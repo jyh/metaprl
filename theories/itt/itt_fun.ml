@@ -230,9 +230,9 @@ let eqcd_funT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (fun_term, eqcd_funT)
 
-let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in 'A -> 'B >>
+let fun_equal_term = << ('A1 -> 'A2) = ('B1 -> 'B2) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_funT)
+let d_resource = d_resource.resource_improve d_resource (fun_equal_term, d_wrap_eqcd eqcd_funT)
 
 (*
  * Apply equality.

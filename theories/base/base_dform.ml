@@ -127,7 +127,6 @@ dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
  *    cflag is true if the last term was a conclusion
  *    t is the term to be printed.
  *)
-(* It has to be rewritten since sequent is a special term 
 mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
    let rec format_goal goals i len =
       if i <> len then
@@ -169,8 +168,7 @@ mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
       format_goal goals 0 (SeqGoal.length goals);
       format_string buf " }";
       format_popm buf;
-      format_ezone buf  
-*)
+      format_ezone buf
 
 mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    let format_arg = function
@@ -206,9 +204,12 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
                   (* This is a context hypothesis *)
                   format_term buf NOParens (mk_so_var_term v values)
              | Hypothesis (v, a) ->
+                  format_szone buf;
                   format_string buf v;
-                  format_string buf ": ";
-                  format_term buf NOParens a
+                  format_string buf ":";
+                  format_space buf;
+                  format_term buf NOParens a;
+                  format_ezone buf
          in
             format_hyp hyps (i + 1) len
    in
@@ -217,7 +218,7 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
          let a = SeqGoal.get goals i in
          let _ =
             if i = 0 then
-               format_ibreak buf "   " " \159 "
+               format_ibreak buf " \159 " " \159 "
             else
                format_break buf "; " "\159 "
          in

@@ -6,6 +6,7 @@
 include Tacticals
 
 include Itt_equal
+include Itt_struct
 include Itt_rfun
 
 open Printf
@@ -24,6 +25,7 @@ open Tacticals
 open Typeinf
 
 open Itt_equal
+open Itt_struct
 open Itt_subtype
 
 (*
@@ -260,12 +262,9 @@ let d_concl_union p =
 let d_hyp_union i p =
    let count = hyp_count p in
    let z, _ = Sequent.nth_hyp p i in
-   let i, j = hyp_indices p i in
-      (match maybe_new_vars [z; z] (declared_vars p) with
-          [u; v] ->
-             unionElimination i j z u v
-        | _ ->
-             failT) p
+   let j, k = hyp_indices p i in
+   let u, v = maybe_new_vars2 p z z in
+      (unionElimination j k z u v thenT thinT i) p
 
 (*
  * Join them.
@@ -305,6 +304,10 @@ let eqcd_unionT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (union_term, eqcd_unionT)
 
+let union_equal_term = << ('a1 + 'a2) = ('b1 + 'b2) in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (union_equal_term, d_wrap_eqcd eqcd_unionT)
+
 (*
  * EQCD inl.
  *)
@@ -315,6 +318,10 @@ let eqcd_inlT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (inl_term, eqcd_inlT)
 
+let inl_equal_term = << inl{'x1} = inl{'x2} in ('a1 + 'a2) >>
+
+let d_resource = d_resource.resource_improve d_resource (inl_equal_term, d_wrap_eqcd eqcd_inlT)
+
 (*
  * EQCD inr.
  *)
@@ -324,6 +331,10 @@ let eqcd_inrT p =
        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (inr_term, eqcd_inrT)
+
+let inr_equal_term = << inr{'x1} = inr{'x2} in ('a1 + 'a2) >>
+
+let d_resource = d_resource.resource_improve d_resource (inr_equal_term, d_wrap_eqcd eqcd_inrT)
 
 (*
  * EQCD decide.
@@ -378,7 +389,7 @@ let inf_decide (inf : typeinf_func) (decl : term_subst) (t : term) =
    let l, r = dest_union e' in
    let decl'', a' = inf ((x, l)::decl') a in
    let decl''', b' = inf ((y, l)::decl'') b in
-      unify decl''' a' b', a'
+      unify decl''' [] a' b', a'
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)
 

@@ -22,7 +22,6 @@ NLFILES :=\
 	itt_dprod\
 	itt_prod\
 	itt_union\
-	itt_soft\
 	itt_logic\
 	itt_bool\
 	itt_ext_equal\

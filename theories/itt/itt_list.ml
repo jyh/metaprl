@@ -305,7 +305,7 @@ let inf_cons inf decl t =
    let hd, tl = dest_cons t in
    let decl', hd' = inf decl hd in
    let decl'', tl' = inf decl' tl in
-      unify decl'' (mk_list_term hd') tl', tl'
+      unify decl'' [] (mk_list_term hd') tl', tl'
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (cons_term, inf_cons)
 
@@ -319,7 +319,7 @@ let inf_list_ind inf decl t =
          let decl'', base' = inf decl' base in
          let a = dest_list e' in
          let decl''', step' = inf ((hd, a)::(tl, e')::(f, base')::decl'') step in
-            unify decl''' base' step', base'
+            unify decl''' [] base' step', base'
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 

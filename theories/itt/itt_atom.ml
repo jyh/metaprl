@@ -10,6 +10,7 @@ open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.RefineError
 open Rformat
 open Sequent
 open Resource
@@ -57,6 +58,11 @@ prim atomFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = atom
 prim atomEquality 'H : : sequent ['ext] { 'H >- atom = atom in univ[@i:l] } = it
 
 (*
+ * Typehood.
+ *)
+prim atomType 'H : : sequent ['ext] { 'H >- "type"{atom} } = it
+
+(*
  * H >- Atom ext "t"
  * by tokenFormation "t"
  *)
@@ -89,7 +95,7 @@ let d_atomT i p =
    if i = 0 then
       tokenFormation (num_hyps (goal p)) bogus_token p
    else
-      failwith "Can't eliminate Atom"
+      raise (RefineError ("d_atomT", StringError "no elimination form"))
 
 let d_resource = d_resource.resource_improve d_resource (atom_term, d_atomT)
 
@@ -106,6 +112,23 @@ let eqcd_tokenT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (atom_term, eqcd_atomT)
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (token_term, eqcd_tokenT)
+
+(*
+ * Typehood.
+ *)
+let atom_equal_term = << atom = atom in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (atom_equal_term, d_wrap_eqcd eqcd_atomT)
+
+let d_atom_typeT i p =
+   if i = 0 then
+      atomType (hyp_count p) p
+   else
+      raise (RefineError ("d_atom_typeT", StringError "no elimination form"))
+
+let atom_type_term = << "type"{atom} >>
+
+let d_resource = d_resource.resource_improve d_resource (atom_type_term, d_atom_typeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

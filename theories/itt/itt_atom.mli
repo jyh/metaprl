@@ -36,6 +36,11 @@ axiom atomFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
 axiom atomEquality 'H : sequent ['ext] { 'H >- atom = atom in univ[@i:l] }
 
 (*
+ * Typehood.
+ *)
+axiom atomType 'H : sequent ['ext] { 'H >- "type"{atom} }
+
+(*
  * H >- Atom ext "t"
  * by tokenFormation "t"
  *)

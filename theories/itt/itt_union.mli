@@ -6,6 +6,7 @@
 include Tacticals
 
 include Itt_equal
+include Itt_struct
 include Itt_rfun
 
 open Refiner.Refiner.Term

@@ -8,7 +8,7 @@ declare "string"[@s:s]
 declare "lambda"{x. 'b}
 declare "hyp"{'A; x. 'B}
 declare "concl"{'A; 'B}
-(* declare "sequent"{'A} *)
+(* declare "sequent"{'ext; 'A} *)
 declare "rewrite"{'redex; 'contractum}
 
 (*

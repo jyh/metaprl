@@ -1,0 +1,44 @@
+(*
+ * Structure of parse TPTP files.
+ *)
+
+(*
+ * Type of literals.
+ *)
+type expr =
+   UidExpr of string
+ | FunExpr of string * expr list
+ | NegExpr of expr
+
+(*
+ * A clause is an axiom, or it
+ * is to be derived.
+ *)
+type clause_type =
+   Axiom
+ | Goal
+
+(*
+ * A clause is named.
+ *)
+type clause =
+   { clause_name : string;
+     clause_type : clause_type;
+     clause_expr : expr list
+   }
+
+(*
+ * Commands to include files.
+ *)
+type file_command =
+   FileComplete
+ | FileInclude of string
+ | FileError
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "refiner"
+ * End:
+ * -*-
+ *)

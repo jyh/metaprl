@@ -300,6 +300,10 @@ let eqcd_dprodT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dprod_term, eqcd_dprodT)
 
+let dprod_equal_term = << (x1 : 'A1 * 'B1['x1]) = (x2 : 'A2 * 'B2['x2]) in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (dprod_equal_term, d_wrap_eqcd eqcd_dprodT)
+
 (*
  * EQCD pair.
  *)
@@ -312,6 +316,10 @@ let eqcd_pairT p =
        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (pair_term, eqcd_pairT)
+
+let dpair_equal_term = << ('a1, 'b1) = ('a2, 'b2) in (x1 : 'A1 * 'B1['x1]) >>
+
+let d_resource = d_resource.resource_improve d_resource (dpair_equal_term, d_wrap_eqcd eqcd_pairT)
 
 (*
  * EQCD spread.

@@ -46,6 +46,37 @@ let debug_tactic =
 
 let debug_refine = load_debug "refine"
 
+(************************************************************************
+ * TYPES                                                                *
+ ************************************************************************)
+
+(*
+ * An extract may be precomputed,
+ * or it may be a closure to product the extract.
+ * We also make the identity be a special case because it
+ * happens so often, and we want to prune it from
+ * the resulting extract.
+ *)
+type extract =
+   Extract of Refine.extract * int
+ | Compose of extract * extract list
+ | Identity
+
+(*
+ * Build the thread refiner.
+ *)
+module ThreadRefinerArg =
+struct
+   (* Have to do this to avoid type recursion *)
+   type extract_aux = extract
+   type extract = extract_aux
+
+   let identity = Identity
+   let compose ext extl = Compose (ext, extl)
+end
+
+module ThreadRefiner = Thread_refiner_tree.MakeThreadRefiner (ThreadRefinerArg)
+
 (*
  * Many tactics wish to examine their argument, so
  * the real type of tactic includes an argument.
@@ -89,35 +120,33 @@ and cache_info =
  | OutOfDate of cache
 
 (*
- * An extract may be precomputed,
- * or it may be a closure to product the extract.
- * We also make the identity be a special case because it
- * happens so often, and we want to prune it from
- * the resulting extract.
- *)
-and extract =
-   Extract of Refine.extract * int
- | Compose of extract * extract list
- | Identity
-
-(*
- * A tactic_value is a list of subgoals, and a means for
- * computing the extract.
- *)
-and pre_tactic   = prim_tactic
-and tactic_value = tactic_arg list * extract
-and tactic       = tactic_arg -> tactic_value
-
-(*
  * The cache is instantaited with tactic
  * justifications.  This may change at some
  * point.
  *)
 and cache        = tactic Tactic_cache.extract
 
+(*
+ * A tactic_value is a list of subgoals, and a means for
+ * computing the extract.
+ *)
+and pre_tactic   = prim_tactic
+and tactic_value = tactic_arg ThreadRefiner.t
+and tactic       = tactic_arg -> tactic_value
+
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
+
+(*
+ * Server is created at file execution time.
+ *)
+let print_tactic_arg out { ref_goal = goal } =
+   let goal, _ = dest_msequent goal in
+   let goal = TermMan.nth_concl goal 0 in
+      debug_print out goal
+
+let remote_server = ThreadRefiner.create print_tactic_arg
 
 (*
  * Create an initial tactic_arg for a proof.
@@ -387,224 +416,10 @@ let tactic_arg_alpha_equal { ref_goal = goal1 } { ref_goal = goal2 } =
  * The refiner just applies the tactic to the arg.
  *)
 let refine tac arg =
-   let x = tac arg in
+   let x = ThreadRefiner.eval remote_server (tac arg) in
       if !debug_tactic then
          eprintf "Refinement done%t" eflush;
       x
-
-(*
- * NOTE:
- * The code here can be used to figure out how the primitive rule
- * affects the cache.
- *
- * (*
- *  * We don't have to do anything for an axiom because there are no subgoals.
- *  *)
- * let compile_refiner_axiom { ri_axiom_name = name; ri_axiom_term = seq } tac =
- *    let construct _ _ = function
- *       [] ->
- *          []
- *     | _ ->
- *          raise (RefineError (StringStringError (name, "axiom should not produce subgoals")))
- *    in
- *       construct
- *
- * (*
- *  * We want to get the first address in the list.
- *  *)
- * let get_hyp_index name = function
- *    i :: _ ->
- *       i
- *  | [] ->
- *       raise (RefineError (StringStringError (name, "no hyp address provided")))
- *
- * (*
- *  * For a rule, we have to compute the abstract operation on
- *  * the Tactic_cache.extract.
- *  *
- *  * We handle the general case below, where we just
- *  * compare the result of the tactic with the existing
- *  * sequent, and modify the parts that have changed.
- *  *
- *  * Since this rule is used, we have no idea what parts if the sequent
- *  * were used in the refinement, so we have to mark them all.
- *  *)
- * let construct_unknown_hyp name _ arg seq =
- *    eprintf "Tactic_type.compile_rule: rule %s has an unknown shape.\n\tReference counting will be disabled%t" name eflush;
- *    let { ref_label = label;
- *          ref_args = args;
- *          ref_cache = cache;
- *          ref_rsrc = resources
- *        } = arg
- *    in
- *       { ref_label = label;
- *         ref_args = args;
- *         ref_cache = replace_goal (ref_all cache) seq;
- *         ref_rsrc = resources
- *       }
- *
- * (*
- *  * This is the shape of inline elimination.
- *  *       H, x:T, J >> C
- *  *       BY name
- *  *       H, x:T, y:T2, ..., J' >> C'
- *  *)
- * let construct_add_early_hyps name addrs arg seq =
- *    let i = get_hyp_index name addrs in
- *    let { ref_label = label;
- *          ref_args = args;
- *          ref_cache = cache;
- *          ref_rsrc = resources
- *        } = arg
- *    in
- *       { ref_label = label;
- *         ref_args = args;
- *         ref_cache = replace_hyps (ref_hyp cache i) (i + 1) seq;
- *         ref_rsrc = resources
- *       }
- *
- * (*
- *  * Out-of-line elimination.
- *  *       H, x:T, J >> C
- *  *       BY name
- *  *       H, x:T, J, y:T2, ... >> C'
- *  *)
- * let construct_add_late_hyps name addrs_name arg seq =
- *    let i = get_hyp_index name addrs in
- *    let { ref_label = label;
- *          ref_args = args;
- *          ref_cache = cache;
- *          ref_rsrc = resources
- *        } = arg
- *    in
- *       { ref_label = label;
- *         ref_args = args;
- *         ref_cache = append_hyps (ref_hyp cache i) seq;
- *         ref_rsrc = resources
- *       }
- *
- * (*
- *  * Replace a hyp.
- *  *)
- * let construct_replace_hyp name addrs arg seq =
- *    let i = get_hyp_index name addrs in
- *    let { ref_label = label;
- *          ref_args = args;
- *          ref_cache = cache;
- *          ref_rsrc = resources
- *        } = arg
- *    in
- *       { ref_label = label;
- *         ref_args = args;
- *         ref_cache = replace_hyps (ref_hyp cache i) i seq;
- *         ref_rsrc = resources
- *       }
- *
- * (*
- *  * This function applies the unknown to each of the subgoals.
- *  *)
- * let construct_unknown name addrs arg subgoals =
- *    let i = get_hyp_index name addrs in
- *       List.map (construct_unknown_hyp name i arg) subgoals
- *
- * (*
- *  * This function applies each function in the list to the corresponding
- *  * subgoals.
- *  *)
- * let construct_list fl name i arg subgoals =
- *    try List_util.map2 (fun f subgoal -> f name i arg subgoal) fl subgoals with
- *       Failure "map2" ->
- *          raise (RefineError (StringStringError ("Tactic_type.construct_list",
- *                                                 "refiner produced the wrong number of subgoals")))
- *
- * (*
- *  * Compile the rule, and look for the possible special
- *  * cases.  The more of these we get right, the better
- *  * we can do at reference counting.
- *  *)
- * let construct_refiner_rule { ri_rule_name = name; ri_rule_rule = seq } tac =
- *    let { mseq_goal = goal; mseq_hyps = hyps } = seq in
- *    let construct =
- *       (* Hyp is the same in cases 1-3 *)
- *       let parse_1_3_hyp_same_hyp term =
- *          if is_context_term term then
- *             (* Case 2 *)
- *             construct_add_late_hyps
- *          else
- *             (* Case 1 *)
- *             construct_add_early_hyps
- *       in
- *
- *       (* Found the context in cases 1-3 *)
- *       let parse_1_3_hyp_context hyp concl term =
- *          if is_hyp_term term then
- *             let term, _, terms = dest_hyp term in
- *                if alpha_equal hyp term then
- *                   parse_1_3_hyp_same_hyp terms
- *                else
- *                   (* Hyp is replaced *)
- *                   construct_replace_hyp
- *          else
- *             construct_replace_hyp
- *       in
- *
- *       (* Check for case 1-3 *)
- *       let parse_1_3_hyp hyp concl term =
- *          if is_context_term term then
- *             let _, term, _ = dest_context term in
- *                parse_1_3_hyp_context hyp concl term
- *          else
- *             construct_unknown_hyp
- *       in
- *
- *       (* Check for case 1-3 in each of the subgoals *)
- *       let parse_1_3_hyps hyp concl =
- *          construct_list (List.map (parse_1_3_hyp hyp concl) hyps)
- *       in
- *
- *       (* Got the second context in 1-3, looking for concl *)
- *       let parse_goal_1_3_b hyp term =
- *          if is_concl_term term then
- *             let term, _ = dest_concl term in
- *                construct_1_3 hyp term
- *          else
- *             construct_unknown
- *       in
- *
- *       (* Got the hyp, looking for the context in shapes 1-3 *)
- *       let parse_goal_1_3_a hyp term =
- *          if is_context_term term then
- *             let _, term, _ = dest_context term in
- *                parse_goal_1_3_b hyp term
- *          else
- *             construct_unknown
- *       in
- *
- *       (* Got initial context, looking for hyp or concl in shapes 1-4 *)
- *       let parse_goal_1_4 term =
- *          if is_hyp_term term then
- *             (* Shape 1_3 *)
- *             let _, hyp, term = dest_hyp term in
- *                parse_goal_1_3_a hyp term
- *          else if is_concl_term term then
- *             construct_add_hyps
- *          else
- *             construct_unknown
- *       in
- *
- *       (* Got nothing, looking at goal *)
- *       let parse_goal term =
- *          if is_context_term term then
- *             let _, term, _ = dest_context term in
- *                parse_goal_1_4 term
- *          else
- *             construct_unknown
- *       in
- *          parse_goal term, tac
- *    in
- *       construct name
- *
- *)
 
 (*
  * Eventually, we may want to look at the rule and do something
@@ -654,7 +469,7 @@ let tactic_of_rule rule (addrs, names) params arg =
    let subgoals, ext = Refine.refine sentinal rule goal in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
-      List.map (make_subgoal arg) subgoals, Extract (ext, List.length subgoals)
+      ThreadRefiner.create_value (List.map (make_subgoal arg) subgoals) (Extract (ext, List.length subgoals))
 
 (*
  * Construct polymorphic tactic.
@@ -702,11 +517,12 @@ let tactic_of_rewrite rw arg =
                  ref_sentinal = sentinal
                }
             in
-               [subgoal], Extract (ext, 1)
+               ThreadRefiner.create_value [subgoal] (Extract (ext, 1))
        | [], _ ->
             raise tactic_of_rewrite_exn1
        | _ ->
             raise tactic_of_rewrite_exn2
+
 
 (*
  * Convert a conditional rewrite to a tactic.
@@ -736,7 +552,7 @@ let tactic_of_cond_rewrite crw arg =
         ref_sentinal = sentinal
       }
    in
-      List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
+      ThreadRefiner.create_value (List.map make_subgoal subgoals) (Extract (ext, List.length subgoals))
 
 (************************************************************************
  * EXTRACTS                                                             *
@@ -808,13 +624,14 @@ let nthAssumT i p =
                SimplePrint.prerr_simple_term goal;
                eflush stderr
          end;
-      tactic_of_refine_tactic (Refine.nth_hyp i) p
+      let subgoals, ext = tactic_of_refine_tactic (Refine.nth_hyp i) p in
+         ThreadRefiner.create_value subgoals ext
 
 (*
  * Identity doesn't do anything.
  *)
-let idT arg =
-   [arg], Identity
+let idT p =
+   ThreadRefiner.create_value [p] Identity
 
 (*
  * Flatten the subgoal list.
@@ -827,56 +644,26 @@ let rec flatten_subgoals = function
       [], []
 
 (*
- * Apply a tactic list to the goals.
- *)
-let apply_subgoals_exn = RefineError ("thenLT", StringError "length mismatch")
-
-let rec apply_subgoals = function
-   (tac :: tacl), (subgoal :: subgoals) ->
-      let subgoals', ext = refine tac subgoal in
-      let subgoals'', extl = apply_subgoals (tacl, subgoals) in
-         subgoals' @ subgoals'', ext :: extl
- | [], [] ->
-      [], []
- | _ ->
-      raise apply_subgoals_exn
-
-(*
  * Sequencing tactics.
  *)
-let prefix_thenT tac1 tac2 goal =
-   let subgoals, ext = tac1 goal in
-   let subgoals_ext = List.map tac2 subgoals in
-   let subgoals', extl = flatten_subgoals subgoals_ext in
-      subgoals', Compose (ext, extl)
-
-let prefix_thenLT tac tacl goal =
-   let subgoals, ext = tac goal in
-   let subgoals, extl = apply_subgoals (tacl, subgoals) in
-      subgoals, Compose (ext, extl)
-
-let prefix_thenFLT tac1 tac2 goal =
-   let subgoals, ext = tac1 goal in
-   let subgoals_ext = tac2 subgoals in
-   let subgoals, extl = flatten_subgoals subgoals_ext in
-      subgoals, Compose (ext, extl)
-
-let prefix_orelseT tac1 tac2 goal =
-   try tac1 goal with
-      RefineError _ ->
-         tac2 goal
+let prefix_thenT = ThreadRefiner.compose1
+let prefix_thenLT = ThreadRefiner.compose2
+let prefix_thenFLT = ThreadRefiner.composef
+let firstT = ThreadRefiner.first
+let prefix_orelseT tac1 tac2 =
+   firstT [tac1; tac2]
 
 (*
  * Modify the label.
  *)
-let setLabelT name arg =
+let setLabelT name p =
    let { ref_goal = goal;
          ref_attributes = attributes;
          ref_cache = cache;
          ref_sentinal = sentinal
-       } = arg
+       } = p
    in
-   let arg =
+   let p =
       { ref_goal = goal;
         ref_label = name;
         ref_attributes = attributes;
@@ -884,43 +671,43 @@ let setLabelT name arg =
         ref_sentinal = sentinal
       }
    in
-      [arg], Identity
+      ThreadRefiner.create_value [p] Identity
 
 (*
  * Add a term argument.
  *)
-let withT attribute tac arg =
-   let { ref_goal = goal;
+let withT attribute tac p =
+   let attributes = p.ref_attributes in
+   let make_goal
+       { ref_goal = goal;
          ref_label = name;
-         ref_attributes = attributes;
          ref_cache = cache;
          ref_sentinal = sentinal
-       } = arg
+       } =
+      ThreadRefiner.create_value  (**)
+         [{ ref_goal = goal;
+            ref_label = name;
+            ref_attributes = attribute :: attributes;
+            ref_cache = cache;
+            ref_sentinal = sentinal
+          }] Identity
    in
-   let arg =
-      { ref_goal = goal;
-        ref_label = name;
-        ref_attributes = attribute :: attributes;
-        ref_cache = cache;
-        ref_sentinal = sentinal
-      }
-   in
-   let make_subgoal arg =
+   let make_subgoal p =
       let { ref_goal = goal;
             ref_label = name;
             ref_cache = cache;
             ref_sentinal = sentinal
-          } = arg
+          } = p
       in
-         { ref_goal = goal;
-           ref_label = name;
-           ref_attributes = attributes;
-           ref_cache = cache;
-           ref_sentinal = sentinal
-         }
+         ThreadRefiner.create_value (**)
+            [{ ref_goal = goal;
+               ref_label = name;
+               ref_attributes = attributes;
+               ref_cache = cache;
+               ref_sentinal = sentinal
+             }]  Identity
    in
-   let subgoals, ext = refine tac arg in
-      List.map make_subgoal subgoals, ext
+      (make_goal thenT tac thenT make_subgoal) p
 
 let withTermT name t =
    withT (name, TermArg t)
@@ -977,7 +764,7 @@ let withSubstT subst tac arg =
          }
    in
    let subgoals, ext = refine tac arg in
-      List.map make_subgoal subgoals, ext
+      ThreadRefiner.create_value (List.map make_subgoal subgoals) ext
 
 (*
  * Time the tactic.

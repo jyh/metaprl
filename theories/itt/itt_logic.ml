@@ -4,11 +4,14 @@
  *)
 
 include Itt_equal
+include Itt_rfun
+include Itt_dfun
+include Itt_fun
 include Itt_dprod
+include Itt_prod
 include Itt_union
 include Itt_void
 include Itt_unit
-include Itt_soft
 include Itt_struct
 
 open Printf
@@ -28,6 +31,7 @@ open Tacticals
 open Conversionals
 open Sequent
 open Nltop
+open Var
 
 open Base_auto_tactic
 open Base_dtactic
@@ -35,7 +39,6 @@ open Base_dtactic
 open Itt_squash
 open Itt_void
 open Itt_equal
-open Itt_soft
 open Itt_rfun
 open Itt_dprod
 open Itt_struct
@@ -100,20 +103,186 @@ let foldExists  = makeFoldC << exst x: 'A. 'B['x] >> unfoldExists
  ************************************************************************)
 
 (*
+ * True and false.
+ *)
+interactive true_univ 'H : :
+   sequent ['ext] { 'H >- "true" = "true" in univ[@i:l] }
+
+interactive true_type 'H : :
+   sequent ['ext] { 'H >- "type"{."true"} }
+
+interactive true_intro 'H : :
+   sequent ['ext] { 'H >- "true" }
+
+interactive false_univ 'H : :
+   sequent ['ext] { 'H >- "false" = "false" in univ[@i:l] }
+
+interactive false_type 'H : :
+   sequent ['ext] { 'H >- "type"{."false"} }
+
+interactive false_elim 'H 'J : :
+   sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
+
+(*
+ * Negation.
+ *)
+interactive not_univ 'H :
+   sequent [squash] { 'H >- 't1 = 't2 in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "not"{'t1} = "not"{'t2} in univ[@i:l] }
+
+interactive not_type 'H :
+   sequent [squash] { 'H >- "type"{'t} } -->
+   sequent ['ext] { 'H >- "type"{."not"{'t}} }
+
+interactive not_intro 'H 'x :
+   sequent [squash] { 'H >- "type"{'t} } -->
+   sequent ['ext] { 'H; x: 't >- "false" } -->
+   sequent ['ext] { 'H >- "not"{'t} }
+
+interactive not_elim 'H 'J :
+   sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
+   sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 'C }
+
+(*
+ * Conjunction.
+ *)
+interactive and_univ 'H :
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[@i:l] }
+
+interactive and_type 'H :
+   sequent [squash] { 'H >- "type"{'a1} } -->
+   sequent [squash] { 'H >- "type"{'a2} } -->
+   sequent ['ext] { 'H >- "type"{."and"{'a1; 'a2}} }
+
+interactive and_intro 'H :
+   sequent ['ext] { 'H >- 'a1 } -->
+   sequent ['ext] { 'H >- 'a2 } -->
+   sequent ['ext] { 'H >- "and"{'a1; 'a2} }
+
+interactive and_elim 'H 'J 'y 'z :
+   sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
+   sequent ['ext] { 'H; x: "and"{'a1; 'a2}; 'J['x] >- 'C['x] }
+
+(*
+ * Disjunction.
+ *)
+interactive or_univ 'H :
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[@i:l] }
+
+interactive or_type 'H :
+   sequent [squash] { 'H >- "type"{'a1} } -->
+   sequent [squash] { 'H >- "type"{'a2} } -->
+   sequent ['ext] { 'H >- "type"{."or"{'a1; 'a2}} }
+
+interactive or_intro_left 'H :
+   sequent [squash] { 'H >- "type"{.'a2} } -->
+   sequent ['ext] { 'H >- 'a1 } -->
+   sequent ['ext] { 'H >- "or"{'a1; 'a2} }
+
+interactive or_intro_right 'H :
+   sequent [squash] { 'H >- "type"{.'a1} } -->
+   sequent ['ext] { 'H >- 'a2 } -->
+   sequent ['ext] { 'H >- "or"{'a1; 'a2} }
+
+interactive or_elim 'H 'J 'y :
+   sequent ['ext] { 'H; y: 'a1; 'J[inl{'y}] >- 'C[inl{'y}] } -->
+   sequent ['ext] { 'H; y: 'a2; 'J[inr{'y}] >- 'C[inr{'y}] } -->
+   sequent ['ext] { 'H; x: "or"{'a1; 'a2}; 'J['x] >- 'C['x] }
+
+(*
+ * Implication.
+ *)
+interactive implies_univ 'H :
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[@i:l] }
+
+interactive implies_type 'H :
+   sequent [squash] { 'H >- "type"{'a1} } -->
+   sequent [squash] { 'H >- "type"{'a2} } -->
+   sequent ['ext] { 'H >- "type"{."implies"{'a1; 'a2}} }
+
+interactive implies_intro 'H 'x :
+   sequent [squash] { 'H >- "type"{'a1} } -->
+   sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
+   sequent ['ext] { 'H >- "implies"{'a1; 'a2} }
+
+interactive implies_elim 'H 'J 'y :
+   sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'a1 } -->
+   sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x]; y: 'a2 >- 'C['x] } -->
+   sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'C['x] }
+
+(*
+ * Bi-implication.
+ *)
+interactive iff_univ 'H :
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[@i:l] }
+
+interactive iff_type 'H :
+   sequent [squash] { 'H >- "type"{'a1} } -->
+   sequent [squash] { 'H >- "type"{'a2} } -->
+   sequent ['ext] { 'H >- "type"{."iff"{'a1; 'a2}} }
+
+interactive iff_intro 'H :
+   sequent ['ext] { 'H >- 'a1 => 'a2 } -->
+   sequent ['ext] { 'H >- 'a2 => 'a1 } -->
+   sequent ['ext] { 'H >- "iff"{'a1; 'a2} }
+
+interactive iff_elim 'H 'J 'y 'z :
+   sequent ['ext] { 'H; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; 'J['y, 'z] >- 'C['y, 'z] } -->
+   sequent ['ext] { 'H; x: "iff"{'a1; 'a2}; 'J['x] >- 'C['x] }
+
+(*
  * All elimination performs a thinning
  *)
-interactive allElimination 'H 'J 'w 'z :
+interactive all_univ 'H 'x :
+   sequent [squash] { 'H >- 't1 = 't2 in univ[@i:l] } -->
+   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[@i:l] }
+
+interactive all_type 'H 'x :
+   sequent [squash] { 'H >- "type"{'t} } -->
+   sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+   sequent ['ext] { 'H >- "type"{."all"{'t; v. 'b['v]}} }
+
+interactive all_intro 'H 'x :
+   sequent [squash] { 'H >- "type"{'t} } -->
+   sequent ['ext] { 'H; x: 't >- 'b['x] } -->
+   sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
+
+interactive all_elim 'H 'J 'w 'z :
    sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z = 'z in 'A } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
 
 (*
- * IFF typehood.
+ * Existential.
  *)
-interactive iffType 'H :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{iff{'A; 'B}} }
+interactive exists_univ 'H 'x :
+   sequent [squash] { 'H >- 't1 = 't2 in univ[@i:l] } -->
+   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[@i:l] }
+
+interactive exists_type 'H 'x :
+   sequent [squash] { 'H >- "type"{'t} } -->
+   sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+   sequent ['ext] { 'H >- "type"{."exists"{'t; v. 'b['v]}} }
+
+interactive exists_intro 'H 'z 'x :
+   sequent [squash] { 'H >- 'z = 'z in 't } -->
+   sequent ['ext] { 'H >- 'b['z] } -->
+   sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+   sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }
+
+interactive exists_elim 'H 'J 'y 'z :
+   sequent ['ext] { 'H; y: 'a; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
+   sequent ['ext] { 'H; x: exst v: 'a. 'b['v]; 'J['x] >- 'C['x] }
 
 (************************************************************************
  * DISPLAY FORMS							*
@@ -173,9 +342,23 @@ dform iff_df2 : mode[prl] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
 dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
    slot[le]{'a} " " Nuprl_font!wedge " " slot[lt]{'b}
 
-dform or_df2 : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
-   slot[le]{'a} " " Nuprl_font!vee " " slot[lt]{'b}
+(*
+ * Disjunction.
+ *)
+declare or_df{'a}
 
+dform or_df2 : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
+   szone pushm[0] slot{'a} or_df{'b} popm ezone
+
+dform or_df3 : mode[prl] :: or_df{."or"{'a; 'b}} =
+   hspace Nuprl_font!vee " " slot{'a} or_df{'b}
+
+dform or_df4 : mode[prl] :: or_df{'a} =
+   hspace Nuprl_font!vee " " slot{'a}
+
+(*
+ * Quantifiers.
+ *)
 dform all_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
@@ -234,42 +417,259 @@ let is_not_term = is_dep0_term not_opname
 let dest_not = dest_dep0_term not_opname
 let mk_not_term = mk_dep0_term not_opname
 
+(************************************************************************
+ * D and EQCD TACTICS                                                   *
+ ************************************************************************)
+
 (*
- * D
+ * "True" tactics.
  *)
-let terms =
-   [true_term,    unfoldTrue;
-    false_term,   unfoldFalse;
-    all_term,     unfoldAll;
-    exists_term,  unfoldExists;
-    or_term,      unfoldOr;
-    and_term,     unfoldAnd;
-    implies_term, unfoldImplies;
-    iff_term,     unfoldIff;
-    not_term,     unfoldNot]
+let d_trueT i p =
+   if i = 0 then
+      true_intro (hyp_count p) p
+   else
+      raise (RefineError ("d_trueT", StringError "no elimination form (unfold it if you want to elim)"))
 
-let add arg =
-   let rec aux (dr, er) = function
-      (t, rw)::tl ->
-         aux (add_soft_abs dr er t rw) tl
-    | [] ->
-         (dr, er)
-   in
-      aux arg
+let d_resource = d_resource.resource_improve d_resource (true_term, d_trueT)
 
-let d_resource, eqcd_resource = add (d_resource, eqcd_resource) terms
+let eqcd_trueT p =
+   true_univ (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (true_term, eqcd_trueT)
+
+let true_equal_term = << "true" = "true" in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (true_equal_term, d_wrap_eqcd eqcd_trueT)
+
+let d_true_typeT i p =
+   if i = 0 then
+      true_type (hyp_count p) p
+   else
+      raise (RefineError ("d_true_typeT", StringError "no elimination form"))
+
+let true_type_term = << "type"{."true"} >>
+
+let d_resource = d_resource.resource_improve d_resource (true_type_term, d_true_typeT)
+
+(*
+ * "False" tactics.
+ *)
+let d_falseT i p =
+   if i = 0 then
+      raise (RefineError ("d_falseT", StringError "no rule to prove false"))
+   else
+      let j, k = hyp_indices p i in
+         false_elim j k p
+
+let d_resource = d_resource.resource_improve d_resource (false_term, d_falseT)
+
+let eqcd_falseT p =
+   false_univ (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (false_term, eqcd_falseT)
+
+let false_equal_term = << "false" = "false" in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (false_equal_term, d_wrap_eqcd eqcd_falseT)
+
+let d_false_typeT i p =
+   if i = 0 then
+      false_type (hyp_count p) p
+   else
+      raise (RefineError ("d_false_typeT", StringError "no elimination form"))
+
+let false_type_term = << "type"{."false"} >>
+
+let d_resource = d_resource.resource_improve d_resource (false_type_term, d_false_typeT)
+
+(*
+ * Tactics for conjunction.
+ *)
+let d_notT i p =
+   if i = 0 then
+      let v = maybe_new_vars1 p "v" in
+         (not_intro (hyp_count p) v
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
+   else
+      let j, k = hyp_indices p i in
+         not_elim j k p
+
+let d_resource = d_resource.resource_improve d_resource (not_term, d_notT)
+
+let eqcd_notT p =
+   not_univ (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (not_term, eqcd_notT)
+
+let not_equal_term = << "not"{'t1} = "not"{'t2} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (not_equal_term, d_wrap_eqcd eqcd_notT)
+
+let d_not_typeT i p =
+   if i = 0 then
+      (not_type (hyp_count p) thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_not_typeT", StringError "no elimination form"))
+
+let not_type_term = << "type"{."not"{'t1}} >>
+
+let d_resource = d_resource.resource_improve d_resource (not_type_term, d_not_typeT)
+
+(*
+ * Tactics for conjunction.
+ *)
+let d_andT i p =
+   if i = 0 then
+      and_intro (hyp_count p) p
+   else
+      let u, v = maybe_new_vars2 p "u" "v" in
+      let j, k = hyp_indices p i in
+         and_elim j k u v p
+
+let d_resource = d_resource.resource_improve d_resource (and_term, d_andT)
+
+let eqcd_andT p =
+   and_univ (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (and_term, eqcd_andT)
+
+let and_equal_term = << "and"{'t1; 't2} = "and"{'t3; 't4} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (and_equal_term, d_wrap_eqcd eqcd_andT)
+
+let d_and_typeT i p =
+   if i = 0 then
+      (and_type (hyp_count p) thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_and_typeT", StringError "no elimination form"))
+
+let and_type_term = << "type"{."and"{'t1; 't2}} >>
+
+let d_resource = d_resource.resource_improve d_resource (and_type_term, d_and_typeT)
+
+(*
+ * Tactics for disjunction.
+ *)
+let d_orT i p =
+   if i = 0 then
+      let arg = get_sel_arg p in
+      let tac =
+         if arg = 1 then
+            or_intro_left
+         else
+            or_intro_right
+      in
+         (tac (hyp_count p)
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
+   else
+      let v, _ = nth_hyp p i in
+      let j, k = hyp_indices p i in
+         or_elim j k v p
+
+let d_resource = d_resource.resource_improve d_resource (or_term, d_orT)
+
+let eqcd_orT p =
+   or_univ (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (or_term, eqcd_orT)
+
+let or_equal_term = << "or"{'t1; 't2} = "or"{'t3; 't4} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (or_equal_term, d_wrap_eqcd eqcd_orT)
+
+let d_or_typeT i p =
+   if i = 0 then
+      (or_type (hyp_count p) thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_or_typeT", StringError "no elimination form"))
+
+let or_type_term = << "type"{."or"{'t1; 't2}} >>
+
+let d_resource = d_resource.resource_improve d_resource (or_type_term, d_or_typeT)
+(*
+ * Tactics for implication.
+ *)
+let d_impliesT i p =
+      let v = maybe_new_vars1 p "v" in
+   if i = 0 then
+         (implies_intro (hyp_count p) v
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
+   else
+      let j, k = hyp_indices p i in
+         (implies_elim j k v
+          thenLT [addHiddenLabelT "antecedent";
+                  addHiddenLabelT "main"]) p
+
+let d_resource = d_resource.resource_improve d_resource (implies_term, d_impliesT)
+
+let eqcd_impliesT p =
+   implies_univ (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (implies_term, eqcd_impliesT)
+
+let implies_equal_term = << "implies"{'t1; 't2} = "implies"{'t3; 't4} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (implies_equal_term, d_wrap_eqcd eqcd_impliesT)
+
+let d_implies_typeT i p =
+   if i = 0 then
+      (implies_type (hyp_count p) thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_implies_typeT", StringError "no elimination form"))
+
+let implies_type_term = << "type"{."implies"{'t1; 't2}} >>
+
+let d_resource = d_resource.resource_improve d_resource (implies_type_term, d_implies_typeT)
+
+(*
+ * Tactics for bi-implication.
+ *)
+let d_iffT i p =
+   if i = 0 then
+      iff_intro (hyp_count p) p
+   else
+      let u, v = maybe_new_vars2 p "u" "v" in
+      let j, k = hyp_indices p i in
+         iff_elim j k u v p
+
+let d_resource = d_resource.resource_improve d_resource (iff_term, d_iffT)
+
+let eqcd_iffT p =
+   iff_univ (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (iff_term, eqcd_iffT)
+
+let iff_equal_term = << "iff"{'t1; 't2} = "iff"{'t3; 't4} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (iff_equal_term, d_wrap_eqcd eqcd_iffT)
+
+let d_iff_typeT i p =
+   if i = 0 then
+      (iff_type (hyp_count p) thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_iff_typeT", StringError "no elimination form"))
+
+let iff_type_term = << "type"{."iff"{'t1; 't2}} >>
+
+let d_resource = d_resource.resource_improve d_resource (iff_type_term, d_iff_typeT)
 
 (*
  * Special elimination case for all.
  *)
 let d_allT i p =
    if i = 0 then
-      (rw unfoldAll 0 thenT dT 0) p
+      let goal = Sequent.concl p in
+      let v, _, _ = dest_all goal in
+      let v = maybe_new_vars1 p "v" in
+         all_intro (hyp_count p) v p
    else
-      let w = get_with_arg p in
+      let z = get_with_arg p in
       let j, k = hyp_indices p i in
       let v = Var.maybe_new_vars1 p "v" in
-         (allElimination j k v w
+         (all_elim j k v z
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p
 
@@ -277,18 +677,83 @@ let all_term = << all a: 'A. 'B['a] >>
 
 let d_resource = d_resource.resource_improve d_resource (all_term, d_allT)
 
-(*
- * Special case for iff.
- *)
-let d_iff_typeT i p =
+let eqcd_allT p =
+   let goal = Sequent.concl p in
+   let _, t, _ = dest_equal goal in
+   let v, _, _ = dest_all t in
+   let v = maybe_new_vars1 p v in
+      (all_univ (hyp_count p) v thenT addHiddenLabelT "wf") p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (all_term, eqcd_allT)
+
+let all_equal_term = << (all x1: 't1. 'b1['x1]) = (all x2: 't2. 'b2['t2]) in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (all_equal_term, d_wrap_eqcd eqcd_allT)
+
+let d_all_typeT i p =
    if i = 0 then
-      iffType (Sequent.hyp_count p) p
+      let goal = Sequent.concl p in
+      let t = dest_type_term goal in
+      let v, _, _ = dest_all t in
+      let v = maybe_new_vars1 p v in
+         (all_type (hyp_count p) v thenT addHiddenLabelT "wf") p
    else
-      raise (RefineError ("d_iff_typeT", StringError "no elimination form"))
+      raise (RefineError ("d_all_typeT", StringError "no elimination form"))
 
-let iff_type_term = << "type"{iff{'A; 'B}} >>
+let all_type_term = << "type"{."all"{'t1; x. 't2['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (iff_type_term, d_iff_typeT)
+let d_resource = d_resource.resource_improve d_resource (all_type_term, d_all_typeT)
+
+(*
+ * Existential.
+ *)
+let d_existsT i p =
+   if i = 0 then
+      let goal = Sequent.concl p in
+      let v, _, _ = dest_exists goal in
+      let v = maybe_new_vars1 p "v" in
+      let z = get_with_arg p in
+         (exists_intro (hyp_count p) z v
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "main";
+                  addHiddenLabelT "wf"]) p
+   else
+      let _, hyp = nth_hyp p i in
+      let v, _, _ = dest_exists hyp in
+      let u, v = maybe_new_vars2 p v v in
+      let j, k = hyp_indices p i in
+         exists_elim j k u v p
+
+let exists_term = << exst a: 'A. 'B['a] >>
+
+let d_resource = d_resource.resource_improve d_resource (exists_term, d_existsT)
+
+let eqcd_existsT p =
+   let goal = Sequent.concl p in
+   let _, t, _ = dest_equal goal in
+   let v, _, _ = dest_exists t in
+   let v = maybe_new_vars1 p v in
+      (exists_univ (hyp_count p) v thenT addHiddenLabelT "wf") p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (exists_term, eqcd_existsT)
+
+let exists_equal_term = << (exst x1: 't1. 'b1['x1]) = (exst x2: 't2. 'b2['t2]) in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (exists_equal_term, d_wrap_eqcd eqcd_existsT)
+
+let d_exists_typeT i p =
+   if i = 0 then
+      let goal = Sequent.concl p in
+      let t = dest_type_term goal in
+      let v, _, _ = dest_exists t in
+      let v = maybe_new_vars1 p v in
+         (exists_type (hyp_count p) v thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_exists_typeT", StringError "no elimination form"))
+
+let exists_type_term = << "type"{."exists"{'t1; x. 't2['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (exists_type_term, d_exists_typeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -175,6 +175,10 @@ let eqcd_prodT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (prod_term, eqcd_prodT)
 
+let prod_equal_term = << ('a1 * 'a2) = ('b1 * 'b2) in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (prod_equal_term, d_wrap_eqcd eqcd_prodT)
+
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)

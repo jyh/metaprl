@@ -7,7 +7,14 @@ INCLUDE := -I . -I $(ROOT)/lib -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl_init
 
 # Library files
+MLZFILES :=\
+	thread_refiner_sig
+
 NLFILES :=\
+	thread_refiner_sig\
+	thread_refiner_null\
+	thread_refiner_tree\
+	remote_refiner\
 	perv\
 	tactic_cache\
 	tactic_type\

@@ -4,11 +4,14 @@
  *)
 
 include Itt_equal
+include Itt_rfun
+include Itt_dfun
+include Itt_fun
 include Itt_dprod
+include Itt_prod
 include Itt_union
 include Itt_void
 include Itt_unit
-include Itt_soft
 include Itt_struct
 
 open Refiner.Refiner.TermType
@@ -49,26 +52,6 @@ topval foldAnd : conv
 topval foldOr : conv
 topval foldAll : conv
 topval foldExists : conv
-
-(************************************************************************
- * EXTRA RULES                                                          *
- ************************************************************************)
-
-(*
- * All elimination.
- *)
-axiom allElimination 'H 'J 'w 'z :
-   sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z = 'z in 'A } -->
-   sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
-
-(*
- * IFF typehood.
- *)
-axiom iffType 'H :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{iff{'A; 'B}} }
 
 (************************************************************************
  * DISPLAY FORMS							*
@@ -126,6 +109,7 @@ topval univCDT : tactic
 topval genUnivCDT : tactic
 topval instHypT : term list -> int -> tactic
 
+val logic_prec : auto_prec
 val back_hyp_prec : auto_prec
 val back_assum_prec : auto_prec
 

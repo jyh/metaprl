@@ -36,6 +36,10 @@ include Base_theory
  * Declarations.
  *************************************************************************)
 
+(* Bounds. *)
+declare raw_open_bound{ 'num }
+declare raw_inf_bound
+
 (* Intervals. *)
 declare raw_interval{ 'left; 'right }
 
@@ -45,6 +49,12 @@ declare rawint_set{ 'intervals }
 (*************************************************************************
  * Display forms.
  *************************************************************************)
+
+(* Bounds. *)
+dform raw_open_bound_df : except_mode[src] :: raw_open_bound{ 'num } =
+   `"raw_open_bound(" slot{'num} `")"
+dform raw_inf_bound_df : except_mode[src] :: raw_inf_bound =
+   `"raw_inf_bound"
 
 (* Intervals. *)
 dform raw_interval_df : except_mode[src] :: raw_interval{ 'l; 'r } =

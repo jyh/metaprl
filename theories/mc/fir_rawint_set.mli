@@ -37,6 +37,13 @@ include Base_theory
  *************************************************************************)
 
 (*
+ * Bounds.
+ * Here for completeness.
+ *)
+declare raw_open_bound{ 'num }
+declare raw_inf_bound
+
+(*
  * Intervals.
  * Represents a closed interval in the integers.
  * 'left and 'right should be numbers with 'left <= 'right.

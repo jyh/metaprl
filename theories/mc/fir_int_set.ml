@@ -40,6 +40,10 @@ include Itt_int_ext
  * Declarations.
  *************************************************************************)
 
+(* Bounds. *)
+declare open_bound{ 'num }
+declare inf_bound
+
 (* Intervals. *)
 declare interval{ 'left; 'right }
 
@@ -58,6 +62,12 @@ declare member{ 'num; 'int_set }
 (*************************************************************************
  * Display.
  *************************************************************************)
+
+(* Bounds. *)
+dform open_bound_df : except_mode[src] :: open_bound{ 'num } =
+   `"open_bound(" slot{'num} `")"
+dform inf_bound_df : except_mode[src] :: inf_bound =
+   `"inf_bound"
 
 (* Intervals. *)
 dform interval_df : except_mode[src] :: interval{ 'l; 'r }  =

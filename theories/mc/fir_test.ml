@@ -5,6 +5,30 @@
 
 include Mc_theory
 
+interactive deadcode_test1 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusIntOp; tyInt; 1; 2; v.
+      letBinop{ minusIntOp; tyInt; 2; 3; w. 'w }}}
+
+interactive deadcode_test2 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusIntOp; tyInt; 1; 2; v.
+      letBinop{ minusIntOp; tyInt; 2; 3; w. it }}}
+
+(* Wouldn't evaluate anyway, but lets me test the deadcode elim tactic. *)
+interactive deadcode_test3 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ remIntOp; tyInt; 1; 2; a.
+      letBinop{ divIntOp; 1; 2; 3; x.
+      letUnop{ uminusIntOp; tyInt; 'a; b.
+      letAlloc{ allocTuple{tyInt;cons{'b;nil}}; c.
+      letAlloc{ allocArray{tyInt;'c}; d.
+      letAlloc{ allocArray{1; 2}; y.
+      letAlloc{ allocArray{tyInt;2}; e.
+      letSubscript{ 1; 'x; 'y; 'e; f.
+      letBinop{ 1; 2; 'f; 4; g.
+      letSubscript{ 'x; 2; 'y; 4; h. 'h }}}}}}}}}}}
+
 interactive program1 'H :
 
 (*

@@ -43,6 +43,13 @@ open Tactic_type.Conversionals
  *************************************************************************)
 
 (*
+ * Bounds.
+ * Here for completeness.
+ *)
+declare open_bound{ 'num }
+declare inf_bound
+
+(*
  * Intervals.
  * Represents a closed interval in the integers.
  * 'left and 'right should be numbers with 'left <= 'right.

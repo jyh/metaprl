@@ -63,7 +63,7 @@ open Itt_fun
 
 declare group_power{'g; 'a; 'n}
 declare cycGroup{'g}
-declare cycSubg[i:l]{'s; 'g; 'a}
+declare cycSubg{'g; 'a}
 
 (************************************************************************
  * TACTICS                                                              *

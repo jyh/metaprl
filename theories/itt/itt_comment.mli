@@ -228,7 +228,7 @@ declare math_normalSubg{'i; 's; 'g}
 
 declare math_group_power{'g; 'a; 'n}
 declare math_cycGroup{'g}
-declare math_cycSubg{'i; 's; 'g; 'a}
+declare math_cycSubg{'g; 'a}
 
 declare math_groupHom{'A; 'B}
 (* OTHER *)

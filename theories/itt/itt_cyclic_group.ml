@@ -80,7 +80,7 @@ let _ =
 doc <:doc< @doc{@terms} >>
 declare group_power{'g; 'a; 'n}
 declare cycGroup{'g}
-declare cycSubg[i:l]{'s; 'g; 'a}
+declare cycSubg{'g; 'a}
 doc <:doc< @docoff >>
 
 (************************************************************************
@@ -99,13 +99,13 @@ prim_rw unfold_group_power : group_power{'g; 'a; 'n} <-->
 prim_rw unfold_cycGroup : cycGroup{'g} <-->
    (exst a: 'g^car. all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car))
 
-prim_rw unfold_cycSubg : cycSubg[i:l]{'s; 'g; 'a} <-->
-   ('s^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l] & 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car)
+prim_rw unfold_cycSubg : cycSubg{'g; 'a} <-->
+   {car={x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv}
 doc <:doc< @docoff >>
 
 let fold_group_power = makeFoldC << group_power{'g; 'a; 'n} >> unfold_group_power
 let fold_cycGroup = makeFoldC << cycGroup{'g} >> unfold_cycGroup
-let fold_cycSubg = makeFoldC << cycSubg[i:l]{'s; 'g; 'a} >> unfold_cycSubg
+let fold_cycSubg = makeFoldC << cycSubg{'g; 'a} >> unfold_cycSubg
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -117,8 +117,8 @@ dform group_power_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: group_
 dform cycGroup_df : except_mode[src] :: cycGroup{'g} =
    math_cycGroup{'g}
 
-dform cycSubg_df : except_mode[src] :: cycSubg[i:l]{'s; 'g; 'a} =
-   math_cycSubg{slot[i:l]; 's; 'g; 'a}
+dform cycSubg_df : except_mode[src] :: cycSubg{'g; 'a} =
+   math_cycSubg{'g; 'a}
 
 (************************************************************************
  * REDUCTIONS                                                           *
@@ -278,19 +278,29 @@ doc <:doc<
    @end[doc]
 >>
 interactive cycSubg_intro {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
-   [main] sequent ['ext] { 'H >- 's^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l] } -->
-   [main] sequent ['ext] { 'H >- 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car } -->
-   sequent ['ext] { 'H >- cycSubg[i:l]{'s; 'g; 'a} }
+   sequent ['ext] { 'H >- cycSubg{'g; 'a} in group[i:l] }
 
-interactive cycSubg_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 's in group[i:l] } -->
-   [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'g in group[i:l] } -->
-   [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'a in 'g^car } -->
-   [main] sequent ['ext] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u]; v: 's^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l]; w: 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car >- 'C['u] } -->
-   sequent ['ext] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'C['u] }
+interactive cycSubg_car {| intro [AutoMustComplete] |} :
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent ['ext] { 'H >- cycSubg{'g; 'a}^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l] }
+
+interactive cycSubg_op {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent ['ext] { 'H >- cycSubg{'g; 'a}^"*" = 'g^"*" in cycSubg{'g; 'a}^car -> cycSubg{'g; 'a}^car -> cycSubg{'g; 'a}^car }
+
+interactive cycSubg_id {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent ['ext] { 'H >- cycSubg{'g; 'a}^"1" = 'g^"1" in cycSubg{'g; 'a}^car }
+
+interactive cycSubg_inv {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent ['ext] { 'H >- cycSubg{'g; 'a}^inv = 'g^inv in cycSubg{'g; 'a}^car -> cycSubg{'g; 'a}^car }
 
 doc <:doc< 
    @begin[doc]
@@ -298,13 +308,10 @@ doc <:doc<
    A cyclic subgroup is a subgroup.
    @end[doc]
 >>
-interactive cycsubg_subgroup {| intro [AutoMustComplete] |} 'a :
-   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
+interactive cycsubg_subgroup {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
-   [main] sequent ['ext] { 'H >- cycSubg[i:l]{'s; 'g; 'a} } -->
-   sequent ['ext] { 'H >- subgroup[i:l]{'s; 'g} }
-
+   sequent ['ext] { 'H >- subgroup[i:l]{cycSubg{'g; 'a}; 'g} }
 doc <:doc< @docoff >>
 
 (*

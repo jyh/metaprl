@@ -1250,7 +1250,7 @@ declare math_normalSubg{'i; 's; 'g}
 
 declare math_group_power{'g; 'a; 'n}
 declare math_cycGroup{'g}
-declare math_cycSubg{'i; 's; 'g; 'a}
+declare math_cycSubg{'g; 'a}
 
 declare math_groupHom{'A; 'B}
 
@@ -1386,12 +1386,8 @@ dform cycGroup_df1 : mode[tex] :: math_cycGroup{'g} =
    slot{'g}
    izone `")}" ezone
 
-dform cycSubg_df1 : mode[tex] :: math_cycSubg{'i; 's; 'g; 'a} =
-   izone `"{{\\it Cyclic\\_subgroup}_{" ezone
-   slot{'i}
-   izone `"}(" ezone
-   slot{'s}
-   izone `"," ezone
+dform cycSubg_df1 : mode[tex] :: math_cycSubg{'g; 'a} =
+   izone `"{{\\it Cyclic\\_subgroup}(" ezone
    slot{'g}
    izone `"," ezone
    slot{'a}
@@ -1474,8 +1470,8 @@ dform group_power_df1 : except_mode[tex] :: parens :: "prec"[prec_inv] :: math_g
 dform cycGroup_df : except_mode[src] :: math_cycGroup{'g} =
    `"Cyclic_group(" slot{'g} `")"
 
-dform cycSubg_df : except_mode[tex] :: math_cycSubg{'i; 's; 'g; 'a} =
-   `"Cyclic_subgroup[" slot{'i} `"](" slot{'s} `"; " slot{'g} `"; " slot{'a} `")"
+dform cycSubg_df : except_mode[tex] :: math_cycSubg{'g; 'a} =
+   `"Cyclic_subgroup(" slot{'g} `"; " slot{'a} `")"
 
 dform groupHom_df : except_mode[tex] :: math_groupHom{'A; 'B} =
    `"Group_homomorphism(" slot{'A} `"; " slot{'B}  `")"

@@ -136,6 +136,7 @@ val tactic_of_cond_rewrite : cond_rewrite -> tactic
  * Basic tactics.
  *)
 val idT : tactic
+val nthAssumT : int -> tactic
 
 (*
  * Basic tacticals.
@@ -163,6 +164,9 @@ val timingT : tactic -> tactic
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/16 16:26:24  jyh
+ * Added itt_test.
+ *
  * Revision 1.4  1998/06/15 22:33:48  jyh
  * Added CZF.
  *

@@ -14,7 +14,8 @@ NLFILES :=\
 	czf_itt_set\
 	czf_itt_wf\
 	czf_itt_true\
-	czf_itt_false
+	czf_itt_false\
+	czf_itt_or
 
 # Name of main libraris
 MAIN = czf

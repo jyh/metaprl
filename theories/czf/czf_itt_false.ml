@@ -4,6 +4,9 @@
 
 include Czf_itt_wf
 
+open Refiner.Refiner.Refine
+
+open Sequent
 open Resource
 open Tactic_type
 
@@ -54,10 +57,53 @@ prim false_res 'H : :
    sequent ['ext] { 'H >- restricted{."false"} } =
    it
 
-let dT = d_resource.resource_extract d_resource
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+let false_term = << "false" >>
+let wf_false_term = << wf{."false"} >>
+let res_false_term = << restricted{."false"} >>
+
+(*
+ * Falsehood.
+ *)
+let d_falseT i p =
+   (if i = 0 then
+      idT
+   else
+      let i, j = hyp_indices p i in
+         false_elim i j) p
+
+let d_resource = d_resource.resource_improve d_resource (false_term, d_falseT)
+
+(*
+ * Well-formedness.
+ *)
+let d_wf_falseT i p =
+   if i = 0 then
+      false_wf (hyp_count p) p
+   else
+      raise (RefineError ("d_wf_falseT", (StringTermError ("no elim form", wf_false_term))))
+
+let d_resource = d_resource.resource_improve d_resource (wf_false_term, d_wf_falseT)
+
+(*
+ * Restricted.
+ *)
+let d_res_falseT i p =
+   if i = 0 then
+      false_res (hyp_count p) p
+   else
+      raise (RefineError ("d_res_falseT", (StringTermError ("no elim form", res_false_term))))
+
+let d_resource = d_resource.resource_improve d_resource (res_false_term, d_res_falseT)
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/16 16:25:58  jyh
+ * Added itt_test.
+ *
  * Revision 1.1  1998/06/15 22:32:46  jyh
  * Added CZF.
  *
@@ -68,3 +114,4 @@ let dT = d_resource.resource_extract d_resource
  * End:
  * -*-
  *)
+

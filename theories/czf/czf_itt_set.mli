@@ -117,12 +117,18 @@ val memd_of_proof : tactic_arg -> tactic
 
 val memdT : tactic
 
-val x_resource : Base_dtactic.d_resource
+val x0_resource : Base_dtactic.d_resource
+val x1_resource : Base_dtactic.d_resource
+val x2_resource : Base_dtactic.d_resource
+val x3_resource : Base_dtactic.d_resource
 
 val dT : int -> tactic
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/16 16:26:05  jyh
+ * Added itt_test.
+ *
  * Revision 1.1  1998/06/15 22:32:50  jyh
  * Added CZF.
  *

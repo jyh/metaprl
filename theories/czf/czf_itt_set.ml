@@ -19,8 +19,6 @@
 
 include Itt_theory
 
-let x_resource = d_resource
-
 open Printf
 open Debug
 
@@ -236,7 +234,11 @@ let d_small_typeT i p =
       in
          rule p
 
+let x0_resource = d_resource
+
 let d_resource = d_resource.resource_improve d_resource (small_type_term, d_small_typeT)
+
+let x1_resource = d_resource
 
 (*
  * Small elim.
@@ -258,6 +260,8 @@ let d_smallT i p =
          small_elim i j fun_t prod_t union_t equal_t p
 
 let d_resource = d_resource.resource_improve d_resource (small_term, d_smallT)
+
+let x2_resource = d_resource
 
 (************************************************************************
  * MEM RESOURCE                                                         *
@@ -354,10 +358,15 @@ let d_setT i p =
 
 let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
 
+let x3_resource = d_resource
+
 let dT = d_resource.resource_extract d_resource
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/16 16:26:04  jyh
+ * Added itt_test.
+ *
  * Revision 1.1  1998/06/15 22:32:49  jyh
  * Added CZF.
  *

@@ -34,6 +34,13 @@ rewrite reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
 rewrite reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 
 (************************************************************************
+ * DISPLAY                                                              *
+ ************************************************************************)
+
+prec prec_inl
+prec prec_union
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -172,6 +179,9 @@ val mk_decide_term : term -> string -> term -> string -> term -> term
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/16 16:26:15  jyh
+ * Added itt_test.
+ *
  * Revision 1.6  1998/06/15 22:33:39  jyh
  * Added CZF.
  *

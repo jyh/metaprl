@@ -34,10 +34,11 @@ axiom false_wf 'H :
 axiom false_res 'H :
    sequent ['ext] { 'H >- restricted{."false"} }
 
-val dT : int -> tactic
-
 (*
  * $Log$
+ * Revision 1.2  1998/06/16 16:25:59  jyh
+ * Added itt_test.
+ *
  * Revision 1.1  1998/06/15 22:32:47  jyh
  * Added CZF.
  *

@@ -588,14 +588,44 @@ let tactic_of_rule rule (addrs, names) params arg =
         ref_rsrc = resources
       }
    in
-   let _ =
-      if !debug_tactic then
-         eprintf "Building subgoals%t" eflush
-   in
-   let subgoals = List.map make_subgoal subgoals, Extract (ext, List.length subgoals) in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
-      subgoals
+      List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
+
+(*
+ * Construct polymorphic tactic.
+ *)
+let tactic_of_refine_tactic rule arg =
+   let { ref_goal = goal;
+         ref_label = label;
+         ref_attributes = attributes;
+         ref_cache = cache;
+         ref_rsrc = resources
+       } = arg
+   in
+   let _ =
+      if !debug_tactic then
+         eprintf "Starting refinement%t" eflush
+   in
+   let subgoals, ext = Refine.refine rule goal in
+   let cache =
+      match cache with
+         Current cache ->
+            OutOfDate cache
+       | cache ->
+            cache
+   in
+   let make_subgoal goal =
+      { ref_goal = goal;
+        ref_label = label;
+        ref_attributes = attributes;
+        ref_cache = cache;
+        ref_rsrc = resources
+      }
+   in
+      if !debug_tactic then
+         eprintf "tactic_of_rule done%t" eflush;
+      List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
 
 (*
  * Convert a rewrite into a tactic.
@@ -716,6 +746,12 @@ let term_of_extract refiner ext args =
 (************************************************************************
  * TACTICALS                                                            *
  ************************************************************************)
+
+(*
+ * Assumption tactic from the refiner.
+ *)
+let nthAssumT i =
+   tactic_of_refine_tactic (Refine.nth_hyp i)
 
 (*
  * Identity doesn't do anything.
@@ -894,6 +930,9 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/16 16:26:23  jyh
+ * Added itt_test.
+ *
  * Revision 1.6  1998/06/15 22:33:47  jyh
  * Added CZF.
  *

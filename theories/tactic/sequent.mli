@@ -24,6 +24,7 @@ val hyp_indices : tactic_arg -> int -> int * int
  * Get the parts of the argument.
  *)
 val goal : tactic_arg -> term
+val msequent : tactic_arg -> msequent
 val concl : tactic_arg -> term
 val nth_hyp : tactic_arg -> int -> string * term
 val cache : tactic_arg -> cache
@@ -40,6 +41,9 @@ val is_free_seq_var : int -> string -> tactic_arg -> bool
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/16 16:26:22  jyh
+ * Added itt_test.
+ *
  * Revision 1.4  1998/06/09 20:52:55  jyh
  * Propagated refinement changes.
  * New tacticals module.

@@ -24,6 +24,8 @@ let create = Tactic_type.create
  *)
 let goal = Tactic_type.goal
 
+let msequent = Tactic_type.msequent
+
 let concl arg =
    Tactic_type.nth_concl arg 0
 
@@ -67,6 +69,9 @@ let is_free_seq_var i v arg =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/16 16:26:21  jyh
+ * Added itt_test.
+ *
  * Revision 1.7  1998/06/15 22:33:45  jyh
  * Added CZF.
  *

@@ -57,6 +57,27 @@ primrw reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
 primrw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 
 (************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_inl
+prec prec_union
+
+dform union_df : mode[prl] :: parens :: "prec"[prec_union] :: union{'A; 'B} =
+   slot{'A} " " `"+" " " slot{'B}
+
+dform inl_df : mode[prl] :: parens :: "prec"[prec_inl] :: inl{'a} =
+   `"inl" " " slot{'a}
+
+dform inr_df : mode[prl] :: parens :: "prec"[prec_inl] :: inr{'a} =
+   `"inr" " " slot{'a}
+
+dform decide_df : mode[prl] :: decide{'x; y. 'a; z. 'b} =
+   szone pushm[0] pushm[3] `"match" " " slot{'a} " " `"with" hspace
+   `"inl " slot{'y} `" -> " slot{'a} popm hspace
+   pushm[3] `" | inr " slot{'z} `" -> " slot{'b} popm popm ezone
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -370,6 +391,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/16 16:26:13  jyh
+ * Added itt_test.
+ *
  * Revision 1.10  1998/06/15 22:33:38  jyh
  * Added CZF.
  *

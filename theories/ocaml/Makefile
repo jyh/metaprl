@@ -4,6 +4,7 @@
 ROOT := ../..
 INCLUDE := -I . -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
+PRLCFLAGS := -v
 
 # Common files
 MLZFILES :=\

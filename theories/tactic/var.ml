@@ -28,7 +28,7 @@ let split_var v =
       if !i = 0 then
          v, 0
       else
-         String.sub v 0 !i, int_of_string (String.sub v !i (len - !i))
+         String_util.sub "Var.split_var" v 0 !i, int_of_string (String_util.sub "Var.split_var" v !i (len - !i))
 
 (*
  * Generate a new variable disjoint from the given vars.
@@ -107,6 +107,9 @@ let maybe_new_vars5 p v1 v2 v3 v4 v5 =
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/16 16:26:25  jyh
+ * Added itt_test.
+ *
  * Revision 1.4  1998/06/15 22:33:51  jyh
  * Added CZF.
  *

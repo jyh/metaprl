@@ -106,10 +106,10 @@ doc <:doc<
    @end[doc]
 >>
 
-prim_rw rat_add : (rat{'a;'b} +@ rat{'c;'d}) <--> rat{(('a *@ 'd) +@ ('c *@ 'b)); ('b *@ 'd)}
-prim_rw rat_mul : (rat{'a;'b} *@ rat{'c;'d}) <--> rat{('a *@ 'c); ('b *@ 'd)}
-prim_rw rat_minus : minus{rat{'a;'b}} <--> rat{minus{'a};'b}
-prim_rw rat_lt_bool : lt_bool{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
+prim_rw reduce_add_rat : (rat{'a;'b} +@ rat{'c;'d}) <--> rat{(('a *@ 'd) +@ ('c *@ 'b)); ('b *@ 'd)}
+prim_rw reduce_mul_rat : (rat{'a;'b} *@ rat{'c;'d}) <--> rat{('a *@ 'c); ('b *@ 'd)}
+prim_rw reduce_minus_rat : minus{rat{'a;'b}} <--> rat{minus{'a};'b}
+prim_rw reduce_lt_bool_rat : lt_bool{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
 
 define unfold_beq_rat :
    beq_rat{rat{'a;'b};rat{'c;'d}} <--> beq_int{('a *@ 'd);('c *@ 'b)}

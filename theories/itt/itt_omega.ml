@@ -1531,7 +1531,7 @@ let rec sim_make_sacs_aux p var2index l = function
 		)
 
 let sim_make_sacs p var2index constrs =
-	let afs = sim_make_sacs_aux p var2index [] (List.rev constrs) in
+	let afs = sim_make_sacs_aux p var2index [] constrs in
 	try
  		let item = List.find (fun (i,f) -> is_neg_number f) afs in
  		[item]
@@ -1625,7 +1625,7 @@ let omegaPrepT = funT (fun p ->
 		end;
 	let info = VI.invert var2index in
 	total := !total +. (Unix.time() -. start);
-	(*eprintf "Total time spent in omegaPrepT is %f@." !total;*)
+	eprintf "Total time spent in omegaPrepT is %f@." !total;
 	let aux used_hyps (tree, f) =
 		omegaCoreT info hyp_num hyp_length used_hyps tree f
 	in

@@ -1,14 +1,10 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 18 March 2002
+Last update to this file: 4 April 2002
 
 THIS FILE IS REALLY INCOMPLETE!
 
 I describe the purpose of this theory and its implementation in this file.
-The sections here are:
-   -  Overview: what this theory is for
-   -  General notes: things to keep in mind while perusing the theory
-   -  Compilation issues: why some files are compiled and others aren't
-   -  Module descriptions
+
 
 Overview:
 --------------------------------------------------------------------------
@@ -18,35 +14,17 @@ Mojave compiler's FIR.
 << more information should go here eventually >>
 
 
-General notes:
---------------------------------------------------------------------------
-These are some points to keep in mind while reading through the code
-and terms provided by this theory:
-   -  The majority of my comments will be in *.mli files.  Comments
-      in *.ml files will typically deal with my implementation of something,
-      or be there just to mark off general sections of the file.
-   -  I'm trying my best to keep comments up to date, but occasionally,
-      I may forget to update them (that includes this file).  Feel free
-      to ask me about anything that seems out of date and/or incorrect.
-
-
 Compilation issues:
 --------------------------------------------------------------------------
-If you're using make to build MetaPRL, this theory should build correctly.
-The only thing that may seem odd is that the code to "connect" to the
-Mojave compiler will not be compiled in.  This is because the Mojave
-compiler is built with cons.  So, for those using cons to build MetaPRL,
-the "connection" code will be compiled in, but only if the MC_ROOT
-environment variable is defined.  (You'll probably want to define
-that variable in order to sensibly use MC.)  Otherwise, the build
-is the exact same as if the build was done with make.
-   Note that the Conscript is pretty messy since I don't know perl
-at all.  Please tell me if you know of a better way to write the script.
+While this theory is intended to compile with (as in, be linked with)
+the Mojave compiler, though it will compile without as well.  In order
+to compile with MC, you must set the MC_ROOT environment variable to point to
+the the root directory of MC.
 
 
-Mc_term_op:
+Module -- Mp_mc_term_op:
 --------------------------------------------------------------------------
 This module provides basic term construction and deconstruction operations
-similar to those in Refiner.Refiner.TermOp.  The most notable difference
-is my naming scheme for the functions.  This scheme and other information
-is documented in mc_term_op.mli.
+similar to those in Refiner.Refiner.TermOp.  The most notable difference is my
+naming scheme for the functions.  This scheme and other information is
+documented in mp_mc_term_op.mli.

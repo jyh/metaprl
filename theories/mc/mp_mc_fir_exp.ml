@@ -235,7 +235,7 @@ declare frameLabel{ 'label1; 'label2; 'label3 }
 
 declare atomNil{ 'ty }
 declare atomInt{ 'int }
-declare atomEnum{ 'int1; 'int2 }
+declare atomEnum{ 'int1; 'int2 } (* 'int1 = bound, 'int2 = value *)
 declare atomRawInt{ 'int_precision; 'int_signed; 'num }
 declare atomFloat{ 'float_precision; 'num }
 declare atomLabel{ 'frame_label }

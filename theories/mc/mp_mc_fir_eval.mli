@@ -49,7 +49,7 @@ open Tactic_type.Conversionals
  * Modular arithmetic for integers.
  *)
 
-(* Precision of naml integers. *)
+(* Precision of naml integers. Corresponds to tyInt. *)
 
 declare naml_prec
 
@@ -143,12 +143,9 @@ topval reduce_minRawIntOp : conv
  * Normal values.
  *)
 
-topval reduce_atomVar_atomNil : conv
-topval reduce_atomVar_atomInt : conv
-topval reduce_atomVar_atomEnum : conv
-topval reduce_atomVar_atomRawInt : conv
-topval reduce_atomVar_atomFloat : conv
-topval reduce_atomVar_atomConst : conv
+topval reduce_atomInt : conv
+topval reduce_atomRawInt : conv
+topval reduce_atomVar : conv
 
 (*
  * Expressions.
@@ -158,9 +155,3 @@ topval reduce_atomVar_atomConst : conv
 
 topval reduce_letUnop : conv
 topval reduce_letBinop : conv
-
-(*************************************************************************
- * Automation.
- *************************************************************************)
-
-topval firEvalT : int -> tactic

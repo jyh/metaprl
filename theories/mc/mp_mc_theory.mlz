@@ -37,3 +37,4 @@ include Mp_mc_fir_base
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
 include Mp_mc_fir_eval
+include Mp_mc_deadcode

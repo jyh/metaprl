@@ -50,7 +50,7 @@ open Tactic_type.Conversionals
  * Modular arithmetic for integers.
  *)
 
-(* Precision of naml integers. *)
+(* Precision of naml integers. Corresponds to tyInt. *)
 
 declare naml_prec
 
@@ -112,8 +112,19 @@ dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'ty; 'a1; 'a2 } =
  *************************************************************************)
 
 (*
- * Modular arithmetic for integers.
+ * Since these rewrites express computation equivalence, I assume
+ * well-formedness of all terms.  In particular, if the rewrite
+ * is applied to an ill-formed term, the result will be meaningless.
+ * The goal is to define the rewrites as generally as possible
+ * while still preserving the semantics of the FIR.
  *)
+
+(*
+ * Modular arithmetic for integers.
+ * Essentially, arithmetic in the FIR is not infinite precision.
+ *)
+
+(* Precisions correspond to some number of bits. *)
 
 prim_rw reduce_naml_prec :
    naml_prec <--> 31
@@ -126,9 +137,11 @@ prim_rw reduce_int32 :
 prim_rw reduce_int64 :
    int64 <--> 64
 
+(* Precompute some common powers of 2. *)
+
 prim_rw reduce_pow :
    pow{ 'base; 'exp } <-->
-   ind{ 'exp; i, j. 1; 1; i, j. ('base *@ 'j) }
+   ifthenelse{ beq_int{'exp; 0}; 1; ('base *@ pow{'base; ('exp -@ 1)}) }
 interactive_rw reduce_pow_2_7 :
    pow{ 2; 7 } <--> 128
 interactive_rw reduce_pow_2_8 :
@@ -147,6 +160,8 @@ interactive_rw reduce_pow_2_63 :
    pow{ 2; 63 } <--> 9223372036854775808
 interactive_rw reduce_pow_2_64 :
    pow{ 2; 64 } <--> 18446744073709551616
+
+(* Perform 2's complement arithmetic in the precision specified. *)
 
 prim_rw reduce_mod_arith1 :
    mod_arith{ 'int_precision; signedInt; 'num } <-->
@@ -177,90 +192,78 @@ prim_rw reduce_mod_arith_unsigned :
 prim_rw reduce_idOp :
    unop_exp{ idOp; 'ty; 'atom1 } <--> 'atom1
 
-(* Naml ints. *)
+(* Naml ints. Arithmetic results are always atomInt's (we get a value). *)
 
 prim_rw reduce_uminusIntOp :
-   unop_exp{ uminusIntOp; tyInt; atomInt{'atom1} } <-->
+   unop_exp{ uminusIntOp; tyInt; 'atom1 } <-->
    atomInt{ ."minus"{'atom1} }
 
 (*
  * Binary operations.
  *)
 
-(* Naml ints. *)
+(* Naml ints. Arithmetic results are always atomInt's (we get a value). *)
 
 prim_rw reduce_plusIntOp :
-   binop_exp{ plusIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   binop_exp{ plusIntOp; tyInt; 'atom1; 'atom2 } <-->
    atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 +@ 'atom2) } }
 prim_rw reduce_minusIntOp :
-   binop_exp{ minusIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   binop_exp{ minusIntOp; tyInt; 'atom1; 'atom2 } <-->
    atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 -@ 'atom2) } }
 prim_rw reduce_mulIntOp :
-   binop_exp{ mulIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   binop_exp{ mulIntOp; tyInt; 'atom1; 'atom2 } <-->
    atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 *@ 'atom2) } }
 prim_rw reduce_divIntOp :
-   binop_exp{ divIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   binop_exp{ divIntOp; tyInt; 'atom1; 'atom2 } <-->
    atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 /@ 'atom2) } }
 prim_rw reduce_remIntOp :
-   binop_exp{ remIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   binop_exp{ remIntOp; tyInt; 'atom1; 'atom2 } <-->
    atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 %@ 'atom2) } }
 prim_rw reduce_maxIntOp :
-   binop_exp{ maxIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   binop_exp{ maxIntOp; tyInt; 'atom1; 'atom2 } <-->
    atomInt{ ifthenelse{ lt_bool{'atom1; 'atom2}; 'atom2; 'atom1 } }
 prim_rw reduce_minIntOp :
-   binop_exp{ minIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   binop_exp{ minIntOp; tyInt; 'atom1; 'atom2 } <-->
    atomInt{ ifthenelse{ lt_bool{'atom1; 'atom2}; 'atom1; 'atom2 } }
 
-(* Native ints. *)
+(* Native ints. Arithmetic results are always atomRawInt's with
+ * the appropriate precision and signing (we get a value). *)
 
 prim_rw reduce_plusRawIntOp :
-   binop_exp{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's};
-              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 +@ 'a2) } }
+   binop_exp{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1; 'atom2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('atom1 +@ 'atom2) } }
 prim_rw reduce_minusRawIntOp :
-   binop_exp{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's};
-              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 -@ 'a2) } }
+   binop_exp{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1; 'atom2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('atom1 -@ 'atom2) } }
 prim_rw reduce_mulRawIntOp :
-   binop_exp{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's};
-              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 *@ 'a2) } }
+   binop_exp{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1; 'atom2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('atom1 *@ 'atom2) } }
 prim_rw reduce_divRawIntOp :
-   binop_exp{ divRawIntOp{'p; 's}; tyRawInt{'p; 's};
-              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 /@ 'a2) } }
+   binop_exp{ divRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1; 'atom2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('atom1 /@ 'atom2) } }
 prim_rw reduce_remRawIntOp :
-   binop_exp{ remRawIntOp{'p; 's}; tyRawInt{'p; 's};
-              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 %@ 'a2) } }
+   binop_exp{ remRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1; 'atom2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('atom1 %@ 'atom2) } }
 prim_rw reduce_maxRawIntOp :
-   binop_exp{ maxRawIntOp{'p; 's}; tyRawInt{'p; 's};
-              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
-   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
+   binop_exp{ maxRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1; 'atom2 } <-->
+   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'atom1; 'atom2}; 'atom2; 'atom1 } }
 prim_rw reduce_minRawIntOp :
-   binop_exp{ minRawIntOp{'p; 's}; tyRawInt{'p; 's};
-              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
-   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
+   binop_exp{ minRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1; 'atom2 } <-->
+   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'atom1; 'atom2}; 'atom1; 'atom2 } }
 
 (*
- * Normal values. *)
+ * Normal values.
+ * The atomInt, atomRawInt, and atomVar "wrappers" have no meaning
+ * when we try to evaluate the FIR in MetaPRL, though they are
+ * required in order for expressions / terms to be well-formed.
+ *)
 
-prim_rw reduce_atomVar_atomNil :
-   atomVar{ atomNil{ 'ty } } <--> atomNil{ 'ty }
-prim_rw reduce_atomVar_atomInt :
-   atomVar{ atomInt{'int} } <--> atomInt{'int}
-prim_rw reduce_atomVar_atomEnum :
-   atomVar{ atomEnum{ 'int1; 'int2 } } <-->
-   atomEnum{ 'int1; 'int2 }
-prim_rw reduce_atomVar_atomRawInt :
-   atomVar{ atomRawInt{ 'int_precision; 'int_signed; 'num } } <-->
-   atomRawInt{ 'int_precision; 'int_signed; 'num }
-prim_rw reduce_atomVar_atomFloat :
-   atomVar{ atomFloat{ 'float_precision; 'num } } <-->
-   atomFloat{ 'float_precision; 'num }
-prim_rw reduce_atomVar_atomConst :
-   atomVar{ atomConst{ 'ty; 'ty_var; 'int } } <-->
-   atomConst{ 'ty; 'ty_var; 'int }
+prim_rw reduce_atomInt :
+   atomInt{ 'int } <--> 'int
+prim_rw reduce_atomRawInt :
+   atomRawInt{ 'int_precision; 'int_signed; 'num } <--> 'num
+prim_rw reduce_atomVar :
+   atomVar{ 'var } <--> 'var
 
 (*
  * Expressions.
@@ -274,59 +277,3 @@ prim_rw reduce_letUnop :
 prim_rw reduce_letBinop :
    letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp['var] } <-->
    'exp[ binop_exp{ 'binop; 'ty; 'atom1; 'atom2 } ]
-
-(*************************************************************************
- * Automation.
- *************************************************************************)
-
-let firEvalT i =
-   rwh (repeatC (applyAllC [
-
-      reduce_naml_prec;
-      reduce_int8;
-      reduce_int16;
-      reduce_int32;
-      reduce_int64;
-      reduce_pow_2_7;
-      reduce_pow_2_8;
-      reduce_pow_2_15;
-      reduce_pow_2_16;
-      reduce_pow_2_30;
-      reduce_pow_2_31;
-      reduce_pow_2_32;
-      reduce_pow_2_63;
-      reduce_pow_2_64;
-      reduce_pow;
-      reduce_mod_arith1;
-      reduce_mod_arith2;
-      reduce_mod_arith_signed;
-      reduce_mod_arith_unsigned;
-
-      reduce_plusIntOp;
-      reduce_minusIntOp;
-      reduce_mulIntOp;
-      reduce_divIntOp;
-      reduce_remIntOp;
-      reduce_maxIntOp;
-      reduce_minIntOp;
-
-      reduce_plusRawIntOp;
-      reduce_minusRawIntOp;
-      reduce_mulRawIntOp;
-      reduce_divRawIntOp;
-      reduce_remRawIntOp;
-      reduce_maxRawIntOp;
-      reduce_minRawIntOp;
-
-      reduce_atomVar_atomNil;
-      reduce_atomVar_atomInt;
-      reduce_atomVar_atomEnum;
-      reduce_atomVar_atomRawInt;
-      reduce_atomVar_atomFloat;
-      reduce_atomVar_atomConst;
-
-      reduce_letUnop;
-      reduce_letBinop;
-
-      reduceTopC (* reduce everything else; mainly for Itt term reductions. *)
-   ] )) i

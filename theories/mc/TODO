@@ -22,13 +22,14 @@ Todo list:
    .  Check float conversion code. Specifically, this code
       DOES NOT WORK.  I need a way of going from the 80 bit internal
       representation of rawfloat's to some integral or string representation
-      w/o loss of information.
+      w/o loss of information. This involves some work on the MC
+      end I think.
 -  Verify that Mp_mc_fir_eval actually is general enough now to prove
    other things... . (It just occurred to me that I don't think I can
-   prove deadcode.)
+   prove deadcode.)  Everything from "unary operations" down needs
+   to be checked I think.
 -  fundef (Mp_mc_fir_exp) is a hack.  I need to come up with a term
    representation for entire programs that is "convinient".
--  Fir.frame (would fall under types) is not represented at all.
 
 Notes to myself:
 --------------------------------------------------------------------------

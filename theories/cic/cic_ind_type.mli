@@ -13,10 +13,19 @@ rule collapse_step :
 **********************************************)
 
 (* Coq's Ind(H)[Hp](Hi:=Hc) - inductive definition *)
-declare Ind       (* *)
 declare IndTypes    (* for ind.defenitions, Hi - new types, defenitions of new types *)
 declare IndParams (* for ind. defenirions, Hp - parameters of ind. defenition *)
 declare IndConstrs (* for ind. defenitions, Hc - constructors *)
+
+(*
+ * These sequent args are used to state the well-formedness
+ * of an inductive definition. We need them to distinguish WF
+ * judgements from other uses of inductive definitions in order
+ * to make indCarryOut inapplicable to WF judgements.
+ *)
+declare IndTypesWF
+declare IndParamsWF
+declare IndConstrsWF
 
 (* declaration of a multiple product, i.e. (p1:P1)(p2:P2)...(pr:Pr)T *)
 declare prodH     (*{ <H> >- 'T }*)
@@ -67,10 +76,9 @@ rewrite indCarryOut :
 (* implementation of the first part of the Coq's Ind-Const rule *)
 rule ind_ConstDef 'Hi1 :
    sequent { <H> >-
-	   WF{
-		   sequent [IndParams] { <Hp> >-
-		      sequent [IndTypes] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
-		         sequent [IndConstrs] { <Hc['I]> >- it }}} } } -->
+	   sequent [IndParamsWF] { <Hp> >-
+		   sequent [IndTypesWF] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
+		      sequent [IndConstrsWF] { <Hc['I]> >- it }}} } -->
 	sequent { <H> >-
 		sequent [IndParams] { <Hp> >-
 			sequent [IndTypes] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
@@ -89,53 +97,24 @@ rewrite applH_step :
    sequent [applH] { x:'T; <H> >- sequent { <J> >- 'S} } <-->
 	sequent [applH] { <H> >- sequent { <J>; x:'T >- apply{'S;'x} } }
 
-(* Product + Application + Substitution (p1:P1)...(pn:Pn)C{I/Ip1...pn} *)
-declare prodapp
-
-rewrite prodapp_base :
-   sequent [prodapp] { >- bind{i.'C['i]} } <-->
-	bind{ i.'C['i] }
-
-rewrite prodapp_step :
-   sequent [prodapp] { <Hp>; p:'P >- bind{i.'C['i]} } <-->
-	sequent [prodapp] { <Hp> >- bind{ i.dfun{ 'P; p.'C[apply{'i;'p}] } } }
-
-
-(* declaration of multiple substitution *)
-declare substH (* {<Hp> >- ( <Hi> >- 'T ) } *)
-
-(* inductive definition of multiple substitution with multiple application applied*)
-(*
-rewrite substH_base :
-   sequent [substH] { <Hp> >- sequent { >- 'C<|'Hp|> } } <-->  'C<|'Hp|>
-
-rewrite substH_step :
-   sequent [substH] { <Hp> >- sequent { <Hi>; x:'T >- 'C['x] } } <-->
-	sequent [substH] { <Hp> >- sequent { <Hi> >-
-	   'C[ sequent [applH] { <Hp> >- 'x }] } }
-*)
-rewrite substH_base :
-   sequent { <Hp> >- sequent [substH] { >- 'C } } <-->
-	sequent { <Hp> >- 'C }
-
-rewrite substH_step :
-   sequent { <Hp> >- sequent [substH] { <Hi>; I:'A >- 'C['I] } } <-->
-	sequent { <Hp> >- sequent [substH] { <Hi> >-
-	   sequent [prodapp] { <Hp> >- bind{i.'C['i]} } } }
+declare IndParamsSubst
+declare IndTypesSubst
+declare IndConstrsSubst
+declare IndParamsSubstApp
+declare IndTypesSubstApp
+declare IndConstrsSubstApp
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
 rule ind_ConstConstrs 'Hc1 :
    sequent { <H> >-
-	   WF {
-		   sequent [IndParams] { <Hp> >-
-			   sequent [IndTypes] { <Hi> >-
-	            sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >- it }}} }}  -->
+	   sequent [IndParamsWF] { <Hp> >-
+		   sequent [IndTypesWF] { <Hi> >-
+	         sequent [IndConstrsWF] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >- it } }}}   -->
 	sequent { <H> >-
-	   sequent [IndParams] { <Hp> >-
-		   sequent [IndTypes] { <Hi> >-
-	         sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >-
-				   'c in sequent [prodH] { <Hp> >- 'C } } } } }
-
+	   sequent [IndParamsSubst] { <Hp> >-
+		   sequent [IndTypesSubst] { <Hi> >-
+	         sequent [IndConstrsSubst] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >-
+				   'c in 'C } } } }
 
 (*******************************************************************************************
  *  in the next part the conditions for the W-Ind rule and the W-Ind rule are implemented  *
@@ -335,10 +314,9 @@ rule w_Ind :
 		sequent [arity_of_some_sort_m] { <Hi> >- arity_of_some_sort_m } } } -->
 	sequent { <H> >- sequent { <Hp> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } } -->
 	sequent { <H> >-
-	   WF{
-			sequent [IndParams] { <Hp> >-
-				sequent [IndTypes] { <Hi> >-
-					sequent [IndConstrs] { <Hc> >- it } } } } }
+	   sequent [IndParamsWF] { <Hp> >-
+			sequent [IndTypesWF] { <Hi> >-
+				sequent [IndConstrsWF] { <Hc> >- it } } } }
 
 
 (****************************************************************

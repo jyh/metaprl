@@ -4,13 +4,15 @@
  *
  *)
 
-open Term
-
 include Tactic_type
 
 include Base_theory
 
 include Itt_squash
+
+open Term
+open Tactic_type
+open Base_theory
 
 (************************************************************************
  * TERMS                                                                *
@@ -148,6 +150,9 @@ val squash_equalT : tactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:44:44  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1998/02/18 18:46:57  jyh
  * Initial ocaml semantics.
  *

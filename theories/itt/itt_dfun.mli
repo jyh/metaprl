@@ -3,10 +3,12 @@
  *
  *)
 
-open Term
-
 include Itt_equal
 include Itt_rfun
+
+open Term
+
+open Tactic_type
 
 (************************************************************************
  * RULES                                                                *
@@ -153,6 +155,9 @@ val eqcd_dfunT : tactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:44:39  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1997/08/07 19:43:51  jyh
  * Updated and added Lori's term modifications.
  * Need to update all pattern matchings.

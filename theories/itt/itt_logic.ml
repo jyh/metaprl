@@ -3,17 +3,20 @@
  *
  *)
 
-open Debug
-open Term
-open Resource
-open Refine_sig
-
 include Itt_equal
 include Itt_dprod
 include Itt_union
 include Itt_void
 include Itt_unit
 include Itt_soft
+
+open Debug
+open Term
+open Resource
+open Refine_sig
+
+open Itt_equal
+open Itt_soft
 
 (* debug_string DebugLoad "Loading itt_logic..." *)
 
@@ -214,6 +217,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:44:56  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1997/09/08 15:02:35  jyh
  * This version compiles Ensemble.
  *

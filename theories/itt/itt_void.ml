@@ -5,14 +5,18 @@
  *
  *)
 
+include Tactic_type
+include Itt_equal
+include Itt_subtype
+
 open Debug
 open Sequent
 open Term
 open Resource
 
-include Tactic_type
-include Itt_equal
-include Itt_subtype
+open Tactic_type
+open Itt_equal
+open Itt_subtype
 
 (*
  * incr_debug_level DebugMessage
@@ -137,6 +141,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:45:28  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1998/04/09 18:26:11  jyh
  * Working compiler once again.
  *

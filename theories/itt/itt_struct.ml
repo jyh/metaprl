@@ -3,13 +3,19 @@
  *
  *)
 
+include Options
+
+include Itt_equal
+
 open Debug
 open Term
 open Refine_sig
 
-include Options
-
-include Itt_equal
+open Tactic_type
+open Sequent
+open Options
+open Tacticals
+open Itt_equal
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
 
@@ -257,6 +263,9 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:45:17  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1997/08/06 16:33:11  jyh
  * Minor changes.
  *

@@ -3,12 +3,14 @@
  *
  *)
 
-open Term
-
 include Itt_equal
 include Itt_subtype
 include Itt_unit
 include Itt_struct
+
+open Term
+
+open Tactic_type
 
 (************************************************************************
  * TERMS                                                                *
@@ -129,6 +131,9 @@ val mk_hide_term : term -> term
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:45:09  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1998/04/09 18:26:09  jyh
  * Working compiler once again.
  *

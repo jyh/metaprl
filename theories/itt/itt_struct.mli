@@ -3,9 +3,12 @@
  *
  *)
 
+include Itt_equal
+
 open Term
 
-include Itt_equal
+open Tactic_type
+open Sequent
 
 (*
  * This is just syntax for a binding term.
@@ -115,6 +118,9 @@ val revHypSubstT : int -> tactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:45:18  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1997/08/06 16:33:12  jyh
  * Minor changes.
  *

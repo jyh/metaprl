@@ -3,6 +3,8 @@
  *
  *)
 
+include Itt_equal
+
 open Debug
 open Options
 open Term
@@ -11,9 +13,12 @@ open Term_dtable
 open Refine_sig
 
 open Var
-     
-include Itt_equal
 
+open Tactic_type
+open Sequent
+open Tacticals
+open Itt_equal
+     
 (* debug_string DebugLoad "Loading itt_subtype..." *)
 
 (************************************************************************
@@ -298,6 +303,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:45:20  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1998/04/21 19:55:07  jyh
  * Upgraded refiner for program extraction.
  *

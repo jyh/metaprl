@@ -4,15 +4,20 @@
  * it is used to perform basic inference.
  *
  * $Log$
+ * Revision 1.2  1998/04/22 22:44:32  jyh
+ * *** empty log message ***
+ *
  * Revision 1.1  1997/08/06 16:18:20  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.
  *
  *)
 
+include Tactic_type
+
 open Term
 
-include Tactic_type
+open Tactic_type
 
 (*
  * A type inference is performed in a type context,

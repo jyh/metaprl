@@ -3,18 +3,24 @@
  *
  *)
 
-open Debug
-open Term
-open Refine_sig
-open Resource
-
-include Var
-
 include Tactic_type
 
 include Itt_equal
 include Itt_void
 include Itt_set
+
+open Debug
+open Term
+open Refine_sig
+open Resource
+
+open Tactic_type
+open Tacticals
+open Sequent
+open Var
+open Typeinf
+open Itt_void
+open Itt_equal
 
 (* debug_string DebugLoad "Loading itt_rfun..." *)
 
@@ -368,6 +374,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:45:05  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1998/04/09 18:26:09  jyh
  * Working compiler once again.
  *

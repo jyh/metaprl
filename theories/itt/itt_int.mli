@@ -3,13 +3,15 @@
  *
  *)
 
-open Term
-
 include Tactic_type
 
 include Itt_equal
 include Itt_rfun
 include Itt_logic
+
+open Term
+
+open Tactic_type
 
 (************************************************************************
  * TERMS                                                                *
@@ -224,6 +226,9 @@ val mk_ind_term : term -> string -> string -> term -> term -> string -> string -
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:44:49  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1998/04/09 18:26:05  jyh
  * Working compiler once again.
  *

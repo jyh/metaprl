@@ -3,19 +3,25 @@
  *
  *)
 
+include Itt_squash
+include Itt_equal
+include Itt_unit
+include Itt_subtype
+include Itt_struct
+
 open Debug
 open Options
 open Term
 open Refine_sig
 open Resource
 
-include Var
-include Tacticals
-
-include Itt_equal
-include Itt_unit
-include Itt_subtype
-include Itt_struct
+open Tacticals
+open Sequent
+open Var
+open Itt_squash
+open Itt_struct
+open Itt_equal
+open Itt_subtype
 
 (* debug_string DebugLoad "Loading itt_set..." *)
 
@@ -312,6 +318,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/22 22:45:08  jyh
+ * *** empty log message ***
+ *
  * Revision 1.2  1997/08/06 16:18:41  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

@@ -3,16 +3,23 @@
  *
  *)
 
+include Var
+
+include Itt_equal
+include Itt_rfun
+
 open Debug
 open Term
 open Options
 open Refine_sig
 open Resource
 
-include Var
-
-include Itt_equal
-include Itt_rfun
+open Var
+open Sequent
+open Tacticals
+open Itt_equal
+open Itt_subtype
+open Itt_rfun
 
 (* debug_string DebugLoad "Loading itt_void..." *)
 
@@ -287,6 +294,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/22 22:44:37  jyh
+ * *** empty log message ***
+ *
  * Revision 1.3  1997/08/07 19:43:51  jyh
  * Updated and added Lori's term modifications.
  * Need to update all pattern matchings.

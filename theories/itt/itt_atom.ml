@@ -3,13 +3,15 @@
  *
  *)
 
+include Itt_equal
+
 open Debug
 open Term
 open Rformat
 open Sequent
 open Resource
 
-include Itt_equal
+open Itt_equal
 
 (* debug_string DebugLoad "Loading itt_atom..." *)
 
@@ -115,6 +117,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (token
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/22 22:44:34  jyh
+ * *** empty log message ***
+ *
  * Revision 1.2  1997/08/06 16:18:23  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

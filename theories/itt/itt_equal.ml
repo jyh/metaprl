@@ -3,6 +3,10 @@
  *
  *)
 
+include Tactic_type
+include Base_theory
+include Itt_squash
+
 open Debug
 open Opname
 open Term
@@ -12,11 +16,8 @@ open Term_stable
 open Refine_sig
 open Resource
 
-include Tactic_type
-
-include Base_theory
-
-include Itt_squash
+open Tactic_type
+open Sequent
 
 (* debug_string DebugLoad "Loading itt_equal..." *)
 
@@ -321,6 +322,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/22 22:44:43  jyh
+ * *** empty log message ***
+ *
  * Revision 1.4  1998/04/21 19:54:47  jyh
  * Upgraded refiner for program extraction.
  *

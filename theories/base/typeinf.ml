@@ -4,6 +4,9 @@
  * it is used to perform basic inference.
  *
  * $Log$
+ * Revision 1.3  1998/04/22 22:44:31  jyh
+ * *** empty log message ***
+ *
  * Revision 1.2  1998/04/21 19:54:42  jyh
  * Upgraded refiner for program extraction.
  *
@@ -13,12 +16,14 @@
  *
  *)
 
+include Tactic_type
+
 open Term
 open Term_table
 open Refine_sig
 open Resource
 
-include Tactic_type
+open Tactic_type
 
 (************************************************************************
  * TYPES                                                                *

@@ -3,13 +3,15 @@
  *
  *)
 
-open Term
-
 include Tactic_type
 
 include Itt_equal
 include Itt_set
 include Itt_rfun
+
+open Term
+
+open Tactic_type
 
 (************************************************************************
  * TERMS                                                                *
@@ -175,6 +177,9 @@ val mk_quotient_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/22 22:45:04  jyh
+ * *** empty log message ***
+ *
  * Revision 1.2  1997/08/06 16:18:38  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

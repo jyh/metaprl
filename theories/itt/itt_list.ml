@@ -3,17 +3,21 @@
  *
  *)
 
+include Tactic_type
+
+include Itt_equal
+include Itt_rfun
+
 open Debug
 open Term
 open Options
 open Resource
 open Refine_sig
 
-include Var
-include Tactic_type
-
-include Itt_equal
-include Itt_rfun
+open Var
+open Sequent
+open Tacticals
+open Itt_subtype
 
 (* debug_string DebugLoad "Loading itt_list..." *)
 
@@ -330,6 +334,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/22 22:44:53  jyh
+ * *** empty log message ***
+ *
  * Revision 1.4  1998/04/09 18:26:07  jyh
  * Working compiler once again.
  *

@@ -7,6 +7,9 @@
  *     sequent [it; it] { H >> T }
  *
  * $Log$
+ * Revision 1.3  1998/04/22 22:45:13  jyh
+ * *** empty log message ***
+ *
  * Revision 1.2  1998/04/21 19:54:56  jyh
  * Upgraded refiner for program extraction.
  *
@@ -16,13 +19,16 @@
  *
  *)
 
+include Tactic_type
+include Sequent
+
 open Term
 open Term_stable
 open Refine_sig
 open Resource
 
-include Tactic_type
-include Sequent
+open Tactic_type
+open Sequent
 
 (************************************************************************
  * TERMS                                                                *

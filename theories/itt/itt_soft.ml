@@ -3,14 +3,16 @@
  *
  *)
 
+include Tactic_type
+
+include Itt_equal
+
 open Debug
 open Term
 open Refine
 open Resource
 
-include Tactic_type
-
-include Itt_equal
+open Sequent
 
 (* debug_string DebugLoad "Loading itt_soft..." *)
 
@@ -42,6 +44,9 @@ let add_soft_abs dres eqcdres t rw =
 
 (*
  * $Log$
+ * Revision 1.2  1998/04/22 22:45:11  jyh
+ * *** empty log message ***
+ *
  * Revision 1.1  1997/04/28 15:52:26  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

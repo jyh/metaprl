@@ -3,12 +3,14 @@
  *
  *)
 
-open Term
-
 (*
  * Derived from baseTheory.
  *)
 include Itt_equal
+
+open Term
+
+open Tactic_type
 
 (************************************************************************
  * TERMS                                                                *
@@ -63,6 +65,9 @@ val mk_token_term : string -> term
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/22 22:44:36  jyh
+ * *** empty log message ***
+ *
  * Revision 1.2  1997/08/06 16:18:23  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

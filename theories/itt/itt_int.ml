@@ -3,18 +3,22 @@
  *
  *)
 
+include Tactic_type
+
+include Itt_equal
+include Itt_rfun
+include Itt_logic
+
 open Debug
 open Term
 open Rformat
 open Refine_sig
 open Resource
 
-include Var
-include Tactic_type
-
-include Itt_equal
-include Itt_rfun
-include Itt_logic
+open Var
+open Sequent
+open Tacticals
+open Itt_equal
 
 (* debug_string DebugLoad "Loading itt_int..." *)
 
@@ -373,6 +377,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/22 22:44:48  jyh
+ * *** empty log message ***
+ *
  * Revision 1.4  1998/04/21 20:58:07  jyh
  * Fixed typing problems introduced by refiner msequents.
  *

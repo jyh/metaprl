@@ -170,10 +170,9 @@ prim unitElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
  * @hreftactic[squashT] resource.
  * @end[doc]
  *)
-prim unit_squashElimination 'H :
+interactive unit_squashElimination 'H :
    sequent [squash] { 'H >- unit } -->
-   sequent ['ext] { 'H >- unit } =
-   it
+   sequent ['ext] { 'H >- unit }
 
 (*!
  * @begin[doc]

@@ -90,24 +90,6 @@ let _ =
  * @begin[doc]
  * @rules
  *
- * @thysubsection{Axiom}
- *
- * The @tt{hypothesis} rule defines proof by assumption: if $A$ is
- * assumed, then it is true.  The proof extract term is the program
- * denoted by the assumption $x@colon A$.
- * @end[doc]
- *)
-
-(*
- * H; x: A; J >- A ext x
- * by hypothesis
- *)
-prim hypothesis 'H 'J 'x :
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A } =
-   'x
-
-(*!
- * @begin[doc]
  * @thysubsection{Thinning (of hypotheses)}
  *
  * The @tt{thin} rule states that if the conclusion $C$ can be proved
@@ -171,6 +153,23 @@ prim introduction 'H 't :
    [wf] sequent [squash] { 'H >- 't IN 'T } -->
    sequent ['ext] { 'H >- 'T } =
    't
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Axiom}
+ *
+ * The @tt{hypothesis} rule defines proof by assumption: if $A$ is
+ * assumed, then it is true.  The proof extract term is the program
+ * denoted by the assumption $x@colon A$.
+ * @end[doc]
+ *)
+
+(*
+ * H; x: A; J >- A ext x
+ * by hypothesis
+ *)
+interactive hypothesis 'H 'J 'x :
+   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
 
 (*!
  * @begin[doc]

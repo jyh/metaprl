@@ -144,10 +144,9 @@ prim voidElimination {| elim_resource [] |} 'H 'J :
  * This rule is added to the @hreftactic[squashT] resource.
  * @end[doc]
  *)
-prim void_squashElimination 'H :
+interactive void_squashElimination 'H :
    sequent [squash] { 'H >- void } -->
-   sequent ['ext] { 'H >- void } =
-   it
+   sequent ['ext] { 'H >- void }
 
 (*!
  * @begin[doc]

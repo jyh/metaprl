@@ -135,7 +135,7 @@ declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
  * PRIMITIVES                                                           *
  ************************************************************************)
 
-let equal_term = << equal{'s1; 's2} >>
+let equal_term = << 's1 = 's2 >>
 let equal_opname = opname_of_term equal_term
 let is_eq_term = is_dep0_dep0_term equal_opname
 let dest_eq = dest_dep0_dep0_term equal_opname
@@ -185,17 +185,17 @@ let resource reduce +=
  * must be sets.
  * @end[doc]
  *)
-prim_rw unfold_equal : equal{'s1; 's2} <-->
+prim_rw unfold_equal : ('s1='s2) <-->
    ((isset{'s1} & isset{'s2}) & eq{'s1; 's2})
 
-interactive_rw reduce_equal : equal{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
+interactive_rw reduce_equal : (collect{'T1; x1. 'f1['x1]} = collect{'T2; x2. 'f2['x2]}) <-->
    ((isset{collect{'T1; x1. 'f1['x1]}} & isset{collect{'T2; x2. 'f2['x2]}})
    & ((all y1 : 'T1. exst y2: 'T2. eq{.'f1['y1]; .'f2['y2]})
      & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]})))
 (*! @docoff *)
 
 let resource reduce +=
-   << equal{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_equal
+   << collect{'T1; x1. 'f1['x1]} = collect{'T2; x2. 'f2['x2]} >>, reduce_equal
 
 (*!
  * @begin[doc]
@@ -203,16 +203,16 @@ let resource reduce +=
  * @end[doc]
  *)
 prim_rw unfold_fun_set : fun_set{z. 'f['z]} <-->
-    (all s1: set. all s2: set. (equal{'s1; 's2} => equal{'f['s1]; 'f['s2]}))
+    (all s1: set. all s2: set. ('s1 = 's2 => 'f['s1] = 'f['s2]))
 
 prim_rw unfold_fun_prop : fun_prop{z. 'P['z]} <-->
-    (all s1: set. all s2: set. (equal{'s1; 's2} => 'P['s1] => 'P['s2]))
+    (all s1: set. all s2: set. ('s1 = 's2 => 'P['s1] => 'P['s2]))
 
 (*
  * This is _pointwise_ functionality.
  *)
 prim_rw unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
-  (all s1: set. all s2: set. (equal{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
+  (all s1: set. all s2: set. ('s1 = 's2 => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 (*! @docoff *)
 
 (************************************************************************
@@ -252,7 +252,7 @@ dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_pr
 interactive eq_equality1 {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; eq{'s1; 's2}; eq{'s1; 's2}} }
+   sequent ['ext] { 'H >- eq{'s1; 's2} =  eq{'s1; 's2} in univ[1:l] }
 
 (*
  * Membership in a universe.
@@ -266,9 +266,9 @@ interactive eq_type {| intro [] |} 'H :
  * More general equality in a universe.
  *)
 interactive eq_equality2 {| intro [] |} 'H :
-   sequent [squash] { 'H >- Itt_equal!equal{set; 's1; 's3} } -->
-   sequent [squash] { 'H >- Itt_equal!equal{set; 's2; 's4} } -->
-   sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; eq{'s1; 's2}; eq{'s3; 's4}} }
+   sequent [squash] { 'H >- 's1 = 's3 in set } -->
+   sequent [squash] { 'H >- 's2 = 's4 in set } -->
+   sequent ['ext] { 'H >-  eq{'s1; 's2}=  eq{'s3; 's4} in univ[1:l]  }
 
 (*!
  * @begin[doc]
@@ -280,13 +280,13 @@ interactive eq_equality2 {| intro [] |} 'H :
 interactive equal_type {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{equal{'s1; 's2}} }
+   sequent ['ext] { 'H >- "type"{.'s1='s2} }
 
 interactive equal_intro {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- isset{'s1} } -->
    [wf] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- equal{'s1; 's2} }
+   sequent ['ext] { 'H >- 's1 = 's2 }
 
 (*
  * Equality is over sets.
@@ -363,7 +363,7 @@ interactive eq_fun {| intro [] |} 'H :
 interactive equal_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. equal{'f1['z]; 'f2['z]}} }
+   sequent ['ext] { 'H >- fun_prop{z. 'f1['z] = 'f2['z]} }
 
 (*!
  * @begin[doc]

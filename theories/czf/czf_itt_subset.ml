@@ -1,3 +1,4 @@
+
 (*!
  * @begin[doc]
  * @module[Czf_itt_subset]
@@ -49,7 +50,7 @@ declare \subset{'s1; 's2}
  * The subset is defined using restricted universal quantification.
  * @end[doc]
  *)
-prim_rw unfold_subset : \subset{'s1; 's2} <--> dall{'s1; x. mem{'x; 's2}}
+prim_rw unfold_subset : ('s1 subset 's2) <--> dall{'s1; x. mem{'x; 's2}}
 (*! @docoff *)
 
 prec prec_subset
@@ -69,7 +70,7 @@ dform subset_df : parens :: "prec"[prec_subset] :: \subset{'s1; 's2} =
 interactive subset_type {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{\subset{'s1; 's2}} }
+   sequent ['ext] { 'H >- "type"{.'s1  subset 's2} }
 
 (*!
  * @begin[doc]
@@ -83,7 +84,7 @@ interactive subset_intro {| intro [] |} 'H 'x :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
-   sequent ['ext] { 'H >- \subset{'s1; 's2} }
+   sequent ['ext] { 'H >- 's1  subset 's2 }
 
 (*!
  * @begin[doc]
@@ -95,12 +96,12 @@ interactive subset_intro {| intro [] |} 'H 'x :
  * @end[doc]
  *)
 interactive subset_elim {| elim [] |} 'H 'J 's 'z :
-   ["wf"] sequent [squash] { 'H; x: \subset{'s1; 's2}; 'J['x] >- isset{'s} } -->
-   ["wf"] sequent [squash] { 'H; x: \subset{'s1; 's2}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: \subset{'s1; 's2}; 'J['x] >- isset{'s2} } -->
-   ["antecedent"] sequent ['ext] { 'H; x: \subset{'s1; 's2}; 'J['x] >- mem{'s; 's1} } -->
-   ["main"] sequent ['ext] { 'H; x: \subset{'s1; 's2}; 'J['x]; z: mem{'s; 's2} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: \subset{'s1; 's2}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s} } -->
+   ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s2} } -->
+   ["antecedent"] sequent ['ext] { 'H; x: 's1 subset 's2; 'J['x] >- mem{'s; 's1} } -->
+   ["main"] sequent ['ext] { 'H; x: 's1 subset 's2; 'J['x]; z: mem{'s; 's2} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: 's1  subset 's2; 'J['x] >- 'C['x] }
 
 (*!
  * @begin[doc]
@@ -113,12 +114,12 @@ interactive subset_elim {| elim [] |} 'H 'J 's 'z :
 interactive subset_res {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- restricted{\subset{'s1; 's2}} }
+   sequent ['ext] { 'H >- restricted{.'s1  subset 's2} }
 
 interactive subset_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. \subset{'s1['z]; 's2['z]}} }
+   sequent ['ext] { 'H >- fun_prop{z. 's1['z]  subset 's2['z]} }
 (*! @docoff *)
 
 (*

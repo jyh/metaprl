@@ -213,7 +213,22 @@ struct
        | _,_ -> raise (Invalid_argument "Addition non-trivial lists are not supported")
 
 end
+(*
+let divideAuxC t =
+	let left,right=dest_ge_rat in
+	let first,rest=dest_add_rat left in
+	if is_mul_rat_term first then
+		let k,v=dest_mul_rat first in
 
+	else
+		idC
+
+
+let stdC t =
+	let left,right=dest_ge_rat t in
+	let t' = mk_neg_rat t in
+	ge_addMono_rw t' thenC normalizeC thenC divideC
+*)
 module type SACS_Sig =
 sig
    type vars
@@ -231,6 +246,66 @@ sig
 
    val print: out_channel -> sacs -> unit
 end
+
+let ge_normC = (addrC [0] normalizeC) thenC (addrC[1] normalizeC)
+
+interactive_rw extract2left 't :
+	('a in rationals) -->
+	('b in rationals) -->
+	('t in rationals) -->
+	ge_rat{'a; 'b} <-->
+	ge_rat{'t; add_rat{'t; sub_rat{'b; 'a}}}
+
+let extract2leftC t = extract2left t thenC ge_normC
+
+interactive_rw extract2right 't :
+	('a in rationals) -->
+	('b in rationals) -->
+	('t in rationals) -->
+	ge_rat{'a; 'b} <-->
+	ge_rat{add_rat{'t; sub_rat{'a; 'b}}; 't}
+
+let extract2rightC t = extract2right t thenC ge_normC
+
+interactive_rw positive_multiply_ge 'c :
+	('a in rationals) -->
+	('b in rationals) -->
+	(gt_rat{'c; rat{0;1}}) -->
+	ge_rat{'a; 'b} <--> ge_rat{mul_rat{'c; 'a}; mul_rat{'c; 'b}}
+
+interactive_rw negative_multiply_ge 'c :
+	('a in rationals) -->
+	('b in rationals) -->
+	(lt_rat{'c; rat{0;1}}) -->
+	ge_rat{'a; 'b} <--> ge_rat{mul_rat{'c; 'b}; mul_rat{'c; 'a}}
+
+interactive_rw ge_addMono_rw 'c :
+	('a in rationals) -->
+	('b in rationals) -->
+	('c in rationals) -->
+	ge_rat{'a; 'b} <--> ge_rat{add_rat{'c; 'a}; add_rat{'c; 'b}}
+
+interactive ge_addMono2 'H 'J :
+	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'a in rationals } -->
+	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'b in rationals } -->
+	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'c in rationals } -->
+	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'd in rationals } -->
+	sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K>; ge_rat{add_rat{'a; 'c}; add_rat{'b; 'd}} >- 'C } -->
+	sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'C }
+
+let ge_addMono2T i j = funT (fun p ->
+	let i=Sequent.get_pos_hyp_num p i in
+	let j=Sequent.get_pos_hyp_num p j in
+   begin
+		if !debug_supinf_steps then
+			let h1=Sequent.nth_hyp p i in
+			let h2=Sequent.nth_hyp p j in
+			eprintf "ge_addMono2T %i %i on %s %s@." i j
+				(SimplePrint.short_string_of_term h1)
+				(SimplePrint.short_string_of_term h2)
+	end;
+	ge_addMono2 i (j-i)
+)
 
 module MakeSACS(BField : BoundFieldSig)
 (Source: SourceSig with type bfield=BField.bfield and type vars=VarType.t)
@@ -265,16 +340,23 @@ struct
                upper' info tl v
             else
                let k=BField.neg (BField.inv v_coef) in
+					let src=AF.getSource f in
+					let hyp=
+						(match src with
+							Source.Shypothesis i -> i
+						 | _ -> raise (Invalid_argument "upper' not an Shypothesis source")
+						) in
                let rest=AF.remove f v in
 					let u0=AF.scale k rest in
 					let u1=AF.extract2rightSource v u0 in
                let r0,a0=upper' info tl v in
                let r1=SAF.min r0 (SAF.affine u1) in
 					let saf_v=SAF.affine (AF.mk_var v) in
+					let conv=(positive_multiply_ge (BField.term_of k)) thenC (extract2rightC (SAF.term_of info saf_v)) in
                   if SAF.isAffine r1 then
-                     r1,(SAF.Assert ("upper 0",r1,saf_v, idT))::a0
+                     r1,(SAF.Assert ("upper 0",r1,saf_v, rw conv hyp))::a0
                   else
-                     r1,(SAF.Assert ("upper 1",r1,saf_v, idT))::a0
+                     r1,(SAF.Assert ("upper 1",r1,saf_v, rw conv hyp))::a0
 (*						r1,(SAF.Assert ("upper 1",r1,saf_v, ge_minLeftIntro))::a0*)
 
    let upper info s v =
@@ -775,10 +857,12 @@ let rec make_sacs_aux i l = function
 		let i' = succ i in
 		match hd with
 			Hypothesis (_, t) ->
-				if is_ge_rat_term t then
-					make_sacs_aux i' ((i,t)::l) tl
-				else
-					make_sacs_aux i' l tl
+				(match explode_term t with
+					<<ge_rat{'left; 'right}>> when not (alpha_equal left right) ->
+						make_sacs_aux i' ((i,t)::l) tl
+				 | _ ->
+						make_sacs_aux i' l tl
+				)
 		 | Context _ -> make_sacs_aux i' l tl
 
 let make_sacs var2index p =
@@ -1065,66 +1149,6 @@ let ge2transitiveT i j = funT (fun p ->
 				(SimplePrint.short_string_of_term h2)
 	end;
 	ge2transitive i (j-i)
-)
-
-let ge_normC = (addrC [0] normalizeC) thenC (addrC[1] normalizeC)
-
-interactive_rw extract2left 't :
-	('a in rationals) -->
-	('b in rationals) -->
-	('t in rationals) -->
-	ge_rat{'a; 'b} <-->
-	ge_rat{'t; add_rat{'t; sub_rat{'b; 'a}}}
-
-let extract2leftC t = extract2left t thenC ge_normC
-
-interactive_rw extract2right 't :
-	('a in rationals) -->
-	('b in rationals) -->
-	('t in rationals) -->
-	ge_rat{'a; 'b} <-->
-	ge_rat{add_rat{'t; sub_rat{'a; 'b}}; 't}
-
-let extract2rightC t = extract2right t thenC ge_normC
-
-interactive_rw positive_multiply_ge 'c :
-	('a in rationals) -->
-	('b in rationals) -->
-	(gt_rat{'c; rat{0;1}}) -->
-	ge_rat{'a; 'b} <--> ge_rat{mul_rat{'c; 'a}; mul_rat{'c; 'b}}
-
-interactive_rw negative_multiply_ge 'c :
-	('a in rationals) -->
-	('b in rationals) -->
-	(lt_rat{'c; rat{0;1}}) -->
-	ge_rat{'a; 'b} <--> ge_rat{mul_rat{'c; 'b}; mul_rat{'c; 'a}}
-
-interactive_rw ge_addMono_rw 'c :
-	('a in rationals) -->
-	('b in rationals) -->
-	('c in rationals) -->
-	ge_rat{'a; 'b} <--> ge_rat{add_rat{'c; 'a}; add_rat{'c; 'b}}
-
-interactive ge_addMono2 'H 'J :
-	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'a in rationals } -->
-	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'b in rationals } -->
-	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'c in rationals } -->
-	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'd in rationals } -->
-	sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K>; ge_rat{add_rat{'a; 'c}; add_rat{'b; 'd}} >- 'C } -->
-	sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'c; 'd}; <K> >- 'C }
-
-let ge_addMono2T i j = funT (fun p ->
-	let i=Sequent.get_pos_hyp_num p i in
-	let j=Sequent.get_pos_hyp_num p j in
-   begin
-		if !debug_supinf_steps then
-			let h1=Sequent.nth_hyp p i in
-			let h2=Sequent.nth_hyp p j in
-			eprintf "ge_addMono2T %i %i on %s %s@." i j
-				(SimplePrint.short_string_of_term h1)
-				(SimplePrint.short_string_of_term h2)
-	end;
-	ge_addMono2 i (j-i)
 )
 
 open Tree
@@ -1555,15 +1579,3 @@ interactive inttestn :
 				'v7 in int;
 				'v8 in int;
 				'v9 in int; "assert"{bfalse} >- "assert"{bfalse} }
-
-interactive inttestn2 :
-	sequent {v: int;
-				v1: int;
-				v2: int;
-				v3: int;
-				v4: int;
-				v5: int;
-				v6: int;
-				v7: int;
-				v8: int;
-				v9: int; "assert"{bfalse} >- "assert"{bfalse} }

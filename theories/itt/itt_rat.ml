@@ -68,16 +68,26 @@ open Itt_int_ext
 (********************************************
  *	THIS PART SHOULD GO TO A SEPARATE MODULE *
  ********************************************)
+define unfold_abs : abs{'a} <-->
+	(if 'a <@ 0 then -'a else 'a)
+
+define unfold_let_in {| reduce |} : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
+
 declare gcd{'a; 'b}
 
 prim_rw unfold_gcd : gcd{'a; 'b} <-->
 	(if 'a =@ 1 then 1 else
 	if 'b =@ 1 then 1 else
-	if 'a =@ 0 then 'b else
-	if 'b =@ 0 then 'a else
-	if 'a <@ 'b then gcd{'a; ('b %@ 'a)} else gcd{('a %@ 'b); 'b})
+	let_in{abs{'a}; a.
+	let_in{abs{'b}; b.
+		if 'a =@ 0 then 'b else
+		if 'b =@ 0 then 'a else
+		if 'a <@ 'b then gcd{'a; ('b %@ 'a)} else gcd{('a %@ 'b); 'b}
+	}}
+	)
 
 let resource reduce += [
+	<<abs{number[i:n]}>>, unfold_abs;
 	<<gcd{number[i:n]; number[j:n]}>>, unfold_gcd;
 ]
 
@@ -107,8 +117,6 @@ define unfold_posnat :
 
 define unfold_int0 :
    int0 <--> ({x:int | 'x<>0})
-
-define unfold_let_in {| reduce |} : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
 
 define unfold_ratn : ratn{'a; 'b} <--> ('a, 'b)
 let fold_ratn = makeFoldC <<ratn{'a; 'b}>> unfold_ratn
@@ -686,27 +694,27 @@ let mul_rat_Id3C = mul_rat_Id3_rw
 
 interactive mul_rat_Zero :
    [wf] sequent { <H> >- 'a in rationals } -->
-   sequent { <H> >- mul_rat{rat{0; 1}; 'a} ~ rat{0; 1} }
+   sequent { <H> >- mul_rat{rat{0; 'd}; 'a} ~ rat{0; 1} }
 
 interactive_rw mul_rat_Zero_rw {| reduce |} :
    ('a in rationals) -->
-   mul_rat{rat{0; 1}; 'a} <--> rat{0; 1}
+   mul_rat{rat{0; 'd}; 'a} <--> rat{0; 1}
 
 let mul_rat_ZeroC = mul_rat_Zero_rw
 
 interactive mul_rat_Zero2 :
    [wf] sequent { <H> >- 'a in rationals } -->
-   sequent { <H> >- mul_rat{'a; rat{0; 1}} ~ rat{0; 1} }
+   sequent { <H> >- mul_rat{'a; rat{0; 'd}} ~ rat{0; 1} }
 
 interactive_rw mul_rat_Zero2_rw {| reduce |} :
    ('a in rationals) -->
-   mul_rat{'a; rat{0; 1}} <--> rat{0; 1}
+   mul_rat{'a; rat{0; 'd}} <--> rat{0; 1}
 
 let mul_rat_Zero2C = mul_rat_Zero2_rw
 
 interactive_rw mul_rat_Zero3C 'a :
    ('a in rationals) -->
-   rat{0; 1} <--> mul_rat{rat{0; 1}; 'a}
+   rat{0; 'd} <--> mul_rat{rat{0; 1}; 'a}
 
 interactive_rw negative1_2uni_ratC :
 	('a in rationals) -->

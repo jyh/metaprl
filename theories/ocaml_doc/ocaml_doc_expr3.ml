@@ -42,8 +42,12 @@ doc <:doc<
 Disjoint unions, also called @emph{tagged unions} or @emph{variant
 records}, are an important part of the OCaml type system.  A disjoint
 union, or union for short, represents the union of several different
-types, where each of the cases is given an unique, explicit name.  The
-following syntax is used for defining a union type.
+types, where each of the cases is given an unique, explicit name.
+
+OCaml allows the definition of @emph{emph} and @emph{open} union
+types.  The following syntax is used for an exact union type; we
+discuss open types later in this chapter
+@refsection["open-union-types"].
 
 @begin[center]
 @begin[tabular,l]
@@ -75,7 +79,7 @@ type number = Zero | Integer of int | Real of float
 @end[iverbatim]
 
 @noindent
-Values in a disjoint union are constructed by applying a constructor to
+Values in a disjoint union are formed by applying a constructor to
 an expression of the appropriate type.
 
 @begin[iverbatim]
@@ -141,19 +145,19 @@ variable @code{i} is bound to the @code{Integer} value, and @code{x}
 to the @code{Real} value.
 
 OCaml allows two patterns $p_1$ and $p_2$ to be combined into a choice
-pattern $p_1 | p_2$ under two conditions: both patterns must
-define the same variables; and, the variables must have the same
-types.  Otherwise, the placement of variables in $p_1$ and $p_2$ is
-unrestricted.
+pattern $p_1 | p_2$ under two conditions: both patterns must define
+the same variables; and, the being matched by multiple occurrences of
+a variable must have the same types.  Otherwise, the placement of
+variables in $p_1$ and $p_2$ is unrestricted.
 
 In the remainder of this chapter we will describe the the disjoint union
 type more completely, using a running example for building balanced binary trees,
-and frequently-used data structure in functional programs.
+a frequently-used data structure in functional programs.
 
 @section["union-binary-trees"]{Binary trees}
 
-Binary trees are frequently used data structure for representing
-collection of data.  A binary tree is a collection of nodes (also
+Binary trees are frequently used for representing
+collections of data.  A binary tree is a collection of nodes (also
 called vertices), where each node has either zero or two nodes called
 @emph{children}.  If node $n_2$ is a child of $n_1$, then $n_1$ is
 called the @emph{parent} of $n_2$.  One node, called the @emph{root},
@@ -253,15 +257,16 @@ val mem : 'a -> 'a btree -> bool = <fun>
 
 @section["ordered-btree"]{Unbalanced, ordered, binary trees}
 
-One problem with the unbalanced tree is that the complexity of the
-membership operation is $O(n)$, where $n$ is cardinality of the set.
+One problem with the unbalanced tree defined here is that the
+complexity of the membership operation is $O(n)$, where $n$ is
+cardinality of the set.
 
-We can can begin to address this by ordering the nodes in the tree.
-The invariant we would like to maintain is the following: for any
-interior node @code{Node (x, left, right)}, all the labels in the left
-child are smaller than @tt{x}, and all the labels in the right child
-are larger than @tt{x}.  To maintain this invariant, we need to modify
-the insertion function.
+We can can begin to address the performance by ordering the nodes in
+the tree.  The invariant we would like to maintain is the following:
+for any interior node @code{Node (x, left, right)}, all the labels in
+the left child are smaller than @tt{x}, and all the labels in the
+right child are larger than @tt{x}.  To maintain this invariant, we
+must modify the insertion function.
 
 @begin[iverbatim]
 # let rec insert x = function
@@ -287,23 +292,19 @@ val s : int btree =
         Node (5, Leaf, Node (7, Leaf, Leaf)), Leaf), Leaf))
 @end[iverbatim]
 
-Note that this insertion function still does not build balanced trees.  If
-elements are inserted in order, the tree will be maximally unbalanced,
-with all the elements inserted along the right branch.
+Note that this insertion function still does not build balanced trees.
+For example, if elements are inserted in increasing order, the tree
+will be completely unbalanced, with all the elements inserted along
+the right branch.
 
 For the membership function, we can take advantage of
-the set ordering during the search.
+the set ordering to speed up the search.
 
 @begin[iverbatim]
 # let rec mem x = function
      Leaf -> false
    | Node (y, left, right) ->
-        if x < y then
-           mem x left
-        else if x > y then
-           mem x right
-        else (* x = y *)
-           true;;
+        x = y || (x < y && mem x left) || (x > y && mem y right);;
 val mem : 'a -> 'a btree -> bool = <fun>
 # mem 5 s;;
 - : bool = true
@@ -317,13 +318,85 @@ The complexity of this membership function is $O(l)$ where $l$ is the
 maximal depth of the tree.  Since the @tt{insert} function does not
 guarantee balancing, the complexity is still $O(n)$, worst case.
 
+@section["pattern-as"]{Revisiting pattern matching}
+
+The @code{insert} function as expressed above is slightly inefficient.
+The final @code{else} clause (containing the expression @code{Node (y,
+left, right)}) returns a value that is equal to the one matched, but
+the application of the @code{Node} constructor creates a new value.
+The code would be more concise, and likely more efficient, if the
+matched value were used as the result.
+
+OCaml provides a pattern form for binding the matched value using the
+syntax @emph{pattern} @tt[as] @emph{variable}.  In a clause @tt{$p$ as
+$v$ -> $e$}, the variable $v$ is a binding occurrence.  When a value
+is successfully matched with the pattern $p$, the variable $v$ is
+bound to the value during evaluation of the body $e$.  The simplified
+@code{insert} function is as follows.
+
+@begin[iverbatim]
+# let rec insert x = function
+     Leaf -> Node (x, Leaf, Leaf)
+   | Node (y, left, right) as node ->
+      if x < y then
+         Node (y, insert x left, right)
+      else if x > y then
+         Node (y, left, insert x right)
+      else
+         node;;
+val insert : 'a -> 'a btree -> 'a btree = <fun>
+@end[iverbatim]
+
+Patterns with @code{as} bindings may occur anywhere in a pattern.  For
+example, the pattern @code{Node (y, left, right)} is equivalent to the
+pattern @code{Node (_ as y, (_ as left), (_ as right))}, though the
+former is preferred of course.  The parentheses are required because
+the @code{as} keyword has very low precedence, lower than comma
+(@code{,}) and even the vertical bar (@code{|}).
+
+Another extension to pattern matching is conditional matching with
+@code{when} clauses.  The syntax of a conditional match has the form
+@emph{pattern} @code{when} @emph{expression}.  The @emph{expression}
+is a predicate to be evaluated if the @emph{pattern} matches.  The
+variables bound in the pattern may be used in the @emph{expression}.
+The match is successful if, and only if, the @emph{expression}
+evaluates to true.
+
+A version of the @code{insert} function using @code{when} clauses is
+listed below.  When the pattern match is performed, if the value is a
+@code{Node}, the second clause @code{Node (y, left, right) when x < y}
+is considered.  If $x$ is less than $y$, then $x$ is inserted into the
+left branch.  Otherwise, then evaluation falls through the the third
+clause @code{Node (y, left, right) when x > y}.  If $x$ is greater
+than $y$, then $x$ is inserted into the right branch.  Otherwise,
+evaluation falls through to the final clause, which returns the
+original node.
+
+@begin[iverbatim]
+# let rec insert x = function
+     Leaf ->
+         Node (x, Leaf, Leaf)
+   | Node (y, left, right) when x < y ->
+         Node (y, insert x left, right)
+   | Node (y, left, right) when x > y ->
+         Node (y, left, insert x right)
+   | node ->
+         node;;
+val insert : 'a -> 'a btree -> 'a btree = <fun>
+@end[iverbatim]
+
+The performance of this version of the @code{insert} function is
+nearly identical to the previous definition using @code{if} to perform
+the comparison between $x$ and $y$.  Whether to use @code{when}
+conditions is usually a matter of style and preference.
+
 @section["balanced-red-black-trees"]{Balanced red-black trees}
 
-In order to address the complexity problem, we turn to an
+In order to address the performance problem, we turn to an
 implementation of balanced binary trees.  We'll use a functional
 implementation of red-black trees due to Chris Okasaki @cite[Oka99].
 Red-black trees add a label, either @code{Red} or @code{Black}, to each
-of the interior nodes.  We will establish several new invariants.
+non-leaf node.  We will establish several new invariants.
 
 @begin[enumerate]
 @item{Every leaf is colored black.}
@@ -346,93 +419,158 @@ type color =
    Red
  | Black
 
-type 'a btree =
-   Node of color * 'a btree * 'a * 'a btree
+type 'a rbtree =
+   Node of color * 'a * 'a rbtree * 'a rbtree
  | Leaf
 @end[iverbatim]
 
+@noindent
 The membership function also has to be redefined for the new type.
 
 @begin[iverbatim]
 let rec mem x = function
    Leaf -> false
- | Node (_, a, y, b) ->
-      if x < y then mem x a
-      else if x > y then mem x b
-      else true
+ | Node (_, y, left, right) ->
+      x = y || (x < y && mem x left) || (x > y && mem x right)
 @end[iverbatim]
 
-The @tt{insert} function must maintain the invariants during
-insertion.  This can be done in two parts.  First find the location where
+The difficult part of the data structure is maintaining the invariants
+when a value is added to the tree with the @tt{insert} function.
+This can be done in two parts.  First find the location where
 the node is to be inserted.  If possible, add the new node with a
 @code{Red} label because this would preserve invariant 3.  This may,
 however, violate invariant 2 because the new @tt{Red} node may have a
-@tt{Red} parent.  If this happens, the @tt{balance} function migrates
-the @tt{Red} label upward in the tree.
+@tt{Red} parent.
+
+In order to preserve the invariant, we implement the @tt{balance}
+function, which considers all the cases where a @tt{Red} node has a
+@tt{Red} child and rearranges the tree.
 
 @begin[iverbatim]
 # let balance = function
-    Black, Node (Red, Node (Red, a, x, b), y, c), z, d ->
-        Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
-   | Black, Node (Red, a, x, Node (Red, b, y, c)), z, d ->
-        Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
-   | Black, a, x, Node (Red, Node (Red, b, y, c), z, d) ->
-        Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
-   | Black, a, x, Node (Red, b, y, Node (Red, c, z, d)) ->
-        Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
+     Black, z, Node (Red, y, Node (Red, x, a, b), c), d
+   | Black, z, Node (Red, x, a, Node (Red, y, b, c)), d
+   | Black, x, a, Node (Red, z, Node (Red, y, b, c), d)
+   | Black, x, a, Node (Red, y, b, Node (Red, z, c, d)) ->
+        Node (Red, y, Node (Black, x, a, b), Node (Black, z, c, d))
    | a, b, c, d ->
         Node (a, b, c, d)
 
   let insert x s =
      let rec ins = function
-        Leaf -> Node (Red, Leaf, x, Leaf)
-      | Node (color, a, y, b) as s ->
-           if x < y then balance (color, ins a, y, b)
-           else if x > y then balance (color, a, y, ins b)
+        Leaf -> Node (Red, x, Leaf, Leaf)
+      | Node (color, y, a, b) as s ->
+           if x < y then balance (color, y, ins a, b)
+           else if x > y then balance (color, y, a, ins b)
            else s
      in
         match ins s with  (* guaranteed to be non-empty *)
-           Node (_, a, y, b) -> Node (Black, a, y, b)
+           Node (_, y, a, b) -> Node (Black, y, a, b)
          | Leaf -> raise (Invalid_argument "insert");;
-val balance : color * 'a btree * 'a * 'a btree -> 'a btree = <fun>
-val insert : 'a -> 'a btree -> 'a btree = <fun>
+val balance : color * 'a * 'a rbtree * 'a rbtree -> 'a rbtree = <fun>
+val insert : 'a -> 'a rbtree -> 'a rbtree = <fun>
 @end[iverbatim]
 
 Note the use of nested patterns in the @tt{balance} function.  The
 @tt{balance} function takes a 4-tuple, with a @tt{color}, two
 @tt{btree}s, and an element, and it splits the analysis into five
-cases: four of the cases are for violations of invariant 2 (nested
-@tt{Red} nodes), and the final case is the case where the tree does
-not need rebalancing.
+cases: four of the cases are for the situation where invariant 2 needs
+to be re-established because @tt{Red} nodes are nested, and the final
+case is the case where the tree does not need rebalancing.
 
 Since the longest path from the root is at most twice as long as the
 shortest path, the depth of the tree is $O(log@space n)$.  The
-@tt{balance} function takes constant time.  This means that the
-@tt{insert} and @tt[mem] functions both take time $O(log@space n)$.
+@tt{balance} function takes $O(1)$ (constant) time.  This means that the
+@tt{insert} and @tt[mem] functions each take time $O(log@space n)$.
 
 @begin[iverbatim]
 # let empty = Leaf;;
-val empty : 'a btree = Leaf
+val empty : 'a rbtree = Leaf
 # let rec set_of_list = function
-     [] -> empty
-   | x :: l -> insert x (set_of_list l);;
-val set_of_list : 'a list -> 'a btree = <fun>
+       [] -> empty
+     | x :: l -> insert x (set_of_list l);;
+val set_of_list : 'a list -> 'a rbtree = <fun>
 # let s = set_of_list [3; 9; 5; 7; 11];;
-val s : int btree =
-  Node
-   (Black, Node (Black, Node (Red, Leaf, 3, Leaf), 5, Leaf), 7,
-    Node (Black, Node (Red, Leaf, 9, Leaf), 11, Leaf))
+val s : int rbtree =
+  Node (Black, 7, Node (Black, 5, Node (Red, 3, Leaf, Leaf), Leaf),
+   Node (Black, 11, Node (Red, 9, Leaf, Leaf), Leaf))
 # mem 5 s;;
 - : bool = true
 # mem 6 s;;
 - : bool = false
 @end[iverbatim]
 
+@section["open-union-types"]{Open union types}
+
+OCaml defines a second kind of union type where the type is
+open---that is, other definitions may add more cases to the type
+definition.  The syntax is similar to the exact definition discussed
+previously, but the type but the constructor names are prefixed with a
+backquote (@code{`}) symbol, and the type definition is enclosed in
+@code{[>} $@ldots$ @code{]} brackets.@footnote{As of OCaml 3.08.0, the
+language does not allow open union types in type definitions.}
+
+For example, let build an extensible version of the numbers from the first
+example in this chapter.  Initially, we might define an @code{add} function
+for @code{`Integer} values.
+
+@begin[iverbatim]
+# let string_of_number1 n =
+     match n with
+        `Integer i -> string_of_int i
+      | _ -> raise (Invalid_argument "unknown number");;
+val string_of_number1 : [> `Integer of int ] -> string = <fun>
+# string_of_number1 (`Integer 17);;
+- : string = "17"
+@end[iverbatim]
+
+The type @code{[> `Integer of int ]} specifies that the function takes
+an argument having an open union type, where one of the constructors
+is @code{`Integer} (with a value of type @code{int}).
+
+Later, we may come along and want to define a function that includes
+a constructor @code{`Real} for floating-point values.  We can extend
+the definition as follows.
+
+@begin[iverbatim]
+# let string_of_number2 n =
+     match n with
+        `Real x -> string_of_float x
+      | _ -> string_of_number1 n;;
+val string_of_number2 : [> `Integer of int | `Real of float ] -> string =
+  <fun>
+@end[verbatim]
+
+If passed a floating-point number with the @code{`Real} constructor,
+the string is created with @code{string_of_float} function.
+Otherwise, the original function @code{string_of_number1} is used.
+
+The type @code{[> `Integer of int | `Real of float ]} specifies that
+the function takes an argument in an open union type, and handles the
+constructors @code{`Integer} with a value of type @code{int}, and
+@code{`Real} with a value of type @code{float}.  Unlike the exact
+union, the constructors may still be used with expressions of other types.
+However, application to a value of the wrong type remains disallowed.
+
+@begin[iverbatim]
+# let n = `Real 1;;
+val n : [> `Real of int ] = `Real 1
+# string_of_number2 n;;
+Characters 18-19:
+  string_of_number2 n;;
+                    ^
+This expression has type [> `Real of int ] but is here used with type
+  [> `Integer of int | `Real of float ]
+Types for tag `Real are incompatible
+@end[iverbatim]
+
 @section["common-unions"]{Some common built-in unions}
 
-A few of the types we have already seen are defined as unions.  The
-built-in Boolean type is defined as a union (the @tt{true} and
-@tt{false} keywords are treated as capitalized identifiers).
+A few of the types we have already seen are unions.  The built-in
+Boolean type @code{bool} is defined as a union.  Normally, the
+constructor names in a union must be capitalized.  OCaml defines an
+exception in this case by treating @code{true} and @code{false}
+as capitalized identifiers.
 
 @begin[iverbatim]
 # type bool =
@@ -441,22 +579,20 @@ built-in Boolean type is defined as a union (the @tt{true} and
 type bool = | true | false
 @end[iverbatim]
 
-The list type is similar: once again, the compiler treats the
-@code{[]} and @code{::} identifiers as capitalized
-identifiers@begin[footnote]
-At the time of writing using OCaml 2.04,
-this definition was accepted literally.  In OCaml 3.04 this usage is
-deprecated, and the [] produces a syntax error.
-@end[footnote].
+
+The list type is similar, having the following effective definition.
+However, the @code{'a list} type is primitive in this case because
+@code{[]} is not considered a legal constructor name.
 
 @begin[iverbatim]
-# type 'a list = [] | :: of 'a * 'a list;;
-type 'a list = | [] | :: of 'a * 'a list
+type 'a list =
+   []
+ | :: of 'a * 'a list;;
 @end[iverbatim]
 
 Although it is periodically suggested on the OCaml mailing list, OCaml
-does @emph{not} have a NIL value that can be assigned to a variable of
-any type.  Instead, the built-in @tt{'a option} type is used in this case.
+does not have a NIL value that can be assigned to a variable of
+any type.  Instead, the built-in @tt{'a option} type is used.
 
 @begin[iverbatim]
 # type 'a option =
@@ -466,7 +602,7 @@ type 'a option = | None | Some of 'a
 @end[iverbatim]
 
 The @tt{None} case is intended to represent a NIL value, while the
-@tt{Some} case handles non-default values.
+@tt{Some} case handles non-NIL values.
 
 @end[doc]
 

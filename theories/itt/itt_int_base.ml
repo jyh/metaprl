@@ -70,6 +70,8 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_struct
+
+let _ = show_loading "Loading Itt_int_base%t"
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -192,7 +194,7 @@ prim_rw beq_int_is_true :
 (*
  Derived from previous rewrite
  *)
-interactive eq_2beq_int {| intro_resource []; eqcd_resource |} 'H :
+interactive eq_2beq_int {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- "assert"{beq_int{'a; 'b}} }
 
@@ -309,12 +311,11 @@ up[n, m, it, z])
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
 prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
-   sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
-   sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } -->
-   sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
+   ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
+   ( 'base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } ) -->
+   ( 'up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] } =
-      ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it;
-'z]}
+      ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
 (*
  * @begin[doc]
@@ -459,7 +460,6 @@ interactive_rw uni_add_Distrib :
 
 interactive_rw uni_uni_reduce :
    ('a IN int ) -->
-   ('b IN int ) -->
    uni_minus{ uni_minus{ 'a } } <--> 'a
 
 (*! @docoff *)
@@ -475,12 +475,10 @@ let typeinf_resource =
    Mp_resource.improve typeinf_resource (<<number[n:n]>>, Typeinf.infer_const <<int>>)
 
 let reduce_info =
-   [<< beq_int{'a; 'b} >>, beq_int_is_true;
-    << band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_Reflex;
+   [<< band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_Reflex;
     << ('a +@ 0) >>, add_Id;
     << (0 +@ 'a) >>, add_Id2;
     << ( 'a +@ uni_minus{ 'a } ) >>, uni_add_inverse;
-    << uni_minus{ ('a +@ 'b) } >>, uni_add_Distrib;
     << uni_minus{ uni_minus{ 'a } } >>, uni_uni_reduce;
     << ('a +@ ('b +@ 'c)) >>, add_Assoc]
 

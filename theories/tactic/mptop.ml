@@ -399,10 +399,11 @@ and mk_apply_expr base loc f a =
                match a with
                   AddressExpr a ->
                      f a
-                | _ ->
+                | ListExpr _ ->
                      f (make_address (int_list_of_list loc a))
+                | _ ->
+                     type_error loc "expr should be an address"
             end
-
        | AddrFunExpr f ->
             f (int_list_of_list loc a)
        | StringListFunExpr f ->

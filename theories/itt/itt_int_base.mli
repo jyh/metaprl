@@ -308,7 +308,6 @@ rewrite uni_add_Distrib :
 
 rewrite uni_uni_reduce :
    ('a IN int ) -->
-   ('b IN int ) -->
    uni_minus{ uni_minus{ 'a } } <--> 'a
 
 

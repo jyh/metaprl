@@ -34,6 +34,7 @@ include Itt_bool
 include Itt_int
 include Itt_logic
 
+open Mp_debug
 open Mp_resource
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
@@ -44,6 +45,8 @@ open Base_dtactic
 open Itt_equal
 open Itt_logic
 open Itt_bool
+
+let _ = show_loading "Loading Itt_int_bool%t"
 
 (************************************************************************
  * TERMS                                                                *

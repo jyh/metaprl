@@ -69,6 +69,8 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_struct
+
+let _ = show_loading "Loading Itt_int_ext%t"
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

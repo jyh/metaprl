@@ -15,6 +15,7 @@ extends Itt_struct3
 extends Itt_disect
 extends Itt_logic
 extends Itt_tsquash
+extends Itt_bisect
 
 doc <:doc< @docoff >>
 
@@ -501,6 +502,13 @@ interactive recordOrtSetIntro {| intro [] |} :
 	[wf] sequent { <H> >- { r: 'T | 'P['r] } Type } -->
 	sequent { <H> >- record_ort[n:t]{ 'R; 'T} } -->
 	sequent { <H> >- record_ort[n:t]{ 'R; { r: 'T | 'P['r] } } }
+
+interactive recordOrtBisectIntro {| intro [] |} :
+	[wf] sequent { <H> >- 'A Type } -->
+	[wf] sequent { <H> >- 'B Type } -->
+	sequent { <H> >- record_ort[n:t]{ 'R; 'A} } -->
+	sequent { <H> >- record_ort[n:t]{ 'R; 'B} } -->
+	sequent { <H> >- record_ort[n:t]{ 'R; bisect{ 'A; 'B} } }
 
 (******************)
 (*  Tactics       *)

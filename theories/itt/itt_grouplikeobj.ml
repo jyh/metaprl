@@ -229,6 +229,10 @@ doc <:doc<
 interactive premonoid_wf {| intro [] |} :
    sequent { <H> >- "type"{premonoid[i:l]} }
 
+interactive isMonoid_wf2 {| intro [intro_typeinf <<'A>>] |} premonoid[i:l] :
+   sequent { <H> >- 'A in premonoid[i:l] } -->
+   sequent { <H> >- "type"{isMonoid{'A}} }
+
 interactive isMonoid_wf {| intro [] |} :
    sequent { <H> >- "type"{'A^car} } -->
    sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->

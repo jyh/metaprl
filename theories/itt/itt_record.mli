@@ -37,6 +37,8 @@ define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> bisect{record[n:t]{'A};r.'R
 
 define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;a.'R}
 
+declare record_ort[t:t]{'a;'R}
+
 declare self{'self}
 
 declare self[n:t]{'x}

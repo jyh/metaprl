@@ -1620,13 +1620,13 @@ T	t588	o b580 b587
 B	b588	t588
 T	t589	o554 b571 b588
 B	b589	t589
-P	p589	String "rwh reduceIfthenelseTrue 0 thenT autoT"
+P	p589	String "rwh reduce_ifthenelse_true 0 thenT autoT"
 O	o589	ext_rule p589
 T	t590	o554 b580 b4
 B	b590	t590
 T	t591	o589 b545 b590 b4 b4
 B	b591	t591
-P	p591	String "rwh reduceIfthenelseFalse 0 thenT autoT"
+P	p591	String "rwh reduce_ifthenelse_false 0 thenT autoT"
 O	o591	ext_rule p591
 T	t592	o554 b586 b4
 B	b592	t592
@@ -1960,13 +1960,13 @@ T	t726	o b722 b726
 B	b727	t726
 T	t727	o554 b717 b727
 B	b728	t727
-P	p728	String "rwh reduceIfthenelseTrue 0 thenT trivialT"
+P	p728	String "rwh reduce_ifthenelse_true 0 thenT trivialT"
 O	o728	ext_rule p728
 T	t728	o554 b722 b4
 B	b729	t728
 T	t729	o728 b545 b729 b4 b4
 B	b730	t729
-P	p730	String "rwh reduceIfthenelseFalse 0 thenT trivialT"
+P	p730	String "rwh reduce_ifthenelse_false 0 thenT trivialT"
 O	o730	ext_rule p730
 T	t730	o554 b725 b4
 B	b731	t730
@@ -2082,7 +2082,7 @@ T	t772	o b771 b4
 B	b772	t772
 T	t773	o554 b764 b772
 B	b773	t773
-P	p773	String "rwh reduceIfthenelseTrue 4 thenT rwh reduceIfthenelseTrue 5"
+P	p773	String "rwh reduce_ifthenelse_true 4 thenT rwh reduce_ifthenelse_true 5"
 O	o773	ext_rule p773
 H	h773	z t478
 T	t774	o524 b478 b768 b511
@@ -2167,7 +2167,7 @@ T	t804	o b804 b4
 B	b805	t804
 T	t805	o554 b799 b805
 B	b806	t805
-P	p806	String "rwh reduceIfthenelseFalse 4 thenT rwh reduceIfthenelseFalse 5"
+P	p806	String "rwh reduce_ifthenelse_false 4 thenT rwh reduce_ifthenelse_false 5"
 O	o806	ext_rule p806
 H	h806	z t479
 T	t806	o524 b479 b768 b511

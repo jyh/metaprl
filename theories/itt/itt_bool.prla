@@ -3761,7 +3761,7 @@ T	t2349	o b2345 b2349
 B	b2350	t2349
 T	t2350	o769 b2342 b2350
 B	b2351	t2350
-P	p2351	String "rwh reduceIfthenelseFalse 0 thenT autoT"
+P	p2351	String "rwh reduce_ifthenelse_false 0 thenT autoT"
 O	o2351	ext_rule p2351
 T	t2351	o769 b2345 b4
 B	b2352	t2351
@@ -3800,7 +3800,7 @@ T	t2364	o b2356 b2363
 B	b2364	t2364
 T	t2365	o769 b2348 b2364
 B	b2365	t2365
-P	p2365	String "rwh reduceIfthenelseTrue 4 thenT autoT"
+P	p2365	String "rwh reduce_ifthenelse_true 4 thenT autoT"
 O	o2365	ext_rule p2365
 T	t2366	o769 b2356 b4
 B	b2366	t2366
@@ -4096,7 +4096,7 @@ T	t2478	o b2463 b2477
 B	b2478	t2478
 T	t2479	o769 b2443 b2478
 B	b2479	t2479
-P	p2479	String "thinT 3 thenT rwh reduceIfthenelseTrue 0"
+P	p2479	String "thinT 3 thenT rwh reduce_ifthenelse_true 0"
 O	o2479	ext_rule p2479
 S	s2479	t773 h h2458
 G	s2479	t2391
@@ -4196,7 +4196,7 @@ T	t2518	o b2515 b2518
 B	b2519	t2518
 T	t2519	o2488 b767 b2513 b2519 b4
 B	b2520	t2519
-P	p2520	String "thinT 3 thenT rwh reduceIfthenelseFalse 0"
+P	p2520	String "thinT 3 thenT rwh reduce_ifthenelse_false 0"
 O	o2520	ext_rule p2520
 S	s2520	t773 h h2467
 G	s2520	t2397
@@ -5735,7 +5735,7 @@ T	t3130	o b3130 b4
 B	b3131	t3130
 T	t3131	o769 b3122 b3131
 B	b3132	t3131
-P	p3132	String "rwh unfold_bnot 0 thenT rwh reduceIfthenelseFalse 0 thenT autoT"
+P	p3132	String "rwh unfold_bnot 0 thenT rwh reduce_ifthenelse_false 0 thenT autoT"
 O	o3132	ext_rule p3132
 T	t3132	o769 b3130 b4
 B	b3133	t3132
@@ -6063,7 +6063,7 @@ T	t3267	o b3261 b3267
 B	b3268	t3267
 T	t3268	o769 b3252 b3268
 B	b3269	t3268
-P	p3269	String "rwh unfold_bnot 2 thenT rwh reduceIfthenelseTrue 2 thenT dT 2"
+P	p3269	String "rwh unfold_bnot 2 thenT rwh reduce_ifthenelse_true 2 thenT dT 2"
 O	o3269	ext_rule p3269
 T	t3269	o769 b3261 b4
 B	b3270	t3269
@@ -6588,7 +6588,7 @@ T	t3499	o b3495 b3499
 B	b3500	t3499
 T	t3500	o769 b3486 b3500
 B	b3501	t3500
-P	p3501	String "rwh unfold_bnot 4 thenT rwh reduceIfthenelseTrue 4 thenT dT 4"
+P	p3501	String "rwh unfold_bnot 4 thenT rwh reduce_ifthenelse_true 4 thenT dT 4"
 O	o3501	ext_rule p3501
 T	t3501	o769 b3495 b4
 B	b3502	t3501
@@ -7288,7 +7288,7 @@ T	t4716	o b4712 b4716
 B	b4717	t4716
 T	t4717	o769 b4707 b4717
 B	b4718	t4717
-P	p4718	String "rwh unfold_bnot 5 thenT rwh reduceIfthenelseTrue 5 thenT dT 5"
+P	p4718	String "rwh unfold_bnot 5 thenT rwh reduce_ifthenelse_true 5 thenT dT 5"
 O	o4718	ext_rule p4718
 T	t4718	o769 b4712 b4
 B	b4719	t4718
@@ -7813,7 +7813,7 @@ T	t4938	o b4938 b4
 B	b4939	t4938
 T	t4939	o769 b4935 b4939
 B	b4940	t4939
-P	p4940	String "rwh unfold_bor 2 thenT rwh reduceIfthenelseFalse 2"
+P	p4940	String "rwh unfold_bor 2 thenT rwh reduce_ifthenelse_false 2"
 O	o4940	ext_rule p4940
 S	s4940	t773 h h4899 h4698 h4933
 G	s4940	t4742
@@ -7934,7 +7934,7 @@ T	t4990	o b4990 b4
 B	b4991	t4990
 T	t4991	o769 b4987 b4991
 B	b4992	t4991
-P	p4992	String "rwh unfold_band 2 thenT rwh reduceIfthenelseTrue 2"
+P	p4992	String "rwh unfold_band 2 thenT rwh reduce_ifthenelse_true 2"
 O	o4992	ext_rule p4992
 S	s4992	t773 h h4899 h4698 h4914
 G	s4992	t4742
@@ -7959,7 +7959,7 @@ T	t5001	o b5001 b4
 B	b5002	t5001
 T	t5002	o4741 b767 b4992 b5002 b4
 B	b5003	t5002
-P	p5003	String "rwh unfold_band 2 thenT rwh reduceIfthenelseFalse 2 thenT dT 2"
+P	p5003	String "rwh unfold_band 2 thenT rwh reduce_ifthenelse_false 2 thenT dT 2"
 O	o5003	ext_rule p5003
 T	t5003	o532 b519 b2963
 B	b5004	t5003
@@ -8088,7 +8088,7 @@ T	t5053	o b5053 b4
 B	b5054	t5053
 T	t5054	o5032 b767 b5044 b5054 b4
 B	b5055	t5054
-P	p5055	String "thinT 4 thenT rwh unfold_bimplies 2 thenT rwh reduceIfthenelseTrue 2"
+P	p5055	String "thinT 4 thenT rwh unfold_bimplies 2 thenT rwh reduce_ifthenelse_true 2"
 O	o5055	ext_rule p5055
 T	t5055	o537 b514 b2963
 B	b5056	t5055
@@ -8274,7 +8274,7 @@ T	t5133	o b5133 b4
 B	b5134	t5133
 T	t5134	o5120 b767 b5131 b5134 b4
 B	b5135	t5134
-P	p5135	String "rwh unfold_bor 0 thenT rwh reduceIfthenelseTrue 0 thenT autoT"
+P	p5135	String "rwh unfold_bor 0 thenT rwh reduce_ifthenelse_true 0 thenT autoT"
 O	o5135	ext_rule p5135
 S	s5135	t773 h h4914
 G	s5135	t4913
@@ -8378,7 +8378,7 @@ T	t5181	o769 b5181 b4
 B	b5182	t5181
 T	t5182	o5135 b767 b5182 b4 b4
 B	b5183	t5182
-P	p5183	String "rwh unfold_bor 0 thenT rwh reduceIfthenelseFalse 0"
+P	p5183	String "rwh unfold_bor 0 thenT rwh reduce_ifthenelse_false 0"
 O	o5183	ext_rule p5183
 T	t5183	o771 b5141 b5179
 B	b5184	t5183
@@ -8473,7 +8473,7 @@ T	t5224	o b5224 b4
 B	b5225	t5224
 T	t5225	o5215 b767 b5222 b5225 b4
 B	b5226	t5225
-P	p5226	String "rwh unfold_band 0 thenT rwh reduceIfthenelseTrue 0"
+P	p5226	String "rwh unfold_band 0 thenT rwh reduce_ifthenelse_true 0"
 O	o5226	ext_rule p5226
 S	s5226	t773 h h4914
 G	s5226	t4980
@@ -8589,7 +8589,7 @@ T	t5279	o770 b5279 b4 b776
 B	b5280	t5279
 T	t5280	o2407 b5280
 B	b5281	t5280
-P	p5281	String "rwh unfold_bimplies 0 thenT rwh reduceIfthenelseTrue 0"
+P	p5281	String "rwh unfold_bimplies 0 thenT rwh reduce_ifthenelse_true 0"
 O	o5281	ext_rule p5281
 S	s5281	t773 h h4914
 G	s5281	t5056
@@ -8636,7 +8636,7 @@ T	t5300	o b5300 b4
 B	b5301	t5300
 T	t5301	o5281 b767 b5291 b5301 b4
 B	b5302	t5301
-P	p5302	String "rwh unfold_bimplies 0 thenT rwh reduceIfthenelseFalse 0 thenT autoT"
+P	p5302	String "rwh unfold_bimplies 0 thenT rwh reduce_ifthenelse_false 0 thenT autoT"
 O	o5302	ext_rule p5302
 S	s5302	t773 h h4933
 G	s5302	t5075

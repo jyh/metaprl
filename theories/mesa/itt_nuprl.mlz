@@ -1,0 +1,74 @@
+
+doc <:doc<
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
+extends Itt_theory
+extends Itt_nat
+extends Ctt_markov
+
+declare "!null_abstraction"
+declare "!undefined"
+declare "!placeholder"
+declare termof
+declare any{'a}
+
+(*
+define list_accum: list_accum{x,y.'f['x;'y];'v;'l} <--> fold_left{lambda{x.lambda{y.'f['x;'y]}};'v;'l} (* used once *)
+define select: select{'i;'L} <--> nth{'L;'i}
+define guard: guard{'a} <--> 'a
+*)
+
+define less4: "less"[]{'"i";'"j";'A;'B} <--> ( if 'i <@ 'j then 'A else 'B)
+
+define int_eq4: "int_eq"[]{'"i";'"j";'A;'B} <--> ( if 'i =@ 'j then 'A else 'B)
+
+define atom_eq4: "atom_eq"[]{'"i";'"j";'A;'B} <--> ( if eq_atom{'i;'j} then 'A else 'B)
+
+
+(* core_1 *)
+
+define nuprl_rev_implies : "rev_implies"[]{'"P";'"Q"} <--> "implies"[]{'"Q";'"P"}
+define nuprl_nequal : "nequal"[]{'"T";'"a";'"b"} <--> "not"[]{"equal"[]{'"T";'"a";'"b"}}
+
+
+
+define nuprl_sq_exists : "sq_exists"[]{'"A";"x".'"B"['"x"]} <--> "set"[]{'"A";"x".'"B"['"x"]}
+
+
+(* core_2 *)
+
+define nuprl_so_apply2 : "apply"[]{'"x";'"s1";'"s2"} <--> "apply"[]{"apply"[]{'"x";'"s1"};'"s2"}
+
+
+
+define nuprl_so_apply3 : "apply"[]{'"x";'"s1";'"s2";'"s3"} <--> "apply"[]{"apply"[]{"apply"[]{'"x";'"s1"};'"s2"};'"s3"}
+
+
+
+define nuprl_so_apply4 : "apply"[]{'"x";'"s1";'"s2";'"s3";'"s4"} <--> "apply"[]{"apply"[]{"apply"[]{"apply"[]{'"x";'"s1"};'"s2"};'"s3"};'"s4"}
+
+
+
+define nuprl_so_apply5 : "apply"[]{'"x";'"s1";'"s2";'"s3";'"s4";'"s5"} <--> "apply"[]{"apply"[]{"apply"[]{"apply"[]{"apply"[]{'"x";'"s1"};'"s2"};'"s3"};'"s4"};'"s5"}
+
+
+
+define nuprl_so_apply6 : "apply"[]{'"x";'"a";'"b";'"c";'"d";'"e";'"f"} <--> "apply"[]{"apply"[]{"apply"[]{"apply"[]{"apply"[]{"apply"[]{'"x";'"a"};'"b"};'"c"};'"d"};'"e"};'"f"}
+
+
+
+define nuprl_so_apply7 : "apply"[]{'"x";'"a";'"b";'"c";'"d";'"e";'"f";'"g"} <--> "apply"[]{"apply"[]{"apply"[]{"apply"[]{"apply"[]{"apply"[]{"apply"[]{'"x";'"a"};'"b"};'"c"};'"d"};'"e"};'"f"};'"g"}
+
+
+
+(* sqequal_1 *)
+
+declare term_sq{}
+
+(*  Nuprl_event_system_applications *)
+
+
+declare "!mk_create_realizer_args"[name:t]{'"a"}
+

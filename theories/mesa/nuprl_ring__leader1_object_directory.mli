@@ -1,0 +1,7 @@
+extends Ma_trigger1_object_directory
+
+
+define unfold_ring__leader1 : "ring-leader1"[]{'"loc";'"R";'"uid";'"out";'"in"} <-->
+      "ifthenelse"[]{('"R" '"loc");"cons"[]{"ma-join-list"[]{"send-once"[]{'"loc";"int"[]{};"int"[]{};"mkid"[]{"token"["send-me":t]{};"number"[0:n]{}};"lambda"[]{"x".'"x"};"mkid"[]{"token"["vote":t]{};"number"[0:n]{}};('"out" '"loc");"mkid"[]{"token"["me":t]{};"number"[0:n]{}}}};"cons"[]{"ma-join-list"[]{"trigger1"[]{'"loc";"int"[]{};"int"[]{};"lambda"[]{"x"."lambda"[]{"y"."beq_int"[]{'"x";'"y"}}};'"loc";"rcv"[]{('"in" '"loc");"mkid"[]{"token"["vote":t]{};"number"[0:n]{}}};"mkid"[]{"token"["leader":t]{};"number"[0:n]{}};"mkid"[]{"token"["me":t]{};"number"[0:n]{}}}};"cons"[]{"ma-join-list"[]{"Dconstant"[]{'"loc";"int"[]{};('"uid" '"loc");"mkid"[]{"token"["me":t]{};"number"[0:n]{}};'"loc"}};"cons"[]{"ma-single-sends1"[]{"int"[]{};"int"[]{};"int"[]{};"mkid"[]{"token"["me":t]{};"number"[0:n]{}};"rcv"[]{('"in" '"loc");"mkid"[]{"token"["vote":t]{};"number"[0:n]{}}};('"out" '"loc");"mkid"[]{"token"["vote":t]{};"number"[0:n]{}};"lambda"[]{"a"."lambda"[]{"b"."ifthenelse"[]{"lt_bool"[]{'"a";'"b"};"cons"[]{'"b";"nil"[]{}};"nil"[]{}}}}};"cons"[]{"ma-single-sframe"[]{"cons"[]{"rcv"[]{('"in" '"loc");"mkid"[]{"token"["vote":t]{};"number"[0:n]{}}};"cons"[]{"locl"[]{"mkid"[]{"token"["send-me":t]{};"number"[0:n]{}}};"nil"[]{}}};('"out" '"loc");"mkid"[]{"token"["vote":t]{};"number"[0:n]{}}};"nil"[]{}}}}}};"nil"[]{}}
+
+

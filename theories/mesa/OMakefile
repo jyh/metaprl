@@ -1,0 +1,27 @@
+OCAMLINCLUDES +=\
+   $(addprefix -I , $(SUPPORT_DIRS))\
+   -I ../base -I ../itt
+
+# Library files
+include ofiles
+
+TEST_FILES =\
+
+MPFILES = $(if $(TESTS_ENABLED), $(MPFILES) $(TEST_FILES), $(MPFILES))
+
+Theory($(MPFILES))
+
+#
+# Documentation
+#
+PRINT_THEORIES =\
+
+TheoryDocumentInstall(mesa, $(PRINT_THEORIES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
+
+all: theory$(LIB_SUFFIX)

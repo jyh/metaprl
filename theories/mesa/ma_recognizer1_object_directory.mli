@@ -1,0 +1,3 @@
+extends Nuprl_recognizer1_object_directory
+
+

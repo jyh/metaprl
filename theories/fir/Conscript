@@ -8,8 +8,8 @@ Import qw( env );
 #
 my @src =
    qw(   auto option bool record int list int_set
-         ty exp util
-         tr_bas tr_types tr_atom_base tr_atom tr_store tr_exp
+         ty exp util sequent
+         tr_base tr_types tr_atom_base tr_atom tr_store tr_exp
          termOp_base termOp
          connect_base connect_ty
          test );

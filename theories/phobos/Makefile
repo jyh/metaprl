@@ -14,14 +14,6 @@ MPFILES :=\
 	phobos_base\
 	phobos_theory
 
-ifeq ($(TESTS),YES)
-	MPFILES:= $(MPFILES)\
-	itt_bugs\
-	jprover_tests\
-	itt_test\
-
-endif
-
 # Name of main libraris
 MAIN = theory
 

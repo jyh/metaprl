@@ -138,13 +138,13 @@ interactive barber 'H 'barber :
 (* during an interactive proof session *)
 
 
-interactive fv1 :
+interactive fv1 bind{x.'A['x]} 'x 'y :
    sequent ['ext] { >- 'A['x] => 'A['y] }
 
-interactive fv2 :
+interactive fv2 bind{x.'A['x]} 'a 'b 'f :
    sequent ['ext] { >- all x:'T. 'A['x,'b] => 'A['f('a),'b] }
 
-interactive fv3 :
+interactive fv3 bind{x.'A['x]} 'a 'b 'f :
    sequent ['ext] { >- all x:'T. 'A['x,'b] => 'A['f('a),'a] }  (* INVALID *)
 
 
@@ -158,7 +158,7 @@ interactive fv3 :
 
 
 
-interactive jens_fo_fv :
+interactive jens_fo_fv 'a 'b :
    sequent ['ext] { >- (all x:'O. 'S['x]) & (all y:'O. ("not"{('T['y] => 'R['y])} => 'P['y])) => "not"{(exst z:'O. (('P['z] => 'Q['z]) & ('T['z] => 'R['z])))} => "not"{("not"{('P['a])})} & 'S['a] & 'S['b] }
 
 
@@ -171,10 +171,10 @@ interactive jens_fo_fv :
 (* of function symbols in the righmost implication's conclusion *)
 
 
-interactive fun1 :
+interactive fun1 'a bind{x.'f['x]} :
    sequent ['ext] { >- 'P['a] & (all x:'O. ('P['x] => 'P['f['x]])) => 'P['f['f['f['f['a]]]]] }
 
-interactive fun2 :
+interactive fun2 bind{x.'A['x]} 'a bind{x.'f['x]} bind{x.'g['x]} :
    sequent ['ext] { >- 'A['a,'g['a]] & (all x:'O. ('A['x,'g['x]] => 'A['f['x],'g['f['x]]])) => 'A['f['f['f['a]]],'g['f['f['f['a]]]]] }
 
 
@@ -226,8 +226,8 @@ interactive deadlock1 :
 
 
 
-interactive deadlock2 :
-   sequent ['ext] { >- (all x: 'T. all y:'T. ('P['x,'y] or 'B['x,'y])) & ((exst x:'T. exst y:'T. 'P['x,'y]) => (exst a:'T. 'A['a,'c])) & (all z:'T. ('A['z,'c] => (exst b:'T. "not"{('P['z,'b])}))) => exst x:'T. exst y:'T. 'B['x,'y] }
+interactive deadlock2 bind{x,y.'A['x;'y]} 'c :
+   sequent ['ext] { >- (all x: 'T. all y:'T. ('P['x;'y] or 'B['x;'y])) & ((exst x:'T. exst y:'T. 'P['x;'y]) => (exst a:'T. 'A['a;'c])) & (all z:'T. ('A['z;'c] => (exst b:'T. "not"{('P['z;'b])}))) => exst x:'T. exst y:'T. 'B['x;'y] }
 
 
 
@@ -251,7 +251,7 @@ interactive deadlock4 :
 
 
 interactive mult_no_rename :
-   sequent ['ext] { >- (all x:'T. ('A['x] or (exst a:'T. 'B['x,'a]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. exst y:'T. 'B['x,'y]) }
+   sequent ['ext] { >- (all x:'T. ('A['x] or (exst a:'T. 'B['x;'a]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. exst y:'T. 'B['x;'y]) }
 
 interactive mult_no_rename2 :
    sequent ['ext] { >- (all x:'T. ('A['x] or ('B['x] & (exst a:'T. 'C['a])))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. ('B['x] & (exst z:'T. 'C['z]))) }
@@ -269,7 +269,7 @@ interactive mult_eigen_del :
 (* ebedding multiple use of eigenvariable formula WITH eigenvariable renaming *)
 
 interactive mult_rename :
-   sequent ['ext] { >- (all x:'T. (('A['x] or 'B['x]) & (exst a:'T. 'C['a,'x]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. ('B['x] & (exst z:'T. 'C['z,'x]))) }
+   sequent ['ext] { >- (all x:'T. (('A['x] or 'B['x]) & (exst a:'T. 'C['a;'x]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. ('B['x] & (exst z:'T. 'C['z;'x]))) }
 
 
 

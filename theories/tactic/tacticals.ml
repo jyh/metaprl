@@ -8,6 +8,7 @@ include Nltop
 open Printf
 open Nl_debug
 open Refiner.Refiner
+open Refiner.Refiner.Refine
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
@@ -564,6 +565,23 @@ let tryOnAllMHypsT tac =
 
 let tryOnAllMClausesT tac =
    onAllMClausesT (function i -> tryT (tac i))
+
+
+(*
+ * These tactics are useful for trivial search.
+ *)
+let onSomeAssumT tac p =
+   let rec some i assums p =
+      match assums with
+         [_] ->
+            tac i p
+       | _ :: assums ->
+            (tac i orelseT some (i + 1) assums) p
+       | [] ->
+            raise (RefineError ("onSomeAssumT", StringError "no assumptions"))
+   in
+   let _, assums = dest_msequent (Sequent.msequent p) in
+      some 1 assums p
 
 (*
  * Make sure one of the hyps works.

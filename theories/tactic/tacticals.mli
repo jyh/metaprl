@@ -121,6 +121,7 @@ topval onAllMClausesT : (int -> tactic) -> tactic
 topval tryOnAllMHypsT : (int -> tactic) -> tactic
 topval tryOnAllMClausesT : (int -> tactic) -> tactic
 
+topval onSomeAssumT : (int -> tactic) -> tactic
 topval onSomeHypT : (int -> tactic) -> tactic
 topval onVarT : string -> (int -> tactic) -> tactic
 

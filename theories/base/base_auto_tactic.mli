@@ -88,12 +88,6 @@ topval trivialT : tactic
 topval autoT : tactic
 
 (*
- * These tactics are useful for trivial search.
- *)
-topval onSomeHypT : (int -> tactic) -> tactic
-topval onSomeAssumT : (int -> tactic) -> tactic
-
-(*
  * Most times, a normal tactic is passed as auto_tac.
  * This wrapper converts it.
  *)

@@ -449,35 +449,6 @@ let autoT p =
    Sequent.get_tactic_arg p "auto" p
 
 (*
- * These tactics are useful for trivial search.
- *)
-let onSomeAssumT tac p =
-   let rec some i assums p =
-      match assums with
-         [_] ->
-            tac i p
-       | _ :: assums ->
-            (tac i orelseT some (i + 1) assums) p
-       | [] ->
-            raise (RefineError ("onSomeAssumT", StringError "no assumptions"))
-   in
-   let _, assums = dest_msequent (Sequent.msequent p) in
-      some 1 assums p
-
-let onSomeHypT tac p =
-   let rec some i len p =
-      if i = len then
-         tac i p
-      else
-         (tac i orelseT some (i + 1) len) p
-   in
-   let len = hyp_count p in
-      if len = 0 then
-         raise (RefineError ("onSomeHypT", StringError "no hyps"))
-      else
-         some 1 len p
-
-(*
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -12,7 +12,12 @@ $env = $env->clone(
                 LC_ALL => "C"
         },
         OCAMLCFLAGS => "",
-        OCAMLC => "prlc -opt"
+        OCAMLC => "prlc -opt",
+
+	# All files compiled with prlc implicitly depend on these files and
+	# modules.
+	HIDDEPS => "#filter/filter/prlc #lib/camlp4n #lib/registry.txt #lib/mbs-mpl.txt",
+	HIDMODDEPS => "Printf Mp_debug Refiner Refine_exn Term Term_util Theory Dform Dform_print Tactic Mp_resource Precedence Filter_summary",
 );
 
 Export qw( env );

@@ -20,17 +20,6 @@ Depends $env ['tactic_cache',
 	"#lib/prlcn",
 	"#lib/prlco";
 
-OCamlDepends $env ['tactic_cache', 'perv', 'nuprl_font'],
-	'dform_print',
-	'refine_exn';
-
-OCamlDepends $env ['summary'],
-	'nuprl_font',
-	'base_dform',
-	'comment',
-	'perv',
-	'refine_exn';
-
 OCamlSources $env
 	'tactic_cache.ml',
 	'perv.ml',

@@ -63,10 +63,6 @@
  * jyh@cs.cornell.edu
  *)
 
-(*
- * open Ml_term
- *)
-
 open Printf
 open Mp_debug
 open Refiner.Refiner

@@ -40,13 +40,6 @@
  * @end[license]
  *)
 
-(*
- * open Nuprl_font
- * open Base_dform
- * open Comment
- * open Perv
- *)
-
 (*!
  * @begin[doc]
  * @parents

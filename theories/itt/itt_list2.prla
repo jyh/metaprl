@@ -615,7 +615,7 @@ T	t1360	o1360
 B	b1360	t1360
 P	p1369	String reduce_replace_nth_cons
 O	o1369	rewrite p1369
-P	p1372	String "rw (addrC [0] (higherC unfold_replace_nth)) 0 thenT rw reduceC 0"
+P	p1372	String "rw (addrC [1] (higherC unfold_replace_nth)) 0 thenT rw reduceC 0"
 O	o1372	ext_rule p1372
 P	p1375	Var v_1
 O	o1375	var p1375
@@ -9889,7 +9889,7 @@ B	b3545	t3545
 P	p3545	Number 16421
 P	p3546	Number 16546
 O	o3546	location p3545 p3546
-P	p1196	String "rw (addrC [0] (higherC unfold_nth)) 0 thenT reduceT"
+P	p1196	String "rw (addrC [1] (higherC unfold_nth)) 0 thenT reduceT"
 O	o1201	ext_rule p1196
 P	p1204	String "byDefT fold_nth"
 O	o1204	ext_rule p1204

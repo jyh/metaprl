@@ -6859,7 +6859,7 @@ T	t5376	o b5376 b13
 B	b5377	t5376
 T	t5377	o1008 b5373 b5377
 B	b5378	t5377
-P	p3480	String "rw (lt_addMonoC <<'i>>) 4 thenT rw (addrC [0] reduceC) 4 thenT rwhAll normalizeC thenMT arithT ttca"
+P	p3480	String "rw (lt_addMonoC <<'i>>) 4 thenT rw (addrC [1] reduceC) 4 thenT rwhAll normalizeC thenMT arithT ttca"
 O	o3480	ext_rule p3480
 S	s3476	t990\\ h h3938 h3950 h3952 h4030\\ t4457
 B	b3476	s3476
@@ -6915,7 +6915,7 @@ T	t5394	o1008 b5394 b13
 B	b5395	t5394
 T	t5395	o6166 b1007 b5395 b13 b13
 B	b5396	t5395
-P	p3502	String "rw (unfold_ge thenC unfold_le thenC addrC [0] unfold_le_bool) 0 thenT dT 0 taa thenT rw fold_lt (-1) thenT irrefl_EliminationT 3 6 ttca"
+P	p3502	String "rw (unfold_ge thenC unfold_le thenC addrC [1] unfold_le_bool) 0 thenT dT 0 taa thenT rw fold_lt (-1) thenT irrefl_EliminationT 3 6 ttca"
 O	o3502	ext_rule p3502
 S	s3490	t990\\ h h3938 h3950 h3952 h4030\\ t3490
 B	b3491	s3490
@@ -7047,7 +7047,7 @@ T	t6283	o b6283 b13
 B	b6284	t6283
 T	t6284	o1008 b6278 b6284
 B	b6285	t6284
-P	p3548	String "rw (lt_addMonoC <<'i>>) 4 thenMT rw (addrC [1] normalizeC) 4 thenMT rwh add_CommutC 0 thenMT arithT ttca"
+P	p3548	String "rw (lt_addMonoC <<'i>>) 4 thenMT rw (addrC [2] normalizeC) 4 thenMT rwh add_CommutC 0 thenMT arithT ttca"
 O	o3548	ext_rule p3548
 S	s3542	t990\\ h h3938 h3992 h3997 h4030\\ t5027
 B	b3543	s3542

@@ -21,15 +21,8 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
 
-open Tactic_type
-open Tactic_type.Tacticals
-open Auto_tactic
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_struct
 open Itt_record_label
@@ -597,7 +590,7 @@ let record_exchangeC n =
             if i = 0 then
                record_exchange thenC reduce_eq_label
             else
-               addrC [1] (aux (i -1))
+               addrC [Subterm 2] (aux (i -1))
          in
             aux n
 

@@ -1401,7 +1401,7 @@ T	t537	o b536 b4
 B	b537	t537
 T	t538	o501 b525 b537
 B	b538	t538
-P	p538	String "rwhAll (addrC [1;0] (revAssumC 1))"
+P	p538	String "rwhAll (addrC [2; 1] (revAssumC 1))"
 O	o538	ext_rule p538
 T	t539	o252 b510 b492
 B	b539	t539

@@ -88,9 +88,9 @@ define unfold_ring1 : ring[i:l] <-->
    {R: prering[i:l] | isRing{'R}}
 doc docoff
 
-let unfold_isDistrib = unfold_isDistrib1 thenC addrC [1] unfold_isLDistrib thenC addrC [0] unfold_isRDistrib
-let unfold_isRing = unfold_isRing1 thenC addrC [0] unfold_isSemigroup thenC addrC [1; 0] unfold_isAbelg (* thenC reduceC*) thenC addrC [1; 1] unfold_isDistrib
-let unfold_ring = unfold_ring1 thenC addrC [0] unfold_prering thenC addrC [1] unfold_isRing
+let unfold_isDistrib = unfold_isDistrib1 thenC addrC [Subterm 2] unfold_isLDistrib thenC addrC [Subterm 1] unfold_isRDistrib
+let unfold_isRing = unfold_isRing1 thenC addrC [Subterm 1] unfold_isSemigroup thenC addrC [Subterm 2; Subterm 1] unfold_isAbelg (* thenC reduceC*) thenC addrC [Subterm 2; Subterm 2] unfold_isDistrib
+let unfold_ring = unfold_ring1 thenC addrC [Subterm 1] unfold_prering thenC addrC [Subterm 2] unfold_isRing
 
 let fold_isRDistrib = makeFoldC << isRDistrib{'r} >> unfold_isRDistrib
 let fold_isLDistrib = makeFoldC << isLDistrib{'r} >> unfold_isLDistrib
@@ -519,7 +519,7 @@ define unfold_Z : Z <-->
 doc docoff
 
 let fold_Z = makeFoldC << Z >> unfold_Z
-let fold_Z_car = foldC << Z^car >> ((addrC [0] unfold_Z) thenC reduceC)
+let fold_Z_car = foldC << Z^car >> ((addrC [Subterm 1] unfold_Z) thenC reduceC)
 
 doc <:doc< @doc{ } >>
 interactive integer_ring {| intro [] |} :

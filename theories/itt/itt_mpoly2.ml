@@ -358,7 +358,7 @@ let resource mpoly_eval (*reduce*) += [
 	<<map2{'f; 'l1; 'l2}>>, (unfold_map2 thenC tailC);
 	<<mklist{number[i:n]; 'f}>>, (Itt_list2.unfold_mklist thenC tailC);
 (**)
-	<<mpoly{'R; number[i:n]}>>, (unfold_mpoly thenC (addrC [0] unfold_monom));
+	<<mpoly{'R; number[i:n]}>>, (unfold_mpoly thenC (addrC [Subterm 1] unfold_monom));
 	<<const_mpoly{'c; number[i:n]}>>, (unfold_const_mpoly thenC tailC);
 	<<eval_monom{('k,'f); 'vals; 'R}>>, (reduce_eval_monom thenC tailC);
 	<<eval_mpoly{cons{'h;'t}; 'vals; 'R}>>, (unfold_eval_mpoly thenC tailC);
@@ -391,9 +391,9 @@ let resource mpoly_eval (*reduce*) += [
 	<<mpoly_ofTerm{constTerm{'c}; 'R; number[n:n]}>>, (reduce_mpoly_ofTermConst thenC tailC);
 	<<mpoly_ofTerm{varTerm{number[i:n]}; 'R; number[n:n]}>>, (reduce_mpoly_ofTermVar thenC tailC);
 (**)
-	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC reduceC);
-	<<'a +[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC (addrC [0;0] reduceC) thenC tailC);
-	<<'a *[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC (addrC [0;0] reduceC) thenC tailC);
+	<<field[t:t]{Z}>>, ((addrC [Subterm 1] unfold_Z) thenC reduceC);
+	<<'a +[Z] 'b>>, ((addrC [Subterm 1; Subterm 1; Subterm 1] unfold_Z) thenC (addrC [Subterm 1; Subterm 1] reduceC) thenC tailC);
+	<<'a *[Z] 'b>>, ((addrC [Subterm 1; Subterm 1; Subterm 1] unfold_Z) thenC (addrC [Subterm 1; Subterm 1] reduceC) thenC tailC);
 ]
 
 let resource mpoly_eval += [
@@ -544,7 +544,7 @@ let rec proveVarTypesT f_car = function
 	[] -> idT
  | h::t ->
 		assertT (mk_equal_term f_car h h) thenAT
-		(rw (addrC [0] mpoly_evalC) 0) thenMT
+		(rw (addrC [Subterm 1] mpoly_evalC) 0) thenMT
 		proveVarTypesT f_car t
 
 let assertEqT f f_car vars varlist t =
@@ -554,9 +554,9 @@ let assertEqT f f_car vars varlist t =
 
 let standardizeT ft f f_car vars varlist t =
 	(assertEqT f f_car vars varlist t thenAT rw mpoly_evalC 0) thenMT
-	rw (addrC [2] mpolyTerm2mpoly) (-1) thenMT
+	rw (addrC [Subterm 3] mpolyTerm2mpoly) (-1) thenMT
 	eval_standardizeElim (-1) ft thenMT
-	rw (addrC [2] mpoly_evalC) (-1)
+	rw (addrC [Subterm 3] mpoly_evalC) (-1)
 
 let stdT ft f vars i = funT (fun p ->
 	let t = if i=0 then Sequent.concl p else Sequent.nth_hyp p i in

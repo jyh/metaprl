@@ -4409,7 +4409,7 @@ T	t3336	o937 b3335
 B	b3336	t3336
 T	t3337	o936 b2479 b3336
 B	b3337	t3337
-P	p3339	String "rw (addrC [1] var_arity_not_simple) 0 taa"
+P	p3339	String "rw (addrC [2] var_arity_not_simple) 0 taa"
 O	o3339	ext_rule p3339
 T	t3350	o1006 b1345 b3334 b3334
 S	s3350	t938\\ h\\ t3350
@@ -5148,7 +5148,7 @@ T	t3650	o2280 b3649
 B	b3650	t3650
 T	t3651	o2284 b2285 b3650
 B	b3651	t3651
-P	p3651	String "rwh (addrC [0] unfold_var_arity) 0 thenT rwh reduce_fix 0 thenT rwh fold_var_arity 0 thenT reduceT thenT byDefT unfold_itbterm"
+P	p3651	String "rwh (addrC [1] unfold_var_arity) 0 thenT rwh reduce_fix 0 thenT rwh fold_var_arity 0 thenT reduceT thenT byDefT unfold_itbterm"
 O	o3651	ext_rule p3651
 T	t3652	o1850 b3242 b3651
 S	s3652	t938\\ h\\ t3652
@@ -5171,7 +5171,7 @@ T	t3676	o2280 b3676
 B	b3677	t3676
 T	t3677	o2284 b2285 b3677
 B	b3678	t3677
-P	p3678	String "rw (addrC [0] unfold_var_arity) 0 thenT rwh reduce_fix 0 thenT rwh fold_var_arity 0 thenT byDefT unfold_itbterm thenT reduceT ttca"
+P	p3678	String "rw (addrC [1] unfold_var_arity) 0 thenT rwh reduce_fix 0 thenT rwh fold_var_arity 0 thenT byDefT unfold_itbterm thenT reduceT ttca"
 O	o3678	ext_rule p3678
 T	t3678	o1850 b3278 b3678
 S	s3678	t938\\ h\\ t3678
@@ -7098,7 +7098,7 @@ T	t1206	o b1205 b8
 B	b1207	t1206
 T	t1207	o b1202 b1207
 B	b1213	t1207
-P	p1220	String "rwh (addrC [0] unfold_depth) 0 thenT byDefsT [reduce_fix; fold_depth; reduceC]"
+P	p1220	String "rwh (addrC [1] unfold_depth) 0 thenT byDefsT [reduce_fix; fold_depth; reduceC]"
 O	o1220	ext_rule p1220
 S	s1220	t938\\ h\\ t1202
 B	b1238	s1220
@@ -9729,7 +9729,7 @@ T	t1851	o936 b2414 b1850
 B	b1858	t1851
 T	t1858	o936 b2733 b1858
 B	b1859	t1858
-P	p1864	String "doNotThinT (letT << 'bl = subterms{'b} in list{BTerm} >>) thenMT assumT 4 thenMT rwh (addrC [1] depth_not_zero) 0 ttca"
+P	p1864	String "doNotThinT (letT << 'bl = subterms{'b} in list{BTerm} >>) thenMT assumT 4 thenMT rwh (addrC [2] depth_not_zero) 0 ttca"
 O	o1864	ext_rule p1864
 T	t1870	o b1848 b2744
 B	b1870	t1870
@@ -10643,7 +10643,7 @@ T	t5183	o936 b1317 b5182
 B	b5183	t5183
 T	t5184	o936 b1104 b5183
 B	b5184	t5184
-P	p5184	String "rwh (addrC [0] (compatible_shapes_var << 'bt >>)) 0 ttca"
+P	p5184	String "rwh (addrC [1] (compatible_shapes_var << 'bt >>)) 0 ttca"
 O	o5184	ext_rule p5184
 T	t5185	o b1316 b4447
 B	b5185	t5185
@@ -10724,7 +10724,7 @@ T	t5218	o b5213 b5218
 B	b5219	t5218
 T	t5219	o953 b5210 b5219
 B	b5220	t5219
-P	p5220	String "rwh (addrC [0] (compatible_shapes_var << 'b >>)) 0 ttca"
+P	p5220	String "rwh (addrC [1] (compatible_shapes_var << 'b >>)) 0 ttca"
 O	o5220	ext_rule p5220
 T	t5220	o954 b5212 b8
 B	b5221	t5220

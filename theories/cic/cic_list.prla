@@ -653,7 +653,7 @@ T	t250	o b249 b4
 B	b250	t250
 T	t251	o243 b246 b250
 B	b251	t251
-P	p251	String "rw (addrC [1] fold_prodH) 0"
+P	p251	String "rw (addrC [2] fold_prodH) 0"
 O	o251	ext_rule p251
 NCic_ind_type!prodH	prodH	prodH Cic_ind_type
 O	o252	prodH
@@ -1040,7 +1040,7 @@ T	t276	o b216 b222
 B	b344	t276
 T	t344	o243 b51 b344
 B	b345	t344
-P	p345	String "rw (addrC [0] fold_applH) 0"
+P	p345	String "rw (addrC [1] fold_applH) 0"
 O	o345	ext_rule p345
 NCic_ind_type!applH	applH	applH Cic_ind_type
 O	o346	applH

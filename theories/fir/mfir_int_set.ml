@@ -1,41 +1,41 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Mfir_int_set]
-  
+
    The @tt[Mfir_int_set] module defines integer sets and operations on them.
    @end[doc]
-  
+
    ------------------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.  Additional
    information about the system is available at
    http://www.metaprl.org/
-  
+
    Copyright (C) 2002 Brian Emre Aydemir, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -45,11 +45,11 @@ extends Mfir_bool
 extends Mfir_int
 extends Mfir_list
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
-open Top_conversionals
+open Basic_tactics
 open Mfir_bool
 open Mfir_int
 
@@ -58,11 +58,11 @@ open Mfir_int
  * Declarations.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
    @modsubsection{Integer sets}
-  
+
    The FIR uses integer sets in pattern matching expressions (see
    @hrefterm[matchExp]), and to designate a subset of the cases of a union
    definition.  An integer set is represented as a sorted list of closed
@@ -70,7 +70,7 @@ doc <:doc<
    to be @emph{normalized}; in addition to being sorted, no two intervals in a
    set should overlap, and it should never be the case that two adjacent
    intervals are of the form $[a,i],[i+1,b]$.
-  
+
    The term @tt[interval] represents a closed interval.  The left endpoint
    should be less then or equal to the right endpoint.  The term @tt[intset]
    consists of a sorted list of intervals.  The parameters are tags to
@@ -85,7 +85,7 @@ declare intset[precision:n, sign:s]{ 'interval_list }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Set operations}
-  
+
    The term @tt[member] tests if @tt[num] is a member of the set @tt[s].
    @end[doc]
 >>
@@ -93,9 +93,9 @@ doc <:doc< ************************************
 declare member{ 'num; 's }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The term @tt[normalize] is used to normalize a set by joining intervals
    of the form $[a,i],[i+1,b]$.  It performs no other actions in normalizing
    a set.
@@ -105,7 +105,7 @@ doc <:doc<
 declare normalize{ 'set }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The term @tt[subset] is used to determine whether or not @tt[set1]
    is a subset of @tt[set2].  The term @tt[set_eq] is used to test two
@@ -121,7 +121,7 @@ declare union{ 'set1; 'set2 }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Constants}
-  
+
    The term @tt[intset_max] is the set of all integers with the given
    bit-precision and signedness.  Precisions of 8, 16, 31, 32, and 64 are
    currently supported.  The signedness may be ``signed'' or ``unsigned''.
@@ -133,7 +133,7 @@ doc <:doc< ************************************
 declare intset_max[precision:n, sign:s]
 declare enum_max
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -148,7 +148,7 @@ declare interval_lt{ 'interval1; 'interval2 }
 declare union_aux{ 'interval; 'h1; 't1; 'h2; 't2 }
 declare union_interval{ 'interval1; 'interval2 }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -157,11 +157,11 @@ doc <:doc<
  * Rewrites.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
    @modsubsection{Interval operations}
-  
+
    Rewriting of interval operations is straightforward. Note that in
    taking the union of two intervals, we assume that the two intervals
    overlap.
@@ -185,7 +185,7 @@ prim_rw reduce_subset_interval_main :
    "and"{ int_le{ number[n:n]; number[i:n] };
           int_le{ number[j:n]; number[m:n] } }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -194,13 +194,13 @@ let reduce_interval_lt =
 
 let reduce_union_interval =
    reduce_union_interval_main thenC
-   (addrC [0] reduce_int_min) thenC
-   (addrC [1] reduce_int_max)
+   (addrC [Subterm 1] reduce_int_min) thenC
+   (addrC [Subterm 2] reduce_int_max)
 
 let reduce_subset_interval =
    reduce_subset_interval_main thenC
-   (addrC [0] reduce_int_le) thenC
-   (addrC [1] reduce_int_le) thenC
+   (addrC [Subterm 1] reduce_int_le) thenC
+   (addrC [Subterm 2] reduce_int_le) thenC
    reduce_and thenC
    reduce_ifthenelse
 
@@ -208,7 +208,7 @@ let reduce_subset_interval =
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Set operations}
-  
+
    Testing for set membership is straightforward.
    @end[doc]
 >>
@@ -228,17 +228,17 @@ prim_rw reduce_member_intset_ind :
    else
          member{ number[i:n]; intset[p:n, s:s]{ 'tail } })
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 let reduce_member =
    reduce_member_intset_base orelseC
    (  reduce_member_intset_ind thenC
-      (addrC [0;0] reduce_int_le) thenC
-      (addrC [0;1] reduce_int_le) thenC
-      (addrC [0] reduce_and) thenC
-      (addrC [0] reduce_ifthenelse) thenC
+      (addrC [Subterm 1; Subterm 1] reduce_int_le) thenC
+      (addrC [Subterm 1; Subterm 2] reduce_int_le) thenC
+      (addrC [Subterm 1] reduce_and) thenC
+      (addrC [Subterm 1] reduce_ifthenelse) thenC
       reduce_ifthenelse
    )
 
@@ -247,9 +247,9 @@ let resource reduce += [
 ]
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Set normalization is limited to combining intervals of the form
    $[a,i],[i+1,b]$.  We assume that the intervals are sorted and
    non-overlapping.
@@ -276,7 +276,7 @@ prim_rw reduce_normalize_ind :
       cons{ interval{ number[i:n]; number[j:n] };
             normalize{ cons{ interval{number[m:n]; number[n:n]}; 'tail } } } }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -284,23 +284,23 @@ let reduce_normalize_intervals =
    reduce_normalize_base1 orelseC
    reduce_normalize_base2 orelseC
    (  reduce_normalize_ind thenC
-      (addrC [0; 0] reduce_add) thenC
-      (addrC [0] reduce_int_eq) thenC
+      (addrC [Subterm 1; Subterm 1] reduce_add) thenC
+      (addrC [Subterm 1] reduce_int_eq) thenC
       reduce_ifthenelse
    )
 
 let reduce_normalize =
    reduce_normalize_aux thenC
-   (addrC [0] (repeatC (higherC reduce_normalize_intervals)))
+   (addrC [Subterm 1] (repeatC (higherC reduce_normalize_intervals)))
 
 let resource reduce += [
    << normalize{ intset[p:n, s:s]{ 'intervals } } >>, reduce_normalize
 ]
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The @tt[reduce_subset] conversional uses the three rewrites below to reduce
    <<'set1 subset 'set2>>.  The cases in which one of the sets is
    empty are straightforward.  The case in which both sets are non-empty
@@ -333,7 +333,7 @@ prim_rw reduce_subset_ind :
     else
       "false")
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -342,9 +342,9 @@ let reduce_subset =
    reduce_subset_base1 orelseC
    reduce_subset_base2 orelseC
    (  reduce_subset_ind thenC
-      (addrC [0] reduce_interval_lt) thenC
+      (addrC [Subterm 1] reduce_interval_lt) thenC
       reduce_ifthenelse thenC
-      (tryC (addrC [0] reduce_subset_interval)) thenC
+      (tryC (addrC [Subterm 1] reduce_subset_interval)) thenC
       (tryC reduce_ifthenelse)
    )
 
@@ -353,9 +353,9 @@ let resource reduce += [
 ]
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Computing the union of two integer sets is rather involved.
    The cases in which one of the sets is empty are straightforward.
    The case in which both sets are non-empty reduces to a case
@@ -392,7 +392,7 @@ prim_rw reduce_union_aux :
    else
       union{ ('l :: 't1); 't2 })
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -416,7 +416,7 @@ let union_list = [
 
 let reduce_union =
    reduce_union_start thenC
-   (addrC [0; 0] (repeatC (higherC (firstC union_list)))) thenC
+   (addrC [Subterm 1; Subterm 1] (repeatC (higherC (firstC union_list)))) thenC
    reduce_normalize
 
 let resource reduce += [
@@ -424,9 +424,9 @@ let resource reduce += [
 ]
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Set equality is defined in the usual way.
    @end[doc]
 >>
@@ -435,13 +435,13 @@ prim_rw reduce_set_eq_aux :
    set_eq{ 's1; 's2 } <-->
    "and"{. 's1 subset 's2 ; .'s2 subset 's1  }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 let reduce_set_eq =
    reduce_set_eq_aux thenC
-   (addrC [0] (repeatC reduce_subset)) thenC
+   (addrC [Subterm 1] (repeatC reduce_subset)) thenC
    reduce_and thenC
    reduce_ifthenelse thenC
    (tryC (repeatC reduce_subset))
@@ -454,13 +454,13 @@ let resource reduce += [
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Constants}
-  
+
    Set constants can be rewritten into their actual values.  These rewrites
    are straightforward, and we omit an explicit listing of them.
    @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 

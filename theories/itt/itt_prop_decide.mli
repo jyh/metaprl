@@ -32,9 +32,13 @@
 
 extends Itt_logic
 
-open Tactic_type.Tactic
+open Basic_tactics
 
 topval propDecideT : tactic
+
+val is_imp_and_term : term -> bool
+val is_imp_imp_term : term -> bool
+val is_imp_or_term : term -> bool
 
 (*
  * -*-

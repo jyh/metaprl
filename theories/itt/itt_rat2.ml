@@ -139,13 +139,13 @@ let resource arith_unfold +=[
 	<<mul_rat{'a; mul_rat{'b; 'c}}>>, termC mul_rat_Swap2C;
 	<<mul_rat{'a; rat{number[i:n]; number[k:n]}}>>, mul_rat_CommutC;
 	<<mul_rat{'a; mul_rat{rat{number[i:n]; number[k:n]}; 'b}}>>, mul_rat_BubblePrimitiveC;
-	<<mul_rat{rat{number[i:n]; number[k:n]}; mul_rat{rat{number[j:n]; number[l:n]}; 'c}}>>, (mul_rat_AssocC thenC (addrC [0] reduceC));
+	<<mul_rat{rat{number[i:n]; number[k:n]}; mul_rat{rat{number[j:n]; number[l:n]}; 'c}}>>, (mul_rat_AssocC thenC (addrC [Subterm 1] reduceC));
 
 	<<add_rat{'a; 'b}>>, termC add_rat_Swap1C;
 	<<add_rat{'a; add_rat{'b; 'c}}>>, termC add_rat_Swap2C;
 	<<add_rat{'a; rat{number[i:n]; number[k:n]}}>>, add_rat_CommutC;
 	<<add_rat{'a; add_rat{rat{number[i:n]; number[k:n]}; 'b}}>>, add_rat_BubblePrimitiveC;
-	<<add_rat{rat{number[i:n]; number[k:n]}; add_rat{rat{number[j:n]; number[l:n]}; 'c}}>>, (add_rat_AssocC thenC (addrC [0] reduceC));
+	<<add_rat{rat{number[i:n]; number[k:n]}; add_rat{rat{number[j:n]; number[l:n]}; 'c}}>>, (add_rat_AssocC thenC (addrC [Subterm 1] reduceC));
 
 	<<add_rat{add_rat{'a; 'b}; 'c}>>, add_rat_Assoc2C;
 	<<mul_rat{mul_rat{'a; 'b}; 'c}>>, mul_rat_Assoc2C;
@@ -155,10 +155,10 @@ let resource arith_unfold +=[
 	<<add_rat{'a; mul_rat{rat{number[j:n]; number[l:n]}; 'a}}>>, sum_same_products_rat3C;
 	<<add_rat{'a; 'a}>>, sum_same_products_rat4C;
 
-	<<add_rat{mul_rat{rat{number[i:n]; number[k:n]}; 'a}; add_rat{mul_rat{rat{number[j:n]; number[l:n]}; 'a}; 'b}}>>, (add_rat_AssocC thenC (addrC [0] sum_same_products_rat1C));
-	<<add_rat{mul_rat{rat{number[i:n]; number[k:n]}; 'a}; add_rat{'a; 'b}}>>, (add_rat_AssocC thenC (addrC [0] sum_same_products_rat2C));
-	<<add_rat{'a; add_rat{mul_rat{rat{number[i:n]; number[k:n]}; 'a}; 'b}}>>, (add_rat_AssocC thenC (addrC [0] sum_same_products_rat3C));
-	<<add_rat{'a; add_rat{'a; 'b}}>>, (add_rat_AssocC thenC (addrC [0] sum_same_products_rat4C));
+	<<add_rat{mul_rat{rat{number[i:n]; number[k:n]}; 'a}; add_rat{mul_rat{rat{number[j:n]; number[l:n]}; 'a}; 'b}}>>, (add_rat_AssocC thenC (addrC [Subterm 1] sum_same_products_rat1C));
+	<<add_rat{mul_rat{rat{number[i:n]; number[k:n]}; 'a}; add_rat{'a; 'b}}>>, (add_rat_AssocC thenC (addrC [Subterm 1] sum_same_products_rat2C));
+	<<add_rat{'a; add_rat{mul_rat{rat{number[i:n]; number[k:n]}; 'a}; 'b}}>>, (add_rat_AssocC thenC (addrC [Subterm 1] sum_same_products_rat3C));
+	<<add_rat{'a; add_rat{'a; 'b}}>>, (add_rat_AssocC thenC (addrC [Subterm 1] sum_same_products_rat4C));
 ]
 
 interactive_rw ge_rat_addContract_rw :

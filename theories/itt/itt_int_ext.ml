@@ -53,13 +53,9 @@ doc docoff
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 
+open Basic_tactics
 open Base_meta
-open Dtactic
-open Auto_tactic
-open Top_conversionals
 
 open Itt_equal
 open Itt_squash
@@ -107,13 +103,13 @@ let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
 let resource reduce += [
    << bnot{lt_bool{'b; 'a}} >>, (makeFoldC << le_bool{'a;'b} >> unfold_le_bool);
-   << bnot{le_bool{'a; 'b}} >>, (addrC [0] unfold_le_bool);
+   << bnot{le_bool{'a; 'b}} >>, (addrC [Subterm 1] unfold_le_bool);
 (*    << le_bool{'a; 'b} >>, unfold_le_bool;
    << ge_bool{'a; 'b} >>, unfold_ge_bool;
    << bneq_int{'a; 'b} >>, unfold_bneq_int;
 *)
-   << le_bool{'a;'a}>>, (unfold_le_bool thenC (addrC [0] lt_IrreflexC));
-   << ge_bool{'a;'a}>>, (unfold_ge_bool thenC (addrC [0] lt_IrreflexC));
+   << le_bool{'a;'a}>>, (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC));
+   << ge_bool{'a;'a}>>, (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC));
 ]
 
 (*
@@ -195,15 +191,15 @@ doc <:doc< @docoff >>
 
 let fold_ge = makeFoldC << ge{'a; 'b} >> unfold_ge
 
-let reduce_lt_prop = unfold_lt thenC (addrC [0] reduce_lt)
+let reduce_lt_prop = unfold_lt thenC (addrC [Subterm 1] reduce_lt)
 let reduce_gt_prop = unfold_gt thenC reduce_lt_prop
 let reduce_le_prop = (unfold_le thenC
-                     (addrC [0] (unfold_le_bool thenC
-                     (addrC [0] reduce_lt))))
+                     (addrC [Subterm 1] (unfold_le_bool thenC
+                     (addrC [Subterm 1] reduce_lt))))
 let reduce_ge_prop = unfold_ge thenC reduce_le_prop
 let reduce_neq_prop = unfold_neq_int thenC
-                      (addrC [0] (unfold_bneq_int thenC
-							 (addrC [0] reduce_eq_int)))
+                      (addrC [Subterm 1] (unfold_bneq_int thenC
+							 (addrC [Subterm 1] reduce_eq_int)))
 
 let resource reduce += [
 	<<number[i:n] > number[j:n]>>, reduce_gt_prop;
@@ -215,7 +211,7 @@ let resource reduce += [
    << le{'a; 'b} >>, unfold_le;
    << nequal{'a; 'b} >>, unfold_neq_int;
 *)
-   << le{'a;'a}>>, (unfold_le thenC (addrC [0] (unfold_le_bool thenC (addrC [0] lt_IrreflexC))));
+   << le{'a;'a}>>, (unfold_le thenC (addrC [Subterm 1] (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC))));
 ]
 
 let resource elim += [
@@ -224,10 +220,10 @@ let resource elim += [
 	<<number[i:n] >= number[j:n]>>, rw reduce_ge_prop;
 	<<number[i:n] < number[j:n]>>, rw reduce_lt_prop;
    <<nequal{number[i:n]; number[j:n]}>>, rw reduce_neq_prop;
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] reduce_lt);
-	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] unfold_le_bool);
-	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] (unfold_gt_bool thenC reduce_lt));
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] unfold_ge_bool);
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] reduce_lt);
+	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] unfold_le_bool);
+	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt));
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] unfold_ge_bool);
 	]
 
 let resource intro += [
@@ -236,10 +232,10 @@ let resource intro += [
 	<<number[i:n] >= number[j:n]>>, wrap_intro (rw reduce_ge_prop 0);
 	<<number[i:n] < number[j:n]>>, wrap_intro (rw reduce_lt_prop 0);
    <<nequal{number[i:n]; number[j:n]}>>, wrap_intro (rw reduce_neq_prop 0);
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] reduce_lt) 0);
-	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] unfold_le_bool) 0);
-	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] (unfold_gt_bool thenC reduce_lt)) 0);
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] unfold_ge_bool) 0);
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] reduce_lt) 0);
+	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_le_bool) 0);
+	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)) 0);
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_ge_bool) 0);
 	]
 
 let le_term = << 'x <= 'y >>
@@ -336,13 +332,13 @@ prim_rw reduce_rem_meta : "rem"{number[i:n]; number[j:n]} <-->
 doc <:doc< @docoff >>
 
 let reduce_mul =
-   reduce_mul_meta thenC (addrC [0] reduce_meta_prod) thenC reduce_numeral
+   reduce_mul_meta thenC (addrC [Subterm 1] reduce_meta_prod) thenC reduce_numeral
 
 let reduce_div =
-   reduce_div_meta thenC (addrC [0] reduce_meta_quot) thenC reduce_numeral
+   reduce_div_meta thenC (addrC [Subterm 1] reduce_meta_quot) thenC reduce_numeral
 
 let reduce_rem =
-   reduce_rem_meta thenC (addrC [0] reduce_meta_rem) thenC reduce_numeral
+   reduce_rem_meta thenC (addrC [Subterm 1] reduce_meta_rem) thenC reduce_numeral
 
 let resource arith_unfold += [
    <<number[i:n] *@ number[j:n]>>, reduce_mul;
@@ -730,7 +726,7 @@ interactive_rw uni2negative1C :
 	(- 'a) <--> ((-1) *@ 'a)
 
 let resource arith_unfold +=[
-	<<- 'a>>, (uni2negative1C thenC (addrC [0] reduce_minus));
+	<<- 'a>>, (uni2negative1C thenC (addrC [Subterm 1] reduce_minus));
 ]
 
 interactive lt_mulPositMonoEq 'c :

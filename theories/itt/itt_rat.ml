@@ -133,7 +133,7 @@ define unfold_rat_of_int :
    rat_of_int{'a} <--> rat{'a; 1}
 
 let resource reduce += [
-	<<spread{ratn{'a; 'b}; x,y.'f['x; 'y]}>>, (addrC [0] unfold_ratn);
+	<<spread{ratn{'a; 'b}; x,y.'f['x; 'y]}>>, (addrC [Subterm 1] unfold_ratn);
 (*	<<rat{number[i:n]; number[j:n]}>>, unfold_rat;*)
 	<<rat_of_int{number[i:n]}>>, unfold_rat_of_int;
 ]
@@ -290,18 +290,18 @@ let is_min_rat_term = is_dep0_dep0_term min_rat_opname
 let mk_min_rat_term = mk_dep0_dep0_term min_rat_opname
 let dest_min_rat = dest_dep0_dep0_term min_rat_opname
 
-let reduce_lt_bool_rat=((addrC [0] unfold_ratn) thenC (addrC [1] unfold_ratn) thenC unfold_lt_bool_rat)
-let reduce_le_bool_rat = unfold_le_bool_rat thenC (addrC [0] reduce_lt_bool_rat)
+let reduce_lt_bool_rat=((addrC [Subterm 1] unfold_ratn) thenC (addrC [Subterm 2] unfold_ratn) thenC unfold_lt_bool_rat)
+let reduce_le_bool_rat = unfold_le_bool_rat thenC (addrC [Subterm 1] reduce_lt_bool_rat)
 let reduce_ge_bool_rat = unfold_ge_bool_rat thenC reduce_le_bool_rat
-let reduce_ge_rat = unfold_ge_rat thenC unfold_le_rat thenC (addrC [0] reduce_le_bool_rat)
+let reduce_ge_rat = unfold_ge_rat thenC unfold_le_rat thenC (addrC [Subterm 1] reduce_le_bool_rat)
 
-let reduce_rat_in_args = (addrC [0] (unfold_rat thenC reduceC)) thenC (addrC [1] (unfold_rat thenC reduceC))
+let reduce_rat_in_args = (addrC [Subterm 1] (unfold_rat thenC reduceC)) thenC (addrC [Subterm 2] (unfold_rat thenC reduceC))
 
 let resource reduce +=[
-	<<mul_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [0] unfold_ratn) thenC (addrC [1] unfold_ratn) thenC unfold_mul_rat);
-	<<add_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [0] unfold_ratn) thenC (addrC [1] unfold_ratn) thenC unfold_add_rat);
-	<<inv_rat{ratn{'a; 'b}}>>, ((addrC [0] unfold_ratn) thenC unfold_inv_rat);
-	<<neg_rat{ratn{'a; 'b}}>>, ((addrC [0] unfold_ratn) thenC unfold_neg_rat);
+	<<mul_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 1] unfold_ratn) thenC (addrC [Subterm 2] unfold_ratn) thenC unfold_mul_rat);
+	<<add_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 1] unfold_ratn) thenC (addrC [Subterm 2] unfold_ratn) thenC unfold_add_rat);
+	<<inv_rat{ratn{'a; 'b}}>>, ((addrC [Subterm 1] unfold_ratn) thenC unfold_inv_rat);
+	<<neg_rat{ratn{'a; 'b}}>>, ((addrC [Subterm 1] unfold_ratn) thenC unfold_neg_rat);
 	<<sub_rat{ratn{'a; 'b}; ratn{'b; 'c}}>>, unfold_sub_rat;
 
 	<<lt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_lt_bool_rat;
@@ -508,10 +508,10 @@ interactive_rw reduce_add_rat {| reduce |} :
 	rat{('a *@ 'd) +@ ('b *@ 'c); 'b *@ 'd}
 
 let resource reduce += [
-	<<mul_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [0] ratn2ratC) thenC reduce_mul_rat);
-	<<mul_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [1] ratn2ratC) thenC reduce_mul_rat);
-	<<add_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [0] ratn2ratC) thenC reduce_add_rat);
-	<<add_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [1] ratn2ratC) thenC reduce_add_rat);
+	<<mul_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [Subterm 1] ratn2ratC) thenC reduce_mul_rat);
+	<<mul_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 2] ratn2ratC) thenC reduce_mul_rat);
+	<<add_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [Subterm 1] ratn2ratC) thenC reduce_add_rat);
+	<<add_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 2] ratn2ratC) thenC reduce_add_rat);
 ]
 
 interactive_rw reduce_inv_rat {| reduce |} :
@@ -593,7 +593,7 @@ interactive_rw add_rat_Id2_rw {| reduce; arith_unfold |} :
 let add_rat_Id2C = add_rat_Id2_rw
 
 let resource reduce += [
-	<<sub_rat{'a; rat{0; 1}}>>, (unfold_sub_rat thenC (addrC [1] reduce_sub_rat));
+	<<sub_rat{'a; rat{0; 1}}>>, (unfold_sub_rat thenC (addrC [Subterm 2] reduce_sub_rat));
 ]
 
 interactive_rw add_rat_Id3_rw :

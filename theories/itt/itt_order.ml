@@ -48,10 +48,7 @@ doc docoff
 open Lm_debug
 open Lm_printf
 
-open Tactic_type.Tacticals
-
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_rfun
 
@@ -126,9 +123,9 @@ define unfold_min : min{'rel} <-->
 
 doc docoff
 
-let unfold_isPreorder = unfold_isPreorder1 thenC addrC [0] unfold_isReflexive thenC addrC [1] unfold_isTransitive
-let unfold_isUnstrictPartialOrder = unfold_isUnstrictPartialOrder1 thenC addrC [0] unfold_isPreorder thenC addrC [1] unfold_isAntisym
-let unfold_isStrictPartialOrder = unfold_isStrictPartialOrder1 thenC addrC [0] unfold_isIrreflexive thenC addrC [1] unfold_isTransitive
+let unfold_isPreorder = unfold_isPreorder1 thenC addrC [Subterm 1] unfold_isReflexive thenC addrC [Subterm 2] unfold_isTransitive
+let unfold_isUnstrictPartialOrder = unfold_isUnstrictPartialOrder1 thenC addrC [Subterm 1] unfold_isPreorder thenC addrC [Subterm 2] unfold_isAntisym
+let unfold_isStrictPartialOrder = unfold_isStrictPartialOrder1 thenC addrC [Subterm 1] unfold_isIrreflexive thenC addrC [Subterm 2] unfold_isTransitive
 
 let fold_isReflexive = makeFoldC << isReflexive{'car; 'rel} >> unfold_isReflexive
 let fold_isIrreflexive = makeFoldC << isIrreflexive{'car; 'rel} >> unfold_isIrreflexive
@@ -146,8 +143,8 @@ let isReflexiveDT0 = rw unfold_isReflexive 0 thenT dT 0
 let isIrreflexiveDT0 = rw unfold_isIrreflexive 0 thenT dT 0
 let isAntisymDT0 = rw unfold_isAntisym 0 thenT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT (-1)
 let isTransitiveDT0 = rw unfold_isTransitive 0 thenT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT (-1)
-let isUnstrictPartialOrderDT n = rw (unfold_isUnstrictPartialOrder1 thenC addrC [0] unfold_isPreorder1) n thenT dT n thenT dT n thenT dT (n+1)
-let isUnstrictPartialOrderDT0 = rw (unfold_isUnstrictPartialOrder1 thenC addrC [0] unfold_isPreorder1) 0 thenT dT 0 thenLT [(dT 0 thenLT [idT;dT 0]); idT]
+let isUnstrictPartialOrderDT n = rw (unfold_isUnstrictPartialOrder1 thenC addrC [Subterm 1] unfold_isPreorder1) n thenT dT n thenT dT n thenT dT (n+1)
+let isUnstrictPartialOrderDT0 = rw (unfold_isUnstrictPartialOrder1 thenC addrC [Subterm 1] unfold_isPreorder1) 0 thenT dT 0 thenLT [(dT 0 thenLT [idT;dT 0]); idT]
 let isStrictPartialOrderDT n = rw unfold_isStrictPartialOrder1 n thenT dT n thenT dT (n+1)
 let isStrictPartialOrderDT0 = rw unfold_isStrictPartialOrder1 0 thenT dT 0 thenLT [idT; dT 0]
 let isLinearDT0 = rw unfold_isLinear 0 thenT dT 0 thenMT dT 0
@@ -277,7 +274,7 @@ interactive isTransitive_intro :
 	sequent { <H> >- isTransitive{'car; 'rel} }
 
 let tryReduceBetaC = tryC reduce_beta
-let tryReduceBeta = rw (addrC [0] ((addrC [0] tryReduceBetaC) thenC tryReduceBetaC))
+let tryReduceBeta = rw (addrC [Subterm 1] ((addrC [Subterm 1] tryReduceBetaC) thenC tryReduceBetaC))
 let isTransitiveDT0 = isTransitive_intro thenMT tryReduceBeta 0 thenMT tryReduceBeta (-1) thenMT tryReduceBeta (-2)
 
 let resource intro += [
@@ -487,9 +484,9 @@ define unfold_unstrictTotalOrder1 : unstrictTotalOrder[i:l,rel:t] <-->
 define unfold_strictTotalOrder1 : strictTotalOrder[i:l,rel:t] <-->
    { O: strictPartialOrder[i:l,rel:t] | isTrichotomous{'O^car; 'O^rel} }
 
-let unfold_preorder = unfold_preorder1 thenC addrC [0] unfold_relation thenC addrC [1] unfold_isPreorder
-let unfold_unstrictPartialOrder = unfold_unstrictPartialOrder1 thenC addrC [0] unfold_relation thenC addrC [1] unfold_isUnstrictPartialOrder
-let unfold_strictPartialOrder = unfold_strictPartialOrder1 thenC addrC [0] unfold_relation thenC addrC [1] unfold_isStrictPartialOrder
+let unfold_preorder = unfold_preorder1 thenC addrC [Subterm 1] unfold_relation thenC addrC [Subterm 2] unfold_isPreorder
+let unfold_unstrictPartialOrder = unfold_unstrictPartialOrder1 thenC addrC [Subterm 1] unfold_relation thenC addrC [Subterm 2] unfold_isUnstrictPartialOrder
+let unfold_strictPartialOrder = unfold_strictPartialOrder1 thenC addrC [Subterm 1] unfold_relation thenC addrC [Subterm 2] unfold_isStrictPartialOrder
 
 let fold_relation = makeFoldC << relation[i:l,rel:t] >> unfold_relation
 let fold_preorder1 = makeFoldC << preorder[i:l,rel:t] >> unfold_preorder1

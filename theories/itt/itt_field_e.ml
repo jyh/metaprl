@@ -43,9 +43,8 @@ extends Itt_poly
 
 open Lm_debug
 open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_field2
 open Itt_ring_e
@@ -74,9 +73,9 @@ define unfold_fieldE1 : fieldE[i:l] <-->
    {f: prefieldE[i:l] | isFieldE{'f}}
 doc docoff
 
-let unfold_prefieldE = unfold_prefieldE1 thenC addrC [1] unfold_prefield
-let unfold_isFieldE = unfold_isFieldE1 thenC addrC [0] unfold_isField thenC addrC [1] unfold_eqDecidable
-let unfold_fieldE = unfold_fieldE1 thenC addrC [0] unfold_prefieldE thenC addrC [1] unfold_isFieldE
+let unfold_prefieldE = unfold_prefieldE1 thenC addrC [Subterm 2] unfold_prefield
+let unfold_isFieldE = unfold_isFieldE1 thenC addrC [Subterm 1] unfold_isField thenC addrC [Subterm 2] unfold_eqDecidable
+let unfold_fieldE = unfold_fieldE1 thenC addrC [Subterm 1] unfold_prefieldE thenC addrC [Subterm 2] unfold_isFieldE
 
 let fold_prefieldE1 = makeFoldC << prefieldE[i:l] >> unfold_prefieldE1
 let fold_prefieldE = makeFoldC << prefieldE[i:l] >> unfold_prefieldE

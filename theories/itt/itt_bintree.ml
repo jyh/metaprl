@@ -17,9 +17,7 @@ doc <:doc< @docoff >>
 open Lm_debug
 open Lm_printf
 
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_struct
 
@@ -196,7 +194,7 @@ define node: node{'l;'r;'nd} <--> ( ('nd^left:='l)^right:='r )
 dform node_df : except_mode[src] :: node{'l;'r;'nd} = `"node(" 'l `"," 'r `"," 'nd ")"
 
 let resource reduce +=
-   <<  field[l:t]{node{'l;'r;'nd}}  >>, (addrC [0] node thenC reduceTopC);
+   <<  field[l:t]{node{'l;'r;'nd}}  >>, (addrC [Subterm 1] node thenC reduceTopC);
 
 define nodetype2: Node{'T;l,r.'R['l;'r]} <--> record["left":t]{'T; l.record["right":t]{'T;r.'R['l;'r]}}
 

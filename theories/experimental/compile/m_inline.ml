@@ -40,9 +40,8 @@ extends Base_theory
 extends M_ir
 doc docoff
 
+open Basic_tactics
 open Base_meta
-open Tactic_type.Tacticals
-open Top_conversionals
 
 doc <:doc<
    @begin[doc]
@@ -131,10 +130,10 @@ doc docoff
  * Add all these rules to the reduce resource.
  *)
 let resource reduce += [
-     << AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_add thenC addrC [0] reduce_meta_sum);
-     << AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_sub thenC addrC [0] reduce_meta_diff);
-     << AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_mul thenC addrC [0] reduce_meta_prod);
-     << AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_div thenC addrC [0] reduce_meta_quot);
+     << AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_add thenC addrC [Subterm 1] reduce_meta_sum);
+     << AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_sub thenC addrC [Subterm 1] reduce_meta_diff);
+     << AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_mul thenC addrC [Subterm 1] reduce_meta_prod);
+     << AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_div thenC addrC [Subterm 1] reduce_meta_quot);
 ]
 
 (*

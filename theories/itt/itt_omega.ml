@@ -318,7 +318,7 @@ struct
 	let hash = Hashtbl.hash
 end
 
-let ge_normC = (addrC [0] normalizeC) thenC (addrC [1] normalizeC)
+let ge_normC = (addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
 
 let monom2af var2index t =
 	match explode_term t with
@@ -355,7 +355,7 @@ let ge2af var2index (i,t) =
 let apply_rewrite p conv t =
 	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
 	let s=mk_sequent_term es in
-	let s'=Top_conversionals.apply_rewrite p (addrLiteralC (concl_addr s) conv) s in
+	let s'=Top_conversionals.apply_rewrite p (addrC concl_addr conv) s in
 	TermMan.concl s'
 
 let rec make_sacs_aux p i l = function

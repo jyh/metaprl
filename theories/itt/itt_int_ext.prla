@@ -11259,7 +11259,7 @@ B	b1761	t1761
 T	t791	o1254 b1761 b1083
 B	b791	t791
 B	b4905	t4905
-P	p795	String "rw (addrC [0] add_Id4C) 0 ttca"
+P	p795	String "rw (addrC [1] add_Id4C) 0 ttca"
 O	o800	ext_rule p795
 T	t826	o2176 b791 b4905
 S	s826	tbrarg\\ h2250\\ t826
@@ -11281,7 +11281,7 @@ T	t10007	o b10006 b17
 B	b10007	t10007
 T	t10008	o2188 b10005 b10007
 B	b10008	t10008
-P	p844	String "rw (addrC [0;1] (foldC <<'a +@ (- 'a)>> minus_add_inverseC)) 0 ttca"
+P	p844	String "rw (addrC [1; 2] (foldC <<'a +@ (- 'a)>> minus_add_inverseC)) 0 ttca"
 O	o844	ext_rule p844
 T	t845	o2302 b1083 b4905
 B	b845	t845
@@ -11315,7 +11315,7 @@ T	t10013	o b10012 b17
 B	b10013	t10013
 T	t10014	o2188 b10009 b10013
 B	b10014	t10014
-P	p27	String "rw (addrC [0;0;1] mul_Id3_rw) 0 ttca"
+P	p27	String "rw (addrC [1; 1; 2] mul_Id3_rw) 0 ttca"
 O	o27	ext_rule p27
 T	t887	o2302 b791 b3635
 B	b887	t887
@@ -12273,7 +12273,7 @@ T	t10210	o b10210 b17
 B	b10211	t10210
 T	t10211	o2188 b10209 b10211
 B	b10212	t10211
-P	p3848	String "rw (addrC [0;0;1] mul_CommutC) 7 taa"
+P	p3848	String "rw (addrC [1; 1; 2] mul_CommutC) 7 taa"
 O	o3848	ext_rule p3848
 T	t4665	o1254 b1761 b2737
 B	b4667	t4665
@@ -12382,7 +12382,7 @@ T	t10236	o b10236 b17
 B	b10237	t10236
 T	t10237	o2188 b10235 b10237
 B	b10238	t10237
-P	p4179	String "rw (addrC [1] add_Id3C) 0 taa"
+P	p4179	String "rw (addrC [2] add_Id3C) 0 taa"
 O	o4179	ext_rule p4179
 T	t3499	o2302 b2168 b3885
 B	b3500	t3499
@@ -12397,7 +12397,7 @@ T	t10239	o b10239 b17
 B	b10240	t10239
 T	t10240	o2188 b10236 b10240
 B	b10241	t10240
-P	p4323	String "rw (addrC [0] add_CommutC) 0 taa"
+P	p4323	String "rw (addrC [1] add_CommutC) 0 taa"
 O	o4323	ext_rule p4323
 T	t3522	o2302 b3492 b3885
 B	b3522	t3522
@@ -12513,7 +12513,7 @@ T	t10262	o b10262 b17
 B	b10263	t10262
 T	t10263	o2188 b10259 b10263
 B	b10264	t10263
-P	p4352	String "rw (addrC [0;1;1] mul_Id3C) 0 taa"
+P	p4352	String "rw (addrC [1; 2; 2] mul_Id3C) 0 taa"
 O	o4353	ext_rule p4352
 T	t3740	o1254 b2330 b2749
 B	b3740	t3740
@@ -12647,7 +12647,7 @@ T	t10304	o b10304 b17
 B	b10305	t10304
 T	t10305	o2188 b10301 b10305
 B	b10306	t10305
-P	p4852	String "rw (addrC [0] add_Assoc2C) 7 taa"
+P	p4852	String "rw (addrC [1] add_Assoc2C) 7 taa"
 O	o4852	ext_rule p4852
 S	s3898	tbrarg\\ h2250 h887 h4870 h5013 h4180 h3046 h3468 h3479\\ t3898
 B	b3899	s3898
@@ -12671,7 +12671,7 @@ T	t10308	o b10308 b17
 B	b10309	t10308
 T	t10309	o2188 b10307 b10309
 B	b10310	t10309
-P	p3979	String "rw (addrC [0;1] reduceC) 7"
+P	p3979	String "rw (addrC [1; 2] reduceC) 7"
 O	o3982	ext_rule p3979
 T	t10310	o2189 b3962 b17
 B	b10311	t10310
@@ -12693,7 +12693,7 @@ T	t10312	o b10312 b17
 B	b10313	t10312
 T	t10313	o2188 b10311 b10313
 B	b10314	t10313
-P	p4876	String "rw (addrC [0;1;1] mul_Id3C) 7 taa"
+P	p4876	String "rw (addrC [1; 2; 2] mul_Id3C) 7 taa"
 O	o4876	ext_rule p4876
 T	t10314	o301 b4021 b17
 B	b10315	t10314
@@ -12713,7 +12713,7 @@ T	t10316	o b10316 b17
 B	b10317	t10316
 T	t10317	o2188 b10315 b10317
 B	b10318	t10317
-P	p4887	String "rw (addrC [0;1;1] mul_CommutC) 7 taa"
+P	p4887	String "rw (addrC [1; 2; 2] mul_CommutC) 7 taa"
 O	o4887	ext_rule p4887
 T	t4067	o2302 b3983 b3662
 B	b4068	t4067
@@ -12731,7 +12731,7 @@ T	t10319	o b10319 b17
 B	b10320	t10319
 T	t10320	o2188 b10316 b10320
 B	b10321	t10320
-P	p4932	String "rw (addrC [0;1] mul_add_Distrib2C) 7 taa"
+P	p4932	String "rw (addrC [1; 2] mul_add_Distrib2C) 7 taa"
 O	o4932	ext_rule p4932
 T	t4111	o1254 b2737 b3764
 B	b4111	t4111
@@ -13183,7 +13183,7 @@ T	t10469	o b10469 b17
 B	b10470	t10469
 T	t10470	o2188 b10468 b10470
 B	b10471	t10470
-P	p4832	String "rw fold_lt 0 thenT rw (lt_addMonoC <<'b>>) 0 thenMT rw (addrC [1] reduceC) 0 thenMT rw reduceC 0 ttca"
+P	p4832	String "rw fold_lt 0 thenT rw (lt_addMonoC <<'b>>) 0 thenMT rw (addrC [2] reduceC) 0 thenMT rw reduceC 0 ttca"
 O	o4832	ext_rule p4832
 T	t10471	o301 b1623 b17
 B	b10472	t10471
@@ -13242,7 +13242,7 @@ T	t10486	o b10486 b17
 B	b10487	t10486
 T	t10487	o2188 b10483 b10487
 B	b10488	t10487
-P	p6161	String "rw (addrC [0;1] (mul_Id3C thenC mul_CommutC)) 0 taa"
+P	p6161	String "rw (addrC [1; 2] (mul_Id3C thenC mul_CommutC)) 0 taa"
 O	o6161	ext_rule p6161
 T	t1900	o2302 b3183 b3662
 B	b1900	t1900
@@ -13330,7 +13330,7 @@ T	t10506	o b10506 b17
 B	b10507	t10506
 T	t10507	o2188 b10503 b10507
 B	b10508	t10507
-P	p6189	String "rw (addrC [1;1] add_CommutC) 0 taa"
+P	p6189	String "rw (addrC [2; 2] add_CommutC) 0 taa"
 O	o6189	ext_rule p6189
 T	t2041	o2302 b2737 b3309
 B	b2058	t2041
@@ -13387,7 +13387,7 @@ T	t10517	o b10517 b17
 B	b10518	t10517
 T	t10518	o2188 b10516 b10518
 B	b10519	t10518
-P	p2119	String "rw (addrC [1;1;1] mul_CommutC) 0 ttca"
+P	p2119	String "rw (addrC [2; 2; 2] mul_CommutC) 0 ttca"
 O	o2120	ext_rule p2119
 T	t10519	o2189 b2111 b17
 B	b10520	t10519
@@ -13539,7 +13539,7 @@ T	t10587	o b10583 b10587
 B	b10588	t10587
 T	t10588	o2188 b10580 b10588
 B	b10589	t10588
-P	p6323	String "rw (addrC [2] add_Id3C) 0 taa"
+P	p6323	String "rw (addrC [3] add_Id3C) 0 taa"
 O	o6323	ext_rule p6323
 S	s5205	tbrarg\\ h2250 h887 h4870 h3984 h5023\\ t5205
 B	b5206	s5205
@@ -14457,7 +14457,7 @@ T	t1254	o2128 b2763 b4893
 B	b1254	t1254
 T	t1266	o2128 b2746 b1254
 B	b1266	t1266
-P	p1266	String "rw (addrC [0;1] uni2negative1C) 0 ttca"
+P	p1266	String "rw (addrC [1; 2] uni2negative1C) 0 ttca"
 O	o1269	ext_rule p1266
 T	t2425	o2190 b4892 b2789
 B	b2425	t2425
@@ -14491,7 +14491,7 @@ T	t10715	o b10714 b17
 B	b10715	t10715
 T	t10716	o2188 b10711 b10715
 B	b10716	t10716
-P	p1326	String "rw (addrC [0;0] mul_CommutC) 0 ttca"
+P	p1326	String "rw (addrC [1; 1] mul_CommutC) 0 ttca"
 O	o1326	ext_rule p1326
 T	t1328	o1254 b4667 b2749
 B	b1328	t1328
@@ -14555,7 +14555,7 @@ S	s1365	tbrarg\\ h2250\\ t1365
 B	b1366	s1365
 T	t1366	o2190 b1366 b3089
 B	b1367	t1366
-P	p1371	String "rw (addrC [1;0;1] add_CommutC) 0 ttca"
+P	p1371	String "rw (addrC [2; 1; 2] add_CommutC) 0 ttca"
 O	o1371	ext_rule p1371
 T	t1371	o2302 b1090 b1083
 B	b1372	t1371
@@ -14605,7 +14605,7 @@ S	s1442	tbrarg\\ h2250\\ t1442
 B	b1443	s1442
 T	t1443	o2190 b1443 b3089
 B	b1444	t1443
-P	p1451	String "rw (addrC [1;1;1] add_CommutC) 0 ttca"
+P	p1451	String "rw (addrC [2; 2; 2] add_CommutC) 0 ttca"
 O	o1451	ext_rule p1451
 T	t1503	o2302 b1090 b845
 B	b1525	t1503
@@ -14784,7 +14784,7 @@ T	t10802	o b10802 b17
 B	b10803	t10802
 T	t10803	o2188 b10799 b10803
 B	b10804	t10803
-P	p2852	String "rw (addrC [1] lt_reverse_rw) 0 ttca"
+P	p2852	String "rw (addrC [2] lt_reverse_rw) 0 ttca"
 O	o2852	ext_rule p2852
 T	t2853	o2421 b3815
 B	b2853	t2853

@@ -1,42 +1,42 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Mfir_util]
-  
+
    The @tt[Mfir_util] module defines terms and rewrites for working
    with the @MetaPRL representation of the FIR.
    @end[doc]
-  
+
    ------------------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.  Additional
    information about the system is available at
    http://www.metaprl.org/
-  
+
    Copyright (C) 2002 Brian Emre Aydemir, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -50,25 +50,24 @@ extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
-open Top_conversionals
+open Basic_tactics
 open Mfir_bool
 open Mfir_int
 open Mfir_int_set
-
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
    @modsubsection{Offset type}
-  
+
    The term @tt[offset] represents the type of offset atoms, atoms
    that are used to index aggregate data.
    @end[doc]
@@ -80,7 +79,7 @@ declare offset
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Type application}
-  
+
    If @tt[poly_ty] is a parametrized type definition or quantified type, then
    @tt[do_tyApply] instantiates it at the types in the list @tt[ty_list].
    @end[doc]
@@ -92,7 +91,7 @@ declare apply_types{ 'poly_ty; 'ty_list }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Definition extraction}
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -105,7 +104,7 @@ declare get_core{ 'num; 'poly_ty }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Type projection}
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -118,7 +117,7 @@ declare project_in_bounds{ 'num; 'ty }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Existential unpacking}
-  
+
    The term @tt[instantiate_tyExists] is used to instantiate
    an existential type @tt[ty] using type projections (@hrefterm[tyProject])
    of @tt[var], starting at @tt[num].
@@ -131,7 +130,7 @@ declare unpack_exists{ 'ty; 'var; 'num }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Union of match cases}
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -144,7 +143,7 @@ declare union_cases{ 'set; 'cases }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Conversions}
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -159,11 +158,11 @@ declare ty_of_mutable_ty{ 'mutable_ty }
  * Rewrites.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
    @modsubsection{Type application}
-  
+
    Instantiating a parameterized type definition or quantified type
    at a given list of types is straightforward.
    @end[doc]
@@ -185,7 +184,7 @@ prim_rw reduce_apply_types_ind_exists :
    apply_types{ tyExists{ t. 'ty['t] }; cons{ 'a; 'b } } <-->
    apply_types{ 'ty['a]; 'b }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -204,7 +203,7 @@ let resource reduce += [
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Definition extraction}
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -220,15 +219,15 @@ prim_rw reduce_get_core_main :
    else
       get_core{ number[i:n]; 'ty })
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 let reduce_get_core =
    reduce_get_core_main thenC
-   (addrC [0] reduce_int_eq) thenC
+   (addrC [Subterm 1] reduce_int_eq) thenC
    reduce_ifthenelse thenC
-   (tryC ((addrC [0] reduce_int_gt) thenC reduce_ifthenelse))
+   (tryC ((addrC [Subterm 1] reduce_int_gt) thenC reduce_ifthenelse))
 
 let resource reduce += [
    << get_core{ number[i:n]; 'ty } >>, reduce_get_core
@@ -238,7 +237,7 @@ let resource reduce += [
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Type projection}
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -254,15 +253,15 @@ prim_rw reduce_project_in_bounds_main :
    else
       project_in_bounds{ (number[i:n] -@ 1); 'ty[it] })
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 let reduce_project_in_bounds =
    reduce_project_in_bounds_main thenC
-   (addrC [0] reduce_int_lt) thenC
+   (addrC [Subterm 1] reduce_int_lt) thenC
    reduce_ifthenelse thenC
-   (tryC ((addrC [0] reduce_int_eq) thenC reduce_ifthenelse))
+   (tryC ((addrC [Subterm 1] reduce_int_eq) thenC reduce_ifthenelse))
 
 let resource reduce += [
    << project_in_bounds{ number[i:n]; tyExists{ t. 'ty['t] } } >>,
@@ -273,7 +272,7 @@ let resource reduce += [
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Existential unpacking}
-  
+
    The following rewrites are the basis for reducing
    << unpack_exists{ 'ty; 'var; 'num } >>. The following two
    rewrites are combined into the @tt[reduce_instantiate_tyExists]
@@ -297,7 +296,7 @@ prim_rw reduce_unpack_exists_aux2 :
                   'var;
                   (number[i:n] +@ 1) }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -318,7 +317,7 @@ let resource reduce += [
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Union of match cases}
-  
+
    Taking the union of the sets in a list of match cases is straightforward.
    @end[doc]
 >>
@@ -331,14 +330,14 @@ prim_rw reduce_union_cases_ind :
    union_cases{ 'set; cons{ matchCase{ 'case; 'exp }; 'tail } } <-->
    union_cases{ union{ 'set; 'case }; 'tail }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 let reduce_union_cases =
    reduce_union_cases_base orelseC
    (  reduce_union_cases_ind thenC
-      (addrC [0] (repeatC reduce_union))
+      (addrC [Subterm 1] (repeatC reduce_union))
    )
 
 let resource reduce += [
@@ -349,7 +348,7 @@ let resource reduce += [
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Conversions}
-  
+
    Raw integer subscripts represent byte offsets, while integer
    subscripts represent logical offsets.  Byte offsets must be aligned
    on four byte boundaries.  If this is not the case, then the result
@@ -368,15 +367,15 @@ prim_rw reduce_index_of_subscript_atomRawInt :
       rem{ number[i:n]; 4 };
       . -1 }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 let reduce_index_of_subscript =
    reduce_index_of_subscript_atomInt orelseC
    (  reduce_index_of_subscript_atomRawInt thenC
-      (addrC [0; 1] reduce_rem) thenC
-      (addrC [0] reduce_int_eq) thenC
+      (addrC [Subterm 1; Subterm 2] reduce_rem) thenC
+      (addrC [Subterm 1] reduce_int_eq) thenC
       reduce_ifthenelse thenC
       (tryC reduce_rem)
    )
@@ -386,9 +385,9 @@ let resource reduce += [
 ]
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Converting a mutable type << mutable_ty{ 'ty; 'flag } >> to
    a plain type << 'ty >> is straightforward.
    @end[doc]
@@ -398,7 +397,7 @@ prim_rw reduce_ty_of_mutable_ty :
    ty_of_mutable_ty{ mutable_ty{ 'ty; 'flag } } <-->
    'ty
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 

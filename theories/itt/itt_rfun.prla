@@ -7247,7 +7247,7 @@ T	t1728	o b1727 b4
 B	b1731	t1728
 T	t1731	o1565 b1719 b1731
 B	b1732	t1731
-P	p1732	String "repeatForT 2 (rw (addrC [0] reduce_beta) 0) thenT rw (addrC [1;1] reduce_beta) 0 thenT trivialT"
+P	p1732	String "repeatForT 2 (rw (addrC [1] reduce_beta) 0) thenT rw (addrC [2; 2] reduce_beta) 0 thenT trivialT"
 O	o1732	ext_rule p1732
 T	t1732	o1565 b1727 b4
 B	b1733	t1732
@@ -7273,7 +7273,7 @@ B	b1741	t1741
 P	p1742	Number 8916
 P	p1743	Number 8995
 O	o1743	location p1742 p1743
-P	p1744	String "rwh unfold_fix 0 thenT rw (addrC [0] (reduce_ycomb thenC reduce_beta)) 0 thenT trivialT"
+P	p1744	String "rwh unfold_fix 0 thenT rw (addrC [1] (reduce_ycomb thenC reduce_beta)) 0 thenT trivialT"
 O	o1744	ext_rule p1744
 T	t1744	o1717 b1345 b3122
 S	s1744	tbrarg\\ h3655\\ t1744

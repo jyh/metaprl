@@ -272,8 +272,8 @@ let abstractTopC =
                         let t = mk_close_var_term v t (mk_var_term v) in
                            foldC t reduce_beta
                            thenC close_frame
-                           thenC addrC[2; 0] reduce_meta_sum
-                           thenC addrC[2] wrap_length
+                           thenC addrC [Subterm 3; Subterm 1] reduce_meta_sum
+                           thenC addrC [Subterm 3] wrap_length
                 | [] ->
                      failC
             in

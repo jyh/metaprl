@@ -52,7 +52,7 @@ interactive_rw fold_add :
 interactive_rw fold_mul :
 	('a *@ 'b) <--> ('a *[Z] 'b)
 
-let prepareT i = rw ((addrC [0] reduceC) thenC (addrC [1] reduceC)) i thenMT rw (sweepDnC fold_add) i thenMT rw (sweepDnC fold_mul) i
+let prepareT i = rw ((addrC [Subterm 1] reduceC) thenC (addrC [Subterm 2] reduceC)) i thenMT rw (sweepDnC fold_add) i thenMT rw (sweepDnC fold_mul) i
 
 (*
 let arithT = preArithT thenMT reduceContradRelT (-1)

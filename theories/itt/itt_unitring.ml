@@ -41,8 +41,8 @@ doc docoff
 
 open Lm_debug
 open Lm_printf
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_ring2
 open Itt_equal
@@ -72,9 +72,9 @@ define unfold_unitring1 : unitring[i:l] <-->
    {R: preunitring[i:l] | isUnitRing{'R}}
 doc docoff
 
-let unfold_preunitring = unfold_preunitring1 thenC addrC [1] unfold_prering
-let unfold_isUnitRing = unfold_isUnitRing1 thenC addrC [0] unfold_isRing
-let unfold_unitring = unfold_unitring1 thenC addrC [0] unfold_preunitring thenC addrC [1] unfold_isUnitRing
+let unfold_preunitring = unfold_preunitring1 thenC addrC [Subterm 2] unfold_prering
+let unfold_isUnitRing = unfold_isUnitRing1 thenC addrC [Subterm 1] unfold_isRing
+let unfold_unitring = unfold_unitring1 thenC addrC [Subterm 1] unfold_preunitring thenC addrC [Subterm 2] unfold_isUnitRing
 
 let fold_preunitring = makeFoldC << preunitring[i:l] >> unfold_preunitring
 let fold_isUnitRing1 = makeFoldC << isUnitRing{'R} >> unfold_isUnitRing1

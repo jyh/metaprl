@@ -482,7 +482,7 @@ let eqInConcl2HypT t =
    	idT
 
 let neqInConcl2HypT =
-	(rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) 0)
+	(rw (unfold_neq_int thenC (addrC [Subterm 1] unfold_bneq_int)) 0)
 	thenMT
 	(assert_bnot_intro thenMT (eq_int_assert_elim (-1)) thenMT (thinT (-2)))
 
@@ -517,7 +517,7 @@ let negativeHyp2ConclT = argfunT (fun i p ->
 		else
       	idT
 	else if is_neq_int_term t then
-   	(rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) i)
+   	(rw (unfold_neq_int thenC (addrC [Subterm 1] unfold_bneq_int)) i)
    	thenMT
       ((assert_bnot_elim i) thenMT
       (eq_2beq_int thenMT arithRelInConcl2HypT))
@@ -537,19 +537,19 @@ interactive_rw sum_same_products1_rw :
    ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <-->
    ((number[i:n] +@ number[j:n]) *@ 'a)
 
-let sum_same_products1C = sum_same_products1_rw thenC (addrC [0] reduce_add)
+let sum_same_products1C = sum_same_products1_rw thenC (addrC [Subterm 1] reduce_add)
 
 interactive_rw sum_same_products2_rw :
    ('a in int) -->
    ((number[i:n] *@ 'a) +@ 'a) <--> ((number[i:n] +@ 1) *@ 'a)
 
-let sum_same_products2C = sum_same_products2_rw thenC (addrC [0] reduce_add)
+let sum_same_products2C = sum_same_products2_rw thenC (addrC [Subterm 1] reduce_add)
 
 interactive_rw sum_same_products3_rw :
    ('a in int) -->
    ('a +@ (number[j:n] *@ 'a)) <--> ((number[j:n] +@ 1) *@ 'a)
 
-let sum_same_products3C = sum_same_products3_rw thenC (addrC [0] reduce_add)
+let sum_same_products3C = sum_same_products3_rw thenC (addrC [Subterm 1] reduce_add)
 
 interactive_rw sum_same_products4_rw :
    ('a in int) -->
@@ -641,7 +641,7 @@ let resource arith_unfold +=[
 	<<'a *@ number[i:n]>>, mul_CommutC;
 	(*<<number[i:n] *@ ('b *@ 'c)>>, failC;*)
 	(*<<'b *@ (number[i:n] *@ 'c)>>, mul_BubblePrimitiveC;*)
-	<<number[i:n] *@ (number[j:n] *@ 'c)>>, (mul_AssocC thenC (addrC [0] reduce_mul));
+	<<number[i:n] *@ (number[j:n] *@ 'c)>>, (mul_AssocC thenC (addrC [Subterm 1] reduce_mul));
 
 	<<'a +@ 'b>>, termC addSwap1C;
 	<<'a +@ ('b +@ 'c)>>, termC addSwap2C;
@@ -649,7 +649,7 @@ let resource arith_unfold +=[
 	<<'a +@ number[i:n]>>, add_CommutC;
 	(*<<number[i:n] +@ ('b +@ 'c)>>, failC;*)
 	(*<<'a +@ (number[i:n] +@ 'c)>>, add_BubblePrimitiveC;*)
-	<<number[i:n] +@ (number[j:n] +@ 'c)>>, (add_AssocC thenC (addrC [0] reduce_add));
+	<<number[i:n] +@ (number[j:n] +@ 'c)>>, (add_AssocC thenC (addrC [Subterm 1] reduce_add));
 
 	<<('a +@ 'b) +@ 'c>>, add_Assoc2C;
 	<<('a *@ 'b) *@ 'c>>, mul_Assoc2C;
@@ -659,10 +659,10 @@ let resource arith_unfold +=[
 	<<'a +@ (number[j:n] *@ 'a)>>, sum_same_products3C;
 	<<'a +@ 'a>>, sum_same_products4C;
 
-	<<(number[i:n] *@ 'a) +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products1C));
-	<<(number[i:n] *@ 'a) +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products2C));
-	<<'a +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products3C));
-	<<'a +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products4C));
+	<<(number[i:n] *@ 'a) +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products1C));
+	<<(number[i:n] *@ 'a) +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products2C));
+	<<'a +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products3C));
+	<<'a +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products4C));
 ]
 
 doc <:doc<
@@ -809,7 +809,7 @@ let num1 = num_of_int 1
 let term2term_number p t =
 	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
 	let s=mk_sequent_term es in
-	let s'=Top_conversionals.apply_rewrite p (addrLiteralC (concl_addr s) normalizeC) s in
+	let s'=Top_conversionals.apply_rewrite p (addrC concl_addr normalizeC) s in
 	let t'=TermMan.concl s' in
 	begin
 		if !debug_int_arith then
@@ -967,7 +967,7 @@ let findContradRelT = funT ( fun p ->
    Reduce contradictory relation a>=a+b where b>0.
  *)
 let reduceContradRelT =
-   rw ((addrC [0] normalizeC) thenC (addrC [1] normalizeC) thenC
+   rw ((addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC) thenC
 		 reduceC)
 
 doc <:doc<

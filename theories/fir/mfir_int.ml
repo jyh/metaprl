@@ -1,41 +1,41 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Mfir_int]
-  
+
    The @tt[Mfir_int] module defines integers and operations on integers.
    @end[doc]
-  
+
    ------------------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.  Additional
    information about the system is available at
    http://www.metaprl.org/
-  
+
    Copyright (C) 2002 Brian Emre Aydemir, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -43,12 +43,12 @@ doc <:doc<
 
 extends Mfir_bool
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
+open Basic_tactics
 open Base_meta
-open Top_conversionals
 open Mfir_bool
 
 
@@ -56,10 +56,10 @@ open Mfir_bool
  * Declarations.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The term @tt{number[i:n]} represents the integer $i$.
    @end[doc]
 >>
@@ -67,9 +67,9 @@ doc <:doc<
 declare number[i:n]
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Basic arithmetic operations can be applied to integers.
    @end[doc]
 >>
@@ -85,9 +85,9 @@ declare int_min{ 'num1; 'num2 }
 declare int_max{ 'num1; 'num2 }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Integers can be compared using the following six binary operators.
    @end[doc]
 >>
@@ -104,17 +104,17 @@ declare int_ge{ 'num1; 'num2 }
  * Rewrites.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The arithmetic and comparison operators above can be rewritten to numbers
    and booleans using meta operations from the @tt[Base_meta] module.  These
    rewrites are straightforward, and we omit an explicit listing of them.
    @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -187,22 +187,22 @@ prim_rw reduce_int_ge_aux :
  *)
 
 let reduce_add =
-   reduce_add_aux thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral
+   reduce_add_aux thenC (addrC [Subterm 1] reduce_meta_sum) thenC reduce_numeral
 
 let reduce_sub =
-   reduce_sub_aux thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
+   reduce_sub_aux thenC (addrC [Subterm 1] reduce_meta_diff) thenC reduce_numeral
 
 let reduce_mul =
-   reduce_mul_aux thenC (addrC [0] reduce_meta_prod) thenC reduce_numeral
+   reduce_mul_aux thenC (addrC [Subterm 1] reduce_meta_prod) thenC reduce_numeral
 
 let reduce_div =
-   reduce_div_aux thenC (addrC [0] reduce_meta_quot) thenC reduce_numeral
+   reduce_div_aux thenC (addrC [Subterm 1] reduce_meta_quot) thenC reduce_numeral
 
 let reduce_rem =
-   reduce_rem_aux thenC (addrC [0] reduce_meta_rem) thenC reduce_numeral
+   reduce_rem_aux thenC (addrC [Subterm 1] reduce_meta_rem) thenC reduce_numeral
 
 let reduce_minus =
-   reduce_minus_aux thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
+   reduce_minus_aux thenC (addrC [Subterm 1] reduce_meta_diff) thenC reduce_numeral
 
 let reduce_int_eq =
    reduce_int_eq_aux thenC reduce_meta_eq_num
@@ -259,12 +259,12 @@ prim_rw reduce_int_max_aux :
 
 let reduce_int_min =
    reduce_int_min_aux thenC
-   (addrC [0] reduce_int_lt) thenC
+   (addrC [Subterm 1] reduce_int_lt) thenC
    reduce_ifthenelse
 
 let reduce_int_max =
    reduce_int_max_aux thenC
-   (addrC [0] reduce_int_lt) thenC
+   (addrC [Subterm 1] reduce_int_lt) thenC
    reduce_ifthenelse
 
 let resource reduce += [

@@ -35,15 +35,7 @@ extends Itt_logic
 open Lm_debug
 open Lm_printf
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermAddr
-
-open Tactic_type
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
-
-open Auto_tactic
-open Dtactic
+open Basic_tactics
 
 open Itt_logic
 open Itt_struct
@@ -74,15 +66,17 @@ let ifNotWT = argfunT (fun tac p ->
     else
        tac)
 
+let sub1 = make_address [Subterm 1]
+
 (* Term classes *)
 let is_imp_and_term term =
-   is_implies_term term & is_and_term (term_subterm term (make_address [0]))
+   is_implies_term term & is_and_term (term_subterm term sub1)
 
 let is_imp_or_term term =
-   is_implies_term term & is_or_term (term_subterm term (make_address [0]))
+   is_implies_term term & is_or_term (term_subterm term sub1)
 
 let is_imp_imp_term term =
-   is_implies_term term & is_implies_term (term_subterm term (make_address [0]))
+   is_implies_term term & is_implies_term (term_subterm term sub1)
 
 interactive imp_and_rule 'H :
    sequent { <H>; x: "and"{'C; 'D} => 'B; <J['x]> >- "type"{'C} } -->
@@ -168,7 +162,7 @@ and internalPropDecideT count = funT (fun p ->
 
 (* Convert all "not X" terms to "X => False" *)
 let notToImpliesFalseC =
-   sweepUpC (unfold_not thenC fold_implies thenC (addrC [1] fold_false))
+   sweepUpC (unfold_not thenC fold_implies thenC (addrC [Subterm 2] fold_false))
 
 (*
  * Toplevel tactic:

@@ -150,7 +150,7 @@ dform var_bterm_df : except_mode[src] :: var_bterm{'bt} =
 let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
 
 let is_var_bterm_reduce = unfold_is_var_bterm thenC Base_reflection.reduce_if_var_bterm
-let var_bterm_reduce = unfold_var_bterm thenC addrC [0] is_var_bterm_reduce
+let var_bterm_reduce = unfold_var_bterm thenC addrC [Subterm 1] is_var_bterm_reduce
 let resource reduce +=
    [ << is_var_bterm{ bterm{| <H1> >- 't1 |} } >>, is_var_bterm_reduce;
      << var_bterm{ bterm{| <H1> >- 't1 |} } >>, var_bterm_reduce ]
@@ -277,7 +277,7 @@ prim_rw reduce_xlist_nil :
 let rec reduce_xlist t =
    if is_xnil_term (one_subterm t) then
       reduce_xlist_nil
-   else reduce_xlist_cons thenC addrC [1] (termC reduce_xlist)
+   else reduce_xlist_cons thenC addrC [Subterm 2] (termC reduce_xlist)
 
 
 define unfold_subterms:
@@ -290,7 +290,7 @@ dform subterms_df : except_mode[src] :: subterms{'bt} =
    `"subterms(" slot{'bt} `")"
 
 let reduce_subterms =
-   unfold_subterms thenC addrC [0] Base_reflection.reduce_subterms thenC termC reduce_xlist
+   unfold_subterms thenC addrC [Subterm 1] Base_reflection.reduce_subterms thenC termC reduce_xlist
 
 let resource reduce +=
    ( << subterms{ bterm{| <H> >- 't |} } >>, reduce_subterms )
@@ -341,7 +341,7 @@ dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
    `"same_op(" slot{'b1} `"; " slot{'b2} `")"
 
 let is_same_op_reduce = unfold_is_same_op thenC Base_reflection.reduce_if_same_op
-let same_op_reduce = unfold_same_op thenC addrC [0] is_same_op_reduce
+let same_op_reduce = unfold_same_op thenC addrC [Subterm 1] is_same_op_reduce
 let resource reduce +=
    [ << is_same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, is_same_op_reduce;
      << same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, same_op_reduce ]
@@ -417,7 +417,7 @@ dform simple_bterm_df : except_mode[src] :: simple_bterm{'bt} =
    `"simple_bterm(" slot{'bt} `")"
 
 let is_simple_reduce = unfold_is_simple_bterm thenC Base_reflection.reduce_if_simple_bterm
-let simple_reduce = unfold_simple_bterm thenC addrC [0] is_simple_reduce
+let simple_reduce = unfold_simple_bterm thenC addrC [Subterm 1] is_simple_reduce
 
 let resource reduce +=
    [ << is_simple_bterm{ bterm{| <H1> >- 't1 |} } >>, is_simple_reduce;

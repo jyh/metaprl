@@ -2166,7 +2166,7 @@ O	o1304	add
 NSummary!interactive	interactive	interactive Summary
 O	o1307	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1307	String "rwh unfoldInd 0 thenT rw (addrC [0] (Itt_int_base.reduce_ind_up thenC reduceC)) 0 thenT genAssumT [1] thenT byDefT unfold_nat"
+P	p1307	String "rwh unfoldInd 0 thenT rw (addrC [1] (Itt_int_base.reduce_ind_up thenC reduceC)) 0 thenT genAssumT [1] thenT byDefT unfold_nat"
 O	o1308	ext_rule p1307
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1309	status_incomplete
@@ -6455,7 +6455,7 @@ T	t1019	o b1019 b13
 B	b1020	t1019
 T	t1020	o1310 b1014 b1020
 B	b1021	t1020
-P	p1021	String "dT 0 thenMT rwh fold_lt (-1) thenMT rw (lt_addMonoC <<'m +@ 1>>) (-1) thenMT rw (addrC [0] reduceC) (-1) thenMT dT 5 taa thenT byDefT reduceC"
+P	p1021	String "dT 0 thenMT rwh fold_lt (-1) thenMT rw (lt_addMonoC <<'m +@ 1>>) (-1) thenMT rw (addrC [1] reduceC) (-1) thenMT dT 5 taa thenT byDefT reduceC"
 O	o1021	ext_rule p1021
 T	t1021	o2335 b1018 b13
 B	b1022	t1021
@@ -8297,7 +8297,7 @@ T	t4560	o b4560 b13
 B	b4561	t4560
 T	t4561	o1310 b4557 b4561
 B	b4562	t4561
-P	p4315	String "rwh (lt_addMonoC << 1 >>) (-1) thenT rw (addrC [1] reduceC) (-1) ttca"
+P	p4315	String "rwh (lt_addMonoC << 1 >>) (-1) thenT rw (addrC [2] reduceC) (-1) ttca"
 O	o4315	ext_rule p4315
 S	s6216	tbrarg\\ h3741 h5556 h1587 h1588 h5972 h2274 h2683 h2626 h5918 h5975 h2810\\ t3180
 B	b6217	s6216

@@ -44,9 +44,8 @@ extends Itt_intdomain
 
 open Lm_debug
 open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_grouplikeobj
 open Itt_ring2
@@ -77,9 +76,9 @@ define unfold_field1 : field[i:l] <-->
    {f: prefield[i:l] | isField{'f}}
 doc docoff
 
-let unfold_prefield = unfold_prefield1 thenC addrC [1;1] unfold_prering
-let unfold_isField = unfold_isField1 thenC addrC [0] unfold_isRing thenC addrC [1; 0] unfold_isCommutative
-let unfold_field = unfold_field1 thenC addrC [0] unfold_prefield thenC addrC [1] unfold_isField
+let unfold_prefield = unfold_prefield1 thenC addrC [Subterm 2; Subterm 2] unfold_prering
+let unfold_isField = unfold_isField1 thenC addrC [Subterm 1] unfold_isRing thenC addrC [Subterm 2; Subterm 1] unfold_isCommutative
+let unfold_field = unfold_field1 thenC addrC [Subterm 1] unfold_prefield thenC addrC [Subterm 2] unfold_isField
 
 let fold_prefield1 = makeFoldC << prefield[i:l] >> unfold_prefield1
 let fold_prefield = makeFoldC << prefield[i:l] >> unfold_prefield

@@ -40,13 +40,9 @@ extends Itt_squash
 extends Itt_subtype
 extends Itt_logic
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
+open Basic_tactics
 
 open Itt_squash
-open Dtactic
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
 (*
  * Show that the file is loading.
@@ -75,7 +71,7 @@ interactive extEqualMember {|squash; intro[] |}:
 
 let resource intro +=
    [<<ext_equal{'A; 'B}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0);
-    <<"type"{ext_equal{'A; 'B}}>>, wrap_intro (rw (addrC [0] unfoldExtEqual) 0 thenT dT 0 thenT dT 0)
+    <<"type"{ext_equal{'A; 'B}}>>, wrap_intro (rw (addrC [Subterm 1] unfoldExtEqual) 0 thenT dT 0 thenT dT 0)
    ]
 
 let resource elim += (<<ext_equal{'A; 'B}>>, (fun n -> rw unfoldExtEqual n thenT dT n))

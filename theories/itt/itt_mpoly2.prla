@@ -4746,7 +4746,7 @@ T	t982	o969 b1042 b976 b980 b4
 B	b982	t982
 T	t983	o1040 b982
 B	b983	t983
-P	p990	String "rw (addrC [0] unfold_eval_mpolyTerm) 0"
+P	p990	String "rw (addrC [1] unfold_eval_mpolyTerm) 0"
 O	o990	ext_rule p990
 NPerv!rewrite	rewrite990	rewrite Perv
 O	o991	rewrite990
@@ -5827,7 +5827,7 @@ T	t2878	o1560 b1355 b352 b353
 B	b2878	t2878
 T	t2879	o401 b2877 b2878
 B	b2879	t2879
-P	p2548	String "rw (addrC [0] unfold_mpoly_ofTerm) 0"
+P	p2548	String "rw (addrC [1] unfold_mpoly_ofTerm) 0"
 O	o2548	ext_rule p2548
 T	t2548	o991 b1579 b1582
 S	s2548	t1028\\ h\\ t2548
@@ -5876,7 +5876,7 @@ T	t2572	o b2572 b4
 B	b2573	t2572
 T	t2573	o1043 b2562 b2573
 B	b2574	t2573
-P	p2574	String "rw (addrC [0;0;0] (higherC unfold_leftOperand)) 0 thenT reduceT"
+P	p2574	String "rw (addrC [1; 1; 1] (higherC unfold_leftOperand)) 0 thenT reduceT"
 O	o2574	ext_rule p2574
 T	t2574	o784 b1354 b2565
 B	b2575	t2574
@@ -5893,7 +5893,7 @@ T	t2580	o b2580 b4
 B	b2581	t2580
 T	t2581	o1043 b2572 b2581
 B	b2582	t2581
-P	p2582	String "rw (addrC [0;1;0] (higherC unfold_rightOperand)) 0 thenT reduceT"
+P	p2582	String "rw (addrC [1; 2; 1] (higherC unfold_rightOperand)) 0 thenT reduceT"
 O	o2582	ext_rule p2582
 T	t2582	o784 b1355 b2565
 B	b2583	t2582
@@ -5980,7 +5980,7 @@ T	t2622	o b2621 b4
 B	b2622	t2622
 T	t2626	o1043 b2614 b2622
 B	b2626	t2626
-P	p2626	String "rw (addrC [0;0;0;0] unfold_leftOperand) 0"
+P	p2626	String "rw (addrC [1; 1; 1; 1] unfold_leftOperand) 0"
 O	o2626	ext_rule p2626
 T	t2627	o1511 b1344 b743 b744
 B	b2627	t2627
@@ -5999,7 +5999,7 @@ T	t2635	o b2634 b4
 B	b2635	t2635
 T	t2636	o1043 b2621 b2635
 B	b2636	t2636
-P	p2636	String "rw (addrC [0;1;0;0] unfold_rightOperand) 0"
+P	p2636	String "rw (addrC [1; 2; 1; 1] unfold_rightOperand) 0"
 O	o2636	ext_rule p2636
 T	t2637	o1511 b721 b743 b744
 B	b2637	t2637

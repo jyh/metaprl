@@ -95,7 +95,7 @@ interactive operators_wf {| intro[] |} :
 
 let resource elim += <<Operators[i:l]{'T}>>, fun n-> rw unfold_Operators n thenT dT n
 
-let resource intro += <<'F in Operators[i:l]{'T}>>, wrap_intro (rw (addrC [0] unfold_Operators) 0 thenT dT 0)
+let resource intro += <<'F in Operators[i:l]{'T}>>, wrap_intro (rw (addrC [Subterm 1] unfold_Operators) 0 thenT dT 0)
 
 
 doc <:doc<

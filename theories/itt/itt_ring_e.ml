@@ -41,9 +41,8 @@ doc docoff
 
 open Lm_debug
 open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_ring2
 open Itt_equal
@@ -113,9 +112,9 @@ define unfold_ringE1 : ringE[i:l] <-->
    {f: preringE[i:l] | isRingE{'f}}
 doc docoff
 
-let unfold_preringE = unfold_preringE1 thenC addrC [1] unfold_prering
-let unfold_isRingE = unfold_isRingE1 thenC addrC [0] unfold_isRing thenC addrC [1] unfold_eqDecidable
-let unfold_ringE = unfold_ringE1 thenC addrC [0] unfold_preringE thenC addrC [1] unfold_isRingE
+let unfold_preringE = unfold_preringE1 thenC addrC [Subterm 2] unfold_prering
+let unfold_isRingE = unfold_isRingE1 thenC addrC [Subterm 1] unfold_isRing thenC addrC [Subterm 2] unfold_eqDecidable
+let unfold_ringE = unfold_ringE1 thenC addrC [Subterm 1] unfold_preringE thenC addrC [Subterm 2] unfold_isRingE
 
 let fold_preringE1 = makeFoldC << preringE[i:l] >> unfold_preringE1
 let fold_preringE = makeFoldC << preringE[i:l] >> unfold_preringE

@@ -334,13 +334,13 @@ prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
 doc <:doc< @docoff >>
 
 let reduce_add =
-   reduce_add_meta thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral
+   reduce_add_meta thenC (addrC [Subterm 1] reduce_meta_sum) thenC reduce_numeral
 
 let reduce_minus =
-   reduce_minus_meta thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
+   reduce_minus_meta thenC (addrC [Subterm 1] reduce_meta_diff) thenC reduce_numeral
 
 let reduce_sub =
-   reduce_sub_meta thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
+   reduce_sub_meta thenC (addrC [Subterm 1] reduce_meta_diff) thenC reduce_numeral
 
 let reduce_lt =
    reduce_lt_meta thenC reduce_meta_lt_num
@@ -359,7 +359,7 @@ let resource reduce += [
    <<minus{number[i:n]}>>, reduce_minus;
    <<number[i:n] -@ number[j:n]>>, reduce_sub;
    <<lt_bool{number[i:n]; number[j:n]}>>, reduce_lt;
-   <<number[i:n] < number[j:n]>>, (unfold_lt thenC addrC [0] reduce_lt);
+   <<number[i:n] < number[j:n]>>, (unfold_lt thenC addrC [Subterm 1] reduce_lt);
    <<beq_int{number[i:n]; number[j:n]}>>, reduce_eq_int;
 ]
 
@@ -760,8 +760,8 @@ interactive_rw unfold_ind_number :
  'base; m,z. 'up['m; 'z]}])
 
 let reduce_ind_numberC =
-   unfold_ind_number thenC addrC [2;0] reduce_lt thenC addrC [2] reduceTopC
- thenC addrC [0] reduce_eq_int thenC reduceTopC
+   unfold_ind_number thenC addrC [Subterm 3; Subterm 1] reduce_lt thenC addrC [Subterm 3] reduceTopC
+ thenC addrC [Subterm 1] reduce_eq_int thenC reduceTopC
 
 doc <:doc<
    @begin[doc]
@@ -829,7 +829,7 @@ interactive_rw add_Id2_rw {| reduce; arith_unfold |} :
 let add_Id2C = add_Id2_rw
 
 let resource reduce += [
-	<<'a -@ 0>>, (unfold_sub thenC (addrC [1] reduce_minus));
+	<<'a -@ 0>>, (unfold_sub thenC (addrC [Subterm 2] reduce_minus));
 ]
 
 interactive_rw add_Id3_rw :
@@ -1012,7 +1012,7 @@ let resource typeinf += [
 ]
 
 let resource reduce += [
-   << ('a < 'a) >>, (unfold_lt thenC (addrC [0] lt_irreflex_rw));
+   << ('a < 'a) >>, (unfold_lt thenC (addrC [Subterm 1] lt_irreflex_rw));
    <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
 ]
 

@@ -84,7 +84,7 @@ let subAssoc first length conv env  = (* may raise Not_found *)
            if length = 2 then conv
            else failWithC "subAssocC: Not enough subterms (the second argument is too big)"
      else if length = 1 then
-        addrC [0] conv
+        addrC [Subterm 1] conv
      else raise (Invalid_argument ("Trying to apply subAssocC with nonpositive length"))
   in
   let rec subNC first =  termC (fun term ->
@@ -93,7 +93,7 @@ let subAssoc first length conv env  = (* may raise Not_found *)
         else raise (RefineError ("subAssocC", StringError ("Not enough subterms")))
      else
         if first>0 then
-           addrC [1] (subNC (first -1) )
+           addrC [Subterm 2] (subNC (first -1) )
         else if first = 0 then
            sub0C length
         else raise (Invalid_argument ("Trying to apply subAssocC with negative argument"))

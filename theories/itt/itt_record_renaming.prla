@@ -1314,7 +1314,7 @@ T	t718	o b718 b18
 B	b719	t718
 T	t719	o671 b689 b719
 B	b720	t719
-P	p720	String "rw (addrC [0;1] record_exchange) 0 thenT dT 2"
+P	p720	String "rw (addrC [1; 2] record_exchange) 0 thenT dT 2"
 O	o720	ext_rule p720
 T	t720	o589 b703 b507
 B	b721	t720
@@ -1639,7 +1639,7 @@ T	t858	o b858 b18
 B	b859	t858
 T	t859	o671 b821 b859
 B	b860	t859
-P	p860	String "rw (addrC [0;1] record_exchange) 0 thenT dT 3 thenT rwh record_beta 0 thenT dT 3 thenT dT 2"
+P	p860	String "rw (addrC [1; 2] record_exchange) 0 thenT dT 3 thenT rwh record_beta 0 thenT dT 3 thenT dT 2"
 O	o860	ext_rule p860
 T	t860	o672 b835 b18 b853
 B	b861	t860
@@ -1724,7 +1724,7 @@ T	t897	o b897 b18
 B	b898	t897
 T	t898	o671 b863 b898
 B	b899	t898
-P	p899	String "rw (addrC [0] record_exchange ) 0 thenT dT 4 ttca"
+P	p899	String "rw (addrC [1] record_exchange ) 0 thenT dT 4 ttca"
 O	o899	ext_rule p899
 T	t899	o672 b874 b18 b888
 B	b900	t899
@@ -1817,7 +1817,7 @@ T	t939	o b939 b18
 B	b940	t939
 T	t940	o671 b812 b940
 B	b941	t940
-P	p941	String "rw (addrC [0;1] record_exchange) 0 thenT dT 2 thenT  rw (addrC [0] record_exchange) 0 thenT dT 3 ttca"
+P	p941	String "rw (addrC [1; 2] record_exchange) 0 thenT dT 2 thenT  rw (addrC [1] record_exchange) 0 thenT dT 3 ttca"
 O	o941	ext_rule p941
 T	t941	o671 b939 b18
 B	b942	t941
@@ -2488,7 +2488,7 @@ T	t1219	o b1219 b18
 B	b1220	t1219
 T	t1220	o671 b1210 b1220
 B	b1221	t1220
-P	p1221	String "rw (addrC [1]  record_exchange) 0 thenT dT 2 ttca"
+P	p1221	String "rw (addrC [2]  record_exchange) 0 thenT dT 2 ttca"
 O	o1221	ext_rule p1221
 T	t1221	o671 b1219 b18
 B	b1222	t1221
@@ -3388,7 +3388,7 @@ T	t1591	o b1590 b18
 B	b1591	t1591
 T	t1592	o671 b1557 b1591
 B	b1592	t1592
-P	p1592	String "rw (addrC [0;1] record_exchange) 0 thenT  (rwh  record_beta 0) thenT   decideEqLabelT <<label[a:t]>> <<label[b:t]>> thenT reduceT"
+P	p1592	String "rw (addrC [1; 2] record_exchange) 0 thenT  (rwh  record_beta 0) thenT   decideEqLabelT <<label[a:t]>> <<label[b:t]>> thenT reduceT"
 O	o1592	ext_rule p1592
 T	t1593	o587 b590 b591
 B	b1593	t1593
@@ -3633,7 +3633,7 @@ P	p1481	Number 4516
 O	o1481	location p1480 p1481
 P	p1701	String rename_sym
 O	o1701	rewrite p1701
-P	p1702	String "byDefT rename thenT rw (addrC [0] record_exchange) 0 thenT  decideEqLabelT <<label[a:t]>> <<label[b:t]>> ttca"
+P	p1702	String "byDefT rename thenT rw (addrC [1] record_exchange) 0 thenT  decideEqLabelT <<label[a:t]>> <<label[b:t]>> ttca"
 O	o1702	ext_rule p1702
 T	t1702	o675 b508 b1553
 S	s1702	t674\\ h\\ t1702
@@ -4458,7 +4458,7 @@ T	t2054	o b2053 b18
 B	b2054	t2054
 T	t2055	o671 b1949 b2054
 B	b2055	t2055
-P	p2055	String "rw (addrC [0;1] record_exchange) 0 thenT tryOnAllHypsT dT"
+P	p2055	String "rw (addrC [1; 2] record_exchange) 0 thenT tryOnAllHypsT dT"
 O	o2055	ext_rule p2055
 T	t2056	o589 b590 b1953
 B	b2056	t2056
@@ -4492,7 +4492,7 @@ T	t2069	o b2068 b18
 B	b2069	t2069
 T	t2070	o671 b2053 b2069
 B	b2070	t2070
-P	p2070	String "rw (addrC [0] record_exchange) 0 thenT tryOnAllHypsT dT"
+P	p2070	String "rw (addrC [1] record_exchange) 0 thenT tryOnAllHypsT dT"
 O	o2070	ext_rule p2070
 T	t2071	o587 b588 b2056
 B	b2071	t2071
@@ -4522,7 +4522,7 @@ T	t2082	o b2081 b18
 B	b2082	t2082
 T	t2083	o671 b2068 b2082
 B	b2083	t2083
-P	p2083	String "rw (addrC [0;1;1] record_exchange) 0 thenT tryOnAllHypsT dT"
+P	p2083	String "rw (addrC [1; 2; 2] record_exchange) 0 thenT tryOnAllHypsT dT"
 O	o2083	ext_rule p2083
 T	t2084	o1953 b1401 b591
 B	b2084	t2084
@@ -4558,7 +4558,7 @@ T	t2098	o b2097 b18
 B	b2098	t2098
 T	t2099	o671 b2081 b2098
 B	b2099	t2099
-P	p2099	String "rw (addrC [0;1] record_exchange) 0 thenT tryOnAllHypsT dT ttca"
+P	p2099	String "rw (addrC [1; 2] record_exchange) 0 thenT tryOnAllHypsT dT ttca"
 O	o2099	ext_rule p2099
 T	t2100	o671 b2097 b18
 B	b2100	t2100

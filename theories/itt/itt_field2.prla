@@ -8645,7 +8645,7 @@ T	t12083	o1295 b12083 b13
 B	b12084	t12083
 T	t12084	o9898 b1294 b12084 b13 b13
 B	b12085	t12084
-P	p9902	String "rw (addrC [0] record_exchange) 0 ttca"
+P	p9902	String "rw (addrC [1] record_exchange) 0 ttca"
 O	o9902	ext_rule p9902
 H	h9828	_1010 t9828
 S	s9832	t1290\\ h h9779 h9828\\ t9832

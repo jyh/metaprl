@@ -43,9 +43,8 @@ extends Itt_poly
 
 open Lm_debug
 open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_grouplikeobj
 open Itt_unitring
@@ -75,9 +74,9 @@ define unfold_unitringCE1 : unitringCE[i:l] <-->
    {f: preunitringE[i:l] | isUnitRingCE{'f}}
 doc docoff
 
-let unfold_preunitringE = unfold_preunitringE1 thenC addrC [1] unfold_preunitring
-let unfold_isUnitRingCE = unfold_isUnitRingCE1 thenC addrC [0] unfold_isUnitRing thenC addrC [1; 0] unfold_isCommutative thenC addrC [1; 1] unfold_eqDecidable
-let unfold_unitringCE = unfold_unitringCE1 thenC addrC [0] unfold_preunitringE thenC addrC [1] unfold_isUnitRingCE
+let unfold_preunitringE = unfold_preunitringE1 thenC addrC [Subterm 2] unfold_preunitring
+let unfold_isUnitRingCE = unfold_isUnitRingCE1 thenC addrC [Subterm 1] unfold_isUnitRing thenC addrC [Subterm 2; Subterm 1] unfold_isCommutative thenC addrC [Subterm 2; Subterm 2] unfold_eqDecidable
+let unfold_unitringCE = unfold_unitringCE1 thenC addrC [Subterm 1] unfold_preunitringE thenC addrC [Subterm 2] unfold_isUnitRingCE
 
 let fold_preunitringE1 = makeFoldC << preunitringE[i:l] >> unfold_preunitringE1
 let fold_preunitringE = makeFoldC << preunitringE[i:l] >> unfold_preunitringE

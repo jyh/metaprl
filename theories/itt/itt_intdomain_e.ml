@@ -43,9 +43,8 @@ extends Itt_poly
 
 open Lm_debug
 open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_intdomain
 open Itt_ring_uce
@@ -71,8 +70,8 @@ define unfold_intDomainE1 : intDomainE[i:l] <-->
    {f: preunitringE[i:l] | isIntDomainE{'f}}
 doc docoff
 
-let unfold_isIntDomainE = unfold_isIntDomainE1 thenC addrC [0] unfold_isIntDomain thenC addrC [1] unfold_eqDecidable
-let unfold_intDomainE = unfold_intDomainE1 thenC addrC [0] unfold_preunitringE thenC addrC [1] unfold_isIntDomainE
+let unfold_isIntDomainE = unfold_isIntDomainE1 thenC addrC [Subterm 1] unfold_isIntDomain thenC addrC [Subterm 2] unfold_eqDecidable
+let unfold_intDomainE = unfold_intDomainE1 thenC addrC [Subterm 1] unfold_preunitringE thenC addrC [Subterm 2] unfold_isIntDomainE
 
 let fold_isIntDomainE1 = makeFoldC << isIntDomainE{'f} >> unfold_isIntDomainE1
 let fold_isIntDomainE = makeFoldC << isIntDomainE{'f} >> unfold_isIntDomainE

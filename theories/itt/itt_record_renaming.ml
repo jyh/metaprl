@@ -15,10 +15,8 @@ doc <:doc< @docoff >>
 
 extends Itt_algebra_df
 
-open Refiner.Refiner.TermMan
-open Tactic_type.Tacticals
-open Auto_tactic
-open Top_conversionals
+open Basic_tactics
+
 open Itt_record_label
 
 doc <:doc<
@@ -317,8 +315,8 @@ doc <:doc<
 >>
 
 let resource reduce +=
-  [ << field[c:t]{rename_mul_add{'r}} >>, (addrC [0] unfold_rename_mul_add thenC repeatForC rename_mul_add_length rename_reduceC);
-    << field[c:t]{rename_add_mul{'r}} >>, (addrC [0] unfold_rename_add_mul thenC repeatForC rename_mul_add_length rename_reduceC);
+  [ << field[c:t]{rename_mul_add{'r}} >>, (addrC [Subterm 1] unfold_rename_mul_add thenC repeatForC rename_mul_add_length rename_reduceC);
+    << field[c:t]{rename_add_mul{'r}} >>, (addrC [Subterm 1] unfold_rename_add_mul thenC repeatForC rename_mul_add_length rename_reduceC);
     << rename_add_mul{rcrd[c:t]{'a;'r}} >>, unfold_rename_add_mul;
     << rename_mul_add{rcrd[c:t]{'a;'r}} >>, unfold_rename_mul_add;
     << as_additive{'r} >>, unfold_as_additive
@@ -516,7 +514,7 @@ doc <:doc<
 >>
 
 let resource reduce +=
-  [ << field[c:t]{reverse_order{'r}} >>, (addrC [0] unfold_reverse_order thenC repeatForC reverse_order_length rename_reduceC);
+  [ << field[c:t]{reverse_order{'r}} >>, (addrC [Subterm 1] unfold_reverse_order thenC repeatForC reverse_order_length rename_reduceC);
     << reverse_order{rcrd[c:t]{'a;'r}} >>, unfold_reverse_order;
   ]
 

@@ -303,7 +303,7 @@ let rec proveVarTypesT f_car = function
 	[] -> idT
  | h::t ->
 		assertT (mk_equal_term f_car h h) thenMT
-		(rw (addrC [0] reduceC) (-1)) thenMT
+		(rw (addrC [Subterm 1] reduceC) (-1)) thenMT
 		proveVarTypesT f_car t
 
 let stdT f vars i = funT (fun p ->
@@ -386,7 +386,7 @@ let atIndAuxC c t =
 		failC
 
 let atIndC c = termC (atIndAuxC c)
-let atIndArgC c = atIndC (addrC [0] c)
+let atIndArgC c = atIndC (addrC [Subterm 1] c)
 
 let atTermAuxC c t1 t2 =
 	let op1=opname_of_term t1 in
@@ -400,7 +400,7 @@ let atTermC t c = termC (atTermAuxC c t)
 let atTermHC t c = atTermC t (higherC c)
 
 let resource reduce += [
-	<<field[t:t]{Poly{'F}}>>, ((addrC [0] unfold_Poly) thenC reduceC);
+	<<field[t:t]{Poly{'F}}>>, ((addrC [Subterm 1] unfold_Poly) thenC reduceC);
 	<<mpoly{'F; number[i:n]}>>, unfold_mpoly;
 	<<isZeroPoly{(number[i:n], lambda{i.'f['i]}); 'F}>>, (unfold_isZeroPoly thenC reduceC);
 	<<coeff{(number[i:n], lambda{i.'f['i]}); number[j:n]; 'F}>>, (unfold_coeff  thenC reduceC);
@@ -411,7 +411,7 @@ let resource reduce += [
 	<<normalize{(number[i:n], lambda{i.'f['i]}); 'F}>>, unfold_normalize1;
 
 	<<sum{number[i:n]; number[j:n]; x.'P['x]; 'F}>>, (unfold_sum thenC reduceC);
-	(*<<ind{'n; 'base; i,f.'up['i;'f]}>>, ((addrC [0] reduceC) thenC reduceTopC);*)
+	(*<<ind{'n; 'base; i,f.'up['i;'f]}>>, ((addrC [Subterm 1] reduceC) thenC reduceTopC);*)
 (**)
 	<<eval_mpoly{(number[i:n], lambda{i.'f['i]}); cons{'h;'t}; 'F}>>, unfold_eval_mpoly;
 	<<eval_mpoly{'p; nil; 'F}>>, (unfold_eval_mpoly thenC reduceC);
@@ -424,7 +424,7 @@ let resource reduce += [
 	<<zero_poly{'F}>>, unfold_zero_poly;
 	<<id_poly{'F}>>, unfold_id_poly;
 (**)
-	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC reduceTopC);
+	<<field[t:t]{Z}>>, ((addrC [Subterm 1] unfold_Z) thenC reduceTopC);
 ]
 
 dform id_poly_df : except_mode[src] :: id_poly{'F} =

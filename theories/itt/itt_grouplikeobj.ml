@@ -122,7 +122,7 @@ define unfold_semigroup1 : semigroup[i:l] <-->
    {g: groupoid[i:l] | isSemigroup{'g}}
 doc docoff
 
-let unfold_semigroup = unfold_semigroup1 thenC addrC [0] unfold_groupoid thenC addrC [1] unfold_isSemigroup
+let unfold_semigroup = unfold_semigroup1 thenC addrC [Subterm 1] unfold_groupoid thenC addrC [Subterm 2] unfold_isSemigroup
 
 let fold_isSemigroup = makeFoldC << isSemigroup{'g} >> unfold_isSemigroup
 let fold_semigroup1 = makeFoldC << semigroup[i:l] >> unfold_semigroup1
@@ -202,9 +202,9 @@ define unfold_monoid1 : monoid[i:l] <-->
    {g: premonoid[i:l] | isMonoid{'g}}
 doc docoff
 
-let unfold_premonoid = unfold_premonoid1 thenC addrC [1] unfold_groupoid
-let unfold_isMonoid = unfold_isMonoid1 thenC addrC [0] unfold_isSemigroup
-let unfold_monoid = unfold_monoid1 thenC addrC [0] unfold_premonoid thenC addrC [1] unfold_isMonoid
+let unfold_premonoid = unfold_premonoid1 thenC addrC [Subterm 2] unfold_groupoid
+let unfold_isMonoid = unfold_isMonoid1 thenC addrC [Subterm 1] unfold_isSemigroup
+let unfold_monoid = unfold_monoid1 thenC addrC [Subterm 1] unfold_premonoid thenC addrC [Subterm 2] unfold_isMonoid
 
 let fold_premonoid1 = makeFoldC << premonoid[i:l] >> unfold_premonoid1
 let fold_premonoid = makeFoldC << premonoid[i:l] >> unfold_premonoid

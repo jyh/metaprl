@@ -92,9 +92,9 @@ define unfold_group1 : group[i:l] <-->
    {G: pregroup[i:l] | isGroup{'G}}
 doc docoff
 
-let unfold_pregroup = unfold_pregroup1 thenC addrC [1] unfold_premonoid
-let unfold_isGroup = unfold_isGroup1 thenC addrC [0] unfold_isSemigroup
-let unfold_group = unfold_group1 thenC addrC [0] unfold_pregroup thenC addrC [1] unfold_isGroup
+let unfold_pregroup = unfold_pregroup1 thenC addrC [Subterm 2] unfold_premonoid
+let unfold_isGroup = unfold_isGroup1 thenC addrC [Subterm 1] unfold_isSemigroup
+let unfold_group = unfold_group1 thenC addrC [Subterm 1] unfold_pregroup thenC addrC [Subterm 2] unfold_isGroup
 
 let fold_pregroup1 = makeFoldC << pregroup[i:l] >> unfold_pregroup1
 let fold_pregroup = makeFoldC << pregroup[i:l] >> unfold_pregroup
@@ -484,7 +484,7 @@ define unfold_isAbelg1 : isAbelg{'G} <-->
    isGroup{'G} & isCommutative{'G}
 doc docoff
 
-let unfold_isAbelg = unfold_isAbelg1 thenC addrC [0] unfold_isGroup thenC addrC [1] unfold_isCommutative
+let unfold_isAbelg = unfold_isAbelg1 thenC addrC [Subterm 1] unfold_isGroup thenC addrC [Subterm 2] unfold_isCommutative
 
 let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
 let fold_isAbelg1 = makeFoldC << isAbelg{'G} >> unfold_isAbelg1
@@ -879,7 +879,7 @@ define unfold_groupHom1 : groupHom{'A; 'B} <-->
    { f: 'A^car -> 'B^car | isGroupHom{'f; 'A; 'B} }
 doc docoff
 
-let unfold_groupHom = unfold_groupHom1 thenC addrC [1] unfold_isGroupHom
+let unfold_groupHom = unfold_groupHom1 thenC addrC [Subterm 2] unfold_isGroupHom
 
 let fold_isGroupHom = makeFoldC << isGroupHom{'f; 'A; 'B}  >> unfold_isGroupHom
 let fold_groupHom1 = makeFoldC << groupHom{'A; 'B}  >> unfold_groupHom1
@@ -1139,7 +1139,7 @@ define unfold_groupIso : groupIso{'A; 'B} <-->
    { f: groupHom{'A; 'B} | isBijective{'f; 'A^car; 'B^car} }
 doc docoff
 
-let unfold_isBijective = unfold_isBijective1 thenC addrC [0] unfold_isInjective thenC addrC [1] unfold_isSurjective
+let unfold_isBijective = unfold_isBijective1 thenC addrC [Subterm 1] unfold_isInjective thenC addrC [Subterm 2] unfold_isSurjective
 
 let fold_isInjective = makeFoldC << isInjective{'f; 'A; 'B}  >> unfold_isInjective
 let fold_isSurjective = makeFoldC << isSurjective{'f; 'A; 'B}  >> unfold_isSurjective

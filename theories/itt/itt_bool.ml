@@ -601,17 +601,17 @@ let search_ifthenelse goal =
          search_term addrs vars addr goal
    and search_term addrs vars addr goal =
       let { term_terms = bterms } = dest_term goal in
-         search_bterms addrs vars (0 :: addr) bterms
+         search_bterms addrs vars (Subterm 1 :: addr) bterms
    and search_bterms addrs vars addr = function
       bterm :: bterms ->
          let { bvars = bvars; bterm = bterm } = dest_bterm bterm in
          let addrs = search addrs (bvars @ vars) addr bterm in
          let addr =
             match addr with
-               i :: t ->
-                  succ i :: t
-             | [] ->
-                  raise (Invalid_argument "search_ifthenelse: empty address")
+               Subterm i :: t ->
+                  Subterm (succ i) :: t
+             | _ ->
+                  raise (Invalid_argument "search_ifthenelse: internal error")
          in
             search_bterms addrs vars addr bterms
     | [] ->

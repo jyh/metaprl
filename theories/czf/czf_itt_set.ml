@@ -357,7 +357,7 @@ let dest_set_ind = dest_dep0_dep3_term set_ind_opname
  * Typehood of isset{'s1}
  *)
 let d_isset_typeT =
-   rw (addrC [0] unfold_isset) 0 thenT dT 0
+   rw (addrC [Subterm 1] unfold_isset) 0 thenT dT 0
 
 let isset_type_term = << "type"{isset{'s1}} >>
 

@@ -5127,9 +5127,9 @@ B	b1785	t1785
 P	p1785	Number 4131
 P	p1800	Number 4151
 O	o1800	location p1785 p1800
-Vs1	s1	s1\\ \\ 
+Vs1	s1	s1\\ \\
 B	b1	s1
-Vs2	s2	s2\\ \\ 
+Vs2	s2	s2\\ \\
 B	b2	s2
 T	t2	o581 b1 b2
 B	b3	t2
@@ -5827,13 +5827,13 @@ B	b1952	t1951
 P	p2230	Number 5821
 P	p2231	Number 6045
 O	o2231	location p2230 p2231
-VT1	T1	T1\\ \\ 
+VT1	T1	T1\\ \\
 B	b1953	T1
 Vf1	f1	f1\\ \\ t844
 B	b1954	f1 x1
 T	t1954	o841 b1953 b1954
 B	b1955	t1954
-VT2	T2	T2\\ \\ 
+VT2	T2	T2\\ \\
 B	b1956	T2
 Vf2	f2	f2\\ \\ t848
 B	b1958	f2 x2
@@ -5858,9 +5858,9 @@ T	t1968	o852 b1956 b1968
 B	b1969	t1968
 T	t1969	o851 b1966 b1969
 B	b1973	t1969
-P	p7931	String "rw (addrC [0] unfold_eq thenC reduceC) 0 thenT trivialT"
+P	p7931	String "rw (addrC [1] unfold_eq thenC reduceC) 0 thenT trivialT"
 O	o7931	ext_rule p7931
-C	h1973	H\\ \\ 
+C	h1973	H\\ \\
 T	t1973	o942 b1961 b1973
 S	s1973	tbrarg\\ h1973\\ t1973
 B	b1986	s1973
@@ -6230,11 +6230,11 @@ P	p2285	Number 7742
 O	o2285	location p2284 p2285
 T	t6434	o b6427 b1077
 B	b6434	t6434
-VP	P2151	P\\ \\ 
+VP	P2151	P\\ \\
 B	b2152	P2151 x
 T	t2152	o585 b2152
 B	b2155	t2152
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b2156	x
 T	t2156	o1052 b2156
 B	b2157	t2156
@@ -6279,7 +6279,7 @@ P	p2289	Number 8130
 O	o2289	location p2288 p2289
 P	p2278	String dfun_prop_df
 O	o2278	dform p2278
-VA	A2196	A\\ \\ 
+VA	A2196	A\\ \\
 B	b2197	A2196 u
 B	b2200	P2151 x y
 T	t2200	o601 b2197 b2200
@@ -6293,7 +6293,7 @@ P	p4335	Number 0
 O	o8134	pushm p4335
 T	t8134	o8134
 B	b8134	t8134
-Vu	u	u\\ \\ 
+Vu	u	u\\ \\
 B	b2204	u
 T	t2204	o1052 b2204
 B	b2205	t2204
@@ -6310,7 +6310,7 @@ B	b8137	t8137
 O	o8159	string1052 p4765
 T	t8159	o8159
 B	b8160	t8159
-Vy	y	y\\ \\ 
+Vy	y	y\\ \\
 B	b2208	y
 T	t2209	o1052 b2208
 B	b2209	t2209
@@ -6564,14 +6564,14 @@ P	p2294	Number 8823
 O	o2294	location p2293 p2294
 P	p8254	String eq_equality1
 O	o8254	rule p8254
-Vs1	s12245	s1\\ H\\ 
+Vs1	s12245	s1\\ H\\
 B	b2246	s12245
 T	t2246	o924 b2246
 S	s2246	tbrarg\\ h1973\\ t2246
 B	b2253	s2246
 T	t2253	o1109 b2253
 B	b2254	t2253
-Vs2	s22254	s2\\ H\\ 
+Vs2	s22254	s2\\ H\\
 B	b2255	s22254
 T	t2255	o924 b2255
 S	s2255	tbrarg\\ h1973\\ t2255
@@ -8082,14 +8082,14 @@ T	t2488	o1398 b4 b2483 b2488 b2329
 B	b2489	t2488
 T	t2489	o2323 b2489
 B	b2490	t2489
-Vs3	s3	s3\\ H\\ 
+Vs3	s3	s3\\ H\\
 B	b2491	s3
 T	t2491	o1114 b1000 b2246 b2491
 S	s2491	tbrarg\\ h1973\\ t2491
 B	b2492	s2491
 T	t2492	o1109 b2492
 B	b2493	t2492
-Vs4	s4	s4\\ H\\ 
+Vs4	s4	s4\\ H\\
 B	b2494	s4
 T	t2494	o1114 b1000 b2255 b2494
 S	s2494	tbrarg\\ h1973\\ t2494
@@ -9219,7 +9219,7 @@ T	t3866	o b3866 b4
 B	b3867	t3866
 T	t3867	o938 b3828 b3867
 B	b3868	t3867
-Vz	z	z\\ \\ 
+Vz	z	z\\ \\
 B	b3869	z
 T	t3869	o b3869 b4
 B	b3870	t3869
@@ -9870,7 +9870,7 @@ T	t4722	o b4722 b4
 B	b4723	t4722
 T	t4723	o938 b4686 b4723
 B	b4724	t4723
-Vx_1	x_1	x_1\\ \\ 
+Vx_1	x_1	x_1\\ \\
 B	b4725	x_1
 T	t4725	o b4725 b4
 B	b4732	t4725
@@ -11233,7 +11233,7 @@ B	b2732	t2732
 P	p2732	Number 12196
 P	p2733	Number 12497
 O	o2733	location p2732 p2733
-Vs2	s25472	s2\\ J H\\ 
+Vs2	s25472	s2\\ J H\\
 B	b5473	s25472
 T	t5473	o1411 b5473
 B	b5474	t5473
@@ -12200,7 +12200,7 @@ B	b2778	t2778
 P	p2778	Number 13463
 P	p2779	Number 13572
 O	o2779	location p2778 p2779
-Vu	u6620	u\\ H\\ 
+Vu	u6620	u\\ H\\
 B	b6621	u6620
 T	t6621	o924 b6621
 S	s6621	tbrarg\\ h1973\\ t6621
@@ -12286,7 +12286,7 @@ B	b6656	t6655
 P	p2799	Number 13649
 P	p2800	Number 13761
 O	o2800	location p2799 p2800
-VP	P6656	P\\ H\\ 
+VP	P6656	P\\ H\\
 B	b6657	P6656
 T	t6657	o1323 b6657
 S	s6657	tbrarg\\ h1973\\ t6657

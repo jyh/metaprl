@@ -1194,7 +1194,7 @@ T	t701	o700
 B	b701	t701
 P	p709	String reduce_indtree_node
 O	o709	rewrite p709
-P	p712	String "byDefT indtree thenT byDefT tree thenT rw (addrC [0] unfold_srecind) 0 thenT rwh reduceC 0 thenT autoT"
+P	p712	String "byDefT indtree thenT byDefT tree thenT rw (addrC [1] unfold_srecind) 0 thenT rwh reduceC 0 thenT autoT"
 O	o712	ext_rule p712
 NSummary!dform	dform	dform Summary
 P	p724	String nodetype_df
@@ -1738,7 +1738,7 @@ P	p2020	Number 572
 O	o2020	location p2019 p2020
 NSummary!definition	definition	definition Summary
 O	o2021	definition p616
-VT	T	T\\ \\ 
+VT	T	T\\ \\
 B	b2021	T
 T	t2021	o612 b2021
 B	b2022	t2021
@@ -1775,7 +1775,7 @@ P	p2034	Number 753
 P	p2035	Number 793
 O	o2035	location p2034 p2035
 O	o2036	definition p652
-Vnode	node2036	node\\ \\ 
+Vnode	node2036	node\\ \\
 B	b2036	node2036
 T	t2036	o653 b2036
 B	b2037	t2036
@@ -1789,9 +1789,9 @@ P	p2040	Number 796
 P	p2041	Number 1022
 O	o2041	location p2040 p2041
 O	o2042	definition p672
-Vtree	tree2042	tree\\ \\ 
+Vtree	tree2042	tree\\ \\
 B	b2042	tree2042
-Vempty	empty	empty\\ \\ 
+Vempty	empty	empty\\ \\
 B	b2043	empty
 Vf	f	f\\ \\ t667 t668 t654
 B	b2044	f L R node
@@ -1811,11 +1811,11 @@ B	b2051	t2050
 P	p2051	Number 1025
 P	p2052	Number 1156
 O	o2052	location p2051 p2052
-Vempty_case	empty_case	empty_case\\ \\ 
+Vempty_case	empty_case	empty_case\\ \\
 B	b2052	empty_case
 T	t2052	o663 b643 b2052 b2044
 B	b2053	t2052
-C	h2053	H\\ \\ 
+C	h2053	H\\ \\
 T	t2053	o698 b2053 b2052
 S	s2053	tbrarg\\ h2053\\ t2053
 B	b2054	s2053
@@ -1926,7 +1926,7 @@ B	b2096	t2096
 P	p2096	Number 1709
 P	p2097	Number 1984
 O	o2097	location p2096 p2097
-Vf	f2097	f\\ \\ 
+Vf	f2097	f\\ \\
 B	b2097	f2097 L R node
 T	t2097	o663 b2042 b2043 b2097
 B	b2098	t2097
@@ -1934,9 +1934,9 @@ T	t2098	o763 b2042
 B	b2099	t2098
 T	t2099	o763 b2043
 B	b2100	t2099
-VL	L	L\\ \\ 
+VL	L	L\\ \\
 B	b2101	L
-VR	R	R\\ \\ 
+VR	R	R\\ \\
 B	b2102	R
 B	b2103	f2097
 T	t2103	o763 b2103
@@ -2005,7 +2005,7 @@ B	b2133	t2133
 P	p2133	Number 2062
 P	p2134	Number 2164
 O	o2134	location p2133 p2134
-VT	T2134	T\\ H\\ 
+VT	T2134	T\\ H\\
 B	b2134	T2134
 T	t2134	o870 b2134
 S	s2134	tbrarg\\ h2053\\ t2134
@@ -2041,7 +2041,7 @@ B	b2147	t2147
 P	p2147	Number 2166
 P	p2148	Number 2286
 O	o2148	location p2147 p2148
-VS	S	S\\ H\\ 
+VS	S	S\\ H\\
 B	b2148	S
 T	t2148	o886 b2148 b2134
 S	s2148	tbrarg\\ h2053\\ t2148
@@ -2113,7 +2113,7 @@ P	p932	String match_tree
 O	o2175	definition p932
 NItt_bintree!match_tree	match_tree	match_tree Itt_bintree
 O	o933	match_tree
-Vt	t2175	t\\ \\ 
+Vt	t2175	t\\ \\
 B	b2175	t2175
 P	p934	Var self
 O	o935	var p934
@@ -2135,7 +2135,7 @@ O	o2182	location p2181 p2182
 B	b935	t935
 P	p945	String match_tree_df
 O	o945	dform p945
-Vnonempty_case	nonempty_case2182	nonempty_case\\ \\ 
+Vnonempty_case	nonempty_case2182	nonempty_case\\ \\
 B	b2182	nonempty_case2182 node
 T	t2182	o933 b2175 b2052 b2182
 B	b2183	t2182
@@ -2365,7 +2365,7 @@ P	p1043	String weight_wf
 O	o1043	rule p1043
 NItt_equal!equal	equal	equal Itt_equal
 O	o1044	equal
-Vt	t2252	t\\ H\\ 
+Vt	t2252	t\\ H\\
 B	b2252	t2252
 T	t2253	o1044 b625 b2252 b2252
 S	s2253	tbrarg\\ h2053\\ t2253
@@ -2601,11 +2601,11 @@ P	p1140	String node
 O	o2305	definition p1140
 NItt_bintree!node	node	node Itt_bintree
 O	o1141	node
-Vl	l	l\\ \\ 
+Vl	l	l\\ \\
 B	b2305	l
-Vr	r	r\\ \\ 
+Vr	r	r\\ \\
 B	b2306	r
-Vnd	nd	nd\\ \\ 
+Vnd	nd	nd\\ \\
 B	b2307	nd
 T	t2307	o1141 b2305 b2306 b2307
 B	b2308	t2307
@@ -2804,7 +2804,7 @@ P	p2373	Number 5328
 O	o2373	location p2372 p2373
 P	p2374	String nodetype3
 O	o2374	definition p2374
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b2374	A
 T	t2374	o612 b2021 b2374
 B	b2375	t2374
@@ -2926,9 +2926,9 @@ P	p2415	Number 5880
 O	o2415	location p2414 p2415
 P	p1283	String bt4_df
 O	o1283	dform p1283
-VS	S2415	S\\ \\ 
+VS	S2415	S\\ \\
 B	b2415	S2415
-VP	P2415	P\\ \\ 
+VP	P2415	P\\ \\
 B	b2416	P2415 t
 T	t2416	o625 b2415 b2416
 B	b2417	t2416
@@ -2955,9 +2955,9 @@ P	p2427	Number 5882
 P	p2428	Number 5987
 O	o2428	location p2427 p2428
 O	o1296	improve p277
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b2428	a
-Vb	b2429	b\\ \\ 
+Vb	b2429	b\\ \\
 B	b2430	b2429
 T	t2430	o1044 b2354 b2428 b2430
 B	b2431	t2430
@@ -3240,7 +3240,7 @@ P	p2520	Number 6555
 O	o2520	location p2519 p2520
 P	p1412	String tree_monotone3
 O	o1412	rule p1412
-VR	R2520	R\\ H\\ 
+VR	R2520	R\\ H\\
 B	b2520	R2520
 T	t2520	o886 b2520 b2148
 S	s2520	tbrarg\\ h2053\\ t2520
@@ -3416,7 +3416,7 @@ T	t2580	o1479 b2538
 B	b2580	t2580
 T	t2581	o612 b2508 b2507
 B	b2581	t2581
-Vnode	node2581	node\\ H\\ 
+Vnode	node2581	node\\ H\\
 B	b2582	node2581
 T	t2582	o1044 b2581 b2582 b2582
 S	s2582	tbrarg\\ h2053\\ t2582
@@ -3483,7 +3483,7 @@ P	p2607	Number 7728
 O	o2607	location p2606 p2607
 P	p1514	String tree4_wf
 O	o1514	rule p1514
-VA	A2607	A\\ H\\ 
+VA	A2607	A\\ H\\
 B	b2607	A2607
 VP	P2607	P\\ H\\ t675
 B	b2608	P2607 t
@@ -3538,14 +3538,14 @@ P	p2629	Number 7939
 O	o2629	location p2628 p2629
 P	p1532	String node_wf2
 O	o1532	rule p1532
-Vl	l2629	l\\ H\\ 
+Vl	l2629	l\\ H\\
 B	b2629	l2629
 T	t2629	o1044 b2134 b2629 b2629
 S	s2629	tbrarg\\ h2053\\ t2629
 B	b2630	s2629
 T	t2630	o869 b2630
 B	b2631	t2630
-Vr	r2631	r\\ H\\ 
+Vr	r2631	r\\ H\\
 B	b2632	r2631
 T	t2632	o1044 b2134 b2632 b2632
 S	s2632	tbrarg\\ h2053\\ t2632
@@ -3554,7 +3554,7 @@ T	t2633	o869 b2633
 B	b2634	t2633
 VR	R2634	R\\ H\\ l2629 r2631
 B	b2635	R2634
-Vnd	nd2635	nd\\ H\\ 
+Vnd	nd2635	nd\\ H\\
 B	b2636	nd2635
 T	t2636	o1044 b2635 b2636 b2636
 S	s2636	tbrarg\\ h2053\\ t2636

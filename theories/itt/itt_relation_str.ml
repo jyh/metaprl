@@ -52,18 +52,9 @@ extends Itt_bisect
 extends Itt_comment
 doc <:doc< @docoff >>
 
-open Tactic_type.Tacticals
-open Tactic_type
-open Top_conversionals
-open Itt_struct
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-open Typeinf
+open Basic_tactics
 
-open Auto_tactic
-open Dtactic
+open Itt_struct
 
 let dByDefT  unfold n = rw unfold n thenT dT n
 let dByRecDefT term unfold n = dByDefT unfold n thenT rwhAll (makeFoldC term unfold)
@@ -122,7 +113,7 @@ define less: less{'self; 'a;'b} <--> le{'self; 'a; 'b} and not{eq{'self;'a;'b}}
 
 
 
-let resource reduce += <<less{rcrd[x:t]{'f;'r};'a;'b}>> , (less thenC addrC [0;0;0] reduceTopC)
+let resource reduce += <<less{rcrd[x:t]{'f;'r};'a;'b}>> , (less thenC addrC [Subterm 1; Subterm 1; Subterm 1] reduceTopC)
 
 dform less_df : parens :: except_mode[src] :: less{'self; 'a;'b}
  = 'a  bf[" <"]sub{'self} `" " 'b
@@ -341,7 +332,7 @@ define type_porduct_ord: type_product_ord{'T;'Ord} <-->
    }
 
 let resource reduce +=
-   <<field[f:t]{ type_product_ord{'T;'Ord} }>>, (addrC [0] type_porduct_ord thenC reduceTopC)
+   <<field[f:t]{ type_product_ord{'T;'Ord} }>>, (addrC [Subterm 1] type_porduct_ord thenC reduceTopC)
 
 interactive_rw compare_type_porduct_ord_reduce {| reduce |}:
    compare{type_product_ord{'T;'Ord} ; ('a,'x);('b,'y); 'less_case; 'equal_case; 'greater_case} <-->
@@ -365,7 +356,7 @@ define int_order: int_order <--> {car= int; "<"= lambda{a.lambda{b.lt_bool{'a;'b
 
 
 let resource reduce +=
-   <<compare{int_order ; number[n:n];number[m:n]; 'less_case; 'equal_case; 'greater_case}>>, (addrC [0] int_order thenC compare)
+   <<compare{int_order ; number[n:n];number[m:n]; 'less_case; 'equal_case; 'greater_case}>>, (addrC [Subterm 1] int_order thenC compare)
 
 
 doc docoff

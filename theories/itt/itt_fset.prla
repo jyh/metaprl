@@ -20172,7 +20172,7 @@ P	p6124	String "rw unfold_assert 2 thenT dT 2 thenT rw fold_assert 2"
 O	o6124	ext_rule p6124
 P	p6219	String "copyHypT 2 3"
 O	o6225	ext_rule p6219
-P	p6368	String "rw (addrC [0;2] fold_foflist) 3 ttca"
+P	p6368	String "rw (addrC [1; 3] fold_foflist) 3 ttca"
 O	o6368	ext_rule p6368
 P	p11843	String funion_member_intro_right3
 O	o11843	rule p11843

@@ -41,9 +41,8 @@ doc docoff
 
 open Lm_debug
 open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_grouplikeobj
 open Itt_unitring
@@ -72,8 +71,8 @@ define unfold_intDomain1 : intDomain[i:l] <-->
    {f: preunitring[i:l] | isIntDomain{'f}}
 doc docoff
 
-let unfold_isIntDomain = unfold_isIntDomain1 thenC addrC [0] unfold_isUnitRing thenC addrC [1; 0] unfold_isCommutative thenC addrC [1; 1; 1] unfold_noDiv0
-let unfold_intDomain = unfold_intDomain1 thenC addrC [0] unfold_preunitring thenC addrC [1] unfold_isIntDomain
+let unfold_isIntDomain = unfold_isIntDomain1 thenC addrC [Subterm 1] unfold_isUnitRing thenC addrC [Subterm 2; Subterm 1] unfold_isCommutative thenC addrC [Subterm 2; Subterm 2; Subterm 2] unfold_noDiv0
+let unfold_intDomain = unfold_intDomain1 thenC addrC [Subterm 1] unfold_preunitring thenC addrC [Subterm 2] unfold_isIntDomain
 
 let fold_noDiv0 = makeFoldC << noDiv0{'f} >> unfold_noDiv0
 let fold_isIntDomain1 = makeFoldC << isIntDomain{'f} >> unfold_isIntDomain1

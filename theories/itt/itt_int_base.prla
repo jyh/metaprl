@@ -3105,7 +3105,7 @@ P	p32	String "rwh unfold_sub 0"
 O	o32	ext_rule p32
 P	p3649	String add_Assoc2_rw
 O	o3649	cond_rewrite p3649
-P	p3650	String "rw (addrC [1] add_AssocC) 0 thenT trivialT"
+P	p3650	String "rw (addrC [2] add_AssocC) 0 thenT trivialT"
 O	o3650	ext_rule p3650
 O	o3663	lid p3649
 T	t3663	o3663
@@ -3121,27 +3121,27 @@ T	t3840	o3840
 B	b3840	t3840
 P	p3850	String "add_Functionality << 'a +@ 'b >> twa"
 O	o3850	ext_rule p3850
-P	p3860	String "rw (addrC [0] add_CommutC) 0 taa"
+P	p3860	String "rw (addrC [1] add_CommutC) 0 taa"
 O	o3860	ext_rule p3860
-P	p3867	String "rw (addrC [0] minus_add_inverseC) 0 taa"
+P	p3867	String "rw (addrC [1] minus_add_inverseC) 0 taa"
 O	o3867	ext_rule p3867
-P	p3873	String "rw (addrC [1;1] add_CommutC) 0 ttca"
+P	p3873	String "rw (addrC [2; 2] add_CommutC) 0 ttca"
 O	o3873	ext_rule p3873
-P	p3898	String "rw (addrC [1;0] add_Assoc2C) 0 ttca"
+P	p3898	String "rw (addrC [2; 1] add_Assoc2C) 0 ttca"
 O	o3898	ext_rule p3898
-P	p3907	String "rw (addrC [1;0;1] (add_CommutC thenC minus_add_inverseC)) 0 ttca"
+P	p3907	String "rw (addrC [2; 1; 2] (add_CommutC thenC minus_add_inverseC)) 0 ttca"
 O	o3907	ext_rule p3907
-P	p3915	String "rw (addrC [1;0] add_IdC) 0 taa"
+P	p3915	String "rw (addrC [2; 1] add_IdC) 0 taa"
 O	o3915	ext_rule p3915
 P	p3930	String trivialT
 O	o3930	ext_rule p3930
 P	p5847	String "add_Functionality <<'c>> thenT trivialT"
 O	o5847	ext_rule p5847
-P	p5898	String "rw (addrC [1] add_AssocC) 0 taa"
+P	p5898	String "rw (addrC [2] add_AssocC) 0 taa"
 O	o5898	ext_rule p5898
-P	p5922	String "rw (addrC [1] add_CommutC) 0 taa"
+P	p5922	String "rw (addrC [2] add_CommutC) 0 taa"
 O	o5922	ext_rule p5922
-P	p5928	String "rw (addrC [1] minus_add_inverseC) 0"
+P	p5928	String "rw (addrC [2] minus_add_inverseC) 0"
 O	o5928	ext_rule p5928
 T	t5929	o1656 b2169 b2169
 P	p4370	String lt_wf
@@ -3473,7 +3473,7 @@ T	t1170	o1526 b2669
 P	p5145	String "assertT <<btrue=btrue in bool>> taa"
 O	o5145	ext_rule p5145
 T	t5152	o1652 b1744 b1849 b1849
-P	p5158	String "rw (addrC [1] (splitIntC <<'a>> <<'b>>)) 2 ttca"
+P	p5158	String "rw (addrC [2] (splitIntC <<'a>> <<'b>>)) 2 ttca"
 O	o5158	ext_rule p5158
 P	p5164	String "rwh fold_assert 2"
 O	o5164	ext_rule p5164
@@ -3721,7 +3721,7 @@ P	p4201	String ltDissect
 O	o4202	rule p4201
 P	p4215	String "rwh (unfold_lt thenC unfold_assert) 0"
 O	o4215	ext_rule p4215
-P	p4236	String "rw (addrC [1] (lt_TransitC <<'b>>)) 0 thenT autoT"
+P	p4236	String "rw (addrC [2] (lt_TransitC <<'b>>)) 0 thenT autoT"
 O	o4236	ext_rule p4236
 NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash5258	squash Itt_squash
@@ -4426,7 +4426,7 @@ T	t5428	o1493 b2509 b2178
 B	b5430	t5428
 T	t5439	o1437 b2509 b2178
 B	b5440	t5439
-P	p5508	String "thinT (-1) thenT rw (addrC [0] reduce_ind_down) 0 taa"
+P	p5508	String "thinT (-1) thenT rw (addrC [1] reduce_ind_down) 0 taa"
 O	o5520	ext_rule p5508
 P	p5668	String "splitITE 0 taa"
 O	o5673	ext_rule p5668
@@ -4450,7 +4450,7 @@ T	t6552	o6829 b5375
 B	b6554	t6552
 T	t6554	o1526 b6554
 H	h7091	t6554
-P	p6652	String "byDefT (addrC [0] reduce_ind_up)"
+P	p6652	String "byDefT (addrC [1] reduce_ind_up)"
 O	o6656	ext_rule p6652
 P	p6722	String "dT (-1) thenT byDefT unfold_lt"
 O	o6724	ext_rule p6722
@@ -4464,7 +4464,7 @@ T	t6858	o1493 b1373 b2178
 B	b6858	t6858
 T	t6870	o1437 b1373 b2178
 B	b6870	t6870
-P	p6878	String "rw (addrC [0] unfold_ind) 0 thenT autoT"
+P	p6878	String "rw (addrC [1] unfold_ind) 0 thenT autoT"
 O	o6880	ext_rule p6878
 O	o7002	lid p6806
 T	t7018	o7002
@@ -11896,7 +11896,7 @@ P	p4626	String minus_plus_rw
 O	o4626	cond_rewrite p4626
 T	t10158	o1437 b2043 b2026
 B	b10158	t10158
-P	p4627	String "rwh unfold_sub 0 thenT rwh add_Assoc2C 0 thenMT rw (addrC[0;1] add_CommutC) 0 thenMT rwh minus_add_inverseC 0 thenT rwh add_IdC 0 ttca"
+P	p4627	String "rwh unfold_sub 0 thenT rwh add_Assoc2C 0 thenMT rw (addrC [1; 2] add_CommutC) 0 thenMT rwh minus_add_inverseC 0 thenT rwh add_IdC 0 ttca"
 O	o4627	ext_rule p4627
 T	t10159	o1656 b10158 b2018
 S	s10159	tbrarg\\ h7158\\ t10159
@@ -13148,7 +13148,7 @@ T	t5841	o1523 b2018 b2027
 B	b5841	t5841
 T	t5844	o1523 b2169 b2026
 B	b5844	t5844
-P	p5844	String "rw (addrC [0;0] add_Id4C) 0 thenMT rw reduceC 0 ttca"
+P	p5844	String "rw (addrC [1; 1] add_Id4C) 0 thenMT rw reduceC 0 ttca"
 O	o5844	ext_rule p5844
 T	t5845	o1656 b5841 b5844
 S	s5845	tbrarg\\ h7158\\ t5845
@@ -16347,7 +16347,7 @@ T	t6381	o b6330 b6380
 B	b6381	t6381
 T	t6388	o1679 b6266 b6381
 B	b6388	t6388
-P	p6388	String "rw (addrC [0] add_Id4C) 0 thenMT lt_add_ltT thenT byDefT reduceC"
+P	p6388	String "rw (addrC [1] add_Id4C) 0 thenMT lt_add_ltT thenT byDefT reduceC"
 O	o6388	ext_rule p6388
 T	t6389	o7 b6269 b18 b6329
 B	b6389	t6389
@@ -16991,7 +16991,7 @@ T	t6677	o b6673 b6677
 B	b6678	t6677
 T	t6678	o1679 b6666 b6678
 B	b6679	t6678
-P	p6679	String "rw ((addrC [0] reduceC) thenC reduceC) 0 ttca"
+P	p6679	String "rw ((addrC [1] reduceC) thenC reduceC) 0 ttca"
 O	o6679	ext_rule p6679
 T	t6679	o1679 b6673 b18
 B	b6680	t6679

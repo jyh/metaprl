@@ -138,6 +138,19 @@ interactive cycgroup_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Functionality}
+ *
+ * The @tt{cycgroup} is functional in its set argument.
+ * @end[doc]
+ *)
+interactive cycgroup_fun {| intro [] |} 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- fun_prop{z. cycgroup{'g; 'z}} }
+(*! @docoff *)
+
+(*!
+ * @begin[doc]
  * @modsubsection{Introduction}
  *
  * The proposition $@cycg{g}$ is true if it is well-formed, and there is
@@ -164,6 +177,25 @@ interactive cycgroup_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- equal{car{'g}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}} } -->
    sequent ['ext] { 'H >- cycgroup{'g; 'a} }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Theorems}
+ *
+ * $@cycg{g}$ is equivalent to there exists $a @in @car{g}$ such that $@cycgroup{g; a}$.
+ * @end[doc]
+ *)
+interactive cycg1 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- cycg{'g} } -->
+   sequent ['ext] { 'H >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} }
+
+interactive cycg2 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} } -->
+   sequent ['ext] { 'H >- cycg{'g} }
 
 (*!
  * @begin[doc]

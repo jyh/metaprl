@@ -40,7 +40,7 @@ let redexC =
            reduceDiv;
            reduceFix]
 
-let goal = mk_msequent << sequent { 'H >- fact{125} = 0 in int } >> []
+let goal = mk_msequent << sequent { 'H >- fact{250} = 0 in int } >> []
 
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 

@@ -20,3 +20,4 @@ include Itt_dfun
    ('f IN (x: 'A -> 'B['x])) -->
     lambda{x. 'f 'x} <--> 'f
 
+let reduceEtaC = reduceEta

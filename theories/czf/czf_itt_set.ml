@@ -111,6 +111,7 @@
  * @end[doc]
  *)
 include Itt_theory
+include Itt_eta
 (*! @docoff *)
 include Czf_itt_comment
 
@@ -351,7 +352,7 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
  *)
 interactive set_ind_equality2 {| intro [] |} 'H :
    ["wf"]   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
-   ["main"] sequent [squash] { 'H; a1: univ[1:l]; f1: 'a1 -> set; g1: x: univ[1:l] -> 'x -> 'T >-
+   ["main"] sequent [squash] { 'H; a1: univ[1:l]; f1: 'a1 -> set; g1: x: 'a1 -> 'T >-
       'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}

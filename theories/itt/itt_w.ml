@@ -266,17 +266,6 @@ interactive tree_indEquality {| intro []; eqcd |} 'H (w{'A; x. 'B['x]}) bind{z.'
    sequent ['ext] { 'H >- tree_ind{'z1; a, f, g. 'body1['a; 'f; 'g]}
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T['z1] }
-(*
-
-prim tree_indEquality {| intro []; eqcd |} 'H (w{'A; x. 'B['x]}) :
-   [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
-   [wf] sequent [squash] { 'H; a1: 'A; f1: 'B['a1] -> w{'A; x. 'B['x]}; g1: x: 'B['a1] -> 'T >-
-      'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->
-   sequent ['ext] { 'H >- tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
-                          = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
-                          in 'T } =
-   it
-*)
 
 (*! @docoff *)
 
@@ -323,20 +312,6 @@ let inf_tree inf consts decls eqs opt_eqs defs t =
       eqs'', opt_eqs'', defs'', mk_w_term v a' b'
 
 let resource typeinf += (tree_term, inf_tree)
-
-(*
- * Type of tree_ind.
-let inf_tree_ind inf decl t =
-   let a, f, g, z, b = dest_tree_ind t in
-   let decl', a' = inf decl a in
-      if is_w_term a' then
-         let x, l, r = dest_w a' in
-            inf ((a, l)::(f, subst1 r x (mk_var_term u))::decl') b
-      else
-         raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-
-let resource typeinf += (tree_ind_term, inf_tree_ind)
- *)
 
 (*
  * -*-

@@ -240,10 +240,9 @@ dform pair_src_df : parens :: mode[src] :: pair{'a; 'b} =
    pushm[0] slot{'a}`"," slot{'b} popm
 
 dform spread_prl_df1 : parens :: "prec"[prec_spread] :: except_mode[src] :: spread{'e; u, v. 'b} =
-   szone pushm[1]
-   keyword["match"] `" " slot{'e} `" " keyword["with"] hspace
-      pair{'u; 'v} `" " Nuprl_font!rightarrow hspace
-         slot{'b}
+   szone pushm[0]
+   keyword["let"] pushm [0] hspace pair{'u; 'v} `" " keyword["="] `" " slot{'e} popm hspace
+   keyword["in"] pushm[1] hspace slot{'b} popm
    popm ezone
 
 dform fst_df1 : except_mode[src] :: fst{'e} =

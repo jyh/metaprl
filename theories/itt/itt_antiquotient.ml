@@ -3,6 +3,7 @@ doc <:doc<
    @module[Itt_antiquotient]
 
    See @cite[Nog02c], Section 6 for explanations.
+   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -32,7 +33,6 @@ doc <:doc<
 
    Author: Aleksey Nogin @email{nogin@cs.cornell.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<

@@ -1119,8 +1119,8 @@ let backThruHypT i p =
  * @end[doc]
  *)
 let assumT i p =
-   let goal, assums = dest_msequent (Sequent.msequent p) in
-   let assum = List.nth assums (i - 1) in
+   let goal = Sequent.goal p in
+   let assum = Sequent.nth_assum p i in
    let len = TermMan.num_hyps assum in
 
    (*
@@ -1166,8 +1166,8 @@ let assumT i p =
    (* Call intro form on each arg *)
    let rec introT j p =
       if j > len then
-         let goal, assums = dest_msequent (Sequent.msequent p) in
-         let assum = List.nth assums (i - 1) in
+         let goal = Sequent.goal p in
+         let assum = Sequent.nth_assum p i in
             if is_squash_sequent goal then
                if is_squash_sequent assum then
                   nthAssumT i p
@@ -1225,8 +1225,8 @@ let backThruAssumT i p =
  * @end[doc]
  *)
 let genAssumT indices p =
-   let goal, assums = dest_msequent (Sequent.msequent p) in
-   let len = List.length assums in
+   let goal = Sequent.goal p in
+   let len = Sequent.num_assums p in
    let _ =
       List.iter (fun i ->
             if i <= 0 || i > len then
@@ -1237,7 +1237,7 @@ let genAssumT indices p =
          t
     | i :: indices ->
          let t = make_gen_term t indices in
-         let t' = TermMan.nth_concl (List.nth assums (pred i)) 1 in
+         let t' = TermMan.nth_concl (Sequent.nth_assum p i) 1 in
          if is_member_term t' then
             let t_type, t_var, _ = dest_equal t' in
                if is_var_term t_var then
@@ -1305,9 +1305,8 @@ let resource auto += {
  * Quick test on assumptions.
  *)
 let assum_test i p =
-   let goal, assums = dest_msequent (Sequent.msequent p) in
-   let goal = TermMan.nth_concl goal 1 in
-   let assum = List.nth assums (i - 1) in
+   let goal = Sequent.concl p in
+   let assum =  Sequent.nth_assum p i in
    let goal' = TermMan.nth_concl assum 1 in
       try let _ = match_terms [] goal' goal in
          true

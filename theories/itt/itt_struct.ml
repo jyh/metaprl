@@ -295,9 +295,8 @@ let thinT i p =
       thin i j p
 
 let nthAssumT i p =
-   let mseq = Sequent.msequent p in
-   let goal, assums = Refine.dest_msequent mseq in
-   let assum = List.nth assums (pred i) in
+   let goal = Sequent.goal p in
+   let assum = Sequent.nth_assum p i in
    let index = Match_seq.match_hyps (explode_sequent goal) (explode_sequent assum) in
    let rec tac j =
       if j = 0 then idT else

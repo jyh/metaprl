@@ -225,12 +225,10 @@ let cutMemberT ss  p =
    let i=(Sequent.hyp_count_addr p) in
       cutMember0 i ss  x bind p
 
-let useAssumptionT n  p =
-   let _, assums = dest_msequent (Sequent.msequent p) in
-   let a = List.nth assums n in
-   let g = TermMan.nth_concl  a 0 in
+let useAssumptionT n p =
+   let a = Sequent.nth_assum p n in
+   let g = TermMan.nth_concl a 0 in
       cutMemberT g p
-
 
 let cutMember1T ss  = reverseT thenT cutMemberT ss thenLT [idT;dT 0]
 

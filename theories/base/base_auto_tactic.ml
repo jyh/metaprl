@@ -11,6 +11,7 @@ open Dag
 open Imp_dag
 
 open Refiner.Refiner.TermType
+open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine

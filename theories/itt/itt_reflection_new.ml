@@ -140,9 +140,10 @@ prim bterm_var_left :
  * Make_bterm                                                           *
  ************************************************************************)
 
-prim_rw make_bterm_eval :
- if_quoted_op{'bt ;"true"} -->
- ('bt :> Term) <--> make_bterm{'bt;list_of_rlist{Base_reflection!subterms{'bt}}}
+prim_rw make_bterm_eval:
+ if_quoted_op{ bterm{| <J> >- 'T |} ;"true"} -->
+ bterm{| <J> >- 'T |} <-->
+ make_bterm{bterm{| <J> >- 'T |};list_of_rlist{Base_reflection!subterms{bterm{| <J> >- 'T |}}}}
 
 (************************************************************************
  * Reflection rule for substitution                                     *

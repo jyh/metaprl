@@ -170,7 +170,7 @@ interactive lambda_term_induction  {| elim[] |} 'H:
 interactive lambda_intro  {| intro[] |} :
    sequent { <H> >- 't in LambdaTerm } -->
    sequent { <H> >- bdepth {'t} >= 1  } -->
-   sequent { <H> >- make_bterm{lambda_term-@1; 't::nil} in LambdaTerm }
+   sequent { <H> >- make_bterm{lambda_term; bdepth{'t}-@1; 't::nil} in LambdaTerm }
 
 interactive lambda_intro2  {| intro[] |} :
    sequent { <H> >- bterm{| <K>; x:term >- 't['x] |} in LambdaTerm } -->

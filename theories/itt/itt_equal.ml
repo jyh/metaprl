@@ -201,12 +201,12 @@ let process_eqcd_resource_annotation name context_args term_args statement pre_t
    let t =
       try TermMan.nth_concl goal 1 with
          RefineError _ ->
-            raise (Invalid_argument (sprintf "Itt_equal.improve_intro: %s: must be an introduction rule" name))
+            raise (Invalid_argument (sprintf "Itt_equal.process_eqcd_resource_annotation: %s: must be an introduction rule" name))
    in
    let _, t, _ =
       try dest_equal t with
          RefineError _ ->
-            raise (Invalid_argument (sprintf "Itt_equal.improve_intro: %s must be an equality judgement" name))
+            raise (Invalid_argument (sprintf "Itt_equal.process_eqcd_resource_annotation: %s: must be an equality judgement" name))
    in
    let term_args =
       match term_args with
@@ -231,7 +231,7 @@ let process_eqcd_resource_annotation name context_args term_args statement pre_t
             funT (fun p ->
                 Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] (term_args p))
        | _ ->
-            raise (Invalid_argument (sprintf "Itt_equal.intro: %s: not an introduction rule" name))
+            raise (Invalid_argument (sprintf "Itt_equal.process_eqcd_resource_annotation: %s: not an introduction rule" name))
    in
       (t, tac)
 

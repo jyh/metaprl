@@ -1,28 +1,21 @@
 #
-# Base theories.
+# Don't need any libraries.
 #
-DIR := theories/base
+DIR := support/shell
 ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . $(SUPPORT_INCL) -I $(ROOT)/lib
+INCLUDE := -I . -I ../display -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl
+PRLCFLAGS := -v
 
 # Common files
-MLZFILES :=\
-	base_theory
+MLZFILES =\
 
 # Library files
-MPFILES :=\
-	typeinf\
-	base_trivial\
-	base_auto_tactic\
-	base_dtactic\
-	base_cache\
-	base_meta\
-	base_rewrite\
-	base_theory
+MPFILES =\
+	mptop\
 
 # Name of main libraris
 MAIN = theory
@@ -32,7 +25,7 @@ opt: $(MAIN).cmxa
 install:: all
 
 clean::
-	$(RM) *.p4* *.pp*
+	$(RM) -f *.p4* *.pp*
 
 # Real makefile
 include $(ROOT)/mk/rules

@@ -1,28 +1,26 @@
 #
-# No special includes
+# Don't need any libraries.
 #
-DIR := theories/tactic
+DIR := support/tactics
 ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE = -I . -I $(ROOT)/lib -I $(CAMLP4LIB)
-OCAMLDEPFLAGS := -prl_init
+INCLUDE := -I . -I ../display -I ../shell -I $(CAMLP4LIB)
+OCAMLDEPFLAGS := -prl
+PRLCFLAGS := -v
+
+# Common files
+MLZFILES =\
 
 # Library files
-MPFILES :=\
+MPFILES =\
 	tactic_cache\
-	perv\
-	nuprl_font\
-	base_dform\
-	comment\
-	summary\
 	var\
-	mptop\
 	top_tacticals\
-	top_conversionals
+	top_conversionals\
 
-# Name of main libraries
+# Name of main libraris
 MAIN = theory
 
 all: $(MAIN).cma

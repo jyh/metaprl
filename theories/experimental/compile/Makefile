@@ -6,11 +6,7 @@ ROOT := ../../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE :=\
-	-I .\
-	-I ../../tactic\
-	-I ../../ocaml\
-	-I ../../base\
+INCLUDE := -I . -I ../../base $(SUPPORT_INCL)
 
 OCAMLDEPFLAGS := -prl
 

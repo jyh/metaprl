@@ -1,22 +1,27 @@
 #
 # Don't need any libraries.
 #
-DIR := theories/ocaml
+DIR := support/display
 ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../tactic -I $(CAMLP4LIB)
+INCLUDE := -I . -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl
 PRLCFLAGS := -v
 
 # Common files
-MLZFILES :=\
+MLZFILES =\
 	ocaml\
 	ocaml_df
 
 # Library files
-MPFILES :=\
+MPFILES =\
+	perv\
+	nuprl_font\
+	base_dform\
+	comment\
+	summary\
 	ocaml\
 	ocaml_base_df\
 	ocaml_expr_df\

@@ -44,6 +44,7 @@ declare aabelg[i:l]
 declare prering[i:l]
 declare isDistrib{'R}
 declare ring[i:l]
+declare Z
 
 (************************************************************************
  * TACTICS                                                              *
@@ -52,6 +53,7 @@ declare ring[i:l]
 topval unfold_prering : conv
 topval unfold_isDistrib : conv
 topval unfold_ring : conv
+topval unfoldZ : conv
 
 topval fold_prering1 : conv
 topval fold_prering : conv
@@ -59,6 +61,7 @@ topval fold_isDistrib1 : conv
 topval fold_isDistrib : conv
 topval fold_ring1 : conv
 topval fold_ring : conv
+topval foldZ : conv
 
 (*
  * -*-

@@ -204,7 +204,7 @@ prec prec_add
 prec prec_unary
 prec prec_unary < prec_add
 
-dform int_prl_df : except_mode [src] :: int = mathbbZ
+dform int_prl_df : except_mode [src] :: int = `"int"
 dform int_src_df : mode[src] :: int = `"int"
 
 dform number_df : number[n:n] =

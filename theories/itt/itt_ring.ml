@@ -216,12 +216,14 @@ interactive ring_as_additive_subtype_abelg :
    sequent { <H> >- as_additive{ring[i:l]} subtype abelg[i:l] }
 doc docoff
 
-define unfold_int_ring : int_ring <-->
+define unfoldZ : Z <-->
 	{car=int; "*"=lambda{x.lambda{y.('x *@ 'y)}}; "1"=1;
 	 "+"=lambda{x.lambda{y.('x +@ 'y)}}; "0"=0; "neg"=lambda{x.(- 'x)}}
 
+let foldZ = makeFoldC << Z >> unfoldZ
+
 interactive int_ring_is_ring :
-	sequent { <H> >- int_ring in ring[i:l] }
+	sequent { <H> >- Z in ring[i:l] }
 
 dform ring_df1 : except_mode[src] :: except_mode[prl] :: ring[i:l] =
    mathbbR `"ing" sub{slot[i:l]}
@@ -235,8 +237,8 @@ dform prering_df1 : except_mode[src] :: except_mode[prl] :: prering[i:l] =
 dform prering_df2 : mode[prl] :: prering[i:l] =
    `"prering[" slot[i:l] `"]"
 
-dform int_ring_df1 : except_mode[src] :: int_ring =
-   mathbbZ `" ring"
+dform int_ring_df1 : except_mode[src] :: Z =
+   mathbbZ
 
 (*
  * -*-

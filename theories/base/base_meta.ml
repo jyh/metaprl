@@ -65,7 +65,7 @@ declare meta_lt[a:l,b:l]{'tt; 'ff}
  *)
 let arith op goal =
    match explode_term goal with
-      _, [MatchNumber (i1, _); MatchNumber (i2, _)], [] ->
+      MatchTerm (_, [MatchNumber (i1, _); MatchNumber (i2, _)], []) ->
          <:con< meta_num[$op i1 i2$:n] >>
     | _ ->
          raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))

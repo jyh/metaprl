@@ -120,8 +120,9 @@ operation is the addition of the abstracted variable to the frame, using the fol
 $$
 @xrewrite2[close]{@begin[array,t,l]
                         @line{@CloseVar{v; a}}
-                        @line{@CloseRec{R; @frame; {(a_1, @ldots, a_n)}; {d[R; v; @frame]}; {e[R; v;
-                        @frame]}}}
+                        @line{@CloseRec{R; @frame; {(a_1, @ldots, a_n)}}}
+			@line{@CloseRecDefs{{d[R; v; @frame]}}}
+			@line{@CloseRecBody{{e[R; v; @frame]}}}
                         @end[array];
    @begin[array,t,l]
    @line{@CloseRec{R; @frame; {(a_1, @ldots, a_n, a)}}}
@@ -134,21 +135,32 @@ Once all free variables have been added to the frame, the $@CloseRec{R; @frame; 
 is rewritten to use explicit tuple allocation.
 
 $$
-@xrewrite2[alloc]{
-	          @CloseRec{R; @frame; @it{tuple}; {d[R; @frame]}; {e[R; @frame]}};
-   @LetRec{R; @CloseFrame{@frame; {d[R; @frame]}}; @LetTuple{@Length[n]; @it{tuple}; @frame; {e[R;
-   @frame]}}}}
+@xrewrite2[alloc]{@begin[array,t,l]
+	          @line{@CloseRec{R; @frame; @it{tuple}}}
+	          @line{@CloseRecDefs{{d[R; @frame]}}}
+                  @line{@CloseRecBody{{e[R; @frame]}}}
+		  @end[array];
+   @begin[array,t,l]
+   @line{@LetRec{R; @CloseFrame{@frame; {d[R; @frame]}}}}
+   @line{@LetTuple{@Length[n]; @it{tuple}; @frame; {e[R; @frame]}}}
+   @end[array]}
 $$
 
 The final step of closure conversion is to propagate the subscript operations into the function bodies.
 
 $$
+@arraystretch{2}
 @begin[array,l]
+
 @line{@xrewrite2[arg]{@CloseFrame{@frame; @FunDef{l; @AtomFun{v; {e[@frame; v]}}; {d[@frame]}}};
    @FunDef{l; @AtomFun{@frame; @AtomFun{v; {e[@frame; v]}}}; @CloseFrame{@frame; {d[@frame]}}}}}
+
 @line{@xrewrite2[sub]{@CloseSubscript{a_1; a_2; v_1; @FunDef{l; @AtomFun{v_2; {e[v_1; v_2]}}; {d[v_1]}}};
-   @FunDef{l; @AtomFun{v_2; @LetSubscript{a_1; a_2; v_1; {e[v_1; v_2]}}}; @CloseSubscript{a_1; a_2;
-   v_1; {d[v_1]}}}}}
+   @begin[array,t,l]
+   @line{@FunDef{l; @AtomFun{v_2; @LetSubscript{a_1; a_2; v_1; {e[v_1; v_2]}}}}}
+   @line{@CloseSubscript{a_1; a_2; v_1; {d[v_1]}}}
+   @end[array]}}
+
 @end[array]
 $$
 

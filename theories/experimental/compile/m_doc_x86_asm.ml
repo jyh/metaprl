@@ -165,7 +165,7 @@ dform spill_register_df : mode[tex] :: math_SpillRegister{'v; 'spill} =
    bf["spill["] slot{'v} bf[", "] slot{'spill} bf["]"]
 
 dform context_register_df : mode[tex] :: math_ContextRegister[name:s] =
-   bf["con["] slot[name:s] bf["]"]
+   bf["context["] slot[name:s] bf["]"]
 
 dform mem_reg_df : mode[tex] :: math_MemReg{'r} =
    `"(%" slot{'r} `")"
@@ -345,10 +345,8 @@ For example, the instruction $@Inst2Mem[ADD]{v_1; @MemReg{v_2}; e}$ performs the
 @leftarrow @MemReg{v_2} + v_1$, where $@MemReg{v_2}$ means the value in memory at location $v_2$.
 
 @begin[figure,isa]
-@begin[small]
-$
-@begin[array,cc]
-@line{{@begin[array,rcll]
+$$
+@begin[array,rcll]
 @line{l       {::=}   @it{string}                                                   @hbox{Function labels}}
 @line{@it{r}  {::=}   {@it{eax} {@pipe} @it{ebx} {@pipe} @it{ecx} {@pipe} @it{edx}} @hbox{Registers}}
 @line{{}      {@pipe} {@it{esi} {@pipe} @it{edi} {@pipe} @it{esp} {@pipe} @it{ebp}} {}}
@@ -362,31 +360,28 @@ $
 @line{{}      {@pipe} @ImmediateNumber{i}                                           @hbox{Constant number}}
 @line{{}      {@pipe} @ImmediateCLabel{v; l}                                        @hbox{Label}}
 @line{{} {} {} {}}
-@line{p       {::=} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
-@line{d       {::=} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
+@line{@it{cc} {::=}   {= {@pipe} <> {@pipe} < {@pipe} > {@pipe} {@le} {@pipe} @ge}  @hbox{Condition codes}}
+@line{@it{inst1} {::=}   {@it{INC} @pipe @it{DEC} @pipe @cdots}                     @hbox{1-operand opcodes}}
+@line{@it{inst2} {::=}   {@it{ADD} @pipe @it{SUB} @pipe @it{AND} @pipe @cdots}      @hbox{2-operand opcodes}}
+@line{@it{inst3} {::=}   {@it{MUL} @pipe @it{DIV}}                                  @hbox{3-operand opcodes}}
+@line{@it{cmp}   {::=}   {@it{CMP} @pipe @it{TEST}}                                 @hbox{comparisons}}
+@line{@it{jmp}   {::=}   {@it{JMP}}                                                 @hbox{unconditional branch}}
+@line{@it{jcc}   {::=}   {@it{JEQ} @pipe @it{JLT} @pipe @it{JGT} @pipe @cdots}      @hbox{conditional branch}}
+@line{@it{e}  {::=}   @Mov{o; v; e}                                                 @hbox{Copy}}
+@line{{}      {@pipe} @Inst1Mem[inst1]{o_m; e}                                      @hbox{1-operand mem inst}}
+@line{{}      {@pipe} @Inst1Reg[inst1]{o_r; v; e}                                   @hbox{1-operand reg inst}}
+@line{{}      {@pipe} @Inst2Mem[inst2]{o_r; o_m; e}                                 @hbox{2-operand mem inst}}
+@line{{}      {@pipe} @Inst2Reg[inst2]{o; o_r; v; e}                                @hbox{2-operand reg inst}}
+@line{{}      {@pipe} @Inst3Reg[inst3]{o; o_r; o_r; v_1; v_2; e}                    @hbox{3-operand reg inst}}
+@line{{}      {@pipe} @Cmp[cmp]{o_1; o_2}                                           @hbox{Comparison}}
+@line{{}      {@pipe} @Jmp[jmp]{o; {o_r; @ldots; o_r}}                              @hbox{Unconditional branch}}
+@line{{}      {@pipe} @Jcc[j]{@it{cc}; e_1; e_2}                                    @hbox{Conditional branch}}
+@line{{} {} {} {}}
+@line{p       {@pipe} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
+@line{d       {@pipe} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
 @line{{e_@lambda} {::=} {@LabelFun{v; e_@lambda} @pipe e}                           @hbox{Functions}}
-@end[array]}
-{@begin[array,rcl]
-@line{@it{cc} {::=}   {= {@pipe} <> {@pipe} < {@pipe} > {@pipe} {@le} {@pipe} @ge}}
-@line{@it{inst1} {::=}   {@it{INC} @pipe @it{DEC} @pipe @cdots}                   }
-@line{@it{inst2} {::=}   {@it{ADD} @pipe @it{SUB} @pipe @it{AND} @pipe @cdots}    }
-@line{@it{inst3} {::=}   {@it{MUL} @pipe @it{DIV}}                                }
-@line{@it{cmp}   {::=}   {@it{CMP} @pipe @it{TEST}}                               }
-@line{@it{jmp}   {::=}   {@it{JMP}}                                               }
-@line{@it{jcc}   {::=}   {@it{JEQ} @pipe @it{JLT} @pipe @it{JGT} @pipe @cdots}    }
-@line{@it{e}  {::=}   @Mov{o; v; e}                                               }
-@line{{}      {@pipe} @Inst1Mem[inst1]{o_m; e}                                    }
-@line{{}      {@pipe} @Inst1Reg[inst1]{o_r; v; e}                                 }
-@line{{}      {@pipe} @Inst2Mem[inst2]{o_r; o_m; e}                               }
-@line{{}      {@pipe} @Inst2Reg[inst2]{o; o_r; v; e}                              }
-@line{{}      {@pipe} @Inst3Reg[inst3]{o; o_r; o_r; v_1; v_2; e}                  }
-@line{{}      {@pipe} @Cmp[cmp]{o_1; o_2}                                         }
-@line{{}      {@pipe} @Jmp[jmp]{o; {o_r; @ldots; o_r}}                            }
-@line{{}      {@pipe} @Jcc[j]{@it{cc}; e_1; e_2}                                  }
-@end[array]}}
 @end[array]
-$
-@end[small]
+$$
 @caption{Scoped Intel x86 instruction set}
 @end[figure]
 

@@ -61,64 +61,58 @@ $$
 $$
 
 @begin[figure,syntax]
-$
-@begin[small]
-@begin[array,cc]
-@line{@multicolumn[2,l]{@begin[array,rclcl]
-@line{@it{op} {::=}   {+ @pipe - @pipe * @pipe / @pipe = @pipe <> @pipe < @pipe @le @pipe > @pipe
-@ge }
-{@space} @hbox{Binary operators}}
-@end[array]}}
-@line{{@begin[array,rcll]
+$$
+@begin[array,rcll]
+@line{@it{op} {::=}   {+ @pipe - @pipe * @pipe /} @hbox{Binary operators}}
+@line{{}      {@pipe} {= @pipe <> @pipe < @pipe @le @pipe > @pipe @ge} {}}
+@line{{} {} {} {}}
 @line{@it{e} {::=} {@AtomTrue @pipe @AtomFalse} @hbox{Booleans}}
 @line{{} {@pipe} @AtomInt[i] @hbox{Integers}}
 @line{{} {@pipe} v @hbox{Variables}}
 @line{{} {@pipe} {e @space @it{op} @space e @space} @hbox{Binary expressions}}
-@line{{} {@pipe} @AtomFun{v; e} @hbox{Anonymous functions @space}}
-@line{{} {@pipe} {e; e} @hbox{Sequencing}}
+@line{{} {@pipe} @AtomFun{v; e} @hbox{Anonymous functions}}
+@line{{} {@pipe} @If{e; e; e} @hbox{Conditionals}}
 @line{{} {@pipe} {e.[e]} @hbox{Subscripting}}
-@end[array]}
-{@begin[array,rll]
-@line{{@pipe} {e.[e] @leftarrow e} @hbox{Assignment}}
-@line{{@pipe} @If{e; e; e} @hbox{Conditionals}}
-@line{{@pipe} {e(e_1, @ldots, e_n)} @hbox{Application}}
-@line{{@pipe} @LetAtom{e; v; e} @hbox{Let definitions}}
-@line{{@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} {}}
-@line{{} @vdots @hbox{Recursive functions}}
-@line{{} {@xand f_n (v_1, @ldots, v_n) = e}}
-@end[array]}}
+@line{{} {@pipe} {e.[e] @leftarrow e} @hbox{Assignment}}
+@line{{} {@pipe} {e; e} @hbox{Sequencing}}
+@line{{} {@pipe} {e(e_1, @ldots, e_n)} @hbox{Application}}
+@line{{} {@pipe} @LetAtom{e; v; e} @hbox{Let definitions}}
+@line{{} {@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} @hbox{Recursive functions}}
+@line{{} {} @vdots {}}
+@line{{} {} {@xand f_n (v_1, @ldots, v_n) = e}}
 @end[array]
-@end[small]
-$
+$$
 @caption{Program syntax}
 @end[figure]
 
 The parser is defined as a set of grammar productions.  For each
 grammar production in the program syntax shown in Figure
 @reffigure[syntax], we define a production in the form
-$
+$$
 S ::= S_1 @ldots S_n @longleftrightarrow term
-$
+$$
 where the symbols $S_i$ may be annotated with a term pattern. For
 instance, the production for the let-expression is defined with the
 following production and semantic action.
 $$
-   @tt{exp ::= LET @space ID@left["<"] v @right[">"] @space EQ @space exp@left["<"] e
-   @right[">"] @space IN @space exp@left["<"] rest @right[">"]} @longleftrightarrow @LetAtom{e; v; rest}
+@begin[array,l]
+   @line{@tt{exp ::= LET @space ID@left["<"] v @right[">"] @space EQ @space exp@left["<"] e @right[">"] @space IN @space exp@left["<"] rest @right[">"]}}
+   @line{{@longleftrightarrow @LetAtom{e; v; rest}}}
+@end[array]
 $$
 Phobos constructs an LALR(1) parser from the grammar specification, applying the appropriate rewrite
 rule when a production is reduced.
 
 @comment{{
 For the parser to accept, the stack must contain a single term
-corresponding to the start symbol of the grammar.
+corresponding to the start symbol of the grammar.}}
 
 It may not be feasible during parsing to create the initial binding structure of the programs.  For
 instance, in our implementation function parameters are collected as a list and are not initially
 bound in the function body. Furthermore, for mutually recursive functions, the function variables
 are not initially bound in the functions' bodies.  For this reason, the parsing phases is usually
 followed by an additional rewrite phase that performs these operations using the informal rewriting
-engine.  The source text is replaced with the resulting term on completion.}}
+engine.  The source text is replaced with the resulting term on completion.
 
 @docoff
 @end[doc]

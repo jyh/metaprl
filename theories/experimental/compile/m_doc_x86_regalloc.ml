@@ -72,10 +72,7 @@ be captured by rewriting the program just after the binding occurrences of the v
 spilled.  The following two rules give an example.
 $$
 @begin[array,l]
-@line{@xrewrite2["smov"]{@Mov{o; v; e[v]}; @Mov{o; @it{spill}_i; e[@it{spill}_i]}}}
-@end[array]
-@tt["      "]
-@begin[array,l]
+@line{@xrewrite["smov"]{@Mov{o; v; e[v]}; @Mov{o; @it{spill}_i; e[@it{spill}_i]}}}
 @line{@xrewrite2["sinst2"]{@Inst2Reg[inst2]{o; o_r; v; e[v]};
    @begin[array,t,l]
    @line{@Mov{o_r; @it{spill}_i}}
@@ -185,9 +182,6 @@ $$
    @line{@Spill[set]{@Register{v}; s}}
    @line{{e[@SpillRegister{v; s}]}}
    @end[array]}}
-@end[array]
-@tt["     "]
-@begin[array,l]
 @line{@xrewrite2["sinst2"]{@Inst2Reg[inst2]{o; o_r; v; e[v]};
    @begin[array,t,l]
    @line{@Inst2Reg[inst2]{o; o_r; v; e[v]}}
@@ -203,7 +197,7 @@ a new program that fetches the spill into a new register $v_2$ and uses the new 
 $@SpillRegister{v_2; s}$ in the remainder of the program.  This rewrite is selectively applied
 before any instruction that uses an operand $@SpillRegister{v_1; s}$.
 
-$$@xrewrite[split]{e[@SpillRegister{v_1; s}]; @Spill[get]{@SpillRegister{v_1; s}; v_2; e[@SpillRegister{v_2; s}]}}$$
+$$@xrewrite2[split]{e[@SpillRegister{v_1; s}]; @Spill[get]{@SpillRegister{v_1; s}; v_2; e[@SpillRegister{v_2; s}]}}$$
 
 In the third and final phase, when the register allocator determines that a variable should be
 spilled, the $@SpillRegister{v; s}$ operands are selectively eliminated with the following rewrite.

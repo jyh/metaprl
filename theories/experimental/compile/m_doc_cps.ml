@@ -98,12 +98,13 @@ For many expressions, CPS conversion is a straightforward mapping of the CPS tra
 by the following five rules.
 
 $$
+@arraystretch{2}
 @begin[array,l]
 @line{@xrewrite[atom]{@CPS{@cont; @LetAtom{a; v; e[v]}}; @LetAtom{a; v; @CPS{@cont; e[v]}}}}
-@line{@xrewrite[tuple]{@CPS{@cont; @LetTuple{i; {a_1, @ldots, a_n}; v; e[v]}}; @LetTuple{i; {a_1, @ldots, a_n}; v; @CPS{@cont; e[v]}}}}
-@line{@xrewrite[letsub]{@CPS{@cont; @LetSubscript{a_1; a_2; v; e[v]}}; @LetSubscript{a_1; a_2; v; @CPS{@cont; e[v]}}}}
+@line{@xrewrite2[tuple]{@CPS{@cont; @LetTuple{i; {a_1, @ldots, a_n}; v; e[v]}}; @LetTuple{i; {a_1, @ldots, a_n}; v; @CPS{@cont; e[v]}}}}
+@line{@xrewrite2[letsub]{@CPS{@cont; @LetSubscript{a_1; a_2; v; e[v]}}; @LetSubscript{a_1; a_2; v; @CPS{@cont; e[v]}}}}
 @line{@xrewrite[setsub]{@CPS{@cont; @SetSubscript{a_1; a_2; a_3; e[v]}}; @SetSubscript{a_1; a_2; a_3; @CPS{@cont; e[v]}}}}
-@line{@xrewrite[if]{@CPS{@cont; @If{a; e_1; e_2}}; @If{a; @CPS{@cont; e_1}; @CPS{@cont; e_2}}}}
+@line{@xrewrite2[if]{@CPS{@cont; @If{a; e_1; e_2}}; @If{a; @CPS{@cont; e_1}; @CPS{@cont; e_2}}}}
 @end[array]
 $$
 
@@ -120,13 +121,14 @@ occurrences of the record variable $R$ with the term $@CPSRecordVar{R}$, and the
 @misspelled{@em{letfun}} rule replaces each function variable $f$ with the term $@CPSFunVar{f}$.
 
 $$
+@arraystretch{2}
 @begin[array,l]
-@line{@xrewrite[letrec]{@CPS{@cont; @LetRec{R; d[R]; e[R]}};
+@line{@xrewrite2[letrec]{@CPS{@cont; @LetRec{R; d[R]; e[R]}};
       @LetRec{R; @CPS{@cont; d[@CPSRecordVar{R}]}; @CPS{@cont; e[@CPSRecordVar{R}]}}}}
-@line{@xrewrite[fundef]{@CPS{@cont; @FunDef{l; @AtomFun{v; e[v]}; d}};
+@line{@xrewrite2[fundef]{@CPS{@cont; @FunDef{l; @AtomFun{v; e[v]}; d}};
                 @FunDef{l; @AtomFun{@cont; @AtomFun{v; @CPS{@cont; e[v]}}}; @CPS{@cont; d}}}}
 @line{@xrewrite[enddef]{@CPS{@cont; @EndDef}; @EndDef}}
-@line{@xrewrite[letfun]{@CPS{@cont; @LetAtom{@AtomFunVar{@CPSRecordVar{R}; l}; v; e[v]}};
+@line{@xrewrite2[letfun]{@CPS{@cont; @LetAtom{@AtomFunVar{@CPSRecordVar{R}; l}; v; e[v]}};
                         @LetAtom{@AtomFunVar{R; l}; v; @CPS{@cont; e[@CPSFunVar{v}]}}}}
 @end[array]
 $$
@@ -139,8 +141,8 @@ $$
 @begin[array,l]
 @line{@xrewrite2[apply]{@CPS{@cont; @LetApply{@CPSFunVar{v_1}; a; v_2; e[v_2]}};
       @begin[array,t,l]
-      @line{@LetRec{R; @FunDef{g; @AtomFun{v; @CPS{@cont; e[v]}}; @EndDef}; @LetAtom{@AtomFunVar{R;
-      g}; g; @TailCall{@AtomVar{f}; {@AtomVar{g}; @AtomVar{a}}}}}}
+      @line{@LetRec{R; @FunDef{g; @AtomFun{v; @CPS{@cont; e[v]}}; @EndDef}}}
+      @line{@LetAtom{@AtomFunVar{R; g}; g; @TailCall{@AtomVar{f}; {@AtomVar{g}; @AtomVar{a}}}}}
       @end[array]}}
 @end[array]
 $$

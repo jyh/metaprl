@@ -62,16 +62,16 @@ dform math_Reserve_df2 : mode[tex] :: math_Reserve{'words; 'e} =
    bf["reserve"] `"(" slot{'words} `");" slot{'e}
 
 dform math_StoreTuple_df1 : mode[tex] :: math_StoreTuple{'p; 'i; 'args} =
-   bf["store"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");"
+   bf["store_tuple"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");"
 
 dform math_StoreTuple_df2 : mode[tex] :: math_StoreTuple{'p; 'i; 'args; 'e} =
-   bf["store"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");" slot{'e}
+   bf["store_tuple"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");" slot{'e}
 
 dform math_CopyArgs_df1 : mode[tex] :: math_CopyArgs{'src; 'dst; 'v} =
-   bf["copy"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v}
+   bf["copy_args"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v}
 
 dform math_CopyArgs_df2 : mode[tex] :: math_CopyArgs{'src; 'dst; 'v; 'e} =
-   bf["copy"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v} slot{'e}
+   bf["copy_args"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v} slot{'e}
 
 dform math_ReverseArgs_df1 : mode[tex] :: math_ReverseArgs{'e} =
    bf["reverse"] `"(" slot{'e} `")"
@@ -87,8 +87,8 @@ express these translations with the term $@ASM{e}$, which is the translation of 
 $e$ to an assembly expression; and $@ASM{a; v; e[v]}$, which produces the assembly operand for the atom
 $a$ and substitutes it for the variable $v$ in assembly expression $e[v]$.
 
-@comment{@subsubsection["asmatoms"]{Atom translation}}
-@bf{Atom translation}
+@subsubsection["asmatoms"]{Atom translation}
+
 The translation of atoms is primarily a translation of the IR names for values and the assembly
 names for operands.  A representative set of atom translations is shown in Figure
 @reffigure[asmatomtrans].  Since the language is untyped, we use a 31-bit representation of
@@ -99,8 +99,7 @@ shifted to obtain the standard integer representation, the division operation is
 result is converted to a 31-bit representation.
 
 @begin[figure,asmatomtrans]
-@begin[small]
-$
+$$
 @begin[array,l]
 @line{@xrewrite[false]{@ASM{@AtomFalse; v; e[v]}; e[@ImmediateNumber{1}]}}
 @line{@xrewrite[true]{@ASM{@AtomTrue; v; e[v]}; e[@ImmediateNumber{3}]}}
@@ -115,9 +114,6 @@ $
     @line{@Inst1Reg[DEC]{@Register{@it{tmp}}; @it{sum}}}
     @line{{e[@Register{@it{sum}}]}}
     @end[array]}}}
-@end[array]
-@tt["     "]
-@begin[array,l]
 @line{@xrewrite2[div]{@ASM{@AtomBinop{/; a_1; a_2}; v; e[v]};
    {@begin[array,t,l]
     @line{@ASM{a_1; v_1}}
@@ -131,13 +127,12 @@ $
     @line{{e[@Register{q}]}}
     @end[array]}}}
 @end[array]
-$
-@end[small]
+$$
 @caption{Translation of atoms to x86 assembly}
 @end[figure]
 
-@comment{@subsubsection["asmexps"]{Expression translation}}
-@bf{Expression translation}
+@subsubsection["asmexps"]{Expression translation}
+
 Expressions translate to sequences of assembly instructions.  A representative set of translations
 in shown in Figure @reffigure[asmexptrans].  The translation of $@LetAtom{a; v; e[v]}$ is the
 simplest case, the atom $a$ is translated into an operand $v'$, which is copied to a variable $v$
@@ -145,8 +140,7 @@ simplest case, the atom $a$ is translated into an operand $v'$, which is copied 
 translated.  Conditionals translate into comparisons followed by a conditional branch.
 
 @begin[figure,asmexptrans]
-@begin[small]
-$
+$$
 @begin[array,l]
 @line{@xrewrite2[atom]{@ASM{@LetAtom{a; v; e[v]}};
   {@begin[array,t,l]
@@ -167,9 +161,6 @@ $
    @line{@Cmp[CMP]{v_1; v_2}}
    @line{@Jcc[J]{@ASM{@it{op}}; @ASM{e_1}; @ASM{e_2}}}
    @end[array]}}}
-@end[array]
-@tt["   "]
-@begin[array,l]
 @line{@xrewrite2[sub]{@ASM{@LetSubscript{a_1; a_2; v; e[v]}};
   {@begin[array,t,l]
    @line{@ASM{a_1; v_1}}
@@ -185,8 +176,7 @@ $
    @line{@ASM{e[v]}}
    @end[array]}}}
 @end[array]
-$
-@end[small]
+$$
 @caption{Translation of expressions to x86 assembly}
 @end[figure]
 
@@ -213,16 +203,6 @@ $$
    @line{@StoreTuple{p; 0; @it{tuple}}}
    @line{@ASM{e[v]}}
    @end[array]}}
-@line{@xrewrite2[call]{@ASM{@TailCall{'a; @it{args}}};
-   @begin[array,t,l]
-   @line{@ASM{a; @it{closure}}}
-   @line{@Mov{@MemRegOff{@it{closure}; 4}; @it{env}}}
-   @line{@CopyArgs{(); @it{args}; @it{vargs}}}
-   @line{@Jmp[JMP]{@MemReg{@it{closure}}; @it{vargs}}}
-   @end[array]}}
-@end[array]
-@tt["   "]
-@begin[array,l]
 @line{@xrewrite2[closure]{@ASM{@LetClosure{a_1; a_2; v; e[v]}};
    @begin[array,t,l]
    @line{@Reserve{@ImmediateNumber{3}}}
@@ -235,6 +215,13 @@ $$
    @line{@Inst2Mem[MOV]{v_2; @MemRegOff{v; 8}}}
    @line{@Inst2Reg[ADD]{@ImmediateNumber{4}; @Register{v}; p}}
    @line{@ASM{e[p]}}
+   @end[array]}}
+@line{@xrewrite2[call]{@ASM{@TailCall{'a; @it{args}}};
+   @begin[array,t,l]
+   @line{@ASM{a; @it{closure}}}
+   @line{@Mov{@MemRegOff{@it{closure}; 4}; @it{env}}}
+   @line{@CopyArgs{(); @it{args}; @it{vargs}}}
+   @line{@Jmp[JMP]{@MemReg{@it{closure}}; @it{vargs}}}
    @end[array]}}
 @end[array]
 $$
@@ -269,9 +256,6 @@ $$
    @line{@Inst2Mem[MOV]{v; @MemRegOff{p; i}}}
    @line{@StoreTuple{p; i+4; @it{args}; e}}
    @end[array]}}
-@end[array]
-@tt["   "]
-@begin[array,l]
 @line{@xrewrite[stuple2]{@StoreTuple{p; i; (); e}; e}}
 @line{@xrewrite2[copy1]{@CopyArgs{{(a :: @it{args})}; @it{vargs}; v; e[v]};
    @begin[array,t,l]
@@ -279,7 +263,7 @@ $$
    @line{@Mov{v'; v}}
    @line{@CopyArgs{@it{args}; {(@Register{v} :: @it{vargs})}; v; e[v]}}
    @end[array]}}
-@line{@xrewrite2[copy2]{@CopyArgs{(); @it{vargs}; v; e[v]}; e[@ReverseArgs{@it{vargs}}]}}
+@line{@xrewrite[copy2]{@CopyArgs{(); @it{vargs}; v; e[v]}; e[@ReverseArgs{@it{vargs}}]}}
 @end[array]
 $$
 @caption{Auxiliary terms for x86 code generation}

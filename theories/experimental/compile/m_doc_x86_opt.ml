@@ -51,8 +51,8 @@ $$
 @end[array]
 $$
 
-@comment{As we mentioned in Section @refsection[m_doc_opt], this kind of dead-code elimination should not be
-applied if the instruction being eliminated can raise an exception.}
+As we mentioned in Section @refsection[m_doc_opt], this kind of dead-code elimination should not be
+applied if the instruction being eliminated can raise an exception.
 
 Another useful optimization is the coalescing of $@AsmReserve{i}$ instructions, which call the garbage
 collector if $i$ bytes of storage are not available.  In the current version of the language, all
@@ -62,8 +62,8 @@ statement.  The following rewrites illustrate the process.
 
 $$
 @begin[array,l]
-@line{@xrewrite[rmov]{@Mov{o; v; @AsmReserve{i; e[v]}}; @AsmReserve{i; @Mov{o; v; e[v]}}}}
-@line{@xrewrite[rinst2]{@Inst2Reg[inst2]{o; o_r; v; @AsmReserve{i; e[v]}}; @AsmReserve{i; @Inst2Reg[inst2]{o; o_r; v; e[v]}}}}
+@line{@xrewrite2[rmov]{@Mov{o; v; @AsmReserve{i; e[v]}}; @AsmReserve{i; @Mov{o; v; e[v]}}}}
+@line{@xrewrite2[rinst2]{@Inst2Reg[inst2]{o; o_r; v; @AsmReserve{i; e[v]}}; @AsmReserve{i; @Inst2Reg[inst2]{o; o_r; v; e[v]}}}}
 @end[array]
 $$
 

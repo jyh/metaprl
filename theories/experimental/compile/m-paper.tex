@@ -1,4 +1,4 @@
-\documentclass[letterpaper,10pt]{llncs}
+\documentclass{acm_proc_article-sp}
 
 \usepackage{makeidx}
 \makeindex
@@ -9,39 +9,33 @@
 \usepackage{nameref}
 \usepackage{hyperref}
 
-%% EMRE's hack to override LNCS style.
-\let\Figure=\figure
-\let\endFigure=\endfigure
-\renewenvironment{figure}
-   {\begin{Figure}[tbp]}
-   {\end{Figure}}
-
 %\commentfalse
 
 \begin{document}
 
-\title{Compiler Implementation in a Formal Logical Framework\thanks{An
+\title{Compiler Implementation in a Formal Logical Framework\titlenote{An
   extended version of this paper is available as Caltech technical report
   \texttt{caltechCSTR:2003.002} at
   \href{http://resolver.caltech.edu/caltechCSTR:2003.002}{\texttt{http://caltechcstr.library.caltech.edu/}}}
 }
 
+\numberofauthors{1}
+
 \author{
-Jason Hickey \and Aleksey Nogin \and Adam Granicz \and Brian Aydemir \thanks{This
+\alignauthor Jason Hickey, Aleksey Nogin, Adam Granicz, and Brian Aydemir
+\titlenote{This
   work was supported in part by the DoD Multidisciplinary
   University Research Initiative (MURI) program administered by the
   Office of Naval Research (ONR) under Grant N00014-01-1-0765, the
   Defense Advanced Research Projects Agency (DARPA), the United States
   Air Force, the Lee Center, and by NSF Grant CCR
-  0204193.}}
-\institute{
-California Institute of Technology, M/C 256-80\\
-1200 E. California Blvd.\\
-Pasadena, CA 91125, USA\\
+  0204193.}\\
+\affaddr{California Institute of Technology, M/C 256-80}\\
+\affaddr{1200 E. California Blvd.}\\
+\affaddr{Pasadena, CA 91125, USA}\\
 \email{\{jyh,nogin,granicz,emre\}@cs.caltech.edu}
 }
 \maketitle
-\pagestyle{plain}\thispagestyle{plain}
 
 \begin{abstract}
 The task of designing and implementing a compiler can be a
@@ -75,5 +69,6 @@ assembly in which all registers are immutable.
 \bibliography{rc}
 
 \printindex
+\balancecolumns
 
 \end{document}

@@ -25,7 +25,7 @@ interactive msdriver :
      sequent{ <H> >- 'kA ~ ('kA * 'A) } -->
      sequent{ <H> >- ((-('A)) * ('kA * ('n * ((('R * ('u * ('kR * 'm))) + (-('R))) * ((star{((-('B)) * ('kA * ('n * (('R * ('u * ('kR * 'm))) + (-('R))))))}) * ('B * 'kR)))))) ~ ((-('A)) * ((-('A)) * ('kA * ('n * ((('R * ('u * ('A * ('kR * 'm)))) + (-('R))) * ((star{((-('B)) * ((-('A)) * ('kA * ('n * (('R * ('u * ('A * ('kR * 'm)))) + (-('R)))))))}) * ('B * ('A * 'kR)))))))) }
 
-interactive_rw msdriver_rw :
+interactive_rw msdriverl_rw :
      ('u in kleene) -->
      ('n in kleene) -->
      ('m in kleene) -->
@@ -44,4 +44,24 @@ interactive_rw msdriver_rw :
      ('kR ~ ('kR * (-('A)))) -->
      ('kA ~ ('kA * 'A)) -->
      ((-('A)) * ('kA * ('n * ((('R * ('u * ('kR * 'm))) + (-('R))) * ((star{((-('B)) * ('kA * ('n * (('R * ('u * ('kR * 'm))) + (-('R))))))}) * ('B * 'kR)))))) <--> ((-('A)) * ((-('A)) * ('kA * ('n * ((('R * ('u * ('A * ('kR * 'm)))) + (-('R))) * ((star{((-('B)) * ((-('A)) * ('kA * ('n * (('R * ('u * ('A * ('kR * 'm)))) + (-('R)))))))}) * ('B * ('A * 'kR))))))))
+
+interactive_rw msdriverr_rw :
+     ('u in kleene) -->
+     ('n in kleene) -->
+     ('m in kleene) -->
+     ('kR in kleene) -->
+     ('kA in kleene) -->
+     ('R in bool) -->
+     ('B in bool) -->
+     ('A in bool) -->
+     (('B * 'kR) ~ ('kR * 'B)) -->
+     (('B * 'u) ~ ('u * 'B)) -->
+     (('A * 'm) ~ ('m * 'A)) -->
+     (('A * 'u) ~ ('u * 'A)) -->
+     (('A * 'n) ~ ('n * 'A)) -->
+     ('n ~ ('n * 'B)) -->
+     (('B * 'm) ~ ('B * ('m * (-('B))))) -->
+     ('kR ~ ('kR * (-('A)))) -->
+     ('kA ~ ('kA * 'A)) -->
+     ((-('A)) * ((-('A)) * ('kA * ('n * ((('R * ('u * ('A * ('kR * 'm)))) + (-('R))) * ((star{((-('B)) * ((-('A)) * ('kA * ('n * (('R * ('u * ('A * ('kR * 'm)))) + (-('R)))))))}) * ('B * ('A * 'kR)))))))) <--> ((-('A)) * ('kA * ('n * ((('R * ('u * ('kR * 'm))) + (-('R))) * ((star{((-('B)) * ('kA * ('n * (('R * ('u * ('kR * 'm))) + (-('R))))))}) * ('B * 'kR))))))
 

@@ -4,6 +4,7 @@ extends Base_select
 extends Itt_struct2
 
 open Dtactic
+open Top_conversionals
 
 (************************************************************************
  * TERMS                                                                *
@@ -116,6 +117,21 @@ interactive zero_wf {| intro[] |}:
 
 interactive one_wf {| intro[] |}:
    sequent { <H> >- 1 in kleene}
+
+(*****************************************************
+* Associativitiy
+******************************************************)
+prim_rw prod_assotiative {|reduce |}: (('x * 'y) * 'z) <--> ('x * ('y * 'z))
+
+interactive_rw rev_prod_assotiative: ('x * ('y * 'z)) <--> (('x * 'y) * 'z)
+
+prim_rw plus_assotiative {|reduce |}: (('x + 'y) + 'z) <--> ('x + ('y + 'z))
+
+interactive_rw rev_plus_assotiative: ('x + ('y + 'z)) <--> (('x + 'y) + 'z)
+
+let resource associative +=
+   [ <<'a * 'b>>, (prod_assotiative, rev_prod_assotiative);
+     <<'a + 'b>>, (plus_assotiative, rev_plus_assotiative)]
 
 
 

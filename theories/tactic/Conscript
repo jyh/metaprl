@@ -1,0 +1,57 @@
+Import qw( env );
+
+$env = $env->clone(
+	OCAMLC => "$env->{OCAMLC} -I /usr/lib/camlp4"
+);
+
+Depends $env ['tactic_cache',
+	'perv',
+	'nuprl_font',
+	'base_dform',
+	'comment',
+	'summary',
+	'var',
+	'mptop',
+	'top_tacticals',
+	'top_conversionals'],
+	"#filter/filter/prlc",
+	"#lib/camlp4o",
+	"#lib/camlp4n",
+	"#lib/prlcn",
+	"#lib/prlco";
+
+OCamlDepends $env ['tactic_cache'],
+	'dform_print';
+
+OCamlDepends $env ['summary'],
+	'nuprl_font',
+	'base_dform',
+	'comment',
+	'perv';
+
+OCamlSources $env
+	'tactic_cache.ml',
+	'perv.ml',
+	'nuprl_font.ml',
+	'base_dform.ml',
+	'comment.ml',
+	'summary.ml',
+	'var.ml',
+	'mptop.ml',
+	'top_tacticals.ml',
+	'top_conversionals.ml';
+
+OCamlLibrary $env 'base',
+        'tactic_cache',
+	'perv',
+	'nuprl_font',
+	'base_dform',
+	'comment',
+	'summary',
+	'var',
+	'mptop',
+	'top_tacticals',
+	'top_conversionals';
+
+## Add the library to the default target list
+Default qw( base.cmxa );

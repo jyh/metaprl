@@ -41,6 +41,11 @@
  * @end[license]
  *)
 
+(*
+ * open Ml_term
+ * open Dform_print
+ *)
+
 open Printf
 open Mp_debug
 

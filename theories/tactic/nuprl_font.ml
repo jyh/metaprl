@@ -41,6 +41,10 @@
  * @end[license]
  *)
 
+(*
+ * open Dform_print
+ *)
+
 open Printf
 open Mp_debug
 open Perv

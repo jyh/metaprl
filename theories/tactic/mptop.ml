@@ -423,7 +423,7 @@ and mk_expr base expr =
             not_supported loc "class coercion"
        | (<:expr< $flo:s$ >>) ->
             not_supported loc "float"
-       | (<:expr< for $s$ = $e1$ $to:b$ $e2$ do $list:el$ done >>) ->
+       | (<:expr< for $s$ = $e1$ $to:b$ $e2$ do { $list:el$ } >>) ->
             not_supported loc "for loop"
        | (<:expr< fun [ $list:pwel$ ] >>) ->
             not_supported loc "fun"
@@ -454,7 +454,7 @@ and mk_expr base expr =
 *)
        | MLast.ExRec _ ->
             not_supported loc "record"
-       | (<:expr< do $list:el$ return $e$ >>) ->
+       | (<:expr< do { $list:el$ } >>) ->
             not_supported loc "do"
 (*
        | (<:expr< $e$ # $i$ >>) ->
@@ -473,12 +473,18 @@ and mk_expr base expr =
             mk_expr base e
        | (<:expr< $uid:s$ >>) ->
             mk_var_expr base loc s
-       | (<:expr< while $e$ do $list:el$ done >>) ->
+       | (<:expr< while $e$ do { $list:el$ } >>) ->
             not_supported loc "while"
        | MLast.ExAnt (_, e) ->
             not_supported loc "ExAnt"
        | MLast.ExXnd (_, _, e) ->
             mk_expr base e
+       | MLast.ExVrn _ ->
+            not_supported loc "ExVrn"
+       | MLast.ExOlb _ ->
+            not_supported loc "ExOlb"
+       | MLast.ExLab _ ->
+            not_supported loc "ExLab"
 
 and mk_patt base patt =
    let loc = loc_of_patt patt in
@@ -517,6 +523,14 @@ and mk_patt base patt =
             not_supported loc "pattern PaAnt"
        | MLast.PaXnd _ ->
             not_supported loc "patterm PaXnd"
+       | MLast.PaVrn _ ->
+            not_supported loc "patterm PaVrn"
+       | MLast.PaOlb _ ->
+            not_supported loc "patterm PaOlb"
+       | MLast.PaLab _ ->
+            not_supported loc "patterm PaLab"
+       | MLast.PaFlo _ ->
+            not_supported loc "patterm PaFlo"
 
 and mk_type base t =
    let loc = loc_of_ctyp t in
@@ -557,6 +571,12 @@ and mk_type base t =
             not_supported loc "type constructor var"
        | MLast.TyXnd (_, _, t) ->
             mk_type base t
+       | MLast.TyVrn _ ->
+            not_supported loc "type constructor Vrn"
+       | MLast.TyOlb _ ->
+            not_supported loc "type constructor Olb"
+       | MLast.TyLab _ ->
+            not_supported loc "type constructor Lab"
 
 and mk_sig_item base si =
    let loc = loc_of_sig_item si in
@@ -585,13 +605,12 @@ and mk_sig_item base si =
             not_supported loc "sig type"
        | (<:sig_item< value $s$ : $t$ >>) ->
             not_supported loc "sig value"
+       | MLast.SgDir _ ->
+            not_supported loc "sig dir"
 
 and mk_str_item base si =
    let loc = loc_of_str_item si in
       match si with
-(*
-         (<:str_item< class $list:cdl$ >>) ->
-*)
          MLast.StCls _
        | MLast.StClt _ ->
             not_supported loc "str class"
@@ -613,6 +632,10 @@ and mk_str_item base si =
             not_supported loc "str type"
        | (<:str_item< value $rec:b$ $list:pel$ >>) ->
             not_supported loc "str let"
+       | MLast.StDir _ ->
+            not_supported loc "str dir"
+       | MLast.StInc _ ->
+            not_supported loc "str include"
 
 and mk_module_type base mt =
    let loc = loc_of_module_type mt in

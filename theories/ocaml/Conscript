@@ -1,0 +1,32 @@
+Import qw( env );
+
+$env = $env->clone(
+	INCPATH	=> [@{$env->{INCPATH}}, "../tactic"]
+);
+
+OCamlSources $env
+	'ocaml.mlz',
+	'ocaml_base_df.ml',
+	'ocaml_expr_df.ml',
+	'ocaml_patt_df.ml',
+	'ocaml_type_df.ml',
+	'ocaml_mt_df.ml',
+	'ocaml_me_df.ml',
+	'ocaml_sig_df.ml',
+	'ocaml_str_df.ml',
+	'ocaml_df.mlz';
+
+OCamlLibrary $env 'base',
+	'ocaml',
+	'ocaml_base_df',
+	'ocaml_expr_df',
+	'ocaml_patt_df',
+	'ocaml_type_df',
+	'ocaml_mt_df',
+	'ocaml_me_df',
+	'ocaml_sig_df',
+	'ocaml_str_df',
+	'ocaml_df';
+
+## Add the library to the default target list
+Default qw( base.cmxa );

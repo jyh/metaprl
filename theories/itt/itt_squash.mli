@@ -59,7 +59,7 @@ type squash_data
 (*
  * The resource itself.
  *)
-resource (term * tactic, tactic, squash_data) squash_resource
+resource (term * tactic, tactic, squash_data, unit) squash_resource
 
 (*
  * Access to resources from the toploop.

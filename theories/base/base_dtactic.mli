@@ -43,7 +43,7 @@ open Base_auto_tactic
  *)
 type d_data
 
-resource (term * (int -> tactic), int -> tactic, d_data) d_resource
+resource (term * (int -> tactic), int -> tactic, d_data, meta_term * tactic) d_resource
 
 (*
  * Get a resource for the toploop.

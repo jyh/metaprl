@@ -95,8 +95,8 @@ type 'a auto_data =
  | Label of 'a auto_data
  | Join of 'a auto_data * 'a auto_data
 
-resource (tactic auto_info, tactic, tactic auto_data) trivial_resource
-resource (auto_tac auto_info, tactic, auto_tac auto_data) auto_resource
+resource (tactic auto_info, tactic, tactic auto_data, string * auto_prec * meta_term * tactic) trivial_resource
+resource (auto_tac auto_info, tactic, auto_tac auto_data, string * auto_prec * meta_term * tactic) auto_resource
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -243,6 +243,12 @@ let extract compile info =
       compile tactics
 
 (*
+ * Wrap a regular tactic.
+ *)
+let rec auto_wrap (tac : tactic) =
+   AutoTac (fun p -> [tac, auto_wrap tac])
+
+(*
  * Wrap up the joiner.
  *)
 let join_resource data1 data2 =
@@ -252,6 +258,14 @@ let improve_resource data info =
    if !debug_auto then
       eprintf "Base_auto_tactic.improve_resource: adding %s%t" info.auto_name eflush;
    Tactic (info, data)
+
+let improve_triv_resource_arg data (name, tprec, _, tac) =
+   let info = { auto_name = name; auto_prec = tprec; auto_tac = tac } in
+      Tactic (info, data)
+
+let improve_auto_resource_arg data (name, tprec, _, tac) =
+   let info = { auto_name = name; auto_prec = tprec; auto_tac = auto_wrap tac } in
+      Tactic (info, data)
 
 let close_resource data modname =
    Label data
@@ -267,6 +281,7 @@ let trivial_resource =
       { resource_join = join_resource;
         resource_extract = extract_triv_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = improve_triv_resource_arg;
         resource_close = close_resource
       }
       Empty
@@ -279,6 +294,7 @@ let auto_resource =
       { resource_join = join_resource;
         resource_extract = extract_auto_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = improve_auto_resource_arg;
         resource_close = close_resource
       }
       Empty
@@ -300,12 +316,6 @@ let remove_auto_tactic auto_rsrc node =
       Remove (node, items)
    in
       Mp_resource.wrap auto_rsrc wrap
-
-(*
- * Wrap a regular tactic.
- *)
-let rec auto_wrap (tac : tactic) =
-   AutoTac (fun p -> [tac, auto_wrap tac])
 
 (*
  * Use the tactic as long as progress is being made.

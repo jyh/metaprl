@@ -40,6 +40,8 @@
 
 include Mptop
 
+open Refiner.Refiner.TermType
+
 open Mp_resource
 
 open Tacticals
@@ -75,8 +77,8 @@ type 'a auto_info =
 (*
  * The string is for debugging.
  *)
-resource (tactic auto_info, tactic, tactic auto_data) trivial_resource
-resource (auto_tac auto_info, tactic, auto_tac auto_data) auto_resource
+resource (tactic auto_info, tactic, tactic auto_data, string * auto_prec * meta_term * tactic) trivial_resource
+resource (auto_tac auto_info, tactic, auto_tac auto_data, string * auto_prec * meta_term * tactic) auto_resource
 
 (*
  * Get values for the toploop.

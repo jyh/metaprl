@@ -129,7 +129,7 @@ topval repeatForC : int -> conv -> conv
 
 type reduce_data
 
-resource (term * conv, conv, reduce_data) reduce_resource
+resource (term * conv, conv, reduce_data, meta_term * conv) reduce_resource
 
 val get_resource : string -> reduce_resource
 

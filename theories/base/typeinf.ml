@@ -70,7 +70,7 @@ type typeinf_subst_fun = term_subst -> (string option * term) -> term_subst
 type typeinf_subst_info = term * typeinf_subst_fun
 type typeinf_subst_data = typeinf_subst_fun term_table
 
-resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data) typeinf_subst_resource
+resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typeinf_subst_resource
 
 (*
  * This is the type of the inference algorithm.
@@ -96,7 +96,7 @@ type typeinf_data = typeinf_comp term_table
 (*
  * The resource itself.
  *)
-resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
+resource (typeinf_resource_info, typeinf_func, typeinf_data, unit) typeinf_resource
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -134,6 +134,7 @@ let typeinf_subst_resource =
       { resource_join = join_subst_resource;
         resource_extract = extract_subst_resource;
         resource_improve = improve_subst_resource;
+        resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_subst_resource";
         resource_close = close_subst_resource
       }
       (new_table ())
@@ -229,6 +230,7 @@ let typeinf_resource =
       {  resource_join = join_resource;
          resource_extract = extract_resource;
          resource_improve = improve_resource;
+         resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_resource";
          resource_close = close_resource
       }
       (new_table ())

@@ -39,6 +39,7 @@ include Mptop
 open Mp_debug
 open Printf
 
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
@@ -220,7 +221,7 @@ let rec repeatForC i conv =
 
 type reduce_data = conv term_table
 
-resource (term * conv, conv, reduce_data) reduce_resource
+resource (term * conv, conv, reduce_data, meta_term * conv) reduce_resource
 
 (*
  * Extract a D tactic from the data.
@@ -269,7 +270,14 @@ let improve_resource data x =
       end;
    improve_data x data
 
-and close_resource rsrc modname =
+let improve_resource_arg data (mterm, conv) =
+   match mterm with
+      MetaIff (MetaTheorem t, _) ->
+         improve_resource data (t, conv)
+    | _ ->
+         raise (RefineError ("Conversionals.improve_resource_arg", StringError "not a simple rewrite"))
+
+let close_resource rsrc modname =
    rsrc
 
 (*
@@ -280,6 +288,7 @@ let reduce_resource =
       { resource_join = join_resource;
         resource_extract = extract_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = improve_resource_arg;
         resource_close = close_resource
       }
       (new_table ())

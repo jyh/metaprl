@@ -49,7 +49,7 @@ type typeinf_subst_fun = term_subst -> (string option * term) -> term_subst
 type typeinf_subst_info = term * typeinf_subst_fun
 type typeinf_subst_data
 
-resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data) typeinf_subst_resource
+resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typeinf_subst_resource
 
 val get_typeinf_subst_resource : string -> typeinf_subst_resource
 
@@ -86,7 +86,7 @@ type typeinf_data
 (*
  * The resource itself.
  *)
-resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
+resource (typeinf_resource_info, typeinf_func, typeinf_data, unit) typeinf_resource
 
 (*
  * Resources that have been created.

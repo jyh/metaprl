@@ -76,7 +76,7 @@ type expr =
 type top_data
 type top_table
 
-resource (string * expr, top_table, top_data) toploop_resource
+resource (string * expr, top_table, top_data, unit) toploop_resource
 
 (*
  * Fetch a resource by module name.

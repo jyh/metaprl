@@ -54,7 +54,7 @@ type cache = tactic Tactic_cache.cache
  *)
 type t = cache
 
-resource (cache_rule, cache, t) cache_resource
+resource (cache_rule, cache, t, unit) cache_resource
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -91,6 +91,7 @@ let cache_resource =
       { resource_join = join_resource;
         resource_extract = extract_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = Mp_resource.improve_arg_fail "cache_resource";
         resource_close = close_resource
       }
       (new_cache ())

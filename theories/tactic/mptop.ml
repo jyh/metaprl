@@ -90,7 +90,7 @@ type top_data =
 type top_table =
    (string, string * expr) Hashtbl.t
 
-resource (string * expr, top_table, top_data) toploop_resource
+resource (string * expr, top_table, top_data, unit) toploop_resource
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -648,6 +648,7 @@ let toploop_resource =
       { resource_join = join_resource;
         resource_extract = extract_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = Mp_resource.improve_arg_fail "toploop_resource";
         resource_close = close_resource
       }
       (add_resources Empty values)

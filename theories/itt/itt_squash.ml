@@ -76,7 +76,7 @@ type squash_data = tactic term_stable
 (*
  * The resource itself.
  *)
-resource (term * tactic, tactic, squash_data) squash_resource
+resource (term * tactic, tactic, squash_data, unit) squash_resource
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -146,6 +146,7 @@ let squash_resource =
       { resource_join = join_resource;
         resource_extract = extract_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = Mp_resource.improve_arg_fail "squash_resource";
         resource_close = close_resource
       }
       (new_stable ())

@@ -378,7 +378,7 @@ let is_squash_term = is_no_subterms_term squash_opname
  *)
 type eqcd_data = tactic term_stable
 
-resource (term * tactic, tactic, eqcd_data) eqcd_resource
+resource (term * tactic, tactic, eqcd_data, meta_term * tactic) eqcd_resource
 
 (*
  * Extract an EQCD tactic from the data.
@@ -424,6 +424,7 @@ let eqcd_resource =
       { resource_join = join_resource;
         resource_extract = extract_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = Mp_resource.improve_arg_fail "eqcd_resource";
         resource_close = close_resource
       }
       (new_stable ())

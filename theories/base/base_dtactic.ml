@@ -72,7 +72,7 @@ let debug_dtactic =
  *)
 type d_data = (int -> tactic) term_table
 
-resource (term * (int -> tactic), int -> tactic, d_data) d_resource
+resource (term * (int -> tactic), int -> tactic, d_data, meta_term * tactic) d_resource
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -141,6 +141,7 @@ let d_resource =
       { resource_join = join_resource;
         resource_extract = extract_resource;
         resource_improve = improve_resource;
+        resource_improve_arg = Mp_resource.improve_arg_fail "d_resource";
         resource_close = close_resource
       }
       (new_table ())

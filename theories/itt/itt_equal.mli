@@ -38,6 +38,7 @@ include Base_theory
 
 include Itt_squash
 
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Tacticals
 open Conversionals
@@ -229,7 +230,7 @@ axiom squashFromAny 'H 'ext :
 
 type eqcd_data
 
-resource (term * tactic, tactic, eqcd_data) eqcd_resource
+resource (term * tactic, tactic, eqcd_data, meta_term * tactic) eqcd_resource
 
 (*
  * Access to resources from toploop.

@@ -51,7 +51,7 @@ open Itt_equal
 prim_rw unfold_false : Fol_false!"false" <--> esquash{void}
 prim_rw unfold_true : Fol_true!"true" <--> esquash{unit}
 prim_rw unfold_type : Fol_type!"type"{'t} <-->
-   esquash{(('t = "false" in univ[1:l]) or ('t = "true" in univ[1:l]))}
+   squash{(('t = "false" in univ[1:l]) or ('t = "true" in univ[1:l]))}
 prim_rw unfold_pred : Fol_pred!"pred" <-->
    { T: univ[1:l] | "type"{'T} }
 

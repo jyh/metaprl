@@ -41,6 +41,7 @@ open Mp_resource
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
+open Base_auto_tactic
 open Base_theory
 open Typeinf
 
@@ -265,6 +266,8 @@ val it_term : term
 val infer_univ_dep0_dep0 : (term -> term * term) -> typeinf_comp
 val infer_univ_dep0_dep1 : (term -> string * term * term) -> typeinf_comp
 val infer_univ1 : typeinf_comp
+
+val equality_prec : auto_prec
 
 (*
  * Typehood from truth.

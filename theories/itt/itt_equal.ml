@@ -290,7 +290,8 @@ dform cumulativity_df : cumulativity[i:l, j:l] =
 
 dform squash_df : except_mode[src] :: squash = cdot
 dform squash_df2 : mode[src] :: squash = `"squash"
-dform it_df1 : it = cdot
+dform it_df1 : except_mode[src] :: it = cdot
+dform it_df2 : mode[src] :: it = `"it"
 
 (************************************************************************
  * RULES                                                                *
@@ -517,13 +518,6 @@ let resource intro += (univ_member_term, wrap_intro eqcd_univT)
  * every inhabitant $x @in @univ{l}$ is also a type.
  * @end[doc]
  *)
-prim universeType {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{univ[l:l]} } =
-   it
-
-(*
- * Anything in a universe is a type.
- *)
 prim universeMemberType 'H univ[i:l] :
    [wf] sequent [squash] { 'H >- 'x IN univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} } =
@@ -533,9 +527,11 @@ prim universeMemberType 'H univ[i:l] :
  * Derived form for known membership.
  * hypothesis rule is not know yet.
  *)
-prim universeAssumType 'H 'J :
-   sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} } =
-   it
+interactive universeAssumType 'H 'J :
+   sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} }
+
+interactive universeType {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{univ[l:l]} }
 
 (*! @docoff *)
 let univTypeT t p =
@@ -670,12 +666,28 @@ let typeAssertT p =
  * Automation.
  *)
 let triv_equalT i p =
-   let i, j = Sequent.hyp_indices p i in
-   (equalityAxiom i j orelseT universeAssumType i j) p
+   let concl = Sequent.concl p in
+   let hyp = snd (Sequent.nth_hyp p i) in
+      if is_type_term concl then
+         let _ = dest_univ hyp in univAssumT i p
+      else
+         let gt, ga, gb = dest_equal concl in
+         if alpha_equal gt hyp then equalAssumT i p else
+         let ht, ha, hb = dest_equal hyp in
+         if alpha_equal gt ht then
+            if alpha_equal ga gb then
+               if alpha_equal ha ga then equalRefT hb p
+               else if alpha_equal hb ga then (equalRefT ha thenT equalSymT) p
+               else if alpha_equal ha gb && alpha_equal hb ga then equalSymT p
+               else raise generic_refiner_exn
+            else raise generic_refiner_exn
+         else raise generic_refiner_exn
+
+let equality_prec = create_auto_prec [trivial_prec] []
 
 let resource auto += {
    auto_name = "Itt_equal.triv_equalT";
-   auto_prec = trivial_prec;
+   auto_prec = equality_prec;
    auto_tac = onSomeHypT triv_equalT;
    auto_type = AutoTrivial;
 }

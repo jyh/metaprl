@@ -264,8 +264,8 @@ interactive col_wf {| intro [] |} 'H :
  * [ext] H Ÿ collection[l](T) Type
  *)
 interactive col_wf2 'H :
-   sequent[squash]{'H >- 'T IN univ[l ':l] } -->
-   sequent['ext]{'H >- col[l:l]{'T} IN univ[l ':l] }
+   sequent[squash]{'H >- 'T IN univ[l':l] } -->
+   sequent['ext]{'H >- col[l:l]{'T} IN univ[l':l] }
 
 (* [Ì] H Ÿ T Ñ ”[{l'}] ÝÝÞ
  * [ext] H Ÿ collection[l](T) Ñ ”[{l'}]
@@ -417,8 +417,8 @@ interactive _Col_wf {| intro [] |} 'H :
 (* rwh unfold_Col 0 thenT atT <<univ[l:l]>> autoT*)
 
 interactive _Col_wf2 'H :
-   sequent[squash]{'H >- 'T IN univ[l ':l] } -->
-   sequent['ext]{'H >- Col[l:l]{'T} IN univ[l ':l] }
+   sequent[squash]{'H >- 'T IN univ[l':l] } -->
+   sequent['ext]{'H >- Col[l:l]{'T} IN univ[l':l] }
 
 interactive member_Col 'H :
   sequent[squash]{'H >- "type"{'T}} -->

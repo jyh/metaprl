@@ -57,7 +57,6 @@ include Itt_void
 include Itt_equal
 include Itt_squash
 include Itt_struct
-include Itt_set
 (*! @docoff *)
 
 open Tactic_type
@@ -189,18 +188,6 @@ interactive esquash_equal_intro {| intro [] |} 'H 'x :
    [main] sequent [squash] { 'H; x: 'P1 >- 'P2 } -->
    [main] sequent [squash] { 'H; x: 'P2 >- 'P1 } -->
    sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] }
-
-(*!
- * @begin[doc]
- * @thysubsection{Set elimination}
- *
- * The standard rule for set elimination @hrefrule[setElimination]
- * can be overridden with the following more useful rule.
- * @end[doc]
- *)
-interactive set_elim {| elim [] |} 'H 'J :
-   [main] sequent ['ext] { 'H; x: 'T; z: esquash{'P['x]}; 'J['x] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: { y: 'T | 'P['y] }; 'J['x] >- 'C['x] }
 
 (*!
  * @begin[doc]

@@ -8,7 +8,7 @@ open Base_dtactic
 
 declare "false"
 
-dform false_df : "false" = `"False"
+dform false_df : except_mode[src] :: "false" = `"False"
 
 prim false_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} } = trivial

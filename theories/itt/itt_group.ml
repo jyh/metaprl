@@ -94,6 +94,9 @@ define unfold_isGroup : isGroup{'g} <-->
 define unfold_group1 : group[i:l] <-->
    {g: pregroup[i:l] | isGroup{'g}}
 
+define unfold_abelg1 : abelg[i:l] <-->
+   {g: pregroup[i:l] | isGroup{'g} & isCommutative{'g}}
+
 define unfold_lcoset : lcoset{'s; 'g; 'b} <-->
    {x: 'g^car | exst a: 's^car. 'x = 'b *['g] 'a in 'g^car}
 
@@ -110,17 +113,27 @@ interactive_rw unfold_pregroup :
 interactive_rw unfold_group :
    group[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car; (all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. ^"1" ^* 'x = 'x in ^car) & (all x: ^car. ((^inv) 'x) ^* 'x = ^"1" in ^car)}
 
+interactive_rw unfold_abelg :
+   abelg[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car; ((all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. ^"1" ^* 'x = 'x in ^car) & (all x: ^car. ((^inv) 'x) ^* 'x = ^"1" in ^car)) & (all x: ^car. all y: ^car. 'x ^* 'y = 'y ^* 'x in ^car)}
+
 let fold_pregroup1 = makeFoldC << pregroup[i:l] >> unfold_pregroup1
 let fold_pregroup = makeFoldC << pregroup[i:l] >> unfold_pregroup
 let fold_isGroup = makeFoldC << isGroup{'g} >> unfold_isGroup
 let fold_group1 = makeFoldC << group[i:l] >> unfold_group1
 let fold_group = makeFoldC << group[i:l] >> unfold_group
+let fold_abelg1 = makeFoldC << abelg[i:l] >> unfold_abelg1
+let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
+let fold_lcoset = makeFoldC << lcoset{'s; 'g; 'b} >> unfold_lcoset
+let fold_rcoset = makeFoldC << rcoset{'s; 'g; 'b} >> unfold_rcoset
+let fold_normalSubg = makeFoldC << normalSubg[i:l]{'s; 'g} >> unfold_normalSubg
 
 let groupDT n = rw unfold_group n thenT dT n
+(*let abelgDT n = rw unfold_abelg n thenT dT n*)
 
 let resource elim +=
-   [<<group[i:l]>>, groupDT]
-
+   [<<group[i:l]>>, groupDT;
+(*    <<abelg[i:l]>>, abelgDT*)
+   ]
 let resource intro +=
    [<<group[i:l]>>, wrap_intro (groupDT 0)]
 
@@ -142,6 +155,9 @@ dform isGroup_df : except_mode[src] :: isGroup{'g} =
 
 dform inv_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: ('g^inv 'a) =
    math_inv{'g; 'a}
+
+dform abelg_df : except_mode[src] :: abelg[i:l] =
+   math_abelg{slot[i:l]}
 
 dform lcoset_df : except_mode[src] :: lcoset{'h; 'g; 'a} =
    math_lcoset{'h; 'g; 'a}
@@ -172,6 +188,10 @@ interactive group_type {| intro [] |} 'H :
 interactive group_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: squash{.all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car)}; v: squash{.all x: 'g^car. 'g^"1" *['g] 'x = 'x in 'g^car}; w: squash{.all x: 'g^car. ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: group[i:l]; 'J['g] >- 'C['g] }   
+
+interactive isGroup_wf {| intro [intro_typeinf <<'g>>] |} 'H pregroup[i:l] :
+   sequent [squash] { 'H >- 'g in pregroup[i:l] } -->
+   sequent ['ext] {'H >- "type"{isGroup{'g}} }
 
 interactive car_wf {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
    sequent [squash] {'H >- 'g in group[i:l] } -->
@@ -386,6 +406,25 @@ interactive id_commut2 {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
    sequent [squash] {'H >- 'g in group[i:l] } -->
    sequent [squash] {'H >- 'a in 'g^car } -->
    sequent ['ext] {'H >- 'a *['g] 'g^"1" = 'g^"1" *['g] 'a in 'g^car }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Abelian group}
+ *
+ * @end[doc]
+ *)
+interactive abelg_type {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{abelg[i:l]} }
+
+interactive abelg_intro {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'g in group[i:l] } -->
+   [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
+   sequent ['ext] { 'H >- 'g in abelg[i:l] }
+
+interactive abelg_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; g: abelg[i:l]; x: 'g in group[i:l]; y: isCommutative{'g}; 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: abelg[i:l]; 'J['g] >- 'C['g] }
+(*! @docoff *)
 
 interactive subgroup_ref {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
    sequent [squash] {'H >- 'g in group[i:l] } -->

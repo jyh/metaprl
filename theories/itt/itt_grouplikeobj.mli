@@ -70,6 +70,8 @@ declare premonoid[i:l]
 declare isMonoid{'g}
 declare monoid[i:l]
 declare isCommutative{'g}
+declare csemigroup[i:l]
+declare cmonoid[i:l]
 declare subStructure{'s; 'g}
 
 (************************************************************************
@@ -86,6 +88,10 @@ topval fold_isMonoid : conv
 topval fold_monoid1 : conv
 topval fold_monoid : conv
 topval fold_isCommutative : conv
+topval fold_csemigroup1 : conv
+topval fold_csemigroup : conv
+topval fold_cmonoid1 : conv
+topval fold_cmonoid : conv
 topval fold_subStructure : conv
 
 (*

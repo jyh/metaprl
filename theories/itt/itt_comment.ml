@@ -1396,7 +1396,7 @@ dform groupoid_df1 : except_mode[tex] :: math_groupoid{'i} =
    `"Groupoid[" slot{'i} `"]"
 
 dform semigroup_df1 : except_mode[tex] :: math_semigroup{'i} =
-   `"Semiroup[" slot{'i} `"]"
+   `"Semigroup[" slot{'i} `"]"
 
 dform monoid_df1 : except_mode[tex] :: math_monoid{'i} =
    `"Monoid[" slot{'i} `"]"

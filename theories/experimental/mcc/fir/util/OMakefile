@@ -1,20 +1,35 @@
+#
+# Include directories
+#
 OCAMLINCLUDES =\
 	-I .\
+	-I $(MCC)/fir/type\
 	-I $(ROOT)/theories/tactic\
 	-I $(ROOT)/theories/ocaml\
 	-I $(ROOT)/theories/base\
 	-I $(LIBMOJAVE)/naml/stdlib\
 	-I $(LIBMOJAVE)/util
 
+#
 # Library files
+#
 MPFILES =\
 	m_prec\
 	m_int\
 	m_rawint\
 	m_rawfloat\
 	m_set\
-	m_fir
+	m_fir\
+	m_fir_term
 
+#
+# At least m_fir_term needs to be compiled with -rectypes
+#
+OCAMLFLAGS += -rectypes
+
+#
+# Build the theory
+#
 Theory($(MPFILES))
 
 #
@@ -26,4 +41,4 @@ clean:
 realclean:
     $(REALCLEAN)
 
-local: theory$(LIB_SUFFIX)
+all: theory$(LIB_SUFFIX)

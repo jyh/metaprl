@@ -83,8 +83,8 @@ define unfold_prefield1 : prefield[i:l] <-->
    record["inv":t]{r. 'r^car0 -> 'r^car0 ; record["car0":t]{univ[i:l];ring[i:l]}}
 
 define unfold_isField1 : isField{'F} <-->
-	all a: 'F^car0. (('a in 'F^car) & ('a <> 'F^"0")) &
-	all b: 'F^car. (('b <> 'F^"0") => ('b in 'F^car0)) &
+	all a: 'F^car0. (('a in 'F^car) & ('a <> 'F^"0" in 'F^car)) &
+	all b: 'F^car. (('b <> 'F^"0" in 'F^car) => ('b in 'F^car0)) &
 	all c: 'F^car0. ('F^inv 'c) *['F] 'c = 'F^"1" in 'F^car
 
 define unfold_field1 : field[i:l] <-->

@@ -967,7 +967,7 @@ interactive_rw ge_addMono2_rw 'c :
 
 let ge_addMono2C = ge_addMono2_rw
 
-let reduce_geLeftC = (addrC [0] normalizeC)
+let reduce_geLeftC = (addrC [0] (normalizeC thenC (termC provideConstantC)))
 let reduce_geRightC = (addrC [1] (normalizeC thenC (termC provideConstantC)))
 
 let reduce_geCommonConstT = argfunT (fun i p ->
@@ -977,7 +977,7 @@ let reduce_geCommonConstT = argfunT (fun i p ->
       let (a,b)=dest_add left in
       if is_number_term a then
          thenLocalMT (rw (ge_addMono2_rw (mk_minus_term a)) i)
-                     (rw reduce_geLeftC i)
+                     (rw (addrC [0] normalizeC) i)
       else
          idT
    else

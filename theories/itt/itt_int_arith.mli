@@ -52,3 +52,11 @@ topval onAllLocalMCumulativeHypsT : (int -> tactic) -> tactic
 topval normalizeC : conv
 
 topval arithT : tactic
+
+(* sometimes these parts of arithT are useful to figure out why arithT does not work
+topval arithRelInConcl2HypT : tactic
+topval anyArithRel2geT : int -> tactic
+topval tryReduce_geT : int -> tactic
+topval findContradRelT : tactic
+topval reduceContradRelT : int -> tactic
+*)

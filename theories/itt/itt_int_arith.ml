@@ -689,7 +689,7 @@ let lookup h t =
 let add h t =
 	let (n,k,tab) = !h in
 	begin
-		eprintf"%i<-%a%t" n print_term t eflush;
+		(*eprintf"%i<-%a%t" n print_term t eflush;*)
 		h:=(succ n, k, TTable.add tab t n)
 	end
 
@@ -699,7 +699,7 @@ let print_stat h =
 	eprintf "cacheT: %i goals, %i lookups%t" n k eflush
 
 let print_statT h = funT ( fun p ->
-(*	if !debug_int_arith then*)
+	if !debug_int_arith then
 		print_stat h;
 	idT
 )
@@ -708,7 +708,7 @@ let tryAssertT info t = funT ( fun p ->
 	if mem info t then idT
 	else
 		begin
-			eprintf "%i<-%a%t" (succ(Sequent.hyp_count p)) print_term t eflush;
+			(*eprintf "%i<-%a%t" (succ(Sequent.hyp_count p)) print_term t eflush;*)
 			add info t;
 			assertT t
 		end

@@ -832,9 +832,7 @@ doc <:doc<
 interactive trivial_hom group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
-   [wf] sequent { <H> >- 'f in 'A^car -> 'B^car } -->
-   [main] sequent { <H>; x: 'A^car >- 'f 'x = 'B^"1" in 'B^car } -->
-   sequent { <H> >- 'f in groupHom{'A; 'B} }
+   sequent { <H> >- lambda{x. 'B^"1"} in groupHom{'A; 'B} }
 
 doc <:doc< 
    @begin[doc]

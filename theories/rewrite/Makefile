@@ -1,9 +1,9 @@
 # Libraries
-REF_ROOT := ../..
-INCLUDE := -I . -I $(REF_ROOT)/mllib -I $(REF_ROOT)/refiner -I $(REF_ROOT)/library -I ../tactic -I ../base -I ../itt
-OCAMLFLAGS := -g -root $(REF_ROOT)
-OCAMLC := $(REF_ROOT)/filter/prlcomp.run
-CAMLP4 := $(REF_ROOT)/filter/prlcomp.run -E -root $(REF_ROOT)
+ROOT := ../..
+INCLUDE := -I . -I $(ROOT)/mllib -I $(ROOT)/refiner -I $(ROOT)/library -I ../tactic -I ../base -I ../itt
+OCAMLFLAGS := -g -root $(ROOT)
+OCAMLC := $(ROOT)/filter/prlcomp.run
+CAMLP4 := $(ROOT)/filter/prlcomp.run -E -root $(ROOT)
 
 # Program files
 PFILES :=\
@@ -11,9 +11,9 @@ PFILES :=\
 
 # Libraries
 MLLIBS :=\
-	$(REF_ROOT)/mllib/util\
-	$(REF_ROOT)/refiner/refiner\
-	$(REF_ROOT)/library/library\
+	$(ROOT)/mllib/util\
+	$(ROOT)/refiner/refiner\
+	$(ROOT)/library/library\
 	../tactic/tactics\
 	../base/base\
 	../itt/itt
@@ -35,9 +35,9 @@ clean::
 	$(RM) *.p4* *.pp*
 
 # Add dependency for parser
-$(addsuffix .cmiz, $(MFILES)) $(addsuffix .cmoz, $(MFILES)): $(REF_ROOT)/filter/prlcomp.cma
-$(addsuffix .p4i, $(MFILES)) $(addsuffix .p4, $(MFILES)): $(REF_ROOT)/filter/prlcomp.cma
+$(addsuffix .cmiz, $(MFILES)) $(addsuffix .cmoz, $(MFILES)): $(ROOT)/filter/prlcomp.cma
+$(addsuffix .p4i, $(MFILES)) $(addsuffix .p4, $(MFILES)): $(ROOT)/filter/prlcomp.cma
 
 # Real makefile
-include $(REF_ROOT)/mk/config
+include $(ROOT)/mk/config
 include Makefile.dep

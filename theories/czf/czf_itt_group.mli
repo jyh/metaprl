@@ -33,4 +33,3 @@ declare inv{'s}
 
 topval groupCancelLeftT : term -> tactic
 topval groupCancelRightT : term -> tactic
-(* topval unique_InvT : tactic *)

@@ -44,7 +44,9 @@ dform op_df : parens :: except_mode[src] :: op{'s1; 's2} =
 dform inv_df : parens :: except_mode[src] :: inv{'s} =
    slot["le"]{'s} `"'"
 
-(* axioms *)
+(*
+ * axioms
+ *)
 interactive car_wf {| intro[] |} 'H :
    sequent ['ext] { 'H >- isset{car} }
 
@@ -60,8 +62,7 @@ interactive op_wf2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s2; car} } -->
    sequent ['ext] { 'H >- mem{op{'s1; 's2}; car} }
 
-(* The following two rules are almost the same as the next two, but are necessary. *)
-
+(* The following two axioms are almost the same as the next two, but are necessary. *)
 interactive op_eq1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -93,9 +94,6 @@ interactive op_assoc1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s3; car} } -->
    sequent ['ext] { 'H >- equal{op{op{'s1; 's2}; 's3}; op{'s1; op{'s2; 's3}}} }
 
-(* let op_assoc1T p =
-      op_assoc1 (Sequent.hyp_count_addr p) p *)
-
 interactive op_assoc2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -104,9 +102,6 @@ interactive op_assoc2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s2; car} } -->
    sequent ['ext] { 'H >- mem{'s3; car} } -->
    sequent ['ext] { 'H >- equal{op{'s1; op{'s2; 's3}}; op{op{'s1; 's2}; 's3}} }
-
-(* let op_assoc2T p =
-      op_assoc2 (Sequent.hyp_count_addr p) p *)
 
 interactive id_wf1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- isset{id} }
@@ -123,9 +118,6 @@ interactive id_eq2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- mem{'s; car} } -->
    sequent ['ext] { 'H >- equal{op{'s; id}; 's} }
-
-let id_elim2T p =
-   id_eq1 (Sequent. hyp_count_addr p) p
 
 interactive inv_wf1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
@@ -150,7 +142,9 @@ interactive inv_id2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; car} } -->
    sequent ['ext] { 'H >- equal{op{'s1; inv{'s1}}; id} }
 
-(* theorems *)
+(*
+ * theorems
+ *)
 
 (* Cancellation: a * b = a * c => b = c *)
 interactive cancel1 {| intro [] |} 'H 's1 :

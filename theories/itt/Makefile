@@ -96,7 +96,7 @@ opt: $(MAIN).cmxa
 
 $(TEST).run: $(CMOBJS)
 	rm -f $@
-	$(OCAMLC) -o $@ -custom -linkall $(CMOBJS) $(CCLIBS)
+	$(OCAMLCP) -o $@ -custom -linkall $(CMOBJS) $(CCLIBS)
 
 $(TEST).opt: $(CMXOBJS)
 	rm -f $@

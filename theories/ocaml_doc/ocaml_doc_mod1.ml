@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * ADT ADTs Fset acts expr fset goto grep linenum ll
  * mem namespace stdin timestep cc ed
@@ -78,7 +79,7 @@ functions defined in the @code{.ml} file.
 @section[signatures]{Signatures}
 
 In OCaml, a @emph{signature} contains type definitions and function
-declarations for the visible types and methods in the module.  to see
+declarations for the visible types and methods in the module.  To see
 how this works, let's revisit the binary trees we defined in Chapter
 @refchapter[unions].  A binary tree defines a simple, distinct
 concept, and it is an ideal candidate for encapsulation.
@@ -179,7 +180,7 @@ implementation and inaccessible to other program modules.
 
 @section[implementations]{Implementations}
 
-The module implementation is defined the a @code{.ml} file with the
+The module implementation is defined in a @code{.ml} file with the
 same name as the signature file.  The implementation contains parts
 that correspond to each of the parts in the signature.
 
@@ -200,7 +201,7 @@ in the signature.  The implementation may also include other types.
 These types will be @emph{private} to the implementation; they will
 not be visible outside the implementation.
 
-for the @tt{fset} module, let's use the red-black implementation of
+For the @tt{fset} module, let's use the red-black implementation of
 balanced binary trees.  We need two type definitions: the definition
 of the @tt{Red} and @tt{Black} labels, and the tree definition itself.
 
@@ -580,7 +581,7 @@ access values that may have been hidden by an @tt{open} statement.
 @subsection[open_errors]{A note about @tt{open}}
 
 Be careful with the use of @tt{open}.  In general, fully qualified
-names are provide more information, specifying not only the name of the
+names provide more information, specifying not only the name of the
 value, but the name of the module where the value is defined.  For
 example, the @tt{Fset} and @tt{List} modules both define a @tt{mem}
 function.  In the @tt{Test} module we just defined, it may not be

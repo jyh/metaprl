@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * Dereferencing blit bool doesn downto fields int
  * jason ll namespace permissable rec ref toplevel
@@ -45,7 +46,7 @@ vector of items with constant time access to each element.  There are
 operations to modify some of the fields in a record, and any of the
 fields in an array.
 
-@section[records]{Records}
+@section[sect_records]{Records}
 
 A record is a labeled collection of values of arbitrary types.  The
 syntax for a record type is a set of field type definitions surrounded
@@ -93,7 +94,8 @@ record @tt{r}.
 
 Pattern matching can also be used to access the fields of a record.
 The syntax for a pattern is like a record value, but the fields
-contain a label and a pattern @code{label = patt}.
+contain a label and a pattern @code{label = patt}, and not all of the
+fields have to be included.
 
 @begin[verbatim]
 # let { name = n; height = h } = jason;;
@@ -121,7 +123,7 @@ Record fields can also be modified by assignment, but @emph{only if
 the record field is declared as @bf{mutable}}.  The syntax for a
 mutable field uses the @tt{mutable} keyword before the field label.
 For example, if we wanted to allow salaries to be modified, we would
-redeclare the record entry as follows.
+re-declare the record entry as follows.
 
 @begin[verbatim]
 # type db_entry =
@@ -215,9 +217,9 @@ Chapter @refchapter[modules].
 
 @section[references]{References}
 
-Mutable variables are common enough in OCaml programs that a special
-form is defined just for this case.  Mutable fields use the @tt{ref}
-function.
+Variables are @emph{never} mutable.  However, mutable values are
+common enough in OCaml programs that a special form is defined just
+for this case.  Mutable values use the @tt{ref} function.
 
 @begin[verbatim]
 # let i = ref 1;;
@@ -235,6 +237,8 @@ Dereferencing uses the @code{!} operator, and assignment uses the
 @code{:=} infix operator.
 
 @begin[verbatim]
+# !i;;
+- : int = 1;;
 # i := 17;;
 - : unit = ()
 # !i;;
@@ -257,9 +261,9 @@ operator is more like the @code{*} operator in C.
 
 @subsection[ref_value_restriction]{Value restriction}
 
-As we mentioned in Section @refsection[value_restriction], side-effect
-interact with type inference.  We considered, for example, an
-``identity'' function that saves a value on its first call, and
+As we mentioned in Section @refsection[value_restriction], mutability
+and side-effects interact with type inference.  For example, consider
+a ``one-shot'' function that saves a value on its first call, and
 returns that value on all future calls.  This function is not properly
 polymorphic.  We can illustrate this using a single variable.
 
@@ -294,7 +298,7 @@ indicate.
 @section[arrays]{Arrays and strings}
 
 Arrays are fixed-size vectors of values.  All of the values must have
-the same type.  The fields in the array may be accessed and modified
+the same type.  The fields in the array can be accessed and modified
 in constant time.  Arrays can be created with the $@tt{[|} e_1; @ldots; e_n
 @tt{|]}$ syntax, which creates an array of length $n$ initialized with
 the values computed from the expressions $e_1, @ldots, e_n$.
@@ -354,7 +358,7 @@ to copy.
 
 In OCaml, strings are a lot like packed arrays of characters.  The
 access and update operations use the syntax $s@tt{.[}i@tt{]}$ and
-$s@tt{.[}i@tt{] <-} c$ operators.
+$s@tt{.[}i@tt{] <-} c$.
 
 @begin[verbatim]
 # let s = "Jason";;
@@ -384,11 +388,11 @@ arbitrary contents.
 
 Sequential execution is not useful in a functional language--why
 compute a value and discard it?  In an imperative language, including
-a language like OCaml, sequential execution is needed to compute by
-side-effect.
+a ``semi-imperative'' language like OCaml, sequential execution is
+used to compute by side-effect.
 
 Sequential execution is defined using the semicolon operator.  The
-expression $e_1; e_2$ evaluates $e_1$, discards the result (it
+expression $e_1; e_2$ evaluates $e_1$, discards the result ($e_1$
 probably has a side-effect), and evaluates $e_2$.  Note that the
 semicolon is a @emph{separator} (as in Pascal), not a
 @emph{terminator} (as in C).  The compiler produces a warning if

@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * API CS LCF ML Monolithic Scalability Vino rec scalability
  * stance filesystems ll gcd managable updatable
@@ -36,10 +37,10 @@
 extends Base_theory
 
 (*!
- * @begin[doc]
+@begin[doc]
 
 This document is an introduction to ML programming, specifically for
-the OCaml implementation.  In CS134a, we used C (and variations) to
+the OCaml implementation.  In CS134a, we used C (and variants) to
 specify processes, monitors, semaphores, device drivers and more.
 The topic of CS134a was operating systems, and the C language provides
 an appropriate machine model for programming the machine.

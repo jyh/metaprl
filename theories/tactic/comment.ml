@@ -814,6 +814,20 @@ dform quotation_df2 : except_mode[tex] :: quotation{'t} =
 
 (*!
  * @begin[doc]
+ * Footnotes uses the @code{@footnote} form.
+ * @end[doc]
+ *)
+declare footnote{'t}
+(*! @docoff *)
+
+dform footnote_df1 : mode[tex] :: footnote{'t} =
+   izone `"\\footnote{" ezone 't izone `"}" ezone
+
+dform footnote_df2 : except_mode[tex] :: footnote{'t} =
+   hspace 't hspace
+
+(*!
+ * @begin[doc]
  * Lists can be declared in three forms.  The @tt{enumerate} form
  * numbers the elements of the list; the @tt{itemize} form places a
  * bullet before each item; and the @tt{description} form takes

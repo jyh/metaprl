@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * bprintf dd ddd dddd deallocates eprintf excl fprintf gen int ll nonblock
  * printf rdonly sprintf stderr stdout trunc wronly creat
@@ -63,7 +64,7 @@ val stderr : out_channel
 There are two functions to open an output file: the @code{open_out}
 function opens a file for writing text data, and the
 @code{open_out_bin} opens a file for writing binary data.  These two
-functions are the same on a Unix system.  On a Macintosh or Windows
+functions are identical on a Unix system.  On a Macintosh or Windows
 system, the @code{open_out} function performs line termination
 translation (why do all these systems use different line
 terminators?), while the @code{open_out_bin} function writes the data
@@ -71,7 +72,7 @@ exactly as written.  These functions raise the @code{Sys_error}
 exception if the file can't be opened; otherwise they return an
 @code{out_channel}.
 
-A file can be opened with the corresponding functions @code{open_in}
+A file can be opened with the functions @code{open_in}
 and @code{open_in_bin}.
 
 @begin[verbatim]
@@ -118,7 +119,7 @@ created, and the @code{string} argument is the name of the file.
 
 The closing operations @code{close_out} and @code{close_in} close the
 channels.  If you forget to close a file, the garbage
-collector will eventually close it for you.  however, it is good
+collector will eventually close it for you.  However, it is good
 practice to close the channel manually when you are done with it.
 
 @begin[verbatim]

@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[doc]
  * @chapter[ocaml_doc_name1]{Variables, naming, and binding}
  * @end[doc]

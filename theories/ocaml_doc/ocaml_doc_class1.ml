@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * Coercions Subclassing Superclassing
  * instanceof int fields pos subclassing

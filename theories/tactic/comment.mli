@@ -197,6 +197,7 @@ declare email[text:s]
 declare center{'t}
 declare quote{'t}
 declare quotation{'t}
+declare footnote{'t}
 declare enumerate{'t}
 declare itemize{'t}
 declare description{'t}

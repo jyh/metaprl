@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * Arg ArgName ArgSig Elt EltSig FsetSig Int IntSet MakeFset
  * SigName arg doesn elt int ll mem namespace sig struct val

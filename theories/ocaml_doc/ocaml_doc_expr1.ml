@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * asl asr bool cc chr cmo cmx coercions gdb int lor lsl lsr ml
  * doesn ll untyped mod
@@ -38,14 +39,15 @@ extends Base_theory
 (*!
  *
 @begin[doc]
+
 Many functional programming implementations include a significant
-runtime that includes libraries and a garbage collector.  They also
-often include a toploop that can be used to interact with the
-system.  OCaml provides a compiler and a toploop.  By default, the
-toploop is called @tt{ocaml}.  The toploop prints a prompt (@code{#}),
-reads an input expression, and evaluates it.  Expressions in the
-toploop must be terminated by a double-semicolon @code{;;}.  My
-machine name is @code{kenai}.
+runtime that defines a standard library and a garbage collector.  They
+also often include a toploop that can be used to interact with the
+system.  OCaml provides a compiler, a runtime, and a toploop.  By
+default, the toploop is called @tt{ocaml}.  The toploop prints a
+prompt (@code{#}), reads an input expression, evaluates it, and prints
+the result .  Expressions in the toploop must be terminated by a
+double-semicolon @code{;;}.  My machine name is @code{kenai}.
 
 @begin[verbatim]
 <kenai 113>ocaml
@@ -57,14 +59,17 @@ machine name is @code{kenai}.
 @end[verbatim]
 
 The toploop prints the @emph{type} of the result (in this case,
-@code{int}), and the value ($5$).  To exit the toploop, you may type
-the end-of-file character (usually Control-D in Unix).
+@code{int}) and the value ($5$).  To exit the toploop, you may type
+the end-of-file character (usually Control-D in Unix, and Control-Z in
+Windows).
 
 @section[ocaml_doc_expr1]{Basic expressions}
 
 OCaml is a @emph{strongly typed} language: every expression must have
 a type, and expressions of one type may not be used as expressions in
-another type.  There are no implicit coercions.
+another type.  There are no implicit coercions.  Normally, you do not
+have to input the types of expressions.  @emph{Type inference} is used
+to figure out the types for you.
 
 The basic types are @code{unit}, @code{int}, @code{char}, @code{float},
 @code{bool}, and @code{string}.
@@ -79,26 +84,30 @@ side-effect.  It corresponds to the @code{void} type in C.
 
 @subsection[ocaml_doc_expr_int]{@tt{int}: the integers}
 
-The @code{int} type is the type of 31 bit signed integers: $@ldots, -2, -1, 0, 1, 2,
-@ldots$.  There are the usual expressions
+The @code{int} type is the type of signed integers: $@ldots, -2, -1,
+0, 1, 2, @ldots$.  The precision is finite.  On a 32-bit machine
+architecture, the precision is 31 bits (one bit is reserved for use by
+the runtime), and on a 64-bit architecture, the precision is
+63 bits.
+
+There are the usual expressions on integers
 @target[ocaml_doc_expr_plus]{+} (addition),
 @target[ocaml_doc_expr_minus]{-} (subtraction),
 @target[ocaml_doc_expr_star]{*} (multiplication),
 @target[ocaml_doc_expr_div]{/} (division), and
 @target[ocaml_doc_expr_mod]{@tt{mod}} (remainder).
-
 In addition there are the normal shifting and masking operators on the
 binary representations of the numbers.
 
 @begin[itemize]
 
-@item{$i$ @target[ocaml_doc_expr_lsl]{@tt{lsl}} $j$: logical shift left $i * 2^{j}$.}
+@item{$i$ @target[ocaml_doc_expr_lsl]{@tt{lsl}} $j$: logical shift left $i @cdot 2^{j}$.}
 
 @item{$i$ @target[ocaml_doc_expr_lsr]{@tt{lsr}} $j$: logical shift right $i @div
    2^{j}$ ($i$ is treated as an unsigned twos-complement number).}
 
 @item{$i$ @target[ocaml_doc_expr_asr]{@tt{asl}} $j$: arithmetic shift
-   left $i * 2^{j}$.}
+   left $i @cdot 2^{j}$.}
 
 @item{$i$ @target[ocaml_doc_expr_asr]{@tt{asr}} $j$: arithmetic shift right $i @div
    2^{j}$ (the sign of $i$ is preserved).}
@@ -122,11 +131,13 @@ Here are a few examples.
 0.2, 2e7, 3.1415926, 31.415926e-1
 @end[center]
 
-The integer arithmetic operators @emph{do not} work with floating
-point values.  The corresponding operators include a `.':
-@target[ocaml_doc_expr_plusf]{+.}, @target[ocaml_doc_expr_minusf]{-.},
-@target[ocaml_doc_expr_starf]{*.}, and @target[ocaml_doc_expr_divf]{/.}.
-There are also coercion functions @target[int_of_float]{@tt{int_of_float}} and
+The integer arithmetic operators @emph{do not work} with floating
+point values.  The corresponding operators include a `.': addition is
+@target[ocaml_doc_expr_plusf]{+.}, subtraction is
+@target[ocaml_doc_expr_minusf]{-.}, multiplication is
+@target[ocaml_doc_expr_starf]{*.}, and division is
+@target[ocaml_doc_expr_divf]{/.}.  There are also coercion functions
+@target[int_of_float]{@tt{int_of_float}} and
 @target[float_of_int]{@tt{float_of_int}}.
 
 @begin[verbatim]
@@ -146,8 +157,9 @@ ocaml
 
 @subsection[ocaml_doc_expr_char]{@tt{char}: the characters}
 
-The character type is currently implemented as characters from the
-ASCII character set.  The syntax for a character uses single quotes.
+The character type is implemented as characters from the ASCII
+character set.  The syntax for a character constant uses single
+quotes.
 
 @begin[center]
 @begin[verbatim]
@@ -161,16 +173,16 @@ ASCII character @tt{'x'}, not @tt{'P'}.
 There are functions for converting between characters and integers.
 The function @target[char_code]{@tt{Char.code}} returns the integer
 corresponding to a character, and @target[chr]{@tt{Char.chr}} returns
-the character with the given ASCII code.
-
-The @target[lowercase]{@tt{Char.lowercase}} and
-@target[uppercase]{@tt{Char.uppercase}} functions give the equivalent lower
-or uppercase characters.
+the character with the given ASCII code.  The
+@target[lowercase]{@tt{Char.lowercase}} and
+@target[uppercase]{@tt{Char.uppercase}} functions give the equivalent
+lower or uppercase characters.
 
 @subsection[ocaml_doc_expr_string]{@tt{string}: character strings}
 
-Character strings are a built-in type.  Unlike strings in C,
-character strings do not use @code{'\000'} as a termination character.  The
+Character strings are a built-in type.  Unlike strings in C, character
+strings are not arrays of characters, and they do not use
+@code{'\000'} as a termination character.  The
 @target[string_length]{@tt{String.length}} function computes the
 length of the string.  The syntax for strings uses double-quotes.
 Characters in the string may use the @code{\ddd} syntax.
@@ -200,7 +212,7 @@ replaces character $i$ in string $s$ by character $c$.
 There are only two Boolean values: @tt{true} and @tt{false}.  Every
 relation returns a Boolean value.  Logical negation is
 performed by the @tt{not} function.  The standard binary relations
-take two values of equal types are compare them in the normal way.
+take two values of equal types and compare them in the normal way.
 
 @begin[itemize]
 @item{$x = y$: equality}
@@ -241,13 +253,13 @@ $e_2$}.
 
 @section[ocaml_compiling]{Compiling your code}
 
-OCaml also includes two compilers.  If you wish to compile your code,
-you should place it in a file with the @tt{.ml} suffix.  There are two
-compilers: @tt{ocamlc} compiles to byte-code, and @tt{ocamlopt}
-compiles to native machine code.  The native code is roughly three
-times faster, but compile time is a lot longer.  The usage is a lot
-like @tt{cc}.  The double-semicolon terminators are not necessary in
-the source files; you may omit them if the source text is unambiguous.
+If you wish to compile your code, you should place it in a file with
+the @tt{.ml} suffix.  There are two compilers: @tt{ocamlc} compiles to
+byte-code, and @tt{ocamlopt} compiles to native machine code.  The
+native code is roughly three times faster, but compile time is 
+longer.  The usage is similar to @tt{cc}.  The double-semicolon
+terminators are not necessary in the source files; you may omit them
+if the source text is unambiguous.
 
 @begin[itemize]
 @item{To compile a single file, use @tt{ocamlc -g -c @emph{file}.ml}.
@@ -292,7 +304,7 @@ operational semantics of the programming language, but an approximate
 definition is that a valid program will never fault because of an
 invalid machine operation.  All memory accesses will be valid.  ML
 guarantees safety by guaranteeing that every correctly-typed value is
-valid value, and Lisp guarantees it by checking for validity at run
+valid, and Lisp guarantees it by checking for validity at run
 time.  One surprising (some would say annoying) consequence is
 that ML has no @emph{nil} values; again, all correctly type values are
 valid.
@@ -331,7 +343,7 @@ To begin to see how this works, let's look at the conditional
 expression.
 
 @begin[verbatim]
-<kenai 229>pr -n -t x.ml
+<kenai 229>cat -b x.ml
     1	if 1 < 2 then
     2	   1
     3	else
@@ -357,7 +369,7 @@ If it is omitted, the conditional is treated as if the @tt{else} case
 returns the @tt{()} value.  The following code has a type error.
 
 @begin[verbatim]
-<kenai 236>pr -n -t y.ml
+<kenai 236>cat -b y.ml
     1	if 1 < 2 then
     2	   1
 <kenai 237>ocamlc -c y.ml

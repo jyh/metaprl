@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * Obfuscated Ok expr incr rec toplevel
  * @end[spelling]
@@ -37,12 +38,12 @@ extends Base_theory
 (*!
  * @begin[doc]
 
-So far, we have only considered simple expressions, not involving
+So far, we have only considered simple expressions not involving
 variables.  In ML, variables are @emph{names} for values.  In a purely
 functional setting, it is not possible to tell the difference between
-a variable from the value it stands for.
+a variable and the value it stands for.
 
-In OCaml variable bindings are introduced with the @tt{let} keyword.
+Variable bindings are introduced with the @tt{let} keyword.
 The syntax of a simple top-level declaration is as follows.
 
 @begin[center]
@@ -68,12 +69,14 @@ Definitions using @tt{let} can also be nested using the
 @tt{let @emph{name} = @emph{expr1} in @emph{expr2}}
 @end[center]
 
-The expression @emph{expr2} is called the body of the @tt{let}.  Lets
-of this form are expressions; the value of a @tt{let} expression is
-the value of the body.  The variable @emph{name} is defined as the
-value of @emph{expr1} within the body.  Assuming that there is only
-one definition for @emph{name}, the variable @emph{name} is defined
-@emph{only} in the body @emph{expr2} and not @emph{expr1}.
+The expression @emph{expr2} is called the @emph{body} of the @tt{let}.
+The variable @emph{name} is defined as the value of @emph{expr1}
+within the body.  If there is only one definition for @emph{name}, the
+variable @emph{name} is defined @emph{only} in the body @emph{expr2}
+and not @emph{expr1} (or anywhere else).
+
+Lets with a body are expressions; the value of a @tt{let}
+expression is the value of the body.
 
 @begin[verbatim]
 # let x = 1 in
@@ -130,21 +133,28 @@ a @tt{let}.
 val incr : int -> int = <fun>
 @end[verbatim]
 
-The @code{->} is for a @emph{function type}.  The type before the arrow is
-the type of the function's argument, and the type after the arrow is
-the type of the result.  The @tt{incr} function takes an integer
-argument, and returns an integer.
+Note the type @code{int -> int} for the function.  The @code{->} is
+for a @emph{function type}.  The type before the arrow is the type of
+the function's argument, and the type after the arrow is the type of
+the result.  The @tt{incr} function takes an integer argument, and
+returns an integer.
 
 The syntax for function application (function call) is concatenation:
-the function is followed by its arguments.
+the function is followed by its arguments.  The precedence of function
+aplication is higher than most operators.  Parentheses are needed for
+arguments that are not simple expressions.
 
 @begin[verbatim]
 # incr 2;;
 - : int = 3
+# incr 2 * 3;;
+- : int = 9
+# incr (2 * 3);;
+- : int = 7
 @end[verbatim]
 
 Functions may also be defined with multiple arguments.  For example,
-the sum of two integers might be defined as follows.
+a function to compute the sum of two integers can be defined as follows.
 
 @begin[verbatim]
 # let sum = fun i j -> i + j;;
@@ -154,17 +164,19 @@ val sum : int -> int -> int = <fun>
 @end[verbatim]
 
 Note the @emph{type} for @tt{sum}: @code{int -> int -> int}.  The
-arrow associates to the right, so this could also be written
-@code{int -> (int -> int)}.  That is, @tt{sum} is a function that takes a single
+arrow associates to the right, so this could also be written @code{int
+-> (int -> int)}.  That is, @tt{sum} is a function that takes a single
 integer argument, and returns a function that takes another integer
 argument and returns an integer.  Strictly speaking, all functions in
 ML take a single argument; multiple-argument functions are implemented
-as @emph{nested} functions (this is called ``Currying'').
-The definition of @tt{sum} above is equivalent to the following
-explicitly-curried definition.
+as @emph{nested} functions (this is called ``Currying'', after Haskell
+Curry, a famous logician who had a significant impact on the design
+and interpretation of programming languages).  The definition of
+@tt{sum} above is equivalent to the following explicitly-curried
+definition.
 
 @begin[verbatim]
-# let sum = fun i -> (fun j -> i + j);;
+# let sum = (fun i -> (fun j -> i + j));;
 val sum : int -> int -> int = <fun>
 @end[verbatim]
 
@@ -191,10 +203,10 @@ val sum : int -> int -> int = <fun>
 
 @subsection[ocaml_doc_scoping]{Scoping and nested functions}
 
-In ML, functions may be arbitrarily nested.  They may also be defined
-and passed as arguments.  The rule for scoping uses static binding:
-the value of a variable is determined by the code in which a function
-is defined---not by the code in which a function is evaluated.  For
+Functions may be arbitrarily nested.  They may also be defined and
+passed as arguments.  The rule for scoping uses static binding: the
+value of a variable is determined by the code in which a function is
+defined---not by the code in which a function is evaluated.  For
 example, another way to define @tt{sum} is as follows.
 
 @begin[verbatim]
@@ -208,6 +220,7 @@ val sum : int -> int -> int = <fun>
 - : int = 7
 @end[verbatim]
 
+@noindent
 To illustrate the scoping rules, let's consider the following
 definition.
 
@@ -231,15 +244,14 @@ has no effect on the definition for @tt{addi}, and the application of
 @subsection[ocaml_doc_recursive_functions]{Recursive functions}
 
 Suppose we want to define a recursive function: that is, a function
-where the function is used in its own function body.  In functional
-languages, recursion is used to express repetition and looping.  For
-example, the ``power'' function that computes $x^i$ would be
-defined as follows.
+that is used in its own function body.  In functional languages,
+recursion is used to express repetition and looping.  For example, the
+``power'' function that computes $x^i$ would be defined as follows.
 
 @begin[verbatim]
 # let rec power i x =
      if i = 0 then
-        1
+        1.0
      else
         x *. (power (i - 1) x);;
 val power : int -> float -> float = <fun>
@@ -252,16 +264,16 @@ Normally, the function is @bf{not} defined in its own body.  The
 following definition is very different.
 
 @begin[verbatim]
-# let bogus i x =
+# let power_broken i x =
      (float_of_int i) +. x;;
-val bogus : int -> float -> float = <fun>
-# let bogus i x =
+val power_broken : int -> float -> float = <fun>
+# let power_broken i x =
      if i = 0 then
         1.0
      else
-        x *. (bogus (i - 1) x);;
-val bogus : int -> float -> float = <fun>
-# bogus 5 2.0;;
+        x *. (power_broken (i - 1) x);;
+val power_broken : int -> float -> float = <fun>
+# power_broken 5 2.0;;
 - : float = 12
 @end[verbatim]
 
@@ -297,7 +309,7 @@ approximately as follows.
 # let dx = 1e-10;;
 val dx : float = 1e-10
 # let deriv f =
-     (fun x -> (f x +. f (x +. dx)) /. dx);;
+     (fun x -> (f (x +. dx) -. f x) /. dx);;
 val deriv : (float -> float) -> float -> float = <fun>
 @end[verbatim]
 
@@ -306,7 +318,8 @@ the type is @code{(float -> float) -> (float -> float)}.  That is, the
 derivative is a function that takes a function as an argument, and
 returns a function.
 
-Let's apply this to the @tt{power} function defined above.
+Let's apply this to the @tt{power} function defined above, partially
+applied to the argument 3.
 
 @begin[verbatim]
 # let f = power 3;;
@@ -359,7 +372,7 @@ As you may have noticed in the previous section, the @bf{'} character
 is a valid character in a variable name.  In general, a variable name
 may contain letters (lower and upper case), digits, and the @bf{'} and
 @bf{_} characters. but @bf{it must} begin with a lowercase letter or
-the underscore character.
+the underscore character, and it may not the the @bf{_} all by itself.
 
 In OCaml, sequences of characters from the infix operators, like
 @code{+, -, *, /, ...} are also valid names.  The normal prefix

@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * adhoc cons deconstructed destructed doesn fst int
  * ll namespace obfuscation snd
@@ -43,9 +44,7 @@ variables.  This language is already Turing complete---we can code
 arbitrary data types using numbers and functions.  Of course, in
 practice, this would not only be inefficient, it would also make it
 very hard to understand our programs.  For efficient, and readable,
-data structure implementation we need @emph{aggregate types}.
-
-
+data structure implementations we need @emph{aggregate types}.
 
 OCaml provides a rich set of aggregate types, including tuples, lists,
 disjoint unions (also called tagged unions, or variant records),
@@ -122,11 +121,11 @@ function can no longer be applied to a string.
 
 This behavior is due to the @emph{value restriction}: for an
 expression to be truly polymorphic, it must be a value.  Values are
-expressions that evaluate to themselves.  For example, all numbers,
-characters, and string constants are values.  Functions are also
-values.  Function applications, like @code{identity identity} are
-@emph{not} values, because they can be simplified (the
-@code{identity identity} expression evaluates to @code{identity}).
+immutable expressions that evaluate to themselves.  For example,
+numbers and characters are values.  Functions are also values.
+Function applications, like @code{identity identity} are @emph{not}
+values, because they can be simplified (the @code{identity identity}
+expression evaluates to @code{identity}).
 
 The normal way to get around the value restriction is to use
 @emph{eta-expansion}, which is the technical term for adding extra
@@ -162,9 +161,11 @@ int int_identity(int i)
    return i;
 }
 
-char *string_identity(char *s)
+struct complex { float real; float imag; };
+
+struct complex complex_identity(struct complex x)
 {
-   return s;
+   return x;
 }
 @end[verbatim]
 
@@ -210,25 +211,25 @@ let add x y =
 The best solution would probably to have the compiler produce
 @emph{two} instances of the @tt{add} function, one for integers and
 another for floating point values.  This complicates the compiler, and
-with a sufficiently rich type system, type inference may become
+with a sufficiently rich type system, type inference would become
 undecidable.  @emph{That} would be a problem.
 
 The second reason for the omission is that overloading can make it
 more difficult to understand programs.  It may not be obvious by
 looking at the program text @emph{which} one of a function's instances
 is being called, and there is no way for a compiler to check if all
-the function's instances do ``similar'' things.
-
-I'm not sure I buy this argument.  Properly used, overloading reduces
-namespace clutter'by grouping similar functions under the same
+the function's instances do ``similar'' things@begin[footnote]
+The second reason is weaker.  Properly used, overloading reduces
+namespace clutter by grouping similar functions under the same
 name.  True, overloading is grounds for obfuscation, but OCaml is
 already ripe for obfuscation by allowing arithmetic functions like
-@code{(+)} to be redefined!
+@tt{+} to be redefined!
+@end[footnote].
 
 @section[tuples]{Tuples}
 
 Tuples are the simplest aggregate type.  They correspond to the
-@emph{ordered} tuples you have seen in mathematics, or set theory.  A
+ordered tuples you have seen in mathematics, or set theory.  A
 tuple is a collection of values of arbitrary types.  The syntax for a
 tuple is a sequence of expressions separated by commas.  For example,
 the following tuple is a pair containing a number and a string.
@@ -238,9 +239,9 @@ the following tuple is a pair containing a number and a string.
 val p : int * string = 1, "Hello"
 @end[verbatim]
 
-The syntax for the @emph{type} of a tuple is a @code{*} delimited list of the types of the
-components.  In this case, the type of the
-pair is @code{int * string}.
+The syntax for the type of a tuple is a @code{*} delimited list of the
+types of the components.  In this case, the type of the pair is
+@code{int * string}.
 
 Tuples can be @emph{deconstructed} using pattern matching, with any of
 the pattern matching constructs like @tt{let}, @tt{match}, @tt{fun},
@@ -267,6 +268,7 @@ val snd : 'a * 'b -> 'b = <fun>
 - : string = "Hello"
 @end[verbatim]
 
+Tuple patterns in a function argument must be enclosed in parentheses.
 Note that these functions are polymorphic.  The @tt{fst} and @tt{snd}
 functions can be applied to a pair of any type @code{'a * 'b};
 @tt{fst} returns a value of type @code{'a}, and @tt{snd} returns a
@@ -350,7 +352,7 @@ a list containing strings, and an @code{'a list} is a list containing
 elements of some type @code{'a} (but all the elements have to have the
 same type).
 
-Lists can be destructed using pattern matching.  For example, here is
+Lists can be deconstructed using pattern matching.  For example, here is
 a function that adds up all the numbers in an @code{int list}.
 
 @begin[verbatim]

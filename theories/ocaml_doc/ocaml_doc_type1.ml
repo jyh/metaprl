@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[doc]
  * @chapter[ocaml_doc_type1]{The OCaml type system}
  * @end[doc]

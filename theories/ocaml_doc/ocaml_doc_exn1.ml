@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * iff longjmp mod setjmp
  * @end[spelling]
@@ -46,7 +47,7 @@ or pass it through to the next exception handler.
 Exceptions were designed as a more elegant alternative to explicit
 error handling in more traditional languages.  In Unix/C, for example,
 most system calls return @code{-1} on failure, and @code{0} on
-success.  system code tends to be cluttered with explicit error
+success.  System code tends to be cluttered with explicit error
 handling code that obscures the intended operation of the code.  In the
 OCaml @tt{Unix} module, the system call stubs raise an exception on
 failure, allowing the use of a single error handler for a block of

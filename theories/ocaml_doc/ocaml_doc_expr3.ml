@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * btree iff log mem rebalancing
  * @end[spelling]
@@ -42,7 +43,7 @@ Disjoint unions, also called @emph{tagged unions} or @emph{variant
 records}, are ubiquitous in OCaml programs.  A disjoint union
 represents a set of @emph{cases} of a particular type.  For example,
 we may say that a binary tree contains nodes that are either
-@emph{interior} nodes, or @emph{leaves}.  Suppose that the interior
+@emph{interior} nodes or @emph{leaves}.  Suppose that the interior
 nodes have a label of type @code{'a}.  In OCaml, this would be
 expressed with the following type definition.
 
@@ -62,17 +63,20 @@ right child of type @code{'a btree}.  The type @code{btree} is
 parameterized by the type argument @code{'a}.
 
 The tags (like @code{Node} and @code{Leaf}), are called
-@emph{constructors}.  Technically, the constructors can be viewed as
-functions that @emph{inject} values into the disjoint union.  Thus,
-the @code{Node} constructor would be a function of type
-@code{('a * 'a btree * 'a btree) -> 'a btree}.  Note that OCaml does not allow
-constructors to be passed as arguments.
+@emph{constructors}.  Constructors can be viewed as functions that
+@emph{inject} values into the disjoint union.  Thus, the @code{Node}
+constructor would be a function of type @code{('a * 'a btree * 'a
+btree) -> 'a btree}.  For technical reasons, OCaml does not allow
+non-trivial constructors to be used as values.
 
 @begin[verbatim]
 # Leaf;;
 - : 'a btree = Leaf
 # Node (1, Leaf, Leaf);;
 - : int btree = Node (1, Leaf, Leaf)
+# Node;;
+The constructor Node expects 3 argument(s),
+but is here applied to 0 argument(s)
 @end[verbatim]
 
 A value with a union type is a value having @emph{one of} the cases.
@@ -318,9 +322,13 @@ built-in Boolean type is defined as a union (the @tt{true} and
 type bool = | true | false
 @end[verbatim]
 
-The list type is similar: one again, the compiler treats the @code{[]}
-and @code{::} identifiers as capitalized identifiers for the scope of
-the definition.
+The list type is similar: once again, the compiler treats the
+@code{[]} and @code{::} identifiers as capitalized
+identifiers@begin[footnote]
+At the time of writing using OCaml 2.04,
+this definition was accepted literally.  In OCaml 3.04 this usage is
+deprecated, and the [] produces a syntax error.
+@end[footnote].
 
 @begin[verbatim]
 # type 'a list = [] | :: of 'a * 'a list;;

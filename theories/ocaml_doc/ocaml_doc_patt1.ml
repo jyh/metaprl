@@ -1,4 +1,5 @@
-(*!
+(*! -*- Mode: text -*-
+ *
  * @begin[spelling]
  * acts Fibonacci inexhaustive ll patt wildcard
  * aren expr
@@ -48,7 +49,7 @@ general form.
 @line{{@tt{match} @emph{expr} @tt{with}}}
 @line{{@phantom{$$@space$$ |} $@emph{patt}_1$ @code{->} $@emph{expr}_1$}}
 @line{{$@space$ | $@emph{patt}_2$ @code{->} $@emph{expr}_2$}}
-@line{$@vdots$}
+@line{{@space @space $@vdots$}}
 @line{{$@space$ | $@emph{patt}_n$ @code{->} $@emph{expr}_n$}}
 @end[tabular]
 @end[center]
@@ -59,7 +60,7 @@ corresponding values in the argument.
 
 For example, Fibonacci numbers can be defined succinctly using pattern
 matching.  Fibonacci numbers are defined inductively: $@tt{fib}@space
-1 = 1$, $@tt{fib}@space 2 = 1$, for all other natural numbers $i$,
+0 = 0$, $@tt{fib}@space 1 = 1$, and for all other natural numbers $i$,
 $@tt{fib}@space i = @tt{fib}(i - 1) + @tt{fib}(i - 2)$.
 
 @begin[verbatim]
@@ -87,8 +88,9 @@ body @code{fib (j - 2) + fib (j - 1)} computes the returned value.
 
 Note that the variables in a pattern are @emph{binding} occurrences
 unrelated to any previous definition of the variable.  For example,
-the following code produces a result you might not expect.  The first case
-matches all expressions, returning the value matched.
+the following code produces a result you might not expect.  The first
+case matches all expressions, returning the value matched.  The
+toploop issues warning for the second and third cases.
 
 @begin[verbatim]
 # let zero = 0;;
@@ -113,9 +115,9 @@ The general form of matching, where the function body is a @tt{match}
 expression applied to the function argument, is quite common in ML
 programs.  OCaml defines an equivalent syntactic form to handle this
 case, using the @tt{function} keyword (instead of @tt{fun}).  A
-@tt{function} definition is just like a @tt{fun}, except that multiple
-patterns are allowed.  The @tt{fib} definition using @tt{function} is
-as follows.
+@tt{function} definition is like a @tt{fun}, where a single argument
+is used in a pattern match.  The @tt{fib} definition using
+@tt{function} is as follows.
 
 @begin[verbatim]
 # let rec fib = function
@@ -129,7 +131,7 @@ val fib : int -> int = <fun>
 - : int = 8
 @end[verbatim]
 
-Patterns can also be used with value having the other basic types,
+Patterns can also be used with values having the other basic types,
 like characters, strings, and Boolean values.  In addition, multiple
 patterns @emph{without variables} can be used for a single body.  For
 example, one way to check for capital letters is with the following
@@ -173,7 +175,7 @@ commonly occurring structure, and OCaml provides a special pattern for
 cases like these.  The @tt{_} pattern (a single underscore character)
 is a wildcard pattern that matches anything.  It is not a variable (so
 it can't be used in an expression).  The @tt{is_uppercase} function
-would normally be written using the wildcard pattern.
+would normally be written this way.
 
 @begin[verbatim]
 # let is_uppercase = function
@@ -203,7 +205,7 @@ val is_uppercase : char -> bool = <fun>
 @end[verbatim]
 
 The OCaml compiler and toploop are verbose about inexhaustive
-patterns.  They warn when the pattern match is non-exhaustive, and even
+patterns.  They warn when the pattern match is inexhaustive, and even
 suggest a case that is not matched.  An inexhaustive set of patterns
 is usually an error---what would happen if we applied the
 @tt{is_uppercase} function to a non-uppercase character?
@@ -277,13 +279,13 @@ constructions.  The general forms are as follows.
 @begin[center]
 @begin[tabular, l]
 @line{@tt{let @emph{patt} = @emph{expr}}}
-@line{@tt{let @emph{name} @emph{patt} $@ldots$ @emph{path} = @emph{expr}}}
-@line{@tt{fun @emph{patt} -> @emph{expr}}}
+@line{@tt{let @emph{name} @emph{patt} $@ldots$ @emph{patt} = @emph{expr}}}
+@line{@tt{fun @emph{patt} @tt{->} @emph{expr}}}
 @end[tabular]
 @end[center]
 
 These aren't much use with constants because the pattern match will
-always be non-exhaustive (except for the @tt{()} pattern).  However,
+always be inexhaustive (except for the @tt{()} pattern).  However,
 they will be handy when we introduce tuples and records in the next
 chapter.
 

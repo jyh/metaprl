@@ -53,7 +53,7 @@ doc <:doc<
    @end[doc]
 >>
 
-prim eq_mem_eq 'H :
+prim eq_mem_eq :
    [wf] sequent{ <H> >- 'X Type } -->
    sequent{ <H>; x1: 'X; x2: 'X >- ('x1 = 'x2 in 'A) => ('x1 = 'x2 in 'B)} -->
    sequent{ <H>; x: 'A; esquash{('x in 'X)} >- 'x in 'B } = it

@@ -194,7 +194,7 @@ interactive sprop_fun {| intro [] |} :
    sequent { <H> >- fun_prop{z.sprop{'z}} }
 
 (* ?? *)
-interactive sprop_intro 'H :
+interactive sprop_intro :
    sequent { <H>; x: eq{'s; strue} >- sprop{'s} }
 
 (* ************************** strue ************************* *)
@@ -417,10 +417,10 @@ interactive sfalse_sand_strue {| elim [] |} 'H :
 interactive sfalse_sand_sfalse {| elim [] |} 'H :
    sequent { <H>; x: sprop{sand{sfalse; sfalse}}; <J['x]> >- 'C['x] }
 
-interactive sand_strue_intro1 'H :
+interactive sand_strue_intro1 :
    sequent { <H>; s: set; x: sprop{'s} >- sprop{sand{strue; 's}} }
 
-interactive sand_strue_intro2 'H :
+interactive sand_strue_intro2 :
    sequent { <H>; s: set; x: sprop{'s} >- sprop{sand{strue; 's}} }
 
 interactive sand_sfalse_elim1 {| elim [] |} 'H :
@@ -582,7 +582,7 @@ interactive scand_strue {| elim [] |} 'H :
    sequent { <H>; x: sprop{scand{strue; 's}}; <J['x]>; y: sprop{'s} >- 'C['x] } -->
    sequent { <H>; x: sprop{scand{strue; 's}}; <J['x]> >- 'C['x] }
 
-interactive scand_sfalse1 'H 'J :
+interactive scand_sfalse1 'H :
    ["wf"] sequent { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
    ["wf"] sequent { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
 (*   sequent { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } --> *)
@@ -719,7 +719,7 @@ let sxorAssoc1T i =
    else
       sxorHypAssoc1T i
 
-interactive test 'H :
+interactive test :
    sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
    sequent { <H> >- isset{'c} } -->
@@ -728,7 +728,7 @@ interactive test 'H :
    sequent { <H> >- mem{'c; boolset} } -->
    sequent { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}} >- sprop{sor{sand{sxor{'a; 'b}; snot{'c}}; sand{snot{sxor{'a; 'b}}; 'c}}} }
 
-interactive test2 'H :
+interactive test2 :
    sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
    sequent { <H> >- isset{'c} } -->
@@ -811,7 +811,7 @@ let sxandAssoc1T i =
       sxandHypAssoc1T i
 
 (* ************************** exercises ************************* *)
-interactive test_sxandAssocTi 'H :
+interactive test_sxandAssocTi :
    sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
    sequent { <H> >- isset{'c} } -->
@@ -820,7 +820,7 @@ interactive test_sxandAssocTi 'H :
    sequent { <H> >- mem{'c; boolset} } -->
    sequent { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}} >- sprop{sor{sand{sxand{'a; 'b}; 'c}; sand{snot{sxand{'a; 'b}}; snot{'c}}}} }
 
-interactive test_sxandAssocT0 'H :
+interactive test_sxandAssocT0 :
    sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
    sequent { <H> >- isset{'c} } -->
@@ -829,7 +829,7 @@ interactive test_sxandAssocT0 'H :
    sequent { <H> >- mem{'c; boolset} } -->
    sequent { <H>; x: sprop{sxand{sxand{'a; 'b}; 'c}} >- sprop{sor{sand{'a; sxand{'b; 'c}}; sand{snot{'a}; snot{sxand{'b; 'c}}}}} }
 
-interactive morgan1 'H :
+interactive morgan1 :
    sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
    sequent { <H> >- mem{'a; boolset} } -->

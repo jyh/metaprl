@@ -2637,7 +2637,7 @@ T	t657	o1032 b649 b656
 B	b657	t657
 T	t658	o1056 b1031 b657 b1783 b136
 B	b658	t658
-P	p658	String "eq_mem_eq 2 thenWT type_subtype_rightT <<'B>> thenT autoT thenT (tryT (completeT ( subtypeT <<'A>> ttca))) thenT dT 0 ttca"
+P	p658	String "eq_mem_eq thenWT type_subtype_rightT <<'B>> thenT autoT thenT (tryT (completeT ( subtypeT <<'A>> ttca))) thenT dT 0 ttca"
 O	o658	ext_rule p658
 T	t659	o643 b1742 b136 b1739
 B	b659	t659
@@ -2893,7 +2893,7 @@ T	t1961	o b1961 b136
 B	b1962	t1961
 T	t1962	o1032 b1957 b1962
 B	b1963	t1962
-P	p1264	String "assertT <<esquash{('x in 'A)}>> thenMT eq_mem_eq 2"
+P	p1264	String "assertT <<esquash{('x in 'A)}>> thenMT eq_mem_eq"
 O	o1264	ext_rule p1264
 T	t679	o643 b1959 b136 b1960
 B	b679	t679

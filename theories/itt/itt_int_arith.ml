@@ -878,7 +878,7 @@ let arithT =
    ((tryOnAllMHypsT tryReduce_geT) thenMT
    (findContradRelT thenMT (reduceContradRelT (-1)) ))))
 
-interactive test 'H 'a 'b 'c :
+interactive test 'a 'b 'c :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H> >- 'c in int } -->
@@ -887,7 +887,7 @@ sequent { <H>; x: ('a >= ('b +@ 1));
                      u: ('b >= ('a +@ 0))
                 >- "assert"{bfalse} }
 
-interactive test2 'H 'a 'b 'c :
+interactive test2 'a 'b 'c :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H> >- 'c in int } -->
@@ -896,7 +896,7 @@ sequent { <H>; x: (('b +@ 1) <= 'a);
                      u: ('b >= ('a +@ 0))
                 >- "assert"{bfalse} }
 
-interactive test3 'H 'a 'b 'c :
+interactive test3 'a 'b 'c :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H> >- 'c in int } -->
@@ -904,21 +904,21 @@ sequent { <H>; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2))
                 >- ('b < ('a +@ 0))  }
 
-interactive test4 'H 'a 'b :
+interactive test4 'a 'b :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H>; x: ('a >= 'b);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
 
-interactive test5 'H 'a 'b :
+interactive test5 'a 'b :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H>; x: ('a >= 'b +@ 0);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
 
-interactive test6 'H 'b 'c :
+interactive test6 'b 'c :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H> >- 'c in int } -->

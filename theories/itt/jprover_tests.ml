@@ -164,7 +164,7 @@ interactive subst 'item :
 
 (* barber *)
 
-interactive barber 'barber 'H 'barber bind{x,y.'shaves['x;'y]} :
+interactive barber 'barber 'barber bind{x,y.'shaves['x;'y]} :
    sequent { <H> >- "type"{'People} } -->
    sequent { <H> >- 'barber in 'People } -->
    sequent { <H>; p1: 'People; p2: 'People >- "type"{'shaves['p1;'p2]} } -->

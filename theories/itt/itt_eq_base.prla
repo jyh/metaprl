@@ -3134,7 +3134,7 @@ B	b1278	t1278
 P	p1279	Number 2888
 P	p1280	Number 2988
 O	o1280	location p1279 p1280
-P	p1281	String "assertT << esquash {'x in base} >> thenMT (eq_mem_eq 2 ttca)"
+P	p1281	String "assertT << esquash {'x in base} >> thenMT (eq_mem_eq ttca)"
 O	o1281	ext_rule p1281
 P	p1282	String assertion
 O	o1282	tactic_arg p1282
@@ -3663,7 +3663,7 @@ T	t1497	o1122 b1487 b13
 B	b1498	t1497
 T	t1498	o1497 b1121 b1498 b13 b13
 B	b1499	t1498
-P	p1499	String "assertT << esquash { 'x in ('T isect base)} >> thenMT eq_mem_eq 2 thenT selT 1 autoT thenWT dT 0 thenT selT 1 autoT"
+P	p1499	String "assertT << esquash { 'x in ('T isect base)} >> thenMT eq_mem_eq thenT selT 1 autoT thenWT dT 0 thenT selT 1 autoT"
 O	o1499	ext_rule p1499
 T	t1499	o1206 b1489 b13 b1493
 B	b1500	t1499

@@ -74,7 +74,7 @@ interactive fact650 :
 
 let factT = rw (repeatC redexC) 0
 
-interactive extraction_test 'H :
+interactive extraction_test :
    sequent { <H>; "type"{'A}; "type"{'B}; "type"{'C} >- (('A and 'B) => 'C) => ('A => ('B => 'C)) }
 
 (*

@@ -13,11 +13,11 @@ open Dtactic
 let _ =
    show_loading "Loading Ctt_markov%t"
 
-interactive squash_stable1 'H 't :
+interactive squash_stable1 't :
    sequent { <H>; x:'T >- 't in 'T} -->
    sequent { <H>; x:squash{'T} >- 'T}
 
-interactive squash_stable2 'H bind{v.'t['v]} :
+interactive squash_stable2 bind{v.'t['v]} :
    sequent { <H>; v:squash{'T} >- 't['v] in 'T} -->
    sequent { <H>; x:'T >- 't[it] in 'T}
 

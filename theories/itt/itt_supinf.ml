@@ -939,7 +939,7 @@ let testT = funT (fun p ->
 	end
 )
 
-interactive test 'H 'a 'b 'c :
+interactive test 'a 'b 'c :
 sequent { <H> >- 'a in rationals } -->
 sequent { <H> >- 'b in rationals } -->
 sequent { <H> >- 'c in rationals } -->
@@ -948,7 +948,7 @@ sequent { <H>; ge_rat{'a; add_rat{'b; rat{1;1}}};
                ge_rat{'b; add_rat{'a; rat{0;1}}}
                >- "assert"{bfalse} }
 
-interactive test2 'H 'a 'b 'c :
+interactive test2 'a 'b 'c :
 sequent { <H> >- 'a in rationals } -->
 sequent { <H> >- 'b in rationals } -->
 sequent { <H> >- 'c in rationals } -->

@@ -242,7 +242,7 @@ dform compare_df : except_mode[src] :: compare{'O; 'a;'b; 'less_case; 'equal_cas
        'a `">" 'b `" -> " slot{'greater_case} popm popm ezone
 
 
-interactive trans_less_less preorder[i:l] 'H:
+interactive trans_less_less preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
    [wf] sequent { <H> >- 'x in 'ord^car }  -->
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
@@ -250,7 +250,7 @@ interactive trans_less_less preorder[i:l] 'H:
    sequent { <H>; less{'ord;'x;'z}   >- 'C } -->
    sequent { <H>; less{'ord;'x;'y}; less{'ord;'y;'z}  >- 'C}
 
-interactive trans_less_eq preorder[i:l] 'H:
+interactive trans_less_eq preorder[i:l] :
    [wf] sequent { <H>  >- 'ord in preorder[i:l] }  -->
    [wf] sequent { <H> >- 'x in 'ord^car }  -->
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
@@ -258,7 +258,7 @@ interactive trans_less_eq preorder[i:l] 'H:
    sequent { <H>; less{'ord;'x;'z}   >- 'C } -->
    sequent { <H>; less{'ord;'x;'y}; eq{'ord;'y;'z} >- 'C}
 
-interactive trans_eq_less preorder[i:l] 'H:
+interactive trans_eq_less preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
    [wf] sequent { <H> >- 'x in 'ord^car }  -->
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
@@ -266,7 +266,7 @@ interactive trans_eq_less preorder[i:l] 'H:
    sequent { <H>; less{'ord;'x;'z}   >- 'C } -->
    sequent { <H>; eq{'ord;'x;'y}; less{'ord;'y;'z} >- 'C}
 
-interactive trans_less_less0 preorder[i:l] 'H:
+interactive trans_less_less0 preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
    [wf] sequent { <H> >- 'x in 'ord^car }  -->
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
@@ -274,7 +274,7 @@ interactive trans_less_less0 preorder[i:l] 'H:
    sequent { <H> >- less{'ord;'y;'z}  } -->
    sequent { <H>; less{'ord;'x;'y} >- less{'ord;'x;'z} }
 
-interactive trans_less_less1 preorder[i:l] 'H:
+interactive trans_less_less1 preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
    [wf] sequent { <H> >- 'x in 'ord^car }  -->
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
@@ -282,7 +282,7 @@ interactive trans_less_less1 preorder[i:l] 'H:
    sequent { <H> >- less{'ord;'x;'y}  } -->
    sequent { <H>; less{'ord;'y;'z} >- less{'ord;'x;'z} }
 
-interactive sym_eq_eq preorder[i:l] 'H:
+interactive sym_eq_eq preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
    [wf] sequent { <H> >- 'x in 'ord^car }  -->
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
@@ -290,9 +290,9 @@ interactive sym_eq_eq preorder[i:l] 'H:
 
 
 (* BUG: shoild be implemented using resource(s) *)
-let some_transT n level = firstT [trans_less_less level n; trans_less_eq level n; trans_eq_less level n]
+let some_transT level = firstT [trans_less_less level; trans_less_eq level; trans_eq_less level]
 
-let some_transT0 n level = firstT [trans_less_less0 level n; trans_less_less1 level n; sym_eq_eq level n]
+let some_transT0 level = firstT [trans_less_less0 level; trans_less_less1 level; sym_eq_eq level]
 
 declare order[i:l]
 
@@ -305,9 +305,9 @@ let hypTransT n m =
                   _ -> raise (RefineError ("hypTransT", StringTermError("transitivity does not know about ",term1))) in
             let level = infer_type p ord in
                if n=0 || m=0 then
-                  let k = n+m in copyHypT k (-1) thenT some_transT0 (-1) level
+                  let k = n+m in copyHypT k (-1) thenT some_transT0 level
                else
-                  copyHypT n (-1) thenT copyHypT m (-1) thenT some_transT (-2) level
+                  copyHypT n (-1) thenT copyHypT m (-1) thenT some_transT level
         )
 
 

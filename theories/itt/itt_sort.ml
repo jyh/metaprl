@@ -331,6 +331,19 @@ interactive sort_sameset {| intro [intro_typeinf << 'l >>] |} list{'A} :
    [wf] sequent { <H> >- partial_order{'A; 'lt} } -->
    sequent { <H> >- sameset{sort{'l; 'lt}; 'l; 'A} }
 
+open Itt_list2
+
+(*
+ * This rule can be used to demonstrate the extractor.
+ *)
+interactive smallest_element :
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- 'l in list{'A} } -->
+   sequent { <H> >- 'lt in 'A -> 'A -> bool } -->
+   sequent { <H> >- not{"assert"{is_nil{'l}}}} -->
+   sequent { <H> >- partial_order{'A; 'lt} } -->
+   sequent { <H> >- exst a : 'A. (mem{'a; 'l; 'A} and bounded{'a; 'l; 'lt}) }
+
 (*
  * -*-
  * LOCAL Variables:

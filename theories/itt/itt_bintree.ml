@@ -195,7 +195,7 @@ define node: node{'l;'r;'nd} <--> ( ('nd^left:='l)^right:='r )
 dform node_df : except_mode[src] :: node{'l;'r;'nd} = `"node(" 'l `"," 'r `"," 'nd ")"
 
 let resource reduce +=
-   <<  field[l:t]{node{'l;'r;'nd}}  >>, (addrC [Subterm 1] node thenC reduceTopC);
+   <<  field[label:t]{node{'l;'r;'nd}}  >>, (addrC [Subterm 1] node thenC reduceTopC);
 
 define nodetype2: Node{'T;l,r.'R['l;'r]} <--> record["left":t]{'T; l.record["right":t]{'T;r.'R['l;'r]}}
 

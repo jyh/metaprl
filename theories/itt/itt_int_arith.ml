@@ -80,6 +80,72 @@ let _ = show_loading "Loading Itt_int_ext%t"
  * ARITH
  *******************************************************)
 
+(*
+ * thenMT_prefix with locality-principle behaviour
+ *)
+
+   let emptyLabel=""
+
+   let thenIfLabelPredT pred tac1 tac2 p =
+      let prefer l1 l2 =
+         if l2=emptyLabel then l1
+         else l2 in
+      let label = Sequent.label p in
+      let restoreHiddenLabelT l p' =
+         addHiddenLabelT (prefer l (Sequent.label p')) p'
+      in
+      let ifLabelPredT pred tac1 tac2 p' =
+         (let lab=Sequent.label p' in
+         if pred lab then
+            tac1
+         else
+            tac2) p'
+      in
+      (addHiddenLabelT emptyLabel thenT
+      tac1 thenT
+      ifLabelPredT pred tac2 idT thenT
+      restoreHiddenLabelT label) p
+
+(*
+   let ifMextendedT tac p =
+      let lab=Sequent.label p in
+      (if (List.mem lab main_labels) or Left(lab,5)="main_" then
+          tac
+       else
+          idT) p
+
+   let thenMextendedT tac1 tac2 =
+      prefix_thenT tac1 (ifMT tac2)
+*)
+
+   let isEmptyOrMainLabel l =
+      (l=emptyLabel) or (List.mem l main_labels)
+
+   let isEmptyOrAuxLabel l =
+      (l=emptyLabel) or not (List.mem l main_labels)
+
+   let thenLocalMT tac1 tac2 p =
+      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 p
+
+   let thenLocalAT tac1 tac2 p =
+      thenIfLabelPredT isEmptyOrAuxLabel tac1 tac2 p
+
+   let onAllLocalMHypsT tac p =
+      let rec aux i =
+         if i = 1 then
+            tac i
+         else if i > 1 then
+            thenLocalMT (tac i) (aux (pred i))
+         else
+            idT
+      in
+         aux (Sequent.hyp_count p) p
+
+(*
+ * end of thenMT_prefix part
+ *)
+
+
 let get_term i p =
 (* We skip first item because it is a context *)
    if i<>1 then Sequent.nth_hyp p i else mk_simple_term xperv []
@@ -87,11 +153,11 @@ let get_term i p =
 let le2geT t p =
    let (left,right)=dest_le t in
    let newt=mk_ge_term right left in
-   (assertT newt thenAT (rwh unfold_ge 0 thenT (onSomeHypT nthHypT))) p
+   thenLocalAT (assertT newt) (thenLocalMT (rwh unfold_ge 0) (onSomeHypT nthHypT)) p
 
 interactive lt2ge 'H :
-   sequent [squash] { 'H >- 'a in int } -->
-   sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- 'b >= ('a +@ 1) }
 
@@ -100,11 +166,11 @@ let lt2geT t p =
    let newt=mk_ge_term right
                       (mk_add_term left
                                   (mk_number_term (Mp_num.num_of_int 1))) in
-      (assertT newt thenAT lt2ge (Sequent.hyp_count_addr p)) p
+      (thenLocalAT (assertT newt) (lt2ge (Sequent.hyp_count_addr p))) p
 
 interactive gt2ge 'H :
-   sequent [squash] { 'H >- 'a in int } -->
-   sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- 'a > 'b } -->
    sequent ['ext] { 'H >- 'a >= ('b +@ 1) }
 
@@ -113,7 +179,7 @@ let gt2geT t p =
    let newt=mk_ge_term left
                       (mk_add_term right
                                   (mk_number_term (Mp_num.num_of_int 1))) in
-      (assertT newt thenAT gt2ge (Sequent.hyp_count_addr p)) p
+      (thenLocalAT (assertT newt) (gt2ge (Sequent.hyp_count_addr p))) p
 
 interactive eq2ge1 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
@@ -129,15 +195,14 @@ let eq2ge2T p = eq2ge2 (Sequent.hyp_count_addr p) p
 
 let eq2geT t =
    let (_,l,r)=dest_equal t in
-   (assertT (mk_ge_term l r)
-      thenAT (eq2ge1T thenT (onSomeHypT nthHypT))
-      thenMT ((assertT (mk_ge_term r l))
-                 thenAT (eq2ge2T thenT (onSomeHypT nthHypT))))
+   thenLocalMT
+   (thenLocalAT (assertT (mk_ge_term l r)) (eq2ge1T thenT (onSomeHypT nthHypT)))
+   (thenLocalAT (assertT (mk_ge_term r l)) (eq2ge2T thenT (onSomeHypT nthHypT)))
 
 interactive notle2ge 'H :
-   sequent [squash] { 'H >- 'a in int } -->
-   sequent [squash] { 'H >- 'b in int } -->
-   sequent [squash] { 'H >- "not"{('a <= 'b)} } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [aux] sequent [squash] { 'H >- "not"{('a <= 'b)} } -->
    sequent ['ext] { 'H >- 'a >= ('b +@ 1) }
 
 (*
@@ -172,13 +237,13 @@ interactive_rw bnot_lt2ge_rw :
 
 let bnot_lt2geC = bnot_lt2ge_rw
 
-let lt2ConclT p = (magicT thenLT [idT; rwh bnot_lt2geC (-1)] ) p
+let lt2ConclT p = (magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)] ) p
 
 let ltInConcl2HypT =
-   (rwh unfold_lt 0) thenMT lt2ConclT
+   thenLocalMT (rwh unfold_lt 0) lt2ConclT
 
-let gtInConcl2HypT p =
-   (rwh unfold_gt 0 thenMT ltInConcl2HypT ) p
+let gtInConcl2HypT =
+   thenLocalMT (rwh unfold_gt 0) ltInConcl2HypT
 
 interactive_rw bnot_le2gt_rw :
    ('a in int) -->
@@ -188,10 +253,10 @@ interactive_rw bnot_le2gt_rw :
 let bnot_le2gtC = bnot_le2gt_rw
 
 let leInConcl2HypT =
-   (rwh unfold_le 0 thenMT magicT thenLT [idT;rwh bnot_le2gtC (-1)])
+   thenLocalMT (rwh unfold_le 0) (magicT thenLT [idT;rwh bnot_le2gtC (-1)])
 
-let geInConcl2HypT p =
-   (rwh unfold_ge 0 thenMT leInConcl2HypT) p
+let geInConcl2HypT =
+   thenLocalMT (rwh unfold_ge 0) leInConcl2HypT
 
 let arithRelInConcl2HypT p =
    let g=Sequent.goal p in
@@ -545,14 +610,13 @@ let inject_coefC t =
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
-let mul_normalizeC = (repeatC (higherC mul_Assoc2C)) thenC
+let mul_normalizeC = (* (repeatC (higherC mul_Assoc2C)) thenC *)
                      (higherC (termC inject_coefC)) thenC
                      mul_BubbleSortC
 
 interactive_rw sum_same_products1_rw :
    ('a in int) -->
-   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@
- number[j:n]) *@ 'a)
+   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@ number[j:n]) *@ 'a)
 
 let sum_same_products1C = sum_same_products1_rw
 
@@ -655,7 +719,7 @@ let add_BubbleStepC tm =
          if is_add_term s then
             let (b,c) = dest_add s in
 	       if (is_number_term a) & (is_number_term b) then
-	          (add_AssocC thenC (addrC [0] reduceC))
+	          (add_AssocC thenC (addrC [0] reduceC)) thenC add_Id2C
 	       else
                   let a'=stripCoef a in
                   let b'=stripCoef b in
@@ -680,16 +744,24 @@ let add_BubbleStepC tm =
 let add_BubbleSortC = (repeatC (sweepDnC (termC add_BubbleStepC))) thenC
                       (repeatC (sweepDnC (termC same_productC)))
 
+interactive_rw sub_elim_rw :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ('a -@ 'b ) <--> ('a +@ ((-1) *@ 'b))
+
+let sub_elimC = repeatC (higherC sub_elim_rw)
+
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
-let add_normalizeC = (repeatC (higherC add_Assoc2C)) thenC
+let add_normalizeC = (* (repeatC (higherC add_Assoc2C)) thenC *)
                      add_BubbleSortC
 
 let open_parenthesesC = repeatC (higherC mul_add_DistribC)
 
-let normalizeC = reduceC thenC
-                 open_parenthesesC thenC
+let normalizeC = sub_elimC thenC
+                 reduceC thenC
+                 (* open_parenthesesC thenC *)
                  mul_normalizeC thenC
                  add_normalizeC
 
@@ -713,7 +785,7 @@ let reduceContradRelT i p = (rw ((addrC [0] normalizeC) thenC
 
 let provideConstantC t =
    if is_number_term t then
-      idC
+      add_Id4C (*idC*)
    else if is_add_term t then
       let (a,b)=dest_add t in
       if is_number_term a then
@@ -723,14 +795,53 @@ let provideConstantC t =
    else
       add_Id3C
 
-let tryReduce_geT i p =
+interactive ge_addMono2 'H 'c :
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
+   sequent ['ext] { 'H >- ('a >= 'b) ~ (('c +@ 'a) >= ('c +@ 'b)) }
+
+interactive_rw ge_addMono2_rw 'c :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
+   ('a >= 'b) <--> (('c +@ 'a) >= ('c +@ 'b))
+
+let ge_addMono2C = ge_addMono2_rw
+
+let reduce_geLeftC = (addrC [0] normalizeC)
+let reduce_geRightC = (addrC [1] (normalizeC thenC (termC provideConstantC)))
+
+let reduce_geCommonConstT i p =
+   let t=get_term i p in
+   let (left,right)=dest_ge t in
+   if is_add_term left then
+      let (a,b)=dest_add left in
+      if is_number_term a then
+         thenLocalMT (rw (ge_addMono2_rw (mk_minus_term a)) i)
+                     (rw reduce_geLeftC i) p
+      else
+         idT p
+   else
+      idT p
+
+(*let tryReduce_geT i p =
    let t=get_term i p in
       if is_ge_term t then
          (rw ((addrC [0] normalizeC) thenC
              (addrC [1] (normalizeC thenC (termC provideConstantC))))
              i) p
       else
-	 idT p
+         idT p*)
+
+let tryReduce_geT i p =
+   let t=get_term i p in
+      if is_ge_term t then
+         thenLocalMT (rw reduce_geLeftC i)
+         (thenLocalMT (reduce_geCommonConstT i)
+                     (rw reduce_geRightC i)) p
+      else
+         idT p
 
 (* Generate sum of ge-relations
  *)
@@ -758,7 +869,7 @@ let proveSumT p =
  *)
 let sumListT l p =
    let s = sumList l (Sequent.goal p) in
-   (assertT s thenAT (progressT proveSumT)) p
+   thenLocalAT (assertT s) (progressT proveSumT) p
 
 (* Test if term has a form of a>=b+i where i is a number
  *)
@@ -830,15 +941,16 @@ let findContradRelT p =
 
 (* Finds and proves contradiction among ge-relations
  *)
-let arithT = arithRelInConcl2HypT thenMT
-   (onAllHypsT anyArithRel2geT)
-   thenMT (onAllHypsT tryReduce_geT)
-   thenMT findContradRelT
-   thenMT reduceContradRelT (-1)
+let arithT =
+   thenLocalMT arithRelInConcl2HypT
+   (thenLocalMT (onAllLocalMHypsT anyArithRel2geT)
+   (thenLocalMT (onAllLocalMHypsT tryReduce_geT)
+   (thenLocalMT findContradRelT (reduceContradRelT (-1)))))
 
 interactive test 'H 'a 'b 'c :
 sequent [squash] { 'H >- 'a in int } -->
 sequent [squash] { 'H >- 'b in int } -->
+sequent [squash] { 'H >- 'c in int } -->
 sequent ['ext] { 'H; x: ('a >= ('b +@ 1));
                      t: ('c >= ('b +@ 3));
                      u: ('b >= ('a +@ 0))
@@ -847,6 +959,7 @@ sequent ['ext] { 'H; x: ('a >= ('b +@ 1));
 interactive test2 'H 'a 'b 'c :
 sequent [squash] { 'H >- 'a in int } -->
 sequent [squash] { 'H >- 'b in int } -->
+sequent [squash] { 'H >- 'c in int } -->
 sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2));
                      u: ('b >= ('a +@ 0))
@@ -855,6 +968,7 @@ sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
 interactive test3 'H 'a 'b 'c :
 sequent [squash] { 'H >- 'a in int } -->
 sequent [squash] { 'H >- 'b in int } -->
+sequent [squash] { 'H >- 'c in int } -->
 sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2))
                 >- ('b < ('a +@ 0))  }

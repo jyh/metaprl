@@ -122,6 +122,26 @@ let resource reduce += [
    << ge_bool{'a;'a}>>, (unfold_ge_bool thenC (addrC [0] lt_IrreflexC));
 ]
 
+interactive gt_bool_wf {| intro []; eqcd |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1='a2 in int } -->
+   [wf] sequent [squash] { 'H >- 'b1='b2 in int } -->
+   sequent ['ext] { 'H >- gt_bool{'a1; 'b1}=gt_bool{'a2; 'b2} in bool }
+
+interactive le_bool_wf {| intro []; eqcd |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1='a2 in int } -->
+   [wf] sequent [squash] { 'H >- 'b1='b2 in int } -->
+   sequent ['ext] { 'H >- le_bool{'a1; 'b1}=le_bool{'a2; 'b2} in bool }
+
+interactive ge_bool_wf {| intro []; eqcd |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1='a2 in int } -->
+   [wf] sequent [squash] { 'H >- 'b1='b2 in int } -->
+   sequent ['ext] { 'H >- ge_bool{'a1; 'b1}=ge_bool{'a2; 'b2} in bool }
+
+interactive bneq_int_wf {| intro []; eqcd |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1='a2 in int } -->
+   [wf] sequent [squash] { 'H >- 'b1='b2 in int } -->
+   sequent ['ext] { 'H >- bneq_int{'a1; 'b1}=bneq_int{'a2; 'b2} in bool }
+
 (*
  Prop-int-relations definitions
  *)
@@ -606,7 +626,7 @@ rewrite rem_Assoc 'H :
 *)
 
 let resource reduce +=
-   [<< ('a *@ ('b *@ 'c)) >>, mul_Assoc2_rw;
+   [<< (('a *@ 'b) *@ 'c) >>, mul_Assoc2_rw;
     << ('a *@ ('b +@ 'c)) >>, mul_add_Distrib_rw;
     << (1 *@ 'a) >>, mul_Id_rw;
     << ('a *@ 1) >>, mul_Id2_rw;

@@ -443,6 +443,12 @@ rule add_Id3 'H :
 
 topval add_Id3C: conv
 
+rule add_Id4 'H :
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   sequent ['ext] { 'H >- 'a ~ ('a +@ 0) }
+
+topval add_Id4C: conv
+
 rule minus_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ( 'a +@ ( - 'a ) ) ~ 0 }

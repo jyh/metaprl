@@ -867,6 +867,16 @@ interactive_rw add_Id3_rw :
 
 let add_Id3C = add_Id3_rw
 
+interactive add_Id4 'H :
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   sequent ['ext] { 'H >- 'a ~ ('a +@ 0) }
+
+interactive_rw add_Id4_rw :
+   ( 'a in int ) -->
+   'a <--> ('a +@ 0)
+
+let add_Id4C = add_Id4_rw
+
 (*!
  * @begin[doc]
  *
@@ -964,7 +974,7 @@ let resource reduce += [
    << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
    << ( 'a -@ 'a) >>, minus_same_rw;
    << (-(-'a)) >>, minus_minus_reduceC;
-   << ('a +@ ('b +@ 'c)) >>, add_AssocC;
+   << (('a +@ 'b) +@ 'c) >>, add_Assoc2C;
    << ('a +@ 'b) -@ 'b >>, plus_minus_rw;
    << ('a -@ 'b) +@ 'b >>, minus_plus_rw;
    << lt_bool{'a;'a} >>, lt_irreflex_rw;

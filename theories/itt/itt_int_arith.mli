@@ -43,9 +43,17 @@ open Tactic_type.Conversionals
 open Top_conversionals
 open Itt_int_ext
 
+(* topval thenIfLabelPredT : (string -> bool) -> tactic -> tactic -> tactic *)
+topval thenLocalMT : tactic -> tactic -> tactic
+topval thenLocalAT : tactic -> tactic -> tactic
+topval onAllLocalMHypsT : (int -> tactic) -> tactic
+
 topval bnot_lt2geC : conv
 topval ltInConcl2HypT : tactic
 
+topval le2geT : term -> tactic
+topval lt2geT : term -> tactic
+topval gt2geT : term -> tactic
 topval anyArithRel2geT : int -> tactic
 
 topval arithRelInConcl2HypT : tactic
@@ -77,6 +85,11 @@ topval normalizeC : conv
 topval ge_addContractC : conv
 
 topval reduceContradRelT : int -> tactic
+
+topval ge_addMono2C : term -> conv
+topval reduce_geLeftC : conv
+topval reduce_geRightC : conv
+topval reduce_geCommonConstT : int -> tactic
 topval tryReduce_geT : int -> tactic
 
 topval sumListT : int list -> tactic

@@ -792,6 +792,21 @@ interactive_rw reduce_bnot_bnot :
    ( 'e1 in bool ) -->
    bnot{bnot{'e1}} <--> 'e1
 
+let reduce_bnot_bnotC = reduce_bnot_bnot
+
+interactive eq_bfalse2assert {| intro []; eqcd |} 'H :
+   [wf] sequent ['ext] { 'H >- 'e1 in bool } -->
+   [main] sequent ['ext] { 'H >- "assert"{bnot{'e1}} } -->
+   sequent ['ext] { 'H >- 'e1 = bfalse in bool }
+
+let eq_bfalse2assertT i p = eq_bfalse2assert (Sequent.clause_addr p i) p
+
+interactive assert2eq_bfalse 'H :
+   [main] sequent ['ext] { 'H >- 'e1 = bfalse in bool } -->
+   sequent ['ext] { 'H >- "assert"{bnot{'e1}} }
+
+let assert2eq_bfalseT i p = assert2eq_bfalse (Sequent.clause_addr p i) p
+
 interactive_rw reduce_band_same :
    ( 'e in bool ) -->
    band{'e;'e} <--> 'e

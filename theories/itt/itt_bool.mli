@@ -146,6 +146,9 @@ topval magicT : tactic
 topval splitBoolT : term -> int -> tactic
 topval splitITE : int -> tactic
 
+topval eq_bfalse2assertT : int -> tactic
+topval assert2eq_bfalseT : int -> tactic
+
 (*
  * -*-
  * Local Variables:

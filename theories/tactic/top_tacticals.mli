@@ -51,6 +51,8 @@ topval nthAssumT : int -> tactic
 topval timingT : tactic -> tactic
 topval completeT : tactic -> tactic
 topval progressT : tactic -> tactic
+topval whileProgressT : tactic -> tactic
+topval untilFailT : tactic -> tactic
 topval repeatT : tactic -> tactic
 topval repeatForT : int -> tactic -> tactic
 topval seqOnSameConclT : tactic list -> tactic

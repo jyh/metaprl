@@ -595,13 +595,21 @@ interactive equal_equiv_elim {| elim [] |} 'H 'J 's 'r :
    sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x]; y: equiv{'s; 'r; 'a; 'b} >- 'C['x] } -->
    sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x] >- 'C['x] }
 
+interactive pair_eq1 {| elim [] |} 'H 'J :
+   sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'z} } -->
+   sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'a} } -->
+   sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'b} } -->
+   sequent ['ext] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x]; u: eq{'a; 'b}; v: eq{'a; 'z} >- 'C['x]} -->
+   sequent ['ext] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- 'C['x] }
+
+(*
 interactive pair_eq {| elim [] |} 'H 'J :
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'z} } -->
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'a} } -->
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'b} } -->
    sequent ['ext] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x]; y: eq{'a; 'b} >- 'C['x]} -->
    sequent ['ext] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- 'C['x] }
-
+*)
 (*!
  * @begin[doc]
  * @end[doc]

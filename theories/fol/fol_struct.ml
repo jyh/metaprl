@@ -19,8 +19,8 @@ prim hypothesis 'H 'J 'x :
  * Thinning.
  *)
 prim thin 'H 'J :
-   ('t : sequent ['ext] { 'H; 'J['x] >- 'C['x] }) -->
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'C['x] } = 't
+   ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
+   sequent ['ext] { 'H; x: 'T; 'J >- 'C } = 't
 
 (*
  * Cut rule.

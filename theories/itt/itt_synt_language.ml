@@ -2,11 +2,13 @@ doc <:doc<
    @begin[doc]
    @module[Itt_synt_language]
 
-   The @tt[Itt_synt_language]  module defines an type of syntactic term that are build with a fix list of operators.
+   The @tt[Itt_synt_language]  module defines a type of syntactic terms that are built with a fixed list of operators.
 
-   If $ops$ is a list of operator, then <<Language{'ops}>> is a subtype of type <<BTerm>> that contains all terms build with operators from the list $ops$.
+   If $ops$ is a list of operators, then <<Language{'ops}>> is a subtype of type <<BTerm>> that contains all terms built with operators from the list $ops$.
    @end[doc]
 >>
+
+doc <:doc< @doc{@parents} >>
 
 extends Itt_synt_bterm
 extends Itt_functions
@@ -17,6 +19,7 @@ extends Itt_list
 extends Itt_srec
 extends Itt_pairwise
 extends Itt_pairwise2
+doc docoff
 
 open Basic_tactics
 
@@ -42,6 +45,14 @@ interactive dom_wf  {| intro[] |}:
    sequent { <H> >- 'T Type } -->
    sequent { <H> >- dom{'ops;'T} Type }
 
+interactive dom_intro  {| intro[] |}:
+   sequent { <H> >- 'x in Var + (i:Index{'ops} * depth : nat * { bts: list{BTerm isect 'T} | compatible_shapes{inject{nth{'ops;'i};'depth};'bts} }) } -->
+   sequent { <H> >- 'x in dom{'ops;'T} }
+
+interactive dom_elim  {| elim[] |} 'H :
+   sequent { <H>; x: Var + (i:Index{'ops} * depth : nat * { bts: list{BTerm isect 'T} | compatible_shapes{inject{nth{'ops;'i};'depth};'bts} }); <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: dom{'ops;'T}; <J['x]> >- 'C['x] }
+
 interactive mk_wf  {| intro[] |}:
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- 'T Type } -->
@@ -57,16 +68,29 @@ define dest: dest{'ops} <-->
       dest_bterm{'t;
         var. inl{'var};
         op,subterms.
-           inr{(find{'ops; 'op; x,y.is_same_op{'x;'y}}
-               ,'subterms
-               )} }}
+           inr{(find{'ops; 'op; x,y.Itt_synt_operator!is_same_op{'x;'y}}, (op_bdepth{'op} ,'subterms))
+              } }}
 
+(*interactive dest_wf  {| intro[] |}:
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 'T Type } -->
+   sequent { <H> >- dest{'ops} in BTerm -> dom{'ops;'T} }
+*)
+interactive find_diff_ops {| intro[] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 'i in Index{'ops} } -->
+   sequent { <H> >- 'depth in nat } -->
+   sequent { <H> >- find{'ops; inject{nth{'ops; 'i}; 'depth}; x,y.is_same_op{'x;'y}} = 'i in Index{'ops} }
+
+interactive mk_dest_inverse {| intro[] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 'T subtype BTerm } -->
+   sequent { <H> >- inverse{dest{'ops}; mk{'ops}; dom{'ops;'T}} }
 
 interactive mk_reverse {| intro[] |} :
    sequent { <H> >- 'ops in diff_list{Operator} } -->
    sequent { <H> >- 'T subtype BTerm } -->
    sequent { <H> >- dest{'ops} in RReverse{mk{'ops}; dom{'ops;'T}; BTerm} }
-
 
 interactive language_induction  {| elim[] |} 'H:
    [wf] sequent { <H> >- 'ops in diff_list{Operator} } -->

@@ -109,26 +109,31 @@ doc <:doc<
 >>
 prim group_type {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
-   sequent { <H> >- "type"{group{'g}} }
+   sequent { <H> >- "type"{group{'g}} } =
+   it
 
 prim car_isset {| intro[] |} :
    sequent { <H> >- 'g IN label } -->
-   sequent { <H> >- isset{car{'g}} }
+   sequent { <H> >- isset{car{'g}} } =
+   it
 
 prim op_isset {| intro[] |} :
    sequent { <H> >- 'g IN label } -->
    sequent { <H> >- isset{'s1} } -->
    sequent { <H> >- isset{'s2} } -->
-   sequent { <H> >- isset{op{'g; 's1; 's2}} }
+   sequent { <H> >- isset{op{'g; 's1; 's2}} } =
+   it
 
 prim id_isset {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
-   sequent { <H> >- isset{id{'g}} }
+   sequent { <H> >- isset{id{'g}} } =
+   it
 
 prim inv_isset {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
    sequent { <H> >- 'g IN label } -->
-   sequent { <H> >- isset{inv{'g; 's1}} }
+   sequent { <H> >- isset{inv{'g; 's1}} } =
+   it
 
 doc <:doc<
    @begin[doc]
@@ -148,13 +153,15 @@ prim op_closure {| intro[] |} :
    sequent { <H> >- group{'g} } -->
    sequent { <H> >- mem{'s1; car{'g}} } -->
    sequent { <H> >- mem{'s2; car{'g}} } -->
-   sequent { <H> >- mem{op{'g; 's1; 's2}; car{'g}} }
+   sequent { <H> >- mem{op{'g; 's1; 's2}; car{'g}} } =
+   it
 
 prim op_fun {| intro[] |} :
    sequent { <H> >- 'g IN label } -->
-   sequent { <H> >- fun_set{z. 's1['z]} } -->
-   sequent { <H> >- fun_set{z. 's2['z]} } -->
-   sequent { <H> >- fun_set{z. op{'g; 's1['z]; 's2['z]}} }
+   ('A: sequent { <H> >- fun_set{z. 's1['z]} }) -->
+   ('B: sequent { <H> >- fun_set{z. 's2['z]} }) -->
+   sequent { <H> >- fun_set{z. op{'g; 's1['z]; 's2['z]}} } =
+   'A & 'B
 
 doc <:doc<
    @begin[doc]
@@ -172,7 +179,8 @@ prim op_assoc1 {| intro[] |} :
    sequent { <H> >- mem{'s1; car{'g}} } -->
    sequent { <H> >- mem{'s2; car{'g}} } -->
    sequent { <H> >- mem{'s3; car{'g}} } -->
-   sequent { <H> >- eq{op{'g; op{'g; 's1; 's2}; 's3}; op{'g; 's1; op{'g; 's2; 's3}}} }
+   sequent { <H> >- eq{op{'g; op{'g; 's1; 's2}; 's3}; op{'g; 's1; op{'g; 's2; 's3}}} } =
+   it
 
 doc <:doc<
    @begin[doc]
@@ -185,14 +193,16 @@ doc <:doc<
 prim id_mem {| intro[] |} :
    sequent { <H> >- 'g IN label } -->
    sequent { <H> >- group{'g} } -->
-   sequent { <H> >- mem{id{'g}; car{'g}} }
+   sequent { <H> >- mem{id{'g}; car{'g}} } =
+   it
 
 prim id_eq1 {| intro[] |} :
    sequent { <H> >- isset{'s} } -->
    sequent { <H> >- 'g IN label } -->
    sequent { <H> >- group{'g} } -->
    sequent { <H> >- mem{'s; car{'g}} } -->
-   sequent { <H> >- eq{op{'g; id{'g}; 's}; 's} }
+   sequent { <H> >- eq{op{'g; id{'g}; 's}; 's} } =
+   it
 
 doc <:doc<
    @begin[doc]
@@ -204,22 +214,25 @@ doc <:doc<
 >>
 prim inv_fun {| intro[] |} :
    sequent { <H> >- 'g IN label } -->
-   sequent { <H> >- fun_set{z. 's['z]} } -->
-   sequent { <H> >- fun_set{z. inv{'g; 's['z]}} }
+   ('A : sequent { <H> >- fun_set{z. 's['z]} }) -->
+   sequent { <H> >- fun_set{z. inv{'g; 's['z]}} } =
+   'A
 
 prim inv_mem {| intro[] |} :
    sequent { <H> >- isset{'s} } -->
    sequent { <H> >- 'g IN label } -->
    sequent { <H> >- group{'g} } -->
    sequent { <H> >- mem{'s; car{'g}} } -->
-   sequent { <H> >- mem{inv{'g; 's}; car{'g}} }
+   sequent { <H> >- mem{inv{'g; 's}; car{'g}} } =
+   it
 
 prim inv_id1 {| intro[] |} :
    sequent { <H> >- isset{'s} } -->
    sequent { <H> >- 'g IN label } -->
    sequent { <H> >- group{'g} } -->
    sequent { <H> >- mem{'s; car{'g}} } -->
-   sequent { <H> >- eq{op{'g; inv{'g; 's}; 's}; id{'g}} }
+   sequent { <H> >- eq{op{'g; inv{'g; 's}; 's}; id{'g}} } =
+   it
 
 doc <:doc<@docoff >>
 interactive op_assoc2 {| intro[] |} :

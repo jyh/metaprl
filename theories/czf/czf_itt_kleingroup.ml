@@ -167,19 +167,19 @@ doc <:doc<
    @end[doc]
 >>
 prim klein4_label {| intro [] |} :
-   sequent { <H> >- klein4 IN label }
+   sequent { <H> >- klein4 IN label } = it
 
 prim k0_isset {| intro [] |} :
-   sequent { <H> >- isset{k0} }
+   sequent { <H> >- isset{k0} } = it
 
 prim k1_isset {| intro [] |} :
-   sequent { <H> >- isset{k1} }
+   sequent { <H> >- isset{k1} } = it
 
 prim k2_isset {| intro [] |} :
-   sequent { <H> >- isset{k2} }
+   sequent { <H> >- isset{k2} } = it
 
 prim k3_isset {| intro [] |} :
-   sequent { <H> >- isset{k3} }
+   sequent { <H> >- isset{k3} } = it
 
 doc <:doc<
    @begin[doc]

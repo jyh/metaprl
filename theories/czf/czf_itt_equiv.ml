@@ -26,7 +26,7 @@ doc <:doc<
    It is exclusively designed for the equivalence relation. First, the
    @tt{pair} term used in the definition is unordered, which makes sense
    since an equivalence relation is symmetric. Second, it is given as an
-   assumption that $@equiv{s; r; a; a}$ is true, which corresponds the
+   assumption that $@equiv{s; r; a; a}$ is true, which corresponds to the
    reflexivity of an equivalence relation.
 
    The $@equiv{s; r}$ judgment decides whether $r$ is an equivalence
@@ -207,14 +207,16 @@ doc <:doc<
 prim equiv_rel_type {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
    sequent { <H> >- isset{'r} } -->
-   sequent { <H> >- "type"{equiv{'s; 'r}} }
+   sequent { <H> >- "type"{equiv{'s; 'r}} } =
+   it
 
 prim equiv_type {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
    sequent { <H> >- isset{'r} } -->
    sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
-   sequent { <H> >- "type"{equiv{'s; 'r; 'a; 'b}} }
+   sequent { <H> >- "type"{equiv{'s; 'r; 'a; 'b}} } =
+   it
 
 doc <:doc<
    @begin[doc]
@@ -228,7 +230,8 @@ prim equiv_ref_intro {| intro [] |} :
    [wf] sequent { <H> >- isset{'r} } -->
    [wf] sequent { <H> >- isset{'a} } -->
    sequent { <H> >- mem{'a; 's} } -->
-   sequent { <H> >- equiv{'s; 'r; 'a; 'a} }
+   sequent { <H> >- equiv{'s; 'r; 'a; 'a} } =
+   it
 
 doc <:doc<
    @begin[doc]
@@ -240,10 +243,11 @@ doc <:doc<
 prim equiv_rel_intro {| intro [] |} :
    [wf] sequent { <H> >- isset{'s} } -->
    [wf] sequent { <H> >- isset{'r} } -->
-   sequent { <H>; a: set; x: mem{'a; 's} >- equiv{'s; 'r; 'a; 'a} } -->
-   sequent { <H>; b: set; c: set; x: mem{'b; 's}; y: mem{'c; 's}; u: equiv{'s; 'r; 'b; 'c} >- equiv{'s; 'r; 'c; 'b} } -->
-   sequent { <H>; d: set; e: set; f: set; x: mem{'d; 's}; y: mem{'e; 's}; z: mem{'f; 's}; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}} -->
-   sequent { <H> >- equiv{'s; 'r} }
+   ('A : sequent { <H>; a: set; x: mem{'a; 's} >- equiv{'s; 'r; 'a; 'a} }) -->
+   ('B : sequent { <H>; b: set; c: set; x: mem{'b; 's}; y: mem{'c; 's}; u: equiv{'s; 'r; 'b; 'c} >- equiv{'s; 'r; 'c; 'b} }) -->
+   ('C: sequent { <H>; d: set; e: set; f: set; x: mem{'d; 's}; y: mem{'e; 's}; z: mem{'f; 's}; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}}) -->
+   sequent { <H> >- equiv{'s; 'r} } =
+   'A & 'B & 'C
 
 doc <:doc<
    @begin[doc]
@@ -272,11 +276,12 @@ prim equiv_sym :
    sequent { <H> >- isset{'r} } -->
 (* sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
-*) sequent { <H> >- equiv{'s; 'r} } -->
+*) ('E : sequent { <H> >- equiv{'s; 'r} }) -->
    sequent { <H> >- mem{'a; 's} } -->
    sequent { <H> >- mem{'b; 's} } -->
-   sequent { <H> >- equiv{'s; 'r; 'a; 'b} } -->
-   sequent { <H> >- equiv{'s; 'r; 'b; 'a} }
+   ('A : sequent { <H> >- equiv{'s; 'r; 'a; 'b} }) -->
+   sequent { <H> >- equiv{'s; 'r; 'b; 'a} } =
+   'E & 'A
 
 (*
  * Transitivity.
@@ -286,13 +291,14 @@ prim equiv_trans 'b :
    sequent { <H> >- isset{'r} } -->
 (* sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
-*) sequent { <H> >- equiv{'s; 'r} } -->
+*) ('E : sequent { <H> >- equiv{'s; 'r} }) -->
    sequent { <H> >- mem{'a; 's} } -->
    sequent { <H> >- mem{'b; 's} } -->
    sequent { <H> >- mem{'c; 's} } -->
-   sequent { <H> >- equiv{'s; 'r; 'a; 'b} } -->
-   sequent { <H> >- equiv{'s; 'r; 'b; 'c} } -->
-   sequent { <H> >- equiv{'s; 'r; 'a; 'c} }
+   ('A : sequent { <H> >- equiv{'s; 'r; 'a; 'b} }) -->
+   ('B : sequent { <H> >- equiv{'s; 'r; 'b; 'c} }) -->
+   sequent { <H> >- equiv{'s; 'r; 'a; 'c} } =
+   'E & 'A & 'B
 
 doc <:doc<@docoff >>
 (*
@@ -303,11 +309,12 @@ prim equiv_sym1 'H :
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- isset{'r} } -->
 (* sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- isset{'a} } -->
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- isset{'b} } -->
-*) sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- equiv{'s; 'r} } -->
+*) ('E : sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- equiv{'s; 'r} }) -->
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- mem{'a; 's} } -->
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- mem{'b; 's} } -->
-   sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]>; u: equiv{'s; 'r; 'b; 'a} >- 'C['x] } -->
-   sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- 'C['x] }
+   ('A : sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]>; u: equiv{'s; 'r; 'b; 'a} >- 'C['x] }) -->
+   sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- 'C['x] } =
+   'E & 'A
 
 doc <:doc<
    @begin[doc]

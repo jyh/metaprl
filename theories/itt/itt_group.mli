@@ -67,7 +67,15 @@ declare subgroup[i:l]{'S; 'G}
 declare lcoset{'S; 'G; 'b}
 declare rcoset{'S; 'G; 'b}
 declare normalSubg[i:l]{'S; 'G}
+declare isGroupHom{'f; 'A; 'B}
 declare groupHom{'A; 'B}
+declare isInjective{'f; 'A; 'B}
+declare isSurjective{'f; 'A; 'B}
+declare isBijective{'f; 'A; 'B}
+declare groupEpi{'A; 'B}
+declare groupMono{'A; 'B}
+declare groupIso{'A; 'B}
+declare groupKer{'f; 'A; 'B}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -82,7 +90,11 @@ prec prec_inv
 topval unfold_pregroup : conv
 topval unfold_isGroup : conv
 topval unfold_group : conv
+topval unfold_abelg : conv
 topval unfold_subgroup : conv
+topval unfold_lcoset : conv
+topval unfold_rcoset : conv
+topval unfold_normalSubg : conv
 topval unfold_isGroupHom : conv
 topval unfold_groupHom : conv
 topval unfold_isInjective : conv
@@ -105,9 +117,13 @@ topval fold_lcoset : conv
 topval fold_rcoset : conv
 topval fold_normalSubg : conv
 topval fold_isGroupHom : conv
-topval fold_groupHom1 : conv
 topval fold_groupHom : conv
 topval fold_isBijective : conv
+topval fold_isInjective : conv
+topval fold_isSurjective : conv
+topval fold_isBijective : conv
+topval fold_groupMono : conv
+topval fold_groupEpi : conv
 topval fold_groupIso : conv
 topval fold_groupKer : conv
 

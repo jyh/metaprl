@@ -984,6 +984,8 @@ doc <:doc<
    @begin[doc]
    @modsection{Group Epimorphism, Group Monomorphism, and Group Isomorphism}
    @modsubsection{Rewrites}
+   An epimorphism is a homomorphism that is onto.
+   A monomorphism is a homomorphism that is one-to-one.
    An isomorphism is a homomorphism that is one-to-one and onto.
   
    @end[doc]
@@ -1251,10 +1253,10 @@ dform rcoset_df : except_mode[src] :: rcoset{'H; 'G; 'a} =
    `"Right_coset(" slot{'H} `"; " slot{'G} `"; " slot{'a} `")"
 
 dform normalSubg_df1 : except_mode[src] :: except_mode[prl] :: normalSubg[i:l]{'S; 'G} =
-   `"Normal_subgroup" sub{slot[i:l]} `"(" slot{'S} `", " slot{'G} `")"
+   slot{'S} vartriangleleft sub{slot[i:l]} slot{'G}
 
 dform normalSubg_df2 : mode[prl] :: normalSubg[i:l]{'S; 'G} =
-   `"Normal_subgroup[" slot[i:l] `"](" slot{'S} `", " slot{'G} `")"
+   slot{'S} `" " vartriangleleft `"[" slot[i:l] `"] " slot{'G}
 
 dform isGroupHom_df : except_mode[src] :: isGroupHom{'f; 'A; 'B} =
    `"isGroupHom(" slot{'f} `"; " slot{'A} `"; " slot{'B} `")"

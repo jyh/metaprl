@@ -34,7 +34,7 @@ prim_rw unfold_power : power{'g; 'z; 'n} <-->
    ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
 
 prim_rw unfold_cyc_subg : cyc_subg{'s; 'g; 'a} <-->
-   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all a: set. all b:set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}})) & (all a: set. all b: set. (equiv{car{'s}; eqG{'s}; 'a; 'b} => equiv{car{'g}; eqG{'g}; 'a; 'b})))
+   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all b: set. all c: set. (mem{'b; car{'s}} => mem{'c; car{'s}} => equiv{car{'s}; eqG{'s}; op{'s; 'b; 'c}; op{'g; 'b; 'c}})) & (all b: set. all c: set. (equiv{car{'s}; eqG{'s}; 'b; 'c} => equiv{car{'g}; eqG{'g}; 'b; 'c})) & (all b: set. all c:set. (mem{'b; car{'s}} => mem{'c; car{'s}} => equiv{car{'g}; eqG{'g}; 'b; 'c} => equiv{car{'s}; eqG{'s}; 'b; 'c})))
 
 let fold_power = makeFoldC << power{'g; 'z; 'n} >> unfold_power
 let fold_cyc_subg = makeFoldC << cyc_subg{'s; 'g; 'a} >> unfold_cyc_subg
@@ -128,11 +128,12 @@ interactive cyc_subg_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: equiv{car{'s}; eqG{'s}; 'a; 'b} >- equiv{car{'g}; eqG{'g}; 'a; 'b} } -->
+   sequent ['ext] { 'H; b: set; c: set; x: mem{'b; car{'s}}; y: mem{'c; car{'s}} >- equiv{car{'s}; eqG{'s}; op{'s; 'b; 'c}; op{'g; 'b; 'c}} } -->
+   sequent ['ext] { 'H; d: set; e: set; u: equiv{car{'s}; eqG{'s}; 'd; 'e} >- equiv{car{'g}; eqG{'g}; 'd; 'e} } -->
+   sequent ['ext] { 'H; p: set; q: set; x: mem{'p; car{'s}}; y: mem{'q; car{'s}}; v: equiv{car{'g}; eqG{'g}; 'p; 'q} >- equiv{car{'s}; eqG{'s}; 'p; 'q} } -->
    sequent ['ext] { 'H >- cyc_subg{'s; 'g; 'a} }
 
-interactive cyc_subg_subgroup 'H 'a :
+interactive cycsubg_subgroup 'H 'a :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- 's IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
@@ -143,4 +144,4 @@ interactive cyc_subg_subgroup 'H 'a :
    sequent ['ext] { 'H >- subgroup{'s; 'g} }
 
 let cycsubgSubgroupT t p =
-   cyc_subg_subgroup (hyp_count_addr p) t p
+   cycsubg_subgroup (hyp_count_addr p) t p

@@ -32,7 +32,7 @@ rewrite unfold_power : power{'g; 'z; 'n} <-->
    ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
 
 rewrite unfold_cyc_subg : cyc_subg{'s; 'g; 'a} <-->
-   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all a: set. all b:set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}})) & (all a: set. all b: set. (equiv{car{'s}; eqG{'s}; 'a; 'b} => equiv{car{'g}; eqG{'g}; 'a; 'b})))
+   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all b: set. all c: set. (mem{'b; car{'s}} => mem{'c; car{'s}} => equiv{car{'s}; eqG{'s}; op{'s; 'b; 'c}; op{'g; 'b; 'c}})) & (all b: set. all c: set. (equiv{car{'s}; eqG{'s}; 'b; 'c} => equiv{car{'g}; eqG{'g}; 'b; 'c})) & (all b: set. all c:set. (mem{'b; car{'s}} => mem{'c; car{'s}} => equiv{car{'g}; eqG{'g}; 'b; 'c} => equiv{car{'s}; eqG{'s}; 'b; 'c})))
 
 topval fold_power : conv
 topval fold_cyc_subg : conv

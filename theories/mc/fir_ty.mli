@@ -69,12 +69,6 @@ declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
 
 (*
- * Memory is allocated in blocks.
- * Each block has a tag and some values (a list).
- *)
-declare block{ 'tag; 'args }
-
-(*
  * Boolean type.
  * true_set and false_set define true and false.
  *)

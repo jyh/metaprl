@@ -12,15 +12,11 @@ OCAMLDEPFLAGS := -prl
 # Library files
 MPFILES := \
    fir_state \
-   fir_sos \
-\
    fir_int_set \
    fir_ty \
    fir_exp \
    fir_int \
    fir_test\
-\
-   fir_itt_state
 
 # Name of main libraries
 MAIN = theory

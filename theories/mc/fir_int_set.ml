@@ -45,9 +45,9 @@ dform member_df : except_mode[src] :: member{ 'num; 'set } =
  * Rewrites.
  *************************************************************************)
 
-prim_rw reduce_member_ind : member{ 'num; int_set{ cons{'i; 'el} } } <-->
+prim_rw reduce_member_cons : member{ 'num; int_set{ cons{'i; 'el} } } <-->
    ifthenelse{ in_interval{ 'num; 'i }; btrue; member{ 'num; int_set{'el} } }
-prim_rw reduce_member_base : member{ 'num; int_set{ nil } } <--> bfalse
+prim_rw reduce_member_nil : member{ 'num; int_set{ nil } } <--> bfalse
 
 (*************************************************************************
  * Automation.
@@ -55,6 +55,6 @@ prim_rw reduce_member_base : member{ 'num; int_set{ nil } } <--> bfalse
 
 let resource reduce += [
    << in_interval{ 'num; interval{'l; 'r} } >>, unfold_in_interval;
-   << member{ 'num; int_set{ cons{'i; 'el} } } >>, reduce_member_ind;
-   << member{ 'num; int_set{ nil } } >>, reduce_member_base;
+   << member{ 'num; int_set{ cons{'i; 'el} } } >>, reduce_member_cons;
+   << member{ 'num; int_set{ nil } } >>, reduce_member_nil;
 ]

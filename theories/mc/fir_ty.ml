@@ -49,9 +49,6 @@ declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
 
-(* Blocks / memory. *)
-declare block{ 'tag; 'args }
-
 (* Boolean type. *)
 define unfold_true_set : true_set <--> int_set{ cons{ interval{1; 1}; nil } }
 define unfold_false_set : false_set <--> int_set{ cons{ interval{0; 0}; nil } }
@@ -111,10 +108,6 @@ dform tyDefUnion_df : except_mode[src] ::
    `", " slot{'elts} `")" ezone
 dform tyDefLambda_df : except_mode[src] :: tyDefLambda{ 'ty_var_list; 'ty } =
    szone `"TyDefLambda(" slot{'ty_var_list} `", " slot{'ty} `")" ezone
-
-(* Blocks / memory. *)
-dform block_df : except_mode[src] :: block{ 'tag; 'args } =
-   lzone `"block(" slot{'tag} `", " slot{'args} `")" ezone
 
 (* Boolean type *)
 dform true_set_df : except_mode[src] :: true_set = `"true_set"

@@ -7,12 +7,19 @@
 
 include Base_theory
 include Itt_theory
+include Fir_state
 include Fir_int_set
 include Fir_ty
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
+
+(* Program. *)
+declare prog{ 'state; 'exp }
+
+(* Program value. *)
+declare value{ 'v }
 
 (* Identity (polymorphic). *)
 declare idOp
@@ -70,13 +77,20 @@ declare "match"{ 'key; 'cases }
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'block; 'index; v. 'exp['v] }
-(*declare setSubscript{ 'a1; 'a2; 'a3; 'exp }*)
-declare letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] }
+declare letSubscript{ 'ref; 'index; v. 'exp['v] }
+declare setSubscript{ 'ref; 'index; 'new_val; 'exp }
 
 (*************************************************************************
  * Display forms.
  *************************************************************************)
+
+(* Program. *)
+dform prog_df : except_mode[src] :: prog{ 'state; 'exp } =
+   `"prog(" slot{'state} `", " slot{'exp} `")"
+
+(* Program value. *)
+dform value_df : except_mode[src] :: value{ 'v } =
+   `"value(" slot{'v} `")"
 
 (* Identity (polymorphic). *)
 dform idOp_df : except_mode[src] :: idOp = `"id"
@@ -173,16 +187,23 @@ dform letAlloc_df : except_mode[src] :: letAlloc{ 'alloc_op; v. 'exp } =
 
 (* Subscripting. *)
 dform letSubscript_df : except_mode[src] ::
-   letSubscript{ 'block; 'index; v. 'exp } =
+   letSubscript{ 'ref; 'index; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
-   lzone slot{'block} `"[" slot{'index} `"]" ezone popm hspace
+   lzone slot{'ref} `"[" slot{'index} `"]" ezone popm hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
+dform setSubscript_df : except_mode[src] ::
+   setSubscript{ 'ref; 'index; 'new_val; 'exp } =
+   szone slot{'ref} `"[" slot{'index} `"]" Nuprl_font!leftarrow
+   slot{'new_val} `";" hspace slot{'exp} ezone
 
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
+
+(* Program value. *)
+prim_rw reduce_value : prog{ 's; value{ 'v } } <--> 'v
 
 (* Identity (polymorphic). *)
 prim_rw reduce_idOp : unOp{ idOp; 'a1; v. 'exp['v] } <--> 'exp['a1]
@@ -195,11 +216,13 @@ prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
 
 (* Allocation. *)
 prim_rw reduce_allocTuple :
-   letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } <-->
-   'exp[ block{ 0; 'atom_list } ]
+   prog{ 'state; letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } } <-->
+   "match"{ alloc{ 'state; 0; 'atom_list }; s2, v2.
+      prog{ 's2; 'exp['v2] } }
 prim_rw reduce_allocArray :
-   letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } <-->
-   'exp[ block{ 0; 'atom_list } ]
+   prog{ 'state; letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } } <-->
+   "match"{ alloc{ 'state; 0; 'atom_list }; s2, v2.
+      prog{ 's2; 'exp['v2] } }
 
 (* Control *)
 prim_rw reduce_match_num :
@@ -211,22 +234,26 @@ prim_rw reduce_match_block :
 
 (* Subscripting. *)
 prim_rw reduce_letSubscript :
-   letSubscript{ block{'tag; 'args}; 'index; v. 'exp['v] } <-->
-   'exp[ nth{'args; 'index} ]
-prim_rw reduce_letSubCheck :
-   letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] } <-->
-   'exp['a1; 'a2]
+   prog{ 'state; letSubscript{ 'ref; 'index; v. 'exp['v] } } <-->
+   "match"{ fetch{ 'state; 'ref; 'index }; s2, v2.
+      prog{ 's2; 'exp['v2] } }
+prim_rw reduce_setSubscript :
+   prog{ 'state; setSubscript{ 'ref; 'index; 'new_val; 'exp } } <-->
+   "match"{ store{ 'state; 'ref; 'index; 'new_val }; s2, v2.
+      prog{ 's2; 'exp } }
 
 (*************************************************************************
  * Automation.
  *************************************************************************)
 
 let resource reduce += [
+   <<  prog{ 's; value{ 'v } } >>, reduce_value;
+
    << unOp{ idOp; 'a1; v. 'exp['v] } >>, reduce_idOp;
 
-   << letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } >>,
+   << prog{'state; letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] }} >>,
       reduce_allocTuple;
-   << letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } >>,
+   << prog{'state; letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] }} >>,
       reduce_allocArray;
    << copy{ 'len; 'init } >>, unfold_copy;
 
@@ -235,7 +262,8 @@ let resource reduce += [
    << "match"{ block{ 'i; 'args }; cons{matchCase{'set; 'exp}; 'el} } >>,
       reduce_match_block;
 
-   << letSubscript{ block{'tag; 'args}; 'index; v. 'exp['v] } >>,
+   << prog{ 'state; letSubscript{ 'ref; 'index; v. 'exp['v] } } >>,
       reduce_letSubscript;
-   << letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] } >>, reduce_letSubCheck
+   << prog{ 'state; setSubscript{ 'ref; 'index; 'new_val; 'exp } } >>,
+      reduce_setSubscript
 ]

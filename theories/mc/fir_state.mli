@@ -3,66 +3,89 @@
  * Brian Emre Aydemir, emre@its.caltech.edu
  *
  * State operations for FIR programs.
+ * I'll represent the state as an association list keyed
+ *    on non-negative integers.  I also assume that in this association
+ *    list, the only values are blocks.
  *)
 
 include Base_theory
+include Itt_theory
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
 
 (*
- * First allocated location.
- * Label for the first allocated memory location in the state.
+ * Replace association list elements.
+ * Replace the item in the association list 'l keyed by 'key
+ *    (as determined by 'eq) with 'item.  Amounts to a fancy no-op
+ *    if an keyed by 'key can't be found in the list.
  *)
-declare first
+declare replace_nth_assoc{ 'eq; 'key; 'l; 'item }
 
 (*
- * Next location.
- * Label for the next memory location after 'loc in the state.
+ * Memory is allocated in blocks.
+ * Each block has a tag and some values (a list).
  *)
-declare next{ 'loc }
+declare block{ 'tag; 'args }
 
 (*
- * Location equality.
- * Tests to see if 'loc1 and 'loc2 are the same location.  Evaluates
- *    to 'e1 if they are the same, and 'e2 otherwise.
+ * Block indexing.
+ * Retrieve the 'index-th item in a block.
  *)
-declare if_eq_loc{ 'loc1; 'loc2; 'e1; 'e2 }
+declare nth_block{ 'block; 'index }
 
 (*
- * Pointer.
- * Refers to a memory location. Not actually a location or the
- *    contents of a location.
+ * Replacing block elements.
+ * Replaces the 'index-th element in the block with 'item_list.
  *)
-declare pointer{ 'loc }
+declare replace_nth_block{ 'block; 'index; 'item_list }
+
+(*
+ * Reference.
+ * Refers to a memory location.  'loc will be an index
+ *    into a list of items in the state.
+ *)
+declare ref{ 'num }
 
 (*
  * Empty state.
  * The program state that contains nothing.
  *)
-declare empty
+define unfold_empty : empty <--> nil
 
 (*
  * Memory allocation.
- * Allocation a spot for 'item in 'state and assign 'item to that new
- *    location.  Evaluates to a pair of the new state and the location
- *    of where the item was stored.
+ * Allocates a location in state for 'item_list.  Evaluates to a pair
+ *    which is the new state and a reference to the location used.
  *)
-declare alloc{ 'state; 'item }
+declare alloc{ 'state; 'tag; 'item_list }
 
 (*
  * Assignment.
- * Assign the location 'loc in 'state the value 'item, assuming
- *    that 'loc is an already allocated location.  Evaluates to a pair
- *    of dot (the non-value value) and the updated state.
+ * Stores 'item in the 'index-th location of the block at 'ref in 'state.
+ *    Evaluates to a pair which is the state and it.
  *)
-declare store{ 'state; 'loc; 'item }
+declare store{ 'state; 'ref; 'index; 'item }
 
 (*
  * Value lookup.
- * Retrieve the value at 'loc in 'state. Evaluates to a pair of
- *    the value retrieved and the state (which is unchanged by
- *    the lookup).
+ * Evaulates to a pair which is the state and the value at the 'index-th
+ *    location in the block at 'ref.  The value will be it if the reference
+ *    or index is invalid.
  *)
-declare fetch{ 'state; 'loc }
+declare fetch{ 'state; 'ref; 'index }
+
+(*
+ * Block lookup.
+ * Return the block referred to by 'ref.
+ *)
+declare fetch_block{ 'state; 'ref }
+
+(*
+ * Match / spread.
+ * Declared here for convinience (so I claim) in working with the above.
+ *)
+define unfold_match :
+   "match"{ 'i; a, b. 'exp['a; 'b] } <-->
+   spread{ 'i; a, b. 'exp['a; 'b] }

@@ -7,12 +7,27 @@
 
 include Base_theory
 include Itt_theory
+include Fir_state
 include Fir_int_set
 include Fir_ty
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
+
+(*
+ * Program.
+ * Encapsulates an expression and the state in which the expression
+ *    should be evaluated.
+ *)
+declare prog{ 'state; 'exp }
+
+(*
+ * Program value.
+ * Declares that 'v is a value and that when the program evaluates,
+ *    we can now drop the state from future consideration.
+ *)
+declare value{ 'v }
 
 (* Identity (polymorphic). *)
 declare idOp
@@ -28,8 +43,6 @@ declare eqEqOp
 
 (*
  * Allocation operators.
- * 'args in allocTuple and allocArray is a list.  They both evaluation
- *    to a block whose tag is zero and whose contents are 'args.
  * copy makes a list with 'len copies of 'init.
  * 'len should be a positive number.
  *)
@@ -81,6 +94,5 @@ declare "match"{ 'key; 'cases }
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'block; 'index; v. 'exp['v] }
-(*declare setSubscript{ 'a1; 'a2; 'a3; 'exp }*)
-declare letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] }
+declare letSubscript{ 'ref; 'index; v. 'exp['v] }
+declare setSubscript{ 'ref; 'index; 'new_val; 'exp }

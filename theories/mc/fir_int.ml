@@ -115,23 +115,23 @@ prim_rw reduce_xorIntOp : binOp{ xorIntOp; 'a1; 'a2; v. 'exp['v] } <-->*)
 
 (* Comparison. *)
 prim_rw reduce_eqIntOp : binOp{ eqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   (*'exp[ ifthenelse{ beq_int{ 'a1; 'a2 }; ftrue; ffalse } ]*)
-   'exp[ beq_int{ 'a1; 'a2 } ]
+   'exp[ ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false } ]
+   (*'exp[ beq_int{ 'a1; 'a2 } ]*)
 prim_rw reduce_neqIntOp : binOp{ neqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   (*'exp[ ifthenelse{ bneq_int{ 'a1; 'a2 }; ftrue; ffalse } ]*)
-   'exp[ bneq_int{ 'a1; 'a2 } ]
+   'exp[ ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false } ]
+   (*'exp[ bneq_int{ 'a1; 'a2 } ]*)
 prim_rw reduce_ltIntOp : binOp{ ltIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   (*'exp[ ifthenelse{ lt_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
-   'exp[ lt_bool{ 'a1; 'a2 } ]
+   'exp[ ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }  ]
+   (*'exp[ lt_bool{ 'a1; 'a2 } ]*)
 prim_rw reduce_leIntOp : binOp{ leIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   (*'exp[ ifthenelse{ le_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
-   'exp[ le_bool{ 'a1; 'a2 } ]
+   'exp[ ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false } ]
+   (*'exp[ le_bool{ 'a1; 'a2 } ]*)
 prim_rw reduce_gtIntOp : binOp{ gtIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   (*'exp[ ifthenelse{ gt_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
-   'exp[ gt_bool{ 'a1; 'a2 } ]
+   'exp[ ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false } ]
+   (*'exp[ gt_bool{ 'a1; 'a2 } ]*)
 prim_rw reduce_geIntOp : binOp{ geIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   (*'exp[ ifthenelse{ ge_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
-   'exp[ ge_bool{ 'a1; 'a2 } ]
+   'exp[ ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false } ]
+   (*'exp[ ge_bool{ 'a1; 'a2 } ]*)
 
 (*************************************************************************
  * Automation.

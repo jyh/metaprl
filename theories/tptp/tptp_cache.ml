@@ -28,7 +28,7 @@ struct
    let compare = compare
 end
 
-module StringSet = Splay_set.Make (StringOrd)
+module StringSet = Fun_splay_set.Make (StringOrd)
 
 (*
  * This type is used for comparing terms.

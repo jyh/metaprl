@@ -322,22 +322,22 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive gt_bool_wf {| intro []; eqcd |} :
+interactive gt_bool_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- gt_bool{'a1; 'b1}=gt_bool{'a2; 'b2} in bool }
 
-interactive le_bool_wf {| intro []; eqcd |} :
+interactive le_bool_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- le_bool{'a1; 'b1}=le_bool{'a2; 'b2} in bool }
 
-interactive ge_bool_wf {| intro []; eqcd |} :
+interactive ge_bool_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- ge_bool{'a1; 'b1}=ge_bool{'a2; 'b2} in bool }
 
-interactive bneq_int_wf {| intro []; eqcd |} :
+interactive bneq_int_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- bneq_int{'a1; 'b1}=bneq_int{'a2; 'b2} in bool }
@@ -367,7 +367,7 @@ doc <:doc<
    @end[doc]
 >>
 
-prim mul_wf {| intro []; eqcd |} :
+prim mul_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it

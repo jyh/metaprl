@@ -387,7 +387,7 @@ doc <:doc<
    @end[doc]
 >>
 
-prim add_wf {| intro []; eqcd |} :
+prim add_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a +@ 'b = 'a1 +@ 'b1 in int } = it
@@ -396,17 +396,17 @@ prim minus_wf {| intro []; eqcd |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    sequent { <H> >- (-'a) = (-'a1) in int } = it
 
-interactive sub_wf {| intro []; eqcd |} :
+interactive sub_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a -@ 'b = 'a1 -@ 'b1 in int }
 
-prim lt_bool_wf {| intro []; eqcd |} :
+prim lt_bool_wf {| intro [AutoMustComplete]; eqcd |} :
    sequent { <H> >- 'a='a1 in int } -->
    sequent { <H> >- 'b='b1 in int } -->
    sequent { <H> >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool } = it
 
-prim beq_wf {| intro []; eqcd |} :
+prim beq_wf {| intro [AutoMustComplete]; eqcd |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
@@ -723,7 +723,7 @@ let reduce_ind_numberC =
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-prim indEquality {| intro []; eqcd |} lambda{z. 'T['z]} :
+prim indEquality {| intro [AutoMustComplete]; eqcd |} lambda{z. 'T['z]} :
    sequent { <H> >- 'x1 = 'x2 in int } -->
    sequent { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
  'down2['x; 'y] in 'T['x] } -->

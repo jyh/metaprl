@@ -112,9 +112,13 @@ declare nth{'l; 'i}
 declare replace_nth{'l; 'i; 't}
 
 (*
+ * Reverse the elements of a list.
+ *)
+declare rev{'l}
+
+(*
  * Make the list of the size 'n from the function 'f:[0..n-1]->'T
  *)
-
 declare mklist{'n;'f}
 
 
@@ -143,6 +147,7 @@ topval unfold_fold_left : conv
 topval unfold_nth : conv
 topval unfold_replace_nth : conv
 topval unfold_length : conv
+topval unfold_rev : conv
 
 topval fold_is_nil : conv
 topval fold_mem : conv
@@ -157,6 +162,7 @@ topval fold_fold_left : conv
 topval fold_nth : conv
 topval fold_replace_nth : conv
 topval fold_length : conv
+topval fold_rev : conv
 
 (************************************************************************
  * TACTICS                                                              *

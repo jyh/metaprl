@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_comment]
  *
- * The @tt{Mfir_comment} module declares terms and display forms
+ * The @tt[Mfir_comment] module declares terms and display forms
  * for formatting comments in the FIR theory.
  * @end[doc]
  *

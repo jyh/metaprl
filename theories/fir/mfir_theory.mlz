@@ -52,8 +52,8 @@
  * @begin[doc]
  * @module[Mfir_theory]
  *
- * The @tt{Mfir_theory} module does not introduce any logical content
- * of its own to the FIR theory.  It is a convinience for including
+ * The @tt[Mfir_theory] module does not introduce any logical content
+ * of its own to the FIR theory.  It is a convenience for including
  * the entire FIR theory elsewhere.
  * @end[doc]
  *)

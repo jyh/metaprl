@@ -1,4 +1,6 @@
 (*!
+ * @spelling{deconstruction}
+ *
  * @begin[doc]
  * @module[Mfir_termOp]
  *

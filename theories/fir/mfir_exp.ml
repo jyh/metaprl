@@ -1,8 +1,10 @@
 (*!
+ * @spelling{rawdata tyEnum}
+ *
  * @begin[doc]
  * @module[Mfir_exp]
  *
- * The @tt{Mfir_exp} module declares terms to represent FIR expressions.
+ * The @tt[Mfir_exp] module declares terms to represent FIR expressions.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -123,7 +125,7 @@ declare pointerOfBlockOp{ 'sub_block }
  * @begin[doc]
  * @modsubsection{Binary operators}
  *
- * The FIR binary operators include various arithemetic operators, and pointer
+ * The FIR binary operators include various arithmetic operators, and pointer
  * equality operators. We omit an explicit listing of these terms.
  * @end[doc]
  * @docoff
@@ -209,9 +211,9 @@ declare plusPointerOp[precision:n, sign:s]{ 'sub_block }
  * Apart from arithmetic exceptions, such as division by zero, they are
  * functional; order of atom evaluation does not matter.
  *
- * The term @tt{atomInt} corresponds to integers of type @hrefterm[tyInt]. The
- * term @tt{atomEnum} corresponds to constants of type @hrefterm[tyEnum].  The
- * term @tt{atomRawInt} is an integer of type @hrefterm[tyRawInt]. The
+ * The term @tt[atomInt] corresponds to integers of type @hrefterm[tyInt]. The
+ * term @tt[atomEnum] corresponds to constants of type @hrefterm[tyEnum].  The
+ * term @tt[atomRawInt] is an integer of type @hrefterm[tyRawInt]. The
  * parameters of these terms specify their value, and the relevant parameters
  * of their respective types.
  * @end[doc]
@@ -224,7 +226,7 @@ declare atomRawInt[precision:n, sign:s, value:n]
 (*!
  * @begin[doc]
  *
- * The term @tt{atomVar} corresponds to variables in the FIR.
+ * The term @tt[atomVar] corresponds to variables in the FIR.
  * @end[doc]
  *)
 
@@ -233,9 +235,9 @@ declare atomVar{ 'var }
 (*!
  * @begin[doc]
  *
- * The @tt{atomTyApply} term is the polymorphic type application of an atom
- * @tt{atom} to a list of type arguments @tt{ty_list}.  The subterm @tt{ty} is
- * the type of the @tt{atomTyApply} atom.
+ * The @tt[atomTyApply] term is the polymorphic type application of an atom
+ * @tt[atom] to a list of type arguments @tt[ty_list].  The subterm @tt[ty] is
+ * the type of the @tt[atomTyApply] atom.
  * @end[doc]
  *)
 
@@ -244,8 +246,8 @@ declare atomTyApply{ 'atom; 'ty; 'ty_list }
 (*!
  * @begin[doc]
  *
- * The @tt{atomTyPack} term abstracts a variable @tt{var} over a list of types
- * @tt{ty_list}.  The subterm @tt{ty} is the type of the @tt{atomTyPack} atom.
+ * The @tt[atomTyPack] term abstracts a variable @tt[var] over a list of types
+ * @tt[ty_list].  The subterm @tt[ty] is the type of the @tt[atomTyPack] atom.
  * @end[doc]
  *)
 
@@ -254,8 +256,8 @@ declare atomTyPack{ 'var; 'ty; 'ty_list }
 (*!
  * @begin[doc]
  *
- * The @tt{atomTyUnpack} term is the elimination form for type abstraction.
- * The variable @tt{var} is instantiated with the types from the original pack
+ * The @tt[atomTyUnpack] term is the elimination form for type abstraction.
+ * The variable @tt[var] is instantiated with the types from the original pack
  * operation.
  * @end[doc]
  *)
@@ -265,9 +267,9 @@ declare atomTyUnpack{ 'var }
 (*!
  * @begin[doc]
  *
- * The FIR supports both unary and binary arithmetic. The term @tt{atomUnop}
+ * The FIR supports both unary and binary arithmetic. The term @tt[atomUnop]
  * has subterms for a unary operator and its argument.  The term
- * @tt{atomBinop} has subterms for a binary operator and its two arguments.
+ * @tt[atomBinop] has subterms for a binary operator and its two arguments.
  * @end[doc]
  *)
 
@@ -279,9 +281,9 @@ declare atomBinop{ 'binop; 'atom1; 'atom2 }
  * @modsubsection{Allocation operators}
  *
  * Allocation operators are used the @hrefterm[letAlloc] expression below to
- * allocate data aggregates.  The term @tt{allocTuple} is used to allocate a
- * tuple value with type @tt{ty}, tuple class @tt{tc}, and elements
- * @tt{atom_list}.
+ * allocate data aggregates.  The term @tt[allocTuple] is used to allocate a
+ * tuple value with type @tt[ty], tuple class @tt[tc], and elements
+ * @tt[atom_list].
  * @end[doc]
  *)
 
@@ -290,9 +292,9 @@ declare allocTuple[tc:s]{ 'ty; 'atom_list }
 (*!
  * @begin[doc]
  *
- * The term @tt{allocUnion} is used to allocate a union value.  The union type
- * is given by @tt{ty_var}, and the case allocated is given by @tt{case}.  The
- * values used to initialize the case are given by @tt{atom_list}.
+ * The term @tt[allocUnion] is used to allocate a union value.  The union type
+ * is given by @tt[ty_var], and the case allocated is given by @tt[case].  The
+ * values used to initialize the case are given by @tt[atom_list].
  * @end[doc]
  *)
 
@@ -301,8 +303,8 @@ declare allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list }
 (*!
  * @begin[doc]
  *
- * The term @tt{allocVArray} allocates an array of size @tt{atom1} of type
- * @tt{ty}.  All the elements of the array are initialized to @tt{atom2}.
+ * The term @tt[allocVArray] allocates an array of size @tt[atom1] of type
+ * @tt[ty].  All the elements of the array are initialized to @tt[atom2].
  * @end[doc]
  *)
 
@@ -311,8 +313,8 @@ declare allocVArray{ 'ty; 'atom1; 'atom2 }
 (*!
  * @begin[doc]
  *
- * The term @tt{allocMalloc} is used to allocate a rawdata block with type
- * @tt{ty}.  The size of the allocated area is given by @tt{atom}.
+ * The term @tt[allocMalloc] is used to allocate a rawdata block with type
+ * @tt[ty].  The size of the allocated area is given by @tt[atom].
  * @end[doc]
  *)
 
@@ -327,8 +329,8 @@ declare allocMalloc{ 'ty; 'atom }
  * calling functions, matching a value against a pattern,
  * subscripting aggregate data.
  *
- * The term @tt{letAtom} forms a new scope, where @tt{atom}
- * is bound to @tt{v} in @tt{exp}.
+ * The term @tt[letAtom] forms a new scope, where @tt[atom]
+ * is bound to @tt[v] in @tt[exp].
  * @end[doc]
  *)
 
@@ -337,11 +339,11 @@ declare letAtom{ 'ty; 'atom; v. 'exp['v] }
 (*!
  * @begin[doc]
  *
- * The term @tt{letExt} is used to access a function @tt{str} that is part of
+ * The term @tt[letExt] is used to access a function @tt[str] that is part of
  * the runtime or operating system.  The function has argument types
- * @tt{fun_arg_types}, returns a result of type @tt{fun_res_type}, and is
- * called with arguments @tt{fun_args}.  The value returned is bound to @tt{v}
- * in @tt{exp}.
+ * @tt[fun_arg_types], returns a result of type @tt[fun_res_type], and is
+ * called with arguments @tt[fun_args].  The value returned is bound to @tt[v]
+ * in @tt[exp].
  * @end[doc]
  *)
 
@@ -350,8 +352,8 @@ declare letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp['v] }
 (*!
  * @begin[doc]
  *
- * The term @tt{tailCall} is a function call to the function given by
- * @tt{atom}.  The arguments to the function are given by @tt{atom_list}.
+ * The term @tt[tailCall] is a function call to the function given by
+ * @tt[atom].  The arguments to the function are given by @tt[atom_list].
  * There is no way to bind the value returned by the function.  In practice,
  * functions have a return type of @tt{tyEnum[0:n]}, a void type.
  * @end[doc]
@@ -362,11 +364,11 @@ declare tailCall{ 'atom; 'atom_list }
 (*!
  * @begin[doc]
  *
- * The term @tt{matchExp} is a pattern matching expression that matches an
- * atom @tt{atom} against a list of cases @tt{matchCase_list}. A match case is
- * specified by the term @tt{matchCase}, which takes a set (either an integer
- * set or a raw integer set) @tt{set}, and an expression @tt{exp}.
- * Operationally, the first case for which @tt{atom} is an element of the
+ * The term @tt[matchExp] is a pattern matching expression that matches an
+ * atom @tt{atom} against a list of cases @tt[matchCase_list]. A match case is
+ * specified by the term @tt[matchCase], which takes a set (either an integer
+ * set or a raw integer set) @tt[set], and an expression @tt[exp].
+ * Operationally, the first case for which @tt[atom] is an element of the
  * case's set is selected for evaluation.
  * @end[doc]
  *)
@@ -377,9 +379,9 @@ declare matchExp{ 'atom; 'matchCase_list }
 (*!
  * @begin[doc]
  *
- * The @tt{letAlloc} term is used to allocate a data aggregate using
- * @tt{alloc_op}.  A reference to the data allocated is bound to @tt{v} in
- * @tt{exp}.
+ * The @tt[letAlloc] term is used to allocate a data aggregate using
+ * @tt[alloc_op].  A reference to the data allocated is bound to @tt[v] in
+ * @tt[exp].
  * @end[doc]
  *)
 
@@ -388,12 +390,12 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 (*!
  * @begin[doc]
  *
- * The terms @tt{letSubscript} and @tt{setSubscript} are used to subscript
- * data aggregates.  In both terms, @tt{atom1} refers to a data aggregate,
- * and @tt{atom2} is an index into @tt{atom1}.  The value at that location
- * should have type @tt{ty}.  In the case of @tt{letSubscript}, the value is
- * bound to @tt{v} in @tt{exp}.  In the case of @tt{setSubscript}, the value
- * is set to to @tt{atom3}.
+ * The terms @tt[letSubscript] and @tt[setSubscript] are used to subscript
+ * data aggregates.  In both terms, @tt[atom1] refers to a data aggregate,
+ * and @tt[atom2] is an index into @tt[atom1].  The value at that location
+ * should have type @tt[ty].  In the case of @tt[letSubscript], the value is
+ * bound to @tt[v] in @tt[exp].  In the case of @tt[setSubscript], the value
+ * is set to to @tt[atom3].
  * @end[doc]
  *)
 
@@ -403,10 +405,10 @@ declare setSubscript{ 'atom1; 'atom2; 'ty; 'atom3; 'exp }
 (*!
  * @begin[doc]
  *
- * The term @tt{letGlobal} is used to bind a global variable @tt{label}, of
- * type @tt{ty}, to @tt{v} in @tt{exp}. The term @tt{setGlobal} is used to set
- * the value of a global variable @tt{label}, of type @tt{ty}, to the value
- * @tt{atom}.
+ * The term @tt[letGlobal] is used to bind a global variable @tt[label], of
+ * type @tt[ty], to @tt[v] in @tt[exp]. The term @tt[setGlobal] is used to set
+ * the value of a global variable @tt[label], of type @tt[ty], to the value
+ * @tt[atom].
  * @end[doc]
  *)
 

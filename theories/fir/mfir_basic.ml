@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_basic]
  *
- * The @tt{Mfir_basic} module declares basic terms needed to
+ * The @tt[Mfir_basic] module declares basic terms needed to
  * support the @MetaPRL representation of the FIR.
  * @end[doc]
  *
@@ -65,8 +65,8 @@ declare number[i:n]
  * @modsubsection{Lists}
  *
  * Lists are used in the FIR to encode entities whose arities may vary.  The
- * term @tt{nil} is the empty list, and the term @tt{cons} adds a term
- * @tt{elt} to the list @tt{tail}.
+ * term @tt[nil] is the empty list, and the term @tt[cons] adds a term
+ * @tt[elt] to the list @tt[tail].
  * @end[doc]
  *)
 
@@ -82,10 +82,10 @@ declare cons{ 'elt; 'tail }
  * type (see @hrefterm[tyUnion]).  An integer set is represented as a list of
  * closed intervals.
  *
- * The term @tt{interval} represents a closed interval.  The term @tt{intset}
+ * The term @tt[interval] represents a closed interval.  The term @tt[intset]
  * consists of a list of intervals.  In this case, the end points of each
  * interval are interpreted as signed, 31-bit integers.  The term
- * @tt{rawintset} is similar, except the end points of each interval are
+ * @tt[rawintset] is similar, except the end points of each interval are
  * interpreted as integers with the specified precision and signedness (see
  * @hrefterm[tyRawInt]).
  * @end[doc]

@@ -145,5 +145,3 @@ prim_rw make_bterm_base :
 
 
 
-
-

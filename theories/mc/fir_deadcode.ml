@@ -51,8 +51,11 @@ interactive_rw reduce_letBinop_deadcode :
 
 (* Allocation. *)
 
-prim_rw reduce_letAlloc_deadcode :
-   letAlloc{ 'alloc_op; v. 'exp } <-->
+interactive_rw reduce_allocTuple_deadcode :
+   letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp } <-->
+   'exp
+interactive_rw reduce_allocArray_deadcode :
+   letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp } <-->
    'exp
 
 (* Subscripting. *)
@@ -70,7 +73,8 @@ let firDeadcodeElimT i =
       reduce_letUnop_deadcode;
       reduce_letBinop_deadcode;
 
-      reduce_letAlloc_deadcode;
+      reduce_allocTuple_deadcode;
+      reduce_allocArray_deadcode;
 
       reduce_letSubscript_deadcode
    ] )) i

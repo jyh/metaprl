@@ -182,8 +182,8 @@ prim_rw reduce_mod_arith_unsigned :
 
 prim_rw reduce_true_set : true_set <--> int_set{ 1; 1 }
 prim_rw reduce_false_set : false_set <--> int_set{ 0; 0 }
-prim_rw reduce_val_true : val_true <--> 1
-prim_rw reduce_val_false : val_false <--> 0
+prim_rw reduce_val_true : val_true <--> atomEnum{ 2; 1 }
+prim_rw reduce_val_false : val_false <--> atomEnum{ 2; 0 }
 
 (*
  * Functions.
@@ -304,25 +304,25 @@ prim_rw reduce_minIntOp :
 
 (* Boolean comparisons. *)
 prim_rw reduce_eqIntOp :
-   binop_exp{ eqIntOp; tyInt; 'a1; 'a2 } <-->
+   binop_exp{ eqIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_neqIntOp :
-   binop_exp{ neqIntOp; tyInt; 'a1; 'a2 } <-->
+   binop_exp{ neqIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_ltIntOp :
-   binop_exp{ ltIntOp; tyInt; 'a1; 'a2 } <-->
+   binop_exp{ ltIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_leIntOp :
-   binop_exp{ leIntOp; tyInt; 'a1; 'a2 } <-->
+   binop_exp{ leIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_gtIntOp :
-   binop_exp{ gtIntOp; tyInt; 'a1; 'a2 } <-->
+   binop_exp{ gtIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_geIntOp :
-   binop_exp{ geIntOp; tyInt; 'a1; 'a2 } <-->
+   binop_exp{ geIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_cmpIntOp :
-   binop_exp{ cmpIntOp; tyInt; 'a1; 'a2 } <-->
+   binop_exp{ cmpIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{'a1; 'a2};
       0;
       ifthenelse{ lt_bool{'a1; 'a2};
@@ -370,25 +370,25 @@ prim_rw reduce_minRawIntOp :
 
 (* Boolean comparisons. *)
 prim_rw reduce_eqRawIntOp :
-   binop_exp{ eqRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   binop_exp{ eqRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_neqRawIntOp :
-   binop_exp{ neqRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   binop_exp{ neqRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_ltRawIntOp :
-   binop_exp{ ltRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   binop_exp{ ltRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_leRawIntOp :
-   binop_exp{ leRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   binop_exp{ leRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_gtRawIntOp :
-   binop_exp{ gtRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   binop_exp{ gtRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_geRawIntOp :
-   binop_exp{ geRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   binop_exp{ geRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_cmpRawIntOp :
-   binop_exp{ cmpRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   binop_exp{ cmpRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{'a1; 'a2};
       0;
       ifthenelse{ lt_bool{'a1; 'a2};

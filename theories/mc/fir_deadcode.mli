@@ -42,7 +42,8 @@ open Tactic_type.Conversionals
 topval reduce_letUnop_deadcode : conv
 topval reduce_letBinop_deadcode : conv
 
-topval reduce_letAlloc_deadcode : conv
+topval reduce_allocTuple_deadcode : conv
+topval reduce_allocArray_deadcode : conv
 
 topval reduce_letSubscript_deadcode : conv
 

@@ -104,7 +104,7 @@ dform tyInt_df : except_mode[src] :: tyInt = `"TyInt"
 
 (* Enumeration type. *)
 dform tyEnum_df : except_mode[src] :: tyEnum{ 'num } =
-   lzone `"TyEnum(0.." slot{'num} `")" ezone
+   lzone `"TyEnum(" slot{'num} `")" ezone
 
 (* Native data types. *)
 dform tyRawInt_df : except_mode[src] :: tyRawInt{ 'precision; 'sign } =

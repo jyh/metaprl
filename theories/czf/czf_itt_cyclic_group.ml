@@ -98,13 +98,3 @@ interactive cyclic_group_abel {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; cyclic_group{elem_in_G}} } -->
    sequent ['ext] { 'H >- mem{'s2; cyclic_group{elem_in_G}} } -->
    sequent ['ext] { 'H >- equal{op{'s1; 's2}; op{'s2; 's1}} }
-
-(* A subgroup of a cyclic group is cyclic *)
-(* NOTE: The proofs for this theorem is pretty straight forward: discuss the cases of 'subg; if it is not {id}, then choose 'm as the smallest positive integer such that power{elem_in_G; 'm} is in 'subg; then apply the division algorithm to show that power{elem_in_G; 'm} is the generator for 'subg. However, it is really hard to be implemented here. *)
-interactive subgroup_of_cyclic_group {| intro[] |} 'H :
-   sequent ['ext] { 'H >- isset{'subg} } -->
-   sequent ['ext] { 'H >- subset{'subg; cyclic_group{elem_in_G}} } -->
-   sequent ['ext] { 'H; s1: set; s2: set; a: mem{'s1; 'subg}; b: mem{'s2; 'subg} >- mem{op{'s1; 's2}; 'subg} } -->
-   sequent ['ext] { 'H >- mem{id; 'subg} } -->
-   sequent ['ext] { 'H; s: set; c: mem{'s; 'subg} >- mem{inv{'s}; 'subg} } -->
-   sequent ['ext] { 'H >- exists{int; x. equal{'subg; cyclic_subgroup{power{elem_in_G; 'x}}}} }

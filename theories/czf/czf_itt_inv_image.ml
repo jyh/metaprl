@@ -70,7 +70,7 @@ open Base_dtactic
 open Base_auto_tactic
 
 let _ =
-   show_loading "Loading Czf_itt_set_bvd%t"
+   show_loading "Loading Czf_itt_inv_image%t"
 
 (************************************************************************
  * TERMS                                                                *
@@ -88,7 +88,7 @@ declare inv_image{'s; x. 'a['x]; 't}
  * @begin[doc]
  * @rewrites
  *
- * The @tt{set_bvd} term is defined by separation.
+ * The @tt{inv_image} term is defined by separation.
  * @end[doc]
  *)
 prim_rw unfold_inv_image: inv_image{'s; x. 'a['x]; 't} <-->

@@ -87,7 +87,8 @@ let _ = show_loading "Loading Itt_int_ext%t"
 let debug_subgoals =
    create_debug (**)
       { debug_name = "subgoals";
-        debug_description = "Report subgoals observed with may be some additional info";
+        debug_description = "Report subgoals observed with may be some
+ additional info";
         debug_value = false
       }
 
@@ -174,7 +175,8 @@ let get_term i p =
 let le2geT t p =
    let (left,right)=dest_le t in
    let newt=mk_ge_term right left in
-   thenLocalAT (assertT newt) (thenLocalMT (rwh unfold_ge 0) (onSomeHypT nthHypT)) p
+   thenLocalAT (assertT newt) (thenLocalMT (rwh unfold_ge 0) (onSomeHypT
+ nthHypT)) p
 
 interactive lt2ge :
    [wf] sequent [squash] { 'H >- 'a in int } -->
@@ -258,7 +260,8 @@ interactive_rw bnot_lt2ge_rw :
 
 let bnot_lt2geC = bnot_lt2ge_rw
 
-let lt2ConclT p = (magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)] ) p
+let lt2ConclT p = (magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)]
+ ) p
 
 let ltInConcl2HypT =
    thenLocalMT (rwh unfold_lt 0) lt2ConclT
@@ -637,7 +640,8 @@ let mul_normalizeC = (* (repeatC (higherC mul_Assoc2C)) thenC *)
 
 interactive_rw sum_same_products1_rw :
    ('a in int) -->
-   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@ number[j:n]) *@ 'a)
+   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@
+ number[j:n]) *@ 'a)
 
 let sum_same_products1C = sum_same_products1_rw
 
@@ -929,7 +933,7 @@ let findContradRelT p =
    end
 *)
    let g=Sequent.goal p in
-   let l = Arith.TermHyps.collect good_term g in
+   let l = Arith.collect good_term g in
 (* begin
            List.map (fun x->let t=(Refiner.Refiner.TermMan.nth_hyp g x)
                      in print_term stdout t) l;
@@ -959,7 +963,8 @@ let findContradRelT p =
             flush stderr;
             failT p
 *)
-            raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found"))
+            raise (RefineError("arithT", StringError "Proof by contradiction -
+ No contradiction found"))
          end
 
 (* Finds and proves contradiction among ge-relations

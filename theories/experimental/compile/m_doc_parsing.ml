@@ -109,11 +109,9 @@ $$
 The parser is defined as a set of grammar productions. For each
 grammar production in the program syntax shown in Figure
 @reffigure[syntax], we define a production in the form
-
 $$
 S ::= S_1 @ldots S_n @longleftrightarrow term
 $$
-
 where the symbols $S_i$ may be annotated with a term pattern. For
 instance, the production for the let-expression is defined with the
 following production and semantic action.

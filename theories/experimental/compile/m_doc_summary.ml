@@ -159,7 +159,7 @@ implementation task.
 
 There have been efforts to present more functional accounts of assembly as well.
 Morrisett @it["et. al."] @cite[MWCG98] developed a typed
-assembly language capable capable of supporting many high-level
+assembly language capable of supporting many high-level
 programming constructs and proof carrying code.  In this scheme,
 well-typed assembly programs cannot ``go wrong.''
 

@@ -1,0 +1,25 @@
+OCAMLINCLUDES +=\
+   $(addprefix -I , $(SUPPORT_DIRS))\
+   -I ../base
+
+# Library files
+MPFILES =\
+   cic_lambda\
+   cic_ind_type
+
+#TEST_FILES =
+#   itt_bugs\
+#   jprover_tests\
+#   itt_test
+
+#MPFILES = $(if $(TESTS_ENABLED), $(MPFILES) $(TEST_FILES), $(MPFILES))
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
+
+all: theory$(LIB_SUFFIX)

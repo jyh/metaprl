@@ -114,10 +114,6 @@ interactive id_wf1 {| intro [] |} 'H :
 interactive id_wf2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{id; car} }
 
-(* interactive id_wf3 {| intro [] |} 'H :
-   sequent [squash] { 'H >- isset{id} }
-*)
-
 interactive id_eq1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- mem{'s; car} } -->
@@ -196,13 +192,6 @@ interactive unique_id1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'s; car} } -->
    sequent ['ext] { 'H >- mem{'e2; car} } -->
    sequent ['ext] { 'H; x: eq{op{'e2; 's}; 's}; y: eq{op{'s; 'e2}; 's} >- eq{'e2; id} }
-*)
-(* interactive unique_inv {| intro [] |} 'H :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s; car} } -->
-   sequent ['ext] { 'H >- mem{'s2; car} } -->
-   sequent ['ext] { 'H; x: equal{op{'s2; 's}; id}; y: equal{op{'s; 's2}; id} >- equal{'s2; inv{'s}} }
 *)
 
 interactive unique_inv1 {| intro [] |} 'H :

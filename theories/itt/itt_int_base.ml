@@ -122,6 +122,8 @@ doc <:doc<
 define unfold_sub :
    "sub"{'a ; 'b} <--> ('a +@ minus{'b})
 
+let fold_sub = makeFoldC << 'a -@ 'b >> unfold_sub
+
 doc <:doc<
    @begin[doc]
    Derived propositional relation:

@@ -420,6 +420,16 @@ interactive max_self2 {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- max{'a; 'b} >= 'b }
 
+interactive max_self3 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a <= max{'a; 'b} }
+
+interactive max_self4 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'b <= max{'a; 'b} }
+
 interactive min_self1 {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -429,6 +439,16 @@ interactive min_self2 {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- min{'a; 'b} <= 'b }
+
+interactive min_self3 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a >= min{'a; 'b} }
+
+interactive min_self4 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'b >= min{'a; 'b} }
 
 interactive min_add {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->

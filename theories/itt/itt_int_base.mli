@@ -64,6 +64,8 @@ declare lt_bool{'a; 'b}
 define unfold_sub :
    "sub"{'a ; 'b} <--> ('a +@ (- 'b))
 
+topval fold_sub : conv
+
 (*
  Prop-int-lt definition
  *)

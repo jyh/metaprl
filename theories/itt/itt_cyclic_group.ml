@@ -112,10 +112,12 @@ doc <:doc<
    Well-formedness.
    @end[doc]
 >>
-interactive group_power_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
-   sequent { <H> >- 'n in int } -->
+interactive group_power_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'n in int } -->
+   [wf] sequent { <H>; x: 'g^car; y: 'g^car >- 'x *['g] 'y in 'g^car } -->
+   [wf] sequent { <H>; x: 'g^car >- 'g^inv 'x in 'g^car } -->
+   [wf] sequent { <H> >- 'g^"1" in 'g^car } -->
    sequent { <H> >- group_power{'g; 'a; 'n} in 'g^car }
 doc docoff
 

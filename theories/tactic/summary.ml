@@ -132,10 +132,15 @@ doc <:doc<
    The @tt[opname] term described a @bf{declare}
    statement.  The @it{term} is the term being declared, and the @it{name} is
    the operator name of the declaration.
+
+   The @tt[definition] term describes a @bf{define} statement. The @it{term} 
+   is the term being declared, the @it{definition} is the term the definition
+   expands to and @it[res] lists the resource annotations.
    @end[doc]
 >>
 declare "parent"{'path; 'opens; 'resources}
 declare "opname"[name:s]{'term}
+declare "definition"[name:s]{'term; 'definition; 'res}
 
 doc <:doc< @docoff >>
 declare "parent"[name:s]
@@ -474,6 +479,14 @@ dform opname_df : "opname"[name:s]{'term} =
    info["declare"] " " opname_name[name:s] hspace `"= "
        slot["raw"]{'term}
    ezone popm
+
+dform definition_df : "definition"[name:s]{'term; 'definition; 'res} =
+   szone pushm[4]
+   info["define"] " " szone rewrite_name[name:s] resources{'res} keyword[":"] ezone hspace
+   szone pushm[4]
+   slot["raw"]{'term} `" " ensuremath{longleftrightarrow} hspace ensuremath{'definition}
+   popm ezone
+   popm ezone
 
 dform mlterm_df : "mlterm"{'term; 'cons; 'oexpr} =
    pushm[4] szone

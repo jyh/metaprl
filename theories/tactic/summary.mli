@@ -45,6 +45,7 @@ declare "rewrite"[name:s]{'redex; 'contractum; 'proof; 'res}
 declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res}
 declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
 declare "opname"[name:s]{'term}
+declare "definition"[name:s]{'term; 'definition; 'res}
 declare "mlterm"{'term; 'cons; 'oexpr}
 declare "condition"{'term; 'cons; 'oexpr}
 declare "mlrewrite"[name:s]{'params; 'redex; 'contracta; 'body; 'resources}

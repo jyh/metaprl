@@ -50,17 +50,12 @@ extends Itt_int_ext
 extends Itt_int_arith
 doc <:doc< @docoff >>
 
-open Tactic_type.Tacticals
-open Var
+open Basic_tactics
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Auto_tactic
-open Dtactic
-open Top_conversionals
+open Itt_struct
+open Itt_equal
 open Itt_bool
 open Itt_subtype
-open Itt_equal
 
 doc <:doc< @doc{@terms} >>
 
@@ -160,10 +155,19 @@ interactive natElimination  'H :
    sequent { <H>; x: int; v:'x>=0; <J['x]> >- 'C['x]}  -->
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
-interactive natInduction {| elim [] |} 'H  :
+interactive natInduction {| elim [ThinOption thinT] |} 'H  :
    sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
-   sequent { <H>; n: nat; <J['n]>; m: nat;  z: 'C['m] >- 'C['m +@ 1] }  -->
+   sequent { <H>; n: nat; <J['n]>; m: nat;  'C['m] >- 'C['m +@ 1] }  -->
    sequent { <H>; n: nat; <J['n]> >- 'C['n] }
+
+interactive natFullInduction (* {| elim [SelectOption 1; ThinOption thinT] |} *) 'H  :
+   sequent { <H>; n: nat; <J['n]>; m: nat; all k: nat. (('k < 'm) => 'C['k]) >- 'C['m] }  -->
+   sequent { <H>; n: nat; <J['n]> >- 'C['n] }
+
+interactive natBasedFullInduction 'H bind{x.'f['x]} :
+    [wf] sequent { <H>; x: 'T; <J['x]>; y : 'T >- 'f['y] in nat } -->
+    sequent { <H>; x: 'T; <J['x]>; x1 : 'T; all x2 : 'T. (('f['x2] < 'f['x1]) => 'C['x2]) >- 'C['x1] } -->
+    sequent { <H>; x: 'T; <J['x]> >- 'C['x] }
 
 interactive natBackInduction 'n bind{x.'C['x]}  :
    [wf] sequent { <H> >- 'n in nat }  -->

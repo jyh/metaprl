@@ -69,6 +69,12 @@ struct
 	 | PlusInfinity -> false
 	 | MinusInfinity -> true
 
+	let isPositive = function
+		Number (a,b) ->
+			((compare_num a num0) * (compare_num b num0)) > 0
+	 | PlusInfinity -> true
+	 | MinusInfinity -> false
+
    let mul a b =
       match a with
        |	Number (a1,a2) ->
@@ -853,8 +859,8 @@ let ge2af var2index (i,t) =
 	let left,right=dest_ge_rat t in
 	let f1=linear2af var2index left in
 	let f2=linear2af var2index right in
-	let neg_f2=AF.scale (neg fieldUnit) f2 in
-	AF.hypSource i (AF.add f1 neg_f2)
+	let f=AF.sub f1 f2 in
+	AF.hypSource i f
 
 let apply_rewrite p conv t =
 	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
@@ -1207,7 +1213,7 @@ let rec iter p info constrs v =
 								let floor_sup = floor sup_val in
 								let floor_inf' = Number(floor_inf, num1) in
 								let floor_sup' = Number(floor_sup, num1) in
-								if (compare floor_inf' inf_val = -1) && (compare floor_inf' floor_sup' = 0) then
+								if compare floor_inf' floor_sup' = 0 then
 									use_both info v sup' inf' supsrc infsrc thenMT
 									inseparable_rat (-1) (mk_number_term floor_inf) thenMT
 									rw normalizeC 0
@@ -1243,13 +1249,6 @@ let ge_int2ratT = argfunT (fun i p ->
 		rw (int2ratC thenC ge_normC) i
 	else
 		idT
-)
-
-let preT = funT (fun p ->
-   arithRelInConcl2HypT thenMT
-   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-	all2geT (*thenMT
-	tryOnAllMHypsT ge_int2ratT*))
 )
 
 let core2T = coreT
@@ -1290,94 +1289,3 @@ sequent { <H>; ge_rat{'a; add_rat{'b;rat{3;1}}};
 					ge_rat{'a; add_rat{rat{3;1};mul_rat{rat{-1;1};'b}}};
 					ge_rat{add_rat{'b;rat{2;1}}; 'a}
 					>- "assert"{bfalse} }
-
-interactive inttest 'a 'b 'c :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H> >- 'c in int } -->
-sequent { <H>; x: ('a >= ('b +@ 1));
-                     t: ('c >= ('b +@ 3));
-                     u: ('b >= ('a +@ 0))
-                >- "assert"{bfalse} }
-
-interactive inttest2 'a 'b 'c :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H> >- 'c in int } -->
-sequent { <H>; x: (('b +@ 1) <= 'a);
-                     t: ('c > ('b +@ 2));
-                     u: ('b >= ('a +@ 0))
-                >- "assert"{bfalse} }
-
-interactive inttest3 'a 'b 'c :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H> >- 'c in int } -->
-sequent { <H>; x: (('b +@ 1) <= 'a);
-                     t: ('c > ('b +@ 2))
-                >- ('b < ('a +@ 0))  }
-
-interactive inttest4 'a 'b :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H>; x: ('a >= 'b);
-                     t: ('a < 'b)
-                >- "assert"{bfalse} }
-
-interactive inttest5 'a 'b :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H>; x: ('a >= 'b +@ 0);
-                     t: ('a < 'b)
-                >- "assert"{bfalse} }
-
-interactive inttest6 'b 'c :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H> >- 'c in int } -->
-sequent { <H>; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
-                     t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@
- (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
-                >- "assert"{bfalse} }
-
-interactive inttest7 :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H>; 'a < 'b >- 'a <> 'b }
-
-interactive inttest8 :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H>; 'a < 'b >- not{'a = 'b in int} }
-
-interactive inttest9 :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H>; not{'a < 'b} >- 'a >= 'b }
-
-interactive inttest10 :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H>; 'a <> 'b >- 'a <> 'b }
-
-interactive inttest11 :
-sequent { <H> >- 'a in int } -->
-sequent { <H> >- 'b in int } -->
-sequent { <H> >- 'c in int } -->
-sequent { <H>; 'a +@ 'b >= 'c; 'c >= 'a +@ 'b +@ 1 >- "false" }
-
-interactive inttest12 :
-sequent { <H> >- 'a in int } -->
-sequent { <H>; 3 *@ 'a >= 1; 1 >= 2 *@ 'a >- "false" }
-
-interactive inttestn :
-	sequent {'v  in int;
-				'v1 in int;
-				'v2 in int;
-				'v3 in int;
-				'v4 in int;
-				'v5 in int;
-				'v6 in int;
-				'v7 in int;
-				'v8 in int;
-				'v9 in int; "assert"{bfalse} >- "assert"{bfalse} }

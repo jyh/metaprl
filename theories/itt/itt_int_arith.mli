@@ -74,14 +74,10 @@ topval sum_same_products4C : conv
 *)
 topval normalizeC : conv
 
+topval preT : tactic
 topval preArithT : tactic
 topval reduceContradRelT : int -> tactic
 topval arithT : tactic
-
-(*
- * this tactic generates an artificial example used in testn
- *)
-topval genT : term list -> int -> int -> int -> int -> int -> tactic
 
 (* sometimes these parts of arithT are useful to figure out why arithT does not work
 *)

@@ -78,11 +78,11 @@ declare "string"[s:s]
 
 (*
  * @begin[doc]
- * The @tt{lambda} term is used internally by the @MetaPRL compiler
- * to represent variable binding.
+ * The @tt{bind} term is used internally by the @MetaPRL
+ * to represent generic variable binding.
  * @end[doc]
  *)
-declare "lambda"{x. 'b}
+declare "bind"{x. 'b}
 
 (*
  * @begin[doc]
@@ -119,6 +119,9 @@ dform perv_cons_df : "cons"{'car; 'cdr} =
 
 dform perv_string_df : "string"[s:s] =
    `"\"" slot[s:s] `"\""
+
+dform bind_df : bind{x. 'T} =
+   `"bind(" slot{'x} `"." slot{'T} `")"
 
 (*
  * -*-

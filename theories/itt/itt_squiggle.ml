@@ -26,14 +26,11 @@ open Base_dtactic
 open Itt_equal
 open Itt_struct
 
-
 let squiggle_term = << 'a ~ 'b >>
 let squiggle_opname = opname_of_term squiggle_term
 let is_squiggle_term = is_dep0_dep0_term squiggle_opname
 let dest_squiggle = dest_dep0_dep0_term squiggle_opname
 let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
-
-
 
 prim squiggleEquality {| intro_resource []; eqcd_resource |} 'H :
   [wf] sequent[squash] { 'H >- 't1 ~ 's1 } -->
@@ -93,14 +90,14 @@ let sqSubstConclT t p =
    let bind =
       try
          let t1 = get_with_arg p in
-            if is_bind_term t1 then
+            if is_xbind_term t1 then
                t1
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
-               mk_bind_term x (var_subst (Sequent.concl p) a x)
+               mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
       squiggleSubstitution (Sequent.hyp_count_addr p) t bind p
 
@@ -113,14 +110,14 @@ let sqSubstHypT i t p =
    let bind =
       try
          let b = get_with_arg p in
-            if is_bind_term b then
+            if is_xbind_term b then
                b
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
             let z = get_opt_var_arg "z" p in
-               mk_bind_term z (var_subst t1 a z)
+               mk_xbind_term z (var_subst t1 a z)
    in
    let i, j = Sequent.hyp_indices p i in
       squiggleHypSubstitution i j t bind p

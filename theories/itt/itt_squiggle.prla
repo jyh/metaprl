@@ -1868,7 +1868,7 @@ P	p697	Number 1818
 O	o697	location p696 p697
 P	p698	String squiggleSubstitution
 O	o698	rule p698
-NItt_equal!bind	bind	bind Itt_equal
+NPerv!bind	bind	bind Perv
 O	o699	bind
 B	b699	t673 x
 T	t699	o699 b699

@@ -2183,8 +2183,7 @@ NSummary!term_param	term_param	term_param Summary
 O	o1307	term_param
 T	t1307	o1307 b698
 B	b1307	t1307
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o1308	bind
 P	p1308	Var A
 O	o1309	var p1308

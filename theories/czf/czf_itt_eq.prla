@@ -2794,8 +2794,7 @@ B	b3541	t3538
 T	t3541	o851 b3541 b3424
 P	p3584	String eq_hyp_subst
 O	o3584	rule p3584
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o3585	bind
 P	p3585	Var v
 O	o3586	var p3585

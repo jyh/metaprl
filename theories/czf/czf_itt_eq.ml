@@ -97,6 +97,7 @@ open Itt_equal
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
@@ -454,7 +455,7 @@ let setConclSubstT t p =
    let s1, s2 = dest_eq t in
    let goal = Sequent.concl p in
    let z = maybe_new_vars1 p "v" in
-   let bind = mk_bind_term z (var_subst goal s1 z) in
+   let bind = mk_xbind_term z (var_subst goal s1 z) in
       (eq_concl_subst (hyp_count_addr p) s1 s2 bind z
        thenLT [addHiddenLabelT "eq";
                addHiddenLabelT "main";
@@ -464,7 +465,7 @@ let setHypSubstT t i p =
    let s1, s2 = dest_eq t in
    let _, hyp = nth_hyp p i in
    let z = maybe_new_vars1 p "v" in
-   let bind = mk_bind_term z (var_subst hyp s1 z) in
+   let bind = mk_xbind_term z (var_subst hyp s1 z) in
    let j, k = hyp_indices p i in
       (eq_hyp_subst j k s1 s2 bind z
        thenLT [addHiddenLabelT "eq";

@@ -239,14 +239,14 @@ let substConclT t p =
    let bind =
       try
          let t1 = get_with_arg p in
-            if is_bind_term t1 then
+            if is_xbind_term t1 then
                t1
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
-               mk_bind_term x (var_subst (Sequent.concl p) a x)
+               mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
       substitution2 (Sequent.hyp_count_addr p) t bind p
 
@@ -260,13 +260,13 @@ let substHypT i t p =
    let bind =
       try
          let b = get_with_arg p in
-            if is_bind_term b then
+            if is_xbind_term b then
                b
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_bind_term z (var_subst t1 a z)
+            mk_xbind_term z (var_subst t1 a z)
    in
    let i, j = Sequent.hyp_indices p i in
       hypSubstitution2 i j t bind z p
@@ -312,9 +312,9 @@ let letT x_is_s_in_S p =
       with
          RefineError _ ->
             let z = get_opt_var_arg "z" p in
-               mk_bind_term z (var_subst (Sequent.concl p) s z)
+               mk_xbind_term z (var_subst (Sequent.concl p) s z)
    in
-      if is_bind_term bind then
+      if is_xbind_term bind then
            cutMem (Sequent.hyp_count_addr p) xname s _S bind p
       else
            raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
@@ -331,9 +331,9 @@ let assertEqT eq p =
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
             let _, t,  _ = dest_equal (Sequent.concl p) in
-               mk_bind_term x (var_subst t s1 x)
+               mk_xbind_term x (var_subst t s1 x)
    in
-      if is_bind_term bind then
+      if is_xbind_term bind then
          (try
             cutEq  (Sequent.hyp_count_addr p) eq bind v p
           with

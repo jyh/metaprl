@@ -123,19 +123,6 @@ declare cumulativity[i:l, j:l]
 declare "true"
 declare "false"
 
-
-(*!
- * @begin[doc]
- *
- * The @tt{bind} term defines the syntax for a binding term.
- * It has no semantic meaning in the type theory.
- * @end[doc]
- *)
-declare bind{x. 'T['x]}
-(*! @docoff *)
-
-
-
 let true_term = << "true" >>
 let true_opname = opname_of_term true_term
 let is_true_term = is_no_subterms_term true_opname
@@ -180,14 +167,6 @@ let it_term = << it >>
 let squash_term = << squash >>
 let squash_opname = opname_of_term squash_term
 let is_squash_term = is_no_subterms_term squash_opname
-
-
-let bind_term = << bind{x. 'T['x]} >>
-let bind_opname = opname_of_term bind_term
-let is_bind_term = is_dep1_term bind_opname
-let dest_bind = dest_dep1_term bind_opname
-let mk_bind_term = mk_dep1_term bind_opname
-
 
 (************************************************************************
  * EQCD RESOURCE                                                        *

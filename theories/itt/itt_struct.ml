@@ -82,14 +82,6 @@ let _ =
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
 
-
-(************************************************************************
- * DISPLAY
- ************************************************************************)
-
-dform bind_df : bind{x. 'T} =
-   `"bind(" slot{'x} `"." slot{'T} `")"
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -389,14 +381,14 @@ let substConclT t p =
    let bind =
       try
          let t1 = get_with_arg p in
-            if is_bind_term t1 then
+            if is_xbind_term t1 then
                t1
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
-               mk_bind_term x (var_subst (Sequent.concl p) a x)
+               mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
       substitution (Sequent.hyp_count_addr p) t bind p
 
@@ -410,13 +402,13 @@ let substHypT i t p =
    let bind =
       try
          let b = get_with_arg p in
-            if is_bind_term b then
+            if is_xbind_term b then
                b
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_bind_term z (var_subst t1 a z)
+            mk_xbind_term z (var_subst t1 a z)
    in
    let i, j = Sequent.hyp_indices p i in
       hypSubstitution i j t bind z p

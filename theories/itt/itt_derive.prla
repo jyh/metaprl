@@ -1026,8 +1026,7 @@ T	t494	o489 b490 b493
 B	b494	t494
 T	t495	o488 b494
 B	b495	t495
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o495	bind
 P	p495	Var C
 O	o496	var p495

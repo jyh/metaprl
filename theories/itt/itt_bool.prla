@@ -4061,8 +4061,7 @@ P	p3389	String bool_subst_concl
 O	o3389	rule p3389
 NSummary!term_param	term_param	term_param Summary
 O	o3390	term_param
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o3391	bind
 B	b3391	t1398 x
 T	t3391	o3391 b3391

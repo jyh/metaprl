@@ -37,6 +37,7 @@ open Mp_debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
@@ -105,7 +106,7 @@ let d_set_ind_dfun_typeT p =
    let v, _, b = dest_dfun b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let z = maybe_new_var "z" (free_vars_list b @ declared_vars p) in
-   let goal' = mk_bind_term z (var_subst b apply z) in
+   let goal' = mk_xbind_term z (var_subst b apply z) in
       set_ind_dfun_type (hyp_count_addr p) goal' p
 
 let set_ind_dfun_type_term = << "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f; 'x]}} >>
@@ -122,7 +123,7 @@ let d_set_ind_dfun_funT p =
    let v, _, b = dest_dfun b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let y, u, v = maybe_new_vars3 p "y" "u" "v" in
-   let goal' = mk_bind_term x (mk_bind_term y (var_subst b apply y)) in
+   let goal' = mk_xbind_term x (mk_xbind_term y (var_subst b apply y)) in
       set_ind_dfun_fun (hyp_count_addr p) goal' u v p
 
 let set_ind_dfun_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'T; 'f; 'g; 'x]}} >>
@@ -139,7 +140,7 @@ let d_set_ind_dprod_typeT p =
    let v, _, b = dest_dprod b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let z = maybe_new_vars1 p "z" in
-   let goal' = mk_bind_term z (var_subst b apply z) in
+   let goal' = mk_xbind_term z (var_subst b apply z) in
       set_ind_dprod_type (hyp_count_addr p) goal' p
 
 let set_ind_dprod_type_term = << "type"{set_ind{'s; T, f, g. x: 'T * 'B['f; 'x]}} >>
@@ -156,7 +157,7 @@ let d_set_ind_dprod_funT p =
    let v, _, b = dest_dprod b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let y, u, v = maybe_new_vars3 p "y" "u" "v" in
-   let goal' = mk_bind_term x (mk_bind_term y (var_subst b apply y)) in
+   let goal' = mk_xbind_term x (mk_xbind_term y (var_subst b apply y)) in
       set_ind_dprod_fun (hyp_count_addr p) goal' u v p
 
 let set_ind_dprod_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'T; 'f; 'g; 'x]}} >>

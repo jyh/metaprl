@@ -375,7 +375,7 @@ prim productElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
 let d_spread_equalT tac p =
    let rt, spread, _ = dest_equal (Sequent.concl p) in
    let u, v, a = maybe_new_vars3 p "u" "v" "a" in
-   let type_type = mk_bind_term v rt in
+   let type_type = mk_xbind_term v rt in
    let _, _, pair, _ = dest_spread spread in
    let type_type, pair_type =
       try

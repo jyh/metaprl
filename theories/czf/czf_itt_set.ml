@@ -121,6 +121,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Mp_resource
@@ -412,7 +413,7 @@ let splitT t i p =
    let v_T, v_f, v_z = maybe_new_vars3 p "T" "f" "z" in
       if i = 0 then
          let goal = var_subst (Sequent.concl p) t v_z in
-         let bind = mk_bind_term v_z goal in
+         let bind = mk_xbind_term v_z goal in
             (set_split_concl (hyp_count_addr p) t bind v_T v_f v_z
              thenLT [addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
@@ -420,7 +421,7 @@ let splitT t i p =
       else
          let _, hyp = nth_hyp p i in
          let hyp = var_subst hyp t v_z in
-         let bind = mk_bind_term v_z hyp in
+         let bind = mk_xbind_term v_z hyp in
          let j, k = hyp_indices p i in
             (set_split_hyp j k t bind v_T v_f v_z
              thenLT [addHiddenLabelT "wf";

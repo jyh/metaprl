@@ -1605,8 +1605,7 @@ T	t587	o587
 B	b587	t587
 NSummary!term_param	term_param	term_param Summary
 O	o588	term_param
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o589	bind
 Nvar	var	var NIL
 P	p589	Var B

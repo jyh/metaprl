@@ -58,6 +58,7 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermAddr
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
@@ -604,13 +605,13 @@ let splitBoolCT a p =
    let bind =
       try
          let t1 = get_with_arg p in
-            if is_bind_term t1 then
+            if is_xbind_term t1 then
                t1
             else
                raise (RefineError ("splitBoolT", StringTermError ("need a \"bind\" term: ", t1)))
       with
          RefineError _ ->
-            mk_bind_term x (var_subst (Sequent.concl p) a x)
+            mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
       bool_subst_concl (Sequent.hyp_count_addr p) bind a x p
 
@@ -623,13 +624,13 @@ let splitBoolHT i a p =
    let bind =
       try
          let b = get_with_arg p in
-            if is_bind_term b then
+            if is_xbind_term b then
                b
             else
                raise (RefineError ("splitBoolT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_bind_term z (var_subst t1 a z)
+            mk_xbind_term z (var_subst t1 a z)
    in
    let j, k = Sequent.hyp_indices p i in
       bool_subst_hyp j k bind a z p

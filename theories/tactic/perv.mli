@@ -33,7 +33,7 @@
 declare "nil"
 declare "cons"{'car; 'cdr}
 declare "string"[s:s]
-declare "lambda"{x. 'b}
+declare "bind"{x. 'b}
 declare "hyp"{'A; x. 'B}
 declare "concl"{'A; 'B}
 declare "rewrite"{'redex; 'contractum}

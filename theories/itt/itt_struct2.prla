@@ -1839,8 +1839,7 @@ T	t1273	o1269 b1270 b1271 b1272
 B	b1273	t1273
 T	t1274	o1268 b1273
 B	b1274	t1274
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o1274	bind
 P	p1274	Var C
 O	o1275	var p1274

@@ -54,7 +54,6 @@ declare equal{'T; 'a; 'b}
 declare "true"
 declare "false"
 declare cumulativity[i:l, j:l]
-declare bind{x. 'T['x]}
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -286,11 +285,6 @@ val squash_term : term
 val is_squash_term : term -> bool
 
 val it_term : term
-
-val is_bind_term : term -> bool
-val dest_bind : term -> string * term
-val mk_bind_term : string -> term -> term
-
 
 (* Universe inference functions *)
 val infer_univ_dep0_dep0 : (term -> term * term) -> typeinf_comp

@@ -6070,8 +6070,7 @@ P	p2441	String nat_elim
 O	o2441	rule p2441
 NSummary!term_param	term_param	term_param Summary
 O	o2442	term_param
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o2443	bind
 P	p2443	Var C
 O	o2444	var p2443

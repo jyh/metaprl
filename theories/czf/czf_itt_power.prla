@@ -4458,8 +4458,7 @@ P	p1765	String power_thm
 O	o1765	rule p1765
 NSummary!term_param	term_param	term_param Summary
 O	o1766	term_param
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o1767	bind
 P	p1767	Var P
 O	o1768	var p1767

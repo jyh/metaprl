@@ -6114,8 +6114,7 @@ P	p1901	Number 10053
 O	o1901	location p1900 p1901
 P	p2576	String spreadEquality
 O	o2576	rule p2576
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o2577	bind
 B	b2577	t2508 z
 T	t2577	o2577 b2577

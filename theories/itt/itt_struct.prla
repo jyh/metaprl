@@ -615,8 +615,7 @@ NOcaml!uid	uid	uid Ocaml
 NSummary!opname	opname	opname Summary
 P	p466	String bind
 O	o466	opname p466
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o467	bind
 Nvar	var	var NIL
 P	p467	Var T

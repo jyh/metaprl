@@ -2914,8 +2914,7 @@ T	t1355	o682 b1352 b1353 b1354
 B	b1355	t1355
 T	t1356	o1351 b1355
 B	b1356	t1356
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o1356	bind
 P	p1356	Var T1
 O	o1357	var p1356

@@ -142,14 +142,14 @@ let substConclT t p =
    let bind =
       try
          let t1 = get_with_arg p in
-            if is_bind_term t1 then
+            if is_xbind_term t1 then
                t1
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t1)))
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
-               mk_bind_term x (var_subst (concl p) a x)
+               mk_xbind_term x (var_subst (concl p) a x)
    in
       (substitution (hyp_count_addr p) t bind
        thenLT [addHiddenLabelT "equality";
@@ -166,13 +166,13 @@ let substHypT i t p =
    let bind =
       try
          let b = get_with_arg p in
-            if is_bind_term b then
+            if is_xbind_term b then
                b
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_bind_term z (var_subst t1 a z)
+            mk_xbind_term z (var_subst t1 a z)
    in
    let i, j = hyp_indices p i in
       (hypSubstitution i j t bind z
@@ -215,13 +215,13 @@ let cutMemberT ss  p =
    let bind =
       try
          let b = get_with_arg p in
-            if is_bind_term b then
+            if is_xbind_term b then
                b
             else
                raise (RefineError ("cutMemberT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_bind_term x (var_subst (concl p) s x)
+            mk_xbind_term x (var_subst (concl p) s x)
    in
    let i=(Sequent.hyp_count_addr p) in
       cutMember0 i ss  x bind p

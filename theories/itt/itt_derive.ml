@@ -38,6 +38,7 @@ include Itt_logic
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
@@ -113,7 +114,7 @@ let applyT app i p =
             raise (RefineError ("d_applyT", StringTermError ("not a function type", goal_type)))
       in
       let v = maybe_new_vars1 p "v" in
-      let bind = mk_bind_term v (var_subst (Sequent.concl p) app v) in
+      let bind = mk_xbind_term v (var_subst (Sequent.concl p) app v) in
          tac (Sequent.hyp_count_addr p) goal_type bind f a p
    else
       raise (RefineError ("d_applyT", StringError "no elimination form"))

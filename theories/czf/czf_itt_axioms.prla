@@ -2183,8 +2183,7 @@ T	t2606	o b306 b2605
 B	b2606	t2606
 NSummary!term_param	term_param	term_param Summary
 O	o1029	term_param
-NItt_struct	Itt_struct	Itt_struct NIL
-NItt_struct!bind	bind	bind Itt_struct
+NPerv!bind	bind	bind Perv
 O	o1030	bind
 P	p1030	Var v
 O	o1031	var p1030

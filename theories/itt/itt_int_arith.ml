@@ -84,6 +84,13 @@ let _ = show_loading "Loading Itt_int_ext%t"
  * thenMT_prefix with locality-principle behaviour
  *)
 
+let debug_subgoals =
+   create_debug (**)
+      { debug_name = "subgoals";
+        debug_description = "Report subgoals observed with may be some additional info";
+        debug_value = false
+      }
+
    let emptyLabel=""
 
    let thenIfLabelPredT pred tac1 tac2 tac3 p =
@@ -130,17 +137,21 @@ let _ = show_loading "Loading Itt_int_ext%t"
 
    let thenLocalMElseT tac1 tac2 tac3 p =
       let tac2' p'=
-            begin
+            if !debug_subgoals then begin
                eprintf "\npositive:\n"; flush stderr;
                print_term stdout (Sequent.goal p');
                tac2 p'
-            end in
+            end else
+               tac2 p'
+            in
       let tac3' p'=
-            begin
+            if !debug_subgoals then begin
                eprintf "\nnegative:\n"; flush stderr;
                print_term stdout (Sequent.goal p');
                tac3 p'
-            end in
+            end else
+               tac3 p'
+            in
       thenIfLabelPredT isEmptyOrMainLabel tac1 tac2' tac3' p
 
    let thenLocalAT tac1 tac2 p =

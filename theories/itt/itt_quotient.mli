@@ -176,14 +176,14 @@ rule quotientElimination1 'H 'J 'v 'w 'z :
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
-
+(*
 rule quotientElimination2 'H 'J 'v 'w 'z :
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
-
+*)
 (*
  * H, x: a1 = a2 in quot x, y: A // E, J[x] >- T[x]
  * by quotient_equalityElimination v

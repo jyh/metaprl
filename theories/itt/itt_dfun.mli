@@ -41,8 +41,6 @@ open Tactic_type.Conversionals
 
 rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
 
-rewrite reduceEta (x: 'A -> 'B['x]) : ('f IN (x: 'A -> 'B['x])) -->
-    lambda{x. 'f 'x} <--> 'f
 
 (************************************************************************
  * RULES                                                                *

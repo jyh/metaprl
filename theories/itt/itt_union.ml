@@ -310,11 +310,11 @@ prim unionSubtype {| intro [] |} 'H :
 (*
  * Interactive.
  *)
-interactive union_contradiction1 {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; x: inl{'y} = inr{'z} in 'T; 'J['x] >- 'C['x] }
+interactive unionContradiction1 {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; x: inl{'y} = inr{'z} in 'A+'B; 'J['x] >- 'C['x] }
 
-interactive union_contradiction2 {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; x: inr{'y} = inl{'z} in 'T; 'J['x] >- 'C['x] }
+interactive unionContradiction2 {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; x: inr{'y} = inl{'z} in 'A+'B; 'J['x] >- 'C['x] }
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -418,3 +418,5 @@ let resource sub +=
  * End:
  * -*-
  *)
+
+

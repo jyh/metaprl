@@ -59,8 +59,10 @@
  * @end[doc]
  *)
 include Itt_struct
+include Itt_struct2
 include Itt_equal
 include Itt_set
+include Itt_logic
 (*! @docoff *)
 
 open Refiner.Refiner.TermType
@@ -181,6 +183,12 @@ prim tunionElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'w 'z :
    sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] } =
    it
+
+interactive tunionElimination_eq {| elim [ThinOption thinT] |} 'H 'J 'x 'w 'z :
+   sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w];
+                       u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
+   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- squash{'C['x]} }
+
 (*! @docoff *)
 
 (************************************************************************

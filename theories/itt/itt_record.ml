@@ -206,7 +206,11 @@ let record_eqcdST p =
 
 let resource intro += (<<'r1 = 'r2 in record[m:t]{'A} >>, wrap_intro record_eqcdST)
 
-
+(*
+let resource intro +=
+   [(<<rcrd[n:t]{'a1} = 'r2 in record[m:t]{'A} >>, wrap_intro (rwh unfoldRcrdS 0));
+    (<<'r2 = rcrd[n:t]{'a1} in record[m:t]{'A} >>, wrap_intro (rwh unfoldRcrdS 0))]
+*)
 (*
 let rec record_eqcdS addr  =
    firstT

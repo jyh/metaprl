@@ -16,13 +16,6 @@ open Tactic_type.Tacticals
 open Itt_bool
 open Itt_struct2
 
-(*
-let rwAll c = onAllMClausesT (rw c)
-
-let rwaAll convs = onAllMClausesT (rwa convs)
-
-let rwhAll c = onAllMClausesT (rwh c)
-*)
 
 (******************)
 (*  Defenitions   *)

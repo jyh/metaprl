@@ -24,6 +24,7 @@ MPFILES :=\
 	itt_union\
 	itt_rfun\
 	itt_dfun\
+	itt_eta\
 	itt_fun\
 	itt_dprod\
 	itt_prod\
@@ -59,6 +60,7 @@ MPFILES :=\
 	itt_derive\
 	itt_prop_decide\
 	itt_fset\
+	itt_pointwise2\
 	itt_theory\
 	itt_inv_typing\
 	itt_collection\
@@ -68,6 +70,7 @@ MPFILES :=\
 	itt_record0\
 	itt_record\
 	itt_record_exm\
+	itt_bugs\
 	itt_sort
 
 ifeq ($(TESTS),YES)
@@ -89,3 +92,4 @@ clean::
 # Real makefile
 include $(ROOT)/mk/rules
 include Makefile.dep
+

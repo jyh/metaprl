@@ -128,6 +128,7 @@ include Itt_equal
 include Itt_set
 include Itt_rfun
 include Itt_struct
+include Itt_struct2
 (*! @docoff *)
 
 open Printf
@@ -315,7 +316,7 @@ prim quotient_memberEquality {| intro []; eqcd |} 'H :
  * The difference is the ordering of the hypotheses in the subgoal.
  * @end[doc]
  *)
-prim quotientElimination1 'H 'J 'v 'w 'z :
+prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
@@ -323,6 +324,15 @@ prim quotientElimination1 'H 'J 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
+interactive quotientElimination1_eq {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z 'e1 'e2:
+   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
+   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
+             v: 'A; w: 'A; z: 'E['v; 'w];
+             e1: 'v='a in quot x, y: 'A // 'E['x; 'y]; e2: 'w='a in quot x, y: 'A // 'E['x; 'y]
+             >- 's['v] = 't['w] in 'T['v]
+           } -->
+   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
+(*
 prim quotientElimination2 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
@@ -330,7 +340,7 @@ prim quotientElimination2 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
-
+*)
 (*!
  * @begin[doc]
  * An equality assumption $a_1 = a_2 @in @quot{A; x; y; E[x, y]}$ implies

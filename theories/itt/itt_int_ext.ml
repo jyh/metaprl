@@ -661,7 +661,7 @@ interactive_rw mul_Zero3C 'a :
    ('a in int) -->
    0 <--> (0 *@ 'a)
 
-interactive_rw negative1_2uni :
+interactive_rw negative1_2uniC :
 	('a in int) -->
 	((-1) *@ 'a) <--> (- 'a)
 

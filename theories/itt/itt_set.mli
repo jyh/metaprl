@@ -81,7 +81,7 @@ rule setEquality 'H 'x :
  *)
 rule setMemberFormation 'H 'a 'z :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent [squash]   { 'H >- 'B['a] } -->
+   sequent [squash]   { 'H >- squash{'B['a]} } -->
    sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
    sequent ['ext]   { 'H >- { x:'A | 'B['x] } }
 
@@ -95,7 +95,7 @@ rule setMemberFormation 'H 'a 'z :
  *)
 rule setMemberEquality 'H 'x :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- 'B['a1] } -->
+   sequent [squash] { 'H >- squash{'B['a1]} } -->
    sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
    sequent ['ext]   { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } }
 

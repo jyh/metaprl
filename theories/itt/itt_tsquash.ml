@@ -43,6 +43,6 @@ interactive tsquashElimination {| elim [ThinOption thinT] |} 'H 'J 'x:
    sequent['ext] { 'H; u:tsquash{'A}; 'J['u] >- 'C['u]}
 
 
-dform tsquash_df : tsquash{'A} = `"[" slot{'A} `"]" sub{string["T"]}
+dform tsquash_df : tsquash{'A} = `"[" slot{'A} `"]" sub{\mathbbT}
 
 

@@ -81,6 +81,7 @@ include Itt_set
 include Itt_isect
 include Itt_tsquash
 include Itt_subtype
+include Itt_ext_equal
 (*! @docoff *)
 
 open Printf
@@ -292,8 +293,9 @@ let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
  *)
 
 
-interactive disectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'J 'a 'u :
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x]; a: 'A; u: 'a = 'x in 'A >- 'C['a] } -->
+interactive disectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'J 'a 'u 'b 'v:
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
+                    a: 'A; u: 'a = 'x in 'A;  b: 'B['a]; v: 'b = 'x in 'B['a] >- 'C['a] } -->
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
 
 interactive disectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'J 'a 'u 'b 'v :
@@ -307,7 +309,7 @@ let disectEliminationT n p =
       let sel = get_sel_arg p in
       let a,u,b,v = maybe_new_vars4 p "a" "u" "b" "v" in
       let i, j = Sequent.hyp_indices p n in
-         if sel = 1 then (disectEliminationLeft i j a u thenT thinIfThinningT [-1;n]) p else
+         if sel = 1 then (disectEliminationLeft i j a u b v thenT thinIfThinningT [-3;-1;n]) p else
          if sel = 2 then (disectEliminationRight i j a u b v thenT thinIfThinningT [-3;-1;n]) p else
             raise (RefineError ("disectElimination", StringError ("select option is out of range ([1,2])")))
    with RefineError ("get_attribute",_) ->
@@ -356,21 +358,10 @@ prim dintersectionSubtype {| intro [] |} 'H 'a :
  * @end[doc]
  *)
 
-
-interactive setdisectSubtype {| intro [] |} 'H :
+interactive set_is_disect {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
-   sequent ['ext] { 'H >- subtype{ {x: 'A | 'P['x]}; disect{'A;x.tsquash{'P['x]}}}}
-
-interactive setDisect {| intro [] |} 'H :
-   [wf] sequent[squash] { 'H >- "type"{'A}} -->
-   [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
-   sequent ['ext] { 'H; y: {x: 'A | 'P['x]} >- 'y IN  disect{'A;x.tsquash{'P['x]}}}
-
-interactive disectSet {| intro [] |} 'H :
-   [wf] sequent[squash] { 'H >- "type"{'A}} -->
-   [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
-   sequent ['ext] { 'H >- subtype{ disect{'A;x.tsquash{'P['x]}}; {x: 'A | 'P['x]} } }
+   sequent ['ext] { 'H >- ext_equal{ {x: 'A | 'P['x]}; disect{'A;x.tsquash{'P['x]}}}}
 
 (*! @docoff *)
 

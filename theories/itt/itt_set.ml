@@ -167,7 +167,7 @@ prim setType {| intro [] |} 'H 'x :
  *)
 prim setMemberFormation {| intro [] |} 'H 'a 'z :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   [main] sequent [squash]   { 'H >- 'B['a] } -->
+   [main] sequent [squash]   { 'H >- squash{'B['a]} } -->
    [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
    sequent ['ext]   { 'H >- { x:'A | 'B['x] } } =
    'a
@@ -182,7 +182,7 @@ prim setMemberFormation {| intro [] |} 'H 'a 'z :
  *)
 prim setMemberEquality {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   [assertion] sequent [squash] { 'H >- 'B['a1] } -->
+   [assertion] sequent [squash] { 'H >- squash{'B['a1]} } -->
    [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it

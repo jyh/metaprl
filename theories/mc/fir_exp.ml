@@ -184,7 +184,7 @@ declare allocMalloc{ 'atom }
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomRawInt{ 'precision; 'sign; 'num }
-declare atomFloat{ 'f }
+declare atomFloat{ 'precision; 'f }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
@@ -471,8 +471,8 @@ dform atomRawInt_df : except_mode[src] ::
    atomRawInt{ 'precision; 'sign; 'num } =
    lzone `"AtomRawInt(" slot{'precision} `", "
    slot{'sign} `", " slot{'num} `")" ezone
-dform atomFloat_df : except_mode[src] :: atomFloat{ 'f } =
-   lzone `"AtomFloat(" slot{'f} `")" ezone
+dform atomFloat_df : except_mode[src] :: atomFloat{ 'precision; 'f } =
+   lzone `"AtomFloat(" slot{'precision} `", " slot{'f} `")" ezone
 dform atomConst_df : except_mode[src] :: atomConst{ 'ty; 'ty_var; 'num } =
    lzone `"AtomConst(" slot{'ty} `", " slot{'ty_var} `", "
    slot{'num} `")" ezone
@@ -677,6 +677,7 @@ let is_rawIntOfFloatOp_term = is_dep0_dep0_dep0_term rawIntOfFloatOp_opname
 let mk_rawIntOfFloatOp_term = mk_dep0_dep0_dep0_term rawIntOfFloatOp_opname
 let dest_rawIntOfFloatOp_term = dest_dep0_dep0_dep0_term rawIntOfFloatOp_opname
 
+(*
 let rawIntOfRawIntOp_term =
    << rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign } >>
 let rawIntOfRawIntOp_opname = opname_of_term rawIntOfRawIntOp_term
@@ -684,6 +685,7 @@ let is_rawIntOfRawIntOp_term = is_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
 let mk_rawIntOfRawIntOp_term = mk_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
 let dest_rawIntOfRawIntOp_term =
    dest_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
+*)
 
 (* Integer/pointer coercions. *)
 
@@ -1008,3 +1010,121 @@ let atan2Op_opname = opname_of_term atan2Op_term
 let is_atan2Op_term = is_dep0_term atan2Op_opname
 let mk_atan2Op_term = mk_dep0_term atan2Op_opname
 let dest_atan2Op_term = dest_dep0_term atan2Op_opname
+
+(* Pointer equality. *)
+
+let eqEqOp_term = << eqEqOp >>
+let eqEqOp_opname = opname_of_term eqEqOp_term
+let is_eqEqOp_term = is_no_subterms_term eqEqOp_opname
+
+let neqEqOp_term = << neqEqOp >>
+let neqEqOp_opname = opname_of_term neqEqOp_term
+let is_neqEqOp_term = is_no_subterms_term neqEqOp_opname
+
+(**********************
+ * Subscript operators.
+ **********************)
+
+let blockPolySub_term = << blockPolySub >>
+let blockPolySub_opname = opname_of_term blockPolySub_term
+let is_blockPolySub_term = is_no_subterms_term blockPolySub_opname
+
+let blockRawIntSub_term = << blockRawIntSub{ 'precision; 'sign } >>
+let blockRawIntSub_opname = opname_of_term blockRawIntSub_term
+let is_blockRawIntSub_term = is_dep0_dep0_term blockRawIntSub_opname
+let mk_blockRawIntSub_term = mk_dep0_dep0_term blockRawIntSub_opname
+let dest_blockRawIntSub_term = dest_dep0_dep0_term blockRawIntSub_opname
+
+let blockFloatSub_term = << blockFloatSub{ 'precision } >>
+let blockFloatSub_opname = opname_of_term blockFloatSub_term
+let is_blockFloatSub_term = is_dep0_term blockFloatSub_opname
+let mk_blockFloatSub_term = mk_dep0_term blockFloatSub_opname
+let dest_blockFloatSub_term = dest_dep0_term blockFloatSub_opname
+
+let rawRawIntSub_term = << rawRawIntSub{ 'precision; 'sign } >>
+let rawRawIntSub_opname = opname_of_term rawRawIntSub_term
+let is_rawRawIntSub_term = is_dep0_dep0_term rawRawIntSub_opname
+let mk_rawRawIntSub_term = mk_dep0_dep0_term rawRawIntSub_opname
+let dest_rawRawIntSub_term = dest_dep0_dep0_term rawRawIntSub_opname
+
+let rawFloatSub_term = << rawFloatSub{ 'precision } >>
+let rawFloatSub_opname = opname_of_term rawFloatSub_term
+let is_rawFloatSub_term = is_dep0_term rawFloatSub_opname
+let mk_rawFloatSub_term = mk_dep0_term rawFloatSub_opname
+let dest_rawFloatSub_term = dest_dep0_term rawFloatSub_opname
+
+let rawDataSub_term = << rawDataSub >>
+let rawDataSub_opname = opname_of_term rawDataSub_term
+let is_rawDataSub_term = is_no_subterms_term rawDataSub_opname
+
+let rawFunctionSub_term = << rawFunctionSub >>
+let rawFunctionSub_opname = opname_of_term rawFunctionSub_term
+let is_rawFunctionSub_term = is_no_subterms_term rawFunctionSub_opname
+
+(***********************
+ * Allocation operators.
+ ***********************)
+
+let allocTuple_term = << allocTuple{ 'ty; 'atom_list } >>
+let allocTuple_opname = opname_of_term allocTuple_term
+let is_allocTuple_term = is_dep0_dep0_term allocTuple_opname
+let mk_allocTuple_term = mk_dep0_dep0_term allocTuple_opname
+let dest_allocTuple_term = dest_dep0_dep0_term allocTuple_opname
+
+let allocArray_term = << allocArray{ 'ty; 'atom_list } >>
+let allocArray_opname = opname_of_term allocArray_term
+let is_allocArray_term = is_dep0_dep0_term allocArray_opname
+let mk_allocArray_term = mk_dep0_dep0_term allocArray_opname
+let dest_allocArray_term = dest_dep0_dep0_term allocArray_opname
+
+(* alloc union should go here *)
+
+let allocMalloc_term = << allocMalloc{ 'term } >>
+let allocMalloc_opname = opname_of_term allocMalloc_term
+let is_allocMalloc_term = is_dep0_term allocMalloc_opname
+let mk_allocMalloc_term = mk_dep0_term allocMalloc_opname
+let dest_allocMalloc_term = dest_dep0_term allocMalloc_opname
+
+(****************
+ * Normal values.
+ ****************)
+
+let atomInt_term = << atomInt{ 'int } >>
+let atomInt_opname = opname_of_term atomInt_term
+let is_atomInt_term = is_dep0_term atomInt_opname
+let mk_atomInt_term = mk_dep0_term atomInt_opname
+let dest_atomInt_term = dest_dep0_term atomInt_opname
+
+let atomEnum_term = << atomEnum{ 'bound; 'num } >>
+let atomEnum_opname = opname_of_term atomEnum_term
+let is_atomEnum_term = is_dep0_dep0_term atomEnum_opname
+let mk_atomEnum_term = mk_dep0_dep0_term atomEnum_opname
+let dest_atomEnum_term = dest_dep0_dep0_term atomEnum_opname
+
+let atomRawInt_term = << atomRawInt{ 'precision; 'sign; 'num } >>
+let atomRawInt_opname = opname_of_term atomRawInt_term
+let is_atomRawInt_term = is_dep0_dep0_dep0_term atomRawInt_opname
+let mk_atomRawInt_term = mk_dep0_dep0_dep0_term atomRawInt_opname
+let dest_atomRawInt_term = dest_dep0_dep0_dep0_term atomRawInt_opname
+
+let atomFloat_term = << atomFloat{ 'precision; 'f } >>
+let atomFloat_opname = opname_of_term atomFloat_term
+let is_atomFloat_term = is_dep0_dep0_term atomFloat_opname
+let mk_atomFloat_term = mk_dep0_dep0_term atomFloat_opname
+let dest_atomFloat_term = dest_dep0_dep0_term atomFloat_opname
+
+let atomConst_term = << atomConst{ 'ty; 'ty_var; 'num } >>
+let atomConst_opname = opname_of_term atomConst_term
+let is_atomConst_term = is_dep0_dep0_dep0_term atomConst_opname
+let mk_atomConst_term = mk_dep0_dep0_dep0_term atomConst_opname
+let dest_atomConst_term = dest_dep0_dep0_dep0_term atomConst_opname
+
+let atomVar_term = << atomVar{ 'var } >>
+let atomVar_opname = opname_of_term atomVar_term
+let is_atomVar_term = is_dep0_term atomVar_opname
+let mk_atomVar_term = mk_dep0_term atomVar_opname
+let dest_atomVar_term = dest_dep0_term atomVar_opname
+
+(**************
+ * Expressions.
+ **************)

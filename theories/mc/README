@@ -1,3 +1,26 @@
+Note as of 18 November 2001:
+
+I need to redo this readme file
+
+I also need to get semantics on the FIR union and some expression crap!
+
+--------------------------------------------------------------------------
+
+Note as of 17 November 2001:
+
+This file needs a complete rewrite.  I should also make this file
+much more informative.
+
+If you don't use term_ds, I'm unsure what'll happen with this code...
+
+I'm also highly confused as to what I need to do to get all the necessary
+term operations working as I'd like them too!
+
+I also need to do _a lot_ of rereading of code to eliminate typos since this
+code is otherwise a bit difficult to test.
+
+--------------------------------------------------------------------------
+
 Note as of 7 November 2001:
 
 I have some sort of constant elimination things defined.

@@ -183,7 +183,7 @@ declare allocMalloc{ 'atom }
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomRawInt{ 'precision; 'sign; 'num }
-declare atomFloat{ 'f }
+declare atomFloat{ 'precision; 'f }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
@@ -319,10 +319,12 @@ val is_rawIntOfFloatOp_term : term -> bool
 val mk_rawIntOfFloatOp_term : term -> term -> term -> term
 val dest_rawIntOfFloatOp_term : term -> term * term * term
 
+(*
 val rawIntOfRawIntOp_term : term
 val is_rawIntOfRawIntOp_term : term -> bool
-val mk_rawIntOfRawIntOp_term : term -> term -> term -> term
-val dest_rawIntOfRawIntOp_term : term -> term * term * term
+val mk_rawIntOfRawIntOp_term : term -> term -> term -> term -> term
+val dest_rawIntOfRawIntOp_term : term -> term * term * term * term
+*)
 
 (* Integer/pointer coercions. *)
 
@@ -597,6 +599,96 @@ val dest_atan2Op_term : term -> term
 
 (* Pointer equality. *)
 
+val eqEqOp_term : term
+val is_eqEqOp_term : term -> bool
+
+val neqEqOp_term : term
+val is_neqEqOp_term : term -> bool
+
 (**********************
  * Subscript operators.
  **********************)
+
+val blockPolySub_term : term
+val is_blockPolySub_term : term -> bool
+
+val blockRawIntSub_term : term
+val is_blockRawIntSub_term : term -> bool
+val mk_blockRawIntSub_term : term -> term -> term
+val dest_blockRawIntSub_term : term -> term * term
+
+val blockFloatSub_term : term
+val is_blockFloatSub_term : term -> bool
+val mk_blockFloatSub_term : term -> term
+val dest_blockFloatSub_term : term -> term
+
+val rawRawIntSub_term : term
+val is_rawRawIntSub_term : term -> bool
+val mk_rawRawIntSub_term : term -> term -> term
+val dest_rawRawIntSub_term : term -> term * term
+
+val rawFloatSub_term : term
+val is_rawFloatSub_term : term -> bool
+val mk_rawFloatSub_term : term -> term
+val dest_rawFloatSub_term : term -> term
+
+val rawDataSub_term : term
+val is_rawDataSub_term : term -> bool
+
+val rawFunctionSub_term : term
+val is_rawFunctionSub_term : term -> bool
+
+(***********************
+ * Allocation operators.
+ ***********************)
+
+val allocTuple_term : term
+val is_allocTuple_term : term -> bool
+val mk_allocTuple_term : term -> term -> term
+val dest_allocTuple_term : term -> term * term
+
+val allocArray_term : term
+val is_allocArray_term : term -> bool
+val mk_allocArray_term : term -> term -> term
+val dest_allocArray_term : term -> term * term
+
+(* allocUnion term should go here *)
+
+val allocMalloc_term : term
+val is_allocMalloc_term : term -> bool
+val mk_allocMalloc_term : term -> term
+val dest_allocMalloc_term : term -> term
+
+(****************
+ * Normal values.
+ ****************)
+
+val atomInt_term : term
+val is_atomInt_term : term -> bool
+val mk_atomInt_term : term -> term
+val dest_atomInt_term : term -> term
+
+val atomEnum_term : term
+val is_atomEnum_term : term -> bool
+val mk_atomEnum_term : term -> term -> term
+val dest_atomEnum_term : term -> term * term
+
+val atomRawInt_term : term
+val is_atomRawInt_term : term -> bool
+val mk_atomRawInt_term : term -> term -> term -> term
+val dest_atomRawInt_term : term -> term * term * term
+
+val atomFloat_term : term
+val is_atomFloat_term : term -> bool
+val mk_atomFloat_term : term -> term -> term
+val dest_atomFloat_term : term -> term * term
+
+val atomConst_term : term
+val is_atomConst_term : term -> bool
+val mk_atomConst_term : term -> term -> term -> term
+val dest_atomConst_term : term -> term * term * term
+
+val atomVar_term : term
+val is_atomVar_term : term -> bool
+val mk_atomVar_term : term -> term
+val dest_atomVar_term : term -> term

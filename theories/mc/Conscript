@@ -6,6 +6,7 @@ $env = $env->clone(
 );
 
 OCamlSources $env
+   'mc_term_op_ds.ml'
    'fir_int_set.ml',
    'fir_rawint_set.ml',
    'fir_ty.ml',
@@ -18,6 +19,7 @@ OCamlSources $env
    'fir_test.ml';
 
 OCamlLibrary $env 'base',
+   'mc_term_op_ds',
    'fir_int_set',
    'fir_rawint_set',
    'fir_ty',

@@ -1,4 +1,6 @@
-OCAMLINCLUDED = $(OCAMLINCLUDES) -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base
+OCAMLINCLUDES +=\
+	$(addprefix -I , $(SUPPORT_DIRS))\
+	-I ../base -I ../itt
 
 # Library files
 MPFILES =\
@@ -35,3 +37,5 @@ Theory($(MPFILES))
 #
 clean:
     $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

@@ -5,18 +5,11 @@
  * @end[doc]
  *)
 
-extends Itt_equal
-extends Itt_squiggle
-extends Itt_struct2
 extends Itt_subtype
+extends Itt_pairwise
 
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-open Tactic_type
+open Basic_tactics
 
-open Itt_squiggle
-open Itt_struct
-open Itt_struct2
 (*! @docoff *)
 
 interactive supertype 'H 'B:  (* Can't prove it because of the BUG #3.14 *)

@@ -253,12 +253,12 @@ doc <:doc<
 >>
 interactive and_univ {| intro []; eqcd |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
-   [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
+   [wf] sequent { <H>; 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
    sequent { <H> >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
 
 interactive and_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
-   [wf] sequent { <H> >- "type"{'a2} } -->
+   [wf] sequent { <H>; 'a1 >- "type"{'a2} } -->
    sequent { <H> >- "type"{."and"{'a1; 'a2}} }
 
 interactive and_intro {| intro [] |} :

@@ -67,25 +67,17 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
-declare "sexists"{x. 'A['x]}
-doc <:doc< @docoff >>
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
 doc <:doc< 
    @begin[doc]
-   @rewrites
+   @terms
   
    The unrestricted existential is defined with the type-theoretic
    existential @hrefterm[exists] from the @hrefmodule[Itt_logic]
    module.
    @end[doc]
 >>
-prim_rw unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
-doc <:doc< @docoff >>
+define unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
+doc docoff
 
 let fold_sexists = makeFoldC << "sexists"{x. 'A['x]} >> unfold_sexists
 

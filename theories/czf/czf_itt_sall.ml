@@ -66,23 +66,16 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
-declare "sall"{x. 'A['x]}
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
 doc <:doc< 
    @begin[doc]
-   @rewrites
+   @terms
   
    The quantification $@sall{x; P[x]}$ is defined using the universal
    quantifier @hrefterm[all] from the @hrefmodule[Itt_logic] module.
    @end[doc]
 >>
-prim_rw unfold_sall : "sall"{x. 'A['x]} <--> (all x: set. 'A['x])
-doc <:doc< @docoff >>
+define unfold_sall : "sall"{x. 'A['x]} <--> (all x: set. 'A['x])
+doc docoff
 
 let fold_sall = makeFoldC << "sall"{x. 'A['x]} >> unfold_sall
 

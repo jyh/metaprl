@@ -9,8 +9,6 @@ P	p4	Number 1318
 O	o6	location p3 p4
 NSummary!parent	parent	parent Summary
 O	o8	parent
-NSummary!parent	parent	parent Summary
-O	o2	parent
 P	p2	String Base_theory
 O	o10	parent p2
 T	t88	o10
@@ -1795,19 +1793,19 @@ G	s652	t645
 B	b653	s652
 T	t653	o635 b653 b4
 B	b654	t653
-T	t654	o2 b637
+T	t654	o8 b637
 B	b655	t654
 T	t655	o634 b654 b4 b655
 B	b656	t655
-T	t656	o2 b656
+T	t656	o8 b656
 B	b657	t656
 T	t657	o634 b652 b4 b657
 B	b658	t657
-T	t658	o2 b658
+T	t658	o8 b658
 B	b659	t658
 T	t659	o634 b646 b649 b659
 B	b660	t659
-T	t660	o2 b660
+T	t660	o8 b660
 B	b661	t660
 T	t661	o637 b642 b4 b661
 B	b662	t661

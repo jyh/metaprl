@@ -58,6 +58,15 @@ interactive elem_in_G_wf2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{elem_in_G; car} }
 
 (* power is a set *)
+(* The lt_Id rule and lt_IdT should be added to module "itt_int_base" *)
+interactive lt_Id 'H 'a :
+   [main] sequent ['ext] { 'H >- 'a < 'a } -->
+   [wf] sequent ['ext] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- 'C }
+
+let lt_IdT t1 p =
+   lt_Id (Sequent.hyp_count_addr p) t1 p
+
 interactive power_wf1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- 'n IN int } -->
    sequent ['ext] { 'H >- isset{'z} } -->

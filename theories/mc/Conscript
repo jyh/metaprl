@@ -2,11 +2,11 @@ Import qw( env );
 
 $env = $env->clone(
    INCPATH  => [@{$env->{INCPATH}}, "../tactic", "../ocaml", "../base",
-                "../itt", "../../mc"]
+                "../itt", "$env->{MC}/fir/util"]
 );
 
 OCamlSources $env
-   'mc_term_op_ds.ml'
+   'mc_term_op_ds.ml',
    'fir_int_set.ml',
    'fir_rawint_set.ml',
    'fir_ty.ml',
@@ -32,4 +32,6 @@ OCamlLibrary $env 'base',
    'fir_test';
 
 ## Add the library to the default target list
-Default qw( base.cmxa );
+if(defined($ENV{'MC_ROOT'})) {
+   Default qw( base.cmxa );
+};

@@ -183,6 +183,8 @@ let mk_ind_term = mk_dep0_dep2_dep0_dep2_term ind_opname
 
 prec prec_compare
 prec prec_add
+prec prec_unary
+prec prec_add < prec_unary
 
 (*
 prec prec_mul < prec_apply
@@ -206,7 +208,7 @@ dform add_df2 : mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
 
 dform uni_minus_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: uni_minus{'a} =
    `" - " slot["le"]{'a}
-dform uni_minus_df2 : mode[src] :: parens :: "prec"[prec_add] :: uni_minus{'a} =
+dform uni_minus_df2 : mode[src] :: parens :: "prec"[prec_unary] :: uni_minus{'a} =
    `" -@ " slot["le"]{'a}
 
 dform sub_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
@@ -649,6 +651,14 @@ interactive_rw add_Assoc_rw :
 
 let add_AssocC = add_Assoc_rw
 
+interactive_rw add_Assoc2_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ( 'c IN int ) -->
+   (('a +@ 'b) +@ 'c) <--> ('a +@ ('b +@ 'c))
+
+let add_Assoc2C = add_Assoc2_rw
+
 (*!
  * @begin[doc]
  *
@@ -676,21 +686,6 @@ interactive_rw add_Id2_rw :
 
 let add_Id2C = add_Id2_rw
 
-(*
-interactive add_Functionality 'H :
-   [main] sequent ['ext] { 'H >- 'a ~ 'b } -->
-   [wf] sequent ['ext] { 'H >- 'a IN int } -->
-   [wf] sequent ['ext] { 'H >- 'b IN int } -->
-   [wf] sequent ['ext] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) }
-*)
-interactive add_Functionality 'H 'c :
-   [main] sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) } -->
-   [wf] sequent ['ext] { 'H >- 'a IN int } -->
-   [wf] sequent ['ext] { 'H >- 'b IN int } -->
-   [wf] sequent ['ext] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- 'a ~ 'b }
-
 (*!
  * @begin[doc]
  *
@@ -707,17 +702,41 @@ interactive_rw uni_add_inverse_rw :
    ( 'a +@ uni_minus{ 'a } ) <--> 0
 
 let uni_add_inverseC = uni_add_inverse_rw
-
+(*
 let unfold_zeroC t = foldC (mk_add_term t (mk_uni_minus_term t)) uni_add_inverseC 
 
 interactive uni_add_inverse2 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- 0 ~ ('c +@ uni_minus{ 'c }) }
+*)
+(*
+interactive add_Functionality 'H :
+   [main] sequent ['ext] { 'H >- 'a ~ 'b } -->
+   [wf] sequent ['ext] { 'H >- 'a IN int } -->
+   [wf] sequent ['ext] { 'H >- 'b IN int } -->
+   [wf] sequent ['ext] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) }
+*)
+interactive add_Functionality 'H 'c :
+   [main] sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) } -->
+   [wf] sequent ['ext] { 'H >- 'a IN int } -->
+   [wf] sequent ['ext] { 'H >- 'b IN int } -->
+   [wf] sequent ['ext] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 'a ~ 'b }
+
+interactive_rw add_Functionality_rw 'b 'c :
+   (('a +@ 'c) ~ ('b +@ 'c)) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   'a <--> 'b
+
+let add_FunctionalityC = add_Functionality_rw
 
 interactive uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent { 'H >- uni_minus{ ('a +@ 'b) } ~
+   sequent ['ext] { 'H >- uni_minus{ ('a +@ 'b) } ~
                    ( uni_minus{ 'a } +@ uni_minus{ 'b } ) }
 
 interactive uni_uni_reduce 'H :

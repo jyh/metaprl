@@ -335,6 +335,7 @@ rule add_Assoc 'H :
    sequent ['ext] { 'H >- ('a +@ ('b +@ 'c)) ~ (('a +@ 'b) +@ 'c) }
 
 topval add_AssocC: conv
+topval add_Assoc2C: conv
 
 rule add_Id 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -348,6 +349,18 @@ rule add_Id2 'H :
 
 topval add_Id2C: conv
 
+rule uni_add_inverse 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 }
+
+topval uni_add_inverseC: conv
+(*
+topval unfold_zeroC: term -> conv
+
+rule uni_add_inverse2 'H :
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 0 ~ ('c +@ uni_minus{ 'c }) }
+*)
 (*
 rule add_Functionality 'H :
    [main] sequent ['ext] { 'H >- 'a ~ 'b } -->
@@ -363,21 +376,12 @@ rule add_Functionality 'H 'c :
    [wf] sequent ['ext] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- 'a ~ 'b }
 
-rule uni_add_inverse 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 }
-
-topval uni_add_inverseC: conv
-topval unfold_zeroC: term -> conv
-
-rule uni_add_inverse2 'H :
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- 0 ~ ('c +@ uni_minus{ 'c }) }
+topval add_FunctionalityC : term -> term -> conv
 
 rule uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent { 'H >- uni_minus{ ('a +@ 'b) } ~
+   sequent ['ext] { 'H >- uni_minus{ ('a +@ 'b) } ~
                    ( uni_minus{ 'a } +@ uni_minus{ 'b } ) }
 
 rule uni_uni_reduce 'H :

@@ -57,4 +57,17 @@ interactive lambda_intro2  {| intro[] |} :
    sequent { <H> >- bterm{| <K> >- lambda[@]{x.'t['x]} |} in LambdaTerm }
 
 
+define unfold_mk_apply: mk_apply{'t;'s} <--> let depth=max{bdepth{'t};bdepth{'s}} in  make_bterm{app_term; 'depth; make_depth{'t;'depth}::make_depth{'s;'depth}::nil}
+
+define unfold_mk_lambda: mk_lambda{'f} <--> let depth=max{bdepth{'f}; 1} in  make_bterm{lambda_term; 'depth -@ 1; make_depth{'f;'depth}::nil}
+
+interactive mk_lambda_wf  {| intro[] |} :
+   sequent { <H> >- 't in LambdaTerm } -->
+   sequent { <H> >- mk_lambda{'t} in LambdaTerm }
+
+interactive mk_apply_wf  {| intro[] |} :
+   sequent { <H> >- 't in LambdaTerm } -->
+   sequent { <H> >- 's in LambdaTerm } -->
+   sequent { <H> >- mk_apply{'t;'s} in LambdaTerm }
+
 

@@ -38,6 +38,14 @@ doc <:doc<
 
 open Basic_tactics
 
+declare new_var{'bt}
+declare last_var{'bt}
+declare add_var{'bt;'v}
+declare add_var{'bt}
+declare make_depth{'s;'n}
+declare add_vars_upto{'s;'t}
+declare not_free{'v;'t}
+
 declare subst{'t;'v;'s}
 
 topval fold_add_var : conv

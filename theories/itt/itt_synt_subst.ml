@@ -202,16 +202,41 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Add zero or more binding variables}
 
-   $$ add@_vars@_upto(<<Gamma>>.s; <<Gamma>>,<<Delta>>.t) = <<Gamma>>,<<Delta>>.s$$
+   <<make_depth{'s;'n}>> adds some variables to the term $s$ to make its binding depth to be equal to $n$.
+   It is defined only if <<'n >= bdepth{'s}>>.
    @end[doc]
 >>
+
+define unfold_make_depth: make_depth{'s;'n} <--> ind{'n -@ bdepth{'s};'s; k,s.add_var{'s}}
+
+interactive_rw make_depth_bdepth {| reduce |} :
+   ('s in BTerm)  -->
+   ('n >= bdepth{'s})  -->
+   bdepth{make_depth{'s;'n}} <--> 'n
+
+interactive make_depth_wf {| intro [] |} :
+   sequent { <H> >- 's in BTerm } -->
+   sequent { <H> >- 'n >= bdepth{'s} } -->
+   sequent { <H> >- make_depth{'s;'n} in BTerm }
+
+
+
+doc <:doc<
+   @begin[doc]
+   <<add_vars_upto{'s;'t}>> adds variables to the term $s$  to match its binding depth to the term $t$:
+   $$ add@_vars@_upto(<<Gamma>>.s; <<Gamma>>,<<Delta>>.t) = <<Gamma>>,<<Delta>>.s$$
+   It is undefined when <<bdepth{'t} < bdepth{'s}>>.
+   @end[doc]
+>>
+
+
 define unfold_add_vars_upto:
-   add_vars_upto{'s;'t} <--> ind{bdepth{'t} -@ bdepth{'s};'s; k,s.add_var{'s}}
+   add_vars_upto{'s;'t} <--> make_depth{'s;bdepth{'t}}
 doc docoff
 
 let fold_add_vars_upto = makeFoldC << add_vars_upto{'s;'t} >> unfold_add_vars_upto
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc docon
+
 interactive_rw add_vars_upto_bdepth {| reduce |} :
    ('t in BTerm)  -->
    ('s in BTerm)  -->

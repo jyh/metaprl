@@ -84,6 +84,9 @@ prim bug175:
    sequent { <H>; <J> >- 'A } -->
    sequent { <H> >- sequent { <J> >- 'A }} = it
 
+interactive_rw rw_table_tets {| reduce |} :
+   sequent { 'A; <H>; 'B >- 'C } <--> sequent { 'A; <H>; 'B >- 'C }
+
 interactive_rw context_rw 'C:
    'C[[let v = 'e1<||> in 'e2['v]]] <--> (let v = 'e1 in 'C[['e2['v]]])
 

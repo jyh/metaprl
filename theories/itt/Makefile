@@ -43,6 +43,7 @@ MPFILES :=\
 	itt_prop_decide\
 	itt_fset\
 	itt_theory\
+	collection\
 	itt_test
 
 # Name of main libraris

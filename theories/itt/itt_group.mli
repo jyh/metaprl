@@ -124,7 +124,6 @@ topval fold_groupHom : conv
 topval fold_isBijective : conv
 topval fold_isInjective : conv
 topval fold_isSurjective : conv
-topval fold_isBijective : conv
 topval fold_groupMono : conv
 topval fold_groupEpi : conv
 topval fold_groupIso : conv

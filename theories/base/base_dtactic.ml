@@ -288,7 +288,7 @@ let intro_compact entries =
    let compile ({ info_term = t; info_redex = rw; info_value = (name, _, _) }, entries) =
       let tac =
          let normal, select = split [] [] entries in
-         let selname = String_util.concat ":" (List.map (fun (name, _, _) -> name) select) in
+         let selname = String.concat ":" (List.map (fun (name, _, _) -> name) select) in
          let select = List.map (fun (_, sel, tac) -> sel, tac) select in
             match normal, select with
                [], [] ->

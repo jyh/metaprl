@@ -73,8 +73,6 @@ interactive new_var_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- new_var{'bt} in Var }
 
-
-
 (*
  *  add_var( <H>;<J>.s; <H>,x,<J'>.x ) = <H>,x,<J>.s
  *)
@@ -94,6 +92,8 @@ interactive_rw add_var_reduce1 {| reduce |} :
       add_var{make_bterm{'op;'subterms}; 'v} <--> make_bterm{bind{'op}; map{x.add_var{'x;'v}; 'subterms}}
 
 interactive_rw add_var_reduce2 {| reduce |} :
+      'l in nat -->
+      'r in nat -->
       add_var{var{'l;'r}; 'v} <--> if left{'v} <=@ 'l
                                       then var{'l+@1;'r}
                                       else var{'l;'r+@1}
@@ -114,8 +114,6 @@ interactive add_var_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- add_var{'bt;'v} in BTerm }
 
-
-
 (*
  *  add_var( <H>.s ) = <H>,x.s
  *)
@@ -123,7 +121,8 @@ define unfold_add_new_var:
    add_var{'bt} <--> add_var{'bt; new_var{'bt}}
 
 interactive_rw add_new_var_reduce1 {| reduce |} :
-      add_var{make_bterm{'op;'subterms}} <--> make_bterm{bind{'op}; map{x.add_var{'x; var{op_bdepth{'op}; 0}}; 'subterms}}
+   'op in BOperator -->
+   add_var{make_bterm{'op;'subterms}} <--> make_bterm{bind{'op}; map{x.add_var{'x; var{op_bdepth{'op}; 0}}; 'subterms}}
 
 interactive_rw add_new_var_reduce2 {| reduce |} :
       ('l in nat) -->

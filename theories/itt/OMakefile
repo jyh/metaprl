@@ -71,6 +71,7 @@ MPFILES =\
    itt_record0\
    itt_record\
    itt_record_exm\
+   itt_obj_base_rewrite\
    itt_algebra_df\
    itt_record_renaming\
    itt_relation_str\

@@ -237,10 +237,11 @@ let merge_term_lists =
 (*
  * The order on terms.
  *)
-module Ord =
+module TermBase =
 struct
    type set = StringSet.t
-   type t = term
+   type elt = term
+   type data = term list
 
    let union = StringSet.union
    let compare set term1 term2 =
@@ -251,12 +252,13 @@ struct
             -1
        | GreaterThan ->
             1
+   let append = (@)
 end
 
 (*
  * The term set.
  *)
-module TermTable = MakeSplayTable (Ord)
+module TermTable = MakeSplayTable (TermBase)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -269,7 +271,7 @@ struct
     *)
    type t =
       { cache_constants : StringSet.t;
-        cache_table : term list TermTable.t
+        cache_table : TermTable.t
       }
 
    (*

@@ -637,7 +637,7 @@ let proveT p =
  * This tactic is just for performance testing.
  *)
 let loopTestT p =
-   for i = 0 to 100 do
+   for i = 0 to 200 do
       Tactic_type.refine proveT p
    done
 

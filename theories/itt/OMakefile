@@ -120,7 +120,10 @@ itt_int_bench.mli:
 itt_int_bench2.mli:
 	touch $@
 
-itt_int_bench.ml itt_int_bench2.ml: gen_int_bench$(EXE)
+itt_int_bench.ml : $(GEN)
+	$(GEN)
+
+itt_int_bench2.ml : $(GEN)
 	$(GEN)
 
 clean:

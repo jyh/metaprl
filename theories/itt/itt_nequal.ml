@@ -2,7 +2,7 @@ doc <:doc<
    @begin[doc]
    @module[Itt_nequal]
 
-   The @tt{Itt_nequal} module defines non-equality term <<'a <> 'b in 'T>>.
+   The @tt[Itt_nequal] module defines non-equality term <<'a <> 'b in 'T>>.
    @end[doc]
 
    ----------------------------------------------------------------

@@ -1,4 +1,5 @@
 doc <:doc<
+   @spelling{renamings th}
    @begin[doc]
    @module[Itt_record_renaming]
 
@@ -90,7 +91,7 @@ doc <:doc<
 
 doc <:doc<
    @begin[doc]
-     @modsection{Properies}
+     @modsection{Properties}
      The main properties of the renaming are the following reductions:
    @end[doc]
 @docoff
@@ -353,11 +354,14 @@ doc <:doc<
      The conversion @conv[unfoldAdditiveC] <<'r>>  is opposite to  @conv[foldAdditiveC] <<'r>>.
      For example, it replaces  <<as_additive{'r}^"*">> by  <<'r^"+">> .
 
-     The @tactic[foldAdditiveT] $r$ and  @tactic[unfoldAdditiveT] $r$ tactics apply the above conversions to all subterms of the goal sequent (using @hreftactic[rwhAll]).
+     The @tactic[foldAdditiveT] $r$ and  @tactic[unfoldAdditiveT] $r$ tactics apply the above
+     conversions to all subterms of the goal sequent (using @hreftactic[rwhAll]).
 
-     The @tactic[useAdditiveWithT] $r$ $tac$ tactic applies @tt[foldAdditiveT] then $tac$ and then  @tt[unfoldAdditiveT].
+     The @tactic[useAdditiveWithT] @[r] @i[tac] tactic applies @tt[foldAdditiveT] then @i[tac] and
+     then  @tt[unfoldAdditiveT].
 
-     The @tactic[useAdditiveWithAutoT] $r$ $tac$ tactic applies @tt[useAdditiveWithT] $r$ @tt[autoT] and then runs @tt[autoT] again.
+     The @tactic[useAdditiveWithAutoT] $r$ @i[tac] tactic applies @tt[useAdditiveWithT] $r$
+     @tt[autoT] and then runs @tt[autoT] again.
    @end[doc]
    @docoff
 >>
@@ -386,7 +390,7 @@ doc <:doc<
 
 
    $$
-   @rulebox{foldAdditiveT <<'F>>; ;
+   @rulebox{@tt[foldAdditiveT] <<'F>>; ;
      <<sequent(nil){ <H> >- 'a +['F] 'F^"0" = 'a in 'F^car }>>;
      <<sequent(nil){ <H> >- 'a *[as_additive{'F}] as_additive{'F}^"1" = 'a in as_additive{'F}^car }>>}
    $$
@@ -397,7 +401,7 @@ doc <:doc<
 
       Then
    $$
-   @rulebox{unfoldAdditiveT <<'F>>; ;
+   @rulebox{@tt[unfoldAdditiveT] <<'F>>; ;
      <<sequent(nil){ <H> >- 'a in as_additive{'F}^car }>>;
      <<sequent(nil){ <H> >- 'a in 'F^car }>>}
    $$
@@ -449,13 +453,13 @@ doc <:doc<
          <<group_mult{'R;'a;'n}>> by <<group_power{as_additive{'R}; 'a; 'n}>>
         and visa versa:
    $$
-   @rulebox{foldAdditiveT <<'R>>; ;
+   @rulebox{@tt[foldAdditiveT] <<'R>>; ;
      <<sequent(nil){ <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>;
      <<sequent(nil){ <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>}
    $$
 
    $$
-   @rulebox{unfoldAdditiveT <<'R>>; ;
+   @rulebox{@tt[unfoldAdditiveT] <<'R>>; ;
      <<sequent(nil){ <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>;
      <<sequent(nil){ <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>}
    $$
@@ -526,12 +530,11 @@ doc <:doc<
 
      The @tt[reduceC] conversion should undo this conversion.
 
-     The @tactic[reverseOrderT] $ord$ tactic apply the above conversions to all subterms of the goal sequent (using @hreftactic[rwhAll]).
+     The @tactic[reverseOrderT] @i[ord] tactic apply the above conversions to all subterms of the goal sequent (using @hreftactic[rwhAll]).
 
    @end[doc]
    @docoff
 >>
-
 
 
 interactive_rw reverse_order_rw 'ord:  'ord <-->   reverse_order{reverse_order{'ord}}
@@ -541,12 +544,12 @@ let reverseOrderC term = allSubThenC (reverse_order_rw term) (reduceTopC)
 let reverseOrderT term  = rwhAll (reverseOrderC term)
 
 
-
 doc <:doc<
    @begin[doc]
    @modsubsection{Examples}
-     Suppouse we have an operator <<max{'ord;'a;'b}>> that takes the maximum of $a$ and $b$ w.r.t. order $ord$.
-     Then we can define  <<min{'ord;'a;'b}>> as max w.r.t. reverse order:
+     Suppose we have an operator <<max{'ord;'a;'b}>> that takes the maximum of <<'a>> and <<'b>>
+     w.r.t. order <<'ord>>.  Then we can define  <<min{'ord;'a;'b}>> as a maximum w.r.t. reverse
+     order:
    @end[doc]
 >>
 
@@ -574,7 +577,7 @@ doc <:doc<
    @begin[doc]
          Then we can use @hreftactic[reverseOrderT] tactic on the goal << min{'ord;'a;'b} <['ord] 'a>>:
          $$
-            @rulebox{reverseOrderT <<'ord>>; ;
+            @rulebox{@tt[reverseOrderT] <<'ord>>; ;
                <<sequent{ <H> >-  min{'ord;'a;'b} <['ord] 'a } >>;
                <<sequent{ <H> >-  max{reverse_order{'ord};'a;'b} >[reverse_order{'ord}] 'a }>>}
          $$

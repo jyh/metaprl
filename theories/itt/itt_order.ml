@@ -64,7 +64,7 @@ let _ =
 
 doc <:doc<
    @begin[doc]
-   @modsection{unstrictPartial order}
+   @modsection{Non-strict Partial Order}
    @modsubsection{Rewrites}
 
    @end[doc]
@@ -317,9 +317,9 @@ interactive totalOrderThenDecidableEquality 'rel :
 
 doc <:doc<
    @begin[doc]
-   @modsubsection{Unstrict (total) order vs strict (total) order}
+   @modsubsection{Non-strict (total) order @em[vs] strict (total) order}
 
-	For totally ordered types we can express strict order via unstrict one and
+	For totally ordered types we can express strict order via non-strict one and
 	vice versa.
 
    @end[doc]
@@ -390,10 +390,10 @@ interactive inverseStrictTotalOrder {| intro [] |} :
 
 doc <:doc<
    @begin[doc]
-   @modsubsection{Inverse order vs conversions between strict and unstrict order}
+   @modsubsection{Inverse order @em[vs] conversions between strict and non-strict order}
 
-	Inverse_order commutes with strict2unstrict, unstrict2strict.
-	Unstrict2eq absorbs inverse_order.
+	@tt[Inverse_order] commutes with @tt[strict2unstrict], @tt[unstrict2strict].
+	@tt[Unstrict2eq] absorbs @tt[inverse_order].
 
    @end[doc]
 >>

@@ -2,7 +2,7 @@ doc <:doc<
    @begin[doc]
    @module[Itt_unitring]
 
-   This theory defines unitrings.
+   This theory defines unit rings.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -249,7 +249,7 @@ define unfold_isUnit : isUnit{'x; 'R} <-->
 
 doc <:doc<
    @begin[doc]
-   @modsubsection{Wellformedness, Introduction, and Elimination}
+   @modsubsection{Well-formedness, Introduction, and Elimination}
 
    @end[doc]
 >>

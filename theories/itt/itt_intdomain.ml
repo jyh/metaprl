@@ -366,7 +366,7 @@ interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDoma
 doc <:doc<
    @begin[doc]
    @modsection{Hierarchy}
-   A intDomain is a ring, and also a unitring.
+   An integral domain is a ring, and also a unit ring.
 
    @end[doc]
 >>

@@ -2,7 +2,7 @@ doc <:doc<
    @begin[doc]
    @module[Itt_ring_uce]
 
-   This theory defines commutative unitrings with decidable equality.
+   This theory defines commutative unit rings with decidable equality.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -60,7 +60,7 @@ let _ =
  ************************************************************************)
 doc <:doc<
    @begin[doc]
-   @modsection{Commutative unitring with decidable equality}
+   @modsection{Commutative unit ring with decidable equality}
    @modsubsection{Rewrites}
 
    @end[doc]

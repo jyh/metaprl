@@ -1,7 +1,6 @@
 doc <:doc< -*- mode: text; -*-
    @begin[spelling]
-   CPS ML Mojave untrusted compilable Necula Liang HOAS
-   Morrisett
+   CPS ML Mojave compilable Necula Liang HOAS FDL Girard Moggi Plotkin Sabry Wadler Morrisett
    @end[spelling]
 
    @begin[doc]
@@ -78,7 +77,7 @@ documentation directly to the source that provides the algorithmic
 knowledge in the FDL.
 
 @subsection[fdl_motivation]{Compilers and programming languages}
-      
+
 One of the areas that has plagued the programming language community
 is the problem of compiler validation.  The task of designing and
 implementing a compiler can be difficult even for a small language.
@@ -128,7 +127,7 @@ Other widely-used algorithms include closure conversion (where
 functions in a program are lifted to top-level), code generation,
 register allocation, including spill selection.  Instances of these
 algorithms are used widely is many areas of computer science,
-especialy for compilers for languages ranging from Lisp and ML, to
+especially for compilers for languages ranging from Lisp and ML, to
 Java, C, C#, etc.  By defining them as part of the FDL, we provide a
 freely-available formal implementation that serves as a common
 reference for the many applications that use these algorithms.

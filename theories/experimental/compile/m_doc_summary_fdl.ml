@@ -1,39 +1,39 @@
 doc <:doc< -*- mode: text; -*-
    @begin[spelling]
-   CPS grunge Liang Morrisett Necula untrusted
+   CPS grunge Liang Morrisett Necula FDL
    @end[spelling]
-  
+
    @begin[doc]
    @section[m_doc_summary]{Summary and Future Work}
    @docoff
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
 >>
 extends M_doc_comment
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 One of the points we have stressed in this presentation is that the formalized versions of these
@@ -43,7 +43,7 @@ variety of applications.  This will increase the reliability of these algorithms
 algorithm description is @emph{verifiable}, and it will make development easier, by providing a
 common implementation.
 
-The formal development of these algoriths was eased for several reasons.  @MetaPRL provided a great
+The formal development of these algorithms was eased for several reasons.  @MetaPRL provided a great
 deal of automation for frequently occurring tasks.  In most cases, the implementation of a new
 compiler phase meant only the development of new rewrite rules.  There is very little of the
 ``grunge'' code that plagues traditional implementations, such as the maintenance of tables that
@@ -156,7 +156,7 @@ intermediate and final results.  For example, the work of Necula and
 Lee @cite["Nec00,NP98"] has led to effective mechanisms for certifying
 the output of compilers (e.g., with respect to type and memory-access
 safety), and for verifying that intermediate transformations on the
-code preserve its semantics. 
+code preserve its semantics.
 @comment{While these approaches certify the code
 and ease the debugging process (errors can be flagged at compile time
 rather than at run-time), it is not clear that they simplify the

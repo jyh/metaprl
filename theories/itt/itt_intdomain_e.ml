@@ -59,7 +59,7 @@ let _ =
  ************************************************************************)
 doc <:doc<
    @begin[doc]
-   @modsection{Commutative intDomain with decidable equality}
+   @modsection{Commutative integral domain with decidable equality}
    @modsubsection{Rewrites}
 
    @end[doc]

@@ -216,12 +216,12 @@ force the writing on the buffer, use the @code{flush} function.
 val flush : out_channel -> unit
 @end[verbatim]
 
-@section[printf]{Lm_printf}
+@section[printf]{Printf}
 
 The regular functions for I/O can be somewhat awkward.  OCaml also
 implements a @tt{printf} function similar to the @tt{printf} in
 Unix/C.  These functions are defined in the library module
-@code{Lm_printf}.  The general form is given by @code{fprintf}.
+@code{Printf}.  The general form is given by @code{fprintf}.
 
 @begin[verbatim]
 val fprintf: out_channel -> ('a, out_channel, unit) format -> 'a
@@ -280,7 +280,7 @@ corresponds to the C specification.
 @item{%; takes no argument and output one @tt{%} character.}
 @end[description]
 
-The @tt{Lm_printf} module also provides several additional functions for
+The @tt{Printf} module also provides several additional functions for
 printing on the standard channels.  The @tt{printf} function prints in
 the channel @tt{stdout}, and @tt{eprintf} prints on @tt{stderr}.
 
@@ -349,7 +349,7 @@ the buffer to an @code{out_channel}.
 val output_buffer : out_channel -> t -> unit
 @end[verbatim]
 
-The @tt{Lm_printf} module also provides formatted output to a string
+The @tt{Printf} module also provides formatted output to a string
 buffer.  The @tt{bprintf} function takes a @tt{printf}-style format
 string, and formats output to a buffer.
 

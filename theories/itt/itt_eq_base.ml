@@ -2,12 +2,12 @@ doc <:doc<
    @begin[doc]
    @module[Itt_eq_base]
 
-   The @tt{Itt_eq_base} module defines a $base$ type that allows turning
+   The @tt[Itt_eq_base] module defines a $base$ type that allows turning
    squiggle equality into a first-class equality relation.
    @end[doc]
 
    For more information, see also the newsgroup thread at
-   news://news.metaprl.org/1ad4.3fd93890.24661%40news.metaprl.org
+   @url["news://news.metaprl.org/1ad4.3fd93890.24661%40news.metaprl.org"]
    (Message posted "Thu, 11 Dec 2003 19:39:59 -0800" by Aleksey Nogin
     with Subject ``Idea: "Base" type that solves a lot of problems'').
 
@@ -61,7 +61,7 @@ extends Itt_subset
 
 doc <:doc<
    @doc{
-      The following modules are only needed to be able to prove extenede properties
+      The following modules are only needed to be able to prove extended properties
       of these constructors.
    }
 >>
@@ -107,7 +107,7 @@ prim base_eq :
 interactive base_top {| intro [] |} :
    sequent { <H> >- ext_equal {top; quot x,y:base // "true"} }
 
-doc <:doc< @doc{@modsubsection{The propepries of the $base{`""}$ type constructor}} >>
+doc <:doc< @doc{@modsubsection{The properties of the $base{`""}$ type constructor}} >>
 
 interactive base_op_wf {| intro [] |} :
    sequent { <H> >- 'T Type } -->

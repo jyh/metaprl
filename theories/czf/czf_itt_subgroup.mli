@@ -8,4 +8,4 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare subgroup
+declare subgroup{'g; 's}

@@ -72,6 +72,8 @@ topval dT : int -> tactic
  *)
 topval dForT : int -> tactic
 
+val intro_typeinf : term -> intro_option
+val elim_typeinf : term -> elim_option
 val elim_univ_arg : elim_option
 val intro_univ_arg : intro_option
 

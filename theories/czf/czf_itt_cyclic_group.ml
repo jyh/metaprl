@@ -1,3 +1,4 @@
+include Czf_itt_equiv
 include Czf_itt_group
 include Czf_itt_cyclic_subgroup
 include Czf_itt_subgroup
@@ -27,67 +28,45 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare cyclic{'g; 'a}
+declare cycgroup{'g; 'a}
 
-prim_rw unfold_cyclic : cyclic{'g; 'a} <-->
-   cyclic_subgroup{'g; 'a}
+prim_rw unfold_cycgroup : cycgroup{'g; 'a} <-->
+   cyc_subg{'g; 'g; 'a}
 
-let fold_cyclic = makeFoldC << cyclic{'g; 'a} >> unfold_cyclic
+let fold_cycgroup = makeFoldC << cycgroup{'g; 'a} >> unfold_cycgroup
 
-dform cyclic_group_df : except_mode[src] :: cyclic{'g; 'a} =
-   `"<" slot{'a} `">" subc
+dform cyclic_group_df : except_mode[src] :: cycgroup{'g; 'a} =
+   `"cyclic_group(" slot{'g} `"; " slot{'a} `")"
 
-(* axioms *)
-interactive cyclic_group_def {| intro [] |} 'H :
+interactive cycgroup_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >- equal{cyclic{'g; 'a}; car{'g}} }
+   sequent ['ext] { 'H >- "type"{cycgroup{'g; 'a}} }
 
-(* basic properties of cyclic groups *)
-interactive cyclic_group_wf {| intro [] |} 'H :
+interactive cycgroup_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >-  isset{cyclic{'g; 'a}} }
-
-interactive cyclic_group_op_wf {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; cyclic{'g; 'a}} } -->
-   sequent ['ext] { 'H >- mem{'s2; cyclic{'g; 'a}} } -->
-   sequent ['ext] { 'H >- mem{op{'g; 's1; 's2}; cyclic{'g; 'a}} }
-
-interactive cyclic_group_id_wf {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{id{'g}; cyclic{'g; 'a}} }
-
-interactive cyclic_group_inv_wf1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- mem{'s; cyclic{'g; 'a}} } -->
-   sequent ['ext] { 'H >- mem{inv{'g; 's}; cyclic{'g; 'a}} }
+   sequent ['ext] { 'H >- equal{car{'g}; collect{int; x. power{'g; 'a; 'x}}} } -->
+   sequent ['ext] { 'H >- cycgroup{'g; 'a} }
 
 (* Every cyclic group is abelian *)
-interactive cyclic_group_abel {| intro[] |} 'H 'a :
+interactive cycgroup_abel 'H 'a :
+   sequent [squash] { 'H >- isset{'R} } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
+   sequent ['ext] { 'H >- cycgroup{'g; 'a} } -->
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; cyclic{'g; 'a}} } -->
-   sequent ['ext] { 'H >- mem{'s2; cyclic{'g; 'a}} } -->
-   sequent ['ext] { 'H >- equal{op{'g; 's1; 's2}; op{'g; 's2; 's1}} }
+   sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
+   sequent ['ext] { 'H >- mem{'s2; car{'g}} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's1; 's2}; op{'g; 's2; 's1}} }
+
+let cycgroupAbelT t p =
+   cycgroup_abel (hyp_count_addr p) t p

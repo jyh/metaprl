@@ -27,9 +27,10 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare cyclic{'g; 'a}
+declare cycgroup{'g; 'a}
 
-rewrite unfold_cyclic : cyclic{'g; 'a} <-->
-   cyclic_subgroup{'g; 'a}
+rewrite unfold_cycgroup : cycgroup{'g; 'a} <-->
+   cyc_subg{'g; 'g; 'a}
 
-topval fold_cyclic : conv
+topval fold_cycgroup : conv
+topval cycgroupAbelT: term -> tactic

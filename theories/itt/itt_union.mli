@@ -48,6 +48,10 @@ declare inl{'x}
 declare inr{'x}
 declare decide{'x; y. 'a['y]; z. 'b['z]}
 
+declare outl{'x}
+declare outr{'x}
+declare out{'x}
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)

@@ -1,48 +1,48 @@
 doc <:doc<
    @spelling{bool ifthenelse splitBoolT splitITE}
-  
+
    @begin[doc]
    @module[Itt_bool]
-  
+
    The @tt{Itt_bool} module defines a type of (decidable)
    Booleans.  The definition of the Boolean values is
    based on the @hrefterm[unit] type in the @hrefmodule[Itt_unit] module
    and the @hrefterm[union] type in the @hrefmodule[Itt_union]
    module, as the type $@union{@unit; @unit}$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -75,17 +75,17 @@ open Itt_squash
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The following terms define the Boolean connectives.
    The Boolean values are @emph{not} propositions; the
    @tt[assert] term converts a Boolean expression
    to propositional form.  Note that these connectives
    are completely separate from the logical connectives
    defined in @hrefmodule[Itt_logic].
-  
+
    The $@bool$ type is defined as the type $@union{@unit; @unit}$.
    The $@true$ term is chosen to be the @emph{left} term, and $@false$
    is the @emph{right} term.
@@ -95,7 +95,7 @@ define unfold_bool : bool <--> (unit + unit)
 define unfold_btrue : btrue <--> inl{it}
 define unfold_bfalse : bfalse <--> inr{it}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt{ifthenelse} term is the program that
    performs case analysis on a Boolean value.  The
@@ -111,7 +111,7 @@ define unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
 define unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
 define unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @emph{propositional} form of a Boolean value is
    expressed as an equality judgment.
@@ -129,7 +129,7 @@ let fold_bimplies = makeFoldC << bimplies{'a; 'b} >> unfold_bimplies
 let fold_bnot = makeFoldC << bnot{'a} >> unfold_bnot
 let fold_assert = makeFoldC << "assert"{'t} >> unfold_assert
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The reductions on literal Booleans are derived
    from the computational properties of the @hrefterm[union]
@@ -217,11 +217,11 @@ dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] :: "assert"{
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood, well-formedness, and membership}
-  
+
    The $@bool$ type is a member of every universe, and it
    contains the terms $@true$ and $@false$.
    @end[doc]
@@ -238,10 +238,10 @@ interactive btrue_member {| intro []; eqcd |} :
 interactive bfalse_member {| intro []; eqcd |} :
    sequent { <H> >- bfalse in "bool" }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination rule performs a case analysis on a Boolean
    assumption.  There are two cases: one where the assumption is
    true, and another where it is false.
@@ -252,10 +252,10 @@ interactive boolElimination2 {| elim [] |} 'H :
    [main] sequent{ <H>; <J[bfalse]> >- 'C[bfalse] } -->
    sequent { <H>; x: "bool"; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator well-formedness}
-  
+
    The @tt{ifthenelse} term computes a type if its
    argument is Boolean, and its branches are types under
    a case analysis on the condition.
@@ -267,10 +267,10 @@ interactive ifthenelse_type2 {| intro [] |} :
    [wf] sequent { <H>; x: 'e = bfalse in bool >- "type"{'B} } -->
    sequent { <H> >- "type"{ifthenelse{'e; 'A; 'B}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Contradiction}
-  
+
    The two following rules represent proof by contradiction:
    $@true$ and $@false$ are provably distinct.
    @end[doc]
@@ -281,10 +281,10 @@ interactive boolContradiction1 {| elim [] |} 'H :
 interactive boolContradiction2 {| elim [] |} 'H :
    sequent { <H>; x: bfalse = btrue in bool; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
-  
+
    The @tt{ifthenelse} term computes a value of type $T$
    if the condition is a Boolean value, and the branches
    both have type $T$ under a case analysis on the
@@ -298,10 +298,10 @@ interactive ifthenelse_equality {| intro []; eqcd |} :
    sequent { <H> >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2}
  in 'T }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Computational equivalence}
-  
+
    The Boolean values are computationally equivalent
    if they are equal.  This is because the @emph{only}
    (canonical) terms in $@unit + @unit$ are the terms
@@ -320,10 +320,10 @@ let resource intro += [
    << bfalse ~ 'e >>, wrap_intro boolSqequal
 ]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Connective well-formedness}
-  
+
    The connectives are Boolean values if their
    immediate subterms are also Boolean values.
    @end[doc]
@@ -347,16 +347,16 @@ interactive bnot_equal {| intro []; eqcd |} :
    [wf] sequent { <H> >- 'a = 'b in bool } -->
    sequent { <H> >- bnot{'a} = bnot{'b} in bool }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Propositional reasoning}
-  
+
    The @emph{reasoning} about Boolean expressions
    is performed using the @emph{propositional} form,
    coded using the @hrefterm[assert] form.  The
    @tt{assert} term is well-formed if its argument is
    a Boolean value.
-  
+
    The <<"assert"{"true"}>> goal is always provable;
    the <<"assert"{"false"}>> assumption is contradictory.
    @end[doc]
@@ -365,16 +365,20 @@ interactive assert_type {| intro [] |} :
    [wf] sequent { <H> >- 't in bool } -->
    sequent { <H> >- "type"{."assert"{'t}} }
 
+interactive assert_univ {| intro [] |} :
+   [wf] sequent { <H> >- 't in bool } -->
+   sequent { <H> >- "assert"{'t} in univ[i:l] }
+
 interactive assert_true {| intro [] |} :
    sequent { <H> >- "assert"{btrue} }
 
 interactive assert_false {| elim [] |} 'H :
    sequent { <H>; x: "assert"{bfalse}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Case analysis and substitution}
-  
+
    The following two rules perform a case analysis
    on a Boolean expression in a clause.  This reasoning
    is allowed because the canonical Boolean terms
@@ -396,10 +400,10 @@ interactive bool_subst_hyp 'H bind{x. 'A['x]} 'e :
  'C['x] } -->
    sequent { <H>; x: 'A['e]; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Extensional membership}
-  
+
    Two Boolean expressions $A$ and $B$ are equal if the
    @misspelled{bi}-implication $A @Leftrightarrow_b B$ holds.
    @end[doc]
@@ -411,10 +415,10 @@ interactive bool_ext_equality :
    [main] sequent { <H>; u: "assert"{'y} >- "assert"{'x} } -->
    sequent { <H> >- 'x = 'y in bool }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Squash reasoning}
-  
+
    The proof extract of a Boolean assertion is always the
    term $@it$ term; the proof itself can be omitted.
    @end[doc]
@@ -423,10 +427,10 @@ interactive assertSquashElim {| squash; intro [] |} :
    sequent { <H> >- "assert"{'t} } -->
    sequent { <H> >- it in "assert"{'t} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Reasoning about the Boolean connectives}
-  
+
    The following two rules define introduction and
    elimination reasoning on the Boolean negation.
    @end[doc]
@@ -453,7 +457,7 @@ interactive assert_magic :
    sequent { <H>; x: "assert"{bnot{'t}} >- "false" } -->
    sequent { <H> >- "assert"{'t} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The following rule establishes that @tt[assert] is always decidable.
    @end[doc]
@@ -462,7 +466,7 @@ interactive assert_is_decidable {| intro [] |} :
    [wf] sequent { <H> >- 't in bool } -->
    sequent { <H> >- decidable{."assert"{'t}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The following four rules define elimination reasoning
    on the Boolean binary connectives.
@@ -553,10 +557,10 @@ let magicT = assert_magic
  * BOOL SPLITTING                                                       *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    @begin[description]
    @item{@tactic[splitBoolT];
     { The @tt{splitBoolT} tactic performs a case analysis
@@ -651,7 +655,7 @@ let rec reduce_ite_falseC = function
  | [] ->
       idC
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[splitITE];

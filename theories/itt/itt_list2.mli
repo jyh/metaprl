@@ -42,6 +42,14 @@ open Tactic_type.Conversionals
  * SYNTAX                                                               *
  ************************************************************************)
 
+declare all_list{'l; x. 'P['x]}
+
+declare exists_list{'l; x. 'P['x]}
+
+declare hd{'l}
+
+declare tl{'l}
+
 (*
  * Boolean test if a list is empty.
  *)
@@ -102,6 +110,13 @@ declare nth{'l; 'i}
  * Replace the nth element.
  *)
 declare replace_nth{'l; 'i; 't}
+
+(*
+ * Make the list of the size 'n from the function 'f:[0..n-1]->'T
+ *)
+
+declare mklist{'n;'f}
+
 
 (************************************************************************
  * DISPLAY                                                              *

@@ -114,6 +114,7 @@ doc <:doc<
 >>
 
 doc <:doc< @doc{@parents} >>
+
 extends Itt_void
 extends Itt_equal
 extends Itt_struct
@@ -341,9 +342,14 @@ doc <:doc<
    @end[doc]
 >>
 prim productElimination {| elim [ThinOption thinT] |} 'H :
-   [wf] ('t['z; 'u; 'v] : sequent { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] }) -->
+   ('t['z; 'u; 'v] : sequent { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] }) -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
    spread{'z; u, v. 't['z; 'u; 'v]}
+
+interactive productEqElimination {| elim [] |} 'H :
+   sequent { <H>; v: 'x_1 = 'x_2 in 'A; w: 'y_1= 'y_2 in 'B['x_1];  <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: ('x_1,'y_1) = ('x_2,'y_2) in x:'A * 'B['x]; <J['u]> >- 'T['u] }
+
 
 doc <:doc<
    @begin[doc]

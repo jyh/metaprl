@@ -1,9 +1,9 @@
-doc <:doc< 
+doc <:doc<
    @spelling{dfun}
-  
+
    @begin[doc]
    @module[Itt_dfun]
-  
+
    The @tt{Itt_dfun} module is @emph{derived} from the
    @hrefmodule[Itt_rfun] module.  The type $@fun{x; A; B[x]}$ is
    equivalent to the type $@rfun{f; x; A; B[x]}$, where $f$ is
@@ -13,39 +13,39 @@ doc <:doc<
    The @tt{Itt_dfun} module derives the dependent-function
    rules.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -75,10 +75,10 @@ let _ =
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @tt{unfold_dfun} gives the definition of the
    dependent-function space.
    @end[doc]
@@ -89,11 +89,11 @@ prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Lemmas}
-  
+
    The @tt{void_well_founded} rule is a lemma that is
    useful for proving the well-formedness of the
    dependent-function space.  The @hrefterm[void]
@@ -125,10 +125,10 @@ interactive functionType {| intro [] |} :
    [wf] sequent { <H>; x: 'A1 >- "type"{'B1['x]} } -->
    sequent { <H> >- "type"{. a1:'A1 -> 'B1['a1] } }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The propositional interpretation of the dependent-function
    is the universal quantification @hrefterm[all], $@all{a; A; B[a]}$.  The
    universal quantification is true, if it is a type,
@@ -140,10 +140,10 @@ interactive lambdaFormation {| intro [] |} :
    [main] ('b['z] : sequent { <H>; z: 'A >- 'B['z] }) -->
    sequent { <H> >- a:'A -> 'B['a] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The dependent function space contains the @hrefterm[lambda] functions.
    @end[doc]
 >>
@@ -152,10 +152,10 @@ interactive lambdaEquality {| intro [] |} :
    [wf] sequent { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
    sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Extensionality}
-  
+
    The dependent-function retains the extensional membership
    equality of the very-dependent function type.  This rule is
    derived from the @hrefrule[rfunctionExtensionality] rule.
@@ -168,10 +168,10 @@ interactive functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
    [wf] sequent { <H> >- 'g in z:'E -> 'F['z] } -->
    sequent { <H> >- 'f = 'g in x:'A -> 'B['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination rule @emph{instantiates} the function
    $f@colon @fun{x; A; B[x]}$ with an argument $a @in A$, to
    obtain a proof of $B[a]$.
@@ -182,27 +182,28 @@ interactive functionElimination {| elim [] |} 'H 'a :
    ('t['f; 'y; 'v] : sequent { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
    sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
-  
+
    Applications have (at least) an @emph{intensional} equality; they are
    equal if their functions and arguments are equal.
    @end[doc]
 >>
-interactive applyEquality {| intro[complete_unless_member]; eqcd |} (x:'A -> 'B['x]) :
+
+interactive applyEquality {| intro[intro_typeinf <<'f1>>]; eqcd |} (x:'A -> 'B['x]) :
    sequent { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    Function spaces are @emph{contravariant} in the domains, and
    @emph{covariant} in their ranges.  More specifically, the
    ranges must be pointwise covariant.
-  
+
    @end[doc]
 >>
 interactive functionSubtype {| intro [] |} :

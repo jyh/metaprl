@@ -34,6 +34,7 @@ extends Itt_atom
 extends Itt_bool
 extends Itt_struct
 
+open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 open Base_meta
@@ -85,6 +86,14 @@ prim eq_atom_assert_elim {| elim [] |} 'H :
    [main] sequent { <H>; x: 'a = 'b in atom; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: "assert"{eq_atom{'a; 'b}}; <J['x]> >- 'C['x] } =
    it
+
+interactive eq_atom_elim 'H :
+   sequent { <H>; u: meta_eq[x:t, y:t]{"true"; "false"}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: token[x:t] = token[y:t] in atom; <J['u]> >- 'C['u] }
+
+let eq_atom_assert_elimT n = eq_atom_elim n thenT rw reduce_meta_eq_tok n thenT dT n
+
+let resource elim += <<token[x:t] = token[y:t] in atom>>,  eq_atom_assert_elimT
 
 (*
  * -*-

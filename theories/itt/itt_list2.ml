@@ -40,8 +40,11 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Itt_list
+extends Itt_struct2
 extends Itt_logic
 extends Itt_bool
+extends Itt_nat
+extends Itt_isect
 extends Itt_struct2
 extends Itt_int_base
 extends Itt_int_ext
@@ -53,10 +56,34 @@ open Top_conversionals
 
 open Itt_equal
 open Itt_rfun
+open Itt_logic
+
 
 (************************************************************************
  * SYNTAX                                                               *
  ************************************************************************)
+
+doc <:doc<
+   @begin[doc]
+   @terms
+
+   The @tt[all_list] and @tt[exists_list] term define quantifiers for lists.
+   @end[doc]
+>>
+define unfold_all_list : all_list{'l; x. 'P['x]} <-->
+   list_ind{'l; "true"; x, t, g. 'P['x] and 'g}
+
+define unfold_exists_list : exists_list{'l; x. 'P['x]} <-->
+   list_ind{'l; "false"; x, t, g. 'P['x] or 'g}
+
+declare undefined
+
+define unfold_hd :
+   hd{'l} <--> list_ind{'l; undefined; h, t, g. 'h}
+
+define unfold_hd :
+   tl{'l} <--> list_ind{'l; undefined; h, t, g. 't}
+
 
 doc <:doc<
    @begin[doc]
@@ -192,7 +219,7 @@ doc <:doc<
 >>
 define unfold_nth :
    nth{'l; 'i} <-->
-      (list_ind{'l; it; u, v, g. lambda{j. ifthenelse{beq_int{'j; 0}; 'u; .'g ('j -@ 1)}}} 'i)
+      (list_ind{'l; undefined; u, v, g. lambda{j. if 'j =@  0 then  'u else ('g ('j -@ 1))}} 'i)
 
 doc <:doc<
    @begin[doc]
@@ -203,7 +230,7 @@ doc <:doc<
 >>
 define unfold_replace_nth :
    replace_nth{'l; 'i; 't} <-->
-      (list_ind{'l; nil; u, v, g. lambda{j. ifthenelse{beq_int{'j; 0}; cons{'t; 'v}; cons{'u; .'g ('j -@ 1)}}}} 'i)
+      (list_ind{'l; nil; u, v, g. lambda{j. if 'j =@ 0 then  cons{'t; 'v} else cons{'u; .'g ('j -@ 1)}}} 'i)
 
 doc <:doc<
    @begin[doc]
@@ -224,6 +251,12 @@ doc <:doc<
 >>
 define unfold_rev : rev{'l} <-->
    list_ind{'l; nil; u, v, g. append{'g; cons{'u; nil} }}
+
+
+define unfold_mklist: mklist{'n;'f} <-->
+   ind{'n; nil; x,l.('f ('n-@ 'x)) :: 'l}
+
+
 doc <:doc< @docoff >>
 
 (************************************************************************
@@ -234,11 +267,17 @@ prec prec_append
 prec prec_ball
 prec prec_assoc
 
+dform all_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "all_list"{'A; x. 'B} =
+   szone pushm[3] Nuprl_font!forall slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm ezone
+
+dform exists_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "exists_list"{'A; x. 'B} =
+   szone pushm[3] Nuprl_font!"exists" slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm ezone
+
 dform is_nil_df : except_mode[src] :: parens :: "prec"[prec_equal] :: is_nil{'l} =
    slot{'l} `" =" subb `" []"
 
 dform mem_df : except_mode[src] :: mem{'x; 'l; 'T} =
-   `"(" slot{'x} " " Nuprl_font!member `" " slot{'l} `" in " slot{'T} `")"
+   `"(" slot{'x} " " Nuprl_font!member `" " slot{'l} `" in " slot{list{'T}} `")"
 
 dform subset_df : except_mode[src] :: \subset{'l1; 'l2; 'T} =
    `"(" slot{'l1} " " Nuprl_font!subseteq `"[" slot{'T} `"] " slot{'l2} `")"
@@ -296,6 +335,11 @@ dform rev_df : except_mode[src] :: rev{'l} =
  * REWRITES                                                             *
  ************************************************************************)
 
+interactive_rw reduce_hd {| reduce |} : hd{cons{'h; 't}} <--> 'h
+
+interactive_rw reduce_tl {| reduce |} : tl{cons{'h; 't}} <--> 't
+
+
 doc <:doc<
    @begin[doc]
    @rewrites
@@ -317,10 +361,26 @@ doc <:doc<
    The @hrefterm[mem] term performs induction over the list.
    @end[doc]
 >>
+
 interactive_rw reduce_mem_nil {| reduce |} : mem{'x; nil; 'T} <--> "false"
 
 interactive_rw reduce_mem_cons {| reduce |} :
    mem{'x; cons{'u; 'v}; 'T} <--> "or"{('x = 'u in 'T); mem{'x; 'v; 'T}}
+
+interactive mem_nil {| intro[] |} :
+   sequent { <H> >- "false" } -->
+   sequent { <H> >- mem{'x; nil; 'T} }
+
+interactive mem_cons2 {| intro[AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'x in 'T } -->
+   [wf] sequent { <H> >- 'h in 'T } -->
+   sequent { <H> >- mem{'x; 't; 'T}  } -->
+   sequent { <H> >- mem{'x; 'h::'t; 'T} }
+
+interactive mem_cons1 {| intro[] |} :
+   [wf] sequent { <H> >- 'x in 'T } -->
+   sequent { <H> >- mem{'x; 'x::'t; 'T} }
+
 doc docoff
 
 let fold_mem = makeFoldC << mem{'x; 'l; 'T} >> unfold_mem
@@ -519,6 +579,24 @@ let fold_rev = makeFoldC << rev{'l} >> unfold_rev
  * RULES                                                                *
  ************************************************************************)
 
+
+interactive hd_wf {| intro [] |} :
+   [wf] sequent  { <H> >- 'l in list{'T} } -->
+   sequent  { <H> >- not{.'l = nil in list{'T}} } -->
+   sequent  { <H> >- hd{'l} in 'T }
+
+interactive tl_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list{'T} } -->
+   sequent  { <H> >- not{.'l = nil in list{'T}} } -->
+   sequent  { <H> >- hd{'l} in list{'T} }
+
+interactive_rw tl_hd_rw list{'T} :
+   ('l in list{'T})  -->
+   (not{.'l = nil in list{'T}}) -->
+     cons{hd{'l};tl{'l}} <--> 'l
+
+
+
 doc <:doc<
    @begin[doc]
    @rules
@@ -527,6 +605,7 @@ doc <:doc<
    well-formedness of each of the constructions.
    @end[doc]
 >>
+
 interactive is_nil_wf {| intro [intro_typeinf <<'l>>] |} list{'T} :
    [wf] sequent { <H> >- 'l in list{'T} } -->
    sequent { <H> >- is_nil{'l} in bool }
@@ -665,7 +744,25 @@ interactive_rw rev2 'A :
 doc <:doc<
    @begin[doc]
    @rules
+   Rules for quantifiers are the following:
+   @end[doc]
+>>
+interactive all_list_intro_nil  {| intro[] |} :
+   sequent { <H> >- all_list{nil;  x. 'P['x]} }
 
+interactive all_list_intro_cons  {| intro[] |} :
+   sequent { <H> >-  'P['a] } -->
+   sequent { <H> >-  all_list{'l; x. 'P['x]} } -->
+   sequent { <H> >- all_list{cons{'a; 'l};  x. 'P['x]} }
+
+interactive all_list_map  {| intro[] |} :
+   [wf] sequent { <H> >- 'l in list{top}  } -->
+   sequent { <H> >-  all_list{'l; x. 'P['f('x)]} } -->
+   sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
+
+
+doc <:doc<
+   @begin[doc]
    A list $v$ is a subset of the list <<cons{'u; 'v}>>.
    @end[doc]
 >>

@@ -99,6 +99,12 @@ declare inl{'x}
 declare inr{'x}
 declare decide{'x; y. 'a['y]; z. 'b['z]}
 
+declare undefined
+
+define unfold_outl: outl{'x} <--> decide{'x; y. 'y; z. undefined}
+define unfold_outr: outr{'x} <--> decide{'x; y. undefined; z. 'z}
+define unfold_out: out{'x} <--> decide{'x; y. 'y; z. 'z}
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -115,6 +121,15 @@ doc <:doc<
 
    @end[doc]
 >>
+
+interactive_rw reduce_outl_inl {| reduce |} :  outl{inl{'x}} <--> 'x
+
+interactive_rw reduce_outr_inr {| reduce |} :  outr{inr{'x}} <--> 'x
+
+interactive_rw reduce_out_inl {| reduce |} :  out{inl{'x}} <--> 'x
+
+interactive_rw reduce_out_inr {| reduce |} :  out{inr{'x}} <--> 'x
+
 prim_rw reduceDecideInl {| reduce |} : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
 prim_rw reduceDecideInr {| reduce |} : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 doc docoff

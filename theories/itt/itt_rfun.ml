@@ -116,7 +116,10 @@ declare well_founded{'A; x, y. 'R['x; 'y]}
 declare well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}
 declare well_founded_prop{'A}
 declare well_founded_apply{'P; 'a}
-declare fix{f. 'b['f]}
+
+define unfold_ycomb: ycomb <--> lambda{h. lambda{x. 'h ('x 'x)} lambda{x. 'h ('x 'x)}}
+
+define unfold_fix: fix{f. 'b['f]} <--> ycomb (lambda{f. 'b['f]})
 
 define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
 
@@ -237,8 +240,13 @@ doc <:doc<
    and defining $@fix{x; b[x]} @equiv Y@space (<<lambda{x.'b['x]}>>)$.
    @end[doc]
 >>
+
 prim_rw reduce_beta {| reduce |} : (lambda{v. 'b['v]} 'a) <--> 'b['a]
-prim_rw reduce_fix {| reduce |} : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+
+interactive_rw reduce_ycomb {| reduce |} : (ycomb 'x) <--> ('x (ycomb 'x))
+
+interactive_rw reduce_fix {| reduce |} : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+
 doc docoff
 
 (************************************************************************

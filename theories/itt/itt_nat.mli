@@ -6,6 +6,9 @@ open Tactic_type.Tacticals
 define unfold_nat :
    nat <--> ({x:int | 'x>=0})
 
+define unfold_nat_plus :
+   nat_plus <--> ({x:int | 'x>0})
+
 define unfold_finite_nat : nat{'k} <--> int_seg{0; 'k}
 
 define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->

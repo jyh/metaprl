@@ -212,6 +212,15 @@ dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
 dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
    slot["lt"]{'a} `" " Nuprl_font!neq Nuprl_font!subb `" " slot["le"]{'b}
 
+dform le_bool_df1 : parens :: "prec"[prec_compare] :: le_bool{'a; 'b} =
+   slot["lt"]{'a} `" " Nuprl_font!le Nuprl_font!subb `" " slot["le"]{'b}
+
+dform gt_bool_df1 : parens :: "prec"[prec_compare] :: gt_bool{'a; 'b} =
+   slot["lt"]{'a} `" >" Nuprl_font!subb `" " slot["le"]{'b}
+
+dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
+   slot["lt"]{'a} `" " Nuprl_font!ge Nuprl_font!subb `" " slot["le"]{'b}
+
 (*! @docoff *)
 
 

@@ -25,4 +25,3 @@ clean::
 # Real makefile
 include $(ROOT)/mk/rules
 include Makefile.dep
-

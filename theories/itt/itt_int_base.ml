@@ -514,6 +514,12 @@ interactive add_Id2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (0 +@ 'a) ~ 'a }
 
+interactive_rw add_Id2_rw :
+   ( 'a IN int ) -->
+   (0 +@ 'a) <--> 'a
+
+let add_Id2C = add_Id2_rw
+
 (*!
  * @begin[doc]
  *

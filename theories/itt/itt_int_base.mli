@@ -304,6 +304,8 @@ rule add_Id2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (0 +@ 'a) ~ 'a }
 
+topval add_Id2C: conv
+
 rule uni_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 }

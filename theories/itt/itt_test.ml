@@ -48,7 +48,7 @@ let resources =
      ref_subtype = sub_resource.resource_extract sub_resource
    }
 
-let goal = { mseq_hyps = []; mseq_goal = << sequent { 'H >- fact{80} = 0 in int } >> }
+let goal = { mseq_hyps = []; mseq_goal = << sequent { 'H >- fact{100} = 0 in int } >> }
 
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 
@@ -74,6 +74,9 @@ let test () =
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/01 18:10:10  nogin
+ * Replaced 80 with 100
+ *
  * Revision 1.3  1998/06/23 22:12:38  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

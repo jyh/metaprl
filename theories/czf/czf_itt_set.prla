@@ -1814,7 +1814,7 @@ T	t1154	o b1154 b4
 B	b1155	t1154
 T	t1155	o759 b1150 b1155
 B	b1156	t1155
-P	p1156	String "squash_equalT thenT trivialT"
+P	p1156	String autoT
 O	o1156	ext_rule p1156
 T	t1156	o759 b1154 b4
 B	b1157	t1156

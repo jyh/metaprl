@@ -1559,7 +1559,7 @@ G	s667	t667
 B	b668	s667
 P	p696	String "rwh unfold_fun_set 0 thenT autoT"
 O	o696	ext_rule p696
-P	p698	String "rwh unfold_isset 0 thenT squash_equalT thenT rwh fold_isset 0 thenT autoT"
+P	p698	String "rwh unfold_isset 0 thenT sqsquashT thenT rwh fold_isset 0 thenT autoT"
 O	o698	ext_rule p698
 P	p777	String subset_res
 O	o777	rule p777

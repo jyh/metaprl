@@ -9461,7 +9461,7 @@ T	t3878	o b3816 b3877
 B	b3878	t3878
 T	t3879	o1841 b3792 b3878
 B	b3879	t3879
-P	p3879	String "rwh unfold_isset 0 thenT squash_equalT thenT rwh fold_isset 0 thenT autoT"
+P	p3879	String "rwh unfold_isset 0 thenT sqsquashT thenT rwh fold_isset 0 thenT autoT"
 O	o3879	ext_rule p3879
 T	t3880	o1841 b3816 b10
 B	b3880	t3880

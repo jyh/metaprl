@@ -2077,7 +2077,7 @@ G	s1476	t1467
 B	b1477	s1476
 T	t1477	o940 b1477 b1461
 B	b1478	t1477
-P	p1483	String "rwh unfold_isset 0 thenT squash_equalT thenT rwh fold_isset 0 thenT trivialT"
+P	p1483	String "rwh unfold_isset 0 thenT sqsquashT thenT rwh fold_isset 0 thenT trivialT"
 O	o1483	ext_rule p1483
 B	b1486	t1467 s1
 T	t1486	o852 b1000 b1486
@@ -9130,7 +9130,7 @@ P	p8293	Number 10100
 O	o8293	location p8292 p8293
 P	p8294	String eq_equality2
 O	o8294	rule p8294
-P	p8295	String squash_equalT
+P	p8295	String sqsquashT
 O	o8295	ext_rule p8295
 S	s8295	t1111 h
 G	s8295	t1343
@@ -13706,7 +13706,7 @@ T	t10300	o1109 b10300
 B	b10301	t10300
 T	t10301	o1108 b10301 b3780
 B	b10302	t10301
-P	p10302	String "squash_typeT thenT assumT 1 thenT autoT"
+P	p10302	String "sqsquashT thenT assumT 1 thenT autoT"
 O	o10302	ext_rule p10302
 T	t10302	o b10300 b4
 B	b10303	t10302

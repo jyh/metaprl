@@ -5507,7 +5507,7 @@ T	t4783	o b4780 b4783
 B	b4784	t4783
 T	t4784	o575 b4769 b4784
 B	b4785	t4784
-P	p4785	String "rwh unfold_isset 0 thenT squash_equalT thenT rwh fold_isset 0 thenT trivialT"
+P	p4785	String "rwh unfold_isset 0 thenT sqsquashT thenT rwh fold_isset 0 thenT trivialT"
 O	o4785	ext_rule p4785
 T	t4785	o575 b4780 b4
 B	b4786	t4785

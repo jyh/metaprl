@@ -1,5 +1,7 @@
 extends Base_theory
 
+open Top_conversionals
+
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
 
@@ -296,7 +298,7 @@ prim beta :
    sequent { <H> >- red{ apply{ lambda{'T; x.'t['x]}; 'u }; 't['u] } } = it
 *)
 
-prim_rw beta :
+prim_rw beta {| reduce |} :
    ( apply{ lambda{'T; x.'t['x]}; 'u } ) <--> ( 't['u] )
 
 (*
@@ -321,7 +323,7 @@ prim zeta :
    sequent { <H> >- red{ let_in{ 'u; x.'t['x] }; 't['u] } } = it
 *)
 
-prim_rw zeta :
+prim_rw zeta {| reduce |} :
    let_in{ 'u; x.'t['x] } <--> 't['u]
 
 (***************************************************

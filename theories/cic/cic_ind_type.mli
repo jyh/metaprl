@@ -113,8 +113,6 @@ rule ind_ConstConstrs 'Hc :
 
 declare of_some_sort (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
 
-declare has_type_m (* { <I> >- ( <T> >- has_type_m ) } *) (* multiple has_type, i.e. I={I1,...,Ik}, T={T1,...,Tk},
-                                         member{Ij;Tj}, j=1,..,k *)
 (* declaration of 'arity of sort' notion *)
 declare arity_of_some_sort_m (* (<Hi> >- <S>)*) (* Hi={I1:A1,...,Ik:Ak}, S={s1,...,sk},
                                             Aj is an arity of sort sj, j=1,...,k*)
@@ -288,8 +286,8 @@ rule req3_intro 'Hi 's :
    sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } }
 
 rule req3_m_base :
-   sequent { <Hi> >- req3{'C} } -->
-	sequent { <Hi> >- sequent [req3_m] { c:'C >- it } }
+   sequent { <H> >- sequent { <Hi> >- req3{'C} } } -->
+	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { c:'C >- it } } }
 
 rule req3_m_step :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } -->

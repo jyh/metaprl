@@ -195,71 +195,118 @@ prim_rw applHStep {| reduce |} :
 declare IndParamsSubst
 declare IndTypesSubst
 declare IndConstrsSubst
+declare IndParamsSubstAux
+declare IndTypesSubstAux
+declare Aux
+declare IndConstrsSubstAux
 declare IndParamsSubstApp
 declare IndTypesSubstApp
 declare IndConstrsSubstApp
+declare IndParamsSubstAppAux
+declare IndTypesSubstAppAux
+declare IndConstrsSubstAppAux
 
-prim_rw substStart :
+dform indSubst_df : except_mode[src] ::
+	sequent [IndParamsSubst] { <Hp> >-
+	   sequent [IndTypesSubst] { <Hi<| |> > >-
+		   sequent [IndConstrsSubst] { <Hc<| |> > >- 't<||> }}} =
+	`"Subst[" display_hyps{sequent [IndParamsSubst]{ <Hp> >- 't<||> }} `"]("
+		display_hyps{ sequent [IndTypesSubst]{ <Hi> >- 't<||> }} `" := "
+			display_hyps{ sequent [IndConstrsSubst]{ <Hc> >- 't<||> }} `")" slot{'t}
+
+dform indSubstAux_df : except_mode[src] ::
+	sequent [IndParamsSubstAux] { <Hp> >-
+	   sequent [IndTypesSubstAux] { <Hi<| |> > >-
+			sequent { <Ji> >-
+				sequent [IndConstrsSubstAux] { <Hc<| |> > >- 't<||> }}}} =
+	`"SubstAux[" display_hyps{sequent [IndParamsSubstAux]{ <Hp> >- 't<||> }} `"]("
+		display_hyps{ sequent [IndTypesSubstAux]{ <Hi> >- 't<||> }} `" | "
+			display_hyps{ sequent [Aux] { <Ji> >- it}}  `" := "
+				display_hyps{ sequent [IndConstrsSubstAux]{ <Hc> >- 't<||> }} `")" slot{'t}
+
+dform indSubstApp_df : except_mode[src] ::
+	sequent [IndParamsSubstApp] { <Hp> >-
+	   sequent [IndTypesSubstApp] { <Hi<| |> > >-
+			sequent { <Ji> >-
+				sequent [IndConstrsSubstApp] { <Hc<| |> > >- 't<||> }}}} =
+	`"SubstApp[" display_hyps{sequent [IndParamsSubstApp]{ <Hp> >- 't<||> }} `"]("
+		display_hyps{ sequent [IndTypesSubstApp]{ <Hi> >- 't<||> }} `" | "
+			display_hyps{ sequent [Aux] { <Ji> >- it}}  `" := "
+				display_hyps{ sequent [IndConstrsSubstApp]{ <Hc> >- 't<||> }} `")" slot{'t}
+
+dform indSubstAppAux_df : except_mode[src] ::
+	sequent [IndParamsSubstAppAux] { <Hp> >-
+		sequent { <Jp> >-
+			sequent [IndTypesSubstAppAux] { <Hi<| |> > >-
+				sequent { <Ji> >-
+					sequent [IndConstrsSubstAppAux] { <Hc<| |> > >- 't<||> }}}}} =
+	`"SubstAppAux[" display_hyps{sequent [IndParamsSubstAppAux]{ <Hp> >- 't<||> }} `" | "
+		display_hyps{ sequent [Aux] { <Jp> >- it}} `"]("
+			display_hyps{ sequent [IndTypesSubstAppAux]{ <Hi> >- 't<||> }} `" | "
+				display_hyps{ sequent [Aux] { <Ji> >- it}}  `" := "
+					display_hyps{ sequent [IndConstrsSubstAppAux]{ <Hc> >- 't<||> }} `")" slot{'t}
+
+prim_rw substStart {| reduce |} :
    sequent [IndParamsSubst] { <Hp> >-
 	   sequent [IndTypesSubst] { <Hi> >-
          sequent [IndConstrsSubst] { <Hc> >- 'C } } } <-->
-   sequent [IndParamsSubst] { <Hp> >-
-	   sequent [IndTypesSubst] { <Hi> >-
+   sequent [IndParamsSubstAux] { <Hp> >-
+	   sequent [IndTypesSubstAux] { <Hi> >-
 			sequent { >-
-				sequent [IndConstrsSubst] { <Hc> >- 'C } } } }
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }
 
-prim_rw substStep :
-	sequent [IndParamsSubst] { <Hp> >-
-	   sequent [IndTypesSubst] { <Hi>; I: 'A >-
+prim_rw substStep {| reduce |} :
+	sequent [IndParamsSubstAux] { <Hp> >-
+	   sequent [IndTypesSubstAux] { <Hi>; I: 'A >-
 			sequent { <Ji> >-
-				sequent [IndConstrsSubst] { <Hc> >- 'C['I] } } } } <-->
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C['I] } } } } <-->
 	sequent [IndParamsSubstApp] { <Hp> >-
 	   sequent [IndTypesSubstApp] { <Hi> >-
 			sequent { I: 'A; <Ji> >-
 				sequent [IndConstrsSubstApp] { <Hc> >- 'C['I] } } } }
 
-prim_rw substFinal :
-	sequent [IndParamsSubst] { <Hp> >-
-	   sequent [IndTypesSubst] { >-
+prim_rw substFinal {| reduce |} :
+	sequent [IndParamsSubstAux] { <Hp> >-
+	   sequent [IndTypesSubstAux] { >-
 			sequent { <Ji> >-
-				sequent [IndConstrsSubst] { <Hc> >- 'C } } } } <-->
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } } <-->
 	sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Ji> >-
 			sequent [IndConstrs] { <Hc> >- 'C } } }
 
-prim_rw appStart :
+prim_rw appStart {| reduce |} :
 	sequent [IndParamsSubstApp] { <Hp> >-
 	   sequent [IndTypesSubstApp] { <Hi> >-
 			sequent { <Ji> >-
 				sequent [IndConstrsSubstApp] { <Hc> >- 'C } } } } <-->
-	sequent [IndParamsSubstApp] { <Hp> >-
+	sequent [IndParamsSubstAppAux] { <Hp> >-
 		sequent { >-
-			sequent [IndTypesSubstApp] { <Hi> >-
+			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent { <Ji> >-
-					sequent [IndConstrsSubstApp] { <Hc> >- 'C } } } } }
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } }
 
-prim_rw appStep :
-	sequent [IndParamsSubstApp] { <Hp>; p: 'P >-
+prim_rw appStep {| reduce |} :
+	sequent [IndParamsSubstAppAux] { <Hp>; p: 'P >-
 		sequent { <Jp> >-
-			sequent [IndTypesSubstApp] { <Hi> >-
+			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent { I: 'A; <Ji> >-
-					sequent [IndConstrsSubstApp] { <Hc> >- 'C['I] } } } } } <-->
-	sequent [IndParamsSubstApp] { <Hp> >-
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C['I] } } } } } <-->
+	sequent [IndParamsSubstAppAux] { <Hp> >-
 		sequent { p: 'P; <Jp> >-
-			sequent [IndTypesSubstApp] { <Hi> >-
+			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent { I: 'A; <Ji> >-
-					sequent [IndConstrsSubstApp] { <Hc> >- 'C['I 'p] } } } } }
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C['I 'p] } } } } }
 
-prim_rw appFinal :
-	sequent [IndParamsSubstApp] { >-
+prim_rw appFinal {| reduce |} :
+	sequent [IndParamsSubstAppAux] { >-
 		sequent { <Jp> >-
-			sequent [IndTypesSubstApp] { <Hi> >-
+			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent { <Ji> >-
-					sequent [IndConstrsSubstApp] { <Hc> >- 'C } } } } } <-->
-	sequent [IndParamsSubst] { <Jp> >-
-		sequent [IndTypesSubst] { <Hi> >-
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } } <-->
+	sequent [IndParamsSubstAux] { <Jp> >-
+		sequent [IndTypesSubstAux] { <Hi> >-
 			sequent { <Ji> >-
-				sequent [IndConstrsSubst] { <Hc> >- 'C } } } }
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
 prim ind_ConstConstrs 'Hc :
@@ -280,12 +327,18 @@ prim ind_ConstConstrs 'Hc :
 
 declare of_some_sort (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
 
-declare has_type_m (* { <I> >- ( <T> >- has_type_m ) } *) (* multiple has_type, i.e. I={I1,...,Ik}, T={T1,...,Tk},
-                                         member{Ij;Tj}, j=1,..,k *)
 (* declaration of 'arity of sort' notion *)
 declare arity_of_some_sort_m (* (<Hi> >- <S>)*) (* Hi={I1:A1,...,Ik:Ak}, S={s1,...,sk},
                                             Aj is an arity of sort sj, j=1,...,k*)
 declare arity_of_some_sort{'T} (* type T is an arity of some sort *)
+
+dform arity_of_some_sort_df : arity_of_some_sort{'t} = `"arity_of_some_sort{" slot{'t} `"}"
+
+dform arity_of_some_sort_m_df : sequent [arity_of_some_sort_m] { <T1> >- arity_of_some_sort_m} =
+	`"arity_of_some_sort_m{" display_hyps{ sequent [arity_of_some_sort_m] { <T1> >-
+			arity_of_some_sort_m}} `"}"
+
+dform of_some_sort_df : of_some_sort{'t} = `"of_some_sort{" slot{'t} `"}"
 
 prim arity_of_some_sort_Set :
    sequent { <H> >- arity_of_some_sort{Set} } = it
@@ -311,6 +364,9 @@ prim arity_of_some_sort_m_step :
 
 declare arity_of_sort{'T;'s} (* type T is an arity of sort 's *)
 
+dform arity_of_sort_df : arity_of_sort{'T;'s} =
+	`"arity_of_sort{" slot{'T} `";" slot{'s} `"}"
+
 prim arity_of_sort_Set :
    sequent { <H> >- arity_of_sort{Set;Set} } = it
 
@@ -326,6 +382,9 @@ prim arity_of_sort_prod bind{x.'U['x]} :
 
 (* declaration of 'type of constructor' notion *)
 declare type_of_constructor{'T;'I} (* 'T is a type of constructor of 'I *)
+
+dform type_of_constructor_df : type_of_constructor{'T;'I} =
+	`"type_of_constructor{" slot{'T} `";" slot{'I} `"}"
 
 prim type_of_constructor_app :
    sequent { <H> >- type_of_constructor{ (sequent [applH]{ <T1> >- 'I}); 'I } } = it
@@ -346,6 +405,15 @@ declare strictly_pos{'x;'T} (* constant 'x occurs strictly positively in 'T *)
 declare positivity_cond{ 'T; 'x } (* the type of constructor 'T satisfies the positivity
 												condition for a constant 'x *)
 
+dform strictly_pos_df : strictly_pos{'x;'T} =
+	`"strictly_pos{" slot{'x} `";" slot{'T} `"}"
+
+dform positivity_cond_df : positivity_cond{'T;'x} =
+	`"positivity_cond{" slot{'T} `";" slot{'x} `"}"
+
+dform imbr_pos_cond_df : imbr_pos_cond{'T;'I;'x} =
+	`"imbr_pos_cond{" slot{'T} `";" slot{'I} `";" slot{'x} `"}"
+
 (* declaration of 'positivity condition' notion *)
 prim positivity_cond_1 'H :
    sequent { <H>; x:'T; <J['x]> >- sequent [applH] { <T1> >- 'x} } -->
@@ -359,6 +427,10 @@ prim positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]}:
 
 (* declaration of multiple positivity condition *)
 declare positivity_cond_m
+
+dform positivity_cond_m_df : sequent [positivity_cond_m] { <Hi > >- 'C<||> } =
+	`"positivity_cond_m{" slot{'C} `" for "
+		display_hyps{sequent [positivity_cond_m] { <Hi > >- 'C<||> }} `"}"
 
 prim positivity_cond_m_base :
    sequent { <H>; I:'A >- positivity_cond{'C['I];'I} } -->
@@ -415,6 +487,11 @@ prim imbr_pos_cond_2 'H bind{x,y.'U['x;'y]} :
    of imbr_pos_cond_m *)
 declare imbr_params{'I;'x}
 
+dform imbr_params_df : imbr_params{'I;'x} = `"imbr_params{" slot{'I} `";" slot{'x} `"}"
+
+dform imbr_pos_cond_m_df : sequent [imbr_pos_cond_m] { <Hc> >- 'T<| |> } =
+	`"imbr_pos_cond_m{" display_hyps{ sequent [imbr_pos_cond_m] { <Hc> >- 'T<| |> } } `"|" slot{'T} `"}"
+
 prim imbr_pos_cond_m_base 'H :
    sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
 	sequent { <H>; x:'T; <J['x]> >-
@@ -432,6 +509,9 @@ prim imbr_pos_cond_m_step 'H :
 (* declaration of 'of some sort' notion *)
 declare of_some_sort_m (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
 
+dform of_some_sort_m_df : sequent [of_some_sort_m] { <T1> >- of_some_sort_m } =
+	`"of_some_sort_m{" display_hyps{ sequent [of_some_sort_m] { <T1> >- of_some_sort_m } } `"}"
+
 (* inductive defenition of multiple of_come_sort_m *)
 prim of_some_sort_m_base :
    sequent { <H> >- of_some_sort{'T} } -->
@@ -447,6 +527,12 @@ prim of_some_sort_m_step :
 declare req3{'C}
 declare req3_m
 
+dform req3_df : req3{'C} = `"req3{" slot{'C} `"}"
+
+dform req3_m_df : sequent [req3_m] { <Hi> >- sequent { <Hc<| |> > >- it } } =
+	`"req3_m{" display_hyps{ sequent [req3_m] { <Hi> >- it } } `"|"
+		display_hyps{ sequent [Aux] { <Hc> >- it } } `"}"
+
 prim req3_intro 'Hi 's :
    sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } } -->
    sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'I } } -->
@@ -455,8 +541,8 @@ prim req3_intro 'Hi 's :
    sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } } = it
 
 prim req3_m_base :
-   sequent { <Hi> >- req3{'C} } -->
-	sequent { <Hi> >- sequent [req3_m] { c:'C >- it } } = it
+   sequent { <H> >- sequent { <Hi> >- req3{'C} } } -->
+	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { c:'C >- it } } } = it
 
 prim req3_m_step :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } -->

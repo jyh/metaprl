@@ -34,7 +34,6 @@ MPFILES =\
    itt_int_base\
    itt_int_ext\
    itt_int_arith\
-   itt_rat\
    itt_atom_bool\
    itt_nat\
    itt_isect\
@@ -85,6 +84,7 @@ MPFILES =\
    itt_field\
    itt_ring2\
    itt_order\
+   itt_rat\
    itt_example
 
 TEST_FILES =\

@@ -37,6 +37,54 @@ open Tactic_type.Conversionals
 (************************************************************************
  * SYNTAX                                                               *
  ************************************************************************)
+define unfold_isRelation : isRelation{'car; 'rel} <-->
+	('car Type & 'rel in ('car -> 'car -> bool))
+
+define unfold_isReflexive : isReflexive{'car; 'rel} <-->
+	all a: 'car. "assert"{'rel 'a 'a}
+
+define unfold_isIrreflexive : isIrreflexive{'car; 'rel} <-->
+	all a: 'car. not{"assert"{'rel 'a 'a}}
+
+define unfold_isAntisym : isAntisym{'car; 'rel} <-->
+	all a: 'car. all b: 'car. ("assert"{'rel 'a 'b} & "assert"{'rel 'b 'a} => ('a='b in 'car))
+
+define unfold_isTransitive : isTransitive{'car; 'rel} <-->
+	all a: 'car. all b: 'car. all c: 'car. ("assert"{'rel 'a 'b} & "assert"{'rel 'b 'c} => "assert"{'rel 'a 'c})
+
+define unfold_isPreorder1 : isPreorder{'car; 'rel} <-->
+	isRelation{'car; 'rel} & isReflexive{'car; 'rel} & isTransitive{'car; 'rel}
+
+define unfold_isUnstrictPartialOrder1 : isUnstrictPartialOrder{'car; 'rel} <-->
+	isPreorder{'car; 'rel} & isAntisym{'car; 'rel}
+
+define unfold_isStrictPartialOrder1 : isStrictPartialOrder{'car; 'rel} <-->
+	isRelation{'car; 'rel} & isIrreflexive{'car; 'rel} & isTransitive{'car; 'rel}
+
+define unfold_isLinear : isLinear{'car; 'rel} <-->
+	all a: 'car. all b: 'car. ("assert"{'rel 'a 'b} or "assert"{'rel 'b 'a})
+
+define unfold_isUnstrictTotalOrder1 : isUnstrictTotalOrder{'car; 'rel} <-->
+	isUnstrictPartialOrder{'car; 'rel} & isLinear{'car; 'rel}
+
+define unfold_isTrichotomous : isTrichotomous{'car; 'rel} <-->
+	all a: 'car. all b: 'car. ("assert"{'rel 'a 'b} or "assert"{'rel 'b 'a} or 'a='b in 'car)
+
+define unfold_isStrictTotalOrder1 : isStrictTotalOrder{'car; 'rel} <-->
+	isStrictPartialOrder{'car; 'rel} & isTrichotomous{'car; 'rel}
+
+define unfold_strict2unstrict : strict2unstrict{'rel} <-->
+	lambda{a. lambda{b. bnot{'rel 'b 'a}}}
+
+define unfold_unstrict2strict : unstrict2strict{'rel} <-->
+	lambda{a. lambda{b. bnot{'rel 'b 'a}}}
+
+define unfold_unstrict2eq : unstrict2eq{'rel} <-->
+	lambda{a. lambda{b. band{'rel 'a 'b; 'rel 'b 'a}}}
+
+define unfold_inverse_order : inverse_order{'rel} <-->
+	lambda{a. lambda{b. 'rel 'b 'a}}
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

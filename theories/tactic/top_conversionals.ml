@@ -120,8 +120,7 @@ let extract_data tbl =
             (* Find and apply the right tactic *)
             if !debug_reduce then
                eprintf "Conversionals: lookup %a%t" debug_print t eflush;
-            let _, _, conv = Term_match_table.lookup "Conversionals.extract_data" tbl identity t in
-               conv
+            snd (Term_match_table.lookup "Conversionals.extract_data" tbl identity t)
          with
             Not_found ->
                raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))

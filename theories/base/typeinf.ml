@@ -108,8 +108,8 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data, unit) typeinf_resou
 let identity x = x
 
 let collect (tbl : (typeinf_subst_fun, typeinf_subst_fun) term_table) subst (so, t) =
-   let _, _, inf =
-      try lookup "Typeinf.collect" tbl identity t with
+   let inf =
+      try snd (lookup "Typeinf.collect" tbl identity t) with
          Not_found ->
             raise (RefineError ("Typeinf.collect", StringTermError ("can't collect type for", t)))
    in
@@ -202,8 +202,8 @@ let infer tbl =
                Not_found ->
                   raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
       else
-         let _, _, inf =
-            try lookup "Typeinf.infer" tbl identity t with
+         let inf =
+            try snd (lookup "Typeinf.infer" tbl identity t) with
                Not_found ->
                   raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
          in

@@ -147,12 +147,11 @@ dform insert_df : insert{'u; 'l; 'lt} =
 dform sort_df : sort{'l; 'lt} =
    (keyword["sort"] 'l 'lt)
 
-dform list_ind_df : list_ind{'l; 'base; u, v, g. 'step} =
-   szone pushm[0] pushm[1] `"let rec " slot{'g} `"_fun = function" break["",""]
-   pushm[5] `"  " cons{'u; 'v} `" ->" hspace
-      szone `"let " slot{'g} `" = " slot{'g} `"_fun " slot{'v} `" in" hspace slot{'step} ezone popm hspace
+dform list_ind_df : list_ind{'l; 'base; u, v, g. 'step['g]} =
+   szone pushm[0] pushm[1] `"let rec " slot{'g} `" = function" break["",""]
+   pushm[5] `"  " cons{'u; 'v} `" ->" hspace slot{'step[('g 'v)]} popm hspace
    pushm[5] `"| [] ->" hspace slot{'base} popm popm hspace
-   pushm[3] `"in" hspace slot{'g} `"_fun " slot{'l} popm popm ezone
+   pushm[3] `"in" hspace slot{'g} `" " slot{'l} popm popm ezone
 
 (************************************************************************
  * REWRITE LEMMAS                                                       *

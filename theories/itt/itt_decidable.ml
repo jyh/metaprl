@@ -96,8 +96,7 @@ let extract_data =
    fun tbl p ->
       let t = dest_decidable_term (Sequent.concl p) in
       try
-         let _, _, tac = Term_match_table.lookup "Itt_decidable.extract_data" tbl identity t in
-         tac p
+         (snd (Term_match_table.lookup "Itt_decidable.extract_data" tbl identity t)) p
       with Not_found -> raise ref_exn
       
 (*

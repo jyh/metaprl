@@ -208,8 +208,7 @@ let extract_elim_data tbl = fun
             (* Find and apply the right tactic *)
             if !debug_dtactic then
                eprintf "Base_dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
-            let _, _, tac = Term_match_table.lookup "Base_dtactic.extract_elim_data" tbl identity t in
-               tac
+            snd (Term_match_table.lookup "Base_dtactic.extract_elim_data" tbl identity t)
          with
             Not_found ->
                raise (RefineError ("extract_elim_data", StringTermError ("D tactic doesn't know about", t)))
@@ -227,8 +226,7 @@ let extract_intro_data tbl = fun
             (* Find and apply the right tactic *)
             if !debug_dtactic then
                eprintf "Base_dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
-            let _, _, tac = Term_match_table.lookup "Base_dtactic.extract_intro_data" tbl intro_compact t in
-               tac
+            snd (Term_match_table.lookup "Base_dtactic.extract_intro_data" tbl intro_compact t)
          with
             Not_found ->
                raise (RefineError ("extract_intro_data", StringTermError ("D tactic doesn't know about", t)))

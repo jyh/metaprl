@@ -1004,7 +1004,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_groupKer : groupKer{'f; 'A; 'B} <-->
-   { x: 'A^car | 'f 'x = 'B^"1" in 'B^car }
+   {car={ x: 'A^car | 'f 'x = 'B^"1" in 'B^car }; "*"='A^"*"; "1"='A^"1"; inv='A^inv}
 
 doc <:doc< @docoff >>
 
@@ -1012,50 +1012,15 @@ let fold_groupKer = makeFoldC << groupKer{'f; 'A; 'B}  >> unfold_groupKer
 
 doc <:doc< 
    @begin[doc]
-   @modsubsection{Well-formedness}
+   @modsubsection{Introduction}
   
    @end[doc]
 >>
-interactive groupKer_Equality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1^car = 'A2^car in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'B1^car = 'B2^car in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; x: 'A1^car >- 'f1 'x = 'f2 'x in 'B1^car } -->
-   [wf] sequent [squash] { <H> >- 'B1^"1" = 'B2^"1" in 'B2^car } -->
-   sequent ['ext] { <H> >- groupKer{'f1; 'A1; 'B1} = groupKer{'f2; 'A2; 'B2} in univ[i:l] }
-
-interactive groupKer_wf {| intro [] |} :
-   sequent [squash] { <H> >- "type"{'A^car} } -->
-   sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
-   sequent [squash] { <H> >- 'B^"1" in 'B^car } -->
-   sequent ['ext] { <H> >- "type"{groupKer{'f; 'A; 'B}} }
-
-doc <:doc< 
-   @begin[doc]
-   @modsubsection{Introduction and Elimination}
-  
-   @end[doc]
->>
-interactive groupKer_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] 'x :
+interactive groupKer_intro {| intro [] |} :
    sequent [squash] { <H> >- 'A in group[i:l] } -->
    sequent [squash] { <H> >- 'B in group[i:l] } -->
    sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   sequent [squash] { <H> >- 'x in 'A^car } -->
-   sequent [squash] { <H> >- 'f 'x = 'B^"1" in 'B^car } -->
-   sequent ['ext] { <H> >- groupKer{'f; 'A; 'B} }
-
-interactive groupKer_member_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
-   sequent [squash] { <H> >- 'A in group[i:l] } -->
-   sequent [squash] { <H> >- 'B in group[i:l] } -->
-   sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   sequent [squash] { <H> >- 'x1 = 'x2 in 'A^car } -->
-   sequent [squash] { <H> >- 'f 'x1 = 'B^"1" in 'B^car } -->
-   sequent ['ext] { <H> >- 'x1 = 'x2 in groupKer{'f; 'A; 'B} }
-
-interactive groupKer_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
-   [wf] sequent [squash] { <H>; x: groupKer{'f; 'A; 'B}; <J['x]> >- 'A in group[i:l] } -->
-   [wf] sequent [squash] { <H>; x: groupKer{'f; 'A; 'B}; <J['x]> >- 'B in group[i:l] } -->
-   [main] sequent ['ext] { <H>; x: 'A^car; u: 'f 'x = 'B^"1" in 'B^car; <J['x]> >- 'C['x] } -->
-   sequent ['ext] { <H>; x: groupKer{'f; 'A; 'B}; <J['x]> >- 'C['x] }
+   sequent ['ext] { <H> >- groupKer{'f; 'A; 'B} in group[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -1069,7 +1034,7 @@ interactive groupKer_subg {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   sequent ['ext] { <H> >- subgroup[i:l]{{car=groupKer{'f; 'A; 'B}; "*"='A^"*"; "1"='A^"1"; inv='A^inv}; 'A} }
+   sequent ['ext] { <H> >- subgroup[i:l]{groupKer{'f; 'A; 'B}; 'A} }
 
 doc <:doc< @docoff >>
 

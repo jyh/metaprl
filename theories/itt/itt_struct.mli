@@ -6,7 +6,6 @@
 open Term
 
 include Itt_equal
-include Itt_rfun
 
 (*
  * This is just syntax for a binding term.
@@ -57,7 +56,7 @@ axiom introduction 'H 't :
  * H >- T1[t2]
  * H, x: T2 >- T1[x] = T1[x] in type
  *)
-axiom substitution 'H ('t1 = 't2 in 'T2) lambda{x. 'T1['x]} :
+axiom substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
    sequent ['ext] { 'H >- 'T1['t2] } -->
    sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
@@ -116,6 +115,9 @@ val revHypSubstT : int -> tactic
 
 (*
  * $Log$
+ * Revision 1.3  1997/08/06 16:33:12  jyh
+ * Minor changes.
+ *
  * Revision 1.2  1997/08/06 16:18:44  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

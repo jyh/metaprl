@@ -10,7 +10,6 @@ open Refine_sig
 include Options
 
 include Itt_equal
-include Itt_rfun
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
 
@@ -66,7 +65,7 @@ prim introduction 'H 't :
  * H >- T1[t2] ext t
  * H, x: T2 >- T1[x] = T1[x] in type
  *)
-prim substitution 'H ('t1 = 't2 in 'T2) lambda{x. 'T1['x]} :
+prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
    ('t : sequent ['ext] { 'H >- 'T1['t2] }) -->
    sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
@@ -258,6 +257,9 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.3  1997/08/06 16:33:11  jyh
+ * Minor changes.
+ *
  * Revision 1.2  1997/08/06 16:18:44  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

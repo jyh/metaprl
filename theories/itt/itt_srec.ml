@@ -231,6 +231,7 @@ prim srecUnrollElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'y 'u :
  *)
 prim srecindEquality {| intro []; eqcd |} 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
    [wf] sequent [squash] { 'H >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
+   [wf] sequent [squash] { 'H; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
    [wf] sequent [squash] { 'H; T1: univ[i:l]; z: subtype{'T1; srec{T. 'B['T]}};
                v: w: 'T1 -> 'S['w]; w: 'B['T1]
            >- 't1['v; 'w] = 't2['v; 'w] in 'S['w]

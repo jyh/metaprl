@@ -1,5 +1,4 @@
-include Czf_itt_set
-include Czf_itt_set_bvd
+include Czf_itt_sep
 
 open Printf
 open Mp_debug
@@ -27,37 +26,32 @@ open Base_auto_tactic
 declare inv_image{'s; x. 'a['x]; 't}
 
 prim_rw unfold_inv_image: inv_image{'s; x. 'a['x]; 't} <-->
-   setbvd_prop{'s; x. mem{'a['x]; 't}}
+   sep{'s; x. mem{'a['x]; 't}}
 
 let fold_inv_image = makeFoldC << inv_image{'s; x. 'a['x]; 't} >> unfold_inv_image
 
 dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
    pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
 
-(*
- * Axioms for inverse image.
- *)
 interactive inv_image_isset {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'t} } -->
-   sequent [squash] { 'H; x: set >- isset{'a['x]} } -->
+   sequent ['ext] { 'H >- fun_set{z. 'a['z]} } -->
    sequent ['ext] { 'H >- isset{inv_image{'s; x. 'a['x]; 't}} }
 
-interactive inv_image_member_intro {| intro [] |} 'H :
+interactive inv_image_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'y} } -->
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'t} } -->
-   sequent [squash] { 'H; x: set >- isset{'a['x]} } -->
    sequent ['ext] { 'H >- fun_set{x. 'a['x]} } -->
    sequent ['ext] { 'H >- mem{'y; 's} } -->
    sequent ['ext] { 'H >- mem{'a['y]; 't} } -->
    sequent ['ext] { 'H >- mem{'y; inv_image{'s; x. 'a['x]; 't}} }
 
-interactive inv_image_member_elim {| elim [] |} 'H 'J :
+interactive inv_image_elim {| elim [] |} 'H 'J :
    sequent [squash] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- isset{'y} } -->
    sequent [squash] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- isset{'t} } -->
-   sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x]; z: set >- isset{'a['z]} } -->
    sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- fun_set{x. 'a['x]} } -->
    sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x]; v: mem{'y; 's}; w: mem{'a['y]; 't} >- 'C['x] } -->
    sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- 'C['x] }

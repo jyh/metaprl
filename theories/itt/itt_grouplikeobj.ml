@@ -277,6 +277,13 @@ interactive cmonoid_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; g: monoid[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: cmonoid[i:l]; 'J['g] >- 'C['g] }
 
+interactive csemigrp_is_semigrp {| intro [AutoMustComplete] |} 'H :
+   sequent [squash] { 'H >- 'h in csemigroup[i:l] } -->
+   sequent ['ext] { 'H >- 'h in semigroup[i:l] }
+
+interactive cmonoid_is_monoid {| intro [AutoMustComplete] |} 'H :
+   sequent [squash] { 'H >- 'g in cmonoid[i:l] } -->
+   sequent ['ext] { 'H >- 'g in monoid[i:l] }
 (*! @docoff *)
 
 (*

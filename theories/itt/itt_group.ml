@@ -425,6 +425,10 @@ interactive abelg_intro {| intro [] |} 'H :
 interactive abelg_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; g: group[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: abelg[i:l]; 'J['g] >- 'C['g] }
+
+interactive abelg_is_group {| intro [AutoMustComplete] |} 'H :
+   sequent [squash] { 'H >- 'g in abelg[i:l] } -->
+   sequent ['ext] { 'H >- 'g in group[i:l] }
 (*! @docoff *)
 
 interactive subgroup_ref {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
@@ -638,23 +642,125 @@ interactive abel_subg_normal 'H :
  *
  * @end[doc]
  *)
-interactive groupHom_type {| intro [intro_typeinf <<'G>>] |} 'H group[i:l] :
-   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'H in group[i:l] } -->
-    sequent ['ext] { 'H >- "type"{groupHom{'G; 'H}} }
+interactive groupHom_type {| intro [intro_typeinf <<'A>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+    sequent ['ext] { 'H >- "type"{groupHom{'A; 'B}} }
 
-interactive groupHom_intro {| intro [intro_typeinf <<'G>>] |} 'H group[i:l] :
-   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'H in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'f in 'G^car -> 'H^car } -->
-   [main] sequent ['ext] { 'H; x: 'G^car; y: 'G^car >- ('f ('x *['G] 'y)) = ('f 'x) *['H] ('f 'y) in 'H^car } -->
-    sequent ['ext] { 'H >- 'f in groupHom{'G; 'H} }
+interactive groupHom_intro {| intro [intro_typeinf <<'A>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'f in 'A^car -> 'B^car } -->
+   [main] sequent ['ext] { 'H; x: 'A^car; y: 'A^car >- ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car } -->
+    sequent ['ext] { 'H >- 'f in groupHom{'A; 'B} }
 
-interactive groupHom_elim {| elim [elim_typeinf <<'G>>] |} 'H 'J group[i:l] :
-   [wf] sequent [squash] {'H; f: groupHom{'G; 'H}; 'J['f] >- 'G in group[i:l] } -->
-   [wf] sequent [squash] {'H; f: groupHom{'G; 'H}; 'J['f] >- 'H in group[i:l] } -->
-   [main] sequent ['ext] { 'H; f: 'G^car -> 'H^car; u: all x: 'G^car. all y: 'G^car. ('f ('x *['G] 'y)) = ('f 'x) *['H] ('f 'y) in 'H^car; 'J['f] >- 'C['f] } -->
-   sequent ['ext] { 'H; f: groupHom{'G; 'H}; 'J['f] >- 'C['f] }   
+interactive groupHom_elim {| elim [elim_typeinf <<'B>>] |} 'H 'J group[i:l] :
+   [wf] sequent [squash] {'H; f: groupHom{'A; 'B}; 'J['f] >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H; f: groupHom{'A; 'B}; 'J['f] >- 'B in group[i:l] } -->
+   [main] sequent ['ext] { 'H; f: 'A^car -> 'B^car; u: all x: 'A^car. all y: 'A^car. ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car; 'J['f] >- 'C['f] } -->
+   sequent ['ext] { 'H; f: groupHom{'A; 'B}; 'J['f] >- 'C['f] }   
+
+(*!
+ * @begin[doc]
+ *
+ * For any groups $G_1$ and $G_2$, there is always at least
+ * one homomorphism $f@colon G_1 @rightarrow G_2$ which
+ * maps all elements of $@car{G_1}$ into $@id{G_2}$. This
+ * is called the Trivial Homomorphism.
+ * @end[doc]
+ *)
+interactive trivial_hom {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'f in 'A^car -> 'B^car } -->
+   [main] sequent ['ext] { 'H; x: 'A^car >- 'f 'x = 'B^"1" in 'B^car } -->
+   sequent ['ext] { 'H >- 'f in groupHom{'A; 'B} }
+
+(*!
+ * @begin[doc]
+ * Let $f@colon g_1 @rightarrow g_2$ be a group
+ * homomorphism of $g_1$ into $g_2$.
+ *
+ * $@space @space$
+ *
+ *   $f$ maps the identity of $G_1$ into the identity of $G_2$.
+ * @end[doc]
+ *)
+interactive groupHom_id {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [main] sequent ['ext] { 'H >- 'f in groupHom{'A; 'B} } -->
+   sequent ['ext] { 'H >- 'f 'A^"1" = 'B^"1" in 'B^car }
+
+interactive hom_id {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [main] sequent ['ext] { 'H >- 'f in groupHom{'A; 'B} } -->
+   sequent ['ext] { 'H >- 'f 'A^"1" = 'B^"1" in 'B^car }
+
+(*!
+ * @begin[doc]
+ *
+ *   $f$ maps the inverse of an element $a$ in $@car{G_1}$ into
+ *   the inverse of $f[a]$ in $@car{G_2}$.
+ * @end[doc]
+ *)
+interactive groupHom_inv {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'a in 'A^car } -->
+   [wf] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
+   sequent ['ext] { 'H >- 'f ('A^inv 'a) = 'B^inv ('f 'a) in 'B^car }
+
+(*!
+ * @begin[doc]
+ *
+ * If $f$ is @emph{onto}, then $G_1$ is abelian
+ * implies $G_2$ is abelian.
+ * @end[doc]
+ *)
+interactive groupHom_abel 'H 'A 'f :
+   [wf] sequent [squash] { 'H >- 'A in abelg[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
+   [main] sequent ['ext] { 'H; x: 'B^car >- exst y: 'A^car. 'x = 'f 'y in 'B^car } -->
+   sequent ['ext] { 'H >- 'B in abelg[i:l] }
+
+(*!
+ * @begin[doc]
+ *
+ *   If $S$ is a subgroup of $G_1$, then the image of $S$ under
+ *   $f$ is a subgroup of $G_2$.
+ * @end[doc]
+ *)
+interactive groupHom_subg1 'H group[i:l] 'f 'A 'S :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'S in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'T in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
+   [main] sequent ['ext] { 'H >- subStructure{'S; 'A} } -->
+   [main] sequent ['ext] { 'H >- 'T^car = {x: 'B^car | exst y: 'S^car. 'x = 'f 'y in 'B^car} in univ[i:l] } -->
+   [main] sequent ['ext] { 'H >- 'T^"*" = 'B^"*" in 'T^car -> 'T^car -> 'T^car } -->
+   sequent ['ext] { 'H >- subStructure{'T; 'B} }
+
+(*!
+ * @begin[doc]
+ *
+ *   If $T$ is a subgroup of $G_2$, then the inverse image of
+ *   $T$ under $f$ is a subgroup of $G_1$.
+ * @end[doc]
+ *)
+interactive groupHom_subg2 'H group[i:l] 'f 'B 'T :
+   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'S in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'T in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
+   [main] sequent ['ext] { 'H >- subStructure{'T; 'B} } -->
+   [main] sequent ['ext] { 'H >- 'S^car = {x: 'A^car | 'f 'x in 'T^car} in univ[i:l] } -->
+   [main] sequent ['ext] { 'H >- 'S^"*" = 'A^"*" in 'S^car -> 'S^car -> 'S^car } -->
+   sequent ['ext] { 'H >- subStructure{'S; 'A} }
 (*! @docoff *)
 
 (*

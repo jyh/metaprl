@@ -605,14 +605,11 @@ rewrite rem_Assoc 'H :
 
 *)
 
-(*
 let resource reduce +=
-   [<< ('a *@ ('b *@ 'c)) >>, mul_Assoc;
-    << ('a *@ ('b +@ 'c)) >>, mul_add_Distrib;
-    << (1 *@ 'a) >>, mul_Id;
-    << ('a *@ 1) >>, mul_Id2;
-    << (0 *@ 'a) >>, mul_Zero;
-    << ('a *@ 0) >>, mul_Zero2;
-    << ('a *@ (- 'b)) >>, mul_uni_Assoc]
-*)
-
+   [<< ('a *@ ('b *@ 'c)) >>, mul_Assoc2_rw;
+    << ('a *@ ('b +@ 'c)) >>, mul_add_Distrib_rw;
+    << (1 *@ 'a) >>, mul_Id_rw;
+    << ('a *@ 1) >>, mul_Id2_rw;
+    << (0 *@ 'a) >>, mul_Zero_rw;
+    << ('a *@ 0) >>, mul_Zero2_rw;
+    << ('a *@ (- 'b)) >>, mul_uni_Assoc_rw]

@@ -49,6 +49,13 @@ let debug_supinf_steps =
         debug_value = false
       }
 
+let debug_supinf_memory =
+   create_debug (**)
+      { debug_name = "debug_supinf_memory";
+        debug_description = "Do not re-assert terms that are already in hypotheses";
+        debug_value = false
+      }
+
 module type BoundFieldSig =
 sig
 	type bfield
@@ -1007,54 +1014,75 @@ let make_sacs var2index p =
 	let afs=List.map (ge2af var2index) l in
 	List.fold_left SACS.addConstr SACS.empty afs
 
-(*module TTable=Term_eq_table.MakeTermTable*)
+module TermPos=
+struct
+	type data = int
+	let append l1 l2 = l1 @ l2
+end
 
-let assert_geT info f1 f2 =
-	assertT (mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2))
-(*	let f=SAF.add f1 (SAF.scale (neg fieldZero) f2) in
-	assertT (mk_ge_rat_term (SAF.term_of info f) (term_of fieldZero))
-*)
+module TTable=Term_eq_table.MakeTermTable(TermPos)
 
-let runAssertT info label f1 f2 tac =
-	if tac==idT then
-		assert_geT info f1 f2 thenAT (addHiddenLabelT label)
+let mem h t = TTable.mem !h t
+let add h t d =
+	if !debug_supinf_memory then
+		h:=(TTable.add !h t d)
 	else
-		assert_geT info f1 f2 thenAT (addHiddenLabelT label thenT tac)
+		()
+let empty _ = ref (TTable.empty)
 
-let rec runAssertStepT info label tac f1 f2 =
+let assert_geT info history f1 f2 = funT (fun p ->
+	let t=(mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2)) in
+	if mem history t then
+		idT
+	else
+		begin
+			add history t ((Sequent.hyp_count p)+1);
+			assertT t
+		end
+)
+
+let runAssertT info h label f1 f2 tac =
+	if tac==idT then
+		assert_geT info h f1 f2 thenAT (addHiddenLabelT label)
+	else
+		assert_geT info h f1 f2 thenAT (addHiddenLabelT label thenT tac)
+
+let rec runAssertStepT info h label tac f1 f2 =
 	match f1,f2 with
-		SAF.Affine _, SAF.Affine _ -> runAssertT info label f1 f2 tac
-	 |	SAF.Affine _, SAF.Max(s21,s22) -> runAssertStepListT info label tac [(f1,s21);(f1,s22)]
-	 | SAF.Min(s11,s12), SAF.Affine _ -> runAssertStepListT info label tac [(s11,f2);(s12,f2)]
+		SAF.Affine _, SAF.Affine _ -> runAssertT info h label f1 f2 tac
+	 |	SAF.Affine _, SAF.Max(s21,s22) -> runAssertStepListT info h label tac [(f1,s21);(f1,s22)]
+	 | SAF.Min(s11,s12), SAF.Affine _ -> runAssertStepListT info h label tac [(s11,f2);(s12,f2)]
 	 | SAF.Min(s11,s12),SAF.Max(s21,s22) ->
-			runAssertStepListT info label tac [(s11,s21);(s11,s22);(s12,s21);(s12,s22)]
-	 | SAF.Max(s11,s12),SAF.Max(s21,s22) -> runAssertStepListT info label tac [(s11,s21);(s12,s22)]
-	 | SAF.Min(s11,s12),SAF.Min(s21,s22) -> runAssertStepListT info label tac [(s11,s21);(s12,s22)]
+			runAssertStepListT info h label tac [(s11,s21);(s11,s22);(s12,s21);(s12,s22)]
+	 | SAF.Max(s11,s12),SAF.Max(s21,s22) -> runAssertStepListT info h label tac [(s11,s21);(s12,s22)]
+	 | SAF.Min(s11,s12),SAF.Min(s21,s22) -> runAssertStepListT info h label tac [(s11,s21);(s12,s22)]
 	 | _,_ -> idT(*runAssertT info label f1 f2 tac*)
 
-and runAssertStepListT info label tac = function
-	[(f1,f2)] -> runAssertStepT info label tac f1 f2
- | (f1,f2)::tl -> (runAssertStepT info label tac f1 f2) thenMT runAssertStepListT info label tac tl
+and runAssertStepListT info h label tac = function
+	[(f1,f2)] -> runAssertStepT info h label tac f1 f2
+ | (f1,f2)::tl ->
+		runAssertStepT info h label tac f1 f2 thenMT (runAssertStepListT info h label tac tl)
  | [] -> raise (Invalid_argument "runAssertStepListT applied to an empty list")
 
-let runTransitiveT info label f1 f2 f3=
-	runAssertT info label f1 f3 (geTransitive (SAF.term_of info f2))
+let runTransitiveT info h label f1 f2 f3 =
+	runAssertT info h label f1 f3 (geTransitive (SAF.term_of info f2))
 
-let rec runTransitiveStepT info label f1 f2 f3 =
+let rec runTransitiveStepT info h label f1 f2 f3 =
 	match f1,f2,f3 with
-		SAF.Affine _, SAF.Affine _, SAF.Affine _ -> runTransitiveT info label f1 f2 f3
-	 |	_, SAF.Max(s21,s22), SAF.Max(s31,s32) -> runTransitiveStepListT info label [(f1,s21,s31);(f1,s22,s32)]
-	 |	SAF.Min (s11,s12), SAF.Min(s21,s22), _ -> runTransitiveStepListT info label [(s11,s21,f3);(s12,s22,f3)]
-	 |	_, SAF.Affine _, SAF.Max(s31,s32) -> runTransitiveStepListT info label [(f1,f2,s31);(f1,f2,s32)]
-	 |	SAF.Min (s11,s12), SAF.Affine _, _ -> runTransitiveStepListT info label [(s11,f2,f3);(s12,f2,f3)]
+		SAF.Affine _, SAF.Affine _, SAF.Affine _ -> runTransitiveT info h label f1 f2 f3
+	 |	_, SAF.Max(s21,s22), SAF.Max(s31,s32) -> runTransitiveStepListT info h label [(f1,s21,s31);(f1,s22,s32)]
+	 |	SAF.Min (s11,s12), SAF.Min(s21,s22), _ -> runTransitiveStepListT info h label [(s11,s21,f3);(s12,s22,f3)]
+	 |	_, SAF.Affine _, SAF.Max(s31,s32) -> runTransitiveStepListT info h label [(f1,f2,s31);(f1,f2,s32)]
+	 |	SAF.Min (s11,s12), SAF.Affine _, _ -> runTransitiveStepListT info h label [(s11,f2,f3);(s12,f2,f3)]
 	 | _,_,_ -> idT(*runTransitiveT info label f1 f2 f3*)
 
-and runTransitiveStepListT info label = function
-	[(f1,f2,f3)] -> runTransitiveStepT info label f1 f2 f3
- | (f1,f2,f3)::tl -> (runTransitiveStepT info label f1 f2 f3) thenMT runTransitiveStepListT info label tl
+and runTransitiveStepListT info h label = function
+	[(f1,f2,f3)] -> runTransitiveStepT info h label f1 f2 f3
+ | (f1,f2,f3)::tl ->
+		runTransitiveStepT info h label f1 f2 f3 thenMT (runTransitiveStepListT info h label tl)
  | [] -> raise (Invalid_argument "runTransitiveStepListT applied to an empty list")
 
-let rec runListT info = function
+let rec runListT info h = function
 	[] -> idT
  | [SAF.Assert (label,f1,f2,tac)] ->
 		begin
@@ -1063,7 +1091,7 @@ let rec runListT info = function
 			if SAF.isInfinite f1 || SAF.isInfinite f2 then
 				idT
 			else
-				runAssertStepT info label tac f1 f2
+				runAssertStepT info h label tac f1 f2
 		end
  | [SAF.Transitive (label,f1,f2,f3)] ->
 		begin
@@ -1072,7 +1100,7 @@ let rec runListT info = function
 			if SAF.isInfinite f1 || SAF.isInfinite f2 || SAF.isInfinite f3 then
 				idT
 			else
-				runTransitiveStepT info label f1 f2 f3
+				runTransitiveStepT info h label f1 f2 f3
 		end
  | [SAF.Tactic(label,tac)] ->
 		begin
@@ -1085,24 +1113,24 @@ let rec runListT info = function
 			if !debug_supinf_steps then
 				(printf "%s " label;SAF.print f1;printf">=";SAF.print f2;eflush stdout);
 			if SAF.isInfinite f1 || SAF.isInfinite f2 then
-				runListT info tl
+				runListT info h tl
 			else
-				runAssertStepT info label tac f1 f2 thenMT runListT info tl
+				runAssertStepT info h label tac f1 f2 thenMT (runListT info h tl)
 		end
  | (SAF.Transitive (label,f1,f2,f3))::tl ->
 		begin
 			if !debug_supinf_steps then
 				(printf "%s " label;SAF.print f1;printf">=";SAF.print f2;printf">=";SAF.print f3;eflush stdout);
 			if SAF.isInfinite f1 || SAF.isInfinite f2 || SAF.isInfinite f3 then
-				runListT info tl
+				runListT info h tl
 			else
-				runTransitiveStepT info label f1 f2 f3 thenMT runListT info tl
+				runTransitiveStepT info h label f1 f2 f3 thenMT (runListT info h tl)
 		end
  | (SAF.Tactic(label,tac))::tl ->
 		begin
 			if !debug_supinf_steps then
 				printf "%s%t" label eflush;
-			addHiddenLabelT label thenT (tac thenMT runListT info tl)
+			addHiddenLabelT label thenT (tac thenMT (runListT info h tl))
 		end
 
 let testT = funT (fun p ->
@@ -1129,7 +1157,7 @@ let testT = funT (fun p ->
 					printf"inf=";SAF.print inf'; eflush stdout;
 					SAF.print inf'; printf "<="; SAF.print saf'; printf "<="; SAF.print sup'; eflush stdout;
 				end;
-			runListT info actions
+			runListT info (empty ()) actions
 		end
 	end
 )

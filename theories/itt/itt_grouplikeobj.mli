@@ -78,6 +78,12 @@ declare subStructure{'s; 'g}
  * TACTICS                                                              *
  ************************************************************************)
 
+topval unfold_semigroup : conv
+topval unfold_premonoid : conv
+topval unfold_isMonoid : conv
+topval unfold_monoid : conv
+topval unfold_subStructure : conv
+
 topval fold_groupoid : conv
 topval fold_isSemigroup : conv
 topval fold_semigroup1 : conv

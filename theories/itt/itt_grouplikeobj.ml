@@ -82,38 +82,236 @@ let _ =
    show_loading "Loading Itt_grouplikeobj%t"
 
 (************************************************************************
- * SYNTAX                                                               *
+ * GROUPOID                                                             *
  ************************************************************************)
 
 (*!
  * @begin[doc]
- * @terms
+ * @modsection{Groupoid}
+ * @modsubsection{Rewrites}
  *
  * @end[doc]
  *)
 define unfold_groupoid : groupoid[i:l] <-->
    {car: univ[i:l]; "*": ^car -> ^car -> ^car}
+(*! @docoff *)
 
+let fold_groupoid = makeFoldC << groupoid[i:l] >> unfold_groupoid
+
+let groupoidDT n = rw unfold_groupoid n thenT dT n
+
+let resource elim +=
+   [<<groupoid[i:l]>>, groupoidDT]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
+ *
+ * @end[doc]
+ *)
+interactive groupoid_type {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{groupoid[i:l]} }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
+interactive groupoid_intro {| intro [AutoMustComplete] |} 'H :
+   sequent [squash] { 'H >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car} } -->
+   sequent ['ext] { 'H >- 'g in groupoid[i:l] }
+
+(*interactive groupoid_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: groupoid[i:l]; 'J['g] >- 'C['g] }   
+*)
+(************************************************************************
+ * SEMIGROUP                                                            *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @modsection{Semigroup}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
 define unfold_isSemigroup : isSemigroup{'g} <-->
    all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car)
 
 define unfold_semigroup1 : semigroup[i:l] <-->
    {g: groupoid[i:l] | isSemigroup{'g}}
+(*! @docoff *)
 
+let unfold_semigroup = unfold_semigroup1 thenC addrC [0] unfold_groupoid thenC addrC [1] unfold_isSemigroup
+
+let fold_isSemigroup = makeFoldC << isSemigroup{'g} >> unfold_isSemigroup
+let fold_semigroup1 = makeFoldC << semigroup[i:l] >> unfold_semigroup1
+let fold_semigroup = makeFoldC << semigroup[i:l] >> unfold_semigroup
+
+let semigroupDT n = rw unfold_semigroup n thenT dT n
+
+let resource elim +=
+   [<<semigroup[i:l]>>, semigroupDT]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
+ *
+ * @end[doc]
+ *)
+
+interactive isSemigroup_wf {| intro [intro_typeinf <<'x>>] |} 'H groupoid[i:l] :
+   sequent [squash] { 'H >- 'x in groupoid[i:l] } -->
+   sequent ['ext] {'H >- "type"{isSemigroup{'x}} }
+
+interactive semigroup_type {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{semigroup[i:l]} }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
+interactive isSemigroup_intro {| intro [AutoMustComplete] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
+   [main] sequent ['ext] { 'H; x: 'g^car; y: 'g^car; z: 'g^car >- ('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car } -->
+   sequent ['ext] { 'H >- isSemigroup{'g} }
+
+interactive isSemigroup_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: isSemigroup{'g}; 'J['u] >- 'C['u] }   
+
+interactive semigroup_intro {| intro [AutoMustComplete] |} 'H :
+   [wf] sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
+   [main] sequent ['ext] { 'H >- isSemigroup{'g} } -->
+   sequent ['ext] { 'H >- 'g in semigroup[i:l] }
+
+interactive semigroup_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: semigroup[i:l]; 'J['g] >- 'C['g] }   
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Hierarchy}
+ *
+ * @end[doc]
+ *)
+interactive semigrp_is_grpoid 'H :
+   sequent [squash] { 'H >- 'h in semigroup[i:l] } -->
+   sequent ['ext] { 'H >- 'h in groupoid[i:l] }
+
+(************************************************************************
+ * MONOID                                                               *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @modsection{Monoid}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
 define unfold_premonoid1 : premonoid[i:l] <-->
    record["1":t]{r. 'r^car; groupoid[i:l]}
 
-define unfold_isMonoid : isMonoid{'g} <-->
+define unfold_isMonoid1 : isMonoid{'g} <-->
    isSemigroup{'g} & all x: 'g^car. ('g^"1" *['g] 'x = 'x  in 'g^car & 'x *['g] 'g^"1" = 'x in 'g^car )
 
 define unfold_monoid1 : monoid[i:l] <-->
    {g: premonoid[i:l] | isMonoid{'g}}
+(*! @docoff *)
 
+let unfold_premonoid = unfold_premonoid1 thenC addrC [1] unfold_groupoid
+let unfold_isMonoid = unfold_isMonoid1 thenC addrC [0] unfold_isSemigroup
+let unfold_monoid = unfold_monoid1 thenC addrC [0] unfold_premonoid thenC addrC [1] unfold_isMonoid
+
+let fold_premonoid1 = makeFoldC << premonoid[i:l] >> unfold_premonoid1
+let fold_premonoid = makeFoldC << premonoid[i:l] >> unfold_premonoid
+let fold_isMonoid = makeFoldC << isMonoid{'g} >> unfold_isMonoid
+let fold_monoid1 = makeFoldC << monoid[i:l] >> unfold_monoid1
+let fold_monoid = makeFoldC << monoid[i:l] >> unfold_monoid
+
+let monoidDT n = rw unfold_monoid n thenT dT n
+
+let resource elim +=
+   [<<monoid[i:l]>>, monoidDT]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
+ *
+ * @end[doc]
+ *)
+interactive premonoid_type {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{premonoid[i:l]} }
+
+interactive isMonoid_wf {| intro [intro_typeinf <<'x>>] |} 'H premonoid[i:l] :
+   sequent [squash] { 'H >- 'x in premonoid[i:l] } -->
+   sequent ['ext] {'H >- "type"{isMonoid{'x}} }
+
+interactive monoid_type {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{monoid[i:l]} }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
+interactive premonoid_intro {| intro [AutoMustComplete] |} 'H :
+   sequent [squash] { 'H >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car} } -->
+   sequent ['ext] { 'H >- 'g in premonoid[i:l] }
+
+interactive premonoid_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: premonoid[i:l]; 'J['g] >- 'C['g] }   
+
+interactive isMonoid_intro {| intro [AutoMustComplete] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
+   [main] sequent ['ext] { 'H >- isSemigroup{'g} } -->
+   [main] sequent ['ext] { 'H; x: 'g^car >- 'g^"1" *['g] 'x = 'x in 'g^car } -->
+   [main] sequent ['ext] { 'H; x: 'g^car >- 'x *['g] 'g^"1" = 'x in 'g^car } -->
+   sequent ['ext] { 'H >- isMonoid{'g} }
+
+interactive isMonoid_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; u: isMonoid{'g}; v: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); w: all x: 'g^car. (('g^"1" *['g] 'x = 'x in 'g^car) & ('x *['g] 'g^"1" = 'x in 'g^car)); 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: isMonoid{'g}; 'J['u] >- 'C['u] }   
+
+interactive monoid_intro {| intro [AutoMustComplete] |} 'H :
+   [wf] sequent [squash] { 'H >- 'g in premonoid[i:l] } -->
+   [main] sequent ['ext] { 'H >- isMonoid{'g} } -->
+   sequent ['ext] { 'H >- 'g in monoid[i:l] }
+
+interactive monoid_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); v: all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car & 'x *['g] 'g^"1" = 'x in 'g^car); 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: monoid[i:l]; 'J['g] >- 'C['g] }   
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Hierarchy}
+ *
+ * @end[doc]
+ *)
+interactive monoid_is_semigrp 'H :
+   sequent [squash] { 'H >- 'g in monoid[i:l] } -->
+   sequent ['ext] { 'H >- 'g in semigroup[i:l] }
+
+(************************************************************************
+ * BINARY OPERATION IS COMMUTATIVE                                      *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @modsection{Commutative operation}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
 define unfold_isCommutative : isCommutative{'g} <-->
    all x: 'g^car. all y: 'g^car. ('x *['g] 'y = 'y *['g] 'x in 'g^car)
-
-define unfold_subStructure : subStructure{'s; 'g} <-->
-   's^car subset 'g^car & ('s^"*" = 'g^"*" in 's^car -> 's^car -> 's^car)
 
 define unfold_csemigroup : csemigroup[i:l] <-->
    {g: semigroup[i:l] | isCommutative{'g}}
@@ -122,42 +320,128 @@ define unfold_cmonoid : cmonoid[i:l] <-->
    {g: monoid[i:l] | isCommutative{'g}}
 (*! @docoff *)
 
-interactive_rw unfold_semigroup :
-   semigroup[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car}
-
-interactive_rw unfold_premonoid : 
-   premonoid[i:l] <--> record["1":t]{r. 'r^car; {car: univ[i:l]; "*": ^car -> ^car -> ^car}}
-
-interactive_rw unfold_monoid :
-   monoid[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; (all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. (^"1" ^* 'x = 'x in ^car & 'x ^* ^"1" = 'x in ^car))}
-
-let fold_groupoid = makeFoldC << groupoid[i:l] >> unfold_groupoid
-let fold_isSemigroup = makeFoldC << isSemigroup{'g} >> unfold_isSemigroup
-let fold_semigroup1 = makeFoldC << semigroup[i:l] >> unfold_semigroup1
-let fold_semigroup = makeFoldC << semigroup[i:l] >> unfold_semigroup
-let fold_premonoid1 = makeFoldC << premonoid[i:l] >> unfold_premonoid1
-let fold_premonoid = makeFoldC << premonoid[i:l] >> unfold_premonoid
-let fold_isMonoid = makeFoldC << isMonoid{'g} >> unfold_isMonoid
-let fold_monoid1 = makeFoldC << monoid[i:l] >> unfold_monoid1
-let fold_monoid = makeFoldC << monoid[i:l] >> unfold_monoid
 let fold_isCommutative = makeFoldC << isCommutative{'g} >> unfold_isCommutative
 let fold_csemigroup = makeFoldC << csemigroup[i:l] >> unfold_csemigroup
 let fold_cmonoid = makeFoldC << cmonoid[i:l] >> unfold_cmonoid
-let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
 
-let groupoidDT n = rw unfold_groupoid n thenT dT n
-let semigroupDT n = rw unfold_semigroup n thenT dT n
-let monoidDT n = rw unfold_monoid n thenT dT n
 let csemigroupDT n = rw unfold_csemigroup n thenT dT n
 let cmonoidDT n = rw unfold_cmonoid n thenT dT n
 
 let resource elim +=
-   [<<groupoid[i:l]>>, groupoidDT;
-    <<semigroup[i:l]>>, semigroupDT;
-    <<monoid[i:l]>>, monoidDT;
-    <<csemigroup[i:l]>>, csemigroupDT;
+   [<<csemigroup[i:l]>>, csemigroupDT;
     <<cmonoid[i:l]>>, cmonoidDT
    ]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
+ *
+ * @end[doc]
+ *)
+interactive isComutative_wf {| intro [intro_typeinf <<'g>>] |} 'H groupoid[i:l] :
+   sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
+   sequent ['ext] {'H >- "type"{isCommutative{'g}} }
+
+interactive csemigroup_type {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{csemigroup[i:l]} }
+
+interactive cmonoid_type {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{cmonoid[i:l]} }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
+interactive isCommutative_intro {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
+   [main] sequent ['ext] { 'H; x: 'g^car; y: 'g^car >- ('x *['g] 'y = 'y *['g] 'x in 'g^car) } -->
+   sequent ['ext] { 'H >- isCommutative{'g} }
+
+interactive isCommutative_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; u: isCommutative{'g}; v: all x: 'g^car. all y: 'g^car. ('x *['g] 'y = 'y *['g] 'x in 'g^car); 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: isCommutative{'g}; 'J['u] >- 'C['u] }
+
+interactive csemigroup_intro {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'g in semigroup[i:l] } -->
+   [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
+   sequent ['ext] { 'H >- 'g in csemigroup[i:l] }
+
+interactive csemigroup_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; g: semigroup[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: csemigroup[i:l]; 'J['g] >- 'C['g] }
+
+interactive cmonoid_intro {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'g in monoid[i:l] } -->
+   [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
+   sequent ['ext] { 'H >- 'g in cmonoid[i:l] }
+
+interactive cmonoid_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; g: monoid[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: cmonoid[i:l]; 'J['g] >- 'C['g] }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Hierarchy}
+ *
+ * @end[doc]
+ *)
+interactive csemigrp_is_semigrp 'H :
+   sequent [squash] { 'H >- 'h in csemigroup[i:l] } -->
+   sequent ['ext] { 'H >- 'h in semigroup[i:l] }
+
+interactive cmonoid_is_monoid 'H :
+   sequent [squash] { 'H >- 'g in cmonoid[i:l] } -->
+   sequent ['ext] { 'H >- 'g in monoid[i:l] }
+
+(************************************************************************
+ * SUBSTRUCTURE                                                         *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @modsection{Substructure}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
+define unfold_subStructure1 : subStructure{'s; 'g} <-->
+   ('s^car subset 'g^car) & ('s^"*" = 'g^"*" in 's^car -> 's^car -> 's^car)
+(*! @docoff *)
+
+let unfold_subStructure = unfold_subStructure1 thenC addrC [0] unfold_subset
+
+let fold_subStructure1 = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure1
+let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
+interactive subStructure_intro {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car } -->
+   [main] sequent ['ext] { 'H >- 's^car subset 'g^car } -->
+   sequent ['ext] { 'H >- subStructure{'s; 'g} }
+
+interactive subStructure_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; u: subStructure{'s; 'g}; x: 's^car subtype 'g^car; y: all a: 's^car. all b: 's^car. (('a = 'b in 'g^car) => ('a = 'b in 's^car)); z: {b: 'g^car | exst a: 's^car. 'b = 'a in 'g^car} subtype 's^car; v: 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: subStructure{'s; 'g}; 'J['u] >- 'C['u] }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Rules}
+ *
+ * Substructure is squash stable.
+ * @end[doc]
+ *)
+interactive subStructure_squashStable 'H :
+   [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->
+   [wf] sequent [squash] { 'H >- squash{subStructure{'s; 'g}} } -->
+   sequent ['ext] { 'H >- subStructure{'s; 'g} }
+
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -226,90 +510,6 @@ let resource typeinf += [
    <<'g^"inv">>, inf_inv;
    <<'g^"*">>, inf_mul
 ]
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Well-formedness}
- *
- * @end[doc]
- *)
-interactive groupoid_type {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{groupoid[i:l]} }
-
-interactive semigroup_type {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{semigroup[i:l]} }
-
-interactive premonoid_type {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{premonoid[i:l]} }
-
-interactive monoid_type {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{monoid[i:l]} }
-
-interactive isSemigroup_wf {| intro [intro_typeinf <<'x>>] |} 'H groupoid[i:l] :
-   sequent [squash] { 'H >- 'x in groupoid[i:l] } -->
-   sequent ['ext] {'H >- "type"{isSemigroup{'x}} }
-
-interactive isMonoid_wf {| intro [intro_typeinf <<'x>>] |} 'H premonoid[i:l] :
-   sequent [squash] { 'H >- 'x in premonoid[i:l] } -->
-   sequent ['ext] {'H >- "type"{isMonoid{'x}} }
-
-interactive isComutative_wf {| intro [intro_typeinf <<'g>>] |} 'H groupoid[i:l] :
-   sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
-   sequent ['ext] {'H >- "type"{isCommutative{'g}} }
-
-interactive csemigroup_type {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{csemigroup[i:l]} }
-
-interactive cmonoid_type {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{cmonoid[i:l]} }
-
-interactive semigroup_elim {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; u: squash{.all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car)}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: semigroup[i:l]; 'J['g] >- 'C['g] }   
-
-interactive monoid_elim {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; u: squash{.all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car)}; v: squash{.all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car & 'x *['g] 'g^"1" = 'x in 'g^car)}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: monoid[i:l]; 'J['g] >- 'C['g] }   
-
-interactive semigrp_is_grpoid {| intro [AutoMustComplete] |} 'H :
-   sequent [squash] { 'H >- 'h in semigroup[i:l] } -->
-   sequent ['ext] { 'H >- 'h in groupoid[i:l] }
-
-interactive monoid_is_semigrp {| intro [AutoMustComplete] |} 'H :
-   sequent [squash] { 'H >- 'g in monoid[i:l] } -->
-   sequent ['ext] { 'H >- 'g in semigroup[i:l] }
-
-interactive csemigroup_intro {| intro [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'g in semigroup[i:l] } -->
-   [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
-   sequent ['ext] { 'H >- 'g in csemigroup[i:l] }
-
-interactive cmonoid_intro {| intro [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'g in monoid[i:l] } -->
-   [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
-   sequent ['ext] { 'H >- 'g in cmonoid[i:l] }
-
-interactive csemigroup_elim {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; g: semigroup[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: csemigroup[i:l]; 'J['g] >- 'C['g] }
-
-interactive cmonoid_elim {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; g: monoid[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: cmonoid[i:l]; 'J['g] >- 'C['g] }
-
-interactive csemigrp_is_semigrp {| intro [AutoMustComplete] |} 'H :
-   sequent [squash] { 'H >- 'h in csemigroup[i:l] } -->
-   sequent ['ext] { 'H >- 'h in semigroup[i:l] }
-
-interactive cmonoid_is_monoid {| intro [AutoMustComplete] |} 'H :
-   sequent [squash] { 'H >- 'g in cmonoid[i:l] } -->
-   sequent ['ext] { 'H >- 'g in monoid[i:l] }
-(*! @docoff *)
 
 (*
  * -*-

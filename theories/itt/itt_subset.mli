@@ -42,12 +42,13 @@ open Tactic_type.Tacticals
  * TERMS                                                                *
  ************************************************************************)
 
-declare "subset"{'A; 'B}
+declare \subset{'A; 'B}
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
+topval unfold_subset : conv
 topval fold_subset : conv
 
 val is_subset_term : term -> bool

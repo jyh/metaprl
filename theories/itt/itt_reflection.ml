@@ -621,10 +621,24 @@ interactive var_arity_subst1 {| intro [] |} :
    sequent { <H> >- 'a in Term } -->
    sequent { <H> >- var_arity{'b} = 1 +@ var_arity{subst{'b; 'a}} in nat }
 
+interactive_rw var_arity_subst_rw {| reduce |} :
+   'b in BBTerm  -->
+   'a in Term  -->
+    var_arity{subst{'b; 'a}} <-->  var_arity{'b} -@ 1
+
 interactive var_arity_subst2 {| intro [] |} :
    sequent { <H> >- 'b in BBTerm } -->
    sequent { <H> >- 'a in Term } -->
    sequent { <H> >- var_arity{subst{'b; 'a}} < var_arity{'b} }
+
+interactive var_arity_bbterm :
+   sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- var_arity{'b} > 0 } -->
+   sequent { <H> >- 'b in BBTerm }
+
+interactive var_arity_bbterm2 :
+   sequent { <H> >- 'b in BBTerm } -->
+   sequent { <H> >- var_arity{'b} > 0 }
 
 (************************************************************************
  * Subterms_arity                                                       *
@@ -815,6 +829,13 @@ prim makebterm_wf_elim {| elim [] |} 'H :
    sequent { <H>; x: make_bterm{'bt; 'btl} in BTerm; <J['x]> >- 'C['x] } =
    't[it; it]
 
+interactive_rw var_arity_make_bterm_rw {| reduce |} :
+   'bt in BTerm  -->
+   'btl in list{BTerm}  -->
+    compatible_shapes{'bt; 'btl}  -->
+    var_arity{make_bterm{'bt; 'btl}} <-->  var_arity{'bt}
+
+
 (************************************************************************
  * Bterm elimination rules                                              *
  ************************************************************************)
@@ -844,27 +865,27 @@ interactive bterm_elim4 {| elim [] |} 'H :
  ************************************************************************)
 
 (* may need other well-formedness assumptions for the 4 rules below *)
-interactive subterms_make_bterm {| intro [] |} :
+prim subterms_make_bterm {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- 'btl in list{BTerm} } -->
    sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
-   sequent { <H> >- subterms{make_bterm{'bt; 'btl}} ~ 'btl }
+   sequent { <H> >- subterms{make_bterm{'bt; 'btl}} ~ 'btl } = it
 
-interactive same_op_make_bterm {| intro [] |} :
+prim same_op_make_bterm {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- 'btl in list{BTerm} } -->
    sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
-   sequent { <H> >- same_op{make_bterm{'bt; 'btl}; 'bt} }
+   sequent { <H> >- same_op{make_bterm{'bt; 'btl}; 'bt} }  = it
 
-interactive same_op_subst {| intro [] |} :
+prim same_op_subst {| intro [] |} :
    sequent { <H> >- 'bt in BBTerm } -->
    sequent { <H> >- 't in Term } -->
-   sequent { <H> >- same_op{subst{'bt; 't}; 'bt} }
+   sequent { <H> >- same_op{subst{'bt; 't}; 'bt} } = it
 
-interactive subterms_subst {| intro [] |} :
+prim subterms_subst {| intro [] |} :
    sequent { <H> >- 'bt in BBTerm } -->
    sequent { <H> >- 't in Term } -->
-   sequent { <H> >- subterms{subst{'bt; 't}} ~ map{lambda{x.subst{'x; 't}}; subterms{'bt}} }
+   sequent { <H> >- subterms{subst{'bt; 't}} ~ map{lambda{x.subst{'x; 't}}; subterms{'bt}} }  = it
 
 
 interactive subst_make_bterm {| intro [] |} :

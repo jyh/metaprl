@@ -17,7 +17,9 @@ struct
    type 'term t = 'term list * extract
    type 'term tactic = 'term -> 'term t
 
-   type 'term server = unit
+   type 'share key = 'share
+
+   type ('term, 'share) server = unit
 
    (************************************************************************
     * IMPLEMENTATION                                                       *
@@ -99,6 +101,21 @@ struct
       let args, ext = tac1 arg in
       let argsl, extl = flatten (tacf args) in
          argsl, Arg.compose ext extl
+
+   (*
+    * Shared memory.
+    *)
+   let share () _ f =
+      f ()
+
+   let arg_of_key () x =
+      x
+
+   (*
+    * Nothing in main loop.
+    *)
+   let main_loop () =
+      ()
 end
 
 (*

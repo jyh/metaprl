@@ -42,6 +42,7 @@ let redexC =
 
 let goal = mk_msequent << sequent { 'H >- fact{300} = 0 in int } >> []
 
+(*
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 
 let arg =
@@ -62,6 +63,7 @@ let test () =
             eprintf "No subgoals%t" eflush
        | _ ->
             eprintf "Too many subgoals%t" eflush
+*)
 
 
 (*

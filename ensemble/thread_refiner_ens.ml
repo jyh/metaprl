@@ -32,8 +32,17 @@ let debug_schedule =
         debug_value = false
       }
 
-module MakeThreadRefiner (Arg : ThreadRefinerArgSig) (Remote : RemoteSig) =
+let debug_remote =
+   create_debug (**)
+      { debug_name = "remote";
+        debug_description = "Show remote process management";
+        debug_value = false
+      }
+
+module MakeThreadRefiner (Arg : ThreadRefinerArgSig) =
 struct
+   module Remote = Remote_ensemble.Remote
+
    (************************************************************************
     * TYPES                                                                *
     ************************************************************************)
@@ -53,6 +62,11 @@ struct
    and 'term tactic = 'term -> 'term t
 
    (*
+    * Shared memory keys.
+    *)
+   type 'share key = 'share Remote.key
+
+   (*
     * We keep a stack of goals.
     *)
    type 'term entry =
@@ -68,9 +82,11 @@ struct
    (*
     * Entries in or-queues are one of three values.
     *)
+   type exn_error = string * refine_error
+
    type 'term or_result =
       OrSuccess of 'term list * extract
-    | OrFailure of exn
+    | OrFailure of exn_error
     | OrPending
 
    (*
@@ -90,7 +106,7 @@ struct
     *)
    type 'term proc_message =
       ProcSuccess of 'term list * extract
-    | ProcFailure of exn
+    | ProcFailure of exn_error
     | ProcStack of 'term entry
     | ProcCanceled
 
@@ -99,7 +115,7 @@ struct
     *)
    type 'term job_message =
       JobSuccess of 'term list * extract
-    | JobFailure of exn
+    | JobFailure of exn_error
 
    (*
     * The client canceled an operation.
@@ -124,6 +140,9 @@ struct
       ProcMessage of 'term proc_entry * 'term proc_message
     | SubmitMessage of 'term submit_message
     | ClientMessage of 'term root_entry * 'term client_message
+    | RemoteMessage of 'term remote_entry * 'term job_message
+    | CancelMessage of 'term local_entry
+    | RequestMessage of ('term sched_message, 'term job_message) Remote.local
 
    (*
     * The scheduler saves a doubly-linked tree of entries.
@@ -139,6 +158,7 @@ struct
     | SAndEntryF of 'term and_entryf
     | SOrEntry of 'term or_entry
     | SRoot of 'term root_entry
+    | SLocal of 'term local_entry
 
    and 'term proc_entry =
       { proc_arg : 'term sched_message;
@@ -149,7 +169,7 @@ struct
    and 'term remote_entry =
       { remote_arg : 'term sched_message;
         remote_id : int;
-        remote_hand : ('term sched_message, 'term list * extract) Remote.handle;
+        remote_hand : ('term sched_message, 'term job_message) Remote.handle;
         mutable remote_parent : 'term tree
       }
 
@@ -162,6 +182,11 @@ struct
       { root_request : 'term client_message Thread_event.channel;
         root_response : 'term job_message Thread_event.channel;
         mutable root_child : 'term tree
+      }
+
+   and 'term local_entry =
+      { local_local : ('term sched_message, 'term job_message) Remote.local;
+        mutable local_child : 'term tree
       }
 
    and 'term and_then_entry1 =
@@ -247,23 +272,23 @@ struct
     *    submit: the channel used to submit new jobs to
     *       the scheduler.
     *)
-   type 'term scheduler =
+   type ('term, 'share) scheduler =
       { sched_printer : out_channel -> 'term -> unit;
-        sched_remote : ('term sched_message, 'term list * extract) Remote.t;
+        sched_remote : ('term sched_message, 'term job_message, 'share) Remote.t;
         mutable sched_idle : 'term process list;
         mutable sched_waiting : 'term proc_entry list;
         mutable sched_running : 'term proc_entry list;
         mutable sched_remotes : 'term remote_entry list;
         mutable sched_pending : 'term pending_entry list;
-        mutable sched_clients : 'term root_entry list;
-        mutable sched_events : 'term any_message Thread_event.event list;
+        mutable sched_roots   : 'term root_entry list;
+        mutable sched_locals  : 'term local_entry list;
         sched_submit : 'term submit_message Thread_event.channel;
       }
 
    (*
     * A server is just a scheduler.
     *)
-   type 'term server = 'term scheduler
+   type ('term, 'share) server = ('term, 'share) scheduler
 
    (*
     * This is the number of threads we fork.
@@ -348,6 +373,9 @@ struct
             SRoot { root_child = child } ->
                output_string stderr "(Root";
                [child]
+          | SLocal { local_child = child } ->
+               output_string stderr "(Local";
+               [child]
           | SOrEntry { or_children = children } ->
                output_string stderr "(Or";
                List.map snd children
@@ -384,7 +412,7 @@ struct
       eflush stderr
 
    let print_sched_stacks sched =
-      List.iter (fun root -> print_sched_stack sched.sched_printer root.root_child) sched.sched_clients
+      List.iter (fun root -> print_sched_stack sched.sched_printer root.root_child) sched.sched_roots
 
    (*
     * Check that the stack is linked correctly.
@@ -393,15 +421,17 @@ struct
       match entry with
          SRoot { root_child = child } ->
             raise (Failure "check_parent: SRoot")
+       | SLocal { local_child = child } ->
+            raise (Failure "check_parent: SLocal")
        | SOrEntry { or_parent = parent'; or_children = children } ->
             assert(parent' == parent);
-            List.iter (fun _, child -> check_parent entry child) children
+            List.iter (fun (_, child) -> check_parent entry child) children
        | SAndEntry { and_parent = parent'; and_children = children } ->
             assert(parent' == parent);
-            List.iter (fun _, child -> check_parent entry child) children
+            List.iter (fun (_, child) -> check_parent entry child) children
        | SAndEntryF { andf_parent = parent'; andf_children = children } ->
             assert(parent' == parent);
-            List.iter (fun _, child -> check_parent entry child) children
+            List.iter (fun (_, child) -> check_parent entry child) children
        | SAndEntryThen1 { and_then1_parent = parent'; and_then1_child = child } ->
             assert(parent' == parent);
             check_parent entry child
@@ -422,12 +452,14 @@ struct
       match entry with
          SRoot { root_child = child } ->
             check_parent entry child
+       | SLocal { local_child = child } ->
+            check_parent entry child
        | SOrEntry { or_children = children } ->
-            List.iter (fun _, child -> check_parent entry child) children
+            List.iter (fun (_, child) -> check_parent entry child) children
        | SAndEntry { and_children = children } ->
-            List.iter (fun _, child -> check_parent entry child) children
+            List.iter (fun (_, child) -> check_parent entry child) children
        | SAndEntryF { andf_children = children } ->
-            List.iter (fun _, child -> check_parent entry child) children
+            List.iter (fun (_, child) -> check_parent entry child) children
        | SAndEntryThen1 { and_then1_child = child } ->
             check_parent entry child
        | SAndEntryThen2 { and_then2_child = child } ->
@@ -440,7 +472,7 @@ struct
             ()
 
    let check_sched_stacks sched =
-      List.iter (fun client -> check_sched_stack client.root_child) sched.sched_clients
+      List.iter (fun client -> check_sched_stack client.root_child) sched.sched_roots
 
    (************************************************************************
     * PROCESSING                                                           *
@@ -469,7 +501,8 @@ struct
                   raise (Invalid_argument "pop_failure")
          end
     | [] ->
-         raise exn
+         let name, exn = exn in
+            raise (RefineError (name, exn))
 
    (*
     * Pop a successful entry.
@@ -504,8 +537,8 @@ struct
                         let goals = tacf args in
                            AndEntryF (goals, ext, []) :: stack
                      with
-                        (RefineError _) as exn ->
-                           pop_failure exn stack
+                        RefineError (name, exn) ->
+                           pop_failure (name, exn) stack
                   end
              | AndEntry1 (tac, _ :: goals, ext', subgoals) ->
                   if goals = [] then
@@ -553,22 +586,22 @@ struct
          AndEntry1 (tac, goal :: _, _, _) ->
             begin
                try push_goal (tac goal) (entry :: stack) with
-                  (RefineError _) as exn ->
-                     pop_failure exn stack
+                  RefineError (name, exn) ->
+                     pop_failure (name, exn) stack
             end
        | AndEntry2 (tac :: _, goal :: _, _, _) ->
             begin
                try push_goal (tac goal) (entry :: stack) with
-                  (RefineError _) as exn ->
-                     pop_failure exn stack
+                  RefineError (name, exn) ->
+                     pop_failure (name, exn) stack
             end
        | AndEntryF (arg :: _, _, _) ->
             push_goal arg (entry :: stack)
        | OrEntry ([tac], goal) ->
             begin
                try push_goal (tac goal) (entry :: stack) with
-                  (RefineError _) as exn ->
-                     pop_failure exn stack
+                  RefineError (name, exn) ->
+                     pop_failure (name, exn) stack
             end
        | OrEntry (tac :: tacs, goal) ->
             begin
@@ -579,20 +612,20 @@ struct
        | AndEntryThen1 (tac1, _, goal) ->
             begin
                try push_goal (tac1 goal) (entry :: stack) with
-                  (RefineError _) as exn ->
-                     pop_failure exn stack
+                  RefineError (name, exn) ->
+                     pop_failure (name, exn) stack
             end
        | AndEntryThen2 (tac1, _, goal) ->
             begin
                try push_goal (tac1 goal) (entry :: stack) with
-                  (RefineError _) as exn ->
-                     pop_failure exn stack
+                  RefineError (name, exn) ->
+                     pop_failure (name, exn) stack
             end
        | AndEntryThenF (tac1, _, goal) ->
             begin
                try push_goal (tac1 goal) (entry :: stack) with
-                  (RefineError _) as exn ->
-                     pop_failure exn stack
+                  RefineError (name, exn) ->
+                     pop_failure (name, exn) stack
             end
        | AndEntry1 _
        | AndEntry2 _
@@ -698,14 +731,8 @@ struct
                 | SchedThread goal ->
                      eval_stack proc (push_goal goal [])
          with
-            exn ->
-               if !debug_schedule then
-                  begin
-                     lock_printer ();
-                     eprintf "Exception: %d: %s%t" proc.proc_pid (Printexc.to_string exn) eflush;
-                     unlock_printer ()
-                  end;
-               ProcFailure exn
+            RefineError (name, exn) ->
+               ProcFailure (name, exn)
       in
          proc.proc_wakeup <- false;
          if !debug_sync then
@@ -817,10 +844,50 @@ struct
                parent.and_thenf_child
           | SRoot parent ->
                parent.root_child
+          | SLocal parent ->
+               parent.local_child
           | SProcess _
           | SRemote _
           | SPending _ ->
                raise (Invalid_argument "set_child_process")
+
+   (*
+    * Find the remote in the list of children.
+    *)
+   let find_remote remote =
+      let rec search = function
+         (_, ((SRemote remote') as entry)) :: tl ->
+            if remote' == remote then
+               entry
+            else
+               search tl
+       | _ :: tl ->
+            search tl
+       | [] ->
+            eprintf "Thread_refiner.find_remote: %d%t" remote.remote_id eflush;
+            raise (Invalid_argument "find_remote")
+      in
+         match remote.remote_parent with
+            SOrEntry parent ->
+               search parent.or_children
+          | SAndEntry parent ->
+               search parent.and_children
+          | SAndEntryF parent ->
+               search parent.andf_children
+          | SAndEntryThen1 parent ->
+               parent.and_then1_child
+          | SAndEntryThen2 parent ->
+               parent.and_then2_child
+          | SAndEntryThenF parent ->
+               parent.and_thenf_child
+          | SRoot parent ->
+               parent.root_child
+          | SLocal parent ->
+               parent.local_child
+          | SProcess _
+          | SRemote _
+          | SPending _ ->
+               raise (Invalid_argument "find_remote")
 
    (*
     * Replace a particular child with a new one.
@@ -850,6 +917,8 @@ struct
             parent.and_thenf_child <- new_child
        | SRoot parent ->
             parent.root_child <- new_child
+       | SLocal parent ->
+            parent.local_child <- new_child
        | SProcess _
        | SRemote _
        | SPending _ ->
@@ -885,6 +954,8 @@ struct
             parent.and_thenf_child <- proc
        | SRoot parent ->
             parent.root_child <- proc
+       | SLocal parent ->
+            parent.local_child <- proc
        | SProcess _
        | SRemote _
        | SPending _ ->
@@ -1121,6 +1192,8 @@ struct
          cancel_children sched child
     | SRoot { root_child = child } ->
          cancel_children sched child
+    | SLocal { local_child = child } ->
+         cancel_children sched child
     | SProcess entry ->
          begin
             let proc = entry.proc_process in
@@ -1142,8 +1215,14 @@ struct
                      raise (Invalid_argument "cancel_children")
          end
     | SRemote entry ->
+         if !debug_remote then
+            begin
+               lock_printer ();
+               eprintf "Thread_refiner.cancel_children: cancel remote %d%t" entry.remote_id eflush;
+               unlock_printer ()
+            end;
          Remote.cancel_handle sched.sched_remote entry.remote_hand;
-         sched.sched_remotes <- removeq_error entry sched.sched_remotes
+         sched.sched_remotes <- removeq entry sched.sched_remotes
     | SPending entry ->
          sched.sched_pending <- removeq_error entry sched.sched_pending
 
@@ -1157,18 +1236,6 @@ struct
             lock_printer ();
             eprintf "Thread_refiner.return_result%t" eflush;
             unlock_printer ();
-            if List.length sched.sched_clients <> 1 || sched.sched_pending <> [] then
-               begin
-                  lock_printer ();
-                  eprintf "Return result: stack%t" eflush;
-                  print_sched_stacks sched;
-                  eprintf "Return result: pending%t" eflush;
-                  List.iter (fun { pending_parent = parent } ->
-                        print_sched_stack sched.sched_printer parent) (**)
-                     sched.sched_pending;
-                  unlock_printer ();
-                  raise (Invalid_argument "return_result")
-               end
          end;
       Thread_event.sync 0 (Thread_event.send root.root_response result);
       if !debug_sync then
@@ -1177,13 +1244,37 @@ struct
             eprintf "Thread_refiner.return_result: done%t" eflush;
             unlock_printer ()
          end;
-      sched.sched_clients <- removeq_error root sched.sched_clients
+      sched.sched_roots <- removeq_error root sched.sched_roots
 
    let return_success sched root args ext =
       return_result sched root (JobSuccess (args, ext))
 
    let return_failure sched root exn =
       return_result sched root (JobFailure exn)
+
+   (*
+    * Return a value to the remote handler.
+    *)
+   let remote_success sched local args ext =
+      if !debug_remote then
+         begin
+            lock_printer ();
+            eprintf "Thread_refiner.remote_success: start%t" eflush;
+            unlock_printer ()
+         end;
+      Remote.return_local sched.sched_remote local.local_local (JobSuccess (args, ext));
+      sched.sched_locals <- removeq_error local sched.sched_locals;
+      eprintf "Thread_refiner.remote_success: done%t" eflush
+
+   let remote_failure sched local exn =
+      if !debug_remote then
+         begin
+            lock_printer ();
+            eprintf "Thread_refiner.remote_failure%t" eflush;
+            unlock_printer ()
+         end;
+      Remote.return_local sched.sched_remote local.local_local (JobFailure exn);
+      sched.sched_locals <- removeq_error local sched.sched_locals
 
    (*
     * Get the index for an entry in the list of children.
@@ -1304,8 +1395,8 @@ struct
                   set_child parent this new_entry;
                   andf_entry.andf_children <- spread_andf sched 0 new_entry goals
       with
-         exn ->
-            sched_pop_failure sched this entry.and_thenf_parent exn
+         RefineError (name, exn) ->
+            sched_pop_failure sched this entry.and_thenf_parent (name, exn)
 
    (*
     * Pop the or-success.
@@ -1355,6 +1446,8 @@ struct
             sched_pop_and_thenf_success sched this entry args ext
        | SRoot entry ->
             return_success sched entry args ext
+       | SLocal entry ->
+            remote_success sched entry args ext
        | SProcess _
        | SRemote _
        | SPending _ ->
@@ -1380,6 +1473,9 @@ struct
        | SRoot entry ->
             cancel_children sched this;
             return_failure sched entry exn
+       | SLocal entry ->
+            cancel_children sched this;
+            remote_failure sched entry exn
        | SProcess _
        | SRemote _
        | SPending _ ->
@@ -1388,7 +1484,7 @@ struct
    (*
     * Handle client success/failure.  The process if placed on the idle queue.
     *)
-   let handle_success sched entry args ext =
+   let handle_proc_success sched entry args ext =
       if !debug_schedule then
          begin
             lock_printer ();
@@ -1396,17 +1492,13 @@ struct
             unlock_printer ()
          end;
       if entry.proc_process.proc_status = StatusCanceled then
-         begin
-            make_idle sched entry;
-            true
-         end
+         make_idle sched entry
       else
          let this = find_process entry in
             sched_pop_success sched this entry.proc_parent args ext;
-            make_idle sched entry;
-            true
+            make_idle sched entry
 
-   let handle_failure sched entry exn =
+   let handle_proc_failure sched entry exn =
       if !debug_schedule then
          begin
             lock_printer ();
@@ -1414,15 +1506,31 @@ struct
             unlock_printer ()
          end;
       if entry.proc_process.proc_status = StatusCanceled then
-         begin
-            make_idle sched entry;
-            true
-         end
+         make_idle sched entry
       else
          let this = find_process entry in
             make_idle sched entry;
-            sched_pop_failure sched this entry.proc_parent exn;
-            true
+            sched_pop_failure sched this entry.proc_parent exn
+
+   let handle_remote_success sched entry args ext =
+      if !debug_remote then
+         begin
+            lock_printer ();
+            eprintf "Thread_refiner.handle_remote_success: %d%t" entry.remote_id eflush;
+            unlock_printer ()
+         end;
+      sched.sched_remotes <- removeq_error entry sched.sched_remotes;
+      sched_pop_success sched (find_remote entry) entry.remote_parent args ext
+
+   let handle_remote_failure sched entry exn =
+      if !debug_remote then
+         begin
+            lock_printer ();
+            eprintf "Thread_refiner.handle_remote_failure: %d%t" entry.remote_id eflush;
+            unlock_printer ()
+         end;
+      sched.sched_remotes <- removeq_error entry sched.sched_remotes;
+      sched_pop_failure sched (find_remote entry) entry.remote_parent exn
 
    (*
     * Handle the reception of a new stack entry.
@@ -1553,14 +1661,12 @@ struct
          if proc.proc_status = StatusCanceled then
             begin
                proc.proc_interrupt = SchedCancel;
-               proc.proc_wakeup <- true;
-               false
+               proc.proc_wakeup <- true
             end
          else
             begin
                handle_stack_aux sched entry stack;
-               make_running sched entry;
-               true
+               make_running sched entry
             end
 
    (*
@@ -1574,8 +1680,7 @@ struct
             eprintf "Thread_refiner.handle_process_cancelation: %d%t" entry.proc_process.proc_pid eflush;
             unlock_printer ()
          end;
-      make_idle sched entry;
-      true
+      make_idle sched entry
 
    (*
     * Handle a new submission.
@@ -1601,9 +1706,8 @@ struct
                eprintf "Thread_refiner.handle_submission%t" eflush;
                unlock_printer ()
             end;
-         sched.sched_clients <- root :: sched.sched_clients;
-         sched.sched_pending <- pending :: sched.sched_pending;
-         true
+         sched.sched_roots <- root :: sched.sched_roots;
+         sched.sched_pending <- pending :: sched.sched_pending
 
    (*
     * Remove a client when it cancels its request.
@@ -1615,9 +1719,43 @@ struct
             eprintf "Thread_refiner.handle_client_cancelation%t" eflush;
             unlock_printer ()
          end;
-      sched.sched_clients <- removeq_error root sched.sched_clients;
-      cancel_children sched (SRoot root);
-      true
+      sched.sched_roots <- removeq_error root sched.sched_roots;
+      cancel_children sched (SRoot root)
+
+   (*
+    * Handle a new local submission.
+    *)
+   let handle_local_submission sched local =
+      let rec pending =
+         { pending_arg = Remote.arg_of_local local;
+           pending_parent = SLocal root
+         }
+      and root =
+         { local_local = local;
+           local_child = SPending pending
+         }
+      in
+         if !debug_remote then
+            begin
+               lock_printer ();
+               eprintf "Thread_refiner.handle_local_submission: 0x%08x%t" (Obj.magic root) eflush;
+               unlock_printer ()
+            end;
+         sched.sched_locals <- root :: sched.sched_locals;
+         sched.sched_pending <- pending :: sched.sched_pending
+
+   (*
+    * Handle a local cancelation.
+    *)
+   let handle_local_cancelation sched local =
+      if !debug_remote then
+         begin
+            lock_printer ();
+            eprintf "Thread_refiner.handle_local_cancelation%t" eflush;
+            unlock_printer ()
+         end;
+      sched.sched_locals <- removeq_error local sched.sched_locals;
+      cancel_children sched (SLocal local)
 
    (*
     * Handle all the events that the scheduler receives.
@@ -1636,9 +1774,9 @@ struct
             begin
                match msg with
                   ProcSuccess (args, ext) ->
-                     handle_success sched entry args ext
+                     handle_proc_success sched entry args ext
                 | ProcFailure exn ->
-                     handle_failure sched entry exn
+                     handle_proc_failure sched entry exn
                 | ProcStack stack ->
                      handle_stack sched entry stack
                 | ProcCanceled ->
@@ -1652,6 +1790,18 @@ struct
                   ClientCancel ->
                      handle_client_cancelation sched root
             end
+       | RemoteMessage (remote, msg) ->
+            begin
+               match msg with
+                  JobSuccess (args, ext) ->
+                     handle_remote_success sched remote args ext
+                | JobFailure exn ->
+                     handle_remote_failure sched remote exn
+            end
+       | CancelMessage local ->
+            handle_local_cancelation sched local
+       | RequestMessage local ->
+            handle_local_submission sched local
 
    (************************************************************************
     * SCHEDULER MAIN LOOP                                                  *
@@ -1659,24 +1809,52 @@ struct
 
    (*
     * Get events for any possible event the scheduler may be interested in.
+    * Always poll for:
+    *    1. Running threads
+    *    2. Waiting threads
+    *    3. New submissions
+    *    4. Remote jobs
+    *
+    * If all jobs are idle, and there are pending remote jobs,
+    * also request a job from the remote server.
     *)
-   let reset_events sched =
-      let process_event ({ proc_process = proc } as event) =
-         Thread_event.wrap (Thread_event.receive proc.proc_result) (fun msg -> ProcMessage (event, msg))
+   let process_event ({ proc_process = proc } as event) =
+      Thread_event.wrap (Thread_event.receive proc.proc_result) (fun msg -> ProcMessage (event, msg))
+
+   let stack_event ({ root_request = request } as root) =
+      Thread_event.wrap (Thread_event.receive request) (fun msg -> ClientMessage (root, msg))
+
+   let submit_event sched =
+      Thread_event.wrap (Thread_event.receive sched.sched_submit) (fun msg -> SubmitMessage msg)
+
+   let remote_event sched ({ remote_hand = hand } as remote) =
+      Remote.wrap (Remote.event_of_handle sched.sched_remote hand) (fun msg -> (RemoteMessage (remote, msg)))
+
+   let local_event sched ({ local_local = hand } as local) =
+      Remote.wrap (Remote.event_of_local sched.sched_remote hand) (fun () -> (CancelMessage local))
+
+   let remote_request_event sched =
+      (Remote.wrap (Remote.request sched.sched_remote) (fun msg -> RequestMessage msg))
+
+   let schedule_events sched =
+      let block_events =
+         submit_event sched ::
+            ((List.map process_event sched.sched_running) @
+                (List.map process_event sched.sched_waiting) @
+                (List.map stack_event sched.sched_roots))
       in
-      let stack_event ({ root_request = request } as root) =
-         Thread_event.wrap (Thread_event.receive request) (fun msg -> ClientMessage (root, msg))
-      in
-      let submit_event =
-         Thread_event.wrap (Thread_event.receive sched.sched_submit) (fun msg -> SubmitMessage msg)
+      let block_event =
+         Remote.wrap_event (Thread_event.choose block_events)
       in
       let events =
-         (List.map process_event sched.sched_running) @
-            (List.map process_event sched.sched_waiting) @
-            [submit_event] @
-            (List.map stack_event sched.sched_clients)
+         block_event ::
+            ((List.map (remote_event sched) sched.sched_remotes) @
+                (List.map (local_event sched) sched.sched_locals))
       in
-         sched.sched_events <- events
+         if sched.sched_running = [] && sched.sched_waiting = [] then
+            remote_request_event sched :: events
+         else
+            events
 
    (*
     * Start a process working on a particular job.
@@ -1716,69 +1894,117 @@ struct
          entry
 
    (*
+    * Start a remote job.
+    *)
+   let max_remote_id remotes =
+      let rec search i = function
+         { remote_id = j } :: remotes ->
+            search (max i j) remotes
+       | [] ->
+            succ i
+      in
+         search 0 remotes
+
+   let start_remote sched ({ pending_arg = msg; pending_parent = parent } as pending) =
+      let id = max_remote_id sched.sched_remotes in
+      let _ =
+         if !debug_remote then
+            begin
+               lock_printer ();
+               eprintf "Thread_refiner.start_remote: %d%t" id eflush;
+               unlock_printer ()
+            end
+      in
+      let hand = Remote.submit sched.sched_remote msg in
+      let entry =
+         { remote_arg = msg;
+           remote_hand = hand;
+           remote_id = id;
+           remote_parent = parent
+         }
+      in
+         set_child_process parent pending (SRemote entry);
+         entry
+
+   (*
     * After the scheduler has handled an event, start
     * new processes, and potentially ask running threads for their stack.
     *)
    let rec schedule sched =
       let { sched_idle = idle;
             sched_pending = pending;
-            sched_running = running
+            sched_running = running;
+            sched_remotes = remotes
           } = sched
       in
-         match idle, pending with
-            proc :: procs, pending :: pendings ->
-               sched.sched_running <- start_process sched proc pending :: running;
-               sched.sched_idle <- procs;
-               sched.sched_pending <- pendings;
-               schedule sched
-          | _ :: _, [] ->
+         match pending with
+            pending :: pendings ->
+               begin
+                  match idle with
+                     proc :: procs ->
+                        sched.sched_running <- start_process sched proc pending :: running;
+                        sched.sched_idle <- procs;
+                        sched.sched_pending <- pendings;
+                        schedule sched
+                   | [] ->
+                        if List.length remotes < remote_count then
+                           begin
+                              sched.sched_remotes <- start_remote sched pending :: remotes;
+                              sched.sched_pending <- pendings;
+                              schedule sched
+                           end
+               end
+          | [] ->
+               (* Always try to keep a few pending jobs *)
                request_stack sched
-          | _ ->
-               ()
 
    (*
     * The scheduler waits for events to occur,
     * then potentially reschedules.
     *)
    let rec sched_main_loop sched =
-      reset_events sched;
-      if !debug_schedule then
-         begin
-            lock_printer ();
-            eprintf "Thread_refiner.sched_main_loop: Stacks:";
-            print_sched_stacks sched;
-            check_sched_stacks sched;
-            List.iter (fun proc ->
-                  eprintf "\nIdle process %d (%a)" (**)
-                     proc.proc_pid
-                     print_status proc.proc_status) (**)
-               sched.sched_idle;
-            List.iter (fun proc ->
-                  eprintf "\nRunning process %d (%a):" (**)
-                     proc.proc_process.proc_pid
-                     print_status proc.proc_process.proc_status;
-                  print_sched_stack sched.sched_printer proc.proc_parent) (**)
-               sched.sched_running;
-            List.iter (fun proc ->
-                  eprintf "\nWaiting process %d (%a):" (**)
-                     proc.proc_process.proc_pid
-                     print_status proc.proc_process.proc_status;
-                  print_sched_stack sched.sched_printer proc.proc_parent) (**)
-               sched.sched_waiting;
-            eprintf "Event count: %d%t" (List.length sched.sched_events) eflush;
-            unlock_printer ()
-         end;
-      if !debug_sync then
-         begin
-            lock_printer ();
-            eprintf "Thread_refiner.sched_main_loop: waiting";
-            List.iter (fun proc -> eprintf " %d" proc.proc_process.proc_pid) sched.sched_running;
-            output_string stderr " /";
-            List.iter (fun proc -> eprintf " %d" proc.proc_process.proc_pid) sched.sched_waiting;
-            eflush stderr;
-            unlock_printer ()
-         end;
-      let event = Thread_event.select 0 sched.sched_events in
+      let events = schedule_events sched in
+      let _ =
+         if !debug_schedule then
+            begin
+               lock_printer ();
+               eprintf "Thread_refiner.sched_main_loop: Stacks:";
+               print_sched_stacks sched;
+               check_sched_stacks sched;
+               List.iter (fun proc ->
+                     eprintf "\nIdle process %d (%a)" (**)
+                        proc.proc_pid
+                        print_status proc.proc_status) (**)
+                  sched.sched_idle;
+               List.iter (fun proc ->
+                     eprintf "\nRunning process %d (%a):" (**)
+                        proc.proc_process.proc_pid
+                        print_status proc.proc_process.proc_status;
+                     print_sched_stack sched.sched_printer proc.proc_parent) (**)
+                  sched.sched_running;
+               List.iter (fun proc ->
+                     eprintf "\nWaiting process %d (%a):" (**)
+                        proc.proc_process.proc_pid
+                        print_status proc.proc_process.proc_status;
+                     print_sched_stack sched.sched_printer proc.proc_parent) (**)
+                  sched.sched_waiting;
+               eprintf "Event count: %d%t" (List.length events) eflush;
+               unlock_printer ()
+            end
+      in
+      let _ =
+         if !debug_sync then
+            begin
+               lock_printer ();
+               eprintf "Thread_refiner.sched_main_loop: waiting";
+               List.iter (fun proc -> eprintf " %d" proc.proc_process.proc_pid) sched.sched_running;
+               output_string stderr " /";
+               List.iter (fun proc -> eprintf " %d" proc.proc_process.proc_pid) sched.sched_waiting;
+               eflush stderr;
+               unlock_printer ()
+            end
+      in
+      let event = Remote.select sched.sched_remote (schedule_events sched) in
          if !debug_sync then
             begin
                lock_printer ();
@@ -1797,17 +2023,16 @@ struct
       let sched =
          { sched_printer = printer;
            sched_remote = Remote.create ();
-           sched_idle = create_procs printer thread_count;
+           sched_idle = [];
            sched_waiting = [];
            sched_running = [];
            sched_remotes = [];
            sched_pending = [];
-           sched_clients = [];
-           sched_events = [];
+           sched_roots = [];
+           sched_locals = [];
            sched_submit = Thread_event.new_channel ()
          }
       in
-         Thread.create sched_main_loop sched;
          sched
 
    (************************************************************************
@@ -1877,8 +2102,26 @@ struct
             match result with
                JobSuccess (args, ext) ->
                   args, ext
-             | JobFailure exn ->
-                  raise exn
+             | JobFailure (name, exn) ->
+                  raise (RefineError (name, exn))
+
+   (*
+    * Shared memory.
+    *)
+   let share sched x =
+      Remote.share sched.sched_remote x
+
+   let arg_of_key sched key =
+      Remote.arg_of_key sched.sched_remote key
+
+   (*
+    * Start the main loop.
+    *)
+   let main_loop sched =
+      Remote.main_loop sched.sched_remote;
+      sched.sched_idle <- create_procs sched.sched_printer thread_count;
+      Thread.create sched_main_loop sched;
+      ()
 end
 
 (*

@@ -2,10 +2,9 @@
  * This is the null thread implementation.
  *)
 
-open Remote_sig
 open Thread_refiner_sig
 
-module MakeThreadRefiner (Arg : ThreadRefinerArgSig) (Remote : RemoteSig) : ThreadRefinerSig
+module MakeThreadRefiner (Arg : ThreadRefinerArgSig) : ThreadRefinerSig
 with type extract = Arg.extract
 
 (*

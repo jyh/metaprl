@@ -27,6 +27,7 @@ topval nthAssumT : int -> tactic
 
 (* Print timing information *)
 topval timingT : tactic -> tactic
+val finalT : (unit -> unit) -> tactic
 
 (* Allow tactic only if no subgoals *)
 topval completeT : tactic -> tactic

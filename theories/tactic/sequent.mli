@@ -11,15 +11,32 @@ open Refiner.Refiner.Refine
  * Types.
  *)
 type extract = Tactic_type.extract
+type tactic = Tactic_type.tactic
 type tactic_arg = Tactic_type.tactic_arg
 type tactic_value = Tactic_type.tactic_value
 type cache = Tactic_type.cache
+type raw_cache = Tactic_type.raw_cache
+type sentinal = Tactic_type.sentinal
 type 'a attributes = 'a Tactic_type.attributes
+type raw_attribute = Tactic_type.raw_attribute
+type raw_attributes = Tactic_type.raw_attributes
 
 (*
  * Build an initial argument for a proof.
  *)
-val create : sentinal -> string -> msequent -> cache -> term attributes -> tactic_arg
+val create : Tactic_type.sentinal -> string -> msequent -> raw_cache -> raw_attributes -> tactic_arg
+
+(*
+ * Sentinals.
+ *)
+val sentinal_of_refiner : string -> sentinal
+val sentinal_of_refiner_object : string -> string -> sentinal
+
+(*
+ * Cache.
+ *)
+val make_cache : (unit -> cache) -> raw_cache
+val cache : tactic_arg -> cache
 
 (*
  * Two tactic_arguments are equal when they have
@@ -46,9 +63,7 @@ val goal : tactic_arg -> term
 val msequent : tactic_arg -> msequent
 val concl : tactic_arg -> term
 val nth_hyp : tactic_arg -> int -> string * term
-val cache : tactic_arg -> cache
 val label : tactic_arg -> string
-val attributes : tactic_arg -> term attributes
 
 (*
  * Get info about the sequent.
@@ -66,8 +81,22 @@ val set_concl   : tactic_arg -> term -> tactic_arg
 val set_label   : tactic_arg -> string -> tactic_arg
 
 (*
+ * Attribute construction.
+ *)
+val term_attribute       : string -> term -> raw_attribute
+val type_attribute       : string -> term -> raw_attribute
+val int_attribute        : string -> int -> raw_attribute
+val bool_attribute       : string -> bool -> raw_attribute
+val subst_attribute      : string -> term -> raw_attribute
+val tactic_attribute     : string -> (unit -> tactic) -> raw_attribute
+val int_tactic_attribute : string -> (unit -> int -> tactic) -> raw_attribute
+val arg_tactic_attribute : string -> (unit -> tactic_arg -> tactic) -> raw_attribute
+val typeinf_attribute    : string -> (unit -> unify_subst -> term -> unify_subst * term) -> raw_attribute
+
+(*
  * Argument functions.
  *)
+val attributes         : tactic_arg -> term attributes
 val get_term_arg       : tactic_arg -> string -> term
 val get_type_arg       : tactic_arg -> string -> term
 val get_int_arg        : tactic_arg -> string -> int

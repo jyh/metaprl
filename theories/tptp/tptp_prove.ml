@@ -9,6 +9,7 @@ include Tptp
 open Printf
 open Nl_debug
 open String_set
+open Thread_util
 
 open Refiner.Refiner
 open Refiner.Refiner.TermType
@@ -265,11 +266,6 @@ let dest_goal t =
  ************************************************************************)
 
 (*
- * Unify two terms.
- *)
-let unify_exn = RefineError ("unify", StringError "terms do not unify")
-
-(*
  * Unify the term with as many terms in the list
  * as possible.  Return the unifier, and the
  * list of terms that did not match.
@@ -302,7 +298,7 @@ let rec unify_term_list foundp subst constants term1 = function
       if foundp then
          subst, []
       else
-         raise unify_exn
+         raise (RefineError ("unify", StringError "terms do not unify"))
 
 (*
  * Given two term lists to be unified,
@@ -330,7 +326,7 @@ let rec unify_term_lists constants terms1 terms2 =
                      subst, term1 :: terms1, terms2
          end
     | [] ->
-         raise unify_exn
+         raise (RefineError ("unify", StringError "terms do not unify"))
 
 let unify_term_lists constants terms1 terms2 =
    let subst, terms1, terms2 = unify_term_lists constants terms1 terms2 in
@@ -343,7 +339,7 @@ let check_unify
     { tptp_positive = pos1; tptp_negative = neg1 }
     { tptp_positive = pos2; tptp_negative = neg2 } =
    if not (StringSet.intersectp pos1 pos2 || StringSet.intersectp neg1 neg2) then
-      raise unify_exn
+      raise (RefineError ("unify", StringError "terms do not unify"))
 
 (************************************************************************
  * TACTICS                                                              *
@@ -639,9 +635,9 @@ let resolveT i p =
  * SEARCH                                                               *
  ************************************************************************)
 
-let cycle_exn = RefineError ("proveT", StringError "cycle detected")
-let fail_exn = RefineError ("proveT", StringError "failed")
-
+(*
+ * This just tests the marshaler on values.
+ *)
 let refine_count = ref 0
 let fail_count = ref 0
 
@@ -662,15 +658,15 @@ let rec prove_auxT
          dT 0 p
     | body ->
          if level > bound then
-            raise fail_exn;
+            raise (RefineError ("proveT", StringError "failed"));
 (*
  * Turn off fail-cache for more determinstic performance
  * testing.  --jyh
          if TptpCache.subsumed !fail_cache body then
-            raise fail_exn;
+            raise (RefineError ("proveT", StringError "failed"));
  *)
          if TptpCache.subsumed goal_cache body then
-            raise cycle_exn;
+            raise (RefineError ("proveT", StringError "cycle detected"));
          let cache = TptpCache.insert goal_cache body in
          let nextT goal_info =
             prove_auxT (**)
@@ -686,7 +682,7 @@ let rec prove_auxT
                begin
                   incr fail_count;
                   fail_cache := TptpCache.insert !fail_cache body;
-                  raise fail_exn
+                  raise (RefineError ("proveT", StringError "failed"))
                end
             else
                try
@@ -700,6 +696,9 @@ let rec prove_auxT
                with
                   RefineError _ ->
                      find_hyp (i + 1)
+                | exn ->
+                     eprintf "Tptp_prove.exception: %s%t" (Printexc.to_string exn) eflush;
+                     raise exn
          in
          let rec matchT i p =
             let tac, next = find_hyp i in
@@ -708,6 +707,7 @@ let rec prove_auxT
             matchT first_hyp p
 
 let proveT bound p =
+   eprintf "Tptp_prove.proveT: %d%t" bound eflush;
    let { sequent_goals = goals;
          sequent_hyps = hyps
        } = Sequent.explode_sequent p
@@ -737,7 +737,10 @@ let rec loopTestT i p =
 let testT p =
    refine_count := 0;
    fail_count := 0;
-   timingT (loopTestT 100) p
+   let finalize () =
+      eprintf "Refine count: %d Fail count: %d%t" !refine_count !fail_count eflush
+   in
+      (finalT finalize thenT timingT (loopTestT 200)) p
 
 (*
  * -*-

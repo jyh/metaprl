@@ -19,15 +19,32 @@ let _ =
  * Types.
  *)
 type extract = Tactic_type.extract
+type tactic = Tactic_type.tactic
 type tactic_arg = Tactic_type.tactic_arg
 type tactic_value = Tactic_type.tactic_value
 type cache = Tactic_type.cache
+type raw_cache = Tactic_type.raw_cache
+type sentinal = Tactic_type.sentinal
 type 'a attributes = 'a Tactic_type.attributes
+type raw_attribute = Tactic_type.raw_attribute
+type raw_attributes = Tactic_type.raw_attributes
 
 (*
  * Construction.
  *)
 let create = Tactic_type.create
+
+(*
+ * Sentinals.
+ *)
+let sentinal_of_refiner = Tactic_type.sentinal_of_refiner
+let sentinal_of_refiner_object = Tactic_type.sentinal_of_refiner_object
+
+(*
+ * Cache.
+ *)
+let make_cache = Tactic_type.make_cache
+let cache = Tactic_type.cache
 
 (*
  * Two tactic_arguments are equal when they have
@@ -46,11 +63,7 @@ let msequent = Tactic_type.msequent
 let concl arg =
    Tactic_type.nth_concl arg 1
 
-let cache = Tactic_type.cache
-
 let label = Tactic_type.label
-
-let attributes = Tactic_type.attributes
 
 (*
  * Sequent parts.
@@ -119,8 +132,22 @@ let set_concl = Tactic_type.set_concl
 let set_label = Tactic_type.set_label
 
 (*
+ * Attribute construction.
+ *)
+let term_attribute       = Tactic_type.term_attribute
+let type_attribute       = Tactic_type.type_attribute
+let int_attribute        = Tactic_type.int_attribute
+let bool_attribute       = Tactic_type.bool_attribute
+let subst_attribute      = Tactic_type.subst_attribute
+let tactic_attribute     = Tactic_type.tactic_attribute
+let int_tactic_attribute = Tactic_type.int_tactic_attribute
+let arg_tactic_attribute = Tactic_type.arg_tactic_attribute
+let typeinf_attribute    = Tactic_type.typeinf_attribute
+
+(*
  * Argument functions.
  *)
+let attributes         = Tactic_type.attributes
 let get_term_arg       = Tactic_type.get_term
 let get_type_arg       = Tactic_type.get_type
 let get_int_arg        = Tactic_type.get_int

@@ -52,6 +52,9 @@ let failWithT s p =
 let timingT =
    Tactic_type.timingT
 
+let finalT =
+   Tactic_type.finalT
+
 let nthAssumT =
    Tactic_type.nthAssumT
 

@@ -15,8 +15,11 @@ open Refiner.Refiner.Refine
 
 (*
  * Attributes are values that inherited in the
- * proof tree.  We expose them so they can be
- * marshaled.
+ * proof tree.  These are an incomplete set of
+ * the simple attributes.  They are listed to
+ * make proof marshaling easier.  All other
+ * attributes should be fetched through the
+ * attribute functions.
  *)
 type 'term attribute =
    TermArg of 'term
@@ -24,12 +27,14 @@ type 'term attribute =
  | IntArg of int
  | BoolArg of bool
  | SubstArg of 'term
- | TacticArg of tactic
- | IntTacticArg of (int -> tactic)
- | ArgTacticArg of (tactic_arg -> tactic)  (* For tactics that precompile *)
- | TypeinfArg of (unify_subst -> 'term -> unify_subst * 'term)
 
 and 'a attributes = (string * 'a attribute) list
+
+(*
+ * Thes are the attributes that are used internally.
+ *)
+and raw_attribute
+and raw_attributes = raw_attribute list
 
 (*
  * Here are all the different type of tactics.
@@ -44,6 +49,7 @@ and tactic_arg
 and tactic_value
 and extract
 and pre_tactic
+and sentinal
 and tactic = tactic_arg -> tactic_value
 
 (*
@@ -52,6 +58,7 @@ and tactic = tactic_arg -> tactic_value
  * are tactics.
  *)
 and cache = tactic Tactic_cache.extract
+and raw_cache
 
 (************************************************************************
  * OPERATIONS                                                           *
@@ -60,7 +67,24 @@ and cache = tactic Tactic_cache.extract
 (*
  * Build an initial argument for a proof.
  *)
-val create : sentinal -> string -> msequent -> cache -> term attributes -> tactic_arg
+val create : sentinal -> string -> msequent -> raw_cache -> raw_attributes -> tactic_arg
+
+(*
+ * Sentinals are computed by naming the module and
+ * rule for the sentinal.
+ *)
+val sentinal_of_refiner : string -> sentinal
+val sentinal_of_refiner_object : string -> string -> sentinal
+
+(*
+ * Cache is also computed lazily.
+ *)
+val make_cache : (unit -> cache) -> raw_cache
+
+(*
+ * Start the main loop.
+ *)
+val main_loop : unit -> unit
 
 (*
  * Access to the argument.
@@ -71,7 +95,6 @@ val nth_hyp     : tactic_arg -> int -> string * term
 val nth_concl   : tactic_arg -> int -> term
 val cache       : tactic_arg -> cache
 val label       : tactic_arg -> string
-val attributes  : tactic_arg -> term attributes
 
 (*
  * Modification of the argument.
@@ -82,8 +105,22 @@ val set_concl   : tactic_arg -> term -> tactic_arg
 val set_label   : tactic_arg -> string -> tactic_arg
 
 (*
- * Attributes.
+ * Install new attributes.
  *)
+val term_attribute : string -> term -> raw_attribute
+val type_attribute : string -> term -> raw_attribute
+val int_attribute : string -> int -> raw_attribute
+val bool_attribute : string -> bool -> raw_attribute
+val subst_attribute : string -> term -> raw_attribute
+val tactic_attribute : string -> (unit -> tactic) -> raw_attribute
+val int_tactic_attribute : string -> (unit -> int -> tactic) -> raw_attribute
+val arg_tactic_attribute : string -> (unit -> tactic_arg -> tactic) -> raw_attribute
+val typeinf_attribute : string -> (unit -> unify_subst -> term -> unify_subst * term) -> raw_attribute
+
+(*
+ * Fetch attributes.
+ *)
+val attributes     : tactic_arg -> term attributes
 val get_term       : tactic_arg -> string -> term
 val get_type       : tactic_arg -> string -> term
 val get_int        : tactic_arg -> string -> int
@@ -117,7 +154,7 @@ val term_of_extract : Refine.refiner -> extract -> term list -> term
  * Lift refiner tactics into our tactic type.
  * These functions are required by the Filter_prog module.
  *)
-val compile_rule : refiner -> prim_tactic -> pre_tactic
+val compile_rule : build -> prim_tactic -> pre_tactic
 val tactic_of_rule : pre_tactic -> address array * string array -> term list -> tactic
 
 (*
@@ -155,6 +192,7 @@ val withTacticT : string -> tactic -> tactic -> tactic
  * Print timing information.
  *)
 val timingT : tactic -> tactic
+val finalT : (unit -> unit) -> tactic
 
 (*
  * -*-

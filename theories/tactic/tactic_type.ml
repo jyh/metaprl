@@ -20,10 +20,9 @@
 
 open Nl_debug
 open Printf
-open Getrusage
+open Thread_util
 
-open Simple_print
-
+open Opname
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
@@ -31,6 +30,8 @@ open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Refiner.Refiner.Refine
+
+open Theory
 
 (*
  * Show that the file is loading.
@@ -77,10 +78,7 @@ struct
    let compose ext extl = Compose (ext, extl)
 end
 
-(*
-module ThreadRefiner = Thread_refiner.MakeThreadRefiner (ThreadRefinerArg) (Remote_null.Remote)
-*)
-module ThreadRefiner = Thread_refiner_null.MakeThreadRefiner (ThreadRefinerArg)
+module ThreadRefiner = Thread_refiner.MakeThreadRefiner (ThreadRefinerArg)
 
 (*
  * Many tactics wish to examine their argument, so
@@ -92,12 +90,37 @@ type 'term attribute =
  | IntArg of int
  | BoolArg of bool
  | SubstArg of 'term
- | TacticArg of tactic
- | IntTacticArg of (int -> tactic)
- | ArgTacticArg of (tactic_arg -> tactic)  (* For tactics that precompile *)
- | TypeinfArg of (unify_subst -> 'term -> unify_subst * 'term)
 
 and 'a attributes = (string * 'a attribute) list
+
+(*
+ * The attribute calculations are delayed to minimize communication
+ * cost.  The tactic_arg uses keys to distribute the attributes.
+ * The values are stored in keys.
+ *)
+and shared_object =
+   ShareTactic of tactic
+ | ShareIntTactic of (int -> tactic)
+ | ShareArgTactic of (tactic_arg -> tactic)
+ | ShareTypeinf of (unify_subst -> term -> unify_subst * term)
+ | ShareSentinal of Refine.sentinal
+ | ShareCache of cache_info ref
+
+and shared_key = shared_object ThreadRefiner.key
+
+(*
+ * The raw attributes refer to the shared objects.
+ *)
+and raw_attribute_val =
+   RawTermArg of term
+ | RawTypeArg of term
+ | RawIntArg of int
+ | RawBoolArg of bool
+ | RawSubstArg of term
+ | RawObjectArg of shared_key
+
+and raw_attribute = string * raw_attribute_val
+and raw_attributes = raw_attribute list
 
 (*
  * Every goal has:
@@ -108,28 +131,34 @@ and 'a attributes = (string * 'a attribute) list
  *   ref_rsrc: the resources that are threaded through the refinement
  *
  *   To increase efficiency, the cache is computed lazily.
+ *
+ *   The sentinal is an index into a sentinal array.
  *)
 and tactic_arg =
    { ref_goal : msequent;
      ref_label : string;
-     ref_attributes : term attributes;
-     mutable ref_cache : cache_info;
-     ref_sentinal : sentinal
+     ref_attributes : raw_attributes;
+     mutable ref_cache : shared_key;
+     ref_sentinal : shared_key
    }
+
+and sentinal = shared_key
 
 (*
  * The cache is current, or it may be out-of-date.
+ * We also have NoCache for testing remote refinement.
  *)
 and cache_info =
    Current of cache
  | OutOfDate of cache
 
 (*
- * The cache is instantaited with tactic
+ * The cache is instantiated with tactic
  * justifications.  This may change at some
  * point.
  *)
 and cache        = tactic Tactic_cache.extract
+and raw_cache    = shared_key
 
 (*
  * A tactic_value is a list of subgoals, and a means for
@@ -158,15 +187,16 @@ let remote_server = ThreadRefiner.create print_tactic_arg
  * Cache is initially out-of-date.  It will be
  * set to the current goal when requested.
  *)
-let null_attributes = []
-
 let create sentinal label goal cache attributes =
    { ref_goal = goal;
      ref_label = label;
      ref_attributes = attributes;
-     ref_cache = OutOfDate cache;
+     ref_cache = cache;
      ref_sentinal = sentinal
    }
+
+let main_loop () =
+   ThreadRefiner.main_loop remote_server
 
 (*
  * Access to the sequent.
@@ -183,54 +213,8 @@ let nth_hyp { ref_goal = goal } i =
 let nth_concl { ref_goal = goal } i =
    TermMan.nth_concl (fst (dest_msequent goal)) i
 
-let cache arg =
-   match arg.ref_cache with
-      Current cache ->
-         cache
-    | OutOfDate cache ->
-         let cache = Tactic_cache.set_msequent cache arg.ref_goal in
-            arg.ref_cache <- Current cache;
-            cache
-
 let label { ref_label = label } =
    label
-
-let attributes { ref_attributes = attributes } =
-   attributes
-
-(*
-let normalize_attribute (_, arg) =
-   match arg with
-      TermArg t ->
-         normalize_term t
-    | TypeArg t ->
-         normalize_term t
-    | SubstArg t ->
-         normalize_term t
-    | _ ->
-         ()
-*)
-(*
- * Map a function over the terms in the attributes.
- *)
-let rec map_attributes f = function
-   [] ->
-      []
- | (name, arg) :: tl ->
-      let tl = map_attributes f tl in
-         match arg with
-            TermArg t ->
-               (name, TermArg (f t)) :: tl
-          | TypeArg t ->
-               (name, TypeArg (f t)) :: tl
-          | IntArg i ->
-               (name, IntArg i) :: tl
-          | BoolArg b ->
-               (name, BoolArg b) :: tl
-          | SubstArg t ->
-               (name, SubstArg (f t)) :: tl
-          | _ ->
-               tl
 
 (*
  * Modify the argument.
@@ -280,12 +264,184 @@ let set_label arg label =
         ref_sentinal = sentinal
       }
 
+(************************************************************************
+ * SENTINAL                                                             *
+ ************************************************************************)
+
 (*
- * Attributes.
+ * Sentinal function is lazy.
+ *)
+let get_theory name =
+   let rec search = function
+      thy :: t ->
+         if thy.thy_name = name then
+            thy
+         else
+            search t
+    | [] ->
+         raise (RefineError ("get_theory", StringStringError ("theory is not found", name)))
+   in
+      search (get_theories ())
+
+let sentinal_of_refiner mod_name =
+   let lazy () =
+      let refiner = (get_theory mod_name).thy_refiner in
+         ShareSentinal (Refine.sentinal_of_refiner refiner)
+   in
+      ThreadRefiner.share remote_server "sentinal" lazy
+
+let sentinal_of_refiner_object mod_name name =
+   let lazy () =
+      let refiner = (get_theory mod_name).thy_refiner in
+      let opname = make_opname [name; mod_name] in
+      let refiner =
+         try snd (dest_refiner (find_refiner refiner opname)) with
+            Not_found ->
+               eprintf "Warning: using default refiner for %s%t" name eflush;
+               refiner
+      in
+         ShareSentinal (Refine.sentinal_of_refiner refiner)
+   in
+      ThreadRefiner.share remote_server "sentinal_object" lazy
+
+let get_sentinal key =
+   match ThreadRefiner.arg_of_key remote_server key with
+      ShareSentinal sent ->
+         sent
+    | _ ->
+         raise (Failure "Thread_refiner.get_sentinal")
+
+(************************************************************************
+ * CACHE                                                                *
+ ************************************************************************)
+
+(*
+ * Cache function is lazy.
+ *)
+let make_cache f =
+   ThreadRefiner.share remote_server "cache" (fun () -> ShareCache (ref (OutOfDate (f ()))))
+
+(*
+ * Caching.
+ *)
+let cache arg =
+   match ThreadRefiner.arg_of_key remote_server arg.ref_cache with
+      ShareCache cache ->
+         begin
+            match !cache with
+               Current cache ->
+                  cache
+             | OutOfDate cache' ->
+                  let cache' = Tactic_cache.set_msequent cache' arg.ref_goal in
+                     cache := Current cache';
+                     cache'
+         end
+    | _ ->
+         raise (Failure "Tactic_type.cache")
+
+let out_of_date key =
+   match ThreadRefiner.arg_of_key remote_server key with
+      ShareCache cache ->
+         begin
+            match !cache with
+               Current cache' ->
+                  cache := OutOfDate cache'
+             | OutOfDate _ ->
+                  ()
+         end;
+         key
+    | _ ->
+         raise (Failure "Tactic_type.out_of_date")
+
+(************************************************************************
+ * ATTRIBUTES                                                           *
+ ************************************************************************)
+
+(*
+ * Lazy attribute generation.
+ *)
+let term_attribute name t =
+   name, RawTermArg t
+
+let type_attribute name t =
+   name, RawTypeArg t
+
+let int_attribute name i =
+   name, RawIntArg i
+
+let bool_attribute name b =
+   name, RawBoolArg b
+
+let subst_attribute name t =
+   name, RawSubstArg t
+
+let tactic_attribute name f =
+   name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareTactic (f ())))
+
+let int_tactic_attribute name f =
+   name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareIntTactic (f ())))
+
+let arg_tactic_attribute name f =
+   name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareArgTactic (f ())))
+
+let typeinf_attribute name f =
+   name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareTypeinf (f ())))
+
+(*
+ * Collect all the simple attributes.
+ *)
+let attributes { ref_attributes = attributes } =
+   let rec collect = function
+      (name, hd) :: tl ->
+         begin
+            let tl = collect tl in
+               match hd with
+                  RawTermArg t ->
+                     (name, TermArg t) :: tl
+                | RawTypeArg t ->
+                     (name, TypeArg t) :: tl
+                | RawIntArg i ->
+                     (name, IntArg i) :: tl
+                | RawBoolArg b ->
+                     (name, BoolArg b) :: tl
+                | RawSubstArg t ->
+                     (name, SubstArg t) :: tl
+                | RawObjectArg _ ->
+                     tl
+         end
+    | [] ->
+         []
+   in
+      collect attributes
+
+(*
+ * Map a function over the terms in the attributes.
+ *)
+let rec map_attributes f = function
+   [] ->
+      []
+ | (name, arg) :: tl ->
+      let hd =
+         match arg with
+            TermArg t ->
+               (name, TermArg (f t))
+          | TypeArg t ->
+               (name, TypeArg (f t))
+          | IntArg i ->
+               (name, IntArg i)
+          | BoolArg b ->
+               (name, BoolArg b)
+          | SubstArg t ->
+               (name, SubstArg (f t))
+      in
+         hd :: map_attributes f tl
+
+(*
+ * Fetch the attributes.
  *)
 let get_term { ref_attributes = attributes } name =
    let rec search = function
-      (name', TermArg t) :: tl ->
+      (name', RawTermArg t) :: tl ->
          if name' = name then
             t
          else
@@ -299,7 +455,7 @@ let get_term { ref_attributes = attributes } name =
 
 let get_type { ref_attributes = attributes } name =
    let rec search = function
-      (name', TypeArg t) :: tl ->
+      (name', RawTypeArg t) :: tl ->
          if name' = name then
             t
          else
@@ -313,7 +469,7 @@ let get_type { ref_attributes = attributes } name =
 
 let get_int { ref_attributes = attributes } name =
    let rec search = function
-      (name', IntArg t) :: tl ->
+      (name', RawIntArg t) :: tl ->
          if name' = name then
             t
          else
@@ -327,7 +483,7 @@ let get_int { ref_attributes = attributes } name =
 
 let get_bool { ref_attributes = attributes } name =
    let rec search = function
-      (name', BoolArg t) :: tl ->
+      (name', RawBoolArg t) :: tl ->
          if name' = name then
             t
          else
@@ -341,9 +497,13 @@ let get_bool { ref_attributes = attributes } name =
 
 let get_tactic { ref_attributes = attributes } name =
    let rec search = function
-      (name', TacticArg t) :: tl ->
+      (name', RawObjectArg key) :: tl ->
          if name' = name then
-            t
+            match ThreadRefiner.arg_of_key remote_server key with
+               ShareTactic tac ->
+                  tac
+             | _ ->
+                  search tl
          else
             search tl
     | _ :: tl ->
@@ -355,9 +515,13 @@ let get_tactic { ref_attributes = attributes } name =
 
 let get_int_tactic { ref_attributes = attributes } name =
    let rec search = function
-      (name', IntTacticArg t) :: tl ->
+      (name', RawObjectArg key) :: tl ->
          if name' = name then
-            t
+            match ThreadRefiner.arg_of_key remote_server key with
+               ShareIntTactic tac ->
+                  tac
+             | _ ->
+                  search tl
          else
             search tl
     | (name', _) :: tl ->
@@ -369,9 +533,13 @@ let get_int_tactic { ref_attributes = attributes } name =
 
 let get_arg_tactic { ref_attributes = attributes } name =
    let rec search = function
-      (name', ArgTacticArg t) :: tl ->
+      (name', RawObjectArg key) :: tl ->
          if name' = name then
-            t
+            match ThreadRefiner.arg_of_key remote_server key with
+               ShareArgTactic tac ->
+                  tac
+             | _ ->
+                  search tl
          else
             search tl
     | (name', _) :: tl ->
@@ -383,9 +551,13 @@ let get_arg_tactic { ref_attributes = attributes } name =
 
 let get_typeinf { ref_attributes = attributes } name =
    let rec search = function
-      (name', TypeinfArg t) :: tl ->
+      (name', RawObjectArg key) :: tl ->
          if name' = name then
-            t
+            match ThreadRefiner.arg_of_key remote_server key with
+               ShareTypeinf t ->
+                  t
+             | _ ->
+                  search tl
          else
             search tl
     | _ :: tl ->
@@ -397,7 +569,7 @@ let get_typeinf { ref_attributes = attributes } name =
 
 let get_subst { ref_attributes = attributes } =
    let rec search = function
-      (name, SubstArg t) :: tl ->
+      (name, RawSubstArg t) :: tl ->
          (name, t) :: search tl
     | _ :: tl ->
          search tl
@@ -419,37 +591,19 @@ let tactic_arg_alpha_equal { ref_goal = goal1 } { ref_goal = goal2 } =
 
 (*
  * The refiner just applies the tactic to the arg.
+ * We keep a list of values
  *)
-let show_times = ref false
+let refine_final_list = ref []
+
+let add_final_hook f =
+   refine_final_list := f :: !refine_final_list
 
 let refine tac arg =
-   let start = Unix.times () in
-   let start_time = Unix.gettimeofday () in
-   let x =
-      show_times := false;
-      ThreadRefiner.eval remote_server (tac arg)
-   in
-   let finish = Unix.times () in
-   let finish_time = Unix.gettimeofday () in
-      if !show_times then
-         eprintf "User time %f; System time %f; Real time %f%t" (**)
-            ((finish.Unix.tms_utime +. finish.Unix.tms_cutime)
-             -. (start.Unix.tms_utime +. start.Unix.tms_cstime))
-            ((finish.Unix.tms_stime +. finish.Unix.tms_cstime)
-             -. (start.Unix.tms_stime +. finish.Unix.tms_cstime))
-            (finish_time -. start_time)
-            eflush;
-      if !debug_tactic then
-         eprintf "Refinement done%t" eflush;
+   refine_final_list := [];
+   let x = ThreadRefiner.eval remote_server (tac arg) in
+      List_util.rev_iter (fun f -> f ()) !refine_final_list;
+      refine_final_list := [];
       x
-
-(*
- * Time the tactic.
- * This shows the time for the entire refinement.
- *)
-let timingT tac arg =
-   show_times := true;
-   tac arg
 
 (*
  * Eventually, we may want to look at the rule and do something
@@ -468,19 +622,12 @@ let make_subgoal
       ref_cache = cache;
       ref_sentinal = sentinal
     } goal =
-   let cache =
-      match cache with
-         Current cache ->
-            OutOfDate cache
-       | cache ->
-            cache
-   in
-      { ref_goal = goal;
-        ref_label = label;
-        ref_attributes = attributes;
-        ref_cache = cache;
-        ref_sentinal = sentinal
-      }
+   { ref_goal = goal;
+     ref_label = label;
+     ref_attributes = attributes;
+     ref_cache = out_of_date cache;
+     ref_sentinal = sentinal
+   }
 
 (*
  * Construct polymorphic tactic.
@@ -496,7 +643,7 @@ let tactic_of_rule rule (addrs, names) params arg =
       if !debug_tactic then
          eprintf "Starting refinement%t" eflush
    in
-   let subgoals, ext = Refine.refine sentinal rule goal in
+   let subgoals, ext = Refine.refine (get_sentinal sentinal) rule goal in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
       ThreadRefiner.create_value (List.map (make_subgoal arg) subgoals) (Extract (ext, List.length subgoals))
@@ -510,7 +657,7 @@ let tactic_of_refine_tactic rule arg =
          eprintf "Starting refinement%t" eflush
    in
    let { ref_goal = goal; ref_sentinal = sentinal } = arg in
-   let subgoals, ext = Refine.refine sentinal rule goal in
+   let subgoals, ext = Refine.refine (get_sentinal sentinal) rule goal in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
       List.map (make_subgoal arg) subgoals, Extract (ext, List.length subgoals)
@@ -530,20 +677,13 @@ let tactic_of_rewrite rw arg =
          ref_sentinal = sentinal
        } = arg
    in
-      match Refine.refine sentinal rule goal with
+      match Refine.refine (get_sentinal sentinal) rule goal with
          [subgoal], ext ->
-            let cache =
-               match cache with
-                  Current cache ->
-                     OutOfDate cache
-                | cache ->
-                     cache
-            in
             let subgoal =
                { ref_goal = subgoal;
                  ref_label = label;
                  ref_attributes = attributes;
-                 ref_cache = cache;
+                 ref_cache = out_of_date cache;
                  ref_sentinal = sentinal
                }
             in
@@ -566,19 +706,12 @@ let tactic_of_cond_rewrite crw arg =
          ref_sentinal = sentinal
        } = arg
    in
-   let subgoals, ext = Refine.refine sentinal rule goal in
-   let cache =
-      match cache with
-         Current cache ->
-            OutOfDate cache
-       | cache ->
-            cache
-   in
+   let subgoals, ext = Refine.refine (get_sentinal sentinal) rule goal in
    let make_subgoal goal =
       { ref_goal = goal;
         ref_label = label;
         ref_attributes = attributes;
-        ref_cache = cache;
+        ref_cache = out_of_date cache;
         ref_sentinal = sentinal
       }
    in
@@ -648,10 +781,10 @@ let nthAssumT i p =
             let goal, hyps = dest_msequent seq in
                eprintf "Tactic_type.nthAssumT:\nHyp: %d%t" i eflush;
                List.iter (fun hyp ->
-                     SimplePrint.prerr_simple_term hyp;
+                     print_term stderr hyp;
                      eflush stderr) hyps;
                eprintf "\nGoal: ";
-               SimplePrint.prerr_simple_term goal;
+               print_term stderr goal;
                eflush stderr
          end;
       let subgoals, ext = tactic_of_refine_tactic (Refine.nth_hyp i) p in
@@ -740,19 +873,19 @@ let withT attribute tac p =
       (make_goal thenT tac thenT make_subgoal) p
 
 let withTermT name t =
-   withT (name, TermArg t)
+   withT (name, RawTermArg t)
 
 let withTypeT name t =
-   withT (name, TypeArg t)
+   withT (name, RawTypeArg t)
 
 let withIntT name i =
-   withT (name, IntArg i)
+   withT (name, RawIntArg i)
 
 let withBoolT name flag =
-   withT (name, BoolArg flag)
+   withT (name, RawBoolArg flag)
 
 let withTacticT name tac =
-   withT (name, TacticArg tac)
+   raise (RefineError ("withTacticT", StringError "not implemented"))
 
 (*
  * Add some substitutions.
@@ -767,7 +900,7 @@ let withSubstT subst tac arg =
    in
    let rec make_subst = function
       (name, t) :: tl ->
-         (name, SubstArg t) :: (make_subst tl)
+         (name, RawSubstArg t) :: (make_subst tl)
     | [] ->
          attributes
    in
@@ -795,6 +928,31 @@ let withSubstT subst tac arg =
    in
    let subgoals, ext = refine tac arg in
       ThreadRefiner.create_value (List.map make_subgoal subgoals) ext
+
+(*
+ * Time the tactic.
+ * This shows the time between now and the end of refinement.
+ *)
+let finalT f p =
+   add_final_hook f;
+   idT p
+
+let timingT tac p =
+   let start = Unix.times () in
+   let start_time = Unix.gettimeofday () in
+   let finalize () =
+      let finish = Unix.times () in
+      let finish_time = Unix.gettimeofday () in
+         eprintf "User time %f; System time %f; Real time %f%t" (**)
+            ((finish.Unix.tms_utime +. finish.Unix.tms_cutime)
+             -. (start.Unix.tms_utime +. start.Unix.tms_cstime))
+            ((finish.Unix.tms_stime +. finish.Unix.tms_cstime)
+             -. (start.Unix.tms_stime +. finish.Unix.tms_cstime))
+            (finish_time -. start_time)
+            eflush
+   in
+      add_final_hook finalize;
+      tac p
 
 (*
  * -*-

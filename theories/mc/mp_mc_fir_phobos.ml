@@ -90,7 +90,11 @@ let applyIFormsC iform_rewrites =
 
       ) iform_rewrites
    in
-      (repeatC (higherC (applyAllC (patterns))))
+   match patterns with
+      [] ->
+         idC
+    | _ ->
+         (repeatC (higherC (applyAllC (patterns))))
 
 let applyMetaBaseC =
    (repeatC (higherC (applyAllC [

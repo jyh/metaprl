@@ -18,17 +18,17 @@ open Refiner.Refiner.Refine
  * proof tree.  We expose them so they can be
  * marshaled.
  *)
-type attribute =
-   TermArg of term
- | TypeArg of term
+type 'term attribute =
+   TermArg of 'term
+ | TypeArg of 'term
  | IntArg of int
  | BoolArg of bool
- | SubstArg of term
+ | SubstArg of 'term
  | TacticArg of tactic
  | IntTacticArg of (int -> tactic)
- | TypeinfArg of (term_subst -> term -> term_subst * term)
+ | TypeinfArg of ((string * 'term) list -> 'term -> (string * 'term) list * 'term)
 
-and attributes = (string * attribute) list
+and 'a attributes = (string * 'a attribute) list
 
 (*
  * Here are all the different type of tactics.
@@ -59,7 +59,7 @@ and cache = tactic Tactic_cache.extract
 (*
  * Build an initial argument for a proof.
  *)
-val create : sentinal -> string -> msequent -> cache -> attributes -> tactic_arg
+val create : sentinal -> string -> msequent -> cache -> term attributes -> tactic_arg
 
 (*
  * Access to the argument.
@@ -70,7 +70,7 @@ val nth_hyp     : tactic_arg -> int -> string * term
 val nth_concl   : tactic_arg -> int -> term
 val cache       : tactic_arg -> cache
 val label       : tactic_arg -> string
-val attributes  : tactic_arg -> attributes
+val attributes  : tactic_arg -> term attributes
 
 (*
  * Modification of the argument.
@@ -91,6 +91,11 @@ val get_subst      : tactic_arg -> term_subst
 val get_tactic     : tactic_arg -> string -> tactic
 val get_int_tactic : tactic_arg -> string -> (int -> tactic)
 val get_typeinf    : tactic_arg -> string -> (term_subst -> term -> term_subst * term)
+
+(*
+ * Map a function over the terms in an attribute list.
+ *)
+val map_attributes : ('a -> 'b) -> 'a attributes -> 'b attributes
 
 (*
  * Two tactic_arguments are equal when they have
@@ -151,6 +156,9 @@ val timingT : tactic -> tactic
 
 (*
  * $Log$
+ * Revision 1.7  1998/07/03 22:06:15  jyh
+ * IO terms are now in term_std format.
+ *
  * Revision 1.6  1998/07/02 22:25:35  jyh
  * Created term_copy module to copy and normalize terms.
  *

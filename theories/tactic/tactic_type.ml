@@ -49,17 +49,17 @@ let debug_refine = load_debug "refine"
  * Many tactics wish to examine their argument, so
  * the real type of tactic includes an argument.
  *)
-type attribute =
-   TermArg of term
- | TypeArg of term
+type 'term attribute =
+   TermArg of 'term
+ | TypeArg of 'term
  | IntArg of int
  | BoolArg of bool
- | SubstArg of term
+ | SubstArg of 'term
  | TacticArg of tactic
  | IntTacticArg of (int -> tactic)
- | TypeinfArg of (term_subst -> term -> term_subst * term)
+ | TypeinfArg of ((string * 'term) list -> 'term -> (string * 'term) list * 'term)
 
-and attributes = (string * attribute) list
+and 'a attributes = (string * 'a attribute) list
 
 (*
  * Every goal has:
@@ -74,7 +74,7 @@ and attributes = (string * attribute) list
 and tactic_arg =
    { ref_goal : msequent;
      ref_label : string;
-     ref_attributes : attributes;
+     ref_attributes : term attributes;
      mutable ref_cache : cache_info;
      ref_sentinal : sentinal
    }
@@ -174,6 +174,27 @@ let normalize_attribute (_, arg) =
     | _ ->
          ()
 *)
+(*
+ * Map a function over the terms in the attributes.
+ *)
+let rec map_attributes f = function
+   [] ->
+      []
+ | (name, arg) :: tl ->
+      let tl = map_attributes f tl in
+         match arg with
+            TermArg t ->
+               (name, TermArg (f t)) :: tl
+          | TypeArg t ->
+               (name, TypeArg (f t)) :: tl
+          | IntArg i ->
+               (name, IntArg i) :: tl
+          | BoolArg b ->
+               (name, BoolArg b) :: tl
+          | SubstArg t ->
+               (name, SubstArg (f t)) :: tl
+          | _ ->
+               tl
 
 (*
  * Modify the argument.
@@ -942,6 +963,9 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.12  1998/07/03 22:06:14  jyh
+ * IO terms are now in term_std format.
+ *
  * Revision 1.11  1998/07/02 22:25:34  jyh
  * Created term_copy module to copy and normalize terms.
  *

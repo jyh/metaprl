@@ -14,12 +14,12 @@ type extract = Tactic_type.extract
 type tactic_arg = Tactic_type.tactic_arg
 type tactic_value = Tactic_type.tactic_value
 type cache = Tactic_type.cache
-type attributes = Tactic_type.attributes
+type 'a attributes = 'a Tactic_type.attributes
 
 (*
  * Build an initial argument for a proof.
  *)
-val create : sentinal -> string -> msequent -> cache -> attributes -> tactic_arg
+val create : sentinal -> string -> msequent -> cache -> term attributes -> tactic_arg
 
 (*
  * Two tactic_arguments are equal when they have
@@ -45,7 +45,7 @@ val concl : tactic_arg -> term
 val nth_hyp : tactic_arg -> int -> string * term
 val cache : tactic_arg -> cache
 val label : tactic_arg -> string
-val attributes : tactic_arg -> attributes
+val attributes : tactic_arg -> term attributes
 
 (*
  * Get info about the sequent.
@@ -76,6 +76,9 @@ val get_typeinf_arg    : tactic_arg -> string -> (term_subst -> term -> term_sub
 
 (*
  * $Log$
+ * Revision 1.7  1998/07/03 22:06:13  jyh
+ * IO terms are now in term_std format.
+ *
  * Revision 1.6  1998/07/02 22:25:32  jyh
  * Created term_copy module to copy and normalize terms.
  *

@@ -22,7 +22,7 @@ type extract = Tactic_type.extract
 type tactic_arg = Tactic_type.tactic_arg
 type tactic_value = Tactic_type.tactic_value
 type cache = Tactic_type.cache
-type attributes = Tactic_type.attributes
+type 'a attributes = 'a Tactic_type.attributes
 
 (*
  * Construction.
@@ -106,6 +106,9 @@ let get_typeinf_arg    = Tactic_type.get_typeinf
 
 (*
  * $Log$
+ * Revision 1.10  1998/07/03 22:06:11  jyh
+ * IO terms are now in term_std format.
+ *
  * Revision 1.9  1998/07/02 22:25:30  jyh
  * Created term_copy module to copy and normalize terms.
  *

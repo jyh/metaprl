@@ -87,6 +87,7 @@ declare "inherit_df"
 declare "prec_df"[name:s]
 declare "parens_df"
 declare "mode_df"[mode:s]
+declare "except_mode_df"[mode:s]
 
 declare "df_none"
 declare "df_term"{'t}
@@ -238,11 +239,17 @@ dform resource_defs_dfs : internal :: resource_defs[start:n, finish:n, name:s]{'
 (*
  * A conditional rewrite requires special handling of the params.
  *)
-dform context_param_df : "context_param"[name:s] =
+dform context_param_df : except_mode[src] :: "context_param"[name:s] =
    slot[name:s]
 
-dform var_param_df : "var_param"[name:s] =
+dform context_param_df2 : mode[src] :: "context_param"[name:s] =
+   `"'" slot[name:s]
+
+dform var_param_df : except_mode[src] :: "var_param"[name:s] =
    slot[name:s]
+
+dform var_param_df2 : mode[src] :: "var_param"[name:s] =
+   `"'" slot[name:s]
 
 dform term_param_df : "term_param"{'t} =
    szone pushm[4]
@@ -394,6 +401,9 @@ dform meta_labeled_df : meta_labeled[label:s]{'A} =
 
 dform mode_df : mode_df[s:s] =
    keyword["mode["] slot[s:s] keyword["]"]
+
+dform except_mode_df : except_mode_df[s:s] =
+   keyword["except_mode["] slot[s:s] keyword["]"]
 
 dform prec_df : prec_df[s:s] =
    keyword["prec["] slot[s:s] keyword["]"]

@@ -92,16 +92,16 @@ prim_rw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 prec prec_inl
 prec prec_union
 
-dform union_df : parens :: "prec"[prec_union] :: union{'A; 'B} =
+dform union_df : except_mode[src] :: parens :: "prec"[prec_union] :: union{'A; 'B} =
    slot{'A} " " `"+" " " slot{'B}
 
-dform inl_df : parens :: "prec"[prec_inl] :: inl{'a} =
+dform inl_df : except_mode[src] :: parens :: "prec"[prec_inl] :: inl{'a} =
    `"inl" " " slot{'a}
 
-dform inr_df : parens :: "prec"[prec_inl] :: inr{'a} =
+dform inr_df : except_mode[src] :: parens :: "prec"[prec_inl] :: inr{'a} =
    `"inr" " " slot{'a}
 
-dform decide_df : decide{'x; y. 'a; z. 'b} =
+dform decide_df : except_mode[src] :: decide{'x; y. 'a; z. 'b} =
    szone pushm[0] pushm[3] `"match" " " slot{'x} " " `"with" hspace
    `"inl " slot{'y} `" -> " slot{'a} popm hspace
    pushm[3] `" | inr " slot{'z} `" -> " slot{'b} popm popm ezone

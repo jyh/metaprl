@@ -997,37 +997,36 @@ interactive singlenton_if  'H univ[l:l] :
 (********************** dforms **********************)
 
 
-dform col_df : Col[l:l]{'T} =`"Collection[" slot[l:l] `"](" slot{'T} `")"
-dform col_df : Col{'T} =`"Collection(" slot{'T} `")"
+dform col_df : except_mode[src] :: Col[l:l]{'T} =`"Collection[" slot[l:l] `"](" slot{'T} `")"
+dform col_df : except_mode[src] :: Col{'T} =`"Collection(" slot{'T} `")"
 
-dform col_member_df : Col_member[l:l]{'T;'C;'x} = ('x IN 'C) `" in " Col[l:l]{'T}
+dform col_member_df : except_mode[src] :: Col_member[l:l]{'T;'C;'x} = ('x IN 'C) `" in " Col[l:l]{'T}
 
-dform col_equal_df : col_equal{'T;'c_1;'c_2} = equal{col{'T};'c_1;'c_2}
+dform col_equal_df : except_mode[src] :: col_equal{'T;'c_1;'c_2} = equal{col{'T};'c_1;'c_2}
 
 
-dform type_col_df : type_col{'T} = downarrow slot{'T}
-dform col_type_df : col_type{'C;'T} = uparrow slot{'C}
+dform type_col_df : except_mode[src] :: type_col{'T} = downarrow slot{'T}
+dform col_type_df : except_mode[src] :: col_type{'C;'T} = uparrow slot{'C}
 
-dform singlenton_df :  singlenton{'x} = `"<" slot{'x} `">"
+dform singlenton_df : except_mode[src] :: singlenton{'x} = `"<" slot{'x} `">"
 
-dform union_df : mode[prl] :: parens :: "prec"[prec_tunion] :: union{'X; x. 'Y} =
+dform union_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: union{'X; x. 'Y} =
    cup slot{'x} Nuprl_font!member slot{'X} `"." slot{'Y}
 
-dform col_union_df : mode[prl] :: parens :: "prec"[prec_tunion] :: col_union{'X; x. 'C} =
+dform col_union_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: col_union{'X; x. 'C} =
    cup slot{'x} `":" slot{'X} `"." slot{'C}
 
-dform map_df : map{'C; x.'f} =
+dform map_df : except_mode[src] :: map{'C; x.'f} =
       pushm[3] `"< " slot{'f} `" | " bvar{'x} `":" slot{'C} `">" popm
 
-dform col_filter_df : col_filter{'C; x.'P} =
+dform col_filter_df : except_mode[src] :: col_filter{'C; x.'P} =
       pushm[3] `"< " bvar{'x} `":" slot{'C} `" | " slot{'P} `">" popm
 
-dform isect_df : mode[prl] :: parens :: "prec"[prec_tunion] :: "isect"{'S; s. 'C;'T} =
+dform isect_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: "isect"{'S; s. 'C;'T} =
    cap slot{'s} `":" slot{'S} `"." slot{'C}
 
-dform none_df : none = `"<>"
+dform none_df : except_mode[src] :: none = `"<>"
 
-dform add_df :  mode[prl] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
+dform add_df : except_mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot["le"]{'a} `" + " slot["lt"]{'b}
-
 

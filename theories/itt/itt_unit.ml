@@ -82,7 +82,7 @@ let is_unit_term = is_no_subterms_term unit_opname
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform unit_df1 : unit = `"Unit"
+dform unit_df1 : except_mode[src] :: unit = `"Unit"
 
 (************************************************************************
  * RULES                                                                *

@@ -50,10 +50,10 @@ declare esquash{'P}
 
 prec prec_esquash
 
-dform esquash_bool : esquash_bool{'P} =
+dform esquash_bool : except_mode[src] :: esquash_bool{'P} =
    `"esquash_bool(" slot{'P} `")"
 
-dform esquash_df : parens :: "prec"[prec_esquash] :: esquash{'P} =
+dform esquash_df : parens :: "prec"[prec_esquash] :: except_mode[src] :: esquash{'P} =
    Nuprl_font!downarrow slot{'P}
 
 (*

@@ -124,31 +124,31 @@ let fold_sort = makeFoldC << sort{'l; 'lt} >> unfold_sort
 (*
  * Type for partial order.
  *)
-dform partial_order_df : partial_order{'A; 'lt} =
+dform partial_order_df : except_mode[src] :: partial_order{'A; 'lt} =
    `"PartialOrder(" slot{'lt} " " Nuprl_font!member " " slot{'A} `")"
 
-dform compare_lt_df : compare_lt{'lt; 'a; 'b} =
+dform compare_lt_df : except_mode[src] :: compare_lt{'lt; 'a; 'b} =
    `"(" slot{'a} " " `"<[" slot{'lt} `"] " slot{'b} `")"
 
 (*
  * Definition of being sorted.
  *)
-dform sorted_df : sorted{'l; 'lt} =
+dform sorted_df : except_mode[src] :: sorted{'l; 'lt} =
    `"Sorted[" slot{'lt} `"](" slot{'l} `")"
 
-dform bounded_df : bounded{'u; 'l; 'lt} =
+dform bounded_df : except_mode[src] :: bounded{'u; 'l; 'lt} =
    `"(" slot{'u} " " Nuprl_font!le `"[" slot{'lt} `"] " slot{'l} `")"
 
 (*
  * Sorting algorithm.
  *)
-dform insert_df : insert{'u; 'l; 'lt} =
+dform insert_df : except_mode[src] :: insert{'u; 'l; 'lt} =
    (keyword["insert"] 'u 'l 'lt)
 
-dform sort_df : sort{'l; 'lt} =
+dform sort_df : except_mode[src] :: sort{'l; 'lt} =
    (keyword["sort"] 'l 'lt)
 
-dform list_ind_df : parens :: "prec"[prec_list] :: list_ind{'l; 'base; u, v, g. 'step['g]} =
+dform list_ind_df : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind{'l; 'base; u, v, g. 'step['g]} =
    szone pushm[0] pushm[1] `"let rec " slot{'g} `" = function" hbreak["",""]
    pushm[5] `"  " cons{'u; 'v} `" ->" hspace slot{'step[('g 'v)]} popm hspace
    pushm[5] `"| [] ->" hspace slot{'base} popm popm hspace

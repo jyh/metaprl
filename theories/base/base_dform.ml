@@ -155,10 +155,8 @@ ml_dform bvar_df : bvar{var[v:v]} format_term buf = fun
 (*
  * Rewriting.
  *)
-dform rewrite_df : mode["src"] :: "rewrite"{'redex; 'contractum} =
-   slot{'redex} `"<-->" slot{'contractum}
 
-dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
+dform rewrite_df2 : "rewrite"{'redex; 'contractum} =
    szone pushm[3] slot{'redex} " " longleftrightarrow " " slot{'contractum} popm ezone
 
 (*
@@ -189,7 +187,7 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
                Hypothesis (v, a) ->
                   format_space buf;
                   format_string buf v;
-                  format_string buf ". ";
+                  format_string buf ": ";
                   format_term buf NOParens a
              | Context (v, values) ->
                   format_space buf;

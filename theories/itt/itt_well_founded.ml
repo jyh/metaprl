@@ -45,10 +45,10 @@ declare well_founded[i:l]{'A; x, y. 'R['x; 'y]}
  * DISPLAY                                                              *
  ************************************************************************)
 
-dform partial_order_df : partial_order{'A; x, y. 'R} =
+dform partial_order_df : except_mode[src] :: partial_order{'A; x, y. 'R} =
    szone `"partial_order(" pushm[3] slot{'x} `"," slot{'y} `":" slot{'A} `"." hspace slot{'R} `")" popm ezone
 
-dform well_founded_df : well_founded[i:l]{'A; x, y. 'R} =
+dform well_founded_df : except_mode[src] :: well_founded[i:l]{'A; x, y. 'R} =
    szone `"well_founded[" slot[i:l] `"](" pushm[3] slot{'x} `"," slot{'y} `":" slot{'A} `"." hspace slot{'R} `")" popm ezone
 
 (************************************************************************

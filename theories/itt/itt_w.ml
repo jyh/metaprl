@@ -91,13 +91,13 @@ prim_rw reduce_tree_ind :
 prec prec_w
 prec prec_tree_ind
 
-dform w_df : parens :: "prec"[prec_w] :: w{'A; x. 'B} =
+dform w_df : except_mode[src] :: parens :: "prec"[prec_w] :: w{'A; x. 'B} =
    mathbbW slot{'x} `":" slot{'A} `"." slot{'B}
 
-dform tree_df : tree{'a; 'f} =
+dform tree_df : except_mode[src] :: tree{'a; 'f} =
    `"tree(" slot{'a} `"," " " slot{'f} `")"
 
-dform tree_ind_df : parens :: "prec"[prec_tree_ind] :: tree_ind{'z; a, f, g. 'body} =
+dform tree_ind_df : except_mode[src] :: parens :: "prec"[prec_tree_ind] :: tree_ind{'z; a, f, g. 'body} =
    szone pushm[3] `"tree_ind(" slot{'g} `"." " "
    pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" space slot{'z} space `"in" popm space
    slot{'body} popm ezone

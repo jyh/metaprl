@@ -77,18 +77,18 @@ prec prec_append
 prec prec_ball
 prec prec_assoc
 
-dform is_nil_df : parens :: "prec"[prec_equal] :: is_nil{'l} =
+dform is_nil_df : except_mode[src] :: parens :: "prec"[prec_equal] :: is_nil{'l} =
    slot{'l} `" =" subb `" []"
 
-dform append_df : parens :: "prec"[prec_append] :: append{'l1; 'l2} =
+dform append_df : except_mode[src] :: parens :: "prec"[prec_append] :: append{'l1; 'l2} =
    slot{'l1} `" @" space slot{'l2}
 
-dform ball2_df : parens :: "prec"[prec_ball] :: ball2{'l1; 'l2; x, y. 'b} =
+dform ball2_df : except_mode[src] :: parens :: "prec"[prec_ball] :: ball2{'l1; 'l2; x, y. 'b} =
    pushm[3] Nuprl_font!forall subb slot{'x} `", " slot{'y} space
       Nuprl_font!member space slot{'l1} `", " slot{'l2} sbreak["",". "]
       slot{'b} popm
 
-dform assoc_df : parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l; v. 'b; 'z} =
+dform assoc_df : except_mode[src] :: parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l; v. 'b; 'z} =
    szone pushm[0] pushm[3]
    `"try" hspace
       pushm[3]
@@ -98,7 +98,7 @@ dform assoc_df : parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l; v. 'b; 'z} =
    pushm[3] `"with Not_found ->" hspace
    slot{'z} popm popm ezone
 
-dform rev_assoc_df : parens :: "prec"[prec_assoc] :: rev_assoc{'eq; 'x; 'l; v. 'b; 'z} =
+dform rev_assoc_df : except_mode[src] :: parens :: "prec"[prec_assoc] :: rev_assoc{'eq; 'x; 'l; v. 'b; 'z} =
    szone pushm[0] pushm[3]
    `"try" hspace
       pushm[3]
@@ -108,19 +108,19 @@ dform rev_assoc_df : parens :: "prec"[prec_assoc] :: rev_assoc{'eq; 'x; 'l; v. '
    pushm[3] `"with Not_found ->" hspace
    slot{'z} popm popm ezone
 
-dform map_df : parens :: "prec"[prec_apply] :: map{'f; 'l} =
+dform map_df : except_mode[src] :: parens :: "prec"[prec_apply] :: map{'f; 'l} =
    `"map" space slot{'f} space slot{'l}
 
-dform fold_left_df : fold_left{'f; 'v; 'l} =
+dform fold_left_df : except_mode[src] :: fold_left{'f; 'v; 'l} =
    `"fold_left(" slot{'f} `", " slot{'v} `", " slot{'l} `")"
 
-dform length_df : length{'l} =
+dform length_df : except_mode[src] :: length{'l} =
    `"length(" slot{'l} `")"
 
-dform nth_df : nth{'l; 'i} =
+dform nth_df : except_mode[src] :: nth{'l; 'i} =
    `"nth(" slot{'l} `", " slot{'i} `")"
 
-dform replace_nth_df : replace_nth{'l; 'i; 'v} =
+dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
    szone `"replace_nth(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
 
 (************************************************************************
@@ -311,24 +311,24 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 
 (* We need a proper implementation of rewrites in order to do this.
 
-interactive_rw append_nil :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- 'l IN list{'A} } -->
+interactive_rw append_nil 'A :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
    sequent ['ext] { 'H>- append{'l;nil} <--> 'l }
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource [ <<append{'a; nil}>>, append_nil ]
 
 interactive_rw rev_append :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- 'a IN list{'A} } -->
-   sequent [squash] { 'H >- 'b IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'a IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'b IN list{'A} } -->
    sequent ['ext] { 'H>- rev{append{'a;'b}} <--> append{rev{'b};rev{'a}} }
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource [ <<rev{append{'a;'b}}>>, rev_append ]
 
 interactive_rw rev2 :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- 'l IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
    sequent ['ext] { 'H>- rev{rev{'l}} <--> 'l }
 
 *)

@@ -87,10 +87,10 @@ let mk_hide_term = mk_dep0_term hide_opname
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set_df1 : set{'A; x. 'B} =
+dform set_df1 : {x:'A | 'B} =
    pushm[3] `"{ " bvar{'x} `":" slot{'A} `" | " slot{'B} `"}" popm
 
-dform hide_df1 : hide{'A} = "[" 'A "]"
+dform hide_df1 : except_mode[src] :: hide{'A} = "[" 'A "]"
 
 (************************************************************************
  * RULES                                                                *

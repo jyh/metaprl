@@ -131,7 +131,7 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * DISPLAY                                                              *
  ************************************************************************)
 
-dform two_df : two =
+dform two_df : except_mode[src] :: two =
    `"2"
 
 dform left_df : left =
@@ -140,10 +140,10 @@ dform left_df : left =
 dform right_df : right =
    `"right"
 
-dform choose_df : choose{'x; 'a; 'b} =
+dform choose_df : except_mode[src] :: choose{'x; 'a; 'b} =
    szone pushm[6] keyword["match"] " " slot{'x} " " keyword["with"] hspace keyword["left -> "] slot{'a} hspace keyword["right -> "] slot{'b} popm ezone
 
-dform two_order_df : two_order{'a; 'b} =
+dform two_order_df : except_mode[src] :: two_order{'a; 'b} =
    slot{'a} `" <" Nuprl_font!subtwo " " slot{'b}
 
 (************************************************************************
@@ -153,28 +153,25 @@ dform two_order_df : two_order{'a; 'b} =
 prec prec_prod
 prec prec_spread
 
-dform prod_prl_df : parens :: "prec"[prec_prod] :: prod{'A; 'B} =
+dform prod_df : parens :: "prec"[prec_prod] :: prod{'A; 'B} =
    pushm[0] slot{'A} " " times " " slot{'B} popm
 
-dform prod_src_df : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; 'B} =
-   slot{'A} `" * " slot{'B}
-
-dform prod_prl_df2 :  parens :: "prec"[prec_prod] :: prod{'A; x. 'B} =
+dform prod_df2 :  parens :: "prec"[prec_prod] :: prod{'A; x. 'B} =
    slot{'x} `":" slot{'A} " " times " " slot{'B}
 
-dform prod_src_df2 : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; x. 'B} =
-   slot{'x} `":" slot{'A} `" * " slot{'B}
-
-dform pair_prl_df1 : pair{'a; 'b} =
+dform pair_prl_df : except_mode[src] :: pair{'a; 'b} =
    pushm[0] `"<" slot{'a}`"," slot{'b} `">" popm
 
-dform spread_prl_df1 : parens :: "prec"[prec_spread] :: spread{'e; u, v. 'b} =
+dform pair_src_df : parens :: mode[src] :: pair{'a; 'b} =
+   pushm[0] slot{'a}`"," slot{'b} popm
+
+dform spread_prl_df1 : except_mode[src] :: parens :: "prec"[prec_spread] :: spread{'e; u, v. 'b} =
    `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b}
 
-dform fst_df1 : fst{'e} =
+dform fst_df1 : except_mode[src] :: fst{'e} =
    slot{'e} `".1"
 
-dform snd_df1 : snd{'e} =
+dform snd_df1 : except_mode[src] :: snd{'e} =
    slot{'e} `".2"
 
 (************************************************************************

@@ -155,21 +155,21 @@ dform apply_df1 : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
 dform lambda_df1 : parens :: "prec"[prec_lambda] :: lambda{x. 'b} =
    Nuprl_font!lambda slot{'x} `"." slot{'b}
 
-dform fix_df1 : fix{f. 'b} =
+dform fix_df1 : except_mode[src] :: fix{f. 'b} =
    `"fix" "(" slot{'f} `"." slot{'b} ")"
 
-dform well_founded_prop_df : well_founded_prop{'A} =
+dform well_founded_prop_df : except_mode[src] :: well_founded_prop{'A} =
    `"WellFounded " slot{'A} " " rightarrow `" Prop"
 
-dform well_founded_apply_df : well_founded_apply{'P; 'a} =
+dform well_founded_apply_df : except_mode[src] :: well_founded_apply{'P; 'a} =
    slot{'P} `"[" slot{'a} `"]"
 
-dform well_founded_assum_df : well_founded_assum{'A; a1, a2. 'R; 'P} =
+dform well_founded_assum_df : except_mode[src] :: well_founded_assum{'A; a1, a2. 'R; 'P} =
    szone pushm[3] `"WellFounded " Nuprl_font!forall slot{'a2} `":" slot{'A} `"."
    `"(" Nuprl_font!forall slot{'a1} `":" slot{'A} `". " slot{'R} " " Rightarrow well_founded_apply{'P; 'a1} `")"
    Rightarrow well_founded_apply{'P; 'a2} popm ezone
 
-dform well_founded_df : well_founded{'A; a, b. 'R} =
+dform well_founded_df : except_mode[src] :: well_founded{'A; a, b. 'R} =
    szone pushm[3] `"WellFounded " slot{'a} `"," slot{'b} `":" slot{'A} `"." slot{'R} popm ezone
 
 (************************************************************************

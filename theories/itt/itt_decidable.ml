@@ -57,7 +57,7 @@ let _ =
 
 declare decidable{'p}
 
-dform decidable_df : decidable{'p} = `"Decidable(" 'p `")"
+dform decidable_df : except_mode[src] :: decidable{'p} = `"Decidable(" 'p `")"
 
 prim_rw unfold_decidable : decidable{'p} <--> ( 'p or not {'p} )
 
@@ -74,7 +74,7 @@ let decidable_opname = opname_of_term decidable_term
 let is_decidable_term = is_dep0_term decidable_opname
 let mk_decidable_term = mk_dep0_term decidable_opname
 
-let dest_decidable_term term = 
+let dest_decidable_term term =
    try
       dest_dep0_term decidable_opname term
    with RefineError _ ->
@@ -97,7 +97,7 @@ let extract_data =
       try
          (snd (Term_match_table.lookup "Itt_decidable.extract_data" tbl identity t)) p
       with Not_found -> raise ref_exn
-      
+
 (*
  * Add a new tactic.
  *)
@@ -163,8 +163,8 @@ let decidable_or_autoT = repeatT step_decidable_or_autoT
 
 let prove_decidableT = step_decidableT thenT decidable_or_autoT
 
-let decideT t p = 
-   let tac = 
+let decideT t p =
+   let tac =
       assert_decidable (Sequent.hyp_count_addr p) t
       thenLT [tryT (completeT prove_decidableT); idT; idT]
    in

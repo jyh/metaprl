@@ -56,7 +56,7 @@ let reduce_info =
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
-dform fact_df : parens :: "prec"[prec_apply] :: fact{'i} =
+dform fact_df : except_mode[src] :: parens :: "prec"[prec_apply] :: fact{'i} =
    `"fact" " " slot{'i}
 
 let redex1C =

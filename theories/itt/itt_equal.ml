@@ -261,26 +261,33 @@ let reduce_cumulativity =
 prec prec_type
 prec prec_equal
 
-dform equal_df : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
+dform equal_df : except_mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member `" " slot{'T} popm ezone
 
+dform equal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
+   szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
+
 (* HACK! - this should be replaced with a proper I/O abstruction *)
-dform member_df : parens :: "prec"[prec_equal] :: ('x IN 'T) =
+dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T) =
    szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
+
+dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T) =
+   szone pushm slot{'x} space `"IN" hspace slot{'T} popm ezone
 
 dform it_df1 : it = cdot
 
-dform type_df1 : parens :: "prec"[prec_type] :: "type"{'a} =
+dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: "type"{'a} =
    slot{'a} " " `"Type"
 
 dform type_df2 : mode[src] :: "type"{'a} =
    `"\"type\"{" slot{'a} `"}"
 
-dform univ_df1 : univ[i:l] =
+dform univ_df1 : except_mode[src] :: univ[i:l] =
    mathbbU `"[" slot[i:l] `"]"
 
-dform squash_df : mode[prl] :: squash =
-   cdot
+dform squash_df : except_mode[src] :: squash = cdot
+
+dform squash_df2 : mode[src] :: squash = `"squash"
 
 (************************************************************************
  * RULES                                                                *

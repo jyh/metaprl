@@ -32,6 +32,9 @@
 
 open Printf
 open Mp_debug
+open Perv
+
+include Perv
 
 (*
  * Show that the file is loading.
@@ -213,9 +216,9 @@ declare subz
 (*
  * Pagebreak works only in prl mode.
  *)
-dform pagebreak_df1 : pagebreak = `""
+dform pagebreak_df1 : except_mode[prl] :: pagebreak = `""
 
-dform pagebreak_df2 : mode["prl"] :: pagebreak =
+dform pagebreak_df2 : mode[prl] :: pagebreak =
    `"\012"
 
 (************************************************************************
@@ -225,13 +228,13 @@ dform pagebreak_df2 : mode["prl"] :: pagebreak =
 (*
  * Change directory.
  *)
-dform cd_begin_df1 : internal :: cd_begin[name:s] =
+dform cd_begin_df1 : internal :: except_mode[html] :: cd_begin[name:s] =
    `""
 
 dform cd_begin_df2 : internal :: mode[html] :: cd_begin[name:s] =
    izone `"<a href=\"http://cd.metaprl.local//" slot[name:s] `"\">" ezone
 
-dform cd_end_df1 : internal :: cd_end =
+dform cd_end_df1 : internal :: except_mode[html] :: cd_end =
    `""
 
 dform cd_end_df2 : internal :: mode[html] :: cd_end =
@@ -241,10 +244,10 @@ dform cd_end_df2 : internal :: mode[html] :: cd_end =
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform info_begin_df : internal :: info_begin =
+dform info_begin_df : internal :: mode[html] :: info_begin =
    izone `"<font color=\"#115599\"><b>" ezone
 
-dform info_end_df : internal :: info_end =
+dform info_end_df : internal :: mode[html] :: info_end =
    izone `"</b></font>" ezone
 
 dform info_df1 : internal :: info[text:s] =
@@ -253,11 +256,17 @@ dform info_df1 : internal :: info[text:s] =
 dform info_df2 : internal :: info{'t} =
    info_begin 't info_end
 
-dform keyword_begin_df : internal :: keyword_begin =
+dform keyword_begin_df : internal :: mode[html] :: keyword_begin =
    izone `"<font color=\"#551155\"><b>" ezone
 
-dform keyword_end_df : internal :: keyword_end =
+dform keyword_end_df : internal :: mode[html] :: keyword_end =
    izone `"</b></font>" ezone
+
+dform info_begin_df_all : internal :: except_mode[html] :: except_mode [tex] :: info_begin = `""
+dform info_end_df_all : internal :: except_mode[html] :: except_mode [tex] :: info_end = `""
+
+dform keyword_begin_df_all : internal :: except_mode[html] :: except_mode [tex] :: keyword_begin = `""
+dform keyword_end_df_all : internal :: except_mode[html] :: except_mode [tex] :: keyword_end = `""
 
 dform keyword_df1 : internal :: keyword[text:s] =
    keyword_begin slot[text:s] keyword_end
@@ -265,10 +274,10 @@ dform keyword_df1 : internal :: keyword[text:s] =
 dform keyword_df2 : internal :: keyword{'t} =
    keyword_begin 't keyword_end
 
-dform bf_begin_df : internal :: bf_begin =
+dform bf_begin_df : internal :: mode[html] :: bf_begin =
    izone `"<b>" ezone
 
-dform bf_end_df : internal :: bf_end =
+dform bf_end_df : internal :: mode[html] :: bf_end =
    izone `"</b>" ezone
 
 dform bf_df1 : internal :: bf[text:s] =
@@ -277,10 +286,10 @@ dform bf_df1 : internal :: bf[text:s] =
 dform bf_df2 : internal :: bf{'t} =
    bf_begin 't bf_end
 
-dform it_begin_df : internal :: it_begin =
+dform it_begin_df : internal :: mode[html] :: it_begin =
    izone `"<b>" ezone
 
-dform it_end_df : internal :: it_end =
+dform it_end_df : internal :: mode[html] :: it_end =
    izone `"</b>" ezone
 
 dform it_df1 : internal :: it[text:s] =
@@ -289,10 +298,10 @@ dform it_df1 : internal :: it[text:s] =
 dform it_df2 : internal :: it{'t} =
    it_begin 't it_end
 
-dform sym_begin_df : internal :: sym_begin =
+dform sym_begin_df : internal :: mode[html] :: sym_begin =
    izone `"<b>" ezone
 
-dform sym_end_df : internal :: sym_end =
+dform sym_end_df : internal :: mode[html] :: sym_end =
    izone `"</b>" ezone
 
 dform sym_df1 : internal :: sym[text:s] =
@@ -301,10 +310,10 @@ dform sym_df1 : internal :: sym[text:s] =
 dform sym_df2 : internal :: sym{'t} =
    sym_begin 't sym_end
 
-dform em_begin_df : internal :: em_begin =
+dform em_begin_df : internal :: mode[html] :: em_begin =
    izone `"<em>" ezone
 
-dform em_end_df : internal :: em_end =
+dform em_end_df : internal :: mode[html] :: em_end =
    izone `"</em>" ezone
 
 dform em_df1 : internal :: em[text:s] =
@@ -313,10 +322,10 @@ dform em_df1 : internal :: em[text:s] =
 dform em_df2 : internal :: em{'t} =
    em_begin 't em_end
 
-dform tt_begin_df : internal :: tt_begin =
+dform tt_begin_df : internal :: mode[html] :: tt_begin =
    izone `"<tt>" ezone
 
-dform tt_end_df : internal :: tt_end =
+dform tt_end_df : internal :: mode[html] :: tt_end =
    izone `"</tt>" ezone
 
 dform tt_df1 : internal :: tt[text:s] =
@@ -325,10 +334,10 @@ dform tt_df1 : internal :: tt[text:s] =
 dform tt_df2 : internal :: tt{'t} =
    tt_begin 't tt_end
 
-dform sub_begin_df : internal :: sub_begin =
+dform sub_begin_df : internal :: mode[html] :: sub_begin =
    izone `"<sub>" ezone
 
-dform sub_end_df : internal :: sub_end =
+dform sub_end_df : internal :: mode[html] :: sub_end =
    izone `"</sub>" ezone
 
 dform sub_df1 : internal :: sub[text:s] =
@@ -337,10 +346,10 @@ dform sub_df1 : internal :: sub[text:s] =
 dform sub_df2 : internal :: sub{'t} =
    sub_begin 't sub_end
 
-dform sup_begin_df : internal :: sup_begin =
+dform sup_begin_df : internal :: mode[html] :: sup_begin =
    izone `"<sup>" ezone
 
-dform sup_end_df : internal :: sup_end =
+dform sup_end_df : internal :: mode[html] :: sup_end =
    izone `"</sup>" ezone
 
 dform sup_df1 : internal :: sup[text:s] =
@@ -349,10 +358,10 @@ dform sup_df1 : internal :: sup[text:s] =
 dform sup_df2 : internal :: sup{'t} =
    sup_begin 't sup_end
 
-dform small_begin_df : internal :: small_begin =
+dform small_begin_df : internal :: mode[html] :: small_begin =
    izone `"<small>" ezone
 
-dform small_end_df : internal :: small_end =
+dform small_end_df : internal :: mode[html] :: small_end =
    izone `"</small>" ezone
 
 dform small_df1 : internal :: small[text:s] =
@@ -372,8 +381,14 @@ declare mathmacro[name:s]
 dform mathBB_df : internal :: mode[tex] :: mathBB[text:s] =
    izone `"$\\mathbb " ezone slot[text:s] izone `"$" ezone
 
-dform ensuremath_df : internal :: mode[tex] :: ensuremath[text:s] =
-   izone `"$" ezone slot[text:s] izone `"$" ezone
+dform ensuremath_df1 : internal :: mode[tex] :: ensuremath[text:s] =
+   ensuremath{slot[text:s]}
+
+dform ensuremath_df2 : internal :: mode[tex] :: ensuremath{'t} =
+   izone `"$" ezone slot{'t} izone `"$" ezone
+
+dform ensuremath_cons_df : internal :: mode[tex] :: cons{ensuremath{'t1}; ensuremath{'t2}} =
+   ensuremath{cons{'t1;'t2}}
 
 dform mathmacro_df : internal :: mode[tex] :: mathmacro[text:s] =
    izone `"$\\" slot[text:s] `"$" ezone
@@ -771,6 +786,21 @@ dform subb_df			: internal :: mode[tex] :: subb                      = ensuremat
 dform subc_df			: internal :: mode[tex] :: subc                      = ensuremath["_c"]
 dform subq_df			: internal :: mode[tex] :: subq                      = ensuremath["_q"]
 dform subz_df			: internal :: mode[tex] :: subz                      = ensuremath["_z"]
+
+(*
+ * Source
+ *)
+dform leftarrow_df : internal :: mode[src] :: Leftarrow = `"<="
+dform leftrightarrow_df : internal :: mode[src] :: Leftrightarrow = `"<=>"
+dform rightarrow_df : internal :: mode[src] :: Rightarrow = `"=>"
+dform leftarrow_df : internal :: mode[src] :: leftarrow = `"<-"
+dform rightarrow_df : internal :: mode[src] :: rightarrow = `"->"
+dform longleftrightarrow_src_df : internal :: mode[src] :: longleftrightarrow = `"<-->"
+dform longleftarrow_src_df : internal :: mode[src] :: longleftarrow = `"<--"
+dform longrightarrow_src_df : internal :: mode[src] :: longrightarrow = `"-->"
+dform times_df : internal :: mode[src] :: times = `"*"
+dform vee_df : internal :: mode[src] :: vee = `"or"
+dform wedge_df : internal :: mode[src] :: wedge = `"and"
 
 (*
  * -*-

@@ -57,7 +57,7 @@ declare tsub_any
 
 prec prec_tsub
 
-dform tsub_df : parens :: "prec"[prec_tsub] :: tsub{'A; 'B} =
+dform tsub_df : except_mode[src] :: parens :: "prec"[prec_tsub] :: tsub{'A; 'B} =
    slot["le"]{'A} `" -" space slot{'B}
 
 (************************************************************************

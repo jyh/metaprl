@@ -61,7 +61,7 @@ declare bisect{'A; 'B}
 
 prec prec_bisect
 
-dform bisect_df : parens :: "prec"[prec_bisect] :: bisect{'A; 'B} =
+dform bisect_df : except_mode[src] :: parens :: "prec"[prec_bisect] :: bisect{'A; 'B} =
    slot["le"]{'A} `" " cap space slot{'B}
 
 (************************************************************************

@@ -1,7 +1,7 @@
 #
 # No special includes
 #
-INCLUDE :=
+INCLUDE := -I $(NLLIB)
 
 # Types files
 MLZFILES :=\

@@ -2,6 +2,9 @@
  * Some basic tacticals.
  *
  * $Log$
+ * Revision 1.5  1998/04/13 21:11:18  jyh
+ * Added interactive proofs to filter.
+ *
  * Revision 1.4  1998/04/09 18:26:13  jyh
  * Working compiler once again.
  *
@@ -32,6 +35,9 @@
 open Term
 open Refine_sig
 open Refine
+
+open Proof_type
+
 open Sequent
 open Tactic_type
 

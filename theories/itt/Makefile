@@ -1,5 +1,5 @@
 # Libraries
-INCLUDE := -I . -I ../tactic -I ../base
+INCLUDE := -I . -I ../tactic -I ../base -I $(NLLIB)
 
 # Common files
 MLZFILES :=\

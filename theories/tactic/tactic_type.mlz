@@ -4,25 +4,14 @@
 
 open Term
 open Refine
-
-(*
- * Many tactics wish to examine their argument, so
- * the real type of tactic includes an argument.
- *)
-type refine_attribute =
-   VarArgs of string list
- | TermArgs of term list
- | TypeArg of term 
- | IntArgs of int list
- | ThinArg of bool 
- | SubstArg of (string * term) list
+open Proof_type
 
 (*
  * Every goal has a label.
  *)
-and tactic_argument =
+type tactic_argument =
    { ref_label : string;
-     ref_args : refine_attribute list;
+     ref_args : attribute list;
      ref_fcache : cache;
      ref_rsrc : tactic_resources
    }
@@ -53,6 +42,9 @@ type tactic_arg = term * tactic_argument
 
 (*
  * $Log$
+ * Revision 1.2  1998/04/13 21:11:17  jyh
+ * Added interactive proofs to filter.
+ *
  * Revision 1.1  1997/04/28 15:52:44  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

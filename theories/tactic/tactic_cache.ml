@@ -49,7 +49,7 @@
  * allow the restored inferences to be combined with other
  * inferences added during their abscence.
  *
- * Second, make one rule tablem and tag the inferences in the
+ * Second, make one rule table and tag the inferences in the
  * table with a "version" (which is really just the world in which they
  * were originally inferred).  If there is no garbage collection,
  * backout is easy, by outdated some revisions.  Insertion is
@@ -78,6 +78,9 @@
  * postponement queue if their world is backed out.
  *
  * $Log$
+ * Revision 1.3  1998/04/08 15:08:37  jyh
+ * Moved precedence to mllib.
+ *
  * Revision 1.2  1998/04/08 14:57:37  jyh
  * ImpDag is in mllib.
  *

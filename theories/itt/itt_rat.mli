@@ -95,6 +95,9 @@ topval fold_rat : conv
 topval reduce_beq_rat2 : conv
 topval fold_rationals : conv
 
+val is_rationals_term : term -> bool
+val rationals_term : term
+
 val is_rat_term : term -> bool
 val mk_rat_term : term -> term -> term
 val dest_rat : term -> (term * term)
@@ -134,6 +137,10 @@ val dest_max_rat : term -> (term * term)
 val is_min_rat_term : term -> bool
 val mk_min_rat_term : term -> term -> term
 val dest_min_rat : term -> (term * term)
+
+rule geReflexive :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- ge_rat{'a; 'a} }
 
 rule geTransitive 'b :
 	[wf] sequent { <H> >- 'a in rationals } -->

@@ -1031,26 +1031,83 @@ let assert_geT info history f1 f2 = funT (fun p ->
 		end
 )
 *)
-let runAssertT info history label f1 f2 tac = funT (fun p ->
+
+let runAssertT info (history,wf) label f1 f2 tac = funT (fun p ->
 	if tac==idT then
-		let t=(mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2)) in
+		let left=SAF.term_of info f1 in
+		let right=SAF.term_of info f2 in
+		let t=(mk_ge_rat_term left right) in
 		if mem history t then
 			idT
 		else
-			begin
-				add history t ((Sequent.hyp_count p)+1);
-				assertT t thenAT (addHiddenLabelT label)
-			end
+			if mem wf left then
+				if mem wf right then
+					begin
+						add history t ((Sequent.hyp_count p)+1);
+						assertT t thenAT (addHiddenLabelT label)
+					end
+				else
+					begin
+						add wf right ((Sequent.hyp_count p)+1);
+						add history t ((Sequent.hyp_count p)+2);
+						let rmem=mk_equal_term rationals_term right right in
+						assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label))
+					end
+			else
+				if mem wf right then
+					begin
+						add wf left ((Sequent.hyp_count p)+1);
+						add history t ((Sequent.hyp_count p)+2);
+						let lmem=mk_equal_term rationals_term left left in
+						assertT lmem thenMT (assertT t thenAT (addHiddenLabelT label))
+					end
+				else
+					begin
+						add wf left ((Sequent.hyp_count p)+1);
+						add wf right ((Sequent.hyp_count p)+2);
+						add history t ((Sequent.hyp_count p)+3);
+						let lmem=mk_equal_term rationals_term left left in
+						let rmem=mk_equal_term rationals_term right right in
+						assertT lmem thenMT assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label))
+					end
 (*		assert_geT info history f1 f2 thenAT (addHiddenLabelT label)*)
 	else
-		let t=(mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2)) in
+		let left=SAF.term_of info f1 in
+		let right=SAF.term_of info f2 in
+		let t=(mk_ge_rat_term left right) in
 		if mem history t then
 			idT
 		else
-			begin
-				add history t ((Sequent.hyp_count p)+1);
-				assertT t thenAT (addHiddenLabelT label thenT tac)
-			end
+			if mem wf left then
+				if mem wf right then
+					begin
+						add history t ((Sequent.hyp_count p)+1);
+						assertT t thenAT (addHiddenLabelT label thenT tac)
+					end
+				else
+					begin
+						add wf right ((Sequent.hyp_count p)+1);
+						add history t ((Sequent.hyp_count p)+2);
+						let rmem=mk_equal_term rationals_term right right in
+						assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label thenT tac))
+					end
+			else
+				if mem wf right then
+					begin
+						add wf left ((Sequent.hyp_count p)+1);
+						add history t ((Sequent.hyp_count p)+2);
+						let lmem=mk_equal_term rationals_term left left in
+						assertT lmem thenMT (assertT t thenAT (addHiddenLabelT label thenT tac))
+					end
+				else
+					begin
+						add wf left ((Sequent.hyp_count p)+1);
+						add wf right ((Sequent.hyp_count p)+2);
+						add history t ((Sequent.hyp_count p)+3);
+						let lmem=mk_equal_term rationals_term left left in
+						let rmem=mk_equal_term rationals_term right right in
+						assertT lmem thenMT assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label thenT tac))
+					end
 (*		assert_geT info history f1 f2 thenAT (addHiddenLabelT label thenT tac)*)
 )
 
@@ -1170,13 +1227,7 @@ let testT = funT (fun p ->
 					printf"inf=";SAF.print inf'; eflush stdout;
 					SAF.print inf'; printf "<="; SAF.print saf'; printf "<="; SAF.print sup'; eflush stdout;
 				end;
-			try
-				runListT info (empty ()) actions
-			with generic_refiner_exn ->
-				begin
-					printf"RefineError caught in testT%t" eflush;
-					raise generic_refiner_exn
-				end
+			runListT info (empty (),empty ()) actions
 		end
 	end
 )

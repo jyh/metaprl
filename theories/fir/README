@@ -12,6 +12,12 @@ is likely to be in the form of comments in .ml files.
 The following remarks by Brian Emre Aydemir (emre) are intended to
 serve as notes to himself.  They may not make sense to others.
 
+-- I have to check this, but I'm pretty sure these rules rely on the
+   program being ``standardized''.
+
+-- Idea to consider: The ``tag'' on the has_type term could be
+   moved into the ``sequent tag''.
+
 -- IMPORTANT: The term-set is no longer up-to-date!  I need to re-sync
    everything at some point.
 

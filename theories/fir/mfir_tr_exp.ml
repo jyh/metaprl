@@ -173,8 +173,6 @@ declare check_cases{ 'ty; 'cases }
  * @end[doc]
  *)
 
-(* XXX matching *)
-
 prim ty_check_cases_base {| intro [] |} 'H :
    sequent [mfir] { 'H >- check_cases{ 'ty; nil } }
    = it
@@ -327,7 +325,8 @@ let resource auto += [{
  * @modsubsection{Allocation}
  *
  * An offset atom should either be an integer or a raw integer.
- * Note that offsets cannot be negative.
+ * Note that offsets cannot be negative, but in the case of variables,
+ * this cannot be checked.
  * @end[doc]
  *)
 
@@ -337,6 +336,11 @@ prim ty_offset_tyInt {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["offset"]{ atomInt{'i}; offset } }
    = it
 
+prim ty_offset_tyInt_var 'H 'J :
+   sequent [mfir] { 'H; v: var_def{ tyInt; 'd }; 'J['v] >-
+      has_type["offset"]{ atomVar{'v}; offset } }
+   = it
+
 prim ty_offset_tyRawInt {| intro [] |} 'H :
    sequent [mfir] { 'H >- int_le{ 0; 'i } } -->
    sequent [mfir] { 'H >- has_type["atom"]{ atomRawInt[32, "signed"]{'i};
@@ -344,6 +348,35 @@ prim ty_offset_tyRawInt {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["offset"]{ atomRawInt[32, "signed"]{'i};
                                               offset } }
    = it
+
+prim ty_offset_tyRawInt_var 'H 'J :
+   sequent [mfir] { 'H; v: var_def{ tyRawInt[32, "signed"]; 'd }; 'J['v] >-
+      has_type["offset"]{ atomVar{'v}; offset } }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_ty_offset_tyInt_var i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_offset_tyInt_var j k p
+
+let d_ty_offset_tyRawInt_var i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_offset_tyRawInt_var j k p
+
+let resource auto += [{
+   auto_name = "d_ty_offset_tyInt_var";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_offset_tyInt_var;
+   auto_type = AutoNormal
+}; {
+   auto_name = "d_ty_offset_tyRawInt_var";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_offset_tyRawInt_var;
+   auto_type = AutoNormal
+}]
 
 (*!
  * @begin[doc]
@@ -409,11 +442,120 @@ prim ty_letAlloc_malloc {| intro [] |} 'H 'a :
  * @begin[doc]
  * @modsubsection{Subscripting}
  *
- * ...
+ * XXX Some sort of documentation needs to go here.
  * @end[doc]
  *)
 
-(* XXX subscrripting *)
+prim ty_letSubscript_tyTuple 'H 'J 'a :
+   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+      type_eq{ 'u;
+               nth_elt{ index_of_subscript{'a2}; 'tyl };
+               polyKind[0]{ large_type } } } -->
+   sequent [mfir] { 'H;
+                    x: var_def{ tyTuple[s:s]{'tyl}; 'd };
+                    'J['x];
+                    a: var_def{ 'u; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+      has_type["exp"]{letSubscript{'u; atomVar{'x}; 'a2; v. 'exp['v]}; 't} }
+   = it
+
+prim ty_setSubscript_tyTuple 'H 'J :
+   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+      type_eq{ 'u;
+               nth_elt{ index_of_subscript{'a2}; 'tyl };
+               polyKind[0]{ large_type } } } -->
+   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+      has_type["atom"]{ 'a3; 'u } } -->
+   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+      has_type["exp"]{ 'exp; 't } } -->
+   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+      has_type["exp"]{setSubscript{atomVar{'x}; 'a2; 'u; 'a3; 'exp}; 't} }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_ty_letSubscript_tyTuple i p =
+   let j, k = Sequent.hyp_indices p i in
+   let u = Var.maybe_new_vars1 p "a" in
+      ty_letSubscript_tyTuple j k u p
+
+let d_ty_setSubscript_tyTuple i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_setSubscript_tyTuple j k p
+
+let resource auto += [{
+   auto_name = "d_ty_letSubscript_tyTuple";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_letSubscript_tyTuple;
+   auto_type = AutoNormal
+};{
+   auto_name = "d_ty_setSubscript_tyTuple";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_setSubscript_tyTuple;
+   auto_type = AutoNormal
+}]
+
+(*!
+ * @begin[doc]
+ *
+ * XXX arrays are easy!
+ * @end[doc]
+ *)
+
+prim ty_letSubsript_tyArray {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
+   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ letSubscript{ 'u; 'a1; 'a2; v. 'exp['v] }; 't } }
+   = it
+
+prim ty_setSubscript_tyArray {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
+   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
+   sequent [mfir] { 'H >- has_type["exp"]{ 'exp; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ setSubscript{ 'a1; 'a2; 'u; 'a3; 'exp }; 't } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * XXX unions are icky
+ * @end[doc]
+ *)
+
+(* XXX union subscripting *)
+
+(*!
+ * @begin[doc]
+ *
+ * XXX rawdata is fun!
+ * @end[doc]
+ *)
+
+prim ty_letSubscript_rawData {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
+   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ letSubscript{ 'u; 'a1; 'a2; v. 'exp['v] }; 't } }
+   = it
+
+prim ty_setSubscript_rawdata {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
+   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
+   sequent [mfir] { 'H >- has_type["exp"]{ 'exp; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ setSubscript{ 'a1; 'a2; 'u; 'a3; 'exp };'t } }
+   = it
 
 (*!
  * @begin[doc]

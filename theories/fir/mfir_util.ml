@@ -53,6 +53,7 @@ extends Mfir_exp
  *)
 
 open Top_conversionals
+open Mfir_bool
 open Mfir_int
 open Mfir_int_set
 
@@ -123,6 +124,16 @@ declare nth_unionCase{ 'n; 'union_def }
  *)
 
 declare union_cases{ 'set; 'cases }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[index_of_subscript] is used to turn a term representing
+ * a subscript (into some data aggregate) into a number term.
+ * @end[doc]
+ *)
+
+declare index_of_subscript{ 'atom }
 
 
 (**************************************************************************
@@ -287,6 +298,41 @@ let resource reduce += [
    << union_cases{ 'set; 'cases } >>, reduce_union_cases
 ]
 
+(*!
+ * @begin[doc]
+ *
+ * Raw integer subscripts represent byte offsets, while integer
+ * subscripts represent logical offsets.  Byte offsets must be
+ * aligned on four byte boundaries.
+ * @end[doc]
+ *)
+
+prim_rw reduce_index_of_subscript_atomInt :
+   index_of_subscript{ atomInt{ number[i:n] } } <-->
+   number[i:n]
+
+prim_rw reduce_index_of_subscript_atomRawInt :
+   index_of_subscript{ atomRawInt[32, "signed"]{ number[i:n] } } <-->
+   ifthenelse{ int_eq{ 0; rem{ number[i:n]; 4 } };
+      rem{ number[i:n]; 4 };
+      . -1 }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_index_of_subscript =
+   reduce_index_of_subscript_atomInt orelseC
+   (  reduce_index_of_subscript_atomRawInt thenC
+      (addrC [0; 1] reduce_rem) thenC
+      (addrC [0] reduce_int_eq) thenC
+      reduce_ifthenelse
+   )
+
+let resource reduce += [
+   << index_of_subscript{ 'atom } >>, reduce_index_of_subscript
+]
+
 
 (**************************************************************************
  * Display forms.
@@ -315,3 +361,7 @@ dform nth_unionCase_df : except_mode[src] ::
 dform union_cases_df : except_mode[src] ::
    union_cases{ 'set; 'cases } =
    bf["union_cases"] `"(" slot{'set} `"," slot{'cases} `")"
+
+dform index_of_subscript_df : except_mode[src] ::
+   index_of_subscript{ 'atom } =
+   `"(" bf["index"] leftarrow bf["sub"] `")(" slot{'atom} `")"

@@ -52,6 +52,7 @@ declare instantiate_tyExists{ 'ty; 'var; 'num }
 declare num_params{ 'ty }
 declare nth_unionCase{ 'n; 'union_def }
 declare union_cases{ 'set; 'cases }
+declare index_of_subscript{ 'atom }
 
 
 (**************************************************************************
@@ -63,3 +64,4 @@ topval reduce_instantiate_tyExists : conv
 topval reduce_num_params : conv
 topval reduce_nth_unionCase : conv
 topval reduce_union_cases : conv
+topval reduce_index_of_subscript : conv

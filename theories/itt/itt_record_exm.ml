@@ -323,10 +323,10 @@ define integers : integers <-->
    }
 
 interactive integers_add_semigroup :
-   sequent['ext] {'H >- integers in semigroup["Z":t,"+":t,0:l]}
+   sequent['ext] {'H >- integers in semigroup["car":t,"+":t,0:l]}
 
 interactive integers_mul_semigroup :
-   sequent['ext] {'H >- integers in semigroup["Z":t,"*":t,0:l]}
+   sequent['ext] {'H >- integers in semigroup["car":t,"*":t,0:l]}
 
 
 define morphisms : morphisms{'A}  <-->
@@ -336,7 +336,7 @@ define morphisms : morphisms{'A}  <-->
 
 interactive morphisms_semigroup :
    sequent[squash] {'H >- 'A in univ[i:l]} -->
-   sequent['ext] {'H >- morphisms{'A} in semigroup["M":t,"*":t,i:l]}
+   sequent['ext] {'H >- morphisms{'A} in semigroup["car":t,"*":t,i:l]}
 
 interactive semigroupAssos4 semigroup[i:l] :
    sequent['ext] {'H  >-

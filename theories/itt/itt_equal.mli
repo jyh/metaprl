@@ -52,8 +52,6 @@ open Typeinf
 declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
-declare "true"
-declare "false"
 declare cumulativity[i:l, j:l]
 
 (************************************************************************
@@ -72,12 +70,6 @@ prec prec_equal
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
-
-(*
- * True always holds.
- *)
-rule trueIntro :
-   sequent { <H> >- "true" }
 
 (*
  * Typehood is equality.
@@ -236,12 +228,6 @@ topval eqcdT : tactic
 (************************************************************************
  * PRIMITIVES AND TACTICS                                               *
  ************************************************************************)
-
-val true_term : term
-val is_true_term : term -> bool
-
-val false_term : term
-val is_false_term : term -> bool
 
 val equal_term : term
 val is_equal_term : term -> bool

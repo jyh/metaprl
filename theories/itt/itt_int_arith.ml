@@ -238,13 +238,10 @@ let anyArithRel2geT = argfunT (fun i p ->
    if is_le_term t then le2geT t
    else if is_lt_term t then lt2geT t
    else if is_gt_term t then gt2geT t
-   else if is_equal_term t then
-      let (tt,l,r)=dest_equal t in
-         if (alpha_equal int_term tt) & not (alpha_equal l r) then
-            eq2geT t
-         else
-            idT
-   else idT) (*if is_not_term t then
+   else match explode_term t with
+      << 'l = 'r in 'tt >> when alpha_equal tt <<int>> && not (alpha_equal l r) -> eq2geT t
+    | _ -> idT
+   ) (*if is_not_term t then
       let t1=dest_not t in
          if is_ge_term t1 then notge2geT t1
          else if is_le_term t1 then notle2geT t1

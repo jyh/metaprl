@@ -95,11 +95,7 @@ prec prec_quant
  * TACTICS                                                              *
  ************************************************************************)
 
-val is_true_term : term -> bool
-val true_term : term
-
 val is_false_term : term -> bool
-val false_term : term
 
 val is_all_term : term -> bool
 val dest_all : term -> string * term * term

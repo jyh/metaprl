@@ -61,21 +61,13 @@ declare meta_lt[a:s,b:s]{'tt; 'ff}
 declare meta_lt[a:t,b:t]{'tt; 'ff}
 declare meta_lt[a:l,b:l]{'tt; 'ff}
 
-let num_op = opname_of_term <<meta_num[0]>>
-
 (*
  * Arithmetic operations.
  *)
 let arith op goal =
-   match (dest_op (dest_term goal).term_op).op_params with
-      [num1; num2] ->
-         begin
-            match dest_param num1, dest_param num2 with
-               Number i1, Number i2 ->
-                  mk_term (mk_op num_op [make_param (Number (op i1 i2))]) []
-             | _ ->
-                  raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))
-         end
+   match explode_term goal with
+      _, [MatchNumber (i1, _); MatchNumber (i2, _)], [] ->
+         <:con< meta_num[$op i1 i2$:n] >>
     | _ ->
          raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))
 

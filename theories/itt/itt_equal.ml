@@ -136,14 +136,6 @@ define unfold_cumulativity :
    cumulativity[i:l, j:l] <--> meta_lt[i:l, j:l]{."true"; ."false"}
 doc docoff
 
-let true_term = << "true" >>
-let true_opname = opname_of_term true_term
-let is_true_term = is_no_subterms_term true_opname
-
-let false_term = << "false" >>
-let false_opname = opname_of_term false_term
-let is_false_term = is_no_subterms_term false_opname
-
 let cumulativity_term = << cumulativity[i:l, j:l] >>
 
 let equal_term = << 'a = 'b in 'c >>

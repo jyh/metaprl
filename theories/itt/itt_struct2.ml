@@ -342,7 +342,7 @@ let assertEqT = argfunT (fun eq p ->
             let t' = var_subst t s1 x in
             let t1' = var_subst t1 s1 x in
             let t2' = var_subst t2 s2 x in
-               mk_xbind_term x (mk_equal_term t' t1' t2')
+               <:con< bind{$x$. $mk_equal_term t' t1' t2'$} >>
    in
       if is_xbind_term bind then
          cutEq eq bind thenMT thinIfThinningT [-2;-1]

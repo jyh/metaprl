@@ -637,13 +637,7 @@ dform exists_df2 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 
  * TACTICS                                                              *
  ************************************************************************)
 
-let true_term = << "true" >>
-let true_opname = opname_of_term true_term
-let is_true_term = is_no_subterms_term true_opname
-
-let false_term = << "false" >>
-let false_opname = opname_of_term false_term
-let is_false_term = is_no_subterms_term false_opname
+let is_false_term = is_no_subterms_term (opname_of_term << "false" >>)
 
 let all_term = << all x: 'A. 'B['x] >>
 let all_opname = opname_of_term all_term
@@ -704,8 +698,8 @@ let mk_not_term = mk_dep0_term not_opname
  ************************************************************************)
 
 let resource typeinf += [
-   true_term, infer_univ1;
-   false_term, infer_univ1;
+   <<"true">>, infer_univ1;
+   <<"false">>, infer_univ1;
    all_term, infer_univ_dep0_dep1 dest_all;
    exists_term, infer_univ_dep0_dep1 dest_exists;
    or_term, infer_univ_dep0_dep0 dest_or;
@@ -1397,10 +1391,9 @@ let jproverT = base_jproverT (Some 100)
  *)
 let logic_trivT = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
-      if is_void_term hyp or is_false_term hyp then
-         dT i
-      else
-         raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp))))
+   match explode_term hyp with
+      <<void>> | <<"false">> -> dT i
+    | _ -> raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp))))
 
 (*
  * Backchaining in auto tactic.

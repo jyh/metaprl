@@ -365,10 +365,16 @@ prim rfunction_applyEquality {| eqcd_resource |} 'H ({ f | x:'A -> 'B['f; 'x] })
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
    it
 
+let rfunction_applyEquality' t p =
+   rfunction_applyEquality (Sequent.hyp_count_addr p) t p
+
 interactive rfunction_applyMember 'H ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent [squash] { 'H >- member{.{ f | x:'A -> 'B['f; 'x] }; 'f1} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{.'B['f1; 'a1]; .'f1 'a1} }
+
+let rfunction_applyMember' t p =
+   rfunction_applyMember (Sequent.hyp_count_addr p) t p
 
 (*
  * Subtyping.

@@ -77,6 +77,30 @@ declare spread{'e; u, v. 'b['u; 'v]}
 declare fst{'e}
 declare snd{'e}
 
+let dprod_term = << x: 'A * 'B['x] >>
+let dprod_opname = opname_of_term dprod_term
+let is_dprod_term = is_dep0_dep1_term dprod_opname
+let dest_dprod = dest_dep0_dep1_term dprod_opname
+let mk_dprod_term = mk_dep0_dep1_term dprod_opname
+
+let prod_term = << 'A * 'B >>
+let prod_opname = opname_of_term prod_term
+let is_prod_term = is_dep0_dep0_term prod_opname
+let dest_prod = dest_dep0_dep0_term prod_opname
+let mk_prod_term = mk_dep0_dep0_term prod_opname
+
+let pair_term = << pair{'a; 'b} >>
+let pair_opname = opname_of_term pair_term
+let is_pair_term = is_dep0_dep0_term pair_opname
+let dest_pair = dest_dep0_dep0_term pair_opname
+let mk_pair_term = mk_dep0_dep0_term pair_opname
+
+let spread_term = << spread{'e; u, v. 'b['u; 'v]} >>
+let spread_opname = opname_of_term spread_term
+let is_spread_term = is_dep0_dep2_term spread_opname
+let dest_spread = dest_dep0_dep2_term spread_opname
+let mk_spread_term = mk_dep0_dep2_term spread_opname
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -216,17 +240,55 @@ prim productElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
  * H >- e1 = e2 in w:A * B
  * H, u:A, v: B[u], a: e1 = (u, v) in w:A * B >- b1[u; v] = b2[u; v] in T[u, v]
  *)
-prim spreadEquality {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+(*
+ * These require type inference.
+ *)
+let d_spread_equalT tac p =
+   let rt, spread =
+      try
+         let rt, spread, _ = dest_equal (Sequent.concl p) in
+            rt, spread
+      with
+         RefineError _ ->
+            dest_member (Sequent.concl p)
+   in
+   let u, v, a = maybe_new_vars3 p "u" "v" "a" in
+   let type_type = mk_bind_term v rt in
+   let _, _, pair, _ = dest_spread spread in
+   let type_type, pair_type =
+      try
+         match get_with_args p with
+            type_type :: pair_type :: _ ->
+               type_type, pair_type
+          | [pair_type] ->
+               type_type, pair_type
+          | [] ->
+               raise (RefineError ("d_spread_equalT", StringError "terms are required"))
+      with
+         RefineError _ ->
+            type_type, snd (infer_type p pair)
+   in
+      tac (Sequent.hyp_count_addr p) type_type pair_type u v a p
+
+prim spreadEquality {| eqcd_resource |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
    sequent ['ext] { 'H >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
-interactive spreadMember {| intro_resource [] |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
+
+let intro_resource = Mp_resource.improve intro_resource (spread_equal_term, d_spread_equalT spreadEquality)
+
+interactive spreadMember 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    [wf] sequent [squash] { 'H >- member{.w:'A * 'B['w]; 'e1} } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >- member{'T['u, 'v]; 'b1['u; 'v]} } -->
    sequent ['ext] { 'H >- member{'T['e1]; spread{'e1; u1, v1. 'b1['u1; 'v1]}} }
+
+let spread_member_term = << member{'T; spread{'e1; u1, v1. 'b1['u1; 'v1]}} >>
+
+let intro_resource = Mp_resource.improve intro_resource (spread_member_term, d_spread_equalT spreadMember)
 
 (*
  * H >- a1:A1 * B1 <= a2:A2 * B2
@@ -251,76 +313,6 @@ let reduce_info =
     << snd{pair{'u; 'v}} >>, reduceSnd]
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
-(************************************************************************
- * PRIMITIVES                                                           *
- ************************************************************************)
-
-let dprod_term = << x: 'A * 'B['x] >>
-let dprod_opname = opname_of_term dprod_term
-let is_dprod_term = is_dep0_dep1_term dprod_opname
-let dest_dprod = dest_dep0_dep1_term dprod_opname
-let mk_dprod_term = mk_dep0_dep1_term dprod_opname
-
-let prod_term = << 'A * 'B >>
-let prod_opname = opname_of_term prod_term
-let is_prod_term = is_dep0_dep0_term prod_opname
-let dest_prod = dest_dep0_dep0_term prod_opname
-let mk_prod_term = mk_dep0_dep0_term prod_opname
-
-let pair_term = << pair{'a; 'b} >>
-let pair_opname = opname_of_term pair_term
-let is_pair_term = is_dep0_dep0_term pair_opname
-let dest_pair = dest_dep0_dep0_term pair_opname
-let mk_pair_term = mk_dep0_dep0_term pair_opname
-
-let spread_term = << spread{'e; u, v. 'b['u; 'v]} >>
-let spread_opname = opname_of_term spread_term
-let is_spread_term = is_dep0_dep2_term spread_opname
-let dest_spread = dest_dep0_dep2_term spread_opname
-let mk_spread_term = mk_dep0_dep2_term spread_opname
-
-(************************************************************************
- * SPREAD EQUALITY                                                      *
- ************************************************************************)
-
-(*
- * These require type inference.
- *)
-let d_spread_equalT p =
-   let rt, spread =
-      try
-         let rt, spread, _ = dest_equal (Sequent.concl p) in
-            rt, spread
-      with
-         RefineError _ ->
-            dest_member (Sequent.concl p)
-   in
-   let v = maybe_new_vars1 p "v" in
-   let type_type = mk_bind_term v rt in
-   let _, _, pair, _ = dest_spread spread in
-   let type_type, pair_type =
-      try
-         match get_with_args p with
-            type_type :: pair_type :: _ ->
-               type_type, pair_type
-          | [pair_type] ->
-               type_type, pair_type
-          | [] ->
-               raise (RefineError ("d_spread_equalT", StringError "terms are required"))
-      with
-         RefineError _ ->
-            type_type, snd (infer_type p pair)
-   in
-      (withTermsT [type_type; pair_type] (dT 0)) p
-
-let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
-
-let intro_resource = Mp_resource.improve intro_resource (spread_equal_term, d_spread_equalT)
-
-let spread_member_term = << member{'T; spread{'e1; u1, v1. 'b1['u1; 'v1]}} >>
-
-let intro_resource = Mp_resource.improve intro_resource (spread_member_term, d_spread_equalT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

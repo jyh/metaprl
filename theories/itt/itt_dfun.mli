@@ -56,7 +56,7 @@ rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  * H, a: A >- Ui ext B
  *)
 rule functionFormation 'H 'a 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
    sequent ['ext] { 'H; a: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -148,6 +148,9 @@ rule applyMember 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- member{. x:'A -> 'B['x]; 'f1} } -->
    sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
+
+topval applyEquality' : term -> tactic
+topval applyMember' : term -> tactic
 
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2

@@ -187,10 +187,16 @@ interactive applyEquality {| eqcd_resource |} 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
+let applyEquality' t p =
+   applyEquality (Sequent.hyp_count_addr p) t p
+
 interactive applyMember 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- member{. x:'A -> 'B['x]; 'f1} } -->
    sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
+
+let applyMember' t p =
+   applyMember (Sequent.hyp_count_addr p) t p
 
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2
@@ -246,7 +252,7 @@ interactive function_equalityElimination {| elim_resource [ThinOption thinT] |} 
  * H, a: A >- Ui ext B
  *)
 interactive functionFormation 'H 'a 'A :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
    ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
 

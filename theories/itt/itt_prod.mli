@@ -40,7 +40,7 @@ open Tactic_type.Tacticals
 (*
  * The independent product is defined as a dependent product.
  *)
-rewrite unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
+rewrite unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
 
 (*
  * H >- Ui ext A * B

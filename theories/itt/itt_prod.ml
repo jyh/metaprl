@@ -65,19 +65,7 @@ let _ =
 (*
  * The independent product is defined as a dependent product.
  *)
-prim_rw unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
-
-(*
- * H >- Ui ext A * B
- * by independentProductFormation
- * H >- Ui ext A
- * H >- Ui ext B
- *)
-prim independentProductFormation 'H :
-   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
-   ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
-   'A * 'B
+prim_rw unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
 
 (*
  * H >- A1 * B1 = A2 * B2 in Ui
@@ -85,11 +73,10 @@ prim independentProductFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-prim independentProductEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive independentProductEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] } =
-   it
+   sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
 
 interactive independentProductMember {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
@@ -99,11 +86,46 @@ interactive independentProductMember {| intro_resource [] |} 'H :
 (*
  * Typehood.
  *)
-prim independentProductType {| intro_resource [] |} 'H :
+interactive independentProductType {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H >- "type"{'A2} } -->
-   sequent ['ext] { 'H >- "type"{.'A1 * 'A2} } =
-   it
+   sequent ['ext] { 'H >- "type"{.'A1 * 'A2} }
+
+(*
+ * H >- Ui ext A * B
+ * by independentProductFormation
+ * H >- Ui ext A
+ * H >- Ui ext B
+ *)
+interactive independentProductFormation 'H :
+   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
+   ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] }
+
+(*
+ * H, A * B, J >- T ext t
+ * by independentProductElimination
+ * H, A * B, u: A, v: B, J >- T ext t
+ *)
+interactive independentProductElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
+   ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
+   sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] }
+
+(*
+ * H >- (a1, b1) = (a2, b2) in A * B
+ * by independentPairEquality
+ * H >- a1 = a2 in A
+ * H >- b1 = b2 in B
+ *)
+interactive independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
+   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
+
+interactive independentPairMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
+   [wf] sequent [squash] { 'H >- member{'B; 'b} } -->
+   sequent ['ext] { 'H >- member{.'A * 'B; .('a, 'b)} }
 
 (*
  * H >- A * B ext (a, b)
@@ -112,33 +134,10 @@ prim independentProductType {| intro_resource [] |} 'H :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-prim independentPairFormation {| intro_resource [] |} 'H :
+interactive independentPairFormation {| intro_resource [] |} 'H :
    [wf] ('a : sequent ['ext] { 'H >- 'A }) -->
    [wf] ('b : sequent ['ext] { 'H >- 'B }) -->
-   sequent ['ext] { 'H >- 'A * 'B } =
-   'a, 'b
-
-(*
- * H, A * B, J >- T ext t
- * by independentProductElimination
- * H, A * B, u: A, v: B, J >- T ext t
- *)
-prim independentProductElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
-   ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
-   sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] } =
-   't[fst{'z}; snd{'z}]
-
-(*
- * H >- (a1, b1) = (a2, b2) in A * B
- * by independentPairEquality
- * H >- a1 = a2 in A
- * H >- b1 = b2 in B
- *)
-prim independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
-   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
-   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B } =
-   it
+   sequent ['ext] { 'H >- 'A * 'B }
 
 (*
  * H >- A1 -> B1 <= A2 -> B2
@@ -147,11 +146,10 @@ prim independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
  * H >- A2 <= A1
  * H >- B1 <= B2
  *)
-prim independentProductSubtype {| intro_resource [] |} 'H :
+interactive independentProductSubtype {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } } =
-   it
+   sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

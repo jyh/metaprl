@@ -33,6 +33,7 @@
 open MLast
 
 open Refiner.Refiner.TermType
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.RefineError
 open Mp_resource
 
@@ -329,7 +330,7 @@ and mk_apply_expr base loc f a =
                   AddressExpr a ->
                      f a
                 | _ ->
-                     type_error loc "expr should be an address"
+                     f (make_address (int_list_of_list loc a))
             end
 
        | AddrFunExpr f ->

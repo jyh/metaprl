@@ -184,6 +184,9 @@ rule rfunction_applyMember 'H ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{.'B['f1; 'a1]; .'f1 'a1} }
 
+topval rfunction_applyEquality' : term -> tactic
+topval rfunction_applyMember' : term -> tactic
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

@@ -542,28 +542,28 @@ dform keyword_end_df : internal :: mode[tex] :: keyword_end =
    izone `"}" ezone
 
 dform bf_begin_df : internal :: mode[tex] :: bf_begin =
-   izone `"\\textbf{" ezone
+   tzone["textbf"]
 
 dform bf_end_df : internal :: mode[tex] :: bf_end =
-   izone `"}" ezone
+   ezone
 
 dform it_begin_df : internal :: mode[tex] :: it_begin =
-   izone `"\\textit{" ezone
+   tzone["textit"]
 
 dform it_end_df : internal :: mode[tex] :: it_end =
-   izone `"\\/}" ezone
+   ezone
 
 dform em_begin_df : internal :: mode[tex] :: em_begin =
-   izone `"\\emph{" ezone
+   tzone["emph"]
 
 dform em_end_df : internal :: mode[tex] :: em_end =
-   izone `"\\/}" ezone
+   ezone
 
 dform tt_begin_df : internal :: mode[tex] :: tt_begin =
-   izone `"\\texttt{" ezone
+   tzone["texttt"]
 
 dform tt_end_df : internal :: mode[tex] :: tt_end =
-   izone `"}" ezone
+   ezone
 
 dform sub_begin_df : internal :: mode[tex] :: sub_begin =
    izone `"_{" ezone

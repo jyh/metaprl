@@ -1,9 +1,4 @@
 doc <:doc<
-   @begin[spelling]
-   CloseFrame CloseRec CloseRecVar CloseSubscript CloseVar LetAtom LetRec
-   LetSubscript args rec var vars
-   @end[spelling]
-
    @begin[doc]
    @module[M_closure]
 
@@ -11,20 +6,20 @@ doc <:doc<
    closed in four steps.
 
    @begin[enumerate]
-   @item{{In the first step, all LetRec terms are replaced
-      with CloseRec terms, which include an extra frame
+   @item{In the first step, all @tt[LetRec] terms are replaced
+      with @tt[CloseRec] terms, which include an extra frame
       parameter.  The frame is allocated as a tuple, and
-      and the free variables are projected from the tuple.}}
+      and the free variables are projected from the tuple.}
 
-   @item{{In the second step, for each CloseRec that has a free
+   @item{In the second step, for each @tt[CloseRec] that has a free
       variable, the free variable is added to the frame,
-      and projected within the record.}}
+      and projected within the record.}
 
-   @item{{In the third step, the CloseRec is converted back to
-      a LetRec followed by a tuple allocation.}}
+   @item{In the third step, the @tt[CloseRec] is converted back to
+      a @tt[LetRec] followed by a tuple allocation.}
 
-   @item{{The fourth phase moves code around an generally cleans
-      up.}}
+   @item{The fourth phase moves code around an generally cleans
+      up.}
    @end[enumerate]
 
    @end[doc]
@@ -120,20 +115,20 @@ doc <:doc<
    We use a special term for variables that are being closed.
 
    The <<CloseRecVar{'R; 'frame}>> term is used to wrap record variables.
-   The term represents the partial application of the record R to
-   the frame variable.
+   The term represents the partial application of the record <<'R>> to
+   the <<'frame>> variable.
 
    The <<CloseRec{R1, frame1. 'fields['R1; 'frame1];
                 R2, frame2. 'body['R2; 'frame2];
                 'length; 'tuple}>>
    is a recursive record definition.  The function defined by the
    <<'fields['R1; 'frame1]>> takes the <<'frame1>> as an extra argument; <<'frame1>>
-   represents the environment containing all the functions' free vars.
+   represents the environment containing all the functions' free variables.
    The <<'body['R2; 'frame2]>> is the rest of the program.  The <<'frame2>>
    represents the frame to be used for the functions in <<'R2>>.  The
    <<'frame2>> is allocated as the tuple, which has ``<<'length>>'' fields.
 
-   <<CloseSubscript{'a1; 'a2; v. 'e['v]}>> is the same as @bf[LetSubscript],
+   <<CloseSubscript{'a1; 'a2; v. 'e['v]}>> is the same as @hrefterm[LetSubscript],
    but we use a special term to guide the closure conversion
    process.
 
@@ -159,14 +154,14 @@ dform close_rec_var_df : CloseRecVar{'R; 'frame} =
    slot{'R} bf["["] slot{'frame} bf["]"]
 
 dform close_rec_df : parens :: "prec"[prec_let] :: CloseRec{R1, frame1. 'e1; R2, frame2. 'e2; 'length; 'tuple} =
-   szone pushm[3] bf["close rec "]
+   szone szone pushm[3] bf["close rec "]
    slot{'R1} `"," slot{'frame1} `"." hspace 'e1 popm ezone
    hspace slot{'R2} `"," slot{'frame2} bf["."]
    hspace slot{'tuple} bf[" of length "] slot{'length}
-   hspace slot["lt"]{'e2}
+   hspace slot["lt"]{'e2} ezone
 
 dform close_subscript_df : parens :: "prec"[prec_let] :: CloseSubscript{'a1; 'a2; v. 'e} =
-   bf["close "] slot{'v} bf[" = "] slot{'a1} bf["["] slot{'a2} bf["] in"] hspace slot["lt"]{'e}
+   szone bf["close "] slot{'v} bf[" = "] slot{'a1} bf["["] slot{'a2} bf["] in"] hspace slot["lt"]{'e} ezone
 
 dform close_frame : parens :: "prec"[prec_fun] :: CloseFrame{frame. 'e} =
    szone pushm[3] Nuprl_font!lambda Nuprl_font!subq slot{'frame} `"." hspace slot{'e} popm ezone
@@ -190,8 +185,8 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Phase 1}
 
-   Convert all LetRec to CloseRec so that each function will
-   have a frame var for its free vars.
+   Convert all @tt[LetRec] to @tt[CloseRec] so that each function will
+   have a frame variable for its free variables.
    @end[doc]
 >>
 prim_rw add_frame : LetRec{R1. 'fields['R1]; R2. 'e['R2]} <-->
@@ -223,7 +218,7 @@ doc <:doc<
    @end[verbatim]
 
    Next, we apply the close_frame rewrite, which takes the free
-   var, adds it to the frame, and projects it in the record.
+   variable, adds it to the frame, and projects it in the record.
 
    @begin[verbatim]
    close var v = a in
@@ -271,7 +266,7 @@ prim_rw close_frame :
 doc <:doc<
    @begin[doc]
    Now, a conversional to apply the inverse-beta reduction.
-   The "vars" parameter is the set of function variables.
+   The <<'vars>> parameter is the set of function variables.
    Function variables are not treated as free; we don't
    need closure conversion for them.
    @end[doc]
@@ -306,7 +301,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Phase 3}
 
-   Convert the CloseRec term to a LetRec plus a frame allocation.
+   Convert the @tt[CloseRec] term to a @tt[LetRec] plus a frame allocation.
    @end[doc]
 >>
 prim_rw close_close_rec :
@@ -388,11 +383,10 @@ let resource closure +=
      << LetTuple{'length; 'tuple; v. Initialize{'e['v]}} >>, close_initialize_2;
      << LetClosure{'f; 'frame; g. TailCall{AtomVar{'g}; 'args}} >>, close_tailcall]
 
-doc <:doc<
-   @docoff
+doc docoff
 
-   These are the main tactics.
->>
+(* These are the main tactics. *)
+
 let frameT =
    repeatT (rwh add_frame 0)
 

@@ -476,7 +476,7 @@ dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof; 'res} =
 
 dform opname_df : "opname"[name:s]{'term} =
    pushm[4] szone
-   info["declare"] hspace szone slot["raw"]{'term} hspace
+   info["declare"] hspace szone tt{slot["raw"]{'term}} hspace
    szone info["(displayed as"] hspace ensuremath{slot["decl"]{'term}} info[")"] ezone
    ezone ezone popm
 
@@ -484,7 +484,7 @@ dform definition_df : "definition"[name:s]{'term; 'definition; 'res} =
    szone pushm[4]
    info["define"] " " szone rewrite_name[name:s] resources{'res} keyword[":"] ezone hspace
    szone pushm[4]
-   slot["raw"]{'term} `" " ensuremath{longleftrightarrow} hspace ensuremath{'definition}
+   tt{slot["raw"]{'term}} `" " ensuremath{longleftrightarrow} hspace ensuremath{'definition}
    popm ezone
    popm ezone
 
@@ -556,7 +556,7 @@ dform module_df : "module"[name:s]{'info} =
 dform dform_df : "dform"[name:s]{'modes; 'redex; 'def} =
    szone pushm[4]
    info["dform"] " " slot[name:s]
-   " " keyword[": "] dform_modes{'modes} hspace slot["raw"]{'redex}
+   " " keyword[": "] dform_modes{'modes} hspace tt{slot["raw"]{'redex}}
    " " keyword["="] hspace pushm szone{'def} popm
    ezone popm
 

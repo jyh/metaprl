@@ -166,7 +166,13 @@ ml_dform var_tex_df : mode[tex] :: display_var[v:v]{nil} format_term buf = fun
                else
                   h,tl
             in
+               format_izone buf;
+               format_string buf "\\mathit{";
+               format_ezone buf;
                format_string buf h;
+               format_izone buf;
+               format_string buf "}";
+               format_ezone buf;
                if (tl<>[]) then begin
                   format_izone buf;
                   format_string buf "_{";

@@ -1,8 +1,4 @@
 doc <:doc<
-   @begin[spelling]
-   dst opname src
-   @end[spelling]
-
    @begin[doc]
    @module[M_x86_asm]
 
@@ -104,19 +100,21 @@ doc <:doc<
    we define a normal two-operand instruction set for _memory_
    operands.  Then we define a three-operand set for register
    destination operands.  Again, the allocator is responsible
-   for making sure the dst and the first src register are the
+   for making sure the <<'dst>> and the first <<'src>> register are the
    same.
 
    Further, for simplicity, we categorize instructions into
-   several kinds.
+   several kinds:
 
-   Mov defines a new register from an arbitrary operand
-   Inst1[opname]: a normal one-operand instruction
-   Inst2[opname]: this is a normal two-operand instruction
-   Inst3[opname]: a MUL/DIV instruction
-   Shift[opname]: a shift instruction
-   Cmp[opname]: a comparison; both operands are sources
-   Set[opname]: the set/cc instruction
+   @begin[itemize]
+   @item{@tt[Mov] defines a new register from an arbitrary operand}
+   @item{<<'Inst1['opname]>>: a normal one-operand instruction}
+   @item{<<'Inst2['opname]>>: this is a normal two-operand instruction}
+   @item{<<'Inst3['opname]>>: a MUL/DIV instruction}
+   @item{$@tt[Shift][<<'opname>>]$: a shift instruction}
+   @item{$@tt[Cmp][<<'opname>>]$: a comparison; both operands are sources}
+   @item{$@tt[Set][<<'opname>>]$: the set/cc instruction}
+   @end[itemize]
    @end[doc]
 >>
 declare Mov{'src; dst. 'rest['dst]}

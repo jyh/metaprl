@@ -1,8 +1,5 @@
 doc <:doc<
-   @begin[spelling]
-   AtomFun AtomFunVar CPS EndDef FunDef LetApply LetClosure exp
-   @end[spelling]
-
+   @spelling{CPS}
    @begin[doc]
    @module[M_ir]
 
@@ -101,7 +98,7 @@ doc <:doc<
    Atoms are values: integers, variables, binary operations
    on atoms, and functions.
 
-   AtomFun is a lambda-abstraction, and AtomFunVar is the projection
+   @tt[AtomFun] is a lambda-abstraction, and @tt[AtomFunVar] is the projection
    of a function from a recursive function definition (defined below).
    @end[doc]
 >>
@@ -147,8 +144,8 @@ declare ReserveNil
 
 doc <:doc<
    @begin[doc]
-   LetApply, Return are eliminated during CPS conversion.
-   LetClosure is like LetApply, but it is a partial application.
+   @tt[LetApply], @tt[Return] are eliminated during CPS conversion.
+   @tt[LetClosure] is like @tt[LetApply], but it is a partial application.
    @end[doc]
 >>
 declare LetApply{'f; 'a; v. 'e['v]}
@@ -184,9 +181,9 @@ doc <:doc<
    Records have a set of tagged fields.
    We require that all the fields be functions.
 
-   The record construction is recursive.  The Label term is used for
-   field tags; the FunDef defines a new field in the record; and the
-   EndDef term terminates the record fields.
+   The record construction is recursive.  The @tt[Label] term is used for
+   field tags; the @tt[FunDef] defines a new field in the record; and the
+   @tt[EndDef] term terminates the record fields.
    @end[doc]
 >>
 declare Fields{'fields}
@@ -212,10 +209,10 @@ doc <:doc<
    @modsubsection{Program sequent representation}
 
    Programs are represented as sequents:
-      declarations, definitions >- exp
+      <<sequent{ <declarations>; <definitions> >- exp }>>
 
    For now the language is untyped, so each declaration
-   has the form v:exp.  A definition is an equality judgment.
+   has the form @tt["v: exp"].  A definition is an equality judgment.
    @end[doc]
 >>
 declare exp
@@ -250,7 +247,7 @@ prec prec_fun < prec_if
 prec prec_comma < prec_fun
 prec prec_compilable < prec_comma
 
-doc <:doc< @doc{Some convenient keywords} >>
+doc <:doc< @doc{Some convenient keywords (used in only display forms and do not have a formal meaning).} >>
 declare xlet
 declare xin
 doc <:doc< @docoff >>
@@ -363,6 +360,8 @@ dform reserve_nil_df : parens :: "prec"[prec_comma] :: ReserveNil =
 doc <:doc< @doc{Sequent tag for the M language.} >>
 
 declare m
+
+doc docoff
 
 dform m_df : m = bf["m"]
 

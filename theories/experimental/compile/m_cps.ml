@@ -1,6 +1,6 @@
 doc <:doc< 
    @begin[spelling]
-   CPS CPSFunVar CPSRecordVar EMRE compilable cont cps nop var
+   CPS EMRE compilable op
    @end[spelling]
   
    @begin[doc]
@@ -72,16 +72,16 @@ doc <:doc<
   
    @bf{The @Comment!resource[cps_resource]}
   
-   The @tt{cps} resource provides a generic method for
+   The @tt[cps] resource provides a generic method for
    defining @emph{CPS transformation}.  The @conv[cpsC] conversion
    can be used to apply this evaluator.
   
-   The implementation of the @tt{cps_resource} and the @tt[cpsC]
+   The implementation of the @tt[cps_resource] and the @tt[cpsC]
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
   
-   @docoff
    @end[doc]
+   @docoff
 >>
 let resource cps =
    table_resource_info identity extract_data
@@ -115,12 +115,12 @@ doc <:doc<
          the identity function.}
   
    @item{<<CPS{'cont; 'e}>>
-      is the CPS conversion of expression $e$ with continuation ${cont}$.
-      The interpretation is as the application ${cont}@space{}e$.}
+      is the CPS conversion of expression $e$ with continuation <<'cont>>.
+      The interpretation is as the application $<<'cont>>@space<<'e>>$.}
   
    @item{<<CPS{cont. 'fields['cont]}>>
       is the CPS conversion of a record body.  We think of a record
-      @tt["{ f1 = e1; ...; fn = en }"]
+      $@{ f_1 = e_1; ...; f_n = e_n @}$
       as a function from labels to expressions (on label $f_i$, the function returns $e_i$).
       The CPS form is $@lambda l. @lambda c. <<CPS{'c;'fields['l]}>>$.}
 
@@ -163,8 +163,8 @@ doc <:doc<
    Each rewrite in the transformation preserves the operational
    semantics of the program.
   
-   For atoms, the transformation is a nop unless the atom is
-   a function var.  If so, the function must be partially applied.
+   For atoms, the transformation is a no-op unless the atom is
+   a function variable.  If so, the function must be partially applied.
    @end[doc]
 >>
 prim_rw cps_atom_true {| cps |} : CPS{AtomTrue} <-->

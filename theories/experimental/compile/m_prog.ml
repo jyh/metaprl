@@ -1,8 +1,4 @@
 doc <:doc<
-   @begin[spelling]
-   prog
-   @end[spelling]
-
    @begin[doc]
    @module[M_prog]
 
@@ -73,11 +69,11 @@ doc <:doc<
    @begin[doc]
    @resources
 
-   The @tt["prog"] resource provides a generic method for defining a method
+   The @tt[prog] resource provides a generic method for defining a method
    of lifting closed function definitions to the top level of a program.
    The @conv[progC] conversion can be used to apply this evaluator.
 
-   The implementation of the @tt{prog_resource} and the @tt[progC]
+   The implementation of the @tt[prog_resource] and the @tt[progC]
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
    @end[doc]

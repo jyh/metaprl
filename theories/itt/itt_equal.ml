@@ -79,6 +79,7 @@ declare univ[@i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
 declare it
+declare cumulativity[@i:l, @j:l]
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -272,7 +273,8 @@ let dest_level_param t =
             raise (RefineError ("dest_level_param", TermMatchError (t, "too many params")))
 
 (* Cumulativity over universes *)
-mlterm cumulativity{univ[@j:l]; univ[@i:l]} =
+ml_rule cumulativity 'H :
+   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } ==
    let i = dest_level_param <:con< univ[@i:l] >> in
    let j = dest_level_param <:con< univ[@j:l] >> in
       if level_cumulativity j i then
@@ -288,7 +290,7 @@ mlterm cumulativity{univ[@j:l]; univ[@i:l]} =
  * by universeEquality (side (j < i))
  *)
 prim universeEquality 'H :
-   cumulativity{univ[@j:l]; univ[@i:l]} :
+   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
    sequent ['ext] { 'H >- univ[@j:l] = univ[@j:l] in univ[@i:l] } =
   it
 
@@ -318,7 +320,7 @@ interactive universeAssumType 'H 'J : :
  * by universeFormation
  *)
 prim universeFormation 'H univ[@j:l] :
-   cumulativity{univ[@j:l]; univ[@i:l]} :
+   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
    sequent ['ext] {'H >- univ[@i:l] } =
    univ[@j:l]
 

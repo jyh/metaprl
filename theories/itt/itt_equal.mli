@@ -53,6 +53,7 @@ declare univ[@i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
 declare it
+declare cumulativity[@i:l, @j:l]
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -184,10 +185,10 @@ rule type_squashElimination 'H :
  * H >- Uj = Uj in Ui
  * by universeEquality (side (j < i))
  *)
-mlterm cumulativity{univ[@j:l]; univ[@i:l]}
+(* ml_rule cumulativity 'H : sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } *)
 
 rule universeEquality 'H :
-   cumulativity{univ[@j:l]; univ[@i:l]} -->
+   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
    sequent ['ext] { 'H >- univ[@j:l] = univ[@j:l] in univ[@i:l] }
 
 (*
@@ -214,7 +215,7 @@ rule universeAssumType 'H 'J :
  * by universeFormation level{$j:l}
  *)
 rule universeFormation 'H univ[@j:l] :
-   cumulativity{univ[@j:l]; univ[@i:l]} -->
+   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
    sequent ['ext] {'H >- univ[@i:l] }
 
 (*

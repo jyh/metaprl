@@ -178,14 +178,6 @@ prim_rw indReduceBase :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
 
-mlterm indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}} =
-   raise (RefineError ("indReduce", StringError "not implemented"))
- | fun _ _ ->
-      raise (RefineError ("indReduce", StringError "not implemented"))
-
-prim_rw indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
-   indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}}
-
 let reduce_info =
    [<< "add"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceAdd;
     << "sub"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceSub;

@@ -4,7 +4,7 @@
  * @begin[doc]
  * @theory[Czf_itt_iso]
  *
- * The @tt{Czf_itt_iso} theory defines the isomorphism.
+ * The @tt{Czf_itt_iso} module defines the isomorphism.
  * @end[doc]
  *
  * ----------------------------------------------------------------

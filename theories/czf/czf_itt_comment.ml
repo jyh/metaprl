@@ -825,7 +825,7 @@ dform normalsubg_df : except_mode[tex] :: math_normalsubg{'s; 'g} =
 declare math_hom{'x; 'g1; 'g2; 'f}
 
 dform hom_df1 : mode[tex] :: math_hom{'x; 'g1; 'g2; 'f} =
-   izone `"{{\\it homomorphism}(" ezone
+   izone `"{{\\it hom}(" ezone
    slot{'f}
    izone `":" ezone
    slot{'g1}
@@ -843,7 +843,7 @@ dform hom_df : parens :: except_mode[tex] :: math_hom{'x; 'g1; 'g2; 'f} =
 declare math_ker{'x; 'h; 'g1; 'g2; 'f}
 
 dform ker_df1 : mode[tex] :: math_ker{'x; 'h; 'g1; 'g2; 'f} =
-   izone `"{{\\it kernel}(" ezone
+   izone `"{{\\it ker}(" ezone
    slot{'h}
    izone `"," ezone
    slot{'g1}
@@ -865,23 +865,14 @@ dform ker_df : parens :: except_mode[tex] :: math_ker{'x; 'h; 'g1; 'g2; 'f} =
 declare math_iso{'x; 'g1; 'g2; 'f}
 
 dform iso_df1 : mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
-   izone `"{{\\it isomorphism}(" ezone
+   izone `"{{\\it iso}(" ezone
    slot{'f}
    izone `":" ezone
    slot{'g1}
    izone `"->" ezone
    slot{'g2}
    izone `")}" ezone
-(*   izone `"{{\\it iso}(" ezone
-   slot{'g1}
-   izone `"," ezone
-   slot{'g2}
-   izone `"," ezone
-   slot{'x}
-   izone `"." ezone
-   slot{'f}
-   izone `")}" ezone
-*)
+
 dform iso_df : parens :: except_mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
    `"iso(" slot{'g1} `"; " slot{'g2} `"; " slot{'f} `")"
 

@@ -229,7 +229,7 @@ interactive klein4_inv_isset {| intro[] |} 'H :
  * @begin[doc]
  * @thysubsection{Introduction and elimination for the carrier set}
  *
- * The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$.
+ * The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$ only.
  * @end[doc]
  *)
 interactive car_klein0 {| intro[] |} 'H :
@@ -254,7 +254,7 @@ interactive car_klein0_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Verificatioin of the group axioms}
+ * @thysubsection{Verification of the group axioms}
  *
  * The @tt{op} for @tt{klein4} is functional and is a mapping.
  * @end[doc]

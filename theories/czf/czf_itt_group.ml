@@ -5,14 +5,16 @@
  * @theory[Czf_itt_group]
  *
  * The @tt{Czf_itt_group} module defines groups. Each group
- * is assigned a label, such as $g$, and defined as $@group{g}$.
- * The carrier set, operation, identity, and inverse of the
- * group are defined as $@car{g}$, $@op{g; a; b}$, $@id{g}$,
- * and $@inv{g; a}$ respectively. Axioms are used to describe
- * a group, such as the axioms about the closure property, the
- * axiom about associativity, the axioms about the identity
- * and inverse. The properties of groups can be proved from
- * these axioms.
+ * is assigned a label, such as $g$. The predicate $@group{g}$
+ * is used to represent "$g$ is a group". The carrier set,
+ * operation, identity, and inverse of the group are defined
+ * as $@car{g}$, $@op{g; a; b}$, $@id{g}$, and $@inv{g; a}$
+ * respectively. @emph{Axioms} are used to describe a group,
+ * such as the axioms about the closure property, the axiom
+ * about associativity, the axioms about the identity and
+ * inverse. Any group should satisfy these axioms; all
+ * properties of groups are derived constructively from the
+ * axioms of groups and the axioms of set theory.
  * @end[doc]
  * ----------------------------------------------------------------
  *
@@ -120,7 +122,8 @@ dform inv_df : parens :: except_mode[src] :: inv{'g; 'a} =
  * @thysubsection{Well-formedness}
  *
  * The @tt{group}, @tt{car}, @tt{op}, @tt{inv}, and @tt{id}
- * are well-formed if the group argument is a label.
+ * are well-formed if the group argument is a label and the
+ * set argument is a set (if there is any).
  * @end[doc]
  *)
 interactive group_type {| intro [] |} 'H :
@@ -150,10 +153,11 @@ interactive inv_isset {| intro[] |} 'H :
  * @begin[doc]
  * @thysubsection{Binary operation}
  *
- * The @tt{op} is a binary operation on @tt{car}, which means:
+ * The @tt{op} is a @emph{binary operation} on @tt{car}, which means:
  * first, if $a$ and $b$ are in $@car{g}$, then $@op{g; a; b}$
- * is @emph{again in} $@car{g}$; second, it assigns each ordered
- * pair exactly one element, i.e., @tt{op} is functional.
+ * is @emph{again} in $@car{g}$; second, it assigns each ordered
+ * pair exactly one element, i.e., @tt{op} is functional in its
+ * set arguments.
  * @end[doc]
  *)
 interactive op_closure {| intro[] |} 'H :
@@ -213,8 +217,8 @@ interactive id_eq1 {| intro[] |} 'H :
  * @begin[doc]
  * @thysubsection{Inverse}
  *
- * The @tt{inv} is a unary operation on @tt{car} such that
- * for each $a @in @car{g}$, $@eq{@op{g; @inv{g; s}; s}; @id{g}}$.
+ * The @tt{inv} is a @emph{unary operation} on @tt{car} such that
+ * $@eq{@op{g; @inv{g; s}; s}; @id{g}}$ for any $a @in @car{g}$.
  * @end[doc]
  *)
 interactive inv_fun {| intro[] |} 'H :
@@ -280,7 +284,7 @@ interactive op_eq2 {| intro[] |} 'H :
  * If $@group{g}$, then
  * @begin[enumerate]
  * @item{if $s$ is a member of $@car{g}$ and
- *       $@eq{@op{g; s; s}; s}$, then $@eq{s; @id{g}}$.}
+ *       $@eq{@op{g; s; s}; s}$, then $s$ is the identity.}
  * @item{the left inverse is also the right inverse.}
  * @item{the left identity is also the right identity.}
  * @end[enumerate]
@@ -507,17 +511,17 @@ interactive id_commut2 {| intro [] |} 'H :
  * @tactics
  *
  * @begin[description]
- * @item{@tactic[groupCancelLeftT], groupCancelRightT], @tactic[uniqueInvLeftT], @tactic[uniqueInvRightT];
+ * @item{@tactic[groupCancelLeftT], @tactic[groupCancelRightT], @tactic[uniqueInvLeftT], @tactic[uniqueInvRightT];
  *    The @tt{groupCancelLeftT} tactic applies the @hrefrule[cancel1]
  *    rule, which infers that $a$ and $b$ are equal from the fact that
- *    $c * a$ is eaual to $c * b$.
+ *    $c * a$ is equal to $c * b$.
  *    The @tt{groupCancelRightT} tactic applies the @hrefrule[cancel2]
- *    rule, which infers that $a$ and $b$ are equalt from the fact
- *    that $a * c$ is equal to $b * c$.
+ *    rule, which infers that $a$ and $b$ are equal from the fact
+ *    that $a * c$ equals $b * c$.
  *    The @tt{uniqueInvLeftT} and @tt{uniqueInvRightT} tactics apply
  *    the @hrefrule[unique_inv_elim1] and @hrefrule[unique_inv_elim2] rules
  *    and prove $x$ is the inverse of $y$ from the fact that $y * x$ or
- *    $x * y$ is the identity.}
+ *    $x * y$ is the identity respectively.}
  * @end[description]
  * @docoff
  * @end[doc]

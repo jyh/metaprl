@@ -116,7 +116,6 @@ dform normal_subg_df : except_mode[src] :: normal_subg{'s; 'g} =
 interactive normalSubg_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- "type"{normal_subg{'s; 'g}} }
 
 (*!

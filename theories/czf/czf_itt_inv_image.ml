@@ -8,7 +8,7 @@
  * of a set under some mapping. The inverse image is defined as a set
  * constructor $@invimage{x; s; t; a[x]}$. The term $s$ and $t$ must
  * be sets, and $a[x]$ must be functional. The elements of the inverse
- * image are the elements of $x @in s$ for which $a[x] @in t$ is true.
+ * image are the elements of $x$ in $s$ for which $a[x]$ in $t$ is true.
  *
  * @end[doc]
  *
@@ -113,7 +113,7 @@ dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
  * @rules
  * @thysubsection{Well-formedness}
  *
- * The inverse image $@invimage{x; s; t; a[x]}$ is well-formed
+ * The inverse image $@invimage{x; s; a[x]; t}$ is well-formed
  * if $s$ and $t$ are sets, and $a[x]$ is functional.
  * @end[doc]
  *)
@@ -127,9 +127,9 @@ interactive inv_image_isset {| intro [] |} 'H :
  * @begin[doc]
  * @thysubsection{Introduction}
  *
- * A set $y$ is a member of $@invimage{x; s; t; a[x]}$ if
+ * A set $y$ is a member of $@invimage{x; s; a[x]; t}$ if
  * the inverse image is well-formed; if $@mem{y; s}$;
- * and $@mem{a[y]; t}$.
+ * and if $@mem{a[y]; t}$.
  * @end[doc]
  *)
 interactive inv_image_intro {| intro [] |} 'H :
@@ -145,7 +145,7 @@ interactive inv_image_intro {| intro [] |} 'H :
  * @begin[doc]
  * @thysubsection{Elimination}
  *
- * An assumption $@mem{y; @invimage{x; s; t; a[x]}}$ implies two facts:
+ * An assumption $@mem{y; @invimage{x; s; a[x]; t}}$ implies two facts:
  * $@mem{y; s}$ and $@mem{a[y]; t}$.
  * @end[doc]
  *)

@@ -4,24 +4,23 @@
  * @begin[doc]
  * @theory[Czf_itt_hom]
  *
- * The @tt{Czf_itt_hom} theory defines the @emph{homomorphism}.
- * A homomorphism is a mapping $f$ from a group $g_1$ into another
+ * The @tt{Czf_itt_hom} module defines the @emph{homomorphism}.
+ * A homomorphism is a mapping $f$ from one group $g_1$ into another
  * group $g_2$, which satisfies for any $a$ and $b$ in $@car{g_1}$,
  * $$f(a *_1 b) = f(a) *_2 f(b)$$
  *
  * $f$ is a mapping from group $g_1$ into group $g_2$ means: first,
  * for any $a$ in $@car{g_1}$, $f(a)$ is in $@car{g_2}$; second,
- * for each $a$ in $@car{g_1}$, exactly one element is assigned in
- * $@car{g_2}$.
+ * for each $a$ in $@car{g_1}$, @emph{exactly} one element is
+ * assigned in $@car{g_2}$.
  *
- * The homomorphism is given with the @tt{hom} term, which is
- * defined as follows.
+ * The homomorphism is defined as follows:
  *
  * $$
  * @begin[array, l]
  * @line{@item{@hom{x; g_1; g_2; f[x]} @equiv}}
  * @line{@item{@space @space @space
- *   @group{g_1}}}
+ *   @space @group{g_1}}}
  * @line{@item{@space @space @space
  *   @wedge @group{g_2}}}
  * @line{@item{@space @space @space
@@ -121,7 +120,7 @@ declare hom{'g1; 'g2; x. 'f['x]}
  * The @tt{hom} judgment requires that $g_1$ and $g_2$ be
  * groups, $f$ be a mapping from $@car{g_1}$ into $@car{g_2}$,
  * and for any $a$ and $b$ in $@car{g_1}$, $f$ map
- * $@op{g_{1}; a; b}$ to $@op{g_{2}; f[a]; f[b]}$.
+ * $@op{g_{1}; a; b}$ into $@op{g_{2}; f[a]; f[b]}$.
  * @end[doc]
  *)
 prim_rw unfold_hom : hom{'g1; 'g2; x. 'f['x]} <-->
@@ -144,9 +143,8 @@ dform hom_df : parens :: except_mode[src] :: hom{'g1; 'g2; x. 'f} =
  * @rules
  * @thysubsection{Well-formedness}
  *
- * The proposition $@hom{x; g1; g2; f[x]}$ is well-formed
- * if $g1$ and $g2$ are labels, and $f[x]$ is a set for any
- * set argument $x$.
+ * The @tt{hom} is well-formed if $g1$ and $g2$ are labels,
+ * and $f[x]$ is a set for any set argument $x$.
  * @end[doc]
  *)
 interactive hom_type {| intro [] |} 'H :
@@ -162,8 +160,8 @@ interactive hom_type {| intro [] |} 'H :
  * The proposition $@hom{x; g1; g2; f[x]}$ is true if it
  * is well-formed, $g1$ and $g2$ are groups, $f$ assigns
  * to each element $x$ of $@car{g_1}$ exactly one element
- * $b$ of $@car{g_2}$, and $f$ maps $@op{g_{1}; a; b}$ to
- * $@op{g_{2}; f[a]; f[b]}$ for any $a$ and $b$ in
+ * $b$ of $@car{g_2}$, and $f$ maps $@op{g_{1}; a; b}$
+ * into $@op{g_{2}; f[a]; f[b]}$ for any $a$ and $b$ in
  * $@car{g_1}$.
  * @end[doc]
  *)
@@ -200,8 +198,8 @@ interactive hom_fun {| intro [] |} 'H :
  *
  * For any groups $g_1$ and $g_2$, there is always at least
  * one homomorphism $f@colon g_1 @rightarrow g_2$ which
- * maps all $a$ in $@car{g_1}$ to $@id{g_2}$. This is called
- * the trivial homomorphism.
+ * maps all elements of $@car{g_1}$ into $@id{g_2}$. This
+ * is called the trivial homomorphism.
  * @end[doc]
  *)
 interactive trivial_hom1 'H :
@@ -250,7 +248,7 @@ interactive hom_id {| intro [] |} 'H hom{'g1; 'g2; x. 'f['x]} :
 (*!
  * @begin[doc]
  *
- *   $f$ maps the identity of $g_1$ to the identity of $g_2$.
+ *   $f$ maps the identity of $g_1$ into the identity of $g_2$.
  * @end[doc]
  *)
 interactive hom_id_elim (*{| elim [] |}*) 'H 'J :
@@ -271,7 +269,7 @@ interactive hom_inv {| intro [] |} 'H 'a hom{'g1; 'g2; x. 'f['x]} :
 (*!
  * @begin[doc]
  *
- *   $f$ maps the inverse of an element $a$ in $@car{g_1}$ to
+ *   $f$ maps the inverse of an element $a$ in $@car{g_1}$ into
  *   the inverse of $f[a]$ in $@car{g_2}$.
  * @end[doc]
  *)

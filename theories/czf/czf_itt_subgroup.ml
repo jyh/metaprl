@@ -144,7 +144,7 @@ interactive subgroup_intro {| intro [] |} 'H :
  * If $s$ is a subgroup of $g$, then
  * @begin[enumerate]
  * @item{$s$ is closed under the binary operation of $g$.}
- * @item{the identity of $s$ is also an identity of $g$.}
+ * @item{the identity of $s$ is the identity of $g$.}
  * @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
  * @end[enumerate]
  * @end[doc]
@@ -191,8 +191,8 @@ interactive subgroup_inv2 {| intro [] |} 'H :
  * @begin[doc]
  * @thysubsection{Theorems}
  *
- * The intersection of subgroups $h_1$ and $h_2$ of a group $g$ is
- * again a subgroup of $g$.
+ * The intersection group of subgroups $h_1$ and $h_2$ of
+ * a group $g$ is again a subgroup of $g$.
  * @end[doc]
  *)
 interactive subgroup_isect 'H 'h1 'h2 :

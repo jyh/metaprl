@@ -43,10 +43,7 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
-include Czf_itt_subgroup
 include Czf_itt_hom
-include Czf_itt_sep
 include Czf_itt_coset
 include Czf_itt_normal_subgroup
 (*! @docoff *)
@@ -94,8 +91,8 @@ declare ker{'h; 'g1; 'g2; x. 'f['x]}
  * @rewrites
  * The @tt{ker} judgment requires that $@hom{x; g1; g2; f[x]}$
  * and $h$ be a group which has the same binary operation as
- * $g1$ and the elements of whose underlying set are mapped
- * into the identity of $g2$.
+ * $g1$ and the elements of whose carrier are all mapped into
+ * the identity of $g2$.
  * @end[doc]
  *)
 prim_rw unfold_ker : ker{'h; 'g1; 'g2; x. 'f['x]} <-->
@@ -119,7 +116,7 @@ dform ker_df : parens :: except_mode[src] :: ker{'h; 'g1; 'g2; x. 'f} =
  * @thysubsection{Well-formedness}
  *
  * The kernel proposition $@ker{x; h; g1; g2; f[x]}$ is well-formed if
- * $g1$, $g2$, and $h$ are labels, and $f[x]$ is functional on any
+ * $g1$, $g2$, and $h$ are labels, and $f[x]$ is functional in any
  * set argument $x$.
  * @end[doc]
  *)
@@ -134,10 +131,9 @@ interactive ker_type {| intro [] |} 'H :
  * @begin[doc]
  * @thysubsection{Introduction}
  *
- * The kernel proposition $@ker{x; h; g1; g2; f[x]}$ is true if the
- * homomorphism proposition $@hom{x; g1; g2; f}$ is true and $h$
- * is a group formed by the elements of group $g1$ whose mapping
- * is $@id{g2}$.
+ * The proposition $@ker{x; h; g1; g2; f[x]}$ is true if
+ * $@hom{x; g1; g2; f}$ is true and $h$ is a group formed
+ * by the elements of group $g1$ that are mapped into $@id{g2}$.
  * @end[doc]
  *)
 interactive ker_intro {| intro [] |} 'H :
@@ -213,7 +209,7 @@ interactive ker_rcoset_i {| intro [] |} 'H 'g2 :
 
 (*!
  * @begin[doc]
- * If the kernel proposition $@ker{x; h; g1; g2; f[x]}$ is true, then
+ * If the proposition $@ker{x; h; g1; g2; f[x]}$ is true, then
  * the set $@sep{x; @car{g1}; @eq{f[x]; f[a]}}$
  * is equal to $@lcoset{h; g1; a}$ and $@rcoset{h; g1; a}$.
  * @end[doc]
@@ -240,9 +236,9 @@ interactive ker_rcoset_e (*{| elim [] |}*) 'H 'J 'g2 'a :
 
 (*!
  * @begin[doc]
- * A $@hom{x; g1; g2; f}$ is called a @emph{monomorphism} if it is
- * @emph{one to one}; this is the case if and only if the kernel
- * of $f$ equals ${@id{g1}}$.
+ * A group homomorphism $f$ from $g1$ into $g2$ is called a
+ * @emph{monomorphism} if it is @emph{one to one}; this is the
+ * case if and only if the kernel of $f$ equals $@sing{@id{g1}}$.
  * @end[doc]
  *)
 interactive ker_mono1 (*{| elim [] |}*) 'H 'J :
@@ -263,7 +259,8 @@ interactive ker_mono2 (*{| elim [] |}*) 'H 'J :
 
 (*!
  * @begin[doc]
- * The ker of a $@hom{x; g1; g2; f}$ is a normal subgroup of $g1$.
+ * The kernel of a group homomorphism $f$ from $g1$ into $g2$ is
+ * a normal subgroup of $g1$.
  * @end[doc]
  *)
 interactive ker_normalSubg (*{| elim [] |}*) 'H 'J :

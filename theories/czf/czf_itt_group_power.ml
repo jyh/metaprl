@@ -135,7 +135,7 @@ interactive power_wf {| intro [] |} 'H :
  * @thysubsection{Membership}
  *
  * If $z$ is a member of $@car{g}$, then $@power{g; z; n}$
- * is also in $@car{g}$.
+ * is also in $@car{g}$ for any integer $n$.
  * @end[doc]
  *)
 interactive power_mem {| intro [] |} 'H :

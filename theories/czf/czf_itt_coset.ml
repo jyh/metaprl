@@ -6,14 +6,13 @@
  *
  * The @tt{Czf_itt_coset} module defines the @emph{left coset}
  * and the @emph{right coset}. If $h$ is a subgroup of $g$ and
- * $@mem{a; @car{g}}$, then the set of $a * h$ for which
- * $h @in @car{h}$ is the left coset of $h$ containing $a$, and
- * the set of $h * a$ for which $h @in @car{h}$ is the right
- * coset of $h$ containing $a$. The elements of the left coset
- * are the elements of $x @in @car{g}$ which is equal to $@op{g; a; y}$
- * for some $y @in @car{h}$. The elements of the right coset are
- * the elements of $x @in @car{g}$ which is equal to $@op{g; y; a}$
- * for some $y @in @car{h}$. The cosets are defined by separation.
+ * $@mem{a; @car{g}}$, then the left coset containing $a$ is
+ * ${a * x | x @in @car{h}}$ and the right coset containing $a$
+ * is ${x * a| x @in @car{h}}$. The elements of the left coset
+ * are those in $@car{g}$ which are equal to $@op{g; a; y}$ for
+ * some $y @in @car{h}$. The elements of the right coset are
+ * those in $@car{g}$ which are equal to $@op{g; y; a}$ for some
+ * $y @in @car{h}$. The cosets are defined by separation.
  *
  * @end[doc]
  *
@@ -123,7 +122,7 @@ dform rcoset_df : parens :: except_mode[src] :: rcoset{'h; 'g; 'a} =
  * @thysubsection{Well-formedness}
  *
  * The $@lcoset{h; g; a}$ and $@rcoset{h; g; a}$ are well-formed
- * if $h$ and $g$ are labels, $a$ is a set, and $g$ is a group.
+ * if $h$ and $g$ are labels, and $a$ is a set.
  * @end[doc]
  *)
 interactive lcoset_isset {| intro [] |} 'H :
@@ -149,7 +148,7 @@ interactive rcoset_isset {| intro [] |} 'H :
  * $@mem{x; @car{g}}$, $@subgroup{h; g}$, and there
  * exists a set $y$ such that $y$ is a member of
  * $@car{h}$ and $x$ is equal to $@op{g; a; y}$
- * in $@car{g}$.
+ * in $@car{g}$. The case for @tt{rcoset} is similar.
  * @end[doc]
  *)
 interactive lcoset_intro {| intro [] |} 'H 'z :
@@ -183,9 +182,9 @@ interactive rcoset_intro {| intro [] |} 'H 'z :
  * @thysubsection{Elimination}
  *
  * The elimination form for the left coset
- * $@mem{y; @lcoset{h; g; a}}$ implies $@mem{y; @car{g}}$
- * and also produces a witness $@mem{z; @car{h}}$ for which
- * $@eq{y; @op{g; a; z}}$.
+ * $@mem{y; @lcoset{h; g; a}}$ implies $@mem{y; @car{g}}$ and
+ * also produces a witness $@mem{z; @car{h}}$ for which
+ * $@eq{y; @op{g; a; z}}$. The case for @tt{rcoset} is similar.
  * @end[doc]
  *)
 interactive lcoset_elim {| elim [] |} 'H 'J :
@@ -212,9 +211,9 @@ interactive rcoset_elim {| elim [] |} 'H 'J :
  * @begin[doc]
  * @thysubsection{Theorems}
  *
- * $h$ is a subgroup of group $g$. Both the left and right
- * coset of $h$ containing $a$ are subsets of the underlying
- * set of $g$.
+ * If $h$ is a subgroup of group $g$, both the left and right
+ * cosets of $h$ containing $a$ are subsets of the carrier of
+ * $g$.
  * @end[doc]
  *)
 interactive lcoset_subset {| intro [] |} 'H :

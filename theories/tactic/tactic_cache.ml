@@ -18,14 +18,7 @@
  * When new hypotheses are added, more things can be derived
  * by forward chaining.  Howver, any further inferences that are
  * derived in the old worlds should remain valid in those worlds,
- * wso that if we back out, the inferences are preserved.
- *
- * Unfortunately, refinement and backout are not very compatible.
- * Data structures:
- *     rules: a collection of rules together with inferences
- *         that may be used as arguments.
- *     infs: inferences derived by forward chaining.
- *     goals: goals derived by backward chaining.
+ * so that if we back out, the inferences are preserved.
  *
  * Constraint: backout is common, and it chould be cheap.
  *    Also it should be easy to recover if an inference is
@@ -33,56 +26,24 @@
  * Tradeoff: if backout is cheap, then lookup and insertion
  *    becomes expensive.
  *
- * If we only had refinement, then we could just keep one version
- * of "rules".  However, with backout, we need to recover old rule
- * sets.  "rules" is implemented as a hash table.
+ * The solution that we use is to associate refinement
+ * and forward inference with worlds.  Each world contains the
+ * inferences it has made by forward chaining, and when backout
+ * removes a world, it also removes all the forward inferences.
  *
- * There are two implementations I can think of.
- *
- * First, the rule table can be implemented as a set of tables,
- * one for each world.  Backout is easy: just remove tables from
- * the set.  Insertion is somewhat expensive, because a rule table has
- * to be selected for insertion.  Lookup is expensive, because
- * a lookup has to be performed in all tables.  If outdated
- * tables are retained, recovery should restore an old table
- * to the set, but forward chaining must be restarted to
- * allow the restored inferences to be combined with other
- * inferences added during their abscence.
- *
- * Second, make one rule table and tag the inferences in the
- * table with a "version" (which is really just the world in which they
- * were originally inferred).  If there is no garbage collection,
- * backout is easy, by outdated some revisions.  Insertion is
- * constant time.  Lookup is more difficult, because outdated inferences
- * must be filtered out.  Garbage collection must examine every item
- * in the table.  If forward chaining is performed through outdated
- * inferences, recovery is trivial, but the chaining can get carried
- * away with irrelevant inferences.  If forward chaining does not include
- * outdated inferences, then it must be restarted on inference
- * that are restored.
- *
- * As a whole, the second option seems more reasonable.  And that is
- * the option impelemented in this module.  Haven't decided whether to chain
- * through outdated inferences.  The "goal" table is global, except at a
- * world change.  Example:
- *        H >> A * (B -> C)         (global)
- *        (H >> A) & (H >> B -> C)  (and intro, global)
- *                   (H; B >> C)    (imp intro, local)
- *
- * There is a global backchain list, and a queue of pending
- * goals.  Goals that have been backed out are put on a
- * postponement list.
- *
- * There is a global inference list, and a global forward chaining
- * queue.  Inferences can be moved off of this queue onto a
- * postponement queue if their world is backed out.
+ * There is more discussion of the algorithm just before the
+ * type definition for 'a extract.
  *)
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermShape
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Rewrite
+open Refiner.Refiner.Refine
 
 (*
  * Debug statement.
@@ -134,8 +95,8 @@ type 'a proof =
  * (variables), and the rewrite converts the args
  * to their wildcard entries.
  *)
-type 'a fcacheInfo =
-   { finfo_plates : Term_template.t list;
+type 'a fcache_info =
+   { finfo_plates : shape list;
      finfo_wild : (int list * rewrite_rule) option;
      finfo_rw : rewrite_rule;
      finfo_just : 'a
@@ -145,8 +106,8 @@ type 'a fcacheInfo =
  * A backward info entry has a template for the goal,
  * and a rewrite to produce the subgoals.
  *)
-type 'a bcacheInfo =
-   { binfo_plate : Term_template.t;
+type 'a bcache_info =
+   { binfo_plate : shape;
      binfo_rw : term -> (term list * term) list;
      binfo_just : 'a
    }
@@ -156,11 +117,17 @@ type 'a bcacheInfo =
  *)
 type 'a cache =
    CacheNil
- | CacheForward of 'a fcacheInfo * 'a cache
- | CacheBackward of 'a bcacheInfo * 'a cache
+ | CacheForward of 'a fcache_info * 'a cache
+ | CacheBackward of 'a bcache_info * 'a cache
  | CacheJoin of 'a cache * 'a cache
 
 (*
+ * Inferences are used to list the results from forward chaining.
+ * A world is a hypothesis list, and each world contains
+ * a list of inferences that have been computed
+ * using forward chaining rules.  An extract contains
+ * a world, which then contains the results of forward chaining.
+ *
  * An inference is a fact, either because it is a
  * hypothesis, or because it has been derived by
  * forward chaining.  The info contains the justification,
@@ -168,37 +135,40 @@ type 'a cache =
  * the total list of results.  A particular inference
  * is a specific result.
  *)
-type 'a inferenceInfo =
+type 'a inference_info =
    { inf_values : term list;
      inf_just : 'a;
      inf_args : 'a inference list;
      inf_world : 'a world
    }
 
-and 'a hypInfo =
+and 'a hyp_info =
    { hyp_world : 'a world }
 
-and 'a infInfo =
-   Inference of 'a inferenceInfo
- | Hyp of 'a hypInfo
+and 'a inf_info =
+   Inference of 'a inference_info
+ | Hyp of 'a hyp_info
 
 and 'a inference =
    { inf_name : string;
      inf_value : term;
-     inf_hash : Term_template.t;
-     inf_info : 'a infInfo
+     inf_hash : shape;
+     inf_info : 'a inf_info
    }
 
 (*
- * A goal is just a term.  It may depend on a conjunction of
- * goals, or it may be justified by a forward chained inference.
- * In some cases, the goal will become dependent on a particular world.
- * In that case, list the extra assumptions, as well as the world
- * that has been constructed.
+ * Goals are used to list the results of backward chaining.
+ * They represent one vertex in the or-and tree of backward
+ * chaining (which is type 'a goalnode below).
  *
- * The subgoals are either unexplored, or they are a list of
- * possible subgoal combinations (meaning that they represent
- * an or-and branch).
+ *    goal_goal: this is the term to be proved
+ *    goal_assums: these are extra hypotheses that can be
+ *       assumed at this point the in the backward chaining
+ *    goal_subgoals: the subgoals are set when backwward
+ *       chaining has been applied successfully to this goal.
+ *       The subgoals are either unexplored, or they are a list of
+ *       possible subgoal combinations (meaning that they represent
+ *       an or-branch).
  *)
 and 'a subgoal =
    { sub_goals : 'a goal list;
@@ -212,27 +182,38 @@ and 'a subgoals =
 
 and assumption =
    { assum_term : term;
-     assum_hash : Term_template.t
+     assum_hash : shape
    }
 
 and 'a goal =
    { goal_goal : term;
-     goal_hash : Term_template.t;
+     goal_hash : shape;
      goal_assums : assumption list;
      mutable goal_subgoals : 'a subgoals
    }
 
 (*
+ * The search DAG is used for constructing trees of goals
+ * for backward chaining.  The nodes are matched with the
+ * inferences produced by forward chaining.
+ *
  * The search DAG is a bi-directional DAG of goals, with
  * a flag indicating if the goal is satisfied.  The goal
  * can either be satisfied by forward chaining, or it
  * can be derived from subgoals.
  *
- * Unproved: hasn't been explored
- * Unprovable: can't explore this goal
- * Derivable: can be derived from proof of subgoals
- * Primitive: provable by forward chaining
- * Derived: proof by backward chaining
+ * node_goal: the goal to be proved
+ * node_world: the world (assumptions) to prove it in
+ * node_children: or-and list of nodes to justify this node
+ *    each entry in the list corresponds to
+ *    an entry in node_goal.goal_subgoals.
+ *
+ * node_status: whether this node has been proved:
+ *    Unproved: hasn't been explored
+ *    Unprovable: can't explore this goal
+ *    Derivable: can be derived from proof of subgoals
+ *    Primitive: provable by forward chaining
+ *    Derived: proof by backward chaining
  *)
 and 'a node_status =
    Unproved
@@ -241,30 +222,17 @@ and 'a node_status =
  | Derived
  | Primitive of 'a inference
 
-and 'a goalnode =
+and 'a goal_node =
    { node_goal : 'a goal;
      node_world : 'a world;
-     mutable node_children : 'a goalnode list list;
+     mutable node_children : 'a goal_node list list;
      mutable node_status : 'a node_status
    }
 
 (*
- * Stack is always OR-AND branching.
- *)
-and 'a goalitem =
-   AndBranch
- | OrBranch
- | Node of 'a goalnode
- | RootNode of 'a goalnode
-
-(*
- * A "world" is a collection of assumptions (hypotheses).
- * Each world contains a new assumption that is added to an
- * older world.
- *
- * All the inferences made by forward chaining are listed here.
- * If the assumption is derivable from a previous world, the
- * infs may be associated with that previous world.
+ * A "world" summarizes the results of forward chaining.
+ * Each world represents a hypothesis list, and each hyp
+ * lists the results that have been obtained through forward chaining.
  *)
 and 'a world_info =
    { world_hyp : 'a inference;
@@ -278,94 +246,215 @@ and 'a world =
 
 (*
  * Forward chaining table.
- * The flookupTable maps terms into possible arguments to rules.
+ * The flookup_table maps terms into possible arguments to rules.
+ *
+ * When a turn is given to forward chaining, a hypothesis
+ * is selected.  We look for all the possible forward chaining
+ * rules in the table, and try them all.
  *)
-type 'a flookupTable = (Term_template.t, (int * 'a fcacheInfo) list) Hashtbl.t
+type 'a flookup_table = (shape, (int * 'a fcache_info) list) Hashtbl.t
 
 (*
  * Backward chaining table.
- * A backward table maps goals into rules.
+ * A backward table maps goals into a list of all the possible
+ * backward chaining rules that can be applied.
  *)
-type 'a blookupTable = (Term_template.t, 'a bcacheInfo list) Hashtbl.t
+type 'a blookup_table = (shape, 'a bcache_info list) Hashtbl.t
 
 (*
- * This info table list possible instantiations of rules.
+ * This table is used during forward chaining.
+ * Whenever an inference is made, that inference is
+ * checked for possible matches with forward rules.
+ * This table pairs up the forward rules with possible
+ * arguments, and there are a combinatorial number
+ * of instances of the forward rule.  The argument
+ * shape list is the shape list for the forward rule.
+ *
+ * This info table lists possible instantiations of rules.
  * Each rule contains a list of possible instantiations,
  * where the instantation is expressed as a vector of
  * possible arguments, where the arguments are a list
  * of inferences that are derived from the relevant hyps.
  * The argument lists are updated destructively.
  *)
-type 'a infoTable =
-   (Term_template.t list, ('a fcacheInfo * 'a inference list array) list) Hashtbl.t
+type 'a info_table =
+   (shape list, ('a fcache_info * 'a inference list array) list) Hashtbl.t
 
 (*
  * Table of terms.  Each term can be satisfied by an inference,
  * and it may also be listed as a goal.
  *)
-type 'a termEntry =
+type 'a term_entry =
    { entry_infs : 'a inference list;
      entry_goals : 'a goal list
    }
 
-type 'a termTable = (Term_template.t, 'a termEntry) Hashtbl.t
+type 'a term_table = (shape, 'a term_entry) Hashtbl.t
 
 (*
  * Backward chaining tree table.
  * This maps goals to nodes in the DAG.
  * This will coded to have the type:
- *    'a goal -> 'a goalnode
+ *    'a goal -> 'a goal_node
  *)
-type 'a bchainTable = (Term_template.t, 'a goalnode list) Hashtbl.t
+type 'a bchain_table = (shape, 'a goal_node list) Hashtbl.t
 
 (*
- * The extract contains:
- * Static lookup tables:
- *    ext_ftable: A hashtable of the rules for forward chaining.
- *       The hashtable maps terms to antecedents of rules,
- *       so that when a new fact arrives, it is easy to
- *       tell how the new fact can be used.
- *    ext_btable: A hashtable of the rules for backward chaining
+ * Summary of data structures:
+ *    We keep a summary of the sequent.
+ *    ext_hyps contains the list of hyps in the sequent,
+ *    and ext_goal contains the conclusion.  We don't want to
+ *    be doing substitution on the hyps all the time, so the actual
+ *    free variables in the hyps are saved in ext_names.  The names that
+ *    are used externally are saved in ext_gnames.  The ext_used list
+ *    is a list of the hyps that have been referenced.  This list is
+ *    used during synthesis to garbage collect unused hyps.  The
+ *    world representation of the hyps is saved in ext_world.
  *
- * Tables to optimize inferencing:
- *    ext_terms: a table mapping terms to all inferences
- *        and goals having the same term.
- *    ext_rules: a table containg possible instations of
- *        the forward chaining rules.
+ *    The goal is saved in ext_goal, and the backchaining tree is
+ *    save in ext_node.  During backchaining, we need to map subgoals
+ *    to nodes that we have explored ('a goal -> 'a goal_node), and this
+ *    is saved in ext_goals.
  *
- * Hyp info.  The lists all have the length ext_hcount.
- *    ext_hcount: number of hyps
- *    ext_names: the internal names of the hyps
- *    ext_gnames: the external names of the hyps
- *    ext_hyps: the hyp lost
+ *    The ext_ftable is used to provide a function from hypotheses
+ *    to possible forward rules that can be applied.  From ext_ftable
+ *    we produce a function (term -> (int * 'a fcache_info) list), where the
+ *    number that is returned is the hypothesis from the rule that
+ *    may apply.
  *
- * For hyp records:
- *    ext_used: a list of hyps that have been referenced.
+ *    The ext_btable is used to provide a function from conclusions
+ *    to possible backward rules that might be applied.  We produce
+ *    a function (term -> 'a bcache_info list), of rules that may apply.
  *
- * For forward chaining:
- *    ext_index: number of inferences ever made
- *    ext_fqueue: a list of inferences available for forward chaining
+ *    When a term is produced by chaining, we need to see if it has
+ *    ever occurred during a chaining operation before.  The ext_terms
+ *    gives us a function to find previous occurrences.
+ *       For instance, suppose we produce a result during forward chaining,
+ *       If this term was ever produced by forward chaining previously,
+ *          there is no need to continue.
+ *       If the term was ever produced by backward chaining,
+ *          we can go to the backward instance and satisfy it.
  *
- * For backward chaining:
- *    ext_goal: the goal in the current world
- *    ext_node: the node corresponding to this goal
- *    ext_bchain: the function that incrementally performs back chaining.
- *    ext_goals: the table mapping goals to nodes in the goal tree.
+ *       Otherwise, suppose a goal is produced during backward chaining.
+ *       If the term was ever produced during forward chaining,
+ *          we can satisfy the goal.
+ *       If the term was ever produced during backward chaining,
+ *          we stop, because the search is already in progress.
  *
- * All the worlds ever seen are also recorded.
- *    ext_world: the current world
- *    ext_worlds: all worlds investigated so far.
+ *    The ext_fqueue is used to list the new inferences that have been
+ *    produced by forward chaining.  These are available for further
+ *    chaining.  The ext_index counts the total number of inferences,
+ *    and we use the value to compute new variable names.
  *
- * All info particular to the current world is stored
- * in the extract directly.  All info that is common
- * to all worlds is stored in ext_base.
+ *    The ext_worlds is the list of worlds we have _ever_ seen.
+ *    This is used during backout to recover states that we may
+ *    have forgotten.
+ *
+ *    The ext_rules is used for finding possible matches for
+ *    forward chaining.  When an inference is made, we find
+ *    all the forward rules that might be able to use it,
+ *    and we add the inference to ext_rules as a possible
+ *    match to be explored.
+ *
+ * Algorithm:
+ *    The hyps and the goal can be modified with add_hyp, del_hyp,
+ *    and set_goal.  When a hyp is added, we look to see if we have
+ *    ever inferred it.  If we have, then we just add it as the new
+ *    world.  Otherwise, we construct a new world, add it hyps,
+ *    and add a new inference to ext_fqueue.
+ *
+ *    When a hyp is deleted, we remove the hyp, but we allow
+ *    pending forward inferences to continue on the assumption
+ *    that they will be useful on other branches of the proof.
+ *    In the conclusion, we prune the searh tree that uses the
+ *    hyp or any that follow it.
+ *
+ *    When the goal is changed we have to reset the search tree.
+ *
+ *    Backchaining search produces an or-and tree, and the
+ *    ext_bchain function explores this tree.  It is a value,
+ *    and it is changed each time backchaining produces a new
+ *    goal.  The new function searches the current goal, then
+ *    tries the old ext_bchain.  This produces a simple-minded
+ *    depth-first search in the backchaining tree.  TODO: Would like
+ *    to make this paramterizable at some point.
+ *
+ *    If a chaining action is requested, we alternate between
+ *    backchaining and forechaining.
+ *       During forechaining, we pick an inference off the
+ *       ext_fqueue, and we find all possible rules from
+ *       ext_ftable, and we apply all of them in turn.
+ *          For each rule, this means that we must find an
+ *          instance that applies, which means that we have
+ *          to find all hyps that apply.  We do an an exhaustive
+ *          search through all the inferences we have made in
+ *          the current world.  If we find a potential instance,
+ *          we apply the forward rule.  If it fails, drop it.
+ *          If it succeeds, it produces new results.  We assign
+ *          a new inference to each one of them.  We check if
+ *          they have been seen before, and if not we add them
+ *          to ext_fqueue.
+ *
+ *      During backchaining, we find all back rules that
+ *      potentially apply to the current goal, and we try
+ *      them in turn.
+ (          For each rule, if it applies, it produces
+ *          a list of subgoals that we have to prove.
+ *          For each subgoal, we check if it has been
+ *          found by forward chaining.  If so, we mark
+ *          it as proved.  If it has occurred, before
+ *          during backchaining, we link it to the
+ *          previous occurrence.  If it has never been
+ *          seen before, we construct a new back search
+ *          that explores this case.
+ *
+ * Variable summary:
+ *    Static lookup tables:
+ *       ext_ftable: A hashtable of the rules for forward chaining.
+ *          The hashtable maps terms to antecedents of rules,
+ *          so that when a new fact arrives, it is easy to
+ *          tell how the new fact can be used.
+ *       ext_btable: A hashtable of the rules for backward chaining
+ *
+ *    Tables to optimize inferencing:
+ *       ext_terms: a table mapping terms to all inferences
+ *           and goals having the same term.
+ *       ext_rules: a table containg possible instations of
+ *           the forward chaining rules.
+ *
+ *    Hyp info.  These lists all have the length ext_hcount.
+ *       ext_hcount: number of hyps
+ *       ext_names: the internal names of the hyps
+ *       ext_gnames: the external names of the hyps
+ *       ext_hyps: the actual hyp list, with free vars from ext_names
+ *
+ *    For hyp records:
+ *       ext_used: a list of hyps that have been referenced.
+ *
+ *    For forward chaining:
+ *       ext_index: number of inferences ever made
+ *       ext_fqueue: a list of inferences available for forward chaining
+ *
+ *    For backward chaining:
+ *       ext_goal: the goal in the current world
+ *       ext_node: the node corresponding to this goal
+ *       ext_bchain: the function that incrementally performs back chaining.
+ *       ext_goals: the table mapping goals to nodes in the goal tree.
+ *
+ *    All the worlds ever seen are also recorded.
+ *       ext_world: the current world
+ *       ext_worlds: all worlds investigated so far.
+ *
+ *    All info particular to the current world is stored
+ *    in the extract directly.  All info that is common
+ *    to all worlds is stored in ext_base.
  *)
 type 'a chain =
    {  (* Rule tables *)
-      ext_ftable : 'a flookupTable;
-      ext_btable : 'a blookupTable;
-      ext_terms : 'a termTable;
-      ext_rules : 'a infoTable;
+      ext_ftable : 'a flookup_table;
+      ext_btable : 'a blookup_table;
+      ext_terms : 'a term_table;
+      ext_rules : 'a info_table;
 
       (* Forward chaining *)
       mutable ext_index : int;
@@ -385,8 +474,8 @@ type 'a extract =
 
       (* Backward chaining *)
       ext_goal : 'a goal option;
-      ext_node : 'a goalnode option;
-      ext_goals : 'a bchainTable;
+      ext_node : 'a goal_node option;
+      ext_goals : 'a bchain_table;
       ext_bchain : 'a extract -> bool;
 
       (* Current world *)
@@ -404,6 +493,24 @@ type 'a synthesis =
      syn_used : 'a world list
    }
 
+(*
+ * This type is used to summarize the result of a world search.
+ * See find_world_extension.
+ *)
+type 'a find =
+   FindNone
+ | FindPrev of 'a world_info
+ | FindNext of 'a world
+
+(*
+ * A stack is used to backward chain using an or-and tree.
+ *)
+type 'a goal_item =
+   AndBranch
+ | OrBranch
+ | Node of 'a goal_node
+ | RootNode of 'a goal_node
+
 (************************************************************************
  * BASIC UTILITIES                                                      *
  ************************************************************************)
@@ -414,6 +521,13 @@ type 'a synthesis =
 let mk_var_name { ext_base = { ext_index = index } as base } =
    base.ext_index <- index + 1;
    "`" ^ (string_of_int index)
+
+(*
+ * We use this term to stand for contexts.
+ *)
+declare context
+
+let context_term = << context >>
 
 (*
  * Functional record update.
@@ -475,28 +589,33 @@ let set_gnames
  *)
 let world_of_inf { inf_info = info } =
    match info with
-      Inference { inf_world = world } -> world
-    | Hyp { hyp_world = world } -> world
+      Inference { inf_world = world } ->
+         world
+    | Hyp { hyp_world = world } ->
+         world
 
 (*
  * World naming.
  *)
 let name_of_world = function
-   Hypothesis { world_hyp = { inf_name = name } } -> name
- | Empty -> raise (Invalid_argument "name_of_world")
+   Hypothesis { world_hyp = { inf_name = name } } ->
+      name
+ | Empty ->
+      raise (Invalid_argument "name_of_world")
 
 (*
- * Push an inference into a world.
+ * Add an inference to a world.
  *)
 let push_world_inf world inf =
    match world with
       Hypothesis w ->
-         w.world_infs <- inf::w.world_infs
+         w.world_infs <- inf :: w.world_infs
     | Empty ->
          raise (Invalid_argument "push_world_inf")
 
 (*
- * Forward chaining queue.
+ * Push a new inference onto the forward chaining queue
+ * so that we will check it for further inferencing.
  *)
 let push_extract_inf { ext_base = base } inf =
    base.ext_fqueue <- inf :: base.ext_fqueue
@@ -536,7 +655,7 @@ let eq_goal
  * Determine if a world is a prefix of another.
  * Useful for looking up inferences.
  *)
-let is_child child parent =
+let is_child_of_parent child parent =
    let rec aux world =
       if world == parent then
          true
@@ -552,14 +671,12 @@ let is_child child parent =
 (*
  * Determine if a world is an extension by the given assumptions.
  *)
-let is_world_extension child assums parent =
+let is_child_with_assumptions child assums parent =
    let rec aux world = function
-      { assum_term = t; assum_hash = hash }::tl ->
+      { assum_term = t; assum_hash = hash } :: tl ->
          begin
             match world with
-               Hypothesis { world_hyp = { inf_value = t';
-                                          inf_hash = hash'
-                                        };
+               Hypothesis { world_hyp = { inf_value = t'; inf_hash = hash' };
                             world_prev = prev
                } ->
                   if hash = hash' & alpha_equal t t' then
@@ -575,36 +692,38 @@ let is_world_extension child assums parent =
       aux child assums
 
 (*
- * Provide a 'a goal -> 'a goalnode interface to a 'a bchainTable.
+ * Provide a 'a goal -> 'a goal_node interface to a 'a bchain_table.
  * Not idempotent.
  *)
-let bset_tbl_node tbl ({ node_goal = { goal_hash = hash } } as node) =
+let bset_tbl_node tbl node =
+   let { node_goal = { goal_hash = hash } } = node in
    let nodes =
       try Hashtbl.find tbl hash with
-         Not_found -> []
+         Not_found ->
+            []
    in
       Hashtbl.remove tbl hash;
       Hashtbl.add tbl hash (node :: nodes)
 
-let bset_node { ext_goals = tbl } = bset_tbl_node tbl
+let bset_node { ext_goals = tbl } node =
+   bset_tbl_node tbl node
 
-let bget_nodes
-    ({ ext_goals = tbl })
-    ({ goal_hash = hash } as goal) =
-   let rec aux = function
+let bget_nodes { ext_goals = tbl } ({ goal_hash = hash } as goal) =
+   let rec collect = function
       ({ node_goal = goal' } as node)::tl ->
          if goal' == goal then
-            node::(aux tl)
+            node :: collect tl
          else
-            aux tl
+            collect tl
     | [] ->
          []
    in
    let l =
       try Hashtbl.find tbl hash with
-         Not_found -> []
+         Not_found ->
+            []
    in
-      aux l
+      collect l
 
 (*
  * This gets just one node with the given world,
@@ -613,66 +732,75 @@ let bget_nodes
 let bget_node extract world ({ goal_assums = assums } as goal) =
    let nodes = bget_nodes extract goal in
    let test { node_world = world' } =
-      is_world_extension world' assums world
+      is_child_with_assumptions world' assums world
    in
       List_util.find test nodes
 
 (*
- * Provide a rough
- * term -> (int * 'a fcacheInfo) list interface for flookupTable.
+ * Provide an interface to flookup_table of type
+ *    term -> (int * 'a fcache_info * 'a inference list array) list
+ *
  * Not idempotent.
+ *
+ * When an inference is added to the possible instances,
+ * using fset_insts, a summary of the new combinations
+ * is returned, and the insance list is updated.
  *)
-let fset_entry tbl hash entry =
+let fset_entry (ftable : 'a flookup_table) hash (entry : int * 'a fcache_info) =
    let entries =
-      try Hashtbl.find tbl hash with
-         Not_found -> []
+      try Hashtbl.find ftable hash with
+         Not_found ->
+            []
    in
-      Hashtbl.remove tbl hash;
-      Hashtbl.add tbl hash (entry::entries)
+      Hashtbl.remove ftable hash;
+      Hashtbl.add ftable hash (entry :: entries)
 
-let fget_entry { ext_base = { ext_ftable = tbl; ext_rules = rules } } { inf_hash = hash } =
+let fget_entry { ext_base = { ext_ftable = ftable; ext_rules = rules } } { inf_hash = hash } =
    let aux (i, ({ finfo_plates = plates } as rule)) =
-      let test (rule', _) = rule' == rule in
+      let test (rule', _) =
+         rule' == rule
+      in
       let rules = Hashtbl.find rules plates in
       let _, insts = List_util.find test rules in
          i, rule, insts
    in
-   let l = Hashtbl.find tbl hash in
+   let l = Hashtbl.find ftable hash in
       List.map aux l
 
-let init_insts tbl ({ finfo_plates = plates } as rule) =
+let fset_insts inf (i, _, insts) =
+   let len = Array.length insts in
+   let rec explore j =
+      if j = len then
+         []
+      else if j = i then
+         [inf] :: explore (j + 1)
+      else
+         insts.(j) :: explore (j + 1)
+   in
+      insts.(i) <- inf :: insts.(i);
+      explore 0
+
+let init_insts (rules : 'a info_table) ({ finfo_plates = plates } as rule) =
    let len = List.length plates in
    let entry = Array.create len [] in
    let entries =
-      try Hashtbl.find tbl plates with
-         Not_found -> []
+      try Hashtbl.find rules plates with
+         Not_found ->
+            []
    in
-      Hashtbl.remove tbl plates;
-      Hashtbl.add tbl plates ((rule, entry) :: entries)
-
-let fset_insts { ext_base = { ext_rules = rules } }
-    ({ finfo_plates = plates } as rule)
-    insts =
-   let rec aux = function
-      ((rule', _) as h)::tl ->
-         if rule' == rule then
-            (rule', insts)::tl
-         else
-            h::(aux tl)
-    | [] -> []
-   in
-   let l = Hashtbl.find rules plates in
-      aux l
+      Hashtbl.remove rules plates;
+      Hashtbl.add rules plates ((rule, entry) :: entries)
 
 (*
  * Provide a rough
- * 'a goal -> 'a bcacheInfo list interface for blookupTable.
+ * 'a goal -> 'a bcache_info list interface for blookup_table.
  * Not idempotent.
  *)
-let bset_entry tbl ({ binfo_plate = hash } as entry) =
+let bset_entry (tbl : 'a blookup_table) ({ binfo_plate = hash } as entry) =
    let entries =
       try Hashtbl.find tbl hash with
-         Not_found -> []
+         Not_found ->
+            []
    in
       Hashtbl.remove tbl hash;
       Hashtbl.add tbl hash (entry::entries)
@@ -684,48 +812,45 @@ let bget_entries { ext_base = { ext_btable = tbl } } { goal_hash = hash } =
  * Provide an interface to the terms table.
  * Not idempotent.
  *)
-let set_inf
-    { ext_base = { ext_terms = terms } }
-    ({ inf_hash = hash } as inf) =
+let set_inf { ext_base = { ext_terms = terms } } ({ inf_hash = hash } as inf) =
    let { entry_infs = infs; entry_goals = goals } =
       try Hashtbl.find terms hash with
-         Not_found -> { entry_infs = []; entry_goals = [] }
+         Not_found ->
+            { entry_infs = []; entry_goals = [] }
    in
       Hashtbl.remove terms hash;
-      Hashtbl.add terms hash { entry_infs = inf::infs; entry_goals = goals }
+      Hashtbl.add terms hash { entry_infs = inf :: infs; entry_goals = goals }
 
-let set_goal
-    { ext_base = { ext_terms = terms } }
-    ({ goal_hash = hash } as goal) =
+let set_goal { ext_base = { ext_terms = terms } } ({ goal_hash = hash } as goal) =
    let { entry_infs = infs; entry_goals = goals } =
       try Hashtbl.find terms hash with
-         Not_found -> { entry_infs = []; entry_goals = [] }
+         Not_found ->
+            { entry_infs = []; entry_goals = [] }
    in
       Hashtbl.remove terms hash;
       Hashtbl.add terms hash { entry_infs = infs; entry_goals = goal::goals }
 
 (*
- * Inferences are found by their term, and their world.
+ * Inferences are found by their term and their world must include
+ * the previous inference's world.
  *)
-let find_inf
-    { ext_base = { ext_terms = terms } }
-    world t hash =
+let find_inf { ext_base = { ext_terms = terms } } world t hash =
    let test ({ inf_value = t' } as inf) =
       let world' = world_of_inf inf in
-         alpha_equal t t' & is_child world world'
+         alpha_equal t t' & is_child_of_parent world world'
    in
    let { entry_infs = infs } = Hashtbl.find terms hash in
       List_util.find test infs
 
-let already_known extract world t hash =
+let inf_is_already_known extract world t hash =
    try
-      find_inf extract world t hash; true
+      find_inf extract world t hash;
+      true
    with
-      Not_found -> false
+      Not_found ->
+         false
 
-let find_goal
-    { ext_base = { ext_terms = terms } }
-    ({ goal_hash = hash } as goal) =
+let find_goal { ext_base = { ext_terms = terms } } ({ goal_hash = hash } as goal) =
    let { entry_goals = goals } = Hashtbl.find terms hash in
       List_util.find (eq_goal goal) goals
 
@@ -733,30 +858,26 @@ let find_goal
  * Find the goalnodes that match the inference.
  *)
 let find_nodes
-    ({ ext_base = { ext_terms = terms };
-       ext_goals = btable
-     } as extract)
-    { inf_value = t; inf_hash = hash; inf_info = info } =
-   let world =
-      match info with
-         Inference { inf_world = world' } -> world'
-       | Hyp { hyp_world = world' } -> world'
-   in
+    ({ ext_base = { ext_terms = terms }; ext_goals = btable } as extract)
+    ({ inf_value = t; inf_hash = hash } as inf) =
+   let world = world_of_inf inf in
    let rec filter_goals = function
       ({ goal_goal = t' } as goal)::tl ->
          if alpha_equal t t' then
-            goal::(filter_goals tl)
+            goal :: filter_goals tl
          else
             filter_goals tl
-    | [] -> []
+    | [] ->
+         []
    in
    let rec filter_nodes = function
       ({ node_world = world' } as node)::tl ->
-         if is_child world world' then
-            node::(filter_nodes tl)
+         if is_child_of_parent world world' then
+            node :: filter_nodes tl
          else
             filter_nodes tl
-    | [] -> []
+    | [] ->
+         []
    in
    let { entry_goals = goals } = Hashtbl.find terms hash in
    let goals' = filter_goals goals in
@@ -770,13 +891,11 @@ let find_nodes
  *)
 let find_inf_for_node
     { ext_base = { ext_terms = terms } }
-    { node_goal = { goal_goal = t; goal_hash = hash };
-      node_world = world
-    } =
+    { node_goal = { goal_goal = t; goal_hash = hash }; node_world = world } =
    let rec aux = function
       ({ inf_value = t' } as inf)::tl ->
          let world' = world_of_inf inf in
-            if alpha_equal t t' & is_child world world' then
+            if alpha_equal t t' & is_child_of_parent world world' then
                Some inf
             else
                aux tl
@@ -788,8 +907,10 @@ let find_inf_for_node
 
 let is_provable extract goal =
    match find_inf_for_node extract goal with
-      Some _ -> true
-    | None -> false
+      Some _ ->
+         true
+    | None ->
+         false
 
 (*
  * See if a goal is already known.
@@ -831,45 +952,63 @@ let mix_wild nargs terms wilds =
       aux terms wilds 0 nargs
 
 (*
- * Find a world that is a single extension
- * of the current one.  If there isn't an existing one,
- * raise Not_found.
+ * Find a world that can be used as an extension of the
+ * current one.  The world can be used if the worlds it
+ * depends on are all ancestors of this world.  We return
+ * three cases:
+ *    FindNext world: an exact match is found
+ *    FindPrev world: this world depends on a world
+ *       that is an ancestor of the current world
+ *    FindNone: no appropriate world was found
  *)
-let find_world_extension
-    { ext_base = { ext_worlds = worlds } }
-    world t hash =
-   let rec aux = function
-      (Hypothesis { world_hyp = { inf_value = t'; inf_hash = hash' };
-                    world_prev = prev
-       } as world')::tl ->
-         if hash = hash' & prev == world & alpha_equal t t' then
-            Some world'
-         else
-            aux tl
+let find_world_extension { ext_base = { ext_worlds = worlds } } world t hash =
+   let rec search newest = function
+      ((Hypothesis world') as next)::tl ->
+         let { world_hyp = { inf_value = t'; inf_hash = hash' };
+               world_prev = prev
+             } = world'
+         in
+            if hash = hash' & alpha_equal t t' then
+               if prev == world then
+                  FindNext next
+               else if is_child_of_parent world prev then
+                  match newest with
+                     None ->
+                        search (Some world') tl
+                   | Some world'' ->
+                        if is_child_of_parent prev world''.world_prev then
+                           search (Some world') tl
+                        else
+                           search newest tl
+               else
+                  search newest  tl
+            else
+               search newest tl
     | _::tl ->
-         aux tl
+         search newest tl
     | [] ->
-         None
+         match newest with
+            Some world ->
+               FindPrev world
+          | None ->
+               FindNone
    in
-      aux worlds
+      search None worlds
 
 (*
- * Find a hyp in the current world if it exists,
- * or create a new one.  Return the new world, but
- * do not link it into the complete list of worlds.
- * Assume that find_world_extension failed.
+ * In this case, find_world_extension returned FindNone.
+ * If we can find an inference that characterizes the world,
+ * we create the world from the inference.  Otherwise,
+ * we create a new world, with a new inference pointing
+ * to itself.
  *)
-let build_world_with_hyp ({ ext_base = base } as extract) world t hash =
+let create_world_with_hyp extract world t hash =
    try
       let inf = find_inf extract world t hash in
-      let world' = world_of_inf inf in
-         if is_child world world' then
-            [], Hypothesis ({ world_hyp = inf;
-                              world_prev = world;
-                              world_infs = []
-                            })
-         else
-            raise Not_found
+         [], Hypothesis ({ world_hyp = inf;
+                           world_prev = world;
+                           world_infs = []
+                         })
    with
       Not_found ->
          let name = mk_var_name extract in
@@ -889,27 +1028,45 @@ let build_world_with_hyp ({ ext_base = base } as extract) world t hash =
             [inf], world'
 
 (*
+ * In this case, find_world_extension returned FindAncestor,
+ * and we just copy the inferences into a new world.
+ *)
+let copy_world world world' =
+   let { world_hyp = inf; world_infs = infs } = world' in
+      Hypothesis { world_hyp = inf;
+                   world_prev = world;
+                   world_infs = infs
+      }
+
+(*
  * Find or build a world that is an extension of the current one.
  * Add newly generated inferences to the forward chaining queue.
  *)
-let build_world_extension ({ ext_base = base } as extract) world assums =
-   let rec aux world = function
-      { assum_term = t; assum_hash = hash }::tl ->
-         let world' =
-            match find_world_extension extract world t hash with
-               Some world' -> world'
-             | None ->
-                  let infs, world' = build_world_with_hyp extract world t hash in
-                     base.ext_worlds <- world'::base.ext_worlds;
-                     base.ext_fqueue <- infs @ base.ext_fqueue;
-                     world'
-         in
-            aux world' tl
+let build_world_with_hyp ({ ext_base = base } as extract) world t hash =
+   match find_world_extension extract world t hash with
+      FindNext world' ->
+         world'
+    | FindPrev world' ->
+         let world' = copy_world world world' in
+            base.ext_worlds <- world' :: base.ext_worlds;
+            world'
+    | FindNone ->
+         let infs, world' = create_world_with_hyp extract world t hash in
+            base.ext_worlds <- world' :: base.ext_worlds;
+            base.ext_fqueue <- infs @ base.ext_fqueue;
+            world'
 
+(*
+ * Construct the world from the old world and a list of new assumptions.
+ *)
+let build_world_with_assums extract world assums =
+   let rec build world = function
+      { assum_term = t; assum_hash = hash } :: tl ->
+         build (build_world_with_hyp extract world t hash) tl
     | [] ->
          world
    in
-      aux world assums
+      build world assums
 
 (************************************************************************
  * BACKWARD CHAINING                                                    *
@@ -921,13 +1078,13 @@ let build_world_extension ({ ext_base = base } as extract) world assums =
 let construct_subgoals extract just ants =
    let make_assum t =
       { assum_term = t;
-        assum_hash = Term_template.of_term t
+        assum_hash = shape_of_term t
       }
    in
    let aux (args, t) =
       let goal =
          { goal_goal = t;
-           goal_hash = Term_template.of_term t;
+           goal_hash = shape_of_term t;
            goal_assums = List.map make_assum args;
            goal_subgoals = Unexplored
          }
@@ -940,7 +1097,7 @@ let construct_subgoals extract just ants =
       }
 
 (*
- * Set the subgoals of a goal given a list of bcacheInfo
+ * Set the subgoals of a goal given a list of bcache_info
  * that may match this goal.
  *)
 let set_subgoals extract ({ goal_goal = t } as goal) binfo =
@@ -952,7 +1109,8 @@ let set_subgoals extract ({ goal_goal = t } as goal) binfo =
                let _, subgoals' = aux tl in
                   true, (construct_subgoals extract just ants) :: subgoals'
             with
-               _ -> aux tl
+               _ ->
+                  aux tl
          end
     | [] ->
          false, []
@@ -985,7 +1143,7 @@ let construct_node extract world ({ goal_assums = assums } as goal) =
    try bget_node extract world goal with
       Not_found ->
          (* Construct a new node *)
-         let world' = build_world_extension extract world assums in
+         let world' = build_world_with_assums extract world assums in
          let node =
             { node_goal = goal;
               node_world = world';
@@ -1011,11 +1169,7 @@ let find_node_children extract { node_world = world } subgoals =
  * In the process, we hash the outgoing subgoals to squash
  * the DAG.
  *)
-let set_node_children
-    extract
-    ({ node_goal =
-         { goal_subgoals = subgoals } as goal
-    } as node) =
+let set_node_children extract ({ node_goal = { goal_subgoals = subgoals } as goal } as node) =
    match subgoals with
       Unsolvable ->
          node.node_status <- Unprovable
@@ -1182,14 +1336,16 @@ let new_bchain node =
             (* Is this node successful *)
             begin
                match node.node_status with
-                  Unproved | Derivable ->
+                  Unproved
+                | Derivable ->
                      (* Try backward chaining *)
                      Ref_util.push (Node node) fstack;
                      false
                 | Unprovable ->
                      (* Maybe this will be proved later by forward chaining *)
                      false
-                | Derived | Primitive _ ->
+                | Derived
+                | Primitive _ ->
                      true
             end
    in
@@ -1237,8 +1393,8 @@ let update_goalnodes extract inf =
 let build_results ({ ext_base = base } as extract) world root values =
    let rec aux = function
       t::tl ->
-         let hash = Term_template.of_term t in
-            if already_known extract world t hash then
+         let hash = shape_of_term t in
+            if inf_is_already_known extract world t hash then
                aux tl
             else
                let inf =
@@ -1265,9 +1421,9 @@ let instantiate f world insts =
       h::t ->
          let aux' h' =
             let world' = world_of_inf h' in
-               if is_child world world' then
+               if is_child_of_parent world world' then
                   aux world (h'::l) t
-               else if is_child world' world then
+               else if is_child_of_parent world' world then
                   aux world' (h'::l) t
                else
                   ()
@@ -1281,9 +1437,7 @@ let instantiate f world insts =
 (*
  * Try to chain through a particular arglist.
  *)
-let try_arglist_normal
-    ({ ext_base = base } as extract)
-    rw just world args =
+let try_arglist_normal ({ ext_base = base } as extract) rw just world args =
    let terms = List.map (function inf -> inf.inf_value) args in
       try
          let values, _ = apply_rewrite rw ([||], [||]) terms in
@@ -1296,7 +1450,8 @@ let try_arglist_normal
          in
             build_results extract world root values
       with
-         _ -> ()
+         _ ->
+            ()
 
 (*
  * Try to chain through the new item.
@@ -1318,20 +1473,22 @@ let try_fchain_normal extract world { finfo_rw = rw; finfo_just = just } finst =
  *)
 let try_arglist_wild extract rw wrw nargs just world args =
    let terms = List.map (function inf -> inf.inf_value) args in
-      try let wilds, _ = apply_rewrite wrw ([||], [||]) terms in
-          let wargs = List.map (function t -> find_inf extract world t (Term_template.of_term t)) wilds in
-          let values, _ = apply_rewrite rw ([||], [||]) terms in
-          let facts = mix_wild nargs args wargs in
-          let root =
-             Inference { inf_values = values;
-                    inf_just = just;
-                    inf_args = facts;
-                    inf_world = world
-             }
-          in
-             build_results extract world root values
+      try
+         let wilds, _ = apply_rewrite wrw ([||], [||]) terms in
+         let wargs = List.map (function t -> find_inf extract world t (shape_of_term t)) wilds in
+         let values, _ = apply_rewrite rw ([||], [||]) terms in
+         let facts = mix_wild nargs args wargs in
+         let root =
+            Inference { inf_values = values;
+                        inf_just = just;
+                        inf_args = facts;
+                        inf_world = world
+            }
+         in
+            build_results extract world root values
       with
-         _ -> ()
+         _ ->
+            ()
 
 (*
  * In wildcard chaining, some of the args are wildcards.
@@ -1349,25 +1506,20 @@ let try_fchain_wild extract world { finfo_rw = rw; finfo_just = just } (wargs, w
  *)
 let try_fchain extract world ({ finfo_wild = wild } as info) finst =
    match wild with
-      None -> try_fchain_normal extract world info finst
-    | Some wild -> try_fchain_wild extract world info wild finst
+      None ->
+         try_fchain_normal extract world info finst
+    | Some wild ->
+         try_fchain_wild extract world info wild finst
 
 (*
  * Try chaining through a particular new fact.
+ * We produce all combinations that are available
+ * for the forward rule.
  *)
-let try_fchaining extract inf (i, rule, insts) =
-   let len = Array.length insts in
-   let rec aux j =
-      if j = len then
-         []
-      else if j = i then
-         [inf] :: (aux (j + 1))
-      else
-         (insts.(j)) :: (aux (j + 1))
-   in
-   let finst = aux 0 in
+let try_fchaining extract inf info =
+   let _, rule, _ = info in
+   let finst = fset_insts inf info in
    let world = world_of_inf inf in
-      insts.(i) <- inf :: (insts.(i));
       try_fchain extract world rule finst
 
 (*
@@ -1379,7 +1531,8 @@ let fchain ({ ext_base = { ext_fqueue = fqueue } as base } as extract) =
          base.ext_fqueue <- tl;
          let rules =
             try fget_entry extract inf with
-               Not_found -> []
+               Not_found ->
+                  []
          in
             List.iter (try_fchaining extract inf) rules
 
@@ -1411,10 +1564,6 @@ let new_cache () =
 let join_cache cache1 cache2 =
    CacheJoin (cache1, cache2)
 
-(************************************************************************
- * EXTRACT CONSTRUCTION                                                 *
- ************************************************************************)
-
 (*
  * Forward chaining rule.
  *)
@@ -1442,7 +1591,7 @@ let compute_wild t =
 let add_frule cache { fc_ants = ants; fc_concl = concl; fc_just = just } =
    let args, wild = compute_wild ants in
    let info =
-      { finfo_plates = List.map Term_template.of_term args;
+      { finfo_plates = List.map shape_of_term args;
         finfo_wild = wild;
         finfo_rw = term_rewrite ([||], [||]) args concl;
         finfo_just = just
@@ -1463,9 +1612,12 @@ let rec flatten_ants = function
  * Inverse flatten a term list into an antecedent list.
  *)
 let rec simple_ants = function
-   ([], _)::tl -> simple_ants tl
- | (_::_, _)::_ -> false
- | [] -> true
+   ([], _)::tl ->
+      simple_ants tl
+ | (_::_, _)::_ ->
+      false
+ | [] ->
+      true
 
 let compute_spread_ants ants =
    if simple_ants ants then
@@ -1497,7 +1649,6 @@ let compute_spread_ants ants =
  * Add a rule for backward chaining.
  *)
 let add_brule cache { bc_concl = concl; bc_ants = ants; bc_just = just } =
-   (* Flatten the antecedents *)
    let flat_ants = flatten_ants ants in
    let rw = term_rewrite ([||], [||]) [concl] flat_ants in
    let spread_ants = compute_spread_ants ants in
@@ -1506,20 +1657,24 @@ let add_brule cache { bc_concl = concl; bc_ants = ants; bc_just = just } =
          spread_ants values
    in
    let info =
-      { binfo_plate = Term_template.of_term concl;
+      { binfo_plate = shape_of_term concl;
         binfo_rw = trw;
         binfo_just = just
       }
    in
       CacheBackward (info, cache)
 
+(************************************************************************
+ * EXTRACT CONSTRUCTION                                                 *
+ ************************************************************************)
+
 (*
  * Build the forward chaining hash table.
  *)
-let insert_ftable_entry tbl info =
+let insert_ftable_entry ftable info =
    let rec aux i = function
       h::t ->
-         fset_entry tbl h (i, info);
+         fset_entry ftable h (i, info);
          aux (i + 1) t
     | [] ->
          ()
@@ -1543,9 +1698,9 @@ let make_btable cache =
  * A default rule table.
  *)
 let make_rules info =
-   let tbl = Hashtbl.create 97 in
-      List.iter (init_insts tbl) info;
-      tbl
+   let rules = Hashtbl.create 97 in
+      List.iter (init_insts rules) info;
+      rules
 
 (*
  * Collect all the forward and backward rules form the cache tree.
@@ -1617,65 +1772,35 @@ let extract cache =
 (*
  * Insert a new hyp.
  *)
-let add_hyp
-    ({ ext_used = used;
-       ext_hcount = hcount;
-       ext_names = names;
-       ext_gnames = gnames;
-       ext_hyps = hyps;
-       ext_goal = goal;
-       ext_world = world;
-       ext_base = base
-     } as extract) i gname t =
-   (* Have we already explored this world? *)
-   let t' = subst t (List.map mk_var_term names) gnames in
-   let hash = Term_template.of_term t' in
-   let i' = hcount - i - 1 in
-      match find_world_extension extract world t' hash with
-         Some world' ->
-            (* Found an instance of the world *)
-            let node, goals, bchain = new_goals world' goal in
-               { ext_used = used;
-                 ext_hcount = hcount + 1;
-                 ext_names = List_util.insert_nth i' (name_of_world world') names;
-                 ext_gnames = List_util.insert_nth i' gname gnames;
-                 ext_hyps = List_util.insert_nth i' world' hyps;
-                 ext_goal = goal;
-                 ext_node = node;
-                 ext_goals = goals;
-                 ext_bchain = bchain;
-                 ext_world = world';
-                 ext_base = base
-               }
-
-       | None ->
-            (* Construct a new world *)
-            let name = mk_var_name extract in
-            let rec inf =
-               { inf_name = name;
-                 inf_value = t';
-                 inf_hash = hash;
-                 inf_info = Hyp { hyp_world = world' }
-               }
-            and world' =
-               Hypothesis { world_hyp = inf;
-                            world_prev = world;
-                            world_infs = [inf]
-               }
-            in
-            let node, goals, bchain = new_goals world' goal in
-               { ext_used = used;
-                 ext_hcount = hcount + 1;
-                 ext_names = List_util.insert_nth i' name names;
-                 ext_gnames = List_util.insert_nth i' gname gnames;
-                 ext_hyps = List_util.insert_nth i' world' hyps;
-                 ext_goal = goal;
-                 ext_node = node;
-                 ext_goals = goals;
-                 ext_bchain = bchain;
-                 ext_world = world';
-                 ext_base = base
-               }
+let add_hyp extract i gname t =
+   let { ext_used = used;
+         ext_hcount = hcount;
+         ext_names = names;
+         ext_gnames = gnames;
+         ext_hyps = hyps;
+         ext_goal = goal;
+         ext_world = world;
+         ext_base = base
+       } = extract
+   in
+   let t = subst t (List.map mk_var_term names) gnames in
+   let hash = shape_of_term t in
+   let world = build_world_with_hyp extract world t hash in
+   let name = name_of_world world in
+   let i = hcount - i - 1 in
+   let node, goals, bchain = new_goals world goal in
+      { ext_used = used;
+        ext_hcount = hcount + 1;
+        ext_names = List_util.insert_nth i name names;
+        ext_gnames = List_util.insert_nth i gname gnames;
+        ext_hyps = List_util.insert_nth i world hyps;
+        ext_goal = goal;
+        ext_node = node;
+        ext_goals = goals;
+        ext_bchain = bchain;
+        ext_world = world;
+        ext_base = base
+      }
 
 (*
  * Delete a hyp and all the hyps after it.
@@ -1747,42 +1872,39 @@ let ref_hyp ({ ext_hcount = hcount;
 (*
  * Rename a particular hyp.
  *)
-let name_hyp ({ ext_hcount = hcount;
-                ext_gnames = gnames
-              } as extract) i gname =
-   set_gnames extract (List_util.replace_nth (hcount - i - 1) gname gnames)
-
-(************************************************************************
- * CONCL OPERATIONS                                                     *
- ************************************************************************)
+let name_hyp extract i gname =
+   let { ext_hcount = hcount; ext_gnames = gnames } = extract in
+      set_gnames extract (List_util.replace_nth (hcount - i - 1) gname gnames)
 
 (*
  * Choose a new conclusion.
  * This also resets the backward chaining queue
  * to be only those goals that the current goal depends upon.
  *)
-let set_goal ({ ext_used = used;
-                ext_hcount = hcount;
-                ext_names = names;
-                ext_gnames = gnames;
-                ext_hyps = hyps;
-                ext_world = world;
-                ext_base = base
-              } as extract) t =
-   let t' = subst t (List.map mk_var_term names) gnames in
-   let hash = Term_template.of_term t' in
+let set_goal extract t =
+   let { ext_used = used;
+         ext_hcount = hcount;
+         ext_names = names;
+         ext_gnames = gnames;
+         ext_hyps = hyps;
+         ext_world = world;
+         ext_base = base
+       } = extract
+   in
+   let t = subst t (List.map mk_var_term names) gnames in
+   let hash = shape_of_term t in
    let goal =
-      let goal' =
-         { goal_goal = t';
+      let goal =
+         { goal_goal = t;
            goal_hash = hash;
            goal_assums = [];
            goal_subgoals = Unexplored
          }
       in
-         Some (try find_goal extract goal' with
+         Some (try find_goal extract goal with
                   Not_found ->
-                     set_goal extract goal';
-                     goal')
+                     set_goal extract goal;
+                     goal)
    in
    let node, goals, bchain = new_goals world goal in
       { ext_used = used;
@@ -1798,6 +1920,32 @@ let set_goal ({ ext_used = used;
         ext_base = base
       }
 
+(*
+ * Set the sequent all at once.
+ * This function performs the following:
+ *    1. delete all the hyps using del_hyp
+ *    2. add all the hyps using add_hyp
+ *    3. set the goal using sewt_goal
+ *)
+let set_msequent extract { mseq_goal = goal } =
+   let rec collect i extract = function
+      hyp :: hyps ->
+         let extract =
+            match hyp with
+               TermMan.Hypothesis (name, hyp) ->
+                  add_hyp extract i name hyp
+             | TermMan.Context (name, _) ->
+                  add_hyp extract i name context_term
+         in
+            collect (i + 1) extract hyps
+    | [] ->
+         extract
+   in
+      match explode_sequent goal with
+         { sequent_hyps = hyps; sequent_goals = [goal] } ->
+            set_goal (collect 0 (del_hyp extract 0) hyps) goal
+       | _ ->
+            raise (RefineError (StringStringError ("Tactic_cache.set_msequent", "conclusion has more than one goal")))
 
 (************************************************************************
  * LOOKUP                                                               *
@@ -1814,7 +1962,7 @@ let set_goal ({ ext_used = used;
  * upgrade Root to Inf in place if it comes along.
  *)
 type 'a hyp =
-   Root of int * 'a inferenceInfo
+   Root of int * 'a inference_info
  | Inf of 'a inference
 
 type 'a hypref =
@@ -1934,7 +2082,7 @@ let split_infs infs world =
       inf::tl ->
          let world' = world_of_inf inf in
          let ninfs, infs' = aux tl in
-            if is_child world world' then
+            if is_child_of_parent world world' then
                inf::ninfs, infs'
             else
                ninfs, inf::infs'
@@ -2013,7 +2161,7 @@ let collect_infs node =
  *
  * This is complicated by the fact that we want
  * to perform forward chaining as soon as possible.
- * For this purpose, we erform two passes:
+ * For this purpose, we perform two passes:
  *    In the first pass, we collect all the inferences that
  *    should be infered.
  *
@@ -2056,6 +2204,10 @@ let used_hyps
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/09 20:52:57  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.9  1998/06/01 13:57:04  jyh
  * Proving twice one is two.
  *

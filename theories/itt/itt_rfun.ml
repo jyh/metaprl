@@ -260,7 +260,7 @@ let mk_fun_term = mk_dep0_dep0_term fun_opname
  *)
 let d_concl_rfun p =
    let wf =
-      try get_term_arg 0 p with
+      try get_with_arg p with
          Not_found -> raise (RefineError (StringError "d_concl_rfun: need a well-order term"))
    in
    let t = goal p in
@@ -279,13 +279,12 @@ let d_concl_rfun p =
  * We take the argument.
  *)
 let d_hyp_rfun i p =
-   let a = get_term_arg 0 p in
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let f = var_of_hyp i' p in
+   let a = get_with_arg p in
+   let i, j = hyp_indices p i in
+   let f, _ = Sequent.nth_hyp p i in
       (match maybe_new_vars ["y"; "v"] (declared_vars p) with
           [y; v] ->
-             rfunctionElimination i' (count - i' - 1) f a y v
+             rfunctionElimination i j f a y v
              thenLT [addHiddenLabelT "wf"; idT]
         | _ ->
              failT) p
@@ -312,7 +311,7 @@ let d_resource = d_resource.resource_improve d_resource (rfun_term, d_rfunT)
  *)
 let eqcd_rfunT p =
    let wf =
-      try get_term_arg 0 p with
+      try get_with_arg p with
          Not_found -> raise (RefineError (StringError "eqcd_rfun: need a well-order term"))
    in
    let t = goal p in
@@ -386,6 +385,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:42  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:56:13  jyh
  * Proving twice one is two.
  *

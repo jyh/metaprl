@@ -207,7 +207,7 @@ let mk_spread_term = mk_dep0_dep2_term spread_opname
  *)
 let d_concl_dprod p =
    let t =
-      try get_term_arg 1 p with
+      try get_with_arg p with
          Not_found -> raise (RefineError (StringError "d_concl_dprod: requires an argument"))
    in
    let count = hyp_count p in
@@ -222,13 +222,12 @@ let d_concl_dprod p =
  * We take the argument.
  *)
 let d_hyp_dprod i p =
-   let a = get_term_arg 0 p in
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let z = var_of_hyp i' p in
+   let a = get_with_arg p in
+   let i, j = hyp_indices p i in
+   let z, _ = Sequent.nth_hyp p i in
       (match maybe_new_vars ["u"; "v"] (declared_vars p) with
           [u; v] ->
-             productElimination i' (count - i' - 1) z u v
+             productElimination i j z u v
         | _ ->
              failT) p
 
@@ -352,6 +351,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:32  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:55:48  jyh
  * Proving twice one is two.
  *

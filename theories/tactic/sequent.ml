@@ -4,13 +4,8 @@
 
 open Printf
 open Debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
 
-open Tactic_type
+open Refiner.Refiner
 
 (*
  * Debug statement.
@@ -22,64 +17,60 @@ let _ =
 (*
  * Construction.
  *)
-let create = create_arg
+let create = Tactic_type.create
 
-let dest = dest_arg
+(*
+ * Addressing.
+ *)
+let goal = Tactic_type.goal
 
-let arg = tactic_arg
+let concl arg =
+   Tactic_type.nth_concl arg 0
 
-let goal p =
-   (tactic_seq p).mseq_goal
+let nth_hyp = Tactic_type.nth_hyp
 
-let concl p =
-   nth_concl (goal p) 0
+let cache = Tactic_type.cache
 
-let concl_addr p =
-   nth_concl_addr (goal p) 0
+let label = Tactic_type.label
 
-let hyp_addr p i =
-   let goal = goal p in
+let resources = Tactic_type.resources
+
+let attributes = Tactic_type.attributes
+
+(*
+ * Sequent parts.
+ *)
+let hyp_count arg =
+   TermMan.num_hyps (goal arg)
+
+let hyp_indices arg i =
+   let count = hyp_count arg in
       if i < 0 then
-         nth_address ((num_hyps goal) + i) true
+         count + i, count + i - 1
       else
-         nth_hyp_addr goal i
+         i, count - i
 
-let clause_addr p i =
-   if i = 0 then
-      concl_addr p
-   else
-      hyp_addr p i
+let clause_addr arg i =
+   TermMan.nth_clause_addr (goal arg) i
 
-let var_of_hyp i p =
-   fst (TermMan.nth_hyp (goal p) i)
+let get_decl_number arg v =
+   TermMan.get_decl_number (goal arg) v
 
-let hyp_count p =
-   num_hyps (goal p)
+let declared_vars arg =
+   TermMan.declared_vars (goal arg)
 
-let get_decl_number p v =
-   TermMan.get_decl_number (goal p) v
+let explode_sequent arg =
+   TermMan.explode_sequent (goal arg)
 
-let nth_hyp i p =
-   let _, h = TermMan.nth_hyp (goal p) i in
-      h
-
-let declared_vars p =
-   TermMan.declared_vars (goal p)
-
-let get_pos_hyp_index i count =
-   if i < 0 then
-      count - i
-   else
-      i
-
-let get_pos_hyp_num i p =
-   if i < 0 then
-      (num_hyps (goal p)) - i
-   else
-      i
+let is_free_seq_var i v arg =
+   TermMan.is_free_seq_var i v (goal arg)
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/09 20:52:54  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.5  1998/06/03 22:19:58  jyh
  * Nonpolymorphic refiner.
  *

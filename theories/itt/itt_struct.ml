@@ -147,10 +147,9 @@ let mk_bind_term = mk_dep1_term bind_opname
  * Prove by hypothesis.
  *)
 let nthHypT i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let x = var_of_hyp i' p in
-      hypothesis i' (count - i' - 1) x p
+   let i, j = hyp_indices p i in
+   let x, _ = nth_hyp p i in
+      hypothesis i j x p
 
 (*
  * Thin a hyp.
@@ -158,13 +157,12 @@ let nthHypT i p =
  * (although the rule is still valid otherwise).
  *)
 let thinT i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let x = var_of_hyp i' p in
-      if is_free_seq_var (i' + 1) x (goal p) then
+   let i, j = hyp_indices p i in
+   let x, _ = nth_hyp p i in
+      if is_free_seq_var (i + 1) x p then
          raise (RefineError (StringStringError ("thinT: free variable: ", x)))
       else
-         thin i' (count - i' - 1) p
+         thin i j p
 
 (*
  * Cut rule.
@@ -179,10 +177,9 @@ let assertT s p =
  * Cut in at a certain point.
  *)
 let assertAtT i s p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
+   let i, j = hyp_indices p i in
    let v = get_opt_var_arg "%x" p in
-      (cut i' (count - i' - 1) s v
+      (cut i j s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
 
 (*
@@ -209,7 +206,7 @@ let substConclT t p =
    in
    let bind =
       try
-         let t1 = get_term_arg 0 p in
+         let t1 = get_with_arg p in
             if is_bind_term t1 then
                t1
             else
@@ -228,17 +225,17 @@ let substConclT t p =
  * Hyp substitution requires a replacement.
  *)
 let substHypT i t p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
+   let i, j = hyp_indices p i in
    let _, a, _ =
       try dest_equal t with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("substT: arg should be an equality: ", t)))
+         Term.TermMatch _ ->
+            raise (RefineError (StringTermError ("substT: arg should be an equality: ", t)))
    in
-   let t1 = Sequent.nth_hyp i' p in
+   let _, t1 = Sequent.nth_hyp p i in
    let z = get_opt_var_arg "z" p in
    let bind =
       try
-         let b = get_term_arg 0 p in
+         let b = get_with_arg p in
             if is_bind_term b then
                b
             else
@@ -247,7 +244,7 @@ let substHypT i t p =
          Not_found ->
             mk_bind_term z (var_subst t1 a z)
    in
-      (hypSubstitution i' (count - i' - 1) t bind z
+      (hypSubstitution i j t bind z
        thenLT [addHiddenLabelT "equality";
                addHiddenLabelT "main";
                addHiddenLabelT "aux"]) p
@@ -265,16 +262,20 @@ let substT i =
  * Derived versions.
  *)
 let hypSubstT i p =
-   let h = Sequent.nth_hyp i p in
+   let _, h = Sequent.nth_hyp p i in
       (substT i h thenET nthHypT i) p
 
 let revHypSubstT i p =
-   let t, a, b = dest_equal (Sequent.nth_hyp i p) in
+   let t, a, b = dest_equal (snd (Sequent.nth_hyp p i)) in
    let h' = mk_equal_term t b a in
       (substT i h' thenET (swapEquandsT thenT nthHypT i)) p
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:46  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:56:24  jyh
  * Proving twice one is two.
  *

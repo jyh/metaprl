@@ -3,34 +3,47 @@
  *)
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.Refine
 open Tactic_type
 
 (*
- * Hypothesis operations.
+ * Build an initial argument for a proof.
  *)
-val create : msequent -> tactic_argument -> tactic_arg
-val dest : tactic_arg -> msequent * tactic_argument
-val arg : tactic_arg -> tactic_argument
-val goal : tactic_arg -> term
+val create : string -> msequent -> cache -> attributes -> tactic_resources -> tactic_arg
 
-val concl : tactic_arg -> term
-val concl_addr : tactic_arg -> address
-
-val hyp_addr : tactic_arg -> int -> address
+(*
+ * Get the address of a part of the sequent.
+ *)
 val clause_addr : tactic_arg -> int -> address
-
-val var_of_hyp : int -> tactic_arg -> string
 val get_decl_number : tactic_arg -> string -> int
-val nth_hyp : int -> tactic_arg -> term
-val declared_vars : tactic_arg -> string list
-
-val get_pos_hyp_index : int -> int -> int
-val get_pos_hyp_num : int -> tactic_arg -> int
 val hyp_count : tactic_arg -> int
+val hyp_indices : tactic_arg -> int -> int * int
+
+(*
+ * Get the parts of the argument.
+ *)
+val goal : tactic_arg -> term
+val concl : tactic_arg -> term
+val nth_hyp : tactic_arg -> int -> string * term
+val cache : tactic_arg -> cache
+val label : tactic_arg -> string
+val resources : tactic_arg -> tactic_resources
+val attributes : tactic_arg -> attributes
+
+(*
+ * Get info about the sequent.
+ *)
+val declared_vars : tactic_arg -> string list
+val explode_sequent : tactic_arg -> esequent
+val is_free_seq_var : int -> string -> tactic_arg -> bool
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/09 20:52:55  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.3  1998/06/03 22:19:59  jyh
  * Nonpolymorphic refiner.
  *

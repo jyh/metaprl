@@ -127,7 +127,7 @@ let extract_data base =
          if i = 0 then
             concl p
          else
-            nth_hyp i p
+            snd (nth_hyp p i)
       in
       let key = opname_of_term t, subterm_arities t in
          try
@@ -183,6 +183,10 @@ let dT = d_resource.resource_extract d_resource
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/09 20:52:29  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.5  1998/06/01 13:55:38  jyh
  * Proving twice one is two.
  *

@@ -187,26 +187,27 @@ let d_concl_dfun p =
    let t = concl p in
    let z, _, _ = dest_dfun t in
    let z' = get_opt_var_arg z p in
-      lambdaFormation count z' p;;
+      lambdaFormation count z' p
 
 (*
  * D a hyp.
  * We take the argument.
  *)
 let d_hyp_dfun i p =
-   let a = try get_term_arg 0 p with
-              Not_found ->
-                 raise (RefineError (StringError "d_hyp_dfun: requires an argument"))
+   let a =
+      try get_with_arg p with
+         Not_found ->
+            raise (RefineError (StringError "d_hyp_dfun: requires an argument"))
    in
    let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let f = var_of_hyp i' p in
+   let i, j = hyp_indices p i in
+   let f, _ = Sequent.nth_hyp p i in
       (match maybe_new_vars ["y"; "v"] (declared_vars p) with
           [y; v] ->
-             functionElimination i' (count - i' - 1) f a y v
+             functionElimination i j f a y v
              thenLT [addHiddenLabelT "wf"; idT]
         | _ ->
-             failT) p;;
+             failT) p
 
 (*
  * Join them.
@@ -215,9 +216,9 @@ let d_dfunT i =
    if i = 0 then
       d_concl_dfun
    else
-      d_hyp_dfun i;;
+      d_hyp_dfun i
 
-let d_resource = d_resource.resource_improve d_resource (dfun_term, d_dfunT);;
+let d_resource = d_resource.resource_improve d_resource (dfun_term, d_dfunT)
 
 (************************************************************************
  * EQCD TACTICS                                                         *
@@ -232,9 +233,9 @@ let eqcd_dfunT p =
    let x = get_opt_var_arg v p in
    let count = hyp_count p in
       (functionEquality count x
-       thenT addHiddenLabelT "wf") p;;
+       thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dfun_term, eqcd_dfunT);;
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dfun_term, eqcd_dfunT)
 
 (*
  * EQCD lambda.
@@ -245,23 +246,23 @@ let eqcd_lambdaT p =
    let x = get_opt_var_arg v p in
    let count = hyp_count p in
       (lambdaEquality count x
-       thenT addHiddenLabelT "wf") p;;
+       thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (lambda_term, eqcd_lambdaT);;
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (lambda_term, eqcd_lambdaT)
 
 (*
  * EQCD apply.
  *)
 let eqcd_applyT p =
    let t =
-      try get_term_arg 0 p with
+      try get_with_arg p with
          Not_found -> raise (RefineError (StringError "eqcd_applyT: need an argument"))
    in
    let count = hyp_count p in
       (applyEquality count t
-       thenT addHiddenLabelT "wf") p;;
+       thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (apply_term, eqcd_applyT);;
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (apply_term, eqcd_applyT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -278,9 +279,9 @@ let inf_dfun f decl t =
       try dest_univ a', dest_univ b' with
          Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
    in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2);;
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dfun_term, inf_dfun);;
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dfun_term, inf_dfun)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -292,7 +293,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dfun_
 let dfun_subtypeT p =
    let a = get_opt_var_arg "x" p in
       (functionSubtype (hyp_count p) a
-       thenT addHiddenLabelT "subtype") p;;
+       thenT addHiddenLabelT "subtype") p
 
 let sub_resource =
    sub_resource.resource_improve
@@ -300,10 +301,14 @@ let sub_resource =
    (DSubtype ([<< a1:'A1 -> 'B1['a1] >>, << a2:'A2 -> 'B2['a2] >>;
                << 'A2 >>, << 'A1 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],
-              dfun_subtypeT));;
+              dfun_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:31  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:55:47  jyh
  * Proving twice one is two.
  *

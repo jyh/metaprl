@@ -335,12 +335,11 @@ let d_intT i p =
    if i = 0 then
       numberFormation (hyp_count p) zero p
    else
-      let count = hyp_count p in
-      let i' = get_pos_hyp_index i count in
-      let n = var_of_hyp i' p in
+      let i, j = hyp_indices p i in
+      let n, _ = Sequent.nth_hyp p i in
          match maybe_new_vars ["m"; "v"; "z"] (Sequent.declared_vars p) with
             [m; v; z] ->
-               intElimination i' (count - i' - 1) n m v z p
+               intElimination i j n m v z p
           | _ ->
                failwith "d_int: match"
 
@@ -386,6 +385,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/09 20:52:36  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.8  1998/06/01 13:55:54  jyh
  * Proving twice one is two.
  *

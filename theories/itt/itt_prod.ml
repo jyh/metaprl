@@ -121,12 +121,11 @@ let d_concl_prod p =
  * We take the argument.
  *)
 let d_hyp_prod i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let z = var_of_hyp i' p in
+   let i, j = hyp_indices p i in
+   let z, _ = Sequent.nth_hyp p i in
       (match maybe_new_vars ["%u"; "%v"] (declared_vars p) with
           [u; v] ->
-             independentProductElimination i' (count - i' - 1) z u v
+             independentProductElimination i j z u v
         | _ ->
              failT) p
 
@@ -192,6 +191,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:40  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:56:06  jyh
  * Proving twice one is two.
  *

@@ -118,11 +118,15 @@ let squash_resource =
  * Resource argument.
  *)
 let squash_of_proof p =
-   let { ref_rsrc = { ref_squash = squash } } = Sequent.arg p in
+   let { ref_squash = squash } = Sequent.resources p in
       squash
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:45  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/03 22:19:47  jyh
  * Nonpolymorphic refiner.
  *

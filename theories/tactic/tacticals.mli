@@ -3,17 +3,14 @@
  *)
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 open Tactic_type
-
-(*
- * Identity rule is valid for all logics derived from this theory.
- *)
-axiom id : 'T --> 'T
 
 (* Trivial tactics *)
 val idT : tactic
 val failT : tactic
+val failWithT : string -> tactic
 
 (* Allow tactic only if no subgoals *)
 val completeT : tactic -> tactic
@@ -36,7 +33,7 @@ val tryT : tactic -> tactic
 
 val prefix_thenT : tactic -> tactic -> tactic
 val prefix_thenLT : tactic -> tactic list -> tactic
-val prefix_thenFLT : tactic -> (tactic_arg list -> Tactic_type.t list) -> tactic
+val prefix_thenFLT : tactic -> (tactic_arg list -> tactic_value list) -> tactic
 val prefix_then_OnFirstT : tactic -> tactic -> tactic
 val prefix_then_OnLastT : tactic -> tactic -> tactic
 val prefix_then_OnSameConclT : tactic -> tactic -> tactic
@@ -112,26 +109,42 @@ val onSomeHypT : (int -> tactic) -> tactic
 val onVarT : string -> (int -> tactic) -> tactic
 
 (*
- * Arguments.
+ * General argument functions.
+ *)
+val withTermT : string -> term -> tactic -> tactic
+val withTypeT : string -> term -> tactic -> tactic
+val withBoolT : string -> bool -> tactic -> tactic
+val withIntT : string -> int -> tactic -> tactic
+val withSubstT : term_subst -> tactic -> tactic
+val withTacticT : string -> tactic -> tactic -> tactic
+
+val get_term_arg    : tactic_arg -> string -> term
+val get_type_arg    : tactic_arg -> string -> term
+val get_int_arg     : tactic_arg -> string -> int
+val get_bool_arg    : tactic_arg -> string -> bool
+val get_subst_arg   : tactic_arg -> term_subst
+val get_tactic_arg  : tactic_arg -> string -> tactic
+
+(*
+ * Specific argument functions.
  *)
 val withT : term -> tactic -> tactic
-val newT : string list -> tactic -> tactic
-val usingT : (string * term) list -> tactic -> tactic
+val usingT : term_subst -> tactic -> tactic
 val atT : term -> tactic -> tactic
 val selT : int -> tactic -> tactic
-val notThinningT : tactic -> tactic
-val thinningT : tactic -> tactic
+val thinningT : bool -> tactic -> tactic
 
-val get_int_arg : int -> tactic_arg -> int
-val get_int_args : tactic_arg -> int list
-val get_var_arg : int -> tactic_arg -> string
-val get_var_args : tactic_arg -> string list
-val get_term_arg : int -> tactic_arg -> term
-val get_term_args : tactic_arg -> term list
+val get_with_arg : tactic_arg -> term
+val get_univ_arg : tactic_arg -> term
+val get_sel_arg : tactic_arg -> int
 val get_thinning_arg : tactic_arg -> bool
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/09 20:53:04  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.4  1998/06/03 22:20:05  jyh
  * Nonpolymorphic refiner.
  *

@@ -6,12 +6,13 @@
  *)
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.Refine
 
 (*
- * The cache is initially constructed as a "fcache" from a collection of rules.
+ * The cache is initially constructed as a "cache" from a collection of rules.
  * During refinement, this is compiled to a "extract", which propagates
  * inherited attributes down the tree.  After refinement, the synthesized
- * attributes are computed using "fsynthesis".
+ * attributes are computed using "synthesis".
  *)
 type 'a cache
 type 'a extract
@@ -40,7 +41,7 @@ type 'a brule =
    }
 
 (*
- * A proof has a forward and a backward component.
+ * A proof is a list of forward and backward components.
  *)
 type 'a proof =
    ForeTactics of (int list * 'a) list
@@ -60,13 +61,14 @@ val add_brule : 'a cache -> 'a brule -> 'a cache
 val extract : 'a cache -> 'a extract
 
 (*
- * Cache operations.
+ * Actions that modify the current world.
  *)
-val add_hyp : 'a extract -> int -> string -> term -> 'a extract
-val del_hyp : 'a extract -> int -> 'a extract
-val ref_hyp : 'a extract -> int -> 'a extract
+val add_hyp  : 'a extract -> int -> string -> term -> 'a extract
+val del_hyp  : 'a extract -> int -> 'a extract
+val ref_hyp  : 'a extract -> int -> 'a extract
 val name_hyp : 'a extract -> int -> string -> 'a extract
 val set_goal : 'a extract -> term -> 'a extract
+val set_msequent : 'a extract -> msequent -> 'a extract
 
 (*
  * Queries.
@@ -80,6 +82,10 @@ val used_hyps : 'a synthesis -> int list
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/09 20:52:59  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.4  1998/06/01 13:57:06  jyh
  * Proving twice one is two.
  *

@@ -210,14 +210,18 @@ let mk_decide_term = mk_dep0_dep1_dep1_term decide_opname
 let d_concl_union p =
    let count = hyp_count p in
    let flag =
-      try get_int_arg 0 p with
-         Not_found -> raise (RefineError (StringError "d_concl_union: requires a flag"))
+      try get_sel_arg p with
+         Not_found ->
+            raise (RefineError (StringError "d_concl_union: requires a flag"))
    in
    let tac =
       match flag with
-         1 -> inlFormation
-       | 2 -> inrFormation
-       | _ -> raise (RefineError (StringError "d_concl_union: select either 1 or 2"))
+         1 ->
+            inlFormation
+       | 2 ->
+            inrFormation
+       | _ ->
+            raise (RefineError (StringError "d_concl_union: select either 1 or 2"))
    in
       (tac count thenLT [idT; addHiddenLabelT "wf"]) p
 
@@ -227,11 +231,11 @@ let d_concl_union p =
  *)
 let d_hyp_union i p =
    let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let z = var_of_hyp i' p in
+   let i, j = hyp_indices p i in
+   let z, _ = Sequent.nth_hyp p i in
       (match maybe_new_vars [z; z] (declared_vars p) with
           [u; v] ->
-             unionElimination i' (count - i' - 1) z u v
+             unionElimination i j z u v
         | _ ->
              failT) p
 
@@ -365,6 +369,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:48  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:56:29  jyh
  * Proving twice one is two.
  *

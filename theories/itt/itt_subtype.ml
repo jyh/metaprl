@@ -248,7 +248,7 @@ let sub_resource =
  * Resource argument.
  *)
 let subtyper_of_proof p =
-   let { ref_rsrc = { ref_subtype = f } } = Sequent.arg p in
+   let { ref_subtype = f } = Sequent.resources p in
       f
 
 (************************************************************************
@@ -270,9 +270,8 @@ let d_concl_subtype p =
  * We take the argument.
  *)
 let d_hyp_subtype i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-      subtypeElimination i' (count - i' - 1) p
+   let i, j = hyp_indices p i in
+      subtypeElimination i j p
 
 (*
  * Join them.
@@ -316,6 +315,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/09 20:52:47  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.8  1998/06/03 22:19:49  jyh
  * Nonpolymorphic refiner.
  *

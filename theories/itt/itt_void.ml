@@ -96,9 +96,8 @@ let d_voidT i p =
       failwith "can't prove void"
    else
       let t = goal p in
-      let count = num_hyps t in
-      let i = get_pos_hyp_index i count in
-         voidElimination (i - 1) (count - i - 1) p
+      let i, j = hyp_indices p i in
+         voidElimination i j p
 
 let d_resource = d_resource.resource_improve d_resource (void_term, d_voidT)
 let dT = d_resource.resource_extract d_resource
@@ -150,6 +149,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:51  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:56:34  jyh
  * Proving twice one is two.
  *

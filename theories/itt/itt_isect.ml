@@ -157,13 +157,12 @@ let d_concl_isect p =
  * We take the argument.
  *)
 let d_hyp_isect i p =
-   let a = get_term_arg 0 p in
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let x = var_of_hyp i' p in
+   let a = get_with_arg p in
+   let i, j = hyp_indices p i in
+   let x, _ = Sequent.nth_hyp p i in
       (match maybe_new_vars ["y"; "v"] (declared_vars p) with
           [y; v] ->
-             intersectionElimination i' (count - i' - 1) a x y v
+             intersectionElimination i j a x y v
         | _ ->
              failT) p
 
@@ -230,6 +229,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:37  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:55:56  jyh
  * Proving twice one is two.
  *

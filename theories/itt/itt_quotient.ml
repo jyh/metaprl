@@ -226,12 +226,12 @@ let d_concl_quotient p =
  * We take the argument.
  *)
 let d_hyp_quotient i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
+   let i, j = hyp_indices p i in
       (match maybe_new_vars ["v"; "w"; "z"] (declared_vars p) with
           [v; w; z] ->
-             quotientElimination i' (count - i' - 1) v w z
-        | _ -> failT) p
+             quotientElimination i j v w z
+        | _ ->
+             failT) p
 
 (*
  * Join them.
@@ -303,6 +303,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/09 20:52:41  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.7  1998/06/01 13:56:09  jyh
  * Proving twice one is two.
  *

@@ -20,7 +20,6 @@ open Refiner.Refiner.Refine
 open Resource
 
 open Tacticals
-open Sequent
 open Var
 open Itt_squash
 open Itt_struct
@@ -157,19 +156,18 @@ let set_term = << { a: 'A | 'B['x] } >>
 let d_set i p =
    if i = 0 then
       let t =
-         try get_term_arg 1 p with
+         try get_with_arg p with
             Not_found ->
                raise (RefineError (StringError "d_set requires an argument"))
       in
       let v = get_opt_var_arg "z" p in
-         setMemberFormation (hyp_count p) t v p
+         setMemberFormation (Sequent.hyp_count p) t v p
    else
-      let count = hyp_count p in
-      let i' = get_pos_hyp_index i count in
-      let n = var_of_hyp i' p in
+      let i, j = Sequent.hyp_indices p i in
+      let n, _ = Sequent.nth_hyp p i in
          match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
             [u; y; v] ->
-               setElimination i' (count - i' - 1) u y v p
+               setElimination i j u y v p
           | _ ->
                failwith "d_set: match"
 
@@ -180,7 +178,7 @@ let d = d_resource.resource_extract d_resource
  * EqCD.
  *)
 let eqcd_set p =
-   let count = hyp_count p in
+   let count = Sequent.hyp_count p in
    let v = get_opt_var_arg "x" p in
       setEquality count v p
 
@@ -216,21 +214,20 @@ let squashT p =
  * Unhide a hidden hypothesis.
  *)
 let unhideT i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let s = dest_hide (nth_hyp i' p) in
-      (assertAtT (i' + 1) s
-       thenLT [squashT thenMT nthHypT i';
-               thinT i']) p
+   let i, j = Sequent.hyp_indices p i in
+   let s = dest_hide (snd (Sequent.nth_hyp p i)) in
+      (assertAtT (i + 1) s
+       thenLT [squashT thenMT nthHypT i;
+               thinT i]) p
 
 (*
  * Unhide all hidden hyps.
  *)
 let unhideAllT p =
-   let count = hyp_count p in
+   let count = Sequent.hyp_count p in
    let rec aux i p =
       (if i < count then
-          let h = nth_hyp i p in
+          let _, h = Sequent.nth_hyp p i in
              if is_hide_term h then
                 unhideT i thenMT aux (i + 1)
              else
@@ -245,35 +242,36 @@ let unhideAllT p =
  *)
 let d_set_concl p =
    let t =
-      try get_term_arg 1 p with
+      try get_with_arg p with
          Not_found ->
             raise (RefineError (StringError "d_set requires an argument"))
    in
    let v = get_opt_var_arg "z" p in
-      setMemberFormation (hyp_count p) t v p
+      setMemberFormation (Sequent.hyp_count p) t v p
 
 let d_set_hyp i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let n = var_of_hyp i' p in
+   let i, j = Sequent.hyp_indices p i in
+   let n, _ = Sequent.nth_hyp p i in
    let d_squashed p =
       (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
           [y; v] ->
-             setElimination i' (count - i' - 1) n y v
-        | _ -> failT) p
+             setElimination i j n y v
+        | _ ->
+             failT) p
    in
    let d_hidden p =
       (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
           [y; v] ->
-             setElimination2 i' (count - i' - 1) n y v
-        | _ -> failT) p
+             setElimination2 i j n y v
+        | _ -> 
+             failT) p
    in
       (if is_squash_goal p then
           d_squashed
        else
           let squash = squash_of_proof p in
           let tac =
-             d_hidden thenT tryT (unhideT (i' + 2))
+             d_hidden thenT tryT (unhideT (i + 2))
           in
              (squash thenMT d_squashed) orelseT tac) p
 
@@ -289,7 +287,7 @@ let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
  * EqCD.
  *)
 let eqcd_setT p =
-   let count = hyp_count p in
+   let count = Sequent.hyp_count p in
    let v = get_opt_var_arg "x" p in
       setEquality count v p
 
@@ -319,7 +317,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (set_t
  ************************************************************************)
 
 let set_subtypeT p =
-   (set_subtype (hyp_count p)
+   (set_subtype (Sequent.hyp_count p)
     thenT addHiddenLabelT "wf") p
 
 let sub_resource =
@@ -329,6 +327,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/09 20:52:43  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.6  1998/06/01 13:56:15  jyh
  * Proving twice one is two.
  *

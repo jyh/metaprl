@@ -107,11 +107,15 @@ let typeinf_resource =
  * Projector.
  *)
 let typeinf_of_proof p =
-   let { ref_rsrc = { ref_typeinf = inf } } = Sequent.arg p in
+   let { ref_typeinf = inf } = Sequent.resources p in
       inf
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/09 20:52:30  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.10  1998/06/03 22:19:42  jyh
  * Nonpolymorphic refiner.
  *

@@ -107,8 +107,8 @@ let d_unitT i p =
       (if i = 0 then
           unit_memberFormation count
        else
-          let i = get_pos_hyp_index i count in
-             unitElimination (i - 1) (count - i - 1)) p
+          let i, j = hyp_indices p i in
+             unitElimination i j) p
 
 let d_resource = d_resource.resource_improve d_resource (unit_term, d_unitT)
 let dT = d_resource.resource_extract d_resource
@@ -160,6 +160,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (it_te
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/09 20:52:49  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.6  1998/06/01 13:56:32  jyh
  * Proving twice one is two.
  *

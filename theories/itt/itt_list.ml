@@ -223,12 +223,11 @@ let d_concl_list p =
    nilFormation (hyp_count p) p
 
 let d_hyp_list i p =
-   let count = hyp_count p in
-   let i' = get_pos_hyp_index i count in
-   let n = var_of_hyp i' p in
+   let i, j = hyp_indices p i in
+   let n, _ = Sequent.nth_hyp p i in
       (match maybe_new_vars ["w"; "u"; "v"] (declared_vars p) with
           [w; u; v] ->
-             listElimination i' (count - i' - 1) n w u v
+             listElimination i j n w u v
              thenLT [addHiddenLabelT "base case";
                      addHiddenLabelT "induction step"]
         | _ ->
@@ -344,6 +343,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/09 20:52:38  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.8  1998/06/01 13:55:57  jyh
  * Proving twice one is two.
  *

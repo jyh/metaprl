@@ -263,7 +263,7 @@ let eqcd_resource =
  * Resource argument.
  *)
 let eqcd_of_proof p =
-   let  { ref_rsrc = { ref_eqcd = eqcd } } = Sequent.arg p in
+   let  { ref_eqcd = eqcd } = Sequent.resources p in
       eqcd
 
 (************************************************************************
@@ -335,6 +335,10 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/09 20:52:33  jyh
+ * Propagated refinement changes.
+ * New tacticals module.
+ *
  * Revision 1.9  1998/06/03 22:19:44  jyh
  * Nonpolymorphic refiner.
  *

@@ -1,45 +1,175 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 27 November 2001
+Last update to this file: 7 December 2001
 
-Brief module descriptions:
+I describe the purpose of this theory and its implementation in this file.
+The sections here are:
+   -  Overview: what this theory is for
+   -  General notes: things to keep in mind while perusing the theory
+   -  Compilation issues: why some files are compiled and others aren't
+   -  Module descriptions
+
+Overview:
 --------------------------------------------------------------------------
-mc_term_op_ds - Basic term operations beyond what's provided in
-   Refiner.Refiner.TermOp for working with terms in this theory.
-fir_int_set - Basic FIR integer set.
-fir_rawint_set - Basic FIR raw integer set.
-fir_ty - Terms and display forms for FIR types.
-fir_exp - Terms and display forms for FIR expressions.
-fir_eval - Defines how an FIR term-structure should evaluate.
-fir_deadcode - Deadcode elimination on an FIR term-structure.
-fir_const_elim - Constant elimination on an FIR term-structure.
-fir_marshal - Convertes between an Fir.prog and MetaPRL term-structure.
-mc_theory - Pulls together all of the above files for convinience.
-fir_test - Contains test sequents.  Not comprehensive or actively maintained.
-fir_type* - Not actively maintained.  I think these were supposed to have
-   rules that determined what constituted a well-typed expression.
-
-General overview:
---------------------------------------------------------------------------
-
 The purpose of this theory is to provide a formal representation of the
-Mojave compiler's FIR.
+Mojave compiler's FIR. (And I need to put more information here eventually.)
 
-<NEED TO PUT MORE INFO HERE EVENTUALLY>
 
-Todo list:
+General notes:
 --------------------------------------------------------------------------
--  Term construction / deconstruction operators for int_set and rawint_set.
--  Clean up mc_term_op_ds, esp. with regard to error handling and messages.
--  Get semantics for union / allocation / type-construction ops.
--  Make a comprehensive test file.
--  fir_deadcode - get dead parameter and function removal working.
--  fir_exp - Atomic, Debug, and Migrate term are missing.  I should
-   at least declare these or something.
--  symbol_of_var_term NEEDS SERIOUS CORRECTION!!
--  term_of_rawfloat and the other needs MORE CHECKING!!
+These are some points to keep in mind while reading through the code
+and terms provided by this theory:
+   -  The majority of my comments will be in *.mli files.  Comments
+      in *.ml files will typically deal with my implementation of something.
+   -  I'm trying my best to keep comments up to date, but occasionally,
+      I may forget to update them (that includes this file).  Feel free
+      to ask me about anything that seems out of date and/or incorrect.
 
-Notes to myself:
+
+Compilation issues:
 --------------------------------------------------------------------------
--  building with cons breaks the "up-arrow" thingy in mpopt.
--  I'm going to need variables (MetaPRL) <-> string <-> symbol (MC)
-   conversion functions as well....
+If you're using make to build MetaPRL, this theory should build correctly.
+The only thing that may seem odd is that the code to "connect" to the
+Mojave compiler will not be compiled in.  This is because the Mojave
+compiler is built with cons.  So, for those using cons to build MetaPRL,
+the "connection" code will be compiled in, but only if the MC_ROOT
+environment variable is defined.  (You'll probably want to define
+that variable in order to sensibly use MC.)  Otherwise, the build
+is the exact same as if the build was done with make.
+   Note that the Conscript is pretty messy since I don't know perl
+at all.
+
+
+Mc_term_op:
+--------------------------------------------------------------------------
+This module provides basic term construction and deconstruction operations
+similar to those in Refiner.Refiner.TermOp.  The most notable difference
+is my naming scheme for the functions.  This scheme and other information
+is documented in mc_term_op.mli.
+
+
+Mc_set:
+--------------------------------------------------------------------------
+This module provides terms to represent the sets used in the FIR.
+A set here, as in the FIR, is a list of intervals, e.g.
+   << int_set{ cons{ interval{2;3}; cons{interval{4;5};nil} } } >>
+Every interval is assumed to have closed end points.  Note that
+nothing is enforced of the ordering of the intervals, if they
+overlap or not, if the left hand end point is less than the right hand
+endpoint, etc.  Also, the intervals may conceptually be of anything
+that can be reduced to a number, e.g. AtomInt from Fir_exp.
+   Note that for rawint_set, the 'precision and 'sign terms are
+necessary to know what "sizes" the rawints are in the intervals.
+Note also that this implies that all the rawints are of the same
+precision and signing.
+   The one provided operation on these sets and intervals is membership
+testing.
+   Further information is documented in mc_set.mli.
+
+
+Fir_ty:
+--------------------------------------------------------------------------
+This module provides terms to represent the following FIR entities:
+   -  items of type int_precision
+   -  items of type float_precision
+   -  items of type ty
+   -  items of type union_type
+   -  items of type tydef
+   -  boolean values true and false (not really FIR so much as OCaml values)
+(And I need to put more information here concerning semantics eventually.)
+
+
+Fir_exp:
+--------------------------------------------------------------------------
+This module provides terms to represent the following FIR entities:
+   -  items of type unop
+   -  items of type binop
+   -  items of type subop
+   -  items of type atom
+   -  items of type alloc_op
+   -  items of type exp
+(And I need to put more information here concerning semantics eventually.)
+
+
+Fir_eval:
+--------------------------------------------------------------------------
+<to be filled in>
+
+
+Fir_deadcode:
+--------------------------------------------------------------------------
+<to be filled in>
+
+
+Fir_const_elim:
+--------------------------------------------------------------------------
+<to be filled in>
+
+
+Mc_fir_connect_base:
+--------------------------------------------------------------------------
+This module provides functions to take certain MC FIR entities to and from
+MetaPRL terms defined in the modules above.  Specifically, this module
+deals with converting (in terms of the MC FIR types):
+   -  int  (the plain old OCaml int)
+   -  bool (the plain old OCaml bool)
+   -  symbol
+   -  rawint
+   -  rawfloat
+   -  int_set
+   -  rawint_set
+   -  set
+rawfloats are converted into numbers, i.e. integers.  The idea is that
+the integer's bit representation will be the exact same as that of the
+float.
+   This module also provides some functions for taking OCaml lists and
+converting them to a "term list", e.g.
+   [1;2;3] ==> cons{ 1; cons{ 2; cons{ 3; nil } } }
+   Sets are converted int_set, in which case the interval end points
+are AtomInt's, or rawint_set, in which case the interval end points are
+AtomRawInt's.
+
+
+Mc_fir_connect_ty:
+--------------------------------------------------------------------------
+This module provides functions to take certain FIR entities to and from
+MetaPRL terms defined in the modules above.  Specifically, this module
+deals with converting (in terms of the FIR types):
+   -  ty_var
+   -  ty
+   -  union_type
+   -  ty_def
+
+
+Mc_fir_connect_exp:
+--------------------------------------------------------------------------
+This module provides functions to take certain FIR entities to and from
+MetaPRL terms defined in the modules above.  Specifically, this module
+deals with converting (in terms of the FIR types):
+<to be filled in>
+
+
+Mc_fir_connect:
+--------------------------------------------------------------------------
+<to be filled in>
+
+
+Mc_theory:
+--------------------------------------------------------------------------
+<to be filled in>
+
+
+Fir_test:
+--------------------------------------------------------------------------
+This is supposed to contain test code and interactive rules.   As of now,
+it's essentially a mess of whatever I last felt like putting in it.
+
+
+Fir_type_*:
+--------------------------------------------------------------------------
+I haven't touched these files in quite a while.  I've since
+forgotten what their exact purpose is, but I've kept them around
+in case I ever figure out what I need them for.  I believe at some
+point, these files will contain all the type-semantics/rules for
+the FIR, seeing as how everything else defines various
+transformations and evaluation.  The idea would be to formalize
+the FIR type checker, or something along those lines.

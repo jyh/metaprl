@@ -38,6 +38,7 @@ open Fir
 
 (* Open MetaPRL ML namespaces. *)
 
+open Refiner.Refiner.RefineError
 open Fir_exp
 open Mc_fir_connect_base
 open Mc_fir_connect_ty
@@ -211,7 +212,8 @@ let unop_of_term t =
                            (int_signed_of_term s)
 
    else
-      raise (Invalid_argument "unop_of_term: not a unop")
+      raise (RefineError ("unop_of_term", StringTermError
+            ("not a unop", t)))
 
 (*************************************************************************
  * Convert to and from binop.
@@ -456,7 +458,8 @@ let binop_of_term t =
       NeqEqOp
 
    else
-      raise (Invalid_argument "term_to_binop: not a binop")
+      raise (RefineError ("term_to_binop", StringTermError
+            ("not a binop", t)))
 
 (*************************************************************************
  * Convert to and from subop.
@@ -497,7 +500,8 @@ let subop_of_term t =
    else if is_rawFunctionSub_term t then
       RawFunctionSub
    else
-      raise (Invalid_argument "subop_of_term: not a subop")
+      raise (RefineError ("subop_of_term", StringTermError
+            ("not a subop", t)))
 
 (*************************************************************************
  * Convert to and from atom.
@@ -544,7 +548,8 @@ let atom_of_term t =
       AtomVar (var_of_term (dest_atomVar_term t))
 
    else
-      raise (Invalid_argument "atom_of_term: not an atom")
+      raise (RefineError ("atom_of_term", StringTermError
+            ("not an atom", t)))
 
 (*************************************************************************
  * Convert to and from alloc_op.
@@ -585,4 +590,68 @@ let alloc_op_of_term t =
       AllocMalloc (atom_of_term (dest_allocMalloc_term t))
 
    else
-      raise (Invalid_argument "alloc_op_of_term: not an alloc_op")
+      raise (RefineError ("term_of_alloc_op", StringTermError
+            ("not an alloc_op", t)))
+
+(*************************************************************************
+ * Convert debuggin info to and from terms.
+ *************************************************************************)
+
+(*
+let term_of_debug_line line =
+
+let debug_line_of_term t =
+
+let term_of_debug_vars vars =
+
+let debug_vars_of_term t =
+
+let term_of_debug_info info =
+
+let debug_info_of_term t =
+*)
+
+(*************************************************************************
+ * Convert to and from exp.
+ *************************************************************************)
+
+(*
+ * The expressions below are terrible with respect to variable
+ * names.  The code itself is straight forward though.  If you want
+ * to understand what the variables represent, I would suggest
+ * reading the provided documentation concerning the FIR and
+ * its term representation.
+ *)
+
+(*
+let term_of_exp e =
+   match e with
+
+      (* Primitive operations. *)
+      LetUnop (v, t, op, a1, expr) ->
+    | LetBinop (v t, op, a1, a2, expr) ->
+
+      (* Function application. *)
+    | LetExt (v, t, str, t, al, expr) ->
+    | TailCall (v, al) ->
+
+      (* Control. *)
+    | Match (a, cases) ->
+
+      (* Allocation. *)
+    | LetAlloc (v, op, expr) ->
+
+      (* Subscripting. *)
+    | LetSubscript (op, v, t, v2, a, expr) ->
+    | SetSubscript (op, v, a1, t, a2, expr) ->
+    | Memcpy
+
+      (* Debugging. *)
+    | Debug (info, expr) ->
+
+let exp_of_term t =
+   if
+   else
+      raise (RefineError ("exp_of_term", StringTermError
+            ("not an exp",  t)))
+*)

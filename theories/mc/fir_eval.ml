@@ -30,10 +30,12 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Fir_int_set
+include Mc_set
 include Fir_ty
 include Fir_exp
 include Itt_list2
+include Itt_int_base
+include Itt_int_ext
 
 open Top_conversionals
 open Tactic_type.Conversionals
@@ -78,12 +80,6 @@ declare fix{ f. 'b['f] }
 declare unop_exp{ 'op; 'ty; 'a1 }
 declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
 
-(*
- * Misc.
- *)
-
-declare unknownFun
-
 (*************************************************************************
  * Display forms.
  *************************************************************************)
@@ -127,9 +123,6 @@ dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'ty; 'a1 } =
    slot{'op} `"(" slot{'a1} `"):" slot{'ty}
 dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'ty; 'a1; 'a2 } =
    `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `"):" slot{'ty}
-
-(* Misc. *)
-dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"
 
 (*************************************************************************
  * Rewrites.
@@ -189,8 +182,8 @@ prim_rw reduce_mod_arith_unsigned :
  * Boolean type.
  *)
 
-prim_rw reduce_true_set : true_set <--> int_set{ 1; 1 }
-prim_rw reduce_false_set : false_set <--> int_set{ 0; 0 }
+prim_rw reduce_true_set : true_set <--> int_set{ cons{interval{1;1}; nil} }
+prim_rw reduce_false_set : false_set <--> int_set{ cons{interval{0;0}; nil} }
 prim_rw reduce_val_true : val_true <--> atomEnum{ 2; 1 }
 prim_rw reduce_val_false : val_false <--> atomEnum{ 2; 0 }
 prim_rw reduce_atomEnum_eq_atom :
@@ -251,16 +244,6 @@ prim_rw reduce_letBinop :
 prim_rw reduce_letExt :
    letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] } <-->
    'exp[it]
-
-(*
- * Control.
- * If the case list is nil, we can't evaluate the match expression.
- *)
-prim_rw reduce_match_int :
-   "match"{ number[i:n]; cons{ matchCase{'set; 'e }; 'el } } <-->
-   ifthenelse{ member{ number[i:n]; 'set };
-      'e;
-      ."match"{ number[i:n]; 'el } }
 
 (* Allocation. *)
 prim_rw reduce_allocTuple :
@@ -462,7 +445,6 @@ let firEvalT i =
       reduce_letUnop;
       reduce_letBinop;
       reduce_letExt;
-      reduce_match_int;
       reduce_allocTuple;
       reduce_allocArray;
       reduce_letSubscript;

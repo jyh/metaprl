@@ -30,9 +30,12 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Fir_int_set
+include Mc_set
 include Fir_ty
 include Fir_exp
+include Itt_list2
+include Itt_int_base
+include Itt_int_ext
 
 open Tactic_type.Conversionals
 
@@ -83,13 +86,6 @@ declare fix{ f. 'b['f] }
 
 declare unop_exp{ 'op; 'ty; 'a1 }
 declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
-
-(*
- * Misc.
- * Not FIR terms, but used to make output from mc manageable.
- *)
-
-declare unknownFun
 
 (*************************************************************************
  * Rewrites.
@@ -147,7 +143,6 @@ topval reduce_atomVar : conv
 topval reduce_letUnop : conv
 topval reduce_letBinop : conv
 topval reduce_letExt : conv
-topval reduce_match_int : conv
 topval reduce_allocTuple : conv
 topval reduce_allocArray : conv
 topval reduce_letSubscript : conv

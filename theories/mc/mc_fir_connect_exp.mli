@@ -79,3 +79,27 @@ val atom_of_term : term -> atom
 
 val term_of_alloc_op : alloc_op -> term
 val alloc_op_of_term : term -> alloc_op
+
+(*
+ * Convert debugging info to and from terms.
+ *)
+
+(*
+val term_of_debug_line : debug_line -> term
+val debug_line_of_term : term -> debug_line
+
+val term_of_debug_vars : debug_vars -> term
+val debug_vars_of_term : term -> debug_vars
+
+val term_of_debug_info : debug_info -> term
+val debug_info_of_term : term -> debug_info
+*)
+
+(*
+ * Convert to and from exp.
+ *)
+
+(*
+val term_of_exp : exp -> term
+val exp_of_term : term -> exp
+*)

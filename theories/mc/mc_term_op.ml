@@ -34,11 +34,15 @@
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
+open Refiner.Refiner.RefineError
 
 (*************************************************************************
  * General utility.
  *************************************************************************)
 
+(*
+ * Turn a binding variable into a string.
+ *)
 let string_of_binding_var t =
    match dest_term t with
       { term_op = _; term_terms = [bt1] } ->
@@ -47,14 +51,22 @@ let string_of_binding_var t =
                { bvars = [s1]; bterm = t1 } ->
                   s1
              | _ ->
-               raise (Invalid_argument "string_of_binding_var: match (1) failed")
+               raise (RefineError ("string_of_binding_var", StringTermError
+                     ("not exactly one bvar?", t)))
          )
     | _ ->
-         raise (Invalid_argument "string_of_binding_var: match (2) failed")
+         raise (RefineError ("string_of_binding_var", StringTermError
+               ("not a term with one subterm with one bvar?", t)))
 
+(*
+ * Deconstruct a term into some convinient entities.
+ *)
 let pre_dest_term t =
    ( opname_of_term t, subterm_arities t, subterms_of_term t )
 
+(*
+ * Convinience to check arity and opname at the same time.
+ *)
 let opname_arity_check opname_requested arities_requested opname arities =
    Opname.eq opname_requested opname && arities_requested = arities
 
@@ -79,9 +91,11 @@ let dest_4_dep0_term opname t =
             [t1; t2; t3; t4] ->
                t1, t2, t3, t4
           | _ ->
-               raise (Invalid_argument "dest_4_dep0_term: internal error")
+               raise (RefineError ("dest_4_dep0_term", StringTermError
+                     ("internal error", t)))
       else
-         raise (Invalid_argument "dest_4_dep0_term: invalid term structure")
+         raise (RefineError ("dest_4_dep0_term", StringTermError
+               ("invalid term structure", t)))
 
 let is_3_dep0_1_dep1_term opname t =
    let (opname', arities, subterms) = pre_dest_term t in
@@ -100,9 +114,11 @@ let dest_3_dep0_1_dep1_term opname t =
             [t1; t2; t3; t4] ->
                t1, t2, t3, string_of_binding_var t4, t4
           | _ ->
-               raise (Invalid_argument "dest_3_dep0_1_dep1_term: internal error")
+               raise (RefineError ("dest_3_dep0_1_dep1_term", StringTermError
+                     ("internal error", t)))
       else
-         raise (Invalid_argument "dest_3_dep0_1_dep1_term: invalid term structure")
+         raise (RefineError ("dest_3_dep0_1_dep1_term", StringTermError
+               ("invalid term structure", t)))
 
 (*************************************************************************
  * 5 subterms.
@@ -125,9 +141,11 @@ let dest_4_dep0_1_dep1_term opname t =
             [t1; t2; t3; t4; t5] ->
                t1, t2, t3, t4, string_of_binding_var t5, t5
           | _ ->
-               raise (Invalid_argument "dest_4_dep0_1_dep1_term: internal error")
+               raise (RefineError ("dest_4_dep0_1_dep1_term", StringTermError
+                     ("internal error", t)))
       else
-         raise (Invalid_argument "dest_4_dep0_1_dep1_term: invalid term structure")
+         raise (RefineError ("dest_4_dep0_1_dep1_term", StringTermError
+               ("invalid term structure", t)))
 
 (*************************************************************************
  * 6 subterms.
@@ -150,9 +168,12 @@ let dest_5_dep0_1_dep1_term opname t =
             [t1; t2; t3; t4; t5; t6] ->
                t1, t2, t3, t4, t5, string_of_binding_var t6, t6
           | _ ->
-               raise (Invalid_argument "dest_5_dep0_1_dep1_term: internal error")
+               raise (RefineError ("dest_5_dep0_1_dep1_term", StringTermError
+                     ("internal error", t)))
       else
-         raise (Invalid_argument "dest_5_dep0_1_dep1_term: invalid term structure")
+         raise (RefineError ("dest_5_dep0_1_dep1_term", StringTermError
+               ("invalid term structure", t)))
+
 
 (*************************************************************************
  * 7 subterms.
@@ -176,6 +197,9 @@ let dest_7_dep0_term opname t =
             [t1; t2; t3; t4; t5; t6; t7] ->
                t1, t2, t3, t4, t5, t6, t7
           | _ ->
-               raise (Invalid_argument "dest_7_dep0_term: internal_error")
+               raise (RefineError ("dest_7_dep0_term", StringTermError
+                     ("internal error", t)))
       else
-         raise (Invalid_argument "dest_7_dep0_term: invalid term structure")
+         raise (RefineError ("dest_7_dep0_term", StringTermError
+               ("invalid term structure", t)))
+

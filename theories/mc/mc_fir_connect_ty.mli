@@ -32,26 +32,11 @@
 
 (* Open MC ML namespaces. *)
 
-open Rawint
-open Rawfloat
 open Fir
 
 (* Open MetaPRL ML namespaces. *)
 
 open Refiner.Refiner.Term
-
-(*
- * Convert to and from int_precision, int_signed, and float_precision.
- *)
-
-val term_of_int_precision : int_precision -> term
-val int_precision_of_term : term -> int_precision
-
-val term_of_int_signed : int_signed -> term
-val int_signed_of_term : term -> int_signed
-
-val term_of_float_precision : float_precision -> term
-val float_precision_of_term : term -> float_precision
 
 (*
  * Convert to and from ty_var.
@@ -73,3 +58,10 @@ val ty_of_term : term -> ty
 
 val term_of_union_type : union_type -> term
 val union_type_of_term : term -> union_type
+
+(*
+ * Convert to and from tydef.
+ *)
+
+val term_of_tydef : tydef -> term
+val tydef_of_term : term -> tydef

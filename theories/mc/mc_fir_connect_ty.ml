@@ -32,70 +32,17 @@
 
 (* Open MC ML namespaces. *)
 
-open Rawint
-open Rawfloat
 open Fir
 
 (* Open MetaPRL ML namespaces. *)
 
+open Refiner.Refiner.RefineError
+open Itt_list
 open Fir_ty
 open Mc_fir_connect_base
 
 (*************************************************************************
- * Convert to and from int_precision, int_signed, and float_precision.
- *************************************************************************)
-
-let term_of_int_precision ip =
-   match ip with
-      Int8 ->  int8_term
-    | Int16 -> int16_term
-    | Int32 -> int32_term
-    | Int64 -> int64_term
-
-let int_precision_of_term t =
-   if is_int8_term t then
-      Int8
-   else if is_int16_term t then
-      Int16
-   else if is_int32_term t then
-      Int32
-   else if is_int64_term t then
-      Int64
-   else
-      raise (Invalid_argument "int_precision_of_term: not an int_precision")
-
-let term_of_int_signed s =
-   if s then
-      val_true_term
-   else
-      val_false_term
-
-let int_signed_of_term t =
-   if is_val_true_term t then
-      true
-   else if is_val_false_term t then
-      false
-   else
-      raise (Invalid_argument "int_signed_of_term: not an int_signed")
-
-let term_of_float_precision fp =
-   match fp with
-      Single ->      floatSingle_term
-    | Double ->      floatDouble_term
-    | LongDouble ->  floatLongDouble_term
-
-let float_precision_of_term t =
-   if is_floatSingle_term t then
-      Single
-   else if is_floatDouble_term t then
-      Double
-   else if is_floatLongDouble_term t then
-      LongDouble
-   else
-      raise (Invalid_argument "float_precision_of_term: not a float_precision")
-
-(*************************************************************************
- * Convert toa nd from ty_var.
+ * Convert to and from ty_var.
  *************************************************************************)
 
 (* Just wrappers right now, since ty_var = symbol. *)
@@ -125,6 +72,34 @@ let rec term_of_ty t =
     | TyFun (tl,t) ->
          mk_tyFun_term  (term_of_list term_of_ty tl) (term_of_ty t)
 
+      (* Tuples. *)
+    | TyUnion (tv,tyl,s) ->
+         mk_tyUnion_term (term_of_ty_var tv)
+                         (term_of_list term_of_ty tyl)
+                         (term_of_int_set s)
+    | TyTuple tyl ->
+         mk_tyTuple_term (term_of_list term_of_ty tyl)
+    | TyArray t ->
+         mk_tyArray_term (term_of_ty t)
+    | TyRawData ->
+         tyRawData_term
+
+      (* Polymorphism. *)
+    | TyVar tv ->
+         mk_tyVar_term     (term_of_ty_var tv)
+    | TyApply (tv, tyl) ->
+         mk_tyApply_term   (term_of_ty_var tv)
+                           (term_of_list term_of_ty tyl)
+    | TyExists (tvl,t) ->
+         mk_tyExists_term  (term_of_list term_of_ty_var tvl)
+                           (term_of_ty t)
+    | TyAll (tvl, t) ->
+         mk_tyAll_term     (term_of_list term_of_ty_var tvl)
+                           (term_of_ty t)
+    | TyProject (tv,i) ->
+         mk_tyProject_term (term_of_ty_var tv)
+                           (number_term_of_int i)
+
       (* Type should be inferred. *)
     | TyDelayed -> tyDelayed_term
 
@@ -148,12 +123,42 @@ let rec ty_of_term t =
       let tl, t = dest_tyFun_term t in
          TyFun (list_of_term ty_of_term tl) (ty_of_term t)
 
+   (* Tuples. *)
+   else if is_tyUnion_term t then
+      let tv, tyl, s = dest_tyUnion_term t in
+         TyUnion (ty_var_of_term tv)
+                 (list_of_term ty_of_term tyl)
+                 (int_set_of_term s)
+   else if is_tyTuple_term t then
+      TyTuple (list_of_term ty_of_term (dest_tyTuple_term t))
+   else if is_tyArray_term t then
+      TyArray (ty_of_term (dest_tyArray_term t))
+   else if is_tyRawData_term t then
+      TyRawData
+
+   (* Polymorphism. *)
+   else if is_tyVar_term t then
+      TyVar (ty_var_of_term (dest_tyVar_term t))
+   else if is_tyApply_term t then
+      let tv, tyl = dest_tyApply_term t in
+         TyApply (ty_var_of_term tv) (list_of_term ty_of_term tyl)
+   else if is_tyExists_term t then
+      let tvl, t = dest_tyExists_term t in
+         TyExists (list_of_term ty_var_of_term tvl) (ty_of_term t)
+   else if is_tyAll_term t then
+      let tvl, t = dest_tyAll_term t in
+         TyAll (list_of_term ty_var_of_term tvl) (ty_of_term t)
+   else if is_tyProject_term t then
+      let tv, i = dest_tyProject_term t in
+         TyProject (ty_var_of_term tv) (int_of_number_term i)
+
    (* Type should be inferred. *)
    else if is_tyDelayed_term t then
       TyDelayed
 
    else
-      raise (Invalid_argument "ty_of_term: not a ty")
+      raise (RefineError ("ty_of_term", StringTermError
+            ("not a ty", t)))
 
 (*************************************************************************
  * Convert to and from union_type.
@@ -162,7 +167,7 @@ let rec ty_of_term t =
 let term_of_union_type ut =
    match ut with
       NormalUnion -> normalUnion_term
-    | ExnUnion -> exnUnion_term
+    | ExnUnion ->    exnUnion_term
 
 let union_type_of_term t =
    if is_normalUnion_term t then
@@ -170,4 +175,58 @@ let union_type_of_term t =
    else if is_exnUnion_term t then
       ExnUnion
    else
-      raise (Invalid_argument "union_type_of_term: not a union_type")
+      raise (RefineError ("union_type_of_term", StringTermError
+            ("not a union_type", t)))
+
+(*************************************************************************
+ * Convert to and from tydef.
+ *************************************************************************)
+
+(*
+ * Define helper functions.
+ *)
+
+let term_of_ty_bool (t, b) =
+   mk_unionElt_term (term_of_ty t) (term_of_bool b)
+
+let ty_bool_of_term t =
+   if is_unionElt_term t then
+      let t, b = dest_unionElt_term t in
+         (ty_of_term t), (bool_of_term b)
+   else
+      raise (RefineError ("ty_bool_of_term", StringTermError
+            ("not an unionElt", t)))
+
+let term_of_ty_bool_list_list tbll =
+   (term_of_list (term_of_list term_of_ty_bool) tbll)
+
+let ty_bool_list_list_of_term tbll =
+   (list_of_term (list_of_term ty_bool_of_term) tbll)
+
+(*
+ * Actual functions.
+ *)
+
+let term_of_tydef tyd =
+   match tyd with
+      TyDefUnion (tvl, ut, tbll) ->
+         mk_tyDefUnion_term   (term_of_list term_of_ty_var tvl)
+                              (term_of_union_type ut)
+                              (term_of_ty_bool_list_list tbll)
+    | TyDefLambda (tvl, t) ->
+         mk_tyDefLambda_term  (term_of_list term_of_ty_var tvl)
+                              (term_of_ty t)
+
+let tydef_of_term t =
+   if is_tyDefUnion_term t then
+      let tvl, ut, tbll = dest_tyDefUnion_term t in
+         TyDefUnion  (list_of_term ty_var_of_term tvl)
+                     (union_type_of_term ut)
+                     (ty_bool_list_list_of_term tbll)
+   else if is_tyDefLambda_term t then
+      let tvl, t = dest_tyDefLambda_term t in
+         TyDefLambda (list_of_term ty_var_of_term tvl)
+                     (ty_of_term t)
+   else
+      raise (RefineError ("tydef_of_term", StringTermError
+            ("not a tydef", t)))

@@ -1,9 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define a limited version of the int_set type from the FIR.
- * It's limited in the sense that I don't implement all the
- *    possible operations that the FIR int_set has.
+ * Terms to represent sets used in the MC FIR.
  *
  * ----------------------------------------------------------------
  *
@@ -34,68 +32,61 @@
 
 include Base_theory
 include Itt_bool
+include Itt_list
 include Itt_int_ext
+
+open Refiner.Refiner.Term
+open Tactic_type.Conversionals
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
 
-(* Bounds. *)
-declare open_bound{ 'num }
-declare inf_bound
-
-(* Intervals. *)
+(*
+ * Closed intervals.
+ * 'left and 'right should be "sensible" left and right bounds.
+ *)
 declare interval{ 'left; 'right }
 
-(* The set. *)
+(*
+ * int and rawint sets.
+ * They're both comprised of a list (e.g. << cons{...} >>) of intervals.
+ * The rawint_set also has to keep track of precision and signing.
+ *)
 declare int_set{ 'intervals }
+declare rawint_set{ 'precision; 'sign; 'intervals }
 
-(* Short form. *)
-declare int_set{ 'a; 'b }
-
-(* Member test. *)
-define unfold_in_interval :
-   in_interval{ 'num; interval{'l; 'r} } <-->
-   band{ le_bool{'l; 'num}; le_bool{'num; 'r} }
-declare member{ 'num; 'int_set }
-
-(*************************************************************************
- * Display.
- *************************************************************************)
-
-(* Bounds. *)
-dform open_bound_df : except_mode[src] :: open_bound{ 'num } =
-   `"open_bound(" slot{'num} `")"
-dform inf_bound_df : except_mode[src] :: inf_bound =
-   `"inf_bound"
-
-(* Intervals. *)
-dform interval_df : except_mode[src] :: interval{ 'l; 'r }  =
-   lzone `"[" slot{'l} `"," slot{'r} `"]" ezone
-
-(* The set. *)
-dform int_set_df1 : except_mode[src] :: int_set{ 'intervals } =
-   pushm[0] szone `"int_set(" slot{'intervals} `")" ezone popm
-
-(* Short form. *)
-dform int_set_df2 : except_mode[src] :: int_set{ 'a; 'b } =
-   `"int_set[[" slot{'a} `", " slot{'b} `"]]"
-
-(* Member test. *)
-dform in_interval_df : except_mode[src] :: in_interval{'num; 'interval} =
-   lzone slot{'num} `" " Nuprl_font!member `" " slot{'interval} ezone
-dform member_df : except_mode[src] :: member{ 'num; 'int_set } =
-   szone slot{'num} space Nuprl_font!member space slot{'int_set} ezone
+(*
+ * Membership tests.
+ * These evaluate to btrue or bfalse.
+ * is_member reduces for both int_set and rawint_set.
+ *)
+declare in_interval{ 'num; 'interval }
+declare is_member{ 'num; 'set }
 
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
 
-prim_rw reduce_member_cons :
-   member{ 'num; int_set{ cons{'i; 'el} } } <-->
-   ifthenelse{ in_interval{ 'num; 'i }; btrue; member{ 'num; int_set{'el} } }
-prim_rw reduce_member_nil : member{ 'num; int_set{ nil } } <--> bfalse
+topval reduce_in_interval : conv
+topval reduce_is_member_int : conv
+topval reduce_is_member_rawint: conv
 
-prim_rw reduce_short_int_set :
-   int_set{ 'a; 'b } <-->
-   int_set{ cons{ interval{'a; 'b}; nil } }
+(*************************************************************************
+ * Term operations.
+ *************************************************************************)
+
+val interval_term : term
+val is_interval_term : term -> bool
+val mk_interval_term : term -> term -> term
+val dest_interval_term : term -> term * term
+
+val int_set_term : term
+val is_int_set_term : term -> bool
+val mk_int_set_term : term -> term
+val dest_int_set_term : term -> term
+
+val rawint_set_term : term
+val is_rawint_set_term : term -> bool
+val mk_rawint_set_term : term -> term -> term -> term
+val dest_rawint_set_term : term -> term * term * term

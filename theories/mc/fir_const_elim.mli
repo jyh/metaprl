@@ -30,7 +30,6 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Fir_int_set
 include Fir_ty
 include Fir_exp
 include Fir_eval

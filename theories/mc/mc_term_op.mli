@@ -35,16 +35,18 @@ open Opname
 open Refiner.Refiner.Term
 
 (*
+ * The functions here are essentially the same in function as those
+ * in Refiner.Refiner.TermOp, though the naming scheme is different.
+ *
  * The function naming scheme here is as follows:
  * X_depY pairs represent X terms in a row, each with Y bound variables.
  * The strings for a given subterm with bound variables come right
  * before the term they appear in both function parameters and
  * return values.
  *
- * The dest_* functions can throw one of two Invalid_argument
- * exceptions.  One indicates a coding error on my part (internal error),
- * and the other indicates that some called with function with
- * an improper parameter (invalid term structure).
+ * The dest_* functions will throw RefineError's if they are given
+ * incorrectly structured terms (or if there is an internal
+ * error in my code).
  *)
 
 (*************************************************************************

@@ -25,8 +25,7 @@ if(defined($ENV{'MC_ROOT'})) {
    );
    OCamlSources $env
       'mc_term_op.ml',
-      'fir_int_set.ml',
-      'fir_rawint_set.ml',
+      'mc_set.ml',
       'fir_ty.ml',
       'fir_exp.ml',
       'fir_eval.ml',
@@ -40,8 +39,7 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_test.ml';
    OCamlLibrary $env 'base',
       'mc_term_op',
-      'fir_int_set',
-      'fir_rawint_set',
+      'mc_set',
       'fir_ty',
       'fir_exp',
       'fir_eval',
@@ -56,8 +54,7 @@ if(defined($ENV{'MC_ROOT'})) {
 } else {
    OCamlSources $env
       'mc_term_op.ml',
-      'fir_int_set.ml',
-      'fir_rawint_set.ml',
+      'mc_set.ml',
       'fir_ty.ml',
       'fir_exp.ml',
       'fir_eval.ml',
@@ -67,8 +64,7 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_test.ml';
    OCamlLibrary $env 'base',
       'mc_term_op',
-      'fir_int_set',
-      'fir_rawint_set',
+      'mc_set',
       'fir_ty',
       'fir_exp',
       'fir_eval',

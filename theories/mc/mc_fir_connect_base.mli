@@ -36,6 +36,7 @@
 open Rawint
 open Rawfloat
 open Symbol
+open Fir
 
 (* Open MetaPRL ML namespaces. *)
 
@@ -47,12 +48,13 @@ open Refiner.Refiner.Term
  *)
 
 val var_term_of_symbol : symbol -> term
-val symbol_of_var_term : term -> symbol (* THIS NEEDS FIXING! *)
+val symbol_of_var_term : term -> symbol
 
 (*
  * Convert between integer and floating point constants and numbers.
- * A number term is number[i:n] (for example).
- * Rawfloats are represented as integers!
+ * A number term is number[i:n].
+ * Rawfloats are represented as integers! (See the README file for
+ *    why this is the case.)
  *)
 
 val number_term_of_int : int -> term
@@ -61,9 +63,41 @@ val int_of_number_term : term -> int
 val number_term_of_rawint : rawint -> term
 val rawint_of_number_term : int_precision -> int_signed -> term -> rawint
 
-(* THESE NEED CHECKING (MORE SO THAN OTHER FUNCS) *)
 val number_term_of_rawfloat : rawfloat -> term
 val rawfloat_of_number_term : float_precision -> term -> rawfloat
+
+(*
+ * Convert to and from bool values.
+ *)
+
+val term_of_bool : bool -> term
+val bool_of_term : term -> bool
+
+(*
+ * Convert to and from int_precision, int_signed, and float_precision.
+ *)
+
+val term_of_int_precision : int_precision -> term
+val int_precision_of_term : term -> int_precision
+
+val term_of_int_signed : int_signed -> term
+val int_signed_of_term : term -> int_signed
+
+val term_of_float_precision : float_precision -> term
+val float_precision_of_term : term -> float_precision
+
+(*
+ * Convert to and from int_set, rawint_set, and set.
+ *)
+
+val term_of_int_set : int_set -> term
+val int_set_of_term : term -> int_set
+
+val term_of_rawint_set : rawint_set -> term
+val rawint_set_of_term : term -> rawint_set
+
+val term_of_set : set -> term
+val set_of_term : term -> set
 
 (*
  * Convert a list to a "term list", i.e. << cons{ ... } >>.

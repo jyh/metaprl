@@ -54,6 +54,10 @@ declare neqEqOp
 
 (* Subscript operators. *)
 declare blockPolySub
+declare blockRawIntSub{ 'precision; 'sign }
+declare blockFloatSub{ 'precision }
+declare rawRawIntSub{ 'precision; 'sign }
+declare rawFloatSub{ 'precision }
 declare rawDataSub
 declare rawFunctionSub
 
@@ -71,6 +75,7 @@ declare allocMalloc{ 'atom }
  *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
+declare atomRawInt{ 'num }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
@@ -113,15 +118,14 @@ declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
 (*
  * Misc.
  * Used in making output from the mc compiler more manageable.
+ * They indicate that compiler "didn't know" how to print out
+ * a given term properly.
  *)
 
 declare unknownFun
 declare unknownSet
-declare unknownTy
-declare unknownTydef
 declare unknownAtom
 declare unknownAlloc
-declare unknownSubop
 
 (*************************************************************************
  * Rewrites.
@@ -132,6 +136,7 @@ topval reduce_eqEqOp : conv
 topval reduce_neqEqOp : conv
 topval reduce_atomInt : conv
 topval reduce_atomEnum : conv
+topval reduce_atomRawInt : conv
 topval reduce_atomVar : conv
 topval reduce_letUnop : conv
 topval reduce_letBinop : conv

@@ -116,6 +116,7 @@ dform cmpIntOp_df : except_mode[src] :: cmpIntOp = `"compare"
 prim_rw reduce_uminusIntOp :
    unop_exp{ uminusIntOp; 'a1 } <-->
    "minus"{'a1}
+(* notIntOp requres properly dealing with modular arithmetic. *)
 
 (* Standard binary arithmetic operators. *)
 prim_rw reduce_plusIntOp :
@@ -137,7 +138,7 @@ prim_rw reduce_remIntOp :
 (* Binary bitwise operators. *)
 
 (*
- * Nothing as of yet.
+ * These rewrites requrie a properly dealing with modular arithmetic.
  *)
 
 (* Max / min. *)

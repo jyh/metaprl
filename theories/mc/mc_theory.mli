@@ -30,8 +30,6 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-include Itt_theory
 include Fir_state
 include Fir_int_set
 include Fir_ty

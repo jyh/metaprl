@@ -49,6 +49,10 @@ declare neqEqOp
 
 (* Subscript operators. *)
 declare blockPolySub
+declare blockRawIntSub{ 'precision; 'sign }
+declare blockFloatSub{ 'precision }
+declare rawRawIntSub{ 'precision; 'sign }
+declare rawFloatSub{ 'precision }
 declare rawDataSub
 declare rawFunctionSub
 
@@ -61,6 +65,7 @@ declare allocMalloc{ 'atom }
 (* Normal values. *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
+declare atomRawInt{ 'num }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
@@ -95,11 +100,8 @@ declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
 
 declare unknownFun
 declare unknownSet
-declare unknownTy
-declare unknownTydef
 declare unknownAtom
 declare unknownAlloc
-declare unknownSubop
 
 (*************************************************************************
  * Display forms.
@@ -115,6 +117,14 @@ dform neqEqOp_df : except_mode[src] :: neqEqOp = `"NeqEqOp"
 (* Subscript operators. *)
 dform blockPolySub_df : except_mode[src] :: blockPolySub =
    `"BlockPolySub"
+dform blockRawIntSub_df : except_mode[src] :: blockRawIntSub{ 'p; 's } =
+   `"BlockRawIntSub(" slot{'p} `", " slot{'s} `")"
+dform blockFloatSub_df : except_mode[src] :: blockFloatSub{ 'precision } =
+   `"BlockFloatSub(" slot{'precision} `")"
+dform rawRawIntSub_df : except_mode[src] :: rawRawIntSub{ 'p; 's } =
+   `"RawRawIntSub(" slot{'p} `", " slot{'s} `")"
+dform rawFloatSub_df : except_mode[src] :: rawFloatSub{ 'precision } =
+   `"RawFloatSub(" slot{'precision} `")"
 dform rawDataSub_df : except_mode[src] :: rawDataSub =
    `"RawDataSub"
 dform rawFunctionSub : except_mode[src] :: rawFunctionSub =
@@ -137,6 +147,8 @@ dform atomInt_df : except_mode[src] :: atomInt{ 'int } =
    lzone `"AtomInt(" slot{'int} `")" ezone
 dform atomEnum_df : except_mode[src] :: atomEnum{ 'bound; 'num } =
    lzone `"AtomEnum(" slot{'bound} `", " slot{'num} `")" ezone
+dform atomRawInt_df : except_mode[src] :: atomRawInt{ 'num } =
+   lzone `"AtomRawInt(" slot{'num} `")" ezone
 dform atomConst_df : except_mode[src] :: atomConst{ 'ty; 'ty_var; 'num } =
    lzone `"AtomConst(" slot{'ty} `", " slot{'ty_var} `", "
    slot{'num} `")" ezone
@@ -214,11 +226,11 @@ dform setSubscript_df : except_mode[src] ::
    `"with subop " slot{'subop} hspace
    slot{'exp} ezone
 
-(*
- * Misc.
- *)
-
+(* Misc. *)
 dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"
+dform unknownSet_df : except_mode[src] :: unknownSet = `"UnknownSet"
+dform unknownAtom_df : except_mode[src] :: unknownAtom = `"UnknownAtom"
+dform unknownAlloc_df : except_mode[src] :: unknownAlloc = `"UnknownAlloc"
 
 (*************************************************************************
  * Rewrites.
@@ -236,6 +248,7 @@ prim_rw reduce_neqEqOp : binop_exp{ neqEqOp; 'a1; 'a2 } <-->
 (* Normal values. *)
 prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
 prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
+prim_rw reduce_atomRawInt : atomRawInt{ 'num } <--> 'num
 prim_rw reduce_atomVar : atomVar{ 'var } <--> 'var
 
 (* Primitive operations. *)
@@ -287,6 +300,7 @@ let resource reduce += [
    << binop_exp{ neqEqOp; 'a1; 'a2 } >>, reduce_neqEqOp;
    << atomInt{ 'num } >>, reduce_atomInt;
    << atomEnum{ 'bound; 'num } >>, reduce_atomEnum;
+   << atomRawInt{ 'num } >>, reduce_atomRawInt;
    << atomVar{ 'var } >>, reduce_atomVar;
    << letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } >>,
       reduce_letUnop;

@@ -43,7 +43,7 @@ open Tactic_type.Conversionals
 
 (* Unary and bitwise negation. *)
 declare uminusIntOp
-declare notIntOp
+declare notIntOp (* not implemented until modular arithmetic is deal with *)
 
 (* Standard binary arithmetic operators. *)
 declare plusIntOp
@@ -58,9 +58,8 @@ declare remIntOp
  * logical shifts left/right
  * arithmetic shift right
  *
- * The implementation of these will be completed once ints in the FIR
- * are properly formalized.  Until then, only lsl, lsr, and asr will
- * be implemented, and these three will all do arithmetic shifts.
+ * These won't actually be implemented until modular arithmetic
+ * is properly dealt with.
  *)
 declare lslIntOp
 declare lsrIntOp

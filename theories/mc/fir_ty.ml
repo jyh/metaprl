@@ -37,11 +37,24 @@ include Fir_int_set
  * Declarations.
  *************************************************************************)
 
+(* Integer and floating point precision. *)
+declare int8
+declare int16
+declare int32
+declare int64
+declare floatSingle
+declare floatDouble
+declare floatLongDouble
+
 (* Integer type. *)
 declare tyInt
 
 (* Enumeration type. *)
 declare tyEnum{ 'num }
+
+(* Native data types. *)
+declare tyRawInt{ 'precision; 'sign }
+declare tyFloat{ 'precision }
 
 (* Function type. *)
 declare tyFun{ 'ty_list; 'ty }
@@ -83,9 +96,21 @@ declare lambda{ 'f }          (* function with no arguments *)
 declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
 
+(* Misc. *)
+declare unknownTydef
+
 (*************************************************************************
  * Display forms.
  *************************************************************************)
+
+(* Integer and floating point precision. *)
+dform int8_df : except_mode[src] :: int8 = `"Int8"
+dform int16_df : except_mode[src] :: int16 = `"Int16"
+dform int32_df : except_mode[src] :: int32 = `"Int32"
+dform int64_df : except_mode[src] :: int64 = `"Int64"
+dform floatSingle_df : except_mode[src] :: floatSingle = `"Single"
+dform floatDouble_df : except_mode[src] :: floatDouble = `"Double"
+dform floatLongDouble_df : except_mode[src] :: floatLongDouble = `"LongDouble"
 
 (* Integer type. *)
 dform tyInt_df : except_mode[src] :: tyInt = `"TyInt"
@@ -93,6 +118,12 @@ dform tyInt_df : except_mode[src] :: tyInt = `"TyInt"
 (* Enumeration type. *)
 dform tyEnum_df : except_mode[src] :: tyEnum{ 'num } =
    lzone `"TyEnum(0.." slot{'num} `")" ezone
+
+(* Native data types. *)
+dform tyRawInt_df : except_mode[src] :: tyRawInt{ 'precision; 'sign } =
+   `"TyRawInt(" slot{'precision} `", " slot{'sign} `")"
+dform tyFloat_df : except_mode[src] :: tyFloat{ 'precision } =
+   `"TyFloat(" slot{'precision} `")"
 
 (* Function type. *)
 dform tyFun_df : except_mode[src] :: tyFun{ 'ty_list; 'ty } =
@@ -157,9 +188,17 @@ dform fix_df : except_mode[src] :: fix{ f. 'b } =
    szone slot{'b} `")" ezone popm
    ezone popm
 
+(* Misc. *)
+dform unknownTydef_df : except_mode[src] :: unknownTydef = `"UnknownTydef"
+
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
+
+prim_rw reduce_int8 : int8 <--> 8
+prim_rw reduce_int16 : int16 <--> 16
+prim_rw reduce_int32 : int32 <--> 32
+prim_rw reduce_int64 : int64 <--> 64
 
 prim_rw reduce_tyVar : tyVar{ 'ty_var } <--> 'ty_var
 prim_rw beta_reduce : apply{ lambda{ x. 'f['x] }; 'y } <--> 'f['y]
@@ -175,6 +214,10 @@ let resource reduce += [
    << false_set >>, unfold_false_set;
    << val_true >>, unfold_val_true;
    << val_false >>, unfold_val_false;
+   << int8 >>, reduce_int8;
+   << int16 >>, reduce_int16;
+   << int32 >>, reduce_int32;
+   << int64 >>, reduce_int64;
    << tyVar{ 'ty_var } >>, reduce_tyVar;
    << apply{ lambda{ x. 'f['x] }; 'y } >>, beta_reduce;
    << apply{ lambda{ 'f }; nil } >>, reduce_apply_nil;

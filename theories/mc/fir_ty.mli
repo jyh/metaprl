@@ -39,6 +39,15 @@ open Tactic_type.Conversionals
  * Declarations.
  *************************************************************************)
 
+(* Integer and floating point precision. *)
+declare int8
+declare int16
+declare int32
+declare int64
+declare floatSingle
+declare floatDouble
+declare floatLongDouble
+
 (* Integer type. *)
 declare tyInt
 
@@ -48,6 +57,15 @@ declare tyInt
  * 'num should be a number.
  *)
 declare tyEnum{ 'num }
+
+(*
+ * Native data types.
+ * 'precision is the precision (number of bits).
+ * 'sign should be val_true or val_false if this is, respectively,
+ *    a signed or unsigned integral type.
+ *)
+declare tyRawInt{ 'precision; 'sign }
+declare tyFloat{ 'precision }
 
 (*
  *  Function type.
@@ -94,7 +112,9 @@ declare tyDefLambda{ 'ty_var_list; 'ty }
 
 (*
  * Boolean type.
- * true_set and false_set define true and false.
+ * true_set and false_set define true and false for use in matches.
+ * val_true and val_false should be used for returning true and false
+ *    in FIR evaluation.
  *)
 define unfold_true_set : true_set <--> int_set{ 1; 1 }
 define unfold_false_set : false_set <--> int_set{ 0; 0 }
@@ -107,6 +127,15 @@ declare lambda{ 'f }          (* function with no arguments *)
 declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
 
+(*
+ * Misc.
+ * Used in making output from the mc compiler more manageable.
+ * They indicate that compiler "didn't know" how to print out
+ * a given term properly.
+ *)
+
+declare unknownTydef
+
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
@@ -115,6 +144,10 @@ topval unfold_true_set : conv
 topval unfold_false_set : conv
 topval unfold_val_true : conv
 topval unfold_val_false : conv
+topval reduce_int8 : conv
+topval reduce_int16 : conv
+topval reduce_int32 : conv
+topval reduce_int64 : conv
 topval reduce_tyVar : conv
 topval beta_reduce : conv
 topval reduce_apply_nil : conv

@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define a limited version of the int_set type in the FIR.
+ * Define a limited version of the int_set type from the FIR.
  *
  * ----------------------------------------------------------------
  *

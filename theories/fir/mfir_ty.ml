@@ -1,4 +1,6 @@
 (*!
+ * @spelling{rawdata th tyEnum}
+ *
  * @begin[doc]
  * @module[Mfir_ty]
  *
@@ -58,6 +60,59 @@ open Top_conversionals
 (*!
  * @begin[doc]
  * @terms
+ * @modsubsection{Mutable types}
+ *
+ * The fields in tuples, unions, and dependent tuples are allowed to be
+ * mutable.  (The fields in an array are always mutable.)  The flags
+ * @tt[mutable] and @tt[immutable] declare a field to be mutable and
+ * immutable, respectively.  The term @tt[mutable_ty] is used as the type
+ * of a field; it combines a type along with a flag indicating the
+ * field's mutability.
+ * @end[doc]
+ *)
+
+declare "mutable"
+declare immutable
+declare mutable_ty{ 'ty; 'flag }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Type definitions}
+ *
+ * Type definitions define parameterized types and unions.  The term
+ * @tt[tyDefPoly] abstracts a type @tt[ty] over a type @tt[t].
+ * @end[doc]
+ *)
+
+declare tyDefPoly{ t. 'ty['t] }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[tyDefUnion] is used to define a disjoint union.
+ * The subterm @tt[cases] should be a list of @tt[unionCase] terms,
+ * and each @tt[unionCase] term should have a list of @tt[mutable_ty] terms.
+ * A union case can be viewed as a tuple space in which each field is tagged
+ * with a flag indicating its mutability.
+ * @end[doc]
+ *)
+
+declare unionCase{ 'elts }
+declare tyDefUnion{ 'cases }
+
+(*!
+ * @begin[doc]
+ *
+ * ???
+ * @end[doc]
+ *)
+
+(* XXX: need to document tyDefDTuple *)
+
+declare tyDefDTuple{ 'ty_var }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Numbers}
  *
  * The type @tt[tyInt] includes all signed, 31-bit integers.  The type
@@ -87,13 +142,13 @@ declare tyFun{ 'arg_type; 'res_type }
 
 (*!
  * @begin[doc]
- * @modsubsection{Aggregate data}
+ * @modsubsection{Tuples}
  *
  * The type @tt[tyUnion] represents values in a polymorphic union type.  The
  * integer set @tt[intset] selects a subset of the cases of a polymorphic
- * union definition given by @tt[ty_var], where indexing of union cases starts
- * at zero.  The polymorphic union definition is instantiated at the types
- * in the list @tt[ty_list].
+ * union definition given by @tt[ty_var].  Indexing of union cases starts
+ * at zero.  The union definition is instantiated at the types in the
+ * list @tt[ty_list].
  * @end[doc]
  *)
 
@@ -102,11 +157,13 @@ declare tyUnion{ 'ty_var; 'ty_list; 'intset }
 (*!
  * @begin[doc]
  *
- * The type @tt[tyTuple] represents tuples with arity $n$ if @tt[ty_list]
- * is a list of $n$ types. The parameter @tt[tc] is a tuple class, which
- * can either be ``normal'' or ``box''.  Box tuples must always have
- * arity one, and are used pass arbitrary values (such as floating-point
- * values or raw integers) as polymorphic values.
+ * The type @tt[tyTuple] represents tuples with arity $n$ if @tt[ty_list] is a
+ * list of $n$ types. The parameter @tt[tc] is a tuple class, which can either
+ * be ``normal'', ``raw'', or ``box''.  Raw tuples can contain pointers and
+ * other rawdata.  They require a slightly different runtime representation,
+ * where the first field contains runtime type information.  Box tuples must
+ * always have arity one, and are used pass arbitrary values (such as
+ * floating-point values or raw integers) as polymorphic values.
  * @end[doc]
  *)
 
@@ -114,6 +171,19 @@ declare tyTuple[tc:s]{ 'ty_list }
 
 (*!
  * @begin[doc]
+ *
+ * ???
+ * @end[doc]
+ *)
+
+(* XXX: need to document tyDTuple, tyTag. *)
+
+declare tyDTuple{ 'ty_var; 'mtyl_option }
+declare tyTag{ 'ty_var; 'mtyl }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Other aggregates}
  *
  * Arrays are similar to tuples, except all the elements of an array have the
  * same type, and arrays may have arbitrary, non-negative dimension.
@@ -125,10 +195,10 @@ declare tyArray{ 'ty }
 (*!
  * @begin[doc]
  *
- * The unsafe type @tt[tyRawData] represents arbitrary data.  It is commonly
- * used to represent data aggregates in imperative programming languages, such
- * as C, that allow assignment and retreival of values to and from a data area
- * without regard for the type of the data.
+ * The type @tt[tyRawData] represents arbitrary data.  It is commonly
+ * used to represent data in imperative programming languages, such
+ * as C, where the types of the elements within are not known.  Runtime
+ * safety checks must be performed to guarantee safety.
  * @end[doc]
  *)
 
@@ -147,7 +217,7 @@ declare tyVar{ 'ty_var }
 (*!
  * @begin[doc]
  *
- * The term @tt[tyApply] applies the types in the list @tt[ty_list] to a
+ * The type @tt[tyApply] applies the types in the list @tt[ty_list] to a
  * parametrized type given by @tt[ty_var].  The application must be
  * complete; the resulting type cannot be a parametrized type.
  * @end[doc]
@@ -159,8 +229,8 @@ declare tyApply{ 'ty_var; 'ty_list }
  * @begin[doc]
  *
  * The existential type @tt[tyExists] defines a type @tt[ty] abstracted over a
- * type variable @tt[t].  The term @tt[tyAll] defines a universally quantified
- * type.
+ * type variable @tt[t].  Similarly, the term @tt[tyAll] defines a universally
+ * quantified type.
  * @end[doc]
  *)
 
@@ -179,35 +249,6 @@ declare tyAll{ t. 'ty['t] }
 declare tyProject[i:n]{ 'var }
 
 (*!
- * @begin[doc]
- * @modsubsection{Type definitions}
- *
- * Type definitions define parameterized types and unions.  The term
- * @tt[tyDefPoly] abstracts a type @tt[ty] over @tt[t].
- * @end[doc]
- *)
-
-declare tyDefPoly{ t. 'ty['t] }
-
-(*!
- * @begin[doc]
- *
- * The term @tt[tyDefUnion] is used to define a disjoint union.  The parameter
- * @tt[str] should either be ``normal'' or ``exn''.  Unions are tagged with
- * ``exn'' when they have more than 100 cases, and they are tagged with
- * ``normal'' otherwise.  The subterm @tt[cases] should be a list of
- * @tt[unionCase] terms, and each @tt[unionCase] term should have a list of
- * @tt[unionCaseElt] terms.  A union case can be viewed as a tuple space in
- * which each field is tagged with a boolean indicating whether or not it is
- * mutable.
- * @end[doc]
- *)
-
-declare unionCaseElt{ 'ty; 'boolean }
-declare unionCase{ 'elts }
-declare tyDefUnion[str:s]{ 'cases }
-
-(*!
  * @docoff
  *)
 
@@ -215,6 +256,46 @@ declare tyDefUnion[str:s]{ 'cases }
 (**************************************************************************
  * Display forms.
  **************************************************************************)
+
+(*
+ * Mutable types.
+ *)
+
+dform mutable_df : except_mode[src] ::
+   "mutable" =
+   bf["mutable"]
+
+dform immutable_df : except_mode[src] ::
+   immutable =
+   bf["immutable"]
+
+dform mutable_ty_df : except_mode[src] ::
+   mutable_ty{ 'ty; 'flag } =
+   `"(" slot{'ty} `"," slot{'flag} `")"
+
+(*
+ * Type definitions.
+ *)
+
+dform tyDefPoly_df : except_mode[src] :: except_mode[tex] ::
+   tyDefPoly{ t. 'ty } =
+   lambda uparrow slot{'t} `". " slot{'ty}
+
+dform tyDefPoly_df : mode[tex] ::
+   tyDefPoly{ t. 'ty } =
+   izone `"\\Lambda " ezone slot{'t} `". " slot{'ty}
+
+dform unionCase_df : except_mode[src] ::
+   unionCase{ 'elts } =
+   slot{'elts}
+
+dform tyDefUnion_df : except_mode[src] ::
+   tyDefUnion{ 'cases } =
+   bf["union"] "(" slot{'cases} `")"
+
+dform tyDefDTuple_df : except_mode[src] ::
+   tyDefDTuple{ 'ty_var } =
+   bf["defDTuple"] `"(" slot{'ty_var} `")"
 
 (*
  * Numbers.
@@ -253,7 +334,7 @@ dform tyFun_df : except_mode[src] ::
    `"(" slot{'arg_type} rightarrow slot{'res_type} `")"
 
 (*
- * Aggregate data.
+ * Tuples.
  *)
 
 dform tyUnion_df : except_mode[src] ::
@@ -269,8 +350,24 @@ dform tyTuple_df2 : except_mode[src] ::
    bf["tuple"] sub{bf["normal"]} `"(" slot{'ty_list} `")"
 
 dform tyTuple_df3 : except_mode[src] ::
+   tyTuple["raw"]{ 'ty_list } =
+   bf["tuple"] sub{bf["raw"]} `"(" slot{'ty_list} `")"
+
+dform tyTuple_df4 : except_mode[src] ::
    tyTuple["box"]{ 'ty_list } =
    bf["tuple"] sub{bf["box"]} `"(" slot{'ty_list} `")"
+
+dform tyDTuple_df : except_mode[src] ::
+   tyDTuple{ 'ty_var; 'mtyl_option } =
+   bf["dtuple"] `"(" slot{'ty_var} `"," slot{'mtyl_option} `")"
+
+dform tyTag_df : except_mode[src] ::
+   tyTag{ 'ty_var; 'mtyl } =
+   bf["tag"] `"(" slot{'ty_var} `"," slot{'mtyl} `")"
+
+(*
+ * Other aggregates.
+ *)
 
 dform tyArray_df : except_mode[src] ::
    tyArray{ 'ty } =
@@ -303,35 +400,3 @@ dform tyAll_df : except_mode[src] ::
 dform tyProject_df : except_mode[src] ::
    tyProject[i:n]{ 'var } =
    slot{'var} `"." slot[i:n]
-
-(*
- * Type definitions.
- *)
-
-dform tyDefPoly_df : except_mode[src] :: except_mode[tex] ::
-   tyDefPoly{ t. 'ty } =
-   lambda uparrow slot{'t} `". " slot{'ty}
-
-dform tyDefPoly_df : mode[tex] ::
-   tyDefPoly{ t. 'ty } =
-   izone `"\\Lambda " ezone slot{'t} `". " slot{'ty}
-
-dform unionCaseElt : except_mode[src] ::
-   unionCaseElt{ 'ty; 'boolean } =
-   `"(" slot{'ty} `"," slot{'boolean} `")"
-
-dform unionCase_df : except_mode[src] ::
-   unionCase{ 'elts } =
-   `"+" slot{'elts}
-
-dform tyDefUnion_df1 : except_mode[src] ::
-   tyDefUnion[str:s]{ 'cases } =
-   bf["union"] sub{it[str:s]} `"(" slot{'cases} `")"
-
-dform tyDefUnion_df2 : except_mode[src] ::
-   tyDefUnion["normal"]{ 'cases } =
-   bf["union"] sub{bf["normal"]} `"(" slot{'cases} `")"
-
-dform tyDefUnion_df3: except_mode[src] ::
-   tyDefUnion["exn"]{ 'cases } =
-   bf["exn"] sub{bf["normal"]} `"(" slot{'cases} `")"

@@ -32,6 +32,8 @@
  * @end[license]
  *)
 
+extends Mfir_option
+extends Mfir_record
 extends Mfir_bool
 extends Mfir_int
 extends Mfir_int_set
@@ -40,6 +42,27 @@ extends Mfir_ty
 extends Mfir_exp
 
 open Refiner.Refiner.Term
+
+val none_term : term
+val is_none_term : term -> bool
+
+val some_term : term
+val is_some_term : term -> bool
+val mk_some_term : term -> term
+val dest_some_term : term -> term
+
+val recordEnd_term : term
+val is_recordEnd_term : term -> bool
+
+val record_term : term
+val is_record_term : term -> bool
+val mk_record_term : string -> term -> term -> term
+val dest_record_term : term -> string * term * term
+
+val field_term : term
+val is_field_term : term -> bool
+val mk_field_term : string -> term -> term
+val dest_field_term : term -> string * term
 
 val true_term : term
 val is_true_term : term -> bool
@@ -203,6 +226,37 @@ val dest_intset_max_term : term -> Mp_num.num * string
 val enum_max_term : term
 val is_enum_max_term : term -> bool
 
+val mutable_term : term
+val is_mutable_term : term -> bool
+
+val immutable_term : term
+val is_immutable_term : term -> bool
+
+val mutable_ty_term : term
+val is_mutable_ty_term : term -> bool
+val mk_mutable_ty_term : term -> term -> term
+val dest_mutable_ty_term : term -> term * term
+
+val tyDefPoly_term : term
+val is_tyDefPoly_term : term -> bool
+val mk_tyDefPoly_term : string -> term -> term
+val dest_tyDefPoly_term : term -> string * term
+
+val unionCase_term : term
+val is_unionCase_term : term -> bool
+val mk_unionCase_term : term -> term
+val dest_unionCase_term : term -> term
+
+val tyDefUnion_term : term
+val is_tyDefUnion_term : term -> bool
+val mk_tyDefUnion_term : term -> term
+val dest_tyDefUnion_term : term -> term
+
+val tyDefDTuple_term : term
+val is_tyDefDTuple_term : term -> bool
+val mk_tyDefDTuple_term : term -> term
+val dest_tyDefDTuple_term : term -> term
+
 val tyInt_term : term
 val is_tyInt_term : term -> bool
 
@@ -235,6 +289,16 @@ val tyTuple_term : term
 val is_tyTuple_term : term -> bool
 val mk_tyTuple_term : string -> term -> term
 val dest_tyTuple_term : term -> string * term
+
+val tyDTuple_term : term
+val is_tyDTuple_term : term -> bool
+val mk_tyDTuple_term : term -> term -> term
+val dest_tyDTuple_term : term -> term * term
+
+val tyTag_term : term
+val is_tyTag_term : term -> bool
+val mk_tyTag_term : term -> term -> term
+val dest_tyTag_term : term -> term * term
 
 val tyArray_term : term
 val is_tyArray_term : term -> bool
@@ -269,28 +333,10 @@ val is_tyProject_term : term -> bool
 val mk_tyProject_term : Mp_num.num -> term -> term
 val dest_tyProject_term : term -> Mp_num.num * term
 
-val tyDefPoly_term : term
-val is_tyDefPoly_term : term -> bool
-val mk_tyDefPoly_term : string -> term -> term
-val dest_tyDefPoly_term : term -> string * term
-
-val unionCaseElt_term : term
-val is_unionCaseElt_term : term -> bool
-val mk_unionCaseElt_term : term -> term -> term
-val dest_unionCaseElt_term : term -> term * term
-
-val unionCase_term : term
-val is_unionCase_term : term -> bool
-val mk_unionCase_term : term -> term
-val dest_unionCase_term : term -> term
-
-val tyDefUnion_term : term
-val is_tyDefUnion_term : term -> bool
-val mk_tyDefUnion_term : string -> term -> term
-val dest_tyDefUnion_term : term -> string * term
-
-val idOp_term : term
-val is_idOp_term : term -> bool
+val notEnumOp_term : term
+val is_notEnumOp_term : term -> bool
+val mk_notEnumOp_term : Mp_num.num -> term
+val dest_notEnumOp_term : term -> Mp_num.num
 
 val uminusIntOp_term : term
 val is_uminusIntOp_term : term -> bool
@@ -298,10 +344,8 @@ val is_uminusIntOp_term : term -> bool
 val notIntOp_term : term
 val is_notIntOp_term : term -> bool
 
-val rawBitFieldOp_term : term
-val is_rawBitFieldOp_term : term -> bool
-val mk_rawBitFieldOp_term : Mp_num.num -> string -> term -> term -> term
-val dest_rawBitFieldOp_term : term -> Mp_num.num * string * term * term
+val absIntOp_term : term
+val is_absIntOp_term : term -> bool
 
 val uminusRawIntOp_term : term
 val is_uminusRawIntOp_term : term -> bool
@@ -313,6 +357,11 @@ val is_notRawIntOp_term : term -> bool
 val mk_notRawIntOp_term : Mp_num.num -> string -> term
 val dest_notRawIntOp_term : term -> Mp_num.num * string
 
+val rawBitFieldOp_term : term
+val is_rawBitFieldOp_term : term -> bool
+val mk_rawBitFieldOp_term : Mp_num.num -> string -> term -> term -> term
+val dest_rawBitFieldOp_term : term -> Mp_num.num * string * term * term
+
 val uminusFloatOp_term : term
 val is_uminusFloatOp_term : term -> bool
 val mk_uminusFloatOp_term : Mp_num.num -> term
@@ -323,25 +372,90 @@ val is_absFloatOp_term : term -> bool
 val mk_absFloatOp_term : Mp_num.num -> term
 val dest_absFloatOp_term : term -> Mp_num.num
 
-val sinOp_term : term
-val is_sinOp_term : term -> bool
-val mk_sinOp_term : Mp_num.num -> term
-val dest_sinOp_term : term -> Mp_num.num
+val sinFloatOp_term : term
+val is_sinFloatOp_term : term -> bool
+val mk_sinFloatOp_term : Mp_num.num -> term
+val dest_sinFloatOp_term : term -> Mp_num.num
 
-val cosOp_term : term
-val is_cosOp_term : term -> bool
-val mk_cosOp_term : Mp_num.num -> term
-val dest_cosOp_term : term -> Mp_num.num
+val cosFloatOp_term : term
+val is_cosFloatOp_term : term -> bool
+val mk_cosFloatOp_term : Mp_num.num -> term
+val dest_cosFloatOp_term : term -> Mp_num.num
 
-val sqrtOp_term : term
-val is_sqrtOp_term : term -> bool
-val mk_sqrtOp_term : Mp_num.num -> term
-val dest_sqrtOp_term : term -> Mp_num.num
+val tanFloatOp_term : term
+val is_tanFloatOp_term : term -> bool
+val mk_tanFloatOp_term : Mp_num.num -> term
+val dest_tanFloatOp_term : term -> Mp_num.num
+
+val asinFloatOp_term : term
+val is_asinFloatOp_term : term -> bool
+val mk_asinFloatOp_term : Mp_num.num -> term
+val dest_asinFloatOp_term : term -> Mp_num.num
+
+val acosFloatOp_term : term
+val is_acosFloatOp_term : term -> bool
+val mk_acosFloatOp_term : Mp_num.num -> term
+val dest_acosFloatOp_term : term -> Mp_num.num
+
+val atanFloatOp_term : term
+val is_atanFloatOp_term : term -> bool
+val mk_atanFloatOp_term : Mp_num.num -> term
+val dest_atanFloatOp_term : term -> Mp_num.num
+
+val sinhFloatOp_term : term
+val is_sinhFloatOp_term : term -> bool
+val mk_sinhFloatOp_term : Mp_num.num -> term
+val dest_sinhFloatOp_term : term -> Mp_num.num
+
+val coshFloatOp_term : term
+val is_coshFloatOp_term : term -> bool
+val mk_coshFloatOp_term : Mp_num.num -> term
+val dest_coshFloatOp_term : term -> Mp_num.num
+
+val tanhFloatOp_term : term
+val is_tanhFloatOp_term : term -> bool
+val mk_tanhFloatOp_term : Mp_num.num -> term
+val dest_tanhFloatOp_term : term -> Mp_num.num
+
+val expFloatOp_term : term
+val is_expFloatOp_term : term -> bool
+val mk_expFloatOp_term : Mp_num.num -> term
+val dest_expFloatOp_term : term -> Mp_num.num
+
+val logFloatOp_term : term
+val is_logFloatOp_term : term -> bool
+val mk_logFloatOp_term : Mp_num.num -> term
+val dest_logFloatOp_term : term -> Mp_num.num
+
+val log10FloatOp_term : term
+val is_log10FloatOp_term : term -> bool
+val mk_log10FloatOp_term : Mp_num.num -> term
+val dest_log10FloatOp_term : term -> Mp_num.num
+
+val sqrtFloatOp_term : term
+val is_sqrtFloatOp_term : term -> bool
+val mk_sqrtFloatOp_term : Mp_num.num -> term
+val dest_sqrtFloatOp_term : term -> Mp_num.num
+
+val ceilFloatOp_term : term
+val is_ceilFloatOp_term : term -> bool
+val mk_ceilFloatOp_term : Mp_num.num -> term
+val dest_ceilFloatOp_term : term -> Mp_num.num
+
+val floorFloatOp_term : term
+val is_floorFloatOp_term : term -> bool
+val mk_floorFloatOp_term : Mp_num.num -> term
+val dest_floorFloatOp_term : term -> Mp_num.num
 
 val intOfFloatOp_term : term
 val is_intOfFloatOp_term : term -> bool
 val mk_intOfFloatOp_term : Mp_num.num -> term
 val dest_intOfFloatOp_term : term -> Mp_num.num
+
+val intOfRawIntOp_term : term
+val is_intOfRawIntOp_term : term -> bool
+val mk_intOfRawIntOp_term : Mp_num.num -> Mp_num.num -> term
+val dest_intOfRawIntOp_term : term -> Mp_num.num * Mp_num.num
 
 val floatOfIntOp_term : term
 val is_floatOfIntOp_term : term -> bool
@@ -377,6 +491,31 @@ val rawIntOfRawIntOp_term : term
 val is_rawIntOfRawIntOp_term : term -> bool
 val mk_rawIntOfRawIntOp_term : Mp_num.num -> string -> Mp_num.num -> string -> term
 val dest_rawIntOfRawIntOp_term : term -> Mp_num.num * string * Mp_num.num * string
+
+val rawIntOfPointerOp_term : term
+val is_rawIntOfPointerOp_term : term -> bool
+val mk_rawIntOfPointerOp_term : Mp_num.num -> string -> term
+val dest_rawIntOfPointerOp_term : term -> Mp_num.num * string
+
+val pointerOfRawIntOp_term : term
+val is_pointerOfRawIntOp_term : term -> bool
+val mk_pointerOfRawIntOp_term : Mp_num.num -> string -> term
+val dest_pointerOfRawIntOp_term : term -> Mp_num.num * string
+
+val dtupleOfDTupleOp_term : term
+val is_dtupleOfDTupleOp_term : term -> bool
+val mk_dtupleOfDTupleOp_term : term -> term -> term
+val dest_dtupleOfDTupleOp_term : term -> term * term
+
+val unionOfUnionOp_term : term
+val is_unionOfUnionOp_term : term -> bool
+val mk_unionOfUnionOp_term : term -> term -> term -> term -> term
+val dest_unionOfUnionOp_term : term -> term * term * term * term
+
+val rawDataOfFrameOp_term : term
+val is_rawDataOfFrameOp_term : term -> bool
+val mk_rawDataOfFrameOp_term : term -> term -> term
+val dest_rawDataOfFrameOp_term : term -> term * term
 
 val andEnumOp_term : term
 val is_andEnumOp_term : term -> bool
@@ -623,10 +762,30 @@ val is_cmpFloatOp_term : term -> bool
 val mk_cmpFloatOp_term : Mp_num.num -> term
 val dest_cmpFloatOp_term : term -> Mp_num.num
 
-val atan2Op_term : term
-val is_atan2Op_term : term -> bool
-val mk_atan2Op_term : Mp_num.num -> term
-val dest_atan2Op_term : term -> Mp_num.num
+val atan2FloatOp_term : term
+val is_atan2FloatOp_term : term -> bool
+val mk_atan2FloatOp_term : Mp_num.num -> term
+val dest_atan2FloatOp_term : term -> Mp_num.num
+
+val powerFloatOp_term : term
+val is_powerFloatOp_term : term -> bool
+val mk_powerFloatOp_term : Mp_num.num -> term
+val dest_powerFloatOp_term : term -> Mp_num.num
+
+val ldExpFloatIntOp_term : term
+val is_ldExpFloatIntOp_term : term -> bool
+val mk_ldExpFloatIntOp_term : Mp_num.num -> term
+val dest_ldExpFloatIntOp_term : term -> Mp_num.num
+
+val eqEqOp_term : term
+val is_eqEqOp_term : term -> bool
+val mk_eqEqOp_term : term -> term
+val dest_eqEqOp_term : term -> term
+
+val neqEqOp_term : term
+val is_neqEqOp_term : term -> bool
+val mk_neqEqOp_term : term -> term
+val dest_neqEqOp_term : term -> term
 
 val atomInt_term : term
 val is_atomInt_term : term -> bool

@@ -55,39 +55,59 @@ extends Mfir_ty
  * @terms
  * @modsubsection{Unary operators}
  *
- * The FIR unary operators include a polymorphic identity operator, various
- * arithmetic operators, and coercion operators that safely transform a value
- * between two types.  We omit an explicit listing these terms.
- * @end[doc]
- * @docoff
+ * The FIR unary operators include arithmetic operators and coercion operators
+ * that safely transform a value between two types.  We omit an explicit
+ * listing these terms.
+ * @end[doc] @docoff
  *)
 
-declare idOp
+declare notEnumOp[i:n]
+
 declare uminusIntOp
 declare notIntOp
-
-declare rawBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 }
+declare absIntOp
 
 declare uminusRawIntOp[precision:n, sign:s]
 declare notRawIntOp[precision:n, sign:s]
 
+declare rawBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 }
+
 declare uminusFloatOp[precision:n]
 declare absFloatOp[precision:n]
-declare sinOp[precision:n]
-declare cosOp[precision:n]
-declare sqrtOp[precision:n]
+declare sinFloatOp[precision:n]
+declare cosFloatOp[precision:n]
+declare tanFloatOp[precision:n]
+declare asinFloatOp[precision:n]
+declare acosFloatOp[precision:n]
+declare atanFloatOp[precision:n]
+declare sinhFloatOp[precision:n]
+declare coshFloatOp[precision:n]
+declare tanhFloatOp[precision:n]
+declare expFloatOp[precision:n]
+declare logFloatOp[precision:n]
+declare log10FloatOp[precision:n]
+declare sqrtFloatOp[precision:n]
+declare ceilFloatOp[precision:n]
+declare floorFloatOp[precision:n]
 
 declare intOfFloatOp[precision:n]
+declare intOfRawIntOp[precision:n, sign:n]
 
 declare floatOfIntOp[precision:n]
 declare floatOfFloatOp[dest_prec:n, src_prec:n]
-declare floatOfRawIntOp[float_prec:n, int_prec:n, int_sign:s]
+declare floatOfRawIntOp[flt_prec:n, int_prec:n, int_sign:s]
 
 declare rawIntOfIntOp[precision:n, sign:s]
 declare rawIntOfEnumOp[precision:n, sign:s, i:n]
-declare rawIntOfFloatOp[int_prec:n, int_sign:s, float_prec:n]
+declare rawIntOfFloatOp[int_prec:n, int_sign:s, flt_prec:n]
 declare rawIntOfRawIntOp[dest_prec:n, dest_sign:s, src_prec:n, src_sign:s]
 
+declare rawIntOfPointerOp[precision:n, sign:s]
+declare pointerOfRawIntOp[precision:n, sign:s]
+
+declare dtupleOfDTupleOp{ 'ty_var; 'mtyl }
+declare unionOfUnionOp{ 'ty_var; 'tyl; 'intset1; 'intset2 }
+declare rawDataOfFrameOp{ 'ty_var; 'tyl }
 
 (*!
  * @begin[doc]
@@ -164,8 +184,14 @@ declare gtFloatOp[precision:n]
 declare geFloatOp[precision:n]
 declare cmpFloatOp[precision:n]
 
-declare atan2Op[precision:n]
+declare atan2FloatOp[precision:n]
 
+declare powerFloatOp[precision:n]
+
+declare ldExpFloatIntOp[precision:n]
+
+declare eqEqOp{ 'ty }
+declare neqEqOp{ 'ty }
 
 (*!
  * @begin[doc]

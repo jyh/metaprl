@@ -1,5 +1,6 @@
 (*
- * The Mfir_ty module declares terms to represent the FIR type system.
+ * The Mfir_option module implements a representation of
+ * the OCaml 'a option type.
  *
  * ------------------------------------------------------------------------
  *
@@ -31,70 +32,12 @@
  * @end[license]
  *)
 
-extends Mfir_int
-extends Mfir_list
-
-open Tactic_type.Conversionals
+extends Base_theory
 
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-(*
- * Mutable types.
- *)
-
-declare "mutable"
-declare immutable
-declare mutable_ty{ 'ty; 'flag }
-
-(*
- * Type definitions.
- *)
-
-declare tyDefPoly{ t. 'ty['t] }
-declare unionCase{ 'elts }
-declare tyDefUnion{ 'cases }
-declare tyDefDTuple{ 'ty_var }
-
-(*
- * Numbers.
- *)
-
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
-
-(*
- * Functions.
- *)
-
-declare tyFun{ 'arg_type; 'res_type }
-
-(*
- * Tuples.
- *)
-
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyDTuple{ 'ty_var; 'mtyl_option }
-declare tyTag{ 'ty_var; 'mtyl }
-
-(*
- * Other aggregates.
- *)
-
-declare tyArray{ 'ty }
-declare tyRawData
-
-(*
- * Polymorphism.
- *)
-
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ t. 'ty['t] }
-declare tyAll{ t. 'ty['t] }
-declare tyProject[i:n]{ 'var }
+declare none
+declare some{ 't }

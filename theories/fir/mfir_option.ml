@@ -1,5 +1,10 @@
-(*
- * The Mfir_ty module declares terms to represent the FIR type system.
+(*!
+ * @begin[doc]
+ * @module[Mfir_option]
+ *
+ * The @tt[Mfir_option] module implements a representation of
+ * the @OCaml @tt["'a option"] type.
+ * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
@@ -31,70 +36,44 @@
  * @end[license]
  *)
 
-extends Mfir_int
-extends Mfir_list
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 
-open Tactic_type.Conversionals
+extends Base_theory
 
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-(*
- * Mutable types.
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The terms @tt[none] and @tt[some] correspond to
+ * @tt[None] and @tt["Some t"] in @OCaml.
+ * @end[doc]
  *)
 
-declare "mutable"
-declare immutable
-declare mutable_ty{ 'ty; 'flag }
+declare none
+declare some{ 't }
 
-(*
- * Type definitions.
+(*!
+ * @docoff
  *)
 
-declare tyDefPoly{ t. 'ty['t] }
-declare unionCase{ 'elts }
-declare tyDefUnion{ 'cases }
-declare tyDefDTuple{ 'ty_var }
 
-(*
- * Numbers.
- *)
+(**************************************************************************
+ * Display forms.
+ **************************************************************************)
 
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
+dform none_df : except_mode[src] ::
+   none =
+   bf["None"]
 
-(*
- * Functions.
- *)
-
-declare tyFun{ 'arg_type; 'res_type }
-
-(*
- * Tuples.
- *)
-
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyDTuple{ 'ty_var; 'mtyl_option }
-declare tyTag{ 'ty_var; 'mtyl }
-
-(*
- * Other aggregates.
- *)
-
-declare tyArray{ 'ty }
-declare tyRawData
-
-(*
- * Polymorphism.
- *)
-
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ t. 'ty['t] }
-declare tyAll{ t. 'ty['t] }
-declare tyProject[i:n]{ 'var }
+dform some_df : except_mode[src] ::
+   some{ 't } =
+   bf["Some"] `"(" slot{'t} `")"

@@ -1,5 +1,5 @@
 (*
- * The Mfir_ty module declares terms to represent the FIR type system.
+ * The Mfir_record module implements records.
  *
  * ------------------------------------------------------------------------
  *
@@ -31,8 +31,7 @@
  * @end[license]
  *)
 
-extends Mfir_int
-extends Mfir_list
+extends Base_theory
 
 open Tactic_type.Conversionals
 
@@ -41,60 +40,14 @@ open Tactic_type.Conversionals
  * Declarations.
  **************************************************************************)
 
-(*
- * Mutable types.
- *)
+declare recordEnd
+declare record[tag:s]{ 'data; 'remaining }
 
-declare "mutable"
-declare immutable
-declare mutable_ty{ 'ty; 'flag }
+declare field[tag:s]{ 'record }
 
-(*
- * Type definitions.
- *)
 
-declare tyDefPoly{ t. 'ty['t] }
-declare unionCase{ 'elts }
-declare tyDefUnion{ 'cases }
-declare tyDefDTuple{ 'ty_var }
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
 
-(*
- * Numbers.
- *)
-
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
-
-(*
- * Functions.
- *)
-
-declare tyFun{ 'arg_type; 'res_type }
-
-(*
- * Tuples.
- *)
-
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyDTuple{ 'ty_var; 'mtyl_option }
-declare tyTag{ 'ty_var; 'mtyl }
-
-(*
- * Other aggregates.
- *)
-
-declare tyArray{ 'ty }
-declare tyRawData
-
-(*
- * Polymorphism.
- *)
-
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ t. 'ty['t] }
-declare tyAll{ t. 'ty['t] }
-declare tyProject[i:n]{ 'var }
+topval reduce_field : conv

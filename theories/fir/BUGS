@@ -9,8 +9,8 @@ at the end, things that might be considered bugs, but really aren't.
 
 -- Cannot give a type for functions of zero arguments (see Mfir_ty!tyFun).
 
--- No terms are declared for dependent tuples, including tyDefDTuple
-   and tyDTuple, and tyTag.  These should go in Mfir_ty.
+-- No terms are declared for subops.  If I implement these,
+   perhaps they should go in their own file, e.g. Mfir_subop.
 
 -- No terms are declared for frames, including tyFrame and frame.
    These should go in Mfir_ty.
@@ -18,7 +18,23 @@ at the end, things that might be considered bugs, but really aren't.
 -- No terms are declared for the FIR object system, including tyCase,
    and tyObject.  These should go in Mfir_ty.
 
+-- No terms are declared for the following unary operators:
+      pointerOfBlockOp     lengthOfBlockOp
+   These should go in Mfir_exp.  (They depend on subops.)
+
+-- No term is declared for the binary operators plusPointerOp.
+   It should go in Mfir_exp.
+
+-- No terms are declared for the following atoms:
+      atomNil              atomSizeOf
+      atomConst            atomFun
+      atomFloat
+   These should go in Mfir_exp.
+
 
 Things that might look like bugs, but really aren't:
 
 -- The term tyDelayed is not declared.  See the README for why this is.
+
+-- No terms for debugging info in the FIR are declared.
+   See the README for why this is.

@@ -256,7 +256,7 @@ let resource reduce += [
  *)
 
 prim_rw reduce_nth_unionCase :
-   nth_unionCase{ number[n:n]; tyDefUnion[str:s]{ 'cases } } <-->
+   nth_unionCase{ number[n:n]; tyDefUnion{ 'cases } } <-->
    nth_elt{ number[n:n]; 'cases }
 
 (*!
@@ -264,7 +264,7 @@ prim_rw reduce_nth_unionCase :
  *)
 
 let resource reduce += [
-   << nth_unionCase{ number[i:n]; tyDefUnion[str:s]{ 'cases } } >>,
+   << nth_unionCase{ number[i:n]; tyDefUnion{ 'cases } } >>,
       reduce_nth_unionCase
 ]
 

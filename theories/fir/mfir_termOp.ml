@@ -32,6 +32,8 @@
  * @end[license]
  *)
 
+extends Mfir_option
+extends Mfir_record
 extends Mfir_bool
 extends Mfir_int
 extends Mfir_int_set
@@ -41,6 +43,32 @@ extends Mfir_exp
 
 open Mfir_termOp_base
 open Refiner.Refiner.Term
+
+let none_term = << none >>
+let none_opname = opname_of_term none_term
+let is_none_term = is_0_dep0_term none_opname
+
+let some_term = << some{ 't } >>
+let some_opname = opname_of_term some_term
+let is_some_term = is_1_dep0_term some_opname
+let mk_some_term = mk_1_dep0_term some_opname
+let dest_some_term = dest_1_dep0_term some_opname
+
+let recordEnd_term = << recordEnd >>
+let recordEnd_opname = opname_of_term recordEnd_term
+let is_recordEnd_term = is_0_dep0_term recordEnd_opname
+
+let record_term = << record[tag:s]{ 'data; 'remaining } >>
+let record_opname = opname_of_term record_term
+let is_record_term = is_str_2_dep0_term record_opname
+let mk_record_term = mk_str_2_dep0_term record_opname
+let dest_record_term = dest_str_2_dep0_term record_opname
+
+let field_term = << field[tag:s]{ 'record } >>
+let field_opname = opname_of_term field_term
+let is_field_term = is_str_1_dep0_term field_opname
+let mk_field_term = mk_str_1_dep0_term field_opname
+let dest_field_term = dest_str_1_dep0_term field_opname
 
 let true_term = << "true" >>
 let true_opname = opname_of_term true_term
@@ -238,6 +266,44 @@ let enum_max_term = << enum_max >>
 let enum_max_opname = opname_of_term enum_max_term
 let is_enum_max_term = is_0_dep0_term enum_max_opname
 
+let mutable_term = << "mutable" >>
+let mutable_opname = opname_of_term mutable_term
+let is_mutable_term = is_0_dep0_term mutable_opname
+
+let immutable_term = << immutable >>
+let immutable_opname = opname_of_term immutable_term
+let is_immutable_term = is_0_dep0_term immutable_opname
+
+let mutable_ty_term = << mutable_ty{ 'ty; 'flag } >>
+let mutable_ty_opname = opname_of_term mutable_ty_term
+let is_mutable_ty_term = is_2_dep0_term mutable_ty_opname
+let mk_mutable_ty_term = mk_2_dep0_term mutable_ty_opname
+let dest_mutable_ty_term = dest_2_dep0_term mutable_ty_opname
+
+let tyDefPoly_term = << tyDefPoly{ t. 'ty['t] } >>
+let tyDefPoly_opname = opname_of_term tyDefPoly_term
+let is_tyDefPoly_term = is_0_dep0_1_dep1_term tyDefPoly_opname
+let mk_tyDefPoly_term = mk_0_dep0_1_dep1_term tyDefPoly_opname
+let dest_tyDefPoly_term = dest_0_dep0_1_dep1_term tyDefPoly_opname
+
+let unionCase_term = << unionCase{ 'elts } >>
+let unionCase_opname = opname_of_term unionCase_term
+let is_unionCase_term = is_1_dep0_term unionCase_opname
+let mk_unionCase_term = mk_1_dep0_term unionCase_opname
+let dest_unionCase_term = dest_1_dep0_term unionCase_opname
+
+let tyDefUnion_term = << tyDefUnion{ 'cases } >>
+let tyDefUnion_opname = opname_of_term tyDefUnion_term
+let is_tyDefUnion_term = is_1_dep0_term tyDefUnion_opname
+let mk_tyDefUnion_term = mk_1_dep0_term tyDefUnion_opname
+let dest_tyDefUnion_term = dest_1_dep0_term tyDefUnion_opname
+
+let tyDefDTuple_term = << tyDefDTuple{ 'ty_var } >>
+let tyDefDTuple_opname = opname_of_term tyDefDTuple_term
+let is_tyDefDTuple_term = is_1_dep0_term tyDefDTuple_opname
+let mk_tyDefDTuple_term = mk_1_dep0_term tyDefDTuple_opname
+let dest_tyDefDTuple_term = dest_1_dep0_term tyDefDTuple_opname
+
 let tyInt_term = << tyInt >>
 let tyInt_opname = opname_of_term tyInt_term
 let is_tyInt_term = is_0_dep0_term tyInt_opname
@@ -277,6 +343,18 @@ let tyTuple_opname = opname_of_term tyTuple_term
 let is_tyTuple_term = is_str_1_dep0_term tyTuple_opname
 let mk_tyTuple_term = mk_str_1_dep0_term tyTuple_opname
 let dest_tyTuple_term = dest_str_1_dep0_term tyTuple_opname
+
+let tyDTuple_term = << tyDTuple{ 'ty_var; 'mtyl_option } >>
+let tyDTuple_opname = opname_of_term tyDTuple_term
+let is_tyDTuple_term = is_2_dep0_term tyDTuple_opname
+let mk_tyDTuple_term = mk_2_dep0_term tyDTuple_opname
+let dest_tyDTuple_term = dest_2_dep0_term tyDTuple_opname
+
+let tyTag_term = << tyTag{ 'ty_var; 'mtyl } >>
+let tyTag_opname = opname_of_term tyTag_term
+let is_tyTag_term = is_2_dep0_term tyTag_opname
+let mk_tyTag_term = mk_2_dep0_term tyTag_opname
+let dest_tyTag_term = dest_2_dep0_term tyTag_opname
 
 let tyArray_term = << tyArray{ 'ty } >>
 let tyArray_opname = opname_of_term tyArray_term
@@ -318,33 +396,11 @@ let is_tyProject_term = is_num_1_dep0_term tyProject_opname
 let mk_tyProject_term = mk_num_1_dep0_term tyProject_opname
 let dest_tyProject_term = dest_num_1_dep0_term tyProject_opname
 
-let tyDefPoly_term = << tyDefPoly{ t. 'ty['t] } >>
-let tyDefPoly_opname = opname_of_term tyDefPoly_term
-let is_tyDefPoly_term = is_0_dep0_1_dep1_term tyDefPoly_opname
-let mk_tyDefPoly_term = mk_0_dep0_1_dep1_term tyDefPoly_opname
-let dest_tyDefPoly_term = dest_0_dep0_1_dep1_term tyDefPoly_opname
-
-let unionCaseElt_term = << unionCaseElt{ 'ty; 'boolean } >>
-let unionCaseElt_opname = opname_of_term unionCaseElt_term
-let is_unionCaseElt_term = is_2_dep0_term unionCaseElt_opname
-let mk_unionCaseElt_term = mk_2_dep0_term unionCaseElt_opname
-let dest_unionCaseElt_term = dest_2_dep0_term unionCaseElt_opname
-
-let unionCase_term = << unionCase{ 'elts } >>
-let unionCase_opname = opname_of_term unionCase_term
-let is_unionCase_term = is_1_dep0_term unionCase_opname
-let mk_unionCase_term = mk_1_dep0_term unionCase_opname
-let dest_unionCase_term = dest_1_dep0_term unionCase_opname
-
-let tyDefUnion_term = << tyDefUnion[str:s]{ 'cases } >>
-let tyDefUnion_opname = opname_of_term tyDefUnion_term
-let is_tyDefUnion_term = is_str_1_dep0_term tyDefUnion_opname
-let mk_tyDefUnion_term = mk_str_1_dep0_term tyDefUnion_opname
-let dest_tyDefUnion_term = dest_str_1_dep0_term tyDefUnion_opname
-
-let idOp_term = << idOp >>
-let idOp_opname = opname_of_term idOp_term
-let is_idOp_term = is_0_dep0_term idOp_opname
+let notEnumOp_term = << notEnumOp[i:n] >>
+let notEnumOp_opname = opname_of_term notEnumOp_term
+let is_notEnumOp_term = is_num_0_dep0_term notEnumOp_opname
+let mk_notEnumOp_term = mk_num_0_dep0_term notEnumOp_opname
+let dest_notEnumOp_term = dest_num_0_dep0_term notEnumOp_opname
 
 let uminusIntOp_term = << uminusIntOp >>
 let uminusIntOp_opname = opname_of_term uminusIntOp_term
@@ -354,11 +410,9 @@ let notIntOp_term = << notIntOp >>
 let notIntOp_opname = opname_of_term notIntOp_term
 let is_notIntOp_term = is_0_dep0_term notIntOp_opname
 
-let rawBitFieldOp_term = << rawBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 } >>
-let rawBitFieldOp_opname = opname_of_term rawBitFieldOp_term
-let is_rawBitFieldOp_term = is_num_str_2_dep0_term rawBitFieldOp_opname
-let mk_rawBitFieldOp_term = mk_num_str_2_dep0_term rawBitFieldOp_opname
-let dest_rawBitFieldOp_term = dest_num_str_2_dep0_term rawBitFieldOp_opname
+let absIntOp_term = << absIntOp >>
+let absIntOp_opname = opname_of_term absIntOp_term
+let is_absIntOp_term = is_0_dep0_term absIntOp_opname
 
 let uminusRawIntOp_term = << uminusRawIntOp[precision:n, sign:s] >>
 let uminusRawIntOp_opname = opname_of_term uminusRawIntOp_term
@@ -372,6 +426,12 @@ let is_notRawIntOp_term = is_num_str_0_dep0_term notRawIntOp_opname
 let mk_notRawIntOp_term = mk_num_str_0_dep0_term notRawIntOp_opname
 let dest_notRawIntOp_term = dest_num_str_0_dep0_term notRawIntOp_opname
 
+let rawBitFieldOp_term = << rawBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 } >>
+let rawBitFieldOp_opname = opname_of_term rawBitFieldOp_term
+let is_rawBitFieldOp_term = is_num_str_2_dep0_term rawBitFieldOp_opname
+let mk_rawBitFieldOp_term = mk_num_str_2_dep0_term rawBitFieldOp_opname
+let dest_rawBitFieldOp_term = dest_num_str_2_dep0_term rawBitFieldOp_opname
+
 let uminusFloatOp_term = << uminusFloatOp[precision:n] >>
 let uminusFloatOp_opname = opname_of_term uminusFloatOp_term
 let is_uminusFloatOp_term = is_num_0_dep0_term uminusFloatOp_opname
@@ -384,29 +444,107 @@ let is_absFloatOp_term = is_num_0_dep0_term absFloatOp_opname
 let mk_absFloatOp_term = mk_num_0_dep0_term absFloatOp_opname
 let dest_absFloatOp_term = dest_num_0_dep0_term absFloatOp_opname
 
-let sinOp_term = << sinOp[precision:n] >>
-let sinOp_opname = opname_of_term sinOp_term
-let is_sinOp_term = is_num_0_dep0_term sinOp_opname
-let mk_sinOp_term = mk_num_0_dep0_term sinOp_opname
-let dest_sinOp_term = dest_num_0_dep0_term sinOp_opname
+let sinFloatOp_term = << sinFloatOp[precision:n] >>
+let sinFloatOp_opname = opname_of_term sinFloatOp_term
+let is_sinFloatOp_term = is_num_0_dep0_term sinFloatOp_opname
+let mk_sinFloatOp_term = mk_num_0_dep0_term sinFloatOp_opname
+let dest_sinFloatOp_term = dest_num_0_dep0_term sinFloatOp_opname
 
-let cosOp_term = << cosOp[precision:n] >>
-let cosOp_opname = opname_of_term cosOp_term
-let is_cosOp_term = is_num_0_dep0_term cosOp_opname
-let mk_cosOp_term = mk_num_0_dep0_term cosOp_opname
-let dest_cosOp_term = dest_num_0_dep0_term cosOp_opname
+let cosFloatOp_term = << cosFloatOp[precision:n] >>
+let cosFloatOp_opname = opname_of_term cosFloatOp_term
+let is_cosFloatOp_term = is_num_0_dep0_term cosFloatOp_opname
+let mk_cosFloatOp_term = mk_num_0_dep0_term cosFloatOp_opname
+let dest_cosFloatOp_term = dest_num_0_dep0_term cosFloatOp_opname
 
-let sqrtOp_term = << sqrtOp[precision:n] >>
-let sqrtOp_opname = opname_of_term sqrtOp_term
-let is_sqrtOp_term = is_num_0_dep0_term sqrtOp_opname
-let mk_sqrtOp_term = mk_num_0_dep0_term sqrtOp_opname
-let dest_sqrtOp_term = dest_num_0_dep0_term sqrtOp_opname
+let tanFloatOp_term = << tanFloatOp[precision:n] >>
+let tanFloatOp_opname = opname_of_term tanFloatOp_term
+let is_tanFloatOp_term = is_num_0_dep0_term tanFloatOp_opname
+let mk_tanFloatOp_term = mk_num_0_dep0_term tanFloatOp_opname
+let dest_tanFloatOp_term = dest_num_0_dep0_term tanFloatOp_opname
+
+let asinFloatOp_term = << asinFloatOp[precision:n] >>
+let asinFloatOp_opname = opname_of_term asinFloatOp_term
+let is_asinFloatOp_term = is_num_0_dep0_term asinFloatOp_opname
+let mk_asinFloatOp_term = mk_num_0_dep0_term asinFloatOp_opname
+let dest_asinFloatOp_term = dest_num_0_dep0_term asinFloatOp_opname
+
+let acosFloatOp_term = << acosFloatOp[precision:n] >>
+let acosFloatOp_opname = opname_of_term acosFloatOp_term
+let is_acosFloatOp_term = is_num_0_dep0_term acosFloatOp_opname
+let mk_acosFloatOp_term = mk_num_0_dep0_term acosFloatOp_opname
+let dest_acosFloatOp_term = dest_num_0_dep0_term acosFloatOp_opname
+
+let atanFloatOp_term = << atanFloatOp[precision:n] >>
+let atanFloatOp_opname = opname_of_term atanFloatOp_term
+let is_atanFloatOp_term = is_num_0_dep0_term atanFloatOp_opname
+let mk_atanFloatOp_term = mk_num_0_dep0_term atanFloatOp_opname
+let dest_atanFloatOp_term = dest_num_0_dep0_term atanFloatOp_opname
+
+let sinhFloatOp_term = << sinhFloatOp[precision:n] >>
+let sinhFloatOp_opname = opname_of_term sinhFloatOp_term
+let is_sinhFloatOp_term = is_num_0_dep0_term sinhFloatOp_opname
+let mk_sinhFloatOp_term = mk_num_0_dep0_term sinhFloatOp_opname
+let dest_sinhFloatOp_term = dest_num_0_dep0_term sinhFloatOp_opname
+
+let coshFloatOp_term = << coshFloatOp[precision:n] >>
+let coshFloatOp_opname = opname_of_term coshFloatOp_term
+let is_coshFloatOp_term = is_num_0_dep0_term coshFloatOp_opname
+let mk_coshFloatOp_term = mk_num_0_dep0_term coshFloatOp_opname
+let dest_coshFloatOp_term = dest_num_0_dep0_term coshFloatOp_opname
+
+let tanhFloatOp_term = << tanhFloatOp[precision:n] >>
+let tanhFloatOp_opname = opname_of_term tanhFloatOp_term
+let is_tanhFloatOp_term = is_num_0_dep0_term tanhFloatOp_opname
+let mk_tanhFloatOp_term = mk_num_0_dep0_term tanhFloatOp_opname
+let dest_tanhFloatOp_term = dest_num_0_dep0_term tanhFloatOp_opname
+
+let expFloatOp_term = << expFloatOp[precision:n] >>
+let expFloatOp_opname = opname_of_term expFloatOp_term
+let is_expFloatOp_term = is_num_0_dep0_term expFloatOp_opname
+let mk_expFloatOp_term = mk_num_0_dep0_term expFloatOp_opname
+let dest_expFloatOp_term = dest_num_0_dep0_term expFloatOp_opname
+
+let logFloatOp_term = << logFloatOp[precision:n] >>
+let logFloatOp_opname = opname_of_term logFloatOp_term
+let is_logFloatOp_term = is_num_0_dep0_term logFloatOp_opname
+let mk_logFloatOp_term = mk_num_0_dep0_term logFloatOp_opname
+let dest_logFloatOp_term = dest_num_0_dep0_term logFloatOp_opname
+
+let log10FloatOp_term = << log10FloatOp[precision:n] >>
+let log10FloatOp_opname = opname_of_term log10FloatOp_term
+let is_log10FloatOp_term = is_num_0_dep0_term log10FloatOp_opname
+let mk_log10FloatOp_term = mk_num_0_dep0_term log10FloatOp_opname
+let dest_log10FloatOp_term = dest_num_0_dep0_term log10FloatOp_opname
+
+let sqrtFloatOp_term = << sqrtFloatOp[precision:n] >>
+let sqrtFloatOp_opname = opname_of_term sqrtFloatOp_term
+let is_sqrtFloatOp_term = is_num_0_dep0_term sqrtFloatOp_opname
+let mk_sqrtFloatOp_term = mk_num_0_dep0_term sqrtFloatOp_opname
+let dest_sqrtFloatOp_term = dest_num_0_dep0_term sqrtFloatOp_opname
+
+let ceilFloatOp_term = << ceilFloatOp[precision:n] >>
+let ceilFloatOp_opname = opname_of_term ceilFloatOp_term
+let is_ceilFloatOp_term = is_num_0_dep0_term ceilFloatOp_opname
+let mk_ceilFloatOp_term = mk_num_0_dep0_term ceilFloatOp_opname
+let dest_ceilFloatOp_term = dest_num_0_dep0_term ceilFloatOp_opname
+
+let floorFloatOp_term = << floorFloatOp[precision:n] >>
+let floorFloatOp_opname = opname_of_term floorFloatOp_term
+let is_floorFloatOp_term = is_num_0_dep0_term floorFloatOp_opname
+let mk_floorFloatOp_term = mk_num_0_dep0_term floorFloatOp_opname
+let dest_floorFloatOp_term = dest_num_0_dep0_term floorFloatOp_opname
 
 let intOfFloatOp_term = << intOfFloatOp[precision:n] >>
 let intOfFloatOp_opname = opname_of_term intOfFloatOp_term
 let is_intOfFloatOp_term = is_num_0_dep0_term intOfFloatOp_opname
 let mk_intOfFloatOp_term = mk_num_0_dep0_term intOfFloatOp_opname
 let dest_intOfFloatOp_term = dest_num_0_dep0_term intOfFloatOp_opname
+
+let intOfRawIntOp_term = << intOfRawIntOp[precision:n, sign:n] >>
+let intOfRawIntOp_opname = opname_of_term intOfRawIntOp_term
+let is_intOfRawIntOp_term = is_num_num_0_dep0_term intOfRawIntOp_opname
+let mk_intOfRawIntOp_term = mk_num_num_0_dep0_term intOfRawIntOp_opname
+let dest_intOfRawIntOp_term = dest_num_num_0_dep0_term intOfRawIntOp_opname
 
 let floatOfIntOp_term = << floatOfIntOp[precision:n] >>
 let floatOfIntOp_opname = opname_of_term floatOfIntOp_term
@@ -420,7 +558,7 @@ let is_floatOfFloatOp_term = is_num_num_0_dep0_term floatOfFloatOp_opname
 let mk_floatOfFloatOp_term = mk_num_num_0_dep0_term floatOfFloatOp_opname
 let dest_floatOfFloatOp_term = dest_num_num_0_dep0_term floatOfFloatOp_opname
 
-let floatOfRawIntOp_term = << floatOfRawIntOp[float_prec:n, int_prec:n, int_sign:s] >>
+let floatOfRawIntOp_term = << floatOfRawIntOp[flt_prec:n, int_prec:n, int_sign:s] >>
 let floatOfRawIntOp_opname = opname_of_term floatOfRawIntOp_term
 let is_floatOfRawIntOp_term = is_num_num_str_0_dep0_term floatOfRawIntOp_opname
 let mk_floatOfRawIntOp_term = mk_num_num_str_0_dep0_term floatOfRawIntOp_opname
@@ -438,7 +576,7 @@ let is_rawIntOfEnumOp_term = is_num_str_num_0_dep0_term rawIntOfEnumOp_opname
 let mk_rawIntOfEnumOp_term = mk_num_str_num_0_dep0_term rawIntOfEnumOp_opname
 let dest_rawIntOfEnumOp_term = dest_num_str_num_0_dep0_term rawIntOfEnumOp_opname
 
-let rawIntOfFloatOp_term = << rawIntOfFloatOp[int_prec:n, int_sign:s, float_prec:n] >>
+let rawIntOfFloatOp_term = << rawIntOfFloatOp[int_prec:n, int_sign:s, flt_prec:n] >>
 let rawIntOfFloatOp_opname = opname_of_term rawIntOfFloatOp_term
 let is_rawIntOfFloatOp_term = is_num_str_num_0_dep0_term rawIntOfFloatOp_opname
 let mk_rawIntOfFloatOp_term = mk_num_str_num_0_dep0_term rawIntOfFloatOp_opname
@@ -449,6 +587,36 @@ let rawIntOfRawIntOp_opname = opname_of_term rawIntOfRawIntOp_term
 let is_rawIntOfRawIntOp_term = is_num_str_num_str_0_dep0_term rawIntOfRawIntOp_opname
 let mk_rawIntOfRawIntOp_term = mk_num_str_num_str_0_dep0_term rawIntOfRawIntOp_opname
 let dest_rawIntOfRawIntOp_term = dest_num_str_num_str_0_dep0_term rawIntOfRawIntOp_opname
+
+let rawIntOfPointerOp_term = << rawIntOfPointerOp[precision:n, sign:s] >>
+let rawIntOfPointerOp_opname = opname_of_term rawIntOfPointerOp_term
+let is_rawIntOfPointerOp_term = is_num_str_0_dep0_term rawIntOfPointerOp_opname
+let mk_rawIntOfPointerOp_term = mk_num_str_0_dep0_term rawIntOfPointerOp_opname
+let dest_rawIntOfPointerOp_term = dest_num_str_0_dep0_term rawIntOfPointerOp_opname
+
+let pointerOfRawIntOp_term = << pointerOfRawIntOp[precision:n, sign:s] >>
+let pointerOfRawIntOp_opname = opname_of_term pointerOfRawIntOp_term
+let is_pointerOfRawIntOp_term = is_num_str_0_dep0_term pointerOfRawIntOp_opname
+let mk_pointerOfRawIntOp_term = mk_num_str_0_dep0_term pointerOfRawIntOp_opname
+let dest_pointerOfRawIntOp_term = dest_num_str_0_dep0_term pointerOfRawIntOp_opname
+
+let dtupleOfDTupleOp_term = << dtupleOfDTupleOp{ 'ty_var; 'mtyl } >>
+let dtupleOfDTupleOp_opname = opname_of_term dtupleOfDTupleOp_term
+let is_dtupleOfDTupleOp_term = is_2_dep0_term dtupleOfDTupleOp_opname
+let mk_dtupleOfDTupleOp_term = mk_2_dep0_term dtupleOfDTupleOp_opname
+let dest_dtupleOfDTupleOp_term = dest_2_dep0_term dtupleOfDTupleOp_opname
+
+let unionOfUnionOp_term = << unionOfUnionOp{ 'ty_var; 'tyl; 'intset1; 'intset2 } >>
+let unionOfUnionOp_opname = opname_of_term unionOfUnionOp_term
+let is_unionOfUnionOp_term = is_4_dep0_term unionOfUnionOp_opname
+let mk_unionOfUnionOp_term = mk_4_dep0_term unionOfUnionOp_opname
+let dest_unionOfUnionOp_term = dest_4_dep0_term unionOfUnionOp_opname
+
+let rawDataOfFrameOp_term = << rawDataOfFrameOp{ 'ty_var; 'tyl } >>
+let rawDataOfFrameOp_opname = opname_of_term rawDataOfFrameOp_term
+let is_rawDataOfFrameOp_term = is_2_dep0_term rawDataOfFrameOp_opname
+let mk_rawDataOfFrameOp_term = mk_2_dep0_term rawDataOfFrameOp_opname
+let dest_rawDataOfFrameOp_term = dest_2_dep0_term rawDataOfFrameOp_opname
 
 let andEnumOp_term = << andEnumOp[i:n] >>
 let andEnumOp_opname = opname_of_term andEnumOp_term
@@ -752,11 +920,35 @@ let is_cmpFloatOp_term = is_num_0_dep0_term cmpFloatOp_opname
 let mk_cmpFloatOp_term = mk_num_0_dep0_term cmpFloatOp_opname
 let dest_cmpFloatOp_term = dest_num_0_dep0_term cmpFloatOp_opname
 
-let atan2Op_term = << atan2Op[precision:n] >>
-let atan2Op_opname = opname_of_term atan2Op_term
-let is_atan2Op_term = is_num_0_dep0_term atan2Op_opname
-let mk_atan2Op_term = mk_num_0_dep0_term atan2Op_opname
-let dest_atan2Op_term = dest_num_0_dep0_term atan2Op_opname
+let atan2FloatOp_term = << atan2FloatOp[precision:n] >>
+let atan2FloatOp_opname = opname_of_term atan2FloatOp_term
+let is_atan2FloatOp_term = is_num_0_dep0_term atan2FloatOp_opname
+let mk_atan2FloatOp_term = mk_num_0_dep0_term atan2FloatOp_opname
+let dest_atan2FloatOp_term = dest_num_0_dep0_term atan2FloatOp_opname
+
+let powerFloatOp_term = << powerFloatOp[precision:n] >>
+let powerFloatOp_opname = opname_of_term powerFloatOp_term
+let is_powerFloatOp_term = is_num_0_dep0_term powerFloatOp_opname
+let mk_powerFloatOp_term = mk_num_0_dep0_term powerFloatOp_opname
+let dest_powerFloatOp_term = dest_num_0_dep0_term powerFloatOp_opname
+
+let ldExpFloatIntOp_term = << ldExpFloatIntOp[precision:n] >>
+let ldExpFloatIntOp_opname = opname_of_term ldExpFloatIntOp_term
+let is_ldExpFloatIntOp_term = is_num_0_dep0_term ldExpFloatIntOp_opname
+let mk_ldExpFloatIntOp_term = mk_num_0_dep0_term ldExpFloatIntOp_opname
+let dest_ldExpFloatIntOp_term = dest_num_0_dep0_term ldExpFloatIntOp_opname
+
+let eqEqOp_term = << eqEqOp{ 'ty } >>
+let eqEqOp_opname = opname_of_term eqEqOp_term
+let is_eqEqOp_term = is_1_dep0_term eqEqOp_opname
+let mk_eqEqOp_term = mk_1_dep0_term eqEqOp_opname
+let dest_eqEqOp_term = dest_1_dep0_term eqEqOp_opname
+
+let neqEqOp_term = << neqEqOp{ 'ty } >>
+let neqEqOp_opname = opname_of_term neqEqOp_term
+let is_neqEqOp_term = is_1_dep0_term neqEqOp_opname
+let mk_neqEqOp_term = mk_1_dep0_term neqEqOp_opname
+let dest_neqEqOp_term = dest_1_dep0_term neqEqOp_opname
 
 let atomInt_term = << atomInt{ 'num } >>
 let atomInt_opname = opname_of_term atomInt_term

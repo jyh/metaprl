@@ -19,7 +19,9 @@ from xreadlines import *
 
 sig_file_name = 'mfir_termOp.mli'
 def_file_name = 'mfir_termOp.ml'
-inputs        = [ 'mfir_bool.mli',
+inputs        = [ 'mfir_option.mli',
+                  'mfir_record.mli',
+                  'mfir_bool.mli',
                   'mfir_int.mli',
                   'mfir_list.mli',
                   'mfir_int_set.mli',
@@ -233,7 +235,9 @@ def_file = open( def_file_name, 'w' )
 # Print headers to files.
 
 sig_file.write( get_header() )
-sig_file.write( '\n\nextends Mfir_bool\n' + \
+sig_file.write( '\n\nextends Mfir_option\n' + \
+                'extends Mfir_record\n' + \
+                'extends Mfir_bool\n' + \
                 'extends Mfir_int\n' + \
                 'extends Mfir_int_set\n' + \
                 'extends Mfir_list\n' + \
@@ -242,7 +246,9 @@ sig_file.write( '\n\nextends Mfir_bool\n' + \
                 'open Refiner.Refiner.Term' )
 
 def_file.write( get_header() )
-def_file.write( '\n\nextends Mfir_bool\n' + \
+def_file.write( '\n\nextends Mfir_option\n' + \
+                'extends Mfir_record\n' + \
+                'extends Mfir_bool\n' + \
                 'extends Mfir_int\n' + \
                 'extends Mfir_int_set\n' + \
                 'extends Mfir_list\n' + \
@@ -255,7 +261,7 @@ def_file.write( '\n\nextends Mfir_bool\n' + \
 
 for file_name in inputs:
 
-   print '-> Processing file: ' + file_name
+   print 'Processing file: ' + file_name
    input_file = open( file_name, 'r' )
 
    for line in xreadlines( input_file ):

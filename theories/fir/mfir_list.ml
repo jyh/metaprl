@@ -1,4 +1,6 @@
 (*!
+ * @spelling{th}
+ *
  * @begin[doc]
  * @module[Mfir_list]
  *

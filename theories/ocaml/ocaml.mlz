@@ -19,6 +19,9 @@ declare "int"[@i:s]
 declare "string"[@s:s]
 declare "float"[@s:s]
 
+declare "lid"{'v}
+declare "uid"{'v}
+
 (*
  * Primitive operations on numbers.
  *)
@@ -516,6 +519,9 @@ declare me_uid[@name:s]
 
 (*
  * $Log$
+ * Revision 1.4  1998/05/01 14:59:49  jyh
+ * Updating display forms.
+ *
  * Revision 1.3  1998/04/29 20:53:56  jyh
  * Initial working display forms.
  *

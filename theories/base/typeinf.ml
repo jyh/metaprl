@@ -4,6 +4,9 @@
  * it is used to perform basic inference.
  *
  * $Log$
+ * Revision 1.7  1998/05/01 14:59:46  jyh
+ * Updating display forms.
+ *
  * Revision 1.6  1998/04/29 14:48:41  jyh
  * Added ocaml_sos.
  *
@@ -84,7 +87,7 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
 let infer tbl =
    let rec aux decl t =
       let _, _, inf =
-         try lookup tbl [t] with
+         try lookup tbl t with
             Not_found ->
                raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
       in
@@ -107,7 +110,7 @@ and extract_resource { resource_data = tbl } =
    infer tbl
    
 and improve_resource { resource_data = tbl } (t, inf) =
-   { resource_data = insert tbl [t] inf;
+   { resource_data = insert tbl t inf;
      resource_join = join_resource;
      resource_extract = extract_resource;
      resource_improve = improve_resource

@@ -94,6 +94,7 @@ doc <:doc< @docoff >>
 extends Perv
 extends Nuprl_font
 extends Base_dform
+extends Base_parser
 extends Comment
 extends Ocaml_df
 extends Typeinf

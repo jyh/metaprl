@@ -110,24 +110,22 @@ MPFILES =\
    itt_reflection_example_lambda\
    itt_example
 
-OCamlProgramInstall(.DEFAULT, $(BIN), gen_int_bench, gen_int_bench)
+OCamlProgram(gen_int_bench, gen_int_bench)
 
-GEN= $(BIN)/gen_int_bench$(EXE)
+GEN = gen_int_bench$(EXE)
 
-itt_int_bench.mli:
-	touch $@
+BENCH_FILES[] =
+   itt_int_bench
+   itt_int_bench2
 
-itt_int_bench2.mli:
-	touch $@
+$(addsuffix .ml, $(BENCH_FILES)): $(GEN)
+   ./$(GEN)
 
-itt_int_bench.ml : $(GEN)
-	$(GEN)
-
-itt_int_bench2.ml : $(GEN)
-	$(GEN)
+$(addsuffix .mli, $(BENCH_FILES)):
+   touch $@
 
 clean:
-	$(CLEAN) gen_int_bench.ml
+	$(CLEAN) $(GEN) $(addsuffix .ml, $(BENCH_FILES)) $(addsuffix .mli, $(BENCH_FILES))
 
 TEST_FILES =\
    itt_bugs\

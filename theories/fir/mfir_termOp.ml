@@ -456,18 +456,6 @@ let is_rawIntOfRawIntOp_term = is_num_str_num_str_0_dep0_term rawIntOfRawIntOp_o
 let mk_rawIntOfRawIntOp_term = mk_num_str_num_str_0_dep0_term rawIntOfRawIntOp_opname
 let dest_rawIntOfRawIntOp_term = dest_num_str_num_str_0_dep0_term rawIntOfRawIntOp_opname
 
-let rawIntOfPointerOp_term = << rawIntOfPointerOp[precision:n, sign:s] >>
-let rawIntOfPointerOp_opname = opname_of_term rawIntOfPointerOp_term
-let is_rawIntOfPointerOp_term = is_num_str_0_dep0_term rawIntOfPointerOp_opname
-let mk_rawIntOfPointerOp_term = mk_num_str_0_dep0_term rawIntOfPointerOp_opname
-let dest_rawIntOfPointerOp_term = dest_num_str_0_dep0_term rawIntOfPointerOp_opname
-
-let pointerOfRawIntOp_term = << pointerOfRawIntOp[precision:n, sign:s] >>
-let pointerOfRawIntOp_opname = opname_of_term pointerOfRawIntOp_term
-let is_pointerOfRawIntOp_term = is_num_str_0_dep0_term pointerOfRawIntOp_opname
-let mk_pointerOfRawIntOp_term = mk_num_str_0_dep0_term pointerOfRawIntOp_opname
-let dest_pointerOfRawIntOp_term = dest_num_str_0_dep0_term pointerOfRawIntOp_opname
-
 let andEnumOp_term = << andEnumOp[i:n] >>
 let andEnumOp_opname = opname_of_term andEnumOp_term
 let is_andEnumOp_term = is_num_0_dep0_term andEnumOp_opname

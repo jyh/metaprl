@@ -383,16 +383,6 @@ val is_rawIntOfRawIntOp_term : term -> bool
 val mk_rawIntOfRawIntOp_term : Mp_num.num -> string -> Mp_num.num -> string -> term
 val dest_rawIntOfRawIntOp_term : term -> Mp_num.num * string * Mp_num.num * string
 
-val rawIntOfPointerOp_term : term
-val is_rawIntOfPointerOp_term : term -> bool
-val mk_rawIntOfPointerOp_term : Mp_num.num -> string -> term
-val dest_rawIntOfPointerOp_term : term -> Mp_num.num * string
-
-val pointerOfRawIntOp_term : term
-val is_pointerOfRawIntOp_term : term -> bool
-val mk_pointerOfRawIntOp_term : Mp_num.num -> string -> term
-val dest_pointerOfRawIntOp_term : term -> Mp_num.num * string
-
 val andEnumOp_term : term
 val is_andEnumOp_term : term -> bool
 val mk_andEnumOp_term : Mp_num.num -> term

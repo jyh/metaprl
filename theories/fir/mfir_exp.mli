@@ -68,9 +68,6 @@ declare rawIntOfEnumOp[precision:n, sign:s, i:n]
 declare rawIntOfFloatOp[int_prec:n, int_sign:s, float_prec:n]
 declare rawIntOfRawIntOp[dest_prec:n, dest_sign:s, src_prec:n, src_sign:s]
 
-declare rawIntOfPointerOp[precision:n, sign:s]
-declare pointerOfRawIntOp[precision:n, sign:s]
-
 (*
  * Binary operators.
  *)

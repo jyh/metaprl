@@ -281,3 +281,129 @@ prim ty_plusIntOp {| intro [] |} 'H :
  *)
 
 (* XXX: write up the remaining unop/binop rules. *)
+
+(*
+ * Unary operators.
+ *)
+
+prim ty_idOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; 'ty } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ atomUnop{ idOp; 'a }; 'ty } }
+   = it
+
+(* uminusIntOp is one of the examples above. *)
+
+prim ty_notIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ atomUnop{ notIntOp; 'a}; tyInt } }
+   = it
+
+(* XXX RawBitFieldOp should go here. *)
+
+prim ty_uminusRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ uminusRawIntOp[p:n, s:s]; 'a };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_notRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ notRawIntOp[p:n, s:s]; 'a };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_uminusFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ uminusFloatOp[p:n]; 'a };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_absFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ absFloatOp[p:n]; 'a };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_sinOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ sinOp[p:n]; 'a };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_cosOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ cosOp[p:n]; 'a };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_sqrtOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ sqrtOp[p:n]; 'a };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_intOfFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ intOfFloatOp[p:n]; 'a }; tyInt } }
+   = it
+
+prim ty_floatOfIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ floatOfIntOp[p:n]; 'a };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_floatOfFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[src:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ floatOfFloatOp[dest:n, src:n]; 'a };
+                        tyFloat[dest:n] } }
+   = it
+
+prim ty_floatOfRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyRawInt[ip:n, is:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ floatOfRawIntOp[fp:n, ip:n, is:s]; 'a };
+                        tyFloat[fp:n] } }
+   = it
+
+prim ty_rawIntOfIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ rawIntOfIntOp[p:n, s:s]; 'a };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_rawIntOfEnumOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyEnum[i:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ rawIntOfEnumOp[p:n, s:s, i:n]; 'a };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_rawIntOfFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyFloat[fp:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ rawIntOfFloatOp[ip:n, s:s, fp:n]; 'a };
+                        tyRawInt[ip:n, s:s] } }
+   = it
+
+prim ty_rawIntOfRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyRawInt[sp:n, ss:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{atomUnop{rawIntOfRawIntOp[dp:n, ds:s, sp:n, ss:s]; 'a};
+                       tyRawInt[dp:n, ds:s]} }
+   = it
+
+(*
+ * Binary operators.
+ *)

@@ -6,21 +6,20 @@
  *)
 
 include Base_theory
-include Fir_sos
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
 
 (*
- * First location.
- * Refers to the first memory location in the state.
+ * First allocated location.
+ * Label for the first allocated memory location in the state.
  *)
 declare first
 
 (*
  * Next location.
- * Refers to the next memory location after 'loc in the state.
+ * Label for the next memory location after 'loc in the state.
  *)
 declare next{ 'loc }
 

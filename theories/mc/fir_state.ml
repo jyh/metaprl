@@ -6,13 +6,12 @@
  *)
 
 include Base_theory
-include Fir_sos
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
 
-(* First location. *)
+(* First allocated location. *)
 declare first
 
 (* Next location. *)

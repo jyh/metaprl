@@ -245,9 +245,6 @@ interactive btrue_member {| intro []; eqcd |} :
 interactive bfalse_member {| intro []; eqcd |} :
    sequent { <H> >- bfalse in "bool" }
 
-interactive bool_intro {| intro [] |} :
-   sequent { <H> >- "bool" }
-
 doc <:doc< 
    @begin[doc]
    @modsubsection{Elimination}
@@ -329,23 +326,6 @@ let resource intro += [
    << btrue ~ 'e >>, wrap_intro boolSqequal;
    << bfalse ~ 'e >>, wrap_intro boolSqequal
 ]
-
-(*
- * H >- Ui ext Unit
- * by boolFormation
- *)
-interactive boolFormation :
-   sequent { <H> >- univ[i:l] }
-
-(*
- * H >- Bool ext btrue
- * by bool_*Formation
- *)
-interactive bool_trueFormation :
-   sequent { <H> >- "bool" }
-
-interactive bool_falseFormation :
-   sequent { <H> >- "bool" }
 
 doc <:doc< 
    @begin[doc]
@@ -771,6 +751,23 @@ interactive_rw reduce_band_same {| reduce |} :
 interactive_rw reduce_bor_same {| reduce |} :
    ( 'e in bool ) -->
    bor{'e;'e} <--> 'e
+
+(*
+ * H >- Ui ext Unit
+ * by boolFormation
+ *)
+interactive boolFormation :
+   sequent { <H> >- univ[i:l] }
+
+(*
+ * H >- Bool ext btrue
+ * by bool_*Formation
+ *)
+interactive bool_trueFormation {| intro [] |} :
+   sequent { <H> >- "bool" }
+
+interactive bool_falseFormation :
+   sequent { <H> >- "bool" }
 
 (*
  * -*-

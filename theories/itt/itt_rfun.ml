@@ -90,7 +90,7 @@ prec prec_fun < prec_apply
 prec prec_fun < prec_lambda
 
 dform fun_df1 : parens :: "prec"[prec_fun] :: "fun"{'A; 'B} =
-   slot{'A} " " rightarrow " " slot{'B}
+   slot["le"]{'A} " " rightarrow " " slot["lt"]{'B}
 
 dform fun_df2 : parens :: "prec"[prec_fun] :: "fun"{'A; x. 'B} =
    slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}

@@ -46,7 +46,7 @@ let debug_supinf_steps =
    create_debug (**)
       { debug_name = "debug_supinf_steps";
         debug_description = "Print out (high-level) steps to be proved";
-        debug_value = true
+        debug_value = false
       }
 
 module type BoundFieldSig =
@@ -1020,7 +1020,7 @@ let rec runAssertStepT info label tac f1 f2 =
 			runAssertStepListT info label tac [(s11,s21);(s11,s22);(s12,s21);(s12,s22)]
 	 | SAF.Max(s11,s12),SAF.Max(s21,s22) -> runAssertStepListT info label tac [(s11,s21);(s12,s22)]
 	 | SAF.Min(s11,s12),SAF.Min(s21,s22) -> runAssertStepListT info label tac [(s11,s21);(s12,s22)]
-	 | _,_ -> runAssertT info label f1 f2 tac
+	 | _,_ -> idT(*runAssertT info label f1 f2 tac*)
 
 and runAssertStepListT info label tac = function
 	[(f1,f2)] -> runAssertStepT info label tac f1 f2
@@ -1037,7 +1037,7 @@ let rec runTransitiveStepT info label f1 f2 f3 =
 	 |	SAF.Min (s11,s12), SAF.Min(s21,s22), _ -> runTransitiveStepListT info label [(s11,s21,f3);(s12,s22,f3)]
 	 |	_, SAF.Affine _, SAF.Max(s31,s32) -> runTransitiveStepListT info label [(f1,f2,s31);(f1,f2,s32)]
 	 |	SAF.Min (s11,s12), SAF.Affine _, _ -> runTransitiveStepListT info label [(s11,f2,f3);(s12,f2,f3)]
-	 | _,_,_ -> runTransitiveT info label f1 f2 f3
+	 | _,_,_ -> idT(*runTransitiveT info label f1 f2 f3*)
 
 and runTransitiveStepListT info label = function
 	[(f1,f2,f3)] -> runTransitiveStepT info label f1 f2 f3

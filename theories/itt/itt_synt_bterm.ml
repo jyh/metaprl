@@ -213,6 +213,10 @@ interactive subterms_have_greater_bdepth {| intro [AutoMustComplete] |} :
    sequent { <H> >- compatible_shapes{'op;'btl} } -->
    sequent { <H> >- all_list{'btl; bt. bdepth{'bt} >= op_bdepth{'op}} }
 
+(************************************************************************
+ * Var{bterm}                                                           *
+ ************************************************************************)
+define unfold_vars_of: Vars_of{'bt} <--> { v: Var | bdepth{'v} <= bdepth{'bt} }
 
 (************************************************************************
  * Var_bterm                                                            *

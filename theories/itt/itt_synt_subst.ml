@@ -191,14 +191,14 @@ interactive_rw subst_reduce2 {| reduce |} :
 
 interactive_rw subst_bdepth {| reduce |} :
    ('t in BTerm)  -->
-   ('v in Var)  -->
+   ('v in Vars_of{'t})  -->
    ('s in BTerm)  -->
    (bdepth{'t} >= bdepth{'s})  -->
    bdepth{subst{'t;'v;'s}} <--> bdepth{'t}
 
 interactive subst_wf {| intro [] |} :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- 's in BTerm } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
    sequent { <H> >- subst{'t;'v;'s} in BTerm }
@@ -227,13 +227,13 @@ interactive_rw not_free_var_reduce :
       not_free{'v; 'u} <-->  "assert"{bnot{is_eq{'v;'u}}}
 
 interactive not_free_wf {| intro[] |}:
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- not_free{'v;'t} Type  }
 
 interactive subst_not_free :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- 's in BTerm } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
    sequent { <H> >- not_free{'v;'t} } -->
@@ -258,55 +258,49 @@ interactive eq_add_var {| intro[] |}:
 
 interactive not_free_eq_var 'v  :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- 'u in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
+   sequent { <H> >- 'u in Vars_of{'t} } -->
    sequent { <H> >- "assert"{is_eq{'v;'u}} } -->
    sequent { <H> >- not_free{'v;'t} } -->
    sequent { <H> >- not_free{'u; 't} }
 
 interactive add_var_not_free1 {| intro[] |} :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- 'u in Var } -->
    sequent { <H> >- not_free{'v;'t} } -->
    sequent { <H> >- not_free{add_var{'v;'u}; add_var{'t; 'u}} }
 
 interactive add_var_not_free2 {| intro[] |} :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- 'u in Var } -->
    sequent { <H> >- not_free{'v;'t} } -->
    sequent { <H> >- left{'v} < left{'u} } -->
    sequent { <H> >- not_free{'v; add_var{'t; 'u}} }
 
-interactive not_free_intro1 {| intro[SelectOption 1] |}   :
-   sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- left{'v} >= bdepth{'t} } -->
-   sequent { <H> >- not_free{'v; 't} }
-
 interactive add_var_not_free3 {| intro[] |}   :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- not_free{'v; add_var{'t;'v}} }
 
 interactive add_var_not_free {| intro[] |} :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- not_free{'v;'t} } -->
    sequent { <H> >- not_free{'v; add_var{'t}} }
 
 interactive add_vars_upto_not_free {| intro[] |} :
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- 's in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- bdepth{'s} >= bdepth{'t} } -->
    sequent { <H> >- not_free{'v;'t} } -->
    sequent { <H> >- not_free{'v; add_vars_upto{'t; 's}} }
 
 interactive subst_add_vars_upto :
    sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- 'v2 in Vars_of{'v} } -->
    sequent { <H> >- 's1 in BTerm } -->
    sequent { <H> >- 's2 in BTerm } -->
    sequent { <H> >- bdepth{'v} >= bdepth{'s1} } -->
@@ -316,14 +310,14 @@ interactive subst_add_vars_upto :
    sequent { <H> >- subst{add_vars_upto{'s1;'v};'v2;'s2} ~ add_vars_upto{'s1;'v} }
 
 interactive subst_commute {| intro [] |} :
-   sequent { <H> >- 'v1 in Var } -->
-   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- 'v1 in Vars_of{'t} } -->
+   sequent { <H> >- 'v2 in Vars_of{'t} } -->
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- 's1 in BTerm } -->
    sequent { <H> >- 's2 in BTerm } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s1} } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s2} } -->
-   sequent { <H> >- not_free{'v1;'v2} } -->
+   sequent { <H> >- not{"assert"{is_eq{'v1;'v2}}} } -->
    sequent { <H> >- not_free{'v1;'s2} } -->
    sequent { <H> >- not_free{'v2;'s1} } -->
    sequent { <H> >- subst{subst{'t;'v1;'s1};'v2;'s2} ~ subst{subst{'t;'v2;'s2};'v1;'s1} }

@@ -23,10 +23,12 @@ Todo list:
    I should do this once I settle other issues with my FIR
    representation.
 -  Fir_exp: debugging display forms, and term operations.
--  Consider changing names of files to mp_* to avoid namespace
-   collisions with mc.
 -  Finish the README file.
 -  The tests: sets and symbols still need work...
+
+-  ACK! Update everything to match the new FIR.
+   Reorganize code so as to make all the term construction and
+   deconstruction functions less of a hassle to modify and edit.
 
 
 Notes to myself (things to do, but only if I feel so inclined):
@@ -42,8 +44,6 @@ Notes to myself (things to do, but only if I feel so inclined):
          mllib/bitset
 -  Get a better understanding of MC code.
    .  What the heck is geoff's home dir doing in lib/cutil/Conscript
--  What is the Caltech (and Cornell?) position on releasing MC/MetaPRL
-   under an open source licence, e.g. the GPL.
 
 Scratch space (random thoughts to myself):
 --------------------------------------------------------------------------

@@ -200,7 +200,7 @@ dform int_prl_df : except_mode [src] :: int = mathbbZ
 dform int_src_df : mode[src] :: int = `"int"
 
 dform number_df : number[n:n] =
-   slot[n:s]
+   slot[n:n]
 
 dform beq_int_df1 : parens :: "prec"[prec_compare] :: beq_int{'a; 'b} =
    slot["lt"]{'a} `" =" Nuprl_font!subb `" " slot["le"]{'b}

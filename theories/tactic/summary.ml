@@ -593,7 +593,7 @@ dform prec_rel_df : cons{prec_rel[op]; cons{prec_rel[left]; cons{prec_rel[right]
    info["prec "] slot[left] `" " "rel"[op] `" " slot[right]
 
 dform id_df : "id"[n:n] =
-   info["Id: "] slot[n:s]
+   info["Id: "] slot[n:n]
 
 dform resource_df : "resource"[name]{'extract; 'improve; 'data; 'arg} =
    szone
@@ -606,7 +606,7 @@ dform resource_df : "resource"[name]{'extract; 'improve; 'data; 'arg} =
                 popm
    ezone
 
-dform infix_df : "infix"[name] =
+dform infix_df : "infix"[name:s] =
    info["infix"] " " slot[name:s]
 
 dform magic_block_df : "magic_block"[name:s]{'items} =
@@ -662,7 +662,7 @@ dform packages_df3 : internal :: packages_df{nil} =
  * Argument lists
  *)
 dform int_arg_df : internal :: int_arg[i:n] =
-   slot[i:s]
+   slot[i:n]
 
 dform term_arg_df : internal :: term_arg{'t} =
    't
@@ -671,7 +671,7 @@ dform type_arg_df : internal :: type_arg{'t} =
    't
 
 dform bool_arg_df : internal :: bool_arg[s:t] =
-   slot[s:s]
+   slot[s:t]
 
 dform string_arg_df : internal :: string_arg[s:s] =
    slot[s:s]

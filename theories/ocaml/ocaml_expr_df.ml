@@ -73,7 +73,7 @@ dform char_df2 : internal :: "char"[start:n, finish:n, c:s] =
    "char"[c:s]
 
 dform int_df1 : "int"[i:n] =
-   slot[i:s]
+   slot[i:n]
 
 dform int_df2 : internal :: "int"[start:n, finish:n, i:n] =
    "int"[i:n]

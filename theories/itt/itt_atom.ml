@@ -112,7 +112,7 @@ let bogus_token = << token["token":t] >>
 dform atom_df : except_mode[src] :: atom = `"Atom"
 dform atom_df2 : mode[src] :: atom = `"atom"
 dform token_df : except_mode[src] :: token[t:t] =
-   `"`" slot[t:s] `"'"
+   `"`" slot[t:t] `"'"
 
 (************************************************************************
  * RULES                                                                *

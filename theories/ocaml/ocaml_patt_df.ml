@@ -59,8 +59,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
 include Ocaml
@@ -99,7 +99,7 @@ dform patt_char_df1 : internal :: patt_format{patt_char[c:s]{'p1}; 'p2} =
    patt_format{'p1; .cons{."char"[c:s]; 'p2}}
 
 dform patt_int_df1 : internal :: patt_format{patt_int[i:n]{'p1}; 'p2} =
-   patt_format{'p1; .cons{."int"[i:s]; 'p2}}
+   patt_format{'p1; .cons{."int"[i:n]; 'p2}}
 
 dform patt_string_df1 : internal :: patt_format{patt_string[s:s]{'p1}; 'p2} =
    patt_format{'p1; .cons{."string"[s:s]; 'p2}}
@@ -129,13 +129,13 @@ dform patt_var_df2 : internal :: patt_format{patt_var[start:n, finish:n]{x. 'p1}
    patt_format{patt_var{x. 'p1}; 'p2}
 
 dform patt_uid_df1 : internal :: patt_format{patt_uid{patt_uid[name:s]; 'p1}; 'p2} =
-   patt_format{'p1; cons{var[name:v]; 'p2}}
+   patt_format{'p1; cons{'name; 'p2}}
 
 dform patt_uid_df2 : internal :: patt_format{patt_uid[start:n, finish:n]{'p1; 'p2}; 'p3} =
    patt_format{patt_uid{'p1; 'p2}; 'p3}
 
 dform patt_lid_df1 : internal :: patt_format{patt_lid{patt_lid[name:s]; 'p1}; 'p2} =
-   patt_format{'p1; cons{var[name:v]; 'p2}}
+   patt_format{'p1; cons{'name; 'p2}}
 
 dform patt_lid_df2 : internal :: patt_format{patt_lid[start:n, finish:n]{'p1; 'p2}; 'p3} =
    patt_format{patt_lid{'p1; 'p2}; 'p3}

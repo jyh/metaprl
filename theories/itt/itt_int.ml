@@ -278,7 +278,7 @@ prim_rw reduce_ind_base :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
 
-ml_rw reduce_ind : ('goal : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) =
+ml_rw reduce_ind : ('goal : ind{number[x:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) =
    let x, i, j, down, base, k, l, up = dest_ind goal in
    let x' = dest_number x in
    let code = Mp_num.compare_num x' (Mp_num.Int 0) in
@@ -300,7 +300,7 @@ let reduce_info =
     << "mul"{number[i:n]; number[j:n]} >>, reduce_mul;
     << "div"{number[i:n]; number[j:n]} >>, reduce_div;
     << "rem"{number[i:n]; number[j:n]} >>, reduce_rem;
-    << ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>, reduce_ind]
+    << ind{number[x:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>, reduce_ind]
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 

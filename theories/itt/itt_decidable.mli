@@ -1,5 +1,5 @@
 (*
- * All the parts of ITT.
+ * decideT tactic and decide_resource to reason about decidable predicates.
  *
  * ----------------------------------------------------------------
  *
@@ -26,48 +26,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * Author: Aleksey Nogin
+ * nogin@cs.cornell.edu
  *)
 
-include Base_theory
-include Itt_equal
-include Itt_void
-include Itt_bool
-include Itt_atom
-include Itt_atom_bool
-include Itt_int
-include Itt_int_bool
-include Itt_arith
-include Itt_rfun
-include Itt_dfun
-include Itt_fun
-include Itt_dprod
-include Itt_prod
-include Itt_union
-include Itt_struct
-include Itt_set
-include Itt_isect
-include Itt_tunion
-include Itt_bisect
-include Itt_bunion
-include Itt_subtype
-include Itt_w
-include Itt_prec
-include Itt_srec
-include Itt_quotient
-include Itt_list
-include Itt_list2
-include Itt_derive
-include Itt_prop_decide
-include Itt_fset
-include Itt_decidable
+include Itt_logic
 
-(*
- * -*-
- * Local Variables:
- * Caml-master: "prlcomp.run"
- * End:
- * -*-
- *)
+open Tactic_type
+open Tactic_type.Tacticals
+open Refiner.Refiner.TermType
+
+declare decidable{'p}
+rewrite unfold_decidable : decidable{'p} <--> ('p or not {'p})
+
+type decide_data
+
+resource (term * tactic, tactic, decide_data, Tactic.pre_tactic ) decide_resource
+
+(* Works only on sequents of form "H |- Decidable(P)", tries to prove 
+   that P is in fact decidable using rules added to decide_resource *)
+topval prove_decidableT : tactic
+
+(* "decideT P" asserts decidability of P generating 3 subgoals - 
+   Decidable (P); case P; case not(P)
+   that tries to eliminate the first subgoal using prove_decidableT *)
+topval decideT : term -> tactic
+

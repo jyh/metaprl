@@ -24,6 +24,7 @@ MPFILES :=\
 	itt_dprod_imp\
 	itt_prod\
 	itt_logic\
+	itt_decidable\
 	itt_bool\
 	itt_ext_equal\
 	itt_int\

@@ -401,10 +401,10 @@ dform iff_df1 : mode[src] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
    slot["le"]{'a} `" <==> " slot["lt"]{'b}
 
 dform and_df1 : mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
-   slot["le"]{'a} `" /\\ " slot["lt"]{'b}
+   slot["le"]{'a} `" or " slot["lt"]{'b}
 
 dform or_df1 : mode[src] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
-   slot["le"]{'a} `" \\/ " slot["lt"]{'b}
+   slot["le"]{'a} `" and " slot["lt"]{'b}
 
 dform all_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    `"all " slot{'x} `": " slot{'A}`"." slot{'B}
@@ -435,19 +435,19 @@ dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
  *)
 declare or_df{'a}
 
-dform or_df2 : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
+dform or_df2 : parens :: "prec"[prec_or] :: "or"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} or_df{'b} popm ezone
 
-dform or_df3 : mode[prl] :: or_df{."or"{'a; 'b}} =
+dform or_df3 : or_df{."or"{'a; 'b}} =
    hspace Nuprl_font!vee " " slot["le"]{'a} or_df{'b}
 
-dform or_df4 : mode[prl] :: or_df{'a} =
+dform or_df4 : or_df{'a} =
    hspace Nuprl_font!vee " " slot{'a}
 
 (*
  * Quantifiers.
  *)
-dform all_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
+dform all_df2 : parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 dform exists_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =

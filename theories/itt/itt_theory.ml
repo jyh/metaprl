@@ -62,6 +62,7 @@ include Itt_list2
 include Itt_derive
 include Itt_prop_decide
 include Itt_fset
+include Itt_decidable
 
 open Itt_equal
 open Itt_rfun

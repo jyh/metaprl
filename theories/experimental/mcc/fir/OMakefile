@@ -1,0 +1,23 @@
+OCAMLINCLUDES =\
+	-I .\
+	-I ../../../tactic\
+	-I ../../../ocaml\
+	-I ../../../base\
+	-I ../../compile\
+	-I $(LIBMOJAVE)/naml/stdlib\
+	-I $(LIBMOJAVE)/util
+
+# Library files
+MPFILES =\
+	m_rawint
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

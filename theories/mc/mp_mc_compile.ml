@@ -162,11 +162,11 @@ let compile_phobos_fir term post_rewrites_list inline_forms =
    debug_string "\n\nAfter PhoFIR -> FIR\n\n";
    debug_term term;
 
-   (* Inlining. *)
+   (* Inlining.
    let term = inline_firProg term inline_forms in
    debug_string "\n\nAfter inlining\n\n";
    debug_term term;
-
+*)
    (* Apply optimizations. *)
    let term = apply_rewrite_top firDeadcodeC term in
    let term = apply_rewrite_top firExpEvalC term in

@@ -53,6 +53,7 @@
  *)
 include Itt_equal
 include Itt_struct
+include Itt_squiggle
 include Itt_hide
 include Itt_set
 include Itt_logic
@@ -78,6 +79,7 @@ open Base_auto_tactic
 
 open Itt_equal
 open Itt_struct
+open Itt_squiggle
 
 (*
  * Show that the file is loading.
@@ -273,11 +275,17 @@ let substHypT i t p =
  * General substition.
  *)
 
-let substT t i =
+let eqSubstT t i =
    if i = 0 then
       substConclT t
    else
       substHypT i t
+
+let substT t =
+   if is_squiggle_term t then
+      sqSubstT t
+   else
+      eqSubstT t
 
 (*
  * Derived versions.

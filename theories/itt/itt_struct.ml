@@ -82,26 +82,6 @@ let _ =
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
 
-(************************************************************************
- * TERMS                                                                *
- ************************************************************************)
-
-(*!
- * @begin[doc]
- * @terms
- *
- * The @tt{bind} term defines the syntax for a binding term.
- * It has no semantic meaning in the type theory.
- * @end[doc]
- *)
-declare bind{x. 'T['x]}
-(*! @docoff *)
-
-let bind_term = << bind{x. 'T['x]} >>
-let bind_opname = opname_of_term bind_term
-let is_bind_term = is_dep1_term bind_opname
-let dest_bind = dest_dep1_term bind_opname
-let mk_bind_term = mk_dep1_term bind_opname
 
 (************************************************************************
  * DISPLAY

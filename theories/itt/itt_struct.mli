@@ -38,11 +38,6 @@ open Refiner.Refiner.Term
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
 
-(*
- * This is just syntax for a binding term.
- * It has no semantic meaning in the type theory.
- *)
-declare bind{x. 'T['x]}
 
 (*
  * H; x: A; J >- A ext x
@@ -122,10 +117,6 @@ rule hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-val is_bind_term : term -> bool
-val dest_bind : term -> string * term
-val mk_bind_term : string -> term -> term
 
 topval nthHypT : int -> tactic
 topval thinT : int -> tactic

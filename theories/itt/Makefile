@@ -15,6 +15,7 @@ MPFILES :=\
 	itt_squash\
 	itt_equal\
 	itt_struct\
+	itt_squiggle\
 	itt_subtype\
 	itt_void\
 	itt_unit\

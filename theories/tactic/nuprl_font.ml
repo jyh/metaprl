@@ -539,7 +539,7 @@ dform small_end_df : internal :: mode[tex] :: small_end =
 
 (* Displays *)
 dform mathbbA_df		: internal :: mode[prl] :: mathbbA                   = `"𝔸"
-dform mathbbB_df		: internal :: mode[prl] :: mathbbB                   = `"𝔸"
+dform mathbbB_df		: internal :: mode[prl] :: mathbbB                   = `"Ⓑ" (* or `"𝔸" *)
 dform mathbbC_df		: internal :: mode[prl] :: mathbbC                   = `"ℂ"
 dform mathbbD_df		: internal :: mode[prl] :: mathbbD                   = `"𝔻"
 dform mathbbE_df		: internal :: mode[prl] :: mathbbE                   = `"𝔼"

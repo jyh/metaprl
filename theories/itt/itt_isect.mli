@@ -117,7 +117,6 @@ rule topMemberEquality :
  * H >- b1 = b2 in Isect x:A. B[x]
  * H >- a = a in A
  *)
-(* WEAK BUG
 rule intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
    sequent { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
    sequent { <H> >- 'a = 'a in 'A } -->
@@ -132,7 +131,6 @@ rule intersectionSubtype :
 rule topSubtype :
    sequent { <H> >- "type"{'T} } -->
    sequent { <H> >- \subtype{'T; top} }
-*)
 
 (************************************************************************
  * TACTICS                                                              *

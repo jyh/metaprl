@@ -689,7 +689,7 @@ let lookup h t =
 let add h t =
 	let (n,k,tab) = !h in
 	begin
-		(*eprintf"%i<-%a%t" n print_term t eflush;*)
+		eprintf"%i<-%a%t" n print_term t eflush;
 		h:=(succ n, k, TTable.add tab t n)
 	end
 
@@ -699,7 +699,7 @@ let print_stat h =
 	eprintf "cacheT: %i goals, %i lookups%t" n k eflush
 
 let print_statT h = funT ( fun p ->
-	if !debug_int_arith then
+(*	if !debug_int_arith then*)
 		print_stat h;
 	idT
 )
@@ -708,7 +708,7 @@ let tryAssertT info t = funT ( fun p ->
 	if mem info t then idT
 	else
 		begin
-			(*eprintf "%i<-%a%t" (succ(Sequent.hyp_count p)) print_term t eflush;*)
+			eprintf "%i<-%a%t" (succ(Sequent.hyp_count p)) print_term t eflush;
 			add info t;
 			assertT t
 		end
@@ -729,7 +729,7 @@ let printT i = funT ( fun p ->
 let tryInfoT info = funT ( fun p ->
 	let g=Sequent.concl p in
 	let i=lookup info g in
-	nthHypT i (*orelseT printT i*)
+	nthHypT i orelseT printT i
 )
 
 let cacheT info = argfunT ( fun tac p ->
@@ -830,11 +830,14 @@ let arith2 info = funT (fun p ->
 	cacheT info (reduceContradRelT i)
 )
 
-let arithT = funT (fun p ->
+let arith3 = funT (fun p ->
 	let info=empty () in
-	(cacheT info arith1) thenMT
 	((findContradRelT info) thenMT
 	(arith2 info))
+)
+
+let arithT = funT (fun p ->
+	arith1 thenMT arith3
 )
 
 interactive test 'a 'b 'c :

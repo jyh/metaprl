@@ -84,7 +84,7 @@ TEST_FILES =\
    jprover_tests\
    itt_test
 
-MPFILES = $(if $(equal $(TESTS), yes), $(MPFILES) $(TEST_FILES), $(MPFILES))
+MPFILES = $(if $(TESTS), $(MPFILES) $(TEST_FILES), $(MPFILES))
 
 Theory($(MPFILES))
 

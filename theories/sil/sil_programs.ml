@@ -95,7 +95,7 @@ prec prec_if = prec_spread
  * Numbers.
  *)
 dform number_df : number[i:n] =
-   `"#" slot[i:s]
+   `"#" slot[i:n]
 
 dform add_df : parens :: "prec"[prec_add] :: add{'e1; 'e2} =
    slot["le"]{'e1} `" +" hspace slot{'e2}

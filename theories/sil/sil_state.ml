@@ -63,23 +63,19 @@ prim_rw reduce_if_eq_label2 : if_eq_label{next{'l1}; first; 'e1; 'e2} <--> 'e2
 prim_rw reduce_if_eq_label3 : if_eq_label{first; next{'l1}; 'e1; 'e2} <--> 'e2
 prim_rw reduce_if_eq_label4 : if_eq_label{next{'l1}; next{'l2}; 'e1; 'e2} <--> if_eq_label{'l1; 'l2; 'e1; 'e2}
 
-let reduce_info =
-   [<< if_eq_label{first; first} >>, reduce_if_eq_label1;
-    << if_eq_label{next{'l1}; first} >>, reduce_if_eq_label2;
-    << if_eq_label{first; next{'l1}} >>, reduce_if_eq_label3;
-    << if_eq_label{next{'l1}; next{'l2}} >>, reduce_if_eq_label4]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Fetch operation.
  *)
 prim_rw reduce_fetch : fetch{store{'s; 'l1; 'v}; 'l2} <--> if_eq_label{'l2; 'l1; 'v; fetch{'s; 'l2}}
 
-let reduce_info =
-   [<< fetch{store{'s; 'l1; 'v1}; 'l2} >>, reduce_fetch]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += [
+   << fetch{store{'s; 'l1; 'v1}; 'l2} >>, reduce_fetch;
+   << if_eq_label{first; first; 'e1; 'e2} >>, reduce_if_eq_label1;
+   << if_eq_label{next{'l1}; first; 'e1; 'e2} >>, reduce_if_eq_label2;
+   << if_eq_label{first; next{'l1}; 'e1; 'e2} >>, reduce_if_eq_label3;
+   << if_eq_label{next{'l1}; next{'l2}; 'e1; 'e2} >>, reduce_if_eq_label4
+]
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -98,7 +94,7 @@ prec prec_alloc < prec_if_eq_label
 (*
  * Labels and booleans.
  *)
-declare next_loop
+declare next_loop{'nil; 'first}
 
 dform first_df : first =
    next_loop{nil; first}

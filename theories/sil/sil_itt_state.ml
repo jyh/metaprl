@@ -115,16 +115,15 @@ interactive_rw reduce_le_label1 : le_label{first; 'l} <--> btrue
 interactive_rw reduce_le_label2 : le_label{next{'l1}; first} <--> bfalse
 interactive_rw reduce_le_label3 : le_label{next{'l1}; next{'l2}} <--> le_label{'l1; 'l2}
 
-let reduce_info =
-   [<< eq_label{first; first} >>, reduce_eq_label1;
-    << eq_label{next{'l1}; first} >>, reduce_eq_label2;
-    << eq_label{first; next{'l1}} >>, reduce_eq_label3;
-    << eq_label{next{'l1}; next{'l2}} >>, reduce_eq_label4;
-    << le_label{first; 'l} >>, reduce_le_label1;
-    << le_label{next{'l}; first} >>, reduce_le_label2;
-    << le_label{next{'l1}; next{'l2}} >>, reduce_le_label3]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += [
+   << eq_label{first; first} >>, reduce_eq_label1;
+   << eq_label{next{'l1}; first} >>, reduce_eq_label2;
+   << eq_label{first; next{'l1}} >>, reduce_eq_label3;
+   << eq_label{next{'l1}; next{'l2}} >>, reduce_eq_label4;
+   << le_label{first; 'l} >>, reduce_le_label1;
+   << le_label{next{'l}; first} >>, reduce_le_label2;
+   << le_label{next{'l1}; next{'l2}} >>, reduce_le_label3
+]
 
 interactive_rw reduce_if_eq_label1 : if_eq_label{first; first; 'e1; 'e2} <--> 'e1
 interactive_rw reduce_if_eq_label2 : if_eq_label{next{'l1}; first; 'e1; 'e2} <--> 'e2

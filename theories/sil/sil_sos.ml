@@ -95,7 +95,7 @@ prim sub_eval 'H 's2 :
 prim if_eval_true 'H (number[i:n]) 's2 (number[j:n]) 's3 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{number[j:n]; 's3}} } -->
-   [assertion] sequent [squash] { 'H >- meta_eq{number[i:n]; number[j:n]} } -->
+   [assertion] sequent [squash] { 'H >- meta_eq{number[i:n]; number[j:n]; ."true"; ."false"} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e3; 's3}; ."value"{'v3; 's4}} } -->
    sequent ['ext] { 'H >- evalsto{eval{."if"{'e1; 'e2; 'e3; 'e4}; 's1}; ."value"{'v3; 's4}} } =
    it

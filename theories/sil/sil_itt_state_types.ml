@@ -34,6 +34,8 @@ include Itt_theory
 include Sil_itt_state
 include Sil_state_types
 
+open Base_dtactic
+
 (************************************************************************
  * SYNTAX                                                               *
  ************************************************************************)
@@ -80,11 +82,10 @@ interactive_rw reduce_next_label2 : next_label{store{'D; 'l1; 'T}; 'l2} <-->
       next_label{'D; 'l1};
       next_label{'D; 'l2}}
 
-interactive_rw reduce_next_label3 : next_label{alloc{'D; 'T}; 'l} <-->
+interactive_rw reduce_next_label3 : next_label{alloc_decl{'D; 'T}; 'l} <-->
    ifthenelse{le_label{'l; next_label{'D; first}};
       next_label{'D; next_label{'D; first}};
       next_label{'D; 'l}}
-
 
 (*
  * State builds a function from the declaration.
@@ -100,7 +101,7 @@ prim_rw unfold_state : state{'D} <-->
  * Well-formedness of label type.
  *)
 interactive label_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[i:l]; label_type} }
+   sequent ['ext] { 'H >- label_type IN univ[i:l] }
 
 interactive label_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{label_type} }
@@ -109,62 +110,62 @@ interactive label_type {| intro [] |} 'H :
  * Well-formedness of eqlabel_fun
  *)
 interactive eq_label_fun_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- member{.label_type -> label_type -> bool; eq_label_fun} }
+   sequent ['ext] { 'H >- eq_label_fun IN (label_type -> label_type -> bool) }
 
 (*
  * Type of declaration lists.
  *)
 interactive decl_type_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[i ':l]; decl_type[i:l]} }
+   sequent ['ext] { 'H >- decl_type[i:l] IN univ[i':l] }
 
 interactive empty_decl_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- member{decl_type[i:l]; empty_decl} }
+   sequent ['ext] { 'H >- empty_decl IN decl_type[i:l] }
 
 interactive store_decl_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
-   [wf] sequent [squash] { 'H >- member{label_type; 'l} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'T} } -->
-   sequent ['ext] { 'H >- member{decl_type[i:l]; store_decl{'D; 'l; 'T}} }
+   [wf] sequent [squash] { 'H >- 'D IN decl_type[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'l IN label_type } -->
+   [wf] sequent [squash] { 'H >- 'T IN univ[i:l] } -->
+   sequent ['ext] { 'H >- store_decl{'D; 'l; 'T} IN decl_type[i:l] }
 
 interactive alloc_decl_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'T} } -->
-   sequent ['ext] { 'H >- member{decl_type[i:l]; alloc_decl{'D; 'T}} }
+   [wf] sequent [squash] { 'H >- 'D IN decl_type[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'T IN univ[i:l] } -->
+   sequent ['ext] { 'H >- alloc_decl{'D; 'T} IN decl_type[i:l] }
 
 (*
  * Well-formedness of next_label.
  *)
 interactive next_label_wf {| intro [] |} 'H (univ[i:l]) :
-   [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
-   [wf] sequent [squash] { 'H >- member{label_type; 'l} } -->
-   sequent ['ext] { 'H >- member{label_type; next_label{'D; 'l}} }
+   [wf] sequent [squash] { 'H >- 'D IN decl_type[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'l IN label_type } -->
+   sequent ['ext] { 'H >- next_label{'D; 'l} IN label_type }
 
 (*
  * Well-formedness of state.
  *)
 interactive state_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; state{'D}} }
+   [wf] sequent [squash] { 'H >- 'D IN decl_type[i:l] } -->
+   sequent ['ext] { 'H >- state{'D} IN univ[i:l] }
 
 (*
  * Well-formedness of states.
  *)
 interactive empty_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- member{state{empty_decl}; empty} }
+   sequent ['ext] { 'H >- empty IN state{empty_decl} }
 
 interactive store_wf1 {| intro [] |} 'H (univ[i:l]) :
-   [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
+   [wf] sequent [squash] { 'H >- 'D IN decl_type[i:l] } -->
    [wf] sequent [squash] { 'H >- 'l1 = 'l2 in label_type } -->
-   [wf] sequent [squash] { 'H >- member{'T; 'v} } -->
-   sequent ['ext] { 'H >- member{state{store_decl{'D; 'l1; 'T}}; store{'s; 'l2; 'v}} }
+   [wf] sequent [squash] { 'H >- 'v IN 'T } -->
+   sequent ['ext] { 'H >- store{'s; 'l2; 'v} IN state{store_decl{'D; 'l1; 'T}} }
 
 interactive store_wf2 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
-   [wf] sequent [squash] { 'H >- member{label_type; 'l1} } -->
-   [wf] sequent [squash] { 'H >- member{label_type; 'l2} } -->
+   [wf] sequent [squash] { 'H >- 'l1 IN label_type } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN label_type } -->
    [wf] sequent [squash] { 'H >- "not"{.'l1 = 'l2 in label_type} } -->
-   [wf] sequent [squash] { 'H >- member{state{'D}; store{'s; 'l2; 'v}} } -->
-   sequent ['ext] { 'H >- member{state{store_decl{'D; 'l1; 'T}}; store{'s; 'l2; 'v}} }
+   [wf] sequent [squash] { 'H >- store{'s; 'l2; 'v} IN state{'D} } -->
+   sequent ['ext] { 'H >- store{'s; 'l2; 'v} IN state{store_decl{'D; 'l1; 'T}} }
 
 (*
  * -*-

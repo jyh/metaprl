@@ -248,7 +248,7 @@ let anyArithRel2geT i p =
    else if is_gt_term t then gt2geT t p
    else if is_equal_term t then
       let (tt,l,r)=dest_equal t in
-         if tt=int_term then
+         if (alpha_equal int_term tt) & not (alpha_equal l r) then
             (eq2geT t p)
          else
             idT p

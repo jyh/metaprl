@@ -102,9 +102,9 @@ $$
 @begin[array, l]
 @line{{@tt{try}@space e@space @tt{with}}}
 @line{{@space p_1 @space @tt{->} @space e_1}}
-@line{{| p_2 @space @tt{->} @space e_2}}
+@line{{@tt{|} p_2 @space @tt{->} @space e_2}}
 @line{{@vdots}}
-@line{{| p_n @space @tt{->} @space e_n}}<
+@line{{@tt{|} p_n @space @tt{->} @space e_n}}<
 @end[array]
 $$
 

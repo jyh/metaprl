@@ -269,6 +269,41 @@ dform module_df2 : except_mode[tex] :: "module"[name:s] =
 
 (*!
  * @begin[doc]
+ * Bookmaking commands.
+ * @end[doc]
+ *)
+declare chapter[name:s]{'t}
+declare section[name:s]{'t}
+declare subsection[name:s]{'t}
+declare subsubsection[name:s]{'t}
+(*! @docoff *)
+
+dform chapter_df1 : mode[tex] :: "chapter"[name:s]{'t} =
+   izone `"\\labelchapter{" slot[name:s] `"}{" ezone slot{'t} izone `"}" ezone
+
+dform chapter_df2 : except_mode[tex] :: "chapter"[name:s]{'t} =
+   com_hbreak bf{'t} com_hbreak com_hbreak
+
+dform section_df1 : mode[tex] :: "section"[name:s]{'t} =
+   izone `"\\labelsection{" slot[name:s] `"}{" ezone slot{'t} izone `"}" ezone
+
+dform section_df2 : except_mode[tex] :: "section"[name:s]{'t} =
+   com_hbreak bf{'t} com_hbreak com_hbreak
+
+dform subsection_df1 : mode[tex] :: "subsection"[name:s]{'t} =
+   izone `"\\labelsubsection{" slot[name:s] `"}{" ezone slot{'t} izone `"}" ezone
+
+dform subsection_df2 : except_mode[tex] :: "subsection"[name:s]{'t} =
+   com_hbreak bf{'t} com_hbreak com_hbreak
+
+dform subsubsection_df1 : mode[tex] :: "subsubsection"[name:s]{'t} =
+   izone `"\\labelsubsubsection{" slot[name:s] `"}{" ezone slot{'t} izone `"}" ezone
+
+dform subsubsection_df2 : except_mode[tex] :: "subsubsection"[name:s]{'t} =
+   com_hbreak bf{'t} com_hbreak com_hbreak
+
+(*!
+ * @begin[doc]
  * The @code{@modsection} term produces a subsection header.
  * @end[doc]
  *)
@@ -294,6 +329,27 @@ dform modsubsection_df1 : mode[tex] :: modsubsection{'t} =
 
 dform modsubsection_df2 : except_mode[tex] :: modsubsection{'t} =
    com_hbreak bf_begin 't bf_end com_hbreak
+
+(*!
+ * @begin[doc]
+ * Generic targets.
+ * @end[doc]
+ *)
+declare target[name:s]{'t}
+declare hreftarget[name:s]
+(*! @docoff *)
+
+dform target_df1 : mode[tex] :: target[name:s]{'t} =
+   izone `"\\hreflabeltarget{" slot[name:s] `"}{" ezone slot{'t} izone `"}" ezone
+
+dform target_df2 : except_mode[tex] :: target[name:s]{'t} =
+   bf{'t}
+
+dform hreftarget_df1 : mode[tex] :: "hreftarget"[name:s] =
+   izone `"\\hreflabeltarget{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+
+dform hreftarget_df2 : except_mode[tex] :: "hreftarget"[name:s] =
+   bf[name:s]
 
 (*!
  * @begin[doc]
@@ -440,6 +496,11 @@ dform hrefrule_df2 : except_mode[tex] :: hrefrule[name:s] =
  * a hypertext link.
  * @end[doc]
  *)
+declare refchapter[name:s]
+declare refsection[name:s]
+declare refsubsection[name:s]
+declare refsubsubsection[name:s]
+
 declare refmodule[name:s]
 declare refterm[name:s]
 declare refresource[name:s]
@@ -448,6 +509,30 @@ declare reftactic[name:s]
 declare refconv[name:s]
 declare refrule[name:s]
 (*! @docoff *)
+
+dform refchapter_df1 : mode[tex] :: refchapter[name:s] =
+   izone `"\\reflabelchapter{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+
+dform refchapter_df2 : except_mode[tex] :: refchapter[name:s] =
+   bf[name:s]
+
+dform refsection_df1 : mode[tex] :: refsection[name:s] =
+   izone `"\\reflabelsection{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+
+dform refsection_df2 : except_mode[tex] :: refsection[name:s] =
+   bf[name:s]
+
+dform refsubsection_df1 : mode[tex] :: refsubsection[name:s] =
+   izone `"\\reflabelsubsection{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+
+dform refsubsection_df2 : except_mode[tex] :: refsubsection[name:s] =
+   bf[name:s]
+
+dform refsubsubsection_df1 : mode[tex] :: refsubsubsection[name:s] =
+   izone `"\\reflabelsubsubsection{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+
+dform refsubsubsection_df2 : except_mode[tex] :: refsubsubsection[name:s] =
+   bf[name:s]
 
 dform refmodule_df1 : mode[tex] :: refmodule[name:s] =
    izone `"\\reflabelmodule{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
@@ -582,6 +667,21 @@ dform latex_df1 : mode[tex] :: "LaTeX" =
 
 dform latex_df2 : except_mode[tex] :: "LaTeX" =
    `"LaTeX"
+
+(*!
+ * @begin[doc]
+ * The @code{phantom} term produces white space, equivalent in width
+ * to the term being typeset.
+ * @end[doc]
+ *)
+declare phantom{'t}
+(*! @docoff *)
+
+dform phantom_df1 : mode[tex] :: phantom{'t} =
+   izone `"\\phantom{" slot{'t} `"}" ezone
+
+dform phantom_df2 : except_mode[tex] :: phantom{'t} =
+   `" "
 
 (*!
  * @begin[doc]
@@ -1283,6 +1383,11 @@ dform normal_math_superscript_df1 : except_mode[tex] :: math_superscript{'t1; 't
  * is encouraged.
  * @end[doc]
  *)
+declare tabular[tags]{'t}
+declare line{'t}
+declare cr
+declare hline
+
 declare math_array[tags]{'t}
 declare math_tabular[tags]{'t}
 declare math_line{'t}
@@ -1309,6 +1414,11 @@ dform array_df1 : mode[tex] :: math_array[tags:s]{'t} =
    izone `"\\end{array}" ezone
 
 dform tabular_df1 : mode[tex] :: math_tabular[tags:s]{'t} =
+   izone `"\\begin{tabular}{" slot[tags:s] `"}" ezone
+   tex_strip_white{nil; 't; tex_array_lns}
+   izone `"\\end{tabular}" ezone
+
+dform tabular_df2 : mode[tex] :: tabular[tags:s]{'t} =
    izone `"\\begin{tabular}{" slot[tags:s] `"}" ezone
    tex_strip_white{nil; 't; tex_array_lns}
    izone `"\\end{tabular}" ezone
@@ -1343,18 +1453,26 @@ dform tex_reverse_df2 : tex_reverse{'l; nil; 't} =
 dform tex_apply_array_lines_df1 : tex_apply{tex_array_lns; 'l} =
    tex_array_lines{'l}
 
-dform tex_array_lines_df1 : tex_array_lines{cons{math_line{'l}; nil}} =
+dform tex_array_lines_df1 : tex_array_lines{cons{line{'l}; nil}} =
    tex_strip_white{nil; 'l; tex_array_ln}
 
-dform tex_array_lines_df1 : tex_array_lines{cons{comment_block{'l}; nil}} =
+dform tex_array_lines_df2 : tex_array_lines{cons{math_line{'l}; nil}} =
    tex_strip_white{nil; 'l; tex_array_ln}
 
-dform tex_array_lines_df2 : tex_array_lines{cons{math_line{'l}; cons{'h; 't}}} =
+dform tex_array_lines_df3 : tex_array_lines{cons{comment_block{'l}; nil}} =
+   tex_strip_white{nil; 'l; tex_array_ln}
+
+dform tex_array_lines_df4 : tex_array_lines{cons{line{'l}; cons{'h; 't}}} =
    tex_strip_white{nil; 'l; tex_array_ln}
    izone `"\\\\" ezone
    tex_array_lines{cons{'h; 't}}
 
-dform tex_array_lines_df2 : tex_array_lines{cons{comment_block{'l}; cons{'h; 't}}} =
+dform tex_array_lines_df5 : tex_array_lines{cons{math_line{'l}; cons{'h; 't}}} =
+   tex_strip_white{nil; 'l; tex_array_ln}
+   izone `"\\\\" ezone
+   tex_array_lines{cons{'h; 't}}
+
+dform tex_array_lines_df6 : tex_array_lines{cons{comment_block{'l}; cons{'h; 't}}} =
    tex_strip_white{nil; 'l; tex_array_ln}
    izone `"\\\\" ezone
    tex_array_lines{cons{'h; 't}}
@@ -1394,6 +1512,12 @@ dform math_cr : mode[tex] :: math_cr =
 dform math_hline : mode[tex] :: math_hline =
    izone `"\\hline " ezone
 
+dform cr_df : mode[tex] :: cr =
+   izone `"\\\\" ezone
+
+dform hline_df : mode[tex] :: hline =
+   izone `"\\hline " ezone
+
 (*
  * Normal display.
  *)
@@ -1407,7 +1531,10 @@ dform normal_math_tabular_df1 : except_mode[tex] :: math_tabular[tags:s]{'t} =
    tex_strip_white{nil; 't; tex_array_lns}
    ezone popm
 
-dform normal_math_line_df1 : except_mode[tex] :: math_line{'l} =
+dform normal_math_line_df1 : except_mode[tex] :: line{'l} =
+   pushm[3] szone 'l ezone popm
+
+dform normal_math_line_df2 : except_mode[tex] :: math_line{'l} =
    pushm[3] szone 'l ezone popm
 
 dform normal_math_item_df1 : except_mode[tex] :: math_item{'l} =
@@ -1417,6 +1544,12 @@ dform normal_math_cr_df1 : except_mode[tex] :: math_cr =
    hspace
 
 dform normal_math_hline_df1 : except_mode[tex] :: math_hline =
+   `"===="
+
+dform normal_math_cr_df1 : except_mode[tex] :: cr =
+   hspace
+
+dform normal_math_hline_df1 : except_mode[tex] :: hline =
    `"===="
 
 (*!

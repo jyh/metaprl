@@ -79,6 +79,16 @@ declare "module"[name:s]
 
 (*
  * @begin[doc]
+ * Bookmaking commands.
+ * @end[doc]
+ *)
+declare chapter[name:s]{'t}
+declare section[name:s]{'t}
+declare subsection[name:s]{'t}
+declare subsubsection[name:s]{'t}
+
+(*
+ * @begin[doc]
  * The @modsection{'t} term prduces a subsection header.
  * @end[doc]
  *)
@@ -90,6 +100,12 @@ declare modsection{'t}
  * @end[doc]
  *)
 declare modsubsection{'t}
+
+(*
+ * Generic targets.
+ *)
+declare target[name:s]{'t}
+declare hreftarget[name:s]
 
 (*
  * Other forms of sectioning commands.
@@ -123,6 +139,11 @@ declare hreftactic[name:s]
 declare hrefconv[name:s]
 declare hrefrule[name:s]
 
+declare refchapter[name:s]
+declare refsection[name:s]
+declare refsubsection[name:s]
+declare refsubsubsection[name:s]
+
 declare refmodule[name:s]
 declare refterm[name:s]
 declare refresource[name:s]
@@ -153,6 +174,14 @@ declare "NuPRL"
 declare "OCaml"
 declare "LaTeX"
 declare "MartinLof"
+
+(*
+ * @begin[doc]
+ * The @code{phantom} term produces white space, equivalent in width
+ * to the term being typeset.
+ * @end[doc]
+ *)
+declare phantom{'t}
 
 (*
  * Formatting.
@@ -260,6 +289,11 @@ declare math_superscript{'t1; 't2}
  * ...
  * @end[array]
  *)
+declare tabular[tags]{'t}
+declare line{'t}
+declare cr
+declare hline
+
 declare math_array[tags]{'t}
 declare math_tabular[tags]{'t}
 declare math_line{'t}

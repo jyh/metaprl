@@ -213,7 +213,7 @@ construct new values of type @tt{rec1}.  It is, however, permissable
 to use the same label names in separate files, as we will see in
 Chapter @refchapter[modules].
 
-@section{References}
+@section[references]{References}
 
 Mutable variables are common enough in OCaml programs that a special
 form is defined just for this case.  Mutable fields use the @tt{ref}

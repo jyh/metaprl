@@ -194,7 +194,7 @@ The complexity of this membership function is $O(l)$ where $l$ is the
 maximal depth of the tree.  Since the @tt{insert} function does not
 guarantee balancing, the complexity is still $O(n)$, worst case.
 
-@section{Balanced red-black trees}
+@section[balanced_red_black_trees]{Balanced red-black trees}
 
 To correct the problem with linear complexity, we can use
 @emph{balanced} trees.  One common data structure is red-black trees,

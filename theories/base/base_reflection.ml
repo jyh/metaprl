@@ -49,7 +49,6 @@ declare bterm
 declare sequent_arg{'t}
 declare term
 
-
 let bterm_arg = <<sequent_arg{bterm}>>
 
 let hyp_of_var v =
@@ -79,21 +78,19 @@ let dest_bterm_sequent_and_rename term vars =
          SeqHyp.to_list seq.sequent_hyps, (SeqGoal.get seq.sequent_goals 0)
       else raise (RefineError ("dest_bterm_sequent_and_rename", StringTermError ("not a bterm sequent", term)))
 
-
-
-(*
-if_bterm{'bt; 'tt} evaluates to 'tt when 'bt is a well-formed bterm
-operator and must fail to evaluate otherwise.
-
-rewrite axiom: if_bterm{bterm{<H>; x:_; <J> >- x}; 'tt} <--> 'tt
-ML rewrite axiom:
-    if_bterm{bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}; 'tt}
-       <-->
-    if_bterm{bterm{<H>; <J1> >- 't1};
-       if_bterm{<H>; <J2> >- 't2};
-          ...
-            if_bterm{<H>; <Jn> >- 'tn}; 'tt}...}}
-*)
+(*************************************************************************
+ * if_bterm{'bt; 'tt} evaluates to 'tt when 'bt is a well-formed bterm
+ * operator and must fail to evaluate otherwise.
+ *
+ * rewrite axiom: if_bterm{bterm{<H>; x:_; <J> >- x}; 'tt} <--> 'tt
+ * ML rewrite axiom:
+ *    if_bterm{bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}; 'tt}
+ *       <-->
+ *    if_bterm{bterm{<H>; <J1> >- 't1};
+ *       if_bterm{<H>; <J2> >- 't2};
+ *          ...
+ *            if_bterm{<H>; <Jn> >- 'tn}; 'tt}...}}
+ *)
 
 declare if_bterm{'bt; 'tt}
 
@@ -129,17 +126,14 @@ let reduce_ifbterm =
 let resource reduce +=
    (<< if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt } >>, reduce_ifbterm)
 
-
-
-
-(*
-dest_bterm{'bt} returns a list of sub-bterms of 'bt, undefined if 'bt
-is not a well-formed bterm
-ML rewrite_axiom:
-    dest_bterm{bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}}
-       <-->
-    [ bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn} ]
-*)
+(***************************************************************************
+ * dest_bterm{'bt} returns a list of sub-bterms of 'bt, undefined if 'bt
+ * is not a well-formed bterm
+ * ML rewrite_axiom:
+ *    dest_bterm{bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}}
+ *       <-->
+ *    [ bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn} ]
+ *)
 
 declare dest_bterm{'bt}
 
@@ -155,36 +149,33 @@ ml_rw reduce_dest_bterm (* {| reduce |} *) : ('goal :  dest_bterm{ sequent[bterm
 let resource reduce +=
    (<< dest_bterm{ sequent[bterm]{ <H> >- 't} } >>, reduce_dest_bterm)
 
-
-
-
-(*
-make_bterm{'bt; 'btl} takes the top-level operator of 'bt and
-replaces the subterms with the ones in 'btl (provided they have a
-correct arity).
-
-ML rewrite_axiom:
-    make_bterm{bterm{<K> >- _op_{<J1>.r1, ..., <Jn>.rn}}};
-       [bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn}] }
-    <-->
-    bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}
-
-(<K> and ri are ignored).
-*)
+(************************************************************************
+ * make_bterm{'bt; 'btl} takes the top-level operator of 'bt and
+ * replaces the subterms with the ones in 'btl (provided they have a
+ * correct arity).
+ *
+ * ML rewrite_axiom:
+ *     make_bterm{bterm{<K> >- _op_{<J1>.r1, ..., <Jn>.rn}}};
+ *        [bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn}] }
+ *     <-->
+ *     bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}
+ *
+ * (<K> and ri are ignored).
+ *)
 
 declare make_bterm{'bt; 'bt1}
 
-let rec ggg lista listb fvars hvar lenh l =
+let rec make_bterm_aux lista listb fvars hvar lenh =
    match lista, listb with
-      [], [] -> l
+      [], [] -> []
     | a1 :: a, b1:: b ->
          let b1h, b1g = dest_bterm_sequent_and_rename b1 fvars in
             if (List.length b1h - a1 = lenh) then
                let hvar', j1' = Lm_list_util.split lenh (List.map get_var b1h) in
                let b1g' = subst b1g hvar' (List.map mk_var_term hvar) in
-                  ggg a b fvars hvar lenh (l @ [mk_bterm j1' b1g'])
-            else raise (Invalid_argument "Base_reflection.ggg: unmatched arity.")
-    | _, _ -> raise (Invalid_argument "Base_reflection.ggg: unmatched arity.")
+                  (mk_bterm j1' b1g') :: (make_bterm_aux a b fvars hvar lenh)
+            else raise (Invalid_argument "Base_reflection.make_bterm_aux: unmatched arity.")
+    | _, _ -> raise (Invalid_argument "Base_reflection.make_bterm_aux: unmatched arity.")
 
 
 ml_rw reduce_make_bterm (* {| reduce |} *) : ('goal :  make_bterm{ 'bt; 'bt1 }) =
@@ -205,7 +196,7 @@ ml_rw reduce_make_bterm (* {| reduce |} *) : ('goal :  make_bterm{ 'bt; 'bt1 }) 
                      let hvar' = List.map get_var b1h in
                      let hvar, j1 = Lm_list_util.split lenh hvar' in
                      let fvars = SymbolSet.add_list fvars hvar in
-                     let terms = (mk_bterm j1 b1g) :: ggg lenJr_list' b fvars hvar lenh [] in
+                     let terms = (mk_bterm j1 b1g) :: make_bterm_aux lenJr_list' b fvars hvar lenh in
                         make_bterm_sequent (List.map hyp_of_var hvar) (quote_term (mk_term t'.term_op terms))
                   else raise (RefineError ("reduce_make_bterm", StringTermError ("not a qualified bterm for replacement", b1)))
       else  raise (RefineError ("reduce_make_bterm", StringError "unmatched arities"))
@@ -213,14 +204,12 @@ ml_rw reduce_make_bterm (* {| reduce |} *) : ('goal :  make_bterm{ 'bt; 'bt1 }) 
 let resource reduce +=
    (<< make_bterm{ 'bt; 'bt1 } >>, reduce_make_bterm)
 
-
-
-(*
-if_same_op{'bt1; 'bt2; 'tt; 'ff} evaluates to 'tt if 'bt1 and 'bt2
-are two well-formed bterms with the same top-level operator (including
-all the params and all the arities) and to 'ff when operators are
-distinct. Undefined if either 'bt1 or 'bt2 is ill-formed.
-*)
+(**************************************************************************
+ * if_same_op{'bt1; 'bt2; 'tt; 'ff} evaluates to 'tt if 'bt1 and 'bt2
+ * are two well-formed bterms with the same top-level operator (including
+ * all the params and all the arities) and to 'ff when operators are
+ * distinct. Undefined if either 'bt1 or 'bt2 is ill-formed.
+ *)
 
 declare if_same_op{'bt1; 'bt2; 'tt; 'ff}
 
@@ -231,7 +220,7 @@ ml_rw reduce_if_same_op (* {| reduce |} *) : ('goal :  if_same_op{ 'bt1; 'bt2; '
    let t1 = dest_term (unquote_term g1) in
    let t2 = dest_term (unquote_term g2) in
    let bvar_len t = List.length (dest_bterm t).bvars in
-      if    Term.ops_eq t1.term_op t2.term_op
+      if    ops_eq t1.term_op t2.term_op
          && List.length t1.term_terms = List.length t2.term_terms
          && List.map bvar_len t1.term_terms = List.map bvar_len t1.term_terms
       then  tt
@@ -240,17 +229,15 @@ ml_rw reduce_if_same_op (* {| reduce |} *) : ('goal :  if_same_op{ 'bt1; 'bt2; '
 let resource reduce +=
    (<< if_same_op{ 'bt1; 'bt2; 'tt; 'ff } >>, reduce_if_same_op)
 
-
-
-(*
-if_simple_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a bterm
-with 0 bound variables, to 'ff when it is a bterm with non-0 bound
-variables and is undefined otherwise.
-
-rewrite axiom: if_simple_bterm{bterm{x:_; <H> >- 't}; 'tt; 'ff} <--> 'ff
-ML rewrite axiom:
-    if_simple_bterm{bterm{ >- _op_{...}}; 'tt; 'ff} <--> 'tt
-*)
+(**************************************************************************
+ * if_simple_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a bterm
+ * with 0 bound variables, to 'ff when it is a bterm with non-0 bound
+ * variables and is undefined otherwise.
+ *
+ * rewrite axiom: if_simple_bterm{bterm{x:_; <H> >- 't}; 'tt; 'ff} <--> 'ff
+ * ML rewrite axiom:
+ *     if_simple_bterm{bterm{ >- _op_{...}}; 'tt; 'ff} <--> 'tt
+ *)
 
 declare if_simple_bterm{'bt; 'tt; 'ff}
 
@@ -266,22 +253,20 @@ ml_rw reduce_if_simple_bterm2 (* {| reduce |} *) : ('goal :  if_simple_bterm{ se
 let resource reduce +=
    (<< if_simple_bterm{ sequent[bterm]{ >- 't}; 'tt; 'ff } >>, reduce_if_simple_bterm2)
 
-
-
-(*
-if_var_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a
-well-formed bterm with a bound variable body, to 'ff when it is a bterm
-with a non-variable top-level operator.
-
-rewrite axiom:
-    if_var_bterm{bterm{<H>; x:_; <J> >- 'x}; 'tt; 'ff} <--> 'tt
-ML rewrite axiom:
-    if_var_bterm{bterm{<H> >- _op_{...}}; 'tt; 'ff} <--> 'ff
-*)
+(*************************************************************************
+ * if_var_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a
+ * well-formed bterm with a bound variable body, to 'ff when it is a bterm
+ * with a non-variable top-level operator.
+ *
+ * rewrite axiom:
+ *     if_var_bterm{bterm{<H>; x:_; <J> >- 'x}; 'tt; 'ff} <--> 'tt
+ * ML rewrite axiom:
+ *     if_var_bterm{bterm{<H> >- _op_{...}}; 'tt; 'ff} <--> 'ff
+ *)
 
 declare if_var_bterm{'bt; 'tt; 'ff}
 
-prim_rw reduce_if_var_bterm1 {| reduce |} 'H :
+prim_rw reduce_if_var_bterm1 'H :
    if_var_bterm{ sequent [bterm] { <H>; x: term; <J> >- 'x }; 'tt; 'ff } <--> 'tt
 
 ml_rw reduce_if_var_bterm2 (* {| reduce |} *) : ('goal :  if_var_bterm{ sequent[bterm]{ <H> >- 't }; 'tt; 'ff }) =
@@ -302,18 +287,16 @@ let reduce_if_var_bterm =
 let resource reduce +=
    (<< if_var_bterm{ sequent[bterm]{ <H> >- 't}; 'tt; 'ff } >>, reduce_if_var_bterm)
 
-
-
-(*
-subst{'bt; 't} substitutes 't for the first bound variable of 'bt.
-
-rewrite_axiom:
-subst{bterm{x:_; <H> >- 't1['x]}; bterm{ <J> >- 't2}} <-->
-bterm{<H>; <J> >- 't1['t2] }
-*)
+(************************************************************************
+ * subst{'bt; 't} substitutes 't for the first bound variable of 'bt.
+ *
+ * rewrite_axiom:
+ * subst{bterm{x:_; <H> >- 't1['x]}; bterm{ >- 't2}} <-->
+ * bterm{<H> >- 't1['t2] }
+ *)
 
 declare subst{'bt; 't}
 
 prim_rw reduce_subst {| reduce |} :
-   subst{ sequent[bterm]{ x: term; <H> >- 't1['x] }; sequent[bterm]{ <J> >- 't2 } } <-->
-      sequent[bterm]{ <H>; <J> >- 't1['t2] }
+   subst{ sequent[bterm]{ x: term; <H> >- 't1['x] }; sequent[bterm]{ >- 't2 } } <-->
+      sequent[bterm]{ <H> >- 't1['t2] }

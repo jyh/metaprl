@@ -1,4 +1,4 @@
-MPFILES := itt_nuprl \
+MPFILES = itt_nuprl \
    nuprl_metaprl ma_metaprl \
    nuprl_standard ma_standard \
    nuprl_core_2 ma_core_2 \
@@ -44,3 +44,7 @@ MPFILES := itt_nuprl \
    nuprl_trigger1_object_directory ma_trigger1_object_directory \
    nuprl_ring__leader1_object_directory ma_ring__leader1_object_directory \
    nuprl_tree__leader_object_directory ma_tree__leader_object_directory \
+
+MLZFILES =\
+   itt_nuprl\
+

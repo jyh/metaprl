@@ -3,7 +3,7 @@ OCAMLINCLUDES +=\
    -I ../base -I ../itt
 
 # Library files
-include ofiles
+include Files
 
 TEST_FILES =\
 

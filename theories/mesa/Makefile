@@ -10,8 +10,7 @@ INCLUDE := -I . -I ../itt -I ../base $(SUPPORT_INCL)
 OCAMLDEPFLAGS := -prl
 
 # Library files
-include files
-
+include Files
 
 # Name of main libraris
 MAIN = theory

@@ -31,6 +31,8 @@
  * Email:  emre@its.caltech.edu
  *)
 
+include Base_theory
+
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType

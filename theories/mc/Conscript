@@ -1,37 +1,74 @@
 Import qw( env );
 
+#
+# Set up basic include path.
+#
 $env = $env->clone(
-   INCPATH  => [@{$env->{INCPATH}}, "../tactic", "../ocaml", "../base",
-                "../itt", "$env->{MC}/fir/type", "$env->{MC}/fir/util"]
+   INCPATH  => [@{$env->{INCPATH}},
+                "../tactic",
+                "../ocaml",
+                "../base",
+                "../itt"]
 );
 
-OCamlSources $env
-   'mc_term_op_ds.ml',
-   'fir_int_set.ml',
-   'fir_rawint_set.ml',
-   'fir_ty.ml',
-   'fir_exp.ml',
-   'fir_eval.ml',
-   'fir_deadcode.ml',
-   'fir_const_elim.ml',
-   'fir_marshal.ml',
-   'mc_theory.ml',
-   'fir_test.ml';
-
-OCamlLibrary $env 'base',
-   'mc_term_op_ds',
-   'fir_int_set',
-   'fir_rawint_set',
-   'fir_ty',
-   'fir_exp',
-   'fir_eval',
-   'fir_deadcode',
-   'fir_const_elim',
-   'fir_marshal',
-   'mc_theory',
-   'fir_test';
-
-## Add the library to the default target list
+#
+# Determine the source file list and library files based on whether
+# or now we have the MC compiler source tree.
+# This is a _real_ ugly hack.  Simplifications welcome!
+#
 if(defined($ENV{'MC_ROOT'})) {
-   Default qw( base.cmxa );
-};
+   $env = $env->clone(
+      INCPATH => [@{$env->{INCPATH}},
+                  "$env->{MC}/fir/type",
+                  "$env->{MC}/fir/util"]
+   );
+   OCamlSources $env
+      'mc_term_op_ds.ml',
+      'fir_int_set.ml',
+      'fir_rawint_set.ml',
+      'fir_ty.ml',
+      'fir_exp.ml',
+      'fir_eval.ml',
+      'fir_deadcode.ml',
+      'fir_const_elim.ml',
+      'fir_marshal.ml',
+      'mc_theory.ml',
+      'fir_test.ml';
+   OCamlLibrary $env 'base',
+      'mc_term_op_ds',
+      'fir_int_set',
+      'fir_rawint_set',
+      'fir_ty',
+      'fir_exp',
+      'fir_eval',
+      'fir_deadcode',
+      'fir_const_elim',
+      'fir_marshal',
+      'mc_theory',
+      'fir_test';
+} else {
+   OCamlSources $env
+      'mc_term_op_ds.ml',
+      'fir_int_set.ml',
+      'fir_rawint_set.ml',
+      'fir_ty.ml',
+      'fir_exp.ml',
+      'fir_eval.ml',
+      'fir_deadcode.ml',
+      'fir_const_elim.ml',
+      'mc_theory.ml',
+      'fir_test.ml';
+   OCamlLibrary $env 'base',
+      'mc_term_op_ds',
+      'fir_int_set',
+      'fir_rawint_set',
+      'fir_ty',
+      'fir_exp',
+      'fir_eval',
+      'fir_deadcode',
+      'fir_const_elim',
+      'mc_theory',
+      'fir_test';
+}
+
+Default qw( base.cmxa );

@@ -462,17 +462,39 @@ interactive max_add {| intro [] |} :
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- max{'a; 'b} +@'c = max{'a +@ 'c; 'b +@ 'c} in int }
 
+interactive max_commut {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- max{'a; 'b} = max{'b; 'a} in int }
+
 interactive max_reduce1 {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- max{'b; 'a} = 'a in int }
 
+interactive max_reduce2 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- max{'a; 'b} = 'a in int }
+
+interactive min_commut {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- min{'a; 'b} = min{'b; 'a} in int }
+
 interactive min_reduce1 {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- min{'b; 'a} = 'b in int }
+
+interactive min_reduce2 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- min{'a; 'b} = 'b in int }
 
 doc <:doc<
    @begin[doc]
@@ -511,7 +533,7 @@ interactive_rw mul_Assoc_rw :
 
 let mul_AssocC = mul_Assoc_rw
 
-interactive_rw mul_Assoc2_rw :
+interactive_rw mul_Assoc2_rw {| reduce |} :
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->
@@ -549,7 +571,7 @@ prim mul_Id :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a } = it
 
-interactive_rw mul_Id_rw :
+interactive_rw mul_Id_rw {| reduce |} :
    ('a in int) -->
    (1 *@ 'a) <--> 'a
 
@@ -559,7 +581,7 @@ interactive mul_Id2 :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a *@ 1) ~ 'a }
 
-interactive_rw mul_Id2_rw :
+interactive_rw mul_Id2_rw {| reduce |} :
    ('a in int) -->
    ('a *@ 1) <--> 'a
 
@@ -579,7 +601,7 @@ prim mul_Zero :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (0 *@ 'a) ~ 0 } = it
 
-interactive_rw mul_Zero_rw :
+interactive_rw mul_Zero_rw {| reduce |} :
    ('a in int) -->
    (0 *@ 'a) <--> 0
 
@@ -589,7 +611,7 @@ interactive mul_Zero2 :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a *@ 0) ~ 0 }
 
-interactive_rw mul_Zero2_rw :
+interactive_rw mul_Zero2_rw {| reduce |} :
    ('a in int) -->
    ('a *@ 0) <--> 0
 
@@ -606,15 +628,6 @@ interactive_rw negative1_2uniC :
 interactive_rw uni2negative1C :
 	('a in int) -->
 	(- 'a) <--> ((-1) *@ 'a)
-
-let resource reduce +=
-   [<< (('a *@ 'b) *@ 'c) >>, mul_Assoc2_rw;
-(*    << ('a *@ ('b +@ 'c)) >>, ((addrC [1] reduceC) thenC (tryC mul_add_Distrib_rw));
- *)
-    << (1 *@ 'a) >>, mul_Id_rw;
-    << ('a *@ 1) >>, mul_Id2_rw;
-    << (0 *@ 'a) >>, mul_Zero_rw;
-    << ('a *@ 0) >>, mul_Zero2_rw]
 
 interactive lt_mulPositMonoEq 'c :
    sequent { <H> >- 0 < 'c } -->
@@ -645,7 +658,7 @@ interactive mul_uni_Assoc :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
 
-interactive_rw mul_uni_Assoc_rw :
+interactive_rw mul_uni_Assoc_rw {| reduce |} :
    ('a in int) -->
    ('b in int) -->
    ('a *@ (- 'b)) <--> ((- 'a) *@ 'b)
@@ -890,6 +903,3 @@ rewrite rem_Assoc :
    sequent { <H> >- ('a %@ 'b) %@ 'c <--> ('a %@ 'c) %@ 'b }
 
 *)
-
-let resource reduce +=
-   [<< ('a *@ (- 'b)) >>, mul_uni_Assoc_rw]

@@ -143,10 +143,10 @@ declare CPS{'cont; 'a; v. 'e['v]}
 declare CPS{'cont; 'e}
 
 dform cps_atom_df : CPS{'cont; 'a; v. 'e} =
-   szone pushm[1] `"CPS[" 'cont `";" " " 'a `";" " " 'v `"." slot{'e} popm `"]" ezone
+   szone pushm[1] bf["CPS["] 'cont bf[";"] " " 'a bf[";"] " " 'v `"." slot{'e} popm bf["]"] ezone
 
 dform cps_exp_df : CPS{'cont; 'e} =
-   szone pushm[1] `"CPS[" 'cont `";" hspace 'e popm `"]" ezone
+   szone pushm[1] bf["CPS["] 'cont bf[";"] hspace 'e popm bf["]"] ezone
 
 (*!
  * @begin[doc]

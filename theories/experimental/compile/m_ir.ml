@@ -284,40 +284,40 @@ dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
 
 (* Recursive functions *)
 dform fun_decl_df : parens :: "prec"[prec_let] :: FunDecl{f. 'e} =
-   `"declare " slot{'f} `" " xin hspace slot["lt"]{'e}
+   bf["declare "] slot{'f} `" " xin hspace slot["lt"]{'e}
 
 dform fun_def_df : parens :: "prec"[prec_let] :: FunDef{'f; 'e1; 'e2} =
-   pushm[3] `"define " slot{'f} `" = " hspace slot{'e1} `" " xin popm hspace slot["lt"]{'e2}
+   pushm[3] bf["define "] slot{'f} bf[" = "] hspace slot{'e1} `" " xin popm hspace slot["lt"]{'e2}
 
 (* Expressions *)
 dform exp_let_atom_df : parens :: "prec"[prec_let] :: LetAtom{'a; v. 'e} =
-   xlet `" " slot{'v} `" = " slot{'a} `" " xin hspace slot["lt"]{'e}
+   xlet `" " slot{'v} bf[" = "] slot{'a} `" " xin hspace slot["lt"]{'e}
 
 dform exp_tailcall2_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a} =
-   `"tailcall " slot{'f} `"(" slot{'a} `")"
+   bf["tailcall "] slot{'f} `"(" slot{'a} `")"
 
 dform exp_tailcall3_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a1; 'a2} =
-   `"tailcall " slot{'f} `"(" slot{'a1} `", " slot{'a2} `")"
+   bf["tailcall "] slot{'f} `"(" slot{'a1} `", " slot{'a2} `")"
 
 dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; 'e2} =
-   szone pushm[0] pushm[3] `"if" `" " slot{'a} `" " `"then" hspace
+   szone pushm[0] pushm[3] bf["if"] `" " slot{'a} `" " bf["then"] hspace
    slot{'e1} popm hspace
-   pushm[3] `"else" hspace slot{'e2} popm popm ezone
+   pushm[3] bf["else"] hspace slot{'e2} popm popm ezone
 
 dform exp_let_pair_df : parens :: "prec"[prec_let] :: LetPair{'a1; 'a2; v. 'e} =
-   xlet `" " slot{'v} `" = " ValPair{'a1; 'a2} `" " xin hspace slot["lt"]{'e}
+   xlet `" " slot{'v} bf[" = "] ValPair{'a1; 'a2} `" " xin hspace slot["lt"]{'e}
 
 dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v. 'e} =
-   xlet `" " slot{'v} `" = " slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e}
+   xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e}
 
 dform exp_set_subscript_df : parens :: "prec"[prec_let] :: SetSubscript{'a1; 'a2; 'a3; 'e} =
    slot{'a1} `"[" slot{'a2} `"] <- " slot{'a3} `";" hspace slot["lt"]{'e}
 
 dform exp_let_apply_df : parens :: "prec"[prec_let] :: LetApply{'f; 'a; v. 'e} =
-   xlet `" apply " slot{'v} `" = " slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
+   xlet bf[" apply "] slot{'v} bf[" = "] slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
 
 dform exp_let_closure_df : parens :: "prec"[prec_let] :: LetClosure{'f; 'a; v. 'e} =
-   xlet `" closure " slot{'v} `" = " slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
+   xlet bf[" closure "] slot{'v} bf[" = "] slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
 
 dform exp_return_df : Return{'a} =
    bf["return"] `"(" slot{'a} `")"
@@ -328,7 +328,7 @@ dform exp_return_df : Return{'a} =
 dform exp_df : exp = bf["exp"]
 
 dform def_df : def{'v; 'e} =
-   slot{'v} `" = " slot{'e}
+   slot{'v} bf[" = "] slot{'e}
 
 dform compilable_df : "prec"[prec_compilable] :: compilable{'e} =
    szone pushm[0] pushm[3] bf["compilable"] hspace slot{'e} popm hspace bf["end"] popm ezone

@@ -100,6 +100,10 @@ let progC =
  * Swap FunDecl with any statements before it.
  * @end[doc]
  *)
+prim_rw fundecl_atom_fun :
+   AtomFun{x. FunDecl{f. 'e['f; 'x]}}
+   <--> FunDecl{f. AtomFun{x. 'e['f; 'x]}}
+
 prim_rw fundecl_let_atom :
     LetAtom{'a; v. FunDecl{f. 'e1['f; 'v]}}
     <--> FunDecl{f. LetAtom{'a; v. 'e1['f; 'v]}}
@@ -120,9 +124,17 @@ prim_rw fundecl_if_false :
    If{'a; 'e1; FunDecl{f. 'e2['f]}}
    <--> FunDecl{f. If{'a; 'e1; 'e2['f]}}
 
-prim_rw fundecl_fundef :
+prim_rw fundecl_fundef1 :
+   FunDef{'f; FunDecl{g. 'e1['g]}; 'e2}
+   <--> FunDecl{g. FunDef{'f; 'e1['g]; 'e2}}
+
+prim_rw fundecl_fundef2 :
    FunDef{'f; 'e1; FunDecl{g. 'e2['g]}}
    <--> FunDecl{g. FunDef{'f; 'e1; 'e2['g]}}
+
+prim_rw fundef_atom_fun :
+   AtomFun{x. FunDef{'f; 'e1; 'e2['x]}}
+   <--> FunDef{'f; 'e1; AtomFun{x. 'e2['x]}}
 
 prim_rw fundef_let_atom :
    LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}}
@@ -140,21 +152,29 @@ prim_rw fundef_if_false :
    If{'a; 'e1; FunDef{'f; 'e2; 'e3}}
    <--> FunDef{'f; 'e2; If{'a; 'e1; 'e3}}
 
+prim_rw fundef_fundef :
+   FunDef{'f; FunDef{'g; 'e1; 'e2}; 'e3}
+   <--> FunDef{'f; 'e2; FunDef{'g; 'e1; 'e3}}
+
 (*
  * Add all these rules to the CPS resource.
  *)
 let resource prog +=
-    [<< LetAtom{'a; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_atom;
+    [<< AtomFun{x. FunDecl{f. 'e['f; 'x]}} >>, fundecl_atom_fun;
+     << LetAtom{'a; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_atom;
      << LetPair{'a1; 'a2; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_pair;
      << LetSubscript{'a1; 'a2; v. FunDecl{f. 'e['f; 'v]}} >>, fundecl_let_subscript;
      << If{'a; FunDecl{f. 'e1['f]}; 'e2} >>, fundecl_if_true;
      << If{'a; FunDecl{f. 'e1['f]}; 'e2} >>, fundecl_if_false;
-     << FunDef{'f; 'e1; FunDecl{g. 'e2['g]}} >>, fundecl_fundef;
+     << FunDef{'f; FunDecl{g. 'e1['g]}; 'e2} >>, fundecl_fundef1;
+     << FunDef{'f; 'e1; FunDecl{g. 'e2['g]}} >>, fundecl_fundef2;
 
+     << AtomFun{x. FunDef{'f; 'e1; 'e2['x]}} >>, fundef_atom_fun;
      << LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_atom;
      << LetSubscript{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_subscript;
      << If{'a; FunDef{'f; 'e1; 'e2}; 'e3} >>, fundef_if_true;
-     << If{'a; 'e1; FunDef{'f; 'e2; 'e3}} >>, fundef_if_false]
+     << If{'a; 'e1; FunDef{'f; 'e2; 'e3}} >>, fundef_if_false;
+     << FunDef{'f; FunDef{'g; 'e1; 'e2}; 'e3} >>, fundef_fundef]
 
 (*!
  * @begin[doc]

@@ -24,6 +24,7 @@ MPFILES =\
         m_doc_x86_regalloc\
         m_doc_x86_opt\
         m_doc_summary\
+	m_doc_summary_fdl\
         m_doc_proposal\
         m_util\
         m_arith\
@@ -83,7 +84,7 @@ FDL_THEORIES =\
     m_doc_x86_codegen\
     m_doc_x86_regalloc\
     m_doc_x86_opt\
-    m_doc_summary
+    m_doc_summary_fdl
 
 APPENDIX_THEORIES =\
     m_ir\
@@ -115,7 +116,13 @@ LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-fdl, m-paper-fdl, fdl-body)
 #
 # Clean up
 #
+TEXFILES = fdl theory appendix
+GENERATED_FILES =\
+	$(addsuffix .tex,      $(TEXFILES))\
+	$(addsuffix -body.tex, $(TEXFILES))\
+	$(addsuffix _print.ml, $(TEXFILES))
+
 clean:
-    $(CLEAN) *.cph *.output fdl.tex fdl-body.tex fdl_print.ml theory.tex theory-body.tex theory_print.ml appendix.tex appendix-body.tex appendix_print.ml
+    $(CLEAN) *.cph *.output $(GENERATED_FILES)
 
 all: theory$(LIB_SUFFIX)

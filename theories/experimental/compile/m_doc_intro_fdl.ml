@@ -37,41 +37,53 @@ extends M_doc_comment
 
 doc <:doc<
 @begin[doc]
+      
+Compilers make use of many fundamental algorithms used to transform
+and analyze programs.  For example, CPS (continuation-passing style)
+transformation is a widely-used algorithm that transforms the control
+flow of a program.  As Sabry and Wadler show @cite[SW97], Plotkin's
+CPS translation @cite[Plo75], Moggi's monadic translation
+@cite[Mog88], and Girard's translation to linear logic @cite[Gir87a]
+are all related; insight into any one of these translations provides
+insight into all three.  While CPS transformation may be fundamental,
+it is an example of an algorithm that is difficult for humans to
+understand, and it is quite difficult to perform by hand.  The payoff
+for a general formalization as part of the FDL is thus quite high.
 
-The task of designing and implementing a compiler can be difficult
-even for a small language.  There are many phases in the translation
-from source to machine code, and an error in any one of these phases
-can alter the semantics of the generated program.  The use of
-programming languages that provide type safety, pattern matching, and
-automatic storage management can reduce the compiler's code size and
-eliminate some common kinds of errors.  However, many programming
-languages that appear well-suited for compiler implementation, like ML
-@cite[Ull98], still do not address other issues, such as substitution
-and preservation of scoping in the compiled program.
+Other widely-used algorithms include closure conversion (where
+functions in a program are lifted to top-level), code generation,
+register allocation, including spill selection.  Instances of these
+algorithms are used widely is many areas of computer science,
+especialy for compilers for languages ranging from Lisp and ML, to
+Java, C, C#, etc.  By defining them as part of the FDL, we provide a
+freely-available formal implementation that serves as a common
+reference for the many applications that use these algorithms.
 
-In this paper, we present an alternative approach, based on the use of
-higher-order abstract syntax @cite["NH02,PE88"] and term rewriting in
-a general-purpose logical framework.  All program transformations,
-from parsing to code generation, are cleanly isolated and specified as
-term rewrites.  In our system, term rewrites specify an equivalence
-between two code fragments that is valid in any context.  Rewrites are
-bidirectional and neither imply nor presuppose any particular order of
-application.  Rewrite application is guided by programs in the
-meta-language of the logical framework.
+To demonstrate the process, we discuss the construction of a compiler using
+formalized forms of these algorithms as part of the FDL.  Our approach
+is based on the use of higher-order abstract syntax @cite["NH02,PE88"]
+and term rewriting in a general-purpose logical framework that uses
+the FDL.  All program transformations, from parsing to code
+generation, are cleanly isolated and specified as term rewrites.  In
+our system, term rewrites specify an equivalence between two code
+fragments that is valid in any context.  Rewrites are bidirectional
+and neither imply nor presuppose any particular order of application.
+Rewrite application is guided by programs in the meta-language of the
+logical framework.
 
-There are many advantages to using higher-order abstract syntax and formal rewrites.
-Program scoping
-and substitution are managed implicitly by the logical framework; it
-is not possible to specify a program transformation that modifies the
-program scope.  Perhaps most importantly, the correctness of the
-compiler is dependent only on the rewriting rules.  Programs that
-guide the application of rewrites do not have to be trusted because
-they are required to use rewrites for all program transformations.  If
-the rules can be validated against a program semantics, and if the
-compiler produces a program, that program will be correct relative to
-those semantics.  The role of the guidance programs is to ensure that
-rewrites are applied in the appropriate order so that the output of
-the compiler contains only assembly.
+There are many advantages to using higher-order abstract syntax and
+formal rewrites.  Program scoping and substitution are managed
+implicitly by the logical framework; it is not possible to specify a
+program transformation that modifies the program scope.  Perhaps most
+importantly, the correctness of the compiler is dependent only on the
+rewriting rules.  Programs that guide the application of rewrites do
+not have to be trusted because they are required to use rewrites for
+all program transformations.  If the rules can be validated against a
+program semantics, and if the compiler produces a program, that
+program will be correct relative to those semantics.  The role of the
+guidance programs is to ensure that rewrites are applied in the
+appropriate order so that the output of the compiler contains only
+assembly.
 
 The collection of rewrites needed to implement a compiler is small
 (hundreds of lines of formal mathematics) compared to the entire code
@@ -117,7 +129,7 @@ seeming contradiction can be resolved, as we show in the second half
 of this paper, but it does require a departure from the majority of
 the literature on compilation methods.
 
-In this paper, we explore these problems and show that formal compiler
+In this chapter, we explore these problems and show that formal compiler
 development is feasible, perhaps easy.  We do not specifically address
 the problem of compiler verification in this paper; our main objective
 is to develop the models and methods needed during the compilation
@@ -128,17 +140,18 @@ an ML-like language using the @MetaPRL logical framework
 online as part of the Mojave research project @cite[MojaveHome].
 This document is generated from the program sources (@MetaPRL provides
 a form of literate programming), and the complete source code is
-available online at @url["http://metaprl.org/"] as well as in the
-technical report.
+available online at @url["http://metaprl.org/"].
 
 @subsection[organization]{Organization}
 
-The translation from source code to assembly is usually done in three major stages.  The parsing
-phase translates a source file (a sequence of characters) into an abstract syntax tree; the abstract
-syntax is translated to an intermediate representation; and the intermediate representation is
-translated to machine code.  The reason for the intermediate representation is that many of the
-transformations in the compiler can be stated abstractly, independent of the source and machine
-representations.
+The translation from source code to assembly is usually done in three
+major stages.  The parsing phase translates a source file (a sequence
+of characters) into an abstract syntax tree; the abstract syntax is
+translated to an intermediate representation; and the intermediate
+representation is translated to machine code.  The reason for the
+intermediate representation is that many of the transformations in the
+compiler can be stated abstractly, independent of the source and
+machine representations.
 
 The language that we are using as an example (see Section
 @refsection[m_doc_parsing]) is a small language similar to ML

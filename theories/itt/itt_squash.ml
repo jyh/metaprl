@@ -343,7 +343,7 @@ let process_squash_resource_annotation name contexts args stmt tac =
          is_squash_term aconcl &&
          alpha_equal (dest_squash aconcl) concl
       ->
-         concl, SqStableGoal(Tactic_type.Tactic.tactic_of_rule tac [||] [])
+         [concl, SqStableGoal(Tactic_type.Tactic.tactic_of_rule tac [||] [])]
       (* H |- T --> H |- a in T *)
     | [||], [], [_, _, assum], [Context(h,[],[])] when
          is_equal_term concl &&
@@ -354,13 +354,13 @@ let process_squash_resource_annotation name contexts args stmt tac =
          alpha_equal (SeqGoal.get eassum.sequent_goals 0) t
       ->
          let t,a,_ = dest_equal concl in
-            t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
+            [t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])]
       (* H |- a in T *)
     | [||], [], [], [Context(_,[],[])] when
          (let t,a,b = dest_equal concl in (alpha_equal a b) )
       ->
          let t,a,_ = dest_equal concl in
-            t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
+            [t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])]
       (* H; x:T; J[x] |- C[x] *)
     | [| h |], [], [], [Context(h',[],[]); Hypothesis(v,t); Context(_, [h''], [v'])] when
          h = h' && h' = h'' && is_var_term v' && (dest_var v') = v &&
@@ -373,7 +373,7 @@ let process_squash_resource_annotation name contexts args stmt tac =
          let tac = funT (fun p ->
             Tactic_type.Tactic.tactic_of_rule tac [| Sequent.hyp_count p |] [])
          in
-            t, SqStable(it_term, (assertT t thenMT tac))
+            [t, SqStable(it_term, (assertT t thenMT tac))]
     | _ ->
          raise (Invalid_argument "squash_stable resource annotation")
 

@@ -256,9 +256,9 @@ interactive independentFunctionFormation :
 (*
  * Application equality depends on our infering a type.
  *)
-let d_apply_equalT = funT (fun p ->
+let d_apply_equalT weak = funT (fun p ->
    let _, app, app' = dest_equal (Sequent.concl p) in
-   if (in_auto p) && (not (alpha_equal app app'))
+   if weak && (not (alpha_equal app app'))
    then raise generic_refiner_exn;
    let f, _ = dest_apply app in
    let f_type =
@@ -304,7 +304,8 @@ let d_apply_typeT = funT (fun p ->
          raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ))))
 
 let resource intro += [
-   << 'f1 'a1 = 'f2 'a2 in 'T >>, wrap_intro d_apply_equalT;
+   << 'f1 'a1 = 'f2 'a2 in 'T >>, ("d_apply_equalT", None, AutoNormal, d_apply_equalT true);
+   << 'f1 'a1 = 'f2 'a2 in 'T >>, ("d_apply_equalT", None, AutoComplete, d_apply_equalT false);
    << "type"{'f 'a} >>, wrap_intro d_apply_typeT
 ]
 

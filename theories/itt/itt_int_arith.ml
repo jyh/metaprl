@@ -152,7 +152,7 @@ let process_ge_elim_resource_annotation name context_args term_args statement pr
    in
    let seq_terms = on_main_subgoals assums in
 	let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] []) in
-   (mk_pair_term (mk_var_term v) t), seq_terms, tac
+   [mk_pair_term (mk_var_term v) t, seq_terms, tac]
 
 let process_ge_intro_resource_annotation name context_args term_args statement pre_tactic =
    let assums, goal = unzip_mfunction statement in
@@ -167,7 +167,7 @@ let process_ge_intro_resource_annotation name context_args term_args statement p
    in
    let seq_terms = on_main_subgoals assums in
 	let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] []) in
-   t, seq_terms, tac
+   [t, seq_terms, tac]
 
 let hyp2geT = argfunT (fun i p ->
 	try

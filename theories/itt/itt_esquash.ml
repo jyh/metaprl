@@ -211,16 +211,18 @@ let esquashT i =
 
 let esq_exn = RefineError("Itt_esquash.esquashEqualT", StringError "esquash_univ not appropriate for weakAutoT")
 
-let esquashEqualT = funT (fun p ->
+let esquashEqualT weak = funT (fun p ->
    let in_esquash =
       (Sequent.get_bool_arg p "esquash") = (Some true)
    in
    if is_member_term (Sequent.concl p) then
-      if not in_esquash && in_auto p then raise esq_exn else esquash_univ
+      if weak && not in_esquash then raise esq_exn else esquash_univ
    else if in_esquash then esquash_equal_intro else esquash_equal)
 
-let resource intro +=
-   (<<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, false, esquashEqualT))
+let resource intro += [
+   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, AutoNormal, esquashEqualT true);
+   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, AutoComplete, esquashEqualT false)
+]
 
 let esquashAutoT =
    withBoolT "esquash" true (autoT thenT tryT (onSomeHypT esquashT orelseT esquash thenT autoT))

@@ -258,16 +258,18 @@ prim quotient_memberEquality :
    it
 
 doc <:doc< @docoff >>
-let quotientIntroT = funT (fun p ->
+let quotientIntroT weak = funT (fun p ->
    let _, a1, a2 = dest_equal (Sequent.concl p) in
    if alpha_equal a1 a2 then begin
-      if (in_auto p) then raise generic_refiner_exn;
+      if weak then raise generic_refiner_exn;
       quotient_memberWeakEquality
    end else
       quotient_memberEquality)
 
-let resource intro +=
-   (<<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, wrap_intro quotientIntroT)
+let resource intro += [
+   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, AutoNormal, quotientIntroT true);
+   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, AutoComplete, quotientIntroT false);
+]
 
 doc <:doc<
    @begin[doc]

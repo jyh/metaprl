@@ -96,8 +96,6 @@ interactive idOp_equality {| intro [] |} 'H :
 (*
  * Match equality.
  * As in LetOp, the equality here is intentional.
- * We assume that matches on blocks have been reduced
- *    to matches on integers.
  *)
 
 prim matchCase_equality {| intro [] |} 'H :
@@ -108,46 +106,30 @@ prim matchCase_equality {| intro [] |} 'H :
       matchCase{'k2; s2. 'e2['s2]} in 'T }
    = it
 
-(*
-prim match_equality {| intro [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
-   [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
-   [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
-(*
-   [main] sequent ['ext] { 'H >-
-      "assert"{ produces_match{ 'i1; 'cases1 } } } -->
-*)
-   sequent ['ext] { 'H >-
-      "match"{ 'state1; 'i1; 'cases1 } =
-      "match"{ 'state2; 'i2; 'cases2 } in 'T }
-   = it
-*)
-
 prim match_int_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
-   [wf] sequent ['ext] { 'H >- number[i:n] = number[j:n] in int } -->
+   [wf] sequent ['ext] { 'H >- 'i = 'j in int } -->
    [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
 (*
    [main] sequent ['ext] { 'H >-
       "assert"{ produces_match{ number[i:n]; 'cases1 } } } -->
 *)
    sequent ['ext] { 'H >-
-      "match"{ 'state1; number[i:n]; 'cases1 } =
-      "match"{ 'state2; number[j:n]; 'cases2 } in 'T }
+      match_int{ 'state1; 'i; 'cases1 } =
+      match_int{ 'state2; 'j; 'cases2 } in 'T }
    = it
 
 prim match_block_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
-   [wf] sequent ['ext]
-      { 'H >- block{'i; 'args1} = block{'j; 'args2} in ty_block } -->
+   [wf] sequent ['ext] { 'H >- 'i = 'j in ty_block } -->
 (*
    [main] sequent ['ext] { 'H >-
       "assert"{ produces_match{ 'i; 'cases1 } } } -->
 *)
    sequent ['ext] { 'H >-
-      "match"{ 'state1; block{'i; 'args1}; 'cases1 } =
-      "match"{ 'state2; block{'j; 'args2}; 'cases2 } in 'T }
+      match_block{ 'state1; 'i; 'cases1 } =
+      match_block{ 'state2; 'j; 'cases2 } in 'T }
    = it
 
 (*

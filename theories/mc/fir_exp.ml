@@ -55,7 +55,8 @@ declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
 declare matchCase{ 'set; s. 'exp['s] }
-declare "match"{ 'state; 'key; 'cases }
+declare match_int{ 'state; 'key; 'cases }
+declare match_block{ 'state; 'key; 'cases }
 
 (* Allocation. *)
 declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }
@@ -148,7 +149,15 @@ dform matchCase_df : except_mode[src] :: matchCase{ 'set; s. 'exp } =
    pushm[0] szone push_indent slot{'set} `" ->" hspace
    szone slot{'exp} ezone popm
    ezone popm
-dform match_df : except_mode[src] :: "match"{ 'state; 'a; 'cases } =
+dform match_int_df : except_mode[src] :: match_int{ 'state; 'a; 'cases } =
+   pushm[0] szone push_indent `"match" hspace
+   szone slot{'a} ezone popm hspace
+   push_indent `"with state" hspace
+   szone slot{'state} ezone popm hspace
+   push_indent `"in" hspace
+   szone slot{'cases} ezone popm
+   ezone popm
+dform match_block_df : except_mode[src] :: match_block{ 'state; 'a; 'cases } =
    pushm[0] szone push_indent `"match" hspace
    szone slot{'a} ezone popm hspace
    push_indent `"with state" hspace
@@ -225,35 +234,15 @@ prim_rw reduce_allocArray :
    letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } <-->
    smatch{ alloc{ 'state; 0; 'atom_list }; s, v. 'exp['s; 'v] }
 
-(*
- * Control.
- * The automation should be set up so that reduce_match_block
- * is tried first.
- *)
-
-(*
+(* Control. *)
+prim_rw reduce_match_int :
+   match_int{ 'state; 'key; cons{ matchCase{'set; s. 'e['s] }; 'el } } <-->
+   ifthenelse{ member{ 'key; 'set };
+      'e['state];
+      match_int{ 'state; 'key; 'el } }
 prim_rw reduce_match_block :
-   "match"{ 'state; block{ 'i; 'args }; 'cases } <-->
-   "match"{ 'state; 'i; 'cases }
-prim_rw reduce_match_num :
-   "match"{ 'state; 'i; cons{matchCase{'set; s. 'exp['s]}; 'el} } <-->
-   ifthenelse{ member{'i; 'set};
-      'exp['state];
-      ."match"{'state; 'i; 'el} }
-*)
-
-prim_rw reduce_match_num :
-   "match"{ 'state; number[i:n];
-      cons{matchCase{'set; s. 'exp['s]}; 'el} } <-->
-   ifthenelse{ member{number[i:n]; 'set};
-      'exp['state];
-      ."match"{'state; number[i:n]; 'el} }
-prim_rw reduce_match_block :
-   "match"{ 'state; block{ 'i; 'args };
-      cons{matchCase{'set; s. 'exp['s]}; 'el} } <-->
-   ifthenelse{ member{'i; 'set};
-      'exp['state];
-      ."match"{'state; block{'i; 'args}; 'el} }
+   match_block{ 'state; block{'i; 'args}; 'cases } <-->
+   match_int{ 'state; 'i; 'cases }
 
 (* Subscripting. *)
 prim_rw reduce_letSubscript :
@@ -280,17 +269,9 @@ let resource reduce += [
       reduce_allocTuple;
    << letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } >>,
       reduce_allocArray;
-(*
-   << "match"{ 'state; block{ 'i; 'args }; 'cases } >>, reduce_match_block;
-   << "match"{ 'state; 'i; cons{matchCase{'set; s. 'exp['s]}; 'el } } >>,
-      reduce_match_num;
-*)
-   << "match"{ 'state; number[i:n];
-      cons{matchCase{'set; s. 'exp['s]}; 'el} } >>,
-      reduce_match_num;
-   << "match"{ 'state; block{ 'i; 'args };
-      cons{matchCase{'set; s. 'exp['s]}; 'el}} >>,
-      reduce_match_block;
+   << match_int{ 'state; 'key; cons{ matchCase{'set; s. 'e['s] }; 'el } } >>,
+      reduce_match_int;
+   << match_block{ 'state; block{'i; 'args}; 'cases } >>, reduce_match_block;
    << letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] } >>,
       reduce_letSubscript;
    << setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;

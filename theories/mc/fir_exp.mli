@@ -58,13 +58,10 @@ declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
 declare letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
 declare tailCall{ 'var; 'atom_list }
 
-(*
- * Control.
- * If the match key is in 'set, the matchCase evaluates
- * to 'exp1, otherwise we attempt to match the key in 'exp2.
- *)
+(* Control. *)
 declare matchCase{ 'set; s. 'exp['s] }
-declare "match"{ 'state; 'key; 'cases }
+declare match_int{ 'state; 'key; 'cases }
+declare match_block{ 'state; 'key; 'cases }
 
 (* Allocation. *)
 declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }

@@ -50,17 +50,17 @@ interactive alloc2 'H :
 (* Match tests. *)
 interactive match1 'H :
    sequent ['ext] { 'H >- 512 } -->
-   sequent ['ext] { 'H >- "match"{ empty; 32;
+   sequent ['ext] { 'H >- match_int{ empty; 32;
       cons{matchCase{int_set{1;31};s. 2};
       cons{matchCase{int_set{25;35};s. 512};nil}}}}
 interactive match2 'H :
    sequent ['ext] { 'H >- 317 } -->
-   sequent ['ext] { 'H >- "match"{ empty; block{ 2; nil };
+   sequent ['ext] { 'H >- match_block{ empty; block{ 2; nil };
       cons{matchCase{int_set{1;31};s. 317};
       cons{matchCase{int_set{25;35};s. 512};nil}}}}
 interactive match3 'H :
-   sequent ['ext] { 'H >- "match"{ empty; 3; nil } } -->
-   sequent ['ext] { 'H >- "match"{ empty; 3;
+   sequent ['ext] { 'H >- match_int{ empty; 3; nil } } -->
+   sequent ['ext] { 'H >- match_int{ empty; 3;
       cons{matchCase{true_set;s. 1}; cons{matchCase{false_set;s. 0}; nil}}}}
 
 (* Subscripting tests. *)
@@ -108,7 +108,7 @@ interactive complex1 'H :
          letBinop{ 's11; plusIntOp; tyInt; 'v1; 'v2; s12, e1.
          letBinop{ 's12; mulIntOp; tyInt; 'v3; 'v4; s13, e2.
          letBinop{ 's13; gtIntOp; tyInt; 'e1; 'e2; s14, c.
-         "match"{ 's14; 'c;
+         match_int{ 's14; 'c;
             cons{ matchCase{true_set; s15. 512};
                cons{ matchCase{false_set; s16. 128}; nil}}}}}}}}}}}}}}}}}}
 
@@ -142,19 +142,19 @@ interactive type4 'H :
 
 interactive type6 'H :
    sequent ['ext] { 'H >-
-      "match"{ empty; 2;
+      match_int{ empty; 2;
          cons{matchCase{int_set{2;3};s. 45};
          cons{matchCase{int_set{4;5};s. 56};nil}}} IN tyInt }
 
 interactive type7 'H :
    sequent ['ext] { 'H >-
-      "match"{ empty; 5;
+      match_int{ empty; 5;
          cons{matchCase{int_set{2;3};s. 45};
          cons{matchCase{int_set{4;5};s. 56};nil}}} IN tyInt }
 
 interactive type8 'H :
    sequent ['ext] { 'H >-
-      "match"{ empty; block{2; cons{1;cons{2;nil}}};
+      match_block{ empty; block{2; cons{1;cons{2;nil}}};
          cons{matchCase{int_set{2;3};s. 45};
          cons{matchCase{int_set{4;5};s. 56};nil}}} IN tyInt }
 
@@ -180,7 +180,7 @@ interactive tc1 'H :
          letBinop{ 's11; plusIntOp; tyInt; 'v1; 'v2; s12, e1.
          letBinop{ 's12; mulIntOp; tyInt; 'v3; 'v4; s13, e2.
          letBinop{ 's13; gtIntOp; tyInt; 'e1; 'e2; s14, c.
-         "match"{ 's14; 'c;
+         match_int{ 's14; 'c;
             cons{ matchCase{true_set; s15. 512};
                cons{ matchCase{false_set; s16. 128}; nil}}}}}}}}}}}}}}}}}
          IN tyInt }

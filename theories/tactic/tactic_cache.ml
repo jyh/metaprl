@@ -78,6 +78,9 @@
  * postponement queue if their world is backed out.
  *
  * $Log$
+ * Revision 1.4  1998/04/21 20:58:10  jyh
+ * Fixed typing problems introduced by refiner msequents.
+ *
  * Revision 1.3  1998/04/08 15:08:37  jyh
  * Moved precedence to mllib.
  *
@@ -637,7 +640,7 @@ let bget_node extract world ({ goal_assums = assums } as goal) =
    let test { node_world = world' } =
       is_world_extension world' assums world
    in
-      List_util.find nodes test
+      List_util.find test nodes
 
 (*
  * Provide a rough
@@ -656,7 +659,7 @@ let fget_entry { ext_base = { ext_ftable = tbl; ext_rules = rules } } { inf_hash
    let aux (i, ({ finfo_plates = plates } as rule)) =
       let test (rule', _) = rule' == rule in
       let rules = Hashtbl.find rules plates in
-      let _, insts = List_util.find rules test in
+      let _, insts = List_util.find test rules in
          i, rule, insts
    in
    let l = Hashtbl.find tbl hash in
@@ -737,7 +740,7 @@ let find_inf
          alpha_equal t t' & is_child world world'
    in
    let { entry_infs = infs } = Hashtbl.find terms hash in
-      List_util.find infs test
+      List_util.find test infs
 
 let already_known extract world t hash =
    try
@@ -749,7 +752,7 @@ let find_goal
     { ext_base = { ext_terms = terms } }
     ({ goal_hash = hash } as goal) =
    let { entry_goals = goals } = Hashtbl.find terms hash in
-      List_util.find goals (eq_goal goal)
+      List_util.find (eq_goal goal) goals
 
 (*
  * Find the goalnodes that match the inference.
@@ -819,7 +822,7 @@ let is_provable extract goal =
 let hash_goal { ext_base = { ext_terms = terms } }
     ({ goal_goal = t; goal_hash = hash } as goal) =
    let { entry_goals = goals } = Hashtbl.find terms hash in
-      List_util.find goals (eq_goal goal)
+      List_util.find (eq_goal goal) goals
       
 (************************************************************************
  * UTILITIES                                                            *
@@ -1633,9 +1636,9 @@ let add_hyp
             let node, goals, bchain = new_goals world' goal in
                { ext_used = used;
                  ext_hcount = hcount + 1;
-                 ext_names = List_util.insert_nth names i' (name_of_world world');
-                 ext_gnames = List_util.insert_nth gnames i' gname;
-                 ext_hyps = List_util.insert_nth hyps i' world';
+                 ext_names = List_util.insert_nth i' (name_of_world world') names;
+                 ext_gnames = List_util.insert_nth i' gname gnames;
+                 ext_hyps = List_util.insert_nth i' world' hyps;
                  ext_goal = goal;
                  ext_node = node;
                  ext_goals = goals;
@@ -1662,9 +1665,9 @@ let add_hyp
             let node, goals, bchain = new_goals world' goal in
                { ext_used = used;
                  ext_hcount = hcount + 1;
-                 ext_names = List_util.insert_nth names i' name;
-                 ext_gnames = List_util.insert_nth gnames i' gname;
-                 ext_hyps = List_util.insert_nth hyps i' world';
+                 ext_names = List_util.insert_nth i' name names;
+                 ext_gnames = List_util.insert_nth i' gname gnames;
+                 ext_hyps = List_util.insert_nth i' world' hyps;
                  ext_goal = goal;
                  ext_node = node;
                  ext_goals = goals;
@@ -1714,8 +1717,8 @@ let del_hyp
       let extract =
          { ext_used = List_util.subtractq used rm;
            ext_hcount = i;
-           ext_names = List_util.nth_tl names i';
-           ext_gnames = List_util.nth_tl gnames i';
+           ext_names = List_util.nth_tl i' names;
+           ext_gnames = List_util.nth_tl i' gnames;
            ext_hyps = hyps';
            ext_goal = goal;
            ext_node = node;
@@ -1746,7 +1749,7 @@ let ref_hyp ({ ext_hcount = hcount;
 let name_hyp ({ ext_hcount = hcount;
                 ext_gnames = gnames
               } as extract) i gname =
-   set_gnames extract (List_util.replace_nth gnames (hcount - i - 1) gname)
+   set_gnames extract (List_util.replace_nth (hcount - i - 1) gname gnames)
 
 (************************************************************************
  * CONCL OPERATIONS                                                     *
@@ -1844,7 +1847,7 @@ let hyp_index { hyp_count = hcount; hyp_hyps = hyps } =
    let search_root inf =
       match inf with
          { inf_value = t; inf_info = Inference ({ inf_values = values } as info) } ->
-            let index = List_util.find_indexq values t in
+            let index = List_util.find_indexq t values in
             let rec search i = function
                ({ hyp_info = Root (j, info') } as hyp)::htl ->
                   if info == info' & j = index then
@@ -2048,7 +2051,7 @@ let used_hyps
     { syn_extract = { ext_hyps = hyps; ext_hcount = hcount };
       syn_used = used
     } =
-   List.map (function inf -> hcount - (List_util.find_indexq hyps inf) - 1) used
+   List.map (function inf -> hcount - (List_util.find_indexq inf hyps) - 1) used
    
 (*
  * -*-

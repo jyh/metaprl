@@ -134,6 +134,8 @@ primrw indReduceBase :
 
 mlterm indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}} =
    raise (RefineError (StringError "indReduce: not implemented"))
+ | fun _ _ ->
+      raise (RefineError (StringError "indReduce: not implemented"))
 
 primrw indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
    indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}}
@@ -283,7 +285,9 @@ prim less_thanElimination 'H 'J :
  * This is the large decision procedure.
  *)
 mlterm arith_check{'t} =
-   failwith "arith not implemented"
+   raise (RefineError (StringError "arith not implemented"))
+ | fun _ _ ->
+      raise (RefineError (StringError "arith not implemented"))
 
 prim arith : arith_check{'t} --> 't = it
 
@@ -369,6 +373,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/21 20:58:07  jyh
+ * Fixed typing problems introduced by refiner msequents.
+ *
  * Revision 1.3  1998/04/09 18:26:05  jyh
  * Working compiler once again.
  *

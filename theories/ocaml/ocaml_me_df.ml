@@ -33,9 +33,9 @@ dform me_functor_df : me_functor[@name:s]{'mt; 'me} = mt_functor[@name:s]{'mt; '
  * Structure.
  *)
 dform me_struct_df : me_struct{'sil} =
-   szone pushm[0] push_indent "struct" sbreak
+   szone pushm[0] push_indent "_struct" sbreak
    slot{list_expr; 'sil}
-   popm sbreak "end" popm ezone
+   popm sbreak "_end" popm ezone
 
 (*
  * Type cast.
@@ -51,6 +51,9 @@ dform me_uid_df : me_uid[@name:s] = slot[@name:s]
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/04 13:01:32  jyh
+ * Ocaml display without let rec.
+ *
  * Revision 1.4  1998/04/29 20:54:05  jyh
  * Initial working display forms.
  *

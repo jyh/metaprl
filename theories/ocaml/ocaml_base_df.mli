@@ -47,36 +47,40 @@ declare "#"
 declare "'"
 declare "\""
 
-declare "if"
-declare "then"
-declare "else"
+declare "_if"
+declare "_then"
+declare "_else"
 
-declare "for"
-declare "while"
-declare "to"
-declare "downto"
-declare "do"
-declare "done"
+declare "_for"
+declare "_while"
+declare "_to"
+declare "_downto"
+declare "_do"
+declare "_done"
 
-declare "type"
-declare "exception"
-declare "let"
-declare "letrec"
-declare "in"
-declare "and"
-declare "with"
-declare "val"
-declare "as"
-declare "external"
-declare "of"
+declare "_new"
+declare "_fun"
+declare "_match"
+declare "_try"
+declare "_type"
+declare "_exception"
+declare "_let"
+declare "_letrec"
+declare "_in"
+declare "_and"
+declare "_with"
+declare "_val"
+declare "_as"
+declare "_external"
+declare "_of"
 
-declare "module"
-declare "moduletype"
-declare "open"
-declare "sig"
-declare "struct"
-declare "functor"
-declare "end"
+declare "_module"
+declare "_moduletype"
+declare "_open"
+declare "_sig"
+declare "_struct"
+declare "_functor"
+declare "_end"
 
 declare push_indent
 
@@ -87,6 +91,9 @@ declare patt_format
 
 (*
  * $Log$
+ * Revision 1.2  1998/05/04 13:01:28  jyh
+ * Ocaml display without let rec.
+ *
  * Revision 1.1  1998/02/18 18:47:07  jyh
  * Initial ocaml semantics.
  *

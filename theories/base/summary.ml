@@ -100,7 +100,7 @@ declare lines{'e}
 dform lines_nil_df : lines{nil} = `""
 
 dform lines_cons_df : lines{cons{'e1; 'e2}} =
-   slot{'e1} newline lines{'e2}
+   szone slot{'e1} ezone newline lines{'e2}
 
 dform interface_df : "interface"{'body} =
    szone pushm[0] pushm[4]
@@ -196,7 +196,9 @@ dform module_df : "module"[@name:s]{'info} =
 
 dform dform_df : "dform"[@name:s]{'modes; 'redex; 'def} =
    szone pushm[4]
-   `"dform" " " slot[@name:s] `" : " slot{'modes} slot["raw"]{'redex} `" = " slot{'def}
+   `"dform" " " slot[@name:s]
+   space `": " slot{'modes} slot["raw"]{'redex}
+   space `"= " pushm slot{'def} popm
    ezone popm
 
 (*
@@ -226,7 +228,7 @@ dform infix_df : "infix"[@name] =
    `"infix" " " slot[@name:s]
 
 dform magic_block_df : "magic_block"[@name:s]{'items} =
-   `"magic_block" " " slot[@name:s] `" = " break slot{'items}
+   `"magic_block" " " slot[@name:s] `" =" space slot{'items}
 
 dform summary_item_df : "summary_item"{'term} =
    slot{'term}
@@ -236,6 +238,9 @@ dform df_term_df : df_term{'t} =
 
 (*
  * $Log$
+ * Revision 1.9  1998/05/04 13:01:23  jyh
+ * Ocaml display without let rec.
+ *
  * Revision 1.8  1998/05/01 18:43:38  jyh
  * Added raw display.
  *

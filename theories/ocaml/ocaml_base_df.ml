@@ -54,36 +54,40 @@ declare "#"
 declare "'"
 declare "\""
 
-declare "if"
-declare "then"
-declare "else"
+declare "_if"
+declare "_then"
+declare "_else"
 
-declare "for"
-declare "while"
-declare "to"
-declare "downto"
-declare "do"
-declare "done"
+declare "_for"
+declare "_while"
+declare "_to"
+declare "_downto"
+declare "_do"
+declare "_done"
 
-declare "type"
-declare "exception"
-declare "let"
-declare "letrec"
-declare "in"
-declare "and"
-declare "with"
-declare "val"
-declare "as"
-declare "external"
-declare "of"
+declare "_new"
+declare "_fun"
+declare "_match"
+declare "_try"
+declare "_type"
+declare "_exception"
+declare "_let"
+declare "_letrec"
+declare "_in"
+declare "_and"
+declare "_with"
+declare "_val"
+declare "_as"
+declare "_external"
+declare "_of"
 
-declare "module"
-declare "moduletype"
-declare "open"
-declare "sig"
-declare "struct"
-declare "functor"
-declare "end"
+declare "_module"
+declare "_moduletype"
+declare "_open"
+declare "_sig"
+declare "_struct"
+declare "_functor"
+declare "_end"
 
 declare push_indent
 
@@ -136,41 +140,48 @@ dform hash_df		: "#"		= pushfont["bold"] `"#" popfont
 dform quote_df		: "'"		= pushfont["bold"] `"'" popfont
 dform backslash_df	: "\""		= pushfont["bold"] `"\"" popfont
 
-dform if_df		: "if"		= pushfont["bold"] `"if" popfont
-dform then_df		: "then"	= pushfont["bold"] `"then" popfont
-dform else_df		: "else"	= pushfont["bold"] `"else" popfont
+dform if_df		: "_if"		= pushfont["bold"] `"if" popfont
+dform then_df		: "_then"	= pushfont["bold"] `"then" popfont
+dform else_df		: "_else"	= pushfont["bold"] `"else" popfont
 
-dform for_df		: "for"		= pushfont["bold"] `"for" popfont
-dform while_df		: "while"	= pushfont["bold"] `"while" popfont
-dform to_df		: "to"		= pushfont["bold"] `"to" popfont
-dform downto_df		: "downto"	= pushfont["bold"] `"downto" popfont
-dform do_df		: "do"		= pushfont["bold"] `"do" popfont
-dform done_df		: "done"	= pushfont["bold"] `"done" popfont
+dform for_df		: "_for"	= pushfont["bold"] `"for" popfont
+dform while_df		: "_while"	= pushfont["bold"] `"while" popfont
+dform to_df		: "_to"		= pushfont["bold"] `"to" popfont
+dform downto_df		: "_downto"	= pushfont["bold"] `"downto" popfont
+dform do_df		: "_do"		= pushfont["bold"] `"do" popfont
+dform done_df		: "_done"	= pushfont["bold"] `"done" popfont
 
-dform type_df		: "type"	= pushfont["bold"] `"type" popfont
-dform exception_df	: "exception"	= pushfont["bold"] `"exception" popfont
-dform let_df		: "let"		= pushfont["bold"] `"let" popfont
-dform letrec_df		: "letrec"	= pushfont["bold"] `"let rec" popfont
-dform in_df		: "in"		= pushfont["bold"] `"in" popfont
-dform and_df		: "and"		= pushfont["bold"] `"and" popfont
-dform with_df		: "with"	= pushfont["bold"] `"with" popfont
-dform val_df		: "val"		= pushfont["bold"] `"val" popfont
-dform as_df		: "as"		= pushfont["bold"] `"as" popfont
-dform external_df	: "external"	= pushfont["bold"] `"of" popfont
-dform of_df		: "of"		= pushfont["bold"] `"external" popfont
+dform new_df		: "_new"	= pushfont["bold"] `"new" popfont
+dform fun_df		: "_fun"	= pushfont["bold"] `"fun" popfont
+dform match_df		: "_match"	= pushfont["bold"] `"match" popfont
+dform try_df		: "_try"	= pushfont["bold"] `"try" popfont
+dform type_df		: "_type"	= pushfont["bold"] `"type" popfont
+dform exception_df	: "_exception"	= pushfont["bold"] `"exception" popfont
+dform let_df		: "_let"	= pushfont["bold"] `"let" popfont
+dform letrec_df		: "_letrec"	= pushfont["bold"] `"let rec" popfont
+dform in_df		: "_in"		= pushfont["bold"] `"in" popfont
+dform and_df		: "_and"	= pushfont["bold"] `"and" popfont
+dform with_df		: "_with"	= pushfont["bold"] `"with" popfont
+dform val_df		: "_val"	= pushfont["bold"] `"val" popfont
+dform as_df		: "_as"		= pushfont["bold"] `"as" popfont
+dform external_df	: "_external"	= pushfont["bold"] `"of" popfont
+dform of_df		: "_of"		= pushfont["bold"] `"external" popfont
 
-dform module_df		: "module"	= pushfont["bold"] `"module" popfont
-dform moduletype_df	: "moduletype"	= pushfont["bold"] `"module type" popfont
-dform open_df		: "open"	= pushfont["bold"] `"open" popfont
-dform sig_df		: "sig"		= pushfont["bold"] `"sig" popfont
-dform struct_df		: "struct"	= pushfont["bold"] `"struct" popfont
-dform functor_df	: "functor"	= pushfont["bold"] `"functor" popfont
-dform end_df		: "end"		= pushfont["bold"] `"end" popfont
+dform module_df		: "_module"	= pushfont["bold"] `"module" popfont
+dform moduletype_df	: "_moduletype"	= pushfont["bold"] `"module type" popfont
+dform open_df		: "_open"	= pushfont["bold"] `"open" popfont
+dform sig_df		: "_sig"	= pushfont["bold"] `"sig" popfont
+dform struct_df		: "_struct"	= pushfont["bold"] `"struct" popfont
+dform functor_df	: "_functor"	= pushfont["bold"] `"functor" popfont
+dform end_df		: "_end"	= pushfont["bold"] `"end" popfont
 
 dform push_ident_df     : push_indent   = pushm[3]
 
 (*
  * $Log$
+ * Revision 1.4  1998/05/04 13:01:27  jyh
+ * Ocaml display without let rec.
+ *
  * Revision 1.3  1998/04/29 20:53:57  jyh
  * Initial working display forms.
  *

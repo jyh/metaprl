@@ -220,6 +220,7 @@ declare math_cmonoid{'i}
 declare math_abelg{'i}
 
 declare math_subStructure{'s; 'g}
+declare math_subgroup{'i; 's; 'g}
 
 declare math_lcoset{'h; 'g; 'a}
 declare math_rcoset{'h; 'g; 'a}

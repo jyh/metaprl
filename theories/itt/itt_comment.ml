@@ -1242,6 +1242,7 @@ declare math_cmonoid{'i}
 declare math_abelg{'i}
 
 declare math_subStructure{'s; 'g}
+declare math_subgroup{'i; 's; 'g}
 
 declare math_lcoset{'h; 'g; 'a}
 declare math_rcoset{'h; 'g; 'a}
@@ -1335,6 +1336,15 @@ dform subStructure_df1 : mode[tex] :: math_subStructure{'s; 'g} =
    slot{'g}
    izone `"}" ezone
 
+dform subgroup_df1 : mode[tex] :: math_subgroup{'i; 's; 'g} =
+   izone `"{{\\it Subgroup}_{" ezone
+   slot{'i}
+   izone `"}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'g}
+   izone `")}" ezone
+
 dform lcoset_df1 : mode[tex] :: math_lcoset{'h; 'g; 'a} =
    izone `"{{\\it Left\\_coset}(" ezone
    slot{'h}
@@ -1362,7 +1372,7 @@ dform normalSubg_df1 : mode[tex] :: math_normalSubg{'i; 's; 'g} =
    slot{'g}
    izone `")}" ezone
 
-dform math_group_power_df1 : mode[tex] :: math_group_power{'g; 'a; 'n} =
+dform group_power_df1 : mode[tex] :: math_group_power{'g; 'a; 'n} =
    izone `"{" ezone
    slot{'a}
    izone `"}^{" ezone
@@ -1445,6 +1455,9 @@ dform abelg_df1 : except_mode[tex] :: math_abelg{'i} =
 
 dform subStructure_df : except_mode[tex] :: math_subStructure{'s; 'g} =
    slot{'s} `" " subseteq `"str " slot{'g}
+
+dform subgroup_df : except_mode[tex] :: math_subgroup{'i; 's; 'g} =
+   `"Subgroup[" slot{'i} `"](" slot{'s} `"; " slot{'g} `")"
 
 dform lcoset_df : parens :: except_mode[tex] :: math_lcoset{'h; 'g; 'a} =
    `"Left_coset(" slot{'h} `"; " slot{'g} `"; " slot{'a} `")"

@@ -179,6 +179,8 @@ sig
 	val div: af -> ring -> af
    val add: af -> af -> af
 	val sub: af -> af -> af
+   val add_scaled: af -> ring -> af -> af
+	val sub_scaled: af -> ring -> af -> af
 	val sub_number : af -> ring -> af
 
    val coef: af -> vars -> ring
@@ -243,17 +245,45 @@ struct
 
 	let get f v = coef f v
 
-   let add f1 f2 =
-		Table.union f1 f2
+	let add_aux v k f =
+		let k' = coef f v in
+		Table.replace f v [Ring.add k' k]
+
+	let add f1 f2 =
+		Table.fold_map add_aux f1 f2
+
+	let sub_aux v k f =
+		let k' = coef f v in
+		Table.replace f v [Ring.sub k' k]
 
 	let sub f1 f2 =
+		Table.fold_map sub_aux f1 f2
+(*
 		let neg_f2 = scale (Ring.neg Ring.ringUnit) f2 in
 		add f1 neg_f2
+*)
+
+	let add_scaled_aux c v k f =
+		let k' = coef f v in
+		Table.replace f v [Ring.add k' (Ring.mul c k)]
+
+	let add_scaled f1 c f2 =
+		Table.fold_map (add_scaled_aux c) f1 f2
+
+	let sub_scaled_aux c v k f =
+		let k' = coef f v in
+		Table.replace f v [Ring.sub k' (Ring.mul c k)]
+
+	let sub_scaled f1 c f2 =
+		Table.fold_map (sub_scaled_aux c) f1 f2
 
 	let sub_number f k =
 		let k' = Table.find f constvar in
+		Table.replace f constvar [Ring.sub k' k]
+(*		let k' = Table.find f constvar in
 		let f' = Table.remove f constvar in
 		Table.add f' constvar (Ring.sub k' k)
+*)
 
 	let gcd f =
 		let r = ref Ring.ringZero in
@@ -390,11 +420,23 @@ struct
 		else
 			Array.mapi (fun i k2 -> Ring.add k2 (get f1 i)) f2
 
+   let add_scaled f1 c f2 =
+		if Array.length f1 > Array.length f2 then
+			Array.mapi (fun i k1 -> Ring.add k1 (Ring.mul c (get f2 i))) f1
+		else
+			Array.mapi (fun i k2 -> Ring.add (Ring.mul c k2) (get f1 i)) f2
+
 	let sub f1 f2 =
 		if Array.length f1 > Array.length f2 then
 			Array.mapi (fun i k1 -> Ring.sub k1 (get f2 i)) f1
 		else
 			Array.mapi (fun i k2 -> Ring.sub (get f1 i) k2) f2
+
+	let sub_scaled f1 c f2 =
+		if Array.length f1 > Array.length f2 then
+			Array.mapi (fun i k1 -> Ring.sub k1 (Ring.mul c (get f2 i))) f1
+		else
+			Array.mapi (fun i k2 -> Ring.sub (get f1 i) (Ring.mul c k2)) f2
 
 	let sub_number f k =
 		f.(constvar) <- Ring.sub f.(constvar) k;
@@ -588,6 +630,18 @@ struct
 				raise (Invalid_argument "MakeDebugAF.add")
 			end
 
+   let add_scaled (f11,f12) c (f21,f22) =
+		let f1 = AF1.add_scaled f11 c f21 in
+		let f2 = AF2.add_scaled f12 c f22 in
+		if equal f1 f2 then (f1,f2)
+		else
+			begin
+				eprintf "MakeDebugAF.add_scaled\n%a %a = %a\n%a %a = %a@."
+				AF1.print f11 AF1.print f21 AF1.print f1
+				AF2.print f12 AF2.print f22 AF2.print f2;
+				raise (Invalid_argument "MakeDebugAF.add_scaled")
+			end
+
 	let sub (f11,f12) (f21,f22) =
 		let f1 = AF1.sub f11 f21 in
 		let f2 = AF2.sub f12 f22 in
@@ -598,6 +652,18 @@ struct
 				AF1.print f11 AF1.print f21 AF1.print f1
 				AF2.print f12 AF2.print f22 AF2.print f2;
 				raise (Invalid_argument "MakeDebugAF.sub")
+			end
+
+	let sub_scaled (f11,f12) c (f21,f22) =
+		let f1 = AF1.sub_scaled f11 c f21 in
+		let f2 = AF2.sub_scaled f12 c f22 in
+		if equal f1 f2 then (f1,f2)
+		else
+			begin
+				eprintf "MakeDebugAF.sub_scaled\n%a %a = %a\n%a %a = %a@."
+				AF1.print f11 AF1.print f21 AF1.print f1
+				AF2.print f12 AF2.print f22 AF2.print f2;
+				raise (Invalid_argument "MakeDebugAF.sub_scaled")
 			end
 
 	let sub_number (f1,f2) k =
@@ -1068,7 +1134,7 @@ let norm constr =
 			(MulAndWeaken (tree, gcd, c), f')
 
 let omega_aux v ((c1,t1,l),(c2,t2,u)) =
-	let s = (Solve (v,c1,t1,l,c2,t2,u),	AF.sub (AF.scale c1 u) (AF.scale c2 l)) in
+	let s = (Solve (v,c1,t1,l,c2,t2,u),	AF.sub_scaled (AF.scale c1 u) c2 l) in
 	norm s
 (*
 let rec compute_metric pool (tree,f) =
@@ -1138,7 +1204,6 @@ let print_constrs constrs =
 
 let print_constrs constrs =
 	eprintf "%i constraints@." (C.length constrs)
-
 
 let var_bounds (old_upper, old_lower) f v =
 	let c = AF.coef f (succ v) in
@@ -1343,10 +1408,6 @@ let make_option tree i tac t =
 	let option = append i tac len pos [] terms in
 	(option, tree)
 
-(* It seems that interplay of map and rev_map is important here.
-Replacement of the first map with rev_map leads to 10x performance hit
-Although I don't see where it could affect anything
-*)
 let options tree i tac t =
 	Node (List.map (make_option tree i tac) t)
 
@@ -1413,10 +1474,6 @@ let rec leaves2list = function
 
 let allhyps2ge p tree =
 	hyp2ge p tree (all_hyps p)
-
-let print_option (i,t,pos,len,tac) =
-	(*eprintf "hyp%i pos=%i len=%i term:%s@." i pos len (SimplePrint.short_string_of_term t)*)
-	eprintf "hyp%i pos=%i len=%i@." i pos len
 
 let all2ge p =
 	let tree = allhyps2ge p (Leaf ()) in
@@ -1551,16 +1608,14 @@ let omegaPrepT = funT (fun p ->
 	let start = Unix.time () in
 	let options = all2ge p in
    let var2index = VI.create 13 in
-   let option_constrs = map_leaves (sim_make_sacs p var2index) options in
-	let hyp_num = succ (Sequent.hyp_count p) in
+ 	let option_constrs = map_leaves (sim_make_sacs p var2index) options in
+ 	let hyp_num = succ (Sequent.hyp_count p) in
 	let used_hyps = Array.make hyp_num false in
 	let hyp_length = Array.make hyp_num 0 in
 	let n0 = VI.length var2index in
 	let pool = Array.make n0 (false,false) in
 	let pool2 = Array.make n0 ringZero in
 	let pruned_solutions = smart_map_leaves (omegaSim n0 pool pool2 used_hyps hyp_length) used_hyps option_constrs in
-	(*let pruned_solutions = prune_tree used_hyps all_solutions in*)
-	(*let solutions_list = leaves2list pruned_solutions in*)
 	let used_hyps = foldi (fun i v acc -> if v then i::acc else acc) used_hyps [] in
 	if !debug_omega then
 		begin
@@ -1568,33 +1623,9 @@ let omegaPrepT = funT (fun p ->
 			List.iter (eprintf "%i ") used_hyps;
 			eprintf "@.";
 		end;
-	(*let count = ref hyp_num in
-	for i=hyp_num-1 downto 0  do
-		count := !count + hyp_length.(i);
-		if !debug_omega then
-			eprintf "hyp_length.(%i)=%i@." i !count;
-		hyp_length.(i) <- !count
-	done;*)
 	let info = VI.invert var2index in
-	(*let tacs = List.map (fun (tree,f) -> omegaCoreT info hyp_length tree f) solutions_list in*)
 	total := !total +. (Unix.time() -. start);
-	(*if !debug_omega then
-		eprintf "actual number of cases is %i@." (List.length tacs);*)
 	(*eprintf "Total time spent in omegaPrepT is %f@." !total;*)
-	(*if List.length used_hyps = 1 then
-		(* If hypothesis contains contradiction
-			do not normalize it because it could evaluate to falsum
-			and the rest of our code would not understand it
-		*)
-		prefix_thenMLT
-			(onMHypsT used_hyps ge_elimT)
-			tacs
-	else*)
-	(*
-		prefix_thenMLT
-			(onMHypsT used_hyps (rw relNormC) thenMT onMHypsT used_hyps ge_elimT)
-			tacs
-	*)
 	let aux used_hyps (tree, f) =
 		omegaCoreT info hyp_num hyp_length used_hyps tree f
 	in

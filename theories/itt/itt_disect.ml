@@ -1,74 +1,74 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
    disect
    @end[spelling]
    @begin[doc]
    @module[Itt_disect]
-  
+
    The @tt{Itt_disect} module defines the @emph{dependent intersection}
    type $@bisect{x@colon A; B[x]}$.
    This type contains all elements $a$ from $A$ such that $a$ is also
    in $B[a]$.
-  
+
    For example if $A=@int$ and $B[x]=@set{y;@int;y>2*y}$
    then $@bisect{x@colon A; B[x]}$ contains all integers,
    such that $x>2*x$.
-  
+
    Do not confuse dependent intersection with $@isect{x;A;B[x]}$ defined
    in the @hrefmodule[Itt_isect] theory.
    The latter type refers to the intersection of a family of types.
-  
+
    In some sense the dependent intersection is similar to
    the dependent product type $@prod{x;A;B[x]}$
    (when $@isect{x;A;B[x]}$ is similar to the function space
    $@fun{x; A; B[x]}$).
-  
+
    The ordinary binary intersection can be defined just as dependent
    intersection with a constant second argument:
    $@bisect{A;B}=@bisect{x@colon A;B}$.
-  
+
    Dependent intersection is used to represent @emph{dependent} records.
    For example the record
    $@record{{@tt[x]@colon A;@tt[y]@colon B[@tt[x]]}}$
    can be defined as
    $@bisect{x@colon @record{@tt[x]@colon A};@record{B[x.@tt[x]]}}$
-  
+
    Sets also can be defined as dependent intersection
    $@set{x;A;P[x]} = @bisect{x@colon A;squash(P[x])}$
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Alexei Kopylov
    @email{kopylov@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -108,10 +108,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{disect} term denotes the dependent intersection type.
    @end[doc]
 >>
@@ -143,11 +143,11 @@ prim dintersectionFormation 'A :
    sequent { <H> >- univ[i:l] } =
    bisect{'A; x.'B['x]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The intersection $@bisect{x@colon A; B[x]}$ is well-formed if
    $A$ is a type, and $B[x]$ is a family of types indexed by
    $x @in A$.
@@ -173,7 +173,7 @@ prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
    sequent { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
    't['u;it]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
    Two elements $t1$ and $t2$ are equal in $@bisect{x@colon A; B[x]}$ if
@@ -189,7 +189,7 @@ prim dintersectionMemberEquality {| intro []; eqcd |} :
    sequent { <H> >- 't1 = 't2 in bisect{'A; x.'B['x]} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
    There is no special rule for introduction.
@@ -204,7 +204,7 @@ interactive dintersectionMemberFormation {| intro [] |} 't:
    sequent { <H> >- 't in 'B['t] } -->
    sequent { <H> >- bisect{'A; x.'B['x]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
    The elimination rule for an assumption $x@colon @bisect{y@colon A;B[y]}$
@@ -213,12 +213,12 @@ doc <:doc<
 >>
 
 prim disectElimination {| elim [] |} 'H  bind{a,b.'T['a;'b]}:
-   [main] ('t['a; 'b] :
+   [main] ('t['x; 'a; 'b] :
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]>;  a:'A; b: 'B['a]  >- 'T['a;'b] }) -->
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'T['x;'x] } =
-   't['x; 'x]
+   't['x; 'x; 'x]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    As a corollary of elimination rule we have that if
    two terms are equal in dependent intersection, they are also
@@ -268,9 +268,9 @@ let disectEliminationT = argfunT (fun n p ->
 
 let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The elimination rule has also two simpler forms.
    The first produces a witness $a$ for $A$, and the second produces two witness $a$ for $A$
    and $b$ for $B[a]$.
@@ -299,10 +299,10 @@ let disectEliminationT = argfunT (fun n p ->
 
 let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    The dependent intersection $@bisect{x@colon A; B[x]}$ is covariant
    in both $A$ and $B[x]$.
    @end[doc]
@@ -327,18 +327,18 @@ interactive dinter_associativity :
                        bisect{bisect{'A;a.'B['a]};ab.'C['ab;'ab]}
                   }}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Set type as dependent intersection}
-  
+
    As an example of using dependent intersection we show that
    sets (@hrefmodule[Itt_set]) are extensionally equal to dependent intersections.
-  
+
    First let us define $[A]$ as $@set{x;Top;A}$.
    @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Now we can prove that
    $@set{x;A;P[x]} = @bisect{x@colon A;[P[x]]}$

@@ -326,9 +326,9 @@ doc <:doc<
    @end[doc]
 >>
 prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H :
-   [main] ('g['v] : sequent { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]>; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
+   [main] ('g['e; 'v] : sequent { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]>; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
    sequent { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]> >- 'T['e] } =
-   'g[it]
+   'g['e; it]
 
 doc <:doc<
    @begin[doc]

@@ -133,9 +133,9 @@ doc <:doc<
 >>
 
 prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
-   ('t : sequent{ <H>; ('t ~ 's); <J[it]> >- 'C[it] }) -->
+   ('f['x] : sequent{ <H>; x: ('t ~ 's); <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
-   't
+   'f['x]
 
 interactive squiggle_memberEquality {| intro []; eqcd; squash |} :
   [wf] sequent{ <H> >- 't ~ 's } -->
@@ -163,9 +163,9 @@ doc <:doc<
 
 prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
    [equality] sequent { <H>; x: 'A['t]; <J['x]> >- 't ~ 's } -->
-   [main] ('t : sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }) -->
+   [main] ('f['x]: sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }) -->
    sequent { <H>; x: 'A['t]; <J['x]> >- 'C['x] } =
-   't
+   'f['x]
 
 interactive squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
    [equality] sequent{ <H> >- 't ~ 's } -->

@@ -205,8 +205,8 @@ doc <:doc<
    @end[doc]
 >>
 prim precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[i:l] :
-   [wf] sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'a = 'a in 'A } -->
-   [main] ('g['r; 'u; 'p; 'h] : sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
+   [wf] sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'a in 'A } -->
+   [main] ('g['r; 'Z; 'u; 'p; 'h] : sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
       Z: 'A -> univ[i:l];
       u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
       h: p: (a: 'A * 'Z 'a) -> 'G['p];
@@ -214,7 +214,7 @@ prim precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[
    >- 'G['p]
    }) -->
    sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['a] } =
-   precind{'a; p, h. 'g['r; lambda{x. it}; 'p; 'h]}
+   precind{'a; p, h. 'g['r; lambda{x.void}; lambda{x. it}; 'p; 'h]}
 
 doc <:doc<
    @begin[doc]

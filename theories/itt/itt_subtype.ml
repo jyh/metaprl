@@ -191,8 +191,9 @@ doc <:doc<
    Subtype elimination has two forms.  The standard @tt[subtypeElimination]
    form corresponds to induction: the witness $x@colon <<'A subtype 'B>>$ is
    replaced with the unique proof term <<it>>.  The second rule
-   @tt[subtypeElimination2] takes a witness $a @in A$ and adds the
-   additional assumption $a @in B$.
+   @tt[use_subtypeT] postulates that <<'A subtype 'B>> with <<'a in 'A>>
+   imply <<'a in 'B>>. Finally, @hrefrule[subtypeElimination2] reformulates
+   @tt[use_subtypeT] in an elimination form.
    @end[doc]
 >>
 prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
@@ -200,11 +201,16 @@ prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't[it]
 
-prim subtypeElimination2 'H 'a 'b :
+prim useSubtype 'A :
+   sequent { <H> >- 'A subtype 'B } -->
+   sequent { <H> >- 'a = 'b in 'A } -->
+   sequent { <H> >- 'a = 'b in 'B } =
+   it
+
+interactive subtypeElimination2 'H 'a 'b :
    [wf] sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->
-   ('t['x] : sequent { <H>; x: 'A subtype 'B; <J['x]>; 'a='b in 'B >- 'C['x] }) -->
-   sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
-   't[it]
+   sequent { <H>; x: 'A subtype 'B; <J['x]>; y:'a='b in 'B >- 'C['x] } -->
+   sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]

@@ -278,9 +278,9 @@ doc <:doc<
 prim well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'a :
    [main] sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'a in 'A } -->
    [main] sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; a3: 'A; 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
-   [main] ('t['u] : sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
+   [main] ('t['p; 'u] : sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
    sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'C['p] } =
-   't[it]
+   't['p; it]
 
 prim well_founded {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->

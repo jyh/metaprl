@@ -19,7 +19,7 @@ B	b	t
 NComment!doc	doc	doc Comment
 O	o5	doc
 NComment!module	module	module Comment
-P	p5	String Itt_unitringCE
+P	p5	String Itt_ring_uce
 O	o6	module p5
 T	t6	o6
 B	b6	t6
@@ -2039,7 +2039,7 @@ B	b816	t816
 P	p816	Number 1510
 O	o816	location p724 p816
 O	o817	str_open p724 p816
-P	p817	String Itt_ringE
+P	p817	String Itt_ring_e
 O	o818	string p817
 T	t818	o818
 B	b818	t818
@@ -2085,7 +2085,7 @@ B	b834	t834
 T	t835	o833 b834
 B	b835	t835
 P	p835	Number 1551
-P	p836	String "Loading Itt_unitringCE%t"
+P	p836	String "Loading Itt_ring_uce%t"
 O	o836	string p835 p830 p836
 T	t836	o836
 B	b836	t836
@@ -2174,8 +2174,8 @@ O	o872	location p871 p872
 NSummary!definition	definition	definition Summary
 P	p873	String unfold_preunitringE1
 O	o873	definition p873
-NItt_unitringCE	Itt_unitringCE	Itt_unitringCE NIL
-NItt_unitringCE!preunitringE	preunitringE	preunitringE Itt_unitringCE
+NItt_ring_uce	Itt_ring_uce	Itt_ring_uce NIL
+NItt_ring_uce!preunitringE	preunitringE	preunitringE Itt_ring_uce
 P	p874	MLevel 0 i 0
 O	o874	preunitringE p874
 T	t874	o874
@@ -2222,7 +2222,7 @@ P	p887	Number 2166
 O	o887	location p886 p887
 P	p888	String unfold_isUnitRingCE1
 O	o888	definition p888
-NItt_unitringCE!isUnitRingCE	isUnitRingCE	isUnitRingCE Itt_unitringCE
+NItt_ring_uce!isUnitRingCE	isUnitRingCE	isUnitRingCE Itt_ring_uce
 O	o889	isUnitRingCE
 Vf	f	f\\ \\
 B	b889	f
@@ -2240,8 +2240,8 @@ NItt_grouplikeobj!isCommutative	isCommutative	isCommutative Itt_grouplikeobj
 O	o892	isCommutative
 T	t892	o892 b889
 B	b892	t892
-NItt_ringE	Itt_ringE	Itt_ringE NIL
-NItt_ringE!eqDecidable	eqDecidable	eqDecidable Itt_ringE
+NItt_ring_e	Itt_ring_e	Itt_ring_e NIL
+NItt_ring_e!eqDecidable	eqDecidable	eqDecidable Itt_ring_e
 O	o893	eqDecidable
 T	t893	o893 b889
 B	b893	t893
@@ -2258,7 +2258,7 @@ P	p898	Number 2261
 O	o898	location p897 p898
 P	p899	String unfold_unitringCE1
 O	o899	definition p899
-NItt_unitringCE!unitringCE	unitringCE	unitringCE Itt_unitringCE
+NItt_ring_uce!unitringCE	unitringCE	unitringCE Itt_ring_uce
 O	o900	unitringCE p874
 T	t900	o900
 B	b900	t900

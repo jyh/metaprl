@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[doc]
-   @module[Itt_intDomainE]
+   @module[Itt_intdomain_e]
 
    This theory defines integral domains with decidable equality.
    @end[doc]
@@ -37,8 +37,9 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Itt_intdomain
-extends Itt_unitringCE
+extends Itt_ring_uce
 doc docoff
+extends Itt_poly
 
 open Lm_debug
 open Tactic_type.Tacticals
@@ -47,12 +48,12 @@ open Top_conversionals
 
 open Itt_grouplikeobj
 open Itt_intdomain
-open Itt_unitringCE
-open Itt_ringE
+open Itt_ring_uce
+open Itt_ring_e
 open Itt_equal
 
 let _ =
-   show_loading "Loading Itt_intdomainE%t"
+   show_loading "Loading Itt_intdomain_e%t"
 
 (************************************************************************
  * Commutative intDomain with Decidable Equality                             *
@@ -167,6 +168,9 @@ doc docoff
 (************************************************************************
  * Polynomials                                                          *
  ************************************************************************)
+interactive poly_intdomain {| intro [] |} :
+   [wf] sequent { <H> >- 'F in intDomainE[i:l] } -->
+   sequent { <H> >- poly{'F} in intDomainE[i:l] }
 
 
 (************************************************************************

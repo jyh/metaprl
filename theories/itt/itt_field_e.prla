@@ -19,7 +19,7 @@ B	b	t
 NComment!doc	doc	doc Comment
 O	o5	doc
 NComment!module	module	module Comment
-P	p5	String Itt_fieldE
+P	p5	String Itt_field_e
 O	o6	module p5
 T	t6	o6
 B	b6	t6
@@ -2033,7 +2033,7 @@ P	p814	Number 1473
 P	p815	Number 1487
 O	o815	location p814 p815
 O	o816	str_open p814 p815
-P	p816	String Itt_ringE
+P	p816	String Itt_ring_e
 O	o817	string p816
 T	t817	o817
 B	b817	t817
@@ -2079,7 +2079,7 @@ B	b833	t833
 T	t834	o832 b833
 B	b834	t834
 P	p834	Number 1528
-P	p835	String "Loading Itt_fieldE%t"
+P	p835	String "Loading Itt_field_e%t"
 O	o835	string p834 p829 p835
 T	t835	o835
 B	b835	t835
@@ -2160,8 +2160,8 @@ O	o868	location p867 p868
 NSummary!definition	definition	definition Summary
 P	p869	String unfold_prefieldE1
 O	o869	definition p869
-NItt_fieldE	Itt_fieldE	Itt_fieldE NIL
-NItt_fieldE!prefieldE	prefieldE	prefieldE Itt_fieldE
+NItt_field_e	Itt_field_e	Itt_field_e NIL
+NItt_field_e!prefieldE	prefieldE	prefieldE Itt_field_e
 P	p870	MLevel 0 i 0
 O	o870	prefieldE p870
 T	t870	o870
@@ -2208,7 +2208,7 @@ P	p883	Number 2080
 O	o883	location p882 p883
 P	p884	String unfold_isFieldE1
 O	o884	definition p884
-NItt_fieldE!isFieldE	isFieldE	isFieldE Itt_fieldE
+NItt_field_e!isFieldE	isFieldE	isFieldE Itt_field_e
 O	o885	isFieldE
 Vf	f	f\\ \\
 B	b885	f
@@ -2221,8 +2221,8 @@ NItt_field2!isField	isField	isField Itt_field2
 O	o887	isField
 T	t887	o887 b885
 B	b887	t887
-NItt_ringE	Itt_ringE	Itt_ringE NIL
-NItt_ringE!eqDecidable	eqDecidable	eqDecidable Itt_ringE
+NItt_ring_e	Itt_ring_e	Itt_ring_e NIL
+NItt_ring_e!eqDecidable	eqDecidable	eqDecidable Itt_ring_e
 O	o888	eqDecidable
 T	t888	o888 b885
 B	b888	t888
@@ -2237,7 +2237,7 @@ P	p892	Number 2160
 O	o892	location p891 p892
 P	p893	String unfold_fieldE1
 O	o893	definition p893
-NItt_fieldE!fieldE	fieldE	fieldE Itt_fieldE
+NItt_field_e!fieldE	fieldE	fieldE Itt_field_e
 O	o894	fieldE p870
 T	t894	o894
 B	b894	t894

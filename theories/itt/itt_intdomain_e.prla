@@ -2039,7 +2039,7 @@ P	p815	Number 1498
 P	p816	Number 1517
 O	o816	location p815 p816
 O	o817	str_open p815 p816
-P	p817	String Itt_unitringCE
+P	p817	String Itt_ring_uce
 O	o818	string p817
 T	t818	o818
 B	b818	t818
@@ -2055,7 +2055,7 @@ P	p822	Number 1518
 P	p823	Number 1532
 O	o823	location p822 p823
 O	o824	str_open p822 p823
-P	p824	String Itt_ringE
+P	p824	String Itt_ring_e
 O	o825	string p824
 T	t825	o825
 B	b825	t825
@@ -2101,7 +2101,7 @@ B	b841	t841
 T	t842	o840 b841
 B	b842	t842
 P	p842	Number 1573
-P	p843	String "Loading Itt_intdomainE%t"
+P	p843	String "Loading Itt_intdomain_e%t"
 O	o843	string p842 p837 p843
 T	t843	o843
 B	b843	t843
@@ -2190,8 +2190,8 @@ O	o879	location p878 p879
 NSummary!definition	definition	definition Summary
 P	p880	String unfold_isIntDomainE1
 O	o880	definition p880
-NItt_intdomainE	Itt_intdomainE	Itt_intdomainE NIL
-NItt_intdomainE!isIntDomainE	isIntDomainE	isIntDomainE Itt_intdomainE
+NItt_intdomain_e	Itt_intdomain_e	Itt_intdomain_e NIL
+NItt_intdomain_e!isIntDomainE	isIntDomainE	isIntDomainE Itt_intdomain_e
 O	o881	isIntDomainE
 Vf	f	f\\ \\
 B	b881	f
@@ -2205,8 +2205,8 @@ NItt_intdomain!isIntDomain	isIntDomain	isIntDomain Itt_intdomain
 O	o883	isIntDomain
 T	t883	o883 b881
 B	b883	t883
-NItt_ringE	Itt_ringE	Itt_ringE NIL
-NItt_ringE!eqDecidable	eqDecidable	eqDecidable Itt_ringE
+NItt_ring_e	Itt_ring_e	Itt_ring_e NIL
+NItt_ring_e!eqDecidable	eqDecidable	eqDecidable Itt_ring_e
 O	o884	eqDecidable
 T	t884	o884 b881
 B	b884	t884
@@ -2221,7 +2221,7 @@ P	p888	Number 2145
 O	o888	location p887 p888
 P	p889	String unfold_intDomainE1
 O	o889	definition p889
-NItt_intdomainE!intDomainE	intDomainE	intDomainE Itt_intdomainE
+NItt_intdomain_e!intDomainE	intDomainE	intDomainE Itt_intdomain_e
 P	p890	MLevel 0 i 0
 O	o890	intDomainE p890
 T	t890	o890
@@ -2229,8 +2229,8 @@ B	b890	t890
 NItt_set	Itt_set	Itt_set NIL
 NItt_set!set	set	set Itt_set
 O	o891	set
-NItt_unitringCE	Itt_unitringCE	Itt_unitringCE NIL
-NItt_unitringCE!preunitringE	preunitringE	preunitringE Itt_unitringCE
+NItt_ring_uce	Itt_ring_uce	Itt_ring_uce NIL
+NItt_ring_uce!preunitringE	preunitringE	preunitringE Itt_ring_uce
 O	o892	preunitringE p890
 T	t892	o892
 B	b892	t892

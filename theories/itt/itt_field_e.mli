@@ -1,5 +1,5 @@
 (*
- * Commutative unitrings with decidable equality.
+ * Fields with decidable equality.
  *
  * ----------------------------------------------------------------
  *
@@ -30,8 +30,8 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-extends Itt_unitring
-extends Itt_ringE
+extends Itt_field2
+extends Itt_intdomain_e
 
 open Tactic_type.Conversionals
 
@@ -39,24 +39,24 @@ open Tactic_type.Conversionals
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare preunitringE[i:l]
-declare isUnitRingCE{'f}
-declare unitringCE[i:l]
+declare prefieldE[i:l]
+declare isFieldE{'f}
+declare fieldE[i:l]
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-topval unfold_preunitringE : conv
-topval unfold_isUnitRingCE : conv
-topval unfold_unitringCE : conv
+topval unfold_prefieldE : conv
+topval unfold_isFieldE : conv
+topval unfold_fieldE : conv
 
-topval fold_preunitringE1 : conv
-topval fold_preunitringE : conv
-topval fold_isUnitRingCE1 : conv
-topval fold_isUnitRingCE : conv
-topval fold_unitringCE1 : conv
-topval fold_unitringCE : conv
+topval fold_prefieldE1 : conv
+topval fold_prefieldE : conv
+topval fold_isFieldE1 : conv
+topval fold_isFieldE : conv
+topval fold_fieldE1 : conv
+topval fold_fieldE : conv
 
 (*
  * -*-

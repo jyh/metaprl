@@ -92,13 +92,13 @@ MPFILES :=\
 	itt_field\
 	itt_poly\
 	itt_ring2\
-	itt_ringE\
+	itt_ring_e\
 	itt_unitring\
-	itt_unitringCE\
+	itt_ring_uce\
 	itt_intdomain\
-	itt_intdomainE\
+	itt_intdomain_e\
 	itt_field2\
-	itt_fieldE\
+	itt_field_e\
 	itt_order\
 	itt_example\
 	itt_rat\

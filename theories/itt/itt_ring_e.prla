@@ -19,7 +19,7 @@ B	b	t
 NComment!doc	doc	doc Comment
 O	o5	doc
 NComment!module	module	module Comment
-P	p5	String Itt_ringE
+P	p5	String Itt_ring_e
 O	o6	module p5
 T	t6	o6
 B	b6	t6
@@ -2047,7 +2047,7 @@ B	b819	t819
 T	t820	o818 b819
 B	b820	t820
 P	p820	Number 1491
-P	p821	String "Loading Itt_ringE%t"
+P	p821	String "Loading Itt_ring_e%t"
 O	o821	string p820 p815 p821
 T	t821	o821
 B	b821	t821
@@ -2122,8 +2122,8 @@ O	o849	location p664 p849
 NSummary!definition	definition	definition Summary
 P	p850	String unfold_eqDecidable
 O	o850	definition p850
-NItt_ringE	Itt_ringE	Itt_ringE NIL
-NItt_ringE!eqDecidable	eqDecidable	eqDecidable Itt_ringE
+NItt_ring_e	Itt_ring_e	Itt_ring_e NIL
+NItt_ring_e!eqDecidable	eqDecidable	eqDecidable Itt_ring_e
 O	o851	eqDecidable
 Vf	f	f\\ \\
 B	b851	f
@@ -2605,7 +2605,7 @@ P	p1038	Number 3496
 O	o1038	location p1037 p1038
 P	p1039	String unfold_preringE1
 O	o1039	definition p1039
-NItt_ringE!preringE	preringE	preringE Itt_ringE
+NItt_ring_e!preringE	preringE	preringE Itt_ring_e
 P	p1040	MLevel 0 i 0
 O	o1040	preringE p1040
 T	t1040	o1040
@@ -2640,7 +2640,7 @@ P	p1051	Number 3571
 O	o1051	location p1050 p1051
 P	p1052	String unfold_isRingE1
 O	o1052	definition p1052
-NItt_ringE!isRingE	isRingE	isRingE Itt_ringE
+NItt_ring_e!isRingE	isRingE	isRingE Itt_ring_e
 O	o1053	isRingE
 T	t1053	o1053 b851
 B	b1053	t1053
@@ -2661,7 +2661,7 @@ P	p1059	Number 3647
 O	o1059	location p1058 p1059
 P	p1060	String unfold_ringE1
 O	o1060	definition p1060
-NItt_ringE!ringE	ringE	ringE Itt_ringE
+NItt_ring_e!ringE	ringE	ringE Itt_ring_e
 O	o1061	ringE p1040
 T	t1061	o1061
 B	b1061	t1061

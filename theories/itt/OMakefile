@@ -84,14 +84,14 @@ MPFILES =\
    itt_ring\
    itt_field\
    itt_ring2\
-   itt_ringE\
+   itt_ring_e\
    itt_poly\
    itt_unitring\
-   itt_unitringCE\
+   itt_ring_uce\
    itt_intdomain\
-   itt_intdomainE\
+   itt_intdomain_e\
    itt_field2\
-   itt_fieldE\
+   itt_field_e\
    itt_order\
    itt_rat\
    itt_supinf\
@@ -165,14 +165,14 @@ PRINT_THEORIES =\
     itt_cyclic_group\
     itt_quotient_group\
     itt_ring2\
-    itt_ringE\
+    itt_ring_e\
     itt_poly\
     itt_unitring\
-    itt_unitringCE\
+    itt_ring_uce\
     itt_intdomain\
-    itt_intdomainE\
+    itt_intdomain_e\
     itt_field2\
-    itt_fieldE\
+    itt_field_e\
     itt_collection\
     itt_pointwise\
     itt_pointwise2

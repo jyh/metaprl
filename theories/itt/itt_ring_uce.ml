@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[doc]
-   @module[Itt_unitringCE]
+   @module[Itt_ring_uce]
 
    This theory defines commutative unitrings with decidable equality.
    @end[doc]
@@ -37,8 +37,9 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Itt_unitring
-extends Itt_ringE
+extends Itt_ring_e
 doc docoff
+extends Itt_poly
 
 open Lm_debug
 open Tactic_type.Tacticals
@@ -47,11 +48,12 @@ open Top_conversionals
 
 open Itt_grouplikeobj
 open Itt_unitring
-open Itt_ringE
+open Itt_ring_e
+open Itt_poly
 open Itt_equal
 
 let _ =
-   show_loading "Loading Itt_unitringCE%t"
+   show_loading "Loading Itt_ring_uce%t"
 
 (************************************************************************
  * Commutative unitring with Decidable Equality                             *
@@ -190,6 +192,9 @@ doc docoff
 (************************************************************************
  * Polynomials                                                          *
  ************************************************************************)
+interactive poly_ring {| intro [] |} :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   sequent { <H> >- poly{'F} in unitringCE[i:l] }
 
 
 (************************************************************************

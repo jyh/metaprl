@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[doc]
-   @module[Itt_ringE]
+   @module[Itt_ring_e]
 
    This theory defines rings with decidable equality.
    @end[doc]
@@ -49,7 +49,7 @@ open Itt_ring2
 open Itt_equal
 
 let _ =
-   show_loading "Loading Itt_ringE%t"
+   show_loading "Loading Itt_ring_e%t"
 
 (************************************************************************
  * Decidable Equality                                                   *

@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[doc]
-   @module[Itt_fieldE]
+   @module[Itt_field_e]
 
    This theory defines fields with decidable equality.
    @end[doc]
@@ -37,8 +37,9 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Itt_field2
-extends Itt_ringE
+extends Itt_intdomain_e
 doc docoff
+extends Itt_poly
 
 open Lm_debug
 open Tactic_type.Tacticals
@@ -46,12 +47,14 @@ open Dtactic
 open Top_conversionals
 
 open Itt_grouplikeobj
+open Itt_intdomain_e
 open Itt_field2
-open Itt_ringE
+open Itt_ring_e
+open Itt_poly
 open Itt_equal
 
 let _ =
-   show_loading "Loading Itt_fieldE%t"
+   show_loading "Loading Itt_field_e%t"
 
 (************************************************************************
  * Field with Decidable Equality                                        *
@@ -169,6 +172,9 @@ doc docoff
 (************************************************************************
  * Polynomials                                                          *
  ************************************************************************)
+interactive poly_field {| intro [] |} :
+   [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
+   sequent { <H> >- poly{'F} in intDomainE[i:l] }
 
 
 

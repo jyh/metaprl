@@ -31,7 +31,7 @@
  *)
 
 extends Itt_intdomain
-extends Itt_unitringCE
+extends Itt_ring_uce
 
 open Tactic_type.Conversionals
 

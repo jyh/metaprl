@@ -796,15 +796,15 @@ interactive index_mem {| intro [AutoMustComplete] |} :
     sequent { <H> >- 'l in list } -->
     sequent { <H> >- 'i in Index{'l} }
 
-interactive index_nil_elim {| elim []; squash; nth_hyp |} 'H :
-   sequent { <H>; i:Index{nil}; <J['i]> >-  'P['i] }
-
 interactive index_elim {| elim [] |} 'H :
    sequent { <H>; i:nat; 'i<length{'l}; <J['i]> >-  'P['i] } -->
    sequent { <H>; i:Index{'l}; <J['i]> >-  'P['i] }
 
 interactive index_is_int {| nth_hyp |} 'H :
     sequent { <H>; i:Index{'l}; <J['i]> >- 'i in int }
+
+interactive index_nil_elim {| elim []; squash; nth_hyp |} 'H :
+   sequent { <H>; i:Index{nil}; <J['i]> >-  'P['i] }
 
 interactive nth_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->

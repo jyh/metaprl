@@ -158,7 +158,7 @@ let create () =
    Hashtbl.create 201
 
 let add tbl (module_name,name,expr) =
-   Hashtbl.add tbl name (module_name,expr)
+   Hashtbl.add tbl name ((String.capitalize module_name),expr)
 
 let add_commands tbl =
    List.iter (fun (name, expr) -> Hashtbl.add tbl name ("",expr))

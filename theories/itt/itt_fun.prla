@@ -1551,16 +1551,10 @@ B	b573	t573
 NSummary!ext_unjustified	ext_unjustified	ext_unjustified Summary
 O	o573	ext_unjustified
 O	o574	tactic_arg p537
-NItt_squash	Itt_squash	Itt_squash NIL
-NItt_squash!squash	squash574	squash Base_trivial
-O	o575	squash574
-T	t575	o575
-B	b575	t575
-T	t576	o b575 b4
-S	s576	t576 h
+S	s576	t541 h
 G	s576	t545
 B	b576	s576
-S	s577	t576 h
+S	s577	t541 h
 G	s577	t550
 B	b577	s577
 T	t577	o b577 b4
@@ -1602,7 +1596,7 @@ B	b595	t594
 P	p595	String "thinT 2 thenT trivialT"
 O	o595	ext_rule p595
 H	h595	x t543
-S	s595	t576 h h595
+S	s595	t541 h h595
 G	s595	t550
 B	b596	s595
 T	t596	o565 b596 b579
@@ -2165,10 +2159,10 @@ T	t815	o563 b814
 B	b815	t815
 P	p815	String "rwch unfold_fun 1 2 thenT trivialT"
 O	o815	ext_rule p815
-S	s815	t576 h h753 h754
+S	s815	t541 h h753 h754
 G	s815	t801
 B	b816	s815
-S	s816	t576 h h731 h732
+S	s816	t541 h h731 h732
 G	s816	t801
 B	b817	s816
 T	t817	o b817 b811
@@ -2299,13 +2293,13 @@ B	b870	t870
 P	p870	String "rwch unfold_fun 1 0 thenT trivialT"
 O	o870	ext_rule p870
 T	t871	o519 b532 b848 b849
-S	s871	t576 h
+S	s871	t541 h
 G	s871	t871
 B	b871	s871
-S	s872	t576 h
+S	s872	t541 h
 G	s872	t850
 B	b872	s872
-S	s873	t576 h
+S	s873	t541 h
 G	s873	t853
 B	b873	s873
 T	t873	o b873 b4
@@ -2397,10 +2391,10 @@ T	t910	o519 b516 b856 b856
 S	s910	t554 h
 G	s910	t910
 B	b910	s910
-S	s911	t576 h
+S	s911	t541 h
 G	s911	t895
 B	b911	s911
-S	s912	t576 h
+S	s912	t541 h
 G	s912	t898
 B	b912	s912
 T	t912	o b912 b4
@@ -2422,13 +2416,13 @@ B	b920	t919
 T	t920	o564 b915 b917 b920
 B	b921	t920
 T	t921	o609 b532 b848
-S	s921	t576 h
+S	s921	t541 h
 G	s921	t921
 B	b922	s921
 T	t922	o565 b922 b914
 B	b923	t922
 T	t923	o519 b532 b848 b848
-S	s923	t576 h
+S	s923	t541 h
 G	s923	t923
 B	b924	s923
 T	t924	o565 b924 b914
@@ -2444,7 +2438,7 @@ B	b929	t928
 T	t929	o565 b912 b914
 B	b930	t929
 T	t930	o519 b515 b686 b686
-S	s930	t576 h
+S	s930	t541 h
 G	s930	t930
 B	b931	s930
 T	t931	o565 b931 b914
@@ -2543,10 +2537,10 @@ T	t973	o564 b972 b4 b568
 B	b973	t973
 T	t974	o563 b973
 B	b974	t974
-S	s974	t576 h
+S	s974	t541 h
 G	s974	t962
 B	b975	s974
-S	s975	t576 h
+S	s975	t541 h
 G	s975	t964
 B	b976	s975
 T	t976	o b976 b4
@@ -2580,7 +2574,7 @@ B	b989	t988
 T	t989	o570 b562 b989 b4 b4
 B	b990	t989
 H	h990	a t543
-S	s990	t576 h h990
+S	s990	t541 h h990
 G	s990	t964
 B	b991	s990
 T	t991	o565 b991 b978
@@ -2716,13 +2710,13 @@ B	b1042	t1042
 T	t1043	o514 b755 b1042
 B	b1043	t1043
 T	t1044	o609 b542 b1043
-S	s1044	t576 h h1016 h1032
+S	s1044	t541 h h1016 h1032
 G	s1044	t1044
 B	b1044	s1044
 T	t1045	o565 b1044 b1012
 B	b1045	t1045
 T	t1046	o519 b542 b1043 b1043
-S	s1046	t576 h h1016 h1032
+S	s1046	t541 h h1016 h1032
 G	s1046	t1046
 B	b1046	s1046
 T	t1047	o565 b1046 b1012

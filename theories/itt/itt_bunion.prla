@@ -1590,16 +1590,10 @@ T	t580	o546 b547 b577 b579
 S	s580	t559 h
 G	s580	t580
 B	b580	s580
-NItt_squash	Itt_squash	Itt_squash NIL
-NItt_squash!squash	squash580	squash Itt_squash
-O	o580	squash580
-T	t581	o580
-B	b581	t581
-T	t582	o b581 b4
-S	s582	t582 h
+S	s582	t546 h
 G	s582	t550
 B	b582	s582
-S	s583	t582 h
+S	s583	t546 h
 G	s583	t555
 B	b583	s583
 T	t583	o b583 b4
@@ -1614,7 +1608,7 @@ H	h587	x t512
 B	b588	t576
 B	b589	t578
 T	t589	o546 b547 b588 b589
-S	s589	t582 h h587
+S	s589	t546 h h587
 G	s589	t589
 B	b590	s589
 T	t590	o570 b590 b585
@@ -1638,7 +1632,7 @@ B	b597	t597
 T	t598	o513 b596 b549 b554
 B	b598	t598
 T	t599	o546 b547 b597 b598
-S	s599	t582 h
+S	s599	t546 h
 G	s599	t599
 B	b599	s599
 T	t600	o570 b599 b585
@@ -1656,7 +1650,7 @@ B	b603	t603
 T	t604	o513 b602 b549 b554
 B	b604	t604
 T	t605	o546 b547 b603 b604
-S	s605	t582 h
+S	s605	t546 h
 G	s605	t605
 B	b605	s605
 T	t606	o570 b605 b585
@@ -1748,10 +1742,10 @@ T	t642	o627 b516
 S	s642	t559 h
 G	s642	t642
 B	b642	s642
-S	s643	t582 h
+S	s643	t546 h
 G	s643	t627
 B	b643	s643
-S	s644	t582 h
+S	s644	t546 h
 G	s644	t630
 B	b644	s644
 T	t644	o b644 b4
@@ -1764,7 +1758,7 @@ T	t647	o569 b647 b4 b573
 B	b648	t647
 B	b649	t515
 T	t649	o627 b649
-S	s649	t582 h h587
+S	s649	t546 h h587
 G	s649	t649
 B	b650	s649
 T	t650	o570 b650 b646
@@ -1889,7 +1883,7 @@ T	t699	o546 b516 b514 b687
 S	s699	t559 h
 G	s699	t699
 B	b699	s699
-S	s700	t582 h
+S	s700	t546 h
 G	s700	t688
 B	b700	s700
 T	t700	o b700 b645
@@ -1907,7 +1901,7 @@ B	b704	t704
 T	t705	o513 b704 b480 b481
 B	b705	t705
 T	t706	o627 b705
-S	s706	t582 h h703
+S	s706	t546 h h703
 G	s706	t706
 B	b706	s706
 T	t707	o570 b706 b701
@@ -1917,7 +1911,7 @@ B	b708	t708
 T	t709	o513 b596 b480 b481
 B	b709	t709
 T	t710	o546 b709 b514 b687
-S	s710	t582 h
+S	s710	t546 h
 G	s710	t710
 B	b710	s710
 T	t711	o570 b710 b701
@@ -2013,7 +2007,7 @@ T	t750	o568 b749
 B	b750	t750
 P	p750	String "withT << bfalse >> (dT 0) thenT autoT"
 O	o750	ext_rule p750
-S	s750	t582 h
+S	s750	t546 h
 G	s750	t741
 B	b751	s750
 T	t751	o b643 b4
@@ -2026,7 +2020,7 @@ T	t754	o569 b754 b4 b573
 B	b755	t754
 T	t755	o546 b512 b704 b602
 H	h755	v t755
-S	s755	t582 h h703 h755
+S	s755	t546 h h703 h755
 G	s755	t630
 B	b756	s755
 T	t756	o570 b756 b753
@@ -2036,7 +2030,7 @@ B	b758	t757
 T	t758	o513 b602 b480 b481
 B	b759	t758
 T	t759	o546 b759 b514 b687
-S	s759	t582 h
+S	s759	t546 h
 G	s759	t759
 B	b760	s759
 T	t760	o570 b760 b753
@@ -2051,7 +2045,7 @@ T	t764	o576 b755 b764
 B	b765	t764
 P	p765	String "equalTypeT << 'x >> << 'y >>"
 O	o765	ext_rule p765
-S	s765	t582 h h703 h755
+S	s765	t546 h h703 h755
 G	s765	t741
 B	b766	s765
 T	t766	o570 b766 b753

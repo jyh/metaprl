@@ -42,7 +42,7 @@ prec prec_bunion
 rewrite unfold_bunion : bunion{'A; 'B} <-->
                           tunion{bool; x. ifthenelse{'x; 'A; 'B}}
 
-val fold_bunion : conv
+topval fold_bunion : conv
 
 (*
  * -*-

@@ -4410,8 +4410,8 @@ T	t1749	o b608 b1748
 B	b1749	t1749
 P	p1749	String wf
 O	o1749	tactic_arg p1749
-NItt_squash	Itt_squash	Itt_squash NIL
-NItt_squash!squash	squash	squash Itt_squash
+NBase_trivial	Base_trivial	Base_trivial NIL
+NBase_trivial!squash	squash	squash Base_trivial
 O	o1750	squash
 T	t1750	o1750
 B	b1750	t1750

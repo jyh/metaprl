@@ -2522,20 +2522,14 @@ O	o944	ext_rule p944
 NSummary!ext_unjustified	ext_unjustified	ext_unjustified Summary
 O	o945	ext_unjustified
 O	o946	tactic_arg p703
-NItt_squash	Itt_squash	Itt_squash NIL
-NItt_squash!squash	squash946	squash Itt_squash
-O	o947	squash946
-T	t947	o947
-B	b947	t947
-T	t948	o b947 b4
 T	t949	o728 b894 b903 b903
-S	s949	t948 h
+S	s949	t707 h
 G	s949	t949
 B	b949	s949
-S	s950	t948 h
+S	s950	t707 h
 G	s950	t930
 B	b950	s950
-S	s951	t948 h h873 h874 h907
+S	s951	t707 h h873 h874 h907
 G	s951	t933
 B	b951	s951
 T	t951	o b951 b4
@@ -2589,7 +2583,7 @@ B	b971	t971
 T	t972	o944 b766 b971 b4 b4
 B	b972	t972
 T	t973	o728 b908 b909 b909
-S	s973	t948 h h873 h874 h907
+S	s973	t707 h h873 h874 h907
 G	s973	t973
 B	b973	s973
 T	t974	o769 b973 b953

@@ -60,8 +60,6 @@ declare mod_arith_unsigned{ 'precision; 'num }
 
 declare true_set
 declare false_set
-declare val_true
-declare val_false
 declare atomEnum_eq{ 'a; 'b }
 
 (*

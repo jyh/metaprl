@@ -80,7 +80,7 @@ dform rawint_set_df : except_mode[src] ::
 (* Membership tests. *)
 
 dform in_interval_df : except_mode[src] :: in_interval{'num; 'interval} =
-   lzone slot{'num} Nuprl_font!member slot{'interval} ezone
+   lzone slot{'num} `" " Nuprl_font!member `" " slot{'interval} ezone
 dform member_df : except_mode[src] :: is_member{ 'num; 'set } =
    pushm[0] szone slot{'num} `" " Nuprl_font!member hspace
    szone slot{'set} ezone

@@ -153,9 +153,8 @@ prim btermUniv {| intro [] |} :
    sequent { <H> >- BTerm in univ[i:l] } =
    it
 
-prim btermVar {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- 'v in BTerm }
+prim btermVar {| nth_hyp |} 'H :
+   sequent { <H>; v: Var; <J['v]> >- 'v in BTerm }
    = it
 
 prim makebterm_wf {| intro [] |} :
@@ -269,6 +268,12 @@ iform dest_bterm:
                    op,subterms. 'op_case['op; 'subterms] }
    <--> bterm_ind{'bt; v.'var_case['v];
                        op,subterms,ind. 'op_case['op; 'subterms] }
+
+interactive_rw make_bterm_depth:
+   ('op in BOperator) -->
+   ('subterms in list{BTerm}) -->
+   (compatible_shapes{'op; 'subterms}) -->
+   make_bterm{'op;'subterms} <--> make_bterm{'op; op_bdepth{'op};'subterms}
 doc docoff
 
 dform make_bterm_df: make_bterm{'op;'bdepth;'subterms} =

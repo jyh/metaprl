@@ -131,7 +131,7 @@ declare cmp_lexi{'m1; 'm2; 'n; 'cmp; 'eq}
 
 prim_rw reduce_cmp_lexi : cmp_lexi{('k1,'f1); ('k2,'f2); 'n; 'cmp; 'eq} <-->
 	ind{'n -@ 1;
-		'cmp ('f1 ('n -@ 1)) ('f2 ('n -@ 1));
+		'cmp ('f1 0) ('f2 0);
 		i_cmp,f.(if 'eq ('f1 'i_cmp) ('f2 'i_cmp)
 				then 'f
 				else 'cmp ('f1 'i_cmp) ('f2 'i_cmp))}

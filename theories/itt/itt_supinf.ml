@@ -1470,8 +1470,8 @@ let rec iter p info constrs v =
 							let tm=mk_ge_rat_term sup_tm inf_tm in
 							source2hypT info supsrc thenMT
 							source2hypT info src thenMT
-							(assertT tm thenAT geTransitive (VI.restore info v)) (*thenMT
-							rw normalizeC (-1)*)
+							(assertT tm thenAT geTransitive (VI.restore info v)) thenMT
+							rw normalizeC (-1)
 					end
 			end
 

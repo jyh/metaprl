@@ -28,6 +28,7 @@ PRINT_THEORIES =\
     $(SUPPORT)/tactics/dtactic\
     base_trivial\
     base_rewrite\
+    base_reflection\
     $(SUPPORT)/display/summary\
     $(SUPPORT)/display/comment\
     $(SUPPORT)/shell/mptop

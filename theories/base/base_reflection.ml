@@ -2,7 +2,10 @@ doc <:doc<
    @begin[doc]
    @module[Base_reflection]
 
-   @end[doc]
+   The @tt[Base_reflection] module defines computation over bterms. In
+   this module, we formalize the bterm constants and computational
+   operations on them by exposing some of the system internals to the user.
+  @end[doc]
 
    ----------------------------------------------------------------
 
@@ -122,9 +125,19 @@ let rec mk_rlist_term = function
  | [] ->
       rnil_term
 
-(************************************************************************
- * Reflection terms.
- *)
+doc <:doc< @begin[doc]
+   @modsection{Bterm}
+
+   We use sequents for representing bterms internally. The internal
+   representation for $bterm@{x_1,@ldots,x_n.t[@vec{x}]@}$ is
+   $x_1:@_; @~@ldots; @~x_n:@_ @~@vdash_{bterm}@~t[@vec{x}]$, where
+   $n @ge 0$, << 't >> is constructed from quoted operators, and
+   $x_i$ and $@_$ can be anything. The sequent contexts represent
+   meta-variables that denote arbitrary sequences of bterm bindings.
+   For example, $bterm@{<<Gamma>>,x,<<Delta>>.x@}$ is a schema for an
+   arbitrary bterm variable.
+@end[doc] >>
+
 declare sequent [bterm] { Term : Term >- Term } : Term
 declare term
 
@@ -170,6 +183,16 @@ let dest_bterm_sequent_and_rename term vars =
  *          ...
  *            if_bterm{bterm{<H>; <Jn> >- 'tn}; 'tt}...}}
  *)
+
+doc <:doc< @begin[doc]
+   @modsection{Computational Operations on Bterms}
+   @modsubsection{If_bterm}
+
+   << if_quoted_op{'op; 'tt} >> evaluates to << 'tt >> when << 'op >> is a
+   quoted bterm operator and must fail to evaluate otherwise.
+   << if_bterm{'bt; 'tt} >> evaluates to << 'tt >> when << 'bt >> is a
+   well-formed bterm operator and must fail to evaluate otherwise.
+@end[doc] >>
 
 declare if_quoted_op{'op; 'tt}
 
@@ -224,6 +247,13 @@ let resource reduce +=
  *    [ bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn} ]
  *)
 
+doc <:doc< @begin[doc]
+   @modsubsection{Subterms}
+
+   << subterms{'bt} >> returns a list of sub-bterms of << 'bt >>, undefined
+   if << 'bt >> is not a well-formed bterm.
+@end[doc] >>
+
 declare subterms{'bt}
 
 prim_rw reduce_subterms1 'H :
@@ -265,6 +295,14 @@ let resource reduce +=
  *
  * (ri's are ignored).
  *)
+
+doc <:doc< @begin[doc]
+   @modsubsection{Make_bterm}
+
+   << make_bterm{'bt; 'btl} >> takes the top-level operator of << 'bt >>
+   and replaces the subterms with the ones in << 'btl >> (provided they
+   have a correct arity).
+@end[doc] >>
 
 declare make_bterm{'bt; 'bt1}
 
@@ -317,6 +355,16 @@ let resource reduce +=
  * distinct. Undefined if either 'bt1 or 'bt2 is ill-formed.
  *)
 
+doc <:doc< @begin[doc]
+   @modsubsection{If_same_op}
+
+   << if_same_op{'bt1; 'bt2; 'tt; 'ff} >> evaluates to << 'tt >> if << 'bt1 >>
+   and << 'bt2 >> are two well-formed bterms with the same top-level operator
+   (including all the params and all the arities) and to << 'ff >> when
+   operators are distinct. Undefined if either << 'bt1 >> or << 'bt2 >> is
+   ill-formed.
+@end[doc] >>
+
 declare if_same_op{'bt1; 'bt2; 'tt; 'ff}
 
 ml_rw reduce_if_same_op {| reduce |} : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'ff } ) =
@@ -340,6 +388,14 @@ ml_rw reduce_if_same_op {| reduce |} : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'f
  * rewrite axiom: if_simple_bterm{bterm{x:_; <H> >- 't['x]}; 'tt; 'ff} <--> 'ff
  *                if_simple_bterm{bterm{ >- 't}; 'tt; 'ff} <--> 'tt
  *)
+
+doc <:doc< @begin[doc]
+   @modsubsection{If_simple_bterm}
+
+   << if_simple_bterm{'bt; 'tt; 'ff} >> evaluates to << 'tt >> when << 'bt >>
+   has $0$ bound variables, to << 'ff >> when it is a bterm with non-$0$ bound
+   variables and is undefined otherwise.
+@end[doc] >>
 
 declare if_simple_bterm{'bt; 'tt; 'ff}
 
@@ -369,6 +425,14 @@ let resource reduce +=
  * ML rewrite axiom:
  *     if_var_bterm{bterm{<H> >- _op_{...}}; 'tt; 'ff} <--> 'ff
  *)
+
+doc <:doc< @begin[doc]
+   @modsubsection{If_var_bterm}
+
+   << if_var_bterm{'bt; 'tt; 'ff} >> evaluates to << 'tt >> when << 'bt >>
+   is a well-formed bterm with a bound variable body, to << 'ff >> when
+   it is a bterm with a non-variable top-level operator.
+@end[doc] >>
 
 declare if_var_bterm{'bt; 'tt; 'ff}
 
@@ -400,6 +464,13 @@ let resource reduce +=
  * subst{bterm{x:_; <H> >- 't1['x]}; bterm{ >- 't2}} <-->
  * bterm{<H> >- 't1['t2] }
  *)
+
+doc <:doc< @begin[doc]
+   @modsubsection{Subst}
+
+   << subst{'bt; 't} >> substitutes << 't >> for the first bound variable
+   of << 'bt >>.
+@end[doc] >>
 
 declare subst{'bt; 't}
 
@@ -596,3 +667,21 @@ ml_dform bterm_tex_df : mode["tex"] :: sequent[bterm]{ <H> >- 'concl } format_te
 
 ml_dform bterm_tex_df : mode["tex"] :: sequent[bterm]{ <H> >- } format_term buf =
    format_bterm_tex format_term buf
+
+
+dform if_quoted_op_df : if_quoted_op{'bt; 'tt} =
+   `"if_quoted_op(" slot{'bt} `"; " slot{'tt} `")"
+dform if_bterm_df : if_bterm{'bt; 'tt} =
+   `"if_bterm(" slot{'tt} `"; " slot{'tt} `")"
+dform subterms_df : except_mode[src] :: subterms{'bt} =
+   `"subterms(" slot{'bt} `")"
+dform make_bterm_df : make_bterm{'bt; 'btl} =
+   `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
+dform if_same_op_df : if_same_op{'bt1; 'bt2; 'tt; 'ff} =
+   `"if_same_op(" slot{'bt1} `"; " slot{'bt2} `"; " slot{'tt} `"; " slot{'ff} `")"
+dform if_simple_bterm_df : if_simple_bterm{'bt; 'tt; 'ff} =
+   `"if_simple_bterm(" slot{'bt} `"; " slot{'tt} `"; " slot{'ff} `")"
+dform if_var_bterm_df : if_var_bterm{'bt; 'tt; 'ff} =
+   `"if_var_bterm(" slot{'bt} `"; " slot{'tt} `"; " slot{'ff} `")"
+dform subst_df : subst{'bt; 't} =
+   `"subst(" slot{'bt} `"; " slot{'t} `")"

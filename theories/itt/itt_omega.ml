@@ -250,7 +250,10 @@ struct
 	let gcd f =
 		let r = ref Ring.ringZero in
 		let aux v k =
-			r:=Ring.gcd !r k
+			if v=constvar then
+				()
+			else
+				r:=Ring.gcd !r k
 		in
 		Table.iter aux f;
 		!r
@@ -393,7 +396,14 @@ struct
 		f.(v) <- Ring.ringZero;
 		f
 
-	let gcd f = Array.fold_left Ring.gcd Ring.ringZero f
+	let rec gcd_aux f acc i =
+		if i < Array.length f then
+			gcd_aux f (Ring.gcd acc f.(i)) (succ i)
+		else
+			acc
+
+	(*let gcd f = Array.fold_left Ring.gcd Ring.ringZero f*)
+	let gcd f = gcd_aux f Ring.ringZero (succ constvar)
 
 	exception Found of int
 
@@ -703,7 +713,7 @@ struct
 	let div a b =
 		let a_rem_b = rem a b in
 		let a' = sub a a_rem_b in
-		let abs_div = div_num (abs_num a) (abs_num b) in
+		let abs_div = div_num (abs_num a') (abs_num b) in
 		if ((compare_num a num0) * (compare_num b num0)) >= 0 then
 			abs_div
 		else
@@ -771,53 +781,6 @@ struct
 	let equal = alpha_equal
 	let hash = Hashtbl.hash
 end
-
-(**********************************************************
-	Factoring out GCD of coefficients
- **********************************************************
-interactive_rw number_factorize number[j:n] number[k:n] :
-	(number[i:n] = number[j:n] *@ number[k:n] in int) -->
-	number[i:n] <--> (number[j:n] *@ number[k:n])
-
-interactive_rw monom_factorize number[j:n] number[k:n] :
-	('a in int) -->
-	(number[i:n] = number[j:n] *@ number[k:n] in int) -->
-	(number[i:n] *@ 'a) <--> (number[j:n] *@ (number[k:n] *@ 'a))
-
-interactive_rw number_assoc :
-	('a in int) -->
-	('b in int) -->
-	((number[i:n] *@ 'a) +@ (number[i:n] *@ 'b)) <-->
-	(number[i:n] *@ ('a +@ 'b))
-
-interactive_rw number_assoc2 :
-	('a in int) -->
-	(number[i:n] +@ (number[i:n] *@ 'a)) <-->
-	(number[i:n] *@ (1 +@ 'a))
-
-interactive_rw number_assoc3 :
-	('a in int) -->
-	((number[i:n] *@ 'a) +@ number[i:n]) <-->
-	(number[i:n] *@ ('a +@ 1))
-
-let rec factorizeC n t =
-	match explode_term t with
-		<<'a +@ 'b>> ->
-			(addrC [Subterm 1] (factorizeC n a)) thenC
-			(addrC [Subterm 2] (factorizeC n b)) thenC
-			(firstC [number_assoc; number_assoc2; number_assoc3])
-	 | <<'a *@ 'b>> ->
-			let m = dest_number a in
-			let k = Lm_num.div_num m (dest_number n) in
-			monom_factorize n (mk_number_term k)
-	 | <<number[i:n]>> ->
-			let m = dest_number t in
-			let k = Lm_num.div_num m (dest_number n) in
-			number_factorize n (mk_number_term k)
-	 | _ ->
-			raise (RefineError ("factorizeC", StringError "unexpected opname"))
-
-************************************************************)
 
 let ge_normC = (addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
 
@@ -908,16 +871,6 @@ interactive var_elim 'v :
 	sequent { <H> >- 'b -@ number[j:n] *@ 'v >= 0 } -->
 	sequent { <H> >- number[i:n] *@ 'b >= number[j:n] *@ 'a }
 
-(*************
-interactive dark_var_elim 'v :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	[wf] sequent { <H> >- 'v in int } -->
-	sequent { <H> >- number[i:n] *@ 'v -@ 'a >= 0 } -->
-	sequent { <H> >- 'b -@ number[j:n] *@ 'v >= 0 } -->
-	sequent { <H> >- number[i:n] *@ 'b >= number[j:n] *@ 'a +@ (number[i:n] -@ 1) *@ (number[j:n] -@ 1) }
-*************)
-
 interactive_rw factor_out 'cleft 'tleft 'cright 'tright :
 	('cleft in int) -->
 	('tleft in int) -->
@@ -949,15 +902,6 @@ let factor_outC cleft tleft cright tright = funC (fun e ->
 (*	debug_rewrite := false;*)
 	factor_out2 cleft tleft cright tright
 )
-
-(*****************
-interactive_rw dark_factor_out2 number[l:n] 'tleft number[r:n] 'tright :
-	('tleft in int) -->
-	('tright in int) -->
-	('left +@ (number[r:n] *@ 'tright) = (number[l:n] *@ 'tleft) in int) -->
-	('left >= (number[l:n] -@ 1) *@ (number[r:n] -@ 1)) <-->
-	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright +@ (number[l:n] -@ 1) *@ (number[r:n] -@ 1))
-*****************)
 
 let rec rev_flatten = function
    h :: t ->
@@ -999,6 +943,7 @@ type omegaTree =
 	Solve of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)
 (* | SolveDark of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)*)
  | Mul of (omegaTree * ring)
+ | MulAndWeaken of (omegaTree * ring * ring)
  | Hyp of int
 
 let norm constr =
@@ -1007,23 +952,16 @@ let norm constr =
 	if compare gcd ringUnit <= 0 then
 		constr
 	else
-		begin
-			let f' = AF.div f gcd in
+		let c = rem (AF.coef f AF.constvar) gcd in
+		let f' = AF.div f gcd in
+		if compare c num0 = 0 then
 			(Mul (tree, gcd), f')
-		end
+		else
+			(MulAndWeaken (tree, gcd, c), f')
 
 let omega_aux v ((c1,t1,l),(c2,t2,u)) =
 	let s = (Solve (v,c1,t1,l,c2,t2,u),	AF.sub (AF.scale c1 u) (AF.scale c2 l)) in
 	norm s
-
-(**************
-let dark_omega_aux = function
-	(Solve t), f ->
-		let (v,c1,t1,l,c2,t2,u) = t in
-		((SolveDark t), AF.sub_number f (mul (sub c1 ringUnit) (sub c2 ringUnit)))
- | _ ->
-		raise (Invalid_argument "dark_omega_aux was applied to a non-Solve node")
-***************)
 
 let rec pick_var info = function
 	[] ->
@@ -1052,56 +990,17 @@ let rec get_bounds v l u rest = function
 			else
 				get_bounds v l u (original::rest) tl
 
-(*
 let rec print_constrs info = function
 	[] ->
 		eprintf "@."
  | (tree, f)::tl ->
 		eprintf "%a@." AF.print f;
 		print_constrs info tl
-*)
 
+(*
 let print_constrs info l =
 	eprintf "%i constraints@." (List.length l)
-
-
-(***********************
-let rec omega info constrs =
-	if !debug_omega then
-		print_constrs info constrs;
-	let v = pick_var info constrs in
-	if !debug_omega then
-		eprintf "picked %a@." AF.print_var v;
-	let l, u, rest = get_bounds v [] [] constrs in
-	find_or_map_pairs
-		(omega info)
-		(dark_omega info v rest)
-		(fun x y -> omega_aux v (x,y))
-		(fun (tree, f) -> is_neg_number f)
-		l u rest []
-
-and dark_omega info v rest constrs =
-	if !debug_omega then
-		eprintf "dark shadow for %a@." AF.print_var v;
-	let l1 = match constrs with
-		[] -> []
-	 | hd :: tl -> [hd]
-	in
-	find_or_map_pairs
-		(omega info)
-		(fun _ -> raise Not_found)
-		(fun x y -> dark_omega_aux y)
-		(fun (tree, f) -> is_neg_number f)
-		l1(*[List.hd constrs]*) constrs rest []
-**************)
-(*************
-let identical_to_real_shadow = function
-	(Solve t), f ->
-		let (v,c1,t1,l,c2,t2,u) = t in
-			(compare c1 ringUnit = 0) || (compare c2 ringUnit = 0)
- | _ ->
-		raise (Invalid_argument "identical_to_real_shadow was applied to a non-Solve node")
-***********)
+*)
 
 let rec omega info constrs =
 	if !debug_omega then
@@ -1122,24 +1021,6 @@ let rec omega info constrs =
 		if !debug_omega then
 			eprintf "no contradiction found, calling omega@.";
 		omega info (List.rev_append rest new_constrs)
-(**********************
-		(try omega info (List.rev_append rest new_constrs)
-			with Not_found ->
-				dark_omega info v new_constrs rest
-		)
-
-and dark_omega info v constrs rest =
-	if List.for_all identical_to_real_shadow constrs then
-		raise Not_found
-	else
-		if !debug_omega then
-			eprintf "dark shadow for %a@." AF.print_var v;
-		let new_constrs = List.rev_map dark_omega_aux constrs in
-		try
-			List.find (fun (tree, f) -> is_neg_number f) new_constrs
-		with Not_found ->
-			omega info (List.rev_append rest new_constrs)
-**********************)
 
 interactive_rw ge_to_ge0 :
 	('a in int) -->
@@ -1163,11 +1044,36 @@ interactive_rw ge_mulMonoPosit_rw 'c :
 
 let scaleC n = ge_mulMonoPosit_rw n
 
-let rec source2hyp info = function
+interactive ge_scaleAndWeaken 'c 'd :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   [wf] sequent { <H> >- 'd in int } -->
+   [aux] sequent { <H> >- 'd >= 0 } -->
+   [aux] sequent { <H> >- 'c > 'd } -->
+	sequent { <H> >- (('c *@ 'a) +@ 'd) >= ('c *@ 'b) } -->
+   sequent { <H> >- 'a >= 'b }
+
+interactive ge_scaleAndWeaken2 number[k:n] number[c:n] :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [aux] sequent { <H> >- number[c:n] >= 0 } -->
+   [aux] sequent { <H> >- number[k:n] > number[c:n] } -->
+	sequent { <H> >- ((number[k:n] *@ 'a) +@ number[c:n]) >= (number[k:n] *@ 'b) } -->
+   sequent { <H> >- 'a >= 'b }
+
+let scaleAndWeakenT k c = ge_scaleAndWeaken2 k c
+
+let rec source2hyp info src = funT (fun p ->
+match src with
  | Hyp i ->
 		rw normalize2C i
  | Mul (tree, gcd) ->
 		rw ((scaleC (mk_number_term gcd)) thenC ge_normC) 0 thenMT
+		source2hyp info tree
+ | MulAndWeaken (tree, gcd, c) ->
+		scaleAndWeakenT (mk_number_term gcd) (mk_number_term c) thenMT
+		rw ge_normC 0 thenMT
 		source2hyp info tree
  | Solve (v,c1,t1,l,c2,t2,u) ->
 		let cleft = term_of c1 in
@@ -1177,16 +1083,7 @@ let rec source2hyp info = function
 		rw (factor_out2 cleft tleft cright tright) 0 thenMT
 		tryT (var_elim (VI.restore info v) thenMLT
 			[source2hyp info t1; source2hyp info t2])
-(***************************
- | SolveDark (v,c1,t1,l,c2,t2,u) ->
-		let cleft = term_of c1 in
-		let tleft = AF.term_of info u in
-		let cright = term_of c2 in
-		let tright = AF.term_of info l in
-		rw (dark_factor_out2 cleft tleft cright tright) 0 thenMT
-		tryT (dark_var_elim (VI.restore info v) thenMLT
-			[source2hyp info t1; source2hyp info t2])
-***********************)
+)
 
 let omegaAuxT info tree = funT (fun p ->
 	(*debug_refine := true;
@@ -1201,14 +1098,14 @@ let omegaCoreT = funT (fun p ->
    match s with
    	Constraints constrs ->
 			let n = succ (VI.length var2index) in
-			let constrs = List.map (fun (i,f) -> (Hyp i, AF.grow n f)) constrs in
+			let constrs = List.map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
 			let tree, f = omega info constrs in
 			if !debug_omega then
 				eprintf "Solved, reconstructing the proof@.";
 			(match tree with
 			 | Hyp i ->
 					omegaAuxT info tree
-			 | Mul (_, gcd) ->
+			 | Mul _ | MulAndWeaken _ ->
 					let tm = AF.term_of info f in
 					assertT (mk_ge_term tm (term_of num0))
 					thenLT [omegaAuxT info tree; rw ge_normC (-1)]
@@ -1220,17 +1117,6 @@ let omegaCoreT = funT (fun p ->
 							(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
 							(mk_number_term num0))
 					thenLT [omegaAuxT info tree; rw ge_normC (-1)]
-(***************************************
-			 | SolveDark (v,c1,t1,l,c2,t2,u) ->
-					let c1t = term_of c1 in
-					let c2t = term_of c2 in
-					let num1_term = mk_number_term num1 in
-					assertT
-						(mk_ge_term
-							(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
-							(mk_mul_term (mk_sub_term c1t num1_term) (mk_sub_term c2t num1_term)))
-					thenLT [omegaAuxT info tree; rw ge_normC (-1)]
-***************************************)
 			)
 	 | Contradiction (i,f) ->
 			if !debug_omega then
@@ -1239,6 +1125,3 @@ let omegaCoreT = funT (fun p ->
 )
 
 let omegaT = preT thenMT omegaCoreT thenT rw normalizeC 0
-
-interactive test17 'v :
-	sequent { <H> >- number[-68124:n] >= 0 }

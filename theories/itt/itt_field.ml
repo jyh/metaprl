@@ -185,7 +185,7 @@ interactive field_elim {| elim [] |} 'H :
 
 doc <:doc<
    @begin[doc]
-   @modsubsection{Auxiliary properties}
+   @modsubsection{Miscellaneous properties}
 
 	Some properties we need to establish before we can prove that field has a
 	multiplicative subgroup over car0
@@ -194,6 +194,25 @@ doc <:doc<
 
 interactive fieldUnitInCar0 'H :
 	sequent { <H>; F: field[i:l]; <J['F]> >- 'F^"1" in 'F^car0 }
+
+interactive car0invCommutativity monoid[i:l] :
+	sequent { <H> >- 'F in field[i:l] } -->
+	sequent { <H> >- 'a in 'F^car0 } -->
+	sequent { <H> >- 'b in 'F^car0 } -->
+	sequent { <H> >- 'b *['F] 'a = 'F^"1" in 'F^car } -->
+	sequent { <H> >- 'a *['F] 'b = 'F^"1" in 'F^car }
+
+interactive noLeftZeroDivisor 'b field[i:l] :
+	sequent { <H> >- 'F in field[i:l] } -->
+	sequent { <H> >- 'b in 'F^car0 } -->
+	sequent { <H> >- 'a *['F] 'b <> 'F^"0" in 'F^car } -->
+	sequent { <H> >- 'a <> 'F^"0" in 'F^car }
+
+interactive noRightZeroDivisor 'a field[i:l] :
+	sequent { <H> >- 'F in field[i:l] } -->
+	sequent { <H> >- 'a in 'F^car0 } -->
+	sequent { <H> >- 'a *['F] 'b <> 'F^"0" in 'F^car } -->
+	sequent { <H> >- 'b <> 'F^"0" in 'F^car }
 
 doc <:doc<
    @begin[doc]

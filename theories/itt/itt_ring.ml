@@ -265,8 +265,16 @@ doc <:doc<
 interactive ring_subtype_monoid :
    sequent { <H> >- ring[i:l] subtype monoid[i:l] }
 
-interactive ring_subtype_aabelg :
+interactive ring_subtype_aabelg {| intro [] |} :
    sequent { <H> >- ring[i:l] subtype aabelg[i:l] }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Miscellaneous facts}
+
+   @end[doc]
+>>
+
 doc docoff
 
 define unfoldZ : Z <-->

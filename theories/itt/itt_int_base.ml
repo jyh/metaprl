@@ -361,7 +361,7 @@ prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 
  * @begin[doc]
  * @thysubsection{Order relation properties}
  *
- * @tt{lt_bool} defines reflexive, decidable, transitive and 
+ * @tt{lt_bool} defines reflexive, decidable, transitive and
  * discrete order on @tt{int}
  * @end[doc]
  *)
@@ -377,7 +377,7 @@ prim lt_Reflex 'H :
 interactive_rw lt_Reflex_rw :
    ( 'a IN int ) -->
    ( 'b IN int ) -->
-   band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse 
+   band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse
 
 let lt_ReflexC = lt_Reflex_rw
 

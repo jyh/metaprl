@@ -63,6 +63,19 @@ interactive lambda_intro2  {| intro[] |} :
    sequent { <H> >- if_quoted_op{ bterm{| <K<||> >; x:term >- 't<|K|>['x] |}; "true" } } -->
    sequent { <H> >- bterm{| <K<||> > >- lambda[@]{x.'t<|K|>['x]} |} in LambdaTerm }
 
+interactive app_intro  {| intro[] |} :
+   sequent { <H> >- 't in LambdaTerm } -->
+   sequent { <H> >- 's in LambdaTerm } -->
+   sequent { <H> >- bdepth {'t} = bdepth {'s} in int  } -->
+   sequent { <H> >- make_bterm{app_term; bdepth{'t}; 't::'s::nil} in LambdaTerm }
+
+interactive app_intro2  {| intro[] |} :
+   sequent { <H> >- bterm{| <K<||> > >- 't<|K|> |} in LambdaTerm } -->
+   sequent { <H> >- bterm{| <K<||> > >- 's<|K|> |} in LambdaTerm } -->
+   sequent { <H> >- if_quoted_op{ bterm{| <K<||> > >- 't<|K|> |}; "true" } } -->
+   sequent { <H> >- if_quoted_op{ bterm{| <K<||> > >- 's<|K|> |}; "true" } } -->
+   sequent { <H> >- bterm{| <K<||> > >- apply[@]{'t<|K|>;'s<|K|>} |} in LambdaTerm }
+
 
 define unfold_mk_apply: mk_apply{'t;'s} <--> let depth=max{bdepth{'t};bdepth{'s}} in  make_bterm{app_term; 'depth; make_depth{'t;'depth}::make_depth{'s;'depth}::nil}
 

@@ -136,10 +136,12 @@ let resource intro +=
  (<<bterm{| <J> >- 'op<||> |} in BOperator>>,wrap_intro (bterm_op thenT rw reduce_if_quoted_op 0 thenT trivialT) )
 
 prim_rw bterm_op_bdepth1 {| reduce |} : op_bdepth{ bterm{| >- 'op |}} <--> 0
-prim_rw bterm_op_bdepth2 {| reduce |} : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> op_bdepth{ bterm{| <H> >- 'op |} } +@ 1
-(*prim_rw bterm_op_bdepth2 {| reduce |} : op_bdepth{ bterm{| x:term >- 'op |}} <--> 1
-prim_rw bterm_op_bdepth3 {| reduce |} : op_bdepth{ bterm{| <H>; <J<||> > >- 'op |}} <--> op_bdepth{ bterm{| <H> >- it[@] |} } +@ op_bdepth{ bterm{| <J> >- it[@] |} }
-*)
+prim_rw bterm_op_bdepth2 {| reduce |} : op_bdepth{ bterm{| x:term >- 'op |}} <--> 1
+prim_rw bterm_op_bdepth3 'H : op_bdepth{ bterm{| <H>; <J<||> > >- 'op |}} <--> op_bdepth{ bterm{| <H> >- it[@] |} } +@ op_bdepth{ bterm{| <J> >- it[@] |} }
+
+interactive_rw bterm_op_bdepth4 {| reduce |} : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> 1 +@ op_bdepth{ bterm{| <H> >- 'op |} }
+interactive_rw bterm_op_bdepth5 {| reduce |} : op_bdepth{ bterm{| <H>; x:term >- 'op |}} <--> op_bdepth{ bterm{| <H> >- 'op |} } +@ 1
+
 prim_rw bterm_shape :
     if_quoted_op{'op<||>;"true"} -->
     shape{'op} <-->  map{lambda{x.(op_bdepth{'x} -@ op_bdepth{'op})}; list_of_rlist{Base_reflection!subterms{'op}} }

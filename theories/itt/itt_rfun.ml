@@ -241,6 +241,7 @@ doc <:doc<
 >>
 
 prim_rw reduce_beta {| reduce |} : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+interactive_rw reduce_let {| reduce |} : ("let"{'a;x.'b['x]}) <--> 'b['a]
 
 interactive_rw reduce_ycomb : (ycomb 'x) <--> ('x (ycomb 'x))
 

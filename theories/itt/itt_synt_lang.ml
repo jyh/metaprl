@@ -19,6 +19,7 @@ extends Itt_list
 extends Itt_srec
 extends Itt_pairwise
 extends Itt_pairwise2
+extends Itt_synt_subst
 doc docoff
 
 open Basic_tactics
@@ -142,3 +143,38 @@ interactive lang_intro_var  {| intro[AutoMustComplete] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- 'v in Lang{'ops} }
+
+
+
+interactive add_var_lang {| intro[] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 's in Lang{'ops} } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- add_var{'s; 'v} in Lang{'ops} }
+
+interactive add_new_var_lang {| intro[] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 's in Lang{'ops} } -->
+   sequent { <H> >- add_var{'s} in Lang{'ops} }
+
+interactive make_depth_lang {| intro[] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 's in Lang{'ops} } -->
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- 'n >= bdepth{'s} } -->
+   sequent { <H> >- make_depth{'s;'n} in Lang{'ops} }
+
+interactive add_vars_upto_lang {| intro [] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 't in Lang{'ops} } -->
+   sequent { <H> >- 's in Lang{'ops} } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
+   sequent { <H> >- add_vars_upto{'s;'t} in Lang{'ops} }
+
+interactive subst_lang {| intro [] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 't in Lang{'ops} } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
+   sequent { <H> >- 's in Lang{'ops} } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
+   sequent { <H> >- subst{'t;'v;'s} in Lang{'ops} }

@@ -300,7 +300,7 @@ interactive shape_int_list2 {| intro [] |} :
 doc <:doc< @begin[doc]
 @end[doc] >>
 interactive_rw shape_inject {| reduce |} :
-   'op in BOperator -->
+   'op in Operator -->
    'n in nat -->
    shape{inject{'op; 'n}} <--> shape{'op}
 

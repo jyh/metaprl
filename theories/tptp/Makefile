@@ -23,7 +23,7 @@ MPFILES :=\
 	tptp_prove
 
 # Name of main libraris
-MAIN = tptp
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

@@ -23,7 +23,7 @@ X :=\
 	ocaml_theory
 
 # Name of main libraris
-MAIN = ocaml_sos
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

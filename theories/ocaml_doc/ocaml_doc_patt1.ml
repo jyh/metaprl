@@ -41,35 +41,30 @@ doc <:doc<
 
 One of ML's more powerful features is the use of @emph{pattern
 matching} to define expressions by case analysis.  Pattern matching is
-indicated syntactically by the @tt{match} expression, which has the following
+indicated by a @tt{match} expression, which has the following
 syntax.
 
 @begin[center]
 @begin[tabular, l]
-@line{{@tt{match} @emph{expr} @tt{with}}}
-@line{{@phantom{$@space$ |} $@emph{patt}_1$ @code{->} $@emph{expr}_1$}}
-@line{{$@space$ | $@emph{patt}_2$ @code{->} $@emph{expr}_2$}}
+@line{{@tt{match} @emph{expression} @tt{with}}}
+@line{{$@space$ $@space$ $@emph{pattern}_1$ @code{->} $@emph{expression}_1$}}
+@line{{$@space$ | $@emph{pattern}_2$ @code{->} $@emph{expression}_2$}}
 @line{{$@space$ $@space$ $@vdots$}}
-@line{{$@space$ | $@emph{patt}_n$ @code{->} $@emph{expr}_n$}}
+@line{{$@space$ | $@emph{pattern}_n$ @code{->} $@emph{expression}_n$}}
 @end[tabular]
 @end[center]
 
-Each $@emph{patt}_i$ is called a @emph{pattern}; each sequence
-$@emph{patt}_i$ @code{->} $@emph{expr}_i$ is called a match
-@emph{clause} or @emph{case}; the clauses are separated by the
-vertical bar @code{|} (often called the ``pipe'' symbol).
+When a @code{match} expression is evaluated, it evaluates the
+expression @emph{expression}, and compares the value with the
+patterns.  If $@emph{pattern}_i$ is the first pattern to match, then
+$@emph{expression}_i$ is evaluated and returned as the result of the
+@code{match}.
 
-A @emph{pattern} is an expression made of constants and variables (we
-will see more complex patterns later when we look at tuples, lists,
-and unions).  A constant pattern $c$ matches an argument $e$ if $e =
-c$.  A variable pattern $v$ matches any expression $e$.  Pattern
-variables are binding occurrences.  When a ``@code{match} $e$
-@code{with} @emph{clauses}'' expression is evaluated, the clauses
-$@emph{patt}_i$ @code{->} $@emph{expr}_i$ are considered in order.  If
-pattern $@emph{patt}_i$ matches expression $e$, then the variables in
-the pattern are bound to values in $e$, and the expression
-$@emph{expr}_i$ is evaluated.  Otherwise, the next clause is
-considered.  It is an error if no pattern matches.
+A simple @emph{pattern} is an expression made of constants and
+variables.  A constant pattern $c$ matches values that are equal to
+it, and a variable pattern $x$ matches any expression.  A variable
+pattern $x$ is a binding occurrence; when the match is performed, the
+variable $x$ is bound the the value being matched.
 
 For example, Fibonacci numbers can be defined succinctly using pattern
 matching.  Fibonacci numbers are defined inductively: $@tt{fib}@space
@@ -130,7 +125,7 @@ val fib : int -> int = <fun>
 - : int = 2002
 @end[iverbatim]
 
-@subsection[function]{Functions with matching}
+@section[function]{Functions with matching}
 
 It is quite common for the body of an ML function to be a @code{match}
 expression.  To simplify the syntax somewhat, OCaml defines the
@@ -150,6 +145,8 @@ val fib : int -> int = <fun>
 # fib 6;;
 - : int = 8
 @end[iverbatim]
+
+@section["patt1-other-types"]{Values of other types}
 
 Patterns can also be used with values having the other basic types,
 like characters, strings, and Boolean values.  In addition, multiple
@@ -207,11 +204,39 @@ val is_uppercase : char -> bool = <fun>
 - : bool = false
 @end[iverbatim]
 
+The values being matched are not restricted to the basic scalar types
+like integers and characters.  String matching is also supported,
+using the usual syntax.
+
+@begin[iverbatim]
+# let names = function
+     "first" -> "George"
+   | "last" -> "Washington"
+   | _ -> ""
+val names : string -> string = <fun>
+# names "first";;
+- : string = "George"
+# names "Last";;
+- : string = ""
+\end[iverbatim]
+
+Matching against floating-point values, while supported, is rarely
+used because of numerical issues.  The following example illustrates
+the issue.
+
+@begin[iverbatim]
+# match 4.3 -. 1.2 with
+     3.1 -> true
+   | _ -> false;;
+- : bool = false
+@end[iverbatim]
+
 @section["patt1-incomplete-match"]{Incomplete matches}
 
-You might wonder about what happens if all the cases are not
-considered.  For example, what happens if we leave off the default
-case in the @tt{is_uppercase} function?
+You might wonder about what happens if the match expression does not
+include patterns for all the possible cases.  For example, what
+happens if we leave off the default case in the @tt{is_uppercase}
+function?
 
 @begin[iverbatim]
 # let is_uppercase = function
@@ -272,9 +297,9 @@ and bogus.  Eventually, you will overlook real problems, and your
 program will become hard to maintain.  For now, you should add the
 default case that raises an exception manually.  The
 @tt{Invalid_argument} exception is designed for this purpose.  It
-takes a string argument that identifies the name of the place where
-the failure occurred.  You can generate an exception with the
-@emph{raise} construction.
+takes a string argument that is usually used to identify the name of
+the place where the failure occurred.  You can generate an exception
+with the @emph{raise} construction.
 
 @begin[iverbatim]
 # let is_odd i =
@@ -297,9 +322,9 @@ constructions.  The general forms are as follows.
 
 @begin[center]
 @begin[tabular, l]
-@line{@tt{let @emph{pattern} = @emph{expr}}}
-@line{@tt{let @emph{name} @emph{patt} $@ldots$ @emph{patt} = @emph{expr}}}
-@line{@tt{fun @emph{patt} @tt{->} @emph{expr}}}
+@line{@tt{let @emph{pattern} = @emph{expression}}}
+@line{@tt{let @emph{name} @emph{pattern} $@ldots$ @emph{pattern} = @emph{expression}}}
+@line{@tt{fun @emph{pattern} @tt{->} @emph{expression}}}
 @end[tabular]
 @end[center]
 

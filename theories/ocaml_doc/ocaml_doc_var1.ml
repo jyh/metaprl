@@ -435,7 +435,7 @@ val ** : float -> int -> float = <fun>
 - : float = 100000
 @end[iverbatim]
 
-the precedence and associativity of new infix operators is determined
+The precedence and associativity of new infix operators is determined
 by its first character in the operator name.  For example an operator
 named @code{+/-} would have the same precedence and associativity as
 the @code{+} operator.

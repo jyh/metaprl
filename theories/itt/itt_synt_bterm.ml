@@ -203,6 +203,10 @@ interactive bdepth_wf2 {| intro[] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- bdepth{'bt} in int }
 
+interactive bdepth_wf3 {| intro[] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- bdepth{'bt} >= 0 }
+
 interactive compatible_shapes_wf {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- 'btl in list{BTerm} } -->

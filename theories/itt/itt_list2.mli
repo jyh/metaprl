@@ -50,6 +50,8 @@ declare hd{'l}
 
 declare tl{'l}
 
+declare tail{'l;'n}
+
 (*
  * Boolean test if a list is empty.
  *)

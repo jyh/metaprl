@@ -251,12 +251,12 @@ dform term_param_df : "term_param"{'t} =
 dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res} =
    szone pushm[4]
    slot{'proof} info[" rewrite"] " " slot[name:s] " " resources{'res} slot{'params} keyword[" :"] " " slot{'args}
-   " " longrightarrow slot{'redex} longleftrightarrow slot{'contractum}
+   hspace longrightarrow slot{'redex} longleftrightarrow slot{'contractum}
    popm ezone
 
 dform axiom_df : "axiom"[name:s]{'stmt; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} info[" rule"] " " slot[name:s] `" " resources{'res} `": : " slot{'stmt}
+   slot{'proof} info[" rule"] " " slot[name:s] `" " resources{'res} `":" hspace slot{'stmt}
    popm ezone
 
 dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof; 'res} =

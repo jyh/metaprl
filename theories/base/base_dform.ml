@@ -231,14 +231,13 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
          in
             format args;
             format_string buf "]";
-            format_space buf
    in
    let rec format_hyp hyps i len =
       if i <> len then
          let lead = (string_of_int (i + 1)) ^ ". " in
          let _ =
             if i = 0 then
-               format_hbreak buf lead ""
+               format_hbreak buf lead " "
             else
                format_hbreak buf lead "; ";
             match SeqHyp.get hyps i with
@@ -274,7 +273,8 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
          format_szone buf;
          format_pushm buf 0;
          format_arg (dest_xlist args);
-         format_hyp hyps 0 (SeqHyp.length hyps);
+         let hlen = SeqHyp.length hyps in
+         if (hlen>0) then format_hyp hyps 0 hlen;
          format_goal goals 0 (SeqGoal.length goals);
          format_popm buf;
          format_ezone buf
@@ -298,14 +298,13 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
          in
             format args;
             format_string buf "]";
-            format_space buf
    in
    let rec format_hyp hyps i len =
       if i <> len then
          let lead = (string_of_int (i + 1)) ^ ". " in
          let _ =
             if i = 0 then
-               format_hbreak buf lead ""
+               format_hbreak buf lead " "
             else
                format_hbreak buf lead "; ";
             match SeqHyp.get hyps i with
@@ -341,7 +340,8 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
          format_szone buf;
          format_pushm buf 0;
          format_arg (dest_xlist args);
-         format_hyp hyps 0 (SeqHyp.length hyps);
+         let hlen = SeqHyp.length hyps in
+         if (hlen>0) then format_hyp hyps 0 hlen;
          format_goal goals 0 (SeqGoal.length goals);
          format_popm buf;
          format_ezone buf
@@ -365,14 +365,13 @@ ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
          in
             format args;
             format_string buf "]";
-            format_space buf
    in
    let rec format_hyp hyps i len =
       if i <> len then
          let lead = (string_of_int (i + 1)) ^ ". " in
          let _ =
             if i = 0 then
-               format_hbreak buf lead ""
+               format_hbreak buf lead " "
             else
                format_hbreak buf lead "; ";
             match SeqHyp.get hyps i with
@@ -413,7 +412,8 @@ ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
          format_szone buf;
          format_pushm buf 0;
          format_arg (dest_xlist args);
-         format_hyp hyps 0 (SeqHyp.length hyps);
+         let hlen = SeqHyp.length hyps in
+         if (hlen>0) then format_hyp hyps 0 hlen;
          format_goal goals 0 (SeqGoal.length goals);
          format_popm buf;
          format_ezone buf

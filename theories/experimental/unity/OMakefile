@@ -3,6 +3,7 @@ OCAMLINCLUDES =\
 	-I $(ROOT)/support/display\
 	$(SUPPORT_INCLUDE)\
 	-I ../../base\
+	-I ../compile
 
 include Files
 

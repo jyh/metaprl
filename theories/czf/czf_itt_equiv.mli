@@ -77,6 +77,9 @@ topval equivRefT : tactic
 topval equivSymT : int -> tactic
 topval equivTransT : term -> int -> tactic
 
+topval equivSym1T : tactic
+topval equivTrans1T : term -> tactic
+
 (*
  * Substitution.
  *)

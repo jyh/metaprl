@@ -127,12 +127,12 @@ interactive equiv_ref_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'a; 's} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'a} }
 
-interactive equiv_rel_intro {| intro [] |} 'H 'b 'c 'd 'e 'f :
+interactive equiv_rel_intro {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
-(*   sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'a} } --> *)
-   sequent ['ext] { 'H; u: equiv{'s; 'r; 'b; 'c} >- equiv{'s; 'r; 'c; 'b} } -->
-   sequent ['ext] { 'H; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}} -->
+(* sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'a} } --> *)
+   sequent ['ext] { 'H; b: set; c: set; x: mem{'b; 's}; y: mem{'c; 's}; u: equiv{'s; 'r; 'b; 'c} >- equiv{'s; 'r; 'c; 'b} } -->
+   sequent ['ext] { 'H; d: set; e: set; f: set; x: mem{'d; 's}; y: mem{'e; 's}; z: mem{'f; 's}; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}} -->
    sequent ['ext] { 'H >- equiv{'s; 'r} }
 
 interactive equiv_sym 'H 'J 'u :
@@ -170,6 +170,36 @@ let equivTransT t i p =
    let u, v = maybe_new_vars2 p "u" "v" in
    let j, k = Sequent.hyp_indices p i in
       equiv_trans j k t u v p
+
+interactive equiv_sym1 'H  :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- isset{'r} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'b} } -->
+   sequent ['ext] { 'H >- equiv{'s; 'r} } -->
+   sequent ['ext] { 'H >- mem{'a; 's} } -->
+   sequent ['ext] { 'H >- mem{'b; 's} } -->
+   sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'b} } -->
+   sequent ['ext] { 'H >- equiv{'s; 'r; 'b; 'a} }
+
+interactive equiv_trans1 'H 'b :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- isset{'r} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'c} } -->
+   sequent ['ext] { 'H >- equiv{'s; 'r} } -->
+   sequent ['ext] { 'H >- mem{'a; 's} } -->
+   sequent ['ext] { 'H >- mem{'b; 's} } -->
+   sequent ['ext] { 'H >- mem{'c; 's} } -->
+   sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'b} } -->
+   sequent ['ext] { 'H >- equiv{'s; 'r; 'b; 'c} } -->
+   sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'c} }
+
+let equivSym1T p =
+   equiv_sym1 (hyp_count_addr p) p
+
+let equivTrans1T t p =
+   equiv_trans1 (hyp_count_addr p) t p
 
 interactive equiv_fun_isset 'H 'J equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent [squash] { 'H; z: set; 'J['z] >- isset{'s} } -->
@@ -426,3 +456,35 @@ interactive equiv_fun_prop {| intro [] |} 'H :
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
    sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- equiv_fun_prop{'s; 'r; z. 'P} }
+
+interactive equiv_eq_elim {| elim [] |} 'H 'J 's 'r :
+   sequent [squash] { 'H; x: eq{'a; 'b}; 'J['x] >- isset{'s} } -->
+   sequent [squash] { 'H; x: eq{'a; 'b}; 'J['x] >- isset{'r} } -->
+   sequent [squash] { 'H; x: eq{'a; 'b}; 'J['x] >- isset{'a} } -->
+   sequent [squash] { 'H; x: eq{'a; 'b}; 'J['x] >- isset{'b} } -->
+   sequent ['ext] { 'H; x: eq{'a; 'b}; 'J['x] >- equiv{'s; 'r} } -->
+   sequent ['ext] { 'H; x: eq{'a; 'b}; 'J['x] >- mem{'a; 's} } -->
+   sequent ['ext] { 'H; x: eq{'a; 'b}; 'J['x] >- mem{'b; 's} } -->
+   sequent ['ext] { 'H; x: eq{'a; 'b}; 'J['x]; y: equiv{'s; 'r; 'a; 'b} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: eq{'a; 'b}; 'J['x] >- 'C['x] }
+
+interactive equiv_equal_elim {| elim [] |} 'H 'J 's 'r :
+   sequent [squash] { 'H; x: equal{'a; 'b}; 'J['x] >- isset{'s} } -->
+   sequent [squash] { 'H; x: equal{'a; 'b}; 'J['x] >- isset{'r} } -->
+   sequent [squash] { 'H; x: equal{'a; 'b}; 'J['x] >- isset{'a} } -->
+   sequent [squash] { 'H; x: equal{'a; 'b}; 'J['x] >- isset{'b} } -->
+   sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x] >- equiv{'s; 'r} } -->
+   sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x] >- mem{'a; 's} } -->
+   sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x] >- mem{'b; 's} } -->
+   sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x]; y: equiv{'s; 'r; 'a; 'b} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x] >- 'C['x] }
+(*
+interactive equiv_equal {| intro [] |} 'H 's :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'b} } -->
+   sequent ['ext] { 'H >- mem{'a; 's} } -->
+   sequent ['ext] { 'H >- mem{'b; 's} } -->
+   sequent ['ext] { 'H; r: set; x: equiv{'s; 'r} >- equiv{'s; 'r; 'a; 'b} } -->
+   sequent ['ext] { 'H >- equal{'a; 'b} }
+*)

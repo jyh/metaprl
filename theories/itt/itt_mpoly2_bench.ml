@@ -21,6 +21,12 @@ interactive dualSubst 'H :
 	sequent { <H>; 'a1 >= 'b1; <J>; 'a='a1<|H|> in Z^car; 'b='b1<|H|> in Z^car >- 'C } -->
 	sequent { <H>; 'a >= 'b; <J>; 'a='a1<|H|> in Z^car; 'b='b1<|H|> in Z^car >- 'C }
 
+let rec int_list n =
+	if n=0 then [0]
+	else
+		let n'=pred n in
+		n' :: (int_list n')
+
 let stdT i = funT (fun p ->
 	let i = Sequent.get_pos_hyp_num p i in
 	let t = if i=0 then Sequent.concl p else Sequent.nth_hyp p i in
@@ -32,9 +38,12 @@ let stdT i = funT (fun p ->
 	let varlist = mk_list_of_list vars in
 	let len = mk_length_term varlist in
 	let len_wf = mk_equal_term <<nat>> len len in
+	let mpoly_t = mk_mpolyTerm_term <<Z>> len in
+	let var_terms = List.map (fun i -> mk_varTerm_term (mk_intnum_term i)) (int_list (List.length vars)) in
 	assertT <<Z in unitringCE[i:l]>> thenMT
 	proveVarTypesT <<Z^car>> vars thenMT
 	assertT len_wf thenMT
+	proveVarTypesT mpoly_t var_terms thenMT
 	standardizeT <<unitringCE[i:l]>> <<Z>> <<Z^car>> vars varlist a thenMT
 	standardizeT <<unitringCE[i:l]>> <<Z>> <<Z^car>> vars varlist b thenMT
 	dualSubst i thenMT
@@ -56,7 +65,9 @@ let arithAT = arithT ttca
 *)
 
 let arithT = preArithT thenMT prepareT (-1) thenMT stdT (-1)
-let arithAT = arithT thenT autoT thenT repeatT (rw reduceC 0) ttca
+(*let arithAT = arithT thenT autoT thenT repeatT (rw reduceC 0) ttca*)
+(*let arithAT = arithT thenT autoT thenT rw mpoly_evalC 0 ttca*)
+let arithAT = arithT ttca
 
 
 interactive test 'a 'b 'c :

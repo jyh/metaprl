@@ -80,6 +80,16 @@ let mpoly_evalC = repeatC (lowerC reduceTopC)
 
 define unfold_list_n : list{'T; 'n} <--> {l: list{'T} | length{'l}='n in int}
 
+interactive list_n_wf {| intro [] |} :
+	sequent { <H> >- 'T Type } -->
+	sequent { <H> >- 'n in int } -->
+	sequent { <H> >- list{'T; 'n} Type }
+
+interactive list_n_member {| intro [] |} :
+	sequent { <H> >- 'l in list{'T} } -->
+	sequent { <H> >- length{'l} = 'n in int } -->
+	sequent { <H> >- 'l in list{'T; 'n} }
+
 declare list_ind2{'l1; 'l2; 'base; h1,t1,h2,t2,f. 'step['h1;'t1;'h2;'t2;'f]}
 
 prim_rw reduce_list_ind2Nil : list_ind2{nil; nil; 'base; h1, t1, h2, t2, f. 'step['h1; 't1; 'h2; 't2; 'f]} <--> 'base
@@ -487,6 +497,12 @@ let const_mpoly_opname = opname_of_term const_mpoly_term
 let is_const_mpoly_term = is_dep0_dep0_term const_mpoly_opname
 let mk_const_mpoly_term = mk_dep0_dep0_term const_mpoly_opname
 let dest_const_mpoly = dest_dep0_dep0_term const_mpoly_opname
+
+let mpolyTerm_term = << mpolyTerm{'R; 'n} >>
+let mpolyTerm_opname = opname_of_term mpolyTerm_term
+let is_mpolyTerm_term = is_dep0_dep0_term mpolyTerm_opname
+let mk_mpolyTerm_term = mk_dep0_dep0_term mpolyTerm_opname
+let dest_mpolyTerm = dest_dep0_dep0_term mpolyTerm_opname
 
 let constTerm_term = << constTerm{'v} >>
 let constTerm_opname = opname_of_term constTerm_term

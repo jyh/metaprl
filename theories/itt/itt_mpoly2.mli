@@ -20,6 +20,18 @@ val var_list : var_set -> term list
 resource (term * conv, conv) mpoly_eval
 val process_mpoly_eval_resource_rw_annotation : (prim_rewrite, term*conv) rw_annotation_processor
 
+val mpolyTerm_term : term
+val is_mpolyTerm_term : term -> bool
+val mk_mpolyTerm_term : term -> term -> term
+val dest_mpolyTerm : term -> term * term
+
+val varTerm_term : term
+val is_varTerm_term : term -> bool
+val mk_varTerm_term : term -> term
+val dest_varTerm : term -> term
+
+val mk_intnum_term : int -> term
+
 topval mpoly_evalTopC : conv
 topval mpoly_evalC : conv
 
@@ -30,6 +42,7 @@ declare eval_mpoly{'p; 'vals; 'R}
 declare standardize{'p; 'R; 'n}
 declare eval_mpolyTerm{'pt; 'vals; 'R}
 declare mpoly_ofTerm{'pt; 'R; 'n}
+declare mpolyTerm{'R; 'n}
 
 rewrite mpolyTerm2mpoly :
 	eval_mpolyTerm{'pt; 'vals; 'R} <-->

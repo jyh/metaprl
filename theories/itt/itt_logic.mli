@@ -155,6 +155,7 @@ topval genAssumT : int list -> tactic
 
 (* JProver for itt_logic *)
 topval jproverT : tactic
+topval simple_jproverT : tactic (* JProver with max multiplicity 1; used by autoT *)
 
 (* specifies maximal multiplicity for JProver *)
 topval jAutoT : int -> tactic

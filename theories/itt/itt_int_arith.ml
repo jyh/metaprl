@@ -220,252 +220,279 @@ interactive ge_addMono 'H :
 type comparison = Less | Equal | Greater
 
 let rec compare_terms t1 t2 =
-   let {term_op=op1; term_terms=subt1} = dest_term t1 in
-   let {term_op=op2; term_terms=subt2} = dest_term t2 in
-     match compare_ops op1 op2 with
-       Less -> Less
-     | Greater -> Greater
-     | Equal -> compare_btlists subt1 subt2
+   if t1==t2 then
+      Equal
+   else
+     let {term_op=op1; term_terms=subt1} = dest_term t1 in
+     let {term_op=op2; term_terms=subt2} = dest_term t2 in
+       match compare_ops op1 op2 with
+         Less -> Less
+       | Greater -> Greater
+       | Equal -> compare_btlists subt1 subt2
 
 and compare_ops op1 op2 =
-   let {op_name = opn1; op_params = par1} = dest_op op1 in
-   let {op_name = opn2; op_params = par2} = dest_op op2 in
-   let str1 = string_of_opname opn1 in
-   let str2 = string_of_opname opn2 in
-      if str1 < str2 then
-        Less
-      else if str1 > str2 then
-        Greater
-      else
-        compare_plists par1 par2
+   if op1==op2 then
+      Equal
+   else
+     let {op_name = opn1; op_params = par1} = dest_op op1 in
+     let {op_name = opn2; op_params = par2} = dest_op op2 in
+     let str1 = string_of_opname opn1 in
+     let str2 = string_of_opname opn2 in
+        if str1 < str2 then
+          Less
+        else if str1 > str2 then
+          Greater
+        else
+          compare_plists par1 par2
 
 and compare_btlists subt1 subt2 =
-   match subt1 with
-     [] ->
-       (
-       match subt2 with
-         [] -> Equal
-       | hd2::tail2 -> Less
-       )
-   | hd1::tail1 ->
-       (
-       match subt2 with
-         [] -> Greater
-       | hd2::tail2 ->
-         match compare_bterms hd1 hd2 with
-	   Less -> Less
-	 | Greater -> Greater
-	 | Equal -> compare_btlists tail1 tail2
-       )
+   if subt1==subt2 then
+      Equal
+   else
+      match subt1 with
+        [] ->
+          (
+          match subt2 with
+            [] -> Equal
+          | hd2::tail2 -> Less
+          )
+      | hd1::tail1 ->
+          (
+          match subt2 with
+            [] -> Greater
+          | hd2::tail2 ->
+            match compare_bterms hd1 hd2 with
+              Less -> Less
+          | Greater -> Greater
+          | Equal -> compare_btlists tail1 tail2
+          )
 
 and compare_bterms b1 b2 =
-   let {bvars = bv1; bterm = t1} = dest_bterm b1 in
-   let {bvars = bv2; bterm = t2} = dest_bterm b2 in
-   compare_terms t1 t2
+   if b1==b2 then
+      Equal
+   else
+      let {bvars = bv1; bterm = t1} = dest_bterm b1 in
+      let {bvars = bv2; bterm = t2} = dest_bterm b2 in
+      compare_terms t1 t2
 
 and compare_plists p1 p2 =
-   match p1 with
-     [] ->
-       (
-       match p2 with
-         [] -> Equal
-       | hd2::tail2 -> Less
-       )
-   | hd1::tail1 ->
-       (
-       match p2 with
-         [] -> Greater
-       | hd2::tail2 ->
-         match compare_params hd1 hd2 with
-	   Less -> Less
-	 | Greater -> Greater
-	 | Equal -> compare_plists tail1 tail2
-       )
+   if p1==p2 then
+      Equal
+   else
+      match p1 with
+        [] ->
+          (
+          match p2 with
+            [] -> Equal
+          | hd2::tail2 -> Less
+          )
+      | hd1::tail1 ->
+          (
+          match p2 with
+            [] -> Greater
+          | hd2::tail2 ->
+            match compare_params hd1 hd2 with
+              Less -> Less
+            | Greater -> Greater
+            | Equal -> compare_plists tail1 tail2
+          )
 
 and compare_params par1 par2 =
-   let p1 = dest_param par1 in
-   let p2 = dest_param par2 in
-   match p1 with
-     Number(n1) ->
-      (
-       match p2 with
-         Number(n2) ->
-	   if n1<n2 then Less
-	   else if n1>n2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | String(s1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(s2) ->
-	   if s1<s2 then Less
-	   else if s1>s2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | Token(s1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(s2) ->
-	   if s1<s2 then Less
-	   else if s1>s2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | Var(s1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(s2) ->
-	   if s1<s2 then Less
-	   else if s1>s2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | MNumber(s1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(_) -> Greater
-       | MNumber(s2) ->
-	   if s1<s2 then Less
-	   else if s1>s2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | MString(s1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(_) -> Greater
-       | MNumber(_) -> Greater
-       | MString(s2) ->
-	   if s1<s2 then Less
-	   else if s1>s2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | MToken(s1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(_) -> Greater
-       | MNumber(_) -> Greater
-       | MString(_) -> Greater
-       | MToken(s2) ->
-	   if s1<s2 then Less
-	   else if s1>s2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | MLevel(l1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(_) -> Greater
-       | MNumber(_) -> Greater
-       | MString(_) -> Greater
-       | MToken(_) -> Greater
-       | MLevel(l2) -> compare_levels l1 l2
-       | _ -> Less
-      )
-   | MVar(s1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(_) -> Greater
-       | MNumber(_) -> Greater
-       | MString(_) -> Greater
-       | MToken(_) -> Greater
-       | MLevel(_) -> Greater
-       | MVar(s2) ->
-	   if s1<s2 then Less
-	   else if s1>s2 then Greater
-	   else Equal
-       | _ -> Less
-      )
-   | ObId(id1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(_) -> Greater
-       | MNumber(_) -> Greater
-       | MString(_) -> Greater
-       | MToken(_) -> Greater
-       | MLevel(_) -> Greater
-       | MVar(_) -> Greater
-       | ObId(id2) -> compare_plists id1 id2
-       | _ -> Less
-      )
-   | ParamList(pl1) ->
-      (
-       match p2 with
-         Number(_) -> Greater
-       | String(_) -> Greater
-       | Token(_) -> Greater
-       | Var(_) -> Greater
-       | MNumber(_) -> Greater
-       | MString(_) -> Greater
-       | MToken(_) -> Greater
-       | MLevel(_) -> Greater
-       | MVar(_) -> Greater
-       | ObId(_) -> Greater
-       | ParamList(pl2) -> compare_plists pl1 pl2
-      )
+   if par1==par2 then
+      Equal
+   else
+      let p1 = dest_param par1 in
+      let p2 = dest_param par2 in
+      match p1 with
+        Number(n1) ->
+         (
+          match p2 with
+            Number(n2) ->
+              if n1<n2 then Less
+              else if n1>n2 then Greater
+              else Equal
+          | _ -> Less
+         )
+      | String(s1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(s2) ->
+             if s1<s2 then Less
+             else if s1>s2 then Greater
+             else Equal
+          | _ -> Less
+         )
+      | Token(s1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(s2) ->
+             if s1<s2 then Less
+             else if s1>s2 then Greater
+             else Equal
+          | _ -> Less
+         )
+      | Var(s1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(s2) ->
+             if s1<s2 then Less
+             else if s1>s2 then Greater
+             else Equal
+          | _ -> Less
+         )
+      | MNumber(s1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(_) -> Greater
+          | MNumber(s2) ->
+             if s1<s2 then Less
+             else if s1>s2 then Greater
+             else Equal
+          | _ -> Less
+         )
+      | MString(s1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(_) -> Greater
+          | MNumber(_) -> Greater
+          | MString(s2) ->
+             if s1<s2 then Less
+             else if s1>s2 then Greater
+             else Equal
+          | _ -> Less
+         )
+      | MToken(s1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(_) -> Greater
+          | MNumber(_) -> Greater
+          | MString(_) -> Greater
+          | MToken(s2) ->
+             if s1<s2 then Less
+             else if s1>s2 then Greater
+             else Equal
+          | _ -> Less
+         )
+      | MLevel(l1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(_) -> Greater
+          | MNumber(_) -> Greater
+          | MString(_) -> Greater
+          | MToken(_) -> Greater
+          | MLevel(l2) -> compare_levels l1 l2
+          | _ -> Less
+         )
+      | MVar(s1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(_) -> Greater
+          | MNumber(_) -> Greater
+          | MString(_) -> Greater
+          | MToken(_) -> Greater
+          | MLevel(_) -> Greater
+          | MVar(s2) ->
+             if s1<s2 then Less
+             else if s1>s2 then Greater
+             else Equal
+          | _ -> Less
+         )
+      | ObId(id1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(_) -> Greater
+          | MNumber(_) -> Greater
+          | MString(_) -> Greater
+          | MToken(_) -> Greater
+          | MLevel(_) -> Greater
+          | MVar(_) -> Greater
+          | ObId(id2) -> compare_plists id1 id2
+          | _ -> Less
+        )
+      | ParamList(pl1) ->
+         (
+          match p2 with
+            Number(_) -> Greater
+          | String(_) -> Greater
+          | Token(_) -> Greater
+          | Var(_) -> Greater
+          | MNumber(_) -> Greater
+          | MString(_) -> Greater
+          | MToken(_) -> Greater
+          | MLevel(_) -> Greater
+          | MVar(_) -> Greater
+          | ObId(_) -> Greater
+          | ParamList(pl2) -> compare_plists pl1 pl2
+         )
 
 and compare_levels l1 l2 =
-   let {le_const = c1; le_vars = v1} = dest_level l1 in
-   let {le_const = c2; le_vars = v2} = dest_level l2 in
-     if c1<c2 then Less
-     else if c1>c2 then Greater
-     else compare_lvlists v1 v2
+   if l1==l2 then
+      Equal
+   else
+      let {le_const = c1; le_vars = v1} = dest_level l1 in
+      let {le_const = c2; le_vars = v2} = dest_level l2 in
+        if c1<c2 then Less
+        else if c1>c2 then Greater
+        else compare_lvlists v1 v2
 
 and compare_lvlists lv1 lv2 =
-   match lv1 with
-     [] ->
-       (
-       match lv2 with
-         [] -> Equal
-       | hd2::tail2 -> Less
-       )
-   | hd1::tail1 ->
-       (
-       match lv2 with
-         [] -> Greater
-       | hd2::tail2 ->
-         match compare_lvars hd1 hd2 with
-	   Less -> Less
-	 | Greater -> Greater
-	 | Equal -> compare_lvlists tail1 tail2
-       )
+   if lv1==lv2 then
+      Equal
+   else
+      match lv1 with
+        [] ->
+          (
+          match lv2 with
+            [] -> Equal
+          | hd2::tail2 -> Less
+          )
+      | hd1::tail1 ->
+          (
+          match lv2 with
+            [] -> Greater
+          | hd2::tail2 ->
+            match compare_lvars hd1 hd2 with
+              Less -> Less
+            | Greater -> Greater
+            | Equal -> compare_lvlists tail1 tail2
+          )
 
 and compare_lvars v1 v2 =
-   let {le_var=s1; le_offset=o1}=dest_level_var v1 in
-   let {le_var=s2; le_offset=o2}=dest_level_var v2 in
-     if s1<s2 then Less
-     else if s1>s2 then Greater
-     else
-       if o1<o2 then Less
-       else if o1>o2 then Greater
-       else Equal
+   if v1==v2 then
+      Equal
+   else
+      let {le_var=s1; le_offset=o1}=dest_level_var v1 in
+      let {le_var=s2; le_offset=o2}=dest_level_var v2 in
+        if s1<s2 then Less
+        else if s1>s2 then Greater
+        else
+          if o1<o2 then Less
+          else if o1>o2 then Greater
+          else Equal
 
 let ct a b =
   match compare_terms a b with
@@ -525,11 +552,11 @@ manner
  *)
 let mul_normalizeC = (sweepDnC mul_Assoc2C) thenC
                      (higherC (termC inject_coefC)) thenC
-                     (whileProgressC mul_BubbleSortC)
+                     (repeatC mul_BubbleSortC)
 
 interactive_rw sum_same_products1_rw :
-   ('a = 'b in int) -->
-   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'b)) <--> ((number[i:n] +@ number[j:n]) *@ 'a)
+   ('a IN int) -->
+   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@ number[j:n]) *@ 'a)
 
 let sum_same_products1C = sum_same_products1_rw
 
@@ -551,36 +578,51 @@ interactive_rw sum_same_products4_rw :
 
 let sum_same_products4C = sum_same_products4_rw
 
+let same_product_aux a b =
+   if (is_mul_term a) & (is_mul_term b) then
+      let (a1,a2)=dest_mul a in
+      let (b1,b2)=dest_mul b in
+      if is_number_term a1 then
+         if is_number_term b1 then
+            if (compare_terms a2 b2)=Equal then
+               (true, sum_same_products1C)
+            else
+               (false, idC)
+         else
+            if (compare_terms a1 b)=Equal then
+               (true, sum_same_products2C)
+            else
+               (false, idC)
+      else
+         if is_number_term b1 then
+            if (compare_terms a b1)=Equal then
+               (true, sum_same_products3C)
+            else
+               (false, idC)
+         else
+            if (compare_terms a b)=Equal then
+               (true, sum_same_products4C)
+            else
+               (false, idC)
+   else
+      (false, idC)
+
 let same_productC t =
    if (is_add_term t) then
       let (a,b)=dest_add t in
-      if (is_mul_term a) & (is_mul_term b) then
-         let (a1,a2)=dest_mul a in
-         let (b1,b2)=dest_mul b in
-         if is_number_term a1 then
-            if is_number_term b1 then
-               if (compare_terms a2 b2)=Equal then
-                  sum_same_products1C
-               else
-                  idC
-            else
-               if (compare_terms a1 b)=Equal then
-                  sum_same_products2C
-               else
-                  idC
+      if is_add_term b then
+         let (b1,b2)=dest_add b in
+         let (same, conv)=same_product_aux a b1 in
+         if same then
+           (add_AssocC thenC (addrC [0] (conv thenC (addrC [0] reduceC))))
          else
-            if is_number_term b1 then
-               if (compare_terms a b1)=Equal then
-                  sum_same_products3C
-               else
-                  idC
-            else
-               if (compare_terms a b)=Equal then
-                  sum_same_products4C
-               else
-                  idC
+           idC
       else
-         idC
+         let (same, conv)=same_product_aux a b in
+         if same then
+            conv thenC reduceC
+         else
+            idC
    else
       idC
 
@@ -591,6 +633,16 @@ interactive_rw add_BubblePrimitive_rw :
    ('a +@ ('b +@ 'c)) <--> ('b +@ ('a +@ 'c))
 
 let add_BubblePrimitiveC = add_BubblePrimitive_rw
+
+let stripCoef t =
+   if is_mul_term t then
+      let (c,t')=dest_mul t in
+      if (is_number_term c) then
+         t'
+      else
+         t
+   else
+      t
 
 (* One step of sorting of sum of some terms with simultenious
    contraction of sum of integers
@@ -603,7 +655,9 @@ let add_BubbleStepC tm =
 	       if (is_number_term a) & (is_number_term b) then
 	          (add_AssocC thenC (addrC [0] reduceC))
 	       else
-                  if (compare_terms b a)=Less then
+                  let a'=stripCoef a in
+                  let b'=stripCoef b in
+                  if (compare_terms b' a')=Less then
                      add_BubblePrimitiveC
                   else
                      idC
@@ -627,10 +681,10 @@ let add_BubbleSortC = (sweepDnC (termC same_productC)) thenC
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
-let add_normalizeC = (whileProgressC (sweepDnC add_Assoc2C)) thenC
-                     (whileProgressC add_BubbleSortC)
+let add_normalizeC = (repeatC (higherC add_Assoc2C)) thenC
+                     (repeatC add_BubbleSortC)
 
-let open_parenthesesC = whileProgressC (sweepDnC mul_add_DistribC)
+let open_parenthesesC = repeatC (sweepDnC mul_add_DistribC)
 
 let normalizeC = (sweepDnC reduceC) thenC
                  open_parenthesesC thenC
@@ -653,11 +707,23 @@ let reduceContradRelT i p = (rw ((addrC [0] normalizeC) thenC
 			         reduceC)
                                 i) p
 
+let provideConstantC t =
+   if is_number_term t then
+      idC
+   else if is_add_term t then
+      let (a,b)=dest_add t in
+      if is_number_term a then
+         idC
+      else
+         add_Id3C
+   else
+      add_Id3C
+
 let tryReduce_geT i p =
    let t=get_term i p in
       if is_ge_term t then
          (rw ((addrC [0] normalizeC) thenC
-             (addrC [1] (add_Id3C thenC normalizeC)))
+             (addrC [1] (normalizeC thenC (termC provideConstantC))))
              i) p
       else
 	 idT p
@@ -737,14 +803,14 @@ let findContradRelT p =
    match Arith.TG.solve (g,ar) with
       Arith.TG.Int (_,r),_ ->
          (*
-	   let aux i = eprintf "i=%u " i in
+           let aux i = eprintf "i=%u " i in
            let aux2 i = eprintf "r=%u " ar.(i) in
-	 *)
+         *)
          let aux3 i al = (ar.(i))::al in
          let rl = List.fold_right aux3 r [] in
          begin
             (*
-	      List.map aux l;
+              List.map aux l;
               prerr_endline "";
               List.map aux rl;
               flush stderr;

@@ -433,7 +433,7 @@ topval add_Id2C: conv
 
 rule add_Id3 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- 'a ~ ('a +@ 0) }
+   sequent ['ext] { 'H >- 'a ~ (0 +@ 'a) }
 
 topval add_Id3C: conv
 

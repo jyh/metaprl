@@ -824,11 +824,11 @@ let add_Id2C = add_Id2_rw
 
 interactive add_Id3 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- 'a ~ ('a +@ 0) }
+   sequent ['ext] { 'H >- 'a ~ (0 +@ 'a) }
 
 interactive_rw add_Id3_rw :
    ( 'a IN int ) -->
-   'a <--> ('a +@ 0)
+   'a <--> (0 +@ 'a)
 
 let add_Id3C = add_Id3_rw
 

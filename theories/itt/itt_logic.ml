@@ -1008,30 +1008,23 @@ let genAssumT indices p =
             if i <= 0 || i > len then
                raise (RefineError ("genAssumT", StringIntError ("assum index is out of range", i)))) indices
    in
-   let rec make_assum_implies_term indices t =
-      match indices with
-         [] ->
-            t
-       | i :: indices ->
-            let t' = TermMan.nth_concl (List.nth assums (pred i)) 1 in
-               make_assum_implies_term indices (mk_implies_term t' t)
-   in
-   let t =
-      match indices with
-         i :: indices ->
-            let goal = make_assum_implies_term indices (TermMan.nth_concl goal 1) in
-            let t = TermMan.nth_concl (List.nth assums (pred i)) 1 in
-            let t_type, t_var = dest_member t in
+   let rec make_gen_term t = function
+      [] ->
+         t
+    | i :: indices ->
+         let t = make_gen_term t indices in
+         let t' = TermMan.nth_concl (List.nth assums (pred i)) 1 in
+         if is_member_term t' then
+            let t_type, t_var = dest_member t' in
                if is_var_term t_var then
-                  mk_all_term (dest_var t_var) t_type goal
+                  mk_all_term (dest_var t_var) t_type t
                else
                   let v = maybe_new_vars1 p "v" in
-                     mk_all_term v t_type (var_subst goal t_var v)
-       | [] ->
-            raise (RefineError ("genAssumT", StringError "requires an assumption to generalize"))
-
+                     mk_all_term v t_type (var_subst t t_var v)
+         else mk_implies_term t' t
    in
-      assertT t p
+   let t = make_gen_term (TermMan.nth_concl goal 1) indices in
+   (assertT t thenMT (backThruHypT (-1) thenT autoT) ) p
 
 (************************************************************************
  * AUTO TACTIC                                                          *

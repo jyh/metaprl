@@ -46,7 +46,7 @@ doc <:doc<
 >>
 extends Itt_isect
 extends Itt_bool
-doc <:doc< @docoff >>
+doc docoff
 
 open Basic_tactics
 open Itt_equal
@@ -66,7 +66,7 @@ doc <:doc<
 >>
 define unfold_bisect : bisect{'A; 'B} <-->
                           "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -100,10 +100,9 @@ interactive bisectType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- "type"{bisect{'A; 'B}} }
 
-doc <:doc<
-   Formation.
-   @docoff
->>
+doc docoff
+
+(* Formation. *)
 interactive bisectFormation :
    sequent { <H> >- univ[i:l] } -->
    sequent { <H> >- univ[i:l] } -->
@@ -130,9 +129,10 @@ doc <:doc<
 
    The elimination rule for an assumption $x@colon @bisect{A; B}$ states that  $x$ can be replaced by
    $a @in A$ or by $b @in B$.
+
+   @docoff
    @end[doc]
 >>
-doc <:doc< @docoff >>
 
 interactive bisectElimination_eq 'H bind{x.bind{a,b.'C['x;'a;'b]}} :
    sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A;
@@ -179,6 +179,8 @@ interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H :
 interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H :
    sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
    sequent { <H>; x: 'A isect 'B; <J['x]> >- 'C['x] }
+
+doc docoff
 
 let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
@@ -236,8 +238,7 @@ interactive bisectTrivial1 {| nth_hyp |} 'H:
 interactive bisectTrivial2 {| nth_hyp |} 'H:
    sequent { <H>; x:'A isect 'B; <J['x]>  >- 'x in 'B}
 
-
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

@@ -47,7 +47,7 @@ doc <:doc<
 extends Itt_tunion
 extends Itt_bool
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
@@ -71,7 +71,7 @@ doc <:doc<
 >>
 define unfold_bunion : "bunion"{'A; 'B} <-->
                           Union x: bool. ifthenelse{'x; 'A; 'B}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -154,13 +154,15 @@ interactive bunionElimination {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
    sequent { <H>; x: 'A bunion 'B; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
 
+doc docoff
 let thinLastT n = thinT (-1) thenT tryT (thinT n)
+doc docon
 
 interactive bunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
    [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'A; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
    [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'B; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
    sequent { <H>; x: 'A bunion 'B; <J['x]> >- squash{'C['x]} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

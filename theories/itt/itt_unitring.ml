@@ -125,7 +125,7 @@ interactive car_preunitring_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]
    [wf] sequent { <H> >- 'R in preunitring[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive isUnitRing_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
    [main] sequent { <H> >- isRing{'R} } -->

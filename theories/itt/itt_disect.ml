@@ -233,10 +233,11 @@ interactive disectMemberCaseEquality2 (bisect{'A;x.'B['x]}) :
    [wf] sequent { <H> >- 'x1 = 'x2 in bisect{'A; y.'B['y]}  } -->
    sequent { <H> >- 'x1 = 'x2 in 'B['x1] }
 
+doc docoff
+
 let disectCaseEqualityT t =
    disectMemberCaseEquality2 t orelseT disectMemberCaseEquality1 t
 
-doc <:doc< @docoff >>
 (* disectElimination_eq is derived from disectMemberCaseEquality1/2
    (with the help of dintersectionTypeElimination).
    Therefore we can state disectMemberCaseEquality1/2 as primitive.

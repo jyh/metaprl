@@ -706,9 +706,9 @@ doc <:doc<
 
 	@end[doc]
 >>
-let normalizeC = reduceC thenC arith_unfoldC thenC reduceC
+doc docoff
 
-doc <:doc< @docoff >>
+let normalizeC = reduceC thenC arith_unfoldC thenC reduceC
 
 interactive_rw ge_addContract_rw :
    ( 'a in int ) -->

@@ -94,6 +94,8 @@ interactive assert_decidable 'p :
    sequent { <H>; x: not{'p} >- 'G } -->
    sequent { <H> >- 'G }
 
+doc docoff
+
 let decidable_term = <<decidable{'p}>>
 let decidable_opname = opname_of_term decidable_term
 let is_decidable_term = is_dep0_term decidable_opname

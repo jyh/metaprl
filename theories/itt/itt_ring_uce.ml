@@ -131,7 +131,7 @@ interactive car_preunitringE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>
    [wf] sequent { <H> >- 'f in preunitringE[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive isUnitRingCE_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- isUnitRing{'f} } -->
    sequent { <H> >- isCommutative{'f} } -->

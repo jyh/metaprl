@@ -17,7 +17,7 @@ extends Itt_logic
 extends Itt_tsquash
 extends Itt_bisect
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -47,7 +47,7 @@ doc <:doc< >>
 
 doc <:doc< @doc{@terms} >>
 
-doc <:doc< @docoff >>
+doc docoff
 
 define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
 
@@ -71,7 +71,7 @@ define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;x.'R}
 
 (* let foldRecordI = makeFoldC  <<record{'n;'A;'R}>> unfoldRecordI *)
 
-doc <:doc< @docoff >>
+doc docoff
 
 define unfoldFunctionOrt : function_ort{x.'f['x];'R} <--> (all x:'R. ('x = 'f['x] in 'R))
 
@@ -148,6 +148,8 @@ interactive_rw record_beta:
    field[n:t]{rcrd[m:t]{'a; 'r}} <--> eq_label[m:t,n:t]{'a;
                                                         field[n:t]{'r}}
 
+doc docoff
+
 let record_beta_rw = record_beta thenC reduce_eq_label
 
 let record_beta2_rw = record_beta2
@@ -158,6 +160,8 @@ let resource reduce +=
 let record_reduce = repeatC (higherC (firstC [unfoldRcrdS;record_beta1;record_beta_rw]))
 
 let record_reduceT = rwhAll record_reduce
+
+doc docon
 
 interactive record_eta {| intro [] |} 'A:
    sequent{ <H> >- 'r in record[n:t]{'A} } -->
@@ -224,6 +228,8 @@ interactive recordMemberS {| intro[] |} :
    sequent{ <H> >- rcrd[n:t]{'a;'r} in record[m:t]{'A} }
 *)
 
+doc docoff
+
 let record_eqcdST =
    rwh unfoldRcrdS 0 thenT firstT [recordEqualS5; recordEqualS4; recordEqualS3; recordEqualS2; recordEqualS1]
 
@@ -243,6 +249,8 @@ let rec record_eqcdS addr  =
        recordEqualS1 addr thenLT [not_eq_labelT;record_eqcdS addr]]
 
 *)
+
+doc docon
 
 interactive recordTypeEliminationS {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; u:"type"{record[n:t]{'A}}; v:"type"{'A}; <J['u]> >- 'C['u] } -->
@@ -289,6 +297,8 @@ interactive recordEqualOrt2 :
    [main] sequent{ <H> >- 'r1 = 'r2 in 'R } -->
    [ort] sequent{ <H>; r:'R >- record_ort[n:t]{'a;'R} } -->
    sequent{ <H> >- 'r1 = rcrd[n:t]{'a;'r2}  in 'R }
+
+doc docoff
 
 let recordOrtT = funT (fun p ->
    let rrule =
@@ -372,7 +382,7 @@ interactive recordEliminationI  'H :
    [main] sequent{ <H>; x:'A; r:'R; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent{ <H>; r:record[n:t]{'A;'R}; <J['r]> >- 'C['r]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let recordS_elim = argfunT (fun n p ->
  let n = Sequent.get_pos_hyp_num p n in
@@ -440,16 +450,22 @@ interactive recordOrtIntroS2 :
    [main] sequent{ <H>; x:'A >- 'x='a in 'A } -->
    sequent{ <H> >- record_ort[n:t]{'a;record[n:t]{'A}} }
 
+doc docoff
+
 let recordOrtIntroST =
    recordOrtIntroS2 orelseT recordOrtIntroS1
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A}}>>,wrap_intro recordOrtIntroST)
+
+doc docon
 
 interactive recordOrtIntroL :
    [wf] sequent{ <H> >- "type"{record[m:t]{self.'A['self];'R}} } -->
    [main] sequent{ <H>; r:'R; x:'A['r] >- record_ort[n:t]{'a;'R}}  -->
    [main] sequent{ <H>; r:'R; x:'A['r] >- record_ort[n:t]{'a;record[m:t]{'A['r]}}}  -->
    sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}} }
+
+doc docoff
 
 let recordOrtIntroLT =
    recordOrtIntroL thenLT
@@ -460,11 +476,15 @@ let recordOrtIntroLT =
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}}>>,wrap_intro recordOrtIntroLT)
 
+doc docon
+
 interactive recordOrtIntroR :
    [wf] sequent{ <H> >- "type"{record[m:t]{'A;x.'R['x]}} } -->
    [main] sequent{ <H>; x:'A; r:'R['x] >- record_ort[n:t]{'a;'R['x]} } -->
    [main] sequent{ <H>; x:'A; r:'R['x] >- record_ort[n:t]{'a;record[m:t]{'A}}}  -->
    sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}} }
+
+doc docoff
 
 let recordOrtIntroRT =
    recordOrtIntroR thenLT
@@ -475,11 +495,15 @@ let recordOrtIntroRT =
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}}>>,wrap_intro recordOrtIntroRT)
 
+doc docon
+
 interactive recordOrtIntroI :
    [wf] sequent{ <H> >- "type"{record[m:t]{'A;'R}} } -->
    [main] sequent{ <H>; x:'A; r:'R >- record_ort[n:t]{'a;'R} } -->
    [main] sequent{ <H>; x:'A; r:'R >- record_ort[n:t]{'a;record[m:t]{'A}}} -->
    sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{'A;'R}} }
+
+doc docoff
 
 let recordOrtIntroIT =
    recordOrtIntroI thenLT
@@ -489,6 +513,8 @@ let recordOrtIntroIT =
       ]
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,wrap_intro recordOrtIntroIT)
+
+doc docon
 
 interactive recordOrtSetIntro {| intro [] |} :
 	[wf] sequent { <H>;  r: 'T >- 'P['r] Type } -->
@@ -507,7 +533,7 @@ interactive recordOrtBisectIntro {| intro [] |} :
 (*  Tactics       *)
 (******************)
 
-doc <:doc< @docoff >>
+doc docoff
 
 (*
 let elim0 rule p n =

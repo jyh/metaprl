@@ -192,7 +192,6 @@ interactive prering_equality {| intro [complete_unless_member] |} :
 interactive prering_elim {| elim [] |} 'H :
    sequent { <H>; R: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car}; <J['R]> >- 'C['R] } -->
    sequent { <H>; R: prering[i:l]; <J['R]> >- 'C['R] }
-doc docoff
 
 interactive car_prering_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} prering[i:l] :
    [wf] sequent { <H> >- 'R in prering[i:l] } -->
@@ -218,7 +217,6 @@ interactive addG_isAbelg_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
    sequent { <H> >- isAbelg{as_additive{'R}} }
 
-doc <:doc< @doc{ } >>
 interactive isRing_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
    [main] sequent { <H> >- isSemigroup{'R} } -->
@@ -497,7 +495,7 @@ doc docoff
 dform zeroRing_df1 : except_mode[src] :: ZeroRing =
    `"{0}"
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive zero_ring {| intro [] |}:
    sequent { <H> >- ZeroRing in ring[i:l] }
 
@@ -521,7 +519,7 @@ doc docoff
 let fold_Z = makeFoldC << Z >> unfold_Z
 let fold_Z_car = foldC << Z^car >> ((addrC [Subterm 1] unfold_Z) thenC reduceC)
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive integer_ring {| intro [] |} :
    sequent { <H> >- Z in ring[i:l] }
 
@@ -546,7 +544,7 @@ let fold_Zeven = makeFoldC << Zeven >> unfold_Zeven
 (**** The next rule cannot be proved for now due to the ****
  **** incompleteness of axioms about the rem operation  ****
  **** in Itt_int_ext.                                   ****)
-doc <:doc< @doc{ } >>
+doc docon
 interactive eveninteger_ring {| intro [] |} :
    sequent { <H> >- Zeven in ring[i:l] }
 doc docoff

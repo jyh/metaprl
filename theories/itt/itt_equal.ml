@@ -250,7 +250,7 @@ prim equalityTrans 'z :
    sequent { <H> >- 'x = 'y in 'T } =
    it
 
-doc <<docoff>>
+doc docoff
 (*
  * H >- Ui ext a = b in T
  * by equalityFormation T

@@ -170,7 +170,7 @@ interactive car_preringE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |}
    [wf] sequent { <H> >- 'f in preringE[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive isRingE_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- isRing{'f} } -->
    sequent { <H> >- eqDecidable{'f} } -->

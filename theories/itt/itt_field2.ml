@@ -136,7 +136,7 @@ interactive car_prefield_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |}
    [wf] sequent { <H> >- 'f in prefield[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive isField_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'f^"0" in 'f^car } -->
    [main] sequent { <H> >- isRing{'f} } -->
@@ -441,7 +441,7 @@ interactive field_noDiv0 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- noDiv0{'f} }
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive carNo0_car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- carNo0{'f}^car Type }

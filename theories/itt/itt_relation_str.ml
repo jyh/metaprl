@@ -214,9 +214,7 @@ let decideOrder3T compare_term order_term =
           rwhAll (compare_equal thenTC nthHypT (-1));
           rwhAll (compare_greater thenTC nthHypT (-1))]
 
-
-doc <:doc< @doc{ } >>
-
+doc docon
 
 interactive compare_wf {| intro [intro_typeinf <<'ord>>] |} preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
@@ -227,12 +225,15 @@ interactive compare_wf {| intro [intro_typeinf <<'ord>>] |} preorder[i:l] :
    sequent { <H>; u: eq{'ord;'x;'y} >- 'equal_case in 'T } -->
    sequent { <H> >-  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case} in 'T}
 
+doc docoff
+
 dform compare_df : except_mode[src] :: compare{'O; 'a;'b; 'less_case; 'equal_case; 'greater_case} =
    szone pushm[0] pushm[3] `"Compare in " slot{'O} `": " hspace
        'a `"<" 'b `" -> " slot{'less_case} hspace
        'a `"=" 'b `" -> " slot{'equal_case}  hspace
        'a `">" 'b `" -> " slot{'greater_case} popm popm ezone
 
+doc docon
 
 interactive trans_less_less preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->

@@ -131,7 +131,7 @@ interactive car_prefieldE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |
    sequent { <H> >- 'f in prefieldE[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
-doc <:doc< @doc{ } >>
+doc docon
 interactive isFieldE_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- isField{'f} } -->
    sequent { <H> >- eqDecidable{'f} } -->
@@ -179,6 +179,7 @@ interactive poly_field {| intro [] |} :
    [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
    sequent { <H> >- poly_ring{'F} in intDomainE[i:l] }
 
+doc docoff
 
 (************************************************************************
  * DISPLAY FOfMS                                                        *

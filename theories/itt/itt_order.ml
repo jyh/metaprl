@@ -273,6 +273,8 @@ interactive isTransitive_intro :
 		"assert"{'rel 'a 'b}; "assert"{'rel 'b 'c} >- "assert"{'rel 'a 'c} } -->
 	sequent { <H> >- isTransitive{'car; 'rel} }
 
+doc docoff
+
 let tryReduceBetaC = tryC reduce_beta
 let tryReduceBeta = rw (addrC [Subterm 1] ((addrC [Subterm 1] tryReduceBetaC) thenC tryReduceBetaC))
 let isTransitiveDT0 = isTransitive_intro thenMT tryReduceBeta 0 thenMT tryReduceBeta (-1) thenMT tryReduceBeta (-2)
@@ -484,6 +486,8 @@ define unfold_unstrictTotalOrder1 : unstrictTotalOrder[i:l,rel:t] <-->
 define unfold_strictTotalOrder1 : strictTotalOrder[i:l,rel:t] <-->
    { O: strictPartialOrder[i:l,rel:t] | isTrichotomous{'O^car; 'O^rel} }
 
+doc docoff
+
 let unfold_preorder = unfold_preorder1 thenC addrC [Subterm 1] unfold_relation thenC addrC [Subterm 2] unfold_isPreorder
 let unfold_unstrictPartialOrder = unfold_unstrictPartialOrder1 thenC addrC [Subterm 1] unfold_relation thenC addrC [Subterm 2] unfold_isUnstrictPartialOrder
 let unfold_strictPartialOrder = unfold_strictPartialOrder1 thenC addrC [Subterm 1] unfold_relation thenC addrC [Subterm 2] unfold_isStrictPartialOrder
@@ -501,6 +505,11 @@ let resource elim += [
    <<unstrictPartialOrder[i:l,rel:t]>>, unstrictPartialOrderDT;
 	]
 
+doc <:doc<
+   @begin[doc]
+   Well-formedness rules
+   @end[doc]
+>>
 interactive relation_wf {| intro [] |} :
    sequent { <H> >- relation[i:l,rel:t] Type }
 

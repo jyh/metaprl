@@ -8,7 +8,7 @@ doc <:doc<
 
 extends Itt_record
 
-doc <:doc< @docoff >>
+doc docoff
 
 extends Itt_int_base
 extends Itt_int_ext
@@ -76,7 +76,7 @@ doc <:doc<
 define unfold_A: A <--> {x=1; y=2; z=3}
 define unfold_B: B <--> {z=0; y=2; x=1}
 
-doc <:doc< @docoff >>
+doc docoff
 
 interactive aInSpace {|intro[] |} :
    sequent{ <H> >- A in space }
@@ -134,11 +134,15 @@ doc <:doc<
 define plane_point: point{'a;'b;'e} <--> rcrd["x":t]{'a; rcrd["y":t]{'b;'e }}
 define space_point: point{'a;'b; 'c;'e} <--> rcrd["x":t]{'a; rcrd["y":t]{'b; rcrd["z":t]{'c;'e}}}
 
+doc docoff
+
 let unfold_point = plane_point orelseC space_point
 
 let fold_point =
    makeFoldC <<point{'a;'b;'c;'e}>> space_point orelseC
    makeFoldC <<point{'a;'b;'e}>> plane_point
+
+doc docon
 
 interactive planeIntro {|intro[] |} :
    sequent{ <H> >- 'a in int} -->
@@ -176,7 +180,7 @@ interactive planeElim {|elim[] |} 'H :
    sequent{ <H>; a:int; b:int; e:record; <J[point{'a;'b;'e}]> >- 'C[point{'a;'b;'e}] } -->
    sequent{ <H>; p:plane; <J['p]> >- 'C['p] }
 
-doc <:doc< @docoff >>
+doc docoff
 
 interactive spaceElim {|elim[] |} 'H :
    sequent{ <H>; a:int; b:int; c:int; e:record; <J[point{'a;'b;'c;'e}]> >- 'C[point{'a;'b;'c;'e}] } -->
@@ -257,6 +261,8 @@ define  unfold_mul_semigroup : semigroup[i:l] <-->
     all x: ^car. all y:^car .all z:^car. ('x ^* 'y) ^* 'z =  'x ^* ('y ^* 'z) in ^car
    }
 
+doc docoff
+
 (* let unfold_semigroup = (tryC unfold_semigroup2) thenC unfold_semigroup1 *)
 
 let unfold_semigroup = unfold_mul_semigroup orelseC unfold_semigroup1
@@ -271,6 +277,8 @@ let resource intro +=
    [<<semigroup[i:l]>>,wrap_intro (semigroupDT 0);
     <<semigroup[G:t,mul:t,i:l]>>, wrap_intro (semigroupDT 0)
    ]
+
+doc docon
 
 define integers : integers <-->
    {car = int;
@@ -328,16 +336,16 @@ interactive stack_as_list_wf {| intro [] |}:
    sequent{ <H> >- 'A in univ[i:l]} -->
    sequent{ <H> >- list_stack{'A} in Stack[i:l]{'A}}
 
-(*
- * @begin[doc]
- * @modsection{Mutually recursive functions}
- * Using records, one can define a module with mutually recursive functions.
- * E.g. let us define the module with two functions:
- *   foo x = if x>0 then fee (x-1) else 0
- * and
- *   fee x = if x>0 then foo (x-1) else 1
- * @end[doc]
- *)
+doc <:doc<
+   @begin[doc]
+   @modsection{Mutually recursive functions}
+   Using records, one can define a module with mutually recursive functions.
+   E.g. let us define the module with two functions:
+     foo x = if x>0 then fee (x-1) else 0
+   and
+     fee x = if x>0 then foo (x-1) else 1
+   @end[doc]
+>>
 
 define unfold_a_module : a_module <-->
    fix{self.
@@ -345,11 +353,15 @@ define unfold_a_module : a_module <-->
            fee = lambda{x.ifthenelse{gt_bool{'x;0};. ^foo ('x -@ 1);1}}
           }}
 
+doc docoff
+
 let fold_a_module =
    makeFoldC <<a_module>> unfold_a_module;;
 
 let eval_a_module =
    unfold_a_module thenC reduce_fix thenC higherC fold_a_module;;
+
+doc docon
 
 interactive_rw foo_eval {| reduce |} :
    (a_module^foo 'x) <--> ifthenelse{gt_bool{'x;0};.a_module^fee ('x -@ 1);0}

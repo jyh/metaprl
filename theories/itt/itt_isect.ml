@@ -74,7 +74,7 @@ extends Itt_set
 extends Itt_rfun
 extends Itt_logic
 extends Itt_struct2
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -108,7 +108,7 @@ doc <:doc<
 declare "isect"{'A; x. 'B['x]}
 
 define unfold_top : top <--> "isect"{void; x. void}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -251,7 +251,7 @@ prim intersectionElimination {| elim [] |} 'H 'a :
    sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x] } =
    't['x; 'x]
 
-doc <:doc< @docoff >>
+doc docoff
 
 interactive intersectionElimination_eq 'H 'a bind{x.bind{z.'T['x;'z]}}:
    [wf] sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'a in 'A } -->
@@ -293,6 +293,8 @@ interactive intersectionElimination2 (*{| elim [] |}*) 'H :
    [main] sequent { <H>; x: Isect y: 'A. 'B; <J['x]>; z: 'B; v: 'z = 'x in 'B >- 'T['z] } -->
    sequent { <H>; x: Isect y: 'A. 'B; <J['x]> >- 'T['x] }
 
+doc docoff
+
 let intersectionEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
      (intersectionElimination2 n thenT thinIfThinningT [-1;n])
@@ -320,7 +322,7 @@ interactive intersectionEqualityElim {| elim [] |} 'H 'a :
    sequent { <H>; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; v: 'b1 = 'b2 in 'B['a]; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; <J['u]> >- 'C['u] }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (* We could declare intersectionMemberCaseEquality as primitive and derive intersectionElimination *)
 
@@ -375,7 +377,7 @@ doc <:doc<
 interactive topSubtype {| intro [] |} :
    sequent { <H> >- "type"{'T} } -->
    sequent { <H> >- \subtype{'T; top} }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

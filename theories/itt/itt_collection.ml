@@ -77,7 +77,10 @@ doc <:doc<
 (*--- col ---*)
 
 define unfold_col: col[l:l]{'T} <--> ('T -> univ[l:l])
+
+doc docoff
 let fold_col = makeFoldC <<col[l:l]{'T}>> unfold_col
+doc docon
 
 interactive col_univ {| intro [] |} :
    sequent{ <H> >- 'T in univ[l':l] } -->
@@ -90,12 +93,17 @@ interactive col_wf {| intro [] |} :
 (*--- col_member ---*)
 
 define unfold_col_member: col_member{'C;'x} <--> esquash{('C 'x)}
+
+doc docoff
 let fold_col_member = makeFoldC <<col_member{'C;'x}>> unfold_col_member
+doc docon
 
 interactive col_member_univ {| intro [intro_typeinf <<'x>>] |} 'T:
    sequent{ <H> >- 'x in 'T } -->
    sequent{ <H> >- 'C in col[l:l]{'T} } -->
    sequent{ <H> >- col_member{'C;'x} in univ[l:l] }
+
+doc docoff
 
 let univ_typeinf_arg p t =
    let t =
@@ -105,6 +113,8 @@ let univ_typeinf_arg p t =
 
 let intro_univ_typeinf t = IntroArgsOption (univ_typeinf_arg, Some t)
 let elim_univ_typeinf t = ElimArgsOption (univ_typeinf_arg, Some t)
+
+doc docon
 
 interactive col_member_wf {| intro [intro_univ_typeinf <<'x>>] |} univ[l:l] 'T:
    sequent{ <H> >- 'x in 'T } -->
@@ -151,7 +161,10 @@ interactive col_equal_sym  univ[l:l] :
 (*--- Col --*)
 
 define unfold_Col :  Col[l:l]{'T} <--> (quot x,y: col[l:l]{'T} // col_equal{'T;'x;'y})
+
+doc docoff
 let fold_Col = makeFoldC <<Col[l:l]{'T}>> unfold_Col
+doc docon
 
 interactive _Col_wf {| intro [] |} :
    sequent{ <H> >- "type"{'T}} -->
@@ -197,9 +210,7 @@ interactive member_type_col {| intro [] |} :
    sequent{ <H> >- col_member{type_col{'T};'x}}
 
 (*--- col_type ---*)
-declare col_type{'C;'T}
-
-prim_rw unfold_col_type : col_type{'C;'T} <--> ({ x:'T | col_member{'C;'x} })
+define unfold_col_type : col_type{'C;'T} <--> ({ x:'T | col_member{'C;'x} })
 
 interactive col_type_wf {| intro [intro_univ_arg] |} univ[l:l] :
    sequent{ <H> >- "type"{'T}} -->
@@ -238,9 +249,13 @@ interactive union_wf {| intro [] |} :
    sequent{ <H>; x:'X >- 'Y['x] in Col[l:l]{'T} } -->
    sequent{ <H> >- "union"{'X;x.'Y['x]} in Col[l:l]{'T} }
 
+doc docoff
+
 let univ_with_args_fun p _ = [get_univ_arg p; get_with_arg p]
 let intro_univ_with_args = IntroArgsOption (univ_with_args_fun, None)
 let elim_univ_with_args = ElimArgsOption (univ_with_args_fun, None)
+
+doc docon
 
 interactive member_union {| intro [intro_univ_with_args] |} univ[l:l] 'z :
    [wf] sequent{ <H>; x:'X >- "type"{col_member{'Y['x];'y}} } -->
@@ -314,8 +329,11 @@ interactive member_none_elim {| elim [] |} 'H :
 
 (*--- add ---*)
 
-prim_rw unfold_add : add{'C_1;'C_2} <--> "union"{bool; b. ifthenelse{'b;'C_1;'C_2}}
+define unfold_add : add{'C_1;'C_2} <--> "union"{bool; b. ifthenelse{'b;'C_1;'C_2}}
+
+doc docoff
 let fold_add = makeFoldC <<add{'C_1;'C_2}>> unfold_add
+doc docon
 
 interactive add_wf {| intro [] |} :
    sequent{ <H> >- "type"{'T}} -->
@@ -461,7 +479,7 @@ interactive singleton_if  univ[l:l] :
 
 *)
 
-doc <:doc< @docoff >>
+doc docoff
 
 (********************** Tactics *********************)
 

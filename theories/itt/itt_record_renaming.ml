@@ -11,7 +11,7 @@ doc <:doc< @doc{@parents} >>
 
 extends Itt_record
 
-doc <:doc< @docoff >>
+doc docoff
 
 extends Itt_algebra_df
 
@@ -237,9 +237,9 @@ doc <:doc<
    @end[doc]
 >>
 
+doc docoff
+
 let renameFieldT term = rwhAll  (renameFieldC term)
-
-
 
 (******************* additive **********************)
 
@@ -473,6 +473,8 @@ let test t =
 
 (******************* order  **********************)
 
+let reverse_order_length = 7
+
 doc <:doc<
    @begin[doc]
    @modsection{Inverse Order}
@@ -480,8 +482,6 @@ doc <:doc<
    Then we can reverse the order just by  renaming:
    @end[doc]
 >>
-
-let reverse_order_length = 7
 
 define unfold_reverse_order: reverse_order{'ord} <-->
    rename["<":t,">":t]{
@@ -493,9 +493,9 @@ define unfold_reverse_order: reverse_order{'ord} <-->
    rename["0":t,"1":t]{
       'ord }}}}}}}
 
+doc docoff
 
 dform reverse_order_df: except_mode[src] ::parens :: reverse_order{'ord} = slot["le"]{'ord} sup["-1"]
-
 
 doc <:doc<
    @begin[doc]
@@ -511,13 +511,13 @@ doc <:doc<
      This reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
     <<field[c:t]{reverse_order{'ord}}>>.
    @end[doc]
+   @docoff
 >>
 
 let resource reduce +=
   [ << field[c:t]{reverse_order{'r}} >>, (addrC [Subterm 1] unfold_reverse_order thenC repeatForC reverse_order_length rename_reduceC);
     << reverse_order{rcrd[c:t]{'a;'r}} >>, unfold_reverse_order;
   ]
-
 
 doc <:doc<
    @begin[doc]
@@ -529,13 +529,12 @@ doc <:doc<
      The @tt[reduceC] conversion should undo this conversion.
 
      The @tactic[reverseOrderT] @i[ord] tactic apply the above conversions to all subterms of the goal sequent (using @hreftactic[rwhAll]).
-
    @end[doc]
-   @docoff
 >>
 
-
 interactive_rw reverse_order_rw 'ord:  'ord <-->   reverse_order{reverse_order{'ord}}
+
+doc docoff
 
 let reverseOrderC term = allSubThenC (reverse_order_rw term) (reduceTopC)
 
@@ -554,6 +553,8 @@ doc <:doc<
 declare max{'ord;'a;'b}
 
 define unfold_min:  min{'ord;'a;'b}  <--> max{reverse_order{'ord};'a;'b}
+
+doc docoff
 
 dform max_df : max{'ord;'a;'b} = `"max(" 'ord `";" 'a `";" 'b `")"
 dform min_df : min{'ord;'a;'b} = `"min(" 'ord `";" 'a `";" 'b `")"
@@ -586,8 +587,7 @@ interactive example :
     sequent { <H> >- max{reverse_order{'ord};'a;'b} >[reverse_order{'ord}] 'a } -->
     sequent { <H> >- min{'ord;'a;'b} <['ord] 'a }
 
-
-doc <:doc< @docoff >>
+doc docoff
 
 (*
 

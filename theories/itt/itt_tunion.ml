@@ -61,7 +61,7 @@ extends Itt_struct2
 extends Itt_equal
 extends Itt_set
 extends Itt_logic
-doc <:doc< @docoff >>
+doc docoff
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -85,7 +85,7 @@ doc <:doc<
 >>
 
 declare tunion{'A; x. 'B['x]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -179,7 +179,9 @@ prim tunionElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] } =
    it
 
+doc docoff
 let thinLastT n = (thinT (-1) thenT tryT (thinT n))
+doc docon
 
 interactive tunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
@@ -193,7 +195,7 @@ interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'C['z] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

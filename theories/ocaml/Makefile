@@ -28,6 +28,7 @@ MAIN = ocaml_df
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa
+install:: all
 
 clean::
 	$(RM) -f *.p4* *.pp*

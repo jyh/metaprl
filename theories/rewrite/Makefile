@@ -29,6 +29,7 @@ MAIN = rw
 
 all: $(MAIN).run
 opt: $(MAIN).opt
+install:: all
 
 clean::
 	del -f *.p4* *.pp*

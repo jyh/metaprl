@@ -23,6 +23,7 @@ MAIN = base
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa
+install:: all
 
 clean::
 	del -f *.p4* *.pp*

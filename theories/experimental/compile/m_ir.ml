@@ -280,14 +280,14 @@ dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomBinop{NeqOp; 'e1; 'e
    slot["lt"]{'e1} " " Nuprl_font!neq `" " slot["le"]{'e2}
 
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
-   szone pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." slot{'e} popm ezone
+   szone pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." hspace slot{'e} popm ezone
 
 (* Recursive functions *)
 dform fun_decl_df : parens :: "prec"[prec_let] :: FunDecl{f. 'e} =
    `"declare " slot{'f} `" " xin hspace slot["lt"]{'e}
 
 dform fun_def_df : parens :: "prec"[prec_let] :: FunDef{'f; 'e1; 'e2} =
-   `"define " slot{'f} `" = " slot{'e1} `" " xin hspace slot["lt"]{'e2}
+   pushm[3] `"define " slot{'f} `" = " hspace slot{'e1} `" " xin popm hspace slot["lt"]{'e2}
 
 (* Expressions *)
 dform exp_let_atom_df : parens :: "prec"[prec_let] :: LetAtom{'a; v. 'e} =
@@ -331,7 +331,7 @@ dform def_df : def{'v; 'e} =
    slot{'v} `" = " slot{'e}
 
 dform compilable_df : "prec"[prec_compilable] :: compilable{'e} =
-   szone Nuprl_font!longrightarrow pushm[0] slot{'e} popm ezone
+   szone pushm[0] pushm[3] bf["compilable"] hspace slot{'e} popm hspace bf["end"] popm ezone
 
 (*
  * Sequent tag for the M language.

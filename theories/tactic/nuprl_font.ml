@@ -312,10 +312,10 @@ dform bf_end_df : internal :: mode[html] :: bf_end =
    izone `"</b>" ezone
 
 dform bf_begin_df : internal :: mode[prl] :: bf_begin =
-   `""
+   pushfont["bf"]
 
 dform bf_end_df : internal :: mode[prl] :: bf_end =
-   `""
+   popfont
 
 dform bf_df1 : internal :: bf[text:s] =
    bf_begin slot[text:s] bf_end
@@ -547,23 +547,23 @@ dform mathbbE_df		: internal :: mode[prl] :: mathbbE                   = `"𝔼"
 dform mathbbF_df		: internal :: mode[prl] :: mathbbF                   = `"𝔽"
 dform mathbbG_df		: internal :: mode[prl] :: mathbbG                   = `"𝔾"
 dform mathbbH_df		: internal :: mode[prl] :: mathbbH                   = `"ℍ"
-dform mathbbI_df		: internal :: mode[prl] :: mathbbI                   = `"𝕀"
-dform mathbbJ_df		: internal :: mode[prl] :: mathbbJ                   = `"𝕁"
-dform mathbbK_df		: internal :: mode[prl] :: mathbbK                   = `"𝕂"
-(* dform mathbbL_df		: internal :: mode[prl] :: mathbbL                   = `"𝕃" *)
-dform mathbbM_df		: internal :: mode[prl] :: mathbbM                   = `"𝕃"
+dform mathbbI_df		: internal :: mode[prl] :: mathbbI                   = `"�"
+dform mathbbJ_df		: internal :: mode[prl] :: mathbbJ                   = `"�"
+dform mathbbK_df		: internal :: mode[prl] :: mathbbK                   = `"�"
+(* dform mathbbL_df		: internal :: mode[prl] :: mathbbL                   = `"�" *)
+dform mathbbM_df		: internal :: mode[prl] :: mathbbM                   = `"�"
 dform mathbbN_df		: internal :: mode[prl] :: mathbbN                   = `"ℕ"
-dform mathbbO_df		: internal :: mode[prl] :: mathbbO                   = `"𝕆"
+dform mathbbO_df		: internal :: mode[prl] :: mathbbO                   = `"�"
 dform mathbbP_df		: internal :: mode[prl] :: mathbbP                   = `"ℙ"
 dform mathbbQ_df		: internal :: mode[prl] :: mathbbQ                   = `"ℚ"
 dform mathbbR_df		: internal :: mode[prl] :: mathbbR                   = `"ℝ"
-dform mathbbS_df		: internal :: mode[prl] :: mathbbS                   = `"S" (* or `"𝕊" *)
-dform mathbbT_df		: internal :: mode[prl] :: mathbbT                   = `"𝕋"
-dform mathbbU_df		: internal :: mode[prl] :: mathbbU                   = `"Ů" (* or: `"Ⓤ", or `"U" *) (* real: `"𝕌" *)
-dform mathbbV_df		: internal :: mode[prl] :: mathbbV                   = `"𝕍"
-dform mathbbW_df		: internal :: mode[prl] :: mathbbW                   = `"𝕎"
-dform mathbbX_df		: internal :: mode[prl] :: mathbbX                   = `"𝕏"
-dform mathbbY_df		: internal :: mode[prl] :: mathbbY                   = `"𝕐"
+dform mathbbS_df		: internal :: mode[prl] :: mathbbS                   = `"S" (* or `"�" *)
+dform mathbbT_df		: internal :: mode[prl] :: mathbbT                   = `"�"
+dform mathbbU_df		: internal :: mode[prl] :: mathbbU                   = `"Ů" (* or: `"Ⓤ", or `"U" *) (* real: `"�" *)
+dform mathbbV_df		: internal :: mode[prl] :: mathbbV                   = `"�"
+dform mathbbW_df		: internal :: mode[prl] :: mathbbW                   = `"�"
+dform mathbbX_df		: internal :: mode[prl] :: mathbbX                   = `"�"
+dform mathbbY_df		: internal :: mode[prl] :: mathbbY                   = `"�"
 dform mathbbZ_df		: internal :: mode[prl] :: mathbbZ                   = `"ℤ"
 
 dform mathbbA_df		: internal :: mode[html] :: mathbbA                   = keyword["A"]

@@ -77,11 +77,20 @@ declare SubOp
 declare MulOp
 declare DivOp
 
+declare LtOp
+declare LeOp
+declare EqOp
+declare NeqOp
+declare GeOp
+declare GtOp
+
 (*!
  * @begin[doc]
  * Values are numbers, functions, and pairs.
  * @end[doc]
  *)
+declare ValFalse
+declare ValTrue
 declare ValInt[i:n]
 declare ValFun{v. 'e['v]}
 declare ValPair{'v1; 'v2}
@@ -95,6 +104,8 @@ declare ValPair{'v1; 'v2}
  * are also atoms.
  * @end[doc]
  *)
+declare AtomFalse
+declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
@@ -186,6 +197,7 @@ declare compilable{'e}
 prec prec_var
 prec prec_mul
 prec prec_add
+prec prec_rel
 prec prec_if
 prec prec_fun
 prec prec_let
@@ -193,7 +205,8 @@ prec prec_compilable
 
 prec prec_mul < prec_var
 prec prec_add < prec_mul
-prec prec_let < prec_add
+prec prec_rel < prec_add
+prec prec_let < prec_rel
 prec prec_if < prec_let
 prec prec_fun < prec_if
 prec prec_compilable < prec_let
@@ -205,16 +218,28 @@ dform xlet_df : xlet = bf["let"]
 dform xin_df : xin = bf["in"]
 
 (* Values *)
+dform val_false_df : ValFalse =
+   `"<false>"
+
+dform val_true_df : ValTrue =
+   `"<true>"
+
 dform val_int_df : ValInt[i:n] =
-   slot[i:n]
+   `"<" slot[i:n] `">"
 
 dform val_fun_df : parens :: except_mode [src] :: "prec"[prec_fun] :: ValFun{v. 'b} =
-   Nuprl_font!lambda slot{'v} `"." slot{'b}
+   `"<" Nuprl_font!lambda slot{'v} `"." slot{'b} `">"
 
 dform val_pair_df : except_mode[src] :: ValPair{'a; 'b} =
-   pushm[0] `"(" slot{'a}`"," slot{'b} `")" popm
+   pushm[0] `"<" slot{'a}`"," slot{'b} `">" popm
 
 (* Atoms *)
+dform atom_false_df : AtomFalse =
+   `"false"
+
+dform atom_false_df : AtomTrue =
+   `"true"
+
 dform atom_int_df : AtomInt[i:n] =
    `"#" slot[i:n]
 
@@ -236,8 +261,26 @@ dform atom_binop_mul_df : parens :: "prec"[prec_mul] :: AtomBinop{MulOp; 'e1; 'e
 dform atom_binop_div_df : parens :: "prec"[prec_mul] :: AtomBinop{DivOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
 
+dform atom_binop_lt_df : parens :: "prec"[prec_rel] :: AtomBinop{LtOp; 'e1; 'e2} =
+   slot["lt"]{'e1} " " `"< " slot["le"]{'e2}
+
+dform atom_binop_le_df : parens :: "prec"[prec_rel] :: AtomBinop{LeOp; 'e1; 'e2} =
+   slot["lt"]{'e1} " " Nuprl_font!le `" " slot["le"]{'e2}
+
+dform atom_binop_gt_df : parens :: "prec"[prec_rel] :: AtomBinop{GtOp; 'e1; 'e2} =
+   slot["lt"]{'e1} " " `"> " slot["le"]{'e2}
+
+dform atom_binop_ge_df : parens :: "prec"[prec_rel] :: AtomBinop{GeOp; 'e1; 'e2} =
+   slot["lt"]{'e1} " " Nuprl_font!ge `" " slot["le"]{'e2}
+
+dform atom_binop_eq_df : parens :: "prec"[prec_rel] :: AtomBinop{EqOp; 'e1; 'e2} =
+   slot["lt"]{'e1} " " `"= " slot["le"]{'e2}
+
+dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomBinop{NeqOp; 'e1; 'e2} =
+   slot["lt"]{'e1} " " Nuprl_font!neq `" " slot["le"]{'e2}
+
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
-   pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." slot{'e} popm
+   szone pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." slot{'e} popm ezone
 
 (* Recursive functions *)
 dform fun_decl_df : parens :: "prec"[prec_let] :: FunDecl{f. 'e} =
@@ -257,9 +300,9 @@ dform exp_tailcall3_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a1; 'a2} =
    `"tailcall " slot{'f} `"(" slot{'a1} `", " slot{'a2} `")"
 
 dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; 'e2} =
-   szone pushm[0] pushm[3] `"if" `" " szone{'a} `" " `"then" hspace
-   szone{'e1} popm hspace
-   pushm[3] `"else" hspace szone{'e2} popm popm ezone
+   szone pushm[0] pushm[3] `"if" `" " slot{'a} `" " `"then" hspace
+   slot{'e1} popm hspace
+   pushm[3] `"else" hspace slot{'e2} popm popm ezone
 
 dform exp_let_pair_df : parens :: "prec"[prec_let] :: LetPair{'a1; 'a2; v. 'e} =
    xlet `" " slot{'v} `" = " ValPair{'a1; 'a2} `" " xin hspace slot["lt"]{'e}

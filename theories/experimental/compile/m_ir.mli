@@ -59,6 +59,7 @@ extends Base_theory
 prec prec_var
 prec prec_mul
 prec prec_add
+prec prec_rel
 prec prec_if
 prec prec_fun
 prec prec_let
@@ -72,9 +73,18 @@ declare SubOp
 declare MulOp
 declare DivOp
 
+declare LtOp
+declare LeOp
+declare EqOp
+declare NeqOp
+declare GeOp
+declare GtOp
+
 (*
  * Values are numbers, functions, and pairs.
  *)
+declare ValFalse
+declare ValTrue
 declare ValInt[i:n]
 declare ValFun{v. 'e['v]}
 declare ValPair{'v1; 'v2}
@@ -83,6 +93,8 @@ declare ValPair{'v1; 'v2}
  * Atoms.
  * We use the built-in representation of variables (for now).
  *)
+declare AtomFalse
+declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}

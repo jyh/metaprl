@@ -41,6 +41,17 @@ interactive test_prog 'H :
                                   TailCall{AtomFunVar{'f}; AtomInt[17]}}}}}}}
                }
 
+interactive fib_prog 'H :
+   sequent [m] { 'H; cont: exp >- compilable{CPS{AtomVar{'cont};
+      FunDecl{fib.
+      FunDef{'fib; AtomFun{i.
+         If{AtomBinop{LeOp; AtomVar{'i}; AtomInt[1:n]};
+            Return{AtomVar{'i}};
+            LetApply{AtomFunVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomInt[1:n]}; v1.
+               LetApply{AtomFunVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomInt[2:n]}; v2.
+               Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}};
+      TailCall{AtomFunVar{'fib}; AtomInt[35:n]}}}}} }
+
 (*
 interactive ext_test_prog 'H :
    sequent [m] { 'H >- compilable{.<:ext<

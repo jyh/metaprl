@@ -146,7 +146,7 @@ dform cps_atom_df : CPS{'cont; 'a; v. 'e} =
    szone pushm[1] `"CPS[" 'cont `";" " " 'a `";" " " 'v `"." slot{'e} popm `"]" ezone
 
 dform cps_exp_df : CPS{'cont; 'e} =
-   szone pushm[1] `"CPS[" 'cont `";" " " 'e popm `"]" ezone
+   szone pushm[1] `"CPS[" 'cont `";" hspace 'e popm `"]" ezone
 
 (*!
  * @begin[doc]
@@ -194,6 +194,17 @@ prim_rw cps_let_subscript : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
    LetSubscript{'v1; 'v2;
    v. CPS{'cont; 'e['v]}}}}
 
+prim_rw cps_if : CPS{'cont; If{'a; 'e1; 'e2}} <-->
+   CPS{'cont; 'a; v.
+   If{'v; CPS{'cont; 'e1}; CPS{'cont; 'e2}}}
+
+prim_rw cps_let_apply : CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} <-->
+   FunDecl{g.
+   FunDef{'g; AtomFun{v. CPS{'cont; 'e['v]}};
+   CPS{'cont; 'a1; v1.
+   CPS{'cont; 'a2; v2.
+   TailCall{'v1; 'cont; 'v2}}}}}
+
 prim_rw cps_return : CPS{'cont; Return{'a}} <-->
    CPS{'cont; 'a; v.
    TailCall{'cont; 'v}}
@@ -237,6 +248,8 @@ let resource cps +=
      << CPS{'cont; LetAtom{'a; v. 'e['v]}} >>, cps_let_atom;
      << CPS{'cont; LetPair{'a1; 'a2; v. 'e['v]}} >>, cps_let_pair;
      << CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
+     << CPS{'cont; If{'a; 'e1; 'e2}} >>, cps_if;
+     << CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} >>, cps_let_apply;
      << CPS{'cont; Return{'a}} >>, cps_return;
      << CPS{'cont; TailCall{AtomFunVar{'f}; 'e}} >>, cps_tailcall;
 

@@ -383,7 +383,7 @@ let sub_resource =
    Mp_resource.improve
    sub_resource
    (DSubtype ([<< a1:'A1 * 'B1['a1] >>, << a2:'A2 * 'B2['a2] >>;
-               << 'A2 >>, << 'A1 >>;
+               << 'A1 >>, << 'A2 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],
               dprod_subtypeT))
 

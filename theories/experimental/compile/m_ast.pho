@@ -168,7 +168,6 @@ Tokens -longest {
 // line have the same precendence.
 // This section is optional.
 
-%right prec_seq
 %right prec_let
 %left SEMI LET
 %left ID prec_atom

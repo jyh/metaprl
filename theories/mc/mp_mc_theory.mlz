@@ -60,11 +60,12 @@ extends Itt_list
 extends Itt_list2
 extends Itt_rfun
 
-extends Mp_mc_fir_base
+(*extends Mp_mc_fir_base
 extends Mp_mc_fir_ty
 extends Mp_mc_fir_exp
 extends Mp_mc_fir_prog
 extends Mp_mc_fir_eval
 extends Mp_mc_deadcode
 extends Mp_mc_const_elim
+*)
 (*! @docoff *)

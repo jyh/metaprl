@@ -75,7 +75,7 @@ val print_term : term -> unit
 (*
  * 4 subterms.
  *)
-
+(*
 val is_4_dep0_term : opname -> term -> bool
 val mk_4_dep0_term : opname -> term -> term -> term -> term -> term
 val dest_4_dep0_term : opname -> term -> term * term * term * term
@@ -85,11 +85,11 @@ val mk_3_dep0_1_dep1_term :
    opname -> term -> term -> term -> string -> term -> term
 val dest_3_dep0_1_dep1_term :
    opname -> term -> term * term * term * string * term
-
+*)
 (*
  * 5 subterms.
  *)
-
+(*
 val is_5_dep0_term : opname -> term -> bool 
 val mk_5_dep0_term : opname -> term -> term -> term -> term -> term -> term
 val dest_5_dep0_term : opname -> term -> term * term * term * term * term
@@ -99,11 +99,11 @@ val mk_4_dep0_1_dep1_term :
    opname -> term -> term -> term -> term -> string -> term -> term
 val dest_4_dep0_1_dep1_term :
    opname -> term -> term * term * term * term * string * term
-
+*)
 (*
  * 6 subterms.
  *)
-
+(*
 val is_6_dep0_term : opname -> term -> bool
 val mk_6_dep0_term :
    opname -> term -> term -> term -> term -> term -> term -> term
@@ -115,24 +115,25 @@ val mk_5_dep0_1_dep1_term :
    opname -> term -> term -> term -> term -> term -> string -> term -> term
 val dest_5_dep0_1_dep1_term :
    opname -> term -> term * term * term * term * term * string * term
-
+*)
 (*
  * 7 subterms
  *)
-
+(*
 val is_7_dep0_term : opname -> term -> bool
 val mk_7_dep0_term :
    opname -> term -> term -> term -> term -> term -> term -> term -> term
 val dest_7_dep0_term :
    opname -> term -> term * term * term * term * term * term * term
-
+*)
 (*
  * 8 subterms
  *)
-
+(*
 val is_8_dep0_term : opname -> term -> bool
 val mk_8_dep0_term :
    opname -> term -> term -> term -> term ->
              term -> term -> term -> term -> term
 val dest_8_dep0_term :
    opname -> term -> term * term * term * term * term * term * term * term
+*)

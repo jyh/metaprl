@@ -34,7 +34,7 @@
 
 extends Mp_mc_theory
 extends Mp_mc_fir_phobos
-extends Mp_mc_inline
+(*extends Mp_mc_inline*)
 
 open Symbol
 open Fir
@@ -43,22 +43,15 @@ open Top_conversionals
 
 open Mp_mc_base
 open Mp_mc_fir_phobos
-open Mp_mc_fir_eval
+(*open Mp_mc_fir_eval
 open Mp_mc_deadcode
 open Mp_mc_const_elim
 open Mp_mc_connect_prog
-open Mp_mc_inline
+open Mp_mc_inline*)
 
 (*
  * These are the rewriters we want to use to rewrite terms.
  *)
-
-let apply_rw_post =
-   apply_rewrite (Mp_resource.theory_bookmark "Mp_mc_fir_phobos")
-
-let apply_rw_inline =
-   apply_rewrite (Mp_resource.theory_bookmark "Mp_mc_inline")
-
 let apply_rw_top =
    apply_rewrite (Mp_resource.theory_bookmark "Mp_mc_theory")
 
@@ -133,7 +126,8 @@ let compile_phobos_fir program iforms_list inline_targets =
    debug_string "\nAfter PhoFIR -> FIR";
    debug_term program;
 
-   (* Inlining. *)
+   (* TEMP[granicz]: removed MP_MC theory functionality. *)
+   (* Inlining.
    let program =
       if List.length inline_targets > 0 then
          apply_rw_inline (firInlineC program inline_targets) program
@@ -141,12 +135,12 @@ let compile_phobos_fir program iforms_list inline_targets =
          program
    in
    debug_string "\nAfter inlining";
-   debug_term program;
+   debug_term program; *)
 
-   (* Apply optimizations. *)
+   (* Apply optimizations. 
    let program = apply_rw_top firDeadcodeC program in
    let program = apply_rw_top firExpEvalC program in
-   let program = apply_rw_top firConstElimC program in
+   let program = apply_rw_top firConstElimC program in *)
    print_string "\nFinal term =";
    print_term program
 
@@ -160,8 +154,10 @@ let compile_phobos_fir program iforms_list inline_targets =
  * and then returns a new Fir.prog struct to MCC for further compilation.
  *)
 
-let compile_mc_fir prog =
-   debug_string "Entering Mp_mc_compile.compile_mc_fir.";
+let compile_mc_fir prog = prog
+   (* TEMP[granicz]: removed MP_MC theory functionality. *)
+
+(* debug_string "Entering Mp_mc_compile.compile_mc_fir.";
 
    let table = SymbolTable.map term_of_fundef prog.prog_funs in
 
@@ -177,4 +173,4 @@ let compile_mc_fir prog =
 
    debug_string "Performing term -> Fir.prog conversion and returning.";
    let new_prog_funs = SymbolTable.map fundef_of_term table in
-      { prog with prog_funs = new_prog_funs }
+      { prog with prog_funs = new_prog_funs } *)

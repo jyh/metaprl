@@ -381,4 +381,24 @@ jtest << (exst x:'T. all y:'T. ('A['x,'y] => 'A['y,'x])) >> "C" "LK";;  (* INVAL
 
 *)
 
+interactive agatha 'H 'Butler 'Agatha 'Charles:
+   sequent ['ext] {'H >- "type"{'Person} } -->
+   sequent ['ext] {'H; x: 'Person >- "type"{'Lives['x]} } -->
+   sequent ['ext] {'H; x: 'Person; y:'Person >- "type"{'Hates['x; 'y]} } -->
+   sequent ['ext] {'H; x: 'Person; y:'Person >- "type"{'Richer['x; 'y]} } -->
+   sequent ['ext] {'H; x: 'Person; y:'Person >- "type"{'Killed['x; 'y]} } -->
+   sequent ['ext] {'H >- 'Butler IN 'Person } -->
+   sequent ['ext] {'H >- 'Agatha IN 'Person } -->
+   sequent ['ext] {'H >- 'Charles IN 'Person } -->
+   sequent ['ext] { 'H >-
+      'Lives['Butler] =>
+      'Hates['Agatha; 'Agatha] =>
+      'Hates['Agatha; 'Charles] =>
+      all x:'Person. (('Lives['x] => 'Hates['Butler; 'x]) or ('Richer['x; 'Agatha])) =>
+      all x:'Person. ('Hates['Agatha; 'x] => not{'Hates['Charles; 'x]}) =>
+      all x:'Person.(all y:'Person. ('Killed['x;'y] => 'Hates['x;'y])) =>
+      all x: 'Person. (not{'Hates['x;'Agatha]} or not{'Hates['x;'Butler]} or not{'Hates['x;'Charles]}) =>
+      all x: 'Person.(all y:'Person. ('Killed['x;'y] => not{'Richer['x;'y]})) =>
+      all x: 'Person. ('Hates['Agatha;'x] => 'Hates['Butler; 'x]) =>
+      ( not{'Killed['Butler; 'Agatha]} and not{'Killed['Charles; 'Agatha]} ) }
 

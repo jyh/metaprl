@@ -47,6 +47,8 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermShape
 open Refiner.Refiner.RefineError
 
+open Unify_mm
+
 open Tactic_type
 open Tactic_type.Tacticals
 
@@ -306,7 +308,7 @@ let rec unify_term_list foundp eqnl constants term1 = function
                   print_string_list (StringSet.elements constants)
                   print_unify_eqnlist eqnl
                   eflush;
-            let eqnl = unify_mm_eqnl_eqnl (eqnlist_append_eqn eqnl term1 term2) constants in
+            let eqnl = unify_eqnl_eqnl (eqnlist_append_eqn eqnl term1 term2) constants in
                if !debug_tptp then
                   eprintf "Unification:%a%t" (**)
                      print_unify_eqnlist eqnl
@@ -355,7 +357,7 @@ let rec unify_term_lists constants terms1 terms2 =
 
 let unify_term_lists constants terms1 terms2 =
    let eqnl, terms1, terms2 = unify_term_lists constants terms1 terms2 in
-      (unify_mm_eqnl eqnl constants), terms1, terms2
+      (unify_eqnl eqnl constants), terms1, terms2
 
 (*
  * Check that the goal and the hyp have some hope at unification.

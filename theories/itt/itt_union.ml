@@ -73,9 +73,9 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
+open Unify_mm
 
 open Var
 open Tactic_type.Sequent

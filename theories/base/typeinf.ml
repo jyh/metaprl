@@ -59,6 +59,7 @@ open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Term_match_table
 open Mp_resource
+open Unify_mm
 
 open Tactic_boot_sig
 
@@ -201,7 +202,7 @@ let rec try_append_eqs eqs consts = function
  | ((t1,t2)::opt_eqs) as o_eqs ->
       begin try
          let eqs', opt_eqs' =
-            try_append_eqs (unify_mm_eqnl_eqnl (eqnlist_append_eqn eqs t1 t2) consts)consts opt_eqs
+            try_append_eqs (unify_eqnl_eqnl (eqnlist_append_eqn eqs t1 t2) consts)consts opt_eqs
          in
             eqs', (if opt_eqs'==opt_eqs then o_eqs else (t1,t2)::opt_eqs')
       with RefineError _ ->
@@ -209,9 +210,9 @@ let rec try_append_eqs eqs consts = function
       end
 
 let typeinf_final consts eqs opt_eqs defs t =
-   let eqs = unify_mm_eqnl_eqnl eqs consts in
+   let eqs = unify_eqnl_eqnl eqs consts in
    let all_eqs,opt_eqs = try_append_eqs eqs consts opt_eqs in
-   let subst = unify_mm_eqnl all_eqs consts in
+   let subst = unify_eqnl all_eqs consts in
    eqs, opt_eqs, subst, apply_subst (apply_subst t subst) defs
 
 let infer_type p t =

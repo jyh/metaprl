@@ -34,7 +34,8 @@
 
 open String_set
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
+
+open Unify_mm
 
 open Tactic_boot_sig
 

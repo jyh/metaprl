@@ -1,40 +1,49 @@
 (*
- * These are the axioms of CZF set theory.
+ * Helpful rules about induction combinator.
  *)
 
-include Czf_itt_and
-include Czf_itt_or
-include Czf_itt_implies
-include Czf_itt_all
-include Czf_itt_exists
-include Czf_itt_dall
-include Czf_itt_dexists
+include Czf_itt_sep
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
 
 (*
- * Set induction.
- *
- * H >- all x. P(x)
- * by set_induction
- * H; x: set; w: (all y: x. P(y)) >- P(x)
- * H >- P(x) wf
+ * Dependent function types.
  *)
-axiom set_induction 'H 'x 'y 'w :
-   sequent ['ext] { 'H; x: set; w: (all y: 'x. 'P['y]) => 'P['x] >- 'P['x] } -->
-   sequent ['ext] { 'H; x: set >- wf{'P['x]} } -->
-   sequent ['ext] { 'H >- "all"{z. 'P['z]} }
+axiom set_ind_dfun_type 'H (bind{u. 'B['u]}) :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H; u: set >- "type"{'B['u]} } -->
+   sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
+   sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f 'x]}} }
+
+axiom set_ind_dfun_fun 'H (bind{x. bind{y. 'B['x; 'y]}}) 'u 'v :
+   sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
+   sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
+   sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->
+   sequent ['ext] { 'H; v: set >- fun_prop{z. 'B['z; 'v]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'f 'x]}} }
 
 (*
- * $Log$
- * Revision 1.1  1998/07/08 15:41:52  jyh
- * Pushed higherC into the refiner for efficiency.
- *
- * Revision 1.1  1998/06/23 22:12:21  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *
+ * Dependent product types.
+ *)
+axiom set_ind_dprod_type 'H (bind{u. 'B['u]}) :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H; u: set >- "type"{'B['u]} } -->
+   sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
+   sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T * 'B['f 'x]}} }
+
+axiom set_ind_dprod_fun 'H (bind{x. bind{y. 'B['x; 'y]}}) 'u 'v :
+   sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
+   sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
+   sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->
+   sequent ['ext] { 'H; v: set >- fun_prop{z. 'B['z; 'v]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'f 'x]}} }
+
+(*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

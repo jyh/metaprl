@@ -46,11 +46,11 @@ declare "quot"{'A; x, y. 'E['x; 'y]}
 
 prec prec_quot
 
-dform quot_df1 : mode[prl] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E['x; 'y]} =
-   slot{'x} `"," slot{'y} `":" slot{'A} `"//" slot{'E['x; 'y]}
+dform quot_df1 : mode[prl] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E} =
+   slot{'x} `", " slot{'y} `":" " " slot{'A} `" // " slot{'E}
 
-dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E['x; 'y]} =
-   `"quot " slot{'x} `", " slot{'y} `":" slot{'A} `"//" slot{'E['x; 'y]}
+dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E} =
+   `"quot " slot{'x} `", " slot{'y} `":" slot{'A} `" // " slot{'E}
 
 (************************************************************************
  * RULES                                                                *
@@ -114,6 +114,18 @@ prim quotientEquality 'H 'r 's 'v :
    sequent [squash] { 'H; v: 'A1 = 'A2 in univ[@i:l]; r: 'A1; s: 'A1 >- 'E1['r; 's] -> 'E2['r; 's] } -->
    sequent [squash] { 'H; v: 'A1 = 'A2 in univ[@i:l]; r: 'A1; s: 'A1 >- 'E2['r; 's] -> 'E1['r; 's] } -->
    sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[@i:l] } =
+   it
+
+(*
+ * Typehood.
+ *)
+prim quotientType 'H 'u 'v 'w 'x1 'x2 :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
+   sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
+   sequent [squash] { 'H; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
+   sequent [squash] { 'H; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
+   sequent ['ext] { 'H >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
    it
 
 (*
@@ -258,6 +270,42 @@ let eqcd_quotientT p =
         | _ -> failT) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (quotient_term, eqcd_quotientT)
+
+let quotient_equal_term = << (quot x1, y1: 'A1 // 'E1['x; 'y]) = (quot x2, y2: 'A2 // 'E2['x1; 'x2]) in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (quotient_equal_term, d_wrap_eqcd eqcd_quotientT)
+
+(*
+ * Typehood.
+ *)
+let d_quotient_typeT i p =
+   if i = 0 then
+      let u, v, w, x1, x2 = maybe_new_vars5 p "u" "v" "w" "x" "y" in
+         (quotientType (hyp_count p) u v w x1 x2
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "antecedent";
+                  addHiddenLabelT "antecedent";
+                  addHiddenLabelT "antecedent"]) p
+   else
+      raise (RefineError ("d_quotient_typeT", StringError "no elimination form"))
+
+let quotient_type_term = << "type"{.quot x, y: 'A // 'E['x; 'y]} >>
+
+let d_resource = d_resource.resource_improve d_resource (quotient_type_term, d_quotient_typeT)
+
+(*
+ * Membership in a quotient type.
+ *)
+let d_quotient_equal_memberT i p =
+   if i = 0 then
+      quotient_memberEquality (hyp_count p) p
+   else
+      raise (RefineError ("d_quotient_equalT", StringError "no elimination form"))
+
+let quotient_equal_member_term = << 'x = 'y in (quot u, v: 'A // 'E['u; 'v]) >>
+
+let d_resource = d_resource.resource_improve d_resource (quotient_equal_member_term, d_quotient_equal_memberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

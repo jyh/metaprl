@@ -133,6 +133,10 @@ axiom equality_squashElimination 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- 'a = 'b in 'T }
 
+axiom type_squashElimination 'H :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent ['ext] { 'H >- "type"{'T} }
+
 (*
  * H >- Uj = Uj in Ui
  * by universeEquality (side (j < i))
@@ -213,6 +217,7 @@ val d_equalT : int -> tactic
 val eqcd_univT : tactic
 val eqcd_itT : tactic
 val squash_equalT : tactic
+val squash_typeT : tactic
 
 (*
  * Turn an eqcd tactic into a d tactic.

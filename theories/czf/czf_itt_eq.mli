@@ -21,6 +21,7 @@ declare eq{'s1; 's2}
 declare eq_inner{'s1; 's2}
 declare fun_set{z. 'f['z]}
 declare fun_prop{z. 'P['z]}
+declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
 
 (************************************************************************
  * REWRITES                                                             *
@@ -48,8 +49,8 @@ rewrite unfold_fun_set : fun_set{z. 'f['z]} <-->
 rewrite unfold_fun_prop : fun_prop{z. 'P['z]} <-->
     (all s1: set. all s2: set. (eq{'s1; 's2} => 'P['s1] => 'P['s2]))
 
-rewrite unfold_dfun_prop : fun_prop{u. 'A['u]; v. 'B['v]} <-->
-    (all s1: set. all s2: set. (eq{'s1; 's2} => (all x: 'A['s1]. all y: 'A['s2]. ('B['x] => 'B['y]))))
+rewrite unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
+  (all s1: set. all s2: set. (eq{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 
 (************************************************************************
  * RULES                                                                *
@@ -221,6 +222,9 @@ val setSubstT : term -> int -> tactic
 
 (*
  * $Log$
+ * Revision 1.2  1998/07/17 15:39:05  jyh
+ * CZF is complete, although we may wish to add pairing and inf.
+ *
  * Revision 1.1  1998/07/14 15:43:16  jyh
  * Intermediate version with auto tactic.
  *

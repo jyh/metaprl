@@ -1,59 +1,49 @@
 (*
- * Primitiva axiomatization of implication.
+ * Primitive axiomatization of implication.
  *)
 
-include Czf_itt_and
+include Czf_itt_sep
 
-open Conversionals
+open Refiner.Refiner.TermType
 
-declare "exists"{x. 'A['x]}
+open Tacticals
 
-rewrite unfold_exists : "exists"{x. 'A['x]} <--> prod{set; x. 'A['x]}
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
 
-val fold_exists : conv
+axiom dprod_fun3 'H 'u 'v 'z :
+   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
+   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. "prod"{'A['z]; w. 'B['z; 'w]}} }
+
+axiom dprod_res3 'H 'u 'v 'z :
+   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
+   sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent ['ext] { 'H >- restricted{z. "prod"{'A['z]; w. 'B['z; 'w]}} }
+
+axiom exists_fun 'H 'u 'v 'z :
+   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
+   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. "exists"{'A['z]; w. 'B['z; 'w]}} }
+
+axiom exists_res 'H 'u 'v 'z :
+   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
+   sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent ['ext] { 'H >- restricted{z. "exists"{'A['z]; w. 'B['z; 'w]}} }
 
 (*
- * Intro.
- *
- * H >- exists x. A[x]
- * by exists_intro z
- * H >- member{z; set}
- * H >- A[z]
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
  *)
-axiom exists_intro 'H 'z 'w :
-   sequent ['ext] { 'H >- isset{'z} } -->
-   sequent ['ext] { 'H >- 'A['z] } -->
-   sequent ['ext] { 'H; w: set >- wf{'A['w]} } -->
-   sequent ['ext] { 'H >- "exists"{x. 'A['x]} }
-
-(*
- * Elimination.
- *
- * H, x: exists{y. A[y]}, J[x] >- T[x]
- * by exists_elim
- * H, x: exists{x. A[x]}, z: set, w: A[z], J[pair{z, w}] >- T[pair{z, w}]
- *)
-axiom exists_elim 'H 'J 'x 'z 'w :
-   sequent ['ext] { 'H;
-                    x: "exists"{y. 'A['y]};
-                    z: set;
-                    w: 'A['z];
-                    'J[pair{'z; 'w}]
-                    >- 'T[pair{'z; 'w}]
-                  } -->
-   sequent ['ext] { 'H; x: "exists"{y. 'A['y]}; 'J['x] >- 'T['x] }
-
-(*
- * Well formedness.
- *)
-axiom exists_wf 'H 'y :
-   sequent ['ext] { 'H; y: set >- wf{'A['y]} } -->
-   sequent ['ext] { 'H >- wf{."exists"{x. 'A['x]} } }
-
-(*
- * Simple quantification is restricted.
- *)
-axiom exists_res 'H 'y :
-   sequent ['ext] { 'H; y: set >- restricted{'A['x]} } -->
-   sequent ['ext] { 'H >- restricted{."exists"{x. 'A['x]}} }
-

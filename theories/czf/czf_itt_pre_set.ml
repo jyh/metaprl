@@ -51,7 +51,7 @@ open Itt_w
 
 let _ =
    if !debug_load then
-      eprintf "Loading Czf_itt_set%t" eflush
+      eprintf "Loading Czf_itt_pre_set%t" eflush
 
 let debug_czf_set =
    create_debug (**)
@@ -67,18 +67,14 @@ let debug_czf_set =
 (*
  * Sets are built by collecting over small types.
  *   set: the type of all sets
- *   isset{'s}: the judgement that 's is a set
- *   member{'x; 't}:
- *      a. 'x is a set
- *      b. 't is a set
- *      c. 'x is an element of 't
+ *   is_pre_set{'s}: the judgement that 's is a set
  *   collect{'T; x. 'a['x]}:
  *      the set constructed from the family of sets 'a['x]
  *      where 'x ranges over 'T
  *   set_ind is the induction combinator.
  *)
-declare set
-declare isset{'s}
+declare pre_set
+declare is_pre_set{'s}
 declare collect{'T; x. 'a['x]}
 declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
@@ -89,8 +85,8 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 (*
  * Sets.
  *)
-primrw unfold_set : set <--> w{univ[1:l]; x. 'x}
-primrw unfold_isset : isset{'s} <--> ('s = 's in set)
+primrw unfold_pre_set : pre_set <--> w{univ[1:l]; x. 'x}
+primrw unfold_is_pre_set : is_pre_set{'s} <--> ('s = 's in pre_set)
 primrw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 primrw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
@@ -99,8 +95,8 @@ interactive_rw reduce_set_ind :
    set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
    <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
 
-let fold_set        = makeFoldC << set >> unfold_set
-let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
+let fold_pre_set    = makeFoldC << pre_set >> unfold_pre_set
+let fold_is_pre_set = makeFoldC << is_pre_set{'t} >> unfold_is_pre_set
 let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
 let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
 
@@ -108,11 +104,11 @@ let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfol
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set_df : set =
-   `"set"
+dform pre_set_df : pre_set =
+   `"pre_set"
 
-dform isset_df : mode[prl] :: parens :: "prec"[prec_apply] :: isset{'s} =
-   slot{'s} `" set"
+dform is_pre_set_df : mode[prl] :: parens :: "prec"[prec_apply] :: is_pre_set{'s} =
+   slot{'s} `" pre_set"
 
 dform collect_df : mode[prl] :: parens :: "prec"[prec_apply] :: collect{'T; x. 'a} =
    szone pushm[3] `"collect" " " slot{'x} `":" " " slot{'T} `"." " " slot{'a} popm ezone
@@ -129,81 +125,59 @@ dform set_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: set_ind{'z; a
 (*
  * A set is a type in ITT.
  *)
-interactive set_type 'H : :
-   sequent ['ext] { 'H >- "type"{set} }
+interactive pre_set_type 'H : :
+   sequent ['ext] { 'H >- "type"{pre_set} }
 
 (*
  * Equality from sethood.
  *)
-interactive equal_set 'H :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- 's = 's in set }
+interactive equal_pre_set 'H :
+   sequent ['ext] { 'H >- is_pre_set{'s} } -->
+   sequent ['ext] { 'H >- 's = 's in pre_set }
 
 (*
  * By assumption.
  *)
-interactive isset_assum 'H 'J : :
-   sequent ['ext] { 'H; x: set; 'J['x] >- isset{'x} }
+interactive is_pre_set_assum 'H 'J : :
+   sequent ['ext] { 'H; x: pre_set; 'J['x] >- is_pre_set{'x} }
 
 (*
  * This is how a set is constructed.
  *)
-interactive isset_collect 'H 'y :
+interactive is_pre_set_collect 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
-   sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
-   sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
+   sequent [squash] { 'H; y: 'T >- is_pre_set{'a['y]} } -->
+   sequent ['ext] { 'H >- is_pre_set{collect{'T; x. 'a['x]}} }
 
 (*
  * Applications often come up.
- * This is not a necessary axiom, ut it is useful.
+ * This is not a necessary interactive, ut it is useful.
  *)
-interactive isset_apply 'H 'J :
-   sequent [squash] { 'H; f: 'T -> set; 'J['f] >- 'x = 'x in 'T } -->
-   sequent ['ext] { 'H; f: 'T -> set; 'J['f] >- isset{.'f 'x} }
+interactive is_pre_set_apply 'H 'J :
+   sequent [squash] { 'H; f: 'T -> pre_set; 'J['f] >- 'x = 'x in 'T } -->
+   sequent ['ext] { 'H; f: 'T -> pre_set; 'J['f] >- is_pre_set{.'f 'x} }
 
 (*
  * Induction.
  *)
-interactive set_elim 'H 'J 'a 'T 'f 'w 'z :
+interactive pre_set_elim 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
-                    a: set;
+                    a: pre_set;
                     'J['a];
                     T: univ[1:l];
-                    f: 'T -> set;
+                    f: 'T -> pre_set;
                     w: (all x : 'T. 'C['f 'x]);
-                    z: isset{collect{'T; x. 'f 'x}}
+                    z: is_pre_set{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
-                     sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
-
-(*
- * These are related forms to expand a set into its
- * collect representation.
- *)
-interactive set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
-   sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
-   sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
-   sequent ['ext] { 'H;
-                    x: 'A['s];
-                    'J['x];
-                    T: univ[1:l];
-                    f: 'T -> set;
-                    z: 'A[collect{'T; y. 'f 'y}]
-                    >- 'C['x] } -->
-   sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
-
-interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; z: set >- "type"{'C['z]} } -->
-   sequent ['ext] { 'H; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
-   sequent ['ext] { 'H >- 'C['s] }
+                     sequent ['ext] { 'H; a: pre_set; 'J['a] >- 'C['a] }
 
 (*
  * Equality on tree induction forms.
  *)
-interactive set_ind_equality 'H 'a 'f 'g 'x :
-   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
-   sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
+interactive pre_set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
+   sequent [squash] { 'H >- 'z1 = 'z2 in pre_set } -->
+   sequent [squash] { 'H; a: 'A; f: 'B['a] -> pre_set; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
@@ -216,59 +190,49 @@ interactive set_ind_equality 'H 'a 'f 'g 'x :
 (*
  * Isset.
  *)
-let isset_term = << isset{'s} >>
-let isset_opname = opname_of_term isset_term
-let is_isset_term = is_dep0_term isset_opname
-let mk_isset_term = mk_dep0_term isset_opname
-let dest_isset = dest_dep0_term isset_opname
-
-let set_ind_term = << set_ind{'s; T, f, g. 'B['T; 'f; 'g]} >>
-let set_ind_opname = opname_of_term set_ind_term
-let is_set_ind_term = is_dep0_dep3_term set_ind_opname
-let mk_set_ind_term = mk_dep0_dep3_term set_ind_opname
-let dest_set_ind = dest_dep0_dep3_term set_ind_opname
+let is_pre_set_term = << is_pre_set{'s} >>
+let is_pre_set_opname = opname_of_term is_pre_set_term
+let is_is_pre_set_term = is_dep0_term is_pre_set_opname
+let mk_is_pre_set_term = mk_dep0_term is_pre_set_opname
+let dest_is_pre_set = dest_dep0_term is_pre_set_opname
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-let d_collect_issetT i p =
+let d_collect_is_pre_setT i p =
    if i = 0 then
       let s = maybe_new_vars1 p "s" in
-         isset_collect (hyp_count p) s p
+         is_pre_set_collect (hyp_count p) s p
    else
-      raise (RefineError ("d_collect_issetT", StringError "no elimination form"))
+      raise (RefineError ("d_collect_is_pre_setT", StringError "no elimination form"))
 
 (*
  * Special case for collection.
  *)
-let isset_collect_term = << isset{collect{'T; x. 'a['x]}} >>
+let is_pre_set_collect_term = << is_pre_set{collect{'T; x. 'a['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (isset_collect_term, d_collect_issetT)
-
-(************************************************************************
- * OTHER TACTICS                                                        *
- ************************************************************************)
+let d_resource = d_resource.resource_improve d_resource (is_pre_set_collect_term, d_collect_is_pre_setT)
 
 (*
  * H >- set type
  *)
-let d_set_typeT i p =
+let d_pre_set_typeT i p =
    if i = 0 then
-      set_type (Sequent.hyp_count p) p
+      pre_set_type (Sequent.hyp_count p) p
    else
-      raise (RefineError ("d_set_typeT", StringError "no elimination rule"))
+      raise (RefineError ("d_pre_set_typeT", StringError "no elimination rule"))
 
-let set_type_term = << "type"{set} >>
+let set_type_term = << "type"{pre_set} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_type_term, d_set_typeT)
+let d_resource = d_resource.resource_improve d_resource (set_type_term, d_pre_set_typeT)
 
 (*
  * Set elimination.
  *)
-let d_setT i p =
+let d_pre_setT i p =
    if i = 0 then
-      raise (RefineError ("d_setT", StringError "no introduction rule"))
+      raise (RefineError ("d_pre_setT", StringError "no introduction rule"))
    else
       let thin =
          if i = hyp_count p then
@@ -279,74 +243,57 @@ let d_setT i p =
       let v_a, h_a = nth_hyp p i in
       let j, k = hyp_indices p i in
       let v_T, v_f, v_b, v_z = maybe_new_vars4 p "T" "f" "b" "z" in
-         (set_elim j k v_a v_T v_f v_b v_z thenT thin) p
+         (pre_set_elim j k v_a v_T v_f v_b v_z thenT thin) p
 
-let set_term = << set >>
+let pre_set_term = << pre_set >>
 
-let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
+let d_resource = d_resource.resource_improve d_resource (pre_set_term, d_pre_setT)
 
 (*
  * Application rule.
  *)
-let d_apply_issetT i p =
+let d_apply_is_pre_setT i p =
    if i = 0 then
       let j = get_sel_arg p in
       let k, l = hyp_indices p j in
-         isset_apply k l p
+         is_pre_set_apply k l p
    else
-      raise (RefineError ("d_apply_isset", StringError "no elimination form"))
+      raise (RefineError ("d_apply_is_pre_set", StringError "no elimination form"))
 
-let apply_isset_term = << isset{.'f 'x} >>
+let apply_is_pre_set_term = << is_pre_set{.'f 'x} >>
 
-let d_resource = d_resource.resource_improve d_resource (apply_isset_term, d_apply_issetT)
+let d_resource = d_resource.resource_improve d_resource (apply_is_pre_set_term, d_apply_is_pre_setT)
 
 (*
- * Typehood of isset{'s1}
+ * Typehood of is_pre_set{'s1}
  *)
-let d_isset_typeT i p =
+let d_is_pre_set_typeT i p =
    if i = 0 then
-      (rw (addrC [0] unfold_isset) 0 thenT dT 0) p
+      (rw (addrC [0] unfold_is_pre_set) 0 thenT dT 0) p
    else
-      raise (RefineError ("d_isset_typeT", StringError "no elimination form"))
+      raise (RefineError ("d_is_pre_set_typeT", StringError "no elimination form"))
 
-let isset_type_term = << "type"{isset{'s1}} >>
+let is_pre_set_type_term = << "type"{is_pre_set{'s1}} >>
 
-let d_resource = d_resource.resource_improve d_resource (isset_type_term, d_isset_typeT)
-
-(*
- * Equality of set_ind.
- *)
-let d_set_ind_equalT i p =
-   if i = 0 then
-   let t, f, g, t2 = maybe_new_vars4 p "T" "f" "g" "T2" in
-      (set_ind_equality (hyp_count p) t f g t2
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "main"]) p
-   else
-      raise (RefineError ("d_set_indT", StringError "no elimination form"))
-
-let set_ind_equal_term = << set_ind{'s1; a1, f1, g1. 'b1['a1; 'f1; 'g1]}
-                            = set_ind{'s2; a2, f2, g2. 'B2['a2; 'f2; 'g2]}
-                            in 'T >>
-
-let d_resource = d_resource.resource_improve d_resource (set_ind_equal_term, d_set_ind_equalT)
+let d_resource = d_resource.resource_improve d_resource (is_pre_set_type_term, d_is_pre_set_typeT)
 
 (*
  * Equal sets.
  *)
-let eqSetT p =
-   equal_set (hyp_count p) p
+let eqPreSetT p =
+   equal_pre_set (hyp_count p) p
 
 (*
  * Assumption.
  *)
-let setAssumT i p =
+let preSetAssumT i p =
    let i, j = hyp_indices p i in
-      isset_assum i j p
+      is_pre_set_assum i j p
 
 (*
  * Split a set in a hyp or concl.
  *)
+(*
 let splitT t i p =
    let v_T, v_f, v_z = maybe_new_vars3 p "T" "f" "z" in
       if i = 0 then
@@ -365,6 +312,7 @@ let splitT t i p =
              thenLT [addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p
+*)
 
 (************************************************************************
  * AUTOMATION                                                           *
@@ -375,9 +323,9 @@ let splitT t i p =
  *)
 let trivial_resource =
    trivial_resource.resource_improve trivial_resource (**)
-      { auto_name = "setAssumT";
+      { auto_name = "preSetAssumT";
         auto_prec = trivial_prec;
-        auto_tac = onSomeHypT setAssumT
+        auto_tac = onSomeHypT preSetAssumT
       }
 
 (*
@@ -385,22 +333,22 @@ let trivial_resource =
  *)
 let applyT i p =
    let j, k = hyp_indices p i in
-      isset_apply j k p
+      is_pre_set_apply j k p
 
 (*
  * Similar dumb auto tactic.
  *)
-let set_autoT =
-   firstT [rw fold_isset 0;
+let pre_set_autoT =
+   firstT [rw fold_is_pre_set 0;
            onSomeHypT applyT]
 
-let set_prec = create_auto_prec [trivial_prec] [back_hyp_prec]
+let pre_set_prec = create_auto_prec [trivial_prec] [back_hyp_prec]
 
 let auto_resource =
    auto_resource.resource_improve auto_resource (**)
       { auto_name = "set_autoT";
-        auto_prec = set_prec;
-        auto_tac = auto_wrap set_autoT
+        auto_prec = pre_set_prec;
+        auto_tac = auto_wrap pre_set_autoT
       }
 
 (*

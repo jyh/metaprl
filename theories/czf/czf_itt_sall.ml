@@ -4,6 +4,9 @@
 
 include Czf_itt_set
 
+open Printf
+open Debug
+
 open Refiner.Refiner.RefineError
 open Resource
 
@@ -23,116 +26,91 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-declare "all"{x. 'A['x]}
+declare "sall"{x. 'A['x]}
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_all : "all"{x. 'A['x]} <--> Itt_rfun!"fun"{set; x. 'A['x]}
+primrw unfold_sall : "sall"{x. 'A['x]} <--> (all x: set. 'A['x])
 
-let fold_all = makeFoldC << "all"{x. 'A['x]} >> unfold_all
+let fold_sall = makeFoldC << "sall"{x. 'A['x]} >> unfold_sall
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform all_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "all"{x. 'A} =
-   pushm[0] forall slot{'x} `"." slot{'A} popm
+dform sall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "sall"{x. 'A} =
+   pushm[0] Nuprl_font!forall slot{'x} `"." slot{'A} popm
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * Intro.
- *
- * H >- all x. A
- * by all_intro
- * H, x: set >- A
+ * Typehood.
  *)
-prim all_intro 'H 'a :
+interactive sall_type 'H 'y :
+   sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { 'H >- "type"{."sall"{x. 'A['x]} } }
+
+(*
+ * Intro.
+ *)
+interactive sall_intro 'H 'a :
    sequent ['ext] { 'H; a: set >- 'A['a] } -->
-   sequent ['ext] { 'H >- "all"{x. 'A['x]} } =
-   it
+   sequent ['ext] { 'H >- "sall"{x. 'A['x]} }
 
 (*
  * Elimination.
- *
- * H, x: all{x. A[x]}, J[x] >- T[x]
- * by all_elim z
- * H, x: all{x. A[x]}, J[x] >- member{z; set}
- * H, x: all{x. A[x]}, J[x], y: A[z] >- T[x]
  *)
-prim all_elim 'H 'J 'x 'z 'w :
-   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
-   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x] >- 'T['x] } =
-   it
-
-(*
- * Well formedness.
- *)
-prim all_wf 'H 'y :
-   sequent ['ext] { 'H; y: set >- wf{'A['y]} } -->
-   sequent ['ext] { 'H >- wf{."all"{x. 'A['x]} } } =
-   it
-
-(*
- * Simple quantification is restricted.
- *)
-prim all_res 'H 'y :
-   sequent ['ext] { 'H; y: set >- restricted{'A['x]} } -->
-   sequent ['ext] { 'H >- restricted{."all"{x. 'A['x]}} } =
-   it
+interactive sall_elim 'H 'J 'x 'z 'w :
+   sequent [squash] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
+   sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
+   sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- 'T['x] }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-let all_term = << "all"{x. 'A['x]} >>
-let wf_all_term = << wf{. "all"{x. 'A['x]}} >>
-let res_all_term = << restricted{. "all"{x. 'A['x]}} >>
-
 (*
  * Propositional reasoning.
  *)
-let d_allT i p =
+let d_sallT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         all_intro (hyp_count p) v p
+         sall_intro (hyp_count p) v p
    else
       let x, _ = nth_hyp p i in
       let w = Var.maybe_new_vars1 p "u" in
       let z = get_with_arg p in
       let i, j = hyp_indices p i in
-          all_elim i j x z w p
+         (sall_elim i j x z w
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
 
-let d_resource = d_resource.resource_improve d_resource (all_term, d_allT)
+let sall_term = << "sall"{x. 'A['x]} >>
+
+let d_resource = d_resource.resource_improve d_resource (sall_term, d_sallT)
 
 (*
  * Well-formedness.
  *)
-external id : 'a * 'b -> 'a * 'b = "%identity"
-
-let d_wf_allT i p =
+let d_sall_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         all_wf (hyp_count p) v p
+         sall_type (hyp_count p) v p
    else
-      raise (RefineError (id ("d_wf_allT", (StringTermError ("no elim form", wf_all_term)))))
+      raise (RefineError ("d_sall_typeT", StringError "no elim form"))
 
-let d_resource = d_resource.resource_improve d_resource (wf_all_term, d_wf_allT)
+let sall_type_term = << "type"{."sall"{x. 'A['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (sall_type_term, d_sall_typeT)
 
 (*
- * Restricted.
+ * -*-
+ * Local Variables:
+ * Caml-master: "refiner"
+ * End:
+ * -*-
  *)
-let d_res_allT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         all_res (hyp_count p) v p
-   else
-      raise (RefineError (id ("d_res_allT", (StringTermError ("no elim form", res_all_term)))))
-
-let d_resource = d_resource.resource_improve d_resource (res_all_term, d_res_allT)
-

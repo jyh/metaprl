@@ -36,14 +36,14 @@ open Base_auto_tactic
 (*
  * Sets are built by collecting over small types.
  *   set: the type of all sets
- *   isset{'s}: the judgement that 's is a set
+ *   is_pre_set{'s}: the judgement that 's is a set
  *   collect{'T; x. 'a['x]}:
  *      the set constructed from the family of sets 'a['x]
  *      where 'x ranges over 'T
  *   set_ind is the induction combinator.
  *)
-declare set
-declare isset{'s}
+declare pre_set
+declare is_pre_set{'s}
 declare collect{'T; x. 'a['x]}
 declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
@@ -54,8 +54,8 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 (*
  * Sets.
  *)
-rewrite unfold_set : set <--> w{univ[1:l]; x. 'x}
-rewrite unfold_isset : isset{'s} <--> ('s = 's in set)
+rewrite unfold_pre_set : pre_set <--> w{univ[1:l]; x. 'x}
+rewrite unfold_is_pre_set : is_pre_set{'s} <--> ('s = 's in pre_set)
 rewrite unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 rewrite unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
@@ -64,8 +64,8 @@ rewrite reduce_set_ind :
    set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
    <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
 
-val fold_set : conv
-val fold_isset : conv
+val fold_pre_set : conv
+val fold_is_pre_set : conv
 val fold_collect : conv
 val fold_set_ind : conv
 
@@ -76,81 +76,59 @@ val fold_set_ind : conv
 (*
  * A set is a type in ITT.
  *)
-axiom set_type 'H :
-   sequent ['ext] { 'H >- "type"{set} }
+axiom pre_set_type 'H :
+   sequent ['ext] { 'H >- "type"{pre_set} }
 
 (*
  * Equality from sethood.
  *)
-axiom equal_set 'H :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- 's = 's in set }
+axiom equal_pre_set 'H :
+   sequent ['ext] { 'H >- is_pre_set{'s} } -->
+   sequent ['ext] { 'H >- 's = 's in pre_set }
 
 (*
  * By assumption.
  *)
-axiom isset_assum 'H 'J :
-   sequent ['ext] { 'H; x: set; 'J['x] >- isset{'x} }
+axiom is_pre_set_assum 'H 'J :
+   sequent ['ext] { 'H; x: pre_set; 'J['x] >- is_pre_set{'x} }
 
 (*
  * This is how a set is constructed.
  *)
-axiom isset_collect 'H 'y :
+axiom is_pre_set_collect 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
-   sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
-   sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
+   sequent [squash] { 'H; y: 'T >- is_pre_set{'a['y]} } -->
+   sequent ['ext] { 'H >- is_pre_set{collect{'T; x. 'a['x]}} }
 
 (*
  * Applications often come up.
  * This is not a necessary axiom, ut it is useful.
  *)
-axiom isset_apply 'H 'J :
-   sequent [squash] { 'H; f: 'T -> set; 'J['f] >- 'x = 'x in 'T } -->
-   sequent ['ext] { 'H; f: 'T -> set; 'J['f] >- isset{.'f 'x} }
+axiom is_pre_set_apply 'H 'J :
+   sequent [squash] { 'H; f: 'T -> pre_set; 'J['f] >- 'x = 'x in 'T } -->
+   sequent ['ext] { 'H; f: 'T -> pre_set; 'J['f] >- is_pre_set{.'f 'x} }
 
 (*
  * Induction.
  *)
-axiom set_elim 'H 'J 'a 'T 'f 'w 'z :
+axiom pre_set_elim 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
-                    a: set;
+                    a: pre_set;
                     'J['a];
                     T: univ[1:l];
-                    f: 'T -> set;
+                    f: 'T -> pre_set;
                     w: (all x : 'T. 'C['f 'x]);
-                    z: isset{collect{'T; x. 'f 'x}}
+                    z: is_pre_set{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
-                     sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
-
-(*
- * These are related forms to expand a set into its
- * collect representation.
- *)
-axiom set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
-   sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
-   sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
-   sequent ['ext] { 'H;
-                    x: 'A['s];
-                    'J['x];
-                    T: univ[1:l];
-                    f: 'T -> set;
-                    z: 'A[collect{'T; y. 'f 'y}]
-                    >- 'C['x] } -->
-   sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
-
-axiom set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; z: set >- "type"{'C['z]} } -->
-   sequent ['ext] { 'H; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
-   sequent ['ext] { 'H >- 'C['s] }
+                     sequent ['ext] { 'H; a: pre_set; 'J['a] >- 'C['a] }
 
 (*
  * Equality on tree induction forms.
  *)
-axiom set_ind_equality 'H 'a 'f 'g 'x :
-   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
-   sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
+axiom pre_set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
+   sequent [squash] { 'H >- 'z1 = 'z2 in pre_set } -->
+   sequent [squash] { 'H; a: 'A; f: 'B['a] -> pre_set; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
@@ -160,35 +138,20 @@ axiom set_ind_equality 'H 'a 'f 'g 'x :
  * TACTICS                                                              *
  ************************************************************************)
 
-val isset_term : term
-val is_isset_term : term -> bool
-val mk_isset_term : term -> term
-val dest_isset : term -> term
-
-val set_ind_term : term
-val is_set_ind_term : term -> bool
-val mk_set_ind_term : string -> string -> string -> term -> term -> term
-val dest_set_ind : term -> string * string * string * term * term
+(*
+ * is_pre_set{'s} => 's = 's in set
+ *)
+val eqPreSetT : tactic
 
 (*
- * isset{'s} => 's = 's in set
+ * H, x: set, J >- is_pre_set{x}
  *)
-val eqSetT : tactic
-
-(*
- * H, x: set, J >- isset{x}
- *)
-val setAssumT : int -> tactic
-
-(*
- * Replace a set with a collect.
- *)
-val splitT : term -> int -> tactic
+val preSetAssumT : int -> tactic
 
 (*
  * Automation.
  *)
-val set_prec : auto_prec
+val pre_set_prec : auto_prec
 
 (*
  * -*-

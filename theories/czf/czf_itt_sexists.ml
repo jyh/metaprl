@@ -4,6 +4,9 @@
 
 include Czf_itt_and
 
+open Printf
+open Debug
+
 open Refiner.Refiner.RefineError
 open Resource
 
@@ -23,123 +26,98 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-declare "exists"{x. 'A['x]}
+declare "sexists"{x. 'A['x]}
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_exists : "exists"{x. 'A['x]} <--> prod{set; x. 'A['x]}
+primrw unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
 
-let fold_exists = makeFoldC << "exists"{x. 'A['x]} >> unfold_exists
+let fold_sexists = makeFoldC << "sexists"{x. 'A['x]} >> unfold_sexists
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform exists_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "exists"{x. 'A} =
-   pushm[0] Nuprl_font!"exists" `"'" slot{'x} `"." slot{'A} popm
+dform sexists_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "sexists"{x. 'A} =
+   pushm[0] Nuprl_font!"exists" slot{'x} `"." slot{'A} popm
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * Intro.
- *
- * H >- exists x. A[x]
- * by exists_intro z
- * H >- member{z; set}
- * H >- A[z]
+ * Typing.
  *)
-prim exists_intro 'H 'z 'w :
+interactive sexists_type 'H 'y :
+   sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { 'H >- "type"{."sexists"{x. 'A['x]} } }
+
+(*
+ * Intro.
+ *)
+interactive sexists_intro 'H 'z 'w :
    sequent ['ext] { 'H >- isset{'z} } -->
    sequent ['ext] { 'H >- 'A['z] } -->
-   sequent ['ext] { 'H; w: set >- wf{'A['w]} } -->
-   sequent ['ext] { 'H >- "exists"{x. 'A['x]} } =
-   it
+   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
+   sequent ['ext] { 'H >- "sexists"{x. 'A['x]} }
 
 (*
  * Elimination.
- *
- * H, x: exists{y. A[y]}, J[x] >- T[x]
- * by exists_elim
- * H, x: exists{x. A[x]}, z: set, w: A[z], J[pair{z, w}] >- T[pair{z, w}]
  *)
-prim exists_elim 'H 'J 'x 'z 'w :
+interactive sexists_elim 'H 'J 'x 'z 'w :
    sequent ['ext] { 'H;
-                    x: "exists"{y. 'A['y]};
                     z: set;
                     w: 'A['z];
                     'J[pair{'z; 'w}]
                     >- 'T[pair{'z; 'w}]
                   } -->
-   sequent ['ext] { 'H; x: "exists"{y. 'A['y]}; 'J['x] >- 'T['x] } =
-   it
-
-(*
- * Well formedness.
- *)
-prim exists_wf 'H 'y :
-   sequent ['ext] { 'H; y: set >- wf{'A['y]} } -->
-   sequent ['ext] { 'H >- wf{."exists"{x. 'A['x]} } } =
-   it
-
-(*
- * Simple quantification is restricted.
- *)
-prim exists_res 'H 'y :
-   sequent ['ext] { 'H; y: set >- restricted{'A['x]} } -->
-   sequent ['ext] { 'H >- restricted{."exists"{x. 'A['x]}} } =
-   it
+   sequent ['ext] { 'H; x: "sexists"{y. 'A['y]}; 'J['x] >- 'T['x] }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-let exists_term = << "exists"{'A; 'B} >>
-let wf_exists_term = << wf{. "exists"{'A; 'B}} >>
-let res_exists_term = << restricted{. "exists"{'A; 'B}} >>
-
 (*
  * Propositional reasoning.
  *)
-let d_existsT i p =
+let d_sexistsT i p =
    if i = 0 then
       let z = get_with_arg p in
       let w = maybe_new_vars1 p "v" in
-         exists_intro (hyp_count p) z w p
+         (sexists_intro (hyp_count p) z w
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "main";
+                  addHiddenLabelT "wf"]) p
    else
       let x, _ = nth_hyp p i in
       let z, w = Var.maybe_new_vars2 p "u" "v" in
       let i, j = hyp_indices p i in
-          exists_elim i j x z w p
+          sexists_elim i j x z w p
 
-let d_resource = d_resource.resource_improve d_resource (exists_term, d_existsT)
+let sexists_term = << "sexists"{x. 'B['x]} >>
+
+let d_resource = d_resource.resource_improve d_resource (sexists_term, d_sexistsT)
 
 (*
  * Well-formedness.
  *)
-external id : 'a * 'b -> 'a * 'b = "%identity"
-
-let d_wf_existsT i p =
+let d_exists_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         exists_wf (hyp_count p) v p
+         sexists_type (hyp_count p) v p
    else
-      raise (RefineError (id ("d_wf_existsT", (StringTermError ("no elim form", wf_exists_term)))))
+      raise (RefineError ("d_exists_typeT", StringError "no elim form"))
 
-let d_resource = d_resource.resource_improve d_resource (wf_exists_term, d_wf_existsT)
+let sexists_type_term = << "type"{sexists{x. 'B['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (sexists_type_term, d_exists_typeT)
 
 (*
- * Restricted.
+ * -*-
+ * Local Variables:
+ * Caml-master: "refiner"
+ * End:
+ * -*-
  *)
-let d_res_existsT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         exists_res (hyp_count p) v p
-   else
-      raise (RefineError (id ("d_res_existsT", (StringTermError ("no elim form", res_exists_term)))))
-
-let d_resource = d_resource.resource_improve d_resource (res_exists_term, d_res_existsT)
-

@@ -14,6 +14,7 @@ include Itt_struct
 open Refiner.Refiner.TermType
 
 open Tacticals
+open Conversionals
 
 open Base_auto_tactic
 
@@ -38,6 +39,16 @@ define unfoldExists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
 
 rewrite reducePropTrue : "prop"["true":t] <--> "true"
 rewrite reducePropFalse : "prop"["false":t] <--> "false"
+
+val foldTrue : conv
+val foldFalse : conv
+val foldNot : conv
+val foldImplies : conv
+val foldIff : conv
+val foldAnd : conv
+val foldOr : conv
+val foldAll : conv
+val foldExists : conv
 
 (************************************************************************
  * EXTRA RULES                                                          *
@@ -121,6 +132,9 @@ val back_assum_prec : auto_prec
 val backThruHypT : int -> tactic
 val assumT : int -> tactic
 val backThruAssumT : int -> tactic
+
+val moveToConclT : int -> tactic
+val moveToConclVarsT : string list -> tactic
 
 (*
  * -*-

@@ -35,6 +35,7 @@ declare eq{'s1; 's2}
 declare eq_inner{'s1; 's2}
 declare fun_set{z. 'f['z]}
 declare fun_prop{z. 'P['z]}
+declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
 
 (************************************************************************
  * REWRITES                                                             *
@@ -62,8 +63,11 @@ primrw unfold_fun_set : fun_set{z. 'f['z]} <-->
 primrw unfold_fun_prop : fun_prop{z. 'P['z]} <-->
     (all s1: set. all s2: set. (eq{'s1; 's2} => 'P['s1] => 'P['s2]))
 
-primrw unfold_dfun_prop : fun_prop{u. 'A['u]; v. 'B['v]} <-->
-    (all s1: set. all s2: set. (eq{'s1; 's2} => (all x: 'A['s1]. all y: 'A['s2]. ('B['x] => 'B['y]))))
+(*
+ * This is _pointwise_ functionality.
+ *)
+primrw unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
+  (all s1: set. all s2: set. (eq{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -198,6 +202,10 @@ interactive fun_set 'H :
 
 interactive fun_ref 'H : :
    sequent ['ext] { 'H >- fun_set{z. 'z} }
+
+interactive fun_prop 'H :
+   sequent [squash] { 'H >- "type"{'P} } -->
+   sequent ['ext] { 'H >- fun_prop{z. 'P} }
 
 (*
  * LEMMAS:
@@ -345,8 +353,10 @@ let d_fun_setT i p =
                   fun_ref
                else
                   fun_set
+         else if is_free_var v t then
+            raise (RefineError ("d_fun_setT", StringStringError ("variable is free", v)))
          else
-            raise (RefineError ("d_fun_setT", StringError "not a variable"))
+            fun_set
       in
          tac (hyp_count p) p
    else
@@ -355,6 +365,21 @@ let d_fun_setT i p =
 let fun_set_term = << fun_set{z. 'u} >>
 
 let d_resource = d_resource.resource_improve d_resource (fun_set_term, d_fun_setT)
+
+let d_fun_propT i p =
+   if i = 0 then
+      let concl = Sequent.concl p in
+      let v, t = dest_fun_prop concl in
+         if is_free_var v t then
+            raise (RefineError ("d_fun_propT", StringStringError ("variable is free", v)))
+         else
+            fun_prop (hyp_count p) p
+   else
+      raise (RefineError ("d_fun_propT", StringError "no elimination form"))
+
+let fun_prop_term = << fun_prop{z. 'P} >>
+
+let d_resource = d_resource.resource_improve d_resource (fun_prop_term, d_fun_propT)
 
 (*
  * Substitution.
@@ -419,6 +444,9 @@ let auto_resource =
 
 (*
  * $Log$
+ * Revision 1.2  1998/07/17 15:39:04  jyh
+ * CZF is complete, although we may wish to add pairing and inf.
+ *
  * Revision 1.1  1998/07/14 15:43:16  jyh
  * Intermediate version with auto tactic.
  *

@@ -20,7 +20,7 @@
  *               H >- collect{T; x. a[x]} in set
  *)
 
-include Itt_theory
+include Czf_itt_eq_inner
 
 open Refiner.Refiner.Term
 
@@ -37,15 +37,9 @@ open Base_auto_tactic
  * Sets are built by collecting over small types.
  *   set: the type of all sets
  *   isset{'s}: the judgement that 's is a set
- *   collect{'T; x. 'a['x]}:
- *      the set constructed from the family of sets 'a['x]
- *      where 'x ranges over 'T
- *   set_ind is the induction combinator.
  *)
 declare set
 declare isset{'s}
-declare collect{'T; x. 'a['x]}
-declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -54,20 +48,11 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 (*
  * Sets.
  *)
-rewrite unfold_set : set <--> w{univ[1:l]; x. 'x}
+rewrite unfold_set : set <--> (quot x, y: pre_set // eq_inner{'x; 'y})
 rewrite unfold_isset : isset{'s} <--> ('s = 's in set)
-rewrite unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
-rewrite unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
-   tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
-
-rewrite reduce_set_ind :
-   set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
-   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
 
 val fold_set : conv
 val fold_isset : conv
-val fold_collect : conv
-val fold_set_ind : conv
 
 (************************************************************************
  * RULES                                                                *
@@ -95,9 +80,9 @@ axiom isset_assum 'H 'J :
 (*
  * This is how a set is constructed.
  *)
-axiom isset_collect 'H 'y :
+axiom isset_collect2 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
-   sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
+   sequent [squash] { 'H; y: 'T >- is_pre_set{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
 
 (*
@@ -109,7 +94,7 @@ axiom isset_apply 'H 'J :
    sequent ['ext] { 'H; f: 'T -> set; 'J['f] >- isset{.'f 'x} }
 
 (*
- * Induction.
+ * Induction.  This requires extensional Nuprl.
  *)
 axiom set_elim 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
@@ -148,9 +133,9 @@ axiom set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
 (*
  * Equality on tree induction forms.
  *)
-axiom set_ind_equality 'H 'a 'f 'g 'x :
+axiom set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
    sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
-   sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
+   sequent [squash] { 'H; a: 'A; f: 'B['a] -> set; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
@@ -159,16 +144,6 @@ axiom set_ind_equality 'H 'a 'f 'g 'x :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-val isset_term : term
-val is_isset_term : term -> bool
-val mk_isset_term : term -> term
-val dest_isset : term -> term
-
-val set_ind_term : term
-val is_set_ind_term : term -> bool
-val mk_set_ind_term : string -> string -> string -> term -> term -> term
-val dest_set_ind : term -> string * string * string * term * term
 
 (*
  * isset{'s} => 's = 's in set
@@ -179,6 +154,11 @@ val eqSetT : tactic
  * H, x: set, J >- isset{x}
  *)
 val setAssumT : int -> tactic
+
+(*
+ * Every set is a pre_set.
+ *)
+val setPreSetT : tactic
 
 (*
  * Replace a set with a collect.

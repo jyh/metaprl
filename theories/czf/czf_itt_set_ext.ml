@@ -17,7 +17,7 @@
  * as a collection of rules.
  *)
 
-include Itt_theory
+include Czf_itt_eq_inner
 
 open Printf
 open Debug
@@ -72,15 +72,9 @@ let debug_czf_set =
  *      a. 'x is a set
  *      b. 't is a set
  *      c. 'x is an element of 't
- *   collect{'T; x. 'a['x]}:
- *      the set constructed from the family of sets 'a['x]
- *      where 'x ranges over 'T
- *   set_ind is the induction combinator.
  *)
 declare set
 declare isset{'s}
-declare collect{'T; x. 'a['x]}
-declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -89,20 +83,11 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 (*
  * Sets.
  *)
-primrw unfold_set : set <--> w{univ[1:l]; x. 'x}
+primrw unfold_set : set <--> (quot x, y: pre_set // eq_inner{'x; 'y})
 primrw unfold_isset : isset{'s} <--> ('s = 's in set)
-primrw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
-primrw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
-   tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
-
-interactive_rw reduce_set_ind :
-   set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
-   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
 
 let fold_set        = makeFoldC << set >> unfold_set
 let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
-let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
-let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -113,14 +98,6 @@ dform set_df : set =
 
 dform isset_df : mode[prl] :: parens :: "prec"[prec_apply] :: isset{'s} =
    slot{'s} `" set"
-
-dform collect_df : mode[prl] :: parens :: "prec"[prec_apply] :: collect{'T; x. 'a} =
-   szone pushm[3] `"collect" " " slot{'x} `":" " " slot{'T} `"." " " slot{'a} popm ezone
-
-dform set_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body} =
-   szone pushm[3] `"set_ind(" slot{'g} `"." " "
-   pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" hspace slot{'z} hspace `"in" popm hspace
-   slot{'body} popm ezone
 
 (************************************************************************
  * RELATION TO ITT                                                      *
@@ -146,11 +123,18 @@ interactive isset_assum 'H 'J : :
    sequent ['ext] { 'H; x: set; 'J['x] >- isset{'x} }
 
 (*
+ * Every set is a pre_set.
+ *)
+interactive is_pre_set_set 'H :
+   sequent ['ext] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H >- is_pre_set{'s} }
+
+(*
  * This is how a set is constructed.
  *)
-interactive isset_collect 'H 'y :
+interactive isset_collect2 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
-   sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
+   sequent [squash] { 'H; y: 'T >- is_pre_set{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
 
 (*
@@ -201,9 +185,9 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
 (*
  * Equality on tree induction forms.
  *)
-interactive set_ind_equality 'H 'a 'f 'g 'x :
+interactive set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
    sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
-   sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
+   sequent [squash] { 'H; a: 'A; f: 'B['a] -> set; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
@@ -222,12 +206,6 @@ let is_isset_term = is_dep0_term isset_opname
 let mk_isset_term = mk_dep0_term isset_opname
 let dest_isset = dest_dep0_term isset_opname
 
-let set_ind_term = << set_ind{'s; T, f, g. 'B['T; 'f; 'g]} >>
-let set_ind_opname = opname_of_term set_ind_term
-let is_set_ind_term = is_dep0_dep3_term set_ind_opname
-let mk_set_ind_term = mk_dep0_dep3_term set_ind_opname
-let dest_set_ind = dest_dep0_dep3_term set_ind_opname
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -235,7 +213,7 @@ let dest_set_ind = dest_dep0_dep3_term set_ind_opname
 let d_collect_issetT i p =
    if i = 0 then
       let s = maybe_new_vars1 p "s" in
-         isset_collect (hyp_count p) s p
+         isset_collect2 (hyp_count p) s p
    else
       raise (RefineError ("d_collect_issetT", StringError "no elimination form"))
 
@@ -314,24 +292,6 @@ let isset_type_term = << "type"{isset{'s1}} >>
 let d_resource = d_resource.resource_improve d_resource (isset_type_term, d_isset_typeT)
 
 (*
- * Equality of set_ind.
- *)
-let d_set_ind_equalT i p =
-   if i = 0 then
-   let t, f, g, t2 = maybe_new_vars4 p "T" "f" "g" "T2" in
-      (set_ind_equality (hyp_count p) t f g t2
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "main"]) p
-   else
-      raise (RefineError ("d_set_indT", StringError "no elimination form"))
-
-let set_ind_equal_term = << set_ind{'s1; a1, f1, g1. 'b1['a1; 'f1; 'g1]}
-                            = set_ind{'s2; a2, f2, g2. 'B2['a2; 'f2; 'g2]}
-                            in 'T >>
-
-let d_resource = d_resource.resource_improve d_resource (set_ind_equal_term, d_set_ind_equalT)
-
-(*
  * Equal sets.
  *)
 let eqSetT p =
@@ -343,6 +303,12 @@ let eqSetT p =
 let setAssumT i p =
    let i, j = hyp_indices p i in
       isset_assum i j p
+
+(*
+ * Every set is a pre_set.
+ *)
+let setPreSetT p =
+   is_pre_set_set (hyp_count p) p
 
 (*
  * Split a set in a hyp or concl.

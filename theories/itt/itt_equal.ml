@@ -184,6 +184,11 @@ prim equality_squashElimination 'H :
    sequent ['ext] { 'H >- 'a = 'b in 'T } =
    it
 
+prim type_squashElimination 'H :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent ['ext] { 'H >- "type"{'T} } =
+   it
+
 (*
  * There should be only one param, of String type.
  * Get it.
@@ -469,6 +474,11 @@ let squash_equalT p =
    equality_squashElimination (hyp_count p) p
 
 let squash_resource = squash_resource.resource_improve squash_resource (equal_term, squash_equalT)
+
+let squash_typeT p =
+   type_squashElimination (hyp_count p) p
+
+let squash_resource = squash_resource.resource_improve squash_resource (type_term, squash_typeT)
 
 let unsquashT v p =
    squashFromAny (Sequent.hyp_count p) v p

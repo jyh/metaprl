@@ -2,8 +2,8 @@
  * Primitiva interactiveatization of implication.
  *)
 
-include Czf_itt_set
-include Czf_itt_sep
+include Czf_itt_all
+include Czf_itt_set_ind
 
 open Debug
 open Printf
@@ -27,24 +27,24 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-declare "all"{'T; x. 'A['x]}
+declare "dall"{'T; x. 'A['x]}
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_dall : "all"{'s; x. 'A['x]} <-->
-   set_ind{'s; a, f, g. "fun"{'a; x. 'A['f 'x]}}
+primrw unfold_dall : "dall"{'s; x. 'A['x]} <-->
+   set_ind{'s; a, f, g. (x: 'a -> 'A['f 'x])}
 
-interactive_rw reduce_dall : "all"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
+interactive_rw reduce_dall : "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
    (t: 'T -> 'A['f['t]])
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform dall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "all"{'s; x. 'A} =
-   pushm[0] forall `"'" slot{'x} " " Nuprl_font!member " " slot{'s} `"." slot{'A} popm
+dform dall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "dall"{'s; x. 'A} =
+   pushm[0] forall slot{'x} " " Nuprl_font!member " " slot{'s} `"." slot{'A} popm
 
 (************************************************************************
  * RULES                                                                *
@@ -54,50 +54,51 @@ dform dall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "all"{'s; x. 'A} =
  * Typehood.
  *)
 interactive dall_type 'H 'y :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
-   sequent ['ext] { 'H >- "type"{."all"{'s; x. 'A['x]}} }
-
-(*
- * Well formedness.
- *)
-interactive dall_wf 'H 'y :
-   sequent ['ext] { 'H >- isset{'T} } -->
-   sequent ['ext] { 'H; y: set >- wf{'A['y]} } -->
-   sequent ['ext] { 'H >- wf{."all"{'T; x. 'A['x]} } }
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { 'H >- "type"{."dall"{'s; x. 'A['x]}} }
 
 (*
  * Intro.
  *)
 interactive dall_intro 'H 'a 'b :
-   sequent ['ext] { 'H >- isset{'T} } -->
-   sequent ['ext] { 'H; a: set >- wf{'A['a]} } -->
-   sequent ['ext] { 'H; a: set; b: member{'a; 'T} >- 'A['a] } -->
-   sequent ['ext] { 'H >- "all"{'T; x. 'A['x]} }
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H; a: set >- "type"{'A['a]} } -->
+   sequent ['ext] { 'H; a: set; b: member{'a; 's} >- 'A['a] } -->
+   sequent ['ext] { 'H >- "dall"{'s; x. 'A['x]} }
 
 (*
  * Elimination.
  *)
-interactive dall_elim 'H 'J 'x 'z 'w 'u :
-   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; u: set >- wf{'A['u]} } -->
-   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- member{'z; 'T} } -->
-   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- 'C['x] }
+interactive dall_elim 'H 'J 'z 'w :
+   sequent [squash] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: set >- "type"{'A['w]} } -->
+   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- fun_prop{w. 'A['w]} } -->
+   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- member{'z; 's} } -->
+   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
+   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- 'C['x] }
+
+(*
+ * When this is a functional formula.
+ *)
+interactive dall_fun 'H 'w 'x :
+   sequent [squash] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
+   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- fun_prop{x. 'B['w; 'x]} } -->
+   sequent ['ext] { 'H; x: set >- fun_prop{w. 'B['w; 'x]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. dall{'A['z]; y. 'B['z; 'y]}} }
 
 (*
  * This is a restricted formula.
  *)
-interactive dall_res 'H 'w :
-   sequent ['ext] { 'H; w: set >- isset{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- restricted{y. 'B['y; 'w]} } -->
-   sequent ['ext] { 'H >- restricted{z. "all"{'A['z]; y. 'B['y; 'z]}} }
+interactive dall_res2 'H 'w 'x :
+   sequent ['ext] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
+   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
+   sequent ['ext] { 'H >- restricted{z, y. 'B['z; 'y]} } -->
+   sequent ['ext] { 'H >- restricted{z. "dall"{'A['z]; y. 'B['z; 'y]}} }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-let dall_term = << "all"{'T; x. 'A['x]} >>
-let wf_dall_term = << wf{. "all"{'T; x. 'A['x]}} >>
 
 (*
  * Propositional reasoning.
@@ -105,27 +106,24 @@ let wf_dall_term = << wf{. "all"{'T; x. 'A['x]}} >>
 let d_dallT i p =
    if i = 0 then
       let v, w = maybe_new_vars2 p "v" "w" in
-         dall_intro (hyp_count p) v w p
+         (dall_intro (hyp_count p) v w
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
    else
       let x, _ = nth_hyp p i in
-      let w, u = Var.maybe_new_vars2 p "u" "v" in
+      let u = Var.maybe_new_vars1 p "u" in
       let z = get_with_arg p in
       let i, j = hyp_indices p i in
-          dall_elim i j x z w u p
+         (dall_elim i j z u
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "antecedent";
+                  addHiddenLabelT "main"]) p
+
+let dall_term = << "dall"{'s; x. 'A['x]} >>
 
 let d_resource = d_resource.resource_improve d_resource (dall_term, d_dallT)
-
-(*
- * Well-formedness.
- *)
-let d_wf_dallT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         dall_wf (hyp_count p) v p
-   else
-      raise (RefineError ("d_wf_dallT", (StringTermError ("no elim form", wf_dall_term))))
-
-let d_resource = d_resource.resource_improve d_resource (wf_dall_term, d_wf_dallT)
 
 (*
  * Typehood.
@@ -133,13 +131,48 @@ let d_resource = d_resource.resource_improve d_resource (wf_dall_term, d_wf_dall
 let d_dall_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         dall_type (hyp_count p) v p
+         (dall_type (hyp_count p) v thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_dall_typeT", StringError "no elimination form"))
 
-let dall_type_term = << "type"{."all"{'s; x. 'A['x]}} >>
+let dall_type_term = << "type"{."dall"{'s; x. 'A['x]}} >>
 
 let d_resource = d_resource.resource_improve d_resource (dall_type_term, d_dall_typeT)
+
+(*
+ * Functional.
+ *)
+let d_dall_funT i p =
+   if i = 0 then
+      let w, x = maybe_new_vars2 p "w" "x" in
+         (dall_fun (hyp_count p) w x
+          thenLT [addHiddenLabelT "wf";
+                  idT;
+                  idT;
+                  idT]) p
+   else
+      raise (RefineError ("d_dall_funT", StringError "no eliminaton form"))
+
+let dall_fun_term = << fun_prop{z. dall{'A['z]; y. 'B['z; 'y]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (dall_fun_term, d_dall_funT)
+
+(*
+ * Restricted.
+ *)
+let d_dall_resT i p =
+   if i = 0 then
+      let w, v = maybe_new_vars2 p "u" "v" in
+         (dall_res2 (hyp_count p) w v
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
+   else
+      raise (RefineError ("d_dall_resT", StringError "no elimination form"))
+
+let dall_res_term = << restricted{dall{'s; x. 'A['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (dall_res_term, d_dall_resT)
 
 (*
  * -*-

@@ -2,7 +2,7 @@
  * Empty set.
  *)
 
-include Czf_itt_set
+include Czf_itt_member
 
 open Printf
 open Debug
@@ -73,14 +73,6 @@ interactive union_member_intro_right 'H :
    sequent ['ext] { 'H >- member{'x; 's2} } -->
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
-
-(*
- * Desired elimination form.
-interactive union_member_elim 'H 'J :
-   sequent ['ext] { 'H; x: member{'y; 's1}; 'J['x] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: member{'y; 's2}; 'J['x] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- 'T['x] }
- *)
 
 (*
  * We get a slightly less powerful elim form.

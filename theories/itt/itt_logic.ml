@@ -82,6 +82,16 @@ primrw unfoldExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
 primrw reducePropTrue : "prop"["true":t] <--> "true"
 primrw reducePropFalse : "prop"["false":t] <--> "false"
 
+let foldTrue    = makeFoldC << "true" >> unfoldTrue
+let foldFalse   = makeFoldC << "false" >> unfoldFalse
+let foldNot     = makeFoldC << not{'a} >> unfoldNot
+let foldImplies = makeFoldC << 'a => 'b >> unfoldImplies
+let foldIff     = makeFoldC << "iff"{'a; 'b} >> unfoldIff
+let foldAnd     = makeFoldC << 'a & 'b >> unfoldAnd
+let foldOr      = makeFoldC << 'a or 'b >> unfoldOr
+let foldAll     = makeFoldC << all x: 'A. 'B['x] >> unfoldAll
+let foldExists  = makeFoldC << exst x: 'A. 'B['x] >> unfoldExists
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -331,6 +341,57 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
  ************************************************************************)
 
 (*
+ * Move hyps dependeing on the var to the conclusion.
+ *)
+let rec intersects vars fv =
+   match vars with
+      [] ->
+         false
+    | v :: tl ->
+         if List.mem v fv then
+            true
+         else
+            intersects tl fv
+
+let moveToConclVarsT vars p =
+   let { sequent_hyps = hyps } = explode_sequent p in
+   let len = List.length hyps in
+   let rec collect i vars indices = function
+      Hypothesis (v, hyp) :: tl ->
+         if List.mem v vars or intersects vars (free_vars hyp) then
+            collect (i + 1) (v :: vars) ((i, v, hyp) :: indices) tl
+         else
+            collect (i + 1) vars indices tl
+    | _ :: tl ->
+         collect (i + 1) vars indices tl
+    | [] ->
+         indices
+   in
+   let rec tac indices goal =
+      match indices with
+         (i, v, hyp) :: tl ->
+            if is_free_var v goal then
+               let goal' = mk_all_term v hyp goal in
+                  assertT goal'
+                  thenLT [thinT i thenT tac tl goal';
+                          withT (mk_var_term v) (dT (len + 1)) (**)
+                             thenLT [equalAssumT i; nthHypT (len + 2)]]
+
+            else
+               let goal' = mk_implies_term hyp goal in
+                  assertT goal'
+                  thenLT [thinT i thenT tac tl goal';
+                          (dT (len + 1)) thenLT [nthHypT i; nthHypT (-1)]]
+       | [] ->
+            idT
+   in
+      tac (collect 1 vars [] hyps) (Sequent.concl p) p
+
+let moveToConclT i p =
+   let v, _ = nth_hyp p i in
+      moveToConclVarsT [v] p
+
+(*
  * Decompose universal formulas.
  *)
 let rec univCDT p =
@@ -374,8 +435,10 @@ let instHypT args i =
                else
                   thinT i thenT inst i false args
             in
-               if is_all_term hyp or is_dfun_term hyp then
+               if is_all_term hyp then
                   (withT arg (dT i) thenMT tailT args') p
+               else if is_dfun_term hyp then
+                  (withT arg (dT i) thenMT (thinT (-1) thenT tailT args')) p
                else if is_implies_term hyp or is_fun_term hyp then
                   (dT i thenMT tailT args) p
                else
@@ -579,7 +642,11 @@ let assumT i p =
          TermMan.nth_concl assum 0
       else
          let v, hyp = TermMan.nth_hyp assum j in
-            mk_all_term v hyp (collect (j + 1))
+         let goal = collect (j + 1) in
+            if is_free_var v goal then
+               mk_all_term v hyp goal
+            else
+               mk_implies_term hyp goal
    in
    let form = collect index in
    let _ =

@@ -623,16 +623,6 @@ interactive_rw index_map2 {| reduce |} :
    ('l in list) -->
    Index{map{x.'f['x]; 'l}} <--> Index{'l}
 
-interactive_rw nth_map {| reduce |} :
-   ('l in list) -->
-   ('i in Index{'l}) -->
-   nth{map{'f; 'l};'i} <--> 'f(nth{'l;'i})
-
-interactive_rw nth_map2 {| reduce |} :
-   ('l in list) -->
-   ('i in Index{'l}) -->
-   nth{map{x.'f['x]; 'l};'i} <--> 'f[nth{'l;'i}]
-
 doc docoff
 
 let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
@@ -822,6 +812,16 @@ interactive list_lengthzero {| elim [] |} 'H 'A :
    sequent { <H>; x: (length{'l} = 0 in int); <J[it]>; y: 'l = nil in list{'A} >- 'C[it] } -->
    sequent { <H>; x: (length{'l} = 0 in int); <J['x]> >- 'C['x] }
 
+interactive_rw nth_map {| reduce |} :
+   ('l in list) -->
+   ('i in Index{'l}) -->
+   nth{map{'f; 'l};'i} <--> 'f(nth{'l;'i})
+
+interactive_rw nth_map2 {| reduce |} :
+   ('l in list) -->
+   ('i in Index{'l}) -->
+   nth{map{x.'f['x]; 'l};'i} <--> 'f[nth{'l;'i}]
+
 interactive nth_eq {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l1 = 'l2 in list{'T} } -->
@@ -967,11 +967,6 @@ interactive all_list_intro_cons  {| intro[] |} :
    sequent { <H> >-  all_list{'l; x. 'P['x]} } -->
    sequent { <H> >- all_list{cons{'a; 'l};  x. 'P['x]} }
 
-interactive all_list_map  {| intro[] |} :
-   [wf] sequent { <H> >- 'l in list  } -->
-   sequent { <H> >-  all_list{'l; x. 'P['f('x)]} } -->
-   sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
-
 interactive all_list_intro  {| intro[] |} :
    sequent { <H> >- 'l in list  } -->
    sequent { <H>; i:Index{'l}  >- 'P[nth{'l;'i}]  } -->
@@ -988,6 +983,11 @@ interactive all_list_elim {| elim[] |} 'H  'i :
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'i in Index{'l}  } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P[nth{'l;'i}] >- 'C['u] } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
+
+interactive all_list_map  {| intro[] |} :
+   [wf] sequent { <H> >- 'l in list  } -->
+   sequent { <H> >-  all_list{'l; x. 'P['f('x)]} } -->
+   sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
 
 interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
    sequent { <H> >- 'A Type  } -->

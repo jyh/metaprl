@@ -3,7 +3,7 @@
 #
 DIR := theories/ocaml_sos
 ROOT := ../..
-INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
+INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base
 
 # Common files
 MLZFILES :=

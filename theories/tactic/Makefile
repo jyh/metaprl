@@ -6,7 +6,7 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE = -I . -I ../boot -I $(ROOT)/lib -I $(CAMLP4LIB)
+INCLUDE = -I . -I ../boot -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl_init
 
 # Library files

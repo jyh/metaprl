@@ -3,7 +3,7 @@
 #
 DIR := theories/czf
 ROOT := ../..
-INCLUDE := -I . -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
+INCLUDE := -I . -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base
 OCAMLDEPFLAGS := -prl
 
 # Library files

@@ -3,7 +3,7 @@
 #
 DIR := theories/ocaml
 ROOT := ../..
-INCLUDE := -I . -I ../tactic -I $(ROOT)/lib
+INCLUDE := -I . -I ../tactic
 OCAMLDEPFLAGS := -prl
 PRLCFLAGS := -v
 

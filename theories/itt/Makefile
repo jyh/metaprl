@@ -3,7 +3,7 @@
 #
 DIR := theories/itt
 ROOT := ../..
-INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
+INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml -I ../base
 OCAMLDEPFLAGS := -prl
 
 # Library files

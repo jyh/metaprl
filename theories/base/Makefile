@@ -3,7 +3,7 @@
 #
 DIR := theories/base
 ROOT := ../..
-INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml -I $(ROOT)/lib
+INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml
 OCAMLDEPFLAGS := -prl
 
 # Common files

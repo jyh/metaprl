@@ -1754,22 +1754,22 @@ T	t1125	o b1125 b4
 B	b1126	t1125
 T	t1126	o591 b1112 b1126
 B	b1127	t1126
-P	p742	String "rwh fold_pair 4 thenT rwh fold_pair 0 thenT trivialT"
-O	o742	ext_rule p742
+P	p2	String "byDefT fold_pair"
+O	o3	ext_rule p2
 T	t1127	o591 b1125 b4
 B	b1128	t1127
-T	t1128	o742 b590 b1128 b4 b4
-B	b1129	t1128
-T	t1129	o b1129 b4
-B	b1130	t1129
-T	t1130	o722 b590 b1127 b1130 b4
-B	b1131	t1130
-T	t1131	o588 b1131
-B	b1132	t1131
-T	t1132	o703 b1101 b1109 b1132 b4
-B	b1133	t1132
-T	t1133	o1099 b1133
-B	b1134	t1133
+T	t	o3 b590 b1128 b4 b4
+B	b	t
+T	t3	o b b4
+B	b3	t3
+T	t5	o722 b590 b1127 b3 b4
+B	b5	t5
+T	t6	o588 b5
+B	b6	t6
+T	t7	o703 b1101 b1109 b6 b4
+B	b7	t7
+T	t8	o1099 b7
+B	b8	t8
 P	p749	Number 0
 O	o749	location p749 p749
 NSummary!id	id	id Summary
@@ -1781,30 +1781,30 @@ T	t751	o749 b750
 B	b751	t751
 T	t752	o b751 b4
 B	b752	t752
-T	t1134	o b1134 b752
-B	b1135	t1134
-T	t1135	o b1098 b1135
-B	b1136	t1135
-T	t1136	o b1079 b1136
-B	b1137	t1136
-T	t1137	o b1033 b1137
-B	b1138	t1137
-T	t1138	o b1000 b1138
-B	b1139	t1138
-T	t1139	o b990 b1139
-B	b1140	t1139
-T	t1140	o b980 b1140
-B	b1141	t1140
-T	t1141	o b970 b1141
-B	b1142	t1141
-T	t1142	o b964 b1142
-B	b1143	t1142
-T	t1143	o b957 b1143
-B	b1144	t1143
-T	t1144	o b481 b1144
-B	b1145	t1144
-T	t1145	o b951 b1145
-B	b1146	t1145
-T	t1146	o b940 b1146
-B	b1147	t1146
-T	t1147	o b832 b1147
+T	t9	o b8 b752
+B	b9	t9
+T	t10	o b1098 b9
+B	b10	t10
+T	t11	o b1079 b10
+B	b11	t11
+T	t12	o b1033 b11
+B	b12	t12
+T	t13	o b1000 b12
+B	b13	t13
+T	t14	o b990 b13
+B	b14	t14
+T	t15	o b980 b14
+B	b15	t15
+T	t16	o b970 b15
+B	b16	t16
+T	t17	o b964 b16
+B	b17	t17
+T	t18	o b957 b17
+B	b18	t18
+T	t19	o b481 b18
+B	b19	t19
+T	t20	o b951 b19
+B	b20	t20
+T	t21	o b940 b20
+B	b21	t21
+T	t22	o b832 b21

@@ -6927,7 +6927,7 @@ T	t5359	o5349 b5350 b5359
 B	b5360	t5359
 P	p5365	String stack_as_list_wf
 O	o5365	rule p5365
-P	p5367	String "byDefT stack_as_list thenT byDefT unfold_stack thenT onAllClausesT (rwh reduceC) thenT autoT thenT tryT (completeT (univTypeT <<univ[i:l]>> thenT autoT))"
+P	p5367	String "byDefT stack_as_list thenT byDefT unfold_stack thenT rwhAll reduceC thenT autoT thenT tryT (completeT (univTypeT <<univ[i:l]>> thenT autoT))"
 O	o5367	ext_rule p5367
 T	t5372	o5355 b948 b5332 b5355
 B	b5372	t5372

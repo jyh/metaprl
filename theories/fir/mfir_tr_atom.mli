@@ -35,10 +35,11 @@
  * @end[license]
  *)
 
-extends Mfir_int_set
 extends Mfir_list
+extends Mfir_int_set
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
 extends Mfir_tr_base
 extends Mfir_tr_types
+extends Mfir_tr_atom_base

@@ -65,6 +65,7 @@ open Top_conversionals
 declare "true"
 declare "false"
 
+
 (*!
  * @begin[doc]
  *
@@ -75,6 +76,7 @@ declare "false"
 declare "or"{ 'bool1; 'bool2 }
 declare "and"{ 'bool1; 'bool2 }
 declare "not"{ 'boolean }
+
 
 (*!
  * @begin[doc]
@@ -112,6 +114,7 @@ prim_rw reduce_ifthenelse_false :
 
 let reduce_ifthenelse =
    reduce_ifthenelse_true orelseC reduce_ifthenelse_false
+
 
 (*!
  * @begin[doc]
@@ -161,6 +164,7 @@ dform false_df : except_mode[src] ::
    "false" =
    bf["false"]
 
+
 (*
  * Connectives.
  *)
@@ -176,6 +180,7 @@ dform and_df : except_mode[src] ::
 dform not_df : except_mode[src] ::
    "not"{ 'boolean } =
    tneg slot{'boolean}
+
 
 (*
  * Case analysis.

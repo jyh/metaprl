@@ -62,18 +62,18 @@
 extends Base_theory
 
 extends Mfir_option
-extends Mfir_record
 extends Mfir_bool
+extends Mfir_record
 extends Mfir_int
 extends Mfir_list
 extends Mfir_int_set
 extends Mfir_ty
 extends Mfir_exp
-(*
 extends Mfir_util
 extends Mfir_sequent
 extends Mfir_tr_base
 extends Mfir_tr_types
+(*
 extends Mfir_tr_atom
 extends Mfir_tr_store
 extends Mfir_tr_exp

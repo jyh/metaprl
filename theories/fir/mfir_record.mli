@@ -31,7 +31,7 @@
  * @end[license]
  *)
 
-extends Base_theory
+extends Mfir_bool
 
 open Tactic_type.Conversionals
 
@@ -44,6 +44,7 @@ declare recordEnd
 declare record[tag:s]{ 'data; 'remaining }
 
 declare field[tag:s]{ 'record }
+declare field_mem[tag:s]{ 'record }
 
 
 (**************************************************************************
@@ -51,3 +52,4 @@ declare field[tag:s]{ 'record }
  **************************************************************************)
 
 topval reduce_field : conv
+topval reduce_field_mem : conv

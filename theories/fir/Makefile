@@ -13,23 +13,25 @@ OCAMLDEPFLAGS := -prl
 MPFILES := \
    mfir_auto \
    mfir_option \
-   mfir_record \
    mfir_bool \
+   mfir_record \
    mfir_int \
    mfir_list \
    mfir_int_set \
    mfir_ty \
    mfir_exp \
+   mfir_sequent \
+   mfir_util \
+   mfir_tr_base \
+   mfir_tr_types \
+   mfir_tr_atom_base \
+   mfir_tr_atom \
+   mfir_tr_store \
+   mfir_tr_exp \
    mfir_termOp_base \
    mfir_termOp \
-   mfir_theory
-#   mfir_util \
-#   mfir_sequent \
-#   mfir_tr_base \
-#   mfir_tr_types \
-#   mfir_tr_atom \
-#   mfir_tr_store \
-#   mfir_tr_exp
+   mfir_theory \
+   mfir_test
 
 # Name of main libraries
 MAIN = theory

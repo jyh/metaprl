@@ -66,6 +66,7 @@ open Mfir_bool
 
 declare number[i:n]
 
+
 (*!
  * @begin[doc]
  *
@@ -82,6 +83,7 @@ declare minus{ 'num }
 
 declare int_min{ 'num1; 'num2 }
 declare int_max{ 'num1; 'num2 }
+
 
 (*!
  * @begin[doc]
@@ -117,11 +119,16 @@ declare int_ge{ 'num1; 'num2 }
  * @docoff
  *)
 
-(* Intermediate term for arithmetic operations. *)
+(*
+ * Intermediate term for arithmetic operations.
+ *)
 
 declare numeral{ 'num }
 
-(* Define auxilary rewrites. *)
+
+(*
+ * Define auxilary rewrites.
+ *)
 
 prim_rw reduce_add_aux :
    add{ number[i:n]; number[j:n] } <-->
@@ -175,7 +182,10 @@ prim_rw reduce_int_ge_aux :
    int_ge{ number[i:n]; number[j:n] } <-->
    meta_lt[i:n, j:n]{ "false"; "true" }
 
-(* Define the actual rewrites. *)
+
+(*
+ * Define the actual rewrites.
+ *)
 
 let reduce_add =
    reduce_add_aux thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral
@@ -213,7 +223,10 @@ let reduce_int_gt =
 let reduce_int_ge =
    reduce_int_ge_aux thenC reduce_meta_lt_num
 
-(* Add the above rewrites to the reduce resource. *)
+
+(*
+ * Add the above rewrites to the reduce resource.
+ *)
 
 let resource reduce += [
    << add{ 'num1; 'num2 } >>, reduce_add;
@@ -230,6 +243,7 @@ let resource reduce += [
    << int_gt{ 'num1; 'num2 } >>, reduce_int_gt;
    << int_ge{ 'num1; 'num2 } >>, reduce_int_ge
 ]
+
 
 (*
  * The reductions for min/max are here since they depend on the
@@ -272,6 +286,7 @@ dform number_df : except_mode[src] ::
    number[i:n] =
    slot[i:n]
 
+
 (*
  * Operations.
  *)
@@ -307,6 +322,7 @@ dform int_min_df : except_mode[src] ::
 dform int_max_df : except_mode[src] ::
    int_max{ 'num1; 'num2 } =
    bf["max"] `"(" slot{'num1} `"," slot{'num2} `")"
+
 
 dform int_eq_df : except_mode[src] ::
    int_eq{ 'num1; 'num2 } =

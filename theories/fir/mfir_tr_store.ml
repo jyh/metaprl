@@ -49,16 +49,6 @@ extends Mfir_tr_base
 extends Mfir_tr_types
 extends Mfir_tr_atom
 
-(*!
- * @docoff
- *)
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Base_auto_tactic
-open Base_dtactic
-open Mfir_auto
-
 
 (**************************************************************************
  * Rules.
@@ -73,17 +63,23 @@ open Mfir_auto
  * @end[doc]
  *)
 
-prim ty_store_tuple_box {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
-   sequent [mfir] { 'H >-
+prim ty_store_tuple_normal 'H :
+   sequent [fir] { 'H >- has_type["atom_list"]{ 'elts; 'types } } -->
+   sequent [fir] { 'H >- has_type["store"]{'elts; tyTuple["normal"]{'types}} }
+   = it
+
+prim ty_store_tuple_raw 'H :
+   sequent [fir] { 'H >- has_type["atom_list"]{ 'elts; 'types } } -->
+   sequent [fir] { 'H >- has_type["store"]{'elts; tyTuple["raw"]{'types}} }
+   = it
+
+prim ty_store_tuple_box 'H :
+   sequent [fir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
+   sequent [fir] { 'H >-
       has_type["store"]{ cons{ 'elt; nil };
                          tyTuple["box"]{ cons{ 't; nil } } } }
    = it
 
-prim ty_store_tuple_normal {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom_list"]{ 'elts; 'types } } -->
-   sequent [mfir] { 'H >- has_type["store"]{'elts; tyTuple["normal"]{'types}} }
-   = it
 
 (*!
  * @begin[doc]
@@ -92,15 +88,16 @@ prim ty_store_tuple_normal {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim ty_store_array1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["store"]{ nil; tyArray{'t} } }
+prim ty_store_array1 'H :
+   sequent [fir] { 'H >- has_type["store"]{ nil; tyArray{'t} } }
    = it
 
-prim ty_store_array2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
-   sequent [mfir] { 'H >- has_type["store"]{ 'tail; tyArray{'t} } } -->
-   sequent [mfir] { 'H >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
+prim ty_store_array2 'H :
+   sequent [fir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
+   sequent [fir] { 'H >- has_type["store"]{ 'tail; tyArray{'t} } } -->
+   sequent [fir] { 'H >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
    = it
+
 
 (*!
  * @begin[doc]
@@ -112,20 +109,21 @@ prim ty_store_array2 {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim ty_store_lambda {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- type_eq{ 'u; 'u; large_type } } -->
-   sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
-      has_type["exp"]{ 'f['a]; 't } } -->
-   sequent [mfir] { 'H >-
+prim ty_store_lambda 'H 'a 'v :
+   sequent [fir] { 'H >- type_eq{ 'u; 'u; large_type } } -->
+   sequent [fir] { 'H; a: var_def{ 'v; 'u; no_def } >-
+      has_type["exp"]{ 'f['v]; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{ lambda{ x. 'f['x] }; tyFun{ 'u; 't } } }
    = it
 
-prim ty_store_polyFun {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
-      has_type["exp"]{ 'f['a]; 'ty['a] } } -->
-   sequent [mfir] { 'H >-
+prim ty_store_polyFun 'H 'a 'v :
+   sequent [fir] { 'H; a: ty_def{ 'v; small_type; no_def } >-
+      has_type["exp"]{ 'f['v]; 'ty['v] } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{ polyFun{ x. 'f['x] }; tyAll{ t. 'ty['t] } } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -139,7 +137,7 @@ prim ty_store_polyFun {| intro [] |} 'H 'a :
 
 prim ty_store_union 'H 'J :
    (* well-formedness of the union type. *)
-   sequent [mfir] { 'H; tv: ty_def{ polyKind{'j; 'k}; 'tyd }; 'J['tv] >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; 'J >-
       type_eq{ tyUnion{'tv; 'tyl; intset[31, "signed"]{
                   (interval{number[i:n]; number[i:n]} :: nil) }};
                tyUnion{'tv; 'tyl; intset[31, "signed"]{
@@ -147,13 +145,13 @@ prim ty_store_union 'H 'J :
                small_type } } -->
 
    (* check that the atoms have the right types. *)
-   sequent [mfir] { 'H; tv: ty_def{ polyKind{'j; 'k}; 'tyd }; 'J['tv] >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; 'J >-
       has_type["union_atoms"]{'atoms;
-                              nth_unionCase{number[i:n];
-                                            do_tyApply{ 'tyd; 'tyl }}}} -->
+                              nth_elt{number[i:n];
+                                            apply_types{ 'tyd; 'tyl }}}} -->
 
    (* then the union value is well-typed. *)
-   sequent [mfir] { 'H; tv: ty_def{ polyKind{'j; 'k}; 'tyd }; 'J['tv] >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; 'J >-
       has_type["store"]{ union_val[i:n]{ 'tv; 'atoms };
                          tyUnion{ 'tv; 'tyl;
                            intset[31, "signed"]{ cons{ interval{number[i:n];
@@ -161,20 +159,6 @@ prim ty_store_union 'H 'J :
                                                        nil } } } } }
    = it
 
-(*!
- * @docoff
- *)
-
-let d_ty_store_union i p =
-   let j, k = Sequent.hyp_indices p i in
-      ty_store_union j k p
-
-let resource auto += {
-   auto_name = "d_ty_store_union1";
-   auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_ty_store_union;
-   auto_type = AutoNormal
-}
 
 (*!
  * @begin[doc]
@@ -184,17 +168,18 @@ let resource auto += {
  * @end[doc]
  *)
 
-prim ty_store_union_atoms1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["union_atoms"]{ nil; nil } }
+prim ty_store_union_atoms1 'H :
+   sequent [fir] { 'H >- has_type["union_atoms"]{ nil; nil } }
    = it
 
-prim ty_store_union_atoms2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 'ty } } -->
-   sequent [mfir] { 'H >- has_type["union_atoms"]{ 'tail; 'rest } } -->
-   sequent [mfir] { 'H >-
+prim ty_store_union_atoms2 'H :
+   sequent [fir] { 'H >- has_type["atom"]{ 'elt; 'ty } } -->
+   sequent [fir] { 'H >- has_type["union_atoms"]{ 'tail; 'rest } } -->
+   sequent [fir] { 'H >-
       has_type["union_atoms"]{ cons{ 'elt; 'tail };
-                               cons{ unionCaseElt{'ty; 'boolean}; 'rest } } }
+                               cons{ mutable_ty{'ty; 'flag}; 'rest } } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -204,8 +189,8 @@ prim ty_store_union_atoms2 {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim ty_store_raw_data {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["store"]{ raw_data; tyRawData } }
+prim ty_store_raw_data 'H :
+   sequent [fir] { 'H >- has_type["store"]{ raw_data; tyRawData } }
    = it
 
 (*!

@@ -58,7 +58,11 @@ extends Mfir_ty
  * The FIR unary operators include arithmetic operators and coercion operators
  * that safely transform a value between two types.  We omit an explicit
  * listing these terms.
- * @end[doc] @docoff
+ * @end[doc]
+ *)
+
+(*!
+ * @docoff
  *)
 
 declare notEnumOp[i:n]
@@ -106,16 +110,20 @@ declare rawIntOfPointerOp[precision:n, sign:s]
 declare pointerOfRawIntOp[precision:n, sign:s]
 
 declare dtupleOfDTupleOp{ 'ty_var; 'mtyl }
-declare unionOfUnionOp{ 'ty_var; 'tyl; 'intset1; 'intset2 }
+declare unionOfUnionOp{ 'ty_var; 'tyl; 'intset_dest; 'intset_src }
 declare rawDataOfFrameOp{ 'ty_var; 'tyl }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Binary operators}
  *
  * The FIR binary operators include various arithmetic operators, and pointer
  * equality operators. We omit an explicit listing of these terms.
  * @end[doc]
+ *)
+
+(*!
  * @docoff
  *)
 
@@ -193,7 +201,8 @@ declare ldExpFloatIntOp[precision:n]
 declare eqEqOp{ 'ty }
 declare neqEqOp{ 'ty }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Atoms}
  *
@@ -206,6 +215,7 @@ declare neqEqOp{ 'ty }
  *)
 
 declare atomNil{ 'ty }
+
 
 (*!
  * @begin[doc]
@@ -226,6 +236,7 @@ declare atomEnum[bound:n]{ 'num }
 declare atomRawInt[precision:n, sign:s]{ 'num }
 declare atomFloat[precision:n, value:s]
 
+
 (*!
  * @begin[doc]
  *
@@ -234,6 +245,7 @@ declare atomFloat[precision:n, value:s]
  *)
 
 declare atomVar{ 'var }
+
 
 (*!
  * @begin[doc]
@@ -244,7 +256,8 @@ declare atomVar{ 'var }
  * @end[doc]
  *)
 
-declare atomLabel{ 'frame; 'field; 'subfield; 'num }
+declare atomLabel[field:s, subfield:s]{ 'frame; 'num }
+
 
 (*!
  * @begin[doc]
@@ -257,6 +270,7 @@ declare atomLabel{ 'frame; 'field; 'subfield; 'num }
 
 declare atomSizeof{ 'ty_var_list; 'num }
 
+
 (*!
  * @begin[doc]
  *
@@ -267,6 +281,7 @@ declare atomSizeof{ 'ty_var_list; 'num }
  *)
 
 declare atomConst{ 'ty; 'ty_var; 'num }
+
 
 (*!
  * @begin[doc]
@@ -279,6 +294,7 @@ declare atomConst{ 'ty; 'ty_var; 'num }
 
 declare atomTyApply{ 'atom; 'ty; 'ty_list }
 
+
 (*!
  * @begin[doc]
  *
@@ -288,6 +304,7 @@ declare atomTyApply{ 'atom; 'ty; 'ty_list }
  *)
 
 declare atomTyPack{ 'var; 'ty; 'ty_list }
+
 
 (*!
  * @begin[doc]
@@ -299,6 +316,7 @@ declare atomTyPack{ 'var; 'ty; 'ty_list }
  *)
 
 declare atomTyUnpack{ 'var }
+
 
 (*!
  * @begin[doc]
@@ -313,7 +331,7 @@ declare atomUnop{ 'unop; 'atom }
 declare atomBinop{ 'binop; 'atom1; 'atom2 }
 
 
-(*!
+(*!************************************
  * @begin[doc]
  * @modsubsection{Allocation operators}
  *
@@ -325,6 +343,7 @@ declare atomBinop{ 'binop; 'atom1; 'atom2 }
  *)
 
 declare allocTuple[tc:s]{ 'ty; 'atom_list }
+
 
 (*!
  * @begin[doc]
@@ -338,6 +357,7 @@ declare allocTuple[tc:s]{ 'ty; 'atom_list }
 
 declare allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list }
 
+
 (*!
  * @begin[doc]
  *
@@ -347,6 +367,7 @@ declare allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list }
  *)
 
 declare allocVArray{ 'ty; 'atom1; 'atom2 }
+
 
 (*!
  * @begin[doc]
@@ -359,7 +380,7 @@ declare allocVArray{ 'ty; 'atom1; 'atom2 }
 declare allocMalloc{ 'ty; 'atom }
 
 
-(*!
+(*!************************************
  * @begin[doc]
  * @modsubsection{Expressions}
  *
@@ -375,6 +396,7 @@ declare allocMalloc{ 'ty; 'atom }
 
 declare letAtom{ 'ty; 'atom; v. 'exp['v] }
 
+
 (*!
  * @begin[doc]
  *
@@ -388,6 +410,7 @@ declare letAtom{ 'ty; 'atom; v. 'exp['v] }
 
 declare letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp['v] }
 
+
 (*!
  * @begin[doc]
  *
@@ -398,6 +421,7 @@ declare letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp['v] }
  *)
 
 declare tailCall{ 'atom; 'atom_list }
+
 
 (*!
  * @begin[doc]
@@ -414,6 +438,7 @@ declare tailCall{ 'atom; 'atom_list }
 declare matchCase{ 'set; 'exp }
 declare matchExp{ 'atom; 'matchCase_list }
 
+
 (*!
  * @begin[doc]
  *
@@ -424,6 +449,7 @@ declare matchExp{ 'atom; 'matchCase_list }
  *)
 
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
+
 
 (*!
  * @begin[doc]
@@ -439,6 +465,7 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 declare letSubscript{ 'ty; 'atom1; 'atom2; v. 'exp['v] }
 declare setSubscript{ 'atom1; 'atom2; 'ty; 'atom3; 'exp }
+
 
 (*!
  * @begin[doc]
@@ -476,6 +503,7 @@ dform uminusIntOp_df2 : mode[tex] ::
    uminusIntOp =
    izone `"\\sim\\!\\!-" ezone sub{tyInt}
 
+
 (*
  * Binary operators.
  *)
@@ -485,6 +513,7 @@ dform uminusIntOp_df2 : mode[tex] ::
 dform plusIntOp_df : except_mode[src] ::
    plusIntOp =
    `"+" sub{tyInt}
+
 
 (*
  * Atoms.
@@ -526,9 +555,9 @@ dform atomVar_df : except_mode[src] ::
    bf["var"] `"(" slot{'var} `")"
 
 dform atomLabel_df : except_mode[src] ::
-   atomLabel{ 'frame; 'field; 'subfield; 'num } =
-   bf["label"] `"(" slot{'frame} `"," slot{'field} `","
-   slot{'subfield} `"," slot{'num} `")"
+   atomLabel[field:s, subfield:s]{ 'frame; 'num } =
+   bf["label"] `"(" slot{'frame} `"," slot[field:s] `","
+   slot[subfield:s] `"," slot{'num} `")"
 
 dform atomSizeof_df : except_mode[src] ::
    atomSizeof{ 'ty_var_list; 'num } =
@@ -560,6 +589,7 @@ dform atomBinop_df : except_mode[src] ::
    atomBinop{ 'binop; 'atom1; 'atom2 } =
    `"(" slot{'atom1} `" " slot{'binop} `" " slot{'atom2} `")"
 
+
 (*
  * Allocation operators.
  *)
@@ -581,6 +611,7 @@ dform allocVArray_df : except_mode[src] ::
 dform allocMalloc_df : except_mode[src] ::
    allocMalloc{ 'ty; 'atom } =
    bf["alloc malloc"] `"(" slot{'atom} `"): " slot{'ty}
+
 
 (*
  * Expressions.

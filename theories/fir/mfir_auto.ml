@@ -45,4 +45,10 @@ extends Base_theory
 open Base_auto_tactic
 open Base_dtactic
 
+
+(*
+ * fir_auto_prec is intended to be used as the auto_prec for
+ * adding FIR theory rules to the autoT tactic.
+ *)
+
 let fir_auto_prec = create_auto_prec [trivial_prec; d_prec] []

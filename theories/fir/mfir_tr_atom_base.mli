@@ -1,5 +1,6 @@
 (*
- * The Mfir_bool module implements meta-booleans for the FIR theory.
+ * The Mfir_tr_atom_base module defines the argument types
+ * and result types of the FIR operators.
  *
  * ------------------------------------------------------------------------
  *
@@ -31,44 +32,20 @@
  * @end[license]
  *)
 
-extends Base_theory
-
-open Tactic_type.Conversionals
+extends Mfir_ty
+extends Mfir_exp
+extends Mfir_sequent
 
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-(*
- * Constants.
- *)
-
-declare "true"
-declare "false"
-
-
-(*
- * Connectives.
- *)
-
-declare "or"{ 'bool1; 'bool2 }
-declare "and"{ 'bool1; 'bool2 }
-declare "not"{ 'boolean }
-
-
-(*
- * Case analysis.
- *)
-
-declare ifthenelse{ 'test; 'true_case; 'false_case }
+declare res_type{ 'op }
+declare arg1_type{ 'op }
+declare arg2_type{ 'op }
 
 
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
-
-topval reduce_and : conv
-topval reduce_or : conv
-topval reduce_not : conv
-topval reduce_ifthenelse : conv

@@ -38,6 +38,7 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 
+
 (**************************************************************************
  * General utility.
  **************************************************************************)
@@ -54,23 +55,33 @@ let string_term_of_dep1_term t =
     | _ ->
          raise (Invalid_argument "not a dep1 term")
 
-(* Compares an opname and arities list against those of a term. *)
+
+(*
+ * Compares an opname and arities list against those of a term.
+ *)
 
 let check_basics opname arities t =
    (Opname.eq (opname_of_term t) opname) &&
    ((subterm_arities t) == arities)
 
-(* Returns the parameter list of a term. *)
+
+(*
+ * Returns the parameter list of a term.
+ *)
 
 let get_params t =
    let { term_op = op } = dest_term t in
    let { op_params = param_list } = dest_op op in
       List.map dest_param param_list
 
-(* Take a list of param' elts and make a list of param elts. *)
+
+(*
+ * Take a list of param' elts and make a list of param elts.
+ **)
 
 let mk_params params =
    List.map make_param params
+
 
 (**************************************************************************
  * Main function definitions.
@@ -81,6 +92,7 @@ let mk_params params =
  *)
 
 let is_0_dep0_term = is_no_subterms_term
+
 
 (*
  * No parameters, 1 subterm.
@@ -93,6 +105,7 @@ let dest_1_dep0_term = dest_dep0_term
 let is_0_dep0_1_dep1_term = is_dep1_term
 let mk_0_dep0_1_dep1_term = mk_dep1_term
 let dest_0_dep0_1_dep1_term = dest_dep1_term
+
 
 (*
  * No parameters, 2 subterms.
@@ -110,6 +123,7 @@ let dest_1_dep0_1_dep1_term opname t =
    let str, t1,t2 = dest_dep0_dep1_term opname t in
       t1, str, t2
 
+
 (*
  * No parameters, 3 subterms.
  *)
@@ -121,6 +135,7 @@ let dest_3_dep0_term = dest_dep0_dep0_dep0_term
 let is_2_dep0_1_dep1_term = is_dep0_dep0_dep1_term
 let mk_2_dep0_1_dep1_term = mk_dep0_dep0_dep1_term
 let dest_2_dep0_1_dep1_term = dest_dep0_dep0_dep1_term
+
 
 (*
  * No parameters, 4 subterms.
@@ -153,6 +168,7 @@ let dest_3_dep0_1_dep1_term opname t =
          raise (RefineError ("dest_3_dep0_1_dep1_term", StringTermError
                ("invalid term structure", t)))
 
+
 (*
  * No parameters, 5 subterms.
  *)
@@ -175,6 +191,7 @@ let dest_5_dep0_term opname t =
          raise (RefineError ("dest_5_dep0_term", StringTermError
                ("invalid term structure", t)))
 
+
 (*
  * 1 number parameter, 0 subterms.
  *)
@@ -183,6 +200,7 @@ let is_num_0_dep0_term = is_number_term
 let mk_num_0_dep0_term = mk_number_term
 let dest_num_0_dep0_term = dest_number_term
 
+
 (*
  * 1 string parameter, 0 subterms.
  *)
@@ -190,6 +208,7 @@ let dest_num_0_dep0_term = dest_number_term
 let is_str_0_dep0_term = is_string_term
 let mk_str_0_dep0_term = mk_string_term
 let dest_str_0_dep0_term = dest_string_term
+
 
 (*
  * 1 number parameter, 1 subterm.
@@ -213,6 +232,7 @@ let dest_num_1_dep0_term opname t =
          raise (RefineError ("dest_num_1_dep0_term", StringTermError
                ("invalid term structure", t)))
 
+
 (*
  * 1 string parameter, 1 subterm.
  *)
@@ -220,6 +240,7 @@ let dest_num_1_dep0_term opname t =
 let is_str_1_dep0_term = is_string_dep0_term
 let mk_str_1_dep0_term = mk_string_dep0_term
 let dest_str_1_dep0_term = dest_string_dep0_term
+
 
 (*
  * 1 string parameter, 2 subterms.
@@ -243,6 +264,7 @@ let dest_str_2_dep0_term opname t =
          raise (RefineError ("dest_str_2_dep0_term", StringTermError
                ("invalid term structure", t)))
 
+
 (*
  * 1 string parameter, 2 subterms.
  *)
@@ -264,6 +286,7 @@ let dest_num_3_dep0_term opname t =
     | _ ->
          raise (RefineError ("dest_num_3_dep0_term", StringTermError
                ("invalid term structure", t)))
+
 
 (*
  * 1 string parameter, 4 subterms.
@@ -296,6 +319,7 @@ let dest_str_3_dep0_1_dep1_term opname t =
          raise (RefineError ("dest_str_3_dep0_1_dep1_term", StringTermError
                ("invalid term structure", t)))
 
+
 (*
  * 2 number parameters, 0 subterms.
  *)
@@ -317,6 +341,7 @@ let dest_num_num_0_dep0_term opname t =
     | _ ->
          raise (RefineError ("dest_num_num_0_dep0_term", StringTermError
                ("invalid term structure", t)))
+
 
 (*
  * 1 number parameter, 1 string parameter, 0 subterms.
@@ -340,6 +365,7 @@ let dest_num_str_0_dep0_term opname t =
          raise (RefineError ("dest_num_str_0_dep0_term", StringTermError
                ("invalid term structure", t)))
 
+
 (*
  * 1 string parameter, 1 number parameter, 0 subterms.
  *)
@@ -361,6 +387,7 @@ let dest_str_num_0_dep0_term opname t =
     | _ ->
          raise (RefineError ("dest_str_num_0_dep0_term", StringTermError
                ("invalid term structure", t)))
+
 
 (*
  * 1 number parameter, 1 string paramter, 1 subterm.
@@ -384,6 +411,7 @@ let dest_num_str_1_dep0_term opname t =
          raise (RefineError ("dest_num_str_1_dep0_term", StringTermError
                ("invalid term structure", t)))
 
+
 (*
  * 1 number parameter, 1 string parameter, 2 subterms.
  *)
@@ -405,6 +433,30 @@ let dest_num_str_2_dep0_term opname t =
     | _ ->
          raise (RefineError ("dest_num_str_2_dep0_term", StringTermError
                ("invalid term structure", t)))
+
+
+(*
+ * 2 string paramters, 2 subterms.
+ *)
+
+let is_str_str_2_dep0_term opname t =
+   match get_params t with
+      [String _; String _] -> (check_basics opname [0;0] t)
+    | _ -> false
+
+let mk_str_str_2_dep0_term opname str1 str2 t1 t2 =
+   mk_term  (make_op { op_name = opname;
+                       op_params = mk_params [String str1; String str2] })
+            [mk_simple_bterm t1; mk_simple_bterm t2]
+
+let dest_str_str_2_dep0_term opname t =
+   match get_params t, subterms_of_term t with
+      [String str1; String str2], [t1; t2] when (check_basics opname [0;0] t) ->
+         str1, str2, t1, t2
+    | _ ->
+         raise (RefineError ("dest_str_str_2_dep0_term", StringTermError
+               ("invalid term structure", t)))
+
 
 (*
  * 2 number parameters, 1 string parameter, 0 subterms.
@@ -448,6 +500,7 @@ let dest_num_str_num_0_dep0_term opname t =
     | _ -> raise (RefineError ("dest_num_str_num_0_dep0_term", StringTermError
                  ("invalid term structure", t)))
 
+
 (*
  * 3 number parameters, 1 string parameters, 0 subterms.
  *)
@@ -469,6 +522,7 @@ let dest_num_str_num_num_0_dep0_term opname t =
          i1, str, i2, i3
     | _ -> raise (RefineError ("dest_num_str_num_num_0_dep0_term", StringTermError
                  ("bad parameters", t)))
+
 
 (*
  * 2 number parameters, 2 string parameters, 0 subterms.

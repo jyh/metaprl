@@ -49,6 +49,7 @@ open Tactic_type.Conversionals
 declare interval{ 'left; 'right }
 declare intset[precision:n, sign:s]{ 'interval_list }
 
+
 (*
  * Set operations.
  *)
@@ -58,6 +59,7 @@ declare normalize{ 'set }
 declare subset{ 'set1; 'set2 }
 declare set_eq{ 'set1; 'set2 }
 declare union{ 'set1; 'set2 }
+
 
 (*
  * Constants.
@@ -80,6 +82,7 @@ topval reduce_normalize : conv
 topval reduce_subset : conv
 topval reduce_set_eq : conv
 topval reduce_union : conv
+
 
 (*
  * Constants.

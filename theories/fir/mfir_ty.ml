@@ -75,7 +75,8 @@ declare "mutable"
 declare immutable
 declare mutable_ty{ 'ty; 'flag }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Type definitions}
  *
@@ -86,6 +87,7 @@ declare mutable_ty{ 'ty; 'flag }
 
 declare tyDefPoly{ t. 'ty['t] }
 
+
 (*!
  * @begin[doc]
  *
@@ -95,6 +97,7 @@ declare tyDefPoly{ t. 'ty['t] }
  *)
 
 declare frameSubField{ 'ty; 'num }
+
 
 (*!
  * @begin[doc]
@@ -108,6 +111,7 @@ declare frameSubField{ 'ty; 'num }
 
 declare tyDefUnion{ 'cases }
 
+
 (*!
  * @begin[doc]
  *
@@ -115,11 +119,10 @@ declare tyDefUnion{ 'cases }
  * @end[doc]
  *)
 
-(* XXX: need to document tyDefDTuple *)
-
 declare tyDefDTuple{ 'ty_var }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Numbers}
  *
@@ -137,7 +140,8 @@ declare tyEnum[i:n]
 declare tyRawInt[precision:n, sign:s]
 declare tyFloat[precision:n]
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Functions}
  *
@@ -148,7 +152,8 @@ declare tyFloat[precision:n]
 
 declare tyFun{ 'arg_type; 'res_type }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Tuples}
  *
@@ -161,6 +166,7 @@ declare tyFun{ 'arg_type; 'res_type }
  *)
 
 declare tyUnion{ 'ty_var; 'ty_list; 'intset }
+
 
 (*!
  * @begin[doc]
@@ -175,7 +181,8 @@ declare tyUnion{ 'ty_var; 'ty_list; 'intset }
  * @end[doc]
  *)
 
-declare tyTuple[tc:s]{ 'ty_list }
+declare tyTuple[tc:s]{ 'mtyl }
+
 
 (*!
  * @begin[doc]
@@ -184,12 +191,11 @@ declare tyTuple[tc:s]{ 'ty_list }
  * @end[doc]
  *)
 
-(* XXX: need to document tyDTuple, tyTag. *)
-
 declare tyDTuple{ 'ty_var; 'mtyl_option }
 declare tyTag{ 'ty_var; 'mtyl }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Other aggregates}
  *
@@ -199,6 +205,7 @@ declare tyTag{ 'ty_var; 'mtyl }
  *)
 
 declare tyArray{ 'ty }
+
 
 (*!
  * @begin[doc]
@@ -212,6 +219,7 @@ declare tyArray{ 'ty }
 
 declare tyRawData
 
+
 (*!
  * @begin[doc]
  *
@@ -224,7 +232,8 @@ declare tyRawData
 
 declare tyFrame{ 'ty_var; 'tyl }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Polymorphism}
  *
@@ -233,6 +242,7 @@ declare tyFrame{ 'ty_var; 'tyl }
  *)
 
 declare tyVar{ 'ty_var }
+
 
 (*!
  * @begin[doc]
@@ -245,6 +255,7 @@ declare tyVar{ 'ty_var }
 
 declare tyApply{ 'ty_var; 'ty_list }
 
+
 (*!
  * @begin[doc]
  *
@@ -256,6 +267,7 @@ declare tyApply{ 'ty_var; 'ty_list }
 
 declare tyExists{ t. 'ty['t] }
 declare tyAll{ t. 'ty['t] }
+
 
 (*!
  * @begin[doc]
@@ -293,6 +305,7 @@ dform mutable_ty_df : except_mode[src] ::
    mutable_ty{ 'ty; 'flag } =
    `"(" slot{'ty} `"," slot{'flag} `")"
 
+
 (*
  * Type definitions.
  *)
@@ -315,7 +328,8 @@ dform tyDefUnion_df : except_mode[src] ::
 
 dform tyDefDTuple_df : except_mode[src] ::
    tyDefDTuple{ 'ty_var } =
-   bf["defDTuple"] `"(" slot{'ty_var} `")"
+   bf["def_dtuple"] `"(" slot{'ty_var} `")"
+
 
 (*
  * Numbers.
@@ -345,6 +359,7 @@ dform tyFloat_df : except_mode[src] ::
    tyFloat[precision:n] =
    mathbbR sub{slot[precision:n]}
 
+
 (*
  * Functions.
  *)
@@ -352,6 +367,7 @@ dform tyFloat_df : except_mode[src] ::
 dform tyFun_df : except_mode[src] ::
    tyFun{ 'arg_type; 'res_type } =
    `"(" slot{'arg_type} rightarrow slot{'res_type} `")"
+
 
 (*
  * Tuples.
@@ -362,20 +378,20 @@ dform tyUnion_df : except_mode[src] ::
    bf["union"] `"(" slot{'ty_var} `"," slot{'ty_list} `"," slot{'intset} `")"
 
 dform tyTuple_df1 : except_mode[src] ::
-   tyTuple[tc:s]{ 'ty_list } =
-   bf["tuple"] sub{it[tc:s]} `"(" slot{'ty_list} `")"
+   tyTuple[tc:s]{ 'mtyl } =
+   bf["tuple"] sub{it[tc:s]} `"(" slot{'mtyl} `")"
 
 dform tyTuple_df2 : except_mode[src] ::
-   tyTuple["normal"]{ 'ty_list } =
-   bf["tuple"] sub{bf["normal"]} `"(" slot{'ty_list} `")"
+   tyTuple["normal"]{ 'mtyl } =
+   bf["tuple"] sub{bf["normal"]} `"(" slot{'mtyl} `")"
 
 dform tyTuple_df3 : except_mode[src] ::
-   tyTuple["raw"]{ 'ty_list } =
-   bf["tuple"] sub{bf["raw"]} `"(" slot{'ty_list} `")"
+   tyTuple["raw"]{ 'mtyl } =
+   bf["tuple"] sub{bf["raw"]} `"(" slot{'mtyl} `")"
 
 dform tyTuple_df4 : except_mode[src] ::
-   tyTuple["box"]{ 'ty_list } =
-   bf["tuple"] sub{bf["box"]} `"(" slot{'ty_list} `")"
+   tyTuple["box"]{ 'mtyl } =
+   bf["tuple"] sub{bf["box"]} `"(" slot{'mtyl} `")"
 
 dform tyDTuple_df : except_mode[src] ::
    tyDTuple{ 'ty_var; 'mtyl_option } =
@@ -384,6 +400,7 @@ dform tyDTuple_df : except_mode[src] ::
 dform tyTag_df : except_mode[src] ::
    tyTag{ 'ty_var; 'mtyl } =
    bf["tag"] `"(" slot{'ty_var} `"," slot{'mtyl} `")"
+
 
 (*
  * Other aggregates.
@@ -400,6 +417,7 @@ dform tyRawData_df : except_mode[src] ::
 dform tyFrame_df : except_mode[src] ::
    tyFrame{ 'ty_var; 'tyl } =
    bf["frame"] `"(" slot{'ty_var} `"," slot{'tyl} `")"
+
 
 (*
  * Polymorphism.

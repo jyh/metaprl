@@ -33,8 +33,8 @@
  *)
 
 extends Mfir_option
-extends Mfir_record
 extends Mfir_bool
+extends Mfir_record
 extends Mfir_int
 extends Mfir_int_set
 extends Mfir_list
@@ -50,19 +50,6 @@ val some_term : term
 val is_some_term : term -> bool
 val mk_some_term : term -> term
 val dest_some_term : term -> term
-
-val recordEnd_term : term
-val is_recordEnd_term : term -> bool
-
-val record_term : term
-val is_record_term : term -> bool
-val mk_record_term : string -> term -> term -> term
-val dest_record_term : term -> string * term * term
-
-val field_term : term
-val is_field_term : term -> bool
-val mk_field_term : string -> term -> term
-val dest_field_term : term -> string * term
 
 val true_term : term
 val is_true_term : term -> bool
@@ -89,6 +76,24 @@ val ifthenelse_term : term
 val is_ifthenelse_term : term -> bool
 val mk_ifthenelse_term : term -> term -> term -> term
 val dest_ifthenelse_term : term -> term * term * term
+
+val recordEnd_term : term
+val is_recordEnd_term : term -> bool
+
+val record_term : term
+val is_record_term : term -> bool
+val mk_record_term : string -> term -> term -> term
+val dest_record_term : term -> string * term * term
+
+val field_term : term
+val is_field_term : term -> bool
+val mk_field_term : string -> term -> term
+val dest_field_term : term -> string * term
+
+val field_mem_term : term
+val is_field_mem_term : term -> bool
+val mk_field_mem_term : string -> term -> term
+val dest_field_mem_term : term -> string * term
 
 val number_term : term
 val is_number_term : term -> bool
@@ -824,8 +829,8 @@ val dest_atomVar_term : term -> term
 
 val atomLabel_term : term
 val is_atomLabel_term : term -> bool
-val mk_atomLabel_term : term -> term -> term -> term -> term
-val dest_atomLabel_term : term -> term * term * term * term
+val mk_atomLabel_term : string -> string -> term -> term -> term
+val dest_atomLabel_term : term -> string * string * term * term
 
 val atomSizeof_term : term
 val is_atomSizeof_term : term -> bool

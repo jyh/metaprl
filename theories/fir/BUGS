@@ -2,6 +2,7 @@ Mojave FIR Theory
 BUGS
 by Brian Emre Aydemir (emre@cs.caltech.edu)
 
+
 Below, I have listed many bugs in the Mojave FIR theory that I am
 aware of.  They are listed in no particular order.  I have also listed,
 at the end, things that might be considered bugs, but really aren't.
@@ -18,7 +19,8 @@ I do claim that every bug or problem that I'm aware of is documented.
    perhaps they should go in their own file, e.g. Mfir_subop.
 
 -- No terms are declared for the FIR object system, including tyCase,
-   and tyObject.  These should go in Mfir_ty.
+   and tyObject.  These should go in Mfir_ty.  The expression
+   typeCase should go in Mfir_exp.
 
 -- No terms are declared for the following unary operators:
       pointerOfBlockOp     lengthOfBlockOp
@@ -27,10 +29,26 @@ I do claim that every bug or problem that I'm aware of is documented.
 -- No term is declared for the binary operator plusPointerOp.
    It should go in Mfir_exp.  (It depends on subops.)
 
+-- Allocation operators are out of sync with the actual MCC FIR.
+
+-- No terms are declared for tailops and specialCall.  These should
+   go in Mfir_exp.
+
+-- Other expressions that are missing include Memcpy, Call, and Assert.
+   Related to Assert is the fact that no terms are declared for preds.
+   These should all go in Mfir_exp.
+
 -- Connection code bugs:
       .  In many places, I assume the OCaml int type is
          31-bit, signed integers.
-      .  I assume (raw) integer sets have closed bounds.
+      .  I assume integer sets and raw integer sets have closed bounds.
+
+-- Mfir_util is a mess.  I should figure out a way to clean it up.
+
+-- Mfir_tr_atom needs to be checked to see if it has all the necessary
+   rules and the right organization of stuff.
+
+-- Documentation needs to be checked and cleaned up.
 
 
 Things that might look like bugs, but really aren't
@@ -40,6 +58,7 @@ Things that might look like bugs, but really aren't
 
 -- The term atomFloat encodes the value as a string.
 
--- The term atomFun is declared.
+-- The term atomFun is not declared.
 
--- No terms for debugging info in the FIR are declared.
+-- No terms for debugging info in the FIR are declared.  This includes
+   the Debug expression.

@@ -1,5 +1,10 @@
-(*
- * The Mfir_bool module implements meta-booleans for the FIR theory.
+(*!
+ * @begin[doc]
+ * @module[Mfir_tr_atom_base]
+ *
+ * The @tt[Mfir_tr_atom_base] module defines the argument types
+ * and result types of the FIR operators.
+ * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
@@ -31,44 +36,79 @@
  * @end[license]
  *)
 
-extends Base_theory
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 
-open Tactic_type.Conversionals
+extends Mfir_ty
+extends Mfir_exp
+extends Mfir_sequent
 
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-(*
- * Constants.
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * I need to put some documentation here eventually.
+ * @end[doc]
  *)
 
-declare "true"
-declare "false"
-
-
-(*
- * Connectives.
- *)
-
-declare "or"{ 'bool1; 'bool2 }
-declare "and"{ 'bool1; 'bool2 }
-declare "not"{ 'boolean }
-
-
-(*
- * Case analysis.
- *)
-
-declare ifthenelse{ 'test; 'true_case; 'false_case }
+declare res_type{ 'op }
+declare arg1_type{ 'op }
+declare arg2_type{ 'op }
 
 
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
 
-topval reduce_and : conv
-topval reduce_or : conv
-topval reduce_not : conv
-topval reduce_ifthenelse : conv
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * Maybe I should put some documentation here.
+ * @end[doc]
+ *)
+
+(*!
+ * @docoff
+ *)
+
+prim_rw reduce_res_type_notEnumOp :
+   res_type{ notEnumOp[i:n] } <-->
+   tyEnum[i:n]
+
+prim_rw reduce_res_type_uminusIntOp :
+   res_type{ uminusIntOp } <-->
+   tyInt
+
+prim_rw reduce_res_type_notIntOp :
+   res_type{ notIntOp } <-->
+   tyInt
+
+prim_rw reduce_res_type_absIntOp :
+   res_type{ absIntOp } <-->
+   tyInt
+
+
+(**************************************************************************
+ * Display forms.
+ **************************************************************************)
+
+dform res_type_df : except_mode[src] ::
+   res_type{ 'op } =
+   bf["res_type"] `"(" slot{'op} `")"
+
+dform arg1_type_df : except_mode[src] ::
+   arg1_type{ 'op } =
+   bf["arg1_type"] `"(" slot{'op} `")"
+
+dform arg2_type_df : except_mode[src] ::
+   arg2_type{ 'op } =
+   bf["arg2_type"] `"(" slot{'op} `")"

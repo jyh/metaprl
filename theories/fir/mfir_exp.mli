@@ -87,8 +87,9 @@ declare rawIntOfPointerOp[precision:n, sign:s]
 declare pointerOfRawIntOp[precision:n, sign:s]
 
 declare dtupleOfDTupleOp{ 'ty_var; 'mtyl }
-declare unionOfUnionOp{ 'ty_var; 'tyl; 'intset1; 'intset2 }
+declare unionOfUnionOp{ 'ty_var; 'tyl; 'intset_dest; 'intset_src }
 declare rawDataOfFrameOp{ 'ty_var; 'tyl }
+
 
 (*
  * Binary operators.
@@ -168,6 +169,7 @@ declare ldExpFloatIntOp[precision:n]
 declare eqEqOp{ 'ty }
 declare neqEqOp{ 'ty }
 
+
 (*
  * Atoms.
  *)
@@ -181,7 +183,7 @@ declare atomFloat[precision:n, value:s]
 
 declare atomVar{ 'var }
 
-declare atomLabel{ 'frame; 'field; 'subfield; 'num }
+declare atomLabel[field:s, subfield:s]{ 'frame; 'num }
 declare atomSizeof{ 'ty_var_list; 'num }
 declare atomConst{ 'ty; 'ty_var; 'num }
 
@@ -192,6 +194,7 @@ declare atomTyUnpack{ 'var }
 declare atomUnop{ 'unop; 'atom }
 declare atomBinop{ 'binop; 'atom1; 'atom2 }
 
+
 (*
  * Allocation operators.
  *)
@@ -200,6 +203,7 @@ declare allocTuple[tc:s]{ 'ty; 'atom_list }
 declare allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list }
 declare allocVArray{ 'ty; 'atom1; 'atom2 }
 declare allocMalloc{ 'ty; 'atom }
+
 
 (*
  * Expressions.

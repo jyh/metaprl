@@ -20,17 +20,17 @@ from xreadlines import *
 sig_file_name = 'mfir_termOp.mli'
 def_file_name = 'mfir_termOp.ml'
 inputs        = [ 'mfir_option.mli',
-                  'mfir_record.mli',
                   'mfir_bool.mli',
+                  'mfir_record.mli',
                   'mfir_int.mli',
                   'mfir_list.mli',
                   'mfir_int_set.mli',
                   'mfir_ty.mli',
                   'mfir_exp.mli' ]
 
-###########################################################################
+#--------------------------------------------------------------------------
 # Output functions.
-###########################################################################
+#--------------------------------------------------------------------------
 
 #
 # Output generic header.
@@ -180,9 +180,9 @@ def output_line( full_term, term_name, pdata, sdata, sig_file, def_file ):
                       'let dest_' + term_name + '_term = dest_' + \
                       tag + 'term ' + term_name + '_opname' )
 
-###########################################################################
+#--------------------------------------------------------------------------
 # Process a ``declare'' line.
-###########################################################################
+#--------------------------------------------------------------------------
 
 def process_line( str, sig_file, def_file ):
 
@@ -223,9 +223,9 @@ def process_line( str, sig_file, def_file ):
    # Generate output
    output_line( str, term_name, pdata, sdata, sig_file, def_file )
 
-###########################################################################
+#--------------------------------------------------------------------------
 # Process files and generate output.
-###########################################################################
+#--------------------------------------------------------------------------
 
 # Open files for output.
 
@@ -236,8 +236,8 @@ def_file = open( def_file_name, 'w' )
 
 sig_file.write( get_header() )
 sig_file.write( '\n\nextends Mfir_option\n' + \
-                'extends Mfir_record\n' + \
                 'extends Mfir_bool\n' + \
+                'extends Mfir_record\n' + \
                 'extends Mfir_int\n' + \
                 'extends Mfir_int_set\n' + \
                 'extends Mfir_list\n' + \
@@ -247,8 +247,8 @@ sig_file.write( '\n\nextends Mfir_option\n' + \
 
 def_file.write( get_header() )
 def_file.write( '\n\nextends Mfir_option\n' + \
-                'extends Mfir_record\n' + \
                 'extends Mfir_bool\n' + \
+                'extends Mfir_record\n' + \
                 'extends Mfir_int\n' + \
                 'extends Mfir_int_set\n' + \
                 'extends Mfir_list\n' + \

@@ -36,4 +36,10 @@ extends Base_theory
 
 open Base_auto_tactic
 
+
+(*
+ * fir_auto_prec is intended to be used as the auto_prec for
+ * adding FIR theory rules to the autoT tactic.
+ *)
+
 val fir_auto_prec : auto_prec

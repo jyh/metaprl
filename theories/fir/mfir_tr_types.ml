@@ -42,21 +42,13 @@
  * @end[doc]
  *)
 
+extends Mfir_option
+extends Mfir_record
 extends Mfir_int_set
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_util
 extends Mfir_sequent
-
-(*!
- * @docoff
- *)
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Base_auto_tactic
-open Base_dtactic
-open Mfir_auto
 
 
 (**************************************************************************
@@ -66,15 +58,33 @@ open Mfir_auto
 (*!
  * @begin[doc]
  * @rules
- * @modsubsection{Basic types}
+ * @modsubsection{Mutable types}
+ *
+ * We check that the type is well-formed, and that the flag is a boolean.
+ * @end[doc]
+ *)
+
+prim wf_mutable_ty 'H :
+   sequent [fir] { 'H >- "or"{ 'flag; "not"{ 'flag } } } -->
+   sequent [fir] { 'H >- type_eq{ 'ty1; 'ty2; 'k } } -->
+   sequent [fir] { 'H >- type_eq{ mutable_ty{ 'ty1; 'flag };
+                                  mutable_ty{ 'ty2; 'flag };
+                                  'k } }
+   = it
+
+
+(*!************************************
+ * @begin[doc]
+ * @modsubsection{Numbers}
  *
  * The equality judgment for $<< tyInt >>$ is straightforward.
  * @end[doc]
  *)
 
-prim wf_tyInt {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyInt; tyInt; small_type } }
+prim wf_tyInt 'H :
+   sequent [fir] { 'H >- type_eq{ tyInt; tyInt; small_type } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -86,10 +96,11 @@ prim wf_tyInt {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim wf_tyEnum {| intro [] |} 'H :
-   sequent [mfir] { 'H >- member{ number[i:n]; enum_max } } -->
-   sequent [mfir] { 'H >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } }
+prim wf_tyEnum 'H :
+   sequent [fir] { 'H >- member{ number[i:n]; enum_max } } -->
+   sequent [fir] { 'H >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -100,56 +111,58 @@ prim wf_tyEnum {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim wf_tyRawInt1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >-
+prim wf_tyRawInt1 'H :
+   sequent [fir] { 'H >-
       "or"{ int_eq{ number[p:n]; 8 };
       "or"{ int_eq{ number[p:n]; 16 };
       "or"{ int_eq{ number[p:n]; 32 };
             int_eq{ number[p:n]; 64 } } } } } -->
-   sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, "signed"];
-                                   tyRawInt[p:n, "signed"];
-                                   large_type } }
+   sequent [fir] { 'H >- type_eq{ tyRawInt[p:n, "signed"];
+                                  tyRawInt[p:n, "signed"];
+                                  large_type } }
    = it
 
-prim wf_tyRawInt2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >-
+prim wf_tyRawInt2 'H :
+   sequent [fir] { 'H >-
       "or"{ int_eq{ number[p:n]; 8 };
       "or"{ int_eq{ number[p:n]; 16 };
       "or"{ int_eq{ number[p:n]; 32 };
             int_eq{ number[p:n]; 64 } } } } } -->
-   sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, "unsigned"];
-                                   tyRawInt[p:n, "unsigned"];
-                                   large_type } }
+   sequent [fir] { 'H >- type_eq{ tyRawInt[p:n, "unsigned"];
+                                  tyRawInt[p:n, "unsigned"];
+                                  large_type } }
    = it
 
-prim wf_tyFloat {| intro [] |} 'H :
-   sequent [mfir] { 'H >-
+prim wf_tyFloat 'H :
+   sequent [fir] { 'H >-
       "or"{ int_eq{ number[p:n]; 32 };
       "or"{ int_eq{ number[p:n]; 64 };
             int_eq{ number[p:n]; 80 } } } } -->
-   sequent [mfir] { 'H >- type_eq{ tyFloat[p:n];
-                                   tyFloat[p:n];
-                                   large_type } }
+   sequent [fir] { 'H >- type_eq{ tyFloat[p:n]; tyFloat[p:n]; large_type } }
    = it
 
-(*!
+
+(*!************************************
  * @begin[doc]
+ * @modsubsection{Functions}
  *
  * Two function types are equal if their arguments types are equal, and if
  * the types of their return values are equal.
  * @end[doc]
  *)
 
-prim wf_tyFun {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 'a1; 'a2; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ 'r1; 'r2; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyFun{ 'a1; 'r1 };
+prim wf_tyFun 'H :
+   sequent [fir] { 'H >- type_eq{ 'a1; 'a2; large_type } } -->
+   sequent [fir] { 'H >- type_eq{ 'r1; 'r2; large_type } } -->
+   sequent [fir] { 'H >- type_eq{ tyFun{ 'a1; 'r1 };
                                    tyFun{ 'a2; 'r2 };
                                    small_type } }
    = it
 
-(*!
+
+(*!************************************
  * @begin[doc]
+ * @modsubsection{Tuples}
  *
  * Two union types are equal if they name the same union definition, select
  * the same subset of cases, and instantiate the definition at the same types.
@@ -161,28 +174,28 @@ prim wf_tyFun {| intro [] |} 'H :
 prim wf_tyUnion 'H 'J :
 
    (* Types the unions are instantiated at should be equal. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; union_type[j:n]}; 'd };
-                    'J['tv] >-
+   sequent [fir] { 'H;
+                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
+                    'J >-
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
 
    (* The subset of cases should be equal. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; union_type[j:n]}; 'd };
-                    'J['tv] >-
+   sequent [fir] { 'H;
+                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
+                    'J >-
       set_eq{ 'set1; 'set2 } } -->
 
    (* The subset of cases should actually be a subset. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; union_type[j:n]}; 'd };
-                    'J['tv] >-
+   sequent [fir] { 'H;
+                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
+                    'J >-
       subset{ 'set1;
               intset[31, "signed"]{ interval{0; (number[j:n] -@ 1)} } } } -->
 
    (* Then the two tyUnion's are equal. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; union_type[j:n]}; 'd };
-                    'J['tv] >-
+   sequent [fir] { 'H;
+                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
+                    'J >-
       type_eq{ tyUnion{ 'tv; 'tyl1; 'set1 };
                tyUnion{ 'tv; 'tyl2; 'set2 };
                small_type } }
@@ -192,16 +205,6 @@ prim wf_tyUnion 'H 'J :
  * @docoff
  *)
 
-let d_wf_tyUnion i p =
-   let j, k = Sequent.hyp_indices p i in
-      wf_tyUnion j k p
-
-let resource auto += {
-   auto_name = "d_wf_tyUnion";
-   auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_wf_tyUnion;
-   auto_type = AutoNormal
-}
 
 (*!
  * @begin[doc]
@@ -211,31 +214,70 @@ let resource auto += {
  * @end[doc]
  *)
 
-prim wf_tyTuple_box {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 't1; 't2; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyTuple["box"]{ cons{ 't1; nil } };
+prim wf_tyTuple_normal 'H :
+   sequent [fir] { 'H >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+   sequent [fir] { 'H >- type_eq{ tyTuple["normal"]{ 'tyl1 };
+                                  tyTuple["normal"]{ 'tyl2 };
+                                  small_type } }
+   = it
+
+prim wf_tyTuple_raw 'H :
+   sequent [fir] { 'H >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+   sequent [fir] { 'H >- type_eq{ tyTuple["raw"]{ 'tyl1 };
+                                  tyTuple["raw"]{ 'tyl2 };
+                                  small_type } }
+   = it
+
+prim wf_tyTuple_box 'H :
+   sequent [fir] { 'H >- type_eq{ 't1; 't2; large_type } } -->
+   sequent [fir] { 'H >- type_eq{ tyTuple["box"]{ cons{ 't1; nil } };
                                    tyTuple["box"]{ cons{ 't2; nil } };
                                    small_type } }
    = it
 
-prim wf_tyTuple_normal {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyTuple["normal"]{ 'tyl1 };
-                                   tyTuple["normal"]{ 'tyl2 };
-                                   small_type } }
-   = it
 
 (*!
  * @begin[doc]
+ *
+ * Dependent tuples?
+ * @end[doc]
+ *)
+
+prim wf_tyDTuple_none 'H 'J :
+   sequent [fir] { 'H; a: ty_def{ 'tv; dtuple_type; 'd }; 'J >-
+      type_eq{ tyDTuple{ 'tv; none }; tyDTuple{ 'tv; none }; small_type } }
+   = it
+
+prim wf_tyDTuple_some 'H 'J :
+   sequent [fir] { 'H; a: ty_def{ 'tv; dtuple_type; 'd }; 'J >-
+      type_eq_list{ 'mtyl1; 'mtyl2; small_type } } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; dtuple_type; 'd }; 'J >-
+      type_eq{ tyDTuple{ 'tv; some{'mtyl1} };
+               tyDTuple{ 'tv; some{'mtyl2} };
+               small_type } }
+   = it
+
+prim wf_tyTag 'H 'J :
+   sequent [fir] { 'H; a: ty_def{ 'tv; dtuple_type; 'd }; 'J >-
+      type_eq_list{ 'mtyl1; 'mtyl2; small_type } } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; dtuple_type; 'd }; 'J >-
+      type_eq{ tyTag{ 'tv; 'mtyl1 }; tyTag{ 'tv; 'mtyl2 }; small_type } }
+   = it
+
+
+(*!************************************
+ * @begin[doc]
+ * @modsubsection{Other aggregates}
  *
  * Two array types are equal if their element types are equal.
  * @end[doc]
  *)
 
-prim wf_tyArray {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 't1; 't2; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyArray{'t1}; tyArray{'t2}; small_type } }
+prim wf_tyArray 'H :
+   sequent [fir] { 'H >- type_eq{ 't1; 't2; large_type } } -->
+   sequent [fir] { 'H >- type_eq{ tyArray{'t1}; tyArray{'t2}; small_type } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -245,11 +287,31 @@ prim wf_tyArray {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim wf_tyRawData {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyRawData; tyRawData; small_type } }
+prim wf_tyRawData 'H :
+   sequent [fir] { 'H >- type_eq{ tyRawData; tyRawData; small_type } }
    = it
 
+
 (*!
+ * @begin[doc]
+ *
+ * I have no idea what frames are.
+ * @end[doc]
+ *)
+
+prim wf_tyFrame 'H 'J :
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
+      type_eq{ apply_types{ 'def; 'tyl1 };
+               apply_types{ 'def; 'tyl2 };
+               frame_type } } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
+      type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
+      type_eq{ tyFrame{ 'tv; 'tyl1 }; tyFrame{ 'tv; 'tyl2 }; small_type } }
+   = it
+
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Polymorphism}
  *
@@ -258,27 +320,19 @@ prim wf_tyRawData {| intro [] |} 'H :
  * @end[doc]
  *)
 
-(* BUG: Is exact equality really the way to go? *)
+(*
+ * BUG: Is exact equality really the way to go?  I believe that exact
+ * equality is fine.  The Mojave FIR type checker (as of version 1.56)
+ * uses alpha equality of type variables in a minimal fashion, and the
+ * way I have written the typing rules in MetaPRL eliminates the need
+ * to check for alpha equality.
+ *)
 
 prim wf_tyVar 'H 'J :
-   sequent [mfir] { 'H; tv: ty_def{ 'k; 'd }; 'J['tv] >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
       type_eq{ tyVar{ 'tv }; tyVar{ 'tv }; 'k } }
    = it
 
-(*!
- * @docoff
- *)
-
-let d_wf_tyVar i p =
-   let j, k = Sequent.hyp_indices p i in
-      wf_tyVar j k p
-
-let resource auto += {
-   auto_name = "d_wf_tyVar";
-   auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_wf_tyVar;
-   auto_type = AutoNormal
-}
 
 (*!
  * @begin[doc]
@@ -288,72 +342,24 @@ let resource auto += {
  * @end[doc]
  *)
 
-prim wf_tyApply1 'H 'J :
-   sequent [mfir] { 'H; tv: ty_def{ polyKind{'i;  'k }; no_def }; 'J['tv] >-
-      int_eq{ 'i; length{ 'tyl1 } } } -->
-   sequent [mfir] { 'H; tv: ty_def{ polyKind{'i;  'k }; no_def }; 'J['tv] >-
-      type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [mfir] { 'H; tv: ty_def{ polyKind{'i;  'k }; no_def }; 'J['tv] >-
-      type_eq{ tyApply{ 'tv; 'tyl1 }; tyApply{ 'tv; 'tyl2 }; 'k } }
-   = it
-
-(*!
- * @begin[doc]
- *
- * If the context contains a definition, we can expand a type application.
- * @end[doc]
+(*
+ * BUG: There's other rules that we can right down for tyApply,
+ * such as the case in which one of the types has already been applied.
  *)
 
-prim wf_tyApply2 'H 'J :
-
-   (* The list of types needs to be of the right length. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; 'k}; tyDefPoly{t. 'ty['t]} };
-                    'J['tv] >-
+prim wf_tyApply1 'H 'J :
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; no_def }; 'J >-
       int_eq{ 'i; length{ 'tyl1 } } } -->
-
-   (* The list of types needs to be well-formed. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; 'k}; tyDefPoly{t. 'ty['t]} };
-                    'J['tv] >-
-      type_eq_list{ 'tyl1; 'tyl1; small_type } } -->
-
-   (* The types should be equal when the definitions are expanded. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; 'k}; tyDefPoly{t. 'ty['t]} };
-                    'J['tv] >-
-      type_eq{ do_tyApply{ tyDefPoly{t. 'ty['t]}; 'tyl1 }; 'ty2; 'k } } -->
-
-   (* Then the two types are equal. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'i; 'k}; tyDefPoly{t. 'ty['t]} };
-                    'J['tv] >-
-      type_eq{ tyApply{ 'tv; 'tyl1 }; 'ty2; 'k } }
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; no_def }; 'J >-
+      type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; no_def }; 'J >-
+      type_eq{ tyApply{ 'tv; 'tyl1 }; tyApply{ 'tv; 'tyl2 }; 'k } }
    = it
 
 (*!
  * @docoff
  *)
 
-let d_wf_tyApply1 i p =
-   let j, k = Sequent.hyp_indices p i in
-      wf_tyApply1 j k p
-
-let d_wf_tyApply2 i p =
-   let j, k = Sequent.hyp_indices p i in
-      wf_tyApply2 j k p
-
-let resource auto += [{
-   auto_name = "d_wf_tyApply1";
-   auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_wf_tyApply1;
-   auto_type = AutoNormal
-}; {
-   auto_name = "d_wf_tyApply2";
-   auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_wf_tyApply2;
-   auto_type = AutoNormal
-}]
 
 (*!
  * @begin[doc]
@@ -363,13 +369,14 @@ let resource auto += [{
  * @end[doc]
  *)
 
-prim wf_tyExists {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
-      type_eq{ 't1['a]; 't2['a]; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyExists{ x. 't1['x] };
-                                   tyExists{ y. 't2['y] };
-                                   small_type } }
+prim wf_tyExists 'H 'a 'tv :
+   sequent [fir] { 'H; a: ty_def{ 'tv; small_type; no_def } >-
+      type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
+   sequent [fir] { 'H >- type_eq{ tyExists{ x. 't1['x] };
+                                  tyExists{ y. 't2['y] };
+                                  small_type } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -379,13 +386,14 @@ prim wf_tyExists {| intro [] |} 'H 'a :
  * @end[doc]
  *)
 
-prim wf_tyAll {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
-      type_eq{ 't1['a]; 't2['a]; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyAll{ x. 't1['x] };
-                                   tyAll{ y. 't2['y] };
-                                   small_type } }
+prim wf_tyAll 'H 'a 'tv :
+   sequent [fir] { 'H; a: ty_def{ 'tv; small_type; no_def } >-
+      type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
+   sequent [fir] { 'H >- type_eq{ tyAll{ x. 't1['x] };
+                                  tyAll{ y. 't2['y] };
+                                  small_type } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -401,14 +409,14 @@ prim wf_tyAll {| intro [] |} 'H 'a :
  *)
 
 prim wf_tyProject 'H 'J :
-   sequent [mfir] { 'H;
-                    v: var_def{ tyExists{t. 'ty['t]}; 'd };
-                    'J['v] >-
+   sequent [fir] { 'H;
+                   a: var_def{ 'v; tyExists{t. 'ty['t]}; 'd };
+                   'J >-
       "and"{ int_le{ 0; number[i:n] };
              int_lt{ number[i:n]; num_params{tyExists{t. 'ty['t]}} } } } -->
-   sequent [mfir] { 'H;
-                    v: var_def{ tyExists{t. 'ty['t]}; 'd };
-                    'J['v] >-
+   sequent [fir] { 'H;
+                   a: var_def{ 'v; tyExists{t. 'ty['t]}; 'd };
+                   'J >-
       type_eq{ tyProject[i:n]{ atomVar{'v} };
                tyProject[i:n]{ atomVar{'v} };
                small_type } }
@@ -418,18 +426,8 @@ prim wf_tyProject 'H 'J :
  * @docoff
  *)
 
-let d_wf_tyProject i p =
-   let j, k = Sequent.hyp_indices p i in
-      wf_tyProject j k p
 
-let resource auto += {
-   auto_name = "d_wf_tyProject";
-   auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_wf_tyProject;
-   auto_type = AutoNormal
-}
-
-(*!
+(*!************************************
  * @begin[doc]
  * @modsubsection{Type definitions}
  *
@@ -438,17 +436,51 @@ let resource auto += {
  * @end[doc]
  *)
 
-prim wf_tyDefPoly {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
-      type_eq{ 'ty1['a]; 'ty2['a]; polyKind{ ('i -@ 1); 'k } } } -->
-   sequent [mfir] { 'H >- type_eq{ tyDefPoly{ x. 'ty1['x] };
-                                   tyDefPoly{ y. 'ty2['y] };
-                                   polyKind{ 'i; 'k } } }
+prim wf_tyDefPoly 'H 'a 'tv :
+   sequent [fir] { 'H; a: ty_def{ 'tv; small_type; no_def } >-
+      type_eq{ 'ty1['tv]; 'ty2['tv]; polyKind{ ('i -@ 1); 'k } } } -->
+   sequent [fir] { 'H >- type_eq{ tyDefPoly{ x. 'ty1['x] };
+                                  tyDefPoly{ y. 'ty2['y] };
+                                  polyKind{ 'i; 'k } } }
+   = it
+
+
+(*!
+ * @begin[doc]
+ *
+ * Well-formedness of frame definitions is fun.
+ * @end[doc]
+ *)
+
+prim wf_recordEnd_record 'H :
+   sequent [fir] { 'H >- type_eq{ recordEnd; recordEnd; record_type } }
+    = it
+
+prim wf_recordEnd_frame 'H :
+   sequent [fir] { 'H >- type_eq{ recordEnd; recordEnd; frame_type } }
+   = it
+
+
+prim wf_record_record 'H :
+   sequent [fir] { 'H >- type_eq{ 'data1; 'data2; large_type } } -->
+   sequent [fir] { 'H >- type_eq{ 'rest1; 'rest2; record_type } } -->
+   sequent [fir] { 'H >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
+                                  record[tag:s]{ 'data2; 'rest2 };
+                                  record_type } }
+   = it
+
+prim wf_record_frame 'H :
+   sequent [fir] { 'H >- type_eq{ 'data1; 'data2; record_type } } -->
+   sequent [fir] { 'H >- type_eq{ 'rest1; 'rest2; frame_type } } -->
+   sequent [fir] { 'H >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
+                                  record[tag:s]{ 'data2; 'rest2 };
+                                  frame_type } }
    = it
 
 (*!
  * @docoff
  *)
+
 
 (*
  * The term union_type_eq is used to test the equality of two union case
@@ -456,8 +488,8 @@ prim wf_tyDefPoly {| intro [] |} 'H 'a :
  * of the lists used in defining union types.
  *)
 
-declare union_type_eq{ 'case1; 'case2 }
 declare union_type_eq_list{ 'cases1; 'cases2 }
+
 
 (*!
  * @begin[doc]
@@ -468,13 +500,14 @@ declare union_type_eq_list{ 'cases1; 'cases2 }
  * @end[doc]
  *)
 
-prim wf_tyDefUnion {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_eq{ length{ 'cases1 }; number[i:n] } } -->
-   sequent [mfir] { 'H >- union_type_eq_list{ 'cases1; 'cases2 } } -->
-   sequent [mfir] { 'H >- type_eq{ tyDefUnion[str:s]{ 'cases1 };
-                                   tyDefUnion[str:s]{ 'cases2 };
-                                   polyKind{0; union_type[i:n]} } }
+prim wf_tyDefUnion 'H :
+   sequent [fir] { 'H >- int_eq{ length{ 'cases1 }; number[i:n] } } -->
+   sequent [fir] { 'H >- union_type_eq_list{ 'cases1; 'cases2 } } -->
+   sequent [fir] { 'H >- type_eq{ tyDefUnion{ 'cases1 };
+                                  tyDefUnion{ 'cases2 };
+                                  polyKind{0; union_type[i:n]} } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -483,26 +516,29 @@ prim wf_tyDefUnion {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim wf_tyDefUnion_cases1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- union_type_eq_list{ nil; nil } }
+prim wf_tyDefUnion_cases1 'H :
+   sequent [fir] { 'H >- union_type_eq_list{ nil; nil } }
    = it
 
-prim wf_tyDefUnion_cases2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- union_type_eq{ 'h1; 'h2 } } -->
-   sequent [mfir] { 'H >- union_type_eq_list{ 't1; 't2 } } -->
-   sequent [mfir] { 'H >- union_type_eq_list{cons{'h1; 't1}; cons{'h2; 't2}} }
+prim wf_tyDefUnion_cases2 'H :
+   sequent [fir] { 'H >- type_eq_list{ 'h1; 'h2; large_type } } -->
+   sequent [fir] { 'H >- union_type_eq_list{ 't1; 't2 } } -->
+   sequent [fir] { 'H >- union_type_eq_list{cons{'h1; 't1}; cons{'h2; 't2}} }
    = it
 
-prim wf_tyDefUnion_unionCase {| intro [] |} 'H :
-   sequent [mfir] { 'H >- union_type_eq_list{ 'elts1; 'elts2 } } -->
-   sequent [mfir] { 'H >- union_type_eq{unionCase{'elts1}; unionCase{'elts2}}}
-   = it
 
-prim wf_tyDefUnion_unionCaseElt {| intro [] |} 'H :
-   sequent [mfir] { 'H >- "or"{ 'b; "not"{'b} } } -->
-   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; large_type } } -->
-   sequent [mfir] { 'H >- union_type_eq{ unionCaseElt{ 'ty1; 'b };
-                                         unionCaseElt{ 'ty2; 'b } } }
+(*!
+ * @begin[doc]
+ *
+ * Oh well?
+ * @end[doc]
+ *)
+
+prim wf_tyDefDTuple 'H 'J :
+   sequent [fir] { 'H;
+                   a: ty_def{ 'tv; dtuple_type; tyDefDTuple{ 'tv } };
+                   'J >-
+      type_eq{ tyDefDTuple{ 'tv }; tyDefDTuple{ 'tv }; dtuple_type } }
    = it
 
 (*!
@@ -514,11 +550,7 @@ prim wf_tyDefUnion_unionCaseElt {| intro [] |} 'H :
  * Display forms.
  **************************************************************************)
 
-dform union_type_eq_df : except_mode[src] ::
-   union_type_eq{ 'case1; 'case2 } =
-   slot{'case1} `"=" slot{'case2} `":(" bf["union def"] `")"
-
 dform union_type_eq_list_df : except_mode[src] ::
    union_type_eq_list{ 'cases1; 'cases2 } =
-   slot{'cases1} `"=" sub{it["list"]} slot{'cases2}
+   slot{'cases1} `"=" sub{it["union_cases"]} slot{'cases2}
       `":(" bf["union def"] `")"

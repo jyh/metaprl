@@ -20,28 +20,32 @@
  *
  * ------------------------------------------------------------------------
  *
- * @begin[license] This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming environment for OCaml
- * and other languages.  Additional information about the system is available
- * at http://www.metaprl.org/
+ * @begin[license]
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.  Additional
+ * information about the system is available at
+ * http://www.metaprl.org/
  *
  * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc., 675
- * Mass Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Brian Emre Aydemir @email{emre@cs.caltech.edu} @end[license]
+ * Author: Brian Emre Aydemir
+ * @email{emre@cs.caltech.edu}
+ * @end[license]
  *)
 
 (*!
@@ -62,18 +66,16 @@ extends Mfir_int
  * @terms
  * @modsubsection{Sequent tags}
  *
- * The term @tt[mfir] is used to tag FIR theory sequents.  The term @tt[hack]
- * is used to declare (explicitly) that some ``hacking'' is being done to make
- * things work out correctly. The term @tt[it] is used in rules to express
- * (the lack of) computational content of a proof.
+ * The term @tt[fir] is used to tag FIR theory sequents.  The term @tt[it] is
+ * used in rules to express (the lack of) computational content of a proof.
  * @end[doc]
  *)
 
-declare mfir
-declare hack
+declare fir
 declare it
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Kinds}
  *
@@ -88,6 +90,7 @@ declare it
 declare small_type
 declare large_type
 
+
 (*!
  * @begin[doc]
  *
@@ -97,6 +100,19 @@ declare large_type
  *)
 
 declare union_type[i:n]
+
+
+(*!
+ * @begin[doc]
+ *
+ * Records are fun.
+ * @end[doc]
+ *)
+
+declare record_type
+declare frame_type
+declare dtuple_type
+
 
 (*!
  * @begin[doc]
@@ -112,7 +128,8 @@ declare union_type[i:n]
 
 declare polyKind{ 'i; 'k }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Contexts}
  *
@@ -126,12 +143,13 @@ declare polyKind{ 'i; 'k }
  * @end[doc]
  *)
 
-declare ty_def{ 'k; 'def }
-declare var_def{ 'ty; 'def }
-declare global_def{ 'ty; 'def }
+declare ty_def{ 'var; 'k; 'def }
+declare var_def{ 'var; 'ty; 'def }
+declare global_def{ 'var; 'ty; 'def }
 declare no_def
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Store values}
  *
@@ -151,7 +169,8 @@ declare lambda{ v. 'f['v] }
 declare union_val[i:n]{ 'ty_var; 'atom_list }
 declare raw_data
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Judgments}
  *
@@ -160,6 +179,7 @@ declare raw_data
  *)
 
 declare wf_kind{ 'k }
+
 
 (*!
  * @begin[doc]
@@ -174,6 +194,7 @@ declare wf_kind{ 'k }
 
 declare type_eq{ 'ty1; 'ty2; 'k }
 declare type_eq_list{ 'tyl1; 'tyl2; 'k }
+
 
 (*!
  * @begin[doc]
@@ -201,12 +222,8 @@ declare has_type[str:s]{ 't; 'ty }
  *)
 
 dform mfir_df : except_mode[src] ::
-   mfir =
-   it["mfir"]
-
-dform hack_df : except_mode[src] ::
-   hack =
-   it["hack"]
+   fir =
+   it["fir"]
 
 dform it_df1 : except_mode[src] :: except_mode[tex] ::
    it =
@@ -215,6 +232,7 @@ dform it_df1 : except_mode[src] :: except_mode[tex] ::
 dform it_df2 : mode[tex] ::
    it =
    izone `"\\bullet" ezone
+
 
 (*
  * Kinds.
@@ -236,9 +254,22 @@ dform union_type_df : except_mode[src] ::
    union_type[i:n] =
    bf["union"] `"[" slot[i:n] `"]"
 
+dform record_type_df : except_mode[src] ::
+   record_type =
+   bf["record"]
+
+dform frame_type_df : except_mode[src] ::
+   frame_type =
+   bf["frame"]
+
+dform dtuple_type_df : except_mode[src] ::
+   dtuple_type =
+   bf["dtuple"]
+
 dform polyKind_df : except_mode[src] ::
    polyKind{ 'i; 'k } =
    small_type sup{slot{'i}} rightarrow slot{'k}
+
 
 (*
  * Store values.
@@ -264,33 +295,34 @@ dform raw_data_df : except_mode[src] ::
    raw_data =
    bf["raw_data"]
 
+
 (*
  * Contexts.
  *)
 
 dform ty_def_df1 : except_mode[src] ::
-   ty_def{ 'k; 'def } =
-   slot{'k} `"=" slot{'def}
+   ty_def{ 'var; 'k; 'def } =
+   slot{'var} `":" slot{'k} `"=" slot{'def}
 
 dform ty_def_df2 : except_mode[src] ::
-   ty_def{ 'k; no_def } =
-   slot{'k}
+   ty_def{ 'var; 'k; no_def } =
+   slot{'var} `":" slot{'k}
 
 dform var_def_df1 : except_mode[src] ::
-   var_def{ 'ty; 'def } =
-   slot{'ty} `"=" slot{'def}
+   var_def{ 'var; 'ty; 'def } =
+   slot{'var} `":" slot{'ty} `"=" slot{'def}
 
 dform var_def_df2 : except_mode[src] ::
-   var_def{ 'ty; no_def } =
-   slot{'ty}
+   var_def{ 'var; 'ty; no_def } =
+   slot{'var} `":" slot{'ty}
 
 dform global_def_df1 : except_mode[src] ::
-   global_def{ 'ty; 'def } =
-   slot{'ty} `"=" slot{'def}
+   global_def{ 'var; 'ty; 'def } =
+   slot{'var} `":" slot{'ty} `"=" slot{'def}
 
 dform global_def_df2 : except_mode[src] ::
-   global_def{ 'ty; no_def } =
-   slot{'ty}
+   global_def{ 'var; 'ty; no_def } =
+   slot{'var} `":" slot{'ty}
 
 dform no_def_df1 : except_mode[src] :: except_mode[tex] ::
    no_def =
@@ -299,6 +331,7 @@ dform no_def_df1 : except_mode[src] :: except_mode[tex] ::
 dform no_def_df2 : mode[tex] ::
    no_def =
    izone `"\\bullet" ezone
+
 
 (*
  * Judgments.

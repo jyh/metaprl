@@ -37,6 +37,7 @@ extends Mfir_list
 extends Mfir_int_set
 extends Mfir_ty
 extends Mfir_exp
+extends Mfir_sequent
 
 open Tactic_type.Conversionals
 
@@ -45,23 +46,39 @@ open Tactic_type.Conversionals
  * Declarations.
  **************************************************************************)
 
-declare offset
+(*
+ * Definition extraction.
+ *)
 
-declare do_tyApply{ 'poly_ty; 'ty_list }
-declare instantiate_tyExists{ 'ty; 'var; 'num }
+declare get_core{ 'poly_ty }
+
+
+(*
+ * Type application.
+ *)
+
+declare apply_types{ 'poly_ty; 'ty_list }
+
+
+(*
+ * Parameter counting.
+ *)
+
 declare num_params{ 'ty }
-declare nth_unionCase{ 'n; 'union_def }
-declare union_cases{ 'set; 'cases }
-declare index_of_subscript{ 'atom }
+
+
+(*
+ * Existential unpacking.
+ *)
+
+declare unpack_exists{ 'ty; 'var; 'num }
 
 
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
 
-topval reduce_do_tyApply : conv
-topval reduce_instantiate_tyExists : conv
+topval reduce_get_core : conv
+topval reduce_apply_types : conv
 topval reduce_num_params : conv
-topval reduce_nth_unionCase : conv
-topval reduce_union_cases : conv
-topval reduce_index_of_subscript : conv
+topval reduce_unpack_exists : conv

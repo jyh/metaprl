@@ -49,6 +49,7 @@ declare "mutable"
 declare immutable
 declare mutable_ty{ 'ty; 'flag }
 
+
 (*
  * Type definitions.
  *)
@@ -57,6 +58,7 @@ declare tyDefPoly{ t. 'ty['t] }
 declare frameSubField{ 'ty; 'num }
 declare tyDefUnion{ 'cases }
 declare tyDefDTuple{ 'ty_var }
+
 
 (*
  * Numbers.
@@ -67,20 +69,23 @@ declare tyEnum[i:n]
 declare tyRawInt[precision:n, sign:s]
 declare tyFloat[precision:n]
 
+
 (*
  * Functions.
  *)
 
 declare tyFun{ 'arg_type; 'res_type }
 
+
 (*
  * Tuples.
  *)
 
 declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
+declare tyTuple[tc:s]{ 'mtyl }
 declare tyDTuple{ 'ty_var; 'mtyl_option }
 declare tyTag{ 'ty_var; 'mtyl }
+
 
 (*
  * Other aggregates.
@@ -89,6 +94,7 @@ declare tyTag{ 'ty_var; 'mtyl }
 declare tyArray{ 'ty }
 declare tyRawData
 declare tyFrame{ 'ty_var; 'tyl }
+
 
 (*
  * Polymorphism.

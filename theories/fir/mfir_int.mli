@@ -46,6 +46,7 @@ open Tactic_type.Conversionals
 
 declare number[i:n]
 
+
 (*
  * Operations.
  *)

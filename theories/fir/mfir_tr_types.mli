@@ -32,6 +32,8 @@
  * @end[license]
  *)
 
+extends Mfir_option
+extends Mfir_record
 extends Mfir_int_set
 extends Mfir_ty
 extends Mfir_exp

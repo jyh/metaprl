@@ -42,9 +42,9 @@ extends Mfir_int
  * Sequent tags.
  *)
 
-declare mfir
-declare hack
+declare fir
 declare it
+
 
 (*
  * Kinds.
@@ -53,7 +53,11 @@ declare it
 declare small_type
 declare large_type
 declare union_type[i:n]
+declare record_type
+declare frame_type
+declare dtuple_type
 declare polyKind{ 'i; 'k }
+
 
 (*
  * Store values.
@@ -64,14 +68,16 @@ declare lambda{ v. 'f['v] }
 declare union_val[i:n]{ 'ty_var; 'atom_list }
 declare raw_data
 
+
 (*
  * Contexts.
  *)
 
-declare ty_def{ 'k; 'def }
-declare var_def{ 'ty; 'def }
-declare global_def{ 'ty; 'def }
+declare ty_def{ 'var; 'k; 'def }
+declare var_def{ 'var; 'ty; 'def }
+declare global_def{ 'var; 'ty; 'def }
 declare no_def
+
 
 (*
  * Judgments.

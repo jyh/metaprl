@@ -33,8 +33,8 @@
  *)
 
 extends Mfir_option
-extends Mfir_record
 extends Mfir_bool
+extends Mfir_record
 extends Mfir_int
 extends Mfir_int_set
 extends Mfir_list
@@ -53,22 +53,6 @@ let some_opname = opname_of_term some_term
 let is_some_term = is_1_dep0_term some_opname
 let mk_some_term = mk_1_dep0_term some_opname
 let dest_some_term = dest_1_dep0_term some_opname
-
-let recordEnd_term = << recordEnd >>
-let recordEnd_opname = opname_of_term recordEnd_term
-let is_recordEnd_term = is_0_dep0_term recordEnd_opname
-
-let record_term = << record[tag:s]{ 'data; 'remaining } >>
-let record_opname = opname_of_term record_term
-let is_record_term = is_str_2_dep0_term record_opname
-let mk_record_term = mk_str_2_dep0_term record_opname
-let dest_record_term = dest_str_2_dep0_term record_opname
-
-let field_term = << field[tag:s]{ 'record } >>
-let field_opname = opname_of_term field_term
-let is_field_term = is_str_1_dep0_term field_opname
-let mk_field_term = mk_str_1_dep0_term field_opname
-let dest_field_term = dest_str_1_dep0_term field_opname
 
 let true_term = << "true" >>
 let true_opname = opname_of_term true_term
@@ -101,6 +85,28 @@ let ifthenelse_opname = opname_of_term ifthenelse_term
 let is_ifthenelse_term = is_3_dep0_term ifthenelse_opname
 let mk_ifthenelse_term = mk_3_dep0_term ifthenelse_opname
 let dest_ifthenelse_term = dest_3_dep0_term ifthenelse_opname
+
+let recordEnd_term = << recordEnd >>
+let recordEnd_opname = opname_of_term recordEnd_term
+let is_recordEnd_term = is_0_dep0_term recordEnd_opname
+
+let record_term = << record[tag:s]{ 'data; 'remaining } >>
+let record_opname = opname_of_term record_term
+let is_record_term = is_str_2_dep0_term record_opname
+let mk_record_term = mk_str_2_dep0_term record_opname
+let dest_record_term = dest_str_2_dep0_term record_opname
+
+let field_term = << field[tag:s]{ 'record } >>
+let field_opname = opname_of_term field_term
+let is_field_term = is_str_1_dep0_term field_opname
+let mk_field_term = mk_str_1_dep0_term field_opname
+let dest_field_term = dest_str_1_dep0_term field_opname
+
+let field_mem_term = << field_mem[tag:s]{ 'record } >>
+let field_mem_opname = opname_of_term field_mem_term
+let is_field_mem_term = is_str_1_dep0_term field_mem_opname
+let mk_field_mem_term = mk_str_1_dep0_term field_mem_opname
+let dest_field_mem_term = dest_str_1_dep0_term field_mem_opname
 
 let number_term = << number[i:n] >>
 let number_opname = opname_of_term number_term
@@ -338,7 +344,7 @@ let is_tyUnion_term = is_3_dep0_term tyUnion_opname
 let mk_tyUnion_term = mk_3_dep0_term tyUnion_opname
 let dest_tyUnion_term = dest_3_dep0_term tyUnion_opname
 
-let tyTuple_term = << tyTuple[tc:s]{ 'ty_list } >>
+let tyTuple_term = << tyTuple[tc:s]{ 'mtyl } >>
 let tyTuple_opname = opname_of_term tyTuple_term
 let is_tyTuple_term = is_str_1_dep0_term tyTuple_opname
 let mk_tyTuple_term = mk_str_1_dep0_term tyTuple_opname
@@ -612,7 +618,7 @@ let is_dtupleOfDTupleOp_term = is_2_dep0_term dtupleOfDTupleOp_opname
 let mk_dtupleOfDTupleOp_term = mk_2_dep0_term dtupleOfDTupleOp_opname
 let dest_dtupleOfDTupleOp_term = dest_2_dep0_term dtupleOfDTupleOp_opname
 
-let unionOfUnionOp_term = << unionOfUnionOp{ 'ty_var; 'tyl; 'intset1; 'intset2 } >>
+let unionOfUnionOp_term = << unionOfUnionOp{ 'ty_var; 'tyl; 'intset_dest; 'intset_src } >>
 let unionOfUnionOp_opname = opname_of_term unionOfUnionOp_term
 let is_unionOfUnionOp_term = is_4_dep0_term unionOfUnionOp_opname
 let mk_unionOfUnionOp_term = mk_4_dep0_term unionOfUnionOp_opname
@@ -992,11 +998,11 @@ let is_atomVar_term = is_1_dep0_term atomVar_opname
 let mk_atomVar_term = mk_1_dep0_term atomVar_opname
 let dest_atomVar_term = dest_1_dep0_term atomVar_opname
 
-let atomLabel_term = << atomLabel{ 'frame; 'field; 'subfield; 'num } >>
+let atomLabel_term = << atomLabel[field:s, subfield:s]{ 'frame; 'num } >>
 let atomLabel_opname = opname_of_term atomLabel_term
-let is_atomLabel_term = is_4_dep0_term atomLabel_opname
-let mk_atomLabel_term = mk_4_dep0_term atomLabel_opname
-let dest_atomLabel_term = dest_4_dep0_term atomLabel_opname
+let is_atomLabel_term = is_str_str_2_dep0_term atomLabel_opname
+let mk_atomLabel_term = mk_str_str_2_dep0_term atomLabel_opname
+let dest_atomLabel_term = dest_str_str_2_dep0_term atomLabel_opname
 
 let atomSizeof_term = << atomSizeof{ 'ty_var_list; 'num } >>
 let atomSizeof_opname = opname_of_term atomSizeof_term

@@ -35,12 +35,6 @@
  * @end[license]
  *)
 
-(*
- * NOTE: To make this file remotely readable, I've made lines that are much
- * longer than 80 characters, and I've also used some shorthand notation for
- * some terms, e.g. ifthenelse.
- *)
-
 (*!
  * @begin[doc]
  * @parents
@@ -50,6 +44,10 @@
 extends Mfir_bool
 extends Mfir_int
 extends Mfir_list
+
+(*!
+ * @docoff
+ *)
 
 open Top_conversionals
 open Mfir_bool
@@ -84,7 +82,8 @@ open Mfir_int
 declare interval{ 'left; 'right }
 declare intset[precision:n, sign:s]{ 'interval_list }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Set operations}
  *
@@ -93,6 +92,7 @@ declare intset[precision:n, sign:s]{ 'interval_list }
  *)
 
 declare member{ 'num; 's }
+
 
 (*!
  * @begin[doc]
@@ -104,6 +104,7 @@ declare member{ 'num; 's }
  *)
 
 declare normalize{ 'set }
+
 
 (*!
  * @begin[doc]
@@ -117,7 +118,8 @@ declare subset{ 'set1; 'set2 }
 declare set_eq{ 'set1; 'set2 }
 declare union{ 'set1; 'set2 }
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Constants}
  *
@@ -132,7 +134,8 @@ declare union{ 'set1; 'set2 }
 declare intset_max[precision:n, sign:s]
 declare enum_max
 
-(*
+
+(**************************************
  * The following are auxiliary terms.  They are not available outside the
  * Mfir_int_set module.  They are used to simplify the reductions for
  * integer set operations.
@@ -198,7 +201,8 @@ let reduce_subset_interval =
    reduce_and thenC
    reduce_ifthenelse
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Set operations}
  *
@@ -246,6 +250,7 @@ let reduce_member =
 let resource reduce += [
    << member{ number[i:n]; intset[p:n, s:s]{ 'intervals } } >>, reduce_member
 ]
+
 
 (*!
  * @begin[doc]
@@ -295,6 +300,7 @@ let reduce_normalize =
 let resource reduce += [
    << normalize{ intset[p:n, s:s]{ 'intervals } } >>, reduce_normalize
 ]
+
 
 (*!
  * @begin[doc]
@@ -349,6 +355,7 @@ let reduce_subset =
 let resource reduce += [
    << subset{ 'set1; 'set2 } >>, reduce_subset
 ]
+
 
 (*!
  * @begin[doc]
@@ -422,6 +429,7 @@ let resource reduce += [
    << union{ 'set1; 'set2 } >>, reduce_union
 ]
 
+
 (*!
  * @begin[doc]
  *
@@ -451,7 +459,8 @@ let resource reduce += [
    << set_eq{ 's1; 's2 } >>, reduce_set_eq
 ]
 
-(*!
+
+(*!************************************
  * @begin[doc]
  * @modsubsection{Constants}
  *
@@ -553,6 +562,7 @@ dform intset_df3 : except_mode[src] ::
    bf["intset"] sub{slot[precision:n]} sup{bf["unsigned"]} `" "
       slot{'interval_list}
 
+
 (*
  * Set operations.
  *)
@@ -577,6 +587,7 @@ dform union_df : except_mode[src] ::
    union{ 'set1; 'set2 } =
    `"(" slot{'set1} cup slot{'set2} `")"
 
+
 (*
  * Constants.
  *)
@@ -596,6 +607,7 @@ dform intset_max_df3 : except_mode[src] ::
 dform enum_max_df : except_mode[src] ::
    enum_max =
    bf["enum_max"]
+
 
 (*
  * Auxiliary terms.

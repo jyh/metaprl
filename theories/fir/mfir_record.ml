@@ -41,7 +41,7 @@
  * @end[doc]
  *)
 
-extends Base_theory
+extends Mfir_bool
 
 (*!
  * @docoff
@@ -58,7 +58,7 @@ open Top_conversionals
  * @begin[doc]
  * @terms
  *
- * Records are used to representing a map from labels to values.
+ * Records are used to represent a map from labels to values.
  * The term @tt[recordEnd] represent an empty record.  The term
  * @tt[record] represents a map from the label @tt[tag] to @tt[data].
  * The subterm @tt[remaining] is the rest of the record.
@@ -77,6 +77,7 @@ declare record[tag:s]{ 'data; 'remaining }
  *)
 
 declare field[tag:s]{ 'record }
+declare field_mem[tag:s]{ 'record }
 
 (*!
  * @docoff
@@ -117,6 +118,40 @@ let resource reduce += [
 ]
 
 
+(*!
+ * @begin[doc]
+ *
+ * I really should document the following.
+ * @end[doc]
+ *)
+
+prim_rw reduce_field_mem_success :
+   field_mem[tag:s]{ record[tag:s]{ 'data; 'remaining } } <-->
+   "true"
+
+prim_rw reduce_field_mem_continue :
+   field_mem[tag1:s]{ record[tag2:s]{ 'data; 'remaining } } <-->
+   field_mem[tag1:s]{ 'remaining }
+
+prim_rw reduce_field_mem_fail :
+   field_mem[tag:s]{ recordEnd } <-->
+   "false"
+
+(*!
+ * @docoff
+ *)
+
+let reduce_field_mem =
+   reduce_field_mem_success orelseC
+   reduce_field_mem_continue orelseC
+   reduce_field_mem_fail
+
+let resource reduce += [
+   << field_mem[tag:s]{ 'record } >>,
+      reduce_field_mem
+]
+
+
 (**************************************************************************
  * Display forms.
  **************************************************************************)
@@ -153,4 +188,8 @@ dform mfir_record_display_df3 : except_mode[src] ::
 
 dform field_df : except_mode[src] ::
    field[tag:s]{ 'record } =
-   bf["field"] `"[" slot[tag:s] `"](" slot{ 'record } `")"
+   bf["field"] `"[" slot[tag:s] `"](" slot{'record} `")"
+
+dform field_mem_df : except_mode[src] ::
+   field_mem[tag:s]{ 'record } =
+   bf["field_mem"] `"[" slot[tag:s] `"](" slot{'record} `")"

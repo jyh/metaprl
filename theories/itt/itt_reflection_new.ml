@@ -133,18 +133,9 @@ prim bterm_var_left :
  * Make_bterm                                                           *
  ************************************************************************)
 
-(*
 prim_rw make_bterm_eval :
- (if_bterm{'bt;"true"} ) -->
- (if_var_bterm{'bt;"false";"true"} ) -->
- 'bt <--> make_bterm{'bt;list_of_rlist{Base_reflection!subterms{'bt}}}
-*)
-
-prim_rw make_bterm_eval :
- (if_bterm{bterm{| <H> >- 't |};"true"} ) -->
- (if_var_bterm{bterm{| <H> >- 't |};"false";"true"} ) -->
- bterm{| <H> >- 't |} <--> make_bterm{bterm{| <H> >- 't |};list_of_rlist{Base_reflection!subterms{bterm{| <H> >- 't |}}}}
-
+ if_quoted_op{'bt ;"true"} -->
+ ('bt :> Term) <--> make_bterm{'bt;list_of_rlist{Base_reflection!subterms{'bt}}}
 
 (************************************************************************
  * Reflection rule for substitution                                     *

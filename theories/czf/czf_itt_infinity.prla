@@ -301,13 +301,13 @@ T	t94	o93
 B	b94	t94
 T	t95	o b94 b4
 B	b95	t95
-P	p95	String Base_dtactic
+P	p95	String Dtactic
 O	o95	parent p95
 T	t96	o95
 B	b96	t96
 T	t97	o b96 b4
 B	b97	t97
-P	p97	String Base_auto_tactic
+P	p97	String Auto_tactic
 O	o97	parent p97
 T	t98	o97
 B	b98	t98

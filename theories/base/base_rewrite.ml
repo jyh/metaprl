@@ -57,7 +57,7 @@ doc <:doc<
    @parents
    @end[doc]
 >>
-extends Base_auto_tactic
+extends Auto_tactic
 doc <:doc< @docoff >>
 
 extends Perv
@@ -78,7 +78,7 @@ open Tactic_type.Conversionals
 
 open Var
 
-open Base_auto_tactic
+open Auto_tactic
 
 declare rw_just
 dform rw_just_df : except_mode[src] :: rw_just = `"rw"

@@ -2135,13 +2135,13 @@ T	t842	o841
 B	b842	t842
 T	t843	o b842 b7
 B	b843	t843
-P	p843	String Base_dtactic
+P	p843	String Dtactic
 O	o843	parent p843
 T	t844	o843
 B	b844	t844
 T	t845	o b844 b7
 B	b845	t845
-P	p845	String Base_auto_tactic
+P	p845	String Auto_tactic
 O	o845	parent p845
 T	t846	o845
 B	b846	t846

@@ -1998,13 +1998,13 @@ T	t784	o783
 B	b784	t784
 T	t785	o b784 b8
 B	b785	t785
-P	p785	String Base_dtactic
+P	p785	String Dtactic
 O	o785	parent p785
 T	t786	o785
 B	b786	t786
 T	t787	o b786 b8
 B	b787	t787
-P	p787	String Base_auto_tactic
+P	p787	String Auto_tactic
 O	o787	parent p787
 T	t788	o787
 B	b788	t788

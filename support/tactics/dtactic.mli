@@ -30,7 +30,7 @@
  * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-extends Base_auto_tactic
+extends Auto_tactic
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.Refine
@@ -39,7 +39,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 
 open Mp_resource
-open Base_auto_tactic
+open Auto_tactic
 
 type intro_option =
    SelectOption of int

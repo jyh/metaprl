@@ -1976,7 +1976,7 @@ P	p814	Number 1958
 O	o814	location p813 p814
 NSummary!parent	parent	parent Summary
 O	o815	parent
-P	p815	String Base_auto_tactic
+P	p815	String Auto_tactic
 O	o816	parent p815
 T	t816	o816
 B	b816	t816

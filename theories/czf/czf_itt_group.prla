@@ -2253,13 +2253,13 @@ T	t911	o910
 B	b911	t911
 T	t912	o b911 b12
 B	b912	t912
-P	p912	String Base_dtactic
+P	p912	String Dtactic
 O	o912	parent p912
 T	t913	o912
 B	b913	t913
 T	t914	o b913 b12
 B	b914	t914
-P	p914	String Base_auto_tactic
+P	p914	String Auto_tactic
 O	o914	parent p914
 T	t915	o914
 B	b915	t915

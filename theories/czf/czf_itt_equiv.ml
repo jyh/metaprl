@@ -101,8 +101,8 @@ open Tactic_type.Conversionals
 open Mptop
 open Var
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 
 open Itt_rfun
 open Czf_itt_set

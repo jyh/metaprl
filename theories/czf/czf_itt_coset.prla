@@ -2521,13 +2521,13 @@ T	t1025	o1024
 B	b1025	t1025
 T	t1026	o b1025 b9
 B	b1026	t1026
-P	p1026	String Base_dtactic
+P	p1026	String Dtactic
 O	o1026	parent p1026
 T	t1027	o1026
 B	b1027	t1027
 T	t1028	o b1027 b9
 B	b1028	t1028
-P	p1028	String Base_auto_tactic
+P	p1028	String Auto_tactic
 O	o1028	parent p1028
 T	t1029	o1028
 B	b1029	t1029

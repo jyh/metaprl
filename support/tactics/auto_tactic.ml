@@ -2,9 +2,9 @@ doc <:doc<
    @spelling{arg tac AutoComplete AutoNormal AutoTrivial byDefT conv}
   
    @begin[doc]
-   @module[Base_auto_tactic]
+   @module[Auto_tactic]
   
-   The @tt[Base_auto_tactic] module defines two of the most useful
+   The @tt[Auto_tactic] module defines two of the most useful
    tactics in the @MetaPRL prover.  The @tactic[autoT] tactic attempts
    to prove a goal ``automatically,'' and the @tactic[trivialT] tactic
    proves goals that are ``trivial.''  Their implementations are surprisingly
@@ -120,7 +120,7 @@ open Mptop
  * Debugging.
  *)
 let _ =
-   show_loading "Loading Base_auto_tactic%t"
+   show_loading "Loading Auto_tactic%t"
 
 let debug_auto =
    create_debug (**)

@@ -21,11 +21,11 @@ doc <:doc<
    The base theory also defines several resources that can be used to
    build automated tactics.  The @hrefmodule[Mptop] module (Section @refmodule[Mptop])
    defines a resource for adding functions to the @MetaPRL interactive
-   top-loop.  The @hrefmodule[Base_auto_tactic] module
-   (Section @refmodule[Base_auto_tactic]) defines a resource for
+   top-loop.  The @hrefmodule[Auto_tactic] module
+   (Section @refmodule[Auto_tactic]) defines a resource for
    defining the @hreftactic[trivialT] and @hreftactic[autoT]
-   tactics for automated reasoning.  The @hrefmodule[Base_dtactic] module
-   (Section @refmodule[Base_dtactic]) defines resources for adding
+   tactics for automated reasoning.  The @hrefmodule[Dtactic] module
+   (Section @refmodule[Dtactic]) defines resources for adding
    introduction and elimination reasoning to the @hreftactic[dT] tactic.
   
    The @tt[Base_theory] module itself defines no new primitives; it
@@ -79,8 +79,8 @@ extends Var
 extends Top_tacticals
 extends Top_conversionals
 extends Base_trivial
-extends Base_auto_tactic
-extends Base_dtactic
+extends Auto_tactic
+extends Dtactic
 extends Base_rewrite
 doc <:doc< @docoff >>
 

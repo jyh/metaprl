@@ -5,11 +5,11 @@ doc <:doc<
    @end[spelling]
   
    @begin[doc]
-   @module[Base_dtactic]
+   @module[Dtactic]
   
    The @tactic[dT] tactic is the cornerstone of reasoning in
    most logics; it provides generic application of introduction
-   elimination reasoning.  The @hrefmodule[Base_dtactic] defines a @emph{generic}
+   elimination reasoning.  The @hrefmodule[Dtactic] defines a @emph{generic}
    resource that can be used to add introduction and elimination reasoning.
    In addition, it add resource @emph{annotations} that can be used in rule
    definitions to add them automatically to the @tt[dT] resources.
@@ -148,7 +148,7 @@ doc <:doc<
    @parents
    @end[doc]
 >>
-extends Base_auto_tactic
+extends Auto_tactic
 doc <:doc< @docoff >>
 
 open Printf
@@ -169,7 +169,7 @@ open Term_match_table
 open Tactic_type
 open Tactic_type.Tacticals
 
-open Base_auto_tactic
+open Auto_tactic
 open Typeinf
 open Mptop
 
@@ -177,7 +177,7 @@ open Mptop
  * Show that the file is loading.
  *)
 let _ =
-   show_loading "Loading Base_dtactic%t"
+   show_loading "Loading Dtactic%t"
 
 let debug_dtactic =
    create_debug (**)
@@ -289,7 +289,7 @@ let intro_compact entries =
          let select = List.map (fun (_, sel, tac) -> sel, tac) select in
             match normal, select with
                [], [] ->
-                  raise (Invalid_argument "Base_dtactic: intro_merge")
+                  raise (Invalid_argument "Dtactic: intro_merge")
              | [], select ->
                   compile_select selname select
              | normal, [] ->
@@ -318,14 +318,14 @@ let extract_elim_data data =
          try
             (* Find and apply the right tactic *)
             if !debug_dtactic then
-               eprintf "Base_dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
+               eprintf "Dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
             snd (Term_match_table.lookup tbl t)
          with
             Not_found ->
                raise (RefineError ("extract_elim_data", StringTermError ("D tactic doesn't know about", t)))
       in
          if !debug_dtactic then
-            eprintf "Base_dtactic: applying elim %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
+            eprintf "Dtactic: applying elim %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
          tac i)
 
 let extract_intro_data data =
@@ -335,18 +335,18 @@ let extract_intro_data data =
          try
             (* Find and apply the right tactic *)
             if !debug_dtactic then begin
-               eprintf "Base_dtactic: intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
+               eprintf "Dtactic: intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
                let sv_deb_table = !debug_term_table in
                debug_term_table:=true;
                try
                   let tac = snd (Term_match_table.lookup tbl t) in
                   debug_term_table:=sv_deb_table;
-                  eprintf "Base_dtactic: intro: applying %s%t" (SimplePrint.short_string_of_term t) eflush;
+                  eprintf "Dtactic: intro: applying %s%t" (SimplePrint.short_string_of_term t) eflush;
                   tac
                with
                   Not_found ->
                      debug_term_table:=sv_deb_table;
-                     eprintf "Base_dtactic: intro: not found%t" eflush;
+                     eprintf "Dtactic: intro: not found%t" eflush;
                      raise Not_found
             end else
                snd (Term_match_table.lookup tbl t)
@@ -400,7 +400,7 @@ let find_subterm t arg =
    in
       try make_address (List.rev (search [] t)) with
          Not_found ->
-            raise (RefineError ("Base_dtactic.improve_intro.find_subterm", StringTermError ("subterm can't be found", arg)))
+            raise (RefineError ("Dtactic.improve_intro.find_subterm", StringTermError ("subterm can't be found", arg)))
 
 (*
  * Improve the intro resource from a rule.
@@ -410,7 +410,7 @@ let process_intro_resource_annotation name context_args term_args _ statement (p
    let t =
       try TermMan.nth_concl goal 1 with
          RefineError _ ->
-            raise (Invalid_argument (sprintf "Base_dtactic.improve_intro: %s: must be an introduction rule" name))
+            raise (Invalid_argument (sprintf "Dtactic.improve_intro: %s: must be an introduction rule" name))
    in
    let term_args =
       match term_args with
@@ -460,7 +460,7 @@ let process_intro_resource_annotation name context_args term_args _ statement (p
                   check_auto p;
                      Tactic_type.Tactic.tactic_of_rule pre_tactic [||] (term_args p))
        | _ ->
-            raise (Invalid_argument (sprintf "Base_dtactic.intro: %s: not an introduction rule" name))
+            raise (Invalid_argument (sprintf "Dtactic.intro: %s: not an introduction rule" name))
    in
       t, (name, get_sel_arg options, tac)
 
@@ -480,12 +480,12 @@ let process_elim_resource_annotation name context_args term_args _ statement (pr
    let { sequent_hyps = hyps } =
       try TermMan.explode_sequent goal with
          RefineError _ ->
-            raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: must be a sequent" name))
+            raise (Invalid_argument (sprintf "Dtactic.improve_elim: %s: must be a sequent" name))
    in
    let v, t, hnum =
       let rec search i len =
          if i = len then
-            raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: must be an elimination rule" name))
+            raise (Invalid_argument (sprintf "Dtactic.improve_elim: %s: must be an elimination rule" name))
          else
             match SeqHyp.get hyps i with
                HypBinding (v, t) ->
@@ -546,7 +546,7 @@ let process_elim_resource_annotation name context_args term_args _ statement (pr
        | [| _ |], Some thinT ->
             let rec find_thin_num_aux hyps len i =
                if i = len then
-                  raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: can not find what to thin in one of the subgoals" name));
+                  raise (Invalid_argument (sprintf "Dtactic.improve_elim: %s: can not find what to thin in one of the subgoals" name));
                match SeqHyp.get hyps i with
                   HypBinding (_, t') | Hypothesis t' when alpha_equal t t' -> i
                 | HypBinding (v', _) when v = Some v' -> i
@@ -557,15 +557,15 @@ let process_elim_resource_annotation name context_args term_args _ statement (pr
                   let hyps = (TermMan.explode_sequent assum).sequent_hyps in
                   find_thin_num_aux hyps (SeqHyp.length hyps) 0
                with RefineError _ ->
-                  raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: assumtions must be sequents" name))
+                  raise (Invalid_argument (sprintf "Dtactic.improve_elim: %s: assumtions must be sequents" name))
             in
             let thin_nums = List.map find_thin_num assums in
             let rec check_thin_nums = function
                [i] -> i
              | i :: ((i'::_) as tl) when (i=i') -> check_thin_nums tl
              | [] ->
-                  raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: should not use ThinOption in a rule with no assumptions" name))
-             | _ -> raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: ThinOption: different assumptions have the eliminated hypothesis in a different place" name))
+                  raise (Invalid_argument (sprintf "Dtactic.improve_elim: %s: should not use ThinOption in a rule with no assumptions" name))
+             | _ -> raise (Invalid_argument (sprintf "Dtactic.improve_elim: %s: ThinOption: different assumptions have the eliminated hypothesis in a different place" name))
             in
             let thin_incr = (check_thin_nums thin_nums) - hnum in
             argfunT (fun i p ->
@@ -576,14 +576,14 @@ let process_elim_resource_annotation name context_args term_args _ statement (pr
                   else
                      tac)
        | _ ->
-            raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))
+            raise (Invalid_argument (sprintf "Dtactic: %s: not an elimination rule" name))
    in
       t, tac
 
 let add_intro_data datas ((t, _) as data) =
    if !debug_dtactic then begin
       let opname = opname_of_term t in
-         eprintf "Base_dtactic.improve_intro_resource: %s%t" (string_of_opname opname) eflush
+         eprintf "Dtactic.improve_intro_resource: %s%t" (string_of_opname opname) eflush
    end;
    add_data datas data
 
@@ -593,7 +593,7 @@ let wrap_intro tac =
 let add_elim_data datas ((t,_) as data) =
    if !debug_dtactic then begin
       let opname = opname_of_term t in
-         eprintf "Base_dtactic.improve_elim_resource: %s%t" (string_of_opname opname) eflush
+         eprintf "Dtactic.improve_elim_resource: %s%t" (string_of_opname opname) eflush
    end;
    add_data datas data
 

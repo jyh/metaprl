@@ -2945,13 +2945,13 @@ T	t1232	o1231
 B	b1232	t1232
 T	t1233	o b1232 b8
 B	b1233	t1233
-P	p1233	String Base_dtactic
+P	p1233	String Dtactic
 O	o1233	parent p1233
 T	t1234	o1233
 B	b1234	t1234
 T	t1235	o b1234 b8
 B	b1235	t1235
-P	p1235	String Base_auto_tactic
+P	p1235	String Auto_tactic
 O	o1235	parent p1235
 T	t1236	o1235
 B	b1236	t1236

@@ -1963,13 +1963,13 @@ T	t840	o839
 B	b840	t840
 T	t841	o b840 b8
 B	b841	t841
-P	p841	String Base_dtactic
+P	p841	String Dtactic
 O	o841	parent p841
 T	t842	o841
 B	b842	t842
 T	t843	o b842 b8
 B	b843	t843
-P	p843	String Base_auto_tactic
+P	p843	String Auto_tactic
 O	o843	parent p843
 T	t844	o843
 B	b844	t844

@@ -15,11 +15,7 @@ MLZFILES :=\
 
 # Library files
 MPFILES :=\
-	typeinf\
 	base_trivial\
-	base_auto_tactic\
-	base_dtactic\
-	base_cache\
 	base_meta\
 	base_rewrite\
 	base_theory

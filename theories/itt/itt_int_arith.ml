@@ -150,15 +150,19 @@ let debug_subgoals =
          else
             idT
       in
-         funT (aux 2)
+         funT (aux 1)
 
 (*
  * end of thenMT_prefix part
  *)
 
 let get_term i p =
-(* We skip first item because it is a context *)
-   if i<>1 then Sequent.nth_hyp p i else mk_simple_term xperv []
+   let goal=Sequent.goal p in
+   let hyps = (explode_sequent goal).sequent_hyps in
+   let h=List.nth (SeqHyp.to_list hyps) (i-1) in
+   match h with 
+   	HypBinding (_,t) | Hypothesis t -> t
+    | Context (_,_,_) -> xnil_term
 
 let le2geT = argfunT (fun t p ->
    let (left,right)=dest_le t in
@@ -312,7 +316,7 @@ let rec is_arith_rel t =
    (is_not_term t && is_arith_rel (dest_not t))
 
 let negativeHyp2ConclT = argfunT (fun i p ->
-   let t=Sequent.nth_hyp p i in
+   let t=get_term i p in
 	if is_not_term t then
       if is_arith_rel (dest_not t) then
       	thenLocalMT (dT i) arithRelInConcl2HypT
@@ -799,14 +803,14 @@ let tryReduce_geT = argfunT (fun i p ->
 
 (* Generate sum of ge-relations
  *)
-let sumList tl g =
+let sumList tl p =
    match tl with
    h::t ->
       let aux a (l,r) =
-         let tm = nth_hyp g a in
+         let tm = get_term a p in
          let (al,ar) = dest_ge tm in
          (mk_add_term al l, mk_add_term ar r) in
-      let h_tm = nth_hyp g h in
+      let h_tm = get_term h p in
       let (sl, sr)=List.fold_right aux t (dest_ge h_tm) in
       mk_ge_term sl sr
    | [] ->
@@ -816,7 +820,7 @@ let sumList tl g =
 (* Asserts sum of ge-relations and grounds it
  *)
 let sumListT = argfunT (fun l p ->
-   let s = sumList l (Sequent.goal p) in
+   let s = sumList l p in
    if !debug_int_arith then
    	eprintf "Contradictory term:%a%t" print_term s eflush;
    thenLocalAT (assertT s) (tryT (progressT ge_addMono)))
@@ -851,6 +855,13 @@ let findContradRelT =
    in funT (fun p ->
    let g=Sequent.goal p in
    let l = Arith.collect good_term g in
+   if !debug_int_arith then
+   	begin
+   		eprintf "Looking for contradiction among:";
+   		let _=List.map (fun i -> (eprintf " %i" i)) l in
+   		eprintf "%t" eflush;
+   		()
+   	end;
    let ar=Array.of_list l in
    match Arith.TG.solve (g,ar) with
       Arith.TG.Int (_,r),_ ->

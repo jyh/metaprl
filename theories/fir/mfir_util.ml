@@ -1,0 +1,271 @@
+(*!
+ * @begin[doc]
+ * @module[Mfir_util]
+ *
+ * The @tt[Mfir_util] module defines terms and rewrites for working
+ * with the @MetaPRL representation of the FIR.
+ * @end[doc]
+ *
+ * ------------------------------------------------------------------------
+ *
+ * @begin[license]
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.  Additional
+ * information about the system is available at
+ * http://www.metaprl.org/
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Brian Emre Aydemir
+ * @email{emre@cs.caltech.edu}
+ * @end[license]
+ *)
+
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+
+extends Mfir_int
+extends Mfir_list
+extends Mfir_ty
+
+(*!
+ * @docoff
+ *)
+
+open Top_conversionals
+open Mfir_int
+
+
+(**************************************************************************
+ * Declarations.
+ **************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The term @tt[offset] is the type of ``offsets'' into data aggregates,
+ * such as arrays.
+ * @end[doc]
+ *)
+
+declare offset
+
+(*! @begin[doc]
+ *
+ * If @tt[poly_ty] is a parametrized type definition (see
+ * @hrefterm[tyDefPoly]), then @tt[do_tyApply] instantiates the type
+ * definition at the types in the list @tt[ty_list].
+ * @end[doc]
+ *)
+
+declare do_tyApply{ 'poly_ty; 'ty_list }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[instantiate_tyExists] is used to instantiate
+ * an existential type @tt[ty] using type projections (@hrefterm[tyProject])
+ * with @tt[var], starting at @tt[num].
+ * @end[doc]
+ *)
+
+declare instantiate_tyExists{ 'ty; 'var; 'num }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[num_params] counts the number of parameters in an
+ * existential type @tt[ty].
+ * @end[doc]
+ *)
+
+declare num_params{ 'ty }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[nth_unionCase] returns the $n$th tuple space of a
+ * non-polymorphic union definition.
+ * @end[doc]
+ *)
+
+declare nth_unionCase{ 'n; 'union_def }
+
+
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * Instantiating a parameterized type at a given list of types is
+ * straightforward.  (The following rewrites can be applied
+ * using the @tt[reduce_do_tyApply] conversional.)
+ * @end[doc]
+ *)
+
+prim_rw reduce_do_tyApply_base :
+   do_tyApply{ 'ty; nil } <-->
+   'ty
+
+prim_rw reduce_do_tyApply_ind_poly :
+   do_tyApply{ tyDefPoly{ t. 'ty['t] }; cons{ 'a; 'b } } <-->
+   do_tyApply{ 'ty['a]; 'b }
+
+prim_rw reduce_do_tyApply_ind_all :
+   do_tyApply{ tyAll{ t. 'ty['t] }; cons{ 'a; 'b } } <-->
+   do_tyApply{ 'ty['a]; 'b }
+
+prim_rw reduce_do_tyApply_ind_exists :
+   do_tyApply{ tyExists{ t. 'ty['t] }; cons{ 'a; 'b } } <-->
+   do_tyApply{ 'ty['a]; 'b }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_do_tyApply =
+   firstC [reduce_do_tyApply_base;
+           reduce_do_tyApply_ind_poly;
+           reduce_do_tyApply_ind_all;
+           reduce_do_tyApply_ind_exists]
+
+let resource reduce += [
+   << do_tyApply{ 'ty; nil } >>,
+      reduce_do_tyApply
+]
+
+(*!
+ * @begin[doc]
+ *
+ * The following rewrites are the basis for reducing
+ * $<< instantiate_tyExists{ 'ty; 'var; 'num } >>$.  They are combined
+ * with various conversionals into the conversional
+ * @tt[reduce_instantiate_tyExists].
+ * @end[doc]
+ *)
+
+prim_rw reduce_instantiate_tyExists_aux1 :
+   instantiate_tyExists{ 'ty; 'var; 'num } <-->
+   'ty
+
+prim_rw reduce_instantiate_tyExists_aux2 :
+   instantiate_tyExists{ tyExists{ t. 'ty['t] }; 'var; number[i:n] } <-->
+   instantiate_tyExists{ do_tyApply{ tyExists{ t. 'ty['t] };
+                                     cons{ tyProject[i:n]{ 'var }; nil } };
+                         'var;
+                         (number[i:n] +@ 1) }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_instantiate_tyExists =
+   (reduce_instantiate_tyExists_aux2
+      thenC (repeatC reduce_do_tyApply)
+      thenC reduce_add)
+   orelseC
+   (reduce_instantiate_tyExists_aux1)
+
+let resource reduce += [
+   << instantiate_tyExists{ 'ty; 'var; 'num } >>,
+      reduce_instantiate_tyExists
+]
+
+(*!
+ * @begin[doc]
+ *
+ * Counting the number of parameters in a type $<< tyExists{t. 'ty['t]} >>$ is
+ * also straightforward. Note the bogus instantiation at $<< tyInt >>$ to
+ * address the problem of free variables. We use the @tt[orelseC] conversional
+ * to control the order in which the following rewrites are executed.
+ * @end[doc]
+ *)
+
+prim_rw reduce_num_params_exists :
+   num_params{ tyExists{ t. 'ty['t] } } <-->
+   (1 +@ num_params{ 'ty[tyInt] })
+
+prim_rw reduce_num_params_any :
+   num_params{ 'ty } <-->
+   0
+
+(*!
+ * @docoff
+ *)
+
+let reduce_num_params =
+   reduce_num_params_exists orelseC reduce_num_params_any
+
+let resource reduce += [
+   << num_params{ 'ty } >>,
+      reduce_num_params
+]
+
+(*!
+ * @begin[doc]
+ *
+ * Computing the $n$th tuple space of a non-polymorphic union definition
+ * is straightforward, since the cases are given as a list.
+ * @end[doc]
+ *)
+
+prim_rw reduce_nth_unionCase :
+   nth_unionCase{ number[n:n]; tyDefUnion[str:s]{ 'cases } } <-->
+   nth_elt{ number[n:n]; 'cases }
+
+(*!
+ * @docoff
+ *)
+
+let resource reduce += [
+   << nth_unionCase{ number[i:n]; tyDefUnion[str:s]{ 'cases } } >>,
+      reduce_nth_unionCase
+]
+
+
+(**************************************************************************
+ * Display forms.
+ **************************************************************************)
+
+dform offset_df : except_mode[src] ::
+   offset =
+   bf["offset"]
+
+dform do_tyApply_df : except_mode[src] ::
+   do_tyApply{ 'poly_ty; 'ty_list } =
+   `"((" slot{'poly_ty} `") " slot{'ty_list} `")"
+
+dform do_instantiate_tyExists_df : except_mode[src] ::
+   instantiate_tyExists{ 'ty; 'var; 'num } =
+   bf["inst"] exists `"[" slot{'num} `"](" slot{'ty} `"," slot{'var} `")"
+
+dform num_params_df : except_mode[src] ::
+   num_params{ 'ty } =
+   bf["num_params"] `"(" slot{'ty} `")"
+
+dform nth_unionCase_df : except_mode[src] ::
+   nth_unionCase{ 'i; 'union } =
+   bf["nth_case"] `"(" slot{'i} `"," slot{'union} `")"
+

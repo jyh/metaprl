@@ -41,8 +41,6 @@
  * @end[doc]
  *)
 
-extends Base_theory
-extends Mfir_basic
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
@@ -61,6 +59,7 @@ open Base_auto_tactic
 open Base_dtactic
 open Mfir_auto
 
+
 (**************************************************************************
  * Rules.
  **************************************************************************)
@@ -68,6 +67,7 @@ open Mfir_auto
 (*!
  * @begin[doc]
  * @rules
+ * @modsubsection{Basic expressions}
  *
  * Operationally, the $<< letAtom{ 'ty1; 'atom; v. 'exp['v] } >>$ expression
  * binds $<< 'atom >>$ to $<< 'v >>$ in $<< 'exp >>$.  The expression has type
@@ -84,7 +84,25 @@ prim ty_letAtom {| intro [] |} 'H 'a :
       has_type["exp"]{ letAtom{ 'ty1; 'atom; v. 'exp['v] }; 'ty2 } }
    = it
 
-(* XXX letExt *)
+(*!
+ * @begin[doc]
+ *
+ * The expression $<< letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] } >>$ binds
+ * the result of a call to an @it[external] (e.g.~standard library) function
+ * $<< 'str >>$ to $<< 'v >>$ in $<< 'exp >>$.  We make no attempt to see that
+ * the types in the expression correspond to the actual types for the function
+ * @tt[str].
+ * @end[doc]
+ *)
+
+prim ty_letExt {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type["atom_list"]{ 'args; 'tyl } } -->
+   sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] };
+                       't } }
+   = it
 
 (*!
  * @begin[doc]
@@ -93,7 +111,7 @@ prim ty_letAtom {| intro [] |} 'H 'a :
  * passing style.  A function call is well-formed if the variable
  * $<< atomVar{'v} >>$ is a function, and if the arguments have the
  * appropriate types.  Note that the type of $<< atomVar{'v} >>$ must be a
- * function type that ``returns'' a value of type $<< tyEnum[0] >>$. Also note
+ * function type that ``returns'' a value of type $<< tyEnum[0] >>$. Note
  * that in the two auxilary rules below (@tt[ty_tailCall_args1] and
  * @tt[ty_tailCall_args2]), the well-formedness of the types is ensured by the
  * sequent used in the application of the @tt[ty_tailCall] rule.
@@ -102,20 +120,20 @@ prim ty_letAtom {| intro [] |} 'H 'a :
 
 prim ty_tailCall 'H 'J :
    sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
-      has_type["tailCall"]{ 'atom_list; tyFun{ 't1; 't2 } } } -->
+      has_type["tailCall"]{ 'atoms; tyFun{ 't1; 't2 } } } -->
    sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
-      has_type["exp"]{ tailCall{ atomVar{'v}; 'atom_list }; tyEnum[0] } }
+      has_type["exp"]{ tailCall{ atomVar{'v}; 'atoms }; tyEnum[0] } }
    = it
 
 prim ty_tailCall_args1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["tailCall"]{ nil; tyEnum[0] } }
+   = it
+
+prim ty_tailCall_args2 {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["atom"]{ 'h; 't1 } } -->
    sequent [mfir] { 'H >- has_type["tailCall"]{ 't; 't2 } } -->
    sequent [mfir] { 'H >-
       has_type["tailCall"]{ cons{ 'h; 't }; tyFun{ 't1; 't2 } } }
-   = it
-
-prim ty_tailCall_args2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["tailCall"]{ nil; tyEnum[0] } }
    = it
 
 (*!
@@ -133,14 +151,84 @@ let resource auto += {
    auto_type = AutoNormal
 }
 
-(* XXX matchExp *)
+(*!
+ * @begin[doc]
+ * @modsubsection{Pattern matching}
+ *
+ * ...
+ * @end[doc]
+ *)
 
-(* XXX letAlloc *)
-
-(* XXX Subscript *)
+(* XXX matching *)
 
 (*!
  * @begin[doc]
+ * @modsubsection{Allocation}
+ *
+ * ...
+ * @end[doc]
+ *)
+
+(* XXX alloc *)
+
+prim ty_offset_tyInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["offset"]{ atomInt{'i}; offset } }
+   = it
+
+prim ty_offset_tyRawInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ atomRawInt[32, "signed"]{'i};
+                                            tyRawInt[32, "signed"] } } -->
+   sequent [mfir] { 'H >- has_type["offset"]{ atomRawInt[32, "signed"]{'i};
+                                              offset } }
+   = it
+
+prim ty_letAlloc_tuple {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type["store"]{'atoms; tyTuple[tc:s]{'tyl}} } -->
+   sequent [mfir] { 'H; a: var_def{ tyTuple[tc:s]{'tyl}; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{
+         letAlloc{allocTuple[tc:s]{tyTuple[tc:s]{'tyl}; 'atoms}; v. 'exp['v]};
+         't } }
+   = it
+
+(* XXX allocUnion *)
+
+prim ty_letAlloc_varray {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type["offset"]{ 'a1; offset } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; 'u } } -->
+   sequent [mfir] { 'H; a: var_def{ tyArray{'u}; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{
+         letAlloc{ allocVArray{tyArray{'u}; 'a1; 'a2 }; v. 'exp['v] };
+         't } }
+   = it
+
+prim ty_letAlloc_malloc {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type["offset"]{ 'atom; offset } } -->
+   sequent [mfir] { 'H; a: var_def{ tyRawData; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{
+         letAlloc{ allocMalloc{ tyRawData; 'atom }; v. 'exp['v] };
+         't } }
+   = it
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Subscripting}
+ *
+ * ...
+ * @end[doc]
+ *)
+
+(* XXX subscrripting *)
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Globals}
  *
  * The expression $<< letGlobal{ 'ty1; 'label; v. 'exp['v] } >>$ is used to
  * read a global value, and the expression
@@ -151,7 +239,7 @@ let resource auto += {
  *)
 
 prim ty_label 'H 'J :
-   sequent [mfir] { 'H; l: global_def{ 'ty; no_def }; 'J['l] >-
+   sequent [mfir] { 'H; l: global_def{ 'ty; 'd }; 'J['l] >-
       has_type["label"]{ 'l; 'ty } }
    = it
 

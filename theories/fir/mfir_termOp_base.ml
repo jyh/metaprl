@@ -52,12 +52,13 @@ let string_term_of_dep1_term t =
       { bvars = [s1]; bterm = t1 } ->
          s1, t1
     | _ ->
-         raise (Invalid_argument "string_term_of_dep1_term: not a dep1 term")
+         raise (Invalid_argument "not a dep1 term")
 
 (* Compares an opname and arities list against those of a term. *)
 
 let check_basics opname arities t =
-   Opname.eq (opname_of_term t) opname && (subterm_arities t) == arities
+   (Opname.eq (opname_of_term t) opname) &&
+   ((subterm_arities t) == arities)
 
 (* Returns the parameter list of a term. *)
 
@@ -409,6 +410,8 @@ let dest_num_str_2_dep0_term opname t =
  * 2 number parameters, 1 string parameter, 0 subterms.
  *)
 
+(* num_num_str version *)
+
 let is_num_num_str_0_dep0_term opname t =
    match get_params t with
       [Number _; Number _; String _] -> (check_basics opname [] t)
@@ -426,7 +429,7 @@ let dest_num_num_str_0_dep0_term opname t =
     | _ -> raise (RefineError ("dest_num_num_str_0_dep0_term", StringTermError
                  ("invalid term structure", t)))
 
-(* bonk *)
+(* num_str_num version *)
 
 let is_num_str_num_0_dep0_term opname t =
    match get_params t with

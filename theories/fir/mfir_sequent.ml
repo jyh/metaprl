@@ -13,38 +13,35 @@
  * Contexts may contain declarations and definitions for variables, type
  * variables, and global labels (global values in FIR programs).  A variable
  * must be declared before it is defined, since variables may be defined in a
- * mutually recursive fashion.  No variable may be declared or defined more
- * than once.  Similar requirements hold for type variables and global labels.
+ * mutually recursive fashion (e.g.~functions).  No variable may be declared
+ * or defined more than once.  Similar requirements hold for type variables
+ * and global labels.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.  Additional
- * information about the system is available at
- * http://www.metaprl.org/
+ * @begin[license] This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming environment for OCaml
+ * and other languages.  Additional information about the system is available
+ * at http://www.metaprl.org/
  *
  * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc., 675
+ * Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
+ * Author: Brian Emre Aydemir @email{emre@cs.caltech.edu} @end[license]
  *)
 
 (*!
@@ -54,6 +51,7 @@
  *)
 
 extends Base_theory
+
 
 (**************************************************************************
  * Declarations.
@@ -65,8 +63,7 @@ extends Base_theory
  * @modsubsection{Sequent tags}
  *
  * The term @tt[mfir] is used to tag FIR theory sequents.  The term @tt[it] is
- * used in FIR theory rules to express (the lack of) computational content of
- * a proof.
+ * used in rules to express (the lack of) computational content of a proof.
  * @end[doc]
  *)
 
@@ -101,10 +98,11 @@ declare union_type[i:n]
 (*!
  * @begin[doc]
  *
- * Parametrized types (see @hrefterm[tyDefPoly]) belong to the @tt[polyKind]
- * kind.  The parameter $i$ is the number of parameters in the definition, and
+ * All types, including parametrized types, belong to the @tt[polyKind] kind.
+ * The parameter @tt[i] is the number of parameters in the definition, and
  * the subterm @tt[k] is the kind of the type once all the parameters are
- * instantiated.
+ * instantiated.  We allow the case $i = 0$.  All typing rules express kinds
+ * using the @tt[polyKind] term.
  * @end[doc]
  *)
 
@@ -133,14 +131,14 @@ declare no_def
  * @begin[doc]
  * @modsubsection{Store values}
  *
- * Variables can be defined, in the context, with an atom, or one of values
- * below.  The term @tt[polyFun] is a polymorphic function that takes one type
- * argument.  The term @tt[lambda] is a non-polymorphic function of one
- * argument.  (Note that functions of multiple arguments are represented in
- * curried form.) The term @tt[union_val] is a value of case $i$ of some union
- * type @tt[ty_var], initialized with the atoms in the list @tt[atom_list].
- * The term @tt[raw_data] is an opaque representation of raw data (see
- * @hrefterm[tyRawData]).
+ * Variables can be defined with an atom, or one of values below.  The term
+ * @tt[polyFun] is a polymorphic function that takes one type argument.  The
+ * term @tt[lambda] is a non-polymorphic function that takes one argument.
+ * (Note that functions of multiple arguments are represented in curried
+ * form.) The term @tt[union_val] is a value of case $i$ of some (polymorphic)
+ * union type @tt[ty_var], initialized with the atoms in the list
+ * @tt[atom_list].  The term @tt[raw_data] is an opaque representation of raw
+ * data (see @hrefterm[tyRawData]).
  * @end[doc]
  *)
 
@@ -165,7 +163,8 @@ declare wf_kind{ 'k }
  * A proof of @tt[type_eq] says that two types (or type definitions)
  * @tt[ty1] and @tt[ty2] are equal in the kind @tt[k], and that @tt[k]
  * is well-formed.  A proof of @tt[type_eq_list] says that two lists of types
- * (or type definitions) are pointwise equal.
+ * (or type definitions) are pointwise equal in the specified kind, and that
+ * the kind is well-formed.
  * @end[doc]
  *)
 
@@ -176,7 +175,9 @@ declare type_eq_list{ 'tyl1; 'tyl2; 'k }
  * @begin[doc]
  *
  * A proof of @tt[has_type] proves that a term @tt[t] has type @tt[ty],
- * and that type @tt[ty] is a well-formed.
+ * and that type @tt[ty] is a well-formed.  The string parameter is an
+ * annotation that is intended to describe some aspect of @tt[t] or
+ * the typing relation.
  * @end[doc]
  *)
 
@@ -185,6 +186,7 @@ declare has_type[str:s]{ 't; 'ty }
 (*!
  * @docoff
  *)
+
 
 (**************************************************************************
  * Display forms.
@@ -226,9 +228,13 @@ dform union_type_df : except_mode[src] ::
    union_type[i:n] =
    bf["union"] `"[" slot[i:n] `"]"
 
-dform polyKind_df : except_mode[src] ::
+dform polyKind_df1 : except_mode[src] ::
    polyKind[i:n]{ 'k } =
    small_type sup{slot[i:n]} rightarrow slot{'k}
+
+dform polyKind_df2 : except_mode[src] ::
+   polyKind[0]{ 'k } =
+   `"(" slot{'k} `")"
 
 (*
  * Store values.
@@ -304,7 +310,7 @@ dform type_eq_df : except_mode[src] ::
 
 dform type_eq_list_df : except_mode[src] ::
    type_eq_list{ 'tyl1; 'tyl2; 'k } =
-   slot{'tyl1} `"=" slot{'tyl2} `":" slot{'k}
+   slot{'tyl1} `"=" sub{it["list"]} slot{'tyl2} `":" slot{'k}
 
 dform has_type_df : except_mode[src] ::
    has_type[str:s]{ 't; 'ty } =

@@ -1,5 +1,5 @@
 (*
- * The Mfir_ty module declares terms to represent the FIR type system.
+ * The Mfir_list module implements lists for the FIR theory.
  *
  * ------------------------------------------------------------------------
  *
@@ -31,54 +31,27 @@
  * @end[license]
  *)
 
+extends Mfir_bool
 extends Mfir_int
-extends Mfir_list
 
 open Tactic_type.Conversionals
+
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-(*
- * Numbers.
- *)
+declare nil
+declare cons{ 'elt; 'tail }
 
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
+declare length{ 'l }
+declare nth_elt{ 'n; 'l }
 
-(*
- * Functions.
- *)
 
-declare tyFun{ 'arg_type; 'res_type }
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
 
-(*
- * Aggregate data.
- *)
-
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyArray{ 'ty }
-declare tyRawData
-
-(*
- * Polymorphism.
- *)
-
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ t. 'ty['t] }
-declare tyAll{ t. 'ty['t] }
-declare tyProject[i:n]{ 'var }
-
-(*
- * Type definitions.
- *)
-
-declare tyDefPoly{ t. 'ty['t] }
-declare unionCaseElt{ 'ty; 'boolean }
-declare unionCase{ 'elts }
-declare tyDefUnion[str:s]{ 'cases }
+topval reduce_length_base : conv
+topval reduce_length_ind : conv
+topval reduce_nth_elt : conv

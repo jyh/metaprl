@@ -20,21 +20,28 @@ serve as notes to himself.  They may not make sense to others.
    as well.  Without them, I don't see how we can type-check values of
    a union type.
 
--- polyKind: At some point, I should try to simplify it.  It seems to be
-   causing many rules to multiply into two cases when that does not
-   necessarily have to be the case I think.
-
--- Documentation: I'll try to maintain it, but I will plan on doing a massive
-   clean-up at the end of summer (right before classes start).
+-- BUG: For tyDefUnion, I'm pretty much ignoring the difference between
+   ``normal'' and ``exn''.
 
 -- I should make sure automation, especially those rules added ``by hand'',
    is actually being done ``intelligently''.
+
+-- I should consider using the ``sequent tags'' to help simplify the rules.
+   This would probably involve using them to store information in some
+   manner.
 
 Notable differences from the actual Mojave FIR:
 
 -- The following have been ``curried'' (since: lists are somewhat annoying
    to deal with in MetaPRL, can get better binding variables, ...):
       TyFun
+
+-- So the actual FIR specification (fir/type/fir.ml in Mojave) has
+   all these lists and whatnot.  In some cases, if these lists are
+   empty, the term is ``degenerate'' in some sense.  For my own
+   sanity, I'm not considering ``degenerate'' terms.  You could
+   think of this as some sort of enforcement of a ``normal'' form
+   for everything.  (What I've expressed is pretty vague...)
 
 Comments that will be around a while:
 

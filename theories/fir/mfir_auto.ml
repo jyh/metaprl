@@ -2,8 +2,8 @@
  * @begin[doc]
  * @module[Mfir_auto]
  *
- * The @tt[Mfir_auto] module defines the basic constructs to automate the
- * FIR theory.
+ * The @tt[Mfir_auto] module defines the basic constructs needed
+ * to automate the FIR theory.
  * @end[doc]
  *
  * ------------------------------------------------------------------------

@@ -32,7 +32,10 @@
  * @end[license]
  *)
 
-extends Mfir_basic
+extends Mfir_bool
+extends Mfir_int
+extends Mfir_int_set
+extends Mfir_list
 extends Mfir_ty
 extends Mfir_exp
 
@@ -76,12 +79,6 @@ let number_opname = opname_of_term number_term
 let is_number_term = is_num_0_dep0_term number_opname
 let mk_number_term = mk_num_0_dep0_term number_opname
 let dest_number_term = dest_num_0_dep0_term number_opname
-
-let numeral_term = << numeral{ 'num } >>
-let numeral_opname = opname_of_term numeral_term
-let is_numeral_term = is_1_dep0_term numeral_opname
-let mk_numeral_term = mk_1_dep0_term numeral_opname
-let dest_numeral_term = dest_1_dep0_term numeral_opname
 
 let add_term = << add{ 'num1; 'num2 } >>
 let add_opname = opname_of_term add_term
@@ -195,7 +192,7 @@ let is_rawintset_term = is_num_str_1_dep0_term rawintset_opname
 let mk_rawintset_term = mk_num_str_1_dep0_term rawintset_opname
 let dest_rawintset_term = dest_num_str_1_dep0_term rawintset_opname
 
-let member_term = << member{ 'num; 'set } >>
+let member_term = << member{ 'num; 's } >>
 let member_opname = opname_of_term member_term
 let is_member_term = is_2_dep0_term member_opname
 let mk_member_term = mk_2_dep0_term member_opname
@@ -313,18 +310,6 @@ let is_tyProject_term = is_num_1_dep0_term tyProject_opname
 let mk_tyProject_term = mk_num_1_dep0_term tyProject_opname
 let dest_tyProject_term = dest_num_1_dep0_term tyProject_opname
 
-let do_tyApply_term = << do_tyApply{ 'poly_ty; 'ty_list } >>
-let do_tyApply_opname = opname_of_term do_tyApply_term
-let is_do_tyApply_term = is_2_dep0_term do_tyApply_opname
-let mk_do_tyApply_term = mk_2_dep0_term do_tyApply_opname
-let dest_do_tyApply_term = dest_2_dep0_term do_tyApply_opname
-
-let num_params_term = << num_params{ 'ty } >>
-let num_params_opname = opname_of_term num_params_term
-let is_num_params_term = is_1_dep0_term num_params_opname
-let mk_num_params_term = mk_1_dep0_term num_params_opname
-let dest_num_params_term = dest_1_dep0_term num_params_opname
-
 let tyDefPoly_term = << tyDefPoly{ t. 'ty['t] } >>
 let tyDefPoly_opname = opname_of_term tyDefPoly_term
 let is_tyDefPoly_term = is_0_dep0_1_dep1_term tyDefPoly_opname
@@ -348,12 +333,6 @@ let tyDefUnion_opname = opname_of_term tyDefUnion_term
 let is_tyDefUnion_term = is_str_1_dep0_term tyDefUnion_opname
 let mk_tyDefUnion_term = mk_str_1_dep0_term tyDefUnion_opname
 let dest_tyDefUnion_term = dest_str_1_dep0_term tyDefUnion_opname
-
-let nth_unionCase_term = << nth_unionCase{ 'n; 'union_def } >>
-let nth_unionCase_opname = opname_of_term nth_unionCase_term
-let is_nth_unionCase_term = is_2_dep0_term nth_unionCase_opname
-let mk_nth_unionCase_term = mk_2_dep0_term nth_unionCase_opname
-let dest_nth_unionCase_term = dest_2_dep0_term nth_unionCase_opname
 
 let idOp_term = << idOp >>
 let idOp_opname = opname_of_term idOp_term

@@ -1,5 +1,5 @@
 (*
- * The Mfir_ty module declares terms to represent the FIR type system.
+ * The Mfir_bool module implements meta-booleans for the FIR theory.
  *
  * ------------------------------------------------------------------------
  *
@@ -31,54 +31,43 @@
  * @end[license]
  *)
 
-extends Mfir_int
-extends Mfir_list
+extends Base_theory
 
 open Tactic_type.Conversionals
+
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
 (*
- * Numbers.
+ * Constants.
  *)
 
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
+declare "true"
+declare "false"
 
 (*
- * Functions.
+ * Connectives.
  *)
 
-declare tyFun{ 'arg_type; 'res_type }
+declare "or"{ 'bool1; 'bool2 }
+declare "and"{ 'bool1; 'bool2 }
+declare "not"{ 'boolean }
 
 (*
- * Aggregate data.
+ * Case analysis.
  *)
 
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyArray{ 'ty }
-declare tyRawData
+declare ifthenelse{ 'test; 'true_case; 'false_case }
 
-(*
- * Polymorphism.
- *)
 
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ t. 'ty['t] }
-declare tyAll{ t. 'ty['t] }
-declare tyProject[i:n]{ 'var }
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
 
-(*
- * Type definitions.
- *)
-
-declare tyDefPoly{ t. 'ty['t] }
-declare unionCaseElt{ 'ty; 'boolean }
-declare unionCase{ 'elts }
-declare tyDefUnion[str:s]{ 'cases }
+topval reduce_and : conv
+topval reduce_or : conv
+topval reduce_not : conv
+topval reduce_ifthenelse_true : conv
+topval reduce_ifthenelse_false : conv

@@ -41,8 +41,8 @@
  * @end[doc]
  *)
 
-extends Base_theory
-extends Mfir_basic
+extends Mfir_int_set
+extends Mfir_list
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
@@ -58,6 +58,7 @@ open Tactic_type.Tacticals
 open Base_auto_tactic
 open Base_dtactic
 open Mfir_auto
+
 
 (**************************************************************************
  * Rules.
@@ -105,7 +106,7 @@ prim ty_atomEnum {| intro [] |} 'H :
 prim ty_atomRawInt 'H :
    sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, sign:s];
                                    tyRawInt[p:n, sign:s];
-                                   large_type } } -->
+                                   polyKind[0]{large_type} } } -->
    sequent [mfir] { 'H >- member{ 'i; rawintset_max[p:n, sign:s] } } -->
    sequent [mfir] { 'H >-
       has_type["atom"]{ atomRawInt[p:n, sign:s]{'i}; tyRawInt[p:n, sign:s] } }
@@ -120,7 +121,7 @@ prim ty_atomRawInt 'H :
  *)
 
 prim ty_atomVar 'H 'J :
-   sequent [mfir] { 'H; v: var_def{ 'ty; no_def }; 'J['v] >-
+   sequent [mfir] { 'H; v: var_def{ 'ty; 'd }; 'J['v] >-
       has_type["atom"]{ atomVar{'v}; 'ty } }
    = it
 
@@ -143,11 +144,114 @@ let resource auto += {
  * @begin[doc]
  * @modsubsection{Polymorphism}
  *
- * ...
+ * The atom $<< atomTyApply{ atomVar{'v}; 'u1; 'types } >>$ instantiates
+ * $<< atomVar{'v} >>$ at a list of types, where $<< atomVar{'v} >>$ should
+ * have a universal type.
  * @end[doc]
  *)
 
-(* XXX enter in the poly atom type rules. *)
+prim ty_atomTyApply 'H 'J :
+   (* The type of the atom must agree with what it thinks its own type is. *)
+   sequent [mfir] { 'H;
+                    v: var_def{ tyAll{ t. 'ty['t] }; 'd };
+                    'J['v] >-
+      type_eq{ 'u1; 'u2; polyKind[0]{ small_type } } } -->
+
+   (* The types being applied should be small. *)
+   sequent [mfir] { 'H;
+                    v: var_def{ tyAll{ t. 'ty['t] }; 'd };
+                    'J['v] >-
+      type_eq_list{ 'types; 'types; polyKind[0]{ small_type } } } -->
+
+   (* The type should correspond to the tyAll applied to the given types. *)
+   sequent [mfir] { 'H;
+                    v: var_def{ tyAll{ t. 'ty['t] }; 'd };
+                    'J['v] >-
+      type_eq{ 'u1;
+               do_tyApply{ tyAll{ t. 'ty['t] }; 'types };
+               polyKind[0]{ small_type } } } -->
+
+   (* Then the atom is well-typed. *)
+   sequent [mfir] { 'H;
+                    v: var_def{ tyAll{ t. 'ty['t] }; 'd };
+                    'J['v] >-
+      has_type["atom"]{ atomTyApply{ atomVar{'v}; 'u1; 'types };
+                        'u2 } }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_ty_atomTyApply i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_atomTyApply j k p
+
+let resource auto += {
+   auto_name = "d_ty_atomTyApply";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_atomTyApply;
+   auto_type = AutoNormal
+}
+
+(*!
+ * @begin[doc]
+ *
+ * The atom $<< atomTyPack{ 'var; 'u; 'types } >>$ is the introduction
+ * form for type packing.  A value is packaged with a list of types
+ * to form a value with an existential type.
+ * @end[doc]
+ *)
+
+prim ty_atomTyPack {| intro [] |} 'H :
+   sequent [mfir] { 'H >-
+      type_eq_list{ 'types; 'types; polyKind[0]{ small_type } } } -->
+   sequent [mfir] { 'H >-
+      type_eq{ 'u; tyExists{ t. 'ty['t] }; polyKind[0]{ small_type } } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ 'var; do_tyApply{tyExists{t. 'ty['t]}; 'types} } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomTyPack{ 'var; 'u; 'types };
+                        tyExists{ t. 'ty['t] } } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * The atom $<< atomTyUnpack{ atomVar{'v} } >>$ is the elimination
+ * form for type packing.  If $<< atomVar{'v} >>$ has an existential type
+ * $t$, then the type unpacking has a type equal to $t$ instantiated
+ * at the types from the original packing.
+ * @end[doc]
+ *)
+
+prim ty_atomTyUnpack 'H 'J:
+   sequent [mfir] { 'H;
+                    v: var_def{ tyExists{ t. 'ty['t] }; 'd };
+                    'J['v] >-
+      type_eq{ 'u;
+               instantiate_tyExists{ tyExists{ t. 'ty['t] }; 'v; 0 };
+               polyKind[0]{ large_type } } } -->
+   sequent [mfir] { 'H;
+                    v: var_def{ tyExists{ t. 'ty['t] }; 'd };
+                    'J['v] >-
+      has_type["atom"]{ atomTyUnpack{ atomVar{'v} }; 'u } }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_ty_atomTyUnpack i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_atomTyUnpack j k p
+
+let resource auto += {
+   auto_name = "d_ty_atomTyUnpack";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_atomTyUnpack;
+   auto_type = AutoNormal
+}
 
 (*!
  * @begin[doc]
@@ -176,4 +280,4 @@ prim ty_plusIntOp {| intro [] |} 'H :
  * @docoff
  *)
 
-(* TODO: write up the remaining unop/binop rules. *)
+(* XXX: write up the remaining unop/binop rules. *)

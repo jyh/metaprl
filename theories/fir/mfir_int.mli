@@ -1,5 +1,5 @@
 (*
- * The Mfir_ty module declares terms to represent the FIR type system.
+ * The Mfir_int module implements integers for the FIR theory.
  *
  * ------------------------------------------------------------------------
  *
@@ -31,10 +31,10 @@
  * @end[license]
  *)
 
-extends Mfir_int
-extends Mfir_list
+extends Mfir_bool
 
 open Tactic_type.Conversionals
+
 
 (**************************************************************************
  * Declarations.
@@ -44,41 +44,42 @@ open Tactic_type.Conversionals
  * Numbers.
  *)
 
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
+declare number[i:n]
 
 (*
- * Functions.
+ * Operations.
  *)
 
-declare tyFun{ 'arg_type; 'res_type }
+declare add{ 'num1; 'num2 }
+declare sub{ 'num1; 'num2 }
+declare mul{ 'num1; 'num2 }
+declare div{ 'num1; 'num2 }
+declare rem{ 'num1; 'num2 }
+declare minus{ 'num }
 
-(*
- * Aggregate data.
- *)
+declare int_eq{ 'num1; 'num2 }
+declare int_neq{ 'num1; 'num2 }
+declare int_lt{ 'num1; 'num2 }
+declare int_le{ 'num1; 'num2 }
+declare int_gt{ 'num1; 'num2 }
+declare int_ge{ 'num1; 'num2 }
 
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyArray{ 'ty }
-declare tyRawData
 
-(*
- * Polymorphism.
- *)
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
 
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ t. 'ty['t] }
-declare tyAll{ t. 'ty['t] }
-declare tyProject[i:n]{ 'var }
+topval reduce_add : conv
+topval reduce_sub : conv
+topval reduce_mul : conv
+topval reduce_div : conv
+topval reduce_rem : conv
+topval reduce_minus : conv
+topval reduce_numeral : conv
 
-(*
- * Type definitions.
- *)
-
-declare tyDefPoly{ t. 'ty['t] }
-declare unionCaseElt{ 'ty; 'boolean }
-declare unionCase{ 'elts }
-declare tyDefUnion[str:s]{ 'cases }
+topval reduce_int_eq : conv
+topval reduce_int_neq : conv
+topval reduce_int_lt : conv
+topval reduce_int_le : conv
+topval reduce_int_gt : conv
+topval reduce_int_ge : conv

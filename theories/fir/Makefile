@@ -12,9 +12,13 @@ OCAMLDEPFLAGS := -prl
 # Library files
 MPFILES := \
    mfir_auto \
-   mfir_basic \
+   mfir_bool \
+   mfir_int \
+   mfir_list \
+   mfir_int_set \
    mfir_ty \
    mfir_exp \
+   mfir_util \
    mfir_termOp_base \
    mfir_termOp \
    mfir_sequent \

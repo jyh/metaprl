@@ -43,8 +43,8 @@
  * @end[doc]
  *)
 
-extends Base_theory
 extends Mfir_ty
+
 
 (**************************************************************************
  * Declarations.
@@ -77,6 +77,7 @@ extends Mfir_ty
 (*
  * BUG: I don't think I need AtomFun.  So it's been dropped for now.
  *)
+
 
 (*!
  * @begin[doc]
@@ -118,6 +119,7 @@ declare rawIntOfRawIntOp[dest_prec:n, dest_sign:s, src_prec:n, src_sign:s]
 
 declare rawIntOfPointerOp[precision:n, sign:s]
 declare pointerOfRawIntOp[precision:n, sign:s]
+
 
 (*!
  * @begin[doc]
@@ -199,13 +201,14 @@ declare atan2Op[precision:n]
 declare eqEqOp
 declare neqEqOp
 
+
 (*!
  * @begin[doc]
  * @modsubsection{Atoms}
  *
  * Atoms represent values, including numbers, variables, and basic arithmetic.
  * Apart from arithmetic exceptions, such as division by zero, they are
- * functional; order of atom evaluation does not matter.
+ * functional; the order of atom evaluation does not matter.
  *
  * The term @tt[atomInt] corresponds to integers of type @hrefterm[tyInt]. The
  * term @tt[atomEnum] corresponds to constants of type @hrefterm[tyEnum].  The
@@ -231,8 +234,8 @@ declare atomVar{ 'var }
 (*!
  * @begin[doc]
  *
- * The @tt[atomTyApply] term is the polymorphic type application of an atom
- * @tt[atom] to a list of type arguments @tt[ty_list].  The subterm @tt[ty] is
+ * The term @tt[atomTyApply] is the polymorphic type application of an atom
+ * @tt[atom] to a list of type arguments @tt[ty_list].  The second subterm is
  * the type of the @tt[atomTyApply] atom.
  * @end[doc]
  *)
@@ -242,8 +245,8 @@ declare atomTyApply{ 'atom; 'ty; 'ty_list }
 (*!
  * @begin[doc]
  *
- * The @tt[atomTyPack] term abstracts a variable @tt[var] over a list of types
- * @tt[ty_list].  The subterm @tt[ty] is the type of the @tt[atomTyPack] atom.
+ * The term @tt[atomTyPack] abstracts a variable @tt[var] over a list of types
+ * @tt[ty_list].  The second subterm is the type of the @tt[atomTyPack] atom.
  * @end[doc]
  *)
 
@@ -252,7 +255,7 @@ declare atomTyPack{ 'var; 'ty; 'ty_list }
 (*!
  * @begin[doc]
  *
- * The @tt[atomTyUnpack] term is the elimination form for type abstraction.
+ * The term @tt[atomTyUnpack] is the elimination form for type abstraction.
  * The variable @tt[var] is instantiated with the types from the original pack
  * operation.
  * @end[doc]
@@ -272,6 +275,7 @@ declare atomTyUnpack{ 'var }
 declare atomUnop{ 'unop; 'atom }
 declare atomBinop{ 'binop; 'atom1; 'atom2 }
 
+
 (*!
  * @begin[doc]
  * @modsubsection{Allocation operators}
@@ -289,9 +293,9 @@ declare allocTuple[tc:s]{ 'ty; 'atom_list }
  * @begin[doc]
  *
  * The term @tt[allocUnion] is used to allocate a union value of type @tt[ty].
- * The union type is given by @tt[ty_var], and the case allocated is given by
- * @tt[case].  The values used to initialize the case are given by
- * @tt[atom_list].
+ * The union definition is given by @tt[ty_var], and the case allocated is
+ * given by @tt[case].  The list @tt[atom_list] contains the atoms used to
+ * initialize the case.
  * @end[doc]
  *)
 
@@ -316,6 +320,7 @@ declare allocVArray{ 'ty; 'atom1; 'atom2 }
  *)
 
 declare allocMalloc{ 'ty; 'atom }
+
 
 (*!
  * @begin[doc]
@@ -351,8 +356,7 @@ declare letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp['v] }
  *
  * The term @tt[tailCall] is a function call to the function given by
  * @tt[atom].  The arguments to the function are given by @tt[atom_list].
- * There is no way to bind the value returned by the function.  In practice,
- * functions have a return type of @tt{tyEnum[0]}, a void type.
+ * There is no way to bind the value returned by the function.
  * @end[doc]
  *)
 
@@ -377,7 +381,8 @@ declare matchExp{ 'atom; 'matchCase_list }
  * @begin[doc]
  *
  * The @tt[letAlloc] term is used to allocate a data aggregate using
- * @tt[alloc_op].
+ * @tt[alloc_op].  A pointer to the allocated area is bound to @tt[v]
+ * in @tt[exp].
  * @end[doc]
  *)
 
@@ -391,7 +396,7 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
  * and @tt[atom2] is an index into @tt[atom1].  The value at that location
  * should have type @tt[ty].  In the case of @tt[letSubscript], the value is
  * bound to @tt[v] in @tt[exp].  In the case of @tt[setSubscript], the value
- * is set to to @tt[atom3].
+ * is set to @tt[atom3].
  * @end[doc]
  *)
 
@@ -401,10 +406,10 @@ declare setSubscript{ 'atom1; 'atom2; 'ty; 'atom3; 'exp }
 (*!
  * @begin[doc]
  *
- * The term @tt[letGlobal] is used to bind a global variable @tt[label], of
- * type @tt[ty], to @tt[v] in @tt[exp]. The term @tt[setGlobal] is used to set
- * the value of a global variable @tt[label], of type @tt[ty], to the value
- * @tt[atom].
+ * The term @tt[letGlobal] is used to bind the value of global variable
+ * @tt[label], of type @tt[ty], to @tt[v] in @tt[exp]. The term @tt[setGlobal]
+ * is used to set the value of a global variable @tt[label], of type @tt[ty],
+ * to the value @tt[atom].
  * @end[doc]
  *)
 
@@ -414,6 +419,7 @@ declare setGlobal{ 'label; 'ty; 'atom; 'exp }
 (*!
  * @docoff
  *)
+
 
 (**************************************************************************
  * Display forms.
@@ -455,9 +461,19 @@ dform atomEnum_df : except_mode[src] ::
    atomEnum[bound:n]{ 'num } =
    bf["enum"] sub{slot[bound:n]} `"(" slot{'num} `")"
 
-dform atomRawInt_df : except_mode[src] ::
+dform atomRawInt_df1 : except_mode[src] ::
    atomRawInt[precision:n, sign:s]{ 'num } =
    bf["rawint"] sub{slot[precision:n]} sup{slot[sign:s]}
+      `"(" slot{'num} `")"
+
+dform atomRawInt_df2 : except_mode[src] ::
+   atomRawInt[precision:n, "signed"]{ 'num } =
+   bf["rawint"] sub{slot[precision:n]} sup{bf["signed"]}
+      `"(" slot{'num} `")"
+
+dform atomRawInt_df3 : except_mode[src] ::
+   atomRawInt[precision:n, "unsigned"]{ 'num } =
+   bf["rawint"] sub{slot[precision:n]} sup{bf["unsigned"]}
       `"(" slot{'num} `")"
 
 dform atomVar_df : except_mode[src] ::
@@ -466,17 +482,17 @@ dform atomVar_df : except_mode[src] ::
 
 dform atomTyApply_df : except_mode[src] ::
    atomTyApply{ 'atom; 'ty; 'ty_list } =
-   bf["ty_apply"] `"[" slot{'ty} `"]("
+   bf["apply"] `"[" slot{'ty} `"]("
       slot{'atom} `", " slot{'ty_list} `")"
 
 dform atomTyPack_df : except_mode[src] ::
    atomTyPack{ 'var; 'ty; 'ty_list } =
-   bf["ty_pack"] `"[" slot{'ty} `"]("
-      slot{'var} `", " slot{'ty_list}
+   bf["pack"] `"[" slot{'ty} `"]("
+      slot{'var} `", " slot{'ty_list} `")"
 
 dform atomTyUnpack_df : except_mode[src] ::
    atomTyUnpack{ 'var } =
-   bf["ty_unpack"] `"(" slot{'var} `")"
+   bf["unpack"] `"(" slot{'var} `")"
 
 dform atomUnop_df : except_mode[src] ::
    atomUnop{ 'unop; 'atom } =
@@ -524,7 +540,7 @@ dform letAtom_df : except_mode[src] ::
 dform letExt_df : except_mode[src] ::
    letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp } =
    pushm[0] szone push_indent bf["let "] slot{'v} `"=" hspace
-      szone slot[str:s] slot{'fun_args} `":"
+      szone slot[str:s] `"(" slot{'fun_args} `"):"
          tyFun{'fun_arg_types; 'fun_res_type} ezone popm hspace
       push_indent bf["in"] hspace
       szone slot{'exp} ezone popm

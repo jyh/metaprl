@@ -41,13 +41,13 @@
  * @end[doc]
  *)
 
-extends Base_theory
-extends Mfir_basic
+extends Mfir_list
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
 extends Mfir_tr_base
 extends Mfir_tr_types
+extends Mfir_tr_atom
 
 (*!
  * @docoff
@@ -58,6 +58,7 @@ open Tactic_type.Tacticals
 open Base_auto_tactic
 open Base_dtactic
 open Mfir_auto
+
 
 (**************************************************************************
  * Rules.
@@ -92,48 +93,38 @@ prim ty_store_tuple_normal {| intro [] |} 'H :
  *)
 
 prim ty_store_array1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
-   sequent [mfir] { 'H >- has_type["store"]{ 'tail; tyArray{'t} } } -->
-   sequent [mfir] { 'H >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
+   sequent [mfir] { 'H >- has_type["store"]{ nil; tyArray{'t} } }
    = it
 
 prim ty_store_array2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["store"]{ nil; tyArray{'t} } }
+   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
+   sequent [mfir] { 'H >- has_type["store"]{ 'tail; tyArray{'t} } } -->
+   sequent [mfir] { 'H >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
    = it
 
 (*!
  * @begin[doc]
  * @modsubsection{Functions}
  *
- * The typing rules for functions are straightforward.  Note that for
- * $<< polyFun{ x. 'f['x] } >>$ to be well-formed, $f$ must be a function.
- * These rules use the ``exp'' tag since in $<< lambda{ v. 'f['v] } >>$,
- * $f$ may be an expression.
+ * The typing rules for functions are straightforward.  These rules use the
+ * ``exp'' tag since in $<< polyFun{ x. 'f['x] } >>$ and
+ * $<< lambda{ x. 'f['x] } >>$, $f$ may be an expression.
  * @end[doc]
  *)
 
 prim ty_store_lambda {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- type_eq{ 'arg_type; 'arg_type; large_type } } -->
-   sequent [mfir] { 'H; a: var_def{ 'arg_type; no_def } >-
-      has_type["exp"]{ 'f['a]; 'res_type } } -->
+   sequent [mfir] { 'H >- type_eq{ 'u; 'u; polyKind[0]{large_type} } } -->
+   sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
+      has_type["exp"]{ 'f['a]; 't } } -->
    sequent [mfir] { 'H >-
-      has_type["exp"]{ lambda{ v. 'f['v] }; tyFun{ 'arg_type; 'res_type } } }
+      has_type["exp"]{ lambda{ x. 'f['x] }; tyFun{ 'u; 't } } }
    = it
 
-prim ty_store_polyFun1 {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
-      has_type["exp"]{ polyFun{ y. 'f['a; 'y] }; 'ty['a] } } -->
+prim ty_store_polyFun {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H; a: ty_def{ polyKind[0]{small_type}; no_def } >-
+      has_type["exp"]{ 'f['a]; 'ty['a] } } -->
    sequent [mfir] { 'H >-
-      has_type["exp"]{ polyFun{ x. polyFun{ y. 'f['x; 'y] } };
-                       tyAll{ t. 'ty['t] } } }
-   = it
-
-prim ty_store_polyFun2 {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
-      has_type["exp"]{ lambda{ y. 'f['a; 'y] }; 'ty['a] } } -->
-   sequent [mfir] { 'H >-
-      has_type["exp"]{ polyFun{ x. lambda{ y. 'f['x; 'y] } };
-                       tyAll{ t. 'ty['t] } } }
+      has_type["exp"]{ polyFun{ x. 'f['x] }; tyAll{ t. 'ty['t] } } }
    = it
 
 (*!
@@ -141,96 +132,57 @@ prim ty_store_polyFun2 {| intro [] |} 'H 'a :
  * @modsubsection{Union values}
  *
  * A value $<< union_val[i:n]{ 'tv; 'atom_list } >>$ belongs to a union type
- * $<< tyUnion{'tv; 'tyl; singleton{number[i:n]}} >>$ if the type is
- * well-formed, and if the atoms belong to the tuple space given by the $i$
- * case of $tv$.  We need two rules for union values in order to distinguish
- * between the cases when $tv$ is a polymorphic union definition, and when it
- * isn't.
+ * $<< tyUnion{'tv; 'tyl; singleton{number[i:n]}} >>$ if
+ * $<< tyUnion{'tv; 'tyl; singleton{number[i:n]}} >>$ is a
+ * well-formed type, and if the atoms belong to the tuple space given by the
+ * $i$th case of $tv$.
  * @end[doc]
  *)
 
-(*
- * Non-polymorphic case.
- *)
-
-prim ty_store_union1 'H 'J :
-   (* well-formedness of the union type. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ union_type[k:n]; tyDefUnion[str:s]{'cases} };
-                    'J['tv] >-
-      type_eq{ tyUnion{'tv; nil; singleton{number[i:n]}};
-               tyUnion{'tv; nil; singleton{number[i:n]}};
-               small_type } } -->
-
-   (* check that the atoms have the right types. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ union_type[k:n]; tyDefUnion[str:s]{'cases} };
-                    'J['tv] >-
-      has_type["union_atoms"]{'atom_list;
-                              nth_unionCase{number[i:n];
-                                            tyDefUnion[str:s]{'cases}}}} -->
-
-   (* then the union value is well-typed. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ union_type[k:n]; tyDefUnion[str:s]{'cases} };
-                    'J['tv] >-
-      has_type["store"]{ union_val[i:n]{ 'tv; 'atom_list };
-                         tyUnion{'tv; nil; singleton{number[i:n]}} }}
-   = it
-
-(*
- * Polymorphic case.
- *)
-
-prim ty_store_union2 'H 'J :
+prim ty_store_union 'H 'J :
    (* well-formedness of the union type. *)
    sequent [mfir] { 'H;
                     tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
-      type_eq{ tyUnion{'tv; cons{'a; 'b}; singleton{number[i:n]}};
-               tyUnion{'tv; cons{'a; 'b}; singleton{number[i:n]}};
-               small_type } } -->
+      type_eq{ tyUnion{'tv; 'tyl; singleton{number[i:n]}};
+               tyUnion{'tv; 'tyl; singleton{number[i:n]}};
+               polyKind[0]{small_type} } } -->
 
    (* check that the atoms have the right types. *)
    sequent [mfir] { 'H;
                     tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
-      has_type["union_atoms"]{'atom_list;
+      has_type["union_atoms"]{'atoms;
                               nth_unionCase{number[i:n];
                                             do_tyApply{tyDefPoly{t. 'ty['t]};
-                                                       cons{'a; 'b}}}}} -->
+                                                       'tyl}}}} -->
 
    (* then the union value is well-typed. *)
    sequent [mfir] { 'H;
                     tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
-      has_type["store"]{ union_val[i:n]{ 'tv; 'atom_list };
-                         tyUnion{'tv; cons{'a; 'b}; singleton{number[i:n]}} }}
+      has_type["store"]{ union_val[i:n]{ 'tv; 'atoms };
+                         tyUnion{ 'tv;
+                                  'tyl;
+                                  intset{ cons{ interval{number[i:n];
+                                                         number[i:n]};
+                                                nil } } } } }
    = it
 
 (*!
  * @docoff
  *)
 
-let d_ty_store_union1 i p =
+let d_ty_store_union i p =
    let j, k = Sequent.hyp_indices p i in
-      ty_store_union1 j k p
+      ty_store_union j k p
 
-let d_ty_store_union2 i p =
-   let j, k = Sequent.hyp_indices p i in
-      ty_store_union2 j k p
-
-let resource auto += [{
+let resource auto += {
    auto_name = "d_ty_store_union1";
    auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_ty_store_union1;
+   auto_tac = onSomeHypT d_ty_store_union;
    auto_type = AutoNormal
-}; {
-   auto_name = "d_ty_store_union2";
-   auto_prec = fir_auto_prec;
-   auto_tac = onSomeHypT d_ty_store_union2;
-   auto_type = AutoNormal
-}]
+}
 
 (*!
  * @begin[doc]
@@ -241,15 +193,15 @@ let resource auto += [{
  *)
 
 prim ty_store_union_atoms1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["union_atoms"]{ nil; nil } }
+   = it
+
+prim ty_store_union_atoms2 {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 'ty } } -->
    sequent [mfir] { 'H >- has_type["union_atoms"]{ 'tail; 'rest } } -->
    sequent [mfir] { 'H >-
       has_type["union_atoms"]{ cons{ 'elt; 'tail };
                                cons{ unionCaseElt{'ty; 'boolean}; 'rest } } }
-   = it
-
-prim ty_store_union_atoms2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["union_atoms"]{ nil; nil } }
    = it
 
 (*!

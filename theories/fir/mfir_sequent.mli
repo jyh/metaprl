@@ -33,7 +33,6 @@
 
 extends Base_theory
 
-open Tactic_type.Conversionals
 
 (**************************************************************************
  * Declarations.

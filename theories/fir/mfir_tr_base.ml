@@ -42,8 +42,9 @@
  * @end[doc]
  *)
 
-extends Base_theory
-extends Mfir_basic
+extends Mfir_bool
+extends Mfir_int
+extends Mfir_list
 extends Mfir_sequent
 
 (*!
@@ -51,6 +52,7 @@ extends Mfir_sequent
  *)
 
 open Base_dtactic
+
 
 (**************************************************************************
  * Rules.
@@ -73,8 +75,7 @@ prim ty_symmetric {| intro [] |} 'H :
 (*!
  * @begin[doc]
  *
- * Proofs of side-conditions require a proof of $<< "true" >>$, which we
- * take to be an axiom.
+ * The @tt[truth_intro] rule allows proofs of side-conditions to be completed.
  * @end[doc]
  *)
 
@@ -88,14 +89,12 @@ prim truth_intro {| intro [] |} 'H :
  * Type well-formedness judgments are expressed as a set of type
  * equality judgments.  The @tt[wf_small_type] rule allows any
  * $<< small_type >>$ type to be used as a $<< large_type >>$ type.
- * Type equality judgments are given for the $<< small_type >>$ kind
- * whenever possible.
  * @end[doc]
  *)
 
 prim ty_small_as_large {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 't1; 't2; small_type } } -->
-   sequent [mfir] { 'H >- type_eq{ 't1; 't2; large_type } }
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; polyKind[0]{small_type} } } -->
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; polyKind[0]{large_type} } }
    = it
 
 (*!
@@ -107,78 +106,59 @@ prim ty_small_as_large {| intro [] |} 'H :
  *)
 
 prim ty_atom_list1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom_list"]{ nil; nil } }
+   = it
+
+prim ty_atom_list2 {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
    sequent [mfir] { 'H >- has_type["atom_list"]{ 'tail; 'rest } } -->
    sequent [mfir] { 'H >-
       has_type["atom_list"]{ cons{ 'elt; 'tail }; cons{ 't; 'rest } } }
    = it
 
-prim ty_atom_list2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom_list"]{ nil; nil } }
-   = it
-
 (*!
  * @begin[doc]
  *
- * The next two rules are check that two lists of types are pointwise equal in
- * the specified kind.
+ * The next two rules are conviniences to check that two lists of types are
+ * pointwise equal in the specified kind.
  * @end[doc]
  *)
 
 prim wf_ty_list1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 'h1; 'h2; 'k } } -->
-   sequent [mfir] { 'H >- type_eq_list{ 't1; 't2; 'k } } -->
-   sequent [mfir] { 'H >- type_eq_list{ cons{'h1; 't1}; cons{'h2; 't2}; 'k } }
+   sequent [mfir] { 'H >- wf_kind{ 'k } } -->
+   sequent [mfir] { 'H >- type_eq_list{ nil; nil; 'k } }
    = it
 
 prim wf_ty_list2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- wf_kind{ 'k } } -->
-   sequent [mfir] { 'H >- type_eq_list{ nil; nil; 'k } }
+   sequent [mfir] { 'H >- type_eq{ 'h1; 'h2; 'k } } -->
+   sequent [mfir] { 'H >- type_eq_list{ 't1; 't2; 'k } } -->
+   sequent [mfir] { 'H >- type_eq_list{ cons{'h1; 't1}; cons{'h2; 't2}; 'k } }
    = it
 
 (*!
  * @begin[doc]
  * @modsubsection{Kind well-formedness}
  *
- * The well-formedness judgments for kinds are straightforward.  Note that
- * union definitions cannot define a negative number of cases.
- * @end[doc]
- *)
-
-prim wf_small_type {| intro [] |} 'H :
-   sequent [mfir] { 'H >- wf_kind{ small_type } }
-   = it
-
-prim wf_large_type {| intro [] |} 'H :
-   sequent [mfir] { 'H >- wf_kind{ large_type } }
-   = it
-
-prim wf_union_type {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_le{ 0; number[i:n] } } -->
-   sequent [mfir] { 'H >- wf_kind{ union_type[i:n] } }
-   = it
-
-(*!
- * @begin[doc]
- *
- * For the kind $<< polyKind[i:n]{ 'k } >>$, we require $i$ to be
- * non-negative and for $k$ to be one of the ``simple'' kinds above.
+ * Recall that in typing rules, all kinds are expressed using the
+ * @hrefterm[polyKind] term.  The well-formedness of this kind is
+ * straightforward.  Note that we do not allow nesting of @hrefterm[polyKind]
+ * terms.
  * @end[doc]
  *)
 
 prim wf_polyKind1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_lt{ 0; number[i:n] } } -->
+   sequent [mfir] { 'H >- int_le{ 0; number[i:n] } } -->
    sequent [mfir] { 'H >- wf_kind{ polyKind[i:n]{ small_type } } }
    = it
 
 prim wf_polyKind2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_lt{ 0; number[i:n] } } -->
+   sequent [mfir] { 'H >- int_le{ 0; number[i:n] } } -->
    sequent [mfir] { 'H >- wf_kind{ polyKind[i:n]{ large_type } } }
    = it
 
 prim wf_polyKind3 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_lt{ 0; number[i:n] } } -->
-   sequent [mfir] { 'H >- wf_kind{ union_type[j:n] } } -->
+   sequent [mfir] { 'H >- "and"{ int_le{ 0; number[i:n] };
+                                 int_le{ 0; number[j:n] } } } -->
    sequent [mfir] { 'H >- wf_kind{ polyKind[i:n]{ union_type[j:n] } } }
    = it
 

@@ -1,5 +1,6 @@
 (*
- * The Mfir_ty module declares terms to represent the FIR type system.
+ * The Mfir_util module defines terms and rewrites for working
+ * with the MetaPRL representation of the FIR.
  *
  * ------------------------------------------------------------------------
  *
@@ -33,52 +34,28 @@
 
 extends Mfir_int
 extends Mfir_list
+extends Mfir_ty
 
 open Tactic_type.Conversionals
+
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-(*
- * Numbers.
- *)
+declare offset
 
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
+declare do_tyApply{ 'poly_ty; 'ty_list }
+declare instantiate_tyExists{ 'ty; 'var; 'num }
+declare num_params{ 'ty }
+declare nth_unionCase{ 'n; 'union_def }
 
-(*
- * Functions.
- *)
 
-declare tyFun{ 'arg_type; 'res_type }
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
 
-(*
- * Aggregate data.
- *)
-
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyArray{ 'ty }
-declare tyRawData
-
-(*
- * Polymorphism.
- *)
-
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ t. 'ty['t] }
-declare tyAll{ t. 'ty['t] }
-declare tyProject[i:n]{ 'var }
-
-(*
- * Type definitions.
- *)
-
-declare tyDefPoly{ t. 'ty['t] }
-declare unionCaseElt{ 'ty; 'boolean }
-declare unionCase{ 'elts }
-declare tyDefUnion[str:s]{ 'cases }
+topval reduce_do_tyApply : conv
+topval reduce_instantiate_tyExists : conv
+topval reduce_num_params : conv
+topval reduce_nth_unionCase : conv

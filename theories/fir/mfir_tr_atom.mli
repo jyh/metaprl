@@ -35,8 +35,8 @@
  * @end[license]
  *)
 
-extends Base_theory
-extends Mfir_basic
+extends Mfir_int_set
+extends Mfir_list
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent

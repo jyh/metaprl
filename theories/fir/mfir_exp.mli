@@ -1,11 +1,5 @@
-(*!
- * @begin[doc]
- * @module[Mfir_exp]
- *
- * The @code{Mfir_exp} module declares terms to represent FIR expressions.
- * Expressions in the FIR consist of atoms, operators, and
- * the actual expression forms.
- * @end[doc]
+(*
+ * The Mfir_exp module declares terms to represent FIR expressions.
  *
  * ------------------------------------------------------------------------
  *
@@ -37,8 +31,8 @@
  * @end[license]
  *)
 
-extends Base_theory
 extends Mfir_ty
+
 
 (**************************************************************************
  * Declarations.

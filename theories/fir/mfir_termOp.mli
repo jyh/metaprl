@@ -32,7 +32,10 @@
  * @end[license]
  *)
 
-extends Mfir_basic
+extends Mfir_bool
+extends Mfir_int
+extends Mfir_int_set
+extends Mfir_list
 extends Mfir_ty
 extends Mfir_exp
 
@@ -68,11 +71,6 @@ val number_term : term
 val is_number_term : term -> bool
 val mk_number_term : Mp_num.num -> term
 val dest_number_term : term -> Mp_num.num
-
-val numeral_term : term
-val is_numeral_term : term -> bool
-val mk_numeral_term : term -> term
-val dest_numeral_term : term -> term
 
 val add_term : term
 val is_add_term : term -> bool
@@ -264,16 +262,6 @@ val is_tyProject_term : term -> bool
 val mk_tyProject_term : Mp_num.num -> term -> term
 val dest_tyProject_term : term -> Mp_num.num * term
 
-val do_tyApply_term : term
-val is_do_tyApply_term : term -> bool
-val mk_do_tyApply_term : term -> term -> term
-val dest_do_tyApply_term : term -> term * term
-
-val num_params_term : term
-val is_num_params_term : term -> bool
-val mk_num_params_term : term -> term
-val dest_num_params_term : term -> term
-
 val tyDefPoly_term : term
 val is_tyDefPoly_term : term -> bool
 val mk_tyDefPoly_term : string -> term -> term
@@ -293,11 +281,6 @@ val tyDefUnion_term : term
 val is_tyDefUnion_term : term -> bool
 val mk_tyDefUnion_term : string -> term -> term
 val dest_tyDefUnion_term : term -> string * term
-
-val nth_unionCase_term : term
-val is_nth_unionCase_term : term -> bool
-val mk_nth_unionCase_term : term -> term -> term
-val dest_nth_unionCase_term : term -> term * term
 
 val idOp_term : term
 val is_idOp_term : term -> bool

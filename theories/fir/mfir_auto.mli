@@ -1,6 +1,6 @@
 (*
- * The Mfir_auto module defines the basic constructs to automate the
- * FIR theory.
+ * The Mfir_auto module defines the basic constructs needed
+ * to automate the FIR theory.
  *
  * ------------------------------------------------------------------------
  *

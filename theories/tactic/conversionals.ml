@@ -160,6 +160,8 @@ let rec firstC = function
       conv
  | conv :: t ->
       conv orelseC firstC t
+ | [] ->
+      raise (RefineError ("firstC", StringError "empty argument list"))
 
 (*
  * Repeat the conversion until nothing more happens.

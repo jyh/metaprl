@@ -989,6 +989,15 @@ interactive_rw factor_out2 number[l:n] 'tleft number[r:n] 'tright :
 	('left >= 0) <-->
 	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright)
 
+interactive var_elim2 'v number[l:n] 'tleft number[r:n] 'tright :
+	[wf] sequent { <H> >- 'tleft in int } -->
+	[wf] sequent { <H> >- 'tright in int } -->
+	[wf] sequent { <H> >- 'v in int } -->
+	sequent { <H> >- number[l:n] *@ 'v -@ 'tright >= 0 } -->
+	sequent { <H> >- 'tleft -@ number[r:n] *@ 'v >= 0 } -->
+	[aux] sequent { <H> >- 'left +@ (number[r:n] *@ 'tright) = (number[l:n] *@ 'tleft) in int } -->
+	sequent { <H> >- 'left >= 0 }
+
 let rec rev_flatten = function
    h :: t ->
       List.rev_append h (rev_flatten t)
@@ -1192,7 +1201,13 @@ interactive_rw ge_mulMonoPosit_rw 'c :
    ('c in int) -->
    ('a >= 'b) <--> (('c *@ 'a) >= ('c *@ 'b))
 
-let scaleC n = ge_mulMonoPosit_rw n
+interactive_rw ge_mulMonoPosit2_rw 'c :
+   (0 < 'c) -->
+   ('a in int) -->
+   ('c in int) -->
+   ('a >= 0) <--> (('c *@ 'a) >= 0)
+
+let scaleC n = ge_mulMonoPosit2_rw n
 
 interactive ge_scaleAndWeaken 'c 'd :
    [wf] sequent { <H> >- 'a in int } -->
@@ -1212,7 +1227,14 @@ interactive ge_scaleAndWeaken2 number[k:n] number[c:n] :
 	sequent { <H> >- ((number[k:n] *@ 'a) +@ number[c:n]) >= (number[k:n] *@ 'b) } -->
    sequent { <H> >- 'a >= 'b }
 
-let scaleAndWeakenT k c = ge_scaleAndWeaken2 k c
+interactive ge_scaleAndWeaken3 number[k:n] number[c:n] :
+   [wf] sequent { <H> >- 'a in int } -->
+   [aux] sequent { <H> >- number[c:n] >= 0 } -->
+   [aux] sequent { <H> >- number[k:n] > number[c:n] } -->
+	sequent { <H> >- ((number[k:n] *@ 'a) +@ number[c:n]) >= 0 } -->
+   sequent { <H> >- 'a >= 0 }
+
+let scaleAndWeakenT k c = ge_scaleAndWeaken3 k c
 
 let endT i =
 	if !debug_omega then
@@ -1230,21 +1252,20 @@ let rec tree_stats h m mw s = function
 let rec source2hyp info src = funT (fun p ->
 match src with
  | Hyp i ->
-		rw normalize2C i thenMT endT 1
+		rw normalize2C i
  | Mul (tree, gcd) ->
-		rw ((scaleC (mk_number_term gcd)) thenC ge_normC) 0 thenMT
+		rw ((scaleC (mk_number_term gcd)) (*thenC ge_normC*)) 0 thenMT
 		source2hyp info tree
  | MulAndWeaken (tree, gcd, c) ->
 		scaleAndWeakenT (mk_number_term gcd) (mk_number_term c) thenMT
-		rw ge_normC 0 thenMT
+		(*rw ge_normC 0 thenMT*)
 		source2hyp info tree
  | Solve (v,c1,t1,l,c2,t2,u) ->
 		let cleft = term_of c1 in
 		let tleft = AF.term_of info u in
 		let cright = term_of c2 in
 		let tright = AF.term_of info l in
-		rw (factor_out2 cleft tleft cright tright) 0 thenMT
-		tryT (var_elim (VI.restore info v) thenMLT
+		tryT (var_elim2 (VI.restore info v) cleft tleft cright tright thenMLT
 			[source2hyp info t1; source2hyp info t2])
 )
 
@@ -1284,7 +1305,6 @@ let omegaCoreT = funT (fun p ->
 							(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
 							(mk_number_term num0))
 					thenLT [omegaAuxT info tree; rw ge_normC (-1)]
-					thenMT endT 2
 			)
 	 | Contradiction (i,f) ->
 			if !debug_omega then
@@ -1292,4 +1312,4 @@ let omegaCoreT = funT (fun p ->
 	 		omegaAuxT info (Hyp i)
 )
 
-let omegaT = preT thenMT omegaCoreT thenT rw normalizeC 0
+let omegaT = rwAll normalizeC thenMT preT thenMT omegaCoreT thenT rw normalizeC 0

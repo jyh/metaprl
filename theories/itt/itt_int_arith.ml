@@ -308,22 +308,13 @@ let arith_rels=[
 let rec is_arith_rel t =
 	let op=opname_of_term t in
    (List.mem op arith_rels) or
-   (if is_equal_term t then
-   	let (t',_,_)=dest_equal t in
-      alpha_equal t' <<int>>
-    else
-    	false) or
-   (if is_not_term t then
-   	let t'=dest_not t in
-      is_arith_rel t'
-    else
-    	false)
+   (is_equal_term t && (let (t',_,_)=dest_equal t in alpha_equal t' <<int>>)) or
+   (is_not_term t && is_arith_rel (dest_not t))
 
 let negativeHyp2ConclT = argfunT (fun i p ->
    let t=Sequent.nth_hyp p i in
 	if is_not_term t then
-   	let t'=dest_not t in
-      if is_arith_rel t' then
+      if is_arith_rel (dest_not t) then
       	thenLocalMT (dT i) arithRelInConcl2HypT
 		else
       	idT
@@ -513,9 +504,7 @@ let inject_coefC t =
    	let (a,b)=dest_add t in
       begin
       	if !debug_int_arith then
-         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush
-         else
-         	();
+         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush;
       	let aC=addrC [0] (mul_Id3C thenC
       							(repeatC (higherC mul_uni_AssocC)) thenC
       							(addrC [0] reduceC)
@@ -540,9 +529,7 @@ let rec inject_coefC t =
    	let (a,b)=dest_add t in
       begin
       	if !debug_int_arith then
-         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush
-         else
-         	();
+         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush;
       	let aC=addrC [0] (mul_Id3C thenC
       							(repeatC (higherC mul_uni_AssocC)) thenC
       							(addrC [0] reduceC)
@@ -643,9 +630,7 @@ let stripCoef t =
  *)
 let add_BubbleStepC tm =
   (if !debug_int_arith then
-		eprintf "\nadd_BubbleStepC: %a%t" print_term tm eflush
-   else
-      ();
+		eprintf "\nadd_BubbleStepC: %a%t" print_term tm eflush;
    if is_add_term tm then
       let (a,s) = dest_add tm in
          if is_add_term s then
@@ -653,9 +638,7 @@ let add_BubbleStepC tm =
 	       	if (is_number_term a) & (is_number_term b) then
                begin
                	if !debug_int_arith then
-							eprintf "add_BubbleStepC: adding numbers a b%t" eflush
-                  else
-                  	();
+							eprintf "add_BubbleStepC: adding numbers a b%t" eflush;
 	        			(add_AssocC thenC (addrC [0] reduceC)) thenC (tryC add_Id2C)
                end
 	       	else
@@ -669,9 +652,7 @@ let add_BubbleStepC tm =
             if (is_number_term a) & (is_number_term s) then
                begin
                	if !debug_int_arith then
-							eprintf "add_BubbleStepC: adding numbers a s%t" eflush
-                  else
-                  	();
+							eprintf "add_BubbleStepC: adding numbers a s%t" eflush;
 		       		reduceC
                end
 	    		else
@@ -682,9 +663,7 @@ let add_BubbleStepC tm =
    else
       begin
         	if !debug_int_arith then
-				eprintf "add_BubbleStepC: wrong term%t" eflush
-         else
-         	();
+				eprintf "add_BubbleStepC: wrong term%t" eflush;
 	      failC
       end
   )
@@ -865,7 +844,11 @@ let good_term t =
 
 (* Searches for contradiction among ge-relations
  *)
-let findContradRelT = funT (fun p ->
+let findContradRelT = 
+   let rec lprint ch = function
+      h::t -> (fprintf ch "%u " h; lprint ch t)
+    | [] -> fprintf ch "."
+   in funT (fun p ->
    let g=Sequent.goal p in
    let l = Arith.collect good_term g in
    let ar=Array.of_list l in
@@ -873,14 +856,9 @@ let findContradRelT = funT (fun p ->
       Arith.TG.Int (_,r),_ ->
          let aux3 i al = (ar.(i))::al in
          let rl = List.fold_right aux3 r [] in
-         (if !debug_int_arith then
-            let rec lprint ch ll =match ll with
-               h::t -> (fprintf ch "%u " h; lprint ch t)
-             | [] -> fprintf ch "."
-            in
-            eprintf "Hyps to sum:%a%t" lprint rl eflush
-          else ();
-         sumListT rl)
+         if !debug_int_arith then
+            eprintf "Hyps to sum:%a%t" lprint rl eflush;
+         sumListT rl
     | Arith.TG.Disconnected,_ ->
          raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found")))
 

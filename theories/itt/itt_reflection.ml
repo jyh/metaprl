@@ -507,7 +507,10 @@ interactive subterms_arity_wf1 {| intro [] |} :
  ************************************************************************)
 
 define unfold_depth: depth{'t} <-->
-   fix{ f. lambda{b. (1 +@ list_max{ map{'f; subterms{'b}} })} } 't
+   fix{ f. lambda{b. (1 +@ list_max{ map{lambda{x. 'f 'x}; subterms{'b}} })} } 't
+
+interactive_rw unroll_depth:
+   depth{'t} <--> 1 +@ list_max{ map{lambda{x.depth{'x}}; subterms{'t}}}
 
 dform depth_df : except_mode[src] :: depth{'t} =
    `"depth(" slot{'t} `")"

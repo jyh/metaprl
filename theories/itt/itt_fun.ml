@@ -63,9 +63,6 @@ open Itt_subtype
 open Itt_rfun
 open Itt_dfun
 
-extends Itt_prod (* because of FunctionExtensionality *)
-open Itt_prod
-
 (*
  * Show that the file is loading.
  *)

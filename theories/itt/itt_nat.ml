@@ -253,6 +253,10 @@ interactive list_max_wf {| intro [] |} :
    sequent { <H> >- 'l in list{nat} } -->
    sequent { <H> >- list_max{'l} in nat }
 
+interactive list_max_wf2 {| intro [AutoMustComplete] |} :
+   sequent { <H> >- 'l in list{nat} } -->
+   sequent { <H> >- list_max{'l} in int }
+
 interactive int_div_rem {| intro [] |} :
    sequent { <H> >- 'm in int } -->
    sequent { <H> >- 'k in int } -->

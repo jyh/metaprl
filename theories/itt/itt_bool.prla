@@ -15082,7 +15082,7 @@ B	b651	t651
 P	p652	Number 16206
 P	p653	Number 16356
 O	o653	location p652 p653
-P	p4717	String assert_decidable
+P	p4717	String assert_is_decidable
 O	o4717	rule p4717
 NItt_decidable	Itt_decidable	Itt_decidable NIL
 NItt_decidable!decidable	decidable	decidable Itt_decidable

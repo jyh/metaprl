@@ -195,21 +195,27 @@ dform tex_comment_item_df4 : tex_comment_item{comment_term{'t}} =
    `""
 
 dform tex_comment_item_df4 : tex_comment_item{comment_term{docoff}} =
-   izone `"\\kill\\end{tabbing}\n\\fi\\texoff{}\n\\iftex\\begin{tabbing}%" ezone
+   izone slot["raw", "\n\\end{tabbing}\\fi\\texoff{}\n\\iftex\\begin{tabbing}\n"] ezone
 
 dform tex_comment_item_df5 : tex_comment_item{comment_term{doc{'t}}} =
-   izone slot["raw", "\\kill\\end{tabbing}\n\\fi\\textrue\n"] ezone
+   izone slot["raw", "\n\\end{tabbing}\\fi\\textrue\n\n"] ezone
    't
-   izone `"\\iftex\\begin{tabbing}%" ezone
+   izone slot["raw","\\iftex\\begin{tabbing}\n"] ezone
 
 dform tex_comment_white_df1 : mode[tex] :: comment_white =
-   izone slot["raw", "\n"] ezone
+   izone slot["raw", " "] ezone
+
+dform tex_comment_white_df2 : mode[tex] :: cons{comment_white; cons{comment_white; 't}} =
+   izone slot["raw", "\n\n"] ezone slot{'t}
 
 (*
  * Plain version.
  *)
 dform normal_comment_white_df1 : except_mode[tex] :: comment_white =
    com_cbreak
+
+dform normal_comment_white_df2 : except_mode[tex] :: cons{comment_white; cons{comment_white; 't}} =
+   com_hbreak slot{'t}
 
 dform normal_doc_df2 : except_mode[tex] :: doc{'t} =
    `"@begin[doc]" com_hbreak 't com_hbreak `"@end[doc]"

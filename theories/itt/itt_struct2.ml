@@ -166,13 +166,11 @@ interactive cutMem 'H 'x 'v 's 'S bind{x.'T['x]} :
  * in the conclusion and replace them with $x$.
  *
  * This tactic is usually used when we have an assumption $s @in S$,
- * and want to use the elimination rule corresponding to S.
+ * and want to use the elimination rule corresponding to $S$.
  *
  * @end[doc]
  *)
 
-
-(*! docoff *)
 (*
 interactive cutEqWeak 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'v 'u :
    [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->

@@ -111,8 +111,7 @@ let mk_set_term = mk_dep0_dep1_term set_opname
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set_df1 : {x:'A | 'B} =
-   pushm[3] `"{ " bvar{'x} `":" slot{'A} `" | " slot{'B} `"}" popm
+dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
 
 (************************************************************************
  * RULES                                                                *

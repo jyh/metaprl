@@ -178,9 +178,7 @@ dform sep_df1 : mode[tex] :: math_sep{'x; 's; 'P} =
    izone `"{\\left\\{" ezone
    slot{'x}
    izone `"\\in_s " ezone
-   slot{'s}
-   izone `"\\mathrel{|}" ezone
-   slot{'P}
+   slot{'s} `"| " slot{'P}
    izone `"\\right\\}}" ezone
 
 dform restricted_df1 : mode[tex] :: math_restricted{'P} =

@@ -193,7 +193,7 @@ dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
 dform fun_df2 : "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
 
 dform fun_df3 : rfun{'A; f, x. 'B} =
-   "{" " " slot{bvar{'f}} `" | "  "fun"{'A; x. 'B} `" }"
+   "{" " " slot{bvar{'f}} mid  "fun"{'A; x. 'B} `" }"
 
 dform apply_df : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
    slot["lt"]{'f} " " slot["le"]{'a}

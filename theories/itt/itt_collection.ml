@@ -506,7 +506,7 @@ dform union_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: union{'X; 
    cup slot{'x} `":" slot{'X} `"." slot{'C}
 
 dform col_filter_df : except_mode[src] :: col_filter{'C; x.'P} =
-      pushm[3] `"< " bvar{'x} `":" slot{'C} `" | " slot{'P} `">" popm
+      pushm[3] `"< " bvar{'x} `":" slot{'C} mid slot{'P} `">" popm
 
 dform isect_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: "isect"{'S; s. 'C} =
    cap slot{'s} `":" slot{'S} `"." slot{'C}

@@ -160,6 +160,7 @@ declare Rightarrow
 declare Leftrightarrow
 declare ulcorner
 declare urcorner
+declare mid
 declare vdash
 declare integral
 declare cdot
@@ -691,6 +692,7 @@ dform rightarrow_df		: internal :: mode[tex] :: Rightarrow                = math
 dform leftrightarrow_df		: internal :: mode[tex] :: Leftrightarrow            = mathmacro["leftrightarrow"]
 dform ulcorner_df		: internal :: mode[tex] :: ulcorner                  = mathmacro["ulcorner"]
 dform urcorner_df		: internal :: mode[tex] :: urcorner                  = mathmacro["urcorner"]
+dform mid            : internal :: mode[tex] :: mid                       = `"|"
 dform vdash_df                  : internal :: mode[tex] :: vdash                     = mathmacro["vdash"]
 dform integral_df		: internal :: mode[tex] :: integral                  = mathmacro["int"]
 dform cdot_df                   : internal :: mode[tex] :: cdot                      = mathmacro["cdot"]
@@ -870,6 +872,7 @@ dform subz_df			: internal :: mode[tex] :: subz                      = izone `"_
 (*
  * Source
  *)
+dform mid_df : internal :: except_mode[tex] :: mid = `" | "
 dform leftarrow_df : internal :: mode[src] :: Leftarrow = `"<="
 dform leftrightarrow_df : internal :: mode[src] :: Leftrightarrow = `"<=>"
 dform rightarrow_df : internal :: mode[src] :: Rightarrow = `"=>"

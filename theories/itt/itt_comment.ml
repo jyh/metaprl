@@ -435,9 +435,7 @@ dform math_decide_df1 : mode[tex] :: math_decide{'x; 'y; 'a; 'z; 'b} =
    izone `"\\mathrel{\\bf with}" ezone
    math_inl{'y}
    izone `"\\rightarrow " ezone
-   slot{'a}
-   izone `"\\mathrel{|} " ezone
-   math_inr{'z}
+   slot{'a} `"|" math_inr{'z}
    izone `"\\rightarrow " ezone
    slot{'b}
    izone `"}" ezone
@@ -524,9 +522,7 @@ declare math_not{'A}
  *)
 dform math_rfun_df1 : mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
    izone `"\\left\\{" ezone
-   'f
-   izone `"\\mathrel{|}" ezone
-   'x
+   'f `"|" 'x
    izone `"\\colon " ezone
    'A
    izone `"\\rightarrow " ezone
@@ -652,7 +648,7 @@ dform fun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'x; '
    slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}
 
 dform fun_df3 : except_mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
-   "{" " " slot{bvar{'f}} `" | "  math_fun{'x; 'A; 'B} `" }"
+   "{" " " slot{bvar{'f}} mid math_fun{'x; 'A; 'B} `" }"
 
 dform apply_df1 : parens :: "prec"[prec_apply] :: except_mode[tex] :: math_apply{'f; 'a} =
    slot["lt"]{'f} " " slot["le"]{'a}
@@ -849,13 +845,11 @@ declare math_squash{'A}
  *)
 
 dform math_set_df1 : mode[tex] :: math_set{'x; 'A; 'B} =
-   izone `"{\\left\\{" ezone
+   izone `"\\left\\{" ezone
    slot{'x}
    izone `"\\colon " ezone
-   slot{'A}
-   izone `"\\mathrel{|} " ezone
-   slot{'B}
-   izone `"\\right\\}}" ezone
+   slot{'A} `"|" slot{'B}
+   izone `"\\right\\}" ezone
 
 dform math_squash_df1 : mode[tex] :: math_squash{'A} =
    izone `"\\sq{" ezone
@@ -866,7 +860,7 @@ dform math_squash_df1 : mode[tex] :: math_squash{'A} =
  * Normal mode
  *)
 dform set_df1 : except_mode[tex] :: math_set{'x; 'A; 'B} =
-   pushm[3] `"{ " bvar{'x} `":" slot{'A} `" | " slot{'B} `"}" popm
+   pushm[3] `"{" bvar{'x} `":" slot{'A} mid slot{'B} `"}" popm
 
 dform math_squash_df2 : except_mode[tex] :: math_squash{'A} = "[" 'A "]"
 

@@ -32,7 +32,7 @@ prim_rw unfold_inv_image: inv_image{'s; x. 'a['x]; 't} <-->
 let fold_inv_image = makeFoldC << inv_image{'s; x. 'a['x]; 't} >> unfold_inv_image
 
 dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
-   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} `" | " slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
+   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
 
 (*
  * Axioms for inverse image.

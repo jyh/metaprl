@@ -376,7 +376,7 @@ let cutC = Tactic_type.Conversionals.cutC
  * @item{pair; $(@bf{match}@space (a, b)@space @bf{with}@space u, v @rightarrow c[u, v]) @longleftrightarrow c[a, b]$}
  * @item{union; $(@bf{match}@space @i{inl}(a)@space @bf{with}@space
  *                @i{inl}(u) @rightarrow b[u]
- *                @mathrel{|} @i{inr}(v) @rightarrow c[v]) @longleftrightarrow b[a]$}
+ *                | @i{inr}(v) @rightarrow c[v]) @longleftrightarrow b[a]$}
  * @end[description]
  *
  * Each of the modules for functions (Section @reftheory[Itt_rfun]),
@@ -388,7 +388,7 @@ let cutC = Tactic_type.Conversionals.cutC
  * @tt{Itt_union} adds the @tt{reduceDecideInl} rewrite with
  * redex $(@bf{match}@space @i{inl}(a)@space @bf{with}@space
  *                @i{inl}(u) @rightarrow b[u]
- *                @mathrel{|} @i{inr}(v) @rightarrow c[v])$
+ *                | @i{inr}(v) @rightarrow c[v])$
  *
  * In modules that @tt{include} these three theories, the @tt{reduceC}
  * conversion will recursively search for applications of these three

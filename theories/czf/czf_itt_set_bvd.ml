@@ -35,10 +35,10 @@ interactive_rw reduce_set_bvd : set_bvd{collect{'T; x. 'f['x]}; x. 'a['x]} <-->
 let resource reduce += << set_bvd{collect{'T; x. 'f['x]}; x. 'a['x]} >>, reduce_set_bvd
 
 dform set_bvd_df : parens :: except_mode[src] :: set_bvd{'s; x. 'a} =
-   pushm[0] `"{" slot{'a} `" | " slot{'x} " " Nuprl_font!member `"s " slot{'s} `"}" popm
+   pushm[0] `"{" slot{'a} mid slot{'x} " " Nuprl_font!member `"s " slot{'s} `"}" popm
 
 dform setbvd_prop_df : parens :: except_mode[src] :: setbvd_prop{'s; x. 'p} =
-   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} `" | " slot{'p} `"}" popm
+   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'p} `"}" popm
 
 (*
  * Propertiess for set builder.

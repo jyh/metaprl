@@ -132,6 +132,7 @@ declare Rightarrow
 declare Leftrightarrow
 declare ulcorner
 declare urcorner
+declare mid
 declare vdash
 declare integral
 declare cdot

@@ -30,17 +30,17 @@ extends M_theory
  * Just for testing.
  *)
 interactive test_prog 'H :
-   sequent [m] { 'H; cont: exp >- compilable{CPS{AtomVar{'cont};
-                                  LetAtom{AtomInt[1:n]; v1.
-                                  LetAtom{AtomBinop{AddOp; AtomVar{'v1}; AtomInt[3]}; v2.
-                                  FunDecl{f.
-                                  FunDef{'f; AtomFun{v3.
-                                     LetPair{AtomVar{'v2}; AtomVar{'v3}; v4.
-                                     LetPair{AtomVar{'v1}; AtomVar{'v4}; v5.
-                                     LetSubscript{AtomVar{'v5}; AtomInt[0:n]; v6.
-                                     Return{AtomVar{'v6}}}}}};
-                                  TailCall{AtomFunVar{'f}; AtomInt[17]}}}}}}}
-               }
+   sequent [m] { 'H >-
+      compilable{
+         LetAtom{AtomInt[1:n]; v1.
+         LetAtom{AtomBinop{AddOp; AtomVar{'v1}; AtomInt[3]}; v2.
+         FunDecl{f.
+         FunDef{'f; AtomFun{v3.
+            LetPair{AtomVar{'v2}; AtomVar{'v3}; v4.
+            LetPair{AtomVar{'v1}; AtomVar{'v4}; v5.
+            LetSubscript{AtomVar{'v5}; AtomInt[0:n]; v6.
+            Return{AtomVar{'v6}}}}}};
+         TailCall{AtomFunVar{'f}; AtomInt[17]}}}}}} }
 
 interactive fib_prog 'H :
    sequent [m] { 'H; cont: exp >- compilable{CPS{AtomVar{'cont};

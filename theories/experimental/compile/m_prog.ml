@@ -206,7 +206,7 @@ interactive hoist_fundecl 'H :
    sequent [m] { 'H >- compilable{FunDecl{f. 'e['f]}} }
 
 interactive hoist_fundef 'H :
-   sequent [m] { 'H; w: def{'f; 'e1} >- 'e2 } -->
+   sequent [m] { 'H; w: def{'f; 'e1} >- compilable{'e2} } -->
    sequent [m] { 'H >- compilable{FunDef{'f; 'e1; 'e2}} }
 
 let hoistOnceT p =

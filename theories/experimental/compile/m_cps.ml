@@ -51,6 +51,7 @@ open Mp_resource
 open Simple_print
 open Term_match_table
 
+open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
@@ -258,10 +259,23 @@ let resource cps +=
 
      << LetClosure{'a1; 'a2; f. TailCall{AtomVar{'f}; 'a3}} >>, cps_opt_tailcall]
 
+(*!
+ * @begin[doc]
+ * The program is compilable if the CPS version is compilable.
+ * @end[doc]
+ *)
+interactive cps_prog 'H :
+   sequent [m] { 'H; cont: exp >-
+      compilable{FunDecl{init.
+                 FunDef{'init; AtomFun{cont. CPS{'cont; 'e}};
+                 TailCall{AtomFunVar{'init}; AtomVar{'cont}}}}} } -->
+   sequent [m] { 'H >- compilable{'e} }
+
 (*
  * Toplevel CPS conversion tactic.
  *)
-let cpsT = rw cpsC 0
+let cpsT p =
+   (cps_prog (hyp_count_addr p) thenT rw cpsC 0) p
 
 (*!
  * @docoff

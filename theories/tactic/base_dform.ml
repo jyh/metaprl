@@ -251,7 +251,7 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
 
 (*
  * @begin[doc]
- * The refiner uses a special rewpresentation for sequents that requires the
+ * The refiner uses a special representation for sequents that requires the
  * display form to be implemented in ML.
  * @end[doc]
  *)
@@ -287,10 +287,12 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_term buf NOParens (mk_so_var_term v values)
              | Hypothesis (v, a) ->
                   format_szone buf;
+                  format_pushm buf 0;
                   format_string buf v;
                   format_string buf ":";
                   format_space buf;
                   format_term buf NOParens a;
+                  format_popm buf;
                   format_ezone buf
          in
             format_hyp hyps (succ i) len
@@ -298,13 +300,20 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    let rec format_goal goals i len =
       if i <> len then
          let a = SeqGoal.get goals i in
-            if i = 0 then begin
-               format_hbreak buf "" " ";
-               format_term buf NOParens <<Nuprl_font!vdash>>;
-               format_space buf;
-            end else
-               format_hbreak buf "; " "";
+            if i = 0 then
+               begin
+                  format_hbreak buf "" " ";
+                  format_pushm buf 2;
+                  format_term buf NOParens <<Nuprl_font!vdash>>;
+                  format_string buf " ";
+               end
+            else
+               begin
+                  format_hbreak buf "; " "";
+                  format_pushm buf 2
+               end;
             format_term buf NOParens a;
+            format_popm buf;
             format_goal goals (succ i) len
    in
    let format term =

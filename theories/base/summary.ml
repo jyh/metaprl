@@ -6,6 +6,16 @@ include Perv
 include Nuprl_font
 include Base_dform
 
+open Printf
+open Debug
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading xyz%t" eflush
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -191,6 +201,9 @@ dform "summary_item"{'term} =
 
 (*
  * $Log$
+ * Revision 1.2  1998/04/24 02:43:18  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.1  1998/04/17 01:31:31  jyh
  * Editor is almost constructed.
  *

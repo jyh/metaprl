@@ -78,6 +78,9 @@
  * postponement queue if their world is backed out.
  *
  * $Log$
+ * Revision 1.5  1998/04/24 02:44:02  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.4  1998/04/21 20:58:10  jyh
  * Fixed typing problems introduced by refiner msequents.
  *
@@ -113,9 +116,18 @@
  *
  *)
 
+open Printf
+open Debug
 open Term
 open Term_template
 open Rewrite
+
+(*
+ * Debug statement.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Tactic_cache%t" eflush
 
 (************************************************************************
  * TYPES                                                                *

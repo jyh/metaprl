@@ -5,6 +5,7 @@
 
 include Itt_equal
 
+open Printf
 open Debug
 open Term
 open Rformat
@@ -12,6 +13,13 @@ open Sequent
 open Resource
 
 open Itt_equal
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_atom%t" eflush
 
 (* debug_string DebugLoad "Loading itt_atom..." *)
 
@@ -117,6 +125,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (token
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/24 02:43:21  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.3  1998/04/22 22:44:34  jyh
  * *** empty log message ***
  *

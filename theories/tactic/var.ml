@@ -2,6 +2,9 @@
  * NEw variable generation.
  *
  * $Log$
+ * Revision 1.2  1998/04/24 02:44:07  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.1  1997/04/28 15:52:45  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -19,7 +22,16 @@
  *
  *)
 
+open Printf
+open Debug
 open Ctype
+
+(*
+ * Debug statement.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Var%t" eflush
 
 (*
  * Split a varname into root, suffix

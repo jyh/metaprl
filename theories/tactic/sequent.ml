@@ -2,6 +2,9 @@
  * Utilities for tactics.
  *
  * $Log$
+ * Revision 1.3  1998/04/24 02:44:01  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.2  1998/04/21 19:55:16  jyh
  * Upgraded refiner for program extraction.
  *
@@ -22,8 +25,17 @@
  *
  *)
 
+open Printf
+open Debug
 open Term
 open Refine_sig
+
+(*
+ * Debug statement.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Sequent%t" eflush
 
 (*
  * Sequent operations.

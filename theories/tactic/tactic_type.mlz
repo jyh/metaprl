@@ -2,6 +2,7 @@
  * Define the common types.
  *)
 
+open Debug
 open Term
 open Refine
 open Filter_proof_type
@@ -42,6 +43,9 @@ type tactic_arg = tactic_argument Refine_sig.tactic_arg
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/24 02:44:04  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.4  1998/04/21 19:55:21  jyh
  * Upgraded refiner for program extraction.
  *

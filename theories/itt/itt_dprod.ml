@@ -8,6 +8,7 @@ include Tactic_type
 include Itt_equal
 include Itt_rfun
 
+open Printf
 open Debug
 open Term
 open Options
@@ -20,6 +21,13 @@ open Tacticals
 open Sequent
 open Itt_equal
 open Itt_subtype
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_dprod%t" eflush
 
 (* debug_string DebugLoad "Loading itt_dprod..." *)
 
@@ -341,6 +349,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/24 02:43:24  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.4  1998/04/22 22:44:40  jyh
  * *** empty log message ***
  *

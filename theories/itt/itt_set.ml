@@ -9,6 +9,7 @@ include Itt_unit
 include Itt_subtype
 include Itt_struct
 
+open Printf
 open Debug
 open Options
 open Term
@@ -22,6 +23,13 @@ open Itt_squash
 open Itt_struct
 open Itt_equal
 open Itt_subtype
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_set%t" eflush
 
 (* debug_string DebugLoad "Loading itt_set..." *)
 
@@ -318,6 +326,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/24 02:43:45  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.3  1998/04/22 22:45:08  jyh
  * *** empty log message ***
  *

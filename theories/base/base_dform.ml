@@ -2,6 +2,9 @@
  * Display forms for basic objects.
  *
  * $Log$
+ * Revision 1.2  1998/04/24 02:43:10  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.1  1997/04/28 15:51:54  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -25,9 +28,26 @@
  *
  *)
 
+open Printf
+open Debug
+
 open Term
 open Dform
 open Rformat
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading xyz%t" eflush
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading xyz%t" eflush
 
 (*
  * Display forms.

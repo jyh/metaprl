@@ -8,11 +8,19 @@ include Itt_prec
 include Itt_subtype
 include Itt_void
 
+open Printf
 open Debug
 open Term
 open Resource
 
 open Itt_void
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_srec%t" eflush
 
 (* debug_string DebugLoad "Loading itt_srec..." *)
 
@@ -180,6 +188,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (sreci
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/24 02:43:49  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.3  1998/04/22 22:45:16  jyh
  * *** empty log message ***
  *

@@ -7,6 +7,7 @@ include Tactic_type
 include Base_theory
 include Itt_squash
 
+open Printf
 open Debug
 open Opname
 open Term
@@ -18,6 +19,13 @@ open Resource
 
 open Tactic_type
 open Sequent
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_equal%t" eflush
 
 (* debug_string DebugLoad "Loading itt_equal..." *)
 
@@ -322,6 +330,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.6  1998/04/24 02:43:26  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.5  1998/04/22 22:44:43  jyh
  * *** empty log message ***
  *

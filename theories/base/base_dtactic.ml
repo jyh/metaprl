@@ -2,6 +2,9 @@
  * The D tactic performs a case selection on the conclusion opname.
  *
  * $Log$
+ * Revision 1.2  1998/04/24 02:43:12  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.1  1997/04/28 15:51:55  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -22,6 +25,9 @@
  *
  *)
 
+open Printf
+open Debug
+
 open Opname
 open Term
 open Refine_sig
@@ -30,6 +36,13 @@ open Simple_print
 
 open Tactic_type
 open Sequent
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading xyz%t" eflush
 
 (************************************************************************
  * TYPES                                                                *

@@ -9,6 +9,7 @@ include Itt_equal
 include Itt_void
 include Itt_set
 
+open Printf
 open Debug
 open Term
 open Refine_sig
@@ -21,6 +22,13 @@ open Var
 open Typeinf
 open Itt_void
 open Itt_equal
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_rfun%t" eflush
 
 (* debug_string DebugLoad "Loading itt_rfun..." *)
 
@@ -374,6 +382,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/24 02:43:43  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.4  1998/04/22 22:45:05  jyh
  * *** empty log message ***
  *

@@ -2,6 +2,9 @@
  * characters in the Nuprl font.
  *
  * $Log$
+ * Revision 1.3  1998/04/24 02:43:15  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.2  1998/04/17 01:31:25  jyh
  * Editor is almost constructed.
  *
@@ -24,6 +27,16 @@
  * This is the final version with the old syntax for terms.
  *
  *)
+
+open Printf
+open Debug
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading xyz%t" eflush
 
 (* Displays *)
 declare mathbbP

@@ -7,12 +7,20 @@ include Tactic_type
 
 include Itt_equal
 
+open Printf
 open Debug
 open Term
 open Refine
 open Resource
 
 open Sequent
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_soft%t" eflush
 
 (* debug_string DebugLoad "Loading itt_soft..." *)
 
@@ -44,6 +52,9 @@ let add_soft_abs dres eqcdres t rw =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/24 02:43:46  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.2  1998/04/22 22:45:11  jyh
  * *** empty log message ***
  *

@@ -2,6 +2,16 @@
  * These are the public pervasive terms.
  *)
 
+open Printf
+open Debug
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading xyz%t" eflush
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -29,6 +39,9 @@ dform "cons"{'car; 'cdr} =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/24 02:43:17  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.2  1998/04/23 20:04:49  jyh
  * Initial rebuilt editor.
  *

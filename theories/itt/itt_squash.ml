@@ -7,6 +7,9 @@
  *     sequent [it; it] { H >> T }
  *
  * $Log$
+ * Revision 1.4  1998/04/24 02:43:48  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.3  1998/04/22 22:45:13  jyh
  * *** empty log message ***
  *
@@ -22,6 +25,8 @@
 include Tactic_type
 include Sequent
 
+open Printf
+open Debug
 open Term
 open Term_stable
 open Refine_sig
@@ -29,6 +34,13 @@ open Resource
 
 open Tactic_type
 open Sequent
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_squash%t" eflush
 
 (************************************************************************
  * TERMS                                                                *

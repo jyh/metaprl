@@ -4,6 +4,9 @@
  * it is used to perform basic inference.
  *
  * $Log$
+ * Revision 1.4  1998/04/24 02:43:19  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.3  1998/04/22 22:44:31  jyh
  * *** empty log message ***
  *
@@ -18,12 +21,22 @@
 
 include Tactic_type
 
+open Printf
+open Debug
+
 open Term
 open Term_table
 open Refine_sig
 open Resource
 
 open Tactic_type
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading xyz%t" eflush
 
 (************************************************************************
  * TYPES                                                                *

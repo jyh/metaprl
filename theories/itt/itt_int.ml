@@ -9,6 +9,7 @@ include Itt_equal
 include Itt_rfun
 include Itt_logic
 
+open Printf
 open Debug
 open Term
 open Rformat
@@ -19,6 +20,13 @@ open Var
 open Sequent
 open Tacticals
 open Itt_equal
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_int%t" eflush
 
 (* debug_string DebugLoad "Loading itt_int..." *)
 
@@ -377,6 +385,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.6  1998/04/24 02:43:30  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.5  1998/04/22 22:44:48  jyh
  * *** empty log message ***
  *

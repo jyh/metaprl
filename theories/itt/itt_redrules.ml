@@ -1,5 +1,14 @@
+open Printf
+open Debug
 open Term
 open Evaluator
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_redrules%t" eflush
 
 include Itt_theory
 

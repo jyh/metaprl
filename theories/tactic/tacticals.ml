@@ -3,6 +3,8 @@
  *
  *)
 
+open Printf
+open Debug
 open Term
 open Refine_sig
 open Refine
@@ -11,6 +13,13 @@ open Filter_proof_type
 
 open Sequent
 open Tactic_type
+
+(*
+ * Debug statement.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Tacticals%t" eflush
 
 (************************************************************************
  * RULES                                                                *
@@ -750,6 +759,9 @@ let get_thinning_arg =
 
 (*
  * $Log$
+ * Revision 1.8  1998/04/24 02:44:06  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.7  1998/04/21 19:55:23  jyh
  * Upgraded refiner for program extraction.
  *

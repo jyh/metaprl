@@ -9,6 +9,7 @@ include Tactic_type
 include Itt_equal
 include Itt_subtype
 
+open Printf
 open Debug
 open Sequent
 open Term
@@ -17,6 +18,13 @@ open Resource
 open Tactic_type
 open Itt_equal
 open Itt_subtype
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Itt_void%t" eflush
 
 (*
  * incr_debug_level DebugMessage
@@ -141,6 +149,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/24 02:43:56  jyh
+ * Added more extensive debugging capabilities.
+ *
  * Revision 1.4  1998/04/22 22:45:28  jyh
  * *** empty log message ***
  *

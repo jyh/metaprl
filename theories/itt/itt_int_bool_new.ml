@@ -344,29 +344,29 @@ prim_rw mul_Assoc 'H :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
-   ('a *@ ('b *@ 'c)) <--> (('a *@ 'b) *@ 'c) 
+   ('a *@ ('b *@ 'c)) <--> (('a *@ 'b) *@ 'c)
 
 prim_rw mul_add_Distrib 'H :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
-   ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c)) 
+   ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c))
 
 prim_rw add_Id 'H :
    ('a IN int ) -->
-   'a <--> ('a +@ 0) 
+   'a <--> ('a +@ 0)
 
 prim_rw mul_Id 'H :
    ('a IN int ) -->
-   'a <--> (1 *@ 'a) 
+   'a <--> (1 *@ 'a)
 
 prim_rw mul_Zero 'H :
    ('a IN int ) -->
    (0 *@ 'a) <--> 0
- 
+
 prim_rw uni_add_inverse 'H :
    ('a IN int ) -->
-   ( 'a +@ uni_minus{ 'a } ) <--> 0 
+   ( 'a +@ uni_minus{ 'a } ) <--> 0
 
 (*
 rewrite sub_reduce 'H :
@@ -383,7 +383,7 @@ prim_rw unfold_sub :
 interactive_rw uni_add_Distrib 'H :
    ('a IN int ) -->
    ('b IN int ) -->
-   uni_minus{ ('a +@ 'b) } <--> ( uni_minus{ 'b } +@ uni_minus{ 'b } ) 
+   uni_minus{ ('a +@ 'b) } <--> ( uni_minus{ 'b } +@ uni_minus{ 'b } )
 
 interactive_rw uni_uni_reduce 'H :
    ('a IN int ) -->
@@ -401,21 +401,21 @@ interactive_rw lt_mulNegMono 'H 'c:
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
-   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'b) ; ('c *@ 'a)} 
+   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'b) ; ('c *@ 'a)}
 
 prim_rw rem_baseReduce 'H:
    (0 <= 'a ) -->
    ('a < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
-   ('a rem 'b) <--> 'a 
+   ('a rem 'b) <--> 'a
 
 prim_rw rem_indReduce 'H:
    (0 < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
-   ((('a *@ 'b) +@ 'c) rem 'b) <--> ('c rem 'b) 
+   ((('a *@ 'b) +@ 'c) rem 'b) <--> ('c rem 'b)
 
 interactive rem_wf 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
@@ -435,7 +435,7 @@ prim_rw div_indReduce 'H:
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
-   ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b)) 
+   ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b))
 
 interactive div_wf 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->

@@ -113,63 +113,64 @@ dform var_html_df : mode[html] :: var[v:v] =
    izone `"<font color=\"#114466\"><b>" ezone slot[v:s] izone `"</b></font>" ezone
 
 dform so_var2_df : var[v:v]{'x1; 'x2} =
-   szone var[v:v] "[" pushm[0] 'x1 ";" space 'x2 popm "]" ezone
+   szone var[v:v] "[" pushm[0] 'x1 ";"
+                      hspace 'x2 popm "]" ezone
 
 dform so_var3_df : var[v:v]{'x1; 'x2; 'x3} =
    szone var[v:v] "[" pushm[0] 'x1 ";"
-                       space 'x2 ";"
-                       space 'x3 popm "]" ezone
+                       hspace 'x2 ";"
+                       hspace 'x3 popm "]" ezone
 
 dform so_var4_df : var[v:v]{'x1; 'x2; 'x3; 'x4} =
    szone var[v:v] "[" pushm[0] 'x1 ";"
-                       space 'x2 ";"
-                       space 'x3 ";"
-                       space 'x4 popm "]" ezone
+                       hspace 'x2 ";"
+                       hspace 'x3 ";"
+                       hspace 'x4 popm "]" ezone
 
 dform so_var5_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5} =
    szone var[v:v] "[" pushm[0] 'x1 ";"
-                       space 'x2 ";"
-                       space 'x3 ";"
-                       space 'x4 ";"
-                       space 'x5 popm "]" ezone
+                       hspace 'x2 ";"
+                       hspace 'x3 ";"
+                       hspace 'x4 ";"
+                       hspace 'x5 popm "]" ezone
 
 dform so_var6_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6} =
    szone var[v:v] "[" pushm[0] 'x1 ";"
-                       space 'x2 ";"
-                       space 'x3 ";"
-                       space 'x4 ";"
-                       space 'x5 ";"
-                       space 'x6 popm "]" ezone
+                       hspace 'x2 ";"
+                       hspace 'x3 ";"
+                       hspace 'x4 ";"
+                       hspace 'x5 ";"
+                       hspace 'x6 popm "]" ezone
 
 dform so_var7_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
    szone var[v:v] "[" pushm[0] 'x1 ";"
-                       space 'x2 ";"
-                       space 'x3 ";"
-                       space 'x4 ";"
-                       space 'x5 ";"
-                       space 'x6 ";"
-                       space 'x7 popm "]" ezone
+                       hspace 'x2 ";"
+                       hspace 'x3 ";"
+                       hspace 'x4 ";"
+                       hspace 'x5 ";"
+                       hspace 'x6 ";"
+                       hspace 'x7 popm "]" ezone
 
 dform so_var8_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
    szone var[v:v] "[" pushm[0] 'x1 ";"
-                       space 'x2 ";"
-                       space 'x3 ";"
-                       space 'x4 ";"
-                       space 'x5 ";"
-                       space 'x6 ";"
-                       space 'x7 ";"
-                       space 'x8 popm "]" ezone
+                       hspace 'x2 ";"
+                       hspace 'x3 ";"
+                       hspace 'x4 ";"
+                       hspace 'x5 ";"
+                       hspace 'x6 ";"
+                       hspace 'x7 ";"
+                       hspace 'x8 popm "]" ezone
 
 dform so_var9_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
    szone var[v:v] "[" pushm[0] 'x1 ";"
-                       space 'x2 ";"
-                       space 'x3 ";"
-                       space 'x4 ";"
-                       space 'x5 ";"
-                       space 'x6 ";"
-                       space 'x7 ";"
-                       space 'x8 ";"
-                       space 'x9 popm "]" ezone
+                       hspace 'x2 ";"
+                       hspace 'x3 ";"
+                       hspace 'x4 ";"
+                       hspace 'x5 ";"
+                       hspace 'x6 ";"
+                       hspace 'x7 ";"
+                       hspace 'x8 ";"
+                       hspace 'x9 popm "]" ezone
 
 ml_dform bvar_df : bvar{var[v:v]} format_term buf = fun
    term ->
@@ -481,7 +482,7 @@ dform right_curly_df : internal :: "}" = `"}"
 dform dollar_df : internal :: "$" = `"$"
 dform left_brack_df : internal :: "[" = `"["
 dform right_brack_df : internal :: "]" = `"]"
-dform semicolor_df : internal :: ";" = `";"
+dform semicolon_df : internal :: ";" = `";"
 dform newline_df : internal :: "\\" = \newline
 
 (*

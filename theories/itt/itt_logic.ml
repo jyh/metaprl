@@ -536,11 +536,25 @@ dform not_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: "not"{'a} =
 dform not_df2 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
    `"not " slot["le"]{'a}
 
-dform implies_df : parens :: "prec"[prec_implies] :: implies{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!Rightarrow " " slot["lt"]{'b}
+(*
+ * Implication.
+ *)
+declare implies_df{'a}
 
+dform implies_df1 : parens :: "prec"[prec_implies] :: "implies"{'a; 'b} =
+   szone pushm[0] slot["le"]{'a} implies_df{'b} popm ezone
+
+dform implies_df2 : implies_df{."implies"{'a; 'b}} =
+   implies_df{'a} implies_df{'b}
+
+dform implies_df3 : implies_df{'a} =
+   hspace Nuprl_font!Rightarrow " " slot{'a}
+
+(*
+ * Bi-implication.
+ *)
 dform iff_df : parens :: "prec"[prec_iff] :: iff{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
+   slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["le"]{'b}
 
 (*
  * Disjunction.
@@ -602,13 +616,13 @@ dform cand_df3 : cand_df{'a} =
  * Quantifiers.
  *)
 dform all_df1 : except_mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
-   pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
+   szone pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm ezone
 
 dform all_df2 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    `"all " slot{'x} `": " slot{'A}`"." slot{'B}
 
 dform exists_df1 : except_mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
-   pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
+   szone pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm ezone
 
 dform exists_df2 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
   `"exists " slot{'x} `": " slot{'A} `"." slot{'B}

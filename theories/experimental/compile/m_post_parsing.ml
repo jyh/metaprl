@@ -85,7 +85,7 @@ doc <:doc<
  * Resource PP.
  *)
 let resource pp =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let ppTopC_env e =
    get_resource_arg (env_arg e) get_pp_resource

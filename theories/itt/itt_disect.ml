@@ -289,13 +289,11 @@ interactive disectEliminationRight (*{| elim [SelectOption 2] |}*) 'H :
 
 let disectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
-   try
-      let sel = get_sel_arg p in
-         if sel = 1 then disectEliminationLeft n thenT thinIfThinningT [-3;-1;n] else
-         if sel = 2 then disectEliminationRight n thenT thinIfThinningT [-3;-1;n] else
-            raise (RefineError ("disectElimination", StringError ("select option is out of range ([1,2])")))
-   with RefineError _ ->
-      disectEliminationT n)
+   match get_sel_arg p with
+      None -> disectEliminationT n
+    | Some 1 -> disectEliminationLeft n thenT thinIfThinningT [-3;-1;n]
+    | Some 2 -> disectEliminationRight n thenT thinIfThinningT [-3;-1;n]
+    | Some _ -> raise (RefineError ("disectElimination", StringError ("select option is out of range ([1,2])"))))
 
 let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 

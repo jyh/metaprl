@@ -81,7 +81,7 @@ doc <:doc<
    @docoff
 >>
 let resource spill =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let spillTopC_env e =
    get_resource_arg (env_arg e) get_spill_resource

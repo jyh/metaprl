@@ -1,52 +1,52 @@
-doc <:doc< 
+doc <:doc<
    @spelling{independentFunctionElimination}
-  
+
    @begin[doc]
    @module[Itt_fun]
-  
+
    The @tt{Itt_fun} module defines the non-dependent function type.
    The function type is @emph{derived} from the dependent-function
    type @hrefmodule[Itt_dfun], which is in turn derived from the
    very-dependent function @hrefmodule[Itt_rfun].
-  
+
    The non-dependent function $@fun{A; B}$ is the type of functions
    with domain $A$, and range $B$.  It is equivalent to the
    dependent function space $@fun{x; A; B}$, where $x$ is not
    bound in $B$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -84,10 +84,10 @@ let _ =
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The non-dependent function $@fun{A; B}$ is defined as the
    dependent function $@fun{x; A; B}$ (where $x$ is new).
    @end[doc]
@@ -109,11 +109,11 @@ let mk_fun_term = mk_dep0_dep0_term fun_opname
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The non-dependent function has an intensional type equality.
    @end[doc]
 >>
@@ -130,10 +130,10 @@ interactive independentFunctionType {| intro [] |} :
    [wf] sequent { <H>; x: 'A1 >- "type"{'B1} } -->
    sequent { <H> >- "type"{. 'A1 -> 'B1 } }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The propositional interpretation of the function space $@fun{A; B}$
    is the implication term @hrefterm[implies], $@implies{A; B}$.
    The proposition is true if it is a type, and for any proof of $A$,
@@ -145,10 +145,10 @@ interactive independentLambdaFormation {| intro [] |} :
    [main] ('b['z] : sequent { <H>; z: 'A >- 'B }) -->
    sequent { <H> >- 'A -> 'B }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The elements in the function space $@fun{A; B}$ are the
    @hrefterm[lambda] functions.  The space $@fun{A; B}$ must be a
    type, and the body of the function must be in $B$ for any argument
@@ -160,10 +160,10 @@ interactive independentLambdaEquality {| intro []; eqcd |} :
    [wf] sequent { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Extensionality}
-  
+
    The independent function retains the extensional membership
    equality of the dependent function type.  This rule is
    derived from the @hrefrule[functionExtensionality] rule.
@@ -176,10 +176,10 @@ interactive independentFunctionExtensionality ('C -> 'D) ('E -> 'F) :
    [wf] sequent { <H> >- 'g in 'E -> 'F } -->
    sequent { <H> >- 'f = 'g in 'A -> 'B }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    There are two elimination forms.  The @tt{independentFunctionElimination}
    rule is more appropriate for the propositional interpretation of the function
    space $@fun{A; B}$: if there is a proof of $A$, then there is also a proof
@@ -200,10 +200,10 @@ interactive independentFunctionElimination2 'H 'a :
    [main] sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
    sequent { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
-  
+
    Applications have an intensional equality; they are equal if their
    functions and arguments are equal.
    @end[doc]
@@ -213,13 +213,13 @@ interactive independentApplyEquality {| eqcd |} ('A -> 'B) :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    The function space is @emph{contravariant} in their domains,
    and @emph{covariant} in their ranges.
-  
+
    @docoff
    @end[doc]
 >>
@@ -250,7 +250,7 @@ interactive independentFunctionFormation :
 let d_apply_equalT = funT (fun p ->
    let _, app, app' = dest_equal (Sequent.concl p) in
    if
-      (try Sequent.get_bool_arg p "d_auto" with RefineError _ -> false) &&
+      ((Sequent.get_bool_arg p "d_auto") = (Some true)) &&
       (not (alpha_equal app app'))
    then raise generic_refiner_exn;
    let f, _ = dest_apply app in

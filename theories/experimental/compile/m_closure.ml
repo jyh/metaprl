@@ -85,7 +85,7 @@ doc <:doc<
    @end[doc]
 >>
 let resource closure =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let closureTopC_env e =
    get_resource_arg (env_arg e) get_closure_resource

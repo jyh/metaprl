@@ -99,9 +99,6 @@ let debug_arith_unfold =
 (*
  * RESOURCES USED BY arithT
  *)
-
-let identity x = x
-
 let extract_data tbl =
    let rw e =
       let t = env_term e in
@@ -110,7 +107,7 @@ let extract_data tbl =
             (* Find and apply the right tactic *)
             if !debug_arith_unfold then
                Printf.eprintf "Conversionals: lookup %a%t" debug_print t eflush;
-            snd (Term_match_table.lookup tbl t)
+            Term_match_table.lookup tbl Term_match_table.select_all t
          with
             Not_found ->
                raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
@@ -121,13 +118,14 @@ let extract_data tbl =
    in
       funC rw
 
-let process_arith_unfold_resource_rw_annotation = Rewrite.redex_and_conv_of_rw_annotation "arith_unfold"
+let process_arith_unfold_resource_rw_annotation =
+   Rewrite.redex_and_conv_of_rw_annotation "arith_unfold"
 
 (*
  * Resource.
  *)
 let resource arith_unfold =
-   Term_match_table.table_resource_info identity extract_data
+   Term_match_table.table_resource_info extract_data
 
 let arith_unfoldTopC_env e =
    Sequent.get_resource_arg (env_arg e) get_arith_unfold_resource

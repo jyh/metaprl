@@ -68,7 +68,7 @@ doc <:doc<
    @end[doc]
 >>
 let resource before_ra =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let before_raTopC_env e =
    get_resource_arg (env_arg e) get_before_ra_resource
@@ -79,7 +79,7 @@ let before_raC =
    repeatC (higherC before_raTopC)
 
 let resource after_ra =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let after_raTopC_env e =
    get_resource_arg (env_arg e) get_after_ra_resource

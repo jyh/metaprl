@@ -74,7 +74,7 @@ doc <:doc<
    @docoff
 >>
 let resource dead =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let deadTopC_env e =
    get_resource_arg (env_arg e) get_dead_resource

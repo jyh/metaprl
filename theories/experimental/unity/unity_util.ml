@@ -25,7 +25,7 @@
  * @end[license]
  *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -58,8 +58,6 @@ let debug_reduce =
 (*
  * Helper functions for resources like reduceC.
  *)
-let identity x = x
-
 let extract_data tbl =
    let rw e =
       let t = env_term e in

@@ -270,9 +270,7 @@ doc <:doc< @docoff >>
 let quotientIntroT = funT (fun p ->
    let _, a1, a2 = dest_equal (Sequent.concl p) in
    if alpha_equal a1 a2 then begin
-      if try Sequent.get_bool_arg p "d_auto"
-         with RefineError _ -> false
-      then
+      if (Sequent.get_bool_arg p "d_auto") = (Some true) then
          raise generic_refiner_exn;
       quotient_memberWeakEquality
    end else

@@ -442,6 +442,27 @@ interactive field_noDiv0 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
    sequent { <H> >- noDiv0{'f} }
 
 doc <:doc< @doc{ } >>
+interactive carNo0_car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   sequent { <H> >- carNo0{'f}^car Type }
+
+interactive carNo0_left_inv {| intro [intro_typeinf <<'f>>] |} field[i:l] :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   [wf] sequent { <H> >- 'a in carNo0{'f}^car } -->
+   sequent { <H> >- (carNo0{'f}^inv 'a) *[carNo0{'f}] 'a = carNo0{'f}^"1" in carNo0{'f}^car }
+
+interactive carNo0_left_id {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   [wf] sequent { <H> >- 'a in carNo0{'f}^car } -->
+   sequent { <H> >- carNo0{'f}^"1" *[carNo0{'f}] 'a = 'a in carNo0{'f}^car }
+
+interactive carNo0_assoc {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   [wf] sequent { <H> >- 'a in carNo0{'f}^car } -->
+   [wf] sequent { <H> >- 'b in carNo0{'f}^car } -->
+   [wf] sequent { <H> >- 'c in carNo0{'f}^car } -->
+   sequent { <H> >- ('a *[carNo0{'f}] 'b) *[carNo0{'f}] 'c = 'a *[carNo0{'f}] ('b *[carNo0{'f}] 'c) in carNo0{'f}^car }
+
 interactive field_carNo0_group {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- carNo0{'f} in group[i:l] }

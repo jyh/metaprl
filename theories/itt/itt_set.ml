@@ -1,53 +1,53 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_set]
-  
+
    The @tt[Itt_set] module defines a ``set'' type, or more precisely,
    it defines a type by quantified @emph{separation}.  The form of the type is
    $@set{x; T; P[x]}$, where $T$ is a type, and $P[x]$ is a type for
    any element $x @in T$.  The elements of the set type are those elements
    of $x @in T$ where the proposition $P[x]$ is true.
-  
+
    The set type is a ``squash'' type: the type is similar to the
    dependent product $x@colon T @times P[x]$ (Section @refmodule[Itt_dprod]),
    but the proof $P[x]$ is omitted (squashed).  The set type <<{x: 'T| 'P['x]}>>
    is always a subtype of $T$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
-  
+
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -64,6 +64,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
 open Dtactic
+open Auto_tactic
 
 open Itt_equal
 open Itt_subtype
@@ -78,10 +79,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{set} term defines the set type.
    @end[doc]
 >>
@@ -104,11 +105,11 @@ dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Equality and typehood}
-  
+
    The set type $@set{x; A; B[x]}$ is a type if $A$ is a type,
    and $B[x]$ is a type for any $x @in A$.  Equality of the set
    type is @emph{intensional}.  Two set types are equal only if their
@@ -129,10 +130,10 @@ prim setType {| intro [] |} :
    sequent { <H> >- "type"{.{ a:'A | 'B['a] }} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    Two terms $a_1$ and $a_2$ are equal in the set type $@set{a; A; B[a]}$
    if they are equal in $A$ and also $B[a_1]$ is true.
    @end[doc]
@@ -144,10 +145,10 @@ prim setMemberEquality {| intro []; eqcd |} :
    sequent { <H> >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    A set type $@set{x; A; B[x]}$ is true if there is an element $a @in A$
    where $B[a]$ is true.
    @end[doc]
@@ -158,10 +159,10 @@ interactive setMemberFormation {| intro [] |} 'a :
    [wf] sequent { <H>; z: 'A >- "type"{'B['z]} } -->
    sequent { <H> >- { x:'A | 'B['x] } }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    An assumption with a set type $u@colon @set{x; A; B[x]}$ asserts two facts:
    that $u @in A$ and $B[u]$.  However, the proof of $B[u]$ is unavailable.  The
    $@squash{B[u]}$ hypothesis states that $B[u]$ is true, but its proof is
@@ -173,10 +174,13 @@ prim setElimination {| elim [] |} 'H :
    sequent { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] } =
    't['u;it]
 
-doc <:doc< 
+interactive set_member {| nth_hyp |} 'H :
+   sequent { <H>; u: { x: 'A | 'B['x] }; <J['u]> >- 'u in 'A }
+
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    The set type $@set{x; A; B[x]}$ is always a subtype of $A$ if
    the set type is really a type.  This rule is added to the
    @hrefresource[subtype_resource].

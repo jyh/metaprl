@@ -1,56 +1,56 @@
-doc <:doc< 
+doc <:doc<
    @spelling{bool esquashT unhidden squashes}
-  
+
    @begin[doc]
    @module[Itt_esquash]
-  
+
    The @hrefterm[squash] operator in @hrefmodule[Itt_squash] theory
    allows us to ``squash'' (omit) the computational content
    of a proposition. But in many cases in addition to squashing
    the computational context we want to be able to squash the
    intensional term structure as well.
-  
+
    The @tt[Itt_esquash] module defines a generic squash term
    <<esquash{'P}>>.  The elements of the type are the trivial terms
    $@it$ (provided $P$ itself is non-empty), and two terms
    <<esquash{'P_1}>> and <<esquash{'P_2}>> have the @emph{extensional}
    equality $P_1 @Leftrightarrow P_2$.
-  
+
    For more information on the @tt[esquash] operator see @cite["Nog02a,Nog02b"].
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of Nuprl-Light, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Authors: Jason Hickey @email{jyh@cs.cornell.edu}
             Aleksey Nogin @email{nogin@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -71,10 +71,10 @@ open Auto_tactic
 open Itt_equal
 open Itt_squash
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt[esquash] operator @i{extensionally squashes} a proposition.
    @end[doc]
 >>
@@ -84,11 +84,11 @@ doc <:doc< @docoff >>
 dform esquash_df : except_mode[src] :: esquash{'P} =
    Nuprl_font!esquash{'P}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The @tt[esquash] term inhabits the type universe $@univ{i}$
    if the proposition $P$ is also in $@univ{i}$.
    @end[doc]
@@ -100,7 +100,7 @@ prim esquash_type {| intro [AutoMustComplete] |} :
 
 docoff
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Two squashed propositions <<esquash{'A}>> and <<esquash{'B}>>
    are equal if both are types, and if each one implies another.
@@ -119,10 +119,10 @@ prim esquash_univ :
    sequent { <H> >- esquash{'P} in univ[i:l] } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The <<esquash{'P}>> proposition is true if $P$ is true.
    However, this rule is too strong to add to the
    @hrefresource[intro_resource] directly.  Instead, the
@@ -135,10 +135,10 @@ prim esquash_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- esquash{'P} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The element in the <<esquash{'P}>> term is always the term
    $@it$.
    @end[doc]
@@ -148,7 +148,7 @@ prim esquash_elim {| elim [] |} 'H :
    sequent { <H>; x: esquash{'A}; <J['x]> >- 'C['x] } =
    't[it]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    It can also be formulated as an introduction rule.
    @end[doc]
@@ -157,7 +157,7 @@ interactive esquash_mem {| intro []; squash |} :
    sequent { <H> >- esquash{'A} } -->
    sequent { <H> >- it in esquash{'A} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
    When a proposition is a type (i.e, functional), its @tt[esquash] is
@@ -170,7 +170,7 @@ prim esquash :
    sequent { <H> >- squash{'P} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The following rule is equivalent to the previous one.
    @end[doc]
@@ -180,7 +180,7 @@ interactive unesquash 'H :
    sequent { <H>; x: squash{'P}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: esquash{'P}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The <<esquash{void}>> can not be inhabited.
    @end[doc]
@@ -195,10 +195,10 @@ interactive esquash_equal_intro :
    [main] sequent { <H>; x: 'P2 >- 'P1 } -->
    sequent { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    @begin[description]
    @item{@tactic[esquashT];
      The @tt[esquashT] 0 tactic applies the @hrefrule[esquash] rule and
@@ -214,14 +214,13 @@ let esq_exn = RefineError("Itt_esquash.esquashEqualT", StringError "esquash_univ
 
 let esquashEqualT = funT (fun p ->
    let in_esquash =
-      try Sequent.get_bool_arg p "esquash"
-      with RefineError _ -> false
+      (Sequent.get_bool_arg p "esquash") = (Some true)
    in
-   if is_member_term (Sequent.concl p) then 
+   if is_member_term (Sequent.concl p) then
       if not in_esquash && in_auto p then raise esq_exn else esquash_univ
    else if in_esquash then esquash_equal_intro else esquash_equal)
 
-let resource intro += 
+let resource intro +=
    (<<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, esquashEqualT))
 
 let esquashAutoT =

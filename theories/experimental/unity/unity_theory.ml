@@ -37,7 +37,7 @@ open Refiner.Refiner.Term
 open Term_match_table
 
 let resource test =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let testTopC_env e =
    get_resource_arg (env_arg e) get_test_resource

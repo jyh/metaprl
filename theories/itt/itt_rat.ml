@@ -59,11 +59,14 @@ doc <:doc< @docoff >>
 open Lm_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.RefineError
 
+open Tactic_type
 open Tactic_type.Tacticals
 open Top_conversionals
 open Dtactic
 
+open Itt_equal
 open Itt_struct
 open Itt_int_base
 open Itt_int_ext
@@ -321,10 +324,6 @@ interactive rationalsElimination {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; x: int; y: int; 'y>0; <J['a]> >- squash{'C[rat{'x;'y}]} } -->
    sequent { <H>; a: rationals; <J['a]> >- squash{'C['a]} }
 
-let resource intro += [
-	<<'x='y in rationals>>, wrap_intro (rwh unfold_rationals 0);
-	]
-
 interactive posnatEquality {| intro [] |} :
 	sequent { <H> >- 'a = 'b in int } -->
 	sequent { <H> >- 'a > 0 } -->
@@ -332,6 +331,25 @@ interactive posnatEquality {| intro [] |} :
 
 interactive rationals_wf {| intro [] |} :
 	sequent { <H> >- rationals Type }
+
+interactive rationals_mem_equality :
+   sequent { <H> >- 'x in rationals } -->
+   sequent { <H> >- 'y in rationals } -->
+   sequent { <H> >- "assert"{beq_rat{'x;'y}} } -->
+   sequent { <H> >- 'x='y in rationals }
+
+interactive rationals_mem :
+   sequent { <H> >- 'x in int * posnat } -->
+   sequent { <H> >- 'x in rationals }
+
+let rat_mem_introT = funT (fun p ->
+   let mem = is_member_term (Sequent.concl p) in
+      if ((Sequent.get_bool_arg p "d_auto") = (Some true)) && mem then
+         raise generic_refiner_exn;
+      if mem then rationals_mem else rationals_mem_equality)
+
+let resource intro +=
+   << 'x in rationals >>, ("rat_mem_introT", None, rat_mem_introT)
 
 interactive lt_bool_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'a in int } -->

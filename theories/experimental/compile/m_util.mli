@@ -34,7 +34,6 @@ open Tactic_type.Conversionals
 (*
  * Utilities.
  *)
-val identity : 'a -> 'a
 val extract_data : conv term_table -> conv
 val process_resource_annotation : 'a -> 'b -> 'c -> 'd -> 'e -> meta_term -> 'f -> term * 'f
 

@@ -298,10 +298,10 @@ interactive recordEqualOrt2 :
 
 let recordOrtT = funT (fun p ->
    let rrule =
-      try
-         let sel= get_sel_arg p in
-            if sel=1 then recordEqualOrt1 else  if sel=2 then recordEqualOrt2 else recordMemberOrt
-      with RefineError _ -> recordMemberOrt
+      match get_sel_arg p with
+         Some 1 -> recordEqualOrt1
+       | Some 2 -> recordEqualOrt2
+       | _ -> recordMemberOrt
    in
       rrule thenLT
          [idT;

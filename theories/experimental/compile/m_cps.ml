@@ -74,7 +74,7 @@ doc <:doc<
    @docoff
 >>
 let resource cps =
-   table_resource_info identity extract_data
+   table_resource_info extract_data
 
 let process_cps_resource_rw_annotation = redex_and_conv_of_rw_annotation "cps"
 

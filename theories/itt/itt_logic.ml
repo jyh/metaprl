@@ -1372,8 +1372,9 @@ let rec make_j_assums p goal len i =
 (* input a list_term of hyps,concl *)
 let base_jproverT def_mult = funT (fun p ->
    let mult_limit =
-      try Some (Sequent.get_int_arg p "jprover")
-      with RefineError _ -> def_mult
+      match Sequent.get_int_arg p "jprover" with
+         None -> def_mult
+       | Some _ as ml -> ml
    in
    let goal = Sequent.goal p in
    let seq = explode_sequent goal in

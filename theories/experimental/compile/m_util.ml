@@ -47,8 +47,6 @@ let debug_reduce =
 (*
  * Helper functions for resources like reduceC.
  *)
-let identity x = x
-
 let extract_data tbl =
    let rw e =
       let t = env_term e in
@@ -57,7 +55,7 @@ let extract_data tbl =
             (* Find and apply the right tactic *)
             if !debug_reduce then
                eprintf "M_util: lookup %a%t" debug_print t eflush;
-            snd (Term_match_table.lookup tbl t)
+            Term_match_table.lookup tbl Term_match_table.select_all t
          with
             Not_found ->
                raise (RefineError ("M_util.extract_data", StringTermError ("no reduction for", t)))

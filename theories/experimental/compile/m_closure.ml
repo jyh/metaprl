@@ -201,8 +201,6 @@ prim_rw close_exp :
    LetClosure{AtomFunVar{'f}; 'v; g.
    'e2['g]}}}
 
-(*
- * JYH: phobos goes into an infinite loop here.
 prim_rw ext_close_exp :
    <:desc<
       declare f in
@@ -217,7 +215,6 @@ prim_rw ext_close_exp :
       in
       let closure g = ^f(v) in
          e2[g]>>
- *)
 
 let closeC =
    repeatC (higherC close_exp)

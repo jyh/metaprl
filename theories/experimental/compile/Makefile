@@ -13,6 +13,8 @@ OCAMLDEPFLAGS := -prl
 MPFILES :=\
 	m_util\
 	m_ir\
+	m_ast\
+	m_post_parsing\
 	m_cps\
 	m_closure\
 	m_prog\

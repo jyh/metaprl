@@ -1,6 +1,9 @@
 (*
  * The M Abstract Syntax.
  *
+ * We perform currying and proper binding of mutually recursive
+ * functions.
+ *
  * ----------------------------------------------------------------
  * Copyright (C) 2003 Adam Granicz, Caltech
  *
@@ -27,16 +30,12 @@ Module M_ast
 // Define the term-set to be used.
 
 Terms -extend "M_ir" {
-   // Define our own list terms
-   declare mcons{'el; 'list}
-   declare mnil
-
-   // Binary operators
    declare AddOp
    declare SubOp
    declare MulOp
    declare DivOp
 
+   // These need to be added to the MetaPRL theory
    declare LeOp
    declare LtOp
    declare GeOp
@@ -44,27 +43,44 @@ Terms -extend "M_ir" {
    declare EqOp
    declare NeqOp
 
-   // Atoms
    declare AtomInt[n]
    declare AtomFun{'e}
    declare AtomBinop{'op; 'a1; 'a2}
    declare AtomVar{'v}
+   declare AtomFunVar{'v}
 
-   // Expressions
    declare LetAtom{'a; 'e}
    declare TailCall{'f; 'a}
    declare If{'a; 'e1; 'e2}
    declare LetPair{'a1; 'a2; 'e}
    declare LetSubscript{'a1; 'a2; 'e}
    declare SetSubscript{'a1; 'a2; 'a3; 'e}
+
+   declare FunDef{'e}
    declare FunDecl{'e}
-   declare FunDef{'f; 'e1}
    declare LetApply{'f; 'a; 'e}
    declare Return{'a}
 
+   declare LetClosure{'f; 'v; 'e}
+   declare CloseLambda{'e}
+   declare CloseApply{'a; 'e}
 }
 
+// The AST extensions.
+
+Terms -extend "M_ast" {
+   // Define our own list terms
+   declare mcons{'el; 'list}
+   declare mnil
+}
+
+// These terms must be eliminated by the end of the
+// informal post-parsing rewrites.
+
 Terms -extend "$" {
+   declare MutFuns{'funs; 'cont}
+   declare FunDef_prim{'params; 'body}
+   declare FunDefs_prim{'funs; 'bodies}
    declare bind_vars{'vars; 'e}
 }
 
@@ -80,13 +96,13 @@ Tokens -longest {
    ID = "[_a-zA-Z][_a-zA-Z0-9]*"    { __token__[p:s]{'pos} -> 'p }
    NUM = "[0-9]+"                   { __token__[p:s]{'pos} -> AtomInt[p:n] }
 
+   AND = "and"                      {}
    ELSE = "else"                    {}
    END = "end"                      {}
    FUN = "fun"                      {}
    IF = "if"                        {}
    IN = "in"                        {}
    LET = "let"                      {}
-   REC = "rec"                      {}
    THEN = "then"                    {}
 
    ARROW = "->"                     {}
@@ -121,12 +137,13 @@ Tokens -longest {
 // line have the same precendence.
 // This section is optional.
 
-%left prec_atom
+%left ID prec_atom
 %left ELSE
 %left LT LE GT GE EQ NEQ
 %left PLUS MINUS
 %left TIMES DIV REM
 %left LBRACK
+%left LPAREN
 %right prec_apply
 
 // Specify grammar.
@@ -135,23 +152,30 @@ Tokens -longest {
 Grammar -start exp {
    exp ::= LET ID<var[v:v]> EQ a<'a> IN exp<'e>
                                     => LetAtom{'a; v. 'e}
-    | LET ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => FunDecl{f. FunDef{'f; AtomFun{v. 'e1}; 'e2}}
-    | LET REC ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => FunDecl{f. FunDef{'f; AtomFun{v. 'e1}; 'e2}}
+//    | LET ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
+//                                    => FunDecl{f. FunDef{'f; AtomFun{v. 'e1}; 'e2}}
+    | LET funs<'e1> IN exp<'e2>     => MutFuns{'e1; 'e2}
     | LET ID<var[v:v]> EQ a<'a1> LBRACK a<'a2> RBRACK IN exp<'e>
                                     => LetSubscript{'a1; 'a2; v. 'e}
-    | LET ID<var[v:v]> EQ a<'f> LPAREN a<'a> RPAREN IN exp<'e>
-                                    => LetApply{'f; 'a; v. 'e}
+    | LET ID<var[v:v]> EQ a<'f> LPAREN a_list<'args> RPAREN IN exp<'e>
+                                    => LetApply{'f; 'args; v. 'e}
     | LET ID<var[v:v]> EQ LPAREN a<'a1> COMMA a<'a2> RPAREN IN exp<'e>
                                     => LetPair{'a1; 'a2; v. 'e}
-    | ID<var[f:v]> LPAREN a<'a> RPAREN %prec prec_apply
-                                    => TailCall{AtomVar{'f}; 'a}
+    | ID<var[f:v]> LPAREN a_list<'args> RPAREN %prec prec_apply
+                                    => TailCall{AtomVar{'f}; 'args}
     | IF a<'a> THEN exp<'e1> ELSE exp<'e2>
                                     => If{'a; 'e1; 'e2}
     | a<'a1> LBRACK a<'a2> RBRACK ASSIGN a<'a3> SEMI exp<'e>
                                     => SetSubscript{'a1; 'a2; 'a3; 'e}
     | a<'a> %prec prec_atom         => Return{'a}
+
+   funs ::= fun<FunDef_prim{var[f:v]; 'body}>
+                                    => FunDefs_prim{mcons{'f; mnil{}}; mcons{'body; mnil{}}}
+      | fun<FunDef_prim{var[f:v]; 'body}> AND funs<FunDefs_prim{'vars; 'bodies}>
+                                    => FunDefs_prim{mcons{'f; 'vars}; mcons{'body; 'bodies}}
+
+   fun ::= ID<var[f:v]> LPAREN id_list<'params> RPAREN EQ exp<'e>
+                                    => FunDef_prim{'f; bind_vars{'params; 'e}}
 
    a ::= NUM<'i>                    => 'i
       | ID<var[v:v]>                => AtomVar{'v}
@@ -169,9 +193,32 @@ Grammar -start exp {
       | a<'a1> EQ a<'a2>            => AtomBinop{EqOp{}; 'a1; 'a2}
       | a<'a1> NEQ a<'a2>           => AtomBinop{NeqOp{}; 'a1; 'a2}
 
+   a_list ::= a<'a>                 => mcons{'a; mnil{}}
+      | a<'a> COMMA a_list<'atoms>  => mcons{'a; 'atoms}
+
+   id_list ::= ID<var[v:v]>         => mcons{'v; mnil{}}
+      | ID<var[v:v]> COMMA id_list<'ids>
+                                    => mcons{'v; 'ids}
 }
 
-// Perform binding.
+// Perform binding of mutually recursive functions.
 Rewrites {
+   MutFuns{FunDefs_prim{'funvars; 'bodies}; 'rest} ->
+      FunDefs_prim{'funvars; 'funvars; 'bodies; 'rest}
+
+   FunDefs_prim{mnil{}; mnil{}; mnil{}; 'rest} ->
+      'rest
+   FunDefs_prim{mnil{}; mcons{var[f:v]; 'rest_funvars}; mcons{'body; 'bodies}; 'rest} ->
+      FunDef{'f; 'body; FunDefs_prim{mnil{}; 'rest_funvars; 'bodies; 'rest}}
+   FunDefs_prim{mcons{var[f:v]; 'rest_funvars}; 'funvars; 'bodies; 'rest} ->
+      FunDecl{f. FunDefs_prim{'rest_funvars; 'funvars; 'bodies; 'rest}}
+
 }
 
+// Perform binding of function parameters.
+Rewrites {
+   bind_vars{mnil{}; 'body} ->
+      'body
+   bind_vars{mcons{var[v:v]; 'vars}; 'body} ->
+      AtomFun{v. bind_vars{'vars; 'body}}
+}

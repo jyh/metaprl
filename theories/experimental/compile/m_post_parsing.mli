@@ -1,10 +1,10 @@
 (*
- * The general theory for the M language.
+ * Post-parsing transformations.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
+ * Copyright (C) 2003 Adam Granicz, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,59 +20,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Adam Granicz
+ * @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ast
-extends M_post_parsing
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends X86_asm
-extends M_x86
+extends M_ir
 
-open M_ast
-open M_post_parsing
-open M_cps
-open M_closure
-open M_prog
-open M_dead
-open M_inline
+open Refiner.Refiner.Term
+open Refiner.Refiner.RefineError
+open Mp_resource
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-let compileT =
-   (* Post-parsing translations *)
-   ppT
-
-   (* CPS conversion *)
-   thenT cpsT
-
-   (* Closure conversion *)
-   thenT closeT
-
-   (* Lift definitions to top level *)
-   thenT progT
-
-   (* Perform dead code elimination *)
-   thenT deadT
-
-   (* Perform inlining and constant folding *)
-   thenT inlineT
-
-   (* Another round of dead code elimination *)
-   thenT deadT
-
-(*!
- * @docoff
- *
- * -*-
- * Local Variables:
- * Caml-master: "compile"
- * End:
- * -*-
+(*
+ * PP transformer.
  *)
+declare PP{'e}
+
+(*
+ * PP resource
+ *)
+resource (term * conv, conv) pp
+
+(*
+ * For debugging.
+ *)
+topval ppTopC : conv
+topval ppC : conv
+
+topval ppT : tactic
+

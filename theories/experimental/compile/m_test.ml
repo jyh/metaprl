@@ -53,7 +53,7 @@ interactive fib_prog 'H :
                Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}};
       TailCall{AtomFunVar{'fib}; AtomInt[35:n]}}}}} }
 
-(*
+
 interactive ext_test_prog 'H :
    sequent [m] { 'H >- compilable{.<:ext<
                           let v1 = 1 in
@@ -64,7 +64,13 @@ interactive ext_test_prog 'H :
                                 v5
                           in
                              f(17)>>} }
-*)
+
+interactive ext_test_prog2 'H :
+   sequent [m] { 'H >- compilable{PP{.<:ext<
+                           let f (x, y) = g(y, x)
+                           and g (x, y) = x-y
+                           in
+                              f(1, 2)>>}} }
 
 (*!
  * @docoff

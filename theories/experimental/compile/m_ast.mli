@@ -1,10 +1,16 @@
-(*
- * The general theory for the M language.
+(*!
+ * @begin[doc]
+ * This file defines the terms needed to represent the M AST.
+ * The language is a superset of the M IR. So far, the only
+ * extension is tuples, which are used to encode function
+ * arguments.
+ *
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
+ * Copyright (C) 2003 Adam Granicz, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,30 +26,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Adam Granicz
+ * @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ast
-extends M_post_parsing
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends X86_asm
-extends M_x86
-
-open Tactic_type.Tacticals
-
-topval compileT : tactic
 
 (*!
- * @docoff
- *
- * -*-
- * Local Variables:
- * Caml-master: "compile"
- * End:
- * -*-
+ * @begin[doc]
+ * @parents
+ * @end[doc]
  *)
+extends M_util
+extends M_ir
+(*! @docoff *)
+
+(*!
+ * @begin[doc]
+ * We define our own tuple terms.
+ * @end[doc]
+ *)
+declare mnil
+declare mcons{'e; 'list}
+

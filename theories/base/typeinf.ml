@@ -4,6 +4,9 @@
  * it is used to perform basic inference.
  *
  * $Log$
+ * Revision 1.5  1998/04/24 19:39:13  jyh
+ * Updated debugging.
+ *
  * Revision 1.4  1998/04/24 02:43:19  jyh
  * Added more extensive debugging capabilities.
  *
@@ -36,7 +39,7 @@ open Tactic_type
  *)
 let _ =
    if !debug_load then
-      eprintf "Loading xyz%t" eflush
+      eprintf "Loading Typeinf%t" eflush
 
 (************************************************************************
  * TYPES                                                                *

@@ -8,7 +8,7 @@ open Term
  *)
 let _ =
    if !debug_load then
-      eprintf "Loading xyz%t" eflush
+      eprintf "Loading Evaluator%t" eflush
 
 type eval_rule = term  * (param' list -> term)
 

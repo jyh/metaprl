@@ -14,7 +14,7 @@ open Debug
  *)
 let _ =
    if !debug_load then
-      eprintf "Loading xyz%t" eflush
+      eprintf "Loading Summary%t" eflush
 
 (************************************************************************
  * TERMS                                                                *
@@ -201,6 +201,9 @@ dform "summary_item"{'term} =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/24 19:39:12  jyh
+ * Updated debugging.
+ *
  * Revision 1.2  1998/04/24 02:43:18  jyh
  * Added more extensive debugging capabilities.
  *

@@ -2,6 +2,9 @@
  * Display forms for basic objects.
  *
  * $Log$
+ * Revision 1.3  1998/04/24 19:39:06  jyh
+ * Updated debugging.
+ *
  * Revision 1.2  1998/04/24 02:43:10  jyh
  * Added more extensive debugging capabilities.
  *
@@ -40,14 +43,7 @@ open Rformat
  *)
 let _ =
    if !debug_load then
-      eprintf "Loading xyz%t" eflush
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   if !debug_load then
-      eprintf "Loading xyz%t" eflush
+      eprintf "Loading Base_dform%t" eflush
 
 (*
  * Display forms.

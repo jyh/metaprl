@@ -2,6 +2,9 @@
  * characters in the Nuprl font.
  *
  * $Log$
+ * Revision 1.4  1998/04/24 19:39:09  jyh
+ * Updated debugging.
+ *
  * Revision 1.3  1998/04/24 02:43:15  jyh
  * Added more extensive debugging capabilities.
  *
@@ -36,7 +39,7 @@ open Debug
  *)
 let _ =
    if !debug_load then
-      eprintf "Loading xyz%t" eflush
+      eprintf "Loading Nuprl_font%t" eflush
 
 (* Displays *)
 declare mathbbP

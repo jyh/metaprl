@@ -2,6 +2,9 @@
  * The D tactic performs a case selection on the conclusion opname.
  *
  * $Log$
+ * Revision 1.3  1998/04/24 19:39:07  jyh
+ * Updated debugging.
+ *
  * Revision 1.2  1998/04/24 02:43:12  jyh
  * Added more extensive debugging capabilities.
  *
@@ -42,7 +45,7 @@ open Sequent
  *)
 let _ =
    if !debug_load then
-      eprintf "Loading xyz%t" eflush
+      eprintf "Loading Base_dtactic%t" eflush
 
 (************************************************************************
  * TYPES                                                                *

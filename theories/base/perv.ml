@@ -10,7 +10,7 @@ open Debug
  *)
 let _ =
    if !debug_load then
-      eprintf "Loading xyz%t" eflush
+      eprintf "Loading Perv%t" eflush
 
 (************************************************************************
  * TERMS                                                                *
@@ -39,6 +39,9 @@ dform "cons"{'car; 'cdr} =
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/24 19:39:10  jyh
+ * Updated debugging.
+ *
  * Revision 1.3  1998/04/24 02:43:17  jyh
  * Added more extensive debugging capabilities.
  *

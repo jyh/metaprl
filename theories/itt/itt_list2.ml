@@ -42,6 +42,7 @@ doc <:doc< @doc{@parents} >>
 extends Itt_list
 extends Itt_logic
 extends Itt_bool
+extends Itt_struct2
 extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
@@ -364,6 +365,15 @@ interactive_rw reduce_append_nil {| reduce |} : append{nil; 'l2} <--> 'l2
 interactive_rw reduce_append_cons {| reduce |} :
    append{cons{'x; 'l1}; 'l2} <--> cons{'x; append{'l1; 'l2}}
 
+interactive_rw append_nil 'A :
+   ('l in list{'A}) -->
+   append{'l;nil} <--> 'l
+
+interactive_rw append_assoc 'A:
+   ('l1 in list{'A}) -->
+   append{append{'l1;'l2};'l3} <-->
+   append{'l1;append{'l2;'l3}}
+
 doc docoff
 
 let fold_append = makeFoldC << append{'l1; 'l2} >> unfold_append
@@ -519,30 +529,6 @@ doc docoff
 let fold_rev = makeFoldC << rev{'l} >> unfold_rev
 
 (************************************************************************
- * REDUCTION                                                            *
- ************************************************************************)
-
-(* We need a proper implementation of rewrites in order to do this.
-
-interactive_rw append_nil {| reduce |} 'A :
-   [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H> >- 'l in list{'A} } -->
-   sequent { <H>>- append{'l;nil} <--> 'l }
-
-interactive_rw rev_append {| reduce |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H> >- 'a in list{'A} } -->
-   [wf] sequent { <H> >- 'b in list{'A} } -->
-   sequent { <H>>- rev{append{'a;'b}} <--> append{rev{'b};rev{'a}} }
-
-interactive_rw rev2 {| reduce |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H> >- 'l in list{'A} } -->
-   sequent { <H>>- rev{rev{'l}} <--> 'l }
-
-*)
-
-(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -677,7 +663,17 @@ interactive replace_nth_wf {| intro [] |} :
 interactive rev_wf {| intro [] |} :
    [wf] sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- rev{'l} in list{'A} }
-doc <:doc< @docoff >>
+
+interactive_rw rev_append 'A :
+   ('a in list{'A}) -->
+   ('b in list{'A}) -->
+   rev{append{'a;'b}} <--> append{rev{'b};rev{'a}}
+
+doc <:doc< @doc{Double-reverse is identity.} >>
+
+interactive_rw rev2 'A :
+   ('l in list{'A}) -->
+   rev{rev{'l}} <--> 'l
 
 doc <:doc< 
    @begin[doc]

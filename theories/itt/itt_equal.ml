@@ -275,17 +275,17 @@ prec prec_type
 prec prec_equal
 
 dform equal_df : except_mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
-   szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member `" " slot{'T} popm ezone
+   szone pushm slot["le"]{'a} space `"= " slot["le"]{'b} space Nuprl_font!member `" " slot["le"]{'T} popm ezone
 
 dform equal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
-   szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
+   szone pushm slot["le"]{'a} space `"= " slot["le"]{'b} space `"in " slot["le"]{'T} popm ezone
 
 (* HACK! - this should be replaced with a proper I/O abstraction *)
 dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
-   szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
+   szone pushm slot["le"]{'x} space Nuprl_font!member hspace slot["le"]{'T} popm ezone
 
 dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
-   szone pushm slot{'x} space `"in" hspace slot{'T} popm ezone
+   szone pushm slot["le"]{'x} space `"in" hspace slot["le"]{'T} popm ezone
 
 dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: ('a Type) =
    math_type{'a}

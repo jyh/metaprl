@@ -61,6 +61,7 @@ extends Itt_squash
 extends Itt_struct
 doc <:doc< @docoff >>
 
+open Refiner.Refiner.RefineError
 open Tactic_type
 open Tactic_type.Tacticals
 
@@ -97,13 +98,26 @@ prim esquash_type {| intro [AutoMustComplete] |} :
    sequent { <H> >- "type"{esquash{'P}} } =
    it
 
+docoff
+
+let esquash_equal_exn =
+   RefineError("Esquash.esquash_equal*",StringError "not appropriate for membership goals, use esquash_univ instead")
+
+let equal_only_p require_complete p =
+   if is_member_term (Sequent.concl p) then
+      raise esquash_equal_exn;
+   require_complete
+
+let equal_only require_complete =
+   CondMustComplete (equal_only_p require_complete)
+
 doc <:doc< 
    @begin[doc]
    Two squashed propositions <<esquash{'A}>> and <<esquash{'B}>>
    are equal if both are types, and if each one implies another.
    @end[doc]
 >>
-prim esquash_equal {| intro [SelectOption 0]; eqcd |} :
+prim esquash_equal {| intro [equal_only false]; eqcd |} :
    [wf] sequent { <H> >- esquash{'P1} in univ[i:l] } -->
    [wf] sequent { <H> >- esquash{'P2} in univ[i:l] } -->
    sequent { <H>; esquash{'P1} >- esquash{'P2} } -->
@@ -185,7 +199,7 @@ doc <:doc<
 interactive esquash_void_elim {| elim [] |} 'H :
    sequent { <H>; x: esquash{void}; <J['x]> >- 'C['x] }
 
-interactive esquash_equal_intro {| intro [] |} :
+interactive esquash_equal_intro :
    [wf] sequent { <H> >- 'P1 in univ[i:l] } -->
    [wf] sequent { <H> >- 'P2 in univ[i:l] } -->
    [main] sequent { <H>; x: 'P1 >- 'P2 } -->

@@ -382,7 +382,8 @@ and solveCutT conv p =
  * Apply the rewrite.
  *)
 let rw conv i p =
-   eprintf "Rewrite start%t" eflush;
+   if !debug_rewrite then
+      eprintf "Rewrite start%t" eflush;
    let addr = Sequent.clause_addr p i in
    let x = apply (make_address []) addr conv p in
       if !debug_rewrite then

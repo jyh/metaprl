@@ -5,6 +5,7 @@
 
 open Printf
 open Nl_debug
+open String_set
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermShape
@@ -21,14 +22,6 @@ let debug_cache =
 (************************************************************************
  * TYPES                                                                *
  ************************************************************************)
-
-module StringOrd =
-struct
-   type t = string
-   let compare = compare
-end
-
-module StringSet = Fun_splay_set.Make (StringOrd)
 
 (*
  * This type is used for comparing terms.
@@ -289,10 +282,9 @@ struct
          t
 
    let create constants =
-      let constants = set_of_list StringSet.empty constants in
-         { cache_constants = constants;
-           cache_table = TermTable.create constants
-         }
+      { cache_constants = constants;
+        cache_table = TermTable.create constants
+      }
 
    (*
     * Check if a clause is subsumed by an existing entry.

@@ -11,6 +11,7 @@ include Itt_rfun
 
 open Printf
 open Nl_debug
+open String_set
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -389,7 +390,7 @@ let inf_decide (inf : typeinf_func) (decl : term_subst) (t : term) =
    let l, r = dest_union e' in
    let decl'', a' = inf ((x, l)::decl') a in
    let decl''', b' = inf ((y, l)::decl'') b in
-      unify decl''' [] a' b', a'
+      unify decl''' StringSet.empty a' b', a'
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)
 

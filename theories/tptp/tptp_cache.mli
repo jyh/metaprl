@@ -3,6 +3,8 @@
  * caches.
  *)
 
+open String_set
+
 open Refiner.Refiner.TermType
 
 (*
@@ -22,7 +24,7 @@ sig
     * The strings are the function and predicate symbols in
     * the logic.
     *)
-   val create : string list -> t
+   val create : StringSet.t -> t
 
    (*
     * A clause is "subsumed" when an existing entry is

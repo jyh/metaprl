@@ -8,6 +8,7 @@ include Tptp
 
 open Printf
 open Nl_debug
+open String_set
 
 open Refiner.Refiner
 open Refiner.Refiner.TermType
@@ -49,17 +50,6 @@ let debug_tptp_prove =
  ************************************************************************)
 
 (*
- * Sets for hyp lists.
- *)
-module StringOrd =
-struct
-   type t = string
-   let compare = compare
-end
-
-module StringSet = Fun_splay_set.Make (StringOrd)
-
-(*
  * Keep a list of the hyps in exploded form.
  *    the positive vars are the head constants
  *       of the positive disjuncts in the clause,
@@ -84,7 +74,7 @@ type tptp_clause_info =
  *)
 type tptp_info =
    { tptp_first_hyp : int;
-     tptp_constants : string list;
+     tptp_constants : StringSet.t;
      tptp_hyps : tptp_clause_info array;
      tptp_fail_cache : TptpCache.t ref
    }
@@ -222,6 +212,7 @@ let dest_hyps hyps =
                ()
       done
    in
+   let constants = set_of_list constants in
       { tptp_first_hyp = j;
         tptp_constants = constants;
         tptp_hyps = hyps';
@@ -341,7 +332,7 @@ let new_goal constants subst terms1 terms2 =
    let terms1 = List.map (fun t -> TermSubst.subst t terms vars) terms1 in
    let terms2 = List.map (fun t -> TermSubst.subst (negate_term t) terms vars) terms2 in
    let body = merge_term_lists terms1 terms2 in
-   let vars = List_util.subtract (free_vars_terms body) constants in
+   let vars = StringSet.not_mem_filt constants (free_vars_terms body) in
    let vars' = new_vars 1 [] vars in
    let varst = List.map mk_var_term vars' in
    let body = List.map (fun t -> TermSubst.subst t varst vars) body in
@@ -522,6 +513,7 @@ let resolveT i p =
    let _, hyp = Sequent.nth_hyp p i in
    let { sequent_hyps = hyps; sequent_goals = goals } = Sequent.explode_sequent p in
    let j, constants = first_clause hyps in
+   let constants = set_of_list constants in
    let hyp_info = dest_hyp hyp in
    let goal_info = dest_goal (SeqGoal.get goals 0) in
    let subst, terms1, terms2 = unify_term_lists constants goal_info.tptp_body hyp_info.tptp_body in

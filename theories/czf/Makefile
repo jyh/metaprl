@@ -55,7 +55,8 @@ MPFILES :=\
 	czf_itt_cyclic_group\
 	czf_itt_hom\
 	czf_itt_ker\
-	czf_itt_iso
+	czf_itt_iso\
+	czf_itt_kleingroup
 
 MLZFILES :=\
 	czf_itt_fol\

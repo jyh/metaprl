@@ -1,25 +1,25 @@
-doc <:doc< 
+doc <:doc<
    Define the architecture-specific part of the x86 backend.
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -894,7 +894,6 @@ let get_operands_mov inst rest src dst =
         code_rest  = [rest]
       }
 
-
 (*
  * Branches.
  *)
@@ -932,9 +931,10 @@ let get_operands_reserve inst args =
         code_rest = []
       }
 
-
-(* For multi-operand instructions that don't exist,
-   add an implicit move before the instruction.  *)
+(*
+ * For multi-operand instructions that don't exist,
+ * add an implicit move before the instruction.
+ *)
 let add_implicit_mov rest inst src dst =
    let inst = Inst (IMov (src, dst, inst)) in
    let code =
@@ -948,8 +948,10 @@ let add_implicit_mov rest inst src dst =
       inst, code
 
 
-(* get_operands1
-   Get the operands for an instruction with src = dst.  *)
+(*
+ * get_operands1
+ * Get the operands for an instruction with src = dst.
+ *)
 let get_operands1_mem inst rest src =
    { code_dst   = SymbolSet.empty;
      code_src   = src_regs src SymbolSet.empty;
@@ -970,9 +972,10 @@ let get_operands1_reg inst rest src dst =
    let _, code = add_implicit_mov code inst src dst in
       code
 
-
-(* get_operands2
-   Get the operands for an instruction with a separate src/dst *)
+(*
+ * get_operands2
+ * Get the operands for an instruction with a separate src/dst
+ *)
 let get_operands2_mem inst rest src dst =
    { code_dst   = SymbolSet.empty;
      code_src   = src_regs src (src_regs dst SymbolSet.empty);
@@ -993,10 +996,11 @@ let get_operands2_reg inst rest src1 src2 dst =
    let _, code = add_implicit_mov code inst src2 dst in
       code
 
-
-(* get_operands_mul
-   Construct the special case for MUL, where eax:edx are
-   destination registers, and eax is a source register. *)
+(*
+ * get_operands_mul
+ * Construct the special case for MUL, where eax:edx are
+ * destination registers, and eax is a source register.
+ *)
 let get_operands_mul inst rest src1 src2 src3 dst2 dst3 =
    let code =
       { code_dst   = SymbolSet.add (SymbolSet.singleton dst2) dst3;
@@ -1010,10 +1014,11 @@ let get_operands_mul inst rest src1 src2 src3 dst2 dst3 =
    let _, code = add_implicit_mov code inst src3 dst3 in
       code
 
-
-(* get_operands_cmp
-   Get operands for an instruction which reads both arguments
-   as its sources, but makes no modification and has no dst.  *)
+(*
+ * get_operands_cmp
+ * Get operands for an instruction which reads both arguments
+ * as its sources, but makes no modification and has no dst.
+ *)
 let get_operands_cmp inst rest src1 src2 =
    { code_dst   = SymbolSet.empty;
      code_src   = src_regs src1 (src_regs src2 SymbolSet.empty);
@@ -1021,7 +1026,6 @@ let get_operands_cmp inst rest src1 src2 =
      code_inst  = inst;
      code_rest  = [rest]
    }
-
 
 (* null_inst has no dst,src *)
 let get_operands_null inst rest =
@@ -1031,7 +1035,6 @@ let get_operands_null inst rest =
      code_inst  = inst;
      code_rest  = rest
    }
-
 
 let rec get_operands inst =
    let Inst inst' = inst in

@@ -51,7 +51,7 @@
  *
  * This theory also defines the @tactic[byDefT] tactic. @tt{byDefT }@i{conv}
  * (where @i{conv} is usially an @tt{unfold_} conversional) uses @i{conv}
- * (through @hreftactic[higherC]) on all the assumptions and on the goal and then
+ * (through @hrefconv[higherC]) on all the assumptions and on the goal and then
  * calls @hreftactic[autoT].
  * @end[doc]
  *

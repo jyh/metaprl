@@ -7,7 +7,7 @@
  * @begin[doc]
  * @theory[Base_dtactic]
  *
- * The @hreftactic[dT] tactic is the cornerstone of reasoning in
+ * The @tactic[dT] tactic is the cornerstone of reasoning in
  * most logics; it provides generic application of introduction
  * elimination reasoning.  The @hreftheory[Base_dtactic] defines a @emph{generic}
  * resource that can be used to add introduction and elimination reasoning.

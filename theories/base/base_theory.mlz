@@ -23,14 +23,14 @@
  * top-loop.  The @hreftheory[Base_auto_tactic] module
  * (Section @reftheory[Base_auto_tactic]) defines a resource for
  * defining the @hreftactic[trivialT] and @hreftactic[autoT]
- * tactics for automated reasoning.  The @hreftactic[Base_dtactic] module
+ * tactics for automated reasoning.  The @hreftheory[Base_dtactic] module
  * (Section @reftheory[Base_dtactic]) defines resources for adding
  * introduction and elimination reasoning to the @hreftactic[dT] tactic.
  *
  * The @tt{Base_theory} module itself defines no new primitives; it
  * simply bring together all the parts of the base logic into a unified
  * module.  Descendent theories (such as the @Nuprl type theory, Section
- * @reftheory[Itt_theory], and the first-order logic Section @reftheory[Fol])
+ * @reftheory[Itt_theory], and the first-order logic Section @reftheory[Fol_theory])
  * include the @hreftheory[Base_theory] directly.
  * @end[doc]
  *

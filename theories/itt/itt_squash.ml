@@ -21,7 +21,7 @@
  * Note that $x$ in this sequent stands not for a witness for $A$,
  * but just for $@it$.
  *
- * Squash types are needed to define set in @hreftheory[itt_set]. Also,
+ * Squash types are needed to define set in @hreftheory[Itt_set]. Also,
  * it can be argued (see @cite[KN01]) that it is consistent to use
  * @emph{classical} reasoning under @tt{squash} without losing
  * constructive content.
@@ -343,7 +343,7 @@ interactive squashFormation 'H :
  * @begin[doc]
  * @resources
  *
- * The squash resource keeps 3 kind of tactics, as described by the
+ * The @Comment!resource[squash_resource] keeps 3 kind of tactics, as described by the
  * @tt{squash_info} type. The $@tt{SqUnsquash}(T,@i{tac})$ is used when @i{tac i}
  * is capable turning @i{i}-th hypothesis from $@squash{T}$ into $T$.
  * The $@tt{SqStable}(T,t,@i{tac})$ variant is used when @i{tac} is capable
@@ -549,7 +549,7 @@ let resource squash += [
  * Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
  * in order for @tt[sqsquashT] to work.
  *
- * Both @tt[unsquashT] and @tt[sqsquashT] are added to @hrefresource[auto_resouce],
+ * Both @tt[unsquashT] and @tt[sqsquashT] are added to @hrefresource[auto_resource],
  * so all necessary squashing-unsquashing will be performed by @hreftactic[autoT]
  * whenever possible.
  * @docoff

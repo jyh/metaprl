@@ -64,7 +64,7 @@
  *
  * Alternative quotient formulations may be possible, but we have not
  * pursued this direction extensively.  Instead, we introduce set
- * equality in the @hreftheory[Itt_set_eq] module, together with
+ * equality in the @hreftheory[Czf_itt_eq] module, together with
  * explicit functionality predicates for set operators.  In addition,
  * we prove the functionality properties for all the primitive
  * set operations.

@@ -363,10 +363,10 @@ let cutC = Tactic_type.Conversionals.cutC
  * @begin[doc]
  * @resources
  *
- * @bf{The @Comment!resource[reduce] resource}
+ * @bf{The @Comment!resource[reduce_resource]}
  *
  * The @tt{reduce} resource provides a generic method for
- * defining @emph{evaluation}.  The @tt{reduceC} conversion
+ * defining @emph{evaluation}.  The @conv[reduceC] conversion
  * can be used to apply this evaluator.
  *
  * For example, the @Nuprl type theory describes several
@@ -382,7 +382,7 @@ let cutC = Tactic_type.Conversionals.cutC
  * Each of the modules for functions (Section @reftheory[Itt_rfun]),
  * tuples (Section @reftheory[Itt_dprod]), and union (Section @reftheory[Itt_union]),
  * defines an addition to the @hrefresource[reduce_resource]: the @hreftheory[Itt_rfun] adds
- * the @hrefresource[reduce_beta] rewrite with redex $(@lambda v. b[v])@space a$@; the
+ * the @hrefrewrite[reduce_beta] rewrite with redex $(@lambda v. b[v])@space a$@; the
  * @tt{Itt_dprod} adds the @tt{reduceSpread} rewrite with redex
  * $(@bf{match}@space (a, b)@space @bf{with}@space u, v @rightarrow c[u, v])$@; and the
  * @tt{Itt_union} adds the @tt{reduceDecideInl} rewrite with

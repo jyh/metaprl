@@ -10,7 +10,7 @@
  * the nondependent-function @hreftheory[Itt_fun].
  *
  * A complete description of the semantics of the type is given
- * in Section @reftheory["issues-rfun"].  The type can be described
+ * in @cite["jyh:fool3"].  The type can be described
  * informally as follows.
  * The syntax of the type is $@rfun{f; x; A; B[f, x]}$.
  * The term $f$ represents the functions $f$ that are members of

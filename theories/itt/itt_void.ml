@@ -77,11 +77,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*! @terms *)
+(*! @doc{@terms} *)
 declare void
-(*! @docoff *)
-
 declare top (* we declare it here because we need it for type inference *)
+(*! @docoff *)
 
 let void_term = << void >>
 let void_opname = opname_of_term void_term

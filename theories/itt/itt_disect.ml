@@ -15,7 +15,7 @@
  * such that $x>2*x$.
  *
  * Do not confuse dependent intersection with $@isect{x;A;B[x]}$ defined
- * in the @hreftheory[itt_isect] theory.
+ * in the @hreftheory[Itt_isect] theory.
  * The latter type refers to the intersection of a family of types.
  *
  * In some sence the dependent intersection is similar to
@@ -356,7 +356,7 @@ interactive dinter_associativity 'H :
  * @thysubsection{Set type as dependent intersection}
  *
  * As an example of using dependent intersection we show that
- * sets (@hreftheory[itt_set]) are extensionally equal to dependent intersections.
+ * sets (@hreftheory[Itt_set]) are extensionally equal to dependent intersections.
  *
  * First let us define $[A]$ as $@set{x;Top;A}$.
  * @end[doc]

@@ -184,7 +184,7 @@
  *    elements.}}
  *
  * @item{Logic;
- *   {The modules in @hreftheory[Czf_itt_logic] define the first-order
+ *   {The modules in @hreftheory[Czf_itt_fol] define the first-order
  *    logic, including the restricted quantifiers $@dall{x; s; P[x]}$ and
  *    $@dexists{x; s; P[x]}$, and the unrestricted quantifiers
  *    $@sall{x; P[x]}$ and $@sall{x; P[x]}$.  The modules in the logic

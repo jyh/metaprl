@@ -247,7 +247,7 @@ type sub_resource_info =
  * @begin[doc]
  * @resources
  *
- * The @tt{Itt_subtype} module defines the @hrefresource[subtype_resource], which is
+ * The @tt{Itt_subtype} module defines the @resource[subtype_resource], which is
  * used to prove subtyping judgments.  The @tt{sub_resource_info} argument
  * requires two terms $t_1 @subseteq t_2$ that match the goal term, and
  * a tactic that can be used to refine goals of that form.

@@ -86,11 +86,6 @@ prim_rw reduce_sub :
 prim_rw reduce_mul :
    AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_prod[i:n, j:n]}
 
-(*
- * BUG: Inlining will fail if j = 0 here, I think.
- * We could end up with extraneous MetaInt terms in the program.
- *    --emre
- *)
 prim_rw reduce_div :
    AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_quot[i:n, j:n]}
 

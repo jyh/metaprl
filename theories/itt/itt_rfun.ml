@@ -423,7 +423,7 @@ prim rfunctionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
  * and their arguments are equal.
  * @end[doc]
  *)
-prim rfunction_applyEquality {| eqcd |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
+prim rfunction_applyEquality {| intro[]; eqcd |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =

@@ -67,6 +67,7 @@ open Base_dtactic
 open Perv
 
 open Itt_equal
+open Itt_struct
 
 
 (************************************************************************
@@ -169,6 +170,10 @@ let bisectEliminationT n p =
          raise (RefineError
            ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
 
+let bisectEliminationT n p =
+  let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+    (bisectEliminationT n thenT thinIfThinningT [-3;-1;n]) p
+
 let resource elim += (<<bisect{'A; 'B}>>,bisectEliminationT)
 
 (*! *)
@@ -196,13 +201,16 @@ interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'J 'b 'v :
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
 
 let bisectEliminationT n p =
+   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
    try
       let sel = get_sel_arg p in
       let a,u = maybe_new_vars2 p "a" "u" in
       let i, j = Sequent.hyp_indices p n in
-         if sel = 1 then bisectEliminationLeft i j a u p else
-         if sel = 2 then bisectEliminationRight i j a u p else
+      let r =
+         if sel = 1 then bisectEliminationLeft else
+         if sel = 2 then bisectEliminationRight else
             raise (RefineError ("bisectElimination", StringError ("select option is out of range ([1,2])")))
+      in (r i j a u thenT thinIfThinningT [-1;n]) p
    with RefineError ("get_attribute",_) ->
       try bisectEliminationT n p
       with RefineError ("get_attribute",_) ->
@@ -210,49 +218,6 @@ let bisectEliminationT n p =
             ("bisectElimination", StringTermError ("need a select option or a bind term:",<<bind{a,b.'C['a;'b]}>>)))
 
 let resource elim += (<<bisect{'A; 'B}>>,bisectEliminationT)
-
-
-interactive test 'H 'J :
-  sequent['ext] {'H; x:bisect{'A;'B}; 'J['x] >- 'x,('x,'x) }
-
-
-(*!
- * D tactic.
- * @docoff
- *)
-(*
-let elim_bisectT i p =
-   let j, k = Sequent.hyp_indices p i in
-   try
-      let c = get_with_arg p in
-      let u, v = maybe_new_vars2 p  "u" "v" in
-         bisectElimination j k c u v p
-   with RefineError _ ->
-      let sel = get_sel_arg p in
-      let a, b, u, v = maybe_new_vars4 p "a" "b" "u" "v" in
-         if sel = 1 then
-           bisectEliminationLeft j k a b u v p
-         else if sel = 2 then
-           bisectEliminationRight j k a b u v p
-         else
-           bisectElimination0 j k a b u v p
-
-let elim_bisectT i p =
-   let j, k = Sequent.hyp_indices p i in
-   let sel = get_sel_arg p in
-   let a, u = maybe_new_vars2 p "x" "u" in
-         if sel = 1 then
-           bisectEliminationLeft j k a u p
-         else if sel = 2 then
-           bisectEliminationRight j k a u p
-         else
-            raise (RefineError ("bisectElimination",StringError("Select option should be 1 or 2")))
-
-let bisect_term = << bisect{'A; 'B} >>
-
-let resource elim += (bisect_term, elim_bisectT)
-*)
-
 
 
 (*!

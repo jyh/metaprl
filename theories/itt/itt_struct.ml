@@ -291,6 +291,12 @@ let thinT i p =
    let i, j = Sequent.hyp_indices p i in
       thin i j p
 
+let thinIfThinningT hyps p =
+    (if get_thinning_arg p then
+       tryOnHypsT hyps thinT
+    else idT) p
+
+
 let thinMatchT assum p =
    let goal = Sequent.goal p in
    let index = Match_seq.match_hyps (explode_sequent goal) (explode_sequent assum) in

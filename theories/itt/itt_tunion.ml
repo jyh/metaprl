@@ -184,7 +184,9 @@ prim tunionElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'w 'z :
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] } =
    it
 
-interactive tunionElimination_eq {| elim [ThinOption thinT] |} 'H 'J 'x 'w 'z :
+let thinLastT n = (thinT (-1) thenT tryT (thinT n))
+
+interactive tunionElimination_eq {| elim [ThinOption thinLastT] |} 'H 'J 'x 'w 'z :
    sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- squash{'C['x]} }

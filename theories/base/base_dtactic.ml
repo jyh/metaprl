@@ -455,8 +455,10 @@ let rec get_elim_args_arg = function
 let tryThinT thinT v i p =
    if get_thinning_arg p then
       let i =
-         let v', _ = Sequent.nth_hyp p i in
-         if (v=v') then i else Sequent.get_decl_number p v
+         try
+            let v', _ = Sequent.nth_hyp p i in
+            if (v=v') then i else Sequent.get_decl_number p v
+         with RefineError _ -> Sequent.get_decl_number p v
       in
          tryT (thinT i) p
    else

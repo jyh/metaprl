@@ -148,10 +148,10 @@ interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z :
  *)
 
 
-interactive cutMem 'H 'J 'x 'v 's 'S bind{x.'T['x]} :
-  [assertion] sequent[squash]{ 'H; 'J >- 's IN 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S; 'J >- 'T['x] } -->
-   sequent ['ext] { 'H; 'J >- 'T['s]}
+interactive cutMem 'H 'x 'v 's 'S bind{x.'T['x]} :
+  [assertion] sequent[squash]{ 'H >- 's IN 'S } -->
+   [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
+   sequent ['ext] { 'H >- 'T['s]}
 
 (*!
  * @begin[doc]
@@ -250,7 +250,9 @@ let substConclT t p =
             let x = get_opt_var_arg "z" p in
                mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
-      substitution2 (Sequent.hyp_count_addr p) t bind p
+   let r = if get_thinning_arg p
+   then substitution else substitution2 in
+      r (Sequent.hyp_count_addr p) t bind p
 
 (*
  * Hyp substitution requires a replacement.
@@ -271,7 +273,8 @@ let substHypT i t p =
             mk_xbind_term z (var_subst t1 a z)
    in
    let i, j = Sequent.hyp_indices p i in
-      hypSubstitution2 i j t bind z p
+   let r = if get_thinning_arg p then hypSubstitution else hypSubstitution2 in
+     r i j t bind z p
 
 (*
  * General substition.
@@ -314,9 +317,9 @@ let revHypSubstT i j p =
 
 (* cutMem *)
 
-let letAtT i x_is_s_in_S p =
+let letT x_is_s_in_S p =
    let v = maybe_new_vars1 p "v"  in
-   let i, j = Sequent.hyp_split_addr p i in
+   let i = Sequent.hyp_count_addr p in
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
    let bind =
@@ -328,11 +331,10 @@ let letAtT i x_is_s_in_S p =
                mk_xbind_term z (var_subst (Sequent.concl p) s z)
    in
       if is_xbind_term bind then
-           cutMem i j xname v s _S bind p
+           (cutMem i xname v s _S bind thenMT thinIfThinningT [-1]) p
       else
            raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
 
-let letT  = letAtT (-1)
 
 (* cutEq *)
 
@@ -350,7 +352,7 @@ let assertEqT eq p =
    in
       if is_xbind_term bind then
          (try
-            cutEq  (Sequent.hyp_count_addr p) eq bind v u p
+            (cutEq  (Sequent.hyp_count_addr p) eq bind v u thenMT thinIfThinningT [-2;-1]) p
           with
                  RefineError _ ->
                     raise (RefineError ("assertEqT", StringTermError (" \"bind\" term: ", bind))))

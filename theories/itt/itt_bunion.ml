@@ -165,7 +165,9 @@ interactive bunionElimination {| elim [ThinOption thinT] |} 'H 'J 'y :
    [main] sequent [squash] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
    sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] }
 
-interactive bunionElimination_eq {| elim [ThinOption thinT] |} 'H 'J 'y :
+let thinLastT n = thinT (-1) thenT tryT (thinT n)
+
+interactive bunionElimination_eq {| elim [ThinOption thinLastT] |} 'H 'J 'y :
    [main] sequent [squash] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'A; u:'y='x in bunion{'A; 'B} >- squash{'C['y]} } -->
    [main] sequent [squash] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B; u:'y='x in bunion{'A; 'B} >- squash{'C['y]} } -->
    sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- squash{'C['x]} }

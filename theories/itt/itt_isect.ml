@@ -96,6 +96,7 @@ open Tactic_type.Tacticals
 open Base_dtactic
 
 open Itt_equal
+open Itt_struct
 open Itt_subtype
 open Perv
 
@@ -300,6 +301,9 @@ let intersectionEliminationT n p =
    let bind2 = mk_bind2_term x "HACK" bind in
       intersectionElimination_eq i j v a bind2 p
 
+let intersectionEliminationT n p =
+   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+     (intersectionEliminationT n thenT thinIfThinningT [-1;n]) p
 
 (*!
  * @begin[doc]
@@ -313,9 +317,11 @@ interactive intersectionElimination2 (*{| elim [] |}*) 'H 'J 'z 'v :
    sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x] >- 'T['x] }
 
 let intersectionEliminationT n p =
+   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
    let z,v = maybe_new_vars2 p "z" "v" in
    let i, j = Sequent.hyp_indices p n in
-     (intersectionElimination2 i j z v orelseT intersectionEliminationT n) p
+     ((intersectionElimination2 i j z v  thenT thinIfThinningT [-1;n])
+       orelseT intersectionEliminationT n) p
 
 let resource elim += (<<isect y: 'A. 'B['y]>>, intersectionEliminationT)
 

@@ -227,7 +227,6 @@ prim disectElimination {| elim [] |} 'H 'J  bind{a,b,HACK.'T['a;'b;'HACK]}:
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
    't['x; 'x]
-(*! docoff *)
 
 (*!
  * @begin[doc]
@@ -251,7 +250,13 @@ let disectCaseEqualityT t p =
    let tac = disectMemberCaseEquality2 i t orelseT disectMemberCaseEquality1 i t in
       tac p
 
-
+(*! docoff *)
+(* disectElimination_eq is derived from disectMemberCaseEquality1/2
+   (with the help of dintersectionTypeElimination).
+   Therefore we can state disectMemberCaseEquality1/2 as primitive.
+   Note that in pairwise functionality we do not need dintersectionTypeElimination
+   to derive disectElimination_eq.
+*)
 
 interactive disectElimination_eq {| elim [] |} 'H 'J  'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
    [main] sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
@@ -270,6 +275,10 @@ let disectEliminationT n p =
       else
          raise (RefineError
            ("disectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
+
+let disectEliminationT n p =
+   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+      (disectEliminationT n thenT thinIfThinningT [-3;-1;n]) p
 
 let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
 
@@ -293,12 +302,13 @@ interactive disectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'J 'a 'u '
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
 
 let disectEliminationT n p =
+   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
    try
       let sel = get_sel_arg p in
       let a,u,b,v = maybe_new_vars4 p "a" "u" "b" "v" in
       let i, j = Sequent.hyp_indices p n in
-         if sel = 1 then disectEliminationLeft i j a u p else
-         if sel = 2 then disectEliminationRight i j a u b v p else
+         if sel = 1 then (disectEliminationLeft i j a u thenT thinIfThinningT [-1;n]) p else
+         if sel = 2 then (disectEliminationRight i j a u b v thenT thinIfThinningT [-3;-1;n]) p else
             raise (RefineError ("disectElimination", StringError ("select option is out of range ([1,2])")))
    with RefineError ("get_attribute",_) ->
       try disectEliminationT n p

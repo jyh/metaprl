@@ -331,6 +331,7 @@ let atT = Tactic_type.Tacticals.atT
 let selT = Tactic_type.Tacticals.selT
 let altT = Tactic_type.Tacticals.altT
 let thinningT = Tactic_type.Tacticals.thinningT
+let doNotThinT = thinningT false
 
 (*!************************************************************************
  * @begin[doc]
@@ -390,6 +391,8 @@ let onMClausesT = Tactic_type.Tacticals.onMClausesT
 let onMHypsT = Tactic_type.Tacticals.onMHypsT
 let onAllHypsT = Tactic_type.Tacticals.onAllHypsT
 let onAllClausesT = Tactic_type.Tacticals.onAllClausesT
+let tryOnHypsT = Tactic_type.Tacticals.tryOnHypsT
+let tryOnClausesT = Tactic_type.Tacticals.tryOnClausesT
 let tryOnAllHypsT = Tactic_type.Tacticals.tryOnAllHypsT
 let tryOnAllClausesT = Tactic_type.Tacticals.tryOnAllClausesT
 let onAllMHypsT = Tactic_type.Tacticals.onAllMHypsT

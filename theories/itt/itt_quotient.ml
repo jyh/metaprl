@@ -332,15 +332,15 @@ interactive quotientElimination1_eq {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z
              >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
-(*
-prim quotientElimination2 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
-   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
-   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
-             v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
-           } -->
-   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
-   it
-*)
+
+let quotientEliminationT n p =
+   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+   let i,j = Sequent.hyp_indices p n in
+   let v,w,z,e1,e2 = maybe_new_vars5 p "v" "w" "z" "e_1" "e_2" in
+     (quotientElimination1_eq i j v w z e1 e2 thenT thinIfThinningT [-2;-1;n]) p
+
+let resource elim +=  (<<quot x, y: 'A // 'E['x; 'y]>>, quotientEliminationT)
+
 (*!
  * @begin[doc]
  * An equality assumption $a_1 = a_2 @in @quot{A; x; y; E[x, y]}$ implies

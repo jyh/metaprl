@@ -95,6 +95,8 @@ topval onMHypsT : int list -> (int -> tactic) -> tactic
 topval onAllHypsT : (int -> tactic) -> tactic
 topval onAllClausesT : (int -> tactic) -> tactic
 topval onAllAssumT : (int -> tactic) -> tactic
+topval tryOnHypsT : int list -> (int -> tactic) -> tactic
+topval tryOnClausesT : int list -> (int -> tactic) -> tactic
 topval tryOnAllHypsT : (int -> tactic) -> tactic
 topval tryOnAllClausesT : (int -> tactic) -> tactic
 topval onAllMHypsT : (int -> tactic) -> tactic
@@ -115,6 +117,7 @@ topval atT : term -> tactic -> tactic
 topval selT : int -> tactic -> tactic
 topval altT : tactic -> tactic
 topval thinningT : bool -> tactic -> tactic
+topval doNotThinT : tactic -> tactic
 
 (*
  * -*-

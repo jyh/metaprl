@@ -61,6 +61,7 @@ include Itt_set
 include Itt_isect
 include Itt_tunion
 include Itt_bisect
+include Itt_disect
 include Itt_bunion
 include Itt_subtype
 include Itt_w
@@ -121,3 +122,12 @@ prec prec_eq_atom = prec_equal
  * End:
  * -*-
  *)
+
+
+interactive test 'H 'J :
+sequent['ext] {'H; x:bisect{'A;'B}; y:disect{'A;u.'D['u]}; z:isect u:'A.'D['u]; a: tunion{'A;u.'D['u]}; b: bunion{'A;'B}; c: quot u,v:'A//'E['u;'v]; 'J['x] >- 'C['x;'y;'z;'a;'b;'c]}
+
+
+
+
+

@@ -144,6 +144,8 @@ topval replaceHypT : term -> int -> tactic
 
 topval equalTypeT : term -> term -> tactic
 
+val thinIfThinningT : int list -> tactic
+
 (*
  * -*-
  * Local Variables:

@@ -185,7 +185,7 @@ interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
  * functions and arguments are equal.
  * @end[doc]
  *)
-interactive independentApplyEquality {| eqcd |} 'H ('A -> 'B) :
+interactive independentApplyEquality {| intro[]; eqcd |} 'H ('A -> 'B) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }

@@ -50,7 +50,7 @@ interactive substUsingEpimorphism 'H 'J 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (*
    [main] sequent ['ext] { 'H; y: 'B; 'J['f['y]] >- 'C['f['y]] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
 
-interactive hypReplacementStrong 'H 'J 'B :
+interactive hypReplacementStrong 'H 'J 'B 'y:
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'y IN 'A } -->
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x] >-  'x IN 'B } -->
    [main] sequent ['ext] { 'H; x: 'B; 'J['x] >- 'C['x] } -->
@@ -62,8 +62,9 @@ interactive hypReplacementExt 'H 'J 'B  :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
 
 let changeHypT t i p =
+   let y = maybe_new_vars1 p "y" in
    let j, k = Sequent.hyp_indices p i in
-      hypReplacementStrong j k t p
+      hypReplacementStrong j k t y p
 
 let replaceHypT t i p =
    let j, k = Sequent.hyp_indices p i in
@@ -73,8 +74,3 @@ let replaceHypT t i p =
    with RefineError _ ->
         hypReplacementExt j k t p
 
-
-let replaceHypT t i p =
-   let j, k = Sequent.hyp_indices p i in
-   let univ = get_univ_arg p in
-      hypReplacement j k t univ p

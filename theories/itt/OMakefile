@@ -128,6 +128,7 @@ GEN = gen_int_bench$(EXE)
 BENCH_FILES[] =
    itt_int_bench
    itt_int_bench2
+   itt_int_bench3
 
 $(addsuffix .ml, $(BENCH_FILES)): $(GEN)
    ./$(GEN)

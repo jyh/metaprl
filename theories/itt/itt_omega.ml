@@ -1687,7 +1687,7 @@ let omegaPrepT = funT (fun p ->
 		end;
 	let info = VI.invert var2index in
 	total := !total +. (Unix.time() -. start);
-	(*if !debug_omega then*)
+	if !debug_omega then
 		eprintf "Total time spent in omegaPrepT is %f@." !total;
 	let aux used_hyps (tree, f) =
 		omegaCoreT info hyp_num hyp_length used_hyps tree f
@@ -1697,8 +1697,8 @@ let omegaPrepT = funT (fun p ->
 )
 
 let omegaT =
-	startT 2 thenMT arithRelInConcl2HypT thenMT
-	omegaPrepT thenT rw relNormC 0 thenMT endT 2
+	(*startT 2 thenMT*) arithRelInConcl2HypT thenMT
+	omegaPrepT thenT rw relNormC 0 (*thenMT endT 2*)
 
 let getTimeT = funT (fun p ->
 	eprintf "spent %f seconds in omegaPrepT@." !total;

@@ -222,9 +222,10 @@ declare esq_r
 declare leftarrow
 declare middlearrow
 declare rightarrow
-declare Sigma
+declare Gamma
 declare Delta
 declare Pi
+declare Sigma
 declare times
 declare "div"
 declare supplus
@@ -803,8 +804,9 @@ dform esq_dfr			: internal :: mode[prl] :: esq_r                     = `"〛"
 dform leftarrow_df		: internal :: mode[prl] :: leftarrow                 = `"←─"
 dform middlearrow_df		: internal :: mode[prl] :: middlearrow               = `"─"
 dform rightarrow_df		: internal :: mode[prl] :: rightarrow                = `"─→"
-dform sigma_df			: internal :: mode[prl] :: Sigma                     = `"Σ"
+dform gamma_df			: internal :: mode[prl] :: Gamma                     = `"Γ"
 dform delta_df			: internal :: mode[prl] :: Delta                     = `"Δ"
+dform sigma_df			: internal :: mode[prl] :: Sigma                     = `"Σ"
 dform pi_df			: internal :: mode[prl] :: Pi                        = `"Π"
 dform times_df			: internal :: mode[prl] :: times                     = `"╳" (* `"⨉" or `"⋊" or `"⨯" *)
 dform div_df            	: internal :: mode[prl] :: "div"                     = `"÷"
@@ -882,9 +884,10 @@ dform esq_dfr			: internal :: mode[html] :: esq_r                     = html_uni
 dform leftarrow_df		: internal :: mode[html] :: leftarrow                 = html_uni[8592]
 dform middlearrow_df		: internal :: mode[html] :: middlearrow               = html_uni[9472]
 dform rightarrow_df		: internal :: mode[html] :: rightarrow                = html_uni[8594]
-dform sigma_df			: internal :: mode[html] :: Sigma                     = html_uni[931]
+dform gamma_df			: internal :: mode[html] :: Gamma                     = html_uni[915]
 dform delta_df			: internal :: mode[html] :: Delta                     = html_uni[916]
 dform pi_df			: internal :: mode[html] :: Pi                        = html_uni[928]
+dform sigma_df			: internal :: mode[html] :: Sigma                     = html_uni[931]
 dform times_df			: internal :: mode[html] :: times                     = html_sym["times"]
 dform div_df            	: internal :: mode[html] :: "div"                     = html_sym["divide"]
 dform supplus_df		: internal :: mode[html] :: supplus                   = sup["+"]
@@ -961,9 +964,10 @@ dform esq_dfr			: internal :: mode[tex] :: esq_r                     = `"]" izon
 dform leftarrow_df		: internal :: mode[tex] :: leftarrow                 = mathmacro["leftarrow"]
 dform middlearrow_df		: internal :: mode[tex] :: middlearrow               = mathmacro["-"]
 dform rightarrow_df		: internal :: mode[tex] :: rightarrow                = mathmacro["rightarrow"]
-dform sigma_df			: internal :: mode[tex] :: Sigma                     = mathmacro["Sigma"]
+dform gamma_df			: internal :: mode[tex] :: Gamma                     = mathmacro["Gamma"]
 dform delta_df			: internal :: mode[tex] :: Delta                     = mathmacro["Delta"]
 dform pi_df			: internal :: mode[tex] :: Pi                        = mathmacro["Pi"]
+dform sigma_df			: internal :: mode[tex] :: Sigma                     = mathmacro["Sigma"]
 dform times_df			: internal :: mode[tex] :: times                     = mathmacro["times"]
 dform div_df            	: internal :: mode[tex] :: "div"                     = mathmacro["div"]
 dform supplus_df		: internal :: mode[tex] :: supplus                   = izone `"^{+}" ezone

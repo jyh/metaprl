@@ -1996,6 +1996,7 @@ dform multi_sp  : slot["decl"]{multicolumn[s1,s2]{'t}} = special
 dform multi_sp  : slot["decl"]{math_multicolumn[s1,s2]{'t}} = special
 dform array_sp  : slot["decl"]{math_array[s]{'t}} = special
 dform array_sp  : slot["decl"]{math_array[s1,s2]{'t}} = special
+dform foot_sp   : slot["decl"]{footnote{'t}} = special
 
 (*
  * -*-

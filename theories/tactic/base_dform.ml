@@ -167,11 +167,11 @@ ml_dform var_tex_df : mode[tex] :: display_var[v:v]{nil} format_term buf = fun
                   h,tl
             in
                format_izone buf;
-               format_string buf "\\mathit{";
+               format_string buf "\\ensuremath{\\mathit{";
                format_ezone buf;
                format_string buf h;
                format_izone buf;
-               format_string buf "}";
+               format_string buf "}}";
                format_ezone buf;
                if (tl<>[]) then begin
                   format_izone buf;
@@ -280,6 +280,16 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
    in
       format
 
+let format_context format_term buf v values =
+   let v' = match v with
+      "H" -> <<Gamma>>
+    | "J" -> <<Delta>>
+    | "K" -> <<Sigma>>
+    | _   -> mk_var_term v
+   in
+      format_term buf NOParens v';
+      format_term_list format_term buf values
+
 (*
  * @begin[doc]
  * The refiner uses a special representation for sequents that requires the
@@ -301,7 +311,7 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
                Context (v, values) ->
                   (* This is a context hypothesis *)
                   format_string buf "<";
-                  format_term buf NOParens (mk_so_var_term v values);
+                  format_context format_term buf v values;
                   format_string buf ">";
              | HypBinding (v, a) ->
                   format_szone buf;
@@ -372,7 +382,7 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
                Context (v, values) ->
                   (* This is a context hypothesis *)
                   format_string buf "<";
-                  format_term buf NOParens (mk_so_var_term v values);
+                  format_context format_term buf v values;
                   format_string buf ">"
              | HypBinding (v, a) ->
                   format_szone buf;
@@ -428,7 +438,7 @@ ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
             match SeqHyp.get hyps i with
                Context (v, values) ->
                   format_term buf NOParens <<mathmacro["left<"]>>;
-                  format_term buf NOParens (mk_so_var_term v values);
+                  format_context format_term buf v values;
                   format_term buf NOParens <<mathmacro["right>"]>>
              | HypBinding (v, a) ->
                   format_szone buf;

@@ -173,9 +173,10 @@ declare perp
 declare leftarrow
 declare middlearrow
 declare rightarrow
-declare Sigma
+declare Gamma
 declare Delta
 declare Pi
+declare Sigma
 declare times
 declare "div"
 declare supplus

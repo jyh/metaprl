@@ -74,7 +74,7 @@ dform ref_df : except_mode[src] :: ref{ 'num } =
 
 (* Empty state. *)
 dform empty_df : except_mode[src] :: empty =
-   `"[]"
+   `"empty"
 
 (* Memory allocation. *)
 dform alloc_df : except_mode[src] :: alloc{ 'state; 'tag; 'item_list } =

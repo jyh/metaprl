@@ -27,6 +27,13 @@ declare interval{ 'left; 'right }
 declare int_set{ 'intervals }
 
 (*
+ * Short form.
+ * For convinience.  Declares a set consisting of the closed
+ *    interval [a,b].
+ *)
+declare int_set{ 'a; 'b }
+
+(*
  * Member test.
  * in_interval reduces to btrue if 'num is in the interval and
  *    bfalse otherwise.

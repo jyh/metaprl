@@ -1348,7 +1348,9 @@ struct
    let find_hyp_fail _ =
       raise (Invalid_argument "Itt_logic.Itt_JLogic.find_hyp failed")
 
-   let find_hyp term tact = onSomeHypT (tryfind_hyp term tact) orelseT find_hyp_fail
+   let find_hyp term tact p =
+      eprintf "Looking for\n\t%a\n\tin\n\t%a%t" debug_print term debug_print (Sequent.goal p) eflush;
+      (onSomeHypT (tryfind_hyp term tact) orelseT find_hyp_fail) p
 
    let tryappend_subst subst t tact i p =
       tact (match_terms subst t (snd (Sequent.nth_hyp p i))) p

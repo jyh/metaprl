@@ -134,6 +134,11 @@ val bool_term : term
 val btrue_term : term
 val bfalse_term : term
 
+val bor_term : term
+val is_bor_term : term -> bool
+val mk_bor_term : term -> term -> term
+val dest_bor : term -> term * term
+
 topval extBoolT : tactic
 topval magicT : tactic
 topval splitBoolT : term -> int -> tactic

@@ -191,6 +191,11 @@ rule lt_squashElimination 'H :
    sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- 'a < 'b }
 
+rule lt_wf 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- "type"{ lt{'a; 'b} } }
+
 rule beq_int2prop 'H :
    [main] sequent [squash] { 'H >- "assert"{beq_int{'a; 'b}} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -217,6 +222,12 @@ topval beq_int_is_trueC: conv
 rule eq_2beq_int 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- "assert"{beq_int{'a; 'b}} }
+
+rule lt_bool_member 'H :
+  [main]  sequent [squash] { 'H >- 'a < 'b } -->
+(*  [wf] sequent [squash] { 'H >- 'a IN int } -->
+  [wf] sequent [squash] { 'H >- 'b IN int } --> *)
+  sequent ['ext] { 'H >- "assert"{lt_bool{'a; 'b}} }
 
 (*
  * Reduction on induction combinator:
@@ -332,6 +343,18 @@ rule lt_Trichot 'H :
      { 'H >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue }
 
 topval lt_TrichotC: conv
+
+topval decideC : term -> term -> conv 
+
+rule decide 'H 'a 'b 'w :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [main] sequent ['ext] { 'H; w: ('a < 'b) >- 'C } -->
+   [main] sequent ['ext] { 'H; w: 'a = 'b in int >- 'C } -->
+   [main] sequent ['ext] { 'H; w: ('b < 'a) >- 'C } -->
+   sequent ['ext] { 'H >- 'C }
+
+topval decideT : term -> term -> tactic
 
 (*
 Switching to rewrite to provide the uniform of int-properties

@@ -70,6 +70,7 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_struct
+open Itt_bool
 
 let _ = show_loading "Loading Itt_int_base%t"
 (************************************************************************
@@ -329,9 +330,26 @@ prim beq_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
 (*! @docoff *)
 
-prim lt_squashElimination 'H :
+interactive lt_squashElimination 'H :
    sequent [squash] { 'H >- 'a < 'b } -->
-   sequent ['ext] { 'H >- 'a < 'b } = it
+   sequent ['ext] { 'H >- 'a < 'b }
+
+interactive lt_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- "type"{lt{'a; 'b}} }
+
+(************************************************************
+ * SQUASH STABILITY
+ ************************************************************)
+
+(*
+ * lt is squash stable
+ *)
+let squash_lt p =
+   lt_squashElimination (Sequent.hyp_count_addr p) p
+
+let squash_resource = Mp_resource.improve squash_resource (lt_term, squash_lt)
 
 (*!
  * @begin[doc]
@@ -369,6 +387,12 @@ let beq_int_is_trueC = beq_int_is_true_rw
 interactive eq_2beq_int {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- "assert"{beq_int{'a; 'b}} }
+
+interactive lt_bool_member {| intro_resource [] |} 'H :
+  [main]  sequent [squash] { 'H >- 'a < 'b } -->
+(*  [wf] sequent [squash] { 'H >- 'a IN int } -->
+  [wf] sequent [squash] { 'H >- 'b IN int } --> *)
+  sequent ['ext] { 'H >- "assert"{lt_bool{'a; 'b}} }
 
 (*! @docoff *)
 
@@ -559,6 +583,27 @@ interactive_rw lt_Trichot_rw :
 
 let lt_TrichotC = lt_Trichot_rw
 
+let decideC a b = 
+   foldC 
+      (mk_bor_term 
+         (mk_bor_term 
+            (mk_lt_bool_term a b) 
+            (mk_lt_bool_term b a)) 
+         (mk_beq_int_term a b))  
+      lt_TrichotC
+
+interactive decide 'H 'a 'b 'w :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [main] sequent ['ext] { 'H; w: ('a < 'b) >- 'C } -->
+   [main] sequent ['ext] { 'H; w: 'a = 'b in int >- 'C } -->
+   [main] sequent ['ext] { 'H; w: ('b < 'a) >- 'C } -->
+   sequent ['ext] { 'H >- 'C }
+
+let decideT t1 t2 p =
+   let w = maybe_new_vars1 p "w" in
+      decide (Sequent.hyp_count_addr p) t1 t2 w p
+
 (*
 Switching to rewrite to provide the uniform of int-properties
 
@@ -747,18 +792,6 @@ interactive minus_minus_reduce 'H :
    sequent ['ext] { 'H >- (-(-'a)) ~ 'a }
 
 (*! @docoff *)
-
-(************************************************************
- * SQUASH STABILITY
- ************************************************************)
-
-(*
- * lt is squash stable
- *)
-let squash_lt p =
-   lt_squashElimination (Sequent.hyp_count_addr p) p
-
-let squash_resource = Mp_resource.improve squash_resource (lt_term, squash_lt)
 
 (***********************************************************
  * TYPE INFERENCE

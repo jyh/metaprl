@@ -565,6 +565,12 @@ let mk_ifthenelse_term = mk_dep0_dep0_dep0_term ifthenelse_opname
 let is_ifthenelse_term = is_dep0_dep0_dep0_term ifthenelse_opname
 let dest_ifthenelse = dest_dep0_dep0_dep0_term ifthenelse_opname
 
+let bor_term = << bor{'a; 'b} >>
+let bor_opname = opname_of_term bor_term
+let is_bor_term = is_dep0_dep0_term bor_opname
+let mk_bor_term = mk_dep0_dep0_term bor_opname
+let dest_bor = dest_dep0_dep0_term bor_opname
+
 let extBoolT p =
    let v = maybe_new_vars1 p "u" in
       bool_ext_equality (Sequent.hyp_count_addr p) v p

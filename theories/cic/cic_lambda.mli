@@ -46,6 +46,16 @@ declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
 declare math_fun{'x; 'A; 'B}
 declare math_fun{'A; 'B}
 
+val sequent_arg_term : term
+val is_sequent_arg_term : term -> bool
+val dest_sequent_arg : term -> term
+val mk_sequent_arg_term : term -> term
+
+val member_term : term
+val is_member_term : term -> bool
+val dest_member : term -> term * term
+val mk_member_term : term -> term -> term
+
 val dfun_term : term
 val is_dfun_term : term -> bool
 val dest_dfun : term -> var * term * term

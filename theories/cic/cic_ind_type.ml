@@ -264,6 +264,8 @@ let fold_applHBase = makeFoldC <<sequent [applH] { >- 'S }>> applHBase
 let fold_applHStep = makeFoldC <<sequent [applH] { x:'T; <H> >- 'S }>> applHStep
 let fold_applH = fold_applHBase thenC (repeatC fold_applHStep)
 
+let applHC = (repeatC applHStep) thenC applHBase
+
 (* declaration of multiple substitution C[I/(I p1)...pn] *)
 declare IndParamsSubst
 declare IndTypesSubst
@@ -492,6 +494,13 @@ let fold_substProd = fold_substFinal thenC (repeatC fold_substProdStep) thenC fo
 let fold_subst = fold_substProd thenC
 						(repeatC (fold_substApp thenC fold_substStep)) thenC
 						fold_substStart
+
+let substProd = substProdStart thenC (repeatC substProdStep) thenC substFinal
+
+let substApp = appStart thenC (repeatC appStep) thenC appFinal
+
+let substC = substStart thenC (repeatC (substStep thenC substApp)) thenC substProd
+
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
 prim ind_ConstConstrs 'Hc :

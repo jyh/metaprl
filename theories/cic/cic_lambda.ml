@@ -43,6 +43,18 @@ declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                             free occurrences of a variable 'x in a term 'u *)
 
+let sequent_arg_term = << sequent_arg{'t} >>
+let sequent_arg_opname = opname_of_term sequent_arg_term
+let is_sequent_arg_term = is_dep0_term sequent_arg_opname
+let dest_sequent_arg = dest_dep0_term sequent_arg_opname
+let mk_sequent_arg_term = mk_dep0_term sequent_arg_opname
+
+let member_term = << 'a in 'c >>
+let member_opname = opname_of_term member_term
+let is_member_term = is_dep0_dep0_term member_opname
+let dest_member = dest_dep0_dep0_term member_opname
+let mk_member_term = mk_dep0_dep0_term member_opname
+
 let apply_term = << apply{'f; 'a} >>
 let apply_opname = opname_of_term apply_term
 let is_apply_term = is_dep0_dep0_term apply_opname

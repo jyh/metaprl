@@ -117,6 +117,7 @@ declare applH (* { <H> >- 'T } *)
 topval fold_applHBase : conv
 topval fold_applHStep : conv
 topval fold_applH : conv
+topval applHC : conv
 
 declare IndParamsSubst
 declare IndTypesSubst
@@ -136,6 +137,18 @@ topval fold_substProdStart: conv
 topval fold_substProdStep: conv
 topval fold_substProd: conv
 topval fold_subst : conv
+topval substProdStart : conv
+topval substProdStep : conv
+topval substFinal : conv
+topval substApp : conv
+topval appStart : conv
+topval appStep : conv
+topval appFinal : conv
+topval substC : conv
+topval substStart : conv
+topval substStep : conv
+topval substProd : conv
+
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
 rule ind_ConstConstrs 'Hc :

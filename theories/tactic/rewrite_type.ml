@@ -255,7 +255,7 @@ let makeFoldC contractum conv =
                      let redex, _ = dest_msequent redex in
                      let rw' = term_rewrite ([||], [||]) [redex] [contractum] in
                      let doCE env =
-                        match apply_rewrite rw' ([||], [||], []) [env_term env] with
+                        match apply_rewrite rw' ([||], [||], []) (env_term env) [] with
                            [contractum], _ ->
                               Fold (contractum, conv)
                          | _ ->

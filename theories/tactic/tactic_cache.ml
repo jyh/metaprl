@@ -1438,21 +1438,24 @@ let instantiate f world insts =
 (*
  * Try to chain through a particular arglist.
  *)
-let try_arglist_normal ({ ext_base = base } as extract) rw just world args =
-   let terms = List.map (function inf -> inf.inf_value) args in
-      try
-         let values, _ = apply_rewrite rw ([||], [||], []) terms in
-         let root =
-            Inference { inf_values = values;
-                        inf_just = just;
-                        inf_args = args;
-                        inf_world = world
-            }
-         in
-            build_results extract world root values
-      with
-         _ ->
-            ()
+let try_arglist_normal ({ ext_base = base } as extract) rw just world = function
+   [] -> 
+      ()
+ | (arg::args) as all_args ->
+      let args' = List.map (function inf -> inf.inf_value) args in
+         try
+            let values, _ = apply_rewrite rw ([||], [||], []) arg.inf_value args' in
+            let root =
+               Inference { inf_values = values;
+                           inf_just = just;
+                           inf_args = all_args;
+                           inf_world = world
+               }
+            in
+               build_results extract world root values
+         with
+            _ ->
+               ()
 
 (*
  * Try to chain through the new item.
@@ -1473,23 +1476,28 @@ let try_fchain_normal extract world { finfo_rw = rw; finfo_just = just } finst =
  * produce a new extract info
  *)
 let try_arglist_wild extract rw wrw nargs just world args =
-   let terms = List.map (function inf -> inf.inf_value) args in
-      try
-         let wilds, _ = apply_rewrite wrw ([||], [||], []) terms in
-         let wargs = List.map (function t -> find_inf extract world t (shape_of_term t)) wilds in
-         let values, _ = apply_rewrite rw ([||], [||], []) terms in
-         let facts = mix_wild nargs args wargs in
-         let root =
-            Inference { inf_values = values;
-                        inf_just = just;
-                        inf_args = facts;
-                        inf_world = world
-            }
-         in
-            build_results extract world root values
-      with
-         _ ->
-            ()
+   match args with
+      [] ->
+         ()
+    | arg::argstl ->
+         let terms = List.map (function inf -> inf.inf_value) argstl in
+         let term = arg.inf_value in
+            try
+               let wilds, _ = apply_rewrite wrw ([||], [||], []) term terms in
+               let wargs = List.map (function t -> find_inf extract world t (shape_of_term t)) wilds in
+               let values, _ = apply_rewrite rw ([||], [||], []) term terms in
+               let facts = mix_wild nargs args wargs in
+               let root =
+                  Inference { inf_values = values;
+                              inf_just = just;
+                              inf_args = facts;
+                              inf_world = world
+                  }
+               in
+                  build_results extract world root values
+            with
+               _ ->
+                  ()
 
 (*
  * In wildcard chaining, some of the args are wildcards.
@@ -1654,7 +1662,7 @@ let add_brule cache { bc_concl = concl; bc_ants = ants; bc_just = just } =
    let rw = term_rewrite ([||], [||]) [concl] flat_ants in
    let spread_ants = compute_spread_ants ants in
    let trw t =
-      let values, _ = apply_rewrite rw ([||], [||], []) [t] in
+      let values, _ = apply_rewrite rw ([||], [||], []) t [] in
          spread_ants values
    in
    let info =

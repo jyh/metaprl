@@ -49,13 +49,13 @@ open Base_theory
  ************************************************************************)
 
 declare "type"{'a}
-declare univ[@i:l]
+declare univ[i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
 declare it
 declare "true"
 declare "false"
-declare cumulativity[@i:l, @j:l]
+declare cumulativity[i:l, j:l]
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -121,7 +121,7 @@ rule equalityTrans 'H 'z :
 rule equalityFormation 'H 'T :
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- (a1 = b1 in T1) = (a2 = b2 in T2) in Ui
@@ -132,10 +132,10 @@ rule equalityFormation 'H 'T :
  * H >- b1 = b2 in T1
  *)
 rule equalityEquality 'H :
-   sequent [squash] { 'H >- 'T1 = 'T2 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'T1 = 'T2 in univ[i:l] } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } -->
-   sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[@i:l] }
+   sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] }
 
 (*
  * Typehood.
@@ -195,35 +195,35 @@ rule type_squashElimination 'H :
  * by universeEquality (side (j < i))
  *)
 rule universeEquality 'H :
-   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
-   sequent ['ext] { 'H >- univ[@j:l] = univ[@j:l] in univ[@i:l] }
+   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] { 'H >- univ[j:l] = univ[j:l] in univ[i:l] }
 
 (*
  * Universe is a type.
  *)
 rule universeType 'H :
-   sequent ['ext] { 'H >- "type"{univ[@l:l]} }
+   sequent ['ext] { 'H >- "type"{univ[l:l]} }
 
 (*
  * Anything in a universe is a type.
  *)
-rule universeMemberType 'H univ[@i:l] :
-   sequent [squash] { 'H >- 'x = 'x in univ[@i:l] } -->
+rule universeMemberType 'H univ[i:l] :
+   sequent [squash] { 'H >- 'x = 'x in univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} }
 
 (*
  * Derived form for known membership.
  *)
 rule universeAssumType 'H 'J :
-   sequent ['ext] { 'H; x: univ[@l:l]; 'J['x] >- "type"{'x} }
+   sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} }
 
 (*
  * H >- Ui ext Uj
  * by universeFormation level{$j:l}
  *)
-rule universeFormation 'H univ[@j:l] :
-   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
-   sequent ['ext] {'H >- univ[@i:l] }
+rule universeFormation 'H univ[j:l] :
+   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] {'H >- univ[i:l] }
 
 (*
  * Squash from any.

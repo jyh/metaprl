@@ -57,7 +57,7 @@ prec prec_star
 dform type_proj_df1 : parens :: "prec"[prec_proj] :: type_proj{'t1; 't2} =
    slot{'t1} "." slot{'t2}
 
-dform type_proj_df2 : type_proj[@start:n, @finish:n]{'t1; 't2} =
+dform type_proj_df2 : type_proj[start:n, finish:n]{'t1; 't2} =
    type_proj{'t1; 't2}
 
 (*
@@ -66,7 +66,7 @@ dform type_proj_df2 : type_proj[@start:n, @finish:n]{'t1; 't2} =
 dform type_as_df1 : parens :: "prec"[prec_as] :: type_as{'t1; 't2} =
    slot{'t1} space "_as" space slot{'t2}
 
-dform type_as_df2 : type_as[@start:n, @finish:n]{'t1; 't2} =
+dform type_as_df2 : type_as[start:n, finish:n]{'t1; 't2} =
    type_as{'t1; 't2}
 
 (*
@@ -75,7 +75,7 @@ dform type_as_df2 : type_as[@start:n, @finish:n]{'t1; 't2} =
 dform type_wildcard_df1 : type_wildcard =
    "_"
 
-dform type_wildcard_df2 : type_wildcard[@start:n, @finish:n] =
+dform type_wildcard_df2 : type_wildcard[start:n, finish:n] =
    type_wildcard
 
 (*
@@ -86,13 +86,13 @@ declare type_apply_list
 dform type_apply_df1 : parens :: "prec"[prec_apply] :: type_apply{'t1; 't2} =
    slot{type_apply; 't1; cons{'t2; nil}}
 
-dform type_apply_df2 : type_apply[@start:n, @finish:n]{'t1; 't2} =
+dform type_apply_df2 : type_apply[start:n, finish:n]{'t1; 't2} =
    type_apply{'t1; 't2}
 
 dform type_apply_df3a : slot{type_apply; type_apply{'t1; 't2}; 't3} =
    slot{type_apply; 't1; cons{'t2; 't3}}
 
-dform type_apply_df3b : slot{type_apply; type_apply[@start:n, @finish:n]{'t1; 't2}; 't3} =
+dform type_apply_df3b : slot{type_apply; type_apply[start:n, finish:n]{'t1; 't2}; 't3} =
    slot{type_apply; type_apply{'t1; 't2}; 't3}
 
 dform type_apply_df4 : slot{type_apply; 't1; 't2} =
@@ -113,7 +113,7 @@ dform type_apply_df7 : slot{type_apply_list; cons{'t1; 't2}} =
 dform type_fun_df1 : parens :: "prec"[prec_arrow] :: type_fun{'t1; 't2} =
    slot{'t1} space "->" space slot{'t2}
 
-dform type_fun_df2 : type_fun[@start:n, @finish:n]{'t1; 't2} =
+dform type_fun_df2 : type_fun[start:n, finish:n]{'t1; 't2} =
    type_fun{'t1; 't2}
 
 (*
@@ -122,38 +122,38 @@ dform type_fun_df2 : type_fun[@start:n, @finish:n]{'t1; 't2} =
 dform type_class_id_df1 : parens :: "prec"[prec_not] :: type_class_id{'t1} =
    "#" space slot{'t1}
 
-dform type_class_id_df2 : type_class_id[@start:n, @finish:n]{'t1} =
+dform type_class_id_df2 : type_class_id[start:n, finish:n]{'t1} =
    type_class_id{'t1}
 
 (*
  * Identifiers.
  *)
-dform type_lid_df1 : type_lid[@v:s] =
-   slot[@v:s]
+dform type_lid_df1 : type_lid[v:s] =
+   slot[v:s]
 
 dform type_lid_df2 : type_lid{'v} =
    slot{'v}
 
-dform type_lid_df3 : type_lid[@start:n, @finish:n]{'v} =
+dform type_lid_df3 : type_lid[start:n, finish:n]{'v} =
    type_lid{'v}
 
-dform type_uid_df1 : type_uid[@v:s] =
-   slot[@v:s]
+dform type_uid_df1 : type_uid[v:s] =
+   slot[v:s]
 
 dform type_uid_df2 : type_uid{'v} =
    slot{'v}
 
-dform type_uid_df3 : type_uid[@start:n, @finish:n]{'v} =
+dform type_uid_df3 : type_uid[start:n, finish:n]{'v} =
    type_uid{'v}
 
 (*
  * Type parameter.
  *)
-dform type_param_df1 : type_param[@s:s] =
-   `"'" slot[@s:s]
+dform type_param_df1 : type_param[s:s] =
+   `"'" slot[s:s]
 
-dform type_param_df2 : type_param[@start:n, @finish:n, @s:s] =
-   type_param[@s:s]
+dform type_param_df2 : type_param[start:n, finish:n, s:s] =
+   type_param[s:s]
 
 (*
  * Type equivalence.
@@ -161,7 +161,7 @@ dform type_param_df2 : type_param[@start:n, @finish:n, @s:s] =
 dform type_equal_df1 : parens :: "prec"[prec_equal] :: type_equal{'t1; 't2} =
    slot{'t1} space "==" space slot{'t2}
 
-dform type_equal_df2 : type_equal[@start:n, @finish:n]{'t1; 't2} =
+dform type_equal_df2 : type_equal[start:n, finish:n]{'t1; 't2} =
    type_equal{'t1; 't2}
 
 (*
@@ -178,13 +178,13 @@ dform type_record_cons_df1 : slot{type_record; cons{'sbt; 'sbtl}} =
 dform type_record_nil_df1 : slot{type_record; nil} =
    `""
 
-dform sbt_df1 : sbt{.Ocaml!"string"[@name:s]; .Ocaml!"false"; 't} =
-   szone pushm[3] slot[@name] `" =" hspace slot{'t} popm ezone
+dform sbt_df1 : sbt{.Ocaml!"string"[name:s]; .Ocaml!"false"; 't} =
+   szone pushm[3] slot[name] `" =" hspace slot{'t} popm ezone
 
-dform sbt_df1 : sbt{.Ocaml!"string"[@name:s]; .Ocaml!"true"; 't} =
-   szone pushm[3] `"mutable " slot[@name] `" =" hspace slot{'t} popm ezone
+dform sbt_df1 : sbt{.Ocaml!"string"[name:s]; .Ocaml!"true"; 't} =
+   szone pushm[3] `"mutable " slot[name] `" =" hspace slot{'t} popm ezone
 
-dform type_record_df2 : type_record[@start:n, @finish:n]{'t} =
+dform type_record_df2 : type_record[start:n, finish:n]{'t} =
    type_record{'t}
 
 (*
@@ -199,7 +199,7 @@ dform type_prod_nil_df1 : slot{type_prod; nil} =
 dform type_prod_cons_df1 : slot{type_prod; cons{'t; 'tl}} =
    `" " "*" `" " slot{'t} slot{type_prod; 'tl}
 
-dform type_prod_df2 : type_prod[@start:n, @finish:n]{'tl} =
+dform type_prod_df2 : type_prod[start:n, finish:n]{'tl} =
    type_prod{'tl}
 
 (*
@@ -209,7 +209,7 @@ dform type_list_df1 : type_list{cons{'stl; 'stll}} =
    szone slot{'stl} ezone
    slot{type_list; 'stll}
 
-dform type_list_df2 : type_list[@start:n, @finish:n]{'stl} =
+dform type_list_df2 : type_list[start:n, finish:n]{'stl} =
    type_list{'stl}
 
 dform type_list_nil_df1 : slot{type_list; nil} =
@@ -219,11 +219,11 @@ dform type_list_cons_df1 : slot{type_list; cons{'stl; 'stll}} =
    hspace "|" `" " szone slot{'stl} ezone
    slot{type_list; 'stll}
 
-dform stl_df1 : stl{.Ocaml!"string"[@name:s]; nil} =
-   slot[@name:s]
+dform stl_df1 : stl{.Ocaml!"string"[name:s]; nil} =
+   slot[name:s]
 
-dform stl_df2 : stl{.Ocaml!"string"[@name:s]; cons{'t; 'tl}} =
-   slot[@name:s] `" of " szone slot{'t} slot{stl; 'tl} ezone
+dform stl_df2 : stl{.Ocaml!"string"[name:s]; cons{'t; 'tl}} =
+   slot[name:s] `" of " szone slot{'t} slot{stl; 'tl} ezone
 
 dform stl_df3 : slot{stl; nil} =
    `""

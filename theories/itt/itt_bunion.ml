@@ -81,9 +81,9 @@ let fold_bunion = makeFoldC << bunion{'A; 'B} >> unfold_bunion
  * Typehood.
  *)
 interactive bunionEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[i:l] }
 
 interactive bunionType 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
@@ -94,9 +94,9 @@ interactive bunionType 'H :
  * Formation.
  *)
 interactive bunionFormation 'H :
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * Membership.
@@ -154,7 +154,7 @@ let eqcd_bunionT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (bunion_term, eqcd_bunionT)
 
-let bunion_equal_term = << bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[@i:l] >>
+let bunion_equal_term = << bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (bunion_equal_term, d_wrap_eqcd eqcd_bunionT)
 

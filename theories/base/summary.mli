@@ -37,34 +37,34 @@ include Ocaml_df
 
 declare "interface"{'intf}
 declare "implementation"{'impl}
-declare "location"[@start:n, @finish:n]{'body}
+declare "location"[start:n, finish:n]{'body}
 
-declare "rewrite"[@name:s]{'redex; 'contractum; 'proof}
-declare "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof}
-declare "axiom"[@name:s]{'stmt; 'proof}
-declare "rule"[@name:s]{'params; 'stmt; 'proof}
-declare "opname"[@name:s]{'term}
+declare "rewrite"[name:s]{'redex; 'contractum; 'proof}
+declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof}
+declare "axiom"[name:s]{'stmt; 'proof}
+declare "rule"[name:s]{'params; 'stmt; 'proof}
+declare "opname"[name:s]{'term}
 declare "mlterm"{'term; 'cons; 'oexpr}
 declare "condition"{'term; 'cons; 'oexpr}
 declare "parent"{'path; 'opens; 'resources}
-declare "module"[@name:s]{'info}
+declare "module"[name:s]{'info}
 declare "dform"{'modes; 'redex; 'def}
-declare "prec"[@name:s]
+declare "prec"[name:s]
 declare "prec_rel"{'op; 'left; 'right}
 declare "id"{'id}
-declare "resource"[@name:s]{'extract; 'improve; 'data}
-declare "infix"[@name:s]
-declare "magic_block"[@name:s]{'items}
+declare "resource"[name:s]{'extract; 'improve; 'data}
+declare "infix"[name:s]
+declare "magic_block"[name:s]{'items}
 declare "summary_item"{'term}
 
 declare "inherit_df"
-declare "prec_df"[@name:s]
+declare "prec_df"[name:s]
 declare "parens_df"
-declare "mode_df"[@mode:s]
+declare "mode_df"[mode:s]
 
 declare "df_none"
 declare "df_term"{'t}
-declare "df_ml"[@printer:s, @buffer:s]{'contracta; 'code}
+declare "df_ml"[printer:s, buffer:s]{'contracta; 'code}
 
 declare "none"
 declare "some"{'t}
@@ -75,8 +75,8 @@ declare "meta_implies"{'A; 'B}
 declare "meta_function"{'A; x. 'B['x]}
 declare "meta_iff"{'A; 'B}
 
-declare "context_param"[@name:s]
-declare "var_param"[@name:s]
+declare "context_param"[name:s]
+declare "var_param"[name:s]
 declare "term_param"{'t}
 
 (* Proofs *)

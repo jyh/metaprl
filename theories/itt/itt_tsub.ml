@@ -68,10 +68,10 @@ dform tsub_df : mode[prl] :: parens :: "prec"[prec_tsub] :: tsub{'A; 'B} =
  * Typehood.
  *)
 prim tsubEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent [squash] { 'H >- subtype{'B1; 'A1} } -->
-   sequent ['ext] { 'H >- tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[@i:l] } =
+   sequent ['ext] { 'H >- tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[i:l] } =
    it
 
 prim tsubType 'H :
@@ -137,7 +137,7 @@ let eqcd_tsubT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (tsub_term, eqcd_tsubT)
 
-let tsub_equal_term = << tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[@i:l] >>
+let tsub_equal_term = << tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (tsub_equal_term, d_wrap_eqcd eqcd_tsubT)
 

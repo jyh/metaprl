@@ -57,9 +57,9 @@ rewrite reduceEta (x: 'A -> 'B['x]) : ('f = 'f in (x: 'A -> 'B['x])) -->
  * H, a: A >- Ui ext B
  *)
 rule functionFormation 'H 'a 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   sequent ['ext] { 'H; a: 'A >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   sequent ['ext] { 'H; a: 'A >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- (a1:A1 -> B1[a1]) = (a2:A2 -> B2[a2]) in Ui
@@ -69,9 +69,9 @@ rule functionFormation 'H 'a 'A :
  * H, x: A1 >- B1[x] = B2[x] in Ui
  *)
 rule functionEquality 'H 'x :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
 
 (*
  * Typehood.
@@ -181,13 +181,13 @@ rule function_subtypeElimination 'H 'J 'x 'y 'z 'a :
  *)
 rule function_equalityElimination 'H 'J 'x 'y 'z 'a :
    sequent { 'H;
-             x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l];
+             x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l];
              'J['x];
-             y: 'A1 = 'A2 in univ[@i:l];
-             z: a:'A1 -> ('B1['a] = 'B2['a] in univ[@i:l])
+             y: 'A1 = 'A2 in univ[i:l];
+             z: a:'A1 -> ('B1['a] = 'B2['a] in univ[i:l])
              >- 'T['x]
            } -->
-   sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l]; 'J['x] >- 'T['x] }
+   sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l]; 'J['x] >- 'T['x] }
 
 (************************************************************************
  * TACTICS                                                              *

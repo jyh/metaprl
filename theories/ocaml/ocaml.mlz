@@ -41,11 +41,11 @@ include Perv
  * Constants.
  *)
 declare "unit"
-declare "bool"[@f:s]
-declare "char"[@c:s]
-declare "int"[@i:s]
-declare "string"[@s:s]
-declare "float"[@s:s]
+declare "bool"[f:s]
+declare "char"[c:s]
+declare "int"[i:s]
+declare "string"[s:s]
+declare "float"[s:s]
 declare "true"
 declare "false"
 
@@ -208,10 +208,10 @@ declare "ee"{'e1; 'e2}
 (*
  * Constant.
  *)
-declare patt_char[@c:s]
-declare patt_int[@i:n]
-declare patt_string[@s:s]
-declare patt_float[@f:s]
+declare patt_char[c:s]
+declare patt_int[i:n]
+declare patt_string[s:s]
+declare patt_float[f:s]
 
 (*
  * Binding.
@@ -356,13 +356,13 @@ declare type_class_id{'t1}
 (*
  * Identifiers.
  *)
-declare type_lid[@v:v]
-declare type_uid[@v:v]
+declare type_lid[v:v]
+declare type_uid[v:v]
 
 (*
  * Type parameter.
  *)
-declare type_param[@s:s]
+declare type_param[s:s]
 
 (*
  * Type equivalence.
@@ -380,7 +380,7 @@ declare type_array{'t}
  * I'm not sure what the boolean is for.
  *)
 declare type_record{'sbtl}
-declare type_record_elem[@s:s, @b:s]{'t}
+declare type_record_elem[s:s, b:s]{'t}
 declare type_ref{'t}
 
 (*
@@ -409,22 +409,22 @@ declare stl{'s; 'tl}
 (*
  * Exception declarations name type constructors.
  *)
-declare sig_exception[@name:s]{'tl}
+declare sig_exception[name:s]{'tl}
 
 (*
  * External function declaration.
  *)
-declare sig_external[@name:s]{'t; 'sl}
+declare sig_external[name:s]{'t; 'sl}
 
 (*
  * Module declaration.
  *)
-declare sig_module[@name:s]{'mt}
+declare sig_module[name:s]{'mt}
 
 (*
  * Module type declaration.
  *)
-declare sig_module_type[@name:s]{'mt}
+declare sig_module_type[name:s]{'mt}
 
 (*
  * Open a module in scope.
@@ -439,7 +439,7 @@ declare sig_type{'ssltl}
 (*
  * Value declaration.
  *)
-declare sig_value[@name:s]{'t}
+declare sig_value[name:s]{'t}
 
 (************************************************************************
  * STRUCTURE ITEMS                                                      *
@@ -448,12 +448,12 @@ declare sig_value[@name:s]{'t}
 (*
  * Exception declarations name type constructors.
  *)
-declare str_exception[@name:s]{'tl}
+declare str_exception[name:s]{'tl}
 
 (*
  * External function declaration.
  *)
-declare str_external[@name:s]{'t; 'sl}
+declare str_external[name:s]{'t; 'sl}
 
 (*
  * Unnamed value.
@@ -463,12 +463,12 @@ declare str_expr{'e}
 (*
  * Module definition.
  *)
-declare str_module[@name:s]{'me}
+declare str_module[name:s]{'me}
 
 (*
  * Module type definition.
  *)
-declare str_module_type[@name:s]{'mt}
+declare str_module_type[name:s]{'mt}
 
 (*
  * Open a module in scope.
@@ -508,13 +508,13 @@ declare mt_apply{'mt1; 'mt2}
 (*
  * Functor.
  *)
-declare mt_functor[@name:s]{'mt1; 'mt2}
+declare mt_functor[name:s]{'mt1; 'mt2}
 
 (*
  * Id.
  *)
-declare mt_lid[@name:s]
-declare mt_uid[@name:s]
+declare mt_lid[name:s]
+declare mt_uid[name:s]
 
 (*
  * Signature.
@@ -550,7 +550,7 @@ declare me_apply{'me1; 'me2}
 (*
  * Functor.
  *)
-declare me_functor[@name:s]{'mt; 'me}
+declare me_functor[name:s]{'mt; 'me}
 
 (*
  * Structure.
@@ -565,8 +565,8 @@ declare me_cast{'me; 'mt}
 (*
  * Variables.
  *)
-declare me_lid[@name:s]
-declare me_uid[@name:s]
+declare me_lid[name:s]
+declare me_uid[name:s]
 
 (*
  * -*-

@@ -96,13 +96,13 @@ topval fold_assert : conv
  * H >- Ui ext Unit
  * by boolFormation
  *)
-rule boolFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
+rule boolFormation 'H : sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Bool = Bool in Ui ext Ax
  * by boolEquality
  *)
-rule boolEquality 'H : sequent ['ext] { 'H >- "bool" = "bool" in univ[@i:l] }
+rule boolEquality 'H : sequent ['ext] { 'H >- "bool" = "bool" in univ[i:l] }
 
 (*
  * H >- Bool ext btrue

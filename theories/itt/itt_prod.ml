@@ -75,9 +75,9 @@ prim_rw unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
  * H >- Ui ext B
  *)
 prim independentProductFormation 'H :
-   ('A : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   ('B : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
+   ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    'A * 'B
 
 (*
@@ -87,9 +87,9 @@ prim independentProductFormation 'H :
  * H >- B1 = B2 in Ui
  *)
 prim independentProductEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] } =
    it
 
 (*
@@ -208,7 +208,7 @@ let eqcd_prodT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (prod_term, eqcd_prodT)
 
-let prod_equal_term = << ('a1 * 'a2) = ('b1 * 'b2) in univ[@i:l] >>
+let prod_equal_term = << ('a1 * 'a2) = ('b1 * 'b2) in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (prod_equal_term, d_wrap_eqcd eqcd_prodT)
 

@@ -46,7 +46,7 @@ open Tacticals
  ************************************************************************)
 
 declare int
-declare number[@n:n]
+declare number[n:n]
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 val int_term : term
@@ -82,21 +82,21 @@ rewrite unfold_le  : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
 rewrite unfold_gt  : gt{'a; 'b} <--> 'b < 'a
 rewrite unfold_ge  : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
-rewrite reduce_add : "add"{number[@i:n]; number[@j:n]} <-->
-   meta_sum{number[@i:n]; number[@j:n]}
-rewrite reduce_sub : "sub"{number[@i:n]; number[@j:n]} <-->
-   meta_diff{number[@i:n]; number[@j:n]}
-rewrite reduce_mul : "mul"{number[@i:n]; number[@j:n]} <-->
-   meta_prod{number[@i:n]; number[@j:n]}
-rewrite reduce_div : "div"{number[@i:n]; number[@j:n]} <-->
-   meta_quot{number[@i:n]; number[@j:n]}
-rewrite reduce_rem : "rem"{number[@i:n]; number[@j:n]} <-->
-   meta_rem{number[@i:n]; number[@j:n]}
+rewrite reduce_add : "add"{number[i:n]; number[j:n]} <-->
+   meta_sum{number[i:n]; number[j:n]}
+rewrite reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
+   meta_diff{number[i:n]; number[j:n]}
+rewrite reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
+   meta_prod{number[i:n]; number[j:n]}
+rewrite reduce_div : "div"{number[i:n]; number[j:n]} <-->
+   meta_quot{number[i:n]; number[j:n]}
+rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
+   meta_rem{number[i:n]; number[j:n]}
 
-rewrite reduce_lt : "lt"{number[@i:n]; number[@j:n]} <-->
-   meta_lt{number[@i:n]; number[@j:n]}
-rewrite reduce_eq : (number[@i:n] = number[@j:n] in int) <-->
-   meta_eq{number[@i:n]; number[@j:n]}
+rewrite reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
+   meta_lt{number[i:n]; number[j:n]}
+rewrite reduce_eq : (number[i:n] = number[j:n] in int) <-->
+   meta_eq{number[i:n]; number[j:n]}
 
 (************************************************************************
  * RULES                                                                *
@@ -134,7 +134,7 @@ ml_rw reduce_ind : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}
  * H >- Ui ext Z
  * by intFormation
  *)
-rule intFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
+rule intFormation 'H : sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- int Type
@@ -145,19 +145,19 @@ rule intType 'H : sequent ['ext] { 'H >- "type"{int} }
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-rule intEquality 'H : sequent ['ext] { 'H >- int = int in univ[@i:l] }
+rule intEquality 'H : sequent ['ext] { 'H >- int = int in univ[i:l] }
 
 (*
  * H >- Z ext n
  * by numberFormation n
  *)
-rule numberFormation 'H number[@n:n] : sequent ['ext] { 'H >- int }
+rule numberFormation 'H number[n:n] : sequent ['ext] { 'H >- int }
 
 (*
  * H >- i = i in int
  * by numberEquality
  *)
-rule numberEquality 'H : sequent ['ext] { 'H >- number[@n:n] = number[@n:n] in int }
+rule numberEquality 'H : sequent ['ext] { 'H >- number[n:n] = number[n:n] in int }
 
 (*
  * Induction:
@@ -207,7 +207,7 @@ rule indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
 rule less_thanFormation 'H :
    sequent ['ext] { 'H >- int } -->
    sequent ['ext] { 'H >- int } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- i1 < j1 = i2 < j2 in Ui
@@ -219,7 +219,7 @@ rule less_thanFormation 'H :
 rule less_thanEquality 'H :
    sequent [squash] { 'H >- 'i1 = 'j1 in int } -->
    sequent [squash] { 'H >- 'i2 = 'j2 in int } -->
-   sequent ['ext] { 'H >- 'i1 < 'j1 = 'i2 < 'j2 in univ[@i:l] }
+   sequent ['ext] { 'H >- 'i1 < 'j1 = 'i2 < 'j2 in univ[i:l] }
 
 (*
  * H >- it = it in (a < b)

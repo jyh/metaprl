@@ -67,18 +67,18 @@ dform isect_df : mode[prl] :: parens :: "prec"[prec_tunion] :: tunion{'A; x. 'B}
  * Proof of Ui
  *)
 prim tunionFormation 'H 'x 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    tunion{'A; x. 'B['x]}
 
 (*
  * Typehood.
  *)
 prim tunionEquality 'H 'x :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   sequent ['ext] { 'H >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] } =
    it
 
 prim tunionType 'H 'y :
@@ -191,7 +191,7 @@ let eqcd_tunionT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (tunion_term, eqcd_tunionT)
 
-let eqcd_tunion_term = << tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2]} in univ[@i:l] >>
+let eqcd_tunion_term = << tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2]} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (eqcd_tunion_term, d_wrap_eqcd eqcd_tunionT)
 

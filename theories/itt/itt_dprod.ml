@@ -134,9 +134,9 @@ dform snd_df1 : mode[prl] :: snd{'e} =
  * H, x:A >- Ui ext B
  *)
 prim productFormation 'H 'A 'x :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    x:'A * 'B['x]
 
 (*
@@ -146,9 +146,9 @@ prim productFormation 'H 'A 'x :
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
 prim productEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
    it
 
 (*
@@ -340,7 +340,7 @@ let eqcd_dprodT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (dprod_term, eqcd_dprodT)
 
-let dprod_equal_term = << (x1 : 'A1 * 'B1['x1]) = (x2 : 'A2 * 'B2['x2]) in univ[@i:l] >>
+let dprod_equal_term = << (x1 : 'A1 * 'B1['x1]) = (x2 : 'A2 * 'B2['x2]) in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (dprod_equal_term, d_wrap_eqcd eqcd_dprodT)
 

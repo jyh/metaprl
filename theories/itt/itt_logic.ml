@@ -89,7 +89,7 @@ let debug_auto =
  * REWRITES								*
  ************************************************************************)
 
-declare "prop"[@i:l]
+declare "prop"[i:l]
 
 declare "true"
 declare "false"
@@ -103,7 +103,7 @@ declare "cor"{'a; 'b}
 declare "all"{'A; x. 'B['x]}
 declare "exists"{'A; x. 'B['x]}
 
-prim_rw unfold_prop : "prop"[@i:l] <--> "univ"[@i:l]
+prim_rw unfold_prop : "prop"[i:l] <--> "univ"[i:l]
 
 prim_rw unfold_true : "true" <--> unit
 prim_rw unfold_false : "false" <--> void
@@ -137,7 +137,7 @@ let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
  * True and false.
  *)
 interactive true_univ 'H : :
-   sequent ['ext] { 'H >- "true" = "true" in univ[@i:l] }
+   sequent ['ext] { 'H >- "true" = "true" in univ[i:l] }
 
 interactive true_type 'H : :
    sequent ['ext] { 'H >- "type"{."true"} }
@@ -146,7 +146,7 @@ interactive true_intro 'H : :
    sequent ['ext] { 'H >- "true" }
 
 interactive false_univ 'H : :
-   sequent ['ext] { 'H >- "false" = "false" in univ[@i:l] }
+   sequent ['ext] { 'H >- "false" = "false" in univ[i:l] }
 
 interactive false_type 'H : :
    sequent ['ext] { 'H >- "type"{."false"} }
@@ -162,8 +162,8 @@ interactive false_squash 'H :
  * Negation.
  *)
 interactive not_univ 'H :
-   sequent [squash] { 'H >- 't1 = 't2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "not"{'t1} = "not"{'t2} in univ[@i:l] }
+   sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- "not"{'t1} = "not"{'t2} in univ[i:l] }
 
 interactive not_type 'H :
    sequent [squash] { 'H >- "type"{'t} } -->
@@ -182,9 +182,9 @@ interactive not_elim 'H 'J :
  * Conjunction.
  *)
 interactive and_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
 
 interactive and_type 'H :
    sequent [squash] { 'H >- "type"{'a1} } -->
@@ -204,9 +204,9 @@ interactive and_elim 'H 'J 'y 'z :
  * Disjunction.
  *)
 interactive or_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[i:l] }
 
 interactive or_type 'H :
    sequent [squash] { 'H >- "type"{'a1} } -->
@@ -232,9 +232,9 @@ interactive or_elim 'H 'J 'y :
  * Implication.
  *)
 interactive implies_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[i:l] }
 
 interactive implies_type 'H :
    sequent [squash] { 'H >- "type"{'a1} } -->
@@ -255,9 +255,9 @@ interactive implies_elim 'H 'J 'y :
  * Bi-implication.
  *)
 interactive iff_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
 
 interactive iff_type 'H :
    sequent [squash] { 'H >- "type"{'a1} } -->
@@ -277,9 +277,9 @@ interactive iff_elim 'H 'J 'y 'z :
  * Conjunction.
  *)
 interactive cand_univ 'H 'x :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
-   sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
 
 interactive cand_type 'H 'x :
    sequent [squash] { 'H >- "type"{'a1} } -->
@@ -299,9 +299,9 @@ interactive cand_elim 'H 'J 'y 'z :
  * Disjunction.
  *)
 interactive cor_univ 'H 'x :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
-   sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
 
 interactive cor_type 'H 'x :
    sequent [squash] { 'H >- "type"{'a1} } -->
@@ -328,9 +328,9 @@ interactive cor_elim 'H 'J 'u 'v :
  * All elimination performs a thinning
  *)
 interactive all_univ 'H 'x :
-   sequent [squash] { 'H >- 't1 = 't2 in univ[@i:l] } -->
-   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[@i:l] }
+   sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
+   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+   sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
 interactive all_type 'H 'x :
    sequent [squash] { 'H >- "type"{'t} } -->
@@ -351,9 +351,9 @@ interactive all_elim 'H 'J 'w 'z :
  * Existential.
  *)
 interactive exists_univ 'H 'x :
-   sequent [squash] { 'H >- 't1 = 't2 in univ[@i:l] } -->
-   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[@i:l] }
+   sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
+   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+   sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
 interactive exists_type 'H 'x :
    sequent [squash] { 'H >- "type"{'t} } -->
@@ -539,7 +539,7 @@ let eqcd_trueT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (true_term, eqcd_trueT)
 
-let true_equal_term = << "true" = "true" in univ[@i:l] >>
+let true_equal_term = << "true" = "true" in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (true_equal_term, d_wrap_eqcd eqcd_trueT)
 
@@ -570,7 +570,7 @@ let eqcd_falseT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (false_term, eqcd_falseT)
 
-let false_equal_term = << "false" = "false" in univ[@i:l] >>
+let false_equal_term = << "false" = "false" in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (false_equal_term, d_wrap_eqcd eqcd_falseT)
 
@@ -604,7 +604,7 @@ let eqcd_notT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (not_term, eqcd_notT)
 
-let not_equal_term = << "not"{'t1} = "not"{'t2} in univ[@i:l] >>
+let not_equal_term = << "not"{'t1} = "not"{'t2} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (not_equal_term, d_wrap_eqcd eqcd_notT)
 
@@ -636,7 +636,7 @@ let eqcd_andT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (and_term, eqcd_andT)
 
-let and_equal_term = << "and"{'t1; 't2} = "and"{'t3; 't4} in univ[@i:l] >>
+let and_equal_term = << "and"{'t1; 't2} = "and"{'t3; 't4} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (and_equal_term, d_wrap_eqcd eqcd_andT)
 
@@ -677,7 +677,7 @@ let eqcd_orT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (or_term, eqcd_orT)
 
-let or_equal_term = << "or"{'t1; 't2} = "or"{'t3; 't4} in univ[@i:l] >>
+let or_equal_term = << "or"{'t1; 't2} = "or"{'t3; 't4} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (or_equal_term, d_wrap_eqcd eqcd_orT)
 
@@ -711,7 +711,7 @@ let eqcd_candT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (cand_term, eqcd_candT)
 
-let cand_equal_term = << "cand"{'t1; 't2} = "cand"{'t3; 't4} in univ[@i:l] >>
+let cand_equal_term = << "cand"{'t1; 't2} = "cand"{'t3; 't4} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (cand_equal_term, d_wrap_eqcd eqcd_candT)
 
@@ -748,7 +748,7 @@ let eqcd_impliesT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (implies_term, eqcd_impliesT)
 
-let implies_equal_term = << "implies"{'t1; 't2} = "implies"{'t3; 't4} in univ[@i:l] >>
+let implies_equal_term = << "implies"{'t1; 't2} = "implies"{'t3; 't4} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (implies_equal_term, d_wrap_eqcd eqcd_impliesT)
 
@@ -780,7 +780,7 @@ let eqcd_iffT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (iff_term, eqcd_iffT)
 
-let iff_equal_term = << "iff"{'t1; 't2} = "iff"{'t3; 't4} in univ[@i:l] >>
+let iff_equal_term = << "iff"{'t1; 't2} = "iff"{'t3; 't4} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (iff_equal_term, d_wrap_eqcd eqcd_iffT)
 
@@ -826,7 +826,7 @@ let eqcd_allT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (all_term, eqcd_allT)
 
-let all_equal_term = << (all x1: 't1. 'b1['x1]) = (all x2: 't2. 'b2['t2]) in univ[@i:l] >>
+let all_equal_term = << (all x1: 't1. 'b1['x1]) = (all x2: 't2. 'b2['t2]) in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (all_equal_term, d_wrap_eqcd eqcd_allT)
 
@@ -877,7 +877,7 @@ let eqcd_existsT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (exists_term, eqcd_existsT)
 
-let exists_equal_term = << (exst x1: 't1. 'b1['x1]) = (exst x2: 't2. 'b2['t2]) in univ[@i:l] >>
+let exists_equal_term = << (exst x1: 't1. 'b1['x1]) = (exst x2: 't2. 'b2['t2]) in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (exists_equal_term, d_wrap_eqcd eqcd_existsT)
 

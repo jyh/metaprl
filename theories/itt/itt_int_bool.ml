@@ -80,12 +80,12 @@ dform ge_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: ge_int{'i; 'j} 
  * REWRITES                                                             *
  ************************************************************************)
 
-prim_rw reduce_eq_int' : eq_int{number[@i:n]; number[@j:n]} <-->
-   meta_eq{number[@i:n]; number[@j:n]; btrue; bfalse}
-prim_rw reduce_lt_int' : lt_int{number[@i:n]; number[@j:n]} <-->
-   meta_lt{number[@i:n]; number[@j:n]; btrue; bfalse}
-prim_rw reduce_gt_int' : gt_int{number[@i:n]; number[@j:n]} <-->
-   meta_lt{number[@j:n]; number[@i:n]; btrue; bfalse}
+prim_rw reduce_eq_int' : eq_int{number[i:n]; number[j:n]} <-->
+   meta_eq{number[i:n]; number[j:n]; btrue; bfalse}
+prim_rw reduce_lt_int' : lt_int{number[i:n]; number[j:n]} <-->
+   meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
+prim_rw reduce_gt_int' : gt_int{number[i:n]; number[j:n]} <-->
+   meta_lt{number[j:n]; number[i:n]; btrue; bfalse}
 prim_rw reduce_le_int : le_int{'i; 'j} <-->
    bor{eq_int{'i; 'j}; lt_int{'i; 'j}}
 prim_rw reduce_ge_int : ge_int{'i; 'j} <-->
@@ -101,9 +101,9 @@ let reduce_gt_int =
    reduce_gt_int' andthenC reduce_meta_lt
 
 let reduce_info =
-   [<< eq_int{number[@i:n]; number[@j:n]} >>, reduce_eq_int;
-    << lt_int{number[@i:n]; number[@j:n]} >>, reduce_lt_int;
-    << gt_int{number[@i:n]; number[@j:n]} >>, reduce_gt_int;
+   [<< eq_int{number[i:n]; number[j:n]} >>, reduce_eq_int;
+    << lt_int{number[i:n]; number[j:n]} >>, reduce_lt_int;
+    << gt_int{number[i:n]; number[j:n]} >>, reduce_gt_int;
     << le_int{'i; 'j} >>, reduce_le_int;
     << ge_int{'i; 'j} >>, reduce_ge_int]
 

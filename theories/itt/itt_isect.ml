@@ -88,9 +88,9 @@ dform isect_df2 : mode[src] :: (isect x: 'A. 'B) =
  * H, x: A >- Ui ext B[x]
  *)
 prim intersectionFormation 'H 'x 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    isect x: 'A. 'B['x]
 
 (*
@@ -100,9 +100,9 @@ prim intersectionFormation 'H 'x 'A :
  * H, y: A1 >- B1[y] = B2[y] in Ui
  *)
 prim intersectionEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
 prim intersectionType 'H 'y :
@@ -269,7 +269,7 @@ let eqcd_isectT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (isect_term, eqcd_isectT)
 
-let isect_equal_term = << "isect"{'A1; x1. 'B1['x1]} = "isect"{'A2; x2. 'B2['x2]} in univ[@i:l] >>
+let isect_equal_term = << "isect"{'A1; x1. 'B1['x1]} = "isect"{'A2; x2. 'B2['x2]} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (isect_equal_term, d_wrap_eqcd eqcd_isectT)
 

@@ -99,9 +99,9 @@ rule substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
  * H, x:B, J >- T
  * H, x: A, J >- A = B in type
  *)
-rule hypReplacement 'H 'J 'B univ[@i:l] :
+rule hypReplacement 'H 'J 'B univ[i:l] :
    sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] } -->
-   sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[@i:l] } -->
+   sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
 
 (*

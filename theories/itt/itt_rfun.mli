@@ -80,8 +80,8 @@ rewrite reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
  * H >- { f | a: A -> B } = { f | a: A -> B } in Ui
  *)
 rule rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
-   sequent [squash] { 'H >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent [squash] { 'H >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- { f1 | a1:A1 -> B1[f1, a1] } = { f2 | a2:A2 -> B2[f2, a2] } in Ui
@@ -92,16 +92,16 @@ rule rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
  * H, y:A, g : { f1 | x1: { z: A1 | R z y } -> B1[f1, x1] } >- B1[g, y] = B2[g, y] in Ui
  *)
 rule rfunctionEquality 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
    sequent [squash] { 'H;
              y: 'A1;
              g: { f1 | x1: { z: 'A1 | 'R['z; 'y] } -> 'B1['f1; 'x1] }
-             >- 'B1['g; 'y] = 'B2['g; 'y] in univ[@i:l]
+             >- 'B1['g; 'y] = 'B2['g; 'y] in univ[i:l]
            } -->
    sequent ['ext] { 'H >- { f1 | a1:'A1 -> 'B1['f1; 'a1] }
                    = { f2 | a2:'A2 -> 'B2['f2; 'a2] }
-                   in univ[@i:l]
+                   in univ[i:l]
            }
 
 (*

@@ -96,12 +96,12 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
  * H, x: A, y: A, z: A, u: E[x, y], v: E[y, z] >- E[x, z]
  *)
 prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   sequent [squash] { 'H; x: 'A; y: 'A >- 'E['x; 'y] = 'E['x; 'y] in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   sequent [squash] { 'H; x: 'A; y: 'A >- 'E['x; 'y] = 'E['x; 'y] in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A >- 'E['x; 'x] } -->
    sequent [squash] { 'H; x: 'A; y: 'A; u: 'E['x; 'y] >- 'E['y; 'x] } -->
    sequent [squash] { 'H; x: 'A; y: 'A; z: 'A; u: 'E['x; 'y]; v: 'E['y; 'z] >- 'E['x; 'z] } -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent ['ext] { 'H >- univ[i:l] } =
    quot x, y: 'A // 'E['x; 'y]
 
 (*
@@ -115,14 +115,14 @@ prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
  * H, x: A1, y: A1, z: A1, u: E1[x, y], v: E1[y, z] >- E1[x, z]
  *)
 prim quotientWeakEquality 'H 'x 'y 'z 'u 'v :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
    sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
-                   in univ[@i:l]
+                   in univ[i:l]
            } =
    it
 
@@ -137,12 +137,12 @@ prim quotientWeakEquality 'H 'x 'y 'z 'u 'v :
  * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E2[r, s] -> E1[r, s]
  *)
 prim quotientEquality 'H 'r 's 'v :
-   sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[@i:l] } -->
-   sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[@i:l]; r: 'A1; s: 'A1 >- 'E1['r; 's] -> 'E2['r; 's] } -->
-   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[@i:l]; r: 'A1; s: 'A1 >- 'E2['r; 's] -> 'E1['r; 's] } -->
-   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[@i:l] } =
+   sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
+   sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } -->
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E1['r; 's] -> 'E2['r; 's] } -->
+   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E2['r; 's] -> 'E1['r; 's] } -->
+   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } =
    it
 
 (*
@@ -333,7 +333,7 @@ let eqcd_quotientT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (quotient_term, eqcd_quotientT)
 
-let quotient_equal_term = << (quot x1, y1: 'A1 // 'E1['x; 'y]) = (quot x2, y2: 'A2 // 'E2['x1; 'x2]) in univ[@i:l] >>
+let quotient_equal_term = << (quot x1, y1: 'A1 // 'E1['x; 'y]) = (quot x2, y2: 'A2 // 'E2['x1; 'x2]) in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (quotient_equal_term, d_wrap_eqcd eqcd_quotientT)
 

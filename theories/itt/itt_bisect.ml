@@ -78,9 +78,9 @@ prim_rw unfold_bisect : bisect{'A; 'B} <-->
  * Typehood.
  *)
 interactive bisectEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
 
 interactive bisectType 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
@@ -91,9 +91,9 @@ interactive bisectType 'H :
  * Formation.
  *)
 interactive bisectFormation 'H :
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * Membership.
@@ -178,7 +178,7 @@ let eqcd_bisectT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (bisect_term, eqcd_bisectT)
 
-let bisect_equal_term = << bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[@i:l] >>
+let bisect_equal_term = << bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (bisect_equal_term, d_wrap_eqcd eqcd_bisectT)
 

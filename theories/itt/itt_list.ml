@@ -154,8 +154,8 @@ dform list_ind_df1 : mode[prl] :: parens :: "prec"[prec_list] :: list_ind{'e; 'b
  * H >- Ui ext A
  *)
 prim listFormation 'H :
-   ('A : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    'A
 
 (*
@@ -175,8 +175,8 @@ prim listType 'H :
  * H >- A = B in Ui
  *)
 prim listEquality 'H :
-   sequent [squash] { 'H >- 'A = 'B in univ[@i:l] } -->
-   sequent ['ext] { 'H >- list{'A} = list{'B} in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A = 'B in univ[i:l] } -->
+   sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] } =
    it
 
 (*

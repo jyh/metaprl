@@ -71,10 +71,10 @@ rewrite reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
  *)
 rule precEquality 'H 'A 'x 'y 'z 'T 'P1 'P2 :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H; x: 'A; T: 'A -> univ[@i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[@i:l] } -->
+   sequent [squash] { 'H; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
    sequent [squash] { 'H;
-             P1: 'A -> univ[@i:l];
-             P2: 'A -> univ[@i:l];
+             P1: 'A -> univ[i:l];
+             P2: 'A -> univ[i:l];
              z: x:'A -> subtype{('P1 'x); ('P2 'x)};
              x: 'A;
              y: 'B1['P1; 'x]
@@ -82,7 +82,7 @@ rule precEquality 'H 'A 'x 'y 'z 'T 'P1 'P2 :
            } -->
    sequent ['ext] { 'H >- "prec"{A1, x1. 'B1['A1; 'x1]; 'a1}
                    = "prec"{A2, x2. 'B2['A2; 'x2]; 'a2}
-                   in univ[@i:l]
+                   in univ[i:l]
            }
 
 (*
@@ -120,10 +120,10 @@ rule precMemberEquality 'H 'z :
  *   p: a: A * B[Z, a]
  * >- T[p]
  *)
-rule precElimination 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[@i:l] :
+rule precElimination 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
    sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
-      Z: 'A -> univ[@i:l] ;
+      Z: 'A -> univ[i:l] ;
       u: subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
       h: p: (a: 'A * 'Z 'a) -> 'G['p];
       p: a: 'A * 'B['Z; 'a]
@@ -159,9 +159,9 @@ rule precUnrollElimination 'H 'J 'z 'y 'u :
  *   z: a: A * B[Z; a]
  *   >- t1[h; z] = t2[h; z] in S[z]
  *)
-rule precindEquality 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[@i:l] :
+rule precindEquality 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[i:l] :
    sequent [squash] { 'H >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
-   sequent [squash] { 'H; Z: 'A -> univ[@i:l];
+   sequent [squash] { 'H; Z: 'A -> univ[i:l];
              u: subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
              h: z: (a: 'A * 'Z 'a) -> 'S['z];
              z: a: 'A * 'B['Z; 'a]

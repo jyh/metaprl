@@ -84,9 +84,9 @@ prim_rw reduceIndependentEta ('A -> 'B) : ('f = 'f in 'A -> 'B) -->
  * H >- Ui ext B
  *)
 prim independentFunctionFormation 'H :
-   ('A : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   ('B : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
+   ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    'A -> 'B
 
 (*
@@ -97,9 +97,9 @@ prim independentFunctionFormation 'H :
  * H >- B1 = B2 in Ui
  *)
 prim independentFunctionEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] } =
    it
 
 (*
@@ -258,7 +258,7 @@ let eqcd_funT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (fun_term, eqcd_funT)
 
-let fun_equal_term = << ('A1 -> 'A2) = ('B1 -> 'B2) in univ[@i:l] >>
+let fun_equal_term = << ('A1 -> 'A2) = ('B1 -> 'B2) in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (fun_equal_term, d_wrap_eqcd eqcd_funT)
 

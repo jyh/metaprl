@@ -85,13 +85,13 @@ dform void_df1 : mode[prl] :: void = `"Void"
  * H >- Ui ext Void
  * by voidFormation
  *)
-prim voidFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = void
+prim voidFormation 'H : : sequent ['ext] { 'H >- univ[i:l] } = void
 
 (*
  * H >- Void = Void in Ui ext Ax
  * by voidEquality
  *)
-prim voidEquality 'H : : sequent ['ext] { 'H >- void = void in univ[@i:l] } = it
+prim voidEquality 'H : : sequent ['ext] { 'H >- void = void in univ[i:l] } = it
 
 (*
  * Typehood.
@@ -159,7 +159,7 @@ let eqcd_voidT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (void_term, eqcd_voidT)
 
-let equal_void_term = << void = void in univ[@i:l] >>
+let equal_void_term = << void = void in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (equal_void_term, d_wrap_eqcd eqcd_voidT)
 

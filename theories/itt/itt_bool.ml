@@ -154,7 +154,7 @@ dform assert_df : mode[prl] :: parens :: "prec"[prec_assert] :: "assert"{'t} =
  * by boolEquality
  *)
 interactive boolEquality 'H : :
-   sequent ['ext] { 'H >- "bool" = "bool" in univ[@i:l] }
+   sequent ['ext] { 'H >- "bool" = "bool" in univ[i:l] }
 
 interactive boolType 'H : :
    sequent ['ext] { 'H >- "type"{bool} }
@@ -220,7 +220,7 @@ interactive boolElimination3 'H 'J 'x :
  * by boolFormation
  *)
 interactive boolFormation 'H : :
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Bool ext btrue
@@ -489,7 +489,7 @@ let eqcd_resource = Mp_resource.improve eqcd_resource (bool_term, eqcd_boolT)
 let eqcd_resource = Mp_resource.improve eqcd_resource (btrue_term, eqcd_btrueT)
 let eqcd_resource = Mp_resource.improve eqcd_resource (bfalse_term, eqcd_bfalseT)
 
-let bool_equal_term = << bool = bool in univ[@i:l] >>
+let bool_equal_term = << bool = bool in univ[i:l] >>
 let btrue_equal_term = << btrue = btrue in bool >>
 let bfalse_equal_term = << bfalse = bfalse in bool >>
 

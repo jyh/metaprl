@@ -51,34 +51,34 @@ let _ =
 
 declare "interface"{'intf}
 declare "implementation"{'impl}
-declare "location"[@start:n, @finish:n]{'body}
+declare "location"[start:n, finish:n]{'body}
 
-declare "rewrite"[@name:s]{'redex; 'contractum; 'proof}
-declare "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof}
-declare "axiom"[@name:s]{'stmt; 'proof}
-declare "rule"[@name:s]{'params; 'stmt; 'proof}
-declare "opname"[@name:s]{'term}
+declare "rewrite"[name:s]{'redex; 'contractum; 'proof}
+declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof}
+declare "axiom"[name:s]{'stmt; 'proof}
+declare "rule"[name:s]{'params; 'stmt; 'proof}
+declare "opname"[name:s]{'term}
 declare "mlterm"{'term; 'cons; 'oexpr}
 declare "condition"{'term; 'cons; 'oexpr}
 declare "parent"{'path; 'opens; 'resources}
-declare "module"[@name:s]{'info}
+declare "module"[name:s]{'info}
 declare "dform"{'modes; 'redex; 'def}
-declare "prec"[@name:s]
+declare "prec"[name:s]
 declare "prec_rel"{'op; 'left; 'right}
 declare "id"{'id}
-declare "resource"[@name:s]{'extract; 'improve; 'data}
-declare "infix"[@name:s]
-declare "magic_block"[@name:s]{'items}
+declare "resource"[name:s]{'extract; 'improve; 'data}
+declare "infix"[name:s]
+declare "magic_block"[name:s]{'items}
 declare "summary_item"{'term}
 
 declare "inherit_df"
-declare "prec_df"[@name:s]
+declare "prec_df"[name:s]
 declare "parens_df"
-declare "mode_df"[@mode:s]
+declare "mode_df"[mode:s]
 
 declare "df_none"
 declare "df_term"{'t}
-declare "df_ml"[@printer:s, @buffer:s]{'contracta; 'code}
+declare "df_ml"[printer:s, buffer:s]{'contracta; 'code}
 
 declare "none"
 declare "some"{'t}
@@ -89,8 +89,8 @@ declare "meta_implies"{'A; 'B}
 declare "meta_function"{'A; x. 'B['x]}
 declare "meta_iff"{'A; 'B}
 
-declare "context_param"[@name:s]
-declare "var_param"[@name:s]
+declare "context_param"[name:s]
+declare "var_param"[name:s]
 declare "term_param"{'t}
 
 (* Proofs *)
@@ -173,48 +173,48 @@ dform implementation_df : "implementation"{'body} =
    `"end"
    popm ezone
 
-dform location_df : "location"[@start:n, @finish:n]{'body} =
+dform location_df : "location"[start:n, finish:n]{'body} =
    slot{'body}
 
 (*
  * Display a simple rewrite.
  *)
-dform rewrite_df : "rewrite"[@name:s]{'redex; 'contractum; 'proof} =
+dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'proof} =
    szone pushm[4]
-   slot{'proof} `" rewrite" " " slot[@name:s] " " slot{'redex} " " longleftrightarrow hspace slot{'contractum}
+   slot{'proof} `" rewrite" " " slot[name:s] " " slot{'redex} " " longleftrightarrow hspace slot{'contractum}
    popm ezone
 
 (*
  * A conditional rewrite requires special handling of the params.
  *)
-dform context_param_df : "context_param"[@name:s] =
-   slot[@name:s]
+dform context_param_df : "context_param"[name:s] =
+   slot[name:s]
 
-dform var_param_df : "var_param"[@name:s] =
-   slot[@name:s]
+dform var_param_df : "var_param"[name:s] =
+   slot[name:s]
 
 dform term_param_df : "term_param"{'t} =
    szone pushm[4]
    slot{'t}
    popm ezone
 
-dform cond_rewrite_df : "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof} =
+dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof} =
    szone pushm[4]
-   slot{'proof} `" rewrite" " " slot[@name:s] " " slot{'params} `" :" " " slot{'args}
+   slot{'proof} `" rewrite" " " slot[name:s] " " slot{'params} `" :" " " slot{'args}
    " " longrightarrow slot{'redex} longleftrightarrow slot{'contractum}
    popm ezone
 
-dform axiom_df : "axiom"[@name:s]{'stmt; 'proof} =
+dform axiom_df : "axiom"[name:s]{'stmt; 'proof} =
    szone pushm[4]
-   slot{'proof} `" rule" " " slot[@name:s] `" : : " slot{'stmt}
+   slot{'proof} `" rule" " " slot[name:s] `" : : " slot{'stmt}
    popm ezone
 
-dform rule_df : "rule"[@name:s]{'params; 'stmt; 'proof} =
+dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof} =
    szone pushm[4]
-   slot{'proof} `" rule" " " slot[@name:s] " " space_list{'params} `":" hspace slot{'stmt}
+   slot{'proof} `" rule" " " slot[name:s] " " space_list{'params} `":" hspace slot{'stmt}
    ezone popm
 
-dform opname_df : "opname"[@name:s]{'term} =
+dform opname_df : "opname"[name:s]{'term} =
    szone pushm[4]
    `"declare" " " slot["raw"]{'term}
    ezone popm
@@ -234,11 +234,11 @@ dform condition_df : "condition"{'term; 'cons; 'oexpr} =
  *)
 declare path{'t}
 
-dform path_parent_nil_df : path{cons{."parent"[@name:s]; nil}} =
-   slot[@name:s]
+dform path_parent_nil_df : path{cons{."parent"[name:s]; nil}} =
+   slot[name:s]
 
-dform path_parent_cons_df : path{cons{."parent"[@name:s]; .cons{'n1; 'n2}}} =
-   slot[@name:s] `"." cons{'n1; 'n2}
+dform path_parent_cons_df : path{cons{."parent"[name:s]; .cons{'n1; 'n2}}} =
+   slot[name:s] `"." cons{'n1; 'n2}
 
 dform parent_df : "parent"{'path; 'opens; 'resources} =
    `"include" " " path{'path}
@@ -246,14 +246,14 @@ dform parent_df : "parent"{'path; 'opens; 'resources} =
 (*
  * Nested module is indented.
  *)
-dform module_df : "module"[@name:s]{'info} =
+dform module_df : "module"[name:s]{'info} =
    szone pushm[4]
-   `"module" " " slot[@name:s] `" = " break slot{'info}
+   `"module" " " slot[name:s] `" = " break slot{'info}
    ezone popm
 
-dform dform_df : "dform"[@name:s]{'modes; 'redex; 'def} =
+dform dform_df : "dform"[name:s]{'modes; 'redex; 'def} =
    szone pushm[4]
-   `"dform" " " slot[@name:s]
+   `"dform" " " slot[name:s]
    space `": " dform_modes{'modes} slot["raw"]{'redex}
    space `"=" hspace pushm slot{'def} popm
    ezone popm
@@ -267,8 +267,8 @@ dform rel_lt_df : "rel"{."prec_rel"["lt"]} = `"<"
 dform rel_eq_df : "rel"{."prec_rel"["eq"]} = `"="
 dform rel_gt_df : "rel"{."prec_rel"["gt"]} = `">"
 
-dform prec_df : "prec"[@name:s] =
-   `"prec" " " slot[@name:s]
+dform prec_df : "prec"[name:s] =
+   `"prec" " " slot[name:s]
 
 dform prec_rel_df : "prec_rel"{'op; 'left; 'right} =
    `"prec_rel " slot{'left} "rel"{'op} slot{'right}
@@ -276,16 +276,16 @@ dform prec_rel_df : "prec_rel"{'op; 'left; 'right} =
 dform id_df : "id"{'id} =
    `"id " slot{'id}
 
-dform resource_df : "resource"[@name]{'extract; 'improve; 'data} =
+dform resource_df : "resource"[name]{'extract; 'improve; 'data} =
    szone pushm[4]
-   `"resource" " " slot[@name:s] `"(" pushm slot{'extract} `";" slot{'improve} `";" slot{'data} popm `")"
+   `"resource" " " slot[name:s] `"(" pushm slot{'extract} `";" slot{'improve} `";" slot{'data} popm `")"
    popm ezone
 
-dform infix_df : "infix"[@name] =
-   `"infix" " " slot[@name:s]
+dform infix_df : "infix"[name] =
+   `"infix" " " slot[name:s]
 
-dform magic_block_df : "magic_block"[@name:s]{'items} =
-   `"magic_block" " " slot[@name:s] `" =" space slot{'items}
+dform magic_block_df : "magic_block"[name:s]{'items} =
+   `"magic_block" " " slot[name:s] `" =" space slot{'items}
 
 dform summary_item_df : "summary_item"{'term} =
    slot{'term}
@@ -299,11 +299,11 @@ dform meta_theorem_df : meta_theorem{'A} =
 dform meta_implies_df : meta_implies{'A; 'B} =
    slot{'A} " " longrightarrow hspace slot{'B}
 
-dform mode_df : mode_df[@s:s] =
-   `"mode[" slot[@s:s] `"]"
+dform mode_df : mode_df[s:s] =
+   `"mode[" slot[s:s] `"]"
 
-dform prec_df : prec_df[@s:s] =
-   `"prec[" slot[@s:s] `"]"
+dform prec_df : prec_df[s:s] =
+   `"prec[" slot[s:s] `"]"
 
 dform parens_df : parens_df =
    `"parens"

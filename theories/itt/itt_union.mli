@@ -80,9 +80,9 @@ prec prec_union
  * H >- Ui ext B
  *)
 rule unionFormation 'H :
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- A1 + B1 = A2 + B2 in Ui
@@ -91,9 +91,9 @@ rule unionFormation 'H :
  * H >- B1 = B2 in Ui
  *)
 rule unionEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] }
 
 
 (*

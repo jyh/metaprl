@@ -109,9 +109,9 @@ dform tree_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: tree_ind{'z;
  * H, x:A >- Ui ext B
  *)
 prim wFormation 'H 'A 'x :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    w{'A; x. 'B['x]}
 
 (*
@@ -121,9 +121,9 @@ prim wFormation 'H 'A 'x :
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
 prim wEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] } =
    it
 
 (*
@@ -289,7 +289,7 @@ let eqcd_wT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (w_term, eqcd_wT)
 
-let w_equal_term = << w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[@i:l] >>
+let w_equal_term = << w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (w_equal_term, d_wrap_eqcd eqcd_wT)
 

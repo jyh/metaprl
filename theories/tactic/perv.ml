@@ -48,7 +48,7 @@ let _ =
 
 declare "nil"
 declare "cons"{'car; 'cdr}
-declare "string"[@s:s]
+declare "string"[s:s]
 declare "lambda"{x. 'b}
 declare "hyp"{'A; x. 'B}
 declare "concl"{'A; 'B}
@@ -67,8 +67,8 @@ dform perv_nil_df : "nil" = `""
 dform perv_cons_df : "cons"{'car; 'cdr} =
    slot{'car} slot{'cdr}
 
-dform perv_string_df : "string"[@s:s] =
-   `"\"" slot[@s:s] `"\""
+dform perv_string_df : "string"[s:s] =
+   `"\"" slot[s:s] `"\""
 
 (*
  * -*-

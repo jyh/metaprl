@@ -132,9 +132,9 @@ prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
  * H, x:B, J >- T ext t
  * H, x: A, J >- A = B in type
  *)
-prim hypReplacement 'H 'J 'B univ[@i:l] :
+prim hypReplacement 'H 'J 'B univ[i:l] :
    ('t : sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] }) -->
-   sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[@i:l] } -->
+   sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] } =
    't
 

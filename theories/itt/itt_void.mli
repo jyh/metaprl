@@ -54,13 +54,13 @@ declare void
  * H >- Ui ext Void
  * by voidFormation
  *)
-rule voidFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
+rule voidFormation 'H : sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Void = Void in Ui ext Ax
  * by voidEquality
  *)
-rule voidEquality 'H : sequent ['ext] { 'H >- void = void in univ[@i:l] }
+rule voidEquality 'H : sequent ['ext] { 'H >- void = void in univ[i:l] }
 
 (*
  * Typehood.

@@ -70,7 +70,7 @@ let _ =
  ************************************************************************)
 
 declare int
-declare number[@n:n]
+declare number[n:n]
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 declare "add"{'a; 'b}
@@ -141,7 +141,7 @@ let is_rem_term = is_dep0_dep0_term rem_opname
 let mk_rem_term = mk_dep0_dep0_term rem_opname
 let dest_rem = dest_dep0_dep0_term rem_opname
 
-let number_term = << number[@n:n] >>
+let number_term = << number[n:n] >>
 let number_opname = opname_of_term number_term
 let is_number_term = is_number_term number_opname
 let dest_number = dest_number_term number_opname
@@ -169,8 +169,8 @@ prec prec_compare < prec_add
 
 dform int_prl_df1 : mode[prl] :: int = mathbbZ
 
-dform number_df : number[@n:n] =
-   slot[@n:s]
+dform number_df : number[n:n] =
+   slot[n:s]
 
 dform add_df1 :  mode[prl] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot[le]{'a} `" + " slot[lt]{'b}
@@ -221,21 +221,21 @@ prim_rw unfold_le : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
 prim_rw unfold_gt : gt{'a; 'b} <--> 'b < 'a
 prim_rw unfold_ge : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
-prim_rw reduce_add : "add"{number[@i:n]; number[@j:n]} <-->
-   meta_sum{number[@i:n]; number[@j:n]}
-prim_rw reduce_sub : "sub"{number[@i:n]; number[@j:n]} <-->
-   meta_diff{number[@i:n]; number[@j:n]}
-prim_rw reduce_mul : "mul"{number[@i:n]; number[@j:n]} <-->
-   meta_prod{number[@i:n]; number[@j:n]}
-prim_rw reduce_div : "div"{number[@i:n]; number[@j:n]} <-->
-   meta_quot{number[@i:n]; number[@j:n]}
-prim_rw reduce_rem : "rem"{number[@i:n]; number[@j:n]} <-->
-   meta_rem{number[@i:n]; number[@j:n]}
+prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
+   meta_sum{number[i:n]; number[j:n]}
+prim_rw reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
+   meta_diff{number[i:n]; number[j:n]}
+prim_rw reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
+   meta_prod{number[i:n]; number[j:n]}
+prim_rw reduce_div : "div"{number[i:n]; number[j:n]} <-->
+   meta_quot{number[i:n]; number[j:n]}
+prim_rw reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
+   meta_rem{number[i:n]; number[j:n]}
 
-prim_rw reduce_lt : "lt"{number[@i:n]; number[@j:n]} <-->
-   meta_lt{number[@i:n]; number[@j:n]}
-prim_rw reduce_eq : (number[@i:n] = number[@j:n] in int) <-->
-   meta_eq{number[@i:n]; number[@j:n]}
+prim_rw reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
+   meta_lt{number[i:n]; number[j:n]}
+prim_rw reduce_eq : (number[i:n] = number[j:n] in int) <-->
+   meta_eq{number[i:n]; number[j:n]}
 
 let reduce_add =
    reduce_add andthenC reduce_meta_sum
@@ -303,11 +303,11 @@ ml_rw reduce_ind : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} ==
             raise (RefineError ("reduce_ind", StringError "bogus extract terms"))
 
 let reduce_info =
-   [<< "add"{number[@i:n]; number[@j:n]} >>, reduce_add;
-    << "sub"{number[@i:n]; number[@j:n]} >>, reduce_sub;
-    << "mul"{number[@i:n]; number[@j:n]} >>, reduce_mul;
-    << "div"{number[@i:n]; number[@j:n]} >>, reduce_div;
-    << "rem"{number[@i:n]; number[@j:n]} >>, reduce_rem;
+   [<< "add"{number[i:n]; number[j:n]} >>, reduce_add;
+    << "sub"{number[i:n]; number[j:n]} >>, reduce_sub;
+    << "mul"{number[i:n]; number[j:n]} >>, reduce_mul;
+    << "div"{number[i:n]; number[j:n]} >>, reduce_div;
+    << "rem"{number[i:n]; number[j:n]} >>, reduce_rem;
     << ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>, reduce_ind]
 
 let reduce_resource = add_reduce_info reduce_resource reduce_info
@@ -320,7 +320,7 @@ let reduce_resource = add_reduce_info reduce_resource reduce_info
  * H >- Ui ext Z
  * by intFormation
  *)
-prim intFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = int
+prim intFormation 'H : : sequent ['ext] { 'H >- univ[i:l] } = int
 
 (*
  * H >- int Type
@@ -331,19 +331,19 @@ prim intType 'H : : sequent ['ext] { 'H >- "type"{int} } = it
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-prim intEquality 'H : : sequent ['ext] { 'H >- int = int in univ[@i:l] } = it
+prim intEquality 'H : : sequent ['ext] { 'H >- int = int in univ[i:l] } = it
 
 (*
  * H >- Z ext n
  * by numberFormation n
  *)
-prim numberFormation 'H number[@n:n] : : sequent ['ext] { 'H >- int } = number[@n:n]
+prim numberFormation 'H number[n:n] : : sequent ['ext] { 'H >- int } = number[n:n]
 
 (*
  * H >- i = i in int
  * by numberEquality
  *)
-prim numberEquality 'H : : sequent ['ext] { 'H >- number[@n:n] = number[@n:n] in int } = it
+prim numberEquality 'H : : sequent ['ext] { 'H >- number[n:n] = number[n:n] in int } = it
 
 (*
  * Induction:
@@ -395,7 +395,7 @@ prim indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
 prim less_thanFormation 'H :
    ('a : sequent ['ext] { 'H >- int }) -->
    ('b : sequent ['ext] { 'H >- int }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent ['ext] { 'H >- univ[i:l] } =
    'a < 'b
 
 (*
@@ -408,7 +408,7 @@ prim less_thanFormation 'H :
 prim less_thanEquality 'H :
    sequent [squash] { 'H >- 'i1 = 'j1 in int } -->
    sequent [squash] { 'H >- 'i2 = 'j2 in int } -->
-   sequent ['ext] { 'H >- 'i1 < 'j1 = 'i2 < 'j2 in univ[@i:l] } =
+   sequent ['ext] { 'H >- 'i1 < 'j1 = 'i2 < 'j2 in univ[i:l] } =
    it
 
 (*

@@ -80,13 +80,13 @@ dform unit_df1 : mode[prl] :: unit = `"Unit"
  * H >- Ui ext Unit
  * by unitFormation
  *)
-prim unitFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = unit
+prim unitFormation 'H : : sequent ['ext] { 'H >- univ[i:l] } = unit
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-prim unitEquality 'H : : sequent ['ext] { 'H >- unit = unit in univ[@i:l] } = it
+prim unitEquality 'H : : sequent ['ext] { 'H >- unit = unit in univ[i:l] } = it
 
 (*
  * Is a type.
@@ -186,7 +186,7 @@ let eqcd_itT p =
 let eqcd_resource = Mp_resource.improve eqcd_resource (unit_term, eqcd_unitT)
 let eqcd_resource = Mp_resource.improve eqcd_resource (it_term, eqcd_itT)
 
-let equal_unit_term = << unit = unit in univ[@i:l] >>
+let equal_unit_term = << unit = unit in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (equal_unit_term, d_wrap_eqcd eqcd_unitT)
 

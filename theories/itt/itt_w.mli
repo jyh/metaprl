@@ -81,9 +81,9 @@ prec prec_tree_ind
  * H, x:A >- Ui ext B
  *)
 rule wFormation 'H 'A 'x :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   sequent ['ext] { 'H; x: 'A >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- W(x1:A1; B1) = W(x2:A2; B2) in Ui
@@ -92,9 +92,9 @@ rule wFormation 'H 'A 'x :
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
 rule wEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] }
 
 (*
  * Typehood.

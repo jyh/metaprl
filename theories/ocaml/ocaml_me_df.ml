@@ -55,7 +55,7 @@ dform me_apply_df : me_apply{'me1; 'me2} = apply{'me1; 'me2}
 (*
  * Functor.
  *)
-dform me_functor_df : me_functor[@name:s]{'mt; 'me} = mt_functor[@name:s]{'mt; 'me}
+dform me_functor_df : me_functor[name:s]{'mt; 'me} = mt_functor[name:s]{'mt; 'me}
 
 (*
  * Structure.
@@ -74,8 +74,8 @@ dform me_cast_df : me_cast{'me; 'mt} =
 (*
  * Variables.
  *)
-dform me_lid_df : me_lid[@name:s] = slot[@name:s]
-dform me_uid_df : me_uid[@name:s] = slot[@name:s]
+dform me_lid_df : me_lid[name:s] = slot[name:s]
+dform me_uid_df : me_uid[name:s] = slot[name:s]
 
 (*
  * -*-

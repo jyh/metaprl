@@ -130,9 +130,9 @@ let reduce_resource = add_reduce_info reduce_resource reduce_info
  * H >- Ui ext B
  *)
 prim unionFormation 'H :
-   ('A : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   ('B : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
+   ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    'A + 'B
 
 (*
@@ -142,9 +142,9 @@ prim unionFormation 'H :
  * H >- B1 = B2 in Ui
  *)
 prim unionEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
    it
 
 (*
@@ -372,7 +372,7 @@ let eqcd_unionT p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (union_term, eqcd_unionT)
 
-let union_equal_term = << ('a1 + 'a2) = ('b1 + 'b2) in univ[@i:l] >>
+let union_equal_term = << ('a1 + 'a2) = ('b1 + 'b2) in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (union_equal_term, d_wrap_eqcd eqcd_unionT)
 

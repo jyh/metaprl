@@ -82,8 +82,8 @@ rewrite reduce_listindCons :
  * H >- Ui ext A
  *)
 rule listFormation 'H :
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- list{A} Type
@@ -101,8 +101,8 @@ rule listType 'H :
  * H >- A = B in Ui
  *)
 rule listEquality 'H :
-   sequent [squash] { 'H >- 'A = 'B in univ[@i:l] } -->
-   sequent ['ext] { 'H >- list{'A} = list{'B} in univ[@i:l] }
+   sequent [squash] { 'H >- 'A = 'B in univ[i:l] } -->
+   sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] }
 
 (*
  * H >- list(A) ext nil

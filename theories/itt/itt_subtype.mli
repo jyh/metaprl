@@ -61,9 +61,9 @@ prec prec_subtype
  * H >- Ui ext B
  *)
 rule subtypeFormation 'H :
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- subtype(A1; B1) = subtype(A2; B2) in Ui
@@ -73,9 +73,9 @@ rule subtypeFormation 'H :
  * H >- B1 = B2 in Ui
  *)
 rule subtypeEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[i:l] }
 
 rule subtypeType 'H :
    sequent [squash] { 'H >- "type"{'A} } -->

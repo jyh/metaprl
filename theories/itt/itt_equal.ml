@@ -76,13 +76,13 @@ let debug_eqcd =
  ************************************************************************)
 
 declare "type"{'a}
-declare univ[@i:l]
+declare univ[i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
 declare it
 declare "true"
 declare "false"
-declare cumulativity[@i:l, @j:l]
+declare cumulativity[i:l, j:l]
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -90,8 +90,8 @@ declare cumulativity[@i:l, @j:l]
 
 prim_rw unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
 
-prim_rw reduce_cumulativity' : cumulativity[@i:l, @j:l] <-->
-   meta_lt{univ[@i:l]; univ[@j:l]; ."true"; ."false"}
+prim_rw reduce_cumulativity' : cumulativity[i:l, j:l] <-->
+   meta_lt{univ[i:l]; univ[j:l]; ."true"; ."false"}
 
 let reduce_cumulativity =
    reduce_cumulativity' andthenC reduce_meta_lt
@@ -116,8 +116,8 @@ dform it_df1 : mode[prl] :: it = cdot
 dform type_prl_df1 : parens :: "prec"[prec_type] :: mode[prl] :: "type"{'a} =
    slot{'a} " " `"Type"
 
-dform term_df2 : mode[prl] :: univ[@i:l] =
-   mathbbU `"[" slot[@i:l] `"]"
+dform term_df2 : mode[prl] :: univ[i:l] =
+   mathbbU `"[" slot[i:l] `"]"
 
 dform squash_df : mode[prl] :: squash =
    cdot
@@ -178,7 +178,7 @@ prim equalityTrans 'H 'z :
 prim equalityFormation 'H 'T :
    ('a : sequent ['ext] { 'H >- 'T }) -->
    ('b : sequent ['ext] { 'H >- 'T }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent ['ext] { 'H >- univ[i:l] } =
    'a = 'b in 'T
 
 (*
@@ -190,10 +190,10 @@ prim equalityFormation 'H 'T :
  * H >- b1 = b2 in T1
  *)
 prim equalityEquality 'H :
-   sequent [squash] { 'H >- 'T1 = 'T2 in univ[@i:l] }
+   sequent [squash] { 'H >- 'T1 = 'T2 in univ[i:l] }
    sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 }
    sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } :
-   sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[@i:l] } =
+   sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
    it
 
 (*
@@ -294,22 +294,22 @@ let dest_level_param t =
  * by universeEquality (side (j < i))
  *)
 prim universeEquality 'H :
-   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
-   sequent ['ext] { 'H >- univ[@j:l] = univ[@j:l] in univ[@i:l] } =
+   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] { 'H >- univ[j:l] = univ[j:l] in univ[i:l] } =
   it
 
 (*
  * Universe is a type.
  *)
 prim universeType 'H : :
-   sequent ['ext] { 'H >- "type"{univ[@l:l]} } =
+   sequent ['ext] { 'H >- "type"{univ[l:l]} } =
    it
 
 (*
  * Anything in a universe is a type.
  *)
-prim universeMemberType 'H univ[@i:l] :
-   sequent [squash] { 'H >- 'x = 'x in univ[@i:l] } -->
+prim universeMemberType 'H univ[i:l] :
+   sequent [squash] { 'H >- 'x = 'x in univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} } =
    it
 
@@ -317,16 +317,16 @@ prim universeMemberType 'H univ[@i:l] :
  * Derived form for known membership.
  *)
 interactive universeAssumType 'H 'J : :
-   sequent ['ext] { 'H; x: univ[@l:l]; 'J['x] >- "type"{'x} }
+   sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} }
 
 (*
  * H >- Ui ext Uj
  * by universeFormation
  *)
-prim universeFormation 'H univ[@j:l] :
-   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
-   sequent ['ext] {'H >- univ[@i:l] } =
-   univ[@j:l]
+prim universeFormation 'H univ[j:l] :
+   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] {'H >- univ[i:l] } =
+   univ[j:l]
 
 (*
  * Squash from any.
@@ -351,7 +351,7 @@ let false_term = << "false" >>
 let false_opname = opname_of_term false_term
 let is_false_term = is_no_subterms_term false_opname
 
-let cumulativity_term = << cumulativity[@i:l, @j:l] >>
+let cumulativity_term = << cumulativity[i:l, j:l] >>
 
 let equal_term = << 'a = 'b in 'c >>
 let equal_opname = opname_of_term equal_term
@@ -371,7 +371,7 @@ let is_type_term = is_dep0_term type_opname
 let mk_type_term = mk_dep0_term type_opname
 let dest_type_term = dest_dep0_term type_opname
 
-let univ_term = << univ[@i:l] >>
+let univ_term = << univ[i:l] >>
 let univ1_term = << univ[1:l] >>
 let univ_opname = opname_of_term univ_term
 let is_univ_term = TermOp.is_univ_term univ_opname
@@ -524,7 +524,7 @@ let d_univ_typeT i p =
    else
       raise (RefineError ("d_univ_typeT", StringError "no elimination form"))
 
-let univ_type_term = << "type"{univ[@l:l]} >>
+let univ_type_term = << "type"{univ[l:l]} >>
 
 let d_resource = Mp_resource.improve d_resource (univ_type_term, d_univ_typeT)
 
@@ -547,7 +547,7 @@ let eqcd_itT p =
 let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
 let eqcd_resource = Mp_resource.improve eqcd_resource (it_term, eqcd_itT)
 
-let univ_equal_term = << univ[@i:l] = univ[@i:l] in univ[@j:l] >>
+let univ_equal_term = << univ[i:l] = univ[i:l] in univ[j:l] >>
 
 let d_resource = Mp_resource.improve d_resource (univ_equal_term, d_wrap_eqcd eqcd_univT)
 

@@ -36,7 +36,7 @@ open Conversionals
 open Tacticals
 
 declare vnil
-declare var[@t:t]
+declare var[t:t]
 declare ivar{'i; 'v}
 declare tvar{'t; 'v}
 declare var_type

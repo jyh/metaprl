@@ -59,9 +59,9 @@ declare "isect"{'A; x. 'B['x]}
  * H, x: A >- Ui ext B[x]
  *)
 rule intersectionFormation 'H 'x 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   sequent ['ext] { 'H; x: 'A >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- isect x1:A1. B1[x1] = isect x2:A2. B2[x2] in Ui
@@ -70,9 +70,9 @@ rule intersectionFormation 'H 'x 'A :
  * H, y: A1 >- B1[y] = B2[y] in Ui
  *)
 rule intersectionEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[i:l] }
 
 rule intersectionType 'H 'y :
    sequent [squash] { 'H >- "type"{'A} } -->

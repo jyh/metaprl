@@ -87,9 +87,9 @@ rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b
  * H, x:A >- Ui ext B
  *)
 rule productFormation 'H 'A 'x :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   sequent ['ext] { 'H; x: 'A >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- x1:A1 # B1 = x2:A2 # B2 in Ui
@@ -98,9 +98,9 @@ rule productFormation 'H 'A 'x :
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
 rule productEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] }
 
 (*
  * Typehood.

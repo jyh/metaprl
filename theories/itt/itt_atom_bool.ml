@@ -62,8 +62,8 @@ dform eq_atom_df : mode[prl] :: parens :: "prec"[prec_eq_atom] :: eq_atom{'x; 'y
  * REWRITE                                                              *
  ************************************************************************)
 
-prim_rw reduce_eq_atom' : eq_atom{token[@x:t]; token[@y:t]} <-->
-   meta_eq{token[@x:t]; token[@y:t]; btrue; bfalse}
+prim_rw reduce_eq_atom' : eq_atom{token[x:t]; token[y:t]} <-->
+   meta_eq{token[x:t]; token[y:t]; btrue; bfalse}
 
 let reduce_eq_atom =
    reduce_eq_atom' andthenC reduce_meta_eq

@@ -63,13 +63,13 @@ rule unitSqequal 'H :
  * H >- Ui ext Unit
  * by unitFormation
  *)
-rule unitFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
+rule unitFormation 'H : sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-rule unitEquality 'H : sequent ['ext] { 'H >- unit = unit in univ[@i:l] }
+rule unitEquality 'H : sequent ['ext] { 'H >- unit = unit in univ[i:l] }
 
 (*
  * Is a type.

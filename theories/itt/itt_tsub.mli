@@ -51,10 +51,10 @@ prec prec_tsub
  * Typehood.
  *)
 rule tsubEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent [squash] { 'H >- subtype{'B1; 'A1} } -->
-   sequent ['ext] { 'H >- tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[@i:l] }
+   sequent ['ext] { 'H >- tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[i:l] }
 
 rule tsubType 'H :
    sequent [squash] { 'H >- subtype{'B; 'A} } -->

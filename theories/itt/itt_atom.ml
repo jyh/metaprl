@@ -61,15 +61,15 @@ let _ =
  ************************************************************************)
 
 declare atom
-declare token[@t:t]
+declare token[t:t]
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
 dform atom_df : mode[prl] :: atom = `"Atom"
-dform token_df : mode[prl] :: token[@t:t] =
-   slot[@t:s]
+dform token_df : mode[prl] :: token[t:t] =
+   slot[t:s]
 
 (************************************************************************
  * RULES                                                                *
@@ -79,13 +79,13 @@ dform token_df : mode[prl] :: token[@t:t] =
  * H >- Ui ext Atom
  * by atomFormation
  *)
-prim atomFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = atom
+prim atomFormation 'H : : sequent ['ext] { 'H >- univ[i:l] } = atom
 
 (*
  * H >- Atom = Atom in Ui ext Ax
  * by atomEquality
  *)
-prim atomEquality 'H : : sequent ['ext] { 'H >- atom = atom in univ[@i:l] } = it
+prim atomEquality 'H : : sequent ['ext] { 'H >- atom = atom in univ[i:l] } = it
 
 (*
  * Typehood.
@@ -96,14 +96,14 @@ prim atomType 'H : : sequent ['ext] { 'H >- "type"{atom} } = it
  * H >- Atom ext "t"
  * by tokenFormation "t"
  *)
-prim tokenFormation 'H token[@t:t] : : sequent ['ext] { 'H >- atom } =
-   token[@t:t]
+prim tokenFormation 'H token[t:t] : : sequent ['ext] { 'H >- atom } =
+   token[t:t]
 
 (*
  * H >- "t" = "t" in Atom
  * by tokenEquality
  *)
-prim tokenEquality 'H : : sequent ['ext] { 'H >- token[@t:t] = token[@t:t] in atom } = it
+prim tokenEquality 'H : : sequent ['ext] { 'H >- token[t:t] = token[t:t] in atom } = it
 
 (*
  * Squiggle equality.
@@ -118,7 +118,7 @@ prim atom_sqequal 'H :
  ************************************************************************)
 
 let atom_term = << atom >>
-let token_term = << token[@x:t] >>
+let token_term = << token[x:t] >>
 let token_opname = opname_of_term token_term
 let is_token_term = TermOp.is_token_term token_opname
 let dest_token = TermOp.dest_token_term token_opname
@@ -151,15 +151,15 @@ let eqcd_resource = Mp_resource.improve eqcd_resource (atom_term, eqcd_atomT)
 let eqcd_resource = Mp_resource.improve eqcd_resource (token_term, eqcd_tokenT)
 
 let d_info =
-   [<< atom = atom in univ[@i:l] >>, wrap_intro eqcd_atomT;
-    << token[@t:t] = token[@t:t] in atom >>, wrap_intro eqcd_tokenT]
+   [<< atom = atom in univ[i:l] >>, wrap_intro eqcd_atomT;
+    << token[t:t] = token[t:t] in atom >>, wrap_intro eqcd_tokenT]
 
 let d_resource = add_d_info d_resource d_info
 
 (*
  * Typehood.
  *)
-let atom_equal_term = << atom = atom in univ[@i:l] >>
+let atom_equal_term = << atom = atom in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (atom_equal_term, d_wrap_eqcd eqcd_atomT)
 

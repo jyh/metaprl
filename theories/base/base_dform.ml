@@ -54,7 +54,7 @@ let _ =
 (*
  * Display forms.
  *)
-declare bvar{var[@v:v]}
+declare bvar{var[v:v]}
 declare " "
 declare "^"
 declare "_"
@@ -69,45 +69,45 @@ declare "\\"
 (*
  * Variables.
  *)
-dform var_src_df : mode[src] :: var[@v:v] =
-   `"'" slot[@v:s]
+dform var_src_df : mode[src] :: var[v:v] =
+   `"'" slot[v:s]
 
-dform var_prl_df : mode[prl] :: var[@v:v] =
-   slot[@v:s]
+dform var_prl_df : mode[prl] :: var[v:v] =
+   slot[v:s]
 
-dform so_var1_df : var[@v:v]{'x1} = var[@v:v] "[" 'x1  "]"
+dform so_var1_df : var[v:v]{'x1} = var[v:v] "[" 'x1  "]"
 
-dform so_var2_df : var[@v:v]{'x1; 'x2} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";" space 'x2 popm "]" ezone
+dform so_var2_df : var[v:v]{'x1; 'x2} =
+   szone var[v:v] "[" pushm[0] 'x1 ";" space 'x2 popm "]" ezone
 
-dform so_var3_df : var[@v:v]{'x1; 'x2; 'x3} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";"
+dform so_var3_df : var[v:v]{'x1; 'x2; 'x3} =
+   szone var[v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 popm "]" ezone
 
-dform so_var4_df : var[@v:v]{'x1; 'x2; 'x3; 'x4} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";"
+dform so_var4_df : var[v:v]{'x1; 'x2; 'x3; 'x4} =
+   szone var[v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 popm "]" ezone
 
-dform so_var5_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";"
+dform so_var5_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5} =
+   szone var[v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
                        space 'x5 popm "]" ezone
 
-dform so_var6_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";"
+dform so_var6_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6} =
+   szone var[v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
                        space 'x5 ";"
                        space 'x6 popm "]" ezone
 
-dform so_var7_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";"
+dform so_var7_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
+   szone var[v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
@@ -115,8 +115,8 @@ dform so_var7_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
                        space 'x6 ";"
                        space 'x7 popm "]" ezone
 
-dform so_var8_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";"
+dform so_var8_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
+   szone var[v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
@@ -125,8 +125,8 @@ dform so_var8_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
                        space 'x7 ";"
                        space 'x8 popm "]" ezone
 
-dform so_var9_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
-   szone var[@v:v] "[" pushm[0] 'x1 ";"
+dform so_var9_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
+   szone var[v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
@@ -136,7 +136,7 @@ dform so_var9_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
                        space 'x8 ";"
                        space 'x9 popm "]" ezone
 
-ml_dform bvar_df : bvar{var[@v:v]} format_term buf = fun
+ml_dform bvar_df : bvar{var[v:v]} format_term buf = fun
    term ->
       format_string buf v
 

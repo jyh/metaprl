@@ -93,9 +93,9 @@ dform hide_df1 : mode[prl] :: hide{'A} = "[" 'A "]"
  * H, a: A >- Ui ext B
  *)
 prim setFormation 'H 'a 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] }
-   ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[@i:l] }) :
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] }
+   ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) :
+   sequent ['ext] { 'H >- univ[i:l] } =
    { a: 'A | 'B['a] }
 
 (*
@@ -106,9 +106,9 @@ prim setFormation 'H 'a 'A :
  * H, x: A1 >- B1[x] = B2[x] in Ui
  *)
 prim setEquality 'H 'x :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] }
-   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } :
-   sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[@i:l] } = it
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] }
+   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } :
+   sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } = it
 
 prim setType 'H 'x :
    sequent [squash] { 'H >- "type"{'A1} } -->

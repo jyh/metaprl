@@ -49,17 +49,17 @@ prec prec_tunion
  * Proof of Ui
  *)
 rule tunionFormation 'H 'x 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
-   sequent ['ext] { 'H; x: 'A >- univ[@i:l] } -->
-   sequent ['ext] { 'H >- univ[@i:l] }
+   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * Typehood.
  *)
 rule tunionEquality 'H 'x :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } -->
-   sequent ['ext] { 'H >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[@i:l] }
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   sequent ['ext] { 'H >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] }
 
 rule tunionType 'H 'y :
    sequent [squash] { 'H >- "type"{'A} } -->

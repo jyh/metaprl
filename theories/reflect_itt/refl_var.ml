@@ -48,7 +48,7 @@ open Itt_atom_bool
  ************************************************************************)
 
 declare vnil
-declare var[@t:t]
+declare var[t:t]
 declare ivar{'i; 'v}
 declare tvar{'t; 'v}
 declare var_type
@@ -62,8 +62,8 @@ declare eq_var{'v1; 'v2}
 dform vnil_df : mode[prl] :: vnil =
    `""
 
-dform var_df : mode[prl] :: var[@t:t] =
-   slot[@t:s]
+dform var_df : mode[prl] :: var[t:t] =
+   slot[t:s]
 
 dform ivar_df : mode[prl] :: ivar{'i; 'v} =
    slot{'v} slot{'i}
@@ -92,7 +92,7 @@ prim_rw unfold_ivar : ivar{'i; 'v} <-->
 prim_rw unfold_tvar : tvar{'t; 'v} <-->
    cons{inr{'t}; 'v}
 
-prim_rw unfold_var : var[@v:t] <--> tvar{token[@v:t]; vnil}
+prim_rw unfold_var : var[v:t] <--> tvar{token[v:t]; vnil}
 
 prim_rw unfold_var_type : var_type <--> list{.int + atom}
 
@@ -108,7 +108,7 @@ prim_rw unfold_eq_var : eq_var{'x; 'y} <-->
 let fold_vnil = makeFoldC << vnil >> unfold_vnil
 let fold_ivar = makeFoldC << ivar{'i; 'v} >> unfold_ivar
 let fold_tvar = makeFoldC << tvar{'t; 'v} >> unfold_tvar
-let fold_var = makeFoldC << var[@t:t] >> unfold_var
+let fold_var = makeFoldC << var[t:t] >> unfold_var
 let fold_var_type = makeFoldC << var_type >> unfold_var_type
 let fold_eq_varc = makeFoldC << eq_varc{'x; 'y} >> unfold_eq_varc
 let fold_eq_var = makeFoldC << eq_var{'x; 'y} >> unfold_eq_var
@@ -119,26 +119,26 @@ let fold_eq_var = makeFoldC << eq_var{'x; 'y} >> unfold_eq_var
 
 interactive_rw reduce_eq_var_nil1 : eq_var{vnil; vnil} <--> btrue
 
-interactive_rw reduce_eq_var_nil2 : eq_var{vnil; var[@t:t]} <--> bfalse
+interactive_rw reduce_eq_var_nil2 : eq_var{vnil; var[t:t]} <--> bfalse
 
 interactive_rw reduce_eq_var_nil3 : eq_var{vnil; tvar{'t; 'v}} <--> bfalse
 
 interactive_rw reduce_eq_var_nil4 : eq_var{vnil; ivar{'i; 'v}} <--> bfalse
 
-interactive_rw reduce_eq_var_var1 : eq_var{var[@t:t]; vnil} <--> bfalse
+interactive_rw reduce_eq_var_var1 : eq_var{var[t:t]; vnil} <--> bfalse
 
-interactive_rw reduce_eq_var_var2 : eq_var{var[@t1:t]; var[@t2:t]} <-->
-   band{eq_atom{token[@t1:t]; token[@t2:t]}; btrue}
+interactive_rw reduce_eq_var_var2 : eq_var{var[t1:t]; var[t2:t]} <-->
+   band{eq_atom{token[t1:t]; token[t2:t]}; btrue}
 
-interactive_rw reduce_eq_var_var3 : eq_var{var[@t1:t]; tvar{token[@t2:t]; 'v}} <-->
-   band{eq_atom{token[@t1:t]; token[@t2:t]}; eq_var{vnil; 'v}}
+interactive_rw reduce_eq_var_var3 : eq_var{var[t1:t]; tvar{token[t2:t]; 'v}} <-->
+   band{eq_atom{token[t1:t]; token[t2:t]}; eq_var{vnil; 'v}}
 
-interactive_rw reduce_eq_var_var4 : eq_var{var[@t:t]; ivar{'i; 'v}} <--> bfalse
+interactive_rw reduce_eq_var_var4 : eq_var{var[t:t]; ivar{'i; 'v}} <--> bfalse
 
 interactive_rw reduce_eq_var_tvar1 : eq_var{tvar{'t; 'v}; vnil} <--> bfalse
 
-interactive_rw reduce_eq_var_tvar2 : eq_var{tvar{token[@t1:t]; 'v}; var[@t2:t]} <-->
-   band{eq_atom{token[@t1:t]; token[@t2:t]}; eq_var{'v; vnil}}
+interactive_rw reduce_eq_var_tvar2 : eq_var{tvar{token[t1:t]; 'v}; var[t2:t]} <-->
+   band{eq_atom{token[t1:t]; token[t2:t]}; eq_var{'v; vnil}}
 
 interactive_rw reduce_eq_var_tvar3 : eq_var{tvar{'t1; 'v1}; tvar{'t2; 'v2}} <-->
    band{eq_atom{'t1; 't2}; eq_var{'v1; 'v2}}
@@ -147,7 +147,7 @@ interactive_rw reduce_eq_var_tvar4 : eq_var{tvar{'t1; 'v1}; ivar{'i2; 'v2}} <-->
 
 interactive_rw reduce_eq_var_ivar1 : eq_var{ivar{'i1; 'v1}; vnil} <--> bfalse
 
-interactive_rw reduce_eq_var_ivar2 : eq_var{ivar{'i1; 'v1}; var[@t:t]} <--> bfalse
+interactive_rw reduce_eq_var_ivar2 : eq_var{ivar{'i1; 'v1}; var[t:t]} <--> bfalse
 
 interactive_rw reduce_eq_var_ivar3 : eq_var{ivar{'i1; 'v1}; tvar{'t2; 'v2}} <--> bfalse
 
@@ -156,19 +156,19 @@ interactive_rw reduce_eq_var_ivar4 : eq_var{ivar{'i1; 'v1}; ivar{'i2; 'v2}} <-->
 
 let reduce_info =
    [<< eq_var{vnil; vnil} >>, reduce_eq_var_nil1;
-    << eq_var{vnil; var[@t:t]} >>, reduce_eq_var_nil2;
+    << eq_var{vnil; var[t:t]} >>, reduce_eq_var_nil2;
     << eq_var{vnil; tvar{'t; 'v}} >>, reduce_eq_var_nil3;
     << eq_var{vnil; ivar{'i; 'v}} >>, reduce_eq_var_nil4;
-    << eq_var{var[@t:t]; vnil} >>, reduce_eq_var_var1;
-    << eq_var{var[@t1:t]; var[@t2:t]} >>, reduce_eq_var_var2;
-    << eq_var{var[@t2:t]; tvar{token[@t2:t]; 'v}} >>, reduce_eq_var_var3;
-    << eq_var{var[@t:t]; ivar{'i; 'v}} >>, reduce_eq_var_var4;
+    << eq_var{var[t:t]; vnil} >>, reduce_eq_var_var1;
+    << eq_var{var[t1:t]; var[t2:t]} >>, reduce_eq_var_var2;
+    << eq_var{var[t2:t]; tvar{token[t2:t]; 'v}} >>, reduce_eq_var_var3;
+    << eq_var{var[t:t]; ivar{'i; 'v}} >>, reduce_eq_var_var4;
     << eq_var{tvar{'t1; 'v1}; vnil} >>, reduce_eq_var_tvar1;
-    << eq_var{tvar{token[@t1:t]; 'v1}; var[@t2:t]} >>, reduce_eq_var_tvar2;
+    << eq_var{tvar{token[t1:t]; 'v1}; var[t2:t]} >>, reduce_eq_var_tvar2;
     << eq_var{tvar{'t1; 'v1}; tvar{'t2; 'v2}} >>, reduce_eq_var_tvar3;
     << eq_var{tvar{'t1; 'v1}; ivar{'i2; 'v2}} >>, reduce_eq_var_tvar4;
     << eq_var{ivar{'i1; 'v1}; vnil} >>, reduce_eq_var_ivar1;
-    << eq_var{ivar{'i1; 'v1}; var[@t:t]} >>, reduce_eq_var_ivar2;
+    << eq_var{ivar{'i1; 'v1}; var[t:t]} >>, reduce_eq_var_ivar2;
     << eq_var{ivar{'i1; 'v1}; tvar{'t2; 'v2}} >>, reduce_eq_var_ivar3;
     << eq_var{ivar{'i1; 'v1}; ivar{'i2; 'v2}} >>, reduce_eq_var_ivar4]
 
@@ -200,7 +200,7 @@ interactive vnil_wf 'H : :
    sequent ['ext] { 'H >- member{var_type; vnil} }
 
 interactive var_wf 'H : :
-   sequent ['ext] { 'H >- member{var_type; var[@t:t]} }
+   sequent ['ext] { 'H >- member{var_type; var[t:t]} }
 
 interactive ivar_wf 'H :
    sequent [squash] { 'H >- member{var_type; 'v} } -->
@@ -256,7 +256,7 @@ let d_resource = Mp_resource.improve d_resource (var_type_type_term, wrap_intro 
 
 let d_info =
    [<< member{var_type; vnil} >>, vnil_wf;
-    << member{var_type; var[@t:t]} >>, var_wf;
+    << member{var_type; var[t:t]} >>, var_wf;
     << member{var_type; ivar{'i; 'v}} >>, ivar_wf;
     << member{var_type; tvar{'t; 'v}} >>, tvar_wf;
     << member{bool; eq_var{'v1;'v2}} >>, eq_var_wf]

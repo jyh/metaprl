@@ -85,9 +85,9 @@ dform subtype_df1 : mode[prl] :: parens :: "prec"[prec_subtype] :: subtype{'A; '
  * H >- Ui ext B
  *)
 prim subtypeFormation 'H :
-   ('A : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   ('B : sequent ['ext] { 'H >- univ[@i:l] }) -->
-   sequent ['ext] { 'H >- univ[@i:l] } =
+   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
+   ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] } =
    subtype{'A; 'B}
 
 (*
@@ -98,9 +98,9 @@ prim subtypeFormation 'H :
  * H >- B1 = B2 in Ui
  *)
 prim subtypeEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
-   sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] } =
+   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[i:l] } =
    it
 
 prim subtypeType 'H :
@@ -355,7 +355,7 @@ let eqcd_subtype p =
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (subtype_term, eqcd_subtype)
 
-let subtype_equal_term = << subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] >>
+let subtype_equal_term = << subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[i:l] >>
 
 let d_resource = Mp_resource.improve d_resource (subtype_equal_term, d_wrap_eqcd eqcd_subtype)
 

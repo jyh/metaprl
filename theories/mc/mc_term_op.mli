@@ -31,8 +31,6 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-
 open Opname
 open Refiner.Refiner.Term
 
@@ -42,6 +40,11 @@ open Refiner.Refiner.Term
  * The strings for a given subterm with bound variables come right
  * before the term they appear in both function parameters and
  * return values.
+ *
+ * The dest_* functions can throw one of two Invalid_argument
+ * exceptions.  One indicates a coding error on my part (internal error),
+ * and the other indicates that some called with function with
+ * an improper parameter (invalid term structure).
  *)
 
 (*************************************************************************

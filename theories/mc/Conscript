@@ -14,16 +14,17 @@ $env = $env->clone(
 #
 # Determine the source file list and library files based on whether
 # or now we have the MC compiler source tree.
-# This is a _real_ ugly hack.  Simplifications welcome!
+# This is a _really_ ugly hack.  Simplifications welcome!
 #
 if(defined($ENV{'MC_ROOT'})) {
    $env = $env->clone(
       INCPATH => [@{$env->{INCPATH}},
+                  "$env->{MC}/lib/util",
                   "$env->{MC}/fir/type",
                   "$env->{MC}/fir/util"]
    );
    OCamlSources $env
-      'mc_term_op_ds.ml',
+      'mc_term_op.ml',
       'fir_int_set.ml',
       'fir_rawint_set.ml',
       'fir_ty.ml',
@@ -31,11 +32,14 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_eval.ml',
       'fir_deadcode.ml',
       'fir_const_elim.ml',
-      'fir_marshal.ml',
+      'mc_fir_connect_base.ml',
+      'mc_fir_connect_ty.ml',
+      'mc_fir_connect_exp.ml',
+      'mc_fir_connect.ml',
       'mc_theory.ml',
       'fir_test.ml';
    OCamlLibrary $env 'base',
-      'mc_term_op_ds',
+      'mc_term_op',
       'fir_int_set',
       'fir_rawint_set',
       'fir_ty',
@@ -43,12 +47,15 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_eval',
       'fir_deadcode',
       'fir_const_elim',
-      'fir_marshal',
+      'mc_fir_connect_base',
+      'mc_fir_connect_ty',
+      'mc_fir_connect_exp',
+      'mc_fir_connect',
       'mc_theory',
       'fir_test';
 } else {
    OCamlSources $env
-      'mc_term_op_ds.ml',
+      'mc_term_op.ml',
       'fir_int_set.ml',
       'fir_rawint_set.ml',
       'fir_ty.ml',
@@ -59,7 +66,7 @@ if(defined($ENV{'MC_ROOT'})) {
       'mc_theory.ml',
       'fir_test.ml';
    OCamlLibrary $env 'base',
-      'mc_term_op_ds',
+      'mc_term_op',
       'fir_int_set',
       'fir_rawint_set',
       'fir_ty',
@@ -71,4 +78,7 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_test';
 }
 
+#
+# Add the theory to the default build list.
+#
 Default qw( base.cmxa );

@@ -31,8 +31,6 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
@@ -41,32 +39,18 @@ open Refiner.Refiner.TermType
  * General utility.
  *************************************************************************)
 
-(*
- * Indicates I've screwed up my sanity checks since this should never happen.
- *)
-
-exception SanityError of string
-
-(*
- * Indicates a mis-application of a dest_* function.
- *)
-
-exception DestFailure of string * term
-
-(*
- * Several functions for convinience.
- *)
-
 let string_of_binding_var t =
    match dest_term t with
       { term_op = _; term_terms = [bt1] } ->
-         (match dest_bterm bt1 with
-            { bvars = [s1]; bterm = t1 } ->
-               s1
-          | _ ->
-            raise (SanityError "string_of_binding_var: match failure (1)"))
+         (
+            match dest_bterm bt1 with
+               { bvars = [s1]; bterm = t1 } ->
+                  s1
+             | _ ->
+               raise (Invalid_argument "string_of_binding_var: match (1) failed")
+         )
     | _ ->
-         raise (SanityError "string_of_binding_var: match failure (2)")
+         raise (Invalid_argument "string_of_binding_var: match (2) failed")
 
 let pre_dest_term t =
    ( opname_of_term t, subterm_arities t, subterms_of_term t )
@@ -95,9 +79,9 @@ let dest_4_dep0_term opname t =
             [t1; t2; t3; t4] ->
                t1, t2, t3, t4
           | _ ->
-               raise (SanityError "dest_4_dep0_term")
+               raise (Invalid_argument "dest_4_dep0_term: internal error")
       else
-         raise (DestFailure ("dest_4_dep0_term: ", t))
+         raise (Invalid_argument "dest_4_dep0_term: invalid term structure")
 
 let is_3_dep0_1_dep1_term opname t =
    let (opname', arities, subterms) = pre_dest_term t in
@@ -116,9 +100,9 @@ let dest_3_dep0_1_dep1_term opname t =
             [t1; t2; t3; t4] ->
                t1, t2, t3, string_of_binding_var t4, t4
           | _ ->
-               raise (SanityError "dest_3_dep0_1_dep1_term")
+               raise (Invalid_argument "dest_3_dep0_1_dep1_term: internal error")
       else
-         raise (DestFailure ("dest_3_dep0_1_dep1_term: ", t))
+         raise (Invalid_argument "dest_3_dep0_1_dep1_term: invalid term structure")
 
 (*************************************************************************
  * 5 subterms.
@@ -141,9 +125,9 @@ let dest_4_dep0_1_dep1_term opname t =
             [t1; t2; t3; t4; t5] ->
                t1, t2, t3, t4, string_of_binding_var t5, t5
           | _ ->
-               raise (SanityError "dest_4_dep0_1_dep1_term")
+               raise (Invalid_argument "dest_4_dep0_1_dep1_term: internal error")
       else
-         raise (DestFailure("dest_4_dep0_1_dep1_term: ", t))
+         raise (Invalid_argument "dest_4_dep0_1_dep1_term: invalid term structure")
 
 (*************************************************************************
  * 6 subterms.
@@ -166,9 +150,9 @@ let dest_5_dep0_1_dep1_term opname t =
             [t1; t2; t3; t4; t5; t6] ->
                t1, t2, t3, t4, t5, string_of_binding_var t6, t6
           | _ ->
-               raise (SanityError "dest_5_dep0_1_dep1_term")
+               raise (Invalid_argument "dest_5_dep0_1_dep1_term: internal error")
       else
-         raise (DestFailure ("dest_5_dep0_1_dep1_term: ", t))
+         raise (Invalid_argument "dest_5_dep0_1_dep1_term: invalid term structure")
 
 (*************************************************************************
  * 7 subterms.
@@ -192,6 +176,6 @@ let dest_7_dep0_term opname t =
             [t1; t2; t3; t4; t5; t6; t7] ->
                t1, t2, t3, t4, t5, t6, t7
           | _ ->
-               raise (SanityError "dest_7_dep0_term")
+               raise (Invalid_argument "dest_7_dep0_term: internal_error")
       else
-         raise (DestFailure ("dest_7_dep0_term: ", t))
+         raise (Invalid_argument "dest_7_dep0_term: invalid term structure")

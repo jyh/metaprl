@@ -83,7 +83,7 @@ define unfold_fequal : fequal{'eq; 's1; 's2} <-->
    band{fsubseteq{'eq; 's1; 's2}; fsubseteq{'eq; 's2; 's1}}
 
 define unfold_fequalp : fequalp{'eq; 'T} <-->
-   ((((('eq IN ('T -> 'T -> bool))
+   ((((('eq in ('T -> 'T -> bool))
       & (all x: 'T. "assert"{.fcompare{'eq; 'x; 'x}}))
       & (all x: 'T. all y: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => "assert"{fcompare{'eq; 'y; 'x}})))
       & (all x: 'T. all y: 'T. all z: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => ("assert"{fcompare{'eq; 'y; 'z}} => "assert"{fcompare{'eq; 'x; 'z}})))))
@@ -477,41 +477,41 @@ let elim_typeinf_plusone_fset t = ElimArgsOption (typeinf_plusone_fset_arg, Some
 
 interactive fcompare_wf {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 'y IN 'T } -->
-   sequent ['ext] { 'H >- fcompare{'eq; 'x; 'y} IN bool }
+   sequent [squash] { 'H >- 'x in 'T } -->
+   sequent [squash] { 'H >- 'y in 'T } -->
+   sequent ['ext] { 'H >- fcompare{'eq; 'x; 'y} in bool }
 
 interactive fcompare_ref {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
+   sequent [squash] { 'H >- 'x in 'T } -->
    sequent ['ext] { 'H >- "assert"{fcompare{'eq; 'x; 'x}} }
 
 interactive fcompare_sym 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 'y IN 'T } -->
+   sequent [squash] { 'H >- 'x in 'T } -->
+   sequent [squash] { 'H >- 'y in 'T } -->
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'y; 'x}} } -->
    sequent ['ext] { 'H >- "assert"{fcompare{'eq; 'x; 'y}} }
 
 interactive fcompare_trans 'H 'T 'z :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 'y IN 'T } -->
-   sequent [squash] { 'H >- 'z IN 'T } -->
+   sequent [squash] { 'H >- 'x in 'T } -->
+   sequent [squash] { 'H >- 'y in 'T } -->
+   sequent [squash] { 'H >- 'z in 'T } -->
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'x; 'z}} } -->
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'z; 'y}} } -->
    sequent ['ext] { 'H >- "assert"{fcompare{'eq; 'x; 'y}} }
 
 interactive fmember_wf1 {| intro [intro_typeinf << 'x >>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 's IN list{'T} } -->
-   sequent ['ext] { 'H >- fmember{'eq; 'x; 's} IN bool }
+   sequent [squash] { 'H >- 'x in 'T } -->
+   sequent [squash] { 'H >- 's in list{'T} } -->
+   sequent ['ext] { 'H >- fmember{'eq; 'x; 's} in bool }
 
 interactive fmember_fun 'H 'T 'y :
-   ["wf"] sequent [squash] { 'H >- 'x IN 'T } -->
-   ["wf"] sequent [squash] { 'H >- 'y IN 'T } -->
-   ["wf"] sequent [squash] { 'H >- 'l IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 'x in 'T } -->
+   ["wf"] sequent [squash] { 'H >- 'y in 'T } -->
+   ["wf"] sequent [squash] { 'H >- 'l in list{'T} } -->
    ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'x; 'y}} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'y; 'l}} } -->
@@ -520,15 +520,15 @@ interactive fmember_fun 'H 'T 'y :
 interactive fsubseteq_wf1 {| intro [intro_typeinf_fset <<'s2>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H >- 's2 IN list{'T} } -->
-   sequent ['ext] { 'H >- fsubseteq{'eq; 's1; 's2} IN bool }
+   sequent [squash] { 'H >- 's1 in list{'T} } -->
+   sequent [squash] { 'H >- 's2 in list{'T} } -->
+   sequent ['ext] { 'H >- fsubseteq{'eq; 's1; 's2} in bool }
 
 interactive fsubseteq_elim2 {| elim [elim_typeinf_plusone_fset <<'l1>>] |} 'H 'J 'T 'a 'y :
    ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'a IN 'T } -->
-   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l1 IN list{'T} } -->
-   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l2 IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'a in 'T } -->
+   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l1 in list{'T} } -->
+   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l2 in list{'T} } -->
    sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- "assert"{fmember{'eq; 'a; 'l1}} } -->
    sequent ['ext] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x]; y: "assert"{fmember{'eq; 'a; 'l2}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'C['x] }
@@ -536,15 +536,15 @@ interactive fsubseteq_elim2 {| elim [elim_typeinf_plusone_fset <<'l1>>] |} 'H 'J
 interactive fsubseteq_intro1 {| intro [AutoMustComplete; intro_typeinf_fset <<'s2>>] |} 'H 'T 'x 'y :
    ["wf"] sequent [squash] { 'H >- "type"{'T} } -->
    ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   ["wf"] sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   ["wf"] sequent [squash] { 'H >- 's2 IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 's1 in list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 's2 in list{'T} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's1}} >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 's1; 's2}} }
 
 interactive fsubseteq_cons2 {| intro [intro_typeinf <<'u>>] |} 'H 'T :
-   ["wf"] sequent [squash] { 'H >- 'l1 IN list{'T} } -->
-   ["wf"] sequent [squash] { 'H >- 'l2 IN list{'T} } -->
-   ["wf"] sequent [squash] { 'H >- 'u IN 'T } -->
+   ["wf"] sequent [squash] { 'H >- 'l1 in list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 'l2 in list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 'u in 'T } -->
    ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fsubseteq{'eq; 'l1; 'l2}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l1; cons{'u; 'l2}}} }
@@ -552,15 +552,15 @@ interactive fsubseteq_cons2 {| intro [intro_typeinf <<'u>>] |} 'H 'T :
 interactive fsubseteq_ref {| intro [intro_typeinf_fset <<'l>>] |} 'H 'T :
    ["wf"] sequent [squash] { 'H >- "type"{'T} } -->
    ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   ["wf"] sequent [squash] { 'H >- 'l IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 'l in list{'T} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l; 'l}} }
 
 interactive fsubseteq_trans 'H 'T 'l2 :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'l1 IN list{'T} } -->
-   sequent [squash] { 'H >- 'l2 IN list{'T} } -->
-   sequent [squash] { 'H >- 'l3 IN list{'T} } -->
+   sequent [squash] { 'H >- 'l1 in list{'T} } -->
+   sequent [squash] { 'H >- 'l2 in list{'T} } -->
+   sequent [squash] { 'H >- 'l3 in list{'T} } -->
    sequent [squash] { 'H >- "assert"{fsubseteq{'eq; 'l1; 'l2}} } -->
    sequent [squash] { 'H >- "assert"{fsubseteq{'eq; 'l2; 'l3}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l1; 'l3}} }
@@ -568,15 +568,15 @@ interactive fsubseteq_trans 'H 'T 'l2 :
 interactive fequal_wf1 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
-   sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} IN bool }
+   [wf] sequent [squash] { 'H >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in list{'T} } -->
+   sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} in bool }
 
 interactive fequal_elim1 {| elim [elim_typeinf_plusone_fset <<'s1>>] |} 'H 'J 'T 'a 'y :
-   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'a IN 'T } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'a in 'T } -->
    [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's2 in list{'T} } -->
    sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- "assert"{fmember{'eq; 'a; 's1}} } -->
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x]; y: "assert"{fmember{'eq; 'a; 's2}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'C['x] }
@@ -584,8 +584,8 @@ interactive fequal_elim1 {| elim [elim_typeinf_plusone_fset <<'s1>>] |} 'H 'J 'T
 interactive fequal_intro1 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T 'x 'y :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in list{'T} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's1}} >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's2}} >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{fequal{'eq; 's1; 's2}} }
@@ -598,17 +598,17 @@ interactive fset_type {| intro [] |} 'H :
 interactive fset_list {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN list{'T} } -->
-   sequent ['ext] { 'H >- 'x IN fset{'eq; 'T} }
+   [wf] sequent [squash] { 'H >- 'x in list{'T} } -->
+   sequent ['ext] { 'H >- 'x in fset{'eq; 'T} }
 
 (*
  * Membership.
  *)
 interactive fmember_wf2 {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fmember{'eq; 'x; 's} IN bool }
+   sequent [squash] { 'H >- 'x in 'T } -->
+   sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fmember{'eq; 'x; 's} in bool }
 
 (*
  * Subset.
@@ -616,9 +616,9 @@ interactive fmember_wf2 {| intro [intro_typeinf <<'x>>] |} 'H 'T :
 interactive fsubseteq_wf2 {| intro [intro_typeinf_fset <<'s2>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fsubseteq{'eq; 's1; 's2} IN bool }
+   sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fsubseteq{'eq; 's1; 's2} in bool }
 
 (*
  * Equality.
@@ -626,15 +626,15 @@ interactive fsubseteq_wf2 {| intro [intro_typeinf_fset <<'s2>>] |} 'H 'T :
 interactive fequal_wf2 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} IN bool }
+   sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} in bool }
 
 interactive fequal_intro2 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T 'x 'y :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's1}} >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's2}} >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{fequal{'eq; 's1; 's2}} }
@@ -642,12 +642,12 @@ interactive fequal_intro2 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T 'x 'y :
 interactive fempty_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- "type"{fset{'eq; 'T}} } -->
-   sequent ['ext] { 'H >- fempty IN fset{'eq; 'T} }
+   sequent ['ext] { 'H >- fempty in fset{'eq; 'T} }
 
 interactive fsingleton_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
    [wf] sequent [squash] { 'H >- "type"{fset{'eq; 'T}} } -->
-   sequent ['ext] { 'H >- fsingleton{'x} IN fset{'eq; 'T} }
+   sequent ['ext] { 'H >- fsingleton{'x} in fset{'eq; 'T} }
 
 (*
  * Union.
@@ -655,31 +655,31 @@ interactive fsingleton_wf {| intro [] |} 'H :
 interactive funion_wf1 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H >- 's2 IN list{'T} } -->
-   sequent ['ext] { 'H >- funion{'eq; 's1; 's2} IN list{'T} }
+   sequent [squash] { 'H >- 's1 in list{'T} } -->
+   sequent [squash] { 'H >- 's2 in list{'T} } -->
+   sequent ['ext] { 'H >- funion{'eq; 's1; 's2} in list{'T} }
 
 interactive funion_member_intro_left2 {| intro [SelectOption 1; intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in list{'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} }
 
 interactive funion_member_intro_right2 {| intro [SelectOption 2; intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in list{'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} }
 
 interactive funion_member_elim2 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's2 in list{'T} } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; 's1}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; 's2}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J['z] >- 'C['z] }
@@ -687,9 +687,9 @@ interactive funion_member_elim2 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
 interactive funion_wf2 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- funion{'eq; 's1; 's2} IN fset{'eq; 'T} }
+   sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- funion{'eq; 's1; 's2} in fset{'eq; 'T} }
 
 (*
  * Intersection.
@@ -697,33 +697,33 @@ interactive funion_wf2 {| intro [] |} 'H :
 interactive fisect_wf1 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H >- 's2 IN list{'T} } -->
-   sequent ['ext] { 'H >- fisect{'eq; 's1; 's2} IN list{'T} }
+   sequent [squash] { 'H >- 's1 in list{'T} } -->
+   sequent [squash] { 'H >- 's2 in list{'T} } -->
+   sequent ['ext] { 'H >- fisect{'eq; 's1; 's2} in list{'T} }
 
 interactive fisect_member_intro {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in list{'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}} }
 
 interactive fisect_member_elim2 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T 'u 'v :
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's2 in list{'T} } -->
    sequent ['ext] { 'H; u: "assert"{fmember{'eq; 'x; 's1}}; v: "assert"{fmember{'eq; 'x; 's2}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 'C['z] }
 
 interactive fisect_wf2 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fisect{'eq; 's1; 's2} IN fset{'eq; 'T} }
+   sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fisect{'eq; 's1; 's2} in fset{'eq; 'T} }
 
 (*
  * Subtraction.
@@ -731,40 +731,40 @@ interactive fisect_wf2 {| intro [] |} 'H :
 interactive fsub_wf1 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H >- 's2 IN list{'T} } -->
-   sequent ['ext] { 'H >- fsub{'eq; 's1; 's2} IN list{'T} }
+   sequent [squash] { 'H >- 's1 in list{'T} } -->
+   sequent [squash] { 'H >- 's2 in list{'T} } -->
+   sequent ['ext] { 'H >- fsub{'eq; 's1; 's2} in list{'T} }
 
 interactive fsub_member_intro {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in list{'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent [squash] { 'H >- "assert"{bnot{fmember{'eq; 'x; 's2}}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}} }
 
 interactive fsub_member_elim2 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T 'u 'v:
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's1 IN list{'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's2 IN list{'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's1 in list{'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's2 in list{'T} } -->
    sequent ['ext] { 'H; u: "assert"{fmember{'eq; 'x; 's1}}; v: "assert"{bnot{fmember{'eq; 'x; 's2}}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 'C['z] }
 
 interactive fsub_wf2 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fsub{'eq; 's1; 's2} IN fset{'eq; 'T} }
+   sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fsub{'eq; 's1; 's2} in fset{'eq; 'T} }
 
 (*
  * Singleton.
  *)
 interactive fsingleton_wf1 {| intro [] |} 'H :
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent ['ext] { 'H >- fsingleton{'x} IN list{'T} }
+   sequent [squash] { 'H >- 'x in 'T } -->
+   sequent ['ext] { 'H >- fsingleton{'x} in list{'T} }
 
 interactive fsingleton_member_intro {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
@@ -775,22 +775,22 @@ interactive fsingleton_member_intro {| intro [intro_typeinf <<'x>>] |} 'H 'T :
 interactive fsingleton_member_elim {| elim [elim_typeinf <<'y>>] |} 'H 'J 'T :
    [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- "type"{'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'y IN 'T } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'z IN 'T } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'y in 'T } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'z in 'T } -->
    sequent ['ext] { 'H; x: "assert"{fcompare{'eq; 'y; 'z}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'C['x] }
 
 interactive fsingleton_wf2 {| intro [] |} 'H :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent ['ext] { 'H >- fsingleton{'x} IN fset{'eq; 'T} }
+   sequent [squash] { 'H >- 'x in 'T } -->
+   sequent ['ext] { 'H >- fsingleton{'x} in fset{'eq; 'T} }
 
 (*
  * Empty.
  *)
 interactive fempty_wf1 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
-   sequent ['ext] { 'H >- fempty IN list{'T} }
+   sequent ['ext] { 'H >- fempty in list{'T} }
 
 interactive fempty_member_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: "assert"{fmember{'eq; 'y; fempty}}; 'J['x] >- 'C['x] }
@@ -798,13 +798,13 @@ interactive fempty_member_elim {| elim [] |} 'H 'J :
 interactive fempty_wf2 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fempty IN fset{'eq; 'T} }
+   sequent ['ext] { 'H >- fempty in fset{'eq; 'T} }
 
 interactive fequal_assert_elim2 {| elim [elim_typeinf_fset <<'s1>>] |} 'H 'J 'T :
    [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- "type"{'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's2 in fset{'eq; 'T} } -->
    sequent ['ext] { 'H; x: 's1 = 's2 in fset{'eq; 'T}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'C['x] }
 
@@ -820,30 +820,30 @@ interactive fequal_intro3 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T :
 interactive fsquash_wf1 {| intro [intro_typeinf_fset <<'s>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN list{'T} } -->
-   sequent ['ext] { 'H >- fsquash{'eq; 's} IN list{unit} }
+   sequent [squash] { 'H >- 's in list{'T} } -->
+   sequent ['ext] { 'H >- fsquash{'eq; 's} in list{unit} }
 
 interactive fsub_null {| intro [intro_typeinf <<'u>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'T } -->
+   [wf] sequent [squash] { 'H >- 's in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'u in 'T } -->
    sequent [squash] { 'H >- "assert"{bnot{fmember{'eq; 'u; 's}}} } -->
    sequent ['ext] { 'H >- 's = fsub{'eq; 's; fsingleton{'u}} in list{'T} }
 
 interactive fsquash_fsub1 {| intro [intro_typeinf <<'u>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'T } -->
+   [wf] sequent [squash] { 'H >- 's in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'u in 'T } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'u; 's}} } -->
    sequent ['ext] { 'H >- fsquash{'eq; 's} = cons{it; fsquash{'eq; fsub{'eq; 's; fsingleton{'u}}}} in list{unit} }
 
 interactive fsquash_wf2 {| intro [intro_typeinf_fset <<'s>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fsquash{'eq; 's} IN list{unit} }
+   sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fsquash{'eq; 's} in list{unit} }
 
 interactive fset_elim1 {| elim [] |} 'H 'J 'u 'z 'w :
    [wf] sequent [squash] { 'H; x: fset{'eq; 'T}; 'J['x] >- "type"{'T} } -->
@@ -868,24 +868,24 @@ interactive feset_wf {| intro [] |} 'H :
 interactive fball_wf1 {| intro [intro_typeinf <<'s>>] |} 'H fset{'eq; 'T} :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN list{'T} } -->
-   sequent [squash] { 'H; x: 'T >- 'b['x] IN bool } -->
-   sequent ['ext] { 'H >- fball{'s; x. 'b['x]} IN bool }
+   sequent [squash] { 'H >- 's in list{'T} } -->
+   sequent [squash] { 'H; x: 'T >- 'b['x] in bool } -->
+   sequent ['ext] { 'H >- fball{'s; x. 'b['x]} in bool }
 
 interactive fball_assert_intro1 {| intro [intro_typeinf <<'s>>] |} 'H fset{'eq; 'T} 'w :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's IN list{'T} } -->
-   [wf] sequent [squash] { 'H; z: 'T >- 'b['z] IN bool } -->
+   [wf] sequent [squash] { 'H >- 's in list{'T} } -->
+   [wf] sequent [squash] { 'H; z: 'T >- 'b['z] in bool } -->
    sequent [squash] { 'H; x: 'T; w: "assert"{fmember{'eq; 'x; 's}} >- "assert"{'b['x]} } -->
    sequent ['ext] { 'H >- "assert"{fball{'s; x. 'b['x]}} }
 
 interactive fball_assert_elim1 {| elim [elim_typeinf_plusone <<'s>>] |} 'H 'J fset{'eq; 'T} 'a 'y 'u 'v 'w :
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- "type"{'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 's IN list{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 's in list{'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x]; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 'a IN 'T } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 'a in 'T } -->
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- "assert"{fmember{'eq; 'a; 's}} } -->
    sequent ['ext] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x]; y: "assert"{'b['a]} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 'C['x] }
@@ -893,14 +893,14 @@ interactive fball_assert_elim1 {| elim [elim_typeinf_plusone <<'s>>] |} 'H 'J fs
 interactive fball_wf2 {| intro [intro_typeinf <<'s>>] |} 'H fset{'eq; 'T} 'u 'v 'w :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
    sequent [squash] { 'H; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool } -->
-   sequent ['ext] { 'H >- fball{'s; x. 'b['x]} IN bool }
+   sequent ['ext] { 'H >- fball{'s; x. 'b['x]} in bool }
 
 interactive fball_assert_intro2 {| intro [intro_typeinf <<'s>>] |}'H fset{'eq; 'T} 'w :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
    [wf] sequent [squash] { 'H; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool} -->
    sequent [squash] { 'H; x: 'T; w: "assert"{fmember{'eq; 'x; 's}} >- "assert"{'b['x]} } -->
    sequent ['ext] { 'H >- "assert"{fball{'s; x. 'b['x]}} }
@@ -908,9 +908,9 @@ interactive fball_assert_intro2 {| intro [intro_typeinf <<'s>>] |}'H fset{'eq; '
 interactive fball_assert_elim2 {| elim [elim_typeinf_plusone <<'s>>] |} 'H 'J fset{'eq; 'T} 'a 'y 'u 'v 'w :
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- "type"{'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 's IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 's in fset{'eq; 'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x]; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 'a IN 'T } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 'a in 'T } -->
    [wf] sequent [squash] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- "assert"{fmember{'eq; 'a; 's}} } -->
    sequent ['ext] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x]; y: "assert"{'b['a]} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fball{'s; x. 'b['x]}}; 'J['x] >- 'C['x] }
@@ -921,15 +921,15 @@ interactive fball_assert_elim2 {| elim [elim_typeinf_plusone <<'s>>] |} 'H 'J fs
 interactive fbexists_wf1 {| intro [intro_typeinf <<'s>>] |} 'H fset{'eq; 'T} 'z :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN list{'T} } -->
-   sequent [squash] { 'H; z: 'T >- 'b['z] IN bool } -->
-   sequent ['ext] { 'H >- fbexists{'s; x. 'b['x]} IN bool }
+   sequent [squash] { 'H >- 's in list{'T} } -->
+   sequent [squash] { 'H; z: 'T >- 'b['z] in bool } -->
+   sequent ['ext] { 'H >- fbexists{'s; x. 'b['x]} in bool }
 
 interactive fbexists_assert_intro1 {| intro [intro_typeinf_plusone <<'s>>] |} 'H fset{'eq; 'T} 'a 'u 'v 'w :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's IN list{'T} } -->
-   [wf] sequent [squash] { 'H >- 'a IN 'T } -->
+   [wf] sequent [squash] { 'H >- 's in list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'a in 'T } -->
    [wf] sequent [squash] { 'H; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool } -->
    [wf] sequent [squash] { 'H >- "assert"{fmember{'eq; 'a; 's}} } -->
    sequent [squash] { 'H >- "assert"{'b['a]} } -->
@@ -938,23 +938,23 @@ interactive fbexists_assert_intro1 {| intro [intro_typeinf_plusone <<'s>>] |} 'H
 interactive fbexists_assert_elim1 {| elim [elim_typeinf <<'s>>] |} 'H 'J fset{'eq; 'T} 'u 'v 'w :
    [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- "type"{'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 's IN list{'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x]; u: 'T >- 'b['u] IN bool } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 's in list{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x]; u: 'T >- 'b['u] in bool } -->
    sequent ['ext] { 'H; u: 'T; v: "assert"{fmember{'eq; 'u; 's}}; w: "assert"{'b['u]}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 'C['x] }
 
 interactive fbexists_wf2 {| intro [intro_typeinf <<'s>>] |} 'H fset{'eq; 'T} 'u 'v 'w :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
    sequent [squash] { 'H; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool } -->
-   sequent ['ext] { 'H >- fbexists{'s; x. 'b['x]} IN bool }
+   sequent ['ext] { 'H >- fbexists{'s; x. 'b['x]} in bool }
 
 interactive fbexists_assert_intro2 {| intro [intro_typeinf_plusone <<'s>>] |} 'H fset{'eq; 'T} 'a 'u 'v 'w :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'a IN 'T } -->
+   [wf] sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'a in 'T } -->
    [wf] sequent [squash] { 'H; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool } -->
    [wf] sequent [squash] { 'H >- "assert"{fmember{'eq; 'a; 's}} } -->
    sequent [squash] { 'H >- "assert"{'b['a]} } -->
@@ -963,7 +963,7 @@ interactive fbexists_assert_intro2 {| intro [intro_typeinf_plusone <<'s>>] |} 'H
 interactive fbexists_assert_elim3 {| elim [elim_typeinf <<'s>>] |}'H 'J fset{'eq; 'T} 'u 'v 'w :
    [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- "type"{'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 's IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 's in fset{'eq; 'T} } -->
    [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x]; u: 'T; v: 'T; w: "assert"{fcompare{'eq; 'u; 'v}} >- 'b['u] = 'b['v] in bool } -->
    sequent ['ext] { 'H; x: "assert"{bnot{fball{'s; x. bnot{'b['x]}}}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 'C['x] }
@@ -974,24 +974,24 @@ interactive fbexists_assert_elim3 {| elim [elim_typeinf <<'s>>] |}'H 'J fset{'eq
 interactive foflist_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'l IN list{'T} } -->
-   sequent ['ext] { 'H >- foflist{'l} IN fset{'eq; 'T} }
+   sequent [squash] { 'H >- 'l in list{'T} } -->
+   sequent ['ext] { 'H >- foflist{'l} in fset{'eq; 'T} }
 
 interactive foflist_member_intro_left {| intro [SelectOption 1; intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 'y IN 'T } -->
-   [wf] sequent [squash] { 'H >- 't IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 'y in 'T } -->
+   [wf] sequent [squash] { 'H >- 't in list{'T} } -->
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'x; 'y}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}} }
 
 interactive foflist_member_intro_right {| intro [SelectOption 2; intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 'y IN 'T } -->
-   [wf] sequent [squash] { 'H >- 't IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 'y in 'T } -->
+   [wf] sequent [squash] { 'H >- 't in list{'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 't}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}} }
 
@@ -1001,9 +1001,9 @@ interactive foflist_member_elim_nil {| elim [] |} 'H 'J :
 interactive foflist_member_elim_cons3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- "type"{'T} } -->
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- 'y IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- 't IN list{'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- 'y in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J[it] >- 't in list{'T} } -->
    sequent ['ext] { 'H; z: "assert"{fcompare{'eq; 'x; 'y}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{'t}}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 'C['z] }
@@ -1013,25 +1013,25 @@ interactive foflist_member_elim_cons3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T 
  *)
 interactive funion_member_intro_left3 {| intro [SelectOption 1; intro_typeinf <<'x>>] |}'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} }
 
 interactive funion_member_intro_right3 {| intro [SelectOption 2; intro_typeinf <<'x>>] |}'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} }
 
 interactive funion_member_elim3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's2 in fset{'eq; 'T} } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; 's1}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; 's2}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J['z] >- 'C['z] }
@@ -1041,18 +1041,18 @@ interactive funion_member_elim3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
  *)
 interactive fisect_member_intro3 {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}} }
 
 interactive fisect_member_elim3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 's2 in fset{'eq; 'T} } -->
    sequent ['ext] { 'H; u: "assert"{fmember{'eq; 'x; 's1}}; v: "assert"{fmember{'eq; 'x; 's2}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}}; 'J['z] >- 'C['z] }
 
@@ -1061,18 +1061,18 @@ interactive fisect_member_elim3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
  *)
 interactive fsub_member_intro3 {| intro [intro_typeinf <<'x>>] |}'H 'T :
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 in fset{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent [squash] { 'H >- "assert"{bnot{fmember{'eq; 'x; 's2}}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}} }
 
 interactive fsub_member_elim3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
    [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- fequalp{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 'x IN 'T } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's1 IN fset{'eq; 'T} } -->
-   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's2 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 'x in 'T } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's1 in fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 's2 in fset{'eq; 'T} } -->
    sequent ['ext] { 'H; u: "assert"{fmember{'eq; 'x; 's1}}; v: "assert"{bnot{fmember{'eq; 'x; 's2}}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}}; 'J['z] >- 'C['z] }
 
@@ -1081,22 +1081,22 @@ interactive fsub_member_elim3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
 interactive fall_wf2 {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
    sequent [squash] { 'H; u: feset{'eq; 'T} >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{fall{'eq; 'T; 's; x. 'b['x]}} }
 
 interactive fall_intro 'H 'u 'w :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's in fset{'eq; 'T} } -->
    sequent ['ext] { 'H; u: feset{'eq; 'T}; w: fmember{'eq; 'u; 's} >- 'b['u] } -->
    sequent ['ext] { 'H >- fall{'eq; 'T; 's; x. 'b['x]} }
 
 interactive fall_elim 'H 'J 'a 'w :
    sequent [squash] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- "type"{'T} } -->
    sequent [squash] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- 's IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- 'a IN 'T } -->
+   sequent [squash] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- 's in fset{'eq; 'T} } -->
+   sequent [squash] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- 'a in 'T } -->
    sequent [squash] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- "assert"{fmember{'eq; 'a; 's}} } -->
    sequent ['ext] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x]; w: 'b['a] >- 'C['x] }
    sequent ['ext] { 'H; x: fall{'eq; 'T; 's; y. 'b['y]}; 'J['x] >- 'C['x] }

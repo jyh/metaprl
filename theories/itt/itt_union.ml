@@ -107,7 +107,7 @@ let _ =
  * The @tt{decide} term @emph{decides} the handedness of the term $x @in A + B$.
  * @end[doc]
  *)
-declare union{'A; 'B}
+declare \union{'A; 'B}
 declare inl{'x}
 declare inr{'x}
 declare decide{'x; y. 'a['y]; z. 'b['z]}
@@ -139,7 +139,7 @@ prim_rw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 prec prec_inl
 prec prec_union
 
-dform union_df : except_mode[src] :: parens :: "prec"[prec_union] :: union{'A; 'B} =
+dform union_df : except_mode[src] :: parens :: "prec"[prec_union] :: \union{'A; 'B} =
    slot{'A} " " `"+" " " slot{'B}
 
 dform inl_df : except_mode[src] :: parens :: "prec"[prec_inl] :: inl{'a} =
@@ -301,9 +301,9 @@ prim decideEquality {| intro []; eqcd |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
  * @end[doc]
  *)
 prim unionSubtype {| intro [] |} 'H :
-   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   [subtype] sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } } =
+   ["subtype"] sequent [squash] { 'H >- 'A1 subtype 'A2 } -->
+   ["subtype"] sequent [squash] { 'H >- 'B1 subtype 'B2 } -->
+   sequent ['ext] { 'H >- 'A1 + 'B1 subtype 'A2 + 'B2  } =
    it
 (*! @docoff *)
 

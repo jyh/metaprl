@@ -163,7 +163,7 @@ prim precEquality {| intro []; eqcd |} 'H 'A 'x 'y 'z 'T 'P1 'P2 :
    [wf] sequent [squash] { 'H;
              P1: 'A -> univ[i:l];
              P2: 'A -> univ[i:l];
-             z: x:'A -> subtype{('P1 'x); ('P2 'x)};
+             z: x:'A -> \subtype{('P1 'x); ('P2 'x)};
              x: 'A;
              y: 'B1['P1; 'x]
            >- 'y = 'y in 'B1['P2; 'x]
@@ -212,7 +212,7 @@ prim precElimination {| elim [ThinOption thinT] |} 'H 'J lambda{z. 'G['z]} 'a 'A
    [wf] sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
    [main] ('g['r; 'u; 'p; 'h] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
       Z: 'A -> univ[i:l];
-      u: subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
+      u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
       h: p: (a: 'A * 'Z 'a) -> 'G['p];
       p: a: 'A * 'B['Z; 'a]
    >- 'G['p]
@@ -250,7 +250,7 @@ prim precUnrollElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'y 'u :
 prim precindEquality {| intro []; eqcd |} 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[i:l] :
    [wf] sequent [squash] { 'H >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
    [wf] sequent [squash] { 'H; Z: 'A -> univ[i:l];
-             u: subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
+             u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
              h: z: (a: 'A * 'Z 'a) -> 'S['z];
              z: a: 'A * 'B['Z; 'a]
              >- 't1['h; 'z] = 't2['h; 'z] in 'S['z]

@@ -112,9 +112,9 @@ rule independentPairEquality 'H :
  * H >- B1 <= B2
  *)
 rule independentProductSubtype 'H :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
+   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
 
 (*
  * -*-

@@ -114,7 +114,7 @@ dform unit_df1 : except_mode[src] :: unit = `"Unit"
  * @end[doc]
  *)
 prim unitEquality {| intro []; eqcd |} 'H :
-   sequent ['ext] { 'H >- unit IN univ[i:l] } =
+   sequent ['ext] { 'H >- unit in univ[i:l] } =
    it
 
 (*
@@ -138,7 +138,7 @@ prim unitType {| intro [] |} 'H :
  * @end[doc]
  *)
 prim unit_memberEquality {| intro []; eqcd; squash |} 'H :
-   sequent ['ext] { 'H >- it IN unit } =
+   sequent ['ext] { 'H >- it in unit } =
    it
 
 (*!

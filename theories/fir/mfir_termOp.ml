@@ -257,7 +257,7 @@ let is_normalize_term = is_1_dep0_term normalize_opname
 let mk_normalize_term = mk_1_dep0_term normalize_opname
 let dest_normalize_term = dest_1_dep0_term normalize_opname
 
-let subset_term = << subset{ 'set1; 'set2 } >>
+let subset_term = <<  'set1 subset 'set2  >>
 let subset_opname = opname_of_term subset_term
 let is_subset_term = is_2_dep0_term subset_opname
 let mk_subset_term = mk_2_dep0_term subset_opname

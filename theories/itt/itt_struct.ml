@@ -155,7 +155,7 @@ interactive dup 'H :
  * @end[doc]
  *)
 prim introduction 'H 't :
-   [wf] sequent [squash] { 'H >- 't IN 'T } -->
+   [wf] sequent [squash] { 'H >- 't in 'T } -->
    sequent ['ext] { 'H >- 'T } =
    't
 

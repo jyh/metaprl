@@ -35,7 +35,7 @@ extends Itt_bool
 
 open Tactic_type.Conversionals
 
-define unfold_bunion : bunion{'A; 'B} <-->
+define unfold_bunion : "bunion"{'A; 'B} <-->
                           tunion{bool; x. ifthenelse{'x; 'A; 'B}}
 
 prec prec_bunion

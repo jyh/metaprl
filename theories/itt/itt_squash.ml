@@ -252,7 +252,7 @@ interactive unsquashEqual 'H 'J :
 
 (*! @docoff *)
 interactive unsquashWWitness 'H 'J 't:
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 't IN 'A[it] } -->
+   sequent [squash] { 'H; u: 'P; 'J[it] >- 't in 'A[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'A['u] }
 
 (*!
@@ -261,8 +261,8 @@ interactive unsquashWWitness 'H 'J 't:
  * @end[doc]
  *)
 interactive sqsqEqual 'H :
-   sequent [squash] { 'H >- 't IN 'A} -->
-   sequent ['ext] { 'H >- 't IN 'A}
+   sequent [squash] { 'H >- 't in 'A} -->
+   sequent ['ext] { 'H >- 't in 'A}
 
 (*!
  * @begin[doc]
@@ -271,7 +271,7 @@ interactive sqsqEqual 'H :
  *)
 interactive squashMemberEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- squash{'A} } -->
-   sequent ['ext] { 'H >- it IN squash{'A} }
+   sequent ['ext] { 'H >- it in squash{'A} }
 
 (*!
  * @begin[doc]
@@ -282,7 +282,7 @@ interactive squashMemberEquality {| intro []; eqcd |} 'H :
  *)
 interactive squashStable 'H 't :
    [main] sequent [squash] { 'H >- squash{'A} } -->
-   [wf] sequent [squash] { 'H; x: 'A >- 't IN 'A } -->
+   [wf] sequent [squash] { 'H; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H >- 'A}
 
 interactive unsquashHypEqual 'H 'J :
@@ -311,7 +311,7 @@ interactive unsquashHypGoalStable 'H 'J :
 
 interactive unsquashStable 'H 'J 't 'x :
    sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
-   sequent [squash] { 'H; u: squash{'A}; 'J['u]; x: 'A >- 't IN 'A } -->
+   sequent [squash] { 'H; u: squash{'A}; 'J['u]; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
 let unsquashStableT i t p =

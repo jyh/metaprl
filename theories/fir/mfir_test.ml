@@ -91,19 +91,21 @@ interactive int_set3 :
 
 interactive int_set4 :
    sequent [fir] { >- "false" } -->
-   sequent [fir] { >- subset{
+   sequent [fir] { >-
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
-                            cons{ interval{ 5; 8 }; nil } } };
+                            cons{ interval{ 5; 8 }; nil } } }
+      subset
       intset[32, "signed"]{ cons{ interval{. -3; 4 };
-                            cons{ interval{ 6; 10 }; nil } } } } }
+                            cons{ interval{ 6; 10 }; nil } } } }
 
 interactive int_set5 :
    sequent [fir] { >- "true" } -->
-   sequent [fir] { >- subset{
+   sequent [fir] { >-
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
-                            cons{ interval{ 8; 8 }; nil } } };
+                            cons{ interval{ 8; 8 }; nil } } }
+      subset
       intset[32, "signed"]{ cons{ interval{. -3; 4 };
-                            cons{ interval{ 6; 10 }; nil } } } } }
+                            cons{ interval{ 6; 10 }; nil } } } }
 
 interactive int_set6 :
    sequent [fir] { >- "false" } -->

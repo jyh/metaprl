@@ -191,7 +191,7 @@ interactive true_univ {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- "true" = "true" in univ[i:l] }
 
 interactive true_member {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "true" IN univ[i:l] }
+   sequent ['ext] { 'H >- "true" in univ[i:l] }
 
 interactive true_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{."true"} }
@@ -203,7 +203,7 @@ interactive false_univ {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- "false" = "false" in univ[i:l] }
 
 interactive false_member {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "false" IN univ[i:l] }
+   sequent ['ext] { 'H >- "false" in univ[i:l] }
 
 interactive false_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
@@ -246,7 +246,7 @@ interactive not_elim {| elim [ThinOption thinT] |} 'H 'J :
 interactive not_membership {| intro []; squash |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
    [main] sequent [squash] { 'H >- not{'t} } -->
-   sequent ['ext] { 'H >- lambda{x.'f['x]} IN not{'t} }
+   sequent ['ext] { 'H >- lambda{x.'f['x]} in not{'t} }
 *)
 (*!
  * @begin[doc]
@@ -484,7 +484,7 @@ interactive all_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
 
 interactive all_elim {| elim [ThinOption thinT] |} 'H 'J 'w 'z :
-   [wf] sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z IN 'A } -->
+   [wf] sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z in 'A } -->
    [main] sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
 
@@ -510,7 +510,7 @@ interactive exists_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{."exists"{'t; v. 'b['v]}} }
 
 interactive exists_intro {| intro [] |} 'H 'z :
-   [wf] sequent [squash] { 'H >- 'z IN 't } -->
+   [wf] sequent [squash] { 'H >- 'z in 't } -->
    [main] sequent ['ext] { 'H >- 'b['z] } -->
    [wf] sequent [squash] { 'H; v: 't >- "type"{'b['v]} } -->
    sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }

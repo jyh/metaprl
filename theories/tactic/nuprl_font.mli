@@ -165,7 +165,7 @@ declare plusminus
 declare oplus
 declare infty
 declare partial
-declare subset
+declare "subset"
 declare supset
 declare cap
 declare cup

@@ -32,9 +32,9 @@ define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 
 define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
-define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> disect{'R; self.record[n:t]{'A['self]}}
+define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> bisect{'R; self.record[n:t]{'A['self]}}
 
-define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> disect{record[n:t]{'A};r.'R[field[n:t]{'r}]}
+define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> bisect{record[n:t]{'A};r.'R[field[n:t]{'r}]}
 
 define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;a.'R}
 

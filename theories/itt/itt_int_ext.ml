@@ -300,151 +300,151 @@ prim mul_wf {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
 
 prim mul_Commut 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a *@ 'b) ~ ('b *@ 'a) } = it
 
 interactive_rw mul_Commut_rw :
-   ('a IN int) -->
-   ('b IN int) -->
+   ('a in int) -->
+   ('b in int) -->
    ('a *@ 'b) <--> ('b *@ 'a)
 
 let mul_CommutC = mul_Commut_rw
 
 prim mul_Assoc 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) } = it
 
 interactive_rw mul_Assoc_rw :
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    ('a *@ ('b *@ 'c)) <--> (('a *@ 'b) *@ 'c)
 
 let mul_AssocC = mul_Assoc_rw
 
 interactive_rw mul_Assoc2_rw :
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    (('a *@ 'b) *@ 'c) <--> ('a *@ ('b *@ 'c))
 
 let mul_Assoc2C = mul_Assoc2_rw
 
 prim mul_add_Distrib 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) } = it
 
 interactive_rw mul_add_Distrib_rw :
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c))
 
 let mul_add_DistribC = mul_add_Distrib_rw
 
 prim mul_Id 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- (1 *@ 'a) ~ 'a } = it
 
 interactive_rw mul_Id_rw :
-   ('a IN int) -->
+   ('a in int) -->
    (1 *@ 'a) <--> 'a
 
 let mul_IdC = mul_Id_rw
 
 interactive mul_Id2 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ('a *@ 1) ~ 'a }
 
 interactive_rw mul_Id2_rw :
-   ('a IN int) -->
+   ('a in int) -->
    ('a *@ 1) <--> 'a
 
 let mul_Id2C = mul_Id2_rw
 
 interactive mul_Id3 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- 'a ~ (1 *@ 'a) }
 
 interactive_rw mul_Id3_rw :
-   ('a IN int) -->
+   ('a in int) -->
    'a <--> (1 *@ 'a)
 
 let mul_Id3C = mul_Id3_rw
 
 prim mul_Zero 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 } = it
 
 interactive_rw mul_Zero_rw :
-   ('a IN int) -->
+   ('a in int) -->
    (0 *@ 'a) <--> 0
 
 let mul_ZeroC = mul_Zero_rw
 
 interactive mul_Zero2 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ('a *@ 0) ~ 0 }
 
 interactive_rw mul_Zero2_rw :
-   ('a IN int) -->
+   ('a in int) -->
    ('a *@ 0) <--> 0
 
 let mul_Zero2C = mul_Zero2_rw
 
 interactive lt_mulPositMonoEq 'H 'c :
    sequent [squash] { 'H >- 0 < 'c } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{('c *@ 'a); ('c *@ 'b) } in
  bool }
 
 interactive lt_mulPositMono 'H 'c :
    sequent [squash] { 'H >- 0 < 'c } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
 
 interactive_rw lt_mulPositMono_rw 'c :
    (0 < 'c) -->
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    lt_bool{'a; 'b} <--> lt_bool{('c *@ 'a); ('c *@ 'b) }
 
 let lt_mulPositMonoC = lt_mulPositMono_rw
 
 interactive mul_uni_Assoc 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
 
 interactive_rw mul_uni_Assoc_rw :
-   ('a IN int) -->
-   ('b IN int) -->
+   ('a in int) -->
+   ('b in int) -->
    ('a *@ (- 'b)) <--> ((- 'a) *@ 'b)
 
 let mul_uni_AssocC = mul_uni_Assoc_rw
 
 interactive lt_mulNegMono 'H 'c :
    sequent [squash] { 'H >- 'c < 0 } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'b) ; ('c *@ 'a)} }
 
 interactive_rw lt_mulNegMono_rw 'c :
    ('c < 0)  -->
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    lt_bool{'a; 'b} <--> lt_bool{('c *@ 'b) ; ('c *@ 'a)}
 
 let lt_mulNegMonoC = lt_mulNegMono_rw
@@ -457,40 +457,40 @@ let lt_mulNegMonoC = lt_mulNegMono_rw
 prim rem_baseReduce 'H :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 'a < 'b } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a %@ 'b) ~ 'a } = it
 
 interactive_rw rem_baseReduce_rw :
    (0 <= 'a) -->
    ('a < 'b) -->
-   ('a IN int) -->
-   ('b IN int) -->
+   ('a in int) -->
+   ('b in int) -->
    ('a %@ 'b) <--> 'a
 
 let rem_baseReduceC = rem_baseReduce_rw
 
 prim rem_indReduce 'H :
    sequent [squash] { 'H >- 0 < 'b } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) } = it
 
 interactive_rw rem_indReduce_rw :
    (0 < 'b) -->
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    ((('a *@ 'b) +@ 'c) %@ 'b) <--> ('c %@ 'b)
 
 let rem_indReduceC = rem_indReduce_rw
 
 interactive rem_wf {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- ('a %@ 'b) IN int }
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   sequent ['ext] { 'H >- ('a %@ 'b) in int }
 
 (*!
  * @begin[doc]
@@ -500,96 +500,96 @@ interactive rem_wf {| intro []; eqcd |} 'H :
 prim div_baseReduce 'H :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 'a < 'b } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a /@ 'b) ~ 0 } = it
 
 interactive_rw div_baseReduce_rw :
    (0 <= 'a) -->
    ('a < 'b) -->
-   ('a IN int) -->
-   ('b IN int) -->
+   ('a in int) -->
+   ('b in int) -->
    ('a /@ 'b) <--> 0
 
 let div_baseReduceC = div_baseReduce_rw
 
 prim div_indReduce 'H :
    sequent [squash] { 'H >- 0 < 'b } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) } = it
 
 interactive_rw div_indReduce_rw :
    (0 < 'b) -->
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b))
 
 let div_indReduceC = div_indReduce_rw
 
 interactive div_wf {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- 'a /@ 'b IN int }
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   sequent ['ext] { 'H >- 'a /@ 'b in int }
 
 interactive lt_divMono 'H 'b :
    sequent [squash] { 'H >- 0 < 'c } -->
    sequent [squash] { 'H >- 'a < 'b } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- 'a /@ 'c <= 'b /@ 'c }
 
 interactive add_divReduce 'H :
    sequent [squash] {'H >- 0 < 'a } -->
    sequent [squash] {'H >- 0 < 'b } -->
    sequent [squash] {'H >- 0 < 'c } -->
-   [wf] sequent [squash] {'H >- 'a IN int } -->
-   [wf] sequent [squash] {'H >- 'b IN int } -->
-   [wf] sequent [squash] {'H >- 'c IN int } -->
+   [wf] sequent [squash] {'H >- 'a in int } -->
+   [wf] sequent [squash] {'H >- 'b in int } -->
+   [wf] sequent [squash] {'H >- 'c in int } -->
    sequent ['ext] {'H >- ('a /@ 'c) +@ ('b /@ 'c) <= ('a +@ 'b) /@ 'c }
 
 interactive div_Assoc 'H :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 0 < 'b } -->
    sequent [squash] { 'H >- 0 < 'c } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- (('a /@ 'b) /@ 'c) ~ ('a /@ ('b *@ 'c)) }
 
 interactive_rw div_Assoc_rw :
    (0 <= 'a) -->
    (0 < 'b) -->
    (0 < 'c) -->
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
    (('a /@ 'b) /@ 'c) <--> ('a /@ ('b *@ 'c))
 
 let div_AssocC = div_Assoc_rw
 
 interactive gt_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- "type"{gt{'a; 'b}} }
 
 interactive le_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- "type"{le{'a; 'b}} }
 
 interactive ge_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- "type"{ge{'a; 'b}} }
 
 interactive ge_sqstable {| squash; intro [] |} 'H :
    sequent [squash] { 'H >- 'a >= 'b } -->
-   sequent ['ext] { 'H >- it IN ('a >= 'b) }
+   sequent ['ext] { 'H >- it in ('a >= 'b) }
 
 (*
 Incorrect but there has to be some assoc/commut/composition property
@@ -598,9 +598,9 @@ rewrite rem_Assoc 'H :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 0 < 'b } -->
    sequent [squash] { 'H >- 0 < 'c } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'a in int } -->
+   [wf] sequent [squash] { 'H >- 'b in int } -->
+   [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ('a %@ 'b) %@ 'c <--> ('a %@ 'c) %@ 'b }
 
 *)

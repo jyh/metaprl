@@ -119,8 +119,8 @@ rule quotient_memberWeakEquality 'H :
  * H >- [[ E[a1; a2] ]]
  *)
 rule quotient_memberEquality 'H :
-   sequent [squash] { 'H >- 'a1 IN quot x, y: 'A // 'E['x; 'y] } -->
-   sequent [squash] { 'H >- 'a2 IN quot x, y: 'A // 'E['x; 'y] } -->
+   sequent [squash] { 'H >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
+   sequent [squash] { 'H >- 'a2 in quot x, y: 'A // 'E['x; 'y] } -->
    sequent [squash] { 'H >- esquash{'E['a1; 'a2]} } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
 
@@ -165,11 +165,11 @@ rule quotient_equalityElimination 'H 'J 'v :
  * H >- quot x2, y2: A2 // E2[x2; y2] in type
  *)
 rule quotientSubtype 'H 'a1 'a2 :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
    sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
    sequent [squash] { 'H >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
-   sequent ['ext] { 'H >- subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } };;
+   sequent ['ext] { 'H >- \subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } };;
 
 (************************************************************************
  * TACTICS                                                              *

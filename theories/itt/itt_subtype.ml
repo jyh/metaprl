@@ -107,10 +107,10 @@ let _ =
  * The @tt{subtype} term is a binary relation.
  * @end[doc]
  *)
-declare subtype{'A; 'B}
+declare \subtype{'A; 'B}
 (*! @docoff *)
 
-let subtype_term = << subtype{'A; 'B} >>
+let subtype_term = << 'A subtype 'B >>
 let subtype_opname = opname_of_term subtype_term
 let is_subtype_term = is_dep0_dep0_term subtype_opname
 let dest_subtype = dest_dep0_dep0_term subtype_opname
@@ -122,7 +122,7 @@ let mk_subtype_term = mk_dep0_dep0_term subtype_opname
 
 prec prec_subtype
 
-dform subtype_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: subtype{'A; 'B} =
+dform subtype_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: \subtype{'A; 'B} =
    slot{'A} `" " subseteq space slot{'B}
 
 (************************************************************************
@@ -139,7 +139,7 @@ prim subtypeFormation 'H :
    ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
    ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
-   subtype{'A; 'B}
+   \subtype{'A; 'B}
 
 (*!
  * @begin[doc]
@@ -147,7 +147,7 @@ prim subtypeFormation 'H :
  *
  * @modsubsection{Typehood and equality}
  *
- * The $<< subtype{'A; 'B} >>$ term is a type if both
+ * The $<< \subtype{'A; 'B} >>$ term is a type if both
  * $A$ and $B$ are types.  The equality is @emph{intensional}:
  * two subtype-types are equal if their subterms are equal.
  * @end[doc]
@@ -155,13 +155,13 @@ prim subtypeFormation 'H :
 prim subtypeEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[i:l] } =
+   sequent ['ext] { 'H >- 'A1 subtype 'B1 = 'A2 subtype 'B2 in univ[i:l] } =
    it
 
 prim subtypeType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{subtype{'A; 'B}} } =
+   sequent ['ext] { 'H >- "type"{.'A subtype 'B} } =
    it
 
 (*!
@@ -171,14 +171,14 @@ prim subtypeType {| intro [] |} 'H :
  * and $B$ are types.
  * @end[doc]
  *)
-prim subtypeTypeLeft 'H 'A :
-   [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- "type"{'B} } =
+prim subtypeTypeLeft 'H 'B :
+   [main] sequent [squash] { 'H >- 'A subtype 'B } -->
+   sequent ['ext] { 'H >- "type"{'A} } =
    it
 
-prim subtypeTypeRight 'H 'B :
-   [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- "type"{'A} } =
+prim subtypeTypeRight 'H 'A :
+   [main] sequent [squash] { 'H >- 'A subtype 'B }  -->
+   sequent ['ext] { 'H >- "type"{'B} } =
    it
 
 (*!
@@ -193,8 +193,8 @@ prim subtypeTypeRight 'H 'B :
  *)
 prim subtype_axiomFormation {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [main] sequent [squash] { 'H; x: 'A >- 'x IN 'B } -->
-   sequent ['ext] { 'H >- subtype{'A; 'B} } =
+   [main] sequent [squash] { 'H; x: 'A >- 'x in 'B } -->
+   sequent ['ext] { 'H >- 'A subtype 'B } =
    it
 
 (*!
@@ -206,8 +206,8 @@ prim subtype_axiomFormation {| intro [] |} 'H 'x :
  * @end[doc]
  *)
 prim subtype_axiomEquality {| intro []; eqcd; squash |} 'H :
-   [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- it IN subtype{'A; 'B} } =
+   [main] sequent [squash] { 'H >- 'A subtype 'B } -->
+   sequent ['ext] { 'H >- it in 'A subtype 'B } =
    it
 
 (*!
@@ -222,14 +222,14 @@ prim subtype_axiomEquality {| intro []; eqcd; squash |} 'H :
  * @end[doc]
  *)
 prim subtypeElimination {| elim [ThinOption thinT] |} 'H 'J :
-   ('t : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J[it] >- 'C[it] }) -->
-   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
+   ('t : sequent ['ext] { 'H; x: 'A subtype 'B; 'J[it] >- 'C[it] }) -->
+   sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] } =
    't
 
 prim subtypeElimination2 'H 'J 'a 'b 'y :
-   [wf] sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a='b in 'A } -->
-   ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a='b in 'B >- 'C['x] }) -->
-   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
+   [wf] sequent [squash] { 'H; x: 'A subtype 'B; 'J['x] >- 'a='b in 'A } -->
+   ('t['y] : sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x]; y: 'a='b in 'B >- 'C['x] }) -->
+   sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] } =
    't[it]
 
 (************************************************************************
@@ -342,12 +342,12 @@ let d_hyp_subtypeT i p =
 let resource elim += (subtype_term, d_hyp_subtypeT)
 
 interactive use_subtype1 'H 'A :
-   [aux] sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   [aux] sequent [squash] { 'H >- 'A subtype 'B } -->
    [main] sequent [squash] { 'H >- 't1 = 't2 in 'A } -->
    sequent ['ext] { 'H >- 't1 = 't2 in 'B }
 
 interactive use_subtype2 'H 'A :
-   [aux] sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   [aux] sequent [squash] { 'H >- 'A subtype 'B } -->
    [main] sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- 'B }
 

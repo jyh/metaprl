@@ -155,7 +155,7 @@ interactive squiggleType {| intro [] |} 'H :
 
 prim squiggle_memberEquality {| intro []; eqcd; squash |} 'H :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
-  sequent['ext] { 'H >- it IN ('t ~ 's)} =
+  sequent['ext] { 'H >- it in ('t ~ 's)} =
   it
 
 prim squiggleElimination {|  elim [ThinOption thinT] |} 'H 'J :

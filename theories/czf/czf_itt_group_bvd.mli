@@ -71,7 +71,7 @@ declare group_bvd{'h; 'g; 's}
  ************************************************************************)
 
 rewrite unfold_group_bvd : group_bvd{'h; 'g; 's} <-->
-   (group{'h} & group{'g} & isset{'s} & subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
+   (group{'h} & group{'g} & isset{'s} & \subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
 
 (*
  * -*-

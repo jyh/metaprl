@@ -81,11 +81,11 @@ rule squashFromAny 'H 'ext :
 
 rule squashMemberEquality 'H :
    [wf] sequent [squash] { 'H >- squash{'A} } -->
-   sequent ['ext] { 'H >- it IN squash{'A} }
+   sequent ['ext] { 'H >- it in squash{'A} }
 
 rule squashStable 'H 't :
    [main] sequent [squash] { 'H >- squash{'A} } -->
-   [wf] sequent [squash] { 'H; x: 'A >- 't IN 'A } -->
+   [wf] sequent [squash] { 'H; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H >- 'A}
 
 rule unsquashHypEqual 'H 'J :

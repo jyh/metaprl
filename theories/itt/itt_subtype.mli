@@ -43,7 +43,7 @@ open Tactic_type.Tacticals
  * TERMS                                                                *
  ************************************************************************)
 
-declare subtype{'A; 'B}
+declare \subtype{'A; 'B}
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -76,20 +76,20 @@ rule subtypeFormation 'H :
 rule subtypeEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[i:l] }
+   sequent ['ext] { 'H >- \subtype{'A1; 'B1} = \subtype{'A2; 'B2} in univ[i:l] }
 
 rule subtypeType 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{subtype{'A; 'B}} }
+   sequent ['ext] { 'H >- "type"{.'A subtype 'B} }
 
-rule subtypeTypeLeft 'H 'A :
-   sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- "type"{'B} }
-
-rule subtypeTypeRight 'H 'B :
-   sequent [squash] { 'H >- subtype{'A; 'B} } -->
+rule subtypeTypeLeft 'H 'B :
+   sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- "type"{'A} }
+
+rule subtypeTypeRight 'H 'A :
+   sequent [squash] { 'H >- 'A subtype 'B } -->
+   sequent ['ext] { 'H >- "type"{'B} }
 
 (*
  * H >- subtype(A; B) ext it
@@ -100,8 +100,8 @@ rule subtypeTypeRight 'H 'B :
  *)
 rule subtype_axiomFormation 'H 'x :
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; x: 'A >- 'x IN 'B } -->
-   sequent ['ext] { 'H >- subtype{'A; 'B} }
+   sequent [squash] { 'H; x: 'A >- 'x in 'B } -->
+   sequent ['ext] { 'H >- 'A subtype 'B }
 
 (*
  * H >- it = it in subtype(A; B)
@@ -110,8 +110,8 @@ rule subtype_axiomFormation 'H 'x :
  * H >- subtype(A; B)
  *)
 rule subtype_axiomEquality 'H :
-   sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- it IN subtype{'A; 'B} }
+   sequent [squash] { 'H >- 'A subtype 'B } -->
+   sequent ['ext] { 'H >- it in 'A subtype 'B }
 
 (*
  * H, x: subtype(A; B); J[x] >- C[x]
@@ -120,8 +120,8 @@ rule subtype_axiomEquality 'H :
  * H, x: subtype(A; B); J[it] >- C[it]
  *)
 rule subtypeElimination 'H 'J :
-   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] }
+   sequent ['ext] { 'H; x: 'A subtype 'B; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] }
 
 (*
  * H >- x = y in B
@@ -131,9 +131,9 @@ rule subtypeElimination 'H 'J :
  * H >- subtype(A; B)
  *)
 rule subtypeElimination2 'H 'J 'a 'b 'y :
-   sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a='b in 'A } -->
-   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a = 'b in 'B >- 'C['x] } -->
-   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] }
+   sequent [squash] { 'H; x: 'A subtype 'B; 'J['x] >- 'a='b in 'A } -->
+   sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x]; y: 'a = 'b in 'B >- 'C['x] } -->
+   sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] }
 
 (************************************************************************
  * RESOURCE                                                             *

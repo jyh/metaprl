@@ -182,8 +182,8 @@ prim wf_tyUnion 'H 'J :
 
    (* The subset of cases should actually be a subset. *)
    sequent [fir] { 'H; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; 'J >-
-      subset{ 'set1;
-              intset[31, "signed"]{ interval{0; (number[j:n] -@ 1)} } } } -->
+               'set1 subset
+               intset[31, "signed"]{ interval{0; (number[j:n] -@ 1)} } }  -->
 
    (* Then the two tyUnion's are equal. *)
    sequent [fir] { 'H; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; 'J >-

@@ -82,7 +82,7 @@ rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b
  * H, x:A >- Ui ext B
  *)
 rule productFormation 'H 'A 'x :
-   sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   sequent [squash] { 'H >- 'A in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -113,7 +113,7 @@ rule productType 'H 'x :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 rule pairFormation 'H 'a 'y :
-   sequent [squash] { 'H >- 'a IN 'A } -->
+   sequent [squash] { 'H >- 'a in 'A } -->
    sequent ['ext] { 'H >- 'B['a] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] }
@@ -160,9 +160,9 @@ rule spreadEquality 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
  * H, a: A1 >- B1[a] <= B2[a]
  *)
 rule productSubtype 'H 'a :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }
+   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }
 
 (************************************************************************
  * TACTICS                                                              *

@@ -73,13 +73,13 @@ rule tunionMemberEquality 'H 'a 'y :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent [squash] { 'H >- 'x1 = 'x2 in 'B['a] } -->
-   sequent ['ext] { 'H >- 'x1 = 'x2 in tunion{'A; x. 'B['x]} }
+   sequent ['ext] { 'H >- 'x1 = 'x2 in Union x:'A. 'B['x]  }
 
 rule tunionMemberFormation 'H 'y 'a :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- 'B['a] } -->
-   sequent ['ext] { 'H >- tunion{'A; x. 'B['x]} }
+   sequent ['ext] { 'H >- Union x:'A. 'B['x]  }
 
 (*
  * Elimination.

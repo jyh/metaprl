@@ -37,7 +37,7 @@ open Itt_equal
 declare label[t:t]
 
 prim labelMember {| intro []; eqcd |} 'H :
-   sequent ['ext] { 'H >- label[t:t] IN label } =
+   sequent ['ext] { 'H >- label[t:t] in label } =
    it
 
 let label_term = << label[x:t] >>

@@ -33,15 +33,15 @@ open Itt_pointwise
  * difirent for these functionalities
  *)
 rule substUsingEpimorphism 'H 'J 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
-   [wf] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'f['y] IN 'A } -->
-   [wf] sequent [squash] { 'H; x: 'A; 'J['x] >-  'g['x] IN 'B } -->
+   [wf] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'f['y] in 'A } -->
+   [wf] sequent [squash] { 'H; x: 'A; 'J['x] >-  'g['x] in 'B } -->
    [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- 'f['g['x]] ~ 'x } -->
    [main] sequent ['ext] { 'H; y: 'B; 'J['f['y]] >- 'C['f['y]] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
 
 rule hypReplacementStrong 'H 'J 'B 'y :
-   [assertion] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'y IN 'A } -->
-   [assertion] sequent [squash] { 'H; x: 'A; 'J['x] >-  'x IN 'B } -->
+   [assertion] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'y in 'A } -->
+   [assertion] sequent [squash] { 'H; x: 'A; 'J['x] >-  'x in 'B } -->
    [main] sequent ['ext] { 'H; x: 'B; 'J['x] >- 'C['x] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
 

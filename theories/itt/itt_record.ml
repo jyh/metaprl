@@ -84,9 +84,9 @@ define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
  * @end[doc]
  *)
 
-define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> disect{'R; self.record[n:t]{'A['self]}}
+define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> self: 'R  isect  record[n:t]{'A['self]}
 
-define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> disect{record[n:t]{'A};r.'R[field[n:t]{'r}]}
+define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> r: record[n:t]{'A}  isect   'R[field[n:t]{'r}]
 
 define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;x.'R}
 
@@ -125,8 +125,8 @@ interactive recordTypeS {| intro [] |} 'H :
    sequent['ext]  {'H >- "type"{record[n:t]{'A}} }
 
 interactive field_member {| intro[] |} 'H:
-   sequent[squash]{'H >- 'r IN record[n:t]{'A} } -->
-   sequent['ext]  {'H >- field[n:t]{'r} IN 'A }
+   sequent[squash]{'H >- 'r in record[n:t]{'A} } -->
+   sequent['ext]  {'H >- field[n:t]{'r} in 'A }
 
 interactive recordTypeL {| intro [] |} 'H :
    sequent[squash]{'H >- "type"{'R} } -->
@@ -173,11 +173,11 @@ let record_reduceT = rwhAll record_reduce
 
 
 interactive record_eta {| intro [] |} 'H 'A:
-   sequent[squash]{'H >- 'r IN record[n:t]{'A} } -->
+   sequent[squash]{'H >- 'r in record[n:t]{'A} } -->
    sequent['ext]  {'H >- rcrd[n:t]{field[n:t]{'r}; 'r} ~ 'r }
 
 interactive_rw record_eta_rw  :
-   ('r IN record[n:t]{top} ) -->
+   ('r in record[n:t]{top} ) -->
    rcrd[n:t]{field[n:t]{'r}; 'r} <--> 'r
 
 interactive_rw record_exchange :
@@ -222,8 +222,8 @@ interactive recordEqualS  'H:
    sequent['ext]  {'H >- rcrd[n1:t]{'a1;'r1} = rcrd[n2:t]{'a2;'r2} in record[m:t]{'A} }
 
 interactive recordMemberS {| intro[] |} 'H:
-   [main] sequent[squash]{'H >- eq_label[n:t,m:t]{('a IN 'A); ('r IN record[m:t]{'A})} } -->
-   sequent['ext]  {'H >- rcrd[n:t]{'a;'r} IN record[m:t]{'A} }
+   [main] sequent[squash]{'H >- eq_label[n:t,m:t]{('a in 'A); ('r in record[m:t]{'A})} } -->
+   sequent['ext]  {'H >- rcrd[n:t]{'a;'r} in record[m:t]{'A} }
 *)
 
 let record_eqcdST p =
@@ -260,12 +260,12 @@ interactive recordTypeEliminationS {| elim [ThinOption thinT] |} 'H 'J 'v:
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A}}; 'J['u] >- 'C['u] }
 
 interactive recordTypeEliminationL {| elim [ThinOption thinT] |} 'H 'J 'r 'v:
-   [main] sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; 'J['u] >- 'r IN 'R } -->
+   [main] sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; 'J['u] >- 'r in 'R } -->
    [main] sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; v:"type"{'A['r]}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; 'J['u] >- 'C['u] }
 
 interactive recordTypeEliminationR {| elim [ThinOption thinT] |} 'H 'J 'a 'v:
-   [main] sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; 'J['u] >- 'a IN 'A } -->
+   [main] sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; 'J['u] >- 'a in 'A } -->
    [main] sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; v:"type"{'R['a]}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; 'J['u] >- 'C['u] }
 
@@ -287,9 +287,9 @@ interactive recordEqualI {| intro[] |}  'H:
    sequent['ext]  {'H >- 'r = 's in record[n:t]{'A;'R} }
 
 interactive recordMemberOrt (* {| intro[AutoMustComplete] |} *) 'H 'u:
-   [main] sequent[squash]{'H >- 'r IN 'R } -->
+   [main] sequent[squash]{'H >- 'r in 'R } -->
    [ort] sequent[squash]{'H; u:'R >- record_ort[n:t]{'a;'R} } -->
-   sequent['ext]  {'H >- rcrd[n:t]{'a;'r} IN 'R }
+   sequent['ext]  {'H >- rcrd[n:t]{'a;'r} in 'R }
 
 interactive recordEqualOrt1 'H 'u:
    [main] sequent[squash]{'H >- 'r1 = 'r2 in 'R } -->
@@ -445,10 +445,10 @@ let resource elim += [
 (*! @doc{@modsubsection{Orthogonality}} *)
 
 interactive functionOrtDinter {| intro[] |} 'H 'b :
-   [wf] sequent[squash]{'H >- "type"{disect{'A;a.'B['a]}} } -->
+   [wf] sequent[squash]{'H >- "type"{bisect{'A;a.'B['a]}} } -->
    [main] sequent[squash]{'H; a:'A; b:'B['a] >- function_ort{x.'f['x];'A} } -->
    [main] sequent[squash]{'H; a:'A; b:'B['a] >- function_ort{x.'f['x];'B['a]} } -->
-   sequent['ext]  {'H >-  function_ort{x.'f['x]; disect{'A;a.'B['a]}} }
+   sequent['ext]  {'H >-  function_ort{x.'f['x]; bisect{'A;a.'B['a]}} }
 
 
 

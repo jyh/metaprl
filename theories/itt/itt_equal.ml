@@ -270,10 +270,10 @@ dform equal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b}
    szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
 
 (* HACK! - this should be replaced with a proper I/O abstraction *)
-dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T) =
+dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
    szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
 
-dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T) =
+dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
    szone pushm slot{'x} space `"IN" hspace slot{'T} popm ezone
 
 dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: "type"{'a} =
@@ -315,7 +315,7 @@ prim trueIntro {| intro [] |} 'H :
  * @end[doc]
  *)
 prim equalityAxiom 'H 'J :
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x IN 'T } =
+   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x in 'T } =
    it
 
 (*!************************************************************************
@@ -334,7 +334,7 @@ prim equalityAxiom 'H 'J :
  *)
 prim equalityRef 'H 'y :
    sequent ['ext] { 'H >- 'x = 'y in 'T } -->
-   sequent ['ext] { 'H >- 'x IN 'T } =
+   sequent ['ext] { 'H >- 'x in 'T } =
    it
 
 (*
@@ -396,8 +396,8 @@ prim equalityEquality {| intro [] |} 'H :
  * Typehood.
  *)
 prim equalityType {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a IN 'T } -->
-   [wf] sequent [squash] { 'H >- 'b IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'a in 'T } -->
+   [wf] sequent [squash] { 'H >- 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
@@ -418,7 +418,7 @@ prim equalityType {| intro [] |} 'H :
  *)
 prim axiomMember {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- it IN ('a = 'b in 'T) } =
+   sequent ['ext] { 'H >- it in ('a = 'b in 'T) } =
    it
 
 (*
@@ -434,7 +434,7 @@ prim equalityElimination {| elim [] |} 'H 'J :
 
 prim type_axiomMember {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
-   sequent ['ext] { 'H >- it IN "type"{'T} } =
+   sequent ['ext] { 'H >- it in "type"{'T} } =
    it
 
 (*!************************************************************************
@@ -478,7 +478,7 @@ prim typeEquality 'H :
  *)
 prim universeMember 'H :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { 'H >- univ[j:l] IN univ[i:l] } =
+   sequent ['ext] { 'H >- univ[j:l] in univ[i:l] } =
   it
 
 (*
@@ -495,7 +495,7 @@ prim universeCumulativity 'H univ[j:l] :
    it
 
 (*! @docoff *)
-let univ_member_term = << univ[i:l] IN univ[j:l] >>
+let univ_member_term = << univ[i:l] in univ[j:l] >>
 
 let eqcd_univT p =
    let i = Sequent.hyp_count_addr p in
@@ -514,7 +514,7 @@ let resource intro += (univ_member_term, wrap_intro eqcd_univT)
  * @end[doc]
  *)
 prim universeMemberType 'H univ[i:l] :
-   [wf] sequent [squash] { 'H >- 'x IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'x in univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} } =
    it
 

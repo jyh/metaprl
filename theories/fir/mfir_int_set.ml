@@ -113,7 +113,7 @@ declare normalize{ 'set }
  * @end[doc]
  *)
 
-declare subset{ 'set1; 'set2 }
+declare "subset"{ 'set1; 'set2 }
 declare set_eq{ 'set1; 'set2 }
 declare union{ 'set1; 'set2 }
 
@@ -180,8 +180,8 @@ prim_rw reduce_union_interval_main :
              int_max{ number[j:n]; number[n:n] } }
 
 prim_rw reduce_subset_interval_main :
-   subset{ interval{ number[i:n]; number[j:n] };
-           interval{ number[n:n]; number[m:n] } } <-->
+    (interval{ number[i:n]; number[j:n] } subset
+     interval{ number[n:n]; number[m:n] } ) <-->
    "and"{ int_le{ number[n:n]; number[i:n] };
           int_le{ number[j:n]; number[m:n] } }
 
@@ -302,34 +302,34 @@ let resource reduce += [
  * @begin[doc]
  *
  * The @tt[reduce_subset] conversional uses the three rewrites below to reduce
- * $<< subset{ 'set1; 'set2 } >>$.  The cases in which one of the sets is
+ * $<< 'set1 subset 'set2  >>$.  The cases in which one of the sets is
  * empty are straightforward.  The case in which both sets are non-empty
  * reduces to a case analysis on the first interval in each set.
  * @end[doc]
  *)
 
 prim_rw reduce_subset_base1 :
-   subset{ intset[p:n, s:s]{ nil }; intset[p:n, s:s]{ 'intervals } } <-->
+   (intset[p:n, s:s]{ nil } subset intset[p:n, s:s]{ 'intervals })  <-->
    "true"
 
 prim_rw reduce_subset_base2 :
-   subset{ intset[p:n, s:s]{cons{'a; 'b}}; intset[p:n, s:s]{nil} } <-->
+   (intset[p:n, s:s]{cons{'a; 'b}} subset intset[p:n, s:s]{nil})  <-->
    "false"
 
 prim_rw reduce_subset_ind :
-   subset{ intset[p:n, s:s]{ (interval{ number[i:n]; number[j:n] } :: 't1) };
-           intset[p:n, s:s]{ (interval{ number[m:n]; number[n:n] } :: 't2) } }
+   ( intset[p:n, s:s]{ (interval{ number[i:n]; number[j:n] } :: 't1) } subset
+    intset[p:n, s:s]{ (interval{ number[m:n]; number[n:n] } :: 't2) } )
    <-->
    (if interval_lt{ interval{ number[m:n]; number[n:n] };
                     interval{ number[i:n]; number[j:n] } }
     then
-      subset{ intset[p:n, s:s]{ (interval{number[i:n]; number[j:n]} :: 't1) };
-              intset[p:n, s:s]{ 't2 } }
-    else if subset{ interval{ number[i:n]; number[j:n] };
-                    interval{ number[m:n]; number[n:n] } }
+     ( intset[p:n, s:s]{ (interval{number[i:n]; number[j:n]} :: 't1) } subset
+       intset[p:n, s:s]{ 't2 } )
+    else if  interval{ number[i:n]; number[j:n] } subset
+             interval{ number[m:n]; number[n:n] }
     then
-      subset{ intset[p:n, s:s]{ 't1 };
-              intset[p:n, s:s]{ (interval{number[m:n]; number[n:n]} :: 't2) } }
+      intset[p:n, s:s]{ 't1 } subset
+      intset[p:n, s:s]{ (interval{number[m:n]; number[n:n]} :: 't2) }
     else
       "false")
 
@@ -349,7 +349,7 @@ let reduce_subset =
    )
 
 let resource reduce += [
-   << subset{ 'set1; 'set2 } >>, reduce_subset
+   << 'set1 subset 'set2  >>, reduce_subset
 ]
 
 
@@ -433,7 +433,7 @@ let resource reduce += [
 
 prim_rw reduce_set_eq_aux :
    set_eq{ 's1; 's2 } <-->
-   "and"{ subset{ 's1; 's2 }; subset{ 's2; 's1 } }
+   "and"{. 's1 subset 's2 ; .'s2 subset 's1  }
 
 (*!
  * @docoff
@@ -567,7 +567,7 @@ dform normalize_df : except_mode[src] ::
    bf["normalize"] `"(" slot{'set} `")"
 
 dform subset_df : except_mode[src] ::
-   subset{ 'set1; 'set2 } =
+   "subset"{ 'set1; 'set2 } =
    slot{'set1} subseteq slot{'set2}
 
 dform set_eq_df : except_mode[src] ::

@@ -211,7 +211,7 @@ prim setElimination {| elim [] |} 'H 'J 'u 'v :
  *)
 prim set_subtype {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
-   sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } } =
+   sequent ['ext] { 'H >- \subtype{ { a: 'A | 'B['a] }; 'A } } =
    it
 
 (*! @docoff *)

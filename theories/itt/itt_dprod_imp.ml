@@ -164,10 +164,10 @@ interactive two_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{two} }
 
 interactive left_member {| intro [] |} 'H :
-   sequent ['ext] { 'H >- left IN two }
+   sequent ['ext] { 'H >- left in two }
 
 interactive right_member {| intro [] |} 'H :
-   sequent ['ext] { 'H >- right IN two }
+   sequent ['ext] { 'H >- right in two }
 
 interactive two_elim {| elim [ThinOption thinT] |} 'H 'J :
    [main] sequent ['ext] { 'H; x: two; 'J[left] >- 'C[left] } -->
@@ -189,9 +189,9 @@ interactive productEquality {| intro []; eqcd |} 'H 'y :
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] }
 
 interactive productMember {| intro [] |} 'H 'y :
-   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
-   [wf] sequent [squash] { 'H; y: 'A >- 'B['y] IN univ[i:l] } -->
-   sequent ['ext] { 'H >- (x:'A * 'B['x]) IN univ[i:l] }
+   [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; y: 'A >- 'B['y] in univ[i:l] } -->
+   sequent ['ext] { 'H >- (x:'A * 'B['x]) in univ[i:l] }
 
 (*
  * H >- Ui ext x:A * B
@@ -200,7 +200,7 @@ interactive productMember {| intro [] |} 'H 'y :
  * H, x:A >- Ui ext B
  *)
 interactive productFormation 'H 'A 'x :
-   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
    [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -220,7 +220,7 @@ interactive productType {| intro [] |} 'H 'x :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 interactive pairFormation {| intro [] |} 'H 'a 'y :
-   [wf] sequent [squash] { 'H >- 'a IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'a in 'A } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] }
@@ -271,9 +271,9 @@ interactive spreadEquality {| intro []; eqcd |} 'H bind{z. 'T['z]} (w:'A * 'B['w
  * H, a: A1 >- B1[a] <= B2[a]
  *)
 interactive productSubtype {| intro [] |} 'H 'a :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }
+   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }
 
 (*
  * -*-

@@ -83,14 +83,14 @@ rule trueIntro 'H :
  * Typehood is equality.
  *)
 rule equalityAxiom 'H 'J :
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x IN 'T }
+   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x in 'T }
 
 (*
  * Reflexivity.
  *)
 rule equalityRef 'H 'y :
    sequent ['ext] { 'H >- 'x = 'y in 'T } -->
-   sequent ['ext] { 'H >- 'x IN 'T }
+   sequent ['ext] { 'H >- 'x in 'T }
 
 (*
  * Symettry.
@@ -137,8 +137,8 @@ rule equalityEquality 'H :
  * Typehood.
  *)
 rule equalityType 'H :
-   sequent [squash] { 'H >- 'a IN 'T } -->
-   sequent [squash] { 'H >- 'b IN 'T } -->
+   sequent [squash] { 'H >- 'a in 'T } -->
+   sequent [squash] { 'H >- 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } }
 
 (*
@@ -149,11 +149,11 @@ rule equalityType 'H :
  *)
 rule axiomMember 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- it IN ('a = 'b in 'T) }
+   sequent ['ext] { 'H >- it in ('a = 'b in 'T) }
 
 rule type_axiomMember 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
-   sequent ['ext] { 'H >- it IN "type"{'T} }
+   sequent ['ext] { 'H >- it in "type"{'T} }
 
 (*
  * H, x: a = b in T, J[x] >- C[x]
@@ -181,7 +181,7 @@ rule typeEquality 'H :
  *)
 rule universeMember 'H :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { 'H >- univ[j:l] IN univ[i:l] }
+   sequent ['ext] { 'H >- univ[j:l] in univ[i:l] }
 
 (*
  * H >- x = x in Ui
@@ -205,7 +205,7 @@ rule universeType 'H :
  * Anything in a universe is a type.
  *)
 rule universeMemberType 'H univ[i:l] :
-   sequent [squash] { 'H >- 'x IN univ[i:l] } -->
+   sequent [squash] { 'H >- 'x in univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} }
 
 (*

@@ -895,8 +895,8 @@ B	b1340	t1337
 P	p1347	String unfoldRecordL
 O	o1356	rewrite p1347
 NItt_disect	Itt_disect	Itt_disect NIL
-NItt_disect!disect	disect	disect Itt_disect
-O	o1364	disect
+NItt_disect!bisect	bisect	bisect Itt_disect
+O	o1364	bisect
 B	b1390	t1290
 T	t1390	o1246 b1390
 B	b1391	t1390 self

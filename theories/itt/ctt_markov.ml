@@ -33,12 +33,12 @@ let _ =
 
 
 interactive squash_stable1 'H 't:
-   sequent [squash] {'H; x:'T >- 't IN 'T} -->
+   sequent [squash] {'H; x:'T >- 't in 'T} -->
    sequent ['ext] {'H; x:squash{'T} >- 'T}
 
 interactive squash_stable2 'H bind{v.'t['v]} :
-   sequent [squash] {'H; v:squash{'T} >- 't['v] IN 'T} -->
-   sequent ['ext] {'H; x:'T >- 't[it] IN 'T}
+   sequent [squash] {'H; v:squash{'T} >- 't['v] in 'T} -->
+   sequent ['ext] {'H; x:'T >- 't[it] in 'T}
 
 interactive squash_ex1 'H :
    [wf] sequent [squash] {'H >- "type"{'A} } -->
@@ -113,9 +113,9 @@ interactive markov1 'H 'A : (* proved from Markov3 *)
 
 interactive markov0 'H 'A: (* proved from Markov1 *)
    [wf] sequent [squash] {'H >- "type"{'A} } -->
-   sequent [squash]   {'H; x:'A >- 't IN 'T } -->
-   sequent [squash]   {'H; y:not{'A} >- 't IN 'T } -->
-   sequent ['ext]   {'H >- 't IN 'T }
+   sequent [squash]   {'H; x:'A >- 't in 'T } -->
+   sequent [squash]   {'H; y:not{'A} >- 't in 'T } -->
+   sequent ['ext]   {'H >- 't in 'T }
 
 interactive markov2' 'H :(* = Markov, proved from Markov0 *)
    [wf] sequent [squash] {'H >- "type"{'A} } -->
@@ -123,8 +123,8 @@ interactive markov2' 'H :(* = Markov, proved from Markov0 *)
    sequent ['ext]   {'H >- squash{'A} }
 
 interactive markovN 'H : (* proved from Markov *)
-   [wf] sequent [squash] {'H >- 's IN 'T } -->
-   [wf] sequent [squash] {'H >- 't IN 'T } -->
+   [wf] sequent [squash] {'H >- 's in 'T } -->
+   [wf] sequent [squash] {'H >- 't in 'T } -->
    [main] sequent [squash] {'H >- not{not{.'s='t in 'T}} } -->
    sequent ['ext] {'H >- 's='t in 'T }
 

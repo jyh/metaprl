@@ -173,7 +173,7 @@ interactive independentFunctionElimination 'H 'J 'f 'y :
  * Explicit function elimination.
  *)
 interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
-   [wf] sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a IN 'A } -->
+   [wf] sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a in 'A } -->
    [main] ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
 
@@ -201,9 +201,9 @@ interactive independentApplyEquality {| intro[]; eqcd |} 'H ('A -> 'B) :
  * @end[doc]
  *)
 interactive independentFunctionSubtype {| intro [] |} 'H :
-   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
+   sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- \subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
 
 (*
  * H >- Ui ext A -> B

@@ -25,9 +25,9 @@
 
 extends Czf_itt_dall
 
-declare subset{'s1; 's2}
+declare \subset{'s1; 's2}
 
-rewrite unfold_subset : subset{'s1; 's2} <--> dall{'s1; x. mem{'x; 's2}}
+rewrite unfold_subset : \subset{'s1; 's2} <--> dall{'s1; x. mem{'x; 's2}}
 
 prec prec_subset
 

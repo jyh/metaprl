@@ -603,7 +603,7 @@ declare math_setbvd{'x; 's; 'a}
 
 dform set_bvd_df1 : mode[tex] :: math_setbvd{'x; 's; 'a} =
    izone `"{\\left\\{" ezone
-   slot{'a} `"| " 
+   slot{'a} `"| "
    slot{'x}
    izone `"\\in_s " ezone
    slot{'s}
@@ -622,7 +622,7 @@ dform inv_image_df1 : mode[tex] :: math_invimage{'x; 's; 'a; 't} =
    izone `"{\\left\\{" ezone
    slot{'x}
    izone `"\\in_s " ezone
-   slot{'s} `"| " 
+   slot{'s} `"| "
    slot{'a}
    izone `"\\in_s " ezone
    slot{'t}

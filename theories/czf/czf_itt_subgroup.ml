@@ -92,7 +92,7 @@ declare subgroup{'s; 'g}
  * @end[doc]
  *)
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
-   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
+   (group{'s} & group{'g} & \subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
 (*! @docoff *)
 
 (************************************************************************
@@ -133,7 +133,7 @@ interactive subgroup_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'s} } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- subset{car{'s}; car{'g}} } -->
+   sequent ['ext] { 'H >- \subset{car{'s}; car{'g}} } -->
    sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} }
 

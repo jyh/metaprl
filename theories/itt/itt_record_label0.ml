@@ -37,7 +37,7 @@ define unfoldInd :   ind_lab{'n; 'base; l. 'up['l]} <-->
 
 
 interactive_rw reduce_ind_up :
-   ('x IN label) -->
+   ('x in label) -->
    ind_lab{next{'x}; 'base; l. 'up['l]} <-->
    ('up[ind_lab{'x ; 'base; l. 'up['l]}])
 
@@ -59,7 +59,7 @@ interactive labelType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{label} }
 
 interactive zeroMember {| intro [] |} 'H :
-   sequent ['ext] { 'H >- zero IN label}
+   sequent ['ext] { 'H >- zero in label}
 
 interactive nextMember {| intro [] |} 'H :
    sequent [squash] { 'H >- 'x='y in label} -->
@@ -71,7 +71,7 @@ interactive labelInduction {| elim [ThinOption thinT] |} 'H 'J 'm 'z :
    sequent ['ext] { 'H; n: label; 'J['n] >- 'C['n] }
 
 interactive labelBackInduction 'H 'n bind{x.'C['x]} 'm 'z :
-   sequent [squash]{'H >- 'n IN label }  -->
+   sequent [squash]{'H >- 'n in label }  -->
    sequent ['ext] { 'H >- 'C['n] }  -->
    sequent ['ext] { 'H; m: label;  z: 'C[next{'m}] >- 'C['m] }  -->
    sequent ['ext] { 'H  >- 'C[zero] }
@@ -85,8 +85,8 @@ interactive label_sqequal 'H:
    sequent['ext] {'H >- 'n ~ 'm}
 
 interactive decide_eq_label 'H 'x 'y :
-   [wf] sequent[squash] {'H >- 'x IN label} -->
-   [wf] sequent[squash] {'H >- 'y IN label} -->
+   [wf] sequent[squash] {'H >- 'x in label} -->
+   [wf] sequent[squash] {'H >- 'y in label} -->
    [main] sequent['ext] {'H; u:'x='y in label >- 'C} -->
    [main] sequent['ext] {'H; u:not{.'x='y in label} >- 'C} -->
    sequent['ext] {'H >- 'C}

@@ -44,7 +44,7 @@ open Tactic_type.Tacticals
  * TERMS                                                                *
  ************************************************************************)
 
-declare "disect"{'A; x. 'B['x]}
+declare bisect{'A; x. 'B['x]}
 
 val is_disect_term : term -> bool
 val dest_disect : term -> string * term * term
@@ -55,9 +55,9 @@ val mk_disect_term : string -> term -> term -> term
  ************************************************************************)
 
 rule dintersectionTypeElimination 'H 'J 'a 'v:
-   [wf] sequent [squash] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u]  >- 'a IN 'A } -->
-   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] }
+   [wf] sequent [squash] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u]  >- 'a in 'A } -->
+   sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] }
 
 
 

@@ -47,7 +47,7 @@ P	p10	String _
 O	o11	comment_string p10
 T	t11	o11
 B	b11	t11
-P	p11	String disect
+P	p11	String bisect
 O	o12	comment_string p11
 T	t12	o12
 B	b12	t12
@@ -3859,8 +3859,8 @@ O	o2450	location p2441 p2446
 NSummary!opname	opname	opname Summary
 O	o1635	opname p11
 NItt_disect	Itt_disect	Itt_disect NIL
-NItt_disect!disect	disect	disect Itt_disect
-O	o1636	disect
+NItt_disect!bisect	bisect	bisect Itt_disect
+O	o1636	bisect
 Nvar	var	var NIL
 P	p1636	Var A
 O	o1637	var p1636
@@ -6053,7 +6053,7 @@ T	t3484	o1675 b3484
 B	b3485	t3484
 T	t237	o1673 b230 b3485
 B	b237	t237
-P	p3486	String "assertEqT <<'x1='x2 in disect{'A;y.'B['y]}>> thenAT autoT"
+P	p3486	String "assertEqT <<'x1='x2 in bisect{'A;y.'B['y]}>> thenAT autoT"
 O	o3486	ext_rule p3486
 T	t3486	o b3482 b13
 B	b3487	t3486
@@ -6133,7 +6133,7 @@ T	t3507	o1675 b3506
 B	b3507	t3507
 T	t256	o1673 b230 b3507
 B	b256	t256
-P	p257	String "doNotThinT (assertEqT <<'x1='x2 in disect{'A;y.'B['y]}>>) thenAT autoT"
+P	p257	String "doNotThinT (assertEqT <<'x1='x2 in bisect{'A;y.'B['y]}>>) thenAT autoT"
 O	o257	ext_rule p257
 T	t3509	o2071 b3506 b3487
 B	b3509	t3509
@@ -6464,7 +6464,7 @@ T	t377	o b374 b376
 B	b377	t377
 T	t378	o2069 b3655 b377
 B	b378	t378
-P	p3672	String "disectCaseEqualityT <<disect{'A;y.'B['y]}>> thenT autoT"
+P	p3672	String "disectCaseEqualityT <<bisect{'A;y.'B['y]}>> thenT autoT"
 O	o3672	ext_rule p3672
 T	t3672	o2069 b3666 b13
 B	b3673	t3672
@@ -6572,7 +6572,7 @@ T	t1304	o b526 b1304
 B	b1305	t1304
 T	t1305	o2069 b389 b1305
 B	b1309	t1305
-P	p3712	String "assertT <<\"type\"{disect{'A;y.'B['y]}}>>"
+P	p3712	String "assertT <<\"type\"{bisect{'A;y.'B['y]}}>>"
 O	o3712	ext_rule p3712
 T	t3713	o1814 b3481
 S	s1309	t1677 h h2174 h2175 h2176 h2177 h3704
@@ -7633,7 +7633,7 @@ T	t3965	o3965 b2585
 B	b3965	t3965
 T	t3966	o3963 b3964 b3965
 B	b3966	t3966
-P	p2431	String "MP-Caml3.02 term:\\132\\149\\166\\190\\000\\000\\000P\\000\\000\\000\\\"\\000\\000\\000_\\000\\000\\000\\\\\\160\\160\\160$\\000\\000\\000\\000\\160&disect\\160*Itt_disect@@\\160\\160@\\160\\160\\160\\004\\n\\160#var@\\160\\148!A@@\\160\\160\\160!x@\\160\\160\\004\\012\\160\\148!B@\\160\\160@\\160\\160\\004\\019\\160\\148!x@@@@"
+P	p2431	String "MP-Caml3.02 term:\\132\\149\\166\\190\\000\\000\\000P\\000\\000\\000\\\"\\000\\000\\000_\\000\\000\\000\\\\\\160\\160\\160$\\000\\000\\000\\000\\160&bisect\\160*Itt_disect@@\\160\\160@\\160\\160\\160\\004\\n\\160#var@\\160\\148!A@@\\160\\160\\160!x@\\160\\160\\004\\012\\160\\148!B@\\160\\160@\\160\\160\\004\\019\\160\\148!x@@@@"
 O	o2431	string p3959 p1483 p2431
 T	t2431	o2431
 B	b2432	t2431
@@ -9892,7 +9892,7 @@ T	t3215	o3215 b2585
 B	b3215	t3215
 T	t3216	o3213 b3214 b3215
 B	b3216	t3216
-P	p2697	String "MP-Caml3.02 term:\\132\\149\\166\\190\\000\\000\\000Z\\000\\000\\000$\\000\\000\\000e\\000\\000\\000b\\160\\160\\160$\\000\\000\\000\\000\\160&disect\\160*Itt_disect@@\\160\\160@\\160\\160\\160\\004\\n\\160#var@\\160\\148\\\"A1@@\\160\\160\\160\\\"a1@\\160\\160\\160\\004\\022\\004\\012\\160\\148\\\"B1@\\160\\160@\\160\\160\\160\\004\\030\\004\\020\\160\\148\\\"a1@@@@"
+P	p2697	String "MP-Caml3.02 term:\\132\\149\\166\\190\\000\\000\\000Z\\000\\000\\000$\\000\\000\\000e\\000\\000\\000b\\160\\160\\160$\\000\\000\\000\\000\\160&bisect\\160*Itt_disect@@\\160\\160@\\160\\160\\160\\004\\n\\160#var@\\160\\148\\\"A1@@\\160\\160\\160\\\"a1@\\160\\160\\160\\004\\022\\004\\012\\160\\148\\\"B1@\\160\\160@\\160\\160\\160\\004\\030\\004\\020\\160\\148\\\"a1@@@@"
 O	o3216	string p3210 p3212 p2697
 T	t3217	o3216
 B	b3217	t3217

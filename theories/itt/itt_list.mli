@@ -120,7 +120,7 @@ rule nilFormation 'H :
  *)
 rule nilEquality 'H :
    sequent [squash] { 'H >- "type"{list{'A}} } -->
-   sequent ['ext] { 'H >- nil IN list{'A} }
+   sequent ['ext] { 'H >- nil in list{'A} }
 
 (*
  * H >- list(A) ext cons(h; t)
@@ -187,8 +187,8 @@ rule list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
  * H >- A1 <= A2
  *)
 rule listSubtype 'H :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}}
+   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   sequent ['ext] { 'H >- \subtype{list{'A1}; list{'A2}}}
 
 (*
  * Nil is canonical.

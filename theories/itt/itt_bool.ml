@@ -247,16 +247,16 @@ dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] ::
  * @end[doc]
  *)
 interactive boolEquality {| intro []; eqcd |} 'H :
-   sequent ['ext] { 'H >- "bool" IN univ[i:l] }
+   sequent ['ext] { 'H >- "bool" in univ[i:l] }
 
 interactive boolType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{bool} }
 
 interactive btrue_member {| intro []; eqcd |} 'H :
-  sequent ['ext] { 'H >- btrue IN "bool" }
+  sequent ['ext] { 'H >- btrue in "bool" }
 
 interactive bfalse_member {| intro []; eqcd |} 'H :
-   sequent ['ext] { 'H >- bfalse IN "bool" }
+   sequent ['ext] { 'H >- bfalse in "bool" }
 
 (*!
  * @begin[doc]
@@ -282,7 +282,7 @@ interactive boolElimination2 {| elim [] |} 'H 'J 'x :
  * @end[doc]
  *)
 interactive ifthenelse_type2 {| intro [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- 'e IN bool } -->
+   [wf] sequent [squash] { 'H >- 'e in bool } -->
    [wf] sequent [squash] { 'H; x: 'e = btrue in bool >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'e = bfalse in bool >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{ifthenelse{'e; 'A; 'B}} }
@@ -374,19 +374,19 @@ interactive bool_falseFormation 'H :
  * @end[doc]
  *)
 interactive bor_member {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 't1 IN bool } -->
-   [wf] sequent [squash] { 'H >- 't2 IN bool } -->
-   sequent ['ext] { 'H >- bor{'t1; 't2} IN bool }
+   [wf] sequent [squash] { 'H >- 't1 in bool } -->
+   [wf] sequent [squash] { 'H >- 't2 in bool } -->
+   sequent ['ext] { 'H >- bor{'t1; 't2} in bool }
 
 interactive band_member {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 't1 IN bool } -->
-   [wf] sequent [squash] { 'H >- 't2 IN bool } -->
-   sequent ['ext] { 'H >- band{'t1; 't2} IN bool }
+   [wf] sequent [squash] { 'H >- 't1 in bool } -->
+   [wf] sequent [squash] { 'H >- 't2 in bool } -->
+   sequent ['ext] { 'H >- band{'t1; 't2} in bool }
 
 interactive bimplies_member {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 't1 IN bool } -->
-   [wf] sequent [squash] { 'H >- 't2 IN bool } -->
-   sequent ['ext] { 'H >- bimplies{'t1; 't2} IN bool }
+   [wf] sequent [squash] { 'H >- 't1 in bool } -->
+   [wf] sequent [squash] { 'H >- 't2 in bool } -->
+   sequent ['ext] { 'H >- bimplies{'t1; 't2} in bool }
 
 interactive bnot_equal {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'b in bool } -->
@@ -407,7 +407,7 @@ interactive bnot_equal {| intro []; eqcd |} 'H :
  * @end[doc]
  *)
 interactive assert_type {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 't IN bool } -->
+   [wf] sequent [squash] { 'H >- 't in bool } -->
    sequent ['ext] { 'H >- "type"{."assert"{'t}} }
 
 interactive assert_true {| intro [] |} 'H :
@@ -427,13 +427,13 @@ interactive assert_false {| elim [] |} 'H 'J :
  * @end[doc]
  *)
 interactive bool_subst_concl 'H bind{x. 'C['x]} 'e 'y :
-   [wf] sequent [squash] { 'H >- 'e IN bool } -->
+   [wf] sequent [squash] { 'H >- 'e in bool } -->
    [main] sequent ['ext] { 'H; y: "assert"{'e} >- 'C[btrue] } -->
    [main] sequent ['ext] { 'H; y: "assert"{bnot{'e}} >- 'C[bfalse] } -->
    sequent ['ext] { 'H >- 'C['e] }
 
 interactive bool_subst_hyp 'H 'J bind{x. 'A['x]} 'e 'y :
-   [wf] sequent [squash] { 'H; x: 'A['e]; 'J['x] >- 'e IN bool } -->
+   [wf] sequent [squash] { 'H; x: 'A['e]; 'J['x] >- 'e in bool } -->
    [main] sequent ['ext] { 'H; x: 'A[btrue]; 'J['x]; y: "assert"{'e} >- 'C['x] }
  -->
    [main] sequent ['ext] { 'H; x: 'A[bfalse]; 'J['x]; y: "assert"{bnot{'e}} >-
@@ -449,8 +449,8 @@ interactive bool_subst_hyp 'H 'J bind{x. 'A['x]} 'e 'y :
  * @end[doc]
  *)
 interactive bool_ext_equality 'H 'u :
-   [wf] sequent [squash] { 'H >- 'x IN bool } -->
-   [wf] sequent [squash] { 'H >- 'y IN bool } -->
+   [wf] sequent [squash] { 'H >- 'x in bool } -->
+   [wf] sequent [squash] { 'H >- 'y in bool } -->
    [main] sequent [squash] { 'H; u: "assert"{'x} >- "assert"{'y} } -->
    [main] sequent [squash] { 'H; u: "assert"{'y} >- "assert"{'x} } -->
    sequent ['ext] { 'H >- 'x = 'y in bool }
@@ -465,7 +465,7 @@ interactive bool_ext_equality 'H 'u :
  *)
 interactive assertSquashElim {| squash; intro [] |} 'H :
    sequent [squash] { 'H >- "assert"{'t} } -->
-   sequent ['ext] { 'H >- it IN "assert"{'t} }
+   sequent ['ext] { 'H >- it in "assert"{'t} }
 
 (*!
  * @begin[doc]
@@ -476,7 +476,7 @@ interactive assertSquashElim {| squash; intro [] |} 'H :
  * @end[doc]
  *)
 interactive assert_bnot_intro {| intro [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- 't1 IN bool } -->
+   [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{bnot{'t1}} }
 
@@ -493,7 +493,7 @@ interactive assert_bnot_elim {| elim [] |} 'H 'J :
  * @end[doc]
  *)
 interactive assert_magic 'H 'x :
-   [wf] sequent [squash] { 'H >- 't IN bool } -->
+   [wf] sequent [squash] { 'H >- 't in bool } -->
    sequent [squash] { 'H; x: "assert"{bnot{'t}} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{'t} }
 
@@ -503,7 +503,7 @@ interactive assert_magic 'H 'x :
  * @end[doc]
  *)
 interactive assert_is_decidable {| intro [] |} 'H:
-   [wf] sequent [squash] { 'H >- 't IN bool } -->
+   [wf] sequent [squash] { 'H >- 't in bool } -->
    sequent ['ext] { 'H >- decidable{."assert"{'t}} }
 
 (*!
@@ -513,7 +513,7 @@ interactive assert_is_decidable {| intro [] |} 'H:
  * @end[doc]
  *)
 interactive assert_bor_elim {| elim [] |} 'H 'J :
-   [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 't1 IN bool
+   [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 't1 in bool
  } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t1}; 'J[it] >- 'C[it] } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t2}; 'J[it] >- 'C[it] } -->
@@ -539,12 +539,12 @@ interactive assert_bimplies_elim {| elim [] |} 'H 'J :
  * @end[doc]
  *)
 interactive assert_bor_intro_left {| intro [SelectOption 1] |} 'H :
-   [wf] sequent [squash] { 'H >- 't2 IN bool } -->
+   [wf] sequent [squash] { 'H >- 't2 in bool } -->
    [main] sequent [squash] { 'H >- "assert"{'t1} } -->
    sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
 
 interactive assert_bor_intro_right {| intro [SelectOption 2] |} 'H :
-   [wf] sequent [squash] { 'H >- 't1 IN bool } -->
+   [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [main] sequent [squash] { 'H >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
 
@@ -554,7 +554,7 @@ interactive assert_band_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- "assert"{band{'t1; 't2}} }
 
 interactive assert_bimplies_intro {| intro [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- 't1 IN bool } -->
+   [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{bimplies{'t1; 't2}} }
 
@@ -789,15 +789,15 @@ let resource typeinf += [
  ***********************************************************************)
 
 interactive_rw reduce_bnot_bnot :
-   ( 'e1 IN bool ) -->
+   ( 'e1 in bool ) -->
    bnot{bnot{'e1}} <--> 'e1
 
 interactive_rw reduce_band_same :
-   ( 'e IN bool ) -->
+   ( 'e in bool ) -->
    band{'e;'e} <--> 'e
 
 interactive_rw reduce_bor_same :
-   ( 'e IN bool ) -->
+   ( 'e in bool ) -->
    bor{'e;'e} <--> 'e
 
 let resource reduce +=

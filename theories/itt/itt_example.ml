@@ -178,10 +178,10 @@ interactive oven_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{oven} }
 
 interactive on_intro {| intro [] |}'H :
-   sequent ['ext] { 'H >- on IN oven }
+   sequent ['ext] { 'H >- on in oven }
 
 interactive open_intro {| intro [] |}'H :
-   sequent ['ext] { 'H >- "open" IN oven }
+   sequent ['ext] { 'H >- "open" in oven }
 
 interactive oven_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; 'J[on] >- 'C[on] } -->
@@ -195,10 +195,10 @@ interactive action_type {| intro [] |}'H :
    sequent ['ext] { 'H >- "type"{action} }
 
 interactive button_intro {| intro [] |}'H :
-   sequent ['ext] { 'H >- button IN action }
+   sequent ['ext] { 'H >- button in action }
 
 interactive door_intro {| intro [] |}'H :
-   sequent ['ext] { 'H >- door IN action }
+   sequent ['ext] { 'H >- door in action }
 
 interactive action_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; 'J[button] >- 'C[button] } -->
@@ -209,33 +209,33 @@ interactive action_elim {| elim [] |} 'H 'J :
  * Boolean predicates.
  *)
 interactive eq_oven_intro {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 'o1 IN oven } -->
-   sequent ['ext] { 'H >- 'o2 IN oven } -->
-   sequent ['ext] { 'H >- eq_oven{'o1; 'o2} IN bool }
+   sequent ['ext] { 'H >- 'o1 in oven } -->
+   sequent ['ext] { 'H >- 'o2 in oven } -->
+   sequent ['ext] { 'H >- eq_oven{'o1; 'o2} in bool }
 
 interactive eq_action_intro {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 'a1 IN action } -->
-   sequent ['ext] { 'H >- 'a2 IN action } -->
-   sequent ['ext] { 'H >- eq_action{'a1; 'a2} IN bool }
+   sequent ['ext] { 'H >- 'a1 in action } -->
+   sequent ['ext] { 'H >- 'a2 in action } -->
+   sequent ['ext] { 'H >- eq_action{'a1; 'a2} in bool }
 
 interactive state_val_intro {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 's IN state } -->
-   sequent ['ext] { 'H >- 'o IN oven } -->
-   sequent ['ext] { 'H >- state_val{'s; 'o} IN bool }
+   sequent ['ext] { 'H >- 's in state } -->
+   sequent ['ext] { 'H >- 'o in oven } -->
+   sequent ['ext] { 'H >- state_val{'s; 'o} in bool }
 
 interactive exec_val_intro {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 'e IN exec } -->
-   sequent ['ext] { 'H >- 'i IN nat } -->
-   sequent ['ext] { 'H >- exec_val{'e; 'i} IN state }
+   sequent ['ext] { 'H >- 'e in exec } -->
+   sequent ['ext] { 'H >- 'i in nat } -->
+   sequent ['ext] { 'H >- exec_val{'e; 'i} in state }
 
 interactive eq_state_intro {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 's1 IN state } -->
-   sequent ['ext] { 'H >- 's2 IN state } -->
+   sequent ['ext] { 'H >- 's1 in state } -->
+   sequent ['ext] { 'H >- 's2 in state } -->
    sequent ['ext] { 'H >- "type"{eq_state{'s1; 's2}} }
 
 interactive eq_state_elim {| elim [] |} 'H 'J :
-   ["wf"] sequent ['ext] { 'H; x: eq_state{'s1; 's2}; 'J['x] >- 's1 IN state } -->
-   ["wf"] sequent ['ext] { 'H; x: eq_state{'s1; 's2}; 'J['x] >- 's2 IN state } -->
+   ["wf"] sequent ['ext] { 'H; x: eq_state{'s1; 's2}; 'J['x] >- 's1 in state } -->
+   ["wf"] sequent ['ext] { 'H; x: eq_state{'s1; 's2}; 'J['x] >- 's2 in state } -->
    ["main"] sequent ['ext] { 'H; x: eq_state{'s1; 's2}; 'J['x];
       a: "assert"{state_val{'s1; on}}; b: "assert"{state_val{'s1; ."open"}};
       c: "assert"{state_val{'s2; on}}; d: "assert"{state_val{'s2; ."open"}} >- 'C['x] } -->
@@ -254,17 +254,17 @@ interactive eq_state_elim {| elim [] |} 'H 'J :
  * Next wf.
  *)
 interactive next_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 's IN state } -->
-   sequent ['ext] { 'H >- 'a IN action } -->
-   sequent ['ext] { 'H >- next{'s; 'a} IN state }
+   sequent ['ext] { 'H >- 's in state } -->
+   sequent ['ext] { 'H >- 'a in action } -->
+   sequent ['ext] { 'H >- next{'s; 'a} in state }
 
 (*
  * Itt_nat is incomplete, so let's add some thms.
  *)
 interactive nat_sum_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 'i IN nat } -->
-   sequent ['ext] { 'H >- 'j IN nat } -->
-   sequent ['ext] { 'H >- ('i +@ 'j) IN nat }
+   sequent ['ext] { 'H >- 'i in nat } -->
+   sequent ['ext] { 'H >- 'j in nat } -->
+   sequent ['ext] { 'H >- ('i +@ 'j) in nat }
 
 interactive one_ge_zero_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- 1 >= 0 }
@@ -273,7 +273,7 @@ interactive one_ge_zero_wf {| intro [] |} 'H :
  * Is_exec wf.
  *)
 interactive is_exec_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 'e IN exec } -->
+   sequent ['ext] { 'H >- 'e in exec } -->
    sequent ['ext] { 'H >- "type"{is_exec{'e}} }
 
 (*
@@ -285,7 +285,7 @@ interactive_rw next_on : state_val{next{'s; button}; on} <--> 's
  * Main theorem.
  *)
 interactive safety 'H :
-   sequent ['ext] { 'H >- 'e IN exec } -->
+   sequent ['ext] { 'H >- 'e in exec } -->
    sequent ['ext] { 'H >- is_exec{'e} } -->
    sequent ['ext] { 'H >- all i: nat. "assert"{bnot{band{state_val{exec_val{'e; 'i}; ."open"}; state_val{exec_val{'e; 'i}; on}}}} }
 

@@ -89,6 +89,7 @@ open Itt_equal
  * The @tt{tunion} term defines the union type.
  * @end[doc]
  *)
+
 declare tunion{'A; x. 'B['x]}
 (*! @docoff *)
 
@@ -132,7 +133,7 @@ prim tunionEquality {| intro []; eqcd |} 'H 'x :
 prim tunionType {| intro [] |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- "type"{tunion{'A; x. 'B['x]}} } =
+   sequent ['ext] { 'H >- "type"{.Union x:'A. 'B['x] } } =
    it
 
 (*!
@@ -149,7 +150,7 @@ prim tunionMemberEquality {| intro []; eqcd |} 'H 'a 'y :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    [wf] sequent [squash] { 'H >- 'x1 = 'x2 in 'B['a] } -->
-   sequent ['ext] { 'H >- 'x1 = 'x2 in tunion{'A; x. 'B['x]} } =
+   sequent ['ext] { 'H >- 'x1 = 'x2 in Union x:'A. 'B['x]  } =
    it
 
 (*!
@@ -166,7 +167,7 @@ prim tunionMemberFormation {| intro [] |} 'H 'y 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    [main] ('t : sequent ['ext] { 'H >- 'B['a] }) -->
-   sequent ['ext] { 'H >- tunion{'A; x. 'B['x]} } =
+   sequent ['ext] { 'H >- Union x:'A. 'B['x]  } =
    't
 
 (*!
@@ -197,7 +198,7 @@ interactive tunionElimination_eq {| elim [ThinOption thinLastT] |} 'H 'J 'x 'w '
  * TACTICS                                                              *
  ************************************************************************)
 
-let tunion_term = << tunion{'A; x. 'B['x]} >>
+let tunion_term = << Union x:'A. 'B['x]  >>
 let tunion_opname = opname_of_term tunion_term
 let mk_tunion_term = mk_dep0_dep1_term tunion_opname
 let is_tunion_term = is_dep0_dep1_term tunion_opname

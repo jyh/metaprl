@@ -61,7 +61,7 @@ declare subgroup{'s; 'g}
  ************************************************************************)
 
 rewrite unfold_subgroup : subgroup{'s; 'g} <-->
-   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
+   (group{'s} & group{'g} & \subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
 
 (************************************************************************
  * TACTICS                                                              *

@@ -220,7 +220,7 @@ interactive lcoset_subset {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- subset{lcoset{'h; 'g; 'a}; car{'g}} }
+   sequent ['ext] { 'H >- \subset{lcoset{'h; 'g; 'a}; car{'g}} }
 
 interactive rcoset_subset {| intro [] |} 'H :
    sequent [squash] { 'H >- 'h IN label } -->
@@ -228,7 +228,7 @@ interactive rcoset_subset {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- subset{rcoset{'h; 'g; 'a}; car{'g}} }
+   sequent ['ext] { 'H >- \subset{rcoset{'h; 'g; 'a}; car{'g}} }
 
 (*! @docoff *)
 (*

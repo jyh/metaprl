@@ -152,12 +152,12 @@ prim srecFormation 'H 'T :
  *)
 prim srecEquality {| intro []; eqcd |} 'H 'T 'S1 'S2 'z :
    [wf] sequent [squash] { 'H; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: subtype{'S1; 'S2} >- subtype{'B1['S1]; 'B1['S2]} } -->
+   [wf] sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B1['S1]; 'B1['S2]} } -->
    sequent ['ext] { 'H >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[i:l] } =
    it
 
 prim srecType {| intro [] |} 'H 'S1 'S2 'z univ[i:l] :
-   [wf] sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: subtype{'S1; 'S2} >- subtype{'B['S1]; 'B['S2]} } -->
+   [wf] sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B['S1]; 'B['S2]} } -->
    sequent ['ext] { 'H >- "type"{srec{T. 'B['T]}} } =
    it
 
@@ -200,7 +200,7 @@ prim srecElimination {| elim [ThinOption thinT] |} 'H 'J 'x srec{T. 'B['T]} 'T1 
              x: srec{T. 'B['T]};
              'J['x];
              T1: univ[i:l];
-             u: subtype{'T1; srec{T. 'B['T]}};
+             u: \subtype{'T1; srec{T. 'B['T]}};
              w: v: 'T1 -> 'C['v];
              z: 'B['T1]
            >- 'C['z]
@@ -232,7 +232,7 @@ prim srecUnrollElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'y 'u :
 prim srecindEquality {| intro []; eqcd |} 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
    [wf] sequent [squash] { 'H >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
    [wf] sequent [squash] { 'H; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
-   [wf] sequent [squash] { 'H; T1: univ[i:l]; z: subtype{'T1; srec{T. 'B['T]}};
+   [wf] sequent [squash] { 'H; T1: univ[i:l]; z: \subtype{'T1; srec{T. 'B['T]}};
                v: w: 'T1 -> 'S['w]; w: 'B['T1]
            >- 't1['v; 'w] = 't2['v; 'w] in 'S['w]
            } -->

@@ -232,7 +232,7 @@ interactive listFormation 'H :
  *)
 prim nilEquality {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{list{'A}} } -->
-   sequent ['ext] { 'H >- nil IN list{'A} } =
+   sequent ['ext] { 'H >- nil in list{'A} } =
    it
 
 interactive nilFormation {| intro [] |} 'H :
@@ -350,8 +350,8 @@ prim nilSqequal 'H 'T :
  * @end[doc]
  *)
 interactive listSubtype {| intro [] |} 'H :
-   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}}
+   ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   sequent ['ext] { 'H >- \subtype{list{'A1}; list{'A2}}}
 (*! @docoff *)
 
 (************************************************************************

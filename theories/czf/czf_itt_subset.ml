@@ -3,11 +3,11 @@
  * @module[Czf_itt_subset]
  *
  * The @tt{Czf_itt_subset} module defines the subset proposition
- * $@subset{s_1; s_2}$, which is a proposition for any two sets
+ * $@\subset{s_1; s_2}$, which is a proposition for any two sets
  * $s_1$ and $s_2$.  The subset is a derived proposition defined
  * as follows.
  *
- * $$@subset{s_1; s_2} @equiv @dall{x; s_1; @mem{x; s_2}}$$
+ * $$@\subset{s_1; s_2} @equiv @dall{x; s_1; @mem{x; s_2}}$$
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -40,7 +40,7 @@ extends Czf_itt_dall
 open Base_dtactic
 
 (*! @doc{@terms} *)
-declare subset{'s1; 's2}
+declare \subset{'s1; 's2}
 
 (*!
  * @begin[doc]
@@ -49,12 +49,12 @@ declare subset{'s1; 's2}
  * The subset is defined using restricted universal quantification.
  * @end[doc]
  *)
-prim_rw unfold_subset : subset{'s1; 's2} <--> dall{'s1; x. mem{'x; 's2}}
+prim_rw unfold_subset : \subset{'s1; 's2} <--> dall{'s1; x. mem{'x; 's2}}
 (*! @docoff *)
 
 prec prec_subset
 
-dform subset_df : parens :: "prec"[prec_subset] :: subset{'s1; 's2} =
+dform subset_df : parens :: "prec"[prec_subset] :: \subset{'s1; 's2} =
    slot{'s1} `" " Nuprl_font!subseteq `"s " slot{'s2}
 
 (*!
@@ -62,20 +62,20 @@ dform subset_df : parens :: "prec"[prec_subset] :: subset{'s1; 's2} =
  * @rules
  * @modsubsection{Well-formedness}
  *
- * The subset proposition $@subset{s_1; s_2}$ is well-formed
+ * The subset proposition $@\subset{s_1; s_2}$ is well-formed
  * if $s_1$ and $s_2$ are both sets.
  * @end[doc]
  *)
 interactive subset_type {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{subset{'s1; 's2}} }
+   sequent ['ext] { 'H >- "type"{\subset{'s1; 's2}} }
 
 (*!
  * @begin[doc]
  * @modsubsection{Introduction}
  *
- * The subset proposition $@subset{s_1; s_2}$ is true if every
+ * The subset proposition $@\subset{s_1; s_2}$ is true if every
  * element $@mem{x; s_1}$ is also an element of $s_2$.
  * @end[doc]
  *)
@@ -83,24 +83,24 @@ interactive subset_intro {| intro [] |} 'H 'x :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
-   sequent ['ext] { 'H >- subset{'s1; 's2} }
+   sequent ['ext] { 'H >- \subset{'s1; 's2} }
 
 (*!
  * @begin[doc]
  * @modsubsection{Elimination}
  *
- * The elimination form of the proposition $@subset{s_1; s_2}$
+ * The elimination form of the proposition $@\subset{s_1; s_2}$
  * takes an element $@mem{x; s_1}$ and it produces a proof that
  * $@mem{x; s_2}$.
  * @end[doc]
  *)
 interactive subset_elim {| elim [] |} 'H 'J 's 'z :
-   ["wf"] sequent [squash] { 'H; x: subset{'s1; 's2}; 'J['x] >- isset{'s} } -->
-   ["wf"] sequent [squash] { 'H; x: subset{'s1; 's2}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: subset{'s1; 's2}; 'J['x] >- isset{'s2} } -->
-   ["antecedent"] sequent ['ext] { 'H; x: subset{'s1; 's2}; 'J['x] >- mem{'s; 's1} } -->
-   ["main"] sequent ['ext] { 'H; x: subset{'s1; 's2}; 'J['x]; z: mem{'s; 's2} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: subset{'s1; 's2}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { 'H; x: \subset{'s1; 's2}; 'J['x] >- isset{'s} } -->
+   ["wf"] sequent [squash] { 'H; x: \subset{'s1; 's2}; 'J['x] >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H; x: \subset{'s1; 's2}; 'J['x] >- isset{'s2} } -->
+   ["antecedent"] sequent ['ext] { 'H; x: \subset{'s1; 's2}; 'J['x] >- mem{'s; 's1} } -->
+   ["main"] sequent ['ext] { 'H; x: \subset{'s1; 's2}; 'J['x]; z: mem{'s; 's2} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: \subset{'s1; 's2}; 'J['x] >- 'C['x] }
 
 (*!
  * @begin[doc]
@@ -113,12 +113,12 @@ interactive subset_elim {| elim [] |} 'H 'J 's 'z :
 interactive subset_res {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- restricted{subset{'s1; 's2}} }
+   sequent ['ext] { 'H >- restricted{\subset{'s1; 's2}} }
 
 interactive subset_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. subset{'s1['z]; 's2['z]}} }
+   sequent ['ext] { 'H >- fun_prop{z. \subset{'s1['z]; 's2['z]}} }
 (*! @docoff *)
 
 (*

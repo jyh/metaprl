@@ -62,7 +62,7 @@ interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'J 'w 'z :
 interactive bunionElimination2 {| elim [ThinOption thinT] |} 'H 'J :
    [main] sequent [squash] { 'H; x: 'A; 'J['x] >- squash{'C['x]} } -->
    [main] sequent [squash] { 'H; x: 'B; 'J['x] >- squash{'C['x]} } -->
-   sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- squash{'C['x]} }
+   sequent ['ext] { 'H; x: 'A bunion 'B; 'J['x] >- squash{'C['x]} }
 
 
 

@@ -283,7 +283,7 @@ dform snd_df1 : except_mode[src] :: snd{'e} =
  * H, x:A >- Ui ext B
  *)
 prim productFormation 'H 'A 'x :
-   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
    [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
    x:'A * 'B['x]
@@ -324,7 +324,7 @@ prim productType {| intro [] |} 'H 'x :
  * @end[doc]
  *)
 prim pairFormation {| intro [] |} 'H 'a 'y :
-   [wf] sequent [squash] { 'H >- 'a IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'a in 'A } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] } =
@@ -420,9 +420,9 @@ let resource intro +=
  * @end[doc]
  *)
 prim productSubtype {| intro [] |} 'H 'a :
-   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   [subtype] sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
+   ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   ["subtype"] sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
    it
 (*! @docoff *)
 

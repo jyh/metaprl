@@ -74,7 +74,7 @@ rule cut 'H 'J 'S 'x :
  * H >- t = t in T
  *)
 rule introduction 'H 't :
-   sequent [squash] { 'H >- 't IN 'T } -->
+   sequent [squash] { 'H >- 't in 'T } -->
    sequent ['ext] { 'H >- 'T }
 
 (*

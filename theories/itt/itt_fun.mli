@@ -121,7 +121,7 @@ rule independentFunctionElimination 'H 'J 'f 'y :
  * Explicit function elimination.
  *)
 rule independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
-   sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a IN 'A } -->
+   sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a in 'A } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
 
@@ -145,9 +145,9 @@ rule independentApplyEquality 'H ('A -> 'B) :
  * H >- B1 <= B2
  *)
 rule independentFunctionSubtype 'H :
-   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
+   sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- \subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
 
 (*
  * -*-

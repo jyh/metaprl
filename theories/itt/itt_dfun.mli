@@ -54,7 +54,7 @@ rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  * H, a: A >- Ui ext B
  *)
 rule functionFormation 'H 'a 'A :
-   sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   sequent [squash] { 'H >- 'A in univ[i:l] } -->
    sequent ['ext] { 'H; a: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -114,8 +114,8 @@ rule lambdaEquality 'H 'x :
 rule functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- 'f IN y:'C -> 'D['y] } -->
-   sequent [squash] { 'H >- 'g IN z:'E -> 'F['z] } -->
+   sequent [squash] { 'H >- 'f in y:'C -> 'D['y] } -->
+   sequent [squash] { 'H >- 'g in z:'E -> 'F['z] } -->
    sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] }
 
 (*
@@ -126,7 +126,7 @@ rule functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[f] ext t[f, y, v]
  *)
 rule functionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a IN 'A } -->
+   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a in 'A } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
@@ -152,9 +152,9 @@ topval applyEquality' : term -> tactic
  * H, a: A1 >- B1[a] <= B2[a]
  *)
 rule functionSubtype 'H 'a :
-   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
+   sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['prop] { 'H >- \subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
 
 (*
 (*
@@ -165,13 +165,13 @@ rule functionSubtype 'H 'a :
  *)
 rule function_subtypeElimination 'H 'J 'x 'y 'z 'a :
    sequent { 'H;
-             x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
+             x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              'J['x];
-             y: subtype{'A2; 'A1};
-             z: a:'A2 -> subtype{'B1['a]; 'B2['a]}
+             y: \subtype{'A2; 'A1};
+             z: a:'A2 -> \subtype{'B1['a]; 'B2['a]}
              >- 'T['x]
            } -->
-   sequent { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
+   sequent { 'H; x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
 *)
 
 (*

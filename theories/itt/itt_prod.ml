@@ -169,9 +169,9 @@ interactive independentPairFormation {| intro [] |} 'H :
  * @end[doc]
  *)
 interactive independentProductSubtype {| intro [] |} 'H :
-   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   [subtype] sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
+   ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   ["subtype"] sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
 (*! @docoff *)
 
 (************************************************************************

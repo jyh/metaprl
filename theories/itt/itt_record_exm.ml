@@ -67,7 +67,7 @@ interactive spaceType {|intro[] |} 'H :
 define unfold_O: O <--> rcrd["x":t]{0; rcrd["y":t]{0; rcrd["z":t]{0}}}
 
 interactive oInSpace {|intro[] |} 'H :
-   sequent['ext] {'H >- O IN space }
+   sequent['ext] {'H >- O in space }
 
 (*!
  * @begin[doc]
@@ -76,7 +76,7 @@ interactive oInSpace {|intro[] |} 'H :
  *)
 
 interactive oInPlane {|intro[] |} 'H :
-   sequent['ext] {'H >- O IN plane }
+   sequent['ext] {'H >- O in plane }
 
 (*!
  * @begin[doc]
@@ -85,7 +85,7 @@ interactive oInPlane {|intro[] |} 'H :
  *)
 
 interactive spacePlane {|intro[] |} 'H :
-   sequent['ext] {'H >- subtype{space;plane} }
+   sequent['ext] {'H >- \subtype{space;plane} }
 
 (*!
  * @begin[doc]
@@ -100,10 +100,10 @@ define unfold_B: B <--> rcrd["z":t]{0; rcrd["y":t]{2; rcrd["x":t]{1}}}
 (*! @docoff *)
 
 interactive aInSpace {|intro[] |} 'H :
-   sequent['ext] {'H >- A IN space }
+   sequent['ext] {'H >- A in space }
 
 interactive bInSpace {|intro[] |} 'H :
-   sequent['ext] {'H >- B IN space }
+   sequent['ext] {'H >- B in space }
 
 
 (*!
@@ -164,15 +164,15 @@ let fold_point =
    makeFoldC <<point{'a;'b;'e}>> plane_point
 
 interactive planeIntro {|intro[] |} 'H :
-   sequent[squash] {'H >- 'a IN int} -->
-   sequent[squash] {'H >- 'b IN int} -->
-   sequent['ext] {'H >- point{'a;'b;rcrd} IN plane}
+   sequent[squash] {'H >- 'a in int} -->
+   sequent[squash] {'H >- 'b in int} -->
+   sequent['ext] {'H >- point{'a;'b;rcrd} in plane}
 
 interactive spaceIntro {|intro[] |} 'H :
-   sequent[squash] {'H >- 'a IN int} -->
-   sequent[squash] {'H >- 'b IN int} -->
-   sequent[squash] {'H >- 'c IN int} -->
-   sequent['ext] {'H >- point{'a;'b;'c;rcrd} IN space}
+   sequent[squash] {'H >- 'a in int} -->
+   sequent[squash] {'H >- 'b in int} -->
+   sequent[squash] {'H >- 'c in int} -->
+   sequent['ext] {'H >- point{'a;'b;'c;rcrd} in space}
 
 (*!
  * @begin[doc]
@@ -190,7 +190,7 @@ let resource reduce +=
     << field["y":t]{point{'a;'b;'e}}  >>, point_beta2_rw]
 
 interactive point_eta 'H :
-   sequent[squash]{'H >- 'p IN plane } -->
+   sequent[squash]{'H >- 'p in plane } -->
    sequent['ext]{'H >-   point{field["x":t]{'p};field["y":t]{'p};'p} ~ 'p }
 
 
@@ -248,8 +248,8 @@ interactive length_A {|intro[] |} 'H :
  *)
 
 interactive length_wf {|intro[] |} 'H :
-   sequent[squash]{'H >- 'p IN plane } -->
-   sequent['ext]  {'H >- length{'p} IN int }
+   sequent[squash]{'H >- 'p in plane } -->
+   sequent['ext]  {'H >- length{'p} in int }
 
 (*!
  * @begin[doc]
@@ -263,7 +263,7 @@ define unfold_colored_space:  cspace <--> record["color":t]{atom;space}
 define unfold_redA: redA <--> rcrd["color":t]{token["red":t]; A}
 
 interactive redAInCSpace {|intro[] |} 'H :
-   sequent['ext] {'H >- redA IN cspace }
+   sequent['ext] {'H >- redA in cspace }
 
 
 interactive cspaceElim {|elim[] |} 'H 'J:
@@ -302,21 +302,21 @@ define integers : integers <-->
               }}}
 
 interactive integers_add_semigroup 'H :
-   sequent['ext] {'H >- integers IN semigroup["Z":t,"+":t,0:l]}
+   sequent['ext] {'H >- integers in semigroup["Z":t,"+":t,0:l]}
 
 interactive integers_mul_semigroup 'H :
-   sequent['ext] {'H >- integers IN semigroup["Z":t,"*":t,0:l]}
+   sequent['ext] {'H >- integers in semigroup["Z":t,"*":t,0:l]}
 
 
 define morphisms : morphisms{'A}  <-->
    rcrd["M":t]{.'A -> 'A;rcrd["*":t]{lambda{f.lambda{g. lambda{x. 'f ('g 'x)}}}}}
 
 interactive morphisms_semigroup 'H :
-   sequent[squash] {'H >- 'A IN univ[i:l]} -->
-   sequent['ext] {'H >- morphisms{'A} IN semigroup["M":t,"*":t,i:l]}
+   sequent[squash] {'H >- 'A in univ[i:l]} -->
+   sequent['ext] {'H >- morphisms{'A} in semigroup["M":t,"*":t,i:l]}
 
 interactive semigroupAssos4 'H semigroup[i:l] :
-   sequent[squash] {'H  >- 'g IN semigroup[i:l]} -->
+   sequent[squash] {'H  >- 'g in semigroup[i:l]} -->
    sequent['ext] {'H  >-
     all a:field["G":t]{'g}. all b:field["G":t]{'g}. all c:field["G":t]{'g}. all d:field["G":t]{'g}.
       (field["*":t]{'g} (field["*":t]{'g} (field["*":t]{'g} 'a 'b) 'c) 'd =
@@ -353,8 +353,8 @@ define stack_as_list :
 
 
 interactive stack_as_list_wf 'H :
-   sequent[squash] {'H >- 'A IN univ[i:l]} -->
-   sequent['ext] {'H >- list_stack{'A} IN Stack[i:l]{'A}}
+   sequent[squash] {'H >- 'A in univ[i:l]} -->
+   sequent['ext] {'H >- list_stack{'A} in Stack[i:l]{'A}}
 
 
 (*

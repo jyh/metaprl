@@ -102,7 +102,7 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
 (*! @doc{@rewrites} *)
 
 interactive_rw reduce_ind_up :
-   ('x IN nat) -->
+   ('x in nat) -->
    ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} <-->
    ('up['x +@ 1; ind{'x ; 'base; k,l. 'up['k;'l]}])
 
@@ -126,7 +126,7 @@ interactive natMemberEquality {| intro [] |} 'H :
    sequent ['ext] { 'H >- 'a='b in nat}
 
 interactive natMemberZero {| intro [] |} 'H :
-   sequent ['ext] { 'H >- 0 IN nat}
+   sequent ['ext] { 'H >- 0 in nat}
 
 interactive nat_is_int {| intro[AutoMustComplete] |} 'H:
    sequent [squash] { 'H >- 'a='b in nat} -->
@@ -142,7 +142,7 @@ interactive natInduction {| elim [] |} 'H 'J  :
    sequent ['ext] { 'H; n: nat; 'J['n] >- 'C['n] }
 
 interactive natBackInduction 'H 'n bind{x.'C['x]}  :
-   [wf] sequent [squash]{'H >- 'n IN nat }  -->
+   [wf] sequent [squash]{'H >- 'n in nat }  -->
    sequent ['ext] { 'H >- 'C['n] }  -->
    sequent ['ext] { 'H; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
    sequent ['ext] { 'H  >- 'C[0] }

@@ -39,11 +39,11 @@ extends Itt_subtype
 extends Itt_logic
 
 (*
- * Terms type{'T} and subtype{'A; 'B} have already been defined.
+ * Terms type{'T} and \subtype{'A; 'B} have already been defined.
  *)
-rewrite type_def : "type"{'T} <--> subtype{'T; 'T}
+rewrite type_def : "type"{'T} <--> \subtype{'T; 'T}
 
-define unfoldExtEqual : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
+define unfoldExtEqual : ext_equal{'A; 'B} <--> \subtype{'A; 'B} & \subtype{'B; 'A}
 
 (*
  * -*-

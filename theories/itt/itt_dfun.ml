@@ -179,8 +179,8 @@ interactive lambdaEquality {| intro [] |} 'H 'x :
 interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'f IN y:'C -> 'D['y] } -->
-   [wf] sequent [squash] { 'H >- 'g IN z:'E -> 'F['z] } -->
+   [wf] sequent [squash] { 'H >- 'f in y:'C -> 'D['y] } -->
+   [wf] sequent [squash] { 'H >- 'g in z:'E -> 'F['z] } -->
    sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] }
 
 (*!
@@ -193,7 +193,7 @@ interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * @end[doc]
  *)
 interactive functionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
-   [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a IN 'A } -->
+   [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a in 'A } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
@@ -224,9 +224,9 @@ let applyEquality' t p =
  * @end[doc]
  *)
 interactive functionSubtype {| intro [] |} 'H 'a :
-   [subtype] sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   [subtype] sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
+   ["subtype"] sequent [squash] { 'H >- 'A2 subtype 'A1 } -->
+   ["subtype"] sequent [squash] { 'H; a: 'A1 >- 'B1['a] subtype 'B2['a] } -->
+   sequent ['prop] { 'H >- a1:'A1 -> 'B1['a1]  subtype  a2:'A2 -> 'B2['a2] }
 (*! @docoff *)
 
 (*
@@ -238,13 +238,13 @@ interactive functionSubtype {| intro [] |} 'H 'a :
  *)
 interactive function_subtypeElimination {| elim [] |} 'H 'J 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent ['ext] { 'H;
-             x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
+             x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              'J['x];
-             y: subtype{'A2; 'A1};
-             z: a:'A2 -> subtype{'B1['a]; 'B2['a]}
+             y: \subtype{'A2; 'A1};
+             z: a:'A2 -> \subtype{'B1['a]; 'B2['a]}
              >- 'T['x]
            }) -->
-   sequent ['ext] { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
+   sequent ['ext] { 'H; x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
 *)
 
 (*
@@ -271,7 +271,7 @@ interactive function_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'x 
  * H, a: A >- Ui ext B
  *)
 interactive functionFormation 'H 'a 'A :
-   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
    ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
 

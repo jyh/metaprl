@@ -194,7 +194,7 @@ declare plusminus
 declare oplus
 declare infty
 declare partial
-declare subset
+declare "subset"
 declare supset
 declare cap
 declare cup
@@ -730,7 +730,7 @@ dform plusminus_df		: internal :: mode[prl] :: plusminus                 = `"±"
 dform oplus_df			: internal :: mode[prl] :: oplus                     = `"⊕"
 dform infty_df			: internal :: mode[prl] :: infty                     = `"∞"
 dform partial_df		: internal :: mode[prl] :: partial                   = `"∂"
-dform subset_df			: internal :: mode[prl] :: subset                    = `"⊆"
+dform subset_df			: internal :: mode[prl] :: "subset"                  = `"⊆"
 dform supset_df			: internal :: mode[prl] :: supset                    = `"⊇"
 dform cap_df			: internal :: mode[prl] :: cap                       = `"∩"
 dform cup_df			: internal :: mode[prl] :: cup                       = `"∪"
@@ -781,7 +781,7 @@ dform plusminus_df		: internal :: mode[html] :: plusminus                 = html
 dform oplus_df			: internal :: mode[html] :: oplus                     = html_uni[8853]
 dform infty_df			: internal :: mode[html] :: infty                     = html_uni[8734]
 dform partial_df		: internal :: mode[html] :: partial                   = html_uni[8706]
-dform subset_df			: internal :: mode[html] :: subset                    = html_uni[8838]
+dform subset_df			: internal :: mode[html] :: "subset"                  = html_uni[8838]
 dform supset_df			: internal :: mode[html] :: supset                    = html_uni[8839]
 dform cap_df			: internal :: mode[html] :: cap                       = html_uni[8745]
 dform cup_df			: internal :: mode[html] :: cup                       = html_uni[8746]
@@ -832,7 +832,7 @@ dform plusminus_df		: internal :: mode[tex] :: plusminus                 = mathm
 dform oplus_df			: internal :: mode[tex] :: oplus                     = mathmacro["oplus"]
 dform infty_df			: internal :: mode[tex] :: infty                     = mathmacro["infty"]
 dform partial_df		: internal :: mode[tex] :: partial                   = mathmacro["partial"]
-dform subset_df			: internal :: mode[tex] :: subset                    = mathmacro["subseteq"]
+dform subset_df			: internal :: mode[tex] :: "subset"                  = mathmacro["subseteq"]
 dform supset_df			: internal :: mode[tex] :: supset                    = mathmacro["supseteq"]
 dform cap_df			: internal :: mode[tex] :: cap                       = mathmacro["cap"]
 dform cup_df			: internal :: mode[tex] :: cup                       = mathmacro["cup"]

@@ -124,7 +124,7 @@ let _ =
  * @end[doc]
  *)
 
-declare "disect"{'A; x. 'B['x]}
+declare bisect{'A; x. 'B['x]}
 
 (*! @docoff *)
 
@@ -132,7 +132,7 @@ declare "disect"{'A; x. 'B['x]}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform disect_df1 : except_mode[src] :: (disect{'A; x.'B}) =
+dform disect_df1 : except_mode[src] :: (bisect{'A; x.'B}) =
    slot{'x} `":" slot{'A} cap slot{'B}
 
 
@@ -151,7 +151,7 @@ prim dintersectionFormation 'H 'x 'A :
    [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
-   disect{'A; x.'B['x]}
+   bisect{'A; x.'B['x]}
 
 (*!
  * @begin[doc]
@@ -167,20 +167,20 @@ prim dintersectionFormation 'H 'x 'A :
 prim dintersectionEquality {| intro []; eqcd |} 'H 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
-   sequent ['ext] { 'H >- disect{'A1; x1.'B1['x1]} = disect{'A2; x2.'B2['x2]} in univ[i:l] } =
+   sequent ['ext] { 'H >- bisect{'A1; x1.'B1['x1]} = bisect{'A2; x2.'B2['x2]} in univ[i:l] } =
    it
 
 prim dintersectionType {| intro [] |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- "type"{.disect{'A; x. 'B['x]}} } =
+   sequent ['ext] { 'H >- "type"{.bisect{'A; x. 'B['x]}} } =
    it
 
 prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'J 'a 'v:
-   [wf] sequent [squash] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u]  >- 'a IN 'A } -->
+   [wf] sequent [squash] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u]  >- 'a in 'A } -->
    ('t['u,'v] :
-   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] }) -->
-   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] } =
+   sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] }) -->
+   sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] } =
    't['u,it]
 
 (*!
@@ -197,7 +197,7 @@ prim dintersectionMemberEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H; x:'A >- "type"{'B['x]} } -->
    sequent [squash] { 'H >- 't1 = 't2 in 'A } -->
    sequent [squash] { 'H >- 't1 = 't2 in 'B['t1] } -->
-   sequent ['ext] { 'H >- 't1 = 't2 in disect{'A; x.'B['x]} } =
+   sequent ['ext] { 'H >- 't1 = 't2 in bisect{'A; x.'B['x]} } =
    it
 
 (*!
@@ -211,9 +211,9 @@ prim dintersectionMemberEquality {| intro []; eqcd |} 'H :
 
 interactive dintersectionMemberFormation {| intro [] |} 'H 't:
    [wf] sequent [squash] { 'H; x:'A >- "type"{'B['x]} } -->
-   sequent [squash] { 'H >- 't IN 'A } -->
-   sequent [squash] { 'H >- 't IN 'B['t] } -->
-   sequent ['ext] { 'H >- disect{'A; x.'B['x]} }
+   sequent [squash] { 'H >- 't in 'A } -->
+   sequent [squash] { 'H >- 't in 'B['t] } -->
+   sequent ['ext] { 'H >- bisect{'A; x.'B['x]} }
 
 (*!
  * @begin[doc]
@@ -225,8 +225,8 @@ interactive dintersectionMemberFormation {| intro [] |} 'H 't:
 
 prim disectElimination {| elim [] |} 'H 'J  bind{a,b,HACK.'T['a;'b;'HACK]}:
    [main] ('t['a; 'b] :
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
    't['x; 'x]
 
 (*!
@@ -238,12 +238,12 @@ prim disectElimination {| elim [] |} 'H 'J  bind{a,b,HACK.'T['a;'b;'HACK]}:
  * @end[doc]
  *)
 
-interactive disectMemberCaseEquality1 'H (disect{'A;x.'B['x]}) :
-   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in disect{'A; y.'B['y]}  } -->
+interactive disectMemberCaseEquality1 'H (bisect{'A;x.'B['x]}) :
+   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in bisect{'A; y.'B['y]}  } -->
    sequent ['ext] { 'H >- 'x1 = 'x2 in 'A }
 
-interactive disectMemberCaseEquality2 'H (disect{'A;x.'B['x]}) :
-   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in disect{'A; y.'B['y]}  } -->
+interactive disectMemberCaseEquality2 'H (bisect{'A;x.'B['x]}) :
+   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in bisect{'A; y.'B['y]}  } -->
    sequent ['ext] { 'H >- 'x1 = 'x2 in 'B['x1] }
 
 let disectCaseEqualityT t p =
@@ -260,9 +260,9 @@ let disectCaseEqualityT t p =
 *)
 
 interactive disectElimination_eq {| elim [] |} 'H 'J  'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
-   [main] sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
+   [main] sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x];
                            a: 'A; u: 'a = 'x in 'A; b: 'B['a]; v: 'b = 'x in 'B['a]  >- 'C['x;'a;'b; it] } -->
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x;'x;'x; it] }
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'C['x;'x;'x; it] }
 
 let disectEliminationT n p =
    let u,v = maybe_new_vars2 p "u" "v" in
@@ -281,7 +281,7 @@ let disectEliminationT n p =
    let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
       (disectEliminationT n thenT thinIfThinningT [-3;-1;n]) p
 
-let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
+let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 
 (*!
  * @begin[doc]
@@ -294,14 +294,14 @@ let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
 
 
 interactive disectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'J 'a 'u 'b 'v:
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x];
                     a: 'A; u: 'a = 'x in 'A;  b: 'B['a]; v: 'b = 'x in 'B['a] >- 'C['a] } -->
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
 
 interactive disectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'J 'a 'u 'b 'v :
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x];
                     a: 'A; u: 'a = 'x in 'A;  b: 'B['a]; v: 'b = 'x in 'B['a] >- 'C['b] } -->
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
 
 let disectEliminationT n p =
    let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
@@ -318,7 +318,7 @@ let disectEliminationT n p =
          raise (RefineError
             ("disectElimination", StringTermError ("need a select option or a bind term:",<<bind{a,b.'C['a;'b]}>>)))
 
-let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
+let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 
 
 (*!
@@ -331,9 +331,9 @@ let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
  *)
 
 prim dintersectionSubtype  'H 'a :
-   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   [subtype] sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['ext] { 'H >- subtype{ disect{'A1; a1.'B1['a1]}; disect{'A2; a2.'B2['a2]} } } =
+   ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   ["subtype"] sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- \subtype{ bisect{'A1; a1.'B1['a1]}; bisect{'A2; a2.'B2['a2]} } } =
    it
 
 (************************************************************************
@@ -345,8 +345,8 @@ interactive dinter_associativity 'H :
    [wf] sequent[squash] { 'H; a:'A >- "type"{'B['a]}} -->
    [wf] sequent[squash] { 'H; a:'A; b:'B['a] >- "type"{'C['a;'b]}} -->
    sequent ['ext] { 'H >- ext_equal{
-                       disect{'A;a.disect{'B['a];b.'C['a;'b]}};
-                       disect{disect{'A;a.'B['a]};ab.'C['ab;'ab]}
+                       bisect{'A;a.bisect{'B['a];b.'C['a;'b]}};
+                       bisect{bisect{'A;a.'B['a]};ab.'C['ab;'ab]}
                   }}
 
 
@@ -373,7 +373,7 @@ interactive dinter_associativity 'H :
 interactive set_is_disect {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
-   sequent ['ext] { 'H >- ext_equal{ {x: 'A | 'P['x]}; disect{'A;x.tsquash{'P['x]}}}}
+   sequent ['ext] { 'H >- ext_equal{ {x: 'A | 'P['x]}; bisect{'A;x.tsquash{'P['x]}}}}
 
 (*! @docoff *)
 
@@ -381,7 +381,7 @@ interactive set_is_disect {| intro [] |} 'H :
  * TACTICS                                                              *
  ************************************************************************)
 
-let disect_term = << disect{'A; x.'B['x]} >>
+let disect_term = << bisect{'A; x.'B['x]} >>
 let disect_opname = opname_of_term disect_term
 let is_disect_term = is_dep0_dep1_term disect_opname
 let dest_disect = dest_dep0_dep1_term disect_opname
@@ -405,7 +405,7 @@ let disect_subtypeT p =
       dintersectionSubtype (Sequent.hyp_count_addr p) a p
 
 let resource sub +=
-   (DSubtype ([<< disect{'A1; a1.'B1['a1]} >>, << disect{'A2; a2.'B2['a2]} >>;
+   (DSubtype ([<< bisect{'A1; a1.'B1['a1]} >>, << bisect{'A2; a2.'B2['a2]} >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],
               disect_subtypeT))

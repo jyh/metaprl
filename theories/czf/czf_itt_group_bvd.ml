@@ -97,7 +97,7 @@ declare group_bvd{'h; 'g; 's}
  * @end[doc]
  *)
 prim_rw unfold_group_bvd : group_bvd{'h; 'g; 's} <-->
-   (group{'h} & group{'g} & isset{'s} & subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
+   (group{'h} & group{'g} & isset{'s} & \subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
 (*! @docoff *)
 
 (************************************************************************
@@ -142,7 +142,7 @@ interactive group_bvd_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- group{'h} } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- subset{'s; car{'g}} } -->
+   sequent ['ext] { 'H >- \subset{'s; car{'g}} } -->
    sequent ['ext] { 'H >- equal{car{'h}; 's} } -->
    sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}} } -->
    sequent ['ext] { 'H >- group_bvd{'h; 'g; 's} }

@@ -17,7 +17,7 @@ extends Itt_dfun
  *)
 
  prim_rw reduceEta (x: 'A -> 'B['x]) :
-   ('f IN (x: 'A -> 'B['x])) -->
+   ('f in (x: 'A -> 'B['x])) -->
     lambda{x. 'f 'x} <--> 'f
 
 let reduceEtaC = reduceEta

@@ -90,8 +90,8 @@ let le2geT t p =
    (assertT newt thenAT (rwh unfold_ge 0 thenT (onSomeHypT nthHypT))) p
 
 interactive lt2ge 'H :
-   sequent [squash] { 'H >- 'a IN int } -->
-   sequent [squash] { 'H >- 'b IN int } -->
+   sequent [squash] { 'H >- 'a in int } -->
+   sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- 'b >= ('a +@ 1) }
 
@@ -103,8 +103,8 @@ let lt2geT t p =
       (assertT newt thenAT lt2ge (Sequent.hyp_count_addr p)) p
 
 interactive gt2ge 'H :
-   sequent [squash] { 'H >- 'a IN int } -->
-   sequent [squash] { 'H >- 'b IN int } -->
+   sequent [squash] { 'H >- 'a in int } -->
+   sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- 'a > 'b } -->
    sequent ['ext] { 'H >- 'a >= ('b +@ 1) }
 
@@ -135,8 +135,8 @@ let eq2geT t =
                  thenAT (eq2ge2T thenT (onSomeHypT nthHypT))))
 
 interactive notle2ge 'H :
-   sequent [squash] { 'H >- 'a IN int } -->
-   sequent [squash] { 'H >- 'b IN int } -->
+   sequent [squash] { 'H >- 'a in int } -->
+   sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- "not"{('a <= 'b)} } -->
    sequent ['ext] { 'H >- 'a >= ('b +@ 1) }
 
@@ -166,8 +166,8 @@ let anyArithRel2geT i p =
          else if is_gt_term t1 then notgt2geT t1 *)
 
 interactive_rw bnot_lt2ge_rw :
-   ('a IN int) -->
-   ('b IN int) -->
+   ('a in int) -->
+   ('b in int) -->
    "assert"{bnot{lt_bool{'a; 'b}}} <--> ('a >= 'b)
 
 let bnot_lt2geC = bnot_lt2ge_rw
@@ -181,8 +181,8 @@ let gtInConcl2HypT p =
    (rwh unfold_gt 0 thenMT ltInConcl2HypT ) p
 
 interactive_rw bnot_le2gt_rw :
-   ('a IN int) -->
-   ('b IN int) -->
+   ('a in int) -->
+   ('b in int) -->
    "assert"{bnot{le_bool{'a; 'b}}} <--> ('a > 'b)
 
 let bnot_le2gtC = bnot_le2gt_rw
@@ -204,10 +204,10 @@ let arithRelInConcl2HypT p =
    else idT p
 
 interactive ge_addMono 'H :
-   sequent [squash] { 'H >- 'a IN int } -->
-   sequent [squash] { 'H >- 'b IN int } -->
-   sequent [squash] { 'H >- 'c IN int } -->
-   sequent [squash] { 'H >- 'd IN int } -->
+   sequent [squash] { 'H >- 'a in int } -->
+   sequent [squash] { 'H >- 'b in int } -->
+   sequent [squash] { 'H >- 'c in int } -->
+   sequent [squash] { 'H >- 'd in int } -->
    sequent [squash] { 'H >- 'a >= 'b } -->
    sequent [squash] { 'H >- 'c >= 'd } -->
    sequent ['ext] { 'H >- ('a +@ 'c) >= ('b +@ 'd) }
@@ -496,9 +496,9 @@ let ct a b =
   | Greater -> 1
 
 interactive_rw mul_BubblePrimitive_rw :
-   ( 'a IN int ) -->
-   ( 'b IN int ) -->
-   ( 'c IN int ) -->
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
    ('a *@ ('b *@ 'c)) <--> ('b *@ ('a *@ 'c))
 
 let mul_BubblePrimitiveC = mul_BubblePrimitive_rw
@@ -550,7 +550,7 @@ let mul_normalizeC = (repeatC (higherC mul_Assoc2C)) thenC
                      mul_BubbleSortC
 
 interactive_rw sum_same_products1_rw :
-   ('a IN int) -->
+   ('a in int) -->
    ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@
  number[j:n]) *@ 'a)
 
@@ -558,19 +558,19 @@ let sum_same_products1C = sum_same_products1_rw
 
 (*
 interactive_rw sum_same_products2_rw :
-   ('a IN int) -->
+   ('a in int) -->
    ((number[i:n] *@ 'a) +@ 'a) <--> ((number[i:n] +@ 1) *@ 'a)
 
 let sum_same_products2C = sum_same_products2_rw
 
 interactive_rw sum_same_products3_rw :
-   ('a IN int) -->
+   ('a in int) -->
    ('a +@ (number[j:n] *@ 'a)) <--> ((number[j:n] +@ 1) *@ 'a)
 
 let sum_same_products3C = sum_same_products3_rw
 
 interactive_rw sum_same_products4_rw :
-   ('a IN int) -->
+   ('a in int) -->
    ('a +@ 'a) <--> (2 *@ 'a)
 
 let sum_same_products4C = sum_same_products4_rw
@@ -629,9 +629,9 @@ let same_productC t =
       idC
 
 interactive_rw add_BubblePrimitive_rw :
-   ( 'a IN int ) -->
-   ( 'b IN int ) -->
-   ( 'c IN int ) -->
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
    ('a +@ ('b +@ 'c)) <--> ('b +@ ('a +@ 'c))
 
 let add_BubblePrimitiveC = add_BubblePrimitive_rw
@@ -694,8 +694,8 @@ let normalizeC = reduceC thenC
                  add_normalizeC
 
 interactive_rw ge_addContract_rw :
-   ( 'a IN int ) -->
-   ( 'b IN int ) -->
+   ( 'a in int ) -->
+   ( 'b in int ) -->
    ('a >= ('b +@ 'a)) <--> (0 >= 'b)
 
 let ge_addContractC = ge_addContract_rw
@@ -837,46 +837,46 @@ let arithT = arithRelInConcl2HypT thenMT
    thenMT reduceContradRelT (-1)
 
 interactive test 'H 'a 'b 'c :
-sequent [squash] { 'H >- 'a IN int } -->
-sequent [squash] { 'H >- 'b IN int } -->
+sequent [squash] { 'H >- 'a in int } -->
+sequent [squash] { 'H >- 'b in int } -->
 sequent ['ext] { 'H; x: ('a >= ('b +@ 1));
                      t: ('c >= ('b +@ 3));
                      u: ('b >= ('a +@ 0))
                 >- "assert"{bfalse} }
 
 interactive test2 'H 'a 'b 'c :
-sequent [squash] { 'H >- 'a IN int } -->
-sequent [squash] { 'H >- 'b IN int } -->
+sequent [squash] { 'H >- 'a in int } -->
+sequent [squash] { 'H >- 'b in int } -->
 sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2));
                      u: ('b >= ('a +@ 0))
                 >- "assert"{bfalse} }
 
 interactive test3 'H 'a 'b 'c :
-sequent [squash] { 'H >- 'a IN int } -->
-sequent [squash] { 'H >- 'b IN int } -->
+sequent [squash] { 'H >- 'a in int } -->
+sequent [squash] { 'H >- 'b in int } -->
 sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2))
                 >- ('b < ('a +@ 0))  }
 
 interactive test4 'H 'a 'b :
-sequent [squash] { 'H >- 'a IN int } -->
-sequent [squash] { 'H >- 'b IN int } -->
+sequent [squash] { 'H >- 'a in int } -->
+sequent [squash] { 'H >- 'b in int } -->
 sequent ['ext] { 'H; x: ('a >= 'b);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
 
 interactive test5 'H 'a 'b :
-sequent [squash] { 'H >- 'a IN int } -->
-sequent [squash] { 'H >- 'b IN int } -->
+sequent [squash] { 'H >- 'a in int } -->
+sequent [squash] { 'H >- 'b in int } -->
 sequent ['ext] { 'H; x: ('a >= 'b +@ 0);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
 
 interactive test6 'H 'a 'b 'c :
-sequent [squash] { 'H >- 'a IN int } -->
-sequent [squash] { 'H >- 'b IN int } -->
-sequent [squash] { 'H >- 'c IN int } -->
+sequent [squash] { 'H >- 'a in int } -->
+sequent [squash] { 'H >- 'b in int } -->
+sequent [squash] { 'H >- 'c in int } -->
 sequent ['ext] { 'H; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
                      t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@
  (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)

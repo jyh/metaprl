@@ -108,7 +108,7 @@ dform void_df1 : except_mode[src] :: void = `"Void"
  *
  *)
 prim voidEquality {| intro []; eqcd |} 'H :
-   sequent ['ext] { 'H >- void IN univ[i:l] } =
+   sequent ['ext] { 'H >- void in univ[i:l] } =
    it
 
 (*
@@ -147,7 +147,7 @@ prim voidElimination {| elim []; squash |} 'H 'J :
  * @end[doc]
  *)
 interactive void_subtype 'H :
-   sequent ['ext] { 'H >- subtype{void; 'T} }
+   sequent ['ext] { 'H >- \subtype{void; 'T} }
 (*! @docoff *)
 
 (************************************************************************

@@ -150,7 +150,7 @@ interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z 'v 'w:
 
 
 interactive cutMem 'H 'x 'v 's 'S bind{x.'T['x]} :
-  [assertion] sequent[squash]{ 'H >- 's IN 'S } -->
+  [assertion] sequent[squash]{ 'H >- 's in 'S } -->
    [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
    sequent ['ext] { 'H >- 'T['s]}
 
@@ -174,7 +174,7 @@ interactive cutMem 'H 'x 'v 's 'S bind{x.'T['x]} :
 (*
 interactive cutEqWeak 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'v 'u :
    [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't['x] IN 'T } -->
+   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't['x] in 'T } -->
    sequent ['ext] { 'H >- 't['s_1] = 't['s_2] in 'T}
 *)
 

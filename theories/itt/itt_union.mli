@@ -43,7 +43,7 @@ open Tactic_type.Tacticals
  * TERMS                                                                *
  ************************************************************************)
 
-declare union{'A; 'B}
+declare \union{'A; 'B}
 declare inl{'x}
 declare inr{'x}
 declare decide{'x; y. 'a['y]; z. 'b['z]}
@@ -179,9 +179,9 @@ rule decideEquality 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
  * H >- B1 <= B2
  *)
 rule unionSubtype 'H :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } }
+   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- \subtype{ ('A1 + 'B1); ('A2 + 'B2) } }
 
 (************************************************************************
  * TACTICS                                                              *

@@ -34,7 +34,7 @@ extends Itt_isect
 extends Itt_bool
 
 define unfold_bisect : bisect{'A; 'B} <-->
-                          "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
+                          Isect x: bool. ifthenelse{'x; 'A; 'B}
 
 prec prec_bisect
 

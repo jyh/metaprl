@@ -179,9 +179,9 @@ let resource reduce +=
  * Well-formedness of comparisons.
  *)
 interactive compare_lt_wf {| intro [intro_typeinf << 'a >>] |} 'H 'A :
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
-   [wf] sequent [squash] { 'H >- 'a IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'b IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'a in 'A } -->
+   [wf] sequent [squash] { 'H >- 'b in 'A } -->
    sequent ['ext] { 'H >- "type" {compare_lt{'lt; 'a; 'b}} }
 
 (*
@@ -189,7 +189,7 @@ interactive compare_lt_wf {| intro [intro_typeinf << 'a >>] |} 'H 'A :
  *)
 interactive partial_order_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    sequent ['ext] { 'H >- "type"{partial_order{'A; 'lt}} }
 
 (*
@@ -197,15 +197,15 @@ interactive partial_order_wf {| intro [] |} 'H :
  *)
 interactive bounded_wf {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    sequent ['ext] { 'H >- "type"{bounded{'u; 'l; 'lt}} }
 
 interactive sorted_wf {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    sequent ['ext] { 'H >- "type"{sorted{'l; 'lt}} }
 
 (*
@@ -213,34 +213,34 @@ interactive sorted_wf {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
  *)
 interactive insert_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
-   sequent ['ext] { 'H >- insert{'u; 'l; 'lt} IN list{'A} }
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
+   sequent ['ext] { 'H >- insert{'u; 'l; 'lt} in list{'A} }
 
 interactive sort_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
-   sequent ['ext] { 'H >- sort{'l; 'lt} IN list{'A} }
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
+   sequent ['ext] { 'H >- sort{'l; 'lt} in list{'A} }
 
 (*
  * Some useful ordering theorems.
  *)
 interactive symetric_elim {| elim [elim_typeinf << 'a >>] |} 'H 'J 'A 'v :
-   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'lt IN 'A -> 'A -> bool } -->
-   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'a IN 'A } -->
-   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'b IN 'A } -->
+   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'lt in 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'a in 'A } -->
+   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'b in 'A } -->
    [main] sequent ['ext] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- partial_order{'A; 'lt} } -->
    [main] sequent ['ext] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w]; v: not{compare_lt{'lt; 'b; 'a}} >- 'C['w] } -->
    sequent ['ext] { 'H; w: (compare_lt{'lt; 'a; 'b}); 'J['w] >- 'C['w] }
 
 interactive bounded_inclusion 'H list{'A} 'u1 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
-   [wf] sequent [squash] { 'H >- 'u1 IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'u1 in 'A } -->
    [main] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    [main] sequent ['ext] { 'H >- compare_lt{'lt; 'u; 'u1} } -->
    [main] sequent ['ext] { 'H >- bounded{'u1; 'l; 'lt} } -->
@@ -265,10 +265,10 @@ let boundInclusionT t p =
 
 interactive insert_inclusion 'H 'A :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
-   [wf] sequent [squash] { 'H >- 'u1 IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'u1 in 'A } -->
    [main] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    [main] sequent ['ext] { 'H >- not{compare_lt{'lt; 'u1; 'u}} } -->
    [main] sequent ['ext] { 'H >- bounded{'u; 'l; 'lt} } -->
@@ -289,55 +289,55 @@ let insertInclusionT p =
  *)
 interactive insert_mem {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    sequent ['ext] { 'H >- mem{'u; insert{'u; 'l; 'lt}; 'A} }
 
 interactive insert_subset {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'v IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'v in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
-   sequent ['ext] { 'H >- subset{'v; 'l; 'A} } -->
-   sequent ['ext] { 'H >- subset{'v; insert{'u; 'l; 'lt}; 'A} }
+   sequent ['ext] { 'H >- \subset{'v; 'l; 'A} } -->
+   sequent ['ext] { 'H >- \subset{'v; insert{'u; 'l; 'lt}; 'A} }
 
 interactive subset_insert_cons {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'v IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'v in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
-   sequent ['ext] { 'H >- subset{'v; 'l; 'A} } -->
-   sequent ['ext] { 'H >- subset{insert{'u; 'v; 'lt}; cons{'u; 'l}; 'A} }
+   sequent ['ext] { 'H >- \subset{'v; 'l; 'A} } -->
+   sequent ['ext] { 'H >- \subset{insert{'u; 'v; 'lt}; cons{'u; 'l}; 'A} }
 
 (*
  * Verifications of the functions.
  *)
 interactive insert_thm {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'u in 'A } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    [main] sequent ['ext] { 'H >- sorted{'l; 'lt} } -->
    sequent ['ext] { 'H >- sorted{insert{'u; 'l; 'lt}; 'lt} }
 
 interactive sorted_thm {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    sequent ['ext] { 'H >- sorted{sort{'l; 'lt}; 'lt} }
 
 interactive sort_sameset {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    sequent ['ext] { 'H >- sameset{sort{'l; 'lt}; 'l; 'A} }
 

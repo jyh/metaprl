@@ -161,7 +161,7 @@ rule rfunctionExtensionality 'H
  * H, f: { g | x:A -> B[g, x] }, J[f], y: B[f, a], v: y = f a in B[f, a] >- T[f] ext t[f, y, v]
  *)
 rule rfunctionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a IN 'A } -->
+   sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a in 'A } -->
    sequent ['ext] { 'H;
              f: { g | x:'A -> 'B['g; 'x] };
              'J['f];

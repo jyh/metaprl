@@ -54,15 +54,15 @@ let _ =
    show_loading "Loading Itt_ext_equal%t"
 
 (*
- * Terms type{'T} and subtype{'A; 'B} have already been defined.
+ * Terms type{'T} and \subtype{'A; 'B} have already been defined.
  *)
-prim_rw type_def : "type"{'T} <--> subtype{'T; 'T}
+prim_rw type_def : "type"{'T} <--> \subtype{'T; 'T}
 
-define unfoldExtEqual : ext_equal{'A; 'B} <--> (subtype{'A; 'B} & subtype{'B; 'A})
+define unfoldExtEqual : ext_equal{'A; 'B} <--> (\subtype{'A; 'B} & \subtype{'B; 'A})
 
 interactive extEqualMember {|squash; intro[] |} 'H:
    sequent[squash] {'H >- ext_equal{'A;'B}} -->
-   sequent['ext]  {'H >- (it,it) IN ext_equal{'A;'B} }
+   sequent['ext]  {'H >- (it,it) in ext_equal{'A;'B} }
 
 let resource intro += (<<ext_equal{'A; 'B}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0))
 

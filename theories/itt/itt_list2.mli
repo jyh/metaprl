@@ -56,7 +56,7 @@ declare mem{'x; 'l; 'T}
 (*
  * The elements in one list are also in another.
  *)
-declare subset{'l1; 'l2; 'T}
+declare \subset{'l1; 'l2; 'T}
 
 (*
  * Two lists contain the same set of elements.

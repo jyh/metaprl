@@ -114,7 +114,7 @@ rule setElimination 'H 'J 'u 'v :
  *)
 rule set_subtype 'H :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
-   sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } }
+   sequent ['ext] { 'H >- \subtype{ { a: 'A | 'B['a] }; 'A } }
 
 (************************************************************************
  * TACTICS                                                              *

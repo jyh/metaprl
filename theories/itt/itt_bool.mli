@@ -95,7 +95,7 @@ rule boolFormation 'H : sequent ['ext] { 'H >- univ[i:l] }
  * H >- Bool = Bool in Ui ext Ax
  * by boolEquality
  *)
-rule boolEquality 'H : sequent ['ext] { 'H >- "bool" IN univ[i:l] }
+rule boolEquality 'H : sequent ['ext] { 'H >- "bool" in univ[i:l] }
 
 (*
  * H >- Bool ext btrue
@@ -104,8 +104,8 @@ rule boolEquality 'H : sequent ['ext] { 'H >- "bool" IN univ[i:l] }
 rule bool_trueFormation 'H : sequent ['ext] { 'H >- "bool" }
 rule bool_falseFormation 'H : sequent ['ext] { 'H >- "bool" }
 
-rule btrue_member 'H : sequent ['ext] { 'H >- btrue IN "bool" }
-rule bfalse_member 'H : sequent ['ext] { 'H >- bfalse IN "bool" }
+rule btrue_member 'H : sequent ['ext] { 'H >- btrue in "bool" }
+rule bfalse_member 'H : sequent ['ext] { 'H >- bfalse in "bool" }
 
 (*
  * H; i:x:Unit; J >- C
@@ -122,7 +122,7 @@ rule boolElimination2 'H 'J 'x :
  *)
 rule assertSquashElim 'H :
    sequent [squash] { 'H >- "assert"{'t} } -->
-   sequent ['ext] { 'H >- it IN "assert"{'t} }
+   sequent ['ext] { 'H >- it in "assert"{'t} }
 
 (************************************************************************
  * TACTICS                                                              *

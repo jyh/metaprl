@@ -1257,7 +1257,7 @@ dform math_subset_df1 : mode[tex] :: math_subset =
    izone `"\\subset " ezone
 
 dform math_subset_df2 : except_mode[tex] :: math_subset =
-   Nuprl_font!subset
+   Nuprl_font!"subset"
 
 dform math_subseteq_df1 : mode[tex] :: math_subseteq =
    izone `"\\subseteq " ezone

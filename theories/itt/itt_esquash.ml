@@ -104,16 +104,16 @@ prim esquash_type {| intro [AutoMustComplete] |} 'H :
  * @end[doc]
  *)
 prim esquash_equal {| intro [SelectOption 0]; eqcd |} 'H :
-   [wf] sequent [squash] { 'H >- esquash{'P1} IN univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- esquash{'P2} IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- esquash{'P1} in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- esquash{'P2} in univ[i:l] } -->
    sequent [squash] { 'H; x: esquash{'P1} >- esquash{'P2} } -->
    sequent [squash] { 'H; x: esquash{'P2} >- esquash{'P1} } -->
    sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 
 prim esquash_univ {| intro [AutoMustComplete] |} 'H :
-   [wf] sequent [squash] { 'H >- 'P IN univ[i:l] } -->
-   sequent ['ext] { 'H >- esquash{'P} IN univ[i:l] } =
+   [wf] sequent [squash] { 'H >- 'P in univ[i:l] } -->
+   sequent ['ext] { 'H >- esquash{'P} in univ[i:l] } =
    it
 
 (*!
@@ -152,7 +152,7 @@ prim esquash_elim {| elim [] |} 'H 'J :
  *)
 interactive esquash_mem {| intro []; squash |} 'H :
    sequent [squash] { 'H >- esquash{'A} } -->
-   sequent ['ext] { 'H >- it IN esquash{'A} }
+   sequent ['ext] { 'H >- it in esquash{'A} }
 
 (*!
  * @begin[doc]
@@ -186,8 +186,8 @@ interactive esquash_void_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: esquash{void}; 'J['x] >- 'C['x] }
 
 interactive esquash_equal_intro {| intro [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- 'P1 IN univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'P2 IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'P1 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'P2 in univ[i:l] } -->
    [main] sequent [squash] { 'H; x: 'P1 >- 'P2 } -->
    [main] sequent [squash] { 'H; x: 'P2 >- 'P1 } -->
    sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] }

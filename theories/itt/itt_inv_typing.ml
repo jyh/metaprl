@@ -21,10 +21,10 @@ open Base_auto_tactic
 open Base_dtactic
 
 prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'J 'a 'v:
-   [wf] sequent [squash] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u]  >- 'a IN 'A } -->
+   [wf] sequent [squash] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u]  >- 'a in 'A } -->
    ('t['u;'v] :
-   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] }) -->
-   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] } =
+   sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] }) -->
+   sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] } =
    't['u;it]
 
 prim independentProductTypeElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w:

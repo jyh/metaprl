@@ -86,6 +86,30 @@ interactive ge_addMono 'H :
    sequent [squash] { 'H >- 'c >= 'd } -->
    sequent ['ext] { 'H >- ('a +@ 'c) >= ('b +@ 'd) }
 
+interactive_rw add_BubblePrimitive_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ( 'c IN int ) -->
+   ('a + ('b + 'c)) <--> ('b + ('a + 'c))
+
+let add_BubblePrimitiveC = add_BubblePrimitive_rw
+
+let add_BubbleStepC tm =
+   if is_add_term tm then
+      let (a,s) = dest_add tm in
+         if is_add_term s then
+            let (b,c) = dest_add s in
+               if b<a then
+                  add_BubblePrimitiveC
+               else
+                  idC
+         else
+            failC
+   else
+      failC
+
+let add_BubbleSortC = sweepDnC (termC add_BubbleStepC)
+
 let sumList tl g =
    match tl with
    h::t ->
@@ -150,7 +174,9 @@ let arithT p =
          let rl = List.fold_right aux3 r [] in
          begin
             List.map aux l;
+            prerr_endline "";
             List.map aux rl;
+            flush stderr;
             sumListT rl p
          end
       | Arith.TG.Disconnected,_ ->

@@ -38,6 +38,11 @@ include Itt_int_ext
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+
+topval add_BubblePrimitiveC : conv
+topval add_BubbleStepC : term -> conv
+topval add_BubbleSortC : conv
 
 topval sumListT : int list -> tactic
 topval proveSumT : tactic

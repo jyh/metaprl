@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -60,6 +60,11 @@ prim_rw unfold_member : member{'x; 'y} <-->
 
 interactive_rw reduce_member : member{'x; collect{'T; y. 'f['y]}} <-->
    ((isset{'x} & isset{collect{'T; y. 'f['y]}}) & (exst t: 'T. eq{'x; .'f['t]}))
+
+let reduce_info =
+   [<< member{'x; collect{'T; y. 'f['y]}} >>, reduce_member]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -102,10 +107,16 @@ interactive member_fun_left 'H 's1 :
    sequent ['ext] { 'H >- member{'s1; 's3} } -->
    sequent ['ext] { 'H >- member{'s2; 's3} }
 
+let memSubstLeftT t p =
+   member_fun_left (Sequent.hyp_count_addr p) t p
+
 interactive member_fun_right 'H 's1 :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- member{'s3; 's1} } -->
    sequent ['ext] { 'H >- member{'s3; 's2} }
+
+let memSubstRightT t p =
+   member_fun_right (Sequent.hyp_count_addr p) t p
 
 interactive member_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
@@ -116,10 +127,10 @@ interactive member_fun {| intro_resource [] |} 'H :
  * Set extensionality.
  *)
 interactive set_ext 'H 'x 'y :
-   sequent ['ext] { 'H >- isset{'s1} } -->
-   sequent ['ext] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: set; y: member{'x; 's1} >- member{'x; 's2} } -->
-   sequent ['ext] { 'H; x: set; y: member{'x; 's2} >- member{'x; 's1} } -->
+   ["wf"] sequent ['ext] { 'H >- isset{'s1} } -->
+   ["wf"] sequent ['ext] { 'H >- isset{'s2} } -->
+   ["main"] sequent ['ext] { 'H; x: set; y: member{'x; 's1} >- member{'x; 's2} } -->
+   ["main"] sequent ['ext] { 'H; x: set; y: member{'x; 's2} >- member{'x; 's1} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} }
 
 (************************************************************************
@@ -140,11 +151,7 @@ let setOfT t p =
  *)
 let setExtT p =
    let u, v = maybe_new_vars2 p "u" "v" in
-      (set_ext (hyp_count_addr p) u v
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main";
-               addHiddenLabelT "main"]) p
+      set_ext (Sequent.hyp_count_addr p) u v p
 
 (*
  * -*-

@@ -16,21 +16,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -76,6 +76,9 @@ rewrite unfold_fun_set : fun_set{z. 'f['z]} <-->
 
 rewrite unfold_fun_prop : fun_prop{z. 'P['z]} <-->
     (all s1: set. all s2: set. (eq{'s1; 's2} => 'P['s1] => 'P['s2]))
+
+rewrite unfold_dfun_prop2 : dfun_prop{'A; x. 'B['x]} <-->
+  (u1: 'A -> 'B['u1] -> u2: 'A -> 'B['u2])
 
 rewrite unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
   (all s1: set. all s2: set. (eq{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
@@ -225,6 +228,11 @@ val dest_fun_set : term -> string * term
 val is_fun_prop_term : term -> bool
 val mk_fun_prop_term : string -> term -> term
 val dest_fun_prop : term -> string * term
+
+(*
+ * Functionality.
+ *)
+topval funSetT : int -> tactic
 
 (*
  * Equality relations.

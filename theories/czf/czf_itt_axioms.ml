@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -46,6 +46,9 @@ include Czf_itt_rel
 open Printf
 open Mp_debug
 
+open Tactic_type
+open Var
+
 let _ =
    show_loading "Loading CZF_itt_axioms%t"
 
@@ -63,11 +66,20 @@ interactive set_induction 'H 'x 'w :
    sequent ['ext] { 'H; x: set; w: dall{'x; z. 'P['z]} >- 'P['x] } -->
    sequent ['ext] { 'H >- sall{z. 'P['z]} }
 
+let setInduction1 p =
+   let x, w = maybe_new_vars2 p "x" "w" in
+      set_induction (Sequent.hyp_count_addr p) x w p
+
 interactive set_induction2 'H 'J 'x 'y 'w :
    sequent ['ext] { 'H; x: set; 'J['x]; y: set >- "type"{'C['y]} } -->
    sequent ['ext] { 'H; x: set; 'J['x] >- fun_prop{y. 'C['y]} } -->
    sequent ['ext] { 'H; x: set; 'J['x]; y: set; z: dall{'y; w. 'C['w]} >- 'C['y] }-->
    sequent ['ext] { 'H; x: set; 'J['x] >- 'C['x] }
+
+let setInduction i p =
+   let x, y, w = maybe_new_vars3 p "x" "y" "w" in
+   let j, k = Sequent.hyp_indices p i in
+      set_induction2 j k x y w p
 
 (*
  * Restricted separation.
@@ -92,13 +104,14 @@ interactive collection 'H 's1 (bind{x. bind{y. 'P['x; 'y]}}) 's2 'x 'y 'w :
 (*
  * Subset collection.
  *)
-interactive subset_collection 'H 's1 's2 's3 (bind{x. bind{y. 'P['x; 'y]}}) 'c 'u 'x 'y 'w :
-   sequent ['ext] { 'H >- isset{'s1} } -->
-   sequent ['ext] { 'H >- isset{'s2} } -->
+interactive subset_collection 'H 'a 'b 'c bind{u. bind{x. bind{y. 'P['u; 'x; 'y]}}} :
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- isset{'b} } -->
    sequent [squash] { 'H; u: set; x: set; y: set >- "type"{'P['u; 'x; 'y]} } -->
    sequent ['ext] { 'H; u: set; x: set >- fun_prop{y. 'P['u; 'x; 'y]} } -->
-   sequent ['ext] { 'H; c: set; w: sall{u. (dall{'s1; x. dexists{'s2; y. 'P['u; 'x; 'y]}}) => (dexists{'c; s3. rel{x, y. 'P['u; 'x; 'y]; 's1; 's3}})} >- 'C } -->
+   sequent ['ext] { 'H; w: sexists{c. sall{u. dall{'a; x. dexists{'b; y. 'P['u; 'x; 'y]}} => dexists{'c; z. rel{x, y. 'P['u; 'x; 'y]; 'a; 'z}}}} >- 'C } -->
    sequent ['ext] { 'H >- 'C }
+
 
 (*
  * -*-

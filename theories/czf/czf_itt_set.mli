@@ -29,21 +29,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -90,12 +90,12 @@ rewrite unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
 
 rewrite reduce_set_ind :
    set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
-   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
+   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. set_ind{.'a['a2]; a, f, g. 'b['a; 'f; 'g]}}]
 
-val fold_set : conv
-val fold_isset : conv
-val fold_collect : conv
-val fold_set_ind : conv
+topval fold_set : conv
+topval fold_isset : conv
+topval fold_collect : conv
+topval fold_set_ind : conv
 
 (************************************************************************
  * RULES                                                                *
@@ -129,14 +129,6 @@ rule isset_collect 'H 'y :
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
 
 (*
- * Applications often come up.
- * This is not a necessary axiom, ut it is useful.
- *)
-rule isset_apply 'H 'J :
-   sequent [squash] { 'H; f: 'T -> set; 'J['f] >- 'x = 'x in 'T } -->
-   sequent ['ext] { 'H; f: 'T -> set; 'J['f] >- isset{.'f 'x} }
-
-(*
  * Induction.
  *)
 rule set_elim 'H 'J 'a 'T 'f 'w 'z :
@@ -155,7 +147,7 @@ rule set_elim 'H 'J 'a 'T 'f 'w 'z :
  * These are related forms to expand a set into its
  * collect representation.
  *)
-rule set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
+rule set_split_hyp 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
    sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
    sequent ['ext] { 'H;
@@ -164,7 +156,7 @@ rule set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
                     T: univ[1:l];
                     f: 'T -> set;
                     z: 'A[collect{'T; y. 'f 'y}]
-                    >- 'C['x] } -->
+                    >- 'C['z] } -->
    sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
 
 rule set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
@@ -175,14 +167,14 @@ rule set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
 
 (*
  * Equality on tree induction forms.
- *)
-rule set_ind_equality 'H 'a 'f 'g 'x :
+rule set_ind_equality2 'H 'a 'f 'g 'x :
    sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
    sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T }
+ *)
 
 (************************************************************************
  * TACTICS                                                              *
@@ -212,11 +204,6 @@ topval setAssumT : int -> tactic
  * Replace a set with a collect.
  *)
 topval splitT : term -> int -> tactic
-
-(*
- * Automation.
- *)
-val set_prec : auto_prec
 
 (*
  * -*-

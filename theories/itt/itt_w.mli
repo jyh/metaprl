@@ -65,6 +65,12 @@ rewrite reduce_tree_ind :
    <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
 (*
+ * Trees allow eta-reduction.
+ *)
+rewrite reduce_tree_eta :
+   tree{'a; lambda{x. 'f 'x}} <--> tree{'a; 'f}
+
+(*
  * Precedence of display form.
  *)
 prec prec_w
@@ -149,7 +155,6 @@ rule wElimination 'H 'J 'z 'a 'f 'g 'b 'v :
 
 (*
  * Equality on tree induction forms.
- *)
 rule tree_indEquality 'H (w{'A; x. 'B['x]}) 'a 'f 'g :
    sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
    sequent [squash] { 'H; a: 'A; f: 'B['a] -> w{'A; x. 'B['x]}; g: a: 'A -> 'B['a] -> 'T >-
@@ -157,6 +162,7 @@ rule tree_indEquality 'H (w{'A; x. 'B['x]}) 'a 'f 'g :
    sequent ['ext] { 'H >- tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T }
+ *)
 
 (************************************************************************
  * TACTICS                                                              *

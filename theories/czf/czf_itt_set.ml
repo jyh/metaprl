@@ -125,12 +125,17 @@ prim_rw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
 
 interactive_rw reduce_set_ind :
    set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
-   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
+   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. set_ind{.'a['a2]; a, f, g. 'b['a; 'f; 'g]}}]
 
 let fold_set        = makeFoldC << set >> unfold_set
 let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
 let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
 let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
+
+let reduce_info =
+   [<< set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]} >>, reduce_set_ind]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -146,8 +151,8 @@ dform collect_df : mode[prl] :: parens :: "prec"[prec_apply] :: collect{'T; x. '
    szone pushm[3] `"collect" " " slot{'x} `":" " " slot{'T} `"." " " slot{'a} popm ezone
 
 dform set_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body} =
-   szone pushm[3] `"set_ind(" slot{'g} `"." " "
-   pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" hspace slot{'z} hspace `"in" popm hspace
+   szone pushm[3]
+   pushm[3] `"let set(" slot{'a} `", " slot{'f} `")." slot{'g} `" =" hspace slot{'z} hspace `"in" popm hspace
    slot{'body} popm ezone
 
 (************************************************************************
@@ -181,13 +186,17 @@ interactive isset_collect {| intro_resource [] |} 'H 'y :
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
 
+interactive isset_collect2 {| intro_resource [] |} 'H 'y :
+   sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
+   sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
+   sequent ['ext] { 'H >- collect{'T; x. 'a['x]} IN set }
+
 (*
- * Applications often come up.
- * This is not a necessary axiom, ut it is useful.
+ * This is how a set is constructed.
  *)
-interactive isset_apply 'H 'J :
-   sequent [squash] { 'H; f: 'T -> set; 'J['f] >- 'x = 'x in 'T } -->
-   sequent ['ext] { 'H; f: 'T -> set; 'J['f] >- isset{.'f 'x} }
+interactive isset_apply {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- ('f 'a) IN set } -->
+   sequent ['ext] { 'H >- isset{.'f 'a} }
 
 (*
  * Induction.
@@ -208,7 +217,7 @@ interactive set_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'T 'f 'w 'z
  * These are related forms to expand a set into its
  * collect representation.
  *)
-interactive set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
+interactive set_split_hyp 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
    sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
    sequent ['ext] { 'H;
@@ -217,7 +226,7 @@ interactive set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
                     T: univ[1:l];
                     f: 'T -> set;
                     z: 'A[collect{'T; y. 'f 'y}]
-                    >- 'C['x] } -->
+                    >- 'C['z] } -->
    sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
 
 interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
@@ -229,10 +238,10 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
 (*
  * Equality on tree induction forms.
  *)
-interactive set_ind_equality {| intro_resource [] |} 'H 'a 'f 'g 'x :
+interactive set_ind_equality2 {| intro_resource [] |} 'H :
    ["wf"]   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
-   ["main"] sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
-      'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
+   ["main"] sequent [squash] { 'H; a1: univ[1:l]; f1: 'a1 -> set; g1: x: univ[1:l] -> 'x -> 'T >-
+      'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T }
@@ -259,18 +268,6 @@ let dest_set_ind = dest_dep0_dep3_term set_ind_opname
 (************************************************************************
  * OTHER TACTICS                                                        *
  ************************************************************************)
-
-(*
- * Application rule.
- *)
-let d_apply_issetT p =
-   let j = get_sel_arg p in
-   let k, l = hyp_indices p j in
-      isset_apply k l p
-
-let apply_isset_term = << isset{.'f 'x} >>
-
-let intro_resource = Mp_resource.improve intro_resource (apply_isset_term, d_apply_issetT)
 
 (*
  * Typehood of isset{'s1}
@@ -312,7 +309,7 @@ let splitT t i p =
          let hyp = var_subst hyp t v_z in
          let bind = mk_bind_term v_z hyp in
          let j, k = hyp_indices p i in
-            (set_split_hyp2 j k t bind v_T v_f v_z
+            (set_split_hyp j k t bind v_T v_f v_z
              thenLT [addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p
@@ -329,29 +326,6 @@ let trivial_resource =
       { auto_name = "setAssumT";
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT setAssumT
-      }
-
-(*
- * A function application.
- *)
-let applyT i p =
-   let j, k = hyp_indices p i in
-      isset_apply j k p
-
-(*
- * Similar dumb auto tactic.
- *)
-let set_autoT =
-   firstT [rw fold_isset 0;
-           onSomeHypT applyT]
-
-let set_prec = create_auto_prec [trivial_prec] [back_hyp_prec]
-
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "set_autoT";
-        auto_prec = set_prec;
-        auto_tac = auto_wrap set_autoT
       }
 
 (*

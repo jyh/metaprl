@@ -71,6 +71,11 @@ interactive_rw reduce_union : union{collect{'t1; x1. 'f1['x1]};
 
 let fold_union = makeFoldC << union{'s1; 's2} >> unfold_union
 
+let reduce_info =
+   [<< union{collect{'t1; x1. 'f1['x1]}; collect{'t2; x2. 'f2['x2]}} >>, reduce_union]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)

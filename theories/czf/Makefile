@@ -14,6 +14,8 @@ MPFILES :=\
 	czf_itt_set\
 	czf_itt_eq\
 	czf_itt_member\
+	czf_itt_empty\
+	czf_itt_singleton\
 	czf_itt_sep\
 	czf_itt_union\
 	czf_itt_true\
@@ -29,6 +31,9 @@ MPFILES :=\
 	czf_itt_sall\
 	czf_itt_sexists\
 	czf_itt_rel\
+	czf_itt_pre_theory\
+	czf_itt_subset\
+	czf_itt_infinity\
 	czf_itt_axioms
 
 # Name of main libraris

@@ -84,6 +84,18 @@ prim_rw reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
    <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
+(*
+ * Trees allow eta-reduction.
+ *)
+prim_rw reduce_tree_eta :
+   tree{'a; lambda{x. 'f 'x}} <--> tree{'a; 'f}
+
+let reduce_info =
+   [<< tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]} >>, reduce_tree_ind;
+    << tree{'a; lambda{x. 'f 'x}} >>, reduce_tree_eta]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)
@@ -189,10 +201,10 @@ prim wElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b 'v
 (*
  * Equality on tree induction forms.
  *)
-prim tree_indEquality {| intro_resource []; eqcd_resource |} 'H (w{'A; x. 'B['x]}) 'a 'f 'g :
+prim tree_indEquality {| intro_resource []; eqcd_resource |} 'H (w{'A; x. 'B['x]}) :
    [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
-   [wf] sequent [squash] { 'H; a: 'A; f: 'B['a] -> w{'A; x. 'B['x]}; g: a: 'A -> 'B['a] -> 'T >-
-      'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
+   [wf] sequent [squash] { 'H; a1: 'A; f1: 'B['a1] -> w{'A; x. 'B['x]}; g1: x: 'A -> 'B['x] -> 'T >-
+      'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->
    sequent ['ext] { 'H >- tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T } =

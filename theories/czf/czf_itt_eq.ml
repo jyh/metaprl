@@ -16,21 +16,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -57,6 +57,8 @@ open Itt_equal
 open Itt_rfun
 open Itt_struct
 
+open Czf_itt_set
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -68,12 +70,39 @@ declare fun_prop{z. 'P['z]}
 declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
 
 (************************************************************************
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+let eq_term = << eq{'s1; 's2} >>
+let eq_opname = opname_of_term eq_term
+let is_eq_term = is_dep0_dep0_term eq_opname
+let dest_eq = dest_dep0_dep0_term eq_opname
+let mk_eq_term = mk_dep0_dep0_term eq_opname
+
+let fun_set_term = << fun_set{z. 's['z]} >>
+let fun_set_opname = opname_of_term fun_set_term
+let is_fun_set_term = is_dep1_term fun_set_opname
+let dest_fun_set = dest_dep1_term fun_set_opname
+let mk_fun_set_term = mk_dep1_term fun_set_opname
+
+let fun_prop_term = << fun_prop{z. 's['z]} >>
+let fun_prop_opname = opname_of_term fun_prop_term
+let is_fun_prop_term = is_dep1_term fun_prop_opname
+let dest_fun_prop = dest_dep1_term fun_prop_opname
+let mk_fun_prop_term = mk_dep1_term fun_prop_opname
+
+(************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
 prim_rw reduce_eq_inner : eq_inner{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
    ((all y1 : 'T1. exst y2: 'T2. eq_inner{.'f1['y1]; .'f2['y2]})
     & (all y2 : 'T2. exst y1: 'T1. eq_inner{.'f1['y1]; .'f2['y2]}))
+
+let reduce_info =
+   [<< eq_inner{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_eq_inner]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 prim_rw unfold_eq : eq{'s1; 's2} <-->
    ((isset{'s1} & isset{'s2}) & eq_inner{'s1; 's2})
@@ -82,6 +111,11 @@ interactive_rw reduce_eq : eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['
    ((isset{collect{'T1; x1. 'f1['x1]}} & isset{collect{'T2; x2. 'f2['x2]}})
    & ((all y1 : 'T1. exst y2: 'T2. eq_inner{.'f1['y1]; .'f2['y2]})
      & (all y2 : 'T2. exst y1: 'T1. eq_inner{.'f1['y1]; .'f2['y2]})))
+
+let reduce_info =
+   [<< eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_eq]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * A functional predicate can produce proofs for
@@ -96,6 +130,9 @@ prim_rw unfold_fun_prop : fun_prop{z. 'P['z]} <-->
 (*
  * This is _pointwise_ functionality.
  *)
+prim_rw unfold_dfun_prop2 : dfun_prop{'A; x. 'B['x]} <-->
+  (u1: 'A -> 'B['u1] -> u2: 'A -> 'B['u2])
+
 prim_rw unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
   (all s1: set. all s2: set. (eq{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 
@@ -165,7 +202,7 @@ interactive eq_isset_right 'H 's1 :
 (*
  * Reflexivity.
  *)
-interactive eq_ref 'H :
+interactive eq_ref {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- eq{'s1; 's1} }
 
@@ -187,6 +224,17 @@ interactive eq_trans 'H 's2 :
 (*
  * Finally, functionality puts them all together.
  *)
+interactive eq_isset 'H 'J fun_set{z. 'f['z]} :
+   sequent ['ext] { 'H; z: set; 'J['z] >- fun_set{z. 'f['z]} } -->
+   sequent ['ext] { 'H; z: set; 'J['z] >- isset{'f['z]} }
+
+let funSetT i p =
+   let z, _ = Sequent.nth_hyp p i in
+   let t = dest_isset (Sequent.concl p) in
+   let t = mk_fun_set_term z t in
+   let j, k = Sequent.hyp_indices p i in
+      eq_isset j k t p
+
 interactive eq_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
@@ -238,6 +286,12 @@ interactive fun_prop {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_prop{z. 'P} }
 
 (*
+ * Identity.
+ *)
+interactive fun_identity {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- fun_set{s. 's} }
+
+(*
  * LEMMAS:
  * Every functional type is a type.
  *)
@@ -245,28 +299,6 @@ interactive fun_set_is_set 'H (bind{z. 'P['z]}) 's :
    sequent ['ext] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- fun_set{z. 'P['z]} } -->
    sequent ['ext] { 'H >- isset{'P['s]} }
-
-(************************************************************************
- * PRIMITIVES                                                           *
- ************************************************************************)
-
-let eq_term = << eq{'s1; 's2} >>
-let eq_opname = opname_of_term eq_term
-let is_eq_term = is_dep0_dep0_term eq_opname
-let dest_eq = dest_dep0_dep0_term eq_opname
-let mk_eq_term = mk_dep0_dep0_term eq_opname
-
-let fun_set_term = << fun_set{z. 's['z]} >>
-let fun_set_opname = opname_of_term fun_set_term
-let is_fun_set_term = is_dep1_term fun_set_opname
-let dest_fun_set = dest_dep1_term fun_set_opname
-let mk_fun_set_term = mk_dep1_term fun_set_opname
-
-let fun_prop_term = << fun_prop{z. 's['z]} >>
-let fun_prop_opname = opname_of_term fun_prop_term
-let is_fun_prop_term = is_dep1_term fun_prop_opname
-let dest_fun_prop = dest_dep1_term fun_prop_opname
-let mk_fun_prop_term = mk_dep1_term fun_prop_opname
 
 (************************************************************************
  * TACTICS                                                              *

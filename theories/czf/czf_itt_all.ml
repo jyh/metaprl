@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -72,12 +72,12 @@ interactive dfun_fun3 {| intro_resource [] |} 'H 'u 'v 'z :
    ["main"] sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive dfun_res3 {| intro_resource [] |} 'H 'u 'v 'z :
-   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { 'H >- restricted{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
+interactive dfun_res1 {| intro_resource [] |} 'H :
+   ["wf"]   sequent ['ext] { 'H >- "type"{'A} } -->
+   ["wf"]   sequent ['ext] { 'H; u: 'A >- "type"{'B['u]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{. 'A} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{'A; u. 'B['u]} } -->
+   sequent ['ext] { 'H >- restricted{."fun"{'A; w. 'B['w]}} }
 
 interactive all_fun {| intro_resource [] |} 'H 'u 'v 'z :
    ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
@@ -86,36 +86,12 @@ interactive all_fun {| intro_resource [] |} 'H 'u 'v 'z :
    ["main"] sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "all"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive all_res {| intro_resource [] |} 'H 'u 'v 'z :
-   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { 'H >- restricted{z. "all"{'A['z]; w. 'B['z; 'w]}} }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Also decompose iffs in the hyps.
- *)
-let d_iffT i p =
-   let _, hyp = Sequent.nth_hyp p i in
-      if is_iff_term hyp then
-         dT i p
-      else
-         raise (RefineError ("d_iffT", StringError "not an iff"))
-
-(*
- * Our auto tactic needs to chain trhough aplications and fst.
- *)
-let allAutoT =
-   repeatT (firstT [progressT autoT;
-                    autoApplyT 0;
-                    progressT (rwh (reduceFst orelseC reduceSnd) 0);
-                    onSomeHypT d_iffT;
-                    idT])
+interactive all_res {| intro_resource [] |} 'H :
+   ["wf"]   sequent ['ext] { 'H >- "type"{'A} } -->
+   ["wf"]   sequent ['ext] { 'H; u: 'A >- "type"{'B['u]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{. 'A} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{'A; u. 'B['u]} } -->
+   sequent ['ext] { 'H >- restricted{."all"{'A; w. 'B['w]}} }
 
 (*
  * -*-

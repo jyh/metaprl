@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -65,6 +65,11 @@ prim_rw unfold_dexists : "dexists"{'s; x. 'A['x]} <-->
 
 interactive_rw reduce_dexists : "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
    (t: 'T * 'A['f['t]])
+
+let reduce_info =
+   [<< "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_dexists]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -115,11 +120,11 @@ interactive dexists_elim {| elim_resource [] |} 'H 'J 'x 'z 'v 'w :
 (*
  * This is a restricted formula.
  *)
-interactive dexists_res {| intro_resource [] |} 'H 'w 'x :
-   ["wf"]   sequent ['ext] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
-   ["wf"]   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{z, y. 'B['z; 'y]} } -->
-   sequent ['ext] { 'H >- restricted{z. "dexists"{'A['z]; y. 'B['z; 'y]}} }
+interactive dexists_res2 {| intro_resource [] |} 'H 'w 'x :
+   ["wf"]   sequent ['ext] { 'H >- isset{'A} } -->
+   ["wf"]   sequent ['ext] { 'H; x: set >- "type"{'B['x]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{y. 'B['y]} } -->
+   sequent ['ext] { 'H >- restricted{."dexists"{'A; y. 'B['y]}} }
 
 (*
  * -*-

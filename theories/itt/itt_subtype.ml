@@ -138,7 +138,7 @@ prim subtypeTypeRight 'H 'B :
  *)
 prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [main] sequent [squash] { 'H; x: 'A >- 'x = 'x in 'B } -->
+   [main] sequent [squash] { 'H; x: 'A >- member{'B; 'x} } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} } =
    it
 
@@ -148,10 +148,14 @@ prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
  *
  * H >- subtype(A; B)
  *)
-prim subtype_axiomEquality 'H :
+prim subtype_axiomEquality {| intro_resource []; eqcd_resource |} 'H :
    [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- it = it in subtype{'A; 'B} } =
    it
+
+interactive subtype_axiomMember {| intro_resource [] |} 'H :
+   [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   sequent ['ext] { 'H >- member{subtype{'A; 'B}; it} }
 
 (*
  * H, x: subtype(A; B); J[x] >- C[x]

@@ -100,7 +100,7 @@ rule subtypeTypeRight 'H 'B :
  *)
 rule subtype_axiomFormation 'H 'x :
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; x: 'A >- 'x = 'x in 'B } -->
+   sequent [squash] { 'H; x: 'A >- member{'B; 'x} } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} }
 
 (*

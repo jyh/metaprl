@@ -83,6 +83,11 @@ interactive bisectEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
 
+interactive bisectMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'B} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; bisect{'A; 'B}} }
+
 interactive bisectType {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
@@ -104,6 +109,11 @@ interactive bisectMemberEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x = 'y in bisect{'A; 'B} }
 
+interactive bisectMemberMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{'A; 'x} } -->
+   [wf] sequent [squash] { 'H >- member{'B; 'x} } -->
+   sequent ['ext] { 'H >- member{bisect{'A; 'B}; 'x} }
+
 (*
  * Elimination.
  *)
@@ -114,28 +124,6 @@ interactive bisectEliminationLeft 'H 'J 'y 'z :
 interactive bisectEliminationRight 'H 'J 'y 'z :
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; y: 'B; z: 'y = 'x in 'B >- 'C['x] } -->
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
-
-(*
- * Subtyping.
- *)
-interactive bisectSubtypeLeft 'H :
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent [squash] { 'H >- subtype{'A; 'C} } -->
-   sequent ['ext] { 'H >- subtype{bisect{'A; 'B}; 'C} }
-
-interactive bisectSubtypeRight 'H :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- subtype{'B; 'C} } -->
-   sequent ['ext] { 'H >- subtype{bisect{'A; 'B}; 'C} }
-
-interactive bisectSubtypeBelow 'H :
-   sequent [squash] { 'H >- subtype{'C; 'A} } -->
-   sequent [squash] { 'H >- subtype{'C; 'B} } -->
-   sequent ['ext] { 'H >- subtype{'C; bisect{'A; 'B}} }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
 
 (*
  * D tactic.
@@ -155,6 +143,24 @@ let elim_bisectT i p =
 let bisect_term = << bisect{'A; 'B} >>
 
 let elim_resource = Mp_resource.improve elim_resource (bisect_term, elim_bisectT)
+
+(*
+ * Subtyping.
+ *)
+interactive bisectSubtypeLeft 'H :
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent [squash] { 'H >- subtype{'A; 'C} } -->
+   sequent ['ext] { 'H >- subtype{bisect{'A; 'B}; 'C} }
+
+interactive bisectSubtypeRight 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- subtype{'B; 'C} } -->
+   sequent ['ext] { 'H >- subtype{bisect{'A; 'B}; 'C} }
+
+interactive bisectSubtypeBelow 'H :
+   sequent [squash] { 'H >- subtype{'C; 'A} } -->
+   sequent [squash] { 'H >- subtype{'C; 'B} } -->
+   sequent ['ext] { 'H >- subtype{'C; bisect{'A; 'B}} }
 
 (*
  * Subtyping.

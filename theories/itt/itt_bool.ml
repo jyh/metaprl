@@ -108,6 +108,38 @@ let reduce_info =
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
+ * REDUCTIONS                                                           *
+ ************************************************************************)
+
+interactive_rw reduce_bnot_true : bnot{btrue} <--> bfalse
+
+interactive_rw reduce_bnot_false : bnot{bfalse} <--> btrue
+
+interactive_rw reduce_bor_true : bor{btrue; 'e1} <--> btrue
+
+interactive_rw reduce_bor_false : bor{bfalse; 'e1} <--> 'e1
+
+interactive_rw reduce_band_true : band{btrue; 'e1} <--> 'e1
+
+interactive_rw reduce_band_false : band{bfalse; 'e1} <--> bfalse
+
+interactive_rw reduce_bimplies_true : bimplies{btrue; 'e1} <--> 'e1
+
+interactive_rw reduce_bimplies_false : bimplies{bfalse; 'e1} <--> btrue
+
+let reduce_info =
+   [<< bnot{btrue} >>, reduce_bnot_true;
+    << bnot{bfalse} >>, reduce_bnot_false;
+    << bor{btrue; 'e1} >>, reduce_bor_true;
+    << bor{bfalse; 'e1} >>, reduce_bor_false;
+    << band{btrue; 'e1} >>, reduce_band_true;
+    << band{bfalse; 'e1} >>, reduce_band_false;
+    << bimplies{btrue; 'e1} >>, reduce_bimplies_true;
+    << bimplies{bfalse; 'e1} >>, reduce_bimplies_false]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
+(************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
@@ -236,6 +268,19 @@ interactive ifthenelse_member1 {| intro_resource [] |} 'H 'w :
 interactive boolSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in bool } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
+
+let d_bool_sqequalT p =
+   boolSqequal (Sequent.hyp_count_addr p) p
+
+let bool_sqequal_term1 = << Perv!"rewrite"{'e; btrue} >>
+let bool_sqequal_term2 = << Perv!"rewrite"{'e; bfalse} >>
+let bool_sqequal_term3 = << Perv!"rewrite"{btrue; 'e} >>
+let bool_sqequal_term4 = << Perv!"rewrite"{bfalse; 'e} >>
+
+let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term1, d_bool_sqequalT)
+let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term2, d_bool_sqequalT)
+let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term3, d_bool_sqequalT)
+let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term4, d_bool_sqequalT)
 
 interactive boolElimination3 {| elim_resource [] |} 'H 'J 'x :
    sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
@@ -389,36 +434,6 @@ interactive assertSquashElim 'H :
    sequent ['ext] { 'H >- "assert"{'t} }
 
 (************************************************************************
- * REDUCTIONS                                                           *
- ************************************************************************)
-
-interactive_rw reduce_bnot_true : bnot{btrue} <--> bfalse
-
-interactive_rw reduce_bnot_false : bnot{bfalse} <--> btrue
-
-interactive_rw reduce_bor_true : bor{btrue; 'e1} <--> btrue
-
-interactive_rw reduce_bor_false : bor{bfalse; 'e1} <--> 'e1
-
-interactive_rw reduce_band_true : band{btrue; 'e1} <--> 'e1
-
-interactive_rw reduce_band_false : band{bfalse; 'e1} <--> bfalse
-
-interactive_rw reduce_bimplies_true : bimplies{btrue; 'e1} <--> 'e1
-
-interactive_rw reduce_bimplies_false : bimplies{bfalse; 'e1} <--> btrue
-
-let reduce_info =
-   [<< bnot{btrue} >>, reduce_bnot_true;
-    << bnot{bfalse} >>, reduce_bnot_false;
-    << bor{btrue; 'e1} >>, reduce_bor_true;
-    << bor{bfalse; 'e1} >>, reduce_bor_false;
-    << band{btrue; 'e1} >>, reduce_band_true;
-    << band{bfalse; 'e1} >>, reduce_band_false;
-    << bimplies{btrue; 'e1} >>, reduce_bimplies_true;
-    << bimplies{bfalse; 'e1} >>, reduce_bimplies_false]
-
-(************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
@@ -454,22 +469,6 @@ let magicT = d_magic_assertT
 (************************************************************************
  * BOOL SPLITTING                                                       *
  ************************************************************************)
-
-(*
- * Sqequal.
- *)
-let d_bool_sqequalT p =
-   boolSqequal (Sequent.hyp_count_addr p) p
-
-let bool_sqequal_term1 = << Perv!"rewrite"{'e; btrue} >>
-let bool_sqequal_term2 = << Perv!"rewrite"{'e; bfalse} >>
-let bool_sqequal_term3 = << Perv!"rewrite"{btrue; 'e} >>
-let bool_sqequal_term4 = << Perv!"rewrite"{bfalse; 'e} >>
-
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term1, d_bool_sqequalT)
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term2, d_bool_sqequalT)
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term3, d_bool_sqequalT)
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term4, d_bool_sqequalT)
 
 (*
  * Split a bool in the conclusion.

@@ -240,7 +240,7 @@ let d_collect_is_pre_setT i p =
  *)
 let is_pre_set_collect_term = << is_pre_set{collect{'T; x. 'a['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (is_pre_set_collect_term, d_collect_is_pre_setT)
+let d_resource = Mp_resource.improve d_resource (is_pre_set_collect_term, d_collect_is_pre_setT)
 
 (*
  * H >- set type
@@ -253,7 +253,7 @@ let d_pre_set_typeT i p =
 
 let set_type_term = << "type"{pre_set} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_type_term, d_pre_set_typeT)
+let d_resource = Mp_resource.improve d_resource (set_type_term, d_pre_set_typeT)
 
 (*
  * Set elimination.
@@ -275,7 +275,7 @@ let d_pre_setT i p =
 
 let pre_set_term = << pre_set >>
 
-let d_resource = d_resource.resource_improve d_resource (pre_set_term, d_pre_setT)
+let d_resource = Mp_resource.improve d_resource (pre_set_term, d_pre_setT)
 
 (*
  * Application rule.
@@ -290,7 +290,7 @@ let d_apply_is_pre_setT i p =
 
 let apply_is_pre_set_term = << is_pre_set{.'f 'x} >>
 
-let d_resource = d_resource.resource_improve d_resource (apply_is_pre_set_term, d_apply_is_pre_setT)
+let d_resource = Mp_resource.improve d_resource (apply_is_pre_set_term, d_apply_is_pre_setT)
 
 (*
  * Typehood of is_pre_set{'s1}
@@ -303,7 +303,7 @@ let d_is_pre_set_typeT i p =
 
 let is_pre_set_type_term = << "type"{is_pre_set{'s1}} >>
 
-let d_resource = d_resource.resource_improve d_resource (is_pre_set_type_term, d_is_pre_set_typeT)
+let d_resource = Mp_resource.improve d_resource (is_pre_set_type_term, d_is_pre_set_typeT)
 
 (*
  * Equal sets.
@@ -350,7 +350,7 @@ let splitT t i p =
  * Add set assumptions to trivial tactic.
  *)
 let trivial_resource =
-   trivial_resource.resource_improve trivial_resource (**)
+   Mp_resource.improve trivial_resource (**)
       { auto_name = "preSetAssumT";
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT preSetAssumT
@@ -373,7 +373,7 @@ let pre_set_autoT =
 let pre_set_prec = create_auto_prec [trivial_prec] [back_hyp_prec]
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "set_autoT";
         auto_prec = pre_set_prec;
         auto_tac = auto_wrap pre_set_autoT

@@ -69,7 +69,7 @@ let d_all_type i p =
 
 let all_type_term = << "type"{."all"{x. 'B['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (all_type_term, d_all_type)
+let d_resource = Mp_resource.improve d_resource (all_type_term, d_all_type)
 
 let d_all i p =
    if i = 0 then
@@ -87,7 +87,7 @@ let d_all i p =
       let j, k = Sequent.hyp_indices p i in
          all_elim j k x v y p
 
-let d_resource = d_resource.resource_improve d_resource (all_term, d_all)
+let d_resource = Mp_resource.improve d_resource (all_term, d_all)
 
 (*
  * -*-

@@ -88,7 +88,7 @@ let d_true_funT i p =
 
 let true_fun_term = << fun_prop{x. "true"} >>
 
-let d_resource = d_resource.resource_improve d_resource (true_fun_term, d_true_funT)
+let d_resource = Mp_resource.improve d_resource (true_fun_term, d_true_funT)
 
 (*
  * Restricted.
@@ -101,7 +101,7 @@ let d_true_resT i p =
 
 let true_res_term = << restricted{x. "true"} >>
 
-let d_resource = d_resource.resource_improve d_resource (true_res_term, d_true_resT)
+let d_resource = Mp_resource.improve d_resource (true_res_term, d_true_resT)
 
 (*
  * Restricted.
@@ -114,7 +114,7 @@ let d_unit_funT i p =
 
 let unit_fun_term = << fun_prop{x. "unit"} >>
 
-let d_resource = d_resource.resource_improve d_resource (unit_fun_term, d_unit_funT)
+let d_resource = Mp_resource.improve d_resource (unit_fun_term, d_unit_funT)
 
 (*
  * Restricted.
@@ -127,7 +127,7 @@ let d_unit_resT i p =
 
 let unit_res_term = << restricted{x. "unit"} >>
 
-let d_resource = d_resource.resource_improve d_resource (unit_res_term, d_unit_resT)
+let d_resource = Mp_resource.improve d_resource (unit_res_term, d_unit_resT)
 
 (*
  * -*-

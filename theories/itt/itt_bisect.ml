@@ -156,7 +156,7 @@ let d_bisectT i p =
 
 let bisect_term = << bisect{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_term, d_bisectT)
+let d_resource = Mp_resource.improve d_resource (bisect_term, d_bisectT)
 
 let d_bisect_typeT i p =
    if i = 0 then
@@ -167,7 +167,7 @@ let d_bisect_typeT i p =
 
 let bisect_type_term = << "type"{bisect{'A; 'B}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_type_term, d_bisect_typeT)
+let d_resource = Mp_resource.improve d_resource (bisect_type_term, d_bisect_typeT)
 
 (*
  * EQCD.
@@ -176,11 +176,11 @@ let eqcd_bisectT p =
    (bisectEquality (Sequent.hyp_count_addr p)
     thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (bisect_term, eqcd_bisectT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (bisect_term, eqcd_bisectT)
 
 let bisect_equal_term = << bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_equal_term, d_wrap_eqcd eqcd_bisectT)
+let d_resource = Mp_resource.improve d_resource (bisect_equal_term, d_wrap_eqcd eqcd_bisectT)
 
 let d_bisect_memberT i p =
    if i = 0 then
@@ -191,7 +191,7 @@ let d_bisect_memberT i p =
 
 let bisect_member_term = << 'x = 'y in bisect{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_member_term, d_bisect_memberT)
+let d_resource = Mp_resource.improve d_resource (bisect_member_term, d_bisect_memberT)
 
 (*
  * Subtyping.
@@ -213,7 +213,7 @@ let d_bisect_aboveT i p =
 
 let bisect_above_term = << subtype{bisect{'A; 'B}; 'C} >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_above_term, d_bisect_aboveT)
+let d_resource = Mp_resource.improve d_resource (bisect_above_term, d_bisect_aboveT)
 
 let d_bisect_belowT i p =
    if i = 0 then
@@ -223,7 +223,7 @@ let d_bisect_belowT i p =
 
 let bisect_below_term = << subtype{'C; bisect{'A; 'B}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_below_term, d_bisect_belowT)
+let d_resource = Mp_resource.improve d_resource (bisect_below_term, d_bisect_belowT)
 
 (*
  * -*-

@@ -114,62 +114,32 @@ let collect (tbl : typeinf_subst_fun term_table) subst (so, t) =
       inf subst (so, t)
 
 (*
- * Keep a list of resources for lookup by the toploop.
- *)
-let subst_resources = ref ([] : (string * typeinf_subst_resource) list)
-
-let save_subst name (rsrc : typeinf_subst_resource) =
-   subst_resources := (name, rsrc) :: !subst_resources
-
-let get_typeinf_subst_resource name =
-   let rec search = function
-      (name', rsrc) :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | [] ->
-         raise Not_found
-   in
-      search !subst_resources
-
-(*
  * Wrap up the algorithm.
  *)
-let rec join_subst_resource { resource_data = tbl1 } { resource_data = tbl2 } =
-   let data = join_tables tbl1 tbl2 in
-      { resource_data = data;
-        resource_join = join_subst_resource;
-        resource_extract = extract_subst_resource;
-        resource_improve = improve_subst_resource;
-        resource_close = close_subst_resource
-      }
+let join_subst_resource = join_tables
 
-and extract_subst_resource { resource_data = tbl } =
-   collect tbl
+let extract_subst_resource = collect
 
-and improve_subst_resource { resource_data = tbl } (t, inf) =
-   { resource_data = insert tbl t inf;
-     resource_join = join_subst_resource;
-     resource_extract = extract_subst_resource;
-     resource_improve = improve_subst_resource;
-     resource_close = close_subst_resource
-   }
+let improve_subst_resource tbl (t, inf) =
+   insert tbl t inf
 
-and close_subst_resource (rsrc : typeinf_subst_resource) modname =
-   save_subst modname rsrc;
+let close_subst_resource rsrc modname =
    rsrc
 
 (*
  * Resource.
  *)
 let typeinf_subst_resource =
-   { resource_data = new_table ();
-     resource_join = join_subst_resource;
-     resource_extract = extract_subst_resource;
-     resource_improve = improve_subst_resource;
-     resource_close = close_subst_resource
-   }
+   Mp_resource.create (**)
+      { resource_join = join_subst_resource;
+        resource_extract = extract_subst_resource;
+        resource_improve = improve_subst_resource;
+        resource_close = close_subst_resource
+      }
+      (new_table ())
+
+let get_typeinf_subst_resource modname =
+   Mp_resource.find typeinf_subst_resource modname
 
 (*
  * Projector.
@@ -239,62 +209,32 @@ let infer tbl =
       aux
 
 (*
- * Keep a list of resources for lookup by the toploop.
- *)
-let resources = ref ([] : (string * typeinf_resource) list)
-
-let save name (rsrc : typeinf_resource) =
-   resources := (name, rsrc) :: !resources
-
-let get_typeinf_resource name =
-   let rec search = function
-      (name', rsrc) :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | [] ->
-         raise Not_found
-   in
-      search !resources
-
-(*
  * Wrap up the algorithm.
  *)
-let rec join_resource { resource_data = tbl1 } { resource_data = tbl2 } =
-   let data = join_tables tbl1 tbl2 in
-      { resource_data = data;
-        resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_close = close_resource
-      }
+let join_resource = join_tables
 
-and extract_resource { resource_data = tbl } =
-   infer tbl
+let extract_resource = infer
 
-and improve_resource { resource_data = tbl } (t, inf) =
-   { resource_data = insert tbl t inf;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let improve_resource tbl (t, inf) =
+   insert tbl t inf
 
-and close_resource (rsrc : typeinf_resource) modname =
-   save modname rsrc;
+let close_resource rsrc modname =
    rsrc
 
 (*
  * Resource.
  *)
 let typeinf_resource =
-   { resource_data = new_table ();
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   Mp_resource.create (**)
+      {  resource_join = join_resource;
+         resource_extract = extract_resource;
+         resource_improve = improve_resource;
+         resource_close = close_resource
+      }
+      (new_table ())
+
+let get_typeinf_resource modname =
+   Mp_resource.find typeinf_resource modname
 
 (*
  * Projector.

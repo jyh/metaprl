@@ -57,7 +57,7 @@ let d_exists_type i p =
 
 let exists_type_term = << "type"{."exists"{x. 'B['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_type_term, d_exists_type)
+let d_resource = Mp_resource.improve d_resource (exists_type_term, d_exists_type)
 
 let d_exists i p =
    if i = 0 then
@@ -71,7 +71,7 @@ let d_exists i p =
 
 let exists_term = << "exists"{x. 'B['x]} >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_term, d_exists)
+let d_resource = Mp_resource.improve d_resource (exists_term, d_exists)
 
 (*
  * -*-

@@ -239,26 +239,6 @@ let improve_data base = function
       insert base goal (subtype_f tac)
 
 (*
- * Keep a list of resources for lookup by the toploop.
- *)
-let resources = ref []
-
-let save name rsrc =
-   resources := (name, rsrc) :: !resources
-
-let get_resource name =
-   let rec search = function
-      (name', rsrc) :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | [] ->
-         raise Not_found
-   in
-      search !resources
-
-(*
  * Extract a subtype tactic from the data.
  * Chain the tactics together.
  *)
@@ -279,39 +259,29 @@ let extract_data base =
 (*
  * Wrap up the joiner.
  *)
-let rec join_resource { resource_data = data1 } { resource_data = data2 } =
-   { resource_data = join_tables data1 data2;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let join_resource = join_tables
 
-and extract_resource { resource_data = data } =
-   extract_data data
+let extract_resource = extract_data
 
-and improve_resource { resource_data = data } arg =
-   { resource_data = improve_data data arg;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let improve_resource = improve_data
 
-and close_resource rsrc modname =
-   save modname rsrc;
+let close_resource rsrc modname =
    rsrc
 
 (*
  * Resource.
  *)
 let sub_resource =
-   { resource_data = new_dtable ();
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+      (new_dtable ())
+
+let get_resource modname =
+   Mp_resource.find sub_resource modname
 
 (*
  * Resource argument.
@@ -358,7 +328,7 @@ let d_subtypeT i =
    else
       d_hyp_subtypeT i
 
-let d_resource = d_resource.resource_improve d_resource (subtype_term, d_subtypeT)
+let d_resource = Mp_resource.improve d_resource (subtype_term, d_subtypeT)
 
 (*
  * Typehood.
@@ -372,7 +342,7 @@ let d_subtype_typeT i p =
 
 let subtype_type_term = << "type"{subtype{'A; 'B}} >>
 
-let d_resource = d_resource.resource_improve d_resource (subtype_type_term, d_subtype_typeT)
+let d_resource = Mp_resource.improve d_resource (subtype_type_term, d_subtype_typeT)
 
 (*
  * EQCD.
@@ -382,11 +352,11 @@ let eqcd_subtype p =
       (subtypeEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (subtype_term, eqcd_subtype)
+let eqcd_resource = Mp_resource.improve eqcd_resource (subtype_term, eqcd_subtype)
 
 let subtype_equal_term = << subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (subtype_equal_term, d_wrap_eqcd eqcd_subtype)
+let d_resource = Mp_resource.improve d_resource (subtype_equal_term, d_wrap_eqcd eqcd_subtype)
 
 (*
  * Member equality.
@@ -399,7 +369,7 @@ let d_eqcd_it_subtypeT i p =
 
 let eqcd_it_subtype_term = << it = it in subtype{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (eqcd_it_subtype_term, d_eqcd_it_subtypeT)
+let d_resource = Mp_resource.improve d_resource (eqcd_it_subtype_term, d_eqcd_it_subtypeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -415,7 +385,7 @@ let inf_subtype f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subtype_term, inf_subtype)
+let typeinf_resource = Mp_resource.improve typeinf_resource (subtype_term, inf_subtype)
 
 (************************************************************************
  * SQUASH                                                               *

@@ -199,7 +199,7 @@ let d_set i p =
       let j, k = Sequent.hyp_indices p i in
          setElimination j k u v p
 
-let d_resource = d_resource.resource_improve d_resource (set_term, d_set)
+let d_resource = Mp_resource.improve d_resource (set_term, d_set)
 
 (*
  * EqCD.
@@ -209,8 +209,7 @@ let eqcd_set p =
    let v = get_opt_var_arg "x" p in
       setEquality count v p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (set_term, eqcd_set)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = Mp_resource.improve eqcd_resource (set_term, eqcd_set)
 
 let d_set_typeT p =
    let t = Sequent.concl p in
@@ -222,7 +221,7 @@ let d_set_typeT p =
 
 let set_type_term = << "type"{.{ a: 'A | 'B['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_type_term, wrap_intro d_set_typeT)
+let d_resource = Mp_resource.improve d_resource (set_type_term, wrap_intro d_set_typeT)
 
 (************************************************************************
  * TACTICS                                                              *
@@ -250,7 +249,7 @@ let d_hide_equalT i p =
 
 let hide_equal_term = << hide{.'x = 'y in 'A} >>
 
-let d_resource = d_resource.resource_improve d_resource (hide_equal_term, wrap_elim d_hide_equalT)
+let d_resource = Mp_resource.improve d_resource (hide_equal_term, wrap_elim d_hide_equalT)
 
 (*
  * Squash a goal.
@@ -269,7 +268,7 @@ let eqcd_setT p =
    let v = get_opt_var_arg "x" p in
       setEquality count v p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (set_term, eqcd_setT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (set_term, eqcd_setT)
 
 (*
  * Membership.
@@ -286,7 +285,7 @@ let d_set_equalT p =
 
 let set_equal_term = << 'x = 'y in { z: 'A | 'B['z] } >>
 
-let d_resource = d_resource.resource_improve d_resource (set_equal_term, wrap_intro d_set_equalT)
+let d_resource = Mp_resource.improve d_resource (set_equal_term, wrap_intro d_set_equalT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -302,7 +301,7 @@ let inf_set f decl t =
    let le1, le2 = dest_univ ty', dest_univ prop' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (set_term, inf_set)
+let typeinf_resource = Mp_resource.improve typeinf_resource (set_term, inf_set)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -313,7 +312,7 @@ let set_subtypeT p =
     thenT addHiddenLabelT "wf") p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (LRSubtype ([<< { a: 'A | 'B['a] } >>, << 'A >>], set_subtypeT))
 

@@ -68,7 +68,7 @@ let d_and_type i p =
 
 let and_type_term = << "type"{.'A & 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (and_type_term, d_and_type)
+let d_resource = Mp_resource.improve d_resource (and_type_term, d_and_type)
 
 let d_and i p =
    if i = 0 then
@@ -81,7 +81,7 @@ let d_and i p =
 
 let and_term = << 'A & 'B >>
 
-let d_resource = d_resource.resource_improve d_resource (and_term, d_and)
+let d_resource = Mp_resource.improve d_resource (and_term, d_and)
 
 (*
  * -*-

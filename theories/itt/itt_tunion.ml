@@ -141,7 +141,7 @@ let d_tunionT i p =
       let x, _ = Sequent.nth_hyp p i in
          tunionElimination j k x u v w p
 
-let d_resource = d_resource.resource_improve d_resource (tunion_term, d_tunionT)
+let d_resource = Mp_resource.improve d_resource (tunion_term, d_tunionT)
 
 (*
  * Typehood.
@@ -158,7 +158,7 @@ let d_tunion_typeT i p =
 
 let tunion_type_term = << "type"{tunion{'A; x. 'B['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (tunion_type_term, d_tunion_typeT)
+let d_resource = Mp_resource.improve d_resource (tunion_type_term, d_tunion_typeT)
 
 (*
  * Membership.
@@ -177,7 +177,7 @@ let d_tunion_memT i p =
 
 let tunion_mem_term = << 'x = 'y in tunion{'A; z. 'B['z]} >>
 
-let d_resource = d_resource.resource_improve d_resource (tunion_mem_term, d_tunion_memT)
+let d_resource = Mp_resource.improve d_resource (tunion_mem_term, d_tunion_memT)
 
 (*
  * Equality.
@@ -189,11 +189,11 @@ let eqcd_tunionT p =
    let v = maybe_new_vars1 p v in
       tunionEquality (Sequent.hyp_count_addr p) v p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (tunion_term, eqcd_tunionT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (tunion_term, eqcd_tunionT)
 
 let eqcd_tunion_term = << tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2]} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (eqcd_tunion_term, d_wrap_eqcd eqcd_tunionT)
+let d_resource = Mp_resource.improve d_resource (eqcd_tunion_term, d_wrap_eqcd eqcd_tunionT)
 
 (*
  * -*-

@@ -326,7 +326,7 @@ let d_unionT i =
    else
       d_hyp_union i
 
-let d_resource = d_resource.resource_improve d_resource (union_term, d_unionT)
+let d_resource = Mp_resource.improve d_resource (union_term, d_unionT)
 
 (*
  * Typehood.
@@ -339,7 +339,7 @@ let d_union_typeT i p =
 
 let union_type_term = << "type"{. 'A + 'B } >>
 
-let d_resource = d_resource.resource_improve d_resource (union_type_term, d_union_typeT)
+let d_resource = Mp_resource.improve d_resource (union_type_term, d_union_typeT)
 
 (*
  * Contradiction.
@@ -370,11 +370,11 @@ let eqcd_unionT p =
       (unionEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (union_term, eqcd_unionT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (union_term, eqcd_unionT)
 
 let union_equal_term = << ('a1 + 'a2) = ('b1 + 'b2) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (union_equal_term, d_wrap_eqcd eqcd_unionT)
+let d_resource = Mp_resource.improve d_resource (union_equal_term, d_wrap_eqcd eqcd_unionT)
 
 (*
  * EQCD inl.
@@ -384,11 +384,11 @@ let eqcd_inlT p =
       (inlEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (inl_term, eqcd_inlT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (inl_term, eqcd_inlT)
 
 let inl_equal_term = << inl{'x1} = inl{'x2} in ('a1 + 'a2) >>
 
-let d_resource = d_resource.resource_improve d_resource (inl_equal_term, d_wrap_eqcd eqcd_inlT)
+let d_resource = Mp_resource.improve d_resource (inl_equal_term, d_wrap_eqcd eqcd_inlT)
 
 (*
  * EQCD inr.
@@ -398,11 +398,11 @@ let eqcd_inrT p =
       (inrEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (inr_term, eqcd_inrT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (inr_term, eqcd_inrT)
 
 let inr_equal_term = << inr{'x1} = inr{'x2} in ('a1 + 'a2) >>
 
-let d_resource = d_resource.resource_improve d_resource (inr_equal_term, d_wrap_eqcd eqcd_inrT)
+let d_resource = Mp_resource.improve d_resource (inr_equal_term, d_wrap_eqcd eqcd_inrT)
 
 (*
  * EQCD decide.
@@ -410,7 +410,7 @@ let d_resource = d_resource.resource_improve d_resource (inr_equal_term, d_wrap_
 let eqcd_decideT p =
    raise (RefineError ("eqcd_decideT", StringError "not implemented"))
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (decide_term, eqcd_decideT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (decide_term, eqcd_decideT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -426,7 +426,7 @@ let inf_union f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (union_term, inf_union)
+let typeinf_resource = Mp_resource.improve typeinf_resource (union_term, inf_union)
 
 (*
  * Type of inl.
@@ -436,7 +436,7 @@ let inf_inl f decl t =
    let decl', a' = f decl a in
       decl', mk_union_term a' (mk_var_term (new_unify_var decl' "T"))
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inl_term, inf_inl)
+let typeinf_resource = Mp_resource.improve typeinf_resource (inl_term, inf_inl)
 
 (*
  * Type of inr.
@@ -446,7 +446,7 @@ let inf_inr f decl t =
    let decl', a' = f decl a in
       decl', mk_union_term (mk_var_term (new_unify_var decl' "T")) a'
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inr_term, inf_inr)
+let typeinf_resource = Mp_resource.improve typeinf_resource (inr_term, inf_inr)
 
 (*
  * Type of decide.
@@ -459,7 +459,7 @@ let inf_decide (inf : typeinf_func) (decl : unify_subst) (t : term) =
    let decl''', b' = inf (add_unify_subst y l decl'') b in
       unify decl''' StringSet.empty a' b', a'
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)
+let typeinf_resource = Mp_resource.improve typeinf_resource (decide_term, inf_decide)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -473,7 +473,7 @@ let union_subtypeT p =
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (DSubtype ([<< 'A1 + 'B1 >>, << 'A2 + 'B2 >>;
                << 'A1 >>, << 'A2 >>;

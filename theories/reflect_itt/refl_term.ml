@@ -796,7 +796,7 @@ let d_vmapT i p =
 
 let vmap_term = << vmap_type >>
 
-let d_resource = d_resource.resource_improve d_resource (vmap_term, wrap_elim d_vmapT)
+let d_resource = Mp_resource.improve d_resource (vmap_term, wrap_elim d_vmapT)
 
 (*
  * Comparison on vars.

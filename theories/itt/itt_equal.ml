@@ -404,60 +404,32 @@ let extract_data base =
       eqcd
 
 (*
- * Keep a list of resources for lookup by the toploop.
- *)
-let resources = ref []
-
-let save name rsrc =
-   resources := (name, rsrc) :: !resources
-
-let get_resource name =
-   let rec search = function
-      (name', rsrc) :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | [] ->
-         raise Not_found
-   in
-      search !resources
-
-(*
  * Wrap up the joiner.
  *)
-let rec join_resource { resource_data = data1 } { resource_data = data2 } =
-   { resource_data = join_stables data1 data2;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let join_resource = join_stables
 
-and extract_resource { resource_data = data } =
-   extract_data data
+let extract_resource = extract_data
 
-and improve_resource { resource_data = data } (t, tac) =
-   { resource_data = sinsert data t tac;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let improve_resource data (t, tac) =
+   sinsert data t tac
 
-and close_resource rsrc _ =
+let close_resource rsrc _ =
    rsrc
 
 (*
  * Resource.
  *)
 let eqcd_resource =
-   { resource_data = new_stable ();
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+      (new_stable ())
+
+let get_resource modname =
+   Mp_resource.find eqcd_resource modname
 
 (*
  * Resource argument.
@@ -479,7 +451,7 @@ let d_equalT i p =
       let j, k = hyp_indices p i in
          equalityElimination j k p
 
-let d_resource = d_resource.resource_improve d_resource (equal_term, d_equalT)
+let d_resource = Mp_resource.improve d_resource (equal_term, d_equalT)
 
 (*
  * Typehood.
@@ -493,7 +465,7 @@ let d_equal_typeT i p =
 
 let equal_type_term = << "type"{. 'a = 'b in 'T } >>
 
-let d_resource = d_resource.resource_improve d_resource (equal_type_term, d_equal_typeT)
+let d_resource = Mp_resource.improve d_resource (equal_type_term, d_equal_typeT)
 
 let d_member_typeT i p =
    if i = 0 then
@@ -503,7 +475,7 @@ let d_member_typeT i p =
 
 let member_type_term = << "type"{member{'T; 'x}} >>
 
-let d_resource = d_resource.resource_improve d_resource (member_type_term, d_member_typeT)
+let d_resource = Mp_resource.improve d_resource (member_type_term, d_member_typeT)
 
 (*
  * Turn a eqcd tactic into a d tactic.
@@ -537,7 +509,7 @@ let d_univ_typeT i p =
 
 let univ_type_term = << "type"{univ[@l:l]} >>
 
-let d_resource = d_resource.resource_improve d_resource (univ_type_term, d_univ_typeT)
+let d_resource = Mp_resource.improve d_resource (univ_type_term, d_univ_typeT)
 
 (************************************************************************
  * EQCD                                                                 *
@@ -552,8 +524,8 @@ let eqcd_univT p =
 let eqcd_itT p =
    axiomEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (univ_term, eqcd_univT)
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (it_term, eqcd_itT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (it_term, eqcd_itT)
 
 let d_it_equalT p =
    (axiomEquality (Sequent.hyp_count_addr p)
@@ -561,7 +533,7 @@ let d_it_equalT p =
 
 let it_equal_term = << it = it in ('x = 'y in 'T) >>
 
-let d_resource = d_resource.resource_improve d_resource (it_equal_term, wrap_intro d_it_equalT)
+let d_resource = Mp_resource.improve d_resource (it_equal_term, wrap_intro d_it_equalT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -591,12 +563,12 @@ let infer_member subst (so, t) =
          subst
 
 let typeinf_subst_resource =
-   typeinf_subst_resource.resource_improve (**)
+   Mp_resource.improve (**)
       typeinf_subst_resource
       (equal_term, infer_equal)
 
 let typeinf_subst_resource =
-   typeinf_subst_resource.resource_improve (**)
+   Mp_resource.improve (**)
       typeinf_subst_resource
       (member_term, infer_member)
 
@@ -607,7 +579,7 @@ let inf_univ _ decl t =
    let le = dest_univ t in
       decl, mk_univ_term (incr_level_exp le)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (univ_term, inf_univ)
+let typeinf_resource = Mp_resource.improve typeinf_resource (univ_term, inf_univ)
 
 (*
  * Type of an equality is the type of the equality type.
@@ -616,7 +588,7 @@ let inf_equal inf decl t =
    let ty, _, _ = dest_equal t in
       inf decl ty
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (equal_term, inf_equal)
+let typeinf_resource = Mp_resource.improve typeinf_resource (equal_term, inf_equal)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *
@@ -631,12 +603,12 @@ let squash_equalT p =
 let squash_memberT p =
    member_squashElimination (hyp_count_addr p) p
 
-let squash_resource = squash_resource.resource_improve squash_resource (equal_term, squash_equalT)
+let squash_resource = Mp_resource.improve squash_resource (equal_term, squash_equalT)
 
 let squash_typeT p =
    type_squashElimination (hyp_count_addr p) p
 
-let squash_resource = squash_resource.resource_improve squash_resource (type_term, squash_typeT)
+let squash_resource = Mp_resource.improve squash_resource (type_term, squash_typeT)
 
 let unsquashT v p =
    squashFromAny (Sequent.hyp_count_addr p) v p
@@ -708,7 +680,7 @@ let triv_equalT i =
    orelseT univAssumT i
 
 let trivial_resource =
-   trivial_resource.resource_improve trivial_resource (**)
+   Mp_resource.improve trivial_resource (**)
       { auto_name = "triv_equalT";
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT triv_equalT

@@ -63,7 +63,7 @@ let d_bisect_belowT i p =
 
 let bisect_below_term = << subtype{bisect{'a; 'b}; 'c} >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_below_term, d_bisect_belowT)
+let d_resource = Mp_resource.improve d_resource (bisect_below_term, d_bisect_belowT)
 
 let d_bisect_aboveT i p =
    if i = 0 then
@@ -73,7 +73,7 @@ let d_bisect_aboveT i p =
 
 let bisect_above_term = << subtype{'a; bisect{'a; 'b}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bisect_above_term, d_bisect_aboveT)
+let d_resource = Mp_resource.improve d_resource (bisect_above_term, d_bisect_aboveT)
 
 (*
  * -*-

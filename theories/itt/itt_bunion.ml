@@ -136,7 +136,7 @@ let d_bunionT i p =
 
 let bunion_term = << bunion{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (bunion_term, d_bunionT)
+let d_resource = Mp_resource.improve d_resource (bunion_term, d_bunionT)
 
 let d_bunion_typeT i p =
    if i = 0 then
@@ -152,11 +152,11 @@ let eqcd_bunionT p =
    (bunionEquality (Sequent.hyp_count_addr p)
     thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (bunion_term, eqcd_bunionT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (bunion_term, eqcd_bunionT)
 
 let bunion_equal_term = << bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (bunion_equal_term, d_wrap_eqcd eqcd_bunionT)
+let d_resource = Mp_resource.improve d_resource (bunion_equal_term, d_wrap_eqcd eqcd_bunionT)
 
 let d_bunion_memberT i p =
    if i = 0 then
@@ -174,7 +174,7 @@ let d_bunion_memberT i p =
 
 let bunion_member_term = << 'x = 'y in bunion{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (bunion_member_term, d_bunion_memberT)
+let d_resource = Mp_resource.improve d_resource (bunion_member_term, d_bunion_memberT)
 
 (*
  * -*-

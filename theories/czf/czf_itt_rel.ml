@@ -84,7 +84,7 @@ let d_rel_typeT i p =
 
 let rel_type_term = << "type"{rel{a, b. 'P['a; 'b]; 's1; 's2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (rel_type_term, d_rel_typeT)
+let d_resource = Mp_resource.improve d_resource (rel_type_term, d_rel_typeT)
 
 (*
  * -*-

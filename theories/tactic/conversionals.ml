@@ -253,72 +253,43 @@ let improve_data (t, conv) tbl =
    Refine_exn.print Dform.null_base (insert tbl t) conv
 
 (*
- * Keep a list of resources for lookup by the toploop.
- *)
-let resources = ref []
-
-let save name rsrc =
-   resources := (name, rsrc) :: !resources
-
-let get_resource name =
-   let rec search = function
-      (name', rsrc) :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | [] ->
-         raise Not_found
-   in
-      search !resources
-
-(*
  * Wrap up the joiner.
  *)
-let rec join_resource base1 base2 =
-   let data = join_tables base1.resource_data base2.resource_data in
-      { resource_data = data;
-        resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_close = close_resource
-      }
+let join_resource base1 base2 =
+   join_tables base1 base2
 
-and extract_resource { resource_data = data } =
-   extract_data data
+let extract_resource = extract_data
 
-and improve_resource { resource_data = data } x =
+let improve_resource data x =
    if !debug_reduce then
       begin
          let t, _ = x in
          let opname = opname_of_term t in
             eprintf "Conversionals.improve_resource: %a%t" debug_print t eflush
       end;
-   { resource_data = improve_data x data;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   improve_data x data
 
 and close_resource rsrc modname =
-   save modname rsrc;
    rsrc
 
 (*
  * Resource.
  *)
 let reduce_resource =
-   { resource_data = new_table ();
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+      (new_table ())
+
+let get_resource modname =
+   Mp_resource.find reduce_resource modname
 
 let rec add_reduce_info rr = function
    (t, conv) :: tl ->
-      add_reduce_info (rr.resource_improve rr (t, conv)) tl
+      add_reduce_info (Mp_resource.improve rr (t, conv)) tl
  | [] ->
       rr
 

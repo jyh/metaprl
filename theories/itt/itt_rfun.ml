@@ -330,7 +330,7 @@ let d_rfunT i =
    else
       d_hyp_rfun i
 
-let d_resource = d_resource.resource_improve d_resource (rfun_term, d_rfunT)
+let d_resource = Mp_resource.improve d_resource (rfun_term, d_rfunT)
 
 (************************************************************************
  * EQCD TACTICS                                                         *
@@ -352,7 +352,7 @@ let eqcd_rfunT p =
        (rfunctionEquality count wf g y z
         thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (rfun_term, eqcd_rfunT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (rfun_term, eqcd_rfunT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -368,7 +368,7 @@ let inf_rfun inf decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (rfun_term, inf_rfun)
+let typeinf_resource = Mp_resource.improve typeinf_resource (rfun_term, inf_rfun)
 
 (*
  * Type of lambda.
@@ -386,7 +386,7 @@ let inf_lambda (f : typeinf_func) (decl : unify_subst) (t : term) =
    in
       decl'', mk_dfun_term v a' b'
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (lambda_term, inf_lambda)
+let typeinf_resource = Mp_resource.improve typeinf_resource (lambda_term, inf_lambda)
 
 (*
  * Type of apply.
@@ -410,7 +410,7 @@ let inf_apply inf decl t =
    in
       decl'', ty
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply_term, inf_apply)
+let typeinf_resource = Mp_resource.improve typeinf_resource (apply_term, inf_apply)
 
 (*
  * -*-

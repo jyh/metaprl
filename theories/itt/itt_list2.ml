@@ -349,7 +349,7 @@ let d_is_nil_wfT p =
 
 let is_nil_wf_term = << member{bool; is_nil{'l}} >>
 
-let d_resource = d_resource.resource_improve d_resource (is_nil_wf_term, wrap_intro d_is_nil_wfT)
+let d_resource = Mp_resource.improve d_resource (is_nil_wf_term, wrap_intro d_is_nil_wfT)
 
 (*
  * Append.
@@ -359,7 +359,7 @@ let d_append_memberT p =
 
 let append_member_term = << member{list{'T}; append{'l1; 'l2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (append_member_term, wrap_intro d_append_memberT)
+let d_resource = Mp_resource.improve d_resource (append_member_term, wrap_intro d_append_memberT)
 
 (*
  * ball2.
@@ -396,7 +396,7 @@ let d_ball2_wfT p =
 
 let ball2_member_term = << member{bool; ball2{'l1; 'l2; x, y. 'b['x; 'y]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (ball2_member_term, wrap_intro d_ball2_wfT)
+let d_resource = Mp_resource.improve d_resource (ball2_member_term, wrap_intro d_ball2_wfT)
 
 (*
  * Assoc.
@@ -432,8 +432,8 @@ let d_assoc_wfT assoc_wf p =
 let assoc_wf_term = << member{'T; assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} >>
 let rev_assoc_wf_term = << member{'T; rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} >>
 
-let d_resource = d_resource.resource_improve d_resource (assoc_wf_term, wrap_intro (d_assoc_wfT assoc_wf))
-let d_resource = d_resource.resource_improve d_resource (rev_assoc_wf_term, wrap_intro (d_assoc_wfT rev_assoc_wf))
+let d_resource = Mp_resource.improve d_resource (assoc_wf_term, wrap_intro (d_assoc_wfT assoc_wf))
+let d_resource = Mp_resource.improve d_resource (rev_assoc_wf_term, wrap_intro (d_assoc_wfT rev_assoc_wf))
 
 (*
  * -*-

@@ -93,7 +93,7 @@ let d_atom_wfT p =
 
 let atom_wf_term = << member{bool; eq_atom{'x; 'y}} >>
 
-let d_resource = d_resource.resource_improve d_resource (atom_wf_term, wrap_intro d_atom_wfT)
+let d_resource = Mp_resource.improve d_resource (atom_wf_term, wrap_intro d_atom_wfT)
 
 (*
  * Equality.
@@ -107,7 +107,7 @@ let d_eq_atom_assertT i p =
 
 let eq_atom_assert_term = << "assert"{eq_atom{'v1; 'v2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_atom_assert_term, d_eq_atom_assertT)
+let d_resource = Mp_resource.improve d_resource (eq_atom_assert_term, d_eq_atom_assertT)
 
 (*
  * -*-

@@ -357,7 +357,7 @@ let d_listT i =
    else
       d_hyp_list i
 
-let d_resource = d_resource.resource_improve d_resource (list_term, d_listT)
+let d_resource = Mp_resource.improve d_resource (list_term, d_listT)
 
 let d_list_typeT i p =
    if i = 0 then
@@ -367,7 +367,7 @@ let d_list_typeT i p =
 
 let list_type_term = << "type"{list{'A}} >>
 
-let d_resource = d_resource.resource_improve d_resource (list_type_term, d_list_typeT)
+let d_resource = Mp_resource.improve d_resource (list_type_term, d_list_typeT)
 
 let d_list_subtypeT i p =
    if i = 0 then
@@ -377,7 +377,7 @@ let d_list_subtypeT i p =
 
 let list_subtype_term = << subtype{list{'T1}; list{'T2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (list_subtype_term, d_list_subtypeT)
+let d_resource = Mp_resource.improve d_resource (list_subtype_term, d_list_subtypeT)
 
 (************************************************************************
  * EQCD TACTICS                                                         *
@@ -388,29 +388,29 @@ let d_resource = d_resource.resource_improve d_resource (list_subtype_term, d_li
  *)
 let eqcd_listT p = listEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_term, eqcd_listT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (list_term, eqcd_listT)
 
 (*
  * EqCD nil.
  *)
 let eqcd_nilT p = nilEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (nil_term, eqcd_nilT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (nil_term, eqcd_nilT)
 
 let nil_equal_term = << nil = nil in list{'T} >>
 
-let d_resource = d_resource.resource_improve d_resource (nil_equal_term, d_wrap_eqcd eqcd_nilT)
+let d_resource = Mp_resource.improve d_resource (nil_equal_term, d_wrap_eqcd eqcd_nilT)
 
 (*
  * EqCD nil.
  *)
 let eqcd_consT p = consEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (cons_term, eqcd_consT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (cons_term, eqcd_consT)
 
 let cons_equal_term = << cons{'a1; 'b1} = cons{'a2; 'b2} in list{'T} >>
 
-let d_resource = d_resource.resource_improve d_resource (cons_equal_term, d_wrap_eqcd eqcd_consT)
+let d_resource = Mp_resource.improve d_resource (cons_equal_term, d_wrap_eqcd eqcd_consT)
 
 (*
  * EQCD listind.
@@ -418,7 +418,7 @@ let d_resource = d_resource.resource_improve d_resource (cons_equal_term, d_wrap
 let eqcd_list_indT p =
    raise (RefineError ("eqcd_list_indT", StringError "not implemented"))
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_ind_term, eqcd_list_indT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (list_ind_term, eqcd_list_indT)
 
 (*
  * Nil is canonical.
@@ -440,7 +440,7 @@ let d_nil_sqequalT p =
 
 let nil_sqequal_term = << Perv!"rewrite"{'u; nil} >>
 
-let d_resource = d_resource.resource_improve d_resource (nil_sqequal_term, wrap_intro d_nil_sqequalT)
+let d_resource = Mp_resource.improve d_resource (nil_sqequal_term, wrap_intro d_nil_sqequalT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -453,7 +453,7 @@ let inf_list f decl t =
    let a = dest_list t in
       f decl a
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_term, inf_list)
+let typeinf_resource = Mp_resource.improve typeinf_resource (list_term, inf_list)
 
 (*
  * Type of nil.
@@ -461,7 +461,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_
 let inf_nil f decl t =
    decl, mk_var_term (new_unify_var decl "T")
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (nil_term, inf_nil)
+let typeinf_resource = Mp_resource.improve typeinf_resource (nil_term, inf_nil)
 
 (*
  * Type of cons.
@@ -472,7 +472,7 @@ let inf_cons inf decl t =
    let decl'', tl' = inf decl' tl in
       unify decl'' StringSet.empty (mk_list_term hd') tl', tl'
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (cons_term, inf_cons)
+let typeinf_resource = Mp_resource.improve typeinf_resource (cons_term, inf_cons)
 
 (*
  * Type of list_ind.
@@ -493,7 +493,7 @@ let inf_list_ind inf decl t =
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_ind_term, inf_list_ind)
+let typeinf_resource = Mp_resource.improve typeinf_resource (list_ind_term, inf_list_ind)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -507,7 +507,7 @@ let list_subtypeT p =
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (DSubtype ([<< list{'A1} >>, << list{'A2} >>;
                << 'A2 >>, << 'A1 >>],
@@ -526,7 +526,7 @@ let d_cons_neq_nilT i p =
 
 let cons_neq_nil_term = << cons{'h; 't} = nil in list{'T} >>
 
-let d_resource = d_resource.resource_improve d_resource (cons_neq_nil_term, d_cons_neq_nilT)
+let d_resource = Mp_resource.improve d_resource (cons_neq_nil_term, d_cons_neq_nilT)
 
 let d_nil_neq_consT i p =
    if i = 0 then
@@ -537,7 +537,7 @@ let d_nil_neq_consT i p =
 
 let nil_neq_cons_term = << nil = cons{'h; 't} in list{'T} >>
 
-let d_resource = d_resource.resource_improve d_resource (nil_neq_cons_term, d_nil_neq_consT)
+let d_resource = Mp_resource.improve d_resource (nil_neq_cons_term, d_nil_neq_consT)
 
 (************************************************************************
  * MEMBERSHIP                                                           *
@@ -548,14 +548,14 @@ let d_nil_memberT p =
 
 let nil_member_term = << member{list{'T}; nil} >>
 
-let d_resource = d_resource.resource_improve d_resource (nil_member_term, wrap_intro d_nil_memberT)
+let d_resource = Mp_resource.improve d_resource (nil_member_term, wrap_intro d_nil_memberT)
 
 let d_cons_memberT p =
    cons_member (Sequent.hyp_count_addr p) p
 
 let cons_member_term = << member{list{'T}; cons{'h; 't}} >>
 
-let d_resource = d_resource.resource_improve d_resource (cons_member_term, wrap_intro d_cons_memberT)
+let d_resource = Mp_resource.improve d_resource (cons_member_term, wrap_intro d_cons_memberT)
 
 (*
  * -*-

@@ -119,7 +119,7 @@ let d_sallT i p =
 
 let sall_term = << "sall"{x. 'A['x]} >>
 
-let d_resource = d_resource.resource_improve d_resource (sall_term, d_sallT)
+let d_resource = Mp_resource.improve d_resource (sall_term, d_sallT)
 
 (*
  * Well-formedness.
@@ -133,7 +133,7 @@ let d_sall_typeT i p =
 
 let sall_type_term = << "type"{."sall"{x. 'A['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (sall_type_term, d_sall_typeT)
+let d_resource = Mp_resource.improve d_resource (sall_type_term, d_sall_typeT)
 
 (*
  * -*-

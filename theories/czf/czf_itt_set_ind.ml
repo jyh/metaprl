@@ -119,7 +119,7 @@ let d_set_ind_dfun_typeT i p =
 
 let set_ind_dfun_type_term = << "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f; 'x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_ind_dfun_type_term, d_set_ind_dfun_typeT)
+let d_resource = Mp_resource.improve d_resource (set_ind_dfun_type_term, d_set_ind_dfun_typeT)
 
 (*
  * Functionality.
@@ -139,7 +139,7 @@ let d_set_ind_dfun_funT i p =
 
 let set_ind_dfun_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'T; 'f; 'g; 'x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_ind_dfun_fun_term, d_set_ind_dfun_funT)
+let d_resource = Mp_resource.improve d_resource (set_ind_dfun_fun_term, d_set_ind_dfun_funT)
 
 (*
  * Typehood.
@@ -159,7 +159,7 @@ let d_set_ind_dprod_typeT i p =
 
 let set_ind_dprod_type_term = << "type"{set_ind{'s; T, f, g. x: 'T * 'B['f; 'x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_ind_dprod_type_term, d_set_ind_dprod_typeT)
+let d_resource = Mp_resource.improve d_resource (set_ind_dprod_type_term, d_set_ind_dprod_typeT)
 
 (*
  * Functionality.
@@ -179,7 +179,7 @@ let d_set_ind_dprod_funT i p =
 
 let set_ind_dprod_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'T; 'f; 'g; 'x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_ind_dprod_fun_term, d_set_ind_dprod_funT)
+let d_resource = Mp_resource.improve d_resource (set_ind_dprod_fun_term, d_set_ind_dprod_funT)
 
 (*
  * -*-

@@ -145,9 +145,9 @@ let eq_inner_term = << eq_inner{'s1; 's2} >>
 
 let eq_inner_equal_term = << eq_inner{'s1; 's2} = eq_inner{'s3; 's4} in univ[1:l] >>
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (eq_inner_term, eqcd_eq_innerT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (eq_inner_term, eqcd_eq_innerT)
 
-let d_resource = d_resource.resource_improve d_resource (eq_inner_equal_term, d_wrap_eqcd eqcd_eq_innerT)
+let d_resource = Mp_resource.improve d_resource (eq_inner_equal_term, d_wrap_eqcd eqcd_eq_innerT)
 
 (*
  * Typehood.
@@ -160,7 +160,7 @@ let d_eq_inner_typeT i p =
 
 let eq_inner_type_term = << "type"{eq_inner{'s1; 's2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_inner_type_term, d_eq_inner_typeT)
+let d_resource = Mp_resource.improve d_resource (eq_inner_type_term, d_eq_inner_typeT)
 
 (*
  * Equality relations.
@@ -178,7 +178,7 @@ let eqInnerTransT t p =
  * Always reasonable to try reflexivity.
  *)
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "eqInnerRefT";
         auto_prec = trivial_prec;
         auto_tac = auto_wrap eqInnerRefT

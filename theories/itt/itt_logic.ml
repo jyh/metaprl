@@ -535,16 +535,16 @@ let d_trueT i p =
    else
       raise (RefineError ("d_trueT", StringError "no elimination form (unfold it if you want to elim)"))
 
-let d_resource = d_resource.resource_improve d_resource (true_term, d_trueT)
+let d_resource = Mp_resource.improve d_resource (true_term, d_trueT)
 
 let eqcd_trueT p =
    true_univ (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (true_term, eqcd_trueT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (true_term, eqcd_trueT)
 
 let true_equal_term = << "true" = "true" in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (true_equal_term, d_wrap_eqcd eqcd_trueT)
+let d_resource = Mp_resource.improve d_resource (true_equal_term, d_wrap_eqcd eqcd_trueT)
 
 let d_true_typeT i p =
    if i = 0 then
@@ -554,7 +554,7 @@ let d_true_typeT i p =
 
 let true_type_term = << "type"{."true"} >>
 
-let d_resource = d_resource.resource_improve d_resource (true_type_term, d_true_typeT)
+let d_resource = Mp_resource.improve d_resource (true_type_term, d_true_typeT)
 
 (*
  * "False" tactics.
@@ -566,16 +566,16 @@ let d_falseT i p =
       let j, k = hyp_indices p i in
          false_elim j k p
 
-let d_resource = d_resource.resource_improve d_resource (false_term, d_falseT)
+let d_resource = Mp_resource.improve d_resource (false_term, d_falseT)
 
 let eqcd_falseT p =
    false_univ (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (false_term, eqcd_falseT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (false_term, eqcd_falseT)
 
 let false_equal_term = << "false" = "false" in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (false_equal_term, d_wrap_eqcd eqcd_falseT)
+let d_resource = Mp_resource.improve d_resource (false_equal_term, d_wrap_eqcd eqcd_falseT)
 
 let d_false_typeT i p =
    if i = 0 then
@@ -585,7 +585,7 @@ let d_false_typeT i p =
 
 let false_type_term = << "type"{."false"} >>
 
-let d_resource = d_resource.resource_improve d_resource (false_type_term, d_false_typeT)
+let d_resource = Mp_resource.improve d_resource (false_type_term, d_false_typeT)
 
 (*
  * Tactics for conjunction.
@@ -600,16 +600,16 @@ let d_notT i p =
       let j, k = hyp_indices p i in
          not_elim j k p
 
-let d_resource = d_resource.resource_improve d_resource (not_term, d_notT)
+let d_resource = Mp_resource.improve d_resource (not_term, d_notT)
 
 let eqcd_notT p =
    not_univ (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (not_term, eqcd_notT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (not_term, eqcd_notT)
 
 let not_equal_term = << "not"{'t1} = "not"{'t2} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (not_equal_term, d_wrap_eqcd eqcd_notT)
+let d_resource = Mp_resource.improve d_resource (not_equal_term, d_wrap_eqcd eqcd_notT)
 
 let d_not_typeT i p =
    if i = 0 then
@@ -619,7 +619,7 @@ let d_not_typeT i p =
 
 let not_type_term = << "type"{."not"{'t1}} >>
 
-let d_resource = d_resource.resource_improve d_resource (not_type_term, d_not_typeT)
+let d_resource = Mp_resource.improve d_resource (not_type_term, d_not_typeT)
 
 (*
  * Tactics for conjunction.
@@ -632,16 +632,16 @@ let d_andT i p =
       let j, k = hyp_indices p i in
          and_elim j k u v p
 
-let d_resource = d_resource.resource_improve d_resource (and_term, d_andT)
+let d_resource = Mp_resource.improve d_resource (and_term, d_andT)
 
 let eqcd_andT p =
    and_univ (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (and_term, eqcd_andT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (and_term, eqcd_andT)
 
 let and_equal_term = << "and"{'t1; 't2} = "and"{'t3; 't4} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (and_equal_term, d_wrap_eqcd eqcd_andT)
+let d_resource = Mp_resource.improve d_resource (and_equal_term, d_wrap_eqcd eqcd_andT)
 
 let d_and_typeT i p =
    if i = 0 then
@@ -651,7 +651,7 @@ let d_and_typeT i p =
 
 let and_type_term = << "type"{."and"{'t1; 't2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (and_type_term, d_and_typeT)
+let d_resource = Mp_resource.improve d_resource (and_type_term, d_and_typeT)
 
 (*
  * Tactics for disjunction.
@@ -673,16 +673,16 @@ let d_orT i p =
       let j, k = hyp_indices p i in
          or_elim j k v p
 
-let d_resource = d_resource.resource_improve d_resource (or_term, d_orT)
+let d_resource = Mp_resource.improve d_resource (or_term, d_orT)
 
 let eqcd_orT p =
    or_univ (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (or_term, eqcd_orT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (or_term, eqcd_orT)
 
 let or_equal_term = << "or"{'t1; 't2} = "or"{'t3; 't4} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (or_equal_term, d_wrap_eqcd eqcd_orT)
+let d_resource = Mp_resource.improve d_resource (or_equal_term, d_wrap_eqcd eqcd_orT)
 
 let d_or_typeT i p =
    if i = 0 then
@@ -692,7 +692,7 @@ let d_or_typeT i p =
 
 let or_type_term = << "type"{."or"{'t1; 't2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (or_type_term, d_or_typeT)
+let d_resource = Mp_resource.improve d_resource (or_type_term, d_or_typeT)
 
 (*
  * Tactics for conditional conjunction.
@@ -706,17 +706,17 @@ let d_candT i p =
       let j, k = hyp_indices p i in
          cand_elim j k u v p
 
-let d_resource = d_resource.resource_improve d_resource (cand_term, d_candT)
+let d_resource = Mp_resource.improve d_resource (cand_term, d_candT)
 
 let eqcd_candT p =
    let u = maybe_new_vars1 p "u" in
       cand_univ (hyp_count_addr p) u p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (cand_term, eqcd_candT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (cand_term, eqcd_candT)
 
 let cand_equal_term = << "cand"{'t1; 't2} = "cand"{'t3; 't4} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (cand_equal_term, d_wrap_eqcd eqcd_candT)
+let d_resource = Mp_resource.improve d_resource (cand_equal_term, d_wrap_eqcd eqcd_candT)
 
 let d_cand_typeT i p =
    if i = 0 then
@@ -727,7 +727,7 @@ let d_cand_typeT i p =
 
 let cand_type_term = << "type"{."cand"{'t1; 't2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (cand_type_term, d_cand_typeT)
+let d_resource = Mp_resource.improve d_resource (cand_type_term, d_cand_typeT)
 
 (*
  * Tactics for implication.
@@ -744,16 +744,16 @@ let d_impliesT i p =
           thenLT [addHiddenLabelT "antecedent";
                   addHiddenLabelT "main"]) p
 
-let d_resource = d_resource.resource_improve d_resource (implies_term, d_impliesT)
+let d_resource = Mp_resource.improve d_resource (implies_term, d_impliesT)
 
 let eqcd_impliesT p =
    implies_univ (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (implies_term, eqcd_impliesT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (implies_term, eqcd_impliesT)
 
 let implies_equal_term = << "implies"{'t1; 't2} = "implies"{'t3; 't4} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (implies_equal_term, d_wrap_eqcd eqcd_impliesT)
+let d_resource = Mp_resource.improve d_resource (implies_equal_term, d_wrap_eqcd eqcd_impliesT)
 
 let d_implies_typeT i p =
    if i = 0 then
@@ -763,7 +763,7 @@ let d_implies_typeT i p =
 
 let implies_type_term = << "type"{."implies"{'t1; 't2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (implies_type_term, d_implies_typeT)
+let d_resource = Mp_resource.improve d_resource (implies_type_term, d_implies_typeT)
 
 (*
  * Tactics for bi-implication.
@@ -776,16 +776,16 @@ let d_iffT i p =
       let j, k = hyp_indices p i in
          iff_elim j k u v p
 
-let d_resource = d_resource.resource_improve d_resource (iff_term, d_iffT)
+let d_resource = Mp_resource.improve d_resource (iff_term, d_iffT)
 
 let eqcd_iffT p =
    iff_univ (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (iff_term, eqcd_iffT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (iff_term, eqcd_iffT)
 
 let iff_equal_term = << "iff"{'t1; 't2} = "iff"{'t3; 't4} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (iff_equal_term, d_wrap_eqcd eqcd_iffT)
+let d_resource = Mp_resource.improve d_resource (iff_equal_term, d_wrap_eqcd eqcd_iffT)
 
 let d_iff_typeT i p =
    if i = 0 then
@@ -795,7 +795,7 @@ let d_iff_typeT i p =
 
 let iff_type_term = << "type"{."iff"{'t1; 't2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (iff_type_term, d_iff_typeT)
+let d_resource = Mp_resource.improve d_resource (iff_type_term, d_iff_typeT)
 
 (*
  * Special elimination case for all.
@@ -818,7 +818,7 @@ let d_allT i p =
 
 let all_term = << all a: 'A. 'B['a] >>
 
-let d_resource = d_resource.resource_improve d_resource (all_term, d_allT)
+let d_resource = Mp_resource.improve d_resource (all_term, d_allT)
 
 let eqcd_allT p =
    let goal = Sequent.concl p in
@@ -827,11 +827,11 @@ let eqcd_allT p =
    let v = maybe_new_vars1 p v in
       (all_univ (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (all_term, eqcd_allT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (all_term, eqcd_allT)
 
 let all_equal_term = << (all x1: 't1. 'b1['x1]) = (all x2: 't2. 'b2['t2]) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (all_equal_term, d_wrap_eqcd eqcd_allT)
+let d_resource = Mp_resource.improve d_resource (all_equal_term, d_wrap_eqcd eqcd_allT)
 
 let d_all_typeT i p =
    if i = 0 then
@@ -845,7 +845,7 @@ let d_all_typeT i p =
 
 let all_type_term = << "type"{."all"{'t1; x. 't2['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (all_type_term, d_all_typeT)
+let d_resource = Mp_resource.improve d_resource (all_type_term, d_all_typeT)
 
 (*
  * Existential.
@@ -869,7 +869,7 @@ let d_existsT i p =
 
 let exists_term = << exst a: 'A. 'B['a] >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_term, d_existsT)
+let d_resource = Mp_resource.improve d_resource (exists_term, d_existsT)
 
 let eqcd_existsT p =
    let goal = Sequent.concl p in
@@ -878,11 +878,11 @@ let eqcd_existsT p =
    let v = maybe_new_vars1 p v in
       (exists_univ (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (exists_term, eqcd_existsT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (exists_term, eqcd_existsT)
 
 let exists_equal_term = << (exst x1: 't1. 'b1['x1]) = (exst x2: 't2. 'b2['t2]) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_equal_term, d_wrap_eqcd eqcd_existsT)
+let d_resource = Mp_resource.improve d_resource (exists_equal_term, d_wrap_eqcd eqcd_existsT)
 
 let d_exists_typeT i p =
    if i = 0 then
@@ -896,7 +896,7 @@ let d_exists_typeT i p =
 
 let exists_type_term = << "type"{."exists"{'t1; x. 't2['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_type_term, d_exists_typeT)
+let d_resource = Mp_resource.improve d_resource (exists_type_term, d_exists_typeT)
 
 (*
  * Squash elimination.
@@ -913,8 +913,8 @@ let squash_falseT p =
  *)
 let inf_univ1 _ decl _ = decl, univ1_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (true_term, inf_univ1)
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (false_term, inf_univ1)
+let typeinf_resource = Mp_resource.improve typeinf_resource (true_term, inf_univ1)
+let typeinf_resource = Mp_resource.improve typeinf_resource (false_term, inf_univ1)
 
 (*
  * Type of quantifiers.
@@ -926,8 +926,8 @@ let inf_d dest f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (all_term, inf_d dest_all)
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (exists_term, inf_d dest_exists)
+let typeinf_resource = Mp_resource.improve typeinf_resource (all_term, inf_d dest_all)
+let typeinf_resource = Mp_resource.improve typeinf_resource (exists_term, inf_d dest_exists)
 
 (*
  * Type of propositions.
@@ -939,10 +939,10 @@ let inf_nd dest f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (or_term, inf_nd dest_or)
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (and_term, inf_nd dest_and)
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (implies_term, inf_nd dest_implies)
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (iff_term, inf_nd dest_iff)
+let typeinf_resource = Mp_resource.improve typeinf_resource (or_term, inf_nd dest_or)
+let typeinf_resource = Mp_resource.improve typeinf_resource (and_term, inf_nd dest_and)
+let typeinf_resource = Mp_resource.improve typeinf_resource (implies_term, inf_nd dest_implies)
+let typeinf_resource = Mp_resource.improve typeinf_resource (iff_term, inf_nd dest_iff)
 
 (*
  * Type of all.
@@ -951,7 +951,7 @@ let inf_not f decl t =
    let a = dest_not t in
       f decl a
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_term, inf_not)
+let typeinf_resource = Mp_resource.improve typeinf_resource (not_term, inf_not)
 
 (************************************************************************
  * AUTOMATION                                                           *
@@ -1318,7 +1318,7 @@ let logic_trivT i p =
          raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp)))
 
 let trivial_resource =
-   trivial_resource.resource_improve trivial_resource (**)
+   Mp_resource.improve trivial_resource (**)
       { auto_name = "logic_trivT";
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT logic_trivT
@@ -1343,14 +1343,14 @@ let back_hyp_prec = create_auto_prec [logic_prec] []
 let back_assum_prec = create_auto_prec [back_hyp_prec] []
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "logic_autoT";
         auto_prec = logic_prec;
         auto_tac = auto_wrap (onSomeHypT logic_autoT)
       }
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "backThruHypT";
         auto_prec = back_hyp_prec;
         auto_tac = auto_hyp_progress (fun _ _ -> true) backThruHypT
@@ -1370,7 +1370,7 @@ let assum_test i p =
          false
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "backThruSomeAssumT";
         auto_prec = back_assum_prec;
         auto_tac = auto_assum_progress assum_test backThruAssumT

@@ -55,7 +55,7 @@ let assertT t p =
  * Add to trivialT tactic.
  *)
 let trivial_resource =
-   trivial_resource.resource_improve trivial_resource (**)
+   Mp_resource.improve trivial_resource (**)
       { auto_name = "nthHypT";
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT nthHypT

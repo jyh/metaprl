@@ -243,105 +243,45 @@ let extract compile info =
       compile tactics
 
 (*
- * Keep a list of resources for lookup by the toploop.
- *)
-let trivial_resources = ref []
-let auto_resources = ref []
-
-let save resources name rsrc =
-   resources := (name, rsrc) :: !resources
-
-let get_resource resources name =
-   let rec search = function
-      (name', rsrc) :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | [] ->
-         raise Not_found
-   in
-      search !resources
-
-let get_trivial_resource = get_resource trivial_resources
-let get_auto_resource = get_resource auto_resources
-
-(*
  * Wrap up the joiner.
  *)
-let rec join_resource
-    { resource_data = data1;
-      resource_join = join_resource;
-      resource_extract = extract_resource;
-      resource_improve = improve_resource;
-      resource_close = close_resource
-    }
-    { resource_data = data2 } =
-   { resource_data = Join (data1, data2);
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let join_resource data1 data2 =
+   Join (data1, data2)
 
-and improve_resource
-    { resource_data = data;
-      resource_join = join_resource;
-      resource_extract = extract_resource;
-      resource_improve = improve_resource;
-      resource_close = close_resource
-    } info =
+let improve_resource data info =
    if !debug_auto then
       eprintf "Base_auto_tactic.improve_resource: adding %s%t" info.auto_name eflush;
-   { resource_data = Tactic (info, data);
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   Tactic (info, data)
 
-and close_resource resources rsrc modname =
-   let { resource_data = data;
-         resource_join = join_resource;
-         resource_extract = extract_resource;
-         resource_improve = improve_resource;
-         resource_close = close_resource
-       } = rsrc in
-   let rsrc =
-      { resource_data = Label data;
-        resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_close = close_resource
-      }
-   in
-      save resources modname rsrc;
-      rsrc
+let close_resource data modname =
+   Label data
 
 (*
  * Resource.
  *)
-let extract_triv_resource { resource_data = data } =
+let extract_triv_resource data =
    extract compileTrivialT data
 
 let trivial_resource =
-   { resource_data = Empty;
-     resource_join = join_resource;
-     resource_extract = extract_triv_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource trivial_resources
-   }
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_triv_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+      Empty
 
-let extract_auto_resource { resource_data = data } =
+let extract_auto_resource data =
    extract compileAutoT data
 
 let auto_resource =
-   { resource_data = Empty;
-     resource_join = join_resource;
-     resource_extract = extract_auto_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource auto_resources
-   }
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_auto_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+      Empty
 
 (*
  * Create a precedence.
@@ -355,20 +295,11 @@ let create_auto_prec before after =
 (*
  * Remove all tactics with a given precedence.
  *)
-let remove_auto_tactic auto_data node =
-   let { resource_data = items;
-         resource_join = join_resource;
-         resource_extract = extract_resource;
-         resource_improve = improve_resource;
-         resource_close = close_resource
-       } = auto_data
+let remove_auto_tactic auto_rsrc node =
+   let wrap items =
+      Remove (node, items)
    in
-      { resource_data = Remove (node, items);
-        resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_close = close_resource
-      }
+      Mp_resource.wrap auto_rsrc wrap
 
 (*
  * Wrap a regular tactic.
@@ -467,21 +398,27 @@ let trivial_prec = create_auto_prec [] []
  * Some trivial tactics.
  *)
 let trivial_resource =
-   trivial_resource.resource_improve trivial_resource (**)
+   Mp_resource.improve trivial_resource (**)
       { auto_name = "nthAssumT";
         auto_prec = trivial_prec;
         auto_tac = onSomeAssumT nthAssumT
       }
 
+let get_trivial_resource modname =
+   Mp_resource.find trivial_resource modname
+
 (*
  * Auto tactic includes trivialT.
  *)
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "trivial";
         auto_prec = trivial_prec;
         auto_tac = auto_wrap trivialT
       }
+
+let get_auto_resource modname =
+   Mp_resource.find auto_resource modname
 
 (*
  * The inherited auto tactic.

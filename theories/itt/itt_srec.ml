@@ -228,7 +228,7 @@ let d_srecT i p =
 
 let srec_term = << srec{T. 'B['T]} >>
 
-let d_resource = d_resource.resource_improve d_resource (srec_term, d_srecT)
+let d_resource = Mp_resource.improve d_resource (srec_term, d_srecT)
 
 let d_srec_typeT i p =
    if i = 0 then
@@ -239,7 +239,7 @@ let d_srec_typeT i p =
 
 let srec_type_term = << "type"{srec{T.'B['T]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (srec_type_term, d_srec_typeT)
+let d_resource = Mp_resource.improve d_resource (srec_type_term, d_srec_typeT)
 
 (*
  * Eqcd.
@@ -247,11 +247,11 @@ let d_resource = d_resource.resource_improve d_resource (srec_type_term, d_srec_
 let eqcd_srecT p =
    srec_memberEquality (Sequent.hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (srec_term, eqcd_srecT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (srec_term, eqcd_srecT)
 
 let srec_equal_term = << 't1 = 't2 in srec{T. 'B['T]} >>
 
-let d_resource = d_resource.resource_improve d_resource (srec_equal_term, d_wrap_eqcd eqcd_srecT)
+let d_resource = Mp_resource.improve d_resource (srec_equal_term, d_wrap_eqcd eqcd_srecT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -264,7 +264,7 @@ let inf_srec f decl t =
    let a, body = dest_srec t in
       f (add_unify_subst a void_term decl) body
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srec_term, inf_srec)
+let typeinf_resource = Mp_resource.improve typeinf_resource (srec_term, inf_srec)
 
 (*
  * Type of srecind.
@@ -275,7 +275,7 @@ let inf_srecind f decl t =
    let decl', a' = f decl a in
       f (add_unify_subst p a' (add_unify_subst h a' decl')) g
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srecind_term, inf_srecind)
+let typeinf_resource = Mp_resource.improve typeinf_resource (srecind_term, inf_srecind)
 
 (*
  * -*-

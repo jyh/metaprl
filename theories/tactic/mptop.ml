@@ -123,61 +123,19 @@ let collect_table data =
       hash
 
 (*
- * Keep a list of labeled resources for lookup
- * by the toploop.
- *)
-let resources = ref []
-
-let save data =
-   resources := data :: !resources
-
-let get_resource name =
-   let rec search = function
-      { resource_data = Label (name', _) } as rsrc :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | _ :: tl ->
-         search tl
-    | [] ->
-         raise Not_found
-   in
-      search !resources
-
-(*
  * Wrap up the joiner.
  *)
-let rec join_resource { resource_data = base1 } { resource_data = base2 } =
-   { resource_data = Join (base1, base2);
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let join_resource base1 base2 =
+   Join (base1, base2)
 
-and extract_resource { resource_data = data } =
+let extract_resource data =
    collect_table data
 
-and improve_resource { resource_data = data } (name, expr) =
-   { resource_data = Expr (name, expr, data);
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let improve_resource data (name, expr) =
+   Expr (name, expr, data)
 
-and close_resource { resource_data = data } mod_name =
-   let rsrc =
-      { resource_data = Label (String.capitalize mod_name, data);
-        resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_close = close_resource
-      }
-   in
-      save rsrc;
-      rsrc
+let close_resource data mod_name =
+   Label (String.capitalize mod_name, data)
 
 (************************************************************************
  * COMPILING                                                            *
@@ -471,6 +429,8 @@ and mk_expr base expr =
             not_supported loc "while"
        | MLast.ExAnt (_, e) ->
             not_supported loc "ExAnt"
+       | MLast.ExXnd (_, _, e) ->
+            mk_expr base e
 
 and mk_patt base patt =
    let loc = loc_of_patt patt in
@@ -507,6 +467,8 @@ and mk_patt base patt =
             not_supported loc "pattern uid"
        | MLast.PaAnt (_, p) ->
             not_supported loc "pattern PaAnt"
+       | MLast.PaXnd _ ->
+            not_supported loc "patterm PaXnd"
 
 and mk_type base t =
    let loc = loc_of_ctyp t in
@@ -545,6 +507,8 @@ and mk_type base t =
             not_supported loc "type product"
        | (<:ctyp< $uid:s$ >>) ->
             not_supported loc "type constructor var"
+       | MLast.TyXnd (_, _, t) ->
+            mk_type base t
 
 and mk_sig_item base si =
    let loc = loc_of_sig_item si in
@@ -680,26 +644,16 @@ let rec add_resources base = function
       base
 
 let toploop_resource =
-   { resource_data = add_resources Empty values;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+      (add_resources Empty values)
 
-let toploop_add
-    { resource_data = data;
-      resource_join = join_resource;
-      resource_extract = extract_resource;
-      resource_improve = improve_resource;
-      resource_close = close_resource
-    } values =
-   { resource_data = add_resources data values;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+let get_resource modname =
+   Mp_resource.find toploop_resource modname
 
 let expr_of_ocaml_expr = mk_expr
 let expr_of_ocaml_str_item = mk_str_item

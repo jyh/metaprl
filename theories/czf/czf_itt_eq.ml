@@ -282,7 +282,7 @@ let d_fun_set_typeT i p =
 
 let fun_set_type_term = << "type"{fun_set{z. 'f['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_set_type_term, d_fun_set_typeT)
+let d_resource = Mp_resource.improve d_resource (fun_set_type_term, d_fun_set_typeT)
 
 let d_fun_prop_typeT i p =
    if i = 0 then
@@ -292,7 +292,7 @@ let d_fun_prop_typeT i p =
 
 let fun_prop_type_term = << "type"{fun_prop{z. 'f['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_prop_type_term, d_fun_prop_typeT)
+let d_resource = Mp_resource.improve d_resource (fun_prop_type_term, d_fun_prop_typeT)
 
 (*
  * Equality of inner equality.
@@ -310,9 +310,9 @@ let eq_inner_term = << eq_inner{'s1; 's2} >>
 
 let eq_inner_equal_term = << eq_inner{'s1; 's2} = eq_inner{'s3; 's4} in univ[1:l] >>
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (eq_inner_term, eqcd_eq_innerT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (eq_inner_term, eqcd_eq_innerT)
 
-let d_resource = d_resource.resource_improve d_resource (eq_inner_equal_term, d_wrap_eqcd eqcd_eq_innerT)
+let d_resource = Mp_resource.improve d_resource (eq_inner_equal_term, d_wrap_eqcd eqcd_eq_innerT)
 
 (*
  * Typehood.
@@ -325,7 +325,7 @@ let d_eq_inner_typeT i p =
 
 let eq_inner_type_term = << "type"{eq_inner{'s1; 's2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_inner_type_term, d_eq_inner_typeT)
+let d_resource = Mp_resource.improve d_resource (eq_inner_type_term, d_eq_inner_typeT)
 
 (*
  * Functionality.
@@ -338,7 +338,7 @@ let d_eq_inner_funT i p =
 
 let eq_inner_fun_term = << fun_prop{z. eq_inner{'s1['z]; 's2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_inner_fun_term, d_eq_inner_funT)
+let d_resource = Mp_resource.improve d_resource (eq_inner_fun_term, d_eq_inner_funT)
 
 (*
  * Equality typehood.
@@ -351,7 +351,7 @@ let d_eq_typeT i p =
 
 let eq_type_term = << "type"{eq{'s1; 's2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_type_term, d_eq_typeT)
+let d_resource = Mp_resource.improve d_resource (eq_type_term, d_eq_typeT)
 
 (*
  * Functionality.
@@ -364,7 +364,7 @@ let d_eq_funT i p =
 
 let eq_fun_term = << fun_prop{z. eq{'s1['z]; 's2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_fun_term, d_eq_funT)
+let d_resource = Mp_resource.improve d_resource (eq_fun_term, d_eq_funT)
 
 (*
  * Unquantified sets.
@@ -393,7 +393,7 @@ let d_fun_setT i p =
 
 let fun_set_term = << fun_set{z. 'u} >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_set_term, d_fun_setT)
+let d_resource = Mp_resource.improve d_resource (fun_set_term, d_fun_setT)
 
 let d_fun_propT i p =
    if i = 0 then
@@ -408,7 +408,7 @@ let d_fun_propT i p =
 
 let fun_prop_term = << fun_prop{z. 'P} >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_prop_term, d_fun_propT)
+let d_resource = Mp_resource.improve d_resource (fun_prop_term, d_fun_propT)
 
 (*
  * Substitution.
@@ -465,7 +465,7 @@ let eqSetRightT t p =
  * Always reasonable to try reflexivity.
  *)
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "eqSetRefT";
         auto_prec = trivial_prec;
         auto_tac = auto_wrap eqSetRefT

@@ -29,7 +29,7 @@ let d_true_type i p =
 
 let true_type_term = << "type"{."true"} >>
 
-let d_resource = d_resource.resource_improve d_resource (true_type_term, d_true_type)
+let d_resource = Mp_resource.improve d_resource (true_type_term, d_true_type)
 
 let d_true i p =
    if i = 0 then
@@ -39,7 +39,7 @@ let d_true i p =
 
 let true_term = << "true" >>
 
-let d_resource = d_resource.resource_improve d_resource (true_term, d_true)
+let d_resource = Mp_resource.improve d_resource (true_term, d_true)
 
 (*
  * -*-

@@ -227,7 +227,7 @@ let d_funT i =
    else
       d_hyp_fun i
 
-let d_resource = d_resource.resource_improve d_resource (fun_term, d_funT)
+let d_resource = Mp_resource.improve d_resource (fun_term, d_funT)
 
 (*
  * Typehood.
@@ -242,7 +242,7 @@ let d_fun_typeT i p =
 
 let fun_type_term = << "type"{. 'A -> 'B } >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_type_term, d_fun_typeT)
+let d_resource = Mp_resource.improve d_resource (fun_type_term, d_fun_typeT)
 
 (************************************************************************
  * EQCD TACTIC                                                          *
@@ -256,11 +256,11 @@ let eqcd_funT p =
       (independentFunctionEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (fun_term, eqcd_funT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (fun_term, eqcd_funT)
 
 let fun_equal_term = << ('A1 -> 'A2) = ('B1 -> 'B2) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_equal_term, d_wrap_eqcd eqcd_funT)
+let d_resource = Mp_resource.improve d_resource (fun_equal_term, d_wrap_eqcd eqcd_funT)
 
 (*
  * Apply equality.
@@ -286,7 +286,7 @@ let eqcd_applyT p =
 
 let apply_equal_term = << ('f1 'a1) = ('f2 'a2) in 'T >>
 
-let d_resource = d_resource.resource_improve d_resource (apply_equal_term, d_wrap_eqcd eqcd_applyT)
+let d_resource = Mp_resource.improve d_resource (apply_equal_term, d_wrap_eqcd eqcd_applyT)
 
 (*
  * Typehood of application depends on the ability to infer a type.
@@ -318,7 +318,7 @@ let d_apply_typeT i p =
 
 let apply_type_term = << "type"{. 'f 'a} >>
 
-let d_resource = d_resource.resource_improve d_resource (apply_type_term, d_apply_typeT)
+let d_resource = Mp_resource.improve d_resource (apply_type_term, d_apply_typeT)
 
 (*
  * Lambda equality.
@@ -338,15 +338,15 @@ let eqcd_lambdaT p =
    in
       (tac thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (lambda_term, eqcd_lambdaT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (lambda_term, eqcd_lambdaT)
 
 let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in x3: 'A -> 'B['x3] >>
 
-let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
+let d_resource = Mp_resource.improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
 
 let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in 'A -> 'B >>
 
-let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
+let d_resource = Mp_resource.improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -362,7 +362,7 @@ let inf_fun f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (fun_term, inf_fun)
+let typeinf_resource = Mp_resource.improve typeinf_resource (fun_term, inf_fun)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -376,7 +376,7 @@ let fun_subtypeT p =
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (DSubtype ([<< 'A1 -> 'B1 >>, << 'A2 -> 'B2 >>;
                << 'A2 >>, << 'A1 >>;

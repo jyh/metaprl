@@ -124,7 +124,7 @@ let d_dprod_funT i p =
 
 let dprod_fun_term = << fun_prop{z. "prod"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dprod_fun_term, d_dprod_funT)
+let d_resource = Mp_resource.improve d_resource (dprod_fun_term, d_dprod_funT)
 
 (*
  * Restricted.
@@ -138,7 +138,7 @@ let d_dprod_resT i p =
 
 let dprod_res_term = << restricted{z. "prod"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dprod_res_term, d_dprod_resT)
+let d_resource = Mp_resource.improve d_resource (dprod_res_term, d_dprod_resT)
 
 (*
  * Functionality.
@@ -152,7 +152,7 @@ let d_exists_funT i p =
 
 let exists_fun_term = << fun_prop{z. "exists"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_fun_term, d_exists_funT)
+let d_resource = Mp_resource.improve d_resource (exists_fun_term, d_exists_funT)
 
 (*
  * Restricted.
@@ -166,7 +166,7 @@ let d_exists_resT i p =
 
 let exists_res_term = << restricted{z. "exists"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_res_term, d_exists_resT)
+let d_resource = Mp_resource.improve d_resource (exists_res_term, d_exists_resT)
 
 (*
  * -*-

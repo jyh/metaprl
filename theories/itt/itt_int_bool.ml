@@ -125,7 +125,7 @@ let d_eq_int_wfT p =
 
 let eq_int_wf_term = << member{bool; eq_int{'i; 'j}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_int_wf_term, wrap_intro d_eq_int_wfT)
+let d_resource = Mp_resource.improve d_resource (eq_int_wf_term, wrap_intro d_eq_int_wfT)
 
 (*
  * Equality.
@@ -139,7 +139,7 @@ let d_eq_int_assertT i p =
 
 let eq_int_assert_term = << "assert"{eq_int{'v1; 'v2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_int_assert_term, d_eq_int_assertT)
+let d_resource = Mp_resource.improve d_resource (eq_int_assert_term, d_eq_int_assertT)
 
 (*
  * -*-

@@ -318,7 +318,7 @@ let d_quotientT i =
    else
       d_hyp_quotient i
 
-let d_resource = d_resource.resource_improve d_resource (quotient_term, d_quotientT)
+let d_resource = Mp_resource.improve d_resource (quotient_term, d_quotientT)
 
 (*
  * EQCD.
@@ -331,11 +331,11 @@ let eqcd_quotientT p =
              thenT addHiddenLabelT "wf"
         | _ -> failT) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (quotient_term, eqcd_quotientT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (quotient_term, eqcd_quotientT)
 
 let quotient_equal_term = << (quot x1, y1: 'A1 // 'E1['x; 'y]) = (quot x2, y2: 'A2 // 'E2['x1; 'x2]) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (quotient_equal_term, d_wrap_eqcd eqcd_quotientT)
+let d_resource = Mp_resource.improve d_resource (quotient_equal_term, d_wrap_eqcd eqcd_quotientT)
 
 (*
  * Typehood.
@@ -354,7 +354,7 @@ let d_quotient_typeT i p =
 
 let quotient_type_term = << "type"{.quot x, y: 'A // 'E['x; 'y]} >>
 
-let d_resource = d_resource.resource_improve d_resource (quotient_type_term, d_quotient_typeT)
+let d_resource = Mp_resource.improve d_resource (quotient_type_term, d_quotient_typeT)
 
 (*
  * Membership in a quotient type.
@@ -371,9 +371,9 @@ let quotient_member_equal_term = << 'x = 'y in quot u, v: 'A // 'E['u; 'v] >>
 
 let quotient_member_term = << member{(quot u, v: 'A // 'E['u; 'v]); 'x} >>
 
-let d_resource = d_resource.resource_improve d_resource (quotient_member_equal_term, d_wrap_eqcd eqcd_quotient_equalT)
+let d_resource = Mp_resource.improve d_resource (quotient_member_equal_term, d_wrap_eqcd eqcd_quotient_equalT)
 
-let d_resource = d_resource.resource_improve d_resource (quotient_member_term, d_wrap_eqcd eqcd_quotient_memberT)
+let d_resource = Mp_resource.improve d_resource (quotient_member_term, d_wrap_eqcd eqcd_quotient_memberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -389,7 +389,7 @@ let inf_quotient f decl t =
    let le1, le2 = dest_univ a', dest_univ e' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (quotient_term, inf_quotient)
+let typeinf_resource = Mp_resource.improve typeinf_resource (quotient_term, inf_quotient)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -410,7 +410,7 @@ let quotient_subtypeT p =
      | _ -> failT) p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (DSubtype ([<< quot x1, y1: 'A1 // 'E1['x1; 'y1] >>, << quot x2, y2: 'A2 // 'E2['x2; 'y2] >>;
                << 'A1 >>, << 'A2 >>],

@@ -110,7 +110,7 @@ let d_prod_funT i p =
 
 let prod_fun_term = << fun_prop{z. "prod"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (prod_fun_term, d_prod_funT)
+let d_resource = Mp_resource.improve d_resource (prod_fun_term, d_prod_funT)
 
 (*
  * Restricted.
@@ -124,7 +124,7 @@ let d_prod_resT i p =
 
 let prod_res_term = << restricted{z. "prod"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (prod_res_term, d_prod_resT)
+let d_resource = Mp_resource.improve d_resource (prod_res_term, d_prod_resT)
 
 (*
  * Restricted.
@@ -138,7 +138,7 @@ let d_and_funT i p =
 
 let and_fun_term = << fun_prop{z. "and"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (and_fun_term, d_and_funT)
+let d_resource = Mp_resource.improve d_resource (and_fun_term, d_and_funT)
 
 (*
  * Restricted.
@@ -152,7 +152,7 @@ let d_and_resT i p =
 
 let and_res_term = << restricted{z. "and"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (and_res_term, d_and_resT)
+let d_resource = Mp_resource.improve d_resource (and_res_term, d_and_resT)
 
 (*
  * -*-

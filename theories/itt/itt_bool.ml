@@ -457,7 +457,7 @@ let d_boolT i p =
            thenLT [addHiddenLabelT "true case";
                    addHiddenLabelT "false case"]) p
 
-let d_resource = d_resource.resource_improve d_resource (bool_term, d_boolT)
+let d_resource = Mp_resource.improve d_resource (bool_term, d_boolT)
 
 let d_bool_hideT i p =
    if i = 0 then
@@ -471,7 +471,7 @@ let d_bool_hideT i p =
 
 let bool_hide_term = << hide{bool} >>
 
-let d_resource = d_resource.resource_improve d_resource (bool_hide_term, d_bool_hideT)
+let d_resource = Mp_resource.improve d_resource (bool_hide_term, d_bool_hideT)
 
 let d_bool_typeT i p =
    if i = 0 then
@@ -481,7 +481,7 @@ let d_bool_typeT i p =
 
 let bool_type_term = << "type"{bool} >>
 
-let d_resource = d_resource.resource_improve d_resource (bool_type_term, d_bool_typeT)
+let d_resource = Mp_resource.improve d_resource (bool_type_term, d_bool_typeT)
 
 (*
  * EqCD.
@@ -498,17 +498,17 @@ let eqcd_bfalseT p =
    let count = Sequent.hyp_count_addr p in
       bool_falseEquality count p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (bool_term, eqcd_boolT)
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (btrue_term, eqcd_btrueT)
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (bfalse_term, eqcd_bfalseT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (bool_term, eqcd_boolT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (btrue_term, eqcd_btrueT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (bfalse_term, eqcd_bfalseT)
 
 let bool_equal_term = << bool = bool in univ[@i:l] >>
 let btrue_equal_term = << btrue = btrue in bool >>
 let bfalse_equal_term = << bfalse = bfalse in bool >>
 
-let d_resource = d_resource.resource_improve d_resource (bool_equal_term, d_wrap_eqcd eqcd_boolT)
-let d_resource = d_resource.resource_improve d_resource (btrue_equal_term, d_wrap_eqcd eqcd_btrueT)
-let d_resource = d_resource.resource_improve d_resource (bfalse_equal_term, d_wrap_eqcd eqcd_bfalseT)
+let d_resource = Mp_resource.improve d_resource (bool_equal_term, d_wrap_eqcd eqcd_boolT)
+let d_resource = Mp_resource.improve d_resource (btrue_equal_term, d_wrap_eqcd eqcd_btrueT)
+let d_resource = Mp_resource.improve d_resource (bfalse_equal_term, d_wrap_eqcd eqcd_bfalseT)
 
 let extBoolT p =
    let v = maybe_new_vars1 p "u" in
@@ -532,7 +532,7 @@ let member_info =
 let d_resource =
    let rec add_info dr = function
       (t, tac) :: tl ->
-         add_info (dr.resource_improve dr (t, wrap_intro_addr tac)) tl
+         add_info (Mp_resource.improve dr (t, wrap_intro_addr tac)) tl
     | [] ->
          dr
    in
@@ -544,7 +544,7 @@ let d_ifthenelse_memberT p =
 
 let ifthenelse_member_term = << member{'T; ifthenelse{'e1; 'e2; 'e3}} >>
 
-let d_resource = d_resource.resource_improve d_resource (ifthenelse_member_term, wrap_intro d_ifthenelse_memberT)
+let d_resource = Mp_resource.improve d_resource (ifthenelse_member_term, wrap_intro d_ifthenelse_memberT)
 
 (*
  * Assertions.
@@ -619,7 +619,7 @@ let assert_info =
 let d_resource =
    let rec add_info dr = function
       (t, tac) :: tl ->
-         add_info (dr.resource_improve dr (t, tac)) tl
+         add_info (Mp_resource.improve dr (t, tac)) tl
     | [] ->
          dr
    in
@@ -638,7 +638,7 @@ let d_ifthenelse_typeT i p =
 
 let ifthenelse_type_term = << "type"{ifthenelse{'e1; 'e2; 'e3}} >>
 
-let d_resource = d_resource.resource_improve d_resource (ifthenelse_type_term, d_ifthenelse_typeT)
+let d_resource = Mp_resource.improve d_resource (ifthenelse_type_term, d_ifthenelse_typeT)
 
 let eqcd_ifthenelseT p =
    let v = maybe_new_vars1 p "v" in
@@ -647,11 +647,11 @@ let eqcd_ifthenelseT p =
 
 let ifthenelse_term = << ifthenelse{'e1; 'e2; 'e3} >>
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (ifthenelse_term, eqcd_ifthenelseT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (ifthenelse_term, eqcd_ifthenelseT)
 
 let ifthenelse_equal_term = << ifthenelse{'a1; 'b1; 'c1} = ifthenelse{'a2; 'b2; 'c2} in 'T >>
 
-let d_resource = d_resource.resource_improve d_resource (ifthenelse_equal_term, d_wrap_eqcd eqcd_ifthenelseT)
+let d_resource = Mp_resource.improve d_resource (ifthenelse_equal_term, d_wrap_eqcd eqcd_ifthenelseT)
 
 (*
  * Contradiction.
@@ -673,8 +673,8 @@ let d_bool_contradiction2T i p =
 let bool_contradiction1_term = << btrue = bfalse in bool >>
 let bool_contradiction2_term = << bfalse = btrue in bool >>
 
-let d_resource = d_resource.resource_improve d_resource (bool_contradiction1_term, d_bool_contradiction1T)
-let d_resource = d_resource.resource_improve d_resource (bool_contradiction2_term, d_bool_contradiction2T)
+let d_resource = Mp_resource.improve d_resource (bool_contradiction1_term, d_bool_contradiction1T)
+let d_resource = Mp_resource.improve d_resource (bool_contradiction2_term, d_bool_contradiction2T)
 
 (*
  * Assertions.
@@ -684,7 +684,7 @@ let d_true_typeT p =
 
 let true_type_term = << "type"{."assert"{'T}} >>
 
-let d_resource = d_resource.resource_improve d_resource (true_type_term, wrap_intro d_true_typeT)
+let d_resource = Mp_resource.improve d_resource (true_type_term, wrap_intro d_true_typeT)
 
 (************************************************************************
  * BOOL SPLITTING                                                       *
@@ -704,10 +704,10 @@ let bool_sqequal_term2 = << Perv!"rewrite"{'e; bfalse} >>
 let bool_sqequal_term3 = << Perv!"rewrite"{btrue; 'e} >>
 let bool_sqequal_term4 = << Perv!"rewrite"{bfalse; 'e} >>
 
-let d_resource = d_resource.resource_improve d_resource (bool_sqequal_term1, d_bool_sqequalT)
-let d_resource = d_resource.resource_improve d_resource (bool_sqequal_term2, d_bool_sqequalT)
-let d_resource = d_resource.resource_improve d_resource (bool_sqequal_term3, d_bool_sqequalT)
-let d_resource = d_resource.resource_improve d_resource (bool_sqequal_term4, d_bool_sqequalT)
+let d_resource = Mp_resource.improve d_resource (bool_sqequal_term1, d_bool_sqequalT)
+let d_resource = Mp_resource.improve d_resource (bool_sqequal_term2, d_bool_sqequalT)
+let d_resource = Mp_resource.improve d_resource (bool_sqequal_term3, d_bool_sqequalT)
+let d_resource = Mp_resource.improve d_resource (bool_sqequal_term4, d_bool_sqequalT)
 
 (*
  * Split a bool in the conclusion.
@@ -859,7 +859,7 @@ let splitITE i p =
  *)
 let inf_bool _ decl _ = decl, univ1_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (bool_term, inf_bool)
+let typeinf_resource = Mp_resource.improve typeinf_resource (bool_term, inf_bool)
 
 (*
  * Type of an equality is the type of the equality type.
@@ -867,8 +867,8 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (bool_
 let inf_btrue _ decl _ = decl, bool_term
 let inf_bfalse _ decl _ = decl, bool_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (btrue_term, inf_btrue)
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (bfalse_term, inf_bfalse)
+let typeinf_resource = Mp_resource.improve typeinf_resource (btrue_term, inf_btrue)
+let typeinf_resource = Mp_resource.improve typeinf_resource (bfalse_term, inf_bfalse)
 
 (************************************************************************
  * AUTO TACTIC                                                          *
@@ -886,7 +886,7 @@ let squash_assertT p =
       assertSquashElim (Sequent.hyp_count_addr p) p
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "bool_squash_assertT";
         auto_prec = trivial_prec;
         auto_tac = auto_wrap squash_assertT

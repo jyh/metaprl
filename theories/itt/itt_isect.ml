@@ -220,7 +220,7 @@ let d_isectT i =
    else
       d_hyp_isect i
 
-let d_resource = d_resource.resource_improve d_resource (isect_term, d_isectT)
+let d_resource = Mp_resource.improve d_resource (isect_term, d_isectT)
 
 (*
  * Typehood.
@@ -238,7 +238,7 @@ let d_isect_typeT i p =
 
 let isect_type_term = << "type"{."isect"{'A; x. 'B['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (isect_type_term, d_isect_typeT)
+let d_resource = Mp_resource.improve d_resource (isect_type_term, d_isect_typeT)
 
 (*
  * Membership.
@@ -256,7 +256,7 @@ let d_isect_memT i p =
 
 let isect_mem_term = << 'x = 'y in "isect"{'A; z. 'B['z]} >>
 
-let d_resource = d_resource.resource_improve d_resource (isect_mem_term, d_isect_memT)
+let d_resource = Mp_resource.improve d_resource (isect_mem_term, d_isect_memT)
 
 (*
  * EQCD.
@@ -267,11 +267,11 @@ let eqcd_isectT p =
       (intersectionEquality count v
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (isect_term, eqcd_isectT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (isect_term, eqcd_isectT)
 
 let isect_equal_term = << "isect"{'A1; x1. 'B1['x1]} = "isect"{'A2; x2. 'B2['x2]} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (isect_equal_term, d_wrap_eqcd eqcd_isectT)
+let d_resource = Mp_resource.improve d_resource (isect_equal_term, d_wrap_eqcd eqcd_isectT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -287,7 +287,7 @@ let inf_isect f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (isect_term, inf_isect)
+let typeinf_resource = Mp_resource.improve typeinf_resource (isect_term, inf_isect)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -302,7 +302,7 @@ let isect_subtypeT p =
        thenT addHiddenLabelT "subtype") p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (DSubtype ([<< isect a1:'A1. 'B1['a1] >>, << isect a2:'A2. 'B2['a2] >>;
                << 'A2 >>, << 'A1 >>;
@@ -324,7 +324,7 @@ let d_isect_subtypeT i p =
 
 let isect_subtype_term = << subtype{."isect"{'A; x. 'B['x]}; 'T} >>
 
-let d_resource = d_resource.resource_improve d_resource (isect_subtype_term, d_isect_subtypeT)
+let d_resource = Mp_resource.improve d_resource (isect_subtype_term, d_isect_subtypeT)
 
 (*
  * -*-

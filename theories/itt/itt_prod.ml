@@ -180,7 +180,7 @@ let d_prodT i =
    else
       d_hyp_prod i
 
-let d_resource = d_resource.resource_improve d_resource (prod_term, d_prodT)
+let d_resource = Mp_resource.improve d_resource (prod_term, d_prodT)
 
 (*
  * Typehood.
@@ -193,7 +193,7 @@ let d_prod_typeT i p =
 
 let prod_type_term = << "type"{.'A1 * 'A2} >>
 
-let d_resource = d_resource.resource_improve d_resource (prod_type_term, d_prod_typeT)
+let d_resource = Mp_resource.improve d_resource (prod_type_term, d_prod_typeT)
 
 (*
  * EQCD.
@@ -203,11 +203,11 @@ let eqcd_prodT p =
       (independentProductEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (prod_term, eqcd_prodT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (prod_term, eqcd_prodT)
 
 let prod_equal_term = << ('a1 * 'a2) = ('b1 * 'b2) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (prod_equal_term, d_wrap_eqcd eqcd_prodT)
+let d_resource = Mp_resource.improve d_resource (prod_equal_term, d_wrap_eqcd eqcd_prodT)
 
 (*
  * EQCD pair.
@@ -215,11 +215,11 @@ let d_resource = d_resource.resource_improve d_resource (prod_equal_term, d_wrap
 let eqcd_pairT p =
    independentPairEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (pair_term, eqcd_pairT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (pair_term, eqcd_pairT)
 
 let pair_equal_term = << ('a1, 'b1) = ('a2, 'b2) in ('A1 * 'B1) >>
 
-let d_resource = d_resource.resource_improve d_resource (pair_equal_term, d_wrap_eqcd eqcd_pairT)
+let d_resource = Mp_resource.improve d_resource (pair_equal_term, d_wrap_eqcd eqcd_pairT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -235,7 +235,7 @@ let inf_prod f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (prod_term, inf_prod)
+let typeinf_resource = Mp_resource.improve typeinf_resource (prod_term, inf_prod)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -249,7 +249,7 @@ let prod_subtypeT p =
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (DSubtype ([<< 'A1 * 'B1 >>, << 'A2 * 'B2 >>;
                << 'A1 >>, << 'A2 >>;

@@ -115,72 +115,42 @@ let improve_data (t, tac) tbl =
    Refine_exn.print Dform.null_base (insert tbl t) tac
 
 (*
- * Keep a list of resources for lookup by the toploop.
- *)
-let resources = ref []
-
-let save name rsrc =
-   resources := (name, rsrc) :: !resources
-
-let get_resource name =
-   let rec search = function
-      (name', rsrc) :: tl ->
-         if name' = name then
-            rsrc
-         else
-            search tl
-    | [] ->
-         raise Not_found
-   in
-      search !resources
-
-(*
  * Wrap up the joiner.
  *)
-let rec join_resource base1 base2 =
-   let data = join_tables base1.resource_data base2.resource_data in
-      { resource_data = data;
-        resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_close = close_resource
-      }
+let join_resource = join_tables
 
-and extract_resource { resource_data = data } =
-   extract_data data
+let extract_resource = extract_data
 
-and improve_resource { resource_data = data } x =
+let improve_resource data x =
    if !debug_dtactic then
       begin
          let t, _ = x in
          let opname = opname_of_term t in
             eprintf "Base_dtactic.improve_resource: %s%t" (string_of_opname opname) eflush
       end;
-   { resource_data = improve_data x data;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   improve_data x data
 
-and close_resource rsrc modname =
-   save modname rsrc;
+let close_resource rsrc modname =
    rsrc
 
 (*
  * Resource.
  *)
 let d_resource =
-   { resource_data = new_table ();
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+      (new_table ())
+
+let get_resource modname =
+   Mp_resource.find d_resource modname
 
 let rec add_d_info rr = function
    (t, tac) :: tl ->
-      add_d_info (rr.resource_improve rr (t, tac)) tl
+      add_d_info (Mp_resource.improve rr (t, tac)) tl
  | [] ->
       rr
 
@@ -199,7 +169,7 @@ let rec dForT i =
 let d_prec = create_auto_prec [trivial_prec] []
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "dT";
         auto_prec = d_prec;
         auto_tac = auto_wrap (dT 0)

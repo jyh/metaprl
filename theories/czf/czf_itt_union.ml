@@ -127,7 +127,7 @@ let d_union_setT i p =
 
 let union_isset_term = << isset{union{'s1; 's2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (union_isset_term, d_union_setT)
+let d_resource = Mp_resource.improve d_resource (union_isset_term, d_union_setT)
 
 (*
  * Membership.
@@ -153,7 +153,7 @@ let d_unionT i p =
 
 let union_member_term = << member{'x; union{'s1; 's2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (union_member_term, d_unionT)
+let d_resource = Mp_resource.improve d_resource (union_member_term, d_unionT)
 
 (*
  * -*-

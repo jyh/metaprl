@@ -139,8 +139,7 @@ let d_voidT i p =
       let i, j = hyp_indices p i in
          voidElimination i j p
 
-let d_resource = d_resource.resource_improve d_resource (void_term, d_voidT)
-let dT = d_resource.resource_extract d_resource
+let d_resource = Mp_resource.improve d_resource (void_term, d_voidT)
 
 let d_void_typeT i p =
    if i = 0 then
@@ -150,7 +149,7 @@ let d_void_typeT i p =
 
 let void_type_term = << "type"{void} >>
 
-let d_resource = d_resource.resource_improve d_resource (void_type_term, d_void_typeT)
+let d_resource = Mp_resource.improve d_resource (void_type_term, d_void_typeT)
 
 (*
  * EqCD.
@@ -158,12 +157,11 @@ let d_resource = d_resource.resource_improve d_resource (void_type_term, d_void_
 let eqcd_voidT p =
    voidEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (void_term, eqcd_voidT)
-let eqcdT = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = Mp_resource.improve eqcd_resource (void_term, eqcd_voidT)
 
 let equal_void_term = << void = void in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (equal_void_term, d_wrap_eqcd eqcd_voidT)
+let d_resource = Mp_resource.improve d_resource (equal_void_term, d_wrap_eqcd eqcd_voidT)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *
@@ -175,7 +173,7 @@ let d_resource = d_resource.resource_improve d_resource (equal_void_term, d_wrap
 let squash_voidT p =
    void_squashElimination (hyp_count_addr p) p
 
-let squash_resource = squash_resource.resource_improve squash_resource (void_term, squash_voidT)
+let squash_resource = Mp_resource.improve squash_resource (void_term, squash_voidT)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -185,7 +183,7 @@ let void_sub p =
    void_subtype (hyp_count_addr p) p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (RLSubtype ([void_term, << 'a >>], void_sub))
 
@@ -198,7 +196,7 @@ let sub_resource =
  *)
 let inf_void _ decl _ = decl, univ1_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_term, inf_void)
+let typeinf_resource = Mp_resource.improve typeinf_resource (void_term, inf_void)
 
 (*
  * -*-

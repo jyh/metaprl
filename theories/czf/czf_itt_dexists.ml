@@ -149,7 +149,7 @@ let d_dexistsT i p =
 
 let dexists_term = << "dexists"{'T; x. 'A['x]} >>
 
-let d_resource = d_resource.resource_improve d_resource (dexists_term, d_dexistsT)
+let d_resource = Mp_resource.improve d_resource (dexists_term, d_dexistsT)
 
 (*
  * Typehood.
@@ -163,7 +163,7 @@ let d_dexists_typeT i p =
 
 let dexists_type_term = << "type"{."dexists"{'s; z. 'A['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dexists_type_term, d_dexists_typeT)
+let d_resource = Mp_resource.improve d_resource (dexists_type_term, d_dexists_typeT)
 
 (*
  * Restricted.
@@ -180,7 +180,7 @@ let d_dexists_resT i p =
 
 let dexists_res_term = << restricted{z. "dexists"{'s; y. 'A['y; 'z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dexists_res_term, d_dexists_resT)
+let d_resource = Mp_resource.improve d_resource (dexists_res_term, d_dexists_resT)
 
 (*
  * -*-

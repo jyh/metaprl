@@ -99,7 +99,7 @@ let d_univ_typeT i p =
 
 let univ_type_term = << Itt_equal!"type"{univ} >>
 
-let d_resource = d_resource.resource_improve d_resource (univ_type_term, d_univ_typeT)
+let d_resource = Mp_resource.improve d_resource (univ_type_term, d_univ_typeT)
 
 (*
  * Equality goals.
@@ -113,7 +113,7 @@ let d_utrueT i p =
 
 let utrue_term = << utrue{'t1} = utrue{'t2} in univ >>
 
-let d_resource = d_resource.resource_improve d_resource (utrue_term, d_utrueT)
+let d_resource = Mp_resource.improve d_resource (utrue_term, d_utrueT)
 
 let d_ufalseT i p =
    if i = 0 then
@@ -124,7 +124,7 @@ let d_ufalseT i p =
 
 let ufalse_term = << ufalse{'t1} = ufalse{'t2} in univ >>
 
-let d_resource = d_resource.resource_improve d_resource (ufalse_term, d_ufalseT)
+let d_resource = Mp_resource.improve d_resource (ufalse_term, d_ufalseT)
 
 (*
  * -*-

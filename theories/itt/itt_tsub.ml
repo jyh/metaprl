@@ -115,7 +115,7 @@ let d_tsubT i p =
 
 let tsub_term = << tsub{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (tsub_term, d_tsubT)
+let d_resource = Mp_resource.improve d_resource (tsub_term, d_tsubT)
 
 let d_tsub_typeT i p =
    if i = 0 then
@@ -126,7 +126,7 @@ let d_tsub_typeT i p =
 
 let tsub_type_term = << "type"{tsub{'A; 'B}} >>
 
-let d_resource = d_resource.resource_improve d_resource (tsub_type_term, d_tsub_typeT)
+let d_resource = Mp_resource.improve d_resource (tsub_type_term, d_tsub_typeT)
 
 (*
  * EQCD.
@@ -135,11 +135,11 @@ let eqcd_tsubT p =
    (tsubEquality (Sequent.hyp_count_addr p)
     thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (tsub_term, eqcd_tsubT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (tsub_term, eqcd_tsubT)
 
 let tsub_equal_term = << tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (tsub_equal_term, d_wrap_eqcd eqcd_tsubT)
+let d_resource = Mp_resource.improve d_resource (tsub_equal_term, d_wrap_eqcd eqcd_tsubT)
 
 (*
  * -*-

@@ -254,7 +254,7 @@ let d_wT i p =
    else
       d_hyp_w i p
 
-let d_resource = d_resource.resource_improve d_resource (w_term, d_wT)
+let d_resource = Mp_resource.improve d_resource (w_term, d_wT)
 
 (*
  * Typehood.
@@ -270,7 +270,7 @@ let d_w_typeT i p =
 
 let type_w_term = << "type"{.w{'A1; x. 'A2['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (type_w_term, d_w_typeT)
+let d_resource = Mp_resource.improve d_resource (type_w_term, d_w_typeT)
 
 (************************************************************************
  * EQCD TACTIC                                                          *
@@ -286,11 +286,11 @@ let eqcd_wT p =
    let count = hyp_count_addr p in
       (wEquality count x thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (w_term, eqcd_wT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (w_term, eqcd_wT)
 
 let w_equal_term = << w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (w_equal_term, d_wrap_eqcd eqcd_wT)
+let d_resource = Mp_resource.improve d_resource (w_equal_term, d_wrap_eqcd eqcd_wT)
 
 (*
  * EQCD pair.
@@ -302,11 +302,11 @@ let eqcd_treeT p =
    let count = hyp_count_addr p in
       (treeEquality count x thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (tree_term, eqcd_treeT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (tree_term, eqcd_treeT)
 
 let tree_equal_term = << tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} >>
 
-let d_resource = d_resource.resource_improve d_resource (tree_equal_term, d_wrap_eqcd eqcd_treeT)
+let d_resource = Mp_resource.improve d_resource (tree_equal_term, d_wrap_eqcd eqcd_treeT)
 
 (*
  * EQCD spread.
@@ -322,13 +322,13 @@ let eqcd_tree_indT p =
    in
       tree_indEquality (hyp_count_addr p) w a f g p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (tree_ind_term, eqcd_tree_indT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (tree_ind_term, eqcd_tree_indT)
 
 let tree_ind_equal_term = << tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                            = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                            in 'T >>
 
-let d_resource = d_resource.resource_improve d_resource (tree_ind_equal_term, d_wrap_eqcd eqcd_tree_indT)
+let d_resource = Mp_resource.improve d_resource (tree_ind_equal_term, d_wrap_eqcd eqcd_tree_indT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -344,7 +344,7 @@ let inf_w f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (w_term, inf_w)
+let typeinf_resource = Mp_resource.improve typeinf_resource (w_term, inf_w)
 
 (*
  * Type of pair.
@@ -356,7 +356,7 @@ let inf_tree f decl t =
    let decl'', b' = f decl' b in
       decl'', mk_w_term "v" a' b'
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (tree_term, inf_tree)
+let typeinf_resource = Mp_resource.improve typeinf_resource (tree_term, inf_tree)
 
 (*
  * Type of tree_ind.
@@ -369,7 +369,7 @@ let inf_tree_ind inf decl t =
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (tree_ind_term, inf_tree_ind)
+let typeinf_resource = Mp_resource.improve typeinf_resource (tree_ind_term, inf_tree_ind)
  *)
 
 (*

@@ -58,7 +58,7 @@ let d_not_type i p =
 
 let not_type_term = << "type"{."not"{'A}} >>
 
-let d_resource = d_resource.resource_improve d_resource (not_type_term, d_not_type)
+let d_resource = Mp_resource.improve d_resource (not_type_term, d_not_type)
 
 let d_not i p =
    if i = 0 then
@@ -70,7 +70,7 @@ let d_not i p =
 
 let not_term = << "not"{'A} >>
 
-let d_resource = d_resource.resource_improve d_resource (not_term, d_not)
+let d_resource = Mp_resource.improve d_resource (not_term, d_not)
 
 (*
  * -*-

@@ -428,7 +428,7 @@ let d_allT i p =
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p
 
-let d_resource = d_resource.resource_improve d_resource (all_term, d_allT)
+let d_resource = Mp_resource.improve d_resource (all_term, d_allT)
 
 let d_all_typeT i p =
    if i = 0 then
@@ -439,7 +439,7 @@ let d_all_typeT i p =
 
 let all_type_term = << "type"{."all"{v. 'b['v]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (all_type_term, d_all_typeT)
+let d_resource = Mp_resource.improve d_resource (all_type_term, d_all_typeT)
 
 (*
  * Exists decomposition.
@@ -458,7 +458,7 @@ let d_existsT i p =
       let j, k = Sequent.hyp_indices p i in
          tptp2_exists_elim j k u v p
 
-let d_resource = d_resource.resource_improve d_resource (exists_term, d_existsT)
+let d_resource = Mp_resource.improve d_resource (exists_term, d_existsT)
 
 let d_exists_typeT i p =
    if i = 0 then
@@ -469,7 +469,7 @@ let d_exists_typeT i p =
 
 let exists_type_term = << "type"{."exists"{v. 'b['v]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (exists_type_term, d_exists_typeT)
+let d_resource = Mp_resource.improve d_resource (exists_type_term, d_exists_typeT)
 
 let d_atomic_typeT i p =
    if i = 0 then
@@ -479,7 +479,7 @@ let d_atomic_typeT i p =
 
 let atomic_type_term = << "type"{atomic{'x}} >>
 
-let d_resource = d_resource.resource_improve d_resource (atomic_type_term, d_atomic_typeT)
+let d_resource = Mp_resource.improve d_resource (atomic_type_term, d_atomic_typeT)
 
 (*
  * Atomic formulas.
@@ -508,7 +508,7 @@ let d_atomicT i p =
    else
       raise (RefineError ("atomicT", StringError "no elimination form"))
 
-let d_resource = d_resource.resource_improve d_resource (atomic_term, d_atomicT)
+let d_resource = Mp_resource.improve d_resource (atomic_term, d_atomicT)
 
 let type_intro_rules =
    [|tptp2_type_intro0;
@@ -562,7 +562,7 @@ let auto_tac =
            onSomeHypT typeT]
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "tptp_autoT";
         auto_prec = logic_prec;
         auto_tac = auto_wrap auto_tac

@@ -252,7 +252,7 @@ let var_type_type_term = << "type"{var_type} >>
 (*
  * Well-formedness.
  *)
-let d_resource = d_resource.resource_improve d_resource (var_type_type_term, wrap_intro d_var_type_typeT)
+let d_resource = Mp_resource.improve d_resource (var_type_type_term, wrap_intro d_var_type_typeT)
 
 let d_info =
    [<< member{var_type; vnil} >>, vnil_wf;
@@ -280,7 +280,7 @@ let d_var_typeT i p =
 
 let var_type_term = << var_type >>
 
-let d_resource = d_resource.resource_improve d_resource (var_type_term, d_var_typeT)
+let d_resource = Mp_resource.improve d_resource (var_type_term, d_var_typeT)
 
 (*
  * Squiggle equality.
@@ -300,7 +300,7 @@ let d_eq_var_assertT i p =
 
 let eq_var_assert_term = << "assert"{eq_var{'v1; 'v2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_var_assert_term, d_eq_var_assertT)
+let d_resource = Mp_resource.improve d_resource (eq_var_assert_term, d_eq_var_assertT)
 
 (*
  * -*-

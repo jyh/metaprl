@@ -159,7 +159,7 @@ let d_sep_setT i p =
 
 let sep_isset_term = << isset{sep{'s; x. 'P['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (sep_isset_term, d_sep_setT)
+let d_resource = Mp_resource.improve d_resource (sep_isset_term, d_sep_setT)
 
 (*
  * Membership.
@@ -182,7 +182,7 @@ let d_sep_memberT i p =
 
 let sep_member_term = << member{'x; sep{'s; y. 'P['y]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (sep_member_term, d_sep_memberT)
+let d_resource = Mp_resource.improve d_resource (sep_member_term, d_sep_memberT)
 
 (*
  * -*-

@@ -273,7 +273,7 @@ let d_collect_issetT i p =
  *)
 let isset_collect_term = << isset{collect{'T; x. 'a['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (isset_collect_term, d_collect_issetT)
+let d_resource = Mp_resource.improve d_resource (isset_collect_term, d_collect_issetT)
 
 (************************************************************************
  * OTHER TACTICS                                                        *
@@ -290,7 +290,7 @@ let d_set_typeT i p =
 
 let set_type_term = << "type"{set} >>
 
-let d_resource = d_resource.resource_improve d_resource (set_type_term, d_set_typeT)
+let d_resource = Mp_resource.improve d_resource (set_type_term, d_set_typeT)
 
 (*
  * Set elimination.
@@ -312,7 +312,7 @@ let d_setT i p =
 
 let set_term = << set >>
 
-let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
+let d_resource = Mp_resource.improve d_resource (set_term, d_setT)
 
 (*
  * Application rule.
@@ -327,7 +327,7 @@ let d_apply_issetT i p =
 
 let apply_isset_term = << isset{.'f 'x} >>
 
-let d_resource = d_resource.resource_improve d_resource (apply_isset_term, d_apply_issetT)
+let d_resource = Mp_resource.improve d_resource (apply_isset_term, d_apply_issetT)
 
 (*
  * Typehood of isset{'s1}
@@ -340,7 +340,7 @@ let d_isset_typeT i p =
 
 let isset_type_term = << "type"{isset{'s1}} >>
 
-let d_resource = d_resource.resource_improve d_resource (isset_type_term, d_isset_typeT)
+let d_resource = Mp_resource.improve d_resource (isset_type_term, d_isset_typeT)
 
 (*
  * Equality of set_ind.
@@ -358,7 +358,7 @@ let set_ind_equal_term = << set_ind{'s1; a1, f1, g1. 'b1['a1; 'f1; 'g1]}
                             = set_ind{'s2; a2, f2, g2. 'B2['a2; 'f2; 'g2]}
                             in 'T >>
 
-let d_resource = d_resource.resource_improve d_resource (set_ind_equal_term, d_set_ind_equalT)
+let d_resource = Mp_resource.improve d_resource (set_ind_equal_term, d_set_ind_equalT)
 
 (*
  * Equal sets.
@@ -403,7 +403,7 @@ let splitT t i p =
  * Add set assumptions to trivial tactic.
  *)
 let trivial_resource =
-   trivial_resource.resource_improve trivial_resource (**)
+   Mp_resource.improve trivial_resource (**)
       { auto_name = "setAssumT";
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT setAssumT
@@ -426,7 +426,7 @@ let set_autoT =
 let set_prec = create_auto_prec [trivial_prec] [back_hyp_prec]
 
 let auto_resource =
-   auto_resource.resource_improve auto_resource (**)
+   Mp_resource.improve auto_resource (**)
       { auto_name = "set_autoT";
         auto_prec = set_prec;
         auto_tac = auto_wrap set_autoT

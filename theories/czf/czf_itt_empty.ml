@@ -96,7 +96,7 @@ let d_emptyT i p =
 
 let empty_member_term = << member{'x; empty} >>
 
-let d_resource = d_resource.resource_improve d_resource (empty_member_term, d_emptyT)
+let d_resource = Mp_resource.improve d_resource (empty_member_term, d_emptyT)
 
 (*
  * Sethood.
@@ -109,7 +109,7 @@ let d_empty_setT i p =
 
 let empty_isset_term = << isset{empty} >>
 
-let d_resource = d_resource.resource_improve d_resource (empty_isset_term, d_empty_setT)
+let d_resource = Mp_resource.improve d_resource (empty_isset_term, d_empty_setT)
 
 (*
  * -*-

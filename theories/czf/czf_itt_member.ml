@@ -136,7 +136,7 @@ let d_member_typeT i p =
 
 let member_type_term = << "type"{member{'a; 't}} >>
 
-let d_resource = d_resource.resource_improve d_resource (member_type_term, d_member_typeT)
+let d_resource = Mp_resource.improve d_resource (member_type_term, d_member_typeT)
 
 (*
  * Functionality.
@@ -149,7 +149,7 @@ let d_member_funT i p =
 
 let member_fun_term = << "fun_prop"{z. member{'s1['z]; 's2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (member_fun_term, d_member_funT)
+let d_resource = Mp_resource.improve d_resource (member_fun_term, d_member_funT)
 
 (*
  * Membership.

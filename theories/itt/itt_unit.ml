@@ -149,7 +149,7 @@ let d_unitT i p =
       let i, j = hyp_indices p i in
          unitElimination i j p
 
-let d_resource = d_resource.resource_improve d_resource (unit_term, d_unitT)
+let d_resource = Mp_resource.improve d_resource (unit_term, d_unitT)
 
 let d_unit_typeT i p =
    if i = 0 then
@@ -159,7 +159,7 @@ let d_unit_typeT i p =
 
 let unit_type_term = << "type"{unit} >>
 
-let d_resource = d_resource.resource_improve d_resource (unit_type_term, d_unit_typeT)
+let d_resource = Mp_resource.improve d_resource (unit_type_term, d_unit_typeT)
 
 (*
  * Squiggle reasoning.
@@ -172,7 +172,7 @@ let d_unit_sqequalT i p =
 
 let unit_rewrite_term = << "rewrite"{'e1; it} >>
 
-let d_resource = d_resource.resource_improve d_resource (unit_rewrite_term, d_unit_sqequalT)
+let d_resource = Mp_resource.improve d_resource (unit_rewrite_term, d_unit_sqequalT)
 
 (*
  * EqCD.
@@ -183,17 +183,16 @@ let eqcd_unitT p =
 let eqcd_itT p =
    unit_memberEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (unit_term, eqcd_unitT)
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (it_term, eqcd_itT)
-let eqcdT = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = Mp_resource.improve eqcd_resource (unit_term, eqcd_unitT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (it_term, eqcd_itT)
 
 let equal_unit_term = << unit = unit in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (equal_unit_term, d_wrap_eqcd eqcd_unitT)
+let d_resource = Mp_resource.improve d_resource (equal_unit_term, d_wrap_eqcd eqcd_unitT)
 
 let equal_it_term = << it = it in unit >>
 
-let d_resource = d_resource.resource_improve d_resource (equal_it_term, d_wrap_eqcd eqcd_itT)
+let d_resource = Mp_resource.improve d_resource (equal_it_term, d_wrap_eqcd eqcd_itT)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *
@@ -205,7 +204,7 @@ let d_resource = d_resource.resource_improve d_resource (equal_it_term, d_wrap_e
 let squash_unit p =
    unit_squashElimination (hyp_count_addr p) p
 
-let squash_resource = squash_resource.resource_improve squash_resource (unit_term, squash_unit)
+let squash_resource = Mp_resource.improve squash_resource (unit_term, squash_unit)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -216,14 +215,14 @@ let squash_resource = squash_resource.resource_improve squash_resource (unit_ter
  *)
 let inf_unit _ decl _ = decl, univ1_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (unit_term, inf_unit)
+let typeinf_resource = Mp_resource.improve typeinf_resource (unit_term, inf_unit)
 
 (*
  * Type of an equality is the type of the equality type.
  *)
 let inf_it _ decl _ = decl, unit_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (it_term, inf_it)
+let typeinf_resource = Mp_resource.improve typeinf_resource (it_term, inf_it)
 
 (*
  * -*-

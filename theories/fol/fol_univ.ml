@@ -26,7 +26,7 @@ let nthUnivT i p =
       univ_type j k p
 
 let trivial_resource =
-   trivial_resource.resource_improve trivial_resource (**)
+   Mp_resource.improve trivial_resource (**)
       { auto_name = "nthUnivT";
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT nthUnivT

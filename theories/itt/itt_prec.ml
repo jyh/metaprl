@@ -223,7 +223,7 @@ let inf_prec f decl t =
    let decl', arg' = f decl arg in
       f (add_unify_subst a void_term (add_unify_subst b arg' decl')) body
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (prec_term, inf_prec)
+let typeinf_resource = Mp_resource.improve typeinf_resource (prec_term, inf_prec)
 
 (*
  * Type of precind.
@@ -234,7 +234,7 @@ let inf_precind f decl t =
    let decl', a' = f decl a in
       f (add_unify_subst p a' (add_unify_subst h a' decl')) g
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (precind_term, inf_precind)
+let typeinf_resource = Mp_resource.improve typeinf_resource (precind_term, inf_precind)
 
 (*
  * -*-

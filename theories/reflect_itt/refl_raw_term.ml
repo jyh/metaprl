@@ -278,28 +278,28 @@ let d_operator_typeT p =
 
 let operator_type_term = << "type"{operator_type} >>
 
-let d_resource = d_resource.resource_improve d_resource (operator_type_term, wrap_type d_operator_typeT)
+let d_resource = Mp_resource.improve d_resource (operator_type_term, wrap_type d_operator_typeT)
 
 let d_raw_bterm_type_typeT p =
    raw_bterm_type (Sequent.hyp_count_addr p) p
 
 let raw_bterm_type_type_term = << "type"{raw_bterm_type{'T}} >>
 
-let d_resource = d_resource.resource_improve d_resource (raw_bterm_type_type_term, wrap_type d_raw_bterm_type_typeT)
+let d_resource = Mp_resource.improve d_resource (raw_bterm_type_type_term, wrap_type d_raw_bterm_type_typeT)
 
 let d_bvar_type_typeT p =
    bvar_type (Sequent.hyp_count_addr p) p
 
 let bvar_type_type_term = << "type"{bvar_type{'T}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bvar_type_type_term, wrap_type d_bvar_type_typeT)
+let d_resource = Mp_resource.improve d_resource (bvar_type_type_term, wrap_type d_bvar_type_typeT)
 
 let d_raw_term_type_typeT p =
    raw_term_type2 (Sequent.hyp_count_addr p) p
 
 let raw_term_type_type_term = << "type"{raw_term_type} >>
 
-let d_resource = d_resource.resource_improve d_resource (raw_term_type_type_term, wrap_type d_raw_term_type_typeT)
+let d_resource = Mp_resource.improve d_resource (raw_term_type_type_term, wrap_type d_raw_term_type_typeT)
 
 let d_bvar_wfT p =
    (bvar_wf (Sequent.hyp_count_addr p)
@@ -307,7 +307,7 @@ let d_bvar_wfT p =
 
 let bvar_member_term = << member{raw_term_type; bvar{'v; 'tl}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bvar_member_term, wrap_intro d_bvar_wfT)
+let d_resource = Mp_resource.improve d_resource (bvar_member_term, wrap_intro d_bvar_wfT)
 
 let d_bterm_wfT p =
    (bterm_wf (Sequent.hyp_count_addr p)
@@ -315,7 +315,7 @@ let d_bterm_wfT p =
 
 let bterm_member_term = << member{raw_term_type; bterm{'sl; 't}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bterm_member_term, wrap_intro d_bterm_wfT)
+let d_resource = Mp_resource.improve d_resource (bterm_member_term, wrap_intro d_bterm_wfT)
 
 let d_term_wfT p =
    (term_wf (Sequent.hyp_count_addr p)
@@ -323,7 +323,7 @@ let d_term_wfT p =
 
 let term_member_term = << member{raw_term_type; term{'op; 'tl}} >>
 
-let d_resource = d_resource.resource_improve d_resource (term_member_term, wrap_intro d_term_wfT)
+let d_resource = Mp_resource.improve d_resource (term_member_term, wrap_intro d_term_wfT)
 
 let d_raw_term_typeT i p =
    if i = 0 then
@@ -335,7 +335,7 @@ let d_raw_term_typeT i p =
 
 let raw_term_type_term = << raw_term_type >>
 
-let d_resource = d_resource.resource_improve d_resource (raw_term_type_term, d_raw_term_typeT)
+let d_resource = Mp_resource.improve d_resource (raw_term_type_term, d_raw_term_typeT)
 
 (*
  * Bterm operations.
@@ -346,7 +346,7 @@ let d_bterm_term_wfT p =
 
 let bterm_term_type_term = << member{'T; bterm_term{'t}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bterm_term_type_term, wrap_intro d_bterm_term_wfT)
+let d_resource = Mp_resource.improve d_resource (bterm_term_type_term, wrap_intro d_bterm_term_wfT)
 
 (*
  * Operator equality.
@@ -357,7 +357,7 @@ let d_eq_op_wfT p =
 
 let eq_op_wf_term = << member{bool; eq_op{'op1; 'op2}} >>
 
-let d_resource = d_resource.resource_improve d_resource (eq_op_wf_term, wrap_intro d_eq_op_wfT)
+let d_resource = Mp_resource.improve d_resource (eq_op_wf_term, wrap_intro d_eq_op_wfT)
 
 let eq_opRefT p =
    (eq_op_ref (Sequent.hyp_count_addr p)

@@ -440,7 +440,7 @@ let d_intT i p =
       let m, v, z = maybe_new_vars3 p "m" "v" "z" in
          intElimination j k n m v z p
 
-let d_resource = d_resource.resource_improve d_resource (int_term, d_intT)
+let d_resource = Mp_resource.improve d_resource (int_term, d_intT)
 
 let d_int_typeT i p =
    if i = 0 then
@@ -450,7 +450,7 @@ let d_int_typeT i p =
 
 let int_type_term = << "type"{int} >>
 
-let d_resource = d_resource.resource_improve d_resource (int_type_term, d_int_typeT)
+let d_resource = Mp_resource.improve d_resource (int_type_term, d_int_typeT)
 
 (*
  * Squiggle.
@@ -469,8 +469,8 @@ let eqcd_intT p = intEquality (hyp_count_addr p) p
 
 let eqcd_numberT p = numberEquality (hyp_count_addr p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (int_term, eqcd_intT)
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (natural_number_term, eqcd_numberT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (int_term, eqcd_intT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (natural_number_term, eqcd_numberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -481,14 +481,14 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (natural_number
  *)
 let inf_int _ decl _ = decl, univ1_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (int_term, inf_int)
+let typeinf_resource = Mp_resource.improve typeinf_resource (int_term, inf_int)
 
 (*
  * Type of natural_number.
  *)
 let inf_natural_number _ decl _ = decl, int_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (natural_number_term, inf_natural_number)
+let typeinf_resource = Mp_resource.improve typeinf_resource (natural_number_term, inf_natural_number)
 
 (*
  * Type of ind.
@@ -497,7 +497,7 @@ let inf_ind inf decl t =
    let i, a, b, down, base, c, d, up = dest_ind t in
       inf decl base
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_term, inf_ind)
+let typeinf_resource = Mp_resource.improve typeinf_resource (ind_term, inf_ind)
 
 (*
  * -*-

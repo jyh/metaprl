@@ -126,7 +126,7 @@ let d_sexistsT i p =
 
 let sexists_term = << "sexists"{x. 'B['x]} >>
 
-let d_resource = d_resource.resource_improve d_resource (sexists_term, d_sexistsT)
+let d_resource = Mp_resource.improve d_resource (sexists_term, d_sexistsT)
 
 (*
  * Well-formedness.
@@ -140,7 +140,7 @@ let d_exists_typeT i p =
 
 let sexists_type_term = << "type"{sexists{x. 'B['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (sexists_type_term, d_exists_typeT)
+let d_resource = Mp_resource.improve d_resource (sexists_type_term, d_exists_typeT)
 
 (*
  * -*-

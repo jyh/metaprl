@@ -131,14 +131,14 @@ type reduce_data
 
 resource (term * conv, conv, reduce_data) reduce_resource
 
+val get_resource : string -> reduce_resource
+
 topval reduceTopC : conv
 topval reduceC : conv
 
 (*
  * Get a resource for the toploop.
  *)
-val get_resource : string -> reduce_resource
-
 val add_reduce_info : reduce_resource -> (term * conv) list -> reduce_resource
 
 (*

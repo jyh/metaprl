@@ -176,7 +176,7 @@ let d_small_typeT i p =
 
 let small_type_term = << "type"{small} >>
 
-let d_resource = d_resource.resource_improve d_resource (small_type_term, d_small_typeT)
+let d_resource = Mp_resource.improve d_resource (small_type_term, d_small_typeT)
 
 (*
  * Small intro.
@@ -189,7 +189,7 @@ let d_void_small_typeT i p =
 
 let void_small_type_term = << small_type{void} >>
 
-let d_resource = d_resource.resource_improve d_resource (void_small_type_term, d_void_small_typeT)
+let d_resource = Mp_resource.improve d_resource (void_small_type_term, d_void_small_typeT)
 
 let d_unit_small_typeT i p =
    if i = 0 then
@@ -199,7 +199,7 @@ let d_unit_small_typeT i p =
 
 let unit_small_type_term = << small_type{unit} >>
 
-let d_resource = d_resource.resource_improve d_resource (unit_small_type_term, d_unit_small_typeT)
+let d_resource = Mp_resource.improve d_resource (unit_small_type_term, d_unit_small_typeT)
 
 let d_int_small_typeT i p =
    if i = 0 then
@@ -209,7 +209,7 @@ let d_int_small_typeT i p =
 
 let int_small_type_term = << small_type{int} >>
 
-let d_resource = d_resource.resource_improve d_resource (int_small_type_term, d_int_small_typeT)
+let d_resource = Mp_resource.improve d_resource (int_small_type_term, d_int_small_typeT)
 
 let d_dfun_small_typeT i p =
    if i = 0 then
@@ -220,7 +220,7 @@ let d_dfun_small_typeT i p =
 
 let dfun_small_type_term = << small_type{. a: 'A -> 'B['a] } >>
 
-let d_resource = d_resource.resource_improve d_resource (dfun_small_type_term, d_dfun_small_typeT)
+let d_resource = Mp_resource.improve d_resource (dfun_small_type_term, d_dfun_small_typeT)
 
 let d_fun_small_typeT i p =
    if i = 0 then
@@ -230,7 +230,7 @@ let d_fun_small_typeT i p =
 
 let fun_small_type_term = << small_type{. 'A -> 'B } >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_small_type_term, d_fun_small_typeT)
+let d_resource = Mp_resource.improve d_resource (fun_small_type_term, d_fun_small_typeT)
 
 let d_dprod_small_typeT i p =
    if i = 0 then
@@ -241,7 +241,7 @@ let d_dprod_small_typeT i p =
 
 let dprod_small_type_term = << small_type{. a: 'A * 'B['a] } >>
 
-let d_resource = d_resource.resource_improve d_resource (dprod_small_type_term, d_dprod_small_typeT)
+let d_resource = Mp_resource.improve d_resource (dprod_small_type_term, d_dprod_small_typeT)
 
 let d_prod_small_typeT i p =
    if i = 0 then
@@ -251,7 +251,7 @@ let d_prod_small_typeT i p =
 
 let prod_small_type_term = << small_type{. 'A * 'B } >>
 
-let d_resource = d_resource.resource_improve d_resource (prod_small_type_term, d_prod_small_typeT)
+let d_resource = Mp_resource.improve d_resource (prod_small_type_term, d_prod_small_typeT)
 
 let d_union_small_typeT i p =
    if i = 0 then
@@ -261,7 +261,7 @@ let d_union_small_typeT i p =
 
 let union_small_type_term = << small_type{. 'A + 'B } >>
 
-let d_resource = d_resource.resource_improve d_resource (union_small_type_term, d_union_small_typeT)
+let d_resource = Mp_resource.improve d_resource (union_small_type_term, d_union_small_typeT)
 
 let d_equal_small_typeT i p =
    if i = 0 then
@@ -271,7 +271,7 @@ let d_equal_small_typeT i p =
 
 let equal_small_type_term = << small_type{. 'a = 'b in 'A} >>
 
-let d_resource = d_resource.resource_improve d_resource (equal_small_type_term, d_equal_small_typeT)
+let d_resource = Mp_resource.improve d_resource (equal_small_type_term, d_equal_small_typeT)
 
 let smallAssumT i p =
    (tryT (rwh unfold_small_type 0) thenT equalAssumT i) p

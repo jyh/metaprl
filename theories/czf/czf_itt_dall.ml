@@ -141,7 +141,7 @@ let d_dallT i p =
 
 let dall_term = << "dall"{'s; x. 'A['x]} >>
 
-let d_resource = d_resource.resource_improve d_resource (dall_term, d_dallT)
+let d_resource = Mp_resource.improve d_resource (dall_term, d_dallT)
 
 (*
  * Typehood.
@@ -155,7 +155,7 @@ let d_dall_typeT i p =
 
 let dall_type_term = << "type"{."dall"{'s; x. 'A['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dall_type_term, d_dall_typeT)
+let d_resource = Mp_resource.improve d_resource (dall_type_term, d_dall_typeT)
 
 (*
  * Restricted.
@@ -172,7 +172,7 @@ let d_dall_resT i p =
 
 let dall_res_term = << restricted{dall{'s; x. 'A['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dall_res_term, d_dall_resT)
+let d_resource = Mp_resource.improve d_resource (dall_res_term, d_dall_resT)
 
 (*
  * -*-

@@ -1,9 +1,17 @@
 (*
- * We need a rule for when rewrites are valid.
+ * This is the lowest tactic definition layer.
+ * It defines:
+ *     ('arg, 'static) tactic_arg:
+ *        goals (tactic arguments) with changable attributes of type 'arg
+ *       and static attributes of type 'static
+ *
+ *     ('info, 'arg, 'static) extract:
+ *        proof terms that are annotated with values of type 'info,
+ *        and the 'arg, 'static attributes
  *
  * ----------------------------------------------------------------
  *
- * This file is part of MetaPRL, a modular, higher order
+ * This file is part of Nuprl-Light, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
@@ -30,35 +38,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Rewrite_type
-include Base_dtactic
-
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tacticals
-open Rewrite_type
-
-(*
- * Template for the term.
- *)
-let rewrite_term = << "rewrite"{'a; 'b} >>
-
-(*
- * The dtactic operation only works on a concl.
- *)
-let d_rewriteT i p =
-   if i = 0 then
-      rewriteSequentAxiom (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_rewriteT", StringError "can't decompose a rewrite hyp"))
-
-let d_resource = Mp_resource.improve d_resource (rewrite_term, d_rewriteT)
-
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "nl"
  * End:
  * -*-
  *)

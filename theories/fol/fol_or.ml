@@ -90,7 +90,7 @@ let d_or_type i p =
 
 let or_type_term = << "type"{."or"{'A; 'B}} >>
 
-let d_resource = d_resource.resource_improve d_resource (or_type_term, d_or_type)
+let d_resource = Mp_resource.improve d_resource (or_type_term, d_or_type)
 
 let d_or i p =
    if i = 0 then
@@ -106,7 +106,7 @@ let d_or i p =
 
 let or_term = << "or"{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (or_term, d_or)
+let d_resource = Mp_resource.improve d_resource (or_term, d_or)
 
 (*
  * -*-

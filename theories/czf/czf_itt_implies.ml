@@ -130,7 +130,7 @@ let d_fun_funT i p =
 
 let fun_fun_term = << fun_prop{z. "fun"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_fun_term, d_fun_funT)
+let d_resource = Mp_resource.improve d_resource (fun_fun_term, d_fun_funT)
 
 (*
  * Restricted.
@@ -144,7 +144,7 @@ let d_fun_resT i p =
 
 let fun_res_term = << restricted{z. "fun"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (fun_res_term, d_fun_resT)
+let d_resource = Mp_resource.improve d_resource (fun_res_term, d_fun_resT)
 
 (*
  * Restricted.
@@ -158,7 +158,7 @@ let d_implies_funT i p =
 
 let implies_fun_term = << fun_prop{z. "implies"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (implies_fun_term, d_implies_funT)
+let d_resource = Mp_resource.improve d_resource (implies_fun_term, d_implies_funT)
 
 (*
  * Restricted.
@@ -172,7 +172,7 @@ let d_implies_resT i p =
 
 let implies_res_term = << restricted{z. "implies"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (implies_res_term, d_implies_resT)
+let d_resource = Mp_resource.improve d_resource (implies_res_term, d_implies_resT)
 
 (*
  * Restricted.
@@ -186,7 +186,7 @@ let d_iff_funT i p =
 
 let iff_fun_term = << fun_prop{z. "iff"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (iff_fun_term, d_iff_funT)
+let d_resource = Mp_resource.improve d_resource (iff_fun_term, d_iff_funT)
 
 (*
  * Restricted.
@@ -200,7 +200,7 @@ let d_iff_resT i p =
 
 let iff_res_term = << restricted{z. "iff"{'P1['z]; 'P2['z]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (iff_res_term, d_iff_resT)
+let d_resource = Mp_resource.improve d_resource (iff_res_term, d_iff_resT)
 
 (*
  * -*-

@@ -1047,7 +1047,7 @@ let fcompare_wfT p =
 
 let fcompare_member_term = << member{bool; fcompare{'eq; 'x; 'y}} >>
 
-let d_resource = d_resource.resource_improve d_resource (fcompare_member_term, wrap_intro fcompare_wfT)
+let d_resource = Mp_resource.improve d_resource (fcompare_member_term, wrap_intro fcompare_wfT)
 
 (*
  * Membership tactics for Boolean expressions.
@@ -1088,7 +1088,7 @@ let d_resource =
    in
    let rec add_info dr = function
       (t, tac1, tac2) :: tl ->
-         add_info (dr.resource_improve dr (t, wrap tac1 tac2)) tl
+         add_info (Mp_resource.improve dr (t, wrap tac1 tac2)) tl
     | [] ->
          dr
    in
@@ -1125,7 +1125,7 @@ let d_ball_memberT p =
 
 let ball_member_term = << member{bool; fball{'s; x.'b['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (ball_member_term, wrap_intro d_ball_memberT)
+let d_resource = Mp_resource.improve d_resource (ball_member_term, wrap_intro d_ball_memberT)
 
 let d_bexists_memberT p =
    let t = Sequent.concl p in
@@ -1143,7 +1143,7 @@ let d_bexists_memberT p =
 
 let bexists_member_term = << member{bool; fbexists{'s; x.'b['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (bexists_member_term, wrap_intro d_bexists_memberT)
+let d_resource = Mp_resource.improve d_resource (bexists_member_term, wrap_intro d_bexists_memberT)
 
 (*
  * Well-formedness of fsquash.
@@ -1172,7 +1172,7 @@ let d_fsquash_memberT p =
 
 let fsquash_member_term = << member{list{unit}; fsquash{'eq; 's}} >>
 
-let d_resource = d_resource.resource_improve d_resource (fsquash_member_term, wrap_intro d_fsquash_memberT)
+let d_resource = Mp_resource.improve d_resource (fsquash_member_term, wrap_intro d_fsquash_memberT)
 
 (*
  * Membership tactics for set expressions.
@@ -1196,7 +1196,7 @@ let d_resource =
    in
    let rec add_info dr = function
       (t, tac) :: tl ->
-         add_info (dr.resource_improve dr (t, wrap tac)) tl
+         add_info (Mp_resource.improve dr (t, wrap tac)) tl
     | [] ->
          dr
    in
@@ -1607,7 +1607,7 @@ let d_fset_typeT p =
 
 let fset_type_term = << "type"{fset{'eq; 'T}} >>
 
-let d_resource = d_resource.resource_improve d_resource (fset_type_term, wrap_intro d_fset_typeT)
+let d_resource = Mp_resource.improve d_resource (fset_type_term, wrap_intro d_fset_typeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -1624,7 +1624,7 @@ let infer_fequalp subst (so, t) =
          subst
 
 let typeinf_subst_resource =
-   typeinf_subst_resource.resource_improve (**)
+   Mp_resource.improve (**)
       typeinf_subst_resource
       (fequalp_term, infer_fequalp)
 
@@ -1680,7 +1680,7 @@ let typeinf_info =
 let typeinf_resource =
    let rec add_resource tr = function
       (term, inf) :: tl ->
-         add_resource (tr.resource_improve tr (term, inf)) tl
+         add_resource (Mp_resource.improve tr (term, inf)) tl
     | [] ->
          tr
    in

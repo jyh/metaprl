@@ -28,7 +28,7 @@ let d_false_type i p =
 
 let false_type_term = << "type"{."false"} >>
 
-let d_resource = d_resource.resource_improve d_resource (**)
+let d_resource = Mp_resource.improve d_resource (**)
                     (false_type_term, d_false_type)
 
 let d_false i p =
@@ -40,7 +40,7 @@ let d_false i p =
 
 let false_term = << "false" >>
 
-let d_resource = d_resource.resource_improve d_resource (**)
+let d_resource = Mp_resource.improve d_resource (**)
                     (false_term, d_false)
 
 (*

@@ -305,7 +305,7 @@ let d_dprodT i =
    else
       d_hyp_dprod i
 
-let d_resource = d_resource.resource_improve d_resource (dprod_term, d_dprodT)
+let d_resource = Mp_resource.improve d_resource (dprod_term, d_dprodT)
 
 (*
  * Typehood.
@@ -321,7 +321,7 @@ let d_dprod_typeT i p =
 
 let type_dprod_term = << "type"{.x:'A1 * 'A2['x]} >>
 
-let d_resource = d_resource.resource_improve d_resource (type_dprod_term, d_dprod_typeT)
+let d_resource = Mp_resource.improve d_resource (type_dprod_term, d_dprod_typeT)
 
 (************************************************************************
  * EQCD TACTIC                                                          *
@@ -338,11 +338,11 @@ let eqcd_dprodT p =
       (productEquality count x
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dprod_term, eqcd_dprodT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (dprod_term, eqcd_dprodT)
 
 let dprod_equal_term = << (x1 : 'A1 * 'B1['x1]) = (x2 : 'A2 * 'B2['x2]) in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (dprod_equal_term, d_wrap_eqcd eqcd_dprodT)
+let d_resource = Mp_resource.improve d_resource (dprod_equal_term, d_wrap_eqcd eqcd_dprodT)
 
 (*
  * EQCD pair.
@@ -355,11 +355,11 @@ let eqcd_pairT p =
       (pairEquality count x
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (pair_term, eqcd_pairT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (pair_term, eqcd_pairT)
 
 let dpair_equal_term = << ('a1, 'b1) = ('a2, 'b2) in (x1 : 'A1 * 'B1['x1]) >>
 
-let d_resource = d_resource.resource_improve d_resource (dpair_equal_term, d_wrap_eqcd eqcd_pairT)
+let d_resource = Mp_resource.improve d_resource (dpair_equal_term, d_wrap_eqcd eqcd_pairT)
 
 (*
  * EQCD spread.
@@ -369,7 +369,7 @@ let eqcd_spreadT p =
    let u, v, _, _ = dest_spread l in
       raise (RefineError ("eqcd_spreadT", StringError "not implemented"))
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (spread_term, eqcd_spreadT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (spread_term, eqcd_spreadT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -385,7 +385,7 @@ let inf_dprod f decl t =
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dprod_term, inf_dprod)
+let typeinf_resource = Mp_resource.improve typeinf_resource (dprod_term, inf_dprod)
 
 (*
  * Type of pair.
@@ -396,7 +396,7 @@ let inf_pair f decl t =
    let decl'', b' = f decl' b in
       decl'', mk_prod_term a' b'
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (pair_term, inf_pair)
+let typeinf_resource = Mp_resource.improve typeinf_resource (pair_term, inf_pair)
 
 (*
  * Type of spread.
@@ -413,7 +413,7 @@ let inf_spread inf decl t =
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (spread_term, inf_spread)
+let typeinf_resource = Mp_resource.improve typeinf_resource (spread_term, inf_spread)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -428,7 +428,7 @@ let dprod_subtypeT p =
        thenT addHiddenLabelT "subtype") p
 
 let sub_resource =
-   sub_resource.resource_improve
+   Mp_resource.improve
    sub_resource
    (DSubtype ([<< a1:'A1 * 'B1['a1] >>, << a2:'A2 * 'B2['a2] >>;
                << 'A2 >>, << 'A1 >>;

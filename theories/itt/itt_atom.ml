@@ -135,7 +135,7 @@ let d_atomT i p =
    else
       raise (RefineError ("d_atomT", StringError "no elimination form"))
 
-let d_resource = d_resource.resource_improve d_resource (atom_term, d_atomT)
+let d_resource = Mp_resource.improve d_resource (atom_term, d_atomT)
 
 (*
  * EqCD.
@@ -147,8 +147,8 @@ let eqcd_tokenT p =
    let count = hyp_count_addr p in
       tokenEquality count p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (atom_term, eqcd_atomT)
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (token_term, eqcd_tokenT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (atom_term, eqcd_atomT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (token_term, eqcd_tokenT)
 
 let d_info =
    [<< atom = atom in univ[@i:l] >>, wrap_intro eqcd_atomT;
@@ -161,7 +161,7 @@ let d_resource = add_d_info d_resource d_info
  *)
 let atom_equal_term = << atom = atom in univ[@i:l] >>
 
-let d_resource = d_resource.resource_improve d_resource (atom_equal_term, d_wrap_eqcd eqcd_atomT)
+let d_resource = Mp_resource.improve d_resource (atom_equal_term, d_wrap_eqcd eqcd_atomT)
 
 let d_atom_typeT i p =
    if i = 0 then
@@ -171,7 +171,7 @@ let d_atom_typeT i p =
 
 let atom_type_term = << "type"{atom} >>
 
-let d_resource = d_resource.resource_improve d_resource (atom_type_term, d_atom_typeT)
+let d_resource = Mp_resource.improve d_resource (atom_type_term, d_atom_typeT)
 
 (*
  * Sqequal.
@@ -188,14 +188,14 @@ let atomSqequalT p =
  *)
 let inf_atom _ decl _ = decl, univ1_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (atom_term, inf_atom)
+let typeinf_resource = Mp_resource.improve typeinf_resource (atom_term, inf_atom)
 
 (*
  * Type of an equality is the type of the equality type.
  *)
 let inf_token _ decl _ = decl, atom_term
 
-let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (token_term, inf_token)
+let typeinf_resource = Mp_resource.improve typeinf_resource (token_term, inf_token)
 
 (*
  * -*-

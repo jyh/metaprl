@@ -138,7 +138,7 @@ let d_dfun_funT i p =
 
 let dfun_fun_term = << fun_prop{z. "fun"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dfun_fun_term, d_dfun_funT)
+let d_resource = Mp_resource.improve d_resource (dfun_fun_term, d_dfun_funT)
 
 (*
  * Restricted.
@@ -152,7 +152,7 @@ let d_dfun_resT i p =
 
 let dfun_res_term = << restricted{z. "fun"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (dfun_res_term, d_dfun_resT)
+let d_resource = Mp_resource.improve d_resource (dfun_res_term, d_dfun_resT)
 
 (*
  * Functionality.
@@ -166,7 +166,7 @@ let d_all_funT i p =
 
 let all_fun_term = << fun_prop{z. "all"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (all_fun_term, d_all_funT)
+let d_resource = Mp_resource.improve d_resource (all_fun_term, d_all_funT)
 
 (*
  * Restricted.
@@ -180,7 +180,7 @@ let d_all_resT i p =
 
 let all_res_term = << restricted{z. "all"{'P1['z]; w. 'P2['z; 'w]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (all_res_term, d_all_resT)
+let d_resource = Mp_resource.improve d_resource (all_res_term, d_all_resT)
 
 (*
  * -*-

@@ -88,7 +88,7 @@ let d_void_funT i p =
 
 let void_fun_term = << fun_prop{z. "void"} >>
 
-let d_resource = d_resource.resource_improve d_resource (void_fun_term, d_void_funT)
+let d_resource = Mp_resource.improve d_resource (void_fun_term, d_void_funT)
 
 (*
  * Restricted.
@@ -101,7 +101,7 @@ let d_void_resT i p =
 
 let void_res_term = << restricted{z. "void"} >>
 
-let d_resource = d_resource.resource_improve d_resource (void_res_term, d_void_resT)
+let d_resource = Mp_resource.improve d_resource (void_res_term, d_void_resT)
 
 (*
  * Functional.
@@ -114,7 +114,7 @@ let d_false_funT i p =
 
 let false_fun_term = << fun_prop{z. "false"} >>
 
-let d_resource = d_resource.resource_improve d_resource (false_fun_term, d_false_funT)
+let d_resource = Mp_resource.improve d_resource (false_fun_term, d_false_funT)
 
 (*
  * Restricted.
@@ -127,7 +127,7 @@ let d_false_resT i p =
 
 let false_res_term = << restricted{z. "false"} >>
 
-let d_resource = d_resource.resource_improve d_resource (false_res_term, d_false_resT)
+let d_resource = Mp_resource.improve d_resource (false_res_term, d_false_resT)
 
 (*
  * -*-

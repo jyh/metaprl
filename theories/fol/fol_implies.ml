@@ -73,7 +73,7 @@ let d_implies_type i p =
 
 let implies_type_term = << "type"{implies{'A; 'B}} >>
 
-let d_resource = d_resource.resource_improve d_resource (implies_type_term, d_implies_type)
+let d_resource = Mp_resource.improve d_resource (implies_type_term, d_implies_type)
 
 let d_implies i p =
    if i = 0 then
@@ -87,7 +87,7 @@ let d_implies i p =
 
 let implies_term = << "implies"{'A; 'B} >>
 
-let d_resource = d_resource.resource_improve d_resource (implies_term, d_implies)
+let d_resource = Mp_resource.improve d_resource (implies_term, d_implies)
 
 (*
  * -*-

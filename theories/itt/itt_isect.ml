@@ -3,7 +3,7 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_set
@@ -15,13 +15,13 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
-open Options
+open Refiner.Refiner.RefineError
 open Resource
 
 open Var
 open Sequent
 open Tacticals
+
 open Itt_equal
 open Itt_subtype
 
@@ -31,8 +31,6 @@ open Itt_subtype
 let _ =
    if !debug_load then
       eprintf "Loading Itt_isect%t" eflush
-
-(* debug_string DebugLoad "Loading itt_isect..." *)
 
 (************************************************************************
  * TERMS                                                                *
@@ -199,10 +197,7 @@ let inf_isect f decl t =
    let v, a, b = dest_isect t in
    let decl', a' = f decl a in
    let decl'', b' = f ((v, a)::decl') b in
-   let le1, le2 =
-      try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (isect_term, inf_isect)
@@ -229,6 +224,11 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.11  1998/07/02 18:37:36  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.10  1998/07/01 04:37:41  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

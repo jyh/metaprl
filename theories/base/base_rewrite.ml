@@ -5,10 +5,10 @@
 include Rewrite_type
 include Base_dtactic
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
-open Tactic_type
+open Tacticals
 open Rewrite_type
 
 (*
@@ -29,6 +29,11 @@ let d_resource = d_resource.resource_improve d_resource (rewrite_term, d_rewrite
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/02 18:36:48  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.4  1998/07/01 04:37:15  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

@@ -3,9 +3,9 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 include Conversionals
-
+include Base_dtactic
 include Itt_equal
 
 open Printf
@@ -17,7 +17,10 @@ open Refine
 open Resource
 
 open Sequent
+open Tacticals
 open Conversionals
+open Base_dtactic
+open Itt_equal
 
 (*
  * Show that the file is loading.
@@ -31,24 +34,38 @@ let _ =
 (*
  * D tactic.
  *)
-let d_soft conv i p =
-   Conversionals.rw conv i p
+let d_soft conv i =
+   Conversionals.rw conv i thenT dT i
+
+(*
+ * Typehood.
+ *)
+let d_type_soft conv i =
+   Conversionals.rw (addrC [0] conv) i thenT dT i
 
 (*
  * EqCD.
  *)
-let eqcd_soft conv p =
-   Conversionals.rw conv (hyp_count p) p
+let eqcd_soft conv =
+   Conversionals.rw conv 0 thenT eqcdT
 
 (*
  * Combine them.
  *)
 let add_soft_abs dres eqcdres t rw =
-   dres.resource_improve dres (t, d_soft rw),
-   eqcdres.resource_improve eqcdres (t, eqcd_soft rw)
+   let type_t = mk_type_term t in
+   let dres = dres.resource_improve dres (t, d_soft rw) in
+   let dres = dres.resource_improve dres (type_t, d_type_soft rw) in
+   let eqcdres = eqcdres.resource_improve eqcdres (t, eqcd_soft rw) in
+      dres, eqcdres
 
 (*
  * $Log$
+ * Revision 1.7  1998/07/02 18:37:51  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.6  1998/06/03 22:19:45  jyh
  * Nonpolymorphic refiner.
  *

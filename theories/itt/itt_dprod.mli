@@ -3,14 +3,15 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_rfun
+include Itt_struct
 
 open Refiner.Refiner.Term
 
-open Tactic_type
+open Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -20,6 +21,9 @@ open Tactic_type
 declare prod{'A; x. 'B['x]}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
+
+declare fst{'e}
+declare snd{'e}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -37,6 +41,12 @@ prec prec_spread
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
 rewrite reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
+
+rewrite unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
+rewrite unfoldSnd : fst{'e} <--> spread{'e; u, v. 'v}
+
+rewrite reduceFst : fst{pair{'a; 'b}} <--> 'a
+rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b
 
 (************************************************************************
  * RULES                                                                *
@@ -63,6 +73,14 @@ axiom productEquality 'H 'y :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[@i:l] }
+
+(*
+ * Typehood.
+ *)
+axiom productType 'H 'x :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
+   sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} }
 
 (*
  * H >- x:A * B ext (a, b)
@@ -154,6 +172,11 @@ val mk_spread_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.8  1998/07/02 18:37:29  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.7  1998/06/23 22:12:31  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

@@ -16,7 +16,7 @@ open Debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 
 open Itt_int
 open Itt_equal
@@ -479,6 +479,11 @@ prim arith : arith_check{'t} --> 't = it
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/02 18:37:22  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.2  1998/07/01 04:37:33  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

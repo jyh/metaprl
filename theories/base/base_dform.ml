@@ -11,6 +11,7 @@ open Debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.RefineError
 open Dform
 open Rformat
 
@@ -116,7 +117,7 @@ dform rewrite_df : mode["src"] :: "rewrite"{'redex; 'contractum} =
    slot{'redex} `"<-->" slot{'contractum}
 
 dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
-   slot{'redex} " " longleftrightarrow " " slot{'contractum}
+   szone pushm[3] slot{'redex} " " longleftrightarrow " " slot{'contractum} popm ezone
 
 (*
  * For sequents.
@@ -156,7 +157,7 @@ mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
                format (i + 1, true, true, b)
 
          else
-            raise (Term.TermMatch ("sequent_print", seq, "not a sequent"))
+            raise (RefineError ("sequent_print", TermMatchError (seq, "not a sequent")))
    in
       format_szone buf;
       format_pushm buf 0;
@@ -243,6 +244,11 @@ dform newline_df : "\\" = \newline
 (*
  *
  * $Log$
+ * Revision 1.12  1998/07/02 18:36:45  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.11  1998/06/22 19:46:01  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

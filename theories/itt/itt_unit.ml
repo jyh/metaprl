@@ -6,7 +6,7 @@
  * Type unit contains one element, it.
  *)
 
-include Tactic_type
+include Tacticals
 include Itt_equal
 
 open Printf
@@ -16,7 +16,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Resource
 
-open Tactic_type
+open Tacticals
 open Itt_equal
 
 (*
@@ -160,6 +160,11 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (it_te
 
 (*
  * $Log$
+ * Revision 1.8  1998/07/02 18:38:03  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.7  1998/06/09 20:52:49  jyh
  * Propagated refinement changes.
  * New tacticals module.

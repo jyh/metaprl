@@ -2,9 +2,9 @@
  * Primitiva axiomatization of implication.
  *)
 
-include Czf_itt_wf
+include Czf_itt_set
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -61,7 +61,7 @@ prim all_intro 'H 'a :
  * H, x: all{x. A[x]}, J[x], y: A[z] >- T[x]
  *)
 prim all_elim 'H 'J 'x 'z 'w :
-   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x] >- member{'z; set} } -->
+   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
    sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
    sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x] >- 'T['x] } =
    it
@@ -134,6 +134,11 @@ let d_resource = d_resource.resource_improve d_resource (res_all_term, d_res_all
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/02 18:36:56  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.2  1998/07/01 04:37:18  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

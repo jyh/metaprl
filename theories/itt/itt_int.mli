@@ -3,7 +3,7 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_rfun
@@ -11,7 +11,7 @@ include Itt_logic
 
 open Refiner.Refiner.Term
 
-open Tactic_type
+open Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -271,6 +271,11 @@ val mk_ind_term : term -> string -> string -> term -> term -> string -> string -
 
 (*
  * $Log$
+ * Revision 1.9  1998/07/02 18:37:35  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.8  1998/06/15 22:33:22  jyh
  * Added CZF.
  *

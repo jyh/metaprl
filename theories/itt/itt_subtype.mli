@@ -6,7 +6,9 @@
 include Itt_equal
 
 open Refiner.Refiner.Term
-open Tactic_type
+
+open Sequent
+open Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -132,7 +134,7 @@ resource (sub_resource_info, tactic, sub_data) sub_resource
 (*
  * Utilities.
  *)
-val subtyper_of_proof : tactic_arg -> tactic
+val subtypeT : tactic
 
 (************************************************************************
  * TACTICS                                                              *
@@ -147,6 +149,11 @@ val mk_subtype_term : term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.7  1998/07/02 18:37:59  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.6  1998/06/22 19:46:26  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

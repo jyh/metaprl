@@ -3,8 +3,6 @@
  *
  *)
 
-include Options
-
 include Itt_equal
 
 open Printf
@@ -14,12 +12,12 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 
-open Tactic_type
 open Sequent
-open Options
 open Tacticals
+open Var
+
 open Itt_equal
 
 (*
@@ -116,19 +114,6 @@ prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent ['prop] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
    it
 
-(*
- * We don't really need this a s a rule, but it
- * is used often.
- *
- * H >> a = b in T
- * by swapEquands
- * H >> b = a in T
- *)
-prim swapEquands 'H :
-   sequent [squash] { 'H >- 'b = 'a in 'T } -->
-   sequent ['ext] { 'H >- 'a = 'b in 'T } =
-   it
-
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)
@@ -169,7 +154,7 @@ let thinT i p =
  *)
 let assertT s p =
    let count = hyp_count p in
-   let v = get_opt_var_arg "x" p in
+   let v = get_opt_var_arg "v" p in
       (cut count 0 s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
 
@@ -178,7 +163,7 @@ let assertT s p =
  *)
 let assertAtT i s p =
    let i, j = hyp_indices p i in
-   let v = get_opt_var_arg "x" p in
+   let v = get_opt_var_arg "v" p in
       (cut i j s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
 
@@ -190,20 +175,11 @@ let useWitnessT t p =
       introduction count t p
 
 (*
- * Swap the equands.
- *)
-let swapEquandsT p =
-   swapEquands (hyp_count p) p
-
-(*
  * Substitution.
  * The binding term may be optionally supplied.
  *)
 let substConclT t p =
-   let _, a, _ =
-      try dest_equal t with
-         Term.TermMatch _ -> raise (RefineError ("substT", StringTermError ("arg should be an equality: ", t)))
-   in
+   let _, a, _ = dest_equal t in
    let bind =
       try
          let t1 = get_with_arg p in
@@ -225,11 +201,7 @@ let substConclT t p =
  * Hyp substitution requires a replacement.
  *)
 let substHypT i t p =
-   let _, a, _ =
-      try dest_equal t with
-         Term.TermMatch _ ->
-            raise (RefineError ("substT", StringTermError ("arg should be an equality: ", t)))
-   in
+   let _, a, _ = dest_equal t in
    let _, t1 = Sequent.nth_hyp p i in
    let z = get_opt_var_arg "z" p in
    let bind =
@@ -268,10 +240,15 @@ let hypSubstT i p =
 let revHypSubstT i p =
    let t, a, b = dest_equal (snd (Sequent.nth_hyp p i)) in
    let h' = mk_equal_term t b a in
-      (substT i h' thenET (swapEquandsT thenT nthHypT i)) p
+      (substT i h' thenET (equalSymT thenT nthHypT i)) p
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/02 18:37:55  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.12  1998/07/01 04:37:50  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

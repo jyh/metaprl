@@ -3,7 +3,7 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_rfun
@@ -15,14 +15,14 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
-open Options
+open Refiner.Refiner.RefineError
 open Resource
 
 open Var
 open Sequent
 open Tacticals
 open Typeinf
+
 open Itt_equal
 open Itt_subtype
 
@@ -32,8 +32,6 @@ open Itt_subtype
 let _ =
    if !debug_load then
       eprintf "Loading Itt_union%t" eflush
-
-(* debug_string DebugLoad "Loading itt_union..." *)
 
 (************************************************************************
  * TERMS                                                                *
@@ -324,10 +322,7 @@ let inf_union f decl t =
    let a, b = dest_union t in
    let decl', a' = f decl a in
    let decl'', b' = f decl' b in
-   let le1, le2 =
-      try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (union_term, inf_union)
@@ -358,15 +353,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inr_t
 let inf_decide (inf : typeinf_func) (decl : term_subst) (t : term) =
    let e, x, a, y, b = dest_decide t in
    let decl', e' = inf decl e in
-   let l, r =
-      try dest_union e' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let l, r = dest_union e' in
    let decl'', a' = inf ((x, l)::decl') a in
    let decl''', b' = inf ((y, l)::decl'') b in
-      try unify decl''' a' b', a' with
-         Term.BadMatch _ ->
-            raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
+      unify decl''' a' b', a'
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)
 
@@ -391,6 +381,11 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.14  1998/07/02 18:38:01  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.13  1998/07/01 04:37:53  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

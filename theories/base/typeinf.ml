@@ -4,18 +4,19 @@
  * it is used to perform basic inference.
  *)
 
-include Tactic_type
+include Tacticals
 
 open Printf
 open Debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Term_table
 open Resource
 
-open Tactic_type
+open Tacticals
+open Sequent
 
 (*
  * Show that the file is loading.
@@ -107,11 +108,15 @@ let typeinf_resource =
  * Projector.
  *)
 let typeinf_of_proof p =
-   let { ref_typeinf = inf } = Sequent.resources p in
-      inf
+   get_typeinf_arg p "typeinf"
 
 (*
  * $Log$
+ * Revision 1.15  1998/07/02 18:36:53  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.14  1998/07/01 04:37:16  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

@@ -7,7 +7,7 @@ include Itt_equal
 
 open Refiner.Refiner.Term
 
-open Tactic_type
+open Tacticals
 open Sequent
 
 (*
@@ -89,18 +89,6 @@ axiom hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- 'A['z] } -->
    sequent ['prop] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
 
-(*
- * We don't really need this a s a rule, but it
- * is used often.
- *
- * H >> a = b in T
- * by swapEquands
- * H >> b = a in T
- *)
-axiom swapEquands 'H :
-   sequent [squash] { 'H >- 'b = 'a in 'T } -->
-   sequent ['ext] { 'H >- 'a = 'b in 'T }
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -111,13 +99,17 @@ val assertT : term -> tactic
 val assertAtT : int -> term -> tactic
 val useWitnessT : term -> tactic
 
-val swapEquandsT : tactic
 val substT : int -> term -> tactic
 val hypSubstT : int -> tactic
 val revHypSubstT : int -> tactic
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/02 18:37:56  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.5  1998/05/28 13:48:13  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

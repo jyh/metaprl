@@ -4,7 +4,7 @@
 
 include Czf_itt_exists
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -19,7 +19,8 @@ open Itt_rfun
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_dexists : "exists"{'T; x. 'A['x]} <--> prod{'T; x. 'A['x]}
+primrw unfold_dexists : "exists"{'T; x. 'A['x]} <-->
+                           (x: (x:set * member{'x; 'T}) * 'A[fst{'x}])
 
 let fold_dexists = makeFoldC << "exists"{'T; x. 'A['x]} >> unfold_dexists
 
@@ -46,7 +47,7 @@ dform dexists_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "exists"{'T; x.
 prim dexists_intro 'H 'z 'w :
    sequent ['ext] { 'H >- member{'z; 'T} } -->
    sequent ['ext] { 'H >- 'A['z] } -->
-   sequent ['ext] { 'H; w: 'T >- wf{'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- wf{'A['w]} } -->
    sequent ['ext] { 'H >- "exists"{'T; x. 'A['x]} } =
    it
 
@@ -57,10 +58,11 @@ prim dexists_intro 'H 'z 'w :
  * by exists_elim
  * H, x: y:T. A[x], z: T, w: A[z], J[pair{z, w}] >- T[pair{z, w}]
  *)
-prim dexists_elim 'H 'J 'x 'z 'w :
+prim dexists_elim 'H 'J 'x 'z 'v 'w :
    sequent ['ext] { 'H;
                     x: "exists"{'T; y. 'A['y]};
                     z: 'T;
+                    v: member{'z; 'T};
                     w: 'A['z];
                     'J[pair{'z; 'w}]
                     >- 'C[pair{'z; 'w}]
@@ -94,9 +96,9 @@ let d_dexistsT i p =
          dexists_intro (hyp_count p) z w p
    else
       let x, _ = nth_hyp p i in
-      let z, w = Var.maybe_new_vars2 p "u" "v" in
+      let z, v, w = Var.maybe_new_vars3 p "u" "v" "w" in
       let i, j = hyp_indices p i in
-          dexists_elim i j x z w p
+          dexists_elim i j x z v w p
 
 let d_resource = d_resource.resource_improve d_resource (dexists_term, d_dexistsT)
 
@@ -116,6 +118,11 @@ let d_resource = d_resource.resource_improve d_resource (wf_dexists_term, d_wf_d
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/02 18:37:03  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.2  1998/07/01 04:37:22  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

@@ -2,15 +2,15 @@
  * Primitiva axiomatization of implication.
  *)
 
-include Czf_itt_wf
+include Czf_itt_set
 
 open Conversionals
 
 declare "and"{'A; 'B}
 declare pair{'a; 'b}
 
-rewrite unfold_and : "and"{'A; 'B} <--> prod{'A; 'B}
-rewrite unfold_pair : pair{'a; 'b} <--> Itt_dprod!pair{'a; 'b}
+rewrite unfold_and : "and"{'A; 'B} <--> 'A * (unit * 'B)
+rewrite unfold_pair : pair{'a; 'b} <--> Itt_dprod!pair{'a; Itt_dprod!pair{it; 'b}}
 
 val fold_and : conv
 val fold_pair : conv
@@ -62,6 +62,11 @@ axiom and_res 'H :
 
 (*
  * $Log$
+ * Revision 1.2  1998/07/02 18:36:59  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.1  1998/06/23 22:12:20  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

@@ -3,7 +3,7 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_rfun
@@ -14,7 +14,7 @@ open Printf
 open Debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Rformat
 open Resource
 
@@ -437,6 +437,11 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.14  1998/07/02 18:37:34  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.13  1998/07/01 04:37:39  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

@@ -3,26 +3,28 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_dprod
+include Itt_struct
 
 open Printf
 open Debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
-open Options
+open Refiner.Refiner.RefineError
 open Resource
 
 open Var
 open Sequent
 open Tacticals
+
 open Itt_equal
 open Itt_subtype
 open Itt_dprod
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -55,6 +57,15 @@ prim independentProductEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[@i:l] } =
+   it
+
+(*
+ * Typehood.
+ *)
+prim independentProductType 'H :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H >- "type"{'A2} } -->
+   sequent ['ext] { 'H >- "type"{.'A1 * 'A2} } =
    it
 
 (*
@@ -122,9 +133,13 @@ let d_concl_prod p =
  *)
 let d_hyp_prod i p =
    let z, _ = Sequent.nth_hyp p i in
-   let i, j = hyp_indices p i in
+   let i', j = hyp_indices p i in
    let u, v = maybe_new_vars2 p "u" "v" in
-      independentProductElimination i j z u v p
+   let tac = independentProductElimination i' j z u v in
+      if get_thinning_arg p then
+         (tac thenT thinT i) p
+      else
+         tac p
 
 (*
  * Join them.
@@ -136,6 +151,19 @@ let d_prodT i =
       d_hyp_prod i
 
 let d_resource = d_resource.resource_improve d_resource (prod_term, d_prodT)
+
+(*
+ * Typehood.
+ *)
+let d_prod_typeT i p =
+   if i = 0 then
+      independentProductType (Sequent.hyp_count p) p
+   else
+      raise (RefineError ("d_prod_typeT", StringError "no elimination form"))
+
+let prod_type_term = << "type"{.'A1 * 'A2} >>
+
+let d_resource = d_resource.resource_improve d_resource (prod_type_term, d_prod_typeT)
 
 (*
  * EQCD.
@@ -158,11 +186,7 @@ let inf_prod f decl t =
    let a, b = dest_prod t in
    let decl', a' = f decl a in
    let decl'', b' = f decl' b in
-   let le1, le2 =
-      try dest_univ a', dest_univ b' with
-         Term.TermMatch _ ->
-            raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (prod_term, inf_prod)
@@ -188,6 +212,11 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.12  1998/07/02 18:37:42  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.11  1998/07/01 04:37:44  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

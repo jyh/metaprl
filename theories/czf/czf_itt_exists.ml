@@ -4,7 +4,7 @@
 
 include Czf_itt_and
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -49,7 +49,7 @@ dform exists_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "exists"{x. 'A} 
  * H >- A[z]
  *)
 prim exists_intro 'H 'z 'w :
-   sequent ['ext] { 'H >- member{'z; set} } -->
+   sequent ['ext] { 'H >- isset{'z} } -->
    sequent ['ext] { 'H >- 'A['z] } -->
    sequent ['ext] { 'H; w: set >- wf{'A['w]} } -->
    sequent ['ext] { 'H >- "exists"{x. 'A['x]} } =
@@ -141,6 +141,11 @@ let d_resource = d_resource.resource_improve d_resource (res_exists_term, d_res_
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/02 18:37:05  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.2  1998/07/01 04:37:23  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

@@ -3,13 +3,13 @@
  *)
 
 include Tactic_cache
-include Tactic_type
+include Tacticals
 
 open Refiner.Refiner
 open Resource
 
 open Tactic_cache
-open Tactic_type
+open Tacticals
 
 (************************************************************************
  * TYPES                                                                *
@@ -77,6 +77,11 @@ let cache = cache_resource.resource_extract cache_resource
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/02 18:36:43  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.4  1998/06/03 22:19:40  jyh
  * Nonpolymorphic refiner.
  *

@@ -2,9 +2,9 @@
  * Primitiva axiomatization of implication.
  *)
 
-include Czf_itt_wf
+include Czf_itt_and
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -21,6 +21,12 @@ open Itt_rfun
 
 declare "implies"{'A; 'B}
 
+(*
+ * Make formulas concise.
+ *)
+declare "iff"{'a; 'b}
+primrw unfold_iff : "iff"{'a; 'b} <--> "and"{.'a => 'b; .'b => 'a}
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -35,6 +41,9 @@ let fold_implies = makeFoldC << "implies"{'A; 'B} >> unfold_implies
 
 dform implies_df : mode[prl] :: parens :: "prec"[prec_implies] :: "implies"{'A; 'B} =
    pushm[0] slot{'A} " " Rightarrow `"' " slot{'B} popm
+
+dform iff_fs : mode[prl] :: parens :: "prec"[prec_implies] :: "iff"{'A; 'B} =
+   pushm[0] slot{'A} " " shortleftrightarrow `"' " slot{'B} popm
 
 (************************************************************************
  * RULES                                                                *
@@ -135,6 +144,11 @@ let d_resource = d_resource.resource_improve d_resource (res_implies_term, d_res
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/02 18:37:09  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.2  1998/07/01 04:37:25  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

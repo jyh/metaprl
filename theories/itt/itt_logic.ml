@@ -16,7 +16,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
 open Itt_equal
@@ -100,13 +100,13 @@ dform not_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: "not"{'a} =
    Nuprl_font!tneg slot[le]{'a}
 
 dform implies_df1 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
-   slot[le]{'a} Nuprl_font!Rightarrow " " slot[lt]{'b}
+   slot[le]{'a} " " Nuprl_font!Rightarrow " " slot[lt]{'b}
 
 dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
-   slot[le]{'a} Nuprl_font!wedge " " slot[lt]{'b}
+   slot[le]{'a} " " Nuprl_font!wedge " " slot[lt]{'b}
 
 dform or_df2 : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
-   slot[le]{'a} Nuprl_font!vee " " slot[lt]{'b}
+   slot[le]{'a} " " Nuprl_font!vee " " slot[lt]{'b}
 
 dform all_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
@@ -203,10 +203,7 @@ let inf_d dest f decl t =
    let v, a, b = dest t in
    let decl', a' = f decl a in
    let decl'', b' = f ((v, a)::decl') b in
-   let le1, le2 =
-      try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (all_term, inf_d dest_all)
@@ -219,10 +216,7 @@ let inf_nd dest f decl t =
    let a, b = dest t in
    let decl', a' = f decl a in
    let decl'', b' = f decl' b in
-   let le1, le2 =
-      try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (or_term, inf_nd dest_or)
@@ -240,6 +234,11 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/02 18:37:41  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.12  1998/07/01 04:37:43  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

@@ -3,12 +3,13 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_dprod
+include Itt_struct
 
-open Tactic_type
+open Tacticals
 
 (*
  * H >- Ui ext A * B
@@ -31,6 +32,14 @@ axiom independentProductEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[@i:l] }
+
+(*
+ * Typehood.
+ *)
+axiom independentProductType 'H :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H >- "type"{'A2} } -->
+   sequent ['ext] { 'H >- "type"{.'A1 * 'A2} }
 
 (*
  * H >- A * B ext (a, b)
@@ -85,6 +94,11 @@ val eqcd_prodT : tactic
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/02 18:37:43  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.4  1998/06/01 13:56:07  jyh
  * Proving twice one is two.
  *

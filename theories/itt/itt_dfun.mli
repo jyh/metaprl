@@ -8,7 +8,7 @@ include Itt_rfun
 
 open Refiner.Refiner.Term
 
-open Tactic_type
+open Tacticals
 
 (************************************************************************
  * RULES                                                                *
@@ -155,6 +155,11 @@ val eqcd_dfunT : tactic
 
 (*
  * $Log$
+ * Revision 1.7  1998/07/02 18:37:26  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.6  1998/06/23 22:12:29  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

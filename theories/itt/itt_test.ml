@@ -11,7 +11,7 @@ open Refiner.Refiner.Refine
 
 open Resource
 
-open Tactic_type
+open Tacticals
 open Conversionals
 
 open Itt_rfun
@@ -40,28 +40,20 @@ let redexC =
            reduceDiv;
            reduceFix]
 
-let resources =
-   { ref_d = d_resource.resource_extract d_resource;
-     ref_eqcd = eqcd_resource.resource_extract eqcd_resource;
-     ref_typeinf = typeinf_resource.resource_extract typeinf_resource;
-     ref_squash = squash_resource.resource_extract squash_resource;
-     ref_subtype = sub_resource.resource_extract sub_resource
-   }
-
-let goal = { mseq_hyps = []; mseq_goal = << sequent { 'H >- fact{100} = 0 in int } >> }
+let goal = mk_msequent << sequent { 'H >- fact{100} = 0 in int } >> []
 
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 
 let arg =
-   Tactic_type.create (**)
+   Sequent.create (**)
+      any_sentinal      (* Sentinal *)
       "main"            (* Label *)
       goal              (* Goal of proof *)
       cache             (* Proof cache *)
       []                (* Attributes *)
-      resources
 
 let test () =
-   let subgoals, ext = Tactic_type.refine (timingT (rw (repeatC (higherC redexC)) 0)) arg in
+   let subgoals, ext = Tacticals.refine (timingT (rw (repeatC (higherC redexC)) 0)) arg in
       match subgoals with
          [subgoal] ->
             Simple_print.print_simple_term (Sequent.goal subgoal);
@@ -74,6 +66,11 @@ let test () =
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/02 18:38:00  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.4  1998/07/01 18:10:10  nogin
  * Replaced 80 with 100
  *

@@ -29,6 +29,7 @@ NLFILES :=\
 	itt_int_bool\
 	itt_arith\
 	itt_isect\
+	itt_w\
 	itt_prec\
 	itt_srec\
 	itt_quotient\

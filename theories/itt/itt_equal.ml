@@ -3,7 +3,7 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 include Base_theory
 include Itt_squash
 
@@ -12,15 +12,16 @@ open Debug
 open Opname
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Rformat
 open Simple_print
 open Term_stable
 open Resource
 
-open Tactic_type
+open Tacticals
 open Sequent
 
 (*
@@ -69,6 +70,38 @@ mldform term_df2 : mode[prl] :: univ[@i:l] term_print buf =
  ************************************************************************)
 
 (*
+ * Typehood is equality.
+ *)
+prim equalityAxiom 'H 'J : :
+   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x = 'x in 'T } =
+   it
+
+(*
+ * Reflexivity.
+ *)
+prim equalityRef 'H 'y :
+   sequent ['ext] { 'H >- 'x = 'y in 'T } -->
+   sequent ['ext] { 'H >- 'x = 'x in 'T } =
+   it
+
+(*
+ * Symettry.
+ *)
+prim equalitySym 'H :
+   sequent ['ext] { 'H >- 'y = 'x in 'T } -->
+   sequent ['ext] { 'H >- 'x = 'y in 'T } =
+   it
+
+(*
+ * Transitivity.
+ *)
+prim equalityTrans 'H 'z :
+   sequent ['ext] { 'H >- 'x = 'z in 'T } -->
+   sequent ['ext] { 'H >- 'z = 'y in 'T } -->
+   sequent ['ext] { 'H >- 'x = 'y in 'T } =
+   it
+
+(*
  * H >- Ui ext a = b in T
  * by equalityFormation T
  *
@@ -94,6 +127,15 @@ prim equalityEquality 'H :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 }
    sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } :
    sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[@i:l] } =
+   it
+
+(*
+ * Typehood.
+ *)
+prim equalityType 'H :
+   sequent [squash] { 'H >- 'a = 'a in 'T } -->
+   sequent [squash] { 'H >- 'b = 'b in 'T } -->
+   sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
 (*
@@ -148,12 +190,13 @@ let dest_level_param t =
             begin
                match dest_param param with
                   Level s -> s
-                | _ -> raise (Term.TermMatch ("dest_level_param", t, "param type"))
+                | _ ->
+                     raise (RefineError ("dest_level_param", TermMatchError (t, "param type")))
             end
        | { op_params = [] } ->
-            raise (Term.TermMatch ("dest_level_param", t, "no params"))
+            raise (RefineError ("dest_level_param", TermMatchError (t, "no params")))
        | _ ->
-            raise (Term.TermMatch ("dest_level_param", t, "too many params"))
+            raise (RefineError ("dest_level_param", TermMatchError (t, "too many params")))
 
 (* Cumulativity over universes *)
 mlterm cumulativity{univ[@j:l]; univ[@i:l]} =
@@ -205,6 +248,12 @@ let equal_opname = opname_of_term equal_term
 let is_equal_term = is_dep0_dep0_dep0_term equal_opname
 let dest_equal = dest_dep0_dep0_dep0_term equal_opname
 let mk_equal_term = mk_dep0_dep0_dep0_term equal_opname
+
+let type_term = << "type"{'t} >>
+let type_opname = opname_of_term type_term
+let is_type_term = is_dep0_term type_opname
+let mk_type_term = mk_dep0_term type_opname
+let dest_type_term = dest_dep0_term type_opname
 
 let univ_term = << univ[@i:l] >>
 let univ1_term = << univ[1:l] >>
@@ -283,9 +332,8 @@ let eqcd_resource =
 (*
  * Resource argument.
  *)
-let eqcd_of_proof p =
-   let  { ref_eqcd = eqcd } = Sequent.resources p in
-      eqcd
+let eqcdT p =
+   Sequent.get_tactic_arg p "eqcd" p
 
 (************************************************************************
  * D TACTIC                                                             *
@@ -296,13 +344,35 @@ let eqcd_of_proof p =
  *)
 let d_equalT i p =
    if i = 0 then
-      (eqcd_of_proof p) p
+      eqcdT p
    else
       let t = goal p in
       let count = num_hyps t in
          equalityElimination (i - 1) (count - i - 1) p
 
 let d_resource = d_resource.resource_improve d_resource (equal_term, d_equalT)
+
+(*
+ * Typehood.
+ *)
+let d_equal_typeT i p =
+   if i = 0 then
+      equalityType (hyp_count p) p
+   else
+      raise (RefineError ("d_equal_typeT", StringError "no elimination form"))
+
+let equal_type_term = << "type"{. 'a = 'b in 'T } >>
+
+let d_resource = d_resource.resource_improve d_resource (equal_type_term, d_equal_typeT)
+
+(*
+ * Turn a eqcd tactic into a d tactic.
+ *)
+let d_wrap_eqcd eqcdT i p =
+   if i = 0 then
+      eqcdT p
+   else
+      d_equalT i p
 
 (************************************************************************
  * EQCD                                                                 *
@@ -357,8 +427,42 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 let unsquashT v p =
    squashFromAny (Sequent.hyp_count p) v p
 
+(************************************************************************
+ * OTHER TACTICS                                                        *
+ ************************************************************************)
+
+(*
+ * H, x:T, J >- x = x in T
+ *)
+let equalAssumT i p =
+   let i, j = hyp_indices p i in
+      equalityAxiom i j p
+
+(*
+ * Reflexivity.
+ *)
+let equalRefT t p =
+   equalityRef (hyp_count p) t p
+
+(*
+ * Symettry.
+ *)
+let equalSymT p =
+   equalitySym (hyp_count p) p
+
+(*
+ * Transitivity.
+ *)
+let equalTransT t p =
+   equalityTrans (hyp_count p) t p
+
 (*
  * $Log$
+ * Revision 1.15  1998/07/02 18:37:30  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.14  1998/07/01 04:37:37  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

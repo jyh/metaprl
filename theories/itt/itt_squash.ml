@@ -7,18 +7,18 @@
  *     sequent [it; it] { H >> T }
  *)
 
-include Tactic_type
+include Tacticals
 include Sequent
 
 open Printf
 open Debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Term_stable
 open Resource
 
-open Tactic_type
+open Tacticals
 open Sequent
 
 (*
@@ -118,12 +118,16 @@ let squash_resource =
 (*
  * Resource argument.
  *)
-let squash_of_proof p =
-   let { ref_squash = squash } = Sequent.resources p in
-      squash
+let squashT p =
+   Sequent.get_tactic_arg p "squash" p
 
 (*
  * $Log$
+ * Revision 1.12  1998/07/02 18:37:53  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.11  1998/07/01 04:37:49  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

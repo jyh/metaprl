@@ -3,12 +3,12 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_rfun
 
-open Tactic_type
+open Tacticals
 
 (************************************************************************
  * RULES                                                                *
@@ -83,6 +83,11 @@ val eqcd_funT : tactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/02 18:37:33  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.3  1998/04/22 22:44:47  jyh
  * *** empty log message ***
  *

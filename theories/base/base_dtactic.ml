@@ -8,12 +8,12 @@ open Debug
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermAddr
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 open Simple_print
 open Term_table
 
-open Tactic_type
+open Tacticals
 open Sequent
 
 (*
@@ -118,10 +118,16 @@ let d_resource =
      resource_improve = improve_resource
    }
 
-let dT = d_resource.resource_extract d_resource
+let dT i p =
+   Sequent.get_int_tactic_arg p "d" i p
 
 (*
  * $Log$
+ * Revision 1.10  1998/07/02 18:36:46  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.9  1998/07/01 04:37:13  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

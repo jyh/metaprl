@@ -4,14 +4,14 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Base_theory
 
 include Itt_squash
 
 open Refiner.Refiner.Term
-open Tactic_type
+open Tacticals
 open Base_theory
 
 (************************************************************************
@@ -33,6 +33,34 @@ prec prec_equal
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
+
+(*
+ * Typehood is equality.
+ *)
+axiom equalityAxiom 'H 'J :
+   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x = 'x in 'T }
+
+(*
+ * Reflexivity.
+ *)
+axiom equalityRef 'H 'y :
+   sequent ['ext] { 'H >- 'x = 'y in 'T } -->
+   sequent ['ext] { 'H >- 'x = 'x in 'T }
+
+(*
+ * Symettry.
+ *)
+axiom equalitySym 'H :
+   sequent ['ext] { 'H >- 'y = 'x in 'T } -->
+   sequent ['ext] { 'H >- 'x = 'y in 'T }
+
+(*
+ * Transitivity.
+ *)
+axiom equalityTrans 'H 'z :
+   sequent ['ext] { 'H >- 'x = 'z in 'T } -->
+   sequent ['ext] { 'H >- 'z = 'y in 'T } -->
+   sequent ['ext] { 'H >- 'x = 'y in 'T }
 
 (*
  * H >- type ext a = b in T
@@ -59,6 +87,14 @@ axiom equalityEquality 'H :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } -->
    sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[@i:l] }
+
+(*
+ * Typehood.
+ *)
+axiom equalityType 'H :
+   sequent [squash] { 'H >- 'a = 'a in 'T } -->
+   sequent [squash] { 'H >- 'b = 'b in 'T } -->
+   sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } }
 
 (*
  * H >- it = it in (a = b in T)
@@ -130,15 +166,7 @@ type eqcd_data
 
 resource (term * tactic, tactic, eqcd_data) eqcd_resource
 
-val eqcd_of_proof : tactic_arg -> tactic
-
-(************************************************************************
- * PRIMITIVES                                                           *
- ************************************************************************)
-
-val is_equal_term : term -> bool
-val dest_equal : term -> term * term * term
-val mk_equal_term : term -> term -> term -> term
+val eqcdT : tactic
 
 (************************************************************************
  * PRIMITIVES AND TACTICS                                               *
@@ -148,6 +176,11 @@ val equal_term : term
 val is_equal_term : term -> bool
 val dest_equal : term -> term * term * term
 val mk_equal_term : term -> term -> term -> term
+
+val type_term : term
+val is_type_term : term -> bool
+val mk_type_term : term -> term
+val dest_type_term : term -> term
 
 val univ_term : term
 val univ1_term : term
@@ -162,10 +195,24 @@ val eqcd_univT : tactic
 val eqcd_itT : tactic
 val squash_equalT : tactic
 
+(*
+ * Turn an eqcd tactic into a d tactic.
+ *)
+val d_wrap_eqcd : tactic -> int -> tactic
+
 val unsquashT : term -> tactic
+val equalAssumT : int -> tactic
+val equalRefT : term -> tactic
+val equalSymT : tactic
+val equalTransT : term -> tactic
 
 (*
  * $Log$
+ * Revision 1.8  1998/07/02 18:37:31  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.7  1998/06/22 19:46:16  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

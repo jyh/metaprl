@@ -3,7 +3,7 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_rfun
@@ -14,12 +14,12 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
-open Options
+open Refiner.Refiner.RefineError
 open Resource
 
 open Var
 open Sequent
+
 open Tacticals
 open Itt_subtype
 
@@ -305,8 +305,7 @@ let inf_cons inf decl t =
    let hd, tl = dest_cons t in
    let decl', hd' = inf decl hd in
    let decl'', tl' = inf decl' tl in
-      try unify decl'' (mk_list_term hd') tl', tl' with
-         Term.BadMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
+      unify decl'' (mk_list_term hd') tl', tl'
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (cons_term, inf_cons)
 
@@ -346,6 +345,11 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.14  1998/07/02 18:37:39  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.13  1998/07/01 04:37:42  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

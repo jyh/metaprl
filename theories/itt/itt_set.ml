@@ -11,16 +11,17 @@ include Itt_struct
 
 open Printf
 open Debug
-open Options
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
+open Sequent
 open Tacticals
 open Var
+
 open Itt_squash
 open Itt_struct
 open Itt_equal
@@ -46,7 +47,7 @@ declare hide{'A}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set_df1 : set{'A; x. 'B['x]} = "{" bvar{'x} `":" 'A `"|" 'B['x] "}"
+dform set_df1 : set{'A; x. 'B} = "{" bvar{'x} `":" 'A `"|" 'B "}"
 dform hide_df1 : mode[prl] :: hide{'A} = "[" 'A "]"
 
 (************************************************************************
@@ -205,10 +206,10 @@ let mk_hide_term = mk_dep0_term hide_opname
  * Squash a goal.
  *)
 let squashT p =
-   (if is_squash_goal p then
-       idT
-    else
-       squash_of_proof p) p
+   if is_squash_goal p then
+      idT p
+   else
+      Sequent.get_tactic_arg p "squash" p
 
 (*
  * Unhide a hidden hypothesis.
@@ -263,17 +264,16 @@ let d_set_hyp i p =
       (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
           [y; v] ->
              setElimination2 i j n y v
-        | _ -> 
+        | _ ->
              failT) p
    in
       (if is_squash_goal p then
           d_squashed
        else
-          let squash = squash_of_proof p in
           let tac =
              d_hidden thenT tryT (unhideT (i + 2))
           in
-             (squash thenMT d_squashed) orelseT tac) p
+             (squashT thenMT d_squashed) orelseT tac) p
 
 let d_setT i =
    if i = 0 then
@@ -304,10 +304,7 @@ let inf_set f decl t =
    let v, ty, prop = dest_set t in
    let decl', ty' = f decl ty in
    let decl'', prop' = f ((v, ty)::decl') prop in
-   let le1, le2 =
-      try dest_univ ty', dest_univ prop' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ ty', dest_univ prop' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (set_term, inf_set)
@@ -327,6 +324,11 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/07/02 18:37:49  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.9  1998/07/01 04:37:48  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

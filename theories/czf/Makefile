@@ -12,7 +12,8 @@ MLZFILES :=\
 # Library files
 NLFILES :=\
 	czf_itt_set\
-	czf_itt_wf\
+
+X=\
 	czf_itt_true\
 	czf_itt_false\
 	czf_itt_or\
@@ -22,7 +23,7 @@ NLFILES :=\
 	czf_itt_exists\
 	czf_itt_dall\
 	czf_itt_dexists\
-	czf_itt_axioms
+	czf_itt_set_ind
 
 # Name of main libraris
 MAIN = czf

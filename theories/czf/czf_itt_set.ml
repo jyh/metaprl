@@ -25,11 +25,13 @@ open Debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 open Term_stable
 
-open Tactic_type
+open Tacticals
+open Tacticals
+open Conversionals
 open Sequent
 open Var
 
@@ -56,29 +58,73 @@ let debug_czf_set =
  * TERMS                                                                *
  ************************************************************************)
 
-declare "set"
-declare member{'x; 't}
+(*
+ * Well-formedness judgements on propositions,
+ * and restricted propositions do not range over
+ * all sets.
+ *    wf{'p}: 'p is a well-formed proposition in CZF
+ *    restricted{'p}: 'p is a well-formed restricted proposition in CZF
+ *       where restricted means that it contains no unbounded
+ *       set quantifications.
+ *)
+declare wf{'p}
+declare restricted{'p}
 
 (*
  * These are the small types from which sets are built.
+ *    small: the type of small propositions
+ *    small_desc: descriptions of small propositions
+ *
  *)
 declare small
 declare small_type{'t}
 
 (*
- * The "collect" term is used to build sets.
+ * Sets are built by collecting over small types.
+ *   set: the type of all sets
+ *   isset{'s}: the judgement that 's is a set
+ *   member{'x; 't}:
+ *      a. 'x is a set
+ *      b. 't is a set
+ *      c. 'x is an element of 't
+ *   collect{'T; x. 'a['x]}:
+ *      the set constructed from the family of sets 'a['x]
+ *      where 'x ranges over 'T
  *)
-declare "collect"{'T; x. 'a['x]}
+declare set
+declare isset{'s}
+declare member{'x; 't}
+declare collect{'T; x. 'a['x]}
+
+(************************************************************************
+ * DEFINITIONS                                                          *
+ ************************************************************************)
+
+(*
+ * Sets.
+ *)
+primrw unfold_small_type : small_type{'t} <--> ('t = 't in small)
+primrw unfold_set : set <--> w{small; x. 'x}
+primrw unfold_isset : isset{'s} <--> ('s = 's in set)
+primrw unfold_member : member{'x; 'y} <-->
+  (('y = 'y in set) & tree_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
+primrw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
+
+let fold_small_type = makeFoldC << small_type{'t} >> unfold_small_type
+let fold_set        = makeFoldC << set >> unfold_set
+let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
+let fold_member     = makeFoldC << member{'x; 'y} >> unfold_member
+let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set_df : set =
-   `"set"
+dform wf_df : mode[prl] :: parens :: "prec"[prec_apply] :: wf{'A} =
+   slot{'A} `" wf"
 
-dform member_df : mode[prl] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
-   slot{'x} " " Nuprl_font!member " " slot{'t}
+dform restricted_df : mode[prl] :: parens :: "prec"[prec_apply] :: restricted{'A} =
+   slot{'A} `" restricted"
 
 dform small_df : small =
    `"small"
@@ -86,9 +132,19 @@ dform small_df : small =
 dform small_type_df : small_type{'t} =
    slot{'t} " " `"small_type"
 
+dform set_df : set =
+   `"set"
+
+dform isset_df : mode[prl] :: parens :: "prec"[prec_apply] :: isset{'s} =
+   slot{'s} `" set"
+
+dform member_df : mode[prl] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
+   slot{'x} " " Nuprl_font!member " " slot{'t}
+
 dform collect_df : mode[prl] :: parens :: "prec"[prec_apply] :: collect{'T; x. 'a} =
    szone pushm[3] `"collect" " " slot{'x} `":" " " slot{'T} `"." " " slot{'a} popm ezone
 
+(*
 (************************************************************************
  * SMALL TYPE RULES                                                     *
  ************************************************************************)
@@ -140,73 +196,94 @@ prim small_elim 'H 'J (a1: 'A1 -> 'B1) (a2:'A2 * 'B2) ('A3 + 'B3) ('a4 = 'b4 in 
    sequent ['ext] { 'H; A4: small; a4: 'A4; b: 'A4; 'J[('a4 = 'b4 in 'A4)] >- 'C[('a4 = 'b4 in 'A4)] } -->
    sequent ['ext] { 'H; x: small; 'J['x] >- 'C['x] } =
    it
+*)
 
 (************************************************************************
  * SET TYPE                                                             *
  ************************************************************************)
 
 (*
- * A set is a type.
+ * By assumption.
  *)
-prim set_type 'H : :
-   sequent ['ext] { 'H >- "type"{set} } =
-   it
+interactive isset_assum 'H 'J : :
+   sequent ['ext] { 'H; x: set; 'J['x] >- isset{'x} }
 
 (*
- * Every set is a type.
+ * Only sets have elements.
  *)
-prim subset_type 'H :
-   sequent ['ext] { 'H >- member{'T; set} } -->
-   sequent ['ext] { 'H >- "type"{'T} } =
-   it
-
-(*
- * This is how a set is constructed.
- *)
-prim collect_set 'H :
-   sequent ['ext] { 'H >- small_type{'T} } -->
-   sequent ['ext] { 'H; x: 'T >- member{'a['x]; set} } -->
-   sequent ['ext] { 'H >- member{collect{'T; x. 'a['x]}; set} } =
-   it
+interactive isset_contains 'H 'x :
+   sequent ['ext] { 'H >- member{'x; 'y} } -->
+   sequent ['ext] { 'H >- isset{'y} }
 
 (*
  * Elements of a set are also sets.
  *)
-prim member_set 'H 'y :
-   sequent ['ext] { 'H >- member{'y; set } } -->
+interactive isset_member 'H 'y :
    sequent ['ext] { 'H >- member{'x; 'y} } -->
-   sequent ['ext] { 'H >- member{'x; set} } =
-   it
+   sequent ['ext] { 'H >- isset{'x} }
 
 (*
- * Transfinite induction.
- * BUG: we need to work out the induction combinator.
+ * This is how a set is constructed.
  *)
-prim set_elim 'H 'J 'a 'T 'f 'w :
-   ('t['a; 'T; 'f; 'w] : sequent ['ext] { 'H; a: set; 'J['a]; T: small; f: 'T -> set; w: (all x : 'T. 'C['f 'x]) >- 'C[collect{'T; x. 'f 'x}] }) -->
-   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] } =
-   it
+interactive isset_collect 'H 'y :
+   sequent ['ext] { 'H >- small_type{'T} } -->
+   sequent ['ext] { 'H; y: 'T >- isset{'a['y]} } -->
+   sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
+
+(*
+ * Induction.
+ *)
+interactive set_elim 'H 'J 'a 'T 'f 'w :
+   sequent ['ext] { 'H;
+                    a: set;
+                    'J['a];
+                    T: small;
+                    f: 'T -> set;
+                    w: (all x : 'T. 'C['f 'x])
+                  >- 'C[collect{'T; x. 'f 'x}]
+                  } -->
+   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
 
 (************************************************************************
- * MEMBERSHIP                                                           *
+ * RELATION TO ITT                                                      *
  ************************************************************************)
 
-prim equal_member 'H :
-   sequent ['ext] { 'H >- member{'x; 'T} } -->
-   sequent ['ext] { 'H >- 'x = 'x in 'T } =
-   it
+(*
+ * We need the property that every well-formed proposition
+ * is a type.  The proof is delayed until the theory is collected
+ * and an induction form is given for well-formed formulas.
+ *)
+interactive wf_type 'H :
+   sequent ['ext] { 'H >- wf{'T} } -->
+   sequent ['ext] { 'H >- "type"{'T} }
 
 (*
- * By assumption.
+ * A set is a type in ITT.
  *)
-prim hyp_set_member 'H 'J : :
-   sequent ['ext] { 'H; x: set; 'J['x] >- member{'x; set} } =
-   it
+interactive set_type 'H : :
+   sequent ['ext] { 'H >- "type"{set} }
 
-prim hyp_member 'H 'J :
-   sequent ['ext] { 'H; x: 'y; 'J['x] >- member{'y; set} } -->
-   sequent ['ext] { 'H; x: 'y; 'J['x] >- member{'x; 'y} } =
-   it
+(*
+ * Membership judgment is also a type.
+ *)
+interactive member_type 'H :
+   sequent ['ext] { 'H >- isset{'t} } -->
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- "type"{member{'a; 't}} }
+
+(*
+ * Equality from sethood.
+ *)
+interactive equal_set 'H :
+   sequent ['ext] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H >- 's = 's in set }
+
+(*
+ * Equality from membership.
+ *)
+interactive equal_member 'H :
+   sequent ['ext] { 'H >- member{'x; 's} } -->
+   sequent ['ext] { 'H >- 'x = 'x in 's }
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -218,38 +295,90 @@ let prod_opname = opname_of_term Itt_dprod.dprod_term
 let union_opname = opname_of_term Itt_union.union_term
 let equal_opname = opname_of_term Itt_equal.equal_term
 
-let set_term = << set >>
-let small_term = << small >>
+let wf_term = << wf{'a} >>
+let restricted_term = << restricted{'a} >>
+let wf_opname = opname_of_term wf_term
+let restricted_opname = opname_of_term restricted_term
 
+let small_term = << small >>
 let small_type_term = << small_type{'t} >>
 let small_type_opname = opname_of_term small_type_term
 
+let set_term = << set >>
+let isset_term = << isset{'s} >>
 let member_term = << member{'x; 't} >>
-let member_opname = opname_of_term member_term
-
 let collect_term = << collect{'T; x. 'a['x]} >>
+
+let isset_opname = opname_of_term isset_term
+let member_opname = opname_of_term member_term
 let collect_opname = opname_of_term collect_term
+
+(*
+ * Testers.
+ *)
+let is_wf_term =
+   is_dep0_term wf_opname
+
+let is_restricted_term =
+   is_dep0_term restricted_opname
+
+let is_small_type_term =
+   is_dep0_term small_type_opname
+
+let is_isset_term =
+   is_dep0_term isset_opname
+
+let is_member_term =
+   is_dep0_dep0_term member_opname
+
+let is_collect_term =
+   is_dep0_dep1_term collect_opname
+
+(*
+ * Constructors.
+ *)
+let mk_wf_term =
+   mk_dep0_term wf_opname
+
+let mk_restricted_term =
+   mk_dep0_term restricted_opname
 
 let mk_small_type_term =
    mk_dep0_term small_type_opname
 
-let dest_small_type =
-   dest_dep0_term small_type_opname
+let mk_isset_term =
+   mk_dep0_term isset_opname
 
 let mk_member_term =
    mk_dep0_dep0_term member_opname
 
-let dest_member =
-   dest_dep0_dep0_term member_opname
-
 let mk_collect_term =
    mk_dep0_dep1_term collect_opname
+
+(*
+ * Destructors.
+ *)
+let dest_wf =
+   dest_dep0_term wf_opname
+
+let dest_restricted =
+   dest_dep0_term restricted_opname
+
+let dest_small_type =
+   dest_dep0_term small_type_opname
+
+let dest_isset =
+   dest_dep0_term isset_opname
+
+let dest_member =
+   dest_dep0_dep0_term member_opname
 
 let dest_collect t =
    dest_dep0_dep1_term collect_opname
 
+(*
 (************************************************************************
- * TACTICS                                                              *
+ * SMALL TACTICS                                                        *
  ************************************************************************)
 
 (*
@@ -274,7 +403,7 @@ let d_small_typeT i p =
          else if opname == union_opname then
             union_small n
          else if opname == equal_opname then
-            equal_small n thenLT [idT; setLabelT "wf"; setLabelT "wf"]
+            equal_small n thenLT [idT; addHiddenLabelT "wf"; addHiddenLabelT "wf"]
          else
             raise (RefineError ("d_small_typeT", StringTermError ("no rule applies", t)))
       in
@@ -302,7 +431,9 @@ let d_smallT i p =
          small_elim i j fun_t prod_t union_t equal_t p
 
 let d_resource = d_resource.resource_improve d_resource (small_term, d_smallT)
+*)
 
+(*
 (************************************************************************
  * MEM RESOURCE                                                         *
  ************************************************************************)
@@ -372,17 +503,89 @@ let memd_resource =
  * We inherit the tactic during proofs.
  *)
 let memd_of_proof p =
-   get_tactic p "memd"
+   get_tactic_arg p "memd"
+
+let memdT p =
+   (memd_of_proof p) p
+*)
+
+(************************************************************************
+ * ISSET                                                                *
+ ************************************************************************)
 
 (*
- * Memd on a collection.
+ * Collect is a set.
  *)
-let memd_collectT p =
-   collect_set (Sequent.hyp_count p) p
+let d_isset_genT tac i p =
+   if i = 0 then
+      let i = hyp_count p in
+         try
+            let arg = get_with_arg p in
+            let i =
+               try get_sel_arg p with
+                  Not_found ->
+                     1
+            in
+               if i > 1 then
+                  isset_member i arg p
+               else
+                  isset_contains i arg p
+         with
+            Not_found ->
+               tac i p
+   else
+      raise (RefineError ("d_issetT", StringError "no elimination rule for isset"))
 
-let memd_resource = memd_resource.resource_improve memd_resource (collect_term, memd_collectT)
+let d_isset_varT i p =
+   let tac i p =
+      raise (RefineError ("d_issetT", StringError "use withT to provide an argument"))
+   in
+      d_isset_genT tac i p
 
-let memdT = memd_resource.resource_extract memd_resource
+let d_isset_collectT i p =
+   let tac i p =
+      let v = maybe_new_vars1 p "v" in
+         isset_collect i v p
+   in
+      d_isset_genT tac i p
+
+(*
+ * Special case for collection.
+ *)
+let isset_collect_term = << isset{collect{'T; x. 'a['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (isset_term, d_isset_varT)
+let d_resource = d_resource.resource_improve d_resource (isset_collect_term, d_isset_collectT)
+
+(************************************************************************
+ * OTHER TACTICS                                                        *
+ ************************************************************************)
+
+(*
+ * H >- set type
+ *)
+let d_set_typeT i p =
+   if i = 0 then
+      set_type (Sequent.hyp_count p) p
+   else
+      raise (RefineError ("d_set_typeT", StringError "no elimination rule"))
+
+let set_type_term = << "type"{set} >>
+
+let d_resource = d_resource.resource_improve d_resource (set_type_term, d_set_typeT)
+
+(*
+ * H >- member{a; t} type
+ *)
+let d_member_typeT i p =
+   if i = 0 then
+      member_type (Sequent.hyp_count p) p
+   else
+      raise (RefineError ("d_member_typeT", StringError "no elimination rule"))
+
+let member_type_term = << "type"{member{'a; 't}} >>
+
+let d_resource = d_resource.resource_improve d_resource (member_type_term, d_member_typeT)
 
 (*
  * Set elimination.
@@ -399,42 +602,37 @@ let d_setT i p =
 let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
 
 (*
- * The type of sets is a type.
+ * Apply the type rule.
  *)
-let d_setTypeT p =
-   set_type (hyp_count p) p
+let wf_typeT p =
+   wf_type (Sequent.hyp_count p) p
 
 (*
- * Every set is a type.
+ * Equal sets.
  *)
-let d_subsetTypeT p =
-   subset_type (hyp_count p) p
+let eqSetT p =
+   equal_set (hyp_count p) p
 
 (*
  * Membership is equality.
  *)
-let d_eqMemberT p =
+let eqMemberT p =
    equal_member (hyp_count p) p
 
 (*
  * Assumption.
  *)
-let d_assumSetT i p =
-   let _, t = nth_hyp p i in
+let assumSetT i p =
    let i, j = hyp_indices p i in
-      if alpha_equal t set_term then
-         hyp_set_member i j p
-      else
-         hyp_member i j p
-
-(*
- * Every element of a set is a set.
- *)
-let d_subsetT s p =
-   member_set (hyp_count p) s p
+      isset_assum i j p
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/02 18:37:14  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.4  1998/07/01 04:37:28  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

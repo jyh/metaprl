@@ -7,18 +7,17 @@ include Itt_equal
 
 open Printf
 open Debug
-open Options
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 open Term_dtable
 
 open Var
 
-open Tactic_type
+open Tacticals
 open Sequent
 open Tacticals
 open Itt_equal
@@ -203,11 +202,7 @@ let extract_data base =
    let tbl = extract base in
    let subtyper p =
       let t = concl p in
-      let t1, t2 =
-         try dest_subtype t with
-            Term.TermMatch _ ->
-               raise (RefineError ("subtype", StringTermError ("should be subtype: ", t)))
-      in
+      let t1, t2 = dest_subtype t in
       let tac =
          try lookup tbl t1 t2 with
             Not_found ->
@@ -250,9 +245,8 @@ let sub_resource =
 (*
  * Resource argument.
  *)
-let subtyper_of_proof p =
-   let { ref_subtype = f } = Sequent.resources p in
-      f
+let subtypeT p =
+   Sequent.get_tactic_arg p "subtype" p
 
 (************************************************************************
  * TACTICS                                                              *
@@ -308,16 +302,18 @@ let inf_subtype f decl t =
    let a, b = dest_subtype t in
    let decl', a' = f decl a in
    let decl'', b' = f decl' b in
-   let le1, le2 =
-      try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subtype_term, inf_subtype)
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/02 18:37:58  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.12  1998/07/01 04:37:51  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

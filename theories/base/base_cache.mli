@@ -3,12 +3,12 @@
  *)
 
 include Tactic_cache
-include Tactic_type
+include Tacticals
 
 open Refiner.Refiner
 
 open Tactic_cache
-open Tactic_type
+open Tacticals
 
 type cache_rule =
    Forward of tactic frule
@@ -22,6 +22,11 @@ resource (cache_rule, cache, t) cache_resource
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/02 18:36:44  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.3  1998/06/03 22:19:41  jyh
  * Nonpolymorphic refiner.
  *

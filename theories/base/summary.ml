@@ -94,6 +94,34 @@ declare "proof_subst_arg"{'args}
  ************************************************************************)
 
 (*
+ * Modes.
+ *)
+declare dform_modes{'l}
+
+dform dform_modes_df1 : dform_modes{cons{'hd; 'tl}} =
+   slot{'hd} " " `"::" space dform_modes{dform_modes; 'tl}
+
+dform dform_modes_df2 : dform_modes{dform_modes; cons{'hd; 'tl}} =
+   slot{'hd} " " `"::" space dform_modes{dform_modes; 'tl}
+
+dform dform_modes_df3 : dform_modes{nil} =
+   `""
+
+dform dform_modes_df3 : dform_modes{dform_modes; nil} =
+   hspace
+
+(*
+ * Space the items.
+ *)
+declare space_list{'l}
+
+dform space_list_df1 : space_list{cons{'hd; 'tl}} =
+   slot{'hd} " " space_list{'tl}
+
+dform space_list_df2 : space_list{nil} =
+   `""
+
+(*
  * Interface just declares it.
  *)
 declare lines{'e}
@@ -132,14 +160,14 @@ dform rewrite_df : "rewrite"[@name:s]{'redex; 'contractum; 'proof} =
  * A conditional rewrite requires special handling of the params.
  *)
 dform context_param_df : "context_param"[@name:s] =
-   `"context_param " slot[@name:s]
+   slot[@name:s]
 
 dform var_param_df : "var_param"[@name:s] =
-   `"var_param " slot[@name:s]
+   slot[@name:s]
 
 dform term_param_df : "term_param"{'t} =
    szone pushm[4]
-   `"term_param " slot{'t}
+   slot{'t}
    popm ezone
 
 dform cond_rewrite_df : "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof} =
@@ -155,7 +183,7 @@ dform axiom_df : "axiom"[@name:s]{'stmt; 'proof} =
 
 dform rule_df : "rule"[@name:s]{'params; 'stmt; 'proof} =
    szone pushm[4]
-   `"axiom" " " slot[@name:s] " " slot{'params} `" :" " " slot{'stmt}
+   `"axiom" " " slot[@name:s] " " space_list{'params} `":" hspace slot{'stmt}
    ezone popm
 
 dform opname_df : "opname"[@name:s]{'term} =
@@ -198,8 +226,8 @@ dform module_df : "module"[@name:s]{'info} =
 dform dform_df : "dform"[@name:s]{'modes; 'redex; 'def} =
    szone pushm[4]
    `"dform" " " slot[@name:s]
-   space `": " slot{'modes} slot["raw"]{'redex}
-   space `"= " pushm slot{'def} popm
+   space `": " dform_modes{'modes} slot["raw"]{'redex}
+   space `"=" hspace pushm slot{'def} popm
    ezone popm
 
 (*
@@ -240,8 +268,25 @@ dform df_term_df : df_term{'t} =
 dform meta_theorem_df : meta_theorem{'A} =
    slot{'A}
 
+dform meta_implies_df : meta_implies{'A; 'B} =
+   slot{'A} " " longrightarrow hspace slot{'B}
+
+dform mode_df : mode_df[@s:s] =
+   `"mode[" slot[@s:s] `"]"
+
+dform prec_df : prec_df[@s:s] =
+   `"prec[" slot[@s:s] `"]"
+
+dform parens_df : parens_df =
+   `"parens"
+
 (*
  * $Log$
+ * Revision 1.12  1998/07/02 18:36:52  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.11  1998/06/15 22:32:40  jyh
  * Added CZF.
  *

@@ -5,7 +5,7 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 include Itt_equal
 include Itt_subtype
 
@@ -16,7 +16,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Resource
 
-open Tactic_type
+open Tacticals
 open Itt_equal
 open Itt_subtype
 
@@ -150,6 +150,11 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_
 
 (*
  * $Log$
+ * Revision 1.10  1998/07/02 18:38:05  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.9  1998/06/15 22:33:40  jyh
  * Added CZF.
  *

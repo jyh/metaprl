@@ -4,7 +4,7 @@
 
 open Refiner.Refiner.Term
 open Refine
-open Tactic_type
+open Tacticals
 
 (*
  * This are the types.
@@ -14,7 +14,17 @@ type d_data
 resource (term * (int -> tactic), int -> tactic, d_data) d_resource
 
 (*
+ * The inherited d tactic.
+ *)
+val dT : int -> tactic
+
+(*
  * $Log$
+ * Revision 1.4  1998/07/02 18:36:47  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.3  1998/05/28 13:47:14  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

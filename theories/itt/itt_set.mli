@@ -10,7 +10,7 @@ include Itt_struct
 
 open Refiner.Refiner.Term
 
-open Tactic_type
+open Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -131,6 +131,11 @@ val mk_hide_term : term -> term
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/02 18:37:50  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.5  1998/05/28 13:48:02  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

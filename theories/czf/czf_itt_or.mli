@@ -2,7 +2,7 @@
  * Primitiva axiomatization of implication.
  *)
 
-include Czf_itt_wf
+include Czf_itt_set
 
 open Conversionals
 
@@ -67,6 +67,11 @@ axiom or_res 'H :
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/02 18:37:13  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.3  1998/06/23 22:12:23  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

@@ -2,9 +2,9 @@
  * Logical false.
  *)
 
-include Czf_itt_wf
+include Czf_itt_set
 
-open Tactic_type
+open Tacticals
 
 declare "false"
 
@@ -36,6 +36,11 @@ axiom false_res 'H :
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/02 18:37:08  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.2  1998/06/16 16:25:59  jyh
  * Added itt_test.
  *

@@ -2,7 +2,7 @@
  * Primitiva axiomatization of implication.
  *)
 
-include Czf_itt_wf
+include Czf_itt_and
 
 open Conversionals
 
@@ -11,6 +11,11 @@ declare "implies"{'A; 'B}
 rewrite unfold_implies : "implies"{'A; 'B} <--> "fun"{'A; 'B}
 
 val fold_implies : conv
+
+(*
+ * Make forula concise.
+ *)
+define unfold_iff : "iff"{'a; 'b} <--> "and"{.'a => 'b; .'b => 'a}
 
 (*
  * Intro.
@@ -56,6 +61,11 @@ axiom implies_res 'H :
 
 (*
  * $Log$
+ * Revision 1.2  1998/07/02 18:37:10  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.1  1998/06/23 22:12:22  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

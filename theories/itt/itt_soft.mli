@@ -3,15 +3,16 @@
  *
  *)
 
-include Tactic_type
-
+include Tacticals
+include Conversionals
+include Base_dtactic
 include Itt_equal
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Resource
 
-open Tactic_type
+open Tacticals
 open Base_dtactic
 open Itt_equal
 
@@ -25,6 +26,11 @@ val add_soft_abs :
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/02 18:37:52  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.5  1998/06/03 22:19:46  jyh
  * Nonpolymorphic refiner.
  *

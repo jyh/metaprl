@@ -8,7 +8,7 @@ include Base_dtactic
 open Refiner.Refiner.Term
 open Refiner.Refiner.Refine
 
-open Tactic_type
+open Tacticals
 
 (*
  * Tactics.
@@ -18,6 +18,11 @@ val d_rewriteT : int -> tactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/02 18:36:50  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.3  1998/06/22 19:46:04  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

@@ -2,9 +2,9 @@
  * Logical true.
  *)
 
-include Czf_itt_wf
+include Czf_itt_set
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 
 open Sequent
 open Resource
@@ -19,7 +19,7 @@ primrw unfoldTrue : "true" <--> (0 = 0 in int)
  ************************************************************************)
 
 dform true_df : "true" =
-   `"true"
+   `"true'"
 
 (************************************************************************
  * RULES                                                                *
@@ -94,6 +94,11 @@ let d_resource = d_resource.resource_improve d_resource (res_true_term, d_res_tr
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/02 18:37:16  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.3  1998/07/01 04:37:29  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

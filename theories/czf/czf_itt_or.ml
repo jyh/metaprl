@@ -2,9 +2,9 @@
  * Primitiva axiomatization of implication.
  *)
 
-include Czf_itt_wf
+include Czf_itt_set
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -156,6 +156,11 @@ let d_resource = d_resource.resource_improve d_resource (res_or_term, d_res_orT)
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/02 18:37:12  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.5  1998/07/01 04:37:27  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

@@ -4,7 +4,7 @@
 
 include Czf_itt_all
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -19,7 +19,7 @@ open Itt_rfun
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_dall : "all"{'T; x. 'A['x]} <--> Itt_rfun!"fun"{'T; x. 'A['x]}
+primrw unfold_dall : "all"{'T; x. 'A['x]} <--> (x: set -> member{'x; 'T} -> 'A['x])
 
 let fold_dall = makeFoldC << "all"{'T; x. 'A['x]} >> unfold_dall
 
@@ -42,9 +42,9 @@ dform dall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "all"{'T; x. 'A} =
  * H >- member{T; set}
  * H, x: T >- A
  *)
-prim dall_intro 'H 'a :
-   sequent ['ext] { 'H >- member{'T; set} } -->
-   sequent ['ext] { 'H; a: 'T >- 'A['a] } -->
+prim dall_intro 'H 'a 'b :
+   sequent ['ext] { 'H >- isset{'T} } -->
+   sequent ['ext] { 'H; a: set; b: member{'a; 'T} >- 'A['a] } -->
    sequent ['ext] { 'H >- "all"{'T; x. 'A['x]} } =
    it
 
@@ -66,7 +66,7 @@ prim dall_elim 'H 'J 'x 'z 'w :
  * Well formedness.
  *)
 prim dall_wf 'H 'y :
-   sequent ['ext] { 'H >- member{'T; set} } -->
+   sequent ['ext] { 'H >- isset{'T} } -->
    sequent ['ext] { 'H; y: 'T >- wf{'A['y]} } -->
    sequent ['ext] { 'H >- wf{."all"{'T; x. 'A['x]} } } =
    it
@@ -83,8 +83,8 @@ let wf_dall_term = << wf{. "all"{'T; x. 'A['x]}} >>
  *)
 let d_dallT i p =
    if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         dall_intro (hyp_count p) v p
+      let v, w = maybe_new_vars2 p "v" "w" in
+         dall_intro (hyp_count p) v w p
    else
       let x, _ = nth_hyp p i in
       let w = Var.maybe_new_vars1 p "u" in
@@ -110,6 +110,11 @@ let d_resource = d_resource.resource_improve d_resource (wf_dall_term, d_wf_dall
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/02 18:37:01  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.2  1998/07/01 04:37:21  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

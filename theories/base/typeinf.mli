@@ -4,12 +4,13 @@
  * it is used to perform basic inference.
  *)
 
-include Tactic_type
+include Tacticals
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 
-open Tactic_type
+open Sequent
+open Tacticals
 
 (*
  * A type inference is performed in a type context,
@@ -53,6 +54,11 @@ val typeinf_of_proof : tactic_arg -> typeinf_func
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/02 18:36:54  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.4  1998/06/01 13:55:42  jyh
  * Proving twice one is two.
  *

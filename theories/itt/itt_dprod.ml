@@ -3,10 +3,11 @@
  *
  *)
 
-include Tactic_type
+include Tacticals
 
 include Itt_equal
 include Itt_rfun
+include Itt_struct
 
 open Printf
 open Debug
@@ -15,15 +16,16 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
-open Options
+open Refiner.Refiner.RefineError
 open Resource
 
 open Var
 open Tacticals
 open Sequent
+
 open Itt_equal
 open Itt_subtype
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -42,6 +44,8 @@ let _ =
 declare prod{'A; x. 'B['x]}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
+declare fst{'e}
+declare snd{'e}
 
 (************************************************************************
  * REWRITES                                                             *
@@ -52,6 +56,12 @@ declare spread{'e; u, v. 'b['u; 'v]}
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
 primrw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
+
+primrw unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
+primrw unfoldSnd : fst{'e} <--> spread{'e; u, v. 'v}
+
+primrw reduceFst : fst{pair{'a; 'b}} <--> 'a
+primrw reduceSnd : snd{pair{'a; 'b}} <--> 'b
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -77,6 +87,12 @@ dform pair_prl_df1 : mode[prl] :: pair{'a; 'b} =
 
 dform spread_prl_df1 : parens :: "prec"[prec_spread] :: mode[prl] :: spread{'e; u, v. 'b['u; 'v]} =
    `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b['u; 'v]}
+
+dform fst_df1 : mode[prl] :: fst{'e} =
+   slot{'e} `".1"
+
+dform snd_df1 : mode[prl] :: snd{'e} =
+   slot{'e} `".2"
 
 (************************************************************************
  * RULES                                                                *
@@ -104,6 +120,15 @@ prim productEquality 'H 'y :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[@i:l] } =
+   it
+
+(*
+ * Typehood.
+ *)
+prim productType 'H 'x :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
+   sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} } =
    it
 
 (*
@@ -223,9 +248,13 @@ let d_concl_dprod p =
  *)
 let d_hyp_dprod i p =
    let z, _ = Sequent.nth_hyp p i in
-   let i, j = hyp_indices p i in
+   let i', j = hyp_indices p i in
    let u, v = maybe_new_vars2 p "u" "v" in
-      productElimination i j z u v p
+   let tac = productElimination i' j z u v in
+      if get_thinning_arg p then
+         (tac thenT thinT i) p
+      else
+         tac p
 
 (*
  * Join them.
@@ -237,6 +266,22 @@ let d_dprodT i =
       d_hyp_dprod i
 
 let d_resource = d_resource.resource_improve d_resource (dprod_term, d_dprodT)
+
+(*
+ * Typehood.
+ *)
+let d_dprod_typeT i p =
+   if i = 0 then
+      let concl = Sequent.concl p in
+      let v, _, _ = dest_dprod (one_subterm concl) in
+      let v = maybe_new_vars1 p v in
+         productType (hyp_count p) v p
+   else
+      raise (RefineError ("d_prod_typeT", StringError "no elimination form"))
+
+let type_dprod_term = << "type"{.x:'A1 * 'A2['x]} >>
+
+let d_resource = d_resource.resource_improve d_resource (type_dprod_term, d_dprod_typeT)
 
 (************************************************************************
  * EQCD TACTIC                                                          *
@@ -289,10 +334,7 @@ let inf_dprod f decl t =
    let v, a, b = dest_dprod t in
    let decl', a' = f decl a in
    let decl'', b' = f ((v, a)::decl') b in
-   let le1, le2 =
-      try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
+   let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dprod_term, inf_dprod)
@@ -347,6 +389,11 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.14  1998/07/02 18:37:27  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.13  1998/07/01 04:37:36  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

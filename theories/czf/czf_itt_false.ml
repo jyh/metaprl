@@ -2,13 +2,13 @@
  * Logical false.
  *)
 
-include Czf_itt_wf
+include Czf_itt_set
 
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 
 open Sequent
 open Resource
-open Tactic_type
+open Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -21,7 +21,7 @@ declare "false"
  ************************************************************************)
 
 dform false_df : "false" =
-   `"false"
+   `"false'"
 
 (************************************************************************
  * DEFINTION                                                            *
@@ -101,6 +101,11 @@ let d_resource = d_resource.resource_improve d_resource (res_false_term, d_res_f
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/02 18:37:07  jyh
+ * Refiner modules now raise RefineError exceptions directly.
+ * Modules in this revision have two versions: one that raises
+ * verbose exceptions, and another that uses a generic exception.
+ *
  * Revision 1.3  1998/07/01 04:37:24  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

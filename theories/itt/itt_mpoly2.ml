@@ -70,7 +70,8 @@ let mpoly_evalTopC_env e =
 
 let mpoly_evalTopC = funC mpoly_evalTopC_env
 
-let mpoly_evalC = repeatC (lowerC mpoly_evalTopC)
+(*let mpoly_evalC = repeatC (higherC mpoly_evalTopC)*)
+let mpoly_evalC = reduceC
 (*******************************************************************)
 
 define unfold_monom : monom{'R; 'n} <--> 'R^car * (nat{'n} -> nat)
@@ -87,7 +88,7 @@ declare add_mpoly{'p; 'q}
 prim_rw reduce_add_mpolyNil : add_mpoly{nil; 'q}<--> 'q
 prim_rw reduce_add_mpolyCons : add_mpoly{cons{'m; 'p}; 'q}<--> add_mpoly{'p; cons{'m; 'q}}
 
-let reduce_add_mpolyC = sweepDnC reduce_add_mpolyCons thenC higherC reduce_add_mpolyNil thenC reduceC
+let reduce_add_mpolyC = sweepDnC reduce_add_mpolyCons thenC higherC reduce_add_mpolyNil
 
 define unfold_fun_sum : fun_sum{'f1;'f2} <--> lambda{i_sum.(('f1 'i_sum) +@ ('f2 'i_sum))}
 
@@ -120,7 +121,7 @@ prim_rw reduce_eval_monomAuxCons :
 	eval_monomAux{('k, 'f); cons{'v;'vals}; 'i; 'R} <-->
 	(natpower{'R; 'v; ('f 'i)} *['R] eval_monomAux{('k, 'f); 'vals; 'i +@ 1; 'R})
 
-let reduce_eval_monomAuxC = sweepDnC reduce_eval_monomAuxCons thenC higherC reduce_eval_monomAuxNil thenC reduceC
+let reduce_eval_monomAuxC = sweepDnC reduce_eval_monomAuxCons thenC higherC reduce_eval_monomAuxNil
 let reduce_eval_monomC = unfold_eval_monom thenC reduce_eval_monomAuxC
 
 define unfold_eval_mpoly : eval_mpoly{'p; 'vals; 'R} <-->
@@ -237,7 +238,7 @@ interactive eval_standardizeAssert unitringCE[i:l] eval_mpoly{'p; 'vals; 'R} :
 		 in 'R^car) >- 'C } -->
 	sequent{ <H> >- 'C }
 
-interactive eval_standardizeElim {| elim [elim_typeinf <<'R>>] |} 'H unitringCE[i:l] :
+interactive eval_standardizeElim 'H unitringCE[i:l] :
 	[wf] sequent{ <H> >- 'p in mpoly{'R; length{'vals}} } -->
 	[wf] sequent{ <H> >- 'vals in list{'R^car} } -->
 	[wf] sequent{ <H> >- 'R in unitringCE[i:l] } -->
@@ -394,40 +395,42 @@ interactive mpoly_of_Term_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] 
 	sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mpoly_ofTerm{'pt;'R} in mpoly{'R; 'n} }
 
+let tailC = (*mpoly_evalC thenC*) reduceC
+
 let resource reduce += [
 	<<mpoly{'R; number[i:n]}>>, (unfold_mpoly thenC (addrC [0] unfold_monom));
-	<<const_mpoly{'c}>>, (unfold_const_mpoly thenC reduceC);
-	<<eval_monom{('k,'f); 'vals; 'R}>>, (reduce_eval_monomC thenC reduceC);
-	<<eval_mpoly{'p; 'vals; 'R}>>, (unfold_eval_mpoly thenC reduceC);
-	<<add_mpoly{nil; 'q}>>, (reduce_add_mpolyNil thenC reduceC);
-	<<add_mpoly{cons{'m; 'p}; 'q}>>, (reduce_add_mpolyCons thenC reduceC);
-	<<fun_sum{'f1;'f2} 'n>>, (reduce_fun_sum thenC reduceC);
-	<<mul_monom{('k1,'f1); ('k2,'f2); 'R}>>, (reduce_mul_monom thenC reduceC);
-	<<mul_monom_mpoly{'m; 'p; 'R}>>, (unfold_mul_monom_mpoly thenC reduceC);
-	<<mul_mpoly{'p; 'q; 'R}>>, (unfold_mul_mpoly thenC reduceC);
+	<<const_mpoly{'c}>>, (unfold_const_mpoly thenC tailC);
+	<<eval_monom{('k,'f); 'vals; 'R}>>, (reduce_eval_monomC thenC tailC);
+	<<eval_mpoly{'p; 'vals; 'R}>>, (unfold_eval_mpoly thenC tailC);
+	<<add_mpoly{nil; 'q}>>, (reduce_add_mpolyNil thenC tailC);
+	<<add_mpoly{cons{'m; 'p}; 'q}>>, (reduce_add_mpolyCons thenC tailC);
+	<<fun_sum{'f1;'f2} 'n>>, (reduce_fun_sum thenC tailC);
+	<<mul_monom{('k1,'f1); ('k2,'f2); 'R}>>, (reduce_mul_monom thenC tailC);
+	<<mul_monom_mpoly{'m; 'p; 'R}>>, (unfold_mul_monom_mpoly thenC tailC);
+	<<mul_mpoly{'p; 'q; 'R}>>, (unfold_mul_mpoly thenC tailC);
 
 	<<id_mpoly{'R; number[i:n]}>>, unfold_id_mpoly;
 	<<zero_mpoly>>, unfold_zero_mpoly;
 
-	<<add_monom{('k1,'f1); ('k2,'f2); 'R}>>, (reduce_add_monom thenC reduceC);
-	<<cmp_lexi{('k1,'f1); ('k2,'f2); number[i:n]; 'cmp; 'eq}>>, (reduce_cmp_lexi thenC reduceC);
-	<<eq_monom{('k1,'f1); ('k2,'f2); number[i:n]}>>, (reduce_eq_monom thenC reduceC);
-	<<inject{('k,'f); 'p; 'R; number[i:n]}>>, (unfold_inject thenC reduceC);
-	<<standardize{'p; 'R; number[i:n]}>>, (unfold_standardize thenC reduceC);
+	<<add_monom{('k1,'f1); ('k2,'f2); 'R}>>, (reduce_add_monom thenC tailC);
+	<<cmp_lexi{('k1,'f1); ('k2,'f2); number[i:n]; 'cmp; 'eq}>>, (reduce_cmp_lexi thenC tailC);
+	<<eq_monom{('k1,'f1); ('k2,'f2); number[i:n]}>>, (reduce_eq_monom thenC tailC);
+	<<inject{('k,'f); 'p; 'R; number[i:n]}>>, (unfold_inject thenC tailC);
+	<<standardize{'p; 'R; number[i:n]}>>, (unfold_standardize thenC tailC);
 
-	<<eval_mpolyTerm{addTerm{'l;'r}; 'vals; 'R}>>, (reduce_eval_mpolyTermAdd thenC reduceC);
-	<<eval_mpolyTerm{mulTerm{'l;'r}; 'vals; 'R}>>, (reduce_eval_mpolyTermMul thenC reduceC);
-	<<eval_mpolyTerm{constTerm{'c}; 'vals; 'R}>>, (reduce_eval_mpolyTermConst thenC reduceC);
-	<<eval_mpolyTerm{varTerm{number[i:n]}; 'vals; 'R}>>, (reduce_eval_mpolyTermVar thenC reduceC);
+	<<eval_mpolyTerm{addTerm{'l;'r}; 'vals; 'R}>>, (reduce_eval_mpolyTermAdd thenC tailC);
+	<<eval_mpolyTerm{mulTerm{'l;'r}; 'vals; 'R}>>, (reduce_eval_mpolyTermMul thenC tailC);
+	<<eval_mpolyTerm{constTerm{'c}; 'vals; 'R}>>, (reduce_eval_mpolyTermConst thenC tailC);
+	<<eval_mpolyTerm{varTerm{number[i:n]}; 'vals; 'R}>>, (reduce_eval_mpolyTermVar thenC tailC);
 
-	<<mpoly_ofTerm{addTerm{'l;'r}; 'R}>>, (reduce_mpoly_ofTermAdd thenC reduceC);
-	<<mpoly_ofTerm{mulTerm{'l;'r}; 'R}>>, (reduce_mpoly_ofTermMul thenC reduceC);
-	<<mpoly_ofTerm{constTerm{'c}; 'R}>>, (reduce_mpoly_ofTermConst thenC reduceC);
-	<<mpoly_ofTerm{varTerm{number[i:n]}; 'R}>>, (reduce_mpoly_ofTermVar thenC reduceC);
+	<<mpoly_ofTerm{addTerm{'l;'r}; 'R}>>, (reduce_mpoly_ofTermAdd thenC tailC);
+	<<mpoly_ofTerm{mulTerm{'l;'r}; 'R}>>, (reduce_mpoly_ofTermMul thenC tailC);
+	<<mpoly_ofTerm{constTerm{'c}; 'R}>>, (reduce_mpoly_ofTermConst thenC tailC);
+	<<mpoly_ofTerm{varTerm{number[i:n]}; 'R}>>, (reduce_mpoly_ofTermVar thenC tailC);
 (**)
-	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC reduceC);
-	<<'a +[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC reduceC);
-	<<'a *[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC reduceC);
+	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC tailC);
+	<<'a +[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC tailC);
+	<<'a *[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC tailC);
 ]
 
 type var_set = term list
@@ -554,7 +557,7 @@ let rec proveVarTypesT f_car = function
 	[] -> idT
  | h::t ->
 		assertT (mk_equal_term f_car h h) thenAT
-		(rw (addrC [0] reduceC) 0) thenMT
+		(rw (addrC [0] mpoly_evalC) 0) thenMT
 		proveVarTypesT f_car t
 
 let assertEqT f f_car vars varlist t =
@@ -563,10 +566,10 @@ let assertEqT f f_car vars varlist t =
 	assertT eqt
 
 let standardizeT ft f f_car vars varlist t =
-	(assertEqT f f_car vars varlist t thenAT rw reduceC 0) thenMT
+	(assertEqT f f_car vars varlist t thenAT rw mpoly_evalC 0) thenMT
 	rw (addrC [2] mpolyTerm2mpoly) (-1) thenMT
 	eval_standardizeElim (-1) ft thenMT
-	rw (addrC [2] reduceC) (-1)
+	rw (addrC [2] mpoly_evalC) (-1)
 
 let stdT ft f vars i = funT (fun p ->
 	let t = if i=0 then Sequent.concl p else Sequent.nth_hyp p i in

@@ -1,1 +1,4 @@
+extends Base_reflection
+extends Itt_synt_bterm
+extends Itt_synt_subst
 

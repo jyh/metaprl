@@ -2016,7 +2016,7 @@ T	t855	o855
 B	b855	t855
 T	t856	o854 b854 b855
 B	b856	t856
-P	p860	String unfold_eq
+P	p860	String unfold_is_eq
 NItt_synt_var!is_eq	is_eq	is_eq Itt_synt_var
 O	o861	is_eq
 Vu	u	u\\ \\
@@ -2074,7 +2074,7 @@ B	b895	t894
 NSummary!interactive	interactive	interactive Summary
 O	o895	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p895	String "byDefT unfold_eq"
+P	p895	String "byDefT unfold_is_eq"
 O	o896	ext_rule p895
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o897	status_incomplete
@@ -2414,7 +2414,7 @@ T	t1083	o954 b1079 b1083
 B	b1084	t1083
 T	t1084	o954 b1076 b1084
 B	b1085	t1084
-P	p1085	String "byDefT unfold_eq thenT nat_is_int ttca"
+P	p1085	String "byDefT unfold_is_eq thenT nat_is_int ttca"
 O	o1085	ext_rule p1085
 T	t1085	o b1078 b19
 B	b1086	t1085
@@ -2443,7 +2443,7 @@ NItt_bool!btrue	btrue	btrue Itt_bool
 O	o1103	btrue
 T	t1104	o1103
 B	b1104	t1104
-P	p1104	String "genAssumT [1] thenT dT (-1) thenT byDefT unfold_eq thenT byDefT fold_assert"
+P	p1104	String "genAssumT [1] thenT dT (-1) thenT byDefT unfold_is_eq thenT byDefT fold_assert"
 O	o1104	ext_rule p1104
 T	t1105	o902 b1103 b1104
 S	s1105	t901\\ h\\ t1105
@@ -3628,7 +3628,7 @@ T	t1099	o954 b1079 b1099
 B	b1100	t1099
 T	t1100	o954 b1076 b1100
 B	b1117	t1100
-P	p1119	String "assumT 3 thenT byDefT unfold_eq thenT equalSymT ttca"
+P	p1119	String "assumT 3 thenT byDefT unfold_is_eq thenT equalSymT ttca"
 O	o1120	ext_rule p1119
 T	t1142	o b995 b19
 B	b1142	t1142
@@ -3692,7 +3692,7 @@ T	t1340	o954 b1079 b1340
 B	b1341	t1340
 T	t1341	o954 b1076 b1341
 B	b1342	t1341
-P	p1344	String "genAssumT [4;5] thenT byDefT unfold_eq thenT equalTransT << left{'v2} >> ttca"
+P	p1344	String "genAssumT [4;5] thenT byDefT unfold_is_eq thenT equalTransT << left{'v2} >> ttca"
 O	o1344	ext_rule p1344
 T	t1345	o b1231 b19
 B	b1345	t1345

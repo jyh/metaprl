@@ -50,7 +50,7 @@ doc "doc"{terms}
 
 declare BOperator
 declare op_bdepth{'op}
-declare arity{'op}
+declare shape{'op}
 declare is_same_op{'op_1;'op_2} (* Do not consider  op_bdepth *)
 declare inject{'op; 'n} (* Op * Nat -> BOp *)
 
@@ -66,6 +66,10 @@ define unfold_bind :
 
 define unfold_bind1 :
    bind{'op} <--> inject{'op; op_bdepth{'op} +@ 1 }
+
+declare arity{'op}
+iform unfold_arity : arity{'op} <--> length{shape{'op}}
+dform arity_df: arity{'op} = `"arity(" slot{'op} `")"
 
 define unfold_op :
    Operator <--> quot o1, o2 : BOperator // "assert"{is_same_op{'o1; 'o2}}
@@ -134,9 +138,9 @@ interactive op_bdepth_wf2 {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- op_bdepth{'op} in int }
 
-prim arity_wf {| intro [] |} :
+prim shape_wf {| intro [] |} :
    sequent { <H> >- 'op in Operator } -->
-   sequent { <H> >- arity{'op} in list{nat} }
+   sequent { <H> >- shape{'op} in list{nat} }
    = it
 
 prim inject_wf {| intro [] |} :
@@ -189,34 +193,34 @@ interactive_rw unbind_red {| reduce |} :
    op_bdepth{'op} > 0 -->
    op_bdepth{unbind{'op}} <--> op_bdepth{'op} -@ 1
 
-interactive arity_int_list {| intro [] |} :
+interactive shape_int_list {| intro [] |} :
    sequent { <H> >- 'op in Operator } -->
-   sequent { <H> >- arity{'op} in list{int} }
+   sequent { <H> >- shape{'op} in list{int} }
 
-interactive arity_nat_list {| intro [] |} :
+interactive shape_nat_list {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
-   sequent { <H> >- arity{'op1} = arity{'op2} in list{nat} }
+   sequent { <H> >- shape{'op1} = shape{'op2} in list{nat} }
 
-interactive arity_int_list1 {| intro [] |} :
+interactive shape_int_list1 {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
-   sequent { <H> >- arity{'op1} = arity{'op2} in list{int} }
+   sequent { <H> >- shape{'op1} = shape{'op2} in list{int} }
 
-interactive arity_int_list2 {| intro [] |} :
+interactive shape_int_list2 {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
-   sequent { <H> >- arity{'op1} ~ arity{'op2} }
+   sequent { <H> >- shape{'op1} ~ shape{'op2} }
 
-interactive_rw arity_inject {| reduce |} :
+interactive_rw shape_inject {| reduce |} :
    'op in BOperator -->
    'n in nat -->
-   arity{inject{'op; 'n}} <--> arity{'op}
+   shape{inject{'op; 'n}} <--> shape{'op}
 
-interactive_rw arity_bind {| reduce |} :
+interactive_rw shape_bind {| reduce |} :
    'op in BOperator -->
    'n in nat -->
-   arity{bind{'op; 'n}} <--> arity{'op}
+   shape{bind{'op; 'n}} <--> shape{'op}
 
-interactive_rw arity_bind1 {| reduce |} :
+interactive_rw shape_bind1 {| reduce |} :
    'op in BOperator -->
-   arity{bind{'op}} <--> arity{'op}
+   shape{bind{'op}} <--> shape{'op}
 
 doc <:doc< @docoff >>

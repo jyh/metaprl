@@ -61,6 +61,8 @@ open Itt_squash
  * Xlist                                                                *
  ************************************************************************)
 
+(* XXX: This part should be in a separate theory *)
+
 declare rlist_of_list{'l}
 
 prim_rw rlist_list_cons {| reduce |} :
@@ -103,9 +105,9 @@ prim bterm_op :
 prim_rw bterm_op_bdepth1 : op_bdepth{ bterm{| >- 'op |}} <--> 0
 prim_rw bterm_op_bdepth2 : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> op_bdepth{ bterm{| <H> >- 'op |} } +@ 1
 
-prim_rw bterm_arity:
+prim_rw bterm_shape:
     if_quoted_op{'op<||>;"true"} -->
-    arity{'op} <-->  map{lambda{x.op_bdepth{'x}}; list_of_rlist{subterms{'op}} }
+    shape{'op} <-->  map{lambda{x.op_bdepth{'x}}; list_of_rlist{subterms{'op}} }
 
 prim_rw bterm_same_op:
        is_same_op{'op1;'op2} <--> Base_reflection!if_same_op{'op1;'op2;btrue;bfalse}

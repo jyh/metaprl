@@ -11,3 +11,6 @@ declare bdepth{'bt}
 declare dest_bterm{'bt; v.'var_case['v]; op,subterms. 'op_case['op; 'subterms] }
 
 declare Vars_of{'bt}
+
+declare is_var_bterm{'bt}
+declare var_bterm{'bt}

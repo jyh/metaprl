@@ -3284,8 +3284,8 @@ T	t1291	o1291
 B	b1292	t1291
 NItt_list2!length	length	length Itt_list2
 O	o1292	length
-NItt_synt_operator!arity	arity	arity Itt_synt_operator
-O	o1293	arity
+NItt_synt_operator!shape	shape	shape Itt_synt_operator
+O	o1293	shape
 T	t1293	o1293 b919
 B	b1293	t1293
 T	t1294	o1292 b1293
@@ -5186,7 +5186,7 @@ T	t2382	o b2382 b10
 B	b2383	t2382
 T	t2383	o1116 b2364 b2383
 B	b2384	t2383
-P	p1855	String "letT << 'j = nth{arity{'op}; 'i} in nat >> thenT autoT"
+P	p1855	String "letT << 'j = nth{shape{'op}; 'i} in nat >> thenT autoT"
 O	o1855	ext_rule p1855
 T	t2384	o1175 b2381 b10
 B	b2385	t2384
@@ -7282,7 +7282,7 @@ T	t3806	o b3806 b10
 B	b3807	t3806
 T	t3807	o1116 b3801 b3807
 B	b3808	t3807
-P	p3808	String "dT 7 thenT reduceT thenT letT << 'j = nth{arity{'op}; 'i} in nat >> thenT autoT"
+P	p3808	String "dT 7 thenT reduceT thenT letT << 'j = nth{shape{'op}; 'i} in nat >> thenT autoT"
 O	o3808	ext_rule p3808
 T	t3808	o1170 b1122 b1231
 H	h3808	i1 t3808
@@ -8697,7 +8697,7 @@ T	t2319	o b2319 b10
 B	b2320	t2319
 T	t2320	o1116 b2313 b2320
 B	b2321	t2320
-P	p4420	String "letT << 'j = nth{arity{'op}; 'i1} in nat >> thenT autoT"
+P	p4420	String "letT << 'j = nth{shape{'op}; 'i1} in nat >> thenT autoT"
 O	o4420	ext_rule p4420
 T	t2321	o1175 b2318 b10
 B	b2322	t2321

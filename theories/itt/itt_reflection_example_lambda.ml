@@ -1,5 +1,6 @@
 extends Itt_functions
-extends Itt_reflection
+extends Itt_reflection_new
+extends Base_reflection
 extends Itt_nat
 extends Itt_bisect
 extends Itt_list
@@ -9,8 +10,24 @@ extends Itt_pairwise2
 
 open Basic_tactics
 
-define app_term : app_term : Quote <--> apply[@]{term[@];term[@]}
-define lambda_term: lambda_term : Quote <--> lambda[@]{x.term[@]}
+define app_term : app_term <--> bterm{| >- apply[@]{term[@];term[@]} |}
+define lambda_term: lambda_term <-->  bterm{| >- lambda[@]{x.term[@]} |}
+
+
+interactive app_wf {| intro[] |}:
+   sequent{ <H> >-  app_term in BOperator }
+
+interactive lambda_wf {| intro[] |}:
+   sequent{ <H> >-  lambda_term in BOperator }
+
+interactive_rw shape_of_app {| reduce |}: shape{app_term} <--> (0::0::nil)
+
+interactive_rw shape_of_lam {| reduce |}: shape{lambda_term} <--> (1::nil)
+
+interactive_rw depth_of_app {| reduce |}: op_bdepth{app_term} <--> 0
+
+interactive_rw depth_of_lam {| reduce |}: op_bdepth{lambda_term} <--> 0
+
 
 define mk_app: mk_app <--> lambda {p. spread{'p; t1,t2. make_bterm{app_term; 't1::'t2::nil}}}
 
@@ -18,7 +35,7 @@ interactive_rw mk_app2 {| reduce |}: mk_app ('f,'a) <-->  make_bterm{app_term; '
 
 define dom_app: dom_app{'T;'S} <-->
    {p:(BTerm isect 'T)*(BTerm isect 'S) |
-       var_arity{fst{'p}} =  var_arity{snd{'p}} in nat}
+       bdepth{fst{'p}} =  bdepth{snd{'p}} in nat}
 
 interactive mk_app_wf  {| intro[] |}:
    sequent { <H> >- "type"{'T} } -->
@@ -29,7 +46,7 @@ define mk_lambda: mk_lambda <--> lambda {t. make_bterm{lambda_term; 't::nil}}
 
 interactive_rw mk_lambda2 {| reduce |}: mk_lambda 'f <-->  make_bterm{lambda_term; 'f::nil}
 
-define dom_lambda: dom_lambda{'T} <--> {t:BTerm isect 'T | var_arity{'t} >= 1}
+define dom_lambda: dom_lambda{'T} <--> {t:BTerm isect 'T | bdepth{'t} >= 1}
 
 
 interactive mk_lambda_wf  {| intro[] |}:
@@ -107,15 +124,15 @@ define lambdaTerm: LambdaTerm <--> srec{X. Img{mk; dom{'X}; BTerm}}
 
 interactive lambda_term_induction  {| elim[] |} 'H:
    sequent { <H>; <J>; v:Var >- 'P[ 'v ] } -->
-   sequent { <H>; <J>; t: LambdaTerm; s:LambdaTerm; var_arity{'t} = var_arity{'s} in nat;
+   sequent { <H>; <J>; t: LambdaTerm; s:LambdaTerm; bdepth{'t} = bdepth{'s} in nat;
                             'P['t]; 'P['s]   >- 'P[ make_bterm{app_term; 't::'s::nil} ] } -->
-   sequent { <H>; <J>; t: LambdaTerm; var_arity{'t} >= 1;
+   sequent { <H>; <J>; t: LambdaTerm; bdepth{'t} >= 1;
                             'P['t] >- 'P[ make_bterm{lambda_term; 't::nil} ] } -->
    sequent { <H>; x: LambdaTerm; <J> >- 'P['x] }
 
 interactive lambda_intro  {| intro[] |} :
    sequent { <H> >- 't in LambdaTerm } -->
-   sequent { <H> >- var_arity {'t} >= 1  } -->
+   sequent { <H> >- bdepth {'t} >= 1  } -->
    sequent { <H> >- make_bterm{lambda_term; 't::nil} in LambdaTerm }
 
 interactive lambda_intro2  {| intro[] |} :

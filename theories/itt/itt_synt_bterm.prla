@@ -1314,8 +1314,8 @@ T	t983	o983
 B	b983	t983
 T	t1004	o964 b874
 B	b1004	t1004
-NItt_synt_operator!arity	arity	arity Itt_synt_operator
-O	o1005	arity
+NItt_synt_operator!shape	shape	shape Itt_synt_operator
+O	o1005	shape
 T	t1006	o1005 b874
 B	b1006	t1006
 NSummary!rule	rule	rule Summary
@@ -6187,7 +6187,7 @@ T	t427	o b427 b8
 B	b428	t427
 T	t428	o946 b424 b428
 B	b429	t428
-P	p429	String "letT << 'j = nth{arity{'op};'i} in nat >> thenT autoT"
+P	p429	String "letT << 'j = nth{shape{'op};'i} in nat >> thenT autoT"
 O	o429	ext_rule p429
 T	t429	o1205 b426 b8
 B	b430	t429

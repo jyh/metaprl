@@ -104,25 +104,25 @@ interactive_rw bdepth_var_reduce: ('v in Var) --> bdepth{'v} <--> depth{'v}
 (*
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
    squash{
-   fix{ f. lambda{ diff. lambda{ arity. lambda{ btl.
-      list_ind{ 'arity; is_nil{'btl}; h1,t1,g.
+   fix{ f. lambda{ diff. lambda{ shape. lambda{ btl.
+      list_ind{ 'shape; is_nil{'btl}; h1,t1,g.
          list_ind{ 'btl; bfalse; h2,t2,g.
             (bdepth{'h2} -@ 'h1 = 'diff in int) and  ('f 'diff 't1 't2) } }
-      } } } } op_bdepth{'op} arity{'op} 'btl
+      } } } } op_bdepth{'op} shape{'op} 'btl
    }
 *)
 
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
    squash{
-      length{arity{'op}} = length{'btl} in int &
-      all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{arity{'op};'i} in int
+      length{shape{'op}} = length{'btl} in int &
+      all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int
    }
 
 dform compatible_shapes_df: compatible_shapes{'op;'btl} = `"compatible_shapes(" slot{'op} `";" slot{'btl} `")"
 
 interactive compatible_shapes_wf {| intro [] |} :
-   sequent { <H> >- length{arity{'op}} = length{'btl} in int } -->
-   sequent { <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{arity{'op};'i} in int } -->
+   sequent { <H> >- length{shape{'op}} = length{'btl} in int } -->
+   sequent { <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int } -->
    sequent { <H> >- compatible_shapes{'op; 'btl} }
 
 prim btermUniv {| intro [] |} :

@@ -1985,8 +1985,8 @@ Vop	op	op\\ \\
 B	b857	op
 T	t857	o857 b857
 B	b858	t857
-NItt_synt_operator!arity	arity	arity Itt_synt_operator
-O	o863	arity
+NItt_synt_operator!shape	shape	shape Itt_synt_operator
+O	o863	shape
 T	t863	o863 b857
 B	b863	t863
 NItt_synt_operator!is_same_op	is_same_op	is_same_op Itt_synt_operator
@@ -2470,7 +2470,7 @@ T	t1150	o802 b1149
 B	b1150	t1150
 T	t1151	o801 b988 b1150
 B	b1151	t1151
-P	p1160	String arity_wf
+P	p1160	String shape_wf
 O	o1160	rule p1160
 T	t1162	o863 b986
 B	b1162	t1162
@@ -3643,7 +3643,7 @@ P	p1772	Number 5758
 P	p1773	Number 5889
 O	o1773	location p1772 p1773
 P	p1596	Number 5891
-P	p1603	String arity_int_list
+P	p1603	String shape_int_list
 O	o1603	rule p1603
 T	t1603	o1136 b1481
 B	b1603	t1603
@@ -3688,9 +3688,9 @@ B	b1781	t1781
 P	p1781	Number 6045
 O	o1781	location p1596 p1781
 P	p1614	Number 5929
-P	p611	String arity_nat_list
+P	p611	String shape_nat_list
 O	o611	rule p611
-P	p1621	String arity_int_list1
+P	p1621	String shape_int_list1
 O	o1621	rule p1621
 T	t1621	o804 b896 b1002 b1006
 S	s1621	t803\\ h\\ t1621
@@ -3778,7 +3778,7 @@ B	b1797	t1797
 P	p1797	Number 6204
 P	p1798	Number 6346
 O	o1798	location p1797 p1798
-P	p1642	String arity_int_list2
+P	p1642	String shape_int_list2
 O	o1642	rule p1642
 T	t1642	o1251 b1623 b1624
 S	s1642	t803\\ h\\ t1642
@@ -3787,7 +3787,7 @@ T	t1643	o802 b1642
 B	b1643	t1643
 T	t1644	o801 b1622 b1643
 B	b1644	t1644
-P	p1644	String "assertT << arity{'op1} = arity{'op2} in list{int} >> thenMT listSquiggle thenT autoT"
+P	p1644	String "assertT << shape{'op1} = shape{'op2} in list{int} >> thenMT listSquiggle thenT autoT"
 O	o1644	ext_rule p1644
 T	t1645	o821 b1642 b1628
 B	b1645	t1645
@@ -3860,7 +3860,7 @@ T	t1808	o b1803 b1807
 B	b1808	t1808
 T	t1809	o819 b1646 b1808
 B	b1809	t1809
-P	p1670	String "letT << 'l = arity{'op1} in list{int} >> thenT autoT"
+P	p1670	String "letT << 'l = shape{'op1} in list{int} >> thenT autoT"
 O	o1670	ext_rule p1670
 T	t1810	o1213 b1802 b8
 B	b1810	t1810
@@ -3868,7 +3868,7 @@ T	t1811	o819 b1810 b8
 B	b1811	t1811
 T	t1812	o1670 b818 b1811 b8 b8
 B	b1812	t1812
-P	p1673	String "letT << 'l = arity{'op2} in list{int} >> thenT autoT"
+P	p1673	String "letT << 'l = shape{'op2} in list{int} >> thenT autoT"
 O	o1673	ext_rule p1673
 T	t1813	o1213 b1805 b8
 B	b1813	t1813
@@ -3876,7 +3876,7 @@ T	t1814	o819 b1813 b8
 B	b1814	t1814
 T	t1815	o1673 b818 b1814 b8 b8
 B	b1815	t1815
-P	p1676	String "moveToConclT (-1) thenT letT << 'l2 = arity{'op2} in list{int} >> thenT autoT"
+P	p1676	String "moveToConclT (-1) thenT letT << 'l2 = shape{'op2} in list{int} >> thenT autoT"
 O	o1676	ext_rule p1676
 T	t1677	o1213 b1657 b8
 B	b1677	t1677
@@ -3942,7 +3942,7 @@ T	t1703	o b1695 b1702
 B	b1703	t1703
 T	t1704	o1676 b818 b1693 b1703 b8
 B	b1704	t1704
-P	p1704	String "assertT << nth{arity{'op1}; 'i} = nth{arity{'op2}; 'i} in int >> ttca"
+P	p1704	String "assertT << nth{shape{'op1}; 'i} = nth{shape{'op2}; 'i} in int >> ttca"
 O	o1704	ext_rule p1704
 T	t1705	o819 b1665 b8
 B	b1705	t1705
@@ -3980,7 +3980,7 @@ B	b1826	t1826
 P	p1826	Number 6348
 P	p1827	Number 6473
 O	o1827	location p1826 p1827
-P	p1721	String arity_inject
+P	p1721	String shape_inject
 O	o1721	cond_rewrite p1721
 T	t1721	o863 b876
 B	b1721	t1721
@@ -4011,7 +4011,7 @@ B	b1832	t1832
 P	p1832	Number 6475
 P	p1833	Number 6596
 O	o1833	location p1832 p1833
-P	p1733	String arity_bind
+P	p1733	String shape_bind
 O	o1733	cond_rewrite p1733
 T	t1733	o863 b889
 B	b1733	t1733
@@ -4044,7 +4044,7 @@ B	b1838	t1838
 P	p1838	Number 6598
 P	p1839	Number 6699
 O	o1839	location p1838 p1839
-P	p1745	String arity_bind1
+P	p1745	String shape_bind1
 O	o1745	cond_rewrite p1745
 T	t1745	o863 b1198
 B	b1745	t1745

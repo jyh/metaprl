@@ -718,9 +718,6 @@ let resource reduce +=
 interactive make_bterm_itbterm {| intro [] |} :
    sequent { <H> >- make_bterm{itbterm; nil} = itbterm in BTerm }
 
-interactive make_bterm_itbterm2 {| intro [] |} :
-   sequent { <H> >- make_bterm{bterm{| x: term >- it[@] |}; nil} = itbterm in BTerm }
-
 interactive make_bterm_var_expl {| intro [] |} :
    sequent { <H> >- make_bterm{bterm{| x: term >- 'x |}; nil} = bterm{| x: term >- 'x |} in BTerm }
 
@@ -734,7 +731,7 @@ define unfold_are_compatible_shapes_aux: are_compatible_shapes_aux{'diff; 'l1; '
       } } } } 'diff 'l1 'l2
 
 define unfold_are_compatible_shapes: are_compatible_shapes{'bt; 'l} <-->
-   list_ind{ 'l; beq_int{subterms_arity{'bt}; 0}; h1,t1,f.list_ind{ subterms{'bt}; bfalse; h2,t2,f.are_compatible_shapes_aux{var_arity{'h2} -@ var_arity{'h1}; 't1; 't2} } }
+   are_compatible_shapes_aux{var_arity{'bt};subterms{'bt};'l}
 
 define unfold_compatible_shapes:
    compatible_shapes{'bt; 'l} <--> "assert"{ are_compatible_shapes{'bt; 'l} }
@@ -773,6 +770,7 @@ prim_rw makebterm_same_op :
    'b1 in BTerm -->
    'b2 in BTerm -->
    same_op{'b1; 'b2} -->
+   var_arity{'b1} = var_arity{'b2} in int -->
    make_bterm{'b1; subterms{'b2}} <--> 'b2
 
 (* ??? *)

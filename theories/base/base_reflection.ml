@@ -184,12 +184,12 @@ let resource reduce +=
  *
  * rewrite axiom: make_bterm{bterm{<H>; x:_; <J> >- x}; []} <--> bterm{<H>; x:_; <J> >- x}
  * ML rewrite_axiom:
- *     make_bterm{bterm{<K> >- _op_{<J1>.r1, ..., <Jn>.rn}}};
+ *     make_bterm{bterm{<H> >- _op_{<J1>.r1, ..., <Jn>.rn}}};
  *        [bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn}] }
  *     <-->
  *     bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}
  *
- * (<K> and ri are ignored).
+ * (ri's are ignored).
  *)
 
 declare make_bterm{'bt; 'bt1}
@@ -211,25 +211,17 @@ let rec make_bterm_aux lista listb fvars hvar lenh =
 
 ml_rw reduce_make_bterm2 : ('goal :  make_bterm{ 'bt; 'bt1 }) =
    let bt, bt1 = two_subterms goal in
-   let hyps1, t = dest_bterm_sequent bt in
+   let fvars = free_vars_set bt1 in
+   let hyps1, t = dest_bterm_sequent_and_rename bt fvars in
    let t' = dest_term (unquote_term t) in
    let bt1' = dest_xlist bt1 in
       if (List.length t'.term_terms = (List.length bt1')) then
-         match bt1' with
-            [] -> make_bterm_sequent [] t
-          | b1 :: b ->
-               let fvars = free_vars_set bt1 in
-               let b1h, b1g = dest_bterm_sequent_and_rename b1 fvars in
                let lenJr_list = List.map (fun tmp -> List.length (dest_bterm tmp).bvars) t'.term_terms in
-               let lenJr_list' = List.tl lenJr_list in
-               let lenh = List.length b1h - (List.hd lenJr_list) in
-                  if lenh >= 0 then
-                     let hvar' = List.map get_var b1h in
-                     let hvar, j1 = Lm_list_util.split lenh hvar' in
-                     let fvars = SymbolSet.add_list fvars hvar in
-                     let terms = (mk_bterm j1 b1g) :: make_bterm_aux lenJr_list' b fvars hvar lenh in
+               let lenh = List.length hyps1 in
+               let hvar = List.map get_var hyps1 in
+               let fvars = SymbolSet.add_list fvars hvar in
+               let terms = make_bterm_aux lenJr_list bt1' fvars hvar lenh in
                         make_bterm_sequent (List.map hyp_of_var hvar) (quote_term (mk_term t'.term_op terms))
-                  else raise (RefineError ("reduce_make_bterm2", StringTermError ("not a qualified bterm for replacement", b1)))
       else  raise (RefineError ("reduce_make_bterm2", StringError "unmatched arities"))
 
 let reduce_make_bterm =

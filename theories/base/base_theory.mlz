@@ -1,5 +1,5 @@
 (*!
- * @begin[tex]
+ * @begin[doc]
  * @theory[Base_theory]
  *
  * The @tt{Base_theory} ``theory'' is not a theory in the strict sense.
@@ -32,7 +32,7 @@
  * module.  Descendent theories (such as the @Nuprl type theory, Section
  * @reftheory[Itt_theory], and the first-order logic Section @reftheory[Fol])
  * include the @hreftheory[Base_theory] directly.
- * @end[tex]
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
@@ -68,9 +68,9 @@
  *)
 
 (*!
- * @begin[tex]
+ * @begin[doc]
  * @parents
- * @end[tex]
+ * @end[doc]
  *)
 include Summary
 include Mptop
@@ -81,7 +81,7 @@ include Base_trivial
 include Base_auto_tactic
 include Base_dtactic
 include Base_rewrite
-(*! @texoff *)
+(*! @docoff *)
 
 (*
  * This are very basic theories; not included in

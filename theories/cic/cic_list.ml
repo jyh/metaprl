@@ -47,6 +47,7 @@ sequent { <J> >-
 prim case_wf 'A 's :
 	sequent { <H> >- 'l in (List 'A) } -->
 	sequent { <H> >- 'P in ((List 'A) -> 's) } -->
+	sequent { <H> >- is_sort{'s} } -->
 	sequent { <H> >- 'f1 in ('P (nil 'A)) } -->
 	sequent { <H> >- 'f2 in ( a:'A -> l:(List 'A) -> ('P (cons 'A 'a 'l))) } -->
 	sequent { <H> >- case{'l;'P; sequent [cases] { 'f1; 'f2 >- it} } in ('P 'l) } = it

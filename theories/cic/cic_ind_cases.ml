@@ -86,6 +86,18 @@ prim_rw branchTypeFun {| reduce |} :
 		branchType{ 'P<||>; 'c<||>; (x:'T<||> -> 'C['x]) } } <-->
 	(x: 'T -> sequent [branchType] { <Hp> >- branchType{'P; 'c 'x; 'C['x]}} )
 
+let branchType_term = << branchType{'P; 'c; 'C} >>
+let branchType_opname = opname_of_term branchType_term
+let is_branchType_term = is_dep0_dep0_dep0_term branchType_opname
+let dest_branchType = dest_dep0_dep0_dep0_term branchType_opname
+let mk_branchType_term = mk_dep0_dep0_dep0_term branchType_opname
+
+let mk_branchType_sequent args p c c_type =
+	let br = mk_branchType_term p c c_type in
+	let goal = SeqGoal.singleton br in
+	let label = <<sequent_arg{branchType}>> in
+	TermMan.mk_sequent_term {sequent_args=label; sequent_hyps=args; sequent_goals=goal}
+
 (*
 prim branchTypes :
 	f in  sequent [branchType] { <Hp> >-
@@ -290,21 +302,38 @@ let apply_context t params =
  *	constr is the i-th constructor of indName
  ***********************************************************)
 
-let gen_f_type def params indName i constr =
+let gen_f_type def args indName i constr =
 	let v, t = explode_hyp constr in
-	let xxx = apply_context (get_c_in_C' def t (mk_var_term v)) params in
+	let xxx = apply_context (get_c_in_C' def t (mk_var_term v)) args in
 	let t', t_type = dest_member xxx in
-	printf "'f%i in branchType{'P; %s; %s}@." i (SimplePrint.string_of_term t')
-	   (SimplePrint.string_of_term t_type)
+	let fi = new_symbol_string_term (sprintf "f%i" i) in
+	let p = new_symbol_string_term "P" in
+	let br = mk_branchType_sequent args p t' t_type in
+	let member = mk_member_term fi br in
+	printf "%s@." (SimplePrint.string_of_term member)
+	(*printf "'f%i in branchType{'P; %s; %s}@." i (SimplePrint.string_of_term t')
+	   (SimplePrint.string_of_term t_type)*)
+
+
+(* ----  *)
+
+let rec iteri_aux f i = function
+	[] -> ()
+ | hd::tl ->
+		f i hd;
+		iteri_aux f (succ i) tl
+
+let iteri f = iteri_aux f 0
 
 (********************************************************
  *  generates case-analysis's fourth assumption for the
  *  given inductive type with index i
  ********************************************************)
 
-let gen def i =
+let gen def args i =
 	let params, ti_name, ti_type, constr_list = extract_type_def def i in
-	List.iter (fun x -> gen_f_type def params ti_name i x) constr_list;
+	let {sequent_hyps=args'} = TermMan.explode_sequent args in
+	iteri (gen_f_type def args' ti_name) constr_list;
 	failT
 (*
 module Shell = Shell.Shell(Shell_p4.ShellP4)

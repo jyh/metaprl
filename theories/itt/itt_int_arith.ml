@@ -138,27 +138,6 @@ interactive nequal_elim {| elim [] |} 'H :
    [main] sequent { <H>; <J[it]>; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
 
-(*
-let notle2geT t =
-   let (l,r)=dest_le t in
-   let newt = mk_ge_term l (mk_add_term r <<1>>) in
-*)
-
-let anyArithRel2geT = argfunT (fun i p ->
-   let t = Sequent.nth_hyp p i in
-   if is_le_term t then rw fold_ge i
-   else if is_lt_term t then lt2ge i
-   else if is_gt_term t then gt2ge i
-   else match explode_term t with
-      << 'l = 'r in 'tt >> when alpha_equal tt <<int>> && not (alpha_equal l r) -> eq2ge i
-    | _ -> idT
-   ) (*if is_not_term t then
-      let t1=dest_not t in
-         if is_ge_term t1 then notge2geT t1
-         else if is_le_term t1 then notle2geT t1
-         else if is_lt_term t1 then notlt2geT t1
-         else if is_gt_term t1 then notgt2geT t1 *)
-
 interactive_rw bnot_lt2ge_rw :
    ('a in int) -->
    ('b in int) -->
@@ -282,65 +261,6 @@ let mul_BubbleStepC tm =
    else
       failC
 
-let mul_BubbleStep2C = termC mul_BubbleStepC
-
-(* here we apply mul_BubbleStepC as many times as possible thus
-   finally we have all mul subterms positioned in order
- *)
-let mul_BubbleSortC = repeatC (higherC (mul_BubbleStep2C))
-
-(*
-let inject_coefC t =
-	if is_add_term t then
-   	let (a,b)=dest_add t in
-      begin
-      	if !debug_int_arith then
-         	eprintf "\ninject_coefC: %a %a%t" debug_print a debug_print b eflush;
-      	let aC=addrC [0] (mul_Id3C thenC
-      							(repeatC (higherC mul_uni_AssocC)) thenC
-      							(addrC [0] reduceC)
-             				  )
-			in
-      	if not (is_add_term b) then
-      		aC thenC (addrC [1] (mul_Id3C thenC
-      									(repeatC (higherC mul_uni_AssocC)) thenC
-      									(addrC [0] reduceC)
-              					 	  ))
-       	else
-         	aC
-      end
-	else
-   	failC
-
-let injectCoefC = sweepUpC (termC inject_coefC)
-*)
-
-let rec inject_coefC t =
-	if is_add_term t then
-   	let (a,b)=dest_add t in
-      begin
-      	if !debug_int_arith then
-         	eprintf "\ninject_coefC: %a %a%t" debug_print a debug_print b eflush;
-      	let aC=addrC [0] (mul_Id3C thenC
-      							(repeatC (higherC mul_uni_AssocC)) thenC
-      							(addrC [0] reduceC)
-             				  )
-			in
-      	if not (is_add_term b) then
-      		aC thenC (addrC [1] (mul_Id3C thenC
-      									(repeatC (higherC mul_uni_AssocC)) thenC
-      									(addrC [0] reduceC)
-              					 	  ))
-       	else
-         	aC thenC (addrC [1] (termC inject_coefC))
-      end
-   else
-   	failC
-
-let injectCoefC = higherC (termC inject_coefC)
-
-let mul_normalizeC = injectCoefC thenC mul_BubbleSortC
-
 interactive_rw sum_same_products1_rw :
    ('a in int) -->
    ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <-->
@@ -365,36 +285,6 @@ interactive_rw sum_same_products4_rw :
    ('a +@ 'a) <--> (2 *@ 'a)
 
 let sum_same_products4C = sum_same_products4_rw
-
-let same_product_aux a b =
-   if (is_mul_term a) & (is_mul_term b) then
-      let (a1,a2)=dest_mul a in
-      let (b1,b2)=dest_mul b in
-      if alpha_equal a2 b2 then
-         (true, sum_same_products1_rw)
-      else
-         (false, failC)
-   else
-	  	(false, failC)
-
-let same_productC t =
-   if (is_add_term t) then
-      let (a,b)=dest_add t in
-      if is_add_term b then
-         let (b1,b2)=dest_add b in
-         let (same, conv)=same_product_aux a b1 in
-         if same then
-           (add_AssocC thenC (addrC [0] (conv thenC (addrC [0] reduceC))))
-         else
-           failC
-      else
-         let (same, conv)=same_product_aux a b in
-         if same then
-            conv thenC reduceC
-         else
-            failC
-   else
-      failC
 
 interactive_rw add_BubblePrimitive_rw :
    ( 'a in int ) -->
@@ -462,20 +352,12 @@ let add_BubbleStepC tm =
       end
   )
 
-(* here we apply add_BubbleStepC as many times as possible thus
-   finally we have all sum subterms positioned in order
- *)
-let add_BubbleSortC = (repeatC (higherC (termC add_BubbleStepC))) thenC
-                      (repeatC (higherC (termC same_productC)))
-
 interactive_rw sub_elim_rw {| arith_unfold |} :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ('a -@ 'b ) <--> ('a +@ ((-1) *@ 'b))
 
 let sub_elimC = repeatC (higherC sub_elim_rw)
-
-let add_normalizeC = add_BubbleSortC
 
 let resource arith_unfold +=[
 	<<'a *@ 'b>>, termC mul_BubbleStepC;
@@ -533,16 +415,6 @@ doc <:doc<
 
 	@end[doc]
 >>
-(*
-let normalizeC = arith_unfoldC thenC
-					(*sub_elimC thenC
-					  (repeatC (higherC mul_add_DistribC)) thenC
-					  (repeatC (higherC mul_add_Distrib3C)) thenC*)
-                 reduceC thenC
-                 mul_normalizeC thenC
-                 add_normalizeC thenC
-                 reduceC
-*)
 let normalizeC = reduceC thenC arith_unfoldC thenC reduceC
 
 doc <:doc< @docoff >>
@@ -563,28 +435,13 @@ interactive_rw ge_addContract_rw2 {| reduce |} :
 interactive_rw ge_addContract_rw3 {| reduce |} :
    ( 'a in int ) -->
    ((number[i:n] +@ 'a) >= (number[j:n] +@ 'a)) <--> (number[i:n] >= number[j:n])
-(*
-let ge_addContractC = ge_addContract_rw1 orelseC ge_addContract_rw2 orelseC ge_addContract_rw3
-*)
+
 (*
    Reduce contradictory relation a>=a+b where b>0.
  *)
 let reduceContradRelT =
    rw ((addrC [0] normalizeC) thenC (addrC [1] normalizeC) thenC
-       (*(tryC ge_addContractC) thenC*)
 		 reduceC)
-
-let provideConstantC t =
-   if is_number_term t then
-      add_Id4C (*idC*)
-   else if is_add_term t then
-      let (a,b)=dest_add t in
-      if is_number_term a then
-         idC
-      else
-         add_Id3C
-   else
-      add_Id3C
 
 interactive ge_addMono2 'c :
    [wf] sequent { <H> >- 'a in int } -->
@@ -599,108 +456,6 @@ interactive_rw ge_addMono2_rw 'c :
    ('a >= 'b) <--> (('c +@ 'a) >= ('c +@ 'b))
 
 let ge_addMono2C = ge_addMono2_rw
-
-let reduce_geLeftC = (addrC [0] (normalizeC thenC (termC provideConstantC)))
-let reduce_geRightC = (addrC [1] (normalizeC thenC (termC provideConstantC)))
-
-let reduce_geCommonConstT = argfunT (fun i p ->
-   let t = Sequent.nth_hyp p i in
-   let (left,right)=dest_ge t in
-   let (a,b)=dest_add left in
-   if is_number_term a then
-      (rw (ge_addMono2_rw (mk_minus_term a)) i)
-      thenMT (rw (addrC [0] normalizeC) i)
-   else
-      idT)
-
-let tryReduce_geT = argfunT (fun i p ->
-   let t = Sequent.nth_hyp p i in
-      if is_ge_term t then
-         (rw reduce_geLeftC i) thenMT
-         (tryT (reduce_geCommonConstT i) thenMT
-                     (rw reduce_geRightC i))
-      else
-         idT)
-
-(* Generate sum of ge-relations
- *)
-let sumList tl p =
-   match tl with
-   h::t ->
-      let aux (l,r) a =
-         let tm = Sequent.nth_hyp p a in
-         let (al,ar) = dest_ge tm in
-         (mk_add_term al l, mk_add_term ar r) in
-      let h_tm = Sequent.nth_hyp p h in
-      let (sl, sr)=List.fold_left aux (dest_ge h_tm) t in
-      mk_ge_term sl sr
-   | [] ->
-      let zero = << 0 >> in
-         mk_ge_term zero zero
-
-(* Asserts sum of ge-relations and grounds it
- *)
-(*
-let sumListT = argfunT (fun l p ->
-   let s = sumList l p in
-   if !debug_int_arith then
-   	eprintf "Contradictory term:%a%t" debug_print s eflush;
-   (assertT s) thenAT
-   				(repeatT (ge_addMono thenT (tryT (onSomeHypT nthHypT)))))
-*)
-(* This looks like another working solution:
- *					(repeatT ((progressT (onSomeHypT nthHypT)) orelseT ge_addMono)))
- *)
-
-(* Test if term has a form of a>=b+i where i is a number
- *)
-let good_term t =
-(*
-   debug_print stdout t;
-   eprintf "\n %s \n" (Opname.string_of_opname (opname_of_term t));
-*)
-   if is_ge_term t then
-     let (_,b)=dest_ge t in
-        if is_add_term b then
-           let (d,_)=dest_add b in
-              (is_number_term d)
-        else
-           false
-   else
-     ((*debug_print stdout t;
-      eprintf "%s %s\n" (Opname.string_of_opname (opname_of_term t))
-                        (Opname.string_of_opname (opname_of_term ge_term));*)
-      false
-     )
-
-(* Searches for contradiction among ge-relations
- *)
-(*
-let findContradRelT =
-   let rec lprint ch = function
-      h::t -> (fprintf ch "%u " h; lprint ch t)
-    | [] -> fprintf ch "."
-   in funT (fun p ->
-   let g=Sequent.goal p in
-   let l = Arith.collect good_term g in
-   if !debug_int_arith then
-   	begin
-   		eprintf "Looking for contradiction among:";
-   		let _=List.map (fun i -> (eprintf " %i" i)) l in
-   		eprintf "%t" eflush;
-   		()
-   	end;
-   let ar=Array.of_list l in
-   match Arith.TG.solve (g,ar) with
-      Arith.TG.Int (_,r),_ ->
-         let aux3 i al = (ar.(i))::al in
-         let rl = List.fold_right aux3 r [] in
-         if !debug_int_arith then
-            eprintf "Hyps to sum:%a%t" lprint rl eflush;
-         sumListT rl
-    | Arith.TG.Disconnected,_ ->
-         raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found")))
-*)
 
 interactive sumGe 'H :
 	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd >- 'a in int } -->
@@ -727,12 +482,6 @@ let sumListT = function
  | (_,_,_,tac)::tl ->
 		tac thenMT (sumListAuxT tl)
 
-let term2inequality (i,t) =
-   let (a,b)=dest_ge t in
-   let (c,d)=dest_add b in
-	let n=dest_number c in
-	(a,d,n,copyHypT i (-1))
-
 let num0 = num_of_int 0
 let num1 = num_of_int 1
 
@@ -754,7 +503,7 @@ let term2inequality_aux (a,b,n,tac) =
 	let b1,b2=term2term_number b in
 	(a1,b1,sub_num (add_num b2 n) a2,tac)
 
-let term2inequality' (i,t) =
+let term2inequality (i,t) =
 	if is_ge_term t then
 		let a,b=dest_ge t in
 		List.map term2inequality_aux [(a,b,num0,copyHypT i (-1))]
@@ -786,7 +535,7 @@ let all_hyps arg =
    let hyps = (Sequent.explode_sequent arg).sequent_hyps in
       all_hyps_aux hyps [] (Term.SeqHyp.length hyps)
 
-let good_term' t =
+let good_term t =
 	let op=opname_of_term t in
    (List.mem op arith_rels) or
    (match explode_term t with
@@ -795,15 +544,15 @@ let good_term' t =
 
 let findContradRelT = funT ( fun p ->
 	let hyps=all_hyps p in
-	let aux (i,t) = good_term' t in
+	let aux (i,t) = good_term t in
 	let l=List.filter aux hyps in
-	let l'=List.flatten (List.map term2inequality' l) in
+	let l'=List.flatten (List.map term2inequality l) in
 	let l''=Arith.find_contradiction l' in
 	sumListT l''
 )
 
 let reduceIneqT = argfunT ( fun i p ->
-	if good_term' (Sequent.nth_hyp p i) then
+	if good_term (Sequent.nth_hyp p i) then
 		rw (allSubC normalizeC) i
 	else
 		failT
@@ -873,14 +622,6 @@ doc <:doc<
 
 (* Finds and proves contradiction among ge-relations
  *)
-(*
-let arithT =
-   arithRelInConcl2HypT thenMT
-   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-   ((tryOnAllMHypsT anyArithRel2geT) thenMT
-   ((tryOnAllMHypsT tryReduce_geT) thenMT
-   (findContradRelT thenMT (reduceContradRelT (-1)) ))))
-*)
 let arithT =
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT

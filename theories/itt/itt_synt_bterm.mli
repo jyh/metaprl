@@ -2,6 +2,9 @@ extends Itt_synt_var
 extends Itt_synt_operator
 
 declare BTerm
+declare BTerm{'n}
+declare BTerm_plus{'n}
+
 declare make_bterm{'op; 'subterms}
 declare make_bterm{'op;'bdepth;'subterms}
 
@@ -22,6 +25,9 @@ declare op_of{'t}
 declare subterms{'t}
 declare is_same_op{'b1; 'b2}
 declare same_op{'b1; 'b2}
+
+iform bterm: BTerm{'n} <--> { bt:BTerm | bdepth{'bt} = 'n in nat }
+iform bterm_plus: BTerm_plus{'n} <--> { bt:BTerm | bdepth{'bt} >= 'n }
 
 iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
 

@@ -234,6 +234,16 @@ interactive subterms_have_greater_bdepth {| intro [AutoMustComplete] |} :
    sequent { <H> >- all_list{'btl; bt. bdepth{'bt} >= op_bdepth{'op}} }
 
 doc <:doc< @begin[doc]
+   <<BTerm{'n}>> is a set of bterms with depth <<'n>>; <<BTerm_plus{'n}>> is a set of bterms with depth greater than or equal to <<'n>>.
+@end[doc] >>
+
+declare BTerm{'n}
+declare BTerm_plus{'n}
+
+iform bterm: BTerm{'n} <--> { bt:BTerm | bdepth{'bt} = 'n in nat }
+iform bterm_plus: BTerm_plus{'n} <--> { bt:BTerm | bdepth{'bt} >= 'n }
+
+doc <:doc< @begin[doc]
 
    << make_bterm{'op;'bdepth;'subterms} >> is a version of a bterm that
    takes the depth as an argument.
@@ -260,12 +270,13 @@ doc docoff
 dform make_bterm_df: make_bterm{'op;'bdepth;'subterms} =
    `"make_bterm" sub{'bdepth} `"(" slot{'op} `"; " slot{'subterms} `")"
 
+(*
 dform dest_bterm_df : dest_bterm{'bt; v.'var_case; op,subterms. 'op_case } =
    szone pushm[1] pushm[3]
    `"match " slot{'bt} `" with" hspace
    pushm[3] slot{'v} `" ->" hspace slot{'var_case} popm popm hspace
    `"| " pushm[3] `"make_bterm(" slot{'op} `";" slot{'subterms} `") ->" hspace slot{'op_case} popm popm ezone
-
+*)
 doc <:doc< @begin[doc]
    << Vars_of{'bt} >> defines the set of vars whose depth is less than or
    equal to the depth of << 'bt >>.

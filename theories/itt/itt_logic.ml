@@ -922,7 +922,7 @@ type formula_args =
 let eprint_info info =
    let print_item = function
       AllTerm (v, t) ->
-         eprintf "\tAllTerm %a: %a\n" print_symbol v SimplePrint.print_simple_term_fp t
+         eprintf "\tAllTerm %a: %a\n" output_symbol v SimplePrint.print_simple_term_fp t
     | ImpliesTerm ->
          eprintf "\tImpliesTerm\n"
     | IffLeft ->
@@ -952,7 +952,7 @@ let rec assoc v = function
 let check_subst subst =
    let check (v, t) =
       if !debug_auto then
-         eprintf "check_subst: checking %a/%a%t" print_symbol v SimplePrint.print_simple_term_fp t eflush;
+         eprintf "check_subst: checking %a/%a%t" output_symbol v SimplePrint.print_simple_term_fp t eflush;
       if not (is_var_term t & dest_var t = v) then
          raise (RefineError ("check_subst", StringError "bad match"))
    in
@@ -967,7 +967,7 @@ let instantiate_vars args subst =
    if !debug_auto then
       begin
             eprintf "instantiate_vars: got subst\n";
-            List.iter (fun (v,t) -> eprintf "\t%a: %a%t" print_symbol v SimplePrint.print_simple_term_fp t eflush) subst
+            List.iter (fun (v,t) -> eprintf "\t%a: %a%t" output_symbol v SimplePrint.print_simple_term_fp t eflush) subst
       end;
    let rec collect result args subst =
       match args with

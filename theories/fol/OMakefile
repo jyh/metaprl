@@ -37,7 +37,6 @@ Theory($(MPFILES))
 # Documentation
 #
 PRINT_THEORIES =\
-    fol_theory
 
 TheoryDocumentInstall(fol, $(PRINT_THEORIES))
 

@@ -17,6 +17,7 @@ Theory($(MPFILES))
 # Documentation
 #
 PRINT_THEORIES =\
+    base_theory\
     $(SUPPORT)/tactics/top_tacticals\
     $(SUPPORT)/tactics/top_conversionals\
     $(SUPPORT)/tactics/var\

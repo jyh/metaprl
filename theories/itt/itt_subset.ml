@@ -4,7 +4,7 @@ doc <:doc<
 
    The @tt[Itt_subset] module provides the set-theoretic definition of
    @emph{subset}. A type $A$ is a subset of a type $B$,
-   $@subset{A; B}$, if $A$ is a subtype of $B$ and if any one of two equal
+   <<'A subset 'B>>, if $A$ is a subtype of $B$ and if any one of two equal
    elements in $B$ is in $A$ then another element is also in $A$
    (that is, two equal elements in $B$ are either both in $A$ or both not in $A$).
    As a corollary we have that $A$ and $B$ have the same equality on the
@@ -135,16 +135,16 @@ dform subset_df1 : except_mode[src] :: parens :: "prec"[prec_equal] :: mem{'a;'A
     szone pushm slot{'a} space Nuprl_font!member sub{'B} hspace slot{'A} popm ezone
 
 dform subset_df1 : except_mode[src] :: parens :: "prec"[prec_equal] :: ('a in 'A subset 'B) =
-    szone pushm slot{'a} space Nuprl_font!member hspace math_subset{'A; 'B} popm ezone
+    szone pushm slot{'a} space Nuprl_font!member hspace ('A subset 'B) popm ezone
 
 dform subset_df1 : mode[src] :: parens :: "prec"[prec_equal] :: member{'a;'A; 'B} =
     'a `" in " 'A `" subset " 'B
 
 dform subset_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: ('A subset 'B) =
-   math_subset{'A; 'B}
+   slot{'A} `" " subseteq space slot{'A}
 
 dform subset_df1 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subset 'B) =
-   'A `" subset " 'B
+   slot{'A} `" subset " slot{'B}
 
 (************************************************************************
  * RULES                                                                *

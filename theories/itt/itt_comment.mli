@@ -190,12 +190,6 @@ declare math_listind{'e; 'base; 'h; 't; 'f; 'step}
 
 declare math_quot{'T; 'x; 'y; 'E}
 
-(************************************************************************
- * SUBSET
- ************************************************************************)
-
-declare math_subset{'t1; 't2}
-
 (* OTHER *)
 
 declare colons{'a}

@@ -1161,30 +1161,6 @@ prec prec_quot
 dform quot_df1 : except_mode[tex] :: parens :: "prec"[prec_quot] :: math_quot{'A; 'x; 'y; 'E} =
    slot{'x} `", " slot{'y} `":" " " slot{'A} `" // " slot{'E}
 
-(************************************************************************
- * SUBSET
- ************************************************************************)
-
-declare math_subset{'t1; 't2}
-
-(************************************************
- * TeX mode
- *)
-
-dform subset_df1 : mode[tex] :: math_subset{'t1; 't2} =
-   izone `"{" ezone
-   slot{'t1}
-   izone `"\\subseteq" ezone
-   slot{'t2}
-   izone `"}" ezone
-
-(************************************************
- * Normal mode
- *)
-
-dform subset_df : except_mode[tex] :: math_subset{'t1; 't2} =
-   slot{'t1} `" " subseteq  slot{'t2}
-
 (*
  * -*-
  * Local Variables:

@@ -28,7 +28,7 @@ include Itt_theory
 open Itt_equal
 open Itt_rfun
 open Itt_logic
-open Itt_int
+open Itt_int_base
 open Itt_w
 
 (************************************************************************

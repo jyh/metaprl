@@ -39,10 +39,7 @@ MPFILES :=\
 	itt_int_base\
 	itt_int_ext\
 	itt_int_arith\
-	itt_int\
-	itt_int_bool\
 	itt_atom_bool\
-	itt_arith\
 	itt_nat\
 	itt_isect\
 	itt_tsquash\
@@ -54,8 +51,8 @@ MPFILES :=\
 	itt_w\
 	itt_prec\
 	itt_srec\
-	itt_quotient\
 	itt_esquash\
+	itt_quotient\
 	itt_list\
 	itt_list2\
 	itt_derive\

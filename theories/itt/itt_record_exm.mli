@@ -1,12 +1,11 @@
 include Itt_record
-include Itt_int_bool
 include Itt_fun
+include Itt_int_base
 
 open Tactic_type.Conversionals
 open Var
 open Tactic_type
 open Tactic_type.Tacticals
-open Itt_int_bool
 open Itt_fun
 
 topval fold_point : conv

@@ -37,9 +37,9 @@ include Itt_void
 include Itt_bool
 include Itt_atom
 include Itt_atom_bool
-include Itt_int
-include Itt_int_bool
-include Itt_arith
+include Itt_int_base
+include Itt_int_ext
+include Itt_int_arith
 include Itt_rfun
 include Itt_dfun
 include Itt_fun

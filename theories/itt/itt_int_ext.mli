@@ -38,6 +38,7 @@ include Itt_int_base
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *
@@ -103,14 +104,9 @@ prec prec_mul
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
-   meta_prod{number[i:n]; number[j:n]}
-(*
-rewrite reduce_div : "div"{number[i:n]; number[j:n]} <-->
-   meta_quot{number[i:n]; number[j:n]}
-rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
-   meta_rem{number[i:n]; number[j:n]}
-*)
+topval reduce_mul: conv
+topval reduce_div: conv
+topval reduce_rem: conv
 
 val le_term : term
 val is_le_term : term -> bool

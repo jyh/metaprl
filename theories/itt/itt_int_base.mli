@@ -36,6 +36,7 @@ include Itt_equal
 include Itt_rfun
 include Itt_bool
 include Itt_logic
+include Itt_decidable
 
 open Refiner.Refiner.Term
 
@@ -96,32 +97,6 @@ topval int_sqequalC : term -> conv
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite reduce_add : "add"{number[i:n]; number[j:n]} <-->
-   meta_sum{number[i:n]; number[j:n]}
-rewrite reduce_minus : ( - number[i:n]) <-->
-   meta_diff{number[0:n]; number[i:n]}
-(*
-rewrite reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
-   meta_diff{number[i:n]; number[j:n]}
-*)
-
-(*
-rewrite reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
-   meta_prod{number[i:n]; number[j:n]}
-rewrite reduce_div : "div"{number[i:n]; number[j:n]} <-->
-   meta_quot{number[i:n]; number[j:n]}
-rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
-   meta_rem{number[i:n]; number[j:n]}
-*)
-
-rewrite reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
-   meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
-
-(*
-rewrite reduce_eq : (number[i:n] = number[j:n] in int) <-->
-   meta_eq{number[i:n]; number[j:n]}
-*)
-
 val int_term : term
 val is_int_term : term -> bool
 
@@ -165,6 +140,12 @@ val is_ind_term : term -> bool
 val dest_ind : term -> term * string * string * term * term * string * string * term
 val mk_ind_term : term -> string -> string -> term -> term -> string -> string -> term -> term
 
+topval reduce_minus : conv
+topval reduce_sub : conv
+topval reduce_add : conv
+topval reduce_lt : conv
+topval reduce_eq_int : conv
+
 rule add_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
@@ -183,12 +164,6 @@ rule lt_bool_wf 'H :
    sequent [squash] { 'H >- 'a='a1 in int } -->
    sequent [squash] { 'H >- 'b='b1 in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool }
-
-(* Derived from previous *)
-rule lt_bool_wf2 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- lt_bool{'a; 'b} IN bool }
 
 rule beq_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
@@ -277,7 +252,7 @@ rule intType 'H :
  * by intEquality
  *)
 rule intEquality 'H :
-   sequent ['ext] { 'H >- int = int in univ[i:l] }
+   sequent ['ext] { 'H >- int IN univ[i:l] }
 
 (*
  * H >- Z ext n
@@ -290,7 +265,7 @@ rule numberFormation 'H number[n:n] :
  * by numberEquality
  *)
 rule numberEquality 'H :
-   sequent ['ext] { 'H >- number[n:n] = number[n:n] in int }
+   sequent ['ext] { 'H >- number[n:n] IN int }
 
 (*
  * Induction:

@@ -132,7 +132,7 @@ let debug_reduce =
  *
  * @item{@conv[rwc];
  * Conversions may be applied also to assumptions.
- * The (@tt{rw} @it{conv} $a$ $c$) @emph{tactic} applies the
+ * The (@tt{rwc} @it{conv} $a$ $c$) @emph{tactic} applies the
  * conversion @it{conv} to the $c$-th clause in the $a$-th assumtion.}
  *
  * @item{@conv[rwAll] @conv[rwcAll] @conv[rwAllAll];

@@ -66,7 +66,7 @@ open Base_dtactic
 open Itt_logic
 open Itt_struct
 open Itt_tunion
-open Itt_int
+open Itt_int_base
 
 (*===--- unsquash ---===*)
 

@@ -50,6 +50,7 @@ include Itt_rfun
 include Itt_bool
 include Itt_logic
 include Itt_struct
+include Itt_decidable
 (*! @docoff *)
 
 open Printf
@@ -286,43 +287,45 @@ let int_sqequalC = int_sqequal_rw
  * builtin operations.
  * @end[doc]
  *)
-prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
+prim_rw reduce_add_meta : (number[i:n] +@ number[j:n]) <-->
    meta_sum{number[i:n]; number[j:n]}
 
-(*
-prim_rw reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
-   meta_diff{number[i:n]; number[j:n]}
-*)
-prim_rw reduce_minus : minus{number[i:n]} <-->
+prim_rw reduce_minus_meta : ( - number[i:n]) <-->
    meta_diff{number[0:n]; number[i:n]}
 
-prim_rw reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
+prim_rw reduce_sub_meta : (number[i:n] -@ number[j:n]) <-->
+   meta_diff{number[i:n]; number[j:n]}
+
+prim_rw reduce_lt_meta : "lt"{number[i:n]; number[j:n]} <-->
    meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
 
-(*
-prim_rw reduce_eq : (number[i:n] = number[j:n] in int) <-->
-   meta_eq{number[i:n]; number[j:n]}
-*)
+prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
+   meta_eq{number[i:n]; number[j:n]; btrue; bfalse}
 
 (*! @docoff *)
 
 let reduce_add =
-   reduce_add thenC reduce_meta_sum
+   reduce_add_meta thenC reduce_meta_sum
 
-(*
-let reduce_sub =
-   reduce_sub thenC reduce_meta_diff
-*)
 let reduce_minus =
-   reduce_minus thenC reduce_meta_diff
+   reduce_minus_meta thenC reduce_meta_diff
+
+let reduce_sub =
+   reduce_sub_meta thenC reduce_meta_diff
 
 let reduce_lt =
-   reduce_lt thenC reduce_meta_lt
+   reduce_lt_meta thenC reduce_meta_lt
 
-(*
-let reduce_eq =
-   reduce_eq thenC reduce_meta_eq
-*)
+let reduce_eq_int =
+   reduce_beq_int_meta thenC reduce_meta_eq
+
+let resource reduce += [
+   <<number[i:n] +@ number[j:n]>>, reduce_add;
+   <<minus{number[i:n]}>>, reduce_minus;
+   <<number[i:n] -@ number[j:n]>>, reduce_sub;
+   <<"lt"{number[i:n]; number[j:n]}>>, reduce_lt;
+   <<beq_int{number[i:n]; number[j:n]}>>, reduce_eq_int;
+]
 
 prim add_wf {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
@@ -342,12 +345,6 @@ prim lt_bool_wf {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- 'a='a1 in int } -->
    sequent [squash] { 'H >- 'b='b1 in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool } = it
-
-(* Derived from previous *)
-interactive lt_bool_wf2 {| intro []; eqcd |} 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- lt_bool{'a; 'b} IN bool }
 
 prim beq_wf {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
@@ -411,7 +408,7 @@ interactive lt_bool_member {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection {@tt{ind} definition}
+ * @thysubsection {Induction and recursion}
  * Reduction of the induction combinator @tt{ind} has three cases.
  * If the argument $x$ is $0$, the combinator reduces to the @i{base}
  * case; if it is positive, it reduces to the @i{up} case; and
@@ -458,32 +455,49 @@ prim_rw reduce_ind_base :
  * @end[doc]
  *)
 (*
- * H >- Ui ext Z
- * by intFormation
- *)
-prim intFormation 'H :
-   sequent ['ext] { 'H >- univ[i:l] } = int
-
-(*
- * H >- int Type
- *)
-prim intType {| intro [] |} 'H :
-   sequent ['ext] { 'H >- "type"{int} } = it
-
-(*
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
 prim intEquality {| intro []; eqcd |} 'H :
-   sequent ['ext] { 'H >- int = int in univ[i:l] } = it
+   sequent ['ext] { 'H >- int IN univ[i:l] } = it
+
+(*
+ * H >- int Type
+ *)
+interactive intType {| intro [] |} 'H :
+   sequent ['ext] { 'H >- "type"{int} }
+(*! @docoff *)
+
+(*
+ * H >- Ui ext Z
+ * by intFormation
+ *)
+interactive intFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Z ext n
  * by numberFormation n
  *)
-prim numberFormation 'H number[n:n] :
+prim numberFormation {| intro [] |} 'H number[n:n] :
    sequent ['ext] { 'H >- int } = number[n:n]
-(*! @docoff *)
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Decidability}
+ * The following rule establish decidability of integer relations and
+ * improve the @hreftactic[decideT] tactic.
+ * @end[doc]
+ *)
+interactive lt_decidable {| intro [] |} 'H :
+   [wf] sequent[squash] { 'H >- 'a IN int } -->
+   [wf] sequent[squash] { 'H >- 'b IN int } -->
+   sequent['ext] { 'H >- decidable{('a < 'b)} }
+
+interactive eq_int_decidable {| intro [] |} 'H :
+   [wf] sequent[squash] { 'H >- 'a IN int } -->
+   [wf] sequent[squash] { 'H >- 'b IN int } -->
+   sequent['ext] { 'H >- decidable{('a = 'b in int)} }
 
 (*!
  * @begin[doc]
@@ -497,7 +511,7 @@ prim numberFormation 'H number[n:n] :
  * by numberEquality
  *)
 prim numberEquality {| intro []; eqcd |} 'H :
-   sequent ['ext] { 'H >- number[n:n] = number[n:n] in int } = it
+   sequent ['ext] { 'H >- number[n:n] IN int } = it
 
 (*!
  * @begin[doc]
@@ -828,6 +842,12 @@ interactive minus_minus_reduce 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (-(-'a)) ~ 'a }
 
+interactive_rw minus_minus_reduce_rw :
+   ('a IN int) -->
+   (-(-'a)) <--> 'a
+
+let minus_minus_reduceC = minus_minus_reduce_rw
+
 (*! @docoff *)
 
 (***********************************************************
@@ -835,21 +855,18 @@ interactive minus_minus_reduce 'H :
  ***********************************************************)
 
 (*
- * Type of int.
+ * Type of int and of number
  *)
-let resource typeinf += (<<int>>, infer_univ1)
+let resource typeinf += [
+   (<<int>>, infer_univ1);
+   (<<number[n:n]>>, Typeinf.infer_const <<int>>)
+]
 
-(*
- * Type of number.
- *)
-let resource typeinf += (<<number[n:n]>>, Typeinf.infer_const <<int>>)
-
-(*
-let resource reduce +=
-   [<< band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_ReflexC;
-    << ('a +@ 0) >>, add_IdC;
-    << (0 +@ 'a) >>, add_Id2C;
-    << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
-    << (-(-'a)) >>, minus_minus_reduceC;
-    << ('a +@ ('b +@ 'c)) >>, add_AssocC]
-*)
+let resource reduce += [
+   << band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_ReflexC;
+   << ('a +@ 0) >>, add_IdC;
+   << (0 +@ 'a) >>, add_Id2C;
+   << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
+   << (-(-'a)) >>, minus_minus_reduceC;
+   << ('a +@ ('b +@ 'c)) >>, add_AssocC;
+]

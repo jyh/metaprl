@@ -1436,7 +1436,7 @@ let auto_assumT i p =
 let auto_assumT i = tryT (auto_assumT i)
 
 let auto_jproverT =
-   addHiddenLabelT "main" thenT onAllMAssumT auto_assumT thenMT base_jproverT (Some 1)
+   removeHiddenLabelT thenT onAllMAssumT auto_assumT thenMT base_jproverT (Some 1)
 
 let logic_prec = create_auto_prec [trivial_prec] [d_prec]
 let jprover_prec = create_auto_prec [trivial_prec;logic_prec] [d_prec]

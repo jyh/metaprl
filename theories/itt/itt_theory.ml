@@ -48,7 +48,8 @@ include Itt_equal
 include Itt_void
 include Itt_bool
 include Itt_atom
-include Itt_int
+include Itt_int_base
+include Itt_int_ext
 include Itt_rfun
 include Itt_dfun
 include Itt_fun
@@ -69,8 +70,8 @@ include Itt_prec
 include Itt_srec
 include Itt_list
 include Itt_list2
-include Itt_quotient
 include Itt_esquash
+include Itt_quotient
 include Itt_decidable
 
 (*!
@@ -80,11 +81,10 @@ include Itt_decidable
  * @docoff
  *)
 include Itt_atom_bool
-include Itt_int_bool
-include Itt_arith
 include Itt_derive
 include Itt_prop_decide
 include Itt_fset
+include Itt_int_arith
 
 open Itt_equal
 open Itt_rfun

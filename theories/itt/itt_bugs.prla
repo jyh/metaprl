@@ -1054,8 +1054,8 @@ B	b391	t391
 NSummary!rewrite	rewrite	rewrite Summary
 P	p391	String unfold_label
 O	o391	rewrite p391
-NItt_int	Itt_int	Itt_int NIL
-NItt_int!number	number	number Itt_int
+NItt_int_base	Itt_int_base	Itt_int_base NIL
+NItt_int_base!number	number	number Itt_int_base
 P	p392	Number 17
 O	o392	number p392
 T	t392	o392

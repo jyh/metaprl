@@ -80,8 +80,8 @@ prim_rw unfold_value : "value"{'v; 's2} <-->
 prim_rw unfold_evalsto : evalsto{'e1; 'e2} <-->
    (Perv!"rewrite"{'e1; 'e2})
 
-prim_rw unfold_eq_int : Sil_sos!eq_int{number[i:n]; number[j:n]} <--> "assert"{.Itt_int_bool!eq_int{.Itt_int!number[i:n]; .Itt_int!number[j:n]}}
-prim_rw unfold_neq_int : Sil_sos!neq_int{number[i:n]; number[j:n]} <--> "assert"{bnot{.Itt_int_bool!eq_int{.Itt_int!number[i:n]; .Itt_int!number[j:n]}}}
+prim_rw unfold_eq_int : Sil_sos!eq_int{number[i:n]; number[j:n]} <--> "assert"{.Itt_int_base!beq_int{.Itt_int_base!number[i:n]; .Itt_int_base!number[j:n]}}
+prim_rw unfold_neq_int : Sil_sos!neq_int{number[i:n]; number[j:n]} <--> "assert"{bnot{.Itt_int_base!beq_int{.Itt_int_base!number[i:n]; .Itt_int_base!number[j:n]}}}
 
 prim_rw unfold_eval : eval{'e; 's} <--> Itt_rfun!apply{'e; 's}
 prim_rw unfold_prog : prog{s. 'e['s]} <--> Itt_rfun!lambda{s. 'e['s]}
@@ -280,25 +280,25 @@ prim_rw unfold_alloc1 : Sil_state!alloc{'s; 'v; s2, l. 't['s2; 'l]} <-->
 (*
  * Numbers.
  *)
-prim_rw unfold_snumber : Sil_programs!number[i:n] <--> exprof{.Itt_int!number[i:n]}
+prim_rw unfold_snumber : Sil_programs!number[i:n] <--> exprof{.Itt_int_base!number[i:n]}
 
 prim_rw unfold_add : Sil_programs!add{'e1; 'e2} <-->
    prog{s1.
       "match"{.eval{'e1; 's1}; v1, s2.
       "match"{.eval{'e2; 's2}; v2, s3.
-         "val"{.Itt_int!add{'v1; 'v2}; 's3}}}}
+         "val"{.Itt_int_base!add{'v1; 'v2}; 's3}}}}
 
 prim_rw unfold_sub : Sil_programs!sub{'e1; 'e2} <-->
    prog{s1.
       "match"{.eval{'e1; 's1}; v1, s2.
       "match"{.eval{'e2; 's2}; v2, s3.
-         "val"{.Itt_int!sub{'v1; 'v2}; 's3}}}}
+         "val"{.Itt_int_base!sub{'v1; 'v2}; 's3}}}}
 
 prim_rw unfold_if : "if"{'e1; 'e2; 'e3; 'e4} <-->
    prog{s1.
       "match"{.eval{'e1; 's1}; v1, s2.
       "match"{.eval{'e2; 's2}; v2, s3.
-         ifthenelse{.Itt_int_bool!eq_int{'v1; 'v2}; .eval{'e3; 's3}; .eval{'e4; 's3}}}}}
+         ifthenelse{.Itt_int_base!beq_int{'v1; 'v2}; .eval{'e3; 's3}; .eval{'e4; 's3}}}}}
 
 (*
  * Disjoint union.

@@ -52,6 +52,7 @@ include Itt_struct
 include Itt_union
 include Itt_set
 include Itt_logic
+include Itt_decidable
 (*! @docoff *)
 
 open Refiner.Refiner.TermType
@@ -490,6 +491,15 @@ interactive assert_magic 'H 'x :
 
 (*!
  * @begin[doc]
+ * The following rule establishes that @tt[assert] is always decidable.
+ * @end[doc]
+ *)
+interactive assert_decidable {| intro [] |} 'H:
+   [wf] sequent [squash] { 'H >- 't IN bool } -->
+   sequent ['ext] { 'H >- decidable{."assert"{'t}} }
+
+(*!
+ * @begin[doc]
  * The following four rules define elimination reasoning
  * on the Boolean binary connectives.
  * @end[doc]
@@ -751,17 +761,15 @@ let splitITE i p =
  ************************************************************************)
 
 (*
- * Type of Bool
- *)
-let resource typeinf += (bool_term, infer_univ1)
-
-(*
- * Type of bool constants
+ * Type of Bool and bool constants
  *)
 let inf_b = Typeinf.infer_const bool_term
 
-let resource typeinf += (btrue_term, inf_b)
-let resource typeinf += (bfalse_term, inf_b)
+let resource typeinf += [
+   bool_term, infer_univ1;
+   btrue_term, inf_b;
+   bfalse_term, inf_b;
+]
 
 (*
  * -*-

@@ -99,7 +99,7 @@ prim_rw unfold_var : var[v:t] <--> tvar{token[v:t]; vnil}
 prim_rw unfold_var_type : var_type <--> list{.int + atom}
 
 prim_rw unfold_eq_varc : eq_varc{'a; 'b} <-->
-   decide{'a; x. decide{'b; y. eq_int{'x; 'y}; y. bfalse};
+   decide{'a; x. decide{'b; y. beq_int{'x; 'y}; y. bfalse};
               x. decide{'b; y. bfalse; y. eq_atom{'x; 'y}}}
 
 prim_rw unfold_eq_var : eq_var{'x; 'y} <-->
@@ -154,7 +154,7 @@ interactive_rw reduce_eq_var_ivar2 : eq_var{ivar{'i1; 'v1}; var[t:t]} <--> bfals
 interactive_rw reduce_eq_var_ivar3 : eq_var{ivar{'i1; 'v1}; tvar{'t2; 'v2}} <--> bfalse
 
 interactive_rw reduce_eq_var_ivar4 : eq_var{ivar{'i1; 'v1}; ivar{'i2; 'v2}} <-->
-   band{eq_int{'i1; 'i2}; eq_var{'v1; 'v2}}
+   band{beq_int{'i1; 'i2}; eq_var{'v1; 'v2}}
 
 let resource reduce += [
    << eq_var{vnil; vnil} >>, reduce_eq_var_nil1;

@@ -238,25 +238,29 @@ dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
  * @end[doc]
  *)
 
-prim_rw reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
+prim_rw reduce_mul_meta : (number[i:n] *@ number[j:n]) <-->
    meta_prod{number[i:n]; number[j:n]}
-
-(*
-prim_rw reduce_div : "div"{number[i:n]; number[j:n]} <-->
+prim_rw reduce_div_meta : (number[i:n] /@ number[j:n]) <-->
    meta_quot{number[i:n]; number[j:n]}
-prim_rw reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
+prim_rw reduce_rem_meta : "rem"{number[i:n]; number[j:n]} <-->
    meta_rem{number[i:n]; number[j:n]}
-*)
 
 (*! @docoff *)
 
 let reduce_mul =
-   reduce_mul thenC reduce_meta_prod
+   reduce_mul_meta thenC reduce_meta_prod
 
-(*
 let reduce_div =
-   reduce_div thenC reduce_meta_rem
-*)
+   reduce_div_meta thenC reduce_meta_quot
+
+let reduce_rem =
+   reduce_rem_meta thenC reduce_meta_rem
+
+let resource reduce += [
+   <<number[i:n] *@ number[j:n]>>, reduce_mul;
+   <<number[i:n] /@ number[j:n]>>, reduce_div;
+   <<"rem"{number[i:n]; number[j:n]}>>, reduce_rem;
+]
 
 (*!
  * @begin[doc]

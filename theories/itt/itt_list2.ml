@@ -48,8 +48,9 @@
 include Itt_list
 include Itt_logic
 include Itt_bool
-include Itt_int
-include Itt_int_bool
+include Itt_int_base
+include Itt_int_ext
+include Itt_int_arith
 (*! @docoff *)
 
 open Refiner.Refiner.TermType
@@ -173,7 +174,7 @@ define unfold_fold_left :
  *)
 define unfold_nth :
    nth{'l; 'i} <-->
-      (list_ind{'l; it; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; 'u; .'g ('j -@ 1)}}} 'i)
+      (list_ind{'l; it; u, v, g. lambda{j. ifthenelse{beq_int{'j; 0}; 'u; .'g ('j -@ 1)}}} 'i)
 
 (*!
  * @begin[doc]
@@ -184,7 +185,7 @@ define unfold_nth :
  *)
 define unfold_replace_nth :
    replace_nth{'l; 'i; 't} <-->
-      (list_ind{'l; nil; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; cons{'t; 'v}; cons{'u; .'g ('j -@ 1)}}}} 'i)
+      (list_ind{'l; nil; u, v, g. lambda{j. ifthenelse{beq_int{'j; 0}; cons{'t; 'v}; cons{'u; .'g ('j -@ 1)}}}} 'i)
 
 (*!
  * @begin[doc]
@@ -404,7 +405,7 @@ let fold_length = makeFoldC << length{'l} >> unfold_length
  * @end[doc]
  *)
 interactive_rw reduce_nth_cons :
-   nth{cons{'u; 'v}; 'i} <--> ifthenelse{eq_int{'i; 0}; 'u; nth{'v; .'i -@ 1}}
+   nth{cons{'u; 'v}; 'i} <--> ifthenelse{beq_int{'i; 0}; 'u; nth{'v; .'i -@ 1}}
 
 (*! @docoff *)
 let fold_nth = makeFoldC << nth{'l; 'i} >> unfold_nth
@@ -418,7 +419,7 @@ let fold_nth = makeFoldC << nth{'l; 'i} >> unfold_nth
  *)
 interactive_rw reduce_replace_nth_cons :
    replace_nth{cons{'u; 'v}; 'i; 't} <-->
-      ifthenelse{eq_int{'i; 0}; cons{'t; 'v}; cons{'u; replace_nth{'v; .'i -@ 1; 't}}}
+      ifthenelse{beq_int{'i; 0}; cons{'t; 'v}; cons{'u; replace_nth{'v; .'i -@ 1; 't}}}
 
 (*! @docoff *)
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
@@ -579,6 +580,7 @@ interactive nth_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
    [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
+   [wf] sequent [squash] { 'H >- 'i IN int } -->
    sequent ['ext] { 'H >- nth{'l; 'i} IN 'T }
 
 interactive replace_nth_wf {| intro [] |} 'H :

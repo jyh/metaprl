@@ -26,8 +26,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Aleksey Nogin
- * nogin@cs.cornell.edu
+ * Author: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
 include Itt_logic
@@ -39,17 +38,8 @@ open Mp_resource
 
 define unfold_decidable : decidable{'p} <--> ('p or not {'p})
 
-resource (term * tactic, tactic ) decide
-
-val process_decide_resource_annotation:
-   (Tactic.pre_tactic, term * tactic) annotation_processor
-
-(* Works only on sequents of form "H |- Decidable(P)", tries to prove
-   that P is in fact decidable using rules added to decide_resource *)
-topval prove_decidableT : tactic
-
 (* "decideT P" asserts decidability of P generating 3 subgoals -
    Decidable (P); case P; case not(P)
-   that tries to eliminate the first subgoal using prove_decidableT *)
+   that tries to eliminate the first subgoal using autoT *)
 topval decideT : term -> tactic
 

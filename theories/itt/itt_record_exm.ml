@@ -10,7 +10,8 @@ include Itt_record
 
 (*! @docoff *)
 
-include Itt_int_bool
+include Itt_int_base
+include Itt_int_ext
 include Itt_atom
 include Itt_set
 include Itt_fun
@@ -32,7 +33,6 @@ open Tactic_type.Tacticals
 open Base_dtactic
 open Tactic_type.Conversionals
 
-open Itt_int_bool
 open Itt_struct
 open Itt_record
 open Itt_fun

@@ -44,11 +44,11 @@ open Tactic_type.Conversionals
 
 open Itt_rfun
 open Itt_bool
-open Itt_int
-open Itt_int_bool
+open Itt_int_base
+open Itt_int_ext
 
 declare fact{'i}
-prim_rw reduceFact : fact{'i} <--> ifthenelse{eq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
+prim_rw reduceFact : fact{'i} <--> ifthenelse{beq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
 
 let resource reduce += << fact{'i} >>, reduceFact
 

@@ -1787,8 +1787,8 @@ NItt_list!list	list	list Itt_list
 O	o661	list
 NItt_union!union	union	union Itt_union
 O	o662	union
-NItt_int	Itt_int	Itt_int NIL
-NItt_int!int	int	int Itt_int
+NItt_int_base	Itt_int_base	Itt_int_base NIL
+NItt_int_base!int	int	int Itt_int_base
 O	o663	int
 T	t663	o663
 B	b663	t663
@@ -1821,9 +1821,8 @@ T	t673	o563 b671 b672
 B	b673	t673
 NItt_union!decide	decide	decide Itt_union
 O	o673	decide
-NItt_int_bool	Itt_int_bool	Itt_int_bool NIL
-NItt_int_bool!eq_int	eq_int	eq_int Itt_int_bool
-O	o674	eq_int
+NItt_int_base!beq_int	beq_int	beq_int Itt_int_base
+O	o674	beq_int
 P	p674	Var x
 O	o675	var543 p674
 T	t675	o675

@@ -286,6 +286,12 @@ interactive cycSubg_intro {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'a in 'g^car } -->
    sequent ['ext] { <H> >- cycSubg{'g; 'a} in group[i:l] }
 
+doc <:doc< 
+   @begin[doc]
+  
+   A cyclic subgroup is a subgroup.
+   @end[doc]
+>>
 interactive cycSubg_subgroup {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'g in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'a in 'g^car } -->
@@ -311,16 +317,6 @@ interactive cycSubg_inv {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} gro
    [wf] sequent [squash] { <H> >- 'a in 'g^car } -->
    sequent ['ext] { <H> >- cycSubg{'g; 'a}^inv = 'g^inv in cycSubg{'g; 'a}^car -> cycSubg{'g; 'a}^car }
 
-doc <:doc< 
-   @begin[doc]
-  
-   A cyclic subgroup is a subgroup.
-   @end[doc]
->>
-interactive cycsubg_subgroup {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { <H> >- 'g in group[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'a in 'g^car } -->
-   sequent ['ext] { <H> >- subgroup[i:l]{cycSubg{'g; 'a}; 'g} }
 doc docoff
 
 (*

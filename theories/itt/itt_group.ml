@@ -945,7 +945,7 @@ doc <:doc<
    Let $f: A -> B$ be a group homomorphism with kernel $K$.
    The left coset of $K$ relative to $A$ containing $x$ is equal to the
    set whose element has the same image under $f$ as $x$. So is the right
-   coset
+   coset.
    @end[doc]
 >>
 interactive groupKer_lcoset {| intro [intro_typeinf <<'A>>] |} group[i:l] :
@@ -1176,7 +1176,7 @@ interactive groupEpi_abel 'A 'f :
 doc <:doc< 
    @begin[doc]
    If $f: (<<'A -> 'B>>)$ is an isomorphism, then its inverse mapping is
-   also an isomorphism. <<groupIso{'A; 'B}>>
+   also an isomorphism.
    @end[doc]
 >>
 interactive groupIso_iso group[i:l] 'f :

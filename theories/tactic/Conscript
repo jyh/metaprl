@@ -1,7 +1,7 @@
 Import qw( env );
 
 $env = $env->clone(
-	OCAMLC => "$env->{OCAMLC} -I /usr/lib/ocaml/camlp4"
+	OCAMLC => "$env->{OCAMLC} -I $env->{CAMLP4STDLIB}"
 );
 
 Depends $env ['tactic_cache',

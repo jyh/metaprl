@@ -51,6 +51,21 @@ open Basic_tactics
 doc <:doc< @doc{@terms} >>
 
 (*
+ *  new_var(<H>.t ) = <H>,x.x
+ *)
+define unfold_new_var: new_var{'bt} <--> var{bdepth{'bt};0}
+
+interactive_rw new_var_bdepth {| reduce |} :
+   ('bt in BTerm)  -->
+   depth{new_var{'bt}} <--> bdepth{'bt} +@ 1
+
+interactive new_var_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- new_var{'bt} in Var }
+
+
+
+(*
  *  add_var( <H>;<J>.s; <H>,x,<J'>.x ) = <H>,x,<J>.s
  *)
 define unfold_add_var:
@@ -93,8 +108,8 @@ interactive add_var_wf {| intro [] |} :
 (*
  *  add_var( <H>.s ) = <H>,x.s
  *)
-define unfold_add_var1:
-   add_var{'bt} <--> add_var{'bt; var{bdepth{'bt};0}}
+define unfold_add_new_var:
+   add_var{'bt} <--> add_var{'bt; new_var{'bt}}
 
 interactive_rw add_var1_bdepth {| reduce |} :
    ('bt in BTerm)  -->
@@ -187,6 +202,21 @@ interactive subst_wf {| intro [] |} :
 interactive subst_commutes {| intro |}
    sequent{<H> >- subst{subst{'t;'v1;'s1};'v2;'s2} = ...
  *)
+
+
+(*
+ *  bind(x. bterm{<H>.b[x]} ) = bterm{<H>,x.b[x]}
+ *)
+define unfold_bind:
+   bind{x.'bt['x]} <-->
+      fix{bind.lambda{bt.
+         dest_bterm{'bt;
+                    u. if depth{'u} <=@ bdepth{'bt}
+                        then var{left{'u};right{'u}+@1}
+                        else 'u;
+                    op,subterms. make_bterm{bind{'op}; map{x.'bind 'x; 'subterms}} }
+         }} 'bt[new_var{'bt[it]}]
+
 
 doc docoff
 

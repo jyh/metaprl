@@ -1,29 +1,21 @@
-Notes as of 29 September 2001:
+Notes as of 6 October 2001 (I hope...):
 
 (When I say FIR, I refer to the FIR in the mc compiler.)
-
-Fir_state and Fir_type_state are present, but currently serve
-no purpose that I can see.  Consequently, Fir_type has to declare
-fir_value so that Fir_type_state compiles properly.  The way things
-are going, it looks like as if all this should just disappear, but I'm
-leaving it for now since I don't want to prematurely remove these files
-just yet.
 
 In general, the Fir_type* modules need testing and refinement
 at this point.  Emphasis on the testing.  I've just sort
 of guessed what typing judgements are useful/correct.  There's
 no actual guarentees that the type system defined through those files
-is consistent, logical, correct, etc.
+is consistent, logical, correct, etc.  There's no guarentee that they
+even make any sort of sense at this point.
 
 The general divisions for the Fir_type* files are as follows:
 Fir_type : basic types, e.g. Fir_ty
-Fir_type_state : rules for Fir_state stuff
 Fir_type_exp : rules for Fir_exp stuff
 Fir_type_int : rules for Fir_int stuff (mostly a convinience for automation
    last I checked)
 
 The rest of the files are intended to represent the following:
-Fir_state : state operations (defunct I think, but around anyway...)
 Fir_int_set : A limited implementation of the int_set's in the FIR.
    The set is essentially a list of closed intervals over the integers.
    Unlike the FIR, I have no notiong of max / min sets, singleton sets,
@@ -33,12 +25,8 @@ Fir_int_set : A limited implementation of the int_set's in the FIR.
    order or that for a given interval [a,b], I don't enforce a<=b
    (though membership testing should blow up badly if that's the case).
 Fir_ty : FIR types
-Fir_exp : FIR expressions, except for the integer stuff
-FIR_int : FIR integer items (but not rawints or the like).
-
-Fir_ty, Fir_exp, and Fir_int are going to be the places to look
-for scattered comments concerning why some terms are there, why some
-aren't, etc.
+Fir_exp : FIR expressions
+Fir_eval : used to evaluate the FIR as output by mc with -print_metaprl.
 
 Oh yeah, naming scheme.  Essentially, anything that's supposed to represent
 something in the fir uses the exact same name, except the first
@@ -59,5 +47,3 @@ Subscripting.  Subscripting is fun.  Subscripting is interesting.  Yes.
 So are union related things. These are all "fun".  That means that
 I don't feel that I completely understand them yet, so their implementation
 and whatnot may be wacky.
-
-FIR evaluation is represented through rewrites.

@@ -31,7 +31,6 @@
  *)
 
 include Base_theory
-include Fir_int_set
 
 (*************************************************************************
  * Declarations.
@@ -83,18 +82,6 @@ declare exnUnion
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
-
-(* Boolean type. *)
-define unfold_true_set : true_set <--> int_set{ 1; 1 }
-define unfold_false_set : false_set <--> int_set{ 0; 0 }
-define unfold_val_true : val_true <--> 1
-define unfold_val_false : val_false <--> 0
-
-(* Functions. *)
-declare lambda{ x. 'f['x] }   (* for functions with >= 1 arguments *)
-declare lambda{ 'f }          (* function with no arguments *)
-declare apply{ 'f; 'x }
-declare fix{ f. 'b['f] }
 
 (*************************************************************************
  * Display forms.
@@ -166,54 +153,3 @@ dform tyDefUnion_df : except_mode[src] ::
    `", " slot{'elts} `")" ezone
 dform tyDefLambda_df : except_mode[src] :: tyDefLambda{ 'ty_var_list; 'ty } =
    szone `"TyDefLambda(" slot{'ty_var_list} `", " slot{'ty} `")" ezone
-
-(* Boolean type *)
-dform true_set_df : except_mode[src] :: true_set = `"true_set"
-dform false_set_df : except_mode[src] :: false_set = `"false_set"
-dform val_true_df : except_mode[src] :: val_true = `"val_true"
-dform val_false_df : except_mode[src] :: val_false = `"val_false"
-
-(* Functions. *)
-dform lambda_df1 : except_mode[src] :: lambda{ x. 'f } =
-   `"(" Nuprl_font!lambda slot{'x} `"." slot{'f} `")"
-dform lambda_df0 : except_mode[src] :: lambda{ 'f } =
-   `"(" Nuprl_font!lambda `"()." slot{'f} `")"
-dform apply_df : except_mode[src] :: apply{ 'f; 'x } =
-   `"(" slot{'f} `" " slot{'x} `")"
-dform fix_df : except_mode[src] :: fix{ f. 'b } =
-   pushm[0] szone push_indent `"(fix " slot{'f} `"." hspace
-   szone slot{'b} `")" ezone popm
-   ezone popm
-
-(*************************************************************************
- * Rewrites.
- *************************************************************************)
-
-prim_rw reduce_int8 : int8 <--> 8
-prim_rw reduce_int16 : int16 <--> 16
-prim_rw reduce_int32 : int32 <--> 32
-prim_rw reduce_int64 : int64 <--> 64
-
-prim_rw reduce_tyVar : tyVar{ 'ty_var } <--> 'ty_var
-prim_rw beta_reduce : apply{ lambda{ x. 'f['x] }; 'y } <--> 'f['y]
-prim_rw reduce_apply_nil : apply{ lambda{ 'f }; nil } <--> 'f
-prim_rw reduce_fix : fix{ f. 'b['f] } <--> 'b[ fix{ f. 'b['f] } ]
-
-(*************************************************************************
- * Automation.
- *************************************************************************)
-
-let resource reduce += [
-   << true_set >>, unfold_true_set;
-   << false_set >>, unfold_false_set;
-   << val_true >>, unfold_val_true;
-   << val_false >>, unfold_val_false;
-   << int8 >>, reduce_int8;
-   << int16 >>, reduce_int16;
-   << int32 >>, reduce_int32;
-   << int64 >>, reduce_int64;
-   << tyVar{ 'ty_var } >>, reduce_tyVar;
-   << apply{ lambda{ x. 'f['x] }; 'y } >>, beta_reduce;
-   << apply{ lambda{ 'f }; nil } >>, reduce_apply_nil;
-   << fix{ f. 'b['f] } >>, reduce_fix
-]

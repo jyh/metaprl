@@ -33,5 +33,4 @@
 include Base_theory
 include Itt_theory
 include Fir_exp
-include Fir_int
 include Fir_type

@@ -33,7 +33,8 @@
  *)
 
 include Base_theory
-include Itt_theory
+include Itt_bool
+include Itt_int_ext
 
 (*************************************************************************
  * Declarations.
@@ -88,14 +89,3 @@ prim_rw reduce_member_nil : member{ 'num; int_set{ nil } } <--> bfalse
 prim_rw reduce_short_int_set :
    int_set{ 'a; 'b } <-->
    int_set{ cons{ interval{'a; 'b}; nil } }
-
-(*************************************************************************
- * Automation.
- *************************************************************************)
-
-let resource reduce += [
-   << in_interval{ 'num; interval{'l; 'r} } >>, unfold_in_interval;
-   << member{ 'num; int_set{ cons{'i; 'el} } } >>, reduce_member_cons;
-   << member{ 'num; int_set{ nil } } >>, reduce_member_nil;
-   << int_set{ 'a; 'b } >>, reduce_short_int_set
-]

@@ -31,9 +31,6 @@
  *)
 
 include Base_theory
-include Fir_int_set
-
-open Tactic_type.Conversionals
 
 (*************************************************************************
  * Declarations.
@@ -112,37 +109,3 @@ declare exnUnion
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
-
-(*
- * Boolean type.
- * true_set and false_set define true and false for use in matches.
- * val_true and val_false should be used for returning true and false
- *    in FIR evaluation.
- *)
-define unfold_true_set : true_set <--> int_set{ 1; 1 }
-define unfold_false_set : false_set <--> int_set{ 0; 0 }
-define unfold_val_true : val_true <--> 1
-define unfold_val_false : val_false <--> 0
-
-(* Functions. *)
-declare lambda{ x. 'f['x] }   (* for functions with >= 1 arguments *)
-declare lambda{ 'f }          (* function with no arguments *)
-declare apply{ 'f; 'x }
-declare fix{ f. 'b['f] }
-
-(*************************************************************************
- * Rewrites.
- *************************************************************************)
-
-topval unfold_true_set : conv
-topval unfold_false_set : conv
-topval unfold_val_true : conv
-topval unfold_val_false : conv
-topval reduce_int8 : conv
-topval reduce_int16 : conv
-topval reduce_int32 : conv
-topval reduce_int64 : conv
-topval reduce_tyVar : conv
-topval beta_reduce : conv
-topval reduce_apply_nil : conv
-topval reduce_fix : conv

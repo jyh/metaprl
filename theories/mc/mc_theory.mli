@@ -30,12 +30,12 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Fir_state
+(* for tokens *)
+include Itt_atom
+include Itt_atom_bool
+
+(* main modules *)
 include Fir_int_set
 include Fir_ty
 include Fir_exp
-include Fir_int
-include Fir_type
-include Fir_type_state
-include Fir_type_exp
-include Fir_type_int
+include Fir_eval

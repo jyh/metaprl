@@ -31,10 +31,6 @@
  *)
 
 include Base_theory
-include Itt_theory
-include Fir_state
-include Fir_int_set
-include Fir_ty
 
 (*************************************************************************
  * Declarations.
@@ -42,6 +38,46 @@ include Fir_ty
 
 (* Identity (polymorphic). *)
 declare idOp
+
+(*
+ * Naml integer operations.
+ *)
+
+(* Unary and bitwise negation. *)
+declare uminusIntOp
+declare notIntOp
+
+(* Standard binary arithmetic operators. *)
+declare plusIntOp
+declare minusIntOp
+declare mulIntOp
+declare divIntOp
+declare remIntOp
+
+(* Binary bitwise operators. *)
+declare lslIntOp
+declare lsrIntOp
+declare asrIntOp
+declare andIntOp
+declare orIntOp
+declare xorIntOp
+
+(* Max / min. *)
+declare maxIntOp
+declare minIntOp
+
+(* Boolean comparisons. *)
+declare eqIntOp
+declare neqIntOp
+declare ltIntOp
+declare leIntOp
+declare gtIntOp
+declare geIntOp
+declare cmpIntOp
+
+(*
+ * End Naml integer operations.
+ *)
 
 (* Pointer equality. *)
 declare eqEqOp
@@ -96,18 +132,52 @@ declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
 declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
-(*
- * Misc.
- *)
-
-declare unknownFun
-
 (*************************************************************************
  * Display forms.
  *************************************************************************)
 
 (* Identity (polymorphic). *)
 dform idOp_df : except_mode[src] :: idOp = `"id"
+
+(*
+ * Naml integer operations.
+ *)
+
+(* Unary and bitwise negation. *)
+dform uminusIntOp_df : except_mode[src] :: uminusIntOp = `"-"
+dform notIntOp_df : except_mode[src] :: notIntOp = `"~"
+
+(* Standard binary arithmetic operators. *)
+dform plusIntOp_df : except_mode[src] :: plusIntOp = `"+"
+dform minusIntOp_df : except_mode[src] :: minusIntOp = `"-"
+dform mulIntOp_df : except_mode[src] :: mulIntOp = `"*"
+dform divIntOp_df : except_mode[src] :: divIntOp = Nuprl_font!"div"
+dform remIntOp_df : except_mode[src] :: remIntOp = `"rem"
+
+(* Binary bitwise oerators. *)
+dform lslIntOp_df : except_mode[src] :: lslIntOp = `"<<"
+dform lsrIntOp_df : except_mode[src] :: lsrIntOp = `">>"
+dform asrIntOp_df : except_mode[src] :: asrIntOp = `">>"
+dform andIntOp_df : except_mode[src] :: andIntOp = `"&"
+dform orIntOp_df  : except_mode[src] :: orIntOp  = `"|"
+dform xorIntOp_df : except_mode[src] :: xorIntOp = `"^"
+
+(* Max / min. *)
+dform maxIntOp_df : except_mode[src] :: maxIntOp = `"max"
+dform minIntOp_df : except_mode[src] :: minIntOp = `"min"
+
+(* Comparison. *)
+dform eqIntOp_df : except_mode[src] :: eqIntOp = `"="
+dform neqIntOp_df : except_mode[src] :: neqIntOp = `"!="
+dform ltIntOp_df : except_mode[src] :: ltIntOp = `"<"
+dform leIntOp_df : except_mode[src] :: leIntOp = Nuprl_font!le
+dform gtIntOp_df : except_mode[src] :: gtIntOp = `">"
+dform geIntOp_df : except_mode[src] :: geIntOp = Nuprl_font!ge
+dform cmpIntOp_df : except_mode[src] :: cmpIntOp = `"compare"
+
+(*
+ * End Naml integer operations.
+ *)
 
 (* Pointer equality. *)
 dform eqEqOp_df : except_mode[src] :: eqEqOp = `"EqEqOp"
@@ -232,117 +302,3 @@ dform memcpy_df : except_mode[src] ::
    slot{'var2} `"[" slot{'atom2} `"], " slot{'len} `")" hspace
    `"with subop " slot{'subop} hspace
    slot{'exp} ezone
-
-(* Misc. *)
-dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"
-
-(*************************************************************************
- * Rewrites.
- *************************************************************************)
-
-(* Identity (polymorphic). *)
-prim_rw reduce_idOp : unop_exp{ idOp; 'a1 } <--> 'a1
-
-(* Pointer equality. *)
-prim_rw reduce_eqEqOp : binop_exp{ eqEqOp; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{'a1; 'a2}; val_true; val_false }
-prim_rw reduce_neqEqOp : binop_exp{ neqEqOp; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{'a1; 'a2}; val_false; val_true }
-
-(*
- * Normal values.
- * I could turn reduce_atomEnum into a conditional rewrite
- *    to make sure that 0 <= 'num < 'bound,
- *    but I don't see a compelling reason to do this as it
- *    just complicates evaluation.
- *)
-prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
-prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
-prim_rw reduce_atomRawInt : atomRawInt{ 'num } <--> 'num
-prim_rw reduce_atomVar : atomVar{ 'var } <--> 'var
-
-(* Primitive operations. *)
-prim_rw reduce_letUnop :
-   letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } <-->
-   'exp[ unop_exp{ 'op; 'a1 } ]
-prim_rw reduce_letBinop :
-   letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ binop_exp{ 'op; 'a1; 'a2 } ]
-
-(*
- * Function application.
- * letExt is treated as a no-op, on the assumption that it
- * has a side-effect that we don't need to worry about here.
- * If that's not true... uh-oh.
- *)
-prim_rw reduce_letExt :
-   letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] } <-->
-   'exp[it]
-
-(*
- * Control.
- * If the case list is nil, we can't evaluate the match expression.
- *)
-prim_rw reduce_match_int :
-   "match"{ number[i:n]; cons{ matchCase{'set; 'e }; 'el } } <-->
-   ifthenelse{ member{ number[i:n]; 'set };
-      'e;
-      ."match"{ number[i:n]; 'el } }
-prim_rw reduce_match_block :
-   "match"{ block{ number[i:n]; 'args };
-      cons{ matchCase{'set; 'e }; 'el } } <-->
-   ifthenelse{ member{ number[i:n]; 'set };
-      'e;
-      ."match"{ number[i:n]; 'el } }
-
-(* Allocation. *)
-prim_rw reduce_allocTuple :
-   letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } <-->
-   'exp['atom_list]
-prim_rw reduce_allocArray :
-   letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } <-->
-   'exp['atom_list]
-
-(*
- * Subscripting.
- * For evaluation purposes, 'subop is completely ignored.
- *)
-prim_rw reduce_letSubscript :
-   letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] } <-->
-   'exp[ nth{ 'var; 'index } ]
-prim_rw reduce_setSubscript :
-   setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] } <-->
-   'exp[ replace_nth{ 'var; 'index; 'new_val } ]
-
-(*************************************************************************
- * Automation.
- *************************************************************************)
-
-let resource reduce += [
-   << unop_exp{ idOp; 'a1 } >>, reduce_idOp;
-   << binop_exp{ eqEqOp; 'a1; 'a2 } >>, reduce_eqEqOp;
-   << binop_exp{ neqEqOp; 'a1; 'a2 } >>, reduce_neqEqOp;
-   << atomInt{ 'num } >>, reduce_atomInt;
-   << atomEnum{ 'bound; 'num } >>, reduce_atomEnum;
-   << atomRawInt{ 'num } >>, reduce_atomRawInt;
-   << atomVar{ 'var } >>, reduce_atomVar;
-   << letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } >>,
-      reduce_letUnop;
-   << letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } >>,
-      reduce_letBinop;
-   << letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp['v] } >>,
-      reduce_letExt;
-   << "match"{ number[i:n]; cons{ matchCase{'set; 'e }; 'el } } >>,
-      reduce_match_int;
-   << "match"{ block{ number[i:n]; 'args };
-      cons{ matchCase{'set; 'e }; 'el } } >>,
-      reduce_match_block;
-   << letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } >>,
-      reduce_allocTuple;
-   << letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } >>,
-      reduce_allocArray;
-   << letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] } >>,
-      reduce_letSubscript;
-   << setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] } >>,
-      reduce_setSubscript
-]

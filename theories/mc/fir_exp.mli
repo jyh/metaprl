@@ -31,12 +31,6 @@
  *)
 
 include Base_theory
-include Itt_theory
-include Fir_state
-include Fir_int_set
-include Fir_ty
-
-open Tactic_type.Conversionals
 
 (*************************************************************************
  * Declarations.
@@ -46,8 +40,46 @@ open Tactic_type.Conversionals
 declare idOp
 
 (*
+ * Naml integer operations.
+ *)
+
+(* Unary and bitwise negation. *)
+declare uminusIntOp
+declare notIntOp
+
+(* Standard binary arithmetic operators. *)
+declare plusIntOp
+declare minusIntOp
+declare mulIntOp
+declare divIntOp
+declare remIntOp
+
+(*
+ * Binary bitwise operators: and, or, xor, logical shifts left/right,
+ *    arithmetic shift right.
+ *)
+declare lslIntOp
+declare lsrIntOp
+declare asrIntOp
+declare andIntOp
+declare orIntOp
+declare xorIntOp
+
+(* Max / min. *)
+declare maxIntOp
+declare minIntOp
+
+(* Boolean comparisons. *)
+declare eqIntOp
+declare neqIntOp
+declare ltIntOp
+declare leIntOp
+declare gtIntOp
+declare geIntOp
+declare cmpIntOp
+
+(*
  * Pointer equality.
- * Binary ops that evaluate as integer (in)equality.
  *)
 declare eqEqOp
 declare neqEqOp
@@ -134,31 +166,3 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
 declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
-
-(*
- * Misc.
- * Indicates that the function in question could not be found.
- *)
-
-declare unknownFun
-
-(*************************************************************************
- * Rewrites.
- *************************************************************************)
-
-topval reduce_idOp : conv
-topval reduce_eqEqOp : conv
-topval reduce_neqEqOp : conv
-topval reduce_atomInt : conv
-topval reduce_atomEnum : conv
-topval reduce_atomRawInt : conv
-topval reduce_atomVar : conv
-topval reduce_letUnop : conv
-topval reduce_letBinop : conv
-topval reduce_letExt : conv
-topval reduce_match_int : conv
-topval reduce_match_block : conv
-topval reduce_allocTuple : conv
-topval reduce_allocArray : conv
-topval reduce_letSubscript : conv
-topval reduce_setSubscript : conv

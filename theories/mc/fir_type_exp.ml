@@ -35,7 +35,6 @@ include Itt_theory
 include Fir_int_set
 include Fir_exp
 include Fir_type
-include Fir_type_state
 
 open Base_dtactic
 
@@ -137,6 +136,7 @@ prim match_int_equality {| intro [] |} 'H :
       "match"{ number[j:n]; 'cases2 } in 'T }
    = it
 
+(*
 prim match_block_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
    [wf] sequent ['ext] { 'H >- 'i = 'j in int } -->
@@ -148,6 +148,7 @@ prim match_block_equality {| intro [] |} 'H :
       "match"{ block{'i; 'args}; 'cases1 } =
       "match"{ block{'j; 'args}; 'cases2 } in 'T }
    = it
+*)
 
 (*
  * Allocation operators and expressions.

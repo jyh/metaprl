@@ -35,7 +35,6 @@ include Itt_theory
 include Fir_int_set
 include Fir_exp
 include Fir_type
-include Fir_type_state
 
 open Tactic_type.Conversionals
 

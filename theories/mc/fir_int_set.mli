@@ -33,7 +33,8 @@
  *)
 
 include Base_theory
-include Itt_theory
+include Itt_bool
+include Itt_int_ext
 
 open Tactic_type.Conversionals
 

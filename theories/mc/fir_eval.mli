@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define and implement operations for ints in the FIR.
+ * Define how to evaluate the FIR in MetaPRL.
  *
  * ----------------------------------------------------------------
  *
@@ -30,8 +30,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-include Itt_theory
+include Fir_int_set
 include Fir_ty
 include Fir_exp
 
@@ -41,49 +40,73 @@ open Tactic_type.Conversionals
  * Declarations.
  *************************************************************************)
 
-(* Unary and bitwise negation. *)
-declare uminusIntOp
-declare notIntOp (* not implemented until modular arithmetic is deal with *)
-
-(* Standard binary arithmetic operators. *)
-declare plusIntOp
-declare minusIntOp
-declare mulIntOp
-declare divIntOp
-declare remIntOp
+(*
+ * Boolean type.
+ * true_set and false_set define true and false for use in matches.
+ * val_true and val_false should be used for returning true and false
+ *    in FIR evaluation.
+ *)
+declare true_set
+declare false_set
+declare val_true
+declare val_false
 
 (*
- * Binary bitwise operators:
- * and, or, xor
- * logical shifts left/right
- * arithmetic shift right
- *
- * These won't actually be implemented until modular arithmetic
- * is properly dealt with.
+ * Functions.
  *)
-declare lslIntOp
-declare lsrIntOp
-declare asrIntOp
-declare andIntOp
-declare orIntOp
-declare xorIntOp
 
-(* Max / min. *)
-declare maxIntOp
-declare minIntOp
+declare lambda{ x. 'f['x] }   (* for functions with >= 1 arguments *)
+declare lambda{ 'f }          (* function with no arguments *)
+declare apply{ 'f; 'x }
+declare fix{ f. 'b['f] }
 
-(* Boolean comparisons. *)
-declare eqIntOp
-declare neqIntOp
-declare ltIntOp
-declare leIntOp
-declare gtIntOp
-declare geIntOp
-declare cmpIntOp
+(*
+ * Misc.
+ * Not FIR terms, but used to make output from mc manageable.
+ *)
+
+declare unknownFun
 
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
+
+(* Boolean type. *)
+
+topval reduce_true_set : conv
+topval reduce_false_set : conv
+topval reduce_val_true : conv
+topval reduce_val_false : conv
+
+(* Functions. *)
+
+topval reduce_beta : conv
+topval reduce_apply_nil : conv
+topval reduce_fix : conv
+
+(* Types. *)
+
+topval reduce_tyVar : conv
+
+(* Expressions. *)
+
+topval reduce_idOp : conv
+topval reduce_eqEqOp : conv
+topval reduce_neqEqOp : conv
+topval reduce_atomInt : conv
+topval reduce_atomEnum : conv
+topval reduce_atomRawInt : conv
+topval reduce_atomVar : conv
+topval reduce_letUnop : conv
+topval reduce_letBinop : conv
+topval reduce_letExt : conv
+topval reduce_match_int : conv
+topval reduce_allocTuple : conv
+topval reduce_allocArray : conv
+topval reduce_letSubscript : conv
+topval reduce_setSubscript : conv
+
+(* Naml integers. *)
 
 topval reduce_uminusIntOp : conv
 topval reduce_plusIntOp : conv
@@ -100,3 +123,9 @@ topval reduce_leIntOp : conv
 topval reduce_gtIntOp : conv
 topval reduce_geIntOp : conv
 topval reduce_cmpIntOp : conv
+
+(*************************************************************************
+ * Automation.
+ *************************************************************************)
+
+topval firEvalT : int -> tactic

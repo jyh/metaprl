@@ -114,28 +114,28 @@ doc <:doc<
   
    We define several auxiliary terms.
   
-   The CloseVar{v. e[v]; 'a} term is the same as LetAtom{a; v. e[v]}.
+   The <<CloseVar{v. 'e['v]; 'a}>> term is the same as <<LetAtom{'a; v. 'e['v]}>>.
    We use a special term for variables that are being closed.
   
-   The CloseRecVar{R; frame} term is used to wrap record variables.
+   The <<CloseRecVar{'R; 'frame}>> term is used to wrap record variables.
    The term represents the partial application of the record R to
    the frame variable.
   
-   The CloseRec{R1, frame1. fields[R1; frame1];
-                R2, frame2. body[R2; frame2];
-                length, tuple}
+   The <<CloseRec{R1, frame1. 'fields['R1; 'frame1];
+                R2, frame2. 'body['R2; 'frame2];
+                'length; 'tuple}>>
    is a recursive record definition.  The function defined by the
-   fields[R1; frame1] take the frame1 as an extra argument; frame1
+   <<'fields['R1; 'frame1]>> take the <<'frame1>> as an extra argument; <<'frame1>>
    represents the environment containing all the functions' free vars.
-   The body[R2, frame2] is the rest of the program.  The frame2
-   represents the frame to be used for the functions in R2.  The
-   frame2 is allocated as the tuple, which has "length" fields.
+   The <<'body['R2; 'frame2]>> is the rest of the program.  The <<'frame2>>
+   represents the frame to be used for the functions in <<'R2>>.  The
+   <<'frame2>> is allocated as the tuple, which has ``<<'length>>'' fields.
   
-   CloseSubscript{'a1; 'a2; v. e[v]} is the same as LetSubscript,
+   <<CloseSubscript{'a1; 'a2; v. 'e['v]}>> is the same as @bf[LetSubscript],
    but we use a special term to guide the closure conversion
    process.
   
-   CloseFrame{frame. e[frame]} is the term that adds an extra
+   <<CloseFrame{frame. 'e['frame]}>> is the term that adds an extra
    frame argument to each of the functions in the record.
    @end[doc]
 >>
@@ -148,7 +148,7 @@ declare CloseRec{R1, frame1. 'fields['R1; 'frame1];
 declare CloseSubscript{'frame; 'index; v. 'e['v]}
 declare CloseFrame{frame. 'e['frame]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform close_var_df : parens :: "prec"[prec_let] :: CloseVar{v. 'e; 'a} =
    bf["close "] slot{'v} bf[" = "] slot{'a} bf[" in"] hspace slot["lt"]{'e}

@@ -108,23 +108,23 @@ doc <:doc<
    This should be eliminated by the end of CPS conversion.
   
    @begin[itemize]
-   @item{@tt["CPSRecordVar{R}"] represents the application of the record $R$ to
+   @item{<<CPSRecordVar{'R}>> represents the application of the record $R$ to
          the identity function.}
   
-   @item{@tt["CPSFunVar{f}"] represents the application of the function $f$ to
+   @item{<<CPSFunVar{'f}>> represents the application of the function $f$ to
          the identity function.}
   
-   @item{@tt["CPS{'cont; 'e}"]
+   @item{<<CPS{'cont; 'e}>>
       is the CPS conversion of expression $e$ with continuation ${cont}$.
       The interpretation is as the application ${cont}@space{}e$.}
   
-   @item{@tt["CPS{cont. 'fields['cont]}"]
+   @item{<<CPS{cont. 'fields['cont]}>>
       is the CPS conversion of a record body.  We think of a record
       @tt["{ f1 = e1; ...; fn = en }"]
       as a function from labels to expressions (on label $f_i$, the function returns $e_i$).
-      The CPS form is $@lambda l. @lambda c. CPS(c, {fields}(l))$.}
+      The CPS form is $@lambda l. @lambda c. <<CPS{'c;'fields['l]}>>$.}
 
-   @item{@tt["CPS{'a}"]
+   @item{<<CPS{'a}>>
       is the conversion of the atom expression $a$ (which should be the same as $a$,
       unless $a$ includes function variables).}
   

@@ -3,6 +3,9 @@
 #
 DIR := theories/itt
 ROOT := ../..
+
+include $(ROOT)/mk/preface
+
 INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base
 OCAMLDEPFLAGS := -prl
 

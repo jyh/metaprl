@@ -1,6 +1,9 @@
 # Libraries
 DIR := theories/lf
 ROOT := ../..
+
+include $(ROOT)/mk/preface
+
 INCLUDE = -I . -I ../../refiner
 
 # Commands

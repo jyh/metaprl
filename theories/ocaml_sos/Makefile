@@ -3,6 +3,9 @@
 #
 DIR := theories/ocaml_sos
 ROOT := ../..
+
+include $(ROOT)/mk/preface
+
 INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base
 
 # Common files

@@ -3,6 +3,9 @@
 #
 DIR := theories/czf
 ROOT := ../..
+
+include $(ROOT)/mk/preface
+
 INCLUDE := -I . -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base
 OCAMLDEPFLAGS := -prl
 

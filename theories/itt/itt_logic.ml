@@ -1343,8 +1343,7 @@ struct
        | Andr,t1::t2::ts -> (fun subst -> dT 0 thenLT [t1 subst; t2 subst]) :: ts
        | Orr1,t::ts -> (fun subst -> selT 1 (dT 0) thenLT [idT; t subst]) :: ts
        | Orr2,t::ts -> (fun subst -> selT 2 (dT 0) thenLT [idT; t subst]) :: ts
-       | Impr,t::ts -> (fun subst -> dT 0 thenLT [idT; t subst]) :: ts
-       | Negr,t::ts -> (fun subst -> dT 0 thenLT [idT; t subst]) :: ts
+       | Impr,t::ts | Negr,t::ts -> (fun subst -> dT 0 thenLT [idT; t subst]) :: ts
        | Exr, t::ts ->
             (fun subst ->
                withT (apply_subst inst_term subst) (dT 0) thenLT [idT; t subst; idT]) :: ts

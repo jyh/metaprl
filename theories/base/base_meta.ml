@@ -114,14 +114,13 @@ let eq goal =
                match dest_param p1, dest_param p2 with
                   Number i1, Number i2 ->
                      Mp_num.eq_num i1 i2
-                | String s1, String s2 ->
+                | String s1, String s2
+                | Var s1, Var s2 ->
                      s1 = s2
                 | Token t1, Token t2 ->
                      t1 = t2
                 | MLevel l1, MLevel l2 ->
                      l1 == l2
-                | Var s1, Var s2 ->
-                     s1 = s2
                 | _ ->
                      raise (RefineError ("meta_eq", StringTermError ("ill-formed operation", goal)))
             in
@@ -174,14 +173,13 @@ let le goal =
                match dest_param p1, dest_param p2 with
                   Number i1, Number i2 ->
                      Mp_num.le_num i1 i2
-                | String s1, String s2 ->
+                | String s1, String s2
+                | Var s1, Var s2 ->
                      s1 <= s2
                 | Token t1, Token t2 ->
                      t1 <= t2
                 | MLevel l1, MLevel l2 ->
                      level_le l1 l2
-                | Var s1, Var s2 ->
-                     s1 <= s2
                 | _ ->
                      raise (RefineError ("meta_le", StringTermError ("ill-formed operation", goal)))
             in

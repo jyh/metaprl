@@ -621,8 +621,7 @@ let set_gnames
  *)
 let world_of_inf { inf_info = info } =
    match info with
-      Inference { inf_world = world } ->
-         world
+      Inference { inf_world = world }
     | Hyp { hyp_world = world } ->
          world
 

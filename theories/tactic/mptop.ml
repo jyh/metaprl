@@ -416,10 +416,7 @@ and mk_expr base expr =
             not_supported loc "assignment"
        | (<:expr< $chr:c$ >>) ->
             not_supported loc "char"
-(*
        | (<:expr< ( $e$ :> $t$ ) >>) ->
-*)
-       | MLast.ExCoe (_, e, t) ->
             not_supported loc "class coercion"
        | (<:expr< $flo:s$ >>) ->
             not_supported loc "float"
@@ -433,15 +430,13 @@ and mk_expr base expr =
             IntExpr (int_of_string s)
        | (<:expr< let $rec:b$ $list:pel$ in $e$ >>) ->
             not_supported loc "let"
-       | (<:expr< $lid:s$ >>) ->
+       | (<:expr< $lid:s$ >>)
+       | (<:expr< $uid:s$ >>) ->
             mk_var_expr base loc s
        | MLast.ExLmd _ ->
             not_supported loc "local module"
        | (<:expr< match $e$ with [ $list:pwel$ ] >>) ->
             not_supported loc "match"
-(*
-       | (<:expr< new $e$ >>) ->
-*)
        | MLast.ExNew _ ->
             not_supported loc "new"
 (*
@@ -469,16 +464,13 @@ and mk_expr base expr =
             not_supported loc "try"
        | (<:expr< ( $list:el$ ) >>) ->
             mk_tuple_expr base loc el
-       | (<:expr< ( $e$ : $t$ ) >>) ->
+       | (<:expr< ( $e$ : $_$ ) >>)
+       | MLast.ExXnd (_, _, e) ->
             mk_expr base e
-       | (<:expr< $uid:s$ >>) ->
-            mk_var_expr base loc s
        | (<:expr< while $e$ do { $list:el$ } >>) ->
             not_supported loc "while"
        | MLast.ExAnt (_, e) ->
             not_supported loc "ExAnt"
-       | MLast.ExXnd (_, _, e) ->
-            mk_expr base e
        | MLast.ExVrn _ ->
             not_supported loc "ExVrn"
        | MLast.ExOlb _ ->
@@ -510,7 +502,7 @@ and mk_patt base patt =
        | (<:patt< $p1$ .. $p2$ >>) ->
             not_supported loc "pattern range"
        | (<:patt< { $list:ppl$ } >>) ->
-            not_supported loc "pattern list"
+            not_supported loc "pattern record"
        | (<:patt< $str:s$ >>) ->
             not_supported loc "pattern string"
        | (<:patt< ( $list:pl$ ) >>) ->
@@ -646,12 +638,11 @@ and mk_module_type base mt =
             not_supported loc "module type application"
        | (<:module_type< functor ( $s$ : $mt1$ ) -> $mt2$ >>) ->
             not_supported loc "module type functor"
-       | (<:module_type< $lid:i$ >>) ->
+       | (<:module_type< $lid:i$ >>)
+       | (<:module_type< $uid:i$ >>) ->
             not_supported loc "module type var"
        | (<:module_type< sig $list:sil$ end >>) ->
             not_supported loc "module type sig"
-       | (<:module_type< $uid:i$ >>) ->
-            not_supported loc "module type var"
        | (<:module_type< $mt$ with $list:wcl$ >>) ->
             not_supported loc "module type constraint"
 

@@ -239,6 +239,7 @@ dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
 
 declare display_ind{'x}
 declare display_ind_n
+declare display_ind_eq{'x;'y}
 
 dform display_ind_df1 : internal :: display_ind{'x} =
    display_var["Ind":v]{nil} `"(" 'x `")"
@@ -246,15 +247,18 @@ dform display_ind_df1 : internal :: display_ind{'x} =
 dform display_ind_df2 : internal :: display_ind_n =
    display_ind{display_var["n":v]{nil}}
 
+dform ind_eq_df: internal :: except_mode[src] :: display_ind_eq{'x;'y} =
+   szone 'x space `"=" space 'y ezone
+
 dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} =
    szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space
  `"=" ezone hspace
-   ((display_var["n":v]{nil} < 0) => beq_int{display_ind_n;
+   ((display_var["n":v]{nil} < 0) => display_ind_eq{display_ind_n;
  'down[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} +@ 1)}]})
  hspace
-   (beq_int{display_var["n":v]{nil};0} => beq_int{display_ind_n; 'base}) hspace
-   ((0 < display_var["n":v]{nil}) => beq_int{display_ind_n;
+   (display_ind_eq{display_var["n":v]{nil};0} => display_ind_eq{display_ind_n; 'base}) hspace
+   ((0 < display_var["n":v]{nil}) => display_ind_eq{display_ind_n;
  'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]})
  popm ezone
 
@@ -535,6 +539,12 @@ interactive_rw lt_Reflex_rw :
    band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse
 
 let lt_ReflexC = lt_Reflex_rw
+
+interactive_rw lt_irreflex_rw :
+   ( 'a IN int ) -->
+   lt_bool{'a;'a} <--> bfalse
+
+let lt_IrreflexC = lt_irreflex_rw
 
 interactive lt_Asym 'H 'a 'b :
    [main] sequent [squash] { 'H >- 'a < 'b } -->
@@ -919,6 +929,20 @@ interactive_rw minus_minus_reduce_rw :
 
 let minus_minus_reduceC = minus_minus_reduce_rw
 
+interactive_rw minus_same_rw:
+   ('a IN int) -->
+   ('a -@ 'a) <--> 0
+
+interactive_rw plus_minus_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   (('a +@ 'b) -@ 'b) <--> 'a
+
+interactive_rw minus_plus_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   (('a -@ 'b) +@ 'b) <--> 'a
+
 (*! @docoff *)
 
 (***********************************************************
@@ -938,7 +962,12 @@ let resource reduce += [
    << ('a +@ 0) >>, add_IdC;
    << (0 +@ 'a) >>, add_Id2C;
    << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
+   << ( 'a -@ 'a) >>, minus_same_rw;
    << (-(-'a)) >>, minus_minus_reduceC;
    << ('a +@ ('b +@ 'c)) >>, add_AssocC;
+   << ('a +@ 'b) -@ 'b >>, plus_minus_rw;
+   << ('a -@ 'b) +@ 'b >>, minus_plus_rw;
+   << lt_bool{'a;'a} >>, lt_irreflex_rw;
+   << ('a < 'a) >>, (unfold_lt thenC (addrC [0] lt_irreflex_rw));
    <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
 ]

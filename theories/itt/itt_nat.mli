@@ -6,10 +6,8 @@ open Tactic_type.Tacticals
 define unfold_nat :
    nat <--> ({x:int | 'x>=0})
 
-declare undefined
-
-define unfoldInd :   ind{'n; 'base; k,l. 'up['k;'l]} <-->
-                     ind{'n; i,j.undefined; 'base; k,l . 'up['k;'l]}
+define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
+                   ind{'n; i,j.it; 'base; k,l . 'up['k;'l]}
 
 
 

@@ -110,7 +110,7 @@ declare "sqeq"{'t;'s}
 
 (*! @docoff *)
 
-dform sqeq_df : ('a ~ 'b) = slot{'a} sim slot{'b}
+dform sqeq_df : ('a ~ 'b) = szone slot{'a} `" " sim hspace slot{'b} ezone
 
 
 let squiggle_term = << 'a ~ 'b >>

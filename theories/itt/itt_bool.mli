@@ -146,12 +146,6 @@ topval magicT : tactic
 topval splitBoolT : term -> int -> tactic
 topval splitITE : int -> tactic
 
-(***********************************************************************
- * ADDITIONAL FACTS                                                    *
- ***********************************************************************)
-
-topval reduce_bnot_bnotC : conv
-
 (*
  * -*-
  * Local Variables:

@@ -112,13 +112,14 @@ define unfold_bneq_int :
 
 let resource reduce += [
    << gt_bool{'a; 'b} >>, unfold_gt_bool;
-   << bnot{lt_bool{'b; 'a}} >>, makeFoldC << le_bool{'a;'b} >> unfold_le_bool;
-   << bnot{le_bool{'a; 'b}} >>, ((addrC [0] unfold_le_bool) thenC
-                                 reduce_bnot_bnotC);
+   << bnot{lt_bool{'b; 'a}} >>, (makeFoldC << le_bool{'a;'b} >> unfold_le_bool);
+   << bnot{le_bool{'a; 'b}} >>, (addrC [0] unfold_le_bool);
 (*    << le_bool{'a; 'b} >>, unfold_le_bool;
    << ge_bool{'a; 'b} >>, unfold_ge_bool;
    << bneq_int{'a; 'b} >>, unfold_bneq_int;
 *)
+   << le_bool{'a;'a}>>, (unfold_le_bool thenC (addrC [0] lt_IrreflexC));
+   << ge_bool{'a;'a}>>, (unfold_ge_bool thenC (addrC [0] lt_IrreflexC));
 ]
 
 (*
@@ -200,11 +201,12 @@ let resource reduce += [
                                    (addrC [0] reduce_lt))));
    <<nequal{number[i:n]; number[j:n]}>>, (unfold_neq_int thenC
                                          (addrC [0] (unfold_bneq_int thenC
-					 (addrC [0] reduce_eq_int))))
+					 (addrC [0] reduce_eq_int))));
 (*
    << le{'a; 'b} >>, unfold_le;
    << nequal{'a; 'b} >>, unfold_neq_int;
 *)
+   << le{'a;'a}>>, (unfold_le thenC (addrC [0] (unfold_le_bool thenC (addrC [0] lt_IrreflexC))));
 ]
 
 let le_term = << 'x <= 'y >>

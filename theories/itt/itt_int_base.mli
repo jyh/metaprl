@@ -74,6 +74,11 @@ define unfold_lt :
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
+(* Display mechanisms *)
+declare display_ind{'x}
+declare display_ind_n
+declare display_ind_eq{'x;'y}
+
 prec prec_compare
 prec prec_add
 
@@ -317,6 +322,7 @@ rule lt_Reflex 'H :
    sequent ['ext] { 'H >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse }
 
 topval lt_ReflexC: conv
+topval lt_IrreflexC: conv
 
 rule lt_Asym 'H 'a 'b :
    [main] sequent [squash] { 'H >- 'a < 'b } -->

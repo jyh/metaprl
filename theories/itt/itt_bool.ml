@@ -792,10 +792,18 @@ interactive_rw reduce_bnot_bnot :
    ( 'e1 IN bool ) -->
    bnot{bnot{'e1}} <--> 'e1
 
-let reduce_bnot_bnotC = reduce_bnot_bnot
+interactive_rw reduce_band_same :
+   ( 'e IN bool ) -->
+   band{'e;'e} <--> 'e
+
+interactive_rw reduce_bor_same :
+   ( 'e IN bool ) -->
+   bor{'e;'e} <--> 'e
 
 let resource reduce +=
    [<< bnot{bnot{'e}} >>, reduce_bnot_bnot;
+    << band{'e; 'e} >>, reduce_band_same;
+    << bor{'e; 'e} >>, reduce_bor_same;
    ]
 (*
  * -*-

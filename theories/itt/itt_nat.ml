@@ -2,9 +2,9 @@
  * @spelling{gt_bool le_bool ge_bool gt le ge nequal}
  *
  * @begin[doc]
- * @module[Itt_int_ext]
+ * @module[Itt_nat]
  *
- * Some more about integers
+ * Natural numbers
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -70,16 +70,36 @@ open Mptop
 
 open Base_dtactic
 open Base_auto_tactic
+open Itt_bool
 
-(* Natural numberas *)
+(*! @doc{@terms} *)
 
 define unfold_nat : nat <--> ({x:int | 'x>=0})
 
-declare undefined{}
+(******************
+ *  Display Forms *
+ ******************)
 
-define unfoldInd :   ind{'n; 'base; k,l. 'up['k;'l]} <-->
-                     ind{'n; i,j.undefined; 'base; k,l . 'up['k;'l]}
+define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
+                   ind{'n; i,j.it; 'base; k,l . 'up['k;'l]}
 
+
+(*! @docoff *)
+
+dform nat_prl_df : except_mode [src] :: nat = mathbbN
+dform nat_src_df : mode[src] :: nat = `"nat"
+
+dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
+   ind{'x; 'base; k, l. 'up['k; 'l]} =
+   szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space
+   `"=" ezone hspace
+   ((display_ind_eq{display_var["n":v]{nil};0}) =>
+   (display_ind_eq{display_ind_n;'base})) hspace
+   ((display_var["n":v]{nil} > 0) => (display_ind_eq{display_ind_n;
+   'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]}))
+   popm ezone
+
+(*! @doc{@rewrites} *)
 
 interactive_rw reduce_ind_up :
    ('x IN nat) -->
@@ -95,6 +115,7 @@ let resource reduce +=
    [<< ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} >>, reduce_ind_up;
     << ind{0; 'base; k,l. 'up['k;'l]} >>, reduce_ind_base]
 
+(*! @doc{@rules} *)
 
 interactive natType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{nat} }
@@ -106,6 +127,10 @@ interactive natMemberEquality {| intro [] |} 'H :
 
 interactive natMemberZero {| intro [] |} 'H :
    sequent ['ext] { 'H >- 0 IN nat}
+
+interactive nat_is_int {| intro[AutoMustComplete] |} 'H:
+   sequent [squash] { 'H >- 'a='b in nat} -->
+   sequent [squash] { 'H >- 'a='b in int}
 
 interactive natElimination  'H 'J 'v :
    sequent ['ext] { 'H; x: int; v:'x>=0; 'J['x] >- 'C['x]}  -->
@@ -122,6 +147,14 @@ interactive natBackInduction 'H 'n bind{x.'C['x]}  :
    sequent ['ext] { 'H; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
    sequent ['ext] { 'H  >- 'C[0] }
 
+interactive well_ordering_principle 'H bind{i.'P['i]} 'i :
+   [wf] sequent [squash] { 'H; n: nat >- "type"{'P['n]} } -->
+   [wf] sequent [squash] { 'H >- 'i in nat } -->
+   sequent['ext] {'H >-
+      all n:nat. ("not"{'P['n]} or "not"{.all n2:nat. ('P['n2] => 'n < 'n2)})} -->
+   sequent['ext] {'H >- "not"{'P['i]}}
+
+(*! @docoff *)
 
 let natBackInductionT n p =
    let bind =
@@ -137,12 +170,4 @@ let natBackInductionT n p =
                   mk_xbind_term z (var_subst  (Sequent.concl p) <<0>> z)
    in
       natBackInduction (Sequent.hyp_count_addr p) n bind p
-
-
-(******************)
-(*  Display Forms *)
-(******************)
-
-dform nat_prl_df : except_mode [src] :: nat = mathbbN
-dform nat_src_df : mode[src] :: nat = `"nat"
 

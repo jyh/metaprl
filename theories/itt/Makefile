@@ -87,7 +87,7 @@ MPFILES :=\
         itt_example\
 		itt_rat
 
-ifeq ($(TESTS),YES)
+ifeq ($(TESTS_ENABLED),YES)
 	MPFILES:= $(MPFILES)\
 	itt_bugs\
 	jprover_tests\

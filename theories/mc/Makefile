@@ -15,7 +15,7 @@ MPFILES := \
    mp_mc_set \
    fir_ty \
    fir_exp \
-   fir_eval \
+   mp_mc_fir_eval \
    fir_deadcode \
    fir_const_elim \
    mp_mc_theory \

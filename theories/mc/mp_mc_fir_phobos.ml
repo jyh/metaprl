@@ -73,7 +73,8 @@ let applyIFormsAndBaseC iform_rewrites =
       Base_meta.reduce_meta_diff;
       Base_meta.reduce_meta_prod;
       Base_meta.reduce_meta_quot;
-      Base_meta.reduce_meta_rem] @ patterns))))
+      Base_meta.reduce_meta_rem;
+      Phobos_base.reduce_param_add_string] @ patterns))))
 
 let applyIFormsC iform_rewrites =
    let patterns = List.map

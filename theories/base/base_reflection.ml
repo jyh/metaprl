@@ -95,9 +95,9 @@ let dest_bterm_sequent_and_rename term vars =
 declare if_bterm{'bt; 'tt}
 
 prim_rw reduce_ifbterm1 'H :
-   if_bterm{ sequent [bterm] { <H>; x: 't; <J> >- 'x }; 'tt } <--> 'tt
+   if_bterm{ bterm{| <H>; x: 't; <J> >- 'x |}; 'tt } <--> 'tt
 
-ml_rw reduce_ifbterm2 : ('goal :  if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt }) =
+ml_rw reduce_ifbterm2 : ('goal :  if_bterm{ bterm{| <H> >- 't |}; 'tt }) =
    let bt, tt = two_subterms goal in
    let hyps, t = dest_bterm_sequent bt in
    let t' = dest_term (unquote_term t) in
@@ -124,7 +124,7 @@ let reduce_ifbterm =
          else failC)
 
 let resource reduce +=
-   (<< if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt } >>, reduce_ifbterm)
+   (<< if_bterm{ bterm{| <H> >- 't |}; 'tt } >>, reduce_ifbterm)
 
 (***************************************************************************
  * dest_bterm{'bt} returns a list of sub-bterms of 'bt, undefined if 'bt
@@ -137,7 +137,7 @@ let resource reduce +=
 
 declare dest_bterm{'bt}
 
-ml_rw reduce_dest_bterm {| reduce |} : ('goal :  dest_bterm{ sequent[bterm]{ <H> >- 't} }) =
+ml_rw reduce_dest_bterm {| reduce |} : ('goal :  dest_bterm{ bterm{| <H> >- 't |} }) =
    let bt = one_subterm goal in
    let hyps, t = dest_bterm_sequent bt in
    let t' = dest_term (unquote_term t) in
@@ -233,9 +233,9 @@ ml_rw reduce_if_same_op {| reduce |} : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'f
 declare if_simple_bterm{'bt; 'tt; 'ff}
 
 prim_rw reduce_if_simple_bterm1 {| reduce |} :
-   if_simple_bterm{ sequent [bterm] { x: term; <H> >- 't }; 'tt; 'ff } <--> 'ff
+   if_simple_bterm{ bterm {| x: term; <H> >- 't |}; 'tt; 'ff } <--> 'ff
 
-ml_rw reduce_if_simple_bterm2 {| reduce |} : ('goal :  if_simple_bterm{ sequent[bterm]{ >- 't}; 'tt; 'ff }) =
+ml_rw reduce_if_simple_bterm2 {| reduce |} : ('goal :  if_simple_bterm{ bterm{| >- 't |}; 'tt; 'ff }) =
    let bt, tt, ff = three_subterms goal in
    let hyps, t = dest_bterm_sequent bt in
       if hyps = [] && is_quoted_term t  then tt
@@ -255,9 +255,9 @@ ml_rw reduce_if_simple_bterm2 {| reduce |} : ('goal :  if_simple_bterm{ sequent[
 declare if_var_bterm{'bt; 'tt; 'ff}
 
 prim_rw reduce_if_var_bterm1 'H :
-   if_var_bterm{ sequent [bterm] { <H>; x: term; <J> >- 'x }; 'tt; 'ff } <--> 'tt
+   if_var_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; 'tt; 'ff } <--> 'tt
 
-ml_rw reduce_if_var_bterm2 : ('goal :  if_var_bterm{ sequent[bterm]{ <H> >- 't }; 'tt; 'ff }) =
+ml_rw reduce_if_var_bterm2 : ('goal :  if_var_bterm{ bterm{| <H> >- 't |}; 'tt; 'ff }) =
    let bt, tt, ff = three_subterms goal in
    let hyps, t = dest_bterm_sequent bt in
       if is_quoted_term t  then ff
@@ -273,7 +273,7 @@ let reduce_if_var_bterm =
          else failC)
 
 let resource reduce +=
-   (<< if_var_bterm{ sequent[bterm]{ <H> >- 't}; 'tt; 'ff } >>, reduce_if_var_bterm)
+   (<< if_var_bterm{ bterm{| <H> >- 't|}; 'tt; 'ff } >>, reduce_if_var_bterm)
 
 (************************************************************************
  * subst{'bt; 't} substitutes 't for the first bound variable of 'bt.
@@ -286,7 +286,7 @@ let resource reduce +=
 declare subst{'bt; 't}
 
 prim_rw reduce_subst {| reduce |} :
-   subst{ sequent[bterm]{ x: term; <H> >- 't1['x] }; sequent[bterm]{ >- 't2 } } <-->
-      sequent[bterm]{ <H> >- 't1['t2] }
+   subst{ bterm{| x: term; <H> >- 't1['x] |}; bterm{| >- 't2 |} } <-->
+      bterm{| <H> >- 't1['t2] |}
 
 doc docoff

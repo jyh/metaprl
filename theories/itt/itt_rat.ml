@@ -61,19 +61,13 @@ open Basic_tactics
 
 open Itt_equal
 open Itt_struct
+open Itt_squash
 open Itt_int_base
 open Itt_int_ext
 
-open Term_order
-module TO = TermOrder (Refiner.Refiner)
-open TO
-
-define unfold_posnat :
-   posnat <--> ({x:int | 'x>0})
-
-define unfold_int0 :
-   int0 <--> ({x:int | 'x<>0})
-
+(********************************************
+ *	THIS PART SHOULD GO TO A SEPARATE MODULE *
+ ********************************************)
 declare gcd{'a; 'b}
 
 prim_rw unfold_gcd : gcd{'a; 'b} <-->
@@ -91,30 +85,50 @@ dform gcd_df1 : except_mode[src] :: gcd{'a; 'b}
  =
    `"gcd{" slot{'a} `";" slot{'b} `"}"
 
-prim gcd_wf {| intro [] |} :
+interactive gcd_wf_nat {| intro [] |} :
 	sequent { <H> >- 'a in int } -->
-	sequent { <H> >- 'b in posnat } -->
-	sequent { <H> >- gcd{'a; 'b} in nat } = it
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- gcd{'a; 'b} in nat }
+
+interactive gcd_wf_int {| intro [] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- gcd{'a; 'b} in int }
+
+interactive gcd_nat_multiplier :
+	[wf] sequent { <H> >- 'k in nat } -->
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H> >- gcd{'k *@ 'a; 'k *@ 'b} = 'k *@ gcd{'a; 'b} in int }
+(**********************************************)
+
+define unfold_posnat :
+   posnat <--> ({x:int | 'x>0})
+
+define unfold_int0 :
+   int0 <--> ({x:int | 'x<>0})
 
 define unfold_let_in {| reduce |} : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
 
-(*define unfold_rat0 : rat0{'a; 'b}*)
+define unfold_ratn : ratn{'a; 'b} <--> ('a, 'b)
+let fold_ratn = makeFoldC <<ratn{'a; 'b}>> unfold_ratn
 
 define unfold_rat : rat{'a; 'b} <-->
-	(if 'b =@ 1 then ('a, 'b) else
-	if 'a =@ 0 then (0,1) else
+	(if 'b =@ 1 then ratn{'a; 'b} else
+	if 'a =@ 0 then ratn{0;1} else
 	if 'b >@ 0 then
-		let_in{gcd{'a;'b}; d.(('a /@ 'd), ('b /@ 'd))}
+		let_in{gcd{'a;'b}; d.ratn{('a /@ 'd); ('b /@ 'd)}}
 	else
-		let_in{gcd{'a;'b}; d.(-( 'a /@ 'd), -('b /@ 'd))})
-
-let resource reduce += [
-(*	<<let_in{'e1; 'e2}>>, unfold_let_in;*)
-	<<rat{number[i:n]; number[j:n]}>>, unfold_rat;
-]
+		let_in{gcd{'a;'b}; d.ratn{-( 'a /@ 'd); -('b /@ 'd)}})
 
 define unfold_rat_of_int :
    rat_of_int{'a} <--> rat{'a; 1}
+
+let resource reduce += [
+	<<spread{ratn{'a; 'b}; x,y.'f['x; 'y]}>>, (addrC [0] unfold_ratn);
+(*	<<rat{number[i:n]; number[j:n]}>>, unfold_rat;*)
+	<<rat_of_int{number[i:n]}>>, unfold_rat_of_int;
+]
 
 define unfold_is_normed : is_normed{'x; 'y} <-->
 	"assert"{bor{band{'x=@0; 'y=@1};	band{'y>@0; gcd{'x;'y}=@1}}}
@@ -139,31 +153,32 @@ define unfold_neg_rat : neg_rat{'x} <-->
 define unfold_inv_rat : inv_rat{'x} <-->
 	spread{'x; x1,x2.rat{'x2; 'x1}}
 
-let reduce_add_rat = unfold_add_rat
-let reduce_mul_rat = unfold_mul_rat
-let reduce_neg_rat = unfold_neg_rat
-let reduce_inv_rat = unfold_inv_rat
-
 (*******************************)
 (* CHECK !!!                   *)
 declare lt_bool_rat{'a;'b}
+declare gt_bool_rat{'a;'b}
 declare le_bool_rat{'a;'b}
+declare ge_bool_rat{'a;'b}
 declare beq_rat{'a;'b}
 
-prim_rw reduce_lt_bool_rat : lt_bool_rat{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
-prim_rw reduce_le_bool_rat : le_bool_rat{rat{'a;'b};rat{'c;'d}} <--> le_bool{('a *@ 'd);('c *@ 'b)}
+define unfold_lt_bool_rat : lt_bool_rat{'a;'b} <-->
+	spread{'a; a1,a2.spread{'b; b1,b2.lt_bool{('a1 *@ 'b2);('a2 *@ 'b1)}}}
+
+define unfold_le_bool_rat : le_bool_rat{'a;'b} <--> bnot{lt_bool_rat{'b;'a}}
+define unfold_gt_bool_rat : gt_bool_rat{'a;'b} <--> lt_bool_rat{'b;'a}
+define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
+
+define unfold_bneq_rat : bneq_rat{'x; 'y} <-->
+	spread{'x; x1,x2.spread{'y; y1,y2.(('x1 *@ 'y2) <>@ ('y1 *@ 'x2))}}
 
 prim_rw reduce_beq_rat :
    beq_rat{ ('a,'b) ; ('c,'d) } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
 
-let reduce_beq_rat2 = (addrC [0] unfold_rat) thenC (addrC [1] unfold_rat) thenC reduce_beq_rat
+define unfold_lt_rat : lt_rat{'a;'b} <--> "assert"{lt_bool_rat{'a;'b}}
+define unfold_gt_rat : gt_rat{'a;'b} <--> lt_rat{'b;'a}
+define unfold_le_rat : le_rat{'a;'b} <--> "assert"{le_bool_rat{'a;'b}}
+define unfold_ge_rat : ge_rat{'a;'b} <--> le_rat{'b;'a}
 
-define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
-define unfold_ge_rat : ge_rat{'a;'b} <--> "assert"{ge_bool_rat{'a;'b}}
-
-let reduce_le_bool_rat2 = reduce_le_bool_rat thenC (addrC [0] reduce_mul) thenC (addrC [1] reduce_mul) thenC unfold_le_bool
-let reduce_ge_bool_rat = unfold_ge_bool_rat thenC reduce_le_bool_rat2
-let reduce_ge_rat = unfold_ge_rat thenC (addrC [0] unfold_ge_bool_rat)
 (*                             *)
 (*******************************)
 
@@ -185,6 +200,12 @@ define unfold_min_rat : min_rat{'a;'b} <-->
 let rationals_term = << rationals >>
 let rationals_opname = opname_of_term rationals_term
 let is_rationals_term = is_no_subterms_term rationals_opname
+
+let ratn_term = << ratn{'x; 'y} >>
+let ratn_opname = opname_of_term ratn_term
+let is_ratn_term = is_dep0_dep0_term ratn_opname
+(*let mk_ratn_term = mk_dep0_dep0_term ratn_opname*)
+let dest_ratn = dest_dep0_dep0_term ratn_opname
 
 let rat_term = << rat{'x; 'y} >>
 let rat_opname = opname_of_term rat_term
@@ -252,10 +273,42 @@ let is_min_rat_term = is_dep0_dep0_term min_rat_opname
 let mk_min_rat_term = mk_dep0_dep0_term min_rat_opname
 let dest_min_rat = dest_dep0_dep0_term min_rat_opname
 
+let reduce_lt_bool_rat=((addrC [0] unfold_ratn) thenC (addrC [1] unfold_ratn) thenC unfold_lt_bool_rat)
+let reduce_le_bool_rat = unfold_le_bool_rat thenC (addrC [0] reduce_lt_bool_rat)
+let reduce_ge_bool_rat = unfold_ge_bool_rat thenC reduce_le_bool_rat
+let reduce_ge_rat = unfold_ge_rat thenC unfold_le_rat thenC (addrC [0] reduce_le_bool_rat)
+
+let reduce_rat_in_args = (addrC [0] (unfold_rat thenC reduceC)) thenC (addrC [1] (unfold_rat thenC reduceC))
+
 let resource reduce +=[
-	<<mul_rat{('a, 'b); ('c, 'd)}>>, unfold_mul_rat;
-	<<add_rat{('a, 'b); ('c, 'd)}>>, unfold_add_rat;
+	<<mul_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [0] unfold_ratn) thenC (addrC [1] unfold_ratn) thenC unfold_mul_rat);
+	<<add_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [0] unfold_ratn) thenC (addrC [1] unfold_ratn) thenC unfold_add_rat);
+	<<inv_rat{ratn{'a; 'b}}>>, ((addrC [0] unfold_ratn) thenC unfold_inv_rat);
+	<<neg_rat{ratn{'a; 'b}}>>, ((addrC [0] unfold_ratn) thenC unfold_neg_rat);
+
+	<<lt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_lt_bool_rat;
+	<<gt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_gt_bool_rat;
+	<<ge_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_ge_bool_rat;
+	<<le_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_le_bool_rat;
+
+	<<lt_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_lt_rat;
+	<<gt_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_gt_rat;
+	<<ge_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_ge_rat;
+	<<le_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_le_rat;
+
+	<<lt_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC unfold_lt_rat);
+	<<gt_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC unfold_gt_rat);
+	<<ge_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC reduce_ge_rat);
+	<<le_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC unfold_le_rat);
 ]
+
+dform ratn_df1 : except_mode[src] :: "prec"[prec_mul] :: ratn{'a; 'b}
+ =
+   `"(" slot{'a} `":" slot{'b} `")"
+
+dform int_ratn_df1 : except_mode[src] :: ratn{'a;1}
+ =
+   slot{'a} Nuprl_font!subq
 
 dform rat_df1 : except_mode[src] :: "prec"[prec_mul] :: rat{'a; 'b}
  =
@@ -273,6 +326,10 @@ dform int_rat_df1 : except_mode[src] :: rat{'a;1}
  =
    slot{'a} Nuprl_font!subq
 
+dform rat_of_int_df1 : except_mode[src] :: rat_of_int{'a}
+ =
+   slot{'a} Nuprl_font!subq
+
 dform add_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: add_rat{'a; 'b}
  =
    slot["le"]{'a} `" +" Nuprl_font!subq `" " slot["lt"]{'b}
@@ -283,6 +340,66 @@ dform mul_rat_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_rat{'a
 
 dform rationals_prl_df : except_mode [src] :: rationals = `"rationals"
 
+dform ge_bool_rat_df1 : except_mode[src] :: ge_bool_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" " Nuprl_font!ge Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform le_bool_rat_df1 : except_mode[src] :: le_bool_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" " Nuprl_font!le Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform gt_bool_rat_df1 : except_mode[src] :: gt_bool_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" >" Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform lt_bool_rat_df1 : except_mode[src] :: lt_bool_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" <" Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform ge_rat_df1 : except_mode[src] :: ge_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" " Nuprl_font!ge Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform le_rat_df1 : except_mode[src] :: le_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" " Nuprl_font!le Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform gt_rat_df1 : except_mode[src] :: gt_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" >" Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform lt_rat_df1 : except_mode[src] :: lt_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" <" Nuprl_font!subq `" " slot["lt"]{'b}
+
+interactive int0_mem {| intro [] |} :
+	[wf] sequent { <H> >- 'x in int } -->
+	sequent { <H> >- 'x<>0 } -->
+	sequent { <H> >- 'x in int0 }
+
+interactive int0_int {| nth_hyp |} 'H :
+	sequent { <H>; x: int0; <J['x]> >- 'x in int }
+
+interactive mul_int0 {| intro [] |} :
+	sequent { <H> >- 'x in int0 } -->
+	sequent { <H> >- 'y in int0 } -->
+	sequent { <H> >- ('x *@ 'y) in int0 }
+
+interactive is_normed_type {| intro [] |} :
+	[wf] sequent { <H> >- 'a in int0 } -->
+	[wf] sequent { <H> >- 'b in int0 } -->
+	sequent { <H> >- is_normed{'a; 'b} Type }
+
+interactive denominator_int0 {| intro [AutoMustComplete] |} 'x :
+	[wf] sequent { <H> >- 'x in int } -->
+	[wf] sequent { <H> >- 'y in int } -->
+	sequent { <H> >- is_normed{'x; 'y} } -->
+	sequent { <H> >- 'y in int0 }
+
+interactive is_normed_sqstable {| squash |} :
+	sequent { <H> >- squash{is_normed{'a; 'b}} } -->
+	sequent { <H> >- is_normed{'a; 'b} }
+
 interactive rationalsType {| intro [] |} :
    sequent { <H> >- "type"{rationals} }
 
@@ -290,7 +407,7 @@ interactive rationalsUniv {| intro [] |} :
    sequent { <H> >- rationals in univ[i:l] }
 
 interactive rationalsElimination {| elim [] |} 'H :
-   sequent { <H>; x: int; y: int; is_normed{'x; 'y}; <J[('x,'y)]> >- 'C[('x,'y)] } -->
+   sequent { <H>; x: int; y: int0; is_normed{'x; 'y}; <J[ratn{'x; 'y}]> >- 'C[ratn{'x; 'y}] } -->
    sequent { <H>; a: rationals; <J['a]> >- 'C['a] }
 
 interactive rat_wf {| intro [] |} :
@@ -322,6 +439,65 @@ interactive inv_rat_wf {| intro [] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- neq_rat{'a; rat{0;1}} } -->
 	sequent { <H> >- inv_rat{'a} in rationals }
+
+interactive_rw reduce_multiplier_rw :
+	('k in int0) -->
+	('a in int) -->
+	('b in int0) -->
+	rat{'k *@ 'a; 'k *@ 'b} <--> rat{'a; 'b}
+
+let reduce_multiplierC = reduce_multiplier_rw
+
+interactive_rw inject_multiplier_rw 'k :
+	('k in int0) -->
+	('a in int) -->
+	('b in int0) -->
+	rat{'a; 'b} <--> rat{'k *@ 'a; 'k *@ 'b}
+
+let inject_multiplierC = inject_multiplier_rw
+
+interactive_rw ratn2rat_rw :
+	('a in int) -->
+	('b in int) -->
+	(is_normed{'a; 'b}) -->
+	ratn{'a; 'b} <--> rat{'a; 'b}
+
+let ratn2ratC = ratn2rat_rw
+
+interactive_rw reduce_mul_rat {| reduce |} :
+	('a in int) -->
+	('b in int0) -->
+	('c in int) -->
+	('d in int0) -->
+	mul_rat{rat{'a; 'b}; rat{'c; 'd}} <-->
+	rat{'a *@ 'c; 'b *@ 'd}
+
+interactive_rw reduce_add_rat {| reduce |} :
+	('a in int) -->
+	('b in int0) -->
+	('c in int) -->
+	('d in int0) -->
+	add_rat{rat{'a; 'b}; rat{'c; 'd}} <-->
+	rat{('a *@ 'd) +@ ('b *@ 'c); 'b *@ 'd}
+
+let resource reduce += [
+	<<mul_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [0] ratn2ratC) thenC reduce_mul_rat);
+	<<mul_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [1] ratn2ratC) thenC reduce_mul_rat);
+	<<add_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [0] ratn2ratC) thenC reduce_add_rat);
+	<<add_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [1] ratn2ratC) thenC reduce_add_rat);
+]
+
+interactive_rw reduce_inv_rat {| reduce |} :
+	('a in int0) -->
+	('b in int0) -->
+	inv_rat{rat{'a; 'b}} <-->
+	rat{'b; 'a}
+
+interactive_rw reduce_neg_rat {| reduce |} :
+	('a in int) -->
+	('b in int0) -->
+	inv_rat{rat{'a; 'b}} <-->
+	rat{- 'a; 'b}
 
 interactive add_rat_Commut :
    [wf] sequent { <H> >- 'a in rationals } -->
@@ -525,6 +701,120 @@ let resource arith_unfold +=[
 ]
 *)
 
+let debug_int2rat =
+   create_debug (**)
+      { debug_name = "int2rat";
+        debug_description = "display int-to-rat conversion";
+        debug_value = false
+      }
+
+let extract_data tbl =
+   let rw t =
+      let conv =
+         try
+            (* Find and apply the right tactic *)
+            if !debug_int2rat then
+               eprintf "int2rat: lookup %a%t" debug_print t eflush;
+            Term_match_table.lookup tbl select_all t
+         with
+            Not_found ->
+               raise (RefineError ("int2rat.extract_data", StringTermError ("no reduction for", t)))
+      in
+         if !debug_int2rat then
+            eprintf "int2rat: applying %a%t" debug_print t eflush;
+         conv
+   in
+      termC rw
+
+let process_int2rat_resource_rw_annotation = redex_and_conv_of_rw_annotation "int2rat"
+
+(*
+ * Resource.
+ *)
+let resource (term * conv, conv) int2rat =
+   table_resource_info extract_data
+
+let int2ratTopC_env e =
+   get_resource_arg (env_arg e) get_int2rat_resource
+
+let int2ratTopC = funC int2ratTopC_env
+
+let int2ratC =
+   repeatC (higherC int2ratTopC)
+
+let int2ratT =
+   rwAll int2ratC
+
+interactive_rw rat_of_int_ratn :
+	('a in int) -->
+	rat_of_int{'a} <--> ratn{'a; 1}
+
+let rat_of_int_ratnC = rat_of_int_ratn
+
+interactive ratn_number_wf {| intro [] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- ratn{'a; 1} in rationals }
+
+interactive_rw rat_of_int_add {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	rat_of_int{'a +@ 'b} <--> add_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_mul {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	rat_of_int{'a *@ 'b} <--> mul_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_lt_bool {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a <@ 'b) <--> lt_bool_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_gt_bool {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a >@ 'b) <--> gt_bool_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_le_bool {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a <=@ 'b) <--> le_bool_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_ge_bool {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a >=@ 'b) <--> ge_bool_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_bneq {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a <>@ 'b) <--> bneq_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_lt {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a < 'b) <--> lt_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_gt {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a > 'b) <--> gt_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_le {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a <= 'b) <--> le_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_ge {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a >= 'b) <--> ge_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw rat_of_int_neq {| int2rat |} :
+	('a in int) -->
+	('b in int) -->
+	('a <> 'b) <--> neq_rat{rat_of_int{'a}; rat_of_int{'b}}
+
 interactive lt_bool_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'a in int } -->
 	sequent { <H> >- 'b in int } -->
@@ -626,11 +916,6 @@ interactive min_self2 {| intro [] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- ge_rat{'b;min_rat{'a;'b}} }
-
-interactive ratMembership {| intro [] |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in posnat } -->
-	sequent { <H> >- rat{'a;'b} in rationals }
 
 interactive rat_of_intEquality {| intro [] |} :
 	sequent { <H> >- 'a = 'b in int } -->

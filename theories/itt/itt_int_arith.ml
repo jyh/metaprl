@@ -63,6 +63,7 @@ open Itt_bool
 
 open Itt_int_base
 open Itt_int_ext
+open Itt_dprod
 
 module TO = TermOrder (Refiner.Refiner)
 open TO
@@ -93,7 +94,7 @@ type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
 type ge_intro_type = tactic_arg -> (term list * tactic)
 
 let extract_ge_elim_data tbl i p =
-   let t = Sequent.nth_hyp p i in
+	let t = mk_pair_term (mk_var_term (Sequent.nth_binding p i)) (Sequent.nth_hyp p i) in
    if !debug_arith_dtactic then
 		eprintf "Itt_int_arith.ge_elim: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
 	let terms, tac = Term_match_table.lookup_rmap tbl select_all t in
@@ -143,15 +144,15 @@ let process_ge_elim_resource_annotation name context_args term_args statement pr
 			let l = SeqGoal.to_list (TermMan.explode_sequent goal).sequent_goals in
 				eprintf "Itt_int_arith.improve_ge_elim: %s goal: %s%t" name (SimplePrint.short_string_of_term (List.hd l)) eflush
 	in
-   let t =
+   let v,t =
       match SeqHyp.to_list (TermMan.explode_sequent goal).sequent_hyps with
-         [ Context _; Hypothesis(v,t); Context _ ] -> t
+         [ Context _; Hypothesis(v,t); Context _ ] -> v,t
        | _ ->
             raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_elim: %s: must be an elimination rule" name))
    in
    let seq_terms = on_main_subgoals assums in
 	let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] []) in
-   t, seq_terms, tac
+   (mk_pair_term (mk_var_term v) t), seq_terms, tac
 
 let process_ge_intro_resource_annotation name context_args term_args statement pre_tactic =
    let assums, goal = unzip_mfunction statement in
@@ -168,18 +169,41 @@ let process_ge_intro_resource_annotation name context_args term_args statement p
 	let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] []) in
    t, seq_terms, tac
 
+let hyp2geT = argfunT (fun i p ->
+	try
+		let _,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
+		tac i
+	with Not_found ->
+		idT
+ | RefineError _ ->
+		idT
+)
+
+let concl2geT = funT (fun p ->
+	try
+		let _,tac=Sequent.get_resource_arg p get_ge_intro_resource p in
+		tac
+	with Not_found ->
+		idT
+)
+
+let all2geT = onAllMHypsT hyp2geT
+
 let rec all_hyps_aux hyps l i =
    if i = 0 then l else
-   let i = pred i in
-      match SeqHyp.get hyps i with
+   let j = pred i in
+      match SeqHyp.get hyps j with
          Hypothesis (_, t) ->
-            all_hyps_aux hyps ((i+1,t)::l) i
+				eprintf "hyp %i %s%t" j (SimplePrint.short_string_of_term t) eflush;
+            all_hyps_aux hyps ((j+1,t)::l) j
        | Context _ ->
-            all_hyps_aux hyps l i
+            all_hyps_aux hyps l j
 
 let all_hyps arg =
    let hyps = (Sequent.explode_sequent arg).sequent_hyps in
-      all_hyps_aux hyps [] (Term.SeqHyp.length hyps)
+	let len = Term.SeqHyp.length hyps in
+		eprintf "num of hyps %i%t" len eflush;
+      all_hyps_aux hyps [] len
 
 let rec append tac len pos l = function
 	t::tail ->
@@ -196,9 +220,13 @@ let rec hyp2ge p l = function
 			hyp2ge p ((t,i,0,idT)::l) tail
 		else
 			(try
+				if !debug_arith_dtactic then
+					eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
 				let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
 				match terms with
 					[t] ->
+						if !debug_arith_dtactic then
+							eprintf "Itt_int_arith.hyp2ge: found %s%t" (SimplePrint.short_string_of_term t) eflush;
 						let terms=dest_xlist t in
 						let len=List.length terms in
 						let pos= -len in
@@ -277,6 +305,13 @@ interactive lt2ge {| ge_elim |} 'H :
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
    [main] sequent { <H>; x: 'a < 'b; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
    sequent { <H>; x: 'a < 'b; <J['x]> >- 'C['x] }
+
+interactive ltb2ge {| ge_elim |} 'H :
+   [wf] sequent { <H>; x: "assert"{'a <@ 'b}; <J[it]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "assert"{'a <@ 'b}; <J[it]> >- 'b in int } -->
+   [main] sequent { <H>; x: "assert"{'a <@ 'b}; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: "assert"{'a <@ 'b}; <J['x]> >- 'C['x] }
+
 (*
 let resource ge_elim_data += [
 	<<'a < 'b>>, (fun l i p -> (match l with [a;b] -> mk_ge_term b (mk_add_term a <<1>>) | _ -> <<0>>));
@@ -294,11 +329,19 @@ interactive gt2ge {| ge_elim |} 'H :
    [main] sequent { <H>; x: 'a > 'b; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
    sequent { <H>; x: 'a > 'b; <J['x]> >- 'C['x] }
 
+interactive gtb2ge {| ge_elim |} 'H :
+   [wf] sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]> >- 'b in int } -->
+   [main] sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]> >- 'C['x] }
+
 interactive eq2ge {| ge_elim |} 'H :
    sequent { <H>; x: 'a = 'b in int; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
 
 interactive assert_beq2ge {| ge_elim |} 'H :
+   [wf] sequent { <H>; x: "assert"{'a =@ 'b}; <J[it]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "assert"{'a =@ 'b}; <J[it]> >- 'b in int } -->
    sequent { <H>; x: "assert"{'a =@ 'b}; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: "assert"{'a =@ 'b}; <J['x]> >- 'C['x] }
 

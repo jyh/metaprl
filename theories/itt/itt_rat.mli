@@ -48,16 +48,10 @@ define unfold_posnat :
 define unfold_int0 :
    int0 <--> ({x:int | 'x<>0})
 
-declare gcd{'a; 'b}
-
-rewrite unfold_gcd : gcd{'a; 'b} <-->
-	(if 'a =@ 1 then 1 else
-	if 'b =@ 1 then 1 else
-	if 'a =@ 0 then 'b else
-	if 'b =@ 0 then 'a else
-	if 'a <@ 'b then gcd{'a; ('b %@ 'a)} else gcd{('a %@ 'b); 'b})
-
 define unfold_let_in : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
+
+declare ratn{'a; 'b}
+topval fold_ratn : conv
 
 declare rat{'a; 'b}
 topval unfold_rat : conv
@@ -80,17 +74,25 @@ define unfold_neg_rat : neg_rat{'x} <-->
 define unfold_inv_rat : inv_rat{'x} <-->
 	spread{'x; x1,x2.rat{'x2; 'x1}}
 
+declare beq_rat{'a;'b}
+declare bneq_rat{'a;'b}
+declare neq_rat{'a;'b}
 declare lt_bool_rat{'a;'b}
 declare le_bool_rat{'a;'b}
-declare beq_rat{'a;'b}
-define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
-define unfold_ge_rat : ge_rat{'a;'b} <--> "assert"{ge_bool_rat{'a;'b}}
+declare ge_bool_rat{'a;'b}
+declare gt_bool_rat{'a;'b}
+declare lt_rat{'a;'b}
+declare le_rat{'a;'b}
+declare ge_rat{'a;'b}
+declare gt_rat{'a;'b}
 
+topval reduce_multiplierC : conv
+topval inject_multiplierC : term -> conv
 topval reduce_add_rat : conv
 topval reduce_mul_rat : conv
 topval reduce_neg_rat : conv
 topval reduce_inv_rat : conv
-topval reduce_beq_rat2 : conv
+topval reduce_beq_rat : conv
 
 define unfold_fieldQ : fieldQ <-->
 	{car=rationals; "*"=lambda{x.lambda{y.mul_rat{'x;'y}}}; "1"=rat{1;1};
@@ -107,6 +109,10 @@ define unfold_min_rat : min_rat{'a;'b} <-->
 
 val is_rationals_term : term -> bool
 val rationals_term : term
+
+val is_ratn_term : term -> bool
+(*val mk_rat_term : term -> term -> term*)
+val dest_ratn : term -> (term * term)
 
 val is_rat_term : term -> bool
 val mk_rat_term : term -> term -> term
@@ -233,6 +239,7 @@ rule ge_addMonoElim 'H 'c :
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]>; ge_rat{add_rat{'a;'c};add_rat{'b;'c}} >- 'C['w] } -->
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'C['w] }
 
+topval ratn2ratC : conv
 topval add_rat_IdC : conv
 topval add_rat_Id2C : conv
 topval add_rat_CommutC : conv
@@ -245,3 +252,8 @@ topval mul_rat_AssocC : conv
 topval mul_rat_Assoc2C : conv
 topval mul_rat_add_DistribC : conv
 topval mul_rat_add_Distrib3C : conv
+topval rat_of_int_ratnC : conv
+
+topval int2ratTopC : conv
+topval int2ratC : conv
+topval int2ratT : tactic

@@ -94,10 +94,9 @@ MPFILES =\
    itt_intdomain_e\
    itt_field2\
    itt_field_e\
-   itt_mpoly2\
-   itt_mpoly3\
    itt_order\
    itt_rat\
+   itt_rat2\
    itt_supinf\
    itt_reflection\
    itt_reflection_test\

@@ -4,6 +4,7 @@ extends Itt_logic
 extends Itt_bool
 extends Itt_int_ext
 extends Itt_rat
+extends Itt_rat2
 
 open Lm_debug
 open Lm_printf
@@ -17,6 +18,8 @@ open Itt_struct
 open Itt_bool
 
 open Itt_int_base
+open Itt_int_ext
+open Itt_int_arith
 open Itt_rat
 
 let _ = show_loading "Loading Itt_supinf%t"
@@ -243,8 +246,7 @@ struct
    let addConstr s f = f::s
 
    let print out s =
-		(*printf "{";*)
-      List.iter (fun x -> let _=AF.print out x in fprintf out ">=0\n") s (*; printf"}"*)
+      List.iter (fun x -> begin fprintf out "%a>=0\n" AF.print x end) s
 
    let rec upper' info s v =
       match s with
@@ -314,7 +316,7 @@ open RationalBoundField
 
 let suppa' info (x:AF.vars) (f:AF.af) =
    if !debug_supinf_trace then
-      eprintf "suppa: %a%a@." AF.print_var x AF.print f;
+      eprintf "suppa: %a <= %a@." AF.print_var x AF.print f;
    let b = AF.coef f x in
    let c = AF.remove f x in
    let saf_x=SAF.affine (AF.mk_var x) in
@@ -380,7 +382,7 @@ let supp info x s =
 
 let inffa' info (x:AF.vars) (f:AF.af) =
    if !debug_supinf_trace then
-      eprintf"inffa: %a %a@." AF.print_var x AF.print f;
+      eprintf"inffa: %a >= %a@." AF.print_var x AF.print f;
    let b = AF.coef f x in
    let c = AF.remove f x in
    let saf_x=SAF.affine (AF.mk_var x) in
@@ -448,49 +450,93 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
       end;
    let (r,v,b) = AF.split f in
       if v=AF.constvar then
-         (SAF.affine (AF.mk_number r), [])
+         begin
+            if !debug_supinf_trace then
+               (eprintf "supa case 0@.");
+				(SAF.affine (AF.mk_number r), [])
+			end
       else
-         let af_v=AF.mk_var v in
-         let saf_v = SAF.affine af_v in
-            if (AF.isNumber b) && (compare (AF.coef b AF.constvar) fieldZero =0) then
-               if compare r fieldUnit = 0 then
-                  if CS.mem h v then
-                     (saf_v, [])
-                  else
-                     begin
-                        if !debug_supinf_trace then
-                           (eprintf "case 1001@.");
-                        let r0,a0=SACS.upper info c v in
-                        let saf_v=SAF.affine (AF.mk_var v) in
-						(*let a0=[r0, saf_v, addHiddenLabelT "supa 1001 a0"] in*)
-                        let r1,a1=sup info c r0 (CS.add h v) in
-                        let a11=[SAF.Transitive("supa 1001 a11",r1,r0,saf_v)] in
-                        let r2,a2=supp info v r1 in
-                           (r2,a2@(a11@(a1@a0)))
-                     end
-               else
-               if compare r fieldZero < 0 then
-                  let r0,a0=inf info c saf_v h in
-                     (SAF.scale r r0, a0)
-               else
-                  let r0,a0=sup info c saf_v h in
-                     (SAF.scale r r0, a0)
-            else
-               let b',a0 = sup info c (SAF.affine b) (CS.add h v) in
-               let scaled_v=SAF.affine (AF.scale r af_v) in
-               let f'=SAF.add scaled_v b' in
-               let saf_f=SAF.affine f in
-               let a01=SAF.Assert("supa 11",f', saf_f, idT) in
-                  if SAF.occurs v b' then
-                     let r1,a1=sup info c f' h in
-                        (r1,a1@(a01::a0))
-                  else
-                     let r1,a1=sup info c scaled_v h in
-                     let r2=SAF.add r1 b' in
-                     let b''=SAF.scale (neg fieldUnit) b' in
-                     let a2=SAF.Assert("supa case 1110",r2,f',ge_addMono (SAF.term_of info b'')) in
-                     let a3=SAF.Transitive("supa case 1111",r2,f',saf_f) in
-                        (r2, (a3::(a2::(a1@(a01::a0)))))
+         begin
+            if !debug_supinf_trace then
+               (eprintf "supa case 1 var:%i@." v);
+				let af_v=AF.mk_var v in
+				let saf_v = SAF.affine af_v in
+					if (AF.isNumber b) && (compare (AF.coef b AF.constvar) fieldZero =0) then
+                  begin
+                     if !debug_supinf_trace then
+                        (eprintf "supa case 10@.");
+							if compare r fieldUnit = 0 then
+                        begin
+                           if !debug_supinf_trace then
+                              (eprintf "supa case 100@.");
+									if CS.mem h v then
+                              begin
+                                 if !debug_supinf_trace then
+                                    (eprintf "supa case 1000@.");
+											(saf_v, [])
+										end
+									else
+										begin
+											if !debug_supinf_trace then
+												(eprintf "supa case 1001@.");
+											let r0,a0=SACS.upper info c v in
+											let saf_v=SAF.affine (AF.mk_var v) in
+									(*let a0=[r0, saf_v, addHiddenLabelT "supa 1001 a0"] in*)
+											let r1,a1=sup info c r0 (CS.add h v) in
+											let a11=[SAF.Transitive("supa 1001 a11",r1,r0,saf_v)] in
+											let r2,a2=supp info v r1 in
+												(r2,a2@(a11@(a1@a0)))
+										end
+								end
+							else
+                        begin
+                           if !debug_supinf_trace then
+                              (eprintf "supa case 101@.");
+									if compare r fieldZero < 0 then
+                              begin
+                                 if !debug_supinf_trace then
+                                    (eprintf "supa case 1010@.");
+											let r0,a0=inf info c saf_v h in
+												(SAF.scale r r0, a0)
+										end
+									else
+                              begin
+                                 if !debug_supinf_trace then
+                                    (eprintf "supa case 1011@.");
+											let r0,a0=sup info c saf_v h in
+												(SAF.scale r r0, a0)
+										end
+								end
+						end
+					else
+                  begin
+                     if !debug_supinf_trace then
+                        (eprintf "supa case 11@.");
+							let b',a0 = sup info c (SAF.affine b) (CS.add h v) in
+							let scaled_v=SAF.affine (AF.scale r af_v) in
+							let f'=SAF.add scaled_v b' in
+							let saf_f=SAF.affine f in
+							let a01=SAF.Assert("supa 11",f', saf_f, idT) in
+								if SAF.occurs v b' then
+                           begin
+                              if !debug_supinf_trace then
+                                 (eprintf "supa case 110 var:%a@." SAF.print scaled_v);
+										let r1,a1=sup info c f' h in
+											(r1,a1@(a01::a0))
+									end
+								else
+                           begin
+                              if !debug_supinf_trace then
+                                 (eprintf "supa case 111 var:%a@." SAF.print scaled_v);
+										let r1,a1=sup info c scaled_v h in
+										let r2=SAF.add r1 b' in
+										let b''=SAF.scale (neg fieldUnit) b' in
+										let a2=SAF.Assert("supa case 1110",r2,f',ge_addMono (SAF.term_of info b'')) in
+										let a3=SAF.Transitive("supa case 1111",r2,f',saf_f) in
+											(r2, (a3::(a2::(a1@(a01::a0)))))
+									end
+						end
+			end
 
 and sup' info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
    match s with
@@ -529,33 +575,33 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
       if v=AF.constvar then
          begin
             if !debug_supinf_trace then
-               (eprintf "case 0@.");
+               (eprintf "infa case 0@.");
             (SAF.affine (AF.mk_number r), [])
          end
       else
          begin
             if !debug_supinf_trace then
-               (eprintf "case 1@.");
+               (eprintf "infa case 1 var:%i@." v);
             let af_v=AF.mk_var v in
             let saf_v = SAF.affine af_v in
                if (AF.isNumber b) && (compare (AF.coef b AF.constvar) fieldZero =0) then
                   begin
                      if !debug_supinf_trace then
-                        (eprintf "case 10@.");
+                        (eprintf "infa case 10@.");
                      if compare r fieldUnit = 0 then
                         begin
                            if !debug_supinf_trace then
-                              (eprintf "case 100@.");
+                              (eprintf "infa case 100@.");
                            if CS.mem h v then
                               begin
                                  if !debug_supinf_trace then
-                                    (eprintf "case 1000@.");
+                                    (eprintf "infa case 1000@.");
                                  (saf_v, [])
                               end
                            else
                               begin
                                  if !debug_supinf_trace then
-                                    (eprintf "case 1001@.");
+                                    (eprintf "infa case 1001@.");
                                  let r0,a0=SACS.lower info c v in
 									(*let a0=[saf_v, r0, addHiddenLabelT "infa 1001 a0"] in*)
                                  let r1,a1=inf info c r0 (CS.add h v) in
@@ -567,18 +613,18 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                      else
                         begin
                            if !debug_supinf_trace then
-                              (eprintf "case 101@.");
+                              (eprintf "infa case 101@.");
                            if compare r fieldZero < 0 then
                               begin
                                  if !debug_supinf_trace then
-                                    (eprintf "case 1010@.");
+                                    (eprintf "infa case 1010@.");
                                  let result,actions=sup info c saf_v h in
                                     (SAF.scale r result, actions)
                               end
                            else
                               begin
                                  if !debug_supinf_trace then
-                                    (eprintf "case 1011@.");
+                                    (eprintf "infa case 1011@.");
                                  let result,actions=inf info c saf_v h in
                                     (SAF.scale r result, actions)
                               end
@@ -587,7 +633,7 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                else
                   begin
                      if !debug_supinf_trace then
-                        (eprintf "case 11@.");
+                        (eprintf "infa case 11@.");
                      let b',a0 = inf info c (SAF.affine b) (CS.add h v) in
                      let scaled_v=SAF.affine (AF.scale r af_v) in
                      let f'=SAF.add scaled_v b' in
@@ -596,14 +642,14 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                         if SAF.occurs v b' then
                            begin
                               if !debug_supinf_trace then
-                                 (eprintf "case 110@.");
+                                 (eprintf "infa case 110 var:%a@." SAF.print scaled_v);
                               let r1,a1=inf info c f' h in
                                  r1, a1@(a01::a0)
                            end
                         else
                            begin
                               if !debug_supinf_trace then
-                                 (eprintf "case 111@.");
+                                 (eprintf "infa case 111 var:%a@." SAF.print scaled_v);
                               let r1,a1=inf info c scaled_v h in
                               let r2=SAF.add r1 b' in
                               let b''=SAF.scale (neg fieldUnit) b' in
@@ -898,23 +944,51 @@ let testT =
             begin
                let saf'=SAF.affine (AF.mk_var 1) in
                let sup',a1=sup info constrs saf' CS.empty in
-               let inf',a2=inf info constrs saf' CS.empty in
-               let actions=List.rev (SAF.Transitive("final",sup',(SAF.affine (AF.mk_var 1)),inf')::(a1@a2)) in
-                  begin
-                     if !debug_supinf_steps then
-                        begin
-                           eprintf "start=%a@." SAF.print saf';
-                           eprintf"sup=%a@." SAF.print sup';
-                           eprintf"inf=%a@." SAF.print inf';
-                           eprintf "%a <= %a <= %a@." (**)
-                              SAF.print inf'
-                              SAF.print saf'
-                              SAF.print sup'
-                        end;
-                     runListT info (empty (),empty ()) actions
-                  end
+					if SAF.isMinusInfinity sup' then
+						let actions=List.rev a1 in
+							begin
+								if !debug_supinf_steps then
+									begin
+										eprintf "start=%a@." SAF.print saf';
+										eprintf"sup=%a@." SAF.print sup';
+										eprintf "%a <= %a@." (**)
+											SAF.print saf'
+											SAF.print sup'
+									end;
+								runListT info (empty (),empty ()) actions
+							end
+					else
+						let inf',a2=inf info constrs saf' CS.empty in
+						let actions=List.rev (SAF.Transitive("final",sup',(SAF.affine (AF.mk_var 1)),inf')::(a1@a2)) in
+							begin
+								if !debug_supinf_steps then
+									begin
+										eprintf "start=%a@." SAF.print saf';
+										eprintf"sup=%a@." SAF.print sup';
+										eprintf"inf=%a@." SAF.print inf';
+										eprintf "%a <= %a <= %a@." (**)
+											SAF.print inf'
+											SAF.print saf'
+											SAF.print sup'
+									end;
+								runListT info (empty (),empty ()) actions
+							end
             end
    )
+
+let ge_int2ratT = argfunT (fun i p ->
+	if is_ge_term (Sequent.nth_hyp p i) then
+		rw (int2ratC thenC normalizeC) i
+	else
+		idT
+)
+
+let preT = funT (fun p ->
+   arithRelInConcl2HypT thenMT
+   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
+	all2geT thenMT
+	tryOnAllMHypsT ge_int2ratT)
+)
 
 interactive test 'a 'b 'c :
 sequent { <H> >- 'a in rationals } -->
@@ -971,52 +1045,84 @@ sequent { <H>; ge_rat{mul_rat{rat{1;1};'a}; rat{0;1}};
 					ge_rat{add_rat{rat{-1;1};add_rat{mul_rat{rat{-1;1};'a};mul_rat{rat{-1;1};'b}}}; rat{0;1}}
 					>- "assert"{bfalse} }
 *)
-(*
-extends Itt_list2
 
-define unfold_stop : stop_mark <--> 0
+interactive inttest 'a 'b 'c :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H> >- 'c in int } -->
+sequent { <H>; x: ('a >= ('b +@ 1));
+                     t: ('c >= ('b +@ 3));
+                     u: ('b >= ('a +@ 0))
+                >- "assert"{bfalse} }
 
-interactive_rw add_stop_mark :
-	('t in int) -->
-	't <--> ('t +@ stop_mark)
+interactive inttest2 'a 'b 'c :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H> >- 'c in int } -->
+sequent { <H>; x: (('b +@ 1) <= 'a);
+                     t: ('c > ('b +@ 2));
+                     u: ('b >= ('a +@ 0))
+                >- "assert"{bfalse} }
 
-declare monoms{'l}
+interactive inttest3 'a 'b 'c :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H> >- 'c in int } -->
+sequent { <H>; x: (('b +@ 1) <= 'a);
+                     t: ('c > ('b +@ 2))
+                >- ('b < ('a +@ 0))  }
 
-interactive_rw add_monoms_rw :
-	('t in int) -->
-	't <--> (monoms{nil} +@ 't)
+interactive inttest4 'a 'b :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; x: ('a >= 'b);
+                     t: ('a < 'b)
+                >- "assert"{bfalse} }
 
-interactive_rw move2monoms {| reduce |} :
-	(monoms{'l} +@ (('a *@ 'x) +@ 't)) <--> (monoms{cons{('a, 'x);'l}} +@ 't)
+interactive inttest5 'a 'b :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; x: ('a >= 'b +@ 0);
+                     t: ('a < 'b)
+                >- "assert"{bfalse} }
 
-declare carret{'a;'b;'c;'d}
+interactive inttest6 'b 'c :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H> >- 'c in int } -->
+sequent { <H>; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
+                     t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@
+ (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
+                >- "assert"{bfalse} }
 
-interactive_rw move2carret 'zero_list 'vars :
-	(monoms{'l}+@stop_mark) <--> (carret{nil;nil;'zero_list;'vars}+@monoms{'l})
+interactive inttest7 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; 'a < 'b >- 'a <> 'b }
 
-define unfold_rev_append :
-	rev_append{'a;'b} <--> append{rev{'a};'b}
+interactive inttest8 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; 'a < 'b >- not{'a = 'b in int} }
 
-let resource reduce += [
-	<<rev_append{'a;'b}>>, unfold_rev_append;
-]
+interactive inttest9 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; not{'a < 'b} >- 'a >= 'b }
 
-interactive_rw absorb {| reduce |} :
-	(carret{'c1;'v1;cons{'k;'coefs};cons{'x;'vars}} +@ monoms{cons{(number[i:n],'x);'t}}) <-->
-	(carret{nil;nil;rev_append{'c1; cons{('k+@number[i:n]);'coefs}}; rev_append{'v1; cons{'x;'vars}}}+@monoms{'t})
+interactive inttest10 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; 'a <> 'b >- 'a <> 'b }
 
-interactive_rw next {| reduce |} :
-	(carret{'c1;'v1;cons{'k;'coefs};cons{'y;'vars}}+@monoms{cons{('a,'x);'t}}) <-->
-	(carret{cons{'k;'c1};cons{'y;'v1};'coefs;'vars}+@monoms{cons{('a,'x);'t}})
-
-declare vmul{'a;'b}
-
-interactive_rw carret2vmul {| reduce |} :
-	(carret{nil;nil;'c1;'v1}+@monoms{nil}) <--> vmul{'c1;'v1}
-
-interactive test7 'c :
-	sequent { <H> >- 'a in int } -->
-	sequent { <H> >- 'b in int } -->
-	sequent { <H> >- 'c in int } -->
-	sequent { <H> >- ('a+@'b)*@('a+@'b) in int }
-*)
+interactive inttestn :
+	sequent {'v  in int;
+				'v1 in int;
+				'v2 in int;
+				'v3 in int;
+				'v4 in int;
+				'v5 in int;
+				'v6 in int;
+				'v7 in int;
+				'v8 in int;
+				'v9 in int; "assert"{bfalse} >- "assert"{bfalse} }

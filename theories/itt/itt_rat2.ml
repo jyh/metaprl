@@ -13,19 +13,19 @@ interactive_rw sum_same_products_rat1_rw :
    add_rat{mul_rat{rat{number[i:n]; number[j:n]}; 'a}; mul_rat{rat{number[k:n]; number[l:n]}; 'a}} <-->
    mul_rat{add_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}; 'a}
 
-let sum_same_products_rat1C = sum_same_products_rat1_rw thenC (addrC [0] reduce_add)
+let sum_same_products_rat1C = sum_same_products_rat1_rw thenC (addrC [0] reduce_add_rat)
 
 interactive_rw sum_same_products_rat2_rw :
    ('a in rationals) -->
    add_rat{mul_rat{rat{number[i:n]; number[j:n]}; 'a}; 'a} <--> mul_rat{add_rat{rat{number[i:n]; number[j:n]}; rat{1; 1}}; 'a}
 
-let sum_same_products_rat2C = sum_same_products_rat2_rw thenC (addrC [0] reduce_add)
+let sum_same_products_rat2C = sum_same_products_rat2_rw thenC (addrC [0] reduce_add_rat)
 
 interactive_rw sum_same_products_rat3_rw :
    ('a in rationals) -->
    add_rat{'a; mul_rat{rat{number[i:n]; number[j:n]}; 'a}} <--> mul_rat{add_rat{rat{number[i:n]; number[j:n]}; rat{1; 1}}; 'a}
 
-let sum_same_products_rat3C = sum_same_products_rat3_rw thenC (addrC [0] reduce_add)
+let sum_same_products_rat3C = sum_same_products_rat3_rw thenC (addrC [0] reduce_add_rat)
 
 interactive_rw sum_same_products_rat4_rw :
    ('a in rationals) -->
@@ -57,14 +57,22 @@ let stripRatCoef t =
 
 let add_rat_Swap1C t =
 	match explode_term t with
-		<<add_rat{'a; 'b}>> when (compare_terms (stripRatCoef b) (stripRatCoef a))=Less -> add_rat_CommutC
+		<<add_rat{'a; 'b}>> when
+			let a' = stripRatCoef a in
+			let b' = stripRatCoef b in
+			((compare_terms b' a')=Less &&
+			(if is_mul_rat_term b' then is_mul_rat_term a' else true)) -> add_rat_CommutC
 	 | _ -> failC
 
 let add_rat_Swap2C t =
 	match explode_term t with
 		<<add_rat{'a; 'b}>> ->
 			(match explode_term b with
-				<<add_rat{'c; 'd}>> when (compare_terms (stripRatCoef c) (stripRatCoef a))=Less -> add_rat_BubblePrimitiveC
+				<<add_rat{'c; 'd}>> when
+					let a' = stripRatCoef a in
+					let c' = stripRatCoef c in
+					((compare_terms c' a')=Less &&
+					(if is_mul_rat_term c' then is_mul_rat_term a' else true)) -> add_rat_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC
@@ -79,25 +87,29 @@ let mul_rat_BubblePrimitiveC = mul_rat_BubblePrimitive_rw
 
 let mul_rat_Swap1C t =
 	match explode_term t with
-		<<mul_rat{'a; 'b}>> when (compare_terms b a)=Less -> mul_rat_CommutC
+		<<mul_rat{'a; 'b}>> when
+			((compare_terms b a)=Less &&
+			(if is_mul_rat_term b then is_mul_rat_term a else true)) -> mul_rat_CommutC
 	 | _ -> failC
 
 let mul_rat_Swap2C t =
 	match explode_term t with
 		<<mul_rat{'a; 'b}>> ->
 			(match explode_term b with
-				<<mul_rat{'c; 'd}>> when (compare_terms c a)=Less -> mul_rat_BubblePrimitiveC
+				<<mul_rat{'c; 'd}>> when
+					((compare_terms c a)=Less &&
+					(if is_mul_rat_term c then is_mul_rat_term a else true)) -> mul_rat_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC
 
 let resource arith_unfold +=[
-   << add_rat{rat{'a;'b}; rat{'c;'d}} >>, (reduce_add_rat thenC reduceC);
-   << mul_rat{rat{'a;'b}; rat{'c;'d}} >>, (reduce_mul_rat thenC reduceC);
+   << add_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_add_rat;
+   << mul_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_mul_rat;
    << neg_rat{rat{'a;'b}} >>, reduce_neg_rat;
 	<< inv_rat{rat{'a;'b}} >>, reduce_inv_rat;
 
-	<<rat_of_int{'a}>>, unfold_rat_of_int;
+	<<rat_of_int{number[i:n]}>>, unfold_rat_of_int;
 	<<add_rat{'a; rat{0; 1}}>>, add_rat_IdC;
 	<<add_rat{rat{0; 1}; 'a}>>, add_rat_Id2C;
 	<<mul_rat{'a; add_rat{'b; 'c}}>>, mul_rat_add_DistribC;
@@ -106,11 +118,13 @@ let resource arith_unfold +=[
 	<<mul_rat{'a; 'b}>>, termC mul_rat_Swap1C;
 	<<mul_rat{'a; mul_rat{'b; 'c}}>>, termC mul_rat_Swap2C;
 	<<mul_rat{'a; rat{number[i:n]; number[k:n]}}>>, mul_rat_CommutC;
+	<<mul_rat{'a; mul_rat{rat{number[i:n]; number[k:n]}; 'b}}>>, mul_rat_BubblePrimitiveC;
 	<<mul_rat{rat{number[i:n]; number[k:n]}; mul_rat{rat{number[j:n]; number[l:n]}; 'c}}>>, (mul_rat_AssocC thenC (addrC [0] reduceC));
 
 	<<add_rat{'a; 'b}>>, termC add_rat_Swap1C;
 	<<add_rat{'a; add_rat{'b; 'c}}>>, termC add_rat_Swap2C;
 	<<add_rat{'a; rat{number[i:n]; number[k:n]}}>>, add_rat_CommutC;
+	<<add_rat{'a; add_rat{rat{number[i:n]; number[k:n]}; 'b}}>>, add_rat_BubblePrimitiveC;
 	<<add_rat{rat{number[i:n]; number[k:n]}; add_rat{rat{number[j:n]; number[l:n]}; 'c}}>>, (add_rat_AssocC thenC (addrC [0] reduceC));
 
 	<<add_rat{add_rat{'a; 'b}; 'c}>>, add_rat_Assoc2C;
@@ -127,8 +141,37 @@ let resource arith_unfold +=[
 	<<add_rat{'a; add_rat{'a; 'b}}>>, (add_rat_AssocC thenC (addrC [0] sum_same_products_rat4C));
 ]
 
+interactive_rw ge_rat_addContract_rw :
+   ( 'a in rationals ) -->
+   ( 'b in rationals ) -->
+   ge_rat{'a; add_rat{'b; 'a}} <--> ge_rat{rat{0;1}; 'b}
+
+interactive_rw ge_rat_addContract_rw1 {| reduce |} :
+   ( 'a in rationals ) -->
+   ge_rat{'a; add_rat{rat{'n;'m}; 'a}} <--> ge_rat{rat{0;1}; rat{'n;'m}}
+
+interactive_rw ge_rat_addContract_rw2 {| reduce |} :
+   ( 'a in rationals ) -->
+   ge_rat{add_rat{rat{'n;'m}; 'a}; 'a} <--> ge_rat{rat{'n;'m}; rat{0;1}}
+
+interactive_rw ge_rat_addContract_rw3 {| reduce |} :
+   ( 'a in rationals ) -->
+   ge_rat{add_rat{rat{'n;'m}; 'a}; add_rat{rat{'k;'l}; 'a}} <--> ge_rat{rat{'n;'m}; rat{'k;'l}}
+
 interactive test1 :
    [wf] sequent { <H> >- 'a in rationals } -->
    [wf] sequent { <H> >- 'b in rationals } -->
    [wf] sequent { <H> >- 'c in rationals } -->
    sequent { <H> >- mul_rat{'b; add_rat{'c; add_rat{'a; mul_rat{'a; rat_of_int{1}}}}} in rationals }
+
+interactive testn :
+	sequent {'v  in int;
+				'v1 in int;
+				'v2 in int;
+				'v3 in int;
+				'v4 in int;
+				'v5 in int;
+				'v6 in int;
+				'v7 in int;
+				'v8 in int;
+				'v9 in int; "assert"{bfalse} >- "assert"{bfalse} }

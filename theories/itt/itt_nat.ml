@@ -56,6 +56,7 @@ open Itt_struct
 open Itt_equal
 open Itt_bool
 open Itt_subtype
+open Itt_int_arith
 
 doc <:doc< @doc{@terms} >>
 
@@ -151,8 +152,12 @@ interactive eq_nat_decidable {| intro [] |} :
    [wf] sequent{ <H> >- 'b in nat } -->
    sequent{ <H> >- decidable{('a = 'b in nat)} }
 
-interactive natElimination  'H :
+interactive natElimination 'H :
    sequent { <H>; x: int; v:'x>=0; <J['x]> >- 'C['x]}  -->
+   sequent { <H>; x: nat; <J['x]> >- 'C['x]}
+
+interactive nat2ge {| ge_elim |} 'H :
+   sequent { <H>; x: int; <J['x]>; 'x>=0 >- 'C['x]}  -->
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
 interactive natInduction {| elim [ThinOption thinT] |} 'H  :

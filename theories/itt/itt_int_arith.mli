@@ -37,6 +37,7 @@ extends Itt_bool
 extends Itt_int_ext
 
 open Basic_tactics
+open Tactic_type.Tactic
 
 type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
 type ge_intro_type = tactic_arg -> (term list * tactic)
@@ -46,9 +47,9 @@ type ge_intro_type = tactic_arg -> (term list * tactic)
 resource (term * (term list) * (int -> tactic), ge_elim_type) ge_elim
 resource (term * (term list) * tactic, ge_intro_type) ge_intro
 
-(*val process_ge_elim_resource_annotation :
-   (Tactic.pre_tactic, term * (term list) * (int -> tactic)) annotation_processor
-*)
+val process_ge_elim_resource_annotation :
+   (pre_tactic, term * (term list) * (int -> tactic)) annotation_processor
+
 (*
 val all2ge : tactic_arg -> (term list list * tactic) list
 
@@ -89,8 +90,9 @@ topval arithRelInConcl2HypT : tactic
 topval negativeHyp2ConclT : int -> tactic
 topval findContradRelT : tactic
 (**)
+topval hyp2geT : int -> tactic
+topval all2geT : tactic
 (*
 topval testT : int -> tactic
 topval conv2geT : int -> tactic
-topval all2geT : tactic
 *)

@@ -56,5 +56,6 @@ doc <:doc< @docoff >>
 open Tactic_type.Tactic
 
 topval testT : tactic
+topval preT : tactic
 
 doc <:doc< @docoff >>

@@ -76,6 +76,7 @@ declare tex_comment{'t}
  *)
 declare "theory"{'t}
 declare "module"[name:s]
+declare "module"{'name}
 
 (*
  * @begin[doc]

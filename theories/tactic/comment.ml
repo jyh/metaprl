@@ -253,6 +253,7 @@ doc <:doc<
 >>
 declare "theory"{'t}
 declare "module"[name:s]
+declare "module"{'name}
 doc <:doc< @docoff >>
 
 dform theory_df1 : mode[tex] :: "theory"{'t} =
@@ -266,6 +267,12 @@ dform module_df1 : mode[tex] :: "module"[name:s] =
 
 dform module_df2 : except_mode[tex] :: "module"[name:s] =
    com_hbreak bf[name:s] com_hbreak com_hbreak
+
+dform module_df3 : mode[tex] :: "module"{'name} =
+   izone `"\\module{" ezone slot{'name} izone `"}" ezone
+
+dform module_df4 : except_mode[tex] :: "module"{'name} =
+   com_hbreak bf{'name} com_hbreak com_hbreak
 
 doc <:doc< 
    @begin[doc]

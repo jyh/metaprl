@@ -76,6 +76,7 @@ let resource reduce +=
     <<meta_prod[a:n,b:n]>>, Base_meta.reduce_meta_prod;
     <<meta_quot[a:n,b:n]>>, Base_meta.reduce_meta_quot;
     <<meta_rem[a:n,b:n]>>,  Base_meta.reduce_meta_rem;
+
     <<meta_eq[a:n,b:n]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_num;
     <<meta_eq[a:s,b:s]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_str;
     <<meta_eq[a:v,b:v]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_var;
@@ -84,6 +85,32 @@ let resource reduce +=
     <<meta_lt[a:n,b:n]{'tt; 'ff}>>, Base_meta.reduce_meta_lt_num;
     <<meta_lt[a:s,b:s]{'tt; 'ff}>>, Base_meta.reduce_meta_lt_str;
     <<meta_lt[a:t,b:t]{'tt; 'ff}>>, Base_meta.reduce_meta_lt_tok;
-    <<meta_lt[a:l,b:l]{'tt; 'ff}>>, Base_meta.reduce_meta_lt_lev ]
+    <<meta_lt[a:l,b:l]{'tt; 'ff}>>, Base_meta.reduce_meta_lt_lev;
+
+    <<eq[a:n,b:n]{'tt; 'ff}>>, Phobos_base.reduce_eq_num;
+    <<eq[a:s,b:s]{'tt; 'ff}>>, Phobos_base.reduce_eq_str;
+    <<eq[a:v,b:v]{'tt; 'ff}>>, Phobos_base.reduce_eq_var;
+    <<eq[a:t,b:t]{'tt; 'ff}>>, Phobos_base.reduce_eq_tok;
+    <<eq[a:l,b:l]{'tt; 'ff}>>, Phobos_base.reduce_eq_lev;
+
+    <<lt[a:n,b:n]{'tt; 'ff}>>, Phobos_base.reduce_lt_num;
+    <<lt[a:s,b:s]{'tt; 'ff}>>, Phobos_base.reduce_lt_str;
+    <<lt[a:t,b:t]{'tt; 'ff}>>, Phobos_base.reduce_lt_tok;
+    <<lt[a:l,b:l]{'tt; 'ff}>>, Phobos_base.reduce_lt_lev;
+
+    <<le[a:n,b:n]{'tt; 'ff}>>, Phobos_base.reduce_le_num;
+    <<le[a:s,b:s]{'tt; 'ff}>>, Phobos_base.reduce_le_str;
+    <<le[a:t,b:t]{'tt; 'ff}>>, Phobos_base.reduce_le_tok;
+    <<le[a:l,b:l]{'tt; 'ff}>>, Phobos_base.reduce_le_lev;
+
+    <<gt[a:n,b:n]{'tt; 'ff}>>, Phobos_base.reduce_gt_num;
+    <<gt[a:s,b:s]{'tt; 'ff}>>, Phobos_base.reduce_gt_str;
+    <<gt[a:t,b:t]{'tt; 'ff}>>, Phobos_base.reduce_gt_tok;
+    <<gt[a:l,b:l]{'tt; 'ff}>>, Phobos_base.reduce_gt_lev;
+
+    <<ge[a:n,b:n]{'tt; 'ff}>>, Phobos_base.reduce_ge_num;
+    <<ge[a:s,b:s]{'tt; 'ff}>>, Phobos_base.reduce_ge_str;
+    <<ge[a:t,b:t]{'tt; 'ff}>>, Phobos_base.reduce_ge_tok;
+    <<ge[a:l,b:l]{'tt; 'ff}>>, Phobos_base.reduce_ge_lev ]
 
 (*! @docoff *)

@@ -357,6 +357,14 @@ interactive ge_wf {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- "type"{ge{'a; 'b}} }
 
+interactive le_refl {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- le{'a;'a} }
+
+interactive ge_refl {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- ge{'a;'a} }
+
 interactive ge_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- it in ('a >= 'b) }

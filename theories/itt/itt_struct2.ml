@@ -201,12 +201,12 @@ interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
 
 doc <:doc<
    @begin[doc]
-   Elimination rule for set membership
+   Elimination rule for set equality
    @end[doc]
 >>
-interactive setMemElim {| elim [] |} 'H :
-   sequent { <H>; v: 't in 'A; u: squash{'B['t]}; <J[it]> >- 'C[it] } -->
-   sequent { <H>; v: 't in {x: 'A | 'B['x]}; <J['v]> >- 'C['v] }
+interactive setEqualityElim {| elim [] |} 'H :
+   sequent { <H>; 'a = 'b in 'A; squash{'B['a]}; squash{'B['b]}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: 'a = 'b in { y: 'A | 'B['y] }; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]

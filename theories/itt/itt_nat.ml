@@ -127,6 +127,11 @@ interactive nat_is_subtype_of_int  {| intro[] |} :
 
 let resource sub += (RLSubtype ([<< nat >>, << int>>], nat_is_subtype_of_int  ))
 
+interactive eq_nat_decidable {| intro [] |} :
+   [wf] sequent{ <H> >- 'a in nat } -->
+   [wf] sequent{ <H> >- 'b in nat } -->
+   sequent{ <H> >- decidable{('a = 'b in nat)} }
+
 interactive natElimination  'H :
    sequent { <H>; x: int; v:'x>=0; <J['x]> >- 'C['x]}  -->
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}

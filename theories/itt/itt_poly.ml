@@ -268,11 +268,9 @@ define unfold_mul_poly : mul_poly{'p; 'q; 'F} <-->
    if bor{isZeroPoly{'p;'F}; isZeroPoly{'q;'F}} then zero_poly{'F}
    else (fst{'p} +@ fst{'q}, lambda{x. sum{0; 'x; y. (coeff{'p;'y;'F} *['F] coeff{'q;('x-@'y);'F}); 'F}})
 
-declare eval_poly{'p; 'a; 'F}
-
-prim_rw unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
-   ind{ fst{'p}; (snd{'p} 0); k,l.
-        (snd{'p} 0) +['F] ('a *['F] eval_poly{(fst{'p} -@ 1, lambda{x. snd{'p} ('x +@ 1)}); 'a; 'F}) }
+define unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
+   ind{ fst{'p}; (snd{'p} fst{'p}); i,up.
+        ((snd{'p} (fst{'p} -@ 'i)) +@ ('a *['F] 'up)) }
 doc docoff
 
 let fold_poly = makeFoldC << poly{'F} >> unfold_poly
@@ -441,6 +439,14 @@ interactive mul_poly_wf {| intro [] |} :
    [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "not"{"assert"{isZero{'y; 'F}}} >- "not"{"assert"{isZero{'x *['F] 'y; 'F}}} } -->
    sequent { <H> >- mul_poly{'p; 'q; 'F} in poly{'F} }
+
+interactive eval_poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   sequent { <H> >- eval_poly{'p; 'a; 'F} in 'F^car }
 
 (************************************************************************
  * DISPLAY FOfMS                                                        *

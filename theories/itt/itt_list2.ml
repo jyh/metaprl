@@ -385,6 +385,12 @@ interactive_rw reduce_all_list_cons {| reduce |} :
    all_list{cons{'u; 'v}; x. 'P['x]} <--> 'P['u] and all_list{'v; x.'P['x]}
 doc docoff
 
+interactive_rw reduce_all_list_witness_nil {| reduce |} : all_list_witness{nil; x. 'P['x]} <--> it
+
+interactive_rw reduce_all_list_witness_cons {| reduce |} :
+   all_list_witness{cons{'u; 'v}; x. 'P['x]} <--> ('P['u], all_list_witness{'v; x.'P['x]})
+
+
 doc <:doc<
    @begin[doc]
    @rewrites

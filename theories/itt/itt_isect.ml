@@ -157,7 +157,7 @@ prim intersectionEquality {| intro [] |} :
 prim intersectionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- "type"{."isect"{'A; x. 'B['x]}} } =
+   sequent { <H> >- "type"{"isect"{'A; x. 'B['x]}} } =
    it
 
 doc <:doc<
@@ -358,7 +358,7 @@ interactive intersectionSubtype2 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    ["subtype"] sequent { <H> >- \subtype{'B['a]; 'T} } -->
-   sequent { <H> >- \subtype{."isect"{'A; x. 'B['x]}; 'T} }
+   sequent { <H> >- \subtype{"isect"{'A; x. 'B['x]}; 'T} }
 
 interactive intersectionSubtype3 :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -413,7 +413,7 @@ let d_isect_subtypeT = argfunT (fun i p ->
    else
       raise (RefineError ("d_isect_subtypeT", StringError "no elimination form")))
 
-let isect_subtype_term = << \subtype{."isect"{'A; x. 'B['x]}; 'T} >>
+let isect_subtype_term = << \subtype{"isect"{'A; x. 'B['x]}; 'T} >>
 
 (*
  * -*-

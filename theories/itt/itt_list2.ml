@@ -172,7 +172,7 @@ define unfold_assoc :
    assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
       list_ind{'l; 'z; h, t, g.
          spread{'h; u, v.
-            ifthenelse{.'eq 'u 'x; 'b['v]; 'g}}}
+            ifthenelse{'eq 'u 'x; 'b['v]; 'g}}}
 
 doc <:doc<
    @begin[doc]
@@ -185,7 +185,7 @@ define unfold_rev_assoc :
    rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
       list_ind{'l; 'z; h, t, g.
          spread{'h; u, v.
-            ifthenelse{.'eq 'v 'x; 'b['u]; 'g}}}
+            ifthenelse{'eq 'v 'x; 'b['u]; 'g}}}
 
 doc <:doc<
    @begin[doc]
@@ -196,7 +196,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_map : map{'f; 'l} <-->
-   list_ind{'l; nil; h, t, g. cons{.'f 'h; 'g}}
+   list_ind{'l; nil; h, t, g. cons{'f 'h; 'g}}
 
 doc <:doc<
    @begin[doc]
@@ -467,7 +467,7 @@ interactive_rw reduce_assoc_nil {| reduce |} :
 
 interactive_rw reduce_assoc_cons {| reduce |} :
    assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} <-->
-      ifthenelse{.'eq 'u 'x; 'b['v]; assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
+      ifthenelse{'eq 'u 'x; 'b['v]; assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
 
 doc docoff
 
@@ -484,7 +484,7 @@ interactive_rw reduce_rev_assoc_nil {| reduce |} :
 
 interactive_rw reduce_rev_assoc_cons {| reduce |} :
    rev_assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} <-->
-      ifthenelse{.'eq 'v 'x; 'b['u]; rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
+      ifthenelse{'eq 'v 'x; 'b['u]; rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
 
 doc docoff
 
@@ -500,7 +500,7 @@ interactive_rw reduce_map_nil {| reduce |} :
    map{'f; nil} <--> nil
 
 interactive_rw reduce_map_cons {| reduce |} :
-   map{'f; cons{'h; 't}} <--> cons{.'f 'h; map{'f; 't}}
+   map{'f; cons{'h; 't}} <--> cons{'f 'h; map{'f; 't}}
 
 doc docoff
 
@@ -589,17 +589,17 @@ let fold_rev = makeFoldC << rev{'l} >> unfold_rev
 
 interactive hd_wf {| intro [] |} :
    [wf] sequent  { <H> >- 'l in list{'T} } -->
-   sequent  { <H> >- not{.'l = nil in list{'T}} } -->
+   sequent  { <H> >- not{'l = nil in list{'T}} } -->
    sequent  { <H> >- hd{'l} in 'T }
 
 interactive tl_wf {| intro [] |} :
    [wf] sequent { <H> >- 'l in list{'T} } -->
-   sequent  { <H> >- not{.'l = nil in list{'T}} } -->
+   sequent  { <H> >- not{'l = nil in list{'T}} } -->
    sequent  { <H> >- hd{'l} in list{'T} }
 
 interactive_rw tl_hd_rw list{'T} :
    ('l in list{'T})  -->
-   (not{.'l = nil in list{'T}}) -->
+   (not{'l = nil in list{'T}}) -->
      cons{hd{'l};tl{'l}} <--> 'l
 
 
@@ -666,20 +666,20 @@ interactive ball2_wf2 {| intro [] |} 'T1 'T2 :
 (*
  * assoc2.
  *)
-interactive assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{.'T1 * 'T2} :
+interactive assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{'T1 * 'T2} :
    [wf] sequent { <H> >- "type"{'T2} } -->
    [wf] sequent { <H> >- 'eq in 'T1 -> 'T1 -> bool } -->
    [wf] sequent { <H> >- 'x in 'T1 } -->
-   [wf] sequent { <H> >- 'l in list{.'T1 * 'T2} } -->
+   [wf] sequent { <H> >- 'l in list{'T1 * 'T2} } -->
    [wf] sequent { <H>; z: 'T2 >- 'b['z] in 'T } -->
    [wf] sequent { <H> >- 'z in 'T } -->
    sequent { <H> >- assoc{'eq; 'x; 'l; v. 'b['v]; 'z} in 'T }
 
-interactive rev_assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{.'T1 * 'T2} :
+interactive rev_assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{'T1 * 'T2} :
    [wf] sequent { <H> >- "type"{'T1} } -->
    [wf] sequent { <H> >- 'eq in 'T2 -> 'T2 -> bool } -->
    [wf] sequent { <H> >- 'x in 'T2 } -->
-   [wf] sequent { <H> >- 'l in list{.'T1 * 'T2} } -->
+   [wf] sequent { <H> >- 'l in list{'T1 * 'T2} } -->
    [wf] sequent { <H>; z: 'T1 >- 'b['z] in 'T } -->
    [wf] sequent { <H> >- 'z in 'T } -->
    sequent { <H> >- rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z} in 'T }

@@ -86,7 +86,7 @@ declare exists_df{'b}
 dform all_df1 : "all"{v. 'b} =
    Nuprl_font!"forall" slot{'v} all_df{'b}
 
-dform all_df2 : all_df{."all"{v. 'b}} =
+dform all_df2 : all_df{"all"{v. 'b}} =
    `"," slot{'v} all_df{'b}
 
 dform all_df3 : all_df{'b} =
@@ -95,7 +95,7 @@ dform all_df3 : all_df{'b} =
 dform exists_df1 : "exists"{v. 'b} =
    Nuprl_font!"exists" slot{'v} exists_df{'b}
 
-dform exists_df2 : exists_df{."exists"{v. 'b}} =
+dform exists_df2 : exists_df{"exists"{v. 'b}} =
    `"," slot{'v} exists_df{'b}
 
 dform exists_df3 : exists_df{'b} =
@@ -221,25 +221,25 @@ interactive tptp2_type_intro0 'H :
 
 interactive tptp2_type_intro1 'H :
    sequent { <H>; f: prop1; <J['f]> >- atomic{'x1} } -->
-   sequent { <H>; f: prop1; <J['f]> >- "type"{.'f 'x1} }
+   sequent { <H>; f: prop1; <J['f]> >- "type"{'f 'x1} }
 
 interactive tptp2_type_intro2 'H :
    sequent { <H>; f: prop2; <J['f]> >- atomic{'x1} } -->
    sequent { <H>; f: prop2; <J['f]> >- atomic{'x2} } -->
-   sequent { <H>; f: prop2; <J['f]> >- "type"{.apply{'f; 'x1; 'x2}} }
+   sequent { <H>; f: prop2; <J['f]> >- "type"{apply{'f; 'x1; 'x2}} }
 
 interactive tptp2_type_intro3 'H :
    sequent { <H>; f: prop3; <J['f]> >- atomic{'x1} } -->
    sequent { <H>; f: prop3; <J['f]> >- atomic{'x2} } -->
    sequent { <H>; f: prop3; <J['f]> >- atomic{'x3} } -->
-   sequent { <H>; f: prop3; <J['f]> >- "type"{.apply{'f; 'x1; 'x2; 'x3}} }
+   sequent { <H>; f: prop3; <J['f]> >- "type"{apply{'f; 'x1; 'x2; 'x3}} }
 
 interactive tptp2_type_intro4 'H :
    sequent { <H>; f: prop4; <J['f]> >- atomic{'x1} } -->
    sequent { <H>; f: prop4; <J['f]> >- atomic{'x2} } -->
    sequent { <H>; f: prop4; <J['f]> >- atomic{'x3} } -->
    sequent { <H>; f: prop4; <J['f]> >- atomic{'x4} } -->
-   sequent { <H>; f: prop4; <J['f]> >- "type"{.apply{'f; 'x1; 'x2; 'x3; 'x4}} }
+   sequent { <H>; f: prop4; <J['f]> >- "type"{apply{'f; 'x1; 'x2; 'x3; 'x4}} }
 
 interactive tptp2_type_intro5 'H :
    sequent { <H>; f: prop5; <J['f]> >- atomic{'x1} } -->
@@ -247,7 +247,7 @@ interactive tptp2_type_intro5 'H :
    sequent { <H>; f: prop5; <J['f]> >- atomic{'x3} } -->
    sequent { <H>; f: prop5; <J['f]> >- atomic{'x4} } -->
    sequent { <H>; f: prop5; <J['f]> >- atomic{'x5} } -->
-   sequent { <H>; f: prop5; <J['f]> >- "type"{.apply{'f; 'x1; 'x2; 'x3; 'x4; 'x5}} }
+   sequent { <H>; f: prop5; <J['f]> >- "type"{apply{'f; 'x1; 'x2; 'x3; 'x4; 'x5}} }
 
 (************************************************************************
  * OPERATIONS                                                           *

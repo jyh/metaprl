@@ -161,14 +161,14 @@ prim dintersectionEquality {| intro [] |} :
 prim dintersectionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- "type"{.bisect{'A; x. 'B['x]}} } =
+   sequent { <H> >- "type"{bisect{'A; x. 'B['x]}} } =
    it
 
 prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
-   [wf] sequent { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
+   [wf] sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
    ('t['u;'v] :
-   sequent { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
-   sequent { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
+   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
+   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
    't['u;it]
 
 doc <:doc<

@@ -67,7 +67,7 @@ prec prec_quot
 rule quotientEquality :
    sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H>; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
-   sequent { <H> >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
+   sequent { <H> >- "type"{quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
    sequent { <H> >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[i:l]
@@ -82,7 +82,7 @@ rule quotientType :
    sequent { <H>; u: 'A >- 'E['u; 'u] } -->
    sequent { <H>; u: 'A; v: 'A; 'E['u; 'v] >- 'E['v; 'u] } -->
    sequent { <H>; u: 'A; v: 'A; w: 'A; 'E['u; 'v]; 'E['v; 'w] >- 'E['u; 'w] } -->
-   sequent { <H> >- "type"{.quot x, y: 'A // 'E['x; 'y]} }
+   sequent { <H> >- "type"{quot x, y: 'A // 'E['x; 'y]} }
 
 (*
  * H >- quot x, y: A // E ext a

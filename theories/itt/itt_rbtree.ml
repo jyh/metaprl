@@ -89,7 +89,7 @@ define rbtree: RBTree{'A} <--> fix {rbtree. lambda {n. lambda {parent_color.
                        if beq_int{'n;.  -1}
                          then void
                          else
-                           record["color":t]{ sons_type{'parent_color}; color.Node{.'rbtree ('n -@ cost{'color}) 'color; 'A}}  +
+                           record["color":t]{ sons_type{'parent_color}; color.Node{'rbtree ('n -@ cost{'color}) 'color; 'A}}  +
                             (if beq_int{'n;  0} then unit else void)
                          }}}
 
@@ -119,10 +119,10 @@ doc <:doc<
    @end[doc]
 >>
 define red_tree {| reduce |} :
-   red_tree{'t} <--> match_tree{'t; bfalse; self. black_or_red{.^color;bfalse;btrue} }
+   red_tree{'t} <--> match_tree{'t; bfalse; self. black_or_red{^color;bfalse;btrue} }
 
 define recolor_root {| reduce |} :
-   recolor_root{'t; 'color} <--> match_tree{'t; emptytree; self. tree{.^color:='color}}
+   recolor_root{'t; 'color} <--> match_tree{'t; emptytree; self. tree{^color:='color}}
 
 doc <:doc<
    @begin[doc]
@@ -130,25 +130,25 @@ doc <:doc<
    @end[doc]
 >>
 define recolor_rbb {| reduce |} :
-   recolor_rbb{'t} <--> recolor_root{match_tree{'t; emptytree; self. tree{.(^left:=recolor_root{.^left; black})^right:=recolor_root{.^right; black}}  }; red}
+   recolor_rbb{'t} <--> recolor_root{match_tree{'t; emptytree; self. tree{(^left:=recolor_root{^left; black})^right:=recolor_root{^right; black}}  }; red}
 
 
 
 define lRotate {| reduce |} : lRotate{'t} <--> match_tree{'t; emptytree; root.
-                                 match_tree{.'root^left; 't; left.
-                                               'left^right:=tree{.'root^left:='left^right }
+                                 match_tree{'root^left; 't; left.
+                                               'left^right:=tree{'root^left:='left^right }
                                            }}
 
 define rRotate {| reduce |} : rRotate{'t} <--> match_tree{'t; emptytree; root.
-                                 match_tree{.'root^right; 't; right.
-                                               'right^leftt:=tree{.'root^right:='right^left }
+                                 match_tree{'root^right; 't; right.
+                                               'right^leftt:=tree{'root^right:='right^left }
                                            }}
 
 define lrRotate {| reduce |} :
-   lrRotate{'t} <--> lRotate{ match_tree{'t; emptytree; self. ^left:=rRotate{.^left}}}
+   lrRotate{'t} <--> lRotate{ match_tree{'t; emptytree; self. ^left:=rRotate{^left}}}
 
 define rlRotate {| reduce |} :
-   rlRotate{'t} <--> rRotate{ match_tree{'t; emptytree; self. ^right:=lRotate{.^right}}}
+   rlRotate{'t} <--> rRotate{ match_tree{'t; emptytree; self. ^right:=lRotate{^right}}}
 
 define lbalance {| reduce |} : lbalance{'t} <-->
    if band{  red_tree{leftSubtree{'t}};  red_tree{leftSubtree{leftSubtree{'t}}}  } then recolor_rbb {lRotate{'t}} else
@@ -162,12 +162,12 @@ define rbalance {| reduce |} : rbalance{'t} <-->
 
 define ins: ins{'a;'t;'ord} <-->
    tree_ind{'t;
-     (* if t=emptree *) tree{.(('a^left:=emptytree) ^right:=emptytree) ^color:=red};
+     (* if t=emptree *) tree{(('a^left:=emptytree) ^right:=emptytree) ^color:=red};
      (* if t=tree(self) *) L,R,self.
         compare{'ord;. 'a^data; .^data;
-          (* if a<data *)  lbalance{. ^left:='L};
-          (* if a=data *)  tree{.(('a^left:=^left) ^right:=^right) ^color:=^color};
-          (* if a>data *)  rbalance{. ^right:='R}
+          (* if a<data *)  lbalance{^left:='L};
+          (* if a=data *)  tree{(('a^left:=^left) ^right:=^right) ^color:=^color};
+          (* if a>data *)  rbalance{^right:='R}
                }}
 
 define insert : insert{'a;'t;'ord} <--> recolor_root{ins{'a;'t;'ord}; black}
@@ -236,7 +236,7 @@ interactive rbtree_wf {| intro[] |} :
    sequent{ <H> >- "type"{'A} } -->
    sequent{ <H> >- 'color in Color } -->
    sequent{ <H> >- 'n in nat } -->
-   sequent{ <H> >- "type"{.RBTree{'A} 'n 'color} }
+   sequent{ <H> >- "type"{RBTree{'A} 'n 'color} }
 
 interactive btree1_wf {| intro[] |} :
    sequent{ <H> >- "type"{'A} } -->
@@ -269,7 +269,7 @@ doc <:doc<
    @end[doc]
 >>
 
-define black_depth: black_depth{'t} <--> tree_ind{'t; 0; L,R,self. 'L +@ cost{.^color}}
+define black_depth: black_depth{'t} <--> tree_ind{'t; 0; L,R,self. 'L +@ cost{^color}}
 
 
 
@@ -289,9 +289,9 @@ doc <:doc<
 >>
 
 define rbtree_set {| reduce |} : rbtree_set{'ord} <-->
-   {car = bisect{BTree{.{data:'ord^car}};. SortedTree{'ord;t.top} isect BinTree{.(color:Color)}};
+   {car = bisect{BTree{{data:'ord^car}};. SortedTree{'ord;t.top} isect BinTree{(color:Color)}};
     empty = emptytree;
-    insert = lambda {s. lambda {a. insert{.{data='a}; 's; 'ord}}};
+    insert = lambda {s. lambda {a. insert{{data='a}; 's; 'ord}}};
     member = lambda {s. lambda {a. is_in_tree{'a; 's; 'ord}}}
    }
 
@@ -303,7 +303,7 @@ doc <:doc<
 
 interactive rbtree_correctness {| intro[] |} :
    sequent{ <H> >- 'ord in order[i:l] } -->
-   sequent{ <H> >- rbtree_set{'ord} in Set[i:l]{.'ord^car} }
+   sequent{ <H> >- rbtree_set{'ord} in Set[i:l]{'ord^car} }
 
 doc <:doc<
    @begin[doc]

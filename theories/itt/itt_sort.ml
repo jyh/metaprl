@@ -67,10 +67,10 @@ define unfold_partial_order : partial_order{'A; 'lt} <-->
  *)
 
 define unfold_bounded : bounded{'u1; 'l; 'lt} <-->
-   list_ind{'l; ."true"; u2, v, g. "and"{."not"{compare_lt{'lt; 'u2; 'u1}}; 'g}}
+   list_ind{'l; "true"; u2, v, g. "and"{"not"{compare_lt{'lt; 'u2; 'u1}}; 'g}}
 
 define unfold_sorted : sorted{'l; 'lt} <-->
-   list_ind{'l; ."true"; u, v, g. "and"{bounded{'u; 'v; 'lt}; 'g}}
+   list_ind{'l; "true"; u, v, g. "and"{bounded{'u; 'v; 'lt}; 'g}}
 
 (*
  * Sorting algorithm.
@@ -139,7 +139,7 @@ dform list_ind_df : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind{
 interactive_rw reduce_bounded_nil {| reduce |} : bounded{'u; nil; 'lt} <--> "true"
 
 interactive_rw reduce_bounded_cons {| reduce |} : bounded{'u1; cons{'u2; 'v}; 'lt} <-->
-   "and"{."not"{compare_lt{'lt; 'u2; 'u1}}; bounded{'u1; 'v; 'lt}}
+   "and"{"not"{compare_lt{'lt; 'u2; 'u1}}; bounded{'u1; 'v; 'lt}}
 
 interactive_rw reduce_sorted_nil {| reduce |} : sorted{nil; 'lt} <--> "true"
 

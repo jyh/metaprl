@@ -115,7 +115,7 @@ prim squiggleEquality {| intro [] |} :
 
 interactive squiggleType {| intro [] |} :
   [wf] sequent{ <H> >- 't ~ 's } -->
-  sequent{ <H> >- "type"{.'t ~ 's}}
+  sequent{ <H> >- "type"{'t ~ 's}}
 
 doc <:doc<
    @begin[doc]

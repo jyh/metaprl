@@ -128,7 +128,7 @@ prim setEquality {| intro [] |} :
 prim setType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
-   sequent { <H> >- "type"{.{ a:'A | 'B['a] }} } =
+   sequent { <H> >- "type"{ { a:'A | 'B['a] } } } =
    it
 
 doc <:doc<

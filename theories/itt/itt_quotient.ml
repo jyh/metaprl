@@ -200,7 +200,7 @@ prim quotientType {| intro [] |} :
    [wf] sequent { <H>; u: 'A >- 'E['u; 'u] } -->
    [wf] sequent { <H>; u: 'A; v: 'A; 'E['u; 'v] >- 'E['v; 'u] } -->
    [wf] sequent { <H>; u: 'A; v: 'A; w: 'A; 'E['u; 'v]; 'E['v; 'w] >- 'E['u; 'w] } -->
-   sequent { <H> >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
+   sequent { <H> >- "type"{quot x, y: 'A // 'E['x; 'y]} } =
    it
 
 doc <:doc<
@@ -213,7 +213,7 @@ doc <:doc<
 prim quotientEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
-   [wf] sequent { <H> >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
+   [wf] sequent { <H> >- "type"{quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
    sequent { <H> >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[i:l]

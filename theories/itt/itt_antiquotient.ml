@@ -67,9 +67,9 @@ interactive antiquotient univ[i:l] :
 
 interactive quotent_isect univ[i:l] :
    [wf] sequent{ <H> >- 'A in univ[i:l] } -->
-   [wf] sequent{ <H> >- "type"{ . quot x,y : 'A //'E1['x;'y]}} -->
-   [wf] sequent{ <H> >- "type"{ . quot x,y : 'A //'E2['x;'y]}} -->
-   [wf] sequent{ <H> >- "type"{ . quot x,y : 'A //('E1['x;'y] & 'E2['x;'y])}} -->
+   [wf] sequent{ <H> >- "type"{quot x,y : 'A //'E1['x;'y]}} -->
+   [wf] sequent{ <H> >- "type"{quot x,y : 'A //'E2['x;'y]}} -->
+   [wf] sequent{ <H> >- "type"{quot x,y : 'A //('E1['x;'y] & 'E2['x;'y])}} -->
    [wf] sequent{ <H>; x: 'A; y: 'A >- "type"{'E1['x; 'y]} } -->
    [wf] sequent{ <H>; x: 'A; y: 'A >- "type"{'E2['x; 'y]} } -->
    sequent{ <H> >- ext_equal{bisect{(quot x,y : 'A //'E1['x;'y]); (quot x,y : 'A //'E2['x;'y])};

@@ -119,7 +119,7 @@ interactive independentFunctionEquality {| intro [] |} :
 interactive independentFunctionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'B1} } -->
-   sequent { <H> >- "type"{. 'A1 -> 'B1 } }
+   sequent { <H> >- "type"{ 'A1 -> 'B1 } }
 
 doc <:doc<
    @begin[doc]
@@ -289,7 +289,7 @@ let d_apply_typeT = funT (fun p ->
       else
          raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ))))
 
-let apply_type_term = << "type"{. 'f 'a} >>
+let apply_type_term = << "type"{'f 'a} >>
 
 let resource intro += [
    apply_equal_term, wrap_intro d_apply_equalT;

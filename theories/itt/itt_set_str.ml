@@ -83,10 +83,10 @@ interactive set_intro  {| intro[] |}:
    sequent { <H> >- 'set in {member : 'set^car -> 'T -> bool} } -->
    sequent { <H> >- 'set in {insert : 'set^car -> 'T -> 'set^car} }-->
    sequent { <H> >- 'set in {delete : 'set^car -> 'T -> 'set^car} } -->
-   sequent { <H> >- all a:'T. not{"assert"{.('set^member) ('set^empty) 'a}} } -->
-   sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^insert) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} or 'a='b in 'T} } -->
-   sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^delete) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} and not{.'a='b in 'T}} } -->
-   sequent { <H> >- 'set in Set[i:l]{.'T} }
+   sequent { <H> >- all a:'T. not{"assert"{('set^member) ('set^empty) 'a}} } -->
+   sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^insert) 'S 'b) 'a}; ."assert"{(('set^member) 'S 'a)} or 'a='b in 'T} } -->
+   sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^delete) 'S 'b) 'a}; ."assert"{(('set^member) 'S 'a)} and not{'a='b in 'T}} } -->
+   sequent { <H> >- 'set in Set[i:l]{'T} }
 
  doc <:doc<
    @begin[doc]
@@ -101,11 +101,11 @@ interactive set_intro  {| intro[] |}:
 
    There are three specifications that guarantees that sets works properly:
   @begin[itemize]
-    @item{ << not{"assert"{.(self{'self}^member) (self{'self}^empty) 'a}}>> guarantees that <<label["empty":t]>> is an empty set.}
-    @item{ << iff{"assert"{.(self{'self}^member) ((self{'self}^insert) 'S 'b) 'a}; ("assert"{.((self{'self}^member) 'S 'a)} or 'a='b in 'T)}>>
+    @item{ << not{"assert"{(self{'self}^member) (self{'self}^empty) 'a}}>> guarantees that <<label["empty":t]>> is an empty set.}
+    @item{ << iff{"assert"{(self{'self}^member) ((self{'self}^insert) 'S 'b) 'a}; ("assert"{((self{'self}^member) 'S 'a)} or 'a='b in 'T)}>>
 
      guarantees that  <<label["insert":t] 'S 'b>> has all elements that $S$ had, an element $b$ and nothing more.}
-    @item{ << iff{"assert"{.(self{'self}^member) ((self{'self}^delete) 'S 'b) 'a}; ("assert"{.((self{'self}^member) 'S 'a)} and not{.'a='b in 'T})}>>
+    @item{ << iff{"assert"{(self{'self}^member) ((self{'self}^delete) 'S 'b) 'a}; ("assert"{((self{'self}^member) 'S 'a)} and not{'a='b in 'T})}>>
 
      guarantees that  <<label["delete":t] 'S 'b>> has all elements that $S$ had except element $b$.}
    @end[itemize]
@@ -128,7 +128,7 @@ doc <:doc<
 
    Since @hrefmodule[Itt_fset]'s definition of sets needs a  decidable equality,
    we will define a functor that take a type with decidable equality $A$
-   and construct a data structure of the type <<Set[i:l]{.'A^car}>>.
+   and construct a data structure of the type <<Set[i:l]{'A^car}>>.
    @end[doc]
 >>
 extends Itt_fset
@@ -138,11 +138,11 @@ doc <:doc<
    @doc{Definition:}
 >>
 define set_as_list: set_as_list{'A} <-->
-   {car =  fset{.'A^"=";. 'A^car};
+   {car =  fset{'A^"=";'A^car};
     empty =  fempty;
-    member = lambda {S. lambda{x.fmember{.'A^"="; 'x; 'S} }};
-    insert = lambda {S. lambda{x.funion{.'A^"="; 'S;  fsingleton{'x}} }};
-    delete = lambda {S. lambda{x.fsub{.'A^"="; 'S;  fsingleton{'x}} }}
+    member = lambda {S. lambda{x.fmember{'A^"="; 'x; 'S} }};
+    insert = lambda {S. lambda{x.funion{'A^"="; 'S;  fsingleton{'x}} }};
+    delete = lambda {S. lambda{x.fsub{'A^"="; 'S;  fsingleton{'x}} }}
    }
 
 doc <:doc< @docoff >>
@@ -154,7 +154,7 @@ doc <:doc<
 >>
 interactive set_as_list_correct :
    sequent { <H> >- 'A in  DecEquality[i:l] } -->
-   sequent { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
+   sequent { <H> >- set_as_list{'A} in Set[i:l]{'A^car} }
 
 doc <:doc<
    @begin[doc]
@@ -273,7 +273,7 @@ define set_as_table: set_as_table{'Table} <-->
 interactive set_as_table_correct :
    sequent { <H> >- "type"{'T} } -->
    sequent { <H> >- 'Table in Table[i:l]{'T;unit} } -->
-   sequent { <H> >- set_as_table{'Table} in Set[i:l]{.'T} }
+   sequent { <H> >- set_as_table{'Table} in Set[i:l]{'T} }
 
 (*
 doc <:doc<
@@ -292,11 +292,11 @@ define rel_true: rel_true <--> lambda {a. lambda {b. btrue }}
 doc <:doc< @doc >>
 
 define set_as_list: set_as_list{'A} <-->
-   {car =  fset{.rel_prod{'A^"="; rel_true};. 'A^car * 'S['x]};
+   {car =  fset{rel_prod{'A^"="; rel_true};. 'A^car * 'S['x]};
     empty =  fempty;
     apply =
-    insert = lambda {S. lambda{x.lambda{y.funion{.'A^"="; 'S;  fsingleton{'x,'y}} }};
-    delete = lambda {S. lambda{x.lambda{y.fsub{.'A^"="; 'S;  fsingleton{'x,'y}} }}
+    insert = lambda {S. lambda{x.lambda{y.funion{'A^"="; 'S;  fsingleton{'x,'y}} }};
+    delete = lambda {S. lambda{x.lambda{y.fsub{'A^"="; 'S;  fsingleton{'x,'y}} }}
    }
 
 doc <:doc< @docoff >>
@@ -308,7 +308,7 @@ doc <:doc<
 >>
 interactive set_as_list_correct :
    sequent { <H> >- 'A in  DecEquality[i:l] } -->
-   sequent { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
+   sequent { <H> >- set_as_list{'A} in Set[i:l]{'A^car} }
 
 *)
 

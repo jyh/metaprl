@@ -687,7 +687,7 @@ doc <:doc<
 interactive subgroup_isect :
    sequent { <H> >- subgroup[i:l]{'S1; 'G} } -->
    sequent { <H> >- subgroup[i:l]{'S2; 'G} } -->
-   sequent { <H> >- subgroup[i:l]{{car=bisect{.'S1^car;.'S2^car}; "*"='G^"*"; "1"='G^"1"; inv='G^inv}; 'G} }
+   sequent { <H> >- subgroup[i:l]{{car=bisect{'S1^car; 'S2^car}; "*"='G^"*"; "1"='G^"1"; inv='G^inv}; 'G} }
 
 (************************************************************************
  * COSET                                                                *
@@ -779,13 +779,13 @@ interactive rcoset_member_intro {| intro [intro_typeinf_plusone <<'G>>] |} group
 interactive lcoset_elim {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
    [main] sequent { <H>; u: lcoset{'S; 'G; 'b}; <J['u]> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H>; u: lcoset{'S; 'G; 'b}; <J['u]> >- 'b in 'G^car } -->
-   [main] sequent { <H>; u: 'G^car; v: squash{.exst a: 'S^car. 'u = 'b *['G] 'a in 'G^car}; <J['u]> >- 'C['u] } -->
+   [main] sequent { <H>; u: 'G^car; v: squash{exst a: 'S^car. 'u = 'b *['G] 'a in 'G^car}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: lcoset{'S; 'G; 'b}; <J['u]> >- 'C['u] }
 
 interactive rcoset_elim {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
    [main] sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- 'b in 'G^car } -->
-   [main] sequent { <H>; u: 'G^car; v: squash{.exst a: 'S^car. 'u = 'a *['G] 'b in 'G^car}; <J['u]> >- 'C['u] } -->
+   [main] sequent { <H>; u: 'G^car; v: squash{exst a: 'S^car. 'u = 'a *['G] 'b in 'G^car}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- 'C['u] }
 
 doc <:doc<
@@ -1284,13 +1284,13 @@ interactive groupMono_ker1 group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
    [wf] sequent { <H> >- 'f in groupMono{'A; 'B} } -->
-   sequent { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} }
+   sequent { <H> >- ext_equal{groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} }
 
 interactive groupMono_ker2 group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
    [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
-   [main] sequent { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} } -->
+   [main] sequent { <H> >- ext_equal{groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} } -->
    sequent { <H> >- 'f in groupMono{'A; 'B} }
 
 doc <:doc<

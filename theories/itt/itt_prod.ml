@@ -97,7 +97,7 @@ interactive independentProductEquality {| intro [] |} :
 interactive independentProductType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H> >- "type"{'A2} } -->
-   sequent { <H> >- "type"{.'A1 * 'A2} }
+   sequent { <H> >- "type"{'A1 * 'A2} }
 
 (*
  * H >- Ui ext A * B

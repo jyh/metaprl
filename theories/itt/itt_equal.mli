@@ -123,7 +123,7 @@ rule equalityEquality :
 rule equalityType :
    sequent { <H> >- 'a in 'T } -->
    sequent { <H> >- 'b in 'T } -->
-   sequent { <H> >- "type"{. 'a = 'b in 'T } }
+   sequent { <H> >- "type"{ 'a = 'b in 'T } }
 
 (*
  * H >- it in (a = b in T)

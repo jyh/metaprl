@@ -98,7 +98,7 @@ let eq_labelIntroT =
 let resource intro += (<< eq_label[x:t,y:t]{'A;'B} >>, wrap_intro eq_labelIntroT )
 
 interactive not_eq_label :
-   sequent{ <H> >- eq_label[x:t,y:t]{."false";."true"} } -->
+   sequent{ <H> >- eq_label[x:t,y:t]{"false"; "true"} } -->
    sequent{ <H> >- label[x:t] <> label[y:t]  in label}
 
 let not_eq_labelT =

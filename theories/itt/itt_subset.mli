@@ -70,7 +70,7 @@ val mk_subset_term : term -> term -> term
 rule subset_wf :
    sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{.'A subset 'B} }
+   sequent { <H> >- "type"{'A subset 'B} }
 
 rule subset_intro  :
    [wf] sequent { <H> >- 'A subtype 'B } -->

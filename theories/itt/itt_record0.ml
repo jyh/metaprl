@@ -37,7 +37,7 @@ interactive stepRecord {| intro[] |} :
 
 interactive_rw stepRecord_rw {| reduce |} :
    ('n in label) -->
-   record{.next{'n};'A} <--> (top * record{'n;'A})
+   record{next{'n};'A} <--> (top * record{'n;'A})
 
 (*** Empty Record Type ***)
 
@@ -60,7 +60,7 @@ interactive stepRcrd {| intro [] |} :
 
 interactive_rw stepRcrd_rw {| reduce |} :
    ('n in label) -->
-   rcrd{.next{'n};'a; 'r} <--> (fst{'r},rcrd{'n;'a;snd{'r}})
+   rcrd{next{'n};'a; 'r} <--> (fst{'r},rcrd{'n;'a;snd{'r}})
 
 (*** Field ***)
 

@@ -72,7 +72,7 @@ rule functionEquality :
 rule functionType :
    sequent { <H> >- "type"{'A1} } -->
    sequent { <H>; x: 'A1 >- "type"{'B1['x]} } -->
-   sequent { <H> >- "type"{. a1:'A1 -> 'B1['a1] } }
+   sequent { <H> >- "type"{ a1:'A1 -> 'B1['a1] } }
 
 (*
  * H >- a:A -> B[a] ext lambda(z. b[z])

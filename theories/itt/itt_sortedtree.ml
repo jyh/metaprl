@@ -52,9 +52,9 @@ define dataNode: DataNode{'D;data.'N['data]} <--> record["data":t]{'D;data.'N['d
 dform dn_df : except_mode[src] ::   DataNode{'D;data.'N} = `"DataNode{" 'data ":" 'D `". " 'N `"}"
 
 define sortedTree: SortedTree {'O;data.'A['data]} <-->
-                     BinTree{ DataNode{.'O^car; data.'A['data]} ; self.
-                                        (all x: set_from_tree{.^left; .'O^car}.  less{'O; 'x; (^data)}) &
-                                        (all y: set_from_tree{.^right; .'O^car}. less{'O; (^data); 'y})
+                     BinTree{ DataNode{'O^car; data.'A['data]} ; self.
+                                        (all x: set_from_tree{^left; 'O^car}.  less{'O; 'x; (^data)}) &
+                                        (all y: set_from_tree{^right; 'O^car}. less{'O; (^data); 'y})
                             }
 
 dform dn_df : except_mode[src] ::   SortedTree{'O;data.'A} = `"SortedTree{" 'data ":" ('O^car) `". " 'A `"}"
@@ -79,7 +79,7 @@ interactive emptytree_is_sorted {| intro[] |} univ[i:l] :
 
 interactive sortedtree_subtype {| intro[] |}  univ[i:l]:
    sequent{ <H> >- 'O in order[i:l] } -->
-   sequent{ <H> >- SortedTree{'O; d.'A['d]}  subtype  DataTree{.'O^car} }
+   sequent{ <H> >- SortedTree{'O; d.'A['d]}  subtype  DataTree{'O^car} }
 
 (* find an element a in the tree, return a subtree with the root a if find one, or empty tree otherwise *)
 define find: find{'a; 't; 'O} <-->
@@ -128,10 +128,10 @@ interactive is_in_tree_correct  univ[i:l]:
 
 define insert: insert{'nd; 't; 'O} <-->
       tree_ind{'t;
-        (* if t=empty *)       tree{.(('nd^left:=emptytree) ^right:=emptytree)};
+        (* if t=empty *)       tree{(('nd^left:=emptytree) ^right:=emptytree)};
         (* if t=tree{self} *)  L,R,self. compare{'O;.'nd^data;.^data;
                                 (*if a<data *) .^left:='L;
-                                (*if a=data *) tree{.(('nd^left:=^left) ^right:=^right)};
+                                (*if a=data *) tree{(('nd^left:=^left) ^right:=^right)};
                                 (*if a>data *) .^right:='R}}
 
 dform is_in_tree_df : except_mode[src] ::  insert{'a;'t; 'O} = tt["insert("]  'a tt["; "] 't  tt["; "] 'O  tt[")"]
@@ -141,7 +141,7 @@ let resource reduce += [softrec_reduce  <<insert{'a; 't; 'O}>> insert]
 interactive insert_wf {| intro[] |}  univ[i:l]:
    sequent{ <H> >- 'O in order[i:l] } -->
    sequent{ <H>; d:'O^car >- "type"{'A['d]}  } -->
-   sequent{ <H> >- 'nd in  DataNode{.'O^car;data.'A['data]}  } -->
+   sequent{ <H> >- 'nd in  DataNode{'O^car;data.'A['data]}  } -->
    sequent{ <H> >- 't in SortedTree{'O; d.'A['d]} } -->
    sequent{ <H> >- insert{'nd;'t;'O} in SortedTree{'O; d.'A['d]}  }
 

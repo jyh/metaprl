@@ -77,7 +77,7 @@ rule intersectionEquality :
 rule intersectionType :
    sequent { <H> >- "type"{'A} } -->
    sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- "type"{."isect"{'A; x. 'B['x]}} }
+   sequent { <H> >- "type"{"isect"{'A; x. 'B['x]}} }
 
 rule topUniv :
    sequent { <H> >- top in univ[i:l] }

@@ -121,7 +121,7 @@ interactive functionEquality {| intro [] |} :
 interactive functionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'B1['x]} } -->
-   sequent { <H> >- "type"{. a1:'A1 -> 'B1['a1] } }
+   sequent { <H> >- "type"{ a1:'A1 -> 'B1['a1] } }
 
 doc <:doc<
    @begin[doc]

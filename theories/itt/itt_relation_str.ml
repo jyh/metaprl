@@ -92,16 +92,16 @@ doc <:doc<
 define preorder : preorder[i:l] <-->
     { car : univ[i:l];
       "<=" : ^car -> ^car -> bool ;
-      all x:^car. "assert"{.'x ^<= 'x};
-      all x:^car.all y:^car.all z:^car. ("assert"{.'x ^<= 'y} &  "assert"{.'y ^<= 'z} =>  "assert"{.'x ^<= 'z});
-      all x:^car.all y:^car. ("assert"{.'x ^<= 'y} or  "assert"{.'y ^<= 'x})
+      all x:^car. "assert"{'x ^<= 'x};
+      all x:^car.all y:^car.all z:^car. ("assert"{'x ^<= 'y} &  "assert"{'y ^<= 'z} =>  "assert"{'x ^<= 'z});
+      all x:^car.all y:^car. ("assert"{'x ^<= 'y} or  "assert"{'y ^<= 'x})
     }
 
 
 (*
-define irreflexiveOrder1 :  IrreflexiveOrder[i:l] <--> { self : orderSig[i:l] | all x:^car. not{"assert"{.'x ^< 'x}}}
+define irreflexiveOrder1 :  IrreflexiveOrder[i:l] <--> { self : orderSig[i:l] | all x:^car. not{"assert"{'x ^< 'x}}}
 
-define transitiveOrder1 :  TransitiveOrder[i:l] <--> { self : orderSig[i:l] | all x:^car.all y:^car.all z:^car. ("assert"{.'x ^< 'y} &  "assert"{.'y ^< 'z} =>  "assert"{.'x ^< 'z})}
+define transitiveOrder1 :  TransitiveOrder[i:l] <--> { self : orderSig[i:l] | all x:^car.all y:^car.all z:^car. ("assert"{'x ^< 'y} &  "assert"{'y ^< 'z} =>  "assert"{'x ^< 'z})}
 
 define partialOrder1 : PartialOrder[i:l] <--> bisect{ IrreflexiveOrder[i:l]; TransitiveOrder[i:l]}
 
@@ -109,12 +109,12 @@ dform iorder_df : except_mode[src] :: IrreflexiveOrder[i:l] = `"IrreflexiveOrder
 dform torder_df : except_mode[src] :: TransitiveOrder[i:l] = `"TransitiveOrder" sub{slot[i:l]}
 dform porder_df : except_mode[src] :: PartialOrder[i:l] = `"PartialOrder" sub{slot[i:l]}
 
-define order1 : order[i:l] <-->  { self : PartialOrder[i:l] | all x:^car.all y:^car. ("assert"{.'x ^< 'y} or  "assert"{.'y ^< 'x} or 'x='y in ^car) }
+define order1 : order[i:l] <-->  { self : PartialOrder[i:l] | all x:^car.all y:^car. ("assert"{'x ^< 'y} or  "assert"{'y ^< 'x} or 'x='y in ^car) }
 *)
 
 doc <:doc< @docoff >>
 
-define le: le{'self; 'a;'b} <--> "assert"{.'b ^<= 'a}
+define le: le{'self; 'a;'b} <--> "assert"{'b ^<= 'a}
 
 define eq: eq{'self; 'a;'b} <--> le{'self; 'a;'b} and le{'self; 'b; 'a}
 
@@ -139,7 +139,7 @@ doc <:doc<
 define decEquality : DecEquality[i:l] <-->
     { car : univ[i:l];
       "=" : ^car -> ^car -> bool;
-       all x:^car. all y:^car. iff{"assert"{.'x ^= 'y}; . 'x='y in ^car}
+       all x:^car. all y:^car. iff{"assert"{'x ^= 'y}; 'x='y in ^car}
     }
 
 doc <:doc< @docoff >>
@@ -326,7 +326,7 @@ interactive dec_equalaty  order[i:l] :
    sequent { <H> >- 'ord in order[i:l] }  -->
    sequent { <H> >- 'x in 'ord^car }  -->
    sequent { <H> >- 'y in 'ord^car }  -->
-   sequent { <H> >-  decidable{.'x='y in 'ord^car} }
+   sequent { <H> >-  decidable{'x='y in 'ord^car} }
 *)
 
 

@@ -62,7 +62,7 @@ let resource reduce +=
 
 doc <:doc<
    @begin[doc]
-     For example, <<rename[ "x":t, "y":t]{.{x=1;y=2;z=3}} ~ {y=1;x=2;z=3}>>.
+     For example, <<rename[ "x":t, "y":t]{ {x=1;y=2;z=3} } ~ {y=1;x=2;z=3}>>.
      In general the following reduction rules describe how renaming works on records.
    @end[doc]
 >>

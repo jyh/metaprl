@@ -171,7 +171,7 @@ doc <:doc<
 (*      \     *)
 (*       19   *)
 
-define example: simpletree <--> tree{.{data=17; left=emptytree; right=tree{.{data=19; left=emptytree; right=emptytree}}}}
+define example: simpletree <--> tree{ {data=17; left=emptytree; right=tree{ {data=19; left=emptytree; right=emptytree} }} }
 
 dform simpletree_df : except_mode[src] :: simpletree = `"simpletree"
 

@@ -58,7 +58,7 @@ define unfold_or : "or"{'a; 'b} <--> 'a + 'b
 define unfold_implies : "implies"{'a; 'b} <--> 'a -> 'b
 define unfold_iff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
 define unfold_cand : "cand"{'a; 'b} <--> "and"{'a; 'b}
-define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
+define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; "cand"{"not"{'a}; 'b}}
 
 define unfold_all : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
 define unfold_exists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]

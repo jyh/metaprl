@@ -95,7 +95,7 @@ define recursiveFlea:  recursiveFlea <-->
            else apply["moveBy":t]{apply["move":t]{'self}} ('n -@ 1) };
    flea}
 
-interactive_rw example3 : apply["getX":t]{.apply["moveBy":t]{recursiveFlea} 5} <--> 6
+interactive_rw example3 : apply["getX":t]{apply["moveBy":t]{recursiveFlea} 5} <--> 6
 
 
 define feeFoo: feeFoo <-->

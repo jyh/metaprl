@@ -58,7 +58,7 @@ open Itt_quotient
 define unfold_fcompare : fcompare{'eq; 'x; 'y} <--> ('eq 'x 'y)
 
 define unfold_fmember : fmember{'eq; 'x; 's1} <-->
-   list_ind{'s1; bfalse; h, t, g. bor{.fcompare{'eq; 'x; 'h}; 'g}}
+   list_ind{'s1; bfalse; h, t, g. bor{fcompare{'eq; 'x; 'h}; 'g}}
 
 define unfold_fsubseteq : fsubseteq{'eq; 's1; 's2} <-->
    list_ind{'s1; btrue; h, t, g. band{fmember{'eq; 'h; 's2}; 'g}}
@@ -68,7 +68,7 @@ define unfold_fequal : fequal{'eq; 's1; 's2} <-->
 
 define unfold_fequalp : fequalp{'eq; 'T} <-->
    ((((('eq in ('T -> 'T -> bool))
-      & (all x: 'T. "assert"{.fcompare{'eq; 'x; 'x}}))
+      & (all x: 'T. "assert"{fcompare{'eq; 'x; 'x}}))
       & (all x: 'T. all y: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => "assert"{fcompare{'eq; 'y; 'x}})))
       & (all x: 'T. all y: 'T. all z: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => ("assert"{fcompare{'eq; 'y; 'z}} => "assert"{fcompare{'eq; 'x; 'z}})))))
 
@@ -268,7 +268,7 @@ interactive_rw reduce_fmember_nil {| reduce |} : fmember{'eq; 'x; nil} <--> bfal
 
 interactive_rw reduce_fmember_cons {| reduce |} :
    fmember{'eq; 'x; cons{'h; 't}} <-->
-   bor{.fcompare{'eq; 'x; 'h}; fmember{'eq; 'x; 't}}
+   bor{fcompare{'eq; 'x; 'h}; fmember{'eq; 'x; 't}}
 
 (*
  * Singleton.

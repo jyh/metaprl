@@ -190,7 +190,7 @@ interactive subset_univ {| intro [] |} :
 interactive subset_wf {| intro [] |} :
    sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{.'A subset 'B} }
+   sequent { <H> >- "type"{'A subset 'B} }
 
 doc <:doc<
    @begin[doc]

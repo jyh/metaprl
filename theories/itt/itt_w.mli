@@ -63,7 +63,7 @@ declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
  *)
 rewrite reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
-   <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
+   <--> 'body['a1; 'f1; lambda{a. tree_ind{'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
 (*
  * Precedence of display form.
@@ -103,7 +103,7 @@ rule wEquality :
 rule wType :
    sequent { <H> >- "type"{'A1} } -->
    sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent { <H> >- "type"{.w{'A1; y.'A2['y]}} }
+   sequent { <H> >- "type"{w{'A1; y.'A2['y]}} }
 
 (*
  * H >- W(x:A; B[x]) ext tree(a, f)

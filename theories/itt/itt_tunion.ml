@@ -127,7 +127,7 @@ prim tunionEquality {| intro [] |} :
 prim tunionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- "type"{.Union x:'A. 'B['x] } } =
+   sequent { <H> >- "type"{ Union x:'A. 'B['x] } } =
    it
 
 doc <:doc<

@@ -129,8 +129,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive dec_false {| intro [] |} :
-   sequent { <H> >- decidable{."false"} }
+   sequent { <H> >- decidable{"false"} }
 
 interactive dec_true {| intro [] |} :
-   sequent { <H> >- decidable{."true"} }
+   sequent { <H> >- decidable{"true"} }
 doc <:doc< @docoff >>

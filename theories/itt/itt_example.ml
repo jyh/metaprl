@@ -150,8 +150,8 @@ let fold_eq_action = makeFoldC << eq_action{'s1; 's2} >> unfold_eq_action
 
 interactive_rw reduce_eq_oven1 {| reduce |} : eq_oven{on; on} <--> btrue
 interactive_rw reduce_eq_oven2 {| reduce |} : eq_oven{on; ."open"} <--> bfalse
-interactive_rw reduce_eq_oven3 {| reduce |} : eq_oven{."open"; on} <--> bfalse
-interactive_rw reduce_eq_oven4 {| reduce |} : eq_oven{."open"; ."open"} <--> btrue
+interactive_rw reduce_eq_oven3 {| reduce |} : eq_oven{"open"; on} <--> bfalse
+interactive_rw reduce_eq_oven4 {| reduce |} : eq_oven{"open"; "open"} <--> btrue
 
 interactive_rw reduce_eq_action1 {| reduce |} : eq_action{button; button} <--> btrue
 interactive_rw reduce_eq_action2 {| reduce |} : eq_action{button; door} <--> bfalse

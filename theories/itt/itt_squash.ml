@@ -137,7 +137,7 @@ prim squashEquality {| intro [] |}  :
 
 prim squashType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{.squash{'A}} } =
+   sequent { <H> >- "type"{squash{'A}} } =
    it
 
 doc <:doc<

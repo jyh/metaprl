@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_record_exm]
-  
+
    This theory contains some examples of how to use records.
    @end[doc]
 >>
@@ -22,7 +22,7 @@ open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Simple Records}
    First, let us define two record types: <<plane>> and <<space>>.
@@ -39,7 +39,7 @@ interactive planeType {|intro[] |} :
 interactive spaceType {|intro[] |} :
    sequent{ <H> >- "type"{space} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The elements of these types are records. E.g., the point <<O>> is an element of the type <<space>>:
    @end[doc]
@@ -50,7 +50,7 @@ define unfold_O: O <-->  {x=0; y=0; z=0}
 interactive oInSpace {|intro[] |} :
    sequent{ <H> >- O in space }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    <<O>> also can be considered as an element of the type <<plane>>:
    @end[doc]
@@ -59,7 +59,7 @@ doc <:doc<
 interactive oInPlane {|intro[] |} :
    sequent{ <H> >- O in plane }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    In general <<space>> is a subtype of <<plane>>.
    @end[doc]
@@ -68,7 +68,7 @@ doc <:doc<
 interactive spacePlane {|intro[] |} :
    sequent{ <H> >- space  subtype plane }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Let us consider two points <<A>> and <<B>>:
    @end[doc]
@@ -85,7 +85,7 @@ interactive aInSpace {|intro[] |} :
 interactive bInSpace {|intro[] |} :
    sequent{ <H> >- B in space }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    These points are equal in <<plane>>, since they have
    the same <<label["x":t]>> and <<label["y":t]>> coordinates,
@@ -97,9 +97,9 @@ interactive abInPlane {|intro[] |} :
    sequent{ <H> >- A = B in plane }
 
 interactive abInSpace {|intro[] |} :
-   sequent{ <H> >- not{.A = B in space} }
+   sequent{ <H> >- not{A = B in space} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    We can change the order of fields with different labels. E.g.,
    @end[doc]
@@ -108,7 +108,7 @@ doc <:doc<
 interactive_rw a_rw  :
    A <--> {y=2; z=3; x=1}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    However if two fields have the same label, then the rightmost field covers others. E.g.,
    @end[doc]
@@ -117,7 +117,7 @@ doc <:doc<
 interactive_rw cover_rw  :
    {x=3; x=2} <-->    {x=2}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The field operator <<field[x:t]{'r}>> gets the field <<label[x:t]>> of the record <<'r>>. E.g.,
    @end[doc]
@@ -126,7 +126,7 @@ doc <:doc<
 interactive_rw a_z_rw  :
    (A^y) <--> 2
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Let us define
    @end[doc]
@@ -152,7 +152,7 @@ interactive spaceIntro {|intro[] |} :
    sequent{ <H> >- 'c in int} -->
    sequent{ <H> >- point{'a;'b;'c;rcrd} in space}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Then we have the following reductions:
    @end[doc]
@@ -164,9 +164,9 @@ interactive_rw point_beta2_rw {| reduce |} : (point{'a;'b;'e}^y) <--> 'b
 
 interactive point_eta :
    sequent{ <H> >- 'p in plane } -->
-   sequent{ <H> >-   point{.'p^x;.'p^y;'p} ~ 'p }
+   sequent{ <H> >-   point{'p^x;.'p^y;'p} ~ 'p }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The last reduction says that any element of <<plane>> is a point of the form <<point{'a;'b;rcrd}>>.
    Therefore we have the following elimination rule:
@@ -183,7 +183,7 @@ interactive spaceElim {|elim[] |} 'H :
    sequent{ <H>; a:int; b:int; c:int; e:record; <J[point{'a;'b;'c;'e}]> >- 'C[point{'a;'b;'c;'e}] } -->
    sequent{ <H>; p:space; <J['p]> >- 'C['p] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Now we can define length of a point:
    @end[doc]
@@ -191,7 +191,7 @@ doc <:doc<
 
 define unfold_length: length{'p} <--> ('p^x *@ 'p^x  +@  'p^y *@  'p^y)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    That is,
    @end[doc]
@@ -199,7 +199,7 @@ doc <:doc<
 
 interactive_rw reduce_length {| reduce |} : length{point{'a;'b;'e}} <--> ('a *@ 'a +@ 'b *@ 'b)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    For example,
    @end[doc]
@@ -208,7 +208,7 @@ doc <:doc<
 interactive length_A {|intro[] |} :
    sequent{ <H> >- length{point{3;4;'e}} = 25 in int }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Now, using the @tt[reduce_length] and @hrefrule[planeElim] rule, we can prove that
    @end[doc]
@@ -218,7 +218,7 @@ interactive length_wf {|intro[] |} :
    sequent{ <H> >- 'p in plane } -->
    sequent{ <H> >- length{'p} in int }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Record can be extended. For example we can define <<cplane>> and <<cspace>> types.
    @end[doc]
@@ -236,17 +236,17 @@ interactive cspaceElim {|elim[] |} 'H :
    sequent{ <H>; a:int; b:int; c:int; color:atom; e:record; <J[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}]> >- 'C[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] } -->
    sequent{ <H>; p:cspace; <J['p]> >- 'C['p] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Dependent Records}
    @modsubsection{Algebraic structures}
-  
+
    @end[doc]
 >>
 
 define unfold_semigroup1 : semigroup[G:t,mul:t,i:l] <-->
-   record[G:t]{univ[i:l];m.record[mul:t]{.'m -> 'm -> 'm;mul.
-   tsquash{.all x:'m.all y:'m.all z:'m. ('mul ('mul 'x 'y) 'z = 'mul 'x ('mul 'y 'z) in 'm)}}}
+   record[G:t]{univ[i:l];m.record[mul:t]{'m -> 'm -> 'm;mul.
+   tsquash{all x:'m.all y:'m.all z:'m. ('mul ('mul 'x 'y) 'z = 'mul 'x ('mul 'y 'z) in 'm)}}}
 
 (*
 define unfold_semigroup2 : semigroup[i:l] <--> semigroup["G":t,"*":t,i:l]
@@ -301,7 +301,7 @@ interactive semigroupAssos4 semigroup[i:l] :
       (('a ^* 'b) ^* 'c) ^* 'd = 'a ^* ('b ^* ('c ^* 'd)) in ^car
       }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Data structures}
    @end[doc]

@@ -79,7 +79,7 @@ let fold_two = makeFoldC << two >> unfold_two
 let fold_left = makeFoldC << left >> unfold_left
 let fold_right = makeFoldC << right >> unfold_right
 
-interactive_rw reduce_spread {| reduce |} : spread{.('a, 'b); c, d. 'e['c; 'd]} <--> 'e['a; 'b]
+interactive_rw reduce_spread {| reduce |} : spread{('a, 'b); c, d. 'e['c; 'd]} <--> 'e['a; 'b]
 
 interactive_rw reduce_fst {| reduce |} : fst{pair{'a; 'b}} <--> 'a
 interactive_rw reduce_snd {| reduce |} : snd{pair{'a; 'b}} <--> 'b
@@ -193,7 +193,7 @@ interactive productFormation 'A 'x :
 interactive productType {| intro [] |} 'x :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent { <H> >- "type"{.y:'A1 * 'A2['y]} }
+   sequent { <H> >- "type"{y:'A1 * 'A2['y]} }
 
 (*
  * H >- x:A * B ext (a, b)

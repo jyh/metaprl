@@ -68,7 +68,7 @@ rule independentProductEquality :
 rule independentProductType :
    sequent { <H> >- "type"{'A1} } -->
    sequent { <H> >- "type"{'A2} } -->
-   sequent { <H> >- "type"{.'A1 * 'A2} }
+   sequent { <H> >- "type"{'A1 * 'A2} }
 
 (*
  * H >- A * B ext (a, b)

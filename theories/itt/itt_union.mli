@@ -103,7 +103,7 @@ rule unionEquality :
 rule unionType :
    sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{. 'A + 'B } }
+   sequent { <H> >- "type"{'A + 'B} }
 
 (*
  * H >- A + B ext inl a

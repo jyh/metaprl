@@ -103,7 +103,7 @@ doc <:doc< @doc{@rewrites} >>
 
 interactive_rw reduce_ind_up {| reduce |} :
    ('x in nat) -->
-   ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} <-->
+   ind{'x +@ 1; 'base; k,l. 'up['k;'l]} <-->
    ('up['x +@ 1; ind{'x ; 'base; k,l. 'up['k;'l]}])
 
 interactive_rw reduce_ind_base {| reduce |} :
@@ -175,7 +175,7 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
    [wf] sequent { <H>; n: nat >- "type"{'P['n]} } -->
    [wf] sequent { <H> >- 'i in nat } -->
    sequent{ <H> >-
-      all n:nat. ("not"{'P['n]} or "not"{.all n2:nat. ('P['n2] => 'n < 'n2)})} -->
+      all n:nat. ("not"{'P['n]} or "not"{all n2:nat. ('P['n2] => 'n < 'n2)})} -->
    sequent{ <H> >- "not"{'P['i]}}
 
 interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :

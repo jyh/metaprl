@@ -107,7 +107,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_cumulativity :
-   cumulativity[i:l, j:l] <--> meta_lt[i:l, j:l]{."true"; ."false"}
+   cumulativity[i:l, j:l] <--> meta_lt[i:l, j:l]{"true"; "false"}
 doc docoff
 
 let cumulativity_term = << cumulativity[i:l, j:l] >>

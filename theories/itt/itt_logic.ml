@@ -130,7 +130,7 @@ define unfold_and : "and"{'a; 'b} <--> 'a * 'b
 define unfold_or : "or"{'a; 'b} <--> 'a + 'b
 define unfold_iff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
 define unfold_cand : "cand"{'a; 'b} <--> ('a & 'b)
-define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
+define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{"not"{'a}; 'b}}
 define unfold_all : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
 define unfold_exists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
 doc <:doc< @docoff >>
@@ -171,7 +171,7 @@ interactive true_univ {| intro [] |} :
    sequent { <H> >- "true" in univ[i:l] }
 
 interactive true_type {| intro [] |} :
-   sequent { <H> >- "type"{."true"} }
+   sequent { <H> >- "type"{"true"} }
 
 interactive true_intro {| intro [] |} :
    sequent { <H> >- "true" }
@@ -185,13 +185,13 @@ interactive false_univ {| intro [] |} :
    sequent { <H> >- "false" in univ[i:l] }
 
 interactive false_type {| intro [] |} :
-   sequent { <H> >- "type"{."false"} }
+   sequent { <H> >- "type"{"false"} }
 
 interactive false_elim {| elim []; squash; nth_hyp |} 'H :
    sequent { <H>; x: "false"; <J['x]> >- 'C['x] }
 
 interactive false_esquash_elim {| elim []; nth_hyp |} 'H :
-   sequent { <H>; x: esquash{."false"}; <J['x]> >- 'C['x] }
+   sequent { <H>; x: esquash{"false"}; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]
@@ -211,7 +211,7 @@ interactive not_univ {| intro [] |} :
 
 interactive not_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'t} } -->
-   sequent { <H> >- "type"{."not"{'t}} }
+   sequent { <H> >- "type"{"not"{'t}} }
 
 interactive not_intro {| intro [] |} :
    [wf] sequent { <H> >- "type"{'t} } -->
@@ -246,7 +246,7 @@ interactive and_univ {| intro [] |} :
 interactive and_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
    [wf] sequent { <H>; 'a1 >- "type"{'a2} } -->
-   sequent { <H> >- "type"{."and"{'a1; 'a2}} }
+   sequent { <H> >- "type"{"and"{'a1; 'a2}} }
 
 interactive and_intro {| intro [] |} :
    [main] sequent { <H> >- 'a1 } -->
@@ -290,15 +290,15 @@ interactive or_univ {| intro [] |} :
 interactive or_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
    [wf] sequent { <H> >- "type"{'a2} } -->
-   sequent { <H> >- "type"{."or"{'a1; 'a2}} }
+   sequent { <H> >- "type"{"or"{'a1; 'a2}} }
 
 interactive or_intro_left {| intro [SelectOption 1] |} :
-   [wf] sequent { <H> >- "type"{.'a2} } -->
+   [wf] sequent { <H> >- "type"{'a2} } -->
    [main] sequent { <H> >- 'a1 } -->
    sequent { <H> >- "or"{'a1; 'a2} }
 
 interactive or_intro_right {| intro [SelectOption 2] |} :
-   [wf] sequent { <H> >- "type"{.'a1} } -->
+   [wf] sequent { <H> >- "type"{'a1} } -->
    [main] sequent { <H> >- 'a2 } -->
    sequent { <H> >- "or"{'a1; 'a2} }
 
@@ -327,7 +327,7 @@ interactive implies_univ {| intro [] |} :
 interactive implies_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
    [wf] sequent { <H>; 'a1 >- "type"{'a2} } -->
-   sequent { <H> >- "type"{."implies"{'a1; 'a2}} }
+   sequent { <H> >- "type"{"implies"{'a1; 'a2}} }
 
 interactive implies_intro {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
@@ -356,7 +356,7 @@ interactive iff_univ {| intro [] |} :
 interactive iff_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
    [wf] sequent { <H> >- "type"{'a2} } -->
-   sequent { <H> >- "type"{."iff"{'a1; 'a2}} }
+   sequent { <H> >- "type"{"iff"{'a1; 'a2}} }
 
 interactive iff_intro {| intro [] |} :
    [wf] sequent { <H> >- 'a1 => 'a2 } -->
@@ -385,7 +385,7 @@ interactive cand_univ {| intro [] |} :
 interactive cand_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
    [wf] sequent { <H>; x: 'a1 >- "type"{'a2} } -->
-   sequent { <H> >- "type"{."cand"{'a1; 'a2}} }
+   sequent { <H> >- "type"{"cand"{'a1; 'a2}} }
 
 interactive cand_intro {| intro [] |} :
    [main] sequent { <H> >- 'a1 } -->
@@ -417,7 +417,7 @@ interactive cor_univ {| intro [] |} :
 interactive cor_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
    [wf] sequent { <H>; x: "not"{'a1} >- "type"{'a2} } -->
-   sequent { <H> >- "type"{."cor"{'a1; 'a2}} }
+   sequent { <H> >- "type"{"cor"{'a1; 'a2}} }
 
 interactive cor_intro_left {| intro [SelectOption 1] |} :
    [wf] sequent { <H>; x: "not"{'a1} >- "type"{'a2} } -->
@@ -425,7 +425,7 @@ interactive cor_intro_left {| intro [SelectOption 1] |} :
    sequent { <H> >- "cor"{'a1; 'a2} }
 
 interactive cor_intro_right {| intro [SelectOption 2] |} :
-   [wf] sequent { <H> >- "type"{.'a1} } -->
+   [wf] sequent { <H> >- "type"{'a1} } -->
    [main] sequent { <H> >- "not"{'a1} } -->
    [main] sequent { <H>; x: "not"{'a1} >- 'a2 } -->
    sequent { <H> >- "cor"{'a1; 'a2} }
@@ -456,7 +456,7 @@ interactive all_univ {| intro [] |} :
 interactive all_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'t} } -->
    [wf] sequent { <H>; v: 't >- "type"{'b['v]} } -->
-   sequent { <H> >- "type"{."all"{'t; v. 'b['v]}} }
+   sequent { <H> >- "type"{"all"{'t; v. 'b['v]}} }
 
 interactive all_intro {| intro [] |} :
    [wf] sequent { <H> >- "type"{'t} } -->
@@ -487,7 +487,7 @@ interactive exists_univ {| intro [] |} :
 interactive exists_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'t} } -->
    [wf] sequent { <H>; v: 't >- "type"{'b['v]} } -->
-   sequent { <H> >- "type"{."exists"{'t; v. 'b['v]}} }
+   sequent { <H> >- "type"{"exists"{'t; v. 'b['v]}} }
 
 interactive exists_intro {| intro [] |} 'z :
    [wf] sequent { <H> >- 'z in 't } -->
@@ -537,7 +537,7 @@ declare implies_df{'a}
 dform implies_df1 : parens :: "prec"[prec_implies] :: "implies"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} implies_df{'b} popm ezone
 
-dform implies_df2 : implies_df{."implies"{'a; 'b}} =
+dform implies_df2 : implies_df{"implies"{'a; 'b}} =
    implies_df{'a} implies_df{'b}
 
 dform implies_df3 : implies_df{'a} =
@@ -557,7 +557,7 @@ declare or_df{'a}
 dform or_df1 : parens :: "prec"[prec_or] :: "or"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} or_df{'b} popm ezone
 
-dform or_df2 : or_df{."or"{'a; 'b}} =
+dform or_df2 : or_df{"or"{'a; 'b}} =
    or_df{'a} or_df{'b}
 
 dform or_df3 : or_df{'a} =
@@ -571,7 +571,7 @@ declare cor_df{'a}
 dform cor_df1 : parens :: "prec"[prec_or] :: "cor"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} cor_df{'b} popm ezone
 
-dform cor_df2 : cor_df{."cor"{'a; 'b}} =
+dform cor_df2 : cor_df{"cor"{'a; 'b}} =
    cor_df{'a} cor_df{'b}
 
 dform cor_df3 : cor_df{'a} =
@@ -585,7 +585,7 @@ declare and_df{'a}
 dform and_df1 : parens :: "prec"[prec_and] :: "and"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} and_df{'b} popm ezone
 
-dform and_df2 : and_df{."and"{'a; 'b}} =
+dform and_df2 : and_df{"and"{'a; 'b}} =
    and_df{'a} and_df{'b}
 
 dform and_df3 : and_df{'a} =
@@ -599,7 +599,7 @@ declare cand_df{'a}
 dform cand_df1 : parens :: "prec"[prec_and] :: "cand"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} cand_df{'b} popm ezone
 
-dform cand_df2 : and_df{."cand"{'a; 'b}} =
+dform cand_df2 : and_df{"cand"{'a; 'b}} =
    cand_df{'a} cand_df{'b}
 
 dform cand_df3 : cand_df{'a} =

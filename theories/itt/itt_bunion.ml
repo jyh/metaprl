@@ -109,7 +109,7 @@ interactive bunionEquality {| intro [] |} :
 interactive bunionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{.'A bunion 'B} }
+   sequent { <H> >- "type"{'A bunion 'B} }
 
 doc <:doc<
    Formation.

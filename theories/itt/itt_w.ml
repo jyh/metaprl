@@ -123,7 +123,7 @@ doc <:doc<
 >>
 prim_rw reduce_tree_ind {| reduce |} :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
-   <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
+   <--> 'body['a1; 'f1; lambda{a. tree_ind{'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
 doc docoff
 
@@ -182,7 +182,7 @@ prim wEquality {| intro [] |} :
 prim wType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent { <H> >- "type"{.w{'A1; y.'A2['y]}} } =
+   sequent { <H> >- "type"{w{'A1; y.'A2['y]}} } =
    it
 
 doc <:doc<

@@ -78,7 +78,7 @@ rule subtypeEquality :
 rule subtypeType :
    sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{.'A subtype 'B} }
+   sequent { <H> >- "type"{'A subtype 'B} }
 
 rule subtypeTypeRight 'B :
    sequent { <H> >- 'A subtype 'B } -->

@@ -185,7 +185,7 @@ prim unionEquality {| intro [] |} :
 prim unionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{. 'A + 'B } } =
+   sequent { <H> >- "type"{'A + 'B} } =
    it
 
 doc <:doc<

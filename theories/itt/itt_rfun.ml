@@ -333,7 +333,7 @@ prim rfunctionType  {| intro [] |} bind{a,b. 'R['a; 'b]} :
              g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] }
              >- "type"{'B['g; 'y]}
            } -->
-   sequent { <H> >- "type"{. { f | a:'A -> 'B['f; 'a] } } } =
+   sequent { <H> >- "type"{ { f | a:'A -> 'B['f; 'a] } } } =
    it
 
 doc <:doc<
@@ -444,12 +444,12 @@ doc <:doc<
 >>
 interactive rfunction_rfunction_subtype {| intro [] |} :
    [main] sequent { <H> >- \subtype{'A2; 'A1} } -->
-   [wf] sequent { <H> >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
-   [wf] sequent { <H> >- "type"{.{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->
+   [wf] sequent { <H> >- "type"{{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
+   [wf] sequent { <H> >- "type"{{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->
    [main] sequent { <H>; f: {f1 | x1: 'A1 -> 'B1['f1; 'x1]}; a: 'A2 >-
                           \subtype{'B1['f; 'a]; 'B2['f; 'a]}
                     } -->
-   sequent { <H> >- \subtype{.{ f1 | x1: 'A1 -> 'B1['f1; 'x1] }; .{ f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
+   sequent { <H> >- \subtype{ { f1 | x1: 'A1 -> 'B1['f1; 'x1] }; { f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
 doc <:doc< @docoff >>
 
 (************************************************************************

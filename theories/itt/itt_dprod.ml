@@ -290,7 +290,7 @@ prim productEquality {| intro [] |} :
 prim productType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent { <H> >- "type"{.y:'A1 * 'A2['y]} } =
+   sequent { <H> >- "type"{y:'A1 * 'A2['y]} } =
    it
 
 doc <:doc<

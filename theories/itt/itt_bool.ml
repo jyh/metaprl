@@ -365,7 +365,7 @@ doc <:doc<
 >>
 interactive assert_type {| intro [] |} :
    [wf] sequent { <H> >- 't in bool } -->
-   sequent { <H> >- "type"{."assert"{'t}} }
+   sequent { <H> >- "type"{"assert"{'t}} }
 
 interactive assert_univ {| intro [] |} :
    [wf] sequent { <H> >- 't in bool } -->
@@ -466,7 +466,7 @@ doc <:doc<
 >>
 interactive assert_is_decidable {| intro [] |} :
    [wf] sequent { <H> >- 't in bool } -->
-   sequent { <H> >- decidable{."assert"{'t}} }
+   sequent { <H> >- decidable{"assert"{'t}} }
 
 doc <:doc<
    @begin[doc]

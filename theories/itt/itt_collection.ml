@@ -293,13 +293,13 @@ interactive isect_wf {| intro [] |} :
 interactive member_isect {| intro [intro_univ_arg] |} :
    [wf] sequent{ <H> >- "type"{'S} } -->
    sequent{ <H>; s:'S >-  col_member{'C['s];'x}} -->
-   sequent{ <H> >- col_member{."isect"{'S;s.'C['s]};'x}}
+   sequent{ <H> >- col_member{"isect"{'S;s.'C['s]};'x}}
 
 interactive member_isect_elim {| elim [elim_univ_with_args; ThinOption thinT] |} 'H univ[l:l] 's :
-   [wf] sequent{ <H>; u:col_member{."isect"{'S;y.'C['y]};'x}; <J>; y: 'S >- "type"{col_member{'C['y];'x}} } -->
-   [aux] sequent{ <H>; u:col_member{."isect"{'S;y.'C['y]};'x}; <J> >- 's in 'S } -->
-   sequent{ <H>; u:col_member{."isect"{'S;y.'C['y]};'x}; w:col_member{'C['s];'x}; <J> >- 'Z } -->
-   sequent{ <H>; u:col_member{."isect"{'S;y.'C['y]};'x}; <J> >- 'Z }
+   [wf] sequent{ <H>; u:col_member{"isect"{'S;y.'C['y]};'x}; <J>; y: 'S >- "type"{col_member{'C['y];'x}} } -->
+   [aux] sequent{ <H>; u:col_member{"isect"{'S;y.'C['y]};'x}; <J> >- 's in 'S } -->
+   sequent{ <H>; u:col_member{"isect"{'S;y.'C['y]};'x}; w:col_member{'C['s];'x}; <J> >- 'Z } -->
+   sequent{ <H>; u:col_member{"isect"{'S;y.'C['y]};'x}; <J> >- 'Z }
 
 (*--- none ---*)
 

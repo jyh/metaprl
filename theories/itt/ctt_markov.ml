@@ -33,12 +33,12 @@ interactive squash_ex2 :
 interactive squash_ex3 :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- iff{squash{.'A and 'B}; .squash{'A} and squash{'B}} }
+   sequent { <H> >- iff{squash{'A and 'B}; .squash{'A} and squash{'B}} }
 
 interactive squash_ex4 :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- squash{.'A => 'B} => (squash{'A} => squash{'B}) }
+   sequent { <H> >- squash{'A => 'B} => (squash{'A} => squash{'B}) }
 
 interactive squash_ex5 :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -47,7 +47,7 @@ interactive squash_ex5 :
 interactive squash_ex6 :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- (squash{'A} or squash{'B}) => squash{.'A or 'B} }
+   sequent { <H> >- (squash{'A} or squash{'B}) => squash{'A or 'B} }
 
 define unfold_sqst : sqst{'A} <--> (squash{'A} => 'A)
 
@@ -55,25 +55,25 @@ dform sqst_df : except_mode[src] :: sqst{'A} =
     `"sqst(" slot["le"]{'A} `")"
 
 interactive sqst_ex1 :
-   sequent { <H> >- sqst{."false"} }
+   sequent { <H> >- sqst{"false"} }
 
 interactive sqst_ex2 :
    [wf] sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- sqst{.not{'A}} }
+   sequent { <H> >- sqst{not{'A}} }
 
 interactive sqst_ex3 :
    [wf] sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- sqst{.squash{'A}} }
+   sequent { <H> >- sqst{squash{'A}} }
 
 interactive sqst_ex4 :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- (sqst{'A} and sqst{'B}) => sqst{.'A and 'B} }
+   sequent { <H> >- (sqst{'A} and sqst{'B}) => sqst{'A and 'B} }
 
 interactive sqst_ex5 :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- (sqst{'B}) => sqst{.'A => 'B} }
+   sequent { <H> >- (sqst{'B}) => sqst{'A => 'B} }
 
 prim markov :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -106,7 +106,7 @@ interactive markov2' :(* = Markov, proved from Markov0 *)
 interactive markovN : (* proved from Markov *)
    [wf] sequent { <H> >- 's in 'T } -->
    [wf] sequent { <H> >- 't in 'T } -->
-   [main] sequent { <H> >- not{not{.'s='t in 'T}} } -->
+   [main] sequent { <H> >- not{not{'s='t in 'T}} } -->
    sequent { <H> >- 's='t in 'T }
 
 interactive markov2 : (*  = Markov, proved from MarkovN *)
@@ -125,9 +125,9 @@ interactive markov2'' : (*  = Markov, proved from Markov4 *)
    sequent { <H> >- squash{'A} }
 
 interactive markovPrinciple :
-   [wf] sequent { <H>; n:nat >- "type"{.'A 'n} } -->
-   sequent { <H> >- all n:nat. ('A 'n or  not{.'A 'n}) =>
-                           not{not{.exst n:nat.'A 'n}} =>
+   [wf] sequent { <H>; n:nat >- "type"{'A 'n} } -->
+   sequent { <H> >- all n:nat. ('A 'n or  not{'A 'n}) =>
+                           not{not{exst n:nat.'A 'n}} =>
                            exst n:nat.'A 'n}
 
    (* Proof uses f =  fix{f.lambda{n.decide{('x 'n);a.('n,'a);b.'f ('n+@1)}}} *)
@@ -135,7 +135,7 @@ interactive markovPrinciple :
 interactive squash_ex4m :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- (squash{'A} => squash{'B}) => squash{.'A => 'B} }
+   sequent { <H> >- (squash{'A} => squash{'B}) => squash{'A => 'B} }
 
 interactive sqst_ex6 :
    [wf] sequent { <H> >- "type"{'A} } -->

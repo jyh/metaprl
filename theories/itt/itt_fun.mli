@@ -80,7 +80,7 @@ rule independentFunctionEquality :
 rule independentFunctionType :
    sequent { <H> >- "type"{'A1} } -->
    sequent { <H>; x: 'A1 >- "type"{'B1} } -->
-   sequent { <H> >- "type"{. 'A1 -> 'B1 } }
+   sequent { <H> >- "type"{ 'A1 -> 'B1 } }
 
 (*
  * H >- a:A -> B[a] ext lambda(z. b[z])

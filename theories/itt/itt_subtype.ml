@@ -135,7 +135,7 @@ prim subtypeEquality {| intro [] |} :
 prim subtypeType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{.'A subtype 'B} } =
+   sequent { <H> >- "type"{'A subtype 'B} } =
    it
 
 doc <:doc<

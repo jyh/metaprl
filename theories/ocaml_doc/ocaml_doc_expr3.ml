@@ -39,12 +39,12 @@ extends Base_theory
 doc <:doc<
 @begin[doc]
 
-Disjoint unions, also called @emph{tagged unions} or @emph{variant
-records}, are an important part of the OCaml type system.  A disjoint
-union, or union for short, represents the union of several different
-types, where each of the cases is given an unique, explicit name.
+Disjoint unions, also called tagged unions or variant records, are an
+important part of the OCaml type system.  A disjoint union, or union
+for short, represents the union of several different types, where each
+of the parts is given an unique, explicit name.
 
-OCaml allows the definition of @emph{emph} and @emph{open} union
+OCaml allows the definition of @emph{exact} and @emph{open} union
 types.  The following syntax is used for an exact union type; we
 discuss open types later in this chapter
 @refsection["open-union-types"].
@@ -103,7 +103,7 @@ that have values.
    | Real x -> x
 @end[iverbatim]
 
-Patterns can be arbitrarily nested.  For example, the following
+Patterns can be arbitrarily nested.  The following
 function represents one way that we might perform addition of values
 in the @code{number} type.
 
@@ -125,11 +125,12 @@ val add : number -> number -> number = <fun>
 - : number = Real 4.2
 @end[iverbatim]
 
-There are a few things to note in this pattern matching.  First, we are matching
-against the pair @code{(n1, n2)} of the numbers @code{n1} and @code{n2} being added.
-The patterns are then pair patterns.  For example, the following clause specifies that
-if the first number is @code{Zero} and the second is @code{n}, or if the second number
-is @code{Zero} and the first is @code{n}, then the sum is @code{n}.
+There are a few things to note in this pattern matching.  First, we
+are matching against the pair @code{(n1, n2)} of the numbers @code{n1}
+and @code{n2} being added.  The patterns are then pair patterns.  The
+first clause specifies that if the first number is @code{Zero} and the
+second is @code{n}, or if the second number is @code{Zero} and the
+first is @code{n}, then the sum is @code{n}.
 
 @begin[iverbatim]
         Zero, n
@@ -146,7 +147,7 @@ to the @code{Real} value.
 
 OCaml allows two patterns $p_1$ and $p_2$ to be combined into a choice
 pattern $p_1 | p_2$ under two conditions: both patterns must define
-the same variables; and, the being matched by multiple occurrences of
+the same variables; and, the value being matched by multiple occurrences of
 a variable must have the same types.  Otherwise, the placement of
 variables in $p_1$ and $p_2$ is unrestricted.
 
@@ -214,7 +215,7 @@ val cardinality : 'a btree -> int = <fun>
 
 @section["unbalanced-btree"]{Unbalanced binary trees}
 
-Now that we have defined the type if binary trees, lets build a simple
+Now that we have defined the type of binary trees, lets build a simple
 data structure for representing sets of values of type @code{'a}.
 
 The empty set is just a @code{Leaf}.  To add an element to a set @tt{s}, we
@@ -528,7 +529,7 @@ The type @code{[> `Integer of int ]} specifies that the function takes
 an argument having an open union type, where one of the constructors
 is @code{`Integer} (with a value of type @code{int}).
 
-Later, we may come along and want to define a function that includes
+Later, we might want to define a function that includes
 a constructor @code{`Real} for floating-point values.  We can extend
 the definition as follows.
 

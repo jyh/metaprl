@@ -48,6 +48,10 @@ TheoryDocument(theory, $(PRINT_THEORIES))
 LaTeXDocumentInstall(tex doc, $(DOCDIR), ocaml-book, book2, theory-body)
 LaTeXDocumentInstall(jyh_tex jyh_doc, $(DOCDIR), ocaml-book-jyh, book3, theory-body)
 
+watch.ps: book2.ps
+	cp $< tmp.ps
+	mv tmp.ps $@
+
 #
 # Clean up
 #

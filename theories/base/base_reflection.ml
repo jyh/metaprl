@@ -100,12 +100,13 @@ ml_rw reduce_ifbterm2 : ('goal :  if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt }) =
 
 let rec onSomeHypC rw = function
    1 -> rw 1
- | i when i > 0 -> rw i thenC (onSomeHypC rw (i - 1))
+ | i when i > 0 -> rw i orelseC (onSomeHypC rw (i - 1))
  | _ -> failC
 
 let reduce_ifbterm =
-   termC (fun t ->
-      let seq = TermMan.explode_sequent (one_subterm t) in
+   termC (fun goal ->
+      let t,tt =  two_subterms goal in
+      let seq = TermMan.explode_sequent  t in
       let goal = SeqGoal.get seq.sequent_goals 0 in
          if is_quoted_term goal then reduce_ifbterm2
          else if is_var_term goal then onSomeHypC reduce_ifbterm1 (SeqHyp.length seq.sequent_hyps)

@@ -99,6 +99,7 @@ MPFILES =\
    itt_order\
    itt_rat\
    itt_supinf\
+   itt_reflection_test\
    itt_example
 
 TEST_FILES =\

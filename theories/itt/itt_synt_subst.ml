@@ -211,11 +211,13 @@ define unfold_make_depth: make_depth{'s;'n} <--> ind{'n -@ bdepth{'s};'s; k,s.ad
 
 interactive_rw make_depth_bdepth {| reduce |} :
    ('s in BTerm)  -->
+   ('n in nat)  -->
    ('n >= bdepth{'s})  -->
    bdepth{make_depth{'s;'n}} <--> 'n
 
 interactive make_depth_wf {| intro [] |} :
    sequent { <H> >- 's in BTerm } -->
+   sequent { <H> >- 'n in nat } -->
    sequent { <H> >- 'n >= bdepth{'s} } -->
    sequent { <H> >- make_depth{'s;'n} in BTerm }
 

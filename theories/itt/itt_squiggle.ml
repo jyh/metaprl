@@ -105,7 +105,7 @@ declare "sqeq"{'t;'s}
 
 doc docoff
 
-dform sqeq_df : ('a ~ 'b) = szone slot{'a} `" " sim hspace slot{'b} ezone
+dform sqeq_df : ('a ~ 'b) = szone slot{'a} `" " equiv hspace slot{'b} ezone
 
 let squiggle_term = << 'a ~ 'b >>
 let squiggle_opname = opname_of_term squiggle_term

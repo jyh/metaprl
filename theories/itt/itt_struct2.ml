@@ -268,11 +268,18 @@ let eqSubstT t i =
    else
       substHypT i t
 
-let substT t =
+let substTaux t i =
    if is_squiggle_term t then
-      sqSubstT t
+      sqSubstT t i
    else
-      eqSubstT t
+      eqSubstT t i
+
+let move_and_substT t i = funT (fun p ->
+   let i = get_pos_hyp_num p i in
+      copyHypT i (-1) thenT substTaux t (-1) thenT tryT (thinT i))
+
+let substT t i =
+   substTaux t i orelseT move_and_substT t i
 
 (*
  * Derived versions.

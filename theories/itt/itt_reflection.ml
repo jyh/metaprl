@@ -101,10 +101,14 @@ prim bterm_memberEquality {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'x<||> in BTerm } =
    it
 
-prim btermSquiddle {| nth_hyp |} :
+prim btermSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- 'b1 ~ 'b2 } =
    it
+
+interactive btermListSquiggle {| nth_hyp |} :
+   sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
+   sequent { <H> >- 'b1 ~ 'b2 }
 
 (************************************************************************
  * The Simplest bterm                                                   *
@@ -679,7 +683,6 @@ interactive_rw makebterm_reduce {| reduce |} :
    'b in BTerm -->
     make_bterm{'b; subterms{'b}} <--> 'b
 
-
 (************************************************************************
  * Bterm elimination rules                                              *
  ************************************************************************)
@@ -689,13 +692,10 @@ interactive bterm_elim1 {| elim [ThinOption thinT] |} 'H bind{x.'f['x]} :
    sequent { <H>; b: BTerm; <J['b]>; c: BTerm; all a: BTerm. ('f['a] < 'f['c] => 'C['a]) >- 'C['c] } -->
    sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
 
-
 interactive bterm_elim2 {| elim [] |} 'H :
-   sequent { <H>; b: BTerm; <J['b]>; a: BTerm >- 'C['a] Type} -->
    sequent { <H>; b: BTerm; <J['b]>; c: BTerm; bl: list{BTerm};
       all a: BTerm. (mem{'a; 'bl; BTerm} => 'C['a] & depth{'a} < depth{'c}) >- 'C[make_bterm{'c; 'bl}] } -->
    sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
-
 
 interactive bterm_elim3 {| elim [] |} 'H :
    sequent { <H>; b: BTerm; <J['b]>; a: BTerm >- 'C['a] Type} -->

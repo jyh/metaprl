@@ -15,3 +15,7 @@ declare subst{'bt; 't}
 topval reduce_ifbterm : conv
 topval reduce_if_var_bterm : conv
 topval reduce_dest_bterm : conv
+topval reduce_make_bterm : conv
+topval reduce_if_same_op : conv
+topval reduce_if_simple_bterm : conv
+topval reduce_subst : conv

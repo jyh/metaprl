@@ -286,6 +286,10 @@ rewrite add_Id :
    ('a IN int ) -->
    ('a +@ 0) <--> 'a
 
+rewrite add_Id2 :
+   ('a IN int ) -->
+   (0 +@ 'a) <--> 'a
+
 rewrite uni_add_inverse :
    ('a IN int ) -->
    ( 'a +@ uni_minus{ 'a } ) <--> 0 

@@ -174,7 +174,7 @@ prim_rw mul_Id :
    ('a IN int ) -->
    (1 *@ 'a) <--> 'a
 
-prim_rw mul_Id2 :
+interactive_rw mul_Id2 :
    ('a IN int ) -->
    ('a *@ 1) <--> 'a
 
@@ -182,7 +182,7 @@ prim_rw mul_Zero :
    ('a IN int ) -->
    (0 *@ 'a) <--> 0
  
-prim_rw mul_Zero2 :
+interactive_rw mul_Zero2 :
    ('a IN int ) -->
    ('a *@ 0) <--> 0
 

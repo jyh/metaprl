@@ -437,6 +437,10 @@ prim_rw add_Id :
    ('a IN int ) -->
    ('a +@ 0) <--> 'a
 
+interactive_rw add_Id2 :
+   ('a IN int ) -->
+   (0 +@ 'a) <--> 'a
+
 (*!
  * @begin[doc]
  *
@@ -474,6 +478,7 @@ let reduce_info =
    [<< beq_int{'a; 'b} >>, beq_int_is_true;
     << band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_Reflex;
     << ('a +@ 0) >>, add_Id;
+    << (0 +@ 'a) >>, add_Id2;
     << ( 'a +@ uni_minus{ 'a } ) >>, uni_add_inverse;
     << uni_minus{ ('a +@ 'b) } >>, uni_add_Distrib;
     << uni_minus{ uni_minus{ 'a } } >>, uni_uni_reduce;

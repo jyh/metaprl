@@ -18,9 +18,8 @@ extends Itt_fun
 extends Itt_tsquash
 extends Itt_list
 
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+open Basic_tactics
+open Itt_rfun
 
 doc <:doc<
    @begin[doc]
@@ -350,7 +349,7 @@ let fold_a_module =
    makeFoldC <<a_module>> unfold_a_module;;
 
 let eval_a_module =
-   unfold_a_module thenC reduceTopC thenC higherC fold_a_module;;
+   unfold_a_module thenC reduce_fix thenC higherC fold_a_module;;
 
 interactive_rw foo_eval {| reduce |} :
    (a_module^foo 'x) <--> ifthenelse{gt_bool{'x;0};.a_module^fee ('x -@ 1);0}

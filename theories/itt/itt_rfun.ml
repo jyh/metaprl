@@ -242,9 +242,9 @@ doc <:doc<
 
 prim_rw reduce_beta {| reduce |} : (lambda{v. 'b['v]} 'a) <--> 'b['a]
 
-interactive_rw reduce_ycomb {| reduce |} : (ycomb 'x) <--> ('x (ycomb 'x))
+interactive_rw reduce_ycomb : (ycomb 'x) <--> ('x (ycomb 'x))
 
-interactive_rw reduce_fix {| reduce |} : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+interactive_rw reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 
 doc docoff
 

@@ -71,6 +71,7 @@ MPFILES :=\
 	itt_sort\
 	itt_grouplikeobj\
 	itt_group\
+	itt_abelian_group\
 	itt_example
 
 ifeq ($(TESTS),YES)

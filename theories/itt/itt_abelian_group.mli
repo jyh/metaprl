@@ -1,5 +1,5 @@
 (*
- * Groups.
+ * Commutative.
  *
  * ----------------------------------------------------------------
  *
@@ -31,6 +31,7 @@
  *)
 
 extends Itt_grouplikeobj
+extends Itt_group
 
 open Mp_debug
 open Refiner.Refiner.TermType
@@ -53,31 +54,27 @@ open Var
 
 open Base_dtactic
 open Base_auto_tactic
-open Itt_fun
 
 (************************************************************************
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare pregroup[i:l]
-declare isGroup{'g}
-declare group[i:l]
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-prec prec_inv
+declare isCommutative{'g}
+declare csemigroup[i:l]
+declare cmonoid[i:l]
+declare abelg[i:l]
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-topval fold_pregroup1 : conv
-topval fold_pregroup : conv
-topval fold_isGroup : conv
-topval fold_group1 : conv
-topval fold_group : conv
+topval fold_isCommutative : conv
+topval fold_csemigroup1 : conv
+topval fold_csemigroup : conv
+topval fold_cmonoid1 : conv
+topval fold_cmonoid : conv
+topval fold_abelg1 : conv
+topval fold_abelg : conv
 
 (*
  * -*-

@@ -193,6 +193,26 @@ declare math_listind{'e; 'base; 'h; 't; 'f; 'step}
 declare math_quot{'T; 'x; 'y; 'E}
 declare math_esquash{'P}
 
+(************************************************************************
+ * GROUP THEORY
+ ************************************************************************)
+
+declare math_groupoid{'i}
+declare math_semigroup{'i}
+declare math_monoid{'i}
+declare math_group{'i}
+declare math_premonoid{'i}
+declare math_pregroup{'i}
+
+declare math_car{'g}
+declare math_mul{'g; 'a; 'b}
+declare math_id{'g}
+declare math_inv{'g; 'a}
+
+declare math_csemigroup{'i}
+declare math_cmonoid{'i}
+declare math_abelg{'i}
+
 (* OTHER *)
 
 declare colons{'a}

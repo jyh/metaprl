@@ -69,6 +69,7 @@ open Itt_struct
 open Itt_record
 open Itt_fun
 open Itt_grouplikeobj
+open Itt_int_ext
 
 let _ =
    show_loading "Loading Itt_group%t"
@@ -91,9 +92,6 @@ define unfold_isGroup : isGroup{'g} <-->
 
 define unfold_group1 : group[i:l] <-->
    {g: pregroup[i:l] | isGroup{'g}}
-
-define unfold_abelg1 : abelg[i:l] <-->
-   {g: pregroup[i:l] | isGroup{'g} & isCommutative{'g}}
 (*! @docoff *)
 
 interactive_rw unfold_pregroup :
@@ -102,45 +100,38 @@ interactive_rw unfold_pregroup :
 interactive_rw unfold_group :
    group[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car; (all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. ^"1" ^* 'x = 'x in ^car) & (all x: ^car. ((^inv) 'x) ^* 'x = ^"1" in ^car)}
 
-interactive_rw unfold_abelg :
-   abelg[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car; ((all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. ^"1" ^* 'x = 'x in ^car) & (all x: ^car. ((^inv) 'x) ^* 'x = ^"1" in ^car)) & (all x: ^car. all y: ^car. 'x ^* 'y = 'y ^* 'x in ^car)}
-
 let fold_pregroup1 = makeFoldC << pregroup[i:l] >> unfold_pregroup1
 let fold_pregroup = makeFoldC << pregroup[i:l] >> unfold_pregroup
 let fold_isGroup = makeFoldC << isGroup{'g} >> unfold_isGroup
 let fold_group1 = makeFoldC << group[i:l] >> unfold_group1
 let fold_group = makeFoldC << group[i:l] >> unfold_group
-let fold_abelg1 = makeFoldC << abelg[i:l] >> unfold_abelg1
-let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
 
 let groupDT n = rw unfold_group n thenT dT n
-let abelgDT n = rw unfold_abelg n thenT dT n
 
 let resource elim +=
-   [<<group[i:l]>>, groupDT;
-    <<abelg[i:l]>>, abelgDT
-   ]
+   [<<group[i:l]>>, groupDT]
 
 let resource intro +=
-   [<<group[i:l]>>, wrap_intro (groupDT 0);
-    <<abelg[i:l]>>, wrap_intro (abelgDT 0)
-   ]
+   [<<group[i:l]>>, wrap_intro (groupDT 0)]
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
+prec prec_inv
+prec prec_mul < prec_inv
+
 dform group_df : except_mode[src] :: group[i:l] =
-   `"Group[" slot[i:l] `"]"
+   math_group{slot[i:l]}
 
 dform pregroup_df : except_mode[src] :: pregroup[i:l] =
-   `"pregroup[" slot[i:l] `"]"
+   math_pregroup{slot[i:l]}
 
 dform isGroup_df : except_mode[src] :: isGroup{'g} =
    `"isGroup(" slot{'g} `")"
 
-dform abelg_df : except_mode[src] :: abelg[i:l] =
-   `"Abelian Group[" slot[i:l] `"]"
+dform inv_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: (('g^inv) 'a) =
+   math_inv{'g; 'a}
 
 (************************************************************************
  * RULES                                                                *

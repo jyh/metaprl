@@ -1197,6 +1197,150 @@ dform quot_df1 : except_mode[tex] :: parens :: "prec"[prec_quot] :: math_quot{'A
 dform math_esquash_df2 : except_mode[tex] :: math_esquash{'P} =
    `"[[" slot{'P} `"]]"
 
+(************************************************************************
+ * GROUP THEORY
+ ************************************************************************)
+
+declare math_groupoid{'i}
+declare math_semigroup{'i}
+declare math_monoid{'i}
+declare math_group{'i}
+declare math_premonoid{'i}
+declare math_pregroup{'i}
+
+declare math_car{'g}
+declare math_mul{'g; 'a; 'b}
+declare math_id{'g}
+declare math_inv{'g; 'a}
+
+declare math_csemigroup{'i}
+declare math_cmonoid{'i}
+declare math_abelg{'i}
+
+(************************************************
+ * TeX mode
+ *)
+
+dform math_groupoid_df : mode[tex] :: math_groupoid{'i} =
+   izone `"{{\\mathbb G} {roupoid}}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_semigroup_df : mode[tex] :: math_semigroup{'i} =
+   izone `"{{\\mathbb S} {emigroup}}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_monoid_df : mode[tex] :: math_monoid{'i} =
+   izone `"{{\\mathbb M} {onoid}}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_group_df : mode[tex] :: math_group{'i} =
+   izone `"{{\\mathbb G} {roup}}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_premonoid_df : mode[tex] :: math_premonoid{'i} =
+   izone `"{premonoid}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_pregroup_df : mode[tex] :: math_pregroup{'i} =
+   izone `"{pregroup}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_car_df1 : mode[tex] :: math_car{'g} =
+   izone `"car_{" ezone
+   slot{'g}
+   izone `"}" ezone
+
+dform math_mul_df2 : mode[tex] :: math_mul{'g; 'i; 'j} =
+   izone `"{" ezone
+   slot{'i}
+   izone `"*_{" ezone
+   slot{'g}
+   izone `"}" ezone
+   slot{'j}
+   izone `"}" ezone
+
+dform math_id_df1 : mode[tex] :: math_id{'g} =
+   izone `"1_{" ezone
+   slot{'g}
+   izone `"}" ezone
+
+dform math_inv_df1 : mode[tex] :: math_inv{'g; 'i} =
+   izone `"{" ezone
+   slot{'i}
+   izone `"}^{-1}_{" ezone
+   slot{'g}
+   izone `"}" ezone
+
+dform math_csemigroup_df : mode[tex] :: math_csemigroup{'i} =
+   izone `"{Commutative\\_semigroup}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_cmonoid_df : mode[tex] :: math_cmonoid{'i} =
+   izone `"{Commutative\\_monoid}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+dform math_abelg_df : mode[tex] :: math_abelg{'i} =
+   izone `"{Abelian\\_group}_{" ezone
+   slot{'i}
+   izone `"}" ezone
+
+(************************************************
+ * Normal mode
+ *)
+
+prec prec_inv
+prec prec_mul < prec_inv
+
+dform groupoid_df1 : except_mode[tex] :: math_groupoid{'i} =
+   `"Groupoid[" slot{'i} `"]"
+
+dform semigroup_df1 : except_mode[tex] :: math_semigroup{'i} =
+   `"Semiroup[" slot{'i} `"]"
+
+dform monoid_df1 : except_mode[tex] :: math_monoid{'i} =
+   `"Monoid[" slot{'i} `"]"
+
+dform group_df1 : except_mode[tex] :: math_group{'i} =
+   `"Group[" slot{'i} `"]"
+
+dform premonoid_df1 : except_mode[tex] :: math_premonoid{'i} =
+   `"premonoid[" slot{'i} `"]"
+
+dform pregroup_df1 : except_mode[tex] :: math_pregroup{'i} =
+   `"pregroup[" slot{'i} `"]"
+
+dform car_df1 : except_mode[tex] :: math_car{'g} =
+   slot{'g} `".car"
+(*   `"car_" slot{'g}*)
+
+dform mul_df2 : except_mode[tex] :: parens :: "prec"[prec_mul] :: math_mul{'g; 'a; 'b} =
+   slot["lt"]{'a} `" *_" slot{'g} `" " slot["le"]{'b}
+
+dform id_df1 : except_mode[tex] :: math_id{'g} =
+   slot{'g} `".1"
+(*   `"1_" slot{'g}*)
+
+dform inv_df1 : except_mode[tex] :: parens :: "prec"[prec_inv] :: math_inv{'g; 'a} =
+   slot{'g} `".inv " slot{'a}
+(*   `"inv_" slot{'g} `" " slot{'a}*)
+
+dform csemigroup_df1 : except_mode[tex] :: math_csemigroup{'i} =
+   `"Commutative_semiroup[" slot{'i} `"]"
+
+dform cmonoid_df1 : except_mode[tex] :: math_cmonoid{'i} =
+   `"Commutative_monoid[" slot{'i} `"]"
+
+dform abelg_df1 : except_mode[tex] :: math_abelg{'i} =
+   `"Abelian_group[" slot{'i} `"]"
+
 (*
  * -*-
  * Local Variables:

@@ -783,7 +783,12 @@ let findContradRelT = funT ( fun p ->
 	sumListT l''
 )
 
-let reduceIneqT i = rw (allSubC normalizeC) i
+let reduceIneqT = argfunT ( fun i p ->
+	if good_term' (Sequent.nth_hyp p i) then
+		rw (allSubC normalizeC) i
+	else
+		failT
+)
 
 doc <:doc<
 	@begin[doc]

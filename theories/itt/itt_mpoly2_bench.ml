@@ -33,6 +33,7 @@ let stdT i = funT (fun p ->
 	standardizeT <<unitringCE[i:l]>> <<Z>> <<Z^car>> vars varlist a thenMT
 	standardizeT <<unitringCE[i:l]>> <<Z>> <<Z^car>> vars varlist b thenMT
 	dualSubst i thenMT
+	(thinT (-1) thenT thinT (-1)) thenMT
 	rw reduceC i
 )
 
@@ -42,12 +43,14 @@ interactive_rw fold_add :
 interactive_rw fold_mul :
 	('a *@ 'b) <--> ('a *[Z] 'b)
 
+let prepareT i = rw ((addrC [0] reduceC) thenC (addrC [1] reduceC)) i thenMT rw (sweepDnC fold_add) i thenMT rw (sweepDnC fold_mul) i
+
 (*
 let arithT = preArithT thenMT reduceContradRelT (-1)
 let arithAT = arithT ttca
 *)
 
-let arithT = preArithT thenMT rw ((addrC [0] reduceC) thenC (addrC [1] reduceC)) (-1) thenMT rw (sweepDnC fold_add) (-1) thenMT rw (sweepDnC fold_mul) (-1) thenMT stdT (-1)
+let arithT = preArithT thenMT prepareT (-1) thenMT stdT (-1)
 let arithAT = arithT thenT autoT thenT repeatT (rw reduceC 0) ttca
 
 

@@ -70,8 +70,12 @@ let mpoly_evalTopC_env e =
 
 let mpoly_evalTopC = funC mpoly_evalTopC_env
 
-(*let mpoly_evalC = repeatC (higherC mpoly_evalTopC)*)
-let mpoly_evalC = reduceC
+let mpoly_evalC = repeatC (higherC mpoly_evalTopC)
+(*let mpoly_evalC = repeatC (lowerC mpoly_evalTopC)*)
+(*slow:
+let mpoly_evalC = repeatC (lowerC reduceTopC)
+*)
+(*let mpoly_evalC = reduceC*)
 (*******************************************************************)
 
 define unfold_monom : monom{'R; 'n} <--> 'R^car * (nat{'n} -> nat)
@@ -90,13 +94,9 @@ prim_rw reduce_add_mpolyCons : add_mpoly{cons{'m; 'p}; 'q}<--> add_mpoly{'p; con
 
 let reduce_add_mpolyC = sweepDnC reduce_add_mpolyCons thenC higherC reduce_add_mpolyNil
 
-define unfold_fun_sum : fun_sum{'f1;'f2} <--> lambda{i_sum.(('f1 'i_sum) +@ ('f2 'i_sum))}
-
-interactive_rw reduce_fun_sum : (fun_sum{'f1;'f2} 'n) <--> (('f1 'n) +@ ('f2 'n))
-
 declare mul_monom{'m1; 'm2; 'R}
 
-prim_rw reduce_mul_monom : mul_monom{('k1, 'f1); ('k2, 'f2); 'R} <--> ('k1 *['R] 'k2, fun_sum{'f1;'f2})
+prim_rw reduce_mul_monom : mul_monom{('k1, 'f1); ('k2, 'f2); 'R} <--> ('k1 *['R] 'k2, lambda{i_mm.(('f1 'i_mm) +@ ('f2 'i_mm))})
 
 define unfold_const_mpoly : const_mpoly{'c} <--> cons{('c, lambda{i_zero.0}); nil}
 define unfold_zero_mpoly : zero_mpoly <--> nil
@@ -132,10 +132,9 @@ declare cmp_lexi{'m1; 'm2; 'n; 'cmp; 'eq}
 prim_rw reduce_cmp_lexi : cmp_lexi{('k1,'f1); ('k2,'f2); 'n; 'cmp; 'eq} <-->
 	ind{'n -@ 1;
 		'cmp ('f1 ('n -@ 1)) ('f2 ('n -@ 1));
-		i_cmp,f.(if 'eq ('f1 ('n -@ 'i_cmp -@ 1)) ('f2 ('n -@ 'i_cmp -@ 1))
+		i_cmp,f.(if 'eq ('f1 'i_cmp) ('f2 'i_cmp)
 				then 'f
-				else 'cmp ('f1 ('n -@ 'i_cmp -@ 1)) ('f2 ('n -@ 'i_cmp -@ 1)))}
-
+				else 'cmp ('f1 'i_cmp) ('f2 'i_cmp))}
 declare eq_monom{'m1; 'm2; 'n}
 
 prim_rw reduce_eq_monom : eq_monom{('k1, 'f1); ('k2, 'f2); 'n} <-->
@@ -182,11 +181,6 @@ interactive add_mpoly_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
 	sequent { <H> >- 'R in unitringCE[i:l] } -->
 	sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- add_mpoly{'p; 'q} in mpoly{'R; 'n} }
-
-interactive fun_sum_wf {| intro [] |} :
-	sequent { <H> >- 'f1 in nat -> nat } -->
-	sequent { <H> >- 'f2 in nat -> nat } -->
-	sequent { <H> >- fun_sum{'f1; 'f2} in nat -> nat }
 
 interactive mul_monom_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
 	sequent { <H> >- 'm1 in monom{'R; 'n} } -->
@@ -395,16 +389,16 @@ interactive mpoly_of_Term_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] 
 	sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mpoly_ofTerm{'pt;'R} in mpoly{'R; 'n} }
 
-let tailC = (*mpoly_evalC thenC*) reduceC
+let tailC = mpoly_evalC (*thenC reduceC*)
 
-let resource reduce += [
+let resource mpoly_eval (*reduce*) += [
+(**)
 	<<mpoly{'R; number[i:n]}>>, (unfold_mpoly thenC (addrC [0] unfold_monom));
 	<<const_mpoly{'c}>>, (unfold_const_mpoly thenC tailC);
 	<<eval_monom{('k,'f); 'vals; 'R}>>, (reduce_eval_monomC thenC tailC);
 	<<eval_mpoly{'p; 'vals; 'R}>>, (unfold_eval_mpoly thenC tailC);
 	<<add_mpoly{nil; 'q}>>, (reduce_add_mpolyNil thenC tailC);
 	<<add_mpoly{cons{'m; 'p}; 'q}>>, (reduce_add_mpolyCons thenC tailC);
-	<<fun_sum{'f1;'f2} 'n>>, (reduce_fun_sum thenC tailC);
 	<<mul_monom{('k1,'f1); ('k2,'f2); 'R}>>, (reduce_mul_monom thenC tailC);
 	<<mul_monom_mpoly{'m; 'p; 'R}>>, (unfold_mul_monom_mpoly thenC tailC);
 	<<mul_mpoly{'p; 'q; 'R}>>, (unfold_mul_mpoly thenC tailC);
@@ -428,9 +422,26 @@ let resource reduce += [
 	<<mpoly_ofTerm{constTerm{'c}; 'R}>>, (reduce_mpoly_ofTermConst thenC tailC);
 	<<mpoly_ofTerm{varTerm{number[i:n]}; 'R}>>, (reduce_mpoly_ofTermVar thenC tailC);
 (**)
-	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC tailC);
+	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC reduceC);
 	<<'a +[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC tailC);
 	<<'a *[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC tailC);
+]
+
+let resource mpoly_eval += [
+	<<'f 'arg>>, (reduceTopC thenC tailC);
+	<<length{cons{'h;'t}}>>, (reduceTopC thenC tailC);
+	<<length{nil}>>, (reduceTopC thenC tailC);
+	<<if 'c then 'o1 else 'o2>>, (reduceTopC thenC tailC);
+	<<list_ind{'l;'b;h,t,f.'step['h;'t;'f]}>>, (reduceTopC thenC tailC);
+	<<ind{'n;'b;i,f.'step['i;'f]}>>, (reduceTopC thenC tailC);
+	<<ind{'n;i,f.'down['i;'f];'b;i,f.'step['i;'f]}>>, (reduceTopC thenC tailC);
+	<<field[t:t]{'F}>>, (reduceTopC thenC tailC);
+	<<number[i:n] +@ number[j:n]>>, reduceC;
+	<<number[i:n] -@ number[j:n]>>, reduceC;
+	<<number[i:n] *@ number[j:n]>>, reduceC;
+	<<number[i:n] =@ number[j:n]>>, reduceC;
+	<<number[i:n] <@ number[j:n]>>, reduceC;
+	<<natpower{'g; 'a; 'n}>>, (reduceTopC thenC tailC);
 ]
 
 type var_set = term list

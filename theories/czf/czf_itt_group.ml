@@ -31,16 +31,10 @@ open Base_auto_tactic
 declare group{'g}
 declare car{'g}         (* The "carrier" set for the group *)
 declare eqG{'g}         (* The equivalence relation for the group *)
-(* declare eqG{'g; 'a; 'b} (* a and b are equivalent in the group *) *)
 declare op{'g; 'a; 'b}
 declare id{'g}
 declare inv{'g; 'a}
-(*
-prim_rw unfold_eqG : eqG{'g; 'a; 'b} <-->
-   equiv{car{'g}; eqG{'g}; 'a; 'b}
 
-let fold_eqG = makeFoldC << eqG{'g; 'a; 'b} >> unfold_eqG
-*)
 dform group_df : except_mode[src] :: group{'g} =
    slot{'g} `" group"
 
@@ -50,9 +44,6 @@ dform car_df : except_mode[src] :: car{'g} =
 dform eqG_df1 : except_mode[src] :: eqG{'g} =
    `"eqG(" slot{'g} `")"
 
-(*dform eqG_df2 : except_mode[src] :: eqG{'g; 'a; 'b} =
-   `"eqG(" slot{'g} `"; " slot{'a}  `"; " slot{'b} `")"
-*)
 dform id_df : except_mode[src] :: id{'g} =
    `"id(" slot{'g} `")"
 
@@ -82,22 +73,6 @@ interactive eqG_wf2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}} }
 
-(*interactive eqG_elem_wf1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- "type"{equiv{car{'g}; eqG{'g}; 'a; 'b}} }
-*)
-(*interactive eqG_elem_wf2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'b; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{pair{'a; 'b}; eqG{'g}} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; 'a; 'b} }
-*)
 interactive op_wf {| intro[] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'s1} } -->

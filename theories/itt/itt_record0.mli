@@ -5,6 +5,7 @@ extends Itt_inv_typing
 open Tactic_type.Conversionals
 
 declare record{}
+declare recordTop{}
 declare record{'n;'A}
 declare rcrd{'n;'a;'r}
 declare rcrd{}

@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_record]
-  
+
    This is a theory of record type.
    Record type is defined as dependent intersection.
    @end[doc]
@@ -62,7 +62,7 @@ define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 
 define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Records are defined as intersections. Dependent records are defined as dependent intersections:
    @end[doc]
@@ -100,14 +100,14 @@ let mk_field_term t f =
 (*   Rules        *)
 (******************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
    @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The following rule are derivable using the above definitions.
    @end[doc]
@@ -169,7 +169,7 @@ interactive record_eta {| intro [] |} 'A:
    sequent{ <H> >- rcrd[n:t]{field[n:t]{'r}; 'r} ~ 'r }
 
 interactive_rw record_eta_rw  :
-   ('r in record[n:t]{top} ) -->
+   ('r in recordTop ) -->
    rcrd[n:t]{field[n:t]{'r}; 'r} <--> 'r
 
 interactive_rw record_exchange :
@@ -178,6 +178,13 @@ interactive_rw record_exchange :
 
 (*** Introductions ***)
 doc <:doc< @doc{@modsubsection{Introduction}} >>
+
+interactive recordIntroE1 {| intro[] |} :
+   sequent{ <H> >- 'r in recordTop } -->
+   sequent{ <H> >- rcrd[n:t]{'a;'r} in recordTop }
+
+interactive recordIntroE2 {| intro[] |} :
+   sequent{ <H> >- rcrd[n:t]{'a} in recordTop }
 
 interactive recordEqualS1 :
    [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
@@ -673,7 +680,7 @@ dform recordOrt_df : except_mode [src] :: record_ort[n:t]{'a;'R}
       There are should be an easier way!
  *  - After that associative rule should be proved very easy.
     - Sets and records.
-    - Elimination (and into) tactics:
+    - Elimination (and inrto) tactics:
         : there should be an easy way to make only one elimination (intro)
         : dT (-n) does not work ( next(-n) = -n , and next(-n) = -(n+1) )
     - Renaming labels

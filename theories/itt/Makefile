@@ -68,6 +68,7 @@ MPFILES :=\
 	itt_record_label\
 	itt_record0\
 	itt_record\
+	itt_record_renaming\
 	itt_record_exm\
 	itt_algebra_df\
         itt_relation_str\

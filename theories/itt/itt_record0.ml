@@ -1,4 +1,5 @@
 extends Itt_record_label0
+extends Itt_isect
 extends Itt_struct3
 extends Itt_inv_typing
 
@@ -22,15 +23,12 @@ let _ =
 
 doc <:doc< >>
 
-(*** Empty Record Type ***)
-
-define unfoldEmptyRecord : record <--> top
 
 (*** Single Record Type ***)
 
-define unfoldRecordS : record{'n;'A} <--> ind_lab{'n; ('A * record); l . top * 'l}
+define unfoldRecordS : record{'n;'A} <--> ind_lab{'n; ('A * top); l . top * 'l}
 
-interactive_rw baseRecord {| reduce |} : record{zero;'A} <--> ('A * record)
+interactive_rw baseRecord {| reduce |} : record{zero;'A} <--> ('A * top)
 
 interactive stepRecord {| intro[] |} :
    sequent{ <H> >- 'n in label} -->
@@ -40,9 +38,15 @@ interactive_rw stepRecord_rw {| reduce |} :
    ('n in label) -->
    record{.next{'n};'A} <--> (top * record{'n;'A})
 
+(*** Empty Record Type ***)
+
+define unfoldEmptyRecord : record <--> top
+
+define unfoldRecordTop : recordTop <--> Isect n:label. record{'n;top}
+
 (*** records ***)
 
-declare rcrd
+define unfoldRcrdE : rcrd <--> fix{x.('x,'x)}
 
 define unfoldRcrd : rcrd{'n;'a; 'r} <-->
    ind_lab{'n; lambda{r.('a, snd{'r})}; l.lambda{r.(fst{'r},'l snd{'r})}} 'r
@@ -77,13 +81,16 @@ interactive_rw stepField_rw {| reduce |} :
 
 (*** Typing ***)
 
-interactive emptyRecordType {| intro [] |} :
-   sequent{ <H> >- "type"{record} }
-
 interactive recordType {| intro [] |} :
    sequent{ <H> >- "type"{'A} } -->
    sequent{ <H> >- 'n in label} -->
    sequent{ <H> >- "type"{record{'n;'A}} }
+
+interactive emptyRecordType {| intro [] |} :
+   sequent{ <H> >- "type"{record} }
+
+interactive recordTopType {| intro [] |} :
+   sequent{ <H> >- "type"{recordTop} }
 
 interactive record_elim1 'n :
    [wf] sequent{ <H> >- 'n in label } -->
@@ -95,10 +102,44 @@ interactive recordTypeElimination{| elim [ThinOption thinT]  |} 'H :
    sequent{ <H>; u:"type"{record{'n;'A}}; v:"type"{'A}; <J['u]> >- 'C['u] } -->
    sequent{ <H>; u:"type"{record{'n;'A}}; <J['u]> >- 'C['u] }
 
-(*** Introductions ***)
 
 interactive emptyRecordIntro {| intro[] |} :
    sequent{ <H> >-'r_1 = 'r_2 in record }
+
+
+(*** Reductions ***)
+
+interactive record_beta1 {| intro[] |} :
+   [wf] sequent{ <H> >- 'n in label } -->
+   sequent{ <H> >- field{rcrd{'n; 'a; 'r};'n} ~ 'a }
+
+interactive record_beta2 {| intro[] |} :
+   [wf] sequent{ <H> >- 'n in label } -->
+   [wf] sequent{ <H> >- 'm in label } -->
+   [equality] sequent{ <H> >- not{.'n ='m in label} } -->
+   sequent{ <H> >- field{rcrd{'n; 'a; 'r};'m} ~ field{'r;'m} }
+
+interactive record_eta  {| intro[] |} 'A:
+   [wf] sequent{ <H> >- 'n in label } -->
+   [wf] sequent{ <H> >- 'r in record{'n;'A} } -->
+   sequent{ <H> >- rcrd{'n; field{'r;'n}; 'r} ~ 'r }
+
+interactive_rw record_eta_rw  :
+   ('n in label ) -->
+   ('r in recordTop ) -->
+   rcrd{'n; field{'r;'n}; 'r} <--> 'r
+
+interactive record_cover  {| intro[] |} :
+   [wf] sequent{ <H> >- 'n in label } -->
+   sequent{ <H> >- rcrd{'n; 'a; rcrd{'n; 'b; 'r}} ~  rcrd{'n; 'a; 'r} }
+
+interactive record_exchange {| intro[] |} :
+   [wf] sequent{ <H> >- 'n in label } -->
+   [wf] sequent{ <H> >- 'm in label } -->
+   [equality] sequent{ <H> >- not{.'n='m in label} } -->
+   sequent{ <H> >- rcrd{'n; 'a; rcrd{'m; 'b; 'r}} ~  rcrd{'m; 'b; rcrd{'n; 'a; 'r}} }
+
+(*** Introductions ***)
 
 interactive recordEqualS5 :
    [wf] sequent{ <H> >- 'm in label } -->
@@ -131,37 +172,18 @@ let record_eqcdST =
 
 let resource intro += (<<'r1 = 'r2 in record{'m;'A} >>, wrap_intro record_eqcdST)
 
-(*** Reductions ***)
+interactive recordTEqualIntro :
+   sequent{ <H> >- 'r1 in recordTop } -->
+   sequent{ <H> >- 'r2 in recordTop } -->
+   sequent{ <H> >- 'r1='r2 in recordTop }
 
-interactive record_beta1 {| intro[] |} :
-   [wf] sequent{ <H> >- 'n in label } -->
-   sequent{ <H> >- field{rcrd{'n; 'a; 'r};'n} ~ 'a }
+interactive recordTIntro1 {| intro[] |} :
+   sequent{ <H> >- rcrd in recordTop }
 
-interactive record_beta2 {| intro[] |} :
-   [wf] sequent{ <H> >- 'n in label } -->
+interactive recordTIntro2 {| intro[] |} :
    [wf] sequent{ <H> >- 'm in label } -->
-   [equality] sequent{ <H> >- not{.'n ='m in label} } -->
-   sequent{ <H> >- field{rcrd{'n; 'a; 'r};'m} ~ field{'r;'m} }
-
-interactive record_eta  {| intro[] |}'A:
-   [wf] sequent{ <H> >- 'n in label } -->
-   [wf] sequent{ <H> >- 'r in record{'n;'A} } -->
-   sequent{ <H> >- rcrd{'n; field{'r;'n}; 'r} ~ 'r }
-
-interactive_rw record_eta_rw  :
-   ('n in label ) -->
-   ('r in record{'n;top} ) -->
-   rcrd{'n; field{'r;'n}; 'r} <--> 'r
-
-interactive record_cover  {| intro[] |} :
-   [wf] sequent{ <H> >- 'n in label } -->
-   sequent{ <H> >- rcrd{'n; 'a; rcrd{'n; 'b; 'r}} ~  rcrd{'n; 'a; 'r} }
-
-interactive record_exchange {| intro[] |} :
-   [wf] sequent{ <H> >- 'n in label } -->
-   [wf] sequent{ <H> >- 'm in label } -->
-   [equality] sequent{ <H> >- not{.'n='m in label} } -->
-   sequent{ <H> >- rcrd{'n; 'a; rcrd{'m; 'b; 'r}} ~  rcrd{'m; 'b; rcrd{'n; 'a; 'r}} }
+   sequent{ <H> >- 'r in recordTop } -->
+   sequent{ <H> >- rcrd{'m;'a;'r} in recordTop }
 
 (*** Eliminations ***)
 

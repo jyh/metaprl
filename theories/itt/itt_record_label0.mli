@@ -1,14 +1,9 @@
 (* Labels as natural numberas *)
 
 extends Itt_nat
+open Refiner.Refiner.Term
+open Tactic_type.Conversionals
 
-(*
-topval rwaAll  :  conv list -> tactic
-
-topval rwAll  :  conv -> tactic
-
-topval rwhAll  :  conv -> tactic
-*)
 
 define unfold_label : label <--> nat
 
@@ -25,3 +20,5 @@ rule decide_eq_label 'x 'y :
    sequent{ <H>; u:'x='y in label >- 'C} -->
    sequent{ <H>; u:not{.'x='y in label} >- 'C} -->
    sequent{ <H> >- 'C}
+
+topval decideEqLabel0T : term -> term -> tactic

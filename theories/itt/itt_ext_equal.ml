@@ -57,19 +57,19 @@ prim_rw type_def : "type"{'T} <--> ('T subtype 'T)
 
 define unfoldExtEqual : ext_equal{'A; 'B} <--> 'A subtype 'B & 'B subtype 'A
 
-dform extEqual_df : ext_equal{'A; 'B} =  'A `" =" sube `" " 'B 
+dform extEqual_df : ext_equal{'A; 'B} =  'A `" =" sube `" " 'B
 
-interactive extEqualMember {|squash; intro[] |}: 
+interactive extEqualMember {|squash; intro[] |}:
    sequent{ <H> >- ext_equal{'A;'B}} -->
    sequent{ <H> >- (it,it) in ext_equal{'A;'B} }
 
 let resource intro +=
    [<<ext_equal{'A; 'B}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0);
-    <<"type"{ext_equal{'A; 'B}}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0 thenT dT 0)
+    <<"type"{ext_equal{'A; 'B}}>>, wrap_intro (rw (addrC [0] unfoldExtEqual) 0 thenT dT 0 thenT dT 0)
    ]
 
 let resource elim += (<<ext_equal{'A; 'B}>>, (fun n -> rw unfoldExtEqual n thenT dT n))
-                        
+
 (*
  * -*-
  * Local Variables:

@@ -1,78 +1,96 @@
-doc <:doc<
-   @begin[doc]
-   @module[Itt_rat]
+(*
+ * Rational numbers axiomatization.
+ *
+ * ----------------------------------------------------------------
+ *
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 1998 Jason Hickey, Cornell University
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Yegor Bryukhov
+ * @email{ybryukhov@gc.cuny.edu}
+ *)
 
-   Rational numbers axiomatization.
-
-   @end[doc]
-
-   ----------------------------------------------------------------
-
-   @begin[license]
-   This file is part of MetaPRL, a modular, higher order
-   logical framework that provides a logical programming
-   environment for OCaml and other languages.
-
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
-
-   Copyright (C) 1998 Jason Hickey, Cornell University
-
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Author: Yegor Bryukhov
-   @email{ybryukhov@gc.cuny.edu}
-   @end[license]
->>
-
-doc <:doc<
-   @begin[doc]
-   @parents
-   @end[doc]
->>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_bool
 extends Itt_logic
 extends Itt_struct
 extends Itt_decidable
-extends Itt_quotient
 extends Itt_nequal
 extends Itt_order
 extends Itt_int_arith
-doc <:doc< @docoff >>
 
 open Basic_tactics
 
-declare add_rat{'a;'b}
-declare mul_rat{'a;'b}
-declare neg_rat{'a}
-declare inv_rat{'a}
+define unfold_posnat :
+   posnat <--> ({x:int | 'x>0})
+
+define unfold_int0 :
+   int0 <--> ({x:int | 'x<>0})
+
+declare gcd{'a; 'b}
+
+rewrite unfold_gcd : gcd{'a; 'b} <-->
+	(if 'a =@ 1 then 1 else
+	if 'b =@ 1 then 1 else
+	if 'a =@ 0 then 'b else
+	if 'b =@ 0 then 'a else
+	if 'a <@ 'b then gcd{'a; ('b %@ 'a)} else gcd{('a %@ 'b); 'b})
+
+define unfold_let_in : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
+
+declare rat{'a; 'b}
+topval unfold_rat : conv
+
+define unfold_rat_of_int : rat_of_int{'a} <--> rat{'a; 1}
+
+declare rationals
+topval unfold_rationals : conv
+topval fold_rationals : conv
+
+define unfold_mul_rat : mul_rat{'x; 'y} <-->
+	spread{'x; x1,x2.spread{'y; y1,y2.rat{'x1 *@ 'y1; 'x2 *@ 'y2}}}
+
+define unfold_add_rat : add_rat{'x; 'y} <-->
+	spread{'x; x1,x2.spread{'y; y1,y2.rat{('x1 *@ 'y2) +@ ('x2 *@ 'y1); 'x2 *@ 'y2}}}
+
+define unfold_neg_rat : neg_rat{'x} <-->
+	spread{'x; x1,x2.rat{- 'x1; 'x2}}
+
+define unfold_inv_rat : inv_rat{'x} <-->
+	spread{'x; x1,x2.rat{'x2; 'x1}}
+
 declare lt_bool_rat{'a;'b}
 declare le_bool_rat{'a;'b}
 declare beq_rat{'a;'b}
-
-define unfold_posnat : posnat <--> ({x:int | 'x>0})
-define unfold_int0 : int0 <--> ({x:int | 'x<>0})
-define unfold_rat : rat{'a;'b} <--> ('a,'b)
-define unfold_rat_of_int : rat_of_int{'a} <--> rat{'a; 1}
 define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
 define unfold_ge_rat : ge_rat{'a;'b} <--> "assert"{ge_bool_rat{'a;'b}}
 
-define unfold_rationals : rationals <-->
-	quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}
+topval reduce_add_rat : conv
+topval reduce_mul_rat : conv
+topval reduce_neg_rat : conv
+topval reduce_inv_rat : conv
+topval reduce_beq_rat2 : conv
 
 define unfold_fieldQ : fieldQ <-->
 	{car=rationals; "*"=lambda{x.lambda{y.mul_rat{'x;'y}}}; "1"=rat{1;1};
@@ -86,14 +104,6 @@ define unfold_max_rat : max_rat{'a;'b} <-->
 
 define unfold_min_rat : min_rat{'a;'b} <-->
 	(min{lambda{x.lambda{y.le_bool_rat{'x;'y}}}} 'a 'b)
-
-topval fold_rat : conv
-topval reduce_add_rat : conv
-topval reduce_mul_rat : conv
-topval reduce_neg_rat : conv
-topval reduce_inv_rat : conv
-topval reduce_beq_rat2 : conv
-topval fold_rationals : conv
 
 val is_rationals_term : term -> bool
 val rationals_term : term
@@ -137,6 +147,17 @@ val dest_max_rat : term -> (term * term)
 val is_min_rat_term : term -> bool
 val mk_min_rat_term : term -> term -> term
 val dest_min_rat : term -> (term * term)
+
+rule rat_wf :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int0 } -->
+	sequent { <H> >- rat{'a; 'b} in rationals }
+
+rule ratEquality :
+	sequent { <H> >- 'a *@ 'd = 'b *@ 'c in int } -->
+	[wf] sequent { <H> >- rat{'a; 'b} in rationals } -->
+	[wf] sequent { <H> >- rat{'c; 'd} in rationals } -->
+	sequent { <H> >- rat{'a; 'b} ~ rat{'c; 'd} }
 
 rule geReflexive :
 	[wf] sequent { <H> >- 'a in rationals } -->
@@ -224,5 +245,3 @@ topval mul_rat_AssocC : conv
 topval mul_rat_Assoc2C : conv
 topval mul_rat_add_DistribC : conv
 topval mul_rat_add_Distrib3C : conv
-
-doc <:doc< @docoff >>

@@ -192,17 +192,6 @@ interactive op_assoc1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s3; car{'g}} } -->
    sequent ['ext] { 'H >- eq{op{'g; op{'g; 's1; 's2}; 's3}; op{'g; 's1; op{'g; 's2; 's3}}} }
 
-interactive op_assoc2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent [squash] { 'H >- isset{'s3} } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'s2; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'s3; car{'g}} } -->
-   sequent ['ext] { 'H >- eq{op{'g; 's1; op{'g; 's2; 's3}}; op{'g; op{'g; 's1; 's2}; 's3}} }
-
 (*!
  * @begin[doc]
  * @thysubsection{Identity}
@@ -251,6 +240,17 @@ interactive inv_id1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- eq{op{'g; inv{'g; 's}; 's}; id{'g}} }
 
 (*! @docoff *)
+interactive op_assoc2 {| intro[] |} 'H :
+   sequent [squash] { 'H >- isset{'s1} } -->
+   sequent [squash] { 'H >- isset{'s2} } -->
+   sequent [squash] { 'H >- isset{'s3} } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
+   sequent ['ext] { 'H >- mem{'s2; car{'g}} } -->
+   sequent ['ext] { 'H >- mem{'s3; car{'g}} } -->
+   sequent ['ext] { 'H >- eq{op{'g; 's1; op{'g; 's2; 's3}}; op{'g; op{'g; 's1; 's2}; 's3}} }
+
 interactive op_eq1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->

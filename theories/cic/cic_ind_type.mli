@@ -42,28 +42,28 @@ rewrite prodH_step :
 
 (* base axioms about Ind and IndTypes *)
 (* for new types *)
-rewrite indSubstDef 'Hi1 :
+rewrite indSubstDef 'Hi :
    sequent [IndParams] { <Hp> >-
-	   (sequent [IndTypes] { <Hi1>; x:'T<|Hp|>; <Hi2<|Hp|> > >-
+	   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
 		   (sequent [IndConstrs] { <Hc['x]> >- 't['x]})})} <-->
    sequent [IndParams] { <Hp> >-
-	   (sequent [IndTypes] { <Hi1>; x1:'T<|Hp|>; <Hi2<|Hp|> > >-
+	   (sequent [IndTypes] { <Hi>; x1:'T<|Hp|>; <Ji<|Hp|> > >-
 		   (sequent [IndConstrs] { <Hc['x1]> >-
 			   't[sequent [IndParams] { <Hp> >-
-				   (sequent [IndTypes] { <Hi1>; x:'T<|Hp|>; <Hi2<|Hp|> > >-
+				   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
 				      sequent [IndConstrs] { <Hc['x]> >- 'x}})}] })})}
 
 (* for constructors (names, types) *)
-rewrite indSubstConstr 'Hc1 :
+rewrite indSubstConstr 'Hc :
    sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
-		   sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp|>; < Hc2<|Hi;Hp|> > >- 't['c]}}} <-->
+		   sequent [IndConstrs] { <Hc>; c:'C<|Hi;Hp|>; < Jc<|Hi;Hp|> > >- 't['c]}}} <-->
    sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
-		   sequent { <Hc1>; c1:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >-
+		   sequent [IndConstrs] { <Hc>; c1:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >-
 				't[ sequent [IndParams] { <Hp> >-
 				   sequent [IndTypes] { <Hi> >-
-				      sequent [IndConstrs] { <Hc1>; c:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >- 'c}}}]}}}
+				      sequent [IndConstrs] { <Hc>; c:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >- 'c}}}]}}}
 
 (* carry out ground terms from the Ind *)
 rewrite indCarryOut :
@@ -74,28 +74,19 @@ rewrite indCarryOut :
 
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
-rule ind_ConstDef 'Hi1 :
+rule ind_ConstDef 'Hi :
    sequent { <H> >-
 	   sequent [IndParamsWF] { <Hp> >-
-		   sequent [IndTypesWF] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
+		   sequent [IndTypesWF] { <Hi>; I:'A<|Hp;H|>; <Ji<|Hp;H|> > >-
 		      sequent [IndConstrsWF] { <Hc['I]> >- it }}} } -->
 	sequent { <H> >-
 		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
+			sequent [IndTypes] { <Hi>; I:'A<|Hp;H|>; <Ji<|Hp;H|> > >-
 				sequent { <Hc['I]> >- 'I } } }
 		in	sequent [prodH] { <Hp> >- 'A} }
 
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)
 declare applH (* { <H> >- 'T } *)
-
-(*inductive definition of multiple application *)
-rewrite applH_base :
-   sequent [applH] { >- sequent { <H> >- 'S} } <-->
-	sequent { <H> >- 'S }
-
-rewrite applH_step :
-   sequent [applH] { x:'T; <H> >- sequent { <J> >- 'S} } <-->
-	sequent [applH] { <H> >- sequent { <J>; x:'T >- apply{'S;'x} } }
 
 declare IndParamsSubst
 declare IndTypesSubst
@@ -105,15 +96,15 @@ declare IndTypesSubstApp
 declare IndConstrsSubstApp
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
-rule ind_ConstConstrs 'Hc1 :
+rule ind_ConstConstrs 'Hc :
    sequent { <H> >-
 	   sequent [IndParamsWF] { <Hp> >-
 		   sequent [IndTypesWF] { <Hi> >-
-	         sequent [IndConstrsWF] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >- it } }}}   -->
+	         sequent [IndConstrsWF] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >- it } }}}   -->
 	sequent { <H> >-
 	   sequent [IndParamsSubst] { <Hp> >-
 		   sequent [IndTypesSubst] { <Hi> >-
-	         sequent [IndConstrsSubst] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >-
+	         sequent [IndConstrsSubst] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >-
 				   'c in 'C } } } }
 
 (*******************************************************************************************

@@ -65,6 +65,11 @@ dform math_fun_df1 : mode[tex] :: math_fun{'A; 'B} =
    izone `"\\rightarrow " ezone
    'B
 
+dform fun_df1 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'A; 'B} =
+   slot["le"]{'A} " " rightarrow " " slot["lt"]{'B}
+
+dform fun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'x; 'A; 'B} =
+   slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}
 
 dform it_df1 : except_mode[src] :: it = cdot
 dform it_df2 : mode[src] :: it = `"it"

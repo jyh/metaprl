@@ -1,4 +1,5 @@
 extends Cic_lambda
+open Top_conversionals
 
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
@@ -96,8 +97,25 @@ dform context_hyp_df : display_hyp{x. display_context{'c}} =
 dform display_hyp_df : display_hyp{x. 't[]} =
 	slot{'x} `": " slot{'t}
 
-dform prodH_df : except_mode["src"] :: sequent [prodH] { <H> >- 'e } =
-	math_fun{ display_hyps{sequent [prodH] { <H> >- 'e }} ; display_concl{sequent [prodH] { <H> >- 'e }} }
+dform prodH_df : except_mode[src] :: sequent [prodH] { <H> >- 'e } =
+	math_fun{ display_hyps{sequent [prodH] { <H> >- 'e }} ;
+		display_concl{sequent [prodH] { <H> >- 'e }} }
+
+dform ind_df : except_mode[src] ::
+	sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi<| |> > >-
+		   sequent [IndConstrs] { <Hc<| |> > >- 't<||> }}} =
+	`"Ind[" display_hyps{sequent [IndParams]{ <Hp> >- 't<||> }} `"]("
+		display_hyps{ sequent [IndTypes]{ <Hi> >- 't<||> }} `" := "
+			display_hyps{ sequent [IndConstrs]{ <Hc> >- 't<||> }} `")" slot{'t}
+
+dform indWF_df : except_mode[src] ::
+	sequent [IndParamsWF] { <Hp> >-
+	   sequent [IndTypesWF] { <Hi<| |> > >-
+		   sequent [IndConstrsWF] { <Hc<| |> > >- it }}} =
+	`"WF{ Ind[" display_hyps{sequent [IndParamsWF]{ <Hp> >- it }} `"]("
+		display_hyps{ sequent [IndTypesWF]{ <Hi> >- it }} `" := "
+			display_hyps{ sequent [IndConstrsWF]{ <Hc> >- it }} `") }"
 
 (****************************************************************************
 *                END OF DISPLAY FORMS DEFINITION                            *
@@ -114,28 +132,28 @@ prim_rw prodH_step :
 
 (* base axioms about Ind and IndTypes *)
 (* for new types *)
-prim_rw indSubstDef 'Hi1 :
+prim_rw indSubstDef 'Hi :
    sequent [IndParams] { <Hp> >-
-	   (sequent [IndTypes] { <Hi1>; x:'T<|Hp|>; <Hi2<|Hp|> > >-
+	   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
 		   (sequent [IndConstrs] { <Hc['x]> >- 't['x]})})} <-->
    sequent [IndParams] { <Hp> >-
-	   (sequent [IndTypes] { <Hi1>; x1:'T<|Hp|>; <Hi2<|Hp|> > >-
+	   (sequent [IndTypes] { <Hi>; x1:'T<|Hp|>; <Ji<|Hp|> > >-
 		   (sequent [IndConstrs] { <Hc['x1]> >-
 			   't[sequent [IndParams] { <Hp> >-
-				   (sequent [IndTypes] { <Hi1>; x:'T<|Hp|>; <Hi2<|Hp|> > >-
+				   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
 				      sequent [IndConstrs] { <Hc['x]> >- 'x}})}] })})}
 
 (* for constructors (names, types) *)
-prim_rw indSubstConstr 'Hc1 :
+prim_rw indSubstConstr 'Hc :
    sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
-		   sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp|>; < Hc2<|Hi;Hp|> > >- 't['c]}}} <-->
+		   sequent [IndConstrs] { <Hc>; c:'C<|Hi;Hp|>; < Jc<|Hi;Hp|> > >- 't['c]}}} <-->
    sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
-		   sequent { <Hc1>; c1:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >-
+		   sequent [IndConstrs] { <Hc>; c1:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >-
 				't[ sequent [IndParams] { <Hp> >-
 				   sequent [IndTypes] { <Hi> >-
-				      sequent [IndConstrs] { <Hc1>; c:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >- 'c}}}]}}}
+				      sequent [IndConstrs] { <Hc>; c:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >- 'c}}}]}}}
 
 (* carry out ground terms from the Ind *)
 prim_rw indCarryOut :
@@ -146,32 +164,32 @@ prim_rw indCarryOut :
 
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
-prim ind_ConstDef 'Hi1 :
+prim ind_ConstDef 'Hi :
    sequent { <H> >-
 	   sequent [IndParamsWF] { <Hp> >-
-			sequent [IndTypesWF] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
+			sequent [IndTypesWF] { <Hi>; I:'A<|Hp;H|>; <Ji<|Hp;H|> > >-
 				sequent [IndConstrsWF] { <Hc['I]> >- it }}} }  -->
 	sequent { <H> >-
 		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
+			sequent [IndTypes] { <Hi>; I:'A<|Hp;H|>; <Ji<|Hp;H|> > >-
 				sequent { <Hc['I]> >- 'I } } }
 		in	sequent [prodH] { <Hp> >- 'A} } = it
 
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)
 declare applH (* { <H> >- 'T } *)
-(*
-dform applH_df : except_mode["src"] :: sequent [applH] { <H> >- sequent { <J> >- 'e } } =
-	display_concl{sequent [applH] { <H> >- 'e }} display_hyps{sequent [applH] { <H> >- 'e }} }
-*)
+
+dform applH_df : except_mode[src] :: sequent [applH] { <H> >- 'e } =
+	display_concl{sequent [applH] { <H> >- 'e }} display_hyps{sequent [applH] { <H> >- 'e }}
+
 
 (*inductive definition of multiple application *)
-prim_rw applH_base :
-   sequent [applH] { >- sequent { <H> >- 'S } } <-->
-	sequent { <H> >- 'S }
+prim_rw applHBase {| reduce |} :
+   sequent [applH] { >- 'S } <-->
+	'S
 
-prim_rw applH_step :
-   sequent [applH] { x:'T; <H> >- sequent { <J> >- 'S} } <-->
-	sequent [applH] { <H> >- sequent { <J>; x:'T >- apply{'S;'x} } }
+prim_rw applHStep {| reduce |} :
+   sequent { x:'T; <H> >- 'S } <-->
+	sequent { <H> >- apply{'S;'T}}
 
 (* declaration of multiple substitution C[I/(I p1)...pn] *)
 declare IndParamsSubst
@@ -244,15 +262,15 @@ prim_rw appFinal :
 				sequent [IndConstrsSubst] { <Hc> >- 'C } } } }
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
-prim ind_ConstConstrs 'Hc1 :
+prim ind_ConstConstrs 'Hc :
    sequent { <H> >-
 	   sequent [IndParamsWF] { <Hp> >-
 		   sequent [IndTypesWF] { <Hi> >-
-	         sequent [IndConstrsWF] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >- it } }}}   -->
+	         sequent [IndConstrsWF] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >- it } }}}   -->
 	sequent { <H> >-
 	   sequent [IndParamsSubst] { <Hp> >-
 		   sequent [IndTypesSubst] { <Hi> >-
-	         sequent [IndConstrsSubst] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >-
+	         sequent [IndConstrsSubst] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >-
 				   'c in 'C } } } } = it
 
 

@@ -126,6 +126,12 @@ define unfold_unstrict2eq : unstrict2eq{'rel} <-->
 define unfold_inverse_order : inverse_order{'rel} <-->
 	lambda{a. lambda{b. 'rel 'b 'a}}
 
+define unfold_max : max{'rel} <-->
+	lambda{a.lambda{b.ifthenelse{'rel 'a 'b; 'b; 'a}}}
+
+define unfold_min : min{'rel} <-->
+	lambda{a.lambda{b.ifthenelse{'rel 'a 'b; 'a; 'b}}}
+
 doc docoff
 
 let unfold_isPreorder = unfold_isPreorder1 thenC addrC [0] unfold_isReflexive thenC addrC [1] unfold_isTransitive
@@ -241,27 +247,35 @@ interactive isStrictTotalOrder_wf {| intro [] |} :
    sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
 	sequent { <H> >- isStrictTotalOrder{'car; 'rel} Type }
 
-interactive strict2unstrict_wf {| intro [intro_typeinf <<'rel>>] |} 'car :
+interactive strict2unstrict_wf {| intro [] |} :
 	sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
 	sequent { <H> >- strict2unstrict{'rel} in 'car -> 'car -> bool }
 
-interactive unstrict2strict_wf {| intro [intro_typeinf <<'rel>>] |} 'car :
+interactive unstrict2strict_wf {| intro [] |} :
 	sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
 	sequent { <H> >- unstrict2strict{'rel} in 'car -> 'car -> bool }
 
-interactive unstrict2eq_wf {| intro [intro_typeinf <<'rel>>] |} 'car :
+interactive unstrict2eq_wf {| intro [] |} :
 	sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
 	sequent { <H> >- unstrict2eq{'rel} in 'car -> 'car -> bool }
 
-interactive unstrict2eq_wf2 {| intro [intro_typeinf <<'rel>>] |} 'car :
+interactive unstrict2eq_wf2 {| intro [] |} 'car :
 	sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
 	sequent { <H> >- 'a in 'car } -->
 	sequent { <H> >- 'b in 'car } -->
 	sequent { <H> >- (unstrict2eq{'rel} 'a 'b) in bool }
 
-interactive inverse_order_wf {| intro [intro_typeinf <<'rel>>] |} 'car :
+interactive inverse_order_wf {| intro [] |} :
 	sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
 	sequent { <H> >- inverse_order{'rel} in 'car -> 'car -> bool }
+
+interactive max_wf {| intro [] |} :
+	sequent { <H> >- isRelation{'car;'rel} } -->
+	sequent { <H> >- max{'rel} in 'car -> 'car -> 'car }
+
+interactive min_wf {| intro [] |} :
+	sequent { <H> >- isRelation{'car;'rel} } -->
+	sequent { <H> >- max{'rel} in 'car -> 'car -> 'car }
 
 interactive isTransitive_intro :
    [wf] sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
@@ -437,6 +451,24 @@ interactive inverse_of_le_bool :
 
 interactive int_ge_boolIsUnstrictTotalOrder :
 	sequent { <H> >- isUnstrictTotalOrder{int; lambda{a.lambda{b. ge_bool{'a;'b}}}} }
+
+interactive maxIntro {| intro [intro_typeinf <<'a>>] |} 'car :
+	[wf] sequent { <H> >- 'a in 'car } -->
+	[wf] sequent { <H> >- 'b in 'car } -->
+	[wf] sequent { <H> >- 'x in 'car } -->
+	[wf] sequent { <H> >- isRelation{'car;'rel} } -->
+	sequent { <H> >- "assert"{'rel 'a 'x} } -->
+	sequent { <H> >- "assert"{'rel 'b 'x} } -->
+	sequent { <H> >- "assert"{'rel (max{'rel} 'a 'b) 'x} }
+
+interactive minIntro {| intro [intro_typeinf <<'a>>] |} 'car :
+	[wf] sequent { <H> >- 'a in 'car } -->
+	[wf] sequent { <H> >- 'b in 'car } -->
+	[wf] sequent { <H> >- 'x in 'car } -->
+	[wf] sequent { <H> >- isRelation{'car;'rel} } -->
+	sequent { <H> >- "assert"{'rel 'x 'a} } -->
+	sequent { <H> >- "assert"{'rel 'x 'b} } -->
+	sequent { <H> >- "assert"{'rel 'x (min{'rel} 'a 'b)} }
 
 doc <:doc<
    @begin[doc]

@@ -95,6 +95,7 @@ declare add_rat{'a;'b}
 declare mul_rat{'a;'b}
 declare neg_rat{'a}
 declare lt_bool_rat{'a;'b}
+declare le_bool_rat{'a;'b}
 declare beq_rat{'a;'b}
 
 define unfold_rat_of_int :
@@ -111,6 +112,7 @@ prim_rw reduce_add_rat : add_rat{('a,'b); ('c,'d)} <--> ((('a *@ 'd) +@ ('c *@ '
 prim_rw reduce_mul_rat : mul_rat{('a,'b); ('c,'d)} <--> (('a *@ 'c), ('b *@ 'd))
 prim_rw reduce_neg_rat : neg_rat{('a,'b)} <--> (minus{'a},'b)
 prim_rw reduce_lt_bool_rat : lt_bool_rat{('a,'b);('c,'d)} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
+prim_rw reduce_le_bool_rat : le_bool_rat{('a,'b);('c,'d)} <--> le_bool{('a *@ 'd);('c *@ 'b)}
 
 prim_rw reduce_beq_rat :
    beq_rat{ ('a,'b) ; ('c,'d) } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
@@ -189,6 +191,11 @@ dform q_prl_df : except_mode [src] :: Q = mathbbQ
 dform q_src_df : mode[src] :: Q = `"Q"
 *)
 
+interactive posnatEquality {| intro [] |} :
+	sequent { <H> >- 'a = 'b in int } -->
+	sequent { <H> >- 'a > 0 } -->
+	sequent { <H> >- 'a = 'b in posnat }
+
 interactive rationals_wf {| intro [] |} :
 	sequent { <H> >- rationals Type }
 
@@ -215,6 +222,30 @@ interactive lt_bool_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- lt_bool_rat{'a; 'b} in bool }
+
+interactive le_bool_rat_wf1 {| intro [] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in int } -->
+	sequent { <H> >- 'd in int } -->
+	sequent { <H> >- le_bool_rat{('a,'b); ('c,'d)} in bool }
+
+interactive le_bool_rat_wf2 {| intro [AutoMustComplete] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in int } -->
+	sequent { <H> >- le_bool_rat{'a; ('b,'c)} in bool }
+
+interactive le_bool_rat_wf3 {| intro [AutoMustComplete] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- le_bool_rat{('a,'b); 'c} in bool }
+
+interactive le_bool_rat_wf {| intro [AutoMustComplete] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- le_bool_rat{'a; 'b} in bool }
 
 interactive beq_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'a in int } -->
@@ -245,6 +276,50 @@ interactive ratEquality {| intro [AutoMustComplete] |} :
 	[wf] sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- "assert"{beq_rat{'a;'b}} } -->
 	sequent { <H> >- 'a = 'b in rationals }
+
+interactive ratMembership {| intro [] |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in posnat } -->
+	sequent { <H> >- ('a,'b) in rationals }
+
+interactive rat_of_intEquality {| intro [] |} :
+	sequent { <H> >- 'a = 'b in int } -->
+	sequent { <H> >- rat_of_int{'a}=rat_of_int{'b} in rationals }
+
+interactive rat_of_intEquality2 :
+	sequent { <H> >- rat_of_int{'a}=rat_of_int{'b} in rationals } -->
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'a = 'b in int }
+
+interactive rat_of_intLess {| intro [] |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'a < 'b } -->
+	sequent { <H> >- "assert"{lt_bool_rat{rat_of_int{'a}; rat_of_int{'b}}} }
+
+interactive rat_of_intLess2 :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H> >- "assert"{lt_bool_rat{rat_of_int{'a}; rat_of_int{'b}}} } -->
+	sequent { <H> >- 'a < 'b }
+
+interactive rat_of_intLE {| intro [] |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'a <= 'b } -->
+	sequent { <H> >- "assert"{le_bool_rat{rat_of_int{'a}; rat_of_int{'b}}} }
+
+interactive rat_of_intLE2 :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H> >- "assert"{le_bool_rat{rat_of_int{'a}; rat_of_int{'b}}} } -->
+	sequent { <H> >- 'a <= 'b }
+
+interactive lt_le_rat :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- strict2unstrict{lt_bool_rat{'a;'b}} = le_bool_rat{'a;'b} in bool }
 
 interactive q_is_field {| intro [] |} :
 	sequent { <H> >- fieldQ in field[i:l] }

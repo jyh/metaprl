@@ -89,26 +89,23 @@ declare tyDefPoly{ t. 'ty['t] }
 (*!
  * @begin[doc]
  *
- * Frames are defined as records, where each field is a list of
- * @tt[frameSubField] terms.  Each subfield has subterms for its
- * name, type, and size
+ * Frames are defined as records, where each field is a record of
+ * @tt[frameSubField] terms.
  * @end[doc]
  *)
 
-declare frameSubField{ 'var; 'ty; 'num }
+declare frameSubField{ 'ty; 'num }
 
 (*!
  * @begin[doc]
  *
- * The term @tt[tyDefUnion] is used to define a disjoint union.
- * The subterm @tt[cases] should be a list of @tt[unionCase] terms,
- * and each @tt[unionCase] term should have a list of @tt[mutable_ty] terms.
- * A union case can be viewed as a tuple space in which each field is tagged
- * with a flag indicating its mutability.
+ * The term @tt[tyDefUnion] is used to define a disjoint union.  The subterm
+ * @tt[cases] is the list of cases in the union, and it should be a list of
+ * lists of mutable_ty terms.  A union case can be viewed as a tuple space in
+ * which each field is tagged with a flag indicating its mutability.
  * @end[doc]
  *)
 
-declare unionCase{ 'elts }
 declare tyDefUnion{ 'cases }
 
 (*!
@@ -309,12 +306,8 @@ dform tyDefPoly_df : mode[tex] ::
    izone `"\\Lambda " ezone slot{'t} `". " slot{'ty}
 
 dform frameSubField_df : except_mode[src] ::
-   frameSubField{ 'var; 'ty; 'num } =
-   `"(" slot{'var} `"," slot{'ty} `"," slot{'num} `")"
-
-dform unionCase_df : except_mode[src] ::
-   unionCase{ 'elts } =
-   slot{'elts}
+   frameSubField{ 'ty; 'num } =
+   `"(" slot{'ty} `"," slot{'num} `")"
 
 dform tyDefUnion_df : except_mode[src] ::
    tyDefUnion{ 'cases } =

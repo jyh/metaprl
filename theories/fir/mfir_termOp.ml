@@ -286,17 +286,11 @@ let is_tyDefPoly_term = is_0_dep0_1_dep1_term tyDefPoly_opname
 let mk_tyDefPoly_term = mk_0_dep0_1_dep1_term tyDefPoly_opname
 let dest_tyDefPoly_term = dest_0_dep0_1_dep1_term tyDefPoly_opname
 
-let frameSubField_term = << frameSubField{ 'var; 'ty; 'num } >>
+let frameSubField_term = << frameSubField{ 'ty; 'num } >>
 let frameSubField_opname = opname_of_term frameSubField_term
-let is_frameSubField_term = is_3_dep0_term frameSubField_opname
-let mk_frameSubField_term = mk_3_dep0_term frameSubField_opname
-let dest_frameSubField_term = dest_3_dep0_term frameSubField_opname
-
-let unionCase_term = << unionCase{ 'elts } >>
-let unionCase_opname = opname_of_term unionCase_term
-let is_unionCase_term = is_1_dep0_term unionCase_opname
-let mk_unionCase_term = mk_1_dep0_term unionCase_opname
-let dest_unionCase_term = dest_1_dep0_term unionCase_opname
+let is_frameSubField_term = is_2_dep0_term frameSubField_opname
+let mk_frameSubField_term = mk_2_dep0_term frameSubField_opname
+let dest_frameSubField_term = dest_2_dep0_term frameSubField_opname
 
 let tyDefUnion_term = << tyDefUnion{ 'cases } >>
 let tyDefUnion_opname = opname_of_term tyDefUnion_term

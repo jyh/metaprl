@@ -45,6 +45,7 @@ open Refiner.Refiner.Term
  *)
 
 val term_of_ty : ty -> term
+val ty_of_term : term -> ty
 
 
 (*
@@ -52,5 +53,23 @@ val term_of_ty : ty -> term
  *)
 
 val term_of_mutable_flag : mutable_flag -> term
+val mutable_flag_of_term : term -> mutable_flag
 
 val term_of_mutable_ty : mutable_ty -> term
+val mutable_ty_of_term : term -> mutable_ty
+
+
+(*
+ * Convert to and from tydef.
+ *)
+
+val term_of_tydef : tydef -> term
+val tydef_of_term : term -> tydef
+
+
+(*
+ * Convert to and from frame.
+ *)
+
+val term_of_frame : frame -> term
+val frame_of_term : term -> frame

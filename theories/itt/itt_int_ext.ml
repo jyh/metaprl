@@ -506,11 +506,11 @@ interactive_rw mul_Zero3C 'a :
    ('a in int) -->
    0 <--> (0 *@ 'a)
 
-interactive_rw uni2negative1C :
+interactive_rw negative1_2uniC :
 	('a in int) -->
 	((-1) *@ 'a) <--> (- 'a)
 
-interactive_rw negative1_2uniC :
+interactive_rw uni2negative1C :
 	('a in int) -->
 	(- 'a) <--> ((-1) *@ 'a)
 
@@ -558,6 +558,11 @@ interactive_rw mul_uni_Assoc_rw :
    ('a *@ (- 'b)) <--> ((- 'a) *@ 'b)
 
 let mul_uni_AssocC = mul_uni_Assoc_rw
+
+interactive_rw lt_reverse_rw :
+	('a in int) -->
+	('b in int) -->
+	lt_bool{'a ; 'b} <--> lt_bool{(-'b) ; (- 'a)}
 
 interactive lt_mulNegMono 'c :
    sequent { <H> >- 'c < 0 } -->

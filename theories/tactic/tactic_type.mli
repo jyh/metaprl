@@ -84,6 +84,7 @@ val make_cache : (unit -> cache) -> raw_cache
 (*
  * Start the main loop.
  *)
+val args : unit -> (string * Arg.spec * string) list
 val main_loop : unit -> unit
 
 (*

@@ -9,7 +9,7 @@ open Nl_debug
 
 open Refiner.Refiner.Refine
 
-open Resource
+open Nl_resource
 
 open Tacticals
 open Conversionals

@@ -12,7 +12,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 open Term_dtable
 
 open Var

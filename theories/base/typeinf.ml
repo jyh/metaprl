@@ -15,7 +15,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Term_table
-open Resource
+open Nl_resource
 
 open Tacticals
 open Sequent

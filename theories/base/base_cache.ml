@@ -6,7 +6,7 @@ include Tactic_cache
 include Tacticals
 
 open Refiner.Refiner
-open Resource
+open Nl_resource
 
 open Tactic_cache
 open Tacticals

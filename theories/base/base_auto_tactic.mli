@@ -12,7 +12,7 @@
 
 include Nltop
 
-open Resource
+open Nl_resource
 
 open Tacticals
 open Sequent

@@ -261,8 +261,8 @@ val dest_rem : term -> term * term
 
 val natural_number_term : term
 val is_natural_number_term : term -> bool
-val dest_natural_number : term -> Num.num
-val mk_natural_number_term : Num.num -> term
+val dest_natural_number : term -> Nl_num.num
+val mk_natural_number_term : Nl_num.num -> term
 
 val ind_term : term
 val is_ind_term : term -> bool

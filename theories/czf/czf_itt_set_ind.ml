@@ -10,7 +10,7 @@ open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Sequent
 open Var

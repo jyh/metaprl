@@ -6,7 +6,7 @@ include Czf_itt_eq
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Tacticals
 open Conversionals

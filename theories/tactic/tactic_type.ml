@@ -180,6 +180,8 @@ let print_tactic_arg out { ref_goal = goal } =
    let goal = TermMan.nth_concl goal 0 in
       debug_print out goal
 
+let args = ThreadRefiner.args
+
 let remote_server = ThreadRefiner.create print_tactic_arg
 
 (*

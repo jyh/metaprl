@@ -6,7 +6,7 @@ open MLast
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Tactic_type
 open Rewrite_type

@@ -6,7 +6,7 @@ include Czf_itt_dall
 include Czf_itt_dexists
 
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Sequent
 open Var

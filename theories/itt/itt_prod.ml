@@ -15,7 +15,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Var
 open Sequent

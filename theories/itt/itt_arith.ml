@@ -47,12 +47,12 @@ let debug_arith =
  * which is the product of the constant with the atoms
  * in the list.  The atoms are sorted in ascending order.
  *)
-type mono = Num.num * int list
+type mono = Nl_num.num * int list
 
 (*
  * Monomials are eventually converted to linear forms.
  *)
-type linear = Num.num * int
+type linear = Nl_num.num * int
 
 (*
  * A polynomial is always represented in a normal form as
@@ -68,7 +68,7 @@ type 'a poly = 'a list
  * normalized to a polynomial.
  *)
 type expr =
-   Number of Num.num
+   Number of Nl_num.num
  | Atom of int
  | Sum of expr * expr
  | Diff of expr * expr
@@ -152,7 +152,7 @@ let normalize_poly poly =
    let rec collect ((c1, atoms1) as mono1) = function
       ((c2, atoms2) as mono2) :: t ->
          if atoms1 = atoms2 then
-            collect (Num.add_num c1 c2, atoms1) t
+            collect (Nl_num.add_num c1 c2, atoms1) t
          else
             mono1 :: collect mono2 t
     | [] ->
@@ -184,10 +184,10 @@ let rec linear_poly_poly f = function
       poly1
 
 let add_poly_poly poly1 poly2 =
-   linear_poly_poly Num.add_num (poly1, poly2)
+   linear_poly_poly Nl_num.add_num (poly1, poly2)
 
 let sub_poly_poly poly1 poly2 =
-   linear_poly_poly Num.sub_num (poly1, poly2)
+   linear_poly_poly Nl_num.sub_num (poly1, poly2)
 
 (*
  * Multiply polynomials.
@@ -195,7 +195,7 @@ let sub_poly_poly poly1 poly2 =
 let mul_mono_poly mono poly =
    let rec mul i1 atoms1 = function
       (i2, atoms2) :: t ->
-         (Num.mult_num i1 i2, Sort.merge (<) atoms1 atoms2) :: (mul i1 atoms1 t)
+         (Nl_num.mult_num i1 i2, Sort.merge (<) atoms1 atoms2) :: (mul i1 atoms1 t)
     | [] ->
          []
    in
@@ -223,7 +223,7 @@ let rec poly_of_expr = function
  | Prod (expr1, expr2) ->
       mul_poly_poly (poly_of_expr expr1) (poly_of_expr expr2)
  | Atom i ->
-      [Num.Int 1, [i]]
+      [Nl_num.Int 1, [i]]
  | Number i ->
       [i, []]
 
@@ -266,7 +266,7 @@ let rec linear_form_of_expr_form table form =
          (i, []) :: t ->
             i, find_poly table t
        | t ->
-            Num.Int 0, find_poly table t
+            Nl_num.Int 0, find_poly table t
    in
       form_map (linear_of_expr table) form
 

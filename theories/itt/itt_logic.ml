@@ -24,7 +24,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 open Simple_print
 
 open Tacticals

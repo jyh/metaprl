@@ -6,7 +6,7 @@ include Rewrite_type
 include Base_dtactic
 
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Tacticals
 open Rewrite_type

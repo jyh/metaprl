@@ -11,7 +11,7 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Tacticals
 open Sequent

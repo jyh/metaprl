@@ -13,7 +13,7 @@ open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
-open Resource
+open Nl_resource
 
 open Itt_void
 

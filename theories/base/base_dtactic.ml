@@ -11,7 +11,7 @@ open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermAddr
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 open Simple_print
 open Term_table
 

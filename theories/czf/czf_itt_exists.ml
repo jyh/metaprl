@@ -10,7 +10,7 @@ open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Tacticals
 open Conversionals

@@ -28,7 +28,7 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 open Term_stable
 
 open Tacticals

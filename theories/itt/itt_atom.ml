@@ -13,7 +13,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Rformat
 open Sequent
-open Resource
+open Nl_resource
 
 open Itt_equal
 

@@ -19,7 +19,7 @@ open Refiner.Refiner.RefineError
 open Rformat
 open Simple_print
 open Term_stable
-open Resource
+open Nl_resource
 
 open Tacticals
 open Sequent

@@ -9,7 +9,7 @@ open Nl_debug
 open Printf
 
 open Refiner.Refiner.RefineError
-open Resource
+open Nl_resource
 
 open Tacticals
 open Conversionals

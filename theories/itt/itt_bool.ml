@@ -5,7 +5,7 @@
 include Itt_equal
 include Itt_logic
 
-open Resource
+open Nl_resource
 
 open Itt_equal
 open Itt_logic

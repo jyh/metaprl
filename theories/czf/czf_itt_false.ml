@@ -10,7 +10,7 @@ open Nl_debug
 open Refiner.Refiner.RefineError
 
 open Sequent
-open Resource
+open Nl_resource
 open Tacticals
 
 let _ =

@@ -7,6 +7,7 @@ include Tptp
 
 open Printf
 open Nl_debug
+open Nl_pervasives
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

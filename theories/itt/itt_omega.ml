@@ -976,6 +976,8 @@ interactive var_elim 'v :
 	[wf] sequent { <H> >- 'a in int } -->
 	[wf] sequent { <H> >- 'b in int } -->
 	[wf] sequent { <H> >- 'v in int } -->
+	[aux] sequent { <H> >- number[i:n] > 0 } -->
+	[aux] sequent { <H> >- number[j:n] > 0 } -->
 	sequent { <H> >- number[i:n] *@ 'v -@ 'a >= 0 } -->
 	sequent { <H> >- 'b -@ number[j:n] *@ 'v >= 0 } -->
 	sequent { <H> >- number[i:n] *@ 'b >= number[j:n] *@ 'a }
@@ -1000,6 +1002,8 @@ interactive var_elim2 'v number[l:n] 'tleft number[r:n] 'tright :
 	[wf] sequent { <H> >- 'tleft in int } -->
 	[wf] sequent { <H> >- 'tright in int } -->
 	[wf] sequent { <H> >- 'v in int } -->
+	[aux] sequent { <H> >- number[l:n] > 0 } -->
+	[aux] sequent { <H> >- number[r:n] > 0 } -->
 	sequent { <H> >- number[l:n] *@ 'v -@ 'tright >= 0 } -->
 	sequent { <H> >- 'tleft -@ number[r:n] *@ 'v >= 0 } -->
 	[aux] sequent { <H> >- 'left +@ (number[r:n] *@ 'tright) = (number[l:n] *@ 'tleft) in int } -->
@@ -1017,7 +1021,6 @@ let all_pairs l1 l2 =
 
 type omegaTree =
 	Solve of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)
-(* | SolveDark of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)*)
  | Mul of (omegaTree * ring)
  | MulAndWeaken of (omegaTree * ring * ring)
  | Hyp of int
@@ -1261,11 +1264,10 @@ match src with
  | Hyp i ->
 		rw normalize2C i
  | Mul (tree, gcd) ->
-		rw ((scaleC (mk_number_term gcd)) (*thenC ge_normC*)) 0 thenMT
+		rw (scaleC (mk_number_term gcd)) 0 thenMT
 		source2hyp info tree
  | MulAndWeaken (tree, gcd, c) ->
 		scaleAndWeakenT (mk_number_term gcd) (mk_number_term c) thenMT
-		(*rw ge_normC 0 thenMT*)
 		source2hyp info tree
  | Solve (v,c1,t1,l,c2,t2,u) ->
 		let cleft = term_of c1 in

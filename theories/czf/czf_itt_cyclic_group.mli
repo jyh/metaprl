@@ -1,8 +1,5 @@
 include Czf_itt_group
 include Czf_itt_cyclic_subgroup
-include Czf_itt_subgroup
-include Czf_itt_subset
-include Itt_logic
 
 open Printf
 open Mp_debug
@@ -30,7 +27,7 @@ open Base_auto_tactic
 declare cycgroup{'g; 'a}
 
 rewrite unfold_cycgroup : cycgroup{'g; 'a} <-->
-   cyc_subg{'g; 'g; 'a}
+   (group{'g} & mem{'a; car{'g}} & equal{car{'g}; collect{int; x. power{'g; 'a; 'x}}})
 
 topval fold_cycgroup : conv
 topval cycgroupAbelT: term -> tactic

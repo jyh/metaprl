@@ -39,7 +39,10 @@ MPFILES :=\
 	czf_itt_nat\
 	czf_itt_power\
 	czf_itt_axioms\
-	czf_itt_theory
+	czf_itt_theory\
+	czf_itt_setdiff\
+	czf_itt_bool\
+	czf_itt_group
 
 MLZFILES :=\
 	czf_itt_fol\

@@ -209,6 +209,10 @@ doc <:doc<
 
 define unfold_make_depth: make_depth{'s;'n} <--> ind{'n -@ bdepth{'s};'s; k,s.add_var{'s}}
 
+interactive_rw make_own_bdepth {| reduce |} :
+   ('s in BTerm)  -->
+   make_depth{'s; bdepth{'s}} <--> 's
+
 interactive_rw make_depth_bdepth {| reduce |} :
    ('s in BTerm)  -->
    ('n in nat)  -->
@@ -428,9 +432,12 @@ doc docoff
  ************************************************************************)
 
 dform new_var_df: new_var{'bt} = `"new_var(" slot{'bt} `")"
+dform last_var_df: last_var{'bt} = `"last_var(" slot{'bt} `")"
 dform add_var_df : add_var{'bt;'v} =
    `"add_var(" slot{'bt} `"; " slot{'v} `")"
 dform add_var_df1 : add_var{'bt} = `"add_var(" slot{'bt} `")"
+dform make_depth_df : make_depth{'s;'n} =
+   `"make_depth(" slot{'s} `"; " slot{'n} `")"
 dform add_vars_upto_df : add_vars_upto{'s;'t} =
    `"add_vars_upto(" slot{'s} `"; " slot{'t} `")"
 dform subst_df : subst{'t;'v;'s} =

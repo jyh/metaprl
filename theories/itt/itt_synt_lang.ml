@@ -129,6 +129,15 @@ interactive lang_intro  {| intro[] |} :
    sequent { <H> >- compatible_shapes{inject{'op;'depth};'bts}  } -->
    sequent { <H> >- make_bterm{'op; 'depth; 'bts} in Lang{'ops} }
 
+interactive lang_intro1  {| intro[] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- 'bts in list{BTerm isect Lang{'ops}} } -->
+   sequent { <H> >- mem{'op;'ops;Operator}  } -->
+   sequent { <H> >- all_list{'bts;t.'t in Lang{'ops}} } -->
+   sequent { <H> >- compatible_shapes{'op;'bts}  } -->
+   sequent { <H> >- make_bterm{'op; 'bts} in Lang{'ops} }
+
 interactive lang_intro_var  {| intro[AutoMustComplete] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- 'ops in list{Operator} } -->

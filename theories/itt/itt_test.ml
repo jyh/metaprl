@@ -47,7 +47,8 @@ open Itt_bool
 open Itt_int
 open Itt_int_bool
 
-define reduceFact : fact{'i} <--> ifthenelse{eq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
+declare fact{'i}
+prim_rw reduceFact : fact{'i} <--> ifthenelse{eq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
 
 let reduce_info =
    [<< fact{'i} >>, reduceFact]

@@ -194,6 +194,11 @@ interactive cycGroup_commutative {| intro [AutoMustComplete; intro_typeinf <<'g>
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    sequent ['ext] { 'H >- isCommutative{'g} }
 
+interactive cycGroup_abelian {| intro [AutoMustComplete] |} 'H :
+   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
+   sequent ['ext] { 'H >- 'g in abelg[i:l] }
+
 (*!
  * @begin[doc]
  * @modsubsection{Cyclic subgroup}

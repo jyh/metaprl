@@ -82,7 +82,6 @@ topval fold_pregroup : conv
 topval fold_isGroup : conv
 topval fold_group1 : conv
 topval fold_group : conv
-topval fold_abelg1 : conv
 topval fold_abelg : conv
 topval fold_lcoset : conv
 topval fold_rcoset : conv

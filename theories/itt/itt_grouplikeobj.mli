@@ -88,9 +88,7 @@ topval fold_isMonoid : conv
 topval fold_monoid1 : conv
 topval fold_monoid : conv
 topval fold_isCommutative : conv
-topval fold_csemigroup1 : conv
 topval fold_csemigroup : conv
-topval fold_cmonoid1 : conv
 topval fold_cmonoid : conv
 topval fold_subStructure : conv
 

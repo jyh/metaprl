@@ -1,5 +1,5 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 15 December 2001
+Last update to this file: 28 January 2002
 
 I describe the purpose of this theory and its implementation in this file.
 The sections here are:
@@ -19,7 +19,8 @@ General notes:
 These are some points to keep in mind while reading through the code
 and terms provided by this theory:
    -  The majority of my comments will be in *.mli files.  Comments
-      in *.ml files will typically deal with my implementation of something.
+      in *.ml files will typically deal with my implementation of something,
+      or be there just to mark off general sections of the file.
    -  I'm trying my best to keep comments up to date, but occasionally,
       I may forget to update them (that includes this file).  Feel free
       to ask me about anything that seems out of date and/or incorrect.
@@ -180,4 +181,4 @@ in case I ever figure out what I need them for.  I believe at some
 point, these files will contain all the type-semantics/rules for
 the FIR, seeing as how everything else defines various
 transformations and evaluation.  The idea would be to formalize
-the FIR type checker, or something along those lines.
+the FIR type checker, or something along those lines. Maybe?

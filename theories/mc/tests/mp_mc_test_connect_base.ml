@@ -44,6 +44,7 @@ open Fir
 (* Open MetaPRL namespaces. *)
 
 open Mp_mc_connect_base
+open Mp_mc_connect_ty
 open Simple_print.SimplePrint
 
 (* Open ML namespaces. *)
@@ -137,7 +138,7 @@ let test_string () =
    let t = term_of_string "\"Hallo! This is a test!\"" in
    let t' = string_of_term t in
       print_simple_term t;
-      Printf.printf "\nterm -> string conversion gives:\n%s\n\n" t';
+      Printf.printf "\nterm -> string conversion gives:\n%s" t';
       if t' = "\"Hallo! This is a test!\"" then
          print_pass ()
       else
@@ -230,6 +231,19 @@ let test_floatLongDouble () =
          LongDouble  -> print_pass ()
        | _           -> print_fail ()
 
+(*
+ * List tests.
+ *)
+
+let test_list () =
+   print_head "list" "[TyInt;TyInt;TyInt]";
+   let t = term_of_list term_of_ty [TyInt;TyInt;TyInt] in
+   let t' = list_of_term ty_of_term t in
+      print_simple_term t;
+      match t' with
+         [TyInt;TyInt;TyInt]  -> print_pass ()
+       | _                    -> print_fail ()
+
 (*************************************************************************
  * Define a function to run all the above tests.
  *************************************************************************)
@@ -252,4 +266,5 @@ let run_tests () =
    test_floatSingle ();
    test_floatDouble ();
    test_floatLongDouble ();
+   test_list ();
    !fail_count

@@ -1,5 +1,5 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 22 January 2002
+Last update to this file: 28 January 2002
 
 This file lists what I have remaining to do to complete this theory,
 and some other miscellaneous notes to myself.
@@ -25,7 +25,8 @@ Todo list:
 -  Fir_exp: debugging display forms, and term operations.
 -  Consider changing names of files to mp_* to avoid namespace
    collisions with mc.
--  Finish teh README file.
+-  Finish the README file.
+-  The tests: sets and symbols still need work...
 
 
 Notes to myself (things to do, but only if I feel so inclined):

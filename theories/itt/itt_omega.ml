@@ -33,6 +33,13 @@ let debug_omega =
         debug_value = false
       }
 
+let debug_arith_dtactic =
+   create_debug (**)
+      { debug_name = "arith_dtactic";
+        debug_description = "Itt_int_arith.arithT: display operations of conversion to >=";
+        debug_value = false
+      }
+
 let debug_rewrite =
    create_debug (**)
       { debug_name = "rewrite";
@@ -1092,14 +1099,14 @@ let rec get_bounds_aux v key constr (l,u,rest) =
 
 let get_bounds v constrs = C.fold (get_bounds_aux v) constrs ([],[],[])
 
-(*
+
 let print_constrs constrs =
 	C.iter (fun k (tree,f) -> eprintf "%a@." AF.print f) constrs
-*)
 
+(*
 let print_constrs constrs =
 	eprintf "%i constraints@." (C.length constrs)
-
+*)
 
 let var_bounds (old_upper, old_lower) f v =
 	let c = AF.coef f (succ v) in
@@ -1309,7 +1316,157 @@ let omegaCoreT = funT (fun p ->
 	 | Contradiction (i,f) ->
 			if !debug_omega then
 				eprintf "Immediate contradiction found, reconstructing the proof@.";
-	 		omegaAuxT info (Hyp i)
+	 		rw normalizeC i
 )
 
-let omegaT = rwAll normalizeC thenMT preT thenMT omegaCoreT thenT rw normalizeC 0
+let rec all_hyps_aux hyps l i =
+   if i = 0 then l else
+   let j = pred i in
+      match SeqHyp.get hyps j with
+         Hypothesis (_, t) ->
+            all_hyps_aux hyps ((j+1,t)::l) j
+       | Context _ ->
+            all_hyps_aux hyps l j
+
+let all_hyps arg =
+   let hyps = (Sequent.explode_sequent arg).sequent_hyps in
+	let len = Term.SeqHyp.length hyps in
+      all_hyps_aux hyps [] len
+
+let rec append i tac len pos l = function
+	t::tail ->
+		append i tac len (succ pos) ((i,t,pos,len,tac)::l) tail
+ | [] -> l
+
+let rec cons_to_all item acc = function
+	hd::tl -> cons_to_all item ((item::hd)::acc) tl
+ | [] -> acc
+
+let rec rev_append_to_all prefix acc = function
+	hd::tl -> rev_append_to_all prefix ((List.rev_append prefix hd)::acc) tl
+ | [] -> acc
+
+let make_option i tac terms =
+	let len=List.length terms in
+	let pos= -len in
+	append i tac len pos [] terms
+
+let options l i tac t =
+	let terms = List.map dest_xlist t in
+	let new_options = List.rev_map (make_option i tac) terms in
+	let option_bags = List.rev_map (fun opt -> rev_append_to_all opt [] l) new_options in
+	rev_flatten option_bags
+
+let rec hyp2ge p l = function
+	(i,t)::tail ->
+		if !debug_arith_dtactic then
+			eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
+		if is_member_term t then
+			hyp2ge p l tail
+		else if is_ge_term t then
+			let l' = cons_to_all (i,t,i,0,idT) [] l in
+			hyp2ge p l' tail
+		else
+			(try
+				if !debug_arith_dtactic then
+					eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
+				let terms, tac = Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
+				let l' = options l i (tac i) terms in
+				hyp2ge p l' tail
+			with Not_found ->
+				if !debug_arith_dtactic then
+					eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
+				hyp2ge p l tail
+			)
+ | [] -> l
+
+let allhyps2ge p tail =
+	hyp2ge p tail (all_hyps p)
+
+let all2ge p =
+	(*let pos, l = concl2ge p (succ (Sequent.hyp_count p)) in*)
+	let l = allhyps2ge p [[]] in
+	if !debug_arith_dtactic then
+		eprintf "Itt_int_arith.all2ge: %i inequalities collected%t" (List.length l) eflush;
+	l
+
+let rec count_used_hyps used_hyps = function
+	Hyp i ->
+		used_hyps.(i) <- true
+ | Mul (tree, gcd) ->
+		count_used_hyps used_hyps tree
+ | MulAndWeaken (tree, gcd, c) ->
+		count_used_hyps used_hyps tree
+ | Solve (v,c1,t1,l,c2,t2,u) ->
+		count_used_hyps used_hyps t1;
+		count_used_hyps used_hyps t2
+
+let omegaSim dim pool pool2 used_hyps constrs =
+	if List.length constrs = 1 then
+		let i,f = List.hd constrs in
+		used_hyps.(i) <- true
+	else
+		let n = succ dim in
+		let constrs = List.rev_map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
+		let constrs = C.of_list dim constrs in
+		let tree, f = omega pool pool2 constrs in
+		count_used_hyps used_hyps tree
+
+let rec foldi_aux f ar acc current =
+	if current = Array.length ar then
+		acc
+	else
+		foldi_aux f ar (f current ar.(current) acc) (succ current)
+
+let foldi f ar acc = foldi_aux f ar acc 0
+
+let rec sim_make_sacs_aux p var2index l = function
+	[] -> l
+ | (i,t,pos,len,tac)::tl ->
+		(match explode_term t with
+		 | <<ge{'left; 'right}>> when not (alpha_equal left right) ->
+				let t'=apply_rewrite p ge_normC t in
+				sim_make_sacs_aux p var2index ((ge2af var2index (i,t'))::l) tl
+		 | _ ->
+				sim_make_sacs_aux p var2index l tl
+		)
+
+let sim_make_sacs p var2index constrs =
+	let afs = sim_make_sacs_aux p var2index [] constrs in
+	try
+ 		let item = List.find (fun (i,f) -> is_neg_number f) afs in
+ 		[item]
+	with Not_found ->
+		afs
+
+let ge_elimT = argfunT (fun i p ->
+	let _,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
+	tac i
+)
+
+let omegaPrepT = funT (fun p ->
+	let options = all2ge p in
+	if !debug_omega then
+		eprintf "%i options@." (List.length options);
+   let var2index = VI.create 13 in
+   let option_constrs = List.map (sim_make_sacs p var2index) options in
+	let hyp_num = succ (Sequent.hyp_count p) in
+	let used_hyps = Array.make hyp_num false in
+	let n0 = VI.length var2index in
+	let pool = Array.make n0 (false,false) in
+	let pool2 = Array.make n0 ringZero in
+	List.iter (omegaSim n0 pool pool2 used_hyps) option_constrs;
+	let used_hyps = foldi (fun i v acc -> if v then i::acc else acc) used_hyps [] in
+	if !debug_omega then
+		begin
+			eprintf "used hyps ";
+			List.iter (eprintf "%i ") used_hyps;
+			eprintf "@.";
+		end;
+	onMHypsT used_hyps (rw normalizeC) thenMT
+	onMHypsT used_hyps ge_elimT
+)
+
+let omegaT =
+	arithRelInConcl2HypT thenMT
+	omegaPrepT thenMT omegaCoreT thenT rw normalizeC 0

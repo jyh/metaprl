@@ -173,8 +173,14 @@ let process_ge_intro_resource_annotation name context_args term_args statement p
 
 let hyp2geT = argfunT (fun i p ->
 	try
-		let _,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-		tac i
+		let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
+		if List.length terms > 1 then
+			begin
+				eprintf "Itt_int_arith.hyp2geT: hyp %i - branching is not supported yet" i;
+				idT
+			end
+		else
+			tac i
 	with Not_found ->
 		idT
  | RefineError _ ->
@@ -232,7 +238,9 @@ let rec hyp2ge p l = function
 						let pos= -len in
 						let l'=append (tac i) len pos l terms in
 						hyp2ge p l' tail
-				 | _ -> raise (Invalid_argument "Itt_int_arith: branching is not supported yet")
+				 | _ -> (*raise (Invalid_argument "Itt_int_arith: branching is not supported yet")*)
+						eprintf "Itt_int_arith.hyp2ge: hyp %i - branching is not supported yet" i;
+						hyp2ge p l tail
 			with Not_found ->
 				if !debug_arith_dtactic then
 					eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
@@ -383,7 +391,7 @@ interactive notgt2ge_elim {| ge_elim |} 'H :
    sequent { <H>; x: "not"{'a > 'b}; <J['x]>; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: "not"{'a > 'b}; <J['x]> >- 'C['x] }
 
-interactive noteq2ge_elim (*{| ge_elim |}*) 'H :
+interactive noteq2ge_elim {| ge_elim |} 'H :
    [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'b in int } -->
    sequent { <H>; x: "not"{'a = 'b in int}; <J['x]>; 'a >= 'b +@ 1 >- 'C['x] } -->
@@ -402,7 +410,7 @@ interactive nequal_elim {| elim [] |} 'H :
    sequent { <H>; <J[it]>; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
 
-interactive nequal_elim2 (*{| elim []; ge_elim |}*) 'H :
+interactive nequal_elim2 {| ge_elim |} 'H :
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'a in int } -->
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'b in int } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]>; y: ('a >= 'b +@ 1) >- 'C['x] } -->

@@ -519,6 +519,22 @@ dform power_df3 : except_mode[tex] :: math_power{'s1; 's2} =
    mathbbP `"(" pushm[0] szone slot{'s1} `" ->" hspace  slot{'s2} `")" ezone popm
 
 (************************************************************************
+ * ORDERED PAIR
+ ************************************************************************)
+
+declare math_opair{'s1; 's2}
+
+dform opair_df1 : mode[tex] :: math_opair{'s1; 's2} =
+   izone `"{\\left< " ezone
+   slot{'s1}
+   izone `"," ezone
+   slot{'s2}
+   izone `"\\right>}" ezone
+
+dform opair_df : except_mode[tex] :: math_pair{'s1; 's2} =
+   `"<" pushm[0] szone slot{'s1} `"," hspace slot{'s2} `">" ezone popm
+
+(************************************************************************
  * EQUIVALENCE RELATION
  ************************************************************************)
 
@@ -760,6 +776,7 @@ dform cycsubg_df : except_mode[tex] :: math_cycsubg{'s; 'g; 'a} =
  ************************************************************************)
 
 declare math_cycgroup{'g; 'a}
+declare math_cycg{'g}
 
 dform cycgroup_df1 : mode[tex] :: math_cycgroup{'g; 'a} =
    izone `"{{\\it cyclic\\_group}(" ezone
@@ -770,6 +787,14 @@ dform cycgroup_df1 : mode[tex] :: math_cycgroup{'g; 'a} =
 
 dform cycgroup_df : except_mode[tex] :: math_cycgroup{'g; 'a} =
    `"cyclic_group(" slot{'g} `"; " slot{'a} `")"
+
+dform cycg_df1 : mode[tex] :: math_cycg{'g} =
+   izone `"{{\\it cyclic\\_group}(" ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform cycg_df : except_mode[tex] :: math_cycg{'g} =
+   `"cyclic_group(" slot{'g} `")"
 
 (************************************************************************
  * COSET

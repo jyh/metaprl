@@ -1,6 +1,7 @@
 #
 # Don't need any libraries.
 #
+DIR := theories/pcaml_sos
 ROOT := ../..
 INCLUDE := -I .
 

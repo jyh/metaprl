@@ -51,6 +51,7 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
  * Utilities.
  *)
 val typeinf_of_proof : tactic_arg -> typeinf_func
+val infer_type : tactic_arg -> term -> term_subst * term
 
 (*
  * -*-

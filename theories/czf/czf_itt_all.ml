@@ -1,8 +1,11 @@
 (*
- * Primitiva axiomatization of implication.
+ * Primitiva interactiveatization of implication.
  *)
 
-include Czf_itt_set
+include Czf_itt_sep
+
+open Printf
+open Debug
 
 open Refiner.Refiner.RefineError
 open Resource
@@ -17,122 +20,137 @@ open Itt_rfun
 
 let _ =
    if !debug_load then
-      eprintf "Loading Czf_itt_all%t" eflush
-
-(************************************************************************
- * TERMS                                                                *
- ************************************************************************)
-
-declare "all"{x. 'A['x]}
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-primrw unfold_all : "all"{x. 'A['x]} <--> Itt_rfun!"fun"{set; x. 'A['x]}
-
-let fold_all = makeFoldC << "all"{x. 'A['x]} >> unfold_all
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-dform all_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "all"{x. 'A} =
-   pushm[0] forall slot{'x} `"." slot{'A} popm
+      eprintf "Loading Czf_itt_and%t" eflush
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * Intro.
- *
- * H >- all x. A
- * by all_intro
- * H, x: set >- A
+ * Implication is restricted.
  *)
-prim all_intro 'H 'a :
-   sequent ['ext] { 'H; a: set >- 'A['a] } -->
-   sequent ['ext] { 'H >- "all"{x. 'A['x]} } =
-   it
+interactive dfun_fun 'H 'u 'v 'z :
+   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   sequent ['ext] { 'H; u: set; v: set; z: 'A['v] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
+   sequent ['ext] { 'H; u: set; v: 'A['u] >- fun_prop{z. 'B['z; 'v]} } -->
+   sequent ['ext] { 'H; u: set >- fun_prop{z. 'A['z]; w. 'B['u; 'w]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
+
+interactive dfun_res 'H 'u 'v 'z :
+   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   sequent ['ext] { 'H; u: set; v: set; z: 'A['v] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
+   sequent ['ext] { 'H; u: set; v: 'A['u] >- restricted{z. 'B['z; 'v]} } -->
+   sequent ['ext] { 'H; u: set >- restricted{z. 'A['z]; w. 'B['u; 'w]} } -->
+   sequent ['ext] { 'H >- restricted{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
 
 (*
- * Elimination.
- *
- * H, x: all{x. A[x]}, J[x] >- T[x]
- * by all_elim z
- * H, x: all{x. A[x]}, J[x] >- member{z; set}
- * H, x: all{x. A[x]}, J[x], y: A[z] >- T[x]
+(*
+ * Implication is restricted.
  *)
-prim all_elim 'H 'J 'x 'z 'w :
-   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
-   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: "all"{y. 'A['y]}; 'J['x] >- 'T['x] } =
-   it
+interactive prod_fun 'H 'w :
+   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
+   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
+   sequent ['ext] { 'H >- fun_prop{x. "prod"{'A['x]; 'B['x]}} }
 
 (*
- * Well formedness.
+ * Implication is restricted.
  *)
-prim all_wf 'H 'y :
-   sequent ['ext] { 'H; y: set >- wf{'A['y]} } -->
-   sequent ['ext] { 'H >- wf{."all"{x. 'A['x]} } } =
-   it
+interactive prod_res 'H 'w :
+   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   sequent ['ext] { 'H >- restricted{x. 'A['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. 'B['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. "prod"{'A['x]; 'B['x]}} }
 
 (*
- * Simple quantification is restricted.
+ * Implication is restricted.
  *)
-prim all_res 'H 'y :
-   sequent ['ext] { 'H; y: set >- restricted{'A['x]} } -->
-   sequent ['ext] { 'H >- restricted{."all"{x. 'A['x]}} } =
-   it
+interactive and_fun 'H 'w :
+   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
+   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
+   sequent ['ext] { 'H >- fun_prop{x. "and"{'A['x]; 'B['x]}} }
+
+(*
+ * Implication is restricted.
+ *)
+interactive and_res 'H 'w :
+   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   sequent ['ext] { 'H >- restricted{x. 'A['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. 'B['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. "and"{'A['x]; 'B['x]}} }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-let all_term = << "all"{x. 'A['x]} >>
-let wf_all_term = << wf{. "all"{x. 'A['x]}} >>
-let res_all_term = << restricted{. "all"{x. 'A['x]}} >>
-
 (*
- * Propositional reasoning.
+ * Restricted.
  *)
-let d_allT i p =
+let d_prod_funT i p =
    if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         all_intro (hyp_count p) v p
+      let z = maybe_new_vars1 p "z" in
+         prod_fun (hyp_count p) z p
    else
-      let x, _ = nth_hyp p i in
-      let w = Var.maybe_new_vars1 p "u" in
-      let z = get_with_arg p in
-      let i, j = hyp_indices p i in
-          all_elim i j x z w p
+      raise (RefineError ("d_prod_funT", StringError "no elimination fandm"))
 
-let d_resource = d_resource.resource_improve d_resource (all_term, d_allT)
+let prod_fun_term = << fun_prop{z. "prod"{'P1['z]; 'P2['z]}} >>
 
-(*
- * Well-formedness.
- *)
-external id : 'a * 'b -> 'a * 'b = "%identity"
-
-let d_wf_allT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         all_wf (hyp_count p) v p
-   else
-      raise (RefineError (id ("d_wf_allT", (StringTermError ("no elim form", wf_all_term)))))
-
-let d_resource = d_resource.resource_improve d_resource (wf_all_term, d_wf_allT)
+let d_resource = d_resource.resource_improve d_resource (prod_fun_term, d_prod_funT)
 
 (*
  * Restricted.
  *)
-let d_res_allT i p =
+let d_prod_resT i p =
    if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         all_res (hyp_count p) v p
+      let z = maybe_new_vars1 p "z" in
+         prod_res (hyp_count p) z p
    else
-      raise (RefineError (id ("d_res_allT", (StringTermError ("no elim form", res_all_term)))))
+      raise (RefineError ("d_prod_resT", StringError "no elimination fandm"))
 
-let d_resource = d_resource.resource_improve d_resource (res_all_term, d_res_allT)
+let prod_res_term = << restricted{z. "prod"{'P1['z]; 'P2['z]}} >>
 
+let d_resource = d_resource.resource_improve d_resource (prod_res_term, d_prod_resT)
+
+(*
+ * Restricted.
+ *)
+let d_and_funT i p =
+   if i = 0 then
+      let z = maybe_new_vars1 p "z" in
+         and_fun (hyp_count p) z p
+   else
+      raise (RefineError ("d_and_funT", StringError "no elimination fandm"))
+
+let and_fun_term = << fun_prop{z. "and"{'P1['z]; 'P2['z]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (and_fun_term, d_and_funT)
+
+(*
+ * Restricted.
+ *)
+let d_and_resT i p =
+   if i = 0 then
+      let z = maybe_new_vars1 p "z" in
+         and_res (hyp_count p) z p
+   else
+      raise (RefineError ("d_and_resT", StringError "no elimination fandm"))
+
+let and_res_term = << restricted{z. "and"{'P1['z]; 'P2['z]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (and_res_term, d_and_resT)
+*)
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

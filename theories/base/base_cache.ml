@@ -50,7 +50,8 @@ let rec join_resource base1 base2 =
       { resource_data = data;
         resource_join = join_resource;
         resource_extract = extract_resource;
-        resource_improve = improve_resource
+        resource_improve = improve_resource;
+        resource_close = close_resource
       }
 
 and extract_resource { resource_data = data } =
@@ -60,8 +61,12 @@ and improve_resource { resource_data = data } x =
    { resource_data = improve_data x data;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
+
+and close_resource rsrc =
+   rsrc
 
 (*
  * Resource.
@@ -70,7 +75,8 @@ let cache_resource =
    { resource_data = new_cache ();
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 let cache = cache_resource.resource_extract cache_resource

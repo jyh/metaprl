@@ -2,6 +2,8 @@
  * The D tactic performs a case selection on the conclusion opname.
  *)
 
+include Base_auto_tactic
+
 open Printf
 open Debug
 
@@ -15,6 +17,8 @@ open Term_table
 
 open Tacticals
 open Sequent
+
+open Base_auto_tactic
 
 (*
  * Show that the file is loading.
@@ -89,7 +93,8 @@ let rec join_resource base1 base2 =
       { resource_data = data;
         resource_join = join_resource;
         resource_extract = extract_resource;
-        resource_improve = improve_resource
+        resource_improve = improve_resource;
+        resource_close = close_resource
       }
 
 and extract_resource { resource_data = data } =
@@ -105,8 +110,12 @@ and improve_resource { resource_data = data } x =
    { resource_data = improve_data x data;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
+
+and close_resource rsrc =
+   rsrc
 
 (*
  * Resource.
@@ -115,11 +124,30 @@ let d_resource =
    { resource_data = new_table ();
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 let dT i p =
    Sequent.get_int_tactic_arg p "d" i p
+
+let rec dForT i =
+   if i <= 0 then
+      idT
+   else
+      dT 0 thenMT dForT (i - 1)
+
+(*
+ * By default, dT 0 should always make progress.
+ *)
+let d_prec = create_auto_prec [trivial_prec] []
+
+let auto_resource =
+   auto_resource.resource_improve auto_resource (**)
+      { auto_name = "dT";
+        auto_prec = d_prec;
+        auto_tac = auto_wrap (dT 0)
+      }
 
 (*
  * -*-

@@ -74,7 +74,7 @@ let rec firstT = function
  | tac :: tactl ->
       tac orelseT (firstT tactl)
  | [] ->
-      idT
+      (fun p -> raise (RefineError ("firstT", StringError "no tactics")))
 
 let prefix_then_OnFirstT tac1 tac2 =
    let aux = function

@@ -2,43 +2,31 @@
  * Logical true.
  *)
 
-include Czf_itt_set
-
-declare "true"
+include Czf_itt_sep
 
 (*
- * Definition of truth.
+ * True is functional.
  *)
-rewrite unfold_true : "true" <--> unit
+axiom unit_fun 'H :
+   sequent ['ext] { 'H >- fun_prop{z. "unit"} }
 
 (*
- * True is always true.
- *
- * H >- true
- * by true_intro
+ * True is a restricted formula.
  *)
-axiom true_intro 'H : sequent ['ext] { 'H >- "true" }
+axiom unit_res 'H :
+   sequent ['ext] { 'H >- restricted{z. "unit"} }
 
 (*
- * True is well formed.
- *
- * H >- wf{"true"}
- * by true_wf
+ * True is functional.
  *)
-axiom true_wf 'H :
-   sequent ['ext] { 'H >- wf{."true"} }
-
-(*
- * Typehood.
- *)
-axiom true_type 'H :
-   sequent ['ext] { 'H >- "type"{."true"} }
+axiom true_fun 'H :
+   sequent ['ext] { 'H >- fun_prop{z. "true"} }
 
 (*
  * True is a restricted formula.
  *)
 axiom true_res 'H :
-   sequent ['ext] { 'H >- restricted{x ."true"} }
+   sequent ['ext] { 'H >- restricted{z. "true"} }
 
 (*
  * -*-

@@ -2,8 +2,7 @@
  * Logical false.
  *)
 
-include Czf_itt_set
-include Czf_itt_empty
+include Czf_itt_sep
 
 open Printf
 open Debug
@@ -19,48 +18,26 @@ let _ =
       eprintf "Loading Czf_itt_false%t" eflush
 
 (************************************************************************
- * TERMS                                                                *
- ************************************************************************)
-
-declare "false"
-
-(************************************************************************
- * DISPLAY                                                              *
- ************************************************************************)
-
-dform false_df : "false" =
-   `"false'"
-
-(************************************************************************
- * DEFINTION                                                            *
- ************************************************************************)
-
-primrw unfold_false : "false" <--> void
-
-(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * From false prove anything.
- *
- * H, x: false, J >> T
- * by false_elim i
+ * False is a restricted formula.
  *)
-interactive false_elim 'H 'J : :
-   sequent ['ext] { 'H; x: "false"; 'J['x] >- 'T['x] }
+interactive void_fun 'H : :
+   sequent ['ext] { 'H >- fun_prop{x ."void"} }
 
 (*
- * False is well-formed.
+ * False is a restricted formula.
  *)
-interactive false_wf 'H : :
-   sequent ['ext] { 'H >- wf{."false"} }
+interactive void_res 'H : :
+   sequent ['ext] { 'H >- restricted{x ."void"} }
 
 (*
- * False is a type.
+ * False is a restricted formula.
  *)
-interactive false_type 'H : :
-   sequent ['ext] { 'H >- "type"{."false"} }
+interactive false_fun 'H : :
+   sequent ['ext] { 'H >- fun_prop{x ."false"} }
 
 (*
  * False is a restricted formula.
@@ -72,56 +49,57 @@ interactive false_res 'H : :
  * TACTICS                                                              *
  ************************************************************************)
 
-let false_term = << "false" >>
-let wf_false_term = << wf{."false"} >>
-let res_false_term = << restricted{."false"} >>
-
 (*
- * Falsehood.
+ * Functional.
  *)
-let d_falseT i p =
-   (if i = 0 then
-      idT
-   else
-      let i, j = hyp_indices p i in
-         false_elim i j) p
-
-let d_resource = d_resource.resource_improve d_resource (false_term, d_falseT)
-
-(*
- * Well-formedness.
- *)
-let d_wf_falseT i p =
+let d_void_funT i p =
    if i = 0 then
-      false_wf (hyp_count p) p
+      void_fun (hyp_count p) p
    else
-      raise (RefineError ("d_wf_falseT", (StringTermError ("no elim form", wf_false_term))))
+      raise (RefineError ("d_void_funT", StringError "no elimination form"))
 
-let d_resource = d_resource.resource_improve d_resource (wf_false_term, d_wf_falseT)
+let void_fun_term = << fun_prop{z. "void"} >>
 
-(*
- * False is a type.
- *)
-let d_false_typeT i p =
-   if i = 0 then
-      false_type (hyp_count p) p
-   else
-      raise (RefineError ("d_false_typeT", (StringError "no elimination form")))
-
-let false_type_term = << "type"{."false"} >>
-
-let d_resource = d_resource.resource_improve d_resource (false_type_term, d_false_typeT)
+let d_resource = d_resource.resource_improve d_resource (void_fun_term, d_void_funT)
 
 (*
  * Restricted.
  *)
-let d_res_falseT i p =
+let d_void_resT i p =
+   if i = 0 then
+      void_res (hyp_count p) p
+   else
+      raise (RefineError ("d_void_resT", StringError "no elimination form"))
+
+let void_res_term = << restricted{z. "void"} >>
+
+let d_resource = d_resource.resource_improve d_resource (void_res_term, d_void_resT)
+
+(*
+ * Functional.
+ *)
+let d_false_funT i p =
+   if i = 0 then
+      false_fun (hyp_count p) p
+   else
+      raise (RefineError ("d_false_funT", StringError "no elimination form"))
+
+let false_fun_term = << fun_prop{z. "false"} >>
+
+let d_resource = d_resource.resource_improve d_resource (false_fun_term, d_false_funT)
+
+(*
+ * Restricted.
+ *)
+let d_false_resT i p =
    if i = 0 then
       false_res (hyp_count p) p
    else
-      raise (RefineError ("d_res_falseT", (StringTermError ("no elim form", res_false_term))))
+      raise (RefineError ("d_false_resT", StringError "no elimination form"))
 
-let d_resource = d_resource.resource_improve d_resource (res_false_term, d_res_falseT)
+let false_res_term = << restricted{z. "false"} >>
+
+let d_resource = d_resource.resource_improve d_resource (false_res_term, d_false_resT)
 
 (*
  * -*-

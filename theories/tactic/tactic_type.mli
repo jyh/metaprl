@@ -26,6 +26,7 @@ type 'term attribute =
  | SubstArg of 'term
  | TacticArg of tactic
  | IntTacticArg of (int -> tactic)
+ | ArgTacticArg of (tactic_arg -> tactic)  (* For tactics that precompile *)
  | TypeinfArg of ((string * 'term) list -> 'term -> (string * 'term) list * 'term)
 
 and 'a attributes = (string * 'a attribute) list
@@ -90,6 +91,7 @@ val get_bool       : tactic_arg -> string -> bool
 val get_subst      : tactic_arg -> term_subst
 val get_tactic     : tactic_arg -> string -> tactic
 val get_int_tactic : tactic_arg -> string -> (int -> tactic)
+val get_arg_tactic : tactic_arg -> string -> (tactic_arg -> tactic)
 val get_typeinf    : tactic_arg -> string -> (term_subst -> term -> term_subst * term)
 
 (*

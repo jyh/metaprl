@@ -205,7 +205,9 @@ let d_concl_dfun p =
    let t = concl p in
    let z, _, _ = dest_dfun t in
    let z' = get_opt_var_arg z p in
-      lambdaFormation count z' p
+      (lambdaFormation count z'
+       thenLT [addHiddenLabelT "wf";
+               addHiddenLabelT "main"]) p
 
 (*
  * D a hyp.
@@ -223,7 +225,8 @@ let d_hyp_dfun i p =
       (match maybe_new_vars ["y"; "v"] (declared_vars p) with
           [y; v] ->
              functionElimination i j f a y v
-             thenLT [addHiddenLabelT "wf"; idT]
+             thenLT [addHiddenLabelT "wf";
+                     addHiddenLabelT "main"]
         | _ ->
              failT) p
 

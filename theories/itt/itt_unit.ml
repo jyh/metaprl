@@ -147,8 +147,6 @@ let equal_unit_term = << unit = unit in univ[@i:l] >>
 
 let d_resource = d_resource.resource_improve d_resource (equal_unit_term, d_wrap_eqcd eqcd_unitT)
 
-let dT = d_resource.resource_extract d_resource
-
 (************************************************************************
  * SQUASH STABILITY                                                     *
  ************************************************************************)

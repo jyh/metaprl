@@ -219,7 +219,8 @@ let rec join_resource { resource_data = data1 } { resource_data = data2 } =
    { resource_data = join_tables data1 data2;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 and extract_resource { resource_data = data } =
@@ -229,8 +230,12 @@ and improve_resource { resource_data = data } arg =
    { resource_data = improve_data data arg;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
+
+and close_resource rsrc =
+   rsrc
 
 (*
  * Resource.
@@ -239,7 +244,8 @@ let sub_resource =
    { resource_data = new_dtable ();
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 (*

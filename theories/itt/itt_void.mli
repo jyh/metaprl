@@ -66,8 +66,7 @@ val d_voidT : int -> tactic
 val eqcd_voidT : tactic
 
 val void_term : term
-
-val dT : int -> tactic
+val is_void_term : term -> bool
 
 (*
  * -*-

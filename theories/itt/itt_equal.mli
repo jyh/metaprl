@@ -144,6 +144,25 @@ axiom universeEquality 'H :
    sequent ['ext] { 'H >- univ[@j:l] = univ[@j:l] in univ[@i:l] }
 
 (*
+ * Universe is a type.
+ *)
+axiom universeType 'H :
+   sequent ['ext] { 'H >- "type"{univ[@l:l]} }
+
+(*
+ * Anything in a universe is a type.
+ *)
+axiom universeMemberType 'H univ[@i:l] :
+   sequent [squash] { 'H >- 'x = 'x in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "type"{'x} }
+
+(*
+ * Derived form for known membership.
+ *)
+axiom universeAssumType 'H 'J :
+   sequent ['ext] { 'H; x: univ[@l:l]; 'J['x] >- "type"{'x} }
+
+(*
  * H >- Ui ext Uj
  * by universeFormation level{$j:l}
  *)
@@ -205,6 +224,9 @@ val equalAssumT : int -> tactic
 val equalRefT : term -> tactic
 val equalSymT : tactic
 val equalTransT : term -> tactic
+
+val univTypeT : term -> tactic
+val univAssumT : int -> tactic
 
 (*
  * -*-

@@ -1,6 +1,7 @@
 #
 # No special includes
 #
+DIR := theories/tactic
 ROOT := ../..
 INCLUDE := -I $(ROOT)/lib -I .
 OCAMLDEPFLAGS := -prl_init

@@ -10,6 +10,7 @@ open Printf
 open Debug
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Term_table
@@ -64,12 +65,18 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
  *)
 let infer tbl =
    let rec aux decl t =
-      let _, _, inf =
-         try lookup "Typeinf.infer" tbl t with
-            Not_found ->
-               raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-      in
-         inf aux decl t
+      if is_var_term t then
+         let v = dest_var t in
+            try decl, List.assoc v decl with
+               Not_found ->
+                  raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
+      else
+         let _, _, inf =
+            try lookup "Typeinf.infer" tbl t with
+               Not_found ->
+                  raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
+         in
+            inf aux decl t
    in
       aux
 
@@ -81,7 +88,8 @@ let rec join_resource { resource_data = tbl1 } { resource_data = tbl2 } =
       { resource_data = data;
         resource_join = join_resource;
         resource_extract = extract_resource;
-        resource_improve = improve_resource
+        resource_improve = improve_resource;
+        resource_close = close_resource
       }
 
 and extract_resource { resource_data = tbl } =
@@ -91,8 +99,12 @@ and improve_resource { resource_data = tbl } (t, inf) =
    { resource_data = insert tbl t inf;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
+
+and close_resource rsrc =
+   rsrc
 
 (*
  * Resource.
@@ -101,7 +113,8 @@ let typeinf_resource =
    { resource_data = new_table ();
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 (*
@@ -109,6 +122,19 @@ let typeinf_resource =
  *)
 let typeinf_of_proof p =
    get_typeinf_arg p "typeinf"
+
+let infer_type p t =
+   let rec filter = function
+      Hypothesis (v, t) :: tl ->
+         (v, t) :: filter tl
+    | _ :: tl ->
+         filter tl
+    | [] ->
+         []
+   in
+   let { sequent_hyps = hyps } = Sequent.explode_sequent p in
+   let subst = filter hyps in
+      (get_typeinf_arg p "typeinf") subst t
 
 (*
  * -*-

@@ -3,6 +3,7 @@
  *)
 
 include Czf_itt_set
+include Czf_itt_sep
 
 open Debug
 open Printf
@@ -77,7 +78,8 @@ interactive dall_intro 'H 'a 'b :
 (*
  * Elimination.
  *)
-interactive dall_elim 'H 'J 'x 'z 'w :
+interactive dall_elim 'H 'J 'x 'z 'w 'u :
+   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; u: set >- wf{'A['u]} } -->
    sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- member{'z; 'T} } -->
    sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- 'C['x] }
@@ -85,10 +87,10 @@ interactive dall_elim 'H 'J 'x 'z 'w :
 (*
  * This is a restricted formula.
  *)
-interactive dall_res 'H :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- restricted{y. 'A['y]} } -->
-   sequent ['ext] { 'H >- restricted{z. "all"{'s; y. 'A['y]}} }
+interactive dall_res 'H 'w :
+   sequent ['ext] { 'H; w: set >- isset{'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- restricted{y. 'B['y; 'w]} } -->
+   sequent ['ext] { 'H >- restricted{z. "all"{'A['z]; y. 'B['y; 'z]}} }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -106,10 +108,10 @@ let d_dallT i p =
          dall_intro (hyp_count p) v w p
    else
       let x, _ = nth_hyp p i in
-      let w = Var.maybe_new_vars1 p "u" in
+      let w, u = Var.maybe_new_vars2 p "u" "v" in
       let z = get_with_arg p in
       let i, j = hyp_indices p i in
-          dall_elim i j x z w p
+          dall_elim i j x z w u p
 
 let d_resource = d_resource.resource_improve d_resource (dall_term, d_dallT)
 

@@ -3,14 +3,19 @@
  *
  *)
 
-open Refiner.Refiner.Term
-
 include Itt_equal
 include Itt_dprod
 include Itt_union
 include Itt_void
 include Itt_unit
 include Itt_soft
+include Itt_struct
+
+open Refiner.Refiner.TermType
+
+open Tacticals
+
+open Base_auto_tactic
 
 (************************************************************************
  * TERMS                                                                *
@@ -37,6 +42,14 @@ rewrite reducePropFalse : "prop"["false":t] <--> "false"
 (************************************************************************
  * EXTRA RULES                                                          *
  ************************************************************************)
+
+(*
+ * All elimination.
+ *)
+axiom allElimination 'H 'J 'w 'z :
+   sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z = 'z in 'A } -->
+   sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
+   sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
 
 (*
  * IFF typehood.
@@ -93,6 +106,21 @@ val mk_iff_term : term -> term -> term
 val is_not_term : term -> bool
 val dest_not : term -> term
 val mk_not_term : term -> term
+
+(************************************************************************
+ * AUTOMATION                                                           *
+ ************************************************************************)
+
+val univCDT : tactic
+val genUnivCDT : tactic
+val instHypT : term list -> int -> tactic
+
+val back_hyp_prec : auto_prec
+val back_assum_prec : auto_prec
+
+val backThruHypT : int -> tactic
+val assumT : int -> tactic
+val backThruAssumT : int -> tactic
 
 (*
  * -*-

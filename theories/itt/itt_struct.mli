@@ -93,6 +93,10 @@ axiom hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
  * TACTICS                                                              *
  ************************************************************************)
 
+val is_bind_term : term -> bool
+val dest_bind : term -> string * term
+val mk_bind_term : string -> term -> term
+
 val nthHypT : int -> tactic
 val thinT : int -> tactic
 val thinAllT : int -> int -> tactic

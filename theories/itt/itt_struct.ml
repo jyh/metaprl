@@ -12,11 +12,15 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
+open Resource
 
 open Sequent
 open Tacticals
 open Var
+
+open Base_auto_tactic
 
 open Itt_equal
 
@@ -132,7 +136,7 @@ let mk_bind_term = mk_dep1_term bind_opname
  * Prove by hypothesis.
  *)
 let nthHypT i p =
-   let x, _ = nth_hyp p i in
+   let x, h = nth_hyp p i in
    let i, j = hyp_indices p i in
       hypothesis i j x p
 
@@ -144,7 +148,7 @@ let nthHypT i p =
 let thinT i p =
    let x, _ = nth_hyp p i in
       if is_free_seq_var i x p then
-            raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
+         raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
       else
          let i, j = hyp_indices p i in
             thin i j p
@@ -197,7 +201,7 @@ let substConclT t p =
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
       with
-         Not_found ->
+         RefineError _ ->
             let x = get_opt_var_arg "z" p in
                mk_bind_term x (var_subst (concl p) a x)
    in
@@ -261,6 +265,23 @@ let replaceHypT t i p =
    let j, k = hyp_indices p i in
    let univ = get_univ_arg p in
       hypReplacement j k t univ p
+
+(*
+ * Some trivial tactics.
+ *)
+let trivial_resource =
+   trivial_resource.resource_improve trivial_resource (**)
+      { auto_name = "nthHypT";
+        auto_prec = trivial_prec;
+        auto_tac = onSomeHypT nthHypT
+      }
+
+let trivial_resource =
+   trivial_resource.resource_improve trivial_resource (**)
+      { auto_name = "nthAssumT";
+        auto_prec = trivial_prec;
+        auto_tac = onSomeAssumT nthAssumT
+      }
 
 (*
  * -*-

@@ -2,38 +2,27 @@
  * Logical false.
  *)
 
-include Czf_itt_set
-include Czf_itt_empty
+include Czf_itt_sep
 
 open Tacticals
 
-declare "false"
+(*
+ * False is a restricted formula.
+ *)
+axiom void_fun 'H :
+   sequent ['ext] { 'H >- fun_prop{x ."void"} }
 
 (*
- * Empty type.
+ * False is a restricted formula.
  *)
-rewrite unfold_false : "false" <--> void
+axiom void_res 'H :
+   sequent ['ext] { 'H >- restricted{x ."void"} }
 
 (*
- * From false prove anything.
- *
- * H, x: false, J >> T
- * by false_elim i
+ * False is a restricted formula.
  *)
-axiom false_elim 'H 'J :
-   sequent ['ext] { 'H; x: "false"; 'J['x] >- 'T['x] }
-
-(*
- * False is well-formed.
- *)
-axiom false_wf 'H :
-   sequent ['ext] { 'H >- wf{."false"} }
-
-(*
- * False is a type.
- *)
-axiom false_type 'H :
-   sequent ['ext] { 'H >- "type"{."false"} }
+axiom false_fun 'H :
+   sequent ['ext] { 'H >- fun_prop{x ."false"} }
 
 (*
  * False is a restricted formula.

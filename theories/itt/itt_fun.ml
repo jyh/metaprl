@@ -13,12 +13,15 @@ open Debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Resource
 
 open Sequent
 open Tacticals
 open Var
+
+open Typeinf
 
 open Itt_equal
 open Itt_subtype
@@ -165,7 +168,8 @@ let d_concl_fun p =
    let count = hyp_count p in
    let z = get_opt_var_arg "z" p in
       (independentLambdaFormation count z
-       thenLT [addHiddenLabelT "wf"; idT]) p
+       thenLT [addHiddenLabelT "wf";
+               addHiddenLabelT "main"]) p
 
 (*
  * D a hyp.
@@ -177,10 +181,14 @@ let d_hyp_fun i p =
    let y, z = maybe_new_vars2 p "y" "z" in
       try
          let a = get_with_arg p in
-            independentFunctionElimination2 i j f y z a p
+            (independentFunctionElimination2 i j f y z a
+             thenLT [addHiddenLabelT "wf";
+                     addHiddenLabelT "main"]) p
       with
          RefineError _ ->
-            independentFunctionElimination i j f y p
+            (independentFunctionElimination i j f y
+             thenLT [addHiddenLabelT "antecedent";
+                     addHiddenLabelT "main"]) p
 
 (*
  * Join them.
@@ -230,18 +238,59 @@ let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wr
  * Apply equality.
  *)
 let eqcd_applyT p =
-   let x = get_with_arg p in
+   let t =
+      try get_with_arg p with
+         RefineError _ ->
+            let eq_type, app, _ = dest_equal (Sequent.concl p) in
+            let f, a = dest_apply app in
+               try snd (infer_type p f) with
+                  RefineError _ ->
+                     let _, arg_type = infer_type p a in
+                        mk_fun_term arg_type eq_type
+   in
    let i = hyp_count p in
-      if is_fun_term x then
-         independentApplyEquality i x p
-      else if is_dfun_term x then
-         applyEquality i x p
+      if is_fun_term t then
+         independentApplyEquality i t p
+      else if is_dfun_term t then
+         applyEquality i t p
       else
-         raise (RefineError ("eqcd_applyT", StringTermError ("argument should be a function type", x)))
+         raise (RefineError ("eqcd_applyT", StringTermError ("argument should be a function type", t)))
 
 let apply_equal_term = << ('f1 'a1) = ('f2 'a2) in 'T >>
 
 let d_resource = d_resource.resource_improve d_resource (apply_equal_term, d_wrap_eqcd eqcd_applyT)
+
+(*
+ * Typehood of application depends on the ability to infer a type.
+ *)
+let d_apply_typeT i p =
+   if i = 0 then
+      let app = dest_type_term (Sequent.concl p) in
+      let f, _ = dest_apply app in
+      let f_type =
+         try get_with_arg p with
+            RefineError _ ->
+               snd (infer_type p f)
+      in
+      let univ =
+         if is_dfun_term f_type then
+            let _, _, univ = dest_dfun f_type in
+               univ
+         else if is_fun_term f_type then
+            snd (dest_fun f_type)
+         else
+            raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a function type", f_type)))
+      in
+         if is_univ_term univ then
+            (univTypeT univ thenT withT f_type eqcd_applyT) p
+         else
+            raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ)))
+   else
+      raise (RefineError ("d_apply_typeT", StringError "no elimination form"))
+
+let apply_type_term = << "type"{. 'f 'a} >>
+
+let d_resource = d_resource.resource_improve d_resource (apply_type_term, d_apply_typeT)
 
 (*
  * Lambda equality.

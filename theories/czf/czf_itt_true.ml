@@ -2,7 +2,7 @@
  * Logical true.
  *)
 
-include Czf_itt_set
+include Czf_itt_sep
 
 open Printf
 open Debug
@@ -17,103 +17,89 @@ let _ =
    if !debug_load then
       eprintf "Loading Czf_itt_true%t" eflush
 
-declare "true"
-
-primrw unfold_true : "true" <--> unit
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-dform true_df : "true" =
-   `"true'"
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * True is always true.
- *
- * H >- true
- * by true_intro
+ * True is functional.
  *)
-interactive true_intro 'H : : sequent ['ext] { 'H >- "true" }
+interactive unit_fun 'H : :
+   sequent ['ext] { 'H >- fun_prop{z. "unit"} }
 
 (*
- * True is well formed.
- *
- * H >- wf{"true"}
- * by true_wf
+ * True is a restricted formula.
  *)
-interactive true_wf 'H : :
-   sequent ['ext] { 'H >- wf{."true"} }
+interactive unit_res 'H : :
+   sequent ['ext] { 'H >- restricted{z. "unit"} }
 
 (*
- * Typehood.
+ * True is a restricted formula.
  *)
-interactive true_type 'H : :
-   sequent ['ext] { 'H >- "type"{."true"} }
+interactive true_fun 'H : :
+   sequent ['ext] { 'H >- fun_prop{x. "true"} }
 
 (*
  * True is a restricted formula.
  *)
 interactive true_res 'H : :
-   sequent ['ext] { 'H >- restricted{x ."true"} }
+   sequent ['ext] { 'H >- restricted{x. "true"} }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-let true_term = << "true" >>
-let wf_true_term = << wf{."true"} >>
-let res_true_term = << restricted{."true"} >>
-
 (*
- * Truth.
+ * Restricted.
  *)
-let d_trueT i p =
-   (if i = 0 then
-       true_intro (hyp_count p)
-    else
-       idT) p
-
-let d_resource = d_resource.resource_improve d_resource (true_term, d_trueT)
-
-(*
- * Well-formedness.
- *)
-let d_wf_trueT i p =
+let d_true_funT i p =
    if i = 0 then
-      true_wf (hyp_count p) p
+      true_fun (hyp_count p) p
    else
-      raise (RefineError ("d_wf_trueT", (StringTermError ("no elim form", wf_true_term))))
+      raise (RefineError ("d_true_funT", StringError "no elimination form"))
 
-let d_resource = d_resource.resource_improve d_resource (wf_true_term, d_wf_trueT)
+let true_fun_term = << fun_prop{x. "true"} >>
 
-(*
- * Typehood.
- *)
-let d_true_typeT i p =
-   if i = 0 then
-      true_type (hyp_count p) p
-   else
-      raise (RefineError ("d_true_typeT", (StringError "no elimination form")))
-
-let true_type_term = << "type"{."true"} >>
-
-let d_resource = d_resource.resource_improve d_resource (true_type_term, d_true_typeT)
+let d_resource = d_resource.resource_improve d_resource (true_fun_term, d_true_funT)
 
 (*
  * Restricted.
  *)
-let d_res_trueT i p =
+let d_true_resT i p =
    if i = 0 then
       true_res (hyp_count p) p
    else
-      raise (RefineError ("d_res_trueT", (StringTermError ("no elim form", res_true_term))))
+      raise (RefineError ("d_true_resT", StringError "no elimination form"))
 
-let d_resource = d_resource.resource_improve d_resource (res_true_term, d_res_trueT)
+let true_res_term = << restricted{x. "true"} >>
+
+let d_resource = d_resource.resource_improve d_resource (true_res_term, d_true_resT)
+
+(*
+ * Restricted.
+ *)
+let d_unit_funT i p =
+   if i = 0 then
+      unit_fun (hyp_count p) p
+   else
+      raise (RefineError ("d_unit_funT", StringError "no elimination form"))
+
+let unit_fun_term = << fun_prop{x. "unit"} >>
+
+let d_resource = d_resource.resource_improve d_resource (unit_fun_term, d_unit_funT)
+
+(*
+ * Restricted.
+ *)
+let d_unit_resT i p =
+   if i = 0 then
+      unit_res (hyp_count p) p
+   else
+      raise (RefineError ("d_unit_resT", StringError "no elimination form"))
+
+let unit_res_term = << restricted{x. "unit"} >>
+
+let d_resource = d_resource.resource_improve d_resource (unit_res_term, d_unit_resT)
 
 (*
  * -*-

@@ -13,11 +13,15 @@ open Printf
 open Debug
 open Sequent
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
+
+open Base_auto_tactic
+
 open Itt_equal
 open Itt_subtype
 
@@ -93,14 +97,15 @@ prim void_subtype 'H : :
  * Standard term.
  *)
 let void_term = << void >>
+let void_opname = opname_of_term void_term
+let is_void_term = is_no_subterms_term void_opname
 
 (*
  * D
  *)
 let d_voidT i p =
-   eprintf "d_voidT: %d%t" i eflush;
    if i = 0 then
-      failwith "can't prove void"
+      raise (RefineError ("d_voidT", StringError "can't prove void"))
    else
       let t = goal p in
       let i, j = hyp_indices p i in

@@ -57,6 +57,7 @@ type 'term attribute =
  | SubstArg of 'term
  | TacticArg of tactic
  | IntTacticArg of (int -> tactic)
+ | ArgTacticArg of (tactic_arg -> tactic)  (* For tactics that precompile *)
  | TypeinfArg of ((string * 'term) list -> 'term -> (string * 'term) list * 'term)
 
 and 'a attributes = (string * 'a attribute) list
@@ -320,6 +321,20 @@ let get_tactic { ref_attributes = attributes } name =
 let get_int_tactic { ref_attributes = attributes } name =
    let rec search = function
       (name', IntTacticArg t) :: tl ->
+         if name' = name then
+            t
+         else
+            search tl
+    | (name', _) :: tl ->
+         search tl
+    | [] ->
+         raise (RefineError ("get_int_tactic", StringStringError ("not found", name)))
+   in
+      search attributes
+
+let get_arg_tactic { ref_attributes = attributes } name =
+   let rec search = function
+      (name', ArgTacticArg t) :: tl ->
          if name' = name then
             t
          else

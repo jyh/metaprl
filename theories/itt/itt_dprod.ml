@@ -239,7 +239,7 @@ let d_concl_dprod p =
    let y = get_opt_var_arg "y" p in
       (pairFormation count t y
        thenLT [addHiddenLabelT "wf";
-               idT;
+               addHiddenLabelT "main";
                addHiddenLabelT "wf"]) p
 
 (*

@@ -1,6 +1,7 @@
 #
 # Libraries
 #
+DIR := theories/czf
 ROOT := ../..
 INCLUDE := -I . -I ../itt -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
@@ -11,23 +12,16 @@ MLZFILES :=\
 
 # Library files
 NLFILES :=\
-	czf_itt_small\
 	czf_itt_set\
-	czf_itt_empty\
-	czf_itt_union\
+	czf_itt_eq\
+	czf_itt_member\
 	czf_itt_sep\
 	czf_itt_true\
 	czf_itt_false\
 	czf_itt_or\
 	czf_itt_and\
 	czf_itt_implies\
-	czf_itt_dall\
-
-X=\
-	czf_itt_all\
-	czf_itt_exists\
-	czf_itt_dexists\
-	czf_itt_set_ind
+	czf_itt_all
 
 # Name of main libraris
 MAIN = czf

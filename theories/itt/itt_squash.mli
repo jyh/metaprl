@@ -8,6 +8,7 @@
  *)
 
 include Tacticals
+include Base_theory
 
 open Refiner.Refiner.Term
 
@@ -36,7 +37,10 @@ resource (term * tactic, tactic, squash_data) squash_resource
  * Utilities.
  *)
 val squashT : tactic
+
 val is_squash_goal : tactic_arg -> bool
+val is_squash_sequent : term -> bool
+val get_squash_arg : term -> term
 
 (*
  * -*-

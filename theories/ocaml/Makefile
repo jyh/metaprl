@@ -1,6 +1,7 @@
 #
 # Don't need any libraries.
 #
+DIR := theories/ocaml
 ROOT := ../..
 INCLUDE := -I . -I ../tactic -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl

@@ -24,6 +24,8 @@ open Resource
 open Tacticals
 open Sequent
 
+open Base_auto_tactic
+
 (*
  * Show that the file is loading.
  *)
@@ -61,9 +63,8 @@ dform it_df1 : mode[prl] :: it = cdot
 dform type_prl_df1 : parens :: "prec"[prec_type] :: mode[prl] :: "type"{'a} =
    slot{'a} " " `"Type"
 
-mldform term_df2 : mode[prl] :: univ[@i:l] term_print buf =
-   format_char buf '\134';
-   format_simple_level_exp buf i
+dform term_df2 : mode[prl] :: univ[@i:l] =
+   mathbbU `"[" slot[@i:l] `"]"
 
 (************************************************************************
  * RULES                                                                *
@@ -137,6 +138,10 @@ prim equalityType 'H :
    sequent [squash] { 'H >- 'b = 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
+
+interactive equalityType2 'H :
+   sequent [squash] { 'H >- 'a = 'a in 'T } -->
+   sequent ['ext] { 'H >- "type"{. 'a = 'a in 'T } }
 
 (*
  * H >- it = it in (a = b in T)
@@ -218,6 +223,27 @@ prim universeEquality 'H :
    cumulativity{univ[@j:l]; univ[@i:l]} :
    sequent ['ext] { 'H >- univ[@j:l] = univ[@j:l] in univ[@i:l] } =
   it
+
+(*
+ * Universe is a type.
+ *)
+prim universeType 'H : :
+   sequent ['ext] { 'H >- "type"{univ[@l:l]} } =
+   it
+
+(*
+ * Anything in a universe is a type.
+ *)
+prim universeMemberType 'H univ[@i:l] :
+   sequent [squash] { 'H >- 'x = 'x in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "type"{'x} } =
+   it
+
+(*
+ * Derived form for known membership.
+ *)
+interactive universeAssumType 'H 'J : :
+   sequent ['ext] { 'H; x: univ[@l:l]; 'J['x] >- "type"{'x} }
 
 (*
  * H >- Ui ext Uj
@@ -306,7 +332,8 @@ let rec join_resource { resource_data = data1 } { resource_data = data2 } =
    { resource_data = join_stables data1 data2;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 and extract_resource { resource_data = data } =
@@ -316,8 +343,12 @@ and improve_resource { resource_data = data } (t, tac) =
    { resource_data = sinsert data t tac;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
+
+and close_resource rsrc =
+   rsrc
 
 (*
  * Resource.
@@ -326,7 +357,8 @@ let eqcd_resource =
    { resource_data = new_stable ();
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 (*
@@ -357,7 +389,8 @@ let d_resource = d_resource.resource_improve d_resource (equal_term, d_equalT)
  *)
 let d_equal_typeT i p =
    if i = 0 then
-      equalityType (hyp_count p) p
+      let len = hyp_count p in
+         (equalityType2 len orelseT equalityType len) p
    else
       raise (RefineError ("d_equal_typeT", StringError "no elimination form"))
 
@@ -373,6 +406,19 @@ let d_wrap_eqcd eqcdT i p =
       eqcdT p
    else
       d_equalT i p
+
+(*
+ * Universe is a type.
+ *)
+let d_univ_typeT i p =
+   if i = 0 then
+      universeType (hyp_count p) p
+   else
+      raise (RefineError ("d_univ_typeT", StringError "no elimination form"))
+
+let univ_type_term = << "type"{univ[@l:l]} >>
+
+let d_resource = d_resource.resource_improve d_resource (univ_type_term, d_univ_typeT)
 
 (************************************************************************
  * EQCD                                                                 *
@@ -455,6 +501,32 @@ let equalSymT p =
  *)
 let equalTransT t p =
    equalityTrans (hyp_count p) t p
+
+(*
+ * Membership in a type.
+ *)
+let univTypeT t p =
+   universeMemberType (hyp_count p) t p
+
+(*
+ * Assumed membership.
+ *)
+let univAssumT i p =
+   let j, k = hyp_indices p i in
+      universeAssumType j k p
+
+(*
+ * Automation.
+ *)
+let triv_equalT i =
+   equalAssumT i orelseT univAssumT i
+
+let trivial_resource =
+   trivial_resource.resource_improve trivial_resource (**)
+      { auto_name = "triv_equalT";
+        auto_prec = trivial_prec;
+        auto_tac = onSomeHypT triv_equalT
+      }
 
 (*
  * -*-

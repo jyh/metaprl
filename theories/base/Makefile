@@ -1,6 +1,7 @@
 #
 # Base theories.
 #
+DIR := theories/base
 ROOT := ../..
 INCLUDE := -I . -I ../tactic -I ../ocaml -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
@@ -15,6 +16,7 @@ NLFILES :=\
 	nuprl_font\
 	base_dform\
 	summary\
+	base_auto_tactic\
 	base_dtactic\
 	base_cache\
 	base_rewrite\

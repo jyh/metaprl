@@ -26,6 +26,7 @@ include Itt_prec
 include Itt_srec
 include Itt_quotient
 include Itt_list
+include Itt_derive
 
 (*
  * -*-

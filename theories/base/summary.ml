@@ -153,7 +153,7 @@ dform location_df : "location"[@start:n, @finish:n]{'body} =
  *)
 dform rewrite_df : "rewrite"[@name:s]{'redex; 'contractum; 'proof} =
    szone pushm[4]
-   `"rewrite" " " slot[@name:s] " " slot{'redex} " " longleftrightarrow hspace slot{'contractum}
+   slot{'proof} `" rewrite" " " slot[@name:s] " " slot{'redex} " " longleftrightarrow hspace slot{'contractum}
    popm ezone
 
 (*
@@ -172,18 +172,18 @@ dform term_param_df : "term_param"{'t} =
 
 dform cond_rewrite_df : "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof} =
    szone pushm[4]
-   `"rewrite" " " slot[@name:s] " " slot{'params} `" :" " " slot{'args}
+   slot{'proof} `" rewrite" " " slot[@name:s] " " slot{'params} `" :" " " slot{'args}
    " " longrightarrow slot{'redex} longleftrightarrow slot{'contractum}
    popm ezone
 
 dform axiom_df : "axiom"[@name:s]{'stmt; 'proof} =
    szone pushm[4]
-   `"axiom" " " slot[@name:s] `" : : " slot{'stmt}
+   slot{'proof} `" axiom" " " slot[@name:s] `" : : " slot{'stmt}
    popm ezone
 
 dform rule_df : "rule"[@name:s]{'params; 'stmt; 'proof} =
    szone pushm[4]
-   `"axiom" " " slot[@name:s] " " space_list{'params} `":" hspace slot{'stmt}
+   slot{'proof} `" axiom" " " slot[@name:s] " " space_list{'params} `":" hspace slot{'stmt}
    ezone popm
 
 dform opname_df : "opname"[@name:s]{'term} =

@@ -9,6 +9,7 @@
 
 include Tacticals
 include Sequent
+include Base_theory
 
 open Printf
 open Debug
@@ -59,13 +60,24 @@ let squash_opname = opname_of_term squash_term
 (*
  * Is a goal squashed?
  *)
-let is_squash_goal p =
-   let _, args = dest_sequent (goal p) in
+let is_squash_sequent goal =
+   let _, args = dest_sequent goal in
       match dest_xlist args with
          [flag] ->
             opname_of_term flag == squash_opname
        | _ ->
             false
+
+let get_squash_arg goal =
+   let _, args = dest_sequent goal in
+      match dest_xlist args with
+         [flag] ->
+            flag
+       | _ ->
+            raise (RefineError ("get_squash_arg", StringError "no argument"))
+
+let is_squash_goal p =
+   is_squash_sequent (goal p)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -92,7 +104,8 @@ let rec join_resource { resource_data = data1 } { resource_data = data2 } =
    { resource_data = join_stables data1 data2;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 and extract_resource { resource_data = data } =
@@ -102,8 +115,12 @@ and improve_resource { resource_data = data } (t, tac) =
    { resource_data = sinsert data t tac;
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
+
+and close_resource rsrc =
+   rsrc
 
 (*
  * Resource.
@@ -112,7 +129,8 @@ let squash_resource =
    { resource_data = new_stable ();
      resource_join = join_resource;
      resource_extract = extract_resource;
-     resource_improve = improve_resource
+     resource_improve = improve_resource;
+     resource_close = close_resource
    }
 
 (*

@@ -3,6 +3,7 @@
  *)
 
 include Czf_itt_set
+include Czf_itt_sep
 
 open Conversionals
 
@@ -54,7 +55,8 @@ axiom dall_intro 'H 'a 'b :
 (*
  * Elimination.
  *)
-axiom dall_elim 'H 'J 'x 'z 'w :
+axiom dall_elim 'H 'J 'x 'z 'w 'u :
+   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; u: set >- wf{'A['u]} } -->
    sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- member{'z; 'T} } -->
    sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- 'C['x] }
@@ -62,10 +64,10 @@ axiom dall_elim 'H 'J 'x 'z 'w :
 (*
  * This is a restricted formula.
  *)
-axiom dall_res 'H :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- restricted{y. 'A['y]} } -->
-   sequent ['ext] { 'H >- restricted{z. "all"{'s; y. 'A['y]}} }
+axiom dall_res 'H 'w :
+   sequent ['ext] { 'H; w: set >- isset{'A['w]} } -->
+   sequent ['ext] { 'H; w: set >- restricted{y. 'B['y; 'w]} } -->
+   sequent ['ext] { 'H >- restricted{z. "all"{'A['z]; y. 'B['y; 'z]}} }
 
 (*
  * -*-

@@ -6,30 +6,9 @@
  * Elsevier 1986 17--49.
  *
  * The "set" type is used to relate CZF to the Nuprl type theory.
- * We use a W-type over "small" types to define sets.
+ * We use a W-type over U1 to define sets.
  *
- *    type set = W(x:small. x)
- *
- * Where the type small is defined inductively:
- *       1. int
- *
- *    If A, B in small, then so are:
- *       2. fun{A; x.B[x]}
- *       3. exists{A; x.B[x]}
- *       4. union{A; B}
- *       5. equal{A; a; b}
- *
- * We assert the existence of a small type with
- * an elimination forms.
- *
- *    NOTE: We may want to get stronger elimination
- *    forms by using the following definition:
- *
- *       type set = W(x:small_desc. small_comp x)
- *
- *    The type small_desc is an index type of descriptions
- *    of small types, and (small_comp: small_desc -> small) is
- *    a bijection.
+ *    type set = W(x:U1. x)
  *
  * We abbreviate the sets themselves as:
  *    collect{T; x. a[x]} = tree{T; lambda x. a[x]}
@@ -42,44 +21,29 @@
  *)
 
 include Itt_theory
-include Czf_itt_small
 
 open Refiner.Refiner.Term
 
 open Tacticals
 open Conversionals
 
+open Base_auto_tactic
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
 
 (*
- * Well-formedness judgements on propositions,
- * and restricted propositions do not range over
- * all sets.
- *    wf{'p}: 'p is a well-formed proposition in CZF
- *    restricted{'p}: 'p is a well-formed restricted proposition in CZF
- *       where restricted means that it contains no unbounded
- *       set quantifications.
- *)
-declare wf{'p}
-declare restricted{x. 'P['x]}
-
-(*
  * Sets are built by collecting over small types.
  *   set: the type of all sets
  *   isset{'s}: the judgement that 's is a set
- *   member{'x; 't}:
- *      a. 'x is a set
- *      b. 't is a set
- *      c. 'x is an element of 't
  *   collect{'T; x. 'a['x]}:
  *      the set constructed from the family of sets 'a['x]
  *      where 'x ranges over 'T
+ *   set_ind is the induction combinator.
  *)
 declare set
 declare isset{'s}
-declare member{'x; 't}
 declare collect{'T; x. 'a['x]}
 declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
@@ -90,17 +54,8 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 (*
  * Sets.
  *)
-rewrite unfold_wf : wf{'p} <--> "type"{'p}
-rewrite unfold_restricted : restricted{x. 'P['x]} <-->
-   ((all x: set. small_type{'P['x]})
-    & (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]}))
-
-rewrite unfold_set : set <--> w{small; x. 'x}
+rewrite unfold_set : set <--> w{univ[1:l]; x. 'x}
 rewrite unfold_isset : isset{'s} <--> ('s = 's in set)
-rewrite unfold_member : member{'x; 'y} <-->
-  (('x = 'x in set)
-   & ('y = 'y in set)
-   & set_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
 rewrite unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 rewrite unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
@@ -109,31 +64,14 @@ rewrite reduce_set_ind :
    set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
    <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
 
-rewrite reduce_member :
-   member{'x; collect{'T; y. 'f['y]}} <-->
-      isset{'x} & isset{collect{'T; y. 'f['y]}} & "exists"{'T; z. 'f['z] = 'x in set}
-
-val fold_wf : conv
-val fold_restricted : conv
-
 val fold_set : conv
 val fold_isset : conv
-val fold_member : conv
 val fold_collect : conv
 val fold_set_ind : conv
 
 (************************************************************************
- * RELATION TO ITT                                                      *
+ * RULES                                                                *
  ************************************************************************)
-
-(*
- * We need the property that every well-formed proposition
- * is a type.  The proof is delayed until the theory is collected
- * and an induction form is given for well-formed formulas.
- *)
-axiom wf_type 'H :
-   sequent ['ext] { 'H >- wf{'T} } -->
-   sequent ['ext] { 'H >- "type"{'T} }
 
 (*
  * A set is a type in ITT.
@@ -142,23 +80,11 @@ axiom set_type 'H :
    sequent ['ext] { 'H >- "type"{set} }
 
 (*
- * Membership judgment is also a type.
- *)
-axiom member_type 'H :
-   sequent ['ext] { 'H >- isset{'t} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- "type"{member{'a; 't}} }
-
-(*
  * Equality from sethood.
  *)
 axiom equal_set 'H :
    sequent ['ext] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- 's = 's in set }
-
-(************************************************************************
- * SET TYPE                                                             *
- ************************************************************************)
 
 (*
  * By assumption.
@@ -167,52 +93,57 @@ axiom isset_assum 'H 'J :
    sequent ['ext] { 'H; x: set; 'J['x] >- isset{'x} }
 
 (*
- * Elements of a set are also sets.
- *)
-axiom isset_member 'H 'y :
-   sequent ['ext] { 'H >- member{'x; 'y} } -->
-   sequent ['ext] { 'H >- isset{'x} }
-
-(*
- * Only sets have elements.
- *)
-axiom isset_contains 'H 'x :
-   sequent ['ext] { 'H >- member{'x; 'y} } -->
-   sequent ['ext] { 'H >- isset{'y} }
-
-(*
  * This is how a set is constructed.
  *)
 axiom isset_collect 'H 'y :
-   sequent ['ext] { 'H >- small_type{'T} } -->
-   sequent ['ext] { 'H; y: 'T >- isset{'a['y]} } -->
+   sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
+   sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
+
+(*
+ * Applications often come up.
+ * This is not a necessary axiom, ut it is useful.
+ *)
+axiom isset_apply 'H 'J :
+   sequent [squash] { 'H; f: 'T -> set; 'J['f] >- 'x = 'x in 'T } -->
+   sequent ['ext] { 'H; f: 'T -> set; 'J['f] >- isset{.'f 'x} }
 
 (*
  * Induction.
  *)
-axiom set_elim 'H 'J 'a 'T 'f 'w :
+axiom set_elim 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
                     a: set;
                     'J['a];
-                    T: small;
-                    f: 'T -> set;
-                    w: (all x : 'T. 'C['f 'x])
-                  >- 'C[collect{'T; x. 'f 'x}]
-                  } -->
-   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
-
-axiom set_elim2 'H 'J 'a 'T 'f 'w 'z :
-   sequent ['ext] { 'H;
-                    a: set;
-                    'J['a];
-                    T: small;
+                    T: univ[1:l];
                     f: 'T -> set;
                     w: (all x : 'T. 'C['f 'x]);
                     z: isset{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
-   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
+                     sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
+
+(*
+ * These are related forms to expand a set into its
+ * collect representation.
+ *)
+axiom set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
+   sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
+   sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
+   sequent ['ext] { 'H;
+                    x: 'A['s];
+                    'J['x];
+                    T: univ[1:l];
+                    f: 'T -> set;
+                    z: 'A[collect{'T; y. 'f 'y}]
+                    >- 'C['x] } -->
+   sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
+
+axiom set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H; z: set >- "type"{'C['z]} } -->
+   sequent ['ext] { 'H; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
+   sequent ['ext] { 'H >- 'C['s] }
 
 (*
  * Equality on tree induction forms.
@@ -230,11 +161,6 @@ axiom set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
  ************************************************************************)
 
 (*
- * wf{'T} => type{'T}
- *)
-val wfTypeT : tactic
-
-(*
  * isset{'s} => 's = 's in set
  *)
 val eqSetT : tactic
@@ -242,8 +168,17 @@ val eqSetT : tactic
 (*
  * H, x: set, J >- isset{x}
  *)
-val assumSetT : int -> tactic
 val setAssumT : int -> tactic
+
+(*
+ * Replace a set with a collect.
+ *)
+val splitT : term -> int -> tactic
+
+(*
+ * Automation.
+ *)
+val set_prec : auto_prec
 
 (*
  * -*-

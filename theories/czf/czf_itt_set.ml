@@ -18,14 +18,15 @@
  *)
 
 include Itt_theory
-include Czf_itt_small
 
 open Printf
 open Debug
 
+open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Resource
 open Term_stable
@@ -36,10 +37,16 @@ open Conversionals
 open Sequent
 open Var
 
+open Base_dtactic
+open Base_auto_tactic
+
+open Itt_squash
 open Itt_equal
 open Itt_rfun
 open Itt_dprod
 open Itt_union
+open Itt_struct
+open Itt_logic
 open Itt_w
 
 let _ =
@@ -58,18 +65,6 @@ let debug_czf_set =
  ************************************************************************)
 
 (*
- * Well-formedness judgements on propositions,
- * and restricted propositions do not range over
- * all sets.
- *    wf{'p}: 'p is a well-formed proposition in CZF
- *    restricted{'p}: 'p is a well-formed restricted proposition in CZF
- *       where restricted means that it contains no unbounded
- *       set quantifications.
- *)
-declare wf{'p}
-declare restricted{x. 'P['x]}
-
-(*
  * Sets are built by collecting over small types.
  *   set: the type of all sets
  *   isset{'s}: the judgement that 's is a set
@@ -80,10 +75,10 @@ declare restricted{x. 'P['x]}
  *   collect{'T; x. 'a['x]}:
  *      the set constructed from the family of sets 'a['x]
  *      where 'x ranges over 'T
+ *   set_ind is the induction combinator.
  *)
 declare set
 declare isset{'s}
-declare member{'x; 't}
 declare collect{'T; x. 'a['x]}
 declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
@@ -94,17 +89,8 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 (*
  * Sets.
  *)
-primrw unfold_wf : wf{'p} <--> "type"{'p}
-primrw unfold_restricted : restricted{x. 'P['x]} <-->
-   ((all x: set. small_type{'P['x]})
-    & (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]}))
-
-primrw unfold_set : set <--> w{small; x. 'x}
+primrw unfold_set : set <--> w{univ[1:l]; x. 'x}
 primrw unfold_isset : isset{'s} <--> ('s = 's in set)
-primrw unfold_member : member{'x; 'y} <-->
-  (('x = 'x in set)
-   & ('y = 'y in set)
-   & set_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
 primrw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 primrw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
@@ -113,16 +99,8 @@ interactive_rw reduce_set_ind :
    set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
    <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
 
-interactive_rw reduce_member :
-   member{'x; collect{'T; y. 'f['y]}} <-->
-      isset{'x} & isset{collect{'T; y. 'f['y]}} & "exists"{'T; z. 'f['z] = 'x in set}
-
-let fold_wf         = makeFoldC << wf{'p} >> unfold_wf
-let fold_restricted = makeFoldC << restricted{x. 'P['x]} >> unfold_restricted
-
 let fold_set        = makeFoldC << set >> unfold_set
 let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
-let fold_member     = makeFoldC << member{'x; 'y} >> unfold_member
 let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
 let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
 
@@ -130,20 +108,11 @@ let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfol
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform wf_df : mode[prl] :: parens :: "prec"[prec_apply] :: wf{'A} =
-   slot{'A} `" wf"
-
-dform restricted_df : mode[prl] :: parens :: "prec"[prec_apply] :: restricted{x. 'P} =
-   slot{'P} `" restricted"
-
 dform set_df : set =
    `"set"
 
 dform isset_df : mode[prl] :: parens :: "prec"[prec_apply] :: isset{'s} =
    slot{'s} `" set"
-
-dform member_df : mode[prl] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
-   slot{'x} " " Nuprl_font!member " " slot{'t}
 
 dform collect_df : mode[prl] :: parens :: "prec"[prec_apply] :: collect{'T; x. 'a} =
    szone pushm[3] `"collect" " " slot{'x} `":" " " slot{'T} `"." " " slot{'a} popm ezone
@@ -158,27 +127,10 @@ dform set_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: set_ind{'z; a
  ************************************************************************)
 
 (*
- * We need the property that every well-formed proposition
- * is a type.  The proof is delayed until the theory is collected
- * and an induction form is given for well-formed formulas.
- *)
-interactive wf_type 'H :
-   sequent ['ext] { 'H >- wf{'T} } -->
-   sequent ['ext] { 'H >- "type"{'T} }
-
-(*
  * A set is a type in ITT.
  *)
 interactive set_type 'H : :
    sequent ['ext] { 'H >- "type"{set} }
-
-(*
- * Membership judgment is also a type.
- *)
-interactive member_type 'H :
-   sequent ['ext] { 'H >- isset{'t} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- "type"{member{'a; 't}} }
 
 (*
  * Equality from sethood.
@@ -187,10 +139,6 @@ interactive equal_set 'H :
    sequent ['ext] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- 's = 's in set }
 
-(************************************************************************
- * SET TYPE                                                             *
- ************************************************************************)
-
 (*
  * By assumption.
  *)
@@ -198,52 +146,57 @@ interactive isset_assum 'H 'J : :
    sequent ['ext] { 'H; x: set; 'J['x] >- isset{'x} }
 
 (*
- * Only sets have elements.
- *)
-interactive isset_contains 'H 'x :
-   sequent ['ext] { 'H >- member{'x; 'y} } -->
-   sequent ['ext] { 'H >- isset{'y} }
-
-(*
- * Elements of a set are also sets.
- *)
-interactive isset_member 'H 'y :
-   sequent ['ext] { 'H >- member{'x; 'y} } -->
-   sequent ['ext] { 'H >- isset{'x} }
-
-(*
  * This is how a set is constructed.
  *)
 interactive isset_collect 'H 'y :
-   sequent ['ext] { 'H >- small_type{'T} } -->
-   sequent ['ext] { 'H; y: 'T >- isset{'a['y]} } -->
+   sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
+   sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
+
+(*
+ * Applications often come up.
+ * This is not a necessary axiom, ut it is useful.
+ *)
+interactive isset_apply 'H 'J :
+   sequent [squash] { 'H; f: 'T -> set; 'J['f] >- 'x = 'x in 'T } -->
+   sequent ['ext] { 'H; f: 'T -> set; 'J['f] >- isset{.'f 'x} }
 
 (*
  * Induction.
  *)
-interactive set_elim 'H 'J 'a 'T 'f 'w :
+interactive set_elim 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
                     a: set;
                     'J['a];
-                    T: small;
-                    f: 'T -> set;
-                    w: (all x : 'T. 'C['f 'x])
-                  >- 'C[collect{'T; x. 'f 'x}]
-                  } -->
-   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
-
-interactive set_elim2 'H 'J 'a 'T 'f 'w 'z :
-   sequent ['ext] { 'H;
-                    a: set;
-                    'J['a];
-                    T: small;
+                    T: univ[1:l];
                     f: 'T -> set;
                     w: (all x : 'T. 'C['f 'x]);
                     z: isset{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
-   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
+                     sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
+
+(*
+ * These are related forms to expand a set into its
+ * collect representation.
+ *)
+interactive set_split_hyp2 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
+   sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
+   sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
+   sequent ['ext] { 'H;
+                    x: 'A['s];
+                    'J['x];
+                    T: univ[1:l];
+                    f: 'T -> set;
+                    z: 'A[collect{'T; y. 'f 'y}]
+                    >- 'C['x] } -->
+   sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
+
+interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H; z: set >- "type"{'C['z]} } -->
+   sequent ['ext] { 'H; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
+   sequent ['ext] { 'H >- 'C['s] }
 
 (*
  * Equality on tree induction forms.
@@ -260,127 +213,32 @@ interactive set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
  * PRIMITIVES                                                           *
  ************************************************************************)
 
-let int_opname = opname_of_term Itt_int.int_term
-let fun_opname = opname_of_term Itt_rfun.fun_term
-let prod_opname = opname_of_term Itt_dprod.dprod_term
-let union_opname = opname_of_term Itt_union.union_term
-let equal_opname = opname_of_term Itt_equal.equal_term
-
-let wf_term = << wf{'a} >>
-let restricted_term = << restricted{x. 'P['x]} >>
-let wf_opname = opname_of_term wf_term
-let restricted_opname = opname_of_term restricted_term
-
-let set_term = << set >>
+(*
+ * Isset.
+ *)
 let isset_term = << isset{'s} >>
-let member_term = << member{'x; 't} >>
-let collect_term = << collect{'T; x. 'a['x]} >>
-
 let isset_opname = opname_of_term isset_term
-let member_opname = opname_of_term member_term
-let collect_opname = opname_of_term collect_term
-
-(*
- * Testers.
- *)
-let is_wf_term =
-   is_dep0_term wf_opname
-
-let is_restricted_term =
-   is_dep1_term restricted_opname
-
-let is_isset_term =
-   is_dep0_term isset_opname
-
-let is_member_term =
-   is_dep0_dep0_term member_opname
-
-let is_collect_term =
-   is_dep0_dep1_term collect_opname
-
-(*
- * Constructors.
- *)
-let mk_wf_term =
-   mk_dep0_term wf_opname
-
-let mk_restricted_term =
-   mk_dep1_term restricted_opname
-
-let mk_isset_term =
-   mk_dep0_term isset_opname
-
-let mk_member_term =
-   mk_dep0_dep0_term member_opname
-
-let mk_collect_term =
-   mk_dep0_dep1_term collect_opname
-
-(*
- * Destructors.
- *)
-let dest_wf =
-   dest_dep0_term wf_opname
-
-let dest_restricted =
-   dest_dep1_term restricted_opname
-
-let dest_isset =
-   dest_dep0_term isset_opname
-
-let dest_member =
-   dest_dep0_dep0_term member_opname
-
-let dest_collect t =
-   dest_dep0_dep1_term collect_opname
+let is_isset_term = is_dep0_term isset_opname
+let mk_isset_term = mk_dep0_term isset_opname
+let dest_isset = dest_dep0_term isset_opname
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-(*
- * Collect is a set.
- *)
-let d_isset_genT tac i p =
+let d_collect_issetT i p =
    if i = 0 then
-      let i = hyp_count p in
-         try
-            let arg = get_with_arg p in
-            let sel =
-               try get_sel_arg p with
-                  RefineError _ ->
-                     1
-            in
-               if sel > 1 then
-                  isset_member i arg p
-               else
-                  isset_contains i arg p
-         with
-            RefineError _ ->
-               tac i p
+      let s = maybe_new_vars1 p "s" in
+         isset_collect (hyp_count p) s p
    else
-      raise (RefineError ("d_issetT", StringError "no elimination rule for isset"))
-
-let d_isset_varT i p =
-   let tac i p =
-      raise (RefineError ("d_issetT", StringError "use withT to provide an argument"))
-   in
-      d_isset_genT tac i p
-
-let d_isset_collectT i p =
-   let tac i p =
-      let v = maybe_new_vars1 p "v" in
-         isset_collect i v p
-   in
-      d_isset_genT tac i p
+      raise (RefineError ("d_collect_issetT", StringError "no elimination form"))
 
 (*
  * Special case for collection.
  *)
 let isset_collect_term = << isset{collect{'T; x. 'a['x]}} >>
 
-let d_resource = d_resource.resource_improve d_resource (isset_term, d_isset_varT)
-let d_resource = d_resource.resource_improve d_resource (isset_collect_term, d_isset_collectT)
+let d_resource = d_resource.resource_improve d_resource (isset_collect_term, d_collect_issetT)
 
 (************************************************************************
  * OTHER TACTICS                                                        *
@@ -400,37 +258,54 @@ let set_type_term = << "type"{set} >>
 let d_resource = d_resource.resource_improve d_resource (set_type_term, d_set_typeT)
 
 (*
- * H >- member{a; t} type
- *)
-let d_member_typeT i p =
-   if i = 0 then
-      member_type (Sequent.hyp_count p) p
-   else
-      raise (RefineError ("d_member_typeT", StringError "no elimination rule"))
-
-let member_type_term = << "type"{member{'a; 't}} >>
-
-let d_resource = d_resource.resource_improve d_resource (member_type_term, d_member_typeT)
-
-(*
  * Set elimination.
  *)
 let d_setT i p =
    if i = 0 then
-      raise (RefineError ("d_setT", StringTermError ("no formation rule", set_term)))
+      raise (RefineError ("d_setT", StringError "no introduction rule"))
    else
+      let thin =
+         if i = hyp_count p then
+            thinT i
+         else
+            idT
+      in
       let v_a, h_a = nth_hyp p i in
       let j, k = hyp_indices p i in
       let v_T, v_f, v_b, v_z = maybe_new_vars4 p "T" "f" "b" "z" in
-         set_elim2 j k v_a v_T v_f v_b v_z p
+         (set_elim j k v_a v_T v_f v_b v_z thenT thin) p
+
+let set_term = << set >>
 
 let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
 
 (*
- * Apply the type rule.
+ * Application rule.
  *)
-let wfTypeT p =
-   wf_type (Sequent.hyp_count p) p
+let d_apply_issetT i p =
+   if i = 0 then
+      let j = get_sel_arg p in
+      let k, l = hyp_indices p j in
+         isset_apply k l p
+   else
+      raise (RefineError ("d_apply_isset", StringError "no elimination form"))
+
+let apply_isset_term = << isset{.'f 'x} >>
+
+let d_resource = d_resource.resource_improve d_resource (apply_isset_term, d_apply_issetT)
+
+(*
+ * Typehood of isset{'s1}
+ *)
+let d_isset_typeT i p =
+   if i = 0 then
+      (rw (addrC [0] unfold_isset) 0 thenT dT 0) p
+   else
+      raise (RefineError ("d_isset_typeT", StringError "no elimination form"))
+
+let isset_type_term = << "type"{isset{'s1}} >>
+
+let d_resource = d_resource.resource_improve d_resource (isset_type_term, d_isset_typeT)
 
 (*
  * Equal sets.
@@ -445,7 +320,64 @@ let setAssumT i p =
    let i, j = hyp_indices p i in
       isset_assum i j p
 
-let assumSetT = setAssumT
+(*
+ * Split a set in a hyp or concl.
+ *)
+let splitT t i p =
+   let v_T, v_f, v_z = maybe_new_vars3 p "T" "f" "z" in
+      if i = 0 then
+         let goal = var_subst (Sequent.concl p) t v_z in
+         let bind = mk_bind_term v_z goal in
+            (set_split_concl (hyp_count p) t bind v_T v_f v_z
+             thenLT [addHiddenLabelT "wf";
+                     addHiddenLabelT "wf";
+                     addHiddenLabelT "main"]) p
+      else
+         let _, hyp = nth_hyp p i in
+         let hyp = var_subst hyp t v_z in
+         let bind = mk_bind_term v_z hyp in
+         let j, k = hyp_indices p i in
+            (set_split_hyp2 j k t bind v_T v_f v_z
+             thenLT [addHiddenLabelT "wf";
+                     addHiddenLabelT "wf";
+                     addHiddenLabelT "main"]) p
+
+(************************************************************************
+ * AUTOMATION                                                           *
+ ************************************************************************)
+
+(*
+ * Add set assumptions to trivial tactic.
+ *)
+let trivial_resource =
+   trivial_resource.resource_improve trivial_resource (**)
+      { auto_name = "setAssumT";
+        auto_prec = trivial_prec;
+        auto_tac = onSomeHypT setAssumT
+      }
+
+(*
+ * A function application.
+ *)
+let applyT i p =
+   let j, k = hyp_indices p i in
+      isset_apply j k p
+
+(*
+ * Similar dumb auto tactic.
+ *)
+let set_autoT =
+   firstT [rw fold_isset 0;
+           onSomeHypT applyT]
+
+let set_prec = create_auto_prec [trivial_prec] [back_hyp_prec]
+
+let auto_resource =
+   auto_resource.resource_improve auto_resource (**)
+      { auto_name = "set_autoT";
+        auto_prec = set_prec;
+        auto_tac = auto_wrap set_autoT
+      }
 
 (*
  * -*-

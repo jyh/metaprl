@@ -1,4 +1,5 @@
 # Libraries
+DIR := theories/lf
 ROOT := ../..
 INCLUDE = -I . -I ../../refiner
 

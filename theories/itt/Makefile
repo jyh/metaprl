@@ -1,6 +1,7 @@
 #
 # Libraries
 #
+DIR := theories/itt
 ROOT := ../..
 INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
@@ -34,6 +35,7 @@ NLFILES :=\
 	itt_srec\
 	itt_quotient\
 	itt_list\
+	itt_derive\
 	itt_theory\
 	itt_redrules\
 	itt_test

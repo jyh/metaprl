@@ -104,6 +104,7 @@ doc <:doc<
    @begin[doc]
    The $@cumulativity{i; j}$ term is a primitive judgment that defines level
    @emph{inclusion} (this is a built-in judgment in @MetaPRL).
+   <<cumulativity[i:l, j:l]>> is true iff universe level $i$ is @i{strictly} less than $j$.
    @end[doc]
 >>
 define unfold_cumulativity :
@@ -180,10 +181,10 @@ dform type_df2 : mode[src] :: ('a Type) =
    slot{'a} `" Type"
 
 dform univ_df1 : except_mode[src] :: univ[i:l] =
-   math_univ{slot[i:l]}
+    mathbbU sub[i:l]
 
 dform cumulativity_df : cumulativity[i:l, j:l] =
-   `"cumulativity[" slot[i:l] `";" slot[j:l] `"]"
+   slot[i:l] `" < " subl slot[j:l]
 
 dform it_df1 : except_mode[src] :: it = cdot
 dform it_df2 : mode[src] :: it = `"it"

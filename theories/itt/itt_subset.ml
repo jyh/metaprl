@@ -183,8 +183,6 @@ doc <:doc<
 interactive subset_univ {| intro [] |} :
    sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent { <H>; x: 'A1 >- 'x in 'B1 } -->
-   sequent { <H>; x: 'B1 >- 'x in 'B2 } -->
    sequent { <H> >- ('A1 subset 'B1) = ('A2 subset 'B2) in univ[i:l] }
 
 interactive subset_wf {| intro [] |} :

@@ -4,12 +4,15 @@ open Basic_tactics
 
 declare is_bterm{'bt}
 declare BTerm
+declare Var
 declare subterms{'t}
 declare make_bterm{'bt; 'btl}
 declare same_op{'b1; 'b2}
 declare simple_bterm{'bt}
 declare var_bterm{'bt}
+declare is_var_bterm{'bt}
 declare subst{'bt; 't}
+declare dest_op{'op;'bt; subterms.'match_case['subterms]; 'orelse}
 
 declare var_arity
 declare subterms_arity{'bt}

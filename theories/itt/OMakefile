@@ -18,12 +18,12 @@ MPFILES =\
    itt_atom\
    itt_set\
    itt_union\
+   itt_dprod\
+   itt_prod\
    itt_rfun\
    itt_dfun\
    itt_eta\
    itt_fun\
-   itt_dprod\
-   itt_prod\
    itt_esquash\
    itt_logic\
    itt_nequal\
@@ -100,6 +100,13 @@ MPFILES =\
    itt_supinf\
    itt_reflection\
    itt_reflection_test\
+   itt_pairwise\
+   itt_pairwise2\
+   itt_power\
+   itt_sqsimple\
+   itt_functions\
+   itt_closure\
+   itt_reflection_example_lambda\
    itt_example
 
 TEST_FILES =\

@@ -48,15 +48,7 @@ extends Itt_isect
 extends Itt_bool
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.RefineError
-
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Dtactic
-open Perv
-
+open Basic_tactics
 open Itt_equal
 open Itt_struct
 
@@ -226,6 +218,25 @@ interactive bisectSubtypeBelow {| intro [] |}:
    sequent { <H> >- 'C  subtype 'A } -->
    sequent { <H> >- 'C  subtype 'B } -->
    sequent { <H> >- 'C  subtype   'A isect 'B}
+
+
+interactive bisectSubtype1 {| intro [] |} :
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- 'A isect 'B  subtype 'A}
+
+interactive bisectSubtype2 {| intro [] |} :
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- 'A isect 'B  subtype 'B}
+
+interactive bisectTrivial1 {| nth_hyp |} 'H:
+   sequent { <H>; x:'A isect 'B; <J['x]>  >- 'x in 'A}
+
+interactive bisectTrivial2 {| nth_hyp |} 'H:
+   sequent { <H>; x:'A isect 'B; <J['x]>  >- 'x in 'B}
+
+
 doc <:doc< @docoff >>
 
 (*

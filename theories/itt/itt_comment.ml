@@ -53,11 +53,6 @@ dform math_type_df1 : mode[tex] :: math_type{'t} =
    `"Type"
    izone "}" ezone
 
-dform math_univ_df : mode[tex] :: math_univ{'i} =
-   izone `"{\\mathbb U}_{" ezone
-   slot{'i}
-   izone `"}" ezone
-
 dform math_equal_df1 : mode[tex] :: math_equal{'T; 'a; 'b} =
    izone `"{" ezone
    slot{'a}
@@ -94,11 +89,11 @@ dform member_df2 : mode[tex] :: parens :: "prec"[prec_equal] :: math_member{'T; 
 dform type_df1 : except_mode[tex] :: parens :: "prec"[prec_type] :: math_type{'a} =
    slot{'a} " " `"Type"
 
-dform univ_df1 : except_mode[tex] :: math_univ{'i} =
-   mathbbU `"[" slot{'i} `"]"
+dform univ_df1 :  math_univ{'i} =
+   mathbbU sub{'i}
 
 dform cumulativity_df : except_mode[tex] :: math_cumulativity{'i; 'j} =
-   `"cumulativity[" slot{'i} `";" slot{'j} `"]"
+   slot{'i} `" < " subl slot{'j}
 
 (************************************************************************
  * VOID
@@ -1179,7 +1174,7 @@ declare math_subset{'t1; 't2}
 dform subset_df1 : mode[tex] :: math_subset{'t1; 't2} =
    izone `"{" ezone
    slot{'t1}
-   izone `"\\subseteq" subs ezone
+   izone `"\\subseteq" ezone
    slot{'t2}
    izone `"}" ezone
 
@@ -1188,7 +1183,7 @@ dform subset_df1 : mode[tex] :: math_subset{'t1; 't2} =
  *)
 
 dform subset_df : except_mode[tex] :: math_subset{'t1; 't2} =
-   slot{'t1} `" " subseteq `"s " slot{'t2}
+   slot{'t1} `" " subseteq  slot{'t2}
 
 (*
  * -*-

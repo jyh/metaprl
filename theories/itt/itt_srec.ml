@@ -55,6 +55,7 @@ extends Itt_prec
 extends Itt_subtype
 extends Itt_void
 extends Itt_struct
+extends Itt_logic
 doc <:doc< @docoff >>
 
 open Lm_debug
@@ -189,18 +190,18 @@ doc <:doc<
 >>
 
 prim srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
-   [main] ('g['x; 'T1; 'u; 'w; 'z] : sequent {
+   [main] ('g['x; 'T; 'u; 'w; 'z] : sequent {
              <H>;
-             x: srec{T. 'B['T]};
+             x: srec{X. 'B['X]};
              <J['x]>;
-             T1: univ[i:l];
-             u: \subtype{'T1; srec{T. 'B['T]}};
-             w: v: 'T1 -> 'C['v];
-             z: 'B['T1]
+             T: univ[i:l];
+             u: \subtype{'T; srec{X. 'B['X]}};
+             w: all v:'T. 'C['v];
+             z: 'B['T]
            >- 'C['z]
            }) -->
-   sequent { <H>; x: srec{T. 'B['T]}; <J['x]> >- 'C['x] } =
-   srecind{'x; p, h. 'g['x; srec{T. 'B['T]}; it; 'p; 'h]}
+   sequent { <H>; x: srec{X. 'B['X]}; <J['x]> >- 'C['x] } =
+   srecind{'x; p, h. 'g['x; srec{X. 'B['X]}; it; 'p; 'h]}
 
 doc <:doc<
    @begin[doc]
@@ -287,7 +288,7 @@ let resource typeinf += (srecind_term, inf_srecind)
  *)
 
 
-(* XXX There are some questions about srec. This theory is subject to be changed.
+(* BUG: There are some questions about srec. This theory is subject to be changed.
    1. Is the rule srecType valid?
 
      Suppose we have B: U_n -> U_{n+1}, but not in U_n->U_n.

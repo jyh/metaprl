@@ -198,6 +198,8 @@ prim makebterm_wf {| intro [] |} :
  * Same_op                                                              *
  ************************************************************************)
 
+define unfold_is_same_op: is_same_op{'b1; 'b2} <--> Base_reflection!if_same_op{'b1; 'b2; "btrue"; "bfalse"}
+
 define unfold_same_op: same_op{'b1; 'b2} <--> Base_reflection!if_same_op{'b1; 'b2; "true"; "false"}
 
 dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
@@ -282,6 +284,15 @@ interactive term_is_simplebterm {| intro [] |} :
    sequent { <H> >- simple_bterm{ bterm{| >- term[@] |} } }
 
 
+(************************************************************************
+ * Dest_op                                                              *
+ ************************************************************************)
+
+define dest_op: dest_op{'op;'bt; subterms.'match_case['subterms]; 'orelse} <-->
+   if_same_op{'op;'bt;
+        'match_case[subterms{'bt}];
+        'orelse}
+
 
 (************************************************************************
  * The Term type.                                                       *
@@ -328,6 +339,36 @@ prim var_bterm_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- var_bterm{'bt} Type } =
    it
+
+
+define unfold_is_var_bterm: is_var_bterm{'bt} <-->  Base_reflection!if_var_bterm{'bt; btrue; bfalse}
+
+let resource reduce +=
+   (<< is_var_bterm{ bterm{| <H1> >- 't1 |} } >>, (unfold_is_var_bterm thenC Base_reflection.reduce_if_var_bterm))
+
+interactive is_var_bterm_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- is_var_bterm{'bt} in bool }
+
+
+define unfold_Var: Var <--> { bt:BTerm | var_bterm{'bt} }
+
+interactive var_wf {| intro [] |} :
+   sequent { <H> >- Var Type }
+
+interactive var_subtype {| intro [] |} :
+   sequent { <H> >- Var subtype BTerm }
+
+interactive_rw var_is_var:
+   ('v in Var) -->
+   is_var_bterm{'v} <--> btrue
+
+prim make_btrem_is_not_var {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >-  not{var_bterm{ make_bterm{'bt; 'btl} }} } =
+   lambda{x.'x}
+
 
 
 

@@ -782,6 +782,10 @@ interactive all_list_map  {| intro[] |} :
    sequent { <H> >-  all_list{'l; x. 'P['f('x)]} } -->
    sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
 
+interactive all_list_intro  {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A} :
+   sequent { <H> >- 'l in list{'A}  } -->
+   sequent { <H>; x:'A >- 'P['x]  } -->
+   sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
 doc <:doc<
    @begin[doc]

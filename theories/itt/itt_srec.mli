@@ -38,6 +38,7 @@ open Refiner.Refiner.TermType
 extends Itt_equal
 extends Itt_prec
 extends Itt_subtype
+extends Itt_logic
 
 (************************************************************************
  * TERMS                                                                *
@@ -115,15 +116,18 @@ rule srec_memberEquality :
  * >- C[z]
  *)
 
-rule srecElimination 'H univ[i:l] :
-   sequent { <H>; x: srec{T. 'B['T]}; <J['x]>;
-             T1: univ[i:l];
-             u: \subtype{'T1; srec{T. 'B['T]}};
-             w: v: 'T1 -> 'C['v];
-             z: 'B['T1]
+rule srecElimination  'H univ[i:l] :
+  sequent {
+             <H>;
+             x: srec{X. 'B['X]};
+             <J['x]>;
+             T: univ[i:l];
+             u: \subtype{'T; srec{X. 'B['X]}};
+             w: all v:'T. 'C['v];
+             z: 'B['T]
            >- 'C['z]
            } -->
-   sequent { <H>; x: srec{T. 'B['T]}; <J['x]> >- 'C['x] }
+   sequent { <H>; x: srec{X. 'B['X]}; <J['x]> >- 'C['x] }
 
 (*
  * H, x: srec(T. B[T]); J[x] >- C[x]

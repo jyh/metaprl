@@ -155,10 +155,10 @@ prim subtypeTypeLeft 'A :
    sequent { <H> >- "type"{'B} } =
    it
 
-interactive subtypeElimTypeRight 'H :
+interactive subtypeElimTypeRight {| nth_hyp |} 'H :
 	sequent { <H>; w: 'A subtype 'B; <J['w]> >- 'A Type }
 
-interactive subtypeElimTypeLeft 'H :
+interactive subtypeElimTypeLeft  {| nth_hyp |} 'H :
 	sequent { <H>; w: 'A subtype 'B; <J['w]> >- 'B Type }
 
 doc <:doc<
@@ -171,7 +171,7 @@ doc <:doc<
    proof extract term is always the $@it$ term.
    @end[doc]
 >>
-prim subtype_axiomFormation {| intro [] |} :
+prim subtype_axiomFormation {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [main] sequent { <H>; x: 'A >- 'x in 'B } -->
    sequent { <H> >- 'A subtype 'B } =
@@ -350,6 +350,10 @@ interactive by_subtype1 'H: (* Add to auto??? then remove subtype_axiomFormation
 interactive by_subtype2 'H: (* Add to AutoMustComplete ??? *)
    sequent { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
    sequent { <H>; x:'A; <J['x]> >- 'x in 'B }
+
+interactive subtypeReflexivity {| intro[] |} :
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- 'A subtype 'A }
 
 interactive subtypeTransitive 'C :
    sequent { <H> >- 'A subtype 'C } -->

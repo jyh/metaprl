@@ -415,6 +415,22 @@ interactive ge_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- it in ('a >= 'b) }
 
+interactive le_sqstable {| squash; intro [] |} :
+   sequent { <H> >- 'a <= 'b } -->
+   sequent { <H> >- it in ('a <= 'b) }
+
+interactive gt_sqstable {| squash; intro [] |} :
+   sequent { <H> >- 'a > 'b } -->
+   sequent { <H> >- it in ('a > 'b) }
+
+interactive lt_sqstable {| squash; intro [] |} :
+   sequent { <H> >- 'a < 'b } -->
+   sequent { <H> >- it in ('a < 'b) }
+
+interactive ne_sqstable {| squash; intro [] |} :
+   sequent { <H> >- 'a <> 'b } -->
+   sequent { <H> >- it in ('a <> 'b) }
+
 interactive ge_addWeakMono {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->

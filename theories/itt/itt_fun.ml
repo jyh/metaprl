@@ -63,6 +63,9 @@ open Itt_subtype
 open Itt_rfun
 open Itt_dfun
 
+extends Itt_prod (* because of FunctionExtensionality *)
+open Itt_prod
+
 (*
  * Show that the file is loading.
  *)
@@ -161,11 +164,23 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentFunctionExtensionality ('C -> 'D) ('E -> 'F) :
+(*
+interactive independentFunctionExtensionality {| intro[intro_typeinf <<'f,'g>>] |} (('C -> 'D)*('E -> 'F)) :
+*)
    [main] sequent { <H>; u: 'A >- ('f 'u) = ('g 'u) in 'B } -->
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'f in 'C -> 'D } -->
    [wf] sequent { <H> >- 'g in 'E -> 'F } -->
    sequent { <H> >- 'f = 'g in 'A -> 'B }
+
+interactive independentFunctionExtensionality2 {| intro[AutoMustComplete] |} :
+   [main] sequent { <H>; u: 'A >- ('f 'u) = ('g 'u) in 'B } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- 'f in void -> void } -->
+   [wf] sequent { <H> >- 'g in void -> void } -->
+   sequent { <H> >- 'f = 'g in 'A -> 'B }
+
+
 
 doc <:doc<
    @begin[doc]
@@ -190,6 +205,12 @@ interactive independentFunctionElimination2 'H 'a :
    [wf] sequent { <H>; f: 'A -> 'B; <J['f]> >- 'a in 'A } -->
    [main] sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
    sequent { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
+
+interactive independentFunctionEqElimination {| elim[] |} 'H 'a :
+   [wf] sequent { <H>; 'f='g in 'A -> 'B; <J> >- 'a in 'A } -->
+   [main] sequent { <H>; 'f='g in 'A -> 'B; 'f 'a = 'g 'a in 'B; <J> >- 'T } -->
+   sequent { <H>; 'f='g in 'A -> 'B; <J> >- 'T }
+
 
 doc <:doc<
    @begin[doc]
@@ -324,10 +345,19 @@ let fnExtensionalityT t1 t2 = funT (fun p ->
       dfun_extensionalityT t1 t2
    else if is_fun_term t1 then
       let t, _, _ = dest_equal (Sequent.concl p) in
+         (* independentFunctionExtensionality <:con<prod{$t1$;$t2$}>> *)
          independentFunctionExtensionality t1 t2
    else raise (RefineError ("extensionalityT", StringTermError ("first arg is not a function type", t1))))
 
 let fnExtenT t = fnExtensionalityT t t
+
+
+(* BUG: The right way of applying *FunctionExtensionality:
+     take C->D, E->F from with or
+     let C->D =  typeinf (f) orelse void->void in
+     let E->F =  typeinf (g) orelse void->void in
+      in  independentFunctionExtensionality C->D E->F
+*)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -89,7 +89,6 @@ doc <:doc<
 interactive singletonEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A1 } -->
-   [wf] sequent { <H>; x: 'A1 >- 'x in 'A2 } -->
    sequent { <H> >- singleton{'a1; 'A1} = singleton{ 'a2; 'A2 } in univ[i:l] }
 
 interactive singleton_wf {| intro[] |}:

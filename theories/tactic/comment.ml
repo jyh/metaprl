@@ -713,7 +713,7 @@ doc <:doc< @docoff >>
 dform math_df1 : math[s:s] = math{slot[s:s]}
 
 dform math_df2 : mode[tex] :: math{'t} =
-   izone `"$" ezone slot{'t} izone `"$" ezone
+   lzone izone `"$" ezone slot{'t} izone `"$" ezone ezone
 
 dform math_df3 : except_mode[tex] :: math{'t} =
    `"$" it{'t} `"$"

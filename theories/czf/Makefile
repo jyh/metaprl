@@ -11,7 +11,8 @@ MLZFILES :=\
 
 # Library files
 NLFILES :=\
-	czf_itt_set\
+	czf_itt_small\
+	czf_itt_set
 
 X=\
 	czf_itt_true\

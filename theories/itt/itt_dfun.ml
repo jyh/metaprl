@@ -30,7 +30,17 @@ let _ =
    if !debug_load then
       eprintf "Loading Itt_dfun%t" eflush
 
-(* debug_string DebugLoad "Loading itt_void..." *)
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+primrw reduceEta (x: 'A -> 'B['x]) : ('f = 'f in (x: 'A -> 'B['x])) -->
+   lambda{x. 'f 'x} <--> 'f
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
 
 (*
  * H >- Ui ext a:A -> B
@@ -56,6 +66,15 @@ prim functionEquality 'H 'x :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } -->
    sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l] } =
+   it
+
+(*
+ * Typehood.
+ *)
+prim functionType 'H 'x :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
+   sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } } =
    it
 
 (*
@@ -219,6 +238,21 @@ let d_dfunT i =
 
 let d_resource = d_resource.resource_improve d_resource (dfun_term, d_dfunT)
 
+(*
+ * Typehood.
+ *)
+let d_dfun_typeT i p =
+   if i = 0 then
+      let x = maybe_new_vars1 p "x" in
+         functionType (hyp_count p) x p
+   else
+      let _, t = Sequent.nth_hyp p i in
+         raise (RefineError ("d_dfun_typeT", StringTermError ("no elimination form", t)))
+
+let dfun_type_term = << "type"{. x:'A -> 'B['x] } >>
+
+let d_resource = d_resource.resource_improve d_resource (dfun_type_term, d_dfun_typeT)
+
 (************************************************************************
  * EQCD TACTICS                                                         *
  ************************************************************************)
@@ -236,6 +270,12 @@ let eqcd_dfunT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dfun_term, eqcd_dfunT)
 
+let dfun_equal_term = << (x1 : 'A1 -> 'B1['x1]) = (x2 : 'A2 -> 'B2['x2]) in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (dfun_equal_term, d_wrap_eqcd eqcd_dfunT)
+
+(*
+ * Save this for itt_fun.
 (*
  * EQCD lambda.
  *)
@@ -249,19 +289,32 @@ let eqcd_lambdaT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (lambda_term, eqcd_lambdaT)
 
+let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in x3: 'A -> 'B['x3] >>
+
+let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
+*)
+
+(*
+ * Leave this for itt_fun.
 (*
  * EQCD apply.
  *)
 let eqcd_applyT p =
    let t =
       try get_with_arg p with
-         Not_found -> raise (RefineError ("eqcd_applyT", StringError "need an argument"))
+         RefineError _ ->
+            raise (RefineError ("eqcd_applyT", StringError "need an argument"))
    in
    let count = hyp_count p in
       (applyEquality count t
        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (apply_term, eqcd_applyT)
+
+let apply_equal_term = << ('f1 'x1) = ('f2 'x2) in 'B >>
+
+let d_resource = d_resource.resource_improve d_resource (apply_equal_term, d_wrap_eqcd eqcd_applyT)
+*)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -45,6 +45,7 @@ declare Leftarrow
 declare Middlearrow
 declare shortRightarrow
 declare Rightarrow
+declare Leftrightarrow
 declare ulcorner
 declare urcorner
 declare vdash
@@ -154,6 +155,7 @@ dform leftarrow_df		: mode[prl] :: Leftarrow                 = `"\220\221"
 dform middlearrow_df		: mode[prl] :: Middlearrow               = `"\221"
 dform shortRightarrow_df	: mode[prl] :: shortRightarrow           = `"\158"
 dform rightarrow_df		: mode[prl] :: Rightarrow                = `"\221\222"
+dform leftrightarrow_df		: mode[prl] :: Leftrightarrow            = `"\220\221\222"
 dform ulcorner_df		: mode[prl] :: ulcorner                  = `"\154"
 dform urcorner_df		: mode[prl] :: urcorner                  = `"\155"
 dform vdash_df                  : mode[prl] :: vdash                     = `"\159"

@@ -42,6 +42,7 @@
  *)
 
 include Itt_theory
+include Czf_itt_small
 
 open Refiner.Refiner.Term
 
@@ -62,16 +63,7 @@ open Conversionals
  *       set quantifications.
  *)
 declare wf{'p}
-declare restricted{'p}
-
-(*
- * These are the small types from which sets are built.
- *    small: the type of small propositions
- *    small_desc: descriptions of small propositions
- *
- *)
-declare small
-declare small_type{'t}
+declare restricted{x. 'P['x]}
 
 (*
  * Sets are built by collecting over small types.
@@ -97,65 +89,59 @@ declare collect{'T; x. 'a['x]}
 (*
  * Sets.
  *)
-rewrite unfold_small_type : small_type{'t} <--> ('t = 't in small)
+rewrite unfold_wf : wf{'p} <--> "type"{'p}
+rewrite unfold_restricted : restricted{x. 'P['x]} <-->
+   (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]})
+
 rewrite unfold_set : set <--> w{small; x. 'x}
 rewrite unfold_isset : isset{'s} <--> ('s = 's in set)
 rewrite unfold_member : member{'x; 'y} <-->
-  (('y = 'y in set) & tree_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
+  (('x = 'x in set)
+   & ('y = 'y in set)
+   & tree_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
 rewrite unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 
-val fold_small_type : conv
+val fold_wf : conv
+val fold_restricted : conv
+
 val fold_set : conv
 val fold_isset : conv
 val fold_member : conv
 val fold_collect : conv
 
 (************************************************************************
- * SMALL TYPE RULES                                                     *
+ * RELATION TO ITT                                                      *
  ************************************************************************)
 
 (*
-(*
- * These are the types in the small universe.
+ * We need the property that every well-formed proposition
+ * is a type.  The proof is delayed until the theory is collected
+ * and an induction form is given for well-formed formulas.
  *)
-axiom hyp_small 'H 'J :
-   sequent ['ext] { 'H; a: small; 'J['a] >- small_type{'a} }
-
-axiom int_small 'H :
-   sequent ['ext] { 'H >- small_type{int} }
-
-axiom fun_small 'H :
-   sequent ['ext] { 'H >- small_type{'A} } -->
-   sequent ['ext] { 'H; a: 'A >- small_type{'B['a]} } -->
-   sequent ['ext] { 'H >- small_type{(a: 'A -> 'B['a])} }
-
-axiom exists_small 'H :
-   sequent ['ext] { 'H >- small_type{'A} } -->
-   sequent ['ext] { 'H; a: 'A >- small_type{'B['a]} } -->
-   sequent ['ext] { 'H >- small_type{(a: 'A * 'B['a])} }
-
-axiom union_small 'H :
-   sequent ['ext] { 'H >- small_type{'A} } -->
-   sequent ['ext] { 'H >- small_type{'B} } -->
-   sequent ['ext] { 'H >- small_type{('A + 'B)} }
-
-axiom equal_small 'H :
-   sequent ['ext] { 'H >- small_type{'A} } -->
-   sequent ['ext] { 'H >- 'a = 'a in 'A } -->
-   sequent ['ext] { 'H >- 'b = 'b in 'A } -->
-   sequent ['ext] { 'H >- small_type{('a = 'b in 'A)} }
+axiom wf_type 'H :
+   sequent ['ext] { 'H >- wf{'T} } -->
+   sequent ['ext] { 'H >- "type"{'T} }
 
 (*
- * There are no other small types.
+ * A set is a type in ITT.
  *)
-axiom small_elim 'H 'J (a1: 'A1 -> 'B1) (a2:'A2 * 'B2) ('A3 + 'B3) ('a4 = 'b4 in 'A4) :
-   sequent ['ext] { 'H; 'J[int] >- 'C[int] } -->
-   sequent ['ext] { 'H; A1: small; B1: 'A1 -> small; 'J[(a1:'A1 -> 'B1 'a1)] >- 'C[(a1:'A1 -> 'B1 'a1)] } -->
-   sequent ['ext] { 'H; A2: small; B2: 'A2 -> small; 'J[(a2:'A2 * 'B2 'a2)] >- 'C[(a2:'A2 * 'B2 'a2)] } -->
-   sequent ['ext] { 'H; A3: small; B3: small; 'J[('A3 + 'B3)] >- 'C[('A3 + 'B3)] } -->
-   sequent ['ext] { 'H; A4: small; a4: 'A4; b: 'A4; 'J[('a4 = 'b4 in 'A4)] >- 'C[('a4 = 'b4 in 'A4)] } -->
-   sequent ['ext] { 'H; x: small; 'J['x] >- 'C['x] }
-*)
+axiom set_type 'H :
+   sequent ['ext] { 'H >- "type"{set} }
+
+(*
+ * Membership judgment is also a type.
+ *)
+axiom member_type 'H :
+   sequent ['ext] { 'H >- isset{'t} } -->
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- "type"{member{'a; 't}} }
+
+(*
+ * Equality from sethood.
+ *)
+axiom equal_set 'H :
+   sequent ['ext] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H >- 's = 's in set }
 
 (************************************************************************
  * SET TYPE                                                             *
@@ -204,73 +190,18 @@ axiom set_elim 'H 'J 'a 'T 'f 'w :
    sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
 
 (************************************************************************
- * RELATION TO ITT                                                      *
- ************************************************************************)
-
-(*
- * We need the property that every well-formed proposition
- * is a type.  The proof is delayed until the theory is collected
- * and an induction form is given for well-formed formulas.
- *)
-axiom wf_type 'H :
-   sequent ['ext] { 'H >- wf{'T} } -->
-   sequent ['ext] { 'H >- "type"{'T} }
-
-(*
- * A set is a type in ITT.
- *)
-axiom set_type 'H :
-   sequent ['ext] { 'H >- "type"{set} }
-
-(*
- * Membership judgment is also a type.
- *)
-axiom member_type 'H :
-   sequent ['ext] { 'H >- isset{'t} } -->
-   sequent ['ext] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- "type"{member{'a; 't}} }
-
-(*
- * Equality from sethood.
- *)
-axiom equal_set 'H :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- 's = 's in set }
-
-(*
- * Equality from membership.
- *)
-axiom equal_member 'H :
-   sequent ['ext] { 'H >- member{'x; 's} } -->
-   sequent ['ext] { 'H >- 'x = 'x in 's }
-
-(************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
 (*
- * Set membership.
-type memd_data
-
-resource (term * tactic, tactic, memd_data) memd_resource
-
-val memdT : tactic
- *)
-
-(*
  * wf{'T} => type{'T}
  *)
-val wf_typeT : tactic
+val wfTypeT : tactic
 
 (*
  * isset{'s} => 's = 's in set
  *)
 val eqSetT : tactic
-
-(*
- * member{'x; 's} => 'x = 'x in 's
- *)
-val eqMemberT : tactic
 
 (*
  * H, x: set, J >- isset{x}

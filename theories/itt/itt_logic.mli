@@ -23,9 +23,10 @@ define unfoldFalse : "false" <--> void
 
 define unfoldNot : "not"{'a} <--> 'a -> void
 
-define unfoldImplies : "implies"{'a; 'b} <--> 'a -> 'b
 define unfoldAnd : "and"{'a; 'b} <--> 'a * 'b
 define unfoldOr : "or"{'a; 'b} <--> 'a + 'b
+define unfoldImplies : "implies"{'a; 'b} <--> 'a -> 'b
+define unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
 
 define unfoldAll : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
 define unfoldExists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
@@ -37,6 +38,7 @@ rewrite reducePropFalse : "prop"["false":t] <--> "false"
  * DISPLAY FORMS							*
  ************************************************************************)
 
+prec prec_iff
 prec prec_implies
 prec prec_and
 prec prec_or
@@ -71,6 +73,10 @@ val mk_and_term : term -> term -> term
 val is_implies_term : term -> bool
 val dest_implies : term -> term * term
 val mk_implies_term : term -> term -> term
+
+val is_iff_term : term -> bool
+val dest_iff : term -> term * term
+val mk_iff_term : term -> term -> term
 
 val is_not_term : term -> bool
 val dest_not : term -> term

@@ -6,7 +6,7 @@
 include Tacticals
 
 include Itt_equal
-include Itt_rfun
+include Itt_dfun
 
 open Printf
 open Debug
@@ -23,6 +23,7 @@ open Var
 open Itt_equal
 open Itt_subtype
 open Itt_rfun
+open Itt_dfun
 
 (*
  * Show that the file is loading.
@@ -32,6 +33,17 @@ let _ =
       eprintf "Loading Itt_fun%t" eflush
 
 (* debug_string DebugLoad "Loading itt_fun..." *)
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+primrw reduceIndependentEta ('A -> 'B) : ('f = 'f in 'A -> 'B) -->
+   lambda{x. 'f 'x} <--> 'f
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
 
 (*
  * H >- Ui ext A -> B
@@ -60,6 +72,15 @@ prim independentFunctionEquality 'H :
    it
 
 (*
+ * Typehood.
+ *)
+prim independentFunctionType 'H 'x :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
+   sequent ['ext] { 'H >- "type"{. 'A1 -> 'B1 } } =
+   it
+
+(*
  * H >- a:A -> B[a] ext lambda(z. b[z])
  * by lambdaFormation Ui z
  *
@@ -73,6 +94,19 @@ prim independentLambdaFormation 'H 'z :
    lambda{z. 'b['z]}
 
 (*
+ * H >- lambda(a1. b1[a1]) = lambda(a2. b2[a2]) in a:A -> B
+ * by lambdaEquality Ui x
+ *
+ * H >- A = A in Ui
+ * H, x: A >- b1[x] = b2[x] in B[x]
+ *)
+prim independentLambdaEquality 'H 'x :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
+   sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B } =
+   it
+
+(*
  * H, f: A -> B, J[x] >- T[x]                   ext t[f, f a]
  * by independentFunctionElimination i y
  *
@@ -84,6 +118,28 @@ prim independentFunctionElimination 'H 'J 'f 'y :
    ('t['f; 'y] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] } =
    't['f; 'f 'a]
+
+(*
+ * Explicit function elimination.
+ *)
+prim independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
+   sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'a = 'a in 'A } -->
+   ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
+   sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] } =
+   't['f 'a; it]
+
+(*
+ * H >- (f1 a1) = (f2 a2) in B[a1]
+ * by applyEquality (x:A -> B[x])
+ *
+ * H >- f1 = f2 in x:A -> B[x]
+ * H >- a1 = a2 in A
+ *)
+prim independentApplyEquality 'H ('A -> 'B) :
+   sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
+   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B } =
+   it
 
 (*
  * H >- A1 -> B1 <= A2 -> B2
@@ -118,8 +174,13 @@ let d_concl_fun p =
 let d_hyp_fun i p =
    let f, _ = Sequent.nth_hyp p i in
    let i, j = hyp_indices p i in
-   let y = get_opt_var_arg "y" p in
-      independentFunctionElimination i j f y p
+   let y, z = maybe_new_vars2 p "y" "z" in
+      try
+         let a = get_with_arg p in
+            independentFunctionElimination2 i j f y z a p
+      with
+         RefineError _ ->
+            independentFunctionElimination i j f y p
 
 (*
  * Join them.
@@ -132,14 +193,27 @@ let d_funT i =
 
 let d_resource = d_resource.resource_improve d_resource (fun_term, d_funT)
 
+(*
+ * Typehood.
+ *)
+let d_fun_typeT i p =
+   if i = 0 then
+      let x = maybe_new_vars1 p "x" in
+         independentFunctionType (hyp_count p) x p
+   else
+      let _, t = Sequent.nth_hyp p i in
+         raise (RefineError ("d_fun_typeT", StringTermError ("no elimination form", t)))
+
+let fun_type_term = << "type"{. 'A -> 'B } >>
+
+let d_resource = d_resource.resource_improve d_resource (fun_type_term, d_fun_typeT)
+
 (************************************************************************
  * EQCD TACTIC                                                          *
  ************************************************************************)
 
 (*
  * EQCD.
- *
- * Need a term for the well-order.
  *)
 let eqcd_funT p =
    let count = hyp_count p in
@@ -147,6 +221,55 @@ let eqcd_funT p =
        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (fun_term, eqcd_funT)
+
+let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in 'A -> 'B >>
+
+let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_funT)
+
+(*
+ * Apply equality.
+ *)
+let eqcd_applyT p =
+   let x = get_with_arg p in
+   let i = hyp_count p in
+      if is_fun_term x then
+         independentApplyEquality i x p
+      else if is_dfun_term x then
+         applyEquality i x p
+      else
+         raise (RefineError ("eqcd_applyT", StringTermError ("argument should be a function type", x)))
+
+let apply_equal_term = << ('f1 'a1) = ('f2 'a2) in 'T >>
+
+let d_resource = d_resource.resource_improve d_resource (apply_equal_term, d_wrap_eqcd eqcd_applyT)
+
+(*
+ * Lambda equality.
+ *)
+let eqcd_lambdaT p =
+   let t, l, _ = dest_equal (concl p) in
+   let v, _ = dest_lambda l in
+   let x = get_opt_var_arg v p in
+   let count = hyp_count p in
+   let tac =
+      if is_fun_term t then
+         independentLambdaEquality count x
+      else if is_dfun_term t then
+         lambdaEquality count x
+      else
+         raise (RefineError ("eqcd_lambdaT", StringTermError ("type is not a function tye", t)))
+   in
+      (tac thenT addHiddenLabelT "wf") p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (lambda_term, eqcd_lambdaT)
+
+let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in x3: 'A -> 'B['x3] >>
+
+let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
+
+let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in 'A -> 'B >>
+
+let d_resource = d_resource.resource_improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -182,6 +305,18 @@ let sub_resource =
                << 'A2 >>, << 'A1 >>;
                << 'B1 >>, << 'B2 >>],
               fun_subtypeT))
+
+(************************************************************************
+ * CONVERSIONAL                                                         *
+ ************************************************************************)
+
+let etaC t =
+   if is_fun_term t then
+      reduceIndependentEta t
+   else if is_dfun_term t then
+      Itt_dfun.reduceEta t
+   else
+      raise (RefineError ("etaC", StringTermError ("argument is not a function type", t)))
 
 (*
  * -*-

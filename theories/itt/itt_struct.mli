@@ -85,9 +85,9 @@ axiom hypReplacement 'H 'J 'B univ[@i:l] :
  *)
 axiom hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
-   sequent ['prop] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
-   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- 'A['z] } -->
-   sequent ['prop] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
+   sequent ['prop]  { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
+   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
+   sequent ['prop]  { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -95,13 +95,14 @@ axiom hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
 
 val nthHypT : int -> tactic
 val thinT : int -> tactic
+val thinAllT : int -> int -> tactic
 val assertT : term -> tactic
 val assertAtT : int -> term -> tactic
 val useWitnessT : term -> tactic
 
-val substT : int -> term -> tactic
-val hypSubstT : int -> tactic
-val revHypSubstT : int -> tactic
+val substT : term -> int -> tactic
+val hypSubstT : int -> int -> tactic
+val revHypSubstT : int -> int -> tactic
 
 (*
  * -*-

@@ -11,6 +11,13 @@ open Refiner.Refiner.Term
 open Tacticals
 
 (************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+rewrite reduceEta (x: 'A -> 'B['x]) : ('f = 'f in (x: 'A -> 'B['x])) -->
+   lambda{x. 'f 'x} <--> 'f
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -37,6 +44,14 @@ axiom functionEquality 'H 'x :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } -->
    sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l] }
+
+(*
+ * Typehood.
+ *)
+axiom functionType 'H 'x :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
+   sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } }
 
 (*
  * H >- a:A -> B[a] ext lambda(z. b[z])

@@ -110,7 +110,7 @@ prim hypReplacement 'H 'J 'B univ[@i:l] :
 prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
    sequent ['prop] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
-   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- 'A['z] } -->
+   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
    sequent ['prop] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
    it
 
@@ -148,6 +148,15 @@ let thinT i p =
          raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
       else
          thin i j p
+
+let thinAllT i j p =
+   let rec tac j =
+      if j < i then
+         idT
+      else
+         thinT j thenT tac (j - 1)
+   in
+      tac j p
 
 (*
  * Cut rule.
@@ -212,10 +221,13 @@ let substHypT i t p =
             else
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
-         Not_found ->
+         RefineError _ ->
             mk_bind_term z (var_subst t1 a z)
    in
    let i, j = hyp_indices p i in
+      eprintf "Subst binding: ";
+      Simple_print.prerr_simple_term bind;
+      eflush stderr;
       (hypSubstitution i j t bind z
        thenLT [addHiddenLabelT "equality";
                addHiddenLabelT "main";
@@ -224,23 +236,23 @@ let substHypT i t p =
 (*
  * General substition.
  *)
-let substT i =
+let substT t i =
    if i = 0 then
-      substConclT
+      substConclT t
    else
-      substHypT i
+      substHypT i t
 
 (*
  * Derived versions.
  *)
-let hypSubstT i p =
+let hypSubstT i j p =
    let _, h = Sequent.nth_hyp p i in
-      (substT i h thenET nthHypT i) p
+      (substT h j thenET nthHypT i) p
 
-let revHypSubstT i p =
+let revHypSubstT i j p =
    let t, a, b = dest_equal (snd (Sequent.nth_hyp p i)) in
    let h' = mk_equal_term t b a in
-      (substT i h' thenET (equalSymT thenT nthHypT i)) p
+      (substT h' j thenET (equalSymT thenT nthHypT i)) p
 
 (*
  * -*-

@@ -29,8 +29,6 @@ let _ =
    if !debug_load then
       eprintf "Loading Itt_logic%t" eflush
 
-(* debug_string DebugLoad "Loading itt_logic..." *)
-
 (************************************************************************
  * REWRITES								*
  ************************************************************************)
@@ -40,6 +38,7 @@ declare "prop"[@i:l]
 declare "true"
 declare "false"
 declare "not"{'a}
+declare "iff"{'a; 'b}
 declare "implies"{'a; 'b}
 declare "and"{'a; 'b}
 declare "or"{'a; 'b}
@@ -52,6 +51,7 @@ primrw unfoldTrue : "true" <--> unit
 primrw unfoldFalse : "false" <--> void
 primrw unfoldNot : not{'a} <--> 'a -> void
 primrw unfoldImplies : 'a => 'b <--> 'a -> 'b
+primrw unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
 primrw unfoldAnd : 'a & 'b <--> 'a * 'b
 primrw unfoldOr : 'a or 'b <--> 'a + 'b
 primrw unfoldAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
@@ -64,15 +64,16 @@ primrw reducePropFalse : "prop"["false":t] <--> "false"
  * DISPLAY FORMS							*
  ************************************************************************)
 
+prec prec_iff
 prec prec_implies
 prec prec_and
 prec prec_or
 prec prec_quant
 
-prec prec_implies < prec_and
-prec prec_implies < prec_or
+prec prec_implies < prec_iff
+prec prec_iff < prec_or
 prec prec_or < prec_and
-prec prec_quant < prec_implies
+prec prec_quant < prec_iff
 
 dform true_df1 : mode[src] :: "true" = `"True"
 
@@ -83,6 +84,9 @@ dform not_df1 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
 
 dform implies_df1 : mode[src] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
    slot[le]{'a} `" => " slot[lt]{'b}
+
+dform iff_df1 : mode[src] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
+   slot[le]{'a} `" <==> " slot[lt]{'b}
 
 dform and_df1 : mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
    slot[le]{'a} `" /\\ " slot[lt]{'b}
@@ -99,8 +103,11 @@ dform exists_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 
 dform not_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: "not"{'a} =
    Nuprl_font!tneg slot[le]{'a}
 
-dform implies_df1 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
+dform implies_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
    slot[le]{'a} " " Nuprl_font!Rightarrow " " slot[lt]{'b}
+
+dform iff_df2 : mode[prl] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
+   slot[le]{'a} " " Nuprl_font!Leftrightarrow " " slot[lt]{'b}
 
 dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
    slot[le]{'a} " " Nuprl_font!wedge " " slot[lt]{'b}
@@ -154,6 +161,12 @@ let is_implies_term = is_dep0_dep0_term implies_opname
 let dest_implies = dest_dep0_dep0_term implies_opname
 let mk_implies_term = mk_dep0_dep0_term implies_opname
 
+let iff_term = << "iff"{'A; 'B} >>
+let iff_opname = opname_of_term iff_term
+let is_iff_term = is_dep0_dep0_term iff_opname
+let dest_iff = dest_dep0_dep0_term iff_opname
+let mk_iff_term = mk_dep0_dep0_term iff_opname
+
 let not_term = << 'A => 'B >>
 let not_opname = opname_of_term not_term
 let is_not_term = is_dep0_term not_opname
@@ -171,6 +184,7 @@ let terms =
     or_term,      unfoldOr;
     and_term,     unfoldAnd;
     implies_term, unfoldImplies;
+    iff_term,     unfoldIff;
     not_term,     unfoldNot]
 
 let add arg =
@@ -222,6 +236,7 @@ let inf_nd dest f decl t =
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (or_term, inf_nd dest_or)
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (and_term, inf_nd dest_and)
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (implies_term, inf_nd dest_implies)
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (iff_term, inf_nd dest_iff)
 
 (*
  * Type of all.

@@ -35,6 +35,7 @@ declare Leftarrow
 declare Middlearrow
 declare shortRightarrow
 declare Rightarrow
+declare Leftrightarrow
 declare ulcorner
 declare urcorner
 declare vdash

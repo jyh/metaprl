@@ -250,6 +250,11 @@ interactive boolElimination2 {| elim [] |} 'H :
    [main] sequent{ <H>; <J[btrue]> >- 'C[btrue] } -->
    [main] sequent{ <H>; <J[bfalse]> >- 'C[bfalse] } -->
    sequent { <H>; x: "bool"; <J['x]> >- 'C['x] }
+doc docoff
+
+interactive_rw reduce_bor_true2 {| reduce |} :
+   ('e1 in bool) -->
+   bor{'e1; btrue} <--> btrue
 
 doc <:doc<
    @begin[doc]

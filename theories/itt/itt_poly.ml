@@ -238,7 +238,6 @@ define unfold_zero_poly : zero_poly{'F} <-->
 
 define unfold_isZeroPoly : isZeroPoly{'p; 'F} <-->
    band{ (fst{'p} =@ 0); isZero{(snd{'p} 0); 'F} }
-(*   band{ (fst{'p} =@ 0); 'F^eq (snd{'p} 0) 'F^"0" } *)
 
 define unfold_deg : deg{'p} <-->
    fst{'p}
@@ -251,7 +250,6 @@ declare normalize{'p; 'F}
 prim_rw unfold_normalize : normalize{'p; 'F} <-->
    ind{ fst{'p}; 'p; k,l.
         if isZero{(snd{'p} fst{'p}); 'F}
-(*         k,l. if ('F^eq (snd{'p} fst{'p}) 'F^"0") *)
                 then normalize{(fst{'p} -@ 1, snd{'p}); 'F}
                 else 'p }
 
@@ -260,15 +258,19 @@ define unfold_add_const : add_const{'p; 'a; 'F} <-->
 
 define unfold_mul_const : mul_const{'p; 'a; 'F} <-->
    if isZero{'a; 'F} then zero_poly{'F}
-(*   if ('F^eq 'a 'F^"0") then zero_poly{'F} *)
    else (fst{'p}, lambda{x. (snd{'p} 'x) *['F] 'a})
 
 define unfold_add_poly : add_poly{'p; 'q; 'F} <-->
    normalize{(max{fst{'p}; fst{'q}}, lambda{x. coeff{'p;'x;'F} +['F] coeff{'q;'x;'F}}); 'F}
 
+declare sum{'j; x.'P['x]; 'F}
+
+prim_rw unfold_sum1 : sum{'j; x.'P['x]; 'F} <-->
+   ind{'j; m,n. sum{('j +@ 1); x.'P['x]; 'F} +['F] 'P['j]; 'P[0]; k,l. sum{('j -@ 1); x.'P['x]; 'F} +['F] 'P['j] }
+
 declare sum{'i; 'j; x.'P['x]; 'F}
 
-prim_rw unfold_sum : sum{'i; 'j; x.'P['x]; 'F} <-->
+prim_rw unfold_sum2: sum{'i; 'j; x.'P['x]; 'F} <-->
    ind{('j -@ 'i); m,n. sum{'i; ('j+@1); x.'P['x]; 'F} +['F] 'P['j]; 'P['i]; k,l. sum{'i; ('j-@1); x.'P['x]; 'F} +['F] 'P['j] }
 
 define unfold_mul_poly : mul_poly{'p; 'q; 'F} <-->
@@ -294,7 +296,8 @@ let fold_mul_const = makeFoldC << mul_const{'p; 'a; 'F} >> unfold_mul_const
 let fold_add_poly = makeFoldC << add_poly{'p; 'q; 'F} >> unfold_add_poly
 let fold_mul_poly = makeFoldC << mul_poly{'p; 'q; 'F} >> unfold_mul_poly
 let fold_eval_poly = makeFoldC << eval_poly{'p; 'a; 'F} >> unfold_eval_poly
-let fold_sum = makeFoldC << sum{'i; 'j; x.'P['x]; 'F} >> unfold_sum
+let fold_sum1 = makeFoldC << sum{'j; x.'P['x]; 'F} >> unfold_sum1
+let fold_sum2 = makeFoldC << sum{'i; 'j; x.'P['x]; 'F} >> unfold_sum2
 
 interactive nat_is_int {| intro[AutoMustComplete] |} :
    [wf] sequent { <H> >- 'a='b in nat} -->
@@ -306,6 +309,10 @@ interactive n_in_Nnplus1 {| intro [] |} :
 
 interactive one_ge_0 {| intro [] |} :
    sequent { <H> >- 1 >= 0 }
+
+interactive a_lt_aplus1 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- 'a < 'a +@ 1 }
 
 interactive plus1_nat {| intro [] |} :
    [wf] sequent { <H> >- 'n in nat } -->
@@ -320,6 +327,18 @@ interactive sub_ge_zero {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- 'a -@ 'b >= 0 }
+
+(************************************************************************
+ * REDUCTIONS                                                           *
+ ************************************************************************)
+
+interactive_rw reduce_coeff_degree1 {| reduce |} :
+   (fst{'p} in int) -->
+   coeff{'p; fst{'p}; 'F} <--> (snd{'p} fst{'p})
+
+interactive_rw reduce_coeff_degree2 {| reduce |} :
+   ('u in int) -->
+   coeff{('u, 'v); 'u; 'F} <--> ('v 'u)
 
 doc <:doc<
    @begin[doc]
@@ -405,12 +424,38 @@ interactive add_poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'q in poly{'F} } -->
    sequent { <H> >- add_poly{'p; 'q; 'F} in poly{'F} }
 
-interactive sum_wf {| intro [] |} :
+interactive sum1_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'j in int } -->
+   [wf] sequent { <H>; x: int; ('x >= min{0; 'j}); (max{0; 'j} >= 'x) >- 'P['x] in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   sequent { <H> >- sum{'j; x.'P['x]; 'F} in 'F^car }
+
+interactive sum2_sum1 {| intro [] |} :
    [wf] sequent { <H> >- 'i in int } -->
    [wf] sequent { <H> >- 'j in int } -->
-   [wf] sequent { <H>; x: int; 'x >= 'i; 'j >= 'x >- 'P['x] in 'F^car } -->
+   [wf] sequent { <H>; x: int; ('x >= min{'i; 'j}); (max{'i; 'j} >= 'x) >- 'P['x] in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
+   sequent { <H> >- sum{'i; 'j; x.'P['x]; 'F} = sum{'j -@ 'i; x.'P[('x +@ 'i)]; 'F} in 'F^car }
+
+interactive sum2_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'i in int } -->
+   [wf] sequent { <H> >- 'j in int } -->
+   [wf] sequent { <H>; x: int; ('x >= min{'i; 'j}); (max{'i; 'j} >= 'x) >- 'P['x] in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
    sequent { <H> >- sum{'i; 'j; x.'P['x]; 'F} in 'F^car }
+
+interactive mulpoly_leading_coeff {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "not"{"assert"{isZero{'y; 'F}}} >- "not"{"assert"{isZero{'x *['F] 'y; 'F}}} } -->
+   sequent { <H> >- sum{0; (fst{'p} +@ fst{'q}); y. (coeff{'p; 'y; 'F} *['F] coeff{'q; ((fst{'p} +@ fst{'q}) -@ 'y); 'F}); 'F} = coeff{'p; fst{'p}; 'F} *['F] coeff{'q; fst{'q}; 'F} in 'F^car }
 
 interactive mul_poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
@@ -419,6 +464,7 @@ interactive mul_poly_wf {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "not"{"assert"{isZero{'y; 'F}}} >- "not"{"assert"{isZero{'x *['F] 'y; 'F}}} } -->
    sequent { <H> >- mul_poly{'p; 'q; 'F} in poly{'F} }
 

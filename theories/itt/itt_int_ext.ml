@@ -410,6 +410,50 @@ interactive ge_addMono :
    sequent { <H> >- 'c >= 'd } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
 
+interactive max_self1 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- max{'a; 'b} >= 'a }
+
+interactive max_self2 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- max{'a; 'b} >= 'b }
+
+interactive min_self1 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- min{'a; 'b} <= 'a }
+
+interactive min_self2 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- min{'a; 'b} <= 'b }
+
+interactive min_add {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- min{'a; 'b} +@'c = min{'a +@ 'c; 'b +@ 'c} in int }
+
+interactive max_add {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- max{'a; 'b} +@'c = max{'a +@ 'c; 'b +@ 'c} in int }
+
+interactive max_reduce1 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- max{'b; 'a} = 'a in int }
+
+interactive min_reduce1 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- min{'b; 'a} = 'b in int }
+
 doc <:doc<
    @begin[doc]
    @modsection{Well-formedness and algebraic properties of <<(Perv!nil) *@ (Perv!nil)>>}

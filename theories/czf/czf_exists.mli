@@ -47,7 +47,7 @@ define bounded_exists_abs : "exists"{'y; x. 'P['x]} <--> "exists"{x. member{'x; 
  * H >> member{a; A}
  * functionality subgoal?
  *)
-axiom bounded_exists_intro 'a :
+rule bounded_exists_intro 'a :
    sequent { 'H >> 'B['a] } -->
    sequent { 'H >> member{'a; 'A} } -->
    sequent { 'H >> exists x: 'A. 'B['x] };;
@@ -59,7 +59,7 @@ axiom bounded_exists_intro 'a :
  * by bounded_exists_elim a
  * H, y: (exists x: A. B[x]), a: A, z: B[a], J >> T
  *)
-axiom bounded_exists_elim 'H 'J 'a 'z :
+rule bounded_exists_elim 'H 'J 'a 'z :
    sequent { 'H; y: (exists x: 'A. 'B['y]); a: 'A; b: 'B['a]; 'J['a, 'b] >> 'T['a, 'b] } -->
    sequent { 'H; y: (exists x: 'A. 'B['y]); 'J['y] >> 'T['y] };;
 
@@ -71,7 +71,7 @@ axiom bounded_exists_elim 'H 'J 'a 'z :
  * H >> B[z]
  * H >> member{z, set}
  *)
-axiom exists_intro 'z :
+rule exists_intro 'z :
    sequent { 'H >> 'B['z] } -->
    sequent { 'H >> member{'z; set} } -->
    sequent { 'H >> "exists"{x. 'B['x]} };;
@@ -83,26 +83,26 @@ axiom exists_intro 'z :
  * by exists_elim z w
  * H, y: (exists x. B[x]), z: set, b: 'B['z], J>> T
  *)
-axiom all_elim 'H 'J 'z 'b :
+rule all_elim 'H 'J 'z 'b :
    sequent { 'H; y: "exists"{x. 'B['x]}; z: set; b: 'B['z]; 'J[z, b] >> 'T['z, 'b] } -->
    sequent { 'H; y: "exists"{x. 'B['x]}; 'J['y] >> 'T['y] };;
 
 (*
  * Wellformedness.
  *)
-axiom bounded_exists_wf :
+rule bounded_exists_wf :
    sequent { 'H >> wf{'A} } --> (* should be a different judgment? *)
    sequent { 'H; x: set >> wf{'B['x]} } -->
    sequent { 'H >> wf{exists x: 'A. 'B['x] } };;
 
-axiom exists_wf :
+rule exists_wf :
    sequent { 'H; x: set >> wf{'B['x]} } -->
    sequent { 'H >> wf{"exists"{x. 'B['x]}} };;
 
 (*
  * Bounded formula is restricted.
  *)
-axiom bounded_exists_res :
+rule bounded_exists_res :
    sequent { 'H >> restricted{'A} } -->
    sequent { 'H; x: set; y: restricted{x} >> restricted{'B['x]} } -->
    sequent { 'H >> restricted{exists x: 'A. 'B['x]} };;

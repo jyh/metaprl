@@ -37,25 +37,25 @@ open Tacticals
 (*
  * False is a restricted formula.
  *)
-axiom void_fun 'H :
+rule void_fun 'H :
    sequent ['ext] { 'H >- fun_prop{x ."void"} }
 
 (*
  * False is a restricted formula.
  *)
-axiom void_res 'H :
+rule void_res 'H :
    sequent ['ext] { 'H >- restricted{x ."void"} }
 
 (*
  * False is a restricted formula.
  *)
-axiom false_fun 'H :
+rule false_fun 'H :
    sequent ['ext] { 'H >- fun_prop{x ."false"} }
 
 (*
  * False is a restricted formula.
  *)
-axiom false_res 'H :
+rule false_res 'H :
    sequent ['ext] { 'H >- restricted{x ."false"} }
 
 (*

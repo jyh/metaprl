@@ -38,7 +38,7 @@ include Fol_type
 (*
  * A type is a decidable type in U1.
  *)
-primrw unfold_type : "type"{'A} <--> (subtype{'A; void} or subtype{unit; 'A})
+prim_rw unfold_type : "type"{'A} <--> (subtype{'A; void} or subtype{unit; 'A})
 
 (*
  * Typehood.

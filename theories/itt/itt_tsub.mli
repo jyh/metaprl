@@ -50,20 +50,20 @@ prec prec_tsub
 (*
  * Typehood.
  *)
-axiom tsubEquality 'H :
+rule tsubEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent [squash] { 'H >- subtype{'B1; 'A1} } -->
    sequent ['ext] { 'H >- tsub{'A1; 'B1} = tsub{'A2; 'B2} in univ[@i:l] }
 
-axiom tsubType 'H :
+rule tsubType 'H :
    sequent [squash] { 'H >- subtype{'B; 'A} } -->
    sequent ['ext] { 'H >- "type"{tsub{'A; 'B}} }
 
 (*
  * Membership.
  *)
-axiom tsubMemberEquality 'H 'x :
+rule tsubMemberEquality 'H 'x :
    sequent [squash] { 'H >- 'x1 = 'x2 in 'A } -->
    sequent [squash] { 'H >- subtype{'B; 'A} } -->
    sequent [squash] { 'H; x: 'x1 = 'x2 in 'B >- "false" } -->
@@ -72,7 +72,7 @@ axiom tsubMemberEquality 'H 'x :
 (*
  * Elimination.
  *)
-axiom tsubElimination 'H 'J 'x 'y :
+rule tsubElimination 'H 'J 'x 'y :
    sequent ['ext] { 'H; x: 'A; y: ('x = 'x in 'B) => "false"; 'J['x] >- 'C['x] } -->
    sequent ['ext] { 'H; x: tsub{'A; 'B}; 'J['x] >- 'C['x] }
 

@@ -111,8 +111,8 @@ declare isset{'s}
 (*
  * Sets.
  *)
-primrw unfold_set : set <--> (quot x, y: pre_set // eq_inner{'x; 'y})
-primrw unfold_isset : isset{'s} <--> ('s = 's in set)
+prim_rw unfold_set : set <--> (quot x, y: pre_set // eq_inner{'x; 'y})
+prim_rw unfold_isset : isset{'s} <--> ('s = 's in set)
 
 let fold_set        = makeFoldC << set >> unfold_set
 let fold_isset      = makeFoldC << isset{'t} >> unfold_isset

@@ -114,8 +114,8 @@ dform fix_df1 : mode[prl] :: fix{f. 'b} =
 (*
  * apply(lambda(v. b[v]); a) -> b[a]
  *)
-primrw reduceBeta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
-primrw reduceFix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+prim_rw reduceBeta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+prim_rw reduceFix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 
 let reduce_info =
    [<< (lambda{v. 'b['v]} 'a) >>, reduceBeta;

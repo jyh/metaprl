@@ -99,29 +99,29 @@ dform voflist_df : mode[prl] :: parens :: "prec"[prec_voflist] :: voflist{'sl} =
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-primrw unfold_vequal : vequal <--> lambda{v1. lambda{v2. eq_var{'v1; 'v2}}}
+prim_rw unfold_vequal : vequal <--> lambda{v1. lambda{v2. eq_var{'v1; 'v2}}}
 
-primrw unfold_var_set : var_set <--> fset{vequal; var_type}
+prim_rw unfold_var_set : var_set <--> fset{vequal; var_type}
 
-primrw unfold_vmember :
+prim_rw unfold_vmember :
    vmember{'v; 's} <--> fmember{vequal; 'v; 's}
 
-primrw unfold_vempty :
+prim_rw unfold_vempty :
    vempty <--> fempty
 
-primrw unfold_vsingleton :
+prim_rw unfold_vsingleton :
    vsingleton{'v} <--> fsingleton{'v}
 
-primrw unfold_vunion :
+prim_rw unfold_vunion :
    vunion{'s1; 's2} <--> funion{vequal; 's1; 's2}
 
-primrw unfold_visect :
+prim_rw unfold_visect :
    visect{'s1; 's2} <--> fisect{vequal; 's1; 's2}
 
-primrw unfold_vsub :
+prim_rw unfold_vsub :
    vsub{'s1; 's2} <--> fsub{vequal; 's1; 's2}
 
-primrw unfold_voflist :
+prim_rw unfold_voflist :
    voflist{'sl} <--> foflist{'sl}
 
 let fold_vequal = makeFoldC << vequal >> unfold_vequal

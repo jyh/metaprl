@@ -75,7 +75,7 @@ dform srec_df : mode[prl] :: srec{T. 'B} =
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
+prim_rw unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. srecind{'a; p, h. 'g['p; 'h]}}; 'a]
 
 (************************************************************************

@@ -62,7 +62,7 @@ rewrite reduce_eq_inner : eq_inner{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 
 (*
  * Membership in a universe.
  *)
-axiom eq_inner_equality1 'H :
+rule eq_inner_equality1 'H :
    sequent [squash] { 'H >- is_pre_set{'s1} } -->
    sequent [squash] { 'H >- is_pre_set{'s2} } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s1; 's2} in univ[1:l] }
@@ -70,7 +70,7 @@ axiom eq_inner_equality1 'H :
 (*
  * Membership in a universe.
  *)
-axiom eq_inner_type 'H :
+rule eq_inner_type 'H :
    sequent [squash] { 'H >- is_pre_set{'s1} } -->
    sequent [squash] { 'H >- is_pre_set{'s2} } -->
    sequent ['ext] { 'H >- "type"{eq_inner{'s1; 's2}} }
@@ -78,7 +78,7 @@ axiom eq_inner_type 'H :
 (*
  * More general equality in a universe.
  *)
-axiom eq_inner_equality2 'H :
+rule eq_inner_equality2 'H :
    sequent [squash] { 'H >- 's1 = 's3 in pre_set } -->
    sequent [squash] { 'H >- 's2 = 's4 in pre_set } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s3; 's4} in univ[1:l] }
@@ -86,17 +86,17 @@ axiom eq_inner_equality2 'H :
 (*
  * Equivalence relation rules.
  *)
-axiom eq_inner_ref 'H :
+rule eq_inner_ref 'H :
    sequent [squash] { 'H >- is_pre_set{'s1} } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's1} }
 
-axiom eq_inner_sym 'H :
+rule eq_inner_sym 'H :
    sequent [squash] { 'H >- is_pre_set{'s1} } -->
    sequent [squash] { 'H >- is_pre_set{'s2} } -->
    sequent ['ext] { 'H >- eq_inner{'s2; 's1} } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's2} }
 
-axiom eq_inner_trans 'H 's2 :
+rule eq_inner_trans 'H 's2 :
    sequent [squash] { 'H >- is_pre_set{'s1} } -->
    sequent [squash] { 'H >- is_pre_set{'s2} } -->
    sequent [squash] { 'H >- is_pre_set{'s3} } -->

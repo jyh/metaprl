@@ -46,9 +46,9 @@ dform decide_df : parens :: "prec"["prec_decide"] :: decide{'x; y. 'body1; z. 'b
  * COMPUTATION                                                          *
  ************************************************************************)
 
-primrw reduce_decide_inl : decide{inl{'x}; y. 'body1['y]; z. 'body2['z]} <--> 'body1['x]
+prim_rw reduce_decide_inl : decide{inl{'x}; y. 'body1['y]; z. 'body2['z]} <--> 'body1['x]
 
-primrw reduce_decide_inr : decide{inr{'x}; y. 'body1['y]; z. 'body2['z]} <--> 'body2['x]
+prim_rw reduce_decide_inr : decide{inr{'x}; y. 'body1['y]; z. 'body2['z]} <--> 'body2['x]
 
 (************************************************************************
  * RULES                                                                *

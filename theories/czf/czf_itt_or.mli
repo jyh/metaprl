@@ -39,7 +39,7 @@ include Czf_itt_sep
 (*
  * Implication is restricted.
  *)
-axiom union_fun 'H 'w :
+rule union_fun 'H 'w :
    sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -49,7 +49,7 @@ axiom union_fun 'H 'w :
 (*
  * Implication is restricted.
  *)
-axiom union_res 'H 'w :
+rule union_res 'H 'w :
    sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- restricted{x. 'A['x]} } -->
@@ -59,7 +59,7 @@ axiom union_res 'H 'w :
 (*
  * Implication is restricted.
  *)
-axiom or_fun 'H 'w :
+rule or_fun 'H 'w :
    sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -69,7 +69,7 @@ axiom or_fun 'H 'w :
 (*
  * Implication is restricted.
  *)
-axiom or_res 'H 'w :
+rule or_res 'H 'w :
    sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- restricted{x. 'A['x]} } -->

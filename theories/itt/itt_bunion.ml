@@ -68,7 +68,7 @@ dform bunion_df : mode[prl] :: parens :: "prec"[prec_bunion] :: bunion{'A; 'B} =
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_bunion : bunion{'A; 'B} <-->
+prim_rw unfold_bunion : bunion{'A; 'B} <-->
                           tunion{bool; x. ifthenelse{'x; 'A; 'B}}
 
 let fold_bunion = makeFoldC << bunion{'A; 'B} >> unfold_bunion

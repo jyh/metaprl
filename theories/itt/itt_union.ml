@@ -85,8 +85,8 @@ declare decide{'x; y. 'a['y]; z. 'b['z]}
  * decide(inl x; u. l[u]; v. r[v]) <--> l[x]
  * decide(inr x; u. l[u]; v. r[v]) <--> r[x]
  *)
-primrw reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
-primrw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
+prim_rw reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
+prim_rw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

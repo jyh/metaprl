@@ -62,7 +62,7 @@ val fold_union : conv
 (*
  * Union is a set.
  *)
-axiom union_isset 'H :
+rule union_isset 'H :
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{union{'s1; 's2}} }
@@ -70,12 +70,12 @@ axiom union_isset 'H :
 (*
  * Membership in a union.
  *)
-axiom union_member_intro_left 'H :
+rule union_member_intro_left 'H :
    sequent ['ext] { 'H >- member{'x; 's1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
 
-axiom union_member_intro_right 'H :
+rule union_member_intro_right 'H :
    sequent ['ext] { 'H >- member{'x; 's2} } -->
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
@@ -83,7 +83,7 @@ axiom union_member_intro_right 'H :
 (*
  * We get a slightly less powerful elim form.
  *)
-axiom union_member_elim3 'H 'J 'z :
+rule union_member_elim3 'H 'J 'z :
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x]; z: member{'y; 's1} >- 'T['x] } -->

@@ -84,23 +84,23 @@ dform eq_var_df : mode[prl] :: parens :: "prec"[prec_eq_atom] :: eq_var{'v1; 'v2
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-primrw unfold_vnil : vnil <--> nil
+prim_rw unfold_vnil : vnil <--> nil
 
-primrw unfold_ivar : ivar{'i; 'v} <-->
+prim_rw unfold_ivar : ivar{'i; 'v} <-->
    cons{inl{'i}; 'v}
 
-primrw unfold_tvar : tvar{'t; 'v} <-->
+prim_rw unfold_tvar : tvar{'t; 'v} <-->
    cons{inr{'t}; 'v}
 
-primrw unfold_var : var[@v:t] <--> tvar{token[@v:t]; vnil}
+prim_rw unfold_var : var[@v:t] <--> tvar{token[@v:t]; vnil}
 
-primrw unfold_var_type : var_type <--> list{.int + atom}
+prim_rw unfold_var_type : var_type <--> list{.int + atom}
 
-primrw unfold_eq_varc : eq_varc{'a; 'b} <-->
+prim_rw unfold_eq_varc : eq_varc{'a; 'b} <-->
    decide{'a; x. decide{'b; y. eq_int{'x; 'y}; y. bfalse};
               x. decide{'b; y. bfalse; y. eq_atom{'x; 'y}}}
 
-primrw unfold_eq_var : eq_var{'x; 'y} <-->
+prim_rw unfold_eq_var : eq_var{'x; 'y} <-->
    (list_ind{'x; lambda{y. list_ind{'y; btrue; h, t, g. bfalse}};
              h1, t1, g1. lambda{y. list_ind{'y; bfalse;
                                    h2, t2, g2. band{eq_varc{'h1; 'h2}; .'g1 't2}}}} 'y)

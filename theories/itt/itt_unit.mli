@@ -55,7 +55,7 @@ declare unit
 (*
  * Squiggle equality.
  *)
-axiom unitSqequal 'H :
+rule unitSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in unit } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
 
@@ -63,44 +63,44 @@ axiom unitSqequal 'H :
  * H >- Ui ext Unit
  * by unitFormation
  *)
-axiom unitFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
+rule unitFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-axiom unitEquality 'H : sequent ['ext] { 'H >- unit = unit in univ[@i:l] }
+rule unitEquality 'H : sequent ['ext] { 'H >- unit = unit in univ[@i:l] }
 
 (*
  * Is a type.
  *)
-axiom unitType 'H : sequent ['ext] { 'H >- "type"{unit} }
+rule unitType 'H : sequent ['ext] { 'H >- "type"{unit} }
 
 (*
  * H >- Ui ext Unit
  * by unitFormation
  *)
-axiom unit_memberFormation 'H : sequent ['ext] { 'H >- unit }
+rule unit_memberFormation 'H : sequent ['ext] { 'H >- unit }
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-axiom unit_memberEquality 'H : sequent ['ext] { 'H >- it = it in unit }
+rule unit_memberEquality 'H : sequent ['ext] { 'H >- it = it in unit }
 
 (*
  * H; i:x:Unit; J >- C
  * by unitElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-axiom unitElimination 'H 'J :
+rule unitElimination 'H 'J :
    sequent['ext] { 'H; x: unit; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: unit; 'J['x] >- 'C['x] }
 
 (*
  * Squash elimination.
  *)
-axiom unit_squashElimination 'H :
+rule unit_squashElimination 'H :
    sequent [squash] { 'H >- unit } -->
    sequent ['ext] { 'H >- unit }
 

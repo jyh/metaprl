@@ -76,26 +76,26 @@ declare "bool_flag"[@n:t]
 (*
  * Definition of bool.
  *)
-primrw unfold_bool : bool <--> (unit + unit)
-primrw unfold_btrue : btrue <--> inl{it}
-primrw unfold_bfalse : bfalse <--> inr{it}
+prim_rw unfold_bool : bool <--> (unit + unit)
+prim_rw unfold_btrue : btrue <--> inl{it}
+prim_rw unfold_bfalse : bfalse <--> inr{it}
 
 (*
  * Param actions.
  *)
-primrw reduceBoolTrue : "bool_flag"["true":t] <--> "btrue"
-primrw reduceBoolFalse : "bool_flag"["false":t] <--> "bfalse"
+prim_rw reduceBoolTrue : "bool_flag"["true":t] <--> "btrue"
+prim_rw reduceBoolFalse : "bool_flag"["false":t] <--> "bfalse"
 
 (*
  * Ifthenelse primrws.
  *)
-primrw reduceIfthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
-primrw reduceIfthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
-primrw unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
-primrw unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
-primrw unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
-primrw unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
-primrw unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
+prim_rw reduceIfthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
+prim_rw reduceIfthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+prim_rw unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+prim_rw unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+prim_rw unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
+prim_rw unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
+prim_rw unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
 
 let fold_bool = makeFoldC << bool >> unfold_bool
 let fold_btrue = makeFoldC << btrue >> unfold_btrue

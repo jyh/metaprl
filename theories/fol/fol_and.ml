@@ -35,7 +35,7 @@ dform spread_df : "spread"{'x; a, b. 'body} =
  * COMPUTATION                                                          *
  ************************************************************************)
 
-primrw reduce_spread : spread{pair{'x; 'y}; a, b. 'body['a; 'b]} <--> 'body['x; 'y]
+prim_rw reduce_spread : spread{pair{'x; 'y}; a, b. 'body['a; 'b]} <--> 'body['x; 'y]
 
 (************************************************************************
  * RULES                                                                *

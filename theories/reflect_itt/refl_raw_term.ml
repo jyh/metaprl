@@ -114,19 +114,19 @@ dform match_bterm_df : mode[prl] :: parens :: "prec"[prec_match_term] ::
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_bterm : bterm{'sl; 't} <--> pair{'sl; 't}
-primrw unfold_bterm_term : bterm_term{'t} <--> snd{'t}
-primrw unfold_raw_bterm_type : raw_bterm_type{'T} <--> (list{var_type} * 'T)
-primrw unfold_bvar : bvar{'v; 'tl} <--> inl{pair{'v; 'tl}}
-primrw unfold_bvar_type : bvar_type{'T} <--> (var_type * list{'T})
-primrw unfold_term : term{'op; 'bterms} <--> inr{pair{'op; 'bterms}}
-primrw unfold_raw_term_type : raw_term_type <--> srec{T. bvar_type{'T} + (operator_type * list{raw_bterm_type{'T}})}
+prim_rw unfold_bterm : bterm{'sl; 't} <--> pair{'sl; 't}
+prim_rw unfold_bterm_term : bterm_term{'t} <--> snd{'t}
+prim_rw unfold_raw_bterm_type : raw_bterm_type{'T} <--> (list{var_type} * 'T)
+prim_rw unfold_bvar : bvar{'v; 'tl} <--> inl{pair{'v; 'tl}}
+prim_rw unfold_bvar_type : bvar_type{'T} <--> (var_type * list{'T})
+prim_rw unfold_term : term{'op; 'bterms} <--> inr{pair{'op; 'bterms}}
+prim_rw unfold_raw_term_type : raw_term_type <--> srec{T. bvar_type{'T} + (operator_type * list{raw_bterm_type{'T}})}
 
-primrw unfold_match_term : match_term{'t; v, tl. 'bvar_case['v; 'tl]; op, bterms. 'term_case['op; 'bterms]} <-->
+prim_rw unfold_match_term : match_term{'t; v, tl. 'bvar_case['v; 'tl]; op, bterms. 'term_case['op; 'bterms]} <-->
    decide{'t; x. spread{'x; y, z. 'bvar_case['y; 'z]};
               x. spread{'x; y, z. 'term_case['y; 'z]}}
 
-primrw unfold_match_bterm : match_bterm{'t; sl, t. 'body['sl; 't]} <-->
+prim_rw unfold_match_bterm : match_bterm{'t; sl, t. 'body['sl; 't]} <-->
    spread{'t; sl, t. 'body['sl; 't]}
 
 let fold_bterm = makeFoldC << bterm{'sl; 't} >> unfold_bterm

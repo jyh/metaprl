@@ -115,7 +115,7 @@ dform fold_left_df : mode[prl] :: fold_left{'f; 'v; 'l} =
 (*
  * Is_nil test.
  *)
-primrw unfold_is_nil :
+prim_rw unfold_is_nil :
    is_nil{'l} <--> list_ind{'l; btrue; h, t, g. bfalse}
 
 let fold_is_nil = makeFoldC << is_nil{'l} >> unfold_is_nil
@@ -127,7 +127,7 @@ interactive_rw reduce_is_nil_cons : is_nil{cons{'h; 't}} <--> bfalse
 (*
  * Append two lists.
  *)
-primrw unfold_append :
+prim_rw unfold_append :
    append{'l1; 'l2} <-->
       list_ind{'l1; 'l2; h, t, g. 'h :: 'g}
 
@@ -140,7 +140,7 @@ interactive_rw reduce_append_cons : append{cons{'x; 'l1}; 'l2} <--> cons{'x; app
 (*
  * Boolean universal quanitifier.
  *)
-primrw unfold_ball2 :
+prim_rw unfold_ball2 :
    ball2{'l1; 'l2; x, y. 'b['x; 'y]} <-->
       (list_ind{'l1; lambda{z. list_ind{'z; btrue; h, t, g. bfalse}};
                      h1, t1, g1. lambda{z. list_ind{'z; bfalse;
@@ -164,7 +164,7 @@ interactive_rw reduce_ball2_cons_cons :
 (*
  * Association lists.
  *)
-primrw unfold_assoc :
+prim_rw unfold_assoc :
    assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
       list_ind{'l; 'z; h, t, g.
          spread{'h; u, v.
@@ -179,7 +179,7 @@ interactive_rw reduce_assoc_cons :
    assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} <-->
       ifthenelse{.'eq 'u 'x; 'b['v]; assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
 
-primrw unfold_rev_assoc :
+prim_rw unfold_rev_assoc :
    rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
       list_ind{'l; 'z; h, t, g.
          spread{'h; u, v.
@@ -197,7 +197,7 @@ interactive_rw reduce_rev_assoc_cons :
 (*
  * Maps.
  *)
-primrw unfold_map : map{'f; 'l} <-->
+prim_rw unfold_map : map{'f; 'l} <-->
    list_ind{'l; nil; h, t, g. cons{.'f 'h; 'g}}
 
 let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
@@ -211,7 +211,7 @@ interactive_rw reduce_map_cons :
 (*
  * Fold left.
  *)
-primrw unfold_fold_left :
+prim_rw unfold_fold_left :
    fold_left{'f; 'v; 'l} <-->
       (list_ind{'l; lambda{v. 'v}; h, t, g. lambda{v. 'g ('f 'h 'v)}} 'v)
 

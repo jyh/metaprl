@@ -61,7 +61,7 @@ declare restricted{z. 'P['z]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_sep : sep{'s; x. 'P['x]} <-->
+prim_rw unfold_sep : sep{'s; x. 'P['x]} <-->
    set_ind{'s; T, f, g. collect{."prod"{'T; t. 'P['f 't]}; z. 'f fst{'z}}}
 
 interactive_rw reduce_sep : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
@@ -70,15 +70,15 @@ interactive_rw reduce_sep : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
 (*
  * A restricted formula has the separation property.
  *)
-primrw unfold_restricted : restricted{z. 'P['z]} <-->
+prim_rw unfold_restricted : restricted{z. 'P['z]} <-->
    (exst P2: (set -> univ[1:l]). (fun_prop{z. 'P2 'z} & (all z: set. "iff"{. 'P2 'z; 'P['z]})))
 
-primrw unfold_drestricted : restricted{u. 'A['u]; x, y. 'B['x; 'y]} <-->
+prim_rw unfold_drestricted : restricted{u. 'A['u]; x, y. 'B['x; 'y]} <-->
    (exst P2: (u: set -> 'A['u] -> univ[1:l]).
       (dfun_prop{u. 'A['u]; x, y. 'P2 'x 'y} &
          (all u: set. all x: 'A['u]. "iff"{.'P2 'u 'x; 'B['u; 'x]})))
 
-primrw unfold_restricted2 : restricted{x, y. 'B['x; 'y]} <-->
+prim_rw unfold_restricted2 : restricted{x, y. 'B['x; 'y]} <-->
    (exst P2: (set -> set -> univ[1:l]).
       ((all x: set. fun_prop{y. 'P2 'x 'y})
        & (all y: set. fun_prop{x. 'P2 'x 'y})

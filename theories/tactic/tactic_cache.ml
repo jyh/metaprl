@@ -786,13 +786,13 @@ let fset_entry (ftable : 'a flookup_table) hash (entry : int * 'a fcache_info) =
       Hashtbl.add ftable hash (entry :: entries)
 
 let fget_entry { ext_base = { ext_ftable = ftable; ext_rules = rules } } { inf_hash = hash } =
-   let aux (i, ({ finfo_plates = plates } as rule)) =
+   let aux (i, ({ finfo_plates = plates } as rl)) =
       let test (rule', _) =
-         rule' == rule
+         rule' == rl
       in
       let rules = Hashtbl.find rules plates in
       let _, insts = List_util.find test rules in
-         i, rule, insts
+         i, rl, insts
    in
    let l = Hashtbl.find ftable hash in
       List.map aux l
@@ -810,7 +810,7 @@ let fset_insts inf (i, _, insts) =
       insts.(i) <- inf :: insts.(i);
       explore 0
 
-let init_insts (rules : 'a info_table) ({ finfo_plates = plates } as rule) =
+let init_insts (rules : 'a info_table) ({ finfo_plates = plates } as rl) =
    let len = List.length plates in
    let entry = Array.create len [] in
    let entries =
@@ -819,7 +819,7 @@ let init_insts (rules : 'a info_table) ({ finfo_plates = plates } as rule) =
             []
    in
       Hashtbl.remove rules plates;
-      Hashtbl.add rules plates ((rule, entry) :: entries)
+      Hashtbl.add rules plates ((rl, entry) :: entries)
 
 (*
  * Provide a rough
@@ -1555,10 +1555,10 @@ let try_fchain extract world ({ finfo_wild = wild } as info) finst =
  * for the forward rule.
  *)
 let try_fchaining extract inf info =
-   let _, rule, _ = info in
+   let _, rl, _ = info in
    let finst = fset_insts inf info in
    let world = world_of_inf inf in
-      try_fchain extract world rule finst
+      try_fchain extract world rl finst
 
 (*
  * Get something from the queue, and try to chain through it.

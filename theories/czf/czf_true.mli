@@ -40,7 +40,7 @@ declare "true"
  * H >- true
  * by true_intro
  *)
-axiom true_intro 'H : sequent { 'H >- "true" }
+rule true_intro 'H : sequent { 'H >- "true" }
 
 (*
  * True is well formed.
@@ -48,13 +48,13 @@ axiom true_intro 'H : sequent { 'H >- "true" }
  * H >- wf{"true"}
  * by true_wf
  *)
-axiom true_wf 'H :
+rule true_wf 'H :
    sequent { 'H >- wf{."true"} }
 
 (*
  * True is a restricted formula.
  *)
-axiom true_res 'H :
+rule true_res 'H :
    sequent { 'H >- restricted{."true"} }
 
 (*

@@ -51,7 +51,7 @@ declare pimplies{'p1; 'p2}
  *)
 declare two_values{'p1; 'p2; 'p3}
 
-primrw two_values_reduce :
+prim_rw two_values_reduce :
    two_values{'p1; 'p2; 'p3} <-->
       por{pand{'p1; 'p2}; por{pand{'p1; 'p3}; pand{'p2; 'p3}}}
 

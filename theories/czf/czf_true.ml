@@ -35,7 +35,7 @@ include Czf_wf
 
 declare "true"
 
-primrw unfoldTrue : "true" <--> (0 = 0 in int)
+prim_rw unfoldTrue : "true" <--> (0 = 0 in int)
 
 (*
  * True is always true.

@@ -49,7 +49,7 @@ include Czf_itt_set
 
 declare "set"
 
-primrw unfoldSet : set <--> Czf_itt_set!set
+prim_rw unfoldSet : set <--> Czf_itt_set!set
 
 (*
  * -*-

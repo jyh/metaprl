@@ -48,7 +48,7 @@ declare bind{x. 'T['x]}
  * H; x: A; J >- A ext x
  * by hypothesis
  *)
-axiom hypothesis 'H 'J 'x :
+rule hypothesis 'H 'J 'x :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
 
 (*
@@ -56,7 +56,7 @@ axiom hypothesis 'H 'J 'x :
  * by thin
  * H, J >- A ext t
  *)
-axiom thin 'H 'J :
+rule thin 'H 'J :
    sequent ['ext] { 'H; 'J >- 'C } -->
    sequent ['ext] { 'H; x: 'A; 'J >- 'C }
 
@@ -66,7 +66,7 @@ axiom thin 'H 'J :
  * H, J >- S ext s
  * H, x: S, J >- T ext t[x]
  *)
-axiom cut 'H 'J 'S 'x :
+rule cut 'H 'J 'S 'x :
    sequent ['ext] { 'H; 'J >- 'S } -->
    sequent ['ext] { 'H; x: 'S; 'J >- 'T } -->
    sequent ['ext] { 'H; 'J >- 'T }
@@ -76,7 +76,7 @@ axiom cut 'H 'J 'S 'x :
  * by introduction t
  * H >- t = t in T
  *)
-axiom introduction 'H 't :
+rule introduction 'H 't :
    sequent [squash] { 'H >- 't = 't in 'T } -->
    sequent ['ext] { 'H >- 'T }
 
@@ -87,7 +87,7 @@ axiom introduction 'H 't :
  * H >- T1[t2]
  * H, x: T2 >- T1[x] = T1[x] in type
  *)
-axiom substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
+rule substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
    sequent ['ext] { 'H >- 'T1['t2] } -->
    sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
@@ -99,7 +99,7 @@ axiom substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
  * H, x:B, J >- T
  * H, x: A, J >- A = B in type
  *)
-axiom hypReplacement 'H 'J 'B univ[@i:l] :
+rule hypReplacement 'H 'J 'B univ[@i:l] :
    sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] } -->
    sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[@i:l] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
@@ -111,11 +111,11 @@ axiom hypReplacement 'H 'J 'B univ[@i:l] :
  * H; x: A[t2]; J[x] >> T1[x]
  * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
  *)
-axiom hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+rule hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
-   sequent ['prop]  { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
+   sequent ['ext]  { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
    sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
-   sequent ['prop]  { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
+   sequent ['ext]  { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
 
 (************************************************************************
  * TACTICS                                                              *

@@ -58,7 +58,7 @@ dform eq_atom_df : mode[prl] :: parens :: "prec"[prec_eq_atom] :: eq_atom{'x; 'y
  * REWRITE                                                              *
  ************************************************************************)
 
-primrw reduce_eq_atom : eq_atom{token[@x:t]; token[@y:t]} <--> bool_flag[@x = @y]
+prim_rw reduce_eq_atom : eq_atom{token[@x:t]; token[@y:t]} <--> bool_flag[@x = @y]
 
 (************************************************************************
  * RULES                                                                *

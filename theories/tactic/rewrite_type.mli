@@ -58,12 +58,12 @@ declare rewrite_just
  * The basic rewrite axiom.
  * BUG: jyh: I don't know why we need the extra param here.
  *)
-axiom rewriteAxiom 'x : "rewrite"{'x; 'x}
+rule rewriteAxiom 'x : "rewrite"{'x; 'x}
 
 (*
  * Sequent version of rewrite proposition.
  *)
-axiom rewriteSequentAxiom 'H : sequent ['ext] { 'H >- "rewrite"{'x; 'x} }
+rule rewriteSequentAxiom 'H : sequent ['ext] { 'H >- "rewrite"{'x; 'x} }
 
 (************************************************************************
  * OPERATIONS                                                           *

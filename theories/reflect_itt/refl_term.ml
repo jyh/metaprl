@@ -179,31 +179,31 @@ dform term_depth_df : mode[prl] :: term_depth{'t} =
 (*
  * Variable maps.
  *)
-primrw unfold_vmap_type :
+prim_rw unfold_vmap_type :
    vmap_type <--> list{.var_type * var_type}
 
-primrw unfold_vmap_compare :
+prim_rw unfold_vmap_compare :
    vmap_compare{'v1; 'v2; 'f} <-->
    list_ind{'f; eq_var{'v1; 'v2};
             h, t, g. spread{'h; a, b.
                ifthenelse{eq_var{'a; 'v1}; eq_var{'b; 'v2};
                   ifthenelse{eq_var{'b; 'v2}; bfalse; 'g}}}}
 
-primrw unfold_vmap_invert :
+prim_rw unfold_vmap_invert :
    vmap_invert{'f} <-->
       map{lambda{x. spread{'x; u, v. 'v, 'u}}; 'f}
 
-primrw unfold_vmap_id :
+prim_rw unfold_vmap_id :
    vmap_id{'f} <-->
       list_ind{'f; btrue; h, t, g. band{spread{'h; u, v. eq_var{'u; 'v}}; 'g}}
 
-primrw unfold_vmap_length :
+prim_rw unfold_vmap_length :
    vmap_length{'f; 'g} <-->
       (list_ind{'f; lambda{x. list_ind{'x; btrue; h2, t2, g2. bfalse}};
          h1, t1, g1.
             lambda{x. list_ind{'x; bfalse; h2, t2, g2. 'g1 't2}}} 'g)
 
-primrw unfold_vmap_join :
+prim_rw unfold_vmap_join :
    vmap_join{'f; 'g} <-->
       (list_ind{'f; lambda{x. vmap_nil};
                 h1, t1, g1.
@@ -212,33 +212,33 @@ primrw unfold_vmap_join :
                          spread{'h2; u2, v2.
                             cons{pair{'u1; 'v2}; .'g1 't2}}}}}} 'g)
 
-primrw unfold_vmap_nil : vmap_nil <--> nil
+prim_rw unfold_vmap_nil : vmap_nil <--> nil
 
-primrw unfold_vmap_cons :
+prim_rw unfold_vmap_cons :
    vmap_cons{'v1; 'v2; 'vm} <--> cons{pair{'v1; 'v2}; 'vm}
 
-primrw unfold_vmap_compose :
+prim_rw unfold_vmap_compose :
    vmap_compose{'vl1; 'vl2; 'vm; g. 'b['g]} <-->
       (list_ind{'vl1; lambda{l. lambda{g. list_ind{'l; 'b['g]; h, t, f. bfalse}}};
                 h1, t1, f1. lambda{l. lambda{g. list_ind{'l; bfalse;
                 h2, t2, f2. 'f1 't2 vmap_cons{'h1; 'h2; 'g}}}}} 'vl2 'vm)
 
-primrw unfold_vmap_fst :
+prim_rw unfold_vmap_fst :
    vmap_fst{'f} <-->
       list_ind{'f; nil; h, t, g. spread{'h; u, v. cons{'u; 'g}}}
 
-primrw unfold_vmap_snd :
+prim_rw unfold_vmap_snd :
    vmap_snd{'f} <-->
       list_ind{'f; nil; h, t, g. spread{'h; u, v. cons{'v; 'g}}}
 
 (*
  * Equality.
  *)
-primrw unfold_eq_alpha :
+prim_rw unfold_eq_alpha :
    eq_alpha{'t1; 't2} <-->
       eq_alpha_term{vmap_nil; 't1; 't2}
 
-primrw unfold_eq_alpha_term :
+prim_rw unfold_eq_alpha_term :
    eq_alpha_term{'f; 't1; 't2} <-->
    match_term{'t1;
       v1, tl1.
@@ -255,7 +255,7 @@ primrw unfold_eq_alpha_term :
                                ball2{'bterms1; 'bterms2;
                                bt1, bt2. eq_alpha_bterm{'f; 'bt1; 'bt2}}}}}
 
-primrw unfold_eq_alpha_bterm :
+prim_rw unfold_eq_alpha_bterm :
    eq_alpha_bterm{'f; 'bt1; 'bt2} <-->
    spread{'bt1; sl1, t1.
       spread{'bt2; sl2, t2.
@@ -264,14 +264,14 @@ primrw unfold_eq_alpha_bterm :
 (*
  * Types.
  *)
-primrw unfold_term_type :
+prim_rw unfold_term_type :
    term_type <--> (quot x, y : raw_term_type // "assert"{eq_alpha{'x; 'y}})
 
-primrw unfold_bterm_type :
+prim_rw unfold_bterm_type :
    bterm_type{'T} <--> (quot x, y : raw_bterm_type{'T} // "assert"{eq_alpha_bterm{vmap_nil; 'x; 'y}})
 
 (*
-primrw unfold_term_depth :
+prim_rw unfold_term_depth :
    term_depth{'t} <-->
       match_term{'t;
                  v, tl. list_ind{'tl; 1; h, t, g. term_depth{'h} +@ 'g};

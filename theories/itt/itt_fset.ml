@@ -181,58 +181,58 @@ dform foflist_df : mode[prl] :: parens :: "prec"[prec_foflist] :: foflist{'l} =
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_fcompare : fcompare{'eq; 'x; 'y} <--> ('eq 'x 'y)
+prim_rw unfold_fcompare : fcompare{'eq; 'x; 'y} <--> ('eq 'x 'y)
 
-primrw unfold_fequalp : fequalp{'eq; 'T} <-->
+prim_rw unfold_fequalp : fequalp{'eq; 'T} <-->
    (member{.'T -> 'T -> bool; 'eq}
       & (all x: 'T. "assert"{.fcompare{'eq; 'x; 'x}})
       & (all x: 'T. all y: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => "assert"{fcompare{'eq; 'y; 'x}}))
       & (all x: 'T. all y: 'T. all z: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => "assert"{fcompare{'eq; 'y; 'z}} => "assert"{fcompare{'eq; 'x; 'z}})))
 
-primrw unfold_fset : fset{'eq; 'T} <--> (quot x, y : list{'T} // "assert"{fequal{'eq; 'x; 'y}})
+prim_rw unfold_fset : fset{'eq; 'T} <--> (quot x, y : list{'T} // "assert"{fequal{'eq; 'x; 'y}})
 
-primrw unfold_fempty : fempty <--> nil
+prim_rw unfold_fempty : fempty <--> nil
 
-primrw unfold_fsingleton : fsingleton{'x} <--> cons{'x; nil}
+prim_rw unfold_fsingleton : fsingleton{'x} <--> cons{'x; nil}
 
-primrw unfold_funion : funion{'eq; 's1; 's2} <--> append{'s1; 's2}
+prim_rw unfold_funion : funion{'eq; 's1; 's2} <--> append{'s1; 's2}
 
-primrw unfold_fisect : fisect{'eq; 's1; 's2} <-->
+prim_rw unfold_fisect : fisect{'eq; 's1; 's2} <-->
    list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 's2}; cons{'h; 'g}; 'g}}
 
-primrw unfold_fsub : fsub{'eq; 's1; 's2} <-->
+prim_rw unfold_fsub : fsub{'eq; 's1; 's2} <-->
    list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 's2}; 'g; cons{'h; 'g}}}
 
-primrw unfold_fmember : fmember{'eq; 'x; 's1} <-->
+prim_rw unfold_fmember : fmember{'eq; 'x; 's1} <-->
    list_ind{'s1; bfalse; h, t, g. bor{.fcompare{'eq; 'x; 'h}; 'g}}
 
-primrw unfold_fisempty : fisempty{'s1} <-->
+prim_rw unfold_fisempty : fisempty{'s1} <-->
    list_ind{'s1; btrue; h, t, g. bfalse}
 
-primrw unfold_fsubseteq : fsubseteq{'eq; 's1; 's2} <-->
+prim_rw unfold_fsubseteq : fsubseteq{'eq; 's1; 's2} <-->
    list_ind{'s1; btrue; h, t, g. band{fmember{'eq; 'h; 's2}; 'g}}
 
-primrw unfold_fequal : fequal{'eq; 's1; 's2} <-->
+prim_rw unfold_fequal : fequal{'eq; 's1; 's2} <-->
    band{fsubseteq{'eq; 's1; 's2}; fsubseteq{'eq; 's2; 's1}}
 
-primrw unfold_fsquash : fsquash{'eq; 's1} <-->
+prim_rw unfold_fsquash : fsquash{'eq; 's1} <-->
    list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 't}; 'g; cons{it; 'g}}}
 
-primrw unfold_fball : fball{'s; x. 'b['x]} <-->
+prim_rw unfold_fball : fball{'s; x. 'b['x]} <-->
    list_ind{'s; btrue; x, t, g. band{'b['x]; 'g}}
 
-primrw unfold_fbexists : fbexists{'s; x. 'b['x]} <-->
+prim_rw unfold_fbexists : fbexists{'s; x. 'b['x]} <-->
    list_ind{'s; bfalse; x, t, g. bor{'b['x]; 'g}}
 
-primrw unfold_fall : fall{'eq; 'T; 's; x. 'b['x]} <-->
+prim_rw unfold_fall : fall{'eq; 'T; 's; x. 'b['x]} <-->
    all x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x]
 
-primrw unfold_fexists : fexists{'eq; 'T; 's; x. 'b['x]} <-->
+prim_rw unfold_fexists : fexists{'eq; 'T; 's; x. 'b['x]} <-->
    exst x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x]
 
-primrw unfold_feset : feset{'eq; 'T} <--> (quot x, y: 'T // "assert"{fcompare{'eq; 'x; 'y}})
+prim_rw unfold_feset : feset{'eq; 'T} <--> (quot x, y: 'T // "assert"{fcompare{'eq; 'x; 'y}})
 
-primrw unfold_foflist : foflist{'l} <--> 'l
+prim_rw unfold_foflist : foflist{'l} <--> 'l
 
 let fold_fequalp = makeFoldC << fequalp{'eq; 'T} >> unfold_fequalp
 let fold_fset = makeFoldC << fset{'eq; 'T} >> unfold_fset

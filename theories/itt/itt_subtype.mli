@@ -60,7 +60,7 @@ prec prec_subtype
  * H >- Ui ext A
  * H >- Ui ext B
  *)
-axiom subtypeFormation 'H :
+rule subtypeFormation 'H :
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] }
@@ -72,21 +72,21 @@ axiom subtypeFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-axiom subtypeEquality 'H :
+rule subtypeEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] }
 
-axiom subtypeType 'H :
+rule subtypeType 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{subtype{'A; 'B}} }
 
-axiom subtypeTypeLeft 'H 'A :
+rule subtypeTypeLeft 'H 'A :
    sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- "type"{'B} }
 
-axiom subtypeTypeRight 'H 'B :
+rule subtypeTypeRight 'H 'B :
    sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- "type"{'A} }
 
@@ -97,7 +97,7 @@ axiom subtypeTypeRight 'H 'B :
  * H >- A = A in Ui
  * H; x: A; y: A; x = y in A >- x = y in B
  *)
-axiom subtype_axiomFormation 'H 'x :
+rule subtype_axiomFormation 'H 'x :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; x: 'A >- 'x = 'x in 'B } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} }
@@ -108,7 +108,7 @@ axiom subtype_axiomFormation 'H 'x :
  *
  * H >- subtype(A; B)
  *)
-axiom subtype_axiomEquality 'H :
+rule subtype_axiomEquality 'H :
    sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- it = it in subtype{'A; 'B} }
 
@@ -118,7 +118,7 @@ axiom subtype_axiomEquality 'H :
  *
  * H, x: subtype(A; B); J[it] >- C[it]
  *)
-axiom subtypeElimination 'H 'J :
+rule subtypeElimination 'H 'J :
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] }
 
@@ -129,7 +129,7 @@ axiom subtypeElimination 'H 'J :
  * H >- x = y in A
  * H >- subtype(A; B)
  *)
-axiom subtypeElimination2 'H 'J 'a 'y :
+rule subtypeElimination2 'H 'J 'a 'y :
    sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- member{'A; 'a} } -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: member{'B; 'a} >- 'C['x] } -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] }
@@ -137,7 +137,7 @@ axiom subtypeElimination2 'H 'J 'a 'y :
 (*
  * Squash elimination.
  *)
-axiom subtype_squashElimination 'H :
+rule subtype_squashElimination 'H :
    sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} }
 

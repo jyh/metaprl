@@ -83,10 +83,10 @@ declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
 (*
  * Reduction.
  *)
-primrw reduce_listindNil :
+prim_rw reduce_listindNil :
    list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]} <--> 'base
 
-primrw reduce_listindCons :
+prim_rw reduce_listindCons :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
 

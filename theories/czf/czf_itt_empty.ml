@@ -55,7 +55,7 @@ declare "empty"
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_empty : empty <--> collect{void; x. 'x}
+prim_rw unfold_empty : empty <--> collect{void; x. 'x}
 
 (************************************************************************
  * DISPLAY                                                              *

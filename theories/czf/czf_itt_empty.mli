@@ -51,13 +51,13 @@ rewrite unfold_empty : empty <--> collect{void; x. 'x}
 (*
  * Empty is a set.
  *)
-axiom empty_isset 'H :
+rule empty_isset 'H :
    sequent ['ext] { 'H >- isset{empty} }
 
 (*
  * Nothing is in the empty set.
  *)
-axiom empty_member_elim 'H 'J :
+rule empty_member_elim 'H 'J :
    sequent ['ext] { 'H; x: member{'y; empty}; 'J >- 'T }
 
 (*

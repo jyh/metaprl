@@ -58,7 +58,7 @@ declare hide{'A}
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-axiom setFormation 'H 'a 'A :
+rule setFormation 'H 'a 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
    sequent ['ext] { 'H; a: 'A >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] }
@@ -70,7 +70,7 @@ axiom setFormation 'H 'a 'A :
  * H >- A1 = A2 in Ui
  * H, x: A1 >- B1[x] = B2[x] in Ui
  *)
-axiom setEquality 'H 'x :
+rule setEquality 'H 'x :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[@i:l] }
@@ -83,7 +83,7 @@ axiom setEquality 'H 'x :
  * H >- B[a]
  * H, z: A >- B[z] = B[z] in Ui
  *)
-axiom setMemberFormation 'H 'a 'z :
+rule setMemberFormation 'H 'a 'z :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent ['ext]   { 'H >- 'B['a] } -->
    sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
@@ -97,7 +97,7 @@ axiom setMemberFormation 'H 'a 'z :
  * H >- B[a1]
  * H, x: A >- B[x] = B[x] in Ui
  *)
-axiom setMemberEquality 'H 'x :
+rule setMemberEquality 'H 'x :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'B['a1] } -->
    sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
@@ -109,14 +109,14 @@ axiom setMemberEquality 'H 'x :
  *
  * H, u: { x:A | B }, y: A; v: hide{B[y]}; J[y] >- T[y]
  *)
-axiom setElimination 'H 'J 'u 'v :
+rule setElimination 'H 'J 'u 'v :
    sequent [it; 'prop] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] } -->
    sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
 
 (*
  * Subtyping.
  *)
-axiom set_subtype 'H :
+rule set_subtype 'H :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
    sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } }
 

@@ -77,11 +77,11 @@ dform ge_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: ge_int{'i; 'j} 
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw reduceEQInt : eq_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@i = @j]
-primrw reduceLTInt : lt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@i < @j]
-primrw reduceGTInt : gt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@j < @i]
-primrw reduceLEInt : le_int{'i; 'j} <--> bor{eq_int{'i; 'j}; lt_int{'i; 'j}}
-primrw reduceGEInt : ge_int{'i; 'j} <--> bor{eq_int{'i; 'j}; gt_int{'i; 'j}}
+prim_rw reduceEQInt : eq_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@i = @j]
+prim_rw reduceLTInt : lt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@i < @j]
+prim_rw reduceGTInt : gt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@j < @i]
+prim_rw reduceLEInt : le_int{'i; 'j} <--> bor{eq_int{'i; 'j}; lt_int{'i; 'j}}
+prim_rw reduceGEInt : ge_int{'i; 'j} <--> bor{eq_int{'i; 'j}; gt_int{'i; 'j}}
 
 let reduce_info =
    [<< eq_int{natural_number[@i:n]; natural_number[@j:n]} >>, reduceEQInt;

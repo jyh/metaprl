@@ -62,7 +62,7 @@ val fold_union : conv
 (*
  * Union is a set.
  *)
-axiom union_isset 'H :
+rule union_isset 'H :
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{union{'s1; 's2}} }
@@ -70,12 +70,12 @@ axiom union_isset 'H :
 (*
  * Membership in a union.
  *)
-axiom union_member_intro_left 'H :
+rule union_member_intro_left 'H :
    sequent ['ext] { 'H >- member{'x; 's1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
 
-axiom union_member_intro_right 'H :
+rule union_member_intro_right 'H :
    sequent ['ext] { 'H >- member{'x; 's2} } -->
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
@@ -83,7 +83,7 @@ axiom union_member_intro_right 'H :
 (*
  * This is the elimination form we want,
  * but it requires extensional equality.
-axiom union_member_elim 'H 'J :
+rule union_member_elim 'H 'J :
    sequent ['ext] { 'H; x: member{'y; 's1}; 'J['x] >- 'T['x] } -->
    sequent ['ext] { 'H; x: member{'y; 's2}; 'J['x] >- 'T['x] } -->
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- 'T['x] }

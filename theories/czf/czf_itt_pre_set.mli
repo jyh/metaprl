@@ -104,26 +104,26 @@ val fold_set_ind : conv
 (*
  * A set is a type in ITT.
  *)
-axiom pre_set_type 'H :
+rule pre_set_type 'H :
    sequent ['ext] { 'H >- "type"{pre_set} }
 
 (*
  * Equality from sethood.
  *)
-axiom equal_pre_set 'H :
+rule equal_pre_set 'H :
    sequent ['ext] { 'H >- is_pre_set{'s} } -->
    sequent ['ext] { 'H >- 's = 's in pre_set }
 
 (*
  * By assumption.
  *)
-axiom is_pre_set_assum 'H 'J :
+rule is_pre_set_assum 'H 'J :
    sequent ['ext] { 'H; x: pre_set; 'J['x] >- is_pre_set{'x} }
 
 (*
  * This is how a set is constructed.
  *)
-axiom is_pre_set_collect 'H 'y :
+rule is_pre_set_collect 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- is_pre_set{'a['y]} } -->
    sequent ['ext] { 'H >- is_pre_set{collect{'T; x. 'a['x]}} }
@@ -132,14 +132,14 @@ axiom is_pre_set_collect 'H 'y :
  * Applications often come up.
  * This is not a necessary axiom, ut it is useful.
  *)
-axiom is_pre_set_apply 'H 'J :
+rule is_pre_set_apply 'H 'J :
    sequent [squash] { 'H; f: 'T -> pre_set; 'J['f] >- 'x = 'x in 'T } -->
    sequent ['ext] { 'H; f: 'T -> pre_set; 'J['f] >- is_pre_set{.'f 'x} }
 
 (*
  * Induction.
  *)
-axiom pre_set_elim 'H 'J 'a 'T 'f 'w 'z :
+rule pre_set_elim 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
                     a: pre_set;
                     'J['a];
@@ -154,7 +154,7 @@ axiom pre_set_elim 'H 'J 'a 'T 'f 'w 'z :
 (*
  * Equality on tree induction forms.
  *)
-axiom pre_set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
+rule pre_set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
    sequent [squash] { 'H >- 'z1 = 'z2 in pre_set } -->
    sequent [squash] { 'H; a: 'A; f: 'B['a] -> pre_set; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->

@@ -70,7 +70,7 @@ declare precind{'a; p, h. 'g['p; 'h]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
+prim_rw reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. precind{'a; p, h. 'g['p; 'h]}}; 'a]
 
 (************************************************************************

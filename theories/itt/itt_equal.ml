@@ -84,7 +84,7 @@ declare it
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-primrw unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
+prim_rw unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
 
 let fold_member = makeFoldC << member{'T; 'x} >> unfold_member
 

@@ -61,7 +61,7 @@ declare "dexists"{'T; x. 'A['x]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_dexists : "dexists"{'s; x. 'A['x]} <-->
+prim_rw unfold_dexists : "dexists"{'s; x. 'A['x]} <-->
    set_ind{'s; T, f, g. x: 'T * 'A['f 'x]}
 
 interactive_rw reduce_dexists : "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->

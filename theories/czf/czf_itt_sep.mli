@@ -72,7 +72,7 @@ rewrite unfold_restricted2 : restricted{x, y. 'B['x; 'y]} <-->
 (*
  * Validity of separation.
  *)
-axiom sep_isset 'H 'z :
+rule sep_isset 'H 'z :
    sequent ['ext] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; z: set >- 'P['z] = 'P['z] in univ[1:l] } -->
    sequent ['ext] { 'H >- isset{.sep{'s; x. 'P['x]}} }
@@ -80,7 +80,7 @@ axiom sep_isset 'H 'z :
 (*
  * Intro form.
  *)
-axiom sep_intro2 'H :
+rule sep_intro2 'H :
    sequent [squash] { 'H; w: set >- 'P['w] = 'P['w] in univ[1:l] } -->
    sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    sequent ['ext] { 'H >- member{'x; 's} } -->
@@ -90,7 +90,7 @@ axiom sep_intro2 'H :
 (*
  * Elim exposes the computational content.
  *)
-axiom sep_elim 'H 'J 'u 'v 'z :
+rule sep_elim 'H 'J 'u 'v 'z :
    sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
    sequent [squash] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- 'P['z] = 'P['z] in univ[1:l] } -->
    sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- fun_prop{z. 'P['z]} } -->
@@ -100,13 +100,13 @@ axiom sep_elim 'H 'J 'u 'v 'z :
 (*
  * Functionality properties.
  *)
-axiom sep_fun_set 'H :
+rule sep_fun_set 'H :
    sequent ['ext] { 'H; w: set >- 'P['w] = 'P['w] in univ[1:l] } -->
    sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- eq{sep{'s1; z. 'P['z]}; sep{'s2; z. 'P['z]}} }
 
-axiom sep_fun 'H 'u 'v :
+rule sep_fun 'H 'u 'v :
    sequent ['ext] { 'H; u: set; v: set >- 'P['u; 'v] = 'P['u; 'v] in univ[1:l] } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['z; 'u]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['u; 'z]} } -->

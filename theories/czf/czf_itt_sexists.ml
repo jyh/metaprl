@@ -60,7 +60,7 @@ declare "sexists"{x. 'A['x]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
+prim_rw unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
 
 let fold_sexists = makeFoldC << "sexists"{x. 'A['x]} >> unfold_sexists
 

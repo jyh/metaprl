@@ -51,11 +51,11 @@ declare utrue{'t}
  * INTERPRETATION                                                       *
  ************************************************************************)
 
-primrw unfold_univ : univ <--> (T: Itt_equal!univ[1:l] * "type"{'T})
-primrw unfold_prop : prop{'t} <--> fst{'t}
+prim_rw unfold_univ : univ <--> (T: Itt_equal!univ[1:l] * "type"{'T})
+prim_rw unfold_prop : prop{'t} <--> fst{'t}
 
-primrw unfold_ufalse : ufalse{'t} <--> pair{'t; inl{it}}
-primrw unfold_utrue : utrue{'t} <--> pair{'t; inr{it}}
+prim_rw unfold_ufalse : ufalse{'t} <--> pair{'t; inl{it}}
+prim_rw unfold_utrue : utrue{'t} <--> pair{'t; inr{it}}
 
 interactive_rw reduce_prop_ufalse : prop{ufalse{'t}} <--> 't
 interactive_rw reduce_prop_utrue : prop{utrue{'t}} <--> 't

@@ -129,30 +129,30 @@ rewrite indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
  * H >- Ui ext Z
  * by intFormation
  *)
-axiom intFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
+rule intFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
 
 (*
  * H >- int Type
  *)
-axiom intType 'H : sequent ['ext] { 'H >- "type"{int} }
+rule intType 'H : sequent ['ext] { 'H >- "type"{int} }
 
 (*
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-axiom intEquality 'H : sequent ['ext] { 'H >- int = int in univ[@i:l] }
+rule intEquality 'H : sequent ['ext] { 'H >- int = int in univ[@i:l] }
 
 (*
  * H >- Z ext n
  * by numberFormation n
  *)
-axiom numberFormation 'H natural_number[@n:n] : sequent ['ext] { 'H >- int }
+rule numberFormation 'H natural_number[@n:n] : sequent ['ext] { 'H >- int }
 
 (*
  * H >- i = i in int
  * by numberEquality
  *)
-axiom numberEquality 'H : sequent ['ext] { 'H >- natural_number[@n:n] = natural_number[@n:n] in int }
+rule numberEquality 'H : sequent ['ext] { 'H >- natural_number[@n:n] = natural_number[@n:n] in int }
 
 (*
  * Induction:
@@ -163,7 +163,7 @@ axiom numberEquality 'H : sequent ['ext] { 'H >- natural_number[@n:n] = natural_
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-axiom intElimination 'H 'J 'n 'm 'v 'z :
+rule intElimination 'H 'J 'n 'm 'v 'z :
    sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m add 1] >- 'C['m] } -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } -->
    sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m sub 1] >- 'C['m] } -->
@@ -182,7 +182,7 @@ axiom intElimination 'H 'J 'n 'm 'v 'z :
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-axiom indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
+rule indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
    sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x add 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
@@ -199,7 +199,7 @@ axiom indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
  * H >- Z ext a
  * H >- Z ext b
  *)
-axiom less_thanFormation 'H :
+rule less_thanFormation 'H :
    sequent ['ext] { 'H >- int } -->
    sequent ['ext] { 'H >- int } -->
    sequent ['ext] { 'H >- univ[@i:l] }
@@ -211,7 +211,7 @@ axiom less_thanFormation 'H :
  * H >- i1 = j1 in int
  * H >- i2 = j2 in int
  *)
-axiom less_thanEquality 'H :
+rule less_thanEquality 'H :
    sequent [squash] { 'H >- 'i1 = 'j1 in int } -->
    sequent [squash] { 'H >- 'i2 = 'j2 in int } -->
    sequent ['ext] { 'H >- 'i1 < 'j1 = 'i2 < 'j2 in univ[@i:l] }
@@ -222,7 +222,7 @@ axiom less_thanEquality 'H :
  *
  * H >- a < b
  *)
-axiom less_than_memberEquality 'H :
+rule less_than_memberEquality 'H :
     sequent [squash] { 'H >- 'a < 'b } -->
     sequent ['ext] { 'H >- it = it in ('a < 'b) }
 
@@ -232,7 +232,7 @@ axiom less_than_memberEquality 'H :
  *
  * H, x: a < b; J[it] >- C[it]
  *)
-axiom less_thanElimination 'H 'J :
+rule less_thanElimination 'H 'J :
    sequent ['ext] { 'H; x: 'a < 'b; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: 'a < 'b; 'J['x] >- 'C['x] }
 

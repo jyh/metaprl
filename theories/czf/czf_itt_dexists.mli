@@ -58,7 +58,7 @@ rewrite reduce_dexists : "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
 (*
  * Typehood.
  *)
-axiom dexists_type 'H 'y :
+rule dexists_type 'H 'y :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."dexists"{'s; x. 'A['x]}} }
@@ -66,7 +66,7 @@ axiom dexists_type 'H 'y :
 (*
  * Intro.
  *)
-axiom dexists_intro 'H 'z 'w :
+rule dexists_intro 'H 'z 'w :
    sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
    sequent ['ext] { 'H >- member{'z; 's} } -->
@@ -76,7 +76,7 @@ axiom dexists_intro 'H 'z 'w :
 (*
  * Elimination.
  *)
-axiom dexists_elim 'H 'J 'x 'z 'v 'w :
+rule dexists_elim 'H 'J 'x 'z 'v 'w :
    sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- isset{'s} } -->
    sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x]; z: set >- "type"{'A['z]} } -->
    sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- fun_prop{z. 'A['z]} } -->
@@ -93,7 +93,7 @@ axiom dexists_elim 'H 'J 'x 'z 'v 'w :
 (*
  * This is a restricted formula.
  *)
-axiom dexists_res 'H 'w 'x :
+rule dexists_res 'H 'w 'x :
    sequent ['ext] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
    sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
    sequent ['ext] { 'H >- restricted{z, y. 'B['z; 'y]} } -->

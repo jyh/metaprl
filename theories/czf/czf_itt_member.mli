@@ -60,7 +60,7 @@ rewrite reduce_member : member{'x; collect{'T; y. 'f['y]}} <-->
 (*
  * Membership judgment is also a type.
  *)
-axiom member_type 'H :
+rule member_type 'H :
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{member{'s1; 's2}} }
@@ -68,31 +68,31 @@ axiom member_type 'H :
 (*
  * Sets contain only sets.
  *)
-axiom elem_isset 'H 'y :
+rule elem_isset 'H 'y :
    sequent ['ext] { 'H >- member{'x; 'y} } -->
    sequent ['ext] { 'H >- isset{'x} }
 
 (*
  * Only sets have elements.
  *)
-axiom set_isset 'H 'x :
+rule set_isset 'H 'x :
    sequent ['ext] { 'H >- member{'x; 'y} } -->
    sequent ['ext] { 'H >- isset{'y} }
 
 (*
  * Functionality.
  *)
-axiom member_fun_left 'H 's1 :
+rule member_fun_left 'H 's1 :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- member{'s1; 's3} } -->
    sequent ['ext] { 'H >- member{'s2; 's3} }
 
-axiom member_fun_right 'H 's1 :
+rule member_fun_right 'H 's1 :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- member{'s3; 's1} } -->
    sequent ['ext] { 'H >- member{'s3; 's2} }
 
-axiom member_fun 'H :
+rule member_fun 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. member{'f1['z]; 'f2['z]}} }
@@ -100,7 +100,7 @@ axiom member_fun 'H :
 (*
  * Set extensionality.
  *)
-axiom set_ext 'H 'x 'y :
+rule set_ext 'H 'x 'y :
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H; x: set; y: member{'x; 's1} >- member{'x; 's2} } -->

@@ -60,7 +60,7 @@ declare "sall"{x. 'A['x]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_sall : "sall"{x. 'A['x]} <--> (all x: set. 'A['x])
+prim_rw unfold_sall : "sall"{x. 'A['x]} <--> (all x: set. 'A['x])
 
 let fold_sall = makeFoldC << "sall"{x. 'A['x]} >> unfold_sall
 

@@ -87,7 +87,7 @@ rewrite unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
 (*
  * Membership in a universe.
  *)
-axiom eq_inner_equality1 'H :
+rule eq_inner_equality1 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s1; 's2} in univ[1:l] }
@@ -95,7 +95,7 @@ axiom eq_inner_equality1 'H :
 (*
  * Membership in a universe.
  *)
-axiom eq_inner_type 'H :
+rule eq_inner_type 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{eq_inner{'s1; 's2}} }
@@ -103,7 +103,7 @@ axiom eq_inner_type 'H :
 (*
  * More general equality in a universe.
  *)
-axiom eq_inner_equality2 'H :
+rule eq_inner_equality2 'H :
    sequent [squash] { 'H >- 's1 = 's3 in set } -->
    sequent [squash] { 'H >- 's2 = 's4 in set } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s3; 's4} in univ[1:l] }
@@ -111,7 +111,7 @@ axiom eq_inner_equality2 'H :
 (*
  * Functionality of eq_inner.
  *)
-axiom eq_inner_fun 'H :
+rule eq_inner_fun 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. eq_inner{'f1['z]; 'f2['z]}} }
@@ -119,7 +119,7 @@ axiom eq_inner_fun 'H :
 (*
  * Equality typehood.
  *)
-axiom eq_type 'H :
+rule eq_type 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- "type"{eq{'s1; 's2}} }
@@ -127,32 +127,32 @@ axiom eq_type 'H :
 (*
  * Equality is over sets.
  *)
-axiom eq_isset_left 'H 's2 :
+rule eq_isset_left 'H 's2 :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- isset{'s1} }
 
-axiom eq_isset_right 'H 's1 :
+rule eq_isset_right 'H 's1 :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- isset{'s2} }
 
 (*
  * Reflexivity.
  *)
-axiom eq_ref 'H :
+rule eq_ref 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- eq{'s1; 's1} }
 
 (*
  * Symettry.
  *)
-axiom eq_sym 'H :
+rule eq_sym 'H :
    sequent ['ext] { 'H >- eq{'s2; 's1} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} }
 
 (*
  * Transitivity.
  *)
-axiom eq_trans 'H 's2 :
+rule eq_trans 'H 's2 :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- eq{'s2; 's3} } -->
    sequent ['ext] { 'H >- eq{'s1; 's3} }
@@ -160,7 +160,7 @@ axiom eq_trans 'H 's2 :
 (*
  * Finally, functionality puts them all together.
  *)
-axiom eq_fun 'H :
+rule eq_fun 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. eq{'f1['z]; 'f2['z]}} }
@@ -168,13 +168,13 @@ axiom eq_fun 'H :
 (*
  * Substitution over functional expressions.
  *)
-axiom eq_hyp_subst 'H 'J 's1 's2 (bind{v. 'P['v]}) 'z :
+rule eq_hyp_subst 'H 'J 's1 's2 (bind{v. 'P['v]}) 'z :
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x]; z: 'P['s2] >- 'C['x] } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- fun_prop{z. 'P['z]} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- 'C['x] }
 
-axiom eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
+rule eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- 'C['s2] } -->
    sequent ['ext] { 'H >- fun_prop{z. 'C['z]} } -->
@@ -183,29 +183,29 @@ axiom eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
 (*
  * Typehood of fun propositions.
  *)
-axiom fun_set_type 'H :
+rule fun_set_type 'H :
    sequent ['ext] { 'H; z: set >- isset{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_set{z. 'f['z]}} }
 
-axiom fun_prop_type 'H :
+rule fun_prop_type 'H :
    sequent [squash] { 'H; z: set >- "type"{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_prop{z. 'f['z]}} }
 
 (*
  * Unquantified sets are functional.
  *)
-axiom fun_set 'H :
+rule fun_set 'H :
    sequent ['ext] { 'H >- isset{'u} } -->
    sequent ['ext] { 'H >- fun_set{z. 'u} }
 
-axiom fun_ref 'H :
+rule fun_ref 'H :
    sequent ['ext] { 'H >- fun_set{z. 'z} }
 
 (*
  * LEMMAS:
  * Every functional type is a type.
  *)
-axiom fun_set_is_set 'H (bind{z. 'P['z]}) 's :
+rule fun_set_is_set 'H (bind{z. 'P['z]}) 's :
    sequent ['ext] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- fun_set{z. 'P['z]} } -->
    sequent ['ext] { 'H >- isset{'P['s]} }

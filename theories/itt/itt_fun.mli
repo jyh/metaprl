@@ -59,7 +59,7 @@ rewrite reduceIndependentEta ('A -> 'B) : ('f = 'f in 'A -> 'B) -->
  * H >- Ui ext A
  * H >- Ui ext B
  *)
-axiom independentFunctionFormation 'H :
+rule independentFunctionFormation 'H :
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] }
@@ -71,7 +71,7 @@ axiom independentFunctionFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-axiom independentFunctionEquality 'H :
+rule independentFunctionEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[@i:l] }
@@ -79,7 +79,7 @@ axiom independentFunctionEquality 'H :
 (*
  * Typehood.
  *)
-axiom independentFunctionType 'H 'x :
+rule independentFunctionType 'H 'x :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
    sequent ['ext] { 'H >- "type"{. 'A1 -> 'B1 } }
@@ -91,7 +91,7 @@ axiom independentFunctionType 'H 'x :
  * H >- A = A in Ui
  * H, z: A >- B[z] ext b[z]
  *)
-axiom independentLambdaFormation 'H 'z :
+rule independentLambdaFormation 'H 'z :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H; z: 'A >- 'B } -->
    sequent ['ext] { 'H >- 'A -> 'B }
@@ -103,7 +103,7 @@ axiom independentLambdaFormation 'H 'z :
  * H >- A = A in Ui
  * H, x: A >- b1[x] = b2[x] in B[x]
  *)
-axiom independentLambdaEquality 'H 'x :
+rule independentLambdaEquality 'H 'x :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
@@ -115,7 +115,7 @@ axiom independentLambdaEquality 'H 'x :
  * H, f: A -> B, J >- A                         ext a
  * H, f: A -> B, J[x], y: B >- T[x]             ext t[f, y]
  *)
-axiom independentFunctionElimination 'H 'J 'f 'y :
+rule independentFunctionElimination 'H 'J 'f 'y :
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'A } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B >- 'T['f] } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
@@ -123,7 +123,7 @@ axiom independentFunctionElimination 'H 'J 'f 'y :
 (*
  * Explicit function elimination.
  *)
-axiom independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
+rule independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
@@ -135,7 +135,7 @@ axiom independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
  * H >- f1 = f2 in x:A -> B[x]
  * H >- a1 = a2 in A
  *)
-axiom independentApplyEquality 'H ('A -> 'B) :
+rule independentApplyEquality 'H ('A -> 'B) :
    sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }
@@ -147,7 +147,7 @@ axiom independentApplyEquality 'H ('A -> 'B) :
  * H >- A2 <= A1
  * H >- B1 <= B2
  *)
-axiom independentFunctionSubtype 'H :
+rule independentFunctionSubtype 'H :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }

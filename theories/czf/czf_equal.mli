@@ -42,13 +42,13 @@ declare equal{'A; 'B};;
  * Extensionality.
  * Perhaps there is a better way to formulate this.
  *)
-axiom extensional_equal :
+rule extensional_equal :
    sequent { 'H >> "all"{x. "all"{y. equal{'x; 'y} => "all"{z. member{'z; 'x} => member{'z; 'y}}}} };;
 
 (*
  * Membership is functional.
  *)
-axiom mem_fun :
+rule mem_fun :
    sequent { 'H >> "all"{x. "all"{y. "all"{z. (equal{'x; 'y} /\ member{'x; 'z}) => member{'y; 'z}}}} };;
 
 (*

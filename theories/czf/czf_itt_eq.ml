@@ -70,11 +70,11 @@ declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw reduce_eq_inner : eq_inner{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
+prim_rw reduce_eq_inner : eq_inner{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
    ((all y1 : 'T1. exst y2: 'T2. eq_inner{.'f1['y1]; .'f2['y2]})
     & (all y2 : 'T2. exst y1: 'T1. eq_inner{.'f1['y1]; .'f2['y2]}))
 
-primrw unfold_eq : eq{'s1; 's2} <-->
+prim_rw unfold_eq : eq{'s1; 's2} <-->
    ((isset{'s1} & isset{'s2}) & eq_inner{'s1; 's2})
 
 interactive_rw reduce_eq : eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
@@ -86,16 +86,16 @@ interactive_rw reduce_eq : eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['
  * A functional predicate can produce proofs for
  * all equal sets.
  *)
-primrw unfold_fun_set : fun_set{z. 'f['z]} <-->
+prim_rw unfold_fun_set : fun_set{z. 'f['z]} <-->
     (all s1: set. all s2: set. (eq{'s1; 's2} => eq{'f['s1]; 'f['s2]}))
 
-primrw unfold_fun_prop : fun_prop{z. 'P['z]} <-->
+prim_rw unfold_fun_prop : fun_prop{z. 'P['z]} <-->
     (all s1: set. all s2: set. (eq{'s1; 's2} => 'P['s1] => 'P['s2]))
 
 (*
  * This is _pointwise_ functionality.
  *)
-primrw unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
+prim_rw unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
   (all s1: set. all s2: set. (eq{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 
 (************************************************************************

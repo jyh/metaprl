@@ -27,7 +27,7 @@ dform not_df : parens :: "prec"["prec_not"] :: "not"{'A} =
  * COMPUTATION                                                          *
  ************************************************************************)
 
-primrw unfold_not : "not"{'A} <--> implies{'A; ."false"}
+prim_rw unfold_not : "not"{'A} <--> implies{'A; ."false"}
 
 (************************************************************************
  * RULES                                                                *

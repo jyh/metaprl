@@ -33,12 +33,12 @@
 (*
  * Equality is restricted.
  *)
-axiom eq_res 'H :
+rule eq_res 'H :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- restricted{z. eq{'s1['z]; 's2['z]}} }
 
-axiom member_res 'H :
+rule member_res 'H :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- restricted{z. member{'s1['z]; 's2['z]}} }

@@ -40,19 +40,19 @@ declare false;;
  * H, x: false, J >> T
  * by false_elim i
  *)
-axiom false_elim 'H :
+rule false_elim 'H :
    sequent { 'H; x: false; 'J['x] >> 'T['x] };;
 
 (*
  * False is well-formed.
  *)
-axiom false_wf :
+rule false_wf :
    sequent { 'H >> wf{false} };;
 
 (*
  * False is a restricted formula.
  *)
-axiom false_res :
+rule false_res :
    sequent { 'H >> restricted{false} };;
 
 (*

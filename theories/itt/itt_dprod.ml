@@ -84,13 +84,13 @@ declare snd{'e}
  * Reduction on spread:
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
-primrw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
+prim_rw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 
-primrw unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
-primrw unfoldSnd : fst{'e} <--> spread{'e; u, v. 'v}
+prim_rw unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
+prim_rw unfoldSnd : fst{'e} <--> spread{'e; u, v. 'v}
 
-primrw reduceFst : fst{pair{'a; 'b}} <--> 'a
-primrw reduceSnd : snd{pair{'a; 'b}} <--> 'b
+prim_rw reduceFst : fst{pair{'a; 'b}} <--> 'a
+prim_rw reduceSnd : snd{pair{'a; 'b}} <--> 'b
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

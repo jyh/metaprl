@@ -206,12 +206,12 @@ dform cond_rewrite_df : "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contrac
 
 dform axiom_df : "axiom"[@name:s]{'stmt; 'proof} =
    szone pushm[4]
-   slot{'proof} `" axiom" " " slot[@name:s] `" : : " slot{'stmt}
+   slot{'proof} `" rule" " " slot[@name:s] `" : : " slot{'stmt}
    popm ezone
 
 dform rule_df : "rule"[@name:s]{'params; 'stmt; 'proof} =
    szone pushm[4]
-   slot{'proof} `" axiom" " " slot[@name:s] " " space_list{'params} `":" hspace slot{'stmt}
+   slot{'proof} `" rule" " " slot[@name:s] " " space_list{'params} `":" hspace slot{'stmt}
    ezone popm
 
 dform opname_df : "opname"[@name:s]{'term} =

@@ -53,7 +53,7 @@ dform free_vars_df : mode[prl] :: free_vars{'t} =
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-primrw unfold_free_vars : free_vars{'t} <-->
+prim_rw unfold_free_vars : free_vars{'t} <-->
    match_term{'t; v, tl. ifthenelse{is_nil{'tl};
                             vsingleton{'v};
                             list_ind{'tl; vempty; h, t, g. vunion{free_vars{'h}; 'g}}};

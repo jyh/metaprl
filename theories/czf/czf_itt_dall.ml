@@ -61,7 +61,7 @@ declare "dall"{'T; x. 'A['x]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_dall : "dall"{'s; x. 'A['x]} <-->
+prim_rw unfold_dall : "dall"{'s; x. 'A['x]} <-->
    set_ind{'s; a, f, g. (x: 'a -> 'A['f 'x])}
 
 interactive_rw reduce_dall : "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->

@@ -103,22 +103,22 @@ declare "cor"{'a; 'b}
 declare "all"{'A; x. 'B['x]}
 declare "exists"{'A; x. 'B['x]}
 
-primrw unfoldProp : "prop"[@i:l] <--> "univ"[@i:l]
+prim_rw unfoldProp : "prop"[@i:l] <--> "univ"[@i:l]
 
-primrw unfoldTrue : "true" <--> unit
-primrw unfoldFalse : "false" <--> void
-primrw unfoldNot : not{'a} <--> 'a -> void
-primrw unfoldImplies : 'a => 'b <--> 'a -> 'b
-primrw unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
-primrw unfoldAnd : 'a & 'b <--> 'a * 'b
-primrw unfoldOr : 'a or 'b <--> 'a + 'b
-primrw unfoldCand : "cand"{'a; 'b} <--> 'a & 'b
-primrw unfoldCor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
-primrw unfoldAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
-primrw unfoldExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
+prim_rw unfoldTrue : "true" <--> unit
+prim_rw unfoldFalse : "false" <--> void
+prim_rw unfoldNot : not{'a} <--> 'a -> void
+prim_rw unfoldImplies : 'a => 'b <--> 'a -> 'b
+prim_rw unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
+prim_rw unfoldAnd : 'a & 'b <--> 'a * 'b
+prim_rw unfoldOr : 'a or 'b <--> 'a + 'b
+prim_rw unfoldCand : "cand"{'a; 'b} <--> 'a & 'b
+prim_rw unfoldCor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
+prim_rw unfoldAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
+prim_rw unfoldExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
 
-primrw reducePropTrue : "prop"["true":t] <--> "true"
-primrw reducePropFalse : "prop"["false":t] <--> "false"
+prim_rw reducePropTrue : "prop"["true":t] <--> "true"
+prim_rw reducePropFalse : "prop"["false":t] <--> "false"
 
 let foldTrue    = makeFoldC << "true" >> unfoldTrue
 let foldFalse   = makeFoldC << "false" >> unfoldFalse

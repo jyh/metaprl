@@ -76,7 +76,7 @@ declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
  * Reduction rule.
  * The g part composes the label with an application to f.
  *)
-primrw reduce_tree_ind :
+prim_rw reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
    <--> 'body['a1; 'f1; lambda{a. lambda{b. tree_ind{.'f1 'a 'b; a2, f2, g2. 'body['a2; 'f2; 'g2]}}}]
 

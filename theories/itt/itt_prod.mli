@@ -50,7 +50,7 @@ rewrite unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
  * H >- Ui ext A
  * H >- Ui ext B
  *)
-axiom independentProductFormation 'H :
+rule independentProductFormation 'H :
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] }
@@ -61,7 +61,7 @@ axiom independentProductFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-axiom independentProductEquality 'H :
+rule independentProductEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[@i:l] }
@@ -69,7 +69,7 @@ axiom independentProductEquality 'H :
 (*
  * Typehood.
  *)
-axiom independentProductType 'H :
+rule independentProductType 'H :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H >- "type"{'A2} } -->
    sequent ['ext] { 'H >- "type"{.'A1 * 'A2} }
@@ -81,7 +81,7 @@ axiom independentProductType 'H :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-axiom independentPairFormation 'H :
+rule independentPairFormation 'H :
    sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- 'B } -->
    sequent ['ext] { 'H >- 'A * 'B }
@@ -91,7 +91,7 @@ axiom independentPairFormation 'H :
  * by independentProductElimination
  * H, A * B, u: A, v: B, J >- T ext t
  *)
-axiom independentProductElimination 'H 'J 'z 'u 'v :
+rule independentProductElimination 'H 'J 'z 'u 'v :
    sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] } -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] }
 
@@ -101,7 +101,7 @@ axiom independentProductElimination 'H 'J 'z 'u 'v :
  * H >- a1 = a2 in A
  * H >- b1 = b2 in B
  *)
-axiom independentPairEquality 'H :
+rule independentPairEquality 'H :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
@@ -113,7 +113,7 @@ axiom independentPairEquality 'H :
  * H >- A2 <= A1
  * H >- B1 <= B2
  *)
-axiom independentProductSubtype 'H :
+rule independentProductSubtype 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }

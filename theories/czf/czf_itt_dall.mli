@@ -58,7 +58,7 @@ rewrite reduce_dall : "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
 (*
  * Typehood.
  *)
-axiom dall_type 'H 'y :
+rule dall_type 'H 'y :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."dall"{'s; x. 'A['x]}} }
@@ -66,7 +66,7 @@ axiom dall_type 'H 'y :
 (*
  * Intro.
  *)
-axiom dall_intro 'H 'a 'b :
+rule dall_intro 'H 'a 'b :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; a: set >- "type"{'A['a]} } -->
    sequent ['ext] { 'H; a: set; b: member{'a; 's} >- 'A['a] } -->
@@ -75,7 +75,7 @@ axiom dall_intro 'H 'a 'b :
 (*
  * Elimination.
  *)
-axiom dall_elim 'H 'J 'z 'w :
+rule dall_elim 'H 'J 'z 'w :
    sequent [squash] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- fun_prop{w. 'A['w]} } -->
    sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- member{'z; 's} } -->
@@ -85,7 +85,7 @@ axiom dall_elim 'H 'J 'z 'w :
 (*
  * This is a restricted formula.
  *)
-axiom dall_res2 'H 'w 'x :
+rule dall_res2 'H 'w 'x :
    sequent ['ext] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
    sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
    sequent ['ext] { 'H >- restricted{z, y. 'B['z; 'y]} } -->

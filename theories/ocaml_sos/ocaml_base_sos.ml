@@ -65,7 +65,7 @@ declare functional{'t1; 't2}
 declare equiv{'S; 'e1; 'e2; 't}
 declare member{'S; 'e; 't}
 
-primrw member_unfold :
+prim_rw member_unfold :
    member{'S; 'e; 't} <--> equiv{'S; 'e; 'e; 't}
 
 (*
@@ -76,7 +76,7 @@ primrw member_unfold :
 declare value_equiv{'S; 'e1; 'e2; 't}
 declare value_member{'S; 'e; 't}
 
-primrw value_member_unfold :
+prim_rw value_member_unfold :
    value_member{'S; 'e; 't} <--> value_equiv{'S; 'e; 'e; 't}
 
 (*
@@ -122,10 +122,10 @@ declare lookup{'S; 'n}
 declare replace{'S; 'n; 'v}
 declare allocate{'S; 'v}
 
-primrw state_unfold :
+prim_rw state_unfold :
    state{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'S2}
 
-primrw expr_unfold :
+prim_rw expr_unfold :
    expr{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'v}
 
 (************************************************************************

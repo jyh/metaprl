@@ -40,7 +40,7 @@ dform apply_df : parens :: "prec"["prec_apply"] :: apply{'f; 'a} =
  * COMPUTATION                                                          *
  ************************************************************************)
 
-primrw beta : (lambda{x. 'b['x]} 'a) <--> 'b['a]
+prim_rw beta : (lambda{x. 'b['x]} 'a) <--> 'b['a]
 
 (************************************************************************
  * RULES                                                                *

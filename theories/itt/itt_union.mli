@@ -79,7 +79,7 @@ prec prec_union
  * H >- Ui ext A
  * H >- Ui ext B
  *)
-axiom unionFormation 'H :
+rule unionFormation 'H :
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] }
@@ -90,7 +90,7 @@ axiom unionFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-axiom unionEquality 'H :
+rule unionEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[@i:l] }
@@ -99,7 +99,7 @@ axiom unionEquality 'H :
 (*
  * Typehood.
  *)
-axiom unionType 'H :
+rule unionType 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{. 'A + 'B } }
@@ -110,7 +110,7 @@ axiom unionType 'H :
  * H >- A
  * H >- B = B in Ui
  *)
-axiom inlFormation 'H :
+rule inlFormation 'H :
    sequent ['ext] { 'H >- 'A } -->
    sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- 'A + 'B }
@@ -121,7 +121,7 @@ axiom inlFormation 'H :
  * H >- B
  * H >- A = A in Ui
  *)
-axiom inrFormation 'H :
+rule inrFormation 'H :
    sequent ['ext] { 'H >- 'B } -->
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- 'A + 'B }
@@ -132,7 +132,7 @@ axiom inrFormation 'H :
  * H >- a1 = a2 in A
  * H >- B = B in Ui
  *)
-axiom inlEquality 'H :
+rule inlEquality 'H :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- inl{'a1} = inl{'a2} in 'A + 'B }
@@ -143,7 +143,7 @@ axiom inlEquality 'H :
  * H >- b1 = b2 in B
  * H >- A = A in Ui
  *)
-axiom inrEquality 'H :
+rule inrEquality 'H :
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- inr{'b1} = inr{'b2} in 'A + 'B }
@@ -153,7 +153,7 @@ axiom inrEquality 'H :
  * by unionElimination x u v
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-axiom unionElimination 'H 'J 'x 'u 'v :
+rule unionElimination 'H 'J 'x 'u 'v :
    sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] } -->
    sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] } -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] }
@@ -165,7 +165,7 @@ axiom unionElimination 'H 'J 'x 'u 'v :
  * H, u:A, w: e1 = inl u in A + B >- l1[u] = l2[u] in T[inl u]
  * H, v:A, w: e1 = inr v in A + B >- r1[v] = r2[v] in T[inr v]
  *)
-axiom decideEquality 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+rule decideEquality 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
    sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
    sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
@@ -180,7 +180,7 @@ axiom decideEquality 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
  * H >- A1 <= A2
  * H >- B1 <= B2
  *)
-axiom unionSubtype 'H :
+rule unionSubtype 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } }

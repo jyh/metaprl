@@ -43,7 +43,7 @@ declare pair{'A; 'B};;
  * H >> A
  * H >> B
  *)
-axiom and_intro :
+rule and_intro :
    sequent { 'H >> 'A } -->
    sequent { 'H >> 'B } -->
    sequent { 'H >> 'A /\ 'B };;
@@ -55,14 +55,14 @@ axiom and_intro :
  * by or_elim i
  * H, y: A; z: B; J[<y, z>] >> T[y, z]
  *)
-axiom and_elim 'H 'J 'y 'z :
+rule and_elim 'H 'J 'y 'z :
    sequent { 'H; y: 'A; z: 'B; 'J['y, 'z] >> 'T['y, 'z] } -->
    sequent { 'H; x: 'A /\ 'B; 'J['x] >> 'T['x] };;
 
 (*
  * Well formedness.
  *)
-axiom and_wf :
+rule and_wf :
    sequent { 'H >> wf{'A} } -->
    sequent { 'H >> wf{'B} } -->
    sequent { 'H >> wf{'A /\ 'B} };;
@@ -70,7 +70,7 @@ axiom and_wf :
 (*
  * Implication is restricted.
  *)
-axiom and_res :
+rule and_res :
    sequent { 'H >> restricted{'A} } -->
    sequent { 'H >> restricted{'B} } -->
    sequent { 'H >> restricted{'A /\ 'B} };;

@@ -44,7 +44,7 @@ define not_abs : not{'A} <--> 'A => false;;
  * H, x: A >> B
  * H >> W wf
  *)
-axiom implies_intro 'x :
+rule implies_intro 'x :
    sequent { 'H; x: 'A >> 'B } -->
    sequent { 'H >> wf{'A} } -->
    sequent { 'H >> 'A => 'B };;
@@ -57,7 +57,7 @@ axiom implies_intro 'x :
  * H, x: A => B, J >> A
  * H, x: A => B, J, y: B >> T
  *)
-axiom implies_elim 'H 'J 'y :
+rule implies_elim 'H 'J 'y :
    sequent { 'H; x: 'A => 'B; 'J >> 'A } -->
    sequent { 'H; x: 'A => 'B; 'J; y: 'B >> 'T } -->
    sequent { 'H; x: 'A => 'B; 'J >> 'T };;
@@ -65,7 +65,7 @@ axiom implies_elim 'H 'J 'y :
 (*
  * Well formedness.
  *)
-axiom implies_wf :
+rule implies_wf :
    sequent { 'H >> wf{'A} } -->
    sequent { 'H >> wf{'B} } -->
    sequent { 'H >> wf{'A => 'B} };;
@@ -73,7 +73,7 @@ axiom implies_wf :
 (*
  * Implication is restricted.
  *)
-axiom implies_res :
+rule implies_res :
    sequent { 'H >> restricted{'A} } -->
    sequent { 'H >> restricted{'B} } -->
    sequent { 'H >> restricted{'A => 'B} };;

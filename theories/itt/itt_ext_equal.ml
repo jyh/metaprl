@@ -51,10 +51,10 @@ let _ =
 (*
  * Terms type{'T} and subtype{'A; 'B} have already been defined.
  *)
-primrw type_def : "type"{'T} <--> subtype{'T; 'T}
+prim_rw type_def : "type"{'T} <--> subtype{'T; 'T}
 
 declare ext_equal{'A; 'B}
-primrw unfoldExtEqual : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
+prim_rw unfoldExtEqual : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
 
 (*
  * -*-

@@ -66,7 +66,7 @@ let _ =
 (*
  * The independent product is defined as a dependent product.
  *)
-primrw unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
+prim_rw unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
 
 (*
  * H >- Ui ext A * B

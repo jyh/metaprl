@@ -147,10 +147,10 @@ prim hypReplacement 'H 'J 'B univ[@i:l] :
  *)
 prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
-   sequent ['prop] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
+   ( 't : sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } ) -->
    sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
-   sequent ['prop] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
-   it
+   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
+   't
 
 (************************************************************************
  * PRIMITIVES                                                           *

@@ -38,7 +38,7 @@ include Fol_all
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-primrw unfold_all : "all"{x. 'B['x]} <--> bisect{'B[void]; 'B[unit]}
+prim_rw unfold_all : "all"{x. 'B['x]} <--> bisect{'B[void]; 'B[unit]}
 
 (************************************************************************
  * RULES                                                                *

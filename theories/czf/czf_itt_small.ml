@@ -68,8 +68,8 @@ declare small_type{'t}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_small : small <--> univ[1:l]
-primrw unfold_small_type : small_type{'t} <--> ('t = 't in small)
+prim_rw unfold_small : small <--> univ[1:l]
+prim_rw unfold_small_type : small_type{'t} <--> ('t = 't in small)
 
 let fold_small = makeFoldC << small >> unfold_small
 let fold_small_type = makeFoldC << small_type{'t} >> unfold_small_type

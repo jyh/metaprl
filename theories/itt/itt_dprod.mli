@@ -86,7 +86,7 @@ rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b
  * H >- A = A in Ui
  * H, x:A >- Ui ext B
  *)
-axiom productFormation 'H 'A 'x :
+rule productFormation 'H 'A 'x :
    sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] }
@@ -97,7 +97,7 @@ axiom productFormation 'H 'A 'x :
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-axiom productEquality 'H 'y :
+rule productEquality 'H 'y :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[@i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[@i:l] }
@@ -105,7 +105,7 @@ axiom productEquality 'H 'y :
 (*
  * Typehood.
  *)
-axiom productType 'H 'x :
+rule productType 'H 'x :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} }
@@ -117,7 +117,7 @@ axiom productType 'H 'x :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-axiom pairFormation 'H 'a 'y :
+rule pairFormation 'H 'a 'y :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H >- 'B['a] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -130,7 +130,7 @@ axiom pairFormation 'H 'a 'y :
  * H >- b1 = b2 in B[a1]
  * H, y:A >- B[y] = B[y] in Ui
  *)
-axiom pairEquality 'H 'y :
+rule pairEquality 'H 'y :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -141,7 +141,7 @@ axiom pairEquality 'H 'y :
  * by productElimination u v
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-axiom productElimination 'H 'J 'z 'u 'v :
+rule productElimination 'H 'J 'z 'u 'v :
    sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] } -->
    sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] }
 
@@ -151,7 +151,7 @@ axiom productElimination 'H 'J 'z 'u 'v :
  * H >- e1 = e2 in w:A * B
  * H, u:A, v: B[u], a: e1 = (u, v) in w:A * B >- b1[u; v] = b2[u; v] in T[u, v]
  *)
-axiom spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+rule spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
@@ -164,7 +164,7 @@ axiom spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
  * H >- A1 <= A2
  * H, a: A1 >- B1[a] <= B2[a]
  *)
-axiom productSubtype 'H 'a :
+rule productSubtype 'H 'a :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }

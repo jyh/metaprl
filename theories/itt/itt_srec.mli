@@ -61,7 +61,7 @@ rewrite unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
  *
  * H, T: Ui >- Ui ext B[T]
  *)
-axiom srecFormation 'H 'T :
+rule srecFormation 'H 'T :
    sequent ['ext] { 'H; T: univ[@i:l] >- univ[@i:l] } -->
    sequent ['ext] { 'H >- univ[@i:l] }
 
@@ -72,7 +72,7 @@ axiom srecFormation 'H 'T :
  * H; T: Ui >- B1[T] = B2[T] in Ui
  * H; S1: Ui; S2: Ui; z: subtype(S1; S2) >- subtype(B1[S1]; B1[S2])
  *)
-axiom srecEquality 'H 'T 'S1 'S2 'z :
+rule srecEquality 'H 'T 'S1 'S2 'z :
    sequent [squash] { 'H; T: univ[@i:l] >- 'B1['T] = 'B2['T] in univ[@i:l] } -->
    sequent [squash] { 'H; S1: univ[@i:l]; S2: univ[@i:l]; z: subtype{'S1; 'S2} >- subtype{'B1['S1]; 'B1['S2]} } -->
    sequent ['ext] { 'H >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[@i:l] }
@@ -84,7 +84,7 @@ axiom srecEquality 'H 'T 'S1 'S2 'z :
  * H >- B[srec(T. B[T])] ext g
  * H >- srec(T. B[T]) = srec(T. B[T]) in Ui
  *)
-axiom srec_memberFormation 'H :
+rule srec_memberFormation 'H :
    sequent ['ext] { 'H >- 'B[srec{T. 'B['T]}] } -->
    sequent [squash] { 'H >- "type"{srec{T. 'B['T]}} } -->
    sequent ['ext] { 'H >- srec{T. 'B['T]} }
@@ -96,7 +96,7 @@ axiom srec_memberFormation 'H :
  * H >- x1 = x2 in B[srec(T. B[T])]
  * H >- srec(T. B[T]) = srec(T. B[T]) in Ui
  *)
-axiom srec_memberEquality 'H :
+rule srec_memberEquality 'H :
    sequent [squash] { 'H >- 'x1 = 'x2 in 'B[srec{T. 'B['T]}] } -->
    sequent [squash] { 'H >- "type"{srec{T. 'B['T]}} } -->
    sequent ['ext] { 'H >- 'x1 = 'x2 in srec{T. 'B['T]} }
@@ -112,7 +112,7 @@ axiom srec_memberEquality 'H :
  *   z: T[T1]
  * >- C[z]
  *)
-axiom srecElimination 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
+rule srecElimination 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x];
              T1: univ[@i:l];
              u: subtype{'T1; srec{T. 'B['T]}};
@@ -128,7 +128,7 @@ axiom srecElimination 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
  *
  * H, x: srec(T. B[T]); J[x]; y: B[srec(T. B[T])]; u: x = y in B[srec(T. B[T])] >- C[y]
  *)
-axiom srecUnrollElimination 'H 'J 'x 'y 'u :
+rule srecUnrollElimination 'H 'J 'x 'y 'u :
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x]; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] } -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] }
 
@@ -141,7 +141,7 @@ axiom srecUnrollElimination 'H 'J 'x 'y 'u :
  *    v: w: T1 -> S[w], w: T[T1]
  *    >- t1[v; w] = t2[v; w] in S[w]
  *)
-axiom srecindEquality 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
+rule srecindEquality 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
    sequent [squash] { 'H >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
    sequent [squash] { 'H; T1: univ[@i:l]; z: subtype{'T1; srec{T. 'B['T]}};
                v: w: 'T1 -> 'S['w]; w: 'B['T1]

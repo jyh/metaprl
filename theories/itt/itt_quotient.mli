@@ -67,7 +67,7 @@ prec prec_quot
  * H, x: A, y: A, u: E[x, y] >- E[y, x]
  * H, x: A, y: A, z: A, u: E[x, y], v: E[y, z] >- E[x, z]
  *)
-axiom quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
+rule quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
    sequent [squash] { 'H >- 'A = 'A in univ[@i:l] } -->
    sequent [squash] { 'H; x: 'A; y: 'A >- 'E['x; 'y] = 'E['x; 'y] in univ[@i:l] } -->
    sequent [squash] { 'H; x: 'A >- 'E['x; 'x] } -->
@@ -85,7 +85,7 @@ axiom quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
  * H, x: A1, y: A1, u: E1[x, y] >- E1[y, x]
  * H, x: A1, y: A1, z: A1, u: E1[x, y], v: E1[y, z] >- E1[x, z]
  *)
-axiom quotientWeakEquality 'H 'x 'y 'z 'u 'v :
+rule quotientWeakEquality 'H 'x 'y 'z 'u 'v :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[@i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
@@ -106,7 +106,7 @@ axiom quotientWeakEquality 'H 'x 'y 'z 'u 'v :
  * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E1[r, s] -> E2[r, s]
  * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E2[r, s] -> E1[r, s]
  *)
-axiom quotientEquality 'H 'r 's 'v :
+rule quotientEquality 'H 'r 's 'v :
    sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[@i:l] } -->
    sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[@i:l] } -->
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
@@ -117,7 +117,7 @@ axiom quotientEquality 'H 'r 's 'v :
 (*
  * Typehood.
  *)
-axiom quotientType 'H 'u 'v 'w 'x1 'x2 :
+rule quotientType 'H 'u 'v 'w 'x1 'x2 :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
    sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
@@ -132,7 +132,7 @@ axiom quotientType 'H 'u 'v 'w 'x1 'x2 :
  * H >- quot x, y: A // E = quot x, y: A // E in Ui
  * H >- A ext a
  *)
-axiom quotient_memberFormation 'H :
+rule quotient_memberFormation 'H :
    sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] }
@@ -144,7 +144,7 @@ axiom quotient_memberFormation 'H :
  * H >- quot x, y: A // E = quot x, y: A // E in Ui
  * H >- x1 = a2 in A
  *)
-axiom quotient_memberWeakEquality 'H :
+rule quotient_memberWeakEquality 'H :
    sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
@@ -158,7 +158,7 @@ axiom quotient_memberWeakEquality 'H :
  * H >- a2 = a2 in A
  * H >- E[a1; a2]
  *)
-axiom quotient_memberEquality 'H :
+rule quotient_memberEquality 'H :
    sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent [squash] { 'H >- member{'A; 'a2} } -->
@@ -172,14 +172,14 @@ axiom quotient_memberEquality 'H :
  * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
  * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
-axiom quotientElimination1 'H 'J 'v 'w 'z :
+rule quotientElimination1 'H 'J 'v 'w 'z :
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
 
-axiom quotientElimination2 'H 'J 'v 'w 'z :
+rule quotientElimination2 'H 'J 'v 'w 'z :
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
@@ -192,7 +192,7 @@ axiom quotientElimination2 'H 'J 'v 'w 'z :
  *
  * H, x: a1 = a2 in quot x, y: A // E, J[x], v: hide(E[a, b]) >- T[x]
  *)
-axiom quotient_equalityElimination 'H 'J 'v :
+rule quotient_equalityElimination 'H 'J 'v :
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide('E['a1; 'a2]) >- 'T['x] } -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] }
 
@@ -205,7 +205,7 @@ axiom quotient_equalityElimination 'H 'J 'v :
  * H >- quot x1, y1: A1 // E1[x1; y1] in type
  * H >- quot x2, y2: A2 // E2[x2; y2] in type
  *)
-axiom quotientSubtype 'H 'a1 'a2 :
+rule quotientSubtype 'H 'a1 'a2 :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
    sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->

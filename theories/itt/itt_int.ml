@@ -143,18 +143,18 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfoldLE : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
-primrw unfoldGT : gt{'a; 'b} <--> 'b < 'a
-primrw unfoldGE : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
+prim_rw unfoldLE : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
+prim_rw unfoldGT : gt{'a; 'b} <--> 'b < 'a
+prim_rw unfoldGE : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
-primrw reduceAdd : "add"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i + @j]
-primrw reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i - @j]
-primrw reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
-primrw reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
-primrw reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
+prim_rw reduceAdd : "add"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i + @j]
+prim_rw reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i - @j]
+prim_rw reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
+prim_rw reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
+prim_rw reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
 
-primrw reduceLT : "lt"{natural_number[@i:n]; natural_number[@j:n]} <--> "prop"[@i < @j]
-primrw reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "prop"[@i = @j]
+prim_rw reduceLT : "lt"{natural_number[@i:n]; natural_number[@j:n]} <--> "prop"[@i < @j]
+prim_rw reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "prop"[@i = @j]
 
 (*
  * Reduction on induction combinator:
@@ -164,17 +164,17 @@ primrw reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "pro
  *    x = 0 => (ind[x] -> base)
  *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
  *)
-primrw indReduceDown :
+prim_rw indReduceDown :
    'x < 0 -->
    ((ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
     'down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
-primrw indReduceUp :
+prim_rw indReduceUp :
    ('x > 0) -->
    (ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
     'up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
-primrw indReduceBase :
+prim_rw indReduceBase :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
 
@@ -183,7 +183,7 @@ mlterm indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}} =
  | fun _ _ ->
       raise (RefineError ("indReduce", StringError "not implemented"))
 
-primrw indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+prim_rw indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
    indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}}
 
 let reduce_info =
@@ -208,7 +208,7 @@ let reduce_resource = add_reduce_info reduce_resource reduce_info
  *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
  *)
 (*
-rwthm indReduce ind('x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]) =
+thm_rw indReduce ind('x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]) =
    let n = dest_natural_number x in
       if n > 0 then
          << 'down['x; 'redex] >>

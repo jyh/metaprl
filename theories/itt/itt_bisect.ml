@@ -67,7 +67,7 @@ dform bisect_df : mode[prl] :: parens :: "prec"[prec_bisect] :: bisect{'A; 'B} =
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_bisect : bisect{'A; 'B} <-->
+prim_rw unfold_bisect : bisect{'A; 'B} <-->
                           "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
 
 (************************************************************************

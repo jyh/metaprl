@@ -747,29 +747,29 @@ let make_subgoal
 (*
  * Construct polymorphic tactic.
  *)
-let tactic_of_rule rule (addrs, names) params arg =
+let tactic_of_rule rl (addrs, names) params arg =
    if !debug_tactic then begin
       eprintf "Collecting addresses%t" eflush;
-      let rule = rule (addrs, names) params in
+      let rl = rl (addrs, names) params in
       eprintf "Starting refinement%t" eflush;
-      let subgoals, ext = Refine.refine (get_sentinal arg.ref_sentinal) rule arg.ref_goal in
+      let subgoals, ext = Refine.refine (get_sentinal arg.ref_sentinal) rl arg.ref_goal in
       eprintf "tactic_of_rule done%t" eflush;
       ThreadRefinerTacticals.create_value (List.map (make_subgoal arg) subgoals) (Extract (ext, List.length subgoals))
    end else
-      let rule = rule (addrs, names) params in
-      let subgoals, ext = Refine.refine (get_sentinal arg.ref_sentinal) rule arg.ref_goal in
+      let rl = rl (addrs, names) params in
+      let subgoals, ext = Refine.refine (get_sentinal arg.ref_sentinal) rl arg.ref_goal in
       ThreadRefinerTacticals.create_value (List.map (make_subgoal arg) subgoals) (Extract (ext, List.length subgoals))
 
 (*
  * Construct polymorphic tactic.
  *)
-let tactic_of_refine_tactic rule arg =
+let tactic_of_refine_tactic rl arg =
    let _ =
       if !debug_tactic then
          eprintf "Starting refinement%t" eflush
    in
    let { ref_goal = goal; ref_sentinal = sentinal } = arg in
-   let subgoals, ext = Refine.refine (get_sentinal sentinal) rule goal in
+   let subgoals, ext = Refine.refine (get_sentinal sentinal) rl goal in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
       List.map (make_subgoal arg) subgoals, Extract (ext, List.length subgoals)
@@ -781,7 +781,7 @@ let tactic_of_rewrite_exn1 = RefineError ("tactic_of_rewrite", StringError "rewr
 let tactic_of_rewrite_exn2 = RefineError ("tactic_of_rewrite", StringError "rewrite produced too many goals")
 
 let tactic_of_rewrite rw arg =
-   let rule = rwtactic rw in
+   let rl = rwtactic rw in
    let { ref_goal = goal;
          ref_label = label;
          ref_attributes = attributes;
@@ -789,7 +789,7 @@ let tactic_of_rewrite rw arg =
          ref_sentinal = sentinal
        } = arg
    in
-      match Refine.refine (get_sentinal sentinal) rule goal with
+      match Refine.refine (get_sentinal sentinal) rl goal with
          [subgoal], ext ->
             let subgoal =
                { ref_goal = subgoal;
@@ -810,7 +810,7 @@ let tactic_of_rewrite rw arg =
  * Convert a conditional rewrite to a tactic.
  *)
 let tactic_of_cond_rewrite crw arg =
-   let rule = crwtactic crw in
+   let rl = crwtactic crw in
    let { ref_goal = goal;
          ref_label = label;
          ref_attributes = attributes;
@@ -818,7 +818,7 @@ let tactic_of_cond_rewrite crw arg =
          ref_sentinal = sentinal
        } = arg
    in
-   let subgoals, ext = Refine.refine (get_sentinal sentinal) rule goal in
+   let subgoals, ext = Refine.refine (get_sentinal sentinal) rl goal in
    let make_subgoal goal =
       { ref_goal = goal;
         ref_label = label;

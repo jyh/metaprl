@@ -54,7 +54,7 @@ declare member{'x; 'y}
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-primrw unfold_member : member{'x; 'y} <-->
+prim_rw unfold_member : member{'x; 'y} <-->
    ((isset{'x} & isset{'y}) & set_ind{'y; T, f, g. exst t: 'T. eq{'x; .'f 't}})
 
 interactive_rw reduce_member : member{'x; collect{'T; y. 'f['y]}} <-->

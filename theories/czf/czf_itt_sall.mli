@@ -56,21 +56,21 @@ val fold_sall : conv
 (*
  * Typehood.
  *)
-axiom sall_type 'H 'y :
+rule sall_type 'H 'y :
    sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."sall"{x. 'A['x]} } }
 
 (*
  * Intro.
  *)
-axiom sall_intro 'H 'a :
+rule sall_intro 'H 'a :
    sequent ['ext] { 'H; a: set >- 'A['a] } -->
    sequent ['ext] { 'H >- "sall"{x. 'A['x]} }
 
 (*
  * Elimination.
  *)
-axiom sall_elim 'H 'J 'x 'z 'w :
+rule sall_elim 'H 'J 'x 'z 'w :
    sequent [squash] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
    sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
    sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- 'T['x] }

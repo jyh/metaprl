@@ -62,51 +62,51 @@ val fold_small_type : conv
  * SMALL TYPE RULES                                                     *
  ************************************************************************)
 
-axiom small_type 'H :
+rule small_type 'H :
    sequent ['ext] { 'H >- "type"{small} }
 
-axiom small_type_type 'H :
+rule small_type_type 'H :
    sequent [squash] { 'H >- small_type{'x} } -->
    sequent ['ext] { 'H >- "type"{'x} }
 
 (*
  * These are the types in the small universe.
  *)
-axiom void_small 'H :
+rule void_small 'H :
    sequent ['ext] { 'H >- small_type{void} }
 
-axiom unit_small 'H :
+rule unit_small 'H :
    sequent ['ext] { 'H >- small_type{unit} }
 
-axiom int_small 'H :
+rule int_small 'H :
    sequent ['ext] { 'H >- small_type{int} }
 
-axiom dfun_small 'H 'z :
+rule dfun_small 'H 'z :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H; z: 'A >- small_type{'B['z]} } -->
    sequent ['ext] { 'H >- small_type{. a: 'A -> 'B['a]} }
 
-axiom fun_small 'H :
+rule fun_small 'H :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H >- small_type{'B} } -->
    sequent ['ext] { 'H >- small_type{. 'A -> 'B} }
 
-axiom dprod_small 'H 'z :
+rule dprod_small 'H 'z :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H; z: 'A >- small_type{'B['z]} } -->
    sequent ['ext] { 'H >- small_type{. a: 'A * 'B['a]} }
 
-axiom prod_small 'H :
+rule prod_small 'H :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H >- small_type{'B} } -->
    sequent ['ext] { 'H >- small_type{. 'A * 'B} }
 
-axiom union_small 'H :
+rule union_small 'H :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H >- small_type{'B} } -->
    sequent ['ext] { 'H >- small_type{. 'A + 'B} }
 
-axiom equal_small 'H :
+rule equal_small 'H :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H >- 'b = 'b in 'A } -->

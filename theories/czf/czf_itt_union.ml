@@ -59,7 +59,7 @@ declare "union"{'s1; 's2}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_union : union{'s1; 's2} <-->
+prim_rw unfold_union : union{'s1; 's2} <-->
    set_ind{'s1; a1, f1, g1.
       set_ind{'s2; a2, f2, g2.
          collect{.Itt_union!union{'a1; 'a2}; x. decide{'x; z. 'f1 'z; z. 'f2 'z}}}}

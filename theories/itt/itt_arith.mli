@@ -41,7 +41,7 @@ include Itt_int
  * This is computed with a side condition.
  *)
 mlterm arith_check{'t}
-axiom arith : arith_check{'t} --> 't
+rule arith : arith_check{'t} --> 't
 
 
 (*

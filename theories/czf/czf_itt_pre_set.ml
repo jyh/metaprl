@@ -113,10 +113,10 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 (*
  * Sets.
  *)
-primrw unfold_pre_set : pre_set <--> w{univ[1:l]; x. 'x}
-primrw unfold_is_pre_set : is_pre_set{'s} <--> ('s = 's in pre_set)
-primrw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
-primrw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
+prim_rw unfold_pre_set : pre_set <--> w{univ[1:l]; x. 'x}
+prim_rw unfold_is_pre_set : is_pre_set{'s} <--> ('s = 's in pre_set)
+prim_rw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
+prim_rw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
 interactive_rw reduce_set_ind :

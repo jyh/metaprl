@@ -1,4 +1,4 @@
-OCAMLINCLUDES =\
+OCAMLINCLUDES +=\
 	-I .\
 	-I ../../base\
 	-I $(ROOT)/libmojave/stdlib\

@@ -1,4 +1,4 @@
-OCAMLINCLUDES =\
+OCAMLINCLUDES +=\
 	$(addprefix -I , $(SUPPORT_DIRS))\
 	-I ../base
 

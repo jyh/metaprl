@@ -164,9 +164,10 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive isSemigroup_wf {| intro [intro_typeinf <<'x>>] |} groupoid[i:l] :
-   sequent [squash] { 'H >- 'x in groupoid[i:l] } -->
-   sequent ['ext] {'H >- "type"{isSemigroup{'x}} }
+interactive isSemigroup_wf {| intro [] |} :
+   sequent [squash] { 'H >- "type"{'A^car} } -->
+   sequent [squash] { 'H; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   sequent ['ext] {'H >- "type"{isSemigroup{'A}} }
 
 interactive semigroup_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{semigroup[i:l]} }
@@ -251,9 +252,11 @@ doc <:doc<
 interactive premonoid_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{premonoid[i:l]} }
 
-interactive isMonoid_wf {| intro [intro_typeinf <<'x>>] |} premonoid[i:l] :
-   sequent [squash] { 'H >- 'x in premonoid[i:l] } -->
-   sequent ['ext] {'H >- "type"{isMonoid{'x}} }
+interactive isMonoid_wf {| intro [] |} :
+   sequent [squash] { 'H >- "type"{'A^car} } -->
+   sequent [squash] { 'H; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   sequent [squash] { 'H >- 'A^"1" in 'A^car} -->
+   sequent ['ext] {'H >- "type"{isMonoid{'A}} }
 
 interactive monoid_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{monoid[i:l]} }
@@ -341,9 +344,10 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive isComutative_wf {| intro [intro_typeinf <<'g>>] |} groupoid[i:l] :
-   sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
-   sequent ['ext] {'H >- "type"{isCommutative{'g}} }
+interactive isComutative_wf {| intro [] |} :
+   sequent [squash] { 'H >- "type"{'A^car} } -->
+   sequent [squash] { 'H; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   sequent ['ext] {'H >- "type"{isCommutative{'A}} }
 
 interactive csemigroup_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{csemigroup[i:l]} }
@@ -414,6 +418,19 @@ define unfold_subStructure : subStructure{'s; 'g} <-->
 doc <:doc< @docoff >>
 
 let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
+
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Well-formedness}
+  
+   @end[doc]
+>>
+interactive subStructure_wf {| intro [] |} :
+   sequent [squash] { 'H >- "type"{'A^car} } -->
+   sequent [squash] { 'H >- "type"{'B^car} } -->
+   sequent [squash] { 'H >- 'B^"*" = 'A^"*" in 'A^car -> 'A^car -> 'A^car } -->
+   sequent ['ext] {'H >- "type"{subStructure{'A; 'B}} }
+
 doc <:doc< 
    @begin[doc]
    @modsubsection{Introduction and Elimination}
@@ -436,10 +453,15 @@ doc <:doc<
    Substructure is squash-stable.
    @end[doc]
 >>
-interactive subStructure_squashStable :
+interactive subStructure_sqStable :
    [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->
    [wf] sequent [squash] { 'H >- squash{subStructure{'s; 'g}} } -->
    sequent ['ext] { 'H >- subStructure{'s; 'g} }
+
+interactive subStructure_sqStable1 {| squash |} :
+(*  sequent [squash] { 'H >- "type"{.'s^car} } -->*)
+   sequent [squash] { 'H >- subStructure{'s; 'g} } -->
+   sequent ['ext] { 'H >- it in subStructure{'s; 'g} }
 
 doc <:doc< @docoff >>
 

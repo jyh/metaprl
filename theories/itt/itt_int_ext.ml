@@ -181,6 +181,13 @@ define unfold_ge :
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
+let resource reduce += [
+   << gt{'a; 'b} >>, unfold_gt;
+   << le{'a; 'b} >>, unfold_le;
+   << ge{'a; 'b} >>, unfold_ge;
+   << nequal{'a; 'b} >>, unfold_neq_int;
+]
+
 let le_term = << 'x <= 'y >>
 let le_opname = opname_of_term le_term
 let is_le_term = is_dep0_dep0_term le_opname

@@ -40,12 +40,23 @@ open Refiner.Refiner.Term
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
+open Top_conversionals
+open Itt_int_ext
+
 topval add_BubblePrimitiveC : conv
 topval add_BubbleStepC : term -> conv
 topval add_BubbleSortC : conv
 
+topval add_normalizeC : conv
+
+topval ge_addContractC : conv
+
+topval reduceContradRelT : int -> tactic
+
 topval sumListT : int list -> tactic
 topval proveSumT : tactic
+
+topval findContradRelT : tactic
 
 topval arithT : tactic
 

@@ -65,6 +65,8 @@ open Base_meta
 open Base_dtactic
 open Base_auto_tactic
 
+open Top_conversionals
+
 open Itt_equal
 open Itt_struct
 
@@ -90,7 +92,7 @@ interactive_rw add_BubblePrimitive_rw :
    ( 'a IN int ) -->
    ( 'b IN int ) -->
    ( 'c IN int ) -->
-   ('a + ('b + 'c)) <--> ('b + ('a + 'c))
+   ('a +@ ('b +@ 'c)) <--> ('b +@ ('a +@ 'c))
 
 let add_BubblePrimitiveC = add_BubblePrimitive_rw
 
@@ -99,16 +101,40 @@ let add_BubbleStepC tm =
       let (a,s) = dest_add tm in
          if is_add_term s then
             let (b,c) = dest_add s in
-               if b<a then
-                  add_BubblePrimitiveC
-               else
-                  idC
+	       if (is_number_term a) & (is_number_term b) then
+	          (add_AssocC thenC (addrC [0] reduce_add))
+	       else
+                  if b<a then
+                     add_BubblePrimitiveC
+                  else
+                     idC
          else
-            failC
+            if (is_number_term a) & (is_number_term s) then
+	       reduce_add
+	    else
+               if s<a then
+	          add_CommutC
+	       else
+	          idC
    else
       failC
 
 let add_BubbleSortC = sweepDnC (termC add_BubbleStepC)
+
+let add_normalizeC = (sweepDnC add_Assoc2C) thenC (whileProgressC add_BubbleSortC)
+
+interactive_rw ge_addContract_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ('a >= ('b +@ 'a)) <--> (0 >= 'b)
+
+let ge_addContractC = ge_addContract_rw
+
+let reduceContradRelT i p = ((rw ((addrC [0] add_normalizeC) thenC
+                               (addrC [1] add_normalizeC) thenC
+			       ge_addContractC thenC
+			       reduceC)
+                              i) thenT autoT) p
 
 let sumList tl g =
    match tl with
@@ -146,7 +172,7 @@ let good_term t =
       false
      )
 
-let arithT p =
+let findContradRelT p =
 (*   let es = explode_sequent (Sequent.goal p) in
    let {sequent_args = sa; sequent_hyps = sh; sequent_goals = sg} = es in
    let aux h = match h with Hypothesis (s,t) -> t
@@ -184,6 +210,8 @@ let arithT p =
             eprintf "No contradiction found";
             failT p
          end
+
+let arithT = findContradRelT thenMT reduceContradRelT (-1)
 
 interactive test 'H 'a 'b 'c :
 sequent [squash] { 'H >- 'a IN int } -->

@@ -243,14 +243,7 @@ interactive subst_not_free :
    sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
    sequent { <H> >- not_free{'v;'t} } -->
    sequent { <H> >- subst{'t;'v;'s} ~ 't }
-(*
-interactive add_var_not_free {| intro[] |} :
-   sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- 'v1 in Var } -->
-   sequent { <H> >- not_free{'v;'t} } -->
-   sequent { <H> >- not_free{'v; add_var{'t; 'v1}} }
-*)
+
 interactive eq_add_var1 {| intro[] |}:
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- 'u in Var } -->
@@ -310,14 +303,15 @@ interactive subst_add_vars_upto :
    sequent { <H> >- 's2 in BTerm } -->
    sequent { <H> >- bdepth{'v} >= bdepth{'s1} } -->
    sequent { <H> >- bdepth{'v} >= bdepth{'s2} } -->
+   sequent { <H> >- bdepth{'v2} <= bdepth{'s1} } -->
    sequent { <H> >- not_free{'v2;'s1} } -->
    sequent { <H> >- not_free{'v2;'v} } -->
    sequent { <H> >- subst{add_vars_upto{'s1;'v};'v2;'s2} ~ add_vars_upto{'s1;'v} }
 
 interactive subst_commutativity {| intro [] |} :
    sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v1 in Vars_of{'t} } -->
-   sequent { <H> >- 'v2 in Vars_of{'t} } -->
+   sequent { <H> >- 'v1 in Vars_of{'s2} } -->
+   sequent { <H> >- 'v2 in Vars_of{'s1} } -->
    sequent { <H> >- 's1 in BTerm } -->
    sequent { <H> >- 's2 in BTerm } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s1} } -->

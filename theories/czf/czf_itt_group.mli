@@ -36,5 +36,7 @@ declare inv{'g; 'a}
 
 prec prec_op
 
-topval groupCancelLeftT : term -> term -> tactic
-topval groupCancelRightT : term -> term -> tactic
+topval groupCancelLeftT : int -> tactic
+topval groupCancelRightT : int -> tactic
+(*topval groupCancelLeftT : term -> term -> tactic
+topval groupCancelRightT : term -> term -> tactic*)

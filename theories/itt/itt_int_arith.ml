@@ -288,14 +288,24 @@ let leInConcl2HypT =
 let geInConcl2HypT =
    thenLocalMT (rwh unfold_ge 0) leInConcl2HypT
 
+interactive eq2pair_of_ineq :
+   [wf] sequent ['ext] { 'H >- 'a in int } -->
+   [wf] sequent ['ext] { 'H >- 'b in int } -->
+   [main] sequent ['ext] { 'H >- 'a >= 'b } -->
+   [main] sequent ['ext] { 'H >- 'b >= 'a } -->
+   sequent ['ext] { 'H >- 'a = 'b in int }
+
+let eqInConcl2HypT =
+	thenLocalMT eq2pair_of_ineq geInConcl2HypT
+
 let arithRelInConcl2HypT p =
    let g=Sequent.goal p in
    let t=Refiner.Refiner.TermMan.nth_concl g 1 in
-(*      print_term stdout t; *)
    if is_lt_term t then ltInConcl2HypT p
    else if is_gt_term t then gtInConcl2HypT p
    else if is_le_term t then leInConcl2HypT p
    else if is_ge_term t then geInConcl2HypT p
+   else if is_equal_term t then eqInConcl2HypT p
    else idT p
 
 interactive ge_addMono :

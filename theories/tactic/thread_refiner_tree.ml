@@ -291,22 +291,13 @@ struct
    let rec eval_stack printer stack =
       if !debug_strategy then
          print_stack printer stack;
-      let stack = ref stack in
-      let go = ref None in
-         while !go = None do
-            match !stack with
-               [ValueEntry (args, ext)] ->
-                  go := Some (args, ext)
-             | entry :: stack' ->
-                  stack := eval_entry entry stack'
-             | [] ->
-                  raise (Invalid_argument "eval_stack")
-         done;
-         match !go with
-            Some x ->
-               x
-          | None ->
-               raise (Failure "eval_stack")
+      match stack with
+         [ValueEntry (args, ext)] ->
+            args, ext
+       | entry :: stack ->
+            eval_stack printer (eval_entry entry stack)
+       | [] ->
+            raise (Invalid_argument "eval_stack")
 
    (*
     * The evaluator just does an appication.

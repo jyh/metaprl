@@ -354,9 +354,9 @@ doc <:doc<
 prim rfunction_lambdaFormation {| intro [] |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } -->
-   ('b['g; 'y] : sequent { <H>; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] }) -->
+   ('ext['g; 'y] : sequent { <H>; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] }) -->
    sequent { <H> >- { f | x:'A -> 'B['f; 'x] } } =
-   lambda{y. fix{g. 'b['g; 'y]}}
+   lambda{y. fix{g. 'ext['g; 'y]}}
 
 doc <:doc<
    @begin[doc]

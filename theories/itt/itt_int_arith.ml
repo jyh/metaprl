@@ -69,6 +69,7 @@ open Top_conversionals
 
 open Itt_equal
 open Itt_struct
+open Itt_bool
 
 open Itt_int_base
 open Itt_int_ext
@@ -155,19 +156,24 @@ let anyArithRel2geT i p =
                (eq2geT t p)
             else
 	       idT p
-      else
-         idT p
+      else idT p (*if is_not_term t then
+         let t1=dest_not t in
+            if is_ge_term t1 then notge2geT t1
+            else if is_le_term t1 then notle2geT t1
+            else if is_lt_term t1 then notlt2geT t1
+            else if is_gt_term t1 then notgt2geT t1 *)
    else
       idT p
 
-(*
-   else if is_not_term t then
-      let t1=dest_not t in
-         if is_ge_term t1 then notge2geT t1
-         else if is_le_term t1 then notle2geT t1
-         else if is_lt_term t1 then notlt2geT t1
-         else if is_gt_term t1 then notgt2geT t1
-*)
+interactive_rw bnot_lt2ge_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   "assert"{bnot{lt_bool{'a; 'b}}} <--> ('a >= 'b)
+
+let bnot_lt2geC = bnot_lt2ge_rw
+
+let ltInConcl2HypT t p =
+   (rwh unfold_lt 0 thenMT magicT thenLT [idT;rwh bnot_lt2geC (-1)]) p
 
 interactive ge_addMono 'H :
    sequent [squash] { 'H >- 'a IN int } -->
@@ -311,20 +317,24 @@ let findContradRelT p =
    let ar=Array.of_list l in
    match Arith.TG.solve (g,ar) with
       Arith.TG.Int (_,r),_ ->
-         let aux i = eprintf "i=%u " i in
-         let aux2 i = eprintf "r=%u " ar.(i) in
+         (*
+	   let aux i = eprintf "i=%u " i in
+           let aux2 i = eprintf "r=%u " ar.(i) in
+	 *)
          let aux3 i al = (ar.(i))::al in
          let rl = List.fold_right aux3 r [] in
          begin
-            List.map aux l;
-            prerr_endline "";
-            List.map aux rl;
-            flush stderr;
+            (*
+	      List.map aux l;
+              prerr_endline "";
+              List.map aux rl;
+              flush stderr;
+	    *)
             sumListT rl p
          end
       | Arith.TG.Disconnected,_ ->
          begin
-            eprintf "No contradiction found";
+            (*eprintf "No contradiction found";*)
             failT p
          end
 
@@ -349,3 +359,10 @@ sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2));
                      u: ('b >= ('a +@ 0))
                 >- "assert"{bfalse} }
+
+interactive test3 'H 'a 'b 'c :
+sequent [squash] { 'H >- 'a IN int } -->
+sequent [squash] { 'H >- 'b IN int } -->
+sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
+                     t: ('c > ('b +@ 2))
+                >- ('b < ('a +@ 0))  }

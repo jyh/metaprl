@@ -153,11 +153,16 @@ rule mul_Commut 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a *@ 'b) ~ ('b *@ 'a) }
 
+topval mul_CommutC: conv
+
 rule mul_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) }
+
+topval mul_AssocC: conv
+topval mul_Assoc2C: conv
 
 rule mul_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -165,13 +170,19 @@ rule mul_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) }
 
+topval mul_add_DistribC: conv
+
 rule mul_Id 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (1 *@ 'a) ~ 'a }
 
+topval mul_IdC: conv
+
 rule mul_Id2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a *@ 1) ~ 'a }
+
+topval mul_Id2C: conv
 
 rule mul_Zero 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

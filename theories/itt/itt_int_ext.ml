@@ -305,6 +305,14 @@ interactive_rw mul_Assoc_rw :
 
 let mul_AssocC = mul_Assoc_rw
 
+interactive_rw mul_Assoc2_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   (('a *@ 'b) *@ 'c) <--> ('a *@ ('b *@ 'c))
+
+let mul_Assoc2C = mul_Assoc2_rw
+
 prim mul_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->

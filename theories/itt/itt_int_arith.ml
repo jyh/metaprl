@@ -47,6 +47,7 @@ extends Itt_int_ext
 
 open Printf
 open Mp_debug
+open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
@@ -216,6 +217,363 @@ interactive ge_addMono 'H :
    sequent [squash] { 'H >- 'c >= 'd } -->
    sequent ['ext] { 'H >- ('a +@ 'c) >= ('b +@ 'd) }
 
+type comparison = Less | Equal | Greater
+
+let rec compare_terms t1 t2 =
+   let {term_op=op1; term_terms=subt1} = dest_term t1 in
+   let {term_op=op2; term_terms=subt2} = dest_term t2 in
+     match compare_ops op1 op2 with
+       Less -> Less
+     | Greater -> Greater
+     | Equal -> compare_btlists subt1 subt2
+
+and compare_ops op1 op2 =
+   let {op_name = opn1; op_params = par1} = dest_op op1 in
+   let {op_name = opn2; op_params = par2} = dest_op op2 in
+   let str1 = string_of_opname opn1 in
+   let str2 = string_of_opname opn2 in
+      if str1 < str2 then
+        Less
+      else if str1 > str2 then
+        Greater
+      else
+        compare_plists par1 par2
+
+and compare_btlists subt1 subt2 =
+   match subt1 with
+     [] ->
+       (
+       match subt2 with
+         [] -> Equal
+       | hd2::tail2 -> Less
+       )
+   | hd1::tail1 ->
+       (
+       match subt2 with
+         [] -> Greater
+       | hd2::tail2 ->
+         match compare_bterms hd1 hd2 with
+	   Less -> Less
+	 | Greater -> Greater
+	 | Equal -> compare_btlists tail1 tail2
+       )
+
+and compare_bterms b1 b2 =
+   let {bvars = bv1; bterm = t1} = dest_bterm b1 in
+   let {bvars = bv2; bterm = t2} = dest_bterm b2 in
+   compare_terms t1 t2
+
+and compare_plists p1 p2 =
+   match p1 with
+     [] ->
+       (
+       match p2 with
+         [] -> Equal
+       | hd2::tail2 -> Less
+       )
+   | hd1::tail1 ->
+       (
+       match p2 with
+         [] -> Greater
+       | hd2::tail2 ->
+         match compare_params hd1 hd2 with
+	   Less -> Less
+	 | Greater -> Greater
+	 | Equal -> compare_plists tail1 tail2
+       )
+
+and compare_params par1 par2 =
+   let p1 = dest_param par1 in
+   let p2 = dest_param par2 in
+   match p1 with
+     Number(n1) ->
+      (
+       match p2 with
+         Number(n2) ->
+	   if n1<n2 then Less
+	   else if n1>n2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | String(s1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(s2) ->
+	   if s1<s2 then Less
+	   else if s1>s2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | Token(s1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(s2) ->
+	   if s1<s2 then Less
+	   else if s1>s2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | Var(s1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(s2) ->
+	   if s1<s2 then Less
+	   else if s1>s2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | MNumber(s1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(_) -> Greater
+       | MNumber(s2) ->
+	   if s1<s2 then Less
+	   else if s1>s2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | MString(s1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(_) -> Greater
+       | MNumber(_) -> Greater
+       | MString(s2) ->
+	   if s1<s2 then Less
+	   else if s1>s2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | MToken(s1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(_) -> Greater
+       | MNumber(_) -> Greater
+       | MString(_) -> Greater
+       | MToken(s2) ->
+	   if s1<s2 then Less
+	   else if s1>s2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | MLevel(l1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(_) -> Greater
+       | MNumber(_) -> Greater
+       | MString(_) -> Greater
+       | MToken(_) -> Greater
+       | MLevel(l2) -> compare_levels l1 l2
+       | _ -> Less
+      )
+   | MVar(s1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(_) -> Greater
+       | MNumber(_) -> Greater
+       | MString(_) -> Greater
+       | MToken(_) -> Greater
+       | MLevel(_) -> Greater
+       | MVar(s2) ->
+	   if s1<s2 then Less
+	   else if s1>s2 then Greater
+	   else Equal
+       | _ -> Less
+      )
+   | ObId(id1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(_) -> Greater
+       | MNumber(_) -> Greater
+       | MString(_) -> Greater
+       | MToken(_) -> Greater
+       | MLevel(_) -> Greater
+       | MVar(_) -> Greater
+       | ObId(id2) -> compare_plists id1 id2
+       | _ -> Less
+      )
+   | ParamList(pl1) ->
+      (
+       match p2 with
+         Number(_) -> Greater
+       | String(_) -> Greater
+       | Token(_) -> Greater
+       | Var(_) -> Greater
+       | MNumber(_) -> Greater
+       | MString(_) -> Greater
+       | MToken(_) -> Greater
+       | MLevel(_) -> Greater
+       | MVar(_) -> Greater
+       | ObId(_) -> Greater
+       | ParamList(pl2) -> compare_plists pl1 pl2
+      )
+
+and compare_levels l1 l2 =
+   let {le_const = c1; le_vars = v1} = dest_level l1 in
+   let {le_const = c2; le_vars = v2} = dest_level l2 in
+     if c1<c2 then Less
+     else if c1>c2 then Greater
+     else compare_lvlists v1 v2
+
+and compare_lvlists lv1 lv2 =
+   match lv1 with
+     [] ->
+       (
+       match lv2 with
+         [] -> Equal
+       | hd2::tail2 -> Less
+       )
+   | hd1::tail1 ->
+       (
+       match lv2 with
+         [] -> Greater
+       | hd2::tail2 ->
+         match compare_lvars hd1 hd2 with
+	   Less -> Less
+	 | Greater -> Greater
+	 | Equal -> compare_lvlists tail1 tail2
+       )
+
+and compare_lvars v1 v2 =
+   let {le_var=s1; le_offset=o1}=dest_level_var v1 in
+   let {le_var=s2; le_offset=o2}=dest_level_var v2 in
+     if s1<s2 then Less
+     else if s1>s2 then Greater
+     else
+       if o1<o2 then Less
+       else if o1>o2 then Greater
+       else Equal
+
+interactive_rw mul_BubblePrimitive_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ( 'c IN int ) -->
+   ('a *@ ('b *@ 'c)) <--> ('b *@ ('a *@ 'c))
+
+let mul_BubblePrimitiveC = mul_BubblePrimitive_rw
+
+(* One step of sorting of production of some terms with simultenious
+   contraction of product of integers
+ *)
+let mul_BubbleStepC tm =
+   if is_mul_term tm then
+      let (a,s) = dest_mul tm in
+         if is_mul_term s then
+            let (b,c) = dest_mul s in
+	       if (is_number_term a) & (is_number_term b) then
+	          (mul_AssocC thenC (addrC [0] reduce_mul))
+	       else
+                  if (compare_terms b a)=Less or
+                   (is_number_term b) then
+                     mul_BubblePrimitiveC
+                  else
+                     idC
+         else
+            if (is_number_term a) & (is_number_term s) then
+	       reduce_mul
+	    else
+(* it is incorrect here to compare terms this way because
+result depends on term internal representation. We have to
+implement some kind of term ordering and use it here *)
+               if (compare_terms s a)=Less or
+                (is_number_term s) then
+	          mul_CommutC
+	       else
+	          idC
+   else
+      failC
+
+(* here we apply mul_BubbleStepC as many times as possible thus
+   finally we have all mul subterms positioned in order
+ *)
+let mul_BubbleSortC = sweepDnC (termC mul_BubbleStepC)
+
+(* Before terms sorting we have to put parentheses in the rightmost-first
+manner
+ *)
+let mul_normalizeC = (sweepDnC mul_Assoc2C) thenC
+                     (whileProgressC mul_BubbleSortC)
+
+interactive_rw sum_same_products1_rw :
+   ('a = 'b in int) -->
+   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'b)) <--> (number{meta_sum[i:n, j:n]} *@ 'a)
+
+let sum_same_products1C = sum_same_products1_rw
+
+interactive_rw sum_same_products2_rw :
+   ('a = 'b in int) -->
+   ((number[i:n] *@ 'a) +@ 'b) <--> (number{meta_sum[i:n, 1:n]} *@ 'a)
+
+let sum_same_products2C = sum_same_products2_rw
+
+interactive_rw sum_same_products3_rw :
+   ('a = 'b in int) -->
+   ('a +@ (number[j:n] *@ 'b)) <--> (number{meta_sum[1:n, j:n]} *@ 'a)
+
+let sum_same_products3C = sum_same_products3_rw
+
+interactive_rw sum_same_products4_rw :
+   ('a = 'b in int) -->
+   ('a +@ 'b) <--> (2 *@ 'a)
+
+let sum_same_products4C = sum_same_products4_rw
+
+let same_productC t =
+   if (is_add_term t) then
+      let (a,b)=dest_add t in
+      if (is_mul_term a) & (is_mul_term b) then
+         let (a1,a2)=dest_mul a in
+         let (b1,b2)=dest_mul b in
+         if is_number_term a1 then
+            if is_number_term b1 then
+               if (compare_terms a2 b2)=Equal then
+                  sum_same_products1C
+               else
+                  failC
+            else
+               if (compare_terms a1 b)=Equal then
+                  sum_same_products2C
+               else
+                  failC
+         else
+            if is_number_term b1 then
+               if (compare_terms a b1)=Equal then
+                  sum_same_products3C
+               else
+                  failC
+            else
+               if (compare_terms a b)=Equal then
+                  sum_same_products4C
+               else
+                  failC
+      else
+         failC
+   else
+      failC
+
 interactive_rw add_BubblePrimitive_rw :
    ( 'a IN int ) -->
    ( 'b IN int ) -->
@@ -261,8 +619,8 @@ let add_BubbleSortC = sweepDnC (termC add_BubbleStepC)
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
-let add_normalizeC = (sweepDnC add_Assoc2C) thenC (whileProgressC
- add_BubbleSortC)
+let add_normalizeC = (sweepDnC add_Assoc2C) thenC
+                     (whileProgressC add_BubbleSortC)
 
 interactive_rw ge_addContract_rw :
    ( 'a IN int ) -->

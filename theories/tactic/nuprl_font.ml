@@ -743,7 +743,7 @@ dform longleftrightarrow_df	: internal :: mode[prl] :: longleftrightarrow       
 dform longleftarrow_df		: internal :: mode[prl] :: longleftarrow             = `"←──"
 dform longrightarrow_df		: internal :: mode[prl] :: longrightarrow            = `"──→"
 dform neq_df			: internal :: mode[prl] :: neq                       = `"≠"
-dform sim_df			: internal :: mode[prl] :: sim                       = `"~"
+dform sim_df			: internal :: mode[prl] :: sim                       = `"∼" (* `"~" or `"˜" *)
 dform le_df			: internal :: mode[prl] :: le                        = `"≤"
 dform ge_df			: internal :: mode[prl] :: ge                        = `"≥"
 dform equiv_df			: internal :: mode[prl] :: equiv                     = `"≡"

@@ -40,7 +40,6 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Itt_list
-extends Itt_struct2
 extends Itt_logic
 extends Itt_bool
 extends Itt_nat

@@ -96,7 +96,6 @@ extends Nuprl_font
 extends Base_dform
 extends Comment
 extends Ocaml_df
-extends Base_trivial
 extends Typeinf
 extends Simp_typeinf
 extends Base_cache

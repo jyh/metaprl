@@ -697,8 +697,6 @@ dform set_record_df : except_mode [src] :: subrecord{{self: record[n:t]{self2.'a
    =  subrecord{record[n:t]{self2.'a['self2];'r}} "|" 'P[self{'self2}]
 
 
-
-
 dform rcrdS_df : except_mode [src] :: rcrd[n:t]{'a}
    = "{" subrecord{rcrd[n:t]{'a}} "}"
 
@@ -721,12 +719,8 @@ dform set_record_df : except_mode [src] ::  ({self:'a | 'P['self]})
    =  "{" subrecord{{self:'a | 'P['self]}} "}"
 
 
-
-
-
-
 dform functionOrt_df : except_mode [src] :: function_ort{x.'f['x];'R}
-     =  slot{'f[bf{cdot}]} perp slot{'R}
+     =  slot{'f[math_bf{cdot}]} perp slot{'R}
 
 dform recordOrt_df : except_mode [src] :: record_ort[n:t]{'a;'R}
      =   rcrd[n:t]{'a} perp 'R

@@ -32,7 +32,7 @@ doc <:doc<
    elimination rules, like the following:
   
    $$
-   @defrule{@tt{and@_intro};
+   @defrule[and_intro]{
        @{| @tt{intro@_resource} [ ] |@} H;
        @sequent{ext; H; A}@cr
           @sequent{ext; H; B};
@@ -60,7 +60,7 @@ doc <:doc<
    and right-hand forms.
   
    $$
-   @defrule{or@_intro@_left;
+   @defrule[or_intro_left]{
       @{| @tt{intro@_resource} [SelectOption 1] |@} H;
       @sequent{ext; H; B @Type}
           @cr @sequent{ext; H; A};
@@ -68,7 +68,7 @@ doc <:doc<
    $$
   
    $$
-   @defrule{or@_intro@_right;
+   @defrule[or_intro_right]{
      @{| @tt{intro@_resource} [SelectOption 2] |@} H;
      @sequent{ext; H; A @Type}@cr
         @sequent{ext; H; B};

@@ -1076,10 +1076,10 @@ dform math_mathrel_df4 : except_mode[tex] :: math_mathrel{'t} =
    bf{'t}
 
 dform math_tt_df1 : mode[tex] :: math_tt{'t} =
-   izone `"{\\tt " ezone slot{'t} izone `"}" ezone
+   izone `"\\mathtt{" ezone slot{'t} izone `"}" ezone
 
 dform math_tt_df1 : mode[tex] :: math_tt[text:s] =
-   izone `"{\\tt " ezone slot[text:s] izone `"}" ezone
+   izone `"\\mathtt{" ezone slot[text:s] izone `"}" ezone
 
 dform math_tt_df2 : except_mode[tex] :: math_tt{'t} =
    tt{'t}
@@ -1088,10 +1088,10 @@ dform math_tt_df2 : except_mode[tex] :: math_tt[text:s] =
    tt[text:s]
 
 dform math_bb_df1 : mode[tex] :: math_bb{'t} =
-   izone `"{\\mathbb " ezone slot{'t} izone `"}" ezone
+   izone `"\\mathbb{" ezone slot{'t} izone `"}" ezone
 
 dform math_bb_df1 : mode[tex] :: math_bb[text:s] =
-   izone `"{\\mathbb " ezone slot[text:s] izone `"}" ezone
+   izone `"\\mathbb{" ezone slot[text:s] izone `"}" ezone
 
 dform math_bb_df2 : except_mode[tex] :: math_bb{'t} =
    bf{'t}
@@ -1100,10 +1100,10 @@ dform math_bb_df2 : except_mode[tex] :: math_bb[text:s] =
    bf[text:s]
 
 dform math_bf_df1 : mode[tex] :: math_bf{'t} =
-   izone `"{\\bf " ezone slot{'t} izone `"}" ezone
+   izone `"\\mathbf{" ezone slot{'t} izone `"}" ezone
 
 dform math_bf_df1 : mode[tex] :: math_bf[text:s] =
-   izone `"{\\bf " ezone slot[text:s] izone `"}" ezone
+   izone `"\\mathbf{ " ezone slot[text:s] izone `"}" ezone
 
 dform math_bf_df2 : except_mode[tex] :: math_bf{'t} =
    bf{'t}
@@ -1112,10 +1112,10 @@ dform math_bf_df2 : except_mode[tex] :: math_bf[text:s] =
    bf[text:s]
 
 dform math_i_df1 : mode[tex] :: math_i{'t} =
-   izone `"{\\it " ezone slot{'t} izone `"}" ezone
+   izone `"\\mathit{" ezone slot{'t} izone `"}" ezone
 
 dform math_i_df1 : mode[tex] :: math_i[text:s] =
-   izone `"{\\it " ezone slot[text:s] izone `"}" ezone
+   izone `"\\mathit{" ezone slot[text:s] izone `"}" ezone
 
 dform math_i_df2 : except_mode[tex] :: math_i{'t} =
    it{'t}
@@ -1130,7 +1130,7 @@ dform math_it_df2 : math_it[text:s] =
    math_i[text:s]
 
 dform math_emph_df1 : mode[tex] :: math_emph{'t} =
-   izone `"{\\it " ezone slot{'t} izone `"}" ezone
+   izone `"\\mathit{" ezone slot{'t} izone `"}" ezone
 
 dform math_emph_df2 : except_mode[tex] :: math_emph{'t} =
    emph{'t}
@@ -1844,7 +1844,7 @@ dform normal_math_hline_df1 : except_mode[tex] :: hline =
 doc <:doc< 
    @begin[doc]
    The following macros define higher-level macros.
-   The @tt{defrule} term is used to format the output as a rule
+   The @tt[defrule] term is used to format the output as a rule
    definition.  The @i{name} argument is the name of the rule; the
    @i{args} term represents the arguments; the @i{hyps} are the subgoals
    of the rule; and the @i{goal} is the goal.  The @code{@cr} term
@@ -1852,7 +1852,7 @@ doc <:doc<
    multi-line definitions.
    
    $$
-   @defrule{name; args; hyps; goal}
+   @defrule[name]{args; hyps; goal}
    $$
    
    The @tt{rulebox} macro represents the contents of a rule box.
@@ -1868,7 +1868,7 @@ doc <:doc<
    $$
    @end[doc]
 >>
-declare math_defrule{'name; 'args; 'hyps; 'goal}
+declare math_defrule[name]{'args; 'hyps; 'goal}
 declare math_rulebox{'tac; 'args; 'hyps; 'goal}
 declare math_sequent{'ext; 'hyps; 'goal}
 doc <:doc< @docoff >>
@@ -1876,9 +1876,9 @@ doc <:doc< @docoff >>
 (*
  * TeX display.
  *)
-dform tex_math_defrule_df1 : mode[tex] :: math_defrule{'name; 'args; 'hyps; 'goal} =
+dform tex_math_defrule_df1 : mode[tex] :: math_defrule[name:s]{'args; 'hyps; 'goal} =
    izone `"{\\defrule{" ezone
-   'name
+   slot[name:s]
    izone `"}{" ezone
    'args
    izone `"}{" ezone
@@ -1907,9 +1907,9 @@ dform tex_math_sequent_df1 : mode[tex] :: math_sequent{'ext; 'hyps; 'goal} =
    'goal
    izone `"}}" ezone
 
-dform normal_math_defrule_df1 : except_mode[tex] :: math_defrule{'name; 'args; 'hyps; 'goal} =
+dform normal_math_defrule_df1 : except_mode[tex] :: math_defrule[name:s]{'args; 'hyps; 'goal} =
    pushm[3] szone
-   keyword["rule"] `" " slot{'name} `" " slot{'args} `"=" hspace
+   keyword["rule"] `" " slot[name:s] `" " slot{'args} `"=" hspace
    slot{'hyps} `"-->" hspace
    slot{'goal}
    ezone popm

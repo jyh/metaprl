@@ -14,7 +14,7 @@ doc <:doc<
    strong elimination rule @hrefrule[productElimination] of the form:
   
    $$
-   @defrule{productElimination; i;
+   @defrule[productElimination]{i;
       @sequent{ext; {H; a@colon A; b@colon B[a]; J[@pair{a; b}]}; C[@pair{a; b}]};
       @sequent{ext; {H; x@colon @prod{y; A; B[u]}; J[x]}; C[x]}.}
    $$
@@ -69,7 +69,7 @@ doc <:doc<
    more extensional version:
   
    $$
-   @defrule{weakProductElimination; p;
+   @defrule[weakProductElimination]{p;
      @sequent{ext; {@ldots;
                       a@colon A; b@colon B[a];
                       w@colon @pair{a; b} = p @in @prod{x; A; B[x]}}; C[p]};

@@ -348,7 +348,7 @@ declare math_multicolumn[cols,align]{'t}
  * These macros are used to declare rules,
  * and display ruleboxes.
  *)
-declare math_defrule{'name; 'args; 'hyps; 'goal}
+declare math_defrule[name]{'args; 'hyps; 'goal}
 declare math_rulebox{'tac; 'args; 'hyps; 'goal}
 declare math_sequent{'ext; 'hyps; 'goal}
 

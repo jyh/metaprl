@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -78,7 +78,7 @@ declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
  *)
 prim_rw reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
-   <--> 'body['a1; 'f1; lambda{a. lambda{b. tree_ind{.'f1 'a 'b; a2, f2, g2. 'body['a2; 'f2; 'g2]}}}]
+   <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -168,14 +168,15 @@ prim treeEquality 'H 'y :
  * by wElimination u v
  * H, x:W(y:A; B[y]), u:A, v:B[u] -> W(y:A; B[y]), J[tree(u, v)] >- T[tree(u, v)] ext t[u, v]
  *)
-prim wElimination 'H 'J 'z 'a 'f 'g 'a2 'b2 :
+prim wElimination 'H 'J 'z 'a 'f 'g 'b 'v :
    ('t['z; 'a; 'f; 'g] :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
                     'J['z];
                     a: 'A;
                     f: 'B['a] -> w{'A; x. 'B['x]};
-                    g: a2: 'A -> b2: 'B['a2] -> 'T['f 'b2]
+                    g: b: 'B['a] -> 'T['f 'b];
+                    v: 'z = tree{'a; 'f} in w{'A; x. 'B['x]}
                   >- 'T[tree{'a; 'f}]
                   }) -->
    sequent ['ext] { 'H; z: w{'A; x. 'B['x]}; 'J['z] >- 'T['z] } =
@@ -242,8 +243,8 @@ let d_concl_w p =
 let d_hyp_w i p =
    let z, _ = Sequent.nth_hyp p i in
    let i, j = hyp_indices p i in
-   let a, f, g, a2, b2 = maybe_new_vars5 p "a" "f" "g" "a" "b" in
-      wElimination i j z a f g a2 b2 p
+   let a, f, g, b, v = maybe_new_vars5 p "a" "f" "g" "b" "v" in
+      wElimination i j z a f g b v p
 
 (*
  * Join them.

@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -62,7 +62,7 @@ declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
  *)
 rewrite reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
-   <--> 'body['a1; 'f1; lambda{a. lambda{b. tree_ind{.'f1 'a 'b; a2, f2, g2. 'body['a2; 'f2; 'g2]}}}]
+   <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
 (*
  * Precedence of display form.
@@ -135,13 +135,14 @@ rule treeEquality 'H 'y :
  * by wElimination u v
  * H, x:W(y:A; B[y]), u:A, v:B[u] -> W(y:A; B[y]), J[tree(u, v)] >- T[tree(u, v)] ext t[u, v]
  *)
-rule wElimination 'H 'J 'z 'a 'f 'g 'a2 'b2 :
+rule wElimination 'H 'J 'z 'a 'f 'g 'b 'v :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
                     'J['z];
                     a: 'A;
                     f: 'B['a] -> w{'A; x. 'B['x]};
-                    g: a2: 'A -> b2: 'B['a2] -> 'T['f 'b2]
+                    g: b: 'B['a] -> 'T['f 'b];
+                    v: 'z = tree{'a; 'f} in w{'A; x. 'B['x]}
                   >- 'T[tree{'a; 'f}]
                   } -->
    sequent ['ext] { 'H; z: w{'A; x. 'B['x]}; 'J['z] >- 'T['z] }

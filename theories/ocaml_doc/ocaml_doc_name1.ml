@@ -39,7 +39,7 @@ functional setting, it is not possible to tell the difference between
 a variable from the value it stands for.
 
 In OCaml, variable bindings are introduced with the @tt{let} keyword.
-The syntax of a simple top-level declaration is a follows.
+The syntax of a simple top-level declaration is as follows.
 
 @begin[center]
 @tt{let @it{name} = @it{expr}}

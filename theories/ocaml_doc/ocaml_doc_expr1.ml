@@ -38,12 +38,12 @@ extends Base_theory
 (*!
  * @begin[doc]
 
-Many functional programming implementations includes a significant
+Many functional programming implementations include a significant
 runtime component including libraries and a garbage collector.  They
 often include a ``toploop'' which can be used to interact with the
 system.  OCaml provides a compiler and a toploop.  By default, the
 toploop is called @tt{ocaml}.  The toploop prints a prompt (@code{#}),
-read an input expression, and evaluates it.  Expressions in the
+reads an input expression, and evaluates it.  Expressions in the
 toploop must be terminated by a double-semicolon @code{;;}.  My
 machine name is @code{kenai}.
 

@@ -34,7 +34,7 @@ opt: $(MAIN).cmxa
 
 # Clean out generated files, including symlinks.
 clean::
-	$(RM) *.cm* *.o *.p4* *.pp* *.exec
+	$(RM) mp_mc_theory.ml mp_mc_theory.mli *.exec
 	$(MAKE) -C tests clean
 
 # Real makefile

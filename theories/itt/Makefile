@@ -55,6 +55,7 @@ MPFILES :=\
 
 ifeq ($(TESTS),YES)
 	MPFILES:= $(MPFILES)\
+	jprover_tests\
 	itt_test\
 
 endif

@@ -141,6 +141,8 @@ doc <:doc< @begin[doc]
 declare sequent [bterm] { Term : Term >- Term } : Term
 declare term
 
+doc docoff
+
 let bterm_arg = <<bterm>>
 
 let hyp_of_var v =
@@ -170,6 +172,33 @@ let dest_bterm_sequent_and_rename term vars =
          SeqHyp.to_list seq.sequent_hyps, seq.sequent_concl
       else raise (RefineError ("dest_bterm_sequent_and_rename", StringTermError ("not a bterm sequent", term)))
 
+doc <:doc< @begin[doc]
+   @modsection{Computational Operations on Bterms}
+   @modsubsection{If_quoted_op}
+
+   << if_quoted_op{'op; 'tt} >> evaluates to << 'tt >> when << 'op >> is a
+   quoted bterm operator and must fail to evaluate otherwise.
+@end[doc] >>
+
+declare if_quoted_op{'op; 'tt}
+
+doc <:doc<
+   @begin[doc]
+   << fake_mlrw[reduce_if_quoted_op]{
+         if_quoted_op{bterm{|<H> >-
+            <:doc<@underline{op}@{
+               <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
+               <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}; 'tt};
+         'tt} >>
+   @end[doc]
+   @docoff
+>>
+ml_rw reduce_if_quoted_op {| reduce |} : ('goal :  if_quoted_op{ bterm{| <H> >- 't |}; 'tt }) =
+   let bt, tt = two_subterms goal in
+   let hyps, t = dest_bterm_sequent bt in
+   let t' = unquote_term t in
+      tt
+
 (*************************************************************************
  * if_bterm{'bt; 'tt} evaluates to 'tt when 'bt is a well-formed bterm
  * operator and must fail to evaluate otherwise.
@@ -185,27 +214,31 @@ let dest_bterm_sequent_and_rename term vars =
  *)
 
 doc <:doc< @begin[doc]
-   @modsection{Computational Operations on Bterms}
    @modsubsection{If_bterm}
 
-   << if_quoted_op{'op; 'tt} >> evaluates to << 'tt >> when << 'op >> is a
-   quoted bterm operator and must fail to evaluate otherwise.
    << if_bterm{'bt; 'tt} >> evaluates to << 'tt >> when << 'bt >> is a
    well-formed bterm operator and must fail to evaluate otherwise.
 @end[doc] >>
-
-declare if_quoted_op{'op; 'tt}
-
-ml_rw reduce_if_quoted_op {| reduce |} : ('goal :  if_quoted_op{ bterm{| <H> >- 't |}; 'tt }) =
-   let bt, tt = two_subterms goal in
-   let hyps, t = dest_bterm_sequent bt in
-   let t' = unquote_term t in
-      tt
 
 declare if_bterm{'bt; 'tt}
 
 prim_rw reduce_ifbterm1 'H :
    if_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; 'tt } <--> 'tt
+
+doc <:doc<
+   @begin[doc]
+   << fake_mlrw[reduce_ifbterm2]{
+         if_bterm{bterm{|<H> >-
+            <:doc<@underline{op}@{
+               <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
+               <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}; 'tt};
+         <:doc<if_bterm{bterm{|<H>; <J_1> >- 't_1|};
+         @~@~@~ if_bterm{bterm{|<H>; <J_2> >- 't_2|};
+         @~@~@~@~@~@~ @ldots
+         @~@~@~@~@~@~@~@~@~ if_bterm{bterm{|<H>; <J_n> >- 't_n|}; 'tt} @ldots }} >>} >>
+   @end[doc]
+   @docoff
+>>
 
 ml_rw reduce_ifbterm2 : ('goal :  if_bterm{ bterm{| <H> >- 't |}; 'tt }) =
    let bt, tt = two_subterms goal in
@@ -321,6 +354,22 @@ declare make_bterm{'bt; 'bt1}
 prim_rw reduce_make_bterm1 'H :
    make_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; rnil } <--> bterm{| <H>; x: term; <J> >- 'x |}
 
+(*doc <:doc<
+   @begin[doc]
+   << fake_mlrw[reduce_make_bterm2]{
+         make_bterm{bterm{|<H> >-
+            <:doc<@underline{op}@{
+               <<df_context{'J_1<|H|>}>>.<< 'r_1<|H|> >>, @ldots,
+               <<df_context{'J_n<|H|>}>>.<< 'r_n<|H|> >>@}>>|};
+               [<<bterm{|<H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>>] };
+         <:doc<bterm{|<H> >-
+            <:doc<@underline{op}@{
+               <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
+               <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|} >>} >>
+   @end[doc]
+   @docoff
+>>*)
+
 let rec make_bterm_aux lista listb fvars hvar lenh =
    match lista, listb with
       [], [] -> []
@@ -379,6 +428,7 @@ doc <:doc< @begin[doc]
 
 declare if_same_op{'bt1; 'bt2; 'tt; 'ff}
 
+doc docoff
 ml_rw reduce_if_same_op {| reduce |} : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'ff } ) =
    let bt1, bt2, tt, ff = four_subterms goal in
    let hyps1, g1 = dest_bterm_sequent bt1 in
@@ -417,6 +467,7 @@ prim_rw reduce_if_simple_bterm1 {| reduce |} :
 prim_rw reduce_if_simple_bterm2 {| reduce |} :
    if_simple_bterm{ bterm {| >- 't |}; 'tt; 'ff } <--> 'tt
 
+doc docoff
 let reduce_if_simple_bterm =
    termC (fun goal ->
       let t, tt, ff =  three_subterms goal in
@@ -451,6 +502,15 @@ declare if_var_bterm{'bt; 'tt; 'ff}
 prim_rw reduce_if_var_bterm1 'H :
    if_var_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; 'tt; 'ff } <--> 'tt
 
+doc <:doc<
+   @begin[doc]
+   << fake_mlrw[reduce_if_var_bterm2]{
+         if_var_bterm{bterm{|<H> >-
+            <:doc<@underline{op}@{@ldots@}>>|}; 'tt; 'ff};
+         'ff (*<:doc< << 'ff >> >>*)} >>
+   @end[doc]
+   @docoff
+>>
 ml_rw reduce_if_var_bterm2 : ('goal :  if_var_bterm{ bterm{| <H> >- 't |}; 'tt; 'ff }) =
    let bt, tt, ff = three_subterms goal in
    let hyps, t = dest_bterm_sequent bt in
@@ -523,7 +583,7 @@ dform bterm_sep_nil_df : bterm_sep{| >- 't |} = `""
 dform if_quoted_op_df : if_quoted_op{'bt; 'tt} =
    `"if_quoted_op(" slot{'bt} `"; " slot{'tt} `")"
 dform if_bterm_df : if_bterm{'bt; 'tt} =
-   `"if_bterm(" slot{'tt} `"; " slot{'tt} `")"
+   `"if_bterm(" slot{'bt} `"; " slot{'tt} `")"
 dform subterms_df : except_mode[src] :: subterms{'bt} =
    `"subterms(" slot{'bt} `")"
 dform make_bterm_df : make_bterm{'bt; 'btl} =

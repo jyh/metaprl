@@ -7,7 +7,8 @@ MPFILES =\
    cic_lambda\
    cic_ind_type\
    cic_ind_elim\
-   cic_list
+   cic_list\
+   cic_ind_elim_dep
 #   cic_ind_cases\
 
 #TEST_FILES =

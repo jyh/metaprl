@@ -111,15 +111,16 @@ rule forAll2T_step :
 (*
  * ForAll1T1DT{Terms{|<T1> >-it|}; prodH{|<H> >- Terms{|<T2> >-it|}|}; t1,t2.'pred['t1;'t2]}
  *)
-declare ForAll1T1DT{'Ht1; 'Ht2; t1,t2.'pred['t1;'t2]}
+declare ForAll1T1DT{'Ht1; 'Ht2; t1,v,t2.'pred['t1;'v;'t2]}
 
 rule forAll1T1DT_base :
-	sequent { <H> >- ForAll1T1DT{Terms{| >-it|}; prodH{|<J> >-Terms{| >-it|}|}; t1,t2.'pred['t1;'t2]} }
+	sequent { <H> >- ForAll1T1DT{Terms{| >-it|}; prodH{|<J> >-Terms{| >-it|}|}; t1,v,t2.'pred['t1;'v;'t2]} }
 
 rule forAll1T1DT_step :
-	sequent { <H> >- 'pred['t1; prodH{|<J> >-'t2|}] } -->
-	sequent { <H> >- ForAll1T1DT{Terms{|<T1> >-it|}; prodH{|<J> >-Terms{|<T2> >-it|}|}; t1,t2.'pred['t1;'t2]} } -->
-	sequent { <H> >- ForAll1T1DT{Terms{|<T1>; 't1<|H|> >-it|}; prodH{|<J> >-Terms{|<T2>; 't2<|H;J|> >-it|}|}; t1,t2.'pred['t1;'t2]} }
+	sequent { <H> >- 'pred['t1; prodH{|<J>; v: 't2 >- 'v |}; prodH{|<J> >-'t2 |}] } -->
+	sequent { <H> >- ForAll1T1DT{Terms{|<T1> >-it|}; prodH{|<J> >-Terms{|<T2> >-it|}|}; t1,v,t2.'pred['t1;'v;'t2]} } -->
+	sequent { <H> >-
+		ForAll1T1DT{Terms{|<T1>; 't1<|H|> >-it|}; prodH{|<J> >-Terms{|<T2>; 't2<|H;J|> >-it|}|}; t1,v,t2.'pred['t1;'v;'t2]} }
 
 declare equal_length{'context1; 'context2}
 
@@ -143,7 +144,7 @@ rule nodep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 
 		ForAll1T1DT{
 			Terms{|<F<|H|> > >-it|};
 			prodH{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >-Terms{|<Hc<|Hp;Hi;Ji|>['I]> >-it|}|};
-			f,C.('f in ElimCaseType{'C; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}})
+			f,v,C.('f in ElimCaseType{'C; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}})
 		}
 	} -->
    sequent { <H> >-

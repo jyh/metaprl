@@ -72,26 +72,47 @@ let fold_back_step = makeFoldC <<Back{|<H> >- BackFor{|<ToDrop>; 'dummy >- BackI
 declare sequent [ElimPredicates] { Term : Term >- Term } : Term
 declare ElimCaseType{'C; 'predicates}
 
+(* (P->C){X,Q} = P -> (P[X<-Q] ->C{X,Q}), X=I_1,..., I_n, Q=P1,...,P_n,
+ * when strictly_positive(P,I_i) holds
+ *)
 prim_rw elimCaseType_inductive {| reduce |} :
-	ForAll1D{|<Hi> >- bind{I.strictly_pos{'I; 'P}} |} -->
-	ElimCaseType{prodH{|<Hi> >- 'P -> 'C|}; ElimPredicates{|<Predicates> >- it|}} <-->
-	prodH{|<Hi> >-
-		('P -> Subst{SubstIn{|<Hi> >- 'P|}; SubstArgs{|<Predicates> >- it|} } ->
+	 ForAll1D{|<Hi> >- bind{I.strictly_pos{'I; 'P}} |} -->
+	 ElimCaseType{prodH{|<Hi> >- 'P -> 'C|}; ElimPredicates{|<Predicates> >- it|}} <-->
+		prodH{|<Hi> >-
+			('P -> Subst{SubstIn{|<Hi> >- 'P|}; SubstArgs{|<Predicates> >- it|} } ->
 			ElimCaseType{prodH{|<Hi> >- 'C|}; ElimPredicates{|<Predicates> >- it|}})
 	|}
 
+(* ((x:M)C{I_1,...,I_n,P_1,...,P_n} = (x:M)C{I_1,...,I_n,P_1,...,P_n)
+ * or
+ * ((x:M)C{X,Q} = (x:M)C{X,Q} )
+ *)
 prim_rw elimCaseType_dfun {| reduce |} :
 	ElimCaseType{prodH{|<Hi> >- x:'M<||> -> 'C['x]|}; ElimPredicates{|<Predicates> >- it|}} <-->
 	(x:'M -> ElimCaseType{prodH{|<Hi> >- 'C['x]|}; ElimPredicates{|<Predicates> >- it|}})
 
+(* auxilary function
+ * (C a){I_1,...,I_n,P_1,...,P_n} = (C{I_1,...,I_n,P_1,...,P_n} a)
+ * or
+ * (C a){X,Q}=(C{X,Q} a)
+ *)
 prim_rw elimCaseType_app {| reduce |} :
 	ElimCaseType{prodH{|<Hi> >- 'C 'a<||> |}; ElimPredicates{|<Predicates> >- it|}} <-->
 	(ElimCaseType{prodH{|<Hi> >- 'C |}; ElimPredicates{|<Predicates> >- it|}} 'a)
 
+(* auxilary function
+ * I_i{I_1,...,I_n,P_1,...,P_n} = P_{i}
+ * or
+ * X{X,Q}=Q
+ *)
 prim_rw elimCaseType_id 'Hi :
 	ElimCaseType{prodH{|<Hi>; I: 'A; <Ji<||> > >- 'I |}; ElimPredicates{|<Predicates> >- it|}} <-->
 	Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}
 
+(* (I_i <a>){I_1,...,I_n,P_1,...,P_n} = (P_i <a>)
+ * or
+ * (X <a>){X,Q} = (Q <a>)
+ *)
 prim_rw elimCaseType_applH 'Hi :
 	ElimCaseType{prodH{|<Hi>; I: 'A; <Ji<||> > >- applH{|<Args<||> > >- 'I|}|}; ElimPredicates{|<Predicates> >- it|}} <-->
 	applH{|<Args<||> > >- Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}|}
@@ -113,15 +134,16 @@ prim forAll2T_step {| intro [] |} :
 (*
  * ForAll1T1DT{Terms{|<T1> >-it|}; prodH{|<H> >- Terms{|<T2> >-it|}|}; t1,t2.'pred['t1;'t2]}
  *)
-declare ForAll1T1DT{'Ht1; 'Ht2; t1,t2.'pred['t1;'t2]}
+declare ForAll1T1DT{'Ht1; 'Ht2; t1,v,t2.'pred['t1;'v;'t2]}
 
 prim forAll1T1DT_base {| intro [] |} :
-	sequent { <H> >- ForAll1T1DT{Terms{| >-it|}; prodH{|<J> >-Terms{| >-it|}|}; t1,t2.'pred['t1;'t2]} } = it
+	sequent { <H> >- ForAll1T1DT{Terms{| >-it|}; prodH{|<J> >-Terms{| >-it|}|}; t1,v,t2.'pred['t1;'v;'t2]} } = it
 
 prim forAll1T1DT_step {| intro [] |} :
-	sequent { <H> >- 'pred['t1; prodH{|<J> >-'t2|}] } -->
-	sequent { <H> >- ForAll1T1DT{Terms{|<T1> >-it|}; prodH{|<J> >-Terms{|<T2> >-it|}|}; t1,t2.'pred['t1;'t2]} } -->
-	sequent { <H> >- ForAll1T1DT{Terms{|<T1>; 't1<|H|> >-it|}; prodH{|<J> >-Terms{|<T2>; 't2<|H;J|> >-it|}|}; t1,t2.'pred['t1;'t2]} } = it
+	sequent { <H> >- 'pred['t1; prodH{|<J>; v: 't2 >- 'v |}; prodH{|<J> >-'t2 |}] } -->
+	sequent { <H> >- ForAll1T1DT{Terms{|<T1> >-it|}; prodH{|<J> >-Terms{|<T2> >-it|}|}; t1,v,t2.'pred['t1;'v;'t2]} } -->
+	sequent { <H> >-
+		ForAll1T1DT{Terms{|<T1>; 't1<|H|> >-it|}; prodH{|<J> >-Terms{|<T2>; 't2<|H;J|> >-it|}|}; t1,v,t2.'pred['t1;'v;'t2]} } = it
 
 declare equal_length{'context1; 'context2}
 
@@ -136,18 +158,33 @@ declare Elim{'c; 'predicates; 'cases}
 declare sequent [ElimCases] { Term : Term >- Term } : Term
 declare good_nodep{'sort1; 'sort2}
 
+
+(* the typing rule for non-dependent elimination for mutually inductive definitions
+ * given Ind(X_1:A1, ..., X_n:A_n){C_1|...|C_p}
+ * "restr" - restriction on s2 and s
+ * "eq" -  number of mutually inductive definitions should be equal to the number of predicates P_i
+ * "f_p" - c:(I_k <a>) - first premise of the rule
+ * "s_p" - \forall i=1...n ( P_i:(<x> : <A_i>)s2 )  - the "second premise" of the rule
+ * "thrd_p" - \forall i=1...p ( f_i:C_i{I_1,...,I_n,P_1,...,P_n} ) the "third premise" of the rule
+ *)
+
 prim nodep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 'A<|Hp|>; <Ji<|Hp|> > >- sequent [IndConstrs] { <Hc['I]> >-it}}}) 'Hpredicates :
-	sequent { <H>;<Hp> >- good_nodep{'A<|Hp|>; 's2<||>} } -->
-	sequent { <H>;<Hp> >- equal_length{Aux{|<Hpredicates<|H|> > >- it|}; Aux{|<Hi> >- it|}} } -->
-	sequent { <H> >- 'c in applH{|<Hargs> >- IndParams{|<Hp<||> > >- IndTypes{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >- IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- 'I |}|}|}|} } -->
-	sequent { <H> >- ForAll1T{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- bind{P.('P in prodH{| <Hp<||> > >- 's2<||> |})} |} } -->
-	sequent { <H>;<Hp<||> > >-
-		ForAll1T1DT{
-			Terms{|<F<|H|> > >-it|};
-			prodH{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >-Terms{|<Hc<|Hp;Hi;Ji|>['I]> >-it|}|};
-			f,C.('f in ElimCaseType{'C; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}})
-		}
-	} -->
+	[restr]  sequent { <H>;<Hp> >- good_nodep{'A<|Hp|>; 's2<||>} } -->
+	[eq]     sequent { <H>;<Hp> >- equal_length{Aux{|<Hpredicates<|H|> > >- it|}; Aux{|<Hi> >- it|}} } -->
+	[f_p]    sequent { <H> >-
+					'c in applH{|<Hargs> >-
+						IndParams{|<Hp<||> > >-
+						IndTypes{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >-
+						IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- 'I |}|}|}|} } -->
+	[s_p]		sequent { <H> >-
+					ForAll1T{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- bind{P.('P in prodH{| <Hp<||> > >- 's2<||> |})} |} } -->
+	[thrd_p]	sequent { <H>;<Hp<||> > >-
+					ForAll1T1DT{
+						Terms{|<F<|H|> > >-it|};
+						prodH{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >-Terms{|<Hc<|Hp;Hi;Ji|>['I]> >-it|}|};
+				f,v,C.('f in ElimCaseType{'C; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}})
+					}
+				} -->
    sequent { <H> >-
 		Elim{'c; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}; ElimCases{|<F<|H|> > >- it|}}
 		in applH{|<Hargs<|H|> > >- 'P<|H|> |}
@@ -174,6 +211,9 @@ prim nodep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 
 	} = it
 *)
 
+(* In Coq there is a restriction that s2, s are sorts Prop, where
+ * A = (<x> : <A>)s, meaning that A is an arity of sort s (X_i : A)
+ *)
 prim good_nodep_prop_prop {| intro [] |} :
 	sequent { <H> >- good_nodep{Prop; Prop} } = it
 

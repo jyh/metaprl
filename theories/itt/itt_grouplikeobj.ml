@@ -371,7 +371,7 @@ interactive isCommutative_elim {| elim [] |} 'H :
    sequent ['ext] { <H>; u: isCommutative{'g}; <J['u]> >- 'C['u] }
 
 interactive csemigroup_intro {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- 'g in semigroup[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'g in semigroup[i:l] } -->
    [main] sequent ['ext] { <H> >- isCommutative{'g} } -->
    sequent ['ext] { <H> >- 'g in csemigroup[i:l] }
 
@@ -380,7 +380,7 @@ interactive csemigroup_elim {| elim [] |} 'H :
    sequent ['ext] { <H>; g: csemigroup[i:l]; <J['g]> >- 'C['g] }
 
 interactive cmonoid_intro {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- 'g in monoid[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'g in monoid[i:l] } -->
    [main] sequent ['ext] { <H> >- isCommutative{'g} } -->
    sequent ['ext] { <H> >- 'g in cmonoid[i:l] }
 

@@ -83,6 +83,10 @@ topval unfold_pregroup : conv
 topval unfold_isGroup : conv
 topval unfold_group : conv
 topval unfold_subgroup : conv
+topval unfold_isGroupHom : conv
+topval unfold_groupHom : conv
+topval unfold_isBijective : conv
+topval unfold_groupIso : conv
 
 topval fold_pregroup1 : conv
 topval fold_pregroup : conv
@@ -95,7 +99,11 @@ topval fold_subgroup : conv
 topval fold_lcoset : conv
 topval fold_rcoset : conv
 topval fold_normalSubg : conv
+topval fold_isGroupHom : conv
+topval fold_groupHom1 : conv
 topval fold_groupHom : conv
+topval fold_isBijective : conv
+topval fold_groupIso : conv
 
 (*
  * -*-

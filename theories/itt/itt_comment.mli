@@ -230,7 +230,10 @@ declare math_group_power{'g; 'a; 'n}
 declare math_cycGroup{'g}
 declare math_cycSubg{'g; 'a}
 
+declare math_isBijective{'f; 'A; 'B}
 declare math_groupHom{'A; 'B}
+declare math_groupIso{'A; 'B}
+
 (* OTHER *)
 
 declare colons{'a}

@@ -1252,7 +1252,9 @@ declare math_group_power{'g; 'a; 'n}
 declare math_cycGroup{'g}
 declare math_cycSubg{'g; 'a}
 
+declare math_isBijective{'f; 'A; 'B}
 declare math_groupHom{'A; 'B}
+declare math_groupIso{'A; 'B}
 
 (************************************************
  * TeX mode
@@ -1400,6 +1402,21 @@ dform groupHom_df1 : mode[tex] :: math_groupHom{'A; 'B} =
    slot{'B}
    izone `")}" ezone
 
+dform groupIso_df1 : mode[tex] :: math_groupIso{'A; 'B} =
+   izone `"{{\\it Group\\_isomorphism}(" ezone
+   slot{'A}
+   izone `"," ezone
+   slot{'B}
+   izone `")}" ezone
+
+dform math_isBijective_df1 : mode[tex] :: math_isBijective{'f; 'A; 'B} =
+   'f
+   izone `"\\colon " ezone
+   'A
+   izone `"\\rightarrow " ezone
+   'B
+   izone `"{is bijective}" ezone
+
 (************************************************
  * Normal mode
  *)
@@ -1475,6 +1492,12 @@ dform cycSubg_df : except_mode[tex] :: math_cycSubg{'g; 'a} =
 
 dform groupHom_df : except_mode[tex] :: math_groupHom{'A; 'B} =
    `"Group_homomorphism(" slot{'A} `"; " slot{'B}  `")"
+
+dform groupIso_df : except_mode[tex] :: math_groupIso{'A; 'B} =
+   `"Group_isomorphism(" slot{'A} `"; " slot{'B}  `")"
+
+dform isBijective_df : except_mode[tex] :: math_isBijective{'f; 'A; 'B} =
+   `"isBijective(" slot{'f} `"; " slot{'A} `"; " slot{'B}  `")"
 
 (*
  * -*-

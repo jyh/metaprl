@@ -51,18 +51,24 @@ open Mp_mc_connect_exp
  *)
 
 let term_of_fundef (line, ty, vars, exp) =
+   << 'a >>
+(*
    mk_fundef_term    (term_of_debug_line line)
                      (term_of_ty ty)
                      (term_of_list term_of_var vars)
                      (term_of_exp exp)
+*)
 
 let fundef_of_term t =
    try
+      raise Not_found
+(*
       let line, ty, vars, exp = dest_fundef_term t in
          (debug_line_of_term line),
          (ty_of_term ty),
          (list_of_term var_of_term vars),
          (exp_of_term exp)
+*)
    with
       (* Reprint errors to narrow down term with error. *)
       _ -> report_error "fundef_of_term" t

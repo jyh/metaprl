@@ -53,7 +53,7 @@ declare initNames{ 'ty_var; 'initNameItem_list }
  * Function definition.
  *)
 
-declare fundef{ 'debug_line; 'ty; 'var_list; 'exp }
+declare fundef{ 'debug_line; 'ty; 'func }
 
 (*
  * Program globals.
@@ -121,5 +121,5 @@ val dest_initAlloc_term : term -> term
 
 val fundef_term : term
 val is_fundef_term : term -> bool
-val mk_fundef_term : term -> term -> term -> term -> term
-val dest_fundef_term : term -> term * term * term * term
+val mk_fundef_term : term -> term -> term -> term
+val dest_fundef_term : term -> term * term * term

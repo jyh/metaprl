@@ -71,7 +71,7 @@ declare initNames{ 'ty_var; 'initNameItem_list }
  * @end[doc]
  *)
 
-declare fundef{ 'debug_line; 'ty; 'var_list; 'exp }
+declare fundef{ 'debug_line; 'ty; 'func }
 
 (*
  * Program globals.
@@ -150,9 +150,8 @@ dform initNames_df : except_mode[src] ::
  *)
 
 dform fundef_df : except_mode[src] ::
-   fundef{ 'debug_line; 'ty; 'var_list; 'exp } =
-   `"Fundef(" slot{'debug_line} `"," slot{'ty} `","
-   slot{'var_list} `"," slot{'exp} `")"
+   fundef{ 'debug_line; 'ty; 'func } =
+   `"Fundef(" slot{'debug_line} `"," slot{'ty} `"," slot{'func} `")"
 
 (*
  * Program globals.
@@ -252,8 +251,8 @@ let dest_initAlloc_term = dest_dep0_term initAlloc_opname
  * Function definition.
  *)
 
-let fundef_term = << fundef{ 'debug_line; 'ty; 'var_list; 'exp } >>
+let fundef_term = << fundef{ 'debug_line; 'ty; 'func } >>
 let fundef_opname = opname_of_term fundef_term
-let is_fundef_term = is_4_dep0_term fundef_opname
-let mk_fundef_term = mk_4_dep0_term fundef_opname
-let dest_fundef_term = dest_4_dep0_term fundef_opname
+let is_fundef_term = is_dep0_dep0_dep0_term fundef_opname
+let mk_fundef_term = mk_dep0_dep0_dep0_term fundef_opname
+let dest_fundef_term = dest_dep0_dep0_dep0_term fundef_opname

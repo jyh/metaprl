@@ -595,10 +595,20 @@ interactive hd_wf {| intro [] |} :
    sequent  { <H> >- not{'l = nil in list{'T}} } -->
    sequent  { <H> >- hd{'l} in 'T }
 
+interactive hd_wf1 {| intro [] |} :
+   [wf] sequent  { <H> >- 'l1 = 'l2 in list{'T} } -->
+   sequent  { <H> >- not{'l1 = nil in list{'T}} } -->
+   sequent  { <H> >- hd{'l1} = hd{'l2} in 'T }
+
 interactive tl_wf {| intro [] |} :
    [wf] sequent { <H> >- 'l in list{'T} } -->
    sequent  { <H> >- not{'l = nil in list{'T}} } -->
-   sequent  { <H> >- hd{'l} in list{'T} }
+   sequent  { <H> >- tl{'l} in list{'T} }
+
+interactive tl_wf1 {| intro [] |} :
+   [wf] sequent  { <H> >- 'l1 = 'l2 in list{'T} } -->
+   sequent  { <H> >- not{'l1 = nil in list{'T}} } -->
+   sequent  { <H> >- tl{'l1} = tl{'l2} in list{'T} }
 
 interactive_rw tl_hd_rw list{'T} :
    ('l in list{'T})  -->
@@ -731,6 +741,11 @@ interactive length_cons_pos {| intro [intro_typeinf <<'h>>] |} 'T1 :
    [wf] sequent { <H> >- 't in list{'T1} } -->
    sequent { <H> >- 0 < length{cons{'h;'t}} }
 
+interactive length_wf1 {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H> >- length{'l} in nat }
+
 interactive nth_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->
@@ -750,6 +765,11 @@ interactive list_lengthzero {| elim [] |} 'H 'A :
    sequent { <H>; x: (length{'l} = 0 in int); <J[it]>; y: 'l = nil in list{'A} >- 'C[it] } -->
    sequent { <H>; x: (length{'l} = 0 in int); <J['x]> >- 'C['x] }
 
+interactive index_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H> >- Index{'l} Type }
+
 interactive index_mem {| intro [AutoMustComplete] |} :
     sequent { <H> >- 'i in nat } -->
     sequent { <H> >- 'i < length{'l} } -->
@@ -757,6 +777,12 @@ interactive index_mem {| intro [AutoMustComplete] |} :
 
 interactive index_is_int {| nth_hyp |} 'H :
     sequent { <H>; i:Index{'l}; <J['i]> >- 'i in int }
+
+interactive nth_eq {| intro [] |} :
+   [wf] sequent { <H> >- "type"{'T} } -->
+   [wf] sequent { <H> >- 'l1 = 'l2 in list{'T} } -->
+   [wf] sequent { <H> >- 'i in Index{'l1} } -->
+   sequent { <H> >- nth{'l1; 'i} = nth{'l2; 'i} in 'T }
 
 (*
  * Reverse.

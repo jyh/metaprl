@@ -155,17 +155,8 @@ interactive independentProductSubtype {| intro_resource [] |} 'H :
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of rfun.
- *)
-let inf_prod f decl t =
-   let a, b = dest_prod t in
-   let decl', a' = f decl a in
-   let decl'', b' = f decl' b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (prod_term, inf_prod)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (prod_term, infer_univ_dep0_dep0 dest_prod)
 
 (************************************************************************
  * SUBTYPING                                                            *

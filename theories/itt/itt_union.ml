@@ -31,6 +31,7 @@
  *
  *)
 
+include Itt_void
 include Itt_equal
 include Itt_struct
 include Itt_subtype
@@ -304,48 +305,50 @@ let mk_decide_term = mk_dep0_dep1_dep1_term decide_opname
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of disjoint union.
- *)
-let inf_union f decl t =
-   let a, b = dest_union t in
-   let decl', a' = f decl a in
-   let decl'', b' = f decl' b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (union_term, inf_union)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (union_term, infer_univ_dep0_dep0 dest_union)
 
 (*
  * Type of inl.
  *)
-let inf_inl f decl t =
+let inf_inl inf consts decls eqs opt_eqs defs t =
    let a = dest_inl t in
-   let decl', a' = f decl a in
-      decl', mk_union_term a' (mk_var_term (new_eqns_var decl' "T"))
+   let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
+   let b = Typeinf.vnewname consts defs' "T-r" in
+       eqs', opt_eqs', ((b,<<void>>)::defs') , mk_union_term a' (mk_var_term b)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (inl_term, inf_inl)
 
 (*
  * Type of inr.
  *)
-let inf_inr f decl t =
-   let a = dest_inr t in
-   let decl', a' = f decl a in
-      decl', mk_union_term (mk_var_term (new_eqns_var decl' "T")) a'
+let inf_inr inf consts decls eqs opt_eqs defs t =
+   let a = dest_inl t in
+   let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
+   let b = Typeinf.vnewname consts defs' "T-l" in
+       eqs', opt_eqs', ((b,<<void>>)::defs') , mk_union_term (mk_var_term b) a'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (inr_term, inf_inr)
 
 (*
  * Type of decide.
  *)
-let inf_decide inf decl t =
+let inf_decide inf consts decls eqs opt_eqs defs t =
    let e, x, a, y, b = dest_decide t in
-   let decl', e' = inf decl e in
-   let l, r = dest_union e' in
-   let decl'', a' = inf (eqnlist_append_var_eqn x l decl') a in
-   let decl''', b' = inf (eqnlist_append_var_eqn y l decl'') b in
-      unify_mm_eqnl_eqnl (eqnlist_append_eqn decl''' a' b') StringSet.empty, a'
+   let eqs', opt_eqs', defs', e' = inf consts decls eqs opt_eqs defs e in
+   let consts = StringSet.add x (StringSet.add y consts) in
+   let l = Typeinf.vnewname consts defs' "T-l" in
+   let l' = mk_var_term l in
+   let r = Typeinf.vnewname consts defs' "T-r" in
+   let r' = mk_var_term r in
+   let eqs'', opt_eqs'', defs'', a' =
+      inf consts ((x, l')::decls)
+          (eqnlist_append_eqn eqs' e' (mk_union_term l' r')) opt_eqs'
+          ((l,<<top>>)::(r,<<top>>)::defs') a
+   in
+   let eqs''', opt_eqs''', defs''', b' =
+      inf consts ((y, r')::decls) eqs'' opt_eqs'' defs'' b
+   in eqs''', ((a',b')::opt_eqs'''), defs''', a'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (decide_term, inf_decide)
 

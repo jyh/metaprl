@@ -68,6 +68,7 @@ let _ =
  ************************************************************************)
 
 declare void
+declare top (* we declare it here because we need it for type inference *)
 
 let void_term = << void >>
 let void_opname = opname_of_term void_term
@@ -160,12 +161,7 @@ let sub_resource =
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of void.
- *)
-let inf_void _ decl _ = decl, univ1_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (void_term, inf_void)
+let typeinf_resource = Mp_resource.improve typeinf_resource (void_term, infer_univ1)
 
 (*
  * -*-

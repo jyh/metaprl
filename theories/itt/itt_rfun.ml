@@ -38,6 +38,7 @@ include Itt_struct
 
 open Printf
 open Mp_debug
+open String_set
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -408,55 +409,50 @@ let rfunction_extensionalityT t1 t2 p =
 (*
  * Type of rfun.
  *)
-let inf_rfun inf decl t =
+let inf_rfun inf consts decls eqs opt_eqs defs t =
    let f, v, a, b = dest_rfun t in
-   let decl', a' = inf decl a in
-   let decl'' = eqnlist_append_var_eqn f (mk_fun_term a void_term) decl' in
-   let decl''', b' = inf (eqnlist_append_var_eqn v a decl'') b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl''', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
+   infer_univ_dep0_dep1
+      (fun _ -> v,a,b) inf (StringSet.add f consts) ((f,t)::decls) eqs opt_eqs defs t
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (rfun_term, inf_rfun)
 
 (*
  * Type of lambda.
  *)
-let inf_lambda inf decl t =
+let inf_lambda inf consts decls eqs opt_eqs defs t =
    let v, b = dest_lambda t in
-   let a = new_eqns_var decl v in
-   let decl', b' = inf (eqnlist_append_var_eqn v (mk_var_term a) decl) b in
-   let decl'', a' =
-(*
-      try decl', List.assoc a decl' with
-         Not_found ->
-*)
-            (eqnlist_append_var_eqn a void_term decl'), void_term
+   let consts = StringSet.add v consts in
+   let a = Typeinf.vnewname consts defs "T" in
+   let a' = mk_var_term a in
+   let eqs', opt_eqs', defs', b' =
+      inf consts ((v, a')::decls) eqs opt_eqs ((a,<<top>>)::defs) b
    in
-      decl'', mk_dfun_term v a' b'
+      eqs', opt_eqs', defs', mk_dfun_term v a' b'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (lambda_term, inf_lambda)
 
 (*
  * Type of apply.
  *)
-let inf_apply inf decl t =
+let inf_apply inf consts decls eqs opt_eqs defs t =
    let f, a = dest_apply t in
-   let decl', f' = inf decl f in
-   let decl'', a' = inf decl' a in
-   let ty =
-      if is_dfun_term f' then
-         let v, d, r = dest_dfun f' in
-            subst1 r v a
-      else if is_fun_term f' then
-         let _, r = dest_fun f' in
-            r
-      else if is_rfun_term f' then
-         let f'', v, d, r = dest_rfun f' in
-            subst r [f''; v] [f; a]
-      else
-         raise  (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
-   in
-      decl'', ty
+   let eqs', opt_eqs', defs', f' = inf consts decls eqs opt_eqs defs f in
+   let eqs'', opt_eqs'', defs'', a' = inf consts decls eqs' opt_eqs' defs' a in
+   let eqs''', opt_eqs''', _ , f'' =
+      Typeinf.typeinf_final consts eqs'' opt_eqs'' defs'' f' in
+   if is_dfun_term f'' then
+      let v, d, r = dest_dfun f'' in
+         eqs''', opt_eqs''', defs'', subst1 r v a
+   else if is_rfun_term f'' then
+      let f''', v, d, r = dest_rfun f'' in
+         eqs''', opt_eqs''', defs'', subst r [f'''; v] [f; a]
+   else
+      let av = Typeinf.vnewname consts defs'' "A" in
+      let bv = Typeinf.vnewname consts defs'' "B" in
+      let at = mk_var_term av in
+      let bt = mk_var_term bv in
+         (eqnlist_append_eqn eqs'' f' (mk_fun_term at bt)),((a',at)::opt_eqs'''),
+         ((av, <<top>>)::(bv,<<void>>)::defs''), bt
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (apply_term, inf_apply)
 

@@ -1081,20 +1081,17 @@ let get_clause p i =
 let infer_three_subterms_type p t =
    try get_univ_arg p with
       RefineError _ ->
-         let _, s1, s2 = three_subterms t in
-         let _, t =
+         let _, s1, s2 = three_subterms t in begin
             try infer_type p s2 with
                RefineError _ ->
                   infer_type p s1
-         in
-            t
+         end
 
 let infer_one_subterm_type p t =
    try get_univ_arg p with
       RefineError _ ->
          let s1 = one_subterm t in
-         let _, t = infer_type p s1 in
-            t
+         infer_type p s1
 
 (*
  * Typehood of compare.
@@ -1160,8 +1157,7 @@ let infer_quant_type p t =
       try get_univ_arg p with
          RefineError _ ->
             let _, s, _ = dest_dep0_dep1_any_term t in
-            let _, t = infer_type p s in
-               t
+            infer_type p s
    in
       if is_list_term t then
          false, mk_fset_term (Sequent.get_term_arg p "eq") (dest_list t)
@@ -1216,8 +1212,7 @@ let d_fsquash_memberT p =
       let _, t = two_subterms t in
          try get_univ_arg p with
             RefineError _ ->
-               let _, t = infer_type p t in
-                  t
+               infer_type p t
    in
    let tac, t =
       if is_list_term t then
@@ -1588,8 +1583,7 @@ let fmember_subst_elementT x p =
             let t = Sequent.concl p in
             let t = dest_assert t in
             let _, x, _ = dest_fmember t in
-            let _, t = infer_type p x in
-               t
+            infer_type p x
    in
       (fmember_fun (Sequent.hyp_count_addr p) t x
        thenLT [addHiddenLabelT "wf";
@@ -1605,7 +1599,7 @@ let fsub_nonmemberT p =
          RefineError _ ->
             let t = Sequent.concl p in
             let _, s, _ = dest_equal t in
-            let _, t = infer_type p s in
+            let t = infer_type p s in
                if is_list_term t then
                   dest_list t
                else
@@ -1625,7 +1619,7 @@ let fsquash_memberT p =
             let t = Sequent.concl p in
             let _, s, _ = dest_equal t in
             let _, s = two_subterms s in
-            let _, t = infer_type p s in
+            let t = infer_type p s in
                if is_list_term t then
                   dest_list t
                else
@@ -1642,13 +1636,11 @@ let fcompare_type p t =
    try get_univ_arg p with
       RefineError _ ->
          let t = dest_assert t in
-         let _, x, y = three_subterms t in
-         let _, t =
+         let _, x, y = three_subterms t in begin
             try infer_type p x with
                RefineError _ ->
                   infer_type p y
-         in
-            t
+         end
 
 let fcompareRefT p =
    fcompare_ref (Sequent.hyp_count_addr p) (fcompare_type p (Sequent.concl p)) p

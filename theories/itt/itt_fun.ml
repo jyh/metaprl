@@ -204,7 +204,7 @@ let d_apply_equalT p =
    let f_type =
       try get_with_arg p with
          RefineError _ ->
-            snd (infer_type p f)
+            infer_type p f
    in
    let tac =
       if is_rfun_term f_type then
@@ -228,7 +228,7 @@ let d_apply_memberT p =
    let f_type =
       try get_with_arg p with
          RefineError _ ->
-            snd (infer_type p f)
+            infer_type p f
    in
    let tac =
       if is_rfun_term f_type then
@@ -255,7 +255,7 @@ let d_apply_typeT p =
    let f_type =
       try get_with_arg p with
          RefineError _ ->
-            snd (infer_type p f)
+            infer_type p f
    in
    let univ =
       if is_dfun_term f_type then
@@ -296,17 +296,8 @@ let elim_resource = Mp_resource.improve elim_resource (fun_term, d_hyp_fun)
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of rfun.
- *)
-let inf_fun f decl t =
-   let a, b = dest_fun t in
-   let decl', a' = f decl a in
-   let decl'', b' = f decl' b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (fun_term, inf_fun)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (fun_term, infer_univ_dep0_dep0 dest_fun)
 
 (************************************************************************
  * SUBTYPING                                                            *

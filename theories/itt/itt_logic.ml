@@ -592,47 +592,28 @@ let squash_falseT p =
 (*
  * Type of true, false.
  *)
-let inf_univ1 _ decl _ = decl, univ1_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (true_term, inf_univ1)
-let typeinf_resource = Mp_resource.improve typeinf_resource (false_term, inf_univ1)
+let typeinf_resource = Mp_resource.improve typeinf_resource (true_term, infer_univ1)
+let typeinf_resource = Mp_resource.improve typeinf_resource (false_term, infer_univ1)
 
 (*
  * Type of quantifiers.
  *)
-let inf_d dest f decl t =
-   let v, a, b = dest t in
-   let decl', a' = f decl a in
-   let decl'', b' = f (eqnlist_append_var_eqn v a decl') b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (all_term, infer_univ_dep0_dep1 dest_all)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (exists_term, infer_univ_dep0_dep1 dest_exists)
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (all_term, inf_d dest_all)
-let typeinf_resource = Mp_resource.improve typeinf_resource (exists_term, inf_d dest_exists)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (or_term, infer_univ_dep0_dep0 dest_or)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (and_term, infer_univ_dep0_dep0 dest_and)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (implies_term, infer_univ_dep0_dep0 dest_implies)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (iff_term, infer_univ_dep0_dep0 dest_iff)
 
-(*
- * Type of propositions.
- *)
-let inf_nd dest f decl t =
-   let a, b = dest t in
-   let decl', a' = f decl a in
-   let decl'', b' = f decl' b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (or_term, inf_nd dest_or)
-let typeinf_resource = Mp_resource.improve typeinf_resource (and_term, inf_nd dest_and)
-let typeinf_resource = Mp_resource.improve typeinf_resource (implies_term, inf_nd dest_implies)
-let typeinf_resource = Mp_resource.improve typeinf_resource (iff_term, inf_nd dest_iff)
-
-(*
- * Type of all.
- *)
-let inf_not f decl t =
-   let a = dest_not t in
-      f decl a
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (not_term, inf_not)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (not_term, Typeinf.infer_map dest_not)
 
 (************************************************************************
  * AUTOMATION                                                           *

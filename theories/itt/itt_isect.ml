@@ -64,7 +64,6 @@ let _ =
  ************************************************************************)
 
 declare "isect"{'A; x. 'B['x]}
-declare top
 
 prim_rw unfold_top : top <--> "isect"{void; x. void}
 
@@ -228,17 +227,8 @@ let mk_isect_term = mk_dep0_dep1_term isect_opname
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of isect.
- *)
-let inf_isect f decl t =
-   let v, a, b = dest_isect t in
-   let decl', a' = f decl a in
-   let decl'', b' = f (eqnlist_append_var_eqn v a decl') b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (isect_term, inf_isect)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (isect_term, infer_univ_dep0_dep1 dest_isect)
 
 (************************************************************************
  * SUBTYPING                                                            *

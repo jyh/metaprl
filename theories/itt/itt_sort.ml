@@ -274,9 +274,10 @@ let boundInclusionT t p =
    let a_type =
       try get_with_arg p with
          RefineError _ ->
-            try snd (infer_type p l) with
+            begin try infer_type p l with
                RefineError _ ->
                   raise (RefineError("boundInclusion", StringTermError("can not infer type",l)))
+            end
    in
       bounded_inclusion (Sequent.hyp_count_addr p) a_type t p
 
@@ -297,7 +298,7 @@ let insertInclusionT p =
    let a_type =
       try get_with_arg p with
          RefineError _ ->
-            snd (infer_type p u)
+            infer_type p u
    in
       insert_inclusion (Sequent.hyp_count_addr p) a_type p
 

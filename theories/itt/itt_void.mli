@@ -44,6 +44,7 @@ open Tactic_type.Tacticals
  ************************************************************************)
 
 declare void
+declare top (* we declare it here because we need it for type inference *)
 
 (************************************************************************
  * RULES                                                                *

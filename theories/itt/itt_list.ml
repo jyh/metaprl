@@ -353,49 +353,40 @@ let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
 (*
  * Type of list.
  *)
-let inf_list f decl t =
-   let a = dest_list t in
-      f decl a
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (list_term, inf_list)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (list_term, Typeinf.infer_map dest_list)
 
 (*
  * Type of nil.
  *)
-let inf_nil f decl t =
-   decl, mk_var_term (new_eqns_var decl "T")
+let inf_nil _ consts _ eqs opt_eqs defs _ =
+   let t = Typeinf.vnewname consts defs "T" in
+   eqs, opt_eqs, ((t, <<void>>)::defs), mk_list_term (mk_var_term t)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (nil_term, inf_nil)
 
 (*
  * Type of cons.
  *)
-let inf_cons inf decl t =
+let inf_cons inf consts decls eqs opt_eqs defs t =
    let hd, tl = dest_cons t in
-   let decl', hd' = inf decl hd in
-   let decl'', tl' = inf decl' tl in
-      unify_mm_eqnl_eqnl (eqnlist_append_eqn decl'' (mk_list_term hd') tl') StringSet.empty, tl'
+   let eqs', opt_eqs', defs', hd' = inf consts decls eqs opt_eqs defs hd in
+   let eqs'', opt_eqs'', defs'', tl' = inf consts decls eqs' opt_eqs' defs' tl in
+   let t = Typeinf.vnewname consts defs'' "T" in
+   let tt = mk_var_term t in
+      eqs'', ((mk_list_term tt,tl')::(tt,hd')::opt_eqs''), ((t,<<void>>)::defs''), hd'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (cons_term, inf_cons)
 
 (*
  * Type of list_ind.
  *)
-let inf_list_ind inf decl t =
+let inf_list_ind inf consts decls eqs opt_eqs defs t =
    let e, base, hd, tl, f, step = dest_list_ind t in
-   let decl', e' = inf decl e in
-      if is_list_term e' then
-         let decl'', base' = inf decl' base in
-         let a = dest_list e' in
-         let decl''', step' =
-            inf (eqnlist_append_var_eqn hd a (**)
-                    (eqnlist_append_var_eqn tl e' (**)
-                        (eqnlist_append_var_eqn f base' decl'')))
-            step
-         in
-            unify_mm_eqnl_eqnl (eqnlist_append_eqn decl''' base' step') StringSet.empty, base'
-      else
-         raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
+   let eqs', opt_eqs', defs', e' = inf consts decls eqs opt_eqs defs e in
+   let t = Typeinf.vnewname consts defs' "T" in
+      inf consts decls eqs' 
+          ((mk_list_term (mk_var_term t),e)::opt_eqs') ((t,<<void>>)::defs') base
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (list_ind_term, inf_list_ind)
 

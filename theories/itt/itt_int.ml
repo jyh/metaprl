@@ -582,23 +582,21 @@ let decideT t p =
 (*
  * Type of int.
  *)
-let inf_int _ decl _ = decl, univ1_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (int_term, inf_int)
+let typeinf_resource = Mp_resource.improve typeinf_resource (int_term, infer_univ1)
 
 (*
  * Type of number.
  *)
-let inf_number _ decl _ = decl, int_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (number_term, inf_number)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (number_term, Typeinf.infer_const int_term)
 
 (*
  * Type of ind.
  *)
-let inf_ind inf decl t =
+let inf_ind inf consts decls eqs opt_eqs defs t =
    let i, a, b, down, base, c, d, up = dest_ind t in
-      inf decl base
+   let eqs', opt_eqs', defs', i' = inf consts decls eqs opt_eqs defs i in
+   inf consts decls eqs' ((i', int_term)::opt_eqs') defs' base
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (ind_term, inf_ind)
 

@@ -39,6 +39,7 @@ include Itt_struct
 
 open Printf
 open Mp_debug
+open String_set
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
@@ -220,22 +221,22 @@ let mk_srecind_term = mk_dep0_dep2_term srecind_opname
 (*
  * Type of srec.
  *)
-let inf_srec f decl t =
+let inf_srec inf consts decls eqs opt_eqs defs t =
    let a, body = dest_srec t in
-      f (eqnlist_append_var_eqn a void_term decl) body
+      inf (StringSet.add a consts) ((a,univ1_term)::decls) eqs opt_eqs defs body
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (srec_term, inf_srec)
 
 (*
  * Type of srecind.
- * WRONG.
- *)
+ * WRONG according to jyh.
 let inf_srecind f decl t =
    let p, h, a, g = dest_srecind t in
    let decl', a' = f decl a in
       f (eqnlist_append_var_eqn p a' (eqnlist_append_var_eqn h a' decl')) g
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (srecind_term, inf_srecind)
+*)
 
 (*
  * -*-

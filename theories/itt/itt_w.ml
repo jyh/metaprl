@@ -225,26 +225,21 @@ let mk_tree_ind_term = mk_dep0_dep3_term tree_ind_opname
  ************************************************************************)
 
 (*
- * Type of rfun.
+ * Type of w
  *)
-let inf_w f decl t =
-   let v, a, b = dest_w t in
-   let decl', a' = f decl a in
-   let decl'', b' = f (eqnlist_append_var_eqn v a decl') b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (w_term, inf_w)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (w_term, infer_univ_dep0_dep1 dest_w)
 
 (*
  * Type of pair.
  * This will be pretty difficult.
  *)
-let inf_tree f decl t =
+let inf_tree inf consts decls eqs opt_eqs defs t =
    let a, b = dest_tree t in
-   let decl', a' = f decl a in
-   let decl'', b' = f decl' b in
-      decl'', mk_w_term "v" a' b'
+   let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
+   let eqs'', opt_eqs'', defs'', b' = inf consts decls eqs' opt_eqs' defs' b in
+   let v = Typeinf.vnewname consts defs'' "v" in
+      eqs'', opt_eqs'', defs'', mk_w_term v a' b'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (tree_term, inf_tree)
 

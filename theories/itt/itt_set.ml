@@ -231,17 +231,8 @@ let unhideT i p =
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of atom.
- *)
-let inf_set f decl t =
-   let v, ty, prop = dest_set t in
-   let decl', ty' = f decl ty in
-   let decl'', prop' = f (eqnlist_append_var_eqn v ty decl') prop in
-   let le1, le2 = dest_univ ty', dest_univ prop' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (set_term, inf_set)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (set_term,  infer_univ_dep0_dep1 dest_set)
 
 (************************************************************************
  * SUBTYPING                                                            *

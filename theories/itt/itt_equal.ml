@@ -36,10 +36,12 @@ include Itt_squash
 
 open Printf
 open Mp_debug
+open String_set
 open Opname
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermMeta
@@ -118,6 +120,11 @@ let univ_opname = opname_of_term univ_term
 let is_univ_term = TermOp.is_univ_term univ_opname
 let dest_univ = TermOp.dest_univ_term univ_opname
 let mk_univ_term = TermOp.mk_univ_term univ_opname
+
+let unknown_level = dest_univ << univ[unknown:l] >>
+
+let try_dest_univ t =
+   if is_univ_term t then dest_univ t else unknown_level
 
 let it_term = << it >>
 
@@ -577,20 +584,47 @@ let typeinf_subst_resource =
 (*
  * Type of a universe is incremented by one.
  *)
-let inf_univ _ decl t =
+let inf_univ _ _ _ eqs opt_eqs defs t =
    let le = dest_univ t in
-      decl, mk_univ_term (incr_level_exp le)
+      eqs, opt_eqs, defs, mk_univ_term (incr_level_exp le)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (univ_term, inf_univ)
 
 (*
  * Type of an equality is the type of the equality type.
  *)
-let inf_equal inf decl t =
-   let ty, _, _ = dest_equal t in
-      inf decl ty
+let equal_type t =
+   let ty, _, _ = dest_equal t in ty
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (equal_term, inf_equal)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (equal_term, Typeinf.infer_map equal_type)
+
+(*
+ * Helper functions for universe type inference
+ *)
+
+let infer_univ_dep0_dep0 destruct inf consts decls eqs opt_eqs defs t =
+   let a, b = destruct t in
+   let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
+   let eqs'', opt_eqs'', defs'', b' = inf consts decls eqs' opt_eqs' defs' b in
+   let eqs''', opt_eqs''', subst, a'' = Typeinf.typeinf_final consts eqs'' opt_eqs'' defs'' a' in
+   let b'' = apply_subst (apply_subst b' subst) defs in
+   let le1 = try_dest_univ a'' in
+   let le2 = try_dest_univ b'' in
+      eqs''', opt_eqs''', defs'', mk_univ_term (max_level_exp le1 le2 0)
+
+let infer_univ_dep0_dep1 destruct inf consts decls eqs opt_eqs defs t =
+   let v, a, b = destruct t in
+   let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
+   let eqs'', opt_eqs'', defs'', b' =
+      inf (StringSet.add v consts) ((v,a)::decls) eqs' opt_eqs' defs' b in
+   let eqs''', opt_eqs''', subst, a'' = Typeinf.typeinf_final consts eqs'' opt_eqs'' defs'' a' in
+   let b'' = apply_subst (apply_subst b' subst) defs in
+   let le1 = try_dest_univ a'' in
+   let le2 = try_dest_univ b'' in
+      eqs''', opt_eqs''', defs'', mk_univ_term (max_level_exp le1 le2 0)
+
+let infer_univ1 = Typeinf.infer_const univ1_term
 
 (************************************************************************
  * SQUASH STABILITY                                                     *

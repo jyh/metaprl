@@ -610,20 +610,17 @@ let splitITE i p =
  ************************************************************************)
 
 (*
- * Type of unit.
+ * Type of Bool
  *)
-let inf_bool _ decl _ = decl, univ1_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (bool_term, inf_bool)
+let typeinf_resource = Mp_resource.improve typeinf_resource (bool_term, infer_univ1)
 
 (*
- * Type of an equality is the type of the equality type.
+ * Type of bool constants
  *)
-let inf_btrue _ decl _ = decl, bool_term
-let inf_bfalse _ decl _ = decl, bool_term
+let inf_b = Typeinf.infer_const bool_term
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (btrue_term, inf_btrue)
-let typeinf_resource = Mp_resource.improve typeinf_resource (bfalse_term, inf_bfalse)
+let typeinf_resource = Mp_resource.improve typeinf_resource (btrue_term, inf_b)
+let typeinf_resource = Mp_resource.improve typeinf_resource (bfalse_term, inf_b)
 
 (************************************************************************
  * AUTO TACTIC                                                          *

@@ -1107,7 +1107,8 @@ T	t522	o515 b521
 B	b522	t522
 P	p525	String top
 O	o525	opname p525
-NItt_isect!top	top	top Itt_isect
+NItt_void	Itt_void	Itt_void NIL
+NItt_void!top	top	top Itt_void
 O	o526	top
 T	t526	o526
 B	b526	t526
@@ -1376,7 +1377,6 @@ B	b725	t725
 NSummary!rewrite	rewrite	rewrite Summary
 P	p530	String unfold_top
 O	o530	rewrite p530
-NItt_void	Itt_void	Itt_void NIL
 NItt_void!void	void	void Itt_void
 O	o531	void
 T	t531	o531

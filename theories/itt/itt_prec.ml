@@ -1,5 +1,5 @@
 (*
- * PArameterized recursive type.
+ * Parameterized recursive type.
  *
  * ----------------------------------------------------------------
  *
@@ -40,6 +40,7 @@ include Itt_struct
 
 open Printf
 open Mp_debug
+open String_set
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
@@ -47,8 +48,10 @@ open Mp_resource
 
 open Base_dtactic
 
+open Itt_equal
 open Itt_void
 open Itt_struct
+open Itt_rfun
 
 (*
  * Show that the file is loading.
@@ -221,23 +224,25 @@ let mk_precind_term = mk_dep0_dep2_term precind_opname
 (*
  * Type of prec.
  *)
-let inf_prec f decl t =
+let inf_prec inf consts decls eqs opt_eqs defs t =
    let a, b, body, arg = dest_prec t in
-   let decl', arg' = f decl arg in
-      f (eqnlist_append_var_eqn a void_term (eqnlist_append_var_eqn b arg' decl')) body
+   let consts = StringSet.add a (StringSet.add b consts) in
+   let eqs', opt_eqs', defs', arg' = inf consts decls eqs opt_eqs defs arg in
+      inf consts ((b,arg')::(a,mk_fun_term arg' univ1_term)::decls)
+          eqs' opt_eqs' defs' body
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (prec_term, inf_prec)
 
 (*
  * Type of precind.
- * WRONG!
- *)
+ * HACK!!! WRONG! (according to jyh)
 let inf_precind f decl t =
    let p, h, a, g = dest_precind t in
    let decl', a' = f decl a in
       f (eqnlist_append_var_eqn p a' (eqnlist_append_var_eqn h a' decl')) g
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (precind_term, inf_precind)
+ *)
 
 (*
  * -*-

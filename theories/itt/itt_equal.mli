@@ -42,6 +42,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Base_theory
+open Typeinf
 
 (************************************************************************
  * TERMS                                                                *
@@ -296,6 +297,11 @@ val squash_term : term
 val is_squash_term : term -> bool
 
 val it_term : term
+
+(* Universe inference functions *)
+val infer_univ_dep0_dep0 : (term -> term * term) -> typeinf_comp
+val infer_univ_dep0_dep1 : (term -> string * term * term) -> typeinf_comp
+val infer_univ1 : typeinf_comp
 
 topval squash_equalT : tactic
 topval squash_memberT : tactic

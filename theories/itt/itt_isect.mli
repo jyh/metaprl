@@ -45,7 +45,6 @@ open Tactic_type.Tacticals
  ************************************************************************)
 
 declare "isect"{'A; x. 'B['x]}
-declare top
 
 rewrite unfold_top : top <--> "isect"{void; x. void}
 

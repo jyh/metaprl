@@ -157,19 +157,9 @@ let atomSqequalT p =
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of atom.
- *)
-let inf_atom _ decl _ = decl, univ1_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (atom_term, inf_atom)
-
-(*
- * Type of an equality is the type of the equality type.
- *)
-let inf_token _ decl _ = decl, atom_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (token_term, inf_token)
+let typeinf_resource = Mp_resource.improve typeinf_resource (atom_term, infer_univ1)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (token_term, Typeinf.infer_const atom_term)
 
 (*
  * -*-

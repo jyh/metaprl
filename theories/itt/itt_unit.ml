@@ -191,16 +191,13 @@ let squash_resource = Mp_resource.improve squash_resource (unit_term, squash_uni
 (*
  * Type of unit.
  *)
-let inf_unit _ decl _ = decl, univ1_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (unit_term, inf_unit)
+let typeinf_resource = Mp_resource.improve typeinf_resource (unit_term, infer_univ1)
 
 (*
- * Type of an equality is the type of the equality type.
+ * Type of a unit object is unit.
  *)
-let inf_it _ decl _ = decl, unit_term
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (it_term, inf_it)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (it_term, Typeinf.infer_const unit_term)
 
 (*
  * -*-

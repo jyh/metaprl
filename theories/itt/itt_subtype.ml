@@ -38,6 +38,7 @@ open Printf
 open Mp_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
@@ -319,17 +320,8 @@ let elim_resource = Mp_resource.improve elim_resource (subtype_term, d_hyp_subty
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of subtype.
- *)
-let inf_subtype f decl t =
-   let a, b = dest_subtype t in
-   let decl', a' = f decl a in
-   let decl'', b' = f decl' b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (subtype_term, inf_subtype)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (subtype_term, infer_univ_dep0_dep0 dest_subtype)
 
 (************************************************************************
  * SQUASH                                                               *

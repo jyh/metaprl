@@ -96,7 +96,7 @@ let applyT app i p =
       let goal_type =
          try get_with_arg p with
             RefineError _ ->
-               snd (infer_type p f)
+               infer_type p f
       in
       let goal_type, tac =
          if is_dfun_term goal_type then

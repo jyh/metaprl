@@ -31,12 +31,14 @@
  *
  *)
 
+include Itt_void
 include Itt_equal
 include Itt_struct
 include Itt_subtype
 
 open Printf
 open Mp_debug
+open String_set
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -266,7 +268,7 @@ let d_spread_equalT tac p =
                raise (RefineError ("d_spread_equalT", StringError "terms are required"))
       with
          RefineError _ ->
-            type_type, snd (infer_type p pair)
+            type_type, infer_type p pair
    in
       tac (Sequent.hyp_count_addr p) type_type pair_type u v a p
 
@@ -318,43 +320,40 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of rfun.
- *)
-let inf_dprod f decl t =
-   let v, a, b = dest_dprod t in
-   let decl', a' = f decl a in
-   let decl'', b' = f (eqnlist_append_var_eqn v a decl') b in
-   let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
-
-let typeinf_resource = Mp_resource.improve typeinf_resource (dprod_term, inf_dprod)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (dprod_term, infer_univ_dep0_dep1 dest_dprod)
 
 (*
  * Type of pair.
  *)
-let inf_pair f decl t =
+let inf_pair inf consts decls eqs opt_eqs defs t =
    let a, b = dest_pair t in
-   let decl', a' = f decl a in
-   let decl'', b' = f decl' b in
-      decl'', mk_prod_term a' b'
+   let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
+   let eqs'', opt_eqs'', defs'', b' = inf consts decls eqs' opt_eqs' defs' b in
+      eqs'', opt_eqs'', defs'', mk_prod_term a' b'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (pair_term, inf_pair)
 
 (*
  * Type of spread.
  *)
-let inf_spread inf decl t =
+let inf_spread inf consts decls eqs opt_eqs defs t =
    let u, v, a, b = dest_spread t in
-   let decl', a' = inf decl a in
-      if is_prod_term a' then
-         let l, r = dest_prod a' in
-            inf (eqnlist_append_var_eqn u l (eqnlist_append_var_eqn v r decl')) b
-      else if is_dprod_term a' then
-         let x, l, r = dest_dprod a' in
-            inf (eqnlist_append_var_eqn u l (eqnlist_append_var_eqn v (subst1 r x (mk_var_term u)) decl')) b
-      else
-         raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
+   let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
+   let eqs'', opt_eqs'', _, a'' =
+      Typeinf.typeinf_final consts eqs' opt_eqs' defs' a' in
+   let consts = StringSet.add u (StringSet.add v consts) in
+   if is_dprod_term a'' then
+      let x, l, r = dest_dprod a' in
+         inf consts ((v,subst1 r x (mk_var_term u))::(u,l)::decls) eqs'' opt_eqs'' defs' b
+   else
+      let av = Typeinf.vnewname consts defs' "A" in
+      let bv = Typeinf.vnewname consts defs' "B" in
+      let at = mk_var_term av in
+      let bt = mk_var_term bv in
+         inf consts ((v,bt)::(u,at)::decls)
+             (eqnlist_append_eqn eqs' a' (mk_prod_term at bt)) opt_eqs''
+             ((av,<<top>>)::(bv,<<top>>)::defs') b
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (spread_term, inf_spread)
 

@@ -303,14 +303,12 @@ let mk_quotient_term = mk_dep0_dep2_term quotient_opname
 (*
  * Type of quotient.
  *)
-let inf_quotient f decl t =
+let dest_quotient_inf t =
    let x, y, a, e = dest_quotient t in
-   let decl', a' = f decl a in
-   let decl'', e' = f (eqnlist_append_var_eqn x a (eqnlist_append_var_eqn y a decl')) e in
-   let le1, le2 = dest_univ a', dest_univ e' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
+   x, a, subst1 e y (mk_var_term x)
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (quotient_term, inf_quotient)
+let typeinf_resource =
+   Mp_resource.improve typeinf_resource (quotient_term, infer_univ_dep0_dep1 dest_quotient_inf)
 
 (************************************************************************
  * SUBTYPING                                                            *

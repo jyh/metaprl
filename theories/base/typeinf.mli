@@ -32,6 +32,7 @@
  * Modified by: Alexey Nogin <nogin@cs.cornell.edu>
  *)
 
+open String_set
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 
@@ -87,8 +88,18 @@ val get_typeinf_resource : string -> typeinf_resource
  * Utilities.
  *)
 val typeinf_of_proof : tactic_arg -> typeinf_func
-val infer_type : tactic_arg -> term -> eqnlist * term
+val infer_type : tactic_arg -> term -> term
 val infer_type_args : tactic_arg -> term -> term list
+
+(* finalizes the type using all the eqautions collected,
+ * returns the new eqs and opt_eqs *)
+val typeinf_final : StringSet.t -> eqnlist -> opt_eqs_type -> term_subst -> term -> eqnlist * opt_eqs_type * term_subst * term
+
+(* creates a "fresh" variable name *)
+val vnewname : StringSet.t -> term_subst -> string -> string
+
+val infer_const : term -> typeinf_comp
+val infer_map : (term -> term) -> typeinf_comp
 
 (*
  * -*-

@@ -78,6 +78,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Var
+open Browser_resource
 
 open Auto_tactic
 open Dtactic
@@ -1422,6 +1423,9 @@ let resource auto += [{
 }]
 
 let jAutoT i = withIntT "jprover" i autoT
+
+let resource menubar +=
+    [<< menuitem["refine", "jAutoT 5", "Command('refine jAutoT 5')"] >>, refine_is_enabled]
 
 (* aux is either a hyp or an assum *)
 let autoBackT compare_aux get_aux tac_aux onsome auto_aux =

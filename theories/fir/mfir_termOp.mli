@@ -147,6 +147,11 @@ val is_length_term : term -> bool
 val mk_length_term : term -> term
 val dest_length_term : term -> term
 
+val nth_elt_term : term
+val is_nth_elt_term : term -> bool
+val mk_nth_elt_term : term -> term -> term
+val dest_nth_elt_term : term -> term * term
+
 val interval_term : term
 val is_interval_term : term -> bool
 val mk_interval_term : term -> term -> term
@@ -166,6 +171,16 @@ val member_term : term
 val is_member_term : term -> bool
 val mk_member_term : term -> term -> term
 val dest_member_term : term -> term * term
+
+val subset_term : term
+val is_subset_term : term -> bool
+val mk_subset_term : term -> term -> term
+val dest_subset_term : term -> term * term
+
+val set_eq_term : term
+val is_set_eq_term : term -> bool
+val mk_set_eq_term : term -> term -> term
+val dest_set_eq_term : term -> term * term
 
 val singleton_term : term
 val is_singleton_term : term -> bool
@@ -249,6 +264,11 @@ val is_tyProject_term : term -> bool
 val mk_tyProject_term : Mp_num.num -> term -> term
 val dest_tyProject_term : term -> Mp_num.num * term
 
+val do_tyApply_term : term
+val is_do_tyApply_term : term -> bool
+val mk_do_tyApply_term : term -> term -> term
+val dest_do_tyApply_term : term -> term * term
+
 val tyDefPoly_term : term
 val is_tyDefPoly_term : term -> bool
 val mk_tyDefPoly_term : string -> term -> term
@@ -268,6 +288,11 @@ val tyDefUnion_term : term
 val is_tyDefUnion_term : term -> bool
 val mk_tyDefUnion_term : string -> term -> term
 val dest_tyDefUnion_term : term -> string * term
+
+val nth_unionCase_term : term
+val is_nth_unionCase_term : term -> bool
+val mk_nth_unionCase_term : term -> term -> term
+val dest_nth_unionCase_term : term -> term * term
 
 val idOp_term : term
 val is_idOp_term : term -> bool

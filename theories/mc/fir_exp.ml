@@ -180,7 +180,7 @@ declare allocMalloc{ 'atom }
  *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
-declare atomRawInt{ 'num }
+declare atomRawInt{ 'precision; 'sign; 'num }
 declare atomFloat{ 'f }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
@@ -464,8 +464,10 @@ dform atomInt_df : except_mode[src] :: atomInt{ 'int } =
    lzone `"AtomInt(" slot{'int} `")" ezone
 dform atomEnum_df : except_mode[src] :: atomEnum{ 'bound; 'num } =
    lzone `"AtomEnum(" slot{'bound} `", " slot{'num} `")" ezone
-dform atomRawInt_df : except_mode[src] :: atomRawInt{ 'num } =
-   lzone `"AtomRawInt(" slot{'num} `")" ezone
+dform atomRawInt_df : except_mode[src] ::
+   atomRawInt{ 'precision; 'sign; 'num } =
+   lzone `"AtomRawInt(" slot{'precision} `", "
+   slot{'sign} `", " slot{'num} `")" ezone
 dform atomFloat_df : except_mode[src] :: atomFloat{ 'f } =
    lzone `"AtomFloat(" slot{'f} `")" ezone
 dform atomConst_df : except_mode[src] :: atomConst{ 'ty; 'ty_var; 'num } =

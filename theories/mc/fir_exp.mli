@@ -180,7 +180,7 @@ declare allocMalloc{ 'atom }
  *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
-declare atomRawInt{ 'num }
+declare atomRawInt{ 'precision; 'sign; 'num }
 declare atomFloat{ 'f }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }

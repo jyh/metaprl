@@ -99,11 +99,18 @@ declare unknownFun
 (* Modular arithmetic for integers. *)
 
 topval reduce_naml_prec : conv
-topval reduce_pow : conv
 topval reduce_int8 : conv
 topval reduce_int16 : conv
 topval reduce_int32 : conv
 topval reduce_int64 : conv
+
+topval reduce_pow : conv
+topval reduce_pow_2_8 : conv
+topval reduce_pow_2_16 : conv
+topval reduce_pow_2_31 : conv
+topval reduce_pow_2_32 : conv
+topval reduce_pow_2_64 : conv
+
 topval reduce_mod_arith : conv
 topval reduce_mod_arith_signed : conv
 topval reduce_mod_arith_unsigned : conv
@@ -158,6 +165,23 @@ topval reduce_leIntOp : conv
 topval reduce_gtIntOp : conv
 topval reduce_geIntOp : conv
 topval reduce_cmpIntOp : conv
+
+(* Native integers. *)
+
+topval reduce_plusRawIntOp : conv
+topval reduce_minusRawIntOp : conv
+topval reduce_mulRawIntOp : conv
+topval reduce_divRawIntOp : conv
+topval reduce_remRawIntOp : conv
+topval reduce_maxRawIntOp : conv
+topval reduce_minRawIntOp : conv
+topval reduce_eqRawIntOp : conv
+topval reduce_neqRawIntOp : conv
+topval reduce_ltRawIntOp : conv
+topval reduce_leRawIntOp : conv
+topval reduce_gtRawIntOp : conv
+topval reduce_geRawIntOp : conv
+topval reduce_cmpRawIntOp : conv
 
 (*************************************************************************
  * Automation.

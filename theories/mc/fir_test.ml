@@ -5,6 +5,23 @@
 
 include Mc_theory
 
+interactive raw1 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusRawIntOp{int8;val_false}; tyRawInt{int16;val_false};
+               128; 234; v. 'v }}
+
+interactive raw2 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusRawIntOp{int8;val_false}; tyRawInt{int8;val_false};
+               120; 10; v. 'v }}
+
+interactive misc1 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ divIntOp; tyInt; 3; 0; v. 'v } }
+
+interactive misc2 'H :
+   sequent ['ext] { 'H >- (3 /@ 0) }
+
 interactive ce_test1 'H :
    sequent ['ext] { 'H >-
       letBinop{ plusIntOp; tyInt; 1; 2; v.

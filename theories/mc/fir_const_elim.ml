@@ -44,10 +44,13 @@ open Tactic_type.Conversionals
  *************************************************************************)
 
 (*
+ * I'm assuming well formed atom(Raw)Int's here.
+ * The results should be kept in atom(Raw)Int's to preserve the
+ * structure of the FIR.
+ *)
+
+(*
  * Naml integers.
- * True FIR expressions never have "unwrapped" numbers, so I keep
- * everything wrapped in atomInt.  That is the only reason
- * these rewrites look pretty ugly.
  *)
 
 interactive_rw const_elim_plusIntOp :
@@ -66,6 +69,31 @@ interactive_rw const_elim_remIntOp :
    letBinop{ remIntOp; tyInt; atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
    'exp[ atomInt{ mod_arith{ naml_prec; val_true; ('i %@ 'j) } } ]
 
+(*
+ * Native integers.
+ *)
+
+interactive_rw const_elim_plusRawIntOp :
+   letBinop{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's};
+      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{'p; 's; ('a1 +@ 'a2)} } ]
+interactive_rw const_elim_minusRawIntOp :
+   letBinop{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's};
+      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{'p; 's; ('a1 -@ 'a2)} } ]
+interactive_rw const_elim_mulRawIntOp :
+   letBinop{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's};
+      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{'p; 's; ('a1 *@ 'a2)} } ]
+interactive_rw const_elim_divRawIntOp :
+   letBinop{ divRawIntOp{'p; 's}; tyRawInt{'p; 's};
+      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{'p; 's; ('a1 /@ 'a2)} } ]
+interactive_rw const_elim_remRawIntOp :
+   letBinop{ remRawIntOp{'p; 's}; tyRawInt{'p; 's};
+      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{'p; 's; ('a1 %@ 'a2)} } ]
+
 (*************************************************************************
  * Automation
  *************************************************************************)
@@ -80,6 +108,11 @@ let firConstElimT i =
       reduce_int16;
       reduce_int32;
       reduce_int64;
+      reduce_pow_2_8;
+      reduce_pow_2_16;
+      reduce_pow_2_31;
+      reduce_pow_2_32;
+      reduce_pow_2_64;
       reduce_pow;
       reduce_mod_arith;
       reduce_mod_arith_signed;
@@ -97,6 +130,12 @@ let firConstElimT i =
       const_elim_mulIntOp;
       const_elim_divIntOp;
       const_elim_remIntOp;
+
+      const_elim_plusRawIntOp;
+      const_elim_minusRawIntOp;
+      const_elim_mulRawIntOp;
+      const_elim_divRawIntOp;
+      const_elim_remRawIntOp;
 
       reduceTopC
    ] )) i

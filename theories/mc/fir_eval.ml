@@ -144,9 +144,21 @@ prim_rw reduce_int8 : int8 <--> 8
 prim_rw reduce_int16 : int16 <--> 16
 prim_rw reduce_int32 : int32 <--> 32
 prim_rw reduce_int64 : int64 <--> 64
+
 prim_rw reduce_pow :
    pow{ 'base; 'exp } <-->
    ind{ 'exp; i, j. 1; 1; i, j. ('base *@ 'j) }
+interactive_rw reduce_pow_2_8 :
+   pow{ 2; 8 } <--> 256
+interactive_rw reduce_pow_2_16 :
+   pow{ 2; 16 } <--> 65536
+interactive_rw reduce_pow_2_31 :
+   pow{ 2; 31 } <--> 2147483648
+interactive_rw reduce_pow_2_32 :
+   pow{ 2; 32 } <--> 4294967296
+interactive_rw reduce_pow_2_64 :
+   pow{ 2; 64 } <--> 18446744073709551616
+
 prim_rw reduce_mod_arith :
    mod_arith{ 'precision; 'sign; 'num } <-->
    ifthenelse{ beq_int{'sign; val_true};
@@ -203,7 +215,7 @@ prim_rw reduce_idOp : unop_exp{ idOp; 'ty; 'a1 } <--> 'a1
  *)
 prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
 prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
-prim_rw reduce_atomRawInt : atomRawInt{ 'num } <--> 'num
+prim_rw reduce_atomRawInt : atomRawInt{ 'p; 's; 'num } <--> 'num
 prim_rw reduce_atomVar : atomVar{ 'var } <--> 'var
 
 (* Primitive operations. *)
@@ -262,7 +274,10 @@ prim_rw reduce_uminusIntOp :
    unop_exp{ uminusIntOp; tyInt; 'a1 } <-->
    "minus"{'a1}
 
-(* Standard binary arithmetic operators. *)
+(*
+ * Standard binary arithmetic operators.
+ * We rely on base_meta and friends to stop div and rem by zero.
+ *)
 prim_rw reduce_plusIntOp :
    binop_exp{ plusIntOp; tyInt; 'a1; 'a2 } <-->
    atomInt{ mod_arith{ naml_prec; val_true; ('a1 +@ 'a2) } }
@@ -316,6 +331,72 @@ prim_rw reduce_cmpIntOp :
       }
    }
 
+(******************
+ * Native integers.
+ ******************)
+
+(*
+ * Here, I rely on the fact that MetaPRL will represent abitrarily
+ * large integers natively.
+ *)
+
+(*
+ * Standard binary arithmetic operators.
+ * I rely on base_meta and friends to stop div and rem by zero.
+ *)
+prim_rw reduce_plusRawIntOp :
+   binop_exp{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 +@ 'a2) } }
+prim_rw reduce_minusRawIntOp :
+   binop_exp{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 -@ 'a2) } }
+prim_rw reduce_mulRawIntOp :
+   binop_exp{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 *@ 'a2) } }
+prim_rw reduce_divRawIntOp :
+   binop_exp{ divRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 /@ 'a2) } }
+prim_rw reduce_remRawIntOp :
+   binop_exp{ remRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 %@ 'a2) } }
+
+(* Max / min. *)
+prim_rw reduce_maxRawIntOp :
+   binop_exp{ maxRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
+prim_rw reduce_minRawIntOp :
+   binop_exp{ minRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
+
+(* Boolean comparisons. *)
+prim_rw reduce_eqRawIntOp :
+   binop_exp{ eqRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_neqRawIntOp :
+   binop_exp{ neqRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_ltRawIntOp :
+   binop_exp{ ltRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_leRawIntOp :
+   binop_exp{ leRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_gtRawIntOp :
+   binop_exp{ gtRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_geRawIntOp :
+   binop_exp{ geRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_cmpRawIntOp :
+   binop_exp{ cmpRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
+   ifthenelse{ beq_int{'a1; 'a2};
+      0;
+      ifthenelse{ lt_bool{'a1; 'a2};
+         (-1);
+         1
+      }
+   }
+
 (*************************************************************************
  * Automation.
  *************************************************************************)
@@ -327,7 +408,14 @@ let firEvalT i =
       reduce_int16;
       reduce_int32;
       reduce_int64;
+
+      reduce_pow_2_8;
+      reduce_pow_2_16;
+      reduce_pow_2_31;
+      reduce_pow_2_32;
+      reduce_pow_2_64;
       reduce_pow;
+
       reduce_mod_arith;
       reduce_mod_arith_signed;
       reduce_mod_arith_unsigned;
@@ -372,5 +460,21 @@ let firEvalT i =
       reduce_gtIntOp;
       reduce_geIntOp;
       reduce_cmpIntOp;
+
+      reduce_plusRawIntOp;
+      reduce_minusRawIntOp;
+      reduce_mulRawIntOp;
+      reduce_divRawIntOp;
+      reduce_remRawIntOp;
+      reduce_maxRawIntOp;
+      reduce_minRawIntOp;
+      reduce_eqRawIntOp;
+      reduce_neqRawIntOp;
+      reduce_ltRawIntOp;
+      reduce_leRawIntOp;
+      reduce_gtRawIntOp;
+      reduce_geRawIntOp;
+      reduce_cmpRawIntOp;
+
       reduceTopC
    ] )) i

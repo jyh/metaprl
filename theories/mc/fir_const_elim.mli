@@ -51,6 +51,16 @@ topval const_elim_mulIntOp : conv
 topval const_elim_divIntOp : conv
 topval const_elim_remIntOp : conv
 
+(*
+ * Native integers.
+ *)
+
+topval const_elim_plusRawIntOp : conv
+topval const_elim_minusRawIntOp : conv
+topval const_elim_mulRawIntOp : conv
+topval const_elim_divRawIntOp : conv
+topval const_elim_remRawIntOp : conv
+
 (*************************************************************************
  * Automation.
  *************************************************************************)

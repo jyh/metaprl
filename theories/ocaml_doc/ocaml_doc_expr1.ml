@@ -36,11 +36,11 @@
 extends Base_theory
 
 (*!
- * @begin[doc]
-
+ *
+@begin[doc]
 Many functional programming implementations include a significant
-runtime component including libraries and a garbage collector.  They
-often include a ``toploop'' which can be used to interact with the
+runtime that includes libraries and a garbage collector.  They also
+often include a ``toploop'' that can be used to interact with the
 system.  OCaml provides a compiler and a toploop.  By default, the
 toploop is called @tt{ocaml}.  The toploop prints a prompt (@code{#}),
 reads an input expression, and evaluates it.  Expressions in the

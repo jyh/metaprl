@@ -841,6 +841,23 @@ struct
    let ge_term = mk_ge_term
 end
 
+module R = IntRing
+(*
+module AF=MakeDebugAF(R)(MakeArrayAF(R))(MakeAF(R))
+*)
+module AF=MakeAF(R)
+(*
+module AF=MakeArrayAF(R)
+*)
+module VI=Var2Index(R)
+open IntRing
+
+type omegaTree =
+	Solve of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)
+ | Mul of (omegaTree * ring)
+ | MulAndWeaken of (omegaTree * ring * ring)
+ | Hyp of (int * int * int)
+
 module Constraints
 	(Ring: RingSig)
 	(AF: AF_Sig with type ring = Ring.ring) =
@@ -862,6 +879,9 @@ struct
 
 	let get_key dim f =
 		Array.init dim (fun i -> AF.coef f (succ i))
+
+	let neg_key key =
+		Array.map (fun k -> Ring.neg k) key
 
 	let add_aux info key constr =
 		let dim, table = info in
@@ -918,11 +938,11 @@ struct
 		Hash.iter (filter_aux predicate new_constrs) table;
 		new_constrs
 
-	exception Found of HashedAF.t
+	exception Found of HashedAF.t * (omegaTree * AF.af)
 
 	let find_aux predicate k d =
 		if predicate k d then
-			raise (Found k)
+			raise (Found (k, d))
 		else
 			()
 
@@ -931,24 +951,14 @@ struct
 			Hash.iter (find_aux predicate) table;
 			raise Not_found
 		with
-			Found k -> k
+			Found (k,d) -> (k,d)
 
 	let fold f (dim,table) init_val =
 		Hash.fold f table init_val
 
 end
 
-module R = IntRing
-(*
-module AF=MakeDebugAF(R)(MakeArrayAF(R))(MakeAF(R))
-*)
-module AF=MakeAF(R)
-(*
-module AF=MakeArrayAF(R)
-*)
-module VI=Var2Index(R)
 module C=Constraints(IntRing)(AF)
-open IntRing
 
 module Var =
 struct
@@ -1114,12 +1124,6 @@ let all_pairs l1 l2 =
 	let pairs_lists = List.rev_map (fun x -> List.rev_map (fun y -> (y,x)) l1) l2 in
 	rev_flatten pairs_lists
 
-type omegaTree =
-	Solve of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)
- | Mul of (omegaTree * ring)
- | MulAndWeaken of (omegaTree * ring * ring)
- | Hyp of (int * int * int)
-
 let norm constr =
 	let tree, f = constr in
 	let gcd = AF.gcd f in
@@ -1175,8 +1179,8 @@ let pick_var_aux key (tree,f) =
 
 let pick_var pool constrs =
 	try
-		let k = C.find pick_var_aux constrs in
-		let tree, f = C.get constrs k in
+		let k, (tree, f) = C.find pick_var_aux constrs in
+		(*let tree, f = C.get constrs k in*)
 		AF.any_var f
 	with
 		Not_found ->
@@ -1261,10 +1265,34 @@ let rec remove_unbound_vars pool constrs =
 	*)
 		new_constrs
 
+exception OppositePair of (omegaTree * AF.af) * (omegaTree * AF.af)
+
+let find_opposite constrs key c =
+	let neg_key = C.neg_key key in
+	try
+		let _, opposite = C.find (fun k f -> (k = neg_key)) constrs in
+		let tree1, f1 = c in
+		let tree2, f2 = opposite in
+		let constant = add (AF.coef f1 AF.constvar) (AF.coef f2 AF.constvar) in
+		if isNegative constant then
+			raise (OppositePair (c, opposite))
+		else
+			()
+	with Not_found ->
+		()
+
 let rec omega pool pool2 constrs =
 	if !debug_omega then
 		print_constrs constrs;
-	let constrs = remove_unbound_vars pool constrs in
+	let constrs =
+		try
+			C.iter (find_opposite constrs) constrs;
+			remove_unbound_vars pool constrs
+		with OppositePair (a, b) ->
+			if !debug_omega then
+				eprintf "found opposite pair %a %a@." AF.print (snd a) AF.print (snd b);
+			C.of_list (Array.length pool) [a;b]
+	in
 	let v = pick_var pool2 constrs in
 	if !debug_omega then
 		eprintf "picked %a@." AF.print_var v;
@@ -1303,12 +1331,12 @@ let totaltime = ref 0.
 let starttime = ref 0.
 
 let startT = argfunT (fun i p ->
-	starttime := Unix.time ();
 	if !debug_omega then
 		begin
 			eprintf "start %i@." i;
 			let i' = mk_number_term (Lm_num.num_of_int i) in
 			let t = mk_equal_term <<int>> i' i' in
+			starttime := Unix.time ();
 			assertT t
 		end
 	else
@@ -1316,10 +1344,10 @@ let startT = argfunT (fun i p ->
 )
 
 let endT = argfunT (fun i p ->
-	totaltime := Unix.time() -. !starttime;
-	(*eprintf "endT: total time spent is %f@." !totaltime;*)
 	if !debug_omega then
 		begin
+			totaltime := Unix.time() -. !starttime;
+			eprintf "endT: total time spent is %f@." !totaltime;
 			eprintf "end %i@." i;
 			let i' = mk_number_term (Lm_num.num_of_int i) in
 			let t = mk_equal_term <<int>> i' i' in
@@ -1645,7 +1673,8 @@ let omegaPrepT = funT (fun p ->
 		end;
 	let info = VI.invert var2index in
 	total := !total +. (Unix.time() -. start);
-	(*eprintf "Total time spent in omegaPrepT is %f@." !total;*)
+	if !debug_omega then
+		eprintf "Total time spent in omegaPrepT is %f@." !total;
 	let aux used_hyps (tree, f) =
 		omegaCoreT info hyp_num hyp_length used_hyps tree f
 	in

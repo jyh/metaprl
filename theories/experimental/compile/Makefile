@@ -17,6 +17,7 @@ MPFILES :=\
 	m_closure\
 	m_prog\
 	m_dead\
+	m_inline\
 	m_theory\
 	m_test
 

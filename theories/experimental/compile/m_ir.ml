@@ -64,7 +64,7 @@
  * @parents
  * @end[doc]
  *)
-extends Base_theory
+extends M_util
 (*! @docoff *)
 
 open Refiner.Refiner.Term

@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Constant-folding and function inlining.
  *
  * ----------------------------------------------------------------
  *
@@ -24,39 +24,14 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-
-open M_cps
-open M_closure
-open M_prog
-open M_dead
-open M_inline
+extends M_ir
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
-let compileT =
-   (* CPS conversion *)
-   cpsT
-
-   (* Closure conversion *)
-   thenT closeT
-
-   (* Lift definitions to top level *)
-   thenT progT
-
-   (* Perform dead code elimination *)
-   thenT deadT
-
-   (* Perform inlining and constant folding *)
-   thenT inlineT
-
-   (* Another round of dead code elimination *)
-   thenT deadT
+(*
+ * Inlining.
+ *)
+topval inlineT : tactic
 
 (*!
  * @docoff

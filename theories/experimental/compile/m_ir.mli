@@ -50,7 +50,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Base_theory
+extends M_util
 
 open Refiner.Refiner.Term
 

@@ -29,6 +29,7 @@ extends M_x86_backend
 
 open Lm_symbol
 open Lm_format
+open Lm_symbol_format
 
 open M_standardize
 open M_x86_inst_type

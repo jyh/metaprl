@@ -181,7 +181,7 @@ let print_subst out =
 
 let print_var_subst out =
    let print (v, t) =
-      fprintf out " %a=%a" print_symbol v print_term t
+      fprintf out " %a=%a" output_symbol v print_term t
    in
       List.iter print
 

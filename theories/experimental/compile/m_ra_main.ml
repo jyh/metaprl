@@ -30,6 +30,7 @@ extends M_ra_live
 open Lm_flags
 open Lm_symbol
 open Lm_symbol_matrix
+open Lm_symbol_format
 open Lm_format
 
 open M_ra_type

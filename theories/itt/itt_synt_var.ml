@@ -97,9 +97,17 @@ interactive left_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- left{'v} in nat }
 
+interactive left_wf2 {| intro [] |} :
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- left{'v} in int }
+
 interactive right_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- right{'v} in nat }
+
+interactive right_wf2 {| intro [] |} :
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- left{'v} in int }
 
 interactive depth_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
@@ -117,6 +125,20 @@ interactive eq_wf {| intro [] |} :
 interactive_rw eq_same {| reduce |} :
    ('v in Var) -->
    is_eq{'v;'v} <--> btrue
+
+interactive eq_sym :
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- "assert"{is_eq{'v1; 'v2}} } -->
+   sequent { <H> >- "assert"{is_eq{'v2; 'v1}} }
+
+interactive eq_trans 'v2 :
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- 'v3 in Var } -->
+   sequent { <H> >- "assert"{is_eq{'v1; 'v2}} } -->
+   sequent { <H> >- "assert"{is_eq{'v2; 'v3}} } -->
+   sequent { <H> >- "assert"{is_eq{'v1; 'v3}} }
 
 (* XXX: TODO: arith tactics need to know abot the next 3 rules *)
 

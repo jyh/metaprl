@@ -149,7 +149,6 @@ define unfold_add_vars_upto:
    add_vars_upto{'s;'t} <--> ind{bdepth{'t} -@ bdepth{'s};'s; k,s.add_var{'s}}
 
 let fold_add_vars_upto = makeFoldC << add_vars_upto{'s;'t} >> unfold_add_vars_upto
-
 interactive_rw add_vars_upto_bdepth {| reduce |} :
    ('t in BTerm)  -->
    ('s in BTerm)  -->
@@ -209,7 +208,7 @@ define unfold_not_free: not_free{'v;'t} <-->
       fix{not_free.lambda{t.
          dest_bterm{'t;
                     u. "assert"{bnot{is_eq{'v;'u}}};
-                    op,subterms. all_list{'subterms; t.'not_free 't} }
+                    op,subterms. all_list{ 'subterms; t.'not_free 't} }
          }} 't
 
 let fold_not_free = makeFoldC << not_free{'v;'t} >> unfold_not_free
@@ -229,6 +228,66 @@ interactive not_free_wf {| intro[] |}:
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- not_free{'v;'t} Type  }
 
+interactive subst_not_free :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 's in BTerm } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
+   sequent { <H> >- not_free{'v;'t} } -->
+   sequent { <H> >- subst{'t;'v;'s} ~ 't }
+(*
+interactive add_var_not_free {| intro[] |} :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- not_free{'v;'t} } -->
+   sequent { <H> >- not_free{'v; add_var{'t; 'v1}} }
+*)
+interactive eq_add_var 'v  :
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- "assert"{is_eq{'v;add_var{'v}}} }
+
+interactive not_free_eq_var 'v  :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'u in Var } -->
+   sequent { <H> >- "assert"{is_eq{'v;'u}} } -->
+   sequent { <H> >- not_free{'v;'t} } -->
+   sequent { <H> >- not_free{'u; 't} }
+
+interactive add_var_not_free1 {| intro[] |} :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'u in Var } -->
+   sequent { <H> >- not_free{'v;'t} } -->
+   sequent { <H> >- not_free{'v;add_var{'t; 'u}} } -->
+   sequent { <H> >- not_free{add_var{'v;'u}; add_var{'t; 'u}} }
+
+interactive add_var_not_free {| intro[] |} :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- not_free{'v;'t} } -->
+   sequent { <H> >- not_free{'v; add_var{'t}} }
+
+interactive add_vars_upto_not_free {| intro[] |} :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 's in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- bdepth{'s} >= bdepth{'t} } -->
+   sequent { <H> >- not_free{'v;'t} } -->
+   sequent { <H> >- not_free{'v; add_vars_upto{'t; 's}} }
+
+interactive subst_add_vars_upto :
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- 's1 in BTerm } -->
+   sequent { <H> >- 's2 in BTerm } -->
+   sequent { <H> >- bdepth{'v} >= bdepth{'s1} } -->
+   sequent { <H> >- bdepth{'v} >= bdepth{'s2} } -->
+   sequent { <H> >- not_free{'v2;'s1} } -->
+   sequent { <H> >- not_free{'v2;'v} } -->
+   sequent { <H> >- subst{add_vars_upto{'s1;'v};'v2;'s2} ~ add_vars_upto{'s1;'v} }
+
 interactive subst_commute {| intro [] |} :
    sequent { <H> >- 'v1 in Var } -->
    sequent { <H> >- 'v2 in Var } -->
@@ -237,6 +296,7 @@ interactive subst_commute {| intro [] |} :
    sequent { <H> >- 's2 in BTerm } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s1} } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s2} } -->
+   sequent { <H> >- not_free{'v1;'v2} } -->
    sequent { <H> >- not_free{'v1;'s2} } -->
    sequent { <H> >- not_free{'v2;'s1} } -->
    sequent { <H> >- subst{subst{'t;'v1;'s1};'v2;'s2} ~ subst{subst{'t;'v2;'s2};'v1;'s1} }

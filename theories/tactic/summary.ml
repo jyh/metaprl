@@ -218,7 +218,7 @@ doc <:doc<
 >>
 declare "dform"[name:s]{'modes; 'redex; 'def}
 declare "prec"[name:s]
-declare "prec_rel"[pr:s]
+declare "prec_rel"[op:s, left:s, right:s]
 declare "inherit_df"
 declare "prec_df"[name:s]
 declare "parens_df"
@@ -572,7 +572,7 @@ dform rel_gt_df : internal :: "rel"["gt"] = keyword[">"]
 dform prec_df : "prec"[name:s] =
    info["prec"] " " slot[name:s]
 
-dform prec_rel_df : cons{prec_rel[op]; cons{prec_rel[left]; cons{prec_rel[right]; nil}}} =
+dform prec_rel_df : prec_rel[op, left, right] =
    info["prec "] slot[left] `" " "rel"[op] `" " slot[right]
 
 dform id_df : "id"[n:n] =

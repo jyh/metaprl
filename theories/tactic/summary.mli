@@ -53,7 +53,7 @@ declare "parent"{'path; 'opens; 'resources}
 declare "module"[name:s]{'info}
 declare "dform"[name:s]{'modes; 'redex; 'def}
 declare "prec"[name:s]
-declare "prec_rel"[pr:s]
+declare "prec_rel"[op, left, right]
 declare "id"[n:n]
 declare "resource"[name:s]{'expr}
 declare "infix"[name:s]

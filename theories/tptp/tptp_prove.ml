@@ -733,9 +733,6 @@ let rec loopTestT i p =
       proveT 100 p
    else
       begin
-         eprintf "Marshaling%t" eflush;
-         Marshal.to_string proveT [Marshal.Closures];
-         eprintf "Marshaled%t" eflush;
          (dupT thenLT [loopTestT (pred i); proveT 100]) p
       end
 

@@ -124,8 +124,8 @@ interactive ax_all :
 
 (* involves the vo_jprover parameter with the cut rule *)
 
-interactive all_exst 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive all_exst 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { >- ((all x:'T. 'A['x]) => (exst x:'T. 'A['x])) }
 
@@ -156,8 +156,8 @@ interactive jens_fo :
 (* Making branches independent from eigenvariables introduced in other branches *)
 (* Involves the vo_jprover parameter with the cut rule *)
 
-interactive subst 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive subst 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { >- (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) & (all x:'T. "not"{'B['x]}) =>  'Dummy }
@@ -292,16 +292,16 @@ interactive fo_n4 : (* takes really long *)
 
 (* deadlock1 is the example presented in the papers [9,10] *)
 
-interactive deadlock1 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive deadlock1 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { >- (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. 'B['x]) }
 
 
 
-interactive deadlock2 bind{x,y.'A['x;'y]} 'c 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive deadlock2 bind{x,y.'A['x;'y]} 'c 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x; 'c]} } -->
    sequent { x: 'T; y: 'T >- "type"{'B['x; 'y]} } -->
    sequent { x: 'T; y: 'T >- "type"{'P['x; 'y]} } -->
@@ -316,15 +316,15 @@ interactive deadlock2 bind{x,y.'A['x;'y]} 'c 'v0_jprover :
 (* embedding LJ deadlocks into bigger non-deadlock proofs *)
 
 
-interactive deadlock3 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive deadlock3 'item :
+   sequent { >- 'item in 'T } -->
    sequent { >- "type"{'P} } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { >- 'P & (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. 'B['x]) & 'P }
 
-interactive deadlock4 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive deadlock4 'item :
+   sequent { >- 'item in 'T } -->
    sequent { >- "type"{'P} } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'B['x]} } -->
@@ -332,14 +332,14 @@ interactive deadlock4 'v0_jprover :
 
 (* ebedding multiple use of eigenvariable formula WITHOUT eigenvariable renaming *)
 
-interactive mult_no_rename 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive mult_no_rename 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T; y: 'T >- "type"{'B['x; 'y]} } -->
    sequent { >- (all x:'T. ('A['x] or (exst a:'T. 'B['x;'a]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. exst y:'T. 'B['x;'y]) }
 
-interactive mult_no_rename2 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive mult_no_rename2 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { x: 'T >- "type"{'C['x]} } -->
@@ -349,8 +349,8 @@ interactive mult_no_rename2 'v0_jprover :
 (* ebedding multiple use of eigenvariable formula WITH eigenvariable rule deletion, *)
 (* i.e. the identical eigenvarieble rule occurs on the same branch *)
 
-interactive mult_eigen_del 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive mult_eigen_del 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { x: 'T >- "type"{'C['x]} } -->
@@ -359,8 +359,8 @@ interactive mult_eigen_del 'v0_jprover :
 
 (* ebedding multiple use of eigenvariable formula WITH eigenvariable renaming *)
 
-interactive mult_rename 'v0_jprover :
-   sequent { >- 'v0_jprover in 'T } -->
+interactive mult_rename 'item :
+   sequent { >- 'item in 'T } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { x: 'T; y: 'T >- "type"{'C['x; 'y]} } -->

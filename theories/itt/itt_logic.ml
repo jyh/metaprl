@@ -1389,7 +1389,8 @@ let base_jproverT def_mult = funT (fun p ->
       ITT_JProver.prover mult_limit hyps (SeqGoal.get seq.sequent_goals 0)
    with
       [t] ->
-         t [] assums
+         let substs = try [Lm_symbol.add "v0_jprover", get_with_arg p] with RefineError _ -> [] in
+            t substs assums
     | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof"))
 
 let simple_jproverT = base_jproverT (Some 1)

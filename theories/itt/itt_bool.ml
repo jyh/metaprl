@@ -382,9 +382,9 @@ interactive bimplies_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 't2 IN bool } -->
    sequent ['ext] { 'H >- bimplies{'t1; 't2} IN bool }
 
-interactive bnot_member {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a IN bool } -->
-   sequent ['ext] { 'H >- bnot{'a} IN bool }
+interactive bnot_equal {| intro []; eqcd |} 'H :
+   [wf] sequent [squash] { 'H >- 'a = 'b in bool } -->
+   sequent ['ext] { 'H >- bnot{'a} = bnot{'b} in bool }
 
 (*!
  * @begin[doc]
@@ -455,7 +455,7 @@ interactive bool_ext_equality 'H 'u :
  * term $@it$ term; the proof itself can be omitted.
  * @end[doc]
  *)
-interactive assertSquashElim {| squash |} 'H :
+interactive assertSquashElim {| squash; intro [] |} 'H :
    sequent [squash] { 'H >- "assert"{'t} } -->
    sequent ['ext] { 'H >- it IN "assert"{'t} }
 

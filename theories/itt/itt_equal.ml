@@ -401,11 +401,6 @@ prim equalityType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
-(*! @docoff *)
-interactive equalityType2 {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a IN 'T } -->
-   sequent ['ext] { 'H >- "type"{. 'a IN 'T } }
-
 (*!************************************************************************
  * @begin[doc]
  * @thysubsection{Inhabitants of the equality types}

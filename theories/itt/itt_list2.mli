@@ -133,8 +133,7 @@ declare diff_list{'T}
 (*
  * I/O abstraction for list{top}
  *)
-declare iform list : Term
-iform unfold_list: list <--> list{top}
+define iform unfold_list: list <--> list{top}
 
 (************************************************************************
  * HELPERS                                                              *

@@ -294,7 +294,7 @@ doc <:doc<
    @end[doc]
 >>
 
-iform unfold_list: list <--> list{top}
+define iform unfold_list: list <--> list{top}
 
 doc <:doc< @docoff >>
 

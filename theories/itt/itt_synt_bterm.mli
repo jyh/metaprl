@@ -4,18 +4,14 @@ extends Itt_synt_operator
 open Basic_tactics
 
 declare BTerm
-declare iform BTerm{'n}
-declare iform BTerm_plus{'n}
 
 declare make_bterm{'op; 'subterms}
-declare iform make_bterm{'op;'bdepth;'subterms}
 
 declare bterm_ind{'bt; v.'var_case['v];
                        op,subterms,ind. 'op_case['op; 'subterms; 'ind] }
 declare compatible_shapes{'op; 'btl}
 
 declare bdepth{'bt}
-declare iform dest_bterm{'bt; v.'var_case['v]; op,subterms. 'op_case['op; 'subterms] }
 
 declare Vars_of{'bt}
 
@@ -28,12 +24,12 @@ declare subterms{'t}
 declare is_same_op_of{'b1; 'b2}
 declare same_op_of{'b1; 'b2}
 
-iform bterm: BTerm{'n} <--> { bt:BTerm | bdepth{'bt} = 'n in nat }
-iform bterm_plus: BTerm_plus{'n} <--> { bt:BTerm | bdepth{'bt} >= 'n }
+define iform bterm: BTerm{'n} <--> { bt:BTerm | bdepth{'bt} = 'n in nat }
+define iform bterm_plus: BTerm_plus{'n} <--> { bt:BTerm | bdepth{'bt} >= 'n }
 
-iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
+define iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
 
-iform dest_bterm:
+define iform dest_bterm:
    dest_bterm{'bt; v.'var_case['v];
                    op,subterms. 'op_case['op; 'subterms] }
    <--> bterm_ind{'bt; v.'var_case['v];

@@ -148,6 +148,9 @@ interactive nuprl_d__realizes_wf {| intro[] |} univ[level':l] '"D" "lambda"[]{"x
    [wf] sequent { <H>;"x": "set"[]{"event_system"[level:l]{};"es"."d-es"[level:l]{'"D";'"es"}} >- '"P"['"x"] in "univ"[level':l]{} }  -->
    sequent { <H> >- ("d-realizes"[level:l]{'"D";"es".'"P"['"es"]} in "univ"[i'':l]{}) }
 
+
+
+
 define unfold_d__realizes2 : "d-realizes2"[level:l]{'"D";"es".'"P"['"es"]} <-->
       "all"[]{"world"[level:l]{};"w"."all"[]{"fair-fifo"[]{'"w"};"p"."implies"[]{"possible-world"[level:l]{'"D";'"w"};'"P"["w-es"[level:l]{'"w";'"p"}]}}}
 

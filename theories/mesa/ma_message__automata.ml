@@ -83,5 +83,10 @@ interactive nuprl_ma_empty_compatible_right  {| intro[] |}  :
 
 
 
+interactive state_single_elim {| elim[] |}  'H :
+   [wf] sequent { <H>; s: "ma-state"{"fpf-single"{'x;'T}}; <J['s]> >- "type"{'T} } -->
+   [wf] sequent { <H>; s: "ma-state"{"fpf-single"{'x;'T}}; <J['s]> >- 'x in Id } -->
+   sequent { <H>; s: "ma-state"{"fpf-single"{'x;'T}}; 's 'x in 'T; <J['s]> >- 'C['s]} -->
+   sequent { <H>; s: "ma-state"{"fpf-single"{'x;'T}}; <J['s]> >- 'C['s]}
 
 

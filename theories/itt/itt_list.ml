@@ -377,7 +377,7 @@ let t_var = Lm_symbol.add "T"
  *)
 let inf_nil _ consts _ eqs opt_eqs defs _ =
    let t = Typeinf.vnewname consts defs t_var in
-   eqs, opt_eqs, ((t, <<void>>)::defs), mk_list_term (mk_var_term t)
+   eqs, opt_eqs, ((t, <<void>>)::defs), <:con< list{'$t$} >>
 
 let resource typeinf += (nil_term, inf_nil)
 

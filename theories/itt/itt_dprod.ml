@@ -358,29 +358,6 @@ prim productElimination {| elim [ThinOption thinT] |} 'H :
    spread{'z; u, v. 't['z; 'u; 'v]}
 
 doc <:doc<
-   @docoff
-   The equality reasoning requires type inference.
->>
-let d_spread_equalT tac = funT (fun p ->
-   let rt, spread, _ = dest_equal (Sequent.concl p) in
-   let type_type = mk_xbind_term (maybe_new_var_arg p (Lm_symbol.add "v")) rt in
-   let _, _, pair, _ = dest_spread spread in
-   let type_type, pair_type =
-      try
-         match get_with_args p with
-            type_type :: pair_type :: _ ->
-               type_type, pair_type
-          | [pair_type] ->
-               type_type, pair_type
-          | [] ->
-               raise (RefineError ("d_spread_equalT", StringError "terms are required"))
-      with
-         RefineError _ ->
-            type_type, infer_type p pair
-   in
-      tac type_type pair_type)
-
-doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
 
@@ -395,11 +372,11 @@ prim spreadEquality {| eqcd |} bind{z. 'T['z]} (w:'A * 'B['w]) :
    sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
-doc <:doc< @docoff >>
-let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
-
-let resource intro +=
-   (spread_equal_term, wrap_intro (d_spread_equalT spreadEquality))
+interactive spreadEquality_simple {| eqcd; intro [intro_typeinf <<'e1>>] |} (w:'A * 'B['w]) :
+   [wf] sequent { <H> >- 'e1 = 'e2 in w:'A * 'B['w] } -->
+   [wf] sequent { <H>; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
+             'b1['u; 'v] = 'b2['u; 'v] in 'T } -->
+   sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T }
 
 doc <:doc<
    @begin[doc]

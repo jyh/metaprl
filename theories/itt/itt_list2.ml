@@ -750,26 +750,6 @@ interactive rev_assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{'T1 * 'T2} :
    sequent { <H> >- rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z} in 'T }
 
 (*
- * map.
- *)
-interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- "type"{'T2} } -->
-   [wf] sequent { <H> >- 'f in 'T1 -> 'T2 } -->
-   [wf] sequent { <H> >- 'l in list{'T1} } -->
-   sequent { <H> >- map{'f; 'l} in list{'T2} }
-
-interactive map_wf2 {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T2} } -->
-   [wf] sequent { <H> >- 'l in list } -->
-   [wf] sequent { <H> >- all_list{'l;x.'f['x] in 'T2} } -->
-   sequent { <H> >- map{x.'f['x]; 'l} in list{'T2} }
-
-interactive map_wf3 {| intro [] |} :
-   [wf] sequent { <H> >- 'l in list } -->
-   sequent { <H> >- map{x.'f['x]; 'l} in list }
-
-(*
  * Fold_left.
  *)
 interactive fold_left_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
@@ -817,6 +797,7 @@ interactive index_wf {| intro [] |}  :
 interactive index_mem {| intro [AutoMustComplete] |} :
     sequent { <H> >- 'i in nat } -->
     sequent { <H> >- 'i < length{'l} } -->
+    sequent { <H> >- 'l in list } -->
     sequent { <H> >- 'i in Index{'l} }
 
 interactive index_is_int {| nth_hyp |} 'H :
@@ -884,6 +865,7 @@ interactive mem_cons2 {| intro[AutoMustComplete] |} :
 
 interactive mem_cons1 {| intro[] |} :
    [wf] sequent { <H> >- 'x in 'T } -->
+   [wf] sequent { <H> >- 't in list{'T} } -->
    sequent { <H> >- mem{'x; 'x::'t; 'T} }
 
 interactive restrict_list {| intro[] |} :
@@ -966,7 +948,25 @@ interactive tail_induction 'H :
    sequent { <H>; l:list{'A}; <J['l]>; n:Index{'l}; 'P[tail{'l;'n}] >- 'P[ cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n}}] } -->
    sequent { <H>; l:list{'A}; <J['l]> >-  'P['l] }
 
+(*
+ * map.
+ *)
+interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'f in 'T1 -> 'T2 } -->
+   [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H> >- map{'f; 'l} in list{'T2} }
 
+interactive map_wf2 {| intro [] |} :
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'l in list } -->
+   [wf] sequent { <H> >- all_list{'l;x.'f['x] in 'T2} } -->
+   sequent { <H> >- map{x.'f['x]; 'l} in list{'T2} }
+
+interactive map_wf3 {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list } -->
+   sequent { <H> >- map{x.'f['x]; 'l} in list }
 
 doc <:doc<
    @begin[doc]

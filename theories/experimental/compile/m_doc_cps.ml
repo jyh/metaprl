@@ -68,7 +68,7 @@ function.
 There are different ways of formalizing the CPS conversion (see Section @refsection[m_doc_summary]
 for a discussion). In this compiler we used the following inference rule, which states that a program $e$
 is compilable if for all functions $@cont$, the program $@CPS{@cont; e}$ is compilable.
-$$
+$$@mbox{@misspelled{[cps_prog]}}~~~
 @begin[array,c]
 @line{{@Gamma, @cont @colon @it{exp} @vdash @compilable{@CPS{@cont; e}}}}
 @hline

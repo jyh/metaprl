@@ -26,6 +26,9 @@
  *)
 extends M_doc_ir
 
+declare math_CPS{'a}
+declare math_CPS{'cont; 'e}
+
 (*
  * -*-
  * Local Variables:

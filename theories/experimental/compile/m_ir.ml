@@ -22,14 +22,14 @@ doc <:doc<
         |  fun x -> e   (unnamed functions)
 
      (* Expressions *)
-     e ::= let v = a in e               (LetAtom)
-        |  f(a)                         (TailCall)
-        |  if a then e1 else e2         (Conditional)
-        |  let v = a1.[a2] in e         (Subscripting)
-        |  a1.[a2] <- a3; e             (Assignment)
+     e ::= let v = a in e           (LetAtom)
+        |  f(a)                     (TailCall)
+        |  if a then e1 else e2     (Conditional)
+        |  let v = a1.[a2] in e     (Subscripting)
+        |  a1.[a2] <- a3; e         (Assignment)
 
            (* These are eliminated during CPS *)
-        |  let v = f(a) in e            (Function application)
+        |  let v = f(a) in e        (Function application)
         |  return a
    @end[verbatim]
 
@@ -67,7 +67,7 @@ doc <:doc<
    @parents
 
      Modules in @MetaPRL are organized in a theory hierarchy.  Each theory
-     module extends its parent theories.  In this case, the M_ir module
+     module extends its parent theories.  In this case, the @tt[M_ir] module
      extends base theories that define generic proof automation.
    @end[doc]
 >>

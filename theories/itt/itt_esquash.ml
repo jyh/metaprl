@@ -221,7 +221,7 @@ let esquashEqualT = funT (fun p ->
    else if in_esquash then esquash_equal_intro else esquash_equal)
 
 let resource intro +=
-   (<<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, esquashEqualT))
+   (<<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, false, esquashEqualT))
 
 let esquashAutoT =
    withBoolT "esquash" true (autoT thenT tryT (onSomeHypT esquashT orelseT esquash thenT autoT))

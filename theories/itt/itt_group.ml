@@ -62,6 +62,20 @@ let _ =
    show_loading "Loading Itt_group%t"
 
 (************************************************************************
+ * Intro resource hack.                                                 *
+ ************************************************************************)
+
+(* We do not want the default into handling for broup operations *)
+
+let alg_intro =
+   "alg_intro", None, false, failWithT "Abstract algebra intro tactic: do not know what to do"
+
+let resource intro += [
+   << ('a *['G] 'b) in 'T >>, alg_intro;
+   << ('a +['G] 'b) in 'T >>, alg_intro
+]
+
+(************************************************************************
  * GROUP                                                                *
  ************************************************************************)
 
@@ -511,7 +525,7 @@ interactive abelg_intro {| intro [] |} :
    [main] sequent { <H> >- isCommutative{'G} } -->
    sequent { <H> >- 'G in abelg[i:l] }
 
-interactive isAbelg_intro {| intro [] |} :
+interactive isAbelg_intro {| intro [AutoMustComplete] |} :
    [main] sequent { <H> >- isGroup{'G} } -->
    [main] sequent { <H> >- isCommutative{'G} } -->
    sequent { <H> >- isAbelg{'G} }

@@ -128,15 +128,15 @@ doc <:doc<
    If <<normalSubg[i:l]{'A; 'B}>>, then $f: ('B -> <<quotGroup{'A; 'B}>>)$ defined by $f a = a$ is an epimorphism of $B$ to <<quotGroup{'A; 'B}>> with kernel $A$.
    @end[doc]
 >>
-interactive quotGroup_hom {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+interactive quotGroup_hom {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- lambda{a. 'a} in groupHom{'B; quotGroup{'A; 'B}} }
 
-interactive quotGroup_epi {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+interactive quotGroup_epi {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- lambda{a. 'a} in groupEpi{'B; quotGroup{'A; 'B}} }
 
-interactive quotGroup_ker_ext {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+interactive quotGroup_ker_ext {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- groupExtEqual{groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}}; {car='A^car; "*"='A^"*"; "1"='A^"1"; inv='A^inv}} }
 

@@ -345,12 +345,12 @@ interactive rationals_mem :
 
 let rat_mem_introT = funT (fun p ->
    let mem = is_member_term (Sequent.concl p) in
-      if ((Sequent.get_bool_arg p "d_auto") = (Some true)) && mem then
+      if mem && ((Sequent.get_bool_arg p "d_auto") = (Some true)) then
          raise generic_refiner_exn;
       if mem then rationals_mem else rationals_mem_equality)
 
 let resource intro +=
-   << 'x in rationals >>, ("rat_mem_introT", None, rat_mem_introT)
+   << 'x = 'y in rationals >>, ("rat_mem_introT", None, false, rat_mem_introT)
 
 interactive lt_bool_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'a in int } -->

@@ -278,7 +278,7 @@ let quotientIntroT = funT (fun p ->
       quotient_memberEquality)
 
 let resource intro +=
-   (<<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, quotientIntroT))
+   (<<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, false, quotientIntroT))
 
 doc <:doc<
    @begin[doc]

@@ -182,9 +182,11 @@ interactive finiteNatMemberEquality {| intro [] |} :
    sequent { <H> >- 'a = 'b in nat{'k} }
 
 interactive finiteNatElimination {| elim [] |} 'H :
-   sequent { <H>; x: nat{'k}; <J['x]> >- 'k in int } -->
    sequent { <H>; x: int; v:'x >= 0; w: 'x < 'k; <J['x]> >- 'C['x] }  -->
    sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
+
+interactive finiteNatIsInt {| nth_hyp |} 'H :
+   sequent { <H>; x: nat{'k}; <J['x]> >- 'x in int }
 
 doc <:doc< @docoff >>
 

@@ -60,6 +60,7 @@ open Refiner.Refiner.TermOp
 
 open Base_meta
 open Dtactic
+open Auto_tactic
 open Top_conversionals
 
 open Itt_equal
@@ -953,10 +954,11 @@ interactive intSegMemberEquality {| intro [] |} :
    sequent { <H> >- 'a = 'b in int_seg{'i; 'j} }
 
 interactive intSegElimination {| elim [] |} 'H :
-   sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'i in int } -->
-   sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'j in int } -->
    sequent { <H>; x: int; v:'x >= 'i; w: 'x < 'j; <J['x]> >- 'C['x] }  -->
    sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'C['x] }
+
+interactive intSegIsInt {| nth_hyp |} 'H :
+   sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'x in int }
 
 doc <:doc< @docoff >>
 

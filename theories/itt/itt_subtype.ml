@@ -314,7 +314,7 @@ let prove_subtypeT = funT (fun p ->
    Sequent.get_resource_arg p get_sub_resource)
 
 let resource intro +=
-   subtype_term, ("prove_subtype",None,prove_subtypeT)
+   subtype_term, ("prove_subtype",None,false,prove_subtypeT)
 
 (************************************************************************
  * TACTICS                                                              *

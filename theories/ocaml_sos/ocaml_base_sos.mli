@@ -52,7 +52,7 @@ declare address[name:s]
  * belongs to fun{'t1; 't2} and for any argument in 't1,
  * the application of the function does not modify the state.
  *)
-declare functional{'t1; 't2}
+declare functional{'t1 : Ocaml; 't2 : Ocaml} : Ocaml
 
 (*
  * Judgment:
@@ -62,8 +62,8 @@ declare functional{'t1; 't2}
  *    e1, e2: the expressions being compared
  *    t: the type of the comparison
  *)
-declare equiv{'S; 'e1; 'e2; 't}
-declare member{'S; 'e; 't}
+declare equiv{'S; 'e1 : Ocaml; 'e2 : Ocaml; 't : Ocaml}
+declare member{'S; 'e : Ocaml; 't : Ocaml}
 
 rewrite member_unfold :
    member{'S; 'e; 't} <--> equiv{'S; 'e; 'e; 't}
@@ -73,8 +73,8 @@ rewrite member_unfold :
  * Two expressions are functionally equivalent if they are equivalent
  * and they are both values.
  *)
-declare value_equiv{'S; 'e1; 'e2; 't}
-declare value_member{'S; 'e; 't}
+declare value_equiv{'S; 'e1 : Ocaml; 'e2 : Ocaml; 't : Ocaml}
+declare value_member{'S; 'e : Ocaml; 't : Ocaml}
 
 rewrite value_member_unfold :
    value_member{'S; 'e; 't} <--> value_equiv{'S; 'e; 'e; 't}
@@ -83,13 +83,13 @@ rewrite value_member_unfold :
  * Judgment:
  * Untyped value judgment.
  *)
-declare is_value{'S; 'e}
+declare is_value{'S; 'e : Ocaml}
 
 (*
  * Judgment:
  * t is a valid type.
  *)
-declare is_type{'t}
+declare is_type{'t : Ocaml}
 
 (*
  * Equivalence of names.
@@ -104,13 +104,13 @@ declare name_equiv{'S; 'n1; 'n2}
  * expr: projects the program component
  * :expr_value: projects the program if it is a value
  *)
-declare process{'S; 'e}
-declare "value"{'S; 'e}
+declare process{'S; 'e : Ocaml}
+declare "value"{'S; 'e : Ocaml}
 declare spread{'process; e, S. 'body['e; 'S]}
 declare spread_value{'process; v, S. 'body['v; 'S]}
-declare state{'S; 'e}
-declare expr{'S; 'e}
-declare expr_value{'S; 'e}
+declare state{'S; 'e : Ocaml}
+declare expr{'S; 'e : Ocaml}
+declare expr_value{'S; 'e : Ocaml}
 
 (*
  * Operations on states.
@@ -142,7 +142,7 @@ rule value_equiv_is_equiv :
 (*
  * A functional function application to a value is a value.
  *)
-rule functional_apply_value 't1 :
+rule functional_apply_value ('t1 :> Ocaml) :
    sequent { <H> >- value_equiv{'S; 'a1; 'a2; 't2} } -->
    sequent { <H> >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
    sequent { <H> >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }

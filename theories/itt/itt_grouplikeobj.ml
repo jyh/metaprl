@@ -453,16 +453,10 @@ doc <:doc<
    Substructure is squash-stable.
    @end[doc]
 >>
-interactive subStructure_sqStable :
+interactive subStructure_sqStable (*{| squash |}*) :
    [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->
    [wf] sequent [squash] { 'H >- squash{subStructure{'s; 'g}} } -->
    sequent ['ext] { 'H >- subStructure{'s; 'g} }
-
-interactive subStructure_sqStable1 {| squash |} :
-(*  sequent [squash] { 'H >- "type"{.'s^car} } -->*)
-   sequent [squash] { 'H >- subStructure{'s; 'g} } -->
-   sequent ['ext] { 'H >- it in subStructure{'s; 'g} }
-
 doc <:doc< @docoff >>
 
 (************************************************************************

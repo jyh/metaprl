@@ -1,16 +1,63 @@
-These are just some general notes about what's here.  Perhaps one day
-I'll actually turn this into a full fledged readme that's generally useful...
+Notes as of 29 September 2001:
 
-fir_type* files are for typing rules/judgements.
-All the other files declare terms for FIR terms and rewrites
-to evaluate such terms.
+(When I say FIR, I refer to the FIR in the mc compiler.)
 
-Note that some terms declared (and maybe entire files) may be
-there only for completeness or becuase I think I might need them later
-(or haven't bothered removing them yet).
+Fir_state and Fir_type_state are present, but currently serve
+no purpose that I can see.  Consequently, Fir_type has to declare
+fir_value so that Fir_type_state compiles properly.  The way things
+are going, it looks like as if all this should just disappear, but I'm
+leaving it for now since I don't want to prematurely remove these files
+just yet.
 
-Subscripting is still a bit iffy at this point, especially given
-that there's a bazillino subscripting operators.  I'm pretty much
-ignoring them all at this point.
+In general, the Fir_type* modules need testing and refinement
+at this point.  Emphasis on the testing.  I've just sort
+of guessed what typing judgements are useful/correct.  There's
+no actual guarentees that the type system defined through those files
+is consistent, logical, correct, etc.
 
-The typing rules definitely also need a lot of work at this point.
+The general divisions for the Fir_type* files are as follows:
+Fir_type : basic types, e.g. Fir_ty
+Fir_type_state : rules for Fir_state stuff
+Fir_type_exp : rules for Fir_exp stuff
+Fir_type_int : rules for Fir_int stuff (mostly a convinience for automation
+   last I checked)
+
+The rest of the files are intended to represent the following:
+Fir_state : state operations (defunct I think, but around anyway...)
+Fir_int_set : A limited implementation of the int_set's in the FIR.
+   The set is essentially a list of closed intervals over the integers.
+   Unlike the FIR, I have no notiong of max / min sets, singleton sets,
+   and all those convinient operations/representations.  I have a list
+   of intervals, I can test for membership, and that's about it.
+   I don't even try enforcing that the intervals are in any sort of sane
+   order or that for a given interval [a,b], I don't enforce a<=b
+   (though membership testing should blow up badly if that's the case).
+Fir_ty : FIR types
+Fir_exp : FIR expressions, except for the integer stuff
+FIR_int : FIR integer items (but not rawints or the like).
+
+Fir_ty, Fir_exp, and Fir_int are going to be the places to look
+for scattered comments concerning why some terms are there, why some
+aren't, etc.
+
+Oh yeah, naming scheme.  Essentially, anything that's supposed to represent
+something in the fir uses the exact same name, except the first
+character is lowercase, e.g. TyInt -> tyInt.
+
+With term names like these, the idea is that the mc compiler
+can easily spit things out with a minimum of mangling, leaving it
+to MetaPRL to provide the necessary rewrites to change the output
+or whatever into something it can deal with.
+
+This seems to work pretty well.
+
+The only oddity at this point is that tuples are being represented
+here (and emmited by the compiler) as lists it would seem.
+Really wacky if you ask me, but umm, well, this all has to do with...
+
+Subscripting.  Subscripting is fun.  Subscripting is interesting.  Yes.
+So are union related things. These are all "fun".  That means that
+I don't feel that I completely understand them yet, so their implementation
+and whatnot may be wacky.
+
+FIR evaluation is represented through rewrites.

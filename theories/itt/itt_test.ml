@@ -77,6 +77,9 @@ let factT = rw (repeatC redexC) 0
 interactive extraction_test :
    sequent { <H>; "type"{'A}; "type"{'B}; "type"{'C} >- (('A and 'B) => 'C) => ('A => ('B => 'C)) }
 
+interactive foo:
+   sequent { <H> >- lambda{x.'x +@ 0} }
+
 (*
  * -*-
  * Local Variables:

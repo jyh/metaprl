@@ -87,6 +87,8 @@ MPFILES :=\
 	itt_group\
         itt_cyclic_group\
 	itt_quotient_group\
+	itt_ring\
+	itt_field\
         itt_example\
 		itt_rat
 

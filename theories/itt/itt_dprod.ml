@@ -295,23 +295,6 @@ prim productType {| intro [] |} :
 
 doc <:doc<
    @begin[doc]
-   @modsubsection{Introduction}
-
-   The propositional interpretation of the product space
-   is the bounded existential $@exists{x; A; B[x]}$.  The
-   proposition is true if it is a type, and if there is
-   some element $a @in A$ where $B[a]$ is true.
-   @end[doc]
->>
-prim pairFormation {| intro [] |} 'a :
-   [wf] sequent { <H> >- 'a in 'A } -->
-   [main] ('b : sequent { <H> >- 'B['a] }) -->
-   [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- x:'A * 'B['x] } =
-   'a, 'b
-
-doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The elements of the product space are the pairs.  For
@@ -328,6 +311,22 @@ prim pairEquality {| intro [] |} :
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    sequent { <H> >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Introduction}
+
+   The propositional interpretation of the product space
+   is the bounded existential $@exists{x; A; B[x]}$.  The
+   proposition is true if it is a type, and if there is
+   some element $a @in A$ where $B[a]$ is true.
+   @end[doc]
+>>
+interactive pairFormation {| intro [] |} 'a :
+   [wf] sequent { <H> >- 'a in 'A } -->
+   [main] ('b : sequent { <H> >- 'B['a] }) -->
+   [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent { <H> >- x:'A * 'B['x] }
 
 doc <:doc<
    @begin[doc]

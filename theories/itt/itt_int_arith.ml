@@ -60,9 +60,11 @@ open Term_order
 open Mp_resource
 
 open Tactic_type
+open Tactic_type.Tactic
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
+open Auto_tactic
 open Dtactic
 
 open Top_conversionals
@@ -654,13 +656,97 @@ let good_term t =
       << 'l = 'r in 'tt >> when alpha_equal tt <<int>> && not (alpha_equal l r) -> true
     | _ -> false)
 
-let findContradRelT = funT ( fun p ->
+(*
+ * Caching
+ *)
+let main_label="main"
+
+module TermPos=
+struct
+	type data = int
+	let append l1 l2 = l1 @ l2
+end
+
+module TTable=Term_eq_table.MakeTermTable(TermPos)
+
+let empty _ = ref (0, 0, TTable.empty)
+
+let start_from h n =
+	let (_,k,table) = !h in
+	h:=(n,k,table)
+
+let mem h t =
+	let (n,_,table) = !h in
+	TTable.mem table t
+
+let lookup h t =
+	let (n,k,table) = !h in
+	begin
+		h:=(n,succ k,table);
+		TTable.find table t
+	end
+
+let add h t =
+	let (n,k,tab) = !h in
+	begin
+		(*eprintf"%i<-%a%t" n print_term t eflush;*)
+		h:=(succ n, k, TTable.add tab t n)
+	end
+
+let print_stat h =
+	let (_,k,table) = !h in
+	let n = List.length (TTable.list_of table) in
+	eprintf "cacheT: %i goals, %i lookups%t" n k eflush
+
+let print_statT h = funT ( fun p ->
+	if !debug_int_arith then
+		print_stat h;
+	idT
+)
+
+let tryAssertT info t = funT ( fun p ->
+	if mem info t then idT
+	else
+		begin
+			(*eprintf "%i<-%a%t" (succ(Sequent.hyp_count p)) print_term t eflush;*)
+			add info t;
+			assertT t
+		end
+)
+
+let rec assertListT info = function
+	[(t,_)] -> tryAssertT info t
+ | (t,_)::tl -> tryAssertT info t thenMT assertListT info tl
+ | _ -> idT
+
+let printT i = funT ( fun p ->
+	let t=Sequent.concl p in
+	let h=Sequent.nth_hyp p i in
+	eprintf "missed %a -> %i: %a%t" print_term t i print_term h eflush;
+	idT
+)
+
+let tryInfoT info = funT ( fun p ->
+	let g=Sequent.concl p in
+	let i=lookup info g in
+	nthHypT i (*orelseT printT i*)
+)
+
+let cacheT info = argfunT ( fun tac p ->
+	start_from info (succ(Sequent.hyp_count p));
+	let (goals,_) = refine (tac thenMT addHiddenLabelT main_label) p in
+	let aux_list = List.map (fun p -> (Sequent.concl p, Sequent.label p)) goals in
+	let aux_list = List.filter (fun (g,l) -> l<>main_label) aux_list in
+	assertListT info aux_list thenMT (tac thenAT (tryInfoT info)) thenMT (print_statT info)
+)
+
+let findContradRelT info = funT ( fun p ->
 	let hyps=all_hyps p in
 	let aux (i,t) = good_term t in
 	let l=List.filter aux hyps in
 	let l'=List.flatten (List.map (term2inequality p) l) in
 	let l''=Arith.find_contradiction l' in
-	sumListT l''
+	cacheT info (sumListT l'')
 )
 
 let reduceIneqT = argfunT ( fun i p ->
@@ -734,11 +820,22 @@ doc <:doc<
 
 (* Finds and proves contradiction among ge-relations
  *)
-let arithT =
+let arith1 = funT (fun p ->
    arithRelInConcl2HypT thenMT
-   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-(*   ((tryOnAllMHypsT reduceIneqT) thenMT*)
-   (findContradRelT thenMT (reduceContradRelT (-1)) ))
+   (tryOnAllMCumulativeHypsT negativeHyp2ConclT)
+)
+
+let arith2 info = funT (fun p ->
+	let i=Sequent.hyp_count p in
+	cacheT info (reduceContradRelT i)
+)
+
+let arithT = funT (fun p ->
+	let info=empty () in
+	(cacheT info arith1) thenMT
+	((findContradRelT info) thenMT
+	(arith2 info))
+)
 
 interactive test 'a 'b 'c :
 sequent { <H> >- 'a in int } -->

@@ -796,7 +796,7 @@ let moveToConclVarsT vars p =
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
                           withT (mk_var_term v) (dT (len + 1)) (**)
-                             thenLT [equalAssumT i; nthHypT (len + 2)]]
+                             thenLT [equalAssumT i; nthHypT (-1)]]
 
             else
                let goal' = mk_implies_term hyp goal in

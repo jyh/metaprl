@@ -3,17 +3,25 @@ include Czf_itt_member
 include Czf_itt_pair
 include Czf_itt_set_bvd
 
+open Printf
+open Mp_debug
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
+open Mp_resource
+open Simple_print
 
 open Tactic_type
-open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Var
+open Tactic_type.Sequent
+open Tactic_type.Conversionals
 open Mptop
+open Var
 
 open Base_dtactic
 open Base_auto_tactic
@@ -70,6 +78,9 @@ prim_rw unfold_equiv_fun_prop : equiv_fun_prop{'s; 'r; z. 'P['z]} <-->
 (*prim_rw unfold_equiv_dfun_prop : equiv_dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
    (all s: set. all r: set. all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => (u1: 'A['a] -> 'B['a; 'u1] -> u2: 'A['b] -> 'B['b; 'u2])))
 *)
+
+let fold_equiv = makeFoldC << equiv{'s; 'r; 'a; 'b} >> unfold_equiv
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -136,43 +147,7 @@ interactive equiv_rel_intro {| intro [] |} 'H :
    sequent ['ext] { 'H; d: set; e: set; f: set; x: mem{'d; 's}; y: mem{'e; 's}; z: mem{'f; 's}; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}} -->
    sequent ['ext] { 'H >- equiv{'s; 'r} }
 
-interactive equiv_sym 'H 'J 'u :
-   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'s} } -->
-   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'r} } -->
-   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'a} } -->
-   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'b} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- equiv{'s; 'r} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- mem{'a; 's} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- mem{'b; 's} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x]; u: equiv{'s; 'r; 'b; 'a} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- 'C['x] }
-
-interactive equiv_trans 'H 'J 'c 'u 'v :
-   sequent [squash] { 'H; x: equiv{'s; 'r}; y: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'s} } -->
-   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'r} } -->
-   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'a} } -->
-   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'c} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- equiv{'s; 'r} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- mem{'a; 's} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- mem{'b; 's} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- mem{'c; 's} } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x]; u: equiv{'s; 'r; 'a; 'c}; v: equiv{'s; 'r; 'c; 'b} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- 'C['x] }
-
-let equivRefT p =
-   equiv_ref_intro (hyp_count_addr p) p
-
-let equivSymT i p =
-   let u = maybe_new_vars1 p "u" in
-   let j, k = Sequent.hyp_indices p i in
-      equiv_sym j k u p
-
-let equivTransT t i p =
-   let u, v = maybe_new_vars2 p "u" "v" in
-   let j, k = Sequent.hyp_indices p i in
-      equiv_trans j k t u v p
-
-interactive equiv_sym1 'H  :
+interactive equiv_sym 'H  :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'r} } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -183,7 +158,7 @@ interactive equiv_sym1 'H  :
    sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'b} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r; 'b; 'a} }
 
-interactive equiv_trans1 'H 'b :
+interactive equiv_trans 'H 'b :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'r} } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -196,11 +171,30 @@ interactive equiv_trans1 'H 'b :
    sequent ['ext] { 'H >- equiv{'s; 'r; 'b; 'c} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'c} }
 
-let equivSym1T p =
-   equiv_sym1 (hyp_count_addr p) p
+let equivRefT p =
+   equiv_ref_intro (hyp_count_addr p) p
 
-let equivTrans1T t p =
-   equiv_trans1 (hyp_count_addr p) t p
+let equivSymT p =
+   equiv_sym (hyp_count_addr p) p
+
+let equivTransT t p =
+   equiv_trans (hyp_count_addr p) t p
+
+interactive equiv_sym1 'H 'J 'u :
+   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'s} } -->
+   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'r} } -->
+   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'a} } -->
+   sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'b} } -->
+   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- equiv{'s; 'r} } -->
+   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- mem{'a; 's} } -->
+   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- mem{'b; 's} } -->
+   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x]; u: equiv{'s; 'r; 'b; 'a} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- 'C['x] }
+
+let equivSym1T i p =
+   let u = maybe_new_vars1 p "u" in
+   let j, k = Sequent.hyp_indices p i in
+      equiv_sym1 j k u p
 
 interactive equiv_fun_isset 'H 'J equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent [squash] { 'H; z: set; 'J['z] >- isset{'s} } -->

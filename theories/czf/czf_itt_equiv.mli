@@ -4,17 +4,25 @@ include Czf_itt_pair
 
 open Itt_equal
 
+open Printf
+open Mp_debug
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
+open Mp_resource
+open Simple_print
 
 open Tactic_type
-open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Var
+open Tactic_type.Sequent
+open Tactic_type.Conversionals
 open Mptop
+open Var
 
 open Base_dtactic
 open Base_auto_tactic
@@ -64,6 +72,8 @@ val is_equiv_fun_prop_term : term -> bool
 val mk_equiv_fun_prop_term : term -> term -> string -> term -> term
 val dest_equiv_fun_prop : term -> term * term * string * term
 
+topval fold_equiv : conv
+
 (*
  * Functionality.
  *)
@@ -74,11 +84,10 @@ topval equivFunMemT : term -> int -> tactic
  * Equivalence relations.
  *)
 topval equivRefT : tactic
-topval equivSymT : int -> tactic
-topval equivTransT : term -> int -> tactic
+topval equivSymT : tactic
+topval equivTransT : term -> tactic
 
-topval equivSym1T : tactic
-topval equivTrans1T : term -> tactic
+topval equivSym1T : int -> tactic
 
 (*
  * Substitution.

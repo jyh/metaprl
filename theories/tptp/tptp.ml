@@ -47,6 +47,10 @@ declare "prop2"
 declare "prop3"
 declare "prop4"
 declare "prop5"
+declare "apply"{'f1; 'x1; 'x2}
+declare "apply"{'f1; 'x1; 'x2; 'x3}
+declare "apply"{'f1; 'x1; 'x2; 'x3; 'x4}
+declare "apply"{'f1; 'x1; 'x2; 'x3; 'x4; 'x5}
 
 prim_rw unfold_atomic : "atomic"{'x} <--> ('x = 'x in atom)
 prim_rw unfold_all : "all"{v. 'b['v]} <--> Itt_logic!"all"{atom; v. 'b['v]}

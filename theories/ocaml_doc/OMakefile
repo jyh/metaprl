@@ -39,7 +39,8 @@ PRINT_THEORIES =\
     ocaml_doc_mod2\
     ocaml_doc_class1
 
-TheoryDocumentInstall(book2, $(PRINT_THEORIES))
+TheoryDocument(theory, $(PRINT_THEORIES))
+LaTeXDocumentInstall(tex, $(DOCDIR), book2, book2, theory-body)
 
 #
 # Clean up

@@ -39,7 +39,7 @@ open Tactic_type.Conversionals
  ************************************************************************)
 
 declare prefield[i:l]
-declare isField{'F}
+declare isField[i:l]{'F}
 declare field[i:l]
 declare as_multiplicative_group{'F}
 

@@ -124,7 +124,7 @@ interactive recordTypeS {| intro [] |} 'H :
    sequent[squash]{'H >- "type"{'A} } -->
    sequent['ext]  {'H >- "type"{record[n:t]{'A}} }
 
-interactive field_member {| intro[] |} 'H:
+interactive field_member {| intro[AutoMustComplete] |} 'H:
    sequent[squash]{'H >- 'r in record[n:t]{'A} } -->
    sequent['ext]  {'H >- field[n:t]{'r} in 'A }
 

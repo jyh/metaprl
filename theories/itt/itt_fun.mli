@@ -149,6 +149,9 @@ rule independentFunctionSubtype 'H :
    sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- \subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
 
+topval fnExtensionalityT : term -> term -> tactic
+topval fnExtenT : term -> tactic
+
 (*
  * -*-
  * Local Variables:

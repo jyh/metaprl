@@ -155,6 +155,22 @@ interactive independentLambdaEquality {| intro []; eqcd |} 'H 'x :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Extensionality}
+ *
+ * The independent function retains the extensional membership
+ * equality of the dependent function type.  This rule is
+ * derived from the @hrefrule[functionExtensionality] rule.
+ * @end[doc]
+ *)
+interactive independentFunctionExtensionality 'H ('C -> 'D) ('E -> 'F) 'u :
+   [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'f in 'C -> 'D } -->
+   [wf] sequent [squash] { 'H >- 'g in 'E -> 'F } -->
+   sequent ['ext] { 'H >- 'f = 'g in 'A -> 'B }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Elimination}
  *
  * There are two elimination forms.  The @tt{independentFunctionElimination}
@@ -185,7 +201,7 @@ interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
  * functions and arguments are equal.
  * @end[doc]
  *)
-interactive independentApplyEquality {| intro[]; eqcd |} 'H ('A -> 'B) :
+interactive independentApplyEquality {| eqcd |} 'H ('A -> 'B) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }
@@ -225,12 +241,22 @@ interactive independentFunctionFormation 'H :
  * Application equality depends on our infering a type.
  *)
 let d_apply_equalT p =
-   let _, app, _ = dest_equal (Sequent.concl p) in
+   let _, app, app' = dest_equal (Sequent.concl p) in
    let f, _ = dest_apply app in
    let f_type =
       try get_with_arg p with
          RefineError _ ->
-            infer_type p f
+            let t = infer_type p f in
+            if begin
+               try Sequent.get_bool_arg p "d_auto"
+               with RefineError _ -> false
+            end then
+               let f', _ = dest_apply app' in
+               let t' = infer_type p f' in
+               if alpha_equal t t' then
+                  t
+               else raise (RefineError ("d_apply_equalT", StringError ("inferred types do not much while inside non-complete autoT")))
+           else t
    in
    let tac =
       if is_rfun_term f_type then
@@ -294,6 +320,26 @@ let d_hyp_fun i p =
             independentFunctionElimination i j f y p
 
 let resource elim += (fun_term, d_hyp_fun)
+
+(************************************************************************
+ * EXTENSIOANLITY                                                       *
+ ************************************************************************)
+
+(*
+ * Takes two arguments.
+ *)
+let fnExtensionalityT t1 t2 p =
+   if is_rfun_term t1 then
+      rfunction_extensionalityT t1 t2 p
+   else if is_dfun_term t1 then
+      dfun_extensionalityT t1 t2 p
+   else if is_fun_term t1 then
+      let t, _, _ = dest_equal (Sequent.concl p) in
+      let o = maybe_new_vars1 p "o" in
+         independentFunctionExtensionality (Sequent.hyp_count_addr p) t1 t2 o p
+   else raise (RefineError ("extensionalityT", StringTermError ("first arg is not a function type", t1)))
+
+let fnExtenT t = fnExtensionalityT t t
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -143,7 +143,7 @@ interactive set_subset_intro {| intro [] |} 'H :
 
 interactive subset_ref {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "subset"{'A; 'A} }
+   sequent ['ext] { 'H >- 'A subset 'A }
 
 (*
 interactive subset_trans 'H 'B:

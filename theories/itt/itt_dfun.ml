@@ -205,7 +205,7 @@ interactive functionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
  * equal if their functions and arguments are equal.
  * @end[doc]
  *)
-interactive applyEquality {| intro[]; eqcd |} 'H (x:'A -> 'B['x]) :
+interactive applyEquality {| intro[AutoMustComplete]; eqcd |} 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }

@@ -382,20 +382,22 @@ let rec check_hyp_progress i goal = function
       false
 
 let rec try_hyp_progressT test hyps tac p =
-   let rec expand i = function
-      Hypothesis (_, hyp) :: tl ->
-         if not (test i p) or check_hyp_progress i hyp hyps then
-            expand (i + 1) tl
-         else
-            let item = tac i, AutoTac (try_hyp_progressT test ((i, hyp) :: hyps) tac) in
-               item :: expand (i + 1) tl
-    | Context _ :: tl ->
-         expand (i + 1) tl
-    | [] ->
+   let rec expand hyps' i len =
+      if i > len then
          []
+      else
+         match hyps'.(i - 1) with
+            Hypothesis (_, hyp)  ->
+               if not (test i p) or check_hyp_progress i hyp hyps then
+                  expand hyps' (i + 1) len
+               else
+                  let item = tac i, AutoTac (try_hyp_progressT test ((i, hyp) :: hyps) tac) in
+                     item :: expand hyps' (i + 1) len
+          | Context _ ->
+               expand hyps' (i + 1) len
    in
    let { sequent_hyps = hyps } = Sequent.explode_sequent p in
-      expand 1 hyps
+      expand hyps 1 (Array.length hyps)
 
 let auto_hyp_progress test (tac : int -> tactic) =
    AutoTac (try_hyp_progressT test [] tac)

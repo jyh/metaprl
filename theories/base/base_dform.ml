@@ -127,45 +127,47 @@ dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
  *    t is the term to be printed.
  *)
 mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
-   (let rec format (i, cflag, sflag, t) =
-      let sep = if sflag then "; " else "" in
-	 if is_context_term t then
-            (* This is a context hypothesis *)
-	    let v, subterm, values = dest_context t in
-	       format_string buf sep;
-	       format_space buf;
-	       format_term buf NOParens (mk_so_var_term v values);
-	       format (i + 1, cflag, true, subterm)
-
-         else if is_hyp_term t then
-            let v, a, b = dest_hyp t in
-	       format_string buf sep;
-	       format_space buf;
-	       format_string buf v;
-	       format_string buf ". ";
-               format_term buf NOParens a;
-               format (i + 1, false, true, b)
-
-         else if t = null_concl then
-            ()
-
-         else if is_concl_term t then
-            let a, b = dest_concl t in
-	       format_string buf (if cflag then sep else " >>");
-               format_space buf;
-               format_term buf NOParens a;
-               format (i + 1, true, true, b)
-
-         else
-            raise (RefineError ("sequent_print", TermMatchError (seq, "not a sequent")))
+   let rec format_goal goals i len =
+      if i <> len then
+         begin
+            format_string buf (if i = 0 then ">-" else ";");
+            format_space buf;
+            format_term buf NOParens goals.(i);
+            format_goal goals (i + 1) len
+         end
+   in
+   let rec format_hyp hyps i len =
+      if i <> len then
+         let _ =
+            if i <> 0 then
+               format_string buf ";"
+         in
+         let _ =
+            match hyps.(i) with
+               Hypothesis (v, a) ->
+                  format_space buf;
+                  format_string buf v;
+                  format_string buf ". ";
+                  format_term buf NOParens a
+             | Context (v, values) ->
+                  format_space buf;
+                  format_term buf NOParens (mk_so_var_term v values)
+         in
+            format_hyp hyps (i + 1) len
+   in
+   let { sequent_args = args;
+         sequent_hyps = hyps;
+         sequent_goals = goals
+       } = explode_sequent term
    in
       format_szone buf;
       format_pushm buf 0;
       format_string buf "sequent {";
-      format (1, false, false, seq);
+      format_hyp hyps 0 (Array.length hyps);
+      format_goal goals 0 (Array.length goals);
       format_string buf " }";
       format_popm buf;
-      format_ezone buf)
+      format_ezone buf
 
 mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    let format_arg = function
@@ -186,43 +188,49 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
             format_string buf "]";
             format_space buf
    in
-   let rec format (i, cflag, sflag, t) =
-      let lead = (string_of_int i) ^ ". " in
-      let sep = if sflag then "; " else "" in
-      let format_xbreak = if sflag then format_break else format_ibreak in
-	 if is_context_term t then
-            (* This is a context hypothesis *)
-	    let v, subterm, values = dest_context t in
-	       format_xbreak buf lead sep;
-	       format_term buf NOParens (mk_so_var_term v values);
-	       format (i + 1, cflag, true, subterm)
-
-         else if is_hyp_term t then
-            let v, a, b = dest_hyp t in
-               format_xbreak buf lead sep;
-	       format_string buf v;
-	       format_string buf ": ";
-               format_term buf NOParens a;
-               format (i + 1, false, true, b)
-
-         else if t = null_concl then
-            ()
-
-         else if is_concl_term t then
-            let a, b = dest_concl t in
-               format_xbreak buf
-	       (if cflag then "   " else "\159  ")
-	       (if cflag then sep else " \159 ");
-               format_term buf NOParens a;
-               format (i + 1, true, true, b)
-
-         else
-            format_term buf NOParens t
+   let rec format_hyp hyps i len =
+      if i <> len then
+         let lead = (string_of_int (i + 1)) ^ ". " in
+         let _ =
+            if i = 0 then
+               format_ibreak buf lead ""
+            else
+               format_break buf lead "; "
+         in
+         let _ =
+            match hyps.(i) with
+               Context (v, values) ->
+                  (* This is a context hypothesis *)
+                  format_term buf NOParens (mk_so_var_term v values)
+             | Hypothesis (v, a) ->
+                  format_string buf v;
+                  format_string buf ": ";
+                  format_term buf NOParens a
+         in
+            format_hyp hyps (i + 1) len
+   in
+   let rec format_goal goals i len =
+      if i <> len then
+         let a = goals.(i) in
+         let _ =
+            if i = 0 then
+               format_ibreak buf "   " " \159 "
+            else
+               format_break buf "; " "\159 "
+         in
+            format_term buf NOParens a;
+            format_goal goals (i + 1) len
+   in
+   let { sequent_args = args;
+         sequent_hyps = hyps;
+         sequent_goals = goals
+       } = explode_sequent term
    in
       format_szone buf;
       format_pushm buf 0;
-      format_arg (dest_xlist ext);
-      format (1, false, false, seq);
+      format_arg (dest_xlist args);
+      format_hyp hyps 0 (Array.length hyps);
+      format_goal goals 0 (Array.length goals);
       format_popm buf;
       format_ezone buf
 

@@ -61,7 +61,7 @@ let squash_opname = opname_of_term squash_term
  * Is a goal squashed?
  *)
 let is_squash_sequent goal =
-   let _, args = dest_sequent goal in
+   let args = args_of_sequent goal in
       match dest_xlist args with
          [flag] ->
             opname_of_term flag == squash_opname
@@ -69,7 +69,7 @@ let is_squash_sequent goal =
             false
 
 let get_squash_arg goal =
-   let _, args = dest_sequent goal in
+   let args = args_of_sequent goal in
       match dest_xlist args with
          [flag] ->
             flag

@@ -1439,7 +1439,7 @@ let instantiate f world insts =
  * Try to chain through a particular arglist.
  *)
 let try_arglist_normal ({ ext_base = base } as extract) rw just world = function
-   [] -> 
+   [] ->
       ()
  | (arg::args) as all_args ->
       let args' = List.map (function inf -> inf.inf_value) args in
@@ -1937,25 +1937,23 @@ let set_goal extract t =
  *    3. set the goal using sewt_goal
  *)
 let set_msequent extract seq =
-   let rec collect i extract = function
-      hyp :: hyps ->
+   let rec collect i len extract hyps =
+      if i = len then
+         extract
+      else
          let extract =
-            match hyp with
+            match hyps.(i) with
                TermMan.Hypothesis (name, hyp) ->
                   add_hyp extract i name hyp
              | TermMan.Context (name, _) ->
                   add_hyp extract i name context_term
          in
-            collect (i + 1) extract hyps
-    | [] ->
-         extract
+            collect (i + 1) len extract hyps
    in
    let goal, _ = dest_msequent seq in
       match explode_sequent goal with
-         { sequent_hyps = hyps; sequent_goals = [goal] } ->
-            set_goal (collect 0 (del_hyp extract 0) hyps) goal
-       | _ ->
-            raise (RefineError ("Tactic_cache.set_msequent", StringError "conclusion has more than one goal"))
+         { sequent_hyps = hyps; sequent_goals = goals } ->
+            set_goal (collect 0 (Array.length hyps) (del_hyp extract 0) hyps) goals.(0)
 
 (************************************************************************
  * LOOKUP                                                               *

@@ -353,35 +353,32 @@ let rec parse_form table t =
 (*
  * As hyps are parsed, non-arithmetic forms are skipped.
  *)
-let rec parse_hyps table = function
-   hd :: tl ->
-      begin
-         match hd with
-            Hypothesis (_, t)  ->
-               begin
-                  try parse_form table t :: parse_hyps table tl with
-                     RefineError _ ->
-                        (* Some hyps are not formulas *)
-                        parse_hyps table tl
-               end
-          | Context _ ->
-               parse_hyps table tl
-      end
- | [] ->
+let rec parse_hyps table hyps i len =
+   if i = len then
       []
+   else
+      match hyps.(i) with
+         Hypothesis (_, t)  ->
+            begin
+               try parse_form table t :: parse_hyps table hyps (i + 1) len with
+                  RefineError _ ->
+                     (* Some hyps are not formulas *)
+                     parse_hyps table hyps (i + 1) len
+            end
+       | Context _ ->
+            parse_hyps table hyps (i + 1) len
 
 (*
  * As conclusions are parsed, non-arithemetic forms are skipped.
  *)
-let rec parse_goals table = function
-   hd :: tl ->
-      begin
-         try parse_form table hd :: parse_goals table tl with
-            RefineError _ ->
-               parse_goals table tl
-      end
- | [] ->
+let rec parse_goals table goals i len =
+   if i = len then
       []
+   else
+      let hd = goals.(i) in
+         try parse_form table hd :: parse_goals table goals (i + 1) len with
+            RefineError _ ->
+               parse_goals table goals (i + 1) len
 
 (*
  * Collect the atom bindings by enumerating the table.
@@ -423,8 +420,8 @@ let sort_atoms atoms =
 let sequent_of_term t =
    let { sequent_hyps = hyps; sequent_goals = goals } = explode_sequent t in
    let table = { index = 0; table = Hashtbl.create 97 } in
-   let hyps = parse_hyps table hyps in
-   let goals = parse_goals table goals in
+   let hyps = parse_hyps table hyps 0 (Array.length hyps) in
+   let goals = parse_goals table goals 0 (Array.length goals) in
    let table' = { index = table.index; table = Hashtbl.create 97 } in
    let seq =
       { hyps = List.map (linear_form_of_expr_form table') hyps;

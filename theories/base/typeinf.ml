@@ -145,16 +145,18 @@ let typeinf_of_proof p =
    get_typeinf_arg p "typeinf"
 
 let infer_type p t =
-   let rec filter = function
-      Hypothesis (v, t) :: tl ->
-         (v, t) :: filter tl
-    | _ :: tl ->
-         filter tl
-    | [] ->
+   let rec filter hyps i len =
+      if i = len then
          []
+      else
+         match hyps.(i) with
+            Hypothesis (v, t) ->
+               (v, t) :: filter hyps (i + 1) len
+          | _ ->
+               filter hyps (i + 1) len
    in
    let { sequent_hyps = hyps } = Sequent.explode_sequent p in
-   let subst = filter hyps in
+   let subst = filter hyps 0 (Array.length hyps) in
       (get_typeinf_arg p "typeinf") subst t
 
 (*

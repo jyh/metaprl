@@ -356,17 +356,19 @@ let rec intersects vars fv =
 
 let moveToConclVarsT vars p =
    let { sequent_hyps = hyps } = explode_sequent p in
-   let len = List.length hyps in
-   let rec collect i vars indices = function
-      Hypothesis (v, hyp) :: tl ->
-         if List.mem v vars or intersects vars (free_vars hyp) then
-            collect (i + 1) (v :: vars) ((i, v, hyp) :: indices) tl
-         else
-            collect (i + 1) vars indices tl
-    | _ :: tl ->
-         collect (i + 1) vars indices tl
-    | [] ->
+   let len = Array.length hyps in
+   let rec collect i vars indices =
+      if i > len then
          indices
+      else
+         match hyps.(i - 1) with
+            Hypothesis (v, hyp) ->
+               if List.mem v vars or intersects vars (free_vars hyp) then
+                  collect (i + 1) (v :: vars) ((i, v, hyp) :: indices)
+               else
+                  collect (i + 1) vars indices
+          | _ ->
+               collect (i + 1) vars indices
    in
    let rec tac indices goal =
       match indices with
@@ -386,7 +388,7 @@ let moveToConclVarsT vars p =
        | [] ->
             idT
    in
-      tac (collect 1 vars [] hyps) (Sequent.concl p) p
+      tac (collect 1 vars []) (Sequent.concl p) p
 
 let moveToConclT i p =
    let v, _ = nth_hyp p i in
@@ -624,15 +626,15 @@ let assumT i p =
     * This is approximate.  Right now, we look
     * for the last context hyp.
     *)
-   let rec last_match last_con hyp_index = function
-      [] ->
+   let rec last_match last_con hyp_index hyps =
+      if hyp_index > len then
          last_con
-    | h::t ->
-         match h with
+      else
+         match hyps.(hyp_index - 1) with
             Hypothesis _ ->
-               last_match last_con (hyp_index + 1) t
+               last_match last_con (hyp_index + 1) hyps
           | Context _ ->
-               last_match hyp_index (hyp_index + 1) t
+               last_match hyp_index (hyp_index + 1) hyps
    in
    let { sequent_hyps = hyps } = TermMan.explode_sequent assum in
    let index = last_match 1 1 hyps in

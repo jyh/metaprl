@@ -19,6 +19,7 @@ MPFILES := \
    mp_mc_fir_eval \
    mp_mc_deadcode \
    mp_mc_const_elim \
+   mp_mc_inline \
    mp_mc_theory
 
 # Name of main libraries

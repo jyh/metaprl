@@ -58,4 +58,5 @@ include Mp_mc_fir_prog
 include Mp_mc_fir_eval
 include Mp_mc_deadcode
 include Mp_mc_const_elim
+include Mp_mc_inline
 (*! @docoff *)

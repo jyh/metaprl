@@ -40,6 +40,7 @@ open Top_conversionals
 open Mp_mc_fir_eval
 open Mp_mc_deadcode
 open Mp_mc_const_elim
+open Mp_mc_inline
 
 (*
  * This is the outermost rewriter we want to use to rewrite the program.
@@ -156,6 +157,47 @@ let test8 () =
    print_simple_term t;
    print_string "\nWe should be down to 'nothing...\n"
 
+let test9 () =
+   print_string "\n\n*** Beginning test 9...\n\n";
+   let t = << inline{ 'f; nil; letUnop{tyInt; idOp; atomInt{2}; x. 'y} } >> in
+   print_simple_term t;
+   print_string "\n\nApplying firInlineC...\n\n";
+   let t = apply_rewrite firInlineC t in
+   print_simple_term t;
+   print_string "\ninline term should have propogated down\n"
+
+let test10 () =
+   print_string "\n\n*** Beginning test 10...\n\n";
+   let t = << inline{ 'f; nil; letUnop{tyInt; idOp; atomInt{2}; x. 'x} } >> in
+   print_simple_term t;
+   print_string "\n\nApplying firInlineC...\n\n";
+   let t = apply_rewrite firInlineC t in
+   print_simple_term t;
+   print_string "\ninline term should have propogated down\n"
+
+let test11 () =
+   print_string "\n\n*** Beginning test 11...\n\n";
+   let t = <<
+      inline{ tailCall{'q_diff; 'fee; cons{'a1;nil}}; nil;
+         letUnop{ tyInt; idOp; atomEnum{2;1}; x.
+         matchExp{ 'x;
+            cons{ matchCase{ 'lbl1;
+                             int_set{cons{interval{0;0};nil}};
+                             letBinop{ tyInt; plusIntOp;
+                                       atomInt{1}; atomInt{2}; q.
+                                       tailCall{'q; 'fee; cons{'a1;nil}}} };
+            cons{ matchCase{ 'lbl3;
+                             int_set{cons{interval{1;1};nil}};
+                             tailCall{'lbl4; 'foo; cons{'a2;nil}} };
+            nil}}}}}
+   >> in
+   print_simple_term t;
+   print_string "\n\nApplying firInlineC...\n\n";
+   let t = apply_rewrite firInlineC t in
+   print_simple_term t;
+   print_string "\ninline should be gone and ";
+   print_string "one call should be halfway inlined\n"
+
 (*************************************************************************
  * Run tests.
  *************************************************************************)
@@ -168,4 +210,7 @@ let _ =
    test5 ();
    test6 ();
    test7 ();
-   test8 ()
+   test8 ();
+   test9 ();
+   test10 ();
+   test11 ()

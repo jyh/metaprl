@@ -24,7 +24,7 @@ $env = $env->clone(
 my @src =
    qw( term_op fir_base fir_ty fir_exp fir_prog fir_eval
        fir_phobos fir_phobos_exp
-       deadcode const_elim
+       deadcode const_elim inline
        connect_base connect_ty connect_exp connect_prog
        compile );
 

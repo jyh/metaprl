@@ -12,14 +12,18 @@ OCAMLDEPFLAGS := -prl
 # Library files
 MPFILES := \
    mp_mc_base \
-   mp_mc_fir_base \
-   mp_mc_fir_ty \
-   mp_mc_fir_exp \
-   mp_mc_fir_prog \
-   mp_mc_fir_eval \
-   mp_mc_deadcode \
-   mp_mc_const_elim \
    mp_mc_theory
+
+#MPFILES := \
+#   mp_mc_base \
+#   mp_mc_fir_base \
+#   mp_mc_fir_ty \
+#   mp_mc_fir_exp \
+#   mp_mc_fir_prog \
+#   mp_mc_fir_eval \
+#   mp_mc_deadcode \
+#   mp_mc_const_elim \
+#   mp_mc_theory
 
 # Name of main libraries
 MAIN = theory

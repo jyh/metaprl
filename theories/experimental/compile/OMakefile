@@ -59,6 +59,6 @@ Theory($(MPFILES))
 # Clean up
 #
 clean:
-    $(CLEAN)
+    $(CLEAN) *.cph
 
 all: theory$(LIB_SUFFIX)

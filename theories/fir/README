@@ -52,6 +52,9 @@ Notable differences from the actual Mojave FIR:
 -- No term is declared for TyDelayed.  This is intentional, since we
    we do not plan on formalizing type inference in the near future.
 
+-- No term is declared for AtomFun.  I am pretty sure that
+   it is not needed.
+
 -- No terms are declared for debugging info in the FIR.
    This info has no semantic content.
 

@@ -201,17 +201,30 @@ declare neqEqOp{ 'ty }
  * Apart from arithmetic exceptions, such as division by zero, they are
  * functional; the order of atom evaluation does not matter.
  *
+ * The term @tt[atomNil] is the nil value for the given type.
+ * @end[doc]
+ *)
+
+declare atomNil{ 'ty }
+
+(*!
+ * @begin[doc]
+ *
  * The term @tt[atomInt] corresponds to integers of type @hrefterm[tyInt]. The
  * term @tt[atomEnum] corresponds to constants of type @hrefterm[tyEnum].  The
- * term @tt[atomRawInt] is an integer of type @hrefterm[tyRawInt]. The
- * parameters of these terms specify the relevant parameters of their
- * respective types, and their subterms specify their values.
+ * term @tt[atomRawInt] is an integer of type @hrefterm[tyRawInt]. The term
+ * @tt[atomFloat] is a floating-point value of type @hrefterm[tyFloat].
+ * Since @MetaPRL does not support floating-point values, the value
+ * is encoded in the string parameter.  The parameters of these terms specify
+ * the relevant parameters of their respective types, and their subterms
+ * specify their values.
  * @end[doc]
  *)
 
 declare atomInt{ 'num }
 declare atomEnum[bound:n]{ 'num }
 declare atomRawInt[precision:n, sign:s]{ 'num }
+declare atomFloat[precision:n, value:s]
 
 (*!
  * @begin[doc]
@@ -221,6 +234,39 @@ declare atomRawInt[precision:n, sign:s]{ 'num }
  *)
 
 declare atomVar{ 'var }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[atomLabel] is an offset of @tt[num] into the subfield
+ * @tt[subfield] of field @tt[field] of frame @tt[frame].  The offset
+ * is treated as a signed, 32-bit integer.
+ * @end[doc]
+ *)
+
+declare atomLabel{ 'frame; 'field; 'subfield; 'num }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[atomSizeof] is the size of the frames in the list
+ * @tt[ty_var_list] plus a constant @tt[num].  The constant is treated
+ * as a signed, 32-bit integer.
+ * @end[doc]
+ *)
+
+declare atomSizeof{ 'ty_var_list; 'num }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[atomConst] is a constant constructor used to construct
+ * a value for case @tt[num] of the union given by @tt[ty_var].  The
+ * type of the atom is given by @tt[ty].
+ * @end[doc]
+ *)
+
+declare atomConst{ 'ty; 'ty_var; 'num }
 
 (*!
  * @begin[doc]
@@ -444,6 +490,10 @@ dform plusIntOp_df : except_mode[src] ::
  * Atoms.
  *)
 
+dform atomNil_df : except_mode[src] ::
+   atomNil{ 'ty } =
+   bf["nil"] `"(" slot{'ty} `")"
+
 dform atomInt_df : except_mode[src] ::
    atomInt{ 'num } =
    bf["int"] `"(" slot{'num} `")"
@@ -467,9 +517,26 @@ dform atomRawInt_df3 : except_mode[src] ::
    bf["rawint"] sub{slot[precision:n]} sup{bf["unsigned"]}
       `"(" slot{'num} `")"
 
+dform atomFloat_df : except_mode[src] ::
+   atomFloat[precision:n, value:s] =
+   bf["float"] sub{slot[precision:n]} `"(" slot[value:s] `")"
+
 dform atomVar_df : except_mode[src] ::
    atomVar{ 'var } =
    bf["var"] `"(" slot{'var} `")"
+
+dform atomLabel_df : except_mode[src] ::
+   atomLabel{ 'frame; 'field; 'subfield; 'num } =
+   bf["label"] `"(" slot{'frame} `"," slot{'field} `","
+   slot{'subfield} `"," slot{'num} `")"
+
+dform atomSizeof_df : except_mode[src] ::
+   atomSizeof{ 'ty_var_list; 'num } =
+   bf["sizeof"] `"(" slot{'ty_var_list} `"," slot{'num} `")"
+
+dform atomConst_df : except_mode[src] ::
+   atomConst{ 'ty; 'ty_var; 'num } =
+   bf["const"] `"(" slot{'ty} `"," slot{'ty_var} `"," slot{'num} `")"
 
 dform atomTyApply_df : except_mode[src] ::
    atomTyApply{ 'atom; 'ty; 'ty_list } =

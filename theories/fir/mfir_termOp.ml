@@ -962,6 +962,12 @@ let is_neqEqOp_term = is_1_dep0_term neqEqOp_opname
 let mk_neqEqOp_term = mk_1_dep0_term neqEqOp_opname
 let dest_neqEqOp_term = dest_1_dep0_term neqEqOp_opname
 
+let atomNil_term = << atomNil{ 'ty } >>
+let atomNil_opname = opname_of_term atomNil_term
+let is_atomNil_term = is_1_dep0_term atomNil_opname
+let mk_atomNil_term = mk_1_dep0_term atomNil_opname
+let dest_atomNil_term = dest_1_dep0_term atomNil_opname
+
 let atomInt_term = << atomInt{ 'num } >>
 let atomInt_opname = opname_of_term atomInt_term
 let is_atomInt_term = is_1_dep0_term atomInt_opname
@@ -980,11 +986,35 @@ let is_atomRawInt_term = is_num_str_1_dep0_term atomRawInt_opname
 let mk_atomRawInt_term = mk_num_str_1_dep0_term atomRawInt_opname
 let dest_atomRawInt_term = dest_num_str_1_dep0_term atomRawInt_opname
 
+let atomFloat_term = << atomFloat[precision:n, value:s] >>
+let atomFloat_opname = opname_of_term atomFloat_term
+let is_atomFloat_term = is_num_str_0_dep0_term atomFloat_opname
+let mk_atomFloat_term = mk_num_str_0_dep0_term atomFloat_opname
+let dest_atomFloat_term = dest_num_str_0_dep0_term atomFloat_opname
+
 let atomVar_term = << atomVar{ 'var } >>
 let atomVar_opname = opname_of_term atomVar_term
 let is_atomVar_term = is_1_dep0_term atomVar_opname
 let mk_atomVar_term = mk_1_dep0_term atomVar_opname
 let dest_atomVar_term = dest_1_dep0_term atomVar_opname
+
+let atomLabel_term = << atomLabel{ 'frame; 'field; 'subfield; 'num } >>
+let atomLabel_opname = opname_of_term atomLabel_term
+let is_atomLabel_term = is_4_dep0_term atomLabel_opname
+let mk_atomLabel_term = mk_4_dep0_term atomLabel_opname
+let dest_atomLabel_term = dest_4_dep0_term atomLabel_opname
+
+let atomSizeof_term = << atomSizeof{ 'ty_var_list; 'num } >>
+let atomSizeof_opname = opname_of_term atomSizeof_term
+let is_atomSizeof_term = is_2_dep0_term atomSizeof_opname
+let mk_atomSizeof_term = mk_2_dep0_term atomSizeof_opname
+let dest_atomSizeof_term = dest_2_dep0_term atomSizeof_opname
+
+let atomConst_term = << atomConst{ 'ty; 'ty_var; 'num } >>
+let atomConst_opname = opname_of_term atomConst_term
+let is_atomConst_term = is_3_dep0_term atomConst_opname
+let mk_atomConst_term = mk_3_dep0_term atomConst_opname
+let dest_atomConst_term = dest_3_dep0_term atomConst_opname
 
 let atomTyApply_term = << atomTyApply{ 'atom; 'ty; 'ty_list } >>
 let atomTyApply_opname = opname_of_term atomTyApply_term

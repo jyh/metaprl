@@ -797,6 +797,11 @@ val is_neqEqOp_term : term -> bool
 val mk_neqEqOp_term : term -> term
 val dest_neqEqOp_term : term -> term
 
+val atomNil_term : term
+val is_atomNil_term : term -> bool
+val mk_atomNil_term : term -> term
+val dest_atomNil_term : term -> term
+
 val atomInt_term : term
 val is_atomInt_term : term -> bool
 val mk_atomInt_term : term -> term
@@ -812,10 +817,30 @@ val is_atomRawInt_term : term -> bool
 val mk_atomRawInt_term : Mp_num.num -> string -> term -> term
 val dest_atomRawInt_term : term -> Mp_num.num * string * term
 
+val atomFloat_term : term
+val is_atomFloat_term : term -> bool
+val mk_atomFloat_term : Mp_num.num -> string -> term
+val dest_atomFloat_term : term -> Mp_num.num * string
+
 val atomVar_term : term
 val is_atomVar_term : term -> bool
 val mk_atomVar_term : term -> term
 val dest_atomVar_term : term -> term
+
+val atomLabel_term : term
+val is_atomLabel_term : term -> bool
+val mk_atomLabel_term : term -> term -> term -> term -> term
+val dest_atomLabel_term : term -> term * term * term * term
+
+val atomSizeof_term : term
+val is_atomSizeof_term : term -> bool
+val mk_atomSizeof_term : term -> term -> term
+val dest_atomSizeof_term : term -> term * term
+
+val atomConst_term : term
+val is_atomConst_term : term -> bool
+val mk_atomConst_term : term -> term -> term -> term
+val dest_atomConst_term : term -> term * term * term
 
 val atomTyApply_term : term
 val is_atomTyApply_term : term -> bool

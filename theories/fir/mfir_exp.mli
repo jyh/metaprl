@@ -172,13 +172,23 @@ declare neqEqOp{ 'ty }
  * Atoms.
  *)
 
+declare atomNil{ 'ty }
+
 declare atomInt{ 'num }
 declare atomEnum[bound:n]{ 'num }
 declare atomRawInt[precision:n, sign:s]{ 'num }
+declare atomFloat[precision:n, value:s]
+
 declare atomVar{ 'var }
+
+declare atomLabel{ 'frame; 'field; 'subfield; 'num }
+declare atomSizeof{ 'ty_var_list; 'num }
+declare atomConst{ 'ty; 'ty_var; 'num }
+
 declare atomTyApply{ 'atom; 'ty; 'ty_list }
 declare atomTyPack{ 'var; 'ty; 'ty_list }
 declare atomTyUnpack{ 'var }
+
 declare atomUnop{ 'unop; 'atom }
 declare atomBinop{ 'binop; 'atom1; 'atom2 }
 

@@ -20,18 +20,14 @@ at the end, things that might be considered bugs, but really aren't.
    These should go in Mfir_exp.  (They depend on subops.)
 
 -- No term is declared for the binary operators plusPointerOp.
-   It should go in Mfir_exp.
-
--- No terms are declared for the following atoms:
-      atomNil              atomSizeOf
-      atomConst            atomFun
-      atomFloat
-   These should go in Mfir_exp.
+   It should go in Mfir_exp.  (It depends on subops.)
 
 
-Things that might look like bugs, but really aren't:
+Things that might look like bugs, but really aren't
+(see the README for further information):
 
--- The term tyDelayed is not declared.  See the README for why this is.
+-- The term tyDelayed is not declared.
+
+-- The term atomFun is declared.
 
 -- No terms for debugging info in the FIR are declared.
-   See the README for why this is.

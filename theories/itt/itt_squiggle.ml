@@ -176,7 +176,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive squiggleSym :
+interactive squiggleSym {| nth_hyp |} :
    sequent { <H> >- 's ~ 't } -->
    sequent { <H> >- 't ~ 's }
 

@@ -43,7 +43,7 @@ doc <:doc<
    @end[license]
 >>
 
-open Dtactic
+open Basic_tactics
 
 doc <:doc<
    @begin[doc]
@@ -92,7 +92,7 @@ prim base_univ {| intro [] |} :
 interactive base_wf {| intro [] |} :
    sequent { <H> >- base Type }
 
-prim base_sqeq :
+prim base_sqeq {| nth_hyp |} :
    sequent { <H> >- esquash {'x = 'y in base} } -->
    sequent { <H> >- ('x ~ 'y) } = it
 

@@ -378,7 +378,7 @@ doc <:doc<
    @end[doc]
 >>
 
-prim int_sqequal :
+prim int_sqequal {| nth_hyp |} :
    sequent { <H> >- 'a = 'b in int } -->
    sequent { <H> >- 'a ~ 'b } = it
 
@@ -490,7 +490,7 @@ interactive eq_int_assert_elim {| elim [ThinOption thinT] |} 'H :
    [wf]sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]> >- 'b in int} -->
    sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J['x]> >- 'C['x]}
 
-prim beq_int_is_true :
+prim beq_int_is_true {| nth_hyp |} :
    sequent { <H> >- 'a = 'b in int } -->
    sequent { <H> >- beq_int{'a; 'b} ~ btrue } = it
 
@@ -812,7 +812,7 @@ doc <:doc<
 
    @end[doc]
 >>
-prim add_Id :
+prim add_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a +@ 0) ~ 'a } = it
 
@@ -908,7 +908,7 @@ doc <:doc<
 
    @end[doc]
 >>
-prim minus_add_inverse :
+prim minus_add_inverse {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
@@ -939,7 +939,7 @@ interactive minus_add_Distrib :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- (-('a +@ 'b)) ~ ((-'a) +@ (-'b)) }
 
-interactive minus_minus_reduce :
+interactive minus_minus_reduce {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (-(-'a)) ~ 'a }
 

@@ -576,7 +576,7 @@ doc <:doc<
 	@end[doc]
 >>
 
-interactive add_rat_Id :
+interactive add_rat_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
    sequent { <H> >- add_rat{'a; rat{0; 1}} ~ 'a }
 
@@ -668,7 +668,7 @@ interactive_rw mul_rat_add_Distrib3C {| arith_unfold |} :
    ('c in rationals) -->
    mul_rat{add_rat{'a; 'b}; 'c} <--> add_rat{mul_rat{'a; 'c}; mul_rat{'b; 'c}}
 
-interactive mul_rat_Id :
+interactive mul_rat_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
    sequent { <H> >- mul_rat{rat{1; 1}; 'a} ~ 'a }
 
@@ -678,7 +678,7 @@ interactive_rw mul_rat_Id_rw {| reduce |} :
 
 let mul_rat_IdC = mul_rat_Id_rw
 
-interactive mul_rat_Id2 :
+interactive mul_rat_Id2 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
    sequent { <H> >- mul_rat{'a; rat{1; 1}} ~ 'a }
 
@@ -688,7 +688,7 @@ interactive_rw mul_rat_Id2_rw {| reduce |} :
 
 let mul_rat_Id2C = mul_rat_Id2_rw
 
-interactive mul_rat_Id3 :
+interactive mul_rat_Id3 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
    sequent { <H> >- 'a ~ mul_rat{rat{1; 1}; 'a} }
 
@@ -698,7 +698,7 @@ interactive_rw mul_rat_Id3_rw :
 
 let mul_rat_Id3C = mul_rat_Id3_rw
 
-interactive mul_rat_Zero :
+interactive mul_rat_Zero {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
    sequent { <H> >- mul_rat{rat{0; 'd}; 'a} ~ rat{0; 1} }
 
@@ -708,7 +708,7 @@ interactive_rw mul_rat_Zero_rw {| reduce |} :
 
 let mul_rat_ZeroC = mul_rat_Zero_rw
 
-interactive mul_rat_Zero2 :
+interactive mul_rat_Zero2 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
    sequent { <H> >- mul_rat{'a; rat{0; 'd}} ~ rat{0; 1} }
 

@@ -101,7 +101,7 @@ prim bterm_memberEquality {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'x<||> in BTerm } =
    it
 
-prim btermSquiddle {| intro [AutoMustComplete] |} :
+prim btermSquiddle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- 'b1 ~ 'b2 } =
    it

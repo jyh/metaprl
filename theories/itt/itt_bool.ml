@@ -53,18 +53,7 @@ extends Itt_logic
 extends Itt_decidable
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Var
-
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_equal
 open Itt_squash
@@ -310,7 +299,7 @@ doc <:doc<
    $@inl{@it}$ ($@true$) and $@inr{@it}$ ($@false$).
    @end[doc]
 >>
-interactive boolSqequal :
+interactive boolSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in bool } -->
    sequent { <H> >- 'x ~ 'y }
 doc <:doc< @docoff >>

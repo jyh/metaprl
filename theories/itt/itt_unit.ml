@@ -54,11 +54,8 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 
-open Dtactic
-
+open Basic_tactics
 open Itt_equal
 open Itt_struct
 open Itt_squash
@@ -152,7 +149,7 @@ doc <:doc<
    Two terms in <<unit>> are always computationally equivalent.
    @end[doc]
 >>
-prim unitSqequal :
+prim unitSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in unit } -->
    sequent { <H> >- 'x ~ 'y } = it
 

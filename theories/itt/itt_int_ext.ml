@@ -645,7 +645,7 @@ interactive_rw mul_add_Distrib3C {| arith_unfold |} :
    ('c in int) -->
    (('a +@ 'b) *@ 'c) <--> (('a *@ 'c) +@ ('b *@ 'c))
 
-prim mul_Id :
+prim mul_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a } = it
 
@@ -655,7 +655,7 @@ interactive_rw mul_Id_rw {| reduce |} :
 
 let mul_IdC = mul_Id_rw
 
-interactive mul_Id2 :
+interactive mul_Id2 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a *@ 1) ~ 'a }
 
@@ -665,7 +665,7 @@ interactive_rw mul_Id2_rw {| reduce |} :
 
 let mul_Id2C = mul_Id2_rw
 
-interactive mul_Id3 :
+interactive mul_Id3 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- 'a ~ (1 *@ 'a) }
 
@@ -675,7 +675,7 @@ interactive_rw mul_Id3_rw :
 
 let mul_Id3C = mul_Id3_rw
 
-prim mul_Zero :
+prim mul_Zero {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (0 *@ 'a) ~ 0 } = it
 
@@ -685,7 +685,7 @@ interactive_rw mul_Zero_rw {| reduce |} :
 
 let mul_ZeroC = mul_Zero_rw
 
-interactive mul_Zero2 :
+interactive mul_Zero2 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a *@ 0) ~ 0 }
 

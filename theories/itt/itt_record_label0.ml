@@ -5,10 +5,8 @@ extends Itt_struct2
 extends Itt_struct3
 extends Itt_nequal
 
+open Basic_tactics
 open Itt_struct
-open Dtactic
-open Top_tacticals
-open Top_conversionals
 
 (******************)
 (*  Defenitions   *)
@@ -59,7 +57,7 @@ interactive labelBackInduction 'n bind{x.'C['x]} :
 
 (**** equality ****)
 
-interactive label_sqequal :
+interactive label_sqequal {| nth_hyp |} :
    sequent{ <H> >-'n = 'm  in label} -->
    sequent{ <H> >- 'n ~ 'm}
 

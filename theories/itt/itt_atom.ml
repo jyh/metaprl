@@ -55,11 +55,8 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner
-open Refiner.Refiner.Term
 
-open Dtactic
-
+open Basic_tactics
 open Itt_equal
 
 (*
@@ -162,7 +159,7 @@ doc <:doc<
    are equal.
    @end[doc]
 >>
-prim atomSqequal :
+prim atomSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in atom } -->
    sequent { <H> >- 'x ~ 'y } =
    it

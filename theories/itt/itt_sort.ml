@@ -54,37 +54,15 @@ open Itt_list
  ************************************************************************)
 
 (*
- * Type for partial order.
- *)
-declare partial_order{'A; 'lt}
-declare compare_lt{'lt; 'a; 'b}
-
-(*
- * Definition of being sorted.
- *)
-declare sorted{'l; 'lt}
-declare bounded{'u; 'l; 'lt}
-
-(*
- * Sorting algorithm.
- *)
-declare insert{'u; 'l; 'lt}
-declare sort{'l; 'lt}
-
-(************************************************************************
- * DEFINITIONS                                                          *
- ************************************************************************)
-
-(*
  * Comparisons.
  *)
-prim_rw unfold_compare_lt : compare_lt{'lt; 'a; 'b} <-->
+define unfold_compare_lt : compare_lt{'lt; 'a; 'b} <-->
    "assert"{('lt 'a 'b)}
 
 (*
- * Definition of partial order.
+ * Type for partial order.
  *)
-prim_rw unfold_partial_order : partial_order{'A; 'lt} <-->
+define unfold_partial_order : partial_order{'A; 'lt} <-->
    ((all a: 'A. not{compare_lt{'lt; 'a; 'a}})
     & (all a: 'A. all b: 'A. (compare_lt{'lt; 'a; 'b} => not{compare_lt{'lt; 'b; 'a}}))
     & (all a: 'A. all b: 'A. all c: 'A. (compare_lt{'lt; 'a; 'b} => compare_lt{'lt; 'b; 'c} => compare_lt{'lt; 'a; 'c})))
@@ -92,21 +70,27 @@ prim_rw unfold_partial_order : partial_order{'A; 'lt} <-->
 (*
  * Definition of a sorted list.
  *)
-prim_rw unfold_bounded : bounded{'u1; 'l; 'lt} <-->
+
+define unfold_bounded : bounded{'u1; 'l; 'lt} <-->
    list_ind{'l; ."true"; u2, v, g. "and"{."not"{compare_lt{'lt; 'u2; 'u1}}; 'g}}
 
-prim_rw unfold_sorted : sorted{'l; 'lt} <-->
+define unfold_sorted : sorted{'l; 'lt} <-->
    list_ind{'l; ."true"; u, v, g. "and"{bounded{'u; 'v; 'lt}; 'g}}
 
+
 (*
- * Define it.
+ * Sorting algorithm.
  *)
-prim_rw unfold_insert : insert{'u1; 'l; 'lt} <-->
+define unfold_insert : insert{'u1; 'l; 'lt} <-->
    list_ind{'l; cons{'u1; nil}; u2, v, g.
       ifthenelse{('lt 'u1 'u2); cons{'u1; cons{'u2; 'v}}; cons{'u2; 'g}}}
 
-prim_rw unfold_sort : sort{'l; 'lt} <-->
+define unfold_sort : sort{'l; 'lt} <-->
    list_ind{'l; nil; u, v, g. insert{'u; 'g; 'lt}}
+
+(************************************************************************
+ * DEFINITIONS                                                          *
+ ************************************************************************)
 
 (*
  * Folding.

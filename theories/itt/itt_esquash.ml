@@ -45,8 +45,13 @@ open Itt_equal
 open Itt_void
 open Itt_unit
 
-declare esquash_bool{'P}
-declare esquash{'P}
+(*
+ * Definition.
+ *)
+define unfold_esquash_bool : esquash_bool{'P} <-->
+   (quot b1, b2 : bool // (('b1 = 'b2 in bool) or 'P))
+
+define unfold_esquash : esquash{'P} <--> (btrue = bfalse in esquash_bool{'P})
 
 prec prec_esquash
 
@@ -55,14 +60,6 @@ dform esquash_bool : except_mode[src] :: esquash_bool{'P} =
 
 dform esquash_df : parens :: "prec"[prec_esquash] :: except_mode[src] :: esquash{'P} =
    Nuprl_font!downarrow slot{'P}
-
-(*
- * Definition.
- *)
-prim_rw unfold_esquash_bool : esquash_bool{'P} <-->
-   (quot b1, b2 : bool // (('b1 = 'b2 in bool) or 'P))
-
-prim_rw unfold_esquash : esquash{'P} <--> (btrue = bfalse in esquash_bool{'P})
 
 let fold_esquash_bool = makeFoldC << esquash_bool{'P} >> unfold_esquash_bool
 let fold_esquash = makeFoldC << esquash{'P} >> unfold_esquash

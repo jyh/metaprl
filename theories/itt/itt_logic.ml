@@ -88,33 +88,19 @@ let debug_auto =
  * REWRITES								*
  ************************************************************************)
 
-declare "prop"[i:l]
+define unfold_prop : "prop"[i:l] <--> "univ"[i:l]
 
-declare "true"
-declare "false"
-declare "not"{'a}
-declare "iff"{'a; 'b}
-declare "implies"{'a; 'b}
-declare "and"{'a; 'b}
-declare "or"{'a; 'b}
-declare "cand"{'a; 'b}
-declare "cor"{'a; 'b}
-declare "all"{'A; x. 'B['x]}
-declare "exists"{'A; x. 'B['x]}
-
-prim_rw unfold_prop : "prop"[i:l] <--> "univ"[i:l]
-
-prim_rw unfold_true : "true" <--> unit
-prim_rw unfold_false : "false" <--> void
-prim_rw unfold_not : "not"{'a} <--> ('a -> void)
-prim_rw unfold_implies : ('a => 'b) <--> ('a -> 'b)
-prim_rw unfold_iff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
-prim_rw unfold_and : ('a & 'b) <--> ('a * 'b)
-prim_rw unfold_or : ('a or 'b) <--> ('a + 'b)
-prim_rw unfold_cand : "cand"{'a; 'b} <--> ('a & 'b)
-prim_rw unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
-prim_rw unfold_all : (all x: 'A. 'B['x]) <--> (x:'A -> 'B['x])
-prim_rw unfold_exists : (exst x: 'A. 'B['x]) <--> (x:'A * 'B['x])
+define unfold_true : "true" <--> unit
+define unfold_false : "false" <--> void
+define unfold_not : "not"{'a} <--> ('a -> void)
+define unfold_implies : "implies"{'a; 'b} <--> ('a -> 'b)
+define unfold_and : "and"{'a; 'b} <--> 'a * 'b
+define unfold_or : "or"{'a; 'b} <--> 'a + 'b
+define unfold_iff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
+define unfold_cand : "cand"{'a; 'b} <--> ('a & 'b)
+define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
+define unfold_all : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
+define unfold_exists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
 
 let fold_true    = makeFoldC << "true" >> unfold_true
 let fold_false   = makeFoldC << "false" >> unfold_false

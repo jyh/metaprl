@@ -48,8 +48,8 @@ declare prod{'A; x. 'B['x]}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
 
-declare fst{'e}
-declare snd{'e}
+define unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
+define unfoldSnd : snd{'e} <--> spread{'e; u, v. 'v}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -67,9 +67,6 @@ prec prec_spread
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
 rewrite reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
-
-rewrite unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
-rewrite unfoldSnd : fst{'e} <--> spread{'e; u, v. 'v}
 
 rewrite reduceFst : fst{pair{'a; 'b}} <--> 'a
 rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b

@@ -76,8 +76,8 @@ let _ =
 declare prod{'A; x. 'B['x]}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
-declare fst{'e}
-declare snd{'e}
+define unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
+define unfoldSnd : snd{'e} <--> spread{'e; u, v. 'v}
 
 let dprod_term = << x: 'A * 'B['x] >>
 let dprod_opname = opname_of_term dprod_term
@@ -112,9 +112,6 @@ let mk_spread_term = mk_dep0_dep2_term spread_opname
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
 prim_rw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
-
-prim_rw unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
-prim_rw unfoldSnd : fst{'e} <--> spread{'e; u, v. 'v}
 
 prim_rw reduceFst : fst{pair{'a; 'b}} <--> 'a
 prim_rw reduceSnd : snd{pair{'a; 'b}} <--> 'b

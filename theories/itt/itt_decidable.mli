@@ -36,18 +36,17 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Refiner.Refiner.TermType
 
-declare decidable{'p}
-rewrite unfold_decidable : decidable{'p} <--> ('p or not {'p})
+define unfold_decidable : decidable{'p} <--> ('p or not {'p})
 
 type decide_data
 
 resource (term * tactic, tactic, decide_data, Tactic.pre_tactic ) decide_resource
 
-(* Works only on sequents of form "H |- Decidable(P)", tries to prove 
+(* Works only on sequents of form "H |- Decidable(P)", tries to prove
    that P is in fact decidable using rules added to decide_resource *)
 topval prove_decidableT : tactic
 
-(* "decideT P" asserts decidability of P generating 3 subgoals - 
+(* "decideT P" asserts decidability of P generating 3 subgoals -
    Decidable (P); case P; case not(P)
    that tries to eliminate the first subgoal using prove_decidableT *)
 topval decideT : term -> tactic

@@ -33,12 +33,10 @@
 include Itt_isect
 include Itt_bool
 
-declare bisect{'A; 'B}
+define unfold_bisect : bisect{'A; 'B} <-->
+                          "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
 
 prec prec_bisect
-
-rewrite unfold_bisect : bisect{'A; 'B} <-->
-                          "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
 
 (*
  * -*-

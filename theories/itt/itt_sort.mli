@@ -49,12 +49,12 @@ declare compare_lt{'lt; 'a; 'b}
  * Definition of being sorted.
  *)
 declare sorted{'l; 'lt}
-declare bounded{'u; 'l; 'lt}
+declare bounded{'u1; 'l; 'lt}
 
 (*
  * Sorting algorithm.
  *)
-declare insert{'u; 'l; 'lt}
+declare insert{'u1; 'l; 'lt}
 declare sort{'l; 'lt}
 
 (************************************************************************

@@ -57,17 +57,51 @@ open Itt_dprod
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare is_nil{'l}
-declare append{'l1; 'l2}
-declare ball2{'l1; 'l2; x, y.'b['x; 'y]}
-declare assoc{'eq; 'x; 'l; y. 'b['y]; 'z}
-declare rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z}
-declare map{'f; 'l}
-declare fold_left{'f; 'v; 'l}
-declare nth{'l; 'i}
-declare replace_nth{'l; 'i; 'v}
-declare length{'l}
-declare rev{'l}
+define unfold_is_nil :
+   is_nil{'l} <--> list_ind{'l; btrue; h, t, g. bfalse}
+
+define unfold_append :
+   append{'l1; 'l2} <-->
+      list_ind{'l1; 'l2; h, t, g. 'h :: 'g}
+
+define unfold_ball2 :
+   ball2{'l1; 'l2; x, y. 'b['x; 'y]} <-->
+      (list_ind{'l1; lambda{z. list_ind{'z; btrue; h, t, g. bfalse}};
+                     h1, t1, g1. lambda{z. list_ind{'z; bfalse;
+                     h2, t2, g2. band{'b['h1; 'h2]; .'g1 't2}}}} 'l2)
+
+define unfold_assoc :
+   assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
+      list_ind{'l; 'z; h, t, g.
+         spread{'h; u, v.
+            ifthenelse{.'eq 'u 'x; 'b['v]; 'g}}}
+
+define unfold_rev_assoc :
+   rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
+      list_ind{'l; 'z; h, t, g.
+         spread{'h; u, v.
+            ifthenelse{.'eq 'v 'x; 'b['u]; 'g}}}
+
+define unfold_map : map{'f; 'l} <-->
+   list_ind{'l; nil; h, t, g. cons{.'f 'h; 'g}}
+
+define unfold_fold_left :
+   fold_left{'f; 'v; 'l} <-->
+      (list_ind{'l; lambda{v. 'v}; h, t, g. lambda{v. 'g ('f 'h 'v)}} 'v)
+
+define unfold_length :
+   length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
+
+define unfold_nth :
+   nth{'l; 'i} <-->
+      (list_ind{'l; it; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; 'u; .'g ('j -@ 1)}}} 'i)
+
+define unfold_replace_nth :
+   replace_nth{'l; 'i; 't} <-->
+      (list_ind{'l; nil; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; cons{'t; 'v}; cons{'u; .'g ('j -@ 1)}}}} 'i)
+
+define unfold_rev : rev{'l} <-->
+   list_ind{'l; nil; u, v, g. append{'g; cons{'u; nil} }}
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -130,9 +164,6 @@ dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
 (*
  * Is_nil test.
  *)
-prim_rw unfold_is_nil :
-   is_nil{'l} <--> list_ind{'l; btrue; h, t, g. bfalse}
-
 let fold_is_nil = makeFoldC << is_nil{'l} >> unfold_is_nil
 
 interactive_rw reduce_is_nil_nil : is_nil{nil} <--> btrue
@@ -142,10 +173,6 @@ interactive_rw reduce_is_nil_cons : is_nil{cons{'h; 't}} <--> bfalse
 (*
  * Append two lists.
  *)
-prim_rw unfold_append :
-   append{'l1; 'l2} <-->
-      list_ind{'l1; 'l2; h, t, g. 'h :: 'g}
-
 let fold_append = makeFoldC << append{'l1; 'l2} >> unfold_append
 
 interactive_rw reduce_append_nil : append{nil; 'l2} <--> 'l2
@@ -155,12 +182,6 @@ interactive_rw reduce_append_cons : append{cons{'x; 'l1}; 'l2} <--> cons{'x; app
 (*
  * Boolean universal quanitifier.
  *)
-prim_rw unfold_ball2 :
-   ball2{'l1; 'l2; x, y. 'b['x; 'y]} <-->
-      (list_ind{'l1; lambda{z. list_ind{'z; btrue; h, t, g. bfalse}};
-                     h1, t1, g1. lambda{z. list_ind{'z; bfalse;
-                     h2, t2, g2. band{'b['h1; 'h2]; .'g1 't2}}}} 'l2)
-
 let fold_ball2 = makeFoldC << ball2{'l1; 'l2; x, y. 'b['x; 'y]} >> unfold_ball2
 
 interactive_rw reduce_ball2_nil_nil :
@@ -179,12 +200,6 @@ interactive_rw reduce_ball2_cons_cons :
 (*
  * Association lists.
  *)
-prim_rw unfold_assoc :
-   assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
-      list_ind{'l; 'z; h, t, g.
-         spread{'h; u, v.
-            ifthenelse{.'eq 'u 'x; 'b['v]; 'g}}}
-
 let fold_assoc = makeFoldC << assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_assoc
 
 interactive_rw reduce_assoc_nil :
@@ -193,12 +208,6 @@ interactive_rw reduce_assoc_nil :
 interactive_rw reduce_assoc_cons :
    assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} <-->
       ifthenelse{.'eq 'u 'x; 'b['v]; assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
-
-prim_rw unfold_rev_assoc :
-   rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
-      list_ind{'l; 'z; h, t, g.
-         spread{'h; u, v.
-            ifthenelse{.'eq 'v 'x; 'b['u]; 'g}}}
 
 let fold_rev_assoc = makeFoldC << rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_rev_assoc
 
@@ -212,9 +221,6 @@ interactive_rw reduce_rev_assoc_cons :
 (*
  * Maps.
  *)
-prim_rw unfold_map : map{'f; 'l} <-->
-   list_ind{'l; nil; h, t, g. cons{.'f 'h; 'g}}
-
 let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
 
 interactive_rw reduce_map_nil :
@@ -226,10 +232,6 @@ interactive_rw reduce_map_cons :
 (*
  * Fold left.
  *)
-prim_rw unfold_fold_left :
-   fold_left{'f; 'v; 'l} <-->
-      (list_ind{'l; lambda{v. 'v}; h, t, g. lambda{v. 'g ('f 'h 'v)}} 'v)
-
 let fold_fold_left = makeFoldC << fold_left{'f; 'v; 'l} >> unfold_fold_left
 
 interactive_rw reduce_fold_left_nil :
@@ -242,36 +244,22 @@ interactive_rw reduce_fold_left_cons :
 (*
  * Nth element.
  *)
-prim_rw unfold_length :
-   length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
-
 let fold_length = makeFoldC << length{'l} >> unfold_length
 
 interactive_rw reduce_length_nil : length{nil} <--> 0
 
 interactive_rw reduce_length_cons : length{cons{'u; 'v}} <--> (length{'v} +@ 1)
 
-prim_rw unfold_nth :
-   nth{'l; 'i} <-->
-      (list_ind{'l; it; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; 'u; .'g ('j -@ 1)}}} 'i)
-
 let fold_nth = makeFoldC << nth{'l; 'i} >> unfold_nth
 
 interactive_rw reduce_nth_cons :
    nth{cons{'u; 'v}; 'i} <--> ifthenelse{eq_int{'i; 0}; 'u; nth{'v; .'i -@ 1}}
-
-prim_rw unfold_replace_nth :
-   replace_nth{'l; 'i; 't} <-->
-      (list_ind{'l; nil; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; cons{'t; 'v}; cons{'u; .'g ('j -@ 1)}}}} 'i)
 
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
 
 interactive_rw reduce_replace_nth_cons :
    replace_nth{cons{'u; 'v}; 'i; 't} <-->
       ifthenelse{eq_int{'i; 0}; cons{'t; 'v}; cons{'u; replace_nth{'v; .'i -@ 1; 't}}}
-
-prim_rw unfold_rev : rev{'l} <-->
-   list_ind{'l; nil; u, v, g. append{'g; cons{'u; nil} }}
 
 let fold_rev = makeFoldC << rev{'l} >> unfold_rev
 

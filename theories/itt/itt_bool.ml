@@ -60,34 +60,22 @@ open Itt_struct
  * TERMS                                                                *
  ************************************************************************)
 
-declare "bool"
-declare "btrue"
-declare "bfalse"
-declare bor{'a; 'b}
-declare band{'a; 'b}
-declare bimplies{'a; 'b}
-declare bnot{'a; 'b}
-
-declare "assert"{'t}
-
-declare ifthenelse{'e1; 'e2; 'e3}
-
 (*
  * Definition of bool.
  *)
-prim_rw unfold_bool : bool <--> (unit + unit)
-prim_rw unfold_btrue : btrue <--> inl{it}
-prim_rw unfold_bfalse : bfalse <--> inr{it}
+define unfold_bool : bool <--> (unit + unit)
+define unfold_btrue : btrue <--> inl{it}
+define unfold_bfalse : bfalse <--> inr{it}
 
 (*
  * Ifthenelse primrws.
  *)
-prim_rw unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y. 'e2}
-prim_rw unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
-prim_rw unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
-prim_rw unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
-prim_rw unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
-prim_rw unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
+define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y. 'e2}
+define unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+define unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+define unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
+define unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
+define unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
 
 let fold_bool = makeFoldC << bool >> unfold_bool
 let fold_btrue = makeFoldC << btrue >> unfold_btrue

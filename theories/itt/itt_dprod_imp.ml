@@ -60,30 +60,18 @@ let _ =
  * REWRITES                                                             *
  ************************************************************************)
 
-declare prod{'A; x. 'B['x]}
-declare pair{'a; 'b}
-declare spread{'e; u, v. 'b['u; 'v]}
-declare fst{'e}
-declare snd{'e}
+define unfold_two : two <--> (unit + unit)
+define unfold_left : left <--> inl{it}
+define unfold_right : right <--> inr{it}
+define unfold_choose : choose{'x; 'a; 'b} <--> decide{'x; y. 'a; y. 'b}
+define unfold_two_order : two_order{'a; 'b} <--> choose{'a; choose{'b; void; unit}; void}
 
-declare two
-declare left
-declare right
-declare choose{'x; 'a; 'b}
-declare two_order{'a; 'b}
+define unfold_dprod : prod{'A; x. 'B['x]} <--> { f | x: two -> choose{'x; 'A; 'B['f left]} }
 
-prim_rw unfold_two : two <--> (unit + unit)
-prim_rw unfold_left : left <--> inl{it}
-prim_rw unfold_right : right <--> inr{it}
-prim_rw unfold_choose : choose{'x; 'a; 'b} <--> decide{'x; y. 'a; y. 'b}
-prim_rw unfold_two_order : two_order{'a; 'b} <--> choose{'a; choose{'b; void; unit}; void}
-
-prim_rw unfold_dprod : (x: 'A * 'B['x]) <--> { f | x: two -> choose{'x; 'A; 'B['f left]} }
-
-prim_rw unfold_pair : ('a, 'b) <--> lambda{x. choose{'x; 'a; 'b}}
-prim_rw unfold_spread : spread{'e; a, b. 'c['a; 'b]} <--> 'c['e inl{it}; 'e inr{it}]
-prim_rw unfold_fst : fst{'e} <--> spread{'e; u, v. 'u}
-prim_rw unfold_snd : snd{'e} <--> spread{'e; u, v. 'v}
+define unfold_pair : pair{'a; 'b} <--> lambda{x. choose{'x; 'a; 'b}}
+define unfold_spread : spread{'e; a, b. 'c['a; 'b]} <--> 'c['e inl{it}; 'e inr{it}]
+define unfold_fst : fst{'e} <--> spread{'e; u, v. 'u}
+define unfold_snd : snd{'e} <--> spread{'e; u, v. 'v}
 
 interactive_rw reduce_choose_left : choose{left; 'a; 'b} <--> 'a
 interactive_rw reduce_choose_right : choose{right; 'a; 'b} <--> 'b

@@ -38,8 +38,16 @@ include Itt_logic
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare partial_order{'A; x, y. 'R['x; 'y]}
-declare well_founded[i:l]{'A; x, y. 'R['x; 'y]}
+define unfold_partial_order : partial_order{'A; x, y. 'R['x; 'y]} <-->
+   ((all x: 'A. "not"{'R['x; 'x]})
+    & (all x: 'A. all y: 'A. ('R['x; 'y] => "not"{'R['y; 'x]}))
+    & (all x: 'A. all y: 'A. all z: 'A. ('R['x; 'y] => ('R['y; 'z] => 'R['x; 'z]))))
+
+define unfold_well_founded : well_founded[i:l]{'A; x, y. 'R['x; 'y]} <-->
+   (partial_order{'A; x, y. 'R['x; 'y]}
+    & (all P: ('A -> univ[i:l]).
+       ((all x: 'A. ((all y: 'A. ('R['y; 'x] => ('P 'y))) => ('P 'x))) =>
+        (all x: 'A. 'P 'x))))
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -50,21 +58,6 @@ dform partial_order_df : except_mode[src] :: partial_order{'A; x, y. 'R} =
 
 dform well_founded_df : except_mode[src] :: well_founded[i:l]{'A; x, y. 'R} =
    szone `"well_founded[" slot[i:l] `"](" pushm[3] slot{'x} `"," slot{'y} `":" slot{'A} `"." hspace slot{'R} `")" popm ezone
-
-(************************************************************************
- * DEFINITION                                                           *
- ************************************************************************)
-
-prim_rw unfold_partial_order : partial_order{'A; x, y. 'R['x; 'y]} <-->
-   ((all x: 'A. "not"{'R['x; 'x]})
-    & (all x: 'A. all y: 'A. ('R['x; 'y] => "not"{'R['y; 'x]}))
-    & (all x: 'A. all y: 'A. all z: 'A. ('R['x; 'y] => ('R['y; 'z] => 'R['x; 'z]))))
-
-prim_rw unfold_well_founded : well_founded[i:l]{'A; x, y. 'R['x; 'y]} <-->
-   (partial_order{'A; x, y. 'R['x; 'y]}
-    & (all P: ('A -> univ[i:l]).
-       ((all x: 'A. ((all y: 'A. ('R['y; 'x] => ('P 'y))) => ('P 'x))) =>
-        (all x: 'A. 'P 'x))))
 
 (************************************************************************
  * RULES                                                                *

@@ -35,12 +35,10 @@ include Itt_bool
 
 open Tactic_type.Conversionals
 
-declare bunion{'A; 'B}
+define unfold_bunion : bunion{'A; 'B} <-->
+                          tunion{bool; x. ifthenelse{'x; 'A; 'B}}
 
 prec prec_bunion
-
-rewrite unfold_bunion : bunion{'A; 'B} <-->
-                          tunion{bool; x. ifthenelse{'x; 'A; 'B}}
 
 topval fold_bunion : conv
 

@@ -53,7 +53,8 @@ open Itt_equal
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare bisect{'A; 'B}
+define unfold_bisect : bisect{'A; 'B} <-->
+                          "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -63,13 +64,6 @@ prec prec_bisect
 
 dform bisect_df : except_mode[src] :: parens :: "prec"[prec_bisect] :: bisect{'A; 'B} =
    slot["le"]{'A} `" " cap space slot{'B}
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-prim_rw unfold_bisect : bisect{'A; 'B} <-->
-                          "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
 
 (************************************************************************
  * RULES                                                                *

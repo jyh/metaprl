@@ -79,9 +79,10 @@ declare "mul"{'a; 'b}
 declare "div"{'a; 'b}
 declare "rem"{'a; 'b}
 declare lt{'a; 'b}
-declare le{'a; 'b}
-declare ge{'a; 'b}
-declare gt{'a; 'b}
+
+define unfold_le : le{'a; 'b} <--> (('a < 'b) or ('a = 'b in int))
+define unfold_gt : gt{'a; 'b} <--> ('b < 'a)
+define unfold_ge : ge{'a; 'b} <--> (('b < 'a) or ('a = 'b in int))
 
 let int_term = << int >>
 let int_opname = opname_of_term int_term
@@ -217,10 +218,6 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
-
-prim_rw unfold_le : le{'a; 'b} <--> (('a < 'b) or ('a = 'b in int))
-prim_rw unfold_gt : gt{'a; 'b} <--> ('b < 'a)
-prim_rw unfold_ge : ge{'a; 'b} <--> (('b < 'a) or ('a = 'b in int))
 
 prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
    meta_sum{number[i:n]; number[j:n]}

@@ -43,19 +43,6 @@ open Tactic_type.Conversionals
  * TERMS                                                                *
  ************************************************************************)
 
-declare "bool"
-
-declare "btrue"
-declare "bfalse"
-declare bor{'a; 'b}
-declare band{'a; 'b}
-declare bimplies{'a; 'b}
-declare bnot{'a; 'b}
-
-declare "assert"{'t}
-
-declare ifthenelse{'e1; 'e2; 'e3}
-
 prec prec_bimplies
 prec prec_bor
 prec prec_band
@@ -65,20 +52,23 @@ prec prec_assert
 (*
  * Definition of bool.
  *)
-rewrite unfold_bool : bool <--> (unit + unit)
-rewrite unfold_btrue : btrue <--> inl{it}
-rewrite unfold_bfalse : bfalse <--> inr{it}
+define unfold_bool : bool <--> (unit + unit)
+define unfold_btrue : btrue <--> inl{it}
+define unfold_bfalse : bfalse <--> inr{it}
+
+define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y. 'e2}
+define unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+define unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+define unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
+define unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
+define unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
 
 (*
  * Reduction.
  *)
 rewrite reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
 rewrite reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
-rewrite unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
-rewrite unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
-rewrite unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
-rewrite unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
-rewrite unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
+
 
 topval fold_bool : conv
 topval fold_btrue : conv

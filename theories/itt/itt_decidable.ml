@@ -55,11 +55,9 @@ let _ =
  * decidable                                                            *
  ************************************************************************)
 
-declare decidable{'p}
+define unfold_decidable : decidable{'p} <--> ( 'p or not {'p} )
 
 dform decidable_df : except_mode[src] :: decidable{'p} = `"Decidable(" 'p `")"
-
-prim_rw unfold_decidable : decidable{'p} <--> ( 'p or not {'p} )
 
 interactive_rw fold_decidable : ( 'p or not {'p} ) <--> decidable{'p}
 

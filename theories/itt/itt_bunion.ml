@@ -57,7 +57,9 @@ open Itt_struct
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare bunion{'A; 'B}
+define unfold_bunion : bunion{'A; 'B} <-->
+                          tunion{bool; x. ifthenelse{'x; 'A; 'B}}
+
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -71,9 +73,6 @@ dform bunion_df : parens :: "prec"[prec_bunion] :: except_mode[src] :: bunion{'A
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
-
-prim_rw unfold_bunion : bunion{'A; 'B} <-->
-                          tunion{bool; x. ifthenelse{'x; 'A; 'B}}
 
 let fold_bunion = makeFoldC << bunion{'A; 'B} >> unfold_bunion
 

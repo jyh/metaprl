@@ -84,7 +84,7 @@ declare nth{'l; 'i}
 (*
  * Replace the nth element.
  *)
-declare replace_nth{'l; 'i; 'v}
+declare replace_nth{'l; 'i; 't}
 
 (************************************************************************
  * DISPLAY                                                              *

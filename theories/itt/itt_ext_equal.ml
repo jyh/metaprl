@@ -52,8 +52,7 @@ let _ =
  *)
 prim_rw type_def : "type"{'T} <--> subtype{'T; 'T}
 
-declare ext_equal{'A; 'B}
-prim_rw unfoldExtEqual : ext_equal{'A; 'B} <--> (subtype{'A; 'B} & subtype{'B; 'A})
+define unfoldExtEqual : ext_equal{'A; 'B} <--> (subtype{'A; 'B} & subtype{'B; 'A})
 
 (*
  * -*-

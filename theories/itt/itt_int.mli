@@ -60,9 +60,10 @@ declare "rem"{'a; 'b}
  * Propositions.
  *)
 declare lt{'a; 'b}
-declare le{'a; 'b}
-declare ge{'a; 'b}
-declare gt{'a; 'b}
+
+define unfold_le  : le{'a; 'b} <--> (('a < 'b) or ('a = 'b in int))
+define unfold_gt  : gt{'a; 'b} <--> ('b < 'a)
+define unfold_ge  : ge{'a; 'b} <--> (('b < 'a) or ('a = 'b in int))
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -75,10 +76,6 @@ prec prec_mul
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
-
-rewrite unfold_le  : le{'a; 'b} <--> (('a < 'b) or ('a = 'b in int))
-rewrite unfold_gt  : gt{'a; 'b} <--> ('b < 'a)
-rewrite unfold_ge  : ge{'a; 'b} <--> (('b < 'a) or ('a = 'b in int))
 
 rewrite reduce_add : "add"{number[i:n]; number[j:n]} <-->
    meta_sum{number[i:n]; number[j:n]}

@@ -36,4 +36,10 @@ doc <:doc<
    @end[license]
 >>
 
+open Basic_tactics
+
 declare subst{'t;'v;'s}
+
+topval fold_add_var : conv
+topval fold_subst : conv
+topval fold_add_vars_upto : conv

@@ -69,6 +69,8 @@ prim_rw left_id {| reduce |} :
 prim_rw right_id {| reduce |} :
    right {var{'left; 'right}} <--> 'right
 
+interactive_rw depth_reduce {| reduce |} :  depth{var{'l;'r}} <--> 'l +@ 'r +@ 1
+
 interactive_rw eq_equal {| reduce |} :
    is_eq{var{'left_1; 'right_1};var{'left_2; 'right_2}} <--> ('left_1 =@ 'left_2)
 

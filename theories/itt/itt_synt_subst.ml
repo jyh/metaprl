@@ -78,20 +78,21 @@ define unfold_add_var:
                     op,subterms. make_bterm{bind{'op}; map{x.'add 'x; 'subterms}} }
          }} 'bt
 
-interactive_rw add_var_reduce1 {| reduce |} :
-      add_var{make_bterm{'op;'subterms}; 'v} <--> make_bterm{'op; map{x.add_var{'x;'v}; 'subterms}}
+let fold_add_var = makeFoldC << add_var{'bt;'v} >> unfold_add_var
 
-interactive_rw add_var_var_reduce :
-      ('u in Var) -->
-      add_var{'u; 'v} <--> if left{'v} <=@ left{'u}
-                                  then var{left{'u}+@1;right{'u}}
-                                  else var{left{'u};right{'u}+@1}
+interactive_rw add_var_reduce1 {| reduce |} :
+      add_var{make_bterm{'op;'subterms}; 'v} <--> make_bterm{bind{'op}; map{x.add_var{'x;'v}; 'subterms}}
 
 interactive_rw add_var_reduce2 {| reduce |} :
       add_var{var{'l;'r}; 'v} <--> if left{'v} <=@ 'l
                                       then var{'l+@1;'r}
                                       else var{'l;'r+@1}
 
+interactive_rw add_var_var_reduce :
+      ('u in Var) -->
+      add_var{'u; 'v} <--> if left{'v} <=@ left{'u}
+                                  then var{left{'u}+@1;right{'u}}
+                                  else var{left{'u};right{'u}+@1}
 
 interactive_rw add_var_bdepth {| reduce |} :
    ('bt in BTerm)  -->
@@ -125,6 +126,7 @@ interactive add_new_var_wf {| intro [] |} :
 define unfold_add_vars_upto:
    add_vars_upto{'s;'t} <--> ind{bdepth{'t} -@ bdepth{'s};'s; k,s.add_var{'s}}
 
+let fold_add_vars_upto = makeFoldC << add_vars_upto{'s;'t} >> unfold_add_vars_upto
 
 interactive_rw add_vars_upto_bdepth {| reduce |} :
    ('t in BTerm)  -->
@@ -149,6 +151,8 @@ define unfold_subst:
                     u. if is_eq{'v;'u} then add_vars_upto{'s;'u} else 'u;
                     op,subterms. make_bterm{'op;map{x.'subst 'x; 'subterms}} }
          }} 't
+
+let fold_subst = makeFoldC << subst{'t;'v;'s} >> unfold_subst
 
 interactive_rw subst_reduce1 {| reduce |} :
       subst{make_bterm{'op;'subterms}; 'v; 's} <--> make_bterm{'op; map{x.subst{'x;'v;'s}; 'subterms}}

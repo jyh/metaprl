@@ -42,7 +42,7 @@ doc "doc"{parents}
 extends Itt_quotient
 extends Itt_int_base
 extends Itt_nat
-extends Itt_list
+extends Itt_list2
 
 open Basic_tactics
 
@@ -157,10 +157,25 @@ prim inject_id {| intro [] |} :
    sequent { <H> >- inject{'op; op_bdepth{'op}} = 'op in BOperator }
    = it
 
+prim inject_sameop {| intro [] |} :
+   [wf] sequent { <H> >- 'op in BOperator } -->
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- "assert"{is_same_op{inject{'op;'n}; 'op}} }
+   = it
+
+interactive inject_equal {| intro [] |} :
+   [wf] sequent { <H> >- 'op in BOperator } -->
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- inject{'op;'n} = 'op in Operator }
+
 interactive bind_wf {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- 'n in nat } -->
    sequent { <H> >- bind{'op; 'n} in  BOperator }
+
+interactive bind1_wf {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- bind{'op} in  BOperator }
 
 interactive_rw bind_red {| reduce |} :
    'op in BOperator -->
@@ -180,5 +195,35 @@ interactive_rw unbind_red {| reduce |} :
    'op in BOperator -->
    op_bdepth{'op} > 0 -->
    op_bdepth{unbind{'op}} <--> op_bdepth{'op} -@ 1
+
+interactive arity_int_list {| intro [] |} :
+   sequent { <H> >- 'op in Operator } -->
+   sequent { <H> >- arity{'op} in list{int} }
+
+interactive arity_nat_list {| intro [] |} :
+   sequent { <H> >- 'op1 = 'op2 in Operator } -->
+   sequent { <H> >- arity{'op1} = arity{'op2} in list{nat} }
+
+interactive arity_int_list1 {| intro [] |} :
+   sequent { <H> >- 'op1 = 'op2 in Operator } -->
+   sequent { <H> >- arity{'op1} = arity{'op2} in list{int} }
+
+interactive arity_int_list2 {| intro [] |} :
+   sequent { <H> >- 'op1 = 'op2 in Operator } -->
+   sequent { <H> >- arity{'op1} ~ arity{'op2} }
+
+interactive_rw arity_inject {| reduce |} :
+   'op in BOperator -->
+   'n in nat -->
+   arity{inject{'op; 'n}} <--> arity{'op}
+
+interactive_rw arity_bind {| reduce |} :
+   'op in BOperator -->
+   'n in nat -->
+   arity{bind{'op; 'n}} <--> arity{'op}
+
+interactive_rw arity_bind1 {| reduce |} :
+   'op in BOperator -->
+   arity{bind{'op}} <--> arity{'op}
 
 doc <:doc< @docoff >>

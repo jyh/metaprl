@@ -120,6 +120,11 @@ define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
 
 dform compatible_shapes_df: compatible_shapes{'op;'btl} = `"compatible_shapes(" slot{'op} `";" slot{'btl} `")"
 
+interactive compatible_shapes_wf {| intro [] |} :
+   sequent { <H> >- length{arity{'op}} = length{'btl} in int } -->
+   sequent { <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{arity{'op};'i} in int } -->
+   sequent { <H> >- compatible_shapes{'op; 'btl} }
+
 prim btermUniv {| intro [] |} :
    sequent { <H> >- BTerm in univ[i:l] } =
    it
@@ -270,6 +275,11 @@ interactive var_elim 'H :
 interactive_rw var_is_var:
    ('v in Var) -->
    is_var_bterm{'v} <--> btrue
+
+interactive var_bterm {| intro [] |} :
+   sequent { <H> >- 'l in nat} -->
+   sequent { <H> >- 'r in nat} -->
+   sequent { <H> >- var{'l; 'r} in BTerm }
 
 (************************************************************************
  * OpBTerm                                                              *

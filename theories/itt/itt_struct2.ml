@@ -75,6 +75,7 @@ open Tactic_type.Tacticals
 open Var
 open Mptop
 
+open Base_dtactic
 open Base_auto_tactic
 
 open Itt_equal
@@ -198,8 +199,6 @@ interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 
                            >- "type"{'C['x]} } -->
    sequent ['ext] { 'H >- 'c_1 = 'c_2 in 'C['t_1] }
 
-
-
 (*!
  * @begin[doc]
  *
@@ -212,13 +211,19 @@ interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 
  * @end[doc]
  *)
 
-
 interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } 'v 'u :
    [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
    [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
    sequent ['ext] { 'H >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
 
-
+(*!
+ * @begin[doc]
+ * Elimination rule for set membership
+ * @end[doc]
+ *)
+interactive setMemElim {| elim [] |} 'H :
+   sequent ['ext] { 'H; v: 't in 'A; u: squash{'B['t]}; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; v: 't in {x: 'A | 'B['x]}; 'J['v] >- 'C['v] }
 
 (*!
  * @begin[doc]

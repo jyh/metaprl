@@ -1,113 +1,126 @@
 (*
- * Definition of terms.
+ * Terms modulo alpha-equality.
+ *
+ * ----------------------------------------------------------------
+ *
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 1998 Jason Hickey, Cornell University
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Jason Hickey
+ * jyh@cs.cornell.edu
+ *
  *)
 
-include Itt_theory
+include Refl_raw_term
 
+open Refiner.Refiner.TermType
+
+open Tacticals
 open Conversionals
 
 (************************************************************************
  * SYNTAX                                                               *
  ************************************************************************)
 
-(*
- * Parts of terms.
- *)
-declare opname{'l}
-declare opname_eq{'op1; 'op2}
-declare opname_type
+declare eq_alpha{'t1; 't2}
+declare eq_alpha_term{'f; 't1; 't2}
+declare eq_alpha_bterm{'f; 'bt1; 'bt2}
 
-declare level{'i; 'levels}
-declare level_type
+declare vmap_type
+declare vmap_nil
+declare vmap_cons{'v1; 'v2; 'vmap}
+declare vmap_compose{'vl1; 'vl2; 'vm; g. 'b['g]}
+declare vmap_compare{'v1; 'v2; 'vm}
+declare vmap_invert{'f}
+declare vmap_id{'f}
+declare vmap_length{'f; 'g}
+declare vmap_join{'f; 'g}
+declare vmap_fst{'f}
+declare vmap_snd{'f}
 
-declare "pstring"{'s}
-declare "ptoken"{'t}
-declare "pvar"{'v}
-declare "pint"{'i}
-declare "plevel"{'l}
-declare "mstring"{'s}
-declare "mtoken"{'s}
-declare "mvar"{'s}
-declare "mint"{'s}
-declare "mlevel"{'s}
-declare param_type
-
-declare operator{'name; 'params}
-declare operator_type
-
-declare bterm{'sl; 't}
-declare bterm_type{'t}
-
-declare term{'op; 'bterms}
+declare bterm_type{'T}
 declare term_type
+
+(************************************************************************
+ * DISPLAY                                                              *
+ ************************************************************************)
+
+prec prec_vmap_compose
+prec prec_vmap_fst
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite unfold_level : level{'i; 'levels} <--> pair{'i; 'levels}
-rewrite unfold_level_type : level_type <--> (int * list{.atom * int})
+(*
+ * Variable maps.
+ *)
+topval unfold_vmap_type : conv
+topval unfold_vmap_nil : conv
+topval unfold_vmap_cons : conv
+topval unfold_vmap_compose : conv
+topval unfold_vmap_compare : conv
+topval unfold_vmap_invert : conv
+topval unfold_vmap_id : conv
+topval unfold_vmap_length : conv
+topval unfold_vmap_join : conv
+topval unfold_vmap_fst : conv
+topval unfold_vmap_snd : conv
+topval unfold_eq_alpha : conv
+topval unfold_eq_alpha_term : conv
+topval unfold_eq_alpha_bterm : conv
+topval unfold_term_type : conv
 
-rewrite unfold_param : param_type <-->
-   (atom        (* string *)
-    + atom      (* token *)
-    + atom      (* var *)
-    + int       (* int *)
-    + level     (* level *)
-    + atom      (* mstring *)
-    + atom      (* mtoken *)
-    + atom      (* mvar *)
-    + atom      (* mint *)
-    + atom      (* mlevel *)
-    + void)
-rewrite unfold_pstring : pstring{'s} <--> inl{'s}
-rewrite unfold_ptoken  : ptoken{'t}  <--> inr{inl{'t}}
-rewrite unfold_pvar    : pvar{'v}    <--> inr{inr{inl{'v}}}
-rewrite unfold_pint    : pint{'i}    <--> inr{inr{inr{inl{'i}}}}
-rewrite unfold_plevel  : plevel{'l}  <--> inr{inr{inr{inr{inl{'l}}}}}
-rewrite unfold_mstring : mstring{'s} <--> inr{inr{inr{inr{inr{inl{'s}}}}}}
-rewrite unfold_mtoken  : mtoken{'s}  <--> inr{inr{inr{inr{inr{inr{inl{'s}}}}}}}
-rewrite unfold_mvar    : mvar{'s}    <--> inr{inr{inr{inr{inr{inr{inr{inl{'s}}}}}}}}
-rewrite unfold_mint    : mint{'s}    <--> inr{inr{inr{inr{inr{inr{inr{inr{inl{'s}}}}}}}}}
-rewrite unfold_mlevel  : mlevel{'s}  <--> inr{inr{inr{inr{inr{inr{inr{inr{inr{inl{'s}}}}}}}}}}
+topval fold_vmap_type : conv
+topval fold_vmap_nil : conv
+topval fold_vmap_cons : conv
+topval fold_vmap_compose : conv
+topval fold_vmap_compare : conv
+topval fold_vmap_invert : conv
+topval fold_vmap_id : conv
+topval fold_vmap_length : conv
+topval fold_vmap_join : conv
+topval fold_vmap_fst : conv
+topval fold_vmap_snd : conv
+topval fold_eq_alpha : conv
+topval fold_eq_alpha_term : conv
+topval fold_eq_alpha_bterm : conv
+topval fold_term_type : conv
 
-rewrite unfold_operator : operator{'name; 'params} <--> pair{'name; 'params}
-rewrite unfold_operator_type : operator_type <--> (opname_type * param_type list)
+(*
+ * Tactics.
+ *)
+topval vmapSymT : tactic
+topval vmapTransT : term -> term -> tactic
 
-rewrite unfold_bterm : bterm{'sl; 't} <--> pair{'sl, 't}
-rewrite unfold_bterm_type : bterm_type{'T} <--> (list{atom} * 'T)
-
-rewrite unfold_term : term{'op; 'bterms} <--> pair{'op; 'bterms}
-rewrite unfold_term_type : term_type <--> srec{T. operator_type * list{bterm_type{'T}}}
-
-val fold_level : conv
-val fold_level_type : conv
-
-val fold_param : conv
-val fold_pstring : conv
-val fold_ptoken : conv
-val fold_pvar : conv
-val fold_pint : conv
-val fold_plevel : conv
-val fold_mstring : conv
-val fold_mtoken : conv
-val fold_mvar : conv
-val fold_mint : conv
-val fold_mlevel : conv
-
-val fold_operator : conv
-val fold_operator_type : conv
-
-val fold_bterm : conv
-val fold_bterm_type : conv
-
-val fold_term : conv
-val fold_term_type : conv
+topval eq_alphaRefT : tactic
+topval eq_alphaSymT : tactic
+topval eq_alphaTransT : term -> tactic
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "pousse"
+ * Caml-master: "mp.run"
  * End:
  * -*-
  *)

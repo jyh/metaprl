@@ -27,15 +27,21 @@ MPFILES :=\
 	itt_ext_equal\
 	itt_int\
 	itt_int_bool\
+	itt_atom_bool\
 	itt_arith\
 	itt_isect\
+	itt_tunion\
+	itt_bisect\
+	itt_bunion\
 	itt_w\
 	itt_prec\
 	itt_srec\
 	itt_quotient\
 	itt_list\
+	itt_list2\
 	itt_derive\
 	itt_prop_decide\
+	itt_fset\
 	itt_theory\
 	itt_test
 

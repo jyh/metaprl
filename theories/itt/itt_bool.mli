@@ -31,9 +31,12 @@
  *)
 
 include Itt_equal
+include Itt_logic
+include Itt_struct
 
 open Refiner.Refiner.Term
 open Tacticals
+open Conversionals
 
 (************************************************************************
  * TERMS                                                                *
@@ -45,11 +48,25 @@ declare "btrue"
 declare "bfalse"
 declare bor{'a; 'b}
 declare band{'a; 'b}
+declare bimplies{'a; 'b}
 declare bnot{'a; 'b}
 
 declare "assert"{'t}
 
 declare ifthenelse{'e1; 'e2; 'e3}
+
+prec prec_bimplies
+prec prec_bor
+prec prec_band
+prec prec_bnot
+prec prec_assert
+
+(*
+ * Definition of bool.
+ *)
+rewrite unfold_bool : bool <--> (unit + unit)
+rewrite unfold_btrue : btrue <--> inl{it}
+rewrite unfold_bfalse : bfalse <--> inr{it}
 
 (*
  * This term is used to reduce param actions.
@@ -64,10 +81,20 @@ rewrite reduceBoolFalse : "bool_flag"["false":t] <--> "bfalse"
  *)
 rewrite reduceIfthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
 rewrite reduceIfthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
-rewrite unfoldBor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
-rewrite unfoldBand : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
-rewrite unfoldBnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
-rewrite unfoldAssert : "assert"{'t} <--> ('t = btrue in bool)
+rewrite unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+rewrite unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+rewrite unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
+rewrite unfold_bnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
+rewrite unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
+
+topval fold_bool : conv
+topval fold_btrue : conv
+topval fold_bfalse : conv
+topval fold_bor : conv
+topval fold_band : conv
+topval fold_bimplies : conv
+topval fold_bnot : conv
+topval fold_assert : conv
 
 (************************************************************************
  * RULES                                                                *
@@ -104,14 +131,25 @@ axiom bool_falseEquality 'H : sequent ['ext] { 'H >- bfalse = bfalse in "bool" }
  * by boolElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-axiom boolElimination 'H 'J 'x :
-   sequent['ext] { 'H; x: "bool"; 'J[btrue] >- 'C[btrue] } -->
-   sequent['ext] { 'H; x: "bool"; 'J[bfalse] >- 'C[bfalse] } -->
+axiom boolElimination2 'H 'J 'x :
+   sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
+   sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
    sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }
+
+(*
+ * Squash elimination on assert.
+ *)
+axiom assertSquashElim 'H :
+   sequent [squash] { 'H >- "assert"{'t} } -->
+   sequent ['ext] { 'H >- "assert"{'t} }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
+
+val is_assert_term : term -> bool
+val mk_assert_term : term -> term
+val dest_assert : term -> term
 
 val d_boolT : int -> tactic
 val eqcd_boolT : tactic
@@ -120,6 +158,12 @@ val eqcd_bfalseT : tactic
 val bool_term : term
 val btrue_term : term
 val bfalse_term : term
+
+topval extBoolT : tactic
+topval magicT : tactic
+topval splitBoolT : term -> int -> tactic
+topval splitITE : int -> tactic
+topval squash_assertT : tactic
 
 (*
  * -*-

@@ -50,6 +50,11 @@ open Var
 open Sequent
 
 open Tacticals
+open Conversionals
+
+open Typeinf
+
+open Itt_equal
 open Itt_subtype
 
 (*
@@ -259,15 +264,43 @@ prim list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
    it
 
 (*
+ * Nil is canonical.
+ *)
+prim nilSqequal 'H 'T :
+   sequent [squash] { 'H >- 'u = nil in list{'T} } -->
+   sequent ['ext] { 'H >- Perv!"rewrite"{'u; nil} } =
+   it
+
+(*
  * H >- list(A1) <= list(A2)
  * by listSubtype
  *
  * H >- A1 <= A2
  *)
-prim listSubtype 'H :
+interactive listSubtype 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}} =
-   it
+   sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}}
+
+(*
+ * Cons an nil.
+ *)
+interactive nil_neq_cons 'H 'J : :
+   sequent ['ext] { 'H; x: nil = cons{'h; 't} in list{'T}; 'J['x] >- 'C['x] }
+
+interactive cons_neq_nil 'H 'J : :
+   sequent ['ext] { 'H; x: cons{'h; 't} = nil in list{'T}; 'J['x] >- 'C['x] }
+
+(*
+ * Membership.
+ *)
+interactive nil_member 'H :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent ['ext] { 'H >- member{list{'T}; nil} }
+
+interactive cons_member 'H :
+   sequent [squash] { 'H >- member{'T; 'h} } -->
+   sequent [squash] { 'H >- member{list{'T}; 't} } -->
+   sequent ['ext] { 'H >- member{list{'T}; cons{'h; 't}} }
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -292,6 +325,16 @@ let list_ind_opname = opname_of_term list_ind_term
 let is_list_ind_term = is_dep0_dep0_dep3_term list_ind_opname
 let dest_list_ind = dest_dep0_dep0_dep3_term list_ind_opname
 let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
+
+(************************************************************************
+ * REDUCTIONS                                                           *
+ ************************************************************************)
+
+let reduce_info =
+   [<< list_ind{nil; 'e1; h, t, g. 'e2['h; 't; 'g]} >>, reduce_listindNil;
+    << list_ind{cons{'h1; 't1}; 'e1; h2, t2, g2. 'e2['h2; 't2; 'g2]} >>, reduce_listindCons]
+
+let reduce_resource = add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * D TACTIC                                                             *
@@ -326,6 +369,16 @@ let list_type_term = << "type"{list{'A}} >>
 
 let d_resource = d_resource.resource_improve d_resource (list_type_term, d_list_typeT)
 
+let d_list_subtypeT i p =
+   if i = 0 then
+      listSubtype (Sequent.hyp_count_addr p) p
+   else
+      d_subtypeT i p
+
+let list_subtype_term = << subtype{list{'T1}; list{'T2}} >>
+
+let d_resource = d_resource.resource_improve d_resource (list_subtype_term, d_list_subtypeT)
+
 (************************************************************************
  * EQCD TACTICS                                                         *
  ************************************************************************)
@@ -344,12 +397,20 @@ let eqcd_nilT p = nilEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (nil_term, eqcd_nilT)
 
+let nil_equal_term = << nil = nil in list{'T} >>
+
+let d_resource = d_resource.resource_improve d_resource (nil_equal_term, d_wrap_eqcd eqcd_nilT)
+
 (*
  * EqCD nil.
  *)
 let eqcd_consT p = consEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (cons_term, eqcd_consT)
+
+let cons_equal_term = << cons{'a1; 'b1} = cons{'a2; 'b2} in list{'T} >>
+
+let d_resource = d_resource.resource_improve d_resource (cons_equal_term, d_wrap_eqcd eqcd_consT)
 
 (*
  * EQCD listind.
@@ -358,6 +419,28 @@ let eqcd_list_indT p =
    raise (RefineError ("eqcd_list_indT", StringError "not implemented"))
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_ind_term, eqcd_list_indT)
+
+(*
+ * Nil is canonical.
+ *)
+let d_nil_sqequalT p =
+   let concl = Sequent.concl p in
+   let u, _ = two_subterms concl in
+   let t =
+      try get_univ_arg p with
+         RefineError _ ->
+            let _, t = infer_type p u in
+               if is_list_term t then
+                  dest_list t
+               else
+                  raise (RefineError ("d_nil_sqequalT", StringTermError ("type is not a list", t)))
+   in
+      (nilSqequal (Sequent.hyp_count_addr p) t
+       thenT addHiddenLabelT "equality") p
+
+let nil_sqequal_term = << Perv!"rewrite"{'u; nil} >>
+
+let d_resource = d_resource.resource_improve d_resource (nil_sqequal_term, wrap_intro d_nil_sqequalT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -429,6 +512,50 @@ let sub_resource =
    (DSubtype ([<< list{'A1} >>, << list{'A2} >>;
                << 'A2 >>, << 'A1 >>],
               list_subtypeT))
+
+(************************************************************************
+ * CONS/NIL                                                             *
+ ************************************************************************)
+
+let d_cons_neq_nilT i p =
+   if i = 0 then
+      raise (RefineError ("d_cons_neq_nilT", StringError "no introduction form"))
+   else
+      let j, k = Sequent.hyp_indices p i in
+         cons_neq_nil j k p
+
+let cons_neq_nil_term = << cons{'h; 't} = nil in list{'T} >>
+
+let d_resource = d_resource.resource_improve d_resource (cons_neq_nil_term, d_cons_neq_nilT)
+
+let d_nil_neq_consT i p =
+   if i = 0 then
+      raise (RefineError ("d_cons_neq_nilT", StringError "no introduction form"))
+   else
+      let j, k = Sequent.hyp_indices p i in
+         nil_neq_cons j k p
+
+let nil_neq_cons_term = << nil = cons{'h; 't} in list{'T} >>
+
+let d_resource = d_resource.resource_improve d_resource (nil_neq_cons_term, d_nil_neq_consT)
+
+(************************************************************************
+ * MEMBERSHIP                                                           *
+ ************************************************************************)
+
+let d_nil_memberT p =
+   nil_member (Sequent.hyp_count_addr p) p
+
+let nil_member_term = << member{list{'T}; nil} >>
+
+let d_resource = d_resource.resource_improve d_resource (nil_member_term, wrap_intro d_nil_memberT)
+
+let d_cons_memberT p =
+   cons_member (Sequent.hyp_count_addr p) p
+
+let cons_member_term = << member{list{'T}; cons{'h; 't}} >>
+
+let d_resource = d_resource.resource_improve d_resource (cons_member_term, wrap_intro d_cons_memberT)
 
 (*
  * -*-

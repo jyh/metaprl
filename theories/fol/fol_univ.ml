@@ -9,11 +9,14 @@ open Tacticals
 open Base_auto_tactic
 
 declare univ
+declare prop{'t}
 
 dform univ_df : univ = `"Univ"
+dform prop_df : prop{'t} = downarrow slot{'t}
 
 prim univ_type 'H 'J : :
-   sequent ['ext] { 'H; x: univ; 'J['x] >- "type"{'x} } = trivial
+   sequent ['ext] { 'H; x: univ; 'J['x] >- "type"{prop{'x}} } =
+   trivial
 
 (*
  * Automation.  Add a search tactic to trivialT.

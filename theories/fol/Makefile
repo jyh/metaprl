@@ -7,11 +7,10 @@ INCLUDE := -I . -I ../itt -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Library files
-MLZFILES :=\
-	fol_theory
-
 MPFILES :=\
-	fol_type\
+	fol_type
+
+X=\
 	fol_false\
 	fol_true\
 	fol_implies\

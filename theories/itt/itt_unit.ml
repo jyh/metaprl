@@ -15,21 +15,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -123,6 +123,13 @@ prim unit_squashElimination 'H :
    sequent ['ext] { 'H >- unit } =
    it
 
+(*
+ * Squiggle equality.
+ *)
+interactive unitSqequal 'H :
+   sequent [squash] { 'H >- 'x = 'y in unit } -->
+   sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -155,6 +162,19 @@ let unit_type_term = << "type"{unit} >>
 let d_resource = d_resource.resource_improve d_resource (unit_type_term, d_unit_typeT)
 
 (*
+ * Squiggle reasoning.
+ *)
+let d_unit_sqequalT i p =
+   if i = 0 then
+      unitSqequal (Sequent.hyp_count_addr p) p
+   else
+      raise (RefineError ("d_unit_sqequal", StringError "no elimination form"))
+
+let unit_rewrite_term = << "rewrite"{'e1; it} >>
+
+let d_resource = d_resource.resource_improve d_resource (unit_rewrite_term, d_unit_sqequalT)
+
+(*
  * EqCD.
  *)
 let eqcd_unitT p =
@@ -170,6 +190,10 @@ let eqcdT = eqcd_resource.resource_extract eqcd_resource
 let equal_unit_term = << unit = unit in univ[@i:l] >>
 
 let d_resource = d_resource.resource_improve d_resource (equal_unit_term, d_wrap_eqcd eqcd_unitT)
+
+let equal_it_term = << it = it in unit >>
+
+let d_resource = d_resource.resource_improve d_resource (equal_it_term, d_wrap_eqcd eqcd_itT)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *

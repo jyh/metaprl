@@ -330,6 +330,14 @@ prim less_thanElimination 'H 'J :
    sequent ['ext] { 'H; x: 'a < 'b; 'J['x] >- 'C['x] } =
    't
 
+(*
+ * Integers are canonical.
+ *)
+prim int_sqequal 'H :
+   sequent [squash] { 'H >- 'i = 'j in int } -->
+   sequent ['ext] { 'H >- Perv!"rewrite"{'i; 'j} } =
+   it
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -433,6 +441,12 @@ let d_int_typeT i p =
 let int_type_term = << "type"{int} >>
 
 let d_resource = d_resource.resource_improve d_resource (int_type_term, d_int_typeT)
+
+(*
+ * Squiggle.
+ *)
+let intSqequalT p =
+   int_sqequal (Sequent.hyp_count_addr p) p
 
 (************************************************************************
  * EQCD TACTIC                                                          *

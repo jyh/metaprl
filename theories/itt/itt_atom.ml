@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -42,6 +42,8 @@ open Refiner.Refiner.RefineError
 open Rformat
 open Sequent
 open Mp_resource
+
+open Base_dtactic
 
 open Itt_equal
 
@@ -103,6 +105,14 @@ prim tokenFormation 'H token[@t:t] : : sequent ['ext] { 'H >- atom } =
  *)
 prim tokenEquality 'H : : sequent ['ext] { 'H >- token[@t:t] = token[@t:t] in atom } = it
 
+(*
+ * Squiggle equality.
+ *)
+prim atom_sqequal 'H :
+   sequent [squash] { 'H >- 'x = 'y in atom } -->
+   sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} } =
+   it
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -140,6 +150,12 @@ let eqcd_tokenT p =
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (atom_term, eqcd_atomT)
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (token_term, eqcd_tokenT)
 
+let d_info =
+   [<< atom = atom in univ[@i:l] >>, wrap_intro eqcd_atomT;
+    << token[@t:t] = token[@t:t] in atom >>, wrap_intro eqcd_tokenT]
+
+let d_resource = add_d_info d_resource d_info
+
 (*
  * Typehood.
  *)
@@ -156,6 +172,12 @@ let d_atom_typeT i p =
 let atom_type_term = << "type"{atom} >>
 
 let d_resource = d_resource.resource_improve d_resource (atom_type_term, d_atom_typeT)
+
+(*
+ * Sqequal.
+ *)
+let atomSqequalT p =
+   atom_sqequal (Sequent.hyp_count_addr p) p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

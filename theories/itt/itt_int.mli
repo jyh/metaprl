@@ -240,9 +240,7 @@ axiom less_thanElimination 'H 'J :
  * TACTICS                                                              *
  ************************************************************************)
 
-val d_intT : int -> tactic
-val eqcd_intT : tactic
-val eqcd_numberT : tactic
+topval intSqequalT : tactic
 
 val int_term : term
 val is_int_term : term -> bool

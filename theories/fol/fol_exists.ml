@@ -29,7 +29,7 @@ dform exists_df : parens :: "prec"["prec_exists"] :: "exists"{x. 'B} =
  ************************************************************************)
 
 prim exists_type 'H 'x :
-   sequent ['ext] { 'H; x: univ >- "type"{'B['x]} } -->
+   sequent ['ext] { 'H; x: univ >- "type"{'B[prop{'x}]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{y. 'B['y]}} } = trivial
 
 
@@ -40,10 +40,9 @@ prim exists_intro 'H 'a :
    pair{'a; 'b}
 
 prim exists_elim 'H 'J 'x 'y 'z :
-   ('b['y; 'z] : sequent ['ext] { 'H; y: univ; z: 'B['y]; 'J['y, 'z] >- 'C['y, 'z] }) -->
+   ('b['y; 'z] : sequent ['ext] { 'H; y: univ; z: 'B[prop{'y}]; 'J['y, 'z] >- 'C['y, 'z] }) -->
    sequent ['ext] { 'H; x: "exists"{w. 'B['w]}; 'J['x] >- 'C['x] } =
    spread{'x; y, z. 'b['y; 'z]}
-
 
 (************************************************************************
  * AUTOMATION                                                           *

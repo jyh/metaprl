@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -142,6 +142,78 @@ let maybe_new_vars5 p v1 v2 v3 v4 v5 =
    let vars = v4 :: vars in
    let v5 = maybe_new_var v5 vars in
       v1, v2, v3, v4, v5
+
+let maybe_new_vars6 p v1 v2 v3 v4 v5 v6 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+   let vars = v2 :: vars in
+   let v3 = maybe_new_var v3 vars in
+   let vars = v3 :: vars in
+   let v4 = maybe_new_var v4 vars in
+   let vars = v4 :: vars in
+   let v5 = maybe_new_var v5 vars in
+   let vars = v5 :: vars in
+   let v6 = maybe_new_var v6 vars in
+      v1, v2, v3, v4, v5, v6
+
+let maybe_new_vars7 p v1 v2 v3 v4 v5 v6 v7 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+   let vars = v2 :: vars in
+   let v3 = maybe_new_var v3 vars in
+   let vars = v3 :: vars in
+   let v4 = maybe_new_var v4 vars in
+   let vars = v4 :: vars in
+   let v5 = maybe_new_var v5 vars in
+   let vars = v5 :: vars in
+   let v6 = maybe_new_var v6 vars in
+   let vars = v6 :: vars in
+   let v7 = maybe_new_var v7 vars in
+      v1, v2, v3, v4, v5, v6, v7
+
+let maybe_new_vars8 p v1 v2 v3 v4 v5 v6 v7 v8 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+   let vars = v2 :: vars in
+   let v3 = maybe_new_var v3 vars in
+   let vars = v3 :: vars in
+   let v4 = maybe_new_var v4 vars in
+   let vars = v4 :: vars in
+   let v5 = maybe_new_var v5 vars in
+   let vars = v5 :: vars in
+   let v6 = maybe_new_var v6 vars in
+   let vars = v6 :: vars in
+   let v7 = maybe_new_var v7 vars in
+   let vars = v7 :: vars in
+   let v8 = maybe_new_var v8 vars in
+      v1, v2, v3, v4, v5, v6, v7, v8
+
+let maybe_new_vars9 p v1 v2 v3 v4 v5 v6 v7 v8 v9 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+   let vars = v2 :: vars in
+   let v3 = maybe_new_var v3 vars in
+   let vars = v3 :: vars in
+   let v4 = maybe_new_var v4 vars in
+   let vars = v4 :: vars in
+   let v5 = maybe_new_var v5 vars in
+   let vars = v5 :: vars in
+   let v6 = maybe_new_var v6 vars in
+   let vars = v6 :: vars in
+   let v7 = maybe_new_var v7 vars in
+   let vars = v7 :: vars in
+   let v8 = maybe_new_var v8 vars in
+   let vars = v8 :: vars in
+   let v9 = maybe_new_var v9 vars in
+      v1, v2, v3, v4, v5, v6, v7, v8, v9
 
 (*
  * Optional vars.

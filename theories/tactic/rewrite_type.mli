@@ -12,21 +12,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -65,26 +65,6 @@ axiom rewriteAxiom 'x : "rewrite"{'x; 'x}
  *)
 axiom rewriteSequentAxiom 'H : sequent ['ext] { 'H >- "rewrite"{'x; 'x} }
 
-(*
- * Sequent replacement.
- *)
-axiom rewriteHypCut 'H 'J 'T1 :
-   sequent ['ext] { 'H; x: 'T1; 'J['x] >- 'C['x] } -->
-   sequent ['ext] { 'H >- "rewrite"{'T1; 'T2} } -->
-   sequent ['ext] { 'H; x: 'T2; 'J['x] >- 'C['x] }
-
-axiom rewriteConclCut 'H 'T1 :
-   sequent ['ext] { 'H >- 'T1 } -->
-   sequent ['ext] { 'H >- "rewrite"{'T1; 'T2} } -->
-   sequent ['ext] { 'H >- 'T2 }
-
-(*
-axiom rewriteContextCut 'H 'J (lambda{v. 'T['v]}) :
-   "sequent"{'ext; ."context"[H:v]{'T["concl"{'C; ."concl"}]}} -->
-   "sequent"{'ext; ."context"[H:v]{."concl"{."rewrite"{.'T[rewrite_just]; ."context"[J:v]{rewrite_just}}; concl}}} -->
-   "sequent"{'ext; ."context"[H:v]{."context"[J:v]{."concl"{'C; ."concl"}}}}
-*)
-
 (************************************************************************
  * OPERATIONS                                                           *
  ************************************************************************)
@@ -94,6 +74,10 @@ axiom rewriteContextCut 'H 'J (lambda{v. 'T['v]}) :
  *)
 val env_term : env -> term
 val env_goal : env -> term
+val env_arg : env -> tactic_arg
+
+val get_conv : tactic_arg -> string -> conv
+val conv_attribute : string -> (unit -> conv) -> Tactic_type.raw_attribute
 
 (*
  * Apply a rewrite.

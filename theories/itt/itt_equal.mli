@@ -12,21 +12,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -40,6 +40,7 @@ include Itt_squash
 
 open Refiner.Refiner.Term
 open Tacticals
+open Conversionals
 open Base_theory
 
 (************************************************************************
@@ -49,7 +50,16 @@ open Base_theory
 declare "type"{'a}
 declare univ[@i:l]
 declare equal{'T; 'a; 'b}
+declare member{'T; 'x}
 declare it
+
+(************************************************************************
+ * DEFINITIONS                                                          *
+ ************************************************************************)
+
+rewrite unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
+
+topval fold_member : conv
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -123,6 +133,10 @@ axiom equalityType 'H :
    sequent [squash] { 'H >- 'a = 'a in 'T } -->
    sequent [squash] { 'H >- 'b = 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } }
+
+axiom equalityTypeIsType 'H 'a 'b :
+   sequent [squash] { 'H >- 'a = 'b in 'T } -->
+   sequent ['ext] { 'H >- "type"{'T} }
 
 (*
  * H >- it = it in (a = b in T)
@@ -233,6 +247,11 @@ val is_equal_term : term -> bool
 val dest_equal : term -> term * term * term
 val mk_equal_term : term -> term -> term -> term
 
+val member_term : term
+val is_member_term : term -> bool
+val dest_member : term -> term * term
+val mk_member_term : term -> term -> term
+
 val type_term : term
 val is_type_term : term -> bool
 val mk_type_term : term -> term
@@ -244,12 +263,16 @@ val is_univ_term : term -> bool
 val dest_univ : term -> level_exp
 val mk_univ_term : level_exp -> term
 
+val squash_term : term
+val is_squash_term : term -> bool
+
 val it_term : term
 
 val d_equalT : int -> tactic
 val eqcd_univT : tactic
 val eqcd_itT : tactic
 topval squash_equalT : tactic
+topval squash_memberT : tactic
 topval squash_typeT : tactic
 
 (*
@@ -261,12 +284,17 @@ topval typeAssertT : tactic
  * Turn an eqcd tactic into a d tactic.
  *)
 val d_wrap_eqcd : tactic -> int -> tactic
+val wrap_intro : tactic -> int -> tactic
+val wrap_elim : (int -> tactic) -> int -> tactic
+
+topval memberAssumT : int -> tactic
 
 topval unsquashT : term -> tactic
 topval equalAssumT : int -> tactic
 topval equalRefT : term -> tactic
 topval equalSymT : tactic
 topval equalTransT : term -> tactic
+topval equalTypeT : term -> term -> tactic
 
 topval univTypeT : term -> tactic
 topval univAssumT : int -> tactic

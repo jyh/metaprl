@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -50,6 +50,7 @@ open Term_stable
 open Mp_resource
 
 open Tacticals
+open Conversionals
 open Sequent
 open Mptop
 
@@ -76,7 +77,16 @@ let debug_eqcd =
 declare "type"{'a}
 declare univ[@i:l]
 declare equal{'T; 'a; 'b}
+declare member{'T; 'x}
 declare it
+
+(************************************************************************
+ * DEFINITIONS                                                          *
+ ************************************************************************)
+
+primrw unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
+
+let fold_member = makeFoldC << member{'T; 'x} >> unfold_member
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -87,6 +97,10 @@ prec prec_equal
 
 dform equal_df1 : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
+
+dform member_df1 : parens :: "prec"[prec_equal] :: member{'T; 'x} =
+   szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
+
 dform it_df1 : mode[prl] :: it = cdot
 
 dform type_prl_df1 : parens :: "prec"[prec_type] :: mode[prl] :: "type"{'a} =
@@ -94,6 +108,9 @@ dform type_prl_df1 : parens :: "prec"[prec_type] :: mode[prl] :: "type"{'a} =
 
 dform term_df2 : mode[prl] :: univ[@i:l] =
    mathbbU `"[" slot[@i:l] `"]"
+
+dform squash_df : mode[prl] :: squash =
+   cdot
 
 (************************************************************************
  * RULES                                                                *
@@ -105,6 +122,9 @@ dform term_df2 : mode[prl] :: univ[@i:l] =
 prim equalityAxiom 'H 'J : :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x = 'x in 'T } =
    it
+
+interactive memberAxiom 'H 'J : :
+   sequent ['ext] { 'H; x: 'T; 'J['x] >- member{'T; 'x} }
 
 (*
  * Reflexivity.
@@ -172,6 +192,15 @@ interactive equalityType2 'H :
    sequent [squash] { 'H >- 'a = 'a in 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'a in 'T } }
 
+prim equalityTypeIsType 'H 'a 'b :
+   sequent [squash] { 'H >- 'a = 'b in 'T } -->
+   sequent ['ext] { 'H >- "type"{'T} } =
+   it
+
+interactive memberType 'H :
+   sequent [squash] { 'H >- member{'T; 'x} } -->
+   sequent ['ext] { 'H >- "type"{member{'T; 'x}} }
+
 (*
  * H >- it = it in (a = b in T)
  * by axiomEquality
@@ -211,6 +240,11 @@ prim typeEquality 'H :
 prim equality_squashElimination 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- 'a = 'b in 'T } =
+   it
+
+prim member_squashElimination 'H :
+   sequent [squash] { 'H >- member{'T; 'a} } -->
+   sequent ['ext] { 'H >- member{'T; 'a} } =
    it
 
 prim type_squashElimination 'H :
@@ -309,6 +343,12 @@ let is_equal_term = is_dep0_dep0_dep0_term equal_opname
 let dest_equal = dest_dep0_dep0_dep0_term equal_opname
 let mk_equal_term = mk_dep0_dep0_dep0_term equal_opname
 
+let member_term = << member{'T; 'x} >>
+let member_opname = opname_of_term member_term
+let is_member_term = is_dep0_dep0_term member_opname
+let dest_member = dest_dep0_dep0_term member_opname
+let mk_member_term = mk_dep0_dep0_term member_opname
+
 let type_term = << "type"{'t} >>
 let type_opname = opname_of_term type_term
 let is_type_term = is_dep0_term type_opname
@@ -323,6 +363,10 @@ let dest_univ = TermOp.dest_univ_term univ_opname
 let mk_univ_term = TermOp.mk_univ_term univ_opname
 
 let it_term = << it >>
+
+let squash_term = << squash >>
+let squash_opname = opname_of_term squash_term
+let is_squash_term = is_no_subterms_term squash_opname
 
 (************************************************************************
  * EQCD TACTIC                                                          *
@@ -451,6 +495,16 @@ let equal_type_term = << "type"{. 'a = 'b in 'T } >>
 
 let d_resource = d_resource.resource_improve d_resource (equal_type_term, d_equal_typeT)
 
+let d_member_typeT i p =
+   if i = 0 then
+      memberType (Sequent.hyp_count_addr p) p
+   else
+      raise (RefineError ("d_member_typeT", StringError "no elimination form"))
+
+let member_type_term = << "type"{member{'T; 'x}} >>
+
+let d_resource = d_resource.resource_improve d_resource (member_type_term, d_member_typeT)
+
 (*
  * Turn a eqcd tactic into a d tactic.
  *)
@@ -459,6 +513,18 @@ let d_wrap_eqcd eqcdT i p =
       eqcdT p
    else
       d_equalT i p
+
+let wrap_intro tac i =
+   if i = 0 then
+      tac
+   else
+      raise (RefineError ("wrap_intro", StringError "no introduction form"))
+
+let wrap_elim tac i =
+   if i = 0 then
+      raise (RefineError ("wrap_elim", StringError "no elimination form"))
+   else
+      tac i
 
 (*
  * Universe is a type.
@@ -489,9 +555,50 @@ let eqcd_itT p =
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (univ_term, eqcd_univT)
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (it_term, eqcd_itT)
 
+let d_it_equalT p =
+   (axiomEquality (Sequent.hyp_count_addr p)
+    thenT addHiddenLabelT "wf") p
+
+let it_equal_term = << it = it in ('x = 'y in 'T) >>
+
+let d_resource = d_resource.resource_improve d_resource (it_equal_term, wrap_intro d_it_equalT)
+
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)
+
+(*
+ * Infer types from membership and equality.
+ *)
+let infer_equal subst (so, t) =
+   let t, x1, x2 = dest_equal t in
+   let subst =
+      if is_var_term x1 then
+         (dest_var x1, t) :: subst
+      else
+         subst
+   in
+      if is_var_term x2 then
+         (dest_var x2, t) :: subst
+      else
+         subst
+
+let infer_member subst (so, t) =
+   let t, x1 = dest_member t in
+      if is_var_term x1 then
+         (dest_var x1, t) :: subst
+      else
+         subst
+
+let typeinf_subst_resource =
+   typeinf_subst_resource.resource_improve (**)
+      typeinf_subst_resource
+      (equal_term, infer_equal)
+
+let typeinf_subst_resource =
+   typeinf_subst_resource.resource_improve (**)
+      typeinf_subst_resource
+      (member_term, infer_member)
 
 (*
  * Type of a universe is incremented by one.
@@ -521,6 +628,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (equal
 let squash_equalT p =
    equality_squashElimination (hyp_count_addr p) p
 
+let squash_memberT p =
+   member_squashElimination (hyp_count_addr p) p
+
 let squash_resource = squash_resource.resource_improve squash_resource (equal_term, squash_equalT)
 
 let squash_typeT p =
@@ -542,6 +652,10 @@ let equalAssumT i p =
    let i, j = hyp_indices p i in
       equalityAxiom i j p
 
+let memberAssumT i p =
+   let j, k = hyp_indices p i in
+      memberAxiom j k p
+
 (*
  * Reflexivity.
  *)
@@ -559,6 +673,12 @@ let equalSymT p =
  *)
 let equalTransT t p =
    equalityTrans (hyp_count_addr p) t p
+
+(*
+ * Typehood from equality.
+ *)
+let equalTypeT a b p =
+   equalityTypeIsType (hyp_count_addr p) a b p
 
 (*
  * Membership in a type.
@@ -583,7 +703,9 @@ let typeAssertT p =
  * Automation.
  *)
 let triv_equalT i =
-   equalAssumT i orelseT univAssumT i
+   equalAssumT i
+   orelseT memberAssumT i
+   orelseT univAssumT i
 
 let trivial_resource =
    trivial_resource.resource_improve trivial_resource (**)

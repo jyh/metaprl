@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -77,6 +77,19 @@ axiom subtypeEquality 'H :
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] }
 
+axiom subtypeType 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{subtype{'A; 'B}} }
+
+axiom subtypeTypeLeft 'H 'A :
+   sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   sequent ['ext] { 'H >- "type"{'B} }
+
+axiom subtypeTypeRight 'H 'B :
+   sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   sequent ['ext] { 'H >- "type"{'A} }
+
 (*
  * H >- subtype(A; B) ext it
  * by subtype_axiomFormation
@@ -116,10 +129,10 @@ axiom subtypeElimination 'H 'J :
  * H >- x = y in A
  * H >- subtype(A; B)
  *)
-axiom subtypeElimination2 'H 'A :
-   sequent [squash] { 'H >- 'x = 'y in 'A } -->
-   sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'B }
+axiom subtypeElimination2 'H 'J 'a 'y :
+   sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- member{'A; 'a} } -->
+   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: member{'B; 'a} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] }
 
 (*
  * Squash elimination.
@@ -173,12 +186,16 @@ topval subtypeT : tactic
  * TACTICS                                                              *
  ************************************************************************)
 
-val d_subtype : int -> tactic
-val eqcd_subtype : tactic
+topval d_subtypeT : int -> tactic
+topval eqcd_subtype : tactic
 
 val is_subtype_term : term -> bool
 val dest_subtype : term -> term * term
 val mk_subtype_term : term -> term -> term
+
+topval squash_subtypeT : tactic
+topval type_subtype_leftT : term -> tactic
+topval type_subtype_rightT : term -> tactic
 
 (*
  * -*-

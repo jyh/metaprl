@@ -28,7 +28,7 @@ prec prec_lambda < prec_implies
 prec prec_implies < prec_apply
 
 dform implies_df : parens :: "prec"["prec_implies"] :: implies{'A; 'B} =
-   szone pushm[0] slot{'A} hspace Rightarrow `" " slot{'B} popm ezone
+   szone pushm[0] slot["le"]{'A} hspace Rightarrow `" " slot{'B} popm ezone
 
 dform lambda_df : parens :: "prec"["prec_lambda"] :: lambda{x. 'b} =
    szone pushm[3] Nuprl_font!lambda slot{'x} `"." slot{'b} popm ezone

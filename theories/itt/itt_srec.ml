@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -41,9 +41,14 @@ open Mp_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.RefineError
 open Mp_resource
 
+open Tacticals
+open Var
+
 open Itt_void
+open Itt_equal
 
 (*
  * Show that the file is loading.
@@ -51,8 +56,6 @@ open Itt_void
 let _ =
    if !debug_load then
       eprintf "Loading Itt_srec%t" eflush
-
-(* debug_string DebugLoad "Loading itt_srec..." *)
 
 (************************************************************************
  * TERMS                                                                *
@@ -62,10 +65,17 @@ declare srec{T. 'B['T]}
 declare srecind{'a; p, h. 'g['p; 'h]}
 
 (************************************************************************
+ * DISPLAY                                                              *
+ ************************************************************************)
+
+dform srec_df : mode[prl] :: srec{T. 'B} =
+   szone mu `"{" slot{'T} `"." pushm[0] slot{'B} `"}" popm ezone
+
+(************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw reduceSrecind : srecind{'a; p, h. 'g['p; 'h]} <-->
+primrw unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. srecind{'a; p, h. 'g['p; 'h]}}; 'a]
 
 (************************************************************************
@@ -94,6 +104,11 @@ prim srecEquality 'H 'T 'S1 'S2 'z :
    sequent [squash] { 'H; T: univ[@i:l] >- 'B1['T] = 'B2['T] in univ[@i:l] } -->
    sequent [squash] { 'H; S1: univ[@i:l]; S2: univ[@i:l]; z: subtype{'S1; 'S2} >- subtype{'B1['S1]; 'B1['S2]} } -->
    sequent ['ext] { 'H >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[@i:l] } =
+   it
+
+prim srecType 'H 'S1 'S2 'z :
+   sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: subtype{'S1; 'S2} >- subtype{'B['S1]; 'B['S2]} } -->
+   sequent ['ext] { 'H >- "type"{srec{T. 'B['T]}} } =
    it
 
 (*
@@ -134,7 +149,10 @@ prim srec_memberEquality 'H :
  * >- C[z]
  *)
 prim srecElimination 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
-   ('g['x; 'T1; 'u; 'w; 'z] : sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x];
+   ('g['x; 'T1; 'u; 'w; 'z] : sequent ['ext] {
+             'H;
+             x: srec{T. 'B['T]};
+             'J['x];
              T1: univ[@i:l];
              u: subtype{'T1; srec{T. 'B['T]}};
              w: v: 'T1 -> 'C['v];
@@ -142,7 +160,7 @@ prim srecElimination 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
            >- 'C['z]
            }) -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] } =
-   'g['x; 'T1; 'u; 'w; 'z]
+   srecind{'x; p, h. 'g['x; srec{T. 'B['T]}; it; 'p; 'h]}
 
 (*
  * H, x: srec(T. B[T]); J[x] >- C[x]
@@ -192,6 +210,49 @@ let is_srecind_term = is_dep0_dep2_term srecind_opname
 let dest_srecind = dest_dep0_dep2_term srecind_opname
 let mk_srecind_term = mk_dep0_dep2_term srecind_opname
 
+let d_srecT i p =
+   if i = 0 then
+      (srec_memberFormation (Sequent.hyp_count_addr p)
+       thenLT [idT;
+               addHiddenLabelT "wf"]) p
+   else
+      let j, k = Sequent.hyp_indices p i in
+      let x, t = Sequent.nth_hyp p i in
+      let t1, u, v, w, z = maybe_new_vars5 p x "u" "v" "w" "z" in
+      let univ =
+         try get_univ_arg p with
+            RefineError _ ->
+               << univ[i:l] >>
+      in
+         srecElimination j k x t t1 u v w z univ p
+
+let srec_term = << srec{T. 'B['T]} >>
+
+let d_resource = d_resource.resource_improve d_resource (srec_term, d_srecT)
+
+let d_srec_typeT i p =
+   if i = 0 then
+      let v1, v2, z = maybe_new_vars3 p "u" "v" "z" in
+         srecType (Sequent.hyp_count_addr p) v1 v2 z p
+   else
+      raise (RefineError ("d_srec_typeT", StringError "no elimination form"))
+
+let srec_type_term = << "type"{srec{T.'B['T]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (srec_type_term, d_srec_typeT)
+
+(*
+ * Eqcd.
+ *)
+let eqcd_srecT p =
+   srec_memberEquality (Sequent.hyp_count_addr p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (srec_term, eqcd_srecT)
+
+let srec_equal_term = << 't1 = 't2 in srec{T. 'B['T]} >>
+
+let d_resource = d_resource.resource_improve d_resource (srec_equal_term, d_wrap_eqcd eqcd_srecT)
+
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)
@@ -207,7 +268,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srec_
 
 (*
  * Type of srecind.
- * WRONG!
+ * WRONG.
  *)
 let inf_srecind f decl t =
    let p, h, a, g = dest_srecind t in

@@ -13,21 +13,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -39,6 +39,19 @@ open Refiner.Refiner.TermSubst
 
 open Sequent
 open Tacticals
+
+(*
+ * This resource is used to analyze the sequent to gather type info.
+ * The subst_fun gets a clause from the current sequent or its
+ * assumptions.
+ *)
+type typeinf_subst_fun = term_subst -> (string option * term) -> term_subst
+type typeinf_subst_info = term * typeinf_subst_fun
+type typeinf_subst_data
+
+resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data) typeinf_subst_resource
+
+val get_typeinf_subst_resource : string -> typeinf_subst_resource
 
 (*
  * A type inference is performed in a type context,
@@ -78,7 +91,7 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
 (*
  * Resources that have been created.
  *)
-val get_resource : string -> typeinf_resource
+val get_typeinf_resource : string -> typeinf_resource
 
 (*
  * Utilities.

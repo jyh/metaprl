@@ -34,8 +34,9 @@
 include Base_theory
 include Itt_equal
 include Itt_void
-include Itt_atom
 include Itt_bool
+include Itt_atom
+include Itt_atom_bool
 include Itt_int
 include Itt_int_bool
 include Itt_arith
@@ -48,30 +49,46 @@ include Itt_union
 include Itt_struct
 include Itt_set
 include Itt_isect
+include Itt_tunion
+include Itt_bisect
+include Itt_bunion
 include Itt_subtype
 include Itt_w
 include Itt_prec
 include Itt_srec
 include Itt_quotient
 include Itt_list
+include Itt_list2
 include Itt_derive
 include Itt_prop_decide
+include Itt_fset
 
 open Itt_equal
 open Itt_rfun
 open Itt_logic
 open Itt_w
 open Itt_list
+open Itt_list2
+open Itt_tunion
+open Itt_bisect
+open Itt_bunion
+open Itt_atom_bool
+open Itt_fset
 
 (*
  * Combine the precedences.
  *)
+prec prec_assoc < prec_equal
 prec prec_equal < prec_apply
 prec prec_type = prec_apply
 prec prec_and < prec_apply
 prec prec_w = prec_quant
 prec prec_tree_ind < prec_quant
 prec prec_list = prec_apply
+prec prec_tunion = prec_apply
+prec prec_bisect = prec_and
+prec prec_bunion = prec_or
+prec prec_eq_atom = prec_equal
 
 (*
  * -*-

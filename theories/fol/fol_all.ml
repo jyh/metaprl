@@ -33,11 +33,12 @@ dform all_df : parens :: "prec"["prec_all"] :: "all"{x. 'B} =
  ************************************************************************)
 
 prim all_type 'H 'x :
-   sequent ['ext] { 'H; x: univ >- "type"{'B['x]} } -->
+   sequent ['ext] { 'H; x: univ >- "type"{'B[prop{'x}]} } -->
    sequent ['ext] { 'H >- "type"{."all"{y. 'B['y]}} } = trivial
 
 prim all_intro 'H 'x :
-   ('b['x] : sequent ['ext] { 'H; x: univ >- 'B['x] }) -->
+   ('b['x] : sequent ['ext] { 'H; x: univ >- 'B[prop{'x}] }) -->
+   sequent ['ext] { 'H; x: univ >- "type"{'B[prop{'x}]} } -->
    sequent ['ext] { 'H >- "all"{y. 'B['y]} } =
    lambda{y. 'b['y]}
 
@@ -75,7 +76,9 @@ let d_all i p =
       let goal = Sequent.concl p in
       let v, _ = dest_all goal in
       let v = Var.maybe_new_vars1 p v in
-         all_intro (Sequent.hyp_count_addr p) v p
+         (all_intro (Sequent.hyp_count_addr p) v
+          thenLT [idT;
+                  addHiddenLabelT "wf"]) p
    else
       let x, a = Sequent.nth_hyp p i in
       let v, _ = dest_all a in

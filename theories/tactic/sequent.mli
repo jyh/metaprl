@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -89,6 +89,7 @@ val get_pos_hyp_num : tactic_arg -> int -> int
  *)
 val goal : tactic_arg -> term
 val msequent : tactic_arg -> msequent
+val args : tactic_arg -> term list
 val concl : tactic_arg -> term
 val nth_hyp : tactic_arg -> int -> string * term
 val label : tactic_arg -> string
@@ -116,9 +117,11 @@ val type_attribute       : string -> term -> raw_attribute
 val int_attribute        : string -> int -> raw_attribute
 val bool_attribute       : string -> bool -> raw_attribute
 val subst_attribute      : string -> term -> raw_attribute
+val conv_attribute       : string -> (unit -> Tactic_type.conv) -> raw_attribute
 val tactic_attribute     : string -> (unit -> tactic) -> raw_attribute
 val int_tactic_attribute : string -> (unit -> int -> tactic) -> raw_attribute
 val arg_tactic_attribute : string -> (unit -> tactic_arg -> tactic) -> raw_attribute
+val tsubst_attribute     : string -> (unit -> term_subst -> (string option * term) -> term_subst) -> raw_attribute
 val typeinf_attribute    : string -> (unit -> unify_subst -> term -> unify_subst * term) -> raw_attribute
 
 (*
@@ -130,9 +133,11 @@ val get_type_arg       : tactic_arg -> string -> term
 val get_int_arg        : tactic_arg -> string -> int
 val get_bool_arg       : tactic_arg -> string -> bool
 val get_subst_arg      : tactic_arg -> term_subst
+val get_conv_arg       : tactic_arg -> string -> Tactic_type.conv
 val get_tactic_arg     : tactic_arg -> string -> Tactic_type.tactic
 val get_int_tactic_arg : tactic_arg -> string -> (int -> Tactic_type.tactic)
 val get_arg_tactic_arg : tactic_arg -> string -> tactic_arg -> Tactic_type.tactic
+val get_tsubst_arg     : tactic_arg -> string -> (term_subst -> (string option * term) -> term_subst)
 val get_typeinf_arg    : tactic_arg -> string -> (unify_subst -> term -> unify_subst * term)
 
 (*

@@ -5,6 +5,7 @@
 include Fol_type
 
 declare univ
+declare prop{'t}
 
 (*
  * -*-

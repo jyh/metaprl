@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -76,7 +76,9 @@ declare hide{'A}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set_df1 : set{'A; x. 'B} = "{" bvar{'x} `":" 'A `"|" 'B "}"
+dform set_df1 : mode[prl] :: set{'A; x. 'B} =
+   pushm[3] `"{ " bvar{'x} `":" slot{'A} `" | " slot{'B} `"}" popm
+
 dform hide_df1 : mode[prl] :: hide{'A} = "[" 'A "]"
 
 (************************************************************************
@@ -108,6 +110,12 @@ prim setEquality 'H 'x :
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[@i:l] } :
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[@i:l] } = it
 
+prim setType 'H 'x :
+   sequent [squash] { 'H >- "type"{'A1} } -->
+   sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
+   sequent ['ext] { 'H >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
+   it
+
 (*
  * H >- { a:A | B[a] } ext a
  * by setMemberFormation Ui a z
@@ -138,33 +146,14 @@ prim setMemberEquality 'H 'x :
    sequent ['ext] { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } } = it
 
 (*
- * H, u: { x:A | B }, J[u] >- T[u] ext t[y]
- * by setElimination y v
- *
- * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >- T[y]
- *)
-prim setElimination 'H 'J 'u 'y 'v :
-   sequent [squash] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: 'B['y]; 'J['y] >- 'T['y] } :
-   sequent [squash] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
-   it
-
-(*
  * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
  * by setElimination2 y v z
  * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >> T[y]
  *)
-prim setElimination2 'H 'J 'u 'y 'v :
-   ('t['u; 'y; 'v] : sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: hide{'B['y]}; 'J['y] >- 'T['y] }) -->
+prim setElimination 'H 'J 'u 'v :
+   ('t : sequent [it; 'prop] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] }) -->
    sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
-   't['u; 'u; it]
-
-(*
- * Unhiding.
- *)
-prim hideElimination 'H 'J :
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 'T[it] } -->
-   sequent [squash] { 'H; u: hide{'P}; 'J['u] >- 'T['u] } =
-   it
+   't
 
 (*
  * Subtyping.
@@ -174,11 +163,23 @@ prim set_subtype 'H :
    sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } } =
    it
 
+(*
+ * Equalities can be unhidden.
+ *)
+prim unhide_equal 'H 'J 'u :
+   ('t['u] : sequent [squash] { 'H; u: 'x = 'y in 'A; 'J['u] >- 'C['u] }) -->
+   sequent ['ext] { 'H; u: hide{('x = 'y in 'A)}; 'J['u] >- 'C['u] } =
+   't[it]
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
 let set_term = << { a: 'A | 'B['x] } >>
+let set_opname = opname_of_term set_term
+let mk_set_term = mk_dep0_dep1_term set_opname
+let is_set_term = is_dep0_dep1_term set_opname
+let dest_set = dest_dep0_dep1_term set_opname
 
 (*
  * D
@@ -193,13 +194,12 @@ let d_set i p =
       let v = get_opt_var_arg "z" p in
          setMemberFormation (Sequent.hyp_count_addr p) t v p
    else
-      let n, _ = Sequent.nth_hyp p i in
+      let u, _ = Sequent.nth_hyp p i in
+      let v = maybe_new_vars1 p "v" in
       let j, k = Sequent.hyp_indices p i in
-      let u, y, v = maybe_new_vars3 p "u" "y" "v" in
-         setElimination j k u y v p
+         setElimination j k u v p
 
 let d_resource = d_resource.resource_improve d_resource (set_term, d_set)
-let d = d_resource.resource_extract d_resource
 
 (*
  * EqCD.
@@ -211,6 +211,18 @@ let eqcd_set p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (set_term, eqcd_set)
 let eqcd = eqcd_resource.resource_extract eqcd_resource
+
+let d_set_typeT p =
+   let t = Sequent.concl p in
+   let t = dest_type_term t in
+   let v, _, _ = dest_set t in
+   let v = maybe_new_vars1 p v in
+      (setType (Sequent.hyp_count_addr p) v
+       thenT addHiddenLabelT "wf") p
+
+let set_type_term = << "type"{.{ a: 'A | 'B['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (set_type_term, wrap_intro d_set_typeT)
 
 (************************************************************************
  * TACTICS                                                              *
@@ -229,6 +241,18 @@ let dest_hide = dest_dep0_term hide_opname
 let mk_hide_term = mk_dep0_term hide_opname
 
 (*
+ * Unhide an equality.
+ *)
+let d_hide_equalT i p =
+   let j, k = Sequent.hyp_indices p i in
+   let u, _ = Sequent.nth_hyp p i in
+      unhide_equal j k u p
+
+let hide_equal_term = << hide{.'x = 'y in 'A} >>
+
+let d_resource = d_resource.resource_improve d_resource (hide_equal_term, wrap_elim d_hide_equalT)
+
+(*
  * Squash a goal.
  *)
 let squashT p =
@@ -236,77 +260,6 @@ let squashT p =
       idT p
    else
       Sequent.get_tactic_arg p "squash" p
-
-(*
- * Unhide a hidden hypothesis.
- *)
-let unhideT i p =
-   let s = dest_hide (snd (Sequent.nth_hyp p i)) in
-      (assertAtT (i + 1) s
-       thenLT [squashT thenMT nthHypT i;
-               thinT i]) p
-
-(*
- * Unhide all hidden hyps.
- *)
-let unhideAllT p =
-   let count = Sequent.hyp_count p in
-   let rec aux i p =
-      (if i < count then
-          let _, h = Sequent.nth_hyp p i in
-             if is_hide_term h then
-                unhideT i thenMT aux (i + 1)
-             else
-                aux (i + 1)
-       else
-          idT) p
-   in
-      aux 0 p
-
-(*
- * D
- *)
-let d_set_concl p =
-   let t =
-      try get_with_arg p with
-         Not_found ->
-            raise (RefineError ("d_set", StringError "requires an argument"))
-   in
-   let v = get_opt_var_arg "z" p in
-      setMemberFormation (Sequent.hyp_count_addr p) t v p
-
-let d_set_hyp i p =
-   let n, _ = Sequent.nth_hyp p i in
-   let j, k = Sequent.hyp_indices p i in
-   let d_squashed p =
-      (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
-          [y; v] ->
-             setElimination j k n y v
-        | _ ->
-             failT) p
-   in
-   let d_hidden p =
-      (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
-          [y; v] ->
-             setElimination2 j k n y v
-        | _ ->
-             failT) p
-   in
-      (if is_squash_goal p then
-          d_squashed
-       else
-          let tac =
-             d_hidden thenT tryT (unhideT (i + 2))
-          in
-             (squashT thenMT d_squashed) orelseT tac) p
-
-let d_setT i =
-   if i = 0 then
-      d_set_concl
-   else
-      d_set_hyp i
-
-let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
 
 (*
  * EqCD.
@@ -317,6 +270,23 @@ let eqcd_setT p =
       setEquality count v p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (set_term, eqcd_setT)
+
+(*
+ * Membership.
+ *)
+let d_set_equalT p =
+   let t = Sequent.concl p in
+   let t, _, _ = dest_equal t in
+   let v, _, _ = dest_set t in
+   let v = maybe_new_vars1 p v in
+      (setMemberEquality (Sequent.hyp_count_addr p) v
+       thenLT [addHiddenLabelT "wf";
+               addHiddenLabelT "assertion";
+               addHiddenLabelT "wf"]) p
+
+let set_equal_term = << 'x = 'y in { z: 'A | 'B['z] } >>
+
+let d_resource = d_resource.resource_improve d_resource (set_equal_term, wrap_intro d_set_equalT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -192,6 +192,13 @@ axiom listSubtype 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}}
 
+(*
+ * Nil is canonical.
+ *)
+axiom nilSqequal 'H 'T :
+   sequent [squash] { 'H >- 'u = nil in list{'T} } -->
+   sequent ['ext] { 'H >- Perv!"rewrite"{'u; nil} }
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

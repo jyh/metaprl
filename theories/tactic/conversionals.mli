@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -35,6 +35,7 @@ include Mptop
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
 
+open Tactic_type
 open Tacticals
 open Rewrite_type
 
@@ -50,6 +51,9 @@ type conv = Rewrite_type.conv
  *)
 val env_term : env -> term
 val env_goal : env -> term
+val env_arg : env -> tactic_arg
+
+val get_conv : tactic_arg -> string -> conv
 
 (*
  * All rewrites are wrapped by the rewrite function.
@@ -118,6 +122,24 @@ topval firstC : conv list -> conv
  *)
 topval repeatC : conv -> conv
 topval repeatForC : int -> conv -> conv
+
+(************************************************************************
+ * REDUCTION RESOURCE                                                   *
+ ************************************************************************)
+
+type reduce_data
+
+resource (term * conv, conv, reduce_data) reduce_resource
+
+topval reduceTopC : conv
+topval reduceC : conv
+
+(*
+ * Get a resource for the toploop.
+ *)
+val get_resource : string -> reduce_resource
+
+val add_reduce_info : reduce_resource -> (term * conv) list -> reduce_resource
 
 (*
  * -*-

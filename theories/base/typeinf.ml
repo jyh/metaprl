@@ -13,21 +13,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -37,10 +37,12 @@ include Tacticals
 open Printf
 open Mp_debug
 
-open Refiner.Refiner.Term
+open Refiner.Refiner
 open Refiner.Refiner.TermType
+open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Term_table
 open Mp_resource
@@ -58,6 +60,17 @@ let _ =
 (************************************************************************
  * TYPES                                                                *
  ************************************************************************)
+
+(*
+ * This resource is used to analyze the sequent to gather type info.
+ * The subst_fun gets a clause from the current sequent or its
+ * assumptions.
+ *)
+type typeinf_subst_fun = term_subst -> (string option * term) -> term_subst
+type typeinf_subst_info = term * typeinf_subst_fun
+type typeinf_subst_data = typeinf_subst_fun term_table
+
+resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data) typeinf_subst_resource
 
 (*
  * This is the type of the inference algorithm.
@@ -92,6 +105,122 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
 (*
  * Infer the type of a term from the table.
  *)
+let collect (tbl : typeinf_subst_fun term_table) subst (so, t) =
+   let _, _, inf =
+      try lookup "Typeinf.collect" tbl t with
+         Not_found ->
+            raise (RefineError ("Typeinf.collect", StringTermError ("can't collect type for", t)))
+   in
+      inf subst (so, t)
+
+(*
+ * Keep a list of resources for lookup by the toploop.
+ *)
+let subst_resources = ref ([] : (string * typeinf_subst_resource) list)
+
+let save_subst name (rsrc : typeinf_subst_resource) =
+   subst_resources := (name, rsrc) :: !subst_resources
+
+let get_typeinf_subst_resource name =
+   let rec search = function
+      (name', rsrc) :: tl ->
+         if name' = name then
+            rsrc
+         else
+            search tl
+    | [] ->
+         raise Not_found
+   in
+      search !subst_resources
+
+(*
+ * Wrap up the algorithm.
+ *)
+let rec join_subst_resource { resource_data = tbl1 } { resource_data = tbl2 } =
+   let data = join_tables tbl1 tbl2 in
+      { resource_data = data;
+        resource_join = join_subst_resource;
+        resource_extract = extract_subst_resource;
+        resource_improve = improve_subst_resource;
+        resource_close = close_subst_resource
+      }
+
+and extract_subst_resource { resource_data = tbl } =
+   collect tbl
+
+and improve_subst_resource { resource_data = tbl } (t, inf) =
+   { resource_data = insert tbl t inf;
+     resource_join = join_subst_resource;
+     resource_extract = extract_subst_resource;
+     resource_improve = improve_subst_resource;
+     resource_close = close_subst_resource
+   }
+
+and close_subst_resource (rsrc : typeinf_subst_resource) modname =
+   save_subst modname rsrc;
+   rsrc
+
+(*
+ * Resource.
+ *)
+let typeinf_subst_resource =
+   { resource_data = new_table ();
+     resource_join = join_subst_resource;
+     resource_extract = extract_subst_resource;
+     resource_improve = improve_subst_resource;
+     resource_close = close_subst_resource
+   }
+
+(*
+ * Projector.
+ *)
+let collect_subst p =
+   let collect = get_tsubst_arg p "typeinf_subst" in
+   let rec filter_hyps subst hyps i len =
+      if i = len then
+         subst
+      else
+         match SeqHyp.get hyps i with
+            Hypothesis (v, t) ->
+               let subst = (v, t) :: subst in
+               let subst =
+                  try collect subst (Some v, t) with
+                     RefineError _ ->
+                        subst
+               in
+                  filter_hyps subst hyps (i + 1) len
+          | _ ->
+               filter_hyps subst hyps (i + 1) len
+   in
+   let goal, assums = dest_msequent (Sequent.msequent p) in
+   let { sequent_hyps = hyps } = TermMan.explode_sequent goal in
+   let num_hyps = TermMan.num_hyps goal in
+   let rec filter_assums subst = function
+      assum :: tl ->
+         let num_hyps' = TermMan.num_hyps assum in
+            if num_hyps' <= num_hyps then
+               let concl = TermMan.nth_concl assum 1 in
+               let subst =
+                  try collect subst (None, concl) with
+                     RefineError _ ->
+                        subst
+               in
+                  filter_assums subst tl
+            else
+               subst
+    | [] ->
+         subst
+   in
+   let subst = filter_hyps [] hyps 0 (SeqHyp.length hyps) in
+      filter_assums subst assums
+
+(************************************************************************
+ * IMPLEMENTATION                                                       *
+ ************************************************************************)
+
+(*
+ * Infer the type of a term from the table.
+ *)
 let infer tbl =
    let rec aux decl t =
       if is_var_term t then
@@ -117,7 +246,7 @@ let resources = ref ([] : (string * typeinf_resource) list)
 let save name (rsrc : typeinf_resource) =
    resources := (name, rsrc) :: !resources
 
-let get_resource name =
+let get_typeinf_resource name =
    let rec search = function
       (name', rsrc) :: tl ->
          if name' = name then
@@ -174,18 +303,7 @@ let typeinf_of_proof p =
    get_typeinf_arg p "typeinf"
 
 let infer_type p t =
-   let rec filter hyps i len =
-      if i = len then
-         []
-      else
-         match SeqHyp.get hyps i with
-            Hypothesis (v, t) ->
-               (v, t) :: filter hyps (i + 1) len
-          | _ ->
-               filter hyps (i + 1) len
-   in
-   let { sequent_hyps = hyps } = Sequent.explode_sequent p in
-   let subst = filter hyps 0 (SeqHyp.length hyps) in
+   let subst = collect_subst p in
       (get_typeinf_arg p "typeinf") (unify_subst_of_subst subst) t
 
 (*

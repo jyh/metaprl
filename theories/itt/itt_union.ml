@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -51,7 +51,10 @@ open Mp_resource
 open Var
 open Sequent
 open Tacticals
+open Conversionals
 open Typeinf
+
+open Base_dtactic
 
 open Itt_equal
 open Itt_struct
@@ -105,6 +108,16 @@ dform decide_df : mode[prl] :: decide{'x; y. 'a; z. 'b} =
    szone pushm[0] pushm[3] `"match" " " slot{'x} " " `"with" hspace
    `"inl " slot{'y} `" -> " slot{'a} popm hspace
    pushm[3] `" | inr " slot{'z} `" -> " slot{'b} popm popm ezone
+
+(************************************************************************
+ * REDUCTIONS                                                           *
+ ************************************************************************)
+
+let reduce_info =
+   [<< decide{inl{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInl;
+    << decide{inr{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInr]
+
+let reduce_resource = add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -231,6 +244,15 @@ prim unionSubtype 'H :
    sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } } =
    it
 
+(*
+ * Interactive.
+ *)
+interactive union_contradiction1 'H 'J : :
+   sequent ['ext] { 'H; x: inl{'y} = inr{'z} in 'T; 'J['x] >- 'C['x] }
+
+interactive union_contradiction2 'H 'J : :
+   sequent ['ext] { 'H; x: inr{'y} = inl{'z} in 'T; 'J['x] >- 'C['x] }
+
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)
@@ -318,6 +340,23 @@ let d_union_typeT i p =
 let union_type_term = << "type"{. 'A + 'B } >>
 
 let d_resource = d_resource.resource_improve d_resource (union_type_term, d_union_typeT)
+
+(*
+ * Contradiction.
+ *)
+let d_contradiction1 i p =
+   let j, k = Sequent.hyp_indices p i in
+      union_contradiction1 j k p
+
+let d_contradiction2 i p =
+   let j, k = Sequent.hyp_indices p i in
+      union_contradiction2 j k p
+
+let d_info =
+   [<< inl{'x} = inr{'y} in 'T >>, wrap_elim d_contradiction1;
+    << inr{'x} = inl{'y} in 'T >>, wrap_elim d_contradiction2]
+
+let d_resource = add_d_info d_resource d_info
 
 (************************************************************************
  * EQCD TACTIC                                                          *

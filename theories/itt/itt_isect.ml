@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -36,6 +36,7 @@ include Tacticals
 include Itt_equal
 include Itt_set
 include Itt_rfun
+include Itt_logic
 
 open Printf
 open Mp_debug
@@ -71,8 +72,10 @@ declare "isect"{'A; x. 'B['x]}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform isect_df1 : mode[prl] :: (isect x: 'A. 'B['x]) = cap slot{'x} `":" slot{'A} `"." slot{'B['x]}
-dform isect_df2 : mode[src] :: (isect x: 'A. 'B['x]) = `"isect " slot{'x} `":" slot{'A} `"." slot{'B['x]}
+dform isect_df1 : mode[prl] :: (isect x: 'A. 'B) =
+   cap slot{'x} `":" slot{'A} `"." slot{'B}
+dform isect_df2 : mode[src] :: (isect x: 'A. 'B) =
+   `"isect " slot{'x} `":" slot{'A} `"." slot{'B}
 
 (************************************************************************
  * RULES                                                                *
@@ -102,6 +105,12 @@ prim intersectionEquality 'H 'y :
    sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[@i:l] } =
    it
 
+prim intersectionType 'H 'y :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} } =
+   it
+
 (*
  * H >- isect x: A. B[x] ext b[it]
  * by intersectionMemberFormation z
@@ -110,7 +119,7 @@ prim intersectionEquality 'H 'y :
  *)
 prim intersectionMemberFormation 'H 'z :
    sequent [squash] { 'H >- "type"{'A} } -->
-   ('b['z] : sequent ['ext] { 'H; z: hide('A) >- 'B['z] }) -->
+   ('b['z] : sequent ['ext] { 'H; z: hide{'A} >- 'B['z] }) -->
    sequent ['ext] { 'H >- isect x: 'A. 'B['x] } =
    'b[it]
 
@@ -163,6 +172,18 @@ prim intersectionSubtype 'H 'a :
    sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } } =
    it
 
+interactive intersectionSubtype2 'H 'y 'a :
+   sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+   sequent [squash] { 'H >- subtype{'B['a]; 'T} } -->
+   sequent ['ext] { 'H >- subtype{."isect"{'A; x. 'B['x]}; 'T} }
+
+interactive intersectionSubtype3 'H 'x :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'C} } -->
+   sequent [squash] { 'H; x: 'A >- subtype{'C; 'B['x]} } -->
+   sequent ['ext] { 'H >- subtype{'C; ."isect"{'A; x. 'B['x]}} }
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -202,6 +223,42 @@ let d_isectT i =
 let d_resource = d_resource.resource_improve d_resource (isect_term, d_isectT)
 
 (*
+ * Typehood.
+ *)
+let d_isect_typeT i p =
+   if i = 0 then
+      let concl = Sequent.concl p in
+      let concl = dest_type_term concl in
+      let v, _, _ = dest_isect concl in
+      let v = maybe_new_vars1 p v in
+         (intersectionType (Sequent.hyp_count_addr p) v
+          thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_isect_typeT", StringError "no elimination form"))
+
+let isect_type_term = << "type"{."isect"{'A; x. 'B['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (isect_type_term, d_isect_typeT)
+
+(*
+ * Membership.
+ *)
+let d_isect_memT i p =
+   if i = 0 then
+      let concl = Sequent.concl p in
+      let concl, _, _ = dest_equal concl in
+      let v, _, _ = dest_isect concl in
+      let v = maybe_new_vars1 p v in
+         (intersectionMemberEquality (Sequent.hyp_count_addr p) v
+          thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_isect_memT", StringError "no elimination form"))
+
+let isect_mem_term = << 'x = 'y in "isect"{'A; z. 'B['z]} >>
+
+let d_resource = d_resource.resource_improve d_resource (isect_mem_term, d_isect_memT)
+
+(*
  * EQCD.
  *)
 let eqcd_isectT p =
@@ -211,6 +268,10 @@ let eqcd_isectT p =
        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (isect_term, eqcd_isectT)
+
+let isect_equal_term = << "isect"{'A1; x1. 'B1['x1]} = "isect"{'A2; x2. 'B2['x2]} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (isect_equal_term, d_wrap_eqcd eqcd_isectT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -247,6 +308,23 @@ let sub_resource =
                << 'A2 >>, << 'A1 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],
               isect_subtypeT))
+
+let d_isect_subtypeT i p =
+   if i = 0 then
+      let a = get_with_arg p in
+      let concl = Sequent.concl p in
+      let v, _, _ = dest_isect concl in
+      let v = maybe_new_vars1 p v in
+         (intersectionSubtype2 (Sequent.hyp_count_addr p) v a
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  idT]) p
+   else
+      raise (RefineError ("d_isect_subtypeT", StringError "no elimination form"))
+
+let isect_subtype_term = << subtype{."isect"{'A; x. 'B['x]}; 'T} >>
+
+let d_resource = d_resource.resource_improve d_resource (isect_subtype_term, d_isect_subtypeT)
 
 (*
  * -*-

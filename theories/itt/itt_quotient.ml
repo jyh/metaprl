@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -194,22 +194,29 @@ prim quotient_memberWeakEquality 'H :
  *)
 prim quotient_memberEquality 'H :
    sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { 'H >- 'a1 = 'a1 in 'A } -->
-   sequent [squash] { 'H >- 'a2 = 'a2 in 'A } -->
+   sequent [squash] { 'H >- member{'A; 'a1} } -->
+   sequent [squash] { 'H >- member{'A; 'a2} } -->
    sequent [squash] { 'H >- 'E['a1; 'a2] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
 (*
- * !!!!CHECK!!!!
- *
+ * Membership.
+ *)
+prim quotientMember 'H :
+   sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   sequent [squash] { 'H >- member{'A; 'l} } -->
+   sequent ['ext] { 'H >- member{(quot x, y: 'A // 'E['x; 'y]); 'l} } =
+   it
+
+(*
  * H, a: quot x, y: A // E, J[x] >- s[a] = t[a] in T[a]
  * by quotientElimination v w z
  *
  * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
  * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
-prim quotientElimination 'H 'J 'v 'w 'z :
+prim quotientElimination1 'H 'J 'v 'w 'z :
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
@@ -217,9 +224,15 @@ prim quotientElimination 'H 'J 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
+prim quotientElimination2 'H 'J 'v 'w 'z :
+   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
+   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
+             v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
+           } -->
+   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
+   it
+
 (*
- * !!!!CHECK!!!!
- *
  * H, x: a1 = a2 in quot x, y: A // E, J[x] >- T[x]
  * by quotient_equalityElimination v
  *
@@ -229,6 +242,17 @@ prim quotient_equalityElimination 'H 'J 'v :
    ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide('E['a1; 'a2]) >- 'T['x] }) -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]
+
+(*
+ * Elimination under membership.
+ *)
+prim quotient_memberElimination 'H 'J 'v 'w 'z :
+   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
+   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
+             v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 's['w] in 'T['v]
+           } -->
+   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- member{'T['a]; 's['a]} } =
+   it
 
 (*
  * H >- quot x1, y1: A1 // E1[x1; y1] <= quot x2, y2: A2 // E2[x2; y2]
@@ -269,12 +293,21 @@ let d_concl_quotient p =
  * We take the argument.
  *)
 let d_hyp_quotient i p =
-   let i, j = hyp_indices p i in
-      (match maybe_new_vars ["v"; "w"; "z"] (declared_vars p) with
-          [v; w; z] ->
-             quotientElimination i j v w z
-        | _ ->
-             failT) p
+   let concl = Sequent.concl p in
+   let j, k = hyp_indices p i in
+   let tac =
+      if is_equal_term concl then
+         if get_alt_arg p then
+            quotientElimination1
+         else
+            quotientElimination2
+      else
+         quotient_memberElimination
+   in
+   let v, w, z = maybe_new_vars3 p "v" "w" "z" in
+      (tac j k v w z
+       thenLT [addHiddenLabelT "wf";
+               addHiddenLabelT "equality"]) p
 
 (*
  * Join them.
@@ -326,15 +359,21 @@ let d_resource = d_resource.resource_improve d_resource (quotient_type_term, d_q
 (*
  * Membership in a quotient type.
  *)
-let d_quotient_equal_memberT i p =
-   if i = 0 then
-      quotient_memberEquality (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_quotient_equalT", StringError "no elimination form"))
+let eqcd_quotient_equalT p =
+   (quotient_memberEquality (hyp_count_addr p)
+    thenT addHiddenLabelT "wf") p
 
-let quotient_equal_member_term = << 'x = 'y in (quot u, v: 'A // 'E['u; 'v]) >>
+let eqcd_quotient_memberT p =
+   (quotientMember (hyp_count_addr p)
+    thenT addHiddenLabelT "wf") p
 
-let d_resource = d_resource.resource_improve d_resource (quotient_equal_member_term, d_quotient_equal_memberT)
+let quotient_member_equal_term = << 'x = 'y in quot u, v: 'A // 'E['u; 'v] >>
+
+let quotient_member_term = << member{(quot u, v: 'A // 'E['u; 'v]); 'x} >>
+
+let d_resource = d_resource.resource_improve d_resource (quotient_member_equal_term, d_wrap_eqcd eqcd_quotient_equalT)
+
+let d_resource = d_resource.resource_improve d_resource (quotient_member_term, d_wrap_eqcd eqcd_quotient_memberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

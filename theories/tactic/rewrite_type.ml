@@ -62,19 +62,9 @@ let debug_rewrite = load_debug "rewrite"
  * Compose and Choose that has more efficient
  * operations.
  *)
-type env = tactic_arg * address
+type conv = Tactic_type.conv
 
-type conv =
-   Rewrite of rw
- | CondRewrite of cond_rewrite
- | Compose of conv Flist.t
- | Choose of conv Flist.t
- | Address of address * conv
- | Fold of term * conv
- | Cut of term
- | Fun of (env -> conv)
- | Higher of conv
- | Identity
+type env = Tactic_type.env
 
 (************************************************************************
  * RULES                                                                *
@@ -98,21 +88,6 @@ prim rewriteSequentAxiom 'H : :
    sequent ['ext] { 'H >- "rewrite"{'x; 'x} } =
    rewrite_just
 
-(*
- * Sequent replacement.
- *)
-prim rewriteHypCut 'H 'J 'T1 :
-   ('t : sequent ['ext] { 'H; x: 'T1; 'J['x] >- 'C['x] }) -->
-   sequent ['ext] { 'H >- "rewrite"{'T1; 'T2} } -->
-   sequent ['ext] { 'H; x: 'T2; 'J['x] >- 'C['x] } =
-   't
-
-prim rewriteConclCut 'H 'T1 :
-   ('t : sequent ['ext] { 'H >- 'T1 }) -->
-   sequent ['ext] { 'H >- "rewrite"{'T1; 'T2} } -->
-   sequent ['ext] { 'H >- 'T2 } =
-   't
-
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
@@ -122,6 +97,15 @@ prim rewriteConclCut 'H 'T1 :
  *)
 let env_term (arg, addr) =
    term_subterm (Sequent.goal arg) addr
+
+let env_term_subterm_count (arg, addr) =
+   term_subterm_count (Sequent.goal arg) addr
+
+let env_arg (arg, addr) =
+   arg
+
+let get_conv = Tactic_type.get_conv
+let conv_attribute = Tactic_type.conv_attribute
 
 (*
  * Get the sequent that we are matching against.
@@ -134,14 +118,14 @@ let env_goal (arg, _) =
  * This function is required by filter_prog.
  *)
 let rewrite_of_rewrite rw =
-   Rewrite rw
+   RewriteConv rw
 
 (*
  * Create a conversion from a conditional rewrite.
  * This function is required by filter_prog.
  *)
 let rewrite_of_cond_rewrite crw args =
-   CondRewrite (crw args)
+   CondRewriteConv (crw args)
 
 (*
  * Combine two lissts of conversion.
@@ -149,14 +133,14 @@ let rewrite_of_cond_rewrite crw args =
  *)
 let combine rw_f crw_f make clist1 clist2 =
    match Flist.last clist1, Flist.first clist2 with
-      Rewrite rw1, Rewrite rw2 ->
-         let rw = Rewrite (rw_f rw1 rw2) in
+      RewriteConv rw1, RewriteConv rw2 ->
+         let rw = RewriteConv (rw_f rw1 rw2) in
             if Flist.singleton clist1 & Flist.singleton clist2 then
                rw
             else
                make (Flist.append_skip clist1 rw clist2)
-    | CondRewrite crw1, CondRewrite crw2 ->
-         let crw = CondRewrite (crw_f crw1 crw2) in
+    | CondRewriteConv crw1, CondRewriteConv crw2 ->
+         let crw = CondRewriteConv (crw_f crw1 crw2) in
             if Flist.singleton clist1 & Flist.singleton clist2 then
                crw
             else
@@ -165,22 +149,22 @@ let combine rw_f crw_f make clist1 clist2 =
          make (Flist.append clist1 clist2)
 
 let compose clist1 clist2 =
-   combine andthenrw candthenrw (fun l -> Compose l) clist1 clist2
+   combine andthenrw candthenrw (fun l -> ComposeConv l) clist1 clist2
 
 let choose clist1 clist2 =
-   combine orelserw corelserw (fun l -> Choose l) clist1 clist2
+   combine orelserw corelserw (fun l -> ChooseConv l) clist1 clist2
 
 let prefix_andthenC conv1 conv2 =
    let clist1 =
       match conv1 with
-         Compose clist1 ->
+         ComposeConv clist1 ->
             clist1
        | _ ->
             Flist.create conv1
    in
    let clist2 =
       match conv2 with
-         Compose clist2 ->
+         ComposeConv clist2 ->
             clist2
        | _ ->
             Flist.create conv2
@@ -190,14 +174,14 @@ let prefix_andthenC conv1 conv2 =
 let prefix_orelseC conv1 conv2 =
    let clist1 =
       match conv1 with
-         Choose clist1 ->
+         ChooseConv clist1 ->
             clist1
        | _ ->
             Flist.create conv1
    in
    let clist2 =
       match conv2 with
-         Choose clist2 ->
+         ChooseConv clist2 ->
             clist2
        | _ ->
             Flist.create conv2
@@ -207,13 +191,13 @@ let prefix_orelseC conv1 conv2 =
 (*
  * No action.
  *)
-let idC = Identity
+let idC = IdentityConv
 
 (*
  * Function conversion needs an argument.
  *)
 let funC f =
-   Fun f
+   FunConv f
 
 (*
  * Apply the conversion at the specified address.
@@ -221,28 +205,27 @@ let funC f =
 let addrC addr =
    let addr = make_address addr in
       (function
-         Rewrite rw ->
-            Rewrite (rwaddr addr rw)
-       | CondRewrite crw ->
-            CondRewrite (crwaddr addr crw)
+         RewriteConv rw ->
+            RewriteConv (rwaddr addr rw)
+       | CondRewriteConv crw ->
+            CondRewriteConv (crwaddr addr crw)
        | conv ->
-            Address (addr, conv))
+            AddressConv (addr, conv))
 
 (*
  * Apply the conversion at the highest addresses.
  *)
 let higherC = function
-   Rewrite rw ->
-      Rewrite (rwhigher rw)
- | CondRewrite crw ->
-      CondRewrite (crwhigher crw)
+   RewriteConv rw ->
+      RewriteConv (rwhigher rw)
+ | CondRewriteConv crw ->
+      CondRewriteConv (crwhigher crw)
  | conv ->
-      Higher conv
+      HigherConv conv
 
 let allSubC conv =
    let allSubCE conv env =
-      let t = env_term env in
-      let count = subterm_count t in
+      let count = env_term_subterm_count env in
       let rec subC conv count i =
          if i = count then
             idC
@@ -263,7 +246,7 @@ let higherLC rw =
  * Reverse the conversion at the specified address.
  *)
 let foldC t conv =
-   Fold (t, conv)
+   FoldConv (t, conv)
 
 (*
  * Build a fold conversion from the contractum
@@ -271,7 +254,7 @@ let foldC t conv =
  *)
 let makeFoldC contractum conv =
    let fold_aux = function
-      Rewrite rw ->
+      RewriteConv rw ->
          let mseq = mk_msequent contractum [] in
          let tac = rwtactic rw in
             begin
@@ -284,11 +267,11 @@ let makeFoldC contractum conv =
                      let doCE env =
                         match apply_rewrite rw' ([||], [||], []) (env_term env) [] with
                            [contractum], _ ->
-                              Fold (contractum, conv)
+                              FoldConv (contractum, conv)
                          | _ ->
                               raise (RefineError ("Rewrite_type.fold", StringTermError ("rewrite failed", redex)))
                      in
-                        Fun doCE
+                        FunConv doCE
                 | _ ->
                      raise (RefineError ("Rewrite_type.fold", StringTermError ("fold failed", contractum)))
             end
@@ -302,49 +285,7 @@ let makeFoldC contractum conv =
  * subgoal.
  *)
 let cutC t =
-   Cut t
-
-(*
- * Apply cut sequent rule.
- * We have three cases:
- *    1. The replacement is in a hyp
- *    2. The replacement is in a hyp context
- *    3. The replacement is in the concl
- *)
-let rewrite_just_term = << rewrite_just >>
-
-let cutT i addr t p =
-   if i = 0 then
-      let t2 = Sequent.concl p in
-      let j = Sequent.hyp_count p in
-      let t1 = replace_subterm t2 addr t in
-      let i = Sequent.hyp_count_addr p in
-         rewriteConclCut i t1 p
-   else
-      let goal = Sequent.goal p in
-      let caddr = Sequent.clause_addr p i in
-      let clause = term_subterm goal caddr in
-         if is_context_term clause then
-            let v = maybe_new_vars1 p "v" in
-            let vt = mk_var_term v in
-            let name, arg, args = dest_context clause in
-            let t1 = mk_context_term name vt args in
-            let t1 = replace_subterm t1 addr t in
-            let t1 = mk_xlambda_term v t1 in
-            let count = Sequent.hyp_count p in
-            let i, j =
-               if i < 0 then
-                  count + i, -i
-               else
-                  i - 1, count - i + 1
-            in
-               raise (RefineError ("cutT", StringError "rewriteContextCut needs to be reimplemented"))
-               (* rewriteContextCut i j t1 p *)
-         else
-            let _, t1 = Sequent.nth_hyp p i in
-            let i, j = Sequent.hyp_indices p i in
-            let t1 = replace_subterm t1 addr t in
-               rewriteHypCut i j t1 p
+   CutConv t
 
 (*
  * Apply axiom rule.
@@ -358,81 +299,84 @@ let rwAxiomT =
 let rwSeqAxiomT p =
    rewriteSequentAxiom (Sequent.hyp_count_addr p) p
 
+let rewrite_axiom = rwSeqAxiomT
+
 (*
  * root: address of the clause
  * rel: offset into the term
  * addr: compose_addrress root rel
  *)
-let rec apply i rel addr conv p =
+let rec apply rel addr conv p =
    match conv with
-      Rewrite rw ->
+      RewriteConv rw ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Rewrite%t" eflush;
          Tactic_type.tactic_of_rewrite (rwaddr addr rw) p
-    | CondRewrite crw ->
+    | CondRewriteConv crw ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: CondRewrite%t" eflush;
          Tactic_type.tactic_of_cond_rewrite (crwaddr addr crw) p
-    | Compose clist ->
+    | ComposeConv clist ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Compose%t" eflush;
-         composeT i rel addr (Flist.tree_of_list clist) p
-    | Choose clist ->
+         composeT rel addr (Flist.tree_of_list clist) p
+    | ChooseConv clist ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Choose%t" eflush;
-         chooseT i rel addr (Flist.tree_of_list clist) p
-    | Address (addr', conv) ->
+         chooseT rel addr (Flist.tree_of_list clist) p
+    | AddressConv (addr', conv) ->
          let rel = compose_address rel addr' in
          let addr = compose_address addr addr' in
             if !debug_rewrite then
                eprintf "Rewrite_type.apply: Address %s%t" (string_of_address addr') eflush;
-            apply i rel addr conv p
-    | Identity ->
+            apply rel addr conv p
+    | IdentityConv ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Identity%t" eflush;
          idT p
-    | Fun f ->
+    | FunConv f ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Fun%t" eflush;
-         apply i rel addr (f (p, addr)) p
-    | Higher conv ->
+         apply rel addr (f (p, addr)) p
+    | HigherConv conv ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Higher%t" eflush;
-         apply i rel addr (higherLC conv) p
-    | Fold (t, conv) ->
+         apply rel addr (higherLC conv) p
+    | FoldConv (t, conv) ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Fold%t" eflush;
-         (cutT i rel t thenLT [idT; solveCutT i rel conv]) p
-    | Cut t ->
+         (Tactic_type.tactic_of_cond_rewrite (crwaddr addr (cutrw t))
+          thenLT [idT; solveCutT conv]) p
+    | CutConv t ->
          if !debug_rewrite then
             eprintf "Rewrite_type.apply: Cut%t" eflush;
-         cutT i rel t p
+         Tactic_type.tactic_of_cond_rewrite (crwaddr addr (cutrw t)) p
 
-and composeT i rel addr tree p =
+and composeT rel addr tree p =
    match tree with
       Flist.Empty ->
          idT p
     | Flist.Leaf conv ->
-         apply i rel addr conv p
+         apply rel addr conv p
     | Flist.Append (tree1, tree2) ->
-         (composeT i rel addr tree1
-          thenT composeT i rel addr tree2) p
+         (composeT rel addr tree1
+          thenT composeT rel addr tree2) p
 
-and chooseT i rel addr tree p =
+and chooseT rel addr tree p =
    match tree with
       Flist.Empty ->
          idT p
     | Flist.Leaf conv ->
-         apply i rel addr conv p
+         apply rel addr conv p
     | Flist.Append (tree1, tree2) ->
-         (chooseT i rel addr tree1
-          orelseT chooseT i rel addr tree2) p
+         (chooseT rel addr tree1
+          orelseT chooseT rel addr tree2) p
 
-and solveCutT i rel conv p =
-   let rel = compose_address (make_address [0]) rel in
+and solveCutT conv p =
+   let rel = make_address [0] in
    let root = Sequent.clause_addr p 0 in
    let addr = compose_address root rel in
-      (apply i rel addr conv thenT rwSeqAxiomT) p
+      (apply rel addr conv thenT rwSeqAxiomT) p
 
 (*
  * Apply the rewrite.
@@ -440,7 +384,7 @@ and solveCutT i rel conv p =
 let rw conv i p =
    eprintf "Rewrite start%t" eflush;
    let addr = Sequent.clause_addr p i in
-   let x = apply i (make_address []) addr conv p in
+   let x = apply (make_address []) addr conv p in
       if !debug_rewrite then
          eprintf "Rewrite done%t" eflush;
       x

@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -72,7 +72,7 @@ declare subtype{'A; 'B}
 prec prec_subtype
 
 dform subtype_df1 : mode[prl] :: parens :: "prec"[prec_subtype] :: subtype{'A; 'B} =
-   slot{'A} subseteq slot{'B}
+   slot{'A} `" " subseteq space slot{'B}
 
 (************************************************************************
  * RULES                                                                *
@@ -101,6 +101,22 @@ prim subtypeEquality 'H :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[@i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] } =
+   it
+
+prim subtypeType 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{subtype{'A; 'B}} } =
+   it
+
+prim subtypeTypeLeft 'H 'A :
+   sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   sequent ['ext] { 'H >- "type"{'B} } =
+   it
+
+prim subtypeTypeRight 'H 'B :
+   sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   sequent ['ext] { 'H >- "type"{'A} } =
    it
 
 (*
@@ -145,11 +161,11 @@ prim subtypeElimination 'H 'J :
  * H >- x = y in A
  * H >- subtype(A; B)
  *)
-prim subtypeElimination2 'H 'A :
-   sequent [squash] { 'H >- 'x = 'y in 'A } -->
-   sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'B } =
-   it
+prim subtypeElimination2 'H 'J 'a 'y :
+   sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- member{'A; 'a} } -->
+   ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: member{'B; 'a} >- 'C['x] }) -->
+   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
+   't[it]
 
 (*
  * Squash elimination.
@@ -310,7 +326,7 @@ let subtypeT p =
 (*
  * D the conclusion.
  *)
-let d_concl_subtype p =
+let d_concl_subtypeT p =
    let count = hyp_count_addr p in
    let x = maybe_new_var "x" (declared_vars p) in
       (subtype_axiomFormation count x
@@ -321,20 +337,42 @@ let d_concl_subtype p =
  * D a hyp.
  * We take the argument.
  *)
-let d_hyp_subtype i p =
-   let i, j = hyp_indices p i in
-      subtypeElimination i j p
+let d_hyp_subtypeT i p =
+   let j, k = hyp_indices p i in
+      try
+         let a = get_with_arg p in
+         let v = maybe_new_vars1 p "v" in
+            (subtypeElimination2 j k a v
+             thenLT [addHiddenLabelT "wf";
+                     idT]) p
+      with
+         RefineError _ ->
+            subtypeElimination j k p
 
 (*
  * Join them.
  *)
-let d_subtype i =
+let d_subtypeT i =
    if i = 0 then
-      d_concl_subtype
+      d_concl_subtypeT
    else
-      d_hyp_subtype i
+      d_hyp_subtypeT i
 
-let d_resource = d_resource.resource_improve d_resource (subtype_term, d_subtype)
+let d_resource = d_resource.resource_improve d_resource (subtype_term, d_subtypeT)
+
+(*
+ * Typehood.
+ *)
+let d_subtype_typeT i p =
+   if i = 0 then
+      (subtypeType (Sequent.hyp_count_addr p)
+       thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_subtype_typeT", StringError "no elimination form"))
+
+let subtype_type_term = << "type"{subtype{'A; 'B}} >>
+
+let d_resource = d_resource.resource_improve d_resource (subtype_type_term, d_subtype_typeT)
 
 (*
  * EQCD.
@@ -345,6 +383,23 @@ let eqcd_subtype p =
        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (subtype_term, eqcd_subtype)
+
+let subtype_equal_term = << subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (subtype_equal_term, d_wrap_eqcd eqcd_subtype)
+
+(*
+ * Member equality.
+ *)
+let d_eqcd_it_subtypeT i p =
+   if i = 0 then
+      subtype_axiomEquality (Sequent.hyp_count_addr p) p
+   else
+      raise (RefineError ("d_eqcd_it_subtypeT", StringError "no elimination form"))
+
+let eqcd_it_subtype_term = << it = it in subtype{'A; 'B} >>
+
+let d_resource = d_resource.resource_improve d_resource (eqcd_it_subtype_term, d_eqcd_it_subtypeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -361,6 +416,23 @@ let inf_subtype f decl t =
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subtype_term, inf_subtype)
+
+(************************************************************************
+ * SQUASH                                                               *
+ ************************************************************************)
+
+let squash_subtypeT p =
+   subtype_squashElimination (Sequent.hyp_count_addr p) p
+
+(************************************************************************
+ * TYPEHOOD FROM SUBTYPE                                                *
+ ************************************************************************)
+
+let type_subtype_leftT a p =
+   subtypeTypeLeft (Sequent.hyp_count_addr p) a p
+
+let type_subtype_rightT b p =
+   subtypeTypeRight (Sequent.hyp_count_addr p) b p
 
 (*
  * -*-

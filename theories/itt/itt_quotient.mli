@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -160,30 +160,33 @@ axiom quotient_memberWeakEquality 'H :
  *)
 axiom quotient_memberEquality 'H :
    sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { 'H >- 'a1 = 'a1 in 'A } -->
-   sequent [squash] { 'H >- 'a2 = 'a2 in 'A } -->
+   sequent [squash] { 'H >- member{'A; 'a1} } -->
+   sequent [squash] { 'H >- member{'A; 'a2} } -->
    sequent [squash] { 'H >- 'E['a1; 'a2] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
 
 (*
- * !!!!CHECK!!!!
- *
  * H, a: quot x, y: A // E, J[x] >- s[a] = t[a] in T[a]
  * by quotientElimination v w z
  *
  * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
  * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
-axiom quotientElimination 'H 'J 'v 'w 'z :
+axiom quotientElimination1 'H 'J 'v 'w 'z :
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
 
+axiom quotientElimination2 'H 'J 'v 'w 'z :
+   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
+   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
+             v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
+           } -->
+   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
+
 (*
- * !!!!CHECK!!!!
- *
  * H, x: a1 = a2 in quot x, y: A // E, J[x] >- T[x]
  * by quotient_equalityElimination v
  *

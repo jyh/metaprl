@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -156,6 +156,10 @@ interactive false_type 'H : :
 
 interactive false_elim 'H 'J : :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
+
+interactive false_squash 'H :
+   sequent [squash] { 'H >- "false" } -->
+   sequent ['ext] { 'H >- "false" }
 
 (*
  * Negation.
@@ -342,7 +346,7 @@ interactive all_intro 'H 'x :
    sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
 
 interactive all_elim 'H 'J 'w 'z :
-   sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z = 'z in 'A } -->
+   sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- member{'A; 'z} } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
 
@@ -360,7 +364,7 @@ interactive exists_type 'H 'x :
    sequent ['ext] { 'H >- "type"{."exists"{'t; v. 'b['v]}} }
 
 interactive exists_intro 'H 'z 'x :
-   sequent [squash] { 'H >- 'z = 'z in 't } -->
+   sequent [squash] { 'H >- member{'t; 'z} } -->
    sequent ['ext] { 'H >- 'b['z] } -->
    sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }
@@ -796,8 +800,10 @@ let d_allT i p =
    if i = 0 then
       let goal = Sequent.concl p in
       let v, _, _ = dest_all goal in
-      let v = maybe_new_vars1 p "v" in
-         all_intro (hyp_count_addr p) v p
+      let v = maybe_new_vars1 p v in
+         (all_intro (hyp_count_addr p) v
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
    else
       let z = get_with_arg p in
       let j, k = hyp_indices p i in
@@ -887,6 +893,12 @@ let d_exists_typeT i p =
 let exists_type_term = << "type"{."exists"{'t1; x. 't2['x]}} >>
 
 let d_resource = d_resource.resource_improve d_resource (exists_type_term, d_exists_typeT)
+
+(*
+ * Squash elimination.
+ *)
+let squash_falseT p =
+   false_squash (Sequent.hyp_count_addr p) p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -978,7 +990,7 @@ let moveToConclVarsT vars p =
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
                           withT (mk_var_term v) (dT (len + 1)) (**)
-                             thenLT [equalAssumT i; nthHypT (len + 2)]]
+                             thenLT [memberAssumT i; nthHypT (len + 2)]]
 
             else
                let goal' = mk_implies_term hyp goal in

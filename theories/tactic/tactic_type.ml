@@ -27,21 +27,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -109,10 +109,27 @@ end
 module ThreadRefiner = Thread_refiner.MakeThreadRefiner (ThreadRefinerArg)
 
 (*
+ * Conversions are used by the rewrite module.
+ *)
+type env = tactic_arg * address
+
+and conv =
+   RewriteConv of rw
+ | CondRewriteConv of cond_rewrite
+ | ComposeConv of conv Flist.t
+ | ChooseConv of conv Flist.t
+ | AddressConv of address * conv
+ | FoldConv of term * conv
+ | CutConv of term
+ | FunConv of (env -> conv)
+ | HigherConv of conv
+ | IdentityConv
+
+(*
  * Many tactics wish to examine their argument, so
  * the real type of tactic includes an argument.
  *)
-type 'term attribute =
+and 'term attribute =
    TermArg of 'term
  | TypeArg of 'term
  | IntArg of int
@@ -127,9 +144,11 @@ and 'a attributes = (string * 'a attribute) list
  * The values are stored in keys.
  *)
 and shared_object =
-   ShareTactic of tactic
+   ShareConv of conv
+ | ShareTactic of tactic
  | ShareIntTactic of (int -> tactic)
  | ShareArgTactic of (tactic_arg -> tactic)
+ | ShareTSubst of (term_subst -> (string option * term) -> term_subst)
  | ShareTypeinf of (unify_subst -> term -> unify_subst * term)
  | ShareSentinal of Refine.sentinal
  | ShareCache of cache_info ref
@@ -405,6 +424,9 @@ let bool_attribute name b =
 let subst_attribute name t =
    name, RawSubstArg t
 
+let conv_attribute name f =
+   name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareConv (f ())))
+
 let tactic_attribute name f =
    name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareTactic (f ())))
 
@@ -413,6 +435,9 @@ let int_tactic_attribute name f =
 
 let arg_tactic_attribute name f =
    name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareArgTactic (f ())))
+
+let tsubst_attribute name f =
+   name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareTSubst (f ())))
 
 let typeinf_attribute name f =
    name, RawObjectArg (ThreadRefiner.share remote_server name (fun () -> ShareTypeinf (f ())))
@@ -525,6 +550,24 @@ let get_bool { ref_attributes = attributes } name =
    in
       search attributes
 
+let get_conv { ref_attributes = attributes } name =
+   let rec search = function
+      (name', RawObjectArg key) :: tl ->
+         if name' = name then
+            match ThreadRefiner.arg_of_key remote_server key with
+               ShareConv conv ->
+                  conv
+             | _ ->
+                  search tl
+         else
+            search tl
+    | _ :: tl ->
+         search tl
+    | [] ->
+         raise (RefineError ("get_conv", StringStringError ("not found", name)))
+   in
+      search attributes
+
 let get_tactic { ref_attributes = attributes } name =
    let rec search = function
       (name', RawObjectArg key) :: tl ->
@@ -576,6 +619,24 @@ let get_arg_tactic { ref_attributes = attributes } name =
          search tl
     | [] ->
          raise (RefineError ("get_int_tactic", StringStringError ("not found", name)))
+   in
+      search attributes
+
+let get_tsubst { ref_attributes = attributes } name =
+   let rec search = function
+      (name', RawObjectArg key) :: tl ->
+         if name' = name then
+            match ThreadRefiner.arg_of_key remote_server key with
+               ShareTSubst t ->
+                  t
+             | _ ->
+                  search tl
+         else
+            search tl
+    | _ :: tl ->
+         search tl
+    | [] ->
+         raise (RefineError ("get_tsubst", StringStringError ("not found", name)))
    in
       search attributes
 

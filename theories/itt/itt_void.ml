@@ -13,21 +13,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -172,10 +172,10 @@ let d_resource = d_resource.resource_improve d_resource (equal_void_term, d_wrap
 (*
  * Void is squash stable.
  *)
-let squash_void p =
+let squash_voidT p =
    void_squashElimination (hyp_count_addr p) p
 
-let squash_resource = squash_resource.resource_improve squash_resource (void_term, squash_void)
+let squash_resource = squash_resource.resource_improve squash_resource (void_term, squash_voidT)
 
 (************************************************************************
  * SUBTYPING                                                            *

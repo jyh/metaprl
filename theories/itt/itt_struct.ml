@@ -204,7 +204,7 @@ let assertT s p =
  * Cut in at a certain point.
  *)
 let assertAtT i s p =
-   let i, j = hyp_indices p i in
+   let i, j = hyp_split_addr p i in
    let v = get_opt_var_arg "v" p in
       (cut i j s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
@@ -258,9 +258,6 @@ let substHypT i t p =
             mk_bind_term z (var_subst t1 a z)
    in
    let i, j = hyp_indices p i in
-      eprintf "Subst binding: ";
-      Simple_print.SimplePrint.prerr_simple_term bind;
-      eflush stderr;
       (hypSubstitution i j t bind z
        thenLT [addHiddenLabelT "equality";
                addHiddenLabelT "main";

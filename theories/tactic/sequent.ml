@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -34,6 +34,7 @@ open Printf
 open Mp_debug
 
 open Refiner.Refiner
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Refine
 
 (*
@@ -92,6 +93,10 @@ let concl arg =
    Tactic_type.nth_concl arg 1
 
 let label = Tactic_type.label
+
+let args p =
+   let { sequent_args = args } = TermMan.explode_sequent (goal p) in
+      TermMan.dest_xlist args
 
 (*
  * Sequent parts.
@@ -167,9 +172,11 @@ let type_attribute       = Tactic_type.type_attribute
 let int_attribute        = Tactic_type.int_attribute
 let bool_attribute       = Tactic_type.bool_attribute
 let subst_attribute      = Tactic_type.subst_attribute
+let conv_attribute       = Tactic_type.conv_attribute
 let tactic_attribute     = Tactic_type.tactic_attribute
 let int_tactic_attribute = Tactic_type.int_tactic_attribute
 let arg_tactic_attribute = Tactic_type.arg_tactic_attribute
+let tsubst_attribute     = Tactic_type.tsubst_attribute
 let typeinf_attribute    = Tactic_type.typeinf_attribute
 
 (*
@@ -181,9 +188,11 @@ let get_type_arg       = Tactic_type.get_type
 let get_int_arg        = Tactic_type.get_int
 let get_bool_arg       = Tactic_type.get_bool
 let get_subst_arg      = Tactic_type.get_subst
+let get_conv_arg       = Tactic_type.get_conv
 let get_tactic_arg     = Tactic_type.get_tactic
 let get_int_tactic_arg = Tactic_type.get_int_tactic
 let get_arg_tactic_arg = Tactic_type.get_arg_tactic
+let get_tsubst_arg     = Tactic_type.get_tsubst
 let get_typeinf_arg    = Tactic_type.get_typeinf
 
 (*

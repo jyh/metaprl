@@ -12,21 +12,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -42,6 +42,23 @@ open Refiner.Refiner.Refine
  ************************************************************************)
 
 (*
+ * Conversions are used by the rewrite module.
+ *)
+type env = tactic_arg * address
+
+and conv =
+   RewriteConv of rw
+ | CondRewriteConv of cond_rewrite
+ | ComposeConv of conv Flist.t
+ | ChooseConv of conv Flist.t
+ | AddressConv of address * conv
+ | FoldConv of term * conv
+ | CutConv of term
+ | FunConv of (env -> conv)
+ | HigherConv of conv
+ | IdentityConv
+
+(*
  * Attributes are values that inherited in the
  * proof tree.  These are an incomplete set of
  * the simple attributes.  They are listed to
@@ -49,7 +66,7 @@ open Refiner.Refiner.Refine
  * attributes should be fetched through the
  * attribute functions.
  *)
-type 'term attribute =
+and 'term attribute =
    TermArg of 'term
  | TypeArg of 'term
  | IntArg of int
@@ -141,9 +158,11 @@ val type_attribute : string -> term -> raw_attribute
 val int_attribute : string -> int -> raw_attribute
 val bool_attribute : string -> bool -> raw_attribute
 val subst_attribute : string -> term -> raw_attribute
+val conv_attribute : string -> (unit -> conv) -> raw_attribute
 val tactic_attribute : string -> (unit -> tactic) -> raw_attribute
 val int_tactic_attribute : string -> (unit -> int -> tactic) -> raw_attribute
 val arg_tactic_attribute : string -> (unit -> tactic_arg -> tactic) -> raw_attribute
+val tsubst_attribute : string -> (unit -> term_subst -> (string option * term) -> term_subst) -> raw_attribute
 val typeinf_attribute : string -> (unit -> unify_subst -> term -> unify_subst * term) -> raw_attribute
 
 (*
@@ -155,9 +174,11 @@ val get_type       : tactic_arg -> string -> term
 val get_int        : tactic_arg -> string -> int
 val get_bool       : tactic_arg -> string -> bool
 val get_subst      : tactic_arg -> term_subst
+val get_conv       : tactic_arg -> string -> conv
 val get_tactic     : tactic_arg -> string -> tactic
 val get_int_tactic : tactic_arg -> string -> (int -> tactic)
 val get_arg_tactic : tactic_arg -> string -> (tactic_arg -> tactic)
+val get_tsubst     : tactic_arg -> string -> (term_subst -> (string option * term) -> term_subst)
 val get_typeinf    : tactic_arg -> string -> (unify_subst -> term -> unify_subst * term)
 
 (*

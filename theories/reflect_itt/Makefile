@@ -8,7 +8,11 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES :=\
-	refl_term
+	refl_var\
+	refl_raw_term\
+	refl_term\
+	refl_var_set\
+	refl_free_vars
 
 # Name of main libraris
 MAIN = reflect_itt

@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -109,25 +109,9 @@ axiom setMemberEquality 'H 'x :
  *
  * H, u: { x:A | B }, y: A; v: hide{B[y]}; J[y] >- T[y]
  *)
-axiom setElimination 'H 'J 'u 'y 'v :
-   sequent [squash] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: 'B['y]; 'J['y] >- 'T['y] } -->
-   sequent [squash] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
-
-(*
- * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
- * by setElimination2 y v z
- * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >> T[y]
- *)
-axiom setElimination2 'H 'J 'u 'y 'v :
-   sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: hide{'B['y]}; 'J['y] >- 'T['y] } -->
+axiom setElimination 'H 'J 'u 'v :
+   sequent [it; 'prop] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] } -->
    sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
-
-(*
- * Unhiding.
- *)
-axiom hideElimination 'H 'J :
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 'T[it] } -->
-   sequent [squash] { 'H; u: hide{'P}; 'J['u] >- 'T['u] }
 
 (*
  * Subtyping.
@@ -140,13 +124,8 @@ axiom set_subtype 'H :
  * TACTICS                                                              *
  ************************************************************************)
 
-val d_setT : int -> tactic
-val eqcd_setT : tactic
-
 (* Hiding and unhiding *)
 val squashT : tactic
-val unhideT : int -> tactic
-val unhideAllT : tactic
 
 (* Primitives *)
 val is_set_term : term -> bool

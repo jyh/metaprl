@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -466,10 +466,7 @@ and mk_expr base expr =
        | (<:expr< ( $e$ : $t$ ) >>) ->
             mk_expr base e
        | (<:expr< $uid:s$ >>) ->
-            if s = "()" then
-               UnitExpr ()
-            else
-               not_supported loc "expr uid"
+            mk_var_expr base loc s
        | (<:expr< while $e$ do $list:el$ done >>) ->
             not_supported loc "while"
        | MLast.ExAnt (_, e) ->
@@ -652,11 +649,26 @@ and mk_module_expr base me =
 let int_int_fun_int_expr f =
    IntFunExpr (fun i -> IntFunExpr (fun j -> IntExpr (f i j)))
 
+let cons_expr =
+   FunExpr (fun e1 ->
+         FunExpr (fun e2 ->
+               match e2 with
+                  ListExpr e2 ->
+                     ListExpr (e1 :: e2)
+                | _ ->
+                     raise (RefineError ("cons_expr", StringError "type mismatch"))))
+
 let values =
    ["+",                int_int_fun_int_expr ( + );
     "-",                int_int_fun_int_expr ( - );
     "*",                int_int_fun_int_expr ( * );
-    "/",                int_int_fun_int_expr ( / )]
+    "/",                int_int_fun_int_expr ( / );
+    "::",               cons_expr;
+    "()",               UnitExpr ();
+    "[]",               ListExpr [];
+    "true",             BoolExpr true;
+    "false",            BoolExpr false]
+
 
 let rec add_resources base = function
    (name, expr) :: tl ->

@@ -68,12 +68,12 @@ open Simple_print
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
-open Tactic_type.Conversionals
 open Mptop
 open Var
 
 open Base_dtactic
 open Base_auto_tactic
+open Top_conversionals
 open Itt_bool
 
 doc <:doc< @doc{@terms} >>
@@ -105,19 +105,14 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
 
 doc <:doc< @doc{@rewrites} >>
 
-interactive_rw reduce_ind_up :
+interactive_rw reduce_ind_up {| reduce |} :
    ('x in nat) -->
    ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} <-->
    ('up['x +@ 1; ind{'x ; 'base; k,l. 'up['k;'l]}])
 
-interactive_rw reduce_ind_base :
+interactive_rw reduce_ind_base {| reduce |} :
    (ind{0; 'base; k,l. 'up['k;'l]}) <-->
    'base
-
-doc <:doc< @docoff >>
-let resource reduce +=
-   [<< ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} >>, reduce_ind_up;
-    << ind{0; 'base; k,l. 'up['k;'l]} >>, reduce_ind_base]
 
 doc <:doc< @doc{@rules} >>
 

@@ -32,15 +32,12 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
-open Tactic_type.Conversionals
 open Top_conversionals
 open Base_auto_tactic
 
 open Itt_bintree
 open Itt_sortedtree
 open Itt_relation_str
-
-
 
 let dByDefT  unfold n = rw unfold n thenT dT n
 let dByRecDefT term unfold n = dByDefT unfold n thenT rwhAll (makeFoldC term unfold)
@@ -50,16 +47,11 @@ let soft_into term unfold = term, (dByDefT unfold 0)
 let softrec_elim term unfold = term, (dByRecDefT term unfold)
 let softrec_into term unfold = term, (dByRecDefT term unfold 0)
 
-
-
 let reduceByDefC unfold =   unfold thenC reduceTopC
 let reduceByRecDefC term unfold = reduceByDefC unfold thenC higherC (makeFoldC term unfold)
 
 let soft_reduce term unfold  = term, (reduceByDefC unfold)
 let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
-
-
-
 
 (*
  * Show that the file is loading.
@@ -67,14 +59,12 @@ let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
 let _ =
    show_loading "Loading Itt_redblacktree%t"
 
-
 doc <:doc< 
    @begin[doc]
    @modsection{Definitions of Red-Black Trees}
    @modsubsection{Color}
    @end[doc]
 >>
-
 
 define color: Color <--> unit + unit
 
@@ -86,8 +76,8 @@ define red_type: Red <--> void + unit
 
 define black_or_red: black_or_red{'color; 'black_case; 'red_case} <--> decide{'color; b.'black_case; r.'red_case}
 
-interactive_rw if_black:  black_or_red{black; 'black_case; 'red_case} <--> 'black_case
-interactive_rw if_red:  black_or_red{red; 'black_case; 'red_case} <--> 'red_case
+interactive_rw if_black {| reduce |} :  black_or_red{black; 'black_case; 'red_case} <--> 'black_case
+interactive_rw if_red {| reduce |} :  black_or_red{red; 'black_case; 'red_case} <--> 'red_case
 
 define sons_type: sons_type{'parent_color}  <--> black_or_red{'parent_color; Color; Black}   (* Son of a red parent is black, son of a black parent may have any color *)
 
@@ -140,45 +130,47 @@ doc <:doc<
    << red_tree{'t}>> checks whether <<'t>> has a red root (empty trees are not red):
    @end[doc]
 >>
-define red_tree: red_tree{'t} <--> match_tree{'t; bfalse; self. black_or_red{.^color;bfalse;btrue} }
+define red_tree {| reduce |} :
+   red_tree{'t} <--> match_tree{'t; bfalse; self. black_or_red{.^color;bfalse;btrue} }
 
-
-define recolor_root: recolor_root{'t; 'color} <--> match_tree{'t; emptytree; self. tree{.^color:='color}}
+define recolor_root {| reduce |} :
+   recolor_root{'t; 'color} <--> match_tree{'t; emptytree; self. tree{.^color:='color}}
 
 doc <:doc< 
    @begin[doc]
    Make red root, and black sons:
    @end[doc]
 >>
-define recolor_rbb: recolor_rbb{'t} <--> recolor_root{match_tree{'t; emptytree; self. tree{.(^left:=recolor_root{.^left; black})^right:=recolor_root{.^right; black}}  }; red}
+define recolor_rbb {| reduce |} :
+   recolor_rbb{'t} <--> recolor_root{match_tree{'t; emptytree; self. tree{.(^left:=recolor_root{.^left; black})^right:=recolor_root{.^right; black}}  }; red}
 
 
 
-define lRotate: lRotate{'t} <--> match_tree{'t; emptytree; root.
+define lRotate {| reduce |} : lRotate{'t} <--> match_tree{'t; emptytree; root.
                                  match_tree{.'root^left; 't; left.
                                                'left^right:=tree{.'root^left:='left^right }
                                            }}
 
-define rRotate: rRotate{'t} <--> match_tree{'t; emptytree; root.
+define rRotate {| reduce |} : rRotate{'t} <--> match_tree{'t; emptytree; root.
                                  match_tree{.'root^right; 't; right.
                                                'right^leftt:=tree{.'root^right:='right^left }
                                            }}
 
-define lrRotate: lrRotate{'t} <--> lRotate{ match_tree{'t; emptytree; self. ^left:=rRotate{.^left}}}
+define lrRotate {| reduce |} :
+   lrRotate{'t} <--> lRotate{ match_tree{'t; emptytree; self. ^left:=rRotate{.^left}}}
 
-define rlRotate: rlRotate{'t} <--> rRotate{ match_tree{'t; emptytree; self. ^right:=lRotate{.^right}}}
+define rlRotate {| reduce |} :
+   rlRotate{'t} <--> rRotate{ match_tree{'t; emptytree; self. ^right:=lRotate{.^right}}}
 
-
-define lbalance: lbalance{'t} <-->
+define lbalance {| reduce |} : lbalance{'t} <-->
    if band{  red_tree{leftSubtree{'t}};  red_tree{leftSubtree{leftSubtree{'t}}}  } then recolor_rbb {lRotate{'t}} else
    if band{  red_tree{leftSubtree{'t}};  red_tree{rightSubtree{leftSubtree{'t}}}  } then recolor_rbb {lrRotate {'t}} else
    't
 
-define rbalance: rbalance{'t} <-->
+define rbalance {| reduce |} : rbalance{'t} <-->
    if band{  red_tree{rightSubtree{'t}};  red_tree{rightSubtree{rightSubtree{'t}}}  } then recolor_rbb {rRotate{'t}} else
    if band{  red_tree{rightSubtree{'t}};  red_tree{leftSubtree{rightSubtree{'t}}}  } then recolor_rbb {rlRotate {'t}} else
    't
-
 
 define ins: ins{'a;'t;'ord} <-->
    tree_ind{'t;
@@ -190,22 +182,13 @@ define ins: ins{'a;'t;'ord} <-->
           (* if a>data *)  rbalance{. ^right:='R}
                }}
 
-define insert: insert{'a;'t;'ord} <--> recolor_root{ins{'a;'t;'ord}; black}
+define insert : insert{'a;'t;'ord} <--> recolor_root{ins{'a;'t;'ord}; black}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let resource reduce += [
    soft_reduce <<insert{'a;'t;'ord}>> insert;
    softrec_reduce <<ins{'a;'t;'ord}>> ins;
-   <<rbalance{'t}>>,  rbalance;
-   <<lbalance{'t}>>,  lbalance;
-   <<rRotate{'t}>>,  rRotate;
-   <<lRotate{'t}>>,  lRotate;
-   <<rlRotate{'t}>>,  rlRotate;
-   <<lrRotate{'t}>>,  lrRotate;
-   <<recolor_rbb{'t}>>,  recolor_rbb;
-   <<recolor_root{'t;'c}>>,  recolor_root;
-   <<red_tree{'t}>>,  red_tree;
    soft_reduce <<match_tree{'t;'e; s.'ne['s]}>> match_tree;
    soft_reduce <<leftSubtree{'t}>> leftSubtree;
    soft_reduce <<rightSubtree{'t}>> rightSubtree;
@@ -217,7 +200,6 @@ doc <:doc<
    @modsubsection{Color}
    @end[doc]
 >>
-
 
 interactive color_wf {| intro[] |} :
    sequent['ext]   { <H> >- "type"{Color} }
@@ -247,14 +229,11 @@ interactive black_elim {| elim[] |} 'H:
    sequent['ext]   { <H>; c:Black; <J['c]> >- 'C['c] }
 
 let resource reduce += [
-   <<black_or_red{black; 'black_case; 'red_case}>>, if_black;
-   <<black_or_red{red; 'black_case; 'red_case}>>, if_red;
    soft_reduce <<sons_type{'parent_color}>> sons_type;
    soft_reduce <<cost{'color}>> cost]
 
 interactive black_subtype {| intro[] |}:
    sequent['ext]   { <H> >- Black subtype Color }
-
 
 (* == == *)
 
@@ -321,8 +300,7 @@ doc <:doc<
    @end[doc]
 >>
 
-
-define rbtree_set: rbtree_set{'ord} <-->
+define rbtree_set {| reduce |} : rbtree_set{'ord} <-->
    {car = bisect{BTree{.{data:'ord^car}};. SortedTree{'ord;t.top} isect BinTree{.(color:Color)}};
     empty = emptytree;
     insert = lambda {s. lambda {a. insert{.{data='a}; 's; 'ord}}};
@@ -346,20 +324,9 @@ doc <:doc<
    @end[doc]
 >>
 
-
-define intset: intset <--> rbtree_set{int_order}
-
-let resource reduce += [
-   <<intset>>,  intset;
-   <<rbtree_set{'ord}>>, rbtree_set;
-]
+define intset {| reduce |} : intset <--> rbtree_set{int_order}
 
 interactive_rw example :
    ((intset^member) ((intset^insert) ((intset^insert) ((intset^insert) (intset^empty) 2) 3) 1) 3) <--> btrue
 
-
-
-doc <:doc< @docoff >>
-
-
-
+doc docoff

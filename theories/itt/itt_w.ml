@@ -81,6 +81,7 @@ open Tactic_type.Tacticals
 open Var
 
 open Base_dtactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_struct
@@ -130,14 +131,11 @@ doc <:doc<
    $g_2$ is the value that is returned by a recursive call.
    @end[doc]
 >>
-prim_rw reduce_tree_ind :
+prim_rw reduce_tree_ind {| reduce |} :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
    <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   (<< tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]} >>, reduce_tree_ind)
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *

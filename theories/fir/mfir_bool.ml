@@ -101,21 +101,13 @@ doc <:doc<
    @end[doc]
 >>
 
-prim_rw reduce_ifthenelse_true :
+prim_rw reduce_ifthenelse_true {| reduce |} :
    ifthenelse{ "true"; 't; 'f } <-->
    't
 
-prim_rw reduce_ifthenelse_false :
+prim_rw reduce_ifthenelse_false {| reduce |} :
    ifthenelse{ "false"; 't; 'f } <-->
    'f
-
-doc <:doc< 
-   @docoff
->>
-
-let reduce_ifthenelse =
-   reduce_ifthenelse_true orelseC reduce_ifthenelse_false
-
 
 doc <:doc< 
    @begin[doc]
@@ -124,30 +116,22 @@ doc <:doc<
    @end[doc]
 >>
 
-prim_rw reduce_and :
+prim_rw reduce_and {| reduce |} :
    "and"{ 'bool1; 'bool2 } <-->
    ifthenelse{ 'bool1; 'bool2; "false" }
 
-prim_rw reduce_or :
+prim_rw reduce_or {| reduce |} :
    "or"{ 'bool1; 'bool2 } <-->
    ifthenelse{ 'bool1; "true"; 'bool2 }
 
-prim_rw reduce_not :
+prim_rw reduce_not {| reduce |} :
    "not"{ 'b } <-->
    ifthenelse{ 'b; "false"; "true" }
 
-doc <:doc< 
-   @docoff
->>
+doc docoff
 
-let resource reduce += [
-   << "and"{ 'bool1; 'bool2 } >>, reduce_and;
-   << "or"{ 'bool1; 'bool2 } >>, reduce_or;
-   << "not"{ 'b } >>, reduce_not;
-   << ifthenelse{ 'boolean; 'true_case; 'false_case } >>,
-      reduce_ifthenelse
-]
-
+let reduce_ifthenelse =
+   reduce_ifthenelse_true orelseC reduce_ifthenelse_false
 
 (**************************************************************************
  * Display forms.

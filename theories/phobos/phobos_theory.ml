@@ -43,11 +43,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Base_meta
 
 extends Itt_atom

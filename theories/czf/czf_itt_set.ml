@@ -103,13 +103,11 @@ doc <:doc<
 >>
 
 doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
+   @doc{@parents}
 >>
 extends Itt_theory
 extends Itt_eta
-doc <:doc< @docoff >>
+doc docoff
 extends Czf_itt_comment
 
 open Printf
@@ -127,13 +125,13 @@ open Term_stable
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Perv
 open Mptop
 
 open Base_dtactic
 open Base_auto_tactic
+open Top_conversionals
 
 open Itt_squash
 open Itt_equal
@@ -201,18 +199,17 @@ doc <:doc<
    computational behavior of the @hrefterm[tree_ind] term.
    @end[doc]
 >>
-interactive_rw reduce_set_ind :
+
+interactive_rw reduce_set_ind {| reduce |} :
    set_ind{collect{'T; x. 'A['x]}; a, f, g. 'b['a; 'f; 'g]}
    <--> 'b['T; lambda{x. 'A['x]}; lambda{a2. set_ind{.'A['a2]; a, f, g. 'b['a; 'f; 'g]}}]
-doc <:doc< @docoff >>
+   
+doc docoff
 
 let fold_set        = makeFoldC << set >> unfold_set
 let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
 let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
 let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
-
-let resource reduce +=
-   << set_ind{collect{'T; x. 'A['x]}; a, f, g. 'b['a; 'f; 'g]} >>, reduce_set_ind
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

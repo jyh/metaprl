@@ -43,7 +43,7 @@ extends Itt_rfun
 extends Itt_logic
 extends Itt_bool
 extends Itt_int_ext
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug

@@ -52,12 +52,12 @@ open Printf
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Var
 
 open Base_dtactic
 open Base_auto_tactic
 open Typeinf
+open Top_conversionals
 
 open Itt_equal
 open Itt_bool
@@ -280,119 +280,86 @@ dform foflist_df : parens :: "prec"[prec_foflist] :: except_mode[src] :: foflist
 (*
  * Fmember on lists.
  *)
-interactive_rw reduce_fmember_nil : fmember{'eq; 'x; nil} <--> bfalse
+interactive_rw reduce_fmember_nil {| reduce |} : fmember{'eq; 'x; nil} <--> bfalse
 
-interactive_rw reduce_fmember_cons : fmember{'eq; 'x; cons{'h; 't}} <-->
+interactive_rw reduce_fmember_cons {| reduce |} :
+   fmember{'eq; 'x; cons{'h; 't}} <-->
    bor{.fcompare{'eq; 'x; 'h}; fmember{'eq; 'x; 't}}
-
-let resource reduce +=
-   [<< fmember{'eq; 'x; nil} >>, reduce_fmember_nil;
-    << fmember{'eq; 'x; cons{'h; 't}} >>, reduce_fmember_cons]
 
 (*
  * Singleton.
  *)
-interactive_rw reduce_fmember_fsingleton : fmember{'eq; 'x; fsingleton{'y}} <-->
+interactive_rw reduce_fmember_fsingleton {| reduce |} :
+   fmember{'eq; 'x; fsingleton{'y}} <-->
    bor{fcompare{'eq; 'x; 'y}; bfalse}
-
-let resource reduce +=
-   << fmember{'eq; 'x; fsingleton{'y}} >>, reduce_fmember_fsingleton
 
 (*
  * Subset.
  *)
-interactive_rw reduce_fsubseteq_nil : fsubseteq{'eq; nil; 's} <--> btrue
+interactive_rw reduce_fsubseteq_nil {| reduce |} : fsubseteq{'eq; nil; 's} <--> btrue
 
-interactive_rw reduce_fsubseteq_cons :
+interactive_rw reduce_fsubseteq_cons {| reduce |} :
    fsubseteq{'eq; cons{'h; 't}; 's} <-->
    band{fmember{'eq; 'h; 's}; fsubseteq{'eq; 't; 's}}
-
-let resource reduce +=
-   [<< fsubseteq{'eq; nil; 'l} >>, reduce_fsubseteq_nil;
-    << fsubseteq{'eq; cons{'h; 't}; 'l} >>, reduce_fsubseteq_cons]
 
 (*
  * Union.
  *)
-interactive_rw reduce_funion_nil :
+interactive_rw reduce_funion_nil {| reduce |} :
    funion{'eq; nil; 's} <--> 's
 
-interactive_rw reduce_funion_cons :
+interactive_rw reduce_funion_cons {| reduce |} :
    funion{'eq; cons{'h; 't}; 's} <--> cons{'h; funion{'eq; 't; 's}}
-
-let resource reduce +=
-   [<< funion{'eq; nil; 's} >>, reduce_funion_nil;
-    << funion{'eq; cons{'h; 't}; 's} >>, reduce_funion_cons]
 
 (*
  * Intersection.
  *)
-interactive_rw reduce_fisect_nil :
+interactive_rw reduce_fisect_nil {| reduce |} :
    fisect{'eq; nil; 's2} <--> nil
 
-interactive_rw reduce_fisect_cons :
+interactive_rw reduce_fisect_cons {| reduce |} :
    fisect{'eq; cons{'h; 't}; 's} <-->
       ifthenelse{fmember{'eq; 'h; 's}; cons{'h; fisect{'eq; 't; 's}}; fisect{'eq; 't; 's}}
-
-let resource reduce +=
-   [<< fisect{'eq; nil; 's} >>, reduce_fisect_nil;
-    << fisect{'eq; cons{'h; 't}; 's} >>, reduce_fisect_cons]
 
 (*
  * Set subtraction.
  *)
-interactive_rw reduce_fsub_nil :
+interactive_rw reduce_fsub_nil {| reduce |} :
    fsub{'eq; nil; 's2} <--> nil
 
-interactive_rw reduce_fsub_cons :
+interactive_rw reduce_fsub_cons {| reduce |} :
    fsub{'eq; cons{'h; 't}; 's} <-->
       ifthenelse{fmember{'eq; 'h; 's}; fsub{'eq; 't; 's}; cons{'h; fsub{'eq; 't; 's}}}
-
-let resource reduce +=
-   [<< fsub{'eq; nil; 's} >>, reduce_fsub_nil;
-    << fsub{'eq; cons{'h; 't}; 's} >>, reduce_fsub_cons]
 
 (*
  * Membership squashing.
  *)
-interactive_rw reduce_fsquash_nil1 :
+interactive_rw reduce_fsquash_nil1 {| reduce |} :
    fsquash{'eq; nil} <--> nil
 
-interactive_rw reduce_fsquash_cons1 :
+interactive_rw reduce_fsquash_cons1 {| reduce |} :
    fsquash{'eq; cons{'h; 't}} <-->
       ifthenelse{fmember{'eq; 'h; 't}; fsquash{'eq; 't}; cons{it; fsquash{'eq; 't}}}
-
-let resource reduce +=
-   [<< fsquash{'eq; nil} >>, reduce_fsquash_nil1;
-    << fsquash{'eq; cons{'h; 't}} >>, reduce_fsquash_cons1]
 
 (*
  * Universal quantification.
  *)
-interactive_rw reduce_fball_nil :
+interactive_rw reduce_fball_nil {| reduce |} :
    fball{nil; x. 'b['x]} <--> btrue
 
-interactive_rw reduce_fball_cons :
+interactive_rw reduce_fball_cons {| reduce |} :
    fball{cons{'h; 't}; x. 'b['x]} <-->
       band{'b['h]; fball{'t; x. 'b['x]}}
-
-let resource reduce +=
-   [<< fball{nil; x. 'b['x]} >>, reduce_fball_nil;
-    << fball{cons{'h; 't}; x. 'b['x]} >>, reduce_fball_cons]
 
 (*
  * Existential quantification.
  *)
-interactive_rw reduce_fbexists_nil :
+interactive_rw reduce_fbexists_nil {| reduce |} :
    fbexists{nil; x. 'b['x]} <--> bfalse
 
-interactive_rw reduce_fbexists_cons :
+interactive_rw reduce_fbexists_cons {| reduce |} :
    fbexists{cons{'h; 't}; x. 'b['x]} <-->
       bor{'b['h]; fbexists{'t; x. 'b['x]}}
-
-let resource reduce +=
-   [<< fbexists{nil; x. 'b['x]} >>, reduce_fbexists_nil;
-    << fbexists{cons{'h; 't}; x. 'b['x]} >>, reduce_fbexists_cons]
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

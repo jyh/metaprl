@@ -55,13 +55,9 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Czf_itt_member
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -69,11 +65,11 @@ open Mp_debug
 open Refiner.Refiner.RefineError
 
 open Tactic_type.Sequent
-open Tactic_type.Conversionals
 open Tactic_type.Tacticals
 open Var
 
 open Base_dtactic
+open Top_conversionals
 
 open Itt_rfun
 open Itt_logic
@@ -85,11 +81,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
-   @begin[doc]
-   @terms
-   @end[doc]
->>
+doc <:doc< @doc{@terms} >>
 declare sep{'s; x. 'P['x]}
 declare restricted{'P}
 
@@ -104,14 +96,12 @@ doc <:doc<
    The @tt{sep} term is defined by set induction.
    @end[doc]
 >>
+
 prim_rw unfold_sep : sep{'s; x. 'P['x]} <-->
    set_ind{'s; T, f, g. collect{."prod"{'T; t. 'P['f 't]}; z. 'f fst{'z}}}
 
-interactive_rw reduce_sep : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
+interactive_rw reduce_sep {| reduce |} : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
    collect{. "prod"{'T; t. 'P['f['t]]}; w. 'f[fst{'w}]}
-doc <:doc< @docoff >>
-
-let resource reduce += << sep{collect{'T; x. 'f['x]}; z. 'P['z]} >>, reduce_sep
 
 doc <:doc< 
    @begin[doc]

@@ -38,17 +38,13 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_logic
 extends Itt_bool
 extends Itt_int_base
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -64,11 +60,11 @@ open Mp_resource
 open Var
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
 open Base_meta
 open Base_dtactic
 open Base_auto_tactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_struct
@@ -96,7 +92,7 @@ declare "rem"{'a; 'b}
 
 doc <:doc< @doc{More order relation operations} >>
 
-define unfold_gt_bool :
+define unfold_gt_bool {| reduce |} :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
 
 define unfold_le_bool :
@@ -114,10 +110,9 @@ let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
 let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
 let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
-doc <:doc< @docoff >>
+doc docoff
 
 let resource reduce += [
-   << gt_bool{'a; 'b} >>, unfold_gt_bool;
    << bnot{lt_bool{'b; 'a}} >>, (makeFoldC << le_bool{'a;'b} >> unfold_le_bool);
    << bnot{le_bool{'a; 'b}} >>, (addrC [0] unfold_le_bool);
 (*    << le_bool{'a; 'b} >>, unfold_le_bool;
@@ -152,7 +147,7 @@ interactive bneq_int_wf {| intro []; eqcd |} :
  Prop-int-relations definitions
  *)
 
-define unfold_gt :
+define unfold_gt {| reduce |} :
    gt{'a; 'b} <--> ('b < 'a)
 
 let mul_term = << 'x *@ 'y >>
@@ -211,7 +206,7 @@ doc <:doc< @doc{More order relation propositions} >>
 define unfold_le :
    le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
 
-define unfold_ge :
+define unfold_ge {| reduce |} :
    ge{'a; 'b} <--> ('b <= 'a)
 
 define unfold_neq_int :
@@ -220,8 +215,6 @@ define unfold_neq_int :
 doc <:doc< @docoff >>
 
 let resource reduce += [
-   << gt{'a; 'b} >>, unfold_gt;
-   << ge{'a; 'b} >>, unfold_ge;
    <<number[i:n] <= number[j:n]>>, (unfold_le thenC
                                    (addrC [0] (unfold_le_bool thenC
                                    (addrC [0] reduce_lt))));

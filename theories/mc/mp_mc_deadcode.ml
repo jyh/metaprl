@@ -39,16 +39,11 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Mp_mc_fir_exp
-doc <:doc< @docoff >>
+doc docoff
 
 open Top_conversionals
-open Tactic_type.Conversionals
 
 (*************************************************************************
  * Rewrites.

@@ -84,13 +84,9 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Czf_itt_set
-doc <:doc< @docoff >>
+doc docoff
 
 open Itt_equal
 
@@ -108,6 +104,7 @@ open Mptop
 
 open Base_dtactic
 open Base_auto_tactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_rfun
@@ -119,17 +116,13 @@ open Czf_itt_set
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
-   @begin[doc]
-   @terms
-   @end[doc]
->>
+doc <:doc< @doc{@terms} >>
 declare eq{'s1; 's2}
 declare equal{'s1; 's2}
 declare fun_set{z. 'f['z]}
 declare fun_prop{z. 'P['z]}
 declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -171,13 +164,9 @@ prim_rw unfold_eq : eq{'s1; 's2} <-->
          ((all y1 : 'T1. exst y2: 'T2. eq{.'f1 'y1; .'f2 'y2})
          & (all y2 : 'T2. exst y1: 'T1. eq{.'f1 'y1; .'f2 'y2}))}}
 
-interactive_rw reduce_eq : eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
+interactive_rw reduce_eq {| reduce |} : eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
    ((all y1 : 'T1. exst y2: 'T2. eq{.'f1['y1]; .'f2['y2]})
     & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]}))
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   << eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_eq
 
 doc <:doc< 
    @begin[doc]
@@ -188,14 +177,10 @@ doc <:doc<
 prim_rw unfold_equal : ('s1='s2) <-->
    ((isset{'s1} & isset{'s2}) & eq{'s1; 's2})
 
-interactive_rw reduce_equal : (collect{'T1; x1. 'f1['x1]} = collect{'T2; x2. 'f2['x2]}) <-->
+interactive_rw reduce_equal {| reduce |} : (collect{'T1; x1. 'f1['x1]} = collect{'T2; x2. 'f2['x2]}) <-->
    ((isset{collect{'T1; x1. 'f1['x1]}} & isset{collect{'T2; x2. 'f2['x2]}})
    & ((all y1 : 'T1. exst y2: 'T2. eq{.'f1['y1]; .'f2['y2]})
      & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]})))
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   << collect{'T1; x1. 'f1['x1]} = collect{'T2; x2. 'f2['x2]} >>, reduce_equal
 
 doc <:doc< 
    @begin[doc]

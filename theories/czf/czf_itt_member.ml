@@ -47,24 +47,20 @@ doc <:doc<
    @end[spelling]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Czf_itt_eq
-doc <:doc< @docoff >>
+doc docoff
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Var
 
 open Base_dtactic
+open Top_conversionals
 
 open Itt_rfun
 open Itt_logic
@@ -98,21 +94,16 @@ doc <:doc<
 prim_rw unfold_mem : mem{'x; 'y} <-->
    set_ind{'y; T, f, g. exst t: 'T. eq{'x; .'f 't}}
 
-interactive_rw reduce_mem : mem{'x; collect{'T; y. 'f['y]}} <-->
+interactive_rw reduce_mem {| reduce |} : mem{'x; collect{'T; y. 'f['y]}} <-->
    (exst t: 'T. eq{'x; .'f['t]})
 
-doc <:doc< @docoff >>
-let resource reduce += << mem{'x; collect{'T; y. 'f['y]}} >>, reduce_mem
-
-doc <:doc< @doc{nil} >>
 prim_rw unfold_member : member{'x; 'y} <-->
    ((isset{'x} & isset{'y}) & mem{'x; 'y})
 
-interactive_rw reduce_member : member{'x; collect{'T; y. 'f['y]}} <-->
+interactive_rw reduce_member {| reduce |} : member{'x; collect{'T; y. 'f['y]}} <-->
    ((isset{'x} & isset{collect{'T; y. 'f['y]}}) & (exst t: 'T. eq{'x; .'f['t]}))
-doc <:doc< @docoff >>
 
-let resource reduce += << member{'x; collect{'T; y. 'f['y]}} >>, reduce_member
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

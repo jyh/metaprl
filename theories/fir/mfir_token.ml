@@ -95,18 +95,13 @@ prim_rw reduce_token_eq_main :
    token_eq{ token[str1:s]; token[str2:s] } <-->
    meta_eq[str1:s, str2:s]{ "true"; "false" }
 
-doc <:doc< 
-   @docoff
->>
+doc docoff
 
 let reduce_token_eq =
    reduce_token_eq_main thenC reduce_meta_eq_str
 
-let resource reduce += [
-   << token_eq{ token[str1:s]; token[str2:s] } >>,
-      reduce_token_eq
-]
-
+let resource reduce +=
+   << token_eq{ token[str1:s]; token[str2:s] } >>, reduce_token_eq
 
 (**************************************************************************
  * Display forms.

@@ -87,10 +87,10 @@ open Mp_resource
 
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Var
 
 open Base_dtactic
+open Top_conversionals
 
 open Itt_logic
 
@@ -118,20 +118,19 @@ doc <:doc<
    the disjoint union of their index types.
    @end[doc]
 >>
+
 prim_rw unfold_bunion : union{'s1; 's2} <-->
    set_ind{'s1; a1, f1, g1.
       set_ind{'s2; a2, f2, g2.
          collect{.Itt_union!union{'a1; 'a2}; x. decide{'x; z. 'f1 'z; z. 'f2 'z}}}}
 
-interactive_rw reduce_bunion : union{collect{'t1; x1. 'f1['x1]};
-                                    collect{'t2; x2. 'f2['x2]}} <-->
+interactive_rw reduce_bunion {| reduce |} : 
+   union{collect{'t1; x1. 'f1['x1]}; collect{'t2; x2. 'f2['x2]}} <-->
    collect{.Itt_union!union{'t1; 't2}; x. decide{'x; z. 'f1['z]; z. 'f2['z]}}
-doc <:doc< @docoff >>
+   
+doc docoff
 
 let fold_bunion = makeFoldC << union{'s1; 's2} >> unfold_bunion
-
-let resource reduce +=
-   << union{collect{'t1; x1. 'f1['x1]}; collect{'t2; x2. 'f2['x2]}} >>, reduce_bunion
 
 doc <:doc< 
    @begin[doc]
@@ -140,11 +139,13 @@ doc <:doc<
    above.
    @end[doc]
 >>
+
 prim_rw unfold_union : union{'s} <-->
    set_ind{'s; a1, f1, g1.
       collect{.(x: 'a1 * set_ind{.'f1 'x; a2, f2, g2. 'a2});
          y. spread{'y; u, v. set_ind{.'f1 'u; a3, f3, g3. 'f3 'v}}}}
-doc <:doc< @docoff >>
+
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *

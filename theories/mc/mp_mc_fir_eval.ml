@@ -37,11 +37,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{docoff} >>
 extends Itt_bool
 extends Itt_int_base
 extends Itt_int_ext
@@ -49,10 +45,9 @@ extends Itt_list
 extends Mp_mc_fir_base
 extends Mp_mc_fir_ty
 extends Mp_mc_fir_exp
-doc <:doc< @docoff >>
+doc docoff
 
 open Top_conversionals
-open Tactic_type.Conversionals
 
 (*************************************************************************
  * Declarations.

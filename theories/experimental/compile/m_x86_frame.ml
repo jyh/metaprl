@@ -51,19 +51,19 @@ dform mem_reg_off_df : MemRegOff{'r; 'off} =
 dform mem_reg_reg_off_mul_df : MemRegRegOffMul{'r1; 'r2; 'off; 'mul} =
    `"<" slot{'r1} `"," slot{'r2} `"," slot{'off} `"," slot{'mul} `">"
 
-prim_rw fold_immediate_number :
+prim_rw fold_immediate_number {| reduce |} :
    ImmediateNumber{number[i:n]} <--> ImmediateNumber[i:n]
 
-prim_rw fold_mem_reg_off :
+prim_rw fold_mem_reg_off {| reduce |} :
    MemRegOff{'r; number[off:n]} <--> MemRegOff[off:n]{'r}
 
-prim_rw fold_mem_reg_reg_off_mul :
+prim_rw fold_mem_reg_reg_off_mul {| reduce |} :
    MemRegRegOffMul{'r1; 'r2; number[off:n]; number[mul:n]} <--> MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
 
 (*
  * Size of a word on this platform, in bytes.
  *)
-define unfold_word_size : word_size <--> number[4:n]
+define unfold_word_size {| reduce |} : word_size <--> number[4:n]
 
 dform word_size_df : word_size = `"$word_size"
 
@@ -79,21 +79,10 @@ dform header_df1 : header[i:n] =
 dform header_df2 : header{'i} =
    bf["header<"] slot{'i} bf[">"]
 
-prim_rw unfold_header : header[i:n] <--> ImmediateNumber{mul{number[i:n]; word_size}}
-prim_rw fold_header : header{number[i:n]} <--> header[i:n]
+prim_rw unfold_header {| reduce |} : header[i:n] <--> ImmediateNumber{mul{number[i:n]; word_size}}
+prim_rw fold_header {| reduce |} : header{number[i:n]} <--> header[i:n]
 
-doc <:doc< @docoff >>
-
-(*
- * Add common reductions to reduce resource.
- *)
-let resource reduce +=
-    [<< ImmediateNumber{number[i:n]} >>, fold_immediate_number;
-     << MemRegOff{'r; number[off:n]} >>, fold_mem_reg_off;
-     << MemRegRegOffMul{'r1; 'r2; number[off:n]; number[mul:n]} >>, fold_mem_reg_reg_off_mul;
-     << word_size >>, unfold_word_size;
-     << header[i:n] >>, unfold_header;
-     << header{number[i:n]} >>, fold_header]
+doc docoff
 
 (*
  * -*-

@@ -29,7 +29,6 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-open Tactic_type.Conversionals
 open Top_conversionals
 
 extends Itt_theory
@@ -149,25 +148,15 @@ let fold_action = makeFoldC << action >> unfold_action
 let fold_eq_oven = makeFoldC << eq_oven{'s1; 's2} >> unfold_eq_oven
 let fold_eq_action = makeFoldC << eq_action{'s1; 's2} >> unfold_eq_action
 
-interactive_rw reduce_eq_oven1 : eq_oven{on; on} <--> btrue
-interactive_rw reduce_eq_oven2 : eq_oven{on; ."open"} <--> bfalse
-interactive_rw reduce_eq_oven3 : eq_oven{."open"; on} <--> bfalse
-interactive_rw reduce_eq_oven4 : eq_oven{."open"; ."open"} <--> btrue
+interactive_rw reduce_eq_oven1 {| reduce |} : eq_oven{on; on} <--> btrue
+interactive_rw reduce_eq_oven2 {| reduce |} : eq_oven{on; ."open"} <--> bfalse
+interactive_rw reduce_eq_oven3 {| reduce |} : eq_oven{."open"; on} <--> bfalse
+interactive_rw reduce_eq_oven4 {| reduce |} : eq_oven{."open"; ."open"} <--> btrue
 
-interactive_rw reduce_eq_action1 : eq_action{button; button} <--> btrue
-interactive_rw reduce_eq_action2 : eq_action{button; door} <--> bfalse
-interactive_rw reduce_eq_action3 : eq_action{door; button} <--> bfalse
-interactive_rw reduce_eq_action4 : eq_action{door; door} <--> btrue
-
-let resource reduce +=
-    [<< eq_oven{on; on} >>, reduce_eq_oven1;
-     << eq_oven{on; ."open"} >>, reduce_eq_oven2;
-     << eq_oven{."open"; on} >>, reduce_eq_oven3;
-     << eq_oven{."open"; ."open"} >>, reduce_eq_oven4;
-     << eq_action{button; button} >>, reduce_eq_action1;
-     << eq_action{button; door} >>, reduce_eq_action2;
-     << eq_action{door; button} >>, reduce_eq_action3;
-     << eq_action{door; door} >>, reduce_eq_action4]
+interactive_rw reduce_eq_action1 {| reduce |} : eq_action{button; button} <--> btrue
+interactive_rw reduce_eq_action2 {| reduce |} : eq_action{button; door} <--> bfalse
+interactive_rw reduce_eq_action3 {| reduce |} : eq_action{door; button} <--> bfalse
+interactive_rw reduce_eq_action4 {| reduce |} : eq_action{door; door} <--> btrue
 
 let reduce_next = (higherC unfold_next thenC higherC unfold_state_val thenC reduceC)
 

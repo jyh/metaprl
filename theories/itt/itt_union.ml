@@ -55,11 +55,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Itt_void
 extends Itt_equal
 extends Itt_struct
@@ -80,9 +76,9 @@ open Unify_mm
 open Var
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
 open Base_dtactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_struct
@@ -128,9 +124,9 @@ doc <:doc<
   
    @end[doc]
 >>
-prim_rw reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
-prim_rw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
-doc <:doc< @docoff >>
+prim_rw reduceDecideInl {| reduce |} : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
+prim_rw reduceDecideInr {| reduce |} : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -152,14 +148,6 @@ dform decide_df : except_mode[src] :: decide{'x; y. 'a; z. 'b} =
    szone pushm[0] pushm[3] `"match" " " slot{'x} " " `"with" hspace
    `"inl " slot{'y} `" -> " slot{'a} popm hspace
    pushm[3] `" | inr " slot{'z} `" -> " slot{'b} popm popm ezone
-
-(************************************************************************
- * REDUCTIONS                                                           *
- ************************************************************************)
-
-let resource reduce +=
-   [<< decide{inl{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInl;
-    << decide{inr{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInr]
 
 (************************************************************************
  * RULES                                                                *

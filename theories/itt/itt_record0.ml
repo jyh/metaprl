@@ -16,7 +16,7 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
-open Tactic_type.Conversionals
+open Top_conversionals
 
 open Itt_equal
 open Itt_subtype
@@ -46,21 +46,15 @@ define unfoldEmptyRecord : record <--> top
 
 define unfoldRecordS : record{'n;'A} <--> ind_lab{'n; ('A * record); l . top * 'l}
 
-interactive_rw baseRecord : record{zero;'A} <--> ('A * record)
+interactive_rw baseRecord {| reduce |} : record{zero;'A} <--> ('A * record)
 
 interactive stepRecord {| intro[] |} :
    sequent[squash]  { <H> >- 'n in label} -->
    sequent['ext] { <H> >- record{next{'n};'A} ~ top * record{'n;'A} }
 
-interactive_rw stepRecord_rw  :
+interactive_rw stepRecord_rw {| reduce |} :
    ('n in label) -->
    record{.next{'n};'A} <--> (top * record{'n;'A})
-
-doc <:doc< @docoff >>
-let resource reduce +=
-   [<< record{zero;'A} >>, baseRecord;
-    << record{next{'n};'A} >>,stepRecord_rw]
-doc <:doc< >>
 
 (*** records ***)
 
@@ -69,41 +63,29 @@ declare rcrd
 define unfoldRcrd : rcrd{'n;'a; 'r} <-->
    ind_lab{'n; lambda{r.('a, snd{'r})}; l.lambda{r.(fst{'r},'l snd{'r})}} 'r
 
-interactive_rw baseRcrd : rcrd{zero;'a; 'r} <--> ('a, snd{'r})
+interactive_rw baseRcrd {| reduce |} : rcrd{zero;'a; 'r} <--> ('a, snd{'r})
 
 interactive stepRcrd {| intro [] |} :
    sequent[squash]  { <H> >- 'n in label} -->
    sequent['ext] { <H> >- rcrd{next{'n};'a; 'r} ~ (fst{'r},rcrd{'n;'a;snd{'r}}) }
 
-interactive_rw stepRcrd_rw  :
+interactive_rw stepRcrd_rw {| reduce |} :
    ('n in label) -->
    rcrd{.next{'n};'a; 'r} <--> (fst{'r},rcrd{'n;'a;snd{'r}})
-
-doc <:doc< @docoff >>
-let resource reduce +=
-   [<< rcrd{zero;'a; 'r} >>, baseRcrd;
-    << rcrd{next{'n};'a; 'r} >>, stepRcrd_rw;
-   ]
 
 (*** Field ***)
 
 define unfoldField : field{'r;'n} <--> ind_lab{'n; lambda{r. fst{'r}};  l .lambda{r.'l snd{'r}}} 'r
 
-interactive_rw baseField : field{'r;zero} <--> fst{'r}
+interactive_rw baseField {| reduce |} : field{'r;zero} <--> fst{'r}
 
 interactive stepField {| intro [] |} :
    sequent[squash]  { <H> >- 'n in label} -->
    sequent['ext] { <H> >- field{'r;next{'n}} ~ (field{snd{'r};'n}) }
 
-interactive_rw stepField_rw  :
+interactive_rw stepField_rw {| reduce |} :
    ('n in label) -->
    field{'r;next{'n}} <--> (field{snd{'r};'n})
-
-doc <:doc< @docoff >>
-let resource reduce +=
-   [<< field{'A;zero} >>, baseField;
-    << field{'r;next{'n}} >>, stepField_rw]
-doc <:doc< >>
 
 (******************)
 (*   Rules        *)

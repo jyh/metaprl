@@ -53,5 +53,4 @@ declare nth_elt{ 'n; 'l }
  * Rewrites.
  **************************************************************************)
 
-topval reduce_length : conv
 topval reduce_nth_elt : conv

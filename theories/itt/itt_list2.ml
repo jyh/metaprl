@@ -33,16 +33,12 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
   
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified By: Aleksey Nogin @email{nogin@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Itt_list
 extends Itt_logic
 extends Itt_bool
@@ -59,11 +55,11 @@ open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Var
 
 open Base_dtactic
 open Typeinf
+open Top_conversionals
 
 open Itt_equal
 open Itt_list
@@ -321,10 +317,10 @@ doc <:doc<
    and step case $@bfalse$.
    @end[doc]
 >>
-interactive_rw reduce_is_nil_nil : is_nil{nil} <--> btrue
+interactive_rw reduce_is_nil_nil {| reduce |} : is_nil{nil} <--> btrue
 
-interactive_rw reduce_is_nil_cons : is_nil{cons{'h; 't}} <--> bfalse
-doc <:doc< @docoff >>
+interactive_rw reduce_is_nil_cons {| reduce |} : is_nil{cons{'h; 't}} <--> bfalse
+doc docoff
 
 let fold_is_nil = makeFoldC << is_nil{'l} >> unfold_is_nil
 
@@ -333,10 +329,11 @@ doc <:doc<
    The @hrefterm[mem] term performs induction over the list.
    @end[doc]
 >>
-interactive_rw reduce_mem_nil : mem{'x; nil; 'T} <--> "false"
+interactive_rw reduce_mem_nil {| reduce |} : mem{'x; nil; 'T} <--> "false"
 
-interactive_rw reduce_mem_cons : mem{'x; cons{'u; 'v}; 'T} <--> "or"{('x = 'u in 'T); mem{'x; 'v; 'T}}
-doc <:doc< @docoff >>
+interactive_rw reduce_mem_cons {| reduce |} :
+   mem{'x; cons{'u; 'v}; 'T} <--> "or"{('x = 'u in 'T); mem{'x; 'v; 'T}}
+doc docoff
 
 let fold_mem = makeFoldC << mem{'x; 'l; 'T} >> unfold_mem
 
@@ -345,10 +342,12 @@ doc <:doc<
    The @hrefterm[subset] term performs induction over the first list.
    @end[doc]
 >>
-interactive_rw reduce_subset_nil : \subset{nil; 'l; 'T} <--> "true"
+interactive_rw reduce_subset_nil {| reduce |} : \subset{nil; 'l; 'T} <--> "true"
 
-interactive_rw reduce_subset_cons : \subset{cons{'u; 'v}; 'l; 'T} <--> "and"{mem{'u; 'l; 'T}; \subset{'v; 'l; 'T}}
-doc <:doc< @docoff >>
+interactive_rw reduce_subset_cons {| reduce |} : 
+   \subset{cons{'u; 'v}; 'l; 'T} <--> "and"{mem{'u; 'l; 'T}; \subset{'v; 'l; 'T}}
+
+doc docoff
 
 let fold_subset = makeFoldC << \subset{'l1; 'l2; 'T} >> unfold_subset
 
@@ -360,10 +359,12 @@ doc <:doc<
    first list.
    @end[doc]
 >>
-interactive_rw reduce_append_nil : append{nil; 'l2} <--> 'l2
+interactive_rw reduce_append_nil {| reduce |} : append{nil; 'l2} <--> 'l2
 
-interactive_rw reduce_append_cons : append{cons{'x; 'l1}; 'l2} <--> cons{'x; append{'l1; 'l2}}
-doc <:doc< @docoff >>
+interactive_rw reduce_append_cons {| reduce |} :
+   append{cons{'x; 'l1}; 'l2} <--> cons{'x; append{'l1; 'l2}}
+
+doc docoff
 
 let fold_append = makeFoldC << append{'l1; 'l2} >> unfold_append
 
@@ -374,19 +375,20 @@ doc <:doc<
    the comparison $b[x, y]$.
    @end[doc]
 >>
-interactive_rw reduce_ball2_nil_nil :
+interactive_rw reduce_ball2_nil_nil {| reduce |} :
    ball2{nil; nil; x, y. 'b['x; 'y]} <--> btrue
 
-interactive_rw reduce_ball2_nil_cons :
+interactive_rw reduce_ball2_nil_cons {| reduce |} :
    ball2{nil; cons{'h; 't}; x, y.'b['x; 'y]} <--> bfalse
 
-interactive_rw reduce_ball2_cons_nil :
+interactive_rw reduce_ball2_cons_nil {| reduce |} :
    ball2{cons{'h; 't}; nil; x, y. 'b['x; 'y]} <--> bfalse
 
-interactive_rw reduce_ball2_cons_cons :
+interactive_rw reduce_ball2_cons_cons {| reduce |} :
    ball2{cons{'h1; 't1}; cons{'h2; 't2}; x, y. 'b['x; 'y]} <-->
       band{'b['h1; 'h2]; ball2{'t1; 't2; x, y. 'b['x; 'y]}}
-doc <:doc< @docoff >>
+      
+doc docoff
 
 let fold_ball2 = makeFoldC << ball2{'l1; 'l2; x, y. 'b['x; 'y]} >> unfold_ball2
 
@@ -396,13 +398,14 @@ doc <:doc<
    splitting each pair and comparing it with the key.
    @end[doc]
 >>
-interactive_rw reduce_assoc_nil :
+interactive_rw reduce_assoc_nil {| reduce |} :
    assoc{'eq; 'x; nil; y. 'b['y]; 'z} <--> 'z
 
-interactive_rw reduce_assoc_cons :
+interactive_rw reduce_assoc_cons {| reduce |} :
    assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} <-->
       ifthenelse{.'eq 'u 'x; 'b['v]; assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
-doc <:doc< @docoff >>
+
+doc docoff
 
 let fold_assoc = makeFoldC << assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_assoc
 
@@ -412,14 +415,15 @@ doc <:doc<
    but it keys on the second element of each pair.
    @end[doc]
 >>
-interactive_rw reduce_rev_assoc_nil :
+interactive_rw reduce_rev_assoc_nil {| reduce |} :
    rev_assoc{'eq; 'x; nil; y. 'b['y]; 'z} <--> 'z
 
-interactive_rw reduce_rev_assoc_cons :
+interactive_rw reduce_rev_assoc_cons {| reduce |} :
    rev_assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} <-->
       ifthenelse{.'eq 'v 'x; 'b['u]; rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z}}
 
-doc <:doc< @docoff >>
+doc docoff
+
 let fold_rev_assoc = makeFoldC << rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_rev_assoc
 
 doc <:doc< 
@@ -428,13 +432,14 @@ doc <:doc<
    applying the function to each element, and collecting the results.
    @end[doc]
 >>
-interactive_rw reduce_map_nil :
+interactive_rw reduce_map_nil {| reduce |} :
    map{'f; nil} <--> nil
 
-interactive_rw reduce_map_cons :
+interactive_rw reduce_map_cons {| reduce |} :
    map{'f; cons{'h; 't}} <--> cons{.'f 'h; map{'f; 't}}
 
-doc <:doc< @docoff >>
+doc docoff
+
 let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
 
 doc <:doc< 
@@ -444,14 +449,15 @@ doc <:doc<
    and the argument computed by the previous stage of the computation.
    @end[doc]
 >>
-interactive_rw reduce_fold_left_nil :
+interactive_rw reduce_fold_left_nil {| reduce |} :
    fold_left{'f; 'v; nil} <--> 'v
 
-interactive_rw reduce_fold_left_cons :
+interactive_rw reduce_fold_left_cons {| reduce |} :
    fold_left{'f; 'v; cons{'h; 't}} <-->
    fold_left{'f; .'f 'h 'v; 't}
 
-doc <:doc< @docoff >>
+doc docoff
+
 let fold_fold_left = makeFoldC << fold_left{'f; 'v; 'l} >> unfold_fold_left
 
 doc <:doc< 
@@ -460,11 +466,12 @@ doc <:doc<
    list.
    @end[doc]
 >>
-interactive_rw reduce_length_nil : length{nil} <--> 0
+interactive_rw reduce_length_nil {| reduce |} : length{nil} <--> 0
 
-interactive_rw reduce_length_cons : length{cons{'u; 'v}} <--> (length{'v} +@ 1)
+interactive_rw reduce_length_cons {| reduce |} : length{cons{'u; 'v}} <--> (length{'v} +@ 1)
 
-doc <:doc< @docoff >>
+doc docoff
+
 let fold_length = makeFoldC << length{'l} >> unfold_length
 
 doc <:doc< 
@@ -474,10 +481,11 @@ doc <:doc<
    if it reaches 0.  The $@it$ term is returned if the index never reaches 0.
    @end[doc]
 >>
-interactive_rw reduce_nth_cons :
+interactive_rw reduce_nth_cons {| reduce |} :
    nth{cons{'u; 'v}; 'i} <--> ifthenelse{beq_int{'i; 0}; 'u; nth{'v; .'i -@ 1}}
 
-doc <:doc< @docoff >>
+doc docoff
+
 let fold_nth = makeFoldC << nth{'l; 'i} >> unfold_nth
 
 doc <:doc< 
@@ -487,11 +495,12 @@ doc <:doc<
    when the index reaches 0.
    @end[doc]
 >>
-interactive_rw reduce_replace_nth_cons :
+interactive_rw reduce_replace_nth_cons {| reduce |} :
    replace_nth{cons{'u; 'v}; 'i; 't} <-->
       ifthenelse{beq_int{'i; 0}; cons{'t; 'v}; cons{'u; replace_nth{'v; .'i -@ 1; 't}}}
 
-doc <:doc< @docoff >>
+doc docoff
+
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
 
 doc <:doc< 
@@ -501,63 +510,32 @@ doc <:doc<
    it appends the head of the list to the reversed tail.
    @end[doc]
 >>
-interactive_rw reduce_rev_nil : rev{nil} <--> nil
+interactive_rw reduce_rev_nil {| reduce |} : rev{nil} <--> nil
 
-interactive_rw reduce_rev_cons : rev{cons{'u;'v}} <--> append{rev{'v};cons{'u;nil}}
+interactive_rw reduce_rev_cons {| reduce |} : rev{cons{'u;'v}} <--> append{rev{'v};cons{'u;nil}}
 
-doc <:doc< @docoff >>
+doc docoff
+
 let fold_rev = makeFoldC << rev{'l} >> unfold_rev
 
 (************************************************************************
  * REDUCTION                                                            *
  ************************************************************************)
 
-let resource reduce +=
-   [<< is_nil{nil} >>, reduce_is_nil_nil;
-    << is_nil{cons{'h; 't}} >>, reduce_is_nil_cons;
-    << mem{'x; nil; 'T} >>, reduce_mem_nil;
-    << mem{'x; cons{'u; 'v}; 'T} >>, reduce_mem_cons;
-    << \subset{nil; 'l; 'T} >>, reduce_subset_nil;
-    << \subset{cons{'u; 'v}; 'l; 'T} >>, reduce_subset_cons;
-    << append{cons{'h; 't}; 'l} >>, reduce_append_cons;
-    << append{nil; 'l} >>, reduce_append_nil;
-    << ball2{nil; nil; x, y. 'b['x; 'y]} >>, reduce_ball2_nil_nil;
-    << ball2{nil; cons{'h; 't}; x, y. 'b['x; 'y]} >>, reduce_ball2_nil_cons;
-    << ball2{cons{'h; 't}; nil; x, y. 'b['x; 'y]} >>, reduce_ball2_cons_nil;
-    << ball2{cons{'h1; 't1}; cons{'h2; 't2}; x, y. 'b['x; 'y]} >>, reduce_ball2_cons_cons;
-    << assoc{'eq; 'x; nil; v. 'b['v]; 'z} >>, reduce_assoc_nil;
-    << assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} >>, reduce_assoc_cons;
-    << rev_assoc{'eq; 'x; nil; v. 'b['v]; 'z} >>, reduce_rev_assoc_nil;
-    << rev_assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} >>, reduce_rev_assoc_cons;
-    << map{'f; nil} >>, reduce_map_nil;
-    << map{'f; cons{'h; 't}} >>, reduce_map_cons;
-    << fold_left{'f; 'v; nil} >>, reduce_fold_left_nil;
-    << fold_left{'f; 'v; cons{'h; 't}} >>, reduce_fold_left_cons;
-    << length{nil} >>, reduce_length_nil;
-    << length{cons{'u; 'v}} >>, reduce_length_cons;
-    << nth{cons{'u; 'v}; 'i} >>, reduce_nth_cons;
-    << replace_nth{cons{'u; 'v}; 'i; 't} >>, reduce_replace_nth_cons;
-    << rev{nil} >>, reduce_rev_nil;
-    << rev{cons{'u;'v}} >> , reduce_rev_cons ]
-
 (* We need a proper implementation of rewrites in order to do this.
 
-interactive_rw append_nil 'A :
+interactive_rw append_nil {| reduce |} 'A :
    [wf] sequent [squash] { <H> >- "type"{'A} } -->
    [wf] sequent [squash] { <H> >- 'l in list{'A} } -->
    sequent ['ext] { <H>>- append{'l;nil} <--> 'l }
 
-let resource reduce += <<append{'a; nil}>>, append_nil
-
-interactive_rw rev_append :
+interactive_rw rev_append {| reduce |} :
    [wf] sequent [squash] { <H> >- "type"{'A} } -->
    [wf] sequent [squash] { <H> >- 'a in list{'A} } -->
    [wf] sequent [squash] { <H> >- 'b in list{'A} } -->
    sequent ['ext] { <H>>- rev{append{'a;'b}} <--> append{rev{'b};rev{'a}} }
 
-let resource reduce += <<rev{append{'a;'b}}>>, rev_append
-
-interactive_rw rev2 :
+interactive_rw rev2 {| reduce |} :
    [wf] sequent [squash] { <H> >- "type"{'A} } -->
    [wf] sequent [squash] { <H> >- 'l in list{'A} } -->
    sequent ['ext] { <H>>- rev{rev{'l}} <--> 'l }

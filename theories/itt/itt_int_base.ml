@@ -65,7 +65,6 @@ open Mp_resource
 open Var
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Top_conversionals
 
@@ -341,7 +340,7 @@ prim_rw reduce_lt_meta : lt_bool{number[i:n]; number[j:n]} <-->
 prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
    meta_eq[i:n, j:n]{btrue; bfalse}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let reduce_add =
    reduce_add_meta thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral

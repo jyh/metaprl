@@ -32,9 +32,8 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
-open Tactic_type.Conversionals
-
 open Base_auto_tactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_subtype
@@ -72,7 +71,7 @@ doc <:doc< @docoff >>
 
 define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
 
-define unfoldRcrdS : rcrd[t:t]{'a} <--> rcrd[t:t]{'a;rcrd}
+define unfoldRcrdS {| reduce |} : rcrd[t:t]{'a} <--> rcrd[t:t]{'a;rcrd}
 
 define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 
@@ -160,7 +159,7 @@ interactive recordTypeI {| intro [] |} :
 
 doc <:doc< @doc{@modsubsection{Reductions}} >>
 
-interactive_rw record_beta1:
+interactive_rw record_beta1 {| reduce |} :
    field[n:t]{rcrd[n:t]{'a; 'r}} <--> 'a
 
 interactive_rw record_beta2:
@@ -176,9 +175,7 @@ let record_beta_rw = record_beta thenC reduce_eq_label
 let record_beta2_rw = record_beta2
 
 let resource reduce +=
-   [<< field[n:t]{rcrd[m:t]{'a; 'r}} >>, record_beta_rw;
-    << field[n:t]{rcrd[n:t]{'a; 'r}} >>, record_beta1;
-    << rcrd[n:t]{'a} >>, unfoldRcrdS]
+   << field[n:t]{rcrd[m:t]{'a; 'r}} >>, record_beta_rw
 
 let record_reduce = repeatC (higherC (firstC [unfoldRcrdS;record_beta1;record_beta_rw]))
 

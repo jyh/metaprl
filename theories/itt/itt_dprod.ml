@@ -113,16 +113,12 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Itt_void
 extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -139,10 +135,10 @@ open Unify_mm
 open Var
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
 open Typeinf
 open Base_dtactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_subtype
@@ -219,10 +215,9 @@ doc <:doc<
    @hrefconv[reduceC] resource.
    @end[doc]
 >>
-prim_rw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
+prim_rw reduceSpread {| reduce |} : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 
-doc <:doc< @docoff >>
-let resource reduce += << spread{pair{'u; 'v}; x, y. 'b['x; 'y]} >>, reduceSpread
+doc docoff
 
 doc <:doc< 
    @begin[doc]
@@ -232,13 +227,9 @@ doc <:doc<
    @hrefconv[reduceC] resource.
    @end[doc]
 >>
-interactive_rw reduceFst : fst{pair{'a; 'b}} <--> 'a
-interactive_rw reduceSnd : snd{pair{'a; 'b}} <--> 'b
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   [<< fst{pair{'u; 'v}} >>, reduceFst;
-    << snd{pair{'u; 'v}} >>, reduceSnd]
+interactive_rw reduceFst {| reduce |} : fst{pair{'a; 'b}} <--> 'a
+interactive_rw reduceSnd {| reduce |} : snd{pair{'a; 'b}} <--> 'b
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

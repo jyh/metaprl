@@ -51,7 +51,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_sep
 extends Czf_itt_set_ind
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -59,11 +59,11 @@ open Mp_debug
 open Refiner.Refiner.RefineError
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Var
 
 open Base_dtactic
+open Top_conversionals
 
 open Itt_logic
 open Itt_rfun
@@ -94,12 +94,9 @@ doc <:doc<
 prim_rw unfold_dexists : "dexists"{'s; x. 'A['x]} <-->
    set_ind{'s; T, f, g. x: 'T * 'A['f 'x]}
 
-interactive_rw reduce_dexists : "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
+interactive_rw reduce_dexists {| reduce |} : "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
    (t: 'T * 'A['f['t]])
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   << "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_dexists
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

@@ -49,7 +49,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_dall
 extends Czf_itt_dexists
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -66,12 +66,12 @@ open Mp_resource
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
-open Tactic_type.Conversionals
 open Mptop
 open Var
 
 open Base_dtactic
 open Base_auto_tactic
+open Top_conversionals
 
 let _ =
    show_loading "Loading Czf_itt_set_bvd%t"
@@ -98,11 +98,10 @@ doc <:doc<
 prim_rw unfold_set_bvd: set_bvd{'s; x. 'a['x]} <-->
    set_ind{'s; t, f, g. collect{'t; y. 'a['f 'y]}}
 
-interactive_rw reduce_set_bvd : set_bvd{collect{'T; x. 'f['x]}; x. 'a['x]} <-->
+interactive_rw reduce_set_bvd {| reduce |} :
+   set_bvd{collect{'T; x. 'f['x]}; x. 'a['x]} <-->
    collect{'T; y. 'a['f['y]]}
-doc <:doc< @docoff >>
-
-let resource reduce += << set_bvd{collect{'T; x. 'f['x]}; x. 'a['x]} >>, reduce_set_bvd
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

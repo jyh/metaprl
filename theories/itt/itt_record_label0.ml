@@ -9,10 +9,10 @@ open Itt_int_ext
 open Itt_struct
 open Itt_struct3
 open Base_dtactic
-open Tactic_type.Conversionals
 open Var
 open Tactic_type
 open Tactic_type.Tacticals
+open Top_conversionals
 open Itt_bool
 open Itt_struct2
 
@@ -24,32 +24,21 @@ open Itt_struct2
 
 define unfold_label : label <--> nat
 
-
 define unfold_zero : zero <--> 0
 
-
 define unfold_next : next{'x} <--> ('x +@ 1)
-
 
 define unfoldInd :   ind_lab{'n; 'base; l. 'up['l]} <-->
                      ind{'n; 'base; k,l . 'up['l]}
 
-
-
-interactive_rw reduce_ind_up :
+interactive_rw reduce_ind_up {| reduce |} :
    ('x in label) -->
    ind_lab{next{'x}; 'base; l. 'up['l]} <-->
    ('up[ind_lab{'x ; 'base; l. 'up['l]}])
 
-interactive_rw reduce_ind_base :
+interactive_rw reduce_ind_base {| reduce |} :
    (ind_lab{zero; 'base; l. 'up['l]}) <-->
    'base
-
-doc <:doc< @docoff >>
-let resource reduce +=
-   [<< ind_lab{next{'x}; 'base; l. 'up['l]} >>, reduce_ind_up;
-    << ind_lab{zero; 'base; l. 'up['l]} >>, reduce_ind_base]
-
 
 (******************)
 (*   Rules        *)
@@ -88,6 +77,8 @@ interactive decide_eq_label 'x 'y :
    [main] sequent['ext] { <H>; u:'x='y in label >- 'C} -->
    [main] sequent['ext] { <H>; u:not{.'x='y in label} >- 'C} -->
    sequent['ext] { <H> >- 'C}
+
+doc docoff
 
 (******************)
 (*   Tactic       *)

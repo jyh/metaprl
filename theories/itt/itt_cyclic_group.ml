@@ -59,12 +59,12 @@ open Simple_print
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
-open Tactic_type.Conversionals
 open Mptop
 open Var
 
 open Base_dtactic
 open Base_auto_tactic
+open Top_conversionals
 
 open Itt_struct
 open Itt_group
@@ -95,11 +95,14 @@ doc <:doc<
 prim_rw unfold_group_power : group_power{'g; 'a; 'n} <-->
    ind{'n; i, j. ('g^inv 'a) *['g] group_power{'g; 'a; ('n +@ 1)}; .'g^"1"; k, l. 'a *['g] group_power{'g; 'a; ('n -@ 1)}}
 
+let resource reduce += << group_power{'g; 'a; number[n:n]} >>, unfold_group_power
+
 prim_rw unfold_isCyclic : isCyclic{'g} <-->
    (exst a: 'g^car. all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car))
 
 prim_rw unfold_cycSubg : cycSubg{'g; 'a} <-->
    {car={x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv}
+
 doc docoff
 
 let fold_group_power = makeFoldC << group_power{'g; 'a; 'n} >> unfold_group_power
@@ -127,11 +130,8 @@ dform cycSubg_df : except_mode[src] :: cycSubg{'G; 'a} =
  * REDUCTIONS                                                           *
  ************************************************************************)
 
-interactive_rw reduce_group_power_0 : group_power{'g; 'a; 0} <--> ('g^"1")
-
-let resource reduce +=
-   [<< group_power{'g; 'a; 0} >>, reduce_group_power_0;
-    << group_power{'g; 'a; number[n:n]} >>, unfold_group_power]
+interactive_rw reduce_group_power_0 {| reduce |} :
+   group_power{'g; 'a; 0} <--> ('g^"1")
 
 (************************************************************************
  * RULES                                                                *

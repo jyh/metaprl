@@ -41,10 +41,9 @@ open Mp_debug
 open Printf
 
 open Tactic_type
-open Tactic_type.Conversionals
 open Var
-
 open Base_dtactic
+open Top_conversionals
 
 open Itt_struct
 
@@ -73,38 +72,22 @@ define unfold_spread : spread{'e; a, b. 'c['a; 'b]} <--> 'c['e inl{it}; 'e inr{i
 define unfold_fst : fst{'e} <--> spread{'e; u, v. 'u}
 define unfold_snd : snd{'e} <--> spread{'e; u, v. 'v}
 
-interactive_rw reduce_choose_left : choose{left; 'a; 'b} <--> 'a
-interactive_rw reduce_choose_right : choose{right; 'a; 'b} <--> 'b
+interactive_rw reduce_choose_left {| reduce |} : choose{left; 'a; 'b} <--> 'a
+interactive_rw reduce_choose_right {| reduce |} : choose{right; 'a; 'b} <--> 'b
 
 let fold_two = makeFoldC << two >> unfold_two
 let fold_left = makeFoldC << left >> unfold_left
 let fold_right = makeFoldC << right >> unfold_right
 
-let resource reduce +=
-   [<< choose{left; 'a; 'b} >>, reduce_choose_left;
-    << choose{right; 'a; 'b} >>, reduce_choose_right]
+interactive_rw reduce_spread {| reduce |} : spread{.('a, 'b); c, d. 'e['c; 'd]} <--> 'e['a; 'b]
 
-interactive_rw reduce_spread : spread{.('a, 'b); c, d. 'e['c; 'd]} <--> 'e['a; 'b]
+interactive_rw reduce_fst {| reduce |} : fst{pair{'a; 'b}} <--> 'a
+interactive_rw reduce_snd {| reduce |} : snd{pair{'a; 'b}} <--> 'b
 
-let resource reduce += << spread{.('a, 'b); c, d. 'e['c; 'd]} >>, reduce_spread
-
-interactive_rw reduce_fst : fst{pair{'a; 'b}} <--> 'a
-interactive_rw reduce_snd : snd{pair{'a; 'b}} <--> 'b
-
-let resource reduce +=
-   [<< fst{.('a, 'b)} >>, reduce_fst;
-    << snd{.('a, 'b)} >>, reduce_snd]
-
-interactive_rw reduce_two_order1 : two_order{left; left} <--> void
-interactive_rw reduce_two_order2 : two_order{left; right} <--> unit
-interactive_rw reduce_two_order3 : two_order{right; left} <--> void
-interactive_rw reduce_two_order4 : two_order{right; right} <--> void
-
-let resource reduce +=
-   [<< two_order{left; left} >>, reduce_two_order1;
-    << two_order{left; right} >>, reduce_two_order2;
-    << two_order{right; left} >>, reduce_two_order3;
-    << two_order{right; right} >>, reduce_two_order4]
+interactive_rw reduce_two_order1 {| reduce |} : two_order{left; left} <--> void
+interactive_rw reduce_two_order2 {| reduce |} : two_order{left; right} <--> unit
+interactive_rw reduce_two_order3 {| reduce |} : two_order{right; left} <--> void
+interactive_rw reduce_two_order4 {| reduce |} : two_order{right; right} <--> void
 
 (************************************************************************
  * DISPLAY                                                              *

@@ -44,7 +44,6 @@ open Mp_resource
 open Term_match_table
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
 open Top_conversionals
@@ -110,14 +109,14 @@ doc <:doc<
 declare store_tuple{'v; 'tuple; 'rest}
 declare store_tuple{'v; 'off; 'tuple; 'rest}
 
-prim_rw unfold_store_tuple :
+prim_rw unfold_store_tuple {| reduce |} :
    store_tuple{'v; 'tuple; 'rest}
    <-->
    Comment["unfold_store_tuple"]{
    Mov{Register{'v}; p.
    store_tuple{'p; number[0:n]; 'tuple; 'rest}}}
 
-prim_rw unfold_store_tuple_cons :
+prim_rw unfold_store_tuple_cons {| reduce |} :
    store_tuple{'v; 'off; AllocTupleCons{'a; 'tl}; 'rest}
    <-->
    Comment["unfold_store_tuple_cons"]{
@@ -125,12 +124,12 @@ prim_rw unfold_store_tuple_cons :
    Inst2["mov"]{'v1; MemRegOff{'v; 'off};
    store_tuple{'v; add{'off; word_size}; 'tl; 'rest}}}}
 
-prim_rw unfold_store_tuple_nil :
+prim_rw unfold_store_tuple_nil {| reduce |} :
    store_tuple{'v; 'off; AllocTupleNil; 'rest}
    <-->
    'rest
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform store_tuple_df1 : store_tuple{'v; 'tuple; 'rest} =
    bf["store_tuple[ "] slot{'v} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
@@ -146,22 +145,22 @@ doc <:doc<
 declare reverse_tuple{'tuple}
 declare reverse_tuple{'dst; 'src}
 
-prim_rw unfold_reverse_tuple :
+prim_rw unfold_reverse_tuple {| reduce |} :
    reverse_tuple{'tuple}
    <-->
    reverse_tuple{AllocTupleNil; 'tuple}
 
-prim_rw reduce_reverse_tuple_cons :
+prim_rw reduce_reverse_tuple_cons {| reduce |} :
    reverse_tuple{'dst; AllocTupleCons{'a; 'rest}}
    <-->
    reverse_tuple{AllocTupleCons{'a; 'dst}; 'rest}
 
-prim_rw reduce_reverse_tuple_nil :
+prim_rw reduce_reverse_tuple_nil {| reduce |} :
    reverse_tuple{'dst; AllocTupleNil}
    <-->
    'dst
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform reverse_tuple_df1 : reverse_tuple{'tuple} =
    bf["reverse_tuple[ "] slot{'tuple} bf[" ]"]
@@ -181,22 +180,22 @@ doc <:doc<
 declare reverse_args{'args}
 declare reverse_args{'args1; 'args2}
 
-prim_rw unfold_reverse_args :
+prim_rw unfold_reverse_args {| reduce |} :
    reverse_args{'args}
    <-->
    reverse_args{AsmArgNil; 'args}
 
-prim_rw reduce_reverse_args_cons :
+prim_rw reduce_reverse_args_cons {| reduce |} :
    reverse_args{'args; AsmArgCons{'a; 'rest}}
    <-->
    reverse_args{AsmArgCons{'a; 'args}; 'rest}
 
-prim_rw reduce_reverse_args_nil :
+prim_rw reduce_reverse_args_nil {| reduce |} :
    reverse_args{'args; AsmArgNil}
    <-->
    'args
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform reverse_args_df1 : reverse_args{'args} =
    bf["reverse_args[ "] slot{'args} bf[" ]"]
@@ -212,23 +211,23 @@ doc <:doc<
 declare copy_args{'args; v. 'e['v]}
 declare copy_args{'args1; 'args2; v. 'e['v]}
 
-prim_rw unfold_copy_args :
+prim_rw unfold_copy_args {| reduce |} :
    copy_args{'args; v. 'e['v]}
    <-->
    copy_args{AsmArgNil; 'args; v. 'e['v]}
 
-prim_rw reduce_copy_args_cons :
+prim_rw reduce_copy_args_cons {| reduce |} :
    copy_args{'dst; AsmArgCons{'a; 'rest}; v. 'e['v]}
    <-->
    Mov{'a; arg.
    copy_args{AsmArgCons{Register{'arg}; 'dst}; 'rest; v. 'e['v]}}
 
-prim_rw reduce_copy_args_nil :
+prim_rw reduce_copy_args_nil {| reduce |} :
    copy_args{'dst; AsmArgNil; v. 'e['v]}
    <-->
    'e[reverse_args{'dst}]
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform copy_args_df1 : copy_args{'args; v. 'e} =
    bf["let "] slot{'v} bf[" = copy_args[ "] slot{'args} bf[" ] in"] hspace slot{'e}
@@ -241,13 +240,13 @@ doc <:doc<
    Assemble function arguments.
    @end[doc]
 >>
-prim_rw asm_arg_cons :
+prim_rw asm_arg_cons {| reduce |} :
    ASM{ArgCons{'a; 'rest}; 'args; v. 'e['v]}
    <-->
    ASM{'a; arg.
    ASM{'rest; AsmArgCons{'arg; 'args}; v. 'e['v]}}
 
-prim_rw asm_arg_nil :
+prim_rw asm_arg_nil {| reduce |} :
    ASM{ArgNil; 'args; v. 'e['v]}
    <-->
    'e[reverse_args{'args}]
@@ -269,12 +268,12 @@ doc <:doc<
    translate to 1 and 3, respectively.
    @end[doc]
 >>
-prim_rw asm_atom_false :
+prim_rw asm_atom_false {| reduce |} :
    ASM{AtomFalse; v. 'e['v]}
    <-->
    'e[ImmediateNumber[1:n]]
 
-prim_rw asm_atom_true :
+prim_rw asm_atom_true {| reduce |} :
    ASM{AtomTrue; v. 'e['v]}
    <-->
   'e[ImmediateNumber[3:n]]
@@ -284,7 +283,7 @@ doc <:doc<
    Integers are adjusted for our runtime representation.
    @end[doc]
 >>
-prim_rw asm_atom_int :
+prim_rw asm_atom_int {| reduce |} :
    ASM{AtomInt[i:n]; v. 'e['v]}
    <-->
    'e[ImmediateNumber{add{mul{number[i:n]; number[2:n]}; number[1:n]}}]
@@ -294,7 +293,7 @@ doc <:doc<
    Variables are translated to registers.
    @end[doc]
 >>
-prim_rw asm_atom_var :
+prim_rw asm_atom_var {| reduce |} :
    ASM{AtomVar{'v1}; v2. 'e['v2]}
    <-->
    'e[Register{'v1}]
@@ -304,7 +303,7 @@ doc <:doc<
    Function labels become labels.
    @end[doc]
 >>
-prim_rw asm_atom_fun_var :
+prim_rw asm_atom_fun_var {| reduce |} :
    ASM{AtomFunVar{'R; Label[label:t]}; v2. 'e['v2]}
    <-->
    'e[ImmediateCLabel[label:t]{'R}]
@@ -314,7 +313,7 @@ doc <:doc<
    Functions are assembled.
    @end[doc]
 >>
-prim_rw asm_atom_fun :
+prim_rw asm_atom_fun {| reduce |} :
    ASM{AtomFun{v. 'e['v]}}
    <-->
    LabelFun{v. ASM{'e['v]}}
@@ -328,7 +327,7 @@ doc <:doc<
    integer representation.
    @end[doc]
 >>
-prim_rw asm_atom_binop_add :
+prim_rw asm_atom_binop_add {| reduce |} :
    ASM{AtomBinop{AddOp; 'a1; 'a2}; v. 'e['v]}
    <-->
    Comment["asm_atom_binop_add"]{
@@ -338,7 +337,7 @@ prim_rw asm_atom_binop_add :
    Inst1["dec"]{Register{'sum_tmp}; sum.
    'e[Register{'sum}]}}}}}
 
-prim_rw asm_atom_binop_sub :
+prim_rw asm_atom_binop_sub {| reduce |} :
    ASM{AtomBinop{SubOp; 'a1; 'a2}; v. 'e['v]}
    <-->
    Comment["asm_atom_binop_sub"]{
@@ -355,7 +354,7 @@ doc <:doc<
    operation, and adjust the result.
    @end[doc]
 >>
-prim_rw asm_atom_binop_mul :
+prim_rw asm_atom_binop_mul {| reduce |} :
    ASM{AtomBinop{MulOp; 'a1; 'a2}; v. 'e['v]}
    <-->
    Comment["asm_atom_binop_mul"]{
@@ -368,7 +367,7 @@ prim_rw asm_atom_binop_mul :
    Inst2["or"]{ImmediateNumber[1:n]; Register{'prod_tmp2}; prod.
    'e[Register{'prod}]}}}}}}}}
 
-prim_rw asm_atom_binop_div :
+prim_rw asm_atom_binop_div {| reduce |} :
    ASM{AtomBinop{DivOp; 'a1; 'a2}; v. 'e['v]}
    <-->
    Comment["asm_atom_binop_div"]{
@@ -388,14 +387,14 @@ doc <:doc<
    condition codes. The operations themselves become assembly comparisons.
    @end[doc]
 >>
-prim_rw asm_eq  : ASM{EqOp}  <--> CC["z"]
-prim_rw asm_neq : ASM{NeqOp} <--> CC["nz"]
-prim_rw asm_lt  : ASM{LtOp}  <--> CC["l"]
-prim_rw asm_le  : ASM{LeOp}  <--> CC["le"]
-prim_rw asm_gt  : ASM{GtOp}  <--> CC["g"]
-prim_rw asm_ge  : ASM{GeOp}  <--> CC["ge"]
+prim_rw asm_eq  {| reduce |} : ASM{EqOp}  <--> CC["z"]
+prim_rw asm_neq {| reduce |} : ASM{NeqOp} <--> CC["nz"]
+prim_rw asm_lt  {| reduce |} : ASM{LtOp}  <--> CC["l"]
+prim_rw asm_le  {| reduce |} : ASM{LeOp}  <--> CC["le"]
+prim_rw asm_gt  {| reduce |} : ASM{GtOp}  <--> CC["g"]
+prim_rw asm_ge  {| reduce |} : ASM{GeOp}  <--> CC["ge"]
 
-prim_rw asm_atom_relop :
+prim_rw asm_atom_relop {| reduce |} :
    ASM{AtomRelop{'op; 'a1; 'a2}; v. 'e['v]}
    <-->
    Comment["asm_atom_relop"]{
@@ -414,7 +413,7 @@ doc <:doc<
    Reserve memory.
    @end[doc]
 >>
-prim_rw asm_reserve_1 :
+prim_rw asm_reserve_1 {| reduce |} :
    ASM{Reserve[reswords:n]{'params; 'e}}
    <-->
    Mov{ContextRegister["limit":t]; limit.
@@ -425,7 +424,7 @@ prim_rw asm_reserve_1 :
       AsmReserve[reswords:n]{'v}};
    ASM{'e}}}}}
 
-prim_rw asm_reserve_2 :
+prim_rw asm_reserve_2 {| reduce |} :
    ASM{Reserve[words:n]{'e}}
    <-->
    ASM{'e}
@@ -437,7 +436,7 @@ doc <:doc<
    into v.
    @end[doc]
 >>
-prim_rw asm_let_atom :
+prim_rw asm_let_atom {| reduce |} :
    ASM{LetAtom{'a; v. 'e['v]}}
    <-->
    Comment["asm_let_atom"]{
@@ -452,7 +451,7 @@ doc <:doc<
    @end[doc]
 >>
 (* granicz: Shouldn't we compare against 1? *)
-prim_rw asm_if_1 :
+prim_rw asm_if_1 {| reduce |} :
    ASM{If{'a; 'e1; 'e2}}
    <-->
    Comment["asm_if_1"]{
@@ -466,7 +465,7 @@ doc <:doc<
    the relational operator to the conditional jump.
    @end[doc]
 >>
-prim_rw asm_if_2 :
+prim_rw asm_if_2 {| reduce |} :
    ASM{If{AtomRelop{'op; 'a1; 'a2}; 'e1; 'e2}}
    <-->
    Comment["asm_if_2"]{
@@ -482,7 +481,7 @@ doc <:doc<
    the value from the specified memory location and move it into v.
    @end[doc]
 >>
-prim_rw asm_let_subscript_1 :
+prim_rw asm_let_subscript_1 {| reduce |} :
    ASM{LetSubscript{'a1; 'a2; v. 'e['v]}}
    <-->
    Comment["asm_let_subscript"]{
@@ -494,7 +493,7 @@ prim_rw asm_let_subscript_1 :
    Mov{MemRegRegOffMul{'v1; 'index; number[0:n]; word_size}; v.
    ASM{'e['v]}}}}}}}}
 
-prim_rw asm_let_subscript_2 :
+prim_rw asm_let_subscript_2 {| reduce |} :
    ASM{LetSubscript{'a1; AtomInt[i:n]; v. 'e['v]}}
    <-->
    Comment["asm_let_subscript"]{
@@ -512,7 +511,7 @@ doc <:doc<
 >>
 (* granicz: we are not doing any bounds checking *)
 
-prim_rw asm_set_subscript_1 :
+prim_rw asm_set_subscript_1 {| reduce |} :
    ASM{SetSubscript{'a1; 'a2; 'a3; 'e}}
    <-->
    Comment["asm_set_subscript"]{
@@ -525,7 +524,7 @@ prim_rw asm_set_subscript_1 :
    Inst2["mov"]{'v3; MemRegRegOffMul{'v1; 'index; number[0:n]; word_size};
    ASM{'e}}}}}}}}}
 
-prim_rw asm_set_subscript_2 :
+prim_rw asm_set_subscript_2 {| reduce |} :
    ASM{SetSubscript{'a1; AtomInt[i:n]; 'a3; 'e}}
    <-->
    Comment["asm_set_subscript"]{
@@ -543,7 +542,7 @@ doc <:doc<
    new block, and storing the tuple elements in that block.
    @end[doc]
 >>
-prim_rw asm_alloc_tuple :
+prim_rw asm_alloc_tuple {| reduce |} :
    ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}}
    <-->
    Comment["asm_alloc_tuple"]{
@@ -559,7 +558,7 @@ doc <:doc<
    Allocating a closure is similar to 2-tuple allocation.
    @end[doc]
 >>
-prim_rw asm_let_closure :
+prim_rw asm_let_closure {| reduce |} :
    ASM{LetClosure{'a1; 'a2; v. 'e['v]}}
    <-->
    Comment["asm_let_closure"]{
@@ -580,7 +579,7 @@ doc <:doc<
    function label.
    @end[doc]
 >>
-prim_rw asm_tailcall_direct :
+prim_rw asm_tailcall_direct {| reduce |} :
    ASM{TailCall{AtomFunVar{'R; Label[label:t]}; 'args}}
    <-->
    Comment["asm_tailcall_direct"]{
@@ -588,7 +587,7 @@ prim_rw asm_tailcall_direct :
    copy_args{'args1; args2.
    Jmp["jmp"]{ImmediateLabel[label:t]{'R}; 'args2}}}}
 
-prim_rw asm_tailcall_indirect :
+prim_rw asm_tailcall_indirect {| reduce |} :
    ASM{TailCall{'a; 'args}}
    <-->
    Comment["asm_tailcall"]{
@@ -605,28 +604,28 @@ doc <:doc<
    assembled and identified by function labels.
    @end[doc]
 >>
-prim_rw asm_letrec :
+prim_rw asm_letrec {| reduce |} :
    ASM{LetRec{R1. 'fields['R1]; R2. 'e['R2]}}
    <-->
    Comment["asm_letrec"]{
    LabelRec{R1. ASM{'R1; 'fields['R1]}; R2. ASM{'e['R2]}}}
 
-prim_rw asm_fields :
+prim_rw asm_fields {| reduce |} :
    ASM{'R; Fields{'fields}}
    <-->
    ASM{'R; 'fields}
 
-prim_rw asm_fun_def :
+prim_rw asm_fun_def {| reduce |} :
    ASM{'R; FunDef{Label[label:t]; 'e; 'rest}}
    <-->
    LabelDef{LabelAsm[label:t]{'R}; ASM{'e}; ASM{'R; 'rest}}
 
-prim_rw asm_end_def :
+prim_rw asm_end_def {| reduce |} :
    ASM{'R; EndDef}
    <-->
    LabelEnd
 
-prim_rw asm_initialize :
+prim_rw asm_initialize {| reduce |} :
    ASM{Initialize{'e}}
    <-->
    Init{ASM{'e}}
@@ -636,22 +635,22 @@ prim_rw asm_initialize :
  *)
 doc <:doc< @docoff >>
 
-prim_rw mem_reg_reg_off_mul_cleanup_1 :
+prim_rw mem_reg_reg_off_mul_cleanup_1 {| reduce |} :
    MemRegRegOffMul[off:n, mul:n]{Register{'r1}; 'r2}
    <-->
    MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
 
-prim_rw mem_reg_reg_off_mul_cleanup_2 :
+prim_rw mem_reg_reg_off_mul_cleanup_2 {| reduce |} :
    MemRegRegOffMul[off:n, mul:n]{'r1; Register{'r2}}
    <-->
    MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
 
-prim_rw mem_reg_reg_off_mul_cleanup_3 :
+prim_rw mem_reg_reg_off_mul_cleanup_3 {| reduce |} :
    MemRegRegOffMul[off:n, mul:n]{'r1; ImmediateNumber[j:n]}
    <-->
    MemRegOff{'r1; add{mul{number[mul:n]; number[j:n]}; number[off:n]}}
 
-prim_rw mem_reg_off_cleanup_1 :
+prim_rw mem_reg_off_cleanup_1 {| reduce |} :
    MemRegOff[0:n]{'r}
    <-->
    MemReg{'r}
@@ -661,37 +660,37 @@ prim_rw mem_reg_off_cleanup_1 :
  *)
 declare invert_cc{'cc}
 
-prim_rw invert_cc_z :
+prim_rw invert_cc_z {| reduce |} :
    invert_cc{CC["z"]}
    <-->
    CC["z"]
 
-prim_rw invert_cc_nz :
+prim_rw invert_cc_nz {| reduce |} :
    invert_cc{CC["nz"]}
    <-->
    CC["nz"]
 
-prim_rw invert_cc_lt :
+prim_rw invert_cc_lt {| reduce |} :
    invert_cc{CC["l"]}
    <-->
    CC["ge"]
 
-prim_rw invert_cc_le :
+prim_rw invert_cc_le {| reduce |} :
    invert_cc{CC["le"]}
    <-->
    CC["g"]
 
-prim_rw invert_cc_gt :
+prim_rw invert_cc_gt {| reduce |} :
    invert_cc{CC["g"]}
    <-->
    CC["le"]
 
-prim_rw invert_cc_ge :
+prim_rw invert_cc_ge {| reduce |} :
    invert_cc{CC["ge"]}
    <-->
    CC["l"]
 
-prim_rw cmp_cleanup :
+prim_rw cmp_cleanup {| reduce |} :
    Cmp[cmp_opcode:s]{'src1; ImmediateNumber[i:n]; Jcc[jcc_opcode:s]{'cc; 'rest1; 'rest2}}
    <-->
    Cmp[cmp_opcode:s]{ImmediateNumber[i:n]; 'src1; Jcc[jcc_opcode:s]{invert_cc{'cc}; 'rest1; 'rest2}}
@@ -700,76 +699,11 @@ dform invert_cc_df : invert_cc{'cc} =
    bf["invert "] slot{'cc}
 
 (*
- * Add all these rules to the CPS resource.
- *)
-let resource reduce +=
-    [<< ASM{AtomFalse; v. 'e['v]} >>, asm_atom_false;
-     << ASM{AtomTrue; v. 'e['v]} >>, asm_atom_true;
-     << ASM{AtomInt[i:n]; v. 'e['v]} >>, asm_atom_int;
-     << ASM{AtomVar{'v1}; v2. 'e['v2]} >>, asm_atom_var;
-     << ASM{AtomFunVar{'R; 'v1}; v2. 'e['v2]} >>, asm_atom_fun_var;
-     << ASM{AtomFun{v. 'e['v]}} >>, asm_atom_fun;
-     << ASM{AtomBinop{AddOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_add;
-     << ASM{AtomBinop{SubOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_sub;
-     << ASM{AtomBinop{MulOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_mul;
-     << ASM{AtomBinop{DivOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_div;
-     << ASM{EqOp} >>, asm_eq;
-     << ASM{NeqOp} >>, asm_neq;
-     << ASM{LtOp} >>, asm_lt;
-     << ASM{LeOp} >>, asm_le;
-     << ASM{GtOp} >>, asm_gt;
-     << ASM{GeOp} >>, asm_ge;
-     << ASM{AtomRelop{'op; 'a1; 'a2}; v. 'e['v]} >>,  asm_atom_relop;
-     << ASM{Reserve[words:n]{'params; 'e}} >>, asm_reserve_1;
-     << ASM{Reserve[words:n]{'e}} >>, asm_reserve_2;
-     << ASM{LetAtom{'a; v. 'e['v]}} >>, asm_let_atom;
-     << ASM{ArgCons{'a; 'rest}; 'args; v1. 'e['v1]} >>, asm_arg_cons;
-     << ASM{ArgNil; 'args; v. 'e['v]} >>, asm_arg_nil;
-     << ASM{TailCall{AtomFunVar{'R; Label[label:t]}; 'args}} >>, asm_tailcall_direct;
-     << ASM{TailCall{'f; 'args}} >>, asm_tailcall_indirect;
-     << ASM{If{'a; 'e1; 'e2}} >>, asm_if_1;
-     << ASM{If{AtomRelop{'op; 'a1; 'a2}; 'e1; 'e2}} >>, asm_if_2;
-     << ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}} >>, asm_alloc_tuple;
-     << ASM{LetSubscript{'a1; 'a2; v. 'e['v]}} >>, asm_let_subscript_1;
-     << ASM{LetSubscript{'a1; AtomInt[i:n]; v. 'e['v]}} >>, asm_let_subscript_2;
-     << ASM{SetSubscript{'a1; 'a2; 'a3; 'e}} >>, asm_set_subscript_1;
-     << ASM{SetSubscript{'a1; AtomInt[i:n]; 'a3; 'e}} >>, asm_set_subscript_2;
-     << ASM{LetClosure{'a1; 'a2; v. 'e['v]}} >>, asm_let_closure;
-     << ASM{LetRec{R1. 'fields['R1]; R2. 'e['R2]}} >>, asm_letrec;
-     << ASM{'R; Fields{'fields}} >>, asm_fields;
-     << ASM{'R; FunDef{Label[label:t]; 'e; 'rest}} >>, asm_fun_def;
-     << ASM{'R; EndDef} >>, asm_end_def;
-     << MemRegRegOffMul[off:n, mul:n]{Register{'r1}; 'r2} >>, mem_reg_reg_off_mul_cleanup_1;
-     << MemRegRegOffMul[off:n, mul:n]{'r1; Register{'r2}} >>, mem_reg_reg_off_mul_cleanup_2;
-     << MemRegRegOffMul[off:n, mul:n]{'r1; ImmediateNumber[j:n]} >>, mem_reg_reg_off_mul_cleanup_3;
-     << MemRegOff[0:n]{'r} >>, mem_reg_off_cleanup_1;
-     << store_tuple{'v; 'tuple; 'rest} >>, unfold_store_tuple;
-     << store_tuple{'v; 'off; AllocTupleCons{'a; 'tl}; 'rest} >>, unfold_store_tuple_cons;
-     << store_tuple{'v; 'off; AllocTupleNil; 'rest} >>, unfold_store_tuple_nil;
-     << reverse_tuple{'tuple} >>, unfold_reverse_tuple;
-     << reverse_tuple{'dst; AllocTupleCons{'a; 'rest}} >>, reduce_reverse_tuple_cons;
-     << reverse_tuple{'dst; AllocTupleNil} >>, reduce_reverse_tuple_nil;
-     << reverse_args{'tuple} >>, unfold_reverse_args;
-     << reverse_args{'dst; AsmArgCons{'a; 'rest}} >>, reduce_reverse_args_cons;
-     << reverse_args{'dst; AsmArgNil} >>, reduce_reverse_args_nil;
-     << copy_args{'args; v. 'e['v]} >>, unfold_copy_args;
-     << copy_args{'dst; AsmArgCons{'a; 'rest}; v. 'e['v]} >>, reduce_copy_args_cons;
-     << copy_args{'dst; AsmArgNil; v. 'e['v]} >>, reduce_copy_args_nil;
-     << ASM{Initialize{'e}} >>, asm_initialize;
-     << invert_cc{CC["z"]} >>, invert_cc_z;
-     << invert_cc{CC["nz"]} >>, invert_cc_nz;
-     << invert_cc{CC["l"]} >>, invert_cc_lt;
-     << invert_cc{CC["le"]} >>, invert_cc_le;
-     << invert_cc{CC["g"]} >>, invert_cc_gt;
-     << invert_cc{CC["ge"]} >>, invert_cc_ge;
-     << Cmp[cmp_opcode:s]{'src1; ImmediateNumber[i:n]; Jcc[jcc_opcode:s]{'cc; 'rest1; 'rest2}} >>, cmp_cleanup]
-
-(*
  * Register type.
  *)
 declare register
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform register_df : register =
    bf["register"]

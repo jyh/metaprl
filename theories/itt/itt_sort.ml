@@ -39,7 +39,6 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 
 open Tactic_type
-open Tactic_type.Conversionals
 open Tactic_type.Tacticals
 
 open Var

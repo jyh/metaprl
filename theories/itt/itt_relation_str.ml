@@ -63,7 +63,6 @@ open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Var
 open Top_conversionals
 

@@ -30,14 +30,10 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc<
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends M_x86_asm
 extends M_util
-doc <:doc< @docoff >>
+doc docoff
 
 open M_util
 

@@ -56,16 +56,12 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Itt_equal
 extends Itt_void
 extends Itt_set
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -81,10 +77,10 @@ open Unify_mm
 
 open Var
 open Base_dtactic
+open Top_conversionals
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
 open Itt_void
@@ -253,13 +249,9 @@ doc <:doc<
    and defining $@fix{x; b[x]} @equiv Y@space (<<lambda{x.'b['x]}>>)$.
    @end[doc]
 >>
-prim_rw reduce_beta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
-prim_rw reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   [<< (lambda{v. 'b['v]} 'a) >>, reduce_beta;
-    << fix{f. 'b['f]} >>, reduce_fix]
+prim_rw reduce_beta {| reduce |} : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+prim_rw reduce_fix {| reduce |} : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+doc docoff
 
 (************************************************************************
  * RULES                                                                *

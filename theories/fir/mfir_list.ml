@@ -103,11 +103,11 @@ doc <:doc<
    @end[doc]
 >>
 
-prim_rw reduce_length_base :
+prim_rw reduce_length_base {| reduce |} :
    length{ nil } <-->
    0
 
-prim_rw reduce_length_ind :
+prim_rw reduce_length_ind {| reduce |} :
    length{ cons{ 'h; 't } } <-->
    ( 1 +@ length{ 't } )
 
@@ -119,20 +119,14 @@ doc <:doc<
    @docoff
 >>
 
-let reduce_length =
-   reduce_length_base orelseC reduce_length_ind
-
 let reduce_nth_elt =
    reduce_nth_elt_main thenC
    (addrC [0] reduce_int_eq) thenC
    reduce_ifthenelse thenC
    (tryC (addrC [0] reduce_sub))
 
-let resource reduce += [
-   << length{ 'l } >>, reduce_length;
+let resource reduce +=
    << nth_elt{ 'n; cons{ 'h; 't } } >>, reduce_nth_elt
-]
-
 
 (**************************************************************************
  * Display forms.

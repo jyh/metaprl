@@ -28,7 +28,6 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
-open Tactic_type.Conversionals
 open Top_conversionals
 open Base_auto_tactic
 

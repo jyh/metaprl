@@ -40,7 +40,7 @@ open Refiner.Refiner.Refine
 open Mp_resource
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
+open Top_conversionals
 
 open Itt_rfun
 open Itt_bool
@@ -48,9 +48,7 @@ open Itt_int_base
 open Itt_int_ext
 
 declare fact{'i}
-prim_rw reduceFact : fact{'i} <--> ifthenelse{beq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
-
-let resource reduce += << fact{'i} >>, reduceFact
+prim_rw reduceFact {| reduce |} : fact{'i} <--> ifthenelse{beq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
 
 dform fact_df : except_mode[src] :: parens :: "prec"[prec_apply] :: fact{'i} =
    `"fact" " " slot{'i}

@@ -32,7 +32,6 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
-open Tactic_type.Conversionals
 open Top_conversionals
 
 open Itt_struct
@@ -180,21 +179,13 @@ doc <:doc<
    @end[doc]
 >>
 
+interactive_rw point_beta1_rw {| reduce |} : (point{'a;'b;'e}^x) <--> 'a
 
-
-interactive_rw point_beta1_rw : (point{'a;'b;'e}^x) <--> 'a
-
-interactive_rw point_beta2_rw : (point{'a;'b;'e}^y) <--> 'b
-
-let resource reduce +=
-   [<< point{'a;'b;'e}^x  >>, point_beta1_rw;
-    << point{'a;'b;'e}^y  >>, point_beta2_rw]
-
+interactive_rw point_beta2_rw {| reduce |} : (point{'a;'b;'e}^y) <--> 'b
 
 interactive point_eta :
    sequent[squash]{ <H> >- 'p in plane } -->
    sequent['ext]{ <H> >-   point{.'p^x;.'p^y;'p} ~ 'p }
-
 
 doc <:doc< 
    @begin[doc]
@@ -229,9 +220,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive_rw reduce_length: length{point{'a;'b;'e}} <--> ('a *@ 'a +@ 'b *@ 'b)
-
-let resource reduce += << length{point{'a;'b;'e}}  >>, reduce_length
+interactive_rw reduce_length {| reduce |} : length{point{'a;'b;'e}} <--> ('a *@ 'a +@ 'b *@ 'b)
 
 doc <:doc< 
    @begin[doc]
@@ -402,21 +391,16 @@ let fold_a_module =
 let eval_a_module =
    unfold_a_module thenC reduceTopC thenC higherC fold_a_module;;
 
-interactive_rw foo_eval :
+interactive_rw foo_eval {| reduce |} :
    (a_module^foo 'x) <--> ifthenelse{gt_bool{'x;0};.a_module^fee ('x -@ 1);0}
 
-interactive_rw fee_eval :
+interactive_rw fee_eval {| reduce |} :
    (a_module^fee 'x) <--> ifthenelse{gt_bool{'x;0};.a_module^foo ('x -@ 1);1}
-
-let resource reduce +=
-   [<< a_module^foo 'x  >>, foo_eval;
-    << a_module^fee 'x  >>, fee_eval]
-
 
 interactive_rw example_of_evaluation :
   (a_module^foo 5) <--> 1
 
-doc <:doc< @docoff >>
+doc docoff
 
 interactive tst :
    sequent['ext]  { <H> >-  'C} -->

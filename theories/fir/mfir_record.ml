@@ -118,11 +118,9 @@ let reduce_field =
    (addrC [0] reduce_token_eq) thenC
    reduce_ifthenelse
 
-let resource reduce += [
+let resource reduce +=
    << field[tag1:s]{ record[tag2:s]{ 'data; 'remaining } } >>,
       reduce_field
-]
-
 
 doc <:doc< 
    @begin[doc]
@@ -152,11 +150,9 @@ let reduce_field_mem =
       reduce_ifthenelse
    )
 
-let resource reduce += [
+let resource reduce +=
    << field_mem[tag:s]{ 'record } >>,
       reduce_field_mem
-]
-
 
 (**************************************************************************
  * Display forms.

@@ -26,9 +26,8 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
-open Tactic_type.Conversionals
-
 open Base_auto_tactic
+open Top_conversionals
 
 open Itt_logic
 open Itt_record
@@ -77,15 +76,11 @@ define in_tree: in_tree{'a;'t; 'A} <--> tree_ind{ 't;  ."false"; L,R,self. 'L or
 
 dform in_tree_df : except_mode[src] ::  in_tree{'a;'t; 'A} = 'a Nuprl_font!member 't Nuprl_font!member DataTree{'A}
 
+interactive_rw in_tree_base {| reduce |} :
+   in_tree{'a; emptytree; 'A} <--> "false"
 
-interactive_rw in_tree_base:  in_tree{'a; emptytree; 'A} <--> "false"
-interactive_rw in_tree_step:  in_tree{'a; tree{'node}; 'A} <--> ( in_tree{'a;.'node^left;'A} or in_tree{'a;.'node^right;'A} or 'a = 'node^data in 'A)
-
-let resource reduce +=
-   [<<  in_tree{'a; emptytree; 'A}   >>, in_tree_base;
-    <<  in_tree{'a; tree{'node}; 'A}  >>, in_tree_step
-   ]
-
+interactive_rw in_tree_step {| reduce |} :
+   in_tree{'a; tree{'node}; 'A} <--> ( in_tree{'a;.'node^left;'A} or in_tree{'a;.'node^right;'A} or 'a = 'node^data in 'A)
 
 (* in_tree is a proposition *)
 

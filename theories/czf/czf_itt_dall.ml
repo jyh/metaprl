@@ -51,7 +51,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_all
 extends Czf_itt_set_ind
-doc <:doc< @docoff >>
+doc docoff
 
 open Mp_debug
 open Printf
@@ -59,11 +59,11 @@ open Printf
 open Refiner.Refiner.RefineError
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Var
 
 open Base_dtactic
+open Top_conversionals
 
 open Itt_logic
 open Itt_rfun
@@ -94,11 +94,9 @@ doc <:doc<
 prim_rw unfold_dall : "dall"{'s; x. 'A['x]} <-->
    set_ind{'s; a, f, g. (x: 'a -> 'A['f 'x])}
 
-interactive_rw reduce_dall : "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
+interactive_rw reduce_dall {| reduce |} : "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
    (t: 'T -> 'A['f['t]])
-doc <:doc< @docoff >>
-
-let resource reduce += << "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_dall
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

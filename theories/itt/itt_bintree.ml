@@ -28,7 +28,6 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
-open Tactic_type.Conversionals
 open Top_conversionals
 
 open Base_auto_tactic
@@ -45,8 +44,6 @@ open Itt_struct
 let _ =
    show_loading "Loading Itt_bintree%t"
 
-
-
 doc <:doc< 
    @begin[doc]
    @modsection{Simple Trees}
@@ -54,9 +51,7 @@ doc <:doc<
    @end[doc]
 >>
 
-
 define nodetype: Node{'T} <--> {left:'T; right:'T}
-
 
 define bintree: BinTree <--> srec{T.Node{'T} + unit}
 
@@ -77,16 +72,17 @@ define indtree: tree_ind{'tree; 'empty; L,R,node. 'f['L;'R;'node]} <-->
            }
 
 
-interactive_rw reduce_indtree_empty : tree_ind{emptytree; 'empty_case; L,R,node. 'f['L;'R;'node]} <--> 'empty_case
+interactive_rw reduce_indtree_empty {| reduce |} : 
+   tree_ind{emptytree; 'empty_case; L,R,node. 'f['L;'R;'node]} <--> 'empty_case
 
-interactive_rw reduce_indtree_node : tree_ind{tree{'node}; 'empty_case; L,R,node. 'f['L;'R;'node]} <-->
+interactive_rw reduce_indtree_node {| reduce |} : 
+   tree_ind{tree{'node}; 'empty_case; L,R,node. 'f['L;'R;'node]} <-->
    'f[ tree_ind{('node^left); 'empty_case; L,R,node. 'f['L;'R;'node]};
        tree_ind{('node^right); 'empty_case; L,R,node. 'f['L;'R;'node]};
        'node
      ]
 
-
-doc <:doc< @docoff >>
+doc docoff
 
 dform nodetype_df : except_mode[src] :: Node{'T} = `"Node(" 'T ")"
 
@@ -100,13 +96,6 @@ dform indtree_df : except_mode[src] :: tree_ind{'tree; 'empty; L,R,node. 'f} =
    szone pushm[0] pushm[3] `"match" " " slot{'tree} " " `"with" hspace
    emptytree `" -> " slot{'empty} popm hspace
    pushm[3] `" | " 'L `"." 'R `"." tree{'node} `" -> " slot{'f} popm popm ezone
-
-
-let resource reduce +=
-   [<<  tree_ind{emptytree; 'empty; L,R,node. 'f['L;'R;'node]}  >>, reduce_indtree_empty;
-    <<  tree_ind{tree{'node}; 'empty; L,R,node. 'f['L;'R;'node]}  >>, reduce_indtree_node
-   ]
-
 
 doc <:doc< 
    @begin[doc]
@@ -221,10 +210,8 @@ define node: node{'l;'r;'nd} <--> ( ('nd^left:='l)^right:='r )
 
 dform node_df : except_mode[src] :: node{'l;'r;'nd} = `"node(" 'l `"," 'r `"," 'nd ")"
 
-
 let resource reduce +=
-   [<<  field[l:t]{node{'l;'r;'nd}}  >>, (addrC [0] node thenC reduceTopC);
-   ]
+   <<  field[l:t]{node{'l;'r;'nd}}  >>, (addrC [0] node thenC reduceTopC);
 
 define nodetype2: Node{'T;l,r.'R['l;'r]} <--> record["left":t]{'T; l.record["right":t]{'T;r.'R['l;'r]}}
 

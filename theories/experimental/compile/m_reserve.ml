@@ -28,8 +28,6 @@ extends M_ir
 extends M_arith
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
 open Top_conversionals
 
 (*
@@ -38,19 +36,16 @@ open Top_conversionals
 declare reverse_args{'args}
 declare reverse_args{'dst; 'src}
 
-prim_rw unfold_reverse_args :
-   reverse_args{'args}
-   <-->
+prim_rw unfold_reverse_args {| reduce |} :
+   reverse_args{'args} <-->
    reverse_args{ArgNil; 'args}
 
-prim_rw reverse_args_cons :
-   reverse_args{'dst; ArgCons{'a; 'rest}}
-   <-->
+prim_rw reverse_args_cons {| reduce |} :
+   reverse_args{'dst; ArgCons{'a; 'rest}} <-->
    reverse_args{ArgCons{'a; 'dst}; 'rest}
 
-prim_rw reverse_args_nil :
-   reverse_args{'args; ArgNil}
-   <-->
+prim_rw reverse_args_nil {| reduce |} :
+   reverse_args{'args; ArgNil} <-->
    'args
 
 (*
@@ -71,7 +66,7 @@ prim_rw add_reserve_params :
    <-->
    ReserveParams{ArgNil; AtomFun{v. 'e['v]}}
 
-prim_rw add_reserve_param :
+prim_rw add_reserve_param {| reduce |} :
    ReserveParams{'params; AtomFun{v. 'e['v]}}
    <-->
    AtomFun{v. ReserveParams{ArgCons{AtomVar{'v}; 'params}; 'e['v]}}
@@ -86,7 +81,7 @@ prim_rw reserve_params :
  *)
 declare Reserve{'words; 'e}
 
-prim_rw reduce_reserve :
+prim_rw reduce_reserve {| reduce |} :
    Reserve{number[words:n]; 'e}
    <-->
    Reserve[words:n]{'e}
@@ -94,38 +89,38 @@ prim_rw reduce_reserve :
 (*
  * Propagate the reserve up the expression.
  *)
-prim_rw reserve_let_atom :
+prim_rw reserve_let_atom {| reduce |} :
    LetAtom{'a; v. Reserve[words:n]{'e['v]}}
    <-->
    Reserve[words:n]{LetAtom{'a; v. 'e['v]}}
 
-prim_rw reserve_if :
+prim_rw reserve_if {| reduce |} :
    If{'a; Reserve[words1:n]{'e1}; Reserve[words2:n]{'e2}}
    <-->
    Reserve{max{number[words1:n]; number[words2:n]}; If{'a; 'e1; 'e2}}
 
-prim_rw reserve_let_tuple :
+prim_rw reserve_let_tuple {| reduce |} :
    LetTuple{Length[i:n]; 'tuple; v. Reserve[words:n]{'e['v]}}
    <-->
    Reserve{add{add{number[i:n]; number[1:n]}; number[words:n]};
            LetTuple{Length[i:n]; 'tuple; v. 'e['v]}}
 
-prim_rw reserve_let_subscript :
+prim_rw reserve_let_subscript {| reduce |} :
    LetSubscript{'a1; 'a2; v. Reserve[words:n]{'e['v]}}
    <-->
    Reserve[words:n]{LetSubscript{'a1; 'a2; v. 'e['v]}}
 
-prim_rw reserve_set_subscript :
+prim_rw reserve_set_subscript {| reduce |} :
    SetSubscript{'a1; 'a2; 'a3; Reserve[words:n]{'e}}
    <-->
    Reserve[words:n]{SetSubscript{'a1; 'a2; 'a3; 'e}}
 
-prim_rw reserve_reserve :
+prim_rw reserve_reserve {| reduce |} :
    Reserve[words1:n]{Reserve[words2:n]{'e}}
    <-->
    Reserve{add{number[words1:n]; number[words2:n]}; 'e}
 
-prim_rw reserve_let_closure :
+prim_rw reserve_let_closure {| reduce |} :
    LetClosure{'a1; 'a2; f. Reserve[words:n]{'e['f]}}
    <-->
    Reserve{add{number[words:n]; number[3:n]}; LetClosure{'a1; 'a2; f. 'e['f]}}
@@ -135,22 +130,7 @@ prim_rw reserve_let_closure :
  *)
 declare r
 
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   [<< ReserveParams{'params; AtomFun{v. 'e['v]}} >>, add_reserve_param;
-    << Reserve{number[words:n]; 'e} >>, reduce_reserve;
-    << LetAtom{'a; v. Reserve[words:n]{'e['v]}} >>, reserve_let_atom;
-    << If{'a; Reserve[words1:n]{'e1}; Reserve[words2:n]{'e2}} >>, reserve_if;
-    << LetTuple{Length[i:n]; 'tuple; v. Reserve[words:n]{'e['v]}} >>, reserve_let_tuple;
-    << LetSubscript{'a1; 'a2; v. Reserve[words:n]{'e['v]}} >>, reserve_let_subscript;
-    << SetSubscript{'a1; 'a2; 'a3; Reserve[words:n]{'e}} >>, reserve_set_subscript;
-    << Reserve[words1:n]{Reserve[words2:n]{'e}} >>, reserve_reserve;
-    << LetClosure{'a1; 'a2; f. Reserve[words:n]{'e['f]}} >>, reserve_let_closure;
-    << Reserve{number[words:n]; 'e} >>, reduce_reserve;
-    << reverse_args{'args} >>, unfold_reverse_args;
-    << reverse_args{'dst; ArgCons{'a; 'rest}} >>, reverse_args_cons;
-    << reverse_args{'args; ArgNil} >>, reverse_args_nil]
+doc docoff
 
 (*
  * Add reservations.

@@ -84,7 +84,6 @@ let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
 
 let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
 
-
 interactive eq_label_false :
    sequent['ext] { <H> >- not{.label[x:t] = label[y:t]  in label}} -->
    sequent['ext] { <H> >- 'B} -->

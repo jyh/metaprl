@@ -43,16 +43,12 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_struct
 extends Itt_logic
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -68,10 +64,10 @@ open Var
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
 open Typeinf
 open Base_dtactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_subtype
@@ -82,8 +78,6 @@ open Itt_struct
  *)
 let _ =
    show_loading "Loading Itt_list%t"
-
-(* debug_string DebugLoad "Loading itt_list..." *)
 
 (************************************************************************
  * TERMS                                                                *
@@ -124,21 +118,13 @@ doc <:doc<
    the value computed on the tail $t$ of the list.
    @end[doc]
 >>
-prim_rw reduce_listindNil :
+prim_rw reduce_listindNil {| reduce |} :
    list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]} <--> 'base
 
-prim_rw reduce_listindCons :
+prim_rw reduce_listindCons {| reduce |} :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
-doc <:doc< @docoff >>
-
-(************************************************************************
- * REDUCTIONS                                                           *
- ************************************************************************)
-
-let resource reduce +=
-   [<< list_ind{nil; 'e1; h, t, g. 'e2['h; 't; 'g]} >>, reduce_listindNil;
-    << list_ind{cons{'h1; 't1}; 'e1; h2, t2, g2. 'e2['h2; 't2; 'g2]} >>, reduce_listindCons]
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

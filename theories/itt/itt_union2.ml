@@ -9,7 +9,6 @@ extends Itt_isect (* top *)
 
 open Base_dtactic
 open Base_auto_tactic
-open Tactic_type.Conversionals
 open Top_conversionals
 
 

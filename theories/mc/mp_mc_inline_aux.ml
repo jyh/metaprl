@@ -37,18 +37,13 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Mp_mc_theory
-doc <:doc< @docoff >>
+doc docoff
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Top_conversionals
-open Tactic_type.Conversionals
 open Mp_mc_fir_eval
 
 (*************************************************************************

@@ -216,6 +216,11 @@ interactive var_bterm_decidable {| intro [] |} :
    [wf] sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- decidable{var_bterm{'bt}} }
 
+interactive var_intro1 :
+   sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- var_bterm{'b} } -->
+   sequent { <H> >- 'b in Var }
+
 interactive var_intro :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- var_bterm{'b1} } -->
@@ -285,6 +290,20 @@ interactive_rw op_of_reduce {| reduce |}: op_of{make_bterm{'op;'btl}} <--> 'op
 interactive op_of_wf {| intro [] |} :
    sequent { <H> >- 'bt in OpBTerm } -->
    sequent { <H> >- op_of{'bt} in BOperator }
+
+interactive op_of_wf1 {| intro [] |} :
+   sequent { <H> >- 'b1 = 'b2 in OpBTerm } -->
+   sequent { <H> >- op_of{'b1} = op_of{'b2} in BOperator }
+
+interactive op_of_eq 'bl1 'bl2 :
+   sequent { <H> >- 'op1 in BOperator } -->
+   sequent { <H> >- 'op2 in BOperator } -->
+   sequent { <H> >- 'bl1 in list{BTerm} } -->
+   sequent { <H> >- 'bl2 in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'op1; 'bl1} } -->
+   sequent { <H> >- compatible_shapes{'op2; 'bl2} } -->
+   sequent { <H> >- make_bterm{'op1; 'bl1} = make_bterm{'op2; 'bl2} in BTerm} -->
+   sequent { <H> >- 'op1 = 'op2 in BOperator}
 
 interactive btermSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->

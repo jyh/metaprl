@@ -616,10 +616,10 @@ let atom_of_term t =
       let p, s, i = dest_atomRawInt_term t in
          AtomRawInt (rawint_of_number_term (int_precision_of_term p)
                                            (int_signed_of_term s)
-                                           t)
+                                           i)
    else if is_atomFloat_term t then
       let p, f = dest_atomFloat_term t in
-         AtomFloat (rawfloat_of_number_term (float_precision_of_term p) t)
+         AtomFloat (rawfloat_of_number_term (float_precision_of_term p) f)
    else if is_atomConst_term t then
       let t, tv, i = dest_atomConst_term t in
          AtomConst (ty_of_term t) (ty_var_of_term tv) (int_of_number_term i)
@@ -1105,8 +1105,8 @@ and exp_of_term t =
    (* Debugging. *)
    else if is_debug_term t then
       let info, expr = dest_debug_term t in
-         Debug                   (debug_info_of_term info)
-                                 (exp_of_term expr)
+         Debug             (debug_info_of_term info)
+                           (exp_of_term expr)
 
    else
       raise (RefineError ("exp_of_term", StringTermError

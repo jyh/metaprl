@@ -19,8 +19,7 @@ Todo list:
 -  Deadcode elimination: Implement more forms of it. Prove the
    forms that aren't proven.
 -  Mp_mc_connect_base (special notes):
-   .  Check float converstion code.
-   .  Check string conversion code.
+   .  Check float conversion code.
 
 Notes to myself:
 --------------------------------------------------------------------------
@@ -35,5 +34,5 @@ Scratch space (random thoughts to myself):
    4) test: change cases appropriately
    5) eval: change evaluation as needed
 -  Checklist for when files are added/removed:
-   1) Conscript: 4 file lists to check!
+   1) Conscript: 2 file lists to check!
    2) Makefile: 1 file list to check!

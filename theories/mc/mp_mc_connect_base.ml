@@ -117,10 +117,10 @@ let rawint_of_number_term precision sign t =
    Rawint.of_string precision sign (string_of_num (dest_number t))
 
 let number_term_of_rawfloat f =
-   mk_number_term (num_of_string (Rawfloat.to_string f))
+   mk_token_term (Rawfloat.to_string f)
 
-let rawfloat_of_number_term p t =
-   Rawfloat.of_string p (string_of_num (dest_number t))
+let rawfloat_of_number_term precision t =
+   Rawfloat.of_string precision (dest_token t)
 
 (*
  * Convert to and from string values.
@@ -172,7 +172,7 @@ let rec list_of_term f_conv t =
 let term_of_option converter opt_val =
    match opt_val with
       None ->     noneOpt_term
-    | Some a ->   (converter a)
+    | Some a ->   mk_someOpt_term (converter a)
 
 let option_of_term converter t =
    if is_noneOpt_term t then

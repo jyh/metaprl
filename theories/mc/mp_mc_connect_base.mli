@@ -69,7 +69,9 @@ val label_of_string : string -> label
 
 (*
  * Convert between integer and floating point constants and numbers.
- * A number term is number[i:n].
+ * A number term is number[i:n]. rawfloat's don't get turned into
+ * number terms necessarily (since MetaPRL doesn't have a native
+ * representation for floats).
  *)
 
 val number_term_of_int : int -> term

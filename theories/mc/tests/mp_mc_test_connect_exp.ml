@@ -31,12 +31,9 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* Make someone happy... *)
-
-include Base_theory
-
 (* Open MC namespaces. *)
 
+include Base_theory
 open Rawint
 open Rawfloat
 open Fir
@@ -44,657 +41,407 @@ open Fir
 (* Open MetaPRL namespaces. *)
 
 open Mp_mc_connect_exp
+open Mp_mc_test_connect_base
 open Simple_print.SimplePrint
 
 (* Open ML namespaces. *)
 
 open Printf
 
-(* General functions. *)
+(*
+ * General functions and variables.
+ *)
 
-let print_head name fir_obj =
-   printf "test_%s:\n%s\n" name fir_obj
+let fail_count = ref 0
 
 let print_pass () =
    printf "\nTest passes.\n\n"
-
-let fail_count = ref 0
 
 let print_fail () =
    fail_count := !fail_count + 1;
    printf "\n===> TEST FAILS! <===\n\n"
 
-(*************************************************************************
- * Define test functions.
- *************************************************************************)
-
-(*
- * Unary operations.
- *)
-
-(* Identity (polymorphic). *)
-
-let test_idOp () =
-   print_head "idOp" "IdOp";
-   let t = term_of_unop IdOp in
+let unop_test unop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_unop unop in
    let t' = unop_of_term t in
       print_simple_term t;
-      match t' with
-         IdOp  -> print_pass ()
-       | _     -> print_fail ()
+      if t' = unop then
+         print_pass ()
+      else
+         print_fail ()
 
-(* Naml ints. *)
-
-let test_uminusIntOp () =
-   print_head "uminusIntOp" "UMinusIntOp";
-   let t = term_of_unop UMinusIntOp in
-   let t' = unop_of_term t in
+let binop_test binop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_binop binop in
+   let t' = binop_of_term t in
       print_simple_term t;
-      match t' with
-         UMinusIntOp -> print_pass ()
-       | _           -> print_fail ()
+      if t' = binop then
+         print_pass ()
+      else
+         print_fail ()
+
+let sub_block_test sub_block str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_block sub_block in
+   let t' = sub_block_of_term t in
+      print_simple_term t;
+      if t' = sub_block then
+         print_pass ()
+      else
+         print_fail ()
+
+let sub_value_test sub_value str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_value sub_value in
+   let t' = sub_value_of_term t in
+      print_simple_term t;
+      if t' = sub_value then
+         print_pass ()
+      else
+         print_fail ()
+
+let sub_index_test sub_index str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_index sub_index in
+   let t' = sub_index_of_term t in
+      print_simple_term t;
+      if t' = sub_index then
+         print_pass ()
+      else
+         print_fail ()
+
+let sub_script_test sub_script str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_script sub_script in
+   let t' = sub_script_of_term t in
+      print_simple_term t;
+      if t' = sub_script then
+         print_pass ()
+      else
+         print_fail ()
+
+let subop_test subop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_subop subop in
+   let t' = subop_of_term t in
+      print_simple_term t;
+      if t' = subop then
+         print_pass ()
+      else
+         print_fail ()
+
+let atom_test atom str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_atom atom in
+   let t' = atom_of_term t in
+      print_simple_term t;
+      if t' = atom then
+         print_pass ()
+      else
+         print_fail ()
+
+let alloc_op_test alloc_op str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_alloc_op alloc_op in
+   let t' = alloc_op_of_term t in
+      print_simple_term t;
+      if t' = alloc_op then
+         print_pass ()
+      else
+         print_fail ()
+
+let tailop_test tailop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_tailop tailop in
+   let t' = tailop_of_term t in
+      print_simple_term t;
+      if t' = tailop then
+         print_pass ()
+      else
+         print_fail ()
+
+let pred_nop_test pred_nop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_pred_nop pred_nop in
+   let t' = pred_nop_of_term t in
+      print_simple_term t;
+      if t' = pred_nop then
+         print_pass ()
+      else
+         print_fail ()
+
+let pred_unop_test pred_unop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_pred_unop pred_unop in
+   let t' = pred_unop_of_term t in
+      print_simple_term t;
+      if t' = pred_unop then
+         print_pass ()
+      else
+         print_fail ()
+
+let pred_binop_test pred_binop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_pred_binop pred_binop in
+   let t' = pred_binop_of_term t in
+      print_simple_term t;
+      if t' = pred_binop then
+         print_pass ()
+      else
+         print_fail ()
+
+let pred_test pred str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_pred pred in
+   let t' = pred_of_term t in
+      print_simple_term t;
+      if t' = pred then
+         print_pass ()
+      else
+         print_fail ()
+
+let debug_line_test debug_line str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_debug_line debug_line in
+   let t' = debug_line_of_term t in
+      print_simple_term t;
+      if t' = debug_line then
+         print_pass ()
+      else
+         print_fail ()
+
+let debug_vars_test debug_vars str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_debug_vars debug_vars in
+   let t' = debug_vars_of_term t in
+      print_simple_term t;
+      if t' = debug_vars then
+         print_pass ()
+      else
+         print_fail ()
+
+let debug_info_test debug_info str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_debug_info debug_info in
+   let t' = debug_info_of_term t in
+      print_simple_term t;
+      if t' = debug_info then
+         print_pass ()
+      else
+         print_fail ()
+
+let exp_test exp str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_exp exp in
+   let t' = exp_of_term t in
+      print_simple_term t;
+      if t' = exp then
+         print_pass ()
+      else
+         print_fail ()
 
 (*
- * Binary operations.
+ * Define a function to run all the tests.
  *)
-
-(* Naml ints. *)
-
-let test_plusIntOp () =
-   print_head "plusIntOp" "PlusIntOp";
-   let t = term_of_binop PlusIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         PlusIntOp   -> print_pass ()
-       | _           -> print_fail ()
-
-let test_minusIntOp () =
-   print_head "minusIntOp" "MinusIntOp";
-   let t = term_of_binop MinusIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MinusIntOp  -> print_pass ()
-       | _           -> print_fail ()
-
-let test_mulIntOp () =
-   print_head "mulIntOp" "MulIntOp";
-   let t = term_of_binop MulIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MulIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_divIntOp () =
-   print_head "divIntOp" "DivIntOp";
-   let t = term_of_binop DivIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         DivIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_remIntOp () =
-   print_head "remIntOp" "RemIntOp";
-   let t = term_of_binop RemIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         RemIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_lslIntOp () =
-   print_head "lslIntOp" "LslIntOp";
-   let t = term_of_binop LslIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LslIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_lsrIntOp () =
-   print_head "lsrIntOp" "LsrIntOp";
-   let t = term_of_binop LsrIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LsrIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_asrIntOp () =
-   print_head "asrIntOp" "AsrIntOp";
-   let t = term_of_binop AsrIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         AsrIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_andIntOp () =
-   print_head "andIntOp" "AndIntOp";
-   let t = term_of_binop AndIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         AndIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_orIntOp () =
-   print_head "orIntOp" "OrIntOp";
-   let t = term_of_binop OrIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         OrIntOp  -> print_pass ()
-       | _        -> print_fail ()
-
-let test_xorIntOp () =
-   print_head "xorIntOp" "XorIntOp";
-   let t = term_of_binop XorIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         XorIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_maxIntOp () =
-   print_head "maxIntOp" "MaxIntOp";
-   let t = term_of_binop MaxIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MaxIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_minIntOp () =
-   print_head "minIntOp" "MinIntOp";
-   let t = term_of_binop MinIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MinIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_eqIntOp () =
-   print_head "eqIntOp" "EqIntOp";
-   let t = term_of_binop EqIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         EqIntOp  -> print_pass ()
-       | _        -> print_fail ()
-
-let test_neqIntOp () =
-   print_head "neqIntOp" "NeqIntOp";
-   let t = term_of_binop NeqIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         NeqIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-let test_ltIntOp () =
-   print_head "ltIntOp" "LtIntOp";
-   let t = term_of_binop LtIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LtIntOp  -> print_pass ()
-       | _        -> print_fail ()
-
-let test_leIntOp () =
-   print_head "leIntOp" "LeIntOp";
-   let t = term_of_binop LeIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LeIntOp  -> print_pass ()
-       | _        -> print_fail ()
-
-let test_gtIntOp () =
-   print_head "gtIntOp" "GtIntOp";
-   let t = term_of_binop GtIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         GtIntOp  -> print_pass ()
-       | _        -> print_fail ()
-
-let test_geIntOp () =
-   print_head "geIntOp" "GeIntOp";
-   let t = term_of_binop GeIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         GeIntOp  -> print_pass ()
-       | _        -> print_fail ()
-
-let test_cmpIntOp () =
-   print_head "cmpIntOp" "CmpIntOp";
-   let t = term_of_binop CmpIntOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         CmpIntOp -> print_pass ()
-       | _        -> print_fail ()
-
-(* Native ints. *)
-
-let test_plusRawIntOp () =
-   print_head "plusRawIntOp" "PlusRawIntOp Int32 true";
-   let t = term_of_binop (PlusRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         PlusRawIntOp (Int32, true) -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_minusRawIntOp () =
-   print_head "MinusRawIntOp" "MinusRawIntOp Int32 true";
-   let t = term_of_binop (MinusRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MinusRawIntOp (Int32, true)   -> print_pass ()
-       | _                             -> print_fail ()
-
-let test_mulRawIntOp () =
-   print_head "mulRawIntOp" "MulRawIntOp Int32 true";
-   let t = term_of_binop (MulRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MulRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_divRawIntOp () =
-   print_head "divRawIntOp" "DivRawIntOp Int32 true";
-   let t = term_of_binop (DivRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         DivRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_remRawIntOp () =
-   print_head "remRawIntOp" "RemRawIntOp Int32 true";
-   let t = term_of_binop (RemRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         RemRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_slRawIntOp () =
-   print_head "slRawIntOp" "SlRawIntOp Int32 true";
-   let t = term_of_binop (SlRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         SlRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_srRawIntOp () =
-   print_head "srRawIntOp" "SrRawIntOp Int32 true";
-   let t = term_of_binop (SrRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         SrRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_andRawIntOp () =
-   print_head "andRawIntOp" "AndRawIntOp Int32 true";
-   let t = term_of_binop (AndRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         AndRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_orRawIntOp () =
-   print_head "orRawIntOp" "OrRawIntOp Int32 true";
-   let t = term_of_binop (OrRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         OrRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_xorRawIntOp () =
-   print_head "xorRawIntOp" "XorRawIntOp Int32 true";
-   let t = term_of_binop (XorRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         XorRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_maxRawIntOp () =
-   print_head "maxRawIntOp" "MaxRawIntOp Int32 true";
-   let t = term_of_binop (MaxRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MaxRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_minRawIntOp () =
-   print_head "minRawIntOp" "MinRawIntOp Int32 true";
-   let t = term_of_binop (MinRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MinRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_rawSetBitFieldOp () =
-   print_head "rawSetBitFieldOp" "RawSetBitFieldOp Int64 false 2 -56";
-   let t = term_of_binop (RawSetBitFieldOp Int64 false 2 (-56)) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         RawSetBitFieldOp (Int64, false, 2, -56) -> print_pass ()
-       | _                                         -> print_fail ()
-
-let test_eqRawIntOp () =
-   print_head "eqRawIntOp" "EqRawIntOp Int32 true";
-   let t = term_of_binop (EqRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         EqRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_neqRawIntOp () =
-   print_head "neqRawIntOp" "NeqRawIntOp Int32 true";
-   let t = term_of_binop (NeqRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         NeqRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-let test_ltRawIntOp () =
-   print_head "ltRawIntOp" "LtRawIntOp Int32 true";
-   let t = term_of_binop (LtRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LtRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_leRawIntOp () =
-   print_head "leRawIntOp" "LeRawIntOp Int32 true";
-   let t = term_of_binop (LeRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LeRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_gtRawIntOp () =
-   print_head "gtRawIntOp" "GtRawIntOp Int32 true";
-   let t = term_of_binop (GtRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         GtRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_geRawIntOp () =
-   print_head "geRawIntOp" "GeRawIntOp Int32 true";
-   let t = term_of_binop (GeRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         GeRawIntOp (Int32, true)   -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_cmpRawIntOp () =
-   print_head "cmpRawIntOp" "CmpRawIntOp Int32 true";
-   let t = term_of_binop (CmpRawIntOp Int32 true) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         CmpRawIntOp (Int32, true)   -> print_pass ()
-       | _                           -> print_fail ()
-
-(* Floats. *)
-
-let test_plusFloatOp () =
-   print_head "plusFloatOp" "PlusFloatOp Double";
-   let t = term_of_binop (PlusFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         PlusFloatOp Double   -> print_pass ()
-       | _                    -> print_fail ()
-
-let test_minusFloatOp () =
-   print_head "minusFloatOp" "MinusFloatOp Double";
-   let t = term_of_binop (MinusFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MinusFloatOp Double   -> print_pass ()
-       | _                     -> print_fail ()
-
-let test_mulFloatOp () =
-   print_head "mulFloatOp" "MulFloatOp Double";
-   let t = term_of_binop (MulFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MulFloatOp Double   -> print_pass ()
-       | _                   -> print_fail ()
-
-let test_divFloatOp () =
-   print_head "divFloatOp" "DivFloatOp Double";
-   let t = term_of_binop (DivFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         DivFloatOp Double   -> print_pass ()
-       | _                   -> print_fail ()
-
-let test_remFloatOp () =
-   print_head "remFloatOp" "RemFloatOp Double";
-   let t = term_of_binop (RemFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         RemFloatOp Double   -> print_pass ()
-       | _                   -> print_fail ()
-
-let test_maxFloatOp () =
-   print_head "maxFloatOp" "MaxFloatOp Double";
-   let t = term_of_binop (MaxFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MaxFloatOp Double   -> print_pass ()
-       | _                   -> print_fail ()
-
-let test_minFloatOp () =
-   print_head "minFloatOp" "MinFloatOp Double";
-   let t = term_of_binop (MinFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         MinFloatOp Double   -> print_pass ()
-       | _                   -> print_fail ()
-
-let test_eqFloatOp () =
-   print_head "eqFloatOp" "EqFloatOp Double";
-   let t = term_of_binop (EqFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         EqFloatOp Double   -> print_pass ()
-       | _                  -> print_fail ()
-
-let test_neqFloatOp () =
-   print_head "neqFloatOp" "NeqFloatOp Double";
-   let t = term_of_binop (NeqFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         NeqFloatOp Double   -> print_pass ()
-       | _                   -> print_fail ()
-
-let test_ltFloatOp () =
-   print_head "ltFloatOp" "LtFloatOp Double";
-   let t = term_of_binop (LtFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LtFloatOp Double   -> print_pass ()
-       | _                  -> print_fail ()
-
-let test_leFloatOp () =
-   print_head "leFloatOp" "LeFloatOp Double";
-   let t = term_of_binop (LeFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         LeFloatOp Double   -> print_pass ()
-       | _                  -> print_fail ()
-
-let test_gtFloatOp () =
-   print_head "gtFloatOp" "GtFloatOp Double";
-   let t = term_of_binop (GtFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         GtFloatOp Double   -> print_pass ()
-       | _                  -> print_fail ()
-
-let test_geFloatOp () =
-   print_head "geFloatOp" "GeFloatOp Double";
-   let t = term_of_binop (GeFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         GeFloatOp Double   -> print_pass ()
-       | _                  -> print_fail ()
-
-let test_cmpFloatOp () =
-   print_head "cmpFloatOp" "CmpFloatOp Double";
-   let t = term_of_binop (CmpFloatOp Double) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         CmpFloatOp Double   -> print_pass ()
-       | _                   -> print_fail ()
-
-let test_atan2Op () =
-   print_head "atan2Op" "Atan2Op Single";
-   let t = term_of_binop (Atan2Op Single) in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         Atan2Op Single -> print_pass ()
-       | _              -> print_fail ()
-
-(* Pointer equality. *)
-
-let test_eqEqOp () =
-   print_head "eqEqOp" "EqEqOp";
-   let t = term_of_binop EqEqOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         EqEqOp   -> print_pass ()
-       | _        -> print_fail ()
-
-let test_neqEqOp () =
-   print_head "neqEqOp" "NeqEqOp";
-   let t = term_of_binop NeqEqOp in
-   let t' = binop_of_term t in
-      print_simple_term t;
-      match t' with
-         NeqEqOp   -> print_pass ()
-       | _        -> print_fail ()
-
-(*
- * Subscript operations.
- *)
-
-(*
- * Normal values.
- *)
-
-(*
- * Allocation operators.
- *)
-
-(*************************************************************************
- * Define a function to run all the above tests.
- *************************************************************************)
 
 let run_tests () =
    fail_count := 0;
    Printf.printf "\n\n==> Beginning exp tests <==\n\n";
-   test_idOp ();
-   test_uminusIntOp ();
-   test_plusIntOp ();
-   test_minusIntOp ();
-   test_mulIntOp ();
-   test_divIntOp ();
-   test_remIntOp ();
-   test_lslIntOp ();
-   test_lsrIntOp ();
-   test_asrIntOp ();
-   test_andIntOp ();
-   test_orIntOp ();
-   test_xorIntOp ();
-   test_maxIntOp ();
-   test_minIntOp ();
-   test_eqIntOp ();
-   test_neqIntOp ();
-   test_ltIntOp ();
-   test_leIntOp ();
-   test_gtIntOp ();
-   test_geIntOp ();
-   test_cmpIntOp ();
-   test_plusRawIntOp ();
-   test_minusRawIntOp ();
-   test_mulRawIntOp ();
-   test_divRawIntOp ();
-   test_remRawIntOp ();
-   test_slRawIntOp ();
-   test_srRawIntOp ();
-   test_andRawIntOp ();
-   test_orRawIntOp ();
-   test_xorRawIntOp ();
-   test_maxRawIntOp ();
-   test_minRawIntOp ();
-   test_rawSetBitFieldOp ();
-   test_eqRawIntOp ();
-   test_neqRawIntOp ();
-   test_ltRawIntOp ();
-   test_leRawIntOp ();
-   test_gtRawIntOp ();
-   test_geRawIntOp ();
-   test_cmpRawIntOp ();
-   test_plusFloatOp ();
-   test_minusFloatOp ();
-   test_mulFloatOp ();
-   test_divFloatOp ();
-   test_remFloatOp ();
-   test_maxFloatOp ();
-   test_minFloatOp ();
-   test_eqFloatOp ();
-   test_neqFloatOp ();
-   test_ltFloatOp ();
-   test_leFloatOp ();
-   test_gtFloatOp ();
-   test_geFloatOp ();
-   test_cmpFloatOp ();
-   test_atan2Op ();
-   test_eqEqOp ();
-   test_neqEqOp ();
+
+   (* Unary operations. *)
+   unop_test IdOp "IdOp";
+   unop_test UMinusIntOp "UMinusIntOp";
+   unop_test NotIntOp "NotIntOp";
+   unop_test (RawBitFieldOp Int8 false 2 3) "RawBitFieldOp Int8 false 2 3";
+   unop_test (UMinusRawIntOp Int16 true) "UMinusRawIntOp Int16 true";
+   unop_test (NotRawIntOp Int64 false) "NotRawIntOp Int64 false";
+   unop_test (UMinusFloatOp Single) "UMinusFloatOp Single";
+   unop_test (AbsFloatOp Double) "AbsFloatOp Double";
+   unop_test (SinOp LongDouble) "SinOp LongDouble";
+   unop_test (CosOp Single) "CosOp Single";
+   unop_test (SqrtOp Double) "SqrtOp Double";
+   unop_test (IntOfFloatOp Single) "IntOfFloatOp Single";
+   unop_test (FloatOfIntOp Double) "FloatOfIntOp Double";
+   unop_test (FloatOfFloatOp Single Double) "FloatOfFloatOp Single Double";
+   unop_test (FloatOfRawIntOp Single Int32 true)
+             "FloatOfRawIntOp Single Int32 true";
+   unop_test (RawIntOfIntOp Int32 false) "RawIntOfIntOp Int32 false";
+   unop_test (RawIntOfEnumOp Int8 true 54) "RawIntOfEnumOp Int8 true 54";
+   unop_test (RawIntOfFloatOp Int16 true Double)
+             "RawIntOfFloatOp Int16 true Double";
+   unop_test (RawIntOfRawIntOp Int32 true Int64 false)
+             "RawIntOfRawIntOp Int32 true Int64 false";
+   unop_test (RawIntOfPointerOp Int16 false) "RawIntOfPointerOp Int16 false";
+   unop_test (PointerOfRawIntOp Int32 true) "PointerOfRawIntOp Int32 true";
+
+   (* Binary operations. *)
+   binop_test (AndEnumOp 3) "AndEnumOp 3";
+   binop_test (OrEnumOp 4) "OrEnumOp 4";
+   binop_test (XorEnumOp 5) "XorEnumOp 5";
+   binop_test PlusIntOp "PlusIntOp";
+   binop_test MinusIntOp "MinusIntOp";
+   binop_test MulIntOp "MulIntOp";
+   binop_test DivIntOp "DivIntOp";
+   binop_test RemIntOp "RemIntOp";
+   binop_test LslIntOp "LslIntOp";
+   binop_test LsrIntOp "LsrIntOp";
+   binop_test AsrIntOp "AsrIntOp";
+   binop_test AndIntOp "AndIntOp";
+   binop_test OrIntOp "OrIntOp";
+   binop_test XorIntOp "XorIntOp";
+   binop_test MaxIntOp "MaxIntOp";
+   binop_test MinIntOp "MinIntOp";
+   binop_test EqIntOp "EqIntOp";
+   binop_test NeqIntOp "NeqIntOp";
+   binop_test LtIntOp "LtIntOp";
+   binop_test LeIntOp "LeIntOp";
+   binop_test GtIntOp "GtIntOp";
+   binop_test GeIntOp "GeIntOp";
+   binop_test CmpIntOp "CmpIntOp";
+   binop_test (PlusRawIntOp Int8 true) "PlusRawIntOp Int8 true";
+   binop_test (MinusRawIntOp Int8 true) "MinusRawIntOp Int8 true";
+   binop_test (MulRawIntOp Int8 true) "MulRawIntOp Int8 true";
+   binop_test (DivRawIntOp Int8 true) "DivRawIntOp Int8 true";
+   binop_test (RemRawIntOp Int8 true) "RemRawIntOp Int8 true";
+   binop_test (SlRawIntOp Int8 true) "SlRawIntOp Int8 true";
+   binop_test (SrRawIntOp Int8 true) "SrRawIntOp Int8 true";
+   binop_test (AndRawIntOp Int8 true) "AndRawIntOp Int8 true";
+   binop_test (OrRawIntOp Int8 true) "OrRawIntOp Int8 true";
+   binop_test (XorRawIntOp Int8 true) "XorRawIntOp Int8 true";
+   binop_test (MaxRawIntOp Int8 true) "MaxRawIntOp Int8 true";
+   binop_test (MinRawIntOp Int8 true) "MinRawIntOp Int8 true";
+   binop_test (RawSetBitFieldOp Int8 true 2 3)
+              "RawSetBitFieldOp Int8 true 2 3";
+   binop_test (EqRawIntOp Int8 true) "EqRawIntOp Int8 true";
+   binop_test (NeqRawIntOp Int8 true) "NeqRawIntOp Int8 true";
+   binop_test (LtRawIntOp Int8 true) "LtRawIntOp Int8 true";
+   binop_test (LeRawIntOp Int8 true) "LeRawIntOp Int8 true";
+   binop_test (GtRawIntOp Int8 true) "GtRawIntOp Int8 true";
+   binop_test (GeRawIntOp Int8 true) "GeRawIntOp Int8 true";
+   binop_test (CmpRawIntOp Int8 true) "CmpRawIntOp Int8 true";
+   binop_test (PlusFloatOp Single) "PlusFloatOp Single";
+   binop_test (MinusFloatOp Single) "MinusFloatOp Single";
+   binop_test (MulFloatOp Single) "MulFloatOp Single";
+   binop_test (DivFloatOp Single) "DivFloatOp Single";
+   binop_test (RemFloatOp Single) "RemFloatOp Single";
+   binop_test (MaxFloatOp Single) "MaxFloatOp Single";
+   binop_test (MinFloatOp Single) "MinFloatOp Single";
+   binop_test (EqFloatOp Single) "EqFloatOp Single";
+   binop_test (NeqFloatOp Single) "NeqFloatOp Single";
+   binop_test (LtFloatOp Single) "LtFloatOp Single";
+   binop_test (LeFloatOp Single) "LeFloatOp Single";
+   binop_test (GtFloatOp Single) "GtFloatOp Single";
+   binop_test (GeFloatOp Single) "GeFloatOp Single";
+   binop_test (CmpFloatOp Single) "CmpFloatOp Single";
+   binop_test (Atan2Op Single) "Atan2Op Single";
+   binop_test EqEqOp "EqEqOp";
+   binop_test NeqEqOp "NeqEqOp";
+   binop_test (PlusPointerOp Int8 false) "PlusPointerOp Int8 false";
+
+   (* Subscript operators. *)
+   sub_block_test BlockSub "BlockSub";
+   sub_block_test RawDataSub "RawDataSub";
+   sub_block_test TupleSub "TupleSub";
+   sub_block_test RawTupleSub "RawTupleSub";
+   sub_value_test PolySub "PolySub";
+   sub_value_test (RawIntSub Int8 false) "RawIntSub Int8 false";
+   sub_value_test (RawFloatSub Single) "RawFloatSub Single";
+   sub_value_test PointerSub "PointerSub";
+   sub_value_test FunctionSub "FunctionSub";
+   sub_index_test ByteIndex "ByteIndex";
+   sub_index_test WordIndex "WordIndex";
+   sub_script_test IntIndex "IntIndex";
+   sub_script_test (RawIntIndex Int8 true) "RawIntIndex Int8 true";
+   let op = { sub_block = BlockSub;  sub_value = PolySub;
+              sub_index = ByteIndex; sub_script = IntIndex } in
+   subop_test op "{ BlockSub; PolySub; ByteIndex; IntIndex }";
+
+   (* Normal values. *)
+   atom_test (AtomNil TyInt) "AtomNil TyInt";
+   atom_test (AtomInt 2) "AtomInt 2";
+   atom_test (AtomEnum 3 2) "AtomEnum 3 2";
+   atom_test (AtomRawInt (Rawint.of_string Int8 true "23"))
+             "AtomRawInt (Rawint.of_string Int8 true \"23\")";
+   atom_test (AtomFloat (Rawfloat.of_string Single "2.3"))
+             "AtomFloat (Rawfloat.of_string Single \"2.3\")";
+   atom_test (AtomConst TyInt var1 3) "AtomConst TyInt var1 3";
+   atom_test (AtomVar var1) "AtomVar var1";
+
+   (* Allocation operators. *)
+   alloc_op_test (AllocTuple RawTuple TyInt [AtomInt 3])
+                 "AllocTuple RawTuple TyInt [AtomInt 3]";
+   alloc_op_test (AllocUnion TyInt var2 3 [])
+                 "AllocUnion TyInt var2 3 []";
+   alloc_op_test (AllocArray TyInt [AtomInt 2])
+                 "AllocArray TyInt [AtomInt 2]";
+   alloc_op_test (AllocVArray TyInt ByteIndex (AtomInt 2) (AtomInt 3))
+                 "AllocVArray TyInt ByteIndex (AtomInt 2) (AtomInt 3)";
+   alloc_op_test (AllocMalloc TyInt (AtomEnum 5 2))
+                 "AllocMalloc TyInt (AtomEnum 5 2)";
+
+   (* Tail calls / operations. *)
+   tailop_test (TailSysMigrate 2 (AtomInt 2) (AtomInt 3) var2 [])
+               "TailSysMigrate 2 (AtomInt 2) (AtomInt 3) var2 []";
+   tailop_test (TailAtomic var2 (AtomInt 2) [AtomInt 3])
+               "TailAtomic var2 (AtomInt 2) [AtomInt 3]";
+   tailop_test (TailAtomicRollback (AtomInt 4))
+               "TailAtomicRollback (AtomInt 4)";
+   tailop_test (TailAtomicCommit var2 []) "TailAtomicCommit var2 []";
+
+   (* Predicates and assertions. *)
+   pred_nop_test IsMutable "IsMutable";
+   pred_unop_test Reserve "Reserve";
+   pred_unop_test BoundsCheckLower "BoundsCheckLower";
+   pred_unop_test BoundsCheckUpper "BoundsCheckUpper";
+   pred_unop_test PolyCheck "PolyCheck";
+   pred_unop_test PointerCheck "PointerCheck";
+   pred_unop_test FunctionCheck "FunctionCheck";
+   pred_binop_test BoundsCheck "BoundsCheck";
+   pred_test (PredNop var1 IsMutable) "PredNop var1 IsMutable";
+   pred_test (PredUnop var2 Reserve (AtomVar var1))
+             "PredUnop var2 Reserve (AtomVar var1)";
+   pred_test (PredBinop var1 BoundsCheck (AtomInt 2) (AtomInt 3))
+             "PredBinop var1 BoundsCheck (AtomInt 2) (AtomInt 3)";
+
+   (* Debugging info. *)
+   debug_line_test ("Help!", 3) "\"Help!\" 3";
+   debug_vars_test [(var1, TyInt, var2)] "[(var1, TyInt, var2)]";
+   debug_info_test (DebugString "Hi!") "DebugString \"Hi!\"";
+   let line = ("Hi!", 3) in
+   debug_info_test (DebugContext line [])
+                   "DebugContext (\"Hi!\", 3) []";
+
+   (* Expressions. *)
+   exp_test (LetUnop var1 TyInt UMinusIntOp (AtomInt 2) (TailCall var1 []))
+            "LetUnop var1 TyInt UMinusIntOp (AtomInt 2) (TailCall var1 [])";
+   exp_test (LetBinop var2 TyInt PlusIntOp (AtomInt 2) (AtomInt 3) (TailCall var1 []))
+            "LetBinop var2 TyInt PlusIntOp (AtomInt 2) (AtomInt 3) (TailCall var1 [])";
+   exp_test (LetExt var1 TyInt "Hi!" TyInt [] (TailCall var1 []))
+            "LetExt var1 TyInt \"Hi!\" TyInt [] (TailCall var1 [])";
+   exp_test (TailCall var1 [AtomInt 3]) "TailCall var1 [AtomInt 3]";
+   exp_test (SpecialCall (TailAtomicRollback (AtomInt 3)))
+            "SpecialCall (TailAtomicRollback (AtomInt 3))";
+   exp_test (Match (AtomInt 3) [IntSet set1, TailCall var1[]])
+            "Match (AtomInt 3) [IntSet set1, TailCall var1[]]";
+   exp_test (TypeCase (AtomInt 1) (AtomInt 2) var1 var2 (TailCall var1 []) (TailCall var1[]))
+            "TypeCase (AtomInt 1) (AtomInt 2) var1 var2 (TailCall var1 []) (TailCall var1[])";
+   exp_test (LetAlloc var1 (AllocMalloc TyInt (AtomInt 3)) (TailCall var2 []))
+            "LetAlloc var1 (AllocMalloc TyInt (AtomInt 3)) (TailCall var2 [])";
+   exp_test (LetSubscript op var1 TyInt var2 (AtomInt 2) (TailCall var3 []))
+            "LetSubscript \"op\" var1 TyInt var2 (AtomInt 2) (TailCall var3 [])";
+   exp_test (SetSubscript op var1 var2 (AtomInt 2) TyInt (AtomInt 3) (TailCall var3 []))
+            "SetSubscript \"op\" var1 var2 (AtomInt 2) TyInt (AtomInt 3) (TailCall var3 [])";
+   exp_test (SetGlobal PolySub var1 var2 TyInt (AtomInt 3) (TailCall var3 []))
+            "SetGlobal PolySub var1 var2 TyInt (AtomInt 3) (TailCall var3 [])";
+   exp_test (Memcpy op var1 var2 (AtomInt 3) var2 (AtomInt 4) (AtomInt 60) (TailCall var3 []))
+            "Memcpy \"op\" var1 var2 (AtomInt 3) var2 (AtomInt 4) (AtomInt 60) (TailCall var3 [])";
+   exp_test (Call var1 [None; Some (AtomInt 3)] (TailCall var3 []))
+            "Call var1 [None; Some (AtomInt 3)] (TailCall var3 [])";
+   exp_test (Assert var1 (PredNop var2 IsMutable) (TailCall var3 []))
+            "Assert var1 (PredNop var2 IsMutable) (TailCall var3 [])";
+   exp_test (Debug (DebugContext line []) (TailCall var3 []))
+            "Debug (DebugContext \"line\" []) (TailCall var3 [])";
+
+   (* Done. *)
    !fail_count

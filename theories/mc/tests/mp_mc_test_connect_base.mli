@@ -33,6 +33,19 @@
 
 include Base_theory
 
+open Symbol
+open Fir
+
+(*
+ * Some values to be used in all the test cases.
+ *)
+
+val var1 : symbol
+val var2 : symbol
+val var3 : symbol
+val set1 : int_set
+val set2 : rawint_set
+
 (*
  * Run all the tests defined in this suite.
  * Returns the number of test cases that failed.

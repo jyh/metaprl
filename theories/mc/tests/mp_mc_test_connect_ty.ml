@@ -31,12 +31,9 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* Make someone happy... *)
-
-include Base_theory
-
 (* Open MC namespaces. *)
 
+include Base_theory
 open Rawint
 open Rawfloat
 open Fir
@@ -44,140 +41,95 @@ open Fir
 (* Open MetaPRL namespaces. *)
 
 open Mp_mc_connect_ty
+open Mp_mc_test_connect_base
 open Simple_print.SimplePrint
 
 (* Open ML namespaces. *)
 
 open Printf
 
-(* General functions. *)
+(*
+ * General functions and variables.
+ *)
 
-let print_head name fir_obj =
-   printf "test_%s:\n%s\n" name fir_obj
+let fail_count = ref 0
 
 let print_pass () =
    printf "\nTest passes.\n\n"
-
-let fail_count = ref 0
 
 let print_fail () =
    fail_count := !fail_count + 1;
    printf "\n===> TEST FAILS! <===\n\n"
 
-(*************************************************************************
- * Define test functions.
- *************************************************************************)
+let ty_test ty str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_ty ty in
+   let t' = ty_of_term t in
+      print_simple_term t;
+      if t' = ty then
+         print_pass ()
+      else
+         print_fail ()
+
+let tydef_test tydef str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_tydef tydef in
+   let t' = tydef_of_term t in
+      print_simple_term t;
+      if t' = tydef then
+         print_pass ()
+      else
+         print_fail ()
 
 (*
- * Types.
+ * Define a function to run all the tests.
  *)
-
-(* Base types. *)
-
-let test_tyInt () =
-   print_head "tyInt" "TyInt";
-   let t = term_of_ty TyInt in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyInt -> print_pass ()
-       | _     -> print_fail ()
-
-let test_tyEnum () =
-   print_head "tyEnum" "TyEnum 12";
-   let t = term_of_ty (TyEnum 12) in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyEnum 12   -> print_pass ()
-       | _           -> print_fail ()
-
-(* Native types. *)
-
-let test_tyRawInt () =
-   print_head "tyRawInt" "TyRawInt Int16 false";
-   let t = term_of_ty (TyRawInt Int16 false) in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyRawInt (Int16, false) -> print_pass ()
-       | _                       -> print_fail ()
-
-let test_tyFloat () =
-   print_head "tyFloat" "TyFloat LongDouble";
-   let t = term_of_ty (TyFloat LongDouble) in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyFloat LongDouble   -> print_pass ()
-       | _                    -> print_fail ()
-
-(* Functions. *)
-
-let test_tyFun () =
-   print_head "tyFun" "TyFun [TyInt;TyEnum 2] (TyFloat Single)";
-   let t = term_of_ty (TyFun [TyInt;TyEnum 2] (TyFloat Single)) in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyFun ([TyInt;TyEnum 2], TyFloat Single)  -> print_pass ()
-       | _                                         -> print_fail ()
-
-(* Tuples. *)
-
-let test_tyUnion () =
-   print_head "tyUnion" "==> no test case yet <==";
-   print_fail ()
-
-let test_tyTuple () =
-   print_head "tyTuple" "TyTuple [TyInt;TyEnum 65]";
-   let t = term_of_ty (TyTuple [TyInt;TyEnum 65]) in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyTuple [TyInt;TyEnum 65]  -> print_pass ()
-       | _                          -> print_fail ()
-
-let test_tyArray () =
-   print_head "tyArray" "TyArray TyInt";
-   let t = term_of_ty (TyArray TyInt) in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyArray TyInt  -> print_pass ()
-       | _              -> print_fail ()
-
-let test_tyRawData () =
-   print_head "tyRawData" "TyRawData";
-   let t = term_of_ty TyRawData in
-   let t' = ty_of_term t in
-      print_simple_term t;
-      match t' with
-         TyRawData   -> print_pass ()
-       | _           -> print_fail ()
-
-(* Polymorphism. *)
-
-(* Type should be inferred. *)
-
-(*
- * Unions and tydefs.
- *)
-
-(*************************************************************************
- * Define a function to run all the above tests.
- *************************************************************************)
 
 let run_tests () =
    fail_count := 0;
-   Printf.printf "\n\n==> Beginning ty tests <==\n\n";
-   test_tyInt ();
-   test_tyEnum ();
-   test_tyRawInt ();
-   test_tyFloat ();
-   test_tyFun ();
-   test_tyUnion ();
-   test_tyTuple ();
-   test_tyArray ();
-   test_tyRawData ();
+   Printf.printf "\n\n==> Beginning ty / tydef tests <==\n\n";
+
+   (* Base types. *)
+   ty_test TyInt "TyInt";
+   ty_test (TyEnum 3) "TyEnum 3";
+
+   (* Native types. *)
+   ty_test (TyRawInt Int8 true) "TyRawInt Int8 true";
+   ty_test (TyFloat LongDouble) "TyFloat LongDouble";
+
+   (* Functions. *)
+   ty_test (TyFun [TyInt;TyEnum 2] (TyFloat Single))
+           "TyFun [TyInt;TyEnum 2] (TyFloat Single)";
+
+   (* Tuples. *)
+   ty_test (TyUnion var1 [] set1) "TyUnion var1 [] set1";
+   ty_test (TyTuple NormalTuple [TyInt]) "TyTuple NormalTuple [TyInt]";
+   ty_test (TyArray (TyEnum 2)) "TyArray (TyEnum 2)";
+   ty_test TyRawData "TyRawData";
+   ty_test (TyPointer var2 TyInt) "TyPointer var2 TyInt";
+   ty_test (TyFrame var1 TyInt) "TyFrame var1 TyInt";
+
+   (* Polymorphism. *)
+   ty_test (TyVar var2) "TyVar var2";
+   ty_test (TyApply var1 [TyInt;TyEnum 2]) "TyApply var1 [TyInt;TyEnum 2]";
+   ty_test (TyExists [var1;var2] TyInt) "TyExists [var1;var2] TyInt";
+   ty_test (TyAll [var1;var2] TyInt) "TyAll [var1;var2] TyInt";
+   ty_test (TyProject var2 2) "TyProject var2 2";
+
+   (* Object-oriented. *)
+   ty_test (TyCase TyInt) "TyCase TyInt";
+   ty_test (TyObject var1 TyInt) "TyObject var1 yInt";
+   ty_test (TyOption (TyFrame var2 TyInt))
+           "TyOption (TyFrame var2 TyInt)";
+
+   (* Delayed type. *)
+   ty_test TyDelayed "TyDelayed";
+
+   (* Defining types. *)
+   tydef_test (TyDefUnion [var1;var2] NormalUnion [[(TyInt,true)]])
+              "TyDefUnion [var1;var2] NormalUnion [[(TyInt,true)]]";
+   tydef_test (TyDefLambda [] TyInt) "TyDefLambda [] TyInt";
+
+
+   (* Done. *)
    !fail_count

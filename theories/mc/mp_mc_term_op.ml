@@ -45,23 +45,16 @@ open Refiner.Refiner.RefineError
  *************************************************************************)
 
 (*
- * Turn a binding variable into a string.
+ * Take a term of the form << v1. t1 >> and return ( "v1", t1 ) where
+ * "v1" is a string representation of v1.
  *)
 
-let string_of_binding_var t =
-   match dest_term t with
-      { term_op = _; term_terms = [bt1] } ->
-         (
-            match dest_bterm bt1 with
-               { bvars = [s1]; bterm = t1 } ->
-                  s1
-             | _ ->
-               raise (RefineError ("string_of_binding_var", StringTermError
-                     ("not exactly one bvar?", t)))
-         )
+let string_term_of_dep1_term t =
+   match dest_bterm t with
+      { bvars = [s1]; bterm = t1 } ->
+         s1, t1
     | _ ->
-         raise (RefineError ("string_of_binding_var", StringTermError
-               ("not a term with one subterm with one bvar?", t)))
+         raise (Invalid_argument "string_term_of_dep1_term: not a dep1 term")
 
 (*
  * Deconstruct a term into some convinient entities.
@@ -117,9 +110,14 @@ let mk_3_dep0_1_dep1_term opname t1 t2 t3 b4 t4 =
 let dest_3_dep0_1_dep1_term opname t =
    let (opname', arities, subterms) = pre_dest_term t in
       if opname_arity_check opname [0;0;0;1] opname' arities then
-         match subterms with
-            [t1; t2; t3; t4] ->
-               t1, t2, t3, string_of_binding_var t4, t4
+         match dest_term t with
+            { term_terms = [bt1; bt2; bt3; bt4] } ->
+               let s4, t4 = string_term_of_dep1_term bt4 in
+                  dest_simple_bterm bt1,
+                  dest_simple_bterm bt2,
+                  dest_simple_bterm bt3,
+                  s4,
+                  t4
           | _ ->
                raise (RefineError ("dest_3_dep0_1_dep1_term", StringTermError
                      ("internal error", t)))
@@ -168,9 +166,15 @@ let mk_4_dep0_1_dep1_term opname t1 t2 t3 t4 b5 t5 =
 let dest_4_dep0_1_dep1_term opname t =
    let (opname', arities, subterms) = pre_dest_term t in
       if opname_arity_check opname [0;0;0;0;1] opname' arities then
-         match subterms with
-            [t1; t2; t3; t4; t5] ->
-               t1, t2, t3, t4, string_of_binding_var t5, t5
+         match dest_term t with
+            { term_terms = [bt1; bt2; bt3; bt4; bt5] } ->
+               let s5, t5 = string_term_of_dep1_term bt5 in
+                  dest_simple_bterm bt1,
+                  dest_simple_bterm bt2,
+                  dest_simple_bterm bt3,
+                  dest_simple_bterm bt4,
+                  s5,
+                  t5
           | _ ->
                raise (RefineError ("dest_4_dep0_1_dep1_term", StringTermError
                      ("internal error", t)))
@@ -219,9 +223,16 @@ let mk_5_dep0_1_dep1_term opname t1 t2 t3 t4 t5 b6 t6 =
 let dest_5_dep0_1_dep1_term opname t =
    let (opname', arities, subterms) = pre_dest_term t in
       if opname_arity_check opname [0;0;0;0;0;1] opname' arities then
-         match subterms with
-            [t1; t2; t3; t4; t5; t6] ->
-               t1, t2, t3, t4, t5, string_of_binding_var t6, t6
+         match dest_term t with
+            { term_terms = [bt1; bt2; bt3; bt4; bt5; bt6] } ->
+               let s6, t6 = string_term_of_dep1_term bt6 in
+                  dest_simple_bterm bt1,
+                  dest_simple_bterm bt2,
+                  dest_simple_bterm bt3,
+                  dest_simple_bterm bt4,
+                  dest_simple_bterm bt5,
+                  s6,
+                  t6
           | _ ->
                raise (RefineError ("dest_5_dep0_1_dep1_term", StringTermError
                      ("internal error", t)))

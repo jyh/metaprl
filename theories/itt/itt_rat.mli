@@ -159,4 +159,22 @@ rule ge_maxRightIntro :
 	sequent { <H> >- ge_rat{'a; 'c} } -->
 	sequent { <H> >- ge_rat{'a;max_rat{'b;'c}} }
 
+rule max_ge_maxIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	[wf] sequent { <H> >- 'd in rationals } -->
+	sequent { <H> >- ge_rat{'a;'b} } -->
+	sequent { <H> >- ge_rat{'c;'d} } -->
+	sequent { <H> >- ge_rat{max_rat{'a;'c};max_rat{'b;'d}} }
+
+rule min_ge_minIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	[wf] sequent { <H> >- 'd in rationals } -->
+	sequent { <H> >- ge_rat{'a;'b} } -->
+	sequent { <H> >- ge_rat{'c;'d} } -->
+	sequent { <H> >- ge_rat{min_rat{'a;'c};min_rat{'b;'d}} }
+
 doc <:doc< @docoff >>

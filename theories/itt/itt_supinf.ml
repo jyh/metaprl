@@ -388,7 +388,7 @@ sig
 	type bfield
 	type vars
 	type af
-	type saf
+	type saf = Affine of af | Max of saf*saf | Min of saf*saf
 
 	val affine: af -> saf
    val min: saf -> saf -> saf
@@ -397,7 +397,6 @@ sig
    val scale: bfield -> saf -> saf
    val add: saf -> saf -> saf
 
-   val decompose: saf -> af list
    val occurs: vars -> saf -> bool
 	val isInfinite: saf -> bool
 	val isAffine: saf -> bool
@@ -416,7 +415,7 @@ struct
 	type af=AF.af
 	type bfield=BField.bfield
 
-	type saf = Affine of af | Max of (saf list) | Min of (saf list)
+	type saf = Affine of af | Max of saf*saf | Min of saf*saf
 
 	let affine af = Affine af
 
@@ -427,11 +426,10 @@ struct
 					let c=AF.coef f1' AF.constvar in
 					if BField.compare c BField.plusInfinity = 0 then Affine f
 					else if BField.compare c BField.minusInfinity =0 then f1
-					else Min [f1; Affine f]
+					else Min (f1, Affine f)
 				else
-					Min [f1; Affine f]
-		 |	Min l -> Min ((Affine f)::l)
-		 | Max l -> Min [Affine f; f1]
+					Min (f1, Affine f)
+		 |	_ -> Min (f1, Affine f)
 
 	let min_aff f1 f =
 		if AF.isNumber f then
@@ -444,10 +442,9 @@ struct
 
    let min f1 f2 =
 		match f1,f2 with
-			Min l1, Min l2 -> Min(l1 @ l2)
-		 | _, Affine f -> min_aff f1 f
+			_, Affine f -> min_aff f1 f
 		 | Affine f, _ -> min_aff f2 f
-		 | _,_ -> Min [f1;f2]
+		 | _,_ -> Min (f1,f2)
 
 	let max_aff_simple f1 f =
 		match f1 with
@@ -456,11 +453,10 @@ struct
 					let c=AF.coef f1' AF.constvar in
 					if BField.compare c BField.plusInfinity = 0 then f1
 					else if BField.compare c BField.minusInfinity =0 then Affine f
-					else Max [f1; Affine f]
+					else Max (f1, Affine f)
 				else
-					Max [f1; Affine f]
-		 |	Max l -> Max ((Affine f)::l)
-		 | Min l -> Max [Affine f; f1]
+					Max (f1, Affine f)
+		 |	_ -> Max (f1, Affine f)
 
 	let max_aff f1 f =
 		if AF.isNumber f then
@@ -473,45 +469,38 @@ struct
 
    let max f1 f2 =
 		match f1,f2 with
-			Max l1, Max l2 -> Max(l1 @ l2)
-		 | _, Affine f -> max_aff f1 f
+			_, Affine f -> max_aff f1 f
 		 | Affine f, _ -> max_aff f2 f
-		 | _,_ -> Max [f1;f2]
+		 | _,_ -> Max (f1,f2)
 
 
    let rec scale k f =
 		match f with
 			Affine f' -> Affine (AF.scale k f')
-		 | Min l ->
+		 | Min (a,b) ->
 				let cmp=compare k fieldZero in
-				if cmp<0 then Max (List.map (scale k) l)
+				if cmp<0 then Max (scale k a, scale k b)
 				else if cmp=0 then Affine(AF.mk_number(fieldZero))
-				else Min (List.map (scale k) l)
-		 | Max l ->
+				else Min (scale k a, scale k b)
+		 | Max (a,b) ->
 				let cmp=compare k fieldZero in
-				if cmp<0 then Min (List.map (scale k) l)
+				if cmp<0 then Min (scale k a, scale k b)
 				else if cmp=0 then Affine(AF.mk_number(fieldZero))
-				else Max (List.map (scale k) l)
+				else Max (scale k a, scale k b)
 
    let rec add f1 f2 =
 		match f1,f2 with
 			Affine f1', Affine f2' -> Affine (AF.add f1' f2')
-		 | Min l1, _ -> Min (List.map (add f2) l1)
-		 | _, Min l2 -> Min (List.map (add f1) l2)
-		 | Max l1, _ -> Max (List.map (add f2) l1)
-		 | _, Max l2 -> Max (List.map (add f1) l2)
-
-   let rec decompose f =
-		match f with
-			Affine f' -> [f']
-		 | Min l -> List.concat (List.map decompose l)
-		 | Max l -> List.concat (List.map decompose l)
+		 | Min (a,b), _ -> Min (add a f2, add b f2)
+		 | _, Min (a,b) -> Min (add f1 a, add f1 b)
+		 | Max (a,b), _ -> Max (add a f2, add b f2)
+		 | _, Max (a,b) -> Max (add f1 a, add f1 b)
 
    let rec occurs v f =
 		match f with
 			Affine f' -> (compare (AF.coef f' v) fieldZero <>0)
-		 | Min l -> List.exists (occurs v) l
-		 | Max l -> List.exists (occurs v) l
+		 | Min (a,b) -> (occurs v a) || (occurs v b)
+		 | Max (a,b) -> (occurs v a) || (occurs v b)
 
 	let isInfinite = function
 		Affine f ->
@@ -525,25 +514,15 @@ struct
 	let rec print f =
 		match f with
 			Affine f' -> AF.print f'
-		 | Max fl ->
-				printf "max("; List.iter (fun x -> let _=print x in printf";") fl; printf")"
-		 | Min fl ->
-				printf "min("; List.iter (fun x -> let _=print x in printf";") fl; printf")"
+		 | Max (a,b) ->
+				printf "max("; print a; printf"; "; print b; printf ")"
+		 | Min (a,b) ->
+				printf "min("; print a; printf"; "; print b; printf ")"
 
-	let rec term_of_max info = function
-		[] -> raise (Invalid_argument "Maximum of empty list")
-	 | [f] -> term_of info f
-	 | hd::tl -> BField.max_term (term_of info hd) (term_of_max info tl)
-
-	and term_of_min info = function
-		[] -> raise (Invalid_argument "Minimum of empty list")
-	 | [f] -> term_of info f
-	 | hd::tl -> BField.min_term (term_of info hd) (term_of_max info tl)
-
-	and term_of info = function
+	let rec term_of info = function
 		Affine f -> AF.term_of info f
-	 | Max sl -> term_of_max info sl
-	 | Min sl -> term_of_min info sl
+	 | Max (a,b) -> BField.max_term (term_of info a) (term_of info b)
+	 | Min (a,b) -> BField.min_term (term_of info a) (term_of info b)
 end
 
 module type SACS_Sig =
@@ -682,10 +661,17 @@ let suppa info x f =
 		end;
 	(result,actions)
 
-let supp' info (x:AF.vars) (s:SAF.saf) =
-	let aux f = let (result,actions)=suppa info x f in (SAF.affine result, actions) in
-	let aux2 (f1,a1) (f2,a2) = SAF.min f1 f2, a1 @ a2 in
-	List.fold_left aux2 (SAF.affine AF.plusInfinity, []) (List.map aux (SAF.decompose s))
+let rec supp' info (x:AF.vars) (s:SAF.saf) =
+	match s with
+		SAF.Affine f ->
+			let r,a=suppa info x f in
+			SAF.affine r, a
+	 | SAF.Min (a,b) ->
+			let f1,a1=supp' info x a in
+			let f2,a2=supp' info x b in
+			let result=SAF.min f1 f2 in
+			result, (result,SAF.affine (AF.mk_var x), (addHiddenLabelT "supp" thenT ge_minLeftIntro))::(a1@a2)
+	 | SAF.Max _ -> raise (Invalid_argument "Itt_supinf.supp applied to max(...,...)")
 	(* assertT << 'x <= min('a;'b) >> thenAT
 		'x <= min('a;'b) <-->
 		'x <= 'a & 'x <= 'b *)
@@ -734,10 +720,17 @@ let inffa info x f =
 		end;
 	(result,actions)
 
-let inff' info (x:AF.vars) (s:SAF.saf) =
-	let aux f = let (result,actions)=inffa info x f in (SAF.affine result, actions) in
-	let aux2 (f1,a1) (f2,a2) = SAF.max f1 f2, a1 @ a2 in
-	List.fold_left aux2 (SAF.affine AF.minusInfinity, []) (List.map aux (SAF.decompose s))
+let rec inff' info (x:AF.vars) (s:SAF.saf) =
+	match s with
+		SAF.Affine f ->
+			let r,a=inffa info x f in
+			SAF.affine r, a
+	 | SAF.Max (a,b) ->
+			let f1,a1=inff' info x a in
+			let f2,a2=inff' info x b in
+			let result=SAF.max f1 f2 in
+			result, (SAF.affine (AF.mk_var x), result, (addHiddenLabelT "inff" thenT ge_maxRightIntro))::(a1@a2)
+	 | SAF.Min _ -> raise (Invalid_argument "Itt_supinf.inff applied to min(...,...)")
 	(* assertT << 'x >= max('a;'b) >> thenAT
 		'x >= max('a;'b) <-->
 		'x >= 'a & 'x >= 'b *)
@@ -777,7 +770,7 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 						(*let a0=[r0, saf_v, addHiddenLabelT "supa 1001 a0"] in*)
 						let r1,a1=sup info c r0 (CS.add h v) in
 						let a11=[r1, saf_v,
-									(geTransitive (SAF.term_of info r0) thenMT addHiddenLabelT "supa 1001 a11")] in
+									(addHiddenLabelT "supa 1001 a11" thenT geTransitive (SAF.term_of info r0))] in
 						let r2,a2=supp info v r1 in
 						(r2,a2@(a11@(a1@a0)))
 					end
@@ -801,9 +794,14 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 				(SAF.add r1 b',a1@(a01@a0))
 
 and sup' info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
-	let aux f = supa info c f h in
-	let aux2 (f1,a1) (f2,a2) = SAF.min f1 f2, a1 @ a2 in
-   List.fold_left aux2 (SAF.affine AF.plusInfinity, []) (List.map aux (SAF.decompose s))
+	match s with
+		SAF.Affine f -> supa info c f h
+	 | SAF.Min (a,b) ->
+			let f1,a1=sup' info c a h in
+			let f2,a2=sup' info c b h in
+			let result=SAF.min f1 f2 in
+			result, (result,s, (addHiddenLabelT "sup" thenT min_ge_minIntro))::(a1@a2)
+	 | SAF.Max _ -> raise (Invalid_argument "Itt_supinf.sup applied to max(...,...)")
 
 and sup info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
 	let result,actions=sup' info c s h in
@@ -856,7 +854,7 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 									let saf_v=SAF.affine (AF.mk_var v) in
 									(*let a0=[saf_v, r0, addHiddenLabelT "infa 1001 a0"] in*)
 									let r1,a1=inf info c r0 (CS.add h v) in
-									let a11=[saf_v, r1, (geTransitive (SAF.term_of info r0) thenMT addHiddenLabelT "infa 1001 a11")] in
+									let a11=[saf_v, r1, (addHiddenLabelT "infa 1001 a11" thenT geTransitive (SAF.term_of info r0))] in
 									let r2,a2=inff info v r1 in
 									(r2, a2@(a11@(a1@a0)))
 								end
@@ -907,9 +905,14 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 		end
 
 and inf' info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
-	let aux f = infa info c f h in
-	let aux2 (f1,a1) (f2,a2) = SAF.max f1 f2, a1 @ a2 in
-   List.fold_left aux2 (SAF.affine AF.minusInfinity, []) (List.map aux (SAF.decompose s))
+	match s with
+		SAF.Affine f -> infa info c f h
+	 | SAF.Max (a,b) ->
+			let f1,a1=inf' info c a h in
+			let f2,a2=inf' info c b h in
+			let result=SAF.max f1 f2 in
+			result, (s, result, (addHiddenLabelT "inf" thenT max_ge_maxIntro))::(a1@a2)
+	 | SAF.Min _ -> raise (Invalid_argument "Itt_supinf.inf applied to min(...,...)")
 
 and inf info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
 	let result,actions=inf' info c s h in

@@ -552,4 +552,27 @@ interactive ge_maxRightElim {| elim [] |} 'H :
 	sequent { <H>; ge_rat{'a;'b}; ge_rat{'a;'c}; <J> >- 'C } -->
 	sequent { <H>; ge_rat{'a;max_rat{'b;'c}}; <J> >- 'C }
 
+interactive max_ge_maxIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	[wf] sequent { <H> >- 'd in rationals } -->
+	sequent { <H> >- ge_rat{'a;'b} } -->
+	sequent { <H> >- ge_rat{'c;'d} } -->
+	sequent { <H> >- ge_rat{max_rat{'a;'c};max_rat{'b;'d}} }
+
+interactive min_ge_minIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	[wf] sequent { <H> >- 'd in rationals } -->
+	sequent { <H> >- ge_rat{'a;'b} } -->
+	sequent { <H> >- ge_rat{'c;'d} } -->
+	sequent { <H> >- ge_rat{min_rat{'a;'c};min_rat{'b;'d}} }
+
+interactive max_ge_minIntro {| intro [] |} :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- ge_rat{max_rat{'a;'b};min_rat{'a;'b}} }
+
 doc <:doc< @docoff >>

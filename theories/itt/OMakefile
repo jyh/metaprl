@@ -111,6 +111,7 @@ MPFILES =\
    itt_example
 
 OCamlProgram(gen_int_bench, gen_int_bench)
+gen_int_bench.o gen_int_bench.cmx gen_int_bench.cmo gen_int_bench.cmi:
 
 GEN = gen_int_bench$(EXE)
 
@@ -122,10 +123,12 @@ $(addsuffix .ml, $(BENCH_FILES)): $(GEN)
    ./$(GEN)
 
 $(addsuffix .mli, $(BENCH_FILES)):
-   touch $@
+   touch $(addsuffix .mli, $(BENCH_FILES))
+
+OCamlGeneratedFiles($(addsuffix .mli, $(BENCH_FILES)) $(addsuffix .ml, $(BENCH_FILES)))
 
 clean:
-	$(CLEAN) $(GEN) $(addsuffix .ml, $(BENCH_FILES)) $(addsuffix .mli, $(BENCH_FILES))
+    $(CLEAN) $(GEN) $(addsuffix .ml, $(BENCH_FILES)) $(addsuffix .mli, $(BENCH_FILES))
 
 TEST_FILES =\
    itt_bugs\

@@ -1,41 +1,41 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
    dst opname src
    @end[spelling]
-  
+
    @begin[doc]
-   @module[Assembly]
-  
-   This module define x86 assembly code.
-   The one difference here is that we continue to
-   use variable scoping.
+   @module[M_x86_asm]
+
+   This module defines our representation of x86 assembly code.
+   The one difference here, compared to traditional approaches,
+   is that we continue to use variable scoping.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -43,9 +43,13 @@ doc <:doc<
 extends Base_theory
 doc <:doc< @docoff >>
 
-doc <:doc< 
+(*************************************************************************
+ * Operands.
+ *)
+
+doc <:doc<
    @begin[doc]
-   @modsubsection{x86 operands}
+   @modsection{x86 operands}
    @end[doc]
 >>
 declare ImmediateNumber[i:n]
@@ -59,9 +63,16 @@ declare MemReg{'r}
 declare MemRegOff[i:n]{'r}
 declare MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
 
-doc <:doc< 
+(*************************************************************************
+ * Condition codes.
+ *)
+
+doc <:doc<
    @begin[doc]
-   @modsubsection{Condition codes}
+   @modsection{Condition codes}
+
+   These condition codes are used in the @tt[Jcc] (conditional jump)
+   instruction below.
    @end[doc]
 >>
 declare CC["lt"]
@@ -75,15 +86,19 @@ declare CC["be"]
 declare CC["a"]
 declare CC["ae"]
 
-doc <:doc< 
+(*************************************************************************
+ * Instructions.
+ *)
+
+doc <:doc<
    @begin[doc]
-   @modsubsection{Instructions}
-  
-   We want the assembly to have "semi-functional" property,
+   @modsection{Instructions}
+
+   We want the assembly to have ``semi-functional'' property,
    meaning that registers are immutable.  The register allocator
    will coalesce registers, creating implicit assignments
    in the process.
-  
+
    This presents an interesting problem for the x86, since it
    uses the two-operand instruction form.  To get around this,
    we define a normal two-operand instruction set for _memory_
@@ -91,10 +106,10 @@ doc <:doc<
    destination operands.  Again, the allocator is responsible
    for making sure the dst and the first src register are the
    same.
-  
+
    Further, for simplicity, we categorize instructions into
    several kinds.
-  
+
    Mov defines a new register from an arbitrary operand
    Inst1[opname]: a normal one-operand instruction
    Inst2[opname]: this is a normal two-operand instruction
@@ -131,29 +146,40 @@ declare Jmp[opcode:s]{'label; 'args}
  *)
 declare Jcc[opcode:s]{'cc; 'rest1; 'rest2}
 
-(*
- * Reserve some words.
- * The params are the live registers (normally the parameters
- * to the current function).
- *)
+doc <:doc<
+   @begin[doc]
+   This is a pseudo-instruction that calls the garbage collector to ensure
+   that the specified number of words is available.  The parameters are the
+   live registers (normally the parameters to the current function).
+   @end[doc]
+>>
 declare AsmReserve[words:n]{'params}
 
-(*
- * Also add a comment instruction.
- *)
+doc <:doc<
+   @begin[doc]
+   The @tt[Comment] instruction is not a real instruction.  It is used to
+   include a comment in the program output; the text is given in the string
+   parameter.
+   @end[doc]
+>>
 declare Comment[comment:s]{'rest}
 
-(*
- * The program initialization is wrapped in
- * the Init term; we don't include the initialization
- * code in the program output.
- *)
+doc <:doc<
+   @begin[doc]
+   The program initialization is wrapped in the @tt[Init] term; we don't
+   include the initialization code in the program output.
+   @end[doc]
+>>
 declare Init{'rest}
 
-doc <:doc< 
+(*************************************************************************
+ * Programs.
+ *)
+
+doc <:doc<
    @begin[doc]
-   @modsubsection{Programs}
-  
+   @modsection{Programs}
+
    A program is a set of recursive definitions, just like it is
    in the IR.  The labels in the assembly correspond to functions,
    and the register allocator is responsible for ensuring that the

@@ -1,11 +1,13 @@
 (*!
  * @begin[doc]
- * @theory[Itt_record]
+ * @module[Itt_record]
  *
  * This is a theory of record type.
  * Record type is defined as dependent intersection.
  * @end[doc]
  *)
+
+(*! @doc{@parents} *)
 
 extends Itt_record_label
 extends Itt_record0

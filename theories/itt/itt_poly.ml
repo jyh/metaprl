@@ -74,7 +74,6 @@ doc <:doc<
 >>
 define unfold_eqDecidable : eqDecidable{'f} <-->
    all x: 'f^car. all y: 'f^car. "iff"{'x = 'y in 'f^car; "assert"{'f^eq 'x 'y}}
-
 doc docoff
 
 let fold_eqDecidable = makeFoldC << eqDecidable{'f} >> unfold_eqDecidable
@@ -227,57 +226,277 @@ doc <:doc<
 
    @end[doc]
 >>
-define unfold_poly : poly{'f} <-->
-   {p: (n: nat * (nat{'n + 1} -> 'f^car)) |
-       fst{'p} > 0 => (snd{'p} fst{'p} <> 'f^"0" in 'f^car)}
+define unfold_isZero : isZero{'a; 'F} <-->
+   'F^eq 'a 'F^"0"
 
-define unfold_zero_poly : zero_poly{'f} <-->
-   (0, lambda{x. 'f^"0"})
+define unfold_poly : poly{'F} <-->
+   {p: (n: nat * (nat{'n +@ 1} -> 'F^car)) |
+       fst{'p} > 0 => "not"{"assert"{isZero{(snd{'p} fst{'p}); 'F}}}}
 
-define unfold_isZero : isZero{'a; 'f} <-->
-   'f^eq 'a 'f^"0"
+define unfold_zero_poly : zero_poly{'F} <-->
+   (0, lambda{x. 'F^"0"})
 
-define unfold_isZeroPoly : isZeroPoly{'p; 'f} <-->
-   band{ (fst{'p} =@ 0); isZero{(snd{'p} 0); 'f} }
-(*   band{ (fst{'p} =@ 0); 'f^eq (snd{'p} 0) 'f^"0" } *)
+define unfold_isZeroPoly : isZeroPoly{'p; 'F} <-->
+   band{ (fst{'p} =@ 0); isZero{(snd{'p} 0); 'F} }
+(*   band{ (fst{'p} =@ 0); 'F^eq (snd{'p} 0) 'F^"0" } *)
 
 define unfold_deg : deg{'p} <-->
    fst{'p}
 
-define unfold_coeff : coeff{'p; 'i; 'f} <-->
-   if ('i <=@ fst{'p}) then (snd{'p} 'i) else 'f^"0"
+define unfold_coeff : coeff{'p; 'i; 'F} <-->
+   if ('i <@ (fst{'p} +@ 1)) then (snd{'p} 'i) else 'F^"0"
 
-declare normalize{'p; 'f}
+declare normalize{'p; 'F}
 
-prim_rw unfold_normalize : normalize{'p; 'f} <-->
+prim_rw unfold_normalize : normalize{'p; 'F} <-->
    ind{ fst{'p}; 'p; k,l.
-        if isZero{(snd{'p} fst{'p}); 'f}
-(*         k,l. if ('f^eq (snd{'p} fst{'p}) 'f^"0") *)
-                then normalize{(fst{'p} -@ 1, snd{'p}); 'f}
+        if isZero{(snd{'p} fst{'p}); 'F}
+(*         k,l. if ('F^eq (snd{'p} fst{'p}) 'F^"0") *)
+                then normalize{(fst{'p} -@ 1, snd{'p}); 'F}
                 else 'p }
 
-define unfold_add_const : add_const{'p; 'a; 'f} <-->
-   (fst{'p}, lambda{x. if ('x=@0) then (snd{'p} 0 +['f] 'a) else (snd{'p} 'x)})
+define unfold_add_const : add_const{'p; 'a; 'F} <-->
+   (fst{'p}, lambda{x. if ('x=@0) then (snd{'p} 0 +['F] 'a) else (snd{'p} 'x)})
 
-define unfold_mul_const : mul_const{'p; 'a; 'f} <-->
-   if isZero{'a; 'f} then zero_poly{'f}
-(*   if ('f^eq 'a 'f^"0") then zero_poly{'f} *)
-   else (fst{'p}, lambda{x. (snd{'p} 'x) *['f] 'a})
+define unfold_mul_const : mul_const{'p; 'a; 'F} <-->
+   if isZero{'a; 'F} then zero_poly{'F}
+(*   if ('F^eq 'a 'F^"0") then zero_poly{'F} *)
+   else (fst{'p}, lambda{x. (snd{'p} 'x) *['F] 'a})
 
-define unfold_add : add{'p; 'q; 'f} <-->
-   normalize{(max{fst{'p}; fst{'q}}, lambda{x. coeff{'p;'x;'f} +['f] coeff{'q;'x;'f}}); 'f}
+define unfold_add_poly : add_poly{'p; 'q; 'F} <-->
+   normalize{(max{fst{'p}; fst{'q}}, lambda{x. coeff{'p;'x;'F} +['F] coeff{'q;'x;'F}}); 'F}
 
-declare sum{'i; 'j; x.'P['x]; 'f}
+declare sum{'i; 'j; x.'P['x]; 'F}
 
-prim_rw unfold_sum : sum{'i; 'j; x.'P['x]; 'f} <-->
-   ind{('j -@ 'i); m,n. sum{'i; ('j+@1); x.'P['x]; 'f} +['f] 'P['j]; 'P['i]; k,l. sum{'i; ('j-@1); x.'P['x]; 'f} +['f] 'P['j] }
+prim_rw unfold_sum : sum{'i; 'j; x.'P['x]; 'F} <-->
+   ind{('j -@ 'i); m,n. sum{'i; ('j+@1); x.'P['x]; 'F} +['F] 'P['j]; 'P['i]; k,l. sum{'i; ('j-@1); x.'P['x]; 'F} +['F] 'P['j] }
 
-define unfold_mul : mul{'p; 'q; 'f} <-->
-   if bor{isZeroPoly{'p;'f}; isZeroPoly{'q;'f}} then zero_poly{'f}
-   else (fst{'p} +@ fst{'q}, lambda{x. sum{0; 'x; y. (coeff{'p;'y;'f} *['f] coeff{'q;('x-@'y);'f}); 'f}})
+define unfold_mul_poly : mul_poly{'p; 'q; 'F} <-->
+   if bor{isZeroPoly{'p;'F}; isZeroPoly{'q;'F}} then zero_poly{'F}
+   else (fst{'p} +@ fst{'q}, lambda{x. sum{0; 'x; y. (coeff{'p;'y;'F} *['F] coeff{'q;('x-@'y);'F}); 'F}})
 
-declare eval_poly{'p; 'a; 'f}
+declare eval_poly{'p; 'a; 'F}
 
-prim_rw unfold_eval_poly : eval_poly{'p; 'a; 'f} <-->
+prim_rw unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
    ind{ fst{'p}; (snd{'p} 0); k,l.
-        (snd{'p} 0) +['f] ('a *['f] eval_poly{(fst{'p} -@ 1, lambda{x. snd{'p} ('x +@ 1)}); 'a; 'f}) }
+        (snd{'p} 0) +['F] ('a *['F] eval_poly{(fst{'p} -@ 1, lambda{x. snd{'p} ('x +@ 1)}); 'a; 'F}) }
+doc docoff
+
+let fold_poly = makeFoldC << poly{'F} >> unfold_poly
+let fold_zero_poly = makeFoldC << zero_poly{'F} >> unfold_zero_poly
+let fold_isZero = makeFoldC << isZero{'a; 'F} >> unfold_isZero
+let fold_isZeroPoly = makeFoldC << isZeroPoly{'p; 'F} >> unfold_isZeroPoly
+let fold_deg = makeFoldC << deg{'p} >> unfold_deg
+let fold_coeff = makeFoldC << coeff{'p; 'i; 'F} >> unfold_coeff
+let fold_normalize = makeFoldC << normalize{'p; 'F} >> unfold_normalize
+let fold_add_const = makeFoldC << add_const{'p; 'a; 'F} >> unfold_add_const
+let fold_mul_const = makeFoldC << mul_const{'p; 'a; 'F} >> unfold_mul_const
+let fold_add_poly = makeFoldC << add_poly{'p; 'q; 'F} >> unfold_add_poly
+let fold_mul_poly = makeFoldC << mul_poly{'p; 'q; 'F} >> unfold_mul_poly
+let fold_eval_poly = makeFoldC << eval_poly{'p; 'a; 'F} >> unfold_eval_poly
+let fold_sum = makeFoldC << sum{'i; 'j; x.'P['x]; 'F} >> unfold_sum
+
+interactive nat_is_int {| intro[AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'a='b in nat} -->
+   sequent { <H> >- 'a='b in int}
+
+interactive n_in_Nnplus1 {| intro [] |} :
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- 'n in nat{'n +@ 1} }
+
+interactive one_ge_0 {| intro [] |} :
+   sequent { <H> >- 1 >= 0 }
+
+interactive plus1_nat {| intro [] |} :
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- ('n +@ 1) in nat }
+
+interactive nat1_elim {| elim [] |} 'H :
+   sequent { <H>; x: int; v: 'x = 0 in int; <J['x]> >- 'C['x] }  -->
+   sequent { <H>; x: nat{1}; <J['x]> >- 'C['x] }
+
+interactive sub_ge_zero {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- 'a -@ 'b >= 0 }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Well-formedness, Introduction, Elimination}
+
+   @end[doc]
+>>
+interactive isZero_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- isZero{'a; 'F} in bool }
+
+interactive poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- poly{'F} Type }
+
+interactive poly_intro {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H>; 0 < fst{'p} >- "not"{"assert"{isZero{(snd{'p} fst{'p}); 'F}}} } -->
+   sequent { <H> >- 'p in poly{'F} }
+
+interactive poly_equality {| intro [AutoMustComplete; complete_unless_member]; eqcd |} :
+   [wf] sequent { <H> >- 'p = 'q in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- 0 < fst{'p} => "not"{"assert"{isZero{(snd{'p} fst{'p}); 'F}}} } -->
+   sequent { <H> >- 'p = 'q in poly{'F} }
+
+interactive poly_elim1 {| elim [] |} 'H :
+   sequent { <H>; p: poly{'F}; <J['p]> >- 'F^"0" in 'F^car } -->
+   sequent { <H>; p: poly{'F}; <J['p]>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H>; u: nat; v: nat{'u +@ 1} -> 'F^car; 0 < 'u => "not"{"assert"{isZero{('v 'u); 'F}}}; <J['u, 'v]> >- 'C['u, 'v] } -->
+   sequent { <H>; p: poly{'F}; <J['p]> >- 'C['p] }
+
+interactive zero_poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- zero_poly{'F} in poly{'F} }
+
+interactive isZeroPoly_wf {| intro [] |} :
+   [wf] sequent { <H> >- fst{'p} in int } -->
+   [wf] sequent { <H> >- isZero{(snd{'p} 0); 'F} in bool } -->
+   sequent { <H> >- isZeroPoly{'p; 'F} in bool }
+
+interactive coeff_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'i in nat } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   sequent { <H> >- coeff{'p; 'i; 'F} in 'F^car }
+
+interactive normalize_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- normalize{'p; 'F} in poly{'F} }
+
+interactive add_const_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'a in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- add_const{'p; 'a; 'F} in poly{'F} }
+
+interactive mul_const_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'a in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "not"{"assert"{isZero{'y; 'F}}} >- "not"{"assert"{isZero{'x *['F] 'y; 'F}}} } -->
+   sequent { <H> >- mul_const{'p; 'a; 'F} in poly{'F} }
+
+interactive add_poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'F^eq 'x 'y in bool } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   sequent { <H> >- add_poly{'p; 'q; 'F} in poly{'F} }
+
+interactive sum_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'i in int } -->
+   [wf] sequent { <H> >- 'j in int } -->
+   [wf] sequent { <H>; x: int; 'x >= 'i; 'j >= 'x >- 'P['x] in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   sequent { <H> >- sum{'i; 'j; x.'P['x]; 'F} in 'F^car }
+
+interactive mul_poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "not"{"assert"{isZero{'y; 'F}}} >- "not"{"assert"{isZero{'x *['F] 'y; 'F}}} } -->
+   sequent { <H> >- mul_poly{'p; 'q; 'F} in poly{'F} }
+
+(************************************************************************
+ * DISPLAY FOfMS                                                        *
+ ************************************************************************)
+
+dform fieldE_df1 : except_mode[src] :: except_mode[prl] :: fieldE[i:l] =
+   mathbbF `"ieldE" sub{slot[i:l]}
+
+dform fieldE_df2 : mode[prl] :: fieldE[i:l] =
+   `"FieldE[" slot[i:l] `"]"
+
+dform prefieldE_df1 : except_mode[src] :: except_mode[prl] :: prefieldE[i:l] =
+   `"prefieldE" sub{slot[i:l]}
+
+dform prefieldE_df2 : mode[prl] :: prefieldE[i:l] =
+   `"prefieldE[" slot[i:l] `"]"
+
+dform isFieldE_df : except_mode[src] :: isFieldE{'F} =
+   `"isFieldE(" slot{'F} `")"
+
+dform eqDecidable_df : except_mode[src] :: eqDecidable{'F} =
+   `"eqDecidable(" slot{'F} `")"
+
+dform eq_df1 : except_mode[src] :: except_mode[prl] :: parens :: ('F^eq 'a 'b)
+ =
+   slot["le"]{'a} `"=" sub{'F} slot["le"]{'b}
+
+dform eq_df2 : mode[prl] :: parens :: ('F^eq 'a 'b) =
+   slot["le"]{'a} `" " slot{'F} `".eq " slot["le"]{'b}
+
+dform poly_df : except_mode[src] :: poly{'F} =
+   slot{'F} `"[x]"
+
+dform zero_poly_df : except_mode[src] :: zero_poly{'F} =
+   `"zero_poly(" slot{'F} `")"
+
+dform isZero_df : except_mode[src] :: isZero{'a; 'F} =
+   `"isZero(" slot{'a} `"; " slot{'F} `")"
+
+dform isZeroPoly_df : except_mode[src] :: isZeroPoly{'p; 'F} =
+   `"isZeroPoly(" slot{'p} `"; " slot{'F} `")"
+
+dform deg_df : except_mode[src] :: deg{'p} =
+   `"deg(" slot{'p} `")"
+
+dform coeff_df : except_mode[src] :: coeff{'p; 'i; 'F} =
+   `"coeff(" slot{'p} `"; " slot{'i} `"; " slot{'F} `")"
+
+dform normalize_df : except_mode[src] :: normalize{'p; 'F} =
+   `"normalize(" slot{'p} `"; " slot{'F} `")"
+
+dform add_poly_const_df : except_mode[src] :: parens :: "prec"[prec_add] :: add_const{'p; 'a; 'F} =
+   slot{'p} sub{'F} `" + " slot{'a}
+
+dform mul_poly_const_df : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_const{'p; 'a; 'F} =
+   slot{'p} sub{'F} `" * " slot{'a}
+
+dform add_poly_df : except_mode[src] :: parens :: "prec"[prec_add] :: add_poly{'p; 'q; 'F} =
+   slot{'p} sub{'F} `" + " slot{'q} sub{'F}
+
+dform mul_poly_df : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_poly{'p; 'q; 'F} =
+   slot{'p} sub{'F} `" * " slot{'q} sub{'F}
+
+dform sum_df1 : except_mode[src] :: except_mode[prl] :: sum{'i; 'j; x.'P; 'F} =
+   `"(" Sigma sub{'i} sup{'j} slot{'P} `")" sub{'F}
+
+dform sum_df2 : mode[prl] :: sum{'i; 'j; x.'P; 'F} =
+   `"sum" sub{'F} `"(" slot{'i} `"," slot{'j} `"," slot{'P} `")"
+
+dform eval_poly_df : except_mode[src] :: eval_poly{'p; 'a; 'F} =
+   slot{'p} sub{'F} `"(" slot{'a} `")"
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

@@ -357,6 +357,16 @@ interactive ge_wf {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- "type"{ge{'a; 'b}} }
 
+interactive max_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- max{'a; 'b} in int }
+
+interactive min_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- min{'a; 'b} in int }
+
 interactive le_refl {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- le{'a;'a} }

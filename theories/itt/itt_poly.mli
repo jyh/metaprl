@@ -53,9 +53,9 @@ declare coeff{'p; 'i; 'f}
 declare normalize{'p; 'f}
 declare add_const{'p; 'a; 'f}
 declare mul_const{'p; 'a; 'f}
-declare add{'p; 'q; 'f}
+declare add_poly{'p; 'q; 'f}
 declare sum{'i; 'j; x.'P['x]; 'f}
-declare mul{'p; 'q; 'f}
+declare mul_poly{'p; 'q; 'f}
 declare eval_poly{'p; 'a; 'f}
 
 (************************************************************************
@@ -85,10 +85,24 @@ topval unfold_coeff : conv
 topval unfold_normalize : conv
 topval unfold_add_const : conv
 topval unfold_mul_const : conv
-topval unfold_add : conv
+topval unfold_add_poly : conv
 topval unfold_sum : conv
-topval unfold_mul : conv
+topval unfold_mul_poly : conv
 topval unfold_eval_poly : conv
+
+topval fold_poly : conv
+topval fold_zero_poly : conv
+topval fold_isZero : conv
+topval fold_isZeroPoly : conv
+topval fold_deg : conv
+topval fold_coeff : conv
+topval fold_normalize : conv
+topval fold_add_const : conv
+topval fold_mul_const : conv
+topval fold_add_poly : conv
+topval fold_sum : conv
+topval fold_mul_poly : conv
+topval fold_eval_poly : conv
 
 (*
  * -*-

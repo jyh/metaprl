@@ -663,6 +663,8 @@ prec prec_neg
 prec prec_add
 
 prec prec_add < prec_neg
+prec prec_add < prec_mul
+prec prec_mul < prec_neg
 
 dform ring_df1 : except_mode[src] :: except_mode[prl] :: ring[i:l] =
    mathbbR `"ing" sub{slot[i:l]}

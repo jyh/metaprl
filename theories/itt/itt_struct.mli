@@ -132,6 +132,7 @@ topval assertT : term -> tactic
 (* do not assert if already have the right conclusion *)
 topval tryAssertT : term -> tactic -> tactic -> tactic
 topval assertAtT : int -> term -> tactic
+topval copyHypT : int -> int -> tactic
 topval dupT : tactic
 topval useWitnessT : term -> tactic
 

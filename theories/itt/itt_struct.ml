@@ -355,6 +355,10 @@ let assertAtT i s p =
    let v = get_opt_var_arg "v" p in
       cut i j s v p
 
+let copyHypT i j p =
+   let _, t = Sequent.nth_hyp p i in
+      (assertAtT j t thenLT [nthHypT i; idT]) p
+
 let dupT p =
    dup (Sequent.hyp_count_addr p) p
 

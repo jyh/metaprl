@@ -43,7 +43,10 @@ PRINT_THEORIES =\
     ocaml_doc_class1
 
 TheoryDocument(theory, $(PRINT_THEORIES))
+# XXX: TODO: Whether to use book2 or book3 should depend on a configuration
+# option. See also bug 267 RFE - http://cvs.metaprl.org:12000/bugzilla/show_bug.cgi?id=267
 LaTeXDocumentInstall(tex doc, $(DOCDIR), ocaml-book, book2, theory-body)
+LaTeXDocumentInstall(jyh_tex jyh_doc, $(DOCDIR), ocaml-book-jyh, book3, theory-body)
 
 #
 # Clean up

@@ -118,7 +118,7 @@ doc <:doc<
 >>
 declare "isect"{'A; x. 'B['x]}
 
-prim_rw unfold_top : top <--> "isect"{void; x. void}
+define unfold_top : top <--> "isect"{void; x. void}
 doc <:doc< @docoff >>
 
 (************************************************************************
@@ -130,6 +130,8 @@ dform isect_df1 : except_mode[src] :: (Isect x: 'A. 'B) =
 
 dform isect_df2 : mode[src] :: (Isect x: 'A. 'B) =
    `"isect " slot{'x} `":" slot{'A} `"." slot{'B}
+
+dform top_df : except_mode[src] :: top = `"Top"
 
 (************************************************************************
  * RULES                                                                *
@@ -355,11 +357,11 @@ doc <:doc<
    domain type $B[a]$ for each $a @in A$.
    @end[doc]
 >>
-prim intersectionSubtype {| intro [] |} :
+interactive intersectionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- \subtype{'A2; 'A1} } -->
    ["subtype"] sequent { <H>; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent { <H> >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } } =
-   it
+   [wf] sequent { <H> >- (Isect a1:'A1. 'B1['a1]) Type } -->
+   sequent { <H> >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }
 
 doc <:doc< 
    @begin[doc]

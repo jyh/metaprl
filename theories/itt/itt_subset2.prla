@@ -6099,7 +6099,7 @@ O	o2500	rule p2500
 NItt_logic!not	not	not Itt_logic
 O	o2501	not
 NItt_void	Itt_void	Itt_void NIL
-NItt_void!top	top	top Itt_void
+NItt_isect!top	top	top Itt_isect
 O	o2502	top
 T	t2502	o2502
 B	b2502	t2502

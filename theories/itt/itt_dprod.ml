@@ -452,7 +452,7 @@ let inf_spread inf consts decls eqs opt_eqs defs t =
       let bt = mk_var_term bv in
          inf consts ((v,bt)::(u,at)::decls)
              (eqnlist_append_eqn eqs' a' (mk_prod_term at bt)) opt_eqs''
-             ((av,<<top>>)::(bv,<<top>>)::defs') b
+             ((av,Itt_void.top_term)::(bv,Itt_void.top_term)::defs') b
 
 let resource typeinf += (spread_term, inf_spread)
 

@@ -6007,7 +6007,8 @@ O	o3693	comment_string p3693
 T	t3694	o3693
 B	b3694	t3694
 NItt_void	Itt_void	Itt_void NIL
-NItt_void!top	top	top Itt_void
+NItt_isect	Itt_isect	Itt_isect NIL
+NItt_isect!top	top	top Itt_isect
 O	o3694	top
 T	t3695	o3694
 B	b3695	t3695

@@ -53,6 +53,7 @@ doc <:doc< @docoff >>
 open Printf
 open Mp_debug
 open Tactic_type.Sequent
+open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
@@ -79,20 +80,19 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare void
-declare top (* we declare it here because we need it for type inference *)
 doc <:doc< @docoff >>
 
 let void_term = << void >>
 let void_opname = opname_of_term void_term
 let is_void_term = is_no_subterms_term void_opname
+let top_opname = mk_opname "top" (mk_opname "Itt_isect" nil_opname)
+let top_term = mk_simple_term top_opname []
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
 dform void_df1 : except_mode[src] :: void = `"Void"
-
-dform top_df : except_mode[src] :: top = `"Top"
 
 (************************************************************************
  * RULES                                                                *

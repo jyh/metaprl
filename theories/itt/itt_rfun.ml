@@ -490,7 +490,7 @@ let inf_lambda inf consts decls eqs opt_eqs defs t =
    let a = Typeinf.vnewname consts defs "T" in
    let a' = mk_var_term a in
    let eqs', opt_eqs', defs', b' =
-      inf consts ((v, a')::decls) eqs opt_eqs ((a,<<top>>)::defs) b
+      inf consts ((v, a')::decls) eqs opt_eqs ((a,Itt_void.top_term)::defs) b
    in
       eqs', opt_eqs', defs', mk_dfun_term v a' b'
 
@@ -517,7 +517,7 @@ let inf_apply inf consts decls eqs opt_eqs defs t =
       let at = mk_var_term av in
       let bt = mk_var_term bv in
          (eqnlist_append_eqn eqs'' f' (mk_fun_term at bt)),((a',at)::opt_eqs'''),
-         ((av, <<top>>)::(bv,<<void>>)::defs''), bt
+         ((av, Itt_void.top_term)::(bv,Itt_void.top_term)::defs''), bt
 
 let resource typeinf += (apply_term, inf_apply)
 

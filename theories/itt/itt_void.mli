@@ -44,7 +44,6 @@ open Tactic_type.Tacticals
  ************************************************************************)
 
 declare void
-declare top (* we declare it here because we need it for type inference *)
 
 (************************************************************************
  * RULES                                                                *
@@ -84,6 +83,7 @@ rule void_subtype :
  ************************************************************************)
 
 val void_term : term
+val top_term : term (* used in type inference *)
 val is_void_term : term -> bool
 
 (*

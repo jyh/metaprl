@@ -2327,7 +2327,8 @@ T	t769	o767 b768
 B	b769	t769
 P	p774	String top
 O	o774	opname p774
-NItt_void!top	top	top Itt_void
+NItt_isect	Itt_isect	Itt_isect NIL
+NItt_isect!top	top	top Itt_isect
 O	o775	top
 T	t775	o775
 B	b775	t775

@@ -374,7 +374,7 @@ let inf_decide inf consts decls eqs opt_eqs defs t =
    let eqs'', opt_eqs'', defs'', a' =
       inf consts ((x, l')::decls)
           (eqnlist_append_eqn eqs' e' (mk_union_term l' r')) opt_eqs'
-          ((l,<<top>>)::(r,<<top>>)::defs') a
+          ((l,Itt_void.top_term)::(r,Itt_void.top_term)::defs') a
    in
    let eqs''', opt_eqs''', defs''', b' =
       inf consts ((y, r')::decls) eqs'' opt_eqs'' defs'' b

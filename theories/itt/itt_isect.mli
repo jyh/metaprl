@@ -46,8 +46,7 @@ open Tactic_type.Tacticals
  ************************************************************************)
 
 declare "isect"{'A; x. 'B['x]}
-
-rewrite unfold_top : top <--> "isect"{void; x. void}
+define unfold_top : top <--> "isect"{void; x. void}
 
 (************************************************************************
  * RULES                                                                *
@@ -124,17 +123,10 @@ rule intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
    sequent { <H> >- 'a = 'a in 'A } -->
    sequent { <H> >- 'b1 = 'b2 in 'B['a] }
 
-
-(*
- * H >- Isect a1:A1. B1 <= Isect a2:A2. B2
- * by intersectionSubtype
- *
- * H >- A2 <= A1
- * H, a: A2 >- B1[a] <= B2[a]
- *)
 rule intersectionSubtype :
    sequent { <H> >- \subtype{'A2; 'A1} } -->
    sequent { <H>; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent { <H> >- (Isect a1:'A1. 'B1['a1]) Type } -->
    sequent { <H> >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }
 
 rule topSubtype :

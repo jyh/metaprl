@@ -1318,7 +1318,8 @@ NSummary!cond_rewrite	cond_rewrite	cond_rewrite Summary
 P	p968	String record_eta_rw
 O	o970	cond_rewrite p968
 NItt_void	Itt_void	Itt_void NIL
-NItt_void!top	top	top Itt_void
+NItt_isect	Itt_isect	Itt_isect NIL
+NItt_isect!top	top	top Itt_isect
 O	o972	top
 T	t976	o972
 B	b976	t976

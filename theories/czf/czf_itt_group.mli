@@ -29,10 +29,10 @@ open Base_auto_tactic
 
 declare group{'g}
 declare car{'g}   (* The "carrier" set for the group *)
-declare op{'g; 's1; 's2}
+declare op{'g; 'a; 'b}
 declare id{'g}
-declare inv{'g; 's}
-declare eqElem{'g; 's1; 's2}
+declare inv{'g; 'a}
+(*declare eqElem{'s; 'a; 'b}*)
 
 prec prec_op
 

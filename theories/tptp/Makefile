@@ -6,6 +6,9 @@ ROOT := ../..
 INCLUDE := -I . -I ../itt -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
+MLZFILES :=\
+	tptp_type
+
 # Library files
 LMFILES :=\
 	tptp_type\

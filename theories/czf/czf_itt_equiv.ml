@@ -236,14 +236,15 @@ doc <:doc<
    on S satisfying reflexivity, symmetry, and transitivity.
    @end[doc]
 >>
+(* XXX BUG: Aleksey: For now, I put "it" as an extract here, probably needs ot be fixed *)
 prim equiv_rel_intro {| intro [] |} :
    [wf] sequent { <H> >- isset{'s} } -->
    [wf] sequent { <H> >- isset{'r} } -->
-   ('A : sequent { <H>; a: set; x: mem{'a; 's} >- equiv{'s; 'r; 'a; 'a} }) -->
-   ('B : sequent { <H>; b: set; c: set; x: mem{'b; 's}; y: mem{'c; 's}; u: equiv{'s; 'r; 'b; 'c} >- equiv{'s; 'r; 'c; 'b} }) -->
-   ('C: sequent { <H>; d: set; e: set; f: set; x: mem{'d; 's}; y: mem{'e; 's}; z: mem{'f; 's}; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}}) -->
+   ('A['a; 'x] : sequent { <H>; a: set; x: mem{'a; 's} >- equiv{'s; 'r; 'a; 'a} }) -->
+   ('B['b; 'c; 'x; 'y; 'u] : sequent { <H>; b: set; c: set; x: mem{'b; 's}; y: mem{'c; 's}; u: equiv{'s; 'r; 'b; 'c} >- equiv{'s; 'r; 'c; 'b} }) -->
+   ('C['d; 'e; 'f; 'x; 'y; 'z; 'u; 'v]: sequent { <H>; d: set; e: set; f: set; x: mem{'d; 's}; y: mem{'e; 's}; z: mem{'f; 's}; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}}) -->
    sequent { <H> >- equiv{'s; 'r} } =
-   (('A, 'B), 'C)
+   it
 
 doc <:doc<
    @begin[doc]
@@ -305,12 +306,12 @@ prim equiv_sym1 'H :
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- isset{'r} } -->
 (* sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- isset{'a} } -->
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- isset{'b} } -->
-*) ('E : sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- equiv{'s; 'r} }) -->
+*) ('E['x] : sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- equiv{'s; 'r} }) -->
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- mem{'a; 's} } -->
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- mem{'b; 's} } -->
-   ('A : sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]>; u: equiv{'s; 'r; 'b; 'a} >- 'C['x] }) -->
+   ('A['x; 'u] : sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]>; u: equiv{'s; 'r; 'b; 'a} >- 'C['x] }) -->
    sequent { <H>; x: equiv{'s; 'r; 'a; 'b}; <J['x]> >- 'C['x] } =
-   'E & 'A
+   it
 
 doc <:doc<
    @begin[doc]

@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Dead-code elimination.
  *
  * ----------------------------------------------------------------
  *
@@ -24,31 +24,27 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
+extends M_ir
 
-open M_cps
-open M_closure
-open M_prog
-open M_dead
+open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-let compileT =
-   (* CPS conversion *)
-   cpsT
+(*
+ * Dead resource
+ *)
+resource (term * conv, conv) dead
 
-   (* Closure conversion *)
-   thenT closeT
+(*
+ * Debug functions.
+ *)
+topval deadC : conv
 
-   (* Lift definitions to top level *)
-   thenT progT
-
-   (* Perform dead code elimination *)
-   thenT deadT
+(*
+ * Dead-code elim.
+ *)
+topval deadT : tactic
 
 (*!
  * @docoff

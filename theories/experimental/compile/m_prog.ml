@@ -63,16 +63,6 @@ open Perv
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-(*
- * Display reductions.
- *)
-let debug_prog =
-   create_debug (**)
-      { debug_name = "prog";
-        debug_description = "display reductions during CPS conversion";
-        debug_value = false
-      }
-
 (*!
  * @begin[doc]
  * @resources

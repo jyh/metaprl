@@ -27,6 +27,7 @@
 extends M_cps
 extends M_closure
 extends M_prog
+extends M_dead
 
 open Tactic_type.Tacticals
 

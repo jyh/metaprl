@@ -223,10 +223,10 @@ interactive dintersectionMemberFormation {| intro [] |} 't:
  * @end[doc]
  *)
 
-prim disectElimination {| elim [] |} 'H  bind{a,b,HACK.'T['a;'b;'HACK]}:
+prim disectElimination {| elim [] |} 'H  bind{a,b.'T['a;'b]}:
    [main] ('t['a; 'b] :
-   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
-   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b] }) -->
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x] } =
    't['x; 'x]
 
 (*!
@@ -257,10 +257,10 @@ let disectCaseEqualityT t =
    to derive disectElimination_eq.
 *)
 
-interactive disectElimination_eq {| elim [] |} 'H 'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
+interactive disectElimination_eq {| elim [] |} 'H 'u 'v bind{x.bind{a,b.'C['x;'a;'b]}} :
    [main] sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x];
-                           a: 'A; u: 'a = 'x in 'A; b: 'B['a]; v: 'b = 'x in 'B['a]  >- 'C['x;'a;'b; it] } -->
-   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'C['x;'x;'x; it] }
+                           a: 'A; u: 'a = 'x in 'A; b: 'B['a]; v: 'b = 'x in 'B['a]  >- 'C['x;'a;'b] } -->
+   sequent ['ext] { 'H; x: bisect{'A; y.'B['y]}; 'J['x] >- 'C['x;'x;'x] }
 
 let disectEliminationT n p =
    let u,v = maybe_new_vars2 p "u" "v" in
@@ -268,8 +268,8 @@ let disectEliminationT n p =
    let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then
-         let bind2 = mk_bind2_term x "HACK" bind in
-            disectElimination_eq n u v bind2 p
+         let bind = mk_bind1_term x bind in
+            disectElimination_eq n u v bind p
       else
          raise (RefineError
            ("disectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))

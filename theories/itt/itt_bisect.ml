@@ -152,10 +152,10 @@ interactive bisectMemberEquality {| intro []; eqcd |} :
  *)
 (*!@docoff *)
 
-interactive bisectElimination_eq 'H 'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
+interactive bisectElimination_eq 'H 'u 'v bind{x.bind{a,b.'C['x;'a;'b]}} :
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; u: 'a = 'x in 'A;
-                                                   b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b;it] } -->
-   sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x;'x;'x;it] }
+                                                   b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b] } -->
+   sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x;'x;'x] }
 
 let bisectEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
@@ -164,8 +164,8 @@ let bisectEliminationT n p =
    let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then
-         let bind2 = mk_bind2_term x "HACK" bind in
-            bisectElimination_eq n u v bind2 p
+         let bind = mk_bind1_term x bind in
+            bisectElimination_eq n u v bind p
       else
          raise (RefineError
            ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))

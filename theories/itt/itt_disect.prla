@@ -6102,7 +6102,7 @@ T	t245	o b245 b13
 B	b246	t245
 T	t246	o2069 b3489 b246
 B	b248	t246
-P	p3497	String "withT <<bind{a,b,HACK.'a IN 'A}>> (dT 2) thenT autoT"
+P	p3497	String "withT <<bind{a,b.'a IN 'A}>> (dT 2) thenT autoT"
 O	o3497	ext_rule p3497
 T	t248	o2069 b245 b13
 B	b249	t248
@@ -6147,7 +6147,7 @@ G	s1	t3518
 B	b1	s1
 T	t1	o2071 b1 b3487
 B	b2	t1
-P	p3529	String "withT <<bind{a,b,HACK.'b IN 'B['a]}>> (dT 2) thenT autoT"
+P	p3529	String "withT <<bind{a,b.'b IN 'B['a]}>> (dT 2) thenT autoT"
 O	o3529	ext_rule p3529
 P	p3579	Var tac
 O	o3580	var p3579
@@ -6194,7 +6194,7 @@ T	t3646	o b1668 b3645
 B	b3646	t3646
 H	h3646	u t2176
 H	h3647	v t2178
-T	t3647	o3281 b1639 b2169 b2171 b1799
+T	t3647	o3281 b1639 b2169 b2171
 S	s3647	t1683 h h2174 h2175 h2176 h3646 h2178 h3647
 G	s3647	t3647
 B	b3647	s3647
@@ -6202,7 +6202,7 @@ T	t3648	o1675 b3647
 B	b3648	t3648
 T	t3649	o2173 b3648
 B	b3649	t3649
-T	t3650	o3281 b1639 b1639 b1639 b1799
+T	t3650	o3281 b1639 b1639 b1639
 S	s3650	t1683 h h2174 h2175
 G	s3650	t3650
 B	b3650	s3650
@@ -6420,12 +6420,12 @@ B	b3573	t3573
 P	p3574	Number 8283
 P	p3575	Number 8639
 O	o3575	location p3574 p3575
-P	p371	String "doNotThinT (withT <<bind{a.'C['x;'a;'x;it]}>> (letT <<'a='x in 'A>>))"
+P	p371	String "doNotThinT (withT <<bind{a.'C['x;'a;'x]}>> (letT <<'a='x in 'A>>))"
 O	o371	ext_rule p371
 O	o3657	arg_named p117
 NSummary!arg_term_list	arg_term_list	arg_term_list Summary
 O	o3658	arg_term_list
-T	t3658	o3281 b1639 b2169 b1639 b1799
+T	t3658	o3281 b1639 b2169 b1639
 B	b3658	t3658 a
 T	t3659	o3364 b3658
 B	b3659	t3659
@@ -6470,7 +6470,7 @@ T	t3672	o2069 b3666 b13
 B	b3673	t3672
 T	t3673	o3672 b2068 b3673 b13 b13
 B	b3674	t3673
-P	p378	String "doNotThinT (withT <<bind{b.'C['x;'a;'b;it]}>> (letT <<'b='x in 'B['a]>>))"
+P	p378	String "doNotThinT (withT <<bind{b.'C['x;'a;'b]}>> (letT <<'b='x in 'B['a]>>))"
 O	o378	ext_rule p378
 T	t3674	o1677 b2178 b1639 b1639
 S	s3674	t1677 h h2174 h2175 h2176 h2177

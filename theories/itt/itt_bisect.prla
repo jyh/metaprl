@@ -4680,13 +4680,13 @@ NBase_trivial!it	it	it Base_trivial
 O	o855	it
 T	t858	o855
 B	b858	t858
-T	t886	o839 b511 b739 b740 b858
+T	t886	o839 b511 b739 b740
 S	s886	t537 h h836 h837 h803 h805 h806 h852
 G	s886	t886
 B	b887	s886
 T	t888	o522 b887
 B	b889	t888
-T	t889	o839 b511 b511 b511 b858
+T	t889	o839 b511 b511 b511
 S	s889	t537 h h836 h837
 G	s889	t889
 B	b890	s889
@@ -4750,10 +4750,10 @@ T	t1177	o b1174 b4
 B	b1177	t1177
 T	t1178	o546 b912 b1177
 B	b1178	t1178
-P	p237	String "doNotThinT (withTermsT [<<btrue>>; <<bind{a.'C['x;'a;'x;it]}>>] (dT 2)) thenAT autoT thenT rwhAll reduceC"
+P	p237	String "doNotThinT (withTermsT [<<btrue>>; <<bind{a.'C['x;'a;'x]}>>] (dT 2)) thenAT autoT thenT rwhAll reduceC"
 O	o237	ext_rule p237
 H	h1178	v t805
-T	t1179	o839 b511 b739 b511 b858
+T	t1179	o839 b511 b739 b511
 S	s1179	t537 h h846 h837 h803 h1178
 G	s1179	t1179
 B	b1179	s1179
@@ -4901,7 +4901,7 @@ T	t249	o2 b248
 B	b249	t249
 T	t250	o547 b1180 b4 b249
 B	b250	t250
-P	p254	String "doNotThinT (withTermsT [<<bfalse>>; <<bind{b.'C['x;'a;'b;it]}>>] (dT 2)) thenAT autoT thenT rwhAll reduceC"
+P	p254	String "doNotThinT (withTermsT [<<bfalse>>; <<bind{b.'C['x;'a;'b]}>>] (dT 2)) thenAT autoT thenT rwhAll reduceC"
 O	o254	ext_rule p254
 H	h1225	v_1 t852
 S	s576	t537 h h161 h837 h803 h1178 h806 h1225

@@ -273,11 +273,10 @@ prim intersectionElimination {| elim [] |} 'H 'a 'z :
 
 (*! @docoff *)
 
-interactive intersectionElimination_eq 'H 'v 'a bind{x,HACK.bind{z.'T['x;'z;'HACK]}}:
-(* HACK: see bug 4.11 *)
+interactive intersectionElimination_eq 'H 'v 'a bind{x.bind{z.'T['x;'z]}}:
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
-   [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z;it] } -->
-   sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x;'x; it] }
+   [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z] } -->
+   sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x;'x] }
 
 
 let intersectionEliminationT n p =
@@ -298,8 +297,8 @@ let intersectionEliminationT n p =
                        raise (RefineError ("intersectionElimination", StringError ("need a bind term"))) |
          _ -> raise (RefineError ("intersectionElimination", StringError ("too many arguments")))
    in
-   let bind2 = mk_bind2_term x "HACK" bind in
-      intersectionElimination_eq n v a bind2 p
+   let bind = mk_bind1_term x bind in
+      intersectionElimination_eq n v a bind p
 
 let intersectionEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in

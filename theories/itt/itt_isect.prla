@@ -7193,7 +7193,7 @@ T	t4509	o b777 b4509
 B	b4520	t4509
 T	t4520	o b576 b4520
 B	b4521	t4520
-T	t4521	o791 b519 b698 b308
+T	t4521	o791 b519 b698
 S	s4521	t591 h h785 h786 h790 h791
 G	s4521	t4521
 B	b4532	s4521
@@ -7201,7 +7201,7 @@ T	t4532	o583 b4532
 B	b4533	t4532
 T	t4533	o345 b4533
 B	b4544	t4533
-T	t4544	o791 b519 b519 b308
+T	t4544	o791 b519 b519
 S	s4544	t591 h h785 h786
 G	s4544	t4544
 B	b4545	s4544
@@ -7211,7 +7211,7 @@ T	t4556	o581 b4544 b4556
 B	b4557	t4556
 T	t4557	o581 b513 b4557
 B	b4568	t4557
-P	p258	String "doNotThinT (withT <<bind{z.'T['x;'z;it]}>> (letT <<'z='x in 'B['a]>>)) thenMT autoT"
+P	p258	String "doNotThinT (withT <<bind{z.'T['x;'z]}>> (letT <<'z='x in 'B['a]>>)) thenMT autoT"
 O	o258	ext_rule p258
 T	t4580	o b4532 b4
 B	b4580	t4580

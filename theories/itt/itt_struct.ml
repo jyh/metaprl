@@ -66,6 +66,7 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Tactic_type
+open Tactic_type.Sequent
 open Tactic_type.Tacticals
 open Var
 open Mptop
@@ -295,14 +296,16 @@ let thinIfThinningT = argfunT (fun hyps p ->
        tryOnHypsT hyps thinT
     else idT)
 
-let thinAllT i j =
+let thinAllT i j = funT (fun p ->
+   let i = get_pos_hyp_num p i in
+   let j = get_pos_hyp_num p j in
    let rec tac j =
       if j < i then
          idT
       else
          thinT j thenT tac (pred j)
    in
-      tac j
+      tac j)
 
 doc <:doc< 
    @begin[doc]

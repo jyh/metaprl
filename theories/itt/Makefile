@@ -35,6 +35,7 @@ MPFILES :=\
 	itt_ext_equal\
 	itt_int_base\
         itt_int_ext\
+        itt_int_arith\
         itt_int\
 	itt_int_bool\
 	itt_atom_bool\

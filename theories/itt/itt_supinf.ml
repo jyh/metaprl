@@ -1127,105 +1127,15 @@ let ge_addMono2T i j = funT (fun p ->
 	ge_addMono2 i (j-i)
 )
 
-type 'a tree = Ignore | Leaf of 'a | Left of 'a tree | Right of 'a tree | Pair of ('a tree) * ('a tree)
+open Tree
 
-let rec addToLeaves n tac = function
-	Ignore -> Ignore
- | Leaf(n',tac') -> Leaf(n'+n, (tac' thenMT tac))
- | Left subtree -> Left(addToLeaves n tac subtree)
- | Right subtree -> Right(addToLeaves n tac subtree)
- | Pair(left,right) -> Pair(addToLeaves n tac left, addToLeaves n tac right)
+let treeMapHelper n2 tac2 (n1,tac1) = n1+n2, (tac1 thenMT tac2)
 
-let leftBranch = function
-	Ignore -> Ignore
- |	Leaf _ -> raise (Invalid_argument "leftBranch applied to a leaf")
- | Left subtree -> subtree
- | Right subtree -> Ignore
- | Pair(left, right) -> left
+let treeProductHelper (n1,tac1) (n2,tac2) =
+	n1+n2+1, (tac1 thenMT tac2 thenMT ge_addMono2T (-n2-1) (-1) thenMT rw ge_normC (-1))
 
-let rightBranch = function
-	Ignore -> Ignore
- | Leaf _ -> raise (Invalid_argument "rightBranch applied to a leaf")
- | Left subtree -> Ignore
- | Right subtree -> subtree
- | Pair(left, right) -> right
-
-let rec treeProduct tree1 tree2 =
-   match tree1, tree2 with
-		Ignore, _ -> Ignore
-	 | _, Ignore -> Ignore
-	 | Leaf(n1,tac1), Leaf(n2,tac2) ->
-			Leaf(n1+n2+1, (tac1 thenMT tac2 thenMT ge_addMono2T (-n2-1) (-1) thenMT rw ge_normC (-1)))
-	 | Left(subtree), _ -> Left(treeProduct subtree tree2)
-	 | Right(subtree), _ -> Right(treeProduct subtree tree2)
-	 | Pair(a,Ignore), _ -> Pair(treeProduct a tree2, Ignore)
-	 | Pair(Ignore,b), _ -> Pair(Ignore, treeProduct b tree2)
-	 | Pair(a,b), _ -> Pair(treeProduct a tree2, treeProduct b tree2)
-	 | _, Left(subtree) -> Left(treeProduct tree1 subtree)
-	 | _, Right(subtree) -> Right(treeProduct tree1 subtree)
-	 | _, Pair(a,Ignore) -> Left(treeProduct tree1 a)
-	 | _, Pair(Ignore,b) -> Right(treeProduct tree1 b)
-	 | _, Pair(a,b) -> Pair(treeProduct tree1 a, treeProduct tree1 b)
-
-let rec string_of_tree = function
-	Ignore -> "ignore"
- | Leaf _ -> "leaf"
- | Left subtree -> sprintf "left(%s)" (string_of_tree subtree)
- | Right subtree -> sprintf "right(%s)" (string_of_tree subtree)
- | Pair(left,right) -> sprintf "pair(%s,%s)" (string_of_tree left) (string_of_tree right)
-
-let rec mergeTreesLeft tree1 tree2 =
-	match tree1, tree2 with
-		Ignore, _ -> Ignore
-	 | _, Ignore -> Ignore
-	 | Leaf(n1,tac1), Leaf(n2,tac2) -> Leaf(n1+n2+1, (tac1 thenMT tac2 thenMT ge2transitiveT (-n2-1) (-1)))
-	 | _, Left sub2 -> mergeTreesLeft tree1 sub2
-	 | _, Right sub2 -> mergeTreesLeft tree1 sub2
-	 | Left sub1,Pair(left,right) -> (mergeTreesLeft sub1 left)
-	 | Right sub1,Pair(left,right) -> (mergeTreesLeft sub1 right)
-	 | Pair(left1,right1),Pair(Ignore,right2) -> mergeTreesLeft right1 right2
-	 | Pair(left1,right1),Pair(left2,Ignore) -> mergeTreesLeft left1 left2
-	 | Pair(Ignore,right1),Pair(left2,right2) -> mergeTreesLeft right1 right2
-	 | Pair(left1,Ignore),Pair(left2,right2) -> mergeTreesLeft left1 left2
-	 | Pair(left1,Ignore),Leaf _ -> mergeTreesLeft left1 tree2
-	 | Pair(Ignore,right1),Leaf _ -> mergeTreesLeft right1 tree2
-	 | Pair(left1,right1),Pair(left2,right2) -> Pair(mergeTreesLeft left1 left2, mergeTreesLeft right1 right2)
-	 | Pair(left1,right1),Leaf _ -> Pair(mergeTreesLeft left1 tree2, mergeTreesLeft right1 tree2)
-	 | _, _ ->
-			let s = sprintf "Incompatible trees %s %s in mergeTreesLeft@." (string_of_tree tree1) (string_of_tree tree2) in
-			raise (Invalid_argument s)
-
-let rec mergeTreesRight tree1 tree2 =
-	match tree1, tree2 with
-		Ignore, _ -> Ignore
-	 | _, Ignore -> Ignore
-	 | Leaf(n1,tac1), Leaf(n2,tac2) -> Leaf(n1+n2+1, (tac1 thenMT tac2 thenMT ge2transitiveT (-n2-1) (-1)))
-	 | Left sub1, _ -> mergeTreesRight sub1 tree2
-	 | Right sub1, _ -> mergeTreesRight sub1 tree2
-	 | Pair(left,right),Left sub2 -> (*Left*)(mergeTreesRight left sub2)
-	 | Pair(left,right),Right sub2 -> (*Right*)(mergeTreesRight right sub2)
-	 | Pair(left1,right1),Pair(Ignore,right2) -> mergeTreesRight right1 right2
-	 | Pair(left1,right1),Pair(left2,Ignore) -> mergeTreesRight left1 left2
-	 | Pair(Ignore,right1),Pair(left2,right2) -> mergeTreesRight right1 right2
-	 | Pair(left1,Ignore),Pair(left2,right2) -> mergeTreesRight left1 left2
-	 | Leaf _,Pair(left2,Ignore) -> mergeTreesRight tree1 left2
-	 | Leaf _,Pair(Ignore,right2) -> mergeTreesLeft tree1 right2
-	 | Pair(left1,right1),Pair(left2,right2) -> Pair(mergeTreesRight left1 left2, mergeTreesRight right1 right2)
-	 | Leaf _,Pair(left2,right2) -> Pair(mergeTreesRight tree1 left2, mergeTreesRight tree1 right2)
-	 | _, _ ->
-			let s = sprintf "Incompatible trees %s %s in mergeTreesRight@." (string_of_tree tree1) (string_of_tree tree2) in
-			raise (Invalid_argument s)
-
-let rec leavesList = function
-	Ignore -> []
- | Leaf l -> [l]
- | Left subtree -> leavesList subtree
- | Right subtree -> leavesList subtree
- | Pair(left, right) -> (leavesList left)@(leavesList right)
-
-let rec proj2 = function
-	[] -> []
- | (a,b)::tail -> b::(proj2 tail)
+let treeMergeHelper (n1,tac1) (n2,tac2) =
+	n1+n2+1, (tac1 thenMT tac2 thenMT ge2transitiveT (-n2-1) (-1))
 
 let rec source2hyp info = function
 	Signore ->
@@ -1283,13 +1193,13 @@ let rec source2hyp info = function
 		let v = VI.restore info vi in
 		if !debug_supinf_trace then
 			eprintf "extrLeft %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
-		addToLeaves 0 (rw (extract2leftC v) (-1)) result
+		treeMap (treeMapHelper 0 (rw (extract2leftC v) (-1))) result
  | Sextract2right(vi,s) ->
 		let result = source2hyp info s in
 		let v = VI.restore info vi in
 		if !debug_supinf_trace then
 			eprintf "extrRight %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
-		addToLeaves 0 (rw (extract2rightC v) (-1)) result
+		treeMap (treeMapHelper 0 (rw (extract2rightC v) (-1))) result
  | StrivialConst c ->
 		let ctm = term_of c in
 		let tm = mk_ge_rat_term ctm ctm in
@@ -1308,16 +1218,16 @@ let rec source2hyp info = function
 		if !debug_supinf_trace then
 			eprintf "scale %a %s@." RationalBoundField.print c (string_of_tree result);
 		if compare c fieldZero >0 then
-			addToLeaves 0 (rw ((positive_multiply_ge tm) thenC ge_normC) (-1)) result
+			treeMap (treeMapHelper 0 (rw ((positive_multiply_ge tm) thenC ge_normC) (-1))) result
 		else
-			addToLeaves 0 (rw ((negative_multiply_ge tm) thenC ge_normC) (-1)) result
+			treeMap (treeMapHelper 0 (rw ((negative_multiply_ge tm) thenC ge_normC) (-1))) result
  | SaddVar(c,vi,s) ->
 		let result = source2hyp info s in
 		let v = VI.restore info vi in
 		let tm = mk_mul_rat_term (term_of c) v in
 		if !debug_supinf_trace then
 			eprintf "addV %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
-		addToLeaves 0 (rw ((ge_addMono_rw tm) thenC ge_normC) (-1)) result
+		treeMap (treeMapHelper 0 (rw ((ge_addMono_rw tm) thenC ge_normC) (-1))) result
  | Ssum(s1,s2) ->
 		(* this case computes a product of two trees
 		 * it should be consistent with SAF.add
@@ -1326,36 +1236,40 @@ let rec source2hyp info = function
 		let result2 = source2hyp info s2 in
 		if !debug_supinf_trace then
 			eprintf "sum %s %s@." (string_of_tree result1) (string_of_tree result2);
-		treeProduct result1 result2
+		treeProduct treeProductHelper result1 result2
  | StransitiveLeft(s1,s2,vi) ->
 		let result1 = source2hyp info s1 in
 		let result2 = source2hyp info s2 in
 		let v = VI.restore info vi in
 		if !debug_supinf_trace then
 			eprintf "tranL %i %s >= %s >= %s@." vi (string_of_tree result1) (string_of_tree result2) (SimplePrint.short_string_of_term v);
-		mergeTreesLeft result1 result2
+		treeMergeLeft treeMergeHelper result1 result2
  | StransitiveRight(vi,s1,s2) ->
 		let result1 = source2hyp info s1 in
 		let result2 = source2hyp info s2 in
 		let v = VI.restore info vi in
 		if !debug_supinf_trace then
 			eprintf "tranR %i %s >= %s >= %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result1) (string_of_tree result2);
-		mergeTreesRight result1 result2
+		treeMergeRight treeMergeHelper result1 result2
  | Scontradiction s ->
 		let result = source2hyp info s in
 		if !debug_supinf_trace then
 			eprintf "contrad %s@." (string_of_tree result);
 		result
 
+let rec proj2 = function
+	[] -> []
+ | (a,b)::tail -> b::(proj2 tail)
+
 let source2hypT info s = funT (fun p ->
 	if !debug_supinf_trace then
 		eprintf "%a@." print s;
 	let result = source2hyp info s in
-	let taclist = proj2 (leavesList result) in
+	let taclist = proj2 (treeFlatten result) in
 	seqOnMT taclist thenMT rw normalizeC (-1)
 )
 
-let coreT =
+let testT =
    funT (fun p ->
          let var2index = VI.create 13 in
          let constrs=make_sacs var2index p in
@@ -1401,7 +1315,7 @@ let coreT =
             end
    )
 
-let core2T =
+let test2T =
    funT (fun p ->
          let var2index = VI.create 13 in
          let constrs=make_sacs var2index p in
@@ -1501,6 +1415,8 @@ let preT = funT (fun p ->
 	tryOnAllMHypsT ge_int2ratT)
 )
 
+let coreT = test2T
+let core2T = test2T
 let supinfT = preT thenMT core2T
 
 interactive test 'a 'b 'c :
@@ -1639,3 +1555,15 @@ interactive inttestn :
 				'v7 in int;
 				'v8 in int;
 				'v9 in int; "assert"{bfalse} >- "assert"{bfalse} }
+
+interactive inttestn2 :
+	sequent {v: int;
+				v1: int;
+				v2: int;
+				v3: int;
+				v4: int;
+				v5: int;
+				v6: int;
+				v7: int;
+				v8: int;
+				v9: int; "assert"{bfalse} >- "assert"{bfalse} }

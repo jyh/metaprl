@@ -56,7 +56,7 @@ doc <:doc< @docoff >>
 open Basic_tactics
 open Tactic_type.Tactic
 
-topval coreT : tactic
+topval testT : tactic
 
 topval ge2leftMinT : int -> int -> tactic
 topval ge2rightMaxT : int -> int -> tactic
@@ -65,10 +65,12 @@ topval ge_addMono2T : int -> int -> tactic
 topval extract2leftC : term -> conv
 topval extract2rightC : term -> conv
 topval ge_normC : conv
-topval core2T : tactic
+topval test2T : tactic
 
 topval ge_int2ratT : int -> tactic
 topval preT : tactic
+topval coreT : tactic
+topval core2T : tactic
 topval supinfT : tactic
 
 doc <:doc< @docoff >>

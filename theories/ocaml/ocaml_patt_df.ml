@@ -35,7 +35,7 @@
  *
  * ----------------------------------------------------------------
  *
- * This file is part of Nuprl-Light, a modular, higher order
+ * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
@@ -65,7 +65,7 @@
 include Ocaml
 include Ocaml_base_df
 
-open Nl_debug
+open Mp_debug
 open Printf
 
 let _ =

@@ -4,7 +4,7 @@
 
 include Fol_type
 
-open Nl_resource
+open Mp_resource
 open Refiner.Refiner.RefineError
 open Tacticals
 

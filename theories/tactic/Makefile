@@ -17,7 +17,7 @@ NLFILES :=\
 	sequent\
 	var\
 	rewrite_type\
-	nltop\
+	mptop\
 	tacticals\
 	conversionals
 

@@ -4,7 +4,7 @@
 
 include Fol_type
 
-open Nl_resource
+open Mp_resource
 open Tacticals
 open Base_auto_tactic
 

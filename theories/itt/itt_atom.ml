@@ -3,7 +3,7 @@
  *
  * ----------------------------------------------------------------
  *
- * This file is part of Nuprl-Light, a modular, higher order
+ * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
@@ -34,14 +34,14 @@
 include Itt_equal
 
 open Printf
-open Nl_debug
+open Mp_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Rformat
 open Sequent
-open Nl_resource
+open Mp_resource
 
 open Itt_equal
 

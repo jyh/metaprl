@@ -8,7 +8,7 @@ include Fol_univ
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
-open Nl_resource
+open Mp_resource
 open Tacticals
 
 open Fol_type

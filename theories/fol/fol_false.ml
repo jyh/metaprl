@@ -3,7 +3,7 @@
  *)
 include Fol_type
 
-open Nl_resource
+open Mp_resource
 open Base_dtactic
 open Refiner.Refiner.RefineError
 

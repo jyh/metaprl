@@ -3,7 +3,7 @@
  *
  * ----------------------------------------------------------------
  *
- * This file is part of Nuprl-Light, a modular, higher order
+ * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
@@ -294,8 +294,8 @@ val dest_rem : term -> term * term
 
 val natural_number_term : term
 val is_natural_number_term : term -> bool
-val dest_natural_number : term -> Nl_num.num
-val mk_natural_number_term : Nl_num.num -> term
+val dest_natural_number : term -> Mp_num.num
+val mk_natural_number_term : Mp_num.num -> term
 
 val ind_term : term
 val is_ind_term : term -> bool

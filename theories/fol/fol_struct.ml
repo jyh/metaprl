@@ -6,7 +6,7 @@ include Base_theory
 
 open Refiner.Refiner.RefineError
 open Base_auto_tactic
-open Nl_resource
+open Mp_resource
 open Tacticals
 
 (*

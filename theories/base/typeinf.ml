@@ -5,7 +5,7 @@
  *
  * ----------------------------------------------------------------
  *
- * This file is part of Nuprl-Light, a modular, higher order
+ * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
@@ -35,7 +35,7 @@
 include Tacticals
 
 open Printf
-open Nl_debug
+open Mp_debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
@@ -43,7 +43,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Term_table
-open Nl_resource
+open Mp_resource
 
 open Tacticals
 open Sequent

@@ -5,12 +5,12 @@
 include Itt_theory
 
 open Printf
-open Nl_debug
+open Mp_debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
-open Nl_resource
+open Mp_resource
 
 open Tacticals
 open Conversionals

@@ -111,9 +111,11 @@ define unfold_bneq_int :
 
 let resource reduce += [
    << gt_bool{'a; 'b} >>, unfold_gt_bool;
+(*
    << le_bool{'a; 'b} >>, unfold_le_bool;
    << ge_bool{'a; 'b} >>, unfold_ge_bool;
    << bneq_int{'a; 'b} >>, unfold_bneq_int;
+*)
 ]
 
 (*
@@ -186,9 +188,11 @@ define unfold_neq_int :
 
 let resource reduce += [
    << gt{'a; 'b} >>, unfold_gt;
+(*
    << le{'a; 'b} >>, unfold_le;
    << ge{'a; 'b} >>, unfold_ge;
    << nequal{'a; 'b} >>, unfold_neq_int;
+*)
 ]
 
 let le_term = << 'x <= 'y >>

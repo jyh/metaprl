@@ -1192,7 +1192,6 @@ interactive groupIso_iso group[i:l] 'f :
 
 doc <:doc< @docoff >>
 
-(*
 (************************************************************************
  * GROUP EXAMPLES                                                       *
  ************************************************************************)
@@ -1203,9 +1202,9 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive integer_add_group group[i:l] 'f :
-   sequent ['ext] { <H> >- {car=int; "*"=; "1"=0; inv=} in group[i:l] }
-*)
+interactive integer_add_group :
+   sequent ['ext] { <H> >- {car=int; "*"=lambda{x. lambda{y. 'x +@ 'y}}; "1"=0; inv=lambda{x. (-'x)}} in group[i:l] }
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)

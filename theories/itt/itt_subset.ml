@@ -200,7 +200,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive subset_intro {| intro [] |}  :
+interactive subset_intro {| intro [AutoMustComplete] |}  :
    [wf] sequent { <H> >- 'A subtype 'B } -->
    [main] sequent { <H>; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
    sequent { <H> >- 'A subset 'B }

@@ -411,55 +411,28 @@ let infer_fequalp subst (so, t) =
 let resource typeinf_subst += (fequalp_term, infer_fequalp)
 
 (*
-(*
  * Type of pair.
  *)
-let inf_funion f decl t =
-   let eq, s1, s2 = dest_funion t in
-   let decl, s1 = f decl s1 in
-      decl, s1
+let inf_eq3 inf consts decls eqs opt_eqs defs t =
+   let eq, s1, s2 = three_subterms t in
+   let eqs', opt_eqs', defs', s1' = inf consts decls eqs opt_eqs defs s1 in
+   let eqs'', opt_eqs'', defs'', s2' = inf consts decls eqs' opt_eqs' defs' s2 in
+      eqs'', ((s1', s2') :: opt_eqs''), defs'', s1'
 
-let inf_fisect f decl t =
-   let eq, s1, s2 = dest_fisect t in
-   let decl, s1 = f decl s1 in
-      decl, s1
+let map_singleton t =
+   mk_cons_term (one_subterm t) nil_term
 
-let inf_fsub f decl t =
-   let eq, s1, s2 = dest_fsub t in
-   let decl, s1 = f decl s1 in
-      decl, s1
-
-let inf_fisempty f decl t =
-   decl, bool_term
-
-let inf_fmember f decl t =
-   decl, bool_term
-
-let inf_fsubseteq f decl t =
-   decl, bool_term
-
-let inf_fequal f decl t =
-   decl, bool_term
-
-let inf_fcompare f decl t =
-   decl, bool_term
-
-let inf_fsingleton f decl t =
-   let t = one_subterm t in
-   let decl, t = f decl t in
-      decl, mk_list_term t
-
-let resource typeinf +=
-   [<< funion{'eq; 's1; 's2} >>, inf_funion;
-    << fisect{'eq; 's1; 's2} >>, inf_fisect;
-    << fsub{'eq; 's1; 's2} >>, inf_fsub;
-    << fisempty{'x} >>, inf_fisempty;
-    << fmember{'eq; 'x; 's1} >>, inf_fmember;
-    << fsubseteq{'eq; 's1; 's2} >>, inf_fsubseteq;
-    << fequal{'eq; 's1; 's2} >>, inf_fequal;
-    << fcompare{'eq; 'x1; 'x2} >>, inf_fcompare;
-    << fsingleton{'x} >>, inf_fsingleton]
-*)
+let resource typeinf += [
+   << funion{'eq; 's1; 's2} >>, inf_eq3;
+   << fisect{'eq; 's1; 's2} >>, inf_eq3;
+   << fsub{'eq; 's1; 's2} >>, inf_eq3;
+   << fisempty{'x} >>, Typeinf.infer_const bool_term;
+   << fmember{'eq; 'x; 's1} >>, Typeinf.infer_const bool_term;
+   << fsubseteq{'eq; 's1; 's2} >>, Typeinf.infer_const bool_term;
+   << fequal{'eq; 's1; 's2} >>, Typeinf.infer_const bool_term;
+   << fcompare{'eq; 'x1; 'x2} >>, Typeinf.infer_const bool_term;
+   << fsingleton{'x} >>, Typeinf.infer_map map_singleton;
+]
 
 let dest_fset_type t =
    if !(load_debug "auto") then eprintf "\ttype is %a%t" print_term t eflush;
@@ -584,7 +557,7 @@ interactive fequal_wf1 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
    sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} IN bool }
 
-interactive fequal_elim1 'H 'J 'T 'a 'y :
+interactive fequal_elim1 {| elim [] |} 'H 'J 'T 'a 'y :
    sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'a IN 'T } -->
    sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's1 IN list{'T} } -->
@@ -671,7 +644,7 @@ interactive funion_wf1 {| intro [] |} 'H :
    sequent [squash] { 'H >- 's2 IN list{'T} } -->
    sequent ['ext] { 'H >- funion{'eq; 's1; 's2} IN list{'T} }
 
-interactive funion_member_intro_left2 'H 'T :
+interactive funion_member_intro_left2 {| intro [SelectOption 1; intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 'x IN 'T } -->
    sequent [squash] { 'H >- 's1 IN list{'T} } -->
@@ -679,7 +652,7 @@ interactive funion_member_intro_left2 'H 'T :
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} }
 
-interactive funion_member_intro_right2 'H 'T :
+interactive funion_member_intro_right2 {| intro [SelectOption 2; intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 'x IN 'T } -->
    sequent [squash] { 'H >- 's1 IN list{'T} } -->
@@ -687,7 +660,7 @@ interactive funion_member_intro_right2 'H 'T :
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} }
 
-interactive funion_member_elim2 'H 'J 'T :
+interactive funion_member_elim2 {| elim [elim_typeinf_fset <<'s1>>] |} 'H 'J 'T :
    sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 'x IN 'T } -->
    sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's1 IN list{'T} } -->
@@ -820,7 +793,7 @@ interactive fequal_assert_elim2 {| elim [elim_typeinf_fset <<'s1>>] |} 'H 'J 'T 
    sequent ['ext] { 'H; x: 's1 = 's2 in fset{'eq; 'T}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'C['x] }
 
-interactive fequal_intro3 {| intro [] |} 'H 'T :
+interactive fequal_intro3 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's1 = 's2 in fset{'eq; 'T} } -->

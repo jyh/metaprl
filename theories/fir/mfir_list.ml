@@ -4,7 +4,8 @@
  * @begin[doc]
  * @module[Mfir_list]
  *
- * The @tt[Mfir_list] module implements lists for the FIR theory.
+ * The @tt[Mfir_list] module defines lists and list operations.  Lists
+ * are used in FIR programs to represent entities whose arity may vary.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -59,7 +60,6 @@ open Mfir_int
  * @begin[doc]
  * @terms
  *
- * Lists are used in the FIR to encode entities whose arities may vary.
  * The term @tt[nil] is the empty list, and the term @tt[cons] adds a
  * term @tt[elt] to the list @tt[tail].  Unless otherwise stated, it
  * will be assumed that lists are nil-terminated.
@@ -111,7 +111,7 @@ prim_rw reduce_length_ind :
    length{ cons{ 'h; 't } } <-->
    ( 1 +@ length{ 't } )
 
-prim_rw reduce_nth_elt_aux :
+prim_rw reduce_nth_elt_main :
    nth_elt{ number[i:n]; cons{ 'h; 't } } <-->
    ifthenelse{ int_eq{number[i:n]; 0}; 'h; nth_elt{(number[i:n] -@ 1); 't} }
 
@@ -123,7 +123,7 @@ let reduce_length =
    reduce_length_base orelseC reduce_length_ind
 
 let reduce_nth_elt =
-   reduce_nth_elt_aux thenC
+   reduce_nth_elt_main thenC
    (addrC [0] reduce_int_eq) thenC
    reduce_ifthenelse thenC
    (tryC (addrC [0] reduce_sub))

@@ -3,7 +3,7 @@
  * @module[Mfir_option]
  *
  * The @tt[Mfir_option] module implements a representation of
- * the @OCaml @tt["'a option"] type.
+ * values of the @OCaml @tt["'a option"] type.
  * @end[doc]
  *
  * ------------------------------------------------------------------------

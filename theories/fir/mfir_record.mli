@@ -1,5 +1,6 @@
 (*
- * The Mfir_record module implements records.
+ * The Mfir_record module defines a mechanism for
+ * representing records and operations on records.
  *
  * ------------------------------------------------------------------------
  *
@@ -32,6 +33,7 @@
  *)
 
 extends Mfir_bool
+extends Mfir_token
 
 open Tactic_type.Conversionals
 

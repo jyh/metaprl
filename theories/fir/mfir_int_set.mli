@@ -1,5 +1,5 @@
 (*
- * The Mfir_int_set module implements sets of integers.
+ * The Mfir_int_set module defines integer sets and operations on them.
  *
  * ------------------------------------------------------------------------
  *

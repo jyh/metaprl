@@ -53,9 +53,7 @@
  * @begin[doc]
  * @module[Mfir_theory]
  *
- * The @tt[Mfir_theory] module does not introduce any logical content
- * to the FIR theory.  It is a convenience for including the FIR
- * theory elsewhere.
+ * The @tt[Mfir_theory] module collects all the modules of the FIR theory.
  * @end[doc]
  *)
 
@@ -63,6 +61,7 @@ extends Base_theory
 
 extends Mfir_option
 extends Mfir_bool
+extends Mfir_token
 extends Mfir_record
 extends Mfir_int
 extends Mfir_list

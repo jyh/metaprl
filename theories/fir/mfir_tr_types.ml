@@ -60,7 +60,7 @@ extends Mfir_sequent
  * @rules
  * @modsubsection{Mutable types}
  *
- * We check that the type is well-formed, and that the flag is a boolean.
+ * The types must be equal, and the flags should be identical booleans.
  * @end[doc]
  *)
 
@@ -77,7 +77,7 @@ prim wf_mutable_ty 'H :
  * @begin[doc]
  * @modsubsection{Numbers}
  *
- * The equality judgment for $<< tyInt >>$ is straightforward.
+ * The type $<< tyInt >>$ is well-formed.
  * @end[doc]
  *)
 
@@ -89,10 +89,10 @@ prim wf_tyInt 'H :
 (*!
  * @begin[doc]
  *
- * Two enumeration types are equal if they have the same parameter $i$, and if
- * $i$ is within the allowed range of values.  This latter restriction assists
- * the Mojave compiler's garbage collector in differentiating between
- * enumeration constants and pointers.
+ * Enumeration types are well-formed if the parameter $i$ is within the
+ * allowed range of values.  This latter restriction assists the Mojave
+ * compiler's garbage collector in differentiating between enumeration
+ * constants and pointers.
  * @end[doc]
  *)
 
@@ -105,9 +105,10 @@ prim wf_tyEnum 'H :
 (*!
  * @begin[doc]
  *
- * The equality judgments for the types of raw integers and floating point
- * values are straightforward. Note that $<< tyRawInt[p:n, sign:s] >>$ and
- * $<< tyFloat[p:n] >>$ cannot be used as $<< small_type >>$ types.
+ * The types $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$
+ * are well-formed if their parameters are well-formed.  Note that
+ * $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$ cannot be
+ * used as $<< small_type >>$ types.
  * @end[doc]
  *)
 
@@ -146,8 +147,8 @@ prim wf_tyFloat 'H :
  * @begin[doc]
  * @modsubsection{Functions}
  *
- * Two function types are equal if their arguments types are equal, and if
- * the types of their return values are equal.
+ * Function types are well-formed if the argument and result types
+ * are well-formed.
  * @end[doc]
  *)
 
@@ -165,51 +166,37 @@ prim wf_tyFun 'H :
  * @modsubsection{Tuples}
  *
  * Two union types are equal if they name the same union definition, select
- * the same subset of cases, and instantiate the definition at the same types.
- * The well-formedness of the sequent ensures that the definition is
- * well-formed.
+ * the same subset of cases, and instantiate the definition at equal types.
  * @end[doc]
  *)
 
 prim wf_tyUnion 'H 'J :
 
-   (* Types the unions are instantiated at should be equal. *)
-   sequent [fir] { 'H;
-                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
-                    'J >-
+   (* The types the unions are instantiated at should be equal. *)
+   sequent [fir] { 'H; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; 'J >-
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
 
    (* The subset of cases should be equal. *)
-   sequent [fir] { 'H;
-                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
-                    'J >-
+   sequent [fir] { 'H; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; 'J >-
       set_eq{ 'set1; 'set2 } } -->
 
    (* The subset of cases should actually be a subset. *)
-   sequent [fir] { 'H;
-                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
-                    'J >-
+   sequent [fir] { 'H; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; 'J >-
       subset{ 'set1;
               intset[31, "signed"]{ interval{0; (number[j:n] -@ 1)} } } } -->
 
    (* Then the two tyUnion's are equal. *)
-   sequent [fir] { 'H;
-                    a: ty_def{ 'tv; polyKind{'i; union_type[j:n]}; 'def };
-                    'J >-
+   sequent [fir] { 'H; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; 'J >-
       type_eq{ tyUnion{ 'tv; 'tyl1; 'set1 };
                tyUnion{ 'tv; 'tyl2; 'set2 };
                small_type } }
    = it
 
-(*!
- * @docoff
- *)
-
 
 (*!
  * @begin[doc]
  *
- * Two tuple types are equal if they are the same kind of tuple, and their
+ * Two tuple types are equal if they are the same kind of tuple and their
  * projections are pointwise equal.  Note that box tuples must have arity one.
  * @end[doc]
  *)
@@ -239,9 +226,11 @@ prim wf_tyTuple_box 'H :
 (*!
  * @begin[doc]
  *
- * Dependent tuples?
+ * (Documentation incomplete.)
  * @end[doc]
  *)
+
+(* XXX: documentation needs to be completed. *)
 
 prim wf_tyDTuple_none 'H 'J :
    sequent [fir] { 'H; a: ty_def{ 'tv; dtuple_type; 'd }; 'J >-
@@ -282,8 +271,7 @@ prim wf_tyArray 'H :
 (*!
  * @begin[doc]
  *
- * The rawdata type $<< tyRawData >>$ is used to represent data without
- * strict typing rules.
+ * The type $<< tyRawData >>$ is well-formed.
  * @end[doc]
  *)
 
@@ -295,18 +283,18 @@ prim wf_tyRawData 'H :
 (*!
  * @begin[doc]
  *
- * I have no idea what frames are.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
+(* XXX: documentation needs to be completed. *)
+
 prim wf_tyFrame 'H 'J :
-   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
-      type_eq{ apply_types{ 'def; 'tyl1 };
-               apply_types{ 'def; 'tyl2 };
-               frame_type } } -->
-   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
+      type_eq{apply_types{'d; 'tyl1}; apply_types{'d; 'tyl2}; frame_type} } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
       type_eq{ tyFrame{ 'tv; 'tyl1 }; tyFrame{ 'tv; 'tyl2 }; small_type } }
    = it
 
@@ -315,8 +303,8 @@ prim wf_tyFrame 'H 'J :
  * @begin[doc]
  * @modsubsection{Polymorphism}
  *
- * Two type variables are equal if they name the same variable, and the
- * variable is declared in the context with the specified kind.
+ * Two type variables are considered equal if they name the same variable
+ * and the variable is declared in the context with the specified kind.
  * @end[doc]
  *)
 
@@ -337,8 +325,8 @@ prim wf_tyVar 'H 'J :
 (*!
  * @begin[doc]
  *
- * Two type applications are equal if the name the same parametrized type,
- * and instantiate that type at equal lists of types.
+ * Two type applications are equal if they name the same parametrized type
+ * and instantiate that type at equal types.
  * @end[doc]
  *)
 
@@ -348,11 +336,11 @@ prim wf_tyVar 'H 'J :
  *)
 
 prim wf_tyApply1 'H 'J :
-   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; no_def }; 'J >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; 'J >-
       int_eq{ 'i; length{ 'tyl1 } } } -->
-   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; no_def }; 'J >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; 'J >-
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; no_def }; 'J >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; 'J >-
       type_eq{ tyApply{ 'tv; 'tyl1 }; tyApply{ 'tv; 'tyl2 }; 'k } }
    = it
 
@@ -370,11 +358,10 @@ prim wf_tyApply1 'H 'J :
  *)
 
 prim wf_tyExists 'H 'a 'tv :
-   sequent [fir] { 'H; a: ty_def{ 'tv; small_type; no_def } >-
+   sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
-   sequent [fir] { 'H >- type_eq{ tyExists{ x. 't1['x] };
-                                  tyExists{ y. 't2['y] };
-                                  small_type } }
+   sequent [fir] { 'H >-
+      type_eq{ tyExists{ x. 't1['x] }; tyExists{ y. 't2['y] }; small_type } }
    = it
 
 
@@ -387,11 +374,10 @@ prim wf_tyExists 'H 'a 'tv :
  *)
 
 prim wf_tyAll 'H 'a 'tv :
-   sequent [fir] { 'H; a: ty_def{ 'tv; small_type; no_def } >-
+   sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
-   sequent [fir] { 'H >- type_eq{ tyAll{ x. 't1['x] };
-                                  tyAll{ y. 't2['y] };
-                                  small_type } }
+   sequent [fir] { 'H >-
+      type_eq{ tyAll{ x. 't1['x] }; tyAll{ y. 't2['y] }; small_type } }
    = it
 
 
@@ -437,7 +423,7 @@ prim wf_tyProject 'H 'J :
  *)
 
 prim wf_tyDefPoly 'H 'a 'tv :
-   sequent [fir] { 'H; a: ty_def{ 'tv; small_type; no_def } >-
+   sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 'ty1['tv]; 'ty2['tv]; polyKind{ ('i -@ 1); 'k } } } -->
    sequent [fir] { 'H >- type_eq{ tyDefPoly{ x. 'ty1['x] };
                                   tyDefPoly{ y. 'ty2['y] };
@@ -448,7 +434,7 @@ prim wf_tyDefPoly 'H 'a 'tv :
 (*!
  * @begin[doc]
  *
- * Well-formedness of frame definitions is fun.
+ * Well-formedness of frames and records is straightforward.
  * @end[doc]
  *)
 
@@ -530,14 +516,14 @@ prim wf_tyDefUnion_cases2 'H :
 (*!
  * @begin[doc]
  *
- * Oh well?
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
+(* XXX: documentation needs to be completed. *)
+
 prim wf_tyDefDTuple 'H 'J :
-   sequent [fir] { 'H;
-                   a: ty_def{ 'tv; dtuple_type; tyDefDTuple{ 'tv } };
-                   'J >-
+   sequent [fir] { 'H; a: ty_def{ 'tv; dtuple_type; tyDefDTuple{'tv} }; 'J >-
       type_eq{ tyDefDTuple{ 'tv }; tyDefDTuple{ 'tv }; dtuple_type } }
    = it
 

@@ -66,7 +66,7 @@ open Top_conversionals
  * mutable.  (The fields in an array are always mutable.)  The flags
  * @tt[mutable] and @tt[immutable] declare a field to be mutable and
  * immutable, respectively.  The term @tt[mutable_ty] is used as the type
- * of a field; it combines a type along with a flag indicating the
+ * of a field; it combines a type with a flag indicating the
  * field's mutability.
  * @end[doc]
  *)
@@ -80,8 +80,8 @@ declare mutable_ty{ 'ty; 'flag }
  * @begin[doc]
  * @modsubsection{Type definitions}
  *
- * Type definitions define parameterized type, unions, and frames.
- * The term @tt[tyDefPoly] abstracts a type @tt[ty] over a type @tt[t].
+ * Type definitions define parameterized types, unions, frames, and dependent
+ * tuples.  The term @tt[tyDefPoly] abstracts a type @tt[ty] over @tt[t].
  * @end[doc]
  *)
 
@@ -91,8 +91,8 @@ declare tyDefPoly{ t. 'ty['t] }
 (*!
  * @begin[doc]
  *
- * Frames are defined as records, where each field is a record of
- * @tt[frameSubField] terms.
+ * Frames are defined as records, where each field is a record whose data
+ * consists of @tt[frameSubField] terms.
  * @end[doc]
  *)
 
@@ -104,8 +104,8 @@ declare frameSubField{ 'ty; 'num }
  *
  * The term @tt[tyDefUnion] is used to define a disjoint union.  The subterm
  * @tt[cases] is the list of cases in the union, and it should be a list of
- * lists of mutable_ty terms.  A union case can be viewed as a tuple space in
- * which each field is tagged with a flag indicating its mutability.
+ * lists of @tt[mutable_ty] terms.  A union case can be viewed as a tuple
+ * space in which each field is tagged with a flag indicating its mutability.
  * @end[doc]
  *)
 
@@ -119,6 +119,8 @@ declare tyDefUnion{ 'cases }
  * @end[doc]
  *)
 
+(* XXX: documentation needs to be completed. *)
+
 declare tyDefDTuple{ 'ty_var }
 
 
@@ -127,7 +129,7 @@ declare tyDefDTuple{ 'ty_var }
  * @modsubsection{Numbers}
  *
  * The type @tt[tyInt] includes all signed, 31-bit integers.  The type
- * @tt{tyEnum[i:n]} includes the integers $@{0,@ldots,i-1@}$.  The raw integer
+ * @tt{tyEnum[i:n]} includes the integers $@{0,@ldots,i-1@}$.  The
  * type @tt[tyRawInt] includes integers of varying bit precisions (8, 16, 32,
  * and 64) and signedness (``signed'' or ``unsigned'').  The type @tt[tyFloat]
  * includes floating-point values of a specified bit-precision (32, 64, or
@@ -191,6 +193,8 @@ declare tyTuple[tc:s]{ 'mtyl }
  * @end[doc]
  *)
 
+(* XXX: documentation needs to be completed. *)
+
 declare tyDTuple{ 'ty_var; 'mtyl_option }
 declare tyTag{ 'ty_var; 'mtyl }
 
@@ -224,9 +228,8 @@ declare tyRawData
  * @begin[doc]
  *
  * The type @tt[tyFrame] is the frame given by @tt[ty_var] instantiated
- * at the types in the list @tt[tyl].  Frames are used for the frames
- * generated during closure conversion, and they are not directly
- * accessible to the programmer.
+ * at the types in the list @tt[tyl].  Frames are not directly accessible
+ * to the programmer.
  * @end[doc]
  *)
 

@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_int_set]
  *
- * The @tt[Mfir_int_set] module implements sets of integers.
+ * The @tt[Mfir_int_set] module defines integer sets and operations on them.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -65,12 +65,11 @@ open Mfir_int
  *
  * The FIR uses integer sets in pattern matching expressions (see
  * @hrefterm[matchExp]), and to designate a subset of the cases of a union
- * definition (see @hrefterm[tyUnion]).  An integer set is represented as a
- * sorted list of closed intervals (the first interval in a set contains the
- * least values of the set).  Sets are assumed to be @emph{normalized}; in
- * addition to being sorted, no two intervals in a set should overlap, and it
- * should never be the case that two adjacent intervals are of the form
- * $[a,i],[i+1,b]$.
+ * definition.  An integer set is represented as a sorted list of closed
+ * intervals.  The intervals are sorted in ascending order. Sets are assumed
+ * to be @emph{normalized}; in addition to being sorted, no two intervals in a
+ * set should overlap, and it should never be the case that two adjacent
+ * intervals are of the form $[a,i],[i+1,b]$.
  *
  * The term @tt[interval] represents a closed interval.  The left endpoint
  * should be less then or equal to the right endpoint.  The term @tt[intset]
@@ -124,7 +123,7 @@ declare union{ 'set1; 'set2 }
  * @modsubsection{Constants}
  *
  * The term @tt[intset_max] is the set of all integers with the given
- * precision and signedness.  Precisions of 8, 16, 31, 32, and 64 are
+ * bit-precision and signedness.  Precisions of 8, 16, 31, 32, and 64 are
  * currently supported.  The signedness may be ``signed'' or ``unsigned''.
  * The term @tt[enum_max] is the set of allowed values for the parameter
  * of @hrefterm[tyEnum]
@@ -133,6 +132,10 @@ declare union{ 'set1; 'set2 }
 
 declare intset_max[precision:n, sign:s]
 declare enum_max
+
+(*!
+ * @docoff
+ *)
 
 
 (**************************************
@@ -165,18 +168,18 @@ declare union_interval{ 'interval1; 'interval2 }
  * @end[doc]
  *)
 
-prim_rw reduce_interval_lt_aux :
+prim_rw reduce_interval_lt_main :
    interval_lt{ interval{ number[i:n]; number[j:n] };
                 interval{ number[m:n]; number[n:n] } } <-->
    int_lt{ number[j:n]; number[m:n] }
 
-prim_rw reduce_union_interval_aux :
+prim_rw reduce_union_interval_main :
    union_interval{ interval{ number[i:n]; number[j:n] };
                    interval{ number[m:n]; number[n:n] } } <-->
    interval{ int_min{ number[i:n]; number[m:n] };
              int_max{ number[j:n]; number[n:n] } }
 
-prim_rw reduce_subset_interval_aux :
+prim_rw reduce_subset_interval_main :
    subset{ interval{ number[i:n]; number[j:n] };
            interval{ number[n:n]; number[m:n] } } <-->
    "and"{ int_le{ number[n:n]; number[i:n] };
@@ -187,15 +190,15 @@ prim_rw reduce_subset_interval_aux :
  *)
 
 let reduce_interval_lt =
-   reduce_interval_lt_aux thenC reduce_int_lt
+   reduce_interval_lt_main thenC reduce_int_lt
 
 let reduce_union_interval =
-   reduce_union_interval_aux thenC
+   reduce_union_interval_main thenC
    (addrC [0] reduce_int_min) thenC
    (addrC [1] reduce_int_max)
 
 let reduce_subset_interval =
-   reduce_subset_interval_aux thenC
+   reduce_subset_interval_main thenC
    (addrC [0] reduce_int_le) thenC
    (addrC [1] reduce_int_le) thenC
    reduce_and thenC
@@ -206,16 +209,9 @@ let reduce_subset_interval =
  * @begin[doc]
  * @modsubsection{Set operations}
  *
- * The @tt[reduce_member] conversional reduces the set membership relation
- * $<< member{ 'i; 'set } >>$ to either $<< "true" >>$ or $<< "false" >>$,
- * using the rewrites below.
+ * Testing for set membership is straightforward.
  * @end[doc]
  *)
-
-prim_rw reduce_member_interval_aux :
-   member{ number[i:n]; interval{ number[l:n]; number[r:n] } } <-->
-   "and"{ int_le{ number[l:n]; number[i:n] };
-          int_le{ number[i:n]; number[r:n] } }
 
 prim_rw reduce_member_intset_base :
    member{ number[i:n]; intset[p:n, s:s]{nil} } <-->
@@ -225,25 +221,24 @@ prim_rw reduce_member_intset_ind :
    member{ number[i:n];
            intset[p:n, s:s]{ (interval{number[j:n]; number[k:n]} :: 'tail) } }
    <-->
-   "or"{ member{ number[i:n]; interval{ number[j:n]; number[k:n] } };
-         member{ number[i:n]; intset[p:n, s:s]{ 'tail } } }
+   (if "and"{ int_le{ number[j:n]; number[i:n] };
+              int_le{ number[i:n]; number[k:n] } }
+   then
+      "true"
+   else
+         member{ number[i:n]; intset[p:n, s:s]{ 'tail } })
 
 (*!
  * @docoff
  *)
 
-let reduce_member_interval =
-   reduce_member_interval_aux thenC
-   (addrC [0] reduce_int_le) thenC
-   (addrC [1] reduce_int_le) thenC
-   reduce_and thenC
-   reduce_ifthenelse
-
 let reduce_member =
    reduce_member_intset_base orelseC
    (  reduce_member_intset_ind thenC
-      (addrC [0] reduce_member_interval) thenC
-      reduce_or thenC
+      (addrC [0;0] reduce_int_le) thenC
+      (addrC [0;1] reduce_int_le) thenC
+      (addrC [0] reduce_and) thenC
+      (addrC [0] reduce_ifthenelse) thenC
       reduce_ifthenelse
    )
 
@@ -256,7 +251,8 @@ let resource reduce += [
  * @begin[doc]
  *
  * Set normalization is limited to combining intervals of the form
- * $[a,i],[i+1,b]$.
+ * $[a,i],[i+1,b]$.  We assume that the intervals are sorted and
+ * non-overlapping.
  * @end[doc]
  *)
 
@@ -361,11 +357,9 @@ let resource reduce += [
  * @begin[doc]
  *
  * Computing the union of two integer sets is rather involved.
- * The cases in which one of the sets is empty are straight forward.
+ * The cases in which one of the sets is empty are straightforward.
  * The case in which both sets are non-empty reduces to a case
- * analysis on the first interval in each set.  The @tt[reduce_union]
- * conversional uses the five rewrites below to reduce
- * $<< union{ 'set1; 'set2 } >>$.
+ * analysis on the first interval in each set.
  * @end[doc]
  *)
 
@@ -433,10 +427,7 @@ let resource reduce += [
 (*!
  * @begin[doc]
  *
- * Set equality is defined in the usual way.  The @tt[reduce_set_eq]
- * conversional uses the rewrite below, along with other rewrites, to avoid
- * computing $<< subset{ 's2; 's1 } >>$ in cases where it is not
- * necessary.
+ * Set equality is defined in the usual way.
  * @end[doc]
  *)
 

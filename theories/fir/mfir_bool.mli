@@ -1,5 +1,6 @@
 (*
- * The Mfir_bool module implements meta-booleans for the FIR theory.
+ * The Mfir_bool module implements meta-booleans; the booleans in this
+ * module are not the same as the booleans found in FIR programs.
  *
  * ------------------------------------------------------------------------
  *

@@ -14,6 +14,7 @@ MPFILES := \
    mfir_auto \
    mfir_option \
    mfir_bool \
+   mfir_token \
    mfir_record \
    mfir_int \
    mfir_list \

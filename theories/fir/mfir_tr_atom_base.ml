@@ -55,7 +55,10 @@ extends Mfir_sequent
  * @begin[doc]
  * @terms
  *
- * I need to put some documentation here eventually.
+ * The term @tt[res_type] returns the result type of an operator @tt[op].
+ * The terms @tt[arg1_type] and @tt[arg2_type] return the types of
+ * first and second arguments of an operator @tt[op] (@tt[arg2_type] is
+ * undefined if @tt[op] is a unary operator).
  * @end[doc]
  *)
 
@@ -63,22 +66,14 @@ declare res_type{ 'op }
 declare arg1_type{ 'op }
 declare arg2_type{ 'op }
 
+(*!
+ * @docoff
+ *)
+
 
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
-
-(*!
- * @begin[doc]
- * @rewrites
- *
- * Maybe I should put some documentation here.
- * @end[doc]
- *)
-
-(*!
- * @docoff
- *)
 
 prim_rw reduce_res_type_notEnumOp :
    res_type{ notEnumOp[i:n] } <-->

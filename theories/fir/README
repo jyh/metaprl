@@ -10,32 +10,32 @@ be found in scattered comments and the BUGS file.
 
 Each of the modules in this theory is described briefly below.
 
--- Mfir_auto:  Contains mechanisms to automate the FIR theory.
+   Basic modules:
+   -  Mfir_auto:     Contains mechanisms to automate the FIR theory.
+   -  Mfir_bool:     A (purely syntactic?) implementation of booleans.
+   -  Mfir_token:    A purely syntactic representation of strings.
+   -  Mfir_record:   A (purely syntactic?) implmentation of records.
+   -  Mfir_int:      A (purely syntactic?) implementation of infinite
+                     precision integers.
+   -  Mfir_list:     A (purely syntactic?) implementation of lists.
+   -  Mfir_int_set:  A (purely syntactic?) implementation of sets of integers.
 
--- Mfir_record:  A (purely syntactic?) implmentation of records.
+   Core term declarations:
+   -  Mfir_ty:       Declares terms to represent the FIR type system.
+   -  Mfir_exp:      Declares terms to represent FIR operators and expressions.
+   -  Mfir_sequent:  Declares terms used in representing FIR programs
+                     as sequents.
+   -  Mfir_util:     Declares terms and rewrites for manipulating FIR
+                     expressions and types.
 
--- Mfir_bool:  A (purely syntactic?) implementation of booleans.
-
--- Mfir_int:  A (purely syntactic?) implementation of infinite
-   precision integers.
-
--- Mfir_list:  A (purely syntactic?) implementation of lists.
-
--- Mfir_int_set:  A (purely syntactic?) implementation of sets of integers.
-
--- Mfir_ty:  Declares terms to represent the FIR type system.
-
--- Mfir_exp:  Declares terms to represent FIR operators and expressions.
-
--- Mfir_sequent:  Declares terms used in representing FIR programs
-   as sequents.
-
--- Mfir_util:  Declares terms and rewrites for manipulating FIR
-   expressions and types.
-
--- Mfir_tr_base:  Defines basic typing rules.
-
--- Mfir_tr_types:  Defines well-formedness for FIR types.
+   Typing rules:
+   -  Mfir_tr_base:  Defines basic typing rules.
+   -  Mfir_tr_types: Defines well-formedness for FIR types.
+   -  Mfir_tr_atom_base:   Defines macros to get the argument types and
+                     result type of the FIR unary and binary operators.
+   -  Mfir_tr_atom:  Defines the typing relations for FIR atoms.
+   -  Mfir_tr_store: Defines the typing relations for store values in the FIR.
+   -  Mfir_tr_exp:   Defines the typing relations for FIR expressions.
 
 
 ---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ Notable differences from the actual Mojave FIR:
       TyDefUnion  (using tyDefPoly)
       TyDefLambda (using tyDefPoly)
 
--- So the actual FIR specification (mcc/fir/type/fir.ml) has terms
+-- The actual FIR specification (mcc/fir/type/fir.ml) has terms
    whose subterms are (ML) lists.  In some cases, if these lists are
    empty, the term is degenerate in some sense, e.g TyExists ([], t).
    For my own sanity, I'm not going to consider such degenerate terms,

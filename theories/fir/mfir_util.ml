@@ -68,7 +68,9 @@ open Mfir_int_set
  * @terms
  * @modsubsection{Definition extraction}
  *
- * I should probably document the following.
+ * If @tt[poly_ty] is a parametrized type definition, then
+ * @tt[get_core] instantiates the parameters at $<< it >>$ and returns
+ * the resulting ``type''.
  * @end[doc]
  *)
 
@@ -79,7 +81,7 @@ declare get_core{ 'poly_ty }
  * @begin[doc]
  * @modsubsection{Type application}
  *
- * If @tt[poly_ty] is a parametrized type definition or type, then
+ * If @tt[poly_ty] is a parametrized type definition or quantified type, then
  * @tt[do_tyApply] instantiates it at the types in the list @tt[ty_list].
  * @end[doc]
  *)
@@ -92,7 +94,7 @@ declare apply_types{ 'poly_ty; 'ty_list }
  * @modsubsection{Parameter counting}
  *
  * The term @tt[num_params] counts the number of parameters in an
- * existential type @tt[ty].
+ * existential type.
  * @end[doc]
  *)
 
@@ -105,7 +107,7 @@ declare num_params{ 'ty }
  *
  * The term @tt[instantiate_tyExists] is used to instantiate
  * an existential type @tt[ty] using type projections (@hrefterm[tyProject])
- * with @tt[var], starting at @tt[num].
+ * of @tt[var], starting at @tt[num].
  * @end[doc]
  *)
 
@@ -121,7 +123,10 @@ declare unpack_exists{ 'ty; 'var; 'num }
  * @rewrites
  * @modsubsection{Definition extraction}
  *
- * I should probably document the following.
+ * Obtaining the ``core'' portion of a parametrized type definition
+ * is straightforward.  The following two rewrites are combined into the
+ * @tt[reduce_get_core] conversional in order to control the order of
+ * their application.
  * @end[doc]
  *)
 
@@ -150,8 +155,8 @@ let resource reduce += [
  * @begin[doc]
  * @modsubsection{Type application}
  *
- * Instantiating a parameterized type at a given list of types is
- * straightforward.
+ * Instantiating a parameterized type definition or quantified type
+ * at a given list of types is straightforward.
  * @end[doc]
  *)
 
@@ -193,7 +198,7 @@ let resource reduce += [
  *
  * Counting the number of parameters in a type $<< tyExists{t. 'ty['t]} >>$ is
  * also straightforward. Note the bogus instantiation at $<< it >>$ to
- * address the problem of free variables.  The following rewrites are
+ * address the problem of free variables.  The following two rewrites are
  * combined into the @tt[reduce_num_params] conversional in order to control
  * the order of their application.
  * @end[doc]
@@ -221,10 +226,11 @@ let resource reduce += [
 
 (*!************************************
  * @begin[doc]
+ * @modsubsection{Existential unpacking}
  *
  * The following rewrites are the basis for reducing
- * $<< unpack_exists{ 'ty; 'var; 'num } >>$.
- * The are combined into the @tt[reduce_instantiate_tyExists]
+ * $<< unpack_exists{ 'ty; 'var; 'num } >>$. The following two
+ * rewrites are combined into the @tt[reduce_instantiate_tyExists]
  * conversional in order to control the order of their application.
  * @end[doc]
  *)
@@ -267,7 +273,7 @@ dform get_core_df : except_mode[src] ::
 
 dform apply_types_df : except_mode[src] ::
    apply_types{ 'poly_ty; 'ty_list } =
-   `"((" slot{'poly_ty} `") " slot{'ty_list} `")"
+   `"(" slot{'poly_ty} `" " slot{'ty_list} `")"
 
 dform num_params_df : except_mode[src] ::
    num_params{ 'ty } =
@@ -275,4 +281,4 @@ dform num_params_df : except_mode[src] ::
 
 dform unpack_exists_df : except_mode[src] ::
    unpack_exists{ 'ty; 'var; 'num } =
-   bf["unpack"] exists `"[" slot{'num} `"](" slot{'ty} `"," slot{'var} `")"
+   bf["unpack"] `"[" slot{'num} `"](" slot{'ty} `"," slot{'var} `")"

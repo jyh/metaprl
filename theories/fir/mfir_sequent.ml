@@ -6,16 +6,9 @@
  *
  * The @tt[Mfir_sequent] module declares terms used in FIR theory sequents.
  * We take the following interpretation of sequents in the FIR theory.  If a
- * sequent is not well-formed, then it holds trivially.  In order for a
- * sequent to be well-formed, the list of hypotheses, also called the
- * @em{context}, must be well-formed.
- *
- * Contexts may contain declarations and definitions for variables, type
- * variables, and global labels (global values in FIR programs).  A variable
- * must be declared before it is defined, since variables may be defined in a
- * mutually recursive fashion (e.g.~functions).  No variable may be declared
- * or defined more than once.  Similar requirements hold for type variables
- * and global labels.
+ * sequent is not well-formed, then it holds trivially.  A well-formed
+ * sequent is closed, and the context (list of hypotheses) must be
+ * well-formed.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -54,7 +47,7 @@
  * @end[doc]
  *)
 
-extends Mfir_int
+extends Base_theory
 
 
 (**************************************************************************
@@ -67,7 +60,7 @@ extends Mfir_int
  * @modsubsection{Sequent tags}
  *
  * The term @tt[fir] is used to tag FIR theory sequents.  The term @tt[it] is
- * used in rules to express (the lack of) computational content of a proof.
+ * a trivial term that has no meaning.
  * @end[doc]
  *)
 
@@ -94,7 +87,7 @@ declare large_type
 (*!
  * @begin[doc]
  *
- * Union definitions (see @hrefterm[tyDefUnion]) belong to the @tt[union_type]
+ * Union definitions (@hrefterm[tyDefUnion]) belong to the @tt[union_type]
  * kind, where the parameter $i$ indiciates the number of cases in the union.
  * @end[doc]
  *)
@@ -105,24 +98,35 @@ declare union_type[i:n]
 (*!
  * @begin[doc]
  *
- * Records are fun.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
+(* XXX: documentation needs to be completed. *)
+
 declare record_type
 declare frame_type
+
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
 declare dtuple_type
 
 
 (*!
  * @begin[doc]
  *
- * All types, including parametrized types, belong to the @tt[polyKind] kind.
- * The parameter @tt[i] is the number of parameters in the definition, and
- * the subterm @tt[k] is the kind of the type once all the parameters are
- * instantiated.  We allow the case $i = 0$.  In practice, it assumed
- * that the ``simplest'' kind is used; this is made clear by the rules
- * in @hrefmodule[Mfir_tr_base].
+ * All types, including parametrized type definitions, belong to the
+ * @tt[polyKind] kind.  The subterm @tt[i] is the number of parameters in the
+ * definition, and the subterm @tt[k] is the kind of the type once all the
+ * parameters are instantiated.  We allow the case $i = 0$.
  * @end[doc]
  *)
 
@@ -133,10 +137,27 @@ declare polyKind{ 'i; 'k }
  * @begin[doc]
  * @modsubsection{Contexts}
  *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+declare frame
+declare "fun"
+declare global
+declare "type"
+declare variable
+
+
+(*!
+ * @begin[doc]
+ *
  * The terms @tt[ty_def], @tt[var_def], and @tt[global_def] are used for
- * definitions in the context.  If the subterm @tt[def] is @tt[no_def], then
- * the definition is considered to be a declaration only.  A declaration is
- * well-formed if the first subterm is a well-formed kind/type, and the second
+ * definitions in the context.  The first subterm is the variable being
+ * declared/defined.  If the subterm @tt[def] is @tt[no_def], then the
+ * definition is considered to be a declaration only.  A declaration is
+ * well-formed if the second subterm is a well-formed kind/type, and the third
  * subterm is @tt[no_def].  A definition is well-formed if the corresponding
  * declaration is well-formed, and if the value/type in the definition has the
  * specified kind or type.
@@ -153,14 +174,12 @@ declare no_def
  * @begin[doc]
  * @modsubsection{Store values}
  *
- * Variables can be defined with an atom, or one of values below.  The term
- * @tt[polyFun] is a polymorphic function that takes one type argument.  The
- * term @tt[lambda] is a non-polymorphic function that takes one argument.
- * (Note that functions of multiple arguments are represented in curried
- * form.) The term @tt[union_val] is a value of case $i$ of some (polymorphic)
- * union type @tt[ty_var], initialized with the atoms in the list
- * @tt[atom_list].  The term @tt[raw_data] is an opaque representation of raw
- * data (see @hrefterm[tyRawData]).
+ * The term @tt[polyFun] is a polymorphic function that takes one type
+ * argument.  The term @tt[lambda] is a non-polymorphic function that takes
+ * one argument.  The term @tt[union_val] is a value of case $i$ of some
+ * (polymorphic) union type @tt[ty_var], initialized with the atoms in the
+ * list @tt[atom_list].  The term @tt[raw_data] is an opaque representation of
+ * raw data (see @hrefterm[tyRawData]).
  * @end[doc]
  *)
 
@@ -174,7 +193,7 @@ declare raw_data
  * @begin[doc]
  * @modsubsection{Judgments}
  *
- * The judgment @tt[wf_kind] says that kind @tt[k] is well-formed.
+ * The judgment @tt[wf_kind] says that the kind @tt[k] is well-formed.
  * @end[doc]
  *)
 
@@ -199,8 +218,8 @@ declare type_eq_list{ 'tyl1; 'tyl2; 'k }
 (*!
  * @begin[doc]
  *
- * A proof of @tt[has_type] proves that a term @tt[t] has type @tt[ty],
- * and that type @tt[ty] is a well-formed.  The string parameter is an
+ * A proof of @tt[has_type] says that a term @tt[t] has type @tt[ty],
+ * and that @tt[ty] is a well-formed type.  The string parameter is an
  * annotation that is intended to describe some aspect of @tt[t] or
  * the typing relation.
  * @end[doc]
@@ -299,6 +318,26 @@ dform raw_data_df : except_mode[src] ::
 (*
  * Contexts.
  *)
+
+dform frame_df : except_mode[src] ::
+   frame =
+   tt["Frame"]
+
+dform fun_df : except_mode[src] ::
+   "fun" =
+   tt["Fun"]
+
+dform global_df : except_mode[src] ::
+   global =
+   tt["Global"]
+
+dform type_df : except_mode[src] ::
+   "type" =
+   tt["Type"]
+
+dform variable_df : except_mode[src] ::
+   variable =
+   tt["Variable"]
 
 dform ty_def_df1 : except_mode[src] ::
    ty_def{ 'var; 'k; 'def } =

@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_int]
  *
- * The @tt[Mfir_int] module implements integers for the FIR theory.
+ * The @tt[Mfir_int] module defines integers and operations on integers.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -109,9 +109,8 @@ declare int_ge{ 'num1; 'num2 }
  * @rewrites
  *
  * The arithmetic and comparison operators above can be rewritten to numbers
- * and meta-booleans (see the @hrefmodule[Mfir_bool] module) using the meta
- * operations from the @tt[Base_meta] module.  These rewrites are
- * straightforward, and we omit an explicit listing of them.
+ * and booleans using meta operations from the @tt[Base_meta] module.  These
+ * rewrites are straightforward, and we omit an explicit listing of them.
  * @end[doc]
  *)
 

@@ -2,7 +2,8 @@
  * @begin[doc]
  * @module[Mfir_record]
  *
- * The @tt[Mfir_record] module implements records.
+ * The @tt[Mfir_record] module defines a syntactic mechanism for
+ * representing records and operations on records.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -42,12 +43,15 @@
  *)
 
 extends Mfir_bool
+extends Mfir_token
 
 (*!
  * @docoff
  *)
 
 open Top_conversionals
+open Mfir_bool
+open Mfir_token
 
 
 (**************************************************************************
@@ -58,21 +62,23 @@ open Top_conversionals
  * @begin[doc]
  * @terms
  *
- * Records are used to represent a map from labels to values.
- * The term @tt[recordEnd] represent an empty record.  The term
- * @tt[record] represents a map from the label @tt[tag] to @tt[data].
- * The subterm @tt[remaining] is the rest of the record.
+ * Records are used to represent maps from labels to values.
+ * The term @tt[recordEnd] is an empty record.  The term  @tt[record]
+ * is a record that binds the label @tt[tag] to the value @tt[data].
+ * The subterm @tt[remaining] is the remainder of the record.
  * @end[doc]
  *)
 
 declare recordEnd
 declare record[tag:s]{ 'data; 'remaining }
 
+
 (*!
  * @begin[doc]
  *
  * The term @tt[field] is used to retrieve the data from the field
- * labelled @tt[tag] in the given record.
+ * labelled @tt[tag] in the given record.  The term @tt[field_mem]
+ * tests if there is a binding for @tt[tag] in the given record.
  * @end[doc]
  *)
 
@@ -92,59 +98,59 @@ declare field_mem[tag:s]{ 'record }
  * @begin[doc]
  * @rewrites
  *
- * Reducing a field operation is straighforward.  The @tt[orelseC]
- * conversional is used to control the application of the two rewrites
- * below.
+ * Reducing a field operation is straighforward.
  * @end[doc]
  *)
 
-prim_rw reduce_field_success :
-   field[tag:s]{ record[tag:s]{ 'data; 'remaining } } <-->
-   'data
-
-prim_rw reduce_field_continue :
+prim_rw reduce_field_main :
    field[tag1:s]{ record[tag2:s]{ 'data; 'remaining } } <-->
-   field[tag1:s]{ 'remaining }
+   (if token_eq{ token[tag1:s]; token[tag2:s] } then
+      'data
+   else
+      field[tag1:s]{ 'remaining })
 
 (*!
  * @docoff
  *)
 
 let reduce_field =
-   reduce_field_success orelseC reduce_field_continue
+   reduce_field_main thenC
+   (addrC [0] reduce_token_eq) thenC
+   reduce_ifthenelse
 
 let resource reduce += [
-   << field[tag:s]{ 'record } >>, reduce_field
+   << field[tag1:s]{ record[tag2:s]{ 'data; 'remaining } } >>,
+      reduce_field
 ]
 
 
 (*!
  * @begin[doc]
  *
- * I really should document the following.
+ * Determining whether or not a label is bound in a record is straightforward.
  * @end[doc]
  *)
 
-prim_rw reduce_field_mem_success :
-   field_mem[tag:s]{ record[tag:s]{ 'data; 'remaining } } <-->
-   "true"
-
-prim_rw reduce_field_mem_continue :
-   field_mem[tag1:s]{ record[tag2:s]{ 'data; 'remaining } } <-->
-   field_mem[tag1:s]{ 'remaining }
-
-prim_rw reduce_field_mem_fail :
+prim_rw reduce_field_mem_base :
    field_mem[tag:s]{ recordEnd } <-->
    "false"
+
+prim_rw reduce_field_mem_ind :
+   field_mem[tag1:s]{ record[tag2:s]{ 'data; 'remaining } } <-->
+   "or"{ token_eq{ token[tag1:s]; token[tag2:s] };
+         field_mem[tag1:s]{ 'remaining } }
 
 (*!
  * @docoff
  *)
 
 let reduce_field_mem =
-   reduce_field_mem_success orelseC
-   reduce_field_mem_continue orelseC
-   reduce_field_mem_fail
+   reduce_field_mem_base orelseC
+   (  reduce_field_mem_ind thenC
+      (addrC [0] reduce_token_eq) thenC
+      reduce_or thenC
+      reduce_ifthenelse
+   )
 
 let resource reduce += [
    << field_mem[tag:s]{ 'record } >>,

@@ -1,5 +1,10 @@
-(*
- * The Mfir_int module defines integers and operations on integers.
+(*!
+ * @begin[doc]
+ * @module[Mfir_token]
+ *
+ * The @tt[Mfir_token] module defines tokens, a syntactic mechanism
+ * for representing strings and operations on strings.
+ * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
@@ -31,59 +36,86 @@
  * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+
 extends Mfir_bool
 
-open Tactic_type.Conversionals
+(*!
+ * @docoff
+ *)
+
+open Base_meta
+open Top_conversionals
+open Mfir_bool
 
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
-(*
- * Numbers.
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The term @tt[token] represents a string with value @tt[str].
+ * @end[doc]
  *)
 
-declare number[i:n]
+declare token[str:s]
 
 
-(*
- * Operations.
+(*!
+ * @begin[doc]
+ *
+ * Equality is the only relation defined on tokens.
+ * @end[doc]
  *)
 
-declare add{ 'num1; 'num2 }
-declare sub{ 'num1; 'num2 }
-declare mul{ 'num1; 'num2 }
-declare div{ 'num1; 'num2 }
-declare rem{ 'num1; 'num2 }
-declare minus{ 'num }
-declare int_min{ 'num1; 'num2 }
-declare int_max{ 'num1; 'num2 }
-
-declare int_eq{ 'num1; 'num2 }
-declare int_neq{ 'num1; 'num2 }
-declare int_lt{ 'num1; 'num2 }
-declare int_le{ 'num1; 'num2 }
-declare int_gt{ 'num1; 'num2 }
-declare int_ge{ 'num1; 'num2 }
+declare token_eq{ 'tok1; 'tok2 }
 
 
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
 
-topval reduce_add : conv
-topval reduce_sub : conv
-topval reduce_mul : conv
-topval reduce_div : conv
-topval reduce_rem : conv
-topval reduce_minus : conv
-topval reduce_int_min : conv
-topval reduce_int_max : conv
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * Token equality is reduced to a boolean value using a meta operation from
+ * the @tt[Base_meta] module.
+ * @end[doc]
+ *)
 
-topval reduce_int_eq : conv
-topval reduce_int_neq : conv
-topval reduce_int_lt : conv
-topval reduce_int_le : conv
-topval reduce_int_gt : conv
-topval reduce_int_ge : conv
+prim_rw reduce_token_eq_main :
+   token_eq{ token[str1:s]; token[str2:s] } <-->
+   meta_eq[str1:s, str2:s]{ "true"; "false" }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_token_eq =
+   reduce_token_eq_main thenC reduce_meta_eq_str
+
+let resource reduce += [
+   << token_eq{ token[str1:s]; token[str2:s] } >>,
+      reduce_token_eq
+]
+
+
+(**************************************************************************
+ * Display forms.
+ **************************************************************************)
+
+dform token_df : except_mode[src] ::
+   token[str:s] =
+   bf["str"] `"(" slot[str:s] `")"
+
+dform token_eq_df : except_mode[src] ::
+   token_eq{ 'tok1; 'tok2 } =
+   slot{'tok1} `"=" sub{it["tok"]} slot{'tok2}

@@ -31,7 +31,7 @@
  * @end[license]
  *)
 
-extends Mfir_int
+extends Base_theory
 
 
 (**************************************************************************
@@ -72,6 +72,12 @@ declare raw_data
 (*
  * Contexts.
  *)
+
+declare frame
+declare "fun"
+declare global
+declare "type"
+declare variable
 
 declare ty_def{ 'var; 'k; 'def }
 declare var_def{ 'var; 'ty; 'def }

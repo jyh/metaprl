@@ -50,6 +50,12 @@ I do claim that every bug or problem that I'm aware of is documented.
 
 -- Documentation needs to be checked and cleaned up.
 
+-- I need to identify places where orelseC is used to control the
+   order of rewrite application and remove those instances.
+
+-- In Mfir_sequent, need to say a bit more about the sequents,
+   store values, kinds, etc.
+
 
 Things that might look like bugs, but really aren't
 (see the README for further information):

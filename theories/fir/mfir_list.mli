@@ -1,5 +1,6 @@
 (*
- * The Mfir_list module implements lists for the FIR theory.
+ * The Mfir_list module defines lists and list operations.  Lists
+ * are used in FIR programs to represent entities whose arity may vary.
  *
  * ------------------------------------------------------------------------
  *

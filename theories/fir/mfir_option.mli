@@ -1,6 +1,6 @@
 (*
  * The Mfir_option module implements a representation of
- * the OCaml 'a option type.
+ * values of the OCaml 'a option type.
  *
  * ------------------------------------------------------------------------
  *

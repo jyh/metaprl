@@ -76,8 +76,7 @@ prim ty_store_tuple_raw 'H :
 prim ty_store_tuple_box 'H :
    sequent [fir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
    sequent [fir] { 'H >-
-      has_type["store"]{ cons{ 'elt; nil };
-                         tyTuple["box"]{ cons{ 't; nil } } } }
+      has_type["store"]{ ('elt :: nil); tyTuple["box"]{ ('t :: nil) } } }
    = it
 
 
@@ -99,7 +98,7 @@ prim ty_store_array2 'H :
    = it
 
 
-(*!
+(*!************************************
  * @begin[doc]
  * @modsubsection{Functions}
  *
@@ -111,21 +110,21 @@ prim ty_store_array2 'H :
 
 prim ty_store_lambda 'H 'a 'v :
    sequent [fir] { 'H >- type_eq{ 'u; 'u; large_type } } -->
-   sequent [fir] { 'H; a: var_def{ 'v; 'u; no_def } >-
+   sequent [fir] { 'H; v: variable; a: var_def{ 'v; 'u; no_def } >-
       has_type["exp"]{ 'f['v]; 't } } -->
    sequent [fir] { 'H >-
       has_type["exp"]{ lambda{ x. 'f['x] }; tyFun{ 'u; 't } } }
    = it
 
-prim ty_store_polyFun 'H 'a 'v :
-   sequent [fir] { 'H; a: ty_def{ 'v; small_type; no_def } >-
-      has_type["exp"]{ 'f['v]; 'ty['v] } } -->
+prim ty_store_polyFun 'H 'a 'tv :
+   sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
+      has_type["exp"]{ 'f['tv]; 'ty['tv] } } -->
    sequent [fir] { 'H >-
       has_type["exp"]{ polyFun{ x. 'f['x] }; tyAll{ t. 'ty['t] } } }
    = it
 
 
-(*!
+(*!************************************
  * @begin[doc]
  * @modsubsection{Union values}
  *
@@ -146,17 +145,16 @@ prim ty_store_union 'H 'J :
 
    (* check that the atoms have the right types. *)
    sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; 'J >-
-      has_type["union_atoms"]{'atoms;
-                              nth_elt{number[i:n];
-                                            apply_types{ 'tyd; 'tyl }}}} -->
+      has_type["union_atoms"]{
+         'atoms;
+          nth_elt{number[i:n]; apply_types{ 'tyd; 'tyl }}}} -->
 
    (* then the union value is well-typed. *)
    sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; 'J >-
-      has_type["store"]{ union_val[i:n]{ 'tv; 'atoms };
-                         tyUnion{ 'tv; 'tyl;
-                           intset[31, "signed"]{ cons{ interval{number[i:n];
-                                                                number[i:n]};
-                                                       nil } } } } }
+      has_type["store"]{
+         union_val[i:n]{ 'tv; 'atoms };
+         tyUnion{ 'tv; 'tyl; intset[31, "signed"]{
+            (interval{number[i:n]; number[i:n]} :: nil) } } } }
    = it
 
 
@@ -181,7 +179,7 @@ prim ty_store_union_atoms2 'H :
    = it
 
 
-(*!
+(*!************************************
  * @begin[doc]
  * @modsubsection{Raw data values}
  *

@@ -1,5 +1,6 @@
 (*
- * The Mfir_int module defines integers and operations on integers.
+ * The Mfir_token module defines tokens, a syntactic mechanism
+ * for representing strings and operations on strings.
  *
  * ------------------------------------------------------------------------
  *
@@ -40,50 +41,12 @@ open Tactic_type.Conversionals
  * Declarations.
  **************************************************************************)
 
-(*
- * Numbers.
- *)
-
-declare number[i:n]
-
-
-(*
- * Operations.
- *)
-
-declare add{ 'num1; 'num2 }
-declare sub{ 'num1; 'num2 }
-declare mul{ 'num1; 'num2 }
-declare div{ 'num1; 'num2 }
-declare rem{ 'num1; 'num2 }
-declare minus{ 'num }
-declare int_min{ 'num1; 'num2 }
-declare int_max{ 'num1; 'num2 }
-
-declare int_eq{ 'num1; 'num2 }
-declare int_neq{ 'num1; 'num2 }
-declare int_lt{ 'num1; 'num2 }
-declare int_le{ 'num1; 'num2 }
-declare int_gt{ 'num1; 'num2 }
-declare int_ge{ 'num1; 'num2 }
+declare token[str:s]
+declare token_eq{ 'tok1; 'tok2 }
 
 
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
 
-topval reduce_add : conv
-topval reduce_sub : conv
-topval reduce_mul : conv
-topval reduce_div : conv
-topval reduce_rem : conv
-topval reduce_minus : conv
-topval reduce_int_min : conv
-topval reduce_int_max : conv
-
-topval reduce_int_eq : conv
-topval reduce_int_neq : conv
-topval reduce_int_lt : conv
-topval reduce_int_le : conv
-topval reduce_int_gt : conv
-topval reduce_int_ge : conv
+topval reduce_token_eq : conv

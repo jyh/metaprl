@@ -109,8 +109,9 @@ prim wf_ty_list2 'H :
  * @begin[doc]
  * @modsubsection{Kind well-formedness}
  *
- * Kind well-formedness if straightforward for $<< small_type >>$
- * and $<< large_type >>$.
+ * The kind well-formedness rules specify how kinds may be used
+ * in classifying FIR types.  Specifically, some kinds $<< 'k >>$
+ * may only appear as $<< polyKind{ 'i; 'k } >>$.
  * @end[doc]
  *)
 
@@ -130,18 +131,6 @@ prim wf_dtuple_type 'H :
    sequent [fir] { 'H >- wf_kind{ dtuple_type } }
    = it
 
-
-(*!
- * @begin[doc]
- *
- * The rules for the kind describing parametrized types are somewhat
- * more involved.  In the case of $<< small_type >>$ and $<< large_type >>$,
- * we disallow the case of $i = 0$.  The kind for union definitions, on the
- * other hand, must reflect some parametrization, even if there are
- * no parameters.
- * @end[doc]
- *)
-
 prim wf_polyKind_small 'H :
    sequent [fir] { 'H >- int_lt{ 0; 'i } } -->
    sequent [fir] { 'H >- wf_kind{ polyKind{ 'i; small_type } } }
@@ -154,7 +143,7 @@ prim wf_polyKind_large 'H :
 
 prim wf_polyKind_union 'H :
    sequent [fir] { 'H >- "and"{ int_le{ 0; 'i };
-                                 int_le{ 0; number[j:n] } } } -->
+                                int_le{ 0; number[j:n] } } } -->
    sequent [fir] { 'H >- wf_kind{ polyKind{ 'i; union_type[j:n] } } }
    = it
 

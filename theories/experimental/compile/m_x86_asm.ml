@@ -279,13 +279,13 @@ dform cmp_df : Cmp[opcode:s]{'src1; 'src2; 'rest} =
    bf{slot[opcode:s]} `" " slot{'src1} bf[", "] slot{'src2} hspace slot{'rest}
 
 dform set_df : Set[opcode:s]{'cc; 'src; dst. 'rest} =
-   bf{slot[opcode:s]} 'cc `" " slot{'src} bf[", %"] slot{'dst} hspace slot{'rest}
+   bf{slot[opcode:s]} `"[" 'cc `"] " slot{'src} bf[", %"] slot{'dst} hspace slot{'rest}
 
 dform jmp_df : Jmp[opcode:s]{'src; 'args} =
    bf{slot[opcode:s]} `" " slot{'src} bf["("] slot{'args} bf[")"]
 
 dform jcc_df : Jcc[opcode:s]{'cc; 'rest1; 'rest2} =
-   szone pushm[0] pushm[3] bf{slot[opcode:s]} 'cc bf[" begin"] hspace slot{'rest1} popm hspace bf["end"] popm ezone
+   szone pushm[0] pushm[3] bf{slot[opcode:s]} `"[" 'cc `"]" bf[" begin"] hspace slot{'rest1} popm hspace bf["end"] popm ezone
    hspace slot{'rest2}
 
 dform asm_arg_cons_df1 : AsmArgCons{'a1; AsmArgCons{'a2; 'rest}} =

@@ -148,6 +148,8 @@ declare CloseRec{R1, frame1. 'fields['R1; 'frame1];
 declare CloseSubscript{'frame; 'index; v. 'e['v]}
 declare CloseFrame{frame. 'e['frame]}
 
+doc <:doc< @docoff >>
+
 dform close_var_df : parens :: "prec"[prec_let] :: CloseVar{v. 'e; 'a} =
    bf["close "] slot{'v} bf[" = "] slot{'a} bf[" in"] hspace slot["lt"]{'e}
 

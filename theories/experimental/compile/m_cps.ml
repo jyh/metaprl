@@ -151,6 +151,8 @@ declare CPS{'a}
 declare CPS{'cont; 'e}
 declare CPS{cont. 'fields['cont]}
 
+doc <:doc< @docoff >>
+
 dform cps_record_var_df : CPSRecordVar{'R} =
    bf["CPSRecordVar["] slot{'R} bf["]"]
 

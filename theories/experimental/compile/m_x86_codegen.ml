@@ -5,8 +5,8 @@ doc <:doc<
   
    @begin[doc]
    @module[M_x86_codegen]
-  
-   Compile @emph{M} programs to x86 assembly.
+   This module implements the translation of IR terms to
+   x86 assembly.
    @end[doc]
   
    ----------------------------------------------------------------
@@ -79,6 +79,8 @@ declare ASM{'a; v. 'e['v]}
 declare ASM{'args1; 'args2; v. 'e['v]}
 declare ASM{'R; 'e}
 
+doc <:doc< @docoff >>
+
 dform asm_df1 : ASM{'e} =
    szone pushm[0] pushm[3]
    bf["assemble"]
@@ -108,17 +110,11 @@ dform asm_df4 : ASM{'R; 'e} =
 
 doc <:doc<
    @begin[doc]
-   Helper term to store fields into a tuple.
+   Helper terms to store fields into a tuple.
    @end[doc]
 >>
 declare store_tuple{'v; 'tuple; 'rest}
 declare store_tuple{'v; 'off; 'tuple; 'rest}
-
-dform store_tuple_df1 : store_tuple{'v; 'tuple; 'rest} =
-   bf["store_tuple[ "] slot{'v} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
-
-dform store_tuple_df2 : store_tuple{'v; 'off; 'tuple; 'rest} =
-    bf["store_tuple[ "] slot{'v} `", " slot{'off} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
 
 prim_rw unfold_store_tuple :
    store_tuple{'v; 'tuple; 'rest}
@@ -140,6 +136,14 @@ prim_rw unfold_store_tuple_nil :
    <-->
    'rest
 
+doc <:doc< @docoff >>
+
+dform store_tuple_df1 : store_tuple{'v; 'tuple; 'rest} =
+   bf["store_tuple[ "] slot{'v} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
+
+dform store_tuple_df2 : store_tuple{'v; 'off; 'tuple; 'rest} =
+    bf["store_tuple[ "] slot{'v} `", " slot{'off} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
+
 doc <:doc<
    @begin[doc]
    Terms used to reverse the order of the atoms in tuples.
@@ -147,12 +151,6 @@ doc <:doc<
 >>
 declare reverse_tuple{'tuple}
 declare reverse_tuple{'dst; 'src}
-
-dform reverse_tuple_df1 : reverse_tuple{'tuple} =
-   bf["reverse_tuple[ "] slot{'tuple} bf[" ]"]
-
-dform reverse_tuple_df2 : reverse_tuple{'dst; 'src} =
-   bf["reverse_tuple[ src = "] slot{'src} bf[" dest = "] slot{'dst} bf[" ]"]
 
 prim_rw unfold_reverse_tuple :
    reverse_tuple{'tuple}
@@ -169,6 +167,14 @@ prim_rw reduce_reverse_tuple_nil :
    <-->
    'dst
 
+doc <:doc< @docoff >>
+
+dform reverse_tuple_df1 : reverse_tuple{'tuple} =
+   bf["reverse_tuple[ "] slot{'tuple} bf[" ]"]
+
+dform reverse_tuple_df2 : reverse_tuple{'dst; 'src} =
+   bf["reverse_tuple[ src = "] slot{'src} bf[" dst = "] slot{'dst} bf[" ]"]
+
 (************************************************************************
  * Arguments.
  *)
@@ -180,12 +186,6 @@ doc <:doc<
 >>
 declare reverse_args{'args}
 declare reverse_args{'args1; 'args2}
-
-dform reverse_args_df1 : reverse_args{'args} =
-   bf["reverse_args[ "] slot{'args} bf[" ]"]
-
-dform reverse_args_df2 : reverse_args{'dst; 'src} =
-   bf["reverse_args[ src = "] slot{'src} bf[" dst = "] slot{'dst} bf[" ]"]
 
 prim_rw unfold_reverse_args :
    reverse_args{'args}
@@ -202,6 +202,14 @@ prim_rw reduce_reverse_args_nil :
    <-->
    'args
 
+doc <:doc< @docoff >>
+
+dform reverse_args_df1 : reverse_args{'args} =
+   bf["reverse_args[ "] slot{'args} bf[" ]"]
+
+dform reverse_args_df2 : reverse_args{'dst; 'src} =
+   bf["reverse_args[ src = "] slot{'src} bf[" dst = "] slot{'dst} bf[" ]"]
+
 doc <:doc<
    @begin[doc]
    Copy the arguments into registers.
@@ -209,12 +217,6 @@ doc <:doc<
 >>
 declare copy_args{'args; v. 'e['v]}
 declare copy_args{'args1; 'args2; v. 'e['v]}
-
-dform copy_args_df1 : copy_args{'args; v. 'e} =
-   bf["let "] slot{'v} bf[" = copy_args[ "] slot{'args} bf[" ] in"] hspace slot{'e}
-
-dform copy_args_df2 : copy_args{'dst; 'src; v. 'e} =
-   bf["let "] slot{'v} bf[" = copy_args[ src = "] slot{'src} bf[" dest = "] slot{'dst} bf[" ] in"] hspace slot{'e}
 
 prim_rw unfold_copy_args :
    copy_args{'args; v. 'e['v]}
@@ -231,6 +233,14 @@ prim_rw reduce_copy_args_nil :
    copy_args{'dst; AsmArgNil; v. 'e['v]}
    <-->
    'e[reverse_args{'dst}]
+
+doc <:doc< @docoff >>
+
+dform copy_args_df1 : copy_args{'args; v. 'e} =
+   bf["let "] slot{'v} bf[" = copy_args[ "] slot{'args} bf[" ] in"] hspace slot{'e}
+
+dform copy_args_df2 : copy_args{'dst; 'src; v. 'e} =
+   bf["let "] slot{'v} bf[" = copy_args[ src = "] slot{'src} bf[" dst = "] slot{'dst} bf[" ] in"] hspace slot{'e}
 
 doc <:doc<
    @begin[doc]
@@ -258,17 +268,6 @@ doc <:doc<
    In our runtime, integers are shifted to the left and use the upper
    31 bits only. The least significant bit is set to 1, so that we can
    distinguish between integers and pointers.
-
-   Furthermore, we use a continuous heap and a copying garbage collector.
-   The representation of all memory blocks in the heap includes a
-   header word containing the number of bytes in the block (as a multiple
-   of the word size), followed by one word for each field. A pointer to
-   a block points to the first field of the block (the word after the
-   header). The heap area itself is continuous, delimited by the
-   @emph{base} and @emph{limit} pointers; the next allocation point is
-   the @emph{next} pointer. These pointers are accessed through the
-   @bf[context][name] pseudo-operand, which is later translated to an
-   absolute memory address.
 
    @modsubsection{Atoms}
    Booleans are translated to integers. We use the standard encodings,
@@ -318,7 +317,7 @@ prim_rw asm_atom_fun_var :
 
 doc <:doc< 
    @begin[doc]
-   ??
+   Functions are assembled.
    @end[doc]
 >>
 prim_rw asm_atom_fun :
@@ -391,7 +390,8 @@ prim_rw asm_atom_binop_div :
 
 doc <:doc< 
    @begin[doc]
-   COMMENT MISSING
+   Assembling IR relational operators is a mapping to the appropriate
+   condition codes. The operations themselves become assembly comparisions.
    @end[doc]
 >>
 prim_rw asm_eq  : ASM{EqOp}  <--> CC["z"]
@@ -417,7 +417,7 @@ prim_rw asm_atom_relop :
  *)
 doc <:doc<
    @begin[doc]
-   COMMENT MISSING
+   Reserve memory.
    @end[doc]
 >>
 prim_rw asm_reserve_1 :
@@ -483,6 +483,9 @@ prim_rw asm_if_2 :
 
 doc <:doc<
    @begin[doc]
+   Reading from the memory involves assembling the pointer to the
+   appropriate block and the index within that block. We then fetch
+   the value from the specified memory location and move it into v.
    @end[doc]
 >>
 prim_rw asm_let_subscript_1 :
@@ -508,9 +511,13 @@ prim_rw asm_let_subscript_2 :
 
 doc <:doc<
    @begin[doc]
-   COMMENT MISSING
+   Changing a memory location involves assembling the block pointer and
+   the index within the block. The value to be written is assembled and
+   moved into the specified memory location.
    @end[doc]
 >>
+(* granicz: we are not doing any bounds checking *)
+
 prim_rw asm_set_subscript_1 :
    ASM{SetSubscript{'a1; 'a2; 'a3; 'e}}
    <-->
@@ -536,7 +543,10 @@ prim_rw asm_set_subscript_2 :
 
 doc <:doc<
    @begin[doc]
-   COMMENT MISSING
+   Allocating a tuple involves obtaining a block from the store by 
+   advancing the @bf[next] pointer by the size of the tuple 
+   (plus its header), creating the header for the
+   new block, and storing the tuple elements in that block.
    @end[doc]
 >>
 prim_rw asm_alloc_tuple :
@@ -552,7 +562,7 @@ prim_rw asm_alloc_tuple :
 
 doc <:doc<
    @begin[doc]
-   COMMENT MISSING
+   Allocating a closure is similar to 2-tuple allocation.
    @end[doc]
 >>
 prim_rw asm_let_closure :
@@ -571,7 +581,9 @@ prim_rw asm_let_closure :
 
 doc <:doc<
    @begin[doc]
-   COMMENT MISSING
+   Assembling tailcalls to IR functions involve assembling
+   the function arguments and jumping to the appropriate
+   function label.
    @end[doc]
 >>
 prim_rw asm_tailcall_direct :
@@ -595,7 +607,8 @@ prim_rw asm_tailcall_indirect :
 
 doc <:doc<
    @begin[doc]
-   COMMENT MISSING
+   An IR program is a set of recursive functions. These are
+   assembled and identified by function labels.
    @end[doc]
 >>
 prim_rw asm_letrec :
@@ -627,11 +640,8 @@ prim_rw asm_initialize :
 (*
  * Cleanup.  It is debatiable whether we should have cleanup here...
  *)
-doc <:doc<
-   @begin[doc]
-   COMMENT MISSING
-   @end[doc]
->>
+doc <:doc< @docoff >>
+
 prim_rw mem_reg_reg_off_mul_cleanup_1 :
    MemRegRegOffMul[off:n, mul:n]{Register{'r1}; 'r2}
    <-->
@@ -656,9 +666,6 @@ prim_rw mem_reg_off_cleanup_1 :
  * Illegal operands.
  *)
 declare invert_cc{'cc}
-
-dform invert_cc_df : invert_cc{'cc} =
-   bf["invert "] slot{'cc}
 
 prim_rw invert_cc_z :
    invert_cc{CC["z"]}
@@ -694,6 +701,9 @@ prim_rw cmp_cleanup :
    Cmp[cmp_opcode:s]{'src1; ImmediateNumber[i:n]; Jcc[jcc_opcode:s]{'cc; 'rest1; 'rest2}}
    <-->
    Cmp[cmp_opcode:s]{ImmediateNumber[i:n]; 'src1; Jcc[jcc_opcode:s]{invert_cc{'cc}; 'rest1; 'rest2}}
+
+dform invert_cc_df : invert_cc{'cc} =
+   bf["invert "] slot{'cc}
 
 (*
  * Add all these rules to the CPS resource.
@@ -764,6 +774,8 @@ let resource reduce +=
  * Register type.
  *)
 declare register
+
+doc <:doc< @docoff >>
 
 dform register_df : register =
    bf["register"]

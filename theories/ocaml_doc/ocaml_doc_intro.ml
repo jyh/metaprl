@@ -197,7 +197,7 @@ available at @tt{http://www.cs.caltech.edu/courses/cs134/cs134b}.
 The OCaml reference manual @cite["leroy:ocaml"] is available on the
 OCaml home page @tt{http://www.ocaml.org/}.
 
-The author can be reached at @tt{jyh@cs.caltech.edu}.
+The author can be reached at @email{jyh@cs.caltech.edu}.
 
  * @end[doc]
  *)

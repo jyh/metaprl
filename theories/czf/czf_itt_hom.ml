@@ -74,7 +74,6 @@
 include Czf_itt_group
 include Czf_itt_subgroup
 include Czf_itt_abel_group
-include Czf_itt_set_bvd
 include Czf_itt_inv_image
 (*! @docoff *)
 
@@ -305,7 +304,7 @@ interactive hom_subg1 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
    sequent ['ext] { 'H >- subgroup{'h1; 'g1} } -->
    sequent ['ext] { 'H >- group{'h2} } -->
-   sequent ['ext] { 'H >- equal{car{'h2}; set_bvd{car{'h1}; x. 'f['x]}} } -->
+   sequent ['ext] { 'H >- equal{car{'h2}; sep{car{'g2}; x. "dexists"{car{'h1}; y. eq{'x; 'f['y]}}}} } -->
    sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h2}}; y: mem{'b; car{'h2}} >- eq{op{'h2; 'a; 'b}; op{'g2; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'h2; 'g2} }
 

@@ -6,10 +6,10 @@ open Basic_tactics
 so in rules w-s, ... we skip such things as "x not in H" *)
 
 (* Sequent judgments *)
-declare sequent [cic] { Term -> Term >- Term } : Term
+declare sequent [cic] { Term : Term >- Term } : Term
 
 (* Terms *)
-declare sequent [sequent_arg{'a}] { Term -> Term >- Term } : Term
+declare sequent [sequent_arg{'a}] { Term : Term >- Term } : Term
 
 declare le[i:l,j:l]  (* i is less or equal to j *)
 

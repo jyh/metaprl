@@ -43,10 +43,10 @@ declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                          free occurrences of a variable 'x in a term 'u *)
 
 (* Sequent judgments *)
-declare sequent [cic] { Term -> Term >- Term } : Term
+declare sequent [cic] { Term : Term >- Term } : Term
 
 (* Terms *)
-declare sequent [sequent_arg{'a}] { Term -> Term >- Term } : Term
+declare sequent [sequent_arg{'a}] { Term : Term >- Term } : Term
 
 let sequent_arg_opname = opname_of_term << sequent_arg{'a} >>
 let mk_sequent_arg_term = mk_dep0_term sequent_arg_opname

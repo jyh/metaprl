@@ -143,16 +143,12 @@ $$
 The final step of closure conversion is to propagate the subscript operations into the function bodies.
 
 $$
-@arraystretch{2}
 @begin[array,l]
-
 @line{@xrewrite2[arg]{@CloseFrame{@frame; @FunDef{l; @AtomFun{v; {e[@frame; v]}}; {d[@frame]}}};
    @FunDef{l; @AtomFun{@frame; @AtomFun{v; {e[@frame; v]}}}; @CloseFrame{@frame; {d[@frame]}}}}}
-
 @line{@xrewrite2[sub]{@CloseSubscript{a_1; a_2; v_1; @FunDef{l; @AtomFun{v_2; {e[v_1; v_2]}}; {d[v_1]}}};
    @FunDef{l; @AtomFun{v_2; @LetSubscript{a_1; a_2; v_1; {e[v_1; v_2]}}}; @CloseSubscript{a_1; a_2;
    v_1; {d[v_1]}}}}}
-
 @end[array]
 $$
 

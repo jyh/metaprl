@@ -255,6 +255,7 @@ ML-like language where all intermediate values apart from arithmetic
 expressions are explicitly named.
 
 @begin[figure,ir]
+@small{
 $$
 @begin[array,rcll]
 @line{@it{bop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{@it{Binary arithmetic}}}
@@ -286,7 +287,7 @@ $$
 @line{{d} {::=}   @FunDef{l; e_@lambda; d}                 @hbox{@it{Function definitions}}}
 @line{{}  {@pipe} @EndDef                                  {}}
 @end[array]
-$$
+$$}
 @caption{Intermediate Representation}
 @end[figure]
 

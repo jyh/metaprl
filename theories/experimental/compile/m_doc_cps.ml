@@ -120,7 +120,6 @@ occurrences of the record variable $R$ with the term $@CPSRecordVar{R}$, and the
 @misspelled{@em{letfun}} rule replaces each function variable $f$ with the term $@CPSFunVar{f}$.
 
 $$
-@arraystretch{2}
 @begin[array,l]
 @line{@xrewrite[letrec]{@CPS{@cont; @LetRec{R; d[R]; e[R]}};
       @LetRec{R; @CPS{@cont; d[@CPSRecordVar{R}]}; @CPS{@cont; e[@CPSRecordVar{R}]}}}}

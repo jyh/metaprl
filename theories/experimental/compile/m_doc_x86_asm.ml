@@ -345,6 +345,7 @@ For example, the instruction $@Inst2Mem[ADD]{v_1; @MemReg{v_2}; e}$ performs the
 @leftarrow @MemReg{v_2} + v_1$, where $@MemReg{v_2}$ means the value in memory at location $v_2$.
 
 @begin[figure,isa]
+@small{
 $$
 @begin[array,rcll]
 @line{l       {::=}   @it{string}                                                   @hbox{Function labels}}
@@ -359,6 +360,10 @@ $$
 @line{@it{o}  {::=}   {o_m @pipe o_r}                                               @hbox{General operands}}
 @line{{}      {@pipe} @ImmediateNumber{i}                                           @hbox{Constant number}}
 @line{{}      {@pipe} @ImmediateCLabel{v; l}                                        @hbox{Label}}
+@line{{} {} {} {}}
+@line{p       {@pipe} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
+@line{d       {@pipe} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
+@line{{e_@lambda} {::=} {@LabelFun{v; e_@lambda} @pipe e}                           @hbox{Functions}}
 @end[array]
 @begin[array,rcll]
 @line{@it{cc} {::=}   {= {@pipe} <> {@pipe} < {@pipe} > {@pipe} {@le} {@pipe} @ge}  @hbox{Condition codes}}
@@ -377,12 +382,8 @@ $$
 @line{{}      {@pipe} @Cmp[cmp]{o_1; o_2}                                           @hbox{Comparison}}
 @line{{}      {@pipe} @Jmp[jmp]{o; {o_r; @ldots; o_r}}                              @hbox{Unconditional branch}}
 @line{{}      {@pipe} @Jcc[j]{@it{cc}; e_1; e_2}                                    @hbox{Conditional branch}}
-@line{{} {} {} {}}
-@line{p       {@pipe} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
-@line{d       {@pipe} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
-@line{{e_@lambda} {::=} {@LabelFun{v; e_@lambda} @pipe e}                           @hbox{Functions}}
 @end[array]
-$$
+$$}
 @caption{Scoped Intel x86 instruction set}
 @end[figure]
 

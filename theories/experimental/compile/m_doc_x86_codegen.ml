@@ -105,6 +105,9 @@ $$
     @line{@Inst1Reg[DEC]{@Register{@it{tmp}}; @it{sum}}}
     @line{{e[@Register{@it{sum}}]}}
     @end[array]}}}
+@end[array]
+@tt["     "]
+@begin[array,l]
 @line{@xrewrite2[div]{@ASM{@AtomBinop{/; a_1; a_2}; v; e[v]};
    {@begin[array,t,l]
     @line{@ASM{a_1; v_1}}
@@ -155,6 +158,9 @@ $$
    @line{@Cmp[CMP]{v_1; v_2}}
    @line{@Jcc[J]{@ASM{@it{op}}; @ASM{e_1}; @ASM{e_2}}}
    @end[array]}}}
+@end[array]
+@tt["   "]
+@begin[array,l]
 @line{@xrewrite2[sub]{@ASM{@LetSubscript{a_1; a_2; v; e[v]}};
   {@begin[array,t,l]
    @line{@ASM{a_1; v_1}}
@@ -187,6 +193,16 @@ $$
    @line{@StoreTuple{p; 0; @it{tuple}}}
    @line{@ASM{e[v]}}
    @end[array]}}
+@line{@xrewrite2[call]{@ASM{@TailCall{'a; @it{args}}};
+   @begin[array,t,l]
+   @line{@ASM{a; @it{closure}}}
+   @line{@Mov{@MemRegOff{@it{closure}; 4}; @it{env}}}
+   @line{@CopyArgs{(); @it{args}; @it{vargs}}}
+   @line{@Jmp[JMP]{@MemReg{@it{closure}}; @it{vargs}}}
+   @end[array]}}
+@end[array]
+@tt["   "]
+@begin[array,l]
 @line{@xrewrite2[closure]{@ASM{@LetClosure{a_1; a_2; v; e[v]}};
    @begin[array,t,l]
    @line{@Reserve{@ImmediateNumber{3}}}
@@ -199,13 +215,6 @@ $$
    @line{@Inst2Mem[MOV]{v_2; @MemRegOff{v; 8}}}
    @line{@Inst2Reg[ADD]{@ImmediateNumber{4}; @Register{v}; p}}
    @line{@ASM{e[p]}}
-   @end[array]}}
-@line{@xrewrite2[call]{@ASM{@TailCall{'a; @it{args}}};
-   @begin[array,t,l]
-   @line{@ASM{a; @it{closure}}}
-   @line{@Mov{@MemRegOff{@it{closure}; 4}; @it{env}}}
-   @line{@CopyArgs{(); @it{args}; @it{vargs}}}
-   @line{@Jmp[JMP]{@MemReg{@it{closure}}; @it{vargs}}}
    @end[array]}}
 @end[array]
 $$
@@ -228,6 +237,9 @@ $$
    @line{@Inst2Mem[MOV]{v; @MemRegOff{p; i}}}
    @line{@StoreTuple{p; i+4; @it{args}; e}}
    @end[array]}}
+@end[array]
+@tt["   "]
+@begin[array,l]
 @line{@xrewrite[stuple2]{@StoreTuple{p; i; (); e}; e}}
 @line{@xrewrite2[copy1]{@CopyArgs{{(a :: @it{args})}; @it{vargs}; v; e[v]};
    @begin[array,t,l]
@@ -235,7 +247,7 @@ $$
    @line{@Mov{v'; v}}
    @line{@CopyArgs{@it{args}; {(@Register{v} :: @it{vargs})}; v; e[v]}}
    @end[array]}}
-@line{@xrewrite[copy2]{@CopyArgs{(); @it{vargs}; v; e[v]}; e[@ReverseArgs{@it{vargs}}]}}
+@line{@xrewrite2[copy2]{@CopyArgs{(); @it{vargs}; v; e[v]}; e[@ReverseArgs{@it{vargs}}]}}
 @end[array]
 $$
 @caption{Auxiliary terms for x86 code generation}

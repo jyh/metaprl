@@ -1886,7 +1886,7 @@ T	t687	o b682 b686
 B	b687	t687
 T	t688	o623 b668 b687
 B	b688	t688
-P	p688	String "rwh fold_type 0 thenT unsquashT << 'ext >> thenT trivialT"
+P	p688	String "rwh fold_type 0 thenT unsqsquashT << 'ext >> thenT trivialT"
 O	o688	ext_rule p688
 T	t689	o623 b682 b4
 B	b689	t689

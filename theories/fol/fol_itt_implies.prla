@@ -1787,13 +1787,13 @@ T	t647	o587 b628 b646
 B	b647	t647
 T	t648	o631 b635 b647
 B	b648	t648
-P	p648	String "rwh fold_type 0 thenT unsquashT << 'ext >> thenT trivialT"
+P	p648	String "rwh fold_type 0 thenT unsqsquashT << 'ext >> thenT trivialT"
 O	o648	ext_rule p648
 T	t649	o587 b641 b4
 B	b649	t649
 T	t650	o648 b586 b649 b4 b4
 B	b650	t650
-P	p650	String "thinT 2 thenT rwh fold_type 0 thenT unsquashT << 'ext >> thenT trivialT"
+P	p650	String "thinT 2 thenT rwh fold_type 0 thenT unsqsquashT << 'ext >> thenT trivialT"
 O	o650	ext_rule p650
 T	t651	o587 b644 b4
 B	b651	t651

@@ -2874,7 +2874,7 @@ T	t1492	o b1491 b4
 B	b1492	t1492
 T	t1493	o664 b1485 b1492
 B	b1493	t1493
-P	p1064	String "unhideT 3"
+P	p1064	String "unsquashT 3"
 O	o1064	ext_rule p1064
 H	h1066	v t1058
 S	s1066	t659 h h1025 h1066 h814

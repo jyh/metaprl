@@ -220,6 +220,12 @@ rewrite mul_add_Distrib2C :
    ('c in int) -->
    (('a *@ 'b) +@ ('a *@ 'c)) <--> ('a *@ ('b +@ 'c))
 
+rewrite mul_add_Distrib3C :
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   (('a +@ 'b) *@ 'c) <--> (('a *@ 'c) +@ ('b *@ 'c))
+
 rule mul_Id :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a }

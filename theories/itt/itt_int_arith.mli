@@ -38,6 +38,14 @@ extends Itt_int_ext
 
 open Tactic_type.Conversionals
 
+(* Parts of normalizeC, use for debugging
+topval sub_elimC : conv
+topval mul_normalizeC : conv
+topval add_normalizeC : conv
+topval injectCoefC : conv
+topval mul_BubbleSortC : conv
+topval mul_BubbleStep2C : conv
+*)
 topval normalizeC : conv
 
 topval arithT : tactic

@@ -407,7 +407,7 @@ interactive_rw mul_BubblePrimitive_rw :
 
 let mul_BubblePrimitiveC = mul_BubblePrimitive_rw
 
-(* One step of sorting of production of some terms with simultenious
+(* One step of sorting of production of some terms with simultaneous
    contraction of product of integers
  *)
 let mul_BubbleStepC tm =
@@ -415,14 +415,16 @@ let mul_BubbleStepC tm =
       let (a,s) = dest_mul tm in
          if is_mul_term s then
             let (b,c) = dest_mul s in
-	       if (is_number_term a) & (is_number_term b) then
-	          (mul_AssocC thenC (addrC [0] reduceC))
-	       else
-                  if (compare_terms b a)=Less or
-                   (is_number_term b) then
-                     mul_BubblePrimitiveC
-                  else
-                     failC
+				if is_number_term a then
+					if is_number_term b then
+						(mul_AssocC thenC (addrC [0] reduceC))
+					else
+						failC
+				else
+					if (compare_terms b a)=Less or (is_number_term b) then
+						mul_BubblePrimitiveC
+					else
+                  failC
          else
             if (is_number_term a) & (is_number_term s) then
 	       		reduceC
@@ -435,10 +437,12 @@ let mul_BubbleStepC tm =
    else
       failC
 
+let mul_BubbleStep2C = termC mul_BubbleStepC
+
 (* here we apply mul_BubbleStepC as many times as possible thus
    finally we have all mul subterms positioned in order
  *)
-let mul_BubbleSortC = repeatC (higherC (termC mul_BubbleStepC))
+let mul_BubbleSortC = repeatC (higherC (mul_BubbleStep2C))
 
 (*
 let inject_coefC t =
@@ -577,12 +581,15 @@ let add_BubbleStepC tm =
       let (a,s) = dest_add tm in
          if is_add_term s then
             let (b,c) = dest_add s in
-	       	if (is_number_term a) & (is_number_term b) then
-               begin
-               	if !debug_int_arith then
-							eprintf "add_BubbleStepC: adding numbers a b%t" eflush;
-	        			(add_AssocC thenC (addrC [0] reduceC)) thenC (tryC add_Id2C)
-               end
+	       	if is_number_term a then
+					if is_number_term b then
+						begin
+							if !debug_int_arith then
+								eprintf "add_BubbleStepC: adding numbers a b%t" eflush;
+							(add_AssocC thenC (addrC [0] reduceC)) thenC (tryC add_Id2C)
+						end
+					else
+						failC
 	       	else
                   let a'=stripCoef a in
                   let b'=stripCoef b in
@@ -668,6 +675,7 @@ doc <:doc<
 >>
 let normalizeC = sub_elimC thenC
 					  (repeatC (higherC mul_add_DistribC)) thenC
+					  (repeatC (higherC mul_add_Distrib3C)) thenC
                  reduceC thenC
                  mul_normalizeC thenC
                  add_normalizeC thenC

@@ -18,6 +18,8 @@ MPFILES :=\
 	m_prog\
 	m_dead\
 	m_inline\
+	x86_asm\
+	m_x86\
 	m_theory\
 	m_test
 

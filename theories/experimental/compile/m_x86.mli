@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Compile to x86 assembly.
  *
  * ----------------------------------------------------------------
  *
@@ -24,17 +24,35 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
+
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+extends M_ir
 extends X86_asm
-extends M_x86
+(*! @docoff *)
+
+open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
-topval compileT : tactic
+(*
+ * Dead resource
+ *)
+resource (term * conv, conv) assemble
+
+(*
+ * Debug functions.
+ *)
+topval assembleC : conv
+
+(*
+ * Dead-code elim.
+ *)
+topval assembleT : tactic
 
 (*!
  * @docoff

@@ -29,6 +29,8 @@ extends M_closure
 extends M_prog
 extends M_dead
 extends M_inline
+extends X86_asm
+extends M_x86
 
 open M_cps
 open M_closure

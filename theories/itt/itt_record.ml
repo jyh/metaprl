@@ -495,6 +495,13 @@ let recordOrtIntroIT =
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,wrap_intro recordOrtIntroIT)
 
+interactive recordOrtSetIntro {| intro [] |} :
+	[wf] sequent { <H> >- 'R Type } -->
+	[wf] sequent { <H>;  r: 'T >- 'P['r] Type } -->
+	[wf] sequent { <H> >- { r: 'T | 'P['r] } Type } -->
+	sequent { <H> >- record_ort[n:t]{ 'R; 'T} } -->
+	sequent { <H> >- record_ort[n:t]{ 'R; { r: 'T | 'P['r] } } }
+
 (******************)
 (*  Tactics       *)
 (******************)

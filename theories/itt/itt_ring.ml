@@ -79,13 +79,28 @@ prim additiveEqualityInGroup {| intro [] |} :
 interactive agroup_wf {| intro [] |} :
    sequent { <H> >- "type"{agroup[i:l]} }
 
-interactive agroupWeakElimination {| elim [] |} 'H lambda{x.'C['x]} :
-	sequent { <H>; g: group[i:l]; <J[rename_mul_add{'g}]> >- 'C['g] } -->
-	sequent { <H>; g: agroup[i:l]; <J['g]> >- 'C[as_additive{'g}] }
+interactive agroupWeakElimination 'H bind{x.'C['x]} :
+	sequent { <H>; <J>; g: group[i:l] >- 'C['g] } -->
+	sequent { <H>; g: agroup[i:l]; <J> >- 'C[as_additive{'g}] }
 
 interactive agroupElimination {| elim [] |} 'H :
-	sequent { <H>; g: group[i:l]; <J[rename_mul_add{'g}]> >- 'C[rename_mul_add{'g}] } -->
-	sequent { <H>; g: agroup[i:l]; <J['g]> >- 'C['g] }
+	sequent { <H>; <J>; g: group[i:l] >- 'C[rename_mul_add{'g}] } -->
+	sequent { <H>; g: agroup[i:l]; <J> >- 'C['g] }
+
+(*
+ * <J[as_additive{'g}]> is not supported because it has to be specified as a rule parameter
+ *
+ * interactive agroupFullWeakElimination {| elim [] |} sequent{<H>; g: agroup[i:l]; <J['g]> >- 'C['g] } :
+ *	sequent { <H>; g: group[i:l]; <J['g]> >- 'C['g] } -->
+ *	sequent { <H>; g: agroup[i:l]; <J[as_additive{'g}]> >- 'C[as_additive{'g}] }
+ *
+ *
+ * This version of elimination rule is probably stronger than introduction rules but we possibly don't need it
+ *
+ * prim agroupElimination {| elim [] |} 'H :
+ *	sequent { <H>; g: group[i:l]; <J[rename_mul_add{'g}]> >- 'C[rename_mul_add{'g}] } -->
+ *	sequent { <H>; g: agroup[i:l]; <J['g]> >- 'C['g] }
+ *)
 
 interactive agroup_add_wf {| intro [intro_typeinf <<'R>>] |} agroup[i:l] :
    sequent { <H> >- 'R in agroup[i:l] } -->
@@ -104,9 +119,13 @@ prim additiveEqualityInAbelG {| intro [] |} :
 interactive aabelg_wf {| intro [] |} :
    sequent { <H> >- "type"{aabelg[i:l]} }
 
+interactive aabelgWeakElimination 'H bind{x.'C['x]} :
+	sequent { <H>; <J>; g: abelg[i:l] >- 'C['g] } -->
+	sequent { <H>; g: aabelg[i:l]; <J> >- 'C[as_additive{'g}] }
+
 interactive aabelgElimination {| elim [] |} 'H :
-	sequent { <H>; g: abelg[i:l]; <J[rename_mul_add{'g}]> >- 'C[rename_mul_add{'g}] } -->
-	sequent { <H>; g: aabelg[i:l]; <J['g]> >- 'C['g] }
+	sequent { <H>; <J>; g: abelg[i:l] >- 'C[rename_mul_add{'g}] } -->
+	sequent { <H>; g: aabelg[i:l]; <J> >- 'C['g] }
 
 (************************************************************************
  * RING                                                                 *
@@ -154,6 +173,10 @@ doc <:doc<
 
 interactive prering_wf {| intro [] |} :
    sequent { <H> >- "type"{prering[i:l]} }
+
+interactive prering_car_wf {| intro [intro_typeinf <<'R>>] |} prering[i:l] :
+   sequent { <H> >- 'R in prering[i:l] } -->
+   sequent { <H> >- 'R^car Type }
 
 interactive prering_add_wf {| intro [intro_typeinf <<'R>>] |} prering[i:l] :
    sequent { <H> >- 'R in prering[i:l] } -->
@@ -211,9 +234,6 @@ interactive ring_subtype_monoid :
 
 interactive ring_subtype_aabelg :
    sequent { <H> >- ring[i:l] subtype aabelg[i:l] }
-
-interactive ring_as_additive_subtype_abelg :
-   sequent { <H> >- as_additive{ring[i:l]} subtype abelg[i:l] }
 doc docoff
 
 define unfoldZ : Z <-->

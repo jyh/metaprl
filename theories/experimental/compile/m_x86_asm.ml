@@ -294,8 +294,11 @@ dform asm_arg_cons_df1 : AsmArgCons{'a1; AsmArgCons{'a2; 'rest}} =
 dform asm_arg_cons_df2 : AsmArgCons{'a; AsmArgNil} =
    slot{'a}
 
+dform asm_arg_cons_df3 : AsmArgCons{'a1; 'a2} =
+   slot{'a1} `" :: " slot{'a2}
+
 dform asm_arg_nil_df : AsmArgNil =
-   `""
+   `"()"
 
 (*
  * Reserve.

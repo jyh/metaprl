@@ -302,6 +302,10 @@ dform atom_binop_eq_df : parens :: "prec"[prec_rel] :: AtomRelop{EqOp; 'e1; 'e2}
 dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomRelop{NeqOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " Nuprl_font!neq `" " slot["le"]{'e2}
 
+(* General relop *)
+dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomRelop{'op; 'e1; 'e2} =
+   slot["lt"]{'e1} `" " slot{'op} `" " slot["le"]{'e2}
+
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
    szone pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." hspace slot{'e} popm ezone
 
@@ -318,6 +322,9 @@ dform arg_cons_df1 : parens :: "prec"[prec_comma] :: ArgCons{'a1; ArgCons{'a2; '
 dform arg_cons_df2 : parens :: "prec"[prec_comma] :: ArgCons{'a; ArgNil} =
    slot{'a}
 
+dform arg_cons_df2 : parens :: "prec"[prec_comma] :: ArgCons{'a; 'b} =
+   slot{'a} `" :: " slot{'b}
+
 dform arg_nil_df : parens :: "prec"[prec_comma] :: ArgNil =
    `""
 
@@ -325,6 +332,10 @@ dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; '
    szone pushm[0] pushm[3] bf["if"] `" " slot{'a} `" " bf["then"] hspace
    slot{'e1} popm hspace
    pushm[3] bf["else"] hspace slot{'e2} popm popm ezone
+
+(* TEX if *)
+dform exp_if_df : parens :: "prec"[prec_if] :: mode[tex] :: If{'a; 'e1; 'e2} =
+   bf["if"] `" " slot{'a} `" " bf["then "] slot{'e1} `" " bf["else "] slot{'e2}
 
 (*
  * Reserve.

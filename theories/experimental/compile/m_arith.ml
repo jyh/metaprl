@@ -53,19 +53,19 @@ prec prec_mul
 
 prec prec_add < prec_mul
 
-dform df_number : number[i:n] =
+dform number_df : number[i:n] =
    slot[i:n]
 
-dform df_add : parens :: "prec"[prec_add] :: add{'e1; 'e2} =
+dform add_df : parens :: "prec"[prec_add] :: add{'e1; 'e2} =
    slot["lt"]{'e1} " " `"+ " slot["le"]{'e2}
 
-dform df_sub : parens :: "prec"[prec_add] :: sub{'e1; 'e2} =
+dform sub_df : parens :: "prec"[prec_add] :: sub{'e1; 'e2} =
    slot["lt"]{'e1} " " `"- " slot["le"]{'e2}
 
-dform df_mul : parens :: "prec"[prec_mul] :: mul{'e1; 'e2} =
+dform mul_df : parens :: "prec"[prec_mul] :: mul{'e1; 'e2} =
    slot["lt"]{'e1} " " `"* " slot["le"]{'e2}
 
-dform df_div : parens :: "prec"[prec_mul] :: div{'e1; 'e2} =
+dform div_df : parens :: "prec"[prec_mul] :: div{'e1; 'e2} =
    slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
 
 let resource reduce +=

@@ -39,8 +39,11 @@ declare ImmediateNumber{'i}
 declare MemRegOff{'r; 'off}
 declare MemRegRegOffMul{'r1; 'r2; 'off; 'mul}
 
+dform immediate_number_df : ImmediateNumber{number[i:n]} =
+   `"$" slot[i:n]
+
 dform immediate_number_df : ImmediateNumber{'i} =
-   `"<$" slot{'i} `">"
+   `"$( " slot{'i} `" )"
 
 dform mem_reg_off_df : MemRegOff{'r; 'off} =
    slot{'off} `"<" slot{'r} `">"

@@ -4,7 +4,7 @@ doc <:doc<
    @end[spelling]
   
    @begin[doc]
-   @module[M_x86]
+   @module[M_x86_codegen]
   
    Compile @emph{M} programs to x86 assembly.
    @end[doc]
@@ -57,7 +57,21 @@ open Top_conversionals
 
 doc <:doc< 
    @begin[doc]
-   @modsubsection{Terms}
+   @modsection{Terms}
+
+   We define several terms to represent the assembly translation. All these
+   terms are eliminated by the end of the translation process.
+
+   @begin[itemize]
+   @item{{ASM@{'e@} represents the translation of IR @emph{expressions} into sequences
+   of assembly instructions.}}
+   @item{{ASM@{'a; v. 'e['v]@} represents the translation of an IR @emph{atom} into
+   an assembly operand, which in turn is substituted for variable v in e[v].}}
+   @item{{ASM@{'args1; 'args2; v. 'e['v]@} represents the translation of IR function @emph{arguments} into
+   assembly operands}}
+   @item{{ASM@{'R; 'e@} represents the translation of the mutually recursive IR @emph{functions}
+   in record R and the rest of the program.}}
+   @end[itemize]
    @end[doc]
 >>
 declare ASM{'e}
@@ -78,8 +92,9 @@ dform asm_df2 : ASM{'a; v. 'e} =
 
 dform asm_df3 : ASM{'args1; 'args2; v. 'e} =
    szone pushm[0] pushm[3] bf["assemble args"]
-   hspace bf["dst = "] slot{'args1}
-   hspace bf["src = "] slot{'args2}
+   hspace bf["src = "] slot{'args1}
+   hspace bf["dst = "] slot{'args2}
+   hspace bf["as "] slot{'v}
    popm hspace bf["in"]
    popm ezone hspace slot{'e}
 
@@ -91,9 +106,11 @@ dform asm_df4 : ASM{'R; 'e} =
    popm hspace bf["end"]
    popm ezone
 
-(*
- * Helper term to store fields into a tuple.
- *)
+doc <:doc<
+   @begin[doc]
+   Helper term to store fields into a tuple.
+   @end[doc]
+>>
 declare store_tuple{'v; 'tuple; 'rest}
 declare store_tuple{'v; 'off; 'tuple; 'rest}
 
@@ -123,9 +140,11 @@ prim_rw unfold_store_tuple_nil :
    <-->
    'rest
 
-(*
- * We also need to reverse the order of the atoms in the tuple.
- *)
+doc <:doc<
+   @begin[doc]
+   Terms used to reverse the order of the atoms in tuples.
+   @end[doc]
+>>
 declare reverse_tuple{'tuple}
 declare reverse_tuple{'dst; 'src}
 
@@ -154,9 +173,11 @@ prim_rw reduce_reverse_tuple_nil :
  * Arguments.
  *)
 
-(*
- * Reverse the order of arguments.
- *)
+doc <:doc<
+   @begin[doc]
+   Reverse the order of arguments.
+   @end[doc]
+>>
 declare reverse_args{'args}
 declare reverse_args{'args1; 'args2}
 
@@ -181,9 +202,11 @@ prim_rw reduce_reverse_args_nil :
    <-->
    'args
 
-(*
- * Copy the arguments into registers.
- *)
+doc <:doc<
+   @begin[doc]
+   Copy the arguments into registers.
+   @end[doc]
+>>
 declare copy_args{'args; v. 'e['v]}
 declare copy_args{'args1; 'args2; v. 'e['v]}
 
@@ -209,9 +232,11 @@ prim_rw reduce_copy_args_nil :
    <-->
    'e[reverse_args{'dst}]
 
-(*
- * Assemble args.
- *)
+doc <:doc<
+   @begin[doc]
+   Assemble function arguments.
+   @end[doc]
+>>
 prim_rw asm_arg_cons :
    ASM{ArgCons{'a; 'rest}; 'args; v. 'e['v]}
    <-->
@@ -229,7 +254,26 @@ prim_rw asm_arg_nil :
 
 doc <:doc< 
    @begin[doc]
-   @modsubsection{Code generation}
+   @modsection{Code generation}
+   In our runtime, integers are shifted to the left and use the upper
+   31 bits only. The least significant bit is set to 1, so that we can
+   distinguish between integers and pointers.
+
+   Furthermore, we use a continuous heap and a copying garbage collector.
+   The representation of all memory blocks in the heap includes a
+   header word containing the number of bytes in the block (as a multiple
+   of the word size), followed by one word for each field. A pointer to
+   a block points to the first field of the block (the word after the
+   header). The heap area itself is continuous, delimited by the
+   @emph{base} and @emph{limit} pointers; the next allocation point is
+   the @emph{next} pointer. These pointers are accessed through the
+   @bf[context][name] pseudo-operand, which is later translated to an
+   absolute memory address.
+
+   @modsubsection{Atoms}
+   Booleans are translated to integers. We use the standard encodings,
+   0 for false and 1 for true, which in our integer representation
+   translate to 1 and 3, respectively.
    @end[doc]
 >>
 prim_rw asm_atom_false :
@@ -242,26 +286,55 @@ prim_rw asm_atom_true :
    <-->
   'e[ImmediateNumber[3:n]]
 
+doc <:doc< 
+   @begin[doc]
+   Integers are adjusted for our runtime representation.
+   @end[doc]
+>>
 prim_rw asm_atom_int :
    ASM{AtomInt[i:n]; v. 'e['v]}
    <-->
    'e[ImmediateNumber{add{mul{number[i:n]; number[2:n]}; number[1:n]}}]
 
+doc <:doc< 
+   @begin[doc]
+   Variables are translated to registers.
+   @end[doc]
+>>
 prim_rw asm_atom_var :
    ASM{AtomVar{'v1}; v2. 'e['v2]}
    <-->
    'e[Register{'v1}]
 
+doc <:doc< 
+   @begin[doc]
+   Function labels become labels.
+   @end[doc]
+>>
 prim_rw asm_atom_fun_var :
    ASM{AtomFunVar{'R; Label[label:t]}; v2. 'e['v2]}
    <-->
    'e[ImmediateCLabel[label:t]{'R}]
 
+doc <:doc< 
+   @begin[doc]
+   ??
+   @end[doc]
+>>
 prim_rw asm_atom_fun :
    ASM{AtomFun{v. 'e['v]}}
    <-->
    LabelFun{v. ASM{'e['v]}}
 
+doc <:doc< 
+   @begin[doc]
+   Binary operators are translated to a sequence of assembly
+   instructions that implement that operation.
+   Note that each operation is followed by adjusting
+   the result so that it conforms with our 31-bit
+   integer representation.
+   @end[doc]
+>>
 prim_rw asm_atom_binop_add :
    ASM{AtomBinop{AddOp; 'a1; 'a2}; v. 'e['v]}
    <-->
@@ -282,6 +355,13 @@ prim_rw asm_atom_binop_sub :
    Inst1["inc"]{Register{'diff_tmp}; diff.
    'e[Register{'diff}]}}}}}
 
+doc <:doc< 
+   @begin[doc]
+   In multiplication and division we first obtain the
+   standard integer representation, perform the appropriate
+   operation, and adjust the result.
+   @end[doc]
+>>
 prim_rw asm_atom_binop_mul :
    ASM{AtomBinop{MulOp; 'a1; 'a2}; v. 'e['v]}
    <-->
@@ -309,6 +389,11 @@ prim_rw asm_atom_binop_div :
    Inst2["or"]{ImmediateNumber[1:n]; Register{'quot_tmp2}; quot1.
    'e[Register{'quot1}]}}}}}}}}}
 
+doc <:doc< 
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw asm_eq  : ASM{EqOp}  <--> CC["z"]
 prim_rw asm_neq : ASM{NeqOp} <--> CC["nz"]
 prim_rw asm_lt  : ASM{LtOp}  <--> CC["l"]
@@ -330,6 +415,11 @@ prim_rw asm_atom_relop :
 (************************************************************************
  * Instructions.
  *)
+doc <:doc<
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw asm_reserve_1 :
    ASM{Reserve[reswords:n]{'params; 'e}}
    <-->
@@ -346,6 +436,13 @@ prim_rw asm_reserve_2 :
    <-->
    ASM{'e}
 
+doc <:doc<
+   @begin[doc]
+   The translation of LetAtom is straightforward: we
+   first translate the atom a into an operand v1, which is then moved
+   into v.
+   @end[doc]
+>>
 prim_rw asm_let_atom :
    ASM{LetAtom{'a; v. 'e['v]}}
    <-->
@@ -354,6 +451,13 @@ prim_rw asm_let_atom :
    Mov{'v1; v.
    ASM{'e['v]}}}}
 
+doc <:doc<
+   @begin[doc]
+   Conditionals are translated into a comparision followed by
+   a conditional branch.
+   @end[doc]
+>>
+(* granicz: Shouldn't we compare against 1? *)
 prim_rw asm_if_1 :
    ASM{If{'a; 'e1; 'e2}}
    <-->
@@ -362,6 +466,12 @@ prim_rw asm_if_1 :
    Cmp["cmp"]{ImmediateNumber[0:n]; 'test;
    Jcc["j"]{CC["z"]; ASM{'e2}; ASM{'e1}}}}}
 
+doc <:doc<
+   @begin[doc]
+   If the condition is a relational operation, we carry over
+   the relational operator to the conditional jump.
+   @end[doc]
+>>
 prim_rw asm_if_2 :
    ASM{If{AtomRelop{'op; 'a1; 'a2}; 'e1; 'e2}}
    <-->
@@ -371,6 +481,10 @@ prim_rw asm_if_2 :
    Cmp["cmp"]{'v2; 'v1;
    Jcc["j"]{ASM{'op}; ASM{'e1}; ASM{'e2}}}}}}
 
+doc <:doc<
+   @begin[doc]
+   @end[doc]
+>>
 prim_rw asm_let_subscript_1 :
    ASM{LetSubscript{'a1; 'a2; v. 'e['v]}}
    <-->
@@ -392,6 +506,11 @@ prim_rw asm_let_subscript_2 :
    Mov{MemRegOff{'tuple; mul{number[i:n]; word_size}}; v.
    ASM{'e['v]}}}}}
 
+doc <:doc<
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw asm_set_subscript_1 :
    ASM{SetSubscript{'a1; 'a2; 'a3; 'e}}
    <-->
@@ -415,6 +534,11 @@ prim_rw asm_set_subscript_2 :
    Inst2["mov"]{'v3; MemRegOff{'v1; mul{number[i:n]; word_size}};
    ASM{'e}}}}}}
 
+doc <:doc<
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw asm_alloc_tuple :
    ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}}
    <-->
@@ -426,6 +550,11 @@ prim_rw asm_alloc_tuple :
    store_tuple{'p; reverse_tuple{'tuple};
    ASM{'e['p]}}}}}}}
 
+doc <:doc<
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw asm_let_closure :
    ASM{LetClosure{'a1; 'a2; v. 'e['v]}}
    <-->
@@ -440,6 +569,11 @@ prim_rw asm_let_closure :
    Inst2["add"]{ImmediateNumber{word_size}; Register{'v}; p.
    ASM{'e['p]}}}}}}}}}}
 
+doc <:doc<
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw asm_tailcall_direct :
    ASM{TailCall{AtomFunVar{'R; Label[label:t]}; 'args}}
    <-->
@@ -459,6 +593,11 @@ prim_rw asm_tailcall_indirect :
    copy_args{'args1; args2.
    Jmp["jmp"]{MemReg{'closure}; AsmArgCons{Register{'env}; 'args2}}}}}}}}
 
+doc <:doc<
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw asm_letrec :
    ASM{LetRec{R1. 'fields['R1]; R2. 'e['R2]}}
    <-->
@@ -488,6 +627,11 @@ prim_rw asm_initialize :
 (*
  * Cleanup.  It is debatiable whether we should have cleanup here...
  *)
+doc <:doc<
+   @begin[doc]
+   COMMENT MISSING
+   @end[doc]
+>>
 prim_rw mem_reg_reg_off_mul_cleanup_1 :
    MemRegRegOffMul[off:n, mul:n]{Register{'r1}; 'r2}
    <-->
@@ -512,6 +656,9 @@ prim_rw mem_reg_off_cleanup_1 :
  * Illegal operands.
  *)
 declare invert_cc{'cc}
+
+dform df_invert_cc : invert_cc{'cc} =
+   bf["invert "] slot{'cc}
 
 prim_rw invert_cc_z :
    invert_cc{CC["z"]}

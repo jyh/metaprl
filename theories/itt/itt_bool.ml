@@ -224,7 +224,7 @@ interactive ifthenelse_equality {| intro_resource []; eqcd_resource |} 'H 'w :
    [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
    sequent ['ext] { 'H >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2} in 'T }
 
-interactive ifthenelse_member {| intro_resource [] |} 'H 'w :
+interactive ifthenelse_member1 {| intro_resource [] |} 'H 'w :
    [wf] sequent [squash] { 'H >- member{."bool"; 'e1} } -->
    [wf] sequent [squash] { 'H; w: 'e1 = btrue in bool >- member{'T; 'x1} } -->
    [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- member{'T; 'y1} } -->
@@ -268,7 +268,7 @@ interactive bfalse_member {| intro_resource [] |} 'H :
 interactive btrue_member {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- member{bool; btrue} }
 
-interactive ifthenelse_member {| intro_resource [] |} 'H 'x :
+interactive ifthenelse_member2 {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- member{bool; 'e1} } -->
    [wf] sequent [squash] { 'H; x: 'e1 = btrue in bool >- member{'T; 'e2} } -->
    [wf] sequent [squash] { 'H; x: 'e1 = bfalse in bool >- member{'T; 'e3} } -->

@@ -130,7 +130,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentProductElimination {| elim [ThinOption thinT] |} 'H :
-   ('t['u; 'v] : sequent { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] }) -->
+   sequent { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
    sequent { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
 
 doc <:doc< 

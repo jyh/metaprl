@@ -56,9 +56,9 @@ prim implies_intro {| intro [] |} :
    sequent { <H> >- 'A => 'B } = lambda{x. 'b['x]}
 
 prim implies_elim {| elim [] |} 'H :
-   [assertion] ('a : sequent { <H>; f: 'A => 'B; <J['f]> >- 'A }) -->
+   [assertion] ('a['f] : sequent { <H>; f: 'A => 'B; <J['f]> >- 'A }) -->
    [main] ('t['f; 'b] : sequent { <H>; f: 'A => 'B; <J['f]>; b: 'B >- 'C['f] }) -->
-   sequent { <H>; f: 'A => 'B; <J['f]> >- 'C['f] } = 't['f; 'f 'a]
+   sequent { <H>; f: 'A => 'B; <J['f]> >- 'C['f] } = 't['f; 'f 'a['f]]
 
 (*
  * -*-

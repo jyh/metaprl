@@ -352,9 +352,9 @@ doc <:doc<
    @end[doc]
 >>
 prim productElimination {| elim [ThinOption thinT] |} 'H :
-   [wf] ('t['u; 'v] : sequent { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] }) -->
+   [wf] ('t['z; 'u; 'v] : sequent { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] }) -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
-   spread{'z; u, v. 't['u; 'v]}
+   spread{'z; u, v. 't['z; 'u; 'v]}
 
 doc <:doc< 
    @docoff

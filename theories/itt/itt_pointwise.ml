@@ -47,14 +47,14 @@ doc <:doc<
 
 prim hypSubstPointwise 'H 'J_1 't1  bind{y. 'A['y]} :
    [equality] sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t]; <J_2['x;'t]> >- 't = 't1 in 'T } -->
-   [main] ('c : sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t1]; <J_2['x;'t]> >- 'C['x;'t] }) -->
+   [main] ('c['t;'x] : sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t1]; <J_2['x;'t]> >- 'C['x;'t] }) -->
    sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t]; <J_2['x;'t]> >- 'C['x;'t] } =
-   'c
+   'c['t;'x]
 
 prim contextSubstPointwise 'H 'J_1 'J 't1  :
    [equality] sequent { <H>; t:'T; <J_1['t]>;  <J['t]>; <J_2['t]> >- 't = 't1 in 'T } -->
-   [main] ('c : sequent { <H>; t:'T; <J_1['t]>;  <J['t1]>; <J_2['t]> >- 'C['t] }) -->
+   [main] ('c['t] : sequent { <H>; t:'T; <J_1['t]>;  <J['t1]>; <J_2['t]> >- 'C['t] }) -->
    sequent { <H>; t:'T; <J_1['t]>;  <J['t]>; <J_2['t]> >- 'C['t] } =
-   'c
+   'c['t]
 
 doc <:doc< @docoff >>

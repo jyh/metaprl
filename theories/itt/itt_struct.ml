@@ -221,17 +221,17 @@ doc <:doc<
    @end[doc]
 >>
 prim hypReplacement 'H 'B univ[i:l] :
-   [main] ('t : sequent { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
+   [main] ('t['x] : sequent { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
    [equality] sequent { <H>; x: 'A; <J['x]> >- 'A = 'B in univ[i:l] } -->
    sequent { <H>; x: 'A; <J['x]> >- 'T['x] } =
-   't
+   't['x]
 
 prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
    [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T2 } -->
-   [main] ('t : sequent { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] }) -->
+   [main] ('t['x] : sequent { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] }) -->
    [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T2 >- "type"{'A['z]} } -->
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] } =
-   't
+   't['x]
 
 doc <:doc< ************************************************************************
    @begin[doc]

@@ -188,9 +188,9 @@ prim unsquashEqualWeak 'H :
    it
 
 prim squashElim 'H :
-   ('t : sequent { <H>; squash{'P}; <J[it]> >- 'C[it] }) -->
+   ('t['u] : sequent { <H>; u: squash{'P}; <J[it]> >- 'C[it] }) -->
    sequent { <H>; u: squash{'P}; <J['u]> >- 'C['u] } =
-   't
+   't[it]
 
 doc docoff
 

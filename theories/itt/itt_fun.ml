@@ -193,8 +193,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentFunctionElimination 'H :
-   [assertion] ('a : sequent { <H>; f: 'A -> 'B; <J['f]> >- 'A }) -->
-   [main] ('t['f; 'y] : sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B >- 'T['f] }) -->
+   [assertion] sequent { <H>; f: 'A -> 'B; <J['f]> >- 'A } -->
+   [main] sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B >- 'T['f] } -->
    sequent { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
 
 (*
@@ -202,7 +202,7 @@ interactive independentFunctionElimination 'H :
  *)
 interactive independentFunctionElimination2 'H 'a :
    [wf] sequent { <H>; f: 'A -> 'B; <J['f]> >- 'a in 'A } -->
-   [main] ('t['y; 'z] : sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
+   [main] sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
    sequent { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
 
 doc <:doc< 

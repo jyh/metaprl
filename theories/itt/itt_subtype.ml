@@ -196,9 +196,9 @@ doc <:doc<
    @end[doc]
 >>
 prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
-   ('t : sequent { <H>; 'A subtype 'B; <J[it]> >- 'C[it] }) -->
+   ('t['x] : sequent { <H>; x: 'A subtype 'B; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
-   't
+   't[it]
 
 prim subtypeElimination2 'H 'a 'b :
    [wf] sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->

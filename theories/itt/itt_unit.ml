@@ -150,9 +150,9 @@ doc <:doc<
    @end[doc]
 >>
 prim unitElimination {| elim [ThinOption thinT] |} 'H :
-   ('t : sequent{ <H>; unit; <J[it]> >- 'C[it] }) -->
+   ('t['x] : sequent{ <H>; x: unit; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: unit; <J['x]> >- 'C['x] } =
-   't
+   't[it]
 
 doc <:doc< 
    @begin[doc]

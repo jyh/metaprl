@@ -433,10 +433,11 @@ let splitT t i p =
 (*
  * Add set assumptions to trivial tactic.
  *)
-let resource trivial += {
+let resource auto += {
    auto_name = "setAssumT";
    auto_prec = trivial_prec;
-   auto_tac = onSomeHypT setAssumT
+   auto_tac = onSomeHypT setAssumT;
+   auto_type = AutoTrivial;
 }
 
 (*

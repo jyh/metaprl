@@ -252,7 +252,7 @@ interactive recordEqualI {| intro[] |}  'H:
    [main] sequent[squash]{'H >- 'r = 's in 'R } -->
    sequent['ext]  {'H >- 'r = 's in record[n:t]{'A;'R} }
 
-interactive recordMemberOrt (* {| intro[SelectOption 0] |} *) 'H 'u:
+interactive recordMemberOrt (* {| intro[AutoMustComplete] |} *) 'H 'u:
    [main] sequent[squash]{'H >- 'r IN 'R } -->
    [ort] sequent[squash]{'H; u:'R >- record_ort[n:t]{'a;'R} } -->
    sequent['ext]  {'H >- rcrd[n:t]{'a;'r} IN 'R }

@@ -6521,7 +6521,7 @@ T	t1599	o b1595 b1599
 B	b1600	t1599
 T	t1600	o1306 b1591 b1600
 B	b1601	t1600
-P	p1601	String "selT 0 (dT 0) thenT trivialT"
+P	p1601	String "autoT"
 O	o1601	ext_rule p1601
 T	t1601	o1306 b1595 b23
 B	b1602	t1601

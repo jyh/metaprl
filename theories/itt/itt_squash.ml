@@ -190,11 +190,11 @@ prim squashType {| intro [] |} 'H :
  * @thysubsection{Introduction}
  *
  * A squashed type $<<squash{'A}>>$ is true if $A$ is true.
- * This rule is irreversible, so we use @tt{SelectOption 0} to prevent @tt{autoT}
+ * This rule is irreversible, so we use @tt{AutoMustComplete} to prevent @tt{autoT}
  * from using it.
  * @end[doc]
  *)
-prim squashMemberFormation {| intro [SelectOption 0] |} 'H :
+prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- 'A } -->
    sequent ['ext]   { 'H >- squash{'A} } =
    it
@@ -579,7 +579,7 @@ let unsquashAllT p =
 let sqsquashT p =
    if is_squash_goal p then
       raise (RefineError("sqsquashT", StringError("goal sequent already squashed")))
-    else
+   else
       let h = hyp_count_addr p in
       (squashT thenT squashMemberFormation h) p
 
@@ -603,31 +603,20 @@ let nthAssumT i p =
    let assum = Sequent.nth_assum p i in
       (thinMatchT assum thenT nthAssumArg assum thenT nthAssumT i) p
 
-let resource trivial += {
-   auto_name = "Itt_squash.nthAssumT";
-   auto_prec = create_auto_prec [trivial_prec] [];
-   auto_tac = onSomeAssumT nthAssumT;
-}
-
-let trysquashT p =
-   ( if is_squash_term (concl p) then
-      selT 0 (dT 0) thenT completeT autoT
-     else idT
-   ) p
-
 let allSquashT =
-   progressT (unsquashAllT thenT tryT sqsquashT thenT tryT trysquashT)
+   unsquashAllT thenT tryT sqsquashT
 
-let auto_none p = []
-
-let allSquashT_auto p =
-   [allSquashT, AutoTac auto_none]
-
-let resource auto += {
+let resource auto += [{
+   auto_name = "Itt_squash.nthAssumT";
+   auto_prec = d_prec;
+   auto_tac = onSomeAssumT nthAssumT;
+   auto_type = AutoTrivial;
+}; {
    auto_name = "Itt_squash.allSquashT";
    auto_prec = trivial_prec;
-   auto_tac = AutoTac allSquashT_auto
-}
+   auto_tac = allSquashT;
+   auto_type = AutoNormal;
+}]
 
 (*
  * -*-

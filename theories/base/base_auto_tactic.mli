@@ -34,8 +34,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
 include Mptop
@@ -60,27 +60,24 @@ open Tactic_type.Sequent
  * so we have the tactic produce a tactic
  * and a continuation.
  *)
-type auto_tac =
-   AutoTac of (tactic_arg -> (tactic * auto_tac) list)
-
 type auto_prec
 
-type 'a auto_info =
-   { auto_name : string;
-     auto_prec : auto_prec;
-     auto_tac : 'a
-   }
+type auto_info = {
+   auto_name : string;
+   auto_prec : auto_prec;
+   auto_tac : tactic;
+   auto_type : auto_type;
+}
+
+and auto_type =
+   AutoTrivial
+ | AutoNormal
+ | AutoComplete
 
 (*
  * The string is for debugging.
  *)
-resource (tactic auto_info, tactic) trivial
-resource (auto_tac auto_info, tactic) auto
-
-val process_trivial_resource_annotation :
-   (Tactic.pre_tactic * auto_prec, tactic auto_info) annotation_processor
-val process_auto_resource_annotation :
-   (Tactic.pre_tactic * auto_prec, auto_tac auto_info) annotation_processor
+resource (auto_info, tactic * tactic) auto
 
 (*
  * Operations on precedences.
@@ -108,22 +105,6 @@ topval autoT : tactic
  * Short for tryT (completeT autoT)
  *)
 topval tryAutoT : tactic -> tactic
-
-(*
- * Most times, a normal tactic is passed as auto_tac.
- * This wrapper converts it.
- *)
-val auto_wrap : tactic -> auto_tac
-
-(*
- * At other times, the search algorithm may want to
- * make sure the same configuration does not occur.
- * This wrapper will keep track of the sequents
- * seen, and fail if a sequent has been seen before.
- *)
-val auto_progress : tactic -> auto_tac
-val auto_hyp_progress : (int -> tactic_arg -> bool) -> (int -> tactic) -> auto_tac
-val auto_assum_progress : (int -> tactic_arg -> bool) -> (int -> tactic) -> auto_tac
 
 topval byDefT: conv -> tactic
 

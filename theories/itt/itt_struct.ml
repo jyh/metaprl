@@ -486,10 +486,11 @@ let replaceHypT t i p =
  * @docoff
  * @end[doc]
  *)
-let resource trivial += {
+let resource auto += {
    auto_name = "nthHypT";
    auto_prec = trivial_prec;
-   auto_tac = onSomeHypT nthHypT
+   auto_tac = onSomeHypT nthHypT;
+   auto_type = AutoTrivial;
 }
 
 (*

@@ -26,8 +26,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
 include Base_auto_tactic
@@ -42,15 +42,9 @@ open Mp_resource
 open Base_auto_tactic
 
 type intro_option =
-   (* Select among multiple introduction rules *)
    SelectOption of int
-
-   (*
-    * Function to supply the term arguments of the rule.
-    * If the second argument is Some t, then the subterm described by t
-    * is passed as the argument to the argument producer.
-    *)
  | IntroArgsOption of (tactic_arg -> term -> term list) * term option
+ | AutoMustComplete
 
 type elim_option =
    ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)

@@ -1753,7 +1753,7 @@ G	s810	t810
 B	b811	s810
 P	p818	String "dT 10 thenT rw reduceC 0 thenT autoT"
 O	o818	ext_rule p818
-P	p830	String autoT
+P	p830	String logicAutoT
 O	o830	ext_rule p830
 P	p831	String wf
 O	o831	tactic_arg p831
@@ -6002,7 +6002,7 @@ T	t3380	o b3380 b4
 B	b3381	t3380
 T	t3381	o740 b594 b3341 b3381 b4
 B	b3382	t3381
-P	p3382	String "autoT thenT rwh fold_isset 0 thenT autoT"
+P	p3382	String "logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o3382	ext_rule p3382
 T	t3382	o595 b3333 b4
 B	b3383	t3382
@@ -11731,7 +11731,7 @@ T	t5850	o b5850 b4
 B	b5851	t5850
 T	t5851	o595 b5784 b5851
 B	b5852	t5851
-P	p5852	String autoT;
+P	p5852	String autoT
 O	o5852	ext_rule p5852
 T	t5852	o4071 b5732 b5794
 S	s5852	t599 h h5725 h740 h900 h5568 h5609 h5781 h5096 h5846 h5788

@@ -7003,7 +7003,7 @@ G	s3876	t3876
 B	b3876	s3876
 T	t3877	o644 b3876
 B	b3877	t3877
-P	p3877	String "rwaAll [integers; unfold_semigroup] thenT selT 0 autoT thenT rwh reduceC 0"
+P	p3877	String "rwaAll [integers; unfold_semigroup] thenT autoT thenT rwh reduceC 0"
 O	o3877	ext_rule p3877
 T	t3878	o653 b3876 b4
 B	b3878	t3878

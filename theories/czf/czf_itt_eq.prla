@@ -1839,7 +1839,7 @@ T	t1238	o1235 b1237
 B	b1238	t1238
 T	t1239	o b1238 b4
 B	b1239	t1239
-P	p1277	String autoT
+P	p1277	String logicAutoT
 O	o1277	ext_rule p1277
 T	t1277	o1114 b1000 b575 b575
 S	s1277	t1111 h h1129
@@ -2931,7 +2931,7 @@ T	t3636	o b3636 b4
 B	b3637	t3636
 T	t3637	o938 b3626 b3637
 B	b3638	t3637
-P	p3638	String "instHypT [<< 's1 >>; << 's2 >>] 4 thenT autoT"
+P	p3638	String "instHypT [<< 's1 >>; << 's2 >>] 4 thenT logicAutoT"
 O	o3638	ext_rule p3638
 S	s3638	t1111 h h3596 h3597 h3632 h2671
 G	s3638	t1277
@@ -9536,7 +9536,7 @@ T	t8473	o1108 b1114 b8473
 B	b8474	t8473
 T	t8474	o1108 b1112 b8474
 B	b8475	t8474
-P	p8475	String "rwh unfold_equal 0 thenT autoT thenT rwh fold_isset 0 thenT autoT"
+P	p8475	String "rwh unfold_equal 0 thenT logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o8475	ext_rule p8475
 T	t8475	o940 b8472 b1121
 B	b8476	t8475
@@ -10446,7 +10446,7 @@ T	t8865	o b8865 b4
 B	b8866	t8865
 T	t8866	o1135 b937 b8665 b8866 b4
 B	b8867	t8866
-P	p8867	String "autoT thenT rwh fold_isset 0 thenT autoT"
+P	p8867	String "logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o8867	ext_rule p8867
 T	t8867	o938 b8654 b4
 B	b8868	t8867
@@ -11325,7 +11325,7 @@ T	t9241	o b9241 b4
 B	b9242	t9241
 T	t9242	o1135 b937 b8919 b9242 b4
 B	b9243	t9242
-P	p9243	String "instHypT [<< 's1 >>; << 's2 >>; << 's3 >>] 2 thenT autoT thenT rwh fold_isset 0 thenT autoT"
+P	p9243	String "instHypT [<< 's1 >>; << 's2 >>; << 's3 >>] 2 thenT logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o9243	ext_rule p9243
 T	t9243	o938 b8906 b4
 B	b9244	t9243
@@ -13440,7 +13440,7 @@ T	t10183	o10183 b937 b3750 b4 b4
 B	b10183	t10183
 T	t10184	o10183 b937 b3752 b4 b4
 B	b10184	t10184
-P	p10184	String "rwh unfold_equal 2 thenT autoT"
+P	p10184	String "rwh unfold_equal 2 thenT logicAutoT"
 O	o10184	ext_rule p10184
 H	h10184	y_1 t924
 H	h10185	z_1 t925

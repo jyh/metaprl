@@ -50,10 +50,11 @@ let assertT t p =
 (*
  * Add to trivialT tactic.
  *)
-let resource trivial += {
-   auto_name = "nthHypT";
+let resource auto += {
+   auto_name = "Fol_struct.nthHypT";
    auto_prec = trivial_prec;
-   auto_tac = onSomeHypT nthHypT
+   auto_tac = onSomeHypT nthHypT;
+   auto_type = AutoTrivial;
 }
 
 (*

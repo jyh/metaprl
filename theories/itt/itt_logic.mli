@@ -148,8 +148,6 @@ topval genUnivCDT : tactic
 topval instHypT : term list -> int -> tactic
 
 val logic_prec : auto_prec
-val back_hyp_prec : auto_prec
-val back_assum_prec : auto_prec
 
 topval backThruHypT : int -> tactic
 topval assumT : int -> tactic
@@ -160,8 +158,14 @@ topval moveToConclVarsT : string list -> tactic
 
 topval genAssumT : int list -> tactic
 
-(* jprover for itt_logic *)
+(* JProver for itt_logic *)
 topval jproverT : tactic
+
+(* specifies maximal multiplicity for JProver *)
+topval jAutoT : int -> tactic
+
+(* Tries various backThruHyp and backThruAssum *)
+topval logicAutoT : tactic
 
 (*
  * -*-

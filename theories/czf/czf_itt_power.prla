@@ -4298,7 +4298,7 @@ T	t1693	o b1693 b8
 B	b1694	t1693
 T	t1694	o1627 b1440 b1635 b1694 b8
 B	b1695	t1694
-P	p1695	String "autoT thenT rwh fold_isset 0 thenT autoT"
+P	p1695	String "logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o1695	ext_rule p1695
 T	t1695	o1441 b1624 b8
 B	b1696	t1695
@@ -5148,7 +5148,7 @@ T	t2052	o b2022 b2051
 B	b2052	t2052
 T	t2053	o1441 b2003 b2052
 B	b2053	t2053
-P	p2053	String autoT
+P	p2053	String logicAutoT
 O	o2053	ext_rule p2053
 H	h2053	x_1 t1637
 T	t2054	o1413 b1415 b1874

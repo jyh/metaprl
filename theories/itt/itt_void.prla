@@ -3650,7 +3650,7 @@ O	o938	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
 P	p68	String "useWitnessT <<void>> thenT autoT"
 O	o68	ext_rule p68
-P	p938	String "dT 0 thenT autoT"
+P	p938	String "autoT"
 O	o939	ext_rule p938
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o940	status_incomplete

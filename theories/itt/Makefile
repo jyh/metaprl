@@ -70,11 +70,11 @@ MPFILES :=\
 	itt_record0\
 	itt_record\
 	itt_record_exm\
-	itt_bugs\
 	itt_sort
 
 ifeq ($(TESTS),YES)
 	MPFILES:= $(MPFILES)\
+	itt_bugs\
 	jprover_tests\
 	itt_test\
 

@@ -2041,7 +2041,7 @@ T	t868	o655 b850 b4
 B	b869	t868
 T	t869	o756 b654 b869 b4 b4
 B	b870	t869
-P	p870	String "selT 0 autoT thenT (dT 2) thenT autoT"
+P	p870	String "autoT thenT (dT 2) thenT autoT"
 O	o870	ext_rule p870
 T	t870	o655 b865 b4
 B	b871	t870
@@ -2119,7 +2119,7 @@ T	t901	o b901 b4
 B	b902	t901
 T	t902	o655 b889 b902
 B	b903	t902
-P	p903	String "dT 2 thenT selT 0 autoT thenT jproverT thenT autoT"
+P	p903	String "dT 2 thenT jAutoT 2"
 O	o903	ext_rule p903
 T	t903	o655 b901 b4
 B	b904	t903
@@ -2544,7 +2544,7 @@ T	t1065	o655 b1057 b4
 B	b1065	t1065
 T	t1066	o698 b654 b1065 b4 b4
 B	b1066	t1066
-P	p1066	String "jproverT thenT autoT"
+P	p1066	String "jAutoT 2"
 O	o1066	ext_rule p1066
 T	t1067	o655 b1061 b4
 B	b1067	t1067
@@ -3444,7 +3444,7 @@ T	t1435	o655 b1429 b4
 B	b1436	t1435
 T	t1436	o1307 b654 b1436 b4 b4
 B	b1437	t1436
-P	p1437	String "dT 3 thenT dT 0 thenWT autoT thenT dT 4"
+P	p1437	String "autoT"
 O	o1437	ext_rule p1437
 S	s1437	t644 h h1271 h1417 h1429 h823
 G	s1437	t1259
@@ -4275,7 +4275,7 @@ T	t1865	o655 b1859 b4
 B	b1866	t1865
 T	t1866	o1029 b654 b1866 b4 b4
 B	b1867	t1866
-P	p1867	String "selT 0 autoT thenT dT 3 thenT autoT"
+P	p1867	String "autoT thenT dT 3 thenT autoT"
 O	o1867	ext_rule p1867
 T	t1867	o655 b1862 b4
 B	b1868	t1867

@@ -1101,7 +1101,7 @@ P	p900	String reduce_bnot_true
 O	o900	rewrite p900
 T	t900	o544 b516
 B	b900	t900
-P	p901	String "rwh unfold_bnot 0 thenT rw reduceC 0 thenT autoT"
+P	p901	String "rwh unfold_bnot 0 thenT rw reduceC 0 thenT logicAutoT"
 O	o901	ext_rule p901
 T	t901	o809 b900 b521
 P	p910	String reduce_bnot_false
@@ -1113,7 +1113,7 @@ P	p920	String reduce_bor_true
 O	o920	rewrite p920
 T	t920	o526 b516 b557
 B	b920	t920
-P	p921	String "rwh unfold_bor 0 thenT rw reduceC 0 thenT autoT"
+P	p921	String "rwh unfold_bor 0 thenT rw reduceC 0 thenT logicAutoT"
 O	o921	ext_rule p921
 T	t921	o809 b920 b516
 P	p930	String reduce_bor_false
@@ -1125,7 +1125,7 @@ P	p940	String reduce_band_true
 O	o940	rewrite p940
 T	t940	o534 b516 b557
 B	b940	t940
-P	p941	String "rwh unfold_band 0 thenT rw reduceC 0 thenT autoT"
+P	p941	String "rwh unfold_band 0 thenT rw reduceC 0 thenT logicAutoT"
 O	o941	ext_rule p941
 T	t941	o809 b940 b557
 P	p950	String reduce_band_false
@@ -1137,7 +1137,7 @@ P	p960	String reduce_bimplies_true
 O	o960	rewrite p960
 T	t960	o539 b516 b557
 B	b960	t960
-P	p961	String "rwh unfold_bimplies 0 thenT rw reduceC 0 thenT autoT"
+P	p961	String "rwh unfold_bimplies 0 thenT rw reduceC 0 thenT logicAutoT"
 O	o961	ext_rule p961
 T	t961	o809 b960 b557
 P	p970	String reduce_bimplies_false
@@ -1502,7 +1502,7 @@ P	p1312	MLevel 0 i 0
 O	o1313	univ p1312
 T	t1313	o1313
 B	b1313	t1313
-P	p1315	String "rwh unfold_bool 0 thenT autoT"
+P	p1315	String "rwh unfold_bool 0 thenT logicAutoT"
 O	o1315	ext_rule p1315
 T	t1325	o609 b1313 b511 b511
 S	s1325	t809 h
@@ -1548,7 +1548,7 @@ G	s1364	t1364
 B	b1364	s1364
 T	t1365	o1312 b1364
 B	b1365	t1365
-P	p1346	String "rwh unfold_btrue 0 thenT rwh unfold_bool 0 thenT autoT"
+P	p1346	String "rwh unfold_btrue 0 thenT rwh unfold_bool 0 thenT logicAutoT"
 O	o1346	ext_rule p1346
 T	t1366	o807 b1364 b4
 B	b1366	t1366
@@ -1568,7 +1568,7 @@ G	s1374	t1374
 B	b1374	s1374
 T	t1375	o1312 b1374
 B	b1375	t1375
-P	p1355	String "rwh unfold_bfalse 0 thenT rwh unfold_bool 0 thenT autoT"
+P	p1355	String "rwh unfold_bfalse 0 thenT rwh unfold_bool 0 thenT logicAutoT"
 O	o1355	ext_rule p1355
 T	t1376	o807 b1374 b4
 B	b1376	t1376
@@ -1849,7 +1849,7 @@ T	t1512	o b1508 b1512
 B	b1513	t1512
 T	t1513	o805 b1504 b1513
 B	b1514	t1513
-P	p1515	String "univCDT thenT autoT"
+P	p1515	String "univCDT thenT logicAutoT"
 O	o1515	ext_rule p1515
 T	t1515	o609 b511 b1397 b1468
 H	h1515	x_1 t1515
@@ -1914,7 +1914,7 @@ T	t1565	o807 b1565 b1502
 B	b1566	t1565
 P	p1571	String "equalSymT thenT trivialT"
 O	o1571	ext_rule p1571
-P	p1573	String "autoT"
+P	p1573	String "logicAutoT"
 O	o1573	ext_rule p1573
 P	p1578	String "assertT << 'e = bfalse in bool >> thenAT (equalSymT thenT trivialT)"
 O	o1578	ext_rule p1578
@@ -1924,7 +1924,7 @@ G	s1578	t1479
 B	b1579	s1578
 T	t1579	o807 b1579 b1502
 B	b1580	t1579
-P	p1603	String autoT
+P	p1603	String logicAutoT
 O	o1326	ext_rule p1603
 O	o1593	tactic_arg p1465
 NSummary!arg_named	arg_named	arg_named Summary
@@ -2088,7 +2088,7 @@ T	t1735	o b1731 b1735
 B	b1736	t1735
 T	t1736	o805 b1727 b1736
 B	b1737	t1736
-P	p1738	String "rwh reduce_ifthenelse_false 0 thenT autoT"
+P	p1738	String "rwh reduce_ifthenelse_false 0 thenT logicAutoT"
 O	o1738	ext_rule p1738
 T	t1742	o556 b516 b1663 b566
 H	h1742	v t1742
@@ -2105,7 +2105,7 @@ G	s1747	t1747
 B	b1748	s1747
 T	t1748	o807 b1748 b4
 B	b1749	t1748
-P	p1754	String "rwh reduce_ifthenelse_true 4 thenT autoT"
+P	p1754	String "rwh reduce_ifthenelse_true 4 thenT logicAutoT"
 O	o1754	ext_rule p1754
 P	p1772	String ifthenelse_equality
 O	o1772	rule p1772
@@ -2256,7 +2256,7 @@ B	b1852	s1851
 T	t1852	o807 b1852 b1814
 B	b1853	t1852
 H	h1860	x_3 t1833
-P	p1868	String "equalRefT << 'e2 >> thenT autoT"
+P	p1868	String "equalRefT << 'e2 >> thenT logicAutoT"
 O	o1868	ext_rule p1868
 P	p1870	String "equalRefT << 'x >> thenT trivialT"
 O	o1870	ext_rule p1870
@@ -2279,13 +2279,13 @@ B	b1895	t1895
 T	t1896	o609 b1780 b1895 b1882
 T	t1903	o609 b1780 b1895 b1891
 B	b1927	t1661
-P	p1942	String "revHypSubstT 2 0 thenT autoT"
+P	p1942	String "revHypSubstT 2 0 thenT logicAutoT"
 O	o1942	ext_rule p1942
-P	p1945	String "dT 4 thenT autoT"
+P	p1945	String "dT 4 thenT logicAutoT"
 O	o1945	ext_rule p1945
-P	p1966	String "revHypSubstT 3 0 thenT autoT"
+P	p1966	String "revHypSubstT 3 0 thenT logicAutoT"
 O	o1966	ext_rule p1966
-P	p1976	String "thinT 3 thenT rwh reduceC 0 thenT autoT"
+P	p1976	String "thinT 3 thenT rwh reduceC 0 thenT logicAutoT"
 O	o1976	ext_rule p1976
 P	p2031	String "withT << 'e1 >> (dT 2)"
 O	o2031	ext_rule p2031
@@ -2355,7 +2355,7 @@ G	s2138	t2000
 B	b2139	s2138
 T	t2139	o807 b2139 b1814
 B	b2140	t2139
-P	p2145	String "equalRefT << 'e2 >> thenT autoT"
+P	p2145	String "equalRefT << 'e2 >> thenT logicAutoT"
 O	o2145	ext_rule p2145
 P	p2292	String trivialT
 O	o2292	ext_rule p2292
@@ -2446,7 +2446,7 @@ G	s2386	t2386
 B	b2387	s2386
 T	t2387	o807 b2387 b2362
 B	b2388	t2387
-P	p2397	String "dT 2 thenT dT 2 thenT autoT thenT dT 2"
+P	p2397	String "dT 2 thenT dT 2 thenT logicAutoT thenT dT 2"
 O	o2397	ext_rule p2397
 T	t2397	o609 b511 b1435 b1874
 H	h2397	v2 t2397
@@ -2596,11 +2596,11 @@ NItt_logic!or	or	or Itt_logic
 O	o2830	or
 T	t2851	o609 b511 b1833 b521
 B	b2852	t2851
-P	p2878	String "selT 1 (dT 0) thenT autoT"
+P	p2878	String "selT 1 (dT 0) thenT logicAutoT"
 O	o2878	ext_rule p2878
 P	p2879	String sel
 O	o2879	arg_named p2879
-P	p2889	String "selT 2 (dT 0) thenT autoT"
+P	p2889	String "selT 2 (dT 0) thenT logicAutoT"
 O	o2889	ext_rule p2889
 T	t2890	o2879 b1685
 B	b2890	t2890
@@ -2617,7 +2617,7 @@ G	s3229	t1313
 B	b3229	s3229
 T	t3229	o1312 b3229
 B	b3230	t3229
-P	p3230	String "useWitnessT << bool >> thenT autoT"
+P	p3230	String "useWitnessT << bool >> thenT logicAutoT"
 O	o3230	ext_rule p3230
 T	t3230	o807 b3229 b4
 B	b3231	t3230
@@ -2638,7 +2638,7 @@ G	s3239	t511
 B	b3239	s3239
 T	t3239	o1312 b3239
 B	b3240	t3239
-P	p3240	String "useWitnessT << btrue >> thenT autoT"
+P	p3240	String "useWitnessT << btrue >> thenT logicAutoT"
 O	o3240	ext_rule p3240
 T	t3240	o807 b3239 b4
 B	b3241	t3240
@@ -2654,7 +2654,7 @@ T	t3245	o3239 b1312 b3240 b3245 b4
 B	b3246	t3245
 P	p3249	String bool_falseFormation
 O	o3249	rule p3249
-P	p3250	String "useWitnessT << bfalse >> thenT autoT"
+P	p3250	String "useWitnessT << bfalse >> thenT logicAutoT"
 O	o3250	ext_rule p3250
 T	t3250	o3250 b804 b3243 b4 b4
 B	b3250	t3250
@@ -2700,7 +2700,7 @@ T	t3295	o1389 b3291 b3294
 B	b3295	t3295
 T	t3296	o1389 b3287 b3295
 B	b3296	t3296
-P	p3296	String "rwh unfold_bor 0 thenT autoT"
+P	p3296	String "rwh unfold_bor 0 thenT logicAutoT"
 O	o3296	ext_rule p3296
 T	t3297	o b3289 b4
 B	b3297	t3297
@@ -2730,7 +2730,7 @@ T	t3310	o1389 b3291 b3309
 B	b3310	t3310
 T	t3311	o1389 b3287 b3310
 B	b3311	t3311
-P	p3311	String "rwh unfold_band 0 thenT autoT"
+P	p3311	String "rwh unfold_band 0 thenT logicAutoT"
 O	o3311	ext_rule p3311
 T	t3312	o807 b3308 b3298
 B	b3312	t3312
@@ -2756,7 +2756,7 @@ T	t3323	o1389 b3291 b3322
 B	b3323	t3323
 T	t3324	o1389 b3287 b3323
 B	b3324	t3324
-P	p3324	String "rwh unfold_bimplies 0 thenT autoT"
+P	p3324	String "rwh unfold_bimplies 0 thenT logicAutoT"
 O	o3324	ext_rule p3324
 T	t3325	o807 b3321 b3298
 B	b3325	t3325
@@ -2786,7 +2786,7 @@ T	t3337	o1312 b3336
 B	b3337	t3337
 T	t3338	o1389 b3335 b3337
 B	b3338	t3338
-P	p3338	String "rwh unfold_bnot 0 thenT autoT"
+P	p3338	String "rwh unfold_bnot 0 thenT logicAutoT"
 O	o3338	ext_rule p3338
 T	t3339	o b3333 b4
 B	b3339	t3339
@@ -2818,7 +2818,7 @@ T	t3352	o1312 b3351
 B	b3352	t3352
 T	t3353	o1389 b3350 b3352
 B	b3353	t3353
-P	p3353	String "rwh unfold_assert 0 thenT autoT"
+P	p3353	String "rwh unfold_assert 0 thenT logicAutoT"
 O	o3353	ext_rule p3353
 T	t3354	o b3348 b4
 B	b3354	t3354
@@ -2970,7 +2970,7 @@ T	t3431	o b3427 b3431
 B	b3432	t3431
 T	t3432	o805 b3423 b3432
 B	b3433	t3432
-P	p3434	String "dT 0 thenWT autoT"
+P	p3434	String "dT 0 thenWT logicAutoT"
 O	o3434	ext_rule p3434
 B	b3435	t1398
 T	t3435	o1492 b1519 b3435
@@ -2987,7 +2987,7 @@ T	t3439	o b3439 b4
 B	b3440	t3439
 T	t3440	o805 b3427 b3440
 B	b3441	t3440
-P	p3441	String "dT 2 thenT autoT"
+P	p3441	String "dT 2 thenT logicAutoT"
 O	o3441	ext_rule p3441
 H	h3441	x t1528
 S	s3441	t809 h h3441
@@ -3164,7 +3164,7 @@ T	t3581	o2830 b3580 b3581
 B	b3586	t3379
 B	b3587	t3491
 T	t3587	o2830 b3586 b3587
-P	p3604	String "rwh unfold_bnot 0 thenT rwh reduce_ifthenelse_false 0 thenT autoT"
+P	p3604	String "rwh unfold_bnot 0 thenT rwh reduce_ifthenelse_false 0 thenT logicAutoT"
 O	o3604	ext_rule p3604
 H	h3614	v t3560
 H	h3627	w t3559
@@ -3362,7 +3362,7 @@ G	s4102	t1477
 B	b4103	s4102
 T	t4103	o807 b4103 b3973
 B	b4104	t4103
-P	p4109	String "assertT << all e: bool. (\"assert\"{bnot{'e}} => ('e = bfalse in bool)) >> thenMT autoT"
+P	p4109	String "assertT << all e: bool. (\"assert\"{bnot{'e}} => ('e = bfalse in bool)) >> thenMT logicAutoT"
 O	o4109	ext_rule p4109
 T	t4109	o1492 b3467 b3773
 B	b4110	t4109 e
@@ -3378,7 +3378,7 @@ G	s4116	t4116
 B	b4117	s4116
 T	t4117	o807 b4117 b3973
 B	b4118	t4117
-P	p4122	String "dT (-1) thenT autoT"
+P	p4122	String "dT (-1) thenT logicAutoT"
 O	o4122	ext_rule p4122
 H	h4122	x_1 t3580
 S	s4122	t1467 h h3953 h1397 h3403 h4122
@@ -3524,7 +3524,7 @@ T	t4461	o2 b4461
 B	b4462	t4461
 T	t4462	o806 b4450 b4 b4462
 B	b4463	t4462
-P	p4465	String "dT 2 thenT dT 2 thenT autoT"
+P	p4465	String "dT 2 thenT dT 2 thenT logicAutoT"
 O	o4465	ext_rule p4465
 T	t4465	o4423 b3580 b3586
 H	h4465	x_3 t4465
@@ -3543,7 +3543,7 @@ H	h4485	z t4485
 H	h4486	y_2 t3379
 T	t4487	o1492 b3580 b3586
 H	h4487	y_1 t4487
-P	p4504	String "dT 2 thenT dT 3 thenT autoT"
+P	p4504	String "dT 2 thenT dT 3 thenT logicAutoT"
 O	o4504	ext_rule p4504
 H	h4504	y_1 t4485
 H	h4506	z t4487
@@ -3789,7 +3789,7 @@ T	t4781	o b4781 b4
 B	b4782	t4781
 T	t4782	o805 b4769 b4782
 B	b4783	t4782
-P	p4783	String "dT (-1) thenT rw reduceC 0 thenT autoT"
+P	p4783	String "dT (-1) thenT rw reduceC 0 thenT logicAutoT"
 O	o4783	ext_rule p4783
 H	h4783	x_1 t3369
 H	h4784	x_2 t3379
@@ -4003,7 +4003,7 @@ G	s4929	t551
 B	b4930	s4929
 T	t4930	o807 b4930 b4763
 B	b4931	t4930
-P	p4947	String "dT 4 thenT autoT"
+P	p4947	String "dT 4 thenT logicAutoT"
 O	o4947	ext_rule p4947
 T	t5002	o1492 b3576 b4756
 B	b5003	t5002
@@ -4097,7 +4097,7 @@ T	t5207	o2 b5207
 B	b5208	t5207
 T	t5208	o806 b5203 b4 b5208
 B	b5209	t5208
-P	p5211	String "rw reduceC (-1) thenT dT (-1) thenT autoT"
+P	p5211	String "rw reduceC (-1) thenT dT (-1) thenT logicAutoT"
 O	o5211	ext_rule p5211
 P	p5255	String "withT << 't >> (dT 2)"
 O	o5255	ext_rule p5255
@@ -4157,7 +4157,7 @@ T	t5387	o1389 b5381 b5387
 B	b5388	t5387
 T	t5388	o1389 b5378 b5388
 B	b5389	t5388
-P	p5389	String "splitBoolT << 't1 >> 2 thenT autoT"
+P	p5389	String "splitBoolT << 't1 >> 2 thenT logicAutoT"
 O	o5389	ext_rule p5389
 T	t5389	o b5382 b4
 B	b5390	t5389
@@ -4261,7 +4261,7 @@ T	t5428	o b5428 b4
 B	b5429	t5428
 T	t5429	o805 b5422 b5429
 B	b5430	t5429
-P	p5430	String "autoT"
+P	p5430	String "logicAutoT"
 O	o5430	ext_rule p5430
 T	t5430	o805 b5428 b4
 B	b5431	t5430
@@ -4290,7 +4290,7 @@ T	t5440	o b5440 b4
 B	b5441	t5440
 T	t5441	o805 b5403 b5441
 B	b5442	t5441
-P	p5442	String "byDefT unfold_assert thenT dT 2 thenT autoT"
+P	p5442	String "byDefT unfold_assert thenT dT 2 thenT logicAutoT"
 O	o5442	ext_rule p5442
 T	t5442	o805 b5440 b4
 B	b5443	t5442
@@ -4835,7 +4835,7 @@ G	s5935	t4681
 B	b5936	s5935
 T	t5936	o807 b5936 b5914
 B	b5937	t5936
-P	p5950	String "rwh unfold_bor 0 thenT rwh reduce_ifthenelse_true 0 thenT autoT"
+P	p5950	String "rwh unfold_bor 0 thenT rwh reduce_ifthenelse_true 0 thenT logicAutoT"
 O	o5950	ext_rule p5950
 P	p5953	String "dT 2 thenT trivialT"
 O	o5953	ext_rule p5953
@@ -4852,7 +4852,7 @@ T	t5990	o1389 b5990 b5906
 B	b5991	t5990
 T	t5991	o1389 b3287 b5991
 B	b5992	t5991
-P	p5992	String "splitBoolT << 't1 >> 0 thenT autoT"
+P	p5992	String "splitBoolT << 't1 >> 0 thenT logicAutoT"
 O	o5992	ext_rule p5992
 T	t5992	o b5988 b4
 B	b5993	t5992
@@ -4925,7 +4925,7 @@ T	t6074	o807 b5934 b6056
 B	b6075	t6074
 T	t6075	o807 b5936 b6056
 B	b6076	t6075
-P	p6084	String "equalRefT << btrue >> thenT autoT"
+P	p6084	String "equalRefT << btrue >> thenT logicAutoT"
 O	o6084	ext_rule p6084
 P	p6089	String "rwh unfold_band 0 thenT rwh reduce_ifthenelse_true 0"
 O	o6089	ext_rule p6089
@@ -12899,7 +12899,7 @@ T	t2791	o805 b2774 b4
 B	b2792	t2791
 T	t2792	o2145 b804 b2792 b4 b4
 B	b2793	t2792
-P	p2793	String "autoT"
+P	p2793	String "logicAutoT"
 O	o2793	ext_rule p2793
 T	t2793	o805 b2787 b4
 B	b2794	t2793
@@ -15131,7 +15131,7 @@ T	t6594	o805 b6575 b4
 B	b6595	t6594
 T	t6595	o6594 b804 b6595 b4 b4
 B	b6596	t6595
-P	p6596	String "rwh unfold_bimplies 0 thenT rwh reduce_ifthenelse_false 0 thenT autoT"
+P	p6596	String "rwh unfold_bimplies 0 thenT rwh reduce_ifthenelse_false 0 thenT logicAutoT"
 O	o6596	ext_rule p6596
 T	t6596	o805 b6590 b4
 B	b6597	t6596

@@ -505,17 +505,17 @@ let eqSetRightT t p =
 (*
  * Always reasonable to try reflexivity.
  *)
-let resource auto += {
+let resource auto += [{
    auto_name = "eqSetRefT";
    auto_prec = trivial_prec;
-   auto_tac = auto_wrap eqSetRefT
-}
-
-let resource auto += {
+   auto_tac = eqSetRefT;
+   auto_type = AutoNormal;
+}; {
    auto_name = "funSetRefT";
    auto_prec = trivial_prec;
-   auto_tac = auto_wrap funSetRefT
-}
+   auto_tac = funSetRefT;
+   auto_type = AutoNormal;
+}]
 
 (*
  * -*-

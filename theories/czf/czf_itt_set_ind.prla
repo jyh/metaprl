@@ -1856,7 +1856,7 @@ T	t674	o b674 b4
 B	b675	t674
 T	t675	o645 b625 b652 b675 b4
 B	b676	t675
-P	p676	String autoT
+P	p676	String logicAutoT
 O	o676	ext_rule p676
 P	p677	String wf
 O	o677	tactic_arg p677
@@ -3234,7 +3234,7 @@ T	t3033	o b3032 b4
 B	b3033	t3033
 T	t3053	o626 b2964 b3033
 B	b3053	t3053
-P	p3060	String "setSubstT << equal{.'f_1 'z_2; .'f 'y} >> 0 thenT autoT"
+P	p3060	String "setSubstT << equal{.'f_1 'z_2; .'f 'y} >> 0 thenT logicAutoT"
 O	o3060	ext_rule p3060
 P	p3064	String eq
 O	o3064	tactic_arg p3064

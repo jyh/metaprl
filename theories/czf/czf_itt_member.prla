@@ -1257,7 +1257,7 @@ B	b739	t736
 P	p753	String "rwh fold_isset 0 thenT autoT"
 O	o753	ext_rule p753
 T	t771	o688 b719 b675 b675
-P	p805	String autoT
+P	p805	String logicAutoT
 O	o805	ext_rule p805
 H	h813	T t736
 NItt_rfun!fun	fun	fun Itt_rfun
@@ -6461,7 +6461,7 @@ T	t5198	o b5198 b4
 B	b5199	t5198
 T	t5199	o1001 b574 b5066 b5199 b4
 B	b5200	t5199
-P	p5200	String "instHypT [<< 's1 >>; << 's2 >>] 2 thenT autoT thenT rwh fold_isset 0 thenT autoT"
+P	p5200	String "instHypT [<< 's1 >>; << 's2 >>] 2 thenT logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o5200	ext_rule p5200
 T	t5200	o575 b5054 b4
 B	b5201	t5200
@@ -8158,7 +8158,7 @@ T	t5951	o b5951 b4
 B	b5952	t5951
 T	t5952	o1001 b574 b5706 b5952 b4
 B	b5953	t5952
-P	p5953	String "autoT thenT rwh fold_isset 0 thenT autoT"
+P	p5953	String "logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o5953	ext_rule p5953
 T	t5953	o575 b5689 b4
 B	b5954	t5953

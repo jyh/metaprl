@@ -497,9 +497,10 @@ let auto_tac =
            onSomeHypT typeT]
 
 let resource auto += {
-   auto_name = "tptp_autoT";
+   auto_name = "Tptp.autoT";
    auto_prec = logic_prec;
-   auto_tac = auto_wrap auto_tac
+   auto_tac = auto_tac;
+   auto_type = AutoNormal;
 }
 
 (*

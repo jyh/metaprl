@@ -1846,7 +1846,7 @@ T	t742	o b742 b4
 B	b743	t742
 T	t743	o733 b592 b740 b743 b4
 B	b744	t743
-P	p744	String autoT
+P	p744	String logicAutoT
 O	o744	ext_rule p744
 O	o745	tactic_arg p702
 NItt_equal!equal	equal	equal Itt_equal
@@ -5369,7 +5369,7 @@ T	t2521	o b2521 b4
 B	b2522	t2521
 T	t2522	o593 b1005 b2522
 B	b2523	t2522
-P	p2523	String "rwh unfold_member 4 thenT autoT"
+P	p2523	String "rwh unfold_member 4 thenT logicAutoT"
 O	o2523	ext_rule p2523
 T	t2523	o593 b2521 b4
 B	b2524	t2523

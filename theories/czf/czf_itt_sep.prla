@@ -1278,7 +1278,7 @@ T	t899	o857 b898
 B	b899	t899
 NItt_logic!implies	implies	implies Itt_logic
 O	o934	implies
-P	p1063	String autoT
+P	p1063	String logicAutoT
 O	o1063	ext_rule p1063
 H	h1063	x_1 t681
 P	p1074	String "univTypeT << univ[1:l] >> thenT autoT"
@@ -1533,7 +1533,7 @@ T	t1407	o570 b1383 b1406
 B	b1407	t1407
 T	t1417	o2 b1398
 B	b1418	t1417
-P	p1470	String "autoT thenT rwh fold_isset 0 thenT autoT"
+P	p1470	String "logicAutoT thenT rwh fold_isset 0 thenT autoT"
 O	o1470	ext_rule p1470
 T	t1470	o597 b1345 b4
 B	b1471	t1470
@@ -6699,7 +6699,7 @@ T	t6246	o b6246 b4
 B	b6247	t6246
 T	t6247	o597 b6230 b6247
 B	b6248	t6247
-P	p6248	String "univTypeT << univ[1:l] >> thenT rwh fold_restricted 0 thenT autoT"
+P	p6248	String "univTypeT << univ[1:l] >> thenT rwh fold_restricted 0 thenT logicAutoT"
 O	o6248	ext_rule p6248
 T	t6248	o597 b6246 b4
 B	b6249	t6248
@@ -6759,7 +6759,7 @@ T	t6274	o b6274 b4
 B	b6275	t6274
 T	t6275	o1348 b596 b6079 b6275 b4
 B	b6276	t6275
-P	p6276	String "assumT 3 thenT rwh unfold_member (-1) thenT autoT"
+P	p6276	String "assumT 3 thenT rwh unfold_member (-1) thenT logicAutoT"
 O	o6276	ext_rule p6276
 H	h6276	y_1 t1522
 H	h6277	z_1 t1657

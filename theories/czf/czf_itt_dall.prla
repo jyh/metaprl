@@ -1913,7 +1913,7 @@ T	t746	o b746 b4
 B	b747	t746
 T	t747	o737 b596 b744 b747 b4
 B	b748	t747
-P	p748	String autoT
+P	p748	String logicAutoT
 O	o748	ext_rule p748
 O	o749	tactic_arg p706
 NItt_equal!equal	equal	equal Itt_equal
@@ -4791,7 +4791,7 @@ T	t2540	o b2537 b2540
 B	b2541	t2540
 T	t2541	o597 b2520 b2541
 B	b2542	t2541
-P	p850	String "rw reduceC 0 thenT autoT"
+P	p850	String "rw reduceC 0 thenT logicAutoT"
 O	o850	ext_rule p850
 T	t2542	o597 b2537 b4
 B	b2543	t2542

@@ -26,8 +26,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
  *)
 
 include Base_theory
@@ -35,7 +34,7 @@ include Base_theory
 declare "type"{'t}
 declare trivial
 
-dform type_df : "type"{'t} =
+dform type_df : except_mode[src] :: "type"{'t} =
    slot{'t} `" type"
 
 dform trivial_df : trivial =

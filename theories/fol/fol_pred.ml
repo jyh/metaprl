@@ -53,10 +53,11 @@ let d_pred_type i p =
    let j, k = Sequent.hyp_indices p i in
       pred_type j k p
 
-let resource trivial += {
+let resource auto += {
    auto_name = "d_pred_type";
    auto_prec = trivial_prec;
-   auto_tac = onSomeHypT d_pred_type
+   auto_tac = onSomeHypT d_pred_type;
+   auto_type = AutoTrivial;
 }
 
 (*

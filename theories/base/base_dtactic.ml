@@ -51,6 +51,7 @@
  * type intro_option =
  *    SelectOption of int
  *  | IntroArgsOption of (tactic_arg -> term -> term list) * term option
+ *  | AutoMustComplete
  * @end[verbatim]
  * @end[center]
  *
@@ -81,6 +82,12 @@
  * The function argument takes the current goal and a subterm, and it provides
  * an argument list that can be used in the rule application.  The @code{term option}
  * entry describes the subterm to be used for the second function argument.
+ *
+ * The @tt[AutoMustComplete] option can be used to indicate that the
+ * @hreftactic[autoT] tactic should not use this rule unless it is capable
+ * of finishing the proof on its own. This option can be used to mark irreversible
+ * rules that make take a provable goal and produce potentially unprovable
+ * subgoals.
  *
  * The @hrefresource[elim_resource] options are defined with the following type:
  *
@@ -131,9 +138,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- *
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
  * @end[license]
  *)
 
@@ -189,6 +195,7 @@ let debug_dtactic =
 type intro_option =
    SelectOption of int
  | IntroArgsOption of (tactic_arg -> term -> term list) * term option
+ | AutoMustComplete
 
 type elim_option =
    ThinOption of (int -> tactic)
@@ -432,7 +439,20 @@ let process_intro_resource_annotation name context_args var_args term_args _ sta
    let tac =
       match context_args with
          [|_|] ->
-            (fun p ->
+            let check_auto =
+               if List.mem AutoMustComplete options then
+                  let exn = RefineError("intro_annotation " ^ name, StringError("not appropriate in autoT")) in
+                   (fun p ->
+                        if
+                           try Sequent.get_bool_arg p "d_auto"
+                           with RefineError _ -> false
+                        then
+                           raise exn)
+               else
+                  (fun p -> ())
+            in
+               (fun p ->
+                  check_auto p;
                   let vars = Var.maybe_new_vars_array p var_args in
                   let addr = Sequent.hyp_count_addr p in
                      Tactic_type.Tactic.tactic_of_rule pre_tactic ([| addr |], vars) (term_args p) p)
@@ -604,12 +624,32 @@ let rec dForT i =
  * By default, dT 0 should always make progress.
  *)
 let d_prec = create_auto_prec [trivial_prec] []
+let d_elim_prec = create_auto_prec [trivial_prec; d_prec] []
 
-let resource auto += {
+let eq_exn = RefineError ("dT", StringError "elim rule not suitable for autoT")
+
+let not_equal t i p =
+   if alpha_equal t (snd (Sequent.nth_hyp p i)) then raise eq_exn else idT p
+
+let auto_dT i p =
+   (dT i thenT not_equal (snd (Sequent.nth_hyp p i)) i) p
+
+let resource auto += [ {
    auto_name = "dT";
    auto_prec = d_prec;
-   auto_tac = auto_progress (dT 0)
-}
+   auto_tac = withBoolT "d_auto" true (dT 0);
+   auto_type = AutoNormal;
+}; {
+   auto_name = "dT complete";
+   auto_prec = d_prec;
+   auto_tac = withBoolT "d_auto" false (dT 0);
+   auto_type = AutoComplete;
+}; {
+   auto_name = "dT elim-complete";
+   auto_prec = d_elim_prec;
+   auto_tac = onSomeHypT auto_dT;
+   auto_type = AutoComplete;
+}]
 
 let univ_arg_fun p _ = [get_univ_arg p]
 let elim_univ_arg = ElimArgsOption (univ_arg_fun, None)

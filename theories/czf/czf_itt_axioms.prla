@@ -1377,7 +1377,7 @@ T	t621	o b617 b621
 B	b622	t621
 T	t622	o603 b610 b622
 B	b623	t622
-P	p623	String autoT
+P	p623	String logicAutoT
 O	o623	ext_rule p623
 T	t623	o603 b617 b4
 B	b624	t623
@@ -1579,7 +1579,7 @@ T	t696	o b695 b4
 B	b696	t696
 T	t697	o603 b687 b696
 B	b697	t697
-P	p697	String "withT << 'z_1 >> (dT 4) thenWT autoT"
+P	p697	String "withT << 'z_1 >> (dT 4) thenWT logicAutoT"
 O	o697	ext_rule p697
 T	t698	o593 b691 b591
 H	h698	w_1 t698
@@ -2798,7 +2798,7 @@ T	t1478	o b1467 b1478
 B	b1479	t1478
 T	t1479	o603 b1380 b1479
 B	b1480	t1479
-P	p1480	String "withT << 'z_1 >> (dT 0) thenWT autoT"
+P	p1480	String "withT << 'z_1 >> (dT 0) thenWT logicAutoT"
 O	o1480	ext_rule p1480
 T	t1480	o585 b691 b1469
 S	s1480	t583 h h661 h664 h1310 h670 h1313 h689
@@ -4880,7 +4880,7 @@ T	t2392	o b2392 b4
 B	b2393	t2392
 T	t2393	o603 b2382 b2393
 B	b2394	t2393
-P	p2394	String "withT << 'z_2 >> (dT 0) thenWT autoT"
+P	p2394	String "withT << 'z_2 >> (dT 0) thenWT logicAutoT"
 O	o2394	ext_rule p2394
 T	t2394	o713 b2386 b2160 b2391
 B	b2395	t2394

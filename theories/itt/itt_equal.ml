@@ -677,10 +677,11 @@ let cumulativityT u p =
 let typeAssertT p =
    typeEquality (Sequent.hyp_count_addr p) p
 
-let resource trivial += {
-   auto_name = "triv_equalT";
+let resource auto += {
+   auto_name = "Itt_equal.triv_equalT";
    auto_prec = trivial_prec;
-   auto_tac = onSomeHypT triv_equalT
+   auto_tac = onSomeHypT triv_equalT;
+   auto_type = AutoTrivial;
 }
 
 (*

@@ -4808,7 +4808,7 @@ T	t1904	o b1897 b1903
 B	b1904	t1904
 T	t1905	o1841 b1889 b1904
 B	b1905	t1905
-P	p1905	String autoT
+P	p1905	String logicAutoT
 O	o1905	ext_rule p1905
 T	t1906	o1841 b1897 b10
 B	b1906	t1906

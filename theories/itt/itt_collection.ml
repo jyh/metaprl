@@ -96,7 +96,8 @@ let univTypeComplT  = completeT ((function p -> univTypeT (get_univ_arg p) p) th
 let resource auto += {
    auto_name = "univTypeT";
    auto_prec = logic_prec;
-   auto_tac = auto_wrap univTypeComplT
+   auto_tac = univTypeComplT;
+   auto_type = AutoNormal;
 }
 
 let memberTypeT a = equalTypeT a a thenT tryT (completeT autoT)

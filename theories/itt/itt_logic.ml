@@ -42,8 +42,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
+ * Author: Jason Hickey @email{jyh@cs.cornell.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
+ *
  * @end[license]
  *)
 
@@ -236,7 +237,7 @@ interactive not_intro {| intro [] |} 'H 'x :
    [main] sequent [squash] { 'H; x: 't >- "false" } -->
    sequent ['ext] { 'H >- "not"{'t} }
 
-interactive not_elim {| elim [] |} 'H 'J :
+interactive not_elim {| elim [ThinOption thinT] |} 'H 'J :
    [assertion] sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
    sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 'C }
 (*
@@ -1118,28 +1119,25 @@ let backThruHypT i p =
  * @docoff
  * @end[doc]
  *)
-let assumT i p =
-   let goal = Sequent.goal p in
-   let assum = Sequent.nth_assum p i in
-   let len = TermMan.num_hyps assum in
-
+let assum_term goal assum =
    (*
     * Compute the number of matching hyps.
     * This is approximate.  Right now, we look
     * for the last context hyp.
     *)
-   let rec last_match last_con hyp_index hyps =
+   let len = TermMan.num_hyps assum in
+   let hyps = (TermMan.explode_sequent assum).sequent_hyps in
+   let rec last_match last_con hyp_index =
       if hyp_index > len then
          last_con
       else
-         match SeqHyp.get hyps (hyp_index - 1) with
+         match SeqHyp.get hyps (pred hyp_index) with
             Hypothesis _ ->
-               last_match last_con (hyp_index + 1) hyps
+               last_match last_con (succ hyp_index)
           | Context _ ->
-               last_match (hyp_index + 1) (hyp_index + 1) hyps
+               last_match (succ hyp_index) (succ hyp_index)
    in
-   let { sequent_hyps = hyps } = TermMan.explode_sequent assum in
-   let index = last_match 1 1 hyps in
+   let index = last_match 1 1 in
    let _ =
       if !debug_auto then
          eprintf "Last_match: %d%t" index eflush
@@ -1158,10 +1156,12 @@ let assumT i p =
                mk_implies_term hyp goal
    in
    let form = collect index in
-   let _ =
       if !debug_auto then
-         eprintf "Found assumption: %a%t" debug_print form eflush
-   in
+         eprintf "Found assumption: %a%t" debug_print form eflush;
+      form, index
+
+let make_assumT i goal assum form index =
+   let len = TermMan.num_hyps assum in
 
    (* Call intro form on each arg *)
    let rec introT j p =
@@ -1170,9 +1170,15 @@ let assumT i p =
       else
          (dT 0 thenMT introT (succ j)) p
    in
-      (tryAssertT form
+      tryAssertT form
          (thinAllT index (TermMan.num_hyps goal) thenT introT index)
-         (addHiddenLabelT "main") ) p
+         (addHiddenLabelT "main")
+
+let assumT i p =
+   let goal = Sequent.goal p in
+   let assum = Sequent.nth_assum p i in
+   let form, index = assum_term goal assum in
+      make_assumT i goal assum form index p
 
 (*!
  * @begin[doc]
@@ -1241,75 +1247,6 @@ let genAssumT indices p =
    in
    let t = make_gen_term (TermMan.nth_concl goal 1) indices in
       (assertT t thenMT (backThruHypT (-1) thenT autoT) ) p
-
-(************************************************************************
- * AUTO TACTIC                                                          *
- ************************************************************************)
-
-(*
- * In auto tactic, Ok to decompose product hyps.
- *)
-let logic_trivT i p =
-   let _, hyp = Sequent.nth_hyp p i in
-      if is_void_term hyp or is_false_term hyp then
-         dT i p
-      else
-         raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp)))
-
-let resource trivial += {
-   auto_name = "logic_trivT";
-   auto_prec = trivial_prec;
-   auto_tac = onSomeHypT logic_trivT
-}
-
-
-(*
- * Backchaining in auto tactic.
- *)
-let logic_autoT i p =
-   let _, hyp = Sequent.nth_hyp p i in
-      if is_and_term hyp
-         or is_prod_term hyp
-         or is_dprod_term hyp
-         or is_exists_term hyp
-      then
-         dT i p
-      else
-         raise (RefineError ("logic_autoT", StringError "unknown formula"))
-
-let logic_prec = create_auto_prec [trivial_prec] []
-let back_hyp_prec = create_auto_prec [logic_prec] []
-let back_assum_prec = create_auto_prec [back_hyp_prec] []
-
-let resource auto += {
-   auto_name = "logic_autoT";
-   auto_prec = logic_prec;
-   auto_tac = auto_wrap (onSomeHypT logic_autoT)
-}
-
-let resource auto += {
-   auto_name = "backThruHypT";
-   auto_prec = back_hyp_prec;
-   auto_tac = auto_hyp_progress (fun _ _ -> true) backThruHypT
-}
-
-(*
- * Quick test on assumptions.
- *)
-let assum_test i p =
-   let goal = Sequent.concl p in
-   let assum =  Sequent.nth_assum p i in
-   let goal' = TermMan.nth_concl assum 1 in
-      try let _ = match_terms [] goal' goal in
-         true
-      with RefineError _ ->
-         false
-
-let resource auto += {
-   auto_name = "backThruSomeAssumT";
-   auto_prec = back_assum_prec;
-   auto_tac = auto_assum_progress assum_test backThruAssumT
-}
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
 
@@ -1383,7 +1320,7 @@ struct
       match r, inf with
          Ax,  _ -> (fun _ -> onSomeHypT nthHypT) :: inf
        | Andl,t::ts -> (fun subst -> (find_hyp (apply_subst hyp subst) dT) thenT t subst) :: ts
-       | Negl,t::ts -> (fun subst -> (find_hyp (apply_subst hyp subst) dT) thenT t subst) :: ts
+       | Negl,t::ts -> (fun subst -> (find_hyp (apply_subst hyp subst) nt_dT) thenT t subst) :: ts
        | Orl, t1::t2::ts ->
             (fun subst ->
                (find_hyp (apply_subst hyp subst) dT) thenLT [t1 subst; t2 subst])
@@ -1433,13 +1370,120 @@ let base_jproverT def_mult p =
       with RefineError _ -> def_mult
    in
    let seq = explode_sequent (Sequent.goal p) in
+   let hyps = filter_hyps (SeqHyp.to_list seq.sequent_hyps) in
    match
-      ITT_JProver.prover def_mult (filter_hyps (SeqHyp.to_list seq.sequent_hyps)) (SeqGoal.get seq.sequent_goals 0)
+      ITT_JProver.prover mult_limit hyps (SeqGoal.get seq.sequent_goals 0)
    with
-      [t] -> t [] p
+      [t] ->
+         t [] p
     | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof")
 
 let jproverT = base_jproverT None
+
+(************************************************************************
+ * AUTO TACTIC                                                          *
+ ************************************************************************)
+
+(*
+ * In auto tactic, Ok to decompose product hyps.
+ *)
+let logic_trivT i p =
+   let _, hyp = Sequent.nth_hyp p i in
+      if is_void_term hyp or is_false_term hyp then
+         dT i p
+      else
+         raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp)))
+
+(*
+ * Backchaining in auto tactic.
+ *)
+let logic_autoT i p =
+   let _, hyp = Sequent.nth_hyp p i in
+      if is_and_term hyp
+         or is_prod_term hyp
+         or is_dprod_term hyp
+         or is_exists_term hyp
+      then
+         dT i p
+      else
+         raise (RefineError ("logic_autoT", StringError "unknown formula"))
+
+let assum_exn = (RefineError ("auto_assumT", StringError "already there"))
+let auto_assumT i p =
+   if !debug_auto then
+      eprintf "Trying auto_assumT %d%t" i eflush;
+   let goal = Sequent.goal p in
+   let concl = TermMan.nth_concl goal 1 in
+   let assum = Sequent.nth_assum p i in
+   let aconcl = TermMan.nth_concl assum 1 in
+   let _ = match_terms [] aconcl concl in
+   let gen_assum, index = assum_term goal assum in
+   let hyps = (TermMan.explode_sequent goal).sequent_hyps in
+   let rec check_hyps i =
+      if (i = 0) then () else
+      let i = pred i in
+         match SeqHyp.get hyps i with
+            Hypothesis (_,t) when alpha_equal t gen_assum ->
+               raise assum_exn
+          | _ ->
+               check_hyps i
+   in
+      check_hyps (SeqHyp.length hyps);
+      if !debug_auto then
+         eprintf "\tTrying assumT %d%t" i eflush;
+      make_assumT i goal assum gen_assum index p
+
+let auto_assumT i = tryT (auto_assumT i)
+
+let auto_jproverT =
+   addHiddenLabelT "main" thenT onAllMAssumT auto_assumT thenMT base_jproverT (Some 1)
+
+let logic_prec = create_auto_prec [trivial_prec] [d_prec]
+let jprover_prec = create_auto_prec [trivial_prec;logic_prec] [d_prec]
+
+let resource auto += [{
+   auto_name = "logic_trivT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeHypT logic_trivT;
+   auto_type = AutoTrivial;
+}; {
+   auto_name = "logic_autoT";
+   auto_prec = logic_prec;
+   auto_tac = onSomeHypT logic_autoT;
+   auto_type = AutoNormal;
+}; {
+   auto_name = "Itt_logic.auto_jproverT";
+   auto_prec = jprover_prec;
+   auto_tac = auto_jproverT;
+   auto_type = AutoComplete;
+}]
+
+let jAutoT i = withIntT "jprover" i autoT
+
+(* aux is either a hyp or an assum *)
+let autoBackT compare_aux get_aux tac_aux onsome auto_aux =
+   let mem aux goal (aux', goal') =
+      compare_aux aux aux' && alpha_equal goal goal'
+   in
+   let backHyp tac history (i:int) p =
+      let goal = Sequent.goal p in
+      let aux = get_aux p i in
+      let tac' =
+         if List.exists (mem aux goal) history then failT else
+         tac_aux i thenT tac ((aux,goal)::history)
+      in
+         tac' p
+   in
+   let rec auto_back history =
+      auto_aux thenT tryT (onsome (backHyp auto_back history))
+   in
+      auto_back []
+
+let hypAutoT =
+   let nth_hyp p i = snd (Sequent.nth_hyp p i) in
+      autoBackT alpha_equal nth_hyp backThruHypT onSomeHypT autoT
+
+let logicAutoT = autoBackT (=) (fun i p -> i) backThruAssumT onSomeAssumT hypAutoT
 
 (*
  * -*-

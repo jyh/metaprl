@@ -1,4 +1,3 @@
-include Czf_itt_set
 include Czf_itt_dall
 include Czf_itt_dexists
 
@@ -24,7 +23,8 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare set_bvd{'s; x. 'a['x]}
+declare set_bvd{'s; x. 'a['x]}             (* { a(x) | x in s } *)
+declare setbvd_prop{'s; x. 'p['x]}        (* { x in s | p(x) } *)
 
 rewrite unfold_set_bvd: set_bvd{'s; x. 'a['x]} <-->
    set_ind{'s; t, f, g. collect{'t; y. 'a['f 'y]}}

@@ -110,8 +110,9 @@ doc <:doc< @begin[doc]
    arbitrary bterm variable.
 @end[doc] >>
 
-declare sequent [bterm] { Term : Term >- Term } : Term
-declare term
+declare typeclass BtermType -> Term
+declare sequent [bterm] { Quote : BtermType >- Quote } : Term
+declare term : BtermType
 
 doc docoff
 
@@ -531,22 +532,22 @@ doc docoff
 dform term_df : except_mode[src] :: term =
    `"_"
 
-declare sequent[disply_bterm] { Term : Dform >- Dform } : Dform
-declare sequent[bterm_sep] { Term : Dform >- Dform } : Dform
+declare sequent[display_bterm] { Quote : Dform >- Quote } : Dform
+declare sequent[bterm_sep] { Quote : Dform >- Quote } : Dform
 
 dform bterm_df : parens :: bterm{| <H> >- 't |} =
-   slot{disply_bterm{| <H> >- 't |}}
+   slot{display_bterm{| <H> >- 't |}}
 
-dform bterm_cont_df : disply_bterm{| df_context{'c}; <H> >- 't |} =
-   df_context{'c} bterm_sep{| <H> >- 't |} disply_bterm{| <H> >- 't |}
+dform bterm_cont_df : display_bterm{| df_context{'c}; <H> >- 't |} =
+   df_context{'c} bterm_sep{| <H> >- 't |} display_bterm{| <H> >- 't |}
 
-dform bterm_var_df : disply_bterm{| v: term; <H> >- 't |} =
-   'v bterm_sep{| <H> >- 't |} disply_bterm{| <H> >- 't |}
+dform bterm_var_df : display_bterm{| v: term; <H> >- 't |} =
+   'v bterm_sep{| <H> >- 't |} display_bterm{| <H> >- 't |}
 
-dform bterm_unusual_df : disply_bterm{| v: 't1; <H> >- 't |} =
-   'v `":" slot{'t1} bterm_sep{| <H> >- 't |} disply_bterm{| <H> >- 't |}
+dform bterm_unusual_df : display_bterm{| v: 't1; <H> >- 't |} =
+   'v `":" slot{'t1} bterm_sep{| <H> >- 't |} display_bterm{| <H> >- 't |}
 
-dform bterm_nil_df : disply_bterm{| >- 't |} =
+dform bterm_nil_df : display_bterm{| >- 't |} =
    `"." slot{'t}
 
 dform bterm_sep_cons_df : bterm_sep{| 't1; <H> >- 't |} = `","

@@ -5,8 +5,9 @@ open Basic_tactics
 declare rnil
 declare rcons{'hd; 'tl}
 
-declare sequent [bterm] { Term : Term >- Term } : Term
-declare term
+declare typeclass BtermType -> Term
+declare sequent [bterm] { Quote : BtermType >- Quote } : Term
+declare term : BtermType
 
 declare if_quoted_op{'op; 'tt}
 

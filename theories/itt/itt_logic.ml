@@ -1124,48 +1124,36 @@ doc <:doc<
 let assum_term goal assum =
    (*
     * Compute the number of matching hyps.
-    * This is approximate.  Right now, we look
-    * for the last context hyp.
+    * This is approximate.
     *)
-   let eassum = (TermMan.explode_sequent assum) in
-   let hyps = eassum.sequent_hyps in
-   let len = SeqHyp.length hyps in
-   let rec last_match last_con hyp_index =
-      if hyp_index > len then
-         last_con
-      else
-         match SeqHyp.get hyps (pred hyp_index) with
-            HypBinding _ | Hypothesis _ ->
-               last_match last_con (succ hyp_index)
-          | Context _ ->
-               last_match (succ hyp_index) (succ hyp_index)
-   in
-   let index = last_match 1 1 in
+   let eassum = TermMan.explode_sequent assum in
+   let egoal = TermMan.explode_sequent goal in
+   let index = Match_seq.match_some_hyps egoal eassum in
    let _ =
       if !debug_auto then
-         eprintf "Last_match: %d%t" index eflush
+         eprintf "Last_match: %d%t" (succ index) eflush
    in
+   let hyps = eassum.sequent_hyps in
+   let len = SeqHyp.length hyps in
 
    (* Construct the assumption as a universal formula *)
-   let rec collect j =
-      if j > len then
-         SeqGoal.get eassum.sequent_goals 0
-      else
-         let goal = collect (j + 1) in
-            match SeqHyp.get hyps (j - 1) with
-               HypBinding (v, hyp) when is_var_free v goal ->
-                  mk_all_term v hyp goal
-             | HypBinding (_, hyp) | Hypothesis hyp ->
-                  mk_implies_term hyp goal
-             | Context _ ->
-                  raise(Invalid_argument("Bug in Itt_logic.assumT"))
+   let rec collect j assum =
+      if j = 0 then
+         assum, 1
+      else let j = pred j in
+         match SeqHyp.get hyps j with
+            HypBinding (v, hyp) when is_var_free v assum ->
+               collect j (mk_all_term v hyp assum)
+          | HypBinding (_, hyp) | Hypothesis hyp when j >= index ->
+               collect j (mk_implies_term hyp assum)
+          | _ -> assum, j + 2
    in
-   let form = collect index in
+   let res = collect len (SeqGoal.get eassum.sequent_goals 0) in
       if !debug_auto then
-         eprintf "Found assumption: %a%t" debug_print form eflush;
-      form, index
+         eprintf "Found assumption: %a%t" debug_print (fst res) eflush;
+      res
 
-let make_assumT i goal assum form index =
+let make_assumT tac i goal assum form index =
    let len = TermMan.num_hyps assum in
 
    (* Call intro form on each arg *)
@@ -1175,15 +1163,15 @@ let make_assumT i goal assum form index =
       end else
          (dT 0 thenMT introT (succ j))
    in
-      tryAssertT form
-         (thinAllT index (TermMan.num_hyps goal) thenT introT index)
-         (addHiddenLabelT "main")
+      tryAssertT form (thinAllT index (TermMan.num_hyps goal) thenT introT index) tac
+
+let make_main_assumT = make_assumT (addHiddenLabelT "main")
 
 let assumT = argfunT (fun i p ->
    let goal = Sequent.goal p in
    let assum = Sequent.nth_assum p i in
    let form, index = assum_term goal assum in
-      make_assumT i goal assum form index)
+      make_main_assumT i goal assum form index)
 
 doc <:doc<
    @begin[doc]
@@ -1195,9 +1183,8 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let backThruAssumT = argfunT (fun i p ->
-   let j = Sequent.hyp_count p + 1 in
-      assumT i thenMT (backThruHypT j thenT thinT j))
+let backThruAssumT i =
+   assumT i thenMT (backThruHypT (-1) thenT thinT (-1))
 
 doc <:doc<
    @begin[doc]
@@ -1284,6 +1271,7 @@ struct
    let is_not_term = is_not_term
    let dest_not = dest_not
 
+   (* type inference = (term_subst -> (term * (tactic -> tactic)) list -> tactic) list *)
    type inference = (term_subst -> tactic) list
    let empty_inf = []
 
@@ -1426,7 +1414,7 @@ let auto_assumT = argfunT (fun i p ->
    let concl = TermMan.nth_concl goal 1 in
    let assum = Sequent.nth_assum p i in
    let aconcl = TermMan.nth_concl assum 1 in
-   let _ = match_terms [] aconcl concl in
+   let _ = match_terms [] aconcl concl in  (* XXX: this line needs to go away *)
    let gen_assum, index = assum_term goal assum in
    let hyps = (TermMan.explode_sequent goal).sequent_hyps in
    let rec check_hyps i =
@@ -1441,7 +1429,7 @@ let auto_assumT = argfunT (fun i p ->
       check_hyps (SeqHyp.length hyps);
       if !debug_auto then
          eprintf "\tTrying assumT %d%t" i eflush;
-      make_assumT i goal assum gen_assum index)
+      make_main_assumT i goal assum gen_assum index)
 
 let auto_assumT i = tryT (auto_assumT i)
 

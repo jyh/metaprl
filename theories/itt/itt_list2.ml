@@ -892,6 +892,12 @@ interactive restrict_list {| intro[] |} :
    sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- 'l in list{{x:'A | mem{'x;'l;'A}}} }
 
+doc <:doc<
+   @begin[doc]
+    The following induction principle is used for simultaneous induction on two lists.
+   @end[doc]
+>>
+
 interactive list_induction2 :
    sequent { <H> >- 'P[nil; nil] } -->
    sequent { <H>; h2:'B; t2:list{'B} >- 'P[nil; 'h2::'t2] } -->

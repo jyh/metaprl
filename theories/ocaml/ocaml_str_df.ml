@@ -142,7 +142,7 @@ dform and_let_df2 : internal :: and_let{nil} =
  * Fix definition.
  *)
 dform str_fix_df1 : internal :: str_fix{'p} =
-   szone pushm[0] "_letrec" `" " slot{patt_format; 'p; nil} popm ezone
+   szone pushm[0] "_letrec" `" " patt_format{'p; nil} popm ezone
 
 dform str_fix_df2 : internal :: str_fix[start:n, finish:n]{'p} =
    str_fix{'p}

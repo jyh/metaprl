@@ -388,14 +388,14 @@ dform new_df1 : parens :: "prec"[prec_not] :: "new"{'e1} =
  * "Match" forms.
  *)
 dform fun_df1 : parens :: "prec"[prec_fun] :: "fun"{'pwel} =
-   szone "_fun" `" " slot{patt_format; 'pwel; nil} ezone
+   szone "_fun" `" " patt_format{'pwel; nil} ezone
 
 dform fun_df2 : internal :: "fun"[start:n, finish:n]{'pwel} =
    "fun"{'pwel}
 
 dform match_df1 : parens :: "prec"[prec_fun] :: "match"{'pwel; 'e} =
    szone push_indent "_match" hspace slot{'e} hspace "_with" hspace
-   slot{patt_format; 'pwel; nil}
+   patt_format{'pwel; nil}
    popm ezone
 
 dform match_df2 : internal :: "match"[start:n, finish:n]{'e; 'pwel} =
@@ -403,7 +403,7 @@ dform match_df2 : internal :: "match"[start:n, finish:n]{'e; 'pwel} =
 
 dform try_df1 : parens :: "prec"[prec_fun] :: "try"{'pwel; 'e} =
    szone push_indent "_try" hspace slot{'e} hspace "_with" hspace
-   slot{patt_format; 'pwel; nil}
+   patt_format{'pwel; nil}
    popm ezone
 
 dform try_df2 : internal :: "try"[start:n, finish:n]{'e; 'pwel} =
@@ -413,13 +413,13 @@ dform try_df2 : internal :: "try"[start:n, finish:n]{'e; 'pwel} =
  * "Let" forms.  The real work is performed in the patterns.
  *)
 dform let_df1 : parens :: "prec"[prec_let] :: "let"{'p; 'e} =
-   szone pushm[0] "_let" `" " slot{patt_format; 'p; 'e} popm ezone
+   szone pushm[0] "_let" `" " patt_format{'p; 'e} popm ezone
 
 dform let_df2 : internal :: "let"[start:n, finish:n]{'p; 'e} =
    "let"{'p; 'e}
 
 dform fix_df1 : parens :: "prec"[prec_let] :: "fix"{'p} =
-   szone pushm[0] "_letrec" hspace slot{patt_format; 'p; nil}
+   szone pushm[0] "_letrec" hspace patt_format{'p; nil}
 
 dform fix_df2 : internal :: "fix"[start:n, finish:n]{'p} =
    "fix"{'p}

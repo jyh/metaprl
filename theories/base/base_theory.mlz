@@ -77,7 +77,7 @@ doc <:doc<
    @end[doc]
 >>
 extends Summary
-extends Shell
+extends Shell_theory
 extends Var
 extends Top_tacticals
 extends Top_conversionals

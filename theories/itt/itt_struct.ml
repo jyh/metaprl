@@ -410,7 +410,7 @@ let substConclT t p =
             if is_xbind_term t1 then
                t1
             else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
+               raise generic_refiner_exn (* will be immedeiatelly caugh *)
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
@@ -431,7 +431,7 @@ let substHypT i t p =
             if is_xbind_term b then
                b
             else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
+               raise generic_refiner_exn (* will be immedeiatelly caugh *)
       with
          RefineError _ ->
             mk_xbind_term z (var_subst t1 a z)

@@ -224,8 +224,8 @@ let applyEquality' t p =
  * @end[doc]
  *)
 interactive functionSubtype {| intro [] |} 'H 'a :
-   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   [subtype] sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
 (*! @docoff *)
 
@@ -303,8 +303,7 @@ let resource typeinf += (dfun_term, infer_univ_dep0_dep1 dest_dfun)
  *)
 let dfun_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      (functionSubtype (Sequent.hyp_count_addr p) a
-       thenT addHiddenLabelT "subtype") p
+      functionSubtype (Sequent.hyp_count_addr p) a p
 
 let resource sub +=
    (DSubtype ([<< a1:'A1 -> 'B1['a1] >>, << a2:'A2 -> 'B2['a2] >>;

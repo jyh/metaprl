@@ -364,8 +364,8 @@ interactive intersectionEliminationFromCaseEquality 'H 'J 'a 'z :
  * @end[doc]
  *)
 prim intersectionSubtype {| intro [] |} 'H 'a :
-   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H; a: 'A2 >- subtype{'B1['a]; 'B2['a]} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   [subtype] sequent [squash] { 'H; a: 'A2 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } } =
    it
 
@@ -379,15 +379,15 @@ prim intersectionSubtype {| intro [] |} 'H 'a :
  * @end[doc]
  *)
 interactive intersectionSubtype2 'H 'y 'a :
-   sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent [squash] { 'H >- subtype{'B['a]; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'B['a]; 'T} } -->
    sequent ['ext] { 'H >- subtype{."isect"{'A; x. 'B['x]}; 'T} }
 
 interactive intersectionSubtype3 'H 'x :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'C} } -->
-   sequent [squash] { 'H; x: 'A >- subtype{'C; 'B['x]} } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- "type"{'C} } -->
+   [subtype] sequent [squash] { 'H; x: 'A >- subtype{'C; 'B['x]} } -->
    sequent ['ext] { 'H >- subtype{'C; ."isect"{'A; x. 'B['x]}} }
 
 (*!
@@ -426,8 +426,7 @@ let resource typeinf += (isect_term, infer_univ_dep0_dep1 dest_isect)
  *)
 let isect_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      (intersectionSubtype (Sequent.hyp_count_addr p) a
-       thenT addHiddenLabelT "subtype") p
+      intersectionSubtype (Sequent.hyp_count_addr p) a p
 
 let resource sub +=
    (DSubtype ([<< isect a1:'A1. 'B1['a1] >>, << isect a2:'A2. 'B2['a2] >>;
@@ -441,10 +440,7 @@ let d_isect_subtypeT i p =
       let concl = Sequent.concl p in
       let v, _, _ = dest_isect concl in
       let v = maybe_new_vars1 p v in
-         (intersectionSubtype2 (Sequent.hyp_count_addr p) v a
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  idT]) p
+         intersectionSubtype2 (Sequent.hyp_count_addr p) v a p
    else
       raise (RefineError ("d_isect_subtypeT", StringError "no elimination form"))
 

@@ -169,8 +169,8 @@ interactive independentPairFormation {| intro [] |} 'H :
  * @end[doc]
  *)
 interactive independentProductSubtype {| intro [] |} 'H :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
 (*! @docoff *)
 
@@ -187,15 +187,11 @@ let resource typeinf += (prod_term, infer_univ_dep0_dep0 dest_prod)
 (*
  * Subtyping of two product types.
  *)
-let prod_subtypeT p =
-   (independentProductSubtype (hyp_count_addr p)
-    thenT addHiddenLabelT "subtype") p
-
 let resource sub +=
    (DSubtype ([<< 'A1 * 'B1 >>, << 'A2 * 'B2 >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1 >>, << 'B2 >>],
-              prod_subtypeT))
+              dT 0))
 
 (*
  * -*-

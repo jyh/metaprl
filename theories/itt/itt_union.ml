@@ -301,8 +301,8 @@ prim decideEquality {| intro []; eqcd |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
  * @end[doc]
  *)
 prim unionSubtype {| intro [] |} 'H :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } } =
    it
 (*! @docoff *)
@@ -401,15 +401,11 @@ let resource typeinf += (decide_term, inf_decide)
 (*
  * Subtyping of two union types.
  *)
-let union_subtypeT p =
-   (unionSubtype (hyp_count_addr p)
-    thenT addHiddenLabelT "subtype") p
-
 let resource sub +=
    (DSubtype ([<< 'A1 + 'B1 >>, << 'A2 + 'B2 >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1 >>, << 'B2 >>],
-              union_subtypeT))
+              dT 0))
 
 (*
  * -*-

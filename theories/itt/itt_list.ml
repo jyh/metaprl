@@ -349,8 +349,8 @@ prim nilSqequal 'H 'T :
  * The list type $@list{A}$ is covariant in the type argument $A$.
  * @end[doc]
  *)
-interactive listSubtype 'H :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+interactive listSubtype {| intro [] |} 'H :
+   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}}
 (*! @docoff *)
 
@@ -428,14 +428,10 @@ let resource typeinf += (list_ind_term, inf_list_ind)
 (*
  * Subtyping of two list types.
  *)
-let list_subtypeT p =
-   (listSubtype (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "subtype") p
-
 let resource sub +=
    (DSubtype ([<< list{'A1} >>, << list{'A2} >>;
                << 'A2 >>, << 'A1 >>],
-              list_subtypeT))
+              dT 0))
 
 (*
  * -*-

@@ -419,8 +419,8 @@ let resource intro +=
  * @end[doc]
  *)
 prim productSubtype {| intro [] |} 'H 'a :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   [subtype] sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
    it
 (*! @docoff *)
@@ -472,16 +472,11 @@ let resource typeinf += (spread_term, inf_spread)
 (*
  * Subtyping of two function types.
  *)
-let dprod_subtypeT p =
-   let a = get_opt_var_arg "x" p in
-      (productSubtype (Sequent.hyp_count_addr p) a
-       thenT addHiddenLabelT "subtype") p
-
 let resource sub +=
    (DSubtype ([<< a1:'A1 * 'B1['a1] >>, << a2:'A2 * 'B2['a2] >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],
-              dprod_subtypeT))
+              dT 0))
 
 (*
  * -*-

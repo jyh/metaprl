@@ -331,8 +331,8 @@ let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
  *)
 
 prim dintersectionSubtype  'H 'a :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   [subtype] sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ disect{'A1; a1.'B1['a1]}; disect{'A2; a2.'B2['a2]} } } =
    it
 
@@ -402,8 +402,7 @@ let resource typeinf += (disect_term, infer_univ_dep0_dep1 dest_disect)
  *)
 let disect_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      (dintersectionSubtype (Sequent.hyp_count_addr p) a
-       thenT addHiddenLabelT "subtype") p
+      dintersectionSubtype (Sequent.hyp_count_addr p) a p
 
 let resource sub +=
    (DSubtype ([<< disect{'A1; a1.'B1['a1]} >>, << disect{'A2; a2.'B2['a2]} >>;

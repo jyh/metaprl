@@ -6,4 +6,8 @@ declare term
 
 declare if_bterm{'t; 'tt}
 
+declare dest_bterm{'bt}
+
+declare make_bterm{'bt; 'bt1}
+
 val reduce_ifbterm : conv

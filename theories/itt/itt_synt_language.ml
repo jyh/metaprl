@@ -1,3 +1,13 @@
+doc <:doc<
+   @begin[doc]
+   @module[Itt_synt_language]
+
+   The @tt[Itt_synt_language]  module defines an type of syntactic term that are build with a fix list of operators.
+
+   If $ops$ is a list of operator, then <<Language{'ops}>> is a subtype of type <<BTerm>> that contains all terms build with operators from the list $ops$.
+   @end[doc]
+>>
+
 extends Itt_synt_bterm
 extends Itt_functions
 extends Itt_nat
@@ -11,10 +21,18 @@ extends Itt_pairwise2
 open Basic_tactics
 
 
+doc <:doc<
+   @begin[doc]
+     We define the type <<Language{'ops}>> as the recursive type.
+
+   @end[doc]
+>>
+
+
 define unfold_dom: dom{'ops;'T} <--> Var + (i:Index{'ops} * depth : nat * { bts: list{BTerm isect 'T} | compatible_shapes{inject{nth{'ops;'i};'depth};'bts} })
 
 
-define unfold_mk: mk{'ops} <--> lambda{d. decide{'d; v. 'v; p.spread{'p; i,bts. make_bterm{nth{'ops;'i}; 'bts } }}}
+define unfold_mk: mk{'ops} <--> lambda{d. decide{'d; v. 'v; p.spread{'p; i,q. spread{'q; depth,bts. make_bterm{nth{'ops;'i}; 'depth; 'bts }} }}}
 
 define unfould_language: Language{'ops} <-->  srec{X. Img{mk{'ops}; dom{'ops;'X}; BTerm}}
 

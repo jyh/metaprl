@@ -1,1 +1,2 @@
+declare Languge{'ops}
 

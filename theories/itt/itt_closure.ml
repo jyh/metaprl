@@ -74,7 +74,7 @@ doc <:doc<
    @begin[doc]
    @modsection{Operators}
    An operator on $T$ is a function of an arbitrary arity on $T$.
-   That is, an operator is define on a subset of <<list{'T}>> and range over $T$.
+   That is, an operator is defined on a subset of <<list{'T}>> and range over $T$.
    We define <<Operators[i:l]{'T}>> as a collection of operators.
    @end[doc]
 >>

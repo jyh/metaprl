@@ -81,6 +81,7 @@ declare set
 declare isset{'s}
 declare member{'x; 't}
 declare collect{'T; x. 'a['x]}
+declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -91,7 +92,8 @@ declare collect{'T; x. 'a['x]}
  *)
 rewrite unfold_wf : wf{'p} <--> "type"{'p}
 rewrite unfold_restricted : restricted{x. 'P['x]} <-->
-   (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]})
+   ((all x: small. small_type{'P['x]})
+    & (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]}))
 
 rewrite unfold_set : set <--> w{small; x. 'x}
 rewrite unfold_isset : isset{'s} <--> ('s = 's in set)
@@ -100,6 +102,16 @@ rewrite unfold_member : member{'x; 'y} <-->
    & ('y = 'y in set)
    & tree_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
 rewrite unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
+rewrite unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
+   tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
+
+rewrite reduce_set_ind :
+   set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
+   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
+
+rewrite reduce_member :
+   member{'x; collect{'T; y. 'f['y]}} <-->
+      isset{'x} & isset{collect{'T; y. 'f['y]}} & "exists"{'T; z. 'f['z] = 'x in set}
 
 val fold_wf : conv
 val fold_restricted : conv
@@ -108,6 +120,7 @@ val fold_set : conv
 val fold_isset : conv
 val fold_member : conv
 val fold_collect : conv
+val fold_set_ind : conv
 
 (************************************************************************
  * RELATION TO ITT                                                      *
@@ -189,6 +202,17 @@ axiom set_elim 'H 'J 'a 'T 'f 'w :
                   } -->
    sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
 
+(*
+ * Equality on tree induction forms.
+ *)
+axiom set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
+   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
+   sequent [squash] { 'H; a: 'A; f: 'B['a] -> set; g: a: 'A -> 'B['a] -> 'T >-
+      'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
+   sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
+                          = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
+                          in 'T }
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -207,6 +231,7 @@ val eqSetT : tactic
  * H, x: set, J >- isset{x}
  *)
 val assumSetT : int -> tactic
+val setAssumT : int -> tactic
 
 (*
  * -*-

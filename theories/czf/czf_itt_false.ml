@@ -27,7 +27,7 @@ dform false_df : "false" =
  * DEFINTION                                                            *
  ************************************************************************)
 
-primrw unfoldFalse : "false" <--> (0 = 1 in int)
+primrw unfold_false : "false" <--> void
 
 (************************************************************************
  * RULES                                                                *
@@ -39,23 +39,26 @@ primrw unfoldFalse : "false" <--> (0 = 1 in int)
  * H, x: false, J >> T
  * by false_elim i
  *)
-prim false_elim 'H 'J : :
-   sequent ['ext] { 'H; x: "false"; 'J['x] >- 'T['x] } =
-   it
+interactive false_elim 'H 'J : :
+   sequent ['ext] { 'H; x: "false"; 'J['x] >- 'T['x] }
 
 (*
  * False is well-formed.
  *)
-prim false_wf 'H : :
-   sequent ['ext] { 'H >- wf{."false"} } =
-   it
+interactive false_wf 'H : :
+   sequent ['ext] { 'H >- wf{."false"} }
+
+(*
+ * False is a type.
+ *)
+interactive false_type 'H : :
+   sequent ['ext] { 'H >- "type"{."false"} }
 
 (*
  * False is a restricted formula.
  *)
-prim false_res 'H : :
-   sequent ['ext] { 'H >- restricted{."false"} } =
-   it
+interactive false_res 'H : :
+   sequent ['ext] { 'H >- restricted{x ."false"} }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -87,6 +90,19 @@ let d_wf_falseT i p =
       raise (RefineError ("d_wf_falseT", (StringTermError ("no elim form", wf_false_term))))
 
 let d_resource = d_resource.resource_improve d_resource (wf_false_term, d_wf_falseT)
+
+(*
+ * False is a type.
+ *)
+let d_false_typeT i p =
+   if i = 0 then
+      false_type (hyp_count p) p
+   else
+      raise (RefineError ("d_false_typeT", (StringError "no elimination form")))
+
+let false_type_term = << "type"{."false"} >>
+
+let d_resource = d_resource.resource_improve d_resource (false_type_term, d_false_typeT)
 
 (*
  * Restricted.

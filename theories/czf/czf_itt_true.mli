@@ -9,7 +9,7 @@ declare "true"
 (*
  * Definition of truth.
  *)
-rewrite unfoldTrue : "true" <--> (0 = 0 in int)
+rewrite unfold_true : "true" <--> unit
 
 (*
  * True is always true.
@@ -29,10 +29,16 @@ axiom true_wf 'H :
    sequent ['ext] { 'H >- wf{."true"} }
 
 (*
+ * Typehood.
+ *)
+axiom true_type 'H :
+   sequent ['ext] { 'H >- "type"{."true"} }
+
+(*
  * True is a restricted formula.
  *)
 axiom true_res 'H :
-   sequent ['ext] { 'H >- restricted{."true"} }
+   sequent ['ext] { 'H >- restricted{x ."true"} }
 
 (*
  * -*-

@@ -25,14 +25,20 @@ let _ =
  *)
 let split_var v =
    let len = String.length v in
-   let i = ref (len - 1) in
-      while !i <> 0 & is_digit v.[!i] do
-         decr i
-      done;
-      if !i = 0 then
+      if len = 0 then
          v, 0
       else
-         String_util.sub "Var.split_var" v 0 !i, int_of_string (String_util.sub "Var.split_var" v !i (len - !i))
+         let rec search i =
+            if i = 0 then
+               v, 0
+            else if is_digit v.[i - 1] then
+               search (i - 1)
+            else if i = len then
+               v, 0
+            else
+               String.sub v 0 i, int_of_string (String.sub v i (len - i))
+         in
+            search len
 
 (*
  * Generate a new variable disjoint from the given vars.

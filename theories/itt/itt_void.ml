@@ -14,6 +14,7 @@ open Debug
 open Sequent
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -61,6 +62,11 @@ prim voidFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = void
 prim voidEquality 'H : : sequent ['ext] { 'H >- void = void in univ[@i:l] } = it
 
 (*
+ * Typehood.
+ *)
+prim voidType 'H : : sequent ['ext] { 'H >- "type"{void} } = it
+
+(*
  * H, i:x:Void, J >- C
  * by voidElimination i
  *)
@@ -103,6 +109,16 @@ let d_voidT i p =
 let d_resource = d_resource.resource_improve d_resource (void_term, d_voidT)
 let dT = d_resource.resource_extract d_resource
 
+let d_void_typeT i p =
+   if i = 0 then
+      voidType (hyp_count p) p
+   else
+      raise (RefineError ("d_void_typeT", StringError "no elimination form"))
+
+let void_type_term = << "type"{void} >>
+
+let d_resource = d_resource.resource_improve d_resource (void_type_term, d_void_typeT)
+
 (*
  * EqCD.
  *)
@@ -112,6 +128,10 @@ let eqcd_voidT p =
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (void_term, eqcd_voidT)
 let eqcdT = eqcd_resource.resource_extract eqcd_resource
+
+let equal_void_term = << void = void in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (equal_void_term, d_wrap_eqcd eqcd_voidT)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *

@@ -40,6 +40,7 @@ open Itt_equal
 open Itt_rfun
 open Itt_dprod
 open Itt_union
+open Itt_w
 
 (*
  * Show that the file is loading.
@@ -87,6 +88,7 @@ declare set
 declare isset{'s}
 declare member{'x; 't}
 declare collect{'T; x. 'a['x]}
+declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -97,7 +99,8 @@ declare collect{'T; x. 'a['x]}
  *)
 primrw unfold_wf : wf{'p} <--> "type"{'p}
 primrw unfold_restricted : restricted{x. 'P['x]} <-->
-   (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]})
+   ((all x: small. small_type{'P['x]})
+    & (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]}))
 
 primrw unfold_set : set <--> w{small; x. 'x}
 primrw unfold_isset : isset{'s} <--> ('s = 's in set)
@@ -106,6 +109,16 @@ primrw unfold_member : member{'x; 'y} <-->
    & ('y = 'y in set)
    & tree_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
 primrw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
+primrw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
+   tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
+
+interactive_rw reduce_set_ind :
+   set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
+   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. lambda{b2. set_ind{.'a['a2] 'b2; a, f, g. 'b['a; 'f; 'g]}}}]
+
+interactive_rw reduce_member :
+   member{'x; collect{'T; y. 'f['y]}} <-->
+      isset{'x} & isset{collect{'T; y. 'f['y]}} & "exists"{'T; z. 'f['z] = 'x in set}
 
 let fold_wf         = makeFoldC << wf{'p} >> unfold_wf
 let fold_restricted = makeFoldC << restricted{x. 'P['x]} >> unfold_restricted
@@ -114,6 +127,7 @@ let fold_set        = makeFoldC << set >> unfold_set
 let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
 let fold_member     = makeFoldC << member{'x; 'y} >> unfold_member
 let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
+let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -136,6 +150,11 @@ dform member_df : mode[prl] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
 
 dform collect_df : mode[prl] :: parens :: "prec"[prec_apply] :: collect{'T; x. 'a} =
    szone pushm[3] `"collect" " " slot{'x} `":" " " slot{'T} `"." " " slot{'a} popm ezone
+
+dform set_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body} =
+   szone pushm[3] `"set_ind(" slot{'g} `"." " "
+   pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" space slot{'z} space `"in" popm space
+   slot{'body} popm ezone
 
 (************************************************************************
  * RELATION TO ITT                                                      *
@@ -216,6 +235,17 @@ interactive set_elim 'H 'J 'a 'T 'f 'w :
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
    sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
+
+(*
+ * Equality on tree induction forms.
+ *)
+interactive set_ind_equality 'H 'A (bind{x.'B['x]}) 'a 'f 'g :
+   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
+   sequent [squash] { 'H; a: 'A; f: 'B['a] -> set; g: a: 'A -> 'B['a] -> 'T >-
+      'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
+   sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
+                          = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
+                          in 'T }
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -402,9 +432,11 @@ let eqSetT p =
 (*
  * Assumption.
  *)
-let assumSetT i p =
+let setAssumT i p =
    let i, j = hyp_indices p i in
       isset_assum i j p
+
+let assumSetT = setAssumT
 
 (*
  * -*-

@@ -66,7 +66,7 @@ dform tree_df : mode[prl] :: tree{'a; 'f} =
 
 dform tree_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: tree_ind{'z; a, f, g. 'body} =
    szone pushm[3] `"tree_ind(" slot{'g} `"." " "
-   `"let tree(" slot{'a} `", " slot{'f} `") =" " " slot{'z} " " `"in" " "
+   pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" space slot{'z} space `"in" popm space
    slot{'body} popm ezone
 
 (************************************************************************

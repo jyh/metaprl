@@ -44,6 +44,12 @@ axiom small_type_type 'H :
 (*
  * These are the types in the small universe.
  *)
+axiom void_small 'H :
+   sequent ['ext] { 'H >- small_type{void} }
+
+axiom unit_small 'H :
+   sequent ['ext] { 'H >- small_type{unit} }
+
 axiom int_small 'H :
    sequent ['ext] { 'H >- small_type{int} }
 
@@ -77,8 +83,13 @@ axiom equal_small 'H :
  *)
 val smallTypeT : tactic
 
+val smallAssumT : int -> tactic
+
 (*
  * $Log$
+ * Revision 1.2  1998/07/08 15:41:53  jyh
+ * Pushed higherC into the refiner for efficiency.
+ *
  * Revision 1.1  1998/07/06 21:39:26  jyh
  * Working czf_itt_set.
  *

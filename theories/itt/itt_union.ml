@@ -104,6 +104,15 @@ prim unionEquality 'H :
    it
 
 (*
+ * Typehood.
+ *)
+prim unionType 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{. 'A + 'B } } =
+   it
+
+(*
  * H >- A + B ext inl a
  * by inlFormation
  * H >- A
@@ -268,6 +277,19 @@ let d_unionT i =
       d_hyp_union i
 
 let d_resource = d_resource.resource_improve d_resource (union_term, d_unionT)
+
+(*
+ * Typehood.
+ *)
+let d_union_typeT i p =
+   if i = 0 then
+      unionType (hyp_count p) p
+   else
+      raise (RefineError ("d_union_typeT", StringError "no elimination form"))
+
+let union_type_term = << "type"{. 'A + 'B } >>
+
+let d_resource = d_resource.resource_improve d_resource (union_type_term, d_union_typeT)
 
 (************************************************************************
  * EQCD TACTIC                                                          *

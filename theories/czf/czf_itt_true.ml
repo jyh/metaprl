@@ -12,7 +12,7 @@ open Tacticals
 
 declare "true"
 
-primrw unfoldTrue : "true" <--> (0 = 0 in int)
+primrw unfold_true : "true" <--> unit
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -31,8 +31,7 @@ dform true_df : "true" =
  * H >- true
  * by true_intro
  *)
-prim true_intro 'H : : sequent ['ext] { 'H >- "true" } =
-   it
+interactive true_intro 'H : : sequent ['ext] { 'H >- "true" }
 
 (*
  * True is well formed.
@@ -40,16 +39,20 @@ prim true_intro 'H : : sequent ['ext] { 'H >- "true" } =
  * H >- wf{"true"}
  * by true_wf
  *)
-prim true_wf 'H : :
-   sequent ['ext] { 'H >- wf{."true"} } =
-   it
+interactive true_wf 'H : :
+   sequent ['ext] { 'H >- wf{."true"} }
+
+(*
+ * Typehood.
+ *)
+interactive true_type 'H : :
+   sequent ['ext] { 'H >- "type"{."true"} }
 
 (*
  * True is a restricted formula.
  *)
-prim true_res 'H : :
-   sequent ['ext] { 'H >- restricted{."true"} } =
-   it
+interactive true_res 'H : :
+   sequent ['ext] { 'H >- restricted{x ."true"} }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -80,6 +83,19 @@ let d_wf_trueT i p =
       raise (RefineError ("d_wf_trueT", (StringTermError ("no elim form", wf_true_term))))
 
 let d_resource = d_resource.resource_improve d_resource (wf_true_term, d_wf_trueT)
+
+(*
+ * Typehood.
+ *)
+let d_true_typeT i p =
+   if i = 0 then
+      true_type (hyp_count p) p
+   else
+      raise (RefineError ("d_true_typeT", (StringError "no elimination form")))
+
+let true_type_term = << "type"{."true"} >>
+
+let d_resource = d_resource.resource_improve d_resource (true_type_term, d_true_typeT)
 
 (*
  * Restricted.

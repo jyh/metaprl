@@ -61,6 +61,19 @@ primrw reducePropTrue : "prop"["true":t] <--> "true"
 primrw reducePropFalse : "prop"["false":t] <--> "false"
 
 (************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
+
+(*
+ * IFF typehood.
+ *)
+prim iffType 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{iff{'A; 'B}} } =
+   it
+
+(************************************************************************
  * DISPLAY FORMS							*
  ************************************************************************)
 
@@ -119,7 +132,7 @@ dform all_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 dform exists_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
-   pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B}
+   pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 (************************************************************************
  * TACTICS                                                              *
@@ -197,6 +210,19 @@ let add arg =
       aux arg
 
 let d_resource, eqcd_resource = add (d_resource, eqcd_resource) terms
+
+(*
+ * Special case for iff.
+ *)
+let d_iff_typeT i p =
+   if i = 0 then
+      iffType (Sequent.hyp_count p) p
+   else
+      raise (RefineError ("d_iff_typeT", StringError "no elimination form"))
+
+let iff_type_term = << "type"{iff{'A; 'B}} >>
+
+let d_resource = d_resource.resource_improve d_resource (iff_type_term, d_iff_typeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -11,7 +11,7 @@ declare "false"
 (*
  * Empty type.
  *)
-rewrite unfoldFalse : "false" <--> (0 = 1 in int)
+rewrite unfold_false : "false" <--> void
 
 (*
  * From false prove anything.
@@ -29,10 +29,16 @@ axiom false_wf 'H :
    sequent ['ext] { 'H >- wf{."false"} }
 
 (*
+ * False is a type.
+ *)
+axiom false_type 'H :
+   sequent ['ext] { 'H >- "type"{."false"} }
+
+(*
  * False is a restricted formula.
  *)
 axiom false_res 'H :
-   sequent ['ext] { 'H >- restricted{."false"} }
+   sequent ['ext] { 'H >- restricted{x ."false"} }
 
 (*
  * -*-

@@ -143,11 +143,11 @@ let nthHypT i p =
  *)
 let thinT i p =
    let x, _ = nth_hyp p i in
-   let i, j = hyp_indices p i in
-      if is_free_seq_var (i + 1) x p then
-         raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
+      if is_free_seq_var i x p then
+            raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
       else
-         thin i j p
+         let i, j = hyp_indices p i in
+            thin i j p
 
 let thinAllT i j p =
    let rec tac j =

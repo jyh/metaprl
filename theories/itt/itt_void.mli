@@ -35,6 +35,11 @@ axiom voidFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
 axiom voidEquality 'H : sequent ['ext] { 'H >- void = void in univ[@i:l] }
 
 (*
+ * Typehood.
+ *)
+axiom voidType 'H : sequent ['ext] { 'H >- "type"{void} }
+
+(*
  * H; i:x:Void; J >- C
  * by voidElimination i
  *)

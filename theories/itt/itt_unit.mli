@@ -37,6 +37,11 @@ axiom unitFormation 'H : sequent ['ext] { 'H >- univ[@i:l] }
 axiom unitEquality 'H : sequent ['ext] { 'H >- unit = unit in univ[@i:l] }
 
 (*
+ * Is a type.
+ *)
+axiom unitType 'H : sequent ['ext] { 'H >- "type"{unit} }
+
+(*
  * H >- Ui ext Unit
  * by unitFormation
  *)

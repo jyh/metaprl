@@ -12,12 +12,14 @@ MLZFILES :=\
 # Library files
 NLFILES :=\
 	czf_itt_small\
-	czf_itt_set
-
-X=\
+	czf_itt_set\
+	czf_itt_empty\
+	czf_itt_union\
 	czf_itt_true\
 	czf_itt_false\
 	czf_itt_or\
+
+X=\
 	czf_itt_and\
 	czf_itt_implies\
 	czf_itt_all\

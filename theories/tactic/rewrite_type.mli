@@ -104,6 +104,11 @@ val funC : (env -> conv) -> conv
 val addrC : int list -> conv -> conv
 
 (*
+ * Apply at conversion at the outermost terms where it does not fail.
+ *)
+val higherC : conv -> conv
+
+(*
  * Two versions of cut.
  * foldC t conv: cuts in the new term t, and uses conv to
  *    solve the resulting goal.

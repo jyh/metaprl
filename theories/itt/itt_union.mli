@@ -66,6 +66,15 @@ axiom unionEquality 'H :
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[@i:l] } -->
    sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[@i:l] }
 
+
+(*
+ * Typehood.
+ *)
+axiom unionType 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{. 'A + 'B } }
+
 (*
  * H >- A + B ext inl a
  * by inlFormation

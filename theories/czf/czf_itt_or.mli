@@ -1,22 +1,40 @@
 (*
- * Primitiva axiomatization of implication.
+ * Primitive axiomatization of implication.
  *)
 
 include Czf_itt_set
 
 open Conversionals
 
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
 declare "or"{'A; 'B}
-declare inl{'A}
-declare inr{'A}
+declare "inl"{'x}
+declare "inr"{'x}
+declare decide{'x; y. 'a['y]; z. 'b['z]}
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
 
 rewrite unfold_or : "or"{'A; 'B} <--> union{'A; 'B}
-rewrite unfold_inl : inl{'a} <--> Itt_union!inl{'a}
-rewrite unfold_inr : inr{'a} <--> Itt_union!inr{'a}
+rewrite unfold_inl : inl{'x} <--> Itt_union!inl{'x}
+rewrite unfold_inr : inr{'x} <--> Itt_union!inr{'x}
+rewrite unfold_decide : decide{'x; y. 'a['y]; z. 'b['z]} <--> Itt_union!decide{'x; y. 'a['y]; z. 'b['z]}
+
+rewrite reduce_decide_inl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
+rewrite reduce_decide_inr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 
 val fold_or : conv
-val fold_inl : conv
 val fold_inr : conv
+val fold_inl : conv
+val fold_decide : conv
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
 
 (*
  * Intro.
@@ -57,11 +75,23 @@ axiom or_wf 'H :
    sequent ['ext] { 'H >- wf{'B} } -->
    sequent ['ext] { 'H >- wf{."or"{'A; 'B}} }
 
+axiom or_type 'H :
+   sequent ['ext] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{."or"{'A; 'B}} }
+
 (*
  * Implication is restricted.
  *)
 axiom or_res 'H :
-   sequent ['ext] { 'H >- restricted{'A} } -->
-   sequent ['ext] { 'H >- restricted{'B} } -->
-   sequent ['ext] { 'H >- restricted{."or"{'A; 'B}} }
+   sequent ['ext] { 'H >- restricted{x. 'A['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. 'B['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. "or"{'A['x]; 'B['x]}} }
 
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

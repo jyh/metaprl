@@ -53,6 +53,14 @@ axiom and_wf 'H :
    sequent ['ext] { 'H >- wf{."and"{'A; 'B}} }
 
 (*
+ * Typehood.
+ *)
+axiom and_type 'H :
+   sequent ['ext] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{."and"{'A; 'B}}
+
+(*
  * Implication is restricted.
  *)
 axiom and_res 'H :

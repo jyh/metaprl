@@ -40,6 +40,7 @@ type conv =
  | Fold of term * conv
  | Cut of term
  | Fun of (env -> conv)
+ | Higher of conv
  | Identity
 
 (************************************************************************
@@ -201,6 +202,37 @@ let addrC addr =
             Address (addr, conv))
 
 (*
+ * Apply the conversion at the highest addresses.
+ *)
+let higherC = function
+   Rewrite rw ->
+      Rewrite (rwhigher rw)
+ | CondRewrite crw ->
+      CondRewrite (crwhigher crw)
+ | conv ->
+      Higher conv
+
+let allSubC conv =
+   let allSubCE conv env =
+      let t = env_term env in
+      let count = subterm_count t in
+      let rec subC conv count i =
+         if i = count then
+            idC
+         else
+            (addrC [i] conv) andthenC (subC conv count (i + 1))
+      in
+         subC conv count 0
+   in
+      funC (allSubCE conv)
+
+let higherLC rw =
+   let rec higherCE rw env =
+      (rw orelseC (allSubC (funC (higherCE rw))))
+   in
+      funC (higherCE rw)
+
+(*
  * Reverse the conversion at the specified address.
  *)
 let foldC t conv =
@@ -321,6 +353,8 @@ let rec apply i rel addr conv p =
          idT p
     | Fun f ->
          apply i rel addr (f (p, addr)) p
+    | Higher conv ->
+         apply i rel addr (higherLC conv) p
     | Fold (t, conv) ->
          (cutT i rel t thenLT [idT; solveCutT i rel conv]) p
     | Cut t ->
@@ -356,62 +390,6 @@ and solveCutT i rel conv p =
  * Apply the rewrite.
  *)
 let rw conv i p =
-(*
-   (*
-    * root: address of the clause
-    * rel: offset into the term
-    * addr: compose_addrress root rel
-    *)
-   let rec apply i rel addr conv p =
-      match conv with
-         Rewrite rw ->
-            Tactic_type.tactic_of_rewrite (rwaddr addr rw) p
-       | CondRewrite crw ->
-            Tactic_type.tactic_of_cond_rewrite (crwaddr addr crw) p
-       | Compose clist ->
-            composeT i rel addr (Flist.tree_of_list clist) p
-       | Choose clist ->
-            chooseT i rel addr (Flist.tree_of_list clist) p
-       | Address (addr', conv) ->
-            let rel = compose_address rel addr' in
-            let addr = compose_address addr addr' in
-               apply i rel addr conv p
-       | Identity ->
-            idT p
-       | Fun f ->
-            apply i rel addr (f (p, addr)) p
-       | Fold (t, conv) ->
-            (cutT i rel t thenLT [idT; solveCutT i rel conv]) p
-       | Cut t ->
-            cutT i rel t p
-
-   and composeT i rel addr tree p =
-      match tree with
-         Flist.Empty ->
-            idT p
-       | Flist.Leaf conv ->
-            apply i rel addr conv p
-       | Flist.Append (tree1, tree2) ->
-            (composeT i rel addr tree1
-             thenT composeT i rel addr tree2) p
-
-   and chooseT i rel addr tree p =
-      match tree with
-         Flist.Empty ->
-            idT p
-       | Flist.Leaf conv ->
-            apply i rel addr conv p
-       | Flist.Append (tree1, tree2) ->
-            (chooseT i rel addr tree1
-             orelseT chooseT i rel addr tree2) p
-
-   and solveCutT i rel conv p =
-      let rel = compose_address (make_address [0]) rel in
-      let root = Sequent.clause_addr p 0 in
-      let addr = compose_address root rel in
-         (apply i rel addr conv thenT rwSeqAxiomT) p
-   in
-*)
    let addr = Sequent.clause_addr p i in
       apply i (make_address []) addr conv p
 

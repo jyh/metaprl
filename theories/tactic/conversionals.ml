@@ -119,14 +119,11 @@ let allSubC conv =
       funC (allSubCE conv)
 
 (*
- * Apply to leftmost-outermost term.
- * We use our own sub, so that we can track the addresses.
+ * Outermost terms.
+ * HigherC has been moved into the refiner
+ * for efficiency.
  *)
-let higherC rw =
-   let rec higherCE rw env =
-      (rw orelseC (allSubC (funC (higherCE rw))))
-   in
-      funC (higherCE rw)
+let higherC = Rewrite_type.higherC
 
 let rwh conv i =
    rw (higherC conv) i

@@ -15,6 +15,8 @@ open Conversionals
 open Sequent
 open Var
 
+open Itt_equal
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -61,6 +63,12 @@ interactive small_type_type 'H :
 (*
  * These are the types in the small universe.
  *)
+interactive void_small 'H : :
+   sequent ['ext] { 'H >- small_type{void} }
+
+interactive unit_small 'H : :
+   sequent ['ext] { 'H >- small_type{unit} }
+
 interactive int_small 'H : :
    sequent ['ext] { 'H >- small_type{int} }
 
@@ -128,6 +136,26 @@ let d_resource = d_resource.resource_improve d_resource (small_type_term, d_smal
 (*
  * Small intro.
  *)
+let d_void_small_typeT i p =
+   if i = 0 then
+      void_small (hyp_count p) p
+   else
+      raise (RefineError ("d_void_small_typeT", StringError "no elimination form"))
+
+let void_small_type_term = << small_type{void} >>
+
+let d_resource = d_resource.resource_improve d_resource (void_small_type_term, d_void_small_typeT)
+
+let d_unit_small_typeT i p =
+   if i = 0 then
+      unit_small (hyp_count p) p
+   else
+      raise (RefineError ("d_unit_small_typeT", StringError "no elimination form"))
+
+let unit_small_type_term = << small_type{unit} >>
+
+let d_resource = d_resource.resource_improve d_resource (unit_small_type_term, d_unit_small_typeT)
+
 let d_int_small_typeT i p =
    if i = 0 then
       int_small (hyp_count p) p
@@ -180,8 +208,14 @@ let equal_small_type_term = << small_type{. 'a = 'b in 'A} >>
 
 let d_resource = d_resource.resource_improve d_resource (equal_small_type_term, d_equal_small_typeT)
 
+let smallAssumT i p =
+   (tryT (rwh unfold_small_type 0) thenT equalAssumT i) p
+
 (*
  * $Log$
+ * Revision 1.2  1998/07/08 15:41:52  jyh
+ * Pushed higherC into the refiner for efficiency.
+ *
  * Revision 1.1  1998/07/06 21:39:26  jyh
  * Working czf_itt_set.
  *

@@ -35,6 +35,18 @@ rewrite reducePropTrue : "prop"["true":t] <--> "true"
 rewrite reducePropFalse : "prop"["false":t] <--> "false"
 
 (************************************************************************
+ * EXTRA RULES                                                          *
+ ************************************************************************)
+
+(*
+ * IFF typehood.
+ *)
+axiom iffType 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{iff{'A; 'B}} }
+
+(************************************************************************
  * DISPLAY FORMS							*
  ************************************************************************)
 

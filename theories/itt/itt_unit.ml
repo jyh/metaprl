@@ -14,6 +14,7 @@ open Debug
 open Sequent
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.RefineError
 open Resource
 
 open Tacticals
@@ -58,6 +59,11 @@ prim unitFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = unit
  * by unitEquality
  *)
 prim unitEquality 'H : : sequent ['ext] { 'H >- unit = unit in univ[@i:l] } = it
+
+(*
+ * Is a type.
+ *)
+prim unitType 'H : : sequent ['ext] { 'H >- "type"{unit} } = it
 
 (*
  * H >- Ui ext Unit
@@ -111,7 +117,16 @@ let d_unitT i p =
              unitElimination i j) p
 
 let d_resource = d_resource.resource_improve d_resource (unit_term, d_unitT)
-let dT = d_resource.resource_extract d_resource
+
+let d_unit_typeT i p =
+   if i = 0 then
+      unitType (hyp_count p) p
+   else
+      raise (RefineError ("d_unit_typeT", StringError "no elimination form"))
+
+let unit_type_term = << "type"{unit} >>
+
+let d_resource = d_resource.resource_improve d_resource (unit_type_term, d_unit_typeT)
 
 (*
  * EqCD.
@@ -127,6 +142,12 @@ let eqcd_itT p =
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (unit_term, eqcd_unitT)
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (it_term, eqcd_itT)
 let eqcdT = eqcd_resource.resource_extract eqcd_resource
+
+let equal_unit_term = << unit = unit in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (equal_unit_term, d_wrap_eqcd eqcd_unitT)
+
+let dT = d_resource.resource_extract d_resource
 
 (************************************************************************
  * SQUASH STABILITY                                                     *

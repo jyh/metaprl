@@ -50,6 +50,9 @@ resource (term * (term list) * tactic, ge_intro_type) ge_intro
 val process_ge_elim_resource_annotation :
    (pre_tactic, term * (term list) * (int -> tactic)) annotation_processor
 
+val process_ge_intro_resource_annotation :
+   (pre_tactic, term * (term list) * tactic) annotation_processor
+
 (*
 val all2ge : tactic_arg -> (term list list * tactic) list
 

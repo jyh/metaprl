@@ -174,6 +174,19 @@ interactive nat2ge {| ge_elim |} 'H :
    sequent { <H>; x: nat; <J['x]>; 'x>=0 >- 'C['x]}  -->
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
+interactive ge2nat {| ge_intro |} :
+   [wf] sequent { <H> >- 'n in int }  -->
+   sequent { <H>; (-1) >= 'n >- "false" } -->
+   sequent { <H> >- 'n in nat }
+
+interactive nat_plusone {| nth_hyp |} 'H :
+   sequent { <H>; a: nat; <J['a]> >- 'a +@ 1 in nat }
+
+interactive nat_plus {| intro [AutoMustComplete] |} :
+   sequent { <H> >- 'a in nat } -->
+   sequent { <H> >- 'b in nat } -->
+   sequent { <H> >- ('a +@ 'b) in nat }
+
 interactive natInduction {| elim [ThinOption thinT] |} 'H  :
    sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
    sequent { <H>; n: nat; <J['n]>; m: nat;  'C['m] >- 'C['m +@ 1] }  -->

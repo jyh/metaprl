@@ -46,13 +46,6 @@ extends Itt_list2
 
 open Basic_tactics
 
-
-interactive nat_add :
-   sequent { <H> >- 'm in nat } -->
-   sequent { <H> >- 'n in nat } -->
-   sequent { <H> >- 'm +@ 'n in nat }
-
-
 doc "doc"{terms}
 
 declare BOperator

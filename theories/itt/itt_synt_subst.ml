@@ -128,7 +128,6 @@ define unfold_add_new_var:
    add_var{'bt} <--> add_var{'bt; new_var{'bt}}
 
 interactive_rw add_new_var_reduce1 {| reduce |} :
-   'op in BOperator -->
    add_var{make_bterm{'op;'subterms}} <--> make_bterm{bind{'op}; map{x.add_var{'x; var{op_bdepth{'op}; 0}}; 'subterms}}
 
 interactive_rw add_new_var_reduce2 {| reduce |} :

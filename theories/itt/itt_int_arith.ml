@@ -107,7 +107,7 @@ let extract_ge_elim_data tbl i p =
 	terms, tac
 
 let extract_ge_intro_data tbl p =
-   let t = Sequent.goal p in
+   let t = Sequent.concl p in
    if !debug_arith_dtactic then
 		eprintf "Itt_int_arith.ge_intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
 	let terms, tac = Term_match_table.lookup_rmap tbl select_all t in
@@ -190,8 +190,7 @@ let hyp2geT = argfunT (fun i p ->
 
 let concl2geT = funT (fun p ->
 	try
-		let _,tac=Sequent.get_resource_arg p get_ge_intro_resource p in
-		tac
+		snd (Sequent.get_resource_arg p get_ge_intro_resource p)
 	with Not_found ->
 		idT
 )
@@ -266,7 +265,7 @@ let allhyps2ge p tail =
 
 let all2ge p =
 	(*let pos, l = concl2ge p (succ (Sequent.hyp_count p)) in*)
-	let l = allhyps2ge p [] in
+	let l = allhyps2ge p (concl2ge p) in
 	if !debug_arith_dtactic then
 		eprintf "Itt_int_arith.all2ge: %i inequalities collected%t" (List.length l) eflush;
 	l
@@ -511,7 +510,7 @@ let arithRelInConcl2HypT = funT (fun p ->
    else if is_equal_term t then eqInConcl2HypT t
    else if is_neq_int_term t then neqInConcl2HypT
    else if is_not_term t then not_intro
-   else idT)
+   else concl2geT)
 
 let arith_rels=[
 	opname_of_term << 'x<'y >>;

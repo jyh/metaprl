@@ -107,12 +107,43 @@ let _ =
  ************************************************************************)
 
 doc <:doc<@doc{@terms} >>
-declare equiv{'s; 'r; 'a; 'b}
 declare equiv{'s; 'r}
-declare equiv_fun_set{'s; 'r; z. 'f['z]}
-declare equiv_fun_prop{'s; 'r; z. 'P['z]}
-(*declare equiv_dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}*)
+
+doc docoff
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+doc <:doc<
+   @begin[doc]
+   @rewrites
+
+   The @tt{equiv} judgment requires that the two elements $a$
+   and $b$ are both in the set $s$ and $@pair{a; b}$ is in $r$.
+   @end[doc]
+>>
+define unfold_equiv : equiv{'s; 'r; 'a; 'b} <-->
+   (((isset{'s} & isset{'r} & isset{'a} & isset{'b}) & mem{'a; 's} & mem{'b; 's}) & mem{pair{'a; 'b}; 'r})
+
+doc <:doc<
+   @begin[doc]
+   The following two rewrites define the functionality judgments
+   in the sense of equivalence.
+   @end[doc]
+>>
+define unfold_equiv_fun_set : equiv_fun_set{'s; 'r; z. 'f['z]} <-->
+   (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => equiv{'s; 'r; 'f['a]; 'f['b]}))
+
+define unfold_equiv_fun_prop : equiv_fun_prop{'s; 'r; z. 'P['z]} <-->
+    (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => 'P['a] => 'P['b]))
 doc <:doc<@docoff >>
+
+(*define unfold_equiv_dfun_prop : equiv_dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
+   (all s: set. all r: set. all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => (u1: 'A['a] -> 'B['a; 'u1] -> u2: 'A['b] -> 'B['b; 'u2])))
+*)
+
+let fold_equiv = makeFoldC << equiv{'s; 'r; 'a; 'b} >> unfold_equiv
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -135,40 +166,6 @@ let equiv_fun_prop_opname = opname_of_term equiv_fun_prop_term
 let is_equiv_fun_prop_term = is_dep0_dep0_dep1_term equiv_fun_prop_opname
 let dest_equiv_fun_prop = dest_dep0_dep0_dep1_term equiv_fun_prop_opname
 let mk_equiv_fun_prop_term = mk_dep0_dep0_dep1_term equiv_fun_prop_opname
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-doc <:doc<
-   @begin[doc]
-   @rewrites
-
-   The @tt{equiv} judgment requires that the two elements $a$
-   and $b$ are both in the set $s$ and $@pair{a; b}$ is in $r$.
-   @end[doc]
->>
-prim_rw unfold_equiv : equiv{'s; 'r; 'a; 'b} <-->
-   (((isset{'s} & isset{'r} & isset{'a} & isset{'b}) & mem{'a; 's} & mem{'b; 's}) & mem{pair{'a; 'b}; 'r})
-
-doc <:doc<
-   @begin[doc]
-   The following two rewrites define the functionality judgments
-   in the sense of equivalence.
-   @end[doc]
->>
-prim_rw unfold_equiv_fun_set : equiv_fun_set{'s; 'r; z. 'f['z]} <-->
-   (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => equiv{'s; 'r; 'f['a]; 'f['b]}))
-
-prim_rw unfold_equiv_fun_prop : equiv_fun_prop{'s; 'r; z. 'P['z]} <-->
-    (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => 'P['a] => 'P['b]))
-doc <:doc<@docoff >>
-
-(*prim_rw unfold_equiv_dfun_prop : equiv_dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
-   (all s: set. all r: set. all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => (u1: 'A['a] -> 'B['a; 'u1] -> u2: 'A['b] -> 'B['b; 'u2])))
-*)
-
-let fold_equiv = makeFoldC << equiv{'s; 'r; 'a; 'b} >> unfold_equiv
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -210,13 +207,12 @@ prim equiv_rel_type {| intro [] |} :
    sequent { <H> >- "type"{equiv{'s; 'r}} } =
    it
 
-prim equiv_type {| intro [] |} :
+interactive equiv_type {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
    sequent { <H> >- isset{'r} } -->
    sequent { <H> >- isset{'a} } -->
    sequent { <H> >- isset{'b} } -->
-   sequent { <H> >- "type"{equiv{'s; 'r; 'a; 'b}} } =
-   it
+   sequent { <H> >- "type"{equiv{'s; 'r; 'a; 'b}} }
 
 doc <:doc<
    @begin[doc]

@@ -328,12 +328,12 @@ prim_rw reduce_geIntOp :
    binop_exp{ geIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_cmpIntOp :
-   binop_exp{ cmpIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
+   binop_exp{ cmpIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{'a1; 'a2};
-      0;
+      atomInt{ 0 };
       ifthenelse{ lt_bool{'a1; 'a2};
-         (-1);
-         1
+         atomInt{ (-1) };
+         atomInt{ 1 }
       }
    }
 
@@ -394,12 +394,12 @@ prim_rw reduce_geRawIntOp :
    binop_exp{ geRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_cmpRawIntOp :
-   binop_exp{ cmpRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
+   binop_exp{ cmpRawIntOp{'p; 's}; tyRawInt{ int32; val_true }; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{'a1; 'a2};
-      0;
+      atomRawInt{ int32; val_true; 0 };
       ifthenelse{ lt_bool{'a1; 'a2};
-         (-1);
-         1
+         atomRawInt{ int32; val_true; (-1) };
+         atomRawInt{ int32; val_true; 1 }
       }
    }
 

@@ -41,43 +41,10 @@ open Tactic_type.Conversionals
  * Rewrites.
  *************************************************************************)
 
-(*
- * Naml integers.
- *)
-
-topval const_elim_plusIntOp : conv
-topval const_elim_minusIntOp : conv
-topval const_elim_mulIntOp : conv
-topval const_elim_divIntOp : conv
-topval const_elim_remIntOp : conv
-topval const_elim_maxIntOp : conv
-topval const_elim_minIntOp : conv
-topval const_elim_eqIntOp : conv
-topval const_elim_neqIntOp : conv
-topval const_elim_ltIntOp : conv
-topval const_elim_leIntOp : conv
-topval const_elim_gtIntOp : conv
-topval const_elim_geIntOp : conv
-topval const_elim_cmpIntOp : conv
-
-(*
- * Native integers.
- *)
-
-topval const_elim_plusRawIntOp : conv
-topval const_elim_minusRawIntOp : conv
-topval const_elim_mulRawIntOp : conv
-topval const_elim_divRawIntOp : conv
-topval const_elim_remRawIntOp : conv
-topval const_elim_maxRawIntOp : conv
-topval const_elim_minRawIntOp : conv
-topval const_elim_eqRawIntOp : conv
-topval const_elim_neqRawIntOp : conv
-topval const_elim_ltRawIntOp : conv
-topval const_elim_leRawIntOp : conv
-topval const_elim_gtRawIntOp : conv
-topval const_elim_geRawIntOp : conv
-topval const_elim_cmpRawIntOp : conv
+topval const_elim_atomVar_Int : conv
+topval const_elim_atomVar_RawInt : conv
+topval const_elim_atomInt : conv
+topval const_elim_atomRawInt : conv
 
 (*************************************************************************
  * Automation.

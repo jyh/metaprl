@@ -50,6 +50,6 @@ interactive const_elim2 'H :
 
 interactive const_elim3 'H :
    sequent ['ext] { 'H >-
-      letBinop{ plusIntOp; tyInt; 4; 6; a.
-      letBinop{ minusIntOp; tyInt; 4; 'a; b.
-      letBinop{ mulIntOp; tyInt; 'b; 'c; v. 'v }}}}
+      letBinop{ plusIntOp; tyInt; atomInt{4}; atomInt{6}; a.
+      letBinop{ minusIntOp; tyInt; atomInt{4}; 'a; b.
+      letBinop{ mulIntOp; tyInt; atomVar{'b}; atomVar{'c}; v. 'v }}}}

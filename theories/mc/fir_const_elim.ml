@@ -44,129 +44,24 @@ open Tactic_type.Conversionals
  *************************************************************************)
 
 (*
- * I'm assuming well formed atom(Raw)Int's here.
- * The results should be kept in atom(Raw)Int's to preserve the
- * structure of the FIR.
+ * I'm assuming well formed expressions here.
+ * If that isn't the case, things will fall apart later on...
  *)
 
-(*
- * Naml integers.
- *)
+interactive_rw const_elim_atomVar_Int :
+   atomVar{ atomInt{'i} } <--> atomInt{'i}
 
-interactive_rw const_elim_plusIntOp :
-   letBinop{ plusIntOp; tyInt; atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ plusIntOp; tyInt; 'i; 'j } ]
-interactive_rw const_elim_minusIntOp :
-   letBinop{ minusIntOp; tyInt; atomInt{'i}; atomInt{'j};  v. 'exp['v] } <-->
-   'exp[ binop_exp{ minusIntOp; tyInt; 'i; 'j } ]
-interactive_rw const_elim_mulIntOp :
-   letBinop{ mulIntOp; tyInt; atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ mulIntOp; tyInt; 'i; 'j } ]
-interactive_rw const_elim_divIntOp :
-   letBinop{ divIntOp; tyInt; atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ divIntOp; tyInt; 'i; 'j } ]
-interactive_rw const_elim_remIntOp :
-   letBinop{ remIntOp; tyInt; atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ remIntOp; tyInt; 'i; 'j } ]
+interactive_rw const_elim_atomVar_RawInt :
+   atomVar{ atomRawInt{'p; 's; 'i} } <--> atomRawInt{'p; 's; 'i}
 
-interactive_rw const_elim_maxIntOp :
-   letBinop{ maxIntOp; tyInt; atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ maxIntOp; tyInt; 'i; 'j } ]
-interactive_rw const_elim_minIntOp :
-   letBinop{ minIntOp; tyInt; atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ minIntOp; tyInt; 'i; 'j } ]
+interactive_rw const_elim_atomInt :
+   letBinop{ 'op; tyInt; atomInt{'a1}; atomInt{'a2}; v. 'exp['v] } <-->
+   'exp[ binop_exp{ 'op; tyInt; 'a1; 'a2 } ]
 
-interactive_rw const_elim_eqIntOp :
-   letBinop{ eqIntOp; tyEnum{ 2 };
-      atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ eqIntOp; tyEnum{2}; 'i; 'j } ]
-interactive_rw const_elim_neqIntOp :
-   letBinop{ neqIntOp; tyEnum{ 2 };
-      atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ neqIntOp; tyEnum{2}; 'i; 'j } ]
-interactive_rw const_elim_ltIntOp :
-   letBinop{ ltIntOp; tyEnum{ 2 };
-      atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ ltIntOp; tyEnum{2}; 'i; 'j } ]
-interactive_rw const_elim_leIntOp :
-   letBinop{ leIntOp; tyEnum{ 2 };
-      atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ leIntOp; tyEnum{2}; 'i; 'j } ]
-interactive_rw const_elim_gtIntOp :
-   letBinop{ gtIntOp; tyEnum{ 2 };
-      atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ gtIntOp; tyEnum{2}; 'i; 'j } ]
-interactive_rw const_elim_geIntOp :
-   letBinop{ geIntOp; tyEnum{ 2 };
-      atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ geIntOp; tyEnum{2}; 'i; 'j } ]
-interactive_rw const_elim_cmpIntOp :
-   letBinop{ cmpIntOp; tyEnum{ 2 };
-      atomInt{'i}; atomInt{'j}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ cmpIntOp; tyEnum{2}; 'i; 'j } ]
-
-(*
- * Native integers.
- *)
-
-interactive_rw const_elim_plusRawIntOp :
-   letBinop{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ plusRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_minusRawIntOp :
-   letBinop{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ minusRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_mulRawIntOp :
-   letBinop{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ mulRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_divRawIntOp :
-   letBinop{ divRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ divRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_remRawIntOp :
-   letBinop{ remRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ remRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-
-interactive_rw const_elim_maxRawIntOp :
-   letBinop{ maxRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ maxRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_minRawIntOp :
-   letBinop{ minRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ minRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-
-interactive_rw const_elim_eqRawIntOp :
-   letBinop{ eqRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ eqRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_neqRawIntOp :
-   letBinop{ neqRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ neqRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_ltRawIntOp :
-   letBinop{ ltRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ ltRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_leRawIntOp :
-   letBinop{ leRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ leRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_gtRawIntOp :
-   letBinop{ gtRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ gtRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_geRawIntOp :
-   letBinop{ geRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ geRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
-interactive_rw const_elim_cmpRawIntOp :
-   letBinop{ cmpRawIntOp{'p; 's}; tyRawInt{'p; 's};
-      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ cmpRawIntOp{'p;'s}; tyRawInt{'p;'s}; 'a1; 'a2 } ]
+interactive_rw const_elim_atomRawInt :
+   letBinop{ 'op; tyRawInt{'p; 's};
+      atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2}; v.'exp['v] } <-->
+   'exp[ binop_exp{ 'op; tyRawInt{'p; 's}; 'a1; 'a2 } ]
 
 (*************************************************************************
  * Automation
@@ -198,37 +93,44 @@ let firConstElimT i =
 
       reduce_beta;
 
+      reduce_plusIntOp;
+      reduce_minusIntOp;
+      reduce_mulIntOp;
+      reduce_divIntOp;
+      reduce_remIntOp;
+      reduce_maxIntOp;
+      reduce_minIntOp;
+      reduce_eqIntOp;
+      reduce_neqIntOp;
+      reduce_ltIntOp;
+      reduce_leIntOp;
+      reduce_gtIntOp;
+      reduce_geIntOp;
+      reduce_cmpIntOp;
+
+      reduce_plusRawIntOp;
+      reduce_minusRawIntOp;
+      reduce_mulRawIntOp;
+      reduce_divRawIntOp;
+      reduce_remRawIntOp;
+      reduce_maxRawIntOp;
+      reduce_minRawIntOp;
+      reduce_eqRawIntOp;
+      reduce_neqRawIntOp;
+      reduce_ltRawIntOp;
+      reduce_leRawIntOp;
+      reduce_gtRawIntOp;
+      reduce_geRawIntOp;
+      reduce_cmpRawIntOp;
+
       (* Now we get to the rewrites we defined above. *)
 
-      const_elim_plusIntOp;
-      const_elim_minusIntOp;
-      const_elim_mulIntOp;
-      const_elim_divIntOp;
-      const_elim_remIntOp;
-      const_elim_maxIntOp;
-      const_elim_minIntOp;
-      const_elim_eqIntOp;
-      const_elim_neqIntOp;
-      const_elim_ltIntOp;
-      const_elim_leIntOp;
-      const_elim_gtIntOp;
-      const_elim_geIntOp;
-      const_elim_cmpIntOp;
+      const_elim_atomVar_Int;
+      const_elim_atomVar_RawInt;
+      const_elim_atomInt;
+      const_elim_atomRawInt;
 
-      const_elim_plusRawIntOp;
-      const_elim_minusRawIntOp;
-      const_elim_mulRawIntOp;
-      const_elim_divRawIntOp;
-      const_elim_remRawIntOp;
-      const_elim_maxRawIntOp;
-      const_elim_minRawIntOp;
-      const_elim_eqRawIntOp;
-      const_elim_neqRawIntOp;
-      const_elim_ltRawIntOp;
-      const_elim_leRawIntOp;
-      const_elim_gtRawIntOp;
-      const_elim_geRawIntOp;
-      const_elim_cmpRawIntOp;
+      (* Clean up anything else that remains. *)
 
       reduceTopC
    ] )) i

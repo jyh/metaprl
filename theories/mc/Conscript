@@ -1,0 +1,31 @@
+Import qw( env );
+
+$env = $env->clone(
+   INCPATH  => [@{$env->{INCPATH}}, "../tactic", "../ocaml", "../base",
+                "../itt"]
+);
+
+OCamlSources $env
+   'fir_int_set.ml',
+   'fir_rawint_set.ml',
+   'fir_ty.ml',
+   'fir_exp.ml',
+   'fir_eval.ml',
+   'fir_deadcode.ml',
+   'fir_const_elim.ml',
+   'mc_theory.ml',
+   'fir_test.ml';
+
+OCamlLibrary $env 'base',
+   'fir_int_set',
+   'fir_rawint_set',
+   'fir_ty',
+   'fir_exp',
+   'fir_eval',
+   'fir_deadcode',
+   'fir_const_elim',
+   'mc_theory',
+   'fir_test';
+
+## Add the library to the default target list
+Default qw( base.cmxa );

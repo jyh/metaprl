@@ -161,7 +161,8 @@ dform close_rec_var_df : CloseRecVar{'R; 'frame} =
 dform close_rec_df : parens :: "prec"[prec_let] :: CloseRec{R1, frame1. 'e1; R2, frame2. 'e2; 'length; 'tuple} =
    szone pushm[3] bf["close rec "]
    slot{'R1} `"," slot{'frame1} `"." hspace 'e1 popm ezone
-   hspace slot{'R2} `"," slot{'frame2} bf["[length="] slot{'length} bf["]"] slot{'tuple} bf["."]
+   hspace slot{'R2} `"," slot{'frame2} bf["."]
+   hspace slot{'tuple} bf[" of length "] slot{'length}
    hspace slot["lt"]{'e2}
 
 dform close_subscript_df : parens :: "prec"[prec_let] :: CloseSubscript{'a1; 'a2; v. 'e} =

@@ -1,3 +1,4 @@
+extends Itt_theory
 extends Czf_itt_set
 extends Czf_itt_eq
 extends Czf_itt_empty
@@ -5,9 +6,6 @@ extends Czf_itt_singleton
 extends Czf_itt_setdiff
 extends Czf_itt_union
 extends Czf_itt_isect
-extends Itt_bool
-extends Itt_logic
-extends Itt_theory
 
 open Tactic_type.Conversionals
 

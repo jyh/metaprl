@@ -42,6 +42,7 @@
  * @end[doc]
  *)
 
+extends Mfir_bool
 extends Mfir_int
 extends Mfir_list
 extends Mfir_int_set
@@ -103,14 +104,15 @@ declare apply_types{ 'poly_ty; 'ty_list }
 
 (*!************************************
  * @begin[doc]
- * @modsubsection{Parameter counting}
+ * @modsubsection{Type projection}
  *
- * The term @tt[num_params] counts the number of parameters in an
- * existential type.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-declare num_params{ 'ty }
+(* XXX: documentation needs to be completed. *)
+
+declare project_in_bounds{ 'num; 'ty }
 
 
 (*!************************************
@@ -238,40 +240,44 @@ let resource reduce += [
 
 (*!************************************
  * @begin[doc]
- * @modsubsection{Parameter counting}
+ * @modsubsection{Type projection}
  *
- * Counting the number of parameters in a type $<< tyExists{t. 'ty['t]} >>$ is
- * also straightforward. Note the bogus instantiation at $<< it >>$ to
- * address the problem of free variables.  The following two rewrites are
- * combined into the @tt[reduce_num_params] conversional in order to control
- * the order of their application.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
+
+(* XXX: Documentation incomplete. *)
 
 (*
  * BUG: I really should not be using orelseC to control how
  * the following rewrites are applied.
  *)
 
-prim_rw reduce_num_params_exists :
-   num_params{ tyExists{ t. 'ty['t] } } <-->
-   (1 +@ num_params{ 'ty[it] })
-
-prim_rw reduce_num_params_any :
-   num_params{ 'ty } <-->
-   0
+prim_rw reduce_project_in_bounds_main :
+   project_in_bounds{ number[i:n]; tyExists{ t. 'ty['t] } } <-->
+   (if int_lt{ number[i:n]; 0 } then
+      "false"
+   else if int_eq{ number[i:n]; 0 } then
+      "true"
+   else
+      project_in_bounds{ (number[i:n] -@ 1); 'ty[it] })
 
 (*!
  * @docoff
  *)
 
-let reduce_num_params =
-   reduce_num_params_exists orelseC reduce_num_params_any
+let reduce_project_in_bounds =
+   reduce_project_in_bounds_main thenC
+   (  (addrC [0] reduce_int_lt) thenC
+      reduce_ifthenelse thenC
+      (tryC ((addrC [0] reduce_int_eq) thenC reduce_ifthenelse))
+   )
 
 let resource reduce += [
-   << num_params{ 'ty } >>,
-      reduce_num_params
+   << project_in_bounds{ number[i:n]; tyExists{ t. 'ty['t] } } >>,
+      reduce_project_in_bounds
 ]
+
 
 (*!************************************
  * @begin[doc]
@@ -427,9 +433,9 @@ dform apply_types_df : except_mode[src] ::
    apply_types{ 'poly_ty; 'ty_list } =
    `"(" slot{'poly_ty} `" " slot{'ty_list} `")"
 
-dform num_params_df : except_mode[src] ::
-   num_params{ 'ty } =
-   bf["num_params"] `"(" slot{'ty} `")"
+dform project_in_bounds_df : except_mode[src] ::
+   project_in_bounds{ 'num; 'ty } =
+   bf["project_in_bounds"] `"[" slot{'num} `"](" slot{'ty} `")"
 
 dform unpack_exists_df : except_mode[src] ::
    unpack_exists{ 'ty; 'var; 'num } =

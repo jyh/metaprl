@@ -32,6 +32,7 @@
  * @end[license]
  *)
 
+extends Mfir_bool
 extends Mfir_int
 extends Mfir_list
 extends Mfir_int_set
@@ -68,10 +69,10 @@ declare apply_types{ 'poly_ty; 'ty_list }
 
 
 (*
- * Parameter counting.
+ * Type projection.
  *)
 
-declare num_params{ 'ty }
+declare project_in_bounds{ 'num; 'ty }
 
 
 (*
@@ -102,7 +103,7 @@ declare ty_of_mutable_ty{ 'mutable_ty }
 
 topval reduce_get_core : conv
 topval reduce_apply_types : conv
-topval reduce_num_params : conv
+topval reduce_project_in_bounds : conv
 topval reduce_unpack_exists : conv
 topval reduce_union_cases : conv
 topval reduce_index_of_subscript : conv

@@ -398,8 +398,7 @@ prim wf_tyProject 'H 'J :
    sequent [fir] { 'H;
                    a: var_def{ 'v; tyExists{t. 'ty['t]}; 'd };
                    'J >-
-      "and"{ int_le{ 0; number[i:n] };
-             int_lt{ number[i:n]; num_params{tyExists{t. 'ty['t]}} } } } -->
+      project_in_bounds{ number[i:n]; tyExists{t. 'ty['t]} } } -->
    sequent [fir] { 'H;
                    a: var_def{ 'v; tyExists{t. 'ty['t]}; 'd };
                    'J >-

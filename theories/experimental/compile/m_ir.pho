@@ -24,17 +24,9 @@
 
 Module M
 
-Include Phobos_base
-Include Itt_int_base
-Include "list.cph"
-
 // Define the term-set to be used.
 
 Terms -extend "M_ir" {
-   declare syntax
-
-   declare local, global
-
    declare AddOp
    declare SubOp
    declare MulOp
@@ -129,21 +121,20 @@ Tokens -longest {
 // Specify grammar.
 // Must supply a start symbol.
 
-Grammar -start main {
-   main ::= exp<'e>                 => syntax{'e}
+Grammar -start exp {
 
    exp ::= LET ID<var[v:v]> EQ a<'a> IN exp<'e>
                                     => LetAtom{'a; v. 'e}
     | LET ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetFun{global{}; v. 'e1; f. 'e2}
+                                    => LetFun{v. 'e1; f. 'e2}
     | LET REC ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetRecFun{global{}; f, v. 'e1; f. 'e2}
+                                    => LetRecFun{f, v. 'e1; f. 'e2}
     | LET ID<var[v:v]> EQ a<'a1> LBRACK a<'a2> RBRACK IN exp<'e>
                                     => LetSubscript{'a1; 'a2; v. 'e}
     | LET ID<var[v:v]> EQ ID<var[f:v]> LPAREN a<'a> RPAREN IN exp<'e>
                                     => LetApply{'f; 'a; v. 'e}
     | ID<var[f:v]> LPAREN a<'a> RPAREN %prec prec_apply
-                                    => TailCall{'f; list{'a}}
+                                    => TailCall{'f; 'a}
     | IF a<'a> THEN exp<'e1> ELSE exp<'e2>
                                     => If{'a; 'e1; 'e2}
     | a<'a1> LBRACK a<'a2> RBRACK ASSIGN a<'a3> SEMI exp<'e>

@@ -216,7 +216,7 @@ interactive subterms_have_greater_bdepth {| intro [AutoMustComplete] |} :
 (************************************************************************
  * Var{bterm}                                                           *
  ************************************************************************)
-define unfold_vars_of: Vars_of{'bt} <--> { v: Var | bdepth{'v} <= bdepth{'bt} }
+define unfold_vars_of: Vars_of{'bt} <--> { v: Var | depth{'v} <= bdepth{'bt} }
 
 (************************************************************************
  * Var_bterm                                                            *

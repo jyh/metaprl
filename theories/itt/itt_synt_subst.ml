@@ -209,7 +209,6 @@ define unfold_not_free: not_free{'v;'t} <-->
           dest_bterm{'t;
                     u. "assert"{bnot{is_eq{'v;'u}}};
                     op,subterms.
-                       left{'v} >= bdepth{'t} or
                        all_list{ 'subterms; t.'not_free 't} }
          }} 't
 
@@ -217,7 +216,7 @@ let fold_not_free = makeFoldC << not_free{'v;'t} >> unfold_not_free
 
 interactive_rw not_free_reduce1 {| reduce |} :
       not_free{'v; make_bterm{'op;'subterms}} <-->
-      left{'v} >= op_bdepth{'op} or all_list{'subterms; t.not_free{'v;'t}}
+      all_list{'subterms; t.not_free{'v;'t}}
 
 interactive_rw not_free_reduce2 {| reduce |} :
       not_free{'v; var{'l;'r}} <--> "assert"{bnot{is_eq{'v; var{'l;'r}}}}

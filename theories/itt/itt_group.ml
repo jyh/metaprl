@@ -44,6 +44,7 @@ doc <:doc< @docoff >>
 extends Itt_subset
 extends Itt_subset2
 extends Itt_bisect
+extends Itt_esquash
 
 open Printf
 open Mp_debug
@@ -76,6 +77,7 @@ open Itt_fun
 open Itt_int_ext
 open Itt_bisect
 open Itt_equal
+open Itt_esquash
 
 let _ =
    show_loading "Loading Itt_group%t"
@@ -681,7 +683,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
   
-     If $s$ is a subgroup of group $g$, both the left and right
+     If $S$ is a subgroup of group $G$, both the left and right
      cosets of $s$ containing $b$ are subsets of the carrier of
      $g$.
    @end[doc]
@@ -708,7 +710,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_normalSubg : normalSubg[i:l]{'S; 'G} <-->
-   subgroup[i:l]{'S; 'G} & all x: 'G^car. lcoset{'S; 'G; 'x} = rcoset{'S; 'G; 'x} in univ[i:l]
+   subgroup[i:l]{'S; 'G} & all x: 'G^car. esquash{lcoset{'S; 'G; 'x}} = esquash{rcoset{'S; 'G; 'x}} in univ[i:l]
 doc <:doc< @docoff >>
 
 let fold_normalSubg = makeFoldC << normalSubg[i:l]{'S; 'G} >> unfold_normalSubg
@@ -735,11 +737,11 @@ doc <:doc<
 >>
 interactive normalSubg_intro {| intro [] |} :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
-   [main] sequent [squash] { <H>; x: 'G^car >- lcoset{'S; 'G; 'x} = rcoset{'S; 'G; 'x} in univ[i:l] } -->
+   [main] sequent [squash] { <H>; x: 'G^car >- esquash{lcoset{'S; 'G; 'x}} = esquash{rcoset{'S; 'G; 'x}} in univ[i:l] } -->
    sequent ['ext] { <H> >- normalSubg[i:l]{'S; 'G} }
 
 interactive normalSubg_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]>; y: subgroup[i:l]{'S; 'G}; z: all b: 'G^car. lcoset{'S; 'G; 'b} = rcoset{'S; 'G; 'b} in univ[i:l] >- 'C['x] } -->
+   [main] sequent ['ext] { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]>; y: subgroup[i:l]{'S; 'G}; z: all b: 'G^car. esquash{lcoset{'S; 'G; 'b}} = esquash{rcoset{'S; 'G; 'b}} in univ[i:l] >- 'C['x] } -->
    sequent ['ext] { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
@@ -1035,6 +1037,41 @@ interactive groupKer_subg {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent ['ext] { <H> >- subgroup[i:l]{groupKer{'f; 'A; 'B}; 'A} }
+
+doc <:doc< 
+   @begin[doc]
+  
+   Let $f: A -> B$ be a group homomorphism with kernel $K$.
+   The left coset of $K$ relative to $A$ containing $x$ is equal to the
+   set whose element has the same image under $f$ as $x$. So is the right
+   coset
+   @end[doc]
+>>
+interactive groupKer_lcoset {| intro [] |} :
+   [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
+   [wf] sequent [squash] { <H> >- 'x in 'A^car } -->
+   sequent ['ext] { <H> >- esquash{lcoset{groupKer{'f; 'A; 'B}; 'A; 'x}} = esquash{{ y: 'A^car | 'f 'y = 'f 'x in 'B^car }} in univ[i:l] }
+
+interactive groupKer_rcoset {| intro [] |} :
+   [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
+   [wf] sequent [squash] { <H> >- 'x in 'A^car } -->
+   sequent ['ext] { <H> >- esquash{rcoset{groupKer{'f; 'A; 'B}; 'A; 'x}} = esquash{{ y: 'A^car | 'f 'y = 'f 'x in 'B^car }} in univ[i:l] }
+
+doc <:doc< 
+   @begin[doc]
+   The kernel of a group homomorphism $f$ from $A$ into $B$ is
+   a normal subgroup of $A$.
+   @end[doc]
+>>
+interactive groupKer_normalSubg {| intro [] |} :
+   [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
+   sequent ['ext] { <H> >- normalSubg[i:l]{groupKer{'f; 'A; 'B}; 'A} }
 
 doc <:doc< @docoff >>
 

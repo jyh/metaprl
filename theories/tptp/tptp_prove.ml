@@ -470,7 +470,7 @@ let new_goal constants subst terms1 terms2 =
 
 let mk_goal { tptp_vars = vars; tptp_body = body } =
    if body = [] then
-      true_term
+      << "true" >>
    else
       mk_exists_term vars (mk_and_term body)
 

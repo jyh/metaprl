@@ -254,7 +254,7 @@ let tptp_load name =
       match goals with
          [] ->
             eprintf "TPTP Warning: %s has no goals%t" name eflush;
-            [false_term]
+            [<<"false">>]
        | [_, goal] ->
             [goal]
        | _ ->

@@ -191,8 +191,8 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
 doc <:doc<
 	@begin[doc]
    More propositional inequalities.
-   As it was said in @hrefmodule[Itt_int_base], we define propositional ineqialities
-   via correspondent boolean ineqialities.
+   As it was said in @hrefmodule[Itt_int_base], we define propositional inequalities
+   via correspondent boolean inequalities.
 	@end[doc]
 >>
 

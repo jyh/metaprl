@@ -1,12 +1,9 @@
 doc <:doc< 
-   @begin[spelling]
-   isect
-   @end[spelling]
    @begin[doc]
    @module[Itt_isect]
   
-   The @tt{Itt_isect} module defines the @emph{intersection}
-   type $@isect{x; A; B[x]}$.  The elements of the intersection
+   The @tt[Itt_isect] module defines the @emph{intersection}
+   type <<Isect x:'A.'B['x]>>.  The elements of the intersection
    are the terms that inhabit $B[x]$ for @emph{every} $x @in A$.
    The intersection is similar to the function space $@fun{x; A; B[x]}$;
    the intersection is inhabited if-and-only-if there is a constant
@@ -14,8 +11,8 @@ doc <:doc<
   
    The intersection does not have a conventional
    set-theoretic interpretation.  One example is the
-   type $@top @equiv @isect{x; @void; @void}$.  If the set theoretic
-   interpretation of $@void$ is the empty set, the intersection
+   type $@top @equiv <<Isect x:void.void>>$.  If the set theoretic
+   interpretation of <<void>> is the empty set, the intersection
    would probably be empty.  However, in the type theory,
    the intersection contains @emph{every} term $t$ because the
    quantification is empty.
@@ -114,9 +111,9 @@ doc <:doc<
    @begin[doc]
    @terms
   
-   The @tt{isect} term denotes the intersection type.
-   The @tt{top} type defines the type of all terms
-   $@isect{x; @void; @void}$.
+   The @tt[isect] term denotes the intersection type.
+   The @tt[top] type defines the type of all terms
+   <<Isect x:void.void>>.
    @end[doc]
 >>
 declare "isect"{'A; x. 'B['x]}

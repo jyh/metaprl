@@ -3,7 +3,7 @@ doc <:doc<
    @module[Itt_void]
   
    The @tt{Itt_void} module defines the @emph{empty} type.
-   The $@void$ type is a subtype of every other type (since
+   The <<void>> type is a subtype of every other type (since
    it has no elements).
    @end[doc]
   
@@ -104,7 +104,7 @@ doc <:doc<
   
    @modsubsection{Equality and typehood}
   
-   The $@void$ type is a member of every universe, and it
+   The <<void>> type is a member of every universe, and it
    is a type.
    @end[doc]
   
@@ -114,25 +114,17 @@ prim voidEquality {| intro []; eqcd |} :
    it
 
 (*
- * H >- Ui ext Void
- * by voidFormation
- *)
-interactive voidFormation :
-   sequent { <H> >- univ[i:l] }
-
-(*
  * Typehood.
  *)
-prim voidType {| intro [] |} :
-   sequent { <H> >- "type"{void} } =
-   it
+interactive voidType {| intro [] |} :
+   sequent { <H> >- "type"{void} }
 
 doc <:doc< 
    @begin[doc]
    @modsubsection{Elimination}
   
-   Since the $@void$ type is empty, induction over the
-   $@void$ type produces no cases.
+   Since the <<void>> type is empty, induction over the
+   <<void>> type produces no cases.
    @end[doc]
 >>
 prim voidElimination {| elim []; squash |} 'H :
@@ -143,14 +135,22 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
   
-   The $@void$ type is a subtype of every other type.
+   The <<void>> type is a subtype of every other type.
    This rule is derived from the definition of subtyping, and the
    @hrefrule[voidElimination] rule.
    @end[doc]
 >>
 interactive void_subtype {| intro[] |} :
    sequent { <H> >- \subtype{void; 'T} }
-doc <:doc< @docoff >>
+
+doc docoff
+
+(*
+ * H >- Ui ext Void
+ * by voidFormation
+ *)
+interactive voidFormation :
+   sequent { <H> >- univ[i:l] }
 
 (************************************************************************
  * SUBTYPING                                                            *

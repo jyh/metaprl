@@ -1,9 +1,8 @@
 doc <:doc< 
-  
    @begin[doc]
    @module[Itt_set]
   
-   The @tt{Itt_set} module defines a ``set'' type, or more precisely,
+   The @tt[Itt_set] module defines a ``set'' type, or more precisely,
    it defines a type by quantified @emph{separation}.  The form of the type is
    $@set{x; T; P[x]}$, where $T$ is a type, and $P[x]$ is a type for
    any element $x @in T$.  The elements of the set type are those elements
@@ -11,7 +10,7 @@ doc <:doc<
   
    The set type is a ``squash'' type: the type is similar to the
    dependent product $x@colon T @times P[x]$ (Section @refmodule[Itt_dprod]),
-   but the proof $P[x]$ is omitted (squashed).  The set type $@set{x; T; P[x]}$
+   but the proof $P[x]$ is omitted (squashed).  The set type <<{x: 'T| 'P['x]}>>
    is always a subtype of $T$.
    @end[doc]
   
@@ -117,19 +116,6 @@ dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext { a:A | B }
- * by setFormation A
- *
- * H >- A = A in Ui
- * H, a: A >- Ui ext B
- *)
-prim setFormation 'A :
-   [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
-   ('B['a] : sequent { <H>; 'A >- univ[i:l] }) -->
-   sequent { <H> >- univ[i:l] } =
-   { a: 'A | 'B['a] }
-
 doc <:doc< 
    @begin[doc]
    @rules
@@ -150,9 +136,9 @@ prim setEquality {| intro []; eqcd |} :
    it
 
 prim setType {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'A1} } -->
-   [wf] sequent { <H>; x: 'A1 >- "type"{'B1['x]} } -->
-   sequent { <H> >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
+   sequent { <H> >- "type"{.{ a:'A | 'B['a] }} } =
    it
 
 doc <:doc< 
@@ -212,8 +198,20 @@ interactive set_subtype {| intro [] |} :
    sequent { <H> >- "type"{ { a: 'A | 'B['a] } } } -->
    sequent { <H> >- \subtype{ { a: 'A | 'B['a] }; 'A } }
 
-doc <:doc< @docoff >>
+doc docoff
 
+(*
+ * H >- Ui ext { a:A | B }
+ * by setFormation A
+ *
+ * H >- A = A in Ui
+ * H, a: A >- Ui ext B
+ *)
+prim setFormation 'A :
+   [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
+   ('B['a] : sequent { <H>; 'A >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] } =
+   { a: 'A | 'B['a] }
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

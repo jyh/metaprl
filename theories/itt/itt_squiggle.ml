@@ -1,9 +1,4 @@
 doc <:doc< 
-   @begin[spelling]
-   sqSubstT sqeq
-   @end[spelling]
-
-
    @begin[doc]
    @module[Itt_squiggle]
   
@@ -100,7 +95,7 @@ let _ =
 (*************************************************************************
  * @begin[doc]
  * @terms
- * The @tt{sqeq} term defines the squiggle equality.
+ * The @tt[sqeq] term defines the squiggle equality.
  *
  * @end[doc]
  *)
@@ -108,18 +103,15 @@ let _ =
 declare "sqeq"{'t;'s}
 *)
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform sqeq_df : ('a ~ 'b) = szone slot{'a} `" " sim hspace slot{'b} ezone
-
 
 let squiggle_term = << 'a ~ 'b >>
 let squiggle_opname = opname_of_term squiggle_term
 let is_squiggle_term = is_dep0_dep0_term squiggle_opname
 let dest_squiggle = dest_dep0_dep0_term squiggle_opname
 let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
-
-
 
 doc <:doc< 
    @begin[doc]
@@ -136,11 +128,6 @@ prim squiggleEquality {| intro []; eqcd |} :
   sequent{ <H> >- ('t1 ~ 's1) = ('t2 ~ 's2) in univ[i:l]} =
   it
 
-interactive squiggleFormation ('t ~ 's) :
-  [wf] sequent{ <H> >- 't ~ 's } -->
-  sequent{ <H> >- univ[i:l]}
-     (* = 't ~ 's *)
-
 interactive squiggleType {| intro [] |} :
   [wf] sequent{ <H> >- 't ~ 's } -->
   sequent{ <H> >- "type"{.'t ~ 's}}
@@ -148,20 +135,31 @@ interactive squiggleType {| intro [] |} :
 doc <:doc< 
    @begin[doc]
    @modsubsection{Membership}
-   The $@it$ term is the one-and-only element
+   The <<it>> term is the one-and-only element
    in a provable squiggle equality type.
    @end[doc]
 >>
-
-prim squiggle_memberEquality {| intro []; eqcd; squash |} :
-  [wf] sequent{ <H> >- 't ~ 's } -->
-  sequent{ <H> >- it in ('t ~ 's)} =
-  it
 
 prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
    ('t : sequent{ <H>; ('t ~ 's); <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
    't
+
+interactive squiggle_memberEquality {| intro []; eqcd; squash |} :
+  [wf] sequent{ <H> >- 't ~ 's } -->
+  sequent{ <H> >- it in ('t ~ 's)}
+
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Squiggle equality is an equivalence relation}
+   Squiggle equality is reflexive, symmetric and transitive
+   (the symmetry and transitivity rules are proven in the Substitution section below).
+   @end[doc]
+>>
+
+prim squiggleRef {|  intro [] |} :
+   sequent { <H> >- 't ~ 't } =
+   it
 
 doc <:doc< 
    @begin[doc]
@@ -171,21 +169,20 @@ doc <:doc<
    @end[doc]
 >>
 
-prim squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
-  [equality] sequent{ <H> >- 't ~ 's } -->
-  [main] ('t : sequent{ <H> >- 'A['s] }) -->
-   sequent { <H> >-  'A['t] } =
-   't
-
 prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
    [equality] sequent { <H>; x: 'A['t]; <J['x]> >- 't ~ 's } -->
    [main] ('t : sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }) -->
    sequent { <H>; x: 'A['t]; <J['x]> >- 'C['x] } =
    't
 
+interactive squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
+   [equality] sequent{ <H> >- 't ~ 's } -->
+   [main] sequent{ <H> >- 'A['s] } -->
+   sequent { <H> >-  'A['t] }
+
 doc <:doc< 
    @begin[doc]
-   The  @tt{sqSubstT} tactic takes a clause number $i$, and
+   The  @tt[sqSubstT] tactic takes a clause number $i$, and
    a term <<'t ~ 's>> and applies one of two above rules.
    This tactic substitutes the term $s$ for
    @emph{all} occurrences of the term $t$ in the clause.
@@ -193,18 +190,6 @@ doc <:doc<
    to specify exact location of the subterm to be replaced.
    @end[doc]
 >>
-
-doc <:doc< 
-   @begin[doc]
-   @modsubsection{Squiggle equality is an equivalence relation}
-   Squiggle equality is reflexive, symmetric and transitive.
-   @end[doc]
->>
-
-
-prim squiggleRef {|  intro [] |} :
-   sequent { <H> >- 't ~ 't } =
-   it
 
 interactive squiggleSym :
    sequent { <H> >- 's ~ 't } -->
@@ -215,9 +200,12 @@ interactive squiggleTrans 'r :
    sequent { <H> >- 'r ~ 's } -->
    sequent { <H> >- 't ~ 's }
 
-doc <:doc< @docoff >>
+doc docoff
 
-
+interactive squiggleFormation ('t ~ 's) :
+  [wf] sequent{ <H> >- 't ~ 's } -->
+  sequent{ <H> >- univ[i:l]}
+     (* = 't ~ 's *)
 
 (************************************************************************
  * TACTICS                                                              *

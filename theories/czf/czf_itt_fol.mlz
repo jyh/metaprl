@@ -9,8 +9,8 @@ doc <:doc<
   
    $$
    @begin[array, ccl]
-   @line{@sfalse @equiv @void}
-   @line{@strue @equiv @unit}
+   @line{@sfalse @equiv <<void>>}
+   @line{@strue @equiv <<unit>>}
    @line{@sor{A; B} @equiv  <<'A+'B>>}
    @line{@sand{A; B} @equiv @prod{A; B}}
    @line{@simplies{A; B} @equiv @fun{A; B}}

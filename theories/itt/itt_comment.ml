@@ -104,11 +104,7 @@ dform cumulativity_df : except_mode[tex] :: math_cumulativity{'i; 'j} =
  * VOID
  ************************************************************************)
 
-declare math_void
 declare math_false
-
-dform math_Void_df1 : math_void =
-   math_i["Void"]
 
 dform math_False_df1 : mode[tex] :: math_false =
    izone `"{\\bot}" ezone

@@ -10,7 +10,7 @@ doc <:doc<
 	It was decided that because inequalities on integers are decidable, it would
    be better to define boolean inequalities as primitive ones and
    propositional as derived (via <<"assert"{cdot}>>) from the correspondent
-   boolean ineqialities.
+   boolean inequalities.
 
    The theory of integers continues in @hrefmodule[Itt_int_ext] where multiplicative
    operations and other inequality relations are added.

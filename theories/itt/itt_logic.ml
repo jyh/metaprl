@@ -125,8 +125,8 @@ doc <:doc<
    $$
    @begin[array, rcl]
    @line{@true  @equiv  @unit}
-   @line{@false  @equiv  @void}
-   @line{@not{A}  @equiv  @fun{A; @void}}
+   @line{@false  @equiv  <<void>>}
+   @line{@not{A}  @equiv  <<'A -> void>>}
    @line{@and{A; B}  @equiv  @prod{A; B}}
    @line{@or{A; B}  @equiv  @union{A; B}}
    @line{@implies{A; B}  @equiv  @fun{A; B}}
@@ -220,7 +220,7 @@ doc <:doc<
    The negation << "not"{'A} >> is well-formed if
    $A$ is a type.  The negation states that the type $A$
    is not inhabited: any proof of $A$ is also a proof of
-   $@void$.  To prove the negation, assume $A$ and find
+   <<void>>.  To prove the negation, assume $A$ and find
    a contradiction.  The elimination form forms a proof
    of the goal from a proof of $A$.
    @end[doc]

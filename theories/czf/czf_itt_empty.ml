@@ -3,7 +3,7 @@ doc <:doc<
    @module[Czf_itt_empty]
   
    The @tt{Czf_itt_empty} module defines an empty set
-   as the set $@collect{x; @void; x}$.  Since the $@void$
+   as the set $@collect{x; <<void>>; x}$.  Since the <<void>>
    type is empty, the set has no elements.
    @end[doc]
   
@@ -70,7 +70,7 @@ doc <:doc<
    @begin[doc]
    @rewrites
   
-   The empty set uses the empty index type $@void$.
+   The empty set uses the empty index type <<void>>.
    @end[doc]
 >>
 prim_rw unfold_empty : empty <--> collect{void; x. 'x}

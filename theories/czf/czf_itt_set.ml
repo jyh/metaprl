@@ -23,7 +23,7 @@ doc <:doc<
    the a type used as their index.  For example, the following set
    is empty.
   
-   $$@{@} = @collect{x; @void; x}$$
+   $$@{@} = @collect{x; <<void>>; x}$$
   
    @noindent
    The following set is the singleton set containing the empty

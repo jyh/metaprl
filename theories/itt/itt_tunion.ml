@@ -17,7 +17,7 @@ doc <:doc<
    may seem to contain all of the polymorphic functions
    with type $T @rightarrow T$, for any $T @in @univ{i}$.
    It does--but the union also contains the type case
-   $@fun{@void; @void}$, in which all functions are equal.
+   <<void -> void>>, in which all functions are equal.
    As a consequence, the union space also has the trivial
    equality, and thus it has no useful elimination form.
    @end[doc]

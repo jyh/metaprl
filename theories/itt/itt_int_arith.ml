@@ -1068,7 +1068,7 @@ doc <:doc<
    Weak monotonicity is the @hrefrule[lt_addMono] rule:
 
    $$
-   @rulebox{lt@_addMono; c;
+   @rulebox{@misspelled{lt@_addMono}; c;
      <<sequent{ <H> >- 'a in int }>>@cr
      	 <<sequent{ <H> >- 'b in int }>>@cr
      	 <<sequent{ <H> >- 'c in int }>>;

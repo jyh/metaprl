@@ -398,10 +398,10 @@ interactive id_commut2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
 
 doc <:doc< 
    @begin[doc]
-   @modsection{Extentional Group Equality}
+   @modsection{Extensional Group Equality}
    @modsubsection{Rewrites}
   
-   We define two groups as extentionally equal if their opeartions,
+   We define two groups as extensionally equal if their operations,
    identities, and inverse operations are equal and their carriers
    are extensionally equal.
    @end[doc]

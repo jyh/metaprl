@@ -193,7 +193,7 @@ let opname_rawint = opname_of_term term_rawint
 let dest_rawint t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Number p; Token s; String v], []
@@ -251,8 +251,7 @@ ml_rw reduce_rawint_bitfield : ('goal : rawint_bitfield[off:n, len:n]{'i}) =
          term_terms = bterms
        } = dest_term goal
    in
-   let { op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params (dest_op op).op_params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Number off; Number len], [{ bvars = []; bterm = t }] ->

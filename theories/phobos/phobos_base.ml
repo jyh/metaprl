@@ -90,16 +90,9 @@ let error fn s term =
  * If it has other than one string parameter, it is not touched.
  *)
 let raise_error goal =
-   let term = dest_term goal in
-   let { term_op = operator; term_terms = subterms } = term in
-   let { op_name = opname; op_params = params } = dest_op operator in
-   match params with
-      [s1] ->
-         (match dest_param s1 with
-            String msg ->
-               raise (Invalid_argument ("Phobos: " ^ msg))
-          | _ ->
-               goal)
+   match dest_params (dest_op (dest_term goal).term_op).op_params with
+      [String msg] ->
+         raise (Invalid_argument ("Phobos: " ^ msg))
     | _ ->
          goal
 
@@ -107,33 +100,20 @@ let raise_error goal =
  * String parameter addition.
  *)
 let ml_param_add_string goal =
-   let term = dest_term goal in
-   let { term_op = operator; term_terms = subterms } = term in
-   let { op_name = opname; op_params = params } = dest_op operator in
-   match params with
-      [s1] ->
-         (match dest_param s1 with
-               String s1 ->
-                  if List.length subterms = 1 then begin
-                     let { bvars = bound_vars; bterm = term } = dest_bterm (List.hd subterms) in
-                     let { term_op = operator; term_terms = subterms } = dest_term term in
-                     let { op_name = opname; op_params = params } = dest_op operator in
-                     (match params with
-                        [s2] ->
-                           (match dest_param s2 with
-                              String s2 ->
-                                 mk_term (mk_op opname [make_param (String (s2 ^ s1))]) subterms
-                            | _ ->
-                                 error "param_add_string" "subterm parameter type mismatch" goal
-                           )
-                      | _ ->
-                           error "param_add_string" "subterm doesn't have one string parameter" goal
-                     )
-                  end else
-                     error "param_add_string" "subterm arity mismatch (<>1)" goal
+   let { term_op = operator; term_terms = subterms } = dest_term goal in
+   match dest_params (dest_op operator).op_params with
+      [String s1] ->
+         if List.length subterms = 1 then begin
+            let { term_op = operator; term_terms = subterms } = dest_term (dest_bterm (List.hd subterms)).bterm in
+            let { op_name = opname; op_params = params } = dest_op operator in
+            match dest_params params with
+               [String s2] ->
+                  mk_term (mk_op opname [make_param (String (s2 ^ s1))]) subterms
              | _ ->
-                  error "param_add_string" "parameter type mismatch" goal
-         )
+                  error "param_add_string" "subterm parameter type mismatch" goal
+
+         end else
+            error "param_add_string" "subterm arity mismatch (<>1)" goal
     | _ ->
          error "param_add_string" "ill-formed operation" goal
 

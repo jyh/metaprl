@@ -88,7 +88,7 @@ let opname_Some = opname_of_term term_Some
 let dest_option dest_val t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], []
@@ -301,7 +301,7 @@ let opname_RawIntIndex = opname_of_term term_RawIntIndex
 let dest_sub_script t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], []
@@ -341,7 +341,7 @@ let opname_TyMutable = opname_of_term term_TyMutable
 let dest_poly_mutable dest_ty t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = ty };
@@ -391,7 +391,7 @@ let opname_FunctionSub = opname_of_term term_FunctionSub
 let dest_poly_sub_value dest_ty t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [] ->
@@ -486,7 +486,7 @@ let opname_subop = opname_of_term term_subop
 let dest_poly_subop dest_ty t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = sub_block };
@@ -676,7 +676,7 @@ let opname_TyDelayed = opname_of_term term_TyDelayed
 let dest_poly_type (dest_ty : term -> 'ty) (t : term) : 'ty poly_ty =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [] ->
@@ -896,7 +896,7 @@ let opname_TyLambda = opname_of_term term_TyLambda
 let rec dest_ty_lambda t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = [v]; bterm = t }]
@@ -941,7 +941,7 @@ let dest_poly_frame dest_ty t =
                         List.map (fun subfield ->
                               let { term_op = op; term_terms = bterms } = dest_term subfield in
                               let { op_name = op; op_params = params } = dest_op op in
-                              let params = List.map dest_param params in
+                              let params = dest_params params in
                               let bterms = List.map dest_bterm bterms in
                                  match params, bterms with
                                     [Number size], [{ bvars = []; bterm = v };
@@ -1133,7 +1133,7 @@ let opname_RawDataOfFrameOp = opname_of_term term_RawDataOfFrameOp
 let dest_unop dest_ty t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [] ->
@@ -1607,7 +1607,7 @@ let opname_PlusPointerOp = opname_of_term term_PlusPointerOp
 let dest_binop dest_ty t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [] ->
@@ -1923,7 +1923,7 @@ let opname_FrameLabel = opname_of_term term_FrameLabel
 let dest_frame_label t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Token frame; Token field; Token subfield], []
@@ -2046,7 +2046,7 @@ let opname_AtomBinop = opname_of_term term_AtomBinop
 let dest_poly_atom (dest_ty : term -> 'ty) (dest_atom : term -> 'atom) (t : term) : ('ty, 'atom) poly_atom =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = ty }]
@@ -2259,7 +2259,7 @@ let dest_poly_alloc_op dest_ty dest_atom t =
    let vars, t = dest_ty_lambda t in
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = tuple_class };
@@ -2436,7 +2436,7 @@ let opname_TailCommit = opname_of_term term_TailCommit
 let dest_poly_tailop dest_atom t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Number i], [{ bvars = []; bterm = a1 };
@@ -2545,7 +2545,7 @@ let opname_ElementCheck = opname_of_term term_ElementCheck
 let dest_poly_pred dest_ty dest_atom t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = a }]
@@ -2673,7 +2673,7 @@ let opname_MatchDTuple = opname_of_term term_MatchDTuple
 let dest_match_case dest_exp t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Token label],
@@ -2699,7 +2699,7 @@ let make_match_case make_exp (label, set, e) =
 let dest_match_dtuple_case dest_atom dest_exp t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Token label],
@@ -2797,7 +2797,7 @@ let opname_Assert = opname_of_term term_Assert
 let dest_poly_exp (dest_ty : term -> 'ty) (dest_atom : term -> 'atom) (dest_exp : term -> 'exp) (t : term) : ('ty, 'atom, 'exp) poly_exp =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = ty };
@@ -3139,7 +3139,7 @@ let opname_InitTag = opname_of_term term_InitTag
 let dest_init_name t =
     let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = v };
@@ -3160,7 +3160,7 @@ let make_init_name (v, v_opt) =
 let dest_poly_init dest_ty dest_atom t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = a }]
@@ -3230,7 +3230,7 @@ let opname_FunDef = opname_of_term term_FunDef
 let rec dest_lambda t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = [v]; bterm = t }]
@@ -3251,7 +3251,7 @@ let dest_poly_fundef dest_ty dest_exp t =
    let ty_vars, t = dest_ty_lambda t in
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = ty };
@@ -3281,7 +3281,7 @@ let opname_Global = opname_of_term term_Global
 let dest_poly_global dest_ty dest_atom t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = ty };
@@ -3337,7 +3337,7 @@ let opname_FileInfo = opname_of_term term_FileInfo
 let dest_file_info t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [String dir; String name],
@@ -3379,7 +3379,7 @@ let opname_ArgRawFloat = opname_of_term term_ArgRawFloat
 let dest_import_arg t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [] ->
@@ -3431,7 +3431,7 @@ let opname_ImportFun = opname_of_term term_ImportFun
 let dest_import_info t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], []
@@ -3464,7 +3464,7 @@ let opname_Import = opname_of_term term_Import
 let dest_poly_import dest_ty t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [String name],
@@ -3502,7 +3502,7 @@ let opname_Export = opname_of_term term_Export
 let dest_poly_export dest_ty t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [String name], [{ bvars = []; bterm = ty }]

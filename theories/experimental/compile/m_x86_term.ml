@@ -120,7 +120,7 @@ let label_fun_opname     = opname_of_term label_fun_term
  *)
 let dest_cc t =
    let { term_op = op; term_terms = bterms } = dest_term t in
-   let params = List.map dest_param (dest_op op).op_params in
+   let params = dest_params (dest_op op).op_params in
       match params, bterms with
          [String cc], [] ->
             (match cc with
@@ -307,7 +307,7 @@ let dest_spill_reg t =
 let dest_operand_aux dest_reg t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          (* ImmediateNumber *)
@@ -400,7 +400,7 @@ let dest_reg_operand_term dest_reg t =
 let rec dest_arg_term t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = arg }; { bvars = []; bterm = rest }]
@@ -421,7 +421,7 @@ let dest_operand_args dest_reg t =
 let dest_inst_aux dest_reg dest_rest t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = rest }]

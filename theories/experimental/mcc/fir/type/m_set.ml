@@ -122,7 +122,7 @@ let opname_Open = opname_of_term term_Open
 let dest_bound dest_int t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], []
@@ -180,7 +180,7 @@ let opname_RawIntSet = opname_of_term term_RawIntSet
 let dest_int_set t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = intervals }]
@@ -207,7 +207,7 @@ let make_int_set set =
 let dest_set t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [], [{ bvars = []; bterm = intervals }]

@@ -147,7 +147,7 @@ let opname_rawfloat = opname_of_term term_rawfloat
 let dest_rawfloat t =
    let { term_op = op; term_terms = bterms } = dest_term t in
    let { op_name = op; op_params = params } = dest_op op in
-   let params = List.map dest_param params in
+   let params = dest_params params in
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Number p; String v], []

@@ -108,19 +108,20 @@ let _ =
  * @end[doc]
  *)
 
-interactive substitution2 'H ('t1 = 't2 in 'T) bind{x. 'C['x]}:
+interactive substitution2 'H ('t1 = 't2 in 'T) bind{x. 'C['x]} 'v 'w:
    [equality] sequent [squash] { 'H >- 't1 = 't2 in 'T } -->
    [main]  sequent ['ext] { 'H >- 'C['t2] } -->
    [wf] sequent [squash] { 'H; x: 'T; v: 't1='x in 'T; w: 't2='x in 'T
                            >- "type"{'C['x]} } -->
    sequent ['ext] { 'H >- 'C['t1] }
 
-interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z :
+interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z 'v 'w:
    [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T } -->
    [main] sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'C['x] } -->
    [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T; v: 't1='z in 'T; w: 't2='z in 'T
                            >- "type"{'A['z]} } -->
    sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'C['x] }
+
 
 
 (*!
@@ -153,6 +154,9 @@ interactive cutMem 'H 'x 'v 's 'S bind{x.'T['x]} :
    [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
    sequent ['ext] { 'H >- 'T['s]}
 
+
+
+
 (*!
  * @begin[doc]
  * The corresponding tactic is the @tt{letT} tactic.
@@ -167,6 +171,37 @@ interactive cutMem 'H 'x 'v 's 'S bind{x.'T['x]} :
  * @end[doc]
  *)
 
+
+(*! docoff *)
+(*
+interactive cutEqWeak 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'v 'u :
+   [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
+   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't['x] IN 'T } -->
+   sequent ['ext] { 'H >- 't['s_1] = 't['s_2] in 'T}
+*)
+
+interactive cutEq0 'H ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} 'v 'u :
+   [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
+   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T } -->
+   sequent ['ext] { 'H >- 't_1['s_1] = 't_2['s_2] in 'T}
+
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Substitution in a type}
+ *
+ * @end[doc]
+ *)
+
+interactive substitutionInType 'H ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 'v 'w:
+   [equality] sequent [squash] { 'H >- 't_1 = 't_2 in 'T } -->
+   [main]  sequent ['ext] { 'H >-  'c_1 = 'c_2 in 'C['t_2] } -->
+   [wf] sequent [squash] { 'H; x: 'T; v: 't_1='x in 'T; w: 't_2='x in 'T
+                           >- "type"{'C['x]} } -->
+   sequent ['ext] { 'H >- 'c_1 = 'c_2 in 'C['t_1] }
+
+
+
 (*!
  * @begin[doc]
  *
@@ -180,11 +215,12 @@ interactive cutMem 'H 'x 'v 's 'S bind{x.'T['x]} :
  *)
 
 
-
-interactive cutEq 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'v 'u :
+interactive cutEq 'H ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } 'v 'u :
    [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't['x] IN 'T } -->
-   sequent ['ext] { 'H >- 't['s_1] = 't['s_2] in 'T}
+   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
+   sequent ['ext] { 'H >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
+
+
 
 (*!
  * @begin[doc]
@@ -237,6 +273,8 @@ interactive cutSquash 'H 'J 'S 'x :
 (* substitution *)
 
 let substConclT t p =
+   let n = Sequent.hyp_count_addr p in
+   let v,w = maybe_new_vars2 p "v" "w" in
    let _, a, _ = dest_equal t in
    let bind =
       try
@@ -250,14 +288,15 @@ let substConclT t p =
             let x = get_opt_var_arg "z" p in
                mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
-   let r = if get_thinning_arg p
-   then substitution else substitution2 in
-      r (Sequent.hyp_count_addr p) t bind p
+   let tac =
+      (substitutionInType n t bind v w orelseT substitution2 n t bind v w) thenWT thinIfThinningT [-1;-1]
+   in tac p
 
 (*
  * Hyp substitution requires a replacement.
  *)
 let substHypT i t p =
+   let v,w = maybe_new_vars2 p "v" "w" in
    let _, a, _ = dest_equal t in
    let _, t1 = Sequent.nth_hyp p i in
    let z = get_opt_var_arg "z" p in
@@ -273,8 +312,9 @@ let substHypT i t p =
             mk_xbind_term z (var_subst t1 a z)
    in
    let i, j = Sequent.hyp_indices p i in
-   let r = if get_thinning_arg p then hypSubstitution else hypSubstitution2 in
-     r i j t bind z p
+     if get_thinning_arg p
+       then hypSubstitution i j t bind z p
+       else hypSubstitution2  i j t bind z v w p
 
 (*
  * General substition.
@@ -340,15 +380,18 @@ let letT x_is_s_in_S p =
 
 let assertEqT eq p =
    let v,u = maybe_new_vars2 p "v" "u" in
-   let _, s1, _ = dest_equal eq in
+   let _, s1, s2 = dest_equal eq in
    let bind =
       try
          get_with_arg p
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
-            let _, t,  _ = dest_equal (Sequent.concl p) in
-               mk_xbind_term x (var_subst t s1 x)
+            let t, t1,  t2 = dest_equal (Sequent.concl p) in
+            let t' = var_subst t s1 x in
+            let t1' = var_subst t1 s1 x in
+            let t2' = var_subst t2 s2 x in
+               mk_xbind_term x (mk_equal_term t' t1' t2')
    in
       if is_xbind_term bind then
          (try

@@ -36,7 +36,7 @@ declare srecind{'a; p, h. 'g['p; 'h]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
+primrw reduceSrecind : srecind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. srecind{'a; p, h. 'g['p; 'h]}}; 'a]
 
 (************************************************************************
@@ -189,6 +189,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (sreci
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/15 22:33:34  jyh
+ * Added CZF.
+ *
  * Revision 1.6  1998/06/01 13:56:22  jyh
  * Proving twice one is two.
  *

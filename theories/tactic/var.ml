@@ -6,6 +6,8 @@ open Printf
 open Debug
 open Ctype
 
+open Sequent
+
 (*
  * Debug statement.
  *)
@@ -59,8 +61,55 @@ let maybe_new_vars vars vars' =
    in
       aux vars' [] vars
 
+let maybe_new_vars1 p v1 =
+   let vars = Sequent.declared_vars p in
+      maybe_new_var v1 vars
+
+let maybe_new_vars2 p v1 v2 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+      v1, v2
+
+let maybe_new_vars3 p v1 v2 v3 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+   let vars = v2 :: vars in
+   let v3 = maybe_new_var v3 vars in
+      v1, v2, v3
+
+let maybe_new_vars4 p v1 v2 v3 v4 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+   let vars = v2 :: vars in
+   let v3 = maybe_new_var v3 vars in
+   let vars = v3 :: vars in
+   let v4 = maybe_new_var v4 vars in
+      v1, v2, v3, v4
+
+let maybe_new_vars5 p v1 v2 v3 v4 v5 =
+   let vars = Sequent.declared_vars p in
+   let v1 = maybe_new_var v1 vars in
+   let vars = v1 :: vars in
+   let v2 = maybe_new_var v2 vars in
+   let vars = v2 :: vars in
+   let v3 = maybe_new_var v3 vars in
+   let vars = v3 :: vars in
+   let v4 = maybe_new_var v4 vars in
+   let vars = v4 :: vars in
+   let v5 = maybe_new_var v5 vars in
+      v1, v2, v3, v4, v5
+
 (*
  * $Log$
+ * Revision 1.4  1998/06/15 22:33:51  jyh
+ * Added CZF.
+ *
  * Revision 1.3  1998/06/03 22:20:06  jyh
  * Nonpolymorphic refiner.
  *

@@ -15,10 +15,13 @@ include Itt_logic
  *)
 rewrite type_def : "type"{'T} <--> subtype{'T; 'T}
 
-define reduceExtEqual : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
+define unfoldExtEqual : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/15 22:33:20  jyh
+ * Added CZF.
+ *
  * Revision 1.2  1998/05/28 13:47:35  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

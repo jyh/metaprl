@@ -114,15 +114,18 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw reduceLE : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
-primrw reduceGT : gt{'a; 'b} <--> 'b < 'a
-primrw reduceGE : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
+primrw unfoldLE : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
+primrw unfoldGT : gt{'a; 'b} <--> 'b < 'a
+primrw unfoldGE : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
 primrw reduceAdd : "add"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i + @j]
 primrw reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i - @j]
 primrw reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
 primrw reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
 primrw reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
+
+primrw reduceLT : "lt"{natural_number[@i:n]; natural_number[@j:n]} <--> "prop"[@i < @j]
+primrw reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "prop"[@i = @j]
 
 (*
  * Reduction on induction combinator:
@@ -199,6 +202,12 @@ prim intEquality 'H : : sequent ['ext] { 'H >- int = int in univ[@i:l] } = it
  * by numberFormation n
  *)
 prim numberFormation 'H natural_number[@n:n] : : sequent ['ext] { 'H >- int } = natural_number[@n:n]
+
+(*
+ * H >- i = i in int
+ * by numberEquality
+ *)
+prim numberEquality 'H : : sequent ['ext] { 'H >- natural_number[@n:n] = natural_number[@n:n] in int } = it
 
 (*
  * Induction:
@@ -289,27 +298,66 @@ prim less_thanElimination 'H 'J :
    't
 
 (************************************************************************
- * ARITH                                                                *
- ************************************************************************)
-
-(*
- * H >- i = j in Z
- * by arith
- *
- * This is the large decision procedure.
- *)
-mlterm arith_check{'t} =
-   raise (RefineError ("arith", StringError "not implemented"))
- | fun _ _ ->
-      raise (RefineError ("arith", StringError "not implemented"))
-
-prim arith : arith_check{'t} --> 't = it
-
-(************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
 let int_term = << int >>
+let int_opname = opname_of_term int_term
+let is_int_term = is_no_subterms_term int_opname
+
+let lt_term = << 'x < 'y >>
+let lt_opname = opname_of_term lt_term
+let is_lt_term = is_dep0_dep0_term lt_opname
+let mk_lt_term = mk_dep0_dep0_term lt_opname
+let dest_lt = dest_dep0_dep0_term lt_opname
+
+let le_term = << 'x <= 'y >>
+let le_opname = opname_of_term le_term
+let is_le_term = is_dep0_dep0_term le_opname
+let mk_le_term = mk_dep0_dep0_term le_opname
+let dest_le = dest_dep0_dep0_term le_opname
+
+let ge_term = << 'x >= 'y >>
+let ge_opname = opname_of_term ge_term
+let is_ge_term = is_dep0_dep0_term ge_opname
+let mk_ge_term = mk_dep0_dep0_term ge_opname
+let dest_ge = dest_dep0_dep0_term ge_opname
+
+let gt_term = << 'x > 'y >>
+let gt_opname = opname_of_term gt_term
+let is_gt_term = is_dep0_dep0_term gt_opname
+let mk_gt_term = mk_dep0_dep0_term gt_opname
+let dest_gt = dest_dep0_dep0_term gt_opname
+
+let add_term = << 'x +@ 'y >>
+let add_opname = opname_of_term add_term
+let is_add_term = is_dep0_dep0_term add_opname
+let mk_add_term = mk_dep0_dep0_term add_opname
+let dest_add = dest_dep0_dep0_term add_opname
+
+let sub_term = << 'x -@ 'y >>
+let sub_opname = opname_of_term sub_term
+let is_sub_term = is_dep0_dep0_term sub_opname
+let mk_sub_term = mk_dep0_dep0_term sub_opname
+let dest_sub = dest_dep0_dep0_term sub_opname
+
+let mul_term = << 'x *@ 'y >>
+let mul_opname = opname_of_term mul_term
+let is_mul_term = is_dep0_dep0_term mul_opname
+let mk_mul_term = mk_dep0_dep0_term mul_opname
+let dest_mul = dest_dep0_dep0_term mul_opname
+
+let div_term = << 'x /@ 'y >>
+let div_opname = opname_of_term div_term
+let is_div_term = is_dep0_dep0_term div_opname
+let mk_div_term = mk_dep0_dep0_term div_opname
+let dest_div = dest_dep0_dep0_term div_opname
+
+let rem_term = << "rem"{'x; 'y} >>
+let rem_opname = opname_of_term rem_term
+let is_rem_term = is_dep0_dep0_term rem_opname
+let mk_rem_term = mk_dep0_dep0_term rem_opname
+let dest_rem = dest_dep0_dep0_term rem_opname
 
 let natural_number_term = << natural_number[@n:n] >>
 let natural_number_opname = opname_of_term natural_number_term
@@ -355,7 +403,10 @@ let d_resource = d_resource.resource_improve d_resource (int_term, d_intT)
  *)
 let eqcd_intT p = intEquality (hyp_count p) p
 
+let eqcd_numberT p = numberEquality (hyp_count p) p
+
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (int_term, eqcd_intT)
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (natural_number_term, eqcd_numberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -386,6 +437,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.12  1998/06/15 22:33:21  jyh
+ * Added CZF.
+ *
  * Revision 1.11  1998/06/12 18:36:38  jyh
  * Working factorial proof.
  *

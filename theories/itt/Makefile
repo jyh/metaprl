@@ -31,6 +31,7 @@ NLFILES :=\
 	itt_ext_equal\
 	itt_int\
 	itt_int_bool\
+	itt_arith\
 	itt_isect\
 	itt_prec\
 	itt_srec\

@@ -134,21 +134,20 @@ dform mathbbH_df		: mode[prl] :: mathbbH                   = `"\136"
 dform mathbbI_df		: mode[prl] :: mathbbI                   = `"\137"
 dform mathbbJ_df		: mode[prl] :: mathbbJ                   = `"\138"
 dform mathbbK_df		: mode[prl] :: mathbbK                   = `"\139"
-dform mathbbL_df		: mode[prl] :: mathbbL                   = `"\140"
-dform mathbbM_df		: mode[prl] :: mathbbM                   = `"\141"
-dform mathbbN_df		: mode[prl] :: mathbbN                   = `"\142"
-dform mathbbO_df		: mode[prl] :: mathbbO                   = `"\143"
-dform mathbbP_df		: mode[prl] :: mathbbP                   = `"\144"
-dform mathbbQ_df		: mode[prl] :: mathbbQ                   = `"\145"
-dform mathbbR_df		: mode[prl] :: mathbbR                   = `"\146"
-dform mathbbS_df		: mode[prl] :: mathbbS                   = `"\147"
-dform mathbbT_df		: mode[prl] :: mathbbT                   = `"\148"
-dform mathbbU_df		: mode[prl] :: mathbbU                   = `"\149"
-dform mathbbV_df		: mode[prl] :: mathbbV                   = `"\150"
-dform mathbbW_df		: mode[prl] :: mathbbW                   = `"\151"
-dform mathbbX_df		: mode[prl] :: mathbbX                   = `"\152"
-dform mathbbY_df		: mode[prl] :: mathbbY                   = `"\153"
-dform mathbbZ_df		: mode[prl] :: mathbbZ                   = `"\154"
+(* dform mathbbL_df		: mode[prl] :: mathbbL                   = `"\140" *)
+dform mathbbM_df		: mode[prl] :: mathbbN                   = `"\141"
+dform mathbbN_df		: mode[prl] :: mathbbO                   = `"\142"
+dform mathbbO_df		: mode[prl] :: mathbbP                   = `"\143"
+dform mathbbP_df		: mode[prl] :: mathbbQ                   = `"\144"
+dform mathbbQ_df		: mode[prl] :: mathbbR                   = `"\145"
+dform mathbbR_df		: mode[prl] :: mathbbS                   = `"\146"
+dform mathbbS_df		: mode[prl] :: mathbbT                   = `"\147"
+dform mathbbT_df		: mode[prl] :: mathbbU                   = `"\148"
+dform mathbbU_df		: mode[prl] :: mathbbV                   = `"\149"
+dform mathbbV_df		: mode[prl] :: mathbbW                   = `"\150"
+dform mathbbW_df		: mode[prl] :: mathbbX                   = `"\151"
+dform mathbbX_df		: mode[prl] :: mathbbY                   = `"\152"
+dform mathbbY_df		: mode[prl] :: mathbbZ                   = `"\153"
 
 dform shortLeftarrow_df		: mode[prl] :: shortLeftarrow            = `"\1565"
 dform leftarrow_df		: mode[prl] :: Leftarrow                 = `"\220\221"
@@ -234,6 +233,9 @@ dform subz_df			: mode[prl] :: subz                      = `"\235"
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/15 22:32:39  jyh
+ * Added CZF.
+ *
  * Revision 1.6  1998/05/07 16:03:02  jyh
  * Adding interactive proofs.
  *

@@ -41,7 +41,7 @@ declare precind{'a; p, h. 'g['p; 'h]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw precind : precind{'a; p, h. 'g['p; 'h]} <-->
+primrw reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. precind{'a; p, h. 'g['p; 'h]}}; 'a]
 
 (************************************************************************
@@ -209,6 +209,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (preci
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/15 22:33:28  jyh
+ * Added CZF.
+ *
  * Revision 1.6  1998/06/01 13:56:03  jyh
  * Proving twice one is two.
  *

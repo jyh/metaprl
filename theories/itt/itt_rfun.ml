@@ -85,8 +85,8 @@ dform fix_df1 : mode[prl] :: fix{f. 'b} =
 (*
  * apply(lambda(v. b[v]); a) -> b[a]
  *)
-primrw betaReduction : (lambda{v. 'b['v]} 'a) <--> 'b['a]
-primrw fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+primrw reduceBeta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+primrw reduceFix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 
 (************************************************************************
  * RULES                                                                *
@@ -388,6 +388,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/15 22:33:31  jyh
+ * Added CZF.
+ *
  * Revision 1.10  1998/06/12 18:36:44  jyh
  * Working factorial proof.
  *

@@ -64,7 +64,7 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
 let infer tbl =
    let rec aux decl t =
       let _, _, inf =
-         try lookup tbl t with
+         try lookup "Typeinf.infer" tbl t with
             Not_found ->
                raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
       in
@@ -112,6 +112,9 @@ let typeinf_of_proof p =
 
 (*
  * $Log$
+ * Revision 1.13  1998/06/15 22:32:42  jyh
+ * Added CZF.
+ *
  * Revision 1.12  1998/06/12 13:47:18  jyh
  * D tactic works, added itt_bool.
  *

@@ -36,7 +36,7 @@ prec spread
  * Reduction on spread:
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
-rewrite spreadReduce : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
+rewrite reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 
 (************************************************************************
  * RULES                                                                *
@@ -154,6 +154,9 @@ val mk_spread_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/15 22:33:16  jyh
+ * Added CZF.
+ *
  * Revision 1.4  1998/05/28 13:47:29  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -35,6 +35,8 @@ let _ =
  * REWRITES								*
  ************************************************************************)
 
+declare "prop"[@i:l]
+
 declare "true"
 declare "false"
 declare "not"{'a}
@@ -44,14 +46,19 @@ declare "or"{'a; 'b}
 declare "all"{'A; x. 'B['x]}
 declare "exists"{'A; x. 'B['x]}
 
-primrw reduceTrue : "true" <--> unit
-primrw reduceFalse : "false" <--> void
-primrw reduceNot : not{'a} <--> 'a -> void
-primrw reduceImplies : 'a => 'b <--> 'a -> 'b
-primrw reduceAnd : 'a & 'b <--> 'a * 'b
-primrw reduceOr : 'a or 'b <--> 'a + 'b
-primrw reduceAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
-primrw reduceExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
+primrw unfoldProp : "prop"[@i:l] <--> "univ"[@i:l]
+
+primrw unfoldTrue : "true" <--> unit
+primrw unfoldFalse : "false" <--> void
+primrw unfoldNot : not{'a} <--> 'a -> void
+primrw unfoldImplies : 'a => 'b <--> 'a -> 'b
+primrw unfoldAnd : 'a & 'b <--> 'a * 'b
+primrw unfoldOr : 'a or 'b <--> 'a + 'b
+primrw unfoldAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
+primrw unfoldExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
+
+primrw reducePropTrue : "prop"["true":t] <--> "true"
+primrw reducePropFalse : "prop"["false":t] <--> "false"
 
 (************************************************************************
  * DISPLAY FORMS							*
@@ -152,14 +159,14 @@ let mk_not_term = mk_dep0_term not_opname
  * D
  *)
 let terms =
-   [true_term,    reduceTrue;
-    false_term,   reduceFalse;
-    all_term,     reduceAll;
-    exists_term,  reduceExists;
-    or_term,      reduceOr;
-    and_term,     reduceAnd;
-    implies_term, reduceImplies;
-    not_term,     reduceNot]
+   [true_term,    unfoldTrue;
+    false_term,   unfoldFalse;
+    all_term,     unfoldAll;
+    exists_term,  unfoldExists;
+    or_term,      unfoldOr;
+    and_term,     unfoldAnd;
+    implies_term, unfoldImplies;
+    not_term,     unfoldNot]
 
 let add arg =
    let rec aux (dr, er) = function
@@ -228,6 +235,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/15 22:33:26  jyh
+ * Added CZF.
+ *
  * Revision 1.8  1998/06/12 13:47:33  jyh
  * D tactic works, added itt_bool.
  *

@@ -26,10 +26,13 @@ let _ =
 primrw type_def : "type"{'T} <--> subtype{'T; 'T}
 
 declare ext_equal{'A; 'B}
-primrw reduceExtEqual : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
+primrw unfoldExtEqual : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/15 22:33:19  jyh
+ * Added CZF.
+ *
  * Revision 1.3  1998/05/28 13:47:33  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -85,6 +85,8 @@ val label       : tactic_arg -> string
 val resources   : tactic_arg -> tactic_resources
 val attributes  : tactic_arg -> attributes
 
+val normalize_attribute : (string * attribute) -> unit
+
 (*
  * Modification of the argument.
  * These are functional.
@@ -161,6 +163,9 @@ val timingT : tactic -> tactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/15 22:33:48  jyh
+ * Added CZF.
+ *
  * Revision 1.3  1998/06/13 16:24:03  jyh
  * Adding timing tactical.
  *

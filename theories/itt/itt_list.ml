@@ -48,10 +48,10 @@ declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
 (*
  * Reduction.
  *)
-primrw list_indReduceBase :
+primrw reduce_listindNil :
    list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]} <--> 'base
 
-primrw list_indReduceStep :
+primrw reduce_listindCons :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
 
@@ -343,6 +343,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/15 22:33:23  jyh
+ * Added CZF.
+ *
  * Revision 1.10  1998/06/12 13:47:31  jyh
  * D tactic works, added itt_bool.
  *

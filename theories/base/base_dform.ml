@@ -125,7 +125,7 @@ dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
  *    cflag is true if the last term was a conclusion
  *    t is the term to be printed.
  *)
-mldform sequent_src_df : mode["src"] :: "sequent"{'seq} format_term buf =
+mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
    (let rec format (i, cflag, sflag, t) =
       let sep = if sflag then "; " else "" in
 	 if is_context_term t then
@@ -166,7 +166,7 @@ mldform sequent_src_df : mode["src"] :: "sequent"{'seq} format_term buf =
       format_popm buf;
       format_ezone buf)
 
-mldform sequent_prl_df : mode["prl"] :: "sequent"{'seq} format_term buf =
+mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    let rec format (i, cflag, sflag, t) =
       let lead = (string_of_int i) ^ ". " in
       let sep = if sflag then "; " else "" in
@@ -224,6 +224,9 @@ dform newline_df : "\\" = \newline
 (*
  *
  * $Log$
+ * Revision 1.10  1998/06/15 22:32:36  jyh
+ * Added CZF.
+ *
  * Revision 1.9  1998/06/12 13:47:12  jyh
  * D tactic works, added itt_bool.
  *

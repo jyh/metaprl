@@ -34,6 +34,9 @@ let failT p =
 let failWithT s p =
    raise (RefineError ("failWithT", StringError s))
 
+let timingT =
+   Tactic_type.timingT
+
 (************************************************************************
  * SEQUENCING                                                           *
  ************************************************************************)
@@ -78,7 +81,7 @@ let prefix_then_OnLastT tac1 tac2 =
    let rec aux = function
       [p] ->
          [tac2 p]
-    | p::t -> 
+    | p::t ->
          idT p :: aux t
     | [] ->
          []
@@ -609,6 +612,9 @@ let get_thinning_arg arg =
 
 (*
  * $Log$
+ * Revision 1.14  1998/06/15 22:33:49  jyh
+ * Added CZF.
+ *
  * Revision 1.13  1998/06/12 13:47:49  jyh
  * D tactic works, added itt_bool.
  *

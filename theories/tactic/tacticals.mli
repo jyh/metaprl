@@ -12,6 +12,9 @@ val idT : tactic
 val failT : tactic
 val failWithT : string -> tactic
 
+(* Print timing information *)
+val timingT : tactic -> tactic
+
 (* Allow tactic only if no subgoals *)
 val completeT : tactic -> tactic
 
@@ -141,6 +144,9 @@ val get_thinning_arg : tactic_arg -> bool
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/15 22:33:50  jyh
+ * Added CZF.
+ *
  * Revision 1.5  1998/06/09 20:53:04  jyh
  * Propagated refinement changes.
  * New tacticals module.

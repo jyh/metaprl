@@ -11,6 +11,7 @@ open Refiner.Refiner.TermAddr
 open Refiner.Refiner.Refine
 open Resource
 open Simple_print
+open Term_table
 
 open Tactic_type
 open Sequent
@@ -34,17 +35,9 @@ let debug_dtactic =
  ************************************************************************)
 
 (*
- * The data type for the D tactic maps opname to
- * a tactic.
- *
- * The key is on the operator name and the arities of the subterms.
+ * The d_tactic uses a term_table to match against terms.
  *)
-type key = opname * int list
-
-type d_data =
-   { d_info : (key * (int -> tactic)) list;
-     mutable d_table : (key, int -> tactic) Hashtbl.t option
-   }
+type d_data = (int -> tactic) term_table
 
 resource (term * (int -> tactic), int -> tactic, d_data) d_resource
 
@@ -53,85 +46,11 @@ resource (term * (int -> tactic), int -> tactic, d_data) d_resource
  ************************************************************************)
 
 (*
- * Check if the first list is a suffix of the other.
- *)
-let check_suffix list1 =
-   let rec aux l =
-      if list1 == l then
-         true
-      else
-         match l with
-            _::t ->
-               aux t
-          | [] ->
-               false
-   in
-      aux
-
-(*
- * Insert the first list into the second.
- *)
-let rec insert_data data1 = function
-   h::t ->
-      begin
-         match h with
-            name, tac ->
-               begin
-                  try
-                     List.assq name data1;
-                     insert_data data1 t
-                  with
-                     Not_found ->
-                        insert_data (h::data1) t
-               end
-      end
-
- | [] -> data1
-
-(*
- * Join the data from two bases.
- * First check if one is a suffix of the other.
- * This will commonly be the case, and so we optimize it.
- *)
-let join_data base1 base2 =
-   let data1 = base1.d_info in
-   let data2 = base2.d_info in
-      if check_suffix data1 data2 then
-         base2
-      else if check_suffix data2 data1 then
-         base1
-      else
-         { d_info = insert_data data2 data1; d_table = None }
-
-(*
- * Compute the hashtable from the info.
- *)
-let compute_table info =
-   let tbl = Hashtbl.create 17 in
-   let aux (key, tac) =
-      if !debug_dtactic then
-         eprintf "Base_dtactic.compute_table: adding %s%t" (string_of_opname (fst key)) eflush;
-      Hashtbl.add tbl key tac
-   in
-      List.iter aux info;
-      tbl
-
-(*
  * Extract a D tactic from the data.
  * The tactic checks for an optable.
  *)
-let extract_data base =
+let extract_data tbl =
    let d i p =
-      let tbl =
-         (* Compute the hashtbl if necessary *)
-         match base.d_table with
-            None ->
-               let tbl = compute_table base.d_info in
-                  base.d_table <- Some tbl;
-                  tbl
-          | Some tbl ->
-               tbl
-      in
       let t =
          (* Get the term described by the number *)
          if i = 0 then
@@ -139,30 +58,34 @@ let extract_data base =
          else
             snd (nth_hyp p i)
       in
-      let key = opname_of_term t, subterm_arities t in
+      let tac =
          try
             (* Find and apply the right tactic *)
-            let tac = Hashtbl.find tbl key in
-               tac i p
+            if !debug_dtactic then
+               eprintf "Base_dtactic: lookup %s%t" (Simple_print.string_of_opname (opname_of_term t)) eflush;
+            let _, _, tac = Term_table.lookup "Base_dtactic.extract_data" tbl t in
+               tac
          with
             Not_found ->
                raise (RefineError ("extract_data", StringTermError ("D tactic doesn't know about", t)))
+      in
+         if !debug_dtactic then
+            eprintf "Base_dtactic: applying %s%t" (Simple_print.string_of_opname (opname_of_term t)) eflush;
+         tac i p
    in
       d
 
 (*
  * Add a new tactic.
  *)
-let improve_data (t, tac) data =
-   { d_info = ((opname_of_term t, subterm_arities t), tac)::(data.d_info);
-     d_table = None
-   }
+let improve_data (t, tac) tbl =
+   Refine_exn.print Dform.null_base (insert tbl t) tac
 
 (*
  * Wrap up the joiner.
  *)
 let rec join_resource base1 base2 =
-   let data = join_data base1.resource_data base2.resource_data in
+   let data = join_tables base1.resource_data base2.resource_data in
       { resource_data = data;
         resource_join = join_resource;
         resource_extract = extract_resource;
@@ -189,7 +112,7 @@ and improve_resource { resource_data = data } x =
  * Resource.
  *)
 let d_resource =
-   { resource_data = { d_info = []; d_table = None };
+   { resource_data = new_table ();
      resource_join = join_resource;
      resource_extract = extract_resource;
      resource_improve = improve_resource
@@ -199,6 +122,9 @@ let dT = d_resource.resource_extract d_resource
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/15 22:32:38  jyh
+ * Added CZF.
+ *
  * Revision 1.7  1998/06/12 13:47:13  jyh
  * D tactic works, added itt_bool.
  *

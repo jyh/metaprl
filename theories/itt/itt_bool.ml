@@ -28,17 +28,17 @@ declare ifthenelse{'e1; 'e2; 'e3}
  *)
 declare "bool_flag"[@n:t]
 
-primrw boolTrue : "bool_flag"["true":t] <--> "btrue"
-primrw boolFalse : "bool_flag"["false":t] <--> "bfalse"
+primrw reduceBoolTrue : "bool_flag"["true":t] <--> "btrue"
+primrw reduceBoolFalse : "bool_flag"["false":t] <--> "bfalse"
 
 (*
  * Ifthenelse primrws.
  *)
-primrw ifthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
-primrw ifthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
-primrw reduceBor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
-primrw reduceBand : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
-primrw reduceBnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
+primrw reduceIfthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
+primrw reduceIfthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+primrw unfoldBor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+primrw unfoldBand : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+primrw unfoldBnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -183,6 +183,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (bfals
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/15 22:33:11  jyh
+ * Added CZF.
+ *
  * Revision 1.2  1998/06/12 18:36:35  jyh
  * Working factorial proof.
  *

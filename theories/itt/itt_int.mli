@@ -50,15 +50,18 @@ prec prec_mul
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite reduceLE  : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
-rewrite reduceGT  : gt{'a; 'b} <--> 'b < 'a
-rewrite reduceGE  : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
+rewrite unfoldLE  : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
+rewrite unfoldGT  : gt{'a; 'b} <--> 'b < 'a
+rewrite unfoldGE  : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
 rewrite reduceAdd : "add"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i + @j]
 rewrite reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i - @j]
 rewrite reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
 rewrite reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
 rewrite reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
+
+rewrite reduceLT : "lt"{natural_number[@i:n]; natural_number[@j:n]} <--> "prop"[@i < @j]
+rewrite reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "prop"[@i = @j]
 
 (************************************************************************
  * RULES                                                                *
@@ -111,6 +114,12 @@ axiom intEquality 'H : sequent ['ext] { 'H >- int = int in univ[@i:l] }
  * by numberFormation n
  *)
 axiom numberFormation 'H natural_number[@n:n] : sequent ['ext] { 'H >- int }
+
+(*
+ * H >- i = i in int
+ * by numberEquality
+ *)
+axiom numberEquality 'H : sequent ['ext] { 'H >- natural_number[@n:n] = natural_number[@n:n] in int }
 
 (*
  * Induction:
@@ -194,27 +203,61 @@ axiom less_thanElimination 'H 'J :
    sequent ['ext] { 'H; x: 'a < 'b; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: 'a < 'b; 'J['x] >- 'C['x] }
 
-(*
- * H >- i = j in Z
- * by arith
- *
- * This is computed with a side condition.
- *)
-mlterm arith_check{'t}
-axiom arith : arith_check{'t} --> 't
-
-(*
-val x : (d_resource_info, d_tactic, d_data) Resource.rsrc
-*)
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
 val d_intT : int -> tactic
 val eqcd_intT : tactic
+val eqcd_numberT : tactic
 
 val int_term : term
+val is_int_term : term -> bool
+
+val lt_term : term
+val is_lt_term : term -> bool
+val mk_lt_term : term -> term -> term
+val dest_lt : term -> term * term
+
+val le_term : term
+val is_le_term : term -> bool
+val mk_le_term : term -> term -> term
+val dest_le : term -> term * term
+
+val ge_term : term
+val is_ge_term : term -> bool
+val mk_ge_term : term -> term -> term
+val dest_ge : term -> term * term
+
+val gt_term : term
+val is_gt_term : term -> bool
+val mk_gt_term : term -> term -> term
+val dest_gt : term -> term * term
+
+val add_term : term
+val is_add_term : term -> bool
+val mk_add_term : term -> term -> term
+val dest_add : term -> term * term
+
+val sub_term : term
+val is_sub_term : term -> bool
+val mk_sub_term : term -> term -> term
+val dest_sub : term -> term * term
+
+val mul_term : term
+val is_mul_term : term -> bool
+val mk_mul_term : term -> term -> term
+val dest_mul : term -> term * term
+
+val div_term : term
+val is_div_term : term -> bool
+val mk_div_term : term -> term -> term
+val dest_div : term -> term * term
+
+val rem_term : term
+val is_rem_term : term -> bool
+val mk_rem_term : term -> term -> term
+val dest_rem : term -> term * term
 
 val natural_number_term : term
 val is_natural_number_term : term -> bool
@@ -228,6 +271,9 @@ val mk_ind_term : term -> string -> string -> term -> term -> string -> string -
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/15 22:33:22  jyh
+ * Added CZF.
+ *
  * Revision 1.7  1998/06/12 18:36:39  jyh
  * Working factorial proof.
  *

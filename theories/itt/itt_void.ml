@@ -92,6 +92,7 @@ let void_term = << void >>
  * D
  *)
 let d_voidT i p =
+   eprintf "d_voidT: %d%t" i eflush;
    if i = 0 then
       failwith "can't prove void"
    else
@@ -149,6 +150,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/15 22:33:40  jyh
+ * Added CZF.
+ *
  * Revision 1.8  1998/06/09 20:52:51  jyh
  * Propagated refinement changes.
  * New tacticals module.

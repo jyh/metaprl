@@ -30,7 +30,12 @@ let _ =
    if !debug_load then
       eprintf "Loading Itt_equal%t" eflush
 
-(* debug_string DebugLoad "Loading itt_equal..." *)
+let debug_eqcd =
+   create_debug (**)
+      { debug_name = "eqcd";
+        debug_description = "display eqcd operations";
+        debug_value = false
+      }
 
 (************************************************************************
  * TERMS                                                                *
@@ -221,7 +226,11 @@ let extract_data base =
       let _, l, _ = dest_equal t in
          try
             (* Find and apply the right tactic *)
+            if !debug_eqcd then
+               eprintf "Itt_equal.eqcd: looking up %s%t" (Simple_print.string_of_opname (opname_of_term l)) eflush;
             let tac = slookup tbl l in
+               if !debug_eqcd then
+                  eprintf "Itt_equal.eqcd: found a tactic for %s%t" (Simple_print.string_of_opname (opname_of_term l)) eflush;
                tac p
          with
             Not_found ->
@@ -335,6 +344,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.12  1998/06/15 22:33:17  jyh
+ * Added CZF.
+ *
  * Revision 1.11  1998/06/12 13:47:26  jyh
  * D tactic works, added itt_bool.
  *

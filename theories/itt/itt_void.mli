@@ -62,8 +62,13 @@ val eqcd_voidT : tactic
 
 val void_term : term
 
+val dT : int -> tactic
+
 (*
  * $Log$
+ * Revision 1.6  1998/06/15 22:33:41  jyh
+ * Added CZF.
+ *
  * Revision 1.5  1998/05/28 13:48:24  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -29,10 +29,10 @@ declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
 (*
  * Reduction.
  *)
-rewrite list_indReduceBase :
+rewrite reduce_listindNil :
    list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]} <--> 'base
 
-rewrite list_indReduceStep :
+rewrite reduce_listindCons :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
 
@@ -172,6 +172,9 @@ val mk_list_ind_term : term -> term -> string -> string -> string -> term -> ter
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/15 22:33:25  jyh
+ * Added CZF.
+ *
  * Revision 1.5  1998/06/01 13:55:59  jyh
  * Proving twice one is two.
  *

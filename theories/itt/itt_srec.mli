@@ -20,7 +20,7 @@ declare srecind{'a; p, h. 'g['p; 'h]}
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
+rewrite reduceSrecind : srecind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. srecind{'a; p, h. 'g['p; 'h]}}; 'a]
 
 (************************************************************************
@@ -138,6 +138,9 @@ val mk_srecind_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/15 22:33:35  jyh
+ * Added CZF.
+ *
  * Revision 1.4  1998/06/01 13:56:23  jyh
  * Proving twice one is two.
  *

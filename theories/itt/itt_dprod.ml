@@ -51,7 +51,7 @@ declare spread{'e; u, v. 'b['u; 'v]}
  * Reduction on spread:
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
-primrw spreadReduce : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
+primrw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -351,6 +351,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/15 22:33:13  jyh
+ * Added CZF.
+ *
  * Revision 1.9  1998/06/12 13:47:25  jyh
  * D tactic works, added itt_bool.
  *

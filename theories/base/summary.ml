@@ -56,6 +56,7 @@ declare "none"
 declare "some"{'t}
 
 declare "meta_theory"{'A}
+declare "meta_theorem"{'A}
 declare "meta_implies"{'A; 'B}
 declare "meta_function"{'A; x. 'B['x]}
 declare "meta_iff"{'A; 'B}
@@ -236,8 +237,14 @@ dform summary_item_df : "summary_item"{'term} =
 dform df_term_df : df_term{'t} =
    slot{'t}
 
+dform meta_theorem_df : meta_theorem{'A} =
+   slot{'A}
+
 (*
  * $Log$
+ * Revision 1.11  1998/06/15 22:32:40  jyh
+ * Added CZF.
+ *
  * Revision 1.10  1998/05/07 16:03:04  jyh
  * Adding interactive proofs.
  *

@@ -19,12 +19,28 @@
  *)
 
 open Debug
+open Printf
+
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
+
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   if !debug_load then
+      eprintf "Loading Tactic_type%t" eflush
+
+let debug_tactic =
+   create_debug (**)
+      { debug_name = "tactic";
+        debug_description = "display primitive tactic operations";
+        debug_value = false
+      }
 
 (*
  * Many tactics wish to examine their argument, so
@@ -129,7 +145,7 @@ let goal { ref_goal = { mseq_goal = goal } } =
    goal
 
 let nth_hyp { ref_goal = { mseq_goal = goal } } i =
-   TermMan.nth_hyp goal i
+   TermMan.nth_hyp goal (i - 1)
 
 let nth_concl { ref_goal = { mseq_goal = goal } } i =
    TermMan.nth_concl goal i
@@ -151,6 +167,17 @@ let resources { ref_rsrc = resources } =
 
 let attributes { ref_attributes = attributes } =
    attributes
+
+let normalize_attribute (_, arg) =
+   match arg with
+      TermArg t ->
+         normalize_term t
+    | TypeArg t ->
+         normalize_term t
+    | SubstArg t ->
+         normalize_term t
+    | _ ->
+         ()
 
 (*
  * Modify the argument.
@@ -532,10 +559,18 @@ let tactic_of_rule rule (addrs, names) params arg =
          ref_rsrc = resources
        } = arg
    in
+   let _ =
+      if !debug_tactic then
+         eprintf "Collecting addresses%t" eflush
+   in
    let rule =
       try rule (nth_clause_addrs goal.mseq_goal addrs, names) params with
          IncorrectAddress (addr, t) ->
             raise (RefineError ("tactic_of_rule", AddressError (addr, t)))
+   in
+   let _ =
+      if !debug_tactic then
+         eprintf "Starting refinement%t" eflush
    in
    let subgoals, ext = Refine.refine rule goal in
    let cache =
@@ -553,7 +588,14 @@ let tactic_of_rule rule (addrs, names) params arg =
         ref_rsrc = resources
       }
    in
-      List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
+   let _ =
+      if !debug_tactic then
+         eprintf "Building subgoals%t" eflush
+   in
+   let subgoals = List.map make_subgoal subgoals, Extract (ext, List.length subgoals) in
+      if !debug_tactic then
+         eprintf "tactic_of_rule done%t" eflush;
+      subgoals
 
 (*
  * Convert a rewrite into a tactic.
@@ -852,6 +894,9 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/15 22:33:47  jyh
+ * Added CZF.
+ *
  * Revision 1.5  1998/06/13 16:24:05  jyh
  * Adding timing tactical.
  *

@@ -26,17 +26,17 @@ declare ifthenelse{'e1; 'e2; 'e3}
  *)
 declare "bool_flag"[@n:t]
 
-rewrite boolTrue : "bool_flag"["true":t] <--> "btrue"
-rewrite boolFalse : "bool_flag"["false":t] <--> "bfalse"
+rewrite reduceBoolTrue : "bool_flag"["true":t] <--> "btrue"
+rewrite reduceBoolFalse : "bool_flag"["false":t] <--> "bfalse"
 
 (*
  * Reduction.
  *)
-rewrite ifthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
-rewrite ifthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
-rewrite reduceBor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
-rewrite reduceBand : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
-rewrite reduceBnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
+rewrite reduceIfthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
+rewrite reduceIfthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+rewrite unfoldBor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+rewrite unfoldBand : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+rewrite unfoldBnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
 
 (************************************************************************
  * RULES                                                                *
@@ -92,6 +92,9 @@ val bfalse_term : term
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/15 22:33:12  jyh
+ * Added CZF.
+ *
  * Revision 1.2  1998/06/12 18:36:36  jyh
  * Working factorial proof.
  *

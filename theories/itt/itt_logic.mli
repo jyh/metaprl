@@ -16,17 +16,22 @@ include Itt_soft
  * TERMS                                                                *
  ************************************************************************)
 
-define reduceTrue : "true" <--> unit
-define reduceFalse : "false" <--> void
+define unfoldProp : "prop"[@i:l] <--> "univ"[@i:l]
 
-define reduceNot : "not"{'a} <--> 'a -> void
+define unfoldTrue : "true" <--> unit
+define unfoldFalse : "false" <--> void
 
-define reduceImplies : "implies"{'a; 'b} <--> 'a -> 'b
-define reduceAnd : "and"{'a; 'b} <--> 'a * 'b
-define reduceOr : "or"{'a; 'b} <--> 'a + 'b
+define unfoldNot : "not"{'a} <--> 'a -> void
 
-define reduceAll : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
-define reduceExists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
+define unfoldImplies : "implies"{'a; 'b} <--> 'a -> 'b
+define unfoldAnd : "and"{'a; 'b} <--> 'a * 'b
+define unfoldOr : "or"{'a; 'b} <--> 'a + 'b
+
+define unfoldAll : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
+define unfoldExists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
+
+rewrite reducePropTrue : "prop"["true":t] <--> "true"
+rewrite reducePropFalse : "prop"["false":t] <--> "false"
 
 (************************************************************************
  * DISPLAY FORMS							*
@@ -73,6 +78,9 @@ val mk_not_term : term -> term
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/15 22:33:27  jyh
+ * Added CZF.
+ *
  * Revision 1.3  1998/05/28 13:47:47  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

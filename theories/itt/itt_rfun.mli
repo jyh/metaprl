@@ -38,8 +38,8 @@ prec prec_lambda
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite betaReduction : (lambda{v. 'b['v]} 'a) <--> 'b['a]
-rewrite fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+rewrite reduceBeta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+rewrite reduceFix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 
 (************************************************************************
  * RULES                                                                *
@@ -194,6 +194,9 @@ val mk_apply_term : term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/15 22:33:32  jyh
+ * Added CZF.
+ *
  * Revision 1.4  1998/05/28 13:47:59  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

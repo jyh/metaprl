@@ -103,6 +103,9 @@ let allSubC conv env =
 let rec higherC rw env =
    (rw orelseC (allSubC (higherC rw))) env
 
+let rwh conv i =
+   rw (higherC conv) i
+
 (*
  * Apply to leftmost-innermost term.
  *)
@@ -112,11 +115,11 @@ let rec lowerC rw e =
 (*
  * Apply to all terms possible from innermost to outermost.
  *)
-let rec sweepUpC rw =
-   (allSubC (sweepUpC rw)) andthenC (tryC rw)
+let rec sweepUpC rw e =
+   ((allSubC (sweepUpC rw)) andthenC (tryC rw)) e
 
-let rec sweepDnC rw =
-   (tryC rw) andthenC (allSubC (sweepDnC rw))
+let rec sweepDnC rw e =
+   ((tryC rw) andthenC (allSubC (sweepDnC rw))) e
 
 (*
  * Use the first conversion that works.
@@ -149,6 +152,9 @@ let rec repeatForC i conv env =
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/15 22:33:43  jyh
+ * Added CZF.
+ *
  * Revision 1.4  1998/06/12 20:46:09  jyh
  * Switched to term_ds.
  *

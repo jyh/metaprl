@@ -42,6 +42,7 @@ declare "none"
 declare "some"{'t}
 
 declare "meta_theory"{'A}
+declare "meta_theorem"{'A}
 declare "meta_implies"{'A; 'B}
 declare "meta_function"{'A; x. 'B['x]}
 declare "meta_iff"{'A; 'B}
@@ -76,6 +77,9 @@ declare "proof_subst_arg"{'args}
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/15 22:32:41  jyh
+ * Added CZF.
+ *
  * Revision 1.3  1998/04/29 14:48:40  jyh
  * Added ocaml_sos.
  *

@@ -48,7 +48,7 @@ let hyp_indices arg i =
       if i < 0 then
          count + i, count + i - 1
       else
-         i, count - i
+         i - 1, count - i
 
 let clause_addr arg i =
    TermMan.nth_clause_addr (goal arg) i
@@ -67,6 +67,9 @@ let is_free_seq_var i v arg =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/15 22:33:45  jyh
+ * Added CZF.
+ *
  * Revision 1.6  1998/06/09 20:52:54  jyh
  * Propagated refinement changes.
  * New tacticals module.

@@ -25,7 +25,7 @@ declare precind{'a; p, h. 'g['p; 'h]}
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite precind : precind{'a; p, h. 'g['p; 'h]} <-->
+rewrite reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. precind{'a; p, h. 'g['p; 'h]}}; 'a]
 
 (************************************************************************
@@ -158,6 +158,9 @@ val mk_precind_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/15 22:33:29  jyh
+ * Added CZF.
+ *
  * Revision 1.5  1998/06/01 13:56:04  jyh
  * Proving twice one is two.
  *

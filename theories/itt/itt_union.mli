@@ -30,8 +30,8 @@ declare decide{'x; y. 'a['y]; z. 'b['z]}
  * decide(inl x; u. l[u]; v. r[v]) <--> l[x]
  * decide(inr x; u. l[u]; v. r[v]) <--> r[x]
  *)
-rewrite inlReduce : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
-rewrite inrReduce : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
+rewrite reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
+rewrite reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 
 (************************************************************************
  * RULES                                                                *
@@ -172,6 +172,9 @@ val mk_decide_term : term -> string -> term -> string -> term -> term
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/15 22:33:39  jyh
+ * Added CZF.
+ *
  * Revision 1.5  1998/06/01 13:56:31  jyh
  * Proving twice one is two.
  *

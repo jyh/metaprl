@@ -53,8 +53,8 @@ declare decide{'x; y. 'a['y]; z. 'b['z]}
  * decide(inl x; u. l[u]; v. r[v]) <--> l[x]
  * decide(inr x; u. l[u]; v. r[v]) <--> r[x]
  *)
-primrw inlReduce : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
-primrw inrReduce : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
+primrw reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
+primrw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 
 (************************************************************************
  * RULES                                                                *
@@ -370,6 +370,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/15 22:33:38  jyh
+ * Added CZF.
+ *
  * Revision 1.9  1998/06/12 13:47:43  jyh
  * D tactic works, added itt_bool.
  *

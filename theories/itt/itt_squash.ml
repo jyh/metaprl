@@ -60,11 +60,12 @@ let squash_opname = opname_of_term squash_term
  * Is a goal squashed?
  *)
 let is_squash_goal p =
-   match dest_sequent (goal p) with
-      [_; _; flag] ->
-         opname_of_term flag == squash_opname
-    | _ ->
-         false
+   let _, args = dest_sequent (goal p) in
+      match dest_xlist args with
+         [flag] ->
+            opname_of_term flag == squash_opname
+       | _ ->
+            false
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -123,6 +124,9 @@ let squash_of_proof p =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/15 22:33:33  jyh
+ * Added CZF.
+ *
  * Revision 1.9  1998/06/12 13:47:39  jyh
  * D tactic works, added itt_bool.
  *

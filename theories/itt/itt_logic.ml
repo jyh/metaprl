@@ -218,7 +218,7 @@ interactive false_esquash_elim {| elim [] |} 'H 'J :
  * @begin[doc]
  * @modsubsection{Negation}
  *
- * The negation $<< "not"{'A} >>$ is a well-formed if
+ * The negation $<< "not"{'A} >>$ is well-formed if
  * $A$ is a type.  The negation states that the type $A$
  * is not inhabited: any proof of $A$ is also a proof of
  * $@void$.  To prove the negation, assume $A$ and find

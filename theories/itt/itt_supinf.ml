@@ -817,8 +817,8 @@ and inf info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
       (result,actions)
 
 let monom2af var2index t =
-   if is_mul_rat_term t then
-      let t1,t2=dest_mul_rat t in
+	match explode_term t with
+		<<mul_rat{'t1;'t2}>> ->
          if is_rat_term t1 then
             let k1,k2=dest_rat t1 in
             let i=VI.lookup var2index t2 in
@@ -827,22 +827,20 @@ let monom2af var2index t =
          else
             let i=VI.lookup var2index t in
                AF.mk_var i
-   else
-   if is_rat_term t then
-      let k1,k2=dest_rat t in
+	 | <<rat{'k1;'k2}>> ->
          AF.mk_number (Number (dest_number k1, dest_number k2))
-   else
-      let i=VI.lookup var2index t in
-         AF.mk_var i
+	 | _ ->
+			let i=VI.lookup var2index t in
+				AF.mk_var i
 
 let rec linear2af var2index t =
-   if is_add_rat_term t then
-      let t1,t2=dest_add_rat t in
-      let f1=linear2af var2index t1 in
-      let f2=linear2af var2index t2 in
-         AF.add f1 f2
-   else
-      monom2af var2index t
+	match explode_term t with
+		<<add_rat{'t1;'t2}>> ->
+			let f1=linear2af var2index t1 in
+			let f2=linear2af var2index t2 in
+				AF.add f1 f2
+	 | _ ->
+			monom2af var2index t
 
 let ge2af var2index (i,t) =
 	let left,right=dest_ge_rat t in
@@ -851,7 +849,13 @@ let ge2af var2index (i,t) =
 	let neg_f2=AF.scale (neg fieldUnit) f2 in
 	AF.hypSource i (AF.add f1 neg_f2)
 
-let rec make_sacs_aux i l = function
+let apply_rewrite p conv t =
+	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
+	let s=mk_sequent_term es in
+	let s'=Top_conversionals.apply_rewrite p (higherC conv) s in
+	SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0
+
+let rec make_sacs_aux p i l = function
 	[] -> l
  | hd::tl ->
 		let i' = succ i in
@@ -859,15 +863,19 @@ let rec make_sacs_aux i l = function
 			Hypothesis (_, t) ->
 				(match explode_term t with
 					<<ge_rat{'left; 'right}>> when not (alpha_equal left right) ->
-						make_sacs_aux i' ((i,t)::l) tl
+						let t'=apply_rewrite p ge_normC t in
+						make_sacs_aux p i' ((i,t')::l) tl
+				 | <<ge{'left; 'right}>> when not (alpha_equal left right) ->
+						let t'=apply_rewrite p (int2ratC thenC ge_normC) t in
+						make_sacs_aux p i' ((i,t')::l) tl
 				 | _ ->
-						make_sacs_aux i' l tl
+						make_sacs_aux p i' l tl
 				)
-		 | Context _ -> make_sacs_aux i' l tl
+		 | Context _ -> make_sacs_aux p i' l tl
 
 let make_sacs var2index p =
    let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent p).sequent_hyps in
-	let ihyps = make_sacs_aux 1 [] hyps in
+	let ihyps = make_sacs_aux p 1 [] hyps in
 	let afs=List.map (ge2af var2index) ihyps in
 	List.fold_left SACS.addConstr SACS.empty afs
 
@@ -1169,7 +1177,7 @@ let rec source2hyp info = function
  | Shypothesis i ->
 		if !debug_supinf_trace then
 			eprintf "hyp %i@." i;
-		Leaf(1, (copyHypT i (-1)))
+		Leaf(1, ((rw (int2ratC thenC ge_normC) i) thenMT copyHypT i (-1)))
  | Smin(Signore,s2) ->
 		let result = source2hyp info s2 in
 		if !debug_supinf_trace then
@@ -1435,8 +1443,8 @@ let empty_hyps _ = (0, Array.create 13 Unused)
 let preT = funT (fun p ->
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-	all2geT thenMT
-	tryOnAllMHypsT ge_int2ratT)
+	all2geT (*thenMT
+	tryOnAllMHypsT ge_int2ratT*))
 )
 
 let coreT = test2T

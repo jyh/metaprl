@@ -7706,7 +7706,7 @@ B	b3763	t3763
 T	t3764	o589 b4206 b3763
 B	b3764	t3764
 O	o1944	location p1709 p1709
-P	p1332	String "assertT <<\subtype{'A;'B}>> thenAT autoT"
+P	p1332	String "assertT <<\"subtype\"{'A;'B}>> thenAT autoT"
 O	o1332	ext_rule p1332
 T	t1333	o b4207 b4
 B	b1333	t1333

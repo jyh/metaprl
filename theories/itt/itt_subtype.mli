@@ -83,11 +83,11 @@ rule subtypeType 'H :
    sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{.'A subtype 'B} }
 
-rule subtypeTypeLeft 'H 'B :
+rule subtypeTypeRight 'H 'B :
    sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- "type"{'A} }
 
-rule subtypeTypeRight 'H 'A :
+rule subtypeTypeLeft 'H 'A :
    sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- "type"{'B} }
 

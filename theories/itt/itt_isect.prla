@@ -7386,7 +7386,7 @@ P	p4042	String As
 O	o4042	comment_string p4042
 T	t4042	o4042
 B	b4042	t4042
-P	p10	String "(assertEqT <<'b1 = 'b2 in isect x: 'A. 'B['x]>>)"
+P	p10	String "(assertEqT <<'b1 = 'b2 in Isect x: 'A. 'B['x]>>)"
 O	o10	ext_rule p10
 T	t4126	o b765 b4
 B	b4126	t4126
@@ -9389,7 +9389,7 @@ T	t4407	o b4407 b4
 B	b4408	t4407
 T	t4408	o645 b4403 b4408
 B	b4409	t4408
-P	p4410	String "intersectionMemberCaseEquality 4 <<isect x: 'A. 'B['x]>> <<'a>> ttca"
+P	p4410	String "intersectionMemberCaseEquality 4 <<Isect x: 'A. 'B['x]>> <<'a>> ttca"
 O	o4425	ext_rule p4410
 T	t4426	o645 b4407 b4
 B	b4427	t4426
@@ -9459,7 +9459,7 @@ T	t2595	o b5504 b2595
 B	b2603	t2595
 T	t2603	o645 b5501 b2603
 B	b2607	t2603
-P	p5510	String "intersectionMemberCaseEquality 4 <<isect x: 'A. 'B['x]>> <<'a>>"
+P	p5510	String "intersectionMemberCaseEquality 4 <<Isect x: 'A. 'B['x]>> <<'a>>"
 O	o5510	ext_rule p5510
 S	s5510	t585 h h785 h786
 G	s5510	t1748

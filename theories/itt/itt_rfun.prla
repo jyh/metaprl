@@ -2177,7 +2177,7 @@ T	t2241	o b2230 b2241
 B	b2242	t2241
 T	t2242	o1565 b4167 b2242
 B	b2243	t2242
-P	p2259	String "assertT << \subtype{'B1['x; 'x2]; 'B2['x; 'x2]} >>"
+P	p2259	String "assertT << \"subtype\"{'B1['x; 'x2]; 'B2['x; 'x2]} >>"
 O	o2259	ext_rule p2259
 T	t2261	o1527 b530 b1742
 B	b2261	t2261
@@ -2287,7 +2287,7 @@ T	t481	o b2327 b480
 B	b481	t481
 T	t482	o1565 b1988 b481
 B	b482	t482
-P	p2335	String "assertT << \subtype{'A2; 'A1} >>"
+P	p2335	String "assertT << \"subtype\"{'A2; 'A1} >>"
 O	o2335	ext_rule p2335
 S	s2339	t1392 h h2209 h2230 h2269
 G	s2339	t2172

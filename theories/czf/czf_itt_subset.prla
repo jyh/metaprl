@@ -811,7 +811,7 @@ G	s619	t617
 B	b620	s619
 T	t620	o548 b620
 B	b621	t620
-P	p624	String "assertT << \subset{'s1; 's2} >> thenAT trivialT"
+P	p624	String "assertT << 's1 subset 's2 >> thenAT trivialT"
 O	o624	ext_rule p624
 H	h629	v t509
 S	s629	t558 h h610 h611 h629

@@ -4777,7 +4777,7 @@ T	t1127	o854 b1112 b4
 B	b1128	t1127
 T	t1128	o1127 b853 b1128 b4 b4
 B	b1129	t1128
-P	p1129	String "assertT << \subtype{'A1; 'A2} >>"
+P	p1129	String "assertT << \"subtype\"{'A1; 'A2} >>"
 O	o1129	ext_rule p1129
 P	p1134	String assertion
 O	o1134	tactic_arg p1134

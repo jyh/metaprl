@@ -4962,7 +4962,7 @@ T	t2451	o574 b2440 b4 b2441
 B	b2452	t2451
 T	t2453	o570 b2446 b4 b2441
 B	b2454	t2453
-P	p2460	String "assertT << \subtype{'A2; 'A1} >>"
+P	p2460	String "assertT << \"subtype\"{'A2; 'A1} >>"
 O	o2460	ext_rule p2460
 S	s2464	t552 h h2338 h2367
 G	s2464	t2177
@@ -5008,7 +5008,7 @@ T	t2579	o b2579 b4
 B	b2580	t2579
 T	t2580	o569 b2230 b2580
 B	b2581	t2580
-P	p2582	String "assertT << a: 'A1 -> \subtype{'B1['a]; 'B2['a]} >>"
+P	p2582	String "assertT << a: 'A1 -> \"subtype\"{'B1['a]; 'B2['a]} >>"
 O	o2582	ext_rule p2582
 B	b2583	t2181 a
 T	t2583	o523 b761 b2583
@@ -5085,7 +5085,7 @@ T	t2645	o574 b2634 b4 b2635
 B	b2646	t2645
 T	t2647	o570 b2640 b4 b2635
 B	b2648	t2647
-P	p2654	String "thinT 3 thenT assertT << \subtype{'A2; 'A1} >>"
+P	p2654	String "thinT 3 thenT assertT << \"subtype\"{'A2; 'A1} >>"
 O	o2654	ext_rule p2654
 S	s2654	t552 h h2212
 G	s2654	t2632

@@ -171,12 +171,12 @@ prim subtypeType {| intro [] |} 'H :
  * and $B$ are types.
  * @end[doc]
  *)
-prim subtypeTypeLeft 'H 'B :
+prim subtypeTypeRight 'H 'B :
    [main] sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- "type"{'A} } =
    it
 
-prim subtypeTypeRight 'H 'A :
+prim subtypeTypeLeft 'H 'A :
    [main] sequent [squash] { 'H >- 'A subtype 'B }  -->
    sequent ['ext] { 'H >- "type"{'B} } =
    it

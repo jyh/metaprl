@@ -173,7 +173,7 @@ doc <:doc<
    @modsubsection{Theorems}
   
    The kernel of a group homomorphism from $g1$ into $g2$ is a subgroup
-   of $g2$.
+   of $g1$.
    @end[doc]
 >>
 interactive ker_subgroup_elim (*{| elim [] |}*) 'H :

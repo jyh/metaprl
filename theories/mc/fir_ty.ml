@@ -55,6 +55,7 @@ define unfold_val_false : val_false <--> 0
 (* Functions. *)
 declare lambda{ x. 'f['x] }
 declare apply{ 'f; 'x }
+declare fix{ f. 'b['f] }
 
 (*************************************************************************
  * Display forms.
@@ -123,12 +124,19 @@ dform lambda_df : except_mode[src] :: lambda{ x. 'f } =
    `"(" Nuprl_font!lambda slot{'x} `"." slot{'f} `")"
 dform apply_df : except_mode[src] :: apply{ 'f; 'x } =
    `"(" slot{'f} `" " slot{'x} `")"
+dform fix_df : except_mode[src] :: fix{ f. 'b } =
+   pushm[0] szone push_indent `"(fix " slot{'f} `"." hspace
+   szone slot{'b} `")" ezone popm
+   ezone popm
 
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
 
+prim_rw reduce_tyVar : tyVar{ 'ty_var } <--> 'ty_var
+
 prim_rw beta_reduce : apply{ lambda{ x. 'f['x] }; 'y } <--> 'f['y]
+prim_rw reduce_fix : fix{ f. 'b['f] } <--> 'b[ fix{ f. 'b['f] } ]
 
 (*************************************************************************
  * Automation.
@@ -139,5 +147,7 @@ let resource reduce += [
    << false_set >>, unfold_false_set;
    << val_true >>, unfold_val_true;
    << val_false >>, unfold_val_false;
-   << apply{ lambda{ x. 'f['x] }; 'y } >>, beta_reduce
+   << tyVar{ 'ty_var } >>, reduce_tyVar;
+   << apply{ lambda{ x. 'f['x] }; 'y } >>, beta_reduce;
+   << fix{ f. 'b['f] } >>, reduce_fix
 ]

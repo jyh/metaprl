@@ -53,25 +53,23 @@ declare atomVar{ 'var }
 (* Primitive operations. *)
 declare unop_exp{ 'op; 'a1 }
 declare binop_exp{ 'op; 'a1; 'a2 }
-declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
-declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
+declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
+declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
 (* Function application. *)
 declare letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
-declare matchCase{ 'set; s. 'exp['s] }
-declare match_int{ 'state; 'key; 'cases }
-declare match_block{ 'state; 'key; 'cases }
+declare matchCase{ 'set; 'exp }
+declare "match"{ 'key; 'cases }
 
 (* Allocation. *)
-declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }
+declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] }
-declare setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
-                      'new_val; s. 'exp['s] }
+declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
+declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
 
 (*************************************************************************
  * Rewrites.
@@ -85,10 +83,5 @@ topval reduce_atomEnum : conv
 topval reduce_atomVar : conv
 topval reduce_letUnop : conv
 topval reduce_letBinop : conv
-topval reduce_allocTuple : conv
-topval reduce_allocArray : conv
-topval reduce_allocUnion : conv
 topval reduce_match_int : conv
 topval reduce_match_block : conv
-topval reduce_letSubscript : conv
-topval reduce_setSubscript : conv

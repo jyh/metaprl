@@ -46,25 +46,23 @@ declare atomVar{ 'var }
 (* Primitive operations. *)
 declare unop_exp{ 'op; 'a1 }
 declare binop_exp{ 'op; 'a1; 'a2 }
-declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
-declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
+declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
+declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
 (* Function application. *)
 declare letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
-declare matchCase{ 'set; s. 'exp['s] }
-declare match_int{ 'state; 'key; 'cases }
-declare match_block{ 'state; 'key; 'cases }
+declare matchCase{ 'set; 'exp }
+declare "match"{ 'key; 'cases }
 
 (* Allocation. *)
-declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }
+declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] }
-declare setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
-                      'new_val; s. 'exp['s] }
+declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
+declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
 
 (*************************************************************************
  * Display forms.
@@ -118,18 +116,16 @@ dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'a1 } =
 dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'a1; 'a2 } =
    `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")"
 dform letUnop_df : except_mode[src] ::
-   letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp } =
+   letUnop{ 'op; 'ty; 'a1; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
    lzone slot{'op} `"(" slot{'a1} `")" ezone popm hspace
-   `"with state " slot{'state} hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
 dform letBinop_df : except_mode[src] ::
-   letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp } =
+   letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
    lzone `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")" ezone popm hspace
-   `"with state " slot{'state} hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
@@ -144,53 +140,40 @@ dform tailCall_df : except_mode[src] :: tailCall{ 'var; 'atom_list } =
    szone `"TailCall(" slot{'var} `", " slot{'atom_list} `")" ezone
 
 (* Control. *)
-dform matchCase_df : except_mode[src] :: matchCase{ 'set; s. 'exp } =
+dform matchCase_df : except_mode[src] :: matchCase{ 'set; 'exp } =
    pushm[0] szone push_indent slot{'set} `" ->" hspace
    szone slot{'exp} ezone popm
    ezone popm
-dform match_int_df : except_mode[src] :: match_int{ 'state; 'a; 'cases } =
+dform match_df : except_mode[src] :: "match"{ 'key; 'cases } =
    pushm[0] szone push_indent `"match" hspace
-   szone slot{'a} ezone popm hspace
-   push_indent `"with state" hspace
-   szone slot{'state} ezone popm hspace
-   push_indent `"in" hspace
-   szone slot{'cases} ezone popm
-   ezone popm
-dform match_block_df : except_mode[src] :: match_block{ 'state; 'a; 'cases } =
-   pushm[0] szone push_indent `"match" hspace
-   szone slot{'a} ezone popm hspace
-   push_indent `"with state" hspace
-   szone slot{'state} ezone popm hspace
+   szone slot{'key} ezone popm hspace
    push_indent `"in" hspace
    szone slot{'cases} ezone popm
    ezone popm
 
 (* Allocation *)
 dform letAlloc_df : except_mode[src] ::
-   letAlloc{ 'state; 'alloc_op; s, v. 'exp } =
+   letAlloc{ 'alloc_op; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
    lzone slot{'alloc_op} ezone popm hspace
-   `"with state " slot{'state} hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
 
 (* Subscripting. *)
 dform letSubscript_df : except_mode[src] ::
-   letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp } =
+   letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
    lzone slot{'ref} `"[" slot{'index} `"]" ezone popm hspace
    `"with subop " slot{'subop} hspace
-   `"with state " slot{'state} hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
 dform setSubscript_df : except_mode[src] ::
-   setSubscript{ 'state; 'subop; 'ty; 'ref; 'index; 'new_val; s. 'exp } =
+   setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp } =
    szone slot{'ref} `"[" slot{'index} `"]" Nuprl_font!leftarrow
    slot{'new_val} hspace
    `"with subop " slot{'subop} hspace
-   `"with state " slot{'state} `";" hspace
    slot{'exp} ezone
 
 (*************************************************************************
@@ -213,11 +196,11 @@ prim_rw reduce_atomVar : atomVar{ 'var } <--> 'var
 
 (* Primitive operations. *)
 prim_rw reduce_letUnop :
-   letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] } <-->
-   'exp[ 'state; unop_exp{ 'op; 'a1 } ]
+   letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } <-->
+   'exp[ unop_exp{ 'op; 'a1 } ]
 prim_rw reduce_letBinop :
-   letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] } <-->
-   'exp[ 'state; binop_exp{ 'op; 'a1; 'a2 } ]
+   letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } <-->
+   'exp[ binop_exp{ 'op; 'a1; 'a2 } ]
 
 (* Function application. *)
 prim_rw reduce_letExt :
@@ -226,34 +209,16 @@ prim_rw reduce_letExt :
 
 (* Control. *)
 prim_rw reduce_match_int :
-   match_int{ 'state; 'key; cons{ matchCase{'set; s. 'e['s] }; 'el } } <-->
-   ifthenelse{ member{ 'key; 'set };
-      'e['state];
-      match_int{ 'state; 'key; 'el } }
+   "match"{ number[i:n]; cons{ matchCase{'set; 'e }; 'el } } <-->
+   ifthenelse{ member{ number[i:n]; 'set };
+      'e;
+      ."match"{ number[i:n]; 'el } }
 prim_rw reduce_match_block :
-   match_block{ 'state; block{'i; 'args}; 'cases } <-->
-   match_int{ 'state; 'i; 'cases }
-
-(* Allocation. *)
-prim_rw reduce_allocTuple :
-   letAlloc{ 'state; allocTuple{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } <-->
-   smatch{ alloc{ 'state; 0; 'atom_list }; s, v. 'exp['s; 'v] }
-prim_rw reduce_allocArray :
-   letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } <-->
-   smatch{ alloc{ 'state; 0; 'atom_list }; s, v. 'exp['s; 'v] }
-prim_rw reduce_allocUnion :
-   letAlloc{ 'state; allocUnion{ 'ty; 'ty_var; 'num; 'atom_list };
-      s, v. 'exp['s; 'v] } <-->
-   smatch{ alloc{ 'state; 'num; 'atom_list }; s, v. 'exp['s; 'v] }
-
-(* Subscripting. *)
-prim_rw reduce_letSubscript :
-   letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] } <-->
-   smatch{ fetch{ 'state; 'ref; 'index }; s, v. 'exp['s; 'v] }
-prim_rw reduce_setSubscript :
-   setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
-      'new_val; s. 'exp['s] } <-->
-   smatch{ store{ 'state; 'ref; 'index; 'new_val }; s, v. 'exp['s] }
+   "match"{ block{ number[i:n]; 'args };
+      cons{ matchCase{'set; 'e }; 'el } } <-->
+   ifthenelse{ member{ number[i:n]; 'set };
+      'e;
+      ."match"{ number[i:n]; 'el } }
 
 (*************************************************************************
  * Automation.
@@ -266,25 +231,15 @@ let resource reduce += [
    << atomInt{ 'num } >>, reduce_atomInt;
    << atomEnum{ 'bound; 'num } >>, reduce_atomEnum;
    << atomVar{ 'var } >>, reduce_atomVar;
-   << letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] } >>,
+   << letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } >>,
       reduce_letUnop;
-   << letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] } >>,
+   << letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } >>,
       reduce_letBinop;
    << letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp } >>,
       reduce_letExt;
-   << match_int{ 'state; 'key; cons{ matchCase{'set; s. 'e['s] }; 'el } } >>,
+   << "match"{ number[i:n]; cons{ matchCase{'set; 'e }; 'el } } >>,
       reduce_match_int;
-   << match_block{ 'state; block{'i; 'args}; 'cases } >>, reduce_match_block;
-   << letAlloc{ 'state; allocTuple{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } >>,
-      reduce_allocTuple;
-   << letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } >>,
-      reduce_allocArray;
-   << letAlloc{ 'state; allocUnion{ 'ty; 'ty_var; 'num; 'atom_list };
-         s, v. 'exp['s; 'v] } >>,
-      reduce_allocUnion;
-   << letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] } >>,
-      reduce_letSubscript;
-   << setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
-      'new_val; s. 'exp['s] } >>,
-      reduce_setSubscript
+   << "match"{ block{ number[i:n]; 'args };
+      cons{ matchCase{'set; 'e }; 'el } } >>,
+      reduce_match_block
 ]

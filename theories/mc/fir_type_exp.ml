@@ -44,7 +44,7 @@ prim_rw reduce_produces_match_base :
    produces_match{ 'key; nil } <-->
    bfalse
 prim_rw reduce_produces_match_ind :
-   produces_match{ 'key; cons{ matchCase{'set; s. 'e}; 'el } } <-->
+   produces_match{ 'key; cons{ matchCase{'set; 'e}; 'el } } <-->
    ifthenelse{ member{ 'key; 'set };
       btrue;
       produces_match{ 'key; 'el } }
@@ -52,13 +52,15 @@ prim_rw reduce_produces_match_ind :
 (* Automation for rewrites. *)
 let resource reduce += [
    << produces_match{ 'key; nil } >>, reduce_produces_match_base;
-   << produces_match{ 'key; cons{ matchCase{'set; s. 'e}; 'el } } >>,
+   << produces_match{ 'key; cons{ matchCase{'set; 'e}; 'el } } >>,
       reduce_produces_match_ind
 ]
 
 (*************************************************************************
  * Rules.
  *************************************************************************)
+
+(*
 
 (*
  * LetUnop/LetBinop equality. Note that 'T is the type 'e[v] and that
@@ -205,3 +207,5 @@ prim setSubscript_equality {| intro [] |} 'H 's :
       setSubscript{ 'st1; 'op1; 'ty1; 'r1; 'i1; 'n1; s1. 'e1['s1] } =
       setSubscript{ 'st2; 'op2; 'ty2; 'r2; 'i2; 'n2; s2. 'e2['s2] } in 'T }
    = it
+
+*)

@@ -130,7 +130,7 @@ interactive cycgroup_wf {| intro [] |} 'H :
  * @modsubsection{Introduction}
  *
  * The proposition $@cycgroup{g; a}$ is true if it is well-formed,
- * $@mem{a; @car{g}}$, and
+ * $@mem{a; @car{g}}$, and @space @space
  * $@equal{@car{g}; @sep{x; @car{g}; @exists{n; @int; @eq{x; @power{g; a; x}}}}}$.
  * @end[doc]
  *)

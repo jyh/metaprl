@@ -5,8 +5,8 @@
  * The @tt[Czf_itt_coset] module defines the @emph{left coset}
  * and the @emph{right coset}. If $h$ is a subgroup of $g$ and
  * $@mem{a; @car{g}}$, then the left coset containing $a$ is
- * ${a * x | x @in @car{h}}$ and the right coset containing $a$
- * is ${x * a| x @in @car{h}}$. The elements of the left coset
+ * $@{a * x | x @in @car{h}@}$ and the right coset containing $a$
+ * is $@{x * a| x @in @car{h}@}$. The elements of the left coset
  * are those in $@car{g}$ which are equal to $@op{g; a; y}$ for
  * some $y @in @car{h}$. The elements of the right coset are
  * those in $@car{g}$ which are equal to $@op{g; y; a}$ for some

@@ -296,7 +296,7 @@ let resource typeinf += (prec_term, inf_prec)
 
 (*
  * Type of precind.
- * HACK!!! WRONG! (according to jyh)
+ * WRONG! (according to jyh)
 let inf_precind f decl t =
    let p, h, a, g = dest_precind t in
    let decl', a' = f decl a in

@@ -27,6 +27,7 @@ include Itt_srec
 include Itt_quotient
 include Itt_list
 include Itt_derive
+include Itt_prop_decide
 
 (*
  * -*-

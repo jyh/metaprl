@@ -35,6 +35,7 @@ NLFILES :=\
 	itt_quotient\
 	itt_list\
 	itt_derive\
+	itt_prop_decide\
 	itt_theory\
 	itt_redrules\
 	itt_test

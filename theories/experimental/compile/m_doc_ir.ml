@@ -1,6 +1,6 @@
 doc <:doc< -*- mode: text; -*-
    @begin[spelling]
-   ML binop relop op AST compilable
+   ML binop relop op AST compilable marks
    @end[spelling]
 
    @begin[doc]
@@ -319,8 +319,11 @@ terminated by a $@Return{a}$ expression or tail-call.
 The translation from AST to IR is straightforward, but we use it to
 illustrate a style of translation we use frequently.  The term
 $@tt{IR} @lbrace e_1; v. e_2[v] @rbrace$ (displayed as $@IR{e_1; v;
-e_2[v]}$) is the translation of an expression $e_1$ to an IR atom,
-which is substituted for $v$ in expression $e_2[v]$.  The translation
+e_2[v]}$) is the translation of an expression $e_1$ to an IR atom. The second argument ($e_2[v]$)
+is a @emph{meta-continuation} of the translation process. In other words, $e_2$ represents @emph{the
+rest} of the program and $v$ marks the location where the IR for $e_1$ would go.
+
+The translation
 problem is expressed through the following rule, which states that a
 program $e$ is compilable if the program can be translated to an atom,
 returning the value as the result of the program.
@@ -333,7 +336,7 @@ $$
 $$
 
 For many AST expressions, the translation to IR is straightforward.  The following rules give a few
-representative examples.  Note that the @tt[add] and @tt[set] rules perform substitution, which is
+representative examples.  Note that all the rules perform substitution, which is
 specified implicitly using higher-order abstract syntax.
 $$
 @begin[array,l]

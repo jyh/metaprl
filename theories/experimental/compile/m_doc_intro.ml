@@ -50,7 +50,7 @@ and preservation of scoping in the compiled program.
 
 In this paper, we present an alternative approach, based on the use of
 higher-order abstract syntax @cite["NH02,PE88"] and term rewriting in
-a general-purpose logical framework.  All program transformations,
+an existing general-purpose logical framework.  All program transformations,
 from parsing to code generation, are cleanly isolated and specified as
 term rewrites.  In our system, term rewrites specify an equivalence
 between two code fragments that is valid in any context.  Rewrites are
@@ -146,7 +146,10 @@ The language that we are using as an example (see Section
 @cite[Ull98].  To keep the presentation simple, the language is
 untyped.  However, it includes higher-order and nested functions, and
 one necessary step in the compilation process is closure conversion,
-in which the program is modified so that all functions are closed.
+in which the program is modified so that all functions are closed. To give a better idea of what it
+takes to implement a compiler using our approach, we also provide an Appendix with a pretty-printed
+annotated version of some of the relevant source code.
+
 The high-level outline of the paper is as follows.
 
 @begin[center]
@@ -209,7 +212,7 @@ $$
 $$
 
 The left-hand-side of the rewrite is a pattern called
-the @emph{redex}.  The $v_1[x]$ stands for an arbitrary term with free
+the @emph{redex}.  The $v_1[x]$ stands for an arbitrary term that may have free occurrences of the
 variable $x$, and $v_2$ is another arbitrary term.  The
 right-hand-side of the rewrite is called the @emph{contractum}.  The
 second-order variable $v_1[v_2]$ substitutes the term matched by $v_2$
@@ -245,7 +248,7 @@ The compilation process is expressed in @MetaPRL as a judgment of
 the form ${@Gamma @vdash @compilable{e}}$, which states the the
 program $e$ is compilable in any logical context $@Gamma$.  The
 meaning of the $@compilable{e}$ judgment is defined by the target
-architecture.  A program $e'$ is compilable if it is a sequence of
+architecture.  A program $e'$ is compilable if it is equivalent to a sequence of
 valid assembly instructions.  The compilation task is a process of
 rewriting the source program $e$ to an equivalent assembly program
 $e'$.

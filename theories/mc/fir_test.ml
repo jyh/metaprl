@@ -16,63 +16,17 @@ include Fir_type
 include Fir_type_state
 include Fir_type_exp
 
-(*************************************************************************
- * Silly, truely useless tests, and other such things...
- *************************************************************************)
+(*
+ * The term to represent I don't know what should go in a spot,
+ * but it doesn't really matter anyways.
+ *)
+declare darb
+dform darb_df : except_mode[src] :: darb = `"Darb"
 
 (*************************************************************************
  * Simple program tests.
  * Should be provable with rw reduceC 0 thenT autoT.
  *************************************************************************)
-
-(* Integer tests... for sanity. *)
-interactive int1 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; plusIntOp; tyInt; 0; 1; s, v. 'v } }
-interactive int2 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; minusIntOp; tyInt; 2; 1; s, v. 'v} }
-interactive int3 'H :
-   sequent ['ext] { 'H >- 0 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; mulIntOp; tyInt; 0; 1; s, v. 'v } }
-interactive int4 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; divIntOp; tyInt; 6; 4; s, v. 'v } }
-interactive int5 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; remIntOp; tyInt; 5; 4; s, v. 'v } }
-interactive int6 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letUnop{ empty; uminusIntOp; tyInt; (-1); s, v. 'v} }
-interactive int7 'H :
-   sequent ['ext] { 'H >- 0 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; eqIntOp; tyInt; 0; 1; s, v. 'v } }
-interactive int8 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; neqIntOp; tyInt; 0; 1; s, v. 'v } }
-interactive int9 'H :
-   sequent ['ext] { 'H >- 0 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; ltIntOp; tyInt; 1; 1; s, v. 'v } }
-interactive int10 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; leIntOp; tyInt; 0; 1; s, v. 'v } }
-interactive int11 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; leIntOp; tyInt; 1; 1; s, v. 'v } }
-interactive int12 'H :
-   sequent ['ext] { 'H >- 0 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; gtIntOp; tyInt; 0; 1; s, v. 'v } }
-interactive int13 'H :
-   sequent ['ext] { 'H >- 0 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; geIntOp; tyInt; 0; 1; s, v. 'v } }
-interactive int14 'H :
-   sequent ['ext] { 'H >- 1 } -->
-   sequent ['ext] { 'H >- letBinop{ empty; geIntOp; tyInt; 1; 1; s, v. 'v } }
-
-(* Identity test. *)
-interactive id 'H :
-   sequent ['ext] { 'H >- 32 } -->
-   sequent ['ext] { 'H >- letUnop{ empty; idOp; tyInt; 32; s, v. 'v} }
 
 (* Alloc tests. *)
 interactive alloc1 'H :

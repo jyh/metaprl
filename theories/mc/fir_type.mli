@@ -39,13 +39,29 @@ declare array{ 'A }
  * FIR functions may not.
  *)
 declare ty_fun{ 'A; 'B }
+(*
+declare apply
+declare lambda
+*)
+
+(*
+ * Universally quantified type.
+ * x varies over all types in fir_univ.
+ *)
+declare ty_all{ x. 'ty['x] }
+
+(*
+ * Existentially quantified type.
+ * There is a type x in fir_univ such that...
+ *)
+declare ty_exists{ x. 'ty['x] }
 
 (*
  * Recursive type.
  * Itt_srec is not sufficient since that won't allow something like:
  *    type 'a term = Int of int | Fun of ('a term -> 'a term)
  *)
-declare "rec"{ X. 'A['X] }
+declare "rec"{ x. 'ty['x] }
 
 (* Integer set type. *)
 declare ty_interval

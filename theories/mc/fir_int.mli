@@ -42,6 +42,10 @@ declare andIntOp
 declare orIntOp
 declare xorIntOp
 
+(* Max / min. *)
+declare maxIntOp
+declare minIntOp
+
 (* Boolean comparisons. *)
 declare eqIntOp
 declare neqIntOp
@@ -49,6 +53,7 @@ declare ltIntOp
 declare leIntOp
 declare gtIntOp
 declare geIntOp
+declare cmpIntOp
 
 (* Exponentiation assuming a non-negative, integral exponent. *)
 define unfold_pow : pow{ 'base; 'exp } <-->

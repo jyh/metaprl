@@ -31,9 +31,19 @@ declare array{ 'A }
 
 (* Function type from 'A to 'B *)
 declare ty_fun{ 'A; 'B }
+(*
+declare apply
+declare lambda
+*)
+
+(* Universally quantified type. *)
+declare ty_all{ x. 'ty['x] }
+
+(* Existentially quantified type. *)
+declare ty_exists{ x. 'ty['x] }
 
 (* Recursive type *)
-declare "rec"{ X. 'A['X] }
+declare "rec"{ x. 'ty['x] }
 
 (* Integer set type. *)
 declare ty_interval
@@ -70,9 +80,17 @@ dform array_df : except_mode[src] :: array{ 'A } =
 dform ty_fun_df : except_mode[src] :: ty_fun{ 'A; 'B } =
    slot{'A} `" " Nuprl_font!rightarrow `" " slot{'B}
 
+(* Universally quantified type. *)
+dform all_df : except_mode[src] :: ty_all{ x. 'ty } =
+   Nuprl_font!forall slot{'x} `"." slot{'ty}
+
+(* Existentially quantified type. *)
+dform exist_df : except_mode[src] :: ty_exists{ x. 'ty } =
+   Nuprl_font!exists slot{'x} `"." slot{'ty}
+
 (* Recursive type. *)
-dform rec_df : except_mode[src] :: "rec"{ x. 'a } =
-   Nuprl_font!mu slot{'x} `"." slot{'a}
+dform rec_df : except_mode[src] :: "rec"{ x. 'ty } =
+   Nuprl_font!mu slot{'x} `"." slot{'ty}
 
 (* Integer set type. *)
 dform ty_interval_df : except_mode[src] :: ty_interval =
@@ -108,16 +126,14 @@ prim_rw reduce_tyTuple2 : tyTuple{ cons{'h; 't} } <--> ('h * tyTuple{'t})
 prim_rw reduce_tyArray : tyArray{'ty} <--> array{'ty}
 
 (* Use intersection/union for all/exists. *)
-(*
 prim_rw reduce_tyExists1 :
-   tyExists{ cons{'h; nil}; 'ty } <--> nil
+   tyExists{ cons{'h; nil}; 'ty } <--> ty_exists{ h. 'ty }
 prim_rw reduce_tyExists2 :
-   tyExists{ cons{'h; 't}; 'ty } <--> nil
+   tyExists{ cons{'h; 't}; 'ty } <--> ty_exists{ h. tyExists{'t; 'ty} }
 prim_rw reduce_tyAll1 :
-   tyAll{ cons{'h; nil}; 'ty } <--> nil
+   tyAll{ cons{'h; nil}; 'ty } <--> ty_all{ h. 'ty }
 prim_rw reduce_tyAll2 :
-   tyAll{ cons{'h; 't}; 'ty } <--> nil
-*)
+   tyAll{ cons{'h; 't}; 'ty } <--> ty_all{ h. tyAll{ 't; 'ty } }
 
 (* Automation for rewrites. *)
 let resource reduce += [
@@ -127,12 +143,10 @@ let resource reduce += [
    << tyTuple{ cons{'h; nil} } >>, reduce_tyTuple1;
    << tyTuple{ cons{'h; 't} } >>, reduce_tyTuple2;
    << tyArray{'ty} >>, reduce_tyArray;
-(*
    << tyExists{ cons{'h; nil}; 'ty } >>, reduce_tyExists1;
    << tyExists{ cons{'h; 't}; 'ty } >>, reduce_tyExists2;
    << tyAll{ cons{'h; nil}; 'ty } >>, reduce_tyAll1;
    << tyAll{ cons{'h; 't}; 'ty } >>, reduce_tyAll2;
-*)
 ]
 
 (*************************************************************************
@@ -239,25 +253,48 @@ prim ty_fun_equality {| intro [] |} 'H :
    = it
 
 (*
+ * Universally quantified type.
+ *)
+
+prim all_equality {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H; a: 'T >- 'ty1['a] = 'ty2['a] in 'T } -->
+   sequent ['ext] { 'H >-
+      ty_all{ x1. 'ty1['x1] } =
+      ty_all{ x2. 'ty2['x2] } in 'T }
+   = it
+
+(*
+ * Existentially quantified type.
+ *)
+
+prim exist_equality {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H; a: 'T >- 'ty1['a] = 'ty2['a] in 'T } -->
+   sequent ['ext] { 'H >-
+      ty_exists{ x1. 'ty1['x1] } =
+      ty_exists{ x2. 'ty2['x2] } in 'T }
+   = it
+
+(*
  * Recursive type.
  *)
 
 prim rec_equality {| intro[] |} 'H :
-   [wf] sequent ['ext] { 'H; X: fir_univ >- 'A1['X] = 'A2['X] in fir_univ } -->
+   [wf] sequent ['ext]
+      { 'H; x: fir_univ >- 'ty1['x] = 'ty2['x] in fir_univ } -->
    sequent ['ext]
-      { 'H >- "rec"{X1. 'A1['X1]} = "rec"{X2. 'A2['X2]} in fir_univ }
+      { 'H >- "rec"{x1. 'ty1['x1]} = "rec"{x2. 'ty2['x2]} in fir_univ }
    = it
 
 prim rec_unfold_intro {| intro [] |} 'H :
    [main] sequent ['ext]
-      { 'H >- 'A1[ "rec"{X. 'A1['X]} ] = 'A2 in fir_univ } -->
-   sequent ['ext] { 'H >- "rec"{ X. 'A1['X] } = 'A2 in fir_univ }
+      { 'H >- 'ty1[ "rec"{x. 'ty1['x]} ] = 'ty2 in fir_univ } -->
+   sequent ['ext] { 'H >- "rec"{ x. 'ty1['x] } = 'ty2 in fir_univ }
    = it
 
 prim rec_unfold_elim {| elim [] |} 'H 'J :
    [main] sequent ['ext]
-      { 'H; y: 'A[ "rec"{ X. 'A['X] } ]; 'J['y] >- 'C['y] } -->
-   sequent ['ext] { 'H; y: "rec"{ X. 'A['X] }; 'J['y] >- 'C['y] }
+      { 'H; y: 'ty[ "rec"{ x. 'ty['x] } ]; 'J['y] >- 'C['y] } -->
+   sequent ['ext] { 'H; y: "rec"{ x. 'ty['x] }; 'J['y] >- 'C['y] }
    = it
 
 (*

@@ -25,6 +25,7 @@ declare tyFun{ 'ty_list; 'ty }
 declare tyUnion{ 'union_ty; 'ty_list; 'int_opt }
 declare tyTuple{ 'ty_list }
 declare tyArray{ 'ty }
+declare tyRawData
 
 (* Polymorphism. *)
 declare tyVar{ 'ty_var }
@@ -75,6 +76,20 @@ dform tyTuple_df : except_mode[src] :: tyTuple{ 'ty_list } =
    lzone `"TyTuple(" slot{'ty_list} `")" ezone
 dform tyArray_df : except_mode[src] :: tyArray{ 'ty } =
    lzone `"TyArray(" slot{'ty} `")" ezone
+dform tyRawData : except_mode[src] :: tyRawData =
+   `"TyRawData"
+
+(* Polymorphism. *)
+dform tyVar_df : except_mode[src] :: tyVar{ 'ty_var } =
+   `"TyVar(" slot{'ty_var} `")"
+dform tyApply_df : except_mode[src] :: tyApply{ 'ty_var; 'ty_list } =
+   `"TyApply(" slot{'ty_var} `", " slot{'ty_list} `")"
+dform tyExists_df : except_mode[src] :: tyExists{ 'ty_var_list; 'ty } =
+   `"TyExists(" slot{'ty_var_list} `", " slot{'ty} `")"
+dform tyAll_df : except_mode[src] :: tyAll{ 'ty_var_list; 'ty } =
+   `"TyAll(" slot{'ty_var_list} `", " slot{'ty} `")"
+dform tyProject_df : except_mode[src] :: tyProject{ 'ty_var; 'num } =
+   `"TyProject(" slot{'ty_var} `", " slot{'num} `")"
 
 (* Delayed type. *)
 dform tyDelayed_df : except_mode[src] :: tyDelayed = `"TyDelayed"

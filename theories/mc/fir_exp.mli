@@ -18,6 +18,15 @@ include Fir_ty
 (* Identity (polymorphic). *)
 declare idOp
 
+(* Pointer equality. *)
+declare eqEqOp
+declare neqEqOp
+
+(* Subscript operators. *)
+declare blockPolySub
+declare rawDataSub
+declare rawFunctionSub
+
 (*
  * Allocation operators.
  * copy makes a list with 'len copies of 'init.
@@ -26,16 +35,11 @@ declare idOp
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
-define unfold_copy : copy{ 'len; 'init } <-->
-   ind{'len; i, j. nil; nil; i, j. cons{'init; 'j}}
+declare allocMalloc{ 'atom }
 
 (*
  * Normal values.
  *)
-
-(* Subscript ops. *)
-declare rawSubscript
-declare intSubscript
 
 (*
  * Normal atoms.
@@ -59,7 +63,12 @@ declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
 declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
 
 (* Function application. *)
+(*
+declare letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
+*)
+(*
 declare tailCall{ 'var; 'atom_list }
+*)
 
 (* Control. *)
 declare matchCase{ 'set; s. 'exp['s] }

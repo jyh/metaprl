@@ -18,20 +18,24 @@ include Fir_ty
 (* Identity (polymorphic). *)
 declare idOp
 
+(* Pointer equality. *)
+declare eqEqOp
+declare neqEqOp
+
+(* Subscript operators. *)
+declare blockPolySub
+declare rawDataSub
+declare rawFunctionSub
+
 (* Allocation operators. *)
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
-define unfold_copy : copy{ 'len; 'init } <-->
-   ind{'len; i, j. nil; nil; i, j. cons{'init; 'j}}
+declare allocMalloc{ 'atom }
 
 (*
  * Normal values.
  *)
-
-(* Subscript ops. *)
-declare rawSubscript
-declare intSubscript
 
 (* Normal atoms. *)
 declare atomInt{ 'int }
@@ -50,7 +54,12 @@ declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
 declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
 
 (* Function application. *)
+(*
+declare letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
+*)
+(*
 declare tailCall{ 'var; 'atom_list }
+*)
 
 (* Control. *)
 declare matchCase{ 'set; s. 'exp['s] }
@@ -70,6 +79,18 @@ declare setSubscript{ 'state; 'ref; 'index; 'new_val; s. 'exp['s] }
 (* Identity (polymorphic). *)
 dform idOp_df : except_mode[src] :: idOp = `"id"
 
+(* Pointer equality. *)
+dform eqEqOp_df : except_mode[src] :: eqEqOp = `"EqEqOp"
+dform neqEqOp_df : except_mode[src] :: neqEqOp = `"NeqEqOp"
+
+(* Subscript operators. *)
+dform blockPolySub_df : except_mode[src] :: blockPolySub =
+   `"BlockPolySub"
+dform rawDataSub_df : except_mode[src] :: rawDataSub =
+   `"RawDataSub"
+dform rawFunctionSub : except_mode[src] :: rawFunctionSub =
+   `"RawFunctionSub"
+
 (* Allocation operators. *)
 dform allocTuple_df : except_mode[src] :: allocTuple{ 'ty; 'atom_list } =
    szone `"AllocTuple(" slot{'ty} `", " slot{'atom_list} `")" ezone
@@ -79,16 +100,12 @@ dform allocUnion_df : except_mode[src] ::
    allocUnion{ 'ty; 'ty_var; 'num; 'atom_list } =
    szone `"AllocUnion(" slot{'ty} `", " slot{'ty_var} `", "
    slot{'num} `", " slot{'atom_list } `")" ezone
-dform copy_df : except_mode[src] :: copy{ 'len; 'init} =
-   lzone `"copy(" slot{'len} `", " slot{'init} `")" ezone
+dform allocMalloc_df : except_mode[src] :: allocMalloc{ 'atom } =
+   `"AllocMalloc(" slot{'atom} `")"
 
 (*
  * Normal values.
  *)
-
-(* Subscript ops. *)
-dform rawSubscript_df : except_mode[src] :: rawSubscript = `"RawSubscript"
-dform intSubscript_df : except_mode[src] :: intSubscript = `"IntSubscript"
 
 (* Normal atoms. *)
 dform atomInt_df : except_mode[src] :: atomInt{ 'int } =
@@ -130,8 +147,14 @@ dform letBinop_df : except_mode[src] ::
    ezone popm
 
 (* Function application. *)
+(*
+dform letExt_df : except_mode[src] ::
+   letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
+*)
+(*
 dform tailCall_df : except_mode[src] :: tailCall{ 'var; 'atom_list } =
    szone `"TailCall(" slot{'var} `", " slot{'atom_list} `")" ezone
+*)
 
 (* Control. *)
 dform matchCase_df : except_mode[src] :: matchCase{ 'set; s. 'exp } =
@@ -181,6 +204,12 @@ dform setSubscript_df : except_mode[src] ::
 
 (* Identity (polymorphic). *)
 prim_rw reduce_idOp : unop_exp{ idOp; 'a1 } <--> 'a1
+
+(* Pointer equality. *)
+prim_rw reduce_eqEqOp : binop_exp{ eqEqOp; 'a1; 'a2 } <-->
+   ifthenelse{ beq_int{'a1; 'a2}; val_true; val_false }
+prim_rw reduce_neqEqOp : binop_exp{ neqEqOp; 'a1; 'a2 } <-->
+   ifthenelse{ beq_int{'a1; 'a2}; val_false; val_true }
 
 (* Integer atom. *)
 prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
@@ -232,6 +261,8 @@ prim_rw reduce_setSubscript :
 
 let resource reduce += [
    << unop_exp{ idOp; 'a1 } >>, reduce_idOp;
+   << binop_exp{ eqEqOp; 'a1; 'a2 } >>, reduce_eqEqOp;
+   << binop_exp{ neqEqOp; 'a1; 'a2 } >>, reduce_neqEqOp;
    << letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] } >>,
       reduce_letUnop;
    << letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] } >>,
@@ -240,7 +271,6 @@ let resource reduce += [
       reduce_allocTuple;
    << letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } >>,
       reduce_allocArray;
-   << copy{ 'len; 'init } >>, unfold_copy;
    << "match"{ 'state; number[i:n];
       cons{matchCase{'set; s. 'exp['s]}; 'el} } >>,
       reduce_match_num;

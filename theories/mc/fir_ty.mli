@@ -37,6 +37,7 @@ declare tyFun{ 'ty_list; 'ty }
 declare tyUnion{ 'union_ty; 'ty_list; 'int_opt }
 declare tyTuple{ 'ty_list }
 declare tyArray{ 'ty }
+declare tyRawData
 
 (* Polymorphism. *)
 declare tyVar{ 'ty_var }

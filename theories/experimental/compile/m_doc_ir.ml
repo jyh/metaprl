@@ -177,13 +177,13 @@ dform math_LetTuple_df : mode[tex] :: math_LetTuple{'length; 'tuple; 'v; 'e} =
    math_xlet slot{'v} `"= (" slot{'tuple} `")" math_xin slot{'e}
 
 dform math_LetSubscript_df : mode[tex] :: math_LetSubscript{'a1; 'a2; 'v; 'e} =
-   math_xlet slot{'v} `"= " slot{'a1} `"[" slot{'a2} `"]" math_xin slot{'e}
+   math_xlet slot{'v} `"= " slot{'a1} `".[" slot{'a2} `"]" math_xin slot{'e}
 
 dform math_SetSubscript_df1 : mode[tex] :: math_SetSubscript{'a1; 'a2; 'a3} =
-   slot{'a1} `"[" slot{'a2} `"]" leftarrow slot{'a3} `";"
+   slot{'a1} `".[" slot{'a2} `"]" leftarrow slot{'a3} `";"
 
 dform math_SetSubscript_df2 : mode[tex] :: math_SetSubscript{'a1; 'a2; 'a3; 'e} =
-   slot{'a1} `"[" slot{'a2} `"]" leftarrow slot{'a3} `";" slot{'e}
+   slot{'a1} `".[" slot{'a2} `"]" leftarrow slot{'a3} `";" slot{'e}
 
 dform math_LetApply_df : mode[tex] :: math_LetApply{'f; 'a; 'v; 'e} =
    math_xlet slot{'v} `"=" slot{'f} `"(" slot{'a} `")" math_xin slot{'e}
@@ -342,7 +342,7 @@ $$
 @line{@xrewrite[var]{@IR{v_1; v_2; e[v_2]}; e[@AtomVar{v_1}]}}
 @line{@xrewrite2[add]{@IR{{e_1 + e_2}; v; e[v]};
 		        @IR{e_1; v_1; @IR{e_2; v_2; e[@AtomBinop{+; v_1; v_2}]}}}}
-@line{@xrewrite2[set]{@IR{e_1[e_2] @leftarrow e_3; v; e_4[v]};
+@line{@xrewrite2[set]{@IR{e_1.[e_2] @leftarrow e_3; v; e_4[v]};
     @begin[array,t,l]
     @line{@IR{e_1; v_1}}
     @line{@IR{e_2; v_2}}

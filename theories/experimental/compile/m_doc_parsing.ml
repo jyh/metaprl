@@ -65,8 +65,8 @@ $$
 @line{{} {@pipe} {e @space @it{op} @space e} @hbox{@it{Binary expressions}}}
 @line{{} {@pipe} @AtomFun{v; e} @hbox{@it{Anonymous functions}}}
 @line{{} {@pipe} @If{e; e; e} @hbox{@it{Conditionals}}}
-@line{{} {@pipe} {e[e]} @hbox{@it{Subscripting}}}
-@line{{} {@pipe} {e[e] @leftarrow e} @hbox{@it{Assignment}}}
+@line{{} {@pipe} {e.[e]} @hbox{@it{Subscripting}}}
+@line{{} {@pipe} {e.[e] @leftarrow e} @hbox{@it{Assignment}}}
 @line{{} {@pipe} {e; e} @hbox{@it{Sequencing}}}
 @line{{} {@pipe} {e(e_1, @ldots, e_n)} @hbox{@it{Application}}}
 @line{{} {@pipe} @LetAtom{e; v; e} @hbox{@it{Let definitions}}}

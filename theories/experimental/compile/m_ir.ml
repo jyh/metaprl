@@ -25,8 +25,8 @@ doc <:doc<
      e ::= let v = a in e               (LetAtom)
         |  f(a)                         (TailCall)
         |  if a then e1 else e2         (Conditional)
-        |  let v = a1[a2] in e          (Subscripting)
-        |  a1[a2] <- a3; e              (Assignment)
+        |  let v = a1.[a2] in e         (Subscripting)
+        |  a1.[a2] <- a3; e             (Assignment)
 
            (* These are eliminated during CPS *)
         |  let v = f(a) in e            (Function application)
@@ -411,10 +411,10 @@ dform exp_let_tuple_df : parens :: "prec"[prec_let] :: LetTuple{'length; 'tuple;
    szone pushm[3] xlet `" " slot{'v} bf[" =[length = "] slot{'length} bf["] "] slot{'tuple} `" " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v. 'e} =
-   szone pushm[3] xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e} popm ezone
+   szone pushm[3] xlet `" " slot{'v} bf[" = "] slot{'a1} `".[" slot{'a2} `"] " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_set_subscript_df : parens :: "prec"[prec_let] :: SetSubscript{'a1; 'a2; 'a3; 'e} =
-   slot{'a1} `"[" slot{'a2} `"] " leftarrow `" " slot{'a3} `";" hspace slot["lt"]{'e}
+   slot{'a1} `".[" slot{'a2} `"] " leftarrow `" " slot{'a3} `";" hspace slot["lt"]{'e}
 
 (*
  * Functions and application.

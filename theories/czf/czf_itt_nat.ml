@@ -2,7 +2,7 @@
  * @spelling{nat natIndT succ}
  *
  * @begin[doc]
- * @theory[Czf_itt_nat]
+ * @module[Czf_itt_nat]
  *
  * The @tt{Czf_itt_nat} module defines the infinite set $@inf$.
  * We use the definition of $@inf$ as the definition of the
@@ -141,7 +141,7 @@ dform lt_df : parens :: "prec"[prec_compare] :: lt{'i; 'j} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * Zero is a set, and the successor of @emph{any} set
  * is a set.  Infinity is also a set.
@@ -178,7 +178,7 @@ interactive succ_isnat {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Induction}
+ * @modsubsection{Induction}
  *
  * The induction rule performs induction on an
  * arbitrary number expression in the goal.  The goal
@@ -198,7 +198,7 @@ interactive nat_elim 'H bind{z. 'C['z]} 'i :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The $@lt{i; j}$ relation is functional on its arguments,
  * and it is also a restricted proposition.
@@ -216,7 +216,7 @@ interactive lt_restricted {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Zero}
+ * @modsubsection{Zero}
  *
  * The following three rules characterize the @tt{zero}
  * set.  Zero is a number that is smaller than every successor.
@@ -239,7 +239,7 @@ interactive zero_member_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Successor}
+ * @modsubsection{Successor}
  *
  * The following two rules characterize the successor.
  * The relation $@lt{@succ{i}; @succ{j}}$ is true if-and-only-if

@@ -4,7 +4,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Summary]
+ * @module[Summary]
  *
  * The @tt{Summary} module implements display forms for top level
  * module summaries.  A @emph{summary} is a term representation of

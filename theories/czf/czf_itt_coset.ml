@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_coset]
+ * @module[Czf_itt_coset]
  *
  * The @tt[Czf_itt_coset] module defines the @emph{left coset}
  * and the @emph{right coset}. If $h$ is a subgroup of $g$ and
@@ -117,7 +117,7 @@ dform rcoset_df : parens :: except_mode[src] :: rcoset{'h; 'g; 'a} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The $@lcoset{h; g; a}$ and $@rcoset{h; g; a}$ are well-formed
  * if $h$ and $g$ are labels, and $a$ is a set.
@@ -139,7 +139,7 @@ interactive rcoset_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * A set $x$ is a member of $@lcoset{h; g; a}$ if the
  * left coset is well-formed, $@mem{a; @car{g}}$,
@@ -177,7 +177,7 @@ interactive rcoset_intro {| intro [] |} 'H 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form for the left coset
  * $@mem{y; @lcoset{h; g; a}}$ implies $@mem{y; @car{g}}$ and
@@ -207,7 +207,7 @@ interactive rcoset_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Theorems}
+ * @modsubsection{Theorems}
  *
  * If $h$ is a subgroup of group $g$, both the left and right
  * cosets of $h$ containing $a$ are subsets of the carrier of

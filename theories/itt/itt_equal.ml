@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_equal]
+ * @module[Itt_equal]
  *
  * The @tt{Itt_equal} module defines type @emph{universes},
  * @emph{cumulativity} of type universes, and equality.
@@ -308,7 +308,7 @@ prim trueIntro {| intro [] |} 'H :
  * @begin[doc]
  * @rules
  *
- * @thysubsection{Equality axiom}
+ * @modsubsection{Equality axiom}
  *
  * The @emph{axiom} rule declares that if a program $x$ has type
  * $T$ by assumption, then $T$ is a type, and $x$ is a member of $T$.
@@ -320,7 +320,7 @@ prim equalityAxiom 'H 'J :
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{Equality is an equivalence relation}
+ * @modsubsection{Equality is an equivalence relation}
  *
  * The next three rules specify that equality is an equivalence relation.
  * The @emph{reflexivity} rule differs from the standard definition:
@@ -369,7 +369,7 @@ prim equalityFormation 'H 'T :
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{Well-formedness of equality}
+ * @modsubsection{Well-formedness of equality}
  *
  * The next two rules describe well-formedness of the equality judgment.
  * Equality is @emph{intensional}: two equalities are equal if all of their
@@ -403,7 +403,7 @@ prim equalityType {| intro [] |} 'H :
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{Inhabitants of the equality types}
+ * @modsubsection{Inhabitants of the equality types}
  *
  * The two following rules state that $@it$ is the one-and-only element
  * in a provable equality or a provable @tt{Type} type.
@@ -439,7 +439,7 @@ prim type_axiomMember {| intro []; eqcd |} 'H :
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{Truth implies typehood}
+ * @modsubsection{Truth implies typehood}
  *
  * For any sequent judgment $@sequent{ext; H; T}$ the term $T$ must be a
  * a type.  The following rule allows us to infer well-formedness of a
@@ -461,7 +461,7 @@ prim typeEquality 'H :
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{Universe cumulativity}
+ * @modsubsection{Universe cumulativity}
  *
  * The following two rules describe universe @emph{cumulativity}.
  * The $@cumulativity{i:l; j:l}$ term is a built-in judgment
@@ -507,7 +507,7 @@ let resource intro += (univ_member_term, wrap_intro eqcd_univT)
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{The type universe is a type}
+ * @modsubsection{The type universe is a type}
  *
  * The next three rules state that every universe $@univ{l}$ is a type, and
  * every inhabitant $x @in @univ{l}$ is also a type.

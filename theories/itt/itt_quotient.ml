@@ -2,7 +2,7 @@
  * @spelling{quot}
  *
  * @begin[doc]
- * @theory[Itt_quotient]
+ * @module[Itt_quotient]
  *
  * The @tt{Itt_quotient} module defines the @emph{quotient}
  * type $@quot{T; x; y; E[x, y]}$, which imposes a @emph{new}
@@ -193,7 +193,7 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Equality and well-formedness}
+ * @modsubsection{Equality and well-formedness}
  *
  * The quotient $@quot{A; x; y; E[x, y]}$ if $A$ is a type,
  * and $E$ is an @emph{equivalence relation}:
@@ -232,7 +232,7 @@ prim quotientEquality {| intro []; eqcd |} 'H 'x 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * In the @emph{weak} form, any two elements in $A$ are also
  * in the quotient $@quot{A; x; y; E[x, y]}$ for @emph{any}
@@ -284,7 +284,7 @@ let resource intro +=
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The first two elimination forms are valid only if the goal
  * is an equality judgment.  For both cases, the judgment is true
@@ -333,7 +333,7 @@ prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'v :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The quotient $@quot{A; x; y; E[x, y]}$ is covariant in  the type $A$ and the
  * the equivalence relation $E$ (the relation must become coarser).

@@ -2,7 +2,7 @@
  * @spelling{rel}
  *
  * @begin[doc]
- * @theory[Czf_itt_rel]
+ * @module[Czf_itt_rel]
  *
  * The @tt{Czf_itt_rel} module defines Aczel's @emph{collection}
  * scheme :

@@ -1,11 +1,11 @@
 (*!
  * @begin[doc]
- * @theory[Itt_bisect]
+ * @module[Itt_bisect]
  *
  * The @tt{Itt_bisect} module derives a binary intersection
  * $@bisect{A; B}$ from the intersection @hrefterm[isect] defined
- * in the @hreftheory[Itt_isect] theory, and the Boolean values
- * defined in the @hreftheory[Itt_bool] theory.
+ * in the @hrefmodule[Itt_isect] theory, and the Boolean values
+ * defined in the @hrefmodule[Itt_bool] theory.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -102,7 +102,7 @@ dform bisect_df : except_mode[src] :: parens :: "prec"[prec_bisect] :: bisect{'A
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The binary intersection $@bisect{A; B}$ is well-formed if both $A$
  * and $B$ are types.
@@ -129,7 +129,7 @@ interactive bisectFormation 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * Two terms $x$ and $y$ are equal in the binary intersection
  * $@bisect{A; B}$ if they are equal in both $A$ and $B$.  Put another
@@ -144,7 +144,7 @@ interactive bisectMemberEquality {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination rule for an assumption $x@colon @bisect{A; B}$ states that  $x$ can be replaced by
  * $a @in A$ or by $b @in B$.
@@ -222,7 +222,7 @@ let resource elim += (<<bisect{'A; 'B}>>,bisectEliminationT)
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The binary intersection $@bisect{A; B}$ is covariant
  * in both $A$ and $B$.

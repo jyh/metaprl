@@ -2,7 +2,7 @@
  * @spelling{sexists}
  *
  * @begin[doc]
- * @theory[Czf_itt_sexists]
+ * @module[Czf_itt_sexists]
  *
  * The @tt{Czf_itt_sexists} module defines the @emph{unrestricted}
  * existential quantification $@sexists{x; P[x]}$.  The proposition
@@ -80,7 +80,7 @@ declare "sexists"{x. 'A['x]}
  * @rewrites
  *
  * The unrestricted existential is defined with the type-theoretic
- * existential @hrefterm[exists] from the @hreftheory[Itt_logic]
+ * existential @hrefterm[exists] from the @hrefmodule[Itt_logic]
  * module.
  * @end[doc]
  *)
@@ -103,7 +103,7 @@ dform sexists_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sexists
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The unrestricted existential $@sexists{x; P[x]}$ is well-formed
  * if $P[x]$ is a well-formed proposition for any set argument $x$.
@@ -115,7 +115,7 @@ interactive sexists_type {| intro [] |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The existential $@sexists{x; P[x]}$ is true if $P[a]$
  * is true for some set $a$.
@@ -129,7 +129,7 @@ interactive sexists_intro  {| intro [] |}'H 'z 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The proof of the existential $@sexists{x; P[x]}$ is a pair of a witness
  * set $a$ and a proof $P[a]$.

@@ -2,7 +2,7 @@
  * @spelling{dall}
  *
  * @begin[doc]
- * @theory[Czf_itt_dall]
+ * @module[Czf_itt_dall]
  *
  * The @tt{Czf_itt_dall} theory defines @emph{restricted}
  * universal quantification.  The syntax of the operator
@@ -114,7 +114,7 @@ dform dall_df1 : parens :: except_mode[src] :: "prec"[prec_lambda] :: "dall"{'s;
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The $@dall{x; s; P[x]}$ proposition is well-formed
  * if $s$ is a set, and $P[x]$ is a proposition for any
@@ -128,7 +128,7 @@ interactive dall_type {| intro [] |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@dall{x; s; P[x]}$ is true if it is
  * well-formed, and $P[a]$ is true for any set $@mem{a; s}$.
@@ -142,7 +142,7 @@ interactive dall_intro {| intro [] |} 'H 'a 'b :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form instantiates the universal quantification
  * $@dall{x; s; P[x]}$ on a particular argument $@mem{z; s}$.  It
@@ -158,7 +158,7 @@ interactive dall_elim {| elim [] |} 'H 'J 'z 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The @tt{dall} proposition is functional in it's set
  * and proposition arguments.
@@ -173,7 +173,7 @@ interactive dall_fun {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Restriction}
+ * @modsubsection{Restriction}
  *
  * The proposition $@dall{x; s; P[x]}$ is restricted for any
  * set $s$ because the proposition quantifies over the @emph{index}

@@ -5,7 +5,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Itt_subtype]
+ * @module[Itt_subtype]
  *
  * The @tt{Itt_subtype} module provides the definition of
  * @emph{subtyping}.  Informally a type $T_1$ is a subtype of
@@ -145,7 +145,7 @@ prim subtypeFormation 'H :
  * @begin[doc]
  * @rules
  *
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The $<< subtype{'A; 'B} >>$ term is a type if both
  * $A$ and $B$ are types.  The equality is @emph{intensional}:
@@ -183,7 +183,7 @@ prim subtypeTypeRight 'H 'B :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The @tt{subtype_axiomFormation} rule gives the introduction form
  * for the subtype judgment.  A type $A @subseteq B$ is true if $A$
@@ -199,7 +199,7 @@ prim subtype_axiomFormation {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Member equality}
+ * @modsubsection{Member equality}
  * The subtype-type, if true, contains only the term $@it$.
  * For $@it$ to be in $A @subseteq B$, the subtype judgment
  * must be true.
@@ -212,7 +212,7 @@ prim subtype_axiomEquality {| intro []; eqcd; squash |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * Subtype elimination has two forms.  The standard @tt{subtypeElimination}
  * form corresponds to induction: the witness $x@colon A @subseteq B$ is

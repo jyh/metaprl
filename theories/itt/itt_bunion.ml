@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_bunion]
+ * @module[Itt_bunion]
  *
  * The @tt{Itt_bunion} module defines a binary union $@bunion{A; B}$
  * of type types $A$ and $B$.  The elements include the elements of $A$
@@ -106,7 +106,7 @@ let fold_bunion = makeFoldC << bunion{'A; 'B} >> unfold_bunion
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The union $@bunion{A; B}$ is well-formed if
  * both $A$ and $B$ are types.
@@ -133,7 +133,7 @@ interactive bunionFormation 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * Two terms are equal in the binary union if they are equal
  * in either type.
@@ -151,7 +151,7 @@ interactive bunionMemberEqualityRight {| intro [SelectOption 2]; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form retains the limitations of the
  * general union elimination @hrefrule[tunionElimination]: it

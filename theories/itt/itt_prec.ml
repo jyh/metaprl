@@ -2,7 +2,7 @@
  * @spelling{cons prec precind unrollings}
  *
  * @begin[doc]
- * @theory[Itt_prec]
+ * @module[Itt_prec]
  *
  * The @tt{Itt_prec} module define the @emph{parameterized}
  * recursive type.  The parameter allows values to be passed
@@ -147,7 +147,7 @@ dform precind_df : except_mode[src] :: precind{'a; p, h. 'g} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Equality}
+ * @modsubsection{Equality}
  *
  * The @tt{prec} type $@prec{T; x; B[T, x]; a}$ is well-formed if: 1) there
  * is a type of parameters $A$; 2) the initial parameter $a$ has type $A$;
@@ -185,7 +185,7 @@ prim precMemberFormation {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The elements of the parameterized recursive type $@prec{T; x; B[T, x]; a}$ are the
  * elements in the body $B[@lambda{a'; @prec{T; x; B[T, x]; a'}}, a]$, where the
@@ -200,7 +200,7 @@ prim precMemberEquality {| intro []; eqcd |} 'H 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form performs induction on the recursive type
  * definition.  The conclusion $G[p]$ holds on any element $p$ of the
@@ -237,7 +237,7 @@ prim precUnrollElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'y 'u :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * The @hrefterm[precind] term $@precind{r; h; z; t[h, z]}$ produces
  * values of type $S$ if the argument $r$ is the pair of a parameter $a$

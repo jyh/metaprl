@@ -4,7 +4,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Czf_itt_eq]
+ * @module[Czf_itt_eq]
  *
  * The @tt{Czf_itt_eq} module defines @emph{extensional} equality
  * of sets.  Sets are equal if they have the same members, and in addition
@@ -243,7 +243,7 @@ dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_pr
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  * The @tt{eq} judgment is well-formed if both arguments are
  * sets.  The @emph{equality} if the @tt{eq} judgment requires
  * the set arguments to be equal (in the native @hrefterm[set] type).
@@ -301,7 +301,7 @@ interactive equal_isset_right 'H 's1 :
 
 (*!
  * @begin[doc]
- * @thysubsection{Equality is an equivalence relation}
+ * @modsubsection{Equality is an equivalence relation}
  * The @tt{eq} judgment is reflexive, symmetric, and
  * transitive.
  * @end[doc]
@@ -332,7 +332,7 @@ interactive eq_trans 'H 's2 :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  * The $@funset{z; f[z]}$ judgment implies that $f[z]$ is a
  * set for any set $z$.
  * @end[doc]
@@ -367,7 +367,7 @@ interactive equal_fun {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  *
  * The following two rules define substitution.
  * Set $s_1$ can be replaced by set $s_2$ in a context
@@ -389,7 +389,7 @@ interactive eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Typehood of the functionality judgments}
+ * @modsubsection{Typehood of the functionality judgments}
  * The @tt{fun_set} judgment requires that it's argument
  * be a family of sets, and the @tt{fun_prop} judgment requires that
  * it's argument be a family of propositions.
@@ -427,7 +427,7 @@ interactive fun_prop {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  *
  * @begin[description]
  * @item{@tactic[setSubstT];

@@ -2,7 +2,7 @@
  * @spelling{fol}
  *
  * @begin[doc]
- * @theory[Czf_itt_fol]
+ * @module[Czf_itt_fol]
  *
  * The @tt{Czf_itt_fol} module defines the first-order logic for
  * the set theory.  The predicates are defined as follows.
@@ -47,8 +47,8 @@
  * the quantifiers are unnecessary, because the set theory can't reason
  * about the programs in the first-order logic directly.  The
  * usual set-theoretic quantifiers are defined in the
- * @hreftheory[Czf_itt_dall], @hreftheory[Czf_itt_dexists],
- * @hreftheory[Czf_itt_sall], and @hreftheory[Czf_itt_sexists]
+ * @hrefmodule[Czf_itt_dall], @hrefmodule[Czf_itt_dexists],
+ * @hrefmodule[Czf_itt_sall], and @hrefmodule[Czf_itt_sexists]
  * modules. The existential demonstrates a typical functionality
  * argument.
  *

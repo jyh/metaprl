@@ -2,7 +2,7 @@
  * @spelling{gt_bool le_bool ge_bool gt le ge nequal}
  *
  * @begin[doc]
- * @theory[Itt_int_ext]
+ * @module[Itt_int_ext]
  *
  * Some more about integers
  * @end[doc]
@@ -93,11 +93,8 @@ declare "rem"{'a; 'b}
  Definitions of >b <=b >=b
  *)
 
-(*!
- * @begin[doc]
- * More order relation operations
- * @end[doc]
- *)
+(*! @doc{More order relation operations} *)
+
 define unfold_gt_bool :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
 
@@ -109,6 +106,8 @@ define unfold_ge_bool :
 
 define unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
+
+(*! @docoff *)
 
 let resource reduce += [
    << gt_bool{'a; 'b} >>, unfold_gt_bool;
@@ -172,6 +171,8 @@ dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
 dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
    slot["lt"]{'a} `" > " slot["le"]{'b}
 
+(*! @doc{More order relation propositions} *)
+
 define unfold_le :
    le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
 
@@ -180,6 +181,8 @@ define unfold_ge :
 
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
+
+(*! @docoff *)
 
 let resource reduce += [
    << gt{'a; 'b} >>, unfold_gt;
@@ -228,10 +231,6 @@ dform gt_bool_df1 : parens :: "prec"[prec_compare] :: gt_bool{'a; 'b} =
 dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
    slot["lt"]{'a} `" " Nuprl_font!ge Nuprl_font!subb `" " slot["le"]{'b}
 
-(*! @docoff *)
-
-
-
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -272,7 +271,7 @@ let resource reduce += [
 
 (*!
  * @begin[doc]
- * @thysection{Well-formedness and algebraic properties of @tt[mul]}
+ * @modsection{Well-formedness and algebraic properties of @tt[mul]}
  * @end[doc]
  *)
 prim mul_wf {| intro []; eqcd |} 'H :
@@ -413,7 +412,7 @@ let lt_mulNegMonoC = lt_mulNegMono_rw
 
 (*!
  * @begin[doc]
- * @thysection{@tt[rem] definition and well-formedness}
+ * @modsection{@tt[rem] definition and well-formedness}
  * @end[doc]
  *)
 prim rem_baseReduce 'H :
@@ -456,7 +455,7 @@ interactive rem_wf {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysection{@tt[div] definition and properties}
+ * @modsection{@tt[div] definition and properties}
  * @end[doc]
  *)
 prim div_baseReduce 'H :

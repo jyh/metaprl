@@ -2,11 +2,11 @@
  * @spelling{cons consFormation nilFormation}
  *
  * @begin[doc]
- * @theory[Itt_list]
+ * @module[Itt_list]
  *
  * The @tt{Itt_list} module defines the type of finite
  * lists of elements.  The lists can be defined using the
- * simple recursive type in module @hreftheory[Itt_srec].
+ * simple recursive type in module @hrefmodule[Itt_srec].
  * However, the lists have a simpler semantics, and they are defined
  * them as primitive, so that lists can be used without including
  * the recursive type.
@@ -200,7 +200,7 @@ dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The $@list{T}$ term is a well-formed type if
  * $T$ is a type.
@@ -225,7 +225,7 @@ interactive listFormation 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The @hrefterm[nil] term is a member of every list type $@list{A}$.
  * @end[doc]
@@ -267,7 +267,7 @@ interactive consFormation 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
  * computes a value of type $T$ if 1) the argument $l$ is a list of type $@list{A}$,
@@ -289,7 +289,7 @@ prim list_indEquality {| intro []; eqcd |} 'H lambda{l. 'T['l]} list{'A} 'u 'v '
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination for performs induction over the assumption
  * $l@colon @list{A}$.  The rule produces two cases for a conclusion
@@ -307,7 +307,7 @@ prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'w 'u 'v :
 
 (*!
  * @begin[doc]
- * @thysubsection{Contradiction}
+ * @modsubsection{Contradiction}
  *
  * The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
  * every list type.
@@ -321,7 +321,7 @@ interactive cons_neq_nil {| elim [] |} 'H 'J :
 
 (*
  * @begin[doc]
- * @thysubsection{Equality elimination}
+ * @modsubsection{Equality elimination}
  * @end[doc]
  *)
 interactive consEqElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w :
@@ -331,7 +331,7 @@ interactive consEqElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Computation}
+ * @modsubsection{Computation}
  *
  * The @emph{only} representative on the empty list is the
  * @hrefterm[nil] term.
@@ -344,7 +344,7 @@ prim nilSqequal 'H 'T :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The list type $@list{A}$ is covariant in the type argument $A$.
  * @end[doc]

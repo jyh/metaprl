@@ -2,7 +2,7 @@
  * @spelling{sep}
  *
  * @begin[doc]
- * @theory[Czf_itt_sep]
+ * @module[Czf_itt_sep]
  *
  * The @tt[Czf_itt_sep] module defines @emph{restricted separation}.
  * Separation is defined as a set constructor $@sep{x; s; P[x]}$.
@@ -152,7 +152,7 @@ let squash_restrictedT p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Equality and membership are restricted judgments}
+ * @modsubsection{Equality and membership are restricted judgments}
  *
  * The next two rules show that equality and membership
  * are restricted for any @hrefterm[set] arguments.
@@ -170,7 +170,7 @@ interactive member_restricted {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The separation $@sep{x; s; P[x]}$ is well-formed
  * if $s$ is a set, and $P[x]$ is restricted and functional
@@ -185,7 +185,7 @@ interactive sep_isset {| intro [] |} 'H 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * A set $x$ is a member of $@sep{z; s; P[z]}$ if
  * the separation is well-formed; if $@member{x; s}$;
@@ -201,12 +201,12 @@ interactive sep_intro2 {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * An assumption $@mem{x; @sep{y; s; P[y]}}$ implies two facts:
  * $@mem{x; s}$ and $P[x]$.  The computational content of the
  * predicate $P[x]$ is visible (unlike the separation ``set''
- * constructor in the @Nuprl type theory module @hreftheory[Itt_set]).
+ * constructor in the @Nuprl type theory module @hrefmodule[Itt_set]).
  * @end[doc]
  *)
 interactive sep_elim {| elim [] |} 'H 'J 'u 'v 'z :
@@ -219,7 +219,7 @@ interactive sep_elim {| elim [] |} 'H 'J 'u 'v 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The separation constructor is functional in both the
  * set argument and the proposition.

@@ -1,10 +1,10 @@
 (*!
  * @begin[doc]
- * @theory[Itt_well_founded]
+ * @module[Itt_well_founded]
  *
  * The @tt{Itt_well_founded} module provides a more convenient
  * description of well-foundness than the @hrefterm[well_founded_prop]
- * term formalized in the @hreftheory[Itt_rfun] module.  The definition
+ * term formalized in the @hrefmodule[Itt_rfun] module.  The definition
  * of well-foundness requires the derivation of an induction
  * principle.
  * @end[doc]
@@ -101,7 +101,7 @@ dform well_founded_df : except_mode[src] :: well_founded[i:l]{'A; x, y. 'R} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The @tt{partial_order} and @tt{well_founded} predicates are
  * both well-formed if their domain $A$ is a type, and their
@@ -123,7 +123,7 @@ interactive well_founded_type {| intro [] |} 'H 'a 'b :
  * The purpose of this definition is to give a more convenient
  * specification of well-foundness that uses normal quantification
  * in its formalization (the @hrefterm[well_founded_prop] predicate defined
- * in the @hreftheory[Itt_rfun] can't use the function type in its
+ * in the @hrefmodule[Itt_rfun] can't use the function type in its
  * definition).  The following rule specifies that the new
  * description of well-foundness is sufficient to derive the
  * primitive definition.

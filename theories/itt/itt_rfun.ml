@@ -2,12 +2,12 @@
  * @spelling{rfun rfunctionFormation}
  *
  * @begin[doc]
- * @theory[Itt_rfun]
+ * @module[Itt_rfun]
  *
  * The @tt{Itt_rfun} module defines the @emph{very-dependent function
  * type}.  This is the root type for the function types
- * for the dependent-function @hreftheory[Itt_dfun] and
- * the nondependent-function @hreftheory[Itt_fun].
+ * for the dependent-function @hrefmodule[Itt_dfun] and
+ * the nondependent-function @hrefmodule[Itt_fun].
  *
  * A complete description of the semantics of the type is given
  * in @cite["jyh:fool3"].  The type can be described
@@ -250,7 +250,7 @@ let resource reduce +=
 
 (*!
  * @begin[doc]
- * @thysubsection{Well-foundness}
+ * @modsubsection{Well-foundness}
  *
  * The following three rules are used to define a well-founded order.
  * The term @hrefterm[well_founded_prop] $@"well_founded_prop"{A}$ represents an arbitrary
@@ -261,7 +261,7 @@ let resource reduce +=
  *
  * The reason this definition is so convoluted is that the definition of
  * well-foundness must be give @emph{before} defining functions and application.
- * The @hreftheory[Itt_well_founded] module provides simplified definitions
+ * The @hrefmodule[Itt_well_founded] module provides simplified definitions
  * of well-foundness.
  * @end[doc]
  *)
@@ -299,7 +299,7 @@ prim rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
 
 (*!
  * @begin[doc]
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The well-formedness of the very-dependent function
  * requires that the domain type $A$ be a type, that the domain
@@ -334,7 +334,7 @@ prim rfunctionType  {| intro [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z 
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * Viewed as a proposition, the very-dependent function type
  * represents a @emph{recursive} proposition.  The function type
@@ -356,7 +356,7 @@ prim rfunction_lambdaFormation {| intro [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The members of the function space are the @hrefterm[lambda] terms.
  * The function space must be well-formed, and the body of the function
@@ -372,7 +372,7 @@ prim rfunction_lambdaEquality {| intro []; eqcd |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Extensional equality}
+ * @modsubsection{Extensional equality}
  *
  * The function space is one of the few types in the @Nuprl type
  * theory with an @emph{extensional} equality.  Normally, equality is
@@ -397,7 +397,7 @@ prim rfunctionExtensionality 'H
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form for a function type $f@colon @rfun{g; x; A; B[g, x]}$
  * allows @emph{instantiation} of the function on an argument $a$, to
@@ -417,7 +417,7 @@ prim rfunctionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * Two @emph{applications} are equal if their functions are equal,
  * and their arguments are equal.
@@ -435,7 +435,7 @@ let rfunction_applyEquality' t p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * Function subtyping is @emph{contravariant} in the domain and
  * @emph{covariant} in the range.  The range subtyping is given using

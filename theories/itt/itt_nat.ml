@@ -2,7 +2,7 @@
  * @spelling{gt_bool le_bool ge_bool gt le ge nequal}
  *
  * @begin[doc]
- * @theory[Itt_int_ext]
+ * @module[Itt_int_ext]
  *
  * Some more about integers
  * @end[doc]

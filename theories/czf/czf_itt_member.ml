@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_member]
+ * @module[Czf_itt_member]
  *
  * The @tt{Czf_itt_member} module defines membership in a set.
  * The basic definition is an existential judgment: a set $s$
@@ -131,7 +131,7 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_apply] :: member{'x;
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The @tt{member} judgment is well-formed if-and-only-if its arguments are
  * sets.
@@ -172,7 +172,7 @@ interactive set_isset 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  * The @tt{member} judgment is functional in both its arguments.
  * The next two rules provide simple functionality judgments
  * for the two set arguments.
@@ -216,7 +216,7 @@ interactive member_fun {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Set extensionality}
+ * @modsubsection{Set extensionality}
  *
  * Two sets are equal if-and-only-if they have the same elements.
  * The proof of this theorem is straightforward.  The two membership

@@ -2,7 +2,7 @@
  * @spelling{powerT}
  *
  * @begin[doc]
- * @theory[Czf_itt_power]
+ * @module[Czf_itt_power]
  *
  * The @tt{Czf_itt_power} module defines @emph{subset} collection.
  * Contrary to the name, the subset collection is @emph{not} a
@@ -102,7 +102,7 @@ dform power_df3 : power{'s1; 's2} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The subset collection is well-formed if its arguments
  * are sets.
@@ -115,7 +115,7 @@ interactive power_isset1 {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{The subset collection axiom}
+ * @modsubsection{The subset collection axiom}
  *
  * There is an element of the power set for each computable
  * function $@fun{s_1; s_2}$.

@@ -2,10 +2,10 @@
  * @spelling{dfun}
  *
  * @begin[doc]
- * @theory[Itt_dfun]
+ * @module[Itt_dfun]
  *
  * The @tt{Itt_dfun} module is @emph{derived} from the
- * @hreftheory[Itt_rfun] module.  The type $@fun{x; A; B[x]}$ is
+ * @hrefmodule[Itt_rfun] module.  The type $@fun{x; A; B[x]}$ is
  * equivalent to the type $@rfun{f; x; A; B[x]}$, where $f$ is
  * not bound in $B[x]$.  The @emph{well-founded} restriction in
  * for the very-dependent function type is always trivially satisfied
@@ -107,7 +107,7 @@ prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Lemmas}
+ * @modsubsection{Lemmas}
  *
  * The @tt{void_well_founded} rule is a lemma that is
  * useful for proving the well-formedness of the
@@ -121,7 +121,7 @@ interactive void_well_founded {| intro [] |} 'H :
 
 (*
  * @begin[doc]
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The dependent-function space retains the intensional type
  * equality of the very-dependent type.
@@ -142,7 +142,7 @@ interactive functionType {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The propositional interpretation of the dependent-function
  * is the universal quantification @hrefterm[all], $@all{a; A; B[x]}$.  The
@@ -157,7 +157,7 @@ interactive lambdaFormation {| intro [] |} 'H 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The dependent function space contains the @hrefterm[lambda] functions.
  * @end[doc]
@@ -169,7 +169,7 @@ interactive lambdaEquality {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Extensionality}
+ * @modsubsection{Extensionality}
  *
  * The dependent-function retains the extensional membership
  * equality of the very-dependent function type.  This rule is
@@ -185,7 +185,7 @@ interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination rule @emph{instantiates} the function
  * $f@colon @fun{x; A; B[x]}$ with an argument $a @in A$, to
@@ -199,7 +199,7 @@ interactive functionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * Applications have (at least) an @emph{intensional} equality; they are
  * equal if their functions and arguments are equal.
@@ -215,7 +215,7 @@ let applyEquality' t p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * Function spaces are @emph{contravariant} in the domains, and
  * @emph{covariant} in their ranges.  More specifically, the

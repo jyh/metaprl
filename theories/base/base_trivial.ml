@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Base_trivial]
+ * @module[Base_trivial]
  *
  * Logics that include ``trivial'' reasoning need a ``squash'' term
  * to denote proofs that contain no computational content, and an

@@ -1,8 +1,8 @@
 (*
  * @begin[doc]
- * @theory[Perv]
+ * @module[Perv]
  *
- * The @hreftheory[Perv] module defines some basic built-in terms used
+ * The @hrefmodule[Perv] module defines some basic built-in terms used
  * by the @MetaPRL compiler.
  *
  * @docoff

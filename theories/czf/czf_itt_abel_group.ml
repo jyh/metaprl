@@ -2,7 +2,7 @@
  * @spelling{abel}
  *
  * @begin[doc]
- * @theory[Czf_itt_abel_group]
+ * @module[Czf_itt_abel_group]
  *
  * The @tt[Czf_itt_abel_group] module defines abelian groups.
  * A group is @emph{abelian} if its binary operation is
@@ -107,7 +107,7 @@ dform abel_df : except_mode[src] :: abel{'g} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood}
+ * @modsubsection{Typehood}
  *
  * The @tt[abel] judgment is well-formed if its
  * argument is a label.
@@ -119,7 +119,7 @@ interactive abel_type {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@abel{g}$ is true if it is well-formed, $g$
  * is a group, and @tt[op] is commutative.

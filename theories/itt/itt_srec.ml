@@ -2,11 +2,11 @@
  * @spelling{memberFormation srec srecind unrollings}
  *
  * @begin[doc]
- * @theory[Itt_srec]
+ * @module[Itt_srec]
  *
  * The @tt{Itt_srec} module defines a ``simple'' recursive type,
  * without parameters that are passed along the unrollings of the
- * type, as it is in the parameterized recursive type in @hreftheory[Itt_prec].
+ * type, as it is in the parameterized recursive type in @hrefmodule[Itt_prec].
  *
  * The syntax of the recursive type is $@srec{T; B[T]}$.  The variable
  * $T$ represents the type itself, which is given through the
@@ -144,7 +144,7 @@ prim srecFormation 'H 'T :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The simple recursive type $@srec{T; B[T]}$ is a type if $B[T]$ is
  * a monotone type over types type $T @in @univ{i}$.
@@ -172,7 +172,7 @@ prim srec_memberFormation {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The elements of the recursive type $@srec{T; B[T]}$ are the
  * elements of $B[@srec{T; B[T]}]$.
@@ -186,7 +186,7 @@ prim srec_memberEquality {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form performs induction over the
  * assumption $x@colon @srec{T; B[T]}$.  The conclusion $C[x]$ is
@@ -221,7 +221,7 @@ prim srecUnrollElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'y 'u :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * The @hrefterm[srecind] term produces a value of type $S$ if the
  * argument belongs to some recursive type, and the body computes

@@ -2,7 +2,7 @@
  * @spelling{arg tac AutoComplete AutoNormal AutoTrivial byDefT conv}
  *
  * @begin[doc]
- * @theory[Base_auto_tactic]
+ * @module[Base_auto_tactic]
  *
  * The @tt[Base_auto_tactic] module defines two of the most useful
  * tactics in the @MetaPRL prover.  The @tactic[autoT] tactic attempts

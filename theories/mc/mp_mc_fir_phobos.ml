@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Mp_mc_fir_phobos]
+ * @module[Mp_mc_fir_phobos]
  *
  * Convert preFIR terms to FIR terms.
  * @end[doc]

@@ -2,7 +2,7 @@
  * @spelling{arithT tactic implementation}
  *
  * @begin[doc]
- * @theory[Itt_int_arith]
+ * @module[Itt_int_arith]
  *
  * Prove simple systems of inequalities
  * @end[doc]

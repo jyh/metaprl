@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_hom]
+ * @module[Czf_itt_hom]
  *
  * The @tt[Czf_itt_hom] module defines the @emph{homomorphism}.
  * A homomorphism is a mapping $f$ from one group $g_1$ into another
@@ -139,7 +139,7 @@ dform hom_df : parens :: except_mode[src] :: hom{'g1; 'g2; x. 'f} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The @tt[hom] is well-formed if $g1$ and $g2$ are labels,
  * and $f[x]$ is a set for any set argument $x$.
@@ -153,7 +153,7 @@ interactive hom_type {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@hom{x; g1; g2; f[x]}$ is true if it
  * is well-formed, $g1$ and $g2$ are groups, $f$ assigns
@@ -175,7 +175,7 @@ interactive hom_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The @tt[hom] judgment is functional in the function
  * argument.
@@ -192,7 +192,7 @@ interactive hom_fun {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Trivial homomorphism}
+ * @modsubsection{Trivial homomorphism}
  *
  * For any groups $g_1$ and $g_2$, there is always at least
  * one homomorphism $f@colon g_1 @rightarrow g_2$ which
@@ -210,7 +210,7 @@ interactive trivial_hom1 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Theorems}
+ * @modsubsection{Theorems}
  *
  * Let $f@colon g_1 @rightarrow g_2$ be a group
  * homomorphism of $g_1$ into $g_2$.

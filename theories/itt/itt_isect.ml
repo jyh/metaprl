@@ -3,7 +3,7 @@
  * isect
  * @end[spelling]
  * @begin[doc]
- * @theory[Itt_isect]
+ * @module[Itt_isect]
  *
  * The @tt{Itt_isect} module defines the @emph{intersection}
  * type $@isect{x; A; B[x]}$.  The elements of the intersection
@@ -156,7 +156,7 @@ prim intersectionFormation 'H 'x 'A :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The intersection $@isect{x; A; B[x]}$ is well-formed if
  * $A$ is a type, and $B[x]$ is a family of types indexed by
@@ -190,7 +190,7 @@ interactive topType {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  * The elements in the intersection $@isect{x; A; B[x]}$ are the
  * terms $b$ that inhabit $B[z]$ for @emph{every} $a @in A$.
  * The member equality of the intersection is the intersection
@@ -214,7 +214,7 @@ interactive topMemberEquality {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * In general the only one way to introduce intersection is
  * to show @emph{explicitly} its witness.
@@ -257,7 +257,7 @@ interactive topMemberFormation {| intro [] |} 'H:
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form performs instantiation of the
  * intersection space.  If $a @in A$, the elimination form
@@ -355,7 +355,7 @@ interactive intersectionEliminationFromCaseEquality 'H 'J 'a 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The intersection type conforms to the subtyping properties
  * of the dependent-function space.  The type is @emph{contravariant}

@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_union]
+ * @module[Czf_itt_union]
  *
  * The @tt{Czf_itt_union} module gives two definitions of
  * set unions.  The $@union{s_1; s_2}$ is the binary union
@@ -14,7 +14,7 @@
  * The binary union is defined for sets $s_1 = @collect{x_1; T_1; f_1[x_1]}$
  * and $s_2 = @collect{x_2; T_2; f_2[x_2]}$ as a set with the disjoint
  * union index type $@"Itt_comment"!union{T_1; T_2}$ defined in
- * the @hreftheory[Itt_union] module.
+ * the @hrefmodule[Itt_union] module.
  *
  * $$
  * @begin[array,l]
@@ -163,7 +163,7 @@ dform union_df2 : parens :: "prec"[prec_or] :: union{'s} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * Both forms of union are well-formed if their arguments
  * are sets.
@@ -180,7 +180,7 @@ interactive union_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The binary union $@union{s_1; s_2}$ has two membership introduction forms
  * for an argument set $x$; the set $x$ may be a member of $s_1$ or it may
@@ -216,7 +216,7 @@ interactive union_member_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * @noindent
  * The elimination form for membership in the binary union

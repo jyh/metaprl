@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_pair]
+ * @module[Czf_itt_pair]
  *
  * The @tt{Czf_itt_pair} module defines the binary pairing
  * constructor $@pair{s_1; s_2}$.  The pair is derived from
@@ -78,7 +78,7 @@ dform pair_df : pair{'s1; 's2} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The pair is a set if both arguments are sets.
  * @end[doc]
@@ -90,7 +90,7 @@ interactive pair_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The elements of the pair $@pair{s_1; s_2}$ are the
  * sets $s_1$ and $s_2$.
@@ -112,7 +112,7 @@ interactive pair_member_intro_right {| intro [SelectOption 2] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The @emph{only} elements of the pair $@pair{s_1; s_2}$ are
  * the sets $s_1$ and $s_2$.
@@ -128,7 +128,7 @@ interactive pair_member_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The pair is functional in both its arguments.
  * @end[doc]

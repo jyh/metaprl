@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_atom]
+ * @module[Itt_atom]
  *
  * The @tt{Itt_atom} module defines the $@atom$ type---a type of strings
  * without any order relation.  The elements of the atom type are the
@@ -8,7 +8,7 @@
  * no elimination rule.
  *
  * The $@atom$ type is defined as primitive.  This is not strictly necessary;
- * the type can be derived from the recursive type (Section @reftheory[Itt_srec]).
+ * the type can be derived from the recursive type (Section @refmodule[Itt_srec]).
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -130,7 +130,7 @@ prim atomFormation 'H :
  * @begin[doc]
  * @rules
  *
- * @thysubsection{Equality and typehood}
+ * @modsubsection{Equality and typehood}
  * The $@atom$ term is a member of every universe, and it is a type.
  * @end[doc]
  *)
@@ -147,7 +147,7 @@ prim atomType {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The $@atom$ type is always provable; the token ``t'' is
  * a witness.
@@ -159,7 +159,7 @@ prim tokenFormation 'H token[t:t] :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * Two tokens are equal in the token type only if they are exactly the
  * same token.

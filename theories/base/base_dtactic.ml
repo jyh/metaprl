@@ -5,11 +5,11 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Base_dtactic]
+ * @module[Base_dtactic]
  *
  * The @tactic[dT] tactic is the cornerstone of reasoning in
  * most logics; it provides generic application of introduction
- * elimination reasoning.  The @hreftheory[Base_dtactic] defines a @emph{generic}
+ * elimination reasoning.  The @hrefmodule[Base_dtactic] defines a @emph{generic}
  * resource that can be used to add introduction and elimination reasoning.
  * In addition, it add resource @emph{annotations} that can be used in rule
  * definitions to add them automatically to the @tt[dT] resources.

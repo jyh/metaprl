@@ -6,7 +6,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Itt_logic]
+ * @module[Itt_logic]
  *
  * The @tt{Itt_logic} module defines the propositional
  * interpretations of the basic types.  This is a @emph{derived}
@@ -180,7 +180,7 @@ let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
  * has a well-formedness rule, and introduction and elimination
  * forms (where possible).
  *
- * @thysubsection{True and False}
+ * @modsubsection{True and False}
  * The @hrefterm[true] and @hrefterm[false] terms are
  * both types.  The @tt{true} term is always true; there is
  * no elimination form.  The @tt{false} term is always false;
@@ -216,7 +216,7 @@ interactive false_esquash_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Negation}
+ * @modsubsection{Negation}
  *
  * The negation $<< "not"{'A} >>$ is a well-formed if
  * $A$ is a type.  The negation states that the type $A$
@@ -250,7 +250,7 @@ interactive not_membership {| intro []; squash |} 'H :
 *)
 (*!
  * @begin[doc]
- * @thysubsection{Conjunction}
+ * @modsubsection{Conjunction}
  *
  * The conjunction $<< "and"{'A; 'B} >>$ is well-formed if
  * both $A$ and $B$ are types.  It is true if both $A$ and
@@ -288,7 +288,7 @@ interactive and_squash_elim {| elim [] |} 'H 'J 'y 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Disjunction}
+ * @modsubsection{Disjunction}
  *
  * The disjunction $<< "or"{'A; 'B} >>$ is well-formed if both
  * $A$ and $B$ are types.  The disjunction is true if it is
@@ -329,7 +329,7 @@ interactive or_elim {| elim [] |} 'H 'J 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Implication}
+ * @modsubsection{Implication}
  *
  * The implication $<< "implies"{'A; 'B} >>$ is well-formed if both
  * $A$ and $B$ are types.  The implication is true if it is a
@@ -361,7 +361,7 @@ interactive implies_elim {| elim [ThinOption thinT] |} 'H 'J 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Bi-implication}
+ * @modsubsection{Bi-implication}
  *
  * The bi-implication $<< "iff"{'A; 'B} >>$ is well-formed if
  * both $A$ and $B$ are types.  The introduction and elimination rules
@@ -389,7 +389,7 @@ interactive iff_elim {| elim [] |} 'H 'J 'y 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Conditional conjunction}
+ * @modsubsection{Conditional conjunction}
  *
  * The conditional conjunction $<< "cand"{'A; 'B} >>$ differs from
  * the conjunction only in the introduction rule.  The conjunction
@@ -418,7 +418,7 @@ interactive cand_elim {| elim [] |} 'H 'J 'y 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Conditional disjunction}
+ * @modsubsection{Conditional disjunction}
  *
  * The conditional disjunction $<< "cor"{'A; 'B} >>$ differs from
  * the disjunction in that a proof of $B$ is needed only if
@@ -457,7 +457,7 @@ interactive cor_elim {| elim [] |} 'H 'J 'u 'v :
 
 (*!
  * @begin[doc]
- * @thysubsection{Universal quantification}
+ * @modsubsection{Universal quantification}
  *
  * The universal quantification $<< all x: 'A. 'B['x] >>$ is well-formed
  * if $A$ is a type, and $B[x]$ is a type for any $x @in A$.
@@ -490,7 +490,7 @@ interactive all_elim {| elim [ThinOption thinT] |} 'H 'J 'w 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Existential quantification}
+ * @modsubsection{Existential quantification}
  *
  * The existential quantification $<< exst x: 'A. 'B['x] >>$ is well-formed
  * if $A$ is a type, and $B[x]$ is a type for any $x @in A$.  The quantification
@@ -743,7 +743,7 @@ let rec intersects vars fv =
  * @begin[doc]
  * @tactics
  *
- * The @hreftheory[Itt_logic] module defines several tactics for
+ * The @hrefmodule[Itt_logic] module defines several tactics for
  * reasoning in the @Nuprl type theory.  The tactics perform
  * @emph{generic} reasoning of @Nuprl sequents.
  *

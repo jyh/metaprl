@@ -1,6 +1,7 @@
 (*!
  * @begin[doc]
- * @theory[Itt_theory]
+ * @theory{ITT: Intuitionistic Type Theory}
+ * @module[Itt_theory]
  *
  * The @tt{Itt_theory} module collects all of the modules in the
  * @Nuprl type theory.  This is the basic module to use when

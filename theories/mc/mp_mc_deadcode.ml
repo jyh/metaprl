@@ -2,7 +2,7 @@
  * @spelling{deadcode}
  *
  * @begin[doc]
- * @theory[Mp_mc_deadcode]
+ * @module[Mp_mc_deadcode]
  *
  * The @tt[Mp_mc_deadcode] module defines rewrites for deadcode
  * elimination of FIR programs.

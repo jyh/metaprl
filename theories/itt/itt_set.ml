@@ -1,7 +1,7 @@
 (*!
  *
  * @begin[doc]
- * @theory[Itt_set]
+ * @module[Itt_set]
  *
  * The @tt{Itt_set} module defines a ``set'' type, or more precisely,
  * it defines a type by quantified @emph{separation}.  The form of the type is
@@ -10,7 +10,7 @@
  * of $x @in T$ where the proposition $P[x]$ is true.
  *
  * The set type is a ``squash'' type: the type is similar to the
- * dependent product $x@colon T @times P[x]$ (Section @reftheory[Itt_dprod]),
+ * dependent product $x@colon T @times P[x]$ (Section @refmodule[Itt_dprod]),
  * but the proof $P[x]$ is omitted (squashed).  The set type $@set{x; T; P[x]}$
  * is always a subtype of $T$.
  * @end[doc]
@@ -133,7 +133,7 @@ prim setFormation 'H 'a 'A :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Equality and typehood}
+ * @modsubsection{Equality and typehood}
  *
  * The set type $@set{x; A; B[x]}$ is a type if $A$ is a type,
  * and $B[x]$ is a type for any $x @in A$.  Equality of the set
@@ -157,7 +157,7 @@ prim setType {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * A set type $@set{x; A; B[x]}$ is true if there is an element $a @in A$
  * where $B[x]$ is true.
@@ -172,7 +172,7 @@ prim setMemberFormation {| intro [] |} 'H 'a 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * Two terms $a_1$ and $a_2$ are equal in the set type $@set{a; A; B[a]}$
  * if they are equal in $A$ and also $B[a_1]$ is true.
@@ -187,7 +187,7 @@ prim setMemberEquality {| intro []; eqcd |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * An assumption with a set type $u@colon @set{x; A; B[x]}$ asserts two facts:
  * that $u @in A$ and $B[u]$.  However, the proof of $B[u]$ is unavailable.  The
@@ -202,7 +202,7 @@ prim setElimination {| elim [] |} 'H 'J 'u 'v :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The set type $@set{x; A; B[x]}$ is always a subtype of $A$ if
  * the set type is really a type.  This rule is added to the

@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_subset]
+ * @module[Czf_itt_subset]
  *
  * The @tt{Czf_itt_subset} module defines the subset proposition
  * $@subset{s_1; s_2}$, which is a proposition for any two sets
@@ -60,7 +60,7 @@ dform subset_df : parens :: "prec"[prec_subset] :: subset{'s1; 's2} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The subset proposition $@subset{s_1; s_2}$ is well-formed
  * if $s_1$ and $s_2$ are both sets.
@@ -73,7 +73,7 @@ interactive subset_type {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The subset proposition $@subset{s_1; s_2}$ is true if every
  * element $@mem{x; s_1}$ is also an element of $s_2$.
@@ -87,7 +87,7 @@ interactive subset_intro {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form of the proposition $@subset{s_1; s_2}$
  * takes an element $@mem{x; s_1}$ and it produces a proof that
@@ -104,7 +104,7 @@ interactive subset_elim {| elim [] |} 'H 'J 's 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The subset proposition is functional in both set
  * arguments, and it is a restricted proposition.

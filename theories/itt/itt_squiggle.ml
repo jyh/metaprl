@@ -5,7 +5,7 @@
 
 
  * @begin[doc]
- * @theory[Itt_squiggle]
+ * @module[Itt_squiggle]
  *
  * The @tt{Itt_squiggle} module defines the squiggle equality.
  * The squiggle equality $<<'t ~ 's>>$ holds for closed terms $t$ and $s$ iff
@@ -124,7 +124,7 @@ let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
 (*!
  * @begin[doc]
    @rewrites
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
    The squiggle relation $<<'t ~ 's>>$ is a type if and only if
    it holds.  Two squiggle relation $<<'t_1 ~ 's_1>>$ and $<<'t_2 ~ 's_2>>$
    are equal as types whenever they are correct types.
@@ -147,7 +147,7 @@ interactive squiggleType {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  * The $@it$ term is the one-and-only element
  * in a provable squiggle equality type.
  * @end[doc]
@@ -165,7 +165,7 @@ prim squiggleElimination {|  elim [ThinOption thinT] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  * If we can prove that $<<'t ~ 's>>$, then we can substitute $s$ for $t$
  * in any place without generating any well-formedness subgoals.
  * @end[doc]
@@ -196,7 +196,7 @@ prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
 
 (*!
  * @begin[doc]
- * @thysubsection{Squiggle equality is an equivalence relation}
+ * @modsubsection{Squiggle equality is an equivalence relation}
  * Squiggle equality is reflexive, symmetric and transitive.
  * @end[doc]
  *)

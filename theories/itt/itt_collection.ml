@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_collection]
+ * @module[Itt_collection]
  * The @tt{Itt_collection} module formalized the type of indexed collections.
  * See @cite[Nog02a] for more information.
  * @end[doc] 
@@ -83,7 +83,7 @@ open Base_dtactic
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Basic definitions}
+ * @modsubsection{Basic definitions}
  * @end[doc]
  *)
 
@@ -221,7 +221,7 @@ interactive col_type_wf {| intro [intro_univ_arg] |} 'H univ[l:l] :
    sequent['ext]   {'H >- "type"{col_type{'C;'T}}}
 
 
-(*! @doc{@thysubsection{Basic operations}} *)
+(*! @doc{@modsubsection{Basic operations}} *)
 
 (*--- singleton ---*)
 
@@ -271,7 +271,7 @@ interactive member_union_elim {| elim [ThinOption thinT] |} 'H 'J:
    sequent['ext] {'H; u:col_member{union{'X;x.'Y['x]};'y}; 'J >- squash{'Z} }
 
 
-(*! @doc{@thysubsection{Other operations}} *)
+(*! @doc{@modsubsection{Other operations}} *)
 
 (*--- col_filter ---*)
 

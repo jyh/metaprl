@@ -2,7 +2,7 @@
  * @spelling{equiv equivSubstT}
  *
  * @begin[doc]
- * @theory[Czf_itt_equiv]
+ * @module[Czf_itt_equiv]
  *
  * The @tt{Czf_itt_equiv} module defines equivalence relations on sets.
  * An equivalence relation is a binary relation that is reflexive,
@@ -206,7 +206,7 @@ dform equiv_fun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: eq
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood}
+ * @modsubsection{Typehood}
  *
  * Both of the @tt{equiv} judgments are well-formed if their
  * arguments are sets.
@@ -226,7 +226,7 @@ interactive equiv_type {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Definition and property}
+ * @modsubsection{Definition and property}
  *
  * The binary relation @tt{equiv} is defined reflexive.
  * @end[doc]
@@ -319,7 +319,7 @@ interactive equiv_sym1 'H 'J 'u :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The $@equivfunset{s; r; z; f[z]}$ judgment implies that if $r$ is
  * an equivalence relation on $s$, then for any set $z @in s$,
@@ -485,7 +485,7 @@ interactive equiv_elem_equiv_fun5 {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  *
  * The following two rules define substitution.
  * Set $s_1$ can be replaced by set $s_2$ in a context
@@ -510,7 +510,7 @@ interactive equiv_concl_subst 'H 's 'r 's1 's2 (bind{w. 'C['w]}) :
 
 (*!
  * @begin[doc]
- * @thysubsection{Typehood of the functionality judgments}
+ * @modsubsection{Typehood of the functionality judgments}
  *
  * The @tt{equiv_fun_set} judgment $@equivfunset{s; r; x; f[x]}$
  * requires $s$ and $r$ be sets, $f[x]$ be a family of sets,
@@ -565,7 +565,7 @@ interactive equiv_fun_prop {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Equivalence relation and Equality}
+ * @modsubsection{Equivalence relation and Equality}
  *
  * If $@eq{a; b}$, then $a$ is equivalent with $b$ under any equivalence
  * relation. On the other hand, if $a$ and $b$ are equivalent under all
@@ -630,7 +630,7 @@ interactive equiv_equal_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  *
  * @begin[description]
  * @item{@tactic[equivSubstT];

@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_ker]
+ * @module[Czf_itt_ker]
  *
  * The @tt[Czf_itt_ker] module defines the kernel proposition
  * $@ker{x; h; g1; g2; f[x]}$, in which $f$ is a homomorphism of
@@ -111,7 +111,7 @@ dform ker_df : parens :: except_mode[src] :: ker{'h; 'g1; 'g2; x. 'f} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The kernel proposition $@ker{x; h; g1; g2; f[x]}$ is well-formed if
  * $g1$, $g2$, and $h$ are labels, and $f[x]$ is functional in any
@@ -127,7 +127,7 @@ interactive ker_type {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@ker{x; h; g1; g2; f[x]}$ is true if
  * $@hom{x; g1; g2; f}$ is true and $h$ is a group formed
@@ -170,7 +170,7 @@ interactive ker_subgroup 'H hom{'g1; 'g2; x. 'f['x]} 'h :
 
 (*!
  * @begin[doc]
- * @thysubsection{Theorems}
+ * @modsubsection{Theorems}
  *
  * The kernel of a group homomorphism from $g1$ into $g2$ is a subgroup
  * of $g2$.

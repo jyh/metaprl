@@ -2,11 +2,11 @@
  * @spelling{assoc iff nth rev}
  *
  * @begin[doc]
- * @theory[Itt_list2]
+ * @module[Itt_list2]
  *
  * The @tt{Itt_list2} module defines a ``library'' of
  * additional operations on the lists defined in
- * the @hreftheory[Itt_list] module.
+ * the @hrefmodule[Itt_list] module.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -498,7 +498,7 @@ interactive_rw rev2 :
  * @begin[doc]
  * @rules
  *
- * The rules in the @hreftheory[Itt_list2] are limited to
+ * The rules in the @hrefmodule[Itt_list2] are limited to
  * well-formedness of each of the constructions.
  * @end[doc]
  *)

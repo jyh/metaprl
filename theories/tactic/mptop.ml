@@ -2,7 +2,7 @@
  * @spelling{mptop toplevel}
  *
  * @begin[doc]
- * @theory[Mptop]
+ * @module[Mptop]
  *
  * The @tt{Mptop} module defines a simplified OCaml top-loop
  * that is used by the @MetaPRL editor to evaluate user input.

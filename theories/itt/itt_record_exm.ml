@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_record_exm]
+ * @module[Itt_record_exm]
  *
  * This theory contains some examples of how to use records.
  * @end[doc]

@@ -11,18 +11,18 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Top_conversionals]
+ * @module[Top_conversionals]
  *
- * Conversionals are analog of tactics  (Section~@reftheory[Top_tacticals])
+ * Conversionals are analog of tactics  (Section~@refmodule[Top_tacticals])
  * for rewriting.  Conversionals are used extensively in the @Nuprl
- * type theory (Section @reftheory[Itt_theory]) to express and
+ * type theory (Section @refmodule[Itt_theory]) to express and
  * apply computational equivalences.  The @tt{Top_conversionals}
  * module defines the basic conversionals provided by the @MetaPRL
  * prover.
  *
  * Each @bf{rewrite} definition in a module defines a conversion.
  * For example, the definition of beta reduction in the @Nuprl type
- * theory (Section @reftheory[Itt_rfun]), is defined as follows:
+ * theory (Section @refmodule[Itt_rfun]), is defined as follows:
  *
  * @begin[center]
  * @bf{rewrite} unfold_beta : $(@lambda x. b[x])@space a @longleftrightarrow b[a]$
@@ -118,7 +118,7 @@ let debug_reduce =
 
 (*!
  * @begin[doc]
- * @thysection{Conversion application}
+ * @modsection{Conversion application}
  *
  * @begin[description]
  * @item{@conv[rw];
@@ -170,7 +170,7 @@ let rwaAllAll = Tactic_type.Conversionals.rwaAllAll
 
 (*!
  * @begin[doc]
- * @thysection{Primitive conversions}
+ * @modsection{Primitive conversions}
  *
  * @begin[description]
  * @item{@conv[idC], @conv[failC];
@@ -187,7 +187,7 @@ let failWithC = Tactic_type.Conversionals.failWithC
 
 (*!
  * @begin[doc]
- * @thysection{Conversionals}
+ * @modsection{Conversionals}
  *
  * @begin[description]
  * @item{@conv[thenC], @conv[orelseC];
@@ -232,7 +232,7 @@ let repeatForC = Tactic_type.Conversionals.repeatForC
 
 (*!
  * @begin[doc]
- * @thysection{Addressing and search}
+ * @modsection{Addressing and search}
  *
  * Generally, the terms to be rewritten to not occur at the outermost
  * level of a clause.  The following conversionals recursively search
@@ -314,7 +314,7 @@ let applyAllC = Tactic_type.Conversionals.applyAllC
 
 (*!
  * @begin[doc]
- * @thysection{Conversion reversal}
+ * @modsection{Conversion reversal}
  *
  * Computational rewrites define a congruence, and all of the
  * equivalence relations hold, including reversing the application
@@ -379,9 +379,9 @@ let cutC = Tactic_type.Conversionals.cutC
  *                | @i{inr}(v) @rightarrow c[v]) @longleftrightarrow b[a]$}
  * @end[description]
  *
- * Each of the modules for functions (Section @reftheory[Itt_rfun]),
- * tuples (Section @reftheory[Itt_dprod]), and union (Section @reftheory[Itt_union]),
- * defines an addition to the @hrefresource[reduce_resource]: the @hreftheory[Itt_rfun] adds
+ * Each of the modules for functions (Section @refmodule[Itt_rfun]),
+ * tuples (Section @refmodule[Itt_dprod]), and union (Section @refmodule[Itt_union]),
+ * defines an addition to the @hrefresource[reduce_resource]: the @hrefmodule[Itt_rfun] adds
  * the @hrefrewrite[reduce_beta] rewrite with redex $(@lambda v. b[v])@space a$@; the
  * @tt{Itt_dprod} adds the @tt{reduceSpread} rewrite with redex
  * $(@bf{match}@space (a, b)@space @bf{with}@space u, v @rightarrow c[u, v])$@; and the

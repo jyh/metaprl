@@ -12,7 +12,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Top_tacticals]
+ * @module[Top_tacticals]
  *
  * The @tt{Top_tacticals} module defines the primitive
  * tactics and tacticals provided by the @MetaPRL prover.
@@ -60,7 +60,7 @@ extends Mptop
 
 (*!************************************************************************
  * @begin[doc]
- * @thysection{Primitive tactics}
+ * @modsection{Primitive tactics}
  *
  * @begin[description]
  * @item{@tactic[idT];
@@ -139,7 +139,7 @@ let nthAssumT = Tactic_type.Tacticals.nthAssumT
 
 (*!************************************************************************
  * @begin[doc]
- * @thysection{Tacticals}
+ * @modsection{Tacticals}
  *
  * @begin[description]
  * @item{@tactic[thenT], @tactic[orelseT];
@@ -285,7 +285,7 @@ let repeatForT = Tactic_type.Tacticals.repeatForT
 
 (*!************************************************************************
  * @begin[doc]
- * @thysection{Tactic arguments}
+ * @modsection{Tactic arguments}
  *
  * Tactics and rules may require arguments of various types (such as numbers, strings,
  * terms, or even other tactics).  The proof structure allows the proof tree to
@@ -307,7 +307,7 @@ let repeatForT = Tactic_type.Tacticals.repeatForT
  * There is one more tactical that is frequently
  * used in the @MetaPRL logics: by convention the @tt{selT} tactical is used to
  * ``select'' among several alternate methods of proof.  For example, in proving
- * a disjunction (Section @reftheory[Itt_logic]) it is necessary to select the
+ * a disjunction (Section @refmodule[Itt_logic]) it is necessary to select the
  * branch of the disjunct.
  *
  * $$
@@ -335,7 +335,7 @@ let doNotThinT = thinningT false
 
 (*!************************************************************************
  * @begin[doc]
- * @thysection{Clause selection}
+ * @modsection{Clause selection}
  *
  * The following tactics are intended for use in a single-conclusion sequent calculus.
  * A sequent $@sequent{ext; {x_1@colon T_1; @cdots; x_n@colon T_n}; C}$ has
@@ -407,7 +407,7 @@ let onVarT = Tactic_type.Tacticals.onVarT
 
 (*!************************************************************************
  * @begin[doc]
- * @thysection{Labels}
+ * @modsection{Labels}
  *
  * Each node in a proof tree has a @emph{label}.  The labels have no logical
  * meaning, but they are frequently used to provide an informal description

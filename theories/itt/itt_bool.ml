@@ -2,12 +2,12 @@
  * @spelling{bool ifthenelse splitBoolT splitITE}
  *
  * @begin[doc]
- * @theory[Itt_bool]
+ * @module[Itt_bool]
  *
  * The @tt{Itt_bool} module defines a type of (decidable)
  * Booleans.  The definition of the Boolean values is
- * based on the @hrefterm[unit] type in the @hreftheory[Itt_unit] module
- * and the @hrefterm[union] type in the @hreftheory[Itt_union]
+ * based on the @hrefterm[unit] type in the @hrefmodule[Itt_unit] module
+ * and the @hrefterm[union] type in the @hrefmodule[Itt_union]
  * module, as the type $@union{@unit; @unit}$.
  * @end[doc]
  *
@@ -90,7 +90,7 @@ open Itt_logic
  * @tt{assert} term converts a Boolean expression
  * to propositional form.  Note that these connectives
  * are completely separate from the logical connectives
- * defined in @hreftheory[Itt_logic].
+ * defined in @hrefmodule[Itt_logic].
  *
  * The $@bool$ type is defined as the type $@union{@unit; @unit}$.
  * The $@true$ term is chosen to be the @emph{left} term, and $@false$
@@ -106,7 +106,7 @@ define unfold_bfalse : bfalse <--> inr{it}
  * The @tt{ifthenelse} term is the program that
  * performs case analysis on a Boolean value.  The
  * @tt{ifthenelse} term is defined directly in terms
- * of the @hrefterm[decide] term in @hreftheory[Itt_union].
+ * of the @hrefterm[decide] term in @hrefmodule[Itt_union].
  * The Boolean connectives are defined in terms of @tt{ifthenelse}.
  * @end[doc]
  *)
@@ -235,7 +235,7 @@ dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] :: "assert"{
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood, well-formedness, and membership}
+ * @modsubsection{Typehood, well-formedness, and membership}
  *
  * The $@bool$ type is a member of every universe, and it
  * contains the terms $@true$ and $@false$.
@@ -255,7 +255,7 @@ interactive bfalse_member {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination rule performs a case analysis on a Boolean
  * assumption.  There are two cases: one where the assumption is
@@ -269,7 +269,7 @@ interactive boolElimination2 {| elim [] |} 'H 'J 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator well-formedness}
+ * @modsubsection{Combinator well-formedness}
  *
  * The @tt{ifthenelse} term computes a type if its
  * argument is Boolean, and its branches are types under
@@ -284,7 +284,7 @@ interactive ifthenelse_type2 {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Contradiction}
+ * @modsubsection{Contradiction}
  *
  * The two following rules represent proof by contradiction:
  * $@true$ and $@false$ are provably distinct.
@@ -298,7 +298,7 @@ interactive boolContradiction2 {| elim [ThinOption thinT] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * The @tt{ifthenelse} term computes a value of type $T$
  * if the condition is a Boolean value, and the branches
@@ -314,7 +314,7 @@ interactive ifthenelse_equality {| intro []; eqcd |} 'H 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Computational equivalence}
+ * @modsubsection{Computational equivalence}
  *
  * The Boolean values are computationally equivalent
  * if they are equal.  This is because the @emph{only}
@@ -361,7 +361,7 @@ interactive bool_falseFormation 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Connective well-formedness}
+ * @modsubsection{Connective well-formedness}
  *
  * The connectives are Boolean values if their
  * immediate subterms are also Boolean values.
@@ -388,7 +388,7 @@ interactive bnot_equal {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Propositional reasoning}
+ * @modsubsection{Propositional reasoning}
  *
  * The @emph{reasoning} about Boolean expressions
  * is performed using the @emph{propositional} form,
@@ -412,7 +412,7 @@ interactive assert_false {| elim [ThinOption thinT] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Case analysis and substitution}
+ * @modsubsection{Case analysis and substitution}
  *
  * The following two rules perform a case analysis
  * on a Boolean expression in a clause.  This reasoning
@@ -434,7 +434,7 @@ interactive bool_subst_hyp 'H 'J bind{x. 'A['x]} 'e 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Extensional membership}
+ * @modsubsection{Extensional membership}
  *
  * Two Boolean expressions $A$ and $B$ are equal if the
  * @misspelled{bi}-implication $A @Leftrightarrow_b B$ holds.
@@ -449,7 +449,7 @@ interactive bool_ext_equality 'H 'u :
 
 (*!
  * @begin[doc]
- * @thysubsection{Squash reasoning}
+ * @modsubsection{Squash reasoning}
  *
  * The proof extract of a Boolean assertion is always the
  * term $@it$ term; the proof itself can be omitted.
@@ -461,7 +461,7 @@ interactive assertSquashElim {| squash; intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Reasoning about the Boolean connectives}
+ * @modsubsection{Reasoning about the Boolean connectives}
  *
  * The following two rules define introduction and
  * elimination reasoning on the Boolean negation.

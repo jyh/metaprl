@@ -1,6 +1,6 @@
 (*
  * @begin[doc]
- * @theory[Typeinf]
+ * @module[Typeinf]
  *
  * This module implements a simple type inference algorithm based
  * on Hindley-Milner type inference~@cite[damas84principle].  This is

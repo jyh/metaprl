@@ -2,12 +2,12 @@
  * @spelling{var vars productElimination}
  *
  * @begin[doc]
- * @theory[Var]
+ * @module[Var]
  *
  * The @tt{Var} module provides utilities to
  * generate new variables that are guaranteed to be distinct
  * from all other bound variables in a proof goal.  For example,
- * the @tt{productElimination} (Section @reftheory[Itt_dprod])
+ * the @tt{productElimination} (Section @refmodule[Itt_dprod])
  * rule, splits a hypothesis of the form $x@colon T_1 @times T_2$
  * into two hypotheses $u@colon T_1$ and $v@colon T_2$.  The variables
  * $u$ and $v$ have to be chosen at rule application time, and this

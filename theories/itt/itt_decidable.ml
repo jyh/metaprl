@@ -2,7 +2,7 @@
  * @spelling{decideT}
  *
  * @begin[doc]
- * @theory[Itt_decidable]
+ * @module[Itt_decidable]
  *
  * It is occasionally useful to assert the @emph{decidability}
  * of a proposition $P$.  The proposition is decidable if
@@ -133,7 +133,7 @@ let decideT t p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Basic decidability}
+ * @modsubsection{Basic decidability}
  *
  * The propositions $@true$ and $@false$ are always decidable.
  * @end[doc]

@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_comment]
+ * @module[Itt_comment]
  *
  * Terms used for comments in the @Nuprl type theory.
  * @end[doc]

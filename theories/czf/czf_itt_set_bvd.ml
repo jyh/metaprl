@@ -2,7 +2,7 @@
  * @spelling{set_bvd Xin}
  *
  * @begin[doc]
- * @theory[Czf_itt_set_bvd]
+ * @module[Czf_itt_set_bvd]
  *
  * The @tt{Czf_itt_set_bvd} module defines the @emph{image} of a set
  * under some mapping. Image is defined as a set constructor
@@ -118,7 +118,7 @@ dform set_bvd_df : parens :: except_mode[src] :: set_bvd{'s; x. 'a} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The set builder $@setbvd{x; s; a[x]}$ is well-formed
  * if $s$ is a set, and $a[x]$ is a family of sets.
@@ -131,7 +131,7 @@ interactive set_bvd_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * A set $y$ is a member of $@setbvd{x; s; a[x]}$
  * if the set builder is well-formed; if $a[x]$ is
@@ -149,7 +149,7 @@ interactive set_bvd_member_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form for the set builder $@mem{y; @set_bvd{x; s; a[x]}}$
  * produces a witness $@mem{z; s}$ for which $@eq{y; a[z]}$.
@@ -165,7 +165,7 @@ interactive set_bvd_member_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The image constructor is functional in both the set
  * argument and the mapping.

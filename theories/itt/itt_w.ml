@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_w]
+ * @module[Itt_w]
  *
  * The @tt{Itt_w} module defines the recursive @i{W}-type.
  * The @i{W} type has the form $@w{x; A; B[x]}$, where
@@ -14,7 +14,7 @@
  * $B[a] @rightarrow @w{x; A; B[x]}$.
  *
  * The @i{W}-type is defined as primitive.  It @emph{can}
- * be derived from the recursive type @hreftheory[Itt_srec], with
+ * be derived from the recursive type @hrefmodule[Itt_srec], with
  * the definition:
  *
  * $$@w{x; A; B[x]} @equiv @srec{T; @prod{x; A; @fun{B[a]; T}}}.$$
@@ -176,7 +176,7 @@ prim wFormation 'H 'A 'x :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The $W$-type $@w{x; A; B[x]}$ is well-formed if $A$ is a type,
  * and $B[a]$ is a type for any $a @in A$.
@@ -209,7 +209,7 @@ prim treeFormation {| intro [] |} 'H 'a 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The elements of the $W$-type $@w{x; A; B[x]}$ are the
  * @hrefterm[tree] terms $@tree{a; f}$, where $a @in A$,
@@ -225,7 +225,7 @@ prim treeEquality {| intro []; eqcd |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination rule performs induction over the $W$-type
  * $@w{x; A; B[x]}$.  The conclusion is true for all $z$ in the
@@ -248,7 +248,7 @@ prim wElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * The tree-induction term computes a value of type $T$ if the body
  * computes a value of type $T$ given and argument $a @in A$, a child

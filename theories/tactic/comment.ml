@@ -5,7 +5,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Comment]
+ * @module[Comment]
  *
  * The @tt{Comment} module defines @emph{structured} comments.
  * Structured comments begin with the sequence @tt{({*}!}.  They
@@ -23,7 +23,7 @@
  *
  * The @tt{opname} is an operator name.  The usual quantification can be
  * used; the term @code{@Itt_dprod!prod} refers to the @hrefterm[prod] term
- * defined in the @hreftheory[Itt_dprod] module.  The strings $s_1, @ldots, s_m$
+ * defined in the @hrefmodule[Itt_dprod] module.  The strings $s_1, @ldots, s_m$
  * are the @emph{parameters} of the term, and the $t_1; @cdots; t_n$ expressions
  * are the subterms.  The parameters must be strings, possibly enclosed in
  * double-quotes.  The subterms are normal comment text.
@@ -246,57 +246,58 @@ dform prl_comment_df1 : except_mode[tex] :: prl_comment{'t} =
 
 (*!
  * @begin[doc]
- * @terms
- * The @code{@theory[name:s]} term produces a section header for a theory.
+ * The @code{@theory} term produces a chapter header for a theory (e.g.
+ * a collection of modules) and the @code{@module[name:s]} produces a section
+ * header for the current module.
  * @end[doc]
  *)
-declare "theory"[name:s]{'t}
-declare "theory"[name:s]
+declare "theory"{'t}
+declare "module"[name:s]
 (*! @docoff *)
 
-dform theory_df1 : mode[tex] :: "theory"[name:s]{'t} =
-   izone `"\\labeltheory{" slot[name:s] `"}{" ezone 't izone `"}" ezone
+dform theory_df1 : mode[tex] :: "theory"{'t} =
+   izone `"\\theory{" ezone slot{'t} izone `"}" ezone
 
-dform theory_df1 : mode[tex] :: "theory"[name:s] =
-   izone `"\\labeltheory{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+dform theory_df2 : except_mode[tex] :: "theory"{'t} =
+   com_hbreak bf{'t} com_hbreak com_hbreak
 
-dform theory_df2 : except_mode[tex] :: "theory"[name:s]{'t} =
-   com_hbreak bf_begin 't bf_end com_hbreak com_hbreak
+dform module_df1 : mode[tex] :: "module"[name:s] =
+   izone `"\\labelmodule{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
 
-dform theory_df2 : except_mode[tex] :: "theory"[name:s] =
+dform module_df2 : except_mode[tex] :: "module"[name:s] =
    com_hbreak bf[name:s] com_hbreak com_hbreak
 
 (*!
  * @begin[doc]
- * The @code{@thysection} term produces a section header.
+ * The @code{@modsection} term produces a subsection header.
  * @end[doc]
  *)
-declare thysection{'t}
+declare modsection{'t}
 (*! @docoff *)
 
-dform thysection_df1 : mode[tex] :: thysection{'t} =
-   izone `"\\thysection{" ezone slot{'t} izone `"}" ezone
+dform modsection_df1 : mode[tex] :: modsection{'t} =
+   izone `"\\modsection{" ezone slot{'t} izone `"}" ezone
 
-dform thysection_df2 : except_mode[tex] :: thysection{'t} =
+dform modsection_df2 : except_mode[tex] :: modsection{'t} =
    com_hbreak bf_begin 't bf_end com_hbreak com_hbreak
 
 (*!
  * @begin[doc]
- * The @code{@thysubsection} term produces a subsection header.
+ * The @code{@modsubsection} term produces a sub-subsection header.
  * @end[doc]
  *)
-declare thysubsection{'t}
+declare modsubsection{'t}
 (*! @docoff *)
 
-dform thysubsection_df1 : mode[tex] :: thysubsection{'t} =
-   izone `"\\thysubsection{" ezone slot{'t} izone `"}" ezone
+dform modsubsection_df1 : mode[tex] :: modsubsection{'t} =
+   izone `"\\modsubsection{" ezone slot{'t} izone `"}" ezone
 
-dform thysubsection_df2 : except_mode[tex] :: thysubsection{'t} =
+dform modsubsection_df2 : except_mode[tex] :: modsubsection{'t} =
    com_hbreak bf_begin 't bf_end com_hbreak
 
 (*!
  * @begin[doc]
- * The following terms generate the @emph{standard} @code{@thysection}
+ * The following terms generate the @emph{standard} @code{@modsection}
  * headings for the commonly-defined parts of a module.
  * @end[doc]
  *)
@@ -310,25 +311,25 @@ declare terms
 (*! @docoff *)
 
 dform parents_df1 : parents =
-   thysection{comment_string["Parents"]}
+   modsection{comment_string["Parents"]}
 
 dform rewrites_df1 : rewrites =
-   thysection{comment_string["Rewrites"]}
+   modsection{comment_string["Rewrites"]}
 
 dform rules_df1 : rules =
-   thysection{comment_string["Rules"]}
+   modsection{comment_string["Rules"]}
 
 dform convs_df1 : convs =
-   thysection{comment_string["Conversions"]}
+   modsection{comment_string["Conversions"]}
 
 dform tactics_df1 : tactics =
-   thysection{comment_string["Tactics"]}
+   modsection{comment_string["Tactics"]}
 
 dform resources_df1 : resources =
-   thysection{comment_string["Resources"]}
+   modsection{comment_string["Resources"]}
 
 dform terms_df1 : terms =
-   thysection{comment_string["Terms"]}
+   modsection{comment_string["Terms"]}
 
 (*!
  * @begin[doc]
@@ -382,7 +383,7 @@ dform rule_df2 : except_mode[tex] :: "rule"[name:s] =
  * The hypertext links are specified with the following terms.
  * @end[doc]
  *)
-declare hreftheory[name:s]
+declare hrefmodule[name:s]
 declare hrefterm[name:s]
 declare hrefresource[name:s]
 declare hrefrewrite[name:s]
@@ -391,10 +392,10 @@ declare hrefconv[name:s]
 declare hrefrule[name:s]
 (*! @docoff *)
 
-dform hreftheory_df1 : mode[tex] :: hreftheory[name:s] =
-   izone `"\\hreflabeltheory{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+dform hrefmodule_df1 : mode[tex] :: hrefmodule[name:s] =
+   izone `"\\hreflabelmodule{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
 
-dform hreftheory_df2 : except_mode[tex] :: hreftheory[name:s] =
+dform hrefmodule_df2 : except_mode[tex] :: hrefmodule[name:s] =
    bf[name:s]
 
 dform hrefterm_df1 : mode[tex] :: hrefterm[name:s] =
@@ -439,7 +440,7 @@ dform hrefrule_df2 : except_mode[tex] :: hrefrule[name:s] =
  * a hypertext link.
  * @end[doc]
  *)
-declare reftheory[name:s]
+declare refmodule[name:s]
 declare refterm[name:s]
 declare refresource[name:s]
 declare refrewrite[name:s]
@@ -448,10 +449,10 @@ declare refconv[name:s]
 declare refrule[name:s]
 (*! @docoff *)
 
-dform reftheory_df1 : mode[tex] :: reftheory[name:s] =
-   izone `"\\reflabeltheory{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+dform refmodule_df1 : mode[tex] :: refmodule[name:s] =
+   izone `"\\reflabelmodule{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
 
-dform reftheory_df2 : except_mode[tex] :: reftheory[name:s] =
+dform refmodule_df2 : except_mode[tex] :: refmodule[name:s] =
    bf[name:s]
 
 dform refterm_df1 : mode[tex] :: refterm[name:s] =
@@ -818,7 +819,7 @@ dform math_slot_df1 : math_slot[tag:s]{'t} =
 
 (*!
  * @begin[doc]
- * @thysubsection{Math mode}
+ * @modsubsection{Math mode}
  *
  * Terms are formatted in @emph{math mode} if they are
  * placed between matching @tt["$"] symbols (for inline

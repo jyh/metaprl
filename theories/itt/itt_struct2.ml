@@ -7,10 +7,10 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Itt_struct2]
+ * @module[Itt_struct2]
  *
  * The @tt{Itt_struct2} module contains some @emph{derived} rules similar
- * to @hrefrule[cut] and @hrefrule[substitution] in the @hreftheory[Itt_struct] theory.
+ * to @hrefrule[cut] and @hrefrule[substitution] in the @hrefmodule[Itt_struct] theory.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -96,7 +96,7 @@ let _ =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  *
  * Using @hrefterm[set] type we can derive more stronger version of the @hrefrule[substitution]
  * and @hrefrule[hypSubstitution] rules.
@@ -138,7 +138,7 @@ interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z 'v 'w:
 
 (*!
  * @begin[doc]
- * @thysubsection{Cut rules}
+ * @modsubsection{Cut rules}
  *
  * There are three advanced versions of the @hrefrule[cut] rule.
  * The @tt{cutMem} states that if $s @in S$,
@@ -186,7 +186,7 @@ interactive cutEq0 'H ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} 'v 'u :
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution in a type}
+ * @modsubsection{Substitution in a type}
  *
  * @end[doc]
  *)
@@ -238,7 +238,7 @@ interactive cutEq 'H ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } 'v
  * The @tt{cutSquash} rule is similar to the @hrefrule[cut] rule.
  * If we prove $S$, but do not show the extract term, then we can assert
  * $S$ as a @emph{squashed} hypothesis, that is we are not allow to use its extract
- * (see @hreftheory[Itt_squash]).
+ * (see @hrefmodule[Itt_squash]).
  * @end[doc]
  *)
 

@@ -1,11 +1,11 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_singleton]
+ * @module[Czf_itt_singleton]
  *
  * The @tt{Czf_itt_singleton} module defines the singleton
  * sets $@sing{s}$, which is a set that contains the single element
  * $s$.  The singleton is used as a building block for pairing,
- * defined in the @hreftheory[Czf_itt_pair] module.
+ * defined in the @hrefmodule[Czf_itt_pair] module.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -94,7 +94,7 @@ dform sing_df : sing{'s} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The singleton $@sing{s}$ is well-formed if
  * $s$ is a set.
@@ -106,7 +106,7 @@ interactive sing_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction and elimination}
+ * @modsubsection{Introduction and elimination}
  *
  * The @emph{only} element of the singleton set $@sing{s}$ is
  * the set $s$.
@@ -124,7 +124,7 @@ interactive sing_member_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The singleton is functional in it's set argument.
  * @end[doc]

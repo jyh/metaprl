@@ -1,8 +1,8 @@
 (*
  * @begin[doc]
- * @theory[Dform]
+ * @module[Dform]
  *
- * The @hreftheory[Dform] module implements basic display forms for
+ * The @hrefmodule[Dform] module implements basic display forms for
  * variables and sequents.
  *
  * @docoff

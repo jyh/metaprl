@@ -2,7 +2,7 @@
  * @spelling{int number ind add minus beq_int lt_bool}
  *
  * @begin[doc]
- * @theory[Itt_int_base]
+ * @module[Itt_int_base]
  *
  * The integers are formalized as a @emph{primitive}
  * type in the @Nuprl type theory.
@@ -277,8 +277,8 @@ let testT p =
 
 (*!
  * @begin[doc]
- * @thysection{Rules and rewrites}
- * @thysubsection{Typehood and well-formedness of arithmetic operators}
+ * @modsection{Rules and rewrites}
+ * @modsubsection{Typehood and well-formedness of arithmetic operators}
  *
  * @end[doc]
  *)
@@ -387,7 +387,7 @@ interactive lt_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{@tt{beq_int} and @tt{= in int} correspondence}
+ * @modsubsection{@tt{beq_int} and @tt{= in int} correspondence}
  *
  * @end[doc]
  *)
@@ -436,7 +436,7 @@ interactive lt_bool_member {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Typehood and well-formedness of @tt{int} and @tt{number}}
+ * @modsubsection{Typehood and well-formedness of @tt{int} and @tt{number}}
  *
  * The $@int$ type inhabits every universe, and it
  * is a type.
@@ -472,7 +472,7 @@ prim numberFormation {| intro [] |} 'H number[n:n] :
 
 (*!
  * @begin[doc]
- * @thysubsection{Decidability}
+ * @modsubsection{Decidability}
  * The following rule establish decidability of integer relations and
  * improve the @hreftactic[decideT] tactic.
  * @end[doc]
@@ -489,7 +489,7 @@ interactive eq_int_decidable {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The $@int$ type contains the @hrefterm[number] terms.
  * @end[doc]
@@ -503,7 +503,7 @@ prim numberEquality {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Order relation properties}
+ * @modsubsection{Order relation properties}
  *
  * @tt{lt_bool} defines reflexive, decidable, transitive and
  * discrete order on @tt{int}
@@ -633,7 +633,7 @@ let lt_addMonoC = lt_addMono_rw
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * Induction on an integer assumption produces three cases:
  * one for the base case $0$, one for induction on negative arguments,
@@ -660,7 +660,7 @@ prim intElimination {| elim [ThinOption thinT] |} 'H 'J 'm 'v 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection {Induction and recursion}
+ * @modsubsection {Induction and recursion}
  * Reduction of the induction combinator @tt{ind} has three cases.
  * If the argument $x$ is $0$, the combinator reduces to the @i{base}
  * case; if it is positive, it reduces to the @i{up} case; and
@@ -712,7 +712,7 @@ let reduce_ind_numberC =
 
 (*
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * Two @tt{ind} term compute values of type $T$ if each of the three
  * cases (zero, positive, and negative) produce values of type $T$.
@@ -743,7 +743,7 @@ prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Addition properties}
+ * @modsubsection{Addition properties}
  *
  * @tt{add} is commutative and associative.
  *

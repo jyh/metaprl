@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Itt_void]
+ * @module[Itt_void]
  *
  * The @tt{Itt_void} module defines the @emph{empty} type.
  * The $@void$ type is a subtype of every other type (since
@@ -100,7 +100,7 @@ dform void_df1 : except_mode[src] :: void = `"Void"
  * @begin[doc]
  * @rules
  *
- * @thysubsection{Equality and typehood}
+ * @modsubsection{Equality and typehood}
  *
  * The $@void$ type is a member of very universe, and it
  * is a type.
@@ -127,7 +127,7 @@ prim voidType {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * Since the $@void$ type is empty, induction over the
  * $@void$ type produces no cases.
@@ -139,7 +139,7 @@ prim voidElimination {| elim []; squash |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The $@void$ type is a subtype of every other type.
  * This rule is derived from the definition of subtyping, and the

@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Mp_mc_fir_ty]
+ * @module[Mp_mc_fir_ty]
  *
  * The @tt[Mp_mc_fir_ty] module defines terms to represent FIR types.
  * @end[doc]
@@ -70,7 +70,7 @@ declare tyEnum{ 'int }
  *
  * @tt[tyRawInt] and @tt[tyFloat] represent raw data types.  Their
  * subterms specify the precision and signed nature of the type
- * (see @hreftheory[Mp_mc_fir_base]).  These correspond to
+ * (see @hrefmodule[Mp_mc_fir_base]).  These correspond to
  * the integer and floating point types in a language such as C.
  * @end[doc]
  *)
@@ -82,11 +82,11 @@ declare tyFloat{ 'float_precision }
  * @begin[doc]
  *
  * @tt[tyFun] is a function type.  The first subterm is a list
- * (see @hreftheory[Itt_list]) of types indicating the types of
+ * (see @hrefmodule[Itt_list]) of types indicating the types of
  * the arguments to the function. The second subterm is the type
  * of the return value of the function.  Note that FIR
  * functions never actually return in the conventional sense
- * of the word (see @hreftheory[Mp_mc_fir_exp] and @hrefterm[tailCall]
+ * of the word (see @hrefmodule[Mp_mc_fir_exp] and @hrefterm[tailCall]
  * for more on this).
  * @end[doc]
  *)

@@ -2,7 +2,7 @@
  * @spelling{klein}
  *
  * @begin[doc]
- * @theory[Czf_itt_kleingroup]
+ * @module[Czf_itt_kleingroup]
  *
  * The @tt[Czf_itt_kleingroup] module defines the klein 4-group, which
  * contains 4 elements $e$, $a$, $b$, $c$, and whose group table is:
@@ -180,7 +180,7 @@ dform k3_df : except_mode[src] :: k3 =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The @tt[klein4] is a label and @tt[k0], @tt[k1], @tt[k2], @tt[k3]
  * are all sets. These are axioms.
@@ -227,7 +227,7 @@ interactive klein4_inv_isset {| intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction and elimination for the carrier set}
+ * @modsubsection{Introduction and elimination for the carrier set}
  *
  * The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$ only.
  * @end[doc]
@@ -254,7 +254,7 @@ interactive car_klein0_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Verification of the group axioms}
+ * @modsubsection{Verification of the group axioms}
  *
  * The @tt[op] for @tt[klein4] is functional and is a mapping.
  * @end[doc]

@@ -3,7 +3,7 @@
  * isect
  * @end[spelling]
  * @begin[doc]
- * @theory[Czf_itt_isect]
+ * @module[Czf_itt_isect]
  *
  * The @tt{Czf_itt_isect} module gives defines a binary
  * and general intersection.  The intersection is a @emph{derived} form,
@@ -89,8 +89,8 @@ declare "isect"{'s1}
  * @rewrites
  *
  * The intersections are derived from the separation
- * set constructor in the @hreftheory[Czf_itt_sep] module,
- * and the union in the @hreftheory[Czf_itt_union] module.
+ * set constructor in the @hrefmodule[Czf_itt_sep] module,
+ * and the union in the @hrefmodule[Czf_itt_union] module.
  * @end[doc]
  *)
 prim_rw unfold_bisect : "isect"{'s1; 's2} <--> sep{'s1; x. mem{'x; 's2}}
@@ -114,7 +114,7 @@ dform isect_df2 : parens :: "prec"[prec_and] :: "isect"{'s} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * Both forms of intersection are well-formed if their arguments are sets.
  * @end[doc]
@@ -130,7 +130,7 @@ interactive isect_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The binary intersection $@isect{s_1; s_2}$ requires membership
  * in both sets $s_1$ and $s_2$.
@@ -159,7 +159,7 @@ interactive isect_member_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form for membership in the binary intersection
  * produces the proofs for membership in both types.

@@ -2,9 +2,9 @@
  * @spelling{bool esquash esquashT unhidden squashes}
  *
  * @begin[doc]
- * @theory[Itt_esquash]
+ * @module[Itt_esquash]
  *
- * The @hrefterm[squash] operator in @hreftheory[Itt_squash] theory
+ * The @hrefterm[squash] operator in @hrefmodule[Itt_squash] theory
  * allows us to ``squash'' (omit) the computational content
  * of a proposition. But in many cases in addition to squashing
  * the computational context we want to be able to squash the
@@ -84,7 +84,7 @@ dform esquash_df : except_mode[src] :: esquash{'P} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The @tt{esquash} term inhabits the type universe $@univ{i}$
  * if the proposition $P$ is also in $@univ{i}$.
@@ -116,7 +116,7 @@ prim esquash_univ {| intro [AutoMustComplete] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The $@esquash{P}$ proposition is true if $P$ is true.
  * However, this rule is too strong to add to the
@@ -132,7 +132,7 @@ prim esquash_intro {| intro [AutoMustComplete] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The element in the $@esquash{P}$ term is always the term
  * $@it$.
@@ -154,7 +154,7 @@ interactive esquash_mem {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  * When a proposition is a type (i.e, functional), its @tt[esquash] is
  * true if and only if its @tt[squash] is true.
  * @end[doc]

@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_setdiff]
+ * @module[Czf_itt_setdiff]
  * @parents
  * @end[doc]
  *)
@@ -68,7 +68,7 @@ dform setdiff_df : except_mode[src] :: parens :: "prec"[prec_setdiff] :: setdiff
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * A @tt[setdiff] is well-formed if its arguments are both sets.
  * @end[doc]
@@ -80,7 +80,7 @@ interactive setdiff_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * A set $x$ is in the difference set @setdiff{s1; s2} if $x$ is a
  * member of $s_1$ and $x$ is not a member of $s_2$.
@@ -96,7 +96,7 @@ interactive setdiff_intro {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form of @setdiff{s_1; s_2} produces a proof that
  * $@mem{x; s_2}$ is wrong for which $@mem{x; s_1}$.
@@ -111,7 +111,7 @@ interactive setdiff_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * A @tt[setdiff] type is functional in both set arguments.
  * @end[doc]

@@ -2,7 +2,7 @@
  * @spelling{groupCancelLeftT groupCancelRightT uniqueInvLeftT uniqueInvRightT}
  *
  * @begin[doc]
- * @theory[Czf_itt_group]
+ * @module[Czf_itt_group]
  *
  * The @tt{Czf_itt_group} module defines groups. Each group
  * is assigned a label, such as $g$. The predicate $@group{g}$
@@ -115,11 +115,11 @@ dform inv_df : parens :: except_mode[src] :: inv{'g; 'a} =
 
 (*!
  * @begin[doc]
- * @thysection{Axioms}
+ * @modsection{Axioms}
  *
  * The @tt{group} is defined by a set of axioms.
  *
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The @tt[group], @tt[car], @tt[op], @tt[inv], and @tt[id]
  * are well-formed if the group argument is a label and the
@@ -151,7 +151,7 @@ interactive inv_isset {| intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Binary operation}
+ * @modsubsection{Binary operation}
  *
  * Every @tt[op] is a @emph{binary operation} on @tt[car], which means:
  * first, if $a$ and $b$ are in $@car{g}$, then $@op{g; a; b}$
@@ -177,7 +177,7 @@ interactive op_fun {| intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Associativity}
+ * @modsubsection{Associativity}
  *
  * Every @tt[op] is associative.
  * @end[doc]
@@ -195,7 +195,7 @@ interactive op_assoc1 {| intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Identity}
+ * @modsubsection{Identity}
  *
  * Each group $g$ has an identity $@id{g}$ such that
  * for any $s @in @car{g}$, $@eq{@op{g; @id{g}; s}; s}$.
@@ -215,7 +215,7 @@ interactive id_eq1 {| intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Inverse}
+ * @modsubsection{Inverse}
  *
  * Every @tt[inv] is a @emph{unary operation} on @tt[car] such that
  * $@eq{@op{g; @inv{g; s}; s}; @id{g}}$ for any $a @in @car{g}$.
@@ -279,7 +279,7 @@ interactive op_eq2 {| intro[] |} 'H :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Lemmas}
+ * @modsubsection{Lemmas}
  *
  * If $@group{g}$, then
  * @begin[enumerate]
@@ -314,7 +314,7 @@ interactive id_eq2 {| intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Theorems}
+ * @modsubsection{Theorems}
  *
  * $@space @space$
  *

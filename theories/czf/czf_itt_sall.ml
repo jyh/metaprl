@@ -2,7 +2,7 @@
  * @spelling{sall}
  *
  * @begin[doc]
- * @theory[Czf_itt_sall]
+ * @module[Czf_itt_sall]
  *
  * The @tt{Czf_itt_sall} module defines the @emph{unrestricted} universal
  * quantification $@sall{x; P[x]}$ over all sets $x$.  The proposition
@@ -78,7 +78,7 @@ declare "sall"{x. 'A['x]}
  * @rewrites
  *
  * The quantification $@sall{x; P[x]}$ is defined using the universal
- * quantifier @hrefterm[all] from the @hreftheory[Itt_logic] module.
+ * quantifier @hrefterm[all] from the @hrefmodule[Itt_logic] module.
  * @end[doc]
  *)
 prim_rw unfold_sall : "sall"{x. 'A['x]} <--> (all x: set. 'A['x])
@@ -100,7 +100,7 @@ dform sall_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sall"{x. '
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The quantification $@sall{x; A[x]}$ is well-formed if
  * $A[x]$ is a proposition for any set $x$.
@@ -112,7 +112,7 @@ interactive sall_type {| intro [] |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The quantification $@sall{x; A[x]}$ is true if it is well-formed,
  * and if $A[x]$ is true for every set $x$.
@@ -124,7 +124,7 @@ interactive sall_intro {| intro [] |} 'H 'a :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form instantiates the universal assumption
  * on a particular set argument $z$.

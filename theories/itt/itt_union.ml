@@ -5,7 +5,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Itt_union]
+ * @module[Itt_union]
  *
  * The union type $T_1 + T_2$ defines a union space containing the
  * elements of both $T_1$ and $T_2$.  The union is @emph{disjoint}: the
@@ -16,7 +16,7 @@
  * The union type is the first primitive type that can have more than one
  * element.  The tag makes the handedness of membership decidable, and
  * the union type $@unit + @unit$ contains two elements: @inl{it} and
- * @inr{it}.  The @hreftheory[Itt_bool] module uses this definition to
+ * @inr{it}.  The @hrefmodule[Itt_bool] module uses this definition to
  * define the Boolean values, where @emph{false} is @inl{it} and
  * @emph{true} is @inr{it}.
  *
@@ -180,7 +180,7 @@ prim unionFormation 'H :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The equality of the @hrefterm[union] type is intensional; the
  * union $A + B$ is a type if both $A$ and $B$ are types.
@@ -203,7 +203,7 @@ prim unionType {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The union type $A + B$ is true if both $A$ and $B$ are types,
  * and either 1) $A$ is provable, or 2) $B$ is provable.  The following
@@ -233,7 +233,7 @@ prim inrFormation {| intro [SelectOption 2] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The following two rules define membership, $@inl{a} @in A + B$
  * if $a @in A$ and $@inr{b} @in A + B$ if $b @in B$.  Both
@@ -260,7 +260,7 @@ prim inrEquality {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The handedness of the union membership is @emph{decidable}.  The
  * elimination rule performs a case analysis in the assumption $x@colon A + B$;
@@ -277,7 +277,7 @@ prim unionElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'u 'v :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * The @tt{decide} term equality is true if there is @emph{some} type
  * $A + B$ for which all the subterms are equal.
@@ -294,7 +294,7 @@ prim decideEquality {| intro []; eqcd |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The union type $A_1 + A_2$ is a subtype of type $A_2 + B_2$ if
  * $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.

@@ -3,7 +3,7 @@
  * disect
  * @end[spelling]
  * @begin[doc]
- * @theory[Itt_disect]
+ * @module[Itt_disect]
  *
  * The @tt{Itt_disect} module defines the @emph{dependent intersection}
  * type $@bisect{x@colon A; B[x]}$.
@@ -15,7 +15,7 @@
  * such that $x>2*x$.
  *
  * Do not confuse dependent intersection with $@isect{x;A;B[x]}$ defined
- * in the @hreftheory[Itt_isect] theory.
+ * in the @hrefmodule[Itt_isect] theory.
  * The latter type refers to the intersection of a family of types.
  *
  * In some sence the dependent intersection is similar to
@@ -156,7 +156,7 @@ prim dintersectionFormation 'H 'x 'A :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The intersection $@bisect{x@colon A; B[x]}$ is well-formed if
  * $A$ is a type, and $B[x]$ is a family of types indexed by
@@ -185,7 +185,7 @@ prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'J 'a 'v:
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  * Two elements $t1$ and $t2$ are equal in $@bisect{x@colon A; B[x]}$ if
  * they are equal both in $A$ and in $B[t1]$.
  * That is $t @in @bisect{x@colon A; B[x]}$ if $t @in A$ and $t @in B[t]$.
@@ -202,7 +202,7 @@ prim dintersectionMemberEquality {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  * There is no special rule for introduction.
  * The only one way to introduce dependent intersection is to present
  * its witness @emph{explicitly} and use the above rule.
@@ -217,7 +217,7 @@ interactive dintersectionMemberFormation {| intro [] |} 'H 't:
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  * The elimination rule for an assumption $x@colon @bisect{y@colon A;B[y]}$
  * produces two witnesses that $x @in A$ and that $x @in B[x]$
  * @end[doc]
@@ -323,7 +323,7 @@ let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The dependent intersection $@bisect{x@colon A; B[x]}$ is covariant
  * in both $A$ and $B[x]$.
@@ -353,10 +353,10 @@ interactive dinter_associativity 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Set type as dependent intersection}
+ * @modsubsection{Set type as dependent intersection}
  *
  * As an example of using dependent intersection we show that
- * sets (@hreftheory[Itt_set]) are extensionally equal to dependent intersections.
+ * sets (@hrefmodule[Itt_set]) are extensionally equal to dependent intersections.
  *
  * First let us define $[A]$ as $@set{x;Top;A}$.
  * @end[doc]

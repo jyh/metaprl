@@ -2,12 +2,12 @@
  * @spelling{unitElimination}
  *
  * @begin[doc]
- * @theory[Itt_unit]
+ * @module[Itt_unit]
  *
  * The @tt{Itt_unit} module defines a term containing exactly
  * one element, $@it$.  The element is the same term that inhabits
- * the equality (Section @reftheory[Itt_equal]) and subtype
- * (Section @reftheory[Itt_subtype]) judgments.
+ * the equality (Section @refmodule[Itt_equal]) and subtype
+ * (Section @refmodule[Itt_subtype]) judgments.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -107,7 +107,7 @@ dform unit_df1 : except_mode[src] :: unit = `"Unit"
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The $@unit$ type is a member of every universe, and it
  * is also a type.
@@ -133,7 +133,7 @@ prim unitType {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  * The unique inhabitant of the $@unit$ type is the term $@it$.
  * @end[doc]
  *)
@@ -143,7 +143,7 @@ prim unit_memberEquality {| intro []; eqcd; squash |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The $@unit$ type is always provable.  The proof is the unique term
  * $@it$.
@@ -154,7 +154,7 @@ interactive unit_memberFormation {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  * The elimination rule @tt{unitElimination} performs a case analysis
  * on $x@colon @unit$.  The witness is replaced with the term $@it$.
  * @end[doc]
@@ -166,7 +166,7 @@ prim unitElimination {| elim [ThinOption thinT] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Rewriting}
+ * @modsubsection{Rewriting}
  * Two terms in $@unit$ are always computationally equivalent.
  * @end[doc]
  *)

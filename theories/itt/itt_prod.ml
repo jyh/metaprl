@@ -2,10 +2,10 @@
  * @spelling{dprod}
  *
  * @begin[doc]
- * @theory[Itt_prod]
+ * @module[Itt_prod]
  *
  * The product type $@prod{A; B}$ is @emph{derived} from the
- * dependent production module @hreftheory[Itt_dprod].  The
+ * dependent production module @hrefmodule[Itt_dprod].  The
  * non-dependent product $@prod{A; B}$ is equivalent to
  * $@prod{x; A; B}$, where $x$ is not free in $B$.
  * @end[doc]
@@ -91,7 +91,7 @@ prim_rw unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The product space $@prod{A; B}$ is well-formed if
  * both $A$ and $B$ are types.
@@ -123,7 +123,7 @@ interactive independentProductFormation 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form splits the hypothesis $x@colon @prod{A; B}$ into
  * its parts $u@colon A$ and $v@colon B$.
@@ -135,7 +135,7 @@ interactive independentProductElimination {| elim [ThinOption thinT] |} 'H 'J 'u
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The members of the non-dependent product $@prod{A; B}$
  * are the pairs $@pair{a; b}$, where $a @in A$ and $b @in B$.
@@ -148,7 +148,7 @@ interactive independentPairEquality {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The propositional interpretation of the
  * non-dependent product space $@prod{A; B}$ is the
@@ -163,7 +163,7 @@ interactive independentPairFormation {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The product space is covariant in both parts.
  * @end[doc]

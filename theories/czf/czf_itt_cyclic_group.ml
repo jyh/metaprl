@@ -2,7 +2,7 @@
  * @spelling{cycgroup}
  *
  * @begin[doc]
- * @theory[Czf_itt_cyclic_group]
+ * @module[Czf_itt_cyclic_group]
  *
  * The @tt{Czf_itt_cyclic_group} module defines cyclic groups.
  * A group $g$ is @emph{cyclic} if there exists $a @in @car{g}$
@@ -114,7 +114,7 @@ dform cyclic_group_df : except_mode[src] :: cycgroup{'g; 'a} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood}
+ * @modsubsection{Typehood}
  *
  * The $@cycgroup{g; a}$ is well-formed if $g$ is a label
  * and $a$ is a set.
@@ -127,7 +127,7 @@ interactive cycgroup_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@cycgroup{g; a}$ is true if it is well-formed,
  * $@mem{a; @car{g}}$, and
@@ -144,7 +144,7 @@ interactive cycgroup_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Theorems}
+ * @modsubsection{Theorems}
  *
  * Every cyclic group is abelian.
  * @end[doc]

@@ -3,12 +3,12 @@
  * assum isset
  * @end[spelling]
  * @begin[doc]
- * @theory[Czf_itt_set]
+ * @module[Czf_itt_set]
  *
  * The @tt{Czf_itt_set} module provides the basic definition
  * of sets and their elements.  The @tt{set} term denotes
  * the type of all sets, defined using the $W$-type in
- * the module @hreftheory[Itt_w], as follows:
+ * the module @hrefmodule[Itt_w], as follows:
  *
  * $$@set @equiv @w{T; @univ{1}; T}.$$
  *
@@ -49,7 +49,7 @@
  *
  * One solution to this problem would be to use a quotient
  * construction using the quotient type defined in the
- * @hreftheory[Itt_quotient] module.  The @hreftheory[Czf_itt_eq]
+ * @hrefmodule[Itt_quotient] module.  The @hrefmodule[Czf_itt_eq]
  * module defines extensional set equality $@equiv_{@i{ext}}$, and
  * we could potentially define the ``real'' sets with the following
  * type definition.
@@ -64,7 +64,7 @@
  *
  * Alternative quotient formulations may be possible, but we have not
  * pursued this direction extensively.  Instead, we introduce set
- * equality in the @hreftheory[Czf_itt_eq] module, together with
+ * equality in the @hrefmodule[Czf_itt_eq] module, together with
  * explicit functionality predicates for set operators.  In addition,
  * we prove the functionality properties for all the primitive
  * set operations.
@@ -242,7 +242,7 @@ dform set_ind_df : parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The @hrefterm[set] term is a type in the @Nuprl type theory.
  * The @tt{equal_set} and @tt{isset_assum} rules define the
@@ -294,7 +294,7 @@ interactive isset_apply {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form performs induction on the
  * assumption $a@colon @set$.  The inductive argument is this:
@@ -342,7 +342,7 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  * The induction combinator computes a value of type $T$ if its
  * argument $z$ is a set, and the body $b[z, f, g]$ computes a value
  * of type $T$, for any type $z @in @univ{1}$, any function

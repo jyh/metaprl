@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Mp_mc_fir_exp]
+ * @module[Mp_mc_fir_exp]
  *
  * The @tt[Mp_mc_fir_exp] module defines terms to represent
  * FIR function definitions and program structures.

@@ -1,8 +1,8 @@
 (*
  * @begin[doc]
- * @theory[Nuprl_font]
+ * @module[Nuprl_font]
  *
- * The @hreftheory[Nuprl_font] module defines display forms for the
+ * The @hrefmodule[Nuprl_font] module defines display forms for the
  * special characters used by the @MetaPRL editor.
  *
  * @docoff

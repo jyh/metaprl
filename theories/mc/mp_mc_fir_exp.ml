@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Mp_mc_fir_exp]
+ * @module[Mp_mc_fir_exp]
  *
  * The @tt[Mp_mc_fir_exp] module defines terms to represent
  * FIR expressions.
@@ -56,7 +56,7 @@ open Mp_mc_base
 (*!
  * @begin[doc]
  * @terms
- * @thysubsection{Unary operations}
+ * @modsubsection{Unary operations}
  *
  * These are the unary operations in the FIR.  They are used in
  * @hrefterm[letUnop] as the @tt[unop] subterm.  Each of these
@@ -182,7 +182,7 @@ declare pointerOfBlockOp{ 'sub_block }
 
 (*!
  * @begin[doc]
- * @thysubsection{Binary operations}
+ * @modsubsection{Binary operations}
  *
  * These are the binary operations in the FIR.  They are used in
  * @hrefterm[letBinop] as the @tt[binop] subterm.  Each of these
@@ -307,7 +307,7 @@ declare plusPointerOp{ 'sub_block; 'int_precision; 'int_signed }
 
 (*!
  * @begin[doc]
- * @thysubsection{Fields (frame labels)}
+ * @modsubsection{Fields (frame labels)}
  *
  * (Documentation incomplete.)
  * @end[doc]
@@ -317,7 +317,7 @@ declare frameLabel{ 'label1; 'label2; 'label3 }
 
 (*!
  * @begin[doc]
- * @thysubsection{Normal values}
+ * @modsubsection{Normal values}
  *
  * Atoms represent values in the FIR. (Documentation incomplete.)
  * @end[doc]
@@ -335,7 +335,7 @@ declare atomVar{ 'var }
 
 (*!
  * @begin[doc]
- * @thysubsection{Allocation operators}
+ * @modsubsection{Allocation operators}
  *
  * (Documentation incomplete.)
  * @end[doc]
@@ -350,7 +350,7 @@ declare allocFrame{ 'var }
 
 (*!
  * @begin[doc]
- * @thysubsection{Tail calls / operations}
+ * @modsubsection{Tail calls / operations}
  *
  * These operators are used in the @hrefterm[specialCall] expression.
  * They specify the actions that need to occur before control
@@ -366,7 +366,7 @@ declare tailAtomicCommit{ 'atom; 'var; 'atom_list }
 
 (*!
  * @begin[doc]
- * @thysubsection{Predicates and assertions}
+ * @modsubsection{Predicates and assertions}
  *
  * These terms encode the safety checks that an FIR program must
  * perform in order to ensure that programs execute safely.
@@ -381,7 +381,7 @@ declare elementCheck{ 'ty; 'subop; 'var; 'atom }
 
 (*!
  * @begin[doc]
- * @thysubsection{Debugging info}
+ * @modsubsection{Debugging info}
  *
  * These terms are used to encode debugging information.
  * (Documentation incomplete.)
@@ -396,7 +396,7 @@ declare debugContext{ 'debug_line; 'debug_vars }
 
 (*!
  * @begin[doc]
- * @thysubsection{Expressions}
+ * @modsubsection{Expressions}
  *
  * (Documentation incomplete.)
  * @end[doc]

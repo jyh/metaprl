@@ -6,7 +6,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Itt_struct]
+ * @module[Itt_struct]
  *
  * The @tt{Itt_struct} module defines @emph{structural} rules.
  * Structural rules are logical operations like thinning and substitution
@@ -90,7 +90,7 @@ let _ =
  * @begin[doc]
  * @rules
  *
- * @thysubsection{Thinning (of hypotheses)}
+ * @modsubsection{Thinning (of hypotheses)}
  *
  * The @tt{thin} rule states that if the conclusion $C$ can be proved
  * from hypotheses defined in $H$ and $J$, then it can also be proved with
@@ -118,7 +118,7 @@ prim exchange 'H 'K 'L 'J:
 
 (*!
  * @begin[doc]
- * @thysubsection{Cut (lemma instantiation)}
+ * @modsubsection{Cut (lemma instantiation)}
  *
  * The @tt{cut} rule is an alternate form of @emph{modus-ponens}.
  * If the lemma $S$ can be proved from the current assumptions $H$
@@ -147,7 +147,7 @@ interactive dup 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Explicit proof introduction}
+ * @modsubsection{Explicit proof introduction}
  *
  * The @tt{introduction} rule performs proof by explicit introduction
  * of a proof term.  If the program $t$ has type $T$, then $T$ is
@@ -161,7 +161,7 @@ prim introduction 'H 't :
 
 (*!
  * @begin[doc]
- * @thysubsection{Axiom}
+ * @modsubsection{Axiom}
  *
  * The @tt{hypothesis} rule defines proof by assumption: if $A$ is
  * assumed, then it is true.  The proof extract term is the program
@@ -181,7 +181,7 @@ interactive hypothesisType 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  *
  * There are three rules to define substitution.
  * The @tt{substitution} rule defines substitution of an arbitrary
@@ -231,7 +231,7 @@ prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{Equality in a type}
+ * @modsubsection{Equality in a type}
  *
  * Equality in any term $T$ means that $T$ is a type.
  * @end[doc]
@@ -248,7 +248,7 @@ interactive equalityTypeIsType 'H 'a 'b :
  * @begin[doc]
  * @tactics
  *
- * @thysubsection{Axiom}
+ * @modsubsection{Axiom}
  * The @tactic[nthHypT] tactic uses the @hrefrule[hypothesis] rule
  * to perform proof by assumption.
  *
@@ -267,7 +267,7 @@ let nthHypT i p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Thinning}
+ * @modsubsection{Thinning}
  * The @tactic[thinT] tactic uses the @hrefrule[thin] rule to
  * @emph{thin} a hypothesis in the current goal.
  *
@@ -309,7 +309,7 @@ let thinAllT i j p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Lemma assertion}
+ * @modsubsection{Lemma assertion}
  *
  * The @tactic[assertT] tactic uses the @hrefrule[cut] rule to
  * introduce a lemma.
@@ -364,7 +364,7 @@ let dupT p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Explicit witness introduction}
+ * @modsubsection{Explicit witness introduction}
  *
  * The @tactic[useWitnessT] tactic uses the @hrefrule[introduction] rule
  * to perform explicit proof witness introduction.
@@ -383,7 +383,7 @@ let useWitnessT t p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Substitution}
+ * @modsubsection{Substitution}
  *
  * The three substitution rules are unified into a single
  * tactic @tactic[substT], which takes a clause number $i$, and

@@ -2,7 +2,7 @@
  * @spelling{reduceEta}
  *
  * @begin[doc]
- * @theory[Itt_eta]
+ * @module[Itt_eta]
  * @parents
  * @end[doc]
  *)

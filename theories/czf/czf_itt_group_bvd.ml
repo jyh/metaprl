@@ -2,7 +2,7 @@
  * @spelling{group_bvd}
  *
  * @begin[doc]
- * @theory[Czf_itt_group_bvd]
+ * @module[Czf_itt_group_bvd]
  *
  * The @tt{Czf_itt_group_bvd} module defines the @emph{group builder}
  * which builds a new group $g_1$ from an existing group $g_2$ which
@@ -114,7 +114,7 @@ dform group_bvd_df : parens :: except_mode[src] :: group_bvd{'h; 'g; 's} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The group builder $@groupbvd{h; g; s}$ is well-formed
  * if $h$ and $g$ are labels and $s$ is a set.
@@ -128,7 +128,7 @@ interactive group_bvd_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@groupbvd{h; g; s}$ is true if it is
  * well-formed; if $h$ and $g$ are both groups; if
@@ -149,7 +149,7 @@ interactive group_bvd_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Properties}
+ * @modsubsection{Properties}
  *
  * If $h$ is built from $g$, then $@eq{@id{h}; @id{g}}$ and
  * for all $a @in @car{h}$, $@eq{@inv{h; a}; @inv{g; a}}$.

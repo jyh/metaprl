@@ -2,7 +2,7 @@
  * @spelling{inv_image}
  *
  * @begin[doc]
- * @theory[Czf_itt_inv_image]
+ * @module[Czf_itt_inv_image]
  *
  * The @tt{Czf_itt_inv_image} module defines the @emph{inverse image}
  * of a set under some mapping. The inverse image is defined as a set
@@ -111,7 +111,7 @@ dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The inverse image $@invimage{x; s; a[x]; t}$ is well-formed
  * if $s$ and $t$ are sets, and $a[x]$ is functional.
@@ -125,7 +125,7 @@ interactive inv_image_isset {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * A set $y$ is a member of $@invimage{x; s; a[x]; t}$ if
  * the inverse image is well-formed; if $@mem{y; s}$;
@@ -143,7 +143,7 @@ interactive inv_image_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * An assumption $@mem{y; @invimage{x; s; a[x]; t}}$ implies two facts:
  * $@mem{y; s}$ and $@mem{a[y]; t}$.

@@ -2,7 +2,7 @@
  * @spelling{rewriter rw}
  *
  * @begin[doc]
- * @theory[Base_rewrite]
+ * @module[Base_rewrite]
  *
  * The rewrite judgment $t_1 @longleftrightarrow t_2$ is used in rewrite
  * derivations.  Derived rewrites are declared with the @bf{interactive_rw}
@@ -15,7 +15,7 @@
  * The judgment is not conditional, and it is not stated in a sequent
  * calculus.
  *
- * The @hreftheory[Base_rewrite] module lifts the rewrite judgment to the sequent
+ * The @hrefmodule[Base_rewrite] module lifts the rewrite judgment to the sequent
  * level.  It also defines rules for reflexivity and symmetry.
  * @end[doc]
  *

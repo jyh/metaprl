@@ -2,7 +2,7 @@
  * @spelling{subgroup}
  *
  * @begin[doc]
- * @theory[Czf_itt_subgroup]
+ * @module[Czf_itt_subgroup]
  *
  * The @tt{Czf_itt_subgroup} module defines subgroups.
  * A subgroup of a group $g$ is a group whose carrier
@@ -109,7 +109,7 @@ dform subgroup_df : except_mode[src] :: subgroup{'s; 'g} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood}
+ * @modsubsection{Typehood}
  *
  * The $@subgroup{s; g}$ is well-formed if its arguments are labels.
  * @end[doc]
@@ -121,7 +121,7 @@ interactive subgroup_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@subgroup{s; g}$ is true if it is well-formed,
  * $s$ and $g$ are groups, $@car{s}$ is a subset of $@car{g}$, and
@@ -139,7 +139,7 @@ interactive subgroup_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Properties}
+ * @modsubsection{Properties}
  *
  * If $s$ is a subgroup of $g$, then
  * @begin[enumerate]
@@ -189,7 +189,7 @@ interactive subgroup_inv2 {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Theorems}
+ * @modsubsection{Theorems}
  *
  * The intersection group of subgroups $h_1$ and $h_2$ of
  * a group $g$ is again a subgroup of $g$.

@@ -1,6 +1,6 @@
 (*
  * @begin[doc]
- * @theory[Comment]
+ * @module[Comment]
  *
  * Structured comments are comments with ! as the first character.
  * Currently, structured comments can be used only at the top level of
@@ -70,25 +70,26 @@ declare tex_comment{'t}
 (*
  * @begin[doc]
  * @terms
- * The @theory[name:s] term produces a section header for the current module.
+ * The @theory{'t} term produces a chapter header for a collection of modules
+ * and the @module[name:s] term produces a section header for the current module.
  * @end[doc]
  *)
-declare "theory"[name:s]
-declare "theory"[name:s]{'t}
+declare "theory"{'t}
+declare "module"[name:s]
 
 (*
  * @begin[doc]
- * The @thysection{'t} term prduces a subsection header.
+ * The @modsection{'t} term prduces a subsection header.
  * @end[doc]
  *)
-declare thysection{'t}
+declare modsection{'t}
 
 (*
  * @begin[doc]
- * The @thysubsection{'t} term prduces a subsection header.
+ * The @modsubsection{'t} term prduces a subsection header.
  * @end[doc]
  *)
-declare thysubsection{'t}
+declare modsubsection{'t}
 
 (*
  * Other forms of sectioning commands.
@@ -114,7 +115,7 @@ declare "rewrite"[name:s]
 (*
  * Hypertext links.
  *)
-declare hreftheory[name:s]
+declare hrefmodule[name:s]
 declare hrefterm[name:s]
 declare hrefresource[name:s]
 declare hrefrewrite[name:s]
@@ -122,7 +123,7 @@ declare hreftactic[name:s]
 declare hrefconv[name:s]
 declare hrefrule[name:s]
 
-declare reftheory[name:s]
+declare refmodule[name:s]
 declare refterm[name:s]
 declare refresource[name:s]
 declare refrewrite[name:s]

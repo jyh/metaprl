@@ -7,7 +7,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @theory[Itt_squash]
+ * @module[Itt_squash]
  *
  * The @tt{Itt_squash} module defines a @emph{squash} type.
  * $<<squash{'A}>>$ hides computational content of $A$.
@@ -22,7 +22,7 @@
  * Note that $x$ in this sequent stands not for a witness for $A$,
  * but just for $@it$.
  *
- * Squash types are needed to define set in @hreftheory[Itt_set]. Also,
+ * Squash types are needed to define set in @hrefmodule[Itt_set]. Also,
  * it can be argued (see @cite[KN01]) that it is consistent to use
  * @emph{classical} reasoning under @tt{squash} without losing
  * constructive content.
@@ -36,7 +36,7 @@
  * of the proof.
  *
  * The other form is $@sequent{squash; H; T}$, where @hrefterm[squash] is a
- * term defined in the @hreftheory[Base_trivial]{} module.
+ * term defined in the @hrefmodule[Base_trivial]{} module.
  * The @tt{squash} term specifies that the extract of the proof of this
  * subgoal is @em{not} needed for the computational content of the whole proof.
  *
@@ -173,7 +173,7 @@ dform squash_df : except_mode[src] :: squash{'A} = math_squash{'A}
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Equality and typehood}
+ * @modsubsection{Equality and typehood}
  *
  * $<<squash{'A}>>$ is a type if $A$ is a type.
  * @end[doc]
@@ -189,7 +189,7 @@ prim squashType {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * A squashed type $<<squash{'A}>>$ is true if $A$ is true.
  * This rule is irreversible, so we use @tt{AutoMustComplete} to prevent @tt{autoT}
@@ -203,7 +203,7 @@ prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The first rule, @tt{unsquashEqual}, allows equalities to
  * be unsquashed (because the proof can always be inferred).
@@ -243,7 +243,7 @@ let resource typeinf += (squash_term,  Typeinf.infer_map dest_squash)
 
 (*!
  * @begin[doc]
- * @thysection{Derived Rules}
+ * @modsection{Derived Rules}
  *
  * First, we can prove a stronger version of @tt{unsquashEqualWeak} by
  * combining it with @tt{squashElim}.

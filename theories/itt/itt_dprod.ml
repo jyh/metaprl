@@ -2,7 +2,7 @@
  * @spelling{dprod fst snd productElimination weakProductElimination}
  *
  * @begin[doc]
- * @theory[Itt_dprod]
+ * @module[Itt_dprod]
  *
  * The @emph{dependent product} $@prod{x; A; B}$ is a space of @emph{pairs},
  * where $A$ is a type, and $B[x]$ is a family of types indexed by $x @in A$.
@@ -22,9 +22,9 @@
  * Because of this intensional equality, the @tt{Itt_dprod} module is
  * primitive.  An alternative formulation would be to @emph{derive}
  * the product space from the very-dependent function @hrefterm[rfun]
- * (in the @hreftheory[Itt_rfun] module), the @hrefterm[union] (in the
- * @hreftheory[Itt_union] module), and the @hrefterm[unit] type (in the
- * and @hreftheory[Itt_union]) module).  The construction is as follows.
+ * (in the @hrefmodule[Itt_rfun] module), the @hrefterm[union] (in the
+ * @hrefmodule[Itt_union] module), and the @hrefterm[unit] type (in the
+ * and @hrefmodule[Itt_union]) module).  The construction is as follows.
  *
  * First, the Boolean values are defined with the @tt{union} and @tt{unit}
  * types.
@@ -290,7 +290,7 @@ prim productFormation 'H 'A 'x :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The type equality is intensional.  A product type
  * $<< x: 'A * 'B['x] >>$ is a type if $A$ is a type, and
@@ -314,7 +314,7 @@ prim productType {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The propositional interpretation of the product space
  * is the bounded existential $@exists{x; A; B[x]}$.  The
@@ -331,7 +331,7 @@ prim pairFormation {| intro [] |} 'H 'a 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The elements of the product space are the pairs.  For
  * the equality judgment to be valid, the $@prod{x; A; B[x]}$
@@ -350,7 +350,7 @@ prim pairEquality {| intro []; eqcd |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination rule performs a case analysis on the
  * hypothesis $x@colon @prod{x; A; B[x]}$.  The @emph{only}
@@ -390,7 +390,7 @@ let d_spread_equalT tac p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * The @hrefterm[spread] combinator is well-formed if all
  * its parts are well-formed.
@@ -411,7 +411,7 @@ let resource intro +=
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The subtype judgment is @emph{covariant} in the
  * first type $A$, and pointwise-covariant in the second

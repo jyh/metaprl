@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Mp_mc_deadcode]
+ * @module[Mp_mc_deadcode]
  *
  * The @tt{Mp_mc_inline} module defines rewrites for
  * inlining of tailCall's in FIR programs.

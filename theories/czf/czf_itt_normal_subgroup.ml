@@ -2,7 +2,7 @@
  * @spelling{abelNormalSubgT}
  *
  * @begin[doc]
- * @theory[Czf_itt_normal_subgroup]
+ * @module[Czf_itt_normal_subgroup]
  *
  * The @tt{Czf_itt_normal_subgroup} module defines normal subgroups.
  * A subgroup $h$ of a group $g$ is @emph{normal} if its left and
@@ -107,7 +107,7 @@ dform normal_subg_df : except_mode[src] :: normal_subg{'s; 'g} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood}
+ * @modsubsection{Typehood}
  *
  * The @tt[normal_subg] judgment is well-formed if its
  * arguments are labels.
@@ -120,7 +120,7 @@ interactive normalSubg_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The proposition $@normalsubg{s; g}$ is true if it is well-formed,
  * $s$ is a subgroup of $g$, and for any $a$ in $@car{g}$,
@@ -136,7 +136,7 @@ interactive normalSubg_intro {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Theorems}
+ * @modsubsection{Theorems}
  *
  * All subgroups of abelian groups are normal.
  * @end[doc]

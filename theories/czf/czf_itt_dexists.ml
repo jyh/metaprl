@@ -2,7 +2,7 @@
  * @spelling{dexists}
  *
  * @begin[doc]
- * @theory[Czf_itt_dexists]
+ * @module[Czf_itt_dexists]
  *
  * The @tt{Czf_itt_dexists} theory defines @emph{restricted}
  * existential quantification.  The syntax of the operator
@@ -115,7 +115,7 @@ dform dexists_df : parens :: "prec"[prec_lambda] :: "dexists"{'s; x. 'A} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The proposition $@dexists{x; s; P[x]}$ is well-formed
  * if $s$ is a set, and $P[x]$ is a well-formed proposition
@@ -129,7 +129,7 @@ interactive dexists_type {| intro [] |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The existential $@dexists{x; s; P[x]}$ is true if
  * it is well-formed and if $P[a]$ is true for some
@@ -145,7 +145,7 @@ interactive dexists_intro {| intro [] |} 'H 'z 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The proof of the existential $@dexists{x; s; P[x]}$ has two parts:
  * an element $@mem{a; s}$, and a proof $P[a]$.  The elimination form
@@ -168,7 +168,7 @@ interactive dexists_elim {| elim [] |} 'H 'J 'x 'z 'v 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The existential is functional in both its set and proposition
  * arguments.
@@ -183,7 +183,7 @@ interactive dexists_fun {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Restriction}
+ * @modsubsection{Restriction}
  *
  * The existential is a restricted formula because it is
  * a quantification over the @emph{index} type of the set

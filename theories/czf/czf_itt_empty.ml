@@ -1,6 +1,6 @@
 (*!
  * @begin[doc]
- * @theory[Czf_itt_empty]
+ * @module[Czf_itt_empty]
  *
  * The @tt{Czf_itt_empty} module defines an empty set
  * as the set $@collect{x; @void; x}$.  Since the $@void$

@@ -2,12 +2,12 @@
  * @spelling{independentFunctionElimination}
  *
  * @begin[doc]
- * @theory[Itt_fun]
+ * @module[Itt_fun]
  *
  * The @tt{Itt_fun} module defines the non-dependent function type.
  * The function type is @emph{derived} from the dependent-function
- * type @hreftheory[Itt_dfun], which is in turn derived from the
- * very-dependent function @hreftheory[Itt_rfun].
+ * type @hrefmodule[Itt_dfun], which is in turn derived from the
+ * very-dependent function @hrefmodule[Itt_rfun].
  *
  * The non-dependent function $@fun{A; B}$ is the type of functions
  * with domain $A$, and range $B$.  It is equivalent to the
@@ -105,7 +105,7 @@ prim_rw unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The non-dependent function has an intensional type equality.
  * @end[doc]
@@ -125,7 +125,7 @@ interactive independentFunctionType {| intro [] |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The propositional interpretation of the function space $@fun{A; B}$
  * is the implication term @hrefterm[implies], $@implies{A; B}$.
@@ -140,7 +140,7 @@ interactive independentLambdaFormation {| intro [] |} 'H 'z :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The elements in the function space $@fun{A; B}$ are the
  * @hrefterm[lambda] functions.  The space $@fun{A; B}$ must be a
@@ -155,7 +155,7 @@ interactive independentLambdaEquality {| intro []; eqcd |} 'H 'x :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * There are two elimination forms.  The @tt{independentFunctionElimination}
  * rule is more appropriate for the propositional interpretation of the function
@@ -179,7 +179,7 @@ interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
 
 (*!
  * @begin[doc]
- * @thysubsection{Combinator equality}
+ * @modsubsection{Combinator equality}
  *
  * Applications have an intensional equality; they are equal if their
  * functions and arguments are equal.
@@ -192,7 +192,7 @@ interactive independentApplyEquality {| intro[]; eqcd |} 'H ('A -> 'B) :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subtyping}
+ * @modsubsection{Subtyping}
  *
  * The function space is @emph{contravariant} in their domains,
  * and @emph{covariant} in their ranges.

@@ -2,7 +2,7 @@
  * @spelling{iso}
  *
  * @begin[doc]
- * @theory[Czf_itt_iso]
+ * @module[Czf_itt_iso]
  *
  * The @tt{Czf_itt_iso} module defines the isomorphism.
  * @end[doc]
@@ -105,7 +105,7 @@ dform iso_df : parens :: except_mode[src] :: iso{'g1; 'g2; x. 'f} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The proposition $@iso{x; g1; g2; f[x]}$ is well-formed
  * if $g1$ and $g2$ are labels, and $f[x]$ is a set for any
@@ -120,7 +120,7 @@ interactive iso_type {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The @tt{iso} judgment is functional in the function
  * argument.

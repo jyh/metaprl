@@ -2,7 +2,7 @@
  * @spelling{rel}
  *
  * @begin[doc]
- * @theory[Czf_itt_axioms]
+ * @module[Czf_itt_axioms]
  *
  * The @tt[Czf_itt_axioms] defines the remaining axioms of
  * the set theory as axioms.  This includes the set induction
@@ -76,7 +76,7 @@ let _ =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Set induction}
+ * @modsubsection{Set induction}
  *
  * The set induction rule formalizes the induction scheme.  A goal
  * $P[z]$ can be proven for a set $z$ if it can be proven for
@@ -110,7 +110,7 @@ let setInduction i p =
 
 (*!
  * @begin[doc]
- * @thysubsection{Strong Collection}
+ * @modsubsection{Strong Collection}
  *
  * The strong collection axiom states that for every proof
  * of a @misspelled{forall}/exists formula $@dall{x; s_1; @sexists{s_2; P[x; y]}}$,
@@ -133,9 +133,9 @@ interactive collection 'H 's1 (bind{x. bind{y. 'P['x; 'y]}}) 's2 'x 'y 'w :
 
 (*!
  * @begin[doc]
- * @thysubsection{Subset collection}
+ * @modsubsection{Subset collection}
  *
- * The @hreftheory[Czf_itt_power] module defines the subset collection
+ * The @hrefmodule[Czf_itt_power] module defines the subset collection
  * set constructor $@power{s_1; s_2}$.  For completeness, we reprove the
  * axiom form of the subset collection.
  * @end[doc]

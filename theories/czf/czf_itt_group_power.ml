@@ -2,7 +2,7 @@
  * @spelling{power}
  *
  * @begin[doc]
- * @theory[Czf_itt_group_power]
+ * @module[Czf_itt_group_power]
  *
  * The @tt{Czf_itt_group_power} module defines the power operation
  * in a group, i.e., it describes $x^n = x * x * ... * x$.
@@ -118,7 +118,7 @@ dform power_df : parens :: except_mode[src] :: power{'g; 'z; 'n} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Well-formedness}
+ * @modsubsection{Well-formedness}
  *
  * The $@power{g; z; n}$ is well-formed if $g$ is a label,
  * $z$ is a set, and $n$ is an integer in ITT.
@@ -132,7 +132,7 @@ interactive power_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * If $z$ is a member of $@car{g}$, then $@power{g; z; n}$
  * is also in $@car{g}$ for any integer $n$.
@@ -148,7 +148,7 @@ interactive power_mem {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Functionality}
+ * @modsubsection{Functionality}
  *
  * The @tt{power} is functional in its set argument.
  * @end[doc]
@@ -182,7 +182,7 @@ interactive power_more {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Power reduction}
+ * @modsubsection{Power reduction}
  *
  * $x^m * x^n = x^{m + n}$
  * @end[doc]

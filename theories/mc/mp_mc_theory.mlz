@@ -2,7 +2,8 @@
  * @spelling{MC MCC Mojave}
  *
  * @begin[doc]
- * @theory[Mp_mc_theory]
+ * @theory{Mojave Compiler Theory}
+ * @module[Mp_mc_theory]
  *
  * The MC theory (all it's modules have the ``@tt[Mp_mc_]'' prefix) attempts
  * to formalize the Mojave Compiler Collection's (MCC) functional intermediate

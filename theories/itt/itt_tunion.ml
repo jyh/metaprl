@@ -2,7 +2,7 @@
  * @spelling{tunion}
  *
  * @begin[doc]
- * @theory[Itt_tunion]
+ * @module[Itt_tunion]
  *
  * The @tt{Itt_tunion} module defines a (joint) union type
  * $@tunion{x; A; B[x]}$.  The elements of the union are the
@@ -117,7 +117,7 @@ prim tunionFormation 'H 'x 'A :
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood and equality}
+ * @modsubsection{Typehood and equality}
  *
  * The union type $@tunion{x; A; B[x]}$ is well-formed if $A$ is
  * a type, and $B[a]$ is a type for any $a @in A$.
@@ -137,7 +137,7 @@ prim tunionType {| intro [] |} 'H 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @modsubsection{Membership}
  *
  * The elements $t$ of the union type are the elements in
  * any one of the branches $t @in B[a]$ for any $a @in A$.
@@ -154,7 +154,7 @@ prim tunionMemberEquality {| intro []; eqcd |} 'H 'a 'y :
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction}
+ * @modsubsection{Introduction}
  *
  * The propositional interpretation of the union type
  * is similar to the existential $@exists{x; A; B[x]}$.
@@ -171,7 +171,7 @@ prim tunionMemberFormation {| intro [] |} 'H 'y 'a :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
+ * @modsubsection{Elimination}
  *
  * The elimination form is weak.  The desired rule would be that if,
  * If $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some

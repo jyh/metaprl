@@ -65,8 +65,6 @@ prim_rw cons_reduce :
 	('f2 'a 'l)
 *)
 
-(* will uncomment this section when the elim-part will be added
-
 interactive list_nodep_elim_wf {| intro [] |} :
 	sequent { <H> >- 'A in Set } -->
 	sequent { <H> >- 'l in (List 'A) } -->
@@ -74,7 +72,6 @@ interactive list_nodep_elim_wf {| intro [] |} :
 	sequent { <H> >- 'base in ('Q 'A) } -->
 	sequent { <H>; a: 'A; l: (List 'A) >- 'step in ('Q 'A 'a 'l) } -->
 	sequent { <H> >- Elim{'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| x:'base; y:'step >- it|}} in ('Q 'A) }
-*)
 
 interactive prodH_test1 :
 	sequent { <H> >- prodH{|x: 'A >- 'x |} }

@@ -6,8 +6,9 @@ OCAMLINCLUDES[] +=
 MPFILES =\
    cic_lambda\
    cic_ind_type\
-   cic_ind_cases\
+   cic_ind_elim\
    cic_list
+#   cic_ind_cases\
 
 #TEST_FILES =
 #   itt_bugs\

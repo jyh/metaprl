@@ -161,7 +161,15 @@ declare check_cases{ 'ty; 'cases }
  * @begin[doc]
  * @modsubsection{Pattern matching}
  *
- * ...
+ * Match statements allow pattern matching on numbers, where each pattern
+ * is a set of constant intervals.  Operationally, the first case for which
+ * the number is a member of the cases's set is selected for execution.
+ * One case must always match; that is, the list of cases for a match
+ * expression cannot be empty, and the must cover all possible values
+ * of the number (atom) being matched.
+ *
+ * The next two rules are used to check that the expression in each case
+ * has the appropriate type.
  * @end[doc]
  *)
 
@@ -177,6 +185,13 @@ prim ty_check_cases_ind {| intro [] |} 'H :
    sequent [mfir] { 'H >- check_cases{ 'ty; cons{ matchCase{ 'set; 'exp };
                                                   'tail } } }
    = it
+
+(*!
+ * @begin[doc]
+ *
+ * The next three rules are fairly straightforward.
+ * @end[doc]
+ *)
 
 prim ty_matchExp_tyInt {| intro [] |} 'H :
    (* The  atom being matched should be well-formed. *)
@@ -239,7 +254,10 @@ prim ty_matchExp_tyRawInt {| intro [] |} 'H :
 (*!
  * @begin[doc]
  *
- * ..
+ * The typing rules for matching a union values are the only difficult
+ * cases for match statements.  The expression in each case must
+ * have the given type, given the restricted type for the variable
+ * being matched.
  * @end[doc]
  *)
 
@@ -275,7 +293,34 @@ prim ty_matchExp_tyUnion_cases_ind 'H 'J :
  * @docoff
  *)
 
-(* XXX auto for the above rules shoudl go here. *)
+let d_ty_matchExp_tyUnion_start i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_matchExp_tyUnion_start j k p
+
+let d_ty_matchExp_tyUnion_cases_base i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_matchExp_tyUnion_cases_base j k p
+
+let d_ty_matchExp_tyUnion_cases_ind i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_matchExp_tyUnion_cases_ind j k p
+
+let resource auto += [{
+   auto_name = "d_ty_matchExp_tyUnion_start";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_matchExp_tyUnion_start;
+   auto_type = AutoNormal
+}; {
+   auto_name = "d_ty_matchExp_tyUnion_cases_base";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_matchExp_tyUnion_cases_base;
+   auto_type = AutoNormal
+}; {
+   auto_name = "d_ty_matchExp_tyUnion_cases_ind";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_matchExp_tyUnion_cases_ind;
+   auto_type = AutoNormal
+}]
 
 (*!
  * @begin[doc]

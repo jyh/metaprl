@@ -755,7 +755,7 @@ let num1 = num_of_int 1
 let term2term_number p t =
 	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
 	let s=mk_sequent_term es in
-	let s'=apply_rewrite p normalizeC s in
+	let s'=Top_conversionals.apply_rewrite p normalizeC s in
 	let t'=SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0 in
 	begin
 		if !debug_int_arith then

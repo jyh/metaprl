@@ -403,6 +403,8 @@ prim universeCumulativity univ[j:l] :
    sequent { <H> >- 'x = 'y in univ[i:l] } =
    it
 
+doc docoff
+
 let resource intro +=
    << univ[i:l] in univ[j:l] >>,
    ("universeMember", None, false, (universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)))

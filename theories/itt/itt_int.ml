@@ -49,6 +49,7 @@ open Mp_resource
 open Var
 open Sequent
 open Tacticals
+open Conversionals
 open Itt_equal
 
 (*
@@ -184,6 +185,15 @@ mlterm indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}} =
 
 primrw indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
    indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}}
+
+let reduce_info =
+   [<< "add"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceAdd;
+    << "sub"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceSub;
+    << "mul"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceMul;
+    << "div"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceDiv;
+    << "rem"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceRem]
+
+let reduce_resource = add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *

@@ -118,7 +118,8 @@ primrw reduceBeta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
 primrw reduceFix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 
 let reduce_info =
-   [<< (lambda{v. 'b['v]} 'a) >>, reduceBeta]
+   [<< (lambda{v. 'b['v]} 'a) >>, reduceBeta;
+    << fix{f. 'b['f]} >>, reduceFix]
 
 let reduce_resource = add_reduce_info reduce_resource reduce_info
 

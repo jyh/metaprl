@@ -1,6 +1,6 @@
 (*
  * Basic definition for the operational semantics of
- * ocaml.  We define states as maps form "addresses", which
+ * ocaml.  We define states as maps from "addresses", which
  * are just strings, to values.
  *
  * ----------------------------------------------------------------
@@ -13,29 +13,30 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
 
 include Ocaml
+include Base_theory
 
 (*
- * Extract for equivalences.
+ * Extract term for equivalences.
  *)
 declare it
 
@@ -57,6 +58,9 @@ declare functional{'t1; 't2}
  * Judgment:
  * Two expressions are equivalent if their evaluation from the same
  * state produces the same value and the same state.
+ *    S: the state
+ *    e1, e2: the expressions being compared
+ *    t: the type of the comparison
  *)
 declare equiv{'S; 'e1; 'e2; 't}
 declare member{'S; 'e; 't}
@@ -93,12 +97,12 @@ declare is_type{'t}
 declare name_equiv{'S; 'n1; 'n2}
 
 (*
- * Form:
- * "process" is a run of a program in a particular state
- * "value" is a process, but its evaluation does not modify the state
- * "state" projects the state component of a process
- * "expr" projects the program component
- * "expr_value" projects the program if it is a value
+ * Forms:
+ * process: a run of a program in a particular state
+ * value: is a process, but its evaluation does not modify the state
+ * state: projects the state component of a process
+ * expr: projects the program component
+ * :expr_value: projects the program if it is a value
  *)
 declare process{'S; 'e}
 declare "value"{'S; 'e}
@@ -110,6 +114,9 @@ declare expr_value{'S; 'e}
 
 (*
  * Operations on states.
+ * lookup: get the value of name 'n in the state 'S
+ * replace: replace the value of the name 'n in the state 'S with value 'v
+ * allocate: allocate a new name in the state 'S with value 'v
  *)
 declare lookup{'S; 'n}
 declare replace{'S; 'n; 'v}

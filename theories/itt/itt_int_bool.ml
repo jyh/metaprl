@@ -36,6 +36,7 @@ include Itt_logic
 
 open Mp_resource
 open Tacticals
+open Conversionals
 
 open Itt_equal
 open Itt_logic
@@ -80,7 +81,16 @@ primrw reduceEQInt : eq_int{natural_number[@i:n]; natural_number[@j:n]} <--> boo
 primrw reduceLTInt : lt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@i < @j]
 primrw reduceGTInt : gt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@j < @i]
 primrw reduceLEInt : le_int{'i; 'j} <--> bor{eq_int{'i; 'j}; lt_int{'i; 'j}}
-primrw reduceGEInt : le_int{'i; 'j} <--> bor{eq_int{'i; 'j}; gt_int{'i; 'j}}
+primrw reduceGEInt : ge_int{'i; 'j} <--> bor{eq_int{'i; 'j}; gt_int{'i; 'j}}
+
+let reduce_info =
+   [<< eq_int{natural_number[@i:n]; natural_number[@j:n]} >>, reduceEQInt;
+    << lt_int{natural_number[@i:n]; natural_number[@j:n]} >>, reduceLTInt;
+    << gt_int{natural_number[@i:n]; natural_number[@j:n]} >>, reduceGTInt;
+    << le_int{'i; 'j} >>, reduceLEInt;
+    << ge_int{'i; 'j} >>, reduceGEInt]
+
+let reduce_resource = add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *

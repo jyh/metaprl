@@ -402,7 +402,9 @@ let reduce_info =
     << band{btrue; 'e1} >>, reduce_band_true;
     << band{bfalse; 'e1} >>, reduce_band_false;
     << bimplies{btrue; 'e1} >>, reduce_bimplies_true;
-    << bimplies{bfalse; 'e1} >>, reduce_bimplies_false]
+    << bimplies{bfalse; 'e1} >>, reduce_bimplies_false;
+    << bool_flag["true":t] >>, reduceBoolTrue;
+    << bool_flag["false":t] >>, reduceBoolFalse]
 
 let reduce_resource = add_reduce_info reduce_resource reduce_info
 

@@ -49,15 +49,19 @@ open Itt_int_bool
 
 declare fact{'i}
 
-interactive_rw reduceFact : fact{'i} <--> fix{f. lambda{i. ifthenelse{eq_int{'i; 0}; 1; .'i *@ 'f ('i -@ 1)}}} 'i
+primrw reduceFact : fact{'i} <--> ifthenelse{eq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
+
+let reduce_info =
+   [<< fact{'i} >>, reduceFact]
+
+let reduce_resource = add_reduce_info reduce_resource reduce_info
 
 dform fact_df : parens :: "prec"[prec_apply] :: fact{'i} =
    `"fact" " " slot{'i}
 
-let redexC =
+let redex1C =
    firstC [reduceBeta;
            reduceEQInt;
-           reduceFact;
            reduceBoolTrue;
            reduceBoolFalse;
            reduceIfthenelseTrue;
@@ -65,22 +69,26 @@ let redexC =
            reduceAdd;
            reduceSub;
            reduceMul;
-           reduceDiv;
-           reduceFix]
+           reduceDiv]
+
+let redex2C =
+   reduceFact
+
+let redexC = (repeatC (higherC redex1C) andthenC (higherC redex2C))
 
 interactive fact100 'H : :
-   sequent ['ext] { 'H >- fact{100} = 0 in int }
+   sequent ['ext] { 'H >- fact{100} }
 
 interactive fact250 'H : :
-   sequent ['ext] { 'H >- fact{250} = 0 in int }
+   sequent ['ext] { 'H >- fact{250} }
 
-interactive fact4000 'H : :
-   sequent ['ext] { 'H >- fact{400} = 0 in int }
+interactive fact400 'H : :
+   sequent ['ext] { 'H >- fact{400} }
 
 interactive fact650 'H : :
-   sequent ['ext] { 'H >- fact{650} = 0 in int }
+   sequent ['ext] { 'H >- fact{650} }
 
-let factT = rw (repeatC (higherC redexC)) 0
+let factT = rw (repeatC redexC) 0
 
 (*
  * -*-

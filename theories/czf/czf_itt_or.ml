@@ -34,13 +34,13 @@ primrw unfold_inr : inr{'a} <--> Itt_union!inr{'a}
  ************************************************************************)
 
 dform or_df : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'A; 'B} =
-   slot{'A} " " vee " " slot{'B}
+   slot{'A} " " vee `"' " slot{'B}
 
 dform inl_df : parens :: "prec"[prec_apply] :: inl{'a} =
-   `"inl" " " slot{'a}
+   `"inl'" " " slot{'a}
 
 dform inr_df : parens :: "prec"[prec_apply] :: inr{'a} =
-   `"inr" " " slot{'a}
+   `"inr'" " " slot{'a}
 
 (************************************************************************
  * RULES                                                                *
@@ -151,6 +151,9 @@ let d_resource = d_resource.resource_improve d_resource (res_or_term, d_res_orT)
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/22 20:01:42  jyh
+ * Fixed syntax error in term_addr_gen.ml
+ *
  * Revision 1.2  1998/06/22 19:46:06  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

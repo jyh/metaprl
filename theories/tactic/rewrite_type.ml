@@ -76,7 +76,7 @@ prim rewriteConclCut 'H 'T1 :
 
 prim rewriteContextCut 'H 'J (lambda{v. 'T['v]}) :
    ('t : "sequent"{'ext; ."context"[H:v]{'T["concl"{'C; ."concl"}]}}) -->
-   "sequent"{'ext; ."context"[H:v]{."concl"{."rewrite"{."context"[J:v]{rewrite_just}; 'T[rewrite_just]}; concl}}} -->
+   "sequent"{'ext; ."context"[H:v]{."concl"{."rewrite"{.'T[rewrite_just]; ."context"[J:v]{rewrite_just}}; concl}}} -->
    "sequent"{'ext; ."context"[H:v]{."context"[J:v]{."concl"{'C; ."concl"}}}} =
    't
 
@@ -247,6 +247,9 @@ let rw conv i p =
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/22 20:01:43  jyh
+ * Fixed syntax error in term_addr_gen.ml
+ *
  * Revision 1.2  1998/06/22 19:46:43  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

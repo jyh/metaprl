@@ -7,8 +7,12 @@ Import qw( env );
 # Set up file lists.
 #
 my @src =
-   qw(   auto option record bool int list int_set ty exp termOp_base termOp
-         connect_base connect_ty );
+   qw(   auto option bool record int list int_set
+         ty exp util
+         tr_bas tr_types tr_atom_base tr_atom tr_store tr_exp
+         termOp_base termOp
+         connect_base connect_ty
+         test );
 
 #
 # Set up file lists and build everything.
@@ -19,4 +23,4 @@ OCamlLibrary $env 'base', (map "mfir_$_", @src), 'mfir_theory';
 #
 # Default target to build.
 #
-Default( "base$env->{SUFLIB}" );
+#Default( "base$env->{SUFLIB}" );

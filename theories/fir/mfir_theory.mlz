@@ -73,11 +73,10 @@ extends Mfir_util
 extends Mfir_sequent
 extends Mfir_tr_base
 extends Mfir_tr_types
-(*
+extends Mfir_tr_atom_base
 extends Mfir_tr_atom
 extends Mfir_tr_store
 extends Mfir_tr_exp
-*)
 
 (*!
  * @docoff

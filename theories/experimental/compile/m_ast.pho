@@ -1,9 +1,6 @@
 (*
  * The M Abstract Syntax.
  *
- * We perform currying and proper binding of mutually recursive
- * functions.
- *
  * ----------------------------------------------------------------
  * Copyright (C) 2003 Adam Granicz, Caltech
  *
@@ -29,7 +26,7 @@ Module M_ast
 
 // Define the term-set to be used.
 
-Terms -extend "M_ir" {
+Terms -extend "M_ast" {
    // Arithmetic operators
    declare AddOp
    declare SubOp
@@ -44,39 +41,43 @@ Terms -extend "M_ir" {
    declare EqOp
    declare NeqOp
 
-   // Atoms
-   declare AtomFalse
-   declare AtomTrue
-   declare AtomInt[n]
-   declare AtomBinop{'op; 'a1; 'a2}
-   declare AtomRelop{'op; 'a1; 'a2}
-   declare AtomFun{'e}
-   declare AtomVar{'v}
-
-   // LetAtom
-   declare LetAtom{'a; 'e}
+   // Simple expressions.
+   declare TrueExpr
+   declare FalseExpr
+   declare IntExpr[n]
+   declare BinopExpr{'op; 'e1; 'e2}
+   declare RelopExpr{'op; 'e1; 'e2}
+   declare VarExpr{'v}
+   declare LambdaExpr{'e}
 
    // If
-   declare If{'a; 'e1; 'e2}
+   declare IfExpr{'e1; 'e2; 'e3}
+
+   // Subscripting
+   declare SubscriptExpr{'e1; 'e2}
+
+   // Assignment
+   declare AssignExpr{'e1; 'e2; 'e3}
+
+   // Sequencing
+   declare SeqExpr{'e1; 'e2}
 
    // Function arguments
    declare ArgNil
    declare ArgCons{'a; 'rest}
 
    // Function calls and return
-   declare TailCall{'f; 'args}
-   declare LetApply{'f; 'a; 'e}
-   declare Return{'a}
+   declare ApplyExpr{'f; 'args}
+
+   // Let-definition
+   declare LetVarExpr{'e1 ;'e2}
 
    // Tuples
+   // TEMP: this are not used yet.
    declare Length[n]
    declare AllocTupleNil
    declare AllocTupleCons{'a; 'rest}
    declare LetTuple{'length; 'tuple; 'e}
-
-   // Subscripting
-   declare LetSubscript{'a1; 'a2; 'e}
-   declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
    // Mutually recursive functions
    declare LetRec{'e1; 'e2}
@@ -93,6 +94,7 @@ Terms -extend "M_ir" {
 // informal post-parsing rewrites.
 
 Terms -extend "$" {
+   declare number[n]
    declare SimpleFun{'f; 'params; 'body}
    declare Functions{'fvars; 'pbunch; 'fbodies}
    declare NewFun{'fun; 'rest}
@@ -117,7 +119,7 @@ Terms -extend "$" {
 
 Tokens -longest {
    ID = "[_a-zA-Z][_a-zA-Z0-9]*"    { __token__[p:s]{'pos} -> 'p }
-   NUM = "[0-9]+"                   { __token__[p:s]{'pos} -> AtomInt[p:n] }
+   NUM = "[0-9]+"                   { __token__[p:s]{'pos} -> number[p:n] }
 
    AND = "and"                      {}
    ELSE = "else"                    {}
@@ -161,6 +163,8 @@ Tokens -longest {
 // line have the same precendence.
 // This section is optional.
 
+%left prec_let
+%left SEMI LET
 %left ID prec_atom
 %left ELSE
 %left LT LE GT GE EQ NEQ
@@ -174,61 +178,81 @@ Tokens -longest {
 // Must supply a start symbol.
 
 Grammar -start exp {
-   exp ::= LET ID<var[v:v]> EQ a<'a> IN exp<'e>
-                                    => LetAtom{'a; v. 'e}
-    | LET REC funs<Functions{'funs; 'pbunch; 'bodies}> IN exp<'e>
+   exp ::=
+    // Numbers
+      NUM<number[i:n]>              => IntExpr[i:n]
+
+    // Variables
+    | ID<var[v:v]>                  => VarExpr{'v}
+
+    // Anonymous functions
+    | FUN ID<var[v:v]> ARROW exp<'e> %prec prec_let
+                                    => LambdaExpr{v. 'e}
+    // Binary operations
+    | exp<'e1> PLUS exp<'e2>        => BinopExpr{AddOp{}; 'e1; 'e2}
+    | exp<'e1> MINUS exp<'e2>       => BinopExpr{SubOp{}; 'e1; 'e2}
+    | exp<'e1> TIMES exp<'e2>       => BinopExpr{MulOp{}; 'e1; 'e2}
+    | exp<'e1> DIV exp<'e2>         => BinopExpr{DivOp{}; 'e1; 'e2}
+
+    | exp<'e1> LE exp<'e2>          => RelopExpr{LeOp{}; 'e1; 'e2}
+    | exp<'e1> LT exp<'e2>          => RelopExpr{LtOp{}; 'e1; 'e2}
+    | exp<'e1> GE exp<'e2>          => RelopExpr{GeOp{}; 'e1; 'e2}
+    | exp<'e1> GT exp<'e2>          => RelopExpr{GtOp{}; 'e1; 'e2}
+    | exp<'e1> EQ exp<'e2>          => RelopExpr{EqOp{}; 'e1; 'e2}
+    | exp<'e1> NEQ exp<'e2>         => RelopExpr{NeqOp{}; 'e1; 'e2}
+
+    // Conditionals
+    | IF exp<'e1> THEN exp<'e2> ELSE exp<'e3>
+                                    => IfExpr{'e1; 'e2; 'e3}
+
+    // Subscripting
+    | exp<'e1> LBRACK exp<'e2> RBRACK
+                                    => SubscriptExpr{'e1; 'e2}
+
+    // Assignments
+    | exp<'e1> LBRACK exp<'e2> RBRACK ASSIGN exp<'e3> %prec prec_let
+                                    => AssignExpr{'e1; 'e2; 'e3}
+
+    // Sequencing
+    | exp<'e1> SEMI exp<'e2> %prec prec_let
+                                    => SeqExpr{'e1; 'e2}
+
+    // Function application
+    | exp<'f> LPAREN args<'args> RPAREN %prec prec_apply
+                                    => ApplyExpr{'f; 'args}
+
+    // Let-definitions
+    | LET ID<var[v:v]> EQ exp<'e1> IN exp<'e2> %prec prec_let
+                                    => LetVarExpr{'e1; v. 'e2}
+
+    // Recursive functions
+    | LET REC funs<Functions{'funs; 'pbunch; 'bodies}> IN exp<'e> %prec prec_let
                                     => MutFuns{'funs; 'pbunch; 'bodies; 'e}
-    | LET fun<'fun> IN exp<'e2>     => NewFun{'fun; 'e2}
-    | LET ID<var[v:v]> EQ a<'a1> LBRACK a<'a2> RBRACK IN exp<'e>
-                                    => LetSubscript{'a1; 'a2; v. 'e}
-    | LET ID<var[v:v]> EQ a<'f> LPAREN args<'args> RPAREN IN exp<'e>
-                                    => LetApply{'f; 'args; v. 'e}
-//    | LET ID<var[v:v]> EQ LPAREN a<'a1> COMMA a<'a2> RPAREN IN exp<'e>
-//                                    => LetPair{'a1; 'a2; v. 'e}
-    | ID<var[f:v]> LPAREN args<'args> RPAREN %prec prec_apply
-                                    => TailCall{AtomVar{'f}; 'args}
-    | IF a<'a> THEN exp<'e1> ELSE exp<'e2>
-                                    => If{'a; 'e1; 'e2}
-    | a<'a1> LBRACK a<'a2> RBRACK ASSIGN a<'a3> SEMI exp<'e>
-                                    => SetSubscript{'a1; 'a2; 'a3; 'e}
-    | a<'a> %prec prec_atom         => Return{'a}
+    // Non-recursive functions
+    | LET fun<'fun> IN exp<'e2> %prec prec_let
+                                    => NewFun{'fun; 'e2}
+
 
    funs ::= fun<SimpleFun{var[f:v]; 'params; 'body}>
                                     => Functions{mcons{'f; mnil{}}; mcons{'params; mnil{}}; mcons{'body; mnil{}}}
-      | fun<SimpleFun{var[f:v]; 'params; 'body}> AND funs<Functions{'fvars; 'pbunch; 'fbodies}>
+    | fun<SimpleFun{var[f:v]; 'params; 'body}> AND funs<Functions{'fvars; 'pbunch; 'fbodies}>
                                     => Functions{mcons{'f; 'fvars}; mcons{'params; 'pbunch}; mcons{'body; 'fbodies}}
 
-   fun ::= ID<var[f:v]> LPAREN id_list<'params> RPAREN EQ exp<'e>
+   fun ::= ID<var[f:v]> LPAREN params<'params> RPAREN EQ exp<'e>
                                     => SimpleFun{'f; 'params; 'e}
 
-   a ::= NUM<'i>                    => 'i
-      | ID<var[v:v]>                => AtomVar{'v}
-      | FUN ID<var[v:v]> ARROW exp<'e>
-                                    => AtomFun{v. 'e}
-      | a<'a1> PLUS a<'a2>          => AtomBinop{AddOp{}; 'a1; 'a2}
-      | a<'a1> MINUS a<'a2>         => AtomBinop{SubOp{}; 'a1; 'a2}
-      | a<'a1> TIMES a<'a2>         => AtomBinop{MulOp{}; 'a1; 'a2}
-      | a<'a1> DIV a<'a2>           => AtomBinop{DivOp{}; 'a1; 'a2}
+   args ::= exp<'e>                 => ArgCons{'e; ArgNil{}}
+    | exp<'e> COMMA args<'args>     => ArgCons{'e; 'args}
 
-      | a<'a1> LE a<'a2>            => AtomRelop{LeOp{}; 'a1; 'a2}
-      | a<'a1> LT a<'a2>            => AtomRelop{LtOp{}; 'a1; 'a2}
-      | a<'a1> GE a<'a2>            => AtomRelop{GeOp{}; 'a1; 'a2}
-      | a<'a1> GT a<'a2>            => AtomRelop{GtOp{}; 'a1; 'a2}
-      | a<'a1> EQ a<'a2>            => AtomRelop{EqOp{}; 'a1; 'a2}
-      | a<'a1> NEQ a<'a2>           => AtomRelop{NeqOp{}; 'a1; 'a2}
-
-   args ::= a<'a>                   => ArgCons{'a; ArgNil{}}
-      | a<'a> COMMA args<'args>     => ArgCons{'a; 'args}
-
-   id_list ::= ID<var[v:v]>         => mcons{'v; mnil{}}
-      | ID<var[v:v]> COMMA id_list<'ids>
+   params ::= ID<var[v:v]>          => mcons{'v; mnil{}}
+    | ID<var[v:v]> COMMA params<'ids>
                                     => mcons{'v; 'ids}
 }
 
 // We want:
 //
 // LetRec{R. Fields{
-//                FunDef{Label["fib":t]; AtomFun{i.
+//                FunDef{Label["fib":t]; LambdaExpr{i.
 //                      LetFun{'R; Label["fib":t]; fib.
 //                            ...}};
 //                      FunDef{...;
@@ -258,7 +282,7 @@ Rewrites {
       project_functions{'R; 'fvars; 'body}
 
    bind_vars{var[R:v]; 'fvars; mcons{var[v:v]; 'vars}; 'body} ->
-      AtomFun{v. bind_vars{'R; 'fvars; 'vars; 'body}}
+      LambdaExpr{v. bind_vars{'R; 'fvars; 'vars; 'body}}
 
    // Perform binding of function parameters (currying).
    // No function projection.
@@ -266,7 +290,7 @@ Rewrites {
       'body
 
    norec_bind_vars{var[R:v]; 'fvars; mcons{var[v:v]; 'vars}; 'body} ->
-      AtomFun{v. norec_bind_vars{'R; 'fvars; 'vars; 'body}}
+      LambdaExpr{v. norec_bind_vars{'R; 'fvars; 'vars; 'body}}
 
    // project_functions{...} projects a list of functions into variables.
    project_functions{var[R:v]; mcons{var[f:v]; 'fvars}; 'rest} ->
@@ -281,3 +305,4 @@ Rewrites {
          FunDef{Label[f:t]; norec_bind_vars{'R; mcons{var[f:v]; mnil{}}; 'params; 'body}; EndDef{}}};
          R. project_functions{'R; mcons{var[f:v]; mnil{}}; 'rest}}
 }
+

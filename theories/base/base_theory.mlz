@@ -1,14 +1,14 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @theory{Base Meta-Theory}
    @module[Base_theory]
-  
+
    The @tt[Base_theory] ``theory'' is not a theory in the strict sense.
    It defines only two rules (in the @hrefmodule[Base_rewrite] module;
    Section @refmodule[Base_rewrite]).  Instead, it serves as the
    connection to the primitive @MetaPRL prover, and it defines
    several resources that are useful for defining tactics.
-  
+
    The connection with the primitive @MetaPRL prover is defined
    in the modules @hrefmodule[Top_tacticals] (Section @refmodule[Top_tacticals])
    and @hrefmodule[Top_conversionals] (Section @refmodule[Top_conversionals]).
@@ -17,7 +17,7 @@ doc <:doc<
    composition (such as the @hreftactic[thenT]{} and @hreftactic[orelseT]
    tacticals).  The @hrefmodule[Top_conversionals] module defines @emph{conversions},
    which play the role of tactics for @emph{rewriting}.
-  
+
    The base theory also defines several resources that can be used to
    build automated tactics.  The @hrefmodule[Mptop] module (Section @refmodule[Mptop])
    defines a resource for adding functions to the @MetaPRL interactive
@@ -27,48 +27,48 @@ doc <:doc<
    tactics for automated reasoning.  The @hrefmodule[Dtactic] module
    (Section @refmodule[Dtactic]) defines resources for adding
    introduction and elimination reasoning to the @hreftactic[dT] tactic.
-  
+
    The @tt[Base_theory] module itself defines no new primitives; it
    simply bring together all the parts of the base logic into a unified
    module.  Descendent theories (such as the @MartinLof-style Type Theory, Section
    @refmodule[Itt_theory], and the Constructive Set Theory Section @refmodule[Czf_itt_theory])
    include the @hrefmodule[Base_theory] directly.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
-  
+
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -95,6 +95,7 @@ extends Comment
 extends Ocaml_df
 extends Base_trivial
 extends Typeinf
+extends Simp_typeinf
 extends Base_cache
 extends Base_meta
 

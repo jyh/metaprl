@@ -1,0 +1,4 @@
+
+declare singleton{'a;'A}
+
+

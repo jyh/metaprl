@@ -273,7 +273,7 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T)
    szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
 
 dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
-   szone pushm slot{'x} space `"IN" hspace slot{'T} popm ezone
+   szone pushm slot{'x} space `"in" hspace slot{'T} popm ezone
 
 dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: "type"{'a} =
    math_type{'a}

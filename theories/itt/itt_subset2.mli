@@ -1,7 +1,5 @@
 (*
- * This module defines some extra features _after_ equality
- * and subtyping have been defined.  This includes the "type"
- * judgement, and extensional type equality.
+ * Subsets.
  *
  * ----------------------------------------------------------------
  *
@@ -28,50 +26,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Xin Yu
+ * xiny@cs.caltech.edu
+ *
  *)
 
-open Printf
-open Mp_debug
+extends Itt_subset
+
 open Refiner.Refiner.Term
 
-extends Itt_equal
-extends Itt_squash
-extends Itt_subtype
-extends Itt_logic
-
-open Itt_squash
-open Base_dtactic
+open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_ext_equal%t"
-
-(*
- * Terms type{'T} and \subtype{'A; 'B} have already been defined.
- *)
-prim_rw type_def : "type"{'T} <--> ('T subtype 'T)
-
-define unfoldExtEqual : ext_equal{'A; 'B} <--> 'A subtype 'B & 'B subtype 'A
-
-interactive extEqualMember {|squash; intro[] |}: 
-   sequent[squash] {'H >- ext_equal{'A;'B}} -->
-   sequent['ext]  {'H >- (it,it) in ext_equal{'A;'B} }
-
-
-let resource intro +=
-   [<<ext_equal{'A; 'B}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0);
-    <<"type"{ext_equal{'A; 'B}}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0 thenT dT 0)
-   ]
-
-
-let resource elim += (<<ext_equal{'A; 'B}>>, (fun n -> rw unfoldExtEqual n thenT dT n))
+    
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
 
 (*
  * -*-

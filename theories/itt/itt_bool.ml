@@ -258,6 +258,9 @@ interactive btrue_member {| intro []; eqcd |} :
 interactive bfalse_member {| intro []; eqcd |} :
    sequent ['ext] { 'H >- bfalse in "bool" }
 
+interactive bool_intro {| intro [] |} :
+   sequent ['ext] { 'H >- "bool" }
+
 (*!
  * @begin[doc]
  * @modsubsection{Elimination}

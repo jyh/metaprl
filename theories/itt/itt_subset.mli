@@ -31,7 +31,16 @@
  *
  *)
 
+extends Itt_equal
 extends Itt_subtype
+extends Itt_struct
+extends Itt_logic
+extends Itt_singleton
+extends Itt_squash
+extends Itt_isect
+extends Itt_bool
+extends Itt_int_base
+extends Itt_ext_equal
 
 open Refiner.Refiner.Term
 
@@ -42,8 +51,12 @@ open Tactic_type.Tacticals
  * TERMS                                                                *
  ************************************************************************)
 
-declare \subset{'A; 'B}
+declare  "subset"{'A; 'B} 
 
+declare  member{'a; 'A; 'B}
+
+
+    
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -55,10 +68,90 @@ val is_subset_term : term -> bool
 val dest_subset : term -> term * term
 val mk_subset_term : term -> term -> term
 
-(*
- * -*-
- * Local Variables:
- * Caml-master: "prlcomp.run"
- * End:
- * -*-
- *)
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
+
+rule subset_wf :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{.'A subset 'B} }
+
+rule subset_intro  :
+   [wf] sequent [squash] { 'H >- 'A subtype 'B } -->
+   [main] sequent [squash] {'H; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
+   sequent ['ext] { 'H >- 'A subset 'B }
+
+
+
+      
+rule subset_sqstable  :
+   sequent [squash] { 'H >- squash{'A subset 'B} } -->
+   sequent ['ext] { 'H >- 'A subset 'B }
+
+
+      
+rule subset_is_subtype  :
+   sequent [squash] { 'H >- 'A subset 'B } -->
+   sequent ['ext] { 'H >- 'A subtype 'B }
+
+
+
+rule use_subset  'A :
+   sequent [squash] { 'H >- 'A subset 'B } -->
+   sequent [squash] { 'H >- 'x = 'y in 'A } -->
+   sequent ['ext] { 'H >- 'x = 'y in 'B }
+
+
+rule use_superset1  'B :
+   sequent [squash] { 'H >- 'A subset 'B } -->
+   sequent [squash] { 'H >- 'x in 'A } -->
+   sequent [squash] { 'H >- 'x = 'y in 'B } -->
+   sequent ['ext] { 'H >- 'x = 'y in 'A }
+
+rule use_superset2  'B :
+   sequent [squash] { 'H >- 'A subset 'B } -->
+   sequent [squash] { 'H >- 'y in 'A } -->
+   sequent [squash] { 'H >- 'x = 'y in 'B } -->
+   sequent ['ext] { 'H >- 'x = 'y in 'A }
+
+
+rule use_superset 'B 'y:
+   sequent [squash] { 'H >- 'A subset 'B } -->
+   sequent [squash] { 'H >- 'y in 'A } -->
+   sequent [squash] { 'H >- 'x = 'y in 'B } -->
+   sequent ['ext] { 'H >- 'x  in 'A }
+
+
+
+      
+rule subsetTypeRight  'B :
+   sequent [squash] { 'H >- 'A subset 'B } -->
+   sequent ['ext] { 'H >- "type"{'A} }
+
+rule subsetTypeLeft  'A :
+   sequent [squash] { 'H >- 'A subset 'B }  -->
+   sequent ['ext] { 'H >- "type"{'B} }
+
+
+
+      
+rule member_wf :
+   sequent [squash] { 'H >- 'a in 'B } -->
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- "type"{'a in 'A subset 'B} }
+
+
+      
+rule member_intro   :
+   sequent [squash] { 'H >- 'a in 'A } -->
+   sequent [squash] { 'H >- 'A subtype 'B } -->
+   sequent ['ext] { 'H >- 'a in 'A subset 'B }
+
+      
+rule member_elim 'H :
+   sequent ['ext] { 'H; u: 'a in 'A; u: 'A subset 'B; 'J >- 'C } --> 
+   sequent ['ext] { 'H; u: 'a in 'A subset 'B; 'J >- 'C  }
+
+
+      

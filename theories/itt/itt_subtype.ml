@@ -122,8 +122,11 @@ let mk_subtype_term = mk_dep0_dep0_term subtype_opname
 
 prec prec_subtype
 
-dform subtype_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: \subtype{'A; 'B} =
-   slot{'A} `" " subseteq space slot{'B}
+dform subtype_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] ::  ('A subtype 'B) =
+   slot{'A} `" " sqsubseteq space slot{'B}
+
+dform subtype_df2 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subtype 'B) =
+   'A `" subtype " 'B
 
 (************************************************************************
  * RULES                                                                *
@@ -355,6 +358,15 @@ let subtypeT t p =
       use_subtype1 t p
    else
       use_subtype2 t p
+
+interactive by_subtype1 'H: (* Add to auto??? then remove subtype_axiomFormation from auto *)
+   sequent [squash] { 'H; x:'A; 'J >- 'A subtype 'B } -->
+   sequent ['ext] { 'H; x:'A; 'J >- 'x in 'B }
+
+interactive by_subtype2 'H: (* Add to AutoMustComplete ??? *)
+   sequent [squash] { 'H; x:'A; 'J['x] >- 'A subtype 'B } -->
+   sequent ['ext] { 'H; x:'A; 'J['x] >- 'x in 'B }
+
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

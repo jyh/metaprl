@@ -142,7 +142,7 @@ interactive car_prefield_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |}
    sequent { <H> >- 'f in prefield[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
-doc <:doc< >>
+doc <:doc< @doc{ } >>
 interactive isField_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'f^car Type } -->
    [wf] sequent { <H> >- 'f^"0" in 'f^car } -->
@@ -403,7 +403,7 @@ interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i
 doc <:doc<
    @begin[doc]
    @modsection{Hierarchy}
-   A field is also a ring. If << 'F >> is a field, then << 'F >> is an Abelian group over addition and << 'F >> without << 0 >> is an Abelian group over multiplication.
+   A field is also a ring. If << 'F >> is a field, then << 'F >> is an Abelian group over addition and << carNo0{'F} >> is an Abelian group over multiplication.
 
    @end[doc]
 >>
@@ -447,7 +447,7 @@ interactive mul_naddid_naddid2 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
    sequent { <H> >- 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} } -->
    sequent { <H> >- 'a *['f] 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} }
 
-doc <:doc< >>
+doc <:doc< @doc{ } >>
 interactive field_carNo0_group {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- carNo0{'f} in group[i:l] }
@@ -482,7 +482,7 @@ doc <:doc<
  ************************************************************************)
 
 dform field_df1 : except_mode[src] :: except_mode[prl] :: field[i:l] =
-   mathbbF `"ing" sub{slot[i:l]}
+   mathbbF `"ield" sub{slot[i:l]}
 
 dform field_df2 : mode[prl] :: field[i:l] =
    `"Field[" slot[i:l] `"]"

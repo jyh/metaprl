@@ -220,7 +220,7 @@ interactive addG_isAbelg_intro {| intro [AutoMustComplete] |} :
    [main] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
    sequent { <H> >- isAbelg{as_additive{'R}} }
 
-doc <:doc< >>
+doc <:doc< @doc{ } >>
 interactive isRing_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
    [main] sequent { <H> >- isSemigroup{'R} } -->
@@ -475,7 +475,7 @@ doc docoff
 dform zeroRing_df1 : except_mode[src] :: ZeroRing =
    `"ZeroRing"
 
-doc <:doc< >>
+doc <:doc< @doc{ } >>
 interactive zero_ring {| intro [] |}:
    sequent { <H> >- ZeroRing in ring[i:l] }
 
@@ -490,14 +490,10 @@ doc docoff
 
 let fold_Z = makeFoldC << Z >> unfold_Z
 
-doc <:doc< >>
+doc <:doc< @doc{ } >>
 interactive integer_ring {| intro [] |} :
    sequent { <H> >- Z in ring[i:l] }
 
-(**** The next rule cannot be proved for now due to the ****
- **** incompleteness of axioms about the rem operation  ****
- **** in Itt_int_ext.                                   ****)
-(*
 doc <:doc<
    @begin[doc]
    Ring of Even Integers.
@@ -509,11 +505,13 @@ doc docoff
 
 let fold_Zeven = makeFoldC << Zeven >> unfold_Zeven
 
-doc <:doc< >>
+(**** The next rule cannot be proved for now due to the ****
+ **** incompleteness of axioms about the rem operation  ****
+ **** in Itt_int_ext.                                   ****)
+doc <:doc< @doc{ } >>
 interactive eveninteger_ring {| intro [] |} :
    sequent { <H> >- Zeven in ring[i:l] }
 doc docoff
-*)
 
 
 doc <:doc<
@@ -549,9 +547,6 @@ interactive neg_mul_neg {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
    sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- ('R^neg 'a) *['R] ('R^neg 'b) = 'a *['R] 'b in 'R^car }
-
-
-
 
 (************************************************************************
  * SUBRING                                                              *
@@ -650,17 +645,15 @@ doc docoff
 (**** The next rule cannot be proved for now due to the ****
  **** incompleteness of axioms about the rem operation  ****
  **** in Itt_int_ext.                                   ****)
-(*
 doc <:doc<
    @begin[doc]
-
    The ring of even integers is a subring of the ring of integers.
+
    @end[doc]
 >>
-interactive subring_even_int {| intro [] |} :
+interactive evenint_subring_int {| intro [] |} :
    sequent { <H> >- subring[i:l]{Zeven; Z} }
 doc docoff
-*)
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -716,9 +709,9 @@ dform isDistrib_df : except_mode[src] :: isDistrib{'R} =
 dform int_ring_df : except_mode[src] :: Z =
    mathbbZ
 
-(*dform even_int_ring_df : except_mode[src] :: Zeven =
+dform even_int_ring_df : except_mode[src] :: Zeven =
    `"2" mathbbZ
-*)
+
 dform subring_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_subtype] :: subring[i:l]{'S; 'R} =
    slot{'S} `" " subseteq izone `"_{" ezone `"ring" izone `"_{" ezone slot[i:l] izone `"}}" ezone `" " slot{'R}
 

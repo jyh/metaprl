@@ -153,6 +153,8 @@ PRINT_THEORIES =\
     itt_group\
     itt_cyclic_group\
     itt_quotient_group\
+    itt_ring2\
+    itt_field2\
     itt_collection\
     itt_pointwise\
     itt_pointwise2

@@ -39,6 +39,13 @@ let debug_supinf_steps =
         debug_value = false
       }
 
+let debug_supinf_post =
+   create_debug (**)
+      { debug_name = "supinf_post";
+        debug_description = "Itt_supinf.supinfT: post-supinf processing";
+        debug_value = false
+      }
+
 module RationalBoundField =
 struct
    open Lm_num
@@ -56,6 +63,12 @@ struct
       Number _ -> false
     | _ -> true
 
+	let isNegative = function
+		Number (a,b) ->
+			((compare_num a num0) * (compare_num b num0)) < 0
+	 | PlusInfinity -> false
+	 | MinusInfinity -> true
+
    let mul a b =
       match a with
        |	Number (a1,a2) ->
@@ -63,10 +76,10 @@ struct
                match b with
                   Number (b1,b2) -> Number(mult_num a1 b1, mult_num a2 b2)
                 | PlusInfinity ->
-                     if lt_num a1 num0 then MinusInfinity
+                     if isNegative a then MinusInfinity
                      else b
                 | MinusInfinity ->
-                     if lt_num a1 num0 then PlusInfinity
+                     if isNegative a then PlusInfinity
                      else b
             end
        | _ -> raise (Invalid_argument "Multiplications by infinities are not defined")
@@ -108,6 +121,8 @@ struct
             else Number(mult_num a1 b2, mult_num a2 b1)
        | _,_ -> raise (Invalid_argument "Division defined only on proper numbers")
 
+	let sign_num a = num_of_int (compare_num a num0)
+
    let compare a b =
       match a,b with
          MinusInfinity, MinusInfinity -> 0
@@ -116,7 +131,8 @@ struct
        | PlusInfinity, PlusInfinity -> 0
        | PlusInfinity, _ -> 1
        | _, PlusInfinity -> -1
-       | Number (a1,a2), Number (b1,b2) -> compare_num (mult_num a1 b2) (mult_num a2 b1)
+       | Number (a1,a2), Number (b1,b2) ->
+				compare_num (mult_num (mult_num a1 (sign_num a2)) (abs_num b2)) (mult_num (abs_num a2) (mult_num b1 (sign_num b2)))
 
    let print out r =
       match r with
@@ -160,6 +176,8 @@ struct
 	type t=int ref * int Table.t
 
 	let create n = (ref 0, Table.create n)
+
+	let length (r,_) = !r
 
 	let lookup (info:t) v =
 		let (count,table)=info in
@@ -232,19 +250,24 @@ let stdC t =
 module type SACS_Sig =
 sig
    type vars
+	type bfield
    type af
    type saf
    type step
 	type source
    type sacs
 
-   val empty: sacs
+   val empty: int -> sacs
    val addConstr: sacs -> af -> sacs
 
    val upper: (term array) -> sacs -> vars -> (saf * step list)
    val lower: (term array) -> sacs -> vars -> (saf * step list)
 
+	val addUpperBound : sacs -> vars -> bfield -> sacs
+	val addLowerBound : sacs -> vars -> bfield -> sacs
+
    val print: out_channel -> sacs -> unit
+	val print_bounds: (term array) -> sacs -> out_channel -> unit
 end
 
 let ge_normC = (addrC [0] normalizeC) thenC (addrC[1] normalizeC)
@@ -313,22 +336,27 @@ module MakeSACS(BField : BoundFieldSig)
 (SAF : SAF_Sig  with type bfield=BField.bfield and type vars=VarType.t and type source=Source.source and type af=AF.af)
 : SACS_Sig with
  	type vars=VarType.t and
+	type bfield=BField.bfield and
   	type source=Source.source and
  	type af=AF.af and
   	type saf=SAF.saf and
    type step = tactic SAF.step =
 struct
    type vars   = VarType.t
+	type bfield = BField.bfield
    type af     = AF.af
    type saf    = SAF.saf
    type step   = tactic SAF.step
 	type source = Source.source
-   type sacs   = af list
+   type sacs   = (af list) * ((saf * (step list)) option array) * ((saf * (step list)) option array)
 
-   let empty = []
-   let addConstr s f = f::s
+   let empty n =
+		let n'= succ n in
+		([], Array.make n' None, Array.make n' None)
 
-   let print out s =
+   let addConstr (s,l,u) f = (f::s,l,u)
+
+   let print out (s,l,u) =
       List.iter (fun x -> begin fprintf out "%a>=0\n" AF.print x end) s
 
    let rec upper' info s v =
@@ -359,11 +387,16 @@ struct
                      r1,(SAF.Assert ("upper 1",r1,saf_v, rw conv hyp))::a0
 (*						r1,(SAF.Assert ("upper 1",r1,saf_v, ge_minLeftIntro))::a0*)
 
-   let upper info s v =
-      let result,actions = upper' info s v in
-         if !debug_supinf_steps then
-            eprintf "upper: %a <= %a@." AF.print_var v SAF.print result;
-         result,actions
+   let upper info (s,l,u) v =
+		let result, actions =
+			match u.(v) with
+				Some b -> b
+			 | None ->
+					upper' info s v
+		in
+		if !debug_supinf_steps then
+			eprintf "upper: %a <= %a@." AF.print_var v SAF.print result;
+		result,actions
 
    let rec lower' info s v =
       match s with
@@ -386,11 +419,41 @@ struct
                      r1,(SAF.Assert ("lower 1",saf_v, r1, idT))::a0
 (*						r1,(SAF.Assert ("lower 1",saf_v, r1, ge_maxRightIntro))::a0*)
 
-   let lower info s v =
-      let result,actions = lower' info s v in
-         if !debug_supinf_steps then
-            eprintf "lower: %a <= %a@." SAF.print result AF.print_var v;
-         result,actions
+   let lower info (s,l,u) v =
+		let result, actions =
+			match l.(v) with
+				Some b -> b
+			 | None ->
+					lower' info s v
+		in
+      if !debug_supinf_steps then
+         eprintf "lower: %a <= %a@." SAF.print result AF.print_var v;
+      result,actions
+
+	let addUpperBound constrs v b =
+		let (s,l,u)=constrs in
+		if BField.compare b BField.plusInfinity < 0 then
+			u.(v) <- Some (SAF.affine (AF.mk_number b),[]);
+		constrs
+
+	let addLowerBound constrs v b =
+		let (s,l,u)=constrs in
+		if BField.compare b BField.minusInfinity > 0 then
+			l.(v) <- Some (SAF.affine (AF.mk_number b),[]);
+		constrs
+
+	let print_bounds info (s,l,u) out =
+		for i=1 to (Array.length l -1) do
+			match l.(i), u.(i) with
+				None, None -> ()
+			 | Some (lv,_), None ->
+					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term info.(i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
+			 | None, Some (uv,_) ->
+					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term info.(i))
+			 |Some (lv,_), Some (uv,_) ->
+					fprintf out "%s >= %s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term info.(i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
+		done;
+
 end
 
 module type CS_Sig =
@@ -877,7 +940,7 @@ let make_sacs var2index p =
    let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent p).sequent_hyps in
 	let ihyps = make_sacs_aux p 1 [] hyps in
 	let afs=List.map (ge2af var2index) ihyps in
-	List.fold_left SACS.addConstr SACS.empty afs
+	List.fold_left SACS.addConstr (SACS.empty (VI.length var2index)) afs
 
 module TermPos=
 struct
@@ -1177,7 +1240,7 @@ let rec source2hyp info = function
  | Shypothesis i ->
 		if !debug_supinf_trace then
 			eprintf "hyp %i@." i;
-		Leaf(1, ((rw (int2ratC thenC ge_normC) i) thenMT copyHypT i (-1)))
+		Leaf(1, ((rw (tryC (progressC (int2ratC thenC ge_normC))) i) thenMT copyHypT i (-1)))
  | Smin(Signore,s2) ->
 		let result = source2hyp info s2 in
 		if !debug_supinf_trace then
@@ -1347,61 +1410,83 @@ let testT =
             end
    )
 
-let test2T =
-   funT (fun p ->
-         let var2index = VI.create 13 in
-         let constrs=make_sacs var2index p in
-         let info=VI.invert var2index in
-            if !debug_supinf_steps then
-               begin
-                  eprintf "Vars:\n%a\nSACS:\n%a@." (**)
-                     VI.print var2index
-                     SACS.print constrs
-               end;
-            begin
-               let saf'=SAF.affine (AF.mk_var 1) in
-               let sup',a1=sup info constrs saf' CS.empty in
-					if SAF.isMinusInfinity sup' then
-						begin
-							let src=SAF.getSource sup' in
-							if !debug_supinf_steps then
-								begin
-									eprintf "start=%a@." SAF.print saf';
-									eprintf"sup=%a@." SAF.print sup';
-									eprintf "%a <= %a@." (**)
-										SAF.print saf'
-										SAF.print sup';
-								end;
-							source2hypT info src
-						end
-					else
-						let inf',a2=inf info constrs saf' CS.empty in
-						begin
-							let src=SAF.getSource inf' in
-							if !debug_supinf_steps then
-								begin
-									eprintf "start=%a@." SAF.print saf';
-									eprintf"sup=%a@." SAF.print sup';
-									eprintf"inf=%a@." SAF.print inf';
-									eprintf "%a <= %a <= %a@." (**)
-										SAF.print inf'
-										SAF.print saf'
-										SAF.print sup';
-								end;
-							if (SAF.isPlusInfinity inf') then
-								source2hypT info src
-							else
-								let supsrc=SAF.getSource sup' in
-								let sup_tm=SAF.term_of info sup' in
-								let inf_tm=SAF.term_of info inf' in
-								let tm=mk_ge_rat_term sup_tm inf_tm in
-								source2hypT info supsrc thenMT
-								source2hypT info src thenMT
-								(assertT tm thenAT geTransitive (VI.restore info 1)) thenMT
-								rw normalizeC (-1)
-						end
-            end
-   )
+let rec iter p info constrs v =
+	if !debug_supinf_post then
+		eprintf "Iteration %i@." v;
+	if v >= (Array.length info) then
+		begin
+			printf "No contradiction found:\n%t" (SACS.print_bounds info constrs);
+			failT
+		end
+	else
+		let saf'=SAF.affine (AF.mk_var v) in
+		let sup',a1=sup info constrs saf' CS.empty in
+		if SAF.isMinusInfinity sup' then
+			let src=SAF.getSource sup' in
+			begin
+				if !debug_supinf_steps then
+					begin
+						eprintf "start=%a@." SAF.print saf';
+						eprintf"sup=%a@." SAF.print sup';
+						eprintf "%a <= %a@." (**)
+							SAF.print saf'
+							SAF.print sup';
+					end;
+				source2hypT info src
+			end
+		else
+			let inf',a2=inf info constrs saf' CS.empty in
+			let src=SAF.getSource inf' in
+			begin
+				if !debug_supinf_steps then
+					begin
+						eprintf "start=%a@." SAF.print saf';
+						eprintf"sup=%a@." SAF.print sup';
+						eprintf"inf=%a@." SAF.print inf';
+						eprintf "%a <= %a <= %a@." (**)
+							SAF.print inf'
+							SAF.print saf'
+							SAF.print sup';
+					end;
+				if (SAF.isPlusInfinity inf') then
+					source2hypT info src
+				else
+					begin
+						if !debug_supinf_post then
+							eprintf "%a >= %a >= %a@."
+								SAF.print sup'
+								VarType.print v
+								SAF.print inf';
+						let sup_val=SAF.value_of sup' in
+						let inf_val=SAF.value_of inf' in
+						if compare sup_val inf_val >= 0 then
+							let constrs' = SACS.addUpperBound constrs v sup_val in
+							let constrs'' = SACS.addLowerBound constrs' v inf_val in
+							iter p info constrs'' (succ v)
+						else
+							let supsrc=SAF.getSource sup' in
+							let sup_tm=SAF.term_of info sup' in
+							let inf_tm=SAF.term_of info inf' in
+							let tm=mk_ge_rat_term sup_tm inf_tm in
+							source2hypT info supsrc thenMT
+							source2hypT info src thenMT
+							(assertT tm thenAT geTransitive (VI.restore info v)) (*thenMT
+							rw normalizeC (-1)*)
+					end
+			end
+
+let test2T = funT (fun p ->
+   let var2index = VI.create 13 in
+   let constrs=make_sacs var2index p in
+   let info=VI.invert var2index in
+   if !debug_supinf_steps or !debug_supinf_post then
+      begin
+			eprintf "Vars:\n%a\nSACS:\n%a@." (**)
+			VI.print var2index
+			SACS.print constrs
+		end;
+	iter p info constrs 1
+)
 
 let ge_int2ratT = argfunT (fun i p ->
 	if is_ge_term (Sequent.nth_hyp p i) then
@@ -1409,37 +1494,7 @@ let ge_int2ratT = argfunT (fun i p ->
 	else
 		idT
 )
-(*
-let term2term_number p t =
-	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
-	let s=mk_sequent_term es in
-	let s'=Top_conversionals.apply_rewrite p normalizeC s in
-	let t'=SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0 in
-	begin
-		if !debug_int_arith then
-			eprintf "t2t_n: %a -> %a%t" print_term t print_term t' eflush;
-		if is_add_term t' then
-			let a,b=dest_add t' in
-			if is_number_term a then
-				(b,dest_number a)
-			else
-				(t',num0)
-		else
-			if is_number_term t' then
-				(mk_number_term num0, dest_number t')
-			else
-				(t',num0)
-	end
 
-let findContradRelT = funT ( fun p ->
-	let l = all2ge p in
-	let l' = List.map (four2inequality p) l in
-)
-
-type HypPosition = Unused | Original of int | Normed of int
-
-let empty_hyps _ = (0, Array.create 13 Unused)
-*)
 let preT = funT (fun p ->
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
@@ -1575,6 +1630,12 @@ interactive inttest10 :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H>; 'a <> 'b >- 'a <> 'b }
+
+interactive inttest11 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H> >- 'c in int } -->
+sequent { <H>; 'a +@ 'b >= 'c; 'c >= 'a +@ 'b +@ 1 >- "false" }
 
 interactive inttestn :
 	sequent {'v  in int;

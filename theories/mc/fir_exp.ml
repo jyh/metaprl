@@ -32,6 +32,9 @@
 
 include Base_theory
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -548,3 +551,460 @@ dform memcpy_df : except_mode[src] ::
    slot{'var2} `"[" slot{'atom2} `"], " slot{'len} `")" hspace
    `"with subop " slot{'subop} hspace
    slot{'exp} ezone
+
+(*************************************************************************
+ * Term operations.
+ *************************************************************************)
+
+(*******************
+ * Unary operations.
+ *******************)
+
+(* Identity (polymorphic). *)
+
+let idOp_term = << idOp >>
+let idOp_opname = opname_of_term idOp_term
+let is_idOp_term = is_no_subterms_term idOp_opname
+
+(* Naml ints. *)
+
+let uminusIntOp_term = << uminusIntOp >>
+let uminusIntOp_opname = opname_of_term uminusIntOp_term
+let is_uminusIntOp_term = is_no_subterms_term uminusIntOp_opname
+
+let notIntOp_term = << notIntOp >>
+let notIntOp_opname = opname_of_term notIntOp_term
+let is_notIntOp_term = is_no_subterms_term notIntOp_opname
+
+(* Bit fields. *)
+
+(*
+let rawBitFieldOp_term = << rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 } >>
+let rawBitFieldOp_opname = opname_of_term rawBitFieldOp_term
+let is_rawBitFieldOp_term = is_dep0_dep0_dep0_dep0_term rawBitFieldOp_opname
+let mk_rawBitFieldOp_term = mk_dep0_dep0_dep0_dep0_term rawBitFieldOp_opname
+let dest_rawBitFieldOp_term =
+   dest_dep0_dep0_dep0_dep0_term rawBitFieldOp_opname
+*)
+
+(* Native ints. *)
+
+let uminusRawIntOp_term = << uminusRawIntOp{ 'precision; 'sign } >>
+let uminusRawIntOp_opname = opname_of_term uminusRawIntOp_term
+let is_uminusRawIntOp_term = is_dep0_dep0_term uminusRawIntOp_opname
+let mk_uminusRawIntOp_term = mk_dep0_dep0_term uminusRawIntOp_opname
+let dest_uminusRawIntOp_term = dest_dep0_dep0_term uminusRawIntOp_opname
+
+let notRawIntOp_term = << notRawIntOp{ 'precision; 'sign } >>
+let notRawIntOp_opname = opname_of_term notRawIntOp_term
+let is_notRawIntOp_term = is_dep0_dep0_term notRawIntOp_opname
+let mk_notRawIntOp_term = mk_dep0_dep0_term notRawIntOp_opname
+let dest_notRawIntOp_term = dest_dep0_dep0_term notRawIntOp_opname
+
+(* Floats. *)
+
+let uminusFloatOp_term = << uminusFloatOp{ 'precision } >>
+let uminusFloatOp_opname = opname_of_term uminusFloatOp_term
+let is_uminusFloatOp_term = is_dep0_term uminusFloatOp_opname
+let mk_uminusFloatOp_term = mk_dep0_term uminusFloatOp_opname
+let dest_uminusFloatOp_term = dest_dep0_term uminusFloatOp_opname
+
+let absFloatOp_term = << absFloatOp{ 'precision } >>
+let absFloatOp_opname = opname_of_term absFloatOp_term
+let is_absFloatOp_term = is_dep0_term absFloatOp_opname
+let mk_absFloatOp_term = mk_dep0_term absFloatOp_opname
+let dest_absFloatOp_term = dest_dep0_term absFloatOp_opname
+
+let sinOp_term = << sinOp{ 'precision } >>
+let sinOp_opname = opname_of_term sinOp_term
+let is_sinOp_term = is_dep0_term sinOp_opname
+let mk_sinOp_term = mk_dep0_term sinOp_opname
+let dest_sinOp_term = dest_dep0_term sinOp_opname
+
+let cosOp_term = << cosOp{ 'precision } >>
+let cosOp_opname = opname_of_term cosOp_term
+let is_cosOp_term = is_dep0_term cosOp_opname
+let mk_cosOp_term = mk_dep0_term cosOp_opname
+let dest_cosOp_term = dest_dep0_term cosOp_opname
+
+let sqrtOp_term = << sqrtOp{ 'precision } >>
+let sqrtOp_opname = opname_of_term sqrtOp_term
+let is_sqrtOp_term = is_dep0_term sqrtOp_opname
+let mk_sqrtOp_term = mk_dep0_term sqrtOp_opname
+let dest_sqrtOp_term = dest_dep0_term sqrtOp_opname
+
+(* Coerce to int. *)
+
+let intOfFloatOp_term = << intOfFloatOp{ 'precision } >>
+let intOfFloatOp_opname = opname_of_term intOfFloatOp_term
+let is_intOfFloatOp_term = is_dep0_term intOfFloatOp_opname
+let mk_intOfFloatOp_term = mk_dep0_term intOfFloatOp_opname
+let dest_intOfFloatOp_term = dest_dep0_term intOfFloatOp_opname
+
+(* Coerce to float. *)
+
+let floatOfIntOp_term = << floatOfIntOp{ 'precision } >>
+let floatOfIntOp_opname = opname_of_term floatOfIntOp_term
+let is_floatOfIntOp_term = is_dep0_term floatOfIntOp_opname
+let mk_floatOfIntOp_term = mk_dep0_term floatOfIntOp_opname
+let dest_floatOfIntOp_term = dest_dep0_term floatOfIntOp_opname
+
+let floatOfFloatOp_term = << floatOfFloatOp{ 'prec1; 'prec2 } >>
+let floatOfFloatOp_opname = opname_of_term floatOfFloatOp_term
+let is_floatOfFloatOp_term = is_dep0_dep0_term floatOfFloatOp_opname
+let mk_floatOfFloatOp_term = mk_dep0_dep0_term floatOfFloatOp_opname
+let dest_floatOfFloatOp_term = dest_dep0_dep0_term floatOfFloatOp_opname
+
+let floatOfRawIntOp_term =
+   << floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign } >>
+let floatOfRawIntOp_opname = opname_of_term floatOfRawIntOp_term
+let is_floatOfRawIntOp_term = is_dep0_dep0_dep0_term floatOfRawIntOp_opname
+let mk_floatOfRawIntOp_term = mk_dep0_dep0_dep0_term floatOfRawIntOp_opname
+let dest_floatOfRawIntOp_term = dest_dep0_dep0_dep0_term floatOfRawIntOp_opname
+
+(* Coerce to rawint. *)
+
+let rawIntOfEnumOp_term = << rawIntOfEnumOp{ 'precision; 'sign; 'num } >>
+let rawIntOfEnumOp_opname = opname_of_term rawIntOfEnumOp_term
+let is_rawIntOfEnumOp_term = is_dep0_dep0_dep0_term rawIntOfEnumOp_opname
+let mk_rawIntOfEnumOp_term = mk_dep0_dep0_dep0_term rawIntOfEnumOp_opname
+let dest_rawIntOfEnumOp_term = dest_dep0_dep0_dep0_term rawIntOfEnumOp_opname
+
+let rawIntOfFloatOp_term =
+   << rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec } >>
+let rawIntOfFloatOp_opname = opname_of_term rawIntOfFloatOp_term
+let is_rawIntOfFloatOp_term = is_dep0_dep0_dep0_term rawIntOfFloatOp_opname
+let mk_rawIntOfFloatOp_term = mk_dep0_dep0_dep0_term rawIntOfFloatOp_opname
+let dest_rawIntOfFloatOp_term = dest_dep0_dep0_dep0_term rawIntOfFloatOp_opname
+
+let rawIntOfRawIntOp_term =
+   << rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign } >>
+let rawIntOfRawIntOp_opname = opname_of_term rawIntOfRawIntOp_term
+let is_rawIntOfRawIntOp_term = is_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
+let mk_rawIntOfRawIntOp_term = mk_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
+let dest_rawIntOfRawIntOp_term =
+   dest_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
+
+(* Integer/pointer coercions. *)
+
+let rawIntOfPointerOp_term = << rawIntOfPointerOp{ 'precision; 'sign } >>
+let rawIntOfPointerOp_opname = opname_of_term rawIntOfPointerOp_term
+let is_rawIntOfPointerOp_term = is_dep0_dep0_term rawIntOfPointerOp_opname
+let mk_rawIntOfPointerOp_term = mk_dep0_dep0_term rawIntOfPointerOp_opname
+let dest_rawIntOfPointerOp_term = dest_dep0_dep0_term rawIntOfPointerOp_opname
+
+let pointerOfRawIntOp_term = << pointerOfRawIntOp{ 'precision; 'sign } >>
+let pointerOfRawIntOp_opname = opname_of_term pointerOfRawIntOp_term
+let is_pointerOfRawIntOp_term = is_dep0_dep0_term pointerOfRawIntOp_opname
+let mk_pointerOfRawIntOp_term = mk_dep0_dep0_term pointerOfRawIntOp_opname
+let dest_pointerOfRawIntOp_term = dest_dep0_dep0_term pointerOfRawIntOp_opname
+
+(********************
+ * Binary operations.
+ ********************)
+
+(* Enums. *)
+
+let andEnumOp_term = << andEnumOp{ 'num } >>
+let andEnumOp_opname = opname_of_term andEnumOp_term
+let is_andEnumOp_term = is_dep0_term andEnumOp_opname
+let mk_andEnumOp_term = mk_dep0_term andEnumOp_opname
+let dest_andEnumOp_term = dest_dep0_term andEnumOp_opname
+
+let orEnumOp_term = << orEnumOp{ 'num } >>
+let orEnumOp_opname = opname_of_term orEnumOp_term
+let is_orEnumOp_term = is_dep0_term orEnumOp_opname
+let mk_orEnumOp_term = mk_dep0_term orEnumOp_opname
+let dest_orEnumOp_term = dest_dep0_term orEnumOp_opname
+
+(* Naml ints. *)
+
+let plusIntOp_term = << plusIntOp >>
+let plusIntOp_opname = opname_of_term plusIntOp_term
+let is_plusIntOp_term = is_no_subterms_term plusIntOp_opname
+
+let minusIntOp_term = << minusIntOp >>
+let minusIntOp_opname = opname_of_term minusIntOp_term
+let is_minusIntOp_term = is_no_subterms_term minusIntOp_opname
+
+let mulIntOp_term = << mulIntOp >>
+let mulIntOp_opname = opname_of_term mulIntOp_term
+let is_mulIntOp_term = is_no_subterms_term mulIntOp_opname
+
+let divIntOp_term = << divIntOp >>
+let divIntOp_opname = opname_of_term divIntOp_term
+let is_divIntOp_term = is_no_subterms_term divIntOp_opname
+
+let remIntOp_term = << remIntOp >>
+let remIntOp_opname = opname_of_term remIntOp_term
+let is_remIntOp_term = is_no_subterms_term remIntOp_opname
+
+let lslIntOp_term = << lslIntOp >>
+let lslIntOp_opname = opname_of_term lslIntOp_term
+let is_lslIntOp_term = is_no_subterms_term lslIntOp_opname
+
+let lsrIntOp_term = << lsrIntOp >>
+let lsrIntOp_opname = opname_of_term lsrIntOp_term
+let is_lsrIntOp_term = is_no_subterms_term lsrIntOp_opname
+
+let asrIntOp_term = << asrIntOp >>
+let asrIntOp_opname = opname_of_term asrIntOp_term
+let is_asrIntOp_term = is_no_subterms_term asrIntOp_opname
+
+let andIntOp_term = << andIntOp >>
+let andIntOp_opname = opname_of_term andIntOp_term
+let is_andIntOp_term = is_no_subterms_term andIntOp_opname
+
+let orIntOp_term = << orIntOp >>
+let orIntOp_opname = opname_of_term orIntOp_term
+let is_orIntOp_term = is_no_subterms_term orIntOp_opname
+
+let xorIntOp_term = << xorIntOp >>
+let xorIntOp_opname = opname_of_term xorIntOp_term
+let is_xorIntOp_term = is_no_subterms_term xorIntOp_opname
+
+let maxIntOp_term = << maxIntOp >>
+let maxIntOp_opname = opname_of_term maxIntOp_term
+let is_maxIntOp_term = is_no_subterms_term maxIntOp_opname
+
+let minIntOp_term = << minIntOp >>
+let minIntOp_opname = opname_of_term minIntOp_term
+let is_minIntOp_term = is_no_subterms_term minIntOp_opname
+
+let eqIntOp_term = << eqIntOp >>
+let eqIntOp_opname = opname_of_term eqIntOp_term
+let is_eqIntOp_term = is_no_subterms_term eqIntOp_opname
+
+let neqIntOp_term = << neqIntOp >>
+let neqIntOp_opname = opname_of_term neqIntOp_term
+let is_neqIntOp_term = is_no_subterms_term neqIntOp_opname
+
+let ltIntOp_term = << ltIntOp >>
+let ltIntOp_opname = opname_of_term ltIntOp_term
+let is_ltIntOp_term = is_no_subterms_term ltIntOp_opname
+
+let leIntOp_term = << leIntOp >>
+let leIntOp_opname = opname_of_term leIntOp_term
+let is_leIntOp_term = is_no_subterms_term leIntOp_opname
+
+let gtIntOp_term = << gtIntOp >>
+let gtIntOp_opname = opname_of_term gtIntOp_term
+let is_gtIntOp_term = is_no_subterms_term gtIntOp_opname
+
+let geIntOp_term = << geIntOp >>
+let geIntOp_opname = opname_of_term geIntOp_term
+let is_geIntOp_term = is_no_subterms_term geIntOp_opname
+
+let cmpIntOp_term = << cmpIntOp >>
+let cmpIntOp_opname = opname_of_term cmpIntOp_term
+let is_cmpIntOp_term = is_no_subterms_term cmpIntOp_opname
+
+(* Native ints. *)
+
+let plusRawIntOp_term = << plusRawIntOp{ 'precision; 'sign } >>
+let plusRawIntOp_opname = opname_of_term plusRawIntOp_term
+let is_plusRawIntOp_term = is_dep0_dep0_term plusRawIntOp_opname
+let mk_plusRawIntOp_term = mk_dep0_dep0_term plusRawIntOp_opname
+let dest_plusRawIntOp_term = dest_dep0_dep0_term plusRawIntOp_opname
+
+let minusRawIntOp_term = << minusRawIntOp{ 'precision; 'sign } >>
+let minusRawIntOp_opname = opname_of_term minusRawIntOp_term
+let is_minusRawIntOp_term = is_dep0_dep0_term minusRawIntOp_opname
+let mk_minusRawIntOp_term = mk_dep0_dep0_term minusRawIntOp_opname
+let dest_minusRawIntOp_term = dest_dep0_dep0_term minusRawIntOp_opname
+
+let mulRawIntOp_term = << mulRawIntOp{ 'precision; 'sign } >>
+let mulRawIntOp_opname = opname_of_term mulRawIntOp_term
+let is_mulRawIntOp_term = is_dep0_dep0_term mulRawIntOp_opname
+let mk_mulRawIntOp_term = mk_dep0_dep0_term mulRawIntOp_opname
+let dest_mulRawIntOp_term = dest_dep0_dep0_term mulRawIntOp_opname
+
+let divRawIntOp_term = << divRawIntOp{ 'precision; 'sign } >>
+let divRawIntOp_opname = opname_of_term divRawIntOp_term
+let is_divRawIntOp_term = is_dep0_dep0_term divRawIntOp_opname
+let mk_divRawIntOp_term = mk_dep0_dep0_term divRawIntOp_opname
+let dest_divRawIntOp_term = dest_dep0_dep0_term divRawIntOp_opname
+
+let remRawIntOp_term = << remRawIntOp{ 'precision; 'sign } >>
+let remRawIntOp_opname = opname_of_term remRawIntOp_term
+let is_remRawIntOp_term = is_dep0_dep0_term remRawIntOp_opname
+let mk_remRawIntOp_term = mk_dep0_dep0_term remRawIntOp_opname
+let dest_remRawIntOp_term = dest_dep0_dep0_term remRawIntOp_opname
+
+let slRawIntOp_term = << slRawIntOp{ 'precision; 'sign } >>
+let slRawIntOp_opname = opname_of_term slRawIntOp_term
+let is_slRawIntOp_term = is_dep0_dep0_term slRawIntOp_opname
+let mk_slRawIntOp_term = mk_dep0_dep0_term slRawIntOp_opname
+let dest_slRawIntOp_term = dest_dep0_dep0_term slRawIntOp_opname
+
+let srRawIntOp_term = << srRawIntOp{ 'precision; 'sign } >>
+let srRawIntOp_opname = opname_of_term srRawIntOp_term
+let is_srRawIntOp_term = is_dep0_dep0_term srRawIntOp_opname
+let mk_srRawIntOp_term = mk_dep0_dep0_term srRawIntOp_opname
+let dest_srRawIntOp_term = dest_dep0_dep0_term srRawIntOp_opname
+
+let andRawIntOp_term = << andRawIntOp{ 'precision; 'sign } >>
+let andRawIntOp_opname = opname_of_term andRawIntOp_term
+let is_andRawIntOp_term = is_dep0_dep0_term andRawIntOp_opname
+let mk_andRawIntOp_term = mk_dep0_dep0_term andRawIntOp_opname
+let dest_andRawIntOp_term = dest_dep0_dep0_term andRawIntOp_opname
+
+let orRawIntOp_term = << orRawIntOp{ 'precision; 'sign } >>
+let orRawIntOp_opname = opname_of_term orRawIntOp_term
+let is_orRawIntOp_term = is_dep0_dep0_term orRawIntOp_opname
+let mk_orRawIntOp_term = mk_dep0_dep0_term orRawIntOp_opname
+let dest_orRawIntOp_term = dest_dep0_dep0_term orRawIntOp_opname
+
+let xorRawIntOp_term = << xorRawIntOp{ 'precision; 'sign } >>
+let xorRawIntOp_opname = opname_of_term xorRawIntOp_term
+let is_xorRawIntOp_term = is_dep0_dep0_term xorRawIntOp_opname
+let mk_xorRawIntOp_term = mk_dep0_dep0_term xorRawIntOp_opname
+let dest_xorRawIntOp_term = dest_dep0_dep0_term xorRawIntOp_opname
+
+let maxRawIntOp_term = << maxRawIntOp{ 'precision; 'sign } >>
+let maxRawIntOp_opname = opname_of_term maxRawIntOp_term
+let is_maxRawIntOp_term = is_dep0_dep0_term maxRawIntOp_opname
+let mk_maxRawIntOp_term = mk_dep0_dep0_term maxRawIntOp_opname
+let dest_maxRawIntOp_term = dest_dep0_dep0_term maxRawIntOp_opname
+
+let minRawIntOp_term = << minRawIntOp{ 'precision; 'sign } >>
+let minRawIntOp_opname = opname_of_term minRawIntOp_term
+let is_minRawIntOp_term = is_dep0_dep0_term minRawIntOp_opname
+let mk_minRawIntOp_term = mk_dep0_dep0_term minRawIntOp_opname
+let dest_minRawIntOp_term = dest_dep0_dep0_term minRawIntOp_opname
+
+(* raw set bit field op goes here *)
+
+let eqRawIntOp_term = << eqRawIntOp{ 'precision; 'sign } >>
+let eqRawIntOp_opname = opname_of_term eqRawIntOp_term
+let is_eqRawIntOp_term = is_dep0_dep0_term eqRawIntOp_opname
+let mk_eqRawIntOp_term = mk_dep0_dep0_term eqRawIntOp_opname
+let dest_eqRawIntOp_term = dest_dep0_dep0_term eqRawIntOp_opname
+
+let neqRawIntOp_term = << neqRawIntOp{ 'precision; 'sign } >>
+let neqRawIntOp_opname = opname_of_term neqRawIntOp_term
+let is_neqRawIntOp_term = is_dep0_dep0_term neqRawIntOp_opname
+let mk_neqRawIntOp_term = mk_dep0_dep0_term neqRawIntOp_opname
+let dest_neqRawIntOp_term = dest_dep0_dep0_term neqRawIntOp_opname
+
+let ltRawIntOp_term = << ltRawIntOp{ 'precision; 'sign } >>
+let ltRawIntOp_opname = opname_of_term ltRawIntOp_term
+let is_ltRawIntOp_term = is_dep0_dep0_term ltRawIntOp_opname
+let mk_ltRawIntOp_term = mk_dep0_dep0_term ltRawIntOp_opname
+let dest_ltRawIntOp_term = dest_dep0_dep0_term ltRawIntOp_opname
+
+let leRawIntOp_term = << leRawIntOp{ 'precision; 'sign } >>
+let leRawIntOp_opname = opname_of_term leRawIntOp_term
+let is_leRawIntOp_term = is_dep0_dep0_term leRawIntOp_opname
+let mk_leRawIntOp_term = mk_dep0_dep0_term leRawIntOp_opname
+let dest_leRawIntOp_term = dest_dep0_dep0_term leRawIntOp_opname
+
+let gtRawIntOp_term = << gtRawIntOp{ 'precision; 'sign } >>
+let gtRawIntOp_opname = opname_of_term gtRawIntOp_term
+let is_gtRawIntOp_term = is_dep0_dep0_term gtRawIntOp_opname
+let mk_gtRawIntOp_term = mk_dep0_dep0_term gtRawIntOp_opname
+let dest_gtRawIntOp_term = dest_dep0_dep0_term gtRawIntOp_opname
+
+let geRawIntOp_term = << geRawIntOp{ 'precision; 'sign } >>
+let geRawIntOp_opname = opname_of_term geRawIntOp_term
+let is_geRawIntOp_term = is_dep0_dep0_term geRawIntOp_opname
+let mk_geRawIntOp_term = mk_dep0_dep0_term geRawIntOp_opname
+let dest_geRawIntOp_term = dest_dep0_dep0_term geRawIntOp_opname
+
+let cmpRawIntOp_term = << cmpRawIntOp{ 'precision; 'sign } >>
+let cmpRawIntOp_opname = opname_of_term cmpRawIntOp_term
+let is_cmpRawIntOp_term = is_dep0_dep0_term cmpRawIntOp_opname
+let mk_cmpRawIntOp_term = mk_dep0_dep0_term cmpRawIntOp_opname
+let dest_cmpRawIntOp_term = dest_dep0_dep0_term cmpRawIntOp_opname
+
+(* Floats. *)
+
+let plusFloatOp_term = << plusFloatOp{ 'precision } >>
+let plusFloatOp_opname = opname_of_term plusFloatOp_term
+let is_plusFloatOp_term = is_dep0_term plusFloatOp_opname
+let mk_plusFloatOp_term = mk_dep0_term plusFloatOp_opname
+let dest_plusFloatOp_term = dest_dep0_term plusFloatOp_opname
+
+let minusFloatOp_term = << minusFloatOp{ 'precision } >>
+let minusFloatOp_opname = opname_of_term minusFloatOp_term
+let is_minusFloatOp_term = is_dep0_term minusFloatOp_opname
+let mk_minusFloatOp_term = mk_dep0_term minusFloatOp_opname
+let dest_minusFloatOp_term = dest_dep0_term minusFloatOp_opname
+
+let mulFloatOp_term = << mulFloatOp{ 'precision } >>
+let mulFloatOp_opname = opname_of_term mulFloatOp_term
+let is_mulFloatOp_term = is_dep0_term mulFloatOp_opname
+let mk_mulFloatOp_term = mk_dep0_term mulFloatOp_opname
+let dest_mulFloatOp_term = dest_dep0_term mulFloatOp_opname
+
+let divFloatOp_term = << divFloatOp{ 'precision } >>
+let divFloatOp_opname = opname_of_term divFloatOp_term
+let is_divFloatOp_term = is_dep0_term divFloatOp_opname
+let mk_divFloatOp_term = mk_dep0_term divFloatOp_opname
+let dest_divFloatOp_term = dest_dep0_term divFloatOp_opname
+
+let remFloatOp_term = << remFloatOp{ 'precision } >>
+let remFloatOp_opname = opname_of_term remFloatOp_term
+let is_remFloatOp_term = is_dep0_term remFloatOp_opname
+let mk_remFloatOp_term = mk_dep0_term remFloatOp_opname
+let dest_remFloatOp_term = dest_dep0_term remFloatOp_opname
+
+let maxFloatOp_term = << maxFloatOp{ 'precision } >>
+let maxFloatOp_opname = opname_of_term maxFloatOp_term
+let is_maxFloatOp_term = is_dep0_term maxFloatOp_opname
+let mk_maxFloatOp_term = mk_dep0_term maxFloatOp_opname
+let dest_maxFloatOp_term = dest_dep0_term maxFloatOp_opname
+
+let minFloatOp_term = << minFloatOp{ 'precision } >>
+let minFloatOp_opname = opname_of_term minFloatOp_term
+let is_minFloatOp_term = is_dep0_term minFloatOp_opname
+let mk_minFloatOp_term = mk_dep0_term minFloatOp_opname
+let dest_minFloatOp_term = dest_dep0_term minFloatOp_opname
+
+let eqFloatOp_term = << eqFloatOp{ 'precision } >>
+let eqFloatOp_opname = opname_of_term eqFloatOp_term
+let is_eqFloatOp_term = is_dep0_term eqFloatOp_opname
+let mk_eqFloatOp_term = mk_dep0_term eqFloatOp_opname
+let dest_eqFloatOp_term = dest_dep0_term eqFloatOp_opname
+
+let neqFloatOp_term = << neqFloatOp{ 'precision } >>
+let neqFloatOp_opname = opname_of_term neqFloatOp_term
+let is_neqFloatOp_term = is_dep0_term neqFloatOp_opname
+let mk_neqFloatOp_term = mk_dep0_term neqFloatOp_opname
+let dest_neqFloatOp_term = dest_dep0_term neqFloatOp_opname
+
+let ltFloatOp_term = << ltFloatOp{ 'precision } >>
+let ltFloatOp_opname = opname_of_term ltFloatOp_term
+let is_ltFloatOp_term = is_dep0_term ltFloatOp_opname
+let mk_ltFloatOp_term = mk_dep0_term ltFloatOp_opname
+let dest_ltFloatOp_term = dest_dep0_term ltFloatOp_opname
+
+let leFloatOp_term = << leFloatOp{ 'precision } >>
+let leFloatOp_opname = opname_of_term leFloatOp_term
+let is_leFloatOp_term = is_dep0_term leFloatOp_opname
+let mk_leFloatOp_term = mk_dep0_term leFloatOp_opname
+let dest_leFloatOp_term = dest_dep0_term leFloatOp_opname
+
+let gtFloatOp_term = << gtFloatOp{ 'precision } >>
+let gtFloatOp_opname = opname_of_term gtFloatOp_term
+let is_gtFloatOp_term = is_dep0_term gtFloatOp_opname
+let mk_gtFloatOp_term = mk_dep0_term gtFloatOp_opname
+let dest_gtFloatOp_term = dest_dep0_term gtFloatOp_opname
+
+let geFloatOp_term = << geFloatOp{ 'precision } >>
+let geFloatOp_opname = opname_of_term geFloatOp_term
+let is_geFloatOp_term = is_dep0_term geFloatOp_opname
+let mk_geFloatOp_term = mk_dep0_term geFloatOp_opname
+let dest_geFloatOp_term = dest_dep0_term geFloatOp_opname
+
+let cmpFloatOp_term = << cmpFloatOp{ 'precision } >>
+let cmpFloatOp_opname = opname_of_term cmpFloatOp_term
+let is_cmpFloatOp_term = is_dep0_term cmpFloatOp_opname
+let mk_cmpFloatOp_term = mk_dep0_term cmpFloatOp_opname
+let dest_cmpFloatOp_term = dest_dep0_term cmpFloatOp_opname
+
+let atan2Op_term = << atan2Op{ 'precision } >>
+let atan2Op_opname = opname_of_term atan2Op_term
+let is_atan2Op_term = is_dep0_term atan2Op_opname
+let mk_atan2Op_term = mk_dep0_term atan2Op_opname
+let dest_atan2Op_term = dest_dep0_term atan2Op_opname

@@ -822,12 +822,12 @@ let tryReduce_geT = argfunT (fun i p ->
 let sumList tl p =
    match tl with
    h::t ->
-      let aux a (l,r) =
+      let aux (l,r) a =
          let tm = get_term a p in
          let (al,ar) = dest_ge tm in
          (mk_add_term al l, mk_add_term ar r) in
       let h_tm = get_term h p in
-      let (sl, sr)=List.fold_right aux t (dest_ge h_tm) in
+      let (sl, sr)=List.fold_left aux (dest_ge h_tm) t in
       mk_ge_term sl sr
    | [] ->
       let zero = << 0 >> in
@@ -839,7 +839,11 @@ let sumListT = argfunT (fun l p ->
    let s = sumList l p in
    if !debug_int_arith then
    	eprintf "Contradictory term:%a%t" debug_print s eflush;
-   thenLocalAT (assertT s) (tryT (repeatT ge_addMono)))
+   thenLocalAT (assertT s) 
+   				(repeatT (ge_addMono thenT (tryT (onSomeHypT nthHypT)))))
+(* This looks like another working solution:   				
+ *					(repeatT ((progressT (onSomeHypT nthHypT)) orelseT ge_addMono)))
+ *)
 
 (* Test if term has a form of a>=b+i where i is a number
  *)

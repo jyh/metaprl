@@ -32,7 +32,9 @@ MPFILES :=\
 	itt_decidable\
 	itt_bool\
 	itt_ext_equal\
-	itt_int\
+	itt_int_base\
+        itt_int_ext\
+        itt_int\
 	itt_int_bool\
 	itt_atom_bool\
 	itt_arith\

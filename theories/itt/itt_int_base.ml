@@ -130,6 +130,13 @@ define unfold_lt :
  *
  * @end[doc]
  *)
+(*
+ * Integers are canonical.
+ *)
+prim int_sqequal 'H :
+   sequent [squash] { 'H >- 'a = 'b in int } -->
+   sequent ['ext] { 'H >- 'a ~ 'b } = it
+
 prim add_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
@@ -178,7 +185,7 @@ rewrite beq_int_is_true 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} <--> "btrue" }
 *)
-prim_rw beq_int_is_true 'H :
+prim_rw beq_int_is_true :
    ('a = 'b in int) -->
    beq_int{'a; 'b} <--> btrue
 
@@ -344,7 +351,7 @@ prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 
 
 (*!
  * @begin[doc]
- * @Order relation properties
+ * @thysubsection{Order relation properties}
  *
  * @tt{lt_bool} defines reflexive, decidable, transitive and 
  * discrete order on @tt{int}
@@ -354,12 +361,12 @@ prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 
  Definition of basic operations (and relations) on int
  *)
 
-prim_rw lt_Reflex 'H:
+prim_rw lt_Reflex :
    ('a IN int) -->
    ('b IN int) -->
    band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse
 
-prim_rw lt_Trichot 'H:
+prim_rw lt_Trichot :
    ('a IN int ) -->
    ('b IN int ) -->
    bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} <--> btrue
@@ -373,14 +380,14 @@ rule lt_Transit 'H 'b:
    sequent ['ext] { 'H >- 'a < 'c }
 *)
 
-prim_rw lt_Transit 'H 'b :
+prim_rw lt_Transit 'b :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    (band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool) -->
    lt_bool{'a; 'c} <--> btrue
 
-prim_rw lt_Discret 'H:
+prim_rw lt_Discret :
    ('a IN int ) -->
    ('b IN int ) -->
    lt_bool{'a; 'b} <--> bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}}
@@ -392,7 +399,7 @@ prim_rw lt_Discret 'H:
  *
  * @end[doc]
  *)
-prim_rw lt_addMono 'H 'c:
+prim_rw lt_addMono 'c:
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
@@ -408,12 +415,12 @@ prim_rw lt_addMono 'H 'c:
  *
  * @end[doc]
  *)
-prim_rw add_Commut 'H :
+prim_rw add_Commut :
    ('a IN int ) -->
    ('b IN int ) -->
    ('a +@ 'b) <--> ('b +@ 'a)
 
-prim_rw add_Assoc 'H:
+prim_rw add_Assoc :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
@@ -422,13 +429,13 @@ prim_rw add_Assoc 'H:
 (*!
  * @begin[doc]
  *
- * 0 is neutral element for @tt{add} in @tt{int}}
+ * 0 is neutral element for @tt{add} in @tt{int}
  *
  * @end[doc]
  *)
-prim_rw add_Id 'H :
+prim_rw add_Id :
    ('a IN int ) -->
-   'a <--> ('a +@ 0) 
+   ('a +@ 0) <--> 'a
 
 (*!
  * @begin[doc]
@@ -437,16 +444,16 @@ prim_rw add_Id 'H :
  *
  * @end[doc]
  *)
-prim_rw uni_add_inverse 'H :
+prim_rw uni_add_inverse :
    ('a IN int ) -->
    ( 'a +@ uni_minus{ 'a } ) <--> 0 
 
-interactive_rw uni_add_Distrib 'H :
+interactive_rw uni_add_Distrib :
    ('a IN int ) -->
    ('b IN int ) -->
    uni_minus{ ('a +@ 'b) } <--> ( uni_minus{ 'b } +@ uni_minus{ 'b } ) 
 
-interactive_rw uni_uni_reduce 'H :
+interactive_rw uni_uni_reduce :
    ('a IN int ) -->
    ('b IN int ) -->
    uni_minus{ uni_minus{ 'a } } <--> 'a
@@ -455,11 +462,21 @@ interactive_rw uni_uni_reduce 'H :
 (*
  * Type of int.
  *)
-let typeinf_resource = Mp_resource.improve typeinf_resource (int_term, infer_univ1)
+let typeinf_resource = Mp_resource.improve typeinf_resource (<<int>>, infer_univ1)
 
 (*
  * Type of number.
  *)
 let typeinf_resource =
-   Mp_resource.improve typeinf_resource (number_term, Typeinf.infer_const int_term)
+   Mp_resource.improve typeinf_resource (<<number[n:n]>>, Typeinf.infer_const <<int>>)
 
+let reduce_info =
+   [<< beq_int{'a; 'b} >>, beq_int_is_true;
+    << band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_Reflex;
+    << ('a +@ 0) >>, add_Id;
+    << ( 'a +@ uni_minus{ 'a } ) >>, uni_add_inverse;
+    << uni_minus{ ('a +@ 'b) } >>, uni_add_Distrib;
+    << uni_minus{ uni_minus{ 'a } } >>, uni_uni_reduce;
+    << ('a +@ ('b +@ 'c)) >>, add_Assoc]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info

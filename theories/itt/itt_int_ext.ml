@@ -41,7 +41,7 @@
 (*!
  * @begin[doc]
  * @parents
- * @ned[doc]
+ * @end[doc]
  *)
 include Itt_equal
 include Itt_rfun
@@ -114,12 +114,12 @@ define unfold_gt :
 Switching to define-version to provide the same behaviour as bool-relations,
 i.d. rewritability of <= in the same extent as of <
 
-prim_rw unfold_le 'H :
+prim_rw unfold_le :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a <= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
 
-prim_rw unfold_ge 'H :
+prim_rw unfold_ge :
    [wf] sequent [squash] { 'H >- a IN int } -->
    [wf] sequent [squash] { 'H >- b IN int } -->
    sequent ['ext] { 'H >- 'a >= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
@@ -146,44 +146,52 @@ prim mul_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
 
-interactive_rw lt_mulPositMono 'H 'c:
+interactive_rw lt_mulPositMono 'c:
    (0 < 'c ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    lt_bool{'a; 'b} <--> lt_bool{('c *@ 'a); ('c *@ 'b) }
 
-prim_rw mul_Commut 'H :
+prim_rw mul_Commut :
    ('a IN int ) -->
    ('b IN int ) -->
    ('a *@ 'b) <--> ('b *@ 'a)
 
-prim_rw mul_Assoc 'H :
+prim_rw mul_Assoc :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    ('a *@ ('b *@ 'c)) <--> (('a *@ 'b) *@ 'c) 
 
-prim_rw mul_add_Distrib 'H :
+prim_rw mul_add_Distrib :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c)) 
 
-prim_rw mul_Id 'H :
+prim_rw mul_Id :
    ('a IN int ) -->
-   'a <--> (1 *@ 'a) 
+   (1 *@ 'a) <--> 'a
 
-prim_rw mul_Zero 'H :
+prim_rw mul_Id2 :
+   ('a IN int ) -->
+   ('a *@ 1) <--> 'a
+
+prim_rw mul_Zero :
    ('a IN int ) -->
    (0 *@ 'a) <--> 0
  
-interactive_rw mul_uni_Assoc 'H :
+prim_rw mul_Zero2 :
+   ('a IN int ) -->
+   ('a *@ 0) <--> 0
+
+interactive_rw mul_uni_Assoc :
    ('a IN int ) -->
    ('b IN int ) -->
    ('a *@ uni_minus{ 'b }) <--> (uni_minus{ 'a } *@ 'b)
 
-interactive_rw lt_mulNegMono 'H 'c:
+interactive_rw lt_mulNegMono 'c:
    ('c < 0 ) -->
    ('a IN int ) -->
    ('b IN int ) -->
@@ -195,14 +203,14 @@ interactive_rw lt_mulNegMono 'H 'c:
  * @thysection{@tt[rem] definition and well-formedness}
  * @end[doc]
  *)
-prim_rw rem_baseReduce 'H:
+prim_rw rem_baseReduce :
    (0 <= 'a ) -->
    ('a < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('a rem 'b) <--> 'a 
 
-prim_rw rem_indReduce 'H:
+prim_rw rem_indReduce :
    (0 < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
@@ -220,14 +228,14 @@ interactive rem_wf {| intro_resource []; eqcd_resource |} 'H :
  * @thysection{@tt[div] definition and properties}
  * @end[doc]
  *)
-prim_rw div_baseReduce 'H:
+prim_rw div_baseReduce :
    (0 <= 'a ) -->
    ('a < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('a /@ 'b) <--> 0
 
-prim_rw div_indReduce 'H:
+prim_rw div_indReduce :
    (0 < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
@@ -257,7 +265,7 @@ interactive add_divReduce 'H:
    [wf] sequent [squash] {'H >- 'c IN int } -->
    sequent ['ext] {'H >- ('a /@ 'c) +@ ('b /@ 'c) <= ('a +@ 'b) /@ 'c }
 
-interactive_rw div_Assoc 'H:
+interactive_rw div_Assoc :
    (0 <= 'a ) -->
    (0 < 'b ) -->
    (0 < 'c ) -->
@@ -281,3 +289,13 @@ rewrite rem_Assoc 'H:
 *)
 
 
+let reduce_info =
+   [<< ('a *@ ('b *@ 'c)) >>, mul_Assoc;
+    << ('a *@ ('b +@ 'c)) >>, mul_add_Distrib;
+    << (1 *@ 'a) >>, mul_Id;
+    << ('a *@ 1) >>, mul_Id2;
+    << (0 *@ 'a) >>, mul_Zero;
+    << ('a *@ 0) >>, mul_Zero2;
+    << ('a *@ uni_minus{ 'b }) >>, mul_uni_Assoc]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info

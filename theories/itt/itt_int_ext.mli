@@ -76,12 +76,12 @@ define unfold_gt :
 Switching to define-version to provide the same behaviour as bool-relations,
 i.d. rewritability of <= in the same extent as of <
 
-rewrite unfold_le 'H :
+rewrite unfold_le :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a <= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
 
-rewrite unfold_ge 'H :
+rewrite unfold_ge :
    [wf] sequent [squash] { 'H >- a IN int } -->
    [wf] sequent [squash] { 'H >- b IN int } -->
    sequent ['ext] { 'H >- 'a >= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
@@ -101,58 +101,66 @@ rule mul_wf 'H :
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int }
 
-rewrite lt_mulPositMono 'H 'c:
+rewrite lt_mulPositMono 'c:
    (0 < 'c ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    lt_bool{'a; 'b} <--> lt_bool{('c *@ 'a); ('c *@ 'b) }
 
-rewrite mul_Commut 'H :
+rewrite mul_Commut :
    ('a IN int ) -->
    ('b IN int ) -->
    ('a *@ 'b) <--> ('b *@ 'a)
 
-rewrite mul_Assoc 'H :
+rewrite mul_Assoc :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    ('a *@ ('b *@ 'c)) <--> (('a *@ 'b) *@ 'c) 
 
-rewrite mul_add_Distrib 'H :
+rewrite mul_add_Distrib :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c)) 
 
-rewrite mul_Id 'H :
+rewrite mul_Id :
    ('a IN int ) -->
-   'a <--> (1 *@ 'a) 
+   (1 *@ 'a) <--> 'a
 
-rewrite mul_Zero 'H :
+rewrite mul_Id2 :
+   ('a IN int ) -->
+   ('a *@ 1) <--> 'a
+
+rewrite mul_Zero :
    ('a IN int ) -->
    (0 *@ 'a) <--> 0
  
-rewrite mul_uni_Assoc 'H :
+rewrite mul_Zero2 :
+   ('a IN int ) -->
+   ('a *@ 0) <--> 0
+
+rewrite mul_uni_Assoc :
    ('a IN int ) -->
    ('b IN int ) -->
    ('a *@ uni_minus{ 'b }) <--> (uni_minus{ 'a } *@ 'b)
 
-rewrite lt_mulNegMono 'H 'c:
+rewrite lt_mulNegMono 'c:
    ('c < 0 ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    lt_bool{'a; 'b} <--> lt_bool{('c *@ 'b) ; ('c *@ 'a)} 
 
-rewrite rem_baseReduce 'H:
+rewrite rem_baseReduce :
    (0 <= 'a ) -->
    ('a < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('a rem 'b) <--> 'a 
 
-rewrite rem_indReduce 'H:
+rewrite rem_indReduce :
    (0 < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
@@ -165,14 +173,14 @@ rule rem_wf 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a rem 'b) IN int }
 
-rewrite div_baseReduce 'H:
+rewrite div_baseReduce :
    (0 <= 'a ) -->
    ('a < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
    ('a /@ 'b) <--> 0
 
-rewrite div_indReduce 'H:
+rewrite div_indReduce :
    (0 < 'b ) -->
    ('a IN int ) -->
    ('b IN int ) -->
@@ -202,7 +210,7 @@ rule add_divReduce 'H:
    [wf] sequent [squash] {'H >- 'c IN int } -->
    sequent ['ext] {'H >- ('a /@ 'c) +@ ('b /@ 'c) <= ('a +@ 'b) /@ 'c }
 
-rewrite div_Assoc 'H:
+rewrite div_Assoc :
    (0 <= 'a ) -->
    (0 < 'b ) -->
    (0 < 'c ) -->

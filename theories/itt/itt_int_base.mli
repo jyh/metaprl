@@ -64,6 +64,13 @@ define unfold_sub :
 define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 
+(*
+ * Integers are canonical.
+ *)
+rule int_sqequal 'H :
+   sequent [squash] { 'H >- 'a = 'b in int } -->
+   sequent ['ext] { 'H >- 'a ~ 'b }
+
 rule add_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
@@ -105,11 +112,11 @@ rule eq_int_assert_elim 'H 'J :
    sequent ['ext] { 'H; x: "assert"{beq_int{'a; 'b}}; 'J['x] >- 'C['x] }
 
 (*
-rewrite beq_int_is_true 'H :
+rewrite beq_int_is_true :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} <--> "btrue" }
 *)
-rewrite beq_int_is_true 'H :
+rewrite beq_int_is_true :
    ('a = 'b in int) -->
    beq_int{'a; 'b} <--> btrue
 
@@ -227,12 +234,12 @@ rule indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
  Definition of basic operations (and relations) on int
  *)
 
-rewrite lt_Reflex 'H:
+rewrite lt_Reflex :
    ('a IN int) -->
    ('b IN int) -->
    band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse
 
-rewrite lt_Trichot 'H:
+rewrite lt_Trichot :
    ('a IN int ) -->
    ('b IN int ) -->
    bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} <--> btrue
@@ -246,56 +253,56 @@ rule lt_Transit 'H 'b:
    sequent ['ext] { 'H >- 'a < 'c }
 *)
 
-rewrite lt_Transit 'H 'b :
+rewrite lt_Transit 'b :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    (band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool) -->
    lt_bool{'a; 'c} <--> btrue
 
-rewrite lt_Discret 'H:
+rewrite lt_Discret :
    ('a IN int ) -->
    ('b IN int ) -->
    lt_bool{'a; 'b} <--> bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}}
 
-rewrite lt_addMono 'H 'c:
+rewrite lt_addMono 'c:
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    lt_bool{'a; 'b} <--> lt_bool{('a +@ 'c); ('b +@ 'c)}
 
-rewrite add_Commut 'H :
+rewrite add_Commut :
    ('a IN int ) -->
    ('b IN int ) -->
    ('a +@ 'b) <--> ('b +@ 'a)
 
-rewrite add_Assoc 'H:
+rewrite add_Assoc :
    ('a IN int ) -->
    ('b IN int ) -->
    ('c IN int ) -->
    ('a +@ ('b +@ 'c)) <--> (('a +@ 'b) +@ 'c)
 
-rewrite add_Id 'H :
+rewrite add_Id :
    ('a IN int ) -->
-   'a <--> ('a +@ 0) 
+   ('a +@ 0) <--> 'a
 
-rewrite uni_add_inverse 'H :
+rewrite uni_add_inverse :
    ('a IN int ) -->
    ( 'a +@ uni_minus{ 'a } ) <--> 0 
 
 (*
-rewrite sub_reduce 'H :
+rewrite sub_reduce :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a -@ 'b <--> 'a +@ uni_minus{'b}
 *)
 
-rewrite uni_add_Distrib 'H :
+rewrite uni_add_Distrib :
    ('a IN int ) -->
    ('b IN int ) -->
    uni_minus{ ('a +@ 'b) } <--> ( uni_minus{ 'b } +@ uni_minus{ 'b } ) 
 
-rewrite uni_uni_reduce 'H :
+rewrite uni_uni_reduce :
    ('a IN int ) -->
    ('b IN int ) -->
    uni_minus{ uni_minus{ 'a } } <--> 'a

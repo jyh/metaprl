@@ -1,5 +1,5 @@
 (*
- * Rules for dependent product.
+ * Rules for undependent product.
  *
  * ----------------------------------------------------------------
  *

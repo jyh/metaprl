@@ -8,7 +8,8 @@
  * $@tunion{x; A; B[x]}$.  The elements of the union are the
  * elements of any of the types $B[x]$ for any $x @in A$.
  *
- * The membership equality is the @emph{union} of the equalities
+ * The membership equality is the @emph{the transitive closure of union}
+ * of the equalities
  * in each of the cases $B[x]$.  That is, two elements are equal
  * in the union if they are equal in @emph{any} of the cases.  This
  * may be surprising.  For example, the type

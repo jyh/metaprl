@@ -36,6 +36,7 @@ MPFILES :=\
 	itt_atom_bool\
 	itt_arith\
 	itt_isect\
+	itt_disect\
 	itt_tunion\
 	itt_bisect\
 	itt_bunion\

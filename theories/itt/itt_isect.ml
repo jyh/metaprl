@@ -194,6 +194,19 @@ interactive topType {| intro_resource [] |} 'H :
  *   'b[it]
  *)
 
+(*
+ * H >- isect x: A. B ext b[it]
+ * by intersectionMemberFormation z
+ * H >- A = A in type
+ * H, z: hide(A) >- B ext b[z]
+ *)
+
+prim intersectionMemberFormation {| intro_resource [] |} 'H 'z :
+    [wf] sequent [squash] { 'H >- "type"{'A} } -->
+    [main] ('b['z] : sequent ['ext] { 'H; z: hide{'A} >- 'B }) -->
+    sequent ['ext] { 'H >- isect x: 'A. 'B } =
+    'b[it]
+
 (*!
  * @begin[doc]
  * @thysubsection{Membership}
@@ -224,6 +237,7 @@ interactive topMemberEquality {| intro_resource []; eqcd_resource |} 'H :
  * equal in each of the case of the intersection.
  * @end[doc]
  *)
+
 prim intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } -->
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
@@ -236,13 +250,13 @@ prim intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
  *
  * The elimination form performs instantiation of the
  * intersection space.  If $a @in A$, the elimination form
- * instantiates the intersection assumption $x@colon @isect{u; A; B[y]}$
+ * instantiates the intersection assumption $x@colon @isect{y; A; B[y]}$
  * to get a proof that $x @in B[a]$.
  * @end[doc]
  *)
-prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'y 'v :
+prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'z 'v :
    [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a = 'a in 'A } -->
-   [main] ('t['x; 'y; 'v] : sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x] }) -->
+   [main] ('t['x; 'z; 'v] : sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x] }) -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
    't['x; 'x; it]
 
@@ -258,7 +272,7 @@ prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'y 'v :
  *)
 prim intersectionSubtype {| intro_resource [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent [squash] { 'H; a: 'A2 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } } =
    it
 

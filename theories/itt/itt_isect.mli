@@ -86,6 +86,18 @@ rule topType 'H :
    sequent ['ext] { 'H >- "type"{top} }
 
 (*
+ * H >- isect x: A. B ext b[it]
+ * by intersectionMemberFormation z
+ * H >- A = A in type
+ * H, z: hide(A) >- B ext b[z]
+ *)
+rule intersectionMemberFormation 'H 'z :
+    sequent [squash] { 'H >- "type"{'A} } -->
+    sequent ['ext] { 'H; z: hide{'A} >- 'B } -->
+    sequent ['ext] { 'H >- isect x: 'A. 'B }
+
+
+(*
  * H >- b1 = b2 in isect x:A. B[x]
  * by intersectionMemberEquality z
  * H >- A = A in type
@@ -116,7 +128,8 @@ rule intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
  * H, x: isect y: A. B[y], J[x] >- a = a in A
  * H, x: isect y: A. B[y], J[x], z: B[a], v: z = f in B[a] >- T[x]
  *)
-rule intersectionElimination 'H 'J 'a 'x 'y 'v :
+
+rule intersectionElimination 'H 'J 'a 'x 'z 'v :
    sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x] } -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
@@ -126,11 +139,11 @@ rule intersectionElimination 'H 'J 'a 'x 'y 'v :
  * by intersectionSubtype
  *
  * H >- A2 <= A1
- * H, a: A1 >- B1[a] <= B2[a]
+ * H, a: A2 >- B1[a] <= B2[a]
  *)
 rule intersectionSubtype 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent [squash] { 'H; a: 'A2 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } }
 
 rule topSubtype 'H :

@@ -38,6 +38,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Itt_field2
 doc docoff
+extends Itt_cyclic_group
 
 open Lm_debug
 open Refiner.Refiner.TermOp
@@ -50,6 +51,7 @@ open Itt_fun
 open Itt_record
 open Itt_group
 open Itt_grouplikeobj
+open Itt_cyclic_group
 open Itt_field2
 open Itt_ring2
 open Itt_squash
@@ -274,13 +276,21 @@ define unfold_mul_poly : mul_poly{'p; 'q; 'F} <-->
    if bor{isZeroPoly{'p;'F}; isZeroPoly{'q;'F}} then zero_poly{'F}
    else (fst{'p} +@ fst{'q}, lambda{x. sum{0; 'x; y. (coeff{'p;'y;'F} *['F] coeff{'q;('x-@'y);'F}); 'F}})
 
-define unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
+(*define unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
    ind{ fst{'p}; (snd{'p} fst{'p}); i,up.
         ((snd{'p} (fst{'p} -@ 'i)) +['F] ('a *['F] 'up)) }
 
 interactive_rw unfold_eval_poly1 : eval_poly{('u, 'v); 'a; 'F} <-->
    ind{ 'u; ('v 'u); i,up.
         (('v ('u -@ 'i)) +['F] ('a *['F] 'up)) }
+*)
+define unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
+   ind{ fst{'p}; (snd{'p} 0); k,up.
+        ('up +['F] (natpower{'F; 'a; 'k} *['F] (snd{'p} 'k))) }
+
+interactive_rw unfold_eval_poly1 : eval_poly{('u, 'v); 'a; 'F} <-->
+   ind{ 'u; ('v 0); k,up.
+        ('up +['F] (natpower{'F; 'a; 'k} *['F] ('v 'k))) }
 doc docoff
 
 let fold_poly = makeFoldC << poly{'F} >> unfold_poly
@@ -464,7 +474,30 @@ interactive eval_poly_wf {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
    sequent { <H> >- eval_poly{'p; 'a; 'F} in 'F^car }
 
-interactive eval_normalize {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
+interactive eval_leadingcoeff_isZero {| intro [] |} :
+   [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'a in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H> >- fst{'p} > 0 } -->
+   sequent { <H> >- "assert"{isZero{(snd{'p} fst{'p}); 'F}} } -->
+   sequent { <H> >- eval_poly{'p; 'a; 'F} = eval_poly{((fst{'p} -@ 1), snd{'p}); 'a; 'F} in 'F^car }
+
+interactive eval_leadingcoeff_isZero1 {| intro [] |} :
+   [wf] sequent { <H> >- 'u in nat } -->
+   [wf] sequent { <H> >- 'v in (nat{'u +@ 2} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'a in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H> >- 'u > 0 } -->
+   sequent { <H> >- "assert"{isZero{('v ('u +@ 1)); 'F}} } -->
+   sequent { <H> >- eval_poly{('u +@ 1, 'v); 'a; 'F} = eval_poly{('u, 'v); 'a; 'F} in 'F^car }
+
+interactive eval_normalize {| intro [] |} :
    [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
@@ -473,14 +506,14 @@ interactive eval_normalize {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
    sequent { <H> >- eval_poly{normalize{'p; 'F}; 'a; 'F} = eval_poly{'p; 'a; 'F} in 'F^car }
 
-interactive eval_add_wf1 {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
+interactive eval_add_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
    [wf] sequent { <H> >- 'q in poly{'F} } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
    [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
    sequent { <H> >- eval_poly{'p; 'a; 'F} +['F] eval_poly{'q; 'a; 'F} = eval_poly{add_poly{'p; 'q; 'F}; 'a; 'F} in 'F^car }
 
-interactive eval_mul_wf1 {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
+interactive eval_mul_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
    [wf] sequent { <H> >- 'q in poly{'F} } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->

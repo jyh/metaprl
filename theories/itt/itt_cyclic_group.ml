@@ -62,19 +62,23 @@ doc <:doc< @doc{@rewrites} >>
 define unfold_group_power : group_power{'g; 'a; 'n} <-->
    ind{'n; i, j. ('g^inv 'a) *['g] 'j; .'g^"1"; k, l. 'a *['g] 'l}
 
-let resource reduce += << group_power{'g; 'a; number[n:n]} >>, unfold_group_power
-
 define unfold_isCyclic : isCyclic{'g} <-->
    (exst a: 'g^car. all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car))
 
 define unfold_cycSubg : cycSubg{'g; 'a} <-->
    {car={x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv}
 
+define unfold_natpower : natpower{'g; 'a; 'n} <-->
+   ind{'n; .'g^"1"; k, l. 'a *['g] 'l}
 doc docoff
+
+let resource reduce += << group_power{'g; 'a; number[n:n]} >>, unfold_group_power
+let resource reduce += << natpower{'g; 'a; number[n:n]} >>, unfold_natpower
 
 let fold_group_power = makeFoldC << group_power{'g; 'a; 'n} >> unfold_group_power
 let fold_isCyclic = makeFoldC << isCyclic{'g} >> unfold_isCyclic
 let fold_cycSubg = makeFoldC << cycSubg{'g; 'a} >> unfold_cycSubg
+let fold_natpower = makeFoldC << natpower{'g; 'a; 'n} >> unfold_natpower
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -85,6 +89,12 @@ dform group_power_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"
 
 dform group_power_df2 : mode[prl] :: parens :: "prec"[prec_inv] :: group_power{'G; 'a; 'n} =
 (*   `"(" slot{'a} `"^" slot{'n} `")" sub{'G}*)
+   slot["le"]{'a} sup{'n} sub{'G}
+
+dform natpower_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_inv] :: natpower{'G; 'a; 'n} =
+   slot["le"]{'a} sup{'n} sub{'G}
+
+dform natpower_df2 : mode[prl] :: parens :: "prec"[prec_inv] :: natpower{'G; 'a; 'n} =
    slot["le"]{'a} sup{'n} sub{'G}
 
 dform isCyclic_df : except_mode[src] :: isCyclic{'G} =
@@ -100,6 +110,15 @@ dform cycSubg_df : except_mode[src] :: cycSubg{'G; 'a} =
 interactive_rw reduce_group_power_0 {| reduce |} :
    group_power{'g; 'a; 0} <--> ('g^"1")
 
+interactive_rw reduce_natpower_0 {| reduce |} :
+   natpower{'g; 'a; 0} <--> ('g^"1")
+
+interactive_rw natpower_group_power :
+   ('n in nat) -->
+   natpower{'g; 'a; 'n} <--> group_power{'g; 'a; 'n}
+
+let natpowerC = natpower_group_power
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -112,6 +131,13 @@ doc <:doc<
    Well-formedness.
    @end[doc]
 >>
+interactive natpower_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'n in nat } -->
+   [wf] sequent { <H>; x: 'g^car; y: 'g^car >- 'x *['g] 'y in 'g^car } -->
+   [wf] sequent { <H> >- 'g^"1" in 'g^car } -->
+   sequent { <H> >- natpower{'g; 'a; 'n} in 'g^car }
+
 interactive group_power_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in 'g^car } -->
    [wf] sequent { <H> >- 'n in int } -->

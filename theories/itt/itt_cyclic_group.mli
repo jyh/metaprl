@@ -41,6 +41,7 @@ open Tactic_type.Conversionals
  ************************************************************************)
 
 declare group_power{'g; 'a; 'n}
+declare natpower{'g; 'a; 'n}
 declare isCyclic{'g}
 declare cycSubg{'g; 'a}
 
@@ -49,8 +50,11 @@ declare cycSubg{'g; 'a}
  ************************************************************************)
 
 topval fold_group_power : conv
+topval fold_natpower : conv
 topval fold_isCyclic : conv
 topval fold_cycSubg : conv
+
+topval natpowerC : conv
 
 (*
  * -*-

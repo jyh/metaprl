@@ -82,6 +82,41 @@ interactive new_var_wf {| intro [] |} :
 
 doc <:doc<
    @begin[doc]
+   @modsubsection{Last variable}
+
+   << last_var{'bt} >> is the last variable of the term $bt$:
+   $$ new@_var(<<Gamma>>,x.t) = <<Gamma>>,x.x$$
+   @end[doc]
+>>
+define unfold_last_var: last_var{'bt} <--> var{bdepth{'bt}-@1;0}
+
+interactive_rw last_var_reduce1 {| reduce |} :
+      last_var{make_bterm{'op;'subterms}} <--> var{op_bdepth{'op}-@1;0}
+
+interactive_rw last_var_reduce2 {| reduce |} :
+      'l in nat -->
+      'r in nat -->
+       last_var{var{'l;'r}} <--> var{'l +@ 'r ; 0}
+
+interactive_rw last_var_var_reduce :
+      ('u in Var) -->
+      last_var{'u} <--> var{left{'u}+@right{'u}; 0}
+
+interactive_rw last_var_bdepth {| reduce |} :
+   ('bt in BTerm)  -->
+   depth{last_var{'bt}} <--> bdepth{'bt}
+
+interactive last_var_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- last_var{'bt} in Var }
+
+interactive last_var_wf2 {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- last_var{'bt}  in Vars_of{'bt} }
+
+
+doc <:doc<
+   @begin[doc]
    @modsubsection{Add a binding variable}
 
    $$ add@_var(<<Gamma>>, <<Delta>>.s; <<Gamma>>,x,<<Delta>>_1.x) = <<Gamma>>,x,<<Delta>>.s$$

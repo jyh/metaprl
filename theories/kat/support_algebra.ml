@@ -69,59 +69,54 @@ let assocC =
       )
 
 
-let subAssocC_1 first length opname revAssocC conv  =
+
+
+
+let subAssoc first length conv env  = (* may raise Not_found *)
+   let term = (env_term env) in
+   let opname = opname_of_term term  in
+   let table = Sequent.get_resource_arg (env_arg env) get_associative_resource in
+   let (_,revAssocC) = slookup table term
+   in
    let rec sub0C length = (* invariant: sub0C always applies to an opname term *)
      if length > 1 then
         revAssocC thenC sub0C (length-1)
-        orelseC if length = 2 then conv else failC
+        orelseC
+           if length = 2 then conv
+           else failWithC "subAssocC: Not enough subterms (the second argument is too big)"
      else if length = 1 then
         addrC [0] conv
-     else failC
+     else raise (Invalid_argument ("Trying to apply subAssocC with nonpositive length"))
   in
   let rec subNC first =  termC (fun term ->
      if opname_of_term term <> opname then
-        if first=0 && length=1 then conv else failC
+        if first=0 && length=1 then conv
+        else raise (RefineError ("subAssocC", StringError ("Not enough subterms")))
      else
         if first>0 then
            addrC [1] (subNC (first -1) )
         else if first = 0 then
            sub0C length
-        else failC )
+        else raise (Invalid_argument ("Trying to apply subAssocC with negative argument"))
+                               )
   in
      subNC first
 
-
 let subAssocC first length conv  =
    funC (fun env ->
-   let term = (env_term env) in
-   let opname = opname_of_term term  in
       try
-         let table = Sequent.get_resource_arg (env_arg env) get_associative_resource in
-         let (_,revAssocC) = slookup table term in
-            subAssocC_1 first length opname revAssocC conv
+         subAssoc first length conv env
       with Not_found ->
-               raise (RefineError ("subAssocC", StringTermError ("Associative resource does not know about", term)))
-)
+               raise (RefineError ("subAssocC", StringError ("subAssocC is applied to a term that associative resource does not know about")))
+        )
 
 let rec addrAssocC addr conv =
    funC (fun env ->
-   let term = (env_term env) in
-   let opname = opname_of_term term  in
-   let ussualC ()=
-      match addr with
+      match  addr with
             [] -> conv |
-            n::rest -> addrC [n] (addrAssocC rest conv)
-   in
-   let specialC revAssocC =
-      match addr with
-            [] -> conv |
-            first::length::rest -> subAssocC_1 first length opname revAssocC (addrAssocC rest conv) |
-            _ -> failC
-   in
-      try
-         let table = Sequent.get_resource_arg (env_arg env) get_associative_resource in
-         let (_,revAssocC) = slookup table term in
-            specialC revAssocC
-      with _ -> ussualC ()
-)
-
+            [n] ->  addrC [n] conv |
+            n::m::rest ->
+               try  subAssoc n m (addrAssocC rest conv) env
+               with Not_found ->  addrC [n] (addrAssocC (m::rest) conv)
+        )
+(*            _ ->  raise (Invalid_argument ("addrAssocC is applied to an associative term. Need at least two argements for adress")) *)

@@ -20,6 +20,8 @@ declare star{'x}    (*   'x^*  *)
 
 declare bool
 
+declare kleene
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -36,7 +38,7 @@ dform one_zero_df : number[n:n] =
    slot[n:n]
 
 dform prod_df : parens :: "prec"[prec_mul] :: ('x * 'y) =
-   slot["le"]{'x} " " slot["lt"]{'y}
+   slot["le"]{'x}  cdot slot["lt"]{'y}
 
 dform plus_df : parens :: "prec"[prec_add] :: ('x + 'y) =
    slot["le"]{'x} `" + " slot["lt"]{'y}
@@ -48,6 +50,8 @@ dform star_df : parens :: "prec"[prec_star] :: star{'a} =
    slot["le"]{'a} sup{slot["*"]}
 
 dform bool_df : bool = mathbbB
+
+dform kleene_df : kleene = mathbbK
 
 
 

@@ -34,8 +34,8 @@ let selectSubAT first length =  rws (subAssocC  first length selectC)
 
 let selectDownAT addr = rws (addrAssocC addr selectC)
 
-let selectGoalDownT addr = selectGoalT thenT selectDownT addr
+let selectGoalDownT addr = rw (addrC addr selectC) 0
 
-let selectGoalDownAT addr = selectGoalT thenT selectDownAT addr
+let selectGoalDownAT addr = rw (addrAssocC addr selectC) 0
 
 

@@ -142,6 +142,7 @@ let notle2geT t =
 *)
 
 let anyArithRel2geT i p =
+(* We skip first item because it is a context *)
    if i<>1 then
       let g=Sequent.goal p in
       let (_,t)=Refiner.Refiner.TermMan.nth_hyp g i in

@@ -226,13 +226,13 @@ let rec first_clause_aux i len constants hyps =
       i, constants
    else
       match SeqHyp.get hyps i with
-         (HypBinding (_, hyp) | Hypothesis hyp) as h ->
+         Hypothesis (_, hyp) as h ->
             let opname = opname_of_term hyp in
                if List.exists (Opname.eq opname) decl_opnames then
                   let constants =
                      match h with
-                        HypBinding(v, _) -> StringSet.add constants (string_of_symbol v)
-                      | _ -> constants
+                        Hypothesis(v, _) -> StringSet.add constants (string_of_symbol v)
+                      | Context _ -> constants
                   in
                      first_clause_aux (i + 1) len constants hyps
                else
@@ -289,7 +289,7 @@ let dest_hyps bound hyps =
    let _ =
       for i = j to len - 1 do
          match SeqHyp.get hyps i with
-            HypBinding (_, hyp) | Hypothesis hyp ->
+            Hypothesis (_, hyp) ->
                hyps'.(i) <- dest_hyp hyp
           | Context _ ->
                ()

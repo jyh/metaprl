@@ -633,7 +633,7 @@ let rec all_hyps_aux hyps l i =
    if i = 0 then l else
    let i = pred i in
       match SeqHyp.get hyps i with
-         Hypothesis t | HypBinding (_, t) ->
+         Hypothesis (_, t) ->
             all_hyps_aux hyps ((i+1,t)::l) i
        | Context _ ->
             all_hyps_aux hyps l i

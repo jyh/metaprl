@@ -377,7 +377,7 @@ let process_squash_resource_annotation name contexts args stmt tac =
          let t,a,_ = dest_equal concl in
             t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H; x:T; J[x] |- C[x] *)
-    | [| h |], [], [], [Context(h',[],[]); HypBinding(v,t); Context(_, [h''], [v'])] when
+    | [| h |], [], [], [Context(h',[],[]); Hypothesis(v,t); Context(_, [h''], [v'])] when
          h = h' && h' = h'' && is_var_term v' && (dest_var v') = v &&
          is_so_var_term concl &&
          begin match dest_so_var concl with
@@ -464,7 +464,7 @@ let resource elim += (squash_term, squash_elimT)
 let rec unsquashAllT_aux i seq hyps =
    if i > hyps then idT else
    match SeqHyp.get seq (pred i) with
-      HypBinding (_, hyp) | Hypothesis hyp when is_squash_term hyp ->
+      Hypothesis (_, hyp) when is_squash_term hyp ->
          unsquashT i orthenT unsquashAllT_aux (succ i) seq hyps
     | _ ->
          unsquashAllT_aux (succ i) seq hyps

@@ -767,56 +767,45 @@ doc <:doc<
 
 let none_var = Lm_symbol.add "none"
 
-let moveToConclT = argfunT (fun i p ->
-   let i = Sequent.get_pos_hyp_num p i in
-   let hyps = (Sequent.explode_sequent p).sequent_hyps in
-   let vars, indices =
-      match SeqHyp.get hyps (i - 1) with
-         HypBinding (v, hyp) ->
-            [v], [i, v, hyp]
-       | Hypothesis hyp ->
-            [], [i, none_var, hyp]
-       | Context _ ->
-            raise(RefineError("moveToConclT",StringError "is a context"))
+let moveToConclT =
+   let err = RefineError("moveToConclT",StringError "is a context") in
+   let rec tac len goal = function
+      (i, v, hyp) :: tl ->
+         if is_var_free v goal then
+            let goal' = mk_all_term v hyp goal in
+               assertT goal'
+               thenLT [thinT i thenT tac len goal' tl;
+                       all_elim (len + 1) (mk_var_term v) (**)
+                          thenLT [equalityAxiom i; hypothesis (-1)]]
+
+         else
+            let goal' = mk_implies_term hyp goal in
+               assertT goal'
+               thenLT [thinT i thenT tac len goal' tl;
+                       (implies_elim (len + 1)) thenLT [hypothesis i; hypothesis (-1)]]
+    | [] ->
+         idT
    in
-   let len = SeqHyp.length hyps in
-   let rec collect i vars indices =
+   let rec collect hyps len i vars indices =
       if i > len then
          indices
       else
          match SeqHyp.get hyps (i - 1) with
-            HypBinding (v, hyp) ->
-               if (List.mem v vars) or (is_some_var_free vars hyp) then
-                  collect (i + 1) (v :: vars) ((i, v, hyp) :: indices)
-               else
-                  collect (i + 1) vars indices
-          | Hypothesis hyp ->
+            Hypothesis (v, hyp) ->
                if is_some_var_free vars hyp then
-                  collect (i + 1) vars ((i, none_var, hyp) :: indices)
+                  collect hyps len (i + 1) (v :: vars) ((i, v, hyp) :: indices)
                else
-                  collect (i + 1) vars indices
-          | _ ->
-               collect (i + 1) vars indices
-   in
-   let rec tac indices goal =
-      match indices with
-         (i, v, hyp) :: tl ->
-            if is_var_free v goal then
-               let goal' = mk_all_term v hyp goal in
-                  assertT goal'
-                  thenLT [thinT i thenT tac tl goal';
-                          all_elim (len + 1) (mk_var_term v) (**)
-                             thenLT [equalityAxiom i; hypothesis (-1)]]
-
-            else
-               let goal' = mk_implies_term hyp goal in
-                  assertT goal'
-                  thenLT [thinT i thenT tac tl goal';
-                          (implies_elim (len + 1)) thenLT [hypothesis i; hypothesis (-1)]]
-       | [] ->
-            idT
-   in
-      tac (collect (i+1) vars indices) (Sequent.concl p))
+                  collect hyps len (i + 1) (Lm_list_util.tryremove v vars) indices
+          | Context _ ->
+               collect hyps len (i + 1) vars indices
+   in argfunT (fun i p ->
+      let i = Sequent.get_pos_hyp_num p i in
+      let hyps = (Sequent.explode_sequent p).sequent_hyps in
+         match SeqHyp.get hyps (i - 1) with
+            Context _ -> raise err
+          | Hypothesis (v, hyp) ->
+               let len = SeqHyp.length hyps in
+                  tac len (Sequent.concl p) (collect hyps len (i+1) [v] [i, v, hyp]))
 
 doc <:doc<
    @begin[doc]
@@ -1145,9 +1134,9 @@ let assum_term goal assum =
          assum, 1
       else let j = pred j in
          match SeqHyp.get hyps j with
-            HypBinding (v, hyp) when is_var_free v assum ->
+            Hypothesis (v, hyp) when is_var_free v assum ->
                collect j (mk_all_term v hyp assum)
-          | HypBinding (_, hyp) | Hypothesis hyp when j >= index ->
+          | Hypothesis (_, hyp) when j >= index ->
                collect j (mk_implies_term hyp assum)
           | _ -> assum, j + 2
    in
@@ -1292,7 +1281,7 @@ struct
       let rec aux i =
          if i = len then find_in_assums term tac assums
          else match SeqHyp.get hyps i with
-            HypBinding(_,t) | Hypothesis t when alpha_equal t term -> tac (i+1)
+            Hypothesis(_,t) when alpha_equal t term -> tac (i+1)
           | _ -> aux (i+1)
       in
          aux 0)

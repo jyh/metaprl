@@ -1,7 +1,5 @@
 OCAMLINCLUDES[] +=
-        ../../base
-        $(ROOT)/libmojave/stdlib
-        $(ROOT)/libmojave/util
+        $(dir ../../base)
         $(SUPPORT_DIRS)
 
 MLZFILES =\

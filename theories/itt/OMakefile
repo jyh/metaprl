@@ -99,6 +99,7 @@ MPFILES =\
    itt_rat\
    itt_rat2\
    itt_supinf\
+   itt_synt_var\
    itt_reflection\
    itt_reflection_test\
    itt_pairwise\

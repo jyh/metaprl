@@ -809,7 +809,7 @@ let num1 = num_of_int 1
 let term2term_number p t =
 	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
 	let s=mk_sequent_term es in
-	let s'=Top_conversionals.apply_rewrite p normalizeC s in
+	let s'=Top_conversionals.apply_rewrite p (addrLiteralC (concl_addr s) normalizeC) s in
 	let t'=TermMan.concl s' in
 	begin
 		if !debug_int_arith then

@@ -355,7 +355,7 @@ let ge2af var2index (i,t) =
 let apply_rewrite p conv t =
 	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
 	let s=mk_sequent_term es in
-	let s'=Top_conversionals.apply_rewrite p (higherC conv) s in
+	let s'=Top_conversionals.apply_rewrite p (addrLiteralC (concl_addr s) conv) s in
 	TermMan.concl s'
 
 let rec make_sacs_aux p i l = function

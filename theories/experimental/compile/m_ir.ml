@@ -302,8 +302,11 @@ dform atom_binop_eq_df : parens :: "prec"[prec_rel] :: AtomRelop{EqOp; 'e1; 'e2}
 dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomRelop{NeqOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " Nuprl_font!neq `" " slot["le"]{'e2}
 
-(* General relop *)
-dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomRelop{'op; 'e1; 'e2} =
+(* General bin/relop *)
+dform atom_binop_gen_df : parens :: "prec"[prec_rel] :: AtomRelop{'op; 'e1; 'e2} =
+   slot["lt"]{'e1} `" " slot{'op} `" " slot["le"]{'e2}
+
+dform atom_binop_gen_df : parens :: "prec"[prec_rel] :: AtomBinop{'op; 'e1; 'e2} =
    slot["lt"]{'e1} `" " slot{'op} `" " slot["le"]{'e2}
 
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
@@ -311,7 +314,7 @@ dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
 
 (* Expressions *)
 dform exp_let_atom_df : parens :: "prec"[prec_let] :: LetAtom{'a; v. 'e} =
-   xlet `" " slot{'v} bf[" = "] slot{'a} `" " xin hspace slot["lt"]{'e}
+   szone pushm[3] xlet `" " slot{'v} bf[" = "] slot{'a} `" " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_tailcall_df : parens :: "prec"[prec_let] :: TailCall{'f; 'args} =
    bf["tailcall "] slot{'f} `" " slot{'args}
@@ -404,10 +407,10 @@ dform alloc_tuple_cons_cons_df : alloc_tuple{cons{'a1; cons{'a2; 'l}}} =
  * Actual tuple operations.
  *)
 dform exp_let_tuple_df : parens :: "prec"[prec_let] :: LetTuple{'length; 'tuple; v. 'e} =
-   xlet `" " slot{'v} bf[" =[length = "] slot{'length} bf["] "] slot{'tuple} `" " xin hspace slot["lt"]{'e}
+   szone pushm[3] xlet `" " slot{'v} bf[" =[length = "] slot{'length} bf["] "] slot{'tuple} `" " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v. 'e} =
-   xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e}
+   szone pushm[3] xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_set_subscript_df : parens :: "prec"[prec_let] :: SetSubscript{'a1; 'a2; 'a3; 'e} =
    slot{'a1} `"[" slot{'a2} `"] <- " slot{'a3} `";" hspace slot["lt"]{'e}
@@ -416,10 +419,10 @@ dform exp_set_subscript_df : parens :: "prec"[prec_let] :: SetSubscript{'a1; 'a2
  * Functions and application.
  *)
 dform exp_let_apply_df : parens :: "prec"[prec_let] :: LetApply{'f; 'a; v. 'e} =
-   xlet bf[" apply "] slot{'v} bf[" = "] slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
+   szone pushm[3] xlet bf[" apply "] slot{'v} bf[" = "] slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_let_closure_df : parens :: "prec"[prec_let] :: LetClosure{'f; 'a; v. 'e} =
-   xlet bf[" closure "] slot{'v} bf[" = "] slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
+   szone pushm[3] xlet bf[" closure "] slot{'v} bf[" = "] slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_return_df : Return{'a} =
    bf["return"] `"(" slot{'a} `")"
@@ -443,7 +446,7 @@ dform label_df : Label[s:t] =
    `"\"" slot[s:t] `"\""
 
 dform let_fun_def : parens :: "prec"[prec_let] :: LetFun{'R; 'label; f. 'e} =
-   xlet bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " xin hspace slot["lt"]{'e}
+   szone pushm[3] xlet bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " xin hspace slot["lt"]{'e} popm ezone
 
 (*
  * Initialization code.

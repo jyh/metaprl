@@ -60,6 +60,7 @@ open Term_match_table
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
+open Tactic_type.Rewrite
 
 (************************************************************************
  * REDUCTION RESOURCE                                                   *
@@ -85,6 +86,8 @@ doc <:doc<
 let resource cps =
    table_resource_info identity extract_data
 
+let process_cps_resource_rw_annotation = redex_and_conv_of_rw_annotation "cps"
+
 let cpsTopC_env e =
    get_resource_arg (env_arg e) get_cps_resource
 
@@ -105,51 +108,35 @@ doc <:doc<
    This should be eliminated by the end of CPS conversion.
   
    @begin[itemize]
-   @item{CPSRecordVar{R} represents the application of the record $R$ to
+   @item{@tt["CPSRecordVar{R}"] represents the application of the record $R$ to
          the identity function.}
   
-   @item{CPSFunVar{f} represents the application of the function $f$ to
+   @item{@tt["CPSFunVar{f}"] represents the application of the function $f$ to
          the identity function.}
   
-   @item{
-      @begin[verbatim]
-      CPS{'cont; 'a; v. 'e['v]}
-      @end[verbatim]
-      means
-      @begin[verbatim]
-      let v = apply{'cont; 'a} in 'e['v]
-      @end[verbatim]}
-  
-   @item{
-      @begin[verbatim]
-      CPS{'cont; 'e}
-      @end[verbatim]
+   @item{@tt["CPS{'cont; 'e}"]
       is the CPS conversion of expression $e$ with continuation ${cont}$.
       The interpretation is as the application ${cont}@space{}e$.}
   
-   @item{
-      @begin[verbatim]
-      CPS{cont. 'fields}
-      @end[verbatim]
+   @item{@tt["CPS{cont. 'fields['cont]}"]
       is the CPS conversion of a record body.  We think of a record
-      @begin[verbatim]
-      { f1 = e1; ...; fn = en }
-      @end[verbatim]
+      @tt["{ f1 = e1; ...; fn = en }"]
       as a function from labels to expressions (on label $f_i$, the function returns $e_i$).
       The CPS form is $@lambda l. @lambda c. CPS(c, {fields}(l))$.}
+
+   @item{@tt["CPS{'a}"]
+      is the conversion of the atom expression $a$ (which should be the same as $a$,
+      unless $a$ includes function variables).}
+  
    @end[itemize]
    @end[doc]
-  
-   EMRE BUG: The CPS term in the third item in the list above is never
-   actually declared.  The meaning is made clear in the rewrites below,
-   though.
 >>
 declare CPSRecordVar{'R}
 declare CPSFunVar{'f}
 
-declare CPS{'a}
 declare CPS{'cont; 'e}
 declare CPS{cont. 'fields['cont]}
+declare CPS{'a}
 
 doc <:doc< @docoff >>
 
@@ -180,41 +167,41 @@ doc <:doc<
    a function var.  If so, the function must be partially applied.
    @end[doc]
 >>
-prim_rw cps_atom_true : CPS{AtomTrue} <-->
+prim_rw cps_atom_true {| cps |} : CPS{AtomTrue} <-->
    AtomTrue
 
-prim_rw cps_atom_false : CPS{AtomFalse} <-->
+prim_rw cps_atom_false {| cps |} : CPS{AtomFalse} <-->
    AtomFalse
 
-prim_rw cps_atom_int : CPS{AtomInt[i:n]} <-->
+prim_rw cps_atom_int {| cps |} : CPS{AtomInt[i:n]} <-->
    AtomInt[i:n]
 
-prim_rw cps_atom_var : CPS{AtomVar{'v}} <-->
+prim_rw cps_atom_var {| cps |} : CPS{AtomVar{'v}} <-->
    AtomVar{'v}
 
-prim_rw cps_atom_binop : CPS{AtomBinop{'op; 'a1; 'a2}} <-->
+prim_rw cps_atom_binop {| cps |} : CPS{AtomBinop{'op; 'a1; 'a2}} <-->
    AtomBinop{'op; CPS{'a1}; CPS{'a2}}
 
-prim_rw cps_atom_relop : CPS{AtomRelop{'op; 'a1; 'a2}} <-->
+prim_rw cps_atom_relop {| cps |} : CPS{AtomRelop{'op; 'a1; 'a2}} <-->
    AtomRelop{'op; CPS{'a1}; CPS{'a2}}
 
 (* EMRE: so this rule expands (f (lambda x. x)) to f? *)
-prim_rw cps_fun_var : CPS{CPSFunVar{'f}} <-->
+prim_rw cps_fun_var {| cps |} : CPS{CPSFunVar{'f}} <-->
    AtomVar{'f}
 
-prim_rw cps_alloc_tuple_nil : CPS{AllocTupleNil} <-->
+prim_rw cps_alloc_tuple_nil {| cps |} : CPS{AllocTupleNil} <-->
    AllocTupleNil
 
-prim_rw cps_alloc_tuple_cons : CPS{AllocTupleCons{'a; 'rest}} <-->
+prim_rw cps_alloc_tuple_cons {| cps |} : CPS{AllocTupleCons{'a; 'rest}} <-->
    AllocTupleCons{CPS{'a}; CPS{'rest}}
 
-prim_rw cps_arg_cons : CPS{ArgCons{'a; 'rest}} <-->
+prim_rw cps_arg_cons {| cps |} : CPS{ArgCons{'a; 'rest}} <-->
    ArgCons{CPS{'a}; CPS{'rest}}
 
-prim_rw cps_arg_nil : CPS{ArgNil} <-->
+prim_rw cps_arg_nil {| cps |} : CPS{ArgNil} <-->
    ArgNil
 
-prim_rw cps_length : CPS{Length[i:n]} <-->
+prim_rw cps_length {| cps |} : CPS{Length[i:n]} <-->
    Length[i:n]
 
 doc <:doc< 
@@ -222,16 +209,16 @@ doc <:doc<
    CPS transformation for expressions.
    @end[doc]
 >>
-prim_rw cps_let_atom : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
+prim_rw cps_let_atom {| cps |} : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
    LetAtom{CPS{'a}; v. CPS{'cont; 'e['v]}}
 
-prim_rw cps_let_tuple : CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]}} <-->
+prim_rw cps_let_tuple {| cps |} : CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]}} <-->
    LetTuple{CPS{'length}; CPS{'tuple}; v. CPS{'cont; 'e['v]}}
 
-prim_rw cps_let_subscript : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
+prim_rw cps_let_subscript {| cps |} : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
    LetSubscript{CPS{'a1}; CPS{'a2}; v. CPS{'cont; 'e['v]}}
 
-prim_rw cps_if : CPS{'cont; If{'a; 'e1; 'e2}} <-->
+prim_rw cps_if {| cps |} : CPS{'cont; If{'a; 'e1; 'e2}} <-->
    If{CPS{'a}; CPS{'cont; 'e1}; CPS{'cont; 'e2}}
 
 (*
@@ -243,7 +230,7 @@ prim_rw cps_if : CPS{'cont; If{'a; 'e1; 'e2}} <-->
  * is equivalent to
  *    CPSFunVar{'f}
  *)
-prim_rw cps_let_apply :
+prim_rw cps_let_apply {| cps |} :
    CPS{'cont; LetApply{CPSFunVar{'f}; 'a2; v. 'e['v]}}
    <-->
    LetRec{R. FunDef{Label["g":t]; AtomFun{v. CPS{'cont; 'e['v]}};
@@ -257,68 +244,34 @@ doc <:doc<
    Converting functions is the hard part.
    @end[doc]
 >>
-prim_rw cps_let_rec : CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
+prim_rw cps_let_rec {| cps |} : CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
    LetRec{R1. CPS{cont. CPS{'cont; 'fields[CPSRecordVar{'R1}]}};
           R2. CPS{'cont; 'e[CPSRecordVar{'R2}]}}
 
-prim_rw cps_fields : CPS{cont. CPS{'cont; Fields{'fields['cont]}}} <-->
+prim_rw cps_fields {| cps |} : CPS{cont. CPS{'cont; Fields{'fields['cont]}}} <-->
    Fields{CPS{cont. CPS{'cont; 'fields['cont]}}}
 
-prim_rw cps_fun_def : CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'rest}}} <-->
+prim_rw cps_fun_def {| cps |} : CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'rest}}} <-->
    FunDef{'label; AtomFun{cont. AtomFun{v. CPS{'cont; 'e['v]}}}; CPS{cont. CPS{'cont; 'rest}}}
 
-prim_rw cps_end_def : CPS{cont. CPS{'cont; EndDef}} <-->
+prim_rw cps_end_def {| cps |} : CPS{cont. CPS{'cont; EndDef}} <-->
    EndDef
 
-prim_rw cps_initialize : CPS{'cont; Initialize{'e}} <-->
+prim_rw cps_initialize {| cps |} : CPS{'cont; Initialize{'e}} <-->
    Initialize{CPS{'cont; 'e}}
 
-prim_rw cps_let_fun : CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} <-->
+prim_rw cps_let_fun {| cps |} : CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} <-->
    LetFun{'R; 'label; f. CPS{'cont; 'e[CPSFunVar{'f}]}}
 
-prim_rw cps_return : CPS{'cont; Return{'a}} <-->
+prim_rw cps_return {| cps |} : CPS{'cont; Return{'a}} <-->
    TailCall{AtomVar{'cont}; ArgCons{CPS{'a}; ArgNil}}
 
-prim_rw cps_tailcall : CPS{'cont; TailCall{CPSFunVar{'f}; 'args}} <-->
+prim_rw cps_tailcall {| cps |} : CPS{'cont; TailCall{CPSFunVar{'f}; 'args}} <-->
    TailCall{AtomVar{'f}; ArgCons{AtomVar{'cont}; CPS{'args}}}
 
-prim_rw cps_fun_var_cleanup :
+prim_rw cps_fun_var_cleanup {| cps |} :
    AtomVar{CPSFunVar{'f}} <--> CPSFunVar{'f}
 doc <:doc< @docoff >>
-
-(*
- * Add all these rules to the CPS resource.
- *)
-let resource cps +=
-    [<< CPS{AtomTrue} >>, cps_atom_true;
-     << CPS{AtomFalse} >>, cps_atom_false;
-     << CPS{AtomInt[i:n]} >>, cps_atom_int;
-     << CPS{AtomVar{'v}} >>, cps_atom_var;
-     << CPS{AtomBinop{'op; 'a1; 'a2}} >>, cps_atom_binop;
-     << CPS{AtomRelop{'op; 'a1; 'a2}} >>, cps_atom_relop;
-     << CPS{CPSFunVar{'f}} >>, cps_fun_var;
-
-     << CPS{'cont; LetAtom{'a; v. 'e['v]}} >>, cps_let_atom;
-     << CPS{'cont; If{'a; 'e1; 'e2}} >>, cps_if;
-     << CPS{'cont; LetApply{CPSFunVar{'f}; 'a2; v. 'e['v]}} >>, cps_let_apply;
-
-     << CPS{AllocTupleNil} >>, cps_alloc_tuple_nil;
-     << CPS{AllocTupleCons{'a; 'rest}} >>, cps_alloc_tuple_cons;
-     << CPS{ArgCons{'a; 'rest}} >>, cps_arg_cons;
-     << CPS{ArgNil} >>, cps_arg_nil;
-     << CPS{Length[i:n]} >>, cps_length;
-     << CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]}} >>, cps_let_tuple;
-     << CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
-
-     << CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} >>, cps_let_rec;
-     << CPS{cont. CPS{'cont; Fields{'fields['cont]}}} >>, cps_fields;
-     << CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'rest}}} >>, cps_fun_def;
-     << CPS{cont. CPS{'cont; EndDef}} >>, cps_end_def;
-     << CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} >>, cps_let_fun;
-     << CPS{'cont; Return{'a}} >>, cps_return;
-     << CPS{'cont; TailCall{CPSFunVar{'f}; 'args}} >>, cps_tailcall;
-     << AtomVar{CPSFunVar{'f}} >>, cps_fun_var_cleanup;
-     << CPS{'cont; Initialize{'e}} >>, cps_initialize]
 
 doc <:doc< 
    @begin[doc]

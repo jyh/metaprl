@@ -38,7 +38,6 @@ extends Itt_bool
 extends Itt_logic
 extends Itt_decidable
 
-open Refiner.Refiner.Refine
 open Basic_tactics
 
 (************************************************************************

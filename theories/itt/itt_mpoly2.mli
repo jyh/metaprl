@@ -1,7 +1,6 @@
 extends Itt_list2
 extends Itt_ring_uce
 
-open Refiner.Refiner.Refine
 open Basic_tactics
 
 type var_set

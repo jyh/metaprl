@@ -98,9 +98,9 @@ extend the source language to one resembling a modern general-purpose language.
 
 @section["related-work"]{Related work}
 
-The use of higher-order abstract syntax, logical environments, and
+@comment{The use of higher-order abstract syntax, logical environments, and
 term rewriting for compiler implementation and validation are not new
-areas individually.
+areas individually.}
 
 Term rewriting has been successfully used to describe programming
 language syntax and semantics, and there are systems that provide
@@ -152,10 +152,11 @@ intermediate and final results.  For example, the work of Necula and
 Lee @cite["Nec00,NP98"] has led to effective mechanisms for certifying
 the output of compilers (e.g., with respect to type and memory-access
 safety), and for verifying that intermediate transformations on the
-code preserve its semantics.  While these approaches certify the code
+code preserve its semantics. 
+@comment{While these approaches certify the code
 and ease the debugging process (errors can be flagged at compile time
 rather than at run-time), it is not clear that they simplify the
-implementation task.
+implementation task.}
 
 There have been efforts to present more functional accounts of assembly as well.
 Morrisett @it["et. al."] @cite[MWCG98] developed a typed

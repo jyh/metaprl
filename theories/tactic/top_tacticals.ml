@@ -342,10 +342,6 @@ let doNotThinT = thinningT false
  * (@tt[onConclT] @i[tac]) tactical applies its argument tactic with
  * argument $0$.}
  *
- * @item{@tactic[onVarT];
- * The (@tt[onVarT] @i[tac]) applies its argument with the number
- * of the hypothesis labeled with variable $v$.}
- *
  * @item{@tactic[onClausesT], @tactic[onHypsT];
  * The @tt[onClausesT] and @tt[onHypsT] take a list of clause numbers.
  * The (@tt[onClausesT] $[i_1; @cdots; i_n]$ @i[tac]) is equivalent to
@@ -392,7 +388,6 @@ let tryOnAllMHypsT = Tactic_type.Tacticals.tryOnAllMHypsT
 let tryOnAllMClausesT = Tactic_type.Tacticals.tryOnAllMClausesT
 let onSomeAssumT = Tactic_type.Tacticals.onSomeAssumT
 let onSomeHypT = Tactic_type.Tacticals.onSomeHypT
-let onVarT = Tactic_type.Tacticals.onVarT
 
 (*!************************************************************************
  * @begin[doc]

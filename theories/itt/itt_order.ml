@@ -600,4 +600,4 @@ interactive strictTotalOrder_intro {| intro [] |} :
 	sequent { <H> >- isTrichotomous{'R^car; 'R^rel} } -->
    sequent { <H> >- 'R in strictTotalOrder[i:l,rel:t] }
 
-
+doc docoff

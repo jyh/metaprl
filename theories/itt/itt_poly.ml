@@ -216,6 +216,9 @@ let coeffZeropoly1C = reduce_coeff_zeropoly2
 interactive_rw reduce_eval_0 {| reduce |} :
    eval_poly{(0, 'v); 'a; 'F} <--> ('v 0)
 
+let resource reduce +=
+   << normalize{(0,'v); 'F} >>, unfold_normalize
+
 doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness, Introduction, Elimination}
@@ -286,6 +289,12 @@ interactive normalize_wf {| intro [] |} :
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    sequent { <H> >- normalize{'p; 'F} in poly{'F} }
+
+interactive normalize_fst_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- fst{normalize{'p; 'F}} in int }
 
 interactive add_const_wf {| intro [] |} :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
@@ -405,13 +414,26 @@ interactive eval_normalize {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car; y: 'F^car; "assert"{isZero{'y; 'F}} >- 'x +['F] 'y = 'x in 'F^car } -->
    sequent { <H> >- eval_poly{normalize{'p; 'F}; 'a; 'F} = eval_poly{'p; 'a; 'F} in 'F^car }
 
-(*interactive coeff_normalize {| intro [] |} :
+interactive normalize_leadingcoeff1 {| intro [] |} :
+   [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- fst{normalize{'p; 'F}} < fst{'p} +@ 1 }
+
+interactive normalize_leadingcoeff2 {| intro [] |} :
+   [wf] sequent { <H> >- 'u in nat } -->
+   [wf] sequent { <H> >- 'v in nat{'u +@ 1} -> 'F^car } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- fst{normalize{('u,'v); 'F}} < 'u +@ 1 }
+
+interactive coeff_normalize {| intro [] |} :
    [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
    [wf] sequent { <H> >- 'i in nat } -->
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    sequent { <H> >- coeff{normalize{'p; 'F}; 'i; 'F} = coeff{'p; 'i; 'F} in 'F^car }
-*)
+
 (*interactive eval_add_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
    [wf] sequent { <H> >- 'q in poly{'F} } -->
@@ -426,6 +448,9 @@ interactive eval_mul_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
    sequent { <H> >- eval_poly{'p; 'a; 'F} *['F] eval_poly{'q; 'a; 'F} = eval_poly{mul_poly{'p; 'q; 'F}; 'a; 'F} in 'F^car }
 *)
+
+doc docoff
+
 (************************************************************************
  * DISPLAY FOfMS                                                        *
  ************************************************************************)

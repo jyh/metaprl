@@ -220,9 +220,14 @@ PRINT_THEORIES =\
     itt_field_e\
     itt_order\
     itt_rat\
+    itt_synt_var\
+    itt_synt_operator\
+    itt_synt_bterm\
+    itt_synt_subst\
     itt_collection\
     itt_pointwise\
     itt_pointwise2
+
 
 TheoryDocumentInstall(itt, $(PRINT_THEORIES))
 

@@ -51,11 +51,10 @@ open Basic_tactics
 
 doc <:doc< @begin[doc]
    @modsection{Abstract type}
-   $Var$ consists of terms of the form <<var{'i;'j}>>, where $i$ and $j$ are arbitrary natural numbers,
-   and <<var{it;it}>> is a new constructor.
+   <<Var>> consists of terms of the form <<var{'i;'j}>>, where <<'i>> and <<'j>>
+   are arbitrary natural numbers, and <<var{it;it}>> is a new constructor.
    The expression <<var{'i;'j}>> is meant to represent the bterm
-   $bterm(<<Gamma>>; x; <<Delta>>. x)$
-   where $|<<Gamma>>|=i$ and  $|<<Delta>>|=j$.
+   $bterm(<<Gamma>>; x; <<Delta>>. x)$ where $|<<Gamma>>|=i$ and $|<<Delta>>|=j$.
 @end[doc] >>
 
 
@@ -67,8 +66,8 @@ dform var_df : var{'l; 'r} = `"var(" slot{'l} `"," slot{'r} `")"
 
 declare left{'v}
 declare right{'v}
-dform left_df : left{'v} = pi sub["L"] slot{'v}
-dform right_df : right{'v} = pi sub["R"] slot{'v}
+dform left_df : left{'v} = pi sub["L"] `"("slot{'v} `")"
+dform right_df : right{'v} = pi sub["R"] `"(" slot{'v} `")"
 
 prim_rw left_id {| reduce |} :
    'left in nat -->
@@ -85,7 +84,7 @@ doc <:doc< @begin[doc]
  @modsection{Definitions}
 
  @modsubsection{Depth}
- We specify that the depth of a variable <<var{'i;'j}>> is <<'i+@'j+@1>>.
+ The depth of a variable <<var{'i;'j}>> is <<'i+@'j+@1>>.
 @end[doc] >>
 
 define unfold_depth:
@@ -99,7 +98,7 @@ interactive_rw depth_reduce {| reduce |} :
 
 
 doc <:doc< @begin[doc]
- <<Var{'n}>> is a set of variabless with the depth $n$.
+   <<Var{'n}>> is a set of variables with depth <<'n>>.
 @end[doc] >>
 
 define unfold_var: Var{'n} <--> {v:Var| depth{'v} = 'n in int }
@@ -107,20 +106,20 @@ dform var_df : Var{'n} = Var sub{'n}
 
 
 doc <:doc< @begin[doc]
- @modsubsection{Equality}
-  Two variables <<var{'i;'j}>> and <<var{'i;'k}>> are represent the same variable in a term.
-  So, we define:
+   @modsubsection{Equality}
+   Variables <<var{'i;'j}>> and <<var{'i;'k}>> represent the same binding
+   << 'x >> in $bterm(<<Gamma>>; x; <<Delta>>. t[x])$ where $|<<Gamma>>|=i$.
+   We define:
 @end[doc] >>
 
 define unfold_is_eq:
    is_eq{'v;'u} <--> (left{'v} =@ left{'u})
-dform is_eq_df : is_eq{'v;'u} =  slot{'v} cong sub{bool} slot{'u}
+dform is_eq_df : is_eq{'v;'u} =  slot{'v} space cong sub{bool} space slot{'u}
 
 declare eq{'v;'u}
 iform unfold_eq:
    eq{'v;'u} <--> "assert"{is_eq{'v;'u}}
-dform eq_df : eq{'v;'u} =  slot{'v} cong sub{Var} slot{'u}
-
+dform eq_df : eq{'v;'u} =  slot{'v} space cong sub{Var} space slot{'u}
 
 interactive_rw eq_equal {| reduce |} :
    'left_1 in nat -->
@@ -176,6 +175,11 @@ interactive eq_wf {| intro [] |} :
    sequent { <H> >- 'v2 in Var } -->
    sequent { <H> >- is_eq{'v1; 'v2} in bool }
 
+interactive eq_wf1 {| intro [] |} :
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- eq{'v1; 'v2} Type }
+
 interactive_rw eq_same {| reduce |} :
    ('v in Var) -->
    is_eq{'v;'v} <--> btrue
@@ -193,6 +197,20 @@ interactive eq_trans 'v2 :
    sequent { <H> >- "assert"{is_eq{'v1; 'v2}} } -->
    sequent { <H> >- "assert"{is_eq{'v2; 'v3}} } -->
    sequent { <H> >- "assert"{is_eq{'v1; 'v3}} }
+
+interactive eq_sym1 :
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- eq{'v1; 'v2} } -->
+   sequent { <H> >- eq{'v2; 'v1} }
+
+interactive eq_trans1 'v2 :
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- 'v3 in Var } -->
+   sequent { <H> >- eq{'v1; 'v2} } -->
+   sequent { <H> >- eq{'v2; 'v3} } -->
+   sequent { <H> >- eq{'v1; 'v3} }
 
 (* XXX: TODO: arith tactics need to know abot the next 3 rules *)
 
@@ -221,4 +239,3 @@ interactive varSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 ~ 'b2 }
 
 doc <:doc< @docoff >>
-

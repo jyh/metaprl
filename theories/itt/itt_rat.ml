@@ -1079,3 +1079,4 @@ interactive ge_addMonoElim 'H 'c :
 	[wf] sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'c in rationals } -->
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]>; ge_rat{add_rat{'a;'c};add_rat{'b;'c}} >- 'C['w] } -->
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'C['w] }
+doc docoff

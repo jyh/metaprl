@@ -52,8 +52,8 @@ extends Itt_decidable
 extends Itt_quotient
 extends Itt_nequal
 extends Itt_int_arith
-extends Itt_field
 extends Itt_order
+extends Itt_field2
 doc <:doc< @docoff >>
 
 open Lm_debug

@@ -51,7 +51,6 @@ extends Itt_struct
 extends Itt_decidable
 extends Itt_quotient
 extends Itt_nequal
-extends Itt_field
 extends Itt_order
 extends Itt_int_arith
 doc <:doc< @docoff >>

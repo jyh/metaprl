@@ -88,8 +88,6 @@ MPFILES :=\
 	itt_group\
 	itt_cyclic_group\
 	itt_quotient_group\
-	itt_ring\
-	itt_field\
 	itt_poly\
 	itt_ring2\
 	itt_ring_e\

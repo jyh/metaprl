@@ -432,10 +432,10 @@ interactive ge_Transit 'b :
    sequent { <H> >- 'a >= 'c }
 
 interactive ge_addMono :
-   sequent { <H> >- 'a in int } -->
-   sequent { <H> >- 'b in int } -->
-   sequent { <H> >- 'c in int } -->
-   sequent { <H> >- 'd in int } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   [wf] sequent { <H> >- 'd in int } -->
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- 'c >= 'd } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }

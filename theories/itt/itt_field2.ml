@@ -400,41 +400,6 @@ doc <:doc<
 
    @end[doc]
 >>
-interactive field_subtype_unitring {| intro [] |} :
-   sequent { <H> >- field[i:l] subtype unitring[i:l] }
-
-interactive field_subtype_ring {| intro [] |} :
-   sequent { <H> >- field[i:l] subtype ring[i:l] }
-
-interactive mul_naddid_naddid1 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
-   [wf] sequent { <H> >- 'f in field[i:l] } -->
-   [wf] sequent { <H> >- 'a in 'f^car } -->
-   [wf] sequent { <H> >- 'b in 'f^car } -->
-   sequent { <H> >- 'a <> 'f^"0" in 'f^car } -->
-   sequent { <H> >- 'b <> 'f^"0" in 'f^car } -->
-   sequent { <H> >- 'a *['f] 'b <> 'f^"0" in 'f^car }
-
-interactive mul_naddid_naddid2 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
-   [wf] sequent { <H> >- 'f in field[i:l] } -->
-   [wf] sequent { <H> >- 'a in {x: 'f^car|'x <> 'f^"0" in 'f^car} } -->
-   [wf] sequent { <H> >- 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} } -->
-   sequent { <H> >- 'a *['f] 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} }
-
-interactive field_noDiv0 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
-   [wf] sequent { <H> >- 'f in field[i:l] } -->
-   sequent { <H> >- noDiv0{'f} }
-
-interactive field_subtype_intDomain {| intro [] |} :
-   sequent { <H> >- field[i:l] subtype intDomain[i:l] }
-
-interactive field_additive_group {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- 'f in field[i:l] } -->
-   sequent { <H> >- as_additive{'f} in group[i:l] }
-
-interactive field_additive_abelgroup {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- 'f in field[i:l] } -->
-   sequent { <H> >- as_additive{'f} in abelg[i:l] }
-
 define unfold_carNo0 : carNo0{'r} <-->
    rcrd["car":t]{{x: 'r^car|'x <> 'r^"0" in 'r^car}; 'r}
 doc docoff
@@ -450,6 +415,32 @@ let carNo0_rcrd_reduceC = carNo0_rcrd_reduce thenC reduce_eq_label thenC tryC re
 let resource reduce +=
    << carNo0{rcrd[a:t]{'x; 'r}} >>, carNo0_rcrd_reduceC
 
+let inf_carNo0 _ _ _ eqs opt_eqs defs t =
+      eqs, opt_eqs, defs, <<group[i:l]>>   (* hack *)
+
+let resource typeinf += (<< carNo0{'r}>>, inf_carNo0)
+
+interactive field_subtype_ring1 {| intro [] |} :
+   sequent { <H> >- field[i:l] subtype ring[i:l] }
+
+interactive mul_naddid_naddid1 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'f^car } -->
+   [wf] sequent { <H> >- 'b in 'f^car } -->
+   sequent { <H> >- 'a <> 'f^"0" in 'f^car } -->
+   sequent { <H> >- 'b <> 'f^"0" in 'f^car } -->
+   sequent { <H> >- 'a *['f] 'b <> 'f^"0" in 'f^car }
+
+interactive mul_naddid_naddid2 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   [wf] sequent { <H> >- 'a in {x: 'f^car|'x <> 'f^"0" in 'f^car} } -->
+   [wf] sequent { <H> >- 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} } -->
+   sequent { <H> >- 'a *['f] 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} }
+
+interactive field_noDiv0 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   sequent { <H> >- noDiv0{'f} }
+
 doc <:doc< @doc{ } >>
 interactive field_carNo0_group {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
@@ -458,6 +449,23 @@ interactive field_carNo0_group {| intro [AutoMustComplete] |} :
 interactive field_carNo0_abelgroup {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- carNo0{'f} in abelg[i:l] }
+
+interactive field_subtype_intDomain {| intro [] |} :
+   sequent { <H> >- field[i:l] subtype intDomain[i:l] }
+
+interactive field_subtype_unitring {| intro [] |} :
+   sequent { <H> >- field[i:l] subtype unitring[i:l] }
+
+interactive field_subtype_ring {| intro [] |} :
+   sequent { <H> >- field[i:l] subtype ring[i:l] }
+
+interactive field_additive_group {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   sequent { <H> >- as_additive{'f} in group[i:l] }
+
+interactive field_additive_abelgroup {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'f in field[i:l] } -->
+   sequent { <H> >- as_additive{'f} in abelg[i:l] }
 doc docoff
 
 

@@ -91,11 +91,11 @@ interactive preunitring_wf {| intro [] |} :
    sequent { <H> >- preunitring[i:l] Type }
 
 interactive isUnitRing_wf {| intro [] |} :
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
-   sequent { <H> >- 'R^"0" in 'R^car} -->
-   sequent { <H>; x: 'R^car >- 'R^neg 'x in 'R^car} -->
-   sequent { <H> >- 'R^"1" in 'R^car} -->
+   [wf] sequent { <H> >- 'R^"0" in 'R^car} -->
+   [wf] sequent { <H> >- 'R^"1" in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car >- 'R^neg 'x in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
    sequent { <H> >- isUnitRing{'R} Type }
 
 interactive unitring_wf {| intro [] |} :
@@ -108,11 +108,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive preunitring_intro {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car} } -->
+   [wf] sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car} } -->
    sequent { <H> >- 'R in preunitring[i:l] }
 
 interactive preunitring_equality {| intro [complete_unless_member] |} :
-   sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car} } -->
+   [wf] sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car} } -->
    sequent { <H> >- 'A = 'B in preunitring[i:l] }
 
 interactive preunitring_elim {| elim [] |} 'H :
@@ -121,15 +121,15 @@ interactive preunitring_elim {| elim [] |} 'H :
 doc docoff
 
 interactive car_preunitring_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} preunitring[i:l] :
-   sequent { <H> >- 'R in preunitring[i:l] } -->
+   [wf] sequent { <H> >- 'R in preunitring[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
 doc <:doc< @doc{ } >>
 interactive isUnitRing_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
    [main] sequent { <H> >- isRing{'R} } -->
-   [main] sequent { <H>; x: 'R^car >- 'R^"1" *['R] 'x = 'x in 'R^car } -->
-   [main] sequent { <H>; x: 'R^car >- 'x *['R] 'R^"1" = 'x in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car >- 'R^"1" *['R] 'x = 'x in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car >- 'x *['R] 'R^"1" = 'x in 'R^car } -->
    sequent { <H> >- isUnitRing{'R} }
 
 interactive isUnitRing_elim1 {| elim [] |} 'H :
@@ -155,8 +155,8 @@ interactive unitring_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'R in unitring[i:l] }
 
 interactive unitring_equality {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'A = 'B in preunitring[i:l] } -->
-   [main] sequent { <H> >- isUnitRing{'A} } -->
+   [wf] sequent { <H> >- 'A = 'B in preunitring[i:l] } -->
+   sequent { <H> >- isUnitRing{'A} } -->
    sequent { <H> >- 'A = 'B in unitring[i:l] }
 
 interactive unitring_elim1 {| elim [] |} 'H :
@@ -191,45 +191,45 @@ interactive unitring_subtype_monoid {| intro [] |} :
 doc docoff
 
 interactive car_unitring_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
-   sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
 interactive car_unitring_wf2 {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
    sequent { <H> >- 'R^car in univ[i:l] }
 
 interactive unitring_mul {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
-   sequent { <H> >- 'R in unitring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- 'a *['R] 'b in 'R^car }
 
 interactive unitring_mul_assoc {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
-   sequent { <H> >- 'R in unitring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- ('a *['R] 'b) *['R] 'c = 'a *['R] ('b *['R] 'c) in 'R^car }
 
 interactive unitring_mul_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
-   sequent { <H> >- 'R in unitring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'a *['R] ('b *['R] 'c) = ('a *['R] 'b) *['R] 'c in 'R^car }
 
 interactive unitring_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
-   sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
    sequent { <H> >- 'R^"1" in 'R^car }
 
 interactive unitring_left_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
-   sequent { <H> >- 'R in unitring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"1" *['R] 'a = 'a in 'R^car }
 
 interactive unitring_right_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
-   sequent { <H> >- 'R in unitring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'a *['R] 'R^"1" = 'a in 'R^car }
 
 
@@ -253,26 +253,25 @@ doc <:doc<
    @end[doc]
 >>
 interactive isUnit_wf {| intro [] |} :
-   sequent { <H> >- 'R^car Type } -->
-   sequent { <H>; a: 'R^car >- 'a *['R] 'x in 'R^car } -->
-   sequent { <H>; a: 'R^car >- 'x *['R] 'a in 'R^car } -->
-   sequent { <H> >- 'R^"1" in 'R^car } -->
+   [wf] sequent { <H>; a: 'R^car >- 'a *['R] 'x in 'R^car } -->
+   [wf] sequent { <H>; a: 'R^car >- 'x *['R] 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R^"1" in 'R^car } -->
    sequent { <H> >- isUnit{'x; 'R} Type }
 
 interactive isUnit_univ {| intro [] |} :
-   sequent { <H> >- 'R^car in univ[i:l] } -->
-   sequent { <H>; a: 'R^car >- 'a *['R] 'x in 'R^car } -->
-   sequent { <H>; a: 'R^car >- 'x *['R] 'a in 'R^car } -->
-   sequent { <H> >- 'R^"1" in 'R^car } -->
+   [wf] sequent { <H> >- 'R^car in univ[i:l] } -->
+   [wf] sequent { <H>; a: 'R^car >- 'a *['R] 'x in 'R^car } -->
+   [wf] sequent { <H>; a: 'R^car >- 'x *['R] 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R^"1" in 'R^car } -->
    sequent { <H> >- isUnit{'x; 'R} in univ[i:l] }
 
 interactive isUnit_intro {| intro [] |} 'a :
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'a *['R] 'x = 'R^"1" in 'R^car } -->
-   sequent { <H> >- 'x *['R] 'a = 'R^"1" in 'R^car } -->
-   sequent { <H>; u: 'R^car >- 'u *['R] 'x in 'R^car } -->
-   sequent { <H>; u: 'R^car >- 'x *['R] 'u in 'R^car } -->
-   sequent { <H> >- 'R^"1" in 'R^car } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'a *['R] 'x = 'R^"1" in 'R^car } -->
+   [wf] sequent { <H> >- 'x *['R] 'a = 'R^"1" in 'R^car } -->
+   [wf] sequent { <H>; u: 'R^car >- 'u *['R] 'x in 'R^car } -->
+   [wf] sequent { <H>; u: 'R^car >- 'x *['R] 'u in 'R^car } -->
+   [wf] sequent { <H> >- 'R^"1" in 'R^car } -->
    sequent { <H> >- isUnit{'x; 'R} }
 
 interactive isUnit_elim {| elim [] |} 'H :
@@ -287,8 +286,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive unitset_group {| intro [] |} :
-   sequent { <H> >- 'R in unitring[i:l] } -->
-   sequent { <H> >- 'inv in x: {x: 'R^car | isUnit{'x; 'R}} -> isUnit{'x; 'R} } -->
+   [wf] sequent { <H> >- 'R in unitring[i:l] } -->
+   [wf] sequent { <H> >- 'inv in x: {x: 'R^car | isUnit{'x; 'R}} -> isUnit{'x; 'R} } -->
    sequent { <H> >- {car={x: 'R^car| isUnit{'x; 'R}}; "*"='R^"*"; "1"='R^"1"; inv=lambda{x.fst{'inv 'x}}} in group[i:l] }
 doc docoff
 

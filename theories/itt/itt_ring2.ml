@@ -108,30 +108,30 @@ let resource elim +=
 
 (* Rules about distributivity *)
 interactive isRDistrib_wf {| intro [] |} :
-   sequent { <H> >- 'R^car Type } -->
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
+   [wf] sequent { <H> >- 'R^car Type } -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
    sequent { <H> >- isRDistrib{'R} Type }
 
 interactive isLDistrib_wf {| intro [] |} :
-   sequent { <H> >- 'R^car Type } -->
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
+   [wf] sequent { <H> >- 'R^car Type } -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
    sequent { <H> >- isLDistrib{'R} Type }
 
 interactive isDistrib_wf {| intro [] |} :
-   sequent { <H> >- isRDistrib{'R} Type } -->
-   sequent { <H> >- isLDistrib{'R} Type } -->
+   [wf] sequent { <H> >- isRDistrib{'R} Type } -->
+   [wf] sequent { <H> >- isLDistrib{'R} Type } -->
    sequent { <H> >- isDistrib{'R} Type }
 
 interactive isRDistrib_intro {| intro [] |} :
-   sequent { <H> >- 'R^car Type } -->
-   sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- ('x +['R] 'y) *['R] 'z = ('x *['R] 'z) +['R] ('y *['R] 'z) in 'R^car } -->
+   [wf] sequent { <H> >- 'R^car Type } -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- ('x +['R] 'y) *['R] 'z = ('x *['R] 'z) +['R] ('y *['R] 'z) in 'R^car } -->
    sequent { <H> >- isRDistrib{'R} }
 
 interactive isLDistrib_intro {| intro [] |} :
-   sequent { <H> >- 'R^car Type } -->
-   sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- 'x *['R] ('y +['R] 'z) = ('x *['R] 'y) +['R] ('x *['R] 'z) in 'R^car } -->
+   [wf] sequent { <H> >- 'R^car Type } -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- 'x *['R] ('y +['R] 'z) = ('x *['R] 'y) +['R] ('x *['R] 'z) in 'R^car } -->
    sequent { <H> >- isLDistrib{'R} }
 
 interactive isDistrib_intro {| intro [] |} :
@@ -161,10 +161,10 @@ interactive prering_wf {| intro [] |} :
    sequent { <H> >- prering[i:l] Type }
 
 interactive isRing_wf {| intro [] |} :
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
-   sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
-   sequent { <H> >- 'R^"0" in 'R^car} -->
-   sequent { <H>; x: 'R^car >- 'R^neg 'x in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
+   [wf] sequent { <H> >- 'R^"0" in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car >- 'R^neg 'x in 'R^car} -->
    sequent { <H> >- isRing{'R} Type }
 
 interactive ring_wf {| intro [] |} :
@@ -182,11 +182,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive prering_intro {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car} } -->
+   [wf] sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car} } -->
    sequent { <H> >- 'R in prering[i:l] }
 
 interactive prering_equality {| intro [complete_unless_member] |} :
-   sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car} } -->
+   [wf] sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car} } -->
    sequent { <H> >- 'A = 'B in prering[i:l] }
 
 interactive prering_elim {| elim [] |} 'H :
@@ -195,27 +195,27 @@ interactive prering_elim {| elim [] |} 'H :
 doc docoff
 
 interactive car_prering_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} prering[i:l] :
-   sequent { <H> >- 'R in prering[i:l] } -->
+   [wf] sequent { <H> >- 'R in prering[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
 interactive addG_isGroup_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
-   [main] sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- ('x +['R] 'y) +['R] 'z = 'x +['R] ('y +['R] 'z) in 'R^car } -->
-   [main] sequent { <H>; x: 'R^car >- 'R^"0" +['R] 'x = 'x in 'R^car } -->
-   [main] sequent { <H>; x: 'R^car >- ('R^neg 'x) +['R] 'x = 'R^"0" in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- ('x +['R] 'y) +['R] 'z = 'x +['R] ('y +['R] 'z) in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car >- 'R^"0" +['R] 'x = 'x in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car >- ('R^neg 'x) +['R] 'x = 'R^"0" in 'R^car } -->
    sequent { <H> >- isGroup{as_additive{'R}} }
 
 interactive addG_isCommut_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
-   [main] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
    sequent { <H> >- isCommutative{as_additive{'R}} }
 
 interactive addG_isAbelg_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
-   [main] sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- ('x +['R] 'y) +['R] 'z = 'x +['R] ('y +['R] 'z) in 'R^car } -->
-   [main] sequent { <H>; x: 'R^car >- 'R^"0" +['R] 'x = 'x in 'R^car } -->
-   [main] sequent { <H>; x: 'R^car >- ('R^neg 'x) +['R] 'x = 'R^"0" in 'R^car } -->
-   [main] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- ('x +['R] 'y) +['R] 'z = 'x +['R] ('y +['R] 'z) in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car >- 'R^"0" +['R] 'x = 'x in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car >- ('R^neg 'x) +['R] 'x = 'R^"0" in 'R^car } -->
+   [wf] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
    sequent { <H> >- isAbelg{as_additive{'R}} }
 
 doc <:doc< @doc{ } >>
@@ -259,150 +259,150 @@ doc <:doc<
    @end[doc]
 >>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
 interactive car_wf2 {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^car in univ[i:l] }
 
 interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^"+" in 'R^car -> 'R^car -> 'R^car }
 
 interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^neg in 'R^car -> 'R^car }
 
 interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^"*" in 'R^car -> 'R^car -> 'R^car }
 
 interactive add_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- 'a +['R] 'b in 'R^car }
 
 interactive mul_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- 'a *['R] 'b in 'R^car }
 
 interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^"0" in 'R^car }
 
 interactive neg_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^neg 'a in 'R^car }
 
 interactive ring_add_assoc {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- ('a +['R] 'b) +['R] 'c = 'a +['R] ('b +['R] 'c) in 'R^car }
 
 interactive ring_add_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'a +['R] ('b +['R] 'c) = ('a +['R] 'b) +['R] 'c in 'R^car }
 
 interactive ring_mul_assoc {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- ('a *['R] 'b) *['R] 'c = 'a *['R] ('b *['R] 'c) in 'R^car }
 
 interactive ring_mul_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'a *['R] ('b *['R] 'c) = ('a *['R] 'b) *['R] 'c in 'R^car }
 
 interactive ring_left_addid {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"0" +['R] 'a = 'a in 'R^car }
 
 interactive ring_left_addid2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'a = 'R^"0" +['R] 'a in 'R^car }
 
 interactive ring_left_neg {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- ('R^neg 'a) +['R] 'a = 'R^"0" in 'R^car }
 
 interactive ring_left_neg2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"0" = ('R^neg 'a) +['R] 'a in 'R^car }
 
 interactive ring_add_commut {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- 'a +['R] 'b = 'b +['R] 'a in 'R^car }
 
 interactive ring_right_distib {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- ('a +['R] 'b) *['R] 'c = ('a *['R] 'c) +['R] ('b *['R] 'c) in 'R^car }
 
 interactive ring_right_distib1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- ('a *['R] 'c) +['R] ('b *['R] 'c) = ('a +['R] 'b) *['R] 'c in 'R^car }
 
 interactive ring_left_distib {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'a *['R] ('b +['R] 'c) = ('a *['R] 'b) +['R] ('a *['R] 'c) in 'R^car }
 
 interactive ring_left_distib1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- ('a *['R] 'b) +['R] ('a *['R] 'c) = 'a *['R] ('b +['R] 'c) in 'R^car }
 
 interactive add_eq1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a = 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'a +['R] 'c = 'b +['R] 'c in 'R^car }
 
 interactive add_eq2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a = 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'c +['R] 'a = 'c +['R] 'b in 'R^car }
 
 interactive mul_eq1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a = 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'a *['R] 'c = 'b *['R] 'c in 'R^car }
 
 interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a = 'b in 'R^car } -->
-   sequent { <H> >- 'c in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'c *['R] 'a = 'c *['R] 'b in 'R^car }
 
 doc <:doc<
@@ -416,11 +416,11 @@ interactive ring_subtype_semigroup {| intro [] |} :
    sequent { <H> >- ring[i:l] subtype semigroup[i:l] }
 
 interactive ring_additive_group {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- as_additive{'R} in group[i:l] }
 
 interactive ring_additive_abelgroup {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- as_additive{'R} in abelg[i:l] }
 
 doc docoff
@@ -519,31 +519,31 @@ doc <:doc<
    @end[doc]
 >>
 interactive mul_addid1 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'a *['R] 'R^"0" = 'R^"0" in 'R^car }
 
 interactive mul_addid2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"0" *['R] 'a = 'R^"0" in 'R^car }
 
 interactive mul_neg1 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- 'a *['R] ('R^neg 'b) = 'R^neg ('a *['R] 'b) in 'R^car }
 
 interactive mul_neg2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- ('R^neg 'a) *['R] 'b = 'R^neg ('a *['R] 'b) in 'R^car }
 
 interactive neg_mul_neg {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'a in 'R^car } -->
-   sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- ('R^neg 'a) *['R] ('R^neg 'b) = 'a *['R] 'b in 'R^car }
 
 (************************************************************************
@@ -580,10 +580,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive subring_wf {| intro [] |} :
-   sequent { <H> >- 'S in ring[i:l] } -->
-   sequent { <H> >- 'R in ring[i:l] } -->
-   sequent { <H> >- 'R^"*" = 'S^"*" in 'S^car -> 'S^car -> 'S^car } -->
-   sequent { <H> >- 'R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car } -->
+   [wf] sequent { <H> >- 'S in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R^"*" = 'S^"*" in 'S^car -> 'S^car -> 'S^car } -->
+   [wf] sequent { <H> >- 'R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car } -->
    sequent { <H> >- "type"{subring[i:l]{'S; 'R}} }
 
 doc <:doc<
@@ -596,7 +596,7 @@ interactive subring_intro {| intro [] |} :
    [wf] sequent { <H> >- 'S in ring[i:l] } -->
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    [main] sequent { <H> >- subStructure{'S; 'R} } -->
-   sequent { <H> >- 'R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car } -->
+   [wf] sequent { <H> >- 'R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car } -->
    sequent { <H> >- subring[i:l]{'S; 'R} }
 
 interactive subring_elim {| elim [] |} 'H :
@@ -621,12 +621,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive subring_subgroup :
-   [wf] sequent { <H> >- subring[i:l]{'S; 'R} } -->
+   sequent { <H> >- subring[i:l]{'S; 'R} } -->
    sequent { <H> >- subgroup[i:l]{as_additive{'S}; as_additive{'R}} }
 doc docoff
 
 interactive subring_ref {| intro [] |} :
-   sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- subring[i:l]{'R; 'R} }
 
 doc <:doc<

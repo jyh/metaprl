@@ -98,7 +98,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive groupoid_intro {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car} } -->
+   [wf] sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car} } -->
    sequent { <H> >- 'g in groupoid[i:l] }
 
 (*interactive groupoid_elim {| elim [] |} 'H :
@@ -143,8 +143,8 @@ doc <:doc<
 >>
 
 interactive isSemigroup_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
    sequent { <H> >- "type"{isSemigroup{'A}} }
 
 interactive semigroup_wf {| intro [] |} :
@@ -157,8 +157,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive isSemigroup_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- "type"{.'g^car} } -->
-   [main] sequent { <H>; x: 'g^car; y: 'g^car; z: 'g^car >- ('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car } -->
+   [wf] sequent { <H> >- "type"{'g^car} } -->
+   [wf] sequent { <H>; x: 'g^car; y: 'g^car; z: 'g^car >- ('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car } -->
    sequent { <H> >- isSemigroup{'g} }
 
 interactive isSemigroup_elim {| elim [] |} 'H :
@@ -230,13 +230,12 @@ interactive premonoid_wf {| intro [] |} :
    sequent { <H> >- "type"{premonoid[i:l]} }
 
 interactive isMonoid_wf2 {| intro [intro_typeinf <<'A>>] |} premonoid[i:l] :
-   sequent { <H> >- 'A in premonoid[i:l] } -->
+   [wf] sequent { <H> >- 'A in premonoid[i:l] } -->
    sequent { <H> >- "type"{isMonoid{'A}} }
 
 interactive isMonoid_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
-   sequent { <H> >- 'A^"1" in 'A^car} -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H> >- 'A^"1" in 'A^car} -->
    sequent { <H> >- "type"{isMonoid{'A}} }
 
 interactive monoid_wf {| intro [] |} :
@@ -249,7 +248,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive premonoid_intro {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car} } -->
+   [wf] sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car} } -->
    sequent { <H> >- 'g in premonoid[i:l] }
 
 interactive premonoid_elim {| elim [] |} 'H :
@@ -257,10 +256,10 @@ interactive premonoid_elim {| elim [] |} 'H :
    sequent { <H>; g: premonoid[i:l]; <J['g]> >- 'C['g] }
 
 interactive isMonoid_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- "type"{.'g^car} } -->
+   [wf] sequent { <H> >- "type"{'g^car} } -->
    [main] sequent { <H> >- isSemigroup{'g} } -->
-   [main] sequent { <H>; x: 'g^car >- 'g^"1" *['g] 'x = 'x in 'g^car } -->
-   [main] sequent { <H>; x: 'g^car >- 'x *['g] 'g^"1" = 'x in 'g^car } -->
+   [wf] sequent { <H>; x: 'g^car >- 'g^"1" *['g] 'x = 'x in 'g^car } -->
+   [wf] sequent { <H>; x: 'g^car >- 'x *['g] 'g^"1" = 'x in 'g^car } -->
    sequent { <H> >- isMonoid{'g} }
 
 interactive isMonoid_elim {| elim [] |} 'H :
@@ -277,8 +276,8 @@ interactive monoid_elim {| elim [] |} 'H :
    sequent { <H>; g: monoid[i:l]; <J['g]> >- 'C['g] }
 
 interactive monoid_car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} monoid[i:l] :
-   sequent { <H> >- 'G in monoid[i:l] } -->
-   sequent { <H> >- "type"{('G^car)} }
+   [wf] sequent { <H> >- 'G in monoid[i:l] } -->
+   sequent { <H> >- "type"{'G^car} }
 
 doc <:doc<
    @begin[doc]
@@ -329,8 +328,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive isCommutative_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
    sequent { <H> >- "type"{isCommutative{'A}} }
 
 interactive csemigroup_wf {| intro [] |} :
@@ -346,8 +345,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive isCommutative_intro {| intro [] |} :
-   [wf] sequent { <H> >- "type"{.'g^car} } -->
-   [main] sequent { <H>; x: 'g^car; y: 'g^car >- ('x *['g] 'y = 'y *['g] 'x in 'g^car) } -->
+   [wf] sequent { <H> >- "type"{'g^car} } -->
+   [wf] sequent { <H>; x: 'g^car; y: 'g^car >- ('x *['g] 'y = 'y *['g] 'x in 'g^car) } -->
    sequent { <H> >- isCommutative{'g} }
 
 interactive isCommutative_elim {| elim [] |} 'H :
@@ -408,9 +407,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive subStructure_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H> >- "type"{'B^car} } -->
-   sequent { <H> >- 'B^"*" = 'A^"*" in 'A^car -> 'A^car -> 'A^car } -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H> >- "type"{'B^car} } -->
+   [wf] sequent { <H> >- 'B^"*" = 'A^"*" in 'A^car -> 'A^car -> 'A^car } -->
    sequent { <H> >- "type"{subStructure{'A; 'B}} }
 
 doc <:doc<

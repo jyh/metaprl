@@ -107,10 +107,9 @@ interactive pregroup_wf {| intro [] |} :
    sequent { <H> >- "type"{pregroup[i:l]} }
 
 interactive isGroup_wf {| intro [] |} :
-   sequent { <H> >- "type"{'G^car} } -->
-   sequent { <H>; x: 'G^car; y: 'G^car >- 'x *['G] 'y in 'G^car} -->
-   sequent { <H> >- 'G^"1" in 'G^car} -->
-   sequent { <H>; x: 'G^car >- 'G^inv 'x in 'G^car} -->
+   [wf] sequent { <H> >- 'G^"1" in 'G^car} -->
+   [wf] sequent { <H>; x: 'G^car >- 'G^inv 'x in 'G^car} -->
+   [wf] sequent { <H>; x: 'G^car; y: 'G^car >- 'x *['G] 'y in 'G^car} -->
    sequent { <H> >- "type"{isGroup{'G}} }
 
 interactive group_wf {| intro [] |} :
@@ -123,11 +122,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive pregroup_intro {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'G in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
+   [wf] sequent { <H> >- 'G in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent { <H> >- 'G in pregroup[i:l] }
 
 interactive pregroup_equality {| intro [complete_unless_member] |} :
-   sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
+   [wf] sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent { <H> >- 'A = 'B in pregroup[i:l] }
 
 interactive pregroup_elim {| elim [] |} 'H :
@@ -135,10 +134,10 @@ interactive pregroup_elim {| elim [] |} 'H :
    sequent { <H>; G: pregroup[i:l]; <J['G]> >- 'C['G] }
 
 interactive isGroup_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- "type"{.'G^car} } -->
+   [wf] sequent { <H> >- "type"{'G^car} } -->
    [main] sequent { <H> >- isSemigroup{'G} } -->
-   [main] sequent { <H>; x: 'G^car >- 'G^"1" *['G] 'x = 'x in 'G^car } -->
-   [main] sequent { <H>; x: 'G^car >- ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car } -->
+   [wf] sequent { <H>; x: 'G^car >- 'G^"1" *['G] 'x = 'x in 'G^car } -->
+   [wf] sequent { <H>; x: 'G^car >- ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car } -->
    sequent { <H> >- isGroup{'G} }
 
 interactive isGroup_elim {| elim [] |} 'H :
@@ -151,7 +150,7 @@ interactive group_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'G in group[i:l] }
 
 interactive group_equality {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'A = 'B in pregroup[i:l] } -->
+   [wf] sequent { <H> >- 'A = 'B in pregroup[i:l] } -->
    [main] sequent { <H> >- isGroup{'A} } -->
    sequent { <H> >- 'A = 'B in group[i:l] }
 
@@ -166,80 +165,80 @@ doc <:doc<
    @end[doc]
 >>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- "type"{('G^car)} }
 
 interactive car_wf2 {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^car in univ[i:l] }
 
 interactive op_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"*" in 'G^car -> 'G^car -> 'G^car }
 
 interactive inv_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^inv in 'G^car -> 'G^car }
 
 interactive op_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
-   sequent { <H> >- 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'b in 'G^car } -->
    sequent { <H> >- 'a *['G] 'b in 'G^car }
 
 interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"1" in 'G^car }
 
 interactive inv_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^inv 'a in 'G^car }
 
 interactive group_assoc {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
-   sequent { <H> >- 'b in 'G^car } -->
-   sequent { <H> >- 'c in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'c in 'G^car } -->
    sequent { <H> >- ('a *['G] 'b) *['G] 'c = 'a *['G] ('b *['G] 'c) in 'G^car }
 
 interactive group_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
-   sequent { <H> >- 'b in 'G^car } -->
-   sequent { <H> >- 'c in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'c in 'G^car } -->
    sequent { <H> >- 'a *['G] ('b *['G] 'c) = ('a *['G] 'b) *['G] 'c in 'G^car }
 
 interactive group_left_id {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^"1" *['G] 'a = 'a in 'G^car }
 
 interactive group_left_id2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a = 'G^"1" *['G] 'a in 'G^car }
 
 interactive group_left_inv {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- ('G^inv 'a) *['G] 'a = 'G^"1" in 'G^car }
 
 interactive group_left_inv2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^"1" = ('G^inv 'a) *['G] 'a in 'G^car }
 
 interactive op_eq1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a = 'b in 'G^car } -->
-   sequent { <H> >- 'c in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'c in 'G^car } -->
    sequent { <H> >- 'a *['G] 'c = 'b *['G] 'c in 'G^car }
 
 interactive op_eq2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a = 'b in 'G^car } -->
-   sequent { <H> >- 'c in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'c in 'G^car } -->
    sequent { <H> >- 'c *['G] 'a = 'c *['G] 'b in 'G^car }
 
 doc <:doc<
@@ -254,29 +253,29 @@ doc <:doc<
    @end[doc]
 >>
 interactive id_judge {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   sequent { <H>; x: 'u *['G] 'u = 'u in 'G^car; <J['x]> >- 'G in group[i:l] } -->
+   [wf] sequent { <H>; x: 'u *['G] 'u = 'u in 'G^car; <J['x]> >- 'G in group[i:l] } -->
    sequent { <H>; x: 'u *['G] 'u = 'u in 'G^car; <J['x]>; y: 'u = 'G^"1" in 'G^car >- 'C['x] } -->
    sequent { <H>; x: 'u *['G] 'u = 'u in 'G^car; <J['x]> >- 'C['x] }
 
 interactive right_inv {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a *['G] ('G^inv 'a) = 'G^"1" in 'G^car }
 
 interactive right_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a *['G] 'G^"1" = 'a in 'G^car }
 doc docoff
 
 interactive right_inv2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^"1" = 'a *['G] ('G^inv 'a) in 'G^car }
 
 interactive right_id2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a = 'a *['G] 'G^"1" in 'G^car }
 
 doc <:doc<
@@ -298,18 +297,18 @@ doc <:doc<
 >>
 (* Cancellation: a * b = a * c => b = c *)
 interactive cancel_left {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'G in group[i:l] } -->
-   sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'u in 'G^car } -->
-   sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'v in 'G^car } -->
-   sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'w in 'G^car } -->
+   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'G in group[i:l] } -->
+   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'u in 'G^car } -->
+   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'v in 'G^car } -->
+   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'w in 'G^car } -->
    sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'v = 'w in 'G^car }
 
 (* Cancellation: b * a = c * a => b = c *)
 interactive cancel_right {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'G in group[i:l] } -->
-   sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'u in 'G^car } -->
-   sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'v in 'G^car } -->
-   sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'w in 'G^car } -->
+   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'G in group[i:l] } -->
+   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'u in 'G^car } -->
+   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'v in 'G^car } -->
+   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'w in 'G^car } -->
    sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'v = 'w in 'G^car }
 
 doc <:doc<
@@ -340,14 +339,14 @@ interactive unique_inv_left {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    [wf] sequent { <H> >- 'a in 'G^car } -->
    [wf] sequent { <H> >- 'a2 in 'G^car } -->
-   [main] sequent { <H> >- 'a2 *['G] 'a = 'G^"1" in 'G^car } -->
+   [wf] sequent { <H> >- 'a2 *['G] 'a = 'G^"1" in 'G^car } -->
    sequent { <H> >- 'a2 = 'G^inv 'a in 'G^car }
 
 interactive unique_inv_right {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    [wf] sequent { <H> >- 'a in 'G^car } -->
    [wf] sequent { <H> >- 'a2 in 'G^car } -->
-   [main] sequent { <H> >- 'a *['G] 'a2 = 'G^"1" in 'G^car } -->
+   [wf] sequent { <H> >- 'a *['G] 'a2 = 'G^"1" in 'G^car } -->
    sequent { <H> >- 'a2 = 'G^inv 'a in 'G^car }
 
 doc <:doc<
@@ -362,7 +361,7 @@ interactive unique_sol1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} gro
    [wf] sequent { <H> >- 'a in 'G^car } -->
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'x in 'G^car } -->
-   [main] sequent { <H> >- 'a *['G] 'x = 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'a *['G] 'x = 'b in 'G^car } -->
    sequent { <H> >- 'x = ('G^inv 'a) *['G] 'b in 'G^car }
 
 (* The unique solution for y * a = b is y = b * a' *)
@@ -371,7 +370,7 @@ interactive unique_sol2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} gro
    [wf] sequent { <H> >- 'a in 'G^car } -->
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'y in 'G^car } -->
-   [main] sequent { <H> >- 'y *['G] 'a = 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'y *['G] 'a = 'b in 'G^car } -->
    sequent { <H> >- 'y = 'b *['G] ('G^inv 'a) in 'G^car }
 
 doc <:doc<
@@ -382,48 +381,48 @@ doc <:doc<
 >>
 (* (a * b)' = b' * a'  *)
 interactive inv_simplify {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
-   sequent { <H> >- 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'b in 'G^car } -->
    sequent { <H> >- 'G^inv ('a *['G] 'b)  = ('G^inv 'b) *['G] ('G^inv 'a) in 'G^car }
 doc docoff
 
 interactive inv_simplify2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
-   sequent { <H> >- 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'b in 'G^car } -->
    sequent { <H> >- ('G^inv 'b) *['G] ('G^inv 'a) = 'G^inv ('a *['G] 'b) in 'G^car }
 
 (* Inverse of inverse. *)
 interactive inv_inv1 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a = 'G^inv ('G^inv 'a) in 'G^car }
 
 interactive inv_inv2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^inv ('G^inv 'a) = 'a in 'G^car }
 
 (* Inverse of id *)
 interactive inv_of_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^inv 'G^"1" = 'G^"1" in 'G^car }
 
 interactive inv_of_id2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"1" = 'G^inv 'G^"1" in 'G^car }
 
 (* e * a = a * e *)
 interactive id_commut1 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^"1" *['G] 'a = 'a *['G] 'G^"1" in 'G^car }
 
 (* a * e = e * a *)
 interactive id_commut2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a *['G] 'G^"1" = 'G^"1" *['G] 'a in 'G^car }
 
 (************************************************************************
@@ -495,10 +494,9 @@ interactive abelg_wf {| intro [] |} :
    sequent { <H> >- "type"{abelg[i:l]} }
 
 interactive isAbelg_wf {| intro [] |} :
-   sequent { <H> >- 'G^car Type } -->
-   sequent { <H>; x: 'G^car; y: 'G^car >- 'x *['G] 'y in 'G^car} -->
-   sequent { <H> >- 'G^"1" in 'G^car} -->
-   sequent { <H>; x: 'G^car >- 'G^inv 'x in 'G^car} -->
+   [wf] sequent { <H>; x: 'G^car; y: 'G^car >- 'x *['G] 'y in 'G^car} -->
+   [wf] sequent { <H> >- 'G^"1" in 'G^car} -->
+   [wf] sequent { <H>; x: 'G^car >- 'G^inv 'x in 'G^car} -->
    sequent { <H> >- isAbelg{'G} Type }
 
 doc <:doc<
@@ -573,9 +571,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_wf {| intro [] |} :
-   sequent { <H> >- 'S in group[i:l] } -->
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'G^"*" = 'S^"*" in 'S^car -> 'S^car -> 'S^car } -->
+   [wf] sequent { <H> >- 'S in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G^"*" = 'S^"*" in 'S^car -> 'S^car -> 'S^car } -->
    sequent { <H> >- "type"{subgroup[i:l]{'S; 'G}} }
 
 doc <:doc<
@@ -609,7 +607,7 @@ interactive subgroup_sqStable {| squash |} :
 doc docoff
 
 interactive subgroup_ref {| intro [] |} :
-   sequent { <H> >- 'G in group[i:l] } -->
+   [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- subgroup[i:l]{'G; 'G} }
 
 doc <:doc<
@@ -704,14 +702,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive lcoset_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{.'G^car} } -->
-   [wf] sequent { <H> >- "type"{.'S^car} } -->
+   [wf] sequent { <H> >- "type"{'G^car} } -->
+   [wf] sequent { <H> >- "type"{'S^car} } -->
    [wf] sequent { <H>; a: 'S^car >- 'b *['G] 'a in 'G^car } -->
    sequent { <H> >- "type"{lcoset{'S; 'G; 'b}} }
 
 interactive rcoset_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{.'G^car} } -->
-   [wf] sequent { <H> >- "type"{.'S^car} } -->
+   [wf] sequent { <H> >- "type"{'G^car} } -->
+   [wf] sequent { <H> >- "type"{'S^car} } -->
    [wf] sequent { <H>; a: 'S^car >- 'a *['G] 'b in 'G^car } -->
    sequent { <H> >- "type"{rcoset{'S; 'G; 'b}} }
 
@@ -752,7 +750,7 @@ interactive lcoset_member_intro {| intro [intro_typeinf_plusone <<'G>>] |} group
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'x1 = 'x2 in 'G^car } -->
    [wf] sequent { <H> >- 'a in 'S^car } -->
-   [main] sequent { <H> >- 'x1 = 'b *['G] 'a in 'G^car } -->
+   [wf] sequent { <H> >- 'x1 = 'b *['G] 'a in 'G^car } -->
    sequent { <H> >- 'x1 = 'x2 in lcoset{'S; 'G; 'b} }
 
 interactive rcoset_member_intro {| intro [intro_typeinf_plusone <<'G>>] |} group[i:l] 'a :
@@ -760,17 +758,17 @@ interactive rcoset_member_intro {| intro [intro_typeinf_plusone <<'G>>] |} group
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'x1 = 'x2 in 'G^car } -->
    [wf] sequent { <H> >- 'a in 'S^car } -->
-   [main] sequent { <H> >- 'x1 = 'a *['G] 'b in 'G^car } -->
+   [wf] sequent { <H> >- 'x1 = 'a *['G] 'b in 'G^car } -->
    sequent { <H> >- 'x1 = 'x2 in rcoset{'S; 'G; 'b} }
 
 interactive lcoset_elim {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   [wf] sequent { <H>; u: lcoset{'S; 'G; 'b}; <J['u]> >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent { <H>; u: lcoset{'S; 'G; 'b}; <J['u]> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H>; u: lcoset{'S; 'G; 'b}; <J['u]> >- 'b in 'G^car } -->
    [main] sequent { <H>; u: 'G^car; v: squash{.exst a: 'S^car. 'u = 'b *['G] 'a in 'G^car}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: lcoset{'S; 'G; 'b}; <J['u]> >- 'C['u] }
 
 interactive rcoset_elim {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   [wf] sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- 'b in 'G^car } -->
    [main] sequent { <H>; u: 'G^car; v: squash{.exst a: 'S^car. 'u = 'a *['G] 'b in 'G^car}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- 'C['u] }
@@ -883,18 +881,18 @@ doc <:doc<
    @end[doc]
 >>
 interactive isGroupHom_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H> >- "type"{'B^car} } -->
-   sequent { <H> >- 'f in 'A^car -> 'B^car } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
-   sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H> >- "type"{'B^car} } -->
+   [wf] sequent { <H> >- 'f in 'A^car -> 'B^car } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    sequent { <H> >- "type"{isGroupHom{'f; 'A; 'B}} }
 
 interactive groupHom_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H> >- "type"{'B^car} } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
-   sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H> >- "type"{'B^car} } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    sequent { <H> >- "type"{groupHom{'A; 'B}} }
 
 doc <:doc<
@@ -905,7 +903,7 @@ doc <:doc<
 >>
 interactive isGroupHom_intro {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A^car}} -->
-   [main] sequent { <H>; x: 'A^car; y: 'A^car >- ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car } -->
    sequent { <H> >- isGroupHom{'f; 'A; 'B} }
 
 interactive isGroupHom_elim {| elim [] |} 'H :
@@ -915,7 +913,7 @@ interactive isGroupHom_elim {| elim [] |} 'H :
 interactive groupHom_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
-   sequent { <H> >- 'f in 'A^car -> 'B^car } -->
+   [wf] sequent { <H> >- 'f in 'A^car -> 'B^car } -->
    [main] sequent { <H> >- isGroupHom{'f; 'A; 'B} } -->
    sequent { <H> >- 'f in groupHom{'A; 'B} }
 
@@ -953,7 +951,7 @@ doc <:doc<
 interactive groupHom_id {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
-   [main] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
+   [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent { <H> >- 'f 'A^"1" = 'B^"1" in 'B^car }
 
 doc <:doc<
@@ -979,7 +977,7 @@ doc <:doc<
 >>
 interactive groupHom_subg1 'f 'A 'S :
    [wf] sequent { <H> >- 'B in group[i:l] } -->
-   [main] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
+   [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    [main] sequent { <H> >- subgroup[i:l]{'S; 'A} } -->
    sequent { <H> >- subgroup[i:l]{{car={x: 'B^car | exst y: 'S^car. 'x = 'f 'y in 'B^car}; "*"='B^"*"; "1"='B^"1"; inv='B^inv}; 'B} }
 
@@ -992,7 +990,7 @@ doc <:doc<
 >>
 interactive groupHom_subg2 'f 'B 'T :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
-   [main] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
+   [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    [main] sequent { <H> >- subgroup[i:l]{'T; 'B} } -->
    [wf] sequent { <H>; x: 'A^car >- "type"{'f 'x in 'T^car} } -->
    sequent { <H> >- subgroup[i:l]{{car={x: 'A^car | 'f 'x in 'T^car subset 'B^car}; "*"='A^"*"; "1"='A^"1"; inv='A^inv}; 'A} }
@@ -1041,9 +1039,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive groupKer_intro {| intro [] |} :
-   sequent { <H> >- 'A in group[i:l] } -->
-   sequent { <H> >- 'B in group[i:l] } -->
-   sequent { <H> >- 'f in groupHom{'A; 'B} } -->
+   [wf] sequent { <H> >- 'A in group[i:l] } -->
+   [wf] sequent { <H> >- 'B in group[i:l] } -->
+   [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent { <H> >- groupKer{'f; 'A; 'B} in group[i:l] }
 
 doc <:doc<
@@ -1147,41 +1145,41 @@ doc <:doc<
    @end[doc]
 >>
 interactive isInjective_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- 'f in 'A -> 'B } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- 'f in 'A -> 'B } -->
    sequent { <H> >- "type"{isInjective{'f; 'A; 'B}} }
 
 interactive isSurjective_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- 'f in 'A -> 'B } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   [wf] sequent { <H> >- 'f in 'A -> 'B } -->
    sequent { <H> >- "type"{isSurjective{'f; 'A; 'B}} }
 
 interactive isBijective_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- 'f in 'A -> 'B } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   [wf] sequent { <H> >- 'f in 'A -> 'B } -->
    sequent { <H> >- "type"{isBijective{'f; 'A; 'B}} }
 
 interactive groupMono_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H> >- "type"{'B^car} } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
-   sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H> >- "type"{'B^car} } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    sequent { <H> >- "type"{groupMono{'A; 'B}} }
 
 interactive groupEpi_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H> >- "type"{'B^car} } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
-   sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H> >- "type"{'B^car} } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    sequent { <H> >- "type"{groupEpi{'A; 'B}} }
 
 interactive groupIso_wf {| intro [] |} :
-   sequent { <H> >- "type"{'A^car} } -->
-   sequent { <H> >- "type"{'B^car} } -->
-   sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
-   sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
+   [wf] sequent { <H> >- "type"{'A^car} } -->
+   [wf] sequent { <H> >- "type"{'B^car} } -->
+   [wf] sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   [wf] sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    sequent { <H> >- "type"{groupIso{'A; 'B}} }
 
 doc <:doc<
@@ -1193,7 +1191,7 @@ doc <:doc<
 interactive isInjective_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'A}} -->
    [wf] sequent { <H> >- 'f in 'A -> 'B } -->
-   [main] sequent { <H>; x: 'A; y: 'A; u: 'f 'x = 'f 'y in 'B >- 'x = 'y in 'A } -->
+   [wf] sequent { <H>; x: 'A; y: 'A; u: 'f 'x = 'f 'y in 'B >- 'x = 'y in 'A } -->
    sequent { <H> >- isInjective{'f; 'A; 'B} }
 
 interactive isInjective_elim {| elim [] |} 'H :
@@ -1204,7 +1202,7 @@ interactive isSurjective_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'A}} -->
    [wf] sequent { <H> >- "type"{'B}} -->
    [wf] sequent { <H> >- 'f in 'A -> 'B } -->
-   [main] sequent { <H>; z: 'B >- squash{exst u: 'A. 'z = 'f 'u in 'B} } -->
+   [wf] sequent { <H>; z: 'B >- squash{exst u: 'A. 'z = 'f 'u in 'B} } -->
    sequent { <H> >- isSurjective{'f; 'A; 'B} }
 
 interactive isSurjective_elim {| elim [] |} 'H :
@@ -1277,7 +1275,7 @@ interactive groupMono_ker2 group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
    [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
-   [wf] sequent { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} } -->
+   [main] sequent { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} } -->
    sequent { <H> >- 'f in groupMono{'A; 'B} }
 
 doc <:doc<

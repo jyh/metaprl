@@ -62,7 +62,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_noDiv0 : noDiv0{'f} <-->
-   all a: 'f^car. all b: 'f^car. (('a *['f] 'b = 'f^"0" in 'f^car) => squash{'a = 'f^"0" in 'f^car or 'b = 'f^"0" in 'f^car})
+   all a: 'f^car. all b: 'f^car. ('a <> 'f^"0" in 'f^car & 'b <> 'f^"0" in 'f^car & 'a *['f] 'b = 'f^"0" in 'f^car => "false")
 
 define unfold_isIntDomain1 : isIntDomain{'f} <-->
    isUnitRing{'f} & isCommutative{'f} & ('f^"0" <> 'f^"1" in 'f^car) & noDiv0{'f}
@@ -116,11 +116,11 @@ doc <:doc<
 interactive noDiv0_intro {| intro [] |} :
    [wf] sequent { <H> >- 'f^"0" in 'f^car} -->
    sequent { <H>; x: 'f^car; y: 'f^car >- 'x *['f] 'y in 'f^car} -->
-   sequent { <H>; x: 'f^car; y: 'f^car; 'x *['f] 'y = 'f^"0" in 'f^car >- squash{'x = 'f^"0" in 'f^car or 'y = 'f^"0" in 'f^car} } -->
+   sequent { <H>; x: 'f^car; y: 'f^car; 'x <> 'f^"0" in 'f^car; 'y <> 'f^"0" in 'f^car; 'x *['f] 'y = 'f^"0" in 'f^car >- "false" } -->
    sequent { <H> >- noDiv0{'f} }
 
 interactive noDiv0_elim {| elim [] |} 'H :
-   sequent { <H>; x: all a: 'f^car. all b: 'f^car. (('a *['f] 'b = 'f^"0" in 'f^car) => squash{'a = 'f^"0" in 'f^car or 'b = 'f^"0" in 'f^car}); <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: all a: 'f^car. all b: 'f^car. ('a <> 'f^"0" in 'f^car & 'b <> 'f^"0" in 'f^car & 'a *['f] 'b = 'f^"0" in 'f^car => "false"); <J['x]> >- 'C['x] } -->
    sequent { <H>; x: noDiv0{'f}; <J['x]> >- 'C['x] }
 
 interactive isIntDomain_intro {| intro [AutoMustComplete] |} :
@@ -146,7 +146,7 @@ interactive isIntDomain_elim {| elim [] |} 'H :
       u6: all x: 'f^car. (('f^"1" *['f] 'x = 'x in 'f^car) & ('x *['f] 'f^"1" = 'x in 'f^car));
       u7: all x: 'f^car. all y: 'f^car. ('x *['f] 'y = 'y *['f] 'x in 'f^car);
       u8: 'f^"0" <> 'f^"1" in 'f^car;
-      u9: all a: 'f^car. all b: 'f^car. (('a *['f] 'b = 'f^"0" in 'f^car) => squash{'a = 'f^"0" in 'f^car or 'b = 'f^"0" in 'f^car});
+      u9: all a: 'f^car. all b: 'f^car. ('a <> 'f^"0" in 'f^car & 'b <> 'f^"0" in 'f^car & 'a *['f] 'b = 'f^"0" in 'f^car => "false");
       <J['u]> >- 'C['u] } -->
    sequent { <H>; u: isIntDomain{'f}; <J['u]> >- 'C['u] }
 
@@ -177,7 +177,7 @@ interactive intDomain_elim {| elim [] |} 'H :
       u6: all x: 'f^car. (('f^"1" *['f] 'x = 'x in 'f^car) & ('x *['f] 'f^"1" = 'x in 'f^car));
       u7: all x: 'f^car. all y: 'f^car. ('x *['f] 'y = 'y *['f] 'x in 'f^car);
       u8: 'f^"0" <> 'f^"1" in 'f^car;
-      u9: all a: 'f^car. all b: 'f^car. (('a *['f] 'b = 'f^"0" in 'f^car) => squash{'a = 'f^"0" in 'f^car or 'b = 'f^"0" in 'f^car});
+      u9: all a: 'f^car. all b: 'f^car. ('a <> 'f^"0" in 'f^car & 'b <> 'f^"0" in 'f^car & 'a *['f] 'b = 'f^"0" in 'f^car => "false");
       <J['f]> >- 'C['f] } -->
    sequent { <H>; f: intDomain[i:l]; <J['f]> >- 'C['f] }
 
@@ -384,7 +384,7 @@ interactive intDomain_additive_abelgroup {| intro [AutoMustComplete] |} :
    sequent { <H> >- as_additive{'f} in abelg[i:l] }
 doc docoff
 
-interactive mul_naddid_naddid1 {| intro [intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive intdomain_noDiv02 {| intro [intro_typeinf <<'f>>] |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    [wf] sequent { <H> >- 'a in 'f^car } -->
    [wf] sequent { <H> >- 'b in 'f^car } -->

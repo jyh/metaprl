@@ -283,11 +283,15 @@ rule rem_baseReduce :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ 'a }
 
+topval rem_baseReduceC : conv
+
 rule rem_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) }
+
+topval rem_negC : conv
 
 rule rem_indReduce :
    sequent { <H> >- 'b <> 0 } -->
@@ -295,6 +299,8 @@ rule rem_indReduce :
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) }
+
+topval rem_indReduceC : conv
 
 rule rem_wf :
    sequent { <H> >- 'b <> 0 } -->
@@ -309,11 +315,15 @@ rule div_baseReduce :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a /@ 'b) ~ 0 }
 
+topval div_baseReduceC  : conv
+
 rule div_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a /@ 'b) ~ ((-'a) /@ (-'b)) }
+
+topval  div_negC : conv
 
 rule div_indReduce :
    sequent { <H> >- 'b <> 0 } -->
@@ -321,6 +331,8 @@ rule div_indReduce :
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) }
+
+topval div_indReduceC  : conv
 
 rule div_wf :
    sequent { <H> >- 'b <> 0 } -->
@@ -359,5 +371,7 @@ rule div_Assoc :
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- (('a /@ 'b) /@ 'c) ~ ('a /@ ('b *@ 'c)) }
+
+topval div_AssocC : conv
 
 topval fold_int_seg : conv

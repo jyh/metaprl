@@ -149,28 +149,28 @@ doc docoff
 
 (* a ^ 0 = e *)
 interactive group_power_0 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
    sequent { <H> >- group_power{'g; 'a; 0} = 'g^"1" in 'g^car }
 
 (* a ^ 1 = a *)
 interactive group_power_1 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
    sequent { <H> >- group_power{'g; 'a; 1} = 'a in 'g^car }
 
 (* a ^ (n + 1) * a ^ (-1) = a ^ n *)
 interactive group_power_less {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
-   sequent { <H> >- 'n in int } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'n in int } -->
    sequent { <H> >- group_power{'g; 'a; ('n +@ 1)} *['g] ('g^inv 'a) = group_power{'g; 'a; 'n} in 'g^car }
 
 (* a ^ n * x = a ^ (n + 1) *)
 interactive group_power_more {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
-   sequent { <H> >- 'n in int } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'n in int } -->
    sequent { <H> >- group_power{'g; 'a; 'n} *['g] 'a = group_power{'g; 'a; ('n +@ 1)} in 'g^car }
 
 doc <:doc<
@@ -180,17 +180,17 @@ doc <:doc<
    @end[doc]
 >>
 interactive group_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
-   sequent { <H> >- 'm in int } -->
-   sequent { <H> >- 'n in int } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'm in int } -->
+   [wf] sequent { <H> >- 'n in int } -->
    sequent { <H> >- group_power{'g; 'a; 'm} *['g] group_power{'g; 'a; 'n} = group_power{'g; 'a; ('m +@ 'n)} in 'g^car }
 doc docoff
 
 interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
-   sequent { <H> >- 'n in int } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'n in int } -->
    sequent { <H> >- 'g^inv group_power{'g; 'a; 'n} = group_power{'g; 'a; (-'n)} in 'g^car }
 
 doc <:doc<
@@ -200,10 +200,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
-   sequent { <H> >- 'm in int } -->
-   sequent { <H> >- 'n in int } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'm in int } -->
+   [wf] sequent { <H> >- 'n in int } -->
    sequent { <H> >- group_power{'g; group_power{'g; 'a; 'm}; 'n} = group_power{'g; 'a; ('m *@ 'n)} in 'g^car }
 
 doc <:doc<
@@ -226,12 +226,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive isCyclic_type {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
    sequent { <H> >- "type"{isCyclic{'g}} }
 
 interactive isCyclic_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'a :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- 'a in 'g^car } -->
+   [wf] sequent { <H> >- 'g in group[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'g^car } -->
    sequent { <H>; x: 'g^car >- exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car } -->
    sequent { <H> >- isCyclic{'g} }
 

@@ -1,36 +1,36 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_quotient_group]
-  
+
    This theory defines quotient groups.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
@@ -55,7 +55,7 @@ let _ =
  * QUOTIENT GROUP                                                       *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Rewrites}
 
@@ -92,14 +92,14 @@ interactive_rw reduce_quotGroup_id {| reduce |} :
  ************************************************************************)
 
 interactive quotG_equiv_type {| intro [intro_typeinf <<'B>>] |} group[i:l] :
-   [wf] sequent { <H> >- subgroup[i:l]{'A; 'B} } -->
+   sequent { <H> >- subgroup[i:l]{'A; 'B} } -->
    sequent { <H> >- "type"{quot x, y: 'B^car // ('x *['B] ('B^inv 'y) in 'A^car subset 'B^car)} }
 
 interactive quotG_equiv_type2 {| intro [intro_typeinf <<'B>>] |} group[i:l] :
-   [wf] sequent { <H> >- subgroup[i:l]{'A; 'B} } -->
+   sequent { <H> >- subgroup[i:l]{'A; 'B} } -->
    sequent { <H> >- "type"{(quotGroup{'A; 'B}^car)} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Rules}
 
@@ -110,7 +110,7 @@ interactive quotGroup_intro {| intro [] |} :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- quotGroup{'A; 'B} in group[i:l] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
 
    If <<normalSubg[i:l]{'A; 'B}>> and $B$ is abelian, then <<quotGroup{'A; 'B}>> is abelian.
@@ -121,7 +121,7 @@ interactive quotGroup_abel {| intro [AutoMustComplete] |} :
    sequent { <H> >- isCommutative{'B} } -->
    sequent { <H> >- quotGroup{'A; 'B} in abelg[i:l] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
 
    If <<normalSubg[i:l]{'A; 'B}>>, then $f: ('B -> <<quotGroup{'A; 'B}>>)$ defined by $f a = a$ is an epimorphism of $B$ to <<quotGroup{'A; 'B}>> with kernel $A$.
@@ -139,7 +139,7 @@ interactive quotGroup_ker_ext {| intro [AutoMustComplete; intro_typeinf <<'B>>] 
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- groupExtEqual{groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}}; {car='A^car; "*"='A^"*"; "1"='A^"1"; inv='A^inv}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
 
    First Isomorphism Theorem for Groups. Let $f$ be a group epimorphism
@@ -150,7 +150,7 @@ doc <:doc<
 interactive quotGroup_iso {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
-   sequent { <H> >- 'f in groupEpi{'A; 'B} } -->
+   [wf] sequent { <H> >- 'f in groupEpi{'A; 'B} } -->
    sequent { <H> >- lambda{a. ('f 'a)} in groupIso{quotGroup{groupKer{'f; 'A; 'B}; 'A}; 'B} }
 
 doc docoff

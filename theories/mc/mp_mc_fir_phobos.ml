@@ -82,6 +82,6 @@ let applyAllIFormC iform_rewrites =
             debug_string "  ->  ";
             debug_term contractum;
             debug_string "\n";
-               create_iform "post_proc" redex contractum) iform_rewrites
+               create_iform "post_proc" false redex contractum) iform_rewrites
    in
       repeatC (higherC (applyAllC patterns))

@@ -67,7 +67,8 @@ MPFILES :=\
 	itt_record0\
 	itt_record\
 	itt_record_exm\
-	itt_sort
+	itt_sort\
+	itt_example
 
 ifeq ($(TESTS),YES)
 	MPFILES:= $(MPFILES)\

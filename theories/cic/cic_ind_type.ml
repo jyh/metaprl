@@ -1,6 +1,8 @@
 extends Cic_lambda
 open Cic_lambda
 
+open Lm_printf
+
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.Term
@@ -205,10 +207,7 @@ interactive_rw indWrap
 
 let indWrapC def cnv = funC (fun e ->
 	let p = env_arg e in
-	let es={sequent_args=def; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [def])} in
-	let s=mk_sequent_term es in
-	let s'=apply_rewrite p cnv s in
-	let def'=SeqGoal.get (explode_sequent s').sequent_goals 0 in
+	let def'=apply_rewrite p cnv def in
 	indWrap def'
 )
 

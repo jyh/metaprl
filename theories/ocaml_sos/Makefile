@@ -1,13 +1,13 @@
 #
 # Don't need any libraries.
 #
-INCLUDE := -I . -I $(NLLIB)
-OCAMLDEPFLAGS := -prl
+INCLUDE := -I .
 
 # Common files
 MLZFILES :=\
 	ocaml\
-	ocaml_df
+	ocaml_df\
+	ocaml_theory
 
 # Library files
 NLFILES :=\
@@ -20,10 +20,20 @@ NLFILES :=\
 	ocaml_me_df\
 	ocaml_sig_df\
 	ocaml_str_df\
-	ocaml_df
+	ocaml_df\
+	ocaml_logic\
+	ocaml_base_sos\
+	ocaml_expr_sos\
+	ocaml_patt_sos\
+	ocaml_type_sos\
+	ocaml_mt_sos\
+	ocaml_me_sos\
+	ocaml_sig_sos\
+	ocaml_str_sos\
+	ocaml_theory
 
 # Name of main libraris
-MAIN = ocaml_df
+MAIN = ocaml
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

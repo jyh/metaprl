@@ -76,50 +76,11 @@
  * There is a global inference list, and a global forward chaining
  * queue.  Inferences can be moved off of this queue onto a
  * postponement queue if their world is backed out.
- *
- * $Log$
- * Revision 1.5  1998/04/24 02:44:02  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.4  1998/04/21 20:58:10  jyh
- * Fixed typing problems introduced by refiner msequents.
- *
- * Revision 1.3  1998/04/08 15:08:37  jyh
- * Moved precedence to mllib.
- *
- * Revision 1.2  1998/04/08 14:57:37  jyh
- * ImpDag is in mllib.
- *
- * Revision 1.1  1997/04/28 15:52:42  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.4  1996/11/13 22:58:43  jyh
- * Initial version of forward/backward chaining cache.
- *
- * Revision 1.3  1996/11/05 02:42:40  jyh
- * This is a version of the FCache with complete forward chaining,
- * and multiple worlds.  Untested.
- *
- * Revision 1.2  1996/11/01 01:25:16  jyh
- * This is version of the cache for pure forward chaining.
- * Right now, I am thinking about extending the chainer with "worlds,"
- * which will be necessary to incorporate backward chaining.
- *
  *)
 
 open Printf
 open Debug
 open Term
-open Term_template
 open Rewrite
 
 (*
@@ -173,7 +134,7 @@ type 'a proof =
  * to their wildcard entries.
  *)
 type 'a fcacheInfo =
-   { finfo_plates : term_template list;
+   { finfo_plates : Term_template.t list;
      finfo_wild : (int list * rewrite_rule) option;
      finfo_rw : rewrite_rule;
      finfo_just : 'a
@@ -184,7 +145,7 @@ type 'a fcacheInfo =
  * and a rewrite to produce the subgoals.
  *)
 type 'a bcacheInfo =
-   { binfo_plate : term_template;
+   { binfo_plate : Term_template.t;
      binfo_rw : term -> (term list * term) list;
      binfo_just : 'a
    }
@@ -222,7 +183,7 @@ and 'a infInfo =
 and 'a inference =
    { inf_name : string;
      inf_value : term;
-     inf_hash : term_template;
+     inf_hash : Term_template.t;
      inf_info : 'a infInfo
    }
 
@@ -249,12 +210,12 @@ and 'a subgoals =
    
 and assumption =
    { assum_term : term;
-     assum_hash : term_template
+     assum_hash : Term_template.t
    }
 
 and 'a goal =
    { goal_goal : term;
-     goal_hash : term_template;
+     goal_hash : Term_template.t;
      goal_assums : assumption list;
      mutable goal_subgoals : 'a subgoals
    }
@@ -317,13 +278,13 @@ and 'a world =
  * Forward chaining table.
  * The flookupTable maps terms into possible arguments to rules.
  *)
-type 'a flookupTable = (term_template, (int * 'a fcacheInfo) list) Hashtbl.t
+type 'a flookupTable = (Term_template.t, (int * 'a fcacheInfo) list) Hashtbl.t
 
 (*
  * Backward chaining table.
  * A backward table maps goals into rules.
  *)
-type 'a blookupTable = (term_template, 'a bcacheInfo list) Hashtbl.t
+type 'a blookupTable = (Term_template.t, 'a bcacheInfo list) Hashtbl.t
 
 (*
  * This info table list possible instantiations of rules.
@@ -334,7 +295,7 @@ type 'a blookupTable = (term_template, 'a bcacheInfo list) Hashtbl.t
  * The argument lists are updated destructively.
  *)
 type 'a infoTable =
-   (term_template list, ('a fcacheInfo * 'a inference list array) list) Hashtbl.t
+   (Term_template.t list, ('a fcacheInfo * 'a inference list array) list) Hashtbl.t
 
 (*
  * Table of terms.  Each term can be satisfied by an inference,
@@ -345,7 +306,7 @@ type 'a termEntry =
      entry_goals : 'a goal list
    }
 
-type 'a termTable = (term_template, 'a termEntry) Hashtbl.t
+type 'a termTable = (Term_template.t, 'a termEntry) Hashtbl.t
 
 (*
  * Backward chaining tree table.
@@ -353,7 +314,7 @@ type 'a termTable = (term_template, 'a termEntry) Hashtbl.t
  * This will coded to have the type:
  *    'a goal -> 'a goalnode
  *)
-type 'a bchainTable = (term_template, 'a goalnode list) Hashtbl.t
+type 'a bchainTable = (Term_template.t, 'a goalnode list) Hashtbl.t
 
 (*
  * The extract contains:
@@ -958,13 +919,13 @@ let build_world_extension ({ ext_base = base } as extract) world assums =
 let construct_subgoals extract just ants =
    let make_assum t =
       { assum_term = t;
-        assum_hash = compute_template t
+        assum_hash = Term_template.of_term t
       }
    in
    let aux (args, t) =
       let goal =
          { goal_goal = t;
-           goal_hash = compute_template t;
+           goal_hash = Term_template.of_term t;
            goal_assums = List.map make_assum args;
            goal_subgoals = Unexplored
          }
@@ -1274,7 +1235,7 @@ let update_goalnodes extract inf =
 let build_results ({ ext_base = base } as extract) world root values =
    let rec aux = function
       t::tl ->
-         let hash = compute_template t in
+         let hash = Term_template.of_term t in
             if already_known extract world t hash then
                aux tl
             else
@@ -1356,7 +1317,7 @@ let try_fchain_normal extract world { finfo_rw = rw; finfo_just = just } finst =
 let try_arglist_wild extract rw wrw nargs just world args =
    let terms = List.map (function inf -> inf.inf_value) args in
       try let wilds, _ = apply_rewrite wrw ([||], [||]) terms in
-          let wargs = List.map (function t -> find_inf extract world t (compute_template t)) wilds in
+          let wargs = List.map (function t -> find_inf extract world t (Term_template.of_term t)) wilds in
           let values, _ = apply_rewrite rw ([||], [||]) terms in
           let facts = mix_wild nargs args wargs in
           let root =
@@ -1477,7 +1438,7 @@ let add_frule { cache_finfo = finfo; cache_binfo = binfo }
     { fc_ants = ants; fc_concl = concl; fc_just = just } =
    let args, wild = compute_wild ants in
    let info =
-      { finfo_plates = List.map compute_template args;
+      { finfo_plates = List.map Term_template.of_term args;
         finfo_wild = wild;
         finfo_rw = term_rewrite ([||], [||]) args concl;
         finfo_just = just
@@ -1542,7 +1503,7 @@ let add_brule  { cache_finfo = finfo; cache_binfo = binfo }
          spread_ants values
    in
    let info =
-      { binfo_plate = compute_template concl;
+      { binfo_plate = Term_template.of_term concl;
         binfo_rw = trw;
         binfo_just = just
       }
@@ -1640,7 +1601,7 @@ let add_hyp
      } as extract) i gname t =
    (* Have we already explored this world? *) 
    let t' = subst t (List.map mk_var_term names) gnames in
-   let hash = compute_template t' in
+   let hash = Term_template.of_term t' in
    let i' = hcount - i - 1 in
       match find_world_extension extract world t' hash with
          Some world' ->
@@ -1781,7 +1742,7 @@ let set_goal ({ ext_used = used;
                 ext_base = base
               } as extract) t =
    let t' = subst t (List.map mk_var_term names) gnames in
-   let hash = compute_template t' in
+   let hash = Term_template.of_term t' in
    let goal =
       let goal' =
          { goal_goal = t';
@@ -2066,6 +2027,46 @@ let used_hyps
    List.map (function inf -> hcount - (List_util.find_indexq inf hyps) - 1) used
    
 (*
+ * $Log$
+ * Revision 1.6  1998/04/29 14:50:25  jyh
+ * Added ocaml_sos.
+ *
+ * Revision 1.5  1998/04/24 02:44:02  jyh
+ * Added more extensive debugging capabilities.
+ *
+ * Revision 1.4  1998/04/21 20:58:10  jyh
+ * Fixed typing problems introduced by refiner msequents.
+ *
+ * Revision 1.3  1998/04/08 15:08:37  jyh
+ * Moved precedence to mllib.
+ *
+ * Revision 1.2  1998/04/08 14:57:37  jyh
+ * ImpDag is in mllib.
+ *
+ * Revision 1.1  1997/04/28 15:52:42  jyh
+ * This is the initial checkin of Nuprl-Light.
+ * I am porting the editor, so it is not included
+ * in this checkin.
+ *
+ * Directories:
+ *     refiner: logic engine
+ *     filter: front end to the Ocaml compiler
+ *     editor: Emacs proof editor
+ *     util: utilities
+ *     mk: Makefile templates
+ *
+ * Revision 1.4  1996/11/13 22:58:43  jyh
+ * Initial version of forward/backward chaining cache.
+ *
+ * Revision 1.3  1996/11/05 02:42:40  jyh
+ * This is a version of the FCache with complete forward chaining,
+ * and multiple worlds.  Untested.
+ *
+ * Revision 1.2  1996/11/01 01:25:16  jyh
+ * This is version of the cache for pure forward chaining.
+ * Right now, I am thinking about extending the chainer with "worlds,"
+ * which will be necessary to incorporate backward chaining.
+ *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -6,6 +6,15 @@ include Ocaml
 include Ocaml_base_df
 include Ocaml_expr_df
 
+open Debug
+open Printf
+
+open Ocaml_expr_df
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_mt_df%t" eflush
+
 (*
  * Projection.
  *)
@@ -52,6 +61,9 @@ dform slot{mt_with; cons{'wc; 'wcl}} =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:49:10  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:30  jyh
  * Initial ocaml semantics.
  *

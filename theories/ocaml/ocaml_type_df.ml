@@ -6,6 +6,15 @@ include Ocaml
 include Ocaml_base_df
 include Ocaml_expr_df
 
+open Debug
+open Printf
+
+open Ocaml_expr_df
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_type_df%t" eflush
+
 (*
  * Precedences.
  *)
@@ -105,6 +114,9 @@ dform slot{type_prod; 't1; nil} =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:49:31  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:56  jyh
  * Initial ocaml semantics.
  *

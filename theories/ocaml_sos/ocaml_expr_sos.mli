@@ -621,6 +621,9 @@ rewrite apply_apply_eval :
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 14:49:48  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.1  1998/02/18 18:47:18  jyh
  * Initial ocaml semantics.
  *

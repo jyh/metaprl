@@ -6,6 +6,13 @@
 
 include Ocaml
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_base_sos%t" eflush
+
 (*
  * Extract for equivalences.
  *)
@@ -54,9 +61,20 @@ primrw value_member_unfold :
 declare is_value{'S; 'e}
 
 (*
+ * Judgment:
+ * t is a valid type.
+ *)
+declare is_type{'t}
+
+(*
  * Equivalence of names.
  *)
 declare lid_equiv{'n1; 'n2}
+
+(*
+ * Equivalence of names.
+ *)
+declare name_equiv{'S; 'n1; 'n2}
 
 (*
  * Form:
@@ -75,7 +93,8 @@ declare "value"{'S; 'e}
  * Combinator:
  * Evaluate a run to a value and separate the state from the value.
  *)
-declare spread{'run; v, S. 'body['v; 'S]}
+declare spread{'process; e, S. 'body['e; 'S]}
+declare spread_value{'process; v, S. 'body['v; 'S]}
 declare state{'S; 'e}
 declare expr{'S; 'e}
 declare expr_value{'S; 'e}
@@ -86,8 +105,15 @@ primrw state_unfold :
 primrw expr_unfold :
    expr{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'v}
 
-primrw expr_unfold :
+primrw expr_value_unfold :
    expr_value{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'v}
+
+(*
+ * Operations on states.
+ *)
+declare lookup{'S; 'n}
+declare replace{'S; 'n; 'v}
+declare allocate{'S; 'v}
 
 (************************************************************************
  * BASIC FACTS                                                          *
@@ -112,6 +138,9 @@ prim functional_apply_value 'H 't1 :
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 14:49:41  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:10  jyh
  * Initial ocaml semantics.
  *

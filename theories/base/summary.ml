@@ -5,6 +5,7 @@
 include Perv
 include Nuprl_font
 include Base_dform
+include Ocaml_df
 
 open Printf
 open Debug
@@ -22,6 +23,7 @@ let _ =
 
 declare "interface"{'intf}
 declare "implementation"{'impl}
+declare "location"[@start:n, @finish:n]{'body}
 
 declare "rewrite"[@name:s]{'redex; 'contractum; 'proof}
 declare "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof}
@@ -95,15 +97,20 @@ declare "proof_subst_arg"{'args}
  *)
 dform "interface"{'body} =
    szone pushm[4]
-   `"Interface: " break
+   `"Interface:" break
    slot{'body} break
    `"end"
+   popm ezone
 
 dform mode["prl"] :: "implementation"{'body} =
    szone pushm[4]
-   `"Implementation: " break
+   `"Implementation:" break
    slot{'body} break
    `"end"
+   popm ezone
+
+dform "location"[@start:n, @finish:n]{'body} =
+   slot{'body}
 
 (*
  * Display a simple rewrite.
@@ -219,6 +226,9 @@ dform "summary_item"{'term} =
 
 (*
  * $Log$
+ * Revision 1.5  1998/04/29 14:48:38  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.4  1998/04/28 18:30:58  jyh
  * ls() works, adding display.
  *

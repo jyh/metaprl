@@ -2,6 +2,13 @@
  * Utilities for the semantics.
  *)
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_logic%t" eflush
+
 (*
  * Basic propositional logic.
  *)
@@ -22,6 +29,9 @@ primrw two_values_reduce :
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 14:49:50  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.1  1998/02/18 18:47:20  jyh
  * Initial ocaml semantics.
  *

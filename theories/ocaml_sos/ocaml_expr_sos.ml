@@ -17,6 +17,13 @@ include Ocaml
 include Ocaml_logic
 include Ocaml_base_sos
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_expr_sos%t" eflush
+
 (************************************************************************
  * EXCEPTIONS                                                           *
  ************************************************************************)
@@ -656,6 +663,9 @@ primrw apply_apply_eval :
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 14:49:45  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.3  1998/02/18 18:47:16  jyh
  * Initial ocaml semantics.
  *

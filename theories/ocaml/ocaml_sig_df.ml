@@ -6,6 +6,13 @@ include Ocaml
 include Ocaml_base_df
 include Ocaml_expr_df
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_sig_df%t" eflush
+
 (*
  * Display instructions.
  *)
@@ -93,6 +100,9 @@ dform sig_value[@name:s]{'t} =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:49:22  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:42  jyh
  * Initial ocaml semantics.
  *

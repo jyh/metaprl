@@ -37,6 +37,13 @@
 include Ocaml
 include Ocaml_base_df
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_patt_df%t" eflush
+
 (*
  * Special forms.
  *)
@@ -55,7 +62,7 @@ dform slot{patt_format; patt_char[@c:s]{'p1}; 'p2} =
    slot{patt_format; 'p1; .cons{."char"[@c:s]; 'p2}}
 
 dform slot{patt_format; patt_int[@i:n]{'p1}; 'p2} =
-   slot{patt_format; 'p1; .cons{."int"[@c:s]; 'p2}}
+   slot{patt_format; 'p1; .cons{."int"[@i:s]; 'p2}}
 
 dform slot{patt_format; patt_string[@s:s]{'p1}; 'p2} =
    slot{patt_format; 'p1; .cons{."string"[@s:s]; 'p2}}
@@ -144,7 +151,7 @@ dform slot{patt_format; patt_range{'p1}; 'p2} =
 dform slot{patt_format; patt_range_arg{'p1}; 'p2} =
    slot{patt_format; 'p1; 'p2}
 
-dform slot{patt_format; patt_range_end{'p1}; cons{'p1; 'p2}} =
+dform slot{patt_format; patt_range_end{'p1}; cons{'p2; 'p3}} =
    slot{patt_range; 'p1; 'p2; 'p3}
 
 dform slot{patt_range; 'p1; 'p2; cons{'p3; 'p4}} =
@@ -257,11 +264,14 @@ dform slot{patt_format; patt_with{'e1; 'e2}; 'pwel} =
    slot{patt_format; 'pwel; patt_ifelse}
 
 dform slot{patt_format; patt_body{'e}; 'pwel} =
-   "->" sbreak slot {'e2}
+   "->" sbreak slot {'e}
    slot{patt_format; 'pwel; patt_ifelse}
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:49:15  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:36  jyh
  * Initial ocaml semantics.
  *

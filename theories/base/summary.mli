@@ -5,9 +5,11 @@
 include Perv
 include Nuprl_font
 include Base_dform
+include Ocaml_df
 
 declare "interface"{'intf}
 declare "implementation"{'impl}
+declare "location"[@start:n, @finish:n]{'body}
 
 declare "rewrite"[@name:s]{'redex; 'contractum; 'proof}
 declare "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof}
@@ -74,6 +76,9 @@ declare "proof_subst_arg"{'args}
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:48:40  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/04/28 18:31:00  jyh
  * ls() works, adding display.
  *

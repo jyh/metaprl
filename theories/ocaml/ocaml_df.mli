@@ -14,7 +14,7 @@ include Ocaml_str_df
 
 (*
  * $Log$
- * Revision 1.2  1998/04/29 14:48:55  jyh
+ * Revision 1.1  1998/04/29 14:48:53  jyh
  * Added ocaml_sos.
  *
  *

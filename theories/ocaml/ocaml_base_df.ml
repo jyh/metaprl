@@ -3,6 +3,13 @@
  * for ocaml terms.
  *)
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_base_df%t" eflush
+
 (************************************************************************
  * DISPLAY TERMS                                                        *
  ************************************************************************)
@@ -164,6 +171,9 @@ dform push_indent       = pushm[3]
 
 (*
  * $Log$
+ * Revision 1.2  1998/04/29 14:48:45  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.1  1998/02/18 18:47:05  jyh
  * Initial ocaml semantics.
  *

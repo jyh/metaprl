@@ -22,6 +22,9 @@ rewrite two_values_reduce :
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 14:49:53  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.1  1998/02/18 18:47:21  jyh
  * Initial ocaml semantics.
  *

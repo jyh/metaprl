@@ -6,6 +6,13 @@
 include Ocaml
 include Ocaml_base_df
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_expr_df%t" eflush
+
 (*
  * Special flags.
  *)
@@ -215,6 +222,9 @@ dform parens :: "prec"[prec_let] :: "fix"{x. 'p} =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:48:56  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:13  jyh
  * Initial ocaml semantics.
  *

@@ -1,5 +1,5 @@
 (*
-include Ocaml display forms.
+ * Collect all the theories.
  *)
 
 include Ocaml
@@ -11,10 +11,19 @@ include Ocaml_mt_df
 include Ocaml_me_df
 include Ocaml_sig_df
 include Ocaml_str_df
+include Ocaml_logic
+include Ocaml_base_sos
+include Ocaml_expr_sos
+include Ocaml_patt_sos
+include Ocaml_type_sos
+include Ocaml_mt_sos
+include Ocaml_me_sos
+include Ocaml_sig_sos
+include Ocaml_str_sos
 
 (*
  * $Log$
- * Revision 1.2  1998/04/29 14:48:55  jyh
+ * Revision 1.1  1998/04/29 14:50:18  jyh
  * Added ocaml_sos.
  *
  *

@@ -7,6 +7,13 @@ include Ocaml_base_df
 include Ocaml_expr_df
 include Ocaml_mt_df
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_me_df%t" eflush
+
 (*
  * Projection.
  *)
@@ -44,6 +51,9 @@ dform me_uid[@name:s] = slot[@name:s]
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:49:05  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:23  jyh
  * Initial ocaml semantics.
  *

@@ -1,7 +1,7 @@
 #
 # Base theories.
 #
-INCLUDE := -I . -I ../tactic -I $(NLLIB)
+INCLUDE := -I . -I ../tactic -I ../ocaml -I $(NLLIB)
 OCAMLDEPFLAGS := -prl
 
 # Common files

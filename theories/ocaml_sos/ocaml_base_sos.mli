@@ -114,6 +114,9 @@ axiom functional_apply_value 'H 't1 :
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 14:49:43  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.1  1998/02/18 18:47:11  jyh
  * Initial ocaml semantics.
  *

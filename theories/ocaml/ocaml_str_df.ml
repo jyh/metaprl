@@ -6,11 +6,18 @@ include Ocaml
 include Ocaml_base_df
 include Ocaml_sig_df
 
+open Debug
+open Printf
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Ocaml_str_df%t" eflush
+
 (*
  * Exception declarations name type constructors.
  *)
 dform str_exception[@name:s]{'tl} =
-   sig_exception[@name:s]{'t}
+   sig_exception[@name:s]{'tl}
 
 (*
  * External function declaration.
@@ -55,6 +62,9 @@ dform str_let{'p; 'e} = "let"{'p; 'e}
                           
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 14:49:26  jyh
+ * Added ocaml_sos.
+ *
  * Revision 1.2  1998/02/18 18:47:49  jyh
  * Initial ocaml semantics.
  *

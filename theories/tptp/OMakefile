@@ -22,11 +22,6 @@ MPFILES =\
 OCamlGeneratedFiles(tptp_lex.ml tptp_parse.ml)
 
 #
-# Ocamldep usually forgests this dependency
-#
-tptp_lex.cmi: tptp_parse.cmi
-
-#
 # The theory
 #
 Theory($(MPFILES))

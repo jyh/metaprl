@@ -1,9 +1,8 @@
 OCAMLINCLUDES =\
 	-I .\
-	-I ../../../tactic\
-	-I ../../../ocaml\
-	-I ../../../base\
-	-I ../../compile\
+	-I $(ROOT)/theories/tactic\
+	-I $(ROOT)/theories/ocaml\
+	-I $(ROOT)/theories/base\
 	-I $(LIBMOJAVE)/naml/stdlib\
 	-I $(LIBMOJAVE)/util
 
@@ -12,7 +11,9 @@ MPFILES =\
 	m_prec\
 	m_int\
 	m_rawint\
-	m_rawfloat
+	m_rawfloat\
+	m_set\
+	m_fir
 
 Theory($(MPFILES))
 

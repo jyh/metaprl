@@ -39,6 +39,16 @@ prec prec_uminus
 prec prec_coerce
 prec prec_apply
 
+prec prec_colon
+prec prec_fun
+prec prec_union
+prec prec_exists
+
+(*
+ * Some display form helpers.
+ *)
+declare display_list[sep:s]{'l}
+
 (*!
  * @docoff
  *

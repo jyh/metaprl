@@ -47,6 +47,29 @@ prec prec_uminus > prec_mul
 prec prec_coerce > prec_uminus
 prec prec_apply > prec_coerce
 
+prec prec_colon
+prec prec_fun
+prec prec_union
+prec prec_exists
+
+prec prec_fun > prec_colon
+prec prec_union > prec_fun
+prec prec_exists > prec_union
+
+(*
+ * Display utilities.
+ *)
+declare display_list[sep:s]{'l}
+
+dform display_list_cons2_df : display_list[sep:s]{cons{'a; cons{'b; 'c}}} =
+   slot{'a} slot[sep:s] display_list[sep:s]{cons{'b; 'c}}
+
+dform display_list_cons1_df : display_list[sep:s]{cons{'a; nil}} =
+   slot{'a}
+
+dform display_list_nil_df : display_list[sep:s]{nil} =
+   `""
+
 (*!
  * @docoff
  *

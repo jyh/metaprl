@@ -31,6 +31,10 @@ extends M_prec
  *)
 declare rawfloat[precision:n, value:s]
 
+(*
+ * For display purposes.
+ *)
+declare precision[p:n]
 
 (*!
  * @docoff

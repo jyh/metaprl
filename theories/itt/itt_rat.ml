@@ -66,6 +66,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Top_conversionals
 open Dtactic
+open Auto_tactic
 
 open Itt_equal
 open Itt_struct
@@ -310,6 +311,9 @@ let resource elim += [
 	<<posnat>>, posnatDT;
 	<<rationals>>, rationalsDT;
 	]
+
+interactive posnat_is_int {| nth_hyp |} 'H :
+	sequent { <H>; n: posnat; <J['n]> >- 'n in int }
 
 interactive rationalsElimination1Eq{| elim [ThinOption thinT] |} 'H :
    [wf] sequent { <H>; a: rationals; <J['a]> >- "type"{'T['a]} } -->

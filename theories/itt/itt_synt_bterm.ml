@@ -162,6 +162,7 @@ prim bterm_elim {| elim [] |} 'H :
 
 (* Derivable rules *)
 
+
 interactive bterm_ind_wf {| intro [] |} bind{bt.'C['bt]}:
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H>; v:Var >- 'var_case['v] in 'C['v] } -->
@@ -178,6 +179,13 @@ interactive bdepth_wf {| intro[] |} :
 interactive bdepth_wf2 {| intro[] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- bdepth{'bt} in int }
+
+
+(* A version of a bterm that takes depth as an argument *)
+declare make_bterm{'op;'bdepth;'subterms}
+iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
+dform make_bterm_df: make_bterm{'op;'bdepth;'subterms} =   `"make_bterm" sub{'bdepth}`"(" slot{'op} `"; " slot{'subterms} `")"
+
 
 define unfold_dest_bterm:
    dest_bterm{'bt; v.'var_case['v];

@@ -1,3 +1,11 @@
+(*!
+ * @begin[doc]
+ * @theory[Itt_record]
+ *
+ * This is a theory of record type.
+ * Record type is defined as dependent intersection.
+ * @end[doc]
+ *)
 
 extends Itt_record_label
 extends Itt_record0
@@ -5,6 +13,8 @@ extends Itt_struct3
 extends Itt_disect
 extends Itt_logic
 extends Itt_tsquash
+
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -55,6 +65,9 @@ let _ =
 
 (*! @terms *)
 
+(*! @docoff *)
+
+
 define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
 
 define unfoldRcrdS : rcrd[t:t]{'a} <--> rcrd[t:t]{'a;rcrd}
@@ -63,6 +76,12 @@ define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 
 define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
+(*!
+ * @begin[doc]
+ * Records are defined as intersections. Dependent records are defined are defined as dependent intersectons:
+ * @end[doc]
+ *)
+
 define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> disect{'R; self.record[n:t]{'A['self]}}
 
 define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> disect{record[n:t]{'A};r.'R[field[n:t]{'r}]}
@@ -70,6 +89,9 @@ define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> disect{record[n:t]{'A};r.'R
 define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;x.'R}
 
 (* let foldRecordI = makeFoldC  <<record{'n;'A;'R}>> unfoldRecordI *)
+
+(*! @docoff *)
+
 
 define unfoldFunctionOrt : function_ort{x.'f['x];'R} <--> (all x:'R. ('x = 'f['x] in 'R))
 
@@ -83,6 +105,13 @@ define unfoldRecordOrt : record_ort[t:t]{'a;'R} <-->  function_ort{r.rcrd[t:t]{'
 (*! @rules
  * @modsubsection{Typehood and equality}
  *)
+
+(*!
+ * @begin[doc]
+ * The following rule are derivable using the above definitions.
+ * @end[doc]
+ *)
+
 
 (*** Typing ***)
 
@@ -357,6 +386,9 @@ interactive recordEliminationI  'H 'J 'x 'rr:
    [ort] sequent[squash]{'H; r:record[n:t]{'A;'R}; 'J['r]; x:'A; rr:'R >- record_ort[n:t]{'x;'R} } -->
    [main] sequent['ext]  {'H; x:'A; r:'R; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r] >- 'C['r]}
+
+
+(*! @docoff *)
 
 
 let recordL_elim n p =

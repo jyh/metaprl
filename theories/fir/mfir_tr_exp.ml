@@ -1,9 +1,8 @@
 (*!
  * @begin[doc]
- * @module[Mfir_test]
+ * @module[Mfir_tr_exp]
  *
- * The @tt[Mfir_test] module is used to test the FIR theory.  Its contents
- * may or may not be sensible.
+ * The @tt[Mfir_tr_exp] module defines the typing rules for expressions.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -36,21 +35,51 @@
  * @end[license]
  *)
 
-extends Mfir_theory
-
 (*!
  * @begin[doc]
- * Tactic to try: @tt["repeatT (autoT thenT rwh reduceC 0)"]
+ * @parents
  * @end[doc]
  *)
 
-interactive arith1 :
-   sequent [mfir] { >- 42 } -->
-   sequent [mfir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
+extends Base_theory
+extends Mfir_basic
+extends Mfir_ty
+extends Mfir_exp
+extends Mfir_sequent
+extends Mfir_tr_base
+extends Mfir_tr_types
+extends Mfir_tr_atom
+extends Mfir_tr_store
 
-interactive simple1 :
-   sequent [mfir] { >-
-      has_type{ letAtom{ tyInt; atomInt{2}; v. atomVar{'v} }; tyInt } }
+(*!
+ * @docoff
+ *)
+
+open Base_dtactic
+
+(**************************************************************************
+ * Rules.
+ **************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * Operationally, the term @tt[letAtom] binds @tt[atom] to @tt[v] in @tt[exp].
+ * The expression has type @tt[ty2] if @tt[atom] has type @tt[ty1], and the
+ * expression @tt[exp] has type @tt[ty2] under the assumption that @tt[v] has
+ * type @tt[ty1]. The assumptions ensure that @tt[ty1] and @tt[ty2] are
+ * well-formed types.
+ * @end[doc]
+ *)
+
+prim ty_letAtom {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type{ 'atom; 'ty1 } } -->
+   sequent [mfir] { 'H; a: var_def{ 'ty1; no_def } >-
+      has_type{ 'exp['a]; 'ty2 } } -->
+   sequent [mfir] { 'H >-
+      has_type{ letAtom{ 'ty1; 'atom; v. 'exp['v] }; 'ty2 } }
+   = it
 
 (*!
  * @docoff

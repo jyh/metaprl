@@ -1,10 +1,5 @@
-(*!
- * @begin[doc]
- * @module[Mfir_test]
- *
- * The @tt[Mfir_test] module is used to test the FIR theory.  Its contents
- * may or may not be sensible.
- * @end[doc]
+(*
+ * The Mfir_tr_base module defines the basic axioms of the FIR type system.
  *
  * ------------------------------------------------------------------------
  *
@@ -36,22 +31,6 @@
  * @end[license]
  *)
 
-extends Mfir_theory
-
-(*!
- * @begin[doc]
- * Tactic to try: @tt["repeatT (autoT thenT rwh reduceC 0)"]
- * @end[doc]
- *)
-
-interactive arith1 :
-   sequent [mfir] { >- 42 } -->
-   sequent [mfir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
-
-interactive simple1 :
-   sequent [mfir] { >-
-      has_type{ letAtom{ tyInt; atomInt{2}; v. atomVar{'v} }; tyInt } }
-
-(*!
- * @docoff
- *)
+extends Base_theory
+extends Mfir_basic
+extends Mfir_sequent

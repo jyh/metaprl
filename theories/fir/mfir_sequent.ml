@@ -152,7 +152,8 @@ let resource reduce += [
 (*!
  * @begin[doc]
  *
- * A proof of @tt[has_type] proves that a term @tt[t] has type @tt[ty].
+ * A proof of @tt[has_type] proves that a term @tt[t] has type @tt[ty],
+ * and that type @tt[ty] is a well-formed.
  * @end[doc]
  *)
 

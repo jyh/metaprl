@@ -63,7 +63,11 @@ extends Mfir_basic
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
-extends Mfir_type_rules
+extends Mfir_tr_base
+extends Mfir_tr_types
+extends Mfir_tr_atom
+extends Mfir_tr_store
+extends Mfir_tr_exp
 
 (*!
  * @docoff

@@ -424,13 +424,25 @@ declare setGlobal{ 'label; 'ty; 'atom; 'exp }
  * Unary operators.
  *)
 
-(* NOTE: Not implementing these until there is a need. Too many of them. *)
+(* NOTE: Implementing these as needed. *)
+
+dform uminusIntOp_df1 : except_mode[src] :: except_mode[tex] ::
+   uminusIntOp =
+   `"~-" sub{tyInt}
+
+dform uminusIntOp_df2 : mode[tex] ::
+   uminusIntOp =
+   izone `"\\sim\\!\\!-" ezone sub{tyInt}
 
 (*
  * Binary operators.
  *)
 
-(* NOTE: Not implementing these until there is a need. Too many of them. *)
+(* NOTE: Implementing these as needed. *)
+
+dform plusIntOp_df : except_mode[src] ::
+   plusIntOp =
+   `"+" sub{tyInt}
 
 (*
  * Atoms.
@@ -451,7 +463,7 @@ dform atomRawInt_df : except_mode[src] ::
 
 dform atomVar_df : except_mode[src] ::
    atomVar{ 'var } =
-   slot{'var}
+   bf["var"] `"(" slot{'var} `")"
 
 dform atomTyApply_df : except_mode[src] ::
    atomTyApply{ 'atom; 'ty; 'ty_list } =

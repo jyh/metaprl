@@ -436,11 +436,11 @@ dform false_df : except_mode[src] ::
 
 dform or_df : except_mode[src] ::
    "or"{ 'bool1; 'bool2 } =
-   `"(" slot{'bool1} vee slot{'bool2} `")"
+   `"(" slot{'bool1} vee space slot{'bool2} `")"
 
 dform and_df : except_mode[src] ::
    "and"{ 'bool1; 'bool2 } =
-   `"(" slot{'bool1} wedge slot{'bool2} `")"
+   `"(" slot{'bool1} wedge space slot{'bool2} `")"
 
 dform not_df : except_mode[src] ::
    "not"{ 'boolean } =

@@ -17,7 +17,11 @@ MPFILES := \
    mfir_termOp_base \
    mfir_termOp \
    mfir_sequent \
-   mfir_type_rules \
+   mfir_tr_base \
+   mfir_tr_types \
+   mfir_tr_atom \
+   mfir_tr_store \
+   mfir_tr_exp \
    mfir_theory \
    mfir_test
 

@@ -1,9 +1,8 @@
 (*!
  * @begin[doc]
- * @module[Mfir_test]
+ * @module[Mfir_tr_store]
  *
- * The @tt[Mfir_test] module is used to test the FIR theory.  Its contents
- * may or may not be sensible.
+ * The @tt[Mfir_tr_store] module defines the typing rules for store values.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -36,21 +35,54 @@
  * @end[license]
  *)
 
-extends Mfir_theory
-
 (*!
  * @begin[doc]
- * Tactic to try: @tt["repeatT (autoT thenT rwh reduceC 0)"]
+ * @parents
  * @end[doc]
  *)
 
-interactive arith1 :
-   sequent [mfir] { >- 42 } -->
-   sequent [mfir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
+extends Base_theory
+extends Mfir_basic
+extends Mfir_ty
+extends Mfir_exp
+extends Mfir_sequent
+extends Mfir_tr_base
+extends Mfir_tr_types
 
-interactive simple1 :
-   sequent [mfir] { >-
-      has_type{ letAtom{ tyInt; atomInt{2}; v. atomVar{'v} }; tyInt } }
+(*!
+ * @docoff
+ *)
+
+open Base_dtactic
+
+(**************************************************************************
+ * Rules.
+ **************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * The typing rules for functions are straightforward.  The body of the
+ * function must be typed as the result type of the function, assuming that
+ * its binding variable has the appropriate type (or kind).
+ * @end[doc]
+ *)
+
+prim ty_store_lambda {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- type_eq{ 'arg_type; large_type } } -->
+   sequent [mfir] { 'H; a: var_def{ 'arg_type; no_def } >-
+      has_type{ 'f['a]; 'res_type } } -->
+   sequent [mfir] { 'H >-
+      has_type{ lambda{ v. 'f['v] }; tyFun{ 'arg_type; 'res_type } } }
+   = it
+
+prim ty_store_polyFun {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
+      has_type{ 'f['a]; 'ty['a] } } -->
+   sequent [mfir] { 'H >-
+      has_type{ polyFun{ t. 'f['t] }; tyAll{ t. 'ty['t] } } }
+   = it
 
 (*!
  * @docoff

@@ -14,6 +14,11 @@ serve as notes to himself.  They may not make sense to others.
 
 -- Mfir_exp display forms may be a bit wacky since I haven't tested them.
 
+-- Possible method for type checking FIR programs:
+      1) Build up a context that has all the declarations we'll need.
+      2) Type check the context.
+      3) Type check each definition given the context.
+
 Comments that will be around a while:
 
 -- Must _not_ include anything from ITT.  Otherwise, we get

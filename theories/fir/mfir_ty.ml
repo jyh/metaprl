@@ -234,7 +234,7 @@ dform tyEnum_df : except_mode[src] ::
 
 dform tyRawInt_df : except_mode[src] ::
    tyRawInt[precision:n, sign:s] =
-   mathbbZ sub{slot[precision:n]} sup{slot[sign:s]}
+   mathbbZ sub{slot[precision:n]} sup{bf{slot[sign:s]}}
 
 dform tyFloat_df : except_mode[src] ::
    tyFloat[precision:n] =
@@ -274,7 +274,7 @@ dform tyRawData_df : except_mode[src] ::
 
 dform tyVar_df : except_mode[src] ::
    tyVar{ 'ty_var } =
-   slot{'ty_var}
+   bf["tvar"] `"(" slot{'ty_var} `")"
 
 dform tyApply_df : except_mode[src] ::
    tyApply{ 'ty_var; 'ty_list } =

@@ -1,9 +1,9 @@
 (*!
  * @begin[doc]
- * @module[Mfir_test]
+ * @module[Mfir_tr_base]
  *
- * The @tt[Mfir_test] module is used to test the FIR theory.  Its contents
- * may or may not be sensible.
+ * The @tt[Mfir_tr_base] module defines the basic axioms of the FIR type
+ * system.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -36,21 +36,52 @@
  * @end[license]
  *)
 
-extends Mfir_theory
-
 (*!
  * @begin[doc]
- * Tactic to try: @tt["repeatT (autoT thenT rwh reduceC 0)"]
+ * @parents
  * @end[doc]
  *)
 
-interactive arith1 :
-   sequent [mfir] { >- 42 } -->
-   sequent [mfir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
+extends Base_theory
+extends Mfir_basic
+extends Mfir_sequent
 
-interactive simple1 :
-   sequent [mfir] { >-
-      has_type{ letAtom{ tyInt; atomInt{2}; v. atomVar{'v} }; tyInt } }
+(*!
+ * @docoff
+ *)
+
+open Base_dtactic
+
+(**************************************************************************
+ * Rules.
+ **************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * Proofs of side-conditions require a proof of $<< "true" >>$, which we
+ * take to be an axiom.
+ * @end[doc]
+ *)
+
+prim truth_intro {| intro [] |} 'H :
+   sequent [mfir] { 'H >- "true" }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * Type well-formedness judgments are expressed as a set of type
+ * equality judgments.  The @tt[wf_small_type] rule allows any
+ * $<< small_type >>$ type to be used as a $<< large_type >>$.
+ * @end[doc]
+ *)
+
+prim wf_small_type {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; small_type } } -->
+   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; large_type } }
+   = it
 
 (*!
  * @docoff

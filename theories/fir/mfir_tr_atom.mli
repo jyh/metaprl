@@ -1,5 +1,9 @@
-(*
- * The Mfir_type_rules module defines the FIR type system.
+(*!
+ * @begin[doc]
+ * @module[Mfir_tr_atom]
+ *
+ * The @tt[Mfir_tr_atom] module defines the typing rules for atoms.
+ * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
@@ -36,3 +40,5 @@ extends Mfir_basic
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
+extends Mfir_tr_base
+extends Mfir_tr_types

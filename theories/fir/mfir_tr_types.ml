@@ -65,6 +65,7 @@ open Mfir_auto
 (*!
  * @begin[doc]
  * @rules
+ * @modsubsection{Basic types}
  *
  * The equality judgment for $<< tyInt >>$ is straightforward.
  * @end[doc]
@@ -212,6 +213,7 @@ prim wf_tyRawData {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Polymorphism}
  *
  * Two type variables are equal if they name the same variable, and the
  * variable is declared in the context with the specified kind.
@@ -305,6 +307,8 @@ prim wf_tyAll {| intro [] |} 'H 'a :
  * @end[doc]
  *)
 
+(* XXX tyProject (multiple versions?) *)
+
 (* GAGH variable equality??
 prim wf_tyProject {| intro [] |} 'H :
    sequent [mfir] { 'H; v: var_def{ tyExists{ t. 'ty['t] } }; 'J['v] >-
@@ -314,8 +318,92 @@ prim wf_tyProject {| intro [] |} 'H :
    = it
 *)
 
-(* XXX tyProject (multiple versions?), type definitions. *)
+(*!
+ * @begin[doc]
+ * @modsubsection{Type definitions}
+ *
+ * Two parametrized types are equal if when instantiated at the same
+ * $<< small_type >>$, the resulting types are equal.
+ * @end[doc]
+ *)
+
+prim wf_tyDefPoly {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
+      type_eq{ 'ty1['a]; 'ty2['a]; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ tyDefPoly{ x. 'ty1['x] };
+                                   tyDefPoly{ y. 'ty2['y] };
+                                   small_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[union_type_eq] is used to test the equality of two union case
+ * definitions.  It is used in the equality judgments for union definitions.
+ * @end[doc]
+ *)
+
+declare union_type_eq{ 'case1; 'case2 }
+
+(*!
+ * @begin[doc]
+ *
+ * Two union definitions are equal if the cases they define are equal, and if
+ * they define the same kind of union.  Note that a union definition may
+ * define zero cases.
+ * @end[doc]
+ *)
+
+prim wf_tyDefUnion {| intro [] |} 'H :
+   sequent [mfir] { 'H >- int_eq{ length{ 'cases1 }; number[i:n] } } -->
+   sequent [mfir] { 'H >- union_type_eq{ 'cases1; 'cases2 } } -->
+   sequent [mfir] { 'H >- type_eq{ tyDefUnion[str:s]{ 'cases1 };
+                                   tyDefUnion[str:s]{ 'cases2 };
+                                   union_type[i:n] } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * Equality of union case definitions is straightforward.
+ * @end[doc]
+ *)
+
+prim wf_tyDefUnion_cases1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- union_type_eq{ 'h1; 'h2 } } -->
+   sequent [mfir] { 'H >- union_type_eq{ 't1; 't2 } } -->
+   sequent [mfir] { 'H >- union_type_eq{ cons{'h1; 't1}; cons{'h2; 't2} } }
+   = it
+
+prim wf_tyDefUnion_cases2 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- union_type_eq{ nil; nil } }
+   = it
+
+prim wf_tyDefUnion_unionCase {| intro [] |} 'H :
+   sequent [mfir] { 'H >- union_type_eq{ 'elts1; 'elts2 } } -->
+   sequent [mfir] { 'H >- union_type_eq{unionCase{'elts1}; unionCase{'elts2}}}
+   = it
+
+prim wf_tyDefUnion_unionCaseElt1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; large_type } } -->
+   sequent [mfir] { 'H >- union_type_eq{ unionCaseElt{ 'ty1; "true" };
+                                         unionCaseElt{ 'ty2; "true" } } }
+   = it
+
+prim wf_tyDefUnion_unionCaseElt2 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; large_type } } -->
+   sequent [mfir] { 'H >- union_type_eq{ unionCaseElt{ 'ty1; "false" };
+                                         unionCaseElt{ 'ty2; "false" } } }
+   = it
 
 (*!
  * @docoff
  *)
+
+(**************************************************************************
+ * Display forms.
+ **************************************************************************)
+
+dform union_type_eq_df : except_mode[src] ::
+   union_type_eq{ 'case1; 'case2 } =
+   slot{'case1} `"=" slot{'case2} `":(" bf["union case def"] `")"

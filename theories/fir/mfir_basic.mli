@@ -78,6 +78,8 @@ declare int_ge{ 'num1; 'num2 }
 declare nil
 declare cons{ 'elt; 'tail }
 
+declare length{ 'l }
+
 (*
  * Integer sets.
  *)
@@ -130,15 +132,18 @@ topval reduce_int_ge : conv
  * Lists.
  *)
 
+topval reduce_length_base : conv
+topval reduce_length_ind : conv
+
+(*
+ * Integer sets.
+ *)
+
 topval reduce_member_interval : conv
 topval reduce_member_intset_ind : conv
 topval reduce_member_intset_base : conv
 topval reduce_member_rawintset_ind : conv
 topval reduce_member_rawintset_base : conv
-
-(*
- * Integer sets.
- *)
 
 topval reduce_singleton : conv
 topval reduce_intset_max : conv

@@ -320,6 +320,14 @@ dform unionCase_df : except_mode[src] ::
    unionCase{ 'elts } =
    `"+" slot{'elts}
 
-dform tyDefUnion_df : except_mode[src] ::
+dform tyDefUnion_df1 : except_mode[src] ::
    tyDefUnion[str:s]{ 'cases } =
-   bf["union"] sub{bf[str:s]} slot{'cases}
+   bf["union"] sub{it[str:s]} slot{'cases}
+
+dform tyDefUnion_df2 : except_mode[src] ::
+   tyDefUnion["normal"]{ 'cases } =
+   bf["union"] sub{bf["normal"]} slot{'cases}
+
+dform tyDefUnion_df3: except_mode[src] ::
+   tyDefUnion["exn"]{ 'cases } =
+   bf["exn"] sub{bf["normal"]} slot{'cases}

@@ -128,6 +128,15 @@ declare cons{ 'elt; 'tail }
 
 (*!
  * @begin[doc]
+ *
+ * The term @tt[length] returns the number of elements in a list @tt[l].
+ * @end[doc]
+ *)
+
+declare length{ 'l }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Integer sets}
  *
  * The FIR uses integer sets in pattern matching expressions (see
@@ -395,6 +404,22 @@ prim_rw reduce_member_rawintset_base :
 
 (*!
  * @begin[doc]
+ * @modsubsection{List operations}
+ *
+ * Computing the length of a list is straightforward.
+ * @end[doc]
+ *)
+
+prim_rw reduce_length_base :
+   length{ nil } <-->
+   0
+
+prim_rw reduce_length_ind :
+   length{ cons{ 'h; 't } } <-->
+   ( 1 +@ length{ 't } )
+
+(*!
+ * @begin[doc]
  * @modsubsection{Set membership}
  *
  * The set (interval) membership relation $<< member{ 'i; 'set } >>$
@@ -644,6 +669,12 @@ dform mfir_list_colons_df1 :
 dform colons_df2 :
    mfir_list_colons{cons{'last_elt; 'first_elts}} =
    mfir_list_colons{'first_elts} `" :: " slot{'last_elt}
+
+(* List length operator. *)
+
+dform length_df : except_mode[src] ::
+   length{ 'l } =
+   bf["length"] `"(" slot{'l} `")"
 
 (*
  * Integer sets.

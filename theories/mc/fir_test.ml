@@ -5,17 +5,7 @@
  * Contains test theorems and programs.
  *)
 
-include Base_theory
-include Itt_theory
-include Fir_state
-include Fir_int_set
-include Fir_ty
-include Fir_exp
-include Fir_int
-include Fir_type
-include Fir_type_state
-include Fir_type_exp
-include Fir_type_int
+include Mc_theory
 
 (*
  * The term to represent I don't know what should go in a spot,

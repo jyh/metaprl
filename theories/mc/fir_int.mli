@@ -10,6 +10,8 @@ include Itt_theory
 include Fir_ty
 include Fir_exp
 
+open Tactic_type.Conversionals
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -54,3 +56,23 @@ declare leIntOp
 declare gtIntOp
 declare geIntOp
 declare cmpIntOp
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval reduce_uminusIntOp : conv
+topval reduce_plusIntOp : conv
+topval reduce_minusIntOp : conv
+topval reduce_mulIntOp : conv
+topval reduce_divIntOp : conv
+topval reduce_remIntOp : conv
+topval reduce_maxIntOp : conv
+topval reduce_minIntOp : conv
+topval reduce_eqIntOp : conv
+topval reduce_neqIntOp : conv
+topval reduce_ltIntOp : conv
+topval reduce_leIntOp : conv
+topval reduce_gtIntOp : conv
+topval reduce_geIntOp : conv
+topval reduce_cmpIntOp : conv

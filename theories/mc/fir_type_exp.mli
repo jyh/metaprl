@@ -12,6 +12,8 @@ include Fir_exp
 include Fir_type
 include Fir_type_state
 
+open Tactic_type.Conversionals
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -21,3 +23,10 @@ declare produces_match{ 'key; 'cases }
 
 (* Allocation operator type. *)
 declare ty_alloc_op
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval reduce_produces_match_base : conv
+topval reduce_produces_match_ind : conv

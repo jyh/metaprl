@@ -6,7 +6,7 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
+INCLUDE := -I . -I ../itt -I ../tactic -I ../base -I ../ocaml
 OCAMLDEPFLAGS := -prl
 
 # Library files
@@ -20,7 +20,9 @@ MPFILES := \
    fir_type_state \
    fir_type_exp \
    fir_type_int \
-   fir_test\
+   fir_auto \
+   mc_theory \
+   fir_test
 
 # Name of main libraries
 MAIN = theory

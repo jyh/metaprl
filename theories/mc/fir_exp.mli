@@ -11,6 +11,8 @@ include Fir_state
 include Fir_int_set
 include Fir_ty
 
+open Tactic_type.Conversionals
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -70,3 +72,20 @@ declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }
 declare letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] }
 declare setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
                       'new_val; s. 'exp['s] }
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval reduce_idOp : conv
+topval reduce_eqEqOp : conv
+topval reduce_neqEqOp : conv
+topval reduce_letUnop : conv
+topval reduce_letBinop : conv
+topval reduce_allocTuple : conv
+topval reduce_allocArray : conv
+topval reduce_allocUnion : conv
+topval reduce_match_int : conv
+topval reduce_match_block : conv
+topval reduce_letSubscript : conv
+topval reduce_setSubscript : conv

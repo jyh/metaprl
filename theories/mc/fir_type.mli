@@ -9,6 +9,8 @@ include Base_theory
 include Itt_theory
 include Fir_ty
 
+open Tactic_type.Conversionals
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -72,3 +74,18 @@ declare ty_int_set
  * Used to abstract the type of an FIR value.
  *)
 declare fir_value
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval reduce_tyInt : conv
+topval reduce_tyFun1 : conv
+topval reduce_tyFun2 : conv
+topval reduce_tyTuple1 : conv
+topval reduce_tyTuple2 : conv
+topval reduce_tyArray : conv
+topval reduce_tyExists1 : conv
+topval reduce_tyExists2 : conv
+topval reduce_tyAll1 : conv
+topval reduce_tyAll2 : conv

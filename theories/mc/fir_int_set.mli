@@ -8,6 +8,8 @@
 include Base_theory
 include Itt_theory
 
+open Tactic_type.Conversionals
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -45,3 +47,12 @@ define unfold_in_interval :
    in_interval{ 'num; interval{'l; 'r} } <-->
    band{ le_bool{'l; 'num}; le_bool{'num; 'r} }
 declare member{ 'num; 'int_set }
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval unfold_in_interval : conv
+topval reduce_member_cons : conv
+topval reduce_member_nil : conv
+topval reduce_short_int_set : conv

@@ -8,6 +8,8 @@
 include Base_theory
 include Fir_int_set
 
+open Tactic_type.Conversionals
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -77,3 +79,13 @@ define unfold_val_false : val_false <--> 0
 (* Functions. *)
 declare lambda{ x. 'f['x] }
 declare apply{ 'f; 'x }
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval unfold_true_set : conv
+topval unfold_false_set : conv
+topval unfold_val_true : conv
+topval unfold_val_false : conv
+topval beta_reduce : conv

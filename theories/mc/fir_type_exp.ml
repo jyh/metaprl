@@ -156,6 +156,16 @@ prim allocArray_member_equality {| intro [] |} 'H :
       allocArray{'ty2; 'list2} in ty_alloc_op }
    = it
 
+prim allocUnion_member_equality {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
+   (* ty_var things should go here... *)
+   [wf] sequent ['ext] { 'H >- 'num1 = 'num2 in int } -->
+   [wf] sequent ['ext] { 'H >- 'list1 = 'list2 in array{fir_value} } -->
+   sequent ['ext] { 'H >-
+      allocUnion{'ty1; 'ty_var1; 'num1; 'list1 } =
+      allocUnion{'ty2; 'ty_var2; 'num2; 'list2 } in ty_alloc_op }
+   = it
+
 prim letAlloc_equality {| intro [] |} 'H 's 'v :
    [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'alloc_op1 = 'alloc_op2 in ty_alloc_op } -->

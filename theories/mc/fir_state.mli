@@ -12,6 +12,8 @@
 include Base_theory
 include Itt_theory
 
+open Tactic_type.Conversionals
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -81,3 +83,15 @@ declare fetch{ 'state; 'ref; 'index }
  *    to a <- pair(x,y) and b <- z.
  *)
 declare smatch{ 'i; a, b. 'exp['a; 'b] }
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval reduce_nth_block : conv
+topval reduce_replace_nth_block : conv
+topval reduce_empty : conv
+topval reduce_alloc : conv
+topval reduce_store : conv
+topval reduce_fetch : conv
+topval reduce_smatch : conv

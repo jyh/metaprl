@@ -233,6 +233,10 @@ prim_rw reduce_allocTuple :
 prim_rw reduce_allocArray :
    letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } <-->
    smatch{ alloc{ 'state; 0; 'atom_list }; s, v. 'exp['s; 'v] }
+prim_rw reduce_allocUnion :
+   letAlloc{ 'state; allocUnion{ 'ty; 'ty_var; 'num; 'atom_list };
+      s, v. 'exp['s; 'v] } <-->
+   smatch{ alloc{ 'state; 'num; 'atom_list }; s, v. 'exp['s; 'v] }
 
 (* Control. *)
 prim_rw reduce_match_int :
@@ -269,6 +273,9 @@ let resource reduce += [
       reduce_allocTuple;
    << letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } >>,
       reduce_allocArray;
+   << letAlloc{ 'state; allocUnion{ 'ty; 'ty_var; 'num; 'atom_list };
+         s, v. 'exp['s; 'v] } >>,
+      reduce_allocUnion;
    << match_int{ 'state; 'key; cons{ matchCase{'set; s. 'e['s] }; 'el } } >>,
       reduce_match_int;
    << match_block{ 'state; block{'i; 'args}; 'cases } >>, reduce_match_block;

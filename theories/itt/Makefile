@@ -89,6 +89,7 @@ MPFILES :=\
 	itt_quotient_group\
 	itt_ring\
 	itt_field\
+	itt_order\
         itt_example\
 		itt_rat
 

@@ -27,9 +27,9 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare cyclic_group{'a}
+declare cyclic{'g; 'a}
 
-rewrite  unfold_cyclic_group : cyclic_group{'a} <-->
-   cyclic_subgroup{'a}
+rewrite unfold_cyclic : cyclic{'g; 'a} <-->
+   cyclic_subgroup{'g; 'a}
 
-topval fold_cyclic_group : conv
+topval fold_cyclic : conv

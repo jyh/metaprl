@@ -25,16 +25,16 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare elem_in_G
-declare power{'z; 'n}
-declare cyclic_subgroup{'a}
-(* declare cyclic_subgroup{elem_in_G} *)
+declare power{'g; 'z; 'n}
+declare cyclic_subgroup{'g; 'a}
 
-rewrite unfold_power : power{'z; 'n} <-->
-   ind{'n; i, j. op{inv{'z}; power{'z; ('n +@ 1)}}; id; k, l. op{'z; power{'z; ('n -@ 1)}}}
+rewrite unfold_power : power{'g; 'z; 'n} <-->
+   ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
 
-rewrite unfold_cyclic_subgroup : cyclic_subgroup{'a} <-->
-   collect{int; x. power{'a; 'x}}
+rewrite unfold_cyclic_subgroup : cyclic_subgroup{'g; 'a} <-->
+   collect{int; x. power{'g; 'a; 'x}}
+
+prec prec_power
 
 topval fold_power : conv
 topval fold_cyclic_subgroup : conv

@@ -41,11 +41,12 @@ open Refiner.Refiner.RefineError
 (*
  * Meta-operations.
  *)
-declare meta_sum{'a; 'b}
-declare meta_diff{'a; 'b}
-declare meta_prod{'a; 'b}
-declare meta_quot{'a; 'b}
-declare meta_rem{'a; 'b}
+declare meta_num[n:n]
+declare meta_sum[a:n, b:n]
+declare meta_diff[a:n, b:n]
+declare meta_prod[a:n, b:n]
+declare meta_quot[a:n, b:n]
+declare meta_rem[a:n, b:n]
 
 declare meta_eq[a:n,b:n]{'tt; 'ff}
 declare meta_eq[a:s,b:s]{'tt; 'ff}
@@ -58,29 +59,23 @@ declare meta_lt[a:s,b:s]{'tt; 'ff}
 declare meta_lt[a:t,b:t]{'tt; 'ff}
 declare meta_lt[a:l,b:l]{'tt; 'ff}
 
+let num_op = (dest_op (dest_term <<meta_num[0]>>).term_op).op_name
+
 (*
  * Arithmetic operations.
  *)
 let arith op goal =
-   let a, b = two_subterms goal in
-   let { term_op = op1; term_terms = terms1 } = dest_term a in
-   let { term_op = op2; term_terms = terms2 } = dest_term b in
-   let { op_name = name1; op_params = params1 } = dest_op op1 in
-   let { op_name = name2; op_params = params2 } = dest_op op2 in
-   let t =
-      match params1, params2, terms1, terms2 with
-         [num1], [num2], [], [] when Opname.eq name1 name2 ->
-            begin
-               match dest_param num1, dest_param num2 with
-                  Number i1, Number i2 ->
-                     mk_term (mk_op name1 [make_param (Number (op i1 i2))]) []
-                | _ ->
-                     raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))
-            end
-       | _ ->
-            raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))
-   in
-      t
+   match (dest_op (dest_term goal).term_op).op_params with
+      [num1; num2] ->
+         begin
+            match dest_param num1, dest_param num2 with
+               Number i1, Number i2 ->
+                  mk_term (mk_op num_op [make_param (Number (op i1 i2))]) []
+             | _ ->
+                  raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))
+         end
+    | _ ->
+         raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))
 
 let check_zero op =
    fun a b ->
@@ -90,19 +85,19 @@ let check_zero op =
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
  *)
-ml_rw reduce_meta_sum : ('goal : meta_sum{'a; 'b}) =
+ml_rw reduce_meta_sum : ('goal : meta_sum[a:n, b:n]) =
    arith Mp_num.add_num goal
 
-ml_rw reduce_meta_diff : ('goal : meta_diff{'a; 'b}) =
+ml_rw reduce_meta_diff : ('goal : meta_diff[a:n, b:n]) =
    arith Mp_num.sub_num goal
 
-ml_rw reduce_meta_prod : ('goal : meta_prod{'a; 'b}) =
+ml_rw reduce_meta_prod : ('goal : meta_prod[a:n, b:n]) =
    arith Mp_num.mult_num goal
 
-ml_rw reduce_meta_quot : ('goal : meta_quot{'a; 'b}) =
+ml_rw reduce_meta_quot : ('goal : meta_quot[a:n, b:n]) =
    arith (check_zero Mp_num.div_num) goal
 
-ml_rw reduce_meta_rem  : ('goal : meta_rem{'a; 'b}) =
+ml_rw reduce_meta_rem  : ('goal : meta_rem[a:n, b:n]) =
    arith (check_zero Mp_num.rem_num) goal
 
 (*

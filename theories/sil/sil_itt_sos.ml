@@ -384,12 +384,12 @@ interactive number_eval 'H :
 interactive add_eval 'H 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{add{'e1; 'e2}; 's1}; eval{meta_sum{number[i:n]; number[j:n]}; 's3}} }
+   sequent ['ext] { 'H >- evalsto{eval{add{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
 
 interactive sub_eval 'H 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_sum{number[i:n]; number[j:n]}; 's3}} }
+   sequent ['ext] { 'H >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
 
 interactive if_eval 'H (number[i:n]) 's2 (number[j:n]) 's3 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->

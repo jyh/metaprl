@@ -83,13 +83,13 @@ prim snumber_eval 'H :
 prim add_eval 'H 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{number[j:n]; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{add{'e1; 'e2}; 's1}; ."value"{meta_sum{number[i:n]; number[j:n]}; 's3}} } =
+   sequent ['ext] { 'H >- evalsto{eval{add{'e1; 'e2}; 's1}; ."value"{meta_sum[i:n, j:n]; 's3}} } =
    it
 
 prim sub_eval 'H 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{number[j:n]; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_diff{number[i:n]; number[j:n]}; 's3}} } =
+   sequent ['ext] { 'H >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_diff[i:n, j:n]; 's3}} } =
    it
 
 prim if_eval_true 'H (number[i:n]) 's2 (number[j:n]) 's3 :

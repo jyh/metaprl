@@ -247,22 +247,22 @@ dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
  *)
 
 prim_rw reduce_mul_meta : (number[i:n] *@ number[j:n]) <-->
-   meta_prod{number[i:n]; number[j:n]}
+   number{meta_prod[i:n, j:n]}
 prim_rw reduce_div_meta : (number[i:n] /@ number[j:n]) <-->
-   meta_quot{number[i:n]; number[j:n]}
+   number{meta_quot[i:n, j:n]}
 prim_rw reduce_rem_meta : "rem"{number[i:n]; number[j:n]} <-->
-   meta_rem{number[i:n]; number[j:n]}
+   number{meta_rem[i:n, j:n]}
 
 (*! @docoff *)
 
 let reduce_mul =
-   reduce_mul_meta thenC reduce_meta_prod
+   reduce_mul_meta thenC (addrC [0] reduce_meta_prod) thenC reduce_numeral
 
 let reduce_div =
-   reduce_div_meta thenC reduce_meta_quot
+   reduce_div_meta thenC (addrC [0] reduce_meta_quot) thenC reduce_numeral
 
 let reduce_rem =
-   reduce_rem_meta thenC reduce_meta_rem
+   reduce_rem_meta thenC (addrC [0] reduce_meta_rem) thenC reduce_numeral
 
 let resource reduce += [
    <<number[i:n] *@ number[j:n]>>, reduce_mul;

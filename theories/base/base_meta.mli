@@ -36,11 +36,12 @@ include Summary
 (*
  * Meta-operations.
  *)
-declare meta_sum{'a; 'b}
-declare meta_diff{'a; 'b}
-declare meta_prod{'a; 'b}
-declare meta_quot{'a; 'b}
-declare meta_rem{'a; 'b}
+declare meta_num[n:n]
+declare meta_sum[a:n, b:n]
+declare meta_diff[a:n, b:n]
+declare meta_prod[a:n, b:n]
+declare meta_quot[a:n, b:n]
+declare meta_rem[a:n, b:n]
 
 declare meta_eq[a:n,b:n]{'tt; 'ff}
 declare meta_eq[a:s,b:s]{'tt; 'ff}
@@ -56,11 +57,11 @@ declare meta_lt[a:l,b:l]{'tt; 'ff}
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
  *)
-ml_rw reduce_meta_sum : meta_sum{'a; 'b}
-ml_rw reduce_meta_diff : meta_diff{'a; 'b}
-ml_rw reduce_meta_prod : meta_prod{'a; 'b}
-ml_rw reduce_meta_quot : meta_quot{'a; 'b}
-ml_rw reduce_meta_rem  : meta_rem{'a; 'b}
+ml_rw reduce_meta_sum : meta_sum[a:n, b:n]
+ml_rw reduce_meta_diff : meta_diff[a:n, b:n]
+ml_rw reduce_meta_prod : meta_prod[a:n, b:n]
+ml_rw reduce_meta_quot : meta_quot[a:n, b:n]
+ml_rw reduce_meta_rem  : meta_rem[a:n, b:n]
 
 ml_rw reduce_meta_eq_num : meta_eq[a:n,b:n]{'tt; 'ff}
 ml_rw reduce_meta_eq_str : meta_eq[a:s,b:s]{'tt; 'ff}

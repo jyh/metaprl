@@ -52,6 +52,7 @@ open Tactic_type.Sequent
 
 declare int
 declare number[n:n]
+declare number{'a}
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 declare "add"{'a; 'b}
@@ -139,6 +140,8 @@ val ind_term : term
 val is_ind_term : term -> bool
 val dest_ind : term -> term * string * string * term * term * string * string * term
 val mk_ind_term : term -> string -> string -> term -> term -> string -> string -> term -> term
+
+val reduce_numeral: conv
 
 topval reduce_minus : conv
 topval reduce_sub : conv

@@ -94,6 +94,7 @@ let _ = show_loading "Loading Itt_int_base%t"
  *)
 declare int
 declare number[n:n]
+declare number{'a}
 
 (*!
  * @begin[doc]
@@ -307,14 +308,16 @@ let int_sqequalC = int_sqequal_rw
  * builtin operations.
  * @end[doc]
  *)
+prim_rw reduce_numeral : number{meta_num[n:n]} <--> number[n:n]
+
 prim_rw reduce_add_meta : (number[i:n] +@ number[j:n]) <-->
-   meta_sum{number[i:n]; number[j:n]}
+   number{meta_sum[i:n, j:n]}
 
 prim_rw reduce_minus_meta : ( - number[i:n]) <-->
-   meta_diff{number[0:n]; number[i:n]}
+   number{meta_diff[0:n, i:n]}
 
 prim_rw reduce_sub_meta : (number[i:n] -@ number[j:n]) <-->
-   meta_diff{number[i:n]; number[j:n]}
+   number{meta_diff[i:n, j:n]}
 
 prim_rw reduce_lt_meta : lt_bool{number[i:n]; number[j:n]} <-->
    meta_lt[i:n, j:n]{btrue; bfalse}
@@ -325,13 +328,13 @@ prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
 (*! @docoff *)
 
 let reduce_add =
-   reduce_add_meta thenC reduce_meta_sum
+   reduce_add_meta thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral
 
 let reduce_minus =
-   reduce_minus_meta thenC reduce_meta_diff
+   reduce_minus_meta thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
 
 let reduce_sub =
-   reduce_sub_meta thenC reduce_meta_diff
+   reduce_sub_meta thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
 
 let reduce_lt =
    reduce_lt_meta thenC reduce_meta_lt_num

@@ -2,16 +2,34 @@ OCAMLINCLUDES += $(addprefix -I , $(SUPPORT_DIRS))
 
 # Common files
 MLZFILES =\
-	base_theory
+    base_theory
 
 # Library files
 MPFILES =\
-	base_trivial\
-	base_meta\
-	base_rewrite\
-	base_theory
+    base_trivial\
+    base_meta\
+    base_rewrite\
+    base_theory
 
 Theory($(MPFILES))
+
+#
+# Documentation
+#
+PRINT_THEORIES =\
+    base_theory\
+    top_tacticals\
+    top_conversionals\
+    var\
+    auto_tactic\
+    dtactic\
+    base_trivial\
+    base_rewrite\
+    summary\
+    comment\
+    mptop
+
+TheoryDocument(base, $(PRINT_THEORIES))
 
 #
 # Clean up

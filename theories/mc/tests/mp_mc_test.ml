@@ -198,6 +198,21 @@ let test11 () =
    print_string "\ninline should be gone and ";
    print_string "one call should be halfway inlined\n"
 
+let test12 () =
+   print_string "\n\n*** Beginning test 12...\n\n";
+   let t = <<
+      extract_sym_func_pairs{
+         cons{ tableItem{ 'name1; fundef{ 'a1; 'a2; 'a3 } };
+         cons{ tableItem{ 'name2; fundef{ 'b1; 'b2; 'b3 } };
+         nil }}}
+   >> in
+   print_simple_term t;
+   print_string "\n\nApplying firInlineGetGlobalInfoC...\n\n";
+   let t = apply_rewrite firInlineGetGlobalInfoC t in
+   print_simple_term t;
+   print_string "\nDid we extract the info?"
+
+
 (*************************************************************************
  * Run tests.
  *************************************************************************)
@@ -213,4 +228,5 @@ let _ =
    test8 ();
    test9 ();
    test10 ();
-   test11 ()
+   test11 ();
+   test12 ()

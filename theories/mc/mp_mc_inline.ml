@@ -69,6 +69,7 @@ declare get_func_body{ 'global_info; 'name }
  * Inlining tailCall's.
  *)
 
+declare add_inline_wrapper{ 'target; 'global_info; 'prog }
 declare inline{ 'target; 'global_info; 'expr }
 declare inline_tailCall_prep{ 'global_info; 'tailCall_target }
 declare inline_tailCall{ 'body; 'args }
@@ -103,7 +104,7 @@ prim_rw reduce_extract_sym_func_pairs_3 :
    nil
 
 (*
- * Retreiving a function body from the assoc. list created above.
+ * Retrieving a function body from the assoc. list created above.
  *)
 
 prim_rw reduce_get_func_body_1 :
@@ -113,6 +114,31 @@ prim_rw reduce_get_func_body_1 :
 prim_rw reduce_get_func_body_2 :
    get_func_body{ cons{ tableItem{ 'diff_name; 'body }; 'tail }; 'name } <-->
    get_func_body{ 'tail; 'name }
+
+(*
+ * Adding an inline wrapper to all the function definitions of a program.
+ *)
+
+prim_rw reduce_add_inline_wrapper_1 :
+   add_inline_wrapper{ 'target; 'global_info;
+      firProg{ 'file_info; 'import_list; 'export_list; 'tydef_list;
+               'frame_list; 'ty_list; 'global_list; 'fundef_list }
+   }
+   <-->
+   firProg{ 'file_info; 'import_list; 'export_list; 'tydef_list;
+            'frame_list; 'ty_list; 'global_list;
+            add_inline_wrapper{ 'target; 'global_info; 'fundef_list }
+   }
+
+prim_rw reduce_add_inline_wrapper_2 :
+   add_inline_wrapper{ 'target; 'global_info;
+      cons{ tableItem{ 'name; 'fundef }; 'tail } } <-->
+   cons{ tableItem{ 'name; inline{ 'target; 'global_info; 'fundef } };
+         add_inline_wrapper{ 'target; 'global_info; 'tail } }
+
+prim_rw reduce_add_inline_wrapper_3 :
+   add_inline_wrapper{ 'target; 'global_info; nil } <-->
+   nil
 
 (*
  * Searching for a tailCall that we can inline.
@@ -199,6 +225,15 @@ let firInlineGetGlobalInfoC =
 
    ] ))
 
+let firInlineAddWrapperC =
+   repeatC (higherC (applyAllC [
+
+      reduce_add_inline_wrapper_1;
+      reduce_add_inline_wrapper_2;
+      reduce_add_inline_wrapper_3
+
+   ] ))
+
 let firInlineC =
    repeatC (higherC (applyAllC [
 
@@ -231,6 +266,16 @@ let is_extract_sym_func_pairs_term = is_dep0_term extract_sym_func_pairs_opname
 let mk_extract_sym_func_pairs_term = mk_dep0_term extract_sym_func_pairs_opname
 let dest_extract_sym_func_pairs_term =
    dest_dep0_term extract_sym_func_pairs_opname
+
+let add_inline_wrapper_term =
+   << add_inline_wrapper{ 'target; 'global_info; 'prog } >>
+let add_inline_wrapper_opname = opname_of_term add_inline_wrapper_term
+let is_add_inline_wrapper_term =
+   is_dep0_dep0_dep0_term add_inline_wrapper_opname
+let mk_add_inline_wrapper_term =
+   mk_dep0_dep0_dep0_term add_inline_wrapper_opname
+let dest_add_inline_wrapper_term =
+   dest_dep0_dep0_dep0_term add_inline_wrapper_opname
 
 let inline_term = << inline{ 'target; 'global_info; 'expr } >>
 let inline_opname = opname_of_term inline_term

@@ -55,6 +55,7 @@ declare get_func_body{ 'global_info; 'name }
  * Inlining tailCall's.
  *)
 
+declare add_inline_wrapper{ 'target; 'global_info; 'prog }
 declare inline{ 'target; 'global_info; 'expr }
 declare inline_tailCall_prep{ 'global_info; 'tailCall_target }
 declare inline_tailCall{ 'body; 'args }
@@ -77,6 +78,14 @@ topval reduce_extract_sym_func_pairs_3 : conv
 
 topval reduce_get_func_body_1 : conv
 topval reduce_get_func_body_2 : conv
+
+(*
+ * Adding an inline wrapper to all the function definitions of a program.
+ *)
+
+topval reduce_add_inline_wrapper_1 : conv
+topval reduce_add_inline_wrapper_2 : conv
+topval reduce_add_inline_wrapper_3 : conv
 
 (*
  * Searching for a tailCall that we can inline.
@@ -105,6 +114,7 @@ topval reduce_inline_tailCall_real_2 : conv
  *************************************************************************)
 
 topval firInlineGetGlobalInfoC : conv
+topval firInlineAddWrapperC : conv
 topval firInlineC : conv
 
 (*************************************************************************
@@ -115,6 +125,11 @@ val extract_sym_func_pairs_term : term
 val is_extract_sym_func_pairs_term : term -> bool
 val mk_extract_sym_func_pairs_term : term -> term
 val dest_extract_sym_func_pairs_term : term -> term
+
+val add_inline_wrapper_term : term
+val is_add_inline_wrapper_term : term -> bool
+val mk_add_inline_wrapper_term : term -> term -> term -> term
+val dest_add_inline_wrapper_term : term -> term * term * term
 
 val inline_term : term
 val is_inline_term : term -> bool

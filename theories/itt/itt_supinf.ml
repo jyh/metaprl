@@ -121,6 +121,18 @@ struct
             else Number(mult_num a1 b2, mult_num a2 b1)
        | _,_ -> raise (Invalid_argument "Division defined only on proper numbers")
 
+	let floor r =
+		match r with
+			Number (a,b) ->
+				if isNegative r then
+					let a' = abs_num a in
+					let b' = abs_num b in
+					let b'' = sub_num b' num1 in
+					sub_num num0 (div_num (add_num a' b'') b')
+				else
+					div_num a b
+		 | _ -> raise (Invalid_argument "RationalBoundField.floor: undefined on infinities")
+
 	let sign_num a = num_of_int (compare_num a num0)
 
    let compare a b =
@@ -161,6 +173,8 @@ struct
    let max_term a b = mk_max_rat_term a b
    let min_term a b = mk_min_rat_term a b
 end
+
+module R = RationalBoundField
 
 module Var =
 struct
@@ -350,6 +364,8 @@ struct
 	type source = Source.source
    type sacs   = (af list) * ((saf * (step list)) option array) * ((saf * (step list)) option array)
 
+	module VI=Var2Index(BField)
+
    let empty n =
 		let n'= succ n in
 		([], Array.make n' None, Array.make n' None)
@@ -447,11 +463,11 @@ struct
 			match l.(i), u.(i) with
 				None, None -> ()
 			 | Some (lv,_), None ->
-					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term info.(i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
+					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term (VI.restore info i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
 			 | None, Some (uv,_) ->
-					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term info.(i))
+					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term (VI.restore info i))
 			 |Some (lv,_), Some (uv,_) ->
-					fprintf out "%s >= %s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term info.(i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
+					fprintf out "%s >= %s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term (VI.restore info i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
 		done;
 
 end
@@ -1410,19 +1426,38 @@ let testT =
             end
    )
 
+interactive inseparable_rat 'H 'n :
+	[wf] sequent { <H>; ge_rat{'a; 'b}; <J> >- 'a in rationals } -->
+	[wf] sequent { <H>; ge_rat{'a; 'b}; <J> >- 'b in rationals } -->
+	[wf] sequent { <H>; ge_rat{'a; 'b}; <J> >- 'n in int } -->
+	sequent { <H>; ge_rat{'a; 'b}; <J> >- gt_rat{'a; rat_of_int{'n}} } -->
+	sequent { <H>; ge_rat{'a; 'b}; <J> >- gt_rat{rat_of_int{'n +@ 1}; 'b} } -->
+	sequent { <H>; ge_rat{'a; 'b}; <J> >- 'C }
+
+let use_both info v sup' inf' supsrc infsrc =
+	let supsrc=SAF.getSource sup' in
+	let sup_tm=SAF.term_of info sup' in
+	let inf_tm=SAF.term_of info inf' in
+	let tm=mk_ge_rat_term sup_tm inf_tm in
+	source2hypT info supsrc thenMT
+	source2hypT info infsrc thenMT
+	(assertT tm thenAT geTransitive (VI.restore info v))
+
+let isIntegral t = is_rat_of_int_term t
+
 let rec iter p info constrs v =
 	if !debug_supinf_post then
 		eprintf "Iteration %i@." v;
-	if v >= (Array.length info) then
+	if v > (Array.length info) then
 		begin
-			printf "No contradiction found:\n%t" (SACS.print_bounds info constrs);
+			printf "No contradiction found:\n%t@." (SACS.print_bounds info constrs);
 			failT
 		end
 	else
 		let saf'=SAF.affine (AF.mk_var v) in
 		let sup',a1=sup info constrs saf' CS.empty in
+		let supsrc=SAF.getSource sup' in
 		if SAF.isMinusInfinity sup' then
-			let src=SAF.getSource sup' in
 			begin
 				if !debug_supinf_steps then
 					begin
@@ -1432,11 +1467,11 @@ let rec iter p info constrs v =
 							SAF.print saf'
 							SAF.print sup';
 					end;
-				source2hypT info src
+				source2hypT info supsrc
 			end
 		else
 			let inf',a2=inf info constrs saf' CS.empty in
-			let src=SAF.getSource inf' in
+			let infsrc=SAF.getSource inf' in
 			begin
 				if !debug_supinf_steps then
 					begin
@@ -1449,7 +1484,7 @@ let rec iter p info constrs v =
 							SAF.print sup';
 					end;
 				if (SAF.isPlusInfinity inf') then
-					source2hypT info src
+					source2hypT info infsrc
 				else
 					begin
 						if !debug_supinf_post then
@@ -1460,17 +1495,27 @@ let rec iter p info constrs v =
 						let sup_val=SAF.value_of sup' in
 						let inf_val=SAF.value_of inf' in
 						if compare sup_val inf_val >= 0 then
-							let constrs' = SACS.addUpperBound constrs v sup_val in
-							let constrs'' = SACS.addLowerBound constrs' v inf_val in
-							iter p info constrs'' (succ v)
+							if 	SAF.isInfinite sup' or
+									SAF.isInfinite inf' or
+									not (isIntegral (VI.restore info v)) then
+								let constrs' = SACS.addUpperBound constrs v sup_val in
+								let constrs'' = SACS.addLowerBound constrs' v inf_val in
+								iter p info constrs'' (succ v)
+							else
+								let floor_inf = floor inf_val in
+								let floor_sup = floor sup_val in
+								let floor_inf' = Number(floor_inf, num1) in
+								let floor_sup' = Number(floor_sup, num1) in
+								if (compare floor_inf' inf_val = -1) && (compare floor_inf' floor_sup' = 0) then
+									use_both info v sup' inf' supsrc infsrc thenMT
+									inseparable_rat (-1) (mk_number_term floor_inf) thenMT
+									rw normalizeC 0
+								else
+									let constrs' = SACS.addUpperBound constrs v sup_val in
+									let constrs'' = SACS.addLowerBound constrs' v inf_val in
+									iter p info constrs'' (succ v)
 						else
-							let supsrc=SAF.getSource sup' in
-							let sup_tm=SAF.term_of info sup' in
-							let inf_tm=SAF.term_of info inf' in
-							let tm=mk_ge_rat_term sup_tm inf_tm in
-							source2hypT info supsrc thenMT
-							source2hypT info src thenMT
-							(assertT tm thenAT geTransitive (VI.restore info v)) thenMT
+							use_both info v sup' inf' supsrc infsrc thenMT
 							rw normalizeC (-1)
 					end
 			end
@@ -1636,6 +1681,10 @@ sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H> >- 'c in int } -->
 sequent { <H>; 'a +@ 'b >= 'c; 'c >= 'a +@ 'b +@ 1 >- "false" }
+
+interactive inttest12 :
+sequent { <H> >- 'a in int } -->
+sequent { <H>; 3 *@ 'a >= 1; 1 >= 2 *@ 'a >- "false" }
 
 interactive inttestn :
 	sequent {'v  in int;

@@ -121,6 +121,10 @@ val is_rat_term : term -> bool
 val mk_rat_term : term -> term -> term
 val dest_rat : term -> (term * term)
 
+val is_rat_of_int_term : term -> bool
+val mk_rat_of_int_term : term -> term
+val dest_rat_of_int : term -> term
+
 val is_add_rat_term : term -> bool
 val mk_add_rat_term : term -> term -> term
 val dest_add_rat : term -> (term * term)

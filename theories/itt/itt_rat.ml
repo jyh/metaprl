@@ -224,6 +224,12 @@ let is_rat_term = is_dep0_dep0_term rat_opname
 let mk_rat_term = mk_dep0_dep0_term rat_opname
 let dest_rat = dest_dep0_dep0_term rat_opname
 
+let rat_of_int_term = << rat_of_int{'x} >>
+let rat_of_int_opname = opname_of_term rat_of_int_term
+let is_rat_of_int_term = is_dep0_term rat_of_int_opname
+let mk_rat_of_int_term = mk_dep0_term rat_of_int_opname
+let dest_rat_of_int = dest_dep0_term rat_of_int_opname
+
 let add_rat_term = << add_rat{'x; 'y} >>
 let add_rat_opname = opname_of_term add_rat_term
 let is_add_rat_term = is_dep0_dep0_term add_rat_opname

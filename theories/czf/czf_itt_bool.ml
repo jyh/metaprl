@@ -264,8 +264,7 @@ interactive snot_in_boolset {| intro [] |} :
    sequent { <H> >- mem{'x; boolset} } -->
    sequent { <H> >- mem{snot{'x}; boolset} }
 
-(* ?? *)
-interactive boolset_contradiction {| elim [] |} 'H :
+interactive boolset_contradiction 'H :
    ["wf"] sequent { <H>; x: sprop{'a}; y: sprop{snot{'a}}; <J> >- isset{'a} } -->
    sequent { <H>; x: sprop{'a}; y: sprop{snot{'a}}; <J> >- 'C }
 

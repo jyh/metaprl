@@ -168,17 +168,26 @@ doc <:doc<
  * H; x: A; J >- A ext x
  * by hypothesis
  *)
-interactive hypothesis 'H :
+interactive hypothesis {| nth_hyp |} 'H :
    sequent { <H>; x: 'A; <J['x]> >- 'A }
 
-interactive hypothesisType 'H :
+interactive hypothesisType {| nth_hyp |} 'H :
    sequent { <H>; x: 'A; <J['x]> >- "type"{'A} }
 
-interactive hypMem 'H :
+interactive hypMem {| nth_hyp |} 'H :
    sequent { <H>; x: 't1 = 't2 in 'A; <J['x]> >- 'A }
 
-interactive hypMemType 'H :
+interactive hypMemType {| nth_hyp |} 'H :
    sequent { <H>; x: 't1 = 't2 in 'A; <J['x]> >- "type"{'A} }
+
+interactive equalitySymHyp {| nth_hyp |} 'H :
+   sequent { <H>; e: 'x = 'y in 'T; <J['e]> >- 'y = 'x in 'T }
+
+interactive equalityRefHyp {| nth_hyp |} 'H :
+   sequent { <H>; e: 'x = 'y in 'T; <J['e]> >- 'x in 'T }
+
+interactive equalityRefHyp2 {| nth_hyp |} 'H :
+   sequent { <H>; e: 'x = 'y in 'T; <J['e]> >- 'y in 'T }
 
 doc <:doc<
    @begin[doc]
@@ -248,30 +257,6 @@ interactive equalityTypeIsType 'a 'b :
 doc <:doc<
    @begin[doc]
    @tactics
-
-   @modsubsection{Axiom}
-   The @tactic[nthHypT] tactic uses the @hrefrule[hypothesis] rule
-   to perform proof by assumption.
-
-   $$
-   @rulebox{nthHypT; i;
-      @cdot;
-      <<sequent{ <H>; "i. x": 'A; <J> >- 'A}>>}
-   $$
-
-   @docoff
-   @end[doc]
->>
-let nthHypT = argfunT (fun i p ->
-   let concl = Sequent.concl p in
-   let hyp = Sequent.nth_hyp p i in
-      (if alpha_equal hyp concl then hypothesis
-      else if is_type_term concl then
-         if is_equal_term hyp then hypMemType else hypothesisType
-      else hypMem) i)
-
-doc <:doc<
-   @begin[doc]
    @modsubsection{Thinning}
    The @tactic[thinT] tactic uses the @hrefrule[thin] rule to
    @emph{thin} a hypothesis in the current goal.
@@ -468,17 +453,12 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let resource auto += [{
-   auto_name = "nthHypT";
-   auto_prec = trivial_prec;
-   auto_tac = onSomeHypT nthHypT;
-   auto_type = AutoTrivial;
-}; {
+let resource auto += {
    auto_name = "Itt_struct.autoAssumT";
    auto_prec = create_auto_prec [equality_prec] [];
    auto_tac = onSomeAssumT autoAssumT;
    auto_type = AutoTrivial;
-}]
+}
 
 (*
  * -*-

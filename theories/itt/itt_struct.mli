@@ -121,7 +121,6 @@ rule equalityTypeIsType 'a 'b :
  * TACTICS                                                              *
  ************************************************************************)
 
-topval nthHypT : int -> tactic
 topval thinT : int -> tactic
 topval thinAllT : int -> int -> tactic
 topval nthAssumT : int -> tactic (* Does thinning to match against assumption *)

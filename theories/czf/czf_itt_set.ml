@@ -1,14 +1,14 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Czf_itt_set]
-  
+
    The @tt{Czf_itt_set} module provides the basic definition
    of sets and their elements.  The @tt{set} term denotes
    the type of all sets, defined using the $W$-type in
    the module @hrefmodule[Itt_w], as follows:
-  
+
    $$@set @equiv @w{T; @univ{1}; T}.$$
-  
+
    That is, the @emph{sets} are pairs of a type $T @in @univ{1}$,
    and a function $T @rightarrow @set$ that specifies the
    elements of the set.  Note that the type $T$ can be @emph{any}
@@ -16,26 +16,26 @@ doc <:doc<
    their members can't necessarily be enumerated.  This is a
    @emph{constructive} theory, not a decidable theory.  Of course,
    there will be special cases where equality of sets is decidable.
-  
+
    The sets are defined with the terms $@collect{x; T; f[x]}$, where
    $T$ is a type in $@univ{1}$, and $f[x]$ is a set for any index $x @in T$.
    The sets $f[x]$ are the @emph{elements} of the set, and $T$ is
    the a type used as their index.  For example, the following set
    is empty.
-  
+
    $$@{@} = @collect{x; <<void>>; x}$$
-  
+
    @noindent
    The following set is the singleton set containing the empty
    set.
-  
+
    $$@{@{@}@} = @collect{x; @unit; @{@}}$$
-  
+
    @noindent
    The following set is equivalent.
-  
+
    $$@{@{@}@}' = @collect{x; @int; @{@}}$$
-  
+
    This raises an important point about equality.
    The membership equality defined ion $W$-types
    requires equality on the index type $T$ as well as the element
@@ -43,66 +43,66 @@ doc <:doc<
    @emph{not} equal in this type because they have the provably
    different index types $@unit$ and $@int$, even though they have
    the same elements.
-  
+
    One solution to this problem would be to use a quotient
    construction using the quotient type defined in the
    @hrefmodule[Itt_quotient] module.  The @hrefmodule[Czf_itt_eq]
    module defines extensional set equality $@equiv_{@i{ext}}$, and
    we could potentially define the ``real'' sets with the following
    type definition.
-  
+
    $$@i{real@_sets} @equiv (@quot{set; s_1; s_2; s_1 @equiv_{@i{ext}} s_2})$$
-  
+
    This type definition would require explicit functionality
    reasoning on all functions over @i{real_set}.  This construction,
    however, makes these functionality proofs impossible because it
    omits the computational content of the equivalence judgment,
    which is a necessary part of the proof.
-  
+
    Alternative quotient formulations may be possible, but we have not
    pursued this direction extensively.  Instead, we introduce set
    equality in the @hrefmodule[Czf_itt_eq] module, together with
    explicit functionality predicates for set operators.  In addition,
    we prove the functionality properties for all the primitive
    set operations.
-  
+
    One avenue for improvement in this theory would be to stratify
    the set types to arbitrary type universes $@univ{i}$, which would
    allow for higher-order reasoning on sets, classes, etc.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @doc{@parents}
 >>
 extends Itt_theory
@@ -142,10 +142,10 @@ let debug_czf_set =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{set} term defines the type of sets; the @tt{collect}
    terms are the individual sets.  The @tt[isset] term is the
    well-formedness judgment for the $@set$ type.  The @tt[set_ind] term
@@ -165,7 +165,7 @@ doc <:doc< @docoff >>
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
    The following four rewrites give the primitive definitions
@@ -178,7 +178,7 @@ prim_rw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 prim_rw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[set_ind] term performs a pattern match;
    the normal reduction sequence can be derived from the
@@ -189,7 +189,7 @@ doc <:doc<
 interactive_rw reduce_set_ind {| reduce |} :
    set_ind{collect{'T; x. 'A['x]}; a, f, g. 'b['a; 'f; 'g]}
    <--> 'b['T; lambda{x. 'A['x]}; lambda{a2. set_ind{.'A['a2]; a, f, g. 'b['a; 'f; 'g]}}]
-   
+
 doc docoff
 
 let fold_set        = makeFoldC << set >> unfold_set
@@ -219,11 +219,11 @@ dform set_ind_df : parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body
  * RELATION TO ITT                                                      *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The @hrefterm[set] term is a type in the @Nuprl type theory.
    The @tt{equal_set} and @tt[isset_assum] rules define the
    @tt[isset] well-formedness judgment.  The @tt[isset_assum]
@@ -244,10 +244,10 @@ interactive equal_set :
 (*
  * By assumption.
  *)
-interactive isset_assum 'H :
+interactive isset_assum {| nth_hyp |} 'H :
    sequent { <H>; x: set; <J['x]> >- isset{'x} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[collect] terms are well-formed, if their
    index type $T$ is a type in $@univ{1}$, and their element function
@@ -264,7 +264,7 @@ interactive isset_collect2 {| intro [] |} :
    sequent { <H>; y: 'T >- isset{'a['y]} } -->
    sequent { <H> >- collect{'T; x. 'a['x]} IN set }
 
-doc <:doc< 
+doc <:doc<
    @docoff
    This is how a set is constructed.
 >>
@@ -272,10 +272,10 @@ interactive isset_apply {| intro [] |} :
    sequent { <H> >- ('f 'a) IN set } -->
    sequent { <H> >- isset{.'f 'a} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination form performs induction on the
    assumption $a@colon @set$.  The inductive argument is this:
    goal $C$ is true for any set $a$ if it is true for some
@@ -297,7 +297,7 @@ interactive set_elim {| elim [ThinOption thinT] |} 'H :
                   } -->
                      sequent { <H>; a: set; <J['a]> >- 'C['a] }
 
-doc <:doc< 
+doc <:doc<
    @docoff
    The next two rules allow any set argument to be replaced with
    an @tt{collect} argument.  These rules are never used.
@@ -320,7 +320,7 @@ interactive set_split_concl 's (bind{v. 'C['v]}) :
    sequent { <H>; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
    sequent { <H> >- 'C['s] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
    The induction combinator computes a value of type $T$ if its
@@ -399,20 +399,6 @@ let splitT t i = funT (fun p ->
          thenLT [addHiddenLabelT "wf";
                  addHiddenLabelT "wf";
                  addHiddenLabelT "main"])
-
-(************************************************************************
- * AUTOMATION                                                           *
- ************************************************************************)
-
-(*
- * Add set assumptions to trivial tactic.
- *)
-let resource auto += {
-   auto_name = "setAssumT";
-   auto_prec = trivial_prec;
-   auto_tac = onSomeHypT setAssumT;
-   auto_type = AutoTrivial;
-}
 
 (*
  * -*-

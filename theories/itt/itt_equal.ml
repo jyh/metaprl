@@ -310,7 +310,7 @@ doc <:doc< *********************************************************************
    $T$ by assumption, then $T$ is a type, and $x$ is a member of $T$.
    @end[doc]
 >>
-prim equalityAxiom 'H :
+prim equalityAxiom {| nth_hyp |} 'H :
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } =
    it
 
@@ -515,9 +515,9 @@ prim universeMemberType univ[i:l] :
 
 (*
  * Derived form for known membership.
- * hypothesis rule is not know yet.
+ * hypothesis rule is not known yet.
  *)
-interactive universeAssumType 'H :
+interactive universeAssumType {| nth_hyp |} 'H :
    sequent { <H>; x: univ[l:l]; <J['x]> >- 'x Type }
 
 interactive universeType {| intro [] |} :
@@ -632,37 +632,7 @@ let cumulativityT u =
  * Typehood from truth.
  *)
 let typeAssertT = typeEquality
-
-(*
- * Automation.
- *)
-let triv_equalT =
-   argfunT (fun i p ->
-   let concl = Sequent.concl p in
-   let hyp = Sequent.nth_hyp p i in
-      if is_type_term concl then
-         let _ = dest_univ hyp in univAssumT i
-      else
-         let gt, ga, gb = dest_equal concl in
-         if alpha_equal gt hyp then equalAssumT i else
-         let ht, ha, hb = dest_equal hyp in
-         if alpha_equal gt ht then
-            if alpha_equal ga gb then
-               if alpha_equal ha ga then equalRefT hb
-               else if alpha_equal hb ga then equalRefT ha thenT equalSymT
-               else raise generic_refiner_exn
-            else if alpha_equal ha gb && alpha_equal hb ga then equalSymT
-            else raise generic_refiner_exn
-         else raise generic_refiner_exn)
-
 let equality_prec = create_auto_prec [trivial_prec] []
-
-let resource auto += {
-   auto_name = "Itt_equal.triv_equalT";
-   auto_prec = equality_prec;
-   auto_tac = onSomeHypT triv_equalT;
-   auto_type = AutoTrivial;
-}
 
 (*
  * -*-

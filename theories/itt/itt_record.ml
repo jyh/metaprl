@@ -26,6 +26,7 @@ open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
+open Auto_tactic
 open Dtactic
 open Top_conversionals
 

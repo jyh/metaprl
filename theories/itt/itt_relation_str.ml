@@ -62,6 +62,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Typeinf
 
+open Auto_tactic
 open Dtactic
 
 let dByDefT  unfold n = rw unfold n thenT dT n

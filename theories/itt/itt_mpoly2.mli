@@ -16,18 +16,16 @@ topval mpoly_evalTopC : conv
 topval mpoly_evalC : conv
 
 topval reduce_add_mpolyC : conv
-topval reduce_eval_monomAuxC : conv
-topval reduce_eval_monomC : conv
 
 declare mpoly{'R; 'n}
 declare eval_mpoly{'p; 'vals; 'R}
 declare standardize{'p; 'R; 'n}
 declare eval_mpolyTerm{'pt; 'vals; 'R}
-declare mpoly_ofTerm{'pt; 'R}
+declare mpoly_ofTerm{'pt; 'R; 'n}
 
 rewrite mpolyTerm2mpoly :
 	eval_mpolyTerm{'pt; 'vals; 'R} <-->
-	eval_mpoly{mpoly_ofTerm{'pt;'R}; 'vals; 'R}
+	eval_mpoly{mpoly_ofTerm{'pt;'R; length{'vals}}; 'vals; 'R}
 
 rule eval_standardizeElim 'H unitringCE[i:l] :
 	[wf] sequent{ <H> >- 'p in mpoly{'R; length{'vals}} } -->

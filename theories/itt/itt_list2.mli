@@ -156,6 +156,7 @@ topval unfold_nth : conv
 topval unfold_replace_nth : conv
 topval unfold_length : conv
 topval unfold_rev : conv
+topval unfold_mklist : conv
 
 topval fold_is_nil : conv
 topval fold_mem : conv

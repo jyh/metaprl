@@ -70,7 +70,6 @@ be placed in memory.  We can allocate a new global variable, say $@it{spill}_i$ 
 and replace all occurrences of the variable with a reference to the new memory location.  This can
 be captured by rewriting the program just after the binding occurrences of the variables to be
 spilled.  The following two rules give an example.
-
 $$
 @begin[array,l]
 @line{@xrewrite2["smov"]{@Mov{o; v; e[v]}; @Mov{o; @it{spill}_i; e[@it{spill}_i]}}}
@@ -85,7 +84,6 @@ $$
    @end[array]}}
 @end[array]
 $$
-
 However, this kind of brute-force approach spills @em{all} of the occurrences of the variable, even
 those occurrences that could have been assigned to a register.  Furthermore, the spill location
 $@it{spill}_i$ would presumably be represented as the label of a memory location, not a variable,

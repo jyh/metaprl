@@ -87,8 +87,8 @@ express these translations with the term $@ASM{e}$, which is the translation of 
 $e$ to an assembly expression; and $@ASM{a; v; e[v]}$, which produces the assembly operand for the atom
 $a$ and substitutes it for the variable $v$ in assembly expression $e[v]$.
 
-@subsubsection["asmatoms"]{Atom translation}
-
+@comment{@subsubsection["asmatoms"]{Atom translation}}
+@bf{Atom translation}
 The translation of atoms is primarily a translation of the IR names for values and the assembly
 names for operands.  A representative set of atom translations is shown in Figure
 @reffigure[asmatomtrans].  Since the language is untyped, we use a 31-bit representation of
@@ -134,8 +134,8 @@ $$
 @caption{Translation of atoms to x86 assembly}
 @end[figure]
 
-@subsubsection["asmexps"]{Expression translation}
-
+@comment{@subsubsection["asmexps"]{Expression translation}}
+@bf{Expression translation}
 Expressions translate to sequences of assembly instructions.  A representative set of translations
 in shown in Figure @reffigure[asmexptrans].  The translation of $@LetAtom{a; v; e[v]}$ is the
 simplest case, the atom $a$ is translated into an operand $v'$, which is copied to a variable $v$

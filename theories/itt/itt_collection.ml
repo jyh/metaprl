@@ -284,9 +284,9 @@ interactive col_filter_wf {| intro [] |} :
    sequent['ext]  { <H> >- col_filter{'C; x.'P['x]} in Col[l:l]{'T} }
 
 interactive member_col_filter {| intro [intro_univ_arg] |} :
-   sequent[squash]{ <H> >- col_member{'C;'x}} -->
-   sequent[squash]{ <H> >- squash{'P['x]}} -->
-   sequent['ext]  { <H> >- col_member{col_filter{'C; x.'P['x]};'x}}
+   sequent[squash]{ <H> >- col_member{'C;'t}} -->
+   sequent[squash]{ <H> >- squash{'P['t]}} -->
+   sequent['ext]  { <H> >- col_member{col_filter{'C; x.'P['x]};'t}}
 
 interactive member_col_filter_elim {| elim [elim_univ_typeinf <<'x>>] |} 'H univ[l:l] 'T :
    [wf] sequent[squash]{ <H>; <J> >- 'x in 'T} -->

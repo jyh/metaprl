@@ -282,12 +282,11 @@ interactive tree4_wf  {| intro[] |} :
  sequent['ext]  { <H> >-tree{'node} in  BinTree{'A;t.'P['t]} }
 
 
-
 interactive node_wf2  {| intro[] |} :
  sequent[squash]{ <H> >- 'l in 'T }  -->
  sequent[squash]{ <H> >- 'r in 'T }  -->
  sequent[squash]{ <H> >- 'nd in 'R['l;'r] }  -->
- sequent['ext]  { <H> >-node{'l;'r;'nd} in Node{'T;l,r.'R['l;'r]} }
+ sequent['ext]  { <H> >-node{'l;'r;'nd} in Node{'T;ll,rr.'R['ll;'rr]} }
 
 doc <:doc< 
    @begin[doc]

@@ -1,7 +1,10 @@
 open Printf
 open Debug
 
-open Term
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermShape
+open Refiner.Refiner.TermEval
 
 (*
  * Show that the file is loading.

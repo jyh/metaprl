@@ -3,9 +3,21 @@
  *)
 
 open Debug
-open Term
-open Refine
-open Filter_proof_type
+open Refiner.Refiner
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
+
+(*
+ * Many tactics wish to examine their argument, so
+ * the real type of tactic includes an argument.
+ *)
+type attribute =
+   VarArgs of string list
+ | TermArgs of term list
+ | TypeArg of term 
+ | IntArgs of int list
+ | ThinArg of bool 
+ | SubstArg of (string * term) list
 
 (*
  * Every goal has a label.
@@ -28,21 +40,25 @@ and tactic_resources =
 (*
  * A tactic takes these arguments.
  *)
-and tactic = tactic_argument Refiner.tactic
-and safe_tactic = tactic_argument Refiner.safe_tactic
+and tactic = tactic_argument Refine.tactic
+and safe_tactic = tactic_argument Refine.safe_tactic
 
-and rw = tactic_argument Refiner.rw
-and cond_rewrite = tactic_argument Refiner.cond_rewrite
+and rw = tactic_argument Refine.rw
+and cond_rewrite = tactic_argument Refine.cond_rewrite
 
 and cache = tactic Tactic_cache.extract
 
 (*
  * A real arg also includes the goal.
  *)
-type tactic_arg = tactic_argument Refine_sig.tactic_arg
+type tactic_arg = tactic_argument Refine.tactic_arg
 
 (*
  * $Log$
+ * Revision 1.7  1998/05/28 13:48:40  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.6  1998/05/07 16:03:13  jyh
  * Adding interactive proofs.
  *

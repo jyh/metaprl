@@ -8,7 +8,7 @@ include Itt_subtype
 include Itt_unit
 include Itt_struct
 
-open Term
+open Refiner.Refiner.Term
 
 open Tactic_type
 
@@ -131,6 +131,10 @@ val mk_hide_term : term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/28 13:48:02  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.4  1998/04/22 22:45:09  jyh
  * *** empty log message ***
  *

@@ -10,7 +10,7 @@ include Itt_dprod
 
 open Printf
 open Debug
-open Term
+open Refiner.Refiner.Term
 open Options
 open Resource
 open Refine_sig
@@ -189,6 +189,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.6  1998/05/28 13:47:52  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.5  1998/04/24 02:43:39  jyh
  * Added more extensive debugging capabilities.
  *

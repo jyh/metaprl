@@ -5,7 +5,7 @@
  * deduce new facts from old ones.
  *)
 
-open Term
+open Refiner.Refiner.Term
 
 (*
  * The cache is initially constructed as a "fcache" from a collection of rules.
@@ -80,6 +80,10 @@ val used_hyps : 'a synthesis -> int list
 
 (*
  * $Log$
+ * Revision 1.3  1998/05/28 13:48:38  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.2  1998/05/07 16:03:11  jyh
  * Adding interactive proofs.
  *

@@ -11,7 +11,7 @@ include Itt_prod
 
 open Printf
 open Debug
-open Term
+open Refiner.Refiner.Term
 open Resource
 open Refine_sig
 
@@ -209,6 +209,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (preci
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/28 13:47:49  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.4  1998/04/24 02:43:37  jyh
  * Added more extensive debugging capabilities.
  *

@@ -9,7 +9,7 @@ include Itt_equal
 
 open Printf
 open Debug
-open Term
+open Refiner.Refiner.Term
 open Refine_sig
 
 open Tactic_type
@@ -271,6 +271,10 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.6  1998/05/28 13:48:11  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.5  1998/04/24 02:43:50  jyh
  * Added more extensive debugging capabilities.
  *

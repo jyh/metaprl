@@ -2,6 +2,10 @@
  * Utilities for tactics.
  *
  * $Log$
+ * Revision 1.2  1998/05/28 13:48:35  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.1  1997/04/28 15:52:41  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -19,7 +23,7 @@
  *
  *)
 
-open Term
+open Refiner.Refiner.Term
 open Tactic_type
 
 (*

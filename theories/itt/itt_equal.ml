@@ -10,7 +10,7 @@ include Itt_squash
 open Printf
 open Debug
 open Opname
-open Term
+open Refiner.Refiner.Term
 open Rformat
 open Simple_print
 open Term_stable
@@ -330,6 +330,10 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.7  1998/05/28 13:47:31  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.6  1998/04/24 02:43:26  jyh
  * Added more extensive debugging capabilities.
  *

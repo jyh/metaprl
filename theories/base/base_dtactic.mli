@@ -2,7 +2,7 @@
  * The D tactic performs a case selection on the conclusion opname.
  *)
 
-open Term
+open Refiner.Refiner.Term
 open Refine
 open Tactic_type
 
@@ -15,6 +15,10 @@ resource (term * (int -> tactic), int -> tactic, d_data) d_resource
 
 (*
  * $Log$
+ * Revision 1.3  1998/05/28 13:47:14  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.2  1998/05/07 16:02:59  jyh
  * Adding interactive proofs.
  *

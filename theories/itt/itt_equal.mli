@@ -10,7 +10,7 @@ include Base_theory
 
 include Itt_squash
 
-open Term
+open Refiner.Refiner.Term
 open Tactic_type
 open Base_theory
 
@@ -150,6 +150,10 @@ val squash_equalT : tactic
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/28 13:47:32  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.4  1998/04/22 22:44:44  jyh
  * *** empty log message ***
  *

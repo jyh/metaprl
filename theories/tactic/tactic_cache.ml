@@ -80,8 +80,9 @@
 
 open Printf
 open Debug
-open Term
-open Rewrite
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Rewrite
 
 (*
  * Debug statement.
@@ -2055,6 +2056,10 @@ let used_hyps
    
 (*
  * $Log$
+ * Revision 1.8  1998/05/28 13:48:36  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.7  1998/05/07 16:03:09  jyh
  * Adding interactive proofs.
  *

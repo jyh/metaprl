@@ -5,21 +5,6 @@
  * proof is just:
  *     sequent [it; squash] { H >> T } -->
  *     sequent [it; it] { H >> T }
- *
- * $Log$
- * Revision 1.4  1998/04/24 02:43:48  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.3  1998/04/22 22:45:13  jyh
- * *** empty log message ***
- *
- * Revision 1.2  1998/04/21 19:54:56  jyh
- * Upgraded refiner for program extraction.
- *
- * Revision 1.1  1997/08/06 16:18:42  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
  *)
 
 include Tactic_type
@@ -27,9 +12,10 @@ include Sequent
 
 open Printf
 open Debug
-open Term
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Term_stable
-open Refine_sig
 open Resource
 
 open Tactic_type
@@ -134,6 +120,24 @@ let squash_resource =
 let squash_of_proof { tac_arg = { ref_rsrc = { ref_squash = squash } } } = squash
 
 (*
+ * $Log$
+ * Revision 1.5  1998/05/28 13:48:06  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
+ * Revision 1.4  1998/04/24 02:43:48  jyh
+ * Added more extensive debugging capabilities.
+ *
+ * Revision 1.3  1998/04/22 22:45:13  jyh
+ * *** empty log message ***
+ *
+ * Revision 1.2  1998/04/21 19:54:56  jyh
+ * Upgraded refiner for program extraction.
+ *
+ * Revision 1.1  1997/08/06 16:18:42  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

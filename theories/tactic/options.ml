@@ -2,6 +2,10 @@
  * Additional tacticals.
  *
  * $Log$
+ * Revision 1.3  1998/05/28 13:48:32  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.2  1998/04/24 02:43:59  jyh
  * Added more extensive debugging capabilities.
  *
@@ -24,7 +28,7 @@
 
 open Printf
 open Debug
-open Term
+open Refiner.Refiner.Term
 open Refine
 open Var
 open Sequent

@@ -1,6 +1,6 @@
 open Printf
 open Debug
-open Term
+open Refiner.Refiner.Term
 open Evaluator
 
 (*

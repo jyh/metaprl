@@ -9,7 +9,7 @@ include Tactic_type
 include Itt_equal
 include Itt_subtype
 
-open Term
+open Refiner.Refiner.Term
 open Tactic_type
 
 (************************************************************************
@@ -64,6 +64,10 @@ val void_term : term
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/28 13:48:24  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.4  1998/04/22 22:45:29  jyh
  * *** empty log message ***
  *

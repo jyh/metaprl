@@ -5,6 +5,8 @@
 open Printf
 open Debug
 
+open Refiner.Refiner
+
 (*
  * Show that the file is loading.
  *)
@@ -42,6 +44,10 @@ dform perv_string_df : "string"[@s:s] =
 
 (*
  * $Log$
+ * Revision 1.3  1998/05/28 13:48:29  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.2  1998/05/07 16:03:07  jyh
  * Adding interactive proofs.
  *

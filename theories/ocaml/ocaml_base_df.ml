@@ -6,6 +6,8 @@
 open Debug
 open Printf
 
+open Refiner.Refiner
+
 let _ =
    if !debug_load then
       eprintf "Loading Ocaml_base_df%t" eflush
@@ -179,6 +181,10 @@ dform push_ident_df     : push_indent   = pushm[3]
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/28 13:48:27  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.4  1998/05/04 13:01:27  jyh
  * Ocaml display without let rec.
  *

@@ -1,4 +1,4 @@
-open Term
+open Refiner.Refiner.Term
 
 val evaluate_term : term -> term
 

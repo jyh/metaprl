@@ -8,7 +8,7 @@ include Tactic_type
 include Itt_equal
 include Itt_rfun
 
-open Term
+open Refiner.Refiner.Term
 
 open Tactic_type
 
@@ -172,6 +172,10 @@ val mk_decide_term : term -> string -> term -> string -> term -> term
 
 (*
  * $Log$
+ * Revision 1.4  1998/05/28 13:48:19  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.3  1998/04/22 22:45:24  jyh
  * *** empty log message ***
  *

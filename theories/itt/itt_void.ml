@@ -12,7 +12,7 @@ include Itt_subtype
 open Printf
 open Debug
 open Sequent
-open Term
+open Refiner.Refiner.Term
 open Resource
 
 open Tactic_type
@@ -149,6 +149,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_
 
 (*
  * $Log$
+ * Revision 1.6  1998/05/28 13:48:23  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.5  1998/04/24 02:43:56  jyh
  * Added more extensive debugging capabilities.
  *

@@ -2,6 +2,10 @@
  * Some basic tacticals.
  *
  * $Log$
+ * Revision 1.3  1998/05/28 13:48:42  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.2  1997/08/06 16:18:55  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.
@@ -23,7 +27,7 @@
  *
  *)
 
-open Term
+open Refiner.Refiner.Term
 open Refine
 open Tactic_type
 

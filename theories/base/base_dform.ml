@@ -5,7 +5,9 @@
 open Printf
 open Debug
 
-open Term
+open Refiner.Refiner
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
 open Dform
 open Rformat
 
@@ -211,6 +213,10 @@ dform newline_df : "\\" = \newline
 (*
  *
  * $Log$
+ * Revision 1.7  1998/05/28 13:47:12  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.6  1998/05/01 18:43:36  jyh
  * Added raw display.
  *

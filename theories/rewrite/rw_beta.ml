@@ -6,7 +6,7 @@
 open Printf
 
 open Debug
-open Term
+open Refiner.Refiner.Term
 open Dform_print
 open Refine
 open Refiner
@@ -76,6 +76,10 @@ let _ = Printexc.catch main ()
 
 (*
  * $Log$
+ * Revision 1.3  1998/05/28 13:48:30  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.2  1997/09/08 15:02:40  jyh
  * This version compiles Ensemble.
  *

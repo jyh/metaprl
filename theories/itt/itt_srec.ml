@@ -10,7 +10,7 @@ include Itt_void
 
 open Printf
 open Debug
-open Term
+open Refiner.Refiner.Term
 open Resource
 
 open Itt_void
@@ -188,6 +188,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (sreci
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/28 13:48:09  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.4  1998/04/24 02:43:49  jyh
  * Added more extensive debugging capabilities.
  *

@@ -1,7 +1,7 @@
 #
 # Libraries
 #
-INCLUDE := -I . -I ../tactic -I ../base -I $(NLLIB)
+INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(NLLIB)
 OCAMLDEPFLAGS := -prl
 
 # Common files

@@ -3,7 +3,7 @@
  *
  *)
 
-open Term
+open Refiner.Refiner.Term
 
 include Itt_equal
 include Itt_dprod
@@ -73,6 +73,10 @@ val mk_not_term : term -> term
 
 (*
  * $Log$
+ * Revision 1.3  1998/05/28 13:47:47  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.2  1997/08/06 16:18:35  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

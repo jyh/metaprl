@@ -8,7 +8,7 @@ include Itt_subtype
 include Itt_fun
 include Itt_prod
 
-open Term
+open Refiner.Refiner.Term
 
 (************************************************************************
  * TERMS                                                                *
@@ -158,6 +158,10 @@ val mk_precind_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.4  1998/05/28 13:47:51  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.3  1998/04/22 22:44:59  jyh
  * *** empty log message ***
  *

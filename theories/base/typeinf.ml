@@ -2,30 +2,6 @@
  * Before anything, we start the type inference resource.
  * This is mostly an incomplete type inference algorithm, but
  * it is used to perform basic inference.
- *
- * $Log$
- * Revision 1.7  1998/05/01 14:59:46  jyh
- * Updating display forms.
- *
- * Revision 1.6  1998/04/29 14:48:41  jyh
- * Added ocaml_sos.
- *
- * Revision 1.5  1998/04/24 19:39:13  jyh
- * Updated debugging.
- *
- * Revision 1.4  1998/04/24 02:43:19  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.3  1998/04/22 22:44:31  jyh
- * *** empty log message ***
- *
- * Revision 1.2  1998/04/21 19:54:42  jyh
- * Upgraded refiner for program extraction.
- *
- * Revision 1.1  1997/08/06 16:18:18  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
  *)
 
 include Tactic_type
@@ -33,9 +9,10 @@ include Tactic_type
 open Printf
 open Debug
 
-open Term
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Term_table
-open Refine_sig
 open Resource
 
 open Tactic_type
@@ -132,6 +109,33 @@ let typeinf_resource =
 let typeinf_of_proof { tac_arg = { ref_rsrc = { ref_typeinf = inf } } } = inf
 
 (*
+ * $Log$
+ * Revision 1.8  1998/05/28 13:47:18  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
+ * Revision 1.7  1998/05/01 14:59:46  jyh
+ * Updating display forms.
+ *
+ * Revision 1.6  1998/04/29 14:48:41  jyh
+ * Added ocaml_sos.
+ *
+ * Revision 1.5  1998/04/24 19:39:13  jyh
+ * Updated debugging.
+ *
+ * Revision 1.4  1998/04/24 02:43:19  jyh
+ * Added more extensive debugging capabilities.
+ *
+ * Revision 1.3  1998/04/22 22:44:31  jyh
+ * *** empty log message ***
+ *
+ * Revision 1.2  1998/04/21 19:54:42  jyh
+ * Upgraded refiner for program extraction.
+ *
+ * Revision 1.1  1997/08/06 16:18:18  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

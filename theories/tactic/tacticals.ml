@@ -5,11 +5,11 @@
 
 open Printf
 open Debug
-open Term
-open Refine_sig
-open Refine
-
-open Filter_proof_type
+open Refiner.Refiner
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 
 open Sequent
 open Tactic_type
@@ -47,15 +47,15 @@ let failWithT s p =
 (*
  * Sequencing tactics.
  *)
-let prefix_orelseT = Refiner.orelse
+let prefix_orelseT = Refine.orelse
 
-let prefix_andalsoT = Refiner.andthen
+let prefix_andalsoT = Refine.andthen
 
-let prefix_thenT = Refiner.andthen
+let prefix_thenT = Refine.andthen
 
-let prefix_thenLT = Refiner.andthenL
+let prefix_thenLT = Refine.andthenL
 
-let prefix_thenFLT = Refiner.andthenFL
+let prefix_thenFLT = Refine.andthenFL
 
 let tryT tac = tac orelseT idT
 
@@ -759,6 +759,10 @@ let get_thinning_arg =
 
 (*
  * $Log$
+ * Revision 1.9  1998/05/28 13:48:41  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.8  1998/04/24 02:44:06  jyh
  * Added more extensive debugging capabilities.
  *

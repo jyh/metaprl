@@ -2,20 +2,12 @@
  * Before anything, we start the type inference resource.
  * This is mostly an incomplete type inference algorithm, but
  * it is used to perform basic inference.
- *
- * $Log$
- * Revision 1.2  1998/04/22 22:44:32  jyh
- * *** empty log message ***
- *
- * Revision 1.1  1997/08/06 16:18:20  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
  *)
 
 include Tactic_type
 
-open Term
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
 
 open Tactic_type
 
@@ -60,6 +52,18 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
 val typeinf_of_proof : tactic_arg -> typeinf_func
 
 (*
+ * $Log$
+ * Revision 1.3  1998/05/28 13:47:19  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
+ * Revision 1.2  1998/04/22 22:44:32  jyh
+ * *** empty log message ***
+ *
+ * Revision 1.1  1997/08/06 16:18:20  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

@@ -8,7 +8,7 @@
  *)
 include Itt_equal
 
-open Term
+open Refiner.Refiner.Term
 
 open Tactic_type
 
@@ -65,6 +65,10 @@ val mk_token_term : string -> term
 
 (*
  * $Log$
+ * Revision 1.4  1998/05/28 13:47:23  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
  * Revision 1.3  1998/04/22 22:44:36  jyh
  * *** empty log message ***
  *

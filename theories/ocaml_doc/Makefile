@@ -3,6 +3,8 @@
 #
 DIR := theories/ocaml_doc
 ROOT := ../..
+THEORYNAME = ocaml_doc
+THEORYDESCR = \\"Introduction to OCaml\\" Book
 
 include $(ROOT)/mk/preface
 

@@ -3,6 +3,8 @@
 #
 DIR := theories/base
 ROOT := ../..
+THEORYNAME = base
+THEORYDESCR = Basic Meta-Theory
 
 include $(ROOT)/mk/preface
 

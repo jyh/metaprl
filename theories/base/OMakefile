@@ -1,4 +1,6 @@
 OCAMLINCLUDES += $(addprefix -I , $(SUPPORT_DIRS))
+THEORYNAME = base
+THEORYDESCR = Basic Meta-Theory
 
 # Common files
 MLZFILES =\

@@ -3,6 +3,8 @@
 #
 DIR := theories/czf
 ROOT := ../..
+THEORYNAME = czf
+THEORYDESCR = Constructive Set Theory
 
 include $(ROOT)/mk/preface
 

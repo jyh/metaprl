@@ -3,6 +3,8 @@
 #
 DIR := theories/fol
 ROOT := ../..
+THEORYNAME = fol
+THEORYDESCR = First-Order Logic
 
 include $(ROOT)/mk/preface
 

@@ -3,6 +3,8 @@
 #
 DIR := theories/itt
 ROOT := ../..
+THEORYNAME = itt
+THEORYDESCR = Computational Type Theory
 
 include $(ROOT)/mk/preface
 

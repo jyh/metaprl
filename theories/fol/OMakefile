@@ -1,3 +1,6 @@
+THEORYNAME = fol
+THEORYDESCR = First-Order Logic
+
 OCAMLINCLUDES +=\
 	$(addprefix -I , $(SUPPORT_DIRS))\
 	-I ../itt\

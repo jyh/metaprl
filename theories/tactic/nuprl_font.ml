@@ -45,6 +45,10 @@ open Printf
 open Mp_debug
 open Perv
 
+open String_util
+open Refiner.Refiner.TermOp
+open Rformat
+
 include Perv
 
 (*
@@ -292,7 +296,7 @@ dform info_end_df_all : internal :: except_mode[html] :: except_mode [tex] :: in
 dform keyword_begin_df_all : internal :: except_mode[html] :: except_mode[tex] :: keyword_begin = `""
 dform keyword_end_df_all : internal :: except_mode[html] :: except_mode[tex] :: keyword_end = `""
 
-dform keyword_df1 : internal :: keyword[text:s] =
+dform keyword_df1 : internal :: except_mode[tex] :: keyword[text:s] =
    keyword_begin slot[text:s] keyword_end
 
 dform keyword_df2 : internal :: keyword{'t} =
@@ -459,6 +463,19 @@ dform info_begin_df : internal :: mode[tex] :: info_begin =
 
 dform info_end_df : internal :: mode[tex] :: info_end =
    izone `"}" ezone
+
+let not_alnum c = not (is_alnum c)
+ml_dform keyword_tex_df : internal :: mode[tex] :: keyword[text:s] format_term buf =
+   fun term ->
+     let text = dest_string_param term in
+     let font = if String_util.for_all not_alnum text then "tt" else "bf" in
+     format_izone buf;
+     format_string buf ("\\mbox{\\" ^ font ^ " ");
+     format_ezone buf;
+     format_string buf text;
+     format_izone buf;
+     format_string buf "}";
+     format_ezone buf
 
 dform keyword_begin_df : internal :: mode[tex] :: keyword_begin =
    izone `"\\mbox{\\bf " ezone

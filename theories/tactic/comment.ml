@@ -201,7 +201,7 @@ dform tex_comment_item_df4 : tex_comment_item{comment_term{docoff}} =
 dform tex_comment_item_df5 : tex_comment_item{comment_term{doc{'t}}} =
    izone slot["raw", "\\kill\\end{tabbing}\n\\fi\\textrue\n"] ezone
    't
-   izone `"\n\\iftex\\begin{tabbing}%" ezone
+   izone slot["raw", "\n\\iftex\\begin{tabbing}%"] ezone
 
 dform tex_comment_item_df5 : tex_comment_item{comment_term{doc}} =
    izone slot["raw", "\\kill\\end{tabbing}\n\\fi\\textrue\n\\iftex\\begin{tabbing}%"] ezone

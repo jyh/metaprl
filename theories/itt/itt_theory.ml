@@ -2,7 +2,7 @@
  * @begin[doc]
  * @theory[Itt_theory]
  *
- * The @tt{Itt_theory} module collects all of the module in the
+ * The @tt{Itt_theory} module collects all of the modules in the
  * @Nuprl type theory.  This is the basic module to use when
  * stating and proving theorems the the @Nuprl type theory.
  * @end[doc]

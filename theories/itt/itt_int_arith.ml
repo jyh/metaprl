@@ -49,6 +49,7 @@ doc docoff
 
 open Printf
 open Lm_debug
+open Lm_num
 open Opname
 open Term_sig
 open Refiner.Refiner
@@ -115,6 +116,14 @@ interactive gt2ge 'H :
 
 interactive eq2ge 'H :
    sequent { <H>; x: 'a = 'b in int; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
+   sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
+
+interactive eq2ge1 'H :
+   sequent { <H>; x: 'a = 'b in int; <J['x]>; 'a >= 'b >- 'C['x] } -->
+   sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
+
+interactive eq2ge2 'H :
+   sequent { <H>; x: 'a = 'b in int; <J['x]>; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
 
 interactive notle2ge :
@@ -692,6 +701,43 @@ let term2inequality (i,t) =
 	let n=dest_number c in
 	(a,d,n,copyHypT i (-1))
 
+let num0 = num_of_int 0
+let num1 = num_of_int 1
+
+let term2term_number t =
+	if is_add_term t then
+		let a,b=dest_add t in
+		if is_number_term a then
+			(b,dest_number a)
+		else
+			(t,num0)
+	else
+		(t,num0)
+
+let term2inequality_aux (a,b,n,tac) =
+	let a1,a2=term2term_number a in
+	let b1,b2=term2term_number b in
+	(a1,b1,sub_num (add_num b2 n) a2,tac)
+
+let term2inequality' (i,t) =
+	if is_ge_term t then
+		let a,b=dest_ge t in
+		List.map term2inequality_aux [(a,b,num0,copyHypT i (-1))]
+	else if is_le_term t then
+		let a,b=dest_le t in
+		List.map term2inequality_aux [(b,a,num0,((rw fold_ge i) thenT (copyHypT i (-1))))]
+	else if is_gt_term t then
+		let a,b=dest_gt t in
+		List.map term2inequality_aux [(a,b,num1,gt2ge i)]
+	else if is_lt_term t then
+		let a,b=dest_lt t in
+		List.map term2inequality_aux [(b,a,num1,lt2ge i)]
+	else if is_equal_term t then
+		let _,a,b=dest_equal t in
+		List.map term2inequality_aux [(a,b,num0,eq2ge1 i);(b,a,num0,eq2ge2 i)]
+	else
+		raise (Invalid_argument "Itt_int_arith.term2triple - unexpected opname")
+
 let rec all_hyps_aux hyps l i =
    if i = 0 then l else
    let i = pred i in
@@ -705,14 +751,23 @@ let all_hyps arg =
    let hyps = (Sequent.explode_sequent arg).sequent_hyps in
       all_hyps_aux hyps [] (Term.SeqHyp.length hyps)
 
+let good_term' t =
+	let op=opname_of_term t in
+   (List.mem op arith_rels) or
+   (match explode_term t with
+      << 'l = 'r in 'tt >> when alpha_equal tt <<int>> && not (alpha_equal l r) -> true
+    | _ -> false)
+
 let findContradRelT = funT ( fun p ->
 	let hyps=all_hyps p in
-	let aux (i,t) = good_term t in
+	let aux (i,t) = good_term' t in
 	let l=List.filter aux hyps in
-	let l'=List.map term2inequality l in
+	let l'=List.flatten (List.map term2inequality' l) in
 	let l''=Arith.find_contradiction l' in
 	sumListT l''
 )
+
+let reduceIneqT i = rw (allSubC normalizeC) i
 
 doc <:doc<
 	@begin[doc]
@@ -778,12 +833,19 @@ doc <:doc<
 
 (* Finds and proves contradiction among ge-relations
  *)
+(*
 let arithT =
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
    ((tryOnAllMHypsT anyArithRel2geT) thenMT
    ((tryOnAllMHypsT tryReduce_geT) thenMT
    (findContradRelT thenMT (reduceContradRelT (-1)) ))))
+*)
+let arithT =
+   arithRelInConcl2HypT thenMT
+   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
+   ((tryOnAllMHypsT reduceIneqT) thenMT
+   (findContradRelT thenMT (reduceContradRelT (-1)) )))
 
 interactive test 'a 'b 'c :
 sequent { <H> >- 'a in int } -->

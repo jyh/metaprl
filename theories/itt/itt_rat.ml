@@ -59,6 +59,7 @@ open Lm_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
+open Tactic_type.Tacticals
 open Top_conversionals
 open Dtactic
 
@@ -66,6 +67,7 @@ open Itt_equal
 open Itt_struct
 open Itt_bool
 open Itt_int_base
+open Itt_squash
 
 let _ = show_loading "Loading Itt_rat%t"
 
@@ -145,10 +147,33 @@ let is_beq_rat_term = is_dep0_dep0_term beq_rat_opname
 let mk_beq_rat_term = mk_dep0_dep0_term beq_rat_opname
 let dest_beq_rat = dest_dep0_dep0_term beq_rat_opname
 
+let posnatDT n = rw unfold_posnat n thenT dT n thenT dT (n+1)
+
+(*
+let rationalsDT n = rw unfold_rationals n thenT
+                    ((dT n) orelseT tryT (squashT thenT dT n thenLT
+						                      [idT; (dT n thenT dT (n+1))]))
+*)
+let rationalsDT n = rw unfold_rationals n thenT dT n
+
 let resource elim += [
-	<<posnat>>, rw unfold_posnat;
-	<<rationals>>, rw unfold_rationals;
+	<<posnat>>, posnatDT;
+	<<rationals>>, rationalsDT;
 	]
+
+interactive rationalsElimination1Eq{| elim [ThinOption thinT] |} 'H :
+   [wf] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; <J['a]> >- "type"{'T['a]} } -->
+   [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; <J['a]>;
+             u1: int; v1: int; w1:'v1>0;
+				 u2: int; v2: int; w2:'v2>0;
+				 z: 'u1 *@ 'v2 = 'u2 *@ 'v1 in int >- 's[('u1,'v1)] = 't[('u2,'v2)] in 'T[('u1,'v1)]
+           } -->
+   sequent { <H>; a: rationals; <J['a]> >- 's['a] = 't['a] in 'T['a] }
+
+interactive rationalsElimination {| elim [ThinOption thinT] |} 'H :
+   [wf] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; <J['a]> >- "type"{'C['a]} } -->
+   [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; x: int; y: int; 'y>0; <J['a]> >- squash{'C[('x,'y)]} } -->
+   sequent { <H>; a: rationals; <J['a]> >- squash{'C['a]} }
 
 let resource intro += [
 	<<'x='y in rationals>>, wrap_intro (rwh unfold_rationals 0);
@@ -165,10 +190,30 @@ dform q_src_df : mode[src] :: Q = `"Q"
 interactive rationals_wf {| intro [] |} :
 	sequent { <H> >- rationals Type }
 
+interactive lt_bool_rat_wf1 {| intro [] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in int } -->
+	sequent { <H> >- 'd in int } -->
+	sequent { <H> >- lt_bool_rat{('a,'b); ('c,'d)} in bool }
+
+interactive lt_bool_rat_wf2 {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in int } -->
+	sequent { <H> >- lt_bool_rat{'a; ('b,'c)} in bool }
+
+interactive lt_bool_rat_wf3 {| intro [] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- lt_bool_rat{('a,'b); 'c} in bool }
+
 interactive lt_bool_rat_wf {| intro [] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- lt_bool_rat{'a; 'b} in bool }
+
 (*
 interactive lt_bool_rat_wf2 {| intro [] |} :
 	sequent { <H> >- 'a in quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}} } -->

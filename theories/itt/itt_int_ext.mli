@@ -288,7 +288,7 @@ rule div_baseReduce :
    sequent { <H> >- ('a /@ 'b) ~ 0 }
 
 rule div_indReduce :
-   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->

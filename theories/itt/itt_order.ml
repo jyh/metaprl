@@ -61,6 +61,7 @@ open Itt_squash
 open Itt_equal
 open Itt_subtype
 open Itt_record_renaming
+open Itt_rfun
 
 let _ =
    show_loading "Loading Itt_order%t"
@@ -175,7 +176,7 @@ let resource intro += [
 	<<isReflexive{'car; 'rel}>>, wrap_intro (isReflexiveDT0);
 	<<isIrreflexive{'car; 'rel}>>, wrap_intro (isIrreflexiveDT0);
 	<<isAntisym{'car; 'rel}>>, wrap_intro (isAntisymDT0);
-	<<isTransitive{'car; 'rel}>>, wrap_intro (isTransitiveDT0);
+(*	<<isTransitive{'car; 'rel}>>, wrap_intro (isTransitiveDT0);*)
 	<<isUnstrictPartialOrder{'car; 'rel}>>, wrap_intro (isUnstrictPartialOrderDT0);
 	<<isStrictPartialOrder{'car; 'rel}>>, wrap_intro (isStrictPartialOrderDT0);
 	<<isLinear{'car; 'rel}>>, wrap_intro (isLinearDT0);
@@ -261,6 +262,21 @@ interactive unstrict2eq_wf2 {| intro [intro_typeinf <<'rel>>] |} 'car :
 interactive inverse_order_wf {| intro [intro_typeinf <<'rel>>] |} 'car :
 	sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
 	sequent { <H> >- inverse_order{'rel} in 'car -> 'car -> bool }
+
+interactive isTransitive_intro :
+   [wf] sequent { <H> >- 'rel in 'car -> 'car -> bool } -->
+   [wf] sequent { <H> >- 'car Type } -->
+	[main] sequent { <H>; a: 'car; b: 'car; c: 'car;
+		"assert"{'rel 'a 'b}; "assert"{'rel 'b 'c} >- "assert"{'rel 'a 'c} } -->
+	sequent { <H> >- isTransitive{'car; 'rel} }
+
+let tryReduceBetaC = tryC reduce_beta
+let tryReduceBeta = rw (addrC [0] ((addrC [0] tryReduceBetaC) thenC tryReduceBetaC))
+let isTransitiveDT0 = isTransitive_intro thenMT tryReduceBeta 0 thenMT tryReduceBeta (-1) thenMT tryReduceBeta (-2)
+
+let resource intro += [
+	<<isTransitive{'car; 'rel}>>, wrap_intro (isTransitiveDT0);
+	]
 
 doc <:doc<
    @begin[doc]

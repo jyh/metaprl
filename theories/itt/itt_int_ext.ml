@@ -580,6 +580,27 @@ interactive_rw lt_mulNegMono_rw 'c :
 
 let lt_mulNegMonoC = lt_mulNegMono_rw
 
+interactive beq_mulMono :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	[wf] sequent { <H> >- 'c in int } -->
+	sequent { <H> >- 'c <> 0 } -->
+	sequent { <H> >- beq_int{'a;'b} = beq_int{'c *@ 'a; 'c *@ 'b} in bool }
+
+interactive beq_mulMonoSq :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	[wf] sequent { <H> >- 'c in int } -->
+	sequent { <H> >- 'c <> 0 } -->
+	sequent { <H> >- beq_int{'a;'b} ~ beq_int{'c *@ 'a; 'c *@ 'b} }
+
+interactive_rw beq_mulMono_rw 'c :
+	('a in int ) -->
+	('b in int ) -->
+	('c in int ) -->
+	('c <> 0 ) -->
+	beq_int{'a;'b} <--> beq_int{'c *@ 'a; 'c *@ 'b}
+
 doc <:doc<
    @begin[doc]
    @modsection{Definition and well-formedness of <<Perv!nil %@ Perv!nil>>}
@@ -645,14 +666,14 @@ interactive_rw div_baseReduce_rw :
 let div_baseReduceC = div_baseReduce_rw
 
 prim div_indReduce :
-   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) } = it
 
 interactive_rw div_indReduce_rw :
-   (0 < 'b) -->
+   ('b <> 0) -->
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->

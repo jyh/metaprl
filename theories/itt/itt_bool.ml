@@ -755,9 +755,9 @@ interactive bandSym {| intro [] |} :
 
 interactive boolMoveToConcl 'H :
    [wf] sequent { <H> >- 'B in bool } -->
-   [wf] sequent { <H> >- 'C in bool } -->
-	[main] sequent { <H> >- "assert"{bimplies{'B; 'C}} } -->
-	sequent { <H>; "assert"{'B} >- "assert"{'C} }
+   [wf] sequent { <H>; <J> >- 'C in bool } -->
+	[main] sequent { <H>; <J> >- "assert"{bimplies{'B; 'C}} } -->
+	sequent { <H>; "assert"{'B}; <J> >- "assert"{'C} }
 
 (*
  * H >- Ui ext Unit

@@ -216,22 +216,29 @@ interactive lt_bool_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- lt_bool_rat{'a; 'b} in bool }
 
-(*
-interactive lt_bool_rat_wf2 {| intro [] |} :
-	sequent { <H> >- 'a in quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}} } -->
-	sequent { <H> >- 'b in quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}} } -->
-	sequent { <H> >- lt_bool_rat{'a; 'b} in bool }
-*)
-interactive beq_rat_wf {| intro [] |} :
+interactive beq_rat_wf1 {| intro [] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in int } -->
+	sequent { <H> >- 'd in int } -->
+	sequent { <H> >- beq_rat{('a,'b); ('c,'d)} in bool }
+
+interactive beq_rat_wf2 {| intro [AutoMustComplete] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in int } -->
+	sequent { <H> >- beq_rat{'a; ('b,'c)} in bool }
+
+interactive beq_rat_wf3 {| intro [AutoMustComplete] |} :
+	sequent { <H> >- 'a in int } -->
+	sequent { <H> >- 'b in int } -->
+	sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- beq_rat{('a,'b); 'c} in bool }
+
+interactive beq_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- beq_rat{'a; 'b} in bool }
-(*
-interactive beq_rat_wf2 {| intro [] |} :
-	sequent { <H> >- 'a in quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}} } -->
-	sequent { <H> >- 'b in quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}} } -->
-	sequent { <H> >- beq_rat{'a; 'b} in bool }
-*)
 
 interactive ratEquality {| intro [AutoMustComplete] |} :
 	[wf] sequent { <H> >- 'a in rationals } -->

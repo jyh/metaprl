@@ -38,12 +38,6 @@ extends Itt_int_ext
 
 open Tactic_type.Conversionals
 
-topval thenLocalMT : tactic -> tactic -> tactic
-topval thenLocalMElseT : tactic -> tactic -> tactic -> tactic
-topval thenLocalAT : tactic -> tactic -> tactic
-topval onAllLocalMHypsT : (int -> tactic) -> tactic
-topval onAllLocalMCumulativeHypsT : (int -> tactic) -> tactic
-
 topval normalizeC : conv
 
 topval arithT : tactic

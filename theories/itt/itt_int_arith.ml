@@ -85,83 +85,12 @@ let debug_int_arith =
  * ARITH
  *******************************************************)
 
-(*
- * thenMT_prefix with locality-principle behaviour
- *)
-
-let debug_subgoals =
-   create_debug (**)
-      { debug_name = "subgoals";
-        debug_description = "Report subgoals observed with may be some additional info";
-        debug_value = false
-      }
-
-   let emptyLabel=""
-
-   let ifLabelPredT pred tac1' tac2' = funT (fun p ->
-      if pred (Sequent.label p) then
-         tac1'
-      else
-         tac2')
-
-   let thenIfLabelPredT pred tac1 tac2 tac3 = funT (fun p ->
-      let prefer l1 l2 =
-         if l2=emptyLabel then l1
-         else l2 in
-      let restoreHiddenLabelT = argfunT (fun l p ->
-         addHiddenLabelT (prefer l (Sequent.label p)))
-      in
-      let label = Sequent.label p in
-      addHiddenLabelT emptyLabel thenT
-      tac1 thenT
-      ifLabelPredT pred tac2 tac3 thenT
-      restoreHiddenLabelT label)
-
-   let isEmptyOrMainLabel l =
-      (l=emptyLabel) or (List.mem l main_labels)
-
-   let isEmptyOrAuxLabel l =
-      (l=emptyLabel) or not (List.mem l main_labels)
-
-   let thenLocalMT tac1 tac2 =
-      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 idT
-
-   let thenLocalMElseT tac1 tac2 tac3 =
-      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 tac3
-
-   let thenLocalAT tac1 tac2 =
-      thenIfLabelPredT isEmptyOrAuxLabel tac1 tac2 idT
-
-   let onAllLocalMHypsT = argfunT (fun tac p ->
-      let rec aux i =
-         if i = 1 then
-            tac i
-         else if i > 1 then
-            thenLocalMT (tac i) (aux (pred i))
-         else
-            idT
-      in
-         aux (Sequent.hyp_count p))
-
-   let onAllLocalMCumulativeHypsT tac =
-      let rec aux i p =
-         if i <= (Sequent.hyp_count p) then
-            thenLocalMT (tac i) (funT (aux (succ i)))
-         else
-            idT
-      in
-         funT (aux 1)
-
-(*
- * end of thenMT_prefix part
- *)
-
 let get_term i p =
    let goal=Sequent.goal p in
    let hyps = (explode_sequent goal).sequent_hyps in
    let h=List.nth (SeqHyp.to_list hyps) (i-1) in
-   match h with 
-   	HypBinding (_,t) | Hypothesis t -> 
+   match h with
+   	HypBinding (_,t) | Hypothesis t ->
 		   if !debug_int_arith then
    			eprintf "get_term %i=%a%t" i debug_print t eflush;
 	   	t
@@ -183,8 +112,7 @@ let reportT = funT (fun p ->
 let le2geT = argfunT (fun t p ->
    let (left,right)=dest_le t in
    let newt=mk_ge_term right left in
-   thenLocalAT (assertT newt) (thenLocalMT (rwh unfold_ge 0) (onSomeHypT
- nthHypT)))
+   (assertT newt) thenAT ((rwh unfold_ge 0) thenMT (onSomeHypT nthHypT)))
 
 interactive lt2ge :
    [wf] sequent { <H> >- 'a in int } -->
@@ -197,7 +125,7 @@ let lt2geT = argfunT (fun t p ->
    let newt=mk_ge_term right
                       (mk_add_term left
                                   (mk_number_term (Lm_num.num_of_int 1))) in
-      thenLocalAT (assertT newt) lt2ge)
+      (assertT newt) thenAT lt2ge)
 
 interactive gt2ge :
    [wf] sequent { <H> >- 'a in int } -->
@@ -210,7 +138,7 @@ let gt2geT = argfunT (fun t p ->
    let newt=mk_ge_term left
                       (mk_add_term right
                                   (mk_number_term (Lm_num.num_of_int 1))) in
-      thenLocalAT (assertT newt) gt2ge)
+      (assertT newt) thenAT gt2ge)
 
 interactive eq2ge1 :
    sequent { <H> >- 'a = 'b in int } -->
@@ -226,9 +154,9 @@ let eq2ge2T = eq2ge2
 
 let eq2geT t =
    let (_,l,r)=dest_equal t in
-   thenLocalMT
-   (thenLocalAT (assertT (mk_ge_term l r)) (eq2ge1T thenT (onSomeHypT nthHypT)))
-   (thenLocalAT (assertT (mk_ge_term r l)) (eq2ge2T thenT (onSomeHypT nthHypT)))
+   ((assertT (mk_ge_term l r)) thenAT (eq2ge1T thenT (onSomeHypT nthHypT)))
+   thenMT
+   ((assertT (mk_ge_term r l)) thenAT (eq2ge2T thenT (onSomeHypT nthHypT)))
 
 interactive notle2ge :
    [wf] sequent { <H> >- 'a in int } -->
@@ -269,8 +197,8 @@ interactive_rw bnot_lt2ge_rw :
 let bnot_lt2geC = bnot_lt2ge_rw
 
 let lt2ConclT = magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)]
-let ltInConcl2HypT = thenLocalMT (rwh unfold_lt 0) lt2ConclT
-let gtInConcl2HypT = thenLocalMT (rwh unfold_gt 0) ltInConcl2HypT
+let ltInConcl2HypT = (rwh unfold_lt 0) thenMT lt2ConclT
+let gtInConcl2HypT = (rwh unfold_gt 0) thenMT ltInConcl2HypT
 
 interactive_rw bnot_le2gt_rw :
    ('a in int) -->
@@ -280,10 +208,10 @@ interactive_rw bnot_le2gt_rw :
 let bnot_le2gtC = bnot_le2gt_rw
 
 let leInConcl2HypT =
-   thenLocalMT (rwh unfold_le 0) (magicT thenLT [idT;rwh bnot_le2gtC (-1)])
+   (rwh unfold_le 0) thenMT (magicT thenLT [idT;rwh bnot_le2gtC (-1)])
 
 let geInConcl2HypT =
-   thenLocalMT (rwh unfold_ge 0) leInConcl2HypT
+   (rwh unfold_ge 0) thenMT leInConcl2HypT
 
 interactive eq2pair_of_ineq :
    [wf] sequent { <H> >- 'a in int } -->
@@ -298,13 +226,14 @@ let eqInConcl2HypT t =
    	if alpha_equal a b then
       	idT
 		else
-			thenLocalMT eq2pair_of_ineq geInConcl2HypT
+			eq2pair_of_ineq thenMT geInConcl2HypT
    else
    	idT
 
 let neqInConcl2HypT =
-	thenLocalMT (rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) 0)
-	(thenLocalMT (dT 0) (dT (-1)))
+	(rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) 0)
+	thenMT
+	((dT 0) thenMT (dT (-1)))
 
 let arithRelInConcl2HypT = funT (fun p ->
    let g=Sequent.goal p in
@@ -334,13 +263,14 @@ let negativeHyp2ConclT = argfunT (fun i p ->
    let t=get_term i p in
 	if is_not_term t then
       if is_arith_rel (dest_not t) then
-      	thenLocalMT (dT i) arithRelInConcl2HypT
+      	(dT i) thenMT arithRelInConcl2HypT
 		else
       	idT
 	else if is_neq_int_term t then
-   	thenLocalMT (rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) i)
-      (thenLocalMT (dT i)
-      (thenLocalMT eq_2beq_int arithRelInConcl2HypT))
+   	(rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) i)
+   	thenMT
+      ((dT i) thenMT
+      (eq_2beq_int thenMT arithRelInConcl2HypT))
    else
    	idT)
 
@@ -422,8 +352,8 @@ and compare_params par1 par2 =
        | _            , Number _      -> Greater
        | String s1    , String s2     -> simple_compare s1 s2
        | String _     , _             -> Less
-       | _            , String _      -> Greater 
-       | Token t1     , Token t2      -> simple_compare t1 t2 
+       | _            , String _      -> Greater
+       | Token t1     , Token t2      -> simple_compare t1 t2
        | Token _      , _             -> Less
        | _            , Token _       -> Greater
        | Var v1       , Var v2        -> simple_compare v1 v2
@@ -800,8 +730,8 @@ let reduce_geCommonConstT = argfunT (fun i p ->
    if is_add_term left then
       let (a,b)=dest_add left in
       if is_number_term a then
-         thenLocalMT (rw (ge_addMono2_rw (mk_minus_term a)) i)
-                     (rw (addrC [0] normalizeC) i)
+         (rw (ge_addMono2_rw (mk_minus_term a)) i)
+         thenMT (rw (addrC [0] normalizeC) i)
       else
          idT
    else
@@ -810,8 +740,8 @@ let reduce_geCommonConstT = argfunT (fun i p ->
 let tryReduce_geT = argfunT (fun i p ->
    let t=get_term i p in
       if is_ge_term t then
-         thenLocalMT (rw reduce_geLeftC i)
-         (thenLocalMT (reduce_geCommonConstT i)
+         (rw reduce_geLeftC i) thenMT
+         ((reduce_geCommonConstT i) thenMT
                      (rw reduce_geRightC i))
       else
          idT)
@@ -838,9 +768,9 @@ let sumListT = argfunT (fun l p ->
    let s = sumList l p in
    if !debug_int_arith then
    	eprintf "Contradictory term:%a%t" debug_print s eflush;
-   thenLocalAT (assertT s)
+   (assertT s) thenAT
    				(repeatT (ge_addMono thenT (tryT (onSomeHypT nthHypT)))))
-(* This looks like another working solution:   				
+(* This looks like another working solution:
  *					(repeatT ((progressT (onSomeHypT nthHypT)) orelseT ge_addMono)))
  *)
 
@@ -867,7 +797,7 @@ let good_term t =
 
 (* Searches for contradiction among ge-relations
  *)
-let findContradRelT = 
+let findContradRelT =
    let rec lprint ch = function
       h::t -> (fprintf ch "%u " h; lprint ch t)
     | [] -> fprintf ch "."
@@ -957,11 +887,11 @@ doc <:doc<
 (* Finds and proves contradiction among ge-relations
  *)
 let arithT =
-   thenLocalMT arithRelInConcl2HypT
-   (thenLocalMT (onAllLocalMCumulativeHypsT negativeHyp2ConclT)
-   (thenLocalMT (onAllLocalMHypsT anyArithRel2geT)
-   (thenLocalMT (onAllLocalMHypsT tryReduce_geT)
-   (thenLocalMT findContradRelT (reduceContradRelT (-1)) ))))
+   arithRelInConcl2HypT thenMT
+   ((onAllMCumulativeHypsT negativeHyp2ConclT) thenMT
+   ((onAllMHypsT anyArithRel2geT) thenMT
+   ((onAllMHypsT tryReduce_geT) thenMT
+   (findContradRelT thenMT (reduceContradRelT (-1)) ))))
 
 interactive test 'H 'a 'b 'c :
 sequent { <H> >- 'a in int } -->

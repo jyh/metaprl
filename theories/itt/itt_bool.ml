@@ -486,7 +486,7 @@ interactive assert_bnot_elim {| elim [] |} 'H 'J :
  *)
 interactive assert_magic 'H 'x :
    [wf] sequent [squash] { 'H >- 't IN bool } -->
-   [wf] sequent [squash] { 'H; x: "assert"{bnot{'t}} >- "false" } -->
+   sequent [squash] { 'H; x: "assert"{bnot{'t}} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{'t} }
 
 (*!

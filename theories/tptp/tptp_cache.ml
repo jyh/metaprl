@@ -292,15 +292,6 @@ struct
         cache_table : TermTable.t
       }
 
-   (*
-    * Create an empty table.
-    *)
-   let rec set_of_list t = function
-      s :: tl ->
-         set_of_list (StringSet.add s t) tl
-    | [] ->
-         t
-
    let create constants =
       { cache_constants = constants;
         cache_table = TermTable.create constants

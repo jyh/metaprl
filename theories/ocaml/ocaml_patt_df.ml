@@ -34,20 +34,34 @@
  * For the "let" form, we initialize the stack with the list "el".
  *)
 
+include Ocaml
+include Ocaml_base_df
+
+(*
+ * Special forms.
+ *)
+declare "as"
+declare wildcard
+declare rcons
+declare range
+declare patt_let
+declare patt_fix
+declare patt_reverse
+
 (*
  * Constant.
  *)
-dform slot{patt_format; patt_char[$c:s]{'p1}; 'p2} =
-   slot{patt_format; 'p1; cons{"char"[$c:s]; 'p2}}
+dform slot{patt_format; patt_char[@c:s]{'p1}; 'p2} =
+   slot{patt_format; 'p1; .cons{."char"[@c:s]; 'p2}}
 
-dform slot{patt_format; patt_int[$i:n]{'p1}; 'p2} =
-   slot{patt_format; 'p1; cons{"int"[$c:s]; 'p2}}
+dform slot{patt_format; patt_int[@i:n]{'p1}; 'p2} =
+   slot{patt_format; 'p1; .cons{."int"[@c:s]; 'p2}}
 
-dform slot{patt_format; patt_string[$s:s]{'p1}; 'p2} =
-   slot{patt_format; 'p1; cons{"string"[$s:s]; 'p2}}
+dform slot{patt_format; patt_string[@s:s]{'p1}; 'p2} =
+   slot{patt_format; 'p1; .cons{."string"[@s:s]; 'p2}}
 
-dform slot{patt_format; patt_float[$f:s]{'p1}; 'p2} =
-   slot{patt_format; 'p1; cons{"float"[$f:s]; 'p2}}
+dform slot{patt_format; patt_float[@f:s]{'p1}; 'p2} =
+   slot{patt_format; 'p1; .cons{."float"[@f:s]; 'p2}}
 
 (*
  * Binding.
@@ -73,7 +87,7 @@ dform slot{patt_proj; 'p1; 'p2; cons{'p3; 'p4}} =
 (*
  * Simultaneous match.
  *)
-dform slot{patt_format; patt_as{'p1}; 'p2}
+dform slot{patt_format; patt_as{'p1}; 'p2} =
    slot{patt_format; 'p1; 'p2}
 
 dform slot{patt_format; patt_as_arg{'p1}; 'p2} =
@@ -83,7 +97,7 @@ dform slot{patt_format; patt_as_end{'p1}; cons{'p2; 'p3}} =
    slot{patt_as; 'p1; 'p2; 'p3}
 
 dform slot{patt_as; 'p1; 'p2; cons{'p3; 'p4}} =
-   slot{patt_format; 'p1; cons{"as"{'p2; 'p3}; 'p4}}
+   slot{patt_format; 'p1; .cons{."as"{'p2; 'p3}; 'p4}}
 
 (*
  * Wildcard.
@@ -109,10 +123,10 @@ dform slot{patt_apply; 'p1; 'p2; cons{'p3; 'p4}} =
 (*
  * Alternates.
  *)
-dform slot{patt_format; patt_choice_begin{'p1}; 'p2} =
+dform slot{patt_format; patt_choice{'p1}; 'p2} =
    slot{patt_format; 'p1; cons{nil; 'p2}}
 
-dform slot{patt_format; patt_choice_next{'p1}; cons{'p2; 'p3}} =
+dform slot{patt_format; patt_choice_arg{'p1}; cons{'p2; 'p3}} =
    slot{patt_choice; 'p1; 'p2; 'p3}
 
 dform slot{patt_format; patt_choice_end{'p1}; cons{'p2; 'p3}} =
@@ -193,7 +207,7 @@ dform slot{patt_and; 'p1; 'p2; patt_fix; 'p3} =
    slot{patt_format; 'p1; cons{patt_fix; cons{'p2; 'p3}}}
 
 dform slot{patt_let; 'p1; 'p2; 'e; 'el} =
-   slot{'p2} space equals space slot{'e}
+   slot{'p2} space "=" space slot{'e}
    slot{patt_format; 'p1; cons{patt_and; 'el}}
 
 (*
@@ -216,11 +230,11 @@ dform slot{patt_reverse; 'el; 'p1; nil} =
    slot{patt_match; 'p1; 'el}
 
 dform slot{patt_match; cons{'p1; 'pl}; patt_match{'e1; 'el}} =
-   slot{'p1} space equals space slot{'e1}
+   slot{'p1} space "=" space slot{'e1}
    slot{patt_in; 'pl; 'el}
 
 dform slot{patt_in; cons{'p1; 'pl}; patt_match{'e1; 'el}} =
-   slot{'p1} space equals space slot{'e1}
+   slot{'p1} space "=" space slot{'e1}
    slot{patt_in; 'pl; 'el}
 
 dform slot{patt_in; nil; patt_in{'e}} =
@@ -239,15 +253,18 @@ dform slot{patt_format; patt_if{'pwe}; nil} =
    slot{patt_format; 'pwe; nil}
 
 dform slot{patt_format; patt_with{'e1; 'e2}; 'pwel} =
-   "with" space slot{'e1} space arrow sbreak slot{'e2}
+   "with" space slot{'e1} space "->" sbreak slot{'e2}
    slot{patt_format; 'pwel; patt_ifelse}
 
 dform slot{patt_format; patt_body{'e}; 'pwel} =
-   arrow sbreak slot {'e2}
+   "->" sbreak slot {'e2}
    slot{patt_format; 'pwel; patt_ifelse}
 
 (*
  * $Log$
+ * Revision 1.2  1998/02/18 18:47:36  jyh
+ * Initial ocaml semantics.
+ *
  * Revision 1.1  1998/02/13 16:02:19  jyh
  * Partially implemented semantics for caml.
  *

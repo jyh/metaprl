@@ -33,7 +33,7 @@ declare functional{'t1; 't2}
 declare equiv{'S; 'e1; 'e2; 't}
 declare member{'S; 'e; 't}
 
-primrw member_unfold :
+rewrite member_unfold :
    member{'S; 'e; 't} <--> equiv{'S; 'e; 'e; 't}
 
 (*
@@ -44,7 +44,7 @@ primrw member_unfold :
 declare value_equiv{'S; 'e1; 'e2; 't}
 declare value_member{'S; 'e; 't}
 
-primrw value_member_unfold :
+rewrite value_member_unfold :
    value_member{'S; 'e; 't} <--> value_equiv{'S; 'e; 'e; 't}
 
 (*
@@ -54,40 +54,44 @@ primrw value_member_unfold :
 declare is_value{'S; 'e}
 
 (*
+ * Judgment:
+ * t is a valid type.
+ *)
+declare is_type{'t}
+
+(*
  * Equivalence of names.
  *)
-declare lid_equiv{'n1; 'n2}
+declare name_equiv{'S; 'n1; 'n2}
 
 (*
  * Form:
- * This is a program run.  It pairs an expression
- * with an initial state.
+ * "process" is a run of a program in a particular state
+ * "value" is a process, but its evaluation does not modify the state
+ * "state" projects the state component of a process
+ * "expr" projects the program component
+ * "expr_value" projects the program if it is a value
  *)
 declare process{'S; 'e}
-
-(*
- * Form:
- * This program is a value in state 'S;
- *)
 declare "value"{'S; 'e}
-
-(*
- * Combinator:
- * Evaluate a run to a value and separate the state from the value.
- *)
-declare spread{'run; v, S. 'body['v; 'S]}
+declare spread{'process; e, S. 'body['e; 'S]}
+declare spread_value{'process; v, S. 'body['v; 'S]}
 declare state{'S; 'e}
 declare expr{'S; 'e}
 declare expr_value{'S; 'e}
 
-primrw state_unfold : 
+(*
+ * Operations on states.
+ *)
+declare lookup{'S; 'n}
+declare replace{'S; 'n; 'v}
+declare allocate{'S; 'v}
+
+rewrite state_unfold : 
    state{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'S2}
 
-primrw expr_unfold :
+rewrite expr_unfold :
    expr{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'v}
-
-primrw expr_unfold :
-   expr_value{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'v}
 
 (************************************************************************
  * BASIC FACTS                                                          *
@@ -96,23 +100,21 @@ primrw expr_unfold :
 (*
  * Two equivalent values are equivalent.
  *)
-prim value_equiv_is_equiv 'H :
+axiom value_equiv_is_equiv 'H :
    sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
-   sequent { 'H >- equiv{'S; 'e1; 'e2; 't} } =
-   it
+   sequent { 'H >- equiv{'S; 'e1; 'e2; 't} }
 
 (*
  * A functional function application to a value is a value.
  *)
-prim functional_apply_value 'H 't1 :
+axiom functional_apply_value 'H 't1 :
    sequent { 'H >- value_equiv{'S; 'a1; 'a2; 't2} } -->
    sequent { 'H >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
-   sequent { 'H >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} } =
-   it
+   sequent { 'H >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }
 
 (*
  * $Log$
- * Revision 1.2  1998/02/18 18:47:10  jyh
+ * Revision 1.1  1998/02/18 18:47:11  jyh
  * Initial ocaml semantics.
  *
  * Revision 1.1  1998/02/13 16:02:08  jyh

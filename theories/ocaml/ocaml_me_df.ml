@@ -20,14 +20,14 @@ dform me_apply{'me1; 'me2} = apply{'me1; 'me2}
 (*
  * Functor.
  *)
-dform me_functor[$name:s]{'mt; 'me} = mt_functor[$name:s]{'mt; 'me}
+dform me_functor[@name:s]{'mt; 'me} = mt_functor[@name:s]{'mt; 'me}
 
 (*
  * Structure.
  *)
 dform me_struct{'sil} =
    szone pushm push_indent "struct" sbreak
-   slot{line_list; 'sil}
+   slot{list_expr; 'sil}
    popm sbreak "end" popm ezone
 
 (*
@@ -39,11 +39,14 @@ dform me_cast{'me; 'mt} =
 (*
  * Variables.
  *)
-dform me_lid[$name:s] = slot[$name:s]
-dform me_uid[$name:s] = slot[$name:s]
+dform me_lid[@name:s] = slot[@name:s]
+dform me_uid[@name:s] = slot[@name:s]
 
 (*
  * $Log$
+ * Revision 1.2  1998/02/18 18:47:23  jyh
+ * Initial ocaml semantics.
+ *
  * Revision 1.1  1998/02/13 16:02:15  jyh
  * Partially implemented semantics for caml.
  *

@@ -21,15 +21,15 @@ dform parens :: "prec"[prec_apply] :: mt_apply{'mt1; 'mt2} =
 (*
  * Functor.
  *)
-dform parens :: "prec"[prec_fun] :: mt_functor[$name:s]{'mt1; 'mt2} =
-   "functor" space "(" slot[$name:s] space ":" space slot{'mt1} ")"
+dform parens :: "prec"[prec_fun] :: mt_functor[@name:s]{'mt1; 'mt2} =
+   "functor" space "(" slot[@name:s] space ":" space slot{'mt1} ")"
    space "->" slot{'mt2}
 
 (*
  * Id.
  *)
-dform mt_lid[$name:s] = slot[$name:s]
-dform mt_uid[$name:s] = slot[$name:s]
+dform mt_lid[@name:s] = slot[@name:s]
+dform mt_uid[@name:s] = slot[@name:s]
 
 (*
  * Signature.
@@ -45,13 +45,16 @@ dform mt_sig{'sil} =
 dform mt_with{'mt; 'wcl} =
    szone pushm slot{'mt} slot{mt_with; 'wcl} popm ezone
 
-dform slot{mt_with; nil} = ""
+dform slot{mt_with; nil} = `""
 
 dform slot{mt_with; cons{'wc; 'wcl}} =
    slot{'wc} slot{mt_with; 'wcl}
 
 (*
  * $Log$
+ * Revision 1.2  1998/02/18 18:47:30  jyh
+ * Initial ocaml semantics.
+ *
  * Revision 1.1  1998/02/13 16:02:17  jyh
  * Partially implemented semantics for caml.
  *

@@ -2,6 +2,9 @@
  * Some basic tacticals.
  *
  * $Log$
+ * Revision 1.3  1998/02/18 18:48:05  jyh
+ * Initial ocaml semantics.
+ *
  * Revision 1.2  1997/08/06 16:18:55  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.
@@ -33,7 +36,7 @@ open Tactic_type
  * RULES                                                                *
  ************************************************************************)
 
-prim id : ('t : 'T) : 'T = 't
+prim id : ('t : 'T) --> 'T = 't
 
 let idT = id
 

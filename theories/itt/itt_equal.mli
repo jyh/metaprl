@@ -33,8 +33,8 @@ declare it
  * H >- T ext b
  *)
 axiom equalityFormation 'H 'T :
-   sequent [ext] { 'H >- 'T } -->
-   sequent [ext] { 'H >- 'T } -->
+   sequent ['ext] { 'H >- 'T } -->
+   sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- univ[@i:l] }
 
 (*
@@ -148,6 +148,9 @@ val squash_equalT : tactic
 
 (*
  * $Log$
+ * Revision 1.3  1998/02/18 18:46:57  jyh
+ * Initial ocaml semantics.
+ *
  * Revision 1.2  1997/08/06 16:18:27  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

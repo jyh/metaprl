@@ -186,11 +186,6 @@ prim beq_int2prop {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a = 'b in int } = it
 
-(* Derived from previous *)
-interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
-   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{beq_int{'a; 'b}}; 'J['x] >- 'C['x] }
-
 prim beq_int_is_true 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} ~ btrue } = it
@@ -200,6 +195,11 @@ interactive_rw beq_int_is_true_rw :
    beq_int{'a; 'b} <--> btrue 
 
 let beq_int_is_trueC = beq_int_is_true_rw 
+
+(* Derived from previous *)
+interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
+   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; x: "assert"{beq_int{'a; 'b}}; 'J['x] >- 'C['x] }
 
 (*
  Derived from previous rewrite
@@ -535,7 +535,7 @@ interactive uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent { 'H >- uni_minus{ ('a +@ 'b) } ~
-                   ( uni_minus{ 'b } +@ uni_minus{ 'b } ) }
+                   ( uni_minus{ 'a } +@ uni_minus{ 'b } ) }
 
 interactive uni_uni_reduce 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

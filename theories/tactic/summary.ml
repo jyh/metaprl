@@ -250,7 +250,6 @@ declare "meta_implies"{'A; 'B}
 declare "meta_function"{'arg; 'A; 'B}
 declare "meta_iff"{'A; 'B}
 declare "meta_labeled"[label:s]{'meta}
-declare "meta_theory"{'A}
 doc <:doc< @docoff >>
 
 declare "context_param"[name:s]

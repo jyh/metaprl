@@ -8,12 +8,14 @@ doc <:doc<
    @module[Comment]
    
    The @tt{Comment} module defines @emph{structured} comments.
-   Structured comments begin with the sequence @tt{({*}!}.  They
-   are usually used to provide documentation, although special forms
-   can be defined for other purposes.
+   Structured comments are typed in after a keyword @keyword[doc] followed by
+   a quoted term expression. They are usually used to provide documentation,
+   although special forms can be defined for other purposes.
    
-   Currently, structured comments can be used only at the top level of
-   of an interface or implementation.  The text in the comment is parsed
+   The term following the @keyword[doc] keyword can be either the standard
+   @tt["<< ... >>"] with the usual syntax for terms inside the quotation
+   or a special @tt["<:doc< ... >>"] with a specialized syntax inside.
+   The text inside the @tt["<:doc< ... >>"] is parsed
    into a sequence of strings in a list.  The text can also
    contain terms, which begin with the @tt{@@} character.
    
@@ -48,7 +50,10 @@ doc <:doc<
    parsed in a similar manner to normal mode, but the `_' and `^' characters
    are significant in math mode (they are normal text in normal mode).
    The `_' term identifies a subscript operation, and the `^' term
-   denotes a superscript.
+   denotes a superscript. The 
+
+   The @tt["<:doc< ... >>"] quotation can also contain the standard
+   @tt["<< ... >>"] inside (which would imply math mode), and @emph{vice versa}.
    @end[doc]
    
    ----------------------------------------------------------------
@@ -1997,6 +2002,8 @@ dform multi_sp  : slot["decl"]{math_multicolumn[s1,s2]{'t}} = special
 dform array_sp  : slot["decl"]{math_array[s]{'t}} = special
 dform array_sp  : slot["decl"]{math_array[s1,s2]{'t}} = special
 dform foot_sp   : slot["decl"]{footnote{'t}} = special
+dform target_sp : slot["decl"]{target[name]{'t}} = special
+dform target_sp : slot["decl"]{hreftarget[name]} = special
 
 (*
  * -*-

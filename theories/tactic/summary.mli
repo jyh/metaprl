@@ -74,7 +74,6 @@ declare "df_ml"[printer:s, buffer:s]{'contracta; 'code}
 declare "none"
 declare "some"{'t}
 
-declare "meta_theory"{'A}
 declare "meta_theorem"{'A}
 declare "meta_implies"{'A; 'B}
 declare "meta_function"{'arg; 'A; 'B}

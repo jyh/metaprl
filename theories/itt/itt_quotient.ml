@@ -305,6 +305,10 @@ interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; x: 'A; <J['a]> >- squash{'C['x]} } -->
    sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- squash{'C['a]} }
 
+interactive quotientElimination3_sqeq {| elim [ThinOption thinT] |} 'H :
+   sequent { <H>; a: 'A; <J> >- 't1['a] ~ 't2['a] } -->
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J> >- 't1['a] ~ 't2['a] }
+
 doc docoff
 let quotientT = quotientElimination1_eq
 
@@ -328,11 +332,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive quotientSubtype :
-   ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
+   ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
    [aux] sequent { <H>; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
    [wf] sequent { <H> >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
    [wf] sequent { <H> >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
-   sequent { <H> >- \subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } }
+   sequent { <H> >- (quot x1, y1: 'A1 // 'E1['x1; 'y1]) subtype (quot x2, y2: 'A2 // 'E2['x2; 'y2]) }
 doc <:doc< @docoff >>
 
 (************************************************************************

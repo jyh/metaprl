@@ -61,9 +61,6 @@ declare it[name:s]
 declare it{'t}
 declare it_begin
 declare it_end
-declare sym[name:s]
-declare sym_begin
-declare sym_end
 declare em[s:s]
 declare em{'s}
 declare em_begin

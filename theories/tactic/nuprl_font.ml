@@ -94,10 +94,8 @@ declare it[name:s]
 declare it{'t}
 declare it_begin
 declare it_end
-declare sym[name:s]
-declare sym{'t}
-declare sym_begin
-declare sym_end
+declare html_sym[name:s]
+declare html_uni[unicode:n]
 declare em[s:s]
 declare em{'s}
 declare em_begin
@@ -345,17 +343,11 @@ dform i_df1 : internal :: i[text:s] =
 dform i_df2 : internal :: i{'t} =
    it{'t}
 
-dform sym_begin_df : internal :: mode[html] :: sym_begin =
-   izone `"<b>" ezone
+dform html_sym_df : internal ::  mode[html] :: html_sym[text:s] =
+   izone `"<b>&" ezone slot[text:s] izone `";</b>" ezone
 
-dform sym_end_df : internal :: mode[html] :: sym_end =
-   izone `"</b>" ezone
-
-dform sym_df1 : internal :: sym[text:s] =
-   sym_begin slot[text:s] sym_end
-
-dform sym_df2 : internal :: sym{'t} =
-   sym_begin 't sym_end
+dform html_uni_df : internal :: mode[html] :: html_uni[num:n] =
+   izone `"<b>&#" ezone slot[num:n] izone `";</b>" ezone
 
 dform em_begin_df : internal :: mode[html] :: em_begin =
    izone `"<em>" ezone
@@ -508,12 +500,6 @@ dform it_begin_df : internal :: mode[tex] :: it_begin =
 dform it_end_df : internal :: mode[tex] :: it_end =
    izone `"\\/}" ezone
 
-dform sym_begin_df : internal :: mode[tex] :: sym_begin =
-   izone `"{\\bf " ezone
-
-dform sym_end_df : internal :: mode[tex] :: sym_end =
-   izone `"}" ezone
-
 dform em_begin_df : internal :: mode[tex] :: em_begin =
    izone `"{\\em " ezone
 
@@ -588,11 +574,11 @@ dform mathbbJ_df		: internal :: mode[html] :: mathbbJ                   = keywor
 dform mathbbK_df		: internal :: mode[html] :: mathbbK                   = keyword["K"]
 dform mathbbL_df		: internal :: mode[html] :: mathbbL                   = keyword["L"]
 dform mathbbM_df		: internal :: mode[html] :: mathbbM                   = keyword["M"]
-dform mathbbN_df		: internal :: mode[html] :: mathbbN                   = sym["&#8469;"]
+dform mathbbN_df		: internal :: mode[html] :: mathbbN                   = html_uni[8469]
 dform mathbbO_df		: internal :: mode[html] :: mathbbO                   = keyword["O"]
-dform mathbbP_df		: internal :: mode[html] :: mathbbP                   = sym["&#8473;"]
-dform mathbbQ_df		: internal :: mode[html] :: mathbbQ                   = sym["&#8474;"]
-dform mathbbR_df		: internal :: mode[html] :: mathbbR                   = sym["&#8477;"]
+dform mathbbP_df		: internal :: mode[html] :: mathbbP                   = html_uni[8473]
+dform mathbbQ_df		: internal :: mode[html] :: mathbbQ                   = html_uni[8474]
+dform mathbbR_df		: internal :: mode[html] :: mathbbR                   = html_uni[8477]
 dform mathbbS_df		: internal :: mode[html] :: mathbbS                   = keyword["S"]
 dform mathbbT_df		: internal :: mode[html] :: mathbbT                   = keyword["T"]
 dform mathbbU_df		: internal :: mode[html] :: mathbbU                   = keyword["U"]
@@ -600,7 +586,7 @@ dform mathbbV_df		: internal :: mode[html] :: mathbbV                   = keywor
 dform mathbbW_df		: internal :: mode[html] :: mathbbW                   = keyword["W"]
 dform mathbbX_df		: internal :: mode[html] :: mathbbX                   = keyword["X"]
 dform mathbbY_df		: internal :: mode[html] :: mathbbY                   = keyword["Y"]
-dform mathbbZ_df		: internal :: mode[html] :: mathbbZ                   = sym["&#8484;"]
+dform mathbbZ_df		: internal :: mode[html] :: mathbbZ                   = html_uni[8484]
 
 dform mathbbA_df		: internal :: mode[tex] :: mathbbA                   = mathBB["A"]
 dform mathbbB_df		: internal :: mode[tex] :: mathbbB                   = mathBB["B"]
@@ -663,39 +649,39 @@ dform phi_df			: internal :: mode[prl] :: phi                       = `"\181"
 dform xi_df			: internal :: mode[prl] :: xi                        = `"\182"
 dform omega_df			: internal :: mode[prl] :: omega                     = `"\184"
 
-dform shortLeftarrow_df		: internal :: mode[html] :: shortLeftarrow            = sym["&#8656;"]
-dform leftarrow_df		: internal :: mode[html] :: Leftarrow                 = sym["&#8656;"]
-dform middlearrow_df		: internal :: mode[html] :: Middlearrow               = sym["&#8660;"]
-dform shortRightarrow_df	: internal :: mode[html] :: shortRightarrow           = sym["&#8658;"]
-dform rightarrow_df		: internal :: mode[html] :: Rightarrow                = sym["&#8658;"]
-dform leftrightarrow_df		: internal :: mode[html] :: Leftrightarrow            = sym["&#8660;"]
-dform ulcorner_df		: internal :: mode[html] :: ulcorner                  = sym["&#8968;"]
-dform urcorner_df		: internal :: mode[html] :: urcorner                  = sym["&#8969;"]
-dform vdash_df                  : internal :: mode[html] :: vdash                     = sym["&#8866;"]
-dform integral_df		: internal :: mode[html] :: integral                  = sym["&#8747;"]
-dform cdot_df                   : internal :: mode[html] :: cdot                      = keyword["&middot;"]
-dform downarrow_df		: internal :: mode[html] :: downarrow                 = sym["&#8595;"]
-dform uparrow_df		: internal :: mode[html] :: uparrow                   = sym["&#8593;"]
-dform alpha_df                  : internal :: mode[html] :: alpha                     = sym["&#945;"]
-dform beta_df			: internal :: mode[html] :: beta                      = sym["&#946;"]
-dform pi_df			: internal :: mode[html] :: pi                        = sym["&#960;;"]
-dform lambda_df			: internal :: mode[html] :: lambda                    = sym["&#955;"]
-dform gamma_df			: internal :: mode[html] :: gamma                     = sym["&#947;"]
-dform delta_df			: internal :: mode[html] :: delta                     = sym["&#948;"]
-dform rho_df			: internal :: mode[html] :: rho                       = sym["&#961;"]
-dform sigma_df			: internal :: mode[html] :: sigma                     = sym["&#963;"]
-dform epsilon_df		: internal :: mode[html] :: epsilon                   = sym["&#949;"]
-dform eta_df			: internal :: mode[html] :: eta                       = sym["&#951;"]
-dform theta_df			: internal :: mode[html] :: theta                     = sym["&#952;"]
-dform iota_df			: internal :: mode[html] :: iota                      = sym["&#953;"]
-dform kappa_df			: internal :: mode[html] :: kappa                     = sym["&#954;"]
-dform mu_df			: internal :: mode[html] :: mu                        = sym["&#956;"]
-dform nu_df			: internal :: mode[html] :: nu                        = sym["&#957;"]
-dform omicron_df		: internal :: mode[html] :: omicron                   = sym["&#959;"]
-dform tau_df			: internal :: mode[html] :: tau                       = sym["&#964;"]
-dform phi_df			: internal :: mode[html] :: phi                       = sym["&#966;"]
-dform xi_df			: internal :: mode[html] :: xi                        = sym["&#967;"]
-dform omega_df			: internal :: mode[html] :: omega                     = sym["&#969;"]
+dform shortLeftarrow_df		: internal :: mode[html] :: shortLeftarrow            = html_uni[8656]
+dform leftarrow_df		: internal :: mode[html] :: Leftarrow                 = html_uni[8656]
+dform middlearrow_df		: internal :: mode[html] :: Middlearrow               = html_uni[8660]
+dform shortRightarrow_df	: internal :: mode[html] :: shortRightarrow           = html_uni[8658]
+dform rightarrow_df		: internal :: mode[html] :: Rightarrow                = html_uni[8658]
+dform leftrightarrow_df		: internal :: mode[html] :: Leftrightarrow            = html_uni[8660]
+dform ulcorner_df		: internal :: mode[html] :: ulcorner                  = html_uni[8968]
+dform urcorner_df		: internal :: mode[html] :: urcorner                  = html_uni[8969]
+dform vdash_df                  : internal :: mode[html] :: vdash                     = html_uni[8866]
+dform integral_df		: internal :: mode[html] :: integral                  = html_uni[8747]
+dform cdot_df                   : internal :: mode[html] :: cdot                      = html_sym["middot"]
+dform downarrow_df		: internal :: mode[html] :: downarrow                 = html_uni[8595]
+dform uparrow_df		: internal :: mode[html] :: uparrow                   = html_uni[8593]
+dform alpha_df                  : internal :: mode[html] :: alpha                     = html_uni[945]
+dform beta_df			: internal :: mode[html] :: beta                      = html_uni[946]
+dform pi_df			: internal :: mode[html] :: pi                        = html_uni[960]
+dform lambda_df			: internal :: mode[html] :: lambda                    = html_uni[955]
+dform gamma_df			: internal :: mode[html] :: gamma                     = html_uni[947]
+dform delta_df			: internal :: mode[html] :: delta                     = html_uni[948]
+dform rho_df			: internal :: mode[html] :: rho                       = html_uni[961]
+dform sigma_df			: internal :: mode[html] :: sigma                     = html_uni[963]
+dform epsilon_df		: internal :: mode[html] :: epsilon                   = html_uni[949]
+dform eta_df			: internal :: mode[html] :: eta                       = html_uni[951]
+dform theta_df			: internal :: mode[html] :: theta                     = html_uni[952]
+dform iota_df			: internal :: mode[html] :: iota                      = html_uni[953]
+dform kappa_df			: internal :: mode[html] :: kappa                     = html_uni[954]
+dform mu_df			: internal :: mode[html] :: mu                        = html_uni[956]
+dform nu_df			: internal :: mode[html] :: nu                        = html_uni[957]
+dform omicron_df		: internal :: mode[html] :: omicron                   = html_uni[959]
+dform tau_df			: internal :: mode[html] :: tau                       = html_uni[964]
+dform phi_df			: internal :: mode[html] :: phi                       = html_uni[966]
+dform xi_df			: internal :: mode[html] :: xi                        = html_uni[967]
+dform omega_df			: internal :: mode[html] :: omega                     = html_uni[969]
 
 dform shortLeftarrow_df		: internal :: mode[tex] :: shortLeftarrow            = mathmacro["leftarrow"]
 dform leftarrow_df		: internal :: mode[tex] :: Leftarrow                 = mathmacro["leftarrow"]
@@ -781,46 +767,46 @@ dform subc_df			: internal :: mode[prl] :: subc                      = `"\238"
 dform subq_df			: internal :: mode[prl] :: subq                      = `"XXX"
 dform subz_df			: internal :: mode[prl] :: subz                      = `"\235"
 
-dform wedge_df			: internal :: mode[html] :: wedge                     = sym["&#8744;"]
-dform tneg_df			: internal :: mode[html] :: tneg                      = keyword["&not;"]
-dform member_df			: internal :: mode[html] :: member                    = sym["&#8712;"]
-dform plusminus_df		: internal :: mode[html] :: plusminus                 = keyword["&plusmn;"]
-dform oplus_df			: internal :: mode[html] :: oplus                     = sym["&#8853;"]
-dform infty_df			: internal :: mode[html] :: infty                     = sym["&#8734;"]
-dform partial_df		: internal :: mode[html] :: partial                   = sym["&#8706;"]
-dform subset_df			: internal :: mode[html] :: subset                    = sym["&#8838;"]
-dform supset_df			: internal :: mode[html] :: supset                    = sym["&#8839;"]
-dform cap_df			: internal :: mode[html] :: cap                       = sym["&#8745;"]
-dform cup_df			: internal :: mode[html] :: cup                       = sym["&#8746;"]
-dform forall_df			: internal :: mode[html] :: forall                    = sym["&#8704;"]
-dform exists_df			: internal :: mode[html] :: "exists"                  = sym["&#8707;"]
-dform oinfty_df			: internal :: mode[html] :: oinfty                    = sym["&#8733;"]
-dform shortleftrightarrow_df	: internal :: mode[html] :: shortleftrightarrow       = sym["&#8596;"]
-dform shortleftarrow_df		: internal :: mode[html] :: shortleftarrow            = sym["&#8592;"]
-dform shortrightarrow_df	: internal :: mode[html] :: shortrightarrow           = sym["&#8594;"]
-dform longleftrightarrow_df	: internal :: mode[html] :: longleftrightarrow        = sym["&#8596;"]
-dform longleftarrow_df		: internal :: mode[html] :: longleftarrow             = sym["&#8592;"]
-dform longrightarrow_df		: internal :: mode[html] :: longrightarrow            = sym["&#8594;"]
-dform neq_df			: internal :: mode[html] :: neq                       = sym["&#8800;"]
-dform sim_df			: internal :: mode[html] :: sim                       = sym["&#8764;"]
-dform le_df			: internal :: mode[html] :: le                        = sym["&#8804;"]
-dform ge_df			: internal :: mode[html] :: ge                        = sym["&#8805;"]
-dform equiv_df			: internal :: mode[html] :: equiv                     = sym["&#8801;"]
-dform vee_df			: internal :: mode[html] :: vee                       = sym["&#8744;"]
-dform perp_df			: internal :: mode[html] :: perp                      = keyword["&perp;"]
-dform leftarrow_df		: internal :: mode[html] :: leftarrow                 = sym["&#8592;"]
-dform middlearrow_df		: internal :: mode[html] :: middlearrow               = sym["&#8596;"]
-dform rightarrow_df		: internal :: mode[html] :: rightarrow                = sym["&#8594;"]
-dform sigma_df			: internal :: mode[html] :: Sigma                     = sym["&#931;"]
-dform delta_df			: internal :: mode[html] :: Delta                     = sym["&#916;"]
-dform pi_df			: internal :: mode[html] :: Pi                        = sym["&#928;"]
-dform times_df			: internal :: mode[html] :: times                     = keyword["&times;"]
-dform div_df            	: internal :: mode[html] :: "div"                     = keyword["&divide;"]
+dform wedge_df			: internal :: mode[html] :: wedge                     = html_uni[8743]
+dform tneg_df			: internal :: mode[html] :: tneg                      = html_sym["not"]
+dform member_df			: internal :: mode[html] :: member                    = html_uni[8712]
+dform plusminus_df		: internal :: mode[html] :: plusminus                 = html_sym["plusmn"]
+dform oplus_df			: internal :: mode[html] :: oplus                     = html_uni[8853]
+dform infty_df			: internal :: mode[html] :: infty                     = html_uni[8734]
+dform partial_df		: internal :: mode[html] :: partial                   = html_uni[8706]
+dform subset_df			: internal :: mode[html] :: subset                    = html_uni[8838]
+dform supset_df			: internal :: mode[html] :: supset                    = html_uni[8839]
+dform cap_df			: internal :: mode[html] :: cap                       = html_uni[8745]
+dform cup_df			: internal :: mode[html] :: cup                       = html_uni[8746]
+dform forall_df			: internal :: mode[html] :: forall                    = html_uni[8704]
+dform exists_df			: internal :: mode[html] :: "exists"                  = html_uni[8707]
+dform oinfty_df			: internal :: mode[html] :: oinfty                    = html_uni[8733]
+dform shortleftrightarrow_df	: internal :: mode[html] :: shortleftrightarrow       = html_uni[8596]
+dform shortleftarrow_df		: internal :: mode[html] :: shortleftarrow            = html_uni[8592]
+dform shortrightarrow_df	: internal :: mode[html] :: shortrightarrow           = html_uni[8594]
+dform longleftrightarrow_df	: internal :: mode[html] :: longleftrightarrow        = html_uni[8596]
+dform longleftarrow_df		: internal :: mode[html] :: longleftarrow             = html_uni[8592]
+dform longrightarrow_df		: internal :: mode[html] :: longrightarrow            = html_uni[8594]
+dform neq_df			: internal :: mode[html] :: neq                       = html_uni[8800]
+dform sim_df			: internal :: mode[html] :: sim                       = html_uni[8764]
+dform le_df			: internal :: mode[html] :: le                        = html_uni[8804]
+dform ge_df			: internal :: mode[html] :: ge                        = html_uni[8805]
+dform equiv_df			: internal :: mode[html] :: equiv                     = html_uni[8801]
+dform vee_df			: internal :: mode[html] :: vee                       = html_uni[8744]
+dform perp_df			: internal :: mode[html] :: perp                      = html_sym["perp"]
+dform leftarrow_df		: internal :: mode[html] :: leftarrow                 = html_uni[8592]
+dform middlearrow_df		: internal :: mode[html] :: middlearrow               = html_uni[8596]
+dform rightarrow_df		: internal :: mode[html] :: rightarrow                = html_uni[8594]
+dform sigma_df			: internal :: mode[html] :: Sigma                     = html_uni[931]
+dform delta_df			: internal :: mode[html] :: Delta                     = html_uni[916]
+dform pi_df			: internal :: mode[html] :: Pi                        = html_uni[928]
+dform times_df			: internal :: mode[html] :: times                     = html_sym["times"]
+dform div_df            	: internal :: mode[html] :: "div"                     = html_sym["divide"]
 dform supplus_df		: internal :: mode[html] :: supplus                   = sup["+"]
 dform supminus_df		: internal :: mode[html] :: supminus                  = sup["-"]
-dform supcirc_df		: internal :: mode[html] :: supcirc                   = keyword["&deg;"]
-dform subseteq_df		: internal :: mode[html] :: subseteq                  = sym["&#8838;"]
-dform supseteq_df		: internal :: mode[html] :: supseteq                  = sym["&#8839;"]
+dform supcirc_df		: internal :: mode[html] :: supcirc                   = html_sym["deg"]
+dform subseteq_df		: internal :: mode[html] :: subseteq                  = html_uni[8838]
+dform supseteq_df		: internal :: mode[html] :: supseteq                  = html_uni[8839]
 dform subzero_df		: internal :: mode[html] :: subzero                   = sub["0"]
 dform subone_df			: internal :: mode[html] :: subone                    = sub["1"]
 dform subtwo_df			: internal :: mode[html] :: subtwo                    = sub["2"]

@@ -33,7 +33,7 @@ declare id
 declare inv{'s}
 
 dform car_df : except_mode[src] :: car =
-   `"S"
+   `"G"
 
 dform id_df : except_mode[src] :: id =
    `"e"
@@ -120,6 +120,7 @@ interactive id_wf2 {| intro[] |} 'H :
 (* interactive id_wf3 {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{id} }
 *)
+
 interactive id_eq1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- mem{'s; car} } -->
@@ -143,6 +144,9 @@ interactive inv_wf2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; car} } -->
    sequent ['ext] { 'H >- mem{inv{'s1}; car} }
 
+interactive inv_fun1 {| intro[] |} 'H :
+   sequent ['ext] { 'H >- fun_set{z. inv{'z}} }
+
 interactive inv_id1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- mem{'s1; car} } -->
@@ -155,7 +159,16 @@ interactive inv_id2 {| intro[] |} 'H :
 
 (* theorems *)
 (* Cancellation: a * b = a * c => b = c *)
-interactive cancelLeft {| intro [] |} 'H 's1 :
+(* interactive cancel1 {| intro [] |} 'H :
+   sequent [squash] { 'H >- isset{'s1} } -->
+   sequent [squash] { 'H >- isset{'s2} } -->
+   sequent [squash] { 'H >- isset{'s3} } -->
+   sequent ['ext] { 'H >- mem{'s1; car} } -->
+   sequent ['ext] { 'H >- mem{'s2; car} } -->
+   sequent ['ext] { 'H >- mem{'s3; car} } -->
+   sequent ['ext] { 'H; x: equal{op{'s1; 's2}; op{'s1; 's3}} >- equal{'s2; 's3} }
+*)
+interactive cancel1 {| intro [] |} 'H 's1 :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- isset{'s3} } -->
@@ -166,7 +179,7 @@ interactive cancelLeft {| intro [] |} 'H 's1 :
    sequent ['ext] { 'H >- equal{'s2; 's3} }
 
 (* Cancellation: b * a = c * a => b = c *)
-interactive cancelRight {| intro [] |} 'H 's3 :
+interactive cancel2 {| intro [] |} 'H 's3 :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- isset{'s3} } -->
@@ -177,10 +190,10 @@ interactive cancelRight {| intro [] |} 'H 's3 :
    sequent ['ext] { 'H >- equal{'s1; 's2} }
 
 let groupCancelLeftT t p =
-   cancelLeft (Sequent. hyp_count_addr p) t p
+   cancel1 (Sequent. hyp_count_addr p) t p
 
 let groupCancelRightT t p =
-   cancelRight (Sequent. hyp_count_addr p) t p
+   cancel2 (Sequent. hyp_count_addr p) t p
 
 (* Unique Id *)
 interactive unique_id1 {| intro [] |} 'H :
@@ -188,7 +201,13 @@ interactive unique_id1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'e2; car} } -->
    sequent ['ext] { 'H; x: "dall"{car; s. "and"{eq{op{'e2; 's}; 's}; eq{op{'s; 'e2}; 's}}} >- eq{'e2; id} }
 
-(* Unique Inverse *)
+(* interactive unique_id2 {| intro [] |} 'H :
+   sequent ['ext] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H >- isset{'e2} } -->
+   sequent ['ext] { 'H >- mem{'s; car} } -->
+   sequent ['ext] { 'H >- mem{'e2; car} } -->
+   sequent ['ext] { 'H; x: eq{op{'e2; 's}; 's}; y: eq{op{'s; 'e2}; 's} >- eq{'e2; id} }
+*)
 interactive unique_inv {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -225,3 +244,7 @@ interactive inv_simplify {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'a; car} } -->
    sequent ['ext] { 'H >- mem{'b; car} } -->
    sequent ['ext] { 'H >- equal{inv{op{'a; 'b}}; op{inv{'b}; inv{'a}}} }
+
+(* Inverse of id *)
+(* interactive inv_of_id {| intro [] |} 'H :
+   sequent ['ext] { 'H >- eq{inv{id}; id} } *)

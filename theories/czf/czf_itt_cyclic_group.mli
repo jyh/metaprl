@@ -1,9 +1,7 @@
-include Czf_itt_set
-include Czf_itt_member
-include Czf_itt_eq
-include Czf_itt_dall
-include Czf_itt_and
+include Czf_itt_group
+include Czf_itt_cyclic_subgroup
 
+open Printf
 open Mp_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -26,11 +24,4 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare car   (* The "carrier" set for the group *)
-declare op{'s1; 's2}
-declare id
-declare inv{'s}
-
-topval groupCancelLeftT : term -> tactic
-topval groupCancelRightT : term -> tactic
-(* topval unique_InvT : tactic *)
+declare cyclic_group{elem_in_G}

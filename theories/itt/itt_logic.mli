@@ -166,15 +166,17 @@ topval genAssumT : int list -> tactic
 (************* jprover for itt_logic *************)
 
 
-val jtest : Refiner.Refiner.TermSubst.term -> string -> unit
-val jprove : Refiner.Refiner.TermSubst.term ->  string -> 
-    (int * (string * string list) list) * (string * string) list * (string * string) list
+(* topval jtest : term -> string -> unit *)
+
+topval jtest : term -> string -> string -> unit 
+
+(* sequent calculus, another argumnet for proof reconstruction *)
+
+
+val jprover : term -> (string * term * term) list
 
 
 
-(* topval jprove : Refiner.Refiner.TermSubst.term ->  string -> 
-    (int * (string * string list) list) * (string * string) list * (string * string) list
-*)
 
 
 (*

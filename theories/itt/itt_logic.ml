@@ -1123,10 +1123,13 @@ end
 
 module ITT_JProver = Jall.JProver(Itt_JLogic) 
 
-let jtest t s = 
- print_endline "Hello, I am";
-  ITT_JProver.test t s
-let jprove = ITT_JProver.prove
+let jtest t s c = ITT_JProver.test t s c 
+
+
+let jprover t = ITT_JProver.prover t 
+
+
+(* sequent calculus, another argumnet for proof reconstruction *)
 
 (*
  * -*-

@@ -140,7 +140,7 @@ dform top_df : except_mode[src] :: top = `"Top"
  * H, x: A >- Ui ext B[x]
  *)
 prim intersectionFormation 'A :
-   [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
+   [wf] sequent { <H> >- 'A in univ[i:l] } -->
    ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    Isect x: 'A. 'B['x]

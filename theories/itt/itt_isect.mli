@@ -59,7 +59,7 @@ define unfold_top : top <--> "isect"{void; x. void}
  * H, x: A >- Ui ext B[x]
  *)
 rule intersectionFormation 'A :
-   sequent { <H> >- 'A = 'A in univ[i:l] } -->
+   sequent { <H> >- 'A in univ[i:l] } -->
    sequent { <H>; x: 'A >- univ[i:l] } -->
    sequent { <H> >- univ[i:l] }
 
@@ -90,12 +90,12 @@ rule topType :
  * by intersectionMemberFormation
  * H >- A = A in type
  * H, z: squash(A) >- B ext b[z]
-
-rule intersectionMemberFormation :
-    sequent { <H> >- "type"{'A} } -->
-    sequent { <H>; z: squash{'A} >- 'B } -->
-    sequent { <H> >- isect x: 'A. 'B }
  *)
+
+rule intersectionMemberFormation 'b :
+    sequent { <H> >- "type"{'A} } -->
+    sequent { <H>; z: 'A >- 'b in 'B['z] } -->
+    sequent { <H> >- Isect x: 'A. 'B['x] }
 
 (*
  * H >- b1 = b2 in isect x:A. B[x]

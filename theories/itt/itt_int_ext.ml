@@ -222,6 +222,8 @@ dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
 
 (*! @docoff *)
 
+
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -329,13 +331,13 @@ let mul_Id2C = mul_Id2_rw
 prim mul_Zero 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 } = it
- 
+
 interactive_rw mul_Zero_rw :
    ('a IN int) -->
    (0 *@ 'a) <--> 0
 
 let mul_ZeroC = mul_Zero_rw
- 
+
 interactive mul_Zero2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a *@ 0) ~ 0 }
@@ -519,6 +521,51 @@ interactive_rw div_Assoc_rw :
    (('a /@ 'b) /@ 'c) <--> ('a /@ ('b *@ 'c))
 
 let div_AssocC = div_Assoc_rw
+
+interactive gt_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- "type"{gt{'a; 'b}} }
+
+interactive le_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- "type"{le{'a; 'b}} }
+
+interactive ge_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- "type"{ge{'a; 'b}} }
+
+(* Natural numberas *)
+
+define unfold_nat : nat <--> ({x:int | 'x>=0})
+
+dform nat_prl_df : except_mode [src] :: nat = mathbbN
+dform nat_src_df : mode[src] :: nat = `"nat"
+
+interactive natType {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- "type"{nat} }
+
+interactive natMemberEquality {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- 'a='b in int} -->
+   sequent [squash] { 'H >- 'a >= 0}  -->
+   sequent [squash] { 'H >- 'b >= 0}  -->
+   sequent ['ext] { 'H >- 'a='b in nat}
+
+interactive natElimination {| elim_resource [] |} 'H 'J 'v :
+   sequent ['ext] { 'H; x: int; v:'x>=0; 'J['x] >- 'C['x]}  -->
+   sequent ['ext] { 'H; x: nat; 'J['x] >- 'C['x]}
+(*
+interactive natInduction {| elim_resource [] |}  'H 'J 'n   'z    :
+   sequent ['ext] { 'H; 'J >- 'C[0] } -->
+   sequent ['ext] { 'H; 'J; n: nat;  z: 'C['n] >- 'C['n +@ 1]} -->
+   sequent ['ext] { 'H; n: nat; 'J >- 'C['n] }
+*)
+interactive natInduction  'H 'J 'n 'm 'v 'z 'u:
+   sequent ['ext] { 'H; n: int; u: 'n>=0; 'J['n] >- 'C[0] } -->
+   sequent ['ext] { 'H; n: int; u: 'n>=0; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
+   sequent ['ext] { 'H; n: nat; 'J['n] >- 'C['n] }
 
 (*
 Incorrect but there has to be some assoc/commut/composition property

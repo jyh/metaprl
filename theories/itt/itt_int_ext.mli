@@ -93,6 +93,9 @@ define unfold_ge :
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
+define unfold_nat :
+   nat <--> ({x:int | 'x>=0})
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -180,7 +183,7 @@ rule mul_Id2 'H :
 rule mul_Zero 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 }
- 
+
 rule mul_Zero2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a *@ 0) ~ 0 }

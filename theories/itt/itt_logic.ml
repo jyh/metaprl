@@ -261,8 +261,8 @@ interactive and_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."and"{'a1; 'a2}} }
 
 interactive and_intro {| intro_resource [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'a1 } -->
-   [wf] sequent ['ext] { 'H >- 'a2 } -->
+   [main] sequent ['ext] { 'H >- 'a1 } -->
+   [main] sequent ['ext] { 'H >- 'a2 } -->
    sequent ['ext] { 'H >- "and"{'a1; 'a2} }
 
 interactive and_elim {| elim_resource [] |} 'H 'J 'y 'z :

@@ -57,6 +57,7 @@ MPFILES :=\
 	itt_fset\
 	itt_theory\
 	itt_collection\
+	ctt_markov\
 	itt_sort
 
 ifeq ($(TESTS),YES)

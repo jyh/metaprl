@@ -748,6 +748,11 @@ interactive_rw reduce_bor_same {| reduce |} :
    ( 'e in bool ) -->
    bor{'e;'e} <--> 'e
 
+interactive bandSym {| intro [] |} :
+   [wf] sequent { <H> >- 'a in bool } -->
+   [wf] sequent { <H> >- 'b in bool } -->
+   sequent { <H> >- band{'a;'b}=band{'b;'a} in bool }
+
 (*
  * H >- Ui ext Unit
  * by boolFormation

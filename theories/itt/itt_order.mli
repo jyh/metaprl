@@ -37,40 +37,21 @@ open Tactic_type.Conversionals
 (************************************************************************
  * SYNTAX                                                               *
  ************************************************************************)
-
-define unfold_relation : relation[i:l, rel:t] <-->
-	record[rel:t]{r. 'r^car -> 'r^car -> univ[i:l]; {car: univ[i:l]} }
-
-define unfold_isReflexive : isReflexive[rel:t]{'O} <-->
-	all a: 'O^car. field[rel:t]{'O} 'a 'a
-
-define unfold_isAntisym : isAntisym[rel:t]{'O} <-->
-	all a: 'O^car. all b: 'O^car. ((field[rel:t]{'O} 'a 'b) & (field[rel:t]{'O} 'b 'a) => ('a='b in 'O^car))
-
-define unfold_isTransitive : isTransitive[rel:t]{'O} <-->
-	all a: 'O^car. all b: 'O^car. all c: 'O^car. ((field[rel:t]{'O} 'a 'b) & (field[rel:t]{'O} 'b 'c) => (field[rel:t]{'O} 'a 'c))
-
-define unfold_isPartialOrder1 : isPartialOrder[rel:t]{'O} <-->
-	isReflexive[rel:t]{'O} & isTransitive[rel:t]{'O} & isAntisym[rel:t]{'O}
-
-define unfold_partialOrder1 : partialOrder[i:l,rel:t] <-->
-   { O: relation[i:l,rel:t] | isPartialOrder[rel:t]{'O} }
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-topval unfold_isPartialOrder : conv
-topval unfold_partialOrder : conv
+topval unfold_isPreorder : conv
+topval unfold_preorder : conv
+topval unfold_isUnstrictPartialOrder : conv
+topval unfold_unstrictPartialOrder : conv
+topval unfold_isStrictPartialOrder : conv
+topval unfold_strictPartialOrder : conv
 
 topval fold_relation : conv
 topval fold_isReflexive : conv
 topval fold_isTransitive : conv
 topval fold_isAntisym : conv
-topval fold_isPartialOrder1 : conv
-topval fold_isPartialOrder : conv
-topval fold_partialOrder1 : conv
-topval fold_partialOrder : conv
 
 (*
  * -*-

@@ -2,6 +2,7 @@ include Czf_itt_group
 include Czf_itt_eq
 include Czf_itt_subset
 include Czf_itt_isect
+include Czf_itt_group_bvd
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
@@ -22,6 +23,6 @@ open Base_auto_tactic
 declare subgroup{'s; 'g}
 
 rewrite unfold_subgroup : subgroup{'s; 'g} <-->
-   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equiv{car{'s}; eqG{'s}; op{'s; 'a; 'b}; op{'g; 'a; 'b}})) & (all a: set. all b: set. (equiv{car{'s}; eqG{'s}; 'a; 'b} => equiv{car{'g}; eqG{'g}; 'a; 'b})) & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equiv{car{'g}; eqG{'g}; 'a; 'b} => equiv{car{'s}; eqG{'s}; 'a; 'b})))
+   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & group_bvd{'s; 'g; car{'s}})
 
 topval subgroupIsectT: term -> term -> tactic

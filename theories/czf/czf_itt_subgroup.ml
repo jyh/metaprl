@@ -3,6 +3,7 @@ include Czf_itt_eq
 include Czf_itt_group
 include Czf_itt_subset
 include Czf_itt_isect
+include Czf_itt_group_bvd
 
 open Printf
 open Mp_debug
@@ -30,7 +31,7 @@ open Base_auto_tactic
 declare subgroup{'s; 'g}
 
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
-   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equiv{car{'s}; eqG{'s}; op{'s; 'a; 'b}; op{'g; 'a; 'b}})) & (all a: set. all b: set. (equiv{car{'s}; eqG{'s}; 'a; 'b} => equiv{car{'g}; eqG{'g}; 'a; 'b})) & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equiv{car{'g}; eqG{'g}; 'a; 'b} => equiv{car{'s}; eqG{'s}; 'a; 'b})))
+   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & group_bvd{'s; 'g; car{'s}})
 
 dform subgroup_df : except_mode[src] :: subgroup{'s; 'g} =
    `"subgroup(" slot{'s} `"; " slot{'g} `")"
@@ -54,6 +55,9 @@ interactive subgroup_intro {| intro [] |} 'H :
    sequent ['ext] { 'H; p: set; q: set; x: mem{'p; car{'s}}; y: mem{'q; car{'s}}; v: equiv{car{'g}; eqG{'g}; 'p; 'q} >- equiv{car{'s}; eqG{'s}; 'p; 'q} } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} }
 
+(*
+ * Properties.
+ *)
 interactive subgroup_equiv {| intro [] |} 'H :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
@@ -81,13 +85,9 @@ interactive subgroup_isect 'H 'h1 'h2 :
    sequent [squash] { 'H >- 'h1 IN label } -->
    sequent [squash] { 'H >- 'h2 IN label } -->
    sequent [squash] { 'H >- 'h IN label } -->
-   sequent ['ext] { 'H >- group{'h} } -->
    sequent ['ext] { 'H >- subgroup{'h1; 'g} } -->
    sequent ['ext] { 'H >- subgroup{'h2; 'g} } -->
-   sequent ['ext] { 'H >- equal{car{'h}; ."isect"{car{'h1}; car{'h2}}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- equiv{car{'h}; eqG{'h}; op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
-   sequent ['ext] { 'H; c: set; d: set; u: equiv{car{'h}; eqG{'h}; 'c; 'd} >- equiv{car{'h1}; eqG{'h1}; 'c; 'd} } -->
-   sequent ['ext] { 'H; e: set; f: set; x1: mem{'e; car{'h}}; y1: mem{'f; car{'h}}; v: equiv{car{'h1}; eqG{'h1}; 'e; 'f} >- equiv{car{'h}; eqG{'h}; 'e; 'f} } -->
+   sequent ['ext] { 'H >- group_bvd{'h; 'h1; ."isect"{car{'h1}; car{'h2}}} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} }
 
 let subgroupIsectT t1 t2 p =

@@ -1,4 +1,5 @@
 include Czf_itt_group
+include Czf_itt_group_bvd
 include Czf_itt_equiv
 include Czf_itt_subgroup
 include Czf_itt_subset
@@ -34,7 +35,7 @@ prim_rw unfold_power : power{'g; 'z; 'n} <-->
    ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
 
 prim_rw unfold_cyc_subg : cyc_subg{'s; 'g; 'a} <-->
-   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all b: set. all c: set. (mem{'b; car{'s}} => mem{'c; car{'s}} => equiv{car{'s}; eqG{'s}; op{'s; 'b; 'c}; op{'g; 'b; 'c}})) & (all b: set. all c: set. (equiv{car{'s}; eqG{'s}; 'b; 'c} => equiv{car{'g}; eqG{'g}; 'b; 'c})) & (all b: set. all c:set. (mem{'b; car{'s}} => mem{'c; car{'s}} => equiv{car{'g}; eqG{'g}; 'b; 'c} => equiv{car{'s}; eqG{'s}; 'b; 'c})))
+   (group{'s} & group{'g} & mem{'a; car{'g}} & group_bvd{'s; 'g; collect{int; x. power{'g; 'a; 'x}}})
 
 let fold_power = makeFoldC << power{'g; 'z; 'n} >> unfold_power
 let fold_cyc_subg = makeFoldC << cyc_subg{'s; 'g; 'a} >> unfold_cyc_subg

@@ -2,7 +2,8 @@
 # Include support
 #
 OCAMLINCLUDES +=\
-	$(addprefix -I , $(SUPPORT_DIRS))
+	$(addprefix -I , $(SUPPORT_DIRS))\
+	-I ../base
 
 # Library files
 MPFILES = \

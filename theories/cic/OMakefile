@@ -1,5 +1,6 @@
 OCAMLINCLUDES +=\
    $(addprefix -I , $(SUPPORT_DIRS))\
+	-I ../itt\
    -I ../base
 
 # Library files

@@ -53,7 +53,7 @@ declare setGlobal{'sub_value; 'label; 'var; 'ty; 'a}
 declare memcpy{'op; 'label; 'v1; 'a1; 'v2; 'a2; 'a3}
 declare assertExp{'var; 'pred}
 declare debug{'debug_info}
-declare tailCall{'label; 'f; 'params}
+declare tailCall_com[f:s]{'label; 'f; 'params}
 declare specialCall{'label; 'tailop}
 declare matchExp{'a; 'list}
 declare typeCase{'a1; 'a2; 'v1; 'v2; 'e1; 'e2}

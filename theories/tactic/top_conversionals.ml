@@ -134,7 +134,7 @@ let debug_reduce =
  * The (@tt{rw} @it{conv} $a$ $c$) @emph{tactic} applies the
  * conversion @it{conv} to the $c$-th clause in the $a$-th assumtion.}
  *
- * @item{@conv[rwAll,rwcAll,rwAllAll];
+ * @item{@conv[rwAll] @conv[rwcAll] @conv[rwAllAll];
  * The (@tt{rwAll} @it{conv}) @emph{tactic} applies the
  * conversion @it{conv} to the whole goal sequent.
  *
@@ -286,13 +286,13 @@ let repeatForC = Tactic_type.Conversionals.repeatForC
  * @code{let applyAllC convs = sweepUpC (firstC convs)}
  * @end[center]}
  *
- * @item{@conv[rwh, rwch, rwhAll, rwchAll, rwhAllAll];
+ * @item{@conv[rwh], @conv[rwch], @conv[rwhAll], @conv[rwchAll], @conv[rwhAllAll];
  * For convenience, the @tt{rwh},  @tt{rwch}, @tt{rwhAll}, @tt{rwchAll},
  * @tt{rwhAllAll} functions automatically
  * apply the @tt{higherC} conversion. For example, the tactic (@tt{rwh $conv$ $i$})
  * is equivalent to (@tt{rw (higherC $conv$) $i$}).}
  *
- * @item{@conv[rwa, rwca, rwaAll, rwcaAll, rwaAllAll];
+ * @item{@conv[rwa], @conv[rwca], @conv[rwaAll], @conv[rwcaAll], @conv[rwaAllAll];
  * The @tt{rwa},  @tt{rwca}, @tt{rwaAll}, @tt{rwcaAll},
  * @tt{rwaAllAll} functions takes a list of conversions and
  * apply the @tt{applyAllC} conversion. For example, the tactic (@tt{rwh $convs$ $i$})

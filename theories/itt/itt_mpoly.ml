@@ -1,15 +1,22 @@
-extends Itt_ring_uce
 extends Itt_bisect
 extends Itt_poly
 extends Itt_list2
+extends Itt_ring_uce
 
 open Lm_symbol
+open Lm_printf
+open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.RefineError
+open Simple_print
+open Tactic_type
 open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 open Top_conversionals
+open Top_tacticals
 open Dtactic
 open Itt_equal
 open Itt_struct
@@ -17,6 +24,7 @@ open Itt_rfun
 open Itt_record
 open Itt_list
 open Itt_poly
+open Itt_ring2
 
 (*
 define unfold_isMonoidC1 : isMonoidC{'f} <-->
@@ -61,22 +69,6 @@ define unfold_mpoly : mpoly{'F;'nvars} <-->
 define unfold_const_mpoly : const_mpoly{'v; 'F; 'nvars} <-->
 	ind{'nvars; 'v; i,f.const_poly{'f; mpoly{'F; 'i -@ 1}}}
 
-(*
-	fix{f.
-		lambda{l.lambda{p.
-			list_ind{'l; 'p;
-				h,t,fake.('f 't eval_poly{'p; 'h; mpoly{'F; length{'l}}})}}}}
-	'vals 'poly
-*)
-(*	list_ind{'vals; 'poly; h,t,f.eval_poly{'f; 'h; mpoly{'F; length{'t}}}}*)
-(*
-define unfold_eval_mpoly : eval_mpoly_fun{'vals; 'F} <-->
-	list_ind{'vals; lambda{x.'x};
-		h,t,f.lambda{p.eval_poly{('f );'h;'F}}}
-define unfold_eval_mpoly : eval_mpoly{'poly; 'vals; 'F} <-->
-	(eval_mpoly_fun{'vals;'F} 'poly)
-*)
-
 declare eval_mpoly{'poly; 'vals; 'F}
 
 prim_rw unfold_eval_mpoly : eval_mpoly{'poly; 'vals; 'F} <-->
@@ -91,44 +83,77 @@ prim_rw unfold_eval_mpoly : eval_mpoly{'poly; 'vals; 'F} <-->
 			't;
 			'F}}
 
-interactive eval_mpoly_wf :
-	[wf] sequent { <H> >- 'vals in list{'F} } -->
-	[wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}} }	-->
-	sequent { <H> >- eval_mpoly{'p; 'vals; 'F} in 'F }
+interactive eval_mpoly_wf {| intro [] |} :
+	[wf] sequent { <H> >- 'vals in list{'F^car} } -->
+	[wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}}^car }	-->
+	sequent { <H> >- eval_mpoly{'p; 'vals; 'F} in 'F^car }
+
+interactive mpoly_wf {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'nvars in nat } -->
+	sequent { <H> >- mpoly{'F; 'nvars} in unitringCE[i:l] }
+
+interactive add_in_car {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in mpoly{'F; 'nvars}^car } -->
+   [wf] sequent { <H> >- 'b in mpoly{'F; 'nvars}^car } -->
+   sequent { <H> >- 'a +[mpoly{'F; 'nvars}] 'b in mpoly{'F; 'nvars}^car }
+
+interactive mul_in_car {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in mpoly{'F; 'nvars}^car } -->
+   [wf] sequent { <H> >- 'b in mpoly{'F; 'nvars}^car } -->
+   sequent { <H> >- 'a *[mpoly{'F; 'nvars}] 'b in mpoly{'F; 'nvars}^car }
 
 (*
 interactive
-	sequent { <H> >- 'vals in list{'F}	-->
-	sequent { <H> >- 'p in mpoly{'F; length{'vals}} }	-->
-	sequent { <H> >- 'a=eval_mpoly{'p; 'vals; 'F} in 'F } -->
-	sequent { <H> >- 'a in 'F }
+	sequent { <H> >- 'vals in list{'F^car}	-->
+	sequent { <H> >- 'p in mpoly{'F; length{'vals}}^car }	-->
+	sequent { <H> >- 'a=eval_mpoly{'p; 'vals; 'F} in 'F^car } -->
+	sequent { <H> >- 'a in 'F^car }
 *)
 
 (*
 interactive
-	sequent { >- 'p in mpoly{'F; 'n} }	-->
-	sequent { >- 'vals in list{'F} }	-->
+	sequent { >- 'p in mpoly{'F; 'n}^car }	-->
+	sequent { >- 'vals in list{'F^car} }	-->
 	sequent { >- length{'vals}='n in int } -->
-	sequent { >- 'a in 'F } -->
-	sequent { >- 'b in 'F }	-->
-	sequent { >- 'a=eval_mpoly{'p; 'vals; 'F} in 'F } -->
-	sequent { >- 'b=eval_mpoly{'p; 'vals; 'F} in 'F } -->
-	sequent { >- 'a='b in 'F }
+	sequent { >- 'a in 'F^car } -->
+	sequent { >- 'b in 'F^car }	-->
+	sequent { >- 'a=eval_mpoly{'p; 'vals; 'F} in 'F^car } -->
+	sequent { >- 'b=eval_mpoly{'p; 'vals; 'F} in 'F^car } -->
+	sequent { >- 'a='b in 'F^car }
 *)
 
 interactive eval_add_distrib {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
-	[wf] sequent { <H> >- 'vals in list{'F} }	-->
-   [wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}} } -->
-   [wf] sequent { <H> >- 'q in mpoly{'F; length{'vals}} } -->
+	[wf] sequent { <H> >- 'vals in list{'F^car} }	-->
+   [wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}}^car } -->
+   [wf] sequent { <H> >- 'q in mpoly{'F; length{'vals}}^car } -->
    [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
    sequent { <H> >- eval_mpoly{'p; 'vals; 'F} +['F] eval_mpoly{'q; 'vals; 'F} = eval_mpoly{'p +[mpoly{'F; length{'vals}}] 'q; 'vals; 'F} in 'F^car }
 
 interactive eval_mul_distrib {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
-	[wf] sequent { <H> >- 'vals in list{'F} }	-->
-   [wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}} } -->
-   [wf] sequent { <H> >- 'q in mpoly{'F; length{'vals}} } -->
+	[wf] sequent { <H> >- 'vals in list{'F^car} }	-->
+   [wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}}^car } -->
+   [wf] sequent { <H> >- 'q in mpoly{'F; length{'vals}}^car } -->
    [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
    sequent { <H> >- eval_mpoly{'p; 'vals; 'F} *['F] eval_mpoly{'q; 'vals; 'F} = eval_mpoly{'p *[mpoly{'F; length{'vals}}] 'q; 'vals; 'F} in 'F^car }
+
+interactive eval_add_distribElim unitringCE[i:l] 'F 'vals 'p 'q :
+	[wf] sequent { <H> >- 'vals in list{'F^car} }	-->
+   [wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}}^car } -->
+   [wf] sequent { <H> >- 'q in mpoly{'F; length{'vals}}^car } -->
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   sequent { <H>; (eval_mpoly{'p; 'vals; 'F} +['F] eval_mpoly{'q; 'vals; 'F} = eval_mpoly{'p +[mpoly{'F; length{'vals}}] 'q; 'vals; 'F} in 'F^car) >- 'C } -->
+	sequent { <H> >- 'C }
+
+interactive eval_mul_distribElim unitringCE[i:l] 'F 'vals 'p 'q :
+	[wf] sequent { <H> >- 'vals in list{'F^car} }	-->
+   [wf] sequent { <H> >- 'p in mpoly{'F; length{'vals}}^car } -->
+   [wf] sequent { <H> >- 'q in mpoly{'F; length{'vals}}^car } -->
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   sequent { <H>; (eval_mpoly{'p; 'vals; 'F} *['F] eval_mpoly{'q; 'vals; 'F} = eval_mpoly{'p *[mpoly{'F; length{'vals}}] 'q; 'vals; 'F} in 'F^car) >- 'C } -->
+	sequent { <H> >- 'C }
 
 define unfold_id_poly : id_poly{'F} <-->
    (1, lambda{i. if 'i=@0 then 'F^"0" else 'F^"1"})
@@ -140,10 +165,26 @@ define unfold_id_mpoly : id_mpoly{'F; 'nvars; 'i} <-->
 			  else zero_poly{mpoly{'F; 'j -@ 1}}
 		}
 
+interactive id_mpoly_wf {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'nvars in nat } -->
+   [wf] sequent { <H> >- 'k in nat } -->
+	sequent { <H> >- id_mpoly{'F; 'nvars; 'k} in mpoly{'F; 'nvars}^car }
+
+interactive const_mpoly_wf {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'nvars in nat } -->
+   [wf] sequent { <H> >- 'v in 'F^car } -->
+	sequent { <H> >- const_mpoly{'v; 'F; 'nvars} in mpoly{'F; 'nvars}^car }
+
 interactive as_id_poly {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
 	[wf] sequent { <H> >- 'x in 'F^car } -->
 	[wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
 	sequent { <H> >- 'x = eval_poly{id_poly{'F}; cons{'x;nil}; 'F} in 'F^car }
+
+interactive length_nat {| intro [intro_typeinf <<'l>>] |} list{'T} :
+	sequent { <H> >- 'l in list{'T} } -->
+	sequent { <H> >- length{'l} in nat }
 
 let add info t =
 	if List.exists (alpha_equal t) info then info
@@ -239,13 +280,15 @@ let mk_const_mpoly_term = mk_dep0_dep0_dep0_term const_mpoly_opname
 let dest_const_mpoly = dest_dep0_dep0_dep0_term const_mpoly_opname
 
 let var2mpoly f nvars vars v =
+	let lst = mk_list_of_list vars in
+	let len = Itt_list2.mk_length_term lst in
 	match find_index vars v with
 		Some i ->
-			let idp = mk_id_mpoly_term f (mk_intnum_term nvars) (mk_intnum_term (nvars-i)) in
-			mk_eval_mpoly_term idp (mk_list_of_list vars) f
+			let idp = mk_id_mpoly_term f len (mk_intnum_term (nvars-i)) in
+			mk_eval_mpoly_term idp lst f
 	 | None ->
-			let constp = mk_const_mpoly_term v f (mk_intnum_term nvars) in
-			mk_eval_mpoly_term constp (mk_list_of_list vars) f
+			let constp = mk_const_mpoly_term v f len in
+			mk_eval_mpoly_term constp lst f
 
 let rec term2mpoly_aux f nvars vars t =
 	match explode_term t with
@@ -269,27 +312,85 @@ let term2mpoly f vars t =
 	let nvars = List.length vars in
 	term2mpoly_aux f nvars vars t
 
-let stdT f vars t =
-	let t' = term2mpoly f vars t in
-	let eqt = mk_equal_term (mk_field_term f "car") t t' in
-	assertT eqt
+let rec proveVarTypesT f_car = function
+	[] -> idT
+ | h::t ->
+		assertT (mk_equal_term f_car h h) thenMT
+		(rw (addrC [0] reduceC) (-1)) thenMT
+		proveVarTypesT f_car t
+
+let stdT f vars i = funT (fun p ->
+	let t = if i=0 then Sequent.concl p else Sequent.nth_hyp p i in
+	let f_car = mk_field_term f "car" in
+	match explode_term t with
+		<<'a='b in 'T>> ->
+			let a' = term2mpoly f vars a in
+			let eqt = mk_equal_term f_car a a' in
+			proveVarTypesT f_car vars thenMT assertT eqt
+	 | _ -> failT
+)
+
+type subterms = Eval of term | Mul of term * term | Add of term * term
+
+let rec lowerOp f t =
+	match explode_term t with
+		<<eval_mpoly{'p; 'vals; 'field}>> when alpha_equal f field -> Eval p
+	 | <<apply{'a;'b}>> ->
+			(match explode_term a with
+				<<'c 'd>> ->
+					let (f',fname) = dest_field c in
+					(* if alpha_equal f f' *)
+					let l = lowerOp f d in
+						(match l with
+							Eval t1 ->
+								let r = lowerOp f b in
+								(match r with
+									Eval t2 ->
+										(match fname with
+											"*" -> Mul (t1,t2)
+										 | "+" -> Add (t1,t2)
+										 | _ -> raise (RefineError ("Itt_mpoly.lowerOp", StringTermError ("unknown field name", c)))
+										)
+								 | _ -> r
+								)
+						 | _ -> l
+						)
+			 | _ -> raise (RefineError ("Itt_mpoly.lowerOp", StringTermError ("unknown operation", a)))
+			)
+	 | <<'p='q in 'T>> ->
+			lowerOp f q
+	 | _ -> raise (RefineError ("Itt_mpoly.lowerOp", StringTermError ("unknown operation", t)))
+
+let stepT ftype f vals i = funT (fun p ->
+	let t = if i=0 then Sequent.concl p else Sequent.nth_hyp p i in
+	match lowerOp f t with
+		Mul (l,r) ->
+			eval_mul_distribElim ftype f vals l r thenMT hypSubstT (-1) i thenMT thinT (-1)
+	 | Add (l,r) ->
+			eval_add_distribElim ftype f vals l r thenMT hypSubstT (-1) i thenMT thinT (-1)
+	 | Eval _ -> failT
+)
+
+let convT ft f vals i =
+	let vterm = mk_list_of_list vals in
+	repeatMT (stepT ft f vterm i)
+
+(*
+define unfoldPolyTermAux : PolyTermAux{'t; 'n; 'vars; 'F} <-->
+	ind{'n;
+		exists_list{'vars; x.('t='x in 'F^car)};
+		i,f.('f or
+			(x:'F^car * (y:'F^car * (PolyTermAux{'x;'i -@ 1;'vars;'F} and
+				PolyTermAux{'y;'i -@ 1;'vars;'F} and
+					(('t=('x 'F^"*" 'y) in 'F^car) or ('t=('x 'F^"+" 'y) in 'F^car))))))}
+
+define unfoldPolyTerm : PolyTerm{'t; 'vars; 'F} <-->
+	n:nat * PolyTerm{'t; 'n; 'vars; 'F}
+*)
 
 (*EXAMPLE*)
 define unfold_poly_of_list : poly_of_list{'l} <-->
 	((length{'l} -@ 1), lambda{n. if 'n<@length{'l} then nth{'l; 'n} else it})
-
-define unfold_Zuce : Zuce <-->
-   {
-		car=int;
-		"*"=lambda{x. lambda{y. 'x *@ 'y}};
-		"+"=lambda{x. lambda{y. 'x +@ 'y}};
-		"0"=0;
-		neg=lambda{x. (-'x)};
-		eq=lambda{x.lambda{y.beq_int{'x;'y}}};
-		"1"=1
-	}
-
-let fold_Zuce = makeFoldC <<Zuce>> unfold_Zuce
 
 let atIndAuxC c t =
 	if Itt_nat.is_ind_term t then
@@ -312,29 +413,31 @@ let atTermC t c = termC (atTermAuxC c t)
 let atTermHC t c = atTermC t (higherC c)
 
 let resource reduce += [
-	<<field[t:t]{Poly{'F}}>>, (someSubC unfold_Poly);
+	<<field[t:t]{Poly{'F}}>>, ((addrC [0] unfold_Poly) thenC reduceC);
 	<<mpoly{'F; number[i:n]}>>, unfold_mpoly;
-	<<isZeroPoly{(number[i:n], lambda{i.'f['i]}); 'F}>>, unfold_isZeroPoly;
-	<<coeff{(number[i:n], lambda{i.'f['i]}); number[j:n]; 'F}>>, unfold_coeff;
-	<<isZero{'v; 'F}>>, unfold_isZero;
-	<<const_mpoly{'v; 'F; number[i:n]}>>, unfold_const_mpoly;
+	<<isZeroPoly{(number[i:n], lambda{i.'f['i]}); 'F}>>, (unfold_isZeroPoly thenC reduceC);
+	<<coeff{(number[i:n], lambda{i.'f['i]}); number[j:n]; 'F}>>, (unfold_coeff  thenC reduceC);
+	<<coeff{(number[i:n], lambda{j.'f}); 'k; 'F}>>, (unfold_coeff thenC reduceC);
+(*	<<coeff{(number[i:n], lambda{i.'f}); 'i; 'F}>>, unfold_coeff;*)
+	<<isZero{'v; 'F}>>, (unfold_isZero thenC reduceC);
+	<<const_mpoly{'v; 'F; number[i:n]}>>, (unfold_const_mpoly thenC reduceC);
 	<<normalize{(number[i:n], lambda{i.'f['i]}); 'F}>>, unfold_normalize1;
 
-	<<sum{number[i:n]; number[j:n]; x.'P['x]; 'F}>>, unfold_sum;
+	<<sum{number[i:n]; number[j:n]; x.'P['x]; 'F}>>, (unfold_sum thenC reduceC);
 	(*<<ind{'n; 'base; i,f.'up['i;'f]}>>, ((addrC [0] reduceC) thenC reduceTopC);*)
 (**)
 	<<eval_mpoly{(number[i:n], lambda{i.'f['i]}); cons{'h;'t}; 'F}>>, unfold_eval_mpoly;
-	<<eval_mpoly{'p; nil; 'F}>>, unfold_eval_mpoly;
+	<<eval_mpoly{'p; nil; 'F}>>, (unfold_eval_mpoly thenC reduceC);
 	<<eval_poly{(number[i:n], lambda{i.'f['i]}); 'a; 'F}>>, unfold_eval_poly;
-	<<raw_add_poly{(number[i:n], lambda{i.'f['i]});(number[j:n],lambda{i.'g['i]});'F}>>, unfold_raw_add_poly;
-	<<raw_mul_poly{(number[i:n], lambda{i.'f['i]});(number[j:n],lambda{i.'g['i]});'F}>>, unfold_raw_mul_poly;
-	<<id_mpoly{'F; number[i:n]; number[j:n]}>>, unfold_id_mpoly;
+	<<raw_add_poly{(number[i:n], lambda{i.'f['i]});(number[j:n],lambda{i.'g['i]});'F}>>, (unfold_raw_add_poly thenC reduceC);
+	<<raw_mul_poly{(number[i:n], lambda{i.'f['i]});(number[j:n],lambda{i.'g['i]});'F}>>, (unfold_raw_mul_poly thenC reduceC);
+	<<id_mpoly{'F; number[i:n]; number[j:n]}>>, (unfold_id_mpoly thenC reduceC);
 	<<const_poly{'a;'F}>>, unfold_const_poly;
 	<<unit_poly{'F}>>, unfold_unit_poly;
 	<<zero_poly{'F}>>, unfold_zero_poly;
 	<<id_poly{'F}>>, unfold_id_poly;
 (**)
-	<<field[t:t]{Zuce}>>, (someSubC unfold_Zuce);
+	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC reduceTopC);
 ]
 
 dform id_poly_df : except_mode[src] :: id_poly{'F} =
@@ -358,31 +461,29 @@ dform eval_mpoly_df : except_mode[src] :: eval_mpoly{'p;'vals;'F} =
 dform eval_id_mpoly_df : except_mode[src] :: id_mpoly{'F;'nvars;'i} =
 	slot{'F} `"[" slot{'nvars} `"]_x" slot{'i}
 
-dform int_ring_uce_df : except_mode[src] :: Zuce = mathbbZ
-
 dform const_poly : const_poly{'a;'F} = `"const_poly{" slot{'a} `";" slot{'F} `"}"
 
 interactive test1 :
-	sequent { <H> >- poly_of_list{cons{1;cons{2;nil}}} in poly{Zuce} }
+	sequent { <H> >- poly_of_list{cons{1;cons{2;nil}}} in poly{Z} }
 
 interactive test2 :
-	sequent { <H> >- eval_poly{poly_of_list{cons{1;cons{2;nil}}}; 2; Zuce}=5 in int }
+	sequent { <H> >- eval_poly{poly_of_list{cons{1;cons{2;nil}}}; 2; Z}=5 in int }
 
 interactive test3 :
-	sequent { <H> >- id_mpoly{Zuce; 3; 2} in mpoly{Zuce; 3}^car }
+	sequent { <H> >- id_mpoly{Z; 3; 2} in mpoly{Z; 3}^car }
 
 interactive test4 :
 	sequent { <H> >-
-		eval_mpoly{id_mpoly{Zuce; 3; 2}; cons{2;cons{3;cons{4;nil}}}; Zuce}=3 in int }
+		eval_mpoly{id_mpoly{Z; 3; 2}; cons{2;cons{3;cons{4;nil}}}; Z}=3 in int }
 
 interactive test5 :
-	sequent { <H> >- eval_mpoly{id_mpoly{Zuce; 3; 0}; cons{2;cons{3;cons{4;nil}}}; Zuce}=1 in int }
+	sequent { <H> >- eval_mpoly{id_mpoly{Z; 3; 0}; cons{2;cons{3;cons{4;nil}}}; Z}=1 in int }
 
 interactive test6 :
-	sequent { <H> >- eval_mpoly{id_mpoly{Zuce; 3; 4}; cons{2;cons{3;cons{4;nil}}}; Zuce}=0 in int }
+	sequent { <H> >- eval_mpoly{id_mpoly{Z; 3; 4}; cons{2;cons{3;cons{4;nil}}}; Z}=0 in int }
 
 interactive test7 :
-	sequent { <H> >- eval_mpoly{id_mpoly{Zuce; 3; 3}; cons{2;cons{3;cons{4;nil}}}; Zuce}=2 in int }
+	sequent { <H> >- eval_mpoly{id_mpoly{Z; 3; 3}; cons{2;cons{3;cons{4;nil}}}; Z}=2 in int }
 
 interactive test8 :
 	sequent { <H> >- 'x in int } -->
@@ -393,26 +494,31 @@ interactive test8 :
 				raw_add_poly{
 					const_poly{
 						raw_add_poly{
-							unit_poly{Zuce};
-							id_poly{Zuce};Zuce};Poly{Zuce}};
-					id_poly{Poly{Zuce}}; Poly{Zuce}};
-				const_poly{'x;Poly{Zuce}};Poly{Zuce}};
-			'y; Zuce}
+							unit_poly{Z};
+							id_poly{Z};Z};Poly{Z}};
+					id_poly{Poly{Z}}; Poly{Z}};
+				const_poly{'x;Poly{Z}};Poly{Z}};
+			'y; Z}
 		= 1 +@ 'x +@ 'y in int }
 
 interactive test9 :
 	sequent { <H> >-
 		eval_mpoly{
-			id_mpoly{Zuce;2;2};
-			cons{2;cons{3;nil}};Zuce}
+			id_mpoly{Z;2;2};
+			cons{2;cons{3;nil}};Z}
 		= 2 in int }
 
 interactive test10 :
 	sequent { <H> >- 'x in int } -->
 	sequent { <H> >- 'y in int } -->
-	sequent { <H> >- 'x Zuce^"+" 'y Zuce^"+" 1 in int }
+	sequent { <H> >- 'x +[Z] 'y +[Z] 1 in int }
 
 interactive test11 :
 	sequent { <H> >- 'x in int } -->
 	sequent { <H> >- 'y in int } -->
-	sequent { <H> >- 'x Zuce^"+" ('x Zuce^"*" 'y) Zuce^"+" 'y Zuce^"+" 1 in int }
+	sequent { <H> >- 'x +[Z] ('x *[Z] 'y) +[Z] 'y +[Z] 1 in int }
+
+interactive test12 :
+	sequent { <H> >- 'x in Z^car } -->
+	sequent { <H> >- 'y in Z^car } -->
+	sequent { <H> >- ('x +[Z] ('x *[Z] 'y) +[Z] 'y +[Z] 1) in Z^car }

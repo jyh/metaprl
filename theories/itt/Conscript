@@ -1,6 +1,6 @@
 Import qw( env );
 
-OCamlSources $env
+OCamlSources $env ##
 	'itt_comment.ml',
 	'itt_equal.ml',
 	'itt_struct.ml',

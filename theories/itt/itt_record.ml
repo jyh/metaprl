@@ -649,7 +649,7 @@ dform subrecordS_df : except_mode [src] :: subrecord{record[n:t]{'a}}
    = label[n:t] `":" slot{'a}
 
 dform subrcrd_df : except_mode [src] :: subrecord{rcrd[n:t]{'a;'r}}
-   = subrecord{rcrd[n:t]{'a}} `";" \space  subrecord{'r}
+   =  subrecord{'r} `";" \space subrecord{rcrd[n:t]{'a}}
 
 dform subrecordI_df : except_mode [src] :: subrecord{record[n:t]{'a;'r}}
    = subrecord{record[n:t]{'a}} `";" \space subrecord{'r}

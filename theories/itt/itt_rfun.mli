@@ -56,6 +56,8 @@ declare well_founded_prop{'A}
 declare well_founded_apply{'P; 'a}
 declare fix{f. 'b['f]}
 
+define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)

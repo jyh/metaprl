@@ -131,6 +131,9 @@ declare well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}
 declare well_founded_prop{'A}
 declare well_founded_apply{'P; 'a}
 declare fix{f. 'b['f]}
+
+define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
+
 (*! @docoff *)
 
 (*

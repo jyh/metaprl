@@ -348,9 +348,13 @@ let rec get_elim_args_arg = function
  | [] ->
       None
 
-let tryThinT thinT i p =
+let tryThinT thinT v i p =
    if get_thinning_arg p then
-      tryT (thinT i) p
+      let i =
+         let v', _ = Sequent.nth_hyp p i in
+         if (v=v') then i else Sequent.get_decl_number p v
+      in
+         tryT (thinT i) p
    else
       idT p
 
@@ -436,10 +440,11 @@ let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_
 
        | [| _; _ |], Some thinT ->
             (fun i p ->
+                  let v, _ = Sequent.nth_hyp p i in
                   let vars = new_vars i p in
                   let j, k = Sequent.hyp_indices p i in
                      (Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p)
-                      thenT tryThinT thinT i) p)
+                      thenT tryThinT thinT v i) p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))
    in

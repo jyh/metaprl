@@ -41,6 +41,7 @@ open Fir
 (* Open MetaPRL ML namespaces. *)
 
 open Refiner.Refiner.RefineError
+open Itt_rfun
 open Mp_mc_fir_prog
 open Mp_mc_connect_base
 open Mp_mc_connect_ty
@@ -50,25 +51,41 @@ open Mp_mc_connect_exp
  * Convert to and from fundef.
  *)
 
+(* Define helper functions for creating / destructing the function body. *)
+
+let rec term_of_body vars exp =
+   match vars with
+      [] ->
+         raise (Invalid_argument "term_of_body: function with no args!")
+    | [a] ->
+         mk_lambda_term    (string_of_var a)
+                           (term_of_exp exp)
+    | h :: t ->
+         mk_lambda_term    (string_of_var h)
+                           (term_of_body t exp)
+
+let rec body_of_term arg_list term =
+   if is_lambda_term term then
+      let arg, body = dest_lambda term in
+         body_of_term ((var_of_string arg) :: arg_list) body
+   else
+      List.rev arg_list, exp_of_term term
+
+(* Define the actual conversion functions now. *)
+
 let term_of_fundef (line, ty, vars, exp) =
-   << 'a >>
-(*
    mk_fundef_term    (term_of_debug_line line)
                      (term_of_ty ty)
-                     (term_of_list term_of_var vars)
-                     (term_of_exp exp)
-*)
+                     (term_of_body vars exp)
 
 let fundef_of_term t =
    try
-      raise Not_found
-(*
-      let line, ty, vars, exp = dest_fundef_term t in
+      let line, ty, body = dest_fundef_term t in
+      let vars, exp = body_of_term [] body in
          (debug_line_of_term line),
          (ty_of_term ty),
-         (list_of_term var_of_term vars),
-         (exp_of_term exp)
-*)
+         vars,
+         exp
    with
       (* Reprint errors to narrow down term with error. *)
       _ -> report_error "fundef_of_term" t

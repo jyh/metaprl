@@ -82,6 +82,8 @@ topval reduce_get_func_body_2 : conv
  * Searching for a tailCall that we can inline.
  *)
 
+topval reduce_inline_fundef : conv
+topval reduce_inline_lambda : conv
 topval reduce_inline_letUnop : conv
 topval reduce_inline_letBinop : conv
 topval reduce_inline_tailCall_1 : conv

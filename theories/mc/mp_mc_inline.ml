@@ -118,6 +118,16 @@ prim_rw reduce_get_func_body_2 :
  * Searching for a tailCall that we can inline.
  *)
 
+(* Function definitions and lambda terms. *)
+
+prim_rw reduce_inline_fundef :
+   inline{ 'target; 'global_info; fundef{ 'debug_line; 'ty; 'body } } <-->
+   fundef{ 'debug_line; 'ty; inline{ 'target; 'global_info; 'body } }
+
+prim_rw reduce_inline_lambda :
+   inline{ 'target; 'global_info; lambda{ x. 'b['x] } } <-->
+   lambda{ x. inline{ 'target; 'global_info; 'b['x] } }
+
 (* Primitive operations. *)
 
 prim_rw reduce_inline_letUnop :
@@ -195,6 +205,8 @@ let firInlineC =
       reduce_get_func_body_1;
       reduce_get_func_body_2;
 
+      reduce_inline_fundef;
+      reduce_inline_lambda;
       reduce_inline_letUnop;
       reduce_inline_letBinop;
       reduce_inline_tailCall_1;

@@ -2,8 +2,8 @@
 REF_ROOT := ../..
 INCLUDE := -I . -I $(REF_ROOT)/refiner -I ../tactic
 OCAMLFLAGS := -g -root $(REF_ROOT)
-OCAMLC := $(REF_ROOT)/filter_p4/prlcomp.run
-CAMLP4 := $(REF_ROOT)/filter_p4/prlcomp.run -E -root $(REF_ROOT)
+OCAMLC := $(REF_ROOT)/filter/prlcomp.run
+CAMLP4 := $(REF_ROOT)/filter/prlcomp.run -E -root $(REF_ROOT)
 
 # Common files
 MLZFILES :=\
@@ -26,8 +26,8 @@ clean::
 	del -f *.p4* *.pp*
 
 # Add dependency for parser
-$(addsuffix .cmiz, $(MFILES)) $(addsuffix .cmoz, $(MFILES)): $(REF_ROOT)/filter_p4/prlcomp.cma
-$(addsuffix .p4i, $(MFILES)) $(addsuffix .p4, $(MFILES)): $(REF_ROOT)/filter_p4/prlcomp.cma
+$(addsuffix .cmiz, $(MFILES)) $(addsuffix .cmoz, $(MFILES)): $(REF_ROOT)/filter/prlcomp.cma
+$(addsuffix .p4i, $(MFILES)) $(addsuffix .p4, $(MFILES)): $(REF_ROOT)/filter/prlcomp.cma
 
 # Real makefile
 include ../../mk/config

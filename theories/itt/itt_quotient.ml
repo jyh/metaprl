@@ -86,6 +86,9 @@
  *
  * In addition, the membership axioms @tt{empty_axiom} and @tt{add_axiom}
  * can be proved for the $@i{Set}'$ definition.
+ *
+ * This theory implements axiomatization of quotient types
+ * described in @cite["Nog02a,Nog02b"].
  * @end[doc]
  *
  * ----------------------------------------------------------------

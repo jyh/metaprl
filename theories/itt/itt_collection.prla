@@ -3616,7 +3616,7 @@ B	b3069	t3068
 P	p3069	Number 6414
 P	p3070	Number 6562
 O	o3070	location p3069 p3070
-P	p3071	String "byDefT (unfold_type_col orelseC unfold_col) thenT univTypeT <<univ[l:l]>> thenT autoT"
+P	p3071	String "byDefsT [unfold_type_col; unfold_col] thenT univTypeT <<univ[l:l]>> thenT autoT"
 O	o3071	ext_rule p3071
 T	t3071	o3071 b1262 b7503 b4 b4
 B	b3071	t3071
@@ -3779,7 +3779,7 @@ T	t3248	o662 b2995 b3244
 B	b3248	t3248
 T	t3249	o662 b2997 b3248
 B	b3249	t3249
-P	p3249	String "byDefT (unfold_singleton orelseC unfold_col)"
+P	p3249	String "byDefsT [unfold_singleton; unfold_col]"
 O	o3249	ext_rule p3249
 T	t3250	o b2996 b3391
 B	b3251	t3250
@@ -5463,7 +5463,7 @@ B	b5479	t5478
 P	p5480	Number 11470
 P	p5481	Number 11598
 O	o5484	location p5480 p5481
-P	p5484	String "byDefT (unfold_none orelseC unfold_col)"
+P	p5484	String "byDefsT [unfold_none; unfold_col]"
 O	o5485	ext_rule p5484
 T	t5496	o1263 b5442 b4
 B	b5496	t5496

@@ -6450,7 +6450,7 @@ T	t1385	o b1385 b4
 B	b1386	t1385
 T	t1386	o863 b2571 b1386
 B	b1388	t1386
-P	p1388	String "dT 2 thenT byDefT (unfold_sameset thenC reduceC)"
+P	p1388	String "dT 2 thenT byDefsT [unfold_sameset; reduceC]"
 O	o1388	ext_rule p1388
 T	t1388	o863 b1385 b4
 B	b1389	t1388

@@ -15,6 +15,8 @@
  * $@it$ (provided $P$ itself is non-empty), and two terms
  * $@esquash{P_1}$ and $@esquash{P_2}$ have the @emph{extensional}
  * equality $P_1 @Leftrightarrow P_2$.
+ *
+ * For more information on the @tt[esquash] operator see @cite["Nog02a,Nog02b"].
  * @end[doc]
  *
  * ----------------------------------------------------------------

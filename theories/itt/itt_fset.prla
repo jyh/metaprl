@@ -28370,7 +28370,7 @@ T	t10531	o b10531 b4
 B	b10538	t10531
 T	t10538	o1378 b9619 b10538
 B	b10539	t10538
-P	p10539	String "rw unfold_fset 6 thenT dT 6 thenT byDefT (fold_fset orelseC unfold_implies)"
+P	p10539	String "rw unfold_fset 6 thenT dT 6 thenT byDefsT [fold_fset; unfold_implies]"
 O	o10539	ext_rule p10539
 T	t10539	o1378 b10531 b4
 B	b10540	t10539

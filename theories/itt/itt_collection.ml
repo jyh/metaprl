@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Itt_collection]
  * The @tt{Itt_collection} module formalized the type of indexed collections.
- * See @cite[Nog02a] for more information.
+ * See @cite["Nog02a,Nog02b"] for more information.
  * @end[doc] 
  *
  * ----------------------------------------------------------------

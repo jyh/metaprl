@@ -106,6 +106,56 @@ let set_test set str =
       else
          print_fail ()
 
+let sub_block_test sub_block str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_block sub_block in
+   let t' = sub_block_of_term t in
+      print_simple_term t;
+      if t' = sub_block then
+         print_pass ()
+      else
+         print_fail ()
+
+let sub_value_test sub_value str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_value sub_value in
+   let t' = sub_value_of_term t in
+      print_simple_term t;
+      if t' = sub_value then
+         print_pass ()
+      else
+         print_fail ()
+
+let sub_index_test sub_index str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_index sub_index in
+   let t' = sub_index_of_term t in
+      print_simple_term t;
+      if t' = sub_index then
+         print_pass ()
+      else
+         print_fail ()
+
+let sub_script_test sub_script str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_sub_script sub_script in
+   let t' = sub_script_of_term t in
+      print_simple_term t;
+      if t' = sub_script then
+         print_pass ()
+      else
+         print_fail ()
+
+let subop_test subop str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_subop subop in
+   let t' = subop_of_term t in
+      print_simple_term t;
+      if t' = subop then
+         print_pass ()
+      else
+         print_fail ()
+
 (*
  * Define a function to run all the tests.
  *)
@@ -123,6 +173,24 @@ let run_tests () =
    (* Sets. *)
    set_test (IntSet set1) "[-3,3] (IntSet)";
    set_test (RawIntSet set2) "[-3,3] (RawIntSet)";
+
+   (* Subscript operators. *)
+   sub_block_test BlockSub "BlockSub";
+   sub_block_test RawDataSub "RawDataSub";
+   sub_block_test TupleSub "TupleSub";
+   sub_block_test RawTupleSub "RawTupleSub";
+   sub_value_test PolySub "PolySub";
+   sub_value_test (RawIntSub Int8 false) "RawIntSub Int8 false";
+   sub_value_test (RawFloatSub Single) "RawFloatSub Single";
+   sub_value_test PointerSub "PointerSub";
+   sub_value_test FunctionSub "FunctionSub";
+   sub_index_test ByteIndex "ByteIndex";
+   sub_index_test WordIndex "WordIndex";
+   sub_script_test IntIndex "IntIndex";
+   sub_script_test (RawIntIndex Int8 true) "RawIntIndex Int8 true";
+   let op = { sub_block = BlockSub;  sub_value = PolySub;
+              sub_index = ByteIndex; sub_script = IntIndex } in
+   subop_test op "{ BlockSub; PolySub; ByteIndex; IntIndex }";
 
    (* Done. *)
    !fail_count

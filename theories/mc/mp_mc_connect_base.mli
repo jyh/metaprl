@@ -162,3 +162,22 @@ val tuple_class_of_term : term -> tuple_class
 
 val term_of_union_type : union_type -> term
 val union_type_of_term : term -> union_type
+
+(*
+ * Convert to and from subscripting terms.
+ *)
+
+val term_of_sub_block : sub_block -> term
+val sub_block_of_term : term -> sub_block
+
+val term_of_sub_value : sub_value -> term
+val sub_value_of_term : term -> sub_value
+
+val term_of_sub_index : sub_index -> term
+val sub_index_of_term : term -> sub_index
+
+val term_of_sub_script : sub_script -> term
+val sub_script_of_term : term -> sub_script
+
+val term_of_subop : subop -> term
+val subop_of_term : term -> subop

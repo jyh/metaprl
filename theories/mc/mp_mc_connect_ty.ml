@@ -76,8 +76,8 @@ let rec term_of_ty t =
          mk_tyArray_term (term_of_ty t)
     | TyRawData ->
          tyRawData_term
-    | TyPointer (v, t) ->
-         mk_tyPointer_term (term_of_var v) (term_of_ty t)
+    | TyPointer sub_block ->
+         mk_tyPointer_term (term_of_sub_block sub_block)
     | TyFrame lbl ->
          mk_tyFrame_term   (term_of_label lbl)
 
@@ -102,8 +102,6 @@ let rec term_of_ty t =
          mk_tyCase_term    (term_of_ty t)
     | TyObject (tv, t) ->
          mk_tyObject_term  (term_of_ty_var tv) (term_of_ty t)
-    | TyOption t ->
-         mk_tyOption_term  (term_of_ty t)
 
       (* Type should be inferred. *)
     | TyDelayed -> tyDelayed_term
@@ -143,8 +141,7 @@ let rec ty_of_term t =
    else if is_tyRawData_term t then
       TyRawData
    else if is_tyPointer_term t then
-      let v, t = dest_tyPointer_term t in
-         TyPointer (var_of_term v) (ty_of_term t)
+      TyPointer (sub_block_of_term (dest_tyPointer_term t))
    else if is_tyFrame_term t then
       TyFrame (label_of_term (dest_tyFrame_term t))
 
@@ -170,8 +167,6 @@ let rec ty_of_term t =
    else if is_tyObject_term t then
       let tv, t = dest_tyObject_term t in
          TyObject (ty_var_of_term tv) (ty_of_term t)
-   else if is_tyOption_term t then
-      TyOption (ty_of_term (dest_tyOption_term t))
 
    (* Type should be inferred. *)
    else if is_tyDelayed_term t then

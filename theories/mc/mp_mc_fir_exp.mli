@@ -96,9 +96,9 @@ declare rawIntOfRawIntOp{ 'dest_int_precision; 'dest_int_signed;
 declare rawIntOfPointerOp{ 'int_precision; 'int_signed }
 declare pointerOfRawIntOp{ 'int_precision; 'int_signed }
 
-(* Pointer operations. *)
+(* Pointer from a block pointer. *)
 
-declare rawIntOfLabelOp{ 'int_precision; 'int_signed }
+declare pointerOfBlockOp{ 'sub_block }
 
 (*
  * Binary operations.
@@ -186,40 +186,7 @@ declare neqEqOp
 
 (* Pointer arithmetic. *)
 
-declare plusPointerOp{ 'int_precision; 'int_signed }
-
-(*
- * Subscript operators.
- *)
-
-(* Blocks. *)
-
-declare blockSub
-declare rawDataSub
-declare tupleSub
-declare rawTupleSub
-
-(* Values. *)
-
-declare polySub
-declare rawIntSub{ 'int_precision; 'int_signed }
-declare rawFloatSub{ 'float_precision }
-declare pointerSub
-declare functionSub
-
-(* Indexing. *)
-
-declare byteIndex
-declare wordIndex
-
-(* Subscripting. *)
-
-declare intIndex
-declare rawIntIndex{ 'int_precision; 'int_signed }
-
-(* Subscripting op. *)
-
-declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
+declare plusPointerOp{ 'sub_block; 'int_precision; 'int_signed }
 
 (*
  * Fields (frame labels).
@@ -236,7 +203,8 @@ declare atomInt{ 'int }
 declare atomEnum{ 'int1; 'int2 } (* 'int1 = bound, 'int2 = value *)
 declare atomRawInt{ 'int_precision; 'int_signed; 'num }
 declare atomFloat{ 'float_precision; 'num }
-declare atomLabel{ 'frame_label }
+declare atomLabel{ 'frame_label; 'atom_rawint }
+declare atomSizeof{ 'var_list; 'atom_rawint }
 declare atomConst{ 'ty; 'ty_var; 'int }
 declare atomVar{ 'var }
 
@@ -264,28 +232,10 @@ declare tailAtomicCommit{ 'var; 'atom_list }
  * Predicates and assertions.
  *)
 
-(* No-ops. *)
-
-declare isMutable
-
-(* Unary operations. *)
-
-declare reserve
-declare boundsCheckLower
-declare boundsCheckUpper
-declare polyCheck
-declare pointerCheck
-declare functionCheck
-
-(* Binary operations. *)
-
-declare boundsCheck
-
-(* Predicates. *)
-
-declare predNop{ 'var; 'pred_nop }
-declare predUnop{ 'var; 'pred_unop; 'atom }
-declare predBinop{ 'var; 'pred_binop; 'atom1; 'atom2 }
+declare isMutable{ 'var }
+declare reserve{ 'atom1; 'atom2 }
+declare boundsCheck{ 'subop; 'var; 'atom1; 'atom2 }
+declare elementCheck{ 'ty; 'subop; 'var; 'atom }
 
 (*
  * Debugging info.
@@ -469,10 +419,10 @@ val is_pointerOfRawIntOp_term : term -> bool
 val mk_pointerOfRawIntOp_term : term -> term -> term
 val dest_pointerOfRawIntOp_term : term -> term * term
 
-val rawIntOfLabelOp_term : term
-val is_rawIntOfLabelOp_term : term -> bool
-val mk_rawIntOfLabelOp_term : term -> term -> term
-val dest_rawIntOfLabelOp_term : term -> term * term
+val pointerOfBlockOp_term : term
+val is_pointerOfBlockOp_term : term -> bool
+val mk_pointerOfBlockOp_term : term -> term
+val dest_pointerOfBlockOp_term : term -> term
 
 (*
  * Binary operations.
@@ -753,72 +703,8 @@ val is_neqEqOp_term : term -> bool
 
 val plusPointerOp_term : term
 val is_plusPointerOp_term : term -> bool
-val mk_plusPointerOp_term : term -> term -> term
-val dest_plusPointerOp_term : term -> term * term
-
-(*
- * Subscript operators.
- *)
-
-(* Blocks. *)
-
-val blockSub_term : term
-val is_blockSub_term : term -> bool
-
-val rawDataSub_term : term
-val is_rawDataSub_term : term -> bool
-
-val tupleSub_term : term
-val is_tupleSub_term : term -> bool
-
-val rawTupleSub_term : term
-val is_rawTupleSub_term : term -> bool
-
-(* Values. *)
-
-val polySub_term : term
-val is_polySub_term : term -> bool
-
-val rawIntSub_term : term
-val is_rawIntSub_term : term -> bool
-val mk_rawIntSub_term : term -> term -> term
-val dest_rawIntSub_term : term -> term * term
-
-val rawFloatSub_term : term
-val is_rawFloatSub_term : term -> bool
-val mk_rawFloatSub_term : term -> term
-val dest_rawFloatSub_term : term -> term
-
-val pointerSub_term : term
-val is_pointerSub_term : term -> bool
-
-val functionSub_term : term
-val is_functionSub_term : term -> bool
-
-(* Indexing. *)
-
-val byteIndex_term : term
-val is_byteIndex_term : term -> bool
-
-val wordIndex_term : term
-val is_wordIndex_term : term -> bool
-
-(* Subscripting. *)
-
-val intIndex_term : term
-val is_intIndex_term : term -> bool
-
-val rawIntIndex_term : term
-val is_rawIntIndex_term : term -> bool
-val mk_rawIntIndex_term : term -> term -> term
-val dest_rawIntIndex_term : term -> term * term
-
-(* Susbscripting op. *)
-
-val subop_term : term
-val is_subop_term : term -> bool
-val mk_subop_term : term -> term -> term -> term -> term
-val dest_subop_term : term -> term * term * term * term
+val mk_plusPointerOp_term : term -> term -> term -> term
+val dest_plusPointerOp_term : term -> term * term * term
 
 (*
  * Fields (frame labels).
@@ -860,8 +746,13 @@ val dest_atomFloat_term : term -> term * term
 
 val atomLabel_term : term
 val is_atomLabel_term : term -> bool
-val mk_atomLabel_term : term -> term
-val dest_atomLabel_term : term -> term
+val mk_atomLabel_term : term -> term -> term
+val dest_atomLabel_term : term -> term * term
+
+val atomSizeof_term : term
+val is_atomSizeof_term : term -> bool
+val mk_atomSizeof_term : term -> term -> term
+val dest_atomSizeof_term : term -> term * term
 
 val atomConst_term : term
 val is_atomConst_term : term -> bool
@@ -935,52 +826,25 @@ val dest_tailAtomicCommit_term : term -> term * term
  * Predicates and assertions.
  *)
 
-(* No-ops. *)
-
 val isMutable_term : term
 val is_isMutable_term : term -> bool
-
-(* Unary operations. *)
+val mk_isMutable_term : term -> term
+val dest_isMutable_term : term -> term
 
 val reserve_term : term
 val is_reserve_term : term -> bool
-
-val boundsCheckLower_term : term
-val is_boundsCheckLower_term : term -> bool
-
-val boundsCheckUpper_term : term
-val is_boundsCheckUpper_term : term -> bool
-
-val polyCheck_term : term
-val is_polyCheck_term : term -> bool
-
-val pointerCheck_term : term
-val is_pointerCheck_term : term -> bool
-
-val functionCheck_term : term
-val is_functionCheck_term : term -> bool
-
-(* Binary operations. *)
+val mk_reserve_term : term -> term -> term
+val dest_reserve_term : term -> term * term
 
 val boundsCheck_term : term
 val is_boundsCheck_term : term -> bool
+val mk_boundsCheck_term : term -> term -> term -> term -> term
+val dest_boundsCheck_term : term -> term * term * term * term
 
-(* Predicates. *)
-
-val predNop_term : term
-val is_predNop_term : term -> bool
-val mk_predNop_term : term -> term -> term
-val dest_predNop_term : term -> term * term
-
-val predUnop_term : term
-val is_predUnop_term : term -> bool
-val mk_predUnop_term : term -> term -> term -> term
-val dest_predUnop_term : term -> term * term * term
-
-val predBinop_term : term
-val is_predBinop_term : term -> bool
-val mk_predBinop_term : term -> term -> term -> term -> term
-val dest_predBinop_term : term -> term * term * term * term
+val elementCheck_term : term
+val is_elementCheck_term : term -> bool
+val mk_elementCheck_term : term -> term -> term -> term -> term
+val dest_elementCheck_term : term -> term * term * term * term
 
 (*
  * Debugging info.

@@ -121,10 +121,9 @@ let term_of_unop op =
          mk_pointerOfRawIntOp_term  (term_of_int_precision p)
                                     (term_of_int_signed s)
 
-      (* Pointer operations. *)
-    | RawIntOfLabelOp (p, s) ->
-         mk_rawIntOfLabelOp_term    (term_of_int_precision p)
-                                    (term_of_int_signed s)
+      (* Pointer from a block pointer. *)
+    | PointerOfBlockOp sub_block ->
+         mk_pointerOfBlockOp_term   (term_of_sub_block sub_block)
 
 let unop_of_term t =
 
@@ -216,10 +215,8 @@ let unop_of_term t =
                            (int_signed_of_term s)
 
    (* Pointer operations. *)
-   else if is_rawIntOfLabelOp_term t then
-      let p, s = dest_rawIntOfLabelOp_term t in
-         RawIntOfLabelOp   (int_precision_of_term p)
-                           (int_signed_of_term s)
+   else if is_pointerOfBlockOp_term t then
+      PointerOfBlockOp  (sub_block_of_term (dest_pointerOfBlockOp_term t))
 
    else
       raise (RefineError ("unop_of_term", StringTermError
@@ -331,8 +328,9 @@ let term_of_binop op =
     | NeqEqOp ->  neqEqOp_term
 
       (* Pointer arithmetic. *)
-    | PlusPointerOp (p, s) ->
-         mk_plusPointerOp_term   (term_of_int_precision p)
+    | PlusPointerOp (sub_block, p, s) ->
+         mk_plusPointerOp_term   (term_of_sub_block sub_block)
+                                 (term_of_int_precision p)
                                  (term_of_int_signed s)
 
 let binop_of_term t =
@@ -477,117 +475,14 @@ let binop_of_term t =
 
    (* Pointer arithmetic. *)
    else if is_plusPointerOp_term t then
-      let p, s = dest_plusPointerOp_term t in
-         PlusPointerOp  (int_precision_of_term p)
+      let sub_block, p, s = dest_plusPointerOp_term t in
+         PlusPointerOp  (sub_block_of_term sub_block)
+                        (int_precision_of_term p)
                         (int_signed_of_term s)
 
    else
       raise (RefineError ("binop_of_term", StringTermError
             ("not a binop", t)))
-
-(*
- * Convert to and from subscripting terms.
- *)
-
-let term_of_sub_block b =
-   match b with
-      BlockSub ->    blockSub_term
-    | RawDataSub ->  rawDataSub_term
-    | TupleSub ->    tupleSub_term
-    | RawTupleSub -> rawTupleSub_term
-
-let sub_block_of_term t =
-   if is_blockSub_term t then
-      BlockSub
-   else if is_rawDataSub_term t then
-      RawDataSub
-   else if is_tupleSub_term t then
-      TupleSub
-   else if is_rawTupleSub_term t then
-      RawTupleSub
-
-   else
-      raise (RefineError ("sub_block_of_term", StringTermError
-            ("not a sub_block", t)))
-
-let term_of_sub_value v =
-   match v with
-      PolySub ->           polySub_term
-    | RawIntSub (p, s) ->  mk_rawIntSub_term (term_of_int_precision p)
-                                             (term_of_int_signed s)
-    | RawFloatSub p ->     mk_rawFloatSub_term (term_of_float_precision p)
-    | PointerSub ->        pointerSub_term
-    | FunctionSub ->       functionSub_term
-
-let sub_value_of_term t =
-   if is_polySub_term t then
-      PolySub
-   else if is_rawIntSub_term t then
-      let p, s = dest_rawIntSub_term t in
-         RawIntSub   (int_precision_of_term p)
-                     (int_signed_of_term s)
-   else if is_rawFloatSub_term t then
-      RawFloatSub (float_precision_of_term (dest_rawFloatSub_term t))
-   else if is_pointerSub_term t then
-      PointerSub
-   else if is_functionSub_term t then
-      FunctionSub
-
-   else
-      raise (RefineError ("sub_value_of_term", StringTermError
-            ("not a sub_value", t)))
-
-let term_of_sub_index i =
-   match i with
-      ByteIndex -> byteIndex_term
-    | WordIndex -> wordIndex_term
-
-let sub_index_of_term t =
-   if is_byteIndex_term t then
-      ByteIndex
-   else if is_wordIndex_term t then
-      WordIndex
-
-   else
-      raise (RefineError ("sub_index_of_term", StringTermError
-            ("not a sub_index", t)))
-
-let term_of_sub_script t =
-   match t with
-      IntIndex ->             intIndex_term
-    | RawIntIndex (p, s) ->   mk_rawIntIndex_term (term_of_int_precision p)
-                                                  (term_of_int_signed s)
-
-let sub_script_of_term t =
-   if is_intIndex_term t then
-      IntIndex
-   else if is_rawIntIndex_term t then
-      let p, s = dest_rawIntIndex_term t in
-         RawIntIndex (int_precision_of_term p)
-                     (int_signed_of_term s)
-
-   else
-      raise (RefineError ("sub_script_of_term", StringTermError
-            ("not a sub_script", t)))
-
-let term_of_subop op =
-   mk_subop_term        (term_of_sub_block op.sub_block)
-                        (term_of_sub_value op.sub_value)
-                        (term_of_sub_index op.sub_index)
-                        (term_of_sub_script op.sub_script)
-
-let subop_of_term t =
-   if is_subop_term t then
-      let block, value, index, script = dest_subop_term t in
-         {  sub_block = sub_block_of_term block;
-            sub_value = sub_value_of_term value;
-            sub_index = sub_index_of_term index;
-            sub_script = sub_script_of_term script
-         }
-
-   else
-      raise (RefineError ("subop_of_term", StringTermError
-            ("not a subop", t)))
 
 (*
  * Convert to and from frame_label.
@@ -613,7 +508,7 @@ let frame_label_of_term t =
  * Convert to and from atom.
  *)
 
-let term_of_atom a =
+let rec term_of_atom a =
    match a with
       AtomNil t ->
          mk_atomNil_term      (term_of_ty t)
@@ -628,8 +523,12 @@ let term_of_atom a =
     | AtomFloat f ->
          mk_atomFloat_term    (term_of_float_precision (Rawfloat.precision f))
                               (number_term_of_rawfloat f)
-    | AtomLabel flbl ->
+    | AtomLabel (flbl, rawint) ->
          mk_atomLabel_term    (term_of_frame_label flbl)
+                              (term_of_atom (AtomRawInt rawint))
+    | AtomSizeof (vl, rawint) ->
+         mk_atomSizeof_term   (term_of_list term_of_var vl)
+                              (term_of_atom (AtomRawInt rawint))
     | AtomConst (t, tv, i) ->
          mk_atomConst_term    (term_of_ty t)
                               (term_of_ty_var tv)
@@ -637,7 +536,7 @@ let term_of_atom a =
     | AtomVar v ->
          mk_atomVar_term      (term_of_var v)
 
-let atom_of_term t =
+let rec atom_of_term t =
    if is_atomNil_term t then
       AtomNil (ty_of_term (dest_atomNil_term t))
    else if is_atomInt_term t then
@@ -654,7 +553,25 @@ let atom_of_term t =
       let p, f = dest_atomFloat_term t in
          AtomFloat (rawfloat_of_number_term (float_precision_of_term p) f)
    else if is_atomLabel_term t then
-      AtomLabel (frame_label_of_term (dest_atomLabel_term t))
+      let flbl, num = dest_atomLabel_term t in
+      let atom_rawint = atom_of_term num in
+         match atom_rawint with
+            AtomRawInt r ->
+               AtomLabel   (frame_label_of_term flbl)
+                           r
+             | _ ->
+                  raise (RefineError ("atom_of_term", StringTermError
+                        ("internal error", t)))
+   else if is_atomSizeof_term t then
+      let var_list, num = dest_atomSizeof_term t in
+      let atom_rawint = atom_of_term num in
+         match atom_rawint with
+            AtomRawInt r ->
+               AtomSizeof  (list_of_term var_of_term var_list)
+                           r
+          | _ ->
+                  raise (RefineError ("atom_of_term", StringTermError
+                        ("internal error", t)))
    else if is_atomConst_term t then
       let t, tv, i = dest_atomConst_term t in
          AtomConst (ty_of_term t) (ty_var_of_term tv) (int_of_number_term i)
@@ -777,88 +694,43 @@ let tailop_of_term t =
  * Convert to and from predicate / assertion terms.
  *)
 
-let term_of_pred_nop op =
-   match op with
-      IsMutable -> isMutable_term
-
-let pred_nop_of_term t =
-   if is_isMutable_term t then
-      IsMutable
-
-   else
-      raise (RefineError ("pred_nop_of_term", StringTermError
-            ("not a pred_nop", t)))
-
-let term_of_pred_unop op =
-   match op with
-      Reserve ->           reserve_term
-    | BoundsCheckLower ->  boundsCheckLower_term
-    | BoundsCheckUpper ->  boundsCheckUpper_term
-    | PolyCheck ->         polyCheck_term
-    | PointerCheck ->      pointerCheck_term
-    | FunctionCheck ->     functionCheck_term
-
-let pred_unop_of_term t =
-   if is_reserve_term t then
-      Reserve
-   else if is_boundsCheckLower_term t then
-      BoundsCheckLower
-   else if is_boundsCheckUpper_term t then
-      BoundsCheckUpper
-   else if is_polyCheck_term t then
-      PolyCheck
-   else if is_pointerCheck_term t then
-      PointerCheck
-   else if is_functionCheck_term t then
-      FunctionCheck
-
-   else
-      raise (RefineError ("pred_unop_of_term", StringTermError
-            ("not a pred_unop", t)))
-
-let term_of_pred_binop op =
-   match op with
-      BoundsCheck -> boundsCheck_term
-
-let pred_binop_of_term t =
-   if is_boundsCheck_term t then
-      BoundsCheck
-
-   else
-      raise (RefineError ("pred_binop_of_term", StringTermError
-            ("not a pred_binop", t)))
-
 let term_of_pred p =
    match p with
-      PredNop (v, op) ->
-         mk_predNop_term         (term_of_var v)
-                                 (term_of_pred_nop op)
-    | PredUnop (v, op, a) ->
-         mk_predUnop_term        (term_of_var v)
-                                 (term_of_pred_unop op)
-                                 (term_of_atom a)
-    | PredBinop (v, op, a1, a2) ->
-         mk_predBinop_term       (term_of_var v)
-                                 (term_of_pred_binop op)
-                                 (term_of_atom a1)
-                                 (term_of_atom a2)
+      IsMutable var ->
+         mk_isMutable_term    (term_of_var var)
+    | Reserve (a1, a2) ->
+         mk_reserve_term      (term_of_atom a1)
+                              (term_of_atom a2)
+    | BoundsCheck (subop, var, a1, a2) ->
+         mk_boundsCheck_term  (term_of_subop subop)
+                              (term_of_var var)
+                              (term_of_atom a1)
+                              (term_of_atom a2)
+    | ElementCheck (ty, subop, var, atom) ->
+         mk_elementCheck_term (term_of_ty ty)
+                              (term_of_subop subop)
+                              (term_of_var var)
+                              (term_of_atom atom)
 
 let pred_of_term t =
-   if is_predNop_term t then
-      let v, op = dest_predNop_term t in
-         PredNop           (var_of_term v)
-                           (pred_nop_of_term op)
-   else if is_predUnop_term t then
-      let v, op, a = dest_predUnop_term t in
-         PredUnop          (var_of_term v)
-                           (pred_unop_of_term op)
-                           (atom_of_term a)
-   else if is_predBinop_term t then
-      let v, op, a1, a2 = dest_predBinop_term t in
-         PredBinop         (var_of_term v)
-                           (pred_binop_of_term op)
+   if is_isMutable_term t then
+      IsMutable (var_of_term (dest_isMutable_term t))
+   else if is_reserve_term t then
+      let a1, a2 = dest_reserve_term t in
+         Reserve           (atom_of_term a1)
+                           (atom_of_term a2)
+   else if is_boundsCheck_term t then
+      let subop, var, a1, a2 = dest_boundsCheck_term t in
+         BoundsCheck       (subop_of_term subop)
+                           (var_of_term var)
                            (atom_of_term a1)
                            (atom_of_term a2)
+   else if is_elementCheck_term t then
+      let ty, subop, var, atom = dest_elementCheck_term t in
+         ElementCheck      (ty_of_term ty)
+                           (subop_of_term subop)
+                           (var_of_term var)
+                           (atom_of_term atom)
 
    else
       raise (RefineError ("pred_of_term", StringTermError

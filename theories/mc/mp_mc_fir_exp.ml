@@ -98,9 +98,9 @@ declare rawIntOfRawIntOp{ 'dest_int_precision; 'dest_int_signed;
 declare rawIntOfPointerOp{ 'int_precision; 'int_signed }
 declare pointerOfRawIntOp{ 'int_precision; 'int_signed }
 
-(* Pointer operations. *)
+(* Pointer from a block pointer. *)
 
-declare rawIntOfLabelOp{ 'int_precision; 'int_signed }
+declare pointerOfBlockOp{ 'sub_block }
 
 (*
  * Binary operations.
@@ -188,40 +188,7 @@ declare neqEqOp
 
 (* Pointer arithmetic. *)
 
-declare plusPointerOp{ 'int_precision; 'int_signed }
-
-(*
- * Subscript operators.
- *)
-
-(* Blocks. *)
-
-declare blockSub
-declare rawDataSub
-declare tupleSub
-declare rawTupleSub
-
-(* Values. *)
-
-declare polySub
-declare rawIntSub{ 'int_precision; 'int_signed }
-declare rawFloatSub{ 'float_precision }
-declare pointerSub
-declare functionSub
-
-(* Indexing. *)
-
-declare byteIndex
-declare wordIndex
-
-(* Subscripting. *)
-
-declare intIndex
-declare rawIntIndex{ 'int_precision; 'int_signed }
-
-(* Subscripting op. *)
-
-declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
+declare plusPointerOp{ 'sub_block; 'int_precision; 'int_signed }
 
 (*
  * Fields (frame labels).
@@ -238,7 +205,8 @@ declare atomInt{ 'int }
 declare atomEnum{ 'int1; 'int2 } (* 'int1 = bound, 'int2 = value *)
 declare atomRawInt{ 'int_precision; 'int_signed; 'num }
 declare atomFloat{ 'float_precision; 'num }
-declare atomLabel{ 'frame_label }
+declare atomLabel{ 'frame_label; 'atom_rawint }
+declare atomSizeof{ 'var_list; 'atom_rawint }
 declare atomConst{ 'ty; 'ty_var; 'int }
 declare atomVar{ 'var }
 
@@ -266,28 +234,10 @@ declare tailAtomicCommit{ 'var; 'atom_list }
  * Predicates and assertions.
  *)
 
-(* No-ops. *)
-
-declare isMutable
-
-(* Unary operations. *)
-
-declare reserve
-declare boundsCheckLower
-declare boundsCheckUpper
-declare polyCheck
-declare pointerCheck
-declare functionCheck
-
-(* Binary operations. *)
-
-declare boundsCheck
-
-(* Predicates. *)
-
-declare predNop{ 'var; 'pred_nop }
-declare predUnop{ 'var; 'pred_unop; 'atom }
-declare predBinop{ 'var; 'pred_binop; 'atom1; 'atom2 }
+declare isMutable{ 'var }
+declare reserve{ 'atom1; 'atom2 }
+declare boundsCheck{ 'subop; 'var; 'atom1; 'atom2 }
+declare elementCheck{ 'ty; 'subop; 'var; 'atom }
 
 (*
  * Debugging info.
@@ -450,11 +400,11 @@ dform pointerOfRawIntOp_df : except_mode[src] ::
    pointerOfRawIntOp{ 'int_precision; 'int_signed } =
    `"PointerOfRawIntOp(" slot{'int_precision} `"," slot{'int_signed} `")"
 
-(* Pointer operations. *)
+(* Pointer from a block pointer. *)
 
-dform rawIntOfLabelOp_df : except_mode[src] ::
-   rawIntOfLabelOp{ 'int_precision; 'int_signed } =
-   `"RawIntOfLabelOp(" slot{'int_precision} `"," slot{'int_signed} `")"
+dform pointerOfBlockOp_df : except_mode[src] ::
+   pointerOfBlockOp{ 'sub_block } =
+   `"PointerOfBlockOp(" slot{'sub_block} `")"
 
 (*
  * Binary operations.
@@ -665,70 +615,9 @@ dform neqEqOp_df : except_mode[src] ::
 (* Pointer arithmetic. *)
 
 dform plusPointerOp_df : except_mode[src] ::
-   plusPointerOp{ 'int_precision; 'int_signed } =
-   `"PlusPointerOp(" slot{'int_precision} `"," slot{'int_signed} `")"
-
-(*
- * Subscript operators.
- *)
-
-(* Blocks. *)
-
-dform blockSub_df : except_mode[src] ::
-   blockSub =
-   `"BlockSub"
-dform rawDataSub_df : except_mode[src] ::
-   rawDataSub =
-   `"RawDataSub"
-dform tupleSub_df : except_mode[src] ::
-   tupleSub =
-   `"TupleSub"
-dform rawTupleSub_df : except_mode[src] ::
-   rawTupleSub =
-   `"RawTupleSub"
-
-(* Values. *)
-
-dform polySub_df : except_mode[src] ::
-   polySub =
-   `"PolySub"
-dform rawIntSub_df : except_mode[src] ::
-   rawIntSub{ 'int_precision; 'int_signed } =
-   `"RawIntSub(" slot{'int_precision} `"," slot{'int_signed}
-dform rawFloatSub_df : except_mode[src] ::
-   rawFloatSub{ 'float_precision } =
-   `"RawFloatSub(" slot{'float_precision} `")"
-dform pointerSub_df : except_mode[src] ::
-   pointerSub =
-   `"PointerSub"
-dform functionSub_df : except_mode[src] ::
-   functionSub =
-   `"FunctionSub"
-
-(* Indexing. *)
-
-dform byteIndex_df : except_mode[src] ::
-   byteIndex =
-   `"ByteIndex"
-dform wordIndex_df : except_mode[src] ::
-   wordIndex =
-   `"WordIndex"
-
-(* Subscripting. *)
-
-dform intIndex_df : except_mode[src] ::
-   intIndex =
-   `"IntIndex"
-dform rawIntIndex_df : except_mode[src] ::
-   rawIntIndex{ 'int_precision; 'int_signed } =
-   `"RawIntIndex(" slot{'int_precision} `"," slot{'int_signed} `")"
-
-(* Subscripting op. *)
-
-dform subop_df : except_mode[src] ::
-   subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script } =
-   `"Subop(" slot{'sub_block} `"," slot{'sub_value} `","
-   slot{'sub_index} `"," slot{'sub_script} `")"
+   plusPointerOp{ 'sub_block; 'int_precision; 'int_signed } =
+   `"PlusPointerOp(" slot{'sub_block} `","
+   slot{'int_precision} `"," slot{'int_signed} `")"
 
 (*
  * Fields (frame labels).
@@ -760,8 +649,11 @@ dform atomFloat_df : except_mode[src] ::
    atomFloat{ 'float_precision; 'num } =
    `"AtomFloat(" slot{'float_precision} `", " slot{'num} `")"
 dform atomLabel_df : except_mode[src] ::
-   atomLabel{ 'frame_label } =
-   `"AtomLabel(" slot{'frame_label} `")"
+   atomLabel{ 'frame_label; 'atom_rawint } =
+   `"AtomLabel(" slot{'frame_label} `"," slot{'atom_rawint} `")"
+dform atomSizeof_df : except_mode[src] ::
+   atomSizeof{ 'var_list; 'atom_rawint } =
+   `"AtomSizeof(" slot{'var_list} `"," slot{'atom_rawint} `")"
 dform atomConst_df : except_mode[src] ::
    atomConst{ 'ty; 'ty_var; 'int } =
    `"AtomConst(" slot{'ty} `", " slot{'ty_var} `", " slot{'int} `")"
@@ -815,73 +707,40 @@ dform tailAtomicCommit_df : except_mode[src] ::
  * Predicates and assertions.
  *)
 
-(* No-ops. *)
-
 dform isMutable_df : except_mode[src] ::
-   isMutable =
-   `"IsMutable"
-
-(* Unary operations. *)
-
+   isMutable{ 'var } =
+   `"IsMutable(" slot{'var} `")"
 dform reserve_df : except_mode[src] ::
-   reserve =
-   `"Reserve"
-dform boundsCheckLower_df : except_mode[src] ::
-   boundsCheckLower =
-   `"BoundsCheckLower"
-dform boundsCheckUpper_df : except_mode[src] ::
-   boundsCheckUpper =
-   `"BoundsCheckUpper"
-dform polyCheck_df : except_mode[src] ::
-   polyCheck =
-   `"PolyCheck"
-dform pointerCheck_df : except_mode[src] ::
-   pointerCheck =
-   `"PointerCheck"
-dform functionCheck_df : except_mode[src] ::
-   functionCheck =
-   `"FunctionCheck"
-
-(* Binary operations. *)
-
+   reserve{ 'atom1; 'atom2 } =
+   `"Reserve(" slot{'atom1} `"," slot{'atom2} `")"
 dform boundsCheck_df : except_mode[src] ::
-   boundsCheck =
-   `"BoundsCheck"
-
-(* Predicates. *)
-
-dform predNop_df : except_mode[src] ::
-   predNop{ 'var; 'pred_nop } =
-   `"PredNop(" slot{'var} `"," slot{'pred_nop} `")"
-dform predUnop_df : except_mode[src] ::
-   predUnop{ 'var; 'pred_unop; 'atom } =
-   `"PredUnop(" slot{'var} `"," slot{'pred_unop} `"," slot{'atom} `")"
-dform predBinop_df : except_mode[src] ::
-   predBinop{ 'var; 'pred_binop; 'atom1; 'atom2 } =
-   `"PredBinop(" slot{'var} `"," slot{'pred_binop} `","
+   boundsCheck{ 'subop; 'var; 'atom1; 'atom2 } =
+   `"BoundsCheck(" slot{'subop} `"," slot{'var} `","
    slot{'atom1} `"," slot{'atom2} `")"
+dform elementCheck_df : except_mode[src] ::
+   elementCheck{ 'ty; 'subop; 'var; 'atom } =
+   `"ElementCheck(" slot{'ty} `"," slot{'subop} `","
+   slot{'var} `"," slot{'atom} `")"
 
 (*
  * Debugging info.
  *)
 
-dform debugLine_df : except_mode[src] :: debugLine{ 'string; 'int } =
-   lzone `"DebugLine(" slot{'string} `"," slot{'int} `")" ezone
-dform debugVarItem_df : except_mode[src] :: debugVarItem{ 'var1; 'ty; 'var2 } =
-   lzone `"(" slot{'var1} `"," slot{'ty} `"," slot{'var2} `")" ezone
-dform debugVars_df : except_mode[src] :: debugVars{ 'debugVarItem_list } =
-   pushm[0] szone push_indent `"DebugVars(" hspace
-   szone slot{'debugVarItem_list} `")" ezone popm
-   ezone popm
-dform debugString_df : except_mode[src] :: debugString{ 'string } =
-   lzone `"DebugString(" slot{'string} `")" ezone
+dform debugLine_df : except_mode[src] ::
+   debugLine{ 'string; 'int } =
+   `"DebugLine(" slot{'string} `"," slot{'int} `")"
+dform debugVarItem_df : except_mode[src] ::
+   debugVarItem{ 'var1; 'ty; 'var2 } =
+   `"(" slot{'var1} `"," slot{'ty} `"," slot{'var2} `")"
+dform debugVars_df : except_mode[src] ::
+   debugVars{ 'debugVarItem_list } =
+   `"DebugVars(" slot{'debugVarItem_list} `")"
+dform debugString_df : except_mode[src] ::
+   debugString{ 'string } =
+   `"DebugString(" slot{'string} `")"
 dform debugContext : except_mode[src] ::
    debugContext{ 'debug_line; 'debug_vars } =
-   pushm[0] szone push_indent `"DebugContext(" hspace
-   szone slot{'debug_line} `"," ezone popm
-   push_indent hspace
-   szone slot{'debug_vars} `")" ezone popm
-   ezone popm
+   `"DebugContext(" slot{'debug_line} `"," slot{'debug_vars} `")"
 
 (*
  * Expressions.
@@ -1128,11 +987,13 @@ let is_pointerOfRawIntOp_term = is_dep0_dep0_term pointerOfRawIntOp_opname
 let mk_pointerOfRawIntOp_term = mk_dep0_dep0_term pointerOfRawIntOp_opname
 let dest_pointerOfRawIntOp_term = dest_dep0_dep0_term pointerOfRawIntOp_opname
 
-let rawIntOfLabelOp_term = << rawIntOfLabelOp{ 'int_precision; 'int_signed } >>
-let rawIntOfLabelOp_opname = opname_of_term rawIntOfLabelOp_term
-let is_rawIntOfLabelOp_term = is_dep0_dep0_term rawIntOfLabelOp_opname
-let mk_rawIntOfLabelOp_term = mk_dep0_dep0_term rawIntOfLabelOp_opname
-let dest_rawIntOfLabelOp_term = dest_dep0_dep0_term rawIntOfLabelOp_opname
+(* Pointer from a block pointer. *)
+
+let pointerOfBlockOp_term = << pointerOfBlockOp{ 'sub_block } >>
+let pointerOfBlockOp_opname = opname_of_term pointerOfBlockOp_term
+let is_pointerOfBlockOp_term = is_dep0_term pointerOfBlockOp_opname
+let mk_pointerOfBlockOp_term = mk_dep0_term pointerOfBlockOp_opname
+let dest_pointerOfBlockOp_term = dest_dep0_term pointerOfBlockOp_opname
 
 (*
  * Binary operations.
@@ -1467,89 +1328,12 @@ let is_neqEqOp_term = is_no_subterms_term neqEqOp_opname
 
 (* Pointer arithmetic. *)
 
-let plusPointerOp_term = << plusPointerOp{ 'int_precision; 'int_signed } >>
+let plusPointerOp_term =
+   << plusPointerOp{ 'sub_block; 'int_precision; 'int_signed } >>
 let plusPointerOp_opname = opname_of_term plusPointerOp_term
-let is_plusPointerOp_term = is_dep0_dep0_term plusPointerOp_opname
-let mk_plusPointerOp_term = mk_dep0_dep0_term plusPointerOp_opname
-let dest_plusPointerOp_term = dest_dep0_dep0_term plusPointerOp_opname
-
-(*
- * Subscript operators.
- *)
-
-(* Blocks. *)
-
-let blockSub_term = << blockSub >>
-let blockSub_opname = opname_of_term blockSub_term
-let is_blockSub_term = is_no_subterms_term blockSub_opname
-
-let rawDataSub_term = << rawDataSub >>
-let rawDataSub_opname = opname_of_term rawDataSub_term
-let is_rawDataSub_term = is_no_subterms_term rawDataSub_opname
-
-let tupleSub_term = << tupleSub >>
-let tupleSub_opname = opname_of_term tupleSub_term
-let is_tupleSub_term = is_no_subterms_term tupleSub_opname
-
-let rawTupleSub_term = << rawTupleSub >>
-let rawTupleSub_opname = opname_of_term rawTupleSub_term
-let is_rawTupleSub_term = is_no_subterms_term rawTupleSub_opname
-
-(* Values. *)
-
-let polySub_term = << polySub >>
-let polySub_opname = opname_of_term polySub_term
-let is_polySub_term = is_no_subterms_term polySub_opname
-
-let rawIntSub_term = << rawIntSub{ 'int_precision; 'int_signed } >>
-let rawIntSub_opname = opname_of_term rawIntSub_term
-let is_rawIntSub_term = is_dep0_dep0_term rawIntSub_opname
-let mk_rawIntSub_term = mk_dep0_dep0_term rawIntSub_opname
-let dest_rawIntSub_term = dest_dep0_dep0_term rawIntSub_opname
-
-let rawFloatSub_term = << rawFloatSub{ 'float_precision } >>
-let rawFloatSub_opname = opname_of_term rawFloatSub_term
-let is_rawFloatSub_term = is_dep0_term rawFloatSub_opname
-let mk_rawFloatSub_term = mk_dep0_term rawFloatSub_opname
-let dest_rawFloatSub_term = dest_dep0_term rawFloatSub_opname
-
-let pointerSub_term = << pointerSub >>
-let pointerSub_opname = opname_of_term pointerSub_term
-let is_pointerSub_term = is_no_subterms_term pointerSub_opname
-
-let functionSub_term = << functionSub >>
-let functionSub_opname = opname_of_term functionSub_term
-let is_functionSub_term = is_no_subterms_term functionSub_opname
-
-(* Indexing. *)
-
-let byteIndex_term = << byteIndex >>
-let byteIndex_opname = opname_of_term byteIndex_term
-let is_byteIndex_term = is_no_subterms_term byteIndex_opname
-
-let wordIndex_term = << wordIndex >>
-let wordIndex_opname = opname_of_term wordIndex_term
-let is_wordIndex_term = is_no_subterms_term wordIndex_opname
-
-(* Subscripting. *)
-
-let intIndex_term = << intIndex >>
-let intIndex_opname = opname_of_term intIndex_term
-let is_intIndex_term = is_no_subterms_term intIndex_opname
-
-let rawIntIndex_term = << rawIntIndex{ 'int_precision; 'int_signed } >>
-let rawIntIndex_opname = opname_of_term rawIntIndex_term
-let is_rawIntIndex_term = is_dep0_dep0_term rawIntIndex_opname
-let mk_rawIntIndex_term = mk_dep0_dep0_term rawIntIndex_opname
-let dest_rawIntIndex_term = dest_dep0_dep0_term rawIntIndex_opname
-
-(* Subscripting op. *)
-
-let subop_term = << subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script } >>
-let subop_opname = opname_of_term subop_term
-let is_subop_term = is_4_dep0_term subop_opname
-let mk_subop_term = mk_4_dep0_term subop_opname
-let dest_subop_term = dest_4_dep0_term subop_opname
+let is_plusPointerOp_term = is_dep0_dep0_dep0_term plusPointerOp_opname
+let mk_plusPointerOp_term = mk_dep0_dep0_dep0_term plusPointerOp_opname
+let dest_plusPointerOp_term = dest_dep0_dep0_dep0_term plusPointerOp_opname
 
 (*
  * Fields (frame labels).
@@ -1595,11 +1379,17 @@ let is_atomFloat_term = is_dep0_dep0_term atomFloat_opname
 let mk_atomFloat_term = mk_dep0_dep0_term atomFloat_opname
 let dest_atomFloat_term = dest_dep0_dep0_term atomFloat_opname
 
-let atomLabel_term = << atomLabel{ 'frame_label } >>
+let atomLabel_term = << atomLabel{ 'frame_label; 'atom_rawint } >>
 let atomLabel_opname = opname_of_term atomLabel_term
-let is_atomLabel_term = is_dep0_term atomLabel_opname
-let mk_atomLabel_term = mk_dep0_term atomLabel_opname
-let dest_atomLabel_term = dest_dep0_term atomLabel_opname
+let is_atomLabel_term = is_dep0_dep0_term atomLabel_opname
+let mk_atomLabel_term = mk_dep0_dep0_term atomLabel_opname
+let dest_atomLabel_term = dest_dep0_dep0_term atomLabel_opname
+
+let atomSizeof_term = << atomSizeof{ 'var_list; 'atom_rawint } >>
+let atomSizeof_opname = opname_of_term atomSizeof_term
+let is_atomSizeof_term = is_dep0_dep0_term atomSizeof_opname
+let mk_atomSizeof_term = mk_dep0_dep0_term atomSizeof_opname
+let dest_atomSizeof_term = dest_dep0_dep0_term atomSizeof_opname
 
 let atomConst_term = << atomConst{ 'ty; 'ty_var; 'int } >>
 let atomConst_opname = opname_of_term atomConst_term
@@ -1686,63 +1476,29 @@ let dest_tailAtomicCommit_term = dest_dep0_dep0_term tailAtomicCommit_opname
  * Predicates and assertions.
  *)
 
-(* No-ops. *)
-
-let isMutable_term = << isMutable >>
+let isMutable_term = << isMutable{ 'var } >>
 let isMutable_opname = opname_of_term isMutable_term
-let is_isMutable_term = is_no_subterms_term isMutable_opname
+let is_isMutable_term = is_dep0_term isMutable_opname
+let mk_isMutable_term = mk_dep0_term isMutable_opname
+let dest_isMutable_term = dest_dep0_term isMutable_opname
 
-(* Unary operations. *)
-
-let reserve_term = << reserve >>
+let reserve_term = << reserve{ 'atom1; 'atom2 } >>
 let reserve_opname = opname_of_term reserve_term
-let is_reserve_term = is_no_subterms_term reserve_opname
+let is_reserve_term = is_dep0_dep0_term reserve_opname
+let mk_reserve_term = mk_dep0_dep0_term reserve_opname
+let dest_reserve_term = dest_dep0_dep0_term reserve_opname
 
-let boundsCheckLower_term = << boundsCheckLower >>
-let boundsCheckLower_opname = opname_of_term boundsCheckLower_term
-let is_boundsCheckLower_term = is_no_subterms_term boundsCheckLower_opname
-
-let boundsCheckUpper_term = << boundsCheckUpper >>
-let boundsCheckUpper_opname = opname_of_term boundsCheckUpper_term
-let is_boundsCheckUpper_term = is_no_subterms_term boundsCheckUpper_opname
-
-let polyCheck_term = << polyCheck >>
-let polyCheck_opname = opname_of_term polyCheck_term
-let is_polyCheck_term = is_no_subterms_term polyCheck_opname
-
-let pointerCheck_term = << pointerCheck >>
-let pointerCheck_opname = opname_of_term pointerCheck_term
-let is_pointerCheck_term = is_no_subterms_term pointerCheck_opname
-
-let functionCheck_term = << functionCheck >>
-let functionCheck_opname = opname_of_term functionCheck_term
-let is_functionCheck_term = is_no_subterms_term functionCheck_opname
-
-(* Binary operations. *)
-
-let boundsCheck_term = << boundsCheck >>
+let boundsCheck_term = << boundsCheck{ 'subop; 'var; 'atom1; 'atom2 } >>
 let boundsCheck_opname = opname_of_term boundsCheck_term
-let is_boundsCheck_term = is_no_subterms_term boundsCheck_opname
+let is_boundsCheck_term = is_4_dep0_term boundsCheck_opname
+let mk_boundsCheck_term = mk_4_dep0_term boundsCheck_opname
+let dest_boundsCheck_term = dest_4_dep0_term boundsCheck_opname
 
-(* Predicates. *)
-
-let predNop_term = << predNop{ 'var; 'pred_nop } >>
-let predNop_opname = opname_of_term predNop_term
-let is_predNop_term = is_dep0_dep0_term predNop_opname
-let mk_predNop_term = mk_dep0_dep0_term predNop_opname
-let dest_predNop_term = dest_dep0_dep0_term predNop_opname
-
-let predUnop_term = << predUnop{ 'var; 'pred_unop; 'atom } >>
-let predUnop_opname = opname_of_term predUnop_term
-let is_predUnop_term = is_dep0_dep0_dep0_term predUnop_opname
-let mk_predUnop_term = mk_dep0_dep0_dep0_term predUnop_opname
-let dest_predUnop_term = dest_dep0_dep0_dep0_term predUnop_opname
-
-let predBinop_term = << predBinop{ 'var; 'pred_binop; 'atom1; 'atom2 } >>
-let predBinop_opname = opname_of_term predBinop_term
-let is_predBinop_term = is_4_dep0_term predBinop_opname
-let mk_predBinop_term = mk_4_dep0_term predBinop_opname
-let dest_predBinop_term = dest_4_dep0_term predBinop_opname
+let elementCheck_term = << elementCheck{ 'ty; 'subop; 'var; 'atom } >>
+let elementCheck_opname = opname_of_term elementCheck_term
+let is_elementCheck_term = is_4_dep0_term elementCheck_opname
+let mk_elementCheck_term = mk_4_dep0_term elementCheck_opname
+let dest_elementCheck_term = dest_4_dep0_term elementCheck_opname
 
 (*
  * Debugging info.

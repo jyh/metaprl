@@ -83,56 +83,6 @@ let binop_test binop str =
       else
          print_fail ()
 
-let sub_block_test sub_block str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_sub_block sub_block in
-   let t' = sub_block_of_term t in
-      print_simple_term t;
-      if t' = sub_block then
-         print_pass ()
-      else
-         print_fail ()
-
-let sub_value_test sub_value str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_sub_value sub_value in
-   let t' = sub_value_of_term t in
-      print_simple_term t;
-      if t' = sub_value then
-         print_pass ()
-      else
-         print_fail ()
-
-let sub_index_test sub_index str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_sub_index sub_index in
-   let t' = sub_index_of_term t in
-      print_simple_term t;
-      if t' = sub_index then
-         print_pass ()
-      else
-         print_fail ()
-
-let sub_script_test sub_script str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_sub_script sub_script in
-   let t' = sub_script_of_term t in
-      print_simple_term t;
-      if t' = sub_script then
-         print_pass ()
-      else
-         print_fail ()
-
-let subop_test subop str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_subop subop in
-   let t' = subop_of_term t in
-      print_simple_term t;
-      if t' = subop then
-         print_pass ()
-      else
-         print_fail ()
-
 let frame_label_test label str =
    printf "--> Test: %s\n" str;
    let t = term_of_frame_label label in
@@ -169,36 +119,6 @@ let tailop_test tailop str =
    let t' = tailop_of_term t in
       print_simple_term t;
       if t' = tailop then
-         print_pass ()
-      else
-         print_fail ()
-
-let pred_nop_test pred_nop str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_pred_nop pred_nop in
-   let t' = pred_nop_of_term t in
-      print_simple_term t;
-      if t' = pred_nop then
-         print_pass ()
-      else
-         print_fail ()
-
-let pred_unop_test pred_unop str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_pred_unop pred_unop in
-   let t' = pred_unop_of_term t in
-      print_simple_term t;
-      if t' = pred_unop then
-         print_pass ()
-      else
-         print_fail ()
-
-let pred_binop_test pred_binop str =
-   printf "--> Test: %s\n" str;
-   let t = term_of_pred_binop pred_binop in
-   let t' = pred_binop_of_term t in
-      print_simple_term t;
-      if t' = pred_binop then
          print_pass ()
       else
          print_fail ()
@@ -286,7 +206,7 @@ let run_tests () =
              "RawIntOfRawIntOp Int32 true Int64 false";
    unop_test (RawIntOfPointerOp Int16 false) "RawIntOfPointerOp Int16 false";
    unop_test (PointerOfRawIntOp Int32 true) "PointerOfRawIntOp Int32 true";
-   unop_test (RawIntOfLabelOp Int64 false) "RawIntOfLabelOp Int64 false";
+   unop_test (PointerOfBlockOp BlockSub) "PointerOfBlockOp BlockSub";
 
    (* Binary operations. *)
    binop_test (AndEnumOp 3) "AndEnumOp 3";
@@ -350,29 +270,16 @@ let run_tests () =
    binop_test (Atan2Op Single) "Atan2Op Single";
    binop_test EqEqOp "EqEqOp";
    binop_test NeqEqOp "NeqEqOp";
-   binop_test (PlusPointerOp Int8 false) "PlusPointerOp Int8 false";
+   binop_test (PlusPointerOp BlockSub Int8 false)
+              "PlusPointerOp BlockSub Int8 false";
 
    (* Subscript operators. *)
-   sub_block_test BlockSub "BlockSub";
-   sub_block_test RawDataSub "RawDataSub";
-   sub_block_test TupleSub "TupleSub";
-   sub_block_test RawTupleSub "RawTupleSub";
-   sub_value_test PolySub "PolySub";
-   sub_value_test (RawIntSub Int8 false) "RawIntSub Int8 false";
-   sub_value_test (RawFloatSub Single) "RawFloatSub Single";
-   sub_value_test PointerSub "PointerSub";
-   sub_value_test FunctionSub "FunctionSub";
-   sub_index_test ByteIndex "ByteIndex";
-   sub_index_test WordIndex "WordIndex";
-   sub_script_test IntIndex "IntIndex";
-   sub_script_test (RawIntIndex Int8 true) "RawIntIndex Int8 true";
    let op = { sub_block = BlockSub;  sub_value = PolySub;
               sub_index = ByteIndex; sub_script = IntIndex } in
-   subop_test op "{ BlockSub; PolySub; ByteIndex; IntIndex }";
 
    (* Fields (frame labels). *)
    let flbl = (var1, var2, var3) in
-   frame_label_test flbl "(var1, var2, var3";
+   frame_label_test flbl "(var1, var2, var3)";
 
    (* Normal values. *)
    atom_test (AtomNil TyInt) "AtomNil TyInt";
@@ -382,7 +289,10 @@ let run_tests () =
              "AtomRawInt (Rawint.of_string Int8 true \"23\")";
    atom_test (AtomFloat (Rawfloat.of_string Single "2.3"))
              "AtomFloat (Rawfloat.of_string Single \"2.3\")";
-   atom_test (AtomLabel var1 var2 var3) "AtomLabel var1 var2 var3";
+   atom_test (AtomLabel flbl (Rawint.of_string Int8 true "23"))
+             "AtomLabel (var1 var2 var3) (Rawint.of_string Int8 true \"23\")";
+   atom_test  (AtomSizeof [] (Rawint.of_string Int8 true "23"))
+              "AtomSizeof [] (Rawint.of_string Int8 true \"23\")";
    atom_test (AtomConst TyInt var1 3) "AtomConst TyInt var1 3";
    atom_test (AtomVar var1) "AtomVar var1";
 
@@ -409,19 +319,13 @@ let run_tests () =
    tailop_test (TailAtomicCommit var2 []) "TailAtomicCommit var2 []";
 
    (* Predicates and assertions. *)
-   pred_nop_test IsMutable "IsMutable";
-   pred_unop_test Reserve "Reserve";
-   pred_unop_test BoundsCheckLower "BoundsCheckLower";
-   pred_unop_test BoundsCheckUpper "BoundsCheckUpper";
-   pred_unop_test PolyCheck "PolyCheck";
-   pred_unop_test PointerCheck "PointerCheck";
-   pred_unop_test FunctionCheck "FunctionCheck";
-   pred_binop_test BoundsCheck "BoundsCheck";
-   pred_test (PredNop var1 IsMutable) "PredNop var1 IsMutable";
-   pred_test (PredUnop var2 Reserve (AtomVar var1))
-             "PredUnop var2 Reserve (AtomVar var1)";
-   pred_test (PredBinop var1 BoundsCheck (AtomInt 2) (AtomInt 3))
-             "PredBinop var1 BoundsCheck (AtomInt 2) (AtomInt 3)";
+   pred_test (IsMutable var1) "IsMutable var1";
+   pred_test (Reserve (AtomNil TyInt) (AtomInt 3))
+             "Reserve (AtomNil TyInt) (AtomInt 3";
+   pred_test (BoundsCheck op var1 (AtomNil TyInt) (AtomInt 3))
+             "BoundsCheck op var1 (AtomNil TyInt) (AtomInt 3)";
+   pred_test (ElementCheck TyInt op var1 (AtomInt 3))
+             "ElementCheck TyInt op var1 (AtomInt 3)";
 
    (* Debugging info. *)
    debug_line_test ("Help!", 3) "\"Help!\" 3";
@@ -457,8 +361,8 @@ let run_tests () =
             "Memcpy \"op\" var1 var2 (AtomInt 3) var2 (AtomInt 4) (AtomInt 60) (TailCall var1 var3 [])";
    exp_test (Call var2 var1 [None; Some (AtomInt 3)] (TailCall var1 var3 []))
             "Call var2 var1 [None; Some (AtomInt 3)] (TailCall var1 var3 [])";
-   exp_test (Assert var1 (PredNop var2 IsMutable) (TailCall var1 var3 []))
-            "Assert var1 (PredNop var2 IsMutable) (TailCall var1 var3 [])";
+   exp_test (Assert var1 (IsMutable var2) (TailCall var1 var3 []))
+            "Assert var1 (IsMutable var2) (TailCall var1 var3 [])";
    exp_test (Debug (DebugContext line []) (TailCall var1 var3 []))
             "Debug (DebugContext \"line\" []) (TailCall var1 var3 [])";
 

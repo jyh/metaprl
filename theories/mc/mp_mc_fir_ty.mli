@@ -61,7 +61,7 @@ declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'tuple_class; 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
-declare tyPointer{ 'var; 'ty }
+declare tyPointer{ 'sub_block }
 declare tyFrame{ 'label }
 
 (* Polymorphism. *)
@@ -76,7 +76,6 @@ declare tyProject{ 'var; 'int }
 
 declare tyCase{ 'ty }
 declare tyObject{ 'ty_var; 'ty }
-declare tyOption{ 'ty }
 
 (* Delayed type. *)
 
@@ -143,8 +142,8 @@ val is_tyRawData_term : term -> bool
 
 val tyPointer_term : term
 val is_tyPointer_term : term -> bool
-val mk_tyPointer_term : term -> term -> term
-val dest_tyPointer_term : term -> term * term
+val mk_tyPointer_term : term -> term
+val dest_tyPointer_term : term -> term
 
 val tyFrame_term : term
 val is_tyFrame_term : term -> bool
@@ -189,11 +188,6 @@ val tyObject_term : term
 val is_tyObject_term : term -> bool
 val mk_tyObject_term : term -> term -> term
 val dest_tyObject_term : term -> term * term
-
-val tyOption_term : term
-val is_tyOption_term : term -> bool
-val mk_tyOption_term : term -> term
-val dest_tyOption_term : term -> term
 
 (* Delayed type. *)
 

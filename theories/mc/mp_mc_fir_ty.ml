@@ -62,7 +62,7 @@ declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'tuple_class; 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
-declare tyPointer{ 'var; 'ty }
+declare tyPointer{ 'sub_block }
 declare tyFrame{ 'label }
 
 (* Polymorphism. *)
@@ -77,7 +77,6 @@ declare tyProject{ 'var; 'int }
 
 declare tyCase{ 'ty }
 declare tyObject{ 'ty_var; 'ty }
-declare tyOption{ 'ty }
 
 (* Delayed type. *)
 
@@ -132,8 +131,8 @@ dform tyRawData : except_mode[src] ::
    tyRawData =
    `"TyRawData"
 dform tyPointer_df : except_mode[src] ::
-   tyPointer{ 'var; 'ty } =
-   `"TyPointer(" slot{'var} `"," slot{'ty} `")"
+   tyPointer{ 'sub_block } =
+   `"TyPointer(" slot{'sub_block} `")"
 dform tyFrame_df : except_mode[src] ::
    tyFrame{ 'label } =
    `"TyFrame(" slot{'label} `")"
@@ -164,9 +163,6 @@ dform tyCase_df : except_mode[src] ::
 dform tyObject_df : except_mode[src] ::
    tyObject{ 'ty_var; 'ty } =
    `"TyObject(" slot{'ty_var} `"," slot{'ty} `")"
-dform tyOption_df : except_mode[src] ::
-   tyOption{ 'ty } =
-   `"TyOption(" slot{'ty} `")"
 
 (* Delayed type.  Type should be inferred. *)
 
@@ -247,11 +243,11 @@ let tyRawData_term = << tyRawData >>
 let tyRawData_opname = opname_of_term tyRawData_term
 let is_tyRawData_term = is_no_subterms_term tyRawData_opname
 
-let tyPointer_term = << tyPointer{ 'var; 'ty } >>
+let tyPointer_term = << tyPointer{ 'sub_block } >>
 let tyPointer_opname = opname_of_term tyPointer_term
-let is_tyPointer_term = is_dep0_dep0_term tyPointer_opname
-let mk_tyPointer_term = mk_dep0_dep0_term tyPointer_opname
-let dest_tyPointer_term = dest_dep0_dep0_term tyPointer_opname
+let is_tyPointer_term = is_dep0_term tyPointer_opname
+let mk_tyPointer_term = mk_dep0_term tyPointer_opname
+let dest_tyPointer_term = dest_dep0_term tyPointer_opname
 
 let tyFrame_term = << tyFrame{ 'label } >>
 let tyFrame_opname = opname_of_term tyFrame_term
@@ -304,12 +300,6 @@ let tyObject_opname = opname_of_term tyObject_term
 let is_tyObject_term = is_dep0_dep0_term tyObject_opname
 let mk_tyObject_term = mk_dep0_dep0_term tyObject_opname
 let dest_tyObject_term = dest_dep0_dep0_term tyObject_opname
-
-let tyOption_term = << tyOption{ 'ty } >>
-let tyOption_opname = opname_of_term tyOption_term
-let is_tyOption_term = is_dep0_term tyOption_opname
-let mk_tyOption_term = mk_dep0_term tyOption_opname
-let dest_tyOption_term = dest_dep0_term tyOption_opname
 
 (* Delayed type. *)
 

@@ -34,11 +34,21 @@
 
 include Base_theory
 
+open Refiner.Refiner.RefineError
+open Simple_print.SimplePrint
+
 let _ =
-   let base_count = Mp_mc_test_connect_base.run_tests () in
-   let ty_count = Mp_mc_test_connect_ty.run_tests () in
-   let exp_count = Mp_mc_test_connect_exp.run_tests () in
-      Printf.printf "==> Summary <==\n\n";
-      Printf.printf "Number of base cases failed: %d\n" base_count;
-      Printf.printf "Number of ty cases failed: %d\n" ty_count;
-      Printf.printf "Number of exp cases failed: %d\n" exp_count
+   try
+      let base_count = Mp_mc_test_connect_base.run_tests () in
+      let ty_count = Mp_mc_test_connect_ty.run_tests () in
+      let exp_count = Mp_mc_test_connect_exp.run_tests () in
+         Printf.printf "==> Summary <==\n\n";
+         Printf.printf "Number of base cases failed: %d\n" base_count;
+         Printf.printf "Number of ty cases failed: %d\n" ty_count;
+         Printf.printf "Number of exp cases failed: %d\n" exp_count
+   with
+      (RefineError (str, StringTermError (str2, term))) ->
+         Printf.eprintf "\n\nException in: %s\n" str;
+         Printf.eprintf "Message: %s\n" str2;
+         print_simple_term term;
+         Printf.eprintf "Exiting now...\n";

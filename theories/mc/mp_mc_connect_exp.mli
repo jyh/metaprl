@@ -55,25 +55,6 @@ val term_of_binop : binop -> term
 val binop_of_term : term -> binop
 
 (*
- * Convert to and from subscripting terms.
- *)
-
-val term_of_sub_block : sub_block -> term
-val sub_block_of_term : term -> sub_block
-
-val term_of_sub_value : sub_value -> term
-val sub_value_of_term : term -> sub_value
-
-val term_of_sub_index : sub_index -> term
-val sub_index_of_term : term -> sub_index
-
-val term_of_sub_script : sub_script -> term
-val sub_script_of_term : term -> sub_script
-
-val term_of_subop : subop -> term
-val subop_of_term : term -> subop
-
-(*
  * Convert to and from frame_label.
  *)
 
@@ -104,15 +85,6 @@ val tailop_of_term : term -> tailop
 (*
  * Convert to and from predicate / assertion terms.
  *)
-
-val term_of_pred_nop : pred_nop -> term
-val pred_nop_of_term : term -> pred_nop
-
-val term_of_pred_unop : pred_unop -> term
-val pred_unop_of_term : term -> pred_unop
-
-val term_of_pred_binop : pred_binop -> term
-val pred_binop_of_term : term -> pred_binop
 
 val term_of_pred : pred -> term
 val pred_of_term : term -> pred

@@ -1,54 +1,43 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 23 March 2002
+Last update to this file: 19 April 2002
 
 This file lists what I have remaining to do to complete this theory,
 and some other miscellaneous notes to myself.
 
 Todo list:
 --------------------------------------------------------------------------
--  Display forms: These need to be tested and improved so that
-   things print in a reasonable fashion.
--  FIR evaluation: This needs to be completed.
--  Test cases: I've fallen way behind on these.  These cases need
-   to test display forms, rewrites, any tactic like things I define,
-   and the MC FIR <--> MetaPRL connection code.
--  Documentation: Other than making a decent README file, I also
-   need to document code in a slightly more useful fashion.  It would
-   be nice if the same mechanism used to produce the docs for all
-   the theories was used here as well.
--  Deadcode elimination: Implement more forms of it. Prove the
-   forms that aren't proven.
--  Constant elimination: Same notes as for deadcode elim.
--  Mp_mc_connect_base (special notes):
-   .  Check float conversion code. Specifically, this code
-      DOES NOT WORK.  I need a way of going from the 80 bit internal
-      representation of rawfloat's to some integral or string representation
-      w/o loss of information. This involves some work on the MC
-      end I think.
--  Verify that Mp_mc_fir_eval actually is general enough now to prove
-   other things... . (It just occurred to me that I don't think I can
-   prove deadcode.)  Everything from "unary operations" down needs
-   to be checked I think.
--  fundef (Mp_mc_fir_exp) is a hack.  I need to come up with a term
-   representation for entire programs that is "convinient".
--  division: I'm not completely convinced I've expressed this in a
-   "safe and correct" manner.
--  Modify conscripts to get MC and MetaPRL compiling together...
--  Clean up all the MetaPRL conscripts...
+-  Notable omissions in FIR implementation:
+   .  display forms - these are terrible at the moment.
+   .  fir_ty - frame is missing.
+   .  evaluation:
+      -  no where near complete.
+      -  semantics of division seems wrong (prove deadcode elimination
+         of division by zero).
+   .  deadcode elim - needs work.
+   .  constant eliminatino - needs work.
+   .  connection to MC:
+      -  float conversion just doesn't work.  I need someone in MC to
+         implement 80 bit float <--> int/string conversion.
+      -  translating the fundef's only is just a hack.  I need a better,
+         more robust way to represent an entire FIR program.
+   .  test cases - I need to test some of the "higher level"
+      MetaPRL code (deadcode, const_elim).
+-  Documentation: I need it. (-: Current ideas involve the use
+   of whatever mechanism generates theories.pdf.
 
 Notes to myself:
---------------------------------------------------------------------------
--  None at the moment.
-
-Scratch space (random thoughts to myself):
 --------------------------------------------------------------------------
 -  Checklist for when I need to add/remove/change a term:
    1) .mli file: term declaration, term operation function signatures
    2) .ml file: term declaration, display form, term operation functions,
-   3) connect: change cases appropriately (2 directions to check)
+   3) connect: change cases appropriately (2 directions to check).
       this could also involve defining new functions.
    4) test: change cases appropriately
    5) eval: change evaluation as needed
 -  Checklist for when files are added/removed:
-   1) Conscript: 2 file lists to check!
-   2) Makefile: 1 file list to check!
+   1) Conscript:  2 file lists to check
+   2) Makefile:   1 file list to check
+
+Miscellaneous (non-pressing) todo list:
+--------------------------------------------------------------------------
+-  Clean up all the MetaPRL Conscripts.

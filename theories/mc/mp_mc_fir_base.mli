@@ -83,6 +83,39 @@ declare rawTuple
 declare normalUnion
 declare exnUnion
 
+(*
+ * Subscript operators.
+ *)
+
+(* Kind of block. *)
+
+declare blockSub
+declare rawDataSub
+declare tupleSub
+declare rawTupleSub
+
+(* Kind of value. *)
+
+declare polySub
+declare rawIntSub{ 'int_precision; 'int_signed }
+declare rawFloatSub{ 'float_precision }
+declare pointerSub
+declare functionSub
+
+(* Element width. *)
+
+declare byteIndex
+declare wordIndex
+
+(* Kind of subscript. *)
+
+declare intIndex
+declare rawIntIndex{ 'int_precision; 'int_signed }
+
+(* Subscripting op. *)
+
+declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
+
 (*************************************************************************
  * Term operations.
  *************************************************************************)
@@ -168,3 +201,67 @@ val is_normalUnion_term : term -> bool
 
 val exnUnion_term : term
 val is_exnUnion_term : term -> bool
+
+(*
+ * Subscript operators.
+ *)
+
+(* Kind of block. *)
+
+val blockSub_term : term
+val is_blockSub_term : term -> bool
+
+val rawDataSub_term : term
+val is_rawDataSub_term : term -> bool
+
+val tupleSub_term : term
+val is_tupleSub_term : term -> bool
+
+val rawTupleSub_term : term
+val is_rawTupleSub_term : term -> bool
+
+(* Kind of value. *)
+
+val polySub_term : term
+val is_polySub_term : term -> bool
+
+val rawIntSub_term : term
+val is_rawIntSub_term : term -> bool
+val mk_rawIntSub_term : term -> term -> term
+val dest_rawIntSub_term : term -> term * term
+
+val rawFloatSub_term : term
+val is_rawFloatSub_term : term -> bool
+val mk_rawFloatSub_term : term -> term
+val dest_rawFloatSub_term : term -> term
+
+val pointerSub_term : term
+val is_pointerSub_term : term -> bool
+
+val functionSub_term : term
+val is_functionSub_term : term -> bool
+
+(* Element width. *)
+
+val byteIndex_term : term
+val is_byteIndex_term : term -> bool
+
+val wordIndex_term : term
+val is_wordIndex_term : term -> bool
+
+(* Kind of subscript. *)
+
+val intIndex_term : term
+val is_intIndex_term : term -> bool
+
+val rawIntIndex_term : term
+val is_rawIntIndex_term : term -> bool
+val mk_rawIntIndex_term : term -> term -> term
+val dest_rawIntIndex_term : term -> term * term
+
+(* Susbscripting op. *)
+
+val subop_term : term
+val is_subop_term : term -> bool
+val mk_subop_term : term -> term -> term -> term -> term
+val dest_subop_term : term -> term * term * term * term

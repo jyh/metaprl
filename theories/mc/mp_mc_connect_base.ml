@@ -429,3 +429,107 @@ let union_type_of_term t =
    else
       raise (RefineError ("union_type_of_term", StringTermError
             ("not a union_type", t)))
+
+(*
+ * Convert to and from subscripting terms.
+ *)
+
+let term_of_sub_block b =
+   match b with
+      BlockSub ->    blockSub_term
+    | RawDataSub ->  rawDataSub_term
+    | TupleSub ->    tupleSub_term
+    | RawTupleSub -> rawTupleSub_term
+
+let sub_block_of_term t =
+   if is_blockSub_term t then
+      BlockSub
+   else if is_rawDataSub_term t then
+      RawDataSub
+   else if is_tupleSub_term t then
+      TupleSub
+   else if is_rawTupleSub_term t then
+      RawTupleSub
+
+   else
+      raise (RefineError ("sub_block_of_term", StringTermError
+            ("not a sub_block", t)))
+
+let term_of_sub_value v =
+   match v with
+      PolySub ->           polySub_term
+    | RawIntSub (p, s) ->  mk_rawIntSub_term (term_of_int_precision p)
+                                             (term_of_int_signed s)
+    | RawFloatSub p ->     mk_rawFloatSub_term (term_of_float_precision p)
+    | PointerSub ->        pointerSub_term
+    | FunctionSub ->       functionSub_term
+
+let sub_value_of_term t =
+   if is_polySub_term t then
+      PolySub
+   else if is_rawIntSub_term t then
+      let p, s = dest_rawIntSub_term t in
+         RawIntSub   (int_precision_of_term p)
+                     (int_signed_of_term s)
+   else if is_rawFloatSub_term t then
+      RawFloatSub (float_precision_of_term (dest_rawFloatSub_term t))
+   else if is_pointerSub_term t then
+      PointerSub
+   else if is_functionSub_term t then
+      FunctionSub
+
+   else
+      raise (RefineError ("sub_value_of_term", StringTermError
+            ("not a sub_value", t)))
+
+let term_of_sub_index i =
+   match i with
+      ByteIndex -> byteIndex_term
+    | WordIndex -> wordIndex_term
+
+let sub_index_of_term t =
+   if is_byteIndex_term t then
+      ByteIndex
+   else if is_wordIndex_term t then
+      WordIndex
+
+   else
+      raise (RefineError ("sub_index_of_term", StringTermError
+            ("not a sub_index", t)))
+
+let term_of_sub_script t =
+   match t with
+      IntIndex ->             intIndex_term
+    | RawIntIndex (p, s) ->   mk_rawIntIndex_term (term_of_int_precision p)
+                                                  (term_of_int_signed s)
+
+let sub_script_of_term t =
+   if is_intIndex_term t then
+      IntIndex
+   else if is_rawIntIndex_term t then
+      let p, s = dest_rawIntIndex_term t in
+         RawIntIndex (int_precision_of_term p)
+                     (int_signed_of_term s)
+
+   else
+      raise (RefineError ("sub_script_of_term", StringTermError
+            ("not a sub_script", t)))
+
+let term_of_subop op =
+   mk_subop_term        (term_of_sub_block op.sub_block)
+                        (term_of_sub_value op.sub_value)
+                        (term_of_sub_index op.sub_index)
+                        (term_of_sub_script op.sub_script)
+
+let subop_of_term t =
+   if is_subop_term t then
+      let block, value, index, script = dest_subop_term t in
+         {  sub_block = sub_block_of_term block;
+            sub_value = sub_value_of_term value;
+            sub_index = sub_index_of_term index;
+            sub_script = sub_script_of_term script
+         }
+
+   else
+      raise (RefineError ("subop_of_term", StringTermError
+            ("not a subop", t)))

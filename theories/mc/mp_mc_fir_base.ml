@@ -38,6 +38,7 @@ include Base_theory
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Mp_mc_term_op
 
 (*************************************************************************
  * Term declarations.
@@ -83,6 +84,39 @@ declare rawTuple
 
 declare normalUnion
 declare exnUnion
+
+(*
+ * Subscript operators.
+ *)
+
+(* Kind of block. *)
+
+declare blockSub
+declare rawDataSub
+declare tupleSub
+declare rawTupleSub
+
+(* Kind of value. *)
+
+declare polySub
+declare rawIntSub{ 'int_precision; 'int_signed }
+declare rawFloatSub{ 'float_precision }
+declare pointerSub
+declare functionSub
+
+(* Element width. *)
+
+declare byteIndex
+declare wordIndex
+
+(* Kind of subscript. *)
+
+declare intIndex
+declare rawIntIndex{ 'int_precision; 'int_signed }
+
+(* Subscripting op. *)
+
+declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
 
 (*************************************************************************
  * Term declarations.
@@ -169,6 +203,68 @@ dform normalUnion_df : except_mode[src] ::
 dform exnUnion_df : except_mode[src] ::
    exnUnion =
    `"ExnUnion"
+
+(*
+ * Subscript operators.
+ *)
+
+(* Kind of block. *)
+
+dform blockSub_df : except_mode[src] ::
+   blockSub =
+   `"BlockSub"
+dform rawDataSub_df : except_mode[src] ::
+   rawDataSub =
+   `"RawDataSub"
+dform tupleSub_df : except_mode[src] ::
+   tupleSub =
+   `"TupleSub"
+dform rawTupleSub_df : except_mode[src] ::
+   rawTupleSub =
+   `"RawTupleSub"
+
+(* Kind of value. *)
+
+dform polySub_df : except_mode[src] ::
+   polySub =
+   `"PolySub"
+dform rawIntSub_df : except_mode[src] ::
+   rawIntSub{ 'int_precision; 'int_signed } =
+   `"RawIntSub(" slot{'int_precision} `"," slot{'int_signed}
+dform rawFloatSub_df : except_mode[src] ::
+   rawFloatSub{ 'float_precision } =
+   `"RawFloatSub(" slot{'float_precision} `")"
+dform pointerSub_df : except_mode[src] ::
+   pointerSub =
+   `"PointerSub"
+dform functionSub_df : except_mode[src] ::
+   functionSub =
+   `"FunctionSub"
+
+(* Element width. *)
+
+dform byteIndex_df : except_mode[src] ::
+   byteIndex =
+   `"ByteIndex"
+dform wordIndex_df : except_mode[src] ::
+   wordIndex =
+   `"WordIndex"
+
+(* Kind of subscript. *)
+
+dform intIndex_df : except_mode[src] ::
+   intIndex =
+   `"IntIndex"
+dform rawIntIndex_df : except_mode[src] ::
+   rawIntIndex{ 'int_precision; 'int_signed } =
+   `"RawIntIndex(" slot{'int_precision} `"," slot{'int_signed} `")"
+
+(* Subscripting op. *)
+
+dform subop_df : except_mode[src] ::
+   subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script } =
+   `"Subop(" slot{'sub_block} `"," slot{'sub_value} `","
+   slot{'sub_index} `"," slot{'sub_script} `")"
 
 (*************************************************************************
  * Term operations.
@@ -276,3 +372,81 @@ let is_normalUnion_term = is_no_subterms_term normalUnion_opname
 let exnUnion_term = << exnUnion >>
 let exnUnion_opname = opname_of_term exnUnion_term
 let is_exnUnion_term = is_no_subterms_term exnUnion_opname
+
+(*
+ * Subscript operators.
+ *)
+
+(* Kind of block. *)
+
+let blockSub_term = << blockSub >>
+let blockSub_opname = opname_of_term blockSub_term
+let is_blockSub_term = is_no_subterms_term blockSub_opname
+
+let rawDataSub_term = << rawDataSub >>
+let rawDataSub_opname = opname_of_term rawDataSub_term
+let is_rawDataSub_term = is_no_subterms_term rawDataSub_opname
+
+let tupleSub_term = << tupleSub >>
+let tupleSub_opname = opname_of_term tupleSub_term
+let is_tupleSub_term = is_no_subterms_term tupleSub_opname
+
+let rawTupleSub_term = << rawTupleSub >>
+let rawTupleSub_opname = opname_of_term rawTupleSub_term
+let is_rawTupleSub_term = is_no_subterms_term rawTupleSub_opname
+
+(* Kind of value. *)
+
+let polySub_term = << polySub >>
+let polySub_opname = opname_of_term polySub_term
+let is_polySub_term = is_no_subterms_term polySub_opname
+
+let rawIntSub_term = << rawIntSub{ 'int_precision; 'int_signed } >>
+let rawIntSub_opname = opname_of_term rawIntSub_term
+let is_rawIntSub_term = is_dep0_dep0_term rawIntSub_opname
+let mk_rawIntSub_term = mk_dep0_dep0_term rawIntSub_opname
+let dest_rawIntSub_term = dest_dep0_dep0_term rawIntSub_opname
+
+let rawFloatSub_term = << rawFloatSub{ 'float_precision } >>
+let rawFloatSub_opname = opname_of_term rawFloatSub_term
+let is_rawFloatSub_term = is_dep0_term rawFloatSub_opname
+let mk_rawFloatSub_term = mk_dep0_term rawFloatSub_opname
+let dest_rawFloatSub_term = dest_dep0_term rawFloatSub_opname
+
+let pointerSub_term = << pointerSub >>
+let pointerSub_opname = opname_of_term pointerSub_term
+let is_pointerSub_term = is_no_subterms_term pointerSub_opname
+
+let functionSub_term = << functionSub >>
+let functionSub_opname = opname_of_term functionSub_term
+let is_functionSub_term = is_no_subterms_term functionSub_opname
+
+(* Element width. *)
+
+let byteIndex_term = << byteIndex >>
+let byteIndex_opname = opname_of_term byteIndex_term
+let is_byteIndex_term = is_no_subterms_term byteIndex_opname
+
+let wordIndex_term = << wordIndex >>
+let wordIndex_opname = opname_of_term wordIndex_term
+let is_wordIndex_term = is_no_subterms_term wordIndex_opname
+
+(* Kind of subscript. *)
+
+let intIndex_term = << intIndex >>
+let intIndex_opname = opname_of_term intIndex_term
+let is_intIndex_term = is_no_subterms_term intIndex_opname
+
+let rawIntIndex_term = << rawIntIndex{ 'int_precision; 'int_signed } >>
+let rawIntIndex_opname = opname_of_term rawIntIndex_term
+let is_rawIntIndex_term = is_dep0_dep0_term rawIntIndex_opname
+let mk_rawIntIndex_term = mk_dep0_dep0_term rawIntIndex_opname
+let dest_rawIntIndex_term = dest_dep0_dep0_term rawIntIndex_opname
+
+(* Subscripting op. *)
+
+let subop_term = << subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script } >>
+let subop_opname = opname_of_term subop_term
+let is_subop_term = is_4_dep0_term subop_opname
+let mk_subop_term = mk_4_dep0_term subop_opname
+let dest_subop_term = dest_4_dep0_term subop_opname

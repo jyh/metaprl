@@ -31,6 +31,7 @@
  *)
 
 open Refiner.Refiner.TermType
+open Refiner.Refiner.TermAddr
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
@@ -47,6 +48,7 @@ type expr =
  | TermExpr of term
  | TacticExpr of tactic
  | ConvExpr of conv
+ | AddressExpr of address
 
    (* Uptyped tuples and functions *)
  | ListExpr of expr list
@@ -62,6 +64,7 @@ type expr =
  | TacticFunExpr of (tactic -> expr)
  | IntTacticFunExpr of ((int -> tactic) -> expr)
  | ConvFunExpr of (conv -> expr)
+ | AddressFunExpr of (address -> expr)
 
    (* These functions take lists *)
  | AddrFunExpr of (int list -> expr)

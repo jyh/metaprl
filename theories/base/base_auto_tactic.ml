@@ -452,6 +452,9 @@ let get_auto_resource modname =
 let autoT p =
    Sequent.get_tactic_arg p "auto" p
 
+let tryAutoT tac =
+   tac thenT tryT (completeT autoT)
+
 (*
  * -*-
  * Local Variables:

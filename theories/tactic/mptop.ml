@@ -55,6 +55,7 @@ type expr =
  | TermExpr of term
  | TacticExpr of tactic
  | ConvExpr of conv
+ | AddressExpr of address
 
    (* Uptyped tuples and functions *)
  | ListExpr of expr list
@@ -70,6 +71,7 @@ type expr =
  | TacticFunExpr of (tactic -> expr)
  | IntTacticFunExpr of ((int -> tactic) -> expr)
  | ConvFunExpr of (conv -> expr)
+ | AddressFunExpr of (address -> expr)
 
    (* These functions take lists *)
  | AddrFunExpr of (int list -> expr)
@@ -321,6 +323,14 @@ and mk_apply_expr base loc f a =
                 | _ ->
                      type_error loc "expr should be a conversion"
             end
+       | AddressFunExpr f ->
+            begin
+               match a with
+                  AddressExpr a ->
+                     f a
+                | _ ->
+                     type_error loc "expr should be an address"
+            end
 
        | AddrFunExpr f ->
             f (int_list_of_list loc a)
@@ -339,6 +349,7 @@ and mk_apply_expr base loc f a =
        | TermExpr _
        | TacticExpr _
        | ConvExpr _
+       | AddressExpr _
        | ListExpr _
        | TupleExpr _ ->
             type_error loc "expr should be a function"

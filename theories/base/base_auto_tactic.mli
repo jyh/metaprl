@@ -120,6 +120,11 @@ topval trivialT : tactic
 topval autoT : tactic
 
 (*
+ * Short for tryT (completeT autoT)
+ *)
+topval tryAutoT : tactic -> tactic
+
+(*
  * Most times, a normal tactic is passed as auto_tac.
  * This wrapper converts it.
  *)

@@ -61,14 +61,6 @@ open Refiner.Refiner.TermOp
 
 doc <:doc< 
    @begin[doc]
-   We define our own tuple terms.
-   @end[doc]
->>
-declare mnil
-declare mcons{'e; 'list}
-
-doc <:doc< 
-   @begin[doc]
    Operators.
    @end[doc]
 >>
@@ -101,7 +93,6 @@ declare FunLambdaExpr{v. 'e['v]}
 declare IfExpr{'e1; 'e2; 'e3}
 declare SubscriptExpr{'e1; 'e2}
 declare AssignExpr{'e1; 'e2; 'e3}
-(*declare SeqExpr{'e1; 'e2}*)
 declare ApplyExpr{'f; 'args}
 declare LetVarExpr{'e1; v. 'e2['v]}
 
@@ -131,16 +122,140 @@ doc <:doc<
    Missing: Tuples.
    @end[doc]
 >>
+
 (************************************************************************
  * Display forms
  *)
 
-(* Our own tuples *)
-dform mnil_df : mnil =
+(* Precedences *)
+prec prec_add
+prec prec_mul
+prec prec_rel
+prec prec_let
+prec prec_fun
+prec prec_if
+prec prec_subscript
+prec prec_assign
+prec prec_comma
+
+prec prec_comma < prec_if
+prec prec_if < prec_let
+prec prec_let < prec_rel
+prec prec_rel < prec_add
+prec prec_add < prec_mul
+prec prec_mul < prec_fun
+prec prec_fun < prec_assign
+prec prec_assign < prec_subscript
+
+(* Integers *)
+dform int_expr_df : IntExpr[n:n] =
+   `"#" slot[n:n]
+
+(* Booleans *)
+dform true_expr_df : TrueExpr =
+   bf["true"]
+
+dform false_expr_df : FalseExpr =
+   bf["false"]
+
+(* Variables *)
+dform var_expr_df : VarExpr{'v} =
+   Nuprl_font!downarrow slot{'v}
+
+(* Binary operations *)
+dform add_binop_expr_df : parens :: "prec"[prec_add] :: BinopExpr{AstAddOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" + " slot["le"]{'e2}
+
+dform sub_binop_expr_df : parens :: "prec"[prec_add] :: BinopExpr{AstSubOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" - " slot["le"]{'e2}
+
+dform mul_binop_expr_df : parens :: "prec"[prec_mul] :: BinopExpr{AstMulOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" * " slot["le"]{'e2}
+
+dform div_binop_expr_df : parens :: "prec"[prec_mul] :: BinopExpr{AstDivOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" / " slot["le"]{'e2}
+
+(* Relational operations *)
+dform lt_relop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstLtOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" < " slot["le"]{'e2}
+
+dform le_binop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstLeOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" " Nuprl_font!le `" " slot["le"]{'e2}
+
+dform gt_relop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstGtOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" > " slot["le"]{'e2}
+
+dform ge_binop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstGeOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" " Nuprl_font!ge `" " slot["le"]{'e2}
+
+dform eq_relop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstEqOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" = " slot["le"]{'e2}
+
+dform neq_binop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstNeqOp; 'e1; 'e2} =
+   slot["lt"]{'e1} `" " Nuprl_font!neq `" " slot["le"]{'e2}
+
+(* (Unnamed) functions *)
+dform lambda_expr_df : parens :: "prec"[prec_fun] :: LambdaExpr{v. 'e} =
+   szone pushm[3] Nuprl_font!lambda slot{'v} `"." hspace slot{'e} popm ezone
+
+dform fun_lambda_expr_df : parens :: "prec"[prec_fun] :: FunLambdaExpr{v. 'e} =
+   szone pushm[3] Nuprl_font!lambda slot{'v} `"." hspace slot{'e} popm ezone
+
+(* if expressions *)
+dform if_expr_df1 : parens :: "prec"[prec_if] :: except_mode[tex] :: IfExpr{'e1; 'e2; 'e3} =
+   szone pushm[0] pushm[3] bf["if "] slot{'e1} bf[" then"] hspace
+   slot{'e2} popm hspace
+   pushm[3] bf[" else"] hspace slot{'e3} popm popm ezone
+
+dform if_expr_df2 : parens :: "prec"[prec_if] :: mode[tex] :: IfExpr{'e1; 'e2; 'e3} =
+   bf["if "] slot{'e1} bf[" then "] slot{'e2} bf[" else "] slot{'e3}
+
+(* Subscript expressions *)
+dform subscript_expr_df : parens :: "prec"[prec_subscript] :: SubscriptExpr{'e1; 'e2} =
+   slot{'e1} `"[" slot{'e2} `"]"
+
+(* Assignments *)
+dform assign_expr_df : parens :: "prec"[prec_assign] :: AssignExpr{'e1; 'e2; 'e3} =
+   slot{'e1} `"[" slot{'e2} `"] <- " slot{'e3}
+
+(* Function application *)
+dform apply_expr_df : ApplyExpr{'e; 'args} =
+   slot{'e} `"(" slot{'args} `")"
+
+(* Let-var *)
+dform let_var_expr_df : parens :: "prec"[prec_let] :: LetVarExpr{'e1; v. 'e2} =
+   szone pushm[3] bf["let "] slot{'v} `" = " slot{'e1} bf[" in"] hspace slot["lt"]{'e2} popm ezone
+
+(* Recursive functions *)
+dform ast_let_rec_df : parens :: "prec"[prec_let] :: AstLetRec{R1. 'e1; R2. 'e2} =
+   szone pushm[3] bf["let "] bf["rec "] slot{'R1} `"." hspace 'e1 popm ezone hspace slot{'R2} `"."
+   bf[" in"] hspace slot["lt"]{'e2}
+
+dform ast_fields_df : parens :: "prec"[prec_let] :: AstFields{'fields} =
+   szone pushm[0] pushm[2] bf["{ "] slot["lt"]{'fields} popm hspace bf["}"] popm ezone
+
+dform ast_fun_def_df : parens :: "prec"[prec_let] :: AstFunDef{'label; 'e; 'rest} =
+   szone pushm[3] bf["fun "] slot{'label} `" =" hspace slot{'e} popm ezone hspace 'rest
+
+dform ast_end_def_df : AstEndDef =
    `""
-dform mcons_df1 : except_mode[src] :: mcons{'a; mcons{'b; 'c}} =
-   pushm[0] `"[" slot{'a}`"," slot{'b} slot{'c} `"]" popm
 
-dform mcons_df2 : except_mode[src] :: mcons{'a; 'b} =
-   pushm[0] `"[" slot{'a} slot{'b} `"]" popm
+dform ast_label_df : AstLabel[s:t] =
+   `"\"" slot[s:t] `"\""
 
+dform ast_let_fun_df : parens :: "prec"[prec_let] :: AstLetFun{'R; 'label; f. 'e} =
+   szone pushm[3] bf["let"] bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " bf[" in"]
+   hspace slot["lt"]{'e} popm ezone
+
+(* Arguments *)
+dform ast_arg_cons_df1 : parens :: "prec"[prec_comma] :: AstArgCons{'a1; AstArgCons{'a2; 'rest}} =
+   slot{'a1} `", " slot["lt"]{AstArgCons{'a2; 'rest}}
+
+dform ast_arg_cons_df2 : parens :: "prec"[prec_comma] :: AstArgCons{'a; AstArgNil} =
+   slot{'a}
+
+dform ast_arg_cons_df2 : parens :: "prec"[prec_comma] :: AstArgCons{'a; 'b} =
+   slot{'a} `" :: " slot{'b}
+
+dform ast_arg_nil_df : parens :: "prec"[prec_comma] :: AstArgNil =
+   `""

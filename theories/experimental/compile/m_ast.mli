@@ -37,14 +37,6 @@ open Refiner.Refiner.TermOp
 
 doc <:doc< 
    @begin[doc]
-   We define our own tuple terms.
-   @end[doc]
->>
-declare mnil
-declare mcons{'e; 'list}
-
-doc <:doc< 
-   @begin[doc]
    Operators.
    @end[doc]
 >>

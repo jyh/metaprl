@@ -81,6 +81,9 @@ topval dT : int -> tactic
  *)
 topval dForT : int -> tactic
 
+val elim_univ_arg : elim_option
+val intro_univ_arg : intro_option
+
 (*
  * -*-
  * Local Variables:

@@ -528,6 +528,10 @@ let auto_resource =
         auto_tac = auto_wrap (dT 0)
       }
 
+let univ_arg_fun p _ = [get_univ_arg p]
+let elim_univ_arg = ElimArgsOption (univ_arg_fun, None)
+let intro_univ_arg = IntroArgsOption (univ_arg_fun, None)
+
 (*
  * -*-
  * Local Variables:

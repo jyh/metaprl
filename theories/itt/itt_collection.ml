@@ -271,13 +271,9 @@ prim_rw unfold_col :  col[l:l]{'T} <--> (I:univ[l:l] * ('I -> 'T))
 (* collection[l](T) ЯЭЭЮ (I:”[l] г (I ЭЮ T))
  *)
 
-interactive col_wf 'H :
+interactive col_wf {| intro_resource [] |} 'H :
    sequent[squash]{'H >- "type"{'T}} -->
    sequent['ext]{'H >- "type"{col[l:l]{'T}}}
-
-let tactic p =  col_wf (Sequent.hyp_count_addr p) p
-let term = <<   "type"{col[l:l]{'T}}   >>
-let intro_resource = Mp_resource.improve intro_resource (term, tactic)
 
 (* [М] H џ T Type ЭЭЮ
  * [ext] H џ collection[l](T) Type
@@ -335,7 +331,7 @@ interactive col_member_univ {| intro_resource [] |} 'H:
  *      [М] H џ C С collection[l](T) ЭЭЮ
  *      [ext] H џ (x С C) in collection(T) Type
 *)
-interactive col_member_wf {| intro_resource [] |} 'H univ[l:l]:
+interactive col_member_wf {| intro_resource [intro_univ_arg] |} 'H univ[l:l]:
    sequent[squash]{'H >- member{'T;'x}} -->
    sequent[squash]{'H >- member{col[l:l]{'T};'C}} -->
    sequent['ext]{'H >- "type"{col_member{'T;'C;'x}}}
@@ -377,7 +373,7 @@ interactive col_equal_univ {| intro_resource [] |} 'H :
  *        [М] H џ C_2 С collection[l](T) ЭЭЮ
  *        [ext] H џ (C_1 = C_2 in collection(T)) Type
  *)
-interactive col_equal_wf {| intro_resource [] |} 'H univ[l:l] :
+interactive col_equal_wf {| intro_resource [intro_univ_arg] |} 'H univ[l:l] :
    sequent[squash]{'H >- "type"{'T}} -->
    sequent[squash]{'H >- member{col[l:l]{'T};'C_1}} -->
    sequent[squash]{'H >- member{col[l:l]{'T};'C_2}} -->
@@ -387,7 +383,7 @@ interactive col_equal_wf {| intro_resource [] |} 'H univ[l:l] :
  *       [М] H џ C С collection[l](T) ЭЭЮ
  *       [ext] H џ C = C in collection(T)
  *)
-interactive col_equal_reflexivity {| intro_resource [] |} 'H univ[l:l] :
+interactive col_equal_reflexivity {| intro_resource [intro_univ_arg] |} 'H univ[l:l] :
    sequent[squash]{'H >- "type"{'T}} -->
    sequent[squash]  {'H >-  member{col[l:l]{'T};'C} } -->
    sequent['ext]  {'H >-  col_equal{'T;'C;'C} }
@@ -454,7 +450,7 @@ declare Col_member[l:l]{'T;'C;'x}
 prim_rw unfold_Col_member : Col_member[l:l]{'T;'C;'x} <-->
    (exst c:col[l:l]{'T} . (('c='C in Col[l:l]{'T}) and col_member{'T;'c;'x}))
 
-interactive _Col_member_wf {| intro_resource [] |} 'H univ[l:l] :
+interactive _Col_member_wf {| intro_resource [intro_univ_arg] |} 'H univ[l:l] :
    sequent[squash]{'H >- "type"{'T}} -->
    sequent[squash]{'H >- member{'T;'x}} -->
    sequent[squash]{'H >- member{Col[l:l]{'T};'C}} -->
@@ -497,7 +493,7 @@ prim_rw unfold_col_type : col_type{'C;'T} <--> ({ x:'T | col_member{'T;'C;'x} })
  *       [ext] H џ C С collection[l](T) ЭЭЮ
  *       [ext] H џ ОC Type
  *)
-interactive col_type_wf {| intro_resource [] |} 'H univ[l:l] :
+interactive col_type_wf {| intro_resource [intro_univ_arg] |} 'H univ[l:l] :
    sequent[squash] {'H >- "type"{'T}} -->
    sequent['ext]   {'H >- member{col[l:l]{'T}; 'C}} -->
    sequent['ext]   {'H >-"type"{col_type{'C;'T}}}
@@ -571,14 +567,18 @@ interactive union_wf {| intro_resource [] |} 'H 'T:
  * Щx:T. (x С X) in collection(T) П (y С Y[x]) in collection(S)
  *)
 
-interactive member_union {| intro_resource [] |} 'H univ[l:l] member{'T;'x} :
+let univ_with_args_fun p _ = [get_univ_arg p; get_with_arg p]
+let intro_univ_with_args = IntroArgsOption (univ_with_args_fun, None)
+let elim_univ_with_args = ElimArgsOption (univ_with_args_fun, None)
+
+interactive member_union {| intro_resource [intro_univ_with_args] |} 'H univ[l:l] member{'T;'x} :
    sequent[squash]{'H >- member{col[l:l]{'T};'X}} -->
    sequent[squash]{'H; x:'T; u:col_member{'T;'X;'x} >- member{col[l:l]{'S};'Y['x]}} -->
    sequent['ext] {'H >- col_member{'T;'X;'x} } -->
    sequent['ext] {'H >- col_member{'S;'Y['x];'y}} -->
    sequent['ext] {'H >- col_member{'S;union{'X;x.'Y['x]};'y}}
 
-interactive member_union_elim {| elim_resource [] |} 'H 'J univ[l:l] 'T:
+interactive member_union_elim {| elim_resource [elim_univ_with_args] |} 'H 'J univ[l:l] 'T:
    sequent[squash]{'H; 'J >- member{col[l:l]{'T};'X}} -->
    sequent[squash]{'H; 'J; x:'T; u:col_member{'T;'X;'x} >- member{col[l:l]{'S};'Y['x]}} -->
    sequent['ext]   {'H; 'J; x:'T; v:col_member{'T;'X;'x}; u: col_member{'S;'Y['x];'y} >- 'Z } -->
@@ -619,12 +619,12 @@ interactive col_union_wf {| intro_resource [] |} 'H :
 (*           x С Чs:S.C[s] in collection(T)  <==>
  *           Щs:S. (x С C[s]) in collection(T)
  *)
-interactive member_col_union {| intro_resource [] |} 'H univ[l:l]:
+interactive member_col_union {| intro_resource [intro_univ_arg] |} 'H univ[l:l]:
    sequent[squash] {'H; s:'S >- member{col[l:l]{'T};'C['s]}} -->
    sequent['ext]{'H >- (exst s:'S. col_member{'T;'C['s];'x})} -->
    sequent['ext]  {'H >- col_member{'T;col_union{'S;s.'C['s]};'x}}
 
-interactive member_col_union_elim {| elim_resource [] |} 'H 'J univ[l:l] :
+interactive member_col_union_elim {| elim_resource [elim_univ_arg] |} 'H 'J univ[l:l] :
    sequent[squash] {'H; 'J; s:'S >- member{col[l:l]{'T};'C['s]}} -->
    sequent['ext]   {'H; 'J; w:(exst s:'S. col_member{'T;'C['s];'x}) >- 'Z } -->
    sequent['ext]   {'H; u:col_member{'T;col_union{'S;s.'C['s]};'x}; 'J >- 'Z }
@@ -681,14 +681,14 @@ interactive col_filter_wf {| intro_resource [] |} 'H :
 (*        x С < x:C | P[x]> <==>
  *        x С C in collection(T)  and P[x]
  *)
-interactive member_col_filter {| intro_resource [] |} 'H univ[l:l] :
+interactive member_col_filter {| intro_resource [intro_univ_arg] |} 'H univ[l:l] :
    sequent[squash]{'H; x:'T >- "type"{'P['x]}} -->
    sequent[squash]{'H >- member{col[l:l]{'T};'C}} -->
    sequent['ext]{'H >- col_member{'T;'C;'x}} -->
    sequent['ext]{'H >- 'P['x]} -->
    sequent['ext]  {'H >- col_member{'T;col_filter{'C; x.'P['x]};'x}}
 
-interactive member_col_filter_elim {| elim_resource [] |} 'H 'J univ[l:l] :
+interactive member_col_filter_elim {| elim_resource [elim_univ_arg] |} 'H 'J univ[l:l] :
    sequent[squash]{'H; 'J; x:'T >- "type"{'P['x]}} -->
    sequent[squash]{'H; 'J >- member{col[l:l]{'T};'C}} -->
    sequent['ext]  {'H; w:'P['x]; 'J; v:col_member{'T;'C;'x} >- 'Z } -->
@@ -744,13 +744,13 @@ interactive map_wf {| intro_resource [] |} 'H 'T:
 (*            y С < f[x] | x:C> in collection(S)  <==>
  *            Щx:T. (x С C) in collection(T) П (y = f[x] in S)
  *)
-interactive member_map {| intro_resource [] |} 'H univ[l:l] 'T:
+interactive member_map {| intro_resource [intro_univ_with_args] |} 'H univ[l:l] 'T:
    sequent[squash]{'H; x:'T >- member{'S;'f['x]}} -->
    sequent[squash]{'H >- member{col[l:l]{'T};'C}} -->
    sequent['ext]{'H >- exst x:'T. (col_member{'T;'C;'x} and ('y='f['x] in 'S)) } -->
    sequent['ext]  {'H >- col_member{'S;map{'C; x.'f['x]};'y}}
 
-interactive member_map_elim {| elim_resource [] |} 'H 'J univ[l:l] 'T:
+interactive member_map_elim {| elim_resource [elim_univ_with_args] |} 'H 'J univ[l:l] 'T:
    sequent[squash]{'H; 'J; x:'T >- member{'S;'f['x]}} -->
    sequent[squash]{'H; 'J >- member{col[l:l]{'T};'C}} -->
    sequent['ext]  {'H; 'J;  x:'T; v: col_member{'T;'C;'x}; w: ('y='f['x] in 'S) >- 'Z } -->
@@ -797,7 +797,7 @@ interactive isect_wf {| intro_resource [] |} 'H :
  *    x С T  and  Шs:S. (x С C[s]) in collection(T)
  *)
 
-interactive member_isect {| intro_resource [] |} 'H univ[l:l]:
+interactive member_isect {| intro_resource [intro_univ_arg] |} 'H univ[l:l]:
    sequent[squash]{'H >- member{univ[l:l];'T}} -->
    sequent[squash]{'H >- member{univ[l:l];'S}} -->
    sequent[squash]{'H; s:'S >- member{col[l:l]{'T};'C['s]}} -->
@@ -805,7 +805,7 @@ interactive member_isect {| intro_resource [] |} 'H univ[l:l]:
    sequent['ext]  {'H >-  member{'T;'x}} -->
    sequent['ext]  {'H >- col_member{'T;."isect"{'S;s.'C['s];'T};'x}}
 
-interactive member_isect_elim {| elim_resource [] |} 'H 'J univ[l:l] :
+interactive member_isect_elim {| elim_resource [elim_univ_arg] |} 'H 'J univ[l:l] :
    sequent[squash]{'H; 'J >- member{univ[l:l];'T}} -->
    sequent[squash]{'H; 'J >- member{univ[l:l];'S}} -->
    sequent[squash]{'H; 'J; s:'S >- member{col[l:l]{'T};'C['s]}} -->
@@ -872,19 +872,19 @@ interactive add_wf {| intro_resource [] |} 'H :
 (*           x С (C_1 + C_2) in collection(T)  <==>
  *           x С C_1 in collection(T) or x С C_2 in collection(T)
  *)
-interactive member_add1 {| intro_resource [SelectOption 1] |} 'H  univ[l:l] :
+interactive member_add1 {| intro_resource [SelectOption 1; intro_univ_arg] |} 'H  univ[l:l] :
    sequent[squash] {'H >- member{col[l:l]{'T};'C_1}} -->
    sequent[squash] {'H >- member{col[l:l]{'T};'C_2}} -->
    sequent['ext]   {'H >- col_member{'T; 'C_1 ; 'x}} -->
    sequent['ext]   {'H >- col_member{'T; add{'C_1;'C_2} ; 'x}}
 
-interactive member_add2 {| intro_resource [SelectOption 2] |} 'H  univ[l:l] :
+interactive member_add2 {| intro_resource [SelectOption 2; intro_univ_arg] |} 'H  univ[l:l] :
    sequent[squash] {'H >- member{col[l:l]{'T};'C_1}} -->
    sequent[squash] {'H >- member{col[l:l]{'T};'C_2}} -->
    sequent['ext]   {'H >- col_member{'T; 'C_2 ; 'x}} -->
    sequent['ext]   {'H >- col_member{'T; add{'C_1;'C_2} ; 'x}}
 
-interactive member_add_elim {| elim_resource [] |} 'H 'J univ[l:l] :
+interactive member_add_elim {| elim_resource [elim_univ_arg] |} 'H 'J univ[l:l] :
    sequent[squash] {'H; 'J >- member{col[l:l]{'T};'C_1}} -->
    sequent[squash] {'H; 'J >- member{col[l:l]{'T};'C_2}} -->
    sequent['ext]   {'H; 'J; v: col_member{'T; 'C_1 ; 'x} >- 'Z} -->

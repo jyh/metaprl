@@ -42,62 +42,184 @@ open M_ir
 open Mp_debug
 open Printf
 
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermAddr
+open Refiner.Refiner.RefineError
+
+open Mp_resource
+open Term_match_table
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
 open Var
 open Perv
 
+(************************************************************************
+ * REDUCTION RESOURCE                                                   *
+ ************************************************************************)
+
+(*
+ * Display reductions.
+ *)
+let debug_prog =
+   create_debug (**)
+      { debug_name = "prog";
+        debug_description = "display reductions during CPS conversion";
+        debug_value = false
+      }
+
 (*!
  * @begin[doc]
- * The following two rules hoist function declarations and definitions.
+ * @resources
+ *
+ * @bf{The @Comment!resource[prog_resource]}
+ *
+ * The @tt{prog} resource provides a generic method for
+ * defining @emph{CPS transformation}.  The @conv[progC] conversion
+ * can be used to apply this evaluator.
+ *
+ * The implementation of the @tt{prog_resource} and the @tt[progC]
+ * conversion rely on tables to store the shape of redices, together with the
+ * conversions for the reduction.
+ *
+ * @docoff
  * @end[doc]
  *)
-interactive hoist_fundecl 'H bind{x. 'A['x]} FunDecl{f. 'e['f]} :
-   sequent [m] { 'H; f: exp >- 'A['e['f]] } -->
-   sequent [m] { 'H >- 'A[FunDecl{f. 'e['f]}] }
+let identity x = x
 
-interactive hoist_fundef 'H bind{x. 'A['x]} FunDef{'f; 'e1; 'e2} :
-   sequent [m] { 'H; w: def{'f; 'e1} >- 'A['e2] } -->
-   sequent [m] { 'H >- 'A[FunDef{'f; 'e1; 'e2}] }
+let extract_data tbl =
+   let rw e =
+      let t = env_term e in
+      let conv =
+         try
+            (* Find and apply the right tactic *)
+            if !debug_prog then
+               eprintf "M_prog: lookup %a%t" debug_print t eflush;
+            snd (Term_match_table.lookup tbl t)
+         with
+            Not_found ->
+               raise (RefineError ("M_prog.extract_data", StringTermError ("no reduction for", t)))
+      in
+         if !debug_prog then
+            eprintf "M_prog: applying %a%t" debug_print t eflush;
+         conv
+   in
+      funC rw
+
+let process_prog_resource_annotation name cvars vars args params mterm conv =
+   match mterm with
+      MetaIff (MetaTheorem t, _) ->
+         (t, conv)
+    | _ ->
+         raise (RefineError ("M_prog.improve_resource_arg", StringError "not a simple rewrite"))
+
+(*
+ * Resource.
+ *)
+let resource prog =
+   table_resource_info identity extract_data
+
+let progTopC_env e =
+   get_resource_arg (env_arg e) get_prog_resource
+
+let progTopC = funC progTopC_env
+
+let progC =
+   repeatC (higherC progTopC)
+
+(************************************************************************
+ * Rewrites.
+ *)
 
 (*!
  * @begin[doc]
- * A tactic to apply the hoisting rules.
+ * Swap FunDecl with any statements before it.
  * @end[doc]
  *)
-exception Found of address
+prim_rw fundecl_let_atom :
+    LetAtom{'a; v. FunDecl{f. 'e1['f; 'v]}}
+    <--> FunDecl{f. LetAtom{'a; v. 'e1['f; 'v]}}
 
-let declareT p =
-   let goal = concl p in
-   let rec search addr t =
-      if is_fundecl_term t then
-         raise (Found (make_address (List.rev addr)));
-      search_subterms addr 0 (subterms_of_term t)
-   and search_subterms addr next tl =
-      match tl with
-         t :: tl ->
-            search (next :: addr) t;
-            search_subterms addr (succ next) tl
-       | [] ->
-            ()
-   in
-   let goal = concl p in
-   let tac =
-      try search [] goal; failT with
-         Found addr ->
-            let decl = term_subterm goal addr in
-            let x = get_opt_var_arg "z" p in
-            let a = replace_subterm goal addr (mk_var_term x) in
-            let bind = mk_bind1_term x a in
-               eprintf "Bind: %a\nDecl: %a%t" debug_print bind debug_print decl eflush;
-               hoist_fundecl (hyp_count_addr p) bind decl
-   in
-      tac p
+prim_rw fundecl_let_pair :
+   LetPair{'a1; 'a2; v. FunDecl{f. 'e1['f; 'v]}}
+   <--> FunDecl{f. LetPair{'a1; 'a2; v. 'e1['f; 'v]}}
+
+prim_rw fundecl_let_subscript :
+   LetSubscript{'a1; 'a2; v. FunDecl{f. 'e['f; 'v]}}
+   <--> FunDecl{f. LetSubscript{'a1; 'a2; v. 'e['f; 'v]}}
+
+prim_rw fundecl_if_true :
+   If{'a; FunDecl{f. 'e1['f]}; 'e2}
+   <--> FunDecl{f. If{'a; 'e1['f]; 'e2}}
+
+prim_rw fundecl_if_false :
+   If{'a; 'e1; FunDecl{f. 'e2['f]}}
+   <--> FunDecl{f. If{'a; 'e1; 'e2['f]}}
+
+prim_rw fundecl_fundef :
+   FunDef{'f; 'e1; FunDecl{g. 'e2['g]}}
+   <--> FunDecl{g. FunDef{'f; 'e1; 'e2['g]}}
+
+prim_rw fundef_let_atom :
+   LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}}
+   <--> FunDef{'f; 'e1; LetAtom{'a; v. 'e2['v]}}
+
+prim_rw fundef_let_subscript :
+   LetSubscript{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}}
+   <--> FunDef{'f; 'e1; LetSubscript{'a1; 'a2; v. 'e2['v]}}
+
+prim_rw fundef_if_true :
+   If{'a; FunDef{'f; 'e1; 'e2}; 'e3}
+   <--> FunDef{'f; 'e1; If{'a; 'e2; 'e3}}
+
+prim_rw fundef_if_false :
+   If{'a; 'e1; FunDef{'f; 'e2; 'e3}}
+   <--> FunDef{'f; 'e2; If{'a; 'e1; 'e3}}
+
+(*
+ * Add all these rules to the CPS resource.
+ *)
+let resource prog +=
+    [<< LetAtom{'a; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_atom;
+     << LetPair{'a1; 'a2; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_pair;
+     << LetSubscript{'a1; 'a2; v. FunDecl{f. 'e['f; 'v]}} >>, fundecl_let_subscript;
+     << If{'a; FunDecl{f. 'e1['f]}; 'e2} >>, fundecl_if_true;
+     << If{'a; FunDecl{f. 'e1['f]}; 'e2} >>, fundecl_if_false;
+     << FunDef{'f; 'e1; FunDecl{g. 'e2['g]}} >>, fundecl_fundef;
+
+     << LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_atom;
+     << LetSubscript{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_subscript;
+     << If{'a; FunDef{'f; 'e1; 'e2}; 'e3} >>, fundef_if_true;
+     << If{'a; 'e1; FunDef{'f; 'e2; 'e3}} >>, fundef_if_false]
+
+(*!
+ * @begin[doc]
+ * Lift function past the turnstile.
+ * @end[doc]
+ *)
+interactive hoist_fundecl 'H :
+   sequent [m] { 'H; f : exp >- compilable{'e['f]} } -->
+   sequent [m] { 'H >- compilable{FunDecl{f. 'e['f]}} }
+
+interactive hoist_fundef 'H :
+   sequent [m] { 'H; w: def{'f; 'e1} >- 'e2 } -->
+   sequent [m] { 'H >- compilable{FunDef{'f; 'e1; 'e2}} }
+
+let hoistOnceT p =
+   let addr = hyp_count_addr p in
+      (hoist_fundecl addr orelseT hoist_fundef addr) p
+
+let hoistT = repeatT hoistOnceT
+
+(*
+ * Wrap it all in a tactic.
+ *)
+let progT =
+   rw progC 0 thenT hoistT
 
 (*!
  * @docoff

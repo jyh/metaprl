@@ -30,16 +30,20 @@ extends M_prog
 
 open M_cps
 open M_closure
+open M_prog
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 let compileT =
    (* CPS conversion *)
-   rw cpsC 0
+   cpsT
 
    (* Closure conversion *)
    thenT closeT
+
+   (* Lift definitions to top level *)
+   thenT progT
 
 (*!
  * @docoff

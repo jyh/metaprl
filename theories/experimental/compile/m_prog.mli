@@ -26,9 +26,25 @@
  *)
 extends M_ir
 
-open Tactic_type.Tacticals
+open Mp_resource
 
-topval declareT : tactic
+open Refiner.Refiner.Term
+
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+
+(*
+ * CPS resource
+ *)
+resource (term * conv, conv) prog
+val process_prog_resource_annotation : (conv, term * conv) annotation_processor
+
+topval progTopC : conv
+topval progC : conv
+
+topval hoistOnceT : tactic
+topval hoistT : tactic
+topval progT : tactic
 
 (*!
  * @docoff

@@ -258,6 +258,11 @@ let resource cps +=
 
      << LetClosure{'a1; 'a2; f. TailCall{AtomVar{'f}; 'a3}} >>, cps_opt_tailcall]
 
+(*
+ * Toplevel CPS conversion tactic.
+ *)
+let cpsT = rw cpsC 0
+
 (*!
  * @docoff
  *

@@ -30,6 +30,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
 open Mp_resource
 
+open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (*
@@ -44,8 +45,13 @@ declare CPS{'cont; 'e}
 resource (term * conv, conv) cps
 val process_cps_resource_annotation : (conv, term * conv) annotation_processor
 
+(*
+ * For debugging.
+ *)
 topval cpsTopC : conv
 topval cpsC : conv
+
+topval cpsT : tactic
 
 (*!
  * @docoff

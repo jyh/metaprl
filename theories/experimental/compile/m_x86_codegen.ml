@@ -185,10 +185,11 @@ prim_rw asm_atom_binop_div :
    <-->
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Inst2["xor"]{edx; edx;
-   Inst2["mov"]{eax; 'v1;
-   Instm["div"]{edx; eax; 'v2;
-   'e[eax]}}}}}
+   Let["edx":t]{ImmediateNumber[0:n]; edx.
+   Let["eax":t]{'v1; eax.
+   Instm["div"]{Register{'edx}; Register{'eax}; 'v2;
+   Let{Register{'eax}; v.
+   'e['v]}}}}}}
 
 (*
  * We should probably change the representation

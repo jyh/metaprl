@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Rename all vars so they are different.
  *
  * ----------------------------------------------------------------
  *
@@ -25,19 +25,10 @@
  * @end[license]
  *)
 extends M_ir
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends M_x86_codegen
-extends M_standardize
-extends M_x86_spill
 
 open Tactic_type.Tacticals
 
-topval convertT : tactic
-topval compileT : tactic
+topval standardizeT : tactic
 
 (*!
  * @docoff

@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Generate spill code.
  *
  * ----------------------------------------------------------------
  *
@@ -24,20 +24,29 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ir
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends M_x86_codegen
-extends M_standardize
-extends M_x86_spill
+extends X86_term
+
+open Refiner.Refiner.Term
+open Mp_resource
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
-topval convertT : tactic
-topval compileT : tactic
+(*
+ * CPS resource
+ *)
+resource (term * conv, conv) spill
+
+(*
+ * For debugging.
+ *)
+topval spillC : conv
+topval splitC : string -> conv
+
+(*
+ * This is the actual spill function.
+ *)
+topval spillT : string list -> tactic
 
 (*!
  * @docoff

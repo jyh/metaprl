@@ -86,6 +86,7 @@ declare CC["ae"]
  * @end[doc]
  *)
 declare Let{'src; dst. 'rest['dst]}
+declare Let[reg:t]{'src; dst. 'rest['dst]}
 declare Inst1["neg"]{'dst; 'rest}
 declare Inst1["not"]{'dst; 'rest}
 declare Inst2["mov"]{'dst; 'src; 'rest}
@@ -93,6 +94,9 @@ declare Inst2["add"]{'dst; 'src; 'rest}
 declare Inst2["lea"]{'dst; 'src; 'rest}
 declare Inst2["sub"]{'dst; 'src; 'rest}
 declare Inst2["imul"]{'dst; 'src; 'rest}
+
+declare LetSpill["set"]{'src; dst. 'rest['dst]}
+declare LetSpill["get"]{'src; dst. 'rest['dst]}
 
 (*!
  * @begin[doc]

@@ -86,6 +86,7 @@ declare CC["ae"]
  * @end[doc]
  *)
 declare Let{'src; dst. 'rest['dst]}
+declare Let[reg:t]{'src; dst. 'rest['dst]}
 declare Inst1["neg"]{'dst; 'rest}
 declare Inst1["not"]{'dst; 'rest}
 declare Inst2["mov"]{'dst; 'src; 'rest}
@@ -93,6 +94,9 @@ declare Inst2["add"]{'dst; 'src; 'rest}
 declare Inst2["lea"]{'dst; 'src; 'rest}
 declare Inst2["sub"]{'dst; 'src; 'rest}
 declare Inst2["imul"]{'dst; 'src; 'rest}
+
+declare LetSpill["set"]{'src; dst. 'rest['dst]}
+declare LetSpill["get"]{'src; dst. 'rest['dst]}
 
 (*!
  * @begin[doc]
@@ -153,7 +157,7 @@ declare LabelFun{v. 'insts['v]}
  * Operands.
  *)
 dform immediate_number_df : ImmediateNumber[i:n] =
-   `"#" slot[i:n]
+   `"$" slot[i:n]
 
 dform immediate_label_df : ImmediateLabel[label:t]{'R} =
    slot{'R} `"." slot[label:t]
@@ -185,8 +189,14 @@ dform cc_df : CC[cc:s] =
 (*
  * Instructions.
  *)
-dform let_reg_df : Let{'src; dst. 'rest} =
+dform let_df1 : Let{'src; dst. 'rest} =
     `"mov " slot{'src} `", %" slot{'dst} `" /* LET */" hspace slot{'rest}
+
+dform let_df2 : Let[reg:t]{'src; dst. 'rest} =
+    `"mov " slot{'src} `", %" slot{'dst} `" /* LET dst should be " slot[reg:t] `" */" hspace slot{'rest}
+
+dform set_spill_df : LetSpill[opcode:s]{'src; dst. 'rest} =
+    `"mov " slot{'src} `", %" slot{'dst} `" /* SPILL(" slot[opcode:s] `") */" hspace slot{'rest}
 
 dform inst1_df : Inst1[label:s]{'dst; 'rest} =
     slot[label:s] `" " slot{'dst} hspace slot{'rest}

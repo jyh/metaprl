@@ -19,10 +19,13 @@ MPFILES :=\
 	m_prog\
 	m_dead\
 	m_inline\
+	m_standardize\
 	x86_asm\
+	x86_term\
 	m_x86_util\
 	m_x86_frame\
 	m_x86_codegen\
+	m_x86_spill\
 	m_theory\
 	m_test
 

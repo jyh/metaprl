@@ -31,6 +31,8 @@ extends M_prog
 extends M_dead
 extends M_inline
 extends M_x86_codegen
+extends M_standardize
+extends M_x86_spill
 
 open M_cps
 open M_closure
@@ -38,6 +40,7 @@ open M_prog
 open M_dead
 open M_inline
 open M_x86_codegen
+open M_standardize
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
@@ -66,6 +69,9 @@ let compileT =
 
    (* Generate assembly *)
    thenT codegenT
+
+   (* Standardize the program *)
+   thenT standardizeT
 
 (*!
  * @docoff

@@ -1,5 +1,6 @@
 (*
- * The general theory for the M language.
+ * Rename all binding variables so that they
+ * are all different.
  *
  * ----------------------------------------------------------------
  *
@@ -25,19 +26,29 @@
  * @end[license]
  *)
 extends M_ir
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends M_x86_codegen
-extends M_standardize
-extends M_x86_spill
 
-open Tactic_type.Tacticals
+open Refiner.Refiner.TermSubst
 
-topval convertT : tactic
-topval compileT : tactic
+open Tactic_type.Sequent
+
+open Top_tacticals
+
+(*
+ * Alpha equality.
+ *)
+declare equal{'e1; 'e2}
+
+interactive alpha_equal :
+   sequent [m] { 'H >- equal{'e; 'e} }
+
+interactive subst 'e2 :
+   sequent [m] { 'H >- 'e2 } -->
+   ["wf"] sequent [m] { 'H >- equal{'e1; 'e2} } -->
+   sequent [m] { 'H >- 'e1 }
+
+let standardizeT =
+   (fun p -> subst (standardize (concl p)) p)
+   thenWT alpha_equal
 
 (*!
  * @docoff

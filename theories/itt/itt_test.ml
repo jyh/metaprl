@@ -49,7 +49,7 @@ open Itt_int_bool
 
 declare fact{'i}
 
-primrw reduceFact : fact{'i} <--> fix{f. lambda{i. ifthenelse{eq_int{'i; 0}; 1; .'i *@ 'f ('i -@ 1)}}} 'i
+interactive_rw reduceFact : fact{'i} <--> fix{f. lambda{i. ifthenelse{eq_int{'i; 0}; 1; .'i *@ 'f ('i -@ 1)}}} 'i
 
 dform fact_df : parens :: "prec"[prec_apply] :: fact{'i} =
    `"fact" " " slot{'i}
@@ -70,15 +70,14 @@ let redexC =
 
 let goal = mk_msequent << sequent { 'H >- fact{300} = 0 in int } >> []
 
-(*
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 
 let arg =
    Sequent.create (**)
-      any_sentinal      (* Sentinal *)
+      (Sequent.sentinal_of_refiner "itt")      (* Sentinal *)
       "main"            (* Label *)
       goal              (* Goal of proof *)
-      cache             (* Proof cache *)
+      (Sequent.make_cache (fun () -> cache))             (* Proof cache *)
       []                (* Attributes *)
 
 let test () =
@@ -91,8 +90,6 @@ let test () =
             eprintf "No subgoals%t" eflush
        | _ ->
             eprintf "Too many subgoals%t" eflush
-*)
-
 
 (*
  * -*-

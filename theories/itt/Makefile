@@ -49,11 +49,13 @@ PFILES := test
 
 CMXDEPS =\
 	$(CAMLLIB)/unix.cmxa\
+	$(OPTTHREADSLIB)\
 	$(CAMLLIB)/nums.cmxa\
 	$(CAMLP4LIB)/gramlib.cmxa\
 	$(ROOT)/lib/util.cmxa\
 	$(ROOT)/lib/refiner.cmxa\
 	$(ROOT)/lib/library.cmxa\
+	$(ROOT)/lib/trefiner_null.cmxa\
 	$(ROOT)/theories/tactic/tactics.cmxa\
 	$(ROOT)/theories/ocaml/ocaml_df.cmxa\
 	$(ROOT)/theories/base/base.cmxa\
@@ -64,10 +66,12 @@ CMXLIBS =\
 
 CMADEPS =\
 	$(CAMLLIB)/unix.cma\
-        $(CAMLLIB)/nums.cma\
+	$(THREADSLIB)\
+	$(CAMLLIB)/nums.cma\
 	$(ROOT)/lib/util.cma\
 	$(ROOT)/lib/refiner.cma\
 	$(ROOT)/lib/library.cma\
+	$(ROOT)/lib/trefiner_null.cma\
 	$(ROOT)/theories/tactic/tactics.cma\
 	$(ROOT)/theories/ocaml/ocaml_df.cma\
 	$(ROOT)/theories/base/base.cma\
@@ -99,11 +103,11 @@ opt: $(MAIN).cmxa
 
 $(TEST).run: $(CMOBJS)
 	$(RM) $@
-	$(OCAMLCP) -o $@ -custom $(CMOBJS) $(CCLIBS)
+	$(OCAMLC) $(OCAMLCFLAGS) -o $@ -custom -linkall $(THREADS) $(CMOBJS) $(CCLIBS) $(LIBTHREADS)
 
 $(TEST).opt: $(CMXOBJS)
 	$(RM) $@
-	$(OCAMLOPT) $(PROFILE) -o $@ $(CMXOBJS) $(CCLIBS)
+	$(OCAMLOPT) $(OCAMLOPTFLAGS) -o $@ -linkall $(THREADS) $(CMXOBJS) $(CCLIBS) $(OPTTHREADS)
 
 clean::
 	$(RM) *.p4* *.pp*

@@ -148,8 +148,6 @@ topval fold_length : conv
  * TACTICS                                                              *
  ************************************************************************)
 
-topval subsetConsT : tactic
-topval samesetRefT : tactic
 topval samesetSymT : tactic
 topval samesetTransT : term -> tactic
 

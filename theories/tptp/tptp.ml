@@ -186,7 +186,7 @@ interactive tptp2_all_intro {| intro_resource [] |} 'H 'v :
    sequent ['ext] { 'H; v: atom0 >- 'b['v] } -->
    sequent ['ext] { 'H >- "all"{x. 'b['x]} }
 
-interactive tptp2_all_elim {| intro_resource [] |} 'H 'J 'z 'y :
+interactive tptp2_all_elim {| elim_resource [] |} 'H 'J 'z 'y :
    sequent [squash] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- atomic{'z} } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x]; y: 'b['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- 'C['x] }

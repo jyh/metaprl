@@ -95,28 +95,28 @@ rewrite unfold_apply3 : "apply"{'f1; 'x1; 'x2; 'x3} <--> ('f1 'x1 'x2 'x3)
 rewrite unfold_apply4 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4} <--> ('f1 'x1 'x2 'x3 'x4)
 rewrite unfold_apply5 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4; 'x5} <--> ('f1 'x1 'x2 'x3 'x4 'x5)
 
-val fold_atom0 : conv
-val fold_atom1 : conv
-val fold_atom2 : conv
-val fold_atom3 : conv
-val fold_atom4 : conv
-val fold_atom5 : conv
+topval fold_atom0 : conv
+topval fold_atom1 : conv
+topval fold_atom2 : conv
+topval fold_atom3 : conv
+topval fold_atom4 : conv
+topval fold_atom5 : conv
 
-val fold_prop0 : conv
-val fold_prop1 : conv
-val fold_prop2 : conv
-val fold_prop3 : conv
-val fold_prop4 : conv
-val fold_prop5 : conv
+topval fold_prop0 : conv
+topval fold_prop1 : conv
+topval fold_prop2 : conv
+topval fold_prop3 : conv
+topval fold_prop4 : conv
+topval fold_prop5 : conv
 
-val fold_apply2 : conv
-val fold_apply3 : conv
-val fold_apply4 : conv
-val fold_apply5 : conv
+topval fold_apply2 : conv
+topval fold_apply3 : conv
+topval fold_apply4 : conv
+topval fold_apply5 : conv
 
-val fold_atomic : conv
-val fold_all : conv
-val fold_exists : conv
+topval fold_atomic : conv
+topval fold_all : conv
+topval fold_exists : conv
 
 (************************************************************************
  * RULES                                                                *
@@ -165,11 +165,11 @@ val var_of_exists : term -> string
 (*
  * This is for proving intro rules.
  *)
-val tptp_autoT : tactic
+topval tptp_autoT : tactic
 
-val t_atomicT : tactic
-val atomicT : int -> tactic
-val typeT : int -> tactic
+topval t_atomicT : tactic
+topval atomicT : int -> tactic
+topval typeT : int -> tactic
 
 (*
  * -*-

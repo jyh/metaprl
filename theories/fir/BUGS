@@ -1,0 +1,24 @@
+Mojave FIR Theory
+BUGS
+by Brian Emre Aydemir (emre@cs.caltech.edu)
+
+Below, I have listed every bug in the Mojave FIR theory that I am
+aware of.  They are listed in no particular order.  I have also listed,
+at the end, things that might be considered bugs, but really aren't.
+
+
+-- Cannot give a type for functions of zero arguments (see Mfir_ty!tyFun).
+
+-- No terms are declared for dependent tuples, including tyDefDTuple
+   and tyDTuple, and tyTag.  These should go in Mfir_ty.
+
+-- No terms are declared for frames, including tyFrame and frame.
+   These should go in Mfir_ty.
+
+-- No terms are declared for the FIR object system, including tyCase,
+   and tyObject.  These should go in Mfir_ty.
+
+
+Things that might look like bugs, but really aren't:
+
+-- The term tyDelayed is not declared.  See the README for why this is.

@@ -118,8 +118,13 @@ declare AtomFunVar{'R; 'v}
 declare LetAtom{'a; v. 'e['v]}
 declare TailCall{'f; 'a}
 declare TailCall{'f; 'a1; 'a2}
+declare TailCall{'f; 'a1; 'a2; 'a3}
 declare If{'a; 'e1; 'e2}
-declare LetPair{'a1; 'a2; v. 'e['v]}
+
+declare Length[i:n]
+declare AllocTupleNil
+declare AllocTupleCons{'a; 'rest}
+declare LetTuple{'length; 'tuple; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
@@ -165,6 +170,7 @@ declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
  * EndDef term terminates the record fields.
  * @end[doc]
  *)
+declare Fields{'fields}
 declare Label[tag:t]
 declare FunDef{'label; 'exp; 'rest}
 declare EndDef
@@ -282,13 +288,50 @@ dform exp_tailcall2_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a} =
 dform exp_tailcall3_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a1; 'a2} =
    bf["tailcall "] slot{'f} `"(" slot{'a1} `", " slot{'a2} `")"
 
+dform exp_tailcall4_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a1; 'a2; 'a3} =
+   bf["tailcall "] slot{'f} `"(" slot{'a1} `", " slot{'a2} `", " slot{'a3} `")"
+
 dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; 'e2} =
    szone pushm[0] pushm[3] bf["if"] `" " slot{'a} `" " bf["then"] hspace
    slot{'e1} popm hspace
    pushm[3] bf["else"] hspace slot{'e2} popm popm ezone
 
-dform exp_let_pair_df : parens :: "prec"[prec_let] :: LetPair{'a1; 'a2; v. 'e} =
-   xlet `" " slot{'v} bf[" = "] `"(" 'a1 `"," 'a2 `") " xin hspace slot["lt"]{'e}
+(*
+ * Subscripting.
+ * Tuples are listed in reverse order.
+ *)
+declare alloc_tuple{'l1; 'l2}
+declare alloc_tuple{'l}
+
+dform length_df : Length[i:n] =
+   slot[i:n]
+
+dform alloc_tuple_start_nil_df : AllocTupleNil =
+   alloc_tuple{nil; AllocTupleNil}
+
+dform alloc_tuple_start_cons_df : AllocTupleCons{'a; 'rest} =
+   alloc_tuple{nil; AllocTupleCons{'a; 'rest}}
+
+dform alloc_tuple_shift_df : alloc_tuple{'l; AllocTupleCons{'a; 'rest}} =
+   alloc_tuple{cons{'a; 'l}; 'rest}
+
+dform alloc_tuple_start_df : alloc_tuple{'l; AllocTupleNil} =
+   szone pushm[1] bf["("] alloc_tuple{'l} bf[")"] popm ezone
+
+dform alloc_tuple_nil_df : alloc_tuple{nil} =
+   `""
+
+dform alloc_tuple_cons_nil_df : alloc_tuple{cons{'a; nil}} =
+   slot{'a}
+
+dform alloc_tuple_cons_cons_df : alloc_tuple{cons{'a1; cons{'a2; 'l}}} =
+   slot{'a1} bf[","] hspace alloc_tuple{cons{'a2; 'l}}
+
+(*
+ * Actual tuple operations.
+ *)
+dform exp_let_tuple_df : parens :: "prec"[prec_let] :: LetTuple{'length; 'tuple; v. 'e} =
+   xlet `" " slot{'v} bf[" =[length ="] slot{'length} bf["] "] slot{'tuple} `" " xin hspace slot["lt"]{'e}
 
 dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v. 'e} =
    xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e}
@@ -296,6 +339,9 @@ dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v.
 dform exp_set_subscript_df : parens :: "prec"[prec_let] :: SetSubscript{'a1; 'a2; 'a3; 'e} =
    slot{'a1} `"[" slot{'a2} `"] <- " slot{'a3} `";" hspace slot["lt"]{'e}
 
+(*
+ * Functions and application.
+ *)
 dform exp_let_apply_df : parens :: "prec"[prec_let] :: LetApply{'f; 'a; v. 'e} =
    xlet bf[" apply "] slot{'v} bf[" = "] slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
 
@@ -309,10 +355,13 @@ dform exp_return_df : Return{'a} =
  * Recursive functions.
  *)
 dform let_rec_df : parens :: "prec"[prec_let] :: LetRec{R1. 'e1; R2. 'e2} =
-   szone pushm[3] xlet bf[" rec "] slot{'R1} `"." 'e1 popm ezone hspace slot{'R2} `"." xin hspace slot["lt"]{'e2}
+   szone pushm[3] xlet bf[" rec "] slot{'R1} `"." hspace 'e1 popm ezone hspace slot{'R2} `"." xin hspace slot["lt"]{'e2}
+
+dform fields_df : parens :: "prec"[prec_let] :: Fields{'fields} =
+   szone pushm[0] pushm[2] bf["{ "] slot["lt"]{'fields} popm hspace bf["}"] popm ezone
 
 dform fun_def_df : parens :: "prec"[prec_let] :: FunDef{'label; 'e; 'rest} =
-   hspace szone pushm[3] bf["fun "] slot{'label} `" =" hspace slot{'e} popm ezone 'rest
+   szone pushm[3] bf["fun "] slot{'label} `" =" hspace slot{'e} popm ezone hspace 'rest
 
 dform end_def_df : EndDef =
    `""
@@ -340,6 +389,22 @@ dform compilable_df : "prec"[prec_compilable] :: compilable{'e} =
 declare m
 
 dform m_df : m = bf["m"]
+
+(************************************************************************
+ * ML Helpers
+ *)
+let fundef_term      = << FunDef{'label; 'e; 'rest} >>
+let fundef_opname    = opname_of_term fundef_term
+let is_fundef_term   = is_dep0_dep0_dep0_term fundef_opname
+let dest_fundef_term = dest_dep0_dep0_dep0_term fundef_opname
+let mk_fundef_term   = mk_dep0_dep0_dep0_term fundef_opname
+
+let letrec_term      = << LetRec{R1. 'fields['R1]; R2. 'body['R2]} >>
+let letrec_opname    = opname_of_term letrec_term
+let is_letrec_term   = is_dep1_dep1_term letrec_opname
+let dest_letrec_term = dest_dep1_dep1_term letrec_opname
+let mk_letrec_term   = mk_dep1_dep1_term letrec_opname
+
 
 (*!
  * @docoff

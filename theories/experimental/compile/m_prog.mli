@@ -40,9 +40,6 @@ resource (term * conv, conv) prog
 
 topval progTopC : conv
 topval progC : conv
-
-topval hoistOnceT : tactic
-topval hoistT : tactic
 topval progT : tactic
 
 (*!

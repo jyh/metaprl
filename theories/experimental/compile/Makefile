@@ -14,6 +14,10 @@ MPFILES :=\
 	m_util\
 	m_ir\
 	m_cps\
+	m_closure\
+	m_prog\
+	m_dead\
+	m_inline\
 	m_theory\
 	m_test
 
@@ -22,15 +26,12 @@ OTHER =\
 	m_post_parsing\
 	m_cps\
 	m_closure\
-	m_prog\
-	m_dead\
-	m_inline\
 	x86_asm\
 	m_x86\
 	m_theory\
 	m_test
 
-# Name of main libraris
+# Name of main libraries
 MAIN = theory
 
 all: $(MAIN).cma

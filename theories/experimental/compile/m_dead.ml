@@ -95,8 +95,8 @@ let deadC =
 prim_rw dead_let_atom :
    LetAtom{'a; v. 'e} <--> 'e
 
-prim_rw dead_let_pair :
-   LetPair{'a1; 'a2; v. 'e} <--> 'e
+prim_rw dead_let_tuple :
+   LetTuple{'length; 'tuple; v. 'e} <--> 'e
 
 prim_rw dead_let_subscript :
    LetSubscript{'a1; 'a2; v. 'e} <--> 'e
@@ -109,7 +109,7 @@ prim_rw dead_let_closure :
  *)
 let resource dead +=
     [<< LetAtom{'a; v. 'e} >>, dead_let_atom;
-     << LetPair{'a1; 'a2; v. 'e} >>, dead_let_pair;
+     << LetTuple{'length; 'tuple; v. 'e} >>, dead_let_tuple;
      << LetSubscript{'a1; 'a2; v. 'e} >>, dead_let_subscript;
      << LetClosure{'a1; 'a2; f. 'e} >>, dead_let_closure]
 

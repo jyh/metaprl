@@ -26,6 +26,10 @@
  *)
 extends M_ir
 extends M_cps
+extends M_closure
+extends M_prog
+extends M_dead
+extends M_inline
 
 open Tactic_type.Tacticals
 

@@ -26,29 +26,11 @@
  *)
 extends M_ir
 extends M_cps
-
-open M_cps
-
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
-let compileT =
-   (* CPS conversion *)
-   cpsT
-
-(*
-extends M_ast
-extends M_post_parsing
-extends M_cps
 extends M_closure
 extends M_prog
 extends M_dead
 extends M_inline
-extends X86_asm
-extends M_x86
 
-open M_ast
-open M_post_parsing
 open M_cps
 open M_closure
 open M_prog
@@ -59,11 +41,8 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 let compileT =
-   (* Post-parsing translations *)
-   ppT
-
    (* CPS conversion *)
-   thenT cpsT
+   cpsT
 
    (* Closure conversion *)
    thenT closeT
@@ -79,7 +58,6 @@ let compileT =
 
    (* Another round of dead code elimination *)
    thenT deadT
-*)
 
 (*!
  * @docoff

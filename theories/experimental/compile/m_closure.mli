@@ -30,18 +30,26 @@
  *)
 extends M_ir
 
+open Refiner.Refiner.TermType
+
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (*
- * The first three are for debugging.
+ * CPS resource
  *)
-topval abstractT : tactic
-topval closeC : conv
-topval closeOnceT : tactic
+resource (term * conv, conv) closure
 
 (*
- * This is the actual closure conversion.
+ * The first three are for debugging.
+ *)
+topval frameT : tactic
+topval abstractT : tactic
+topval uncloseT : tactic
+topval pushT : tactic
+
+(*
+ * This is the real closure conversion.
  *)
 topval closeT : tactic
 

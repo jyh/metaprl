@@ -31,18 +31,20 @@ extends M_theory
  *)
 interactive fib_prog :
    sequent [m] { 'H >- compilable{
-      LetRec{R.
+      LetAtom{AtomInt[1:n]; one.
+      LetAtom{AtomInt[2:n]; two.
+      LetRec{R. Fields{
          FunDef{Label["fib":t]; AtomFun{i.
             LetFun{'R; Label["fib":t]; fib.
             If{AtomBinop{LeOp; AtomVar{'i}; AtomInt[1:n]};
                Return{AtomVar{'i}};
 
-               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomInt[1:n]}; v1.
-               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomInt[2:n]}; v2.
+               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'one}}; v1.
+               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'two}}; v2.
                Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}}};
-         EndDef};
+         EndDef}};
       R. LetFun{'R; Label["fib":t]; fib.
-         TailCall{'fib; AtomInt[35:n]}}}} }
+         TailCall{'fib; AtomInt[35:n]}}}}}} }
 
 (*!
  * @docoff

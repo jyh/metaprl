@@ -2,40 +2,24 @@
  * @begin[doc]
  * @module[M_closure]
  *
- * Closure conversion for the @emph{M} language.  We close
- * a function by repeating two steps.
+ * Closure conversion for the @emph{M} language.  The program is
+ * closed in four steps.
  *
- * @begin[enumerate]
- * @item{First, assume we have a function with a free variable $y$.
+ * 1. In the first step, all LetRec terms are replaced
+ *    with CloseRec terms, which include an extra frame
+ *    parameter.  The frame is allocated as a tuple, and
+ *    and the free variables are projected from the tuple.
  *
+ * 2. In the second step, for each CloseRec that has a free
+ *    variable, the free variable is added to the frame,
+ *    and projected within the record.
  *
- * @begin[verbatim]
- * declare f in
- * define f = e1[f] in
- * e2[f]
- * <-->
- * declare f
- * define f = lambda{y. e1[f]} y in
- * e2[f]
- * @end[verbatim]}
+ * 3. In the third step, the CloseRec is converted back to
+ *    a LetRec followed by a tuple allocation.
  *
- * @item{Next, apply the following transformation.
+ * 4. The fourth phase moves code around an generally cleans
+ *    up.
  *
- * @begin[verbatim]
- * declare f in
- * define f = lambda{y. e1[y,f]} a in
- * e2[f]
- * <-->
- * declare f in
- * define f =
- *    lambda{y.
- *       let closure g = f(y) in
- *          e1[y,g]}
- * in
- * let closure g = f(a) in
- *    e2[g]
- * @end[verbatim]}
- * @end[enumerate]
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -71,10 +55,10 @@ extends M_ir
 (*! @docoff *)
 
 open M_ir
+open M_util
 
 open Printf
 open Mp_debug
-open String_set
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -90,143 +74,316 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
+open Base_meta
+
 (************************************************************************
- * Phase 1.
+ * REDUCTION RESOURCE                                                   *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @resources
+ *
+ * @bf{The @Comment!resource[closure_resource]}
+ * @docoff
+ * @end[doc]
  *)
+let resource closure =
+   table_resource_info identity extract_data
+
+let closureTopC_env e =
+   get_resource_arg (env_arg e) get_closure_resource
+
+let closureTopC = funC closureTopC_env
+
+let closureC =
+   repeatC (higherC closureTopC)
+
+(************************************************************************
+ * Terms
+ *)
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Terms}
+ *
+ * We define several auxiliary terms.
+ *
+ * The CloseVar{v. e[v]; 'a} term is the same as LetAtom{a; v. e[v]}.
+ * We use a special term for variables that are being closed.
+ *
+ * The CloseRecVar{R; frame} term is used to wrap record variables.
+ * The term represents the partial application of the record R to
+ * the frame variable.
+ *
+ * The CloseRec{R1, frame1. fields[R1; frame1];
+ *              R2, frame2. body[R2; frame2];
+ *              length, tuple}
+ * is a recursive record definition.  The function defined by the
+ * fields[R1; frame1] take the frame1 as an extra argument; frame1
+ * represents the environment containing all the functions' free vars.
+ * The body[R2, frame2] is the rest of the program.  The frame2
+ * represents the frame to be used for the functions in R2.  The
+ * frame2 is allocated as the tuple, which has "length" fields.
+ *
+ * CloseSubscript{'a1; 'a2; v. e[v]} is the same as LetSubscript,
+ * but we use a special term to guide the closure conversion
+ * process.
+ *
+ * CloseFrame{frame. e[frame]} is the term that adds an extra
+ * frame argument to each of the functions in the record.
+ * @end[doc]
+ *)
+declare CloseVar{v. 'e['v]; 'a}
+declare CloseRecVar{'R; 'frame}
+declare CloseRec{R1, frame1. 'fields['R1; 'frame1];
+                 R2, frame2. 'body['R2; 'frame2];
+                 'length;
+                 'tuple}
+declare CloseSubscript{'frame; 'index; v. 'e['v]}
+declare CloseFrame{frame. 'e['frame]}
+
+dform close_var_df : parens :: "prec"[prec_let] :: CloseVar{v. 'e; 'a} =
+   bf["close "] slot{'v} bf[" = "] slot{'a} bf[" in"] hspace slot["lt"]{'e}
+
+dform close_rec_var_df : CloseRecVar{'R; 'frame} =
+   slot{'R} bf["["] slot{'frame} bf["]"]
+
+dform close_rec_df : parens :: "prec"[prec_let] :: CloseRec{R1, frame1. 'e1; R2, frame2. 'e2; 'length; 'tuple} =
+   szone pushm[3] bf["close rec "]
+   slot{'R1} `"," slot{'frame1} `"." hspace 'e1 popm ezone
+   hspace slot{'R2} `"," slot{'frame2} bf["[length="] slot{'length} bf["]"] slot{'tuple} bf["."]
+   hspace slot["lt"]{'e2}
+
+dform close_subscript_df : parens :: "prec"[prec_let] :: CloseSubscript{'a1; 'a2; v. 'e} =
+   bf["close "] slot{'v} bf[" = "] slot{'a1} bf["["] slot{'a2} bf["] in"] hspace slot["lt"]{'e}
+
+dform close_frame : parens :: "prec"[prec_fun] :: CloseFrame{frame. 'e} =
+   szone pushm[3] Nuprl_font!lambda Nuprl_font!subq slot{'frame} `"." hspace slot{'e} popm ezone
+
+(*
+ * ML functions on terms.
+ *)
+let close_var_term      = << CloseVar{v. 'e['v]; 'a} >>
+let close_var_opname    = opname_of_term close_var_term
+let is_close_var_term   = is_dep1_dep0_term close_var_opname
+let dest_close_var_term = dest_dep1_dep0_term close_var_opname
+let mk_close_var_term   = mk_dep1_dep0_term close_var_opname
+
+let close_rec_term      = << CloseRec{R1, frame1. 'fields['R1; 'frame1]; R2, frame2. 'body['R2; 'frame2]; 'length; 'tuple} >>
+let close_rec_opname    = opname_of_term close_rec_term
+let is_close_rec_term   = is_dep2_dep2_dep0_dep0_term close_rec_opname
+let dest_close_rec_term = dest_dep2_dep2_dep0_dep0_term close_rec_opname
+let mk_close_rec_term   = mk_dep2_dep2_dep0_dep0_term close_rec_opname
 
 (*!
  * @begin[doc]
  * @modsubsection{Phase 1}
  *
- * In the first phase, apply inverse beta reduction to abstract
- * free variables from function bodies.  We use a custom version of
- * $@lambda$ and function application.
+ * Convert all LetRec to CloseRec so that each function will
+ * have a frame var for its free vars.
  * @end[doc]
  *)
-declare CloseLambda{x. 'e['x]}
-declare CloseApply{'e1; 'e2}
+prim_rw add_frame : LetRec{R1. 'fields['R1]; R2. 'e['R2]} <-->
+   CloseRec{R1, frame. 'fields[CloseRecVar{'R1; 'frame}];
+            R2, frame. 'e[CloseRecVar{'R2; 'frame}];
+            Length[0:n];
+            AllocTupleNil}
 
-prim_rw reduce_beta : CloseApply{CloseLambda{x. 'e1['x]}; 'e2} <--> 'e1['e2]
-
-(*
- * Display.
+(*!
+ * @begin[doc]
+ * @modsubsection{Phase 1}
+ *
+ * In the first phase, we abstract free variables using inverse beta-reduction.
+ * That is, suppose we have a recursive definition:
+ *
+ * close rec R, frame.
+ *    fun f1 = e1
+ *    ...
+ *    fun fn = en
+ * in ...
+ *
+ * and suppose that one of the function bodies $e_i$ has a free variable $v$.
+ * Then we first abstract the variable:
+ *
+ * CloseVar{v. close rec ...; v}
+ *
+ * Next, we apply the close_frame rewrite, which takes the free
+ * var, adds it to the frame, and projects it in the record.
+ *
+ * close var v = a in
+ * close rec R, frame.
+ *    fun f1 = e1
+ *    ...
+ *    fun fn = en
+ * R, frame (length = i)(args) in
+ * ...
+ *
+ * close rec R, frame.
+ *    let v = frame[i] in
+ *    fun f1 = e1
+ *    ...
+ *    fun fn = en
+ * R, frame (length = i + 1)(v :: args) in
+ * ...
+ * @end[doc]
  *)
-prec prec_apply
-prec prec_lambda
-prec prec_lambda < prec_apply
-
-dform apply_df : parens :: "prec"[prec_apply] :: CloseApply{'f; 'a} =
-   slot["lt"]{'f} " " slot["le"]{'a}
-
-dform lambda_df : parens :: except_mode [src] :: "prec"[prec_lambda] :: CloseLambda{x. 'b} =
-   Nuprl_font!lambda Nuprl_font!subc slot{'x} `"." slot{'b}
-
-
-let lambda_term = << CloseLambda{x. 'e['x]} >>
-let lambda_opname = opname_of_term lambda_term
-let is_lambda_term = is_dep1_term lambda_opname
-let dest_lambda = dest_dep1_term lambda_opname
-let mk_lambda_term = mk_dep1_term lambda_opname
-
-let apply_term = << CloseApply{'e1; 'e2} >>
-let apply_opname = opname_of_term apply_term
-let is_apply_term = is_dep0_dep0_term apply_opname
-let dest_apply = dest_dep0_dep0_term apply_opname
-let mk_apply_term = mk_dep0_dep0_term apply_opname
 
 (*
+ * Variable closure is a beta-rewrite.
+ *)
+prim_rw reduce_beta : CloseVar{v. 'e['v]; 'a} <--> 'e['a]
+
+(*
+ * This is the main function to lift out free vars.
+ *)
+declare Length{'length}
+
+prim_rw wrap_length : Length{meta_num[i:n]} <--> Length[i:n]
+
+prim_rw close_frame :
+   CloseVar{v. CloseRec{R1, frame1. 'fields['v; 'R1; 'frame1];
+                        R2, frame2. 'body['v; 'R2; 'frame2];
+                        Length[i:n];
+                        'tuple};
+            'a} <-->
+   CloseRec{R1, frame1. CloseSubscript{AtomVar{'frame1}; AtomInt[i:n]; v. 'fields['v; 'R1; 'frame1]};
+            R2, frame2. LetAtom{'a; v. 'body['v; 'R2; 'frame2]};
+            Length{meta_sum[i:n, 1:n]};
+            AllocTupleCons{'a; 'tuple}}
+
+(*!
+ * @begin[doc]
  * Now, a conversional to apply the inverse-beta reduction.
  * The "vars" parameter is the set of function variables.
  * Function variables are not treated as free; we don't
  * need closure conversion for them.
+ * @end[doc]
  *)
-let abstractTopC vars =
+let abstractTopC =
    let convC e =
       let t = env_term e in
-         if is_fundef_term t then
-            let f, e1, e2 = dest_fundef_term t in
-            let rec search l =
-               match l with
-                  v :: l ->
-                     if StringSet.mem vars v then
-                        search l
+         if is_close_rec_term t then
+            let r1, frame1, fields, r2, frame2, body, length, tuple = dest_close_rec_term t in
+            let vars = [r1; frame1; r2; frame2] in
+            let rec search fv =
+               match fv with
+                  v :: fv ->
+                     if List.mem v vars then
+                        search fv
                      else
-                        let lambda = mk_lambda_term v e1 in
-                        let apply = mk_apply_term lambda (mk_var_term v) in
-                           addrC [1] (foldC apply reduce_beta)
+                        let t = mk_close_var_term v t (mk_var_term v) in
+                           foldC t reduce_beta
+                           thenC close_frame
+                           thenC addrC[2; 0] reduce_meta_sum
+                           thenC addrC[2] wrap_length
                 | [] ->
                      failC
             in
-               search (free_vars_list e1)
+               search (free_vars_list fields)
          else
             failC
    in
       funC convC
 
-(*
- * Define a tactic to do the rewriting.
- * We first want to collect all the functions that are declared.
- * Those are not free.
+(*!
+ * @begin[doc]
+ * @modsubsection{Phase 3}
+ *
+ * Convert the CloseRec term to a LetRec plus a frame allocation.
+ * @end[doc]
  *)
-let abstractT p =
-   let rec collect vars t =
-      if is_fundecl_term t then
-         let v, t = dest_fundecl_term t in
-            collect (StringSet.add vars v) t
-      else
-         List.fold_left collect vars (subterms_of_term t)
-   in
-   let vars = collect StringSet.empty (concl p) in
-      rwh (abstractTopC vars) 0 p
-
-(************************************************************************
- * Phase 2.
- *)
+prim_rw close_close_rec :
+   CloseRec{R1, frame1. 'fields['R1; 'frame1];
+            R2, frame2. 'body['R2; 'frame2];
+            'length;
+            'tuple} <-->
+   LetRec{R1. CloseFrame{frame1. 'fields['R1; 'frame1]};
+          R2. LetTuple{'length; 'tuple; frame2. 'body['R2; 'frame2]}}
 
 (*!
  * @begin[doc]
- * @modsubsection{Closure conversion, phase 2}
+ * @modsubsection{Phase 4}
  *
- * In the second phase of closure conversion, we perform the
- * actual closure reduction.
+ * Generally clean up and move code around.
  * @end[doc]
  *)
-prim_rw close_exp :
-   FunDecl{f. FunDef{'f; CloseApply{CloseLambda{y. 'e1['f; 'y]}; 'v}; 'e2['f]}}
-   <-->
-   FunDecl{f.
-   FunDef{'f; AtomFun{y.
-              LetClosure{AtomFunVar{'f}; AtomVar{'y}; g.
-              'e1['g; 'y]}};
-   LetClosure{AtomFunVar{'f}; 'v; g.
-   'e2['g]}}}
+prim_rw close_fields :
+   CloseSubscript{'a1; 'a2; v. Fields{'fields['v]}} <-->
+   Fields{CloseSubscript{'a1; 'a2; v. 'fields['v]}}
 
-prim_rw ext_close_exp :
-   <:desc<
-      declare f in
-      define f = (clambda y -> e1[f; y]) ? v in
-         e2[f]>>
-   <-->
-   <:desc<
-      declare f in
-      define f = (lambda y ->
-         let closure g = ^f(@y) in
-            e1[g; y])
-      in
-      let closure g = ^f(v) in
-         e2[g]>>
+prim_rw close_fundef :
+   CloseSubscript{'a1; 'a2; v1. FunDef{'label; AtomFun{v2. 'e['v1; 'v2]}; 'rest['v1]}} <-->
+   FunDef{'label; AtomFun{v2. LetSubscript{'a1; 'a2; v1. 'e['v1; 'v2]}}; CloseSubscript{'a1; 'a2; v1. 'rest['v1]}}
 
-let closeC =
-   repeatC (higherC close_exp)
+prim_rw close_enddef :
+   CloseSubscript{'a1; 'a2; v. EndDef} <--> EndDef
 
-(************************************************************************
- * Closure conversion tactic.
+prim_rw close_frame_fields :
+   CloseFrame{frame. Fields{'fields['frame]}} <-->
+   Fields{CloseFrame{frame. 'fields['frame]}}
+
+prim_rw close_frame_fundef :
+   CloseFrame{frame. FunDef{'label; AtomFun{v. 'e['frame; 'v]}; 'rest['frame]}} <-->
+   FunDef{'label; AtomFun{frame. AtomFun{v. 'e['frame; 'v]}}; CloseFrame{frame. 'rest['frame]}}
+
+prim_rw close_frame_enddef :
+   CloseFrame{frame. EndDef} <--> EndDef
+
+prim_rw close_let_subscript :
+   LetSubscript{'a1; 'a2; v1. AtomFun{v2. 'e['v1; 'v2]}} <-->
+   AtomFun{v2. LetSubscript{'a1; 'a2; v1. 'e['v1; 'v2]}}
+
+(*
+ * Actually build the closure.
  *)
-let closeOnceT =
-   abstractT thenT rw closeC 0
+prim_rw close_let_fun :
+   LetFun{CloseRecVar{'R; 'frame}; 'label; v. 'e['v]} <-->
+   LetClosure{AtomFunVar{'R; 'label}; 'frame; v. 'e['v]}
+
+(*
+ * Optimize closures just before tailcalls.
+ *)
+prim_rw close_tailcall_2 :
+   LetClosure{'f; 'frame; g. TailCall{'g; 'a1; 'a2}} <-->
+   TailCall{'f; 'frame; 'a1; 'a2}
+
+(*
+ * Add all these rules to the CPS resource.
+ *)
+let resource closure +=
+    [<< CloseSubscript{'a1; 'a2; v. Fields{'fields['v]}} >>, close_fields;
+     << CloseSubscript{'a1; 'a2; v1. FunDef{'label; AtomFun{v2. 'e['v1; 'v2]}; 'rest['v1]}} >>, close_fundef;
+     << CloseSubscript{'a1; 'a2; v. EndDef} >>, close_enddef;
+     << CloseFrame{frame. Fields{'fields['frame]}} >>, close_frame_fields;
+     << CloseFrame{frame. FunDef{'label; AtomFun{v. 'e['frame; 'v]}; 'rest['frame]}} >>, close_frame_fundef;
+     << CloseFrame{frame. EndDef} >>, close_frame_enddef;
+     << LetFun{CloseRecVar{'R; 'frame}; 'label; v. 'e['v]} >>, close_let_fun;
+     << LetSubscript{'a1; 'a2; v1. AtomFun{v2. 'e['v1; 'v2]}} >>, close_let_subscript;
+     << LetClosure{'f; 'frame; g. TailCall{'g; 'a1; 'a2}} >>, close_tailcall_2]
+
+(*!
+ * @docoff
+ *
+ * These are the main tactics.
+ *)
+let frameT =
+   repeatT (rwh add_frame 0)
+
+let abstractT =
+   repeatT (rwh abstractTopC 0)
+
+let uncloseT =
+   repeatT (rwh close_close_rec 0)
+
+let pushT =
+   rw closureC 0
 
 let closeT =
-   repeatT closeOnceT
+   frameT
+   thenT abstractT
+   thenT uncloseT
+   thenT pushT
 
 (*!
  * @docoff

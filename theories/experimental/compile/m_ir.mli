@@ -52,6 +52,7 @@
  *)
 extends M_util
 
+open Opname
 open Refiner.Refiner.Term
 
 (*
@@ -99,8 +100,13 @@ declare AtomFunVar{'R; 'v}
 declare LetAtom{'a; v. 'e['v]}
 declare TailCall{'f; 'a}
 declare TailCall{'f; 'a1; 'a2}
+declare TailCall{'f; 'a1; 'a2; 'a3}
 declare If{'a; 'e1; 'e2}
-declare LetPair{'a1; 'a2; v. 'e['v]}
+
+declare Length[i:n]
+declare AllocTupleNil
+declare AllocTupleCons{'a; 'rest}
+declare LetTuple{'length; 'tuple; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
@@ -112,6 +118,7 @@ declare Return{'a}
  * Recursive functions.
  *)
 declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
+declare Fields{'fields}
 declare Label[tag:t]
 declare FunDef{'label; 'exp; 'rest}
 declare EndDef
@@ -132,6 +139,21 @@ declare compilable{'e}
  * Sequent tag for m programs.
  *)
 declare m
+
+(*
+ * Term constructors.
+ *)
+val fundef_term : term
+val fundef_opname : opname
+val is_fundef_term : term -> bool
+val dest_fundef_term : term -> term * term * term
+val mk_fundef_term : term -> term -> term -> term
+
+val letrec_term : term
+val letrec_opname : opname
+val is_letrec_term : term -> bool
+val dest_letrec_term : term -> string * term * string * term
+val mk_letrec_term : string -> term -> string -> term -> term
 
 (*!
  * @docoff

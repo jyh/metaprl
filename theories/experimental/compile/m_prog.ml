@@ -97,113 +97,69 @@ let progC =
 
 (*!
  * @begin[doc]
- * Swap FunDecl with any statements before it.
+ * Swap a recursive definition with anything before it.
  * @end[doc]
  *)
-prim_rw fundecl_atom_fun :
-   AtomFun{x. FunDecl{f. 'e['f; 'x]}}
-   <--> FunDecl{f. AtomFun{x. 'e['f; 'x]}}
+prim_rw letrec_atom_fun :
+   AtomFun{x. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'x]}} <-->
+   LetRec{R1. 'fields['R1]; R2. AtomFun{x. 'e['R2; 'x]}}
 
-prim_rw fundecl_let_atom :
-    LetAtom{'a; v. FunDecl{f. 'e1['f; 'v]}}
-    <--> FunDecl{f. LetAtom{'a; v. 'e1['f; 'v]}}
+prim_rw letrec_let_atom :
+    LetAtom{'a; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} <-->
+    LetRec{R1. 'fields['R1]; R2. LetAtom{'a; v. 'e['R2; 'v]}}
 
-prim_rw fundecl_let_pair :
-   LetPair{'a1; 'a2; v. FunDecl{f. 'e1['f; 'v]}}
-   <--> FunDecl{f. LetPair{'a1; 'a2; v. 'e1['f; 'v]}}
+prim_rw letrec_let_tuple :
+   LetTuple{'length; 'tuple; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} <-->
+   LetRec{R1. 'fields['R1]; R2. LetTuple{'length; 'tuple; v. 'e['R2; 'v]}}
 
-prim_rw fundecl_let_subscript :
-   LetSubscript{'a1; 'a2; v. FunDecl{f. 'e['f; 'v]}}
-   <--> FunDecl{f. LetSubscript{'a1; 'a2; v. 'e['f; 'v]}}
+prim_rw letrec_let_subscript :
+   LetSubscript{'a1; 'a2; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} <-->
+   LetRec{R1. 'fields['R1]; R2. LetSubscript{'a1; 'a2; v. 'e['R2; 'v]}}
 
-prim_rw fundecl_if_true :
-   If{'a; FunDecl{f. 'e1['f]}; 'e2}
-   <--> FunDecl{f. If{'a; 'e1['f]; 'e2}}
+prim_rw letrec_let_closure :
+   LetClosure{'f; 'a; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} <-->
+   LetRec{R1. 'fields['R1]; R2. LetClosure{'f; 'a; v. 'e['R2; 'v]}}
 
-prim_rw fundecl_if_false :
-   If{'a; 'e1; FunDecl{f. 'e2['f]}}
-   <--> FunDecl{f. If{'a; 'e1; 'e2['f]}}
+prim_rw letrec_if_true :
+   If{'a; LetRec{R1. 'fields['R1]; R2. 'e1['R2]}; 'e2} <-->
+   LetRec{R1. 'fields['R1]; R2. If{'a; 'e1['R2]; 'e2}}
 
-prim_rw fundecl_fundef1 :
-   FunDef{'f; FunDecl{g. 'e1['g]}; 'e2}
-   <--> FunDecl{g. FunDef{'f; 'e1['g]; 'e2}}
+prim_rw letrec_if_false :
+   If{'a; 'e1; LetRec{R1. 'fields['R1]; R2. 'e2['R2]}} <-->
+   LetRec{R1. 'fields['R1]; R2. If{'a; 'e1; 'e2['R2]}}
 
-prim_rw fundecl_fundef2 :
-   FunDef{'f; 'e1; FunDecl{g. 'e2['g]}}
-   <--> FunDecl{g. FunDef{'f; 'e1; 'e2['g]}}
+prim_rw letrec_fun_def :
+   FunDef{'label; LetRec{R1. 'fields['R1]; R2. 'e['R2]}; 'rest} <-->
+   LetRec{R1. 'fields['R1]; R2. FunDef{'label; 'e['R2]; 'rest}}
 
-prim_rw fundef_atom_fun :
-   AtomFun{x. FunDef{'f; 'e1; 'e2['x]}}
-   <--> FunDef{'f; 'e1; AtomFun{x. 'e2['x]}}
+prim_rw letrec_fields_def :
+   Fields{LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
+   LetRec{R1. 'fields['R1]; R2. Fields{'e['R2]}}
 
-prim_rw fundef_let_atom :
-   LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}}
-   <--> FunDef{'f; 'e1; LetAtom{'a; v. 'e2['v]}}
-
-prim_rw fundef_let_pair :
-   LetPair{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}}
-   <--> FunDef{'f; 'e1; LetPair{'a1; 'a2; v. 'e2['v]}}
-
-prim_rw fundef_let_subscript :
-   LetSubscript{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}}
-   <--> FunDef{'f; 'e1; LetSubscript{'a1; 'a2; v. 'e2['v]}}
-
-prim_rw fundef_if_true :
-   If{'a; FunDef{'f; 'e1; 'e2}; 'e3}
-   <--> FunDef{'f; 'e1; If{'a; 'e2; 'e3}}
-
-prim_rw fundef_if_false :
-   If{'a; 'e1; FunDef{'f; 'e2; 'e3}}
-   <--> FunDef{'f; 'e2; If{'a; 'e1; 'e3}}
-
-prim_rw fundef_fundef :
-   FunDef{'f; FunDef{'g; 'e1; 'e2}; 'e3}
-   <--> FunDef{'f; 'e2; FunDef{'g; 'e1; 'e3}}
+prim_rw letrec_letrec :
+   LetRec{R1. LetRec{R2. 'fields['R2]; R3. 'e1['R1; 'R3]}; R4. 'e2['R4]} <-->
+   LetRec{R2. 'fields['R2]; R3. LetRec{R1. 'e1['R1; 'R3]; R4. 'e2['R4]}}
 
 (*
  * Add all these rules to the prog resource.
  *)
 let resource prog +=
-    [<< AtomFun{x. FunDecl{f. 'e['f; 'x]}} >>, fundecl_atom_fun;
-     << LetAtom{'a; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_atom;
-     << LetPair{'a1; 'a2; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_pair;
-     << LetSubscript{'a1; 'a2; v. FunDecl{f. 'e['f; 'v]}} >>, fundecl_let_subscript;
-     << If{'a; FunDecl{f. 'e1['f]}; 'e2} >>, fundecl_if_true;
-     << If{'a; 'e1; FunDecl{f. 'e2['f]}} >>, fundecl_if_false;
-     << FunDef{'f; FunDecl{g. 'e1['g]}; 'e2} >>, fundecl_fundef1;
-     << FunDef{'f; 'e1; FunDecl{g. 'e2['g]}} >>, fundecl_fundef2;
-
-     << AtomFun{x. FunDef{'f; 'e1; 'e2['x]}} >>, fundef_atom_fun;
-     << LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_atom;
-     << LetPair{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_pair;
-     << LetSubscript{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_subscript;
-     << If{'a; FunDef{'f; 'e1; 'e2}; 'e3} >>, fundef_if_true;
-     << If{'a; 'e1; FunDef{'f; 'e2; 'e3}} >>, fundef_if_false;
-     << FunDef{'f; FunDef{'g; 'e1; 'e2}; 'e3} >>, fundef_fundef]
-
-(*!
- * @begin[doc]
- * Lift function past the turnstile.
- * @end[doc]
- *)
-interactive hoist_fundecl :
-   sequent [m] { 'H; f : exp >- compilable{'e['f]} } -->
-   sequent [m] { 'H >- compilable{FunDecl{f. 'e['f]}} }
-
-interactive hoist_fundef :
-   sequent [m] { 'H; w: def{'f; 'e1} >- compilable{'e2} } -->
-   sequent [m] { 'H >- compilable{FunDef{'f; 'e1; 'e2}} }
-
-let hoistOnceT =
-   hoist_fundecl orelseT hoist_fundef
-
-let hoistT = repeatT hoistOnceT
+    [<< AtomFun{x. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'x]}} >>, letrec_atom_fun;
+     << LetAtom{'a; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} >>, letrec_let_atom;
+     << LetTuple{'length; 'tuple; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} >>, letrec_let_tuple;
+     << LetSubscript{'a1; 'a2; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} >>, letrec_let_subscript;
+     << LetClosure{'f; 'a; v. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'v]}} >>, letrec_let_closure;
+     << If{'a; LetRec{R1. 'fields['R1]; R2. 'e1['R2]}; 'e2} >>, letrec_if_true;
+     << If{'a; 'e1; LetRec{R1. 'fields['R1]; R2. 'e2['R2]}} >>, letrec_if_false;
+     << FunDef{'label; LetRec{R1. 'fields['R1]; R2. 'e['R2]}; 'rest} >>, letrec_fun_def;
+     << Fields{LetRec{R1. 'fields['R1]; R2. 'e['R2]}} >>, letrec_fields_def;
+     << LetRec{R1. LetRec{R2. 'fields['R2]; R3. 'e1['R1; 'R3]}; R4. 'e2['R4]} >>, letrec_letrec]
 
 (*
  * Wrap it all in a tactic.
  *)
 let progT =
-   rw progC 0 thenT hoistT
+   rw progC 0
 
 (*!
  * @docoff

@@ -182,6 +182,15 @@ prim_rw cps_atom_binop : CPS{AtomBinop{'op; 'a1; 'a2}} <-->
 prim_rw cps_fun_var : CPS{CPSFunVar{'f}} <-->
    AtomVar{'f}
 
+prim_rw cps_alloc_tuple_nil : CPS{AllocTupleNil} <-->
+   AllocTupleNil
+
+prim_rw cps_alloc_tuple_cons : CPS{AllocTupleCons{'a; 'rest}} <-->
+   AllocTupleCons{CPS{'a}; CPS{'rest}}
+
+prim_rw cps_length : CPS{Length[i:n]} <-->
+   Length[i:n]
+
 (*!
  * @begin[doc]
  * CPS transformation for expressions.
@@ -190,8 +199,8 @@ prim_rw cps_fun_var : CPS{CPSFunVar{'f}} <-->
 prim_rw cps_let_atom : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
    LetAtom{CPS{'a}; v. CPS{'cont; 'e['v]}}
 
-prim_rw cps_let_pair : CPS{'cont; LetPair{'a1; 'a2; v. 'e['v]}} <-->
-   LetPair{CPS{'a1}; CPS{'a2}; v. CPS{'cont; 'e['v]}}
+prim_rw cps_let_tuple : CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]}} <-->
+   LetTuple{CPS{'length}; CPS{'tuple}; v. CPS{'cont; 'e['v]}}
 
 prim_rw cps_let_subscript : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
    LetSubscript{CPS{'a1}; CPS{'a2}; v. CPS{'cont; 'e['v]}}
@@ -214,6 +223,9 @@ prim_rw cps_let_apply : CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} <-->
 prim_rw cps_let_rec : CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
    LetRec{R1. CPS{cont. CPS{'cont; 'fields[CPSRecordVar{'R1}]}};
           R2. CPS{'cont; 'e[CPSRecordVar{'R2}]}}
+
+prim_rw cps_fields : CPS{cont. CPS{'cont; Fields{'fields['cont]}}} <-->
+   Fields{CPS{cont. CPS{'cont; 'fields['cont]}}}
 
 prim_rw cps_fun_def : CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'rest}}} <-->
    FunDef{'label; AtomFun{cont. AtomFun{v. CPS{'cont; 'e['v]}}}; CPS{cont. CPS{'cont; 'rest}}}
@@ -241,12 +253,17 @@ let resource cps +=
      << CPS{CPSFunVar{'f}} >>, cps_fun_var;
 
      << CPS{'cont; LetAtom{'a; v. 'e['v]}} >>, cps_let_atom;
-     << CPS{'cont; LetPair{'a1; 'a2; v. 'e['v]}} >>, cps_let_pair;
-     << CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
      << CPS{'cont; If{'a; 'e1; 'e2}} >>, cps_if;
      << CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} >>, cps_let_apply;
 
+     << CPS{AllocTupleNil} >>, cps_alloc_tuple_nil;
+     << CPS{AllocTupleCons{'a; 'rest}} >>, cps_alloc_tuple_cons;
+     << CPS{Length[i:n]} >>, cps_length;
+     << CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]}} >>, cps_let_subscript;
+     << CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
+
      << CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} >>, cps_let_rec;
+     << CPS{cont. CPS{'cont; Fields{'fields['cont]}}} >>, cps_fields;
      << CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'rest}}} >>, cps_fun_def;
      << CPS{cont. CPS{'cont; EndDef}} >>, cps_end_def;
      << CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} >>, cps_let_fun;

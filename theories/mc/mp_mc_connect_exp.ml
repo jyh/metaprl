@@ -40,8 +40,8 @@ open Fir
 
 open Refiner.Refiner.RefineError
 open Fir_exp
-open Mc_fir_connect_base
-open Mc_fir_connect_ty
+open Mp_mc_connect_base
+open Mp_mc_connect_ty
 
 (*************************************************************************
  * Convert to and from var / ty_var.

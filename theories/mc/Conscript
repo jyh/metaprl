@@ -31,10 +31,10 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_eval.ml',
       'fir_deadcode.ml',
       'fir_const_elim.ml',
-      'mc_fir_connect_base.ml',
-      'mc_fir_connect_ty.ml',
-      'mc_fir_connect_exp.ml',
-      'mc_fir_connect.ml',
+      'mp_mc_connect_base.ml',
+      'mp_mc_connect_ty.ml',
+      'mp_mc_connect_exp.ml',
+      'mp_mc_connect.ml',
       'mp_mc_theory.ml',
       'fir_test.ml';
    OCamlLibrary $env 'base',
@@ -45,12 +45,14 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_eval',
       'fir_deadcode',
       'fir_const_elim',
-      'mc_fir_connect_base',
-      'mc_fir_connect_ty',
-      'mc_fir_connect_exp',
-      'mc_fir_connect',
+      'mp_mc_connect_base',
+      'mp_mc_connect_ty',
+      'mp_mc_connect_exp',
+      'mp_mc_connect',
       'mp_mc_theory',
       'fir_test';
+   Default qw( base.cmxa );
+   Build qw( tests/Conscript );
 } else {
    OCamlSources $env
       'mp_mc_term_op.ml',
@@ -72,9 +74,5 @@ if(defined($ENV{'MC_ROOT'})) {
       'fir_const_elim',
       'mp_mc_theory',
       'fir_test';
+   Default qw( base.cmxa );
 }
-
-#
-# Add the theory to the default build list.
-#
-Default qw( base.cmxa );

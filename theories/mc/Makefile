@@ -28,7 +28,8 @@ all: $(MAIN).cma
 opt: $(MAIN).cmxa
 
 clean::
-	$(RM) *.p4* *.pp*
+	$(RM) *.cm* *.o *.p4* *.pp* *.exec
+	$(MAKE) -C tests clean
 
 # Real makefile
 include $(ROOT)/mk/rules

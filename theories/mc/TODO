@@ -22,8 +22,8 @@ Todo list:
          more robust way to represent an entire FIR program.
    .  test cases - I need to test some of the "higher level"
       MetaPRL code (deadcode, const_elim).
--  Documentation: I need it. (-: Current ideas involve the use
-   of whatever mechanism generates theories.pdf.
+-  Documentation: I need it. Current ideas involve the use of the
+   MetaPRL documentation system.
 
 Notes to myself:
 --------------------------------------------------------------------------

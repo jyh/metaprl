@@ -96,6 +96,7 @@ declare rawTupleSub
 declare polySub
 declare rawIntSub{ 'int_precision; 'int_signed }
 declare rawFloatSub{ 'float_precision }
+declare pointerInfixSub
 declare pointerSub
 declare functionSub
 
@@ -231,6 +232,9 @@ val rawFloatSub_term : term
 val is_rawFloatSub_term : term -> bool
 val mk_rawFloatSub_term : term -> term
 val dest_rawFloatSub_term : term -> term
+
+val pointerInfixSub_term : term
+val is_pointerInfixSub_term : term -> bool
 
 val pointerSub_term : term
 val is_pointerSub_term : term -> bool

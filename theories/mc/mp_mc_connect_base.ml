@@ -461,6 +461,7 @@ let term_of_sub_value v =
     | RawIntSub (p, s) ->  mk_rawIntSub_term (term_of_int_precision p)
                                              (term_of_int_signed s)
     | RawFloatSub p ->     mk_rawFloatSub_term (term_of_float_precision p)
+    | PointerInfixSub ->   pointerInfixSub_term
     | PointerSub ->        pointerSub_term
     | FunctionSub ->       functionSub_term
 
@@ -473,6 +474,8 @@ let sub_value_of_term t =
                      (int_signed_of_term s)
    else if is_rawFloatSub_term t then
       RawFloatSub (float_precision_of_term (dest_rawFloatSub_term t))
+   else if is_pointerInfixSub_term t then
+      PointerInfixSub
    else if is_pointerSub_term t then
       PointerSub
    else if is_functionSub_term t then

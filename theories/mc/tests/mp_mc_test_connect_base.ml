@@ -182,6 +182,7 @@ let run_tests () =
    sub_value_test PolySub "PolySub";
    sub_value_test (RawIntSub Int8 false) "RawIntSub Int8 false";
    sub_value_test (RawFloatSub Single) "RawFloatSub Single";
+   sub_value_test PointerInfixSub "PointerInfixSub";
    sub_value_test PointerSub "PointerSub";
    sub_value_test FunctionSub "FunctionSub";
    sub_index_test ByteIndex "ByteIndex";

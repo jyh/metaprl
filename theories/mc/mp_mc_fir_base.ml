@@ -110,6 +110,7 @@ declare rawTupleSub
 declare polySub
 declare rawIntSub{ 'int_precision; 'int_signed }
 declare rawFloatSub{ 'float_precision }
+declare pointerInfixSub
 declare pointerSub
 declare functionSub
 
@@ -243,6 +244,9 @@ dform rawIntSub_df : except_mode[src] ::
 dform rawFloatSub_df : except_mode[src] ::
    rawFloatSub{ 'float_precision } =
    `"RawFloatSub(" slot{'float_precision} `")"
+dform pointerInfixSUb_df : except_mode[src] ::
+   pointerInfixSub =
+   `"PointerInfixSub"
 dform pointerSub_df : except_mode[src] ::
    pointerSub =
    `"PointerSub"
@@ -421,6 +425,10 @@ let rawFloatSub_opname = opname_of_term rawFloatSub_term
 let is_rawFloatSub_term = is_dep0_term rawFloatSub_opname
 let mk_rawFloatSub_term = mk_dep0_term rawFloatSub_opname
 let dest_rawFloatSub_term = dest_dep0_term rawFloatSub_opname
+
+let pointerInfixSub_term = << pointerInfixSub >>
+let pointerInfixSub_opname = opname_of_term pointerInfixSub_term
+let is_pointerInfixSub_term = is_no_subterms_term pointerInfixSub_opname
 
 let pointerSub_term = << pointerSub >>
 let pointerSub_opname = opname_of_term pointerSub_term

@@ -40,6 +40,7 @@ include Itt_logic
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *
@@ -70,6 +71,8 @@ define unfold_lt :
 rule int_sqequal 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- 'a ~ 'b }
+
+topval int_sqequalC : term -> conv
 
 rule add_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
@@ -110,6 +113,10 @@ rule eq_int_assert_elim 'H 'J :
 rule beq_int_is_true 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} ~ btrue }
+
+(* 
+topval beq_int_is_trueC: conv 
+*)
 
 (*
  Derived from previous rewrite
@@ -223,11 +230,19 @@ rule lt_Reflex 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse }
 
+(*
+topval lt_ReflexC: term -> conv
+*)
+
 rule lt_Trichot 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext]
      { 'H >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue }
+
+(*
+val lt_TrichotC: term -> conv
+*)
 
 (*
 Switching to rewrite to provide the uniform of int-properties
@@ -246,11 +261,19 @@ rule lt_Transit 'H 'b :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'c} ~ btrue }
 
+(*
+val lt_TransitC: term -> conv
+*)
+
 rule lt_Discret 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~
                           bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}} }
+
+(*
+val lt_DiscretC: term -> conv
+*)
 
 rule lt_addMono 'H 'c:
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -258,10 +281,18 @@ rule lt_addMono 'H 'c:
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }
 
+(*
+val lt_addMonoC: term -> conv
+*)
+
 rule add_Commut 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a +@ 'b) ~ ('b +@ 'a) }
+
+(*
+val add_CommutC: term -> conv
+*)
 
 rule add_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -269,9 +300,17 @@ rule add_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ('a +@ ('b +@ 'c)) ~ (('a +@ 'b) +@ 'c) }
 
+(*
+val add_AssocC: term -> conv
+*)
+
 rule add_Id 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a +@ 0) ~ 'a }
+
+(*
+val add_IdC: term -> conv
+*)
 
 rule add_Id2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -280,6 +319,10 @@ rule add_Id2 'H :
 rule uni_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 }
+
+(*
+val uni_add_inverseC: term -> conv
+*)
 
 rule uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

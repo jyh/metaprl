@@ -139,6 +139,12 @@ prim int_sqequal 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- 'a ~ 'b } = it
 
+interactive_rw int_sqequal_rw 'b :
+   ('a = 'b in int) -->
+   'a <--> 'b 
+
+let int_sqequalC = int_sqequal_rw
+
 prim add_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
@@ -185,6 +191,12 @@ interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
 prim beq_int_is_true 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} ~ btrue } = it
+
+interactive_rw beq_int_is_true_rw :
+   ('a = 'b in int) -->
+   beq_int{'a; 'b} <--> btrue 
+
+let beq_int_is_trueC = beq_int_is_true_rw 
 
 (*
  Derived from previous rewrite
@@ -362,11 +374,25 @@ prim lt_Reflex 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse } = it
 
+interactive_rw lt_Reflex_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse 
+
+let lt_ReflexC = lt_Reflex_rw
+
 prim lt_Trichot 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext]
      { 'H >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue } = it
+
+interactive_rw lt_Trichot_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} <--> btrue
+
+let lt_TrichotC = lt_Trichot_rw
 
 (*
 Switching to rewrite to provide the uniform of int-properties
@@ -385,11 +411,27 @@ prim lt_Transit 'H 'b :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'c} ~ btrue } = it
 
+interactive_rw lt_Transit_rw 'b :
+   ( band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool ) -->
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ( 'c IN int ) -->
+   lt_bool{'a; 'c} <--> btrue
+
+let lt_TransitC = lt_Transit_rw
+
 prim lt_Discret 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~
                           bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}} } = it
+
+interactive_rw lt_Discret_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   lt_bool{'a; 'b} <--> bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}}
+
+let lt_DiscretC = lt_Discret_rw
 
 (*!
  * @begin[doc]
@@ -398,11 +440,19 @@ prim lt_Discret 'H :
  *
  * @end[doc]
  *)
-prim lt_addMono 'H 'c:
+prim lt_addMono 'H 'c :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} } = it
+
+interactive_rw lt_addMono_rw 'c :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ( 'c IN int ) -->
+   lt_bool{'a; 'b} <--> lt_bool{('a +@ 'c); ('b +@ 'c)}
+
+let lt_addMonoC = lt_addMono_rw
 
 (*! @docoff *)
 
@@ -419,11 +469,26 @@ prim add_Commut 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a +@ 'b) ~ ('b +@ 'a) } = it
 
+interactive_rw add_Commut_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ('a +@ 'b) <--> ('b +@ 'a)
+
+let add_CommutC = add_Commut_rw
+
 prim add_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ('a +@ ('b +@ 'c)) ~ (('a +@ 'b) +@ 'c) } = it
+
+interactive_rw add_Assoc_rw :
+   ( 'a IN int ) -->
+   ( 'b IN int ) -->
+   ( 'c IN int ) -->
+   ('a +@ ('b +@ 'c)) <--> (('a +@ 'b) +@ 'c)
+
+let add_AssocC = add_Assoc_rw
 
 (*!
  * @begin[doc]
@@ -435,6 +500,12 @@ prim add_Assoc 'H :
 prim add_Id 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a +@ 0) ~ 'a } = it
+
+interactive_rw add_Id_rw :
+   ( 'a IN int ) -->
+   ('a +@ 0) <--> 'a
+
+let add_IdC = add_Id_rw
 
 interactive add_Id2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -450,6 +521,12 @@ interactive add_Id2 'H :
 prim uni_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 } = it
+
+interactive_rw uni_add_inverse_rw :
+   ( 'a IN int ) -->
+   ( 'a +@ uni_minus{ 'a } ) <--> 0
+
+let uni_add_inverseC = uni_add_inverse_rw
 
 interactive uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

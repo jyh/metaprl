@@ -252,25 +252,21 @@ ml_rw reduce_if_same_op {| reduce |} : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'f
       else  ff
 
 (**************************************************************************
- * if_simple_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a bterm
- * with 0 bound variables, to 'ff when it is a bterm with non-0 bound
+ * if_simple_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt has
+ * 0 bound variables, to 'ff when it is a bterm with non-0 bound
  * variables and is undefined otherwise.
  *
- * rewrite axiom: if_simple_bterm{bterm{x:_; <H> >- 't}; 'tt; 'ff} <--> 'ff
- * ML rewrite axiom:
- *     if_simple_bterm{bterm{ >- _op_{...}}; 'tt; 'ff} <--> 'tt
+ * rewrite axiom: if_simple_bterm{bterm{x:_; <H> >- 't['x]}; 'tt; 'ff} <--> 'ff
+ *                if_simple_bterm{bterm{ >- 't}; 'tt; 'ff} <--> 'tt
  *)
 
 declare if_simple_bterm{'bt; 'tt; 'ff}
 
 prim_rw reduce_if_simple_bterm1 {| reduce |} :
-   if_simple_bterm{ bterm {| x: term; <H> >- 't |}; 'tt; 'ff } <--> 'ff
+   if_simple_bterm{ bterm {| x: term; <H> >- 't['x] |}; 'tt; 'ff } <--> 'ff
 
-ml_rw reduce_if_simple_bterm2 {| reduce |} : ('goal :  if_simple_bterm{ bterm{| >- 't |}; 'tt; 'ff }) =
-   let bt, tt, ff = three_subterms goal in
-   let hyps, t = dest_bterm_sequent bt in
-      if hyps = [] && is_quoted_term t  then tt
-      else raise (RefineError ("reduce_if_simple_bterm2", StringTermError ("not a quoted term", t)))
+prim_rw reduce_if_simple_bterm2 {| reduce |} :
+   if_simple_bterm{ bterm {| >- 't |}; 'tt; 'ff } <--> 'tt
 
 let reduce_if_simple_bterm =
    termC (fun goal ->

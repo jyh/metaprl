@@ -528,19 +528,32 @@ let normalizeC = sub_elimC thenC
 
 doc <:doc< @docoff >>
 
-interactive_rw ge_addContract_rw :
+(*interactive_rw ge_addContract_rw :
    ( 'a in int ) -->
    ( 'b in int ) -->
-   ('a >= ('b +@ 'a)) <--> (0 >= 'b)
+   ('a >= ('b +@ 'a)) <--> (0 >= 'b)*)
 
-let ge_addContractC = ge_addContract_rw
+interactive_rw ge_addContract_rw1 {| reduce |} :
+   ( 'a in int ) -->
+   ('a >= (number[i:n] +@ 'a)) <--> (0 >= number[i:n])
 
+interactive_rw ge_addContract_rw2 {| reduce |} :
+   ( 'a in int ) -->
+   ((number[i:n] +@ 'a) >= 'a) <--> (number[i:n] >= 0)
+
+interactive_rw ge_addContract_rw3 {| reduce |} :
+   ( 'a in int ) -->
+   ((number[i:n] +@ 'a) >= (number[j:n] +@ 'a)) <--> (number[i:n] >= number[j:n])
+(*
+let ge_addContractC = ge_addContract_rw1 orelseC ge_addContract_rw2 orelseC ge_addContract_rw3
+*)
 (*
    Reduce contradictory relation a>=a+b where b>0.
  *)
 let reduceContradRelT =
    rw ((addrC [0] normalizeC) thenC (addrC [1] normalizeC) thenC
-       (tryC ge_addContractC) thenC reduceC)
+       (*(tryC ge_addContractC) thenC*)
+		 reduceC)
 
 let provideConstantC t =
    if is_number_term t then
@@ -712,7 +725,10 @@ let term2term_number t =
 		else
 			(t,num0)
 	else
-		(t,num0)
+		if is_number_term t then
+			(mk_number_term num0, dest_number t)
+		else
+			(t,num0)
 
 let term2inequality_aux (a,b,n,tac) =
 	let a1,a2=term2term_number a in

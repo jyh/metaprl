@@ -121,9 +121,13 @@ let decideEqLabelT x y =
 (*  Display Forms *)
 (******************)
 
-dform label_df : except_mode[src] :: label[t:s] =  slot[t:s]
+dform label_df : except_mode[src] :: except_mode[tex] :: label[t:s] =  slot[t:s]
+
+dform label_df_tex : mode[tex] :: label[t:s] =
+   izone `"\\mathtt{" ezone
+    slot[t:s]
+   izone "}" ezone
 
 dform eq_label_df : except_mode[src] ::
    eq_label[x:s,y:s]{'A;'B} = ifthenelse{eq_label{label[x:s];label[y:s]};'A;'B}
-
 

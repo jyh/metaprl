@@ -59,6 +59,7 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 open Term_order
+open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
@@ -91,7 +92,31 @@ let debug_int_arith =
 (*******************************************************
  * ARITH
  *******************************************************)
+(*
+let resource ge_elim = Functional {
+   fp_empty = [];
+   fp_add = add_elim_data;
+   fp_retr = extract_elim_data;
+}
 
+let resource ge_intro = Functional {
+   fp_empty = [];
+   fp_add = add_intro_data;
+   fp_retr = extract_intro_data;
+}
+
+let process_ge_elim_resource_annotation = process_elim_resource_annotation
+let process_ge_intro_resource_annotation = process_intro_resource_annotation
+
+let conv2geT = argfunT (fun i p ->
+   if i = 0 then
+      Sequent.get_resource_arg p get_ge_intro_resource
+   else
+      Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i)
+)
+
+let all2geT = (tryT (conv2geT 0)) thenMT (tryOnAllMCumulativeHypsT conv2geT)
+*)
 let reportT = funT (fun p ->
 	if !debug_int_arith then
 		let g=Sequent.goal p in
@@ -102,19 +127,19 @@ let reportT = funT (fun p ->
 	idT
 	)
 
-interactive lt2ge 'H :
+interactive lt2ge (*{| ge_elim [] |}*) 'H :
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
    [main] sequent { <H>; x: 'a < 'b; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
    sequent { <H>; x: 'a < 'b; <J['x]> >- 'C['x] }
 
-interactive gt2ge 'H :
+interactive gt2ge (*{| ge_elim [] |}*) 'H :
    [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'b in int } -->
    [main] sequent { <H>; x: 'a > 'b; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
    sequent { <H>; x: 'a > 'b; <J['x]> >- 'C['x] }
 
-interactive eq2ge 'H :
+interactive eq2ge (*{| ge_elim [] |}*) 'H :
    sequent { <H>; x: 'a = 'b in int; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
 
@@ -132,11 +157,92 @@ interactive notle2ge :
    [aux] sequent { <H> >- "not"{('a <= 'b)} } -->
    sequent { <H> >- 'a >= ('b +@ 1) }
 
+interactive notle2ge_elim 'H :
+   [wf] sequent { <H>; x: "not"{'a <= 'b}; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "not"{'a <= 'b}; <J['x]> >- 'b in int } -->
+   sequent { <H>; x: "not"{'a <= 'b}; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a <= 'b}; <J['x]> >- 'C['x] }
+
+interactive notge2ge_elim 'H :
+   [wf] sequent { <H>; x: "not"{'a >= 'b}; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "not"{'a >= 'b}; <J['x]> >- 'b in int } -->
+   sequent { <H>; x: "not"{'a >= 'b}; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a >= 'b}; <J['x]> >- 'C['x] }
+
+interactive notlt2ge_elim 'H :
+   [wf] sequent { <H>; x: "not"{'a < 'b}; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "not"{'a < 'b}; <J['x]> >- 'b in int } -->
+   sequent { <H>; x: "not"{'a < 'b}; <J['x]>; 'a >= 'b >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a < 'b}; <J['x]> >- 'C['x] }
+
+interactive notgt2ge_elim 'H :
+   [wf] sequent { <H>; x: "not"{'a > 'b}; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "not"{'a > 'b}; <J['x]> >- 'b in int } -->
+   sequent { <H>; x: "not"{'a > 'b}; <J['x]>; 'b >= 'a >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a > 'b}; <J['x]> >- 'C['x] }
+
+interactive noteq2ge_elim 'H :
+   [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'b in int } -->
+   sequent { <H>; x: "not"{'a = 'b in int}; <J['x]>; 'a >= 'b +@ 1 >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a = 'b in int}; <J['x]>; 'b >= 'a +@ 1 >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'C['x] }
+
+interactive notneq2ge_elim 'H :
+   [wf] sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'b in int } -->
+   sequent { <H>; x: "not"{'a <> 'b}; <J['x]>; 'a = 'b in int >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'C['x] }
+
 interactive nequal_elim {| elim [] |} 'H :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'a in int } -->
+   [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'b in int } -->
    [main] sequent { <H>; <J[it]>; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
+
+interactive nequal_elim2 {| elim [](*; ge_elim []*) |} 'H :
+   [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'a in int } -->
+   [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'b in int } -->
+   sequent { <H>; x: nequal{'a;'b}; <J['x]>; y: ('a >= 'b +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: nequal{'a;'b}; <J['x]>; y: ('b >= 'a +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
+
+interactive ltInConcl2ge :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a >= 'b >- "assert"{bfalse} } -->
+	sequent { <H> >- 'a < 'b }
+
+interactive gtInConcl2ge :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'b >= 'a >- "assert"{bfalse} } -->
+	sequent { <H> >- 'a > 'b }
+
+interactive leInConcl2ge :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a >= ('b +@ 1) >- "assert"{bfalse} } -->
+	sequent { <H> >- 'a <= 'b }
+
+interactive geInConcl2ge :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'b >= ('a +@ 1) >- "assert"{bfalse} } -->
+	sequent { <H> >- 'a >= 'b }
+
+interactive eqInConcl2ge :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a >= ('b +@ 1) >- "assert"{bfalse} } -->
+	sequent { <H>; 'b >= ('a +@ 1) >- "assert"{bfalse} } -->
+	sequent { <H> >- 'a = 'b in int }
+
+interactive neqInConcl2ge :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a = 'b in int >- "assert"{bfalse} } -->
+	sequent { <H> >- 'a <> 'b }
 
 interactive_rw bnot_lt2ge_rw :
    ('a in int) -->
@@ -485,40 +591,48 @@ let sumListT = function
 let num0 = num_of_int 0
 let num1 = num_of_int 1
 
-let term2term_number t =
-	if is_add_term t then
-		let a,b=dest_add t in
-		if is_number_term a then
-			(b,dest_number a)
+let term2term_number p t =
+	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
+	let s=mk_sequent_term es in
+	let s'=apply_rewrite p normalizeC s in
+	let t'=SeqGoal.get (explode_sequent s').sequent_goals 0 in
+	begin
+		if !debug_int_arith then
+			eprintf "t2t_n: %a -> %a%t" print_term t print_term t' eflush;
+		if is_add_term t' then
+			let a,b=dest_add t' in
+			if is_number_term a then
+				(b,dest_number a)
+			else
+				(t',num0)
 		else
-			(t,num0)
-	else
-		if is_number_term t then
-			(mk_number_term num0, dest_number t)
-		else
-			(t,num0)
+			if is_number_term t' then
+				(mk_number_term num0, dest_number t')
+			else
+				(t',num0)
+	end
 
-let term2inequality_aux (a,b,n,tac) =
-	let a1,a2=term2term_number a in
-	let b1,b2=term2term_number b in
+let term2inequality_aux p (a,b,n,tac) =
+	let a1,a2=term2term_number p a in
+	let b1,b2=term2term_number p b in
 	(a1,b1,sub_num (add_num b2 n) a2,tac)
 
-let term2inequality (i,t) =
+let term2inequality p (i,t) =
 	if is_ge_term t then
 		let a,b=dest_ge t in
-		List.map term2inequality_aux [(a,b,num0,copyHypT i (-1))]
+		List.map (term2inequality_aux p) [(a,b,num0,copyHypT i (-1))]
 	else if is_le_term t then
 		let a,b=dest_le t in
-		List.map term2inequality_aux [(b,a,num0,((rw fold_ge i) thenT (copyHypT i (-1))))]
+		List.map (term2inequality_aux p) [(b,a,num0,((rw fold_ge i) thenT (copyHypT i (-1))))]
 	else if is_gt_term t then
 		let a,b=dest_gt t in
-		List.map term2inequality_aux [(a,b,num1,gt2ge i)]
+		List.map (term2inequality_aux p) [(a,b,num1,gt2ge i)]
 	else if is_lt_term t then
 		let a,b=dest_lt t in
-		List.map term2inequality_aux [(b,a,num1,lt2ge i)]
+		List.map (term2inequality_aux p) [(b,a,num1,lt2ge i)]
 	else if is_equal_term t then
 		let _,a,b=dest_equal t in
-		List.map term2inequality_aux [(a,b,num0,eq2ge1 i);(b,a,num0,eq2ge2 i)]
+		List.map (term2inequality_aux p) [(a,b,num0,eq2ge1 i);(b,a,num0,eq2ge2 i)]
 	else
 		raise (Invalid_argument "Itt_int_arith.term2triple - unexpected opname")
 
@@ -546,7 +660,7 @@ let findContradRelT = funT ( fun p ->
 	let hyps=all_hyps p in
 	let aux (i,t) = good_term t in
 	let l=List.filter aux hyps in
-	let l'=List.flatten (List.map term2inequality l) in
+	let l'=List.flatten (List.map (term2inequality p) l) in
 	let l''=Arith.find_contradiction l' in
 	sumListT l''
 )
@@ -625,8 +739,8 @@ doc <:doc<
 let arithT =
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-   ((tryOnAllMHypsT reduceIneqT) thenMT
-   (findContradRelT thenMT (reduceContradRelT (-1)) )))
+(*   ((tryOnAllMHypsT reduceIneqT) thenMT *)
+   (findContradRelT thenMT (reduceContradRelT (-1)) ))
 
 interactive test 'a 'b 'c :
 sequent { <H> >- 'a in int } -->

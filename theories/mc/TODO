@@ -15,8 +15,8 @@ Todo list:
          of division by zero).
    .  deadcode elim - needs work.
    .  constant eliminatino - needs work.
-   .  connection to MC:
-      -  float conversion just doesn't work.  I need someone in MC to
+   .  connection to MCC:
+      -  float conversion just doesn't work.  I need someone in MCC to
          implement 80 bit float <--> int/string conversion.
       -  translating the fundef's only is just a hack.  I need a better,
          more robust way to represent an entire FIR program.
@@ -35,7 +35,7 @@ Notes to myself:
    4) test: change cases appropriately
    5) eval: change evaluation as needed
 -  Checklist for when files are added/removed:
-   1) Conscript:  2 file lists to check
+   1) Conscript:  1 file list to check
    2) Makefile:   1 file list to check
 
 Miscellaneous (non-pressing) todo list:

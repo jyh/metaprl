@@ -3,7 +3,7 @@
  * @theory[Mp_mc_theory]
  *
  * The MC theory (all it's modules have the ``Mp_mc_'' prefix) attempts
- * to formalize the Mojave Compiler's (MC) functional intermediate
+ * to formalize the Mojave Compiler Collection's (MCC) functional intermediate
  * representation (FIR).
  *
  * (Documentation incomplete.  I should put the theory overview here.)
@@ -52,7 +52,10 @@ include Mp_mc_term_op
 include Mp_mc_fir_base
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
+include Mp_mc_fir_prog
 include Mp_mc_fir_eval
+include Mp_mc_fir_phobos_exp
+include Mp_mc_fir_phobos
 include Mp_mc_deadcode
 include Mp_mc_const_elim
 (*! @docoff *)

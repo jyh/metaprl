@@ -8,10 +8,10 @@ Import qw( env );
 # Clone the environment and modify as needed.
 #
 $env = $env->clone(
-   INCPATH  => [@{$env->{INCPATH}}, "$env->{MP}/theories/mc"],
-      OCAMLLINK => "$env->{OCAMLLINK} -I /usr/lib/camlp4",
+   INCPATH  => [@{$env->{INCPATH}}, "$env->{MP}/theories/mc", "/usr/lib/ocaml/camlp4"],
+      OCAMLLINK => "$env->{OCAMLLINK} -I /usr/lib/ocaml/camlp4",
       OCAMLCFLAGS => "-thread",
-      MLLIBS    => "unix.cmxa threads.cmxa odyl.cmxa camlp4.cmxa pa_o.cmx",
+      MLLIBS    => "unix$env->{SUFLIB} threads$env->{SUFLIB} odyl$env->{SUFLIB} camlp4$env->{SUFLIB} pa_o$env->{SUFOBJ}",
       CCLIBS    => "-cclib $env->{MP}/clib/clib.a -cclib $env->{MC}/lib/cutil/libcutil.a"
    );
 
@@ -22,12 +22,16 @@ OCamlSources $env
    'mp_mc_test_connect_base.ml',
    'mp_mc_test_connect_ty.ml',
    'mp_mc_test_connect_exp.ml',
-   'mp_mc_test_connect.ml';
+   'mp_mc_test_connect.ml',
+   'mp_mc_test.ml';
 
 OCamlProgram $env 'test_connect.exec',
    'mp_mc_test_connect';
 
+OCamlProgram $env 'test.exec',
+   'mp_mc_test';
+
 #
 # What to build.
 #
-Default qw( test_connect.exec );
+Default qw( test.exec test_connect.exec );

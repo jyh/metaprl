@@ -95,6 +95,13 @@ val process_reduce_resource_annotation : (conv, term*conv) annotation_processor
 topval reduceTopC : conv
 topval reduceC : conv
 
+(************************************************************************
+ * DEBUGGING
+ ************************************************************************)
+
+val create_iform : string -> term -> term -> conv
+val apply_rewrite : Mp_resource.bookmark -> conv -> term -> term
+
 (*
  * -*-
  * Local Variables:

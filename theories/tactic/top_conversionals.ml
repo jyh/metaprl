@@ -444,6 +444,15 @@ let reduceC =
    repeatC (higherC reduceTopC)
 
 (*
+ * Debugging.
+ *)
+let create_iform =
+   Tactic_type.Conversionals.create_iform
+
+let apply_rewrite =
+   Tactic_type.Conversionals.apply_rewrite
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

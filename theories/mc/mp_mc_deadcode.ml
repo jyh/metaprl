@@ -82,10 +82,10 @@ prim_rw reduce_letSubscript_deadcode :
  * Automation.
  *************************************************************************)
 
-let firDeadcodeT i =
-   rwh (repeatC (applyAllC [
+let firDeadcodeC =
+   repeatC (higherC (applyAllC [
       reduce_letUnop_deadcode;
       reduce_letBinop_deadcode;
       reduce_letAlloc_deadcode;
       reduce_letSubscript_deadcode
-   ] )) i
+   ] ))

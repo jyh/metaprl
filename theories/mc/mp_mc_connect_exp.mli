@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Operations for converting between MC Fir expressions and MetaPRL terms.
+ * Operations for converting between MCC Fir expressions and MetaPRL terms.
  *
  * ----------------------------------------------------------------
  *
@@ -32,7 +32,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* Open MC ML namespaces. *)
+(* Open MCC ML namespaces. *)
 
 open Fir
 
@@ -108,10 +108,3 @@ val debug_info_of_term : term -> debug_info
 
 val term_of_exp : exp -> term
 val exp_of_term : term -> exp
-
-(*
- * Convert to and from fundef.
- *)
-
-val term_of_fundef : fundef -> term
-val fundef_of_term : term -> fundef

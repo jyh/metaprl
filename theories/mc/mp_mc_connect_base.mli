@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Basic operations for converting between the MC FIR and
+ * Basic operations for converting between the MCC FIR and
  * and MetaPRL terms.
  *
  * ----------------------------------------------------------------
@@ -33,7 +33,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* Open MC ML namespaces. *)
+(* Open MCC ML namespaces. *)
 
 open Rawint
 open Rawfloat
@@ -44,13 +44,24 @@ open Fir
 
 open Refiner.Refiner.Term
 
+(*
+ * Print out the given term, and then raise a RefineError.
+ * The string parameter should be the name of the function
+ * raising the error.
+ *)
+
+val report_error : string -> term -> 'a
+
 (*************************************************************************
  * Basic conversions.
  *************************************************************************)
 
 (*
- * Convert between var's, ty_var's, label's, and terms.
+ * Convert between symbol's, var's, ty_var's, label's, and terms.
  *)
+
+val term_of_symbol : symbol -> term
+val symbol_of_term : term -> symbol
 
 val term_of_var : var -> term
 val var_of_term : term -> var
@@ -100,6 +111,14 @@ val string_of_term : term -> string
 
 val term_of_list : ('a -> term) -> 'a list -> term
 val list_of_term : (term -> 'a) -> term -> 'a list
+
+(*
+ * Convert SymbolTable's to lists terms.
+ * The first function parameter converts the values in the table to terms.
+ *)
+
+val term_of_symbol_table : ('a -> term) -> 'a SymbolTable.t -> term
+val symbol_table_of_term : (term -> 'a) -> term -> 'a SymbolTable.t
 
 (*************************************************************************
  * Conversions for terms in Mp_mc_fir_base.

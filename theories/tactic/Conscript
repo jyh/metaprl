@@ -1,7 +1,7 @@
 Import qw( env );
 
 $env = $env->clone(
-	OCAMLC => "$env->{OCAMLC} -I /usr/lib/camlp4"
+	OCAMLC => "$env->{OCAMLC} -I /usr/lib/ocaml/camlp4"
 );
 
 Depends $env ['tactic_cache',
@@ -45,4 +45,4 @@ OCamlLibrary $env 'base',
 	'top_conversionals';
 
 ## Add the library to the default target list
-Default qw( base.cmxa );
+Default ( "base$env->{SUFLIB}" );

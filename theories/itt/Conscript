@@ -123,4 +123,4 @@ OCamlLibrary $env 'base',
 	'itt_sort';
 
 ## Add the library to the default target list
-Default qw( base.cmxa );
+Default ( "base$env->{SUFLIB}" );

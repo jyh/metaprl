@@ -15,7 +15,10 @@ MPFILES := \
    mp_mc_fir_base \
    mp_mc_fir_ty \
    mp_mc_fir_exp \
+   mp_mc_fir_prog \
    mp_mc_fir_eval \
+   mp_mc_fir_phobos_exp \
+   mp_mc_fir_phobos \
    mp_mc_deadcode \
    mp_mc_const_elim \
    mp_mc_theory
@@ -30,7 +33,6 @@ opt: $(MAIN).cmxa
 # Clean out generated files, including symlinks.
 clean::
 	$(RM) *.cm* *.o *.p4* *.pp* *.exec
-	$(RM) mp_mc_theory.ml mp_mc_theory.mli
 	$(MAKE) -C tests clean
 
 # Real makefile

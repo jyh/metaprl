@@ -114,6 +114,14 @@ declare rawIntIndex{ 'int_precision; 'int_signed }
 
 declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
 
+(*
+ * Tables, maps, and other structures.
+ *)
+
+(* Represent an item in a table (a value) indexed by some key. *)
+
+declare tableItem{ 'key; 'value }
+
 (*************************************************************************
  * Term operations.
  *************************************************************************)
@@ -266,3 +274,14 @@ val subop_term : term
 val is_subop_term : term -> bool
 val mk_subop_term : term -> term -> term -> term -> term
 val dest_subop_term : term -> term * term * term * term
+
+(*
+ * Tables, maps, and other structures.
+ *)
+
+(* Represent an item in a table (a value) indexed by some key. *)
+
+val tableItem_term : term
+val is_tableItem_term : term -> bool
+val mk_tableItem_term : term -> term -> term
+val dest_tableItem_term : term -> term * term

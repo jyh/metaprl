@@ -11,35 +11,28 @@ $env = $env->clone(
                 "$env->{MP}/theories/tactic",
                 "$env->{MP}/theories/ocaml",
                 "$env->{MP}/theories/base",
-                "$env->{MP}/theories/itt"]
+                "$env->{MP}/theories/itt",
+                "$env->{MC}/front/generic",
+                "$env->{MC}/lib/util",
+                "$env->{MC}/fir/type",
+                "$env->{MC}/fir/util"]
 );
 
 #
 # Set up file lists.
 #
-my @src_no_mc =
-   qw( term_op fir_base fir_ty fir_exp fir_eval deadcode const_elim );
-my @src_mc =
-   qw( term_op fir_base fir_ty fir_exp fir_eval deadcode const_elim connect_base connect_ty connect_exp compile );
+my @src =
+   qw( term_op fir_base fir_ty fir_exp fir_prog fir_eval
+       fir_phobos fir_phobos_exp
+       deadcode const_elim
+       connect_base connect_ty connect_exp connect_prog
+       compile );
 
 #
-# Determine the source file list and library files based on whether
-# or now we have the MC compiler source tree.
+# Set up file lists and build everything.
 #
-if(defined($ENV{'MC_ROOT'})) {
-   $env = $env->clone(
-      INCPATH => [@{$env->{INCPATH}},
-                  "$env->{MC}/lib/util",
-                  "$env->{MC}/fir/type",
-                  "$env->{MC}/fir/util"]
-   );
-   OCamlSources $env (map "mp_mc_$_.ml", @src_mc), 'mp_mc_theory.mlz';
-   OCamlLibrary $env 'base', (map "mp_mc_$_", @src_mc), 'mp_mc_theory';
-   Export qw( env );
-   Default qw( base.cmxa );
-   Build qw( tests/Conscript );
-} else {
-   OCamlSources $env (map "mp_mc_$_.ml", @src_no_mc), 'mp_mc_theory.mlz';
-   OCamlLibrary $env 'base', (map "mp_mc_$_", @src_no_mc), 'mp_mc_theory';
-   Default qw( base.cmxa );
-}
+OCamlSources $env (map "mp_mc_$_.ml", @src), 'mp_mc_theory.mlz';
+OCamlLibrary $env 'base', (map "mp_mc_$_", @src), 'mp_mc_theory';
+Export qw( env );
+Default ( "base$env->{SUFLIB}" );
+Build qw( tests/Conscript );

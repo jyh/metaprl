@@ -4662,6 +4662,9 @@ T	t472	o10 b471
 B	b472	t472
 T	t479	o230 b472
 B	b479	t479
+P	p5	Number 4409
+P	p6	Number 4544
+O	o9	location p5 p6
 P	p483	String "autoT thenT assertT <<esquash{'A}>> ttca"
 O	o483	ext_rule p483
 T	t491	o b4748 b4
@@ -4756,8 +4759,8 @@ T	t760	o b759 b4
 B	b760	t760
 T	t761	o4748 b512 b4752 b755 b760
 B	b761	t761
-T	t762	o2315 b761
-B	b762	t762
+T	t131	o9 b761
+B	b131	t131
 P	p762	Number 4546
 P	p763	Number 4547
 O	o763	location p762 p763
@@ -5352,58 +5355,58 @@ T	t926	o b765 b926
 B	b927	t926
 T	t927	o b763 b927
 B	b928	t927
-T	t928	o b762 b928
-B	b929	t928
-T	t929	o b479 b929
-B	b930	t929
-T	t930	o b417 b930
-B	b931	t930
-T	t931	o b405 b931
-B	b932	t931
-T	t932	o b399 b932
-B	b933	t932
-T	t933	o b384 b933
-B	b934	t933
-T	t934	o b376 b934
-B	b935	t934
-T	t935	o b363 b935
-B	b936	t935
-T	t936	o b240 b936
-B	b937	t936
-T	t937	o b239 b937
-B	b942	t937
-T	t942	o b222 b942
-B	b943	t942
-T	t943	o b221 b943
-B	b944	t943
-T	t944	o b218 b944
-B	b945	t944
-T	t945	o b216 b945
-B	b946	t945
-T	t946	o b214 b946
-B	b947	t946
-T	t947	o b213 b947
-B	b948	t947
-T	t948	o b209 b948
-B	b949	t948
-T	t949	o b200 b949
-B	b950	t949
-T	t950	o b188 b950
-B	b951	t950
-T	t951	o b185 b951
-B	b952	t951
-T	t952	o b181 b952
-B	b953	t952
-T	t953	o b177 b953
-B	b954	t953
-T	t954	o b174 b954
-B	b955	t954
-T	t955	o b171 b955
-B	b956	t955
-T	t956	o b164 b956
-B	b957	t956
-T	t957	o b226 b957
-B	b958	t957
-T	t958	o b4268 b958
-B	b959	t958
-T	t959	o b4267 b959
+T	t134	o b131 b928
+B	b134	t134
+T	t140	o b479 b134
+B	b140	t140
+T	t143	o b417 b140
+B	b143	t143
+T	t146	o b405 b143
+B	b146	t146
+T	t148	o b399 b146
+B	b148	t148
+T	t149	o b384 b148
+B	b149	t149
+T	t151	o b376 b149
+B	b151	t151
+T	t152	o b363 b151
+B	b152	t152
+T	t153	o b240 b152
+B	b153	t153
+T	t154	o b239 b153
+B	b154	t154
+T	t155	o b222 b154
+B	b155	t155
+T	t227	o b221 b155
+B	b227	t227
+T	t314	o b218 b227
+B	b317	t314
+T	t317	o b216 b317
+B	b320	t317
+T	t320	o b214 b320
+B	b321	t320
+T	t321	o b213 b321
+B	b422	t321
+T	t422	o b209 b422
+B	b423	t422
+T	t423	o b200 b423
+B	b424	t423
+T	t424	o b188 b424
+B	b425	t424
+T	t425	o b185 b425
+B	b427	t425
+T	t427	o b181 b427
+B	b428	t427
+T	t428	o b177 b428
+B	b431	t428
+T	t431	o b174 b431
+B	b433	t431
+T	t433	o b171 b433
+B	b435	t433
+T	t435	o b164 b435
+B	b442	t435
+T	t442	o b226 b442
+B	b469	t442
+T	t469	o b4268 b469
+B	b473	t469
+T	t473	o b4267 b473

@@ -467,9 +467,12 @@ and mk_expr base expr =
             not_supported loc "try"
        | (<:expr< ( $list:el$ ) >>) ->
             mk_tuple_expr base loc el
-       | (<:expr< ( $e$ : $_$ ) >>)
+       | (<:expr< ( $e$ : $_$ ) >>) ->
+            mk_expr base e
+(* 3.02
        | MLast.ExXnd (_, _, e) ->
             mk_expr base e
+ *)
        | (<:expr< while $e$ do { $list:el$ } >>) ->
             not_supported loc "while"
        | MLast.ExAnt (_, e) ->
@@ -480,6 +483,8 @@ and mk_expr base expr =
             not_supported loc "ExOlb"
        | MLast.ExLab _ ->
             not_supported loc "ExLab"
+       | MLast.ExCoe _ ->
+            not_supported loc "ExCoe"
 
 and mk_patt base patt =
    let loc = loc_of_patt patt in
@@ -516,8 +521,10 @@ and mk_patt base patt =
             not_supported loc "pattern uid"
        | MLast.PaAnt (_, p) ->
             not_supported loc "pattern PaAnt"
+(* 3.02
        | MLast.PaXnd _ ->
             not_supported loc "patterm PaXnd"
+ *)
        | MLast.PaVrn _ ->
             not_supported loc "patterm PaVrn"
        | MLast.PaOlb _ ->
@@ -526,6 +533,8 @@ and mk_patt base patt =
             not_supported loc "patterm PaLab"
        | MLast.PaFlo _ ->
             not_supported loc "patterm PaFlo"
+       | MLast.PaTyp _ ->
+            not_supported loc "patterm PaTyp"
 
 and mk_type base t =
    let loc = loc_of_ctyp t in
@@ -564,8 +573,10 @@ and mk_type base t =
             not_supported loc "type product"
        | (<:ctyp< $uid:s$ >>) ->
             not_supported loc "type constructor var"
+(* 3.02
        | MLast.TyXnd (_, _, t) ->
             mk_type base t
+ *)
        | MLast.TyVrn _ ->
             not_supported loc "type constructor Vrn"
        | MLast.TyOlb _ ->
@@ -631,6 +642,8 @@ and mk_str_item base si =
             not_supported loc "str dir"
        | MLast.StInc _ ->
             not_supported loc "str include"
+       | MLast.StExc _ ->
+            not_supported loc "StExc"
 
 and mk_module_type base mt =
    let loc = loc_of_module_type mt in

@@ -75,4 +75,4 @@ topval const_elim_atomVar_atomRawInt : conv
  * Automation.
  *************************************************************************)
 
-topval firConstElimT : int -> tactic
+topval firConstElimC : conv

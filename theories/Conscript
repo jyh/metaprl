@@ -21,7 +21,7 @@ $env = $env->clone(
             LC_ALL => "C"
     },
     OCAMLCFLAGS => "",
-    OCAMLC => "prlc -opt",
+    OCAMLC => "prlc %PRLCFLAGS",
 
    # All files compiled with prlc implicitly depend on these files and
    # modules.

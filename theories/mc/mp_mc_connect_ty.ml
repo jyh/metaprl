@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Operations for converting between MC Fir types and MetaPRL terms.
+ * Operations for converting between MCC Fir types and MetaPRL terms.
  *
  * ----------------------------------------------------------------
  *
@@ -32,7 +32,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* Open MC ML namespaces. *)
+(* Open MCC ML namespaces. *)
 
 open Fir
 
@@ -173,8 +173,7 @@ let rec ty_of_term t =
       TyDelayed
 
    else
-      raise (RefineError ("ty_of_term", StringTermError
-            ("not a ty", t)))
+      report_error "ty_of_term" t
 
 (*
  * Convert to and from tydef.
@@ -190,8 +189,7 @@ let ty_bool_of_term t =
       let t, b = dest_unionElt_term t in
          (ty_of_term t), (bool_of_term b)
    else
-      raise (RefineError ("ty_bool_of_term", StringTermError
-            ("not an unionElt / (ty, bool)", t)))
+      report_error "ty_bool_of_term" t
 
 let term_of_ty_bool_list_list tbll =
    (term_of_list (term_of_list term_of_ty_bool) tbll)
@@ -222,5 +220,4 @@ let tydef_of_term t =
          TyDefLambda (list_of_term ty_var_of_term tvl)
                      (ty_of_term t)
    else
-      raise (RefineError ("tydef_of_term", StringTermError
-            ("not a tydef", t)))
+      report_error "tydef_of_term" t

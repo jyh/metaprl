@@ -42,6 +42,9 @@
  * @parents
  * @end[doc]
  *)
+include Itt_bool
+include Itt_int_base
+include Itt_int_ext
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
 include Mp_mc_fir_eval
@@ -116,8 +119,8 @@ interactive_rw const_elim_atomVar_atomRawInt :
  * Automation
  *************************************************************************)
 
-let firConstElimT i =
-   rwh (repeatC (applyAllC [
+let firConstElimC =
+   repeatC (higherC (applyAllC [
 
       (* Many other rewrites are needed to support this optimization. *)
 
@@ -176,4 +179,4 @@ let firConstElimT i =
       (* Clean up anything else that remains. *)
 
       reduceTopC
-   ] )) i
+   ] ))

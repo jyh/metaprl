@@ -284,12 +284,6 @@ declare assertExp{ 'label; 'pred; 'exp }
 
 declare debug{ 'debug_info; 'exp }
 
-(*
- * Function definition.
- *)
-
-declare fundef{ 'debug_line; 'ty; 'var_list; 'exp }
-
 (*************************************************************************
  * Term operations.
  *************************************************************************)
@@ -978,12 +972,3 @@ val debug_term : term
 val is_debug_term : term -> bool
 val mk_debug_term : term -> term -> term
 val dest_debug_term : term -> term * term
-
-(*
- * Function definition.
- *)
-
-val fundef_term : term
-val is_fundef_term : term -> bool
-val mk_fundef_term : term -> term -> term -> term -> term
-val dest_fundef_term : term -> term * term * term * term

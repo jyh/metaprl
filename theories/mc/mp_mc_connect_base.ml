@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Basic operations for converting between the MC FIR and
+ * Basic operations for converting between the MCC FIR and
  * MetaPRL terms.
  *
  * ----------------------------------------------------------------
@@ -33,7 +33,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* Open MC ML namespaces. *)
+(* Open MCC ML namespaces. *)
 
 open Interval_set
 open Rawint
@@ -51,6 +51,20 @@ open Itt_atom
 open Itt_int_base
 open Itt_list
 open Mp_mc_fir_base
+
+(*
+ * Print out the given term, and then raise a RefineError.
+ * func_name is a string that should be the name of the function
+ * raising the error.
+ *)
+
+let report_error func_name term =
+   print_string ("\n\nError encounted in " ^
+                 func_name ^ " with:\n");
+   Simple_print.SimplePrint.print_simple_term term;
+   print_string "\n\n";
+   raise (RefineError (func_name, StringTermError
+         ("Invalid term structure for this function.", term)))
 
 (*************************************************************************
  * Basic conversions.
@@ -81,9 +95,16 @@ let var_term_of_symbol s =
    mk_var_term (string_of_symbol s)
 
 let symbol_of_var_term v =
-   symbol_of_string (dest_var v)
+   try
+      symbol_of_string (dest_var v)
+   with
+      Not_found ->
+         raise (Invalid_argument "can't create symbols out of thin air yet")
 
 (* Alias the below functions to keep the interface as general as possible. *)
+
+let term_of_symbol = var_term_of_symbol
+let symbol_of_term = symbol_of_var_term
 
 let term_of_var = var_term_of_symbol
 let var_of_term = symbol_of_var_term
@@ -133,8 +154,7 @@ let string_of_term t =
    if is_token_term t then
       dest_token t
    else
-      raise (RefineError ("string_of_term", StringTermError
-            ("not a string (token term)", t)))
+      report_error "string_of_term" t
 
 (*
  * Convert a list to a "term list", i.e. << cons{ ... } >>.
@@ -158,8 +178,64 @@ let rec list_of_term f_conv t =
    else if t = nil_term then
       []
    else
-      raise (RefineError ("list_of_term", StringTermError
-            ("not a term representing a list", t)))
+      report_error "list_of_term" t
+
+(*
+ * Convert SymbolTable's to terms.
+ *)
+
+(* Creates a tableItem term given conversion functions to convert
+ * the key and value given to terms. *)
+
+let term_of_table_item key_converter value_converter key value =
+   mk_tableItem_term (key_converter    key)
+                     (value_converter  value)
+
+(* Takes a tableItem term and returns the (key,value) table entry
+ * that it represents. *)
+
+let table_item_of_term key_converter value_converter term =
+   if is_tableItem_term term then
+      let key, value = dest_tableItem_term term in
+         key_converter key, value_converter value
+   else
+      report_error "table_item_of_term" term
+
+(* Used to fold together a list term for a SymbolTable. *)
+
+let symbol_table_folder value_converter term_list key value =
+   mk_cons_term (term_of_table_item term_of_symbol value_converter key value)
+                term_list
+
+(* Unfolds a list term into a SymbolTable. *)
+
+let rec unfold_symbol_table_term existing_table converter term =
+   if is_cons_term term then
+      let head, tail = dest_cons term in
+      let key, value = table_item_of_term symbol_of_term converter term in
+         unfold_symbol_table_term
+            (SymbolTable.add existing_table key value)
+            converter
+            tail
+   else if term = nil_term then
+      existing_table
+   else
+      report_error "unfold_symbol_table_term" term
+
+(* Makes a list term out of a SymbolTable, given a function to convert
+ * the values in the table and the table itself. *)
+
+let term_of_symbol_table value_converter table =
+   SymbolTable.fold (symbol_table_folder value_converter) nil_term table
+
+(* Takes a list term and creates a SymbolTable out of it,
+ * given a function to convert the values of the table and the list term. *)
+
+let symbol_table_of_term converter term =
+   try
+      unfold_symbol_table_term SymbolTable.empty converter term
+   with
+      _ -> report_error "symbol_table_of_term" term
 
 (*************************************************************************
  * Conversions for terms in Mp_mc_fir_base.
@@ -179,10 +255,8 @@ let option_of_term converter t =
       None
    else if is_someOpt_term t then
       Some (converter (dest_someOpt_term t))
-
    else
-      raise (RefineError ("option_of_term", StringTermError
-            ("not an option", t)))
+      report_error "option_of_term" t
 
 (*
  * Convert to and from bool values.
@@ -200,8 +274,7 @@ let bool_of_term t =
    else if is_val_false_term t then
       false
    else
-      raise (RefineError ("term_of_bool", StringTermError
-            ("not a bool", t)))
+      report_error "bool_of_term" t
 
 (*
  * Convert to and from int_precision and float_precision.
@@ -224,8 +297,7 @@ let int_precision_of_term t =
    else if is_int64_term t then
       Int64
    else
-      raise (RefineError ("term_of_int_precision", StringTermError
-            ("not an int_precision", t)))
+      report_error "int_precision_of_term" t
 
 let term_of_float_precision fp =
    match fp with
@@ -241,8 +313,7 @@ let float_precision_of_term t =
    else if is_floatLongDouble_term t then
       LongDouble
    else
-      raise (RefineError ("float_precision_of_term", StringTermError
-            ("not a float_precision", t)))
+      report_error "float_precision_of_term" t
 
 (*
  * Convert to and from int_signed.
@@ -260,8 +331,7 @@ let int_signed_of_term t =
    else if is_unsignedInt_term t then
       false
    else
-      raise (RefineError ("int_signed_of_term", StringTermError
-            ("not an int_signed", t)))
+      report_error "int_signed_of_term" t
 
 (*
  * Convert to and from int_set, rawint_set, and set.
@@ -348,8 +418,7 @@ let int_set_of_term t =
    if is_int_set_term t then
       intSet_of_intervals (dest_int_set_term t)
    else
-      raise (RefineError ("int_set_of_term", StringTermError
-                         ("not an int_set", t)))
+      report_error "int_set_of_term" t
 
 let term_of_rawint_set s =
    let intervals_term_list =
@@ -377,8 +446,7 @@ let rawint_set_of_term t =
                                 (int_signed_of_term sign)
                                 intervals
    else
-      raise (RefineError ("rawint_set_of_term", StringTermError
-                         ("not a rawint_set", t)))
+      report_error "rawint_set_of_term" t
 
 let term_of_set s =
    match s with
@@ -391,8 +459,7 @@ let set_of_term t =
    else if is_rawint_set_term t then
       RawIntSet (rawint_set_of_term t)
    else
-      raise (RefineError ("set_of_term", StringTermError
-            ("not a set", t)))
+      report_error "set_of_term" t
 
 (*
  * Convert to and from tuple_class.
@@ -409,8 +476,7 @@ let tuple_class_of_term t =
    else if is_rawTuple_term t then
       RawTuple
    else
-      raise (RefineError ("tuple_class_of_term", StringTermError
-            ("not a tuple_class", t)))
+      report_error "tuple_class_of_term" t
 
 (*
  * Convert to and from union_type.
@@ -427,8 +493,7 @@ let union_type_of_term t =
    else if is_exnUnion_term t then
       ExnUnion
    else
-      raise (RefineError ("union_type_of_term", StringTermError
-            ("not a union_type", t)))
+      report_error "union_type_of_term" t
 
 (*
  * Convert to and from subscripting terms.
@@ -450,10 +515,8 @@ let sub_block_of_term t =
       TupleSub
    else if is_rawTupleSub_term t then
       RawTupleSub
-
    else
-      raise (RefineError ("sub_block_of_term", StringTermError
-            ("not a sub_block", t)))
+      report_error "sub_block_of_term" t
 
 let term_of_sub_value v =
    match v with
@@ -480,10 +543,8 @@ let sub_value_of_term t =
       PointerSub
    else if is_functionSub_term t then
       FunctionSub
-
    else
-      raise (RefineError ("sub_value_of_term", StringTermError
-            ("not a sub_value", t)))
+      report_error "sub_value_of_term" t
 
 let term_of_sub_index i =
    match i with
@@ -495,10 +556,8 @@ let sub_index_of_term t =
       ByteIndex
    else if is_wordIndex_term t then
       WordIndex
-
    else
-      raise (RefineError ("sub_index_of_term", StringTermError
-            ("not a sub_index", t)))
+      report_error "sub_index_of_term" t
 
 let term_of_sub_script t =
    match t with
@@ -513,10 +572,8 @@ let sub_script_of_term t =
       let p, s = dest_rawIntIndex_term t in
          RawIntIndex (int_precision_of_term p)
                      (int_signed_of_term s)
-
    else
-      raise (RefineError ("sub_script_of_term", StringTermError
-            ("not a sub_script", t)))
+      report_error "sub_script_of_term" t
 
 let term_of_subop op =
    mk_subop_term        (term_of_sub_block op.sub_block)
@@ -532,7 +589,5 @@ let subop_of_term t =
             sub_index = sub_index_of_term index;
             sub_script = sub_script_of_term script
          }
-
    else
-      raise (RefineError ("subop_of_term", StringTermError
-            ("not a subop", t)))
+      report_error "subop_of_term" t

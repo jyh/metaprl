@@ -61,4 +61,4 @@ topval reduce_letSubscript_deadcode : conv
  * Automation.
  *************************************************************************)
 
-topval firDeadcodeT : int -> tactic
+topval firDeadcodeC : conv

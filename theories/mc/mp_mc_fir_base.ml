@@ -189,6 +189,17 @@ declare rawIntIndex{ 'int_precision; 'int_signed }
 
 declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
 
+(*!
+ * @begin[doc]
+ *
+ * Tables, maps, and other structures.
+ * @end[doc]
+ *)
+
+(* Represent an item in a table (a value) indexed by some key. *)
+
+declare tableItem{ 'key; 'value }
+
 (*! @docoff *)
 
 (*************************************************************************
@@ -341,6 +352,16 @@ dform subop_df : except_mode[src] ::
    subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script } =
    `"Subop(" slot{'sub_block} `"," slot{'sub_value} `","
    slot{'sub_index} `"," slot{'sub_script} `")"
+
+(*
+ * Tables, maps, and other structures.
+ *)
+
+(* Represent an item in a table (a value) indexed by some key. *)
+
+dform tableItem_df : except_mode[src] ::
+   tableItem{ 'key; 'value } =
+   `"TableItem(" slot{'key} `"," slot{'value} `")"
 
 (*************************************************************************
  * Term operations.
@@ -530,3 +551,15 @@ let subop_opname = opname_of_term subop_term
 let is_subop_term = is_4_dep0_term subop_opname
 let mk_subop_term = mk_4_dep0_term subop_opname
 let dest_subop_term = dest_4_dep0_term subop_opname
+
+(*
+ * Tables, maps, and other structures.
+ *)
+
+(* Represent an item in a table (a value) indexed by some key. *)
+
+let tableItem_term = << tableItem{ 'key; 'value } >>
+let tableItem_opname = opname_of_term tableItem_term
+let is_tableItem_term = is_dep0_dep0_term tableItem_opname
+let mk_tableItem_term = mk_dep0_dep0_term tableItem_opname
+let dest_tableItem_term = dest_dep0_dep0_term tableItem_opname

@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Operations for converting between MC Fir types and MetaPRL terms.
+ * Operations for converting between MCC Fir types and MetaPRL terms.
  *
  * ----------------------------------------------------------------
  *
@@ -32,7 +32,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* Open MC ML namespaces. *)
+(* Open MCC ML namespaces. *)
 
 open Fir
 

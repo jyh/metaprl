@@ -156,6 +156,4 @@ interactive subst_var_wf {| intro [] |} :
    sequent { <H> >- Var{depth{'u} -@ 1} subtype 'T } -->
    sequent { <H> >- subst_var{'u;'v;'s} in 'T }
 
-
-
 doc <:doc< @docoff >>

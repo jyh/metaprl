@@ -107,6 +107,7 @@ MPFILES =\
    itt_synt_var\
    itt_synt_operator\
    itt_synt_bterm\
+   itt_synt_subst\
    itt_reflection_new\
    itt_reflection\
    itt_reflection_test\

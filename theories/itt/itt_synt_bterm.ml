@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[doc]
-   @module[Itt_reflection]
+   @module[Itt_synt_bterm]
 
    @end[doc]
 
@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
 
-   Copyright (C) 2004 MetaPRL Group
+   Copyright (C) 2005 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,7 +30,9 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Xin Yu @email{xiny@cs.caltech.edu}
+   Authors: Alexei Kopylov @email{kopylov@cs.caltech.edu}
+            Aleksey Nogin @email{nogin@cs.caltech.edu}
+            Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
 
@@ -412,33 +414,7 @@ interactive same_op_trans 'b2:
    sequent { <H> >- same_op{'b2; 'b3} } -->
    sequent { <H> >- same_op{'b1; 'b3} }
 
+doc docoff
+
 let sameOpSymT = same_op_sym
 let sameOpTransT = same_op_trans
-
-
-(************************************************************************
- * Substitution                                                         *
- ************************************************************************)
-
-define unfold_subst:
-subst{'t;'v;'s} <-->
-   fix{subst.lambda{t.
-    dest_bterm{'t;
-               u. subst_var{'u;'v;'s};
-               op,subterms. make_bterm{'op;map{lambda{x.'subst 'x}; 'subterms}} }
-      }} 't
-
-interactive subst_wf {| intro [] |} :
-   sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- bdepth{'t} >= depth{'v} } -->
-   sequent { <H> >- 's in BTerm } -->
-   sequent { <H> >- subst_var{'t;'v;'s} in BTerm }
-
-interactive_rw subst_bdepth {| reduce |} :
-   ('t in BTerm)  -->
-   ('v in Var)  -->
-   (bdepth{'t} >= depth{'v})  -->
-   ('s in BTerm)  -->
-   bdepth{subst_var{'t;'v;'s}} <--> bdepth{'t} -@ 1
-

@@ -63,12 +63,11 @@ define unfold_is_bterm: is_bterm{'bt} <--> Base_reflection!if_bterm{'bt;"true"}
 dform isbterm_df : except_mode[src] :: is_bterm{'bt} =
    `"is_bterm(" slot{'bt} `")"
 
-let resource reduce +=
-   (<<is_bterm{ bterm{| <H> >- 't |} }>>, (unfold_is_bterm thenC reduce_ifbterm))
-
-
 dform ifbterm_df : except_mode[src] :: if_bterm{'bt; 'P} =
    `"ifbterm(" slot{'bt} `";" slot{'P} `")"
+
+let resource reduce +=
+   (<<is_bterm{ bterm{| <H> >- 't |} }>>, (unfold_is_bterm thenC reduce_ifbterm))
 
 prim_rw ifbterm_reduce {| reduce |} :
    ( is_bterm{'b} ) -->
@@ -107,17 +106,137 @@ prim btermSquiddle {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'b1 ~ 'b2 } =
    it
 
-(*
- * XXX: TODO: we use bterm{| >- term[@] |} a lot, we should have a definition
- * with a shorter name for it. Also, "term" is probably not the best operator,
- * "it" might be a better choice. (possible names: itterm or itbterm)
- *)
+(************************************************************************
+ * The Simplest bterm                                                   *
+ ************************************************************************)
 
-interactive term_is_bterm {| intro [] |} :
-   sequent { <H> >- bterm{| >- term[@] |} in BTerm }
+define unfold_itbterm : itbterm <--> bterm{| >- it[@] |}
+
+dform itbterm_df : except_mode[src] :: itbterm =
+   `"itbterm"
+
+let fold_itbterm = makeFoldC << itbterm >> unfold_itbterm
+
+interactive itbterm_is_bterm {| intro [] |} :
+   sequent { <H> >- itbterm in BTerm }
 
 interactive btermFormation {| intro [] |} :
    sequent { <H> >- BTerm }
+
+(************************************************************************
+ * Var_bterm                                                            *
+ ************************************************************************)
+
+define unfold_is_var_bterm: is_var_bterm{'bt} <-->  Base_reflection!if_var_bterm{'bt; btrue; bfalse}
+define unfold_var_bterm: var_bterm{'bt} <--> "assert"{is_var_bterm{'bt}}
+
+dform is_var_bterm_df : except_mode[src] :: is_var_bterm{'bt} =
+   `"is_var_bterm(" slot{'bt} `")"
+dform var_bterm_df : except_mode[src] :: var_bterm{'bt} =
+   `"var_bterm(" slot{'bt} `")"
+
+let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
+
+let is_var_bterm_reduce = unfold_is_var_bterm thenC Base_reflection.reduce_if_var_bterm
+let var_bterm_reduce = unfold_var_bterm thenC addrC [0] is_var_bterm_reduce
+let resource reduce +=
+   [ << is_var_bterm{ bterm{| <H1> >- 't1 |} } >>, is_var_bterm_reduce;
+     << var_bterm{ bterm{| <H1> >- 't1 |} } >>, var_bterm_reduce ]
+
+prim is_var_bterm_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- is_var_bterm{'bt} in bool } =
+   it
+
+interactive_rw varbterm_is_varbterm :
+   (var_bterm{ 'bt}) -->
+   is_var_bterm{'bt} <--> btrue
+
+interactive_rw notvarbterm_is_not_varbterm :
+   ('bt in BTerm ) -->
+   (not{var_bterm{ 'bt}} ) -->
+   is_var_bterm{'bt} <--> bfalse
+
+interactive var_bterm_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- var_bterm{'bt} Type }
+
+interactive var_bterm_univ {| intro [] |} :
+   [wf] sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- var_bterm{'bt} in univ[i:l] }
+
+interactive var_bterm_decidable {| intro [] |} :
+   [wf] sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- decidable{var_bterm{'bt}} }
+
+interactive itbterm_is_not_varbterm {| intro [] |} :
+   sequent { <H> >- not{ var_bterm{ itbterm } } }
+
+(************************************************************************
+ * Var                                                                  *
+ ************************************************************************)
+
+define unfold_var: Var <--> { bt:BTerm | var_bterm{'bt} }
+
+dform var_df : except_mode[src] :: Var =
+   `"Var"
+
+interactive var_univ {| intro [] |} :
+   sequent { <H> >- Var in univ[i:l] }
+
+interactive var_wf {| intro [] |} :
+   sequent { <H> >- Var Type }
+
+interactive var_subtype {| intro [] |} :
+   sequent { <H> >- Var subtype BTerm }
+
+interactive var_intro {| intro [] |} :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H> >- var_bterm{'b1} } -->
+   sequent { <H> >- 'b1 = 'b2 in Var }
+
+interactive var_elim {| elim [] |} 'H :
+   sequent { <H>; u: BTerm; v: var_bterm{'u}; <J['u]> >- 'T['u] } -->
+   sequent { <H>; u: Var; <J['u]> >- 'T['u] }
+
+interactive_rw var_is_var:
+   ('v in Var) -->
+   is_var_bterm{'v} <--> btrue
+
+(************************************************************************
+ * OpBTerm                                                              *
+ ************************************************************************)
+
+define unfold_opbterm:
+   OpBTerm <--> { bt: BTerm |  not{ var_bterm{'bt} } }
+
+dform opbterm_df : except_mode[src] :: OpBTerm =
+   `"OpBTerm"
+
+interactive opbterm_univ {| intro [] |} :
+   sequent { <H> >- OpBTerm in univ[i:l] }
+
+interactive opbterm_wf {| intro [] |} :
+   sequent { <H> >- OpBTerm Type }
+
+interactive opbterm_subtype {| intro [] |} :
+   sequent { <H> >- OpBTerm subtype BTerm }
+
+interactive opbterm_intro {| intro [] |} :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H>; var_bterm{'b1} >- "false" } -->
+   sequent { <H> >- 'b1 = 'b2 in OpBTerm }
+
+interactive opbterm_elim {| elim [] |} 'H :
+   sequent { <H>; u: BTerm; v: not{ var_bterm{'u} }; <J['u]> >- 'T['u] } -->
+   sequent { <H>; u: OpBTerm; <J['u]> >- 'T['u] }
+
+interactive_rw opbterm_is_not_var:
+   ('v in OpBTerm) -->
+   is_var_bterm{'v} <--> bfalse
+
+interactive itbterm_is_opbterm {| intro [] |} :
+   sequent { <H> >- itbterm in OpBTerm }
 
 (************************************************************************
  * Subterms                                                             *
@@ -152,18 +271,10 @@ let reduce_subterms =
 let resource reduce +=
    ( << subterms{ bterm{| <H> >- 't |} } >>, reduce_subterms )
 
-(* XXX: BUG: subterms is currently undefined on variables *)
 prim subterms_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
-(* sequent { <H> >- not var_term{'bt} } --> *)
    sequent { <H> >- subterms{'bt} in list{BTerm} } =
    it
-
-(*
- * XXX: TODO: instead of having separate conditions for 'bt in BTerm and
- * not var_term{'bt} we might want to define a type { bt: BTerm |  not var_term{'bt} }
- * and use that one in all the relevant places. (possible name - OpBTerm)
- *)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -176,69 +287,24 @@ let resource typeinf += (<< BTerm >>, infer_univ1)
 let resource typeinf += (<< subterms{'bt} >>, infer_const << list{BTerm} >>)
 
 
-
-(************************************************************************
- * Make_bterm                                                           *
- ************************************************************************)
-
-declare xlist_of_list{'l}
-
-prim_rw xlist_list_cons {| reduce |} :
-   xlist_of_list{ 'hd :: 'tl } <--> Perv!cons{'hd; xlist_of_list{'tl}}
-
-prim_rw xlist_list_nil {| reduce |} :
-   xlist_of_list{ nil } <--> (Perv!nil)
-
-
-define unfold_make_bterm : make_bterm{'bt; 'bt_list} <--> Base_reflection!make_bterm{'bt; xlist_of_list{'bt_list}}
-
-dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
-   `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
-
-let resource reduce +=
-   ( << make_bterm{ bterm{| <H> >- 't |}; 'btl } >>, (unfold_make_bterm thenC reduceC) )
-
-(* XXX: BUG: need extra conditions *)
-prim makebterm_wf {| intro [] |} :
-   sequent { <H> >- 'bt in BTerm } -->
-(* sequent { <H> >- not var_term{'bt} } --> *)
-   sequent { <H> >- 'btl in list{BTerm} } -->
-(* sequent { <H> >- compatible_shapes{'btl; subterms{'bt}} } --> *)
-   sequent { <H> >- make_bterm{'bt; 'btl} in BTerm } =
-   it
-
-(*
- * Rough draft of definitions:
- *
- * are_compatible_shapes{l1; l2} <-->\
- *   list_ind{l1, is_nil{l2}, hd1,tl1,_.list_ind{l2,bfalse, hd2,tl2,_. are_same_shapes_aux{var_arity{hd2} -@ var_arity{hd1}, tl1, tl2}}}}
- *
- * (definition below is recursive, need to use "fix" or similar)
- * are_compatible_shapes_aux{diff, l1, l2} <-->
- *   list_ind{l1, is_nil{l2}, hd1,tl1,_.list_ind{l2,bfalse, hd2,tl2,_.
- *      ((var_arity{hd2} -@ var_arity{hd1}) =_int diff) band are_compatible_shapes_aux{diff, tl1, tl2}}}}
- *
- * compatible_shapes{l1; l2} <--> "assert"{are_same_shapes{l1; l2}}
- *
- * Note: instead of using compatible_shapes{'btl; subterms{'bt}} we might want to define compatible_shapes{'bt; 'btl}
- * (making the "subterms" operator a part of the definition instead of a part of each rule)
- *)
-
 (************************************************************************
  * Same_op                                                              *
  ************************************************************************)
 
-define unfold_is_same_op: is_same_op{'b1; 'b2} <--> if_same_op{'b1; 'b2; "btrue"; "bfalse"}
+define unfold_is_same_op: is_same_op{'b1; 'b2} <--> if_same_op{'b1; 'b2; btrue; bfalse}
 
 define unfold_same_op: same_op{'b1; 'b2} <--> "assert"{is_same_op{'b1; 'b2}}
 
+dform is_sameop_df : except_mode[src] :: is_same_op{'b1; 'b2} =
+   `"is_same_op(" slot{'b1} `"; " slot{'b2} `")"
 dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
    `"same_op(" slot{'b1} `"; " slot{'b2} `")"
 
-(* XXX: TODO: needs to be updated *)
+let is_same_op_reduce = unfold_is_same_op thenC Base_reflection.reduce_if_same_op
+let same_op_reduce = unfold_same_op thenC addrC [0] is_same_op_reduce
 let resource reduce +=
-   (<< same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>,
-   (unfold_same_op thenC Base_reflection.reduce_if_same_op))
+   [ << is_same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, is_same_op_reduce;
+     << same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, same_op_reduce ]
 
 prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
@@ -246,29 +312,38 @@ prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- is_same_op{'b1; 'b2} in bool } =
    it
 
+interactive_rw sameop_is_sameop :
+   (same_op{'b1; 'b2}) -->
+   is_same_op{'b1; 'b2} <--> btrue
+
+interactive_rw notsameop_is_not_sameop :
+   ('b1 in BTerm ) -->
+   ('b2 in BTerm ) -->
+   (not{same_op{'b1; 'b2}} ) -->
+   is_same_op{'b1; 'b2} <--> bfalse
+
 interactive same_op_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->
    sequent { <H> >- same_op{'b1; 'b2} Type }
 
-prim same_op_id {| intro [] |} :
+interactive same_op_decidable {| intro [] |} :
+   [wf] sequent { <H> >- 'b1 in BTerm } -->
+   [wf] sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- decidable{same_op{'b1; 'b2}} }
+
+prim is_same_op_id {| intro [] |} :
    sequent { <H> >- 'b in BTerm } -->
-   sequent { <H> >- same_op{'b; 'b} } =
+   sequent { <H> >- is_same_op{'b; 'b} = btrue in bool} =
    it
+
+interactive same_op_id {| intro [] |} :
+   sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- same_op{'b; 'b} }
 
 interactive same_op_id2 {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- same_op{'b1; 'b2} }
-
-prim_rw makebterm_same_op :
-   'b1 in BTerm -->
-   'b2 in BTerm -->
-   same_op{'b1; 'b2} -->
-   make_bterm{'b1; subterms{'b2}} <--> 'b2
-
-interactive_rw makebterm_reduce {| reduce |} :
-   'b in BTerm -->
-    make_bterm{'b; subterms{'b}} <--> 'b
 
 (************************************************************************
  * Simple_bterm                                                         *
@@ -316,8 +391,8 @@ interactive simple_bterm_decidable {| intro [] |} :
    [wf] sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- decidable{simple_bterm{'bt}} }
 
-interactive term_is_simplebterm {| intro [] |} :
-   sequent { <H> >- simple_bterm{ bterm{| >- term[@] |} } }
+interactive itbterm_is_simplebterm {| intro [] |} :
+   sequent { <H> >- simple_bterm{ itbterm } }
 
 (************************************************************************
  * The Term type.                                                       *
@@ -334,6 +409,9 @@ interactive termEquality {| intro [] |} :
 interactive termType {| intro [] |} :
    sequent { <H> >- Term Type }
 
+interactive term_subtype {| intro [] |} :
+   sequent { <H> >- Term subtype BTerm }
+
 interactive term_memberEquality {| intro [] |} :
    sequent { <H> >- 'x = 'y in BTerm } -->
    sequent { <H> >- simple_bterm{'x} } -->
@@ -343,64 +421,43 @@ interactive termElimination {| elim [] |} 'H :
    sequent { <H>; b: BTerm; u: simple_bterm{'b}; <J['b]> >- 'C['b] } -->
    sequent { <H>; b: Term; <J['b]> >- 'C['b] }
 
-interactive term_in_term {| intro [] |} :
-   sequent { <H> >- bterm{| >- term[@] |} in Term }
+interactive_rw term_is_simple:
+   ('v in Term) -->
+   is_simple_bterm{'v} <--> btrue
 
+interactive itbterm_in_term {| intro [] |} :
+   sequent { <H> >- itbterm in Term }
 
 (************************************************************************
- * Var_bterm                                                            *
+ * Bound BTerms                                                         *
  ************************************************************************)
 
-(*
- * XXX: TODO: for consistency, we should define is_var_bterm that maps to booleans and
- * then define var_bterm as assert of is_var_bterm
- *)
+define unfold_bbterm: BBTerm <--> { bt: BTerm |  not{ simple_bterm{'bt} } }
 
-define unfold_var_bterm: var_bterm{'bt} <--> Base_reflection!if_var_bterm{'bt; "true"; "false"}
+dform bbterm_df : except_mode[src] :: BBTerm =
+   `"BBTerm"
 
-dform var_bterm_df : except_mode[src] :: var_bterm{'bt} =
-   `"var_bterm(" slot{'bt} `")"
+interactive bbterm_univ {| intro [] |} :
+   sequent { <H> >- BBTerm in univ[i:l] }
 
-let resource reduce +=
-   (<< var_bterm{ bterm{| <H1> >- 't1 |} } >>, (unfold_var_bterm thenC Base_reflection.reduce_if_var_bterm))
+interactive bbterm_wf {| intro [] |} :
+   sequent { <H> >- BBTerm Type }
 
-prim var_bterm_wf {| intro [] |} :
-   sequent { <H> >- 'bt in BTerm } -->
-   sequent { <H> >- var_bterm{'bt} Type } =
-   it
+interactive bbterm_subtype {| intro [] |} :
+   sequent { <H> >- BBTerm subtype BTerm }
 
-define unfold_is_var_bterm: is_var_bterm{'bt} <-->  Base_reflection!if_var_bterm{'bt; btrue; bfalse}
+interactive bbterm_intro {| intro [] |} :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H>; simple_bterm{'b1} >- "false" } -->
+   sequent { <H> >- 'b1 = 'b2 in BBTerm }
 
-let resource reduce +=
-   (<< is_var_bterm{ bterm{| <H1> >- 't1 |} } >>, (unfold_is_var_bterm thenC Base_reflection.reduce_if_var_bterm))
+interactive bbterm_elim {| elim [] |} 'H :
+   sequent { <H>; u: BTerm; v: not{ simple_bterm{'u} }; <J['u]> >- 'T['u] } -->
+   sequent { <H>; u: BBTerm; <J['u]> >- 'T['u] }
 
-interactive is_var_bterm_wf {| intro [] |} :
-   sequent { <H> >- 'bt in BTerm } -->
-   sequent { <H> >- is_var_bterm{'bt} in bool }
-
-
-define unfold_Var: Var <--> { bt:BTerm | var_bterm{'bt} }
-
-interactive var_wf {| intro [] |} :
-   sequent { <H> >- Var Type }
-
-interactive var_subtype {| intro [] |} :
-   sequent { <H> >- Var subtype BTerm }
-
-interactive_rw var_is_var:
-   ('v in Var) -->
-   is_var_bterm{'v} <--> btrue
-
-(* XXX: BUG: need extra conditions *)
-prim make_bterm_is_not_var {| intro [] |} :
-   sequent { <H> >- 'bt in BTerm } -->
-(* sequent { <H> >- not var_term{'bt} } --> *)
-   sequent { <H> >- 'btl in list{BTerm} } -->
-(* sequent { <H> >- compatible_shapes{'btl; subterms{'bt}} } --> *)
-   sequent { <H> >-  not{var_bterm{ make_bterm{'bt; 'btl} }} } =
-   lambda{x.'x}
-
-(* XXX: TODO: prove an elimination form of the above *)
+interactive_rw bbterm_is_not_simple:
+   ('v in BBTerm) -->
+   is_simple_bterm{'v} <--> bfalse
 
 (************************************************************************
  * Subst                                                                *
@@ -415,8 +472,7 @@ let resource reduce +=
    (<< subst{ bterm{| <H1> >- 't1 |}; bterm{| >- 't2 |} } >>, (unfold_subst thenC Base_reflection.reduce_subst))
 
 prim subst_wf1 {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'bt1 = 'bt2 in BTerm } -->
-   sequent { <H> >- not{simple_bterm{'bt1}} } -->
+   sequent { <H> >- 'bt1 = 'bt2 in BBTerm } -->
    sequent { <H> >- 't1 ='t2 in Term } -->
    sequent { <H> >- subst{'bt1; 't1} = subst{'bt2; 't2} in BTerm } =
    it
@@ -429,7 +485,7 @@ define unfold_var_arity: var_arity{'t} <-->
    fix{ f. lambda{ b.
              if is_simple_bterm{'b}
                then 0
-               else 1 +@ ('f subst{'b; bterm{| >- term[@] |}})
+               else 1 +@ ('f subst{'b; itbterm})
         } } 't
 
 dform var_arity_df : except_mode[src] :: var_arity{'t} =
@@ -438,9 +494,8 @@ dform var_arity_df : except_mode[src] :: var_arity{'t} =
 let fold_var_arity = makeFoldC << var_arity{'t} >> unfold_var_arity
 
 interactive_rw var_arity_not_simple :
-   ( 'b in BTerm ) -->
-   (not{simple_bterm{'b}}) -->
-   var_arity{'b} <--> 1 +@ var_arity{subst{'b; bterm{| >- term[@] |}}}
+   ( 'b in BBTerm ) -->
+   var_arity{'b} <--> 1 +@ var_arity{subst{'b; itbterm}}
 
 interactive_rw var_arity_simple :
   (simple_bterm{'b}) -->
@@ -452,7 +507,7 @@ interactive_rw var_arity_reduce_simple :
 
 interactive_rw var_arity_reduce_not_simple {| reduce |}:
    var_arity{bterm{| x:term; <H> >- 'b['x] |}} <-->
-       1 +@ var_arity{ bterm{| <H> >- 'b[ term[@] ] |} }
+       1 +@ var_arity{ bterm{| <H> >- 'b[ it[@] ] |} }
 
 prim var_arity_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
@@ -460,8 +515,7 @@ prim var_arity_wf {| intro [] |} :
    it
 
 prim var_arity_subst {| intro [] |} :
-   sequent { <H> >- 'b in BTerm } -->
-   sequent { <H> >- not{simple_bterm{'b}} } -->
+   sequent { <H> >- 'b in BBTerm } -->
    sequent { <H> >- 'a1 in Term } -->
    sequent { <H> >- 'a2 in Term } -->
    sequent { <H> >- var_arity{subst{'b; 'a1}} ~ var_arity{subst{'b; 'a2}} } =
@@ -472,14 +526,12 @@ interactive var_arity_wf2 {| intro [] |} :
    sequent { <H> >- var_arity{'bt} in int }
 
 interactive var_arity_subst1 {| intro [] |} :
-   sequent { <H> >- 'b in BTerm } -->
-   sequent { <H> >- not{simple_bterm{'b}} } -->
+   sequent { <H> >- 'b in BBTerm } -->
    sequent { <H> >- 'a in Term } -->
    sequent { <H> >- var_arity{'b} = 1 +@ var_arity{subst{'b; 'a}} in nat }
 
 interactive var_arity_subst2 {| intro [] |} :
-   sequent { <H> >- 'b in BTerm } -->
-   sequent { <H> >- not{simple_bterm{'b}} } -->
+   sequent { <H> >- 'b in BBTerm } -->
    sequent { <H> >- 'a in Term } -->
    sequent { <H> >- var_arity{subst{'b; 'a}} < var_arity{'b} }
 
@@ -533,6 +585,102 @@ interactive depth_subterms {| intro [] |} :
    sequent { <H> >- depth {'a} < depth {'b} }
 
 (************************************************************************
+ * Make_bterm                                                           *
+ ************************************************************************)
+
+declare xlist_of_list{'l}
+
+prim_rw xlist_list_cons {| reduce |} :
+   xlist_of_list{ 'hd :: 'tl } <--> Perv!cons{'hd; xlist_of_list{'tl}}
+
+prim_rw xlist_list_nil {| reduce |} :
+   xlist_of_list{ nil } <--> (Perv!nil)
+
+
+define unfold_make_bterm : make_bterm{'bt; 'bt_list} <--> Base_reflection!make_bterm{'bt; xlist_of_list{'bt_list}}
+
+dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
+   `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
+
+let resource reduce +=
+   ( << make_bterm{ bterm{| <H> >- 't |}; 'btl } >>, (unfold_make_bterm thenC reduceC) )
+
+
+define unfold_are_compatible_shapes_aux: are_compatible_shapes_aux{'diff; 'l1; 'l2} <-->
+   fix{ f. lambda{ diff. lambda{ l1. lambda{ l2.
+      list_ind{ 'l1; is_nil{'l2}; h1,t1,g.
+         list_ind{ 'l2; bfalse; h2,t2,g.
+            band{ beq_int{(var_arity{'h2} -@ var_arity{'h1}); 'diff};
+               'f (var_arity{'h2} -@ var_arity{'h1}) 't1 't2 } } }
+      } } } } 'diff 'l1 'l2
+
+define unfold_are_compatible_shapes: are_compatible_shapes{'bt; 'l} <-->
+   list_ind{ 'l; is_var_bterm{'bt}; h1,t1,f.list_ind{ subterms{'bt}; bfalse; h2,t2,f.are_compatible_shapes_aux{var_arity{'h2} -@ var_arity{'h1}; 't1; 't2} } }
+
+define unfold_compatible_shapes:
+   compatible_shapes{'bt; 'l} <--> "assert"{ are_compatible_shapes{'bt; 'l} }
+
+let fold_are_compatible_shapes_aux = makeFoldC << are_compatible_shapes_aux{'diff; 'l1; 'l2} >> unfold_are_compatible_shapes_aux
+
+interactive are_compatible_shapes_aux_wf {| intro [] |} :
+   sequent { <H> >- 'diff in int } -->
+   sequent { <H> >- 'l1 in list{BTerm} } -->
+   sequent { <H> >- 'l2 in list{BTerm} } -->
+   sequent { <H> >- are_compatible_shapes_aux{'diff; 'l1; 'l2} in bool }
+
+interactive are_compatible_shapes_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- 'l in list{BTerm} } -->
+   sequent { <H> >- are_compatible_shapes{'bt; 'l} in bool }
+
+interactive compatible_shapes_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- 'l in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'bt; 'l} Type }
+
+prim makebterm_wf {| intro [] |} :
+   sequent { <H> >- 'bt in OpBTerm } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H> >- make_bterm{'bt; 'btl} in OpBTerm } =
+   it
+
+interactive make_bterm_is_bterm {| intro [] |} :
+   sequent { <H> >- 'bt in OpBTerm } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H> >-  make_bterm{'bt; 'btl} in BTerm }
+
+interactive make_bterm_is_not_varbterm {| intro [] |} :
+   sequent { <H> >- 'bt in OpBTerm } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H> >-  not{var_bterm{ make_bterm{'bt; 'btl} }} }
+
+interactive make_bterm_not_var_elim {| elim [] |} 'H :
+   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- 'bt in OpBTerm } -->
+   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- 'btl in list{BTerm} } -->
+   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- 'C }
+
+interactive make_bterm_opbterm_elim {| elim [] |} 'H :
+   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- 'bt in OpBTerm } -->
+   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- 'btl in list{BTerm} } -->
+   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- 'C }
+
+prim_rw makebterm_same_op :
+   'b1 in BTerm -->
+   'b2 in BTerm -->
+   same_op{'b1; 'b2} -->
+   make_bterm{'b1; subterms{'b2}} <--> 'b2
+
+interactive_rw makebterm_reduce {| reduce |} :
+   'b in BTerm -->
+    make_bterm{'b; subterms{'b}} <--> 'b
+
+
+(************************************************************************
  * Bterm elimination rules                                              *
  ************************************************************************)
 
@@ -553,4 +701,10 @@ interactive bterm_elim3 {| elim [] |} 'H :
    sequent { <H>; b: BTerm; <J['b]>; a: BTerm >- 'C['a] Type} -->
    sequent { <H>; b: BTerm; <J['b]>; c: BTerm; simple_bterm{'c} >- 'C['c] } -->
    sequent { <H>; b: BTerm; <J['b]>; c: BTerm; not{simple_bterm{'c}}; all a: Term. 'C[subst{'c; 'a}] >- 'C['c] } -->
+   sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
+
+interactive bterm_elim4 {| elim [] |} 'H :
+   sequent { <H>; b: BTerm; <J['b]>; a: BTerm >- 'C['a] Type} -->
+   sequent { <H>; b: BTerm; <J['b]>; c: Term >- 'C['c] } -->
+   sequent { <H>; b: BTerm; <J['b]>; c: BBTerm; all a: Term. 'C[subst{'c; 'a}] >- 'C['c] } -->
    sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }

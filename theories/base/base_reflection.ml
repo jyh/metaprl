@@ -261,13 +261,12 @@ prim_rw reduce_subterms1 'H :
 
 doc <:doc<
    @begin[doc]
-   @keyword[ml_rewrite] @rewrite_name[reduce_subterms2]
-      <<Perv!"rewrite"{
-           subterms{bterm{|<H> >-
-              <:doc<@underline{op}@{
-                 <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
-                 <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}};
-           <:doc<[<<bterm{|<H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>> ] >>} >>
+   << fake_mlrw[reduce_subterms2]{
+         subterms{bterm{|<H> >-
+            <:doc<@underline{op}@{
+               <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
+               <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}};
+         <:doc<[<<bterm{|<H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>> ] >>} >>
    @end[doc]
    @docoff
 >>

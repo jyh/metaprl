@@ -156,10 +156,10 @@ let rec sweepDnC rw =
  * Use the first conversion that works.
  *)
 let rec firstC = function
-   conv :: t ->
+   [conv] ->
+      conv
+ | conv :: t ->
       conv orelseC firstC t
- | [] ->
-      failWithC ("firstC", StringError "all conversions failed")
 
 (*
  * Repeat the conversion until nothing more happens.

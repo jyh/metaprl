@@ -140,6 +140,10 @@ prim_rw fundef_let_atom :
    LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}}
    <--> FunDef{'f; 'e1; LetAtom{'a; v. 'e2['v]}}
 
+prim_rw fundef_let_pair :
+   LetPair{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}}
+   <--> FunDef{'f; 'e1; LetPair{'a1; 'a2; v. 'e2['v]}}
+
 prim_rw fundef_let_subscript :
    LetSubscript{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}}
    <--> FunDef{'f; 'e1; LetSubscript{'a1; 'a2; v. 'e2['v]}}
@@ -157,7 +161,7 @@ prim_rw fundef_fundef :
    <--> FunDef{'f; 'e2; FunDef{'g; 'e1; 'e3}}
 
 (*
- * Add all these rules to the CPS resource.
+ * Add all these rules to the prog resource.
  *)
 let resource prog +=
     [<< AtomFun{x. FunDecl{f. 'e['f; 'x]}} >>, fundecl_atom_fun;
@@ -165,12 +169,13 @@ let resource prog +=
      << LetPair{'a1; 'a2; v. FunDecl{f. 'e1['f; 'v]}} >>, fundecl_let_pair;
      << LetSubscript{'a1; 'a2; v. FunDecl{f. 'e['f; 'v]}} >>, fundecl_let_subscript;
      << If{'a; FunDecl{f. 'e1['f]}; 'e2} >>, fundecl_if_true;
-     << If{'a; FunDecl{f. 'e1['f]}; 'e2} >>, fundecl_if_false;
+     << If{'a; 'e1; FunDecl{f. 'e2['f]}} >>, fundecl_if_false;
      << FunDef{'f; FunDecl{g. 'e1['g]}; 'e2} >>, fundecl_fundef1;
      << FunDef{'f; 'e1; FunDecl{g. 'e2['g]}} >>, fundecl_fundef2;
 
      << AtomFun{x. FunDef{'f; 'e1; 'e2['x]}} >>, fundef_atom_fun;
      << LetAtom{'a; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_atom;
+     << LetPair{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_pair;
      << LetSubscript{'a1; 'a2; v. FunDef{'f; 'e1; 'e2['v]}} >>, fundef_let_subscript;
      << If{'a; FunDef{'f; 'e1; 'e2}; 'e3} >>, fundef_if_true;
      << If{'a; 'e1; FunDef{'f; 'e2; 'e3}} >>, fundef_if_false;

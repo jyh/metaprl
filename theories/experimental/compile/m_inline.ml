@@ -69,10 +69,10 @@ prim_rw reduce_sub :
    AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_diff[i:n, j:n]}
 
 prim_rw reduce_mul :
-   AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_prod[i:n, j:n]}
+   AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_prod[i:n, j:n]}
 
 prim_rw reduce_div :
-   AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_quot[i:n, j:n]}
+   AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_quot[i:n, j:n]}
 
 (*
  * Constant inlining.
@@ -84,15 +84,15 @@ prim_rw reduce_let_atom_var :
    LetAtom{AtomVar{'v1}; v2. 'e['v2]} <--> 'e['v1]
 
 (*
- * Add all these rules to the CPS resource.
+ * Add all these rules to the reduce resource.
  *)
 let resource reduce +=
     [<< MetaInt{meta_num[i:n]} >>, meta_int_elim;
 
      << AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_add thenC addrC [0] reduce_meta_sum);
      << AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_sub thenC addrC [0] reduce_meta_diff);
-     << AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_mul thenC addrC [0] reduce_meta_prod);
-     << AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_div thenC addrC [0] reduce_meta_quot);
+     << AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_mul thenC addrC [0] reduce_meta_prod);
+     << AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_div thenC addrC [0] reduce_meta_quot);
 
      << LetAtom{AtomInt[i:n]; v. 'e['v]} >>, reduce_let_atom_int;
      << LetAtom{AtomVar{'v1}; v2. 'e['v2]} >>, reduce_let_atom_var]

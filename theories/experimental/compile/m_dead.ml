@@ -59,9 +59,9 @@ open Tactic_type.Sequent
  * @begin[doc]
  * @resources
  *
- * @bf{The @Comment!resource[prog_resource]}
+ * @bf{The @Comment!resource[dead_resource]}
  *
- * The @tt{prog} resource provides a generic method for
+ * The @tt{dead} resource provides a generic method for
  * defining @emph{dead code elimination}.  The @conv[deadC] conversion
  * can be used to apply this evaluator.
  *
@@ -105,7 +105,7 @@ prim_rw dead_let_closure :
    LetClosure{'a1; 'a2; f. 'e} <--> 'e
 
 (*
- * Add all these rules to the CPS resource.
+ * Add all these rules to the dead resource.
  *)
 let resource dead +=
     [<< LetAtom{'a; v. 'e} >>, dead_let_atom;

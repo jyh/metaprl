@@ -191,4 +191,18 @@ rule min_ge_minIntro :
 	sequent { <H> >- ge_rat{'c;'d} } -->
 	sequent { <H> >- ge_rat{min_rat{'a;'c};min_rat{'b;'d}} }
 
+rule ge_addMono 'c :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- ge_rat{add_rat{'a;'c};add_rat{'b;'c}} } -->
+	sequent { <H> >- ge_rat{'a;'b} }
+
+rule ge_addMonoElim 'H 'c :
+	[wf] sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'a in rationals } -->
+	[wf] sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'b in rationals } -->
+	[wf] sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'c in rationals } -->
+	sequent { <H>; w: ge_rat{'a;'b}; <J['w]>; ge_rat{add_rat{'a;'c};add_rat{'b;'c}} >- 'C['w] } -->
+	sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'C['w] }
+
 doc <:doc< @docoff >>

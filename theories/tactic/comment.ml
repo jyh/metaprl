@@ -633,7 +633,7 @@ declare code[text:s]
 (*! @docoff *)
 
 dform code_df1 : mode[tex] :: code[s:s] =
-   izone `"\\verb{" slot[s:s] `"}" ezone
+   izone `"\\verb}" slot[s:s] `"}" ezone
 
 dform code_df2 : except_mode[tex] :: code[s:s] =
    tt[s:s]
@@ -662,7 +662,7 @@ declare email[text:s]
 (*! @docoff *)
 
 dform email_df1 : mode[tex] :: email[s:s] =
-   izone `"\\verb{" slot[s:s] `"}" ezone
+   izone `"\\verb}" slot[s:s] `"}" ezone
 
 dform email_df2 : except_mode[tex] :: email[s:s] =
    tt[s:s]

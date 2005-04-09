@@ -7,6 +7,26 @@ open Cic_lambda
 open Cic_ind_type
 open Cic_ind_elim
 
+declare ForAll1TConstr{'terms; 'IndDef; t,c,C.'P['t;'c;'C]}
+declare ForAll1TConstrAux{'terms; 'IndDef; t,c,C.'P['t;'c;'C]}
+
+prim forAll1TConstr_base {| intro [] |} :
+	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};
+		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{| >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } = it
+
+prim forAll1TConstr_step {| intro [] |} :
+	sequent { <H> >- IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'P['t; 'c; 'C]|}|}|} } -->
+	sequent { <H> >- ForAll1TConstrAux{Terms{|<T> >-it|};
+		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc>; c:'C >- IndConstrs{|<Jc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
+	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};
+		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{|c:'C; <Jc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } = it
+
+prim forAll1TConstr_start {| intro [] |} :
+	sequent { <H> >- ForAll1TConstrAux{Terms{|<T> >-it|};
+		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{| >- IndConstrs{|<Hc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
+	sequent { <H> >-
+		ForAll1TConstr{Terms{|<T> >-it|}; IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- it|}|}|}; t,c,C.'P['t;'c;'C]} } = it
+
 (******************************************************************************************
  * Definition of application for left parts of declarations                               *
  ******************************************************************************************
@@ -124,10 +144,10 @@ prim dep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 'A
 								IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- 'I |}|}|}
 							}
 						|})} |} } -->
-	[thrd_p]	sequent { <H>; <Hp<||> > >-
-					ForAll1T1DT{
-						Terms{|<F<|H|> > >-it|};
-						prodH{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >-Terms{|<Hc<|Hp;Hi;Ji|>['I]> >-it|}|};
+	[thrd_p]	sequent { <H> >-
+					ForAll1TConstr{
+						Terms{|<F> >-it|};
+						IndParams{|<Hp<||> > >- IndTypes{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >- IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- it|}|}|};
 						f,c,C.('f in ElimCaseTypeDep{'C; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}; 'c})
 					}
 				} -->

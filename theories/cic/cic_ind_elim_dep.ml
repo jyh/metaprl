@@ -12,27 +12,22 @@ open Cic_ind_elim
  ******************************************************************************************
  *)
 
- declare sequent [applHLeft] { Term : Term >- Term } : Term
+declare prodAppShape{x.'T['x]; 't}
+declare sequent [prodApp] { Term : Term >- Term } : Term
+
+prim_rw prodApp_base :
+	prodApp{| >- prodAppShape{y.'S['y]; 't} |} <-->
+	'S['t]
+
+prim_rw prodApp_step :
+	prodApp{| <H>; x: 'T >- prodAppShape{y.'S['x;'y]; 't} |} <-->
+	prodApp{| <H> >- prodAppShape{y.(x: 'T -> 'S['x; 'y 'x]); 't} |}
 (*
-dform applHLeft_df : except_mode[src] :: sequent [applHLeft] { <H> >- 'e } =
-	display_concl{sequent { <H> >- 'e }} display_hyps_emph{sequent { <H> >- 'e }}
+let fold_prodApp_base = makeFoldC <<prodApp{| >- prodAppShape{y.'S['y]; 't} |}>> prodApp_base
+let fold_prodApp_step = makeFoldC <<prodApp{| <H>; x: 'T >- prodAppShape{y.'S['x;'y]; 't} |}>> prodApp_step
+let fold_prodAppC = fold_prodApp_base thenC (repeatC fold_prodApp_step)
 *)
-
-(*inductive definition of multiple application *)
-prim_rw applHLeftBase {| reduce |} :
-   applHLeft{| >- 'S |} <-->
-	'S
-
-(* x:'T should be removed from the second sequent*)
-prim_rw applHLeftStep {| reduce |} :
-   applHLeft{| x:'T; <H> >- 'S |} <-->
-	applHLeft{| x:'T; <H> >- apply{'S;'x} |}
-
-let fold_applHLeftBase = makeFoldC <<applHLeft{| >- 'S |}>> applHLeftBase
-let fold_applHLeftStep = makeFoldC <<applHLeft{| x:'T; <H> >- 'S |}>> applHLeftStep
-let fold_applHLeft = fold_applHLeftBase thenC (repeatC fold_applHLeftStep)
-
-let applHCLeft = (repeatC applHLeftStep) thenC applHLeftBase
+let prodAppC = (repeatC prodApp_step) thenC prodApp_base
 
 
 (******************************************************************************************
@@ -47,13 +42,21 @@ declare ElimCaseTypeDep{'C; 'predicates; 'c}
  *)
 prim_rw elimCaseTypeDep_inductive 'Hi :
 	ForAll1D{|<Hi> >- bind{I.strictly_pos{'I; prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |}}} |} -->
-	ElimCaseTypeDep{prodH{|<Hi>; I:'A; <Ji> >- (prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |}) -> 'C|}; ElimPredicates{|<Predicates> >- it|};'c} <-->
+	ElimCaseTypeDep{
+		prodH{|<Hi>; I:'A; <Ji> >- prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |} -> 'C|};
+		ElimPredicates{|<Predicates> >- it|};'c
+	} <-->
 	prodH{| <Hi>; I:'A; <Ji> >-
-		(p:prodH{| <P> >- applH{| <M> >- 'I |} |} ->
-			(prodH{| <P> >- (applH{| <M> >- 'I |}) (applHLeft{| <P> >- 'p |})|} ->
-				ElimCaseTypeDep{prodH{|<Hi>; I:'A; <Ji> >- 'C|}; ElimPredicates{|<Predicates> >- it|}; 'c 'p}
+		p:prodH{| <P> >- applH{| <M> >- 'I |} |} ->
+			(prodApp{| <P> >-
+				prodAppShape{
+					x.(applH{| <M> >-
+						Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}|} 'x);
+					'p
+				} |}
+			 ->
+			 ElimCaseTypeDep{prodH{|<Hi>; I:'A; <Ji> >- 'C|}; ElimPredicates{|<Predicates> >- it|}; 'c 'p}
 			)
-		)
 	|}
 
 (* ((x:M)C{I_1,...,I_n,P_1,...,P_n,c} = (x:M)C{I_1,...,I_n,P_1,...,P_n,c x)
@@ -114,11 +117,13 @@ prim dep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 'A
 						IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- 'I |}|}|}|} } -->
 	[s_p]		sequent { <H> >-
 					ForAll1T{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >-
-						bind{P.('P in prodH{| <Hp<||> > >-
-							(applHLeft{|<Hp<||> > >-
+						bind{P.('P in prodApp{| <Hp<||> > >-
+							prodAppShape{x.('x -> 's2<||>);
 								IndParams{|<Hp<||> > >-
 								IndTypes{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >-
-								IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- 'I |}|}|}|} -> 's2<||>) |})} |} } -->
+								IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- 'I |}|}|}
+							}
+						|})} |} } -->
 	[thrd_p]	sequent { <H>; <Hp<||> > >-
 					ForAll1T1DT{
 						Terms{|<F<|H|> > >-it|};

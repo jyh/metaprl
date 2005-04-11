@@ -31,9 +31,7 @@
 
 extends Fol_type
 
-open Tactic_type.Tacticals
-
-open Auto_tactic
+open Basic_tactics
 
 (*
  * Syntax and display.
@@ -45,15 +43,8 @@ dform pred_df : pred = `"Pred"
 (*
  * Type judgment.
  *)
-prim pred_type 'H :
+prim pred_type {| intro [] |} 'H :
    sequent { <H>; x: pred; <J['x]> >- "type"{'x} } = trivial
-
-let resource auto += {
-   auto_name = "d_pred_type";
-   auto_prec = trivial_prec;
-   auto_tac = onSomeHypT pred_type;
-   auto_type = AutoTrivial;
-}
 
 (*
  * -*-

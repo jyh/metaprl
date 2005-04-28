@@ -21,13 +21,37 @@ prim forAll1D_step {| intro [] |} :
 
 declare sequent [ForAll1T] { Term : Term >- Term } : Term
 
-prim forAll1T_base {| intro [] |} :
-	sequent { <H> >- ForAll1T{| >- bind{x.'pred['x]} |} } = it
+prim forAll1T_base :
+	sequent { <H> >- ForAll1T{| >- bind{y.'pred['y]} |} } = it
 
-prim forAll1T_step {| intro [] |} :
-	sequent { <H>; v: 'T >- ForAll1T{|<J['v]> >- bind{x.'pred<|H|>['x]}|} } -->
+prim forAll1T_step :
+	sequent { <H>; v: 'T >- ForAll1T{|<J['v]> >- bind{y.'pred<|H|>['y]}|} } -->
 	sequent { <H> >- 'pred['T] } -->
-	sequent { <H> >- ForAll1T{|v: 'T; <J['v]> >- bind{x.'pred<|H|>['x]}|} } = it
+	sequent { <H> >- ForAll1T{|v: 'T; <J['v]> >- bind{y.'pred<|H|>['y]}|} } = it
+
+let rec forAll1T_aux _ =
+  (forAll1T_step thenLT [funT forAll1T_aux; idT]) orelseT forAll1T_base
+
+let forAll1T = funT forAll1T_aux
+
+(*
+let rec forAll1Ttac = funT (fun p ->
+	let concl = Sequent.concl p in
+	let {	sequent_args = args;
+			sequent_hyps = hyps;
+			sequent_concl = goal} = TermMan.explode_sequent concl in
+	if SeqHyp.length hyps = 0 then
+		forAll1T_base
+	else
+		forAll1T_step thenLT [forAll1Ttac; idT]
+)
+
+let rec forAll1Ttac = (forAll1T_step thenLT [forAll1Ttac; idT]) orelseT forAll1T_base
+*)
+
+let resource intro += [
+	<<ForAll1T{|<H> >- 'C|}>>, (wrap_intro forAll1T);
+]
 
 (*
  * Subst{SubstIn{<Params> >- 'Body}; SubstArgs{<Args>}} evaluates to

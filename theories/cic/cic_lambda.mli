@@ -72,27 +72,27 @@ val mk_apply_term : term -> term -> term
 ******************************************************)
 
 rule ax_prop :
-   sequent { <H> >- member{Prop;"type"[i:l]}  }
+   sequent { <H> >- Prop in "type"[i:l] }
 
 rule ax_set :
-   sequent { <H> >- member{Set;"type"[i:l]}  }
+   sequent { <H> >- Set in"type"[i:l] }
 
 rule ax_type :
-   sequent { <H> >- member{"type"[i:l];"type"[i':l]}  }
+   sequent { <H> >- "type"[i:l] in "type"[i':l] }
 
 (* if P:Prop then P is of some sort *)
 rule prop_a_sort:
-   sequent { <H> >- member{'P;Prop} } -->
+   sequent { <H> >- 'P in Prop } -->
    sequent { <H> >- of_some_sort{'P} }
 
 (* if P:Set then P is of some sort *)
 rule set_a_sort:
-   sequent { <H> >- member{'P;Set} } -->
+   sequent { <H> >- 'P in Set } -->
    sequent { <H> >- of_some_sort{'P} }
 
 (* if P:Type(i) then P is of some sort *)
 rule type_a_sort "type"[i:l]:
-   sequent { <H> >- member{'P;"type"[i:l]} } -->
+   sequent { <H> >- 'P in "type"[i:l] } -->
    sequent { <H> >- of_some_sort{'P} }
 
 (* Set is a sort *)
@@ -135,23 +135,23 @@ rule weak 'H :
 	sequent { <H>; x: 'C; <J> >- 'A in 'B }
 
 rule prod_1 's1:
-   sequent { <H> >- prop_set{'s1}  } -->
-   sequent { <H> >- member{ 'T; 's1 } } -->
-   sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
-   sequent { <H> >- member{ (x:'T -> 'U['x]); 's2  }  }
+   sequent { <H> >- prop_set{'s1} } -->
+   sequent { <H> >- 'T in 's1 } -->
+   sequent { <H>; x:'T >- 'U['x] in 's2 } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2 }
 
 rule prod_2 's1:
-   sequent { <H>; x:'T >- prop_set{'s2}  } -->
-   sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
-   sequent { <H> >- member{ 'T; 's1 } } -->
-   sequent { <H> >- member{ (x:'T -> 'U['x]); 's2  }  }
+   sequent { <H>; x:'T >- prop_set{'s2} } -->
+   sequent { <H>; x:'T >- 'U['x] in 's2 } -->
+   sequent { <H> >- 'T in 's1 } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2 }
 
 rule prod_types "type"[i:l] "type"[j:l] :
-   sequent { <H> >- member{'T;"type"[i:l]}  } -->
-   sequent { <H>; x:'T >- member{ 'U['x]; "type"[j:l] }  } -->
-   sequent { >- le[i:l,k:l]  } -->
-   sequent { >- le[j:l,k:l]  } -->
-   sequent { <H> >- member{ (x:'T -> 'U['x]); "type"[k:l] } }
+   sequent { <H> >- 'T in "type"[i:l] } -->
+   sequent { <H>; x:'T >- 'U['x] in "type"[j:l] } -->
+   sequent { >- le[i:l,k:l] } -->
+   sequent { >- le[j:l,k:l] } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in "type"[k:l] }
 
 
 (************************************************
@@ -159,10 +159,10 @@ rule prod_types "type"[i:l] "type"[j:l] :
  ************************************************)
 
 rule lam 's:
-   sequent { <H> >- member{ (x:'T -> 'U['x]); 's }  } -->
-   sequent { <H> >- is_sort{'s }  } -->
-   sequent { <H>; x:'T >- member{ 't['x]; 'U['x] }  } -->
-   sequent { <H> >- member{ lambda{'T;x.'t['x]}; (x:'T -> 'U['x]) } }
+   sequent { <H> >- (x:'T -> 'U['x]) in 's } -->
+   sequent { <H> >- is_sort{'s } } -->
+   sequent { <H>; x:'T >- 't['x] in 'U['x] } -->
+   sequent { <H> >- lambda{'T;x.'t['x]} in (x:'T -> 'U['x]) }
 
 
 (************************************************
@@ -170,9 +170,9 @@ rule lam 's:
  ************************************************)
 
 rule app (x:'T -> 'U['x]) :
-   sequent { <H> >- member{ 'u; (x:'T -> 'U['x]) }  } -->
-   sequent { <H> >- member{ 't;'T }  } -->
-   sequent { <H> >- member{ apply{'u;'t}; 'U['t]  } }
+   sequent { <H> >- 'u in (x:'T -> 'U['x]) } -->
+   sequent { <H> >- 't in 'T } -->
+   sequent { <H> >- apply{'u;'t} in 'U['t] }
 
 
 (************************************************
@@ -181,9 +181,9 @@ rule app (x:'T -> 'U['x]) :
 
 (*
 rule let_in 'T bind{x.'U['x]}:
-   sequent { <H> >- member{'t;'T}  } -->
-   sequent { <H>; x:"let"{'t;'T} >- member{'u['x];'U['x]} } -->
-   sequent { <H> >- member{ let_in{'t;x.'u['x]}; 'U['t] }  }
+   sequent { <H> >- 't in 'T } -->
+   sequent { <H>; x:"let"{'t;'T} >- 'u['x] in 'U['x] } -->
+   sequent { <H> >- let_in{'t;x.'u['x]} in 'U['t] }
 *)
 
 (************************************************
@@ -251,7 +251,7 @@ rule conv_le_5 :
    sequent { <H> >- conv_le{ (x:'T -> 'T1['x]); (x:'T -> 'U1['x]) }}
 
 rule conv_rule 's 'T:
-   sequent { <H> >- member{ 'U; 's } } -->
-   sequent { <H> >- member{ 't; 'T } } -->
+   sequent { <H> >- 'U in 's } -->
+   sequent { <H> >- 't in 'T } -->
    sequent { <H> >- conv_le{ 'T; 'U } } -->
-   sequent { <H> >- member{ 't; 'U } }
+   sequent { <H> >- 't in 'U }

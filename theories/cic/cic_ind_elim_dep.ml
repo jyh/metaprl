@@ -10,22 +10,37 @@ open Cic_ind_elim
 declare ForAll1TConstr{'terms; 'IndDef; t,c,C.'P['t;'c;'C]}
 declare ForAll1TConstrAux{'terms; 'IndDef; t,c,C.'P['t;'c;'C]}
 
-prim forAll1TConstr_base {| intro [] |} :
-	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};
+prim forAll1TConstr_base :
+	sequent { <H> >- ForAll1TConstrAux{Terms{| >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{| >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } = it
 
-prim forAll1TConstr_step {| intro [] |} :
+prim forAll1TConstr_step :
 	sequent { <H> >- IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'P['t; 'c; 'C]|}|}|} } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{|<T> >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc>; c:'C >- IndConstrs{|<Jc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{|c:'C; <Jc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } = it
 
-prim forAll1TConstr_start {| intro [] |} :
+prim forAll1TConstr_start :
 	sequent { <H> >- ForAll1TConstrAux{Terms{|<T> >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{| >- IndConstrs{|<Hc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
 	sequent { <H> >-
 		ForAll1TConstr{Terms{|<T> >-it|}; IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- it|}|}|}; t,c,C.'P['t;'c;'C]} } = it
+(*
+let rec aux stepT baseT = (stepT thenLT [idT; aux stepT baseT]) orelseT baseT
+
+let forAll1TConstrT = forAll1TConstr_start thenT (aux forAll1TConstr_step forAll1TConstr_base)
+*)
+
+let rec forAll1TConstr_aux _ =
+	forAll1TConstr_step thenLT [idT; funT forAll1TConstr_aux] orelseT forAll1TConstr_base
+
+let forAll1TConstr_iter = funT forAll1TConstr_aux
+
+let forAll1TConstrT = forAll1TConstr_start thenT forAll1TConstr_iter
+
+let resource intro +=
+	<<ForAll1TConstr{'Terms; 'IndDef; t,c,C.'P['t;'c;'C]}>>, wrap_intro forAll1TConstrT
 
 (******************************************************************************************
  * Definition of application for left parts of declarations                               *
@@ -49,6 +64,9 @@ let fold_prodAppC = fold_prodApp_base thenC (repeatC fold_prodApp_step)
 *)
 let prodAppC = (repeatC prodApp_step) thenC prodApp_base
 
+let resource reduce += [
+	<<prodAppShape{x.'T['x]; 't}>>, prodAppC;
+]
 
 (******************************************************************************************
  * definition of ElimCaseTypeDef                                                          *

@@ -182,7 +182,7 @@ rule arity_of_some_sort_Prop :
 rule arity_of_some_sort_Type :
    sequent { <H> >- arity_of_some_sort{"type"[i:l]} }
 
-rule arity_of_some_sort_prod bind{x.'U['x]} :
+rule arity_of_some_sort_prod (*bind{x.'U['x]}*) :
    sequent { <H>; x:'T1 >- arity_of_some_sort{'U['x]} } -->
 	sequent { <H> >- arity_of_some_sort{ (x:'T1->'U['x]) } }
 
@@ -205,7 +205,7 @@ rule arity_of_sort_Prop :
 rule arity_of_sort_Type :
    sequent { <H> >- arity_of_sort{"type"[i:l];"type"[i:l]} }
 
-rule arity_of_sort_prod bind{x.'U['x]} :
+rule arity_of_sort_prod (*bind{x.'U['x]}*) :
    sequent { <H>; x:'T1 >- arity_of_sort{'U['x]; 's} } -->
 	sequent { <H> >- arity_of_sort{(x:'T1 -> 'U['x]); 's} }
 
@@ -215,7 +215,7 @@ declare type_of_constructor{'T;'I} (* 'T is a type of constructor of 'I *)
 rule type_of_constructor_app :
    sequent { <H> >- type_of_constructor{ applH{| <T1> >- 'I<|H|> |}; 'I } }
 
-rule type_of_constructor_prod 'T1 bind{x.'C['x]} :
+rule type_of_constructor_prod 'T1 (*bind{x.'C['x]}*) :
    sequent { <H>; x:'T1 >- type_of_constructor{'C['x];'I} } -->
 	sequent { <H> >- type_of_constructor{ (x:'T1 -> 'C['x]); 'I } }
 
@@ -237,7 +237,7 @@ rule positivity_cond_1 'H :
 	sequent { <H>; x:'T; <J['x]> >-
 	   positivity_cond{ applH{| <T1> >- 'x|} ;'x } }
 
-rule positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]}:
+rule positivity_cond_2 'H (*bind{x.'T['x]} bind{y,x.'U['y;'x]}*) :
    sequent { <H>; x:'S; <J['x]> >- strictly_pos{'x;'T['x]}} -->
 	sequent { <H>; x:'S; <J['x]>; y:'T['x] >- positivity_cond{'U['y;'x];'x} } -->
 	sequent { <H>; x:'S; <J['x]> >- positivity_cond{(y:'T['x] -> 'U['y;'x]);'x} }
@@ -261,7 +261,7 @@ rule strictly_pos_1 'H :
 rule strictly_pos_2 'H :
 	sequent { <H>; x:'T1; <J['x]> >- strictly_pos{'x;applH{| <T2> >- 'x|}} }
 
-rule strictly_pos_3 'H 'U bind{x,y.'V['x;'y]} :
+rule strictly_pos_3 'H (*'U bind{x,y.'V['x;'y]}*) :
    sequent { <H>; x:'T2; <J['x]>; x1:'U >- strictly_pos{'x;'V['x1;'x]} } -->
 	sequent { <H>; x:'T2; <J['x]> >-
 	   strictly_pos{'x ; (x1:'U -> 'V['x1;'x])} }
@@ -290,7 +290,7 @@ rule imbr_pos_cond_1 'H :
 	sequent { <H>; x:'T; <J['x]> >-
 	   imbr_pos_cond{ applH{| <T1> >- 'I<|J;H|>['x]|};'I<|J;H|>['x];'x} }
 
-rule imbr_pos_cond_2 'H bind{x,y.'U['x;'y]} :
+rule imbr_pos_cond_2 'H (*bind{x,y.'U['x;'y]}*) :
    sequent { <H>; x:'T2; <J['x]> >- type_of_constructor{ (x1:'T['x] -> 'U['x1;'x]) ;'I} } -->
    sequent { <H>; x:'T2; <J['x]> >- strictly_pos{'x;'T['x]} } -->
 	sequent { <H>; x:'T2; <J['x]>; x1:'T['x] >- imbr_pos_cond{'U['x1;'x];'I;'x} } -->

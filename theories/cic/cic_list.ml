@@ -6,6 +6,9 @@ open Dtactic
 (*extends Cic_ind_cases
 open Cic_ind_cases*)
 
+extends Cic_ind_elim_dep
+open Cic_ind_elim_dep
+
 define unfold_List: List <-->
 	sequent [IndParams] { B: Set >-
 	   sequent [IndTypes] { List: Set >-
@@ -73,6 +76,18 @@ interactive list_nodep_elim_wf {| intro [] |} :
 	sequent { <H> >- 'base in ('Q 'A) } -->
 	sequent { <H>; a: 'A; l: (List 'A) >- 'step in ('Q 'A 'a 'l) } -->
 	sequent { <H> >- Elim{'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| x:'base; y:'step >- it|}} in ('Q 'A) }
+
+interactive list_dep_elim_wf {| intro [] |} :
+	sequent { <H> >- 'A in Set } -->
+	sequent { <H> >- 'l in (List 'A) } -->
+	sequent { <H> >- 'Q in (a: Set -> (List 'a) -> Prop) } -->
+	sequent { <H> >- 'base in (C: Set -> ('Q 'C (nil 'C))) } -->
+	sequent { <H> >- 'step in (C: Set -> a: 'C -> l: (List 'C) -> ('Q 'C 'l) -> ('Q 'C (cons 'C 'a 'l))) } -->
+	sequent { <H> >- Elim{'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| x:'base; y:'step >- it|}} in ('Q 'A 'l) }
+
+(*
+cons in (C:Set -> ('C -> (List 'C) -> (List 'C)))
+*)
 
 interactive prodH_test1 :
 	sequent { <H> >- prodH{|x: 'A >- 'x |} }

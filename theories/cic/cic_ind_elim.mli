@@ -29,6 +29,8 @@ rule forAll1T_step :
 	sequent { <H> >- 'pred['T] } -->
 	sequent { <H> >- ForAll1T{|v: 'T; <J['v]> >- bind{x.'pred<|H|>['x]}|} }
 
+topval forAll1T : tactic
+
 (*
  * Subst{SubstIn{<Params> >- 'Body}; SubstArgs{<Args>}} evaluates to
  * 'Bode[<Args>/<Params>], i.e. parameters are replaced with actual arguments -

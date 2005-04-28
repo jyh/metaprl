@@ -11,7 +11,7 @@ declare ForAll1TConstr{'terms; 'IndDef; t,c,C.'P['t;'c;'C]}
 declare ForAll1TConstrAux{'terms; 'IndDef; t,c,C.'P['t;'c;'C]}
 
 rule forAll1TConstr_base  :
-	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};
+	sequent { <H> >- ForAll1TConstrAux{Terms{| >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{| >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} }
 
 rule forAll1TConstr_step  :
@@ -26,6 +26,8 @@ rule forAll1TConstr_start  :
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{| >- IndConstrs{|<Hc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
 	sequent { <H> >-
 		ForAll1TConstr{Terms{|<T> >-it|}; IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- it|}|}|}; t,c,C.'P['t;'c;'C]} }
+
+topval forAll1TConstrT : tactic
 
 (******************************************************************************************
  * Definition of application for left parts of declarations                               *

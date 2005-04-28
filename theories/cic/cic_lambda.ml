@@ -228,13 +228,9 @@ prim set_a_prop_set {| intro [] |} :
 *      RULES
 *************************************************)
 
-prim var 'H :
+prim var {| intro [] |} 'H :
    sequent { <H> >- of_some_sort{'T} } -->
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } = it
-
-let resource nth_hyp += [
-	(<<'T>>, <<'x in 'T>>, (fun i -> var i ttca))
-]
 
 prim weak 'H :
 	sequent { <H>; <J> >- 'A in 'B } -->
@@ -245,20 +241,20 @@ prim prod_1 's1 :
    sequent { <H> >- prop_set{'s1}  } -->
    sequent { <H> >- member{ 'T; 's1 } } -->
    sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
-   sequent { <H> >- member{ (x:'T -> 'U['x]); 's2  }  } = it
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2  } = it
 
 prim prod_2 's1 :
    sequent { <H>; x:'T >- prop_set{'s2}  } -->
-   sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
-   sequent { <H> >- member{ 'T; 's1 } } -->
-   sequent { <H> >- member{ (x:'T -> 'U['x]); 's2  }  } = it
+   sequent { <H>; x:'T >- 'U['x] in 's2 } -->
+   sequent { <H> >- 'T in 's1 } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2  } = it
 
 prim prod_types "type"[i:l] "type"[j:l] :
-   sequent { <H> >- member{'T;"type"[i:l]}  } -->
-   sequent { <H>; x:'T >- member{ 'U['x]; "type"[j:l] }  } -->
+   sequent { <H> >- 'T in "type"[i:l]  } -->
+   sequent { <H>; x:'T >- 'U['x] in "type"[j:l]  } -->
    sequent { >- le[i:l,k:l]  } -->
    sequent { >- le[j:l,k:l]  } -->
-   sequent { <H> >- member{ (x:'T -> 'U['x]); "type"[k:l] } } = it
+   sequent { <H> >- (x:'T -> 'U['x]) in "type"[k:l] } = it
 
 
 (************************************************
@@ -266,10 +262,10 @@ prim prod_types "type"[i:l] "type"[j:l] :
  ************************************************)
 
 prim lam {| intro [] |} 's :
-   sequent { <H> >- member{ (x:'T -> 'U['x]); 's }  } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in 's  } -->
    sequent { <H> >- is_sort{'s }  } -->
-   sequent { <H>; x:'T >- member{ 't['x]; 'U['x] }  } -->
-   sequent { <H> >- member{ lambda{'T;x.'t['x]}; (x:'T -> 'U['x]) } } = it
+   sequent { <H>; x:'T >- 't['x] in 'U['x]  } -->
+   sequent { <H> >- lambda{'T;x.'t['x]} in (x:'T -> 'U['x]) } = it
 
 
 (************************************************
@@ -277,9 +273,9 @@ prim lam {| intro [] |} 's :
  ************************************************)
 
 prim app {| intro [] |} (x:'T -> 'U['x]) :
-   sequent { <H> >- member{ 'u; (x:'T -> 'U['x]) }  } -->
-   sequent { <H> >- member{ 't;'T }  } -->
-   sequent { <H> >- member{ apply{'u;'t}; 'U['t]  } } = it
+   sequent { <H> >- 'u in (x:'T -> 'U['x])  } -->
+   sequent { <H> >- 't in 'T  } -->
+   sequent { <H> >- apply{'u;'t} in 'U['t] } = it
 
 
 (************************************************
@@ -288,9 +284,9 @@ prim app {| intro [] |} (x:'T -> 'U['x]) :
 
 (*
 prim let_in 'T bind{x.'U['x]}:
-   sequent { <H> >- member{'t;'T}  } -->
-   sequent { <H>; x:"let"{'t;'T} >- member{'u['x];'U['x]} } -->
-   sequent { <H> >- member{ let_in{'t;x.'u['x]}; 'U['t] }  } = it
+   sequent { <H> >- 't in 'T  } -->
+   sequent { <H>; x:"let"{'t;'T} >- 'u['x] in 'U['x] } -->
+   sequent { <H> >- let_in{'t;x.'u['x]} in 'U['t]  } = it
 *)
 
 (************************************************
@@ -358,7 +354,7 @@ prim conv_le_5 :
    sequent { <H> >- conv_le{ (x:'T -> 'T1['x]); (x:'T -> 'U1['x]) }} = it
 
 prim conv_rule 's 'T:
-   sequent { <H> >- member{ 'U; 's } } -->
-   sequent { <H> >- member{ 't; 'T } } -->
+   sequent { <H> >- 'U in 's } -->
+   sequent { <H> >- 't in 'T } -->
    sequent { <H> >- conv_le{ 'T; 'U } } -->
-   sequent { <H> >- member{ 't; 'U } } = it
+   sequent { <H> >- 't in 'U } = it

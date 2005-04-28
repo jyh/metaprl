@@ -15,7 +15,7 @@ prim forAll1TConstr_base :
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{| >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } = it
 
 prim forAll1TConstr_step :
-	sequent { <H> >- IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'P['t; 'c; 'C]|}|}|} } -->
+	sequent { <H> >- IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'P['t; 'c; prodH{|<Hi> >-'C|}]|}|}|} } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{|<T> >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc>; c:'C >- IndConstrs{|<Jc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};
@@ -26,11 +26,6 @@ prim forAll1TConstr_start :
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{| >- IndConstrs{|<Hc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
 	sequent { <H> >-
 		ForAll1TConstr{Terms{|<T> >-it|}; IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- it|}|}|}; t,c,C.'P['t;'c;'C]} } = it
-(*
-let rec aux stepT baseT = (stepT thenLT [idT; aux stepT baseT]) orelseT baseT
-
-let forAll1TConstrT = forAll1TConstr_start thenT (aux forAll1TConstr_step forAll1TConstr_base)
-*)
 
 let rec forAll1TConstr_aux _ =
 	forAll1TConstr_step thenLT [idT; funT forAll1TConstr_aux] orelseT forAll1TConstr_base
@@ -166,7 +161,10 @@ prim dep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 'A
 					ForAll1TConstr{
 						Terms{|<F> >-it|};
 						IndParams{|<Hp<||> > >- IndTypes{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >- IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- it|}|}|};
-						f,c,C.('f in ElimCaseTypeDep{'C; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}; 'c})
+						f,c,C.('f in ElimCaseTypeDep{
+											'C;
+											ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|};
+											'c})
 					}
 				} -->
    sequent { <H> >-

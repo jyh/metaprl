@@ -68,7 +68,7 @@ dform display_hyp_df : display_hyp{x. 't[]} =
 	slot{'x} `": " slot{'t}
 
 dform prodH_df : except_mode[src] :: sequent [prodH] { <H> >- 'e } =
-	slot["le"]{display_hyps_emph{sequent { <H> >- 'e }}}
+	slot["le"]{display_hyps_emph{sequent { <H> >- it }}}
 	" " rightarrow " "
 	slot["lt"]{display_concl{sequent { <H> >- 'e }}}
 (*
@@ -79,9 +79,9 @@ dform ind_df : except_mode[src] ::
 	sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi<| |> > >-
 		   sequent [IndConstrs] { <Hc<| |> > >- 't<||> }}} =
-	`"Ind[" display_hyps{sequent [IndParams]{ <Hp> >- 't<||> }} `"]("
-		display_hyps{ sequent [IndTypes]{ <Hi> >- 't<||> }} `" := "
-			display_hyps{ sequent [IndConstrs]{ <Hc> >- 't<||> }} `")" slot{'t}
+	`"Ind[" display_hyps{sequent [IndParams]{ <Hp> >- it }} `"]("
+		display_hyps{ sequent [IndTypes]{ <Hi> >- it }} `" := "
+			display_hyps{ sequent [IndConstrs]{ <Hc> >- it }} `")" slot{'t}
 
 dform indWF_df : except_mode[src] ::
 	sequent [IndParamsWF] { <Hp> >-
@@ -290,29 +290,29 @@ dform indSubst_df : except_mode[src] ::
 	sequent [IndParamsSubst] { <Hp> >-
 	   sequent [IndTypesSubst] { <Hi<| |> > >-
 		   sequent [IndConstrsSubst] { <Hc<| |> > >- 't<||> }}} =
-	`"Subst[" display_hyps{sequent [IndParamsSubst]{ <Hp> >- 't<||> }} `"]("
-		display_hyps{ sequent [IndTypesSubst]{ <Hi> >- 't<||> }} `" := "
-			display_hyps{ sequent [IndConstrsSubst]{ <Hc> >- 't<||> }} `")" slot{'t}
+	`"Subst[" display_hyps{sequent [IndParamsSubst]{ <Hp> >- it }} `"]("
+		display_hyps{ sequent [IndTypesSubst]{ <Hi> >- it }} `" := "
+			display_hyps{ sequent [IndConstrsSubst]{ <Hc> >- it }} `")" slot{'t}
 
 dform indSubstAux_df : except_mode[src] ::
 	sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { <Hi<| |> > >-
 			sequent [Aux] { <Ji> >-
 				sequent [IndConstrsSubstAux] { <Hc<| |> > >- 't<||> }}}} =
-	`"SubstAux[" display_hyps{sequent [IndParamsSubstAux]{ <Hp> >- 't<||> }} `"]("
-		display_hyps{ sequent [IndTypesSubstAux]{ <Hi> >- 't<||> }} `" | "
+	`"SubstAux[" display_hyps{sequent [IndParamsSubstAux]{ <Hp> >- it }} `"]("
+		display_hyps{ sequent [IndTypesSubstAux]{ <Hi> >- it }} `" | "
 			display_hyps{ sequent [Aux] { <Ji> >- it}}  `" := "
-				display_hyps{ sequent [IndConstrsSubstAux]{ <Hc> >- 't<||> }} `")" slot{'t}
+				display_hyps{ sequent [IndConstrsSubstAux]{ <Hc> >- it }} `")" slot{'t}
 
 dform indSubstApp_df : except_mode[src] ::
 	sequent [IndParamsSubstApp] { <Hp> >-
 	   sequent [IndTypesSubstApp] { <Hi<| |> > >-
 			sequent [Aux] { <Ji> >-
 				sequent [IndConstrsSubstApp] { <Hc<| |> > >- 't<||> }}}} =
-	`"SubstApp[" display_hyps{sequent [IndParamsSubstApp]{ <Hp> >- 't<||> }} `"]("
-		display_hyps{ sequent [IndTypesSubstApp]{ <Hi> >- 't<||> }} `" | "
+	`"SubstApp[" display_hyps{sequent [IndParamsSubstApp]{ <Hp> >- it }} `"]("
+		display_hyps{ sequent [IndTypesSubstApp]{ <Hi> >- it }} `" | "
 			display_hyps{ sequent [Aux] { <Ji> >- it}}  `" := "
-				display_hyps{ sequent [IndConstrsSubstApp]{ <Hc> >- 't<||> }} `")" slot{'t}
+				display_hyps{ sequent [IndConstrsSubstApp]{ <Hc> >- it }} `")" slot{'t}
 
 dform indSubstAppAux_df : except_mode[src] ::
 	sequent [IndParamsSubstAppAux] { <Hp> >-
@@ -320,11 +320,11 @@ dform indSubstAppAux_df : except_mode[src] ::
 			sequent [IndTypesSubstAppAux] { <Hi<| |> > >-
 				sequent [Aux] { <Ji> >-
 					sequent [IndConstrsSubstAppAux] { <Hc<| |> > >- 't<||> }}}}} =
-	`"SubstAppAux[" display_hyps{sequent [IndParamsSubstAppAux]{ <Hp> >- 't<||> }} `" | "
+	`"SubstAppAux[" display_hyps{sequent [IndParamsSubstAppAux]{ <Hp> >- it }} `" | "
 		display_hyps{ sequent [Aux] { <Jp> >- it}} `"]("
-			display_hyps{ sequent [IndTypesSubstAppAux]{ <Hi> >- 't<||> }} `" | "
+			display_hyps{ sequent [IndTypesSubstAppAux]{ <Hi> >- it }} `" | "
 				display_hyps{ sequent [Aux] { <Ji> >- it}}  `" := "
-					display_hyps{ sequent [IndConstrsSubstAppAux]{ <Hc> >- 't<||> }} `")" slot{'t}
+					display_hyps{ sequent [IndConstrsSubstAppAux]{ <Hc> >- it }} `")" slot{'t}
 
 prim_rw substStart {| reduce |} :
    sequent [IndParamsSubst] { <Hp> >-
@@ -530,8 +530,7 @@ declare arity_of_some_sort{'T} (* type T is an arity of some sort *)
 dform arity_of_some_sort_df : arity_of_some_sort{'t} = `"arity_of_some_sort{" slot{'t} `"}"
 (*
 dform arity_of_some_sort_m_df : sequent [arity_of_some_sort_m] { <T1> >- arity_of_some_sort_m} =
-	`"arity_of_some_sort_m{" display_hyps{ sequent [arity_of_some_sort_m] { <T1> >-
-			arity_of_some_sort_m}} `"}"
+	`"arity_of_some_sort_m{" display_hyps{ sequent [arity_of_some_sort_m] { <T1> >- it}} `"}"
 *)
 dform of_some_sort_df : of_some_sort{'t} = `"of_some_sort{" slot{'t} `"}"
 
@@ -624,7 +623,7 @@ declare sequent [positivity_cond_m] { Term : Term >- Term } : Term
 
 dform positivity_cond_m_df : sequent [positivity_cond_m] { <Hi > >- 'C<||> } =
 	`"positivity_cond_m{" slot{'C} `" for "
-		display_hyps{sequent [positivity_cond_m] { <Hi > >- 'C<||> }} `"}"
+		display_hyps{sequent [positivity_cond_m] { <Hi > >- it }} `"}"
 
 prim positivity_cond_m_base {| intro [] |} :
    sequent { <H>; I:'A >- positivity_cond{'C['I];'I} } -->
@@ -691,7 +690,7 @@ declare imbr_params{'I;'x}
 dform imbr_params_df : imbr_params{'I;'x} = `"imbr_params{" slot{'I} `";" slot{'x} `"}"
 
 dform imbr_pos_cond_m_df : sequent [imbr_pos_cond_m] { <Hc> >- 'T<| |> } =
-	`"imbr_pos_cond_m{" display_hyps{ sequent [imbr_pos_cond_m] { <Hc> >- 'T<| |> } } `"|" slot{'T} `"}"
+	`"imbr_pos_cond_m{" display_hyps{ sequent [imbr_pos_cond_m] { <Hc> >- it } } `"|" slot{'T} `"}"
 
 prim imbr_pos_cond_m_base {| nth_hyp |} 'H :
    sequent { <H>; x:'T; <J['x]> >-
@@ -711,7 +710,7 @@ declare sequent [of_some_sort_m] { Term : Term >- Term } : Term
 (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
 (*
 dform of_some_sort_m_df : sequent [of_some_sort_m] { <T1> >- of_some_sort_m } =
-	`"of_some_sort_m{" display_hyps{ sequent [of_some_sort_m] { <T1> >- of_some_sort_m } } `"}"
+	`"of_some_sort_m{" display_hyps{ sequent [of_some_sort_m] { <T1> >- it } } `"}"
 *)
 (* inductive defenition of multiple of_come_sort_m *)
 prim of_some_sort_m_base {| intro [] |} :

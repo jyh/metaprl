@@ -15,7 +15,7 @@ rule forAll1TConstr_base  :
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{| >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} }
 
 rule forAll1TConstr_step  :
-	sequent { <H> >- IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'P['t; 'c; 'C]|}|}|} } -->
+	sequent { <H> >- IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'P['t; 'c; prodH{|<Hi> >-'C|}]|}|}|} } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{|<T> >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc>; c:'C >- IndConstrs{|<Jc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};

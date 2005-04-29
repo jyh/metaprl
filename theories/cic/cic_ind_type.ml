@@ -207,17 +207,15 @@ prim_rw indCarryOut :
 	      sequent [IndConstrs] { <Hc> >- 't<||> } } } <-->
 	't<||>
 
-(*
 interactive_rw indWrap
 		sequent [IndParams] { <Hp> >-
 			sequent [IndTypes] { <Hi> >-
-				sequent [IndConstrs] { <Hc> >- 'aux } } } :
+				sequent [IndConstrs] { <Hc> >- 'aux } } } ('t :> Term) :
 	't <-->
    sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
 	      sequent [IndConstrs] { <Hc> >- 't<||> } } }
-*)
-
+(*
 prim_rw indWrap
 		sequent [IndParams] { <Hp> >-
 			sequent [IndTypes] { <Hi> >-
@@ -226,11 +224,11 @@ prim_rw indWrap
    (sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
 	      sequent [IndConstrs] { <Hc> >- 't<||> in 'T<||> } } })
-
+*)
 let indWrapC def cnv = funC (fun e ->
 	let p = env_arg e in
 	let def' = Top_conversionals.apply_rewrite p cnv def in
-	indWrap def'
+	termC (indWrap def')
 )
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
@@ -329,126 +327,125 @@ dform indSubstAppAux_df : except_mode[src] ::
 prim_rw substStart {| reduce |} :
    sequent [IndParamsSubst] { <Hp> >-
 	   sequent [IndTypesSubst] { <Hi> >-
-         sequent [IndConstrsSubst] { <Hc> >- 'c in 'C } } } <-->
+         sequent [IndConstrsSubst] { <Hc> >- 'C } } } <-->
    sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { <Hi> >-
 			sequent [Aux] { >-
-				sequent [IndConstrsSubstAux] { <Hc> >- 'c in 'C } } } }
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }
 
 let fold_substStart = makeFoldC
 	<<sequent [IndParamsSubst] { <Hp> >-
 	   sequent [IndTypesSubst] { <Hi> >-
-         sequent [IndConstrsSubst] { <Hc> >- 'c in 'C } } }>> substStart
+         sequent [IndConstrsSubst] { <Hc> >- 'C } } }>> substStart
 
 prim_rw substStep {| reduce |} :
 	sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { <Hi>; I: 'A >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstAux] { <Hc['I]> >- 'c in 'C['I] } } } } <-->
+				sequent [IndConstrsSubstAux] { <Hc['I]> >- 'C['I] } } } } <-->
 	sequent [IndParamsSubstApp] { <Hp> >-
 	   sequent [IndTypesSubstApp] { <Hi> >-
 			sequent [Aux] { I: 'A; <Ji> >-
-				sequent [IndConstrsSubstApp] { <Hc['I]> >- 'c in 'C['I] } } } }
+				sequent [IndConstrsSubstApp] { <Hc['I]> >- 'C['I] } } } }
 
 let fold_substStep = makeFoldC
 	<<sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { <Hi>; I: 'A >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstAux] { <Hc['I]> >- 'c in 'C['I] } } } }>> substStep
+				sequent [IndConstrsSubstAux] { <Hc['I]> >- 'C['I] } } } }>> substStep
 
 prim_rw substProdStart {| reduce |} :
 	sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstAux] { <Hc> >- 'c in 'C } } } } <-->
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } } <-->
 	sequent [IndParamsSubstProd] { <Hp> >-
 		sequent [Aux] { >-
 			sequent [IndTypesSubstProd] { <Ji> >-
-				sequent [IndConstrsSubstProd] { <Hc> >- 'c in 'C } } } }
+				sequent [IndConstrsSubstProd] { <Hc> >- 'C } } } }
 
 let fold_substProdStart = makeFoldC
 	<<sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstAux] { <Hc> >- 'c in 'C } } } }>> substProdStart
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }>> substProdStart
 
 prim_rw substProdStep {| reduce |} :
 	sequent [IndParamsSubstProd] { <Hp>; p: 'P >-
 		sequent [Aux] { <Jp['p]> >-
 			sequent [IndTypesSubstProd] { <Hi['p]> >-
-				sequent [IndConstrsSubstProd] { <Hc['p]> >- 'c in 'C['p] } } } } <-->
+				sequent [IndConstrsSubstProd] { <Hc['p]> >- 'C['p] } } } } <-->
 	sequent [IndParamsSubstProd] { <Hp> >-
 		sequent [Aux] { p: 'P; <Jp['p]> >-
 			sequent [IndTypesSubstProd] { <Hi['p]> >-
-				sequent [IndConstrsSubstProd] { <Hc['p]> >- 'c in (q:'P -> 'C['q]) } } } }
+				sequent [IndConstrsSubstProd] { <Hc['p]> >- q:'P -> 'C['q] } } } }
 
 let fold_substProdStep = makeFoldC
 	<<sequent [IndParamsSubstProd] { <Hp>; p: 'P >-
 		sequent [Aux] { <Jp['p]> >-
 			sequent [IndTypesSubstProd] { <Hi['p]> >-
-				sequent [IndConstrsSubstProd] { <Hc['p]> >- 'c in 'C['p] } } } }>> substProdStep
+				sequent [IndConstrsSubstProd] { <Hc['p]> >- 'C['p] } } } }>> substProdStep
 
 prim_rw substFinal {| reduce |} :
 	sequent [IndParamsSubstProd] { >-
 		sequent [Aux] { <Jp> >-
 			sequent [IndTypesSubstProd] { <Hi> >-
-				sequent [IndConstrsSubstProd] { <Hc> >- 'c in 'C } } } } <-->
+				sequent [IndConstrsSubstProd] { <Hc> >- 'C } } } } <-->
 	sequent [IndParams] { <Jp> >-
 	   sequent [IndTypes] { <Hi> >-
-			sequent [IndConstrs] { <Hc> >- 'c in 'C } } }
+			sequent [IndConstrs] { <Hc> >- 'C } } }
 
 let fold_substFinal = makeFoldC
 	<<sequent [IndParamsSubstProd] { >-
 		sequent [Aux] { <Jp> >-
 			sequent [IndTypesSubstProd] { <Hi> >-
-				sequent [IndConstrsSubstProd] { <Hc> >- 'c in 'C } } } }>> substFinal
+				sequent [IndConstrsSubstProd] { <Hc> >- 'C } } } }>> substFinal
 
 prim_rw appStart {| reduce |} :
 	sequent [IndParamsSubstApp] { <Hp> >-
 	   sequent [IndTypesSubstApp] { <Hi> >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstApp] { <Hc> >- 'c in 'C } } } } <-->
+				sequent [IndConstrsSubstApp] { <Hc> >- 'C } } } } <-->
 	sequent [IndParamsSubstAppAux] { <Hp> >-
 		sequent [Aux] { >-
 			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent [Aux] { <Ji> >-
-					sequent [IndConstrsSubstAppAux] { <Hc> >- 'c in 'C } } } } }
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } }
 
 let fold_appStart = makeFoldC
 	<<sequent [IndParamsSubstApp] { <Hp> >-
 	   sequent [IndTypesSubstApp] { <Hi> >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstApp] { <Hc> >- 'c in 'C } } } }>> appStart
+				sequent [IndConstrsSubstApp] { <Hc> >- 'C } } } }>> appStart
 
 prim_rw appStep {| reduce |} :
 	sequent [IndParamsSubstAppAux] { <Hp>; p: 'P >-
 		sequent [Aux] { <Jp['p]> >-
 			sequent [IndTypesSubstAppAux] { <Hi['p]> >-
 				sequent [Aux] { I: 'A['p]; <Ji['p]> >-
-					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'c in 'C['I;'p] } } } } } <-->
+					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'C['I;'p] } } } } } <-->
 	sequent [IndParamsSubstAppAux] { <Hp> >-
 		sequent [Aux] { p: 'P; <Jp['p]> >-
 			sequent [IndTypesSubstAppAux] { <Hi['p]> >-
 				sequent [Aux] { I: 'A['p]; <Ji['p]> >-
-					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'c in 'C[('I 'p);'p] } } } } }
+					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'C[('I 'p);'p] } } } } }
 
 interactive_rw fold_appStep bind{i,p.'C['i;'p]} :
 	sequent [IndParamsSubstAppAux] { <Hp> >-
 		sequent [Aux] { p: 'P; <Jp['p]> >-
 			sequent [IndTypesSubstAppAux] { <Hi['p]> >-
 				sequent [Aux] { I: 'A['p]; <Ji['p]> >-
-					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'c in 'C[('I 'p);'p] } } } } } <-->
+					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'C[('I 'p);'p] } } } } } <-->
 	sequent [IndParamsSubstAppAux] { <Hp>; p: 'P >-
 		sequent [Aux] { <Jp['p]> >-
 			sequent [IndTypesSubstAppAux] { <Hi['p]> >-
 				sequent [Aux] { I: 'A['p]; <Ji['p]> >-
-					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'c in 'C['I;'p] } } } } }
+					sequent [IndConstrsSubstAppAux] { <Hc['I;'p]> >- 'C['I;'p] } } } } }
 
 let fold_appStepAuxC seq =
 	let first = seq_concl seq in
 	let intermed = seq_concl (seq_concl first) in
-	let head = seq_concl (seq_concl (intermed)) in
-	let el,ty = two_subterms head in
+	let ty = seq_concl (seq_concl (intermed)) in
 	let defvar = mk_var_term (TermMan.nth_binding intermed 1) in
 	let param = mk_var_term (TermMan.nth_binding first 1) in
 	let appl = mk_apply_term defvar param in
@@ -462,29 +459,29 @@ prim_rw appFinal {| reduce |} :
 		sequent [Aux] { <Jp> >-
 			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent [Aux] { <Ji> >-
-					sequent [IndConstrsSubstAppAux] { <Hc> >- 'c in 'C } } } } } <-->
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } } <-->
 	sequent [IndParamsSubstAux] { <Jp> >-
 		sequent [IndTypesSubstAux] { <Hi> >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstAux] { <Hc> >- 'c in 'C } } } }
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }
 
 let fold_appFinalC = makeFoldC
 	<<sequent [IndParamsSubstAppAux] { >-
 		sequent [Aux] { <Jp> >-
 			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent [Aux] { <Ji> >-
-					sequent [IndConstrsSubstAppAux] { <Hc> >- 'c in 'C } } } } }>> appFinal
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } }>> appFinal
 (*
 interactive_rw fold_appFinal :
 	sequent [IndParamsSubstAux] { <Jp> >-
 		sequent [IndTypesSubstAux] { <Hi> >-
 			sequent [Aux] { <Ji> >-
-				sequent [IndConstrsSubstAux] { <Hc> >- 'c in 'C } } } } <-->
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } } <-->
 	sequent [IndParamsSubstAppAux] { >-
 		sequent [Aux] { <Jp> >-
 			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent [Aux] { <Ji> >-
-					sequent [IndConstrsSubstAppAux] { <Hc> >- 'c in 'C } } } } }
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } }
 
 let fold_appFinalC = fold_appFinal
 *)
@@ -511,11 +508,14 @@ prim ind_ConstConstrs 'Hc :
 		   sequent [IndTypesWF] { <Hi> >-
 	         sequent [IndConstrsWF] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >- it } }}}   -->
 	sequent { <H> >-
+	   sequent [IndParams] { <Hp> >-
+		   sequent [IndTypes] { <Hi> >-
+	         sequent [IndConstrs] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >- 'c }}}
+		in
 	   sequent [IndParamsSubst] { <Hp> >-
 		   sequent [IndTypesSubst] { <Hi> >-
 	         sequent [IndConstrsSubst] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >-
-				   'c in 'C } } } } = it
-
+				   'C } } } } = it
 
 (*******************************************************************************************
  *  in the next part the conditions for the W-Ind rule and the W-Ind rule are implemented  *
@@ -696,7 +696,7 @@ prim imbr_pos_cond_m_base {| nth_hyp |} 'H :
    sequent { <H>; x:'T; <J['x]> >-
 		sequent [imbr_pos_cond_m] { >- imbr_params{'I['x];'x} } } = it
 
-prim imbr_pos_cond_m_step {| intro [] |} 'H :
+prim imbr_pos_cond_m_step (*{| intro [] |}*) 'H :
    sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
 	sequent { <H>; x:'T; <J['x]> >-
 		sequent [imbr_pos_cond_m] { <Hc['x]> >-

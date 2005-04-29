@@ -78,17 +78,16 @@ rewrite indCarryOut :
 	      sequent [IndConstrs] { <Hc> >- 't<||> } } } <-->
 	't<||>
 
-(*
 rewrite indWrap
 		sequent [IndParams] { <Hp> >-
 			sequent [IndTypes] { <Hi> >-
-				sequent [IndConstrs] { <Hc> >- 'aux } } } :
+				sequent [IndConstrs] { <Hc> >- 'aux } } } ('t :> Term) :
 	't <-->
    sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
 	      sequent [IndConstrs] { <Hc> >- 't<||> } } }
-*)
 
+(*
 rewrite indWrap
 		sequent [IndParams] { <Hp> >-
 			sequent [IndTypes] { <Hi> >-
@@ -97,6 +96,7 @@ rewrite indWrap
    sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Hi> >-
 	      sequent [IndConstrs] { <Hc> >- 't in 'T } } }
+*)
 
 topval indWrapC : term -> conv -> conv
 
@@ -159,10 +159,14 @@ rule ind_ConstConstrs 'Hc :
 		   sequent [IndTypesWF] { <Hi> >-
 	         sequent [IndConstrsWF] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >- it } }}}   -->
 	sequent { <H> >-
+	   sequent [IndParams] { <Hp> >-
+		   sequent [IndTypes] { <Hi> >-
+	         sequent [IndConstrs] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >- 'c }}}
+		in
 	   sequent [IndParamsSubst] { <Hp> >-
 		   sequent [IndTypesSubst] { <Hi> >-
 	         sequent [IndConstrsSubst] { <Hc>; c:'C<|Hi;Hp;H|>; <Jc<|Hi;Hp;H|>['c]> >-
-				   'c in 'C } } } }
+				   'C } } } }
 
 (*******************************************************************************************
  *  in the next part the conditions for the W-Ind rule and the W-Ind rule are implemented  *

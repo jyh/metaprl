@@ -15,7 +15,11 @@ rule forAll1TConstr_base  :
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc> >- IndConstrs{| >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} }
 
 rule forAll1TConstr_step  :
-	sequent { <H> >- IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'P['t; 'c; prodH{|<Hi> >-'C|}]|}|}|} } -->
+	sequent { <H> >-
+		'P['t;
+			IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc>; c:'C; <Jc> >- 'c|}|}|};
+			IndParamsSubst{|<Hp> >- IndTypesSubst{|<Hi> >- IndConstrsSubst{|<Hc>; c:'C; <Jc> >- 'C|}|}|}
+		] } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{|<T> >-it|};
 		IndParams{|<Hp> >- IndTypes{|<Hi> >- Aux{|<Hc>; c:'C >- IndConstrs{|<Jc> >- it|}|}|}|}; t,c,C.'P['t;'c;'C]} } -->
 	sequent { <H> >- ForAll1TConstrAux{Terms{| 't; <T> >-it|};
@@ -28,6 +32,35 @@ rule forAll1TConstr_start  :
 		ForAll1TConstr{Terms{|<T> >-it|}; IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- it|}|}|}; t,c,C.'P['t;'c;'C]} }
 
 topval forAll1TConstrT : tactic
+
+(*
+ *	HypForAll1D{| <H> >- Aux{| <J> >- bind{x.'pred['x]} |}|} holds iff
+ * (<H> >- 'pred['v]) for all declarations (v: 'T) in <J>
+ *)
+declare sequent [HypForAll1D] { Term : Term >- Term } : Term
+
+rule hypForAll1D_base :
+	sequent { <H> >- HypForAll1D{| <K> >- Aux{| >- bind{x.'pred['x]} |}|} }
+
+rule hypForAll1D_step :
+	sequent { <H> >- HypForAll1D{|<K>; v: 'T >- Aux{|<J['v]> >- bind{x.'pred['v;'x]}|}|} } -->
+	sequent { <H>; <K>; v: 'T; <J['v]> >- 'pred['v;'v] } -->
+	sequent { <H> >- HypForAll1D{|<K> >- Aux{|v: 'T; <J['v]> >- bind{x.'pred['v;'x]}|}|} }
+
+(*
+ * BackHyp{| <H> >- Back{|<ToDrop> >- BackIn{|<J> >- it|}|}|} drops |ToDrop| elements from
+ * the end of <J> and then returns the last element of the rest of <J>
+ *)
+declare sequent [BackHyp] { Term : Term >- Term } : Term
+declare sequent [Back] { Term : Term >- Term } : Term
+declare sequent [BackIn] { Term : Term >- Term } : Term
+
+rewrite back_base :
+	BackHyp{|<H> >- Back{| >-BackIn{|<Prefix>; 't<||> >-it|}|}|} <--> 't
+
+rewrite back_step :
+	BackHyp{|<H> >- Back{|<ToDrop>; 'dummy >-BackIn{|<Prefix>; 't >- it|}|}|} <-->
+	BackHyp{|<H> >- Back{|<ToDrop> >-BackIn{|<Prefix> >- it|}|}|}
 
 (******************************************************************************************
  * Definition of application for left parts of declarations                               *
@@ -63,57 +96,74 @@ declare ElimCaseTypeDep{'C; 'predicates; 'c}
  * when strictly_positive(P,I_i) holds
  *)
 rewrite elimCaseTypeDep_inductive 'Hi :
-	ForAll1D{|<Hi> >- bind{I.strictly_pos{'I; prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |}}} |} -->
+	HypForAll1D{|<Hp> >- Aux{|<Hi> >- bind{I.strictly_pos{'I; prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |}}} |}|} -->
 	ElimCaseTypeDep{
-		prodH{|<Hi>; I:'A; <Ji> >- prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |} -> 'C|};
-		ElimPredicates{|<Predicates> >- it|};'c
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi>; I: 'A; <Ji> >-
+				IndConstrs{|<Hc['I]> >-
+					prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |} -> 'C['I]|}|}|};
+		ElimPredicates{|<Predicates> >- it|};
+		'c
 	} <-->
-	prodH{| <Hi>; I:'A; <Ji> >-
-		p:prodH{| <P> >- applH{| <M> >- 'I |} |} ->
-			(prodApp{| <P> >-
-				prodAppShape{
-					x.(applH{| <M> >-
-						Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}|} 'x);
-					'p
-				} |}
-			 ->
-			 ElimCaseTypeDep{prodH{|<Hi>; I:'A; <Ji> >- 'C|}; ElimPredicates{|<Predicates> >- it|}; 'c 'p}
-			)
-	|}
+	(p:prodH{| <P> >- applH{| <M> >-
+			IndParams{|<Hp> >- IndTypes{|<Hi>; I: 'A; <Ji> >- IndConstrs{|<Hc['I]> >- 'I |}|}|} |} |} ->
+		(prodApp{| <P> >-
+			prodAppShape{
+				x.(applH{| <M> >-
+					BackHyp{|<Hp>;<Hi>;I: 'A >- Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}|}|} 'x);
+				'p
+			} |}
+		 ->
+		 ElimCaseTypeDep{
+			IndParams{|<Hp> >- IndTypes{|<Hi>; I: 'A; <Ji> >- IndConstrs{|<Hc['I]> >- 'C['I] |}|}|};
+			ElimPredicates{|<Predicates> >- it|};
+			'c 'p}
+		)
+	)
 
 (* ((x:M)C{I_1,...,I_n,P_1,...,P_n,c} = (x:M)C{I_1,...,I_n,P_1,...,P_n,c x)
  * or
  * ((x:M)C{X,Q,c} = (x:M)C{X,Q,(c x)} )
  *)
-rewrite elimCaseTypeDep_dfun  :
-	ElimCaseTypeDep{prodH{|<Hi> >- x:'M<||> -> 'C['x]|}; ElimPredicates{|<Predicates> >- it|};'c} <-->
-	(x:'M -> ElimCaseTypeDep{prodH{|<Hi> >- 'C['x]|}; ElimPredicates{|<Predicates> >- it|}; 'c 'x})
+rewrite elimCaseTypeDep_dfun :
+	ElimCaseTypeDep{
+		IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- x:'M<||> -> 'C['x]|}|}|};
+		ElimPredicates{|<Predicates> >- it|};
+		'c
+	} <-->
+	(x:'M ->
+		ElimCaseTypeDep{
+			IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'C['x]|}|}|};
+			ElimPredicates{|<Predicates> >- it|};
+			'c 'x
+		}
+	)
 
-(* auxilary function
- * (C a){I_1,...,I_n,P_1,...,P_n,c} = (C{I_1,...,I_n,P_1,...,P_n,c} a)
- * or
- * (C a){X,Q,c}=(C{X,Q,c} a)
- *)
-rewrite elimCaseTypeDep_app  :
-	ElimCaseTypeDep{prodH{|<Hi> >- 'C 'a<||> |}; ElimPredicates{|<Predicates> >- it|};'c} <-->
-	(ElimCaseTypeDep{prodH{|<Hi> >- 'C |}; ElimPredicates{|<Predicates> >- it|}; 'c} 'a)
-
-(* auxilary function
- * I_i{I_1,...,I_n,P_1,...,P_n,c} = P_{i}
- * or
- * X{X,Q,c}=Q
- *)
-rewrite elimCaseTypeDep_id 'Hi :
-	ElimCaseTypeDep{prodH{|<Hi>; I: 'A; <Ji<||> > >- 'I |}; ElimPredicates{|<Predicates> >- it|};'c} <-->
-	Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}
+rewrite elimCaseTypeDep_fun :
+	ElimCaseTypeDep{
+		IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'M<||> -> 'C|}|}|};
+		ElimPredicates{|<Predicates> >- it|};
+		'c
+	} <-->
+	(x:'M ->
+		ElimCaseTypeDep{
+			IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'C|}|}|};
+			ElimPredicates{|<Predicates> >- it|};
+			'c 'x
+		}
+	)
 
 (* (I_i <a>){I_1,...,I_n,P_1,...,P_n,c} = ((P_i <a>) c)
  * or
  * (X <a>){X,Q,c} = ((Q <a>) c)
  *)
 rewrite elimCaseTypeDep_applH 'Hi :
-	ElimCaseTypeDep{prodH{|<Hi>; I: 'A; <Ji<||> > >- applH{|<Args<||> > >- 'I|}|}; ElimPredicates{|<Predicates> >- it|};'c} <-->
-	(applH{|<Args<||> > >- Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}|} 'c)
+	ElimCaseTypeDep{
+		IndParams{|<Hp> >- IndTypes{|<Hi>; I: 'A; <Ji> >- IndConstrs{|<Hc['I]> >- applH{|<Args<||> > >- 'I|}|}|}|};
+		ElimPredicates{|<Predicates> >- it|};
+		'c
+	} <-->
+	(applH{|<Args<||> > >- BackHyp{|<Hp>;<Hi>;I: 'A >- Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}|}|} 'c)
 
 declare good_dep{'sort1; 'sort2}
 

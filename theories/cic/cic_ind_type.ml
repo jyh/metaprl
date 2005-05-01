@@ -46,6 +46,7 @@ dform display_hyps_emph_df : display_hyps_emph{'s} =
 
 dform display_hyps_nil_df : display_hyps{sequent ['arg] { >- 'e }} =
 	`""
+
 (*
 dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't; <H> >- 'e }} =
    display_hyp{x. 't} `"," hspace display_hyps{sequent ['arg] { <H> >- 'e }}
@@ -53,10 +54,6 @@ dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't; <H> >- 'e }} =
 dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't >- 'e }} =
    display_hyp{x. 't} display_hyps{sequent ['arg] { >- 'e }}
 *)
-(*
- * Strip sequent_args if necessary.
- * Note, you can always override this by defining a more specific display form.
- *)
 
 dform display_concl_df : display_concl{sequent ['arg] { <H> >- 'e<||> } } =
 	slot{'e}
@@ -230,6 +227,13 @@ let indWrapC def cnv = funC (fun e ->
 	let def' = Top_conversionals.apply_rewrite p cnv def in
 	termC (indWrap def')
 )
+
+interactive_rw mergeIndApp :
+	(
+	 IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'f|}|}|}
+	 IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'arg|}|}|}
+	) <-->
+	IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'f 'arg|}|}|}
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
 prim ind_ConstDef 'Hi :

@@ -100,6 +100,13 @@ rewrite indWrap
 
 topval indWrapC : term -> conv -> conv
 
+rewrite mergeIndApp :
+	(
+	 IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'f|}|}|}
+	 IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'arg|}|}|}
+	) <-->
+	IndParams{|<Hp> >- IndTypes{|<Hi> >- IndConstrs{|<Hc> >- 'f 'arg|}|}|}
+
 (* implementation of the first part of the Coq's Ind-Const rule *)
 rule ind_ConstDef 'Hi :
    sequent { <H> >-

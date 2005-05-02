@@ -47,13 +47,11 @@ dform display_hyps_emph_df : display_hyps_emph{'s} =
 dform display_hyps_nil_df : display_hyps{sequent ['arg] { >- 'e }} =
 	`""
 
-(*
 dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't; <H> >- 'e }} =
    display_hyp{x. 't} `"," hspace display_hyps{sequent ['arg] { <H> >- 'e }}
 
 dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't >- 'e }} =
    display_hyp{x. 't} display_hyps{sequent ['arg] { >- 'e }}
-*)
 
 dform display_concl_df : display_concl{sequent ['arg] { <H> >- 'e<||> } } =
 	slot{'e}

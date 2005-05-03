@@ -2000,8 +2000,7 @@ P	p1023	Var P
 O	o1024	var p1023
 T	t1024	o1024
 B	b1024	t1024
-NCic_ind_elim!prodH	prodH1024	prodH Cic_ind_elim
-O	o1025	prodH1024
+O	o1025	prodH
 T	t1025	o1025
 S	s1025	t1025\\ h1008\\ t968
 B	b1025	s1025

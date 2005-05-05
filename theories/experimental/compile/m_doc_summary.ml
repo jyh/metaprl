@@ -190,7 +190,7 @@ similar to our own.  Like us, they propose using rewrites to transform code duri
 Winter develops this further in the HATS system @cite[Win99] with a special-purpose transformation
 grammar.  An advantage of this approach is that the transformation language can be tailored for the
 compilation process.  However, this significantly restricts the generality of the approach, and
-
+limits re-use of existing methods and tools.
 
 There have been efforts to present more functional accounts of assembly as well.
 Morrisett @it["et. al."] @cite[MWCG98] developed a typed

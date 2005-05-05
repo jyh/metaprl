@@ -31,7 +31,6 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
 extends Base_theory
 extends Ocaml
 
@@ -52,7 +51,7 @@ declare address[name:s]
  * belongs to fun{'t1; 't2} and for any argument in 't1,
  * the application of the function does not modify the state.
  *)
-declare functional{'t1 : OCaml; 't2 : OCaml} : OCaml
+declare functional{'t1 : TyOCaml; 't2 : TyOCaml} : TyOCaml
 
 (*
  * Judgment:
@@ -62,8 +61,8 @@ declare functional{'t1 : OCaml; 't2 : OCaml} : OCaml
  *    e1, e2: the expressions being compared
  *    t: the type of the comparison
  *)
-declare equiv{'S; 'e1 : OCaml; 'e2 : OCaml; 't : OCaml}
-declare member{'S; 'e : OCaml; 't : OCaml}
+declare equiv{'S; 'e1 : TyOCaml; 'e2 : TyOCaml; 't : TyOCaml}
+declare member{'S; 'e : TyOCaml; 't : TyOCaml}
 
 rewrite member_unfold :
    member{'S; 'e; 't} <--> equiv{'S; 'e; 'e; 't}
@@ -73,8 +72,8 @@ rewrite member_unfold :
  * Two expressions are functionally equivalent if they are equivalent
  * and they are both values.
  *)
-declare value_equiv{'S; 'e1 : OCaml; 'e2 : OCaml; 't : OCaml}
-declare value_member{'S; 'e : OCaml; 't : OCaml}
+declare value_equiv{'S; 'e1 : TyOCaml; 'e2 : TyOCaml; 't : TyOCaml}
+declare value_member{'S; 'e : TyOCaml; 't : TyOCaml}
 
 rewrite value_member_unfold :
    value_member{'S; 'e; 't} <--> value_equiv{'S; 'e; 'e; 't}
@@ -83,13 +82,13 @@ rewrite value_member_unfold :
  * Judgment:
  * Untyped value judgment.
  *)
-declare is_value{'S; 'e : OCaml}
+declare is_value{'S; 'e : TyOCaml}
 
 (*
  * Judgment:
  * t is a valid type.
  *)
-declare is_type{'t : OCaml}
+declare is_type{'t : TyOCaml}
 
 (*
  * Equivalence of names.
@@ -104,13 +103,13 @@ declare name_equiv{'S; 'n1; 'n2}
  * expr: projects the program component
  * :expr_value: projects the program if it is a value
  *)
-declare process{'S; 'e : OCaml}
-declare "value"{'S; 'e : OCaml}
+declare process{'S; 'e : TyOCaml}
+declare "value"{'S; 'e : TyOCaml}
 declare spread{'process; e, S. 'body['e; 'S]}
 declare spread_value{'process; v, S. 'body['v; 'S]}
-declare state{'S; 'e : OCaml}
-declare expr{'S; 'e : OCaml}
-declare expr_value{'S; 'e : OCaml}
+declare state{'S; 'e : TyOCaml}
+declare expr{'S; 'e : TyOCaml}
+declare expr_value{'S; 'e : TyOCaml}
 
 (*
  * Operations on states.
@@ -142,7 +141,7 @@ rule value_equiv_is_equiv :
 (*
  * A functional function application to a value is a value.
  *)
-rule functional_apply_value ('t1 :> OCaml) :
+rule functional_apply_value ('t1 :> TyOCaml) :
    sequent { <H> >- value_equiv{'S; 'a1; 'a2; 't2} } -->
    sequent { <H> >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
    sequent { <H> >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }

@@ -384,8 +384,8 @@ doc <:doc<
    @modsubsection{Subscripting.}
    Tuples are listed in reverse order.
 >>
-declare alloc_tuple{'l1; 'l2}
-declare alloc_tuple{'l}
+declare alloc_tuple{'l1; 'l2} : Dform
+declare alloc_tuple{'l} : Dform
 
 doc <:doc< @docoff >>
 
@@ -406,7 +406,7 @@ dform alloc_tuple_start_df : alloc_tuple{'l; AllocTupleNil} =
 
 (* General alloc_tuple *)
 dform alloc_tuple_start_df : alloc_tuple{'l; 'tl} =
-   slot{'l} `" :: " slot{'tl}
+   szone pushm[1] bf["("] alloc_tuple{'l} `" :: " slot{'tl} bf[")"] popm ezone
 
 dform alloc_tuple_nil_df : alloc_tuple{nil} =
    `""

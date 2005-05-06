@@ -69,7 +69,6 @@ rewrite back_step :
  * Types of cases for Nodep rule
  *)
 declare sequent [ElimPredicates] { Term : Term >- Term } : Term
-declare sequent [prodH] { Term : Term >- Term } : Term
 declare ElimCaseType{'C; 'predicates}
 
 rewrite elimCaseType_inductive :

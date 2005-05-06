@@ -42,6 +42,10 @@ declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                             free occurrences of a variable 'x in a term 'u *)
 
+prec prec_fun
+prec prec_apply
+prec prec_lambda
+
 declare math_fun{'x; 'A; 'B}
 declare math_fun{'A; 'B}
 

@@ -47,10 +47,10 @@ dform display_hyps_emph_df : display_hyps_emph{'s} =
 dform display_hyps_nil_df : display_hyps{sequent ['arg] { >- 'e }} =
 	`""
 
-dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't; <H> >- 'e }} =
+dform display_hyps_cons_df1 : display_hyps{sequent ['arg] { x: 't; <H> >- 'e }} =
    display_hyp{x. 't} `"," hspace display_hyps{sequent ['arg] { <H> >- 'e }}
 
-dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't >- 'e }} =
+dform display_hyps_cons_df2 : display_hyps{sequent ['arg] { x: 't >- 'e }} =
    display_hyp{x. 't} display_hyps{sequent ['arg] { >- 'e }}
 
 dform display_concl_df : display_concl{sequent ['arg] { <H> >- 'e<||> } } =
@@ -62,7 +62,7 @@ dform context_hyp_df : display_hyp{x. df_context{'c}} =
 dform display_hyp_df : display_hyp{x. 't[]} =
 	slot{'x} `": " slot{'t}
 
-dform prodH_df : except_mode[src] :: sequent [prodH] { <H> >- 'e } =
+dform prodH_df : parens :: "prec"[prec_fun] :: except_mode[src] :: sequent [prodH] { <H> >- 'e } =
 	slot["le"]{display_hyps_emph{sequent { <H> >- it }}}
 	" " rightarrow " "
 	slot["lt"]{display_concl{sequent { <H> >- 'e }}}
@@ -247,10 +247,9 @@ prim ind_ConstDef 'Hi :
 
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)
 declare sequent [applH] { Term : Term >- Term } : Term
-(*
-dform applH_df : except_mode[src] :: sequent [applH] { <H> >- 'e } =
-	display_concl{sequent { <H> >- 'e }} display_hyps_emph{sequent { <H> >- 'e }}
-*)
+
+dform applH_df : parens :: "prec"[prec_apply] :: except_mode[src] :: sequent [applH] { <H> >- 'e } =
+	slot["lt"]{display_concl{sequent { <H> >- 'e }}} " " slot["le"]{display_hyps_emph{sequent { <H> >- 'e }}}
 
 (*inductive definition of multiple application *)
 prim_rw applHBase {| reduce |} :

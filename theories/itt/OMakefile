@@ -67,7 +67,6 @@ MPFILES =\
    itt_singleton\
    itt_subset\
    itt_subset2\
-   itt_eq_base\
    itt_theory\
    itt_pointwise2\
    itt_collection\
@@ -199,7 +198,6 @@ PRINT_THEORIES =\
     itt_subset\
     itt_subset2\
     itt_antiquotient\
-    itt_eq_base\
     itt_record\
     itt_record_exm\
     itt_record_renaming\

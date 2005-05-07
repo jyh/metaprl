@@ -95,8 +95,35 @@ declare ElimCaseTypeDep{'C; 'predicates; 'c}
 (* (P->C){X,Q} = P -> (P[X<-Q] ->C{X,Q}), X=I_1,..., I_n, Q=P1,...,P_n,
  * when strictly_positive(P,I_i) holds
  *)
+(*
 rewrite elimCaseTypeDep_inductive 'Hi :
 	HypForAll1D{|<Hp> >- Aux{|<Hi> >- bind{I.strictly_pos{'I; prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |}}} |}|} -->
+	ElimCaseTypeDep{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi>; I: 'A; <Ji> >-
+				IndConstrs{|<Hc['I]> >-
+					prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |} -> 'C['I]|}|}|};
+		ElimPredicates{|<Predicates> >- it|};
+		'c
+	} <-->
+	(p:prodH{| <P> >- applH{| <M> >-
+			IndParams{|<Hp> >- IndTypes{|<Hi>; I: 'A; <Ji> >- IndConstrs{|<Hc['I]> >- 'I |}|}|} |} |} ->
+		(prodApp{| <P> >-
+			prodAppShape{
+				x.(applH{| <M> >-
+					BackHyp{|<Hp>;<Hi>;I: 'A >- Back{|<Ji> >- BackIn{|<Predicates> >- it|}|}|}|} 'x);
+				'p
+			} |}
+		 ->
+		 ElimCaseTypeDep{
+			IndParams{|<Hp> >- IndTypes{|<Hi>; I: 'A; <Ji> >- IndConstrs{|<Hc['I]> >- 'C['I] |}|}|};
+			ElimPredicates{|<Predicates> >- it|};
+			'c 'p}
+		)
+	)
+*)
+
+rewrite elimCaseTypeDep_inductive 'Hi :
 	ElimCaseTypeDep{
 		IndParams{|<Hp> >-
 			IndTypes{|<Hi>; I: 'A; <Ji> >-

@@ -93,7 +93,7 @@ let fold_prodAppC = fold_prodApp_base thenC (repeatC fold_prodApp_step)
 let prodAppC = (repeatC prodApp_step) thenC prodApp_base
 
 let resource reduce += [
-	<<prodAppShape{x.'T['x]; 't}>>, prodAppC;
+	<<prodApp{| <H> >- prodAppShape{x.'T['x]; 't} |}>>, prodAppC;
 ]
 
 (******************************************************************************************
@@ -107,7 +107,6 @@ declare ElimCaseTypeDep{'C; 'predicates; 'c}
  * when strictly_positive(P,I_i) holds
  *)
 prim_rw elimCaseTypeDep_inductive 'Hi :
-	HypForAll1D{|<Hp> >- Aux{|<Hi> >- bind{I.strictly_pos{'I; prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |}}} |}|} -->
 	ElimCaseTypeDep{
 		IndParams{|<Hp> >-
 			IndTypes{|<Hi>; I: 'A; <Ji> >-

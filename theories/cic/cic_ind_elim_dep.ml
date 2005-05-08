@@ -230,3 +230,248 @@ prim good_dep_set_set {| intro [] |} :
 
 prim good_dep_set_prop {| intro [] |} :
 	sequent { <H> >- good_dep{Set; Prop} } = it
+
+declare ElimBracket{'indDef; 'F; 'f}
+
+prim_rw elimBracket_inductive 'Hi :
+	ElimBracket{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi>; I: 'A; <Ji> >-
+				IndConstrs{|<Hc['I]> >-
+					prodH{|<P<||> > >- applH{| <M<|P|> > >- 'I |} |} -> 'C['I]|}|}|};
+		'F;
+		'f
+	} <-->
+	(p: prodH{|<P<||> > >-
+		applH{| <M<|P|> > >-
+			IndParams{|<Hp> >-
+				IndTypes{|<Hi>; I: 'A; <Ji> >-
+					IndConstrs{|<Hc['I]> >-
+				'I
+			|}|}|}
+		|}
+	 |}
+	 ->
+	 ElimBracket{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi>; I: 'A; <Ji> >-
+				IndConstrs{|<Hc['I]> >-
+					'C['I]|}|}|};
+		'F;
+		'f 'p lambdaH{|<P> >- applH{|<M<|P|> >; applH{|<P> >-'p|} >-'F|}|}
+	 }
+	)
+
+prim_rw elimBracket_dfun {| reduce |} :
+	ElimBracket{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					x:'M<||> -> 'C['x]|}|}|};
+		'F;
+		'f
+	} <-->
+	(x: 'M ->
+		ElimBracket{
+			IndParams{|<Hp> >-
+				IndTypes{|<Hi> >-
+					IndConstrs{|<Hc> >-
+						'C['x]|}|}|};
+			'F;
+			'f 'x
+		}
+	)
+
+interactive_rw elimBracket_fun {| reduce |} :
+	ElimBracket{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					'M<||> -> 'C|}|}|};
+		'F;
+		'f
+	} <-->
+	(x: 'M ->
+		ElimBracket{
+			IndParams{|<Hp> >-
+				IndTypes{|<Hi> >-
+					IndConstrs{|<Hc> >-
+						'C|}|}|};
+			'F;
+			'f 'x
+		}
+	)
+
+prim_rw elimBracket_applH 'Hi :
+	ElimBracket{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi>; I: 'A; <Ji> >-
+				IndConstrs{|<Hc['I]> >-
+					applH{|<Args<||> > >-'I|} |}|}|};
+		'F;
+		'f
+	} <-->
+	'f
+
+declare FunElim{'indDef; 'predicates; 'cases}
+
+prim_rw funElim_reduce 'Hi :
+	FunElim{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi>; I: 'A; <Ji> >-
+				IndConstrs{|<Hc['I]> >-
+					'I |}|}|};
+		ElimPredicates{|<Hpredicates> >-it|};
+		ElimCases{|<F> >-it|}
+	} <-->
+	lambdaH{|<Hp>;
+				c:	applH{|<Hp> >-
+					IndParams{|<Hp> >-
+						IndTypes{|<Hi>; I: 'A; <Ji> >-
+							IndConstrs{|<Hc['I]> >-
+								'I
+					|}|}|}
+				|}
+		>-
+		Elim{'c; ElimPredicates{|<Hpredicates> >-it|}; ElimCases{|<F> >-it|}}
+	|}
+
+declare mainType{'indDef}
+
+prim_rw mainType_dfun {| reduce |} :
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						x:'A -> 'B['x]
+		|}|}|}|}
+	} <-->
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P>; x:'A >-
+						'B['x]
+		|}|}|}|}
+	}
+
+prim_rw mainType_fun {| reduce |} :
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						'A -> 'B
+		|}|}|}|}
+	} <-->
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						'B
+		|}|}|}|}
+	}
+
+prim_rw mainType_prodH {| reduce |} :
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						prodH{|<Q> >-'A|}
+		|}|}|}|}
+	} <-->
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P>;<Q> >-
+						'A
+		|}|}|}|}
+	}
+
+prim_rw mainType_app {| reduce |} :
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						'A 'a
+		|}|}|}|}
+	} <-->
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						'A
+		|}|}|}|}
+	}
+
+prim_rw mainType_applH {| reduce |} :
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						applH{|<Args> >- 'A<|Hp;Hi;Hc;P|> |}
+		|}|}|}|}
+	} <-->
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi> >-
+				IndConstrs{|<Hc> >-
+					prodH{|<P> >-
+						'A
+		|}|}|}|}
+	}
+
+prim_rw mainType_inductive 'Hi :
+	mainType{
+		IndParams{|<Hp> >-
+			IndTypes{|<Hi>; I: 'A; <Ji> >-
+				IndConstrs{|<Hc['I]> >-
+					prodH{|<P['I]> >-
+						'I
+		|}|}|}|}
+	} <-->
+	IndParams{|<Hp> >-
+		IndTypes{|<Hi>; I: 'A; <Ji> >-
+			IndConstrs{|<Hc['I]> >-
+				'I
+	|}|}|}
+
+prim_rw elim_reduce 'Hc :
+	Elim{
+		applH{|<M> >-
+			IndParams{|<Hp<||> > >-
+				IndTypes{|<Hi<|Hp|> > >-
+					IndConstrs{|<Hc<|Hp;Hi|> >; c: 'C<|Hp;Hi|>; <Jc<|Hp;Hi;Hc|> > >-
+						'c
+		|}|}|}|};
+		ElimPredicates{|<Hpredicates> >-it|};
+		ElimCases{|<F> >-it|}
+	} <-->
+	applH{|<M> >-
+		ElimBracket{
+			IndParams{|<Hp> >-
+				IndTypes{|<Hi> >-
+					IndConstrs{|<Hc>; c: 'C; <Jc> >-
+						'C
+			|}|}|};
+			FunElim{
+				mainType{
+					IndParams{|<Hp> >-
+						IndTypes{|<Hi> >-
+							IndConstrs{|<Hc>; c: 'C; <Jc> >-
+								'C
+					|}|}|}
+				};
+				ElimPredicates{|<Hpredicates> >-it|};
+				ElimCases{|<F> >-it|}
+			};
+			BackHyp{|<Hp>;<Hi>;<Hc> >- Back{|<Jc> >- BackIn{|<F> >- it|}|}|}
+		}
+	|}

@@ -127,6 +127,18 @@ topval fold_applHStep : conv
 topval fold_applH : conv
 topval applHC : conv
 
+declare sequent [lambdaH] { Term : Term >- Term } : Term
+
+rewrite lambdaHBase :
+	lambdaH{| >-'t|} <--> 't
+
+rewrite lambdaHStep :
+	lambdaH{|<H>; x:'s >-'t['x]|} <--> lambdaH{|<H> >-lambda{'s; x.'t['x]}|}
+
+topval fold_lambdaHBase : conv
+topval fold_lambdaHStep : conv
+topval fold_lambdaH : conv
+
 declare sequent [IndParamsSubst] { Term : Term >- Term } : Term
 declare sequent [IndTypesSubst] { Term : Term >- Term } : Term
 declare sequent [IndConstrsSubst] { Term : Term >- Term } : Term

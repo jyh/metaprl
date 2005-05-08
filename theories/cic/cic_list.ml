@@ -26,8 +26,9 @@ define unfold_cons: cons <-->
 
 dform list_df : List = `"List"
 dform nil_df : nil = `"[]"
+dform nil_app_df : (nil 'T) = `"[]_" slot{'T}
 dform cons_df : cons = `"cons"
-dform cons_df : apply{apply{cons; 'a}; 'l} = slot{'a} `"::" slot{'l}
+dform cons_app_df : apply{apply{apply{cons;'T}; 'a}; 'l} = slot{'a} `" ::_" slot{'T} " " slot{'l}
 
 interactive listDef_wf {| intro [] |} :
 	sequent { <H> >-
@@ -77,13 +78,48 @@ interactive list_nodep_elim_wf {| intro [] |} :
 	sequent { <H>; a: 'A; l: (List 'A) >- 'step in ('Q 'A 'a 'l) } -->
 	sequent { <H> >- Elim{'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| x:'base; y:'step >- it|}} in ('Q 'A) }
 
-interactive list_dep_elim_wf {| intro [] |} :
+interactive list_dep_elim_prop_wf {| intro [] |} :
 	sequent { <H> >- 'A in Set } -->
 	sequent { <H> >- 'l in (List 'A) } -->
 	sequent { <H> >- 'Q in (a: Set -> (List 'a) -> Prop) } -->
 	sequent { <H> >- 'base in (C: Set -> ('Q 'C (nil 'C))) } -->
 	sequent { <H> >- 'step in (C: Set -> a: 'C -> l: (List 'C) -> ('Q 'C 'l) -> ('Q 'C (cons 'C 'a 'l))) } -->
 	sequent { <H> >- Elim{'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| x:'base; y:'step >- it|}} in ('Q 'A 'l) }
+
+interactive list_dep_elim_set_wf {| intro [] |} :
+	sequent { <H> >- 'A in Set } -->
+	sequent { <H> >- 'l in (List 'A) } -->
+	sequent { <H> >- 'Q in (a: Set -> (List 'a) -> Set) } -->
+	sequent { <H> >- 'base in (C: Set -> ('Q 'C (nil 'C))) } -->
+	sequent { <H> >- 'step in (C: Set -> a: 'C -> l: (List 'C) -> ('Q 'C 'l) -> ('Q 'C (cons 'C 'a 'l))) } -->
+	sequent { <H> >- Elim{'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| x:'base; y:'step >- it|}} in ('Q 'A 'l) }
+
+
+interactive_rw elim_nil :
+	Elim{nil 'A; ElimPredicates{| p:'Q >- it|}; ElimCases{| 'base; 'step >- it|}} <-->
+	('base 'A)
+
+interactive_rw elim_cons :
+	Elim{cons 'A 'a 'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| 'base; 'step >- it|}} <-->
+	('step 'A 'a 'l Elim{'l; ElimPredicates{| p:'Q >- it|}; ElimCases{| 'base; 'step >- it|}})
+(*
+define unfold_append : append <-->
+	lambda{}
+	Elim{
+		'l;
+		ElimPredicates{|lambda{Set; C.lambda{List 'C; List }} >-it|};
+		ElimCases{|nil; lambdaH{|C: Set; a: 'C; l: List 'C; fix: Q C 'l >- cons 'C ('f 'a) 'fix|} >-it|}
+	}
+
+define unfold_map : map <-->
+	lambdaH{|A: Set; B: Set; f: 'A -> 'B; l: List 'A >-
+		Elim{
+			'l;
+			ElimPredicates{|lambda{Set; C.lambda{List 'C; List }} >-it|};
+			ElimCases{|nil; lambdaH{|C: Set; a: 'C; l: List 'C; fix: Q C 'l >- cons 'C ('f 'a) 'fix|} >-it|}
+		}
+	|}
+*)
 
 (*
 cons in (C:Set -> ('C -> (List 'C) -> (List 'C)))

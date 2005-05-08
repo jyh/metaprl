@@ -266,6 +266,21 @@ let fold_applH = fold_applHBase thenC (repeatC fold_applHStep)
 
 let applHC = (repeatC applHStep) thenC applHBase
 
+declare sequent [lambdaH] { Term : Term >- Term } : Term
+
+prim_rw lambdaHBase {| reduce |} :
+	lambdaH{| >-'t|} <--> 't
+
+prim_rw lambdaHStep {| reduce |} :
+	lambdaH{|<H>; x:'s >-'t['x]|} <--> lambdaH{|<H> >-lambda{'s; x.'t['x]}|}
+
+dform lambdaH_df : parens :: "prec"[prec_apply] :: except_mode[src] :: sequent [lambdaH] { <H> >- 't } =
+	Nuprl_font!lambda slot{display_hyps_emph{sequent { <H> >- 't }}} `"." slot{display_concl{sequent { <H> >- 't }}}
+
+let fold_lambdaHBase = makeFoldC <<lambdaH{| >-'t|}>> lambdaHBase
+let fold_lambdaHStep = makeFoldC <<lambdaH{|<H>; x:'s >-'t|}>> lambdaHStep
+let fold_lambdaH = fold_lambdaHBase thenC (repeatC fold_lambdaHStep)
+
 (* declaration of multiple substitution C[I/(I p1)...pn] *)
 declare sequent [IndParamsSubst] { Term : Term >- Term } : Term
 declare sequent [IndTypesSubst] { Term : Term >- Term } : Term

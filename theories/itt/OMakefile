@@ -40,6 +40,7 @@ MPFILES[] =
    itt_struct3
    itt_pairwise
    itt_pairwise2
+   itt_image
    itt_int_base
    itt_int_ext
    itt_int_arith

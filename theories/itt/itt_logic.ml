@@ -139,7 +139,7 @@ let fold_true    = makeFoldC << "true" >> unfold_true
 let fold_false   = makeFoldC << "false" >> unfold_false
 let fold_not     = makeFoldC << not{'a} >> unfold_not
 let fold_implies = makeFoldC << 'a => 'b >> unfold_implies
-let fold_iff     = makeFoldC << "iff"{'a; 'b} >> unfold_iff
+let fold_iff     = makeFoldC << 'a <=> 'b >> unfold_iff
 let fold_and     = makeFoldC << 'a & 'b >> unfold_and
 let fold_or      = makeFoldC << 'a or 'b >> unfold_or
 let fold_cand    = makeFoldC << "cand"{'a; 'b} >> unfold_cand
@@ -343,7 +343,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Bi-implication}
 
-   The bi-implication << "iff"{'a_1; 'a_2} >> is well-formed if
+   The bi-implication << 'a_1 <=> 'a_2 >> is well-formed if
    both $a_1$ and $a_2$ are types.  The introduction and elimination rules
    perform the top-level conjunctive reasoning.
    @end[doc]
@@ -351,21 +351,21 @@ doc <:doc<
 interactive iff_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
-   sequent { <H> >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
+   sequent { <H> >- ('a1 <=> 'a2) = ('b1 <=> 'b2) in univ[i:l] }
 
 interactive iff_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
    [wf] sequent { <H> >- "type"{'a2} } -->
-   sequent { <H> >- "type"{"iff"{'a1; 'a2}} }
+   sequent { <H> >- "type"{'a1 <=> 'a2} }
 
 interactive iff_intro {| intro [] |} :
    [wf] sequent { <H> >- 'a1 => 'a2 } -->
    [wf] sequent { <H> >- 'a2 => 'a1 } -->
-   sequent { <H> >- "iff"{'a1; 'a2} }
+   sequent { <H> >- 'a1 <=> 'a2 }
 
 interactive iff_elim {| elim [] |} 'H :
    sequent { <H>; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; <J['y, 'z]> >- 'C['y, 'z] } -->
-   sequent { <H>; x: "iff"{'a1; 'a2}; <J['x]> >- 'C['x] }
+   sequent { <H>; x: 'a1 <=> 'a2; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]
@@ -668,7 +668,7 @@ let is_implies_term = is_dep0_dep0_term implies_opname
 let dest_implies = dest_dep0_dep0_term implies_opname
 let mk_implies_term = mk_dep0_dep0_term implies_opname
 
-let iff_term = << "iff"{'A; 'B} >>
+let iff_term = << 'A <=> 'B >>
 let iff_opname = opname_of_term iff_term
 let is_iff_term = is_dep0_dep0_term iff_opname
 let dest_iff = dest_dep0_dep0_term iff_opname

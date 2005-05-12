@@ -2,12 +2,12 @@ THEORYNAME = hol
 THEORYDESCR = Higher Order Logic
 
 OCAMLINCLUDES[] +=
-	$(SUPPORT_DIRS)
-	../base
+    $(SUPPORT_DIRS)
+    ../base
 
 # Library files
-MPFILES =\
-	hol_core
+MPFILES[] =
+    hol_core
 
 Theory($(MPFILES))
 

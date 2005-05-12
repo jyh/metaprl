@@ -3,20 +3,13 @@ OCAMLINCLUDES[] +=
    ../base
 
 # Library files
-MPFILES =\
-   cic_lambda\
-   cic_ind_type\
-   cic_ind_elim\
-   cic_ind_elim_dep\
+MPFILES[] =
+   cic_lambda
+   cic_ind_type
+   cic_ind_elim
+   cic_ind_elim_dep
    cic_list
-#   cic_ind_cases\
-
-#TEST_FILES =
-#   itt_bugs\
-#   jprover_tests\
-#   itt_test
-
-#MPFILES = $(if $(TESTS_ENABLED), $(MPFILES) $(TEST_FILES), $(MPFILES))
+#   cic_ind_cases
 
 Theory($(MPFILES))
 

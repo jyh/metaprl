@@ -1,7 +1,7 @@
 OCAMLINCLUDES[] +=
-	$(SUPPORT_DIRS)
-	../base
-	../itt
+    $(SUPPORT_DIRS)
+    ../base
+    ../itt
 
 # Library files
 MPFILES = fol_false

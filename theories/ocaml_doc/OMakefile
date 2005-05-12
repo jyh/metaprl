@@ -2,44 +2,44 @@ THEORYNAME = ocaml_doc
 THEORYDESCR = "Introduction to OCaml" Book
 
 OCAMLINCLUDES[] +=
-	$(SUPPORT_DIRS)
-	../base
+    $(SUPPORT_DIRS)
+    ../base
 
 # Common files
 MLZFILES =
 
 # Library files
-MPFILES =\
-	ocaml_doc_intro\
-	ocaml_doc_expr1\
-	ocaml_doc_var1\
-	ocaml_doc_patt1\
-	ocaml_doc_expr2\
-	ocaml_doc_expr3\
-	ocaml_doc_exn1\
-	ocaml_doc_expr4\
-	ocaml_doc_io1\
-	ocaml_doc_mod1\
-	ocaml_doc_mod2\
-	ocaml_doc_class1
+MPFILES[] =
+    ocaml_doc_intro
+    ocaml_doc_expr1
+    ocaml_doc_var1
+    ocaml_doc_patt1
+    ocaml_doc_expr2
+    ocaml_doc_expr3
+    ocaml_doc_exn1
+    ocaml_doc_expr4
+    ocaml_doc_io1
+    ocaml_doc_mod1
+    ocaml_doc_mod2
+    ocaml_doc_class1
 
 Theory($(MPFILES))
 
 #
 # Generate the document
 #
-PRINT_THEORIES =\
-    ocaml_doc_intro\
-    ocaml_doc_expr1\
-    ocaml_doc_var1\
-    ocaml_doc_patt1\
-    ocaml_doc_expr2\
-    ocaml_doc_expr3\
-    ocaml_doc_exn1\
-    ocaml_doc_expr4\
-    ocaml_doc_io1\
-    ocaml_doc_mod1\
-    ocaml_doc_mod2\
+PRINT_THEORIES[] =
+    ocaml_doc_intro
+    ocaml_doc_expr1
+    ocaml_doc_var1
+    ocaml_doc_patt1
+    ocaml_doc_expr2
+    ocaml_doc_expr3
+    ocaml_doc_exn1
+    ocaml_doc_expr4
+    ocaml_doc_io1
+    ocaml_doc_mod1
+    ocaml_doc_mod2
     ocaml_doc_class1
 
 TheoryDocument(theory, $(PRINT_THEORIES))
@@ -49,8 +49,8 @@ LaTeXDocumentInstall(tex doc, $(DOCDIR), ocaml-book, book2, theory-body)
 LaTeXDocumentInstall(jyh_tex jyh_doc, $(DOCDIR), ocaml-book-jyh, book3, theory-body)
 
 watch.ps: book2.ps
-	cp $< tmp.ps
-	mv tmp.ps $@
+    cp $< tmp.ps
+    mv tmp.ps $@
 
 #
 # Clean up

@@ -1,23 +1,23 @@
 OCAMLINCLUDES[] +=
-	$(SUPPORT_DIRS)
-	../base
+    $(SUPPORT_DIRS)
+    ../base
 
 # Common files
 MLZFILES =
 
 # Library files
-MPFILES =\
-	ocaml_base_sos
+MPFILES[] =
+    ocaml_base_sos
 
-X =\
-	ocaml_expr_sos\
-	ocaml_patt_sos\
-	ocaml_type_sos\
-	ocaml_mt_sos\
-	ocaml_me_sos\
-	ocaml_sig_sos\
-	ocaml_str_sos\
-	ocaml_theory
+X[] =
+    ocaml_expr_sos
+    ocaml_patt_sos
+    ocaml_type_sos
+    ocaml_mt_sos
+    ocaml_me_sos
+    ocaml_sig_sos
+    ocaml_str_sos
+    ocaml_theory
 
 Theory($(MPFILES))
 

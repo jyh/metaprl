@@ -1,10 +1,16 @@
 OCAMLINCLUDES[] +=
-	$(ROOT)/support/display
-	$(SUPPORT_INCLUDE)
-	../../base
-	../compile
+    $(ROOT)/support/display
+    $(SUPPORT_INCLUDE)
+    ../../base
+    ../compile
 
-include Files
+CORE_FILES[] =
+    unity_util
+    unity_ast
+    unity_source
+    unity_translate
+    unity_theory
+    unity_test
 
 # Library files
 MPFILES = $(CORE_FILES)

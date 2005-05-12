@@ -3,15 +3,15 @@ THEORYNAME = base
 THEORYDESCR = Basic Meta-Theory
 
 # Common files
-MLZFILES =\
+MLZFILES[] =
     base_theory
 
 # Library files
-MPFILES =\
-    base_trivial\
-    base_meta\
-    base_rewrite\
-    base_reflection\
+MPFILES[] =
+    base_trivial
+    base_meta
+    base_rewrite
+    base_reflection
     base_theory
 
 Theory($(MPFILES))
@@ -19,18 +19,18 @@ Theory($(MPFILES))
 #
 # Documentation
 #
-PRINT_THEORIES =\
-    base_theory\
-    $(SUPPORT)/tactics/top_tacticals\
-    $(SUPPORT)/tactics/top_conversionals\
-    $(SUPPORT)/tactics/var\
-    $(SUPPORT)/tactics/auto_tactic\
-    $(SUPPORT)/tactics/dtactic\
-    base_trivial\
-    base_rewrite\
-    base_reflection\
-    $(SUPPORT)/display/summary\
-    $(SUPPORT)/display/comment\
+PRINT_THEORIES[] =
+    base_theory
+    $(SUPPORT)/tactics/top_tacticals
+    $(SUPPORT)/tactics/top_conversionals
+    $(SUPPORT)/tactics/var
+    $(SUPPORT)/tactics/auto_tactic
+    $(SUPPORT)/tactics/dtactic
+    base_trivial
+    base_rewrite
+    base_reflection
+    $(SUPPORT)/display/summary
+    $(SUPPORT)/display/comment
     $(SUPPORT)/shell/mptop
 
 TheoryDocumentInstall(base, $(PRINT_THEORIES))

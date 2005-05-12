@@ -2,54 +2,54 @@ OCAMLINCLUDES[] +=
         $(dir ../../base)
         $(SUPPORT_DIRS)
 
-MLZFILES =\
-        m_ra_type\
-        m_x86_inst_type\
+MLZFILES[] =
+        m_ra_type
+        m_x86_inst_type
 
 # Library files
-MPFILES =\
-        m_doc_comment\
-        m_doc_intro\
-        m_doc_intro_fdl\
-        m_doc_ir\
-        m_doc_parsing\
-        m_doc_cps\
-        m_doc_closure\
-        m_doc_opt\
-        m_doc_x86_asm\
-        m_doc_x86_codegen\
-        m_doc_x86_regalloc\
-        m_doc_x86_opt\
-        m_doc_summary\
-        m_doc_summary_fdl\
-        m_doc_proposal\
-        m_util\
-        m_arith\
-        m_ast\
-        m_ir\
-        m_ir_ast\
-        m_cps\
-        m_closure\
-        m_prog\
-        m_dead\
-        m_inline\
-        m_reserve\
-        m_standardize\
-        m_x86_asm\
-        m_x86_inst_type\
-        m_x86_term\
-        m_x86_frame\
-        m_x86_codegen\
-        m_ra_state\
-        m_ra_type\
-        m_ra_live\
-        m_ra_main\
-        m_x86_backend\
-        m_x86_coalesce\
-        m_x86_spill\
-        m_x86_opt\
-        m_x86_regalloc\
-        m_theory\
+MPFILES[] =
+        m_doc_comment
+        m_doc_intro
+        m_doc_intro_fdl
+        m_doc_ir
+        m_doc_parsing
+        m_doc_cps
+        m_doc_closure
+        m_doc_opt
+        m_doc_x86_asm
+        m_doc_x86_codegen
+        m_doc_x86_regalloc
+        m_doc_x86_opt
+        m_doc_summary
+        m_doc_summary_fdl
+        m_doc_proposal
+        m_util
+        m_arith
+        m_ast
+        m_ir
+        m_ir_ast
+        m_cps
+        m_closure
+        m_prog
+        m_dead
+        m_inline
+        m_reserve
+        m_standardize
+        m_x86_asm
+        m_x86_inst_type
+        m_x86_term
+        m_x86_frame
+        m_x86_codegen
+        m_ra_state
+        m_ra_type
+        m_ra_live
+        m_ra_main
+        m_x86_backend
+        m_x86_coalesce
+        m_x86_spill
+        m_x86_opt
+        m_x86_regalloc
+        m_theory
         m_test
 
 Theory($(MPFILES))
@@ -57,44 +57,44 @@ Theory($(MPFILES))
 #
 # Generate the documents
 #
-PRINT_THEORIES =\
-    m_doc_intro\
-    m_doc_parsing\
-    m_doc_ir\
-    m_doc_cps\
-    m_doc_closure\
-    m_doc_opt\
-    m_doc_x86_asm\
-    m_doc_x86_codegen\
-    m_doc_x86_regalloc\
-    m_doc_x86_opt\
+PRINT_THEORIES[] =
+    m_doc_intro
+    m_doc_parsing
+    m_doc_ir
+    m_doc_cps
+    m_doc_closure
+    m_doc_opt
+    m_doc_x86_asm
+    m_doc_x86_codegen
+    m_doc_x86_regalloc
+    m_doc_x86_opt
     m_doc_summary
 
-FDL_THEORIES =\
-    m_doc_intro_fdl\
-    m_doc_parsing\
-    m_doc_ir\
-    m_doc_cps\
-    m_doc_closure\
-    m_doc_opt\
+FDL_THEORIES[] =
+    m_doc_intro_fdl
+    m_doc_parsing
+    m_doc_ir
+    m_doc_cps
+    m_doc_closure
+    m_doc_opt
     m_doc_summary_fdl
 
-APPENDIX_THEORIES =\
-    m_ir\
-    m_cps\
-    m_closure\
-    m_prog\
-    m_dead\
-    m_inline\
-    m_reserve\
-    m_x86_asm\
-    m_x86_codegen\
-    m_x86_opt\
+APPENDIX_THEORIES[] =
+    m_ir
+    m_cps
+    m_closure
+    m_prog
+    m_dead
+    m_inline
+    m_reserve
+    m_x86_asm
+    m_x86_codegen
+    m_x86_opt
     m_x86_spill
 
-HOSC_THEORIES=\
-   m_ir\
-   m_cps\
+HOSC_THEORIES[] =
+    m_ir
+    m_cps
 
 #
 # Generate the local files
@@ -116,10 +116,10 @@ LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-fdl, m-paper-fdl, fdl-body)
 # Clean up
 #
 TEXFILES = fdl theory appendix hosc
-GENERATED_FILES =\
-	$(addsuffix .tex,      $(TEXFILES))\
-	$(addsuffix -body.tex, $(TEXFILES))\
-	$(addsuffix _print.ml, $(TEXFILES))
+GENERATED_FILES[] =
+    $(addsuffix .tex,      $(TEXFILES))
+    $(addsuffix -body.tex, $(TEXFILES))
+    $(addsuffix _print.ml, $(TEXFILES))
 
 clean:
     $(CLEAN) *.cph *.output $(GENERATED_FILES)

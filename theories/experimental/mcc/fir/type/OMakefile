@@ -2,26 +2,26 @@
 # Include directories
 #
 OCAMLINCLUDES[] +=
-	$(MCC)/fir/type
-	$(ROOT)/support/display
-	$(ROOT)/support/shell
-	$(ROOT)/support/tactics
-	$(ROOT)/theories/ocaml
-	$(ROOT)/theories/base
-	$(ROOT)/libmojave/stdlib
-	$(ROOT)/libmojave/util
+    $(MCC)/fir/type
+    $(ROOT)/support/display
+    $(ROOT)/support/shell
+    $(ROOT)/support/tactics
+    $(ROOT)/theories/ocaml
+    $(ROOT)/theories/base
+    $(ROOT)/libmojave/stdlib
+    $(ROOT)/libmojave/util
 
 #
 # Library files
 #
-MPFILES =\
-	m_prec\
-	m_int\
-	m_rawint\
-	m_rawfloat\
-	m_set\
-	m_fir\
-	m_fir_term
+MPFILES[] =
+    m_prec
+    m_int
+    m_rawint
+    m_rawfloat
+    m_set
+    m_fir
+    m_fir_term
 
 #
 # At least m_fir_term needs to be compiled with -rectypes

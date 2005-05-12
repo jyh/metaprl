@@ -30,7 +30,7 @@ doc <:doc<
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2005, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -46,8 +46,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 
@@ -61,6 +61,7 @@ extends Itt_struct2
 extends Itt_equal
 extends Itt_set
 extends Itt_logic
+extends Itt_image
 doc docoff
 
 open Refiner.Refiner.Term
@@ -84,7 +85,8 @@ doc <:doc<
    @end[doc]
 >>
 
-declare tunion{'A; x. 'B['x]}
+define (*private*) unfold_tunion :
+   tunion{'A; x. 'B['x]} <--> Img{x: 'A * 'B['x]; p.snd{'p}}
 doc docoff
 
 (************************************************************************
@@ -100,15 +102,6 @@ dform isect_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: tunion{'A;
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Proof of Ui
- *)
-prim tunionFormation 'A :
-   [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
-   ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
-   sequent { <H> >- univ[i:l] } =
-   tunion{'A; x. 'B['x]}
-
 doc <:doc<
    @begin[doc]
    @rules
@@ -118,17 +111,25 @@ doc <:doc<
    a type, and $B[a]$ is a type for any $a @in A$.
    @end[doc]
 >>
-prim tunionEquality {| intro [] |} :
+interactive tunionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
-   sequent { <H> >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] } =
-   it
+   sequent { <H> >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] }
 
-prim tunionType {| intro [] |} :
+interactive tunionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- "type"{ Union x:'A. 'B['x] } } =
-   it
+   sequent { <H> >- "type"{ Union x:'A. 'B['x] } }
+
+doc docoff
+(*
+ * Type extraction
+ *)
+interactive tunionFormation 'A :
+   [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] }
+   (* = tunion{'A; x. 'B['x]} *)
 
 doc <:doc<
    @begin[doc]
@@ -140,12 +141,11 @@ doc <:doc<
    of the branches $B[a]$.
    @end[doc]
 >>
-prim tunionMemberEquality {| intro [] |} 'a :
+interactive tunionMemberEquality {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    [wf] sequent { <H> >- 'x1 = 'x2 in 'B['a] } -->
-   sequent { <H> >- 'x1 = 'x2 in Union x:'A. 'B['x]  } =
-   it
+   sequent { <H> >- 'x1 = 'x2 in Union x:'A. 'B['x]  }
 
 doc <:doc<
    @begin[doc]
@@ -157,12 +157,11 @@ doc <:doc<
    is also inhabited.
    @end[doc]
 >>
-prim tunionMemberFormation {| intro [] |} 'a :
+interactive tunionMemberFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   [main] ('t : sequent { <H> >- 'B['a] }) -->
-   sequent { <H> >- Union x:'A. 'B['x]  } =
-   't
+   [main] sequent { <H> >- 'B['a] } -->
+   sequent { <H> >- Union x:'A. 'B['x]  }
 
 doc <:doc<
    @begin[doc]
@@ -174,10 +173,9 @@ doc <:doc<
    where the computational content of the proof can be omitted.
    @end[doc]
 >>
-prim tunionElimination {| elim [ThinOption thinT] |} 'H :
+interactive tunionElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] } =
-   it
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
 
 doc docoff
 let thinLastT n = (thinT (-1) thenT tryT (thinT n))

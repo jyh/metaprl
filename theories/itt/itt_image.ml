@@ -77,6 +77,10 @@ prim img_univ {| intro [] |}:
    sequent { <H> >- 'A in univ[i:l] } -->
    sequent { <H> >- Img{'A; x.'f<||>['x]} in univ[i:l] } = it
 
+interactive img_univ_eq {| intro [] |}:
+   sequent { <H> >- 'A = 'B in univ[i:l] } -->
+   sequent { <H> >- Img{'A; x.'f<||>['x]} = Img{'B; x.'f<||>['x]} in univ[i:l] }
+
 doc <:doc<
    @begin[doc]
    The elements of <<Img{'A; x.'f['x]}>> are $f[a]$ for <<'a in 'A>>.

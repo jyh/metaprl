@@ -121,26 +121,40 @@ MPFILES[] =
    itt_reflection_lambda_typing
    itt_example
 
-OCamlProgram(gen_int_bench, gen_int_bench)
-gen_int_bench.o gen_int_bench.cmx gen_int_bench.cmo gen_int_bench.cmi:
+#
+# gen_int_bench uses the standard OCaml compiler
+#
+section
+    export $(STANDARD_BUILD_ENV)
+
+    OCamlProgram(gen_int_bench, gen_int_bench)
+
+    gen_int_bench.o gen_int_bench.cmx gen_int_bench.cmo gen_int_bench.cmi:
+    .SCANNER: scan-ocaml-gen_int_bench.mli scan-ocaml-gen_int_bench.ml
+
+    return 0
 
 GEN = gen_int_bench$(EXE)
 
 BENCH_FILES[] =
-   itt_int_bench
-   itt_int_bench2
-   itt_int_bench3
+    itt_int_bench
+    itt_int_bench2
+    itt_int_bench3
 
-$(addsuffix .ml, $(BENCH_FILES)): $(GEN)
+BENCH_MLI_FILES = $(addsuffix .mli, $(BENCH_FILES))
+BENCH_ML_FILES  = $(addsuffix .ml, $(BENCH_FILES))
+BENCH_SRC_FILES = $(BENCH_MLI_FILES) $(BENCH_ML_FILES)
+
+$(BENCH_ML_FILES): $(GEN)
    ./$(GEN)
 
-$(addsuffix .mli, $(BENCH_FILES)):
-   touch $(addsuffix .mli, $(BENCH_FILES))
+$(BENCH_MLI_FILES):
+   touch $(BENCH_MLI_FILES)
 
-LocalOCamlGeneratedFiles($(addsuffix .mli, $(BENCH_FILES)) $(addsuffix .ml, $(BENCH_FILES)))
+LocalOCamlGeneratedFiles($(BENCH_SRC_FILES))
 
 clean:
-    $(CLEAN) $(GEN) $(addsuffix .ml, $(BENCH_FILES)) $(addsuffix .mli, $(BENCH_FILES))
+    $(CLEAN) $(GEN) $(BENCH_SRC_FILES)
 
 TEST_FILES[] =
    itt_bugs

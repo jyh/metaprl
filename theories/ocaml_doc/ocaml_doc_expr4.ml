@@ -41,9 +41,9 @@ doc <:doc<
 
 In this chapter we discuss the remaining data types, all of which
 allow side-effects.  A record can be viewed as a tuple with labeled
-fields.  An array is a fixed-size vector of items with constant
-time access to each element.  There are operations to modify some of
-the fields in a record, and any of the elements in an array.
+fields.  An array is a fixed-size vector of items with constant time
+access to each element.  There are operations to modify some of the
+fields in a record, and any of the elements in an array.
 
 @section["sect-records"]{Records}
 

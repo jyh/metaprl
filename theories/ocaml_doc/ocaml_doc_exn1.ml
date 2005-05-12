@@ -49,7 +49,7 @@ Exception: Division_by_zero.
 
 Exceptions can also be defined and used explicitly by the programmer.
 For example, suppose we define a function @code{head} that returns the
-first element in a list.  If the list is empty, we would like to
+first element of a list.  If the list is empty, we would like to
 signal an error.
 
 @begin[iverbatim]
@@ -84,9 +84,9 @@ Exception: Fail "message".
 @end[iverbatim]
 
 The type @code{exn -> 'a} for the @code{raise} function may seem
-striking at first---it appears to say that the raise function can
+surprising at first---it appears to say that the raise function can
 produce a value having @emph{any} type.  In fact, what it really means
-is that the @code{raise} function never returns, and so the type of
+is that the @code{raise} function never returns, so the type of
 the result doesn't matter.  When a @code{raise} expression occurs in a
 larger computation, the entire computation is aborted.
 

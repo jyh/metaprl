@@ -131,6 +131,11 @@ declare find{'l; 'a; x,y.'eq['x;'y]}
 declare diff_list{'T}
 
 (*
+ * Maximal element of a list.
+ *)
+declare list_max{'l}
+
+(*
  * I/O abstraction for list{top}
  *)
 define iform unfold_list: list <--> list{top}

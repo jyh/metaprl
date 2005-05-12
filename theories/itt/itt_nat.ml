@@ -71,13 +71,6 @@ define unfold_nat_plus : nat_plus <--> ({x:int | 'x>0})
 define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
                    ind{'n; i,j.it; 'base; k,l . 'up['k;'l]}
 
-
-(*
- * Maximal element of a list
- *)
-define unfold_list_max: list_max{'l} <-->
-   list_ind{'l; 0; h, t, g. max{'h; 'g}}
-
 doc <:doc< @docoff >>
 
 let foldInd = makeFoldC << ind{'n; 'base; k,l. 'up['k;'l]} >> unfoldInd
@@ -113,12 +106,6 @@ interactive_rw reduce_ind_up {| reduce |} :
 interactive_rw reduce_ind_base {| reduce |} :
    (ind{0; 'base; k,l. 'up['k;'l]}) <-->
    'base
-
-interactive_rw reduce_list_max_nil {| reduce |} :
-   list_max{nil} <--> 0
-
-interactive_rw reduce_list_max_cons {| reduce |} :
-   list_max{cons{'h; 't}} <--> max{'h; list_max{'t}}
 
 let reduce_ind_numberC =
    unfoldInd
@@ -269,14 +256,6 @@ interactive min_nat_wf {| intro [] |} :
 (*
  * Some applications
  *)
-
-interactive list_max_wf {| intro [] |} :
-   sequent { <H> >- 'l in list{nat} } -->
-   sequent { <H> >- list_max{'l} in nat }
-
-interactive list_max_wf2 {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'l in list{nat} } -->
-   sequent { <H> >- list_max{'l} in int }
 
 interactive int_div_rem {| intro [] |} :
    sequent { <H> >- 'm in int } -->

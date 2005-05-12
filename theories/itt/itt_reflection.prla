@@ -4445,7 +4445,7 @@ T	t2580	o2463 b952 b2579 b8 b8
 B	b2580	t2580
 T	t2581	o950 b2580
 B	b2581	t2581
-NItt_reflection!list_max	list_max	list_max Itt_nat
+NItt_list2!list_max	list_max	list_max Itt_list2
 O	o2591	list_max
 NItt_int_ext!max	max	max Itt_int_ext
 O	o2593	max

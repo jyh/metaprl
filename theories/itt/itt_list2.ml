@@ -296,6 +296,11 @@ doc <:doc<
 
 define iform unfold_list: list <--> list{top}
 
+doc <:doc< @doc{Maximal element of a list} >>
+
+define unfold_list_max: list_max{'l} <-->
+   list_ind{'l; 0; h, t, g. max{'h; 'g}}
+
 doc <:doc< @docoff >>
 
 let length_term = << length{'l} >>
@@ -386,10 +391,8 @@ dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
 dform rev_df : except_mode[src] :: rev{'l} =
    `"rev(" slot{'l} `")"
 
-interactive listelim {| elim [] |} 'H :
-   sequent { <H>; l: list; <J['l]> >- 'C[nil] } -->
-   sequent { <H>; l: list; <J['l]>; u: top; v: list; w: 'C['v] >- 'C['u::'v] } -->
-   sequent { <H>; l: list; <J['l]> >- 'C['l] }
+dform list_max_df : list_max{'l} =
+   pushm[0] szone pushm[3] `"max" Nuprl_font!subl `"(" slot{'l} popm `")" ezone popm
 
 (************************************************************************
  * REWRITES                                                             *
@@ -663,6 +666,19 @@ let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
  * RULES                                                                *
  ************************************************************************)
 
+doc <:doc<
+   @begin[doc]
+   @rules
+
+   The rules in the @hrefmodule[Itt_list2] are mostly limited to
+   well-formedness of each of the constructions.
+   @end[doc]
+>>
+
+interactive listelim {| elim [] |} 'H :
+   sequent { <H>; l: list; <J['l]> >- 'C[nil] } -->
+   sequent { <H>; l: list; <J['l]>; u: top; v: list; w: 'C['v] >- 'C['u::'v] } -->
+   sequent { <H>; l: list; <J['l]> >- 'C['l] }
 
 interactive hd_wf {| intro [] |} :
    [wf] sequent  { <H> >- 'l in list{'T} } -->
@@ -688,17 +704,6 @@ interactive_rw tl_hd_rw list{'T} :
    ('l in list{'T})  -->
    (not{'l = nil in list{'T}}) -->
      cons{hd{'l};tl{'l}} <--> 'l
-
-
-
-doc <:doc<
-   @begin[doc]
-   @rules
-
-   The rules in the @hrefmodule[Itt_list2] are limited to
-   well-formedness of each of the constructions.
-   @end[doc]
->>
 
 interactive is_nil_wf {| intro [] |} :
    [wf] sequent { <H> >- 'l in list } -->
@@ -1126,10 +1131,6 @@ interactive sameset_trans 'l2 :
    sequent { <H> >- sameset{'l2; 'l3; 'A} } -->
    sequent { <H> >- sameset{'l1; 'l3; 'A} }
 
-
-
-
-
 doc <:doc<
    @begin[doc]
     The <<find{'l; 'a; x,y.'eq['x;'y]}>> returns an index of an element in the list $l$ equal to the element $a$ according to equality $eq$.
@@ -1204,6 +1205,22 @@ interactive diff_list_elim {| elim [] |} 'H :
 
 interactive difflist {| nth_hyp |} 'H :
    sequent { <H>; l : diff_list{'A}; <J['l]> >- 'l in list{'A} }
+
+doc <:doc< @doc{ The <<list_max{'l}>> defines the maximal element of a list of natural numbers. } >>
+
+interactive_rw reduce_list_max_nil {| reduce |} :
+   list_max{nil} <--> 0
+
+interactive_rw reduce_list_max_cons {| reduce |} :
+   list_max{cons{'h; 't}} <--> max{'h; list_max{'t}}
+
+interactive list_max_wf {| intro [] |} :
+   sequent { <H> >- 'l in list{nat} } -->
+   sequent { <H> >- list_max{'l} in nat }
+
+interactive list_max_wf2 {| intro [AutoMustComplete] |} :
+   sequent { <H> >- 'l in list{nat} } -->
+   sequent { <H> >- list_max{'l} in int }
 
 doc <:doc< @docoff >>
 

@@ -135,7 +135,7 @@ interactive natMemberEquality {| intro [AutoMustComplete] |} :
 interactive natMemberZero {| intro [] |} :
    sequent { <H> >- 0 in nat}
 
-interactive nat_is_int :
+interactive nat_is_int {| nth_hyp |} :
    sequent { <H> >- 'a='b in nat} -->
    sequent { <H> >- 'a='b in int}
 

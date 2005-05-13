@@ -44,7 +44,6 @@ extends Itt_equal
 extends Itt_rfun
 extends Itt_logic
 extends Itt_bool
-extends Itt_list
 extends Itt_struct3
 extends Itt_int_base
 extends Itt_int_ext

@@ -105,7 +105,7 @@ interactive_rw reduce_wdt_mk_term {| reduce |} :
 doc docoff
 
 dform bind_df : parens :: "prec"[prec_lambda] :: bind{x.'t} =
-   `"B " slot{'x} `"." slot{'t}
+   `"B " 'x `"." slot{'t}
 
 dform subst_df : parens :: "prec"[prec_apply] :: subst{'bt; 't} =
    slot["lt"]{'bt} `"@" slot["le"]{'t}

@@ -105,6 +105,7 @@ MPFILES[] =
    itt_rat2
    itt_supinf
    itt_hoas_base
+   itt_hoas_vector
    itt_hoas_operator
    itt_synt_var
    itt_synt_operator

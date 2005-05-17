@@ -42,6 +42,7 @@ PRINT_THEORIES[] =
     ocaml_doc_mod2
     ocaml_doc_class1
 
+LocalTeXGeneratedFiles(theory.tex theory-body.tex)
 TheoryDocument(theory, $(PRINT_THEORIES))
 # XXX: TODO: Whether to use book2 or book3 should depend on a configuration
 # option. See also bug 267 RFE - http://cvs.metaprl.org:12000/bugzilla/show_bug.cgi?id=267

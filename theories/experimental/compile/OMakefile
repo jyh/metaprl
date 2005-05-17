@@ -97,6 +97,17 @@ HOSC_THEORIES[] =
     m_cps
 
 #
+# Generated files
+#
+TEXFILES = fdl theory appendix hosc
+GENERATED_FILES[] =
+    $(addsuffix .tex,      $(TEXFILES))
+    $(addsuffix -body.tex, $(TEXFILES))
+    $(addsuffix _print.ml, $(TEXFILES))
+
+LocalTeXGeneratedFiles($(GENERATED_FILES))
+
+#
 # Generate the local files
 #
 TheoryDocument(fdl, $(FDL_THEORIES))
@@ -115,13 +126,6 @@ LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-fdl, m-paper-fdl, fdl-body)
 #
 # Clean up
 #
-TEXFILES = fdl theory appendix hosc
-GENERATED_FILES[] =
-    $(addsuffix .tex,      $(TEXFILES))
-    $(addsuffix -body.tex, $(TEXFILES))
-    $(addsuffix _print.ml, $(TEXFILES))
-
-LocalTeXGeneratedFiles($(GENERATED_FILES))
 
 clean:
     $(CLEAN) *.cph *.output $(GENERATED_FILES)

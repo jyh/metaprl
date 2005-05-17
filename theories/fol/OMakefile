@@ -41,7 +41,7 @@ Theory($(MPFILES))
 #
 PRINT_THEORIES[] =
 
-TheoryDocumentInstall(fol, $(PRINT_THEORIES))
+# TheoryDocumentInstall(fol, $(PRINT_THEORIES))
 
 #
 # Clean up

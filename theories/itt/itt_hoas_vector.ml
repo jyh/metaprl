@@ -40,6 +40,7 @@ doc <:doc< @doc{parents} >>
 extends Itt_hoas_base
 extends Itt_nat
 extends Itt_list2
+extends Itt_fun2
 doc docoff
 
 open Basic_tactics

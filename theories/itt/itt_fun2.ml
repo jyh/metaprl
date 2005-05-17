@@ -1,7 +1,9 @@
 extends Itt_fun
 extends Itt_nat
+extends Itt_isect
 
 open Basic_tactics
+open Itt_struct
 
 define unfold_compose : compose{'f;'g} <--> lambda{x.'f ('g 'x)}
 
@@ -60,3 +62,12 @@ interactive funexp_wf {| intro[] |}:
    sequent{ <H> >- fun_exp{'f;'n} in 'T -> 'T }
 
 
+
+
+interactive fun_sqeq_elim {| elim[ThinOption thinT] |} 'H 'a :
+   sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>; 't1['a]~'t2['a]  >- 'C } -->
+   sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>  >- 'C }
+
+interactive fun_sqeq_intro {| intro[AutoMustComplete] |} :
+   sequent { <H>; x:top >- 't1['x] ~ 't2['x] } -->
+   sequent { <H> >- lambda{x.'t1['x]} ~ lambda{x.'t2['x]} }

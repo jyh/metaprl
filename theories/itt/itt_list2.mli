@@ -117,6 +117,11 @@ declare nth{'l; 'i}
 declare replace_nth{'l; 'i; 't}
 
 (*
+ * Insert a new element at a given position
+ *)
+declare insert_at{'l; 'i; 't}
+
+(*
  * Reverse the elements of a list.
  *)
 declare rev{'l}

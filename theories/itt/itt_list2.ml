@@ -59,7 +59,7 @@ open Itt_equal
 open Itt_rfun
 open Itt_logic
 open Itt_squash
-
+open Itt_list
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -94,7 +94,6 @@ define unfold_hd :
 
 define unfold_tl :
    tl{'l} <--> list_ind{'l; undefined; h, t, g. 't}
-
 
 doc <:doc<
    @begin[doc]
@@ -227,7 +226,7 @@ define unfold_fold_left :
 doc <:doc<
    @begin[doc]
    @noindent
-   The @tt[nth] term returns element $i$ of list $l$.
+   The @tt[nth] term returns the $i$-th element of list $l$.
    The argument $i$ must be within the bounds of the list.
    @end[doc]
 >>
@@ -238,13 +237,24 @@ define unfold_nth :
 doc <:doc<
    @begin[doc]
    @noindent
-   The @tt[replace_nth] term replace element $i$ of list $l$
+   The @tt[replace_nth] term replaces the $i$-th element of list $l$
    with the term $v$.
    @end[doc]
 >>
 define unfold_replace_nth :
    replace_nth{'l; 'i; 't} <-->
       (list_ind{'l; nil; u, v, g. lambda{j. if 'j =@ 0 then  cons{'t; 'v} else cons{'u; .'g ('j -@ 1)}}} 'i)
+
+doc <:doc<
+   @begin[doc]
+   @noindent
+   The @tt[insert_at] term inserts a new element into the $i$-th position of list $l$
+   with the term $v$.
+   @end[doc]
+>>
+define unfold_insert_at :
+   insert_at{'l; 'i; 't} <-->
+      ind{'i; lambda{l.cons{'t; 'l}}; "_",r. lambda{l. hd{'l} :: ('r tl{'l})}} 'l
 
 doc <:doc<
    @begin[doc]
@@ -387,6 +397,9 @@ dform nth_df : except_mode[src] :: nth{'l; 'i} =
 
 dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
    szone `"replace_nth(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
+
+dform insert_at_df : except_mode[src] :: insert_at{'l; 'i; 'v} =
+   szone `"insert_at(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
 
 dform rev_df : except_mode[src] :: rev{'l} =
    `"rev(" slot{'l} `")"
@@ -611,6 +624,22 @@ let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nt
 
 doc <:doc<
    @begin[doc]
+   The @hrefterm[inset_at] inserts a new element into a list at the given location.
+   @end[doc]
+>>
+interactive_rw insert_at_base {| reduce |} :
+   insert_at{'l; 0; 't} <--> 't :: 'l
+
+interactive_rw insert_at_step {| reduce |} :
+   'n in nat -->
+   insert_at{'l; 'n +@ 1; 't} <--> hd{'l} :: insert_at{tl{'l}; 'n; 't}
+
+interactive_rw insert_at_cons {| reduce |} :
+   'n in nat -->
+   insert_at{'hd::'tl; 'n +@ 1; 't} <--> 'hd :: insert_at{'tl; 'n; 't}
+
+doc <:doc<
+   @begin[doc]
    The @hrefterm[rev] term reverses the list.
    This particular computation is rather inefficient;
    it appends the head of the list to the reversed tail.
@@ -661,6 +690,36 @@ interactive_rw index_map2 {| reduce |} :
 doc docoff
 
 let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+let t_var = Lm_symbol.add "T"
+
+let infer_hd inf consts decls eqs opt_eqs defs t =
+   let l = one_subterm t in
+   let eqs, opt_eqs, defs, tp_l = inf consts decls eqs opt_eqs defs l in
+      if is_list_term tp_l then
+         eqs, opt_eqs, defs, dest_list tp_l
+      else
+         let t = Typeinf.vnewname consts defs t_var in
+         let tt = mk_var_term t in
+         let eqs = Unify_mm.eqnlist_append_eqn eqs tp_l (mk_list_term tt) in
+            eqs, opt_eqs, (t, <<top>>) :: defs, tt
+
+let infer_append inf consts decls eqs opt_eqs defs t =
+   let l1, l2 = two_subterms t in
+   let eqs, opt_eqs, defs, tp_l1 = inf consts decls eqs opt_eqs defs l1 in
+   let eqs, opt_eqs, defs, tp_l2 = inf consts decls eqs opt_eqs defs l2 in
+      eqs, (tp_l1, tp_l2) :: opt_eqs, defs, tp_l1
+
+let resource typeinf += [
+   << length{'l}>>, Typeinf.infer_const << nat >>;
+   << tl{'l} >>, Typeinf.infer_map one_subterm;
+   << hd{'l} >>, infer_hd;
+   << append{'l1; 'l2} >>, infer_append
+]
 
 (************************************************************************
  * RULES                                                                *
@@ -854,6 +913,13 @@ interactive replace_nth_wf {| intro [] |} :
    [wf] sequent { <H> >- 'i in Index{'l} } -->
    [wf] sequent { <H> >- 't in 'T } -->
    sequent { <H> >- replace_nth{'l; 'i; 't} in list{'T} }
+
+interactive insert_at_wf {| intro [] |} :
+   [wf] sequent { <H> >- "type"{'T} } -->
+   [wf] sequent { <H> >- 'l in list{'T} } -->
+   [wf] sequent { <H> >- 'i in Index{'t::'l} } -->
+   [wf] sequent { <H> >- 't in 'T } -->
+   sequent { <H> >- insert_at{'l; 'i; 't} in list{'T} }
 
 interactive list_lengthzero {| elim [] |} 'H 'A :
    sequent { <H>; x: (length{'l} = 0 in int); <J[it]> >- 'A Type } -->

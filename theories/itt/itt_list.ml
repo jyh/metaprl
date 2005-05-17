@@ -50,23 +50,11 @@ extends Itt_struct
 extends Itt_logic
 doc docoff
 
-open Lm_debug
-open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_equal
 open Itt_subtype
 open Itt_struct
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_list%t"
 
 (************************************************************************
  * TERMS                                                                *
@@ -243,7 +231,7 @@ doc <:doc<
    @hrefterm[nil] term.
    @end[doc]
 >>
-prim nilSqequal 'T :
+prim nilSqequal {| nth_hyp |} 'T :
    sequent { <H> >- 'u = nil in list{'T} } -->
    sequent { <H> >- 'u ~ nil } =
    it

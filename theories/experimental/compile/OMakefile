@@ -121,6 +121,8 @@ GENERATED_FILES[] =
     $(addsuffix -body.tex, $(TEXFILES))
     $(addsuffix _print.ml, $(TEXFILES))
 
+LocalTeXGeneratedFiles($(GENERATED_FILES))
+
 clean:
     $(CLEAN) *.cph *.output $(GENERATED_FILES)
 

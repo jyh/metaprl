@@ -5335,7 +5335,7 @@ T	t2655	o b2655 b8
 B	b2657	t2655
 T	t2657	o2539 b2016 b2652 b2657 b8
 B	b2658	t2657
-P	p2559	String "withT <<'f 'x>> (dT (-2)) ttca thenLT [\nbackThruHypT (-1) ttca thenLT [\nsquashT thenT thinningT false (dT 2) thenLT [\ndT 0 thenT substConclT <<'f 'z = 'w_1 in 'A>> ttca\n]\n]\n]"
+P	p2559	String "withT <<'f 'x>> (dT (-2)) ttca thenLT [\nbackThruHypT (-1) ttca thenLT [\nsquashT thenT thinningT false (dT 2) thenLT [\ndT 0 thenT substConclT <<'f 'z = 'w1 in 'A>> ttca\n]\n]\n]"
 O	o2559	ext_rule p2559
 H	h3342	_1010 t3334
 S	s3342	tbrarg\\ h2939 h3057 h3058 h3312 h3342\\ C3064

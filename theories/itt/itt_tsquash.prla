@@ -1216,7 +1216,7 @@ T	t925	o433 b925
 B	b926	t925
 T	t926	o431 b898 b926
 B	b927	t926
-P	p538	String "useWitnessT <<'any>> thenT autoT"
+P	p538	String "useWitnessT <<it>> thenT autoT"
 O	o538	ext_rule p538
 T	t927	o453 b925 b904
 B	b928	t927

@@ -70,6 +70,7 @@ sig
    val neg : ring -> ring
    val sub : ring -> ring -> ring
    val compare : ring -> ring -> int
+   val equal : ring -> ring -> bool
 	val isNegative : ring -> bool
 	val gcd : ring -> ring -> ring
 	val list_gcd : ring list -> ring
@@ -237,8 +238,8 @@ struct
       Ring.mul k d
 
    let scale k f =
-      if Ring.compare k Ring.ringZero =0 then Table.empty
-      else if Ring.compare k Ring.ringUnit =0 then f
+      if Ring.equal k Ring.ringZero then Table.empty
+      else if Ring.equal k Ring.ringUnit then f
       else Table.map (scale_aux k) f
 
    let coef f v =
@@ -309,7 +310,7 @@ struct
 			let v, coefs, rest = Table.deletemax f in
 			match coefs with
 				[c] ->
-					if v!=constvar && (Ring.compare c Ring.ringZero =0) then
+					if v!=constvar && (Ring.equal c Ring.ringZero) then
 						split rest
 					else
 						(c,v,rest)
@@ -355,7 +356,7 @@ struct
        | (k,[]) -> raise (Invalid_argument "MakeAF.term_of - empty data list linked to a key in list_of")
        | (k,_) -> raise (Invalid_argument "MakeAF.term_of - more than one data item per key in list_of")
       in
-      let aux2 (k,d) = if Ring.compare d Ring.ringZero = 0 then false else true in
+      let aux2 (k,d) = if Ring.equal d Ring.ringZero then false else true in
       term_of_aux info (List.filter aux2 (List.map aux l))
 
 end
@@ -511,7 +512,7 @@ struct
 			t
 		else
 			let k = f.(i) in
-			if Ring.compare k Ring.ringZero = 0 then
+			if Ring.equal k Ring.ringZero then
 				term_of_aux info f n t (succ i)
 			else
 				let t' = Ring.add_term t (term_of_monom info k i) in
@@ -599,7 +600,7 @@ struct
    let coef (f1,f2) v =
 		let c1 = AF1.coef f1 v in
 		let c2 = AF2.coef f2 v in
-		if Ring.compare c1 c2 = 0 then c1
+		if Ring.equal c1 c2 then c1
 		else
 			begin
 				eprintf "MakeDebugAF.coef\n%a %i -> %a\n%a %i -> %a@."
@@ -611,7 +612,7 @@ struct
    let get (f1,f2) v =
 		let c1 = AF1.get f1 v in
 		let c2 = AF2.get f2 v in
-		if Ring.compare c1 c2 = 0 then c1
+		if Ring.equal c1 c2 then c1
 		else
 			begin
 				eprintf "MakeDebugAF.get\n%a %i -> %a\n%a %i -> %a@."
@@ -684,7 +685,7 @@ struct
 	let gcd (f1,f2) =
 		let r1 = AF1.gcd f1 in
 		let r2 = AF2.gcd f2 in
-		if Ring.compare r1 r2 = 0 then
+		if Ring.equal r1 r2 then
 			r1
 		else
 			begin
@@ -698,7 +699,7 @@ struct
 		let c1, v, f1' = AF1.split f1 in
 		let c2 = AF2.coef f2 v in
 		let f2' = AF2.remove f2 v in
-		if (equal f1' f2') && (Ring.compare c1 c2 = 0) then
+		if (equal f1' f2') && (Ring.equal c1 c2) then
 			(c1,v,(f1',f2'))
 		else
 			begin
@@ -712,7 +713,7 @@ struct
 		let v = AF1.any_var f1 in
 		let c1 = AF1.coef f1 v in
 		let c2 = AF2.coef f2 v in
-		if Ring.compare c1 c2 = 0 then
+		if Ring.equal c1 c2 then
 			v
 		else
 			begin
@@ -736,7 +737,7 @@ struct
 	let value_of (f1,f2) =
 		let r1 = AF1.value_of f1 in
 		let r2 = AF2.value_of f2 in
-		if Ring.compare r1 r2 = 0 then
+		if Ring.equal r1 r2 then
 			r1
 		else
 			begin
@@ -799,6 +800,7 @@ struct
 	let sign_num a = num_of_int (compare_num a num0)
 
    let compare = compare_num
+   let equal = eq_num
 
 	let rec gcd_aux a b =
 		if is_zero b then
@@ -866,7 +868,8 @@ struct
 	struct
 		type t = Ring.ring array
 
-		let equal = (=)
+		let equal a1 a2 =
+         Lm_array_util.for_all2 Ring.equal a1 a2
 
 		let hash = Hashtbl.hash
 	end
@@ -1270,7 +1273,7 @@ exception OppositePair of (omegaTree * AF.af) * (omegaTree * AF.af)
 let find_opposite constrs key c =
 	let neg_key = C.neg_key key in
 	try
-		let _, opposite = C.find (fun k f -> (k = neg_key)) constrs in
+		let _, opposite = C.find (fun k _ -> (C.HashedAF.equal k neg_key)) constrs in
 		let tree1, f1 = c in
 		let tree2, f2 = opposite in
 		let constant = add (AF.coef f1 AF.constvar) (AF.coef f2 AF.constvar) in

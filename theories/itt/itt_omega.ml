@@ -10,6 +10,8 @@ extends Itt_rat2
 open Lm_debug
 open Lm_printf
 
+open Lm_num
+
 open Supinf
 
 open Simple_print
@@ -85,7 +87,7 @@ end
 module VarType =
 struct
    type t=int
-   let compare a b = a-b
+   let compare (a: int) b = Pervasives.compare a b
 
    let print out v =
       if v>0 then fprintf out "v%i" v
@@ -750,8 +752,6 @@ end
 
 module IntRing =
 struct
-   open Lm_num
-
    type ring = num
 
    let num0=num_of_int 0
@@ -762,9 +762,9 @@ struct
    let print out a =
       fprintf out "(%s)" (string_of_num a)
 
-	let isNegative n = (compare_num n num0 < 0)
+	let isNegative = gt_num num0
 
-	let isPositive n = (compare_num n num0 > 0)
+	let isPositive = lt_num num0
 
 	let abs = abs_num
 
@@ -779,7 +779,7 @@ struct
 	let rem a b =
 		let abs_b = abs_num b in
 		let almost_mod = mod_num (abs_num a) abs_b in
-		if compare_num a num0 >= 0 then
+		if ge_num a num0 then
 			almost_mod
 		else
 			if is_zero almost_mod then
@@ -798,7 +798,7 @@ struct
 
 	let sign_num a = num_of_int (compare_num a num0)
 
-   let compare a b = compare_num a b
+   let compare = compare_num
 
 	let rec gcd_aux a b =
 		if is_zero b then
@@ -1127,12 +1127,12 @@ let all_pairs l1 l2 =
 let norm constr =
 	let tree, f = constr in
 	let gcd = AF.gcd f in
-	if compare gcd ringUnit <= 0 then
+	if le_num gcd ringUnit then
 		constr
 	else
 		let c = rem (AF.coef f AF.constvar) gcd in
 		let f' = AF.div f gcd in
-		if compare c num0 = 0 then
+		if eq_num c num0 then
 			(Mul (tree, gcd), f')
 		else
 			(MulAndWeaken (tree, gcd, c), f')
@@ -1149,7 +1149,7 @@ let rec min_index_aux pool result current =
 		result
 	else
 		let current_val = pool.(current) in
-		if (compare pool.(result) current_val > 0) && (isPositive current_val) then
+		if (gt_num pool.(result) current_val) && (isPositive current_val) then
 			min_index_aux pool current (succ current)
 		else
 			min_index_aux pool result (succ current)
@@ -1158,7 +1158,7 @@ let rec min_index pool current =
 	if current = Array.length pool then
 		0
 	else
-		if compare pool.(current) ringZero > 0 then
+		if gt_num pool.(current) ringZero then
 			min_index_aux pool current (succ current)
 		else
 			min_index pool (succ current)
@@ -1167,7 +1167,7 @@ let pick_var pool constrs =
 	Array.fill pool 0 (Array.length pool) ringZero;
 	C.iter (compute_metric pool) constrs;
 	let result = min_index pool 0 in
-	if compare pool.(result) ringZero > 0 then
+	if gt_num pool.(result) ringZero then
 		succ result
 	else
 		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
@@ -1212,10 +1212,10 @@ let print_constrs constrs =
 
 let var_bounds (old_upper, old_lower) f v =
 	let c = AF.coef f (succ v) in
-	if compare c num0 < 0 then
+	if lt_num c num0 then
 		(true, old_lower)
 	else
-		if compare c num0 > 0 then
+		if gt_num c num0 then
 			(old_upper, true)
 		else
 			(old_upper, old_lower)
@@ -1240,7 +1240,7 @@ let rec collect_unbound_vars pool acc i =
 let rec no_unbound_vars f = function
 	hd::tl ->
 		let c = AF.coef f hd in
-		if compare c num0 <> 0 then
+		if not (eq_num c num0) then
 			begin
 				if !debug_omega then
 					eprintf "Unbound v%i in %a@." hd AF.print f;

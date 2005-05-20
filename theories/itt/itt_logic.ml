@@ -1431,7 +1431,7 @@ let autoBackT compare_aux get_aux tac_aux onsome auto_aux =
 let hypAutoT =
       autoBackT alpha_equal Sequent.nth_hyp backThruHypT onSomeHypT autoT
 
-let logicAutoT = autoBackT (=) (fun i p -> i) backThruAssumT onSomeAssumT hypAutoT
+let logicAutoT = autoBackT (==) (fun p _ -> p) backThruAssumT onSomeAssumT hypAutoT
 
 (*
  * -*-

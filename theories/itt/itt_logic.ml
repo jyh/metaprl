@@ -921,7 +921,7 @@ let eprint_info info =
  *)
 let rec assoc v = function
    (v', t) :: tl ->
-      if v' = v then
+      if Lm_symbol.eq v' v then
          t, tl
       else
          let t', tl = assoc v tl in

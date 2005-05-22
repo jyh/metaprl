@@ -45,6 +45,7 @@ doc docoff
 
 open Basic_tactics
 open Itt_rfun
+open Itt_list
 
 (************************************************************************
  * TERMS                                                                *
@@ -96,6 +97,11 @@ interactive_rw split_bind_sum :
    bind{'m +@ 'n; l. 't['l]} <-->
    bind{'m; l1. bind{'n; l2. 't[append{'l1;'l2}]}}
 
+interactive_rw merge_bindn {| reduce |} :
+   'm in nat -->
+   'n in nat -->
+   bind{'m; bind{'n; 't }} <--> bind{'m +@ 'n; 't }
+
 interactive_rw reduce_substn_base {| reduce |} :
    subst{0; 'bt; 't} <--> subst{'bt; 't}
 
@@ -107,7 +113,30 @@ interactive_rw reduce_bindn_subst {| reduce |} :
    'n in nat -->
     subst{bind{'n +@ 1; v. 'bt['v]}; 't} <--> bind{'n; v. 'bt['t :: 'v]}
 
-interactive_rw reduce_substn_bindn {| reduce |} :
+interactive_rw reduce_substn_bindn1 Perv!bind{x.'bt['x]} :
+   'm in nat -->
+   'n in nat -->
+   'n >= 'm -->
+   subst{'m; bind{v. bind{'n; l.'bt['v::'l]}}; 't} <--> bind{'n; l. 'bt[insert_at{'l; 'm; 't}]}
+
+doc docoff
+
+let bind_opname = opname_of_term <<bind{v.'t}>>
+let bindn_opname = opname_of_term <<bind{'n; v.'t}>>
+
+let rsbC = termC (fun t ->
+   let _, b, _ = three_subterms t in
+   let v, b = dest_dep1_term bind_opname b in
+   let l, _, bt = dest_dep0_dep1_term bindn_opname b in
+   let bind = var_subst_to_bind bt (mk_cons_term (mk_var_term v) (mk_var_term l)) in
+      reduce_substn_bindn1 bind)
+
+let resource reduce +=
+   << subst{'m; bind{v. bind{'n; l.'bt['v::'l]}}; 't} >>, rsbC
+
+doc <:doc< @doc{ } >>
+
+interactive_rw reduce_substn_bindn2 {| reduce |} :
    'm in nat -->
    'n in nat -->
    'n >= 'm -->

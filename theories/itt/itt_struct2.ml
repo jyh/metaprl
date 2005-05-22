@@ -62,6 +62,7 @@ open Basic_tactics
 open Itt_equal
 open Itt_struct
 open Itt_squiggle
+open Itt_rfun
 
 (*
  * Show that the file is loading.
@@ -235,6 +236,37 @@ doc <:doc<
    @end[doc]
 >>
 
+doc <:doc<
+   @doc{Rewriting using the lambda binding to represent arbitrary SO contexts}
+>>
+interactive fun_sqeq_elim {| elim[ThinOption thinT] |} 'H 'a :
+   sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>; 't1['a]~'t2['a]  >- 'C } -->
+   sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>  >- 'C }
+
+interactive lambda_sqsubst_concl 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't :
+   [equality] sequent { <H> >- lambda{x. 't1['x]} ~ lambda{x.'t2['x]} } -->
+   [main] sequent { <H> >- 'C[[ 't2<|H|>['t] ]] } -->
+   sequent { <H> >- 'C[[ 't1<|H|>['t] ]] }
+
+interactive lambda_sqsubst_hyp 'H 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't :
+   [equality] sequent { <H>; v: 'C[['t1<|H|>['t]]]; <J['v]> >- lambda{x. 't1['x]} ~ lambda{x.'t2['x]} } -->
+   [main] sequent { <H>; v: 'C[['t2<|H|>['t]]]; <J['v]> >- 'A['v] } -->
+   sequent { <H>; v: 'C[['t1<|H|>['t]]]; <J['v]> >- 'A['v] }
+
+(*
+ * XXX: TODO: nogin: The rule I'd actually want is the one below, but so far
+ * the combination of type-checker "stupidity" (not knowing that in ITT a
+ * subterm of a term of type Term must also have type Term) and rewriter
+ * limitations (it can not not match non-sequent contexts that occur more
+ * than once in redeces) make it impossible to specify this rule.
+ *
+interactive lambda_sqsubst2_concl 'C 'C1 'C2 't1 lambda{x.'C2[['x 't2]]} bind{x.'t['x]} :
+   sequent { <H> >- lambda{x. 'C1[['x 't1]]} ~ lambda{x.'C2[['x 't2]]} } -->
+   sequent { <H> >- 'C[[ 'C2<|H|>[['t<|C;H|>['t2<|C2;H|>] ]] ]] } -->
+   sequent { <H> >- 'C[[ 'C1<|H|>[['t<|C;H|>['t1<|C1;H|>] ]] ]] }
+ *
+ *)
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -267,9 +299,46 @@ let eqSubstT t i =
    else
       substHypT i t
 
+let lambdaSqSubstT t i = funT (fun p ->
+   let tt = if i = 0 then concl p else nth_hyp p i in
+   let x, t1 = dest_lambda (fst (dest_squiggle t)) in
+   let arg = ref None in
+   let try_match term bvars =
+      match !arg with
+         Some _ ->
+            false
+       | None ->
+            begin try
+               match match_terms [] t1 term with
+                  [] ->
+                     arg := Some (mk_var_term x);
+                     true
+                | [v, t] when Lm_symbol.eq v x ->
+                     arg := Some t;
+                     true
+                | _ ->
+                     false
+            with RefineError _ ->
+               false
+            end
+   in
+   let addrs = find_subterm tt try_match in
+      match addrs, !arg with
+         addr :: _, Some term ->
+            if i = 0 then
+               lambda_sqsubst_concl addr t term
+            else
+               lambda_sqsubst_hyp i addr t term
+       | _ ->
+            raise(RefineError("lambdaSqSubstT", StringTermError ("Nothing appropriate found in", tt))))
+
 let substTaux t i =
    if is_squiggle_term t then
-      sqSubstT t i
+      let a, b = dest_squiggle t in
+         if is_lambda_term a && is_lambda_term b then
+            lambdaSqSubstT t i
+         else
+            sqSubstT t i
    else
       eqSubstT t i
 
@@ -278,14 +347,19 @@ let move_and_substT t i = funT (fun p ->
       copyHypT i (-1) thenT substTaux t (-1) thenT tryT (thinT i))
 
 let substT t i =
-   substTaux t i orelseT move_and_substT t i
+   if i = 0 then
+      substTaux t i
+   else
+      substTaux t i orelseT move_and_substT t i
 
 let justSubstT t i tac1 tac2 j =
-   (substTaux t i thenET (tac1 thenT tac2 j)) orelseT
-      funT (fun p ->
-         (* move_and_substT messes up hyp numbers; need to recompute into a neg number and subtract 1 *)
-         let j = if j < 0 then j - 1 else hyp_count p - j - 2 in
-            move_and_substT t i thenET (tac1 thenT tac2 j))
+   let t1 = substTaux t i thenET (tac1 thenT tac2 j) in
+      if i = 0 then
+         t1
+      else
+         t1 orelseT funT (fun p ->
+            let j = get_pos_hyp_num p j in
+              copyHypT i (-1) thenT substTaux t (-1) thenET (tac1 thenT tac2 j) thenT tryT (thinT i))
 
 (*
  * Derived versions.

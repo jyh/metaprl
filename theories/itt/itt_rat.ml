@@ -735,6 +735,8 @@ interactive_rw uni2negative1_ratC {| arith_unfold |} :
 	('a in rationals) -->
 	neg_rat{'a} <--> mul_rat{rat{-1; 1}; 'a}
 
+doc docoff
+
 let debug_int2rat =
    create_debug (**)
       { debug_name = "int2rat";
@@ -778,6 +780,8 @@ let int2ratC =
 
 let int2ratT =
    rwAll int2ratC
+
+doc docon
 
 interactive_rw rat_of_int_ratn :
 	('a in int) -->

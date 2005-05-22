@@ -59,17 +59,17 @@ doc <:doc<
    $t$ must be a ``substitution function''.
 
    The <<mk_term{'op; 'subterms}>> expression represents a term with the operator
-   $op$ and subterms $subterms$. In order for it to be well-formed, the length of
-   $subterms$ must equal the arity of $op$ and each subterm must have the ``binding
+   <<'op>> and subterms $subterms$. In order for it to be well-formed, the length of
+   $subterms$ must equal the arity of <<'op>> and each subterm must have the ``binding
    depth'' (i.e. the number of outer binds) equal to the corresponding number in the
-   shape of $op$ (remember, the shape of an operator is a list of natural numbers
+   shape of <<'op>> (remember, the shape of an operator is a list of natural numbers
    and the length of the list is the operator's arity).
 
    The expression <<subst{'bt; 't}>> represents the result of substituting $t$
-   for the first binding in $bt$.
+   for the first binding in <<'bt>>.
 
    Finally, the @tt[weak_dest_bterm] operator allows testing whether a term is a @tt[bind]
-   or a @tt[mk_term] and to get the $op$ and $subterms$ in the latter case.
+   or a @tt[mk_term] and to get the <<'op>> and $subterms$ in the latter case.
    @end[doc]
 >>
 

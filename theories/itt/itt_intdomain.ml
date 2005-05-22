@@ -427,6 +427,8 @@ doc <:doc<
  * DISPLAY FOfMS                                                        *
  ************************************************************************)
 
+doc docoff
+
 dform intDomain_df1 : except_mode[src] :: except_mode[prl] :: intDomain[i:l] =
    mathbbI `"ntDomain" sub{slot[i:l]}
 

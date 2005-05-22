@@ -327,21 +327,21 @@ declare make_bterm{'bt; 'bt1}
 prim_rw reduce_make_bterm1 'H :
    make_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; rnil } <--> bterm{| <H>; x: term; <J> >- 'x |}
 
-(*doc <:doc<
+doc <:doc<
    @begin[doc]
    << fake_mlrw[reduce_make_bterm2]{
          make_bterm{bterm{|<H> >-
             <:doc<@underline{op}@{
                <<df_context{'J_1<|H|>}>>.<< 'r_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 'r_n<|H|> >>@}>>|};
-               [<<bterm{|<H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>>] };
-         <:doc<bterm{|<H> >-
+               <:doc< [<<bterm{| <H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>>]>> };
+         bterm{|<H> >-
             <:doc<@underline{op}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
-               <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|} >>} >>
+               <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|} } >>
    @end[doc]
    @docoff
->>*)
+>>
 
 let rec make_bterm_aux lista listb fvars hvar lenh =
    match lista, listb with
@@ -397,7 +397,8 @@ doc <:doc< @begin[doc]
    (including all the params and all the arities) and to << 'ff >> when
    operators are distinct. Undefined if either << 'bt1 >> or << 'bt2 >> is
    ill-formed.
-@end[doc] >>
+   @end[doc]
+>>
 
 declare if_same_op{'bt1; 'bt2; 'tt; 'ff}
 
@@ -430,7 +431,8 @@ doc <:doc< @begin[doc]
    << if_simple_bterm{'bt; 'tt; 'ff} >> evaluates to << 'tt >> when << 'bt >>
    has $0$ bound variables, to << 'ff >> when it is a bterm with non-$0$ bound
    variables and is undefined otherwise.
-@end[doc] >>
+   @end[doc]
+>>
 
 declare if_simple_bterm{'bt; 'tt; 'ff}
 
@@ -515,7 +517,8 @@ doc <:doc< @begin[doc]
 
    << subst{'bt; 't} >> substitutes << 't >> for the first bound variable
    of << 'bt >>.
-@end[doc] >>
+   @end[doc]
+>>
 
 declare subst{'bt; 't}
 
@@ -554,18 +557,18 @@ dform bterm_sep_cons_df : bterm_sep{| 't1; <H> >- 't |} = `","
 dform bterm_sep_nil_df : bterm_sep{| >- 't |} = `""
 
 dform if_quoted_op_df : if_quoted_op{'bt; 'tt} =
-   `"if_quoted_op(" slot{'bt} `"; " slot{'tt} `")"
+   pushm[3] `"if_quoted_op(" slot{'bt} `";" space slot{'tt} `")" popm
 dform if_bterm_df : if_bterm{'bt; 'tt} =
-   `"if_bterm(" slot{'bt} `"; " slot{'tt} `")"
+   pushm[3] `"if_bterm(" slot{'bt} `";" space slot{'tt} `")" popm
 dform subterms_df : except_mode[src] :: subterms{'bt} =
    `"subterms(" slot{'bt} `")"
 dform make_bterm_df : make_bterm{'bt; 'btl} =
-   `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
+   pushm[3] `"make_bterm(" slot{'bt} `";" space slot{'btl} `")" popm
 dform if_same_op_df : if_same_op{'bt1; 'bt2; 'tt; 'ff} =
-   `"if_same_op(" slot{'bt1} `"; " slot{'bt2} `"; " slot{'tt} `"; " slot{'ff} `")"
+   szone pushm[3] `"if_same_op(" slot{'bt1} `";" hspace slot{'bt2} `";" hspace slot{'tt} `";" hspace slot{'ff} `")" popm ezone
 dform if_simple_bterm_df : if_simple_bterm{'bt; 'tt; 'ff} =
-   `"if_simple_bterm(" slot{'bt} `"; " slot{'tt} `"; " slot{'ff} `")"
+   szone pushm[3] `"if_simple_bterm(" slot{'bt} `";" hspace slot{'tt} `";" hspace slot{'ff} `")" popm ezone
 dform if_var_bterm_df : if_var_bterm{'bt; 'tt; 'ff} =
-   `"if_var_bterm(" slot{'bt} `"; " slot{'tt} `"; " slot{'ff} `")"
+   szone pushm[3] `"if_var_bterm(" slot{'bt} `";" hspace slot{'tt} `";" hspace slot{'ff} `")" popm ezone
 dform subst_df : subst{'bt; 't} =
    `"subst(" slot{'bt} `"; " slot{'t} `")"

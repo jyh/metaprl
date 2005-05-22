@@ -52,7 +52,7 @@ extends Itt_squiggle
 extends Itt_squash
 extends Itt_set
 extends Itt_logic
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -232,12 +232,9 @@ doc <:doc<
    The @tt[assertSquashT] $S$ introduces the lemma $S$ at the end
    of the hypothesis list.
 
-   @docoff
+   Next we implement ``third-order'' rewriting using the lambda binding to represent
+   arbitrary SO contexts.
    @end[doc]
->>
-
-doc <:doc<
-   @doc{Rewriting using the lambda binding to represent arbitrary SO contexts}
 >>
 interactive fun_sqeq_elim {| elim[ThinOption thinT] |} 'H 'a :
    sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>; 't1['a]~'t2['a]  >- 'C } -->
@@ -266,6 +263,8 @@ interactive lambda_sqsubst2_concl 'C 'C1 'C2 't1 lambda{x.'C2[['x 't2]]} bind{x.
    sequent { <H> >- 'C[[ 'C1<|H|>[['t<|C;H|>['t1<|C1;H|>] ]] ]] }
  *
  *)
+
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

@@ -43,6 +43,9 @@ PRINT_THEORIES[] =
 
 # TheoryDocumentInstall(fol, $(PRINT_THEORIES))
 
+theory.tex theory-body.tex:
+    touch $@
+
 #
 # Clean up
 #

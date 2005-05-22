@@ -1,4 +1,5 @@
 doc <:doc<
+   @spelling{cumulativity}
    @begin[doc]
    @module[Itt_equal]
 

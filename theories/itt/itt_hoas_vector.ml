@@ -134,7 +134,7 @@ let rsbC = termC (fun t ->
 let resource reduce +=
    << subst{'m; bind{v. bind{'n; l.'bt['v::'l]}}; 't} >>, rsbC
 
-doc <:doc< @doc{ } >>
+doc docon
 
 interactive_rw reduce_substn_bindn2 {| reduce |} :
    'm in nat -->

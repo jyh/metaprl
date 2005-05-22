@@ -111,7 +111,7 @@ interactive img_wf4 {| intro[] |} :
 
 doc <:doc<
    @begin[doc]
-   Intoduction rule is simple: if <<'a>> is in <<'A>> then of course <<'f('a)>> is in <<Img{'f;'A;'B}>>.
+   Introduction rule is simple: if <<'a>> is in <<'A>> then of course <<'f('a)>> is in <<Img{'f;'A;'B}>>.
    @end[doc]
 >>
 
@@ -127,7 +127,7 @@ doc <:doc<
    then it is enough to prove it for all elements of the form <<'f('a)>> where <<'a in 'A>>.
    But the rule has extra conditions.
    First it holds only for squash-stable conclusions (see @hrefmodule[Itt_squash]).
-   Second, it requries $B$ to be simple (see @hrefmodule[Itt_squiggle]).
+   Second, it requires $B$ to be simple (see @hrefmodule[Itt_squiggle]).
 
    Later we will prove that these conditions could be abandoned if $f$ is @i{reversible}
    (rule @hrefrule[img_elim_reversible]).
@@ -198,7 +198,7 @@ doc <:doc<
    @begin[doc]
    A function <<f:'A->'B>> is a surjection if it has a right inverse.
    That is, for any element in <<'B>> we can find its prototype in <<'A>>.
-   A function is an injenction if it has a left inverse,
+   A function is an injection if it has a left inverse,
    Note that in constructive theory is a stronger statement than just saying
    that $f$ does not map two elements of $A$ to one element of $B$.
    @end[doc]
@@ -219,11 +219,11 @@ dform  is_surjection_df: is_surjection{'f;'A;'B} = slot{'f} `" is surjection(" (
 
 doc <:doc<
    @begin[doc]
-   A function <<f:'A->'B>> is @i{reversable} if it has an inverse function $g$ from its image
-   to $A$. In this case $g$ is a @i{rreverse} function of $f$.
-   In other words, a function is reversable if it is a surjection onto its own image.
+   A function <<f:'A->'B>> is @i{reversible} if it has an inverse function $g$ from its image
+   to $A$. In this case $g$ is a @i{reverse} function of $f$.
+   In other words, a function is reversible if it is a surjection onto its own image.
    In classical mathematics
-   all functions are reversable. However, in constructive theory some functions are
+   all functions are reversible. However, in constructive theory some functions are
    computable only one way. Such functions are not reversible.
    @end[doc]
 >>
@@ -439,7 +439,7 @@ define sq_reverse: sq_reverse{'f;'g;'A;'B} <-->  all y:Img{'f;'A;'B}. ('g('y) in
 doc <:doc<
    @begin[doc]
    @paragraph{Basic Rules}
-   There is no spetial wf-rule. This proposition is well-formed only if it is true.
+   There is no special well-formedness rule. This proposition is well-formed only if it is true.
    @end[doc]
 >>
 
@@ -459,7 +459,7 @@ interactive sqreverse_elim {| elim[] |} 'H 'y:
 
 doc <:doc<
    @begin[doc]
-   If $B$ is simple then ussual reversibility implies squiggle reversibility.
+   If $B$ is simple then usual reversibility implies squiggle reversibility.
    @end[doc]
 >>
 
@@ -489,7 +489,7 @@ interactive img_elim_reversible {| elim[] |} 'H 'g:
 
 doc <:doc<
    @begin[doc]
-    Rules @hrefrule[img_elim_reversible] and @hrefrule[sqreverse_intro_simple] implie that
+    Rules @hrefrule[img_elim_reversible] and @hrefrule[sqreverse_intro_simple] implies that
    @end[doc]
 >>
 

@@ -303,6 +303,8 @@ let testT = argfunT (fun i p ->
 )
 *)
 
+doc docon
+
 interactive le2ge {| ge_elim |} 'H :
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
@@ -460,16 +462,22 @@ interactive_rw bnot_lt2ge_rw :
    ('b in int) -->
    "assert"{bnot{lt_bool{'a; 'b}}} <--> ('a >= 'b)
 
+doc docoff
+
 let bnot_lt2geC = bnot_lt2ge_rw
 
 let lt2ConclT = magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)]
 let ltInConcl2HypT = (rwh unfold_lt 0) thenMT lt2ConclT
 let gtInConcl2HypT = (rwh unfold_gt 0) thenMT ltInConcl2HypT
 
+doc docon
+
 interactive_rw bnot_le2gt_rw :
    ('a in int) -->
    ('b in int) -->
    "assert"{bnot{le_bool{'a; 'b}}} <--> ('a > 'b)
+
+doc docoff
 
 let bnot_le2gtC = bnot_le2gt_rw
 
@@ -479,12 +487,16 @@ let leInConcl2HypT =
 let geInConcl2HypT =
    (rwh unfold_ge 0) thenMT leInConcl2HypT
 
+doc docon
+
 interactive eq2pair_of_ineq :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [main] sequent { <H> >- 'a >= 'b } -->
    [main] sequent { <H> >- 'b >= 'a } -->
    sequent { <H> >- 'a = 'b in int }
+
+doc docoff
 
 let eqInConcl2HypT t =
 	let (t,a,b)=dest_equal t in

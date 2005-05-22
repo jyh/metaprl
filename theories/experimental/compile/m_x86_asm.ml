@@ -1,4 +1,5 @@
 doc <:doc<
+   @spelling{MUL DIV cc}
    @begin[doc]
    @module[M_x86_asm]
 

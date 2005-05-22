@@ -1,4 +1,5 @@
 doc <:doc< -*- Mode: text -*-
+   @spelling{doesn ii wildcard}
 
    @begin[doc]
    @chapter[exceptions]{Exceptions}
@@ -162,7 +163,7 @@ is implemented in the OCaml implementation from INRIA).  When a
 @code{try} expression is evaluated, a new exception handler is pushed
 onto the the stack; the handler is removed when evaluation completes.
 When an exception is raised, the entries of the stack are examined in
-stack order.  If the topmost handler contains a apttern that matches
+stack order.  If the topmost handler contains a pattern that matches
 the raised exception, it receives control.  Otherwise, the handler is
 popped from the stack, and the next handler is examined.
 
@@ -393,13 +394,13 @@ to avoid catching the exception.
 @section["exception-control"]{Other uses of exceptions}
 
 Exceptions are also frequently used to modify the control flow of a
-program, without necessarily being associated with ank kind of error
+program, without necessarily being associated with any kind of error
 condition.
 
-@subsection["exception-remove"]{Descreasing memory usage}
+@subsection["exception-remove"]{Decreasing memory usage}
 
 As a simple example, suppose we wish to write a function to remove the
-first occurence of a particular element ``x'' in a list ``l''.  The
+first occurrence of a particular element ``x'' in a list ``l''.  The
 straightforward implementation is defined as a recursive function.
 
 @begin[iverbatim]
@@ -413,7 +414,7 @@ let rec remove x = function
 @end[iverbatim]
 
 The @code{remove} function searches through the list for the first
-occurence of an element @code{y} that is equal to @code{x},
+occurrence of an element @code{y} that is equal to @code{x},
 reconstructing the list after the removal.
 
 One problem with this function is that the entire list is copied
@@ -448,7 +449,7 @@ there is no ``@code{break}'' statement as found in languages like C
 and Java.  Instead, exceptions can be used to abort a loop execution.
 To illustrate this, suppose we want to define a function @code{cat}
 that prints out all the lines from the standard input channel.  We
-discuss input/output in more detail in Section ref[io], but
+discuss input/output in more detail in Section @refsection[io], but
 for this problem we can just use the standard functions
 @code{input_char} to read a character from the input channel, and
 @code{output_char} to write it to the output channel.  The
@@ -523,17 +524,17 @@ In this example the @code{finally} function is used to ensure that the
 @code{in_channel} is closed after the input file is processed, whether
 or not the @code{process} function was successful.
 
-@subsection["exception-type"]{The exn type}
+@subsection["exception-type"]{The @code{exn} type}
 
 We close with a somewhat unorthodox use of exceptions completely
 unrelated to control flow.  Exceptions (values of the @code{exn} type)
 are first-class values; they can be passed as arguments, stored in
 data structures, etc.  The values in the @code{exn} type are specified
-with @code{exception} definitions.  One unique properrty of the
+with @code{exception} definitions.  One unique property of the
 @code{exn} type is that it is @emph{open} so that new exceptions can
 be declared when desired.  This mechanism can be used to provide a
 kind of dynamic typing, much like the open unions discussed in Section
-ref["open-unions"].
+@refsection["open-unions"].
 
 For example, suppose we want to define a list of values, where the
 type of the values can be extended.  Initially, we might want lists

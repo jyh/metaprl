@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[spelling]
-   CPS EMRE compilable op
+   CPS EMRE compilable op IR
    @end[spelling]
 
    @begin[doc]

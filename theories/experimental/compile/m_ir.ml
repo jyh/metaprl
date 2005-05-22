@@ -1,5 +1,5 @@
 doc <:doc<
-   @spelling{CPS}
+   @spelling{CPS IR}
    @begin[doc]
    @module[M_ir]
 

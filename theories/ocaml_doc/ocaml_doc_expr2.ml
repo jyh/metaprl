@@ -1,8 +1,7 @@
 doc <:doc< -*- Mode: text -*-
 
    @begin[spelling]
-   hoc cons deconstructed destructed doesn
-   ll namespace obfuscation
+   hoc cons deconstructed destructed doesn ll namespace
    @end[spelling]
 
    @begin[doc]
@@ -231,7 +230,7 @@ expression @code{Adder.Add("Hello ", "world")} would evaluate to the string
 @code{"Hello world"}.
 
 OCaml does @emph{not} provide overloading.  There are probably two
-main reasons.  One has to do with a technical difficuly.  It is hard
+main reasons.  One has to do with a technical difficulty.  It is hard
 to provide both type inference and overloading at the same
 time.  For example, suppose the @code{+} function were overloaded to
 work both on integers and floating-point values.  What would be the

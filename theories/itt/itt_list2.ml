@@ -1,4 +1,5 @@
 doc <:doc<
+   @spelling{th}
    @begin[doc]
    @module[Itt_list2]
 
@@ -17,7 +18,7 @@ doc <:doc<
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2005 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -35,6 +36,8 @@ doc <:doc<
 
    Author: Jason Hickey @email{jyh@cs.cornell.edu}
    Modified By: Aleksey Nogin @email{nogin@cs.cornell.edu}
+   Modified By: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+   Modified By: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
 
@@ -362,22 +365,22 @@ dform ball2_df : except_mode[src] :: parens :: "prec"[prec_ball] :: ball2{'l1; '
 
 dform assoc_df : except_mode[src] :: parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l; v. 'b; 'z} =
    szone pushm[0] pushm[3]
-   `"try" hspace
+   keyword["try"] hspace szone
       pushm[3]
-      `"let " slot{'v} `" = assoc " slot{'x} space Nuprl_font!member slot{'eq} space slot{'l} popm hspace
-      pushm[3] `"in" hspace
-      slot{'b} popm popm hspace
-   pushm[3] `"with Not_found ->" hspace
+      keyword["let "] slot{'v} keyword[" ="] hspace tt["assoc "] slot{'x} space Nuprl_font!member slot{'eq} space slot{'l} popm hspace
+      pushm[3] keyword["in"] hspace
+      slot{'b} popm ezone popm hspace
+   pushm[3] keyword["with "] tt[ "Not_found ->"] hspace
    slot{'z} popm popm ezone
 
 dform rev_assoc_df : except_mode[src] :: parens :: "prec"[prec_assoc] :: rev_assoc{'eq; 'x; 'l; v. 'b; 'z} =
    szone pushm[0] pushm[3]
-   `"try" hspace
+   keyword["try"] hspace
       pushm[3]
-      `"let " slot{'v} `" = rev_assoc " slot{'x} space Nuprl_font!member slot{'eq} space slot{'l} popm hspace
-      pushm[3] `"in" hspace
+      keyword["let "] slot{'v} keyword[" ="] hspace tt["rev_assoc "] slot{'x} space Nuprl_font!member slot{'eq} space slot{'l} popm hspace
+      pushm[3] keyword["in"] hspace
       slot{'b} popm popm hspace
-   pushm[3] `"with Not_found ->" hspace
+   pushm[3] keyword["with "] tt["Not_found ->"] hspace
    slot{'z} popm popm ezone
 
 dform map_df : except_mode[src] :: parens :: "prec"[prec_apply] :: map{'f; 'l} =
@@ -396,16 +399,16 @@ dform nth_df : except_mode[src] :: nth{'l; 'i} =
     slot{'l} sub{slot{'i}}
 
 dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
-   szone `"replace_nth(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
+   szone tt["replace_nth"] `"(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
 
 dform insert_at_df : except_mode[src] :: insert_at{'l; 'i; 'v} =
-   szone `"insert_at(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
+   szone tt["insert_at"] `"(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
 
 dform rev_df : except_mode[src] :: rev{'l} =
-   `"rev(" slot{'l} `")"
+   tt["rev"] `"(" slot{'l} `")"
 
 dform list_max_df : list_max{'l} =
-   pushm[0] szone pushm[3] `"max" Nuprl_font!subl `"(" slot{'l} popm `")" ezone popm
+   pushm[0] szone pushm[3] tt["max"] Nuprl_font!subl `"(" slot{'l} popm `")" ezone popm
 
 (************************************************************************
  * REWRITES                                                             *
@@ -965,7 +968,7 @@ interactive_rw rev2 'A :
 doc <:doc<
    @begin[doc]
    @rules
-   Rules for mem.
+   Rules for the @tt[mem] operator.
    @end[doc]
 >>
 interactive mem_nil {| intro[] |} :
@@ -1199,7 +1202,8 @@ interactive sameset_trans 'l2 :
 
 doc <:doc<
    @begin[doc]
-    The <<find{'l; 'a; x,y.'eq['x;'y]}>> returns an index of an element in the list $l$ equal to the element $a$ according to equality $eq$.
+    The <<find{'l; 'a; x,y.'eq['x;'y]}>> returns an index of an element in the list $l$ equal to the element $a$
+    according to equality $@it[eq]$.
     It returns the length of the list otherwise.
    @end[doc]
 >>

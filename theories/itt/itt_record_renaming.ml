@@ -85,12 +85,7 @@ doc <:doc<
    @begin[doc]
      These reductions with constant labels are in the @hrefresource[reduce_resource] resource.
      Thus, the @hrefconv[reduceC] does such reduction whenever <<label[a:t]>>,  <<label[b:t]>>, and  <<label[c:t]>> are concrete labels.
-   @end[doc]
->>
 
-
-doc <:doc<
-   @begin[doc]
      @modsection{Properties}
      The main properties of the renaming are the following reductions:
    @end[doc]
@@ -127,11 +122,7 @@ interactive_rw rename_rw3:
 doc <:doc<
    @begin[doc]
      These reductions with constant labels are also added to the @hrefresource[reduce_resource] resource.
-   @end[doc]
->>
 
-doc <:doc<
-   @begin[doc]
      The trivial renaming is identity:
    @end[doc]
 >>
@@ -311,9 +302,10 @@ interactive_rw add_mul_cancel {| reduce |}:  rename_add_mul{ rename_mul_add{ 'mu
 
 doc <:doc<
    @begin[doc]
-     This reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
+     These reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
     <<field[c:t]{rename_mul_add{'r}}>>, <<field[c:t]{rename_add_mul{'r}}>>.
    @end[doc]
+   @docoff
 >>
 
 let resource reduce +=
@@ -335,7 +327,6 @@ doc <:doc<
 
 interactive_rw additive_reduce (* {| reduce |} *):
    as_additive{  rename_mul_add{ 'mul }} <--> 'mul
-
 
 doc <:doc<
    @begin[doc]
@@ -510,7 +501,7 @@ interactive_rw reverse_order_cancel {| reduce |}:  reverse_order{reverse_order{'
 
 doc <:doc<
    @begin[doc]
-     This reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
+     These reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
     <<field[c:t]{reverse_order{'ord}}>>.
    @end[doc]
    @docoff

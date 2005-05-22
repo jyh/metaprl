@@ -1,6 +1,7 @@
 doc <:doc< -*- mode: text; -*-
    @begin[spelling]
-   mem reg
+   mem reg CMP DIV INC JEQ JGT JLT JMP MOV MUL cc cmp eax ebp ebx ecx
+   edi edx esi esp inst jcc jmp mov opcodes
    @end[spelling]
 
    @begin[doc]

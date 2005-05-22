@@ -1,6 +1,6 @@
 doc <:doc< -*- Mode: text -*-
 
-   @spelling{coercions doesn ll}
+   @spelling{doesn ll newline aren ooo bbb hhh ddd hh th}
 
    @begin[doc]
    @chapter["ocaml-doc-expr1"]{Simple Expressions}
@@ -236,7 +236,7 @@ Each escape sequence begins with the backslash character `@code{\}'.
 @line{{@code{'\\'}}{The backslash character itself.}}
 @line{{@code{'\''}}{The single-quote character.}}
 @line{{@code{'\t'}}{The tab character.}}
-@line{{@code{'\r'}}{The carraige-return character.}}
+@line{{@code{'\r'}}{The carriage-return character.}}
 @line{{@code{'\n'}}{The newline character.}}
 @line{{@code{'\b'}}{The backspace character.}}
 @line{{@code{'\}$ddd$@code{'}}{A decimal escape sequence.}}
@@ -308,7 +308,7 @@ The @code{^} operator performs string concatenation.
 
 Strings also allow random access.  The expression @code{s.[i]} returns
 the $i$'th from string $s$; and the expression @code{s.[i] <- c}
-replaces the $i$'th in string $s$ by character $c$, returing a
+replaces the $i$'th in string $s$ by character $c$, returning a
 @code{unit} value.  The @target[String]{@tt{String}} module (see
 Section @refsection["ocaml-doc-string"]) also defines many functions
 to manipulate strings, including the

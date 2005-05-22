@@ -2,9 +2,9 @@ doc <:doc<
    @begin[doc]
    @module[Itt_synt_var]
     Our simple theory of syntax has three core parts.
-    The first part @hrefmodule[Itt_synt_var] defines a type of variables <<Var>> in a deDruijn-like style @cite[deb72].
-    The second part @hrefmodule[Itt_synt_operators] defines a type of operators BOperator.
-    The third part @hrefmodule[Itt_synt_bterm] defines a type of terms BTerm.
+    The first part @hrefmodule[Itt_synt_var] defines a type of variables <<Var>> in a deBruijn-like style @cite[deb72].
+    The second part @hrefmodule[Itt_synt_operators] defines a type of operators @tt[BOperator].
+    The third part @hrefmodule[Itt_synt_bterm] defines a type of terms @tt[BTerm].
    @end[doc]
 
    ----------------------------------------------------------------

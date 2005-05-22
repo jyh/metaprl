@@ -87,7 +87,6 @@ doc <:doc<
    @end[doc]
 >>
 
-
 interactive node_wf {| intro[] |}:
  sequent{ <H> >-"type"{ 'T}} -->
  sequent{ <H> >-"type"{ Node{'T}}}
@@ -99,21 +98,13 @@ interactive node_monotone {| intro[] |} :
 interactive bintree_wf {| intro[] |} :
  sequent{ <H> >-"type"{ BinTree}}
 
-
 doc <:doc<
    @begin[doc]
    @modsubsection{Functions on trees}
    @end[doc]
 >>
 
-
 define match_tree: match_tree{'t; 'empty_case; self.'nonempty_case['self]} <--> tree_ind{'t; 'empty_case; L,R,self.'nonempty_case['self]}
-
-dform match_tree_df : except_mode[src] :: match_tree{'t; 'empty_case; node.'nonempty_case} =
-   szone pushm[0] pushm[3] `"match" " " slot{'t} " " `"with" hspace
-   emptytree `" -> " slot{'empty_case} popm hspace
-   pushm[3] `" | " tree{'node} `" -> " slot{'nonempty_case} popm popm ezone
-
 
 interactive_rw reduce_matchtree_empty : match_tree{emptytree; 'empty; node. 'f['node]} <--> 'empty
 
@@ -123,26 +114,26 @@ define leftSubtree: leftSubtree{'t} <-->  match_tree{'t; emptytree; self. ^left}
 
 define rightSubtree: rightSubtree{'t} <-->  match_tree{'t; emptytree; self. ^right}
 
-
-dform ltree_df : except_mode[src] :: leftSubtree{'T} = `"leftSubtree(" 'T ")"
-dform rtree_df : except_mode[src] :: rightSubtree{'T} = `"rightSubtree(" 'T ")"
-
-
 interactive_rw reduce_leftSubtree_empty : leftSubtree{emptytree} <--> emptytree
 
 interactive_rw reduce_rightSubtree_empty : rightSubtree{emptytree} <--> emptytree
 
-
-
-
 define weight : weight{'t} <--> tree_ind{'t; 0; L,R,node. 'L +@ 'R +@ 1}
-
-dform weight_df : except_mode[src] :: weight{'T} = `"weight(" 'T ")"
-
 
 interactive weight_wf {| intro[] |} :
  sequent{ <H> >-'t in BinTree} -->
  sequent{ <H> >-weight{'t} in int}
+
+doc docoff
+
+dform match_tree_df : except_mode[src] :: match_tree{'t; 'empty_case; node.'nonempty_case} =
+   szone pushm[0] pushm[3] `"match" " " slot{'t} " " `"with" hspace
+   emptytree `" -> " slot{'empty_case} popm hspace
+   pushm[3] `" | " tree{'node} `" -> " slot{'nonempty_case} popm popm ezone
+
+dform weight_df : except_mode[src] :: weight{'T} = `"weight(" 'T ")"
+dform ltree_df : except_mode[src] :: leftSubtree{'T} = `"leftSubtree(" 'T ")"
+dform rtree_df : except_mode[src] :: rightSubtree{'T} = `"rightSubtree(" 'T ")"
 
 (*
 define height : height{'t} <--> tree_ind{'t; 0; L,R,node. max{'L;'R} +@ 1}
@@ -172,15 +163,14 @@ doc <:doc<
 
 define example: simpletree <--> tree{ {data=17; left=emptytree; right=tree{ {data=19; left=emptytree; right=emptytree} }} }
 
-dform simpletree_df : except_mode[src] :: simpletree = `"simpletree"
-
-
 interactive_rw example_weight : weight{simpletree} <--> 2
 
 interactive example_wf  {| intro[] |} :
  sequent{ <H> >- simpletree in BinTree }
 
+doc docoff
 
+dform simpletree_df : except_mode[src] :: simpletree = `"simpletree"
 
 (* ==================== *)
 doc <:doc<
@@ -192,25 +182,26 @@ doc <:doc<
 
 define node: node{'l;'r;'nd} <--> ( ('nd^left:='l)^right:='r )
 
-dform node_df : except_mode[src] :: node{'l;'r;'nd} = `"node(" 'l `"," 'r `"," 'nd ")"
-
-let resource reduce +=
-   <<  field[label:t]{node{'l;'r;'nd}}  >>, (addrC [Subterm 1] node thenC reduceTopC);
-
 define nodetype2: Node{'T;l,r.'R['l;'r]} <--> record["left":t]{'T; l.record["right":t]{'T;r.'R['l;'r]}}
 
-dform node_df : except_mode[src] :: Node{'T;l,r.'R} = `"Node(" 'T `"; " 'l `"," 'r `"." 'R ")"
-
 define nodetype3: Node{'T;'A} <--> Node{'T; l,r.'A}
-
-dform node_df : except_mode[src] :: Node{'T;'A} = `"Node(" 'T `"; " 'A ")"
-
 
 define bintree2: BinTree{l,r.'R['l;'r]} <--> srec{T.Node{'T;l,r.'R['l;'r]} + unit}
 
 define bintree3: BinTree{'R} <-->  BinTree{l,r.'R}
 
 define bintree4 : BinTree{'A; t.'P['t]} <--> BinTree{l,r. {a:'A |  'P[node{'l;'r;'a}] } }
+
+doc docoff
+
+dform node_df : except_mode[src] :: node{'l;'r;'nd} = `"node(" 'l `"," 'r `"," 'nd ")"
+
+let resource reduce +=
+   <<  field[label:t]{node{'l;'r;'nd}}  >>, (addrC [Subterm 1] node thenC reduceTopC);
+
+dform node_df : except_mode[src] :: Node{'T;l,r.'R} = `"Node(" 'T `"; " 'l `"," 'r `"." 'R ")"
+
+dform node_df : except_mode[src] :: Node{'T;'A} = `"Node(" 'T `"; " 'A ")"
 
 dform bt2_df : except_mode[src] :: BinTree{l,r.'R} = `"BinTree(" 'l `"," 'r `"." 'R ")"
 dform bt3_df : except_mode[src] :: BinTree{'R} = `"BinTree(" 'R ")"
@@ -222,12 +213,7 @@ let resource intro +=
 let resource elim +=
    << Node{'T;l,r.'R['l;'r]} >>, (fun n -> rw nodetype2 n thenT dT n)
 
-doc <:doc<
-   @begin[doc]
-   @modsubsection{Rules}
-   @end[doc]
->>
-
+doc <:doc< @doc{@rules} >>
 
 interactive tree_monotone2 {| intro[] |} :
  sequent{ <H> >-"type"{ BinTree{l,r.'S['l;'r]}} }  -->
@@ -265,7 +251,6 @@ interactive tree4_wf  {| intro[] |} :
  sequent{ <H> >-'node in Node{ BinTree{'A;t.'P['t]}; l,r. {a:'A |  'P[node{'l;'r;'a}] } } }  -->
  sequent{ <H> >-tree{'node} in  BinTree{'A;t.'P['t]} }
 
-
 interactive node_wf2  {| intro[] |} :
  sequent{ <H> >- 'l in 'T }  -->
  sequent{ <H> >- 'r in 'T }  -->
@@ -284,7 +269,6 @@ interactive treeInduction {| elim [ThinOption thinT] |} 'H :
                        >-  'C[tree{node{'l;'r;'node}}] } -->
     sequent{ <H>; t: BinTree{l,r.'R['l;'r]};  <J['t]> >-  'C['t]}
 
-
 interactive treeInduction2 {| elim [ThinOption thinT] |} 'H :
     sequent{ <H>; t: BinTree{'A; t.'P['t]};  <J['t]> >-  'C[emptytree]} -->
     sequent{ <H>; t: BinTree{'A; t.'P['t]};  <J['t]>;
@@ -292,13 +276,12 @@ interactive treeInduction2 {| elim [ThinOption thinT] |} 'H :
                        >-  'C[tree{node{'l;'r;'node}}] } -->
     sequent{ <H>; t: BinTree{'A; t.'P['t]};  <J['t]> >-  'C['t]}
 
-
 interactive treeInduction1 {| elim [ThinOption thinT] |} 'H :
     sequent{ <H>; t: BinTree;  <J['t]> >-  'C[emptytree]} -->
     sequent{ <H>; t: BinTree;  <J['t]>; l:BinTree; r:BinTree; L: 'C['l]; R: 'C['r]
                        >-  'C[tree{{left = 'l; right = 'r }}] } -->
     sequent{ <H>; t: BinTree;  <J['t]> >-  'C['t]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 (* ==================== *)

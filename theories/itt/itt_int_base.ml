@@ -344,7 +344,7 @@ prim_rw reduce_lt_meta : lt_bool{number[i:n]; number[j:n]} <-->
 prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
    meta_eq[i:n, j:n]{btrue; bfalse}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let reduce_add =
    reduce_add_meta thenC (addrC [Subterm 1] reduce_meta_sum) thenC reduce_numeral

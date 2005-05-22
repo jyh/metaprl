@@ -2,7 +2,7 @@ doc <:doc<
    @begin[doc]
    @module[Itt_image]
 
-   The @tt{Itt_image} adds a new type constructor <<Img{'A; x.'f['x]}>> with ther
+   The @tt{Itt_image} adds a new type constructor <<Img{'A; x.'f['x]}>> with the
    following semantics:
 
    If $A$ is a type with a PER $P_a$, then <<Img{'A; x.'f['x]}>> is a type with the

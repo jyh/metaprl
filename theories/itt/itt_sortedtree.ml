@@ -50,13 +50,15 @@ doc <:doc<
 
 define dataNode: DataNode{'D;data.'N['data]} <--> record["data":t]{'D;data.'N['data]}
 
-dform dn_df : except_mode[src] ::   DataNode{'D;data.'N} = `"DataNode{" 'data ":" 'D `". " 'N `"}"
-
 define sortedTree: SortedTree {'O;data.'A['data]} <-->
                      BinTree{ DataNode{'O^car; data.'A['data]} ; self.
                                         (all x: set_from_tree{^left; 'O^car}.  less{'O; 'x; (^data)}) &
                                         (all y: set_from_tree{^right; 'O^car}. less{'O; (^data); 'y})
                             }
+
+doc docoff
+
+dform dn_df : except_mode[src] ::   DataNode{'D;data.'N} = `"DataNode{" 'data ":" 'D `". " 'N `"}"
 
 dform dn_df : except_mode[src] ::   SortedTree{'O;data.'A} = `"SortedTree{" 'data ":" ('O^car) `". " 'A `"}"
 
@@ -67,6 +69,8 @@ let resource elim += [ softrec_elim <<SortedTree{'O; data.'A['data]}>> sortedTre
 let resource intro += [ <<tree{'nd} in SortedTree{'O; data.'A['data]}>>,  wrap_intro (dByRecDefT <<SortedTree{'O; data.'A['data]}>> sortedTree 0);
                        soft_intro  <<'t in DataNode{'D;data.'N['data]}>> (higherC dataNode)
                      ]
+
+doc docon
 
 interactive sortedtree_wf {| intro[] |} univ[i:l] :
    sequent{ <H> >- 'O in order[i:l] } -->
@@ -111,9 +115,13 @@ define is_in_tree: is_in_tree{'a; 't; 'O} <-->
                                 (*if a=data *) btrue;
                                 (*if a>data *) 'R}}
 
+doc docoff
+
 dform is_in_tree_df : except_mode[src] ::  in_tree{'a;'t; 'O} = tt["is_it_tree("]  'a tt["; "] 't  tt["; "] 'O  tt[")"]
 
 let resource reduce += [softrec_reduce  <<is_in_tree{'a; 't; 'O}>> is_in_tree]
+
+doc docon
 
 interactive is_in_tree_wf {| intro[] |}  univ[i:l]:
    sequent{ <H> >- 'O in order[i:l] } -->
@@ -135,9 +143,13 @@ define insert: insert{'nd; 't; 'O} <-->
                                 (*if a=data *) tree{(('nd^left:=^left) ^right:=^right)};
                                 (*if a>data *) .^right:='R}}
 
+doc docoff
+
 dform is_in_tree_df : except_mode[src] ::  insert{'a;'t; 'O} = tt["insert("]  'a tt["; "] 't  tt["; "] 'O  tt[")"]
 
 let resource reduce += [softrec_reduce  <<insert{'a; 't; 'O}>> insert]
+
+doc docon
 
 interactive insert_wf {| intro[] |}  univ[i:l]:
    sequent{ <H> >- 'O in order[i:l] } -->
@@ -146,4 +158,4 @@ interactive insert_wf {| intro[] |}  univ[i:l]:
    sequent{ <H> >- 't in SortedTree{'O; d.'A['d]} } -->
    sequent{ <H> >- insert{'nd;'t;'O} in SortedTree{'O; d.'A['d]}  }
 
-doc <:doc< @docoff >>
+doc docoff

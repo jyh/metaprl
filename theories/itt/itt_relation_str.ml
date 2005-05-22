@@ -32,8 +32,7 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Alexei Kopylov
-   @email{apk6@cs.cornell.edu}
+   Author: Alexei Kopylov @email{apk6@cornell.edu}
    @end[license]
 >>
 
@@ -51,7 +50,7 @@ extends Itt_logic
 extends Itt_bisect
 extends Itt_comment
 extends Itt_labels
-doc <:doc< @docoff >>
+doc docoff
 
 open Basic_tactics
 
@@ -111,8 +110,6 @@ define le: le{'self; 'a;'b} <--> "assert"{'b ^<= 'a}
 define eq: eq{'self; 'a;'b} <--> le{'self; 'a;'b} and le{'self; 'b; 'a}
 
 define less: less{'self; 'a;'b} <--> le{'self; 'a; 'b} and not{eq{'self;'a;'b}}
-
-
 
 let resource reduce += <<less{rcrd[x:t]{'f;'r};'a;'b}>> , (less thenC addrC [Subterm 1; Subterm 1; Subterm 1] reduceTopC)
 
@@ -282,14 +279,18 @@ interactive sym_eq_eq preorder[i:l] :
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
    sequent { <H>; eq{'ord;'x;'y} >- eq{'ord;'y;'x} }
 
+doc docoff
 
-(* BUG: shoild be implemented using resource(s) *)
+(* XXX: BUG: shoild be implemented using resource(s) *)
 let some_transT level = firstT [trans_less_less level; trans_less_eq level; trans_eq_less level]
 
 let some_transT0 level = firstT [trans_less_less0 level; trans_less_less1 level; sym_eq_eq level]
 
+doc docon
+
 declare order[i:l]
 
+doc docoff
 
 let hypTransT n m =
    funT (fun p ->
@@ -304,6 +305,7 @@ let hypTransT n m =
                   copyHypT n (-1) thenT copyHypT m (-1) thenT some_transT level
         )
 
+doc docon
 
 interactive irref_less_eq {| elim[elim_typeinf <<'ord>> ] |} preorder[i:l] 'H :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
@@ -328,25 +330,30 @@ doc <:doc< @begin[doc]
   @end[doc]
 >>
 
-define type_porduct_ord: type_product_ord{'T;'Ord} <-->
+define type_product_ord: type_product_ord{'T;'Ord} <-->
    {car='T * 'Ord^car;
     "<=" = lambda {a.lambda {b. snd{'a} <=['Ord] snd{'b}}}
    }
 
-let resource reduce +=
-   <<field[f:t]{ type_product_ord{'T;'Ord} }>>, (addrC [Subterm 1] type_porduct_ord thenC reduceTopC)
+doc docoff
 
-interactive_rw compare_type_porduct_ord_reduce {| reduce |}:
+let resource reduce +=
+   <<field[f:t]{ type_product_ord{'T;'Ord} }>>, (addrC [Subterm 1] type_product_ord thenC reduceTopC)
+
+doc docon
+
+interactive_rw compare_type_product_ord_reduce {| reduce |}:
    compare{type_product_ord{'T;'Ord} ; ('a,'x);('b,'y); 'less_case; 'equal_case; 'greater_case} <-->
    compare{'Ord ; 'x;'y; 'less_case; 'equal_case; 'greater_case}
 
-interactive type_porduct_ord_preorder {| intro[] |}:
+interactive type_product_ord_preorder {| intro[] |}:
    sequent { <H> >- 'T in univ[i:l] } -->
    sequent { <H> >- 'Ord in preorder[i:l] } -->
    sequent { <H> >-  type_product_ord{'T;'Ord} in preorder[i:l] }
 
+doc docoff
 
-dform  type_porduct_ord_df: type_product_ord{'T;'Ord} = ('T * 'Ord)
+dform  type_product_ord_df: type_product_ord{'T;'Ord} = ('T * 'Ord)
 
 doc <:doc< @begin[doc]
 @modsection{Example: integers}
@@ -355,14 +362,10 @@ doc <:doc< @begin[doc]
 
 define int_order: int_order <--> {car= int; "<"= lambda{a.lambda{b.lt_bool{'a;'b}}};"<="= lambda{a.lambda{b.le_bool{'a;'b}}}}
 
-
+doc docoff
 
 let resource reduce +=
    <<compare{int_order ; number[n:n];number[m:n]; 'less_case; 'equal_case; 'greater_case}>>, (addrC [Subterm 1] int_order thenC compare)
-
-
-doc docoff
-
 
 let preorder_opname = opname_of_term <<preorder[i:l]>>
 let dest_preorder = dest_univ_term preorder_opname
@@ -383,6 +386,5 @@ let infer_preorder inf consts decls eqs opt_eqs defs t =
 let infer_preorder inf consts decls eqs opt_eqs defs t =
    let a, b = dest_type_product_ord t in
       inf consts decls eqs opt_eqs defs b
-
 
 let resource typeinf +=  <<type_product_ord{'T;'Ord}>>,  infer_preorder

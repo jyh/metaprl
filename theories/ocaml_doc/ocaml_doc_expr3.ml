@@ -1,7 +1,7 @@
 doc <:doc< -*- Mode: text -*-
 
    @begin[spelling]
-   btree iff log Okasaki ll deprecated rebalancing
+   btree iff log Okasaki ll rebalancing
    @end[spelling]
 
    @begin[doc]
@@ -51,7 +51,7 @@ discuss open types later in this chapter
 
 @begin[center]
 @begin[tabular,l]
-@line{{@code{type} @emph{typename} =}}
+@line{{@code{type} @emph{@misspelled{typename}} =}}
 @line{{$@space$ $@space$ $@emph{Name}_1$ @code{of} $@emph{type}_1$}}
 @line{{$@space$ $|$ $@emph{Name}_2$ @code{of} $@emph{type}_2$}}
 @line{{$@space$ $@space$ $@vdots$}}
@@ -64,7 +64,7 @@ bar (@code{|}) character.  Each case $i$ has an explicit name
 $@emph{Name}_i$, called a @emph{constructor}; and it has an optional
 value of type $@emph{type}_i$.  The constructor name must be
 capitalized.  The definition @code{of} $@emph{type}_n$ is optional; if
-ommitted there is no explicit value associated with the constructor.
+omitted there is no explicit value associated with the constructor.
 
 Let's look at a simple example using unions, where we wish to define a
 numeric type that is either a value of type @code{int} or @code{float}

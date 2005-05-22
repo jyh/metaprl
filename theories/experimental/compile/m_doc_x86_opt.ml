@@ -1,39 +1,37 @@
 doc <:doc< -*- mode: text; -*-
-   @begin[spelling]
-   max
-   @end[spelling]
-  
+   @spelling{max}
+
    @begin[doc]
    @subsection[m_doc_x86_opt]{Assembly optimization}
    @docoff
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
 >>
 extends M_doc_x86_asm
 
-doc <:doc< 
+doc <:doc<
 
 @begin[doc]
 
@@ -72,7 +70,7 @@ Two reservations at a conditional boundary can also be coalesced.  To ensure tha
 a reserve, it is always legal to introduce a reservation for $0$ bytes of storage.
 $$
 @begin[array,l]
-@line{@xrewrite2[rif]{@Jcc[J]{@it{cc}; @AsmReserve{i_1; e_1}; @AsmReserve{i_2; e_2}}; @AsmReserve{{@it{max}(i_1; i_2)}; @Jcc[J]{@it{cc}; e_1; e_2}}}}
+@line{@xrewrite2[rif]{@Jcc[J]{@it[cc]; @AsmReserve{i_1; e_1}; @AsmReserve{i_2; e_2}}; @AsmReserve{{@it{max}(i_1; i_2)}; @Jcc[J]{@it[cc]; e_1; e_2}}}}
 @line{@xrewrite[rzero]{e; @AsmReserve{0; e}}}
 @end[array]
 $$

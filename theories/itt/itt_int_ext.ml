@@ -333,7 +333,7 @@ prim_rw reduce_div_meta : (number[i:n] /@ number[j:n]) <-->
 prim_rw reduce_rem_meta : "rem"{number[i:n]; number[j:n]} <-->
    number{meta_rem[i:n, j:n]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let reduce_mul =
    reduce_mul_meta thenC (addrC [Subterm 1] reduce_meta_prod) thenC reduce_numeral
@@ -729,9 +729,13 @@ interactive_rw uni2negative1C :
 	('a in int) -->
 	(- 'a) <--> ((-1) *@ 'a)
 
+doc docoff
+
 let resource arith_unfold +=[
 	<<- 'a>>, (uni2negative1C thenC (addrC [Subterm 1] reduce_minus));
 ]
+
+doc docon
 
 interactive lt_mulPositMonoEq 'c :
    sequent { <H> >- 0 < 'c } -->

@@ -171,7 +171,7 @@ $$
    @line{@Mov{@MemRegOff{@it{tuple}; {-4}}; @it{size}'}}
    @line{@Inst2Reg[SAR]{@ImmediateNumber{2}; @Register{@it{size}'}; @it{size}}}
    @line{@Cmp[CMP]{@it{size}; @it{index}}}
-   @line{@Jcc[J]{@it{AE}; @it{bounds.error}}}
+   @line{@Jcc[J]{@it[AE]; @it{bounds.error}}}
    @line{@Mov{@MemRegRegOffMul{@it{tuple}; @it{index}; 0; 4}; v}}
    @line{@ASM{e[v]}}
    @end[array]}}}
@@ -230,7 +230,7 @@ $$
 
 During a subscript operation, shown in the @tt{sub} translation, the index is compared against the
 number of words in the block as indicated in the header word, and a bounds-check exception is raised
-if the index is out-of-bounds (denoted with the instruction $@Jcc[J]{@it{AE}; @it{bounds.error}}$).
+if the index is out-of-bounds (denoted with the instruction $@Jcc[J]{@it[AE]; @it{bounds.error}}$).
 When a block of memory is allocated in the @misspelled{@tt{alloc}} and @misspelled{@tt{closure}}
 rules, the first step reserves storage with the $@Reserve{i}$ term, and then the data is allocated
 and initialized.  Figure @reffigure[asmhelp] shows the implementation of some of

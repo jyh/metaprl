@@ -524,7 +524,7 @@ In this example the @code{finally} function is used to ensure that the
 @code{in_channel} is closed after the input file is processed, whether
 or not the @code{process} function was successful.
 
-@subsection["exception-type"]{The @code{exn} type}
+@subsection["exception-type"]{The @tt[exn] type}
 
 We close with a somewhat unorthodox use of exceptions completely
 unrelated to control flow.  Exceptions (values of the @code{exn} type)

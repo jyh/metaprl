@@ -42,3 +42,6 @@ extends Itt_list2
 
 declare var{'left; 'right}
 declare mk_bterm{'n; 'op; 'btl}
+declare depth{'bt}
+declare get_op{'bt; 'op}
+declare subterms{'bt}

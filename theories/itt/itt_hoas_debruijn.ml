@@ -74,10 +74,31 @@ define (*private*) unfold_mk_bterm:
 doc <:doc<
    @modsubsection{Basic operations on syntax}
    <<depth{'bt}>> is the ``binding depth'' (i.e. the numbere of outer bindings) of a bterm <<'bt>>.
+
+   <<get_op{'bt; 'op}>> returns the <<'bt>>'s operator, if <<'bt>> is a @tt[mk_bterm] and returns
+   <<'op>> if <<'bt>> is a variable.
+
+   <<subterms{'bt}>> computes the subterms of the bterm <<'bt>>.
 >>
 
 define unfold_depth:
    depth{'bt} <--> fix{f.lambda{bt. weak_dest_bterm{'bt; 1 +@ 'f subst{'bt; mk_term{it; nil}}; "_", "_". 0}}} 'bt
+
+define unfold_get_op:
+   get_op{'bt; 'op} <--> fix{f.lambda{bt. weak_dest_bterm{'bt;  'f subst{'bt; mk_term{'op; nil}}; op, "_". 'op}}} 'bt
+
+(*private*) define unfold_num_subterms:
+   num_subterms{'bt}
+   <-->
+   fix{f. lambda{bt. weak_dest_bterm{'bt;  'f subst{'bt; mk_term{it; nil}}; "_", btl.  length{'btl}}}} 'bt
+
+(*private*) define unfold_nth_subterm:
+   nth_subterm{'bt; 'n}
+   <-->
+   fix{f. lambda{bt. weak_dest_bterm{'bt; bind{v. 'f subst{'bt; 'v}}; "_", btl. nth{'btl; 'n}}}} 'bt
+
+define (*private*) undold_subterms:
+   subterms{'bt} <--> list_of_fun{n.nth_subterm{'bt; 'n}; num_subterms{'bt}}
 
 doc <:doc< @doc{@rewrites} >>
 
@@ -107,6 +128,31 @@ interactive_rw reduce_depth_mk_bterm {| reduce |} :
    'n in nat -->
    depth{mk_bterm{'n; 'op; 'btl}} <--> 'n
 
+interactive_rw reduce_getop_var {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   get_op{var{'l; 'r}; 'op} <--> 'op
+
+interactive_rw reduce_getop_mkbterm {| reduce |} :
+   'n in nat -->
+   get_op{mk_bterm{'n; 'op; nil}; 'op'} <--> 'op
+
+interactive_rw num_subterms_id {| reduce |} :
+   'btl in list -->
+   'n in nat -->
+   num_subterms{mk_bterm{'n; 'op; 'btl}} <--> length{'btl}
+
+interactive_rw nth_subterm_id {| reduce |} :
+   'n in nat -->
+   'btl in list -->
+   'k in Index{'btl} -->
+   nth_subterm{mk_bterm{'n; 'op; 'btl}; 'k} <--> nth{'btl; 'k}
+
+interactive_rw subterms_id {| reduce |} :
+   'btl in list -->
+   'n in nat -->
+   subterms{mk_bterm{'n; 'op; 'btl}} <--> 'btl
+
 doc docoff
 
 dform var_df : var{'l; 'r} =
@@ -117,3 +163,10 @@ dform mk_bterm_df : mk_bterm{'n; 'op; 'btl} =
 
 dform depth_df: parens :: "prec"[prec_apply] :: depth{'bt} =
    tt["D"] space slot["le"]{'bt}
+
+dform get_op_df: get_op{'bt; 'op} =
+   pushm[0] szone pushm[3] keyword["try"] hspace tt["get_op"] space slot{'bt}
+   popm hspace pushm[3] keyword["with"] tt[" Not_found ->"] hspace slot{'op} popm ezone popm
+
+dform subterms_df: "prec"[prec_apply] :: parens :: subterms{'bt} =
+   tt["subterms"] space slot["le"]{'bt}

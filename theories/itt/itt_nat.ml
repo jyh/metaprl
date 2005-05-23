@@ -234,8 +234,28 @@ interactive finiteNat_ge_elim {| ge_elim |} 'H :
    sequent { <H>; x: int; <J['x]>; 'x >= 0; 'k >= 'x+@1 >- 'C['x] }  -->
    sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
 
+interactive finiteNat_ge_elim2 {| ge_elim |} 'H :
+	[wf] sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'k in int } -->
+   sequent { <H>; t: 'x in nat{'k}; <J['t]>; 'x >= 0; 'k >= 'x+@1 >- 'C['t] }  -->
+   sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'C['t] }
+
 interactive finiteNatIsInt {| nth_hyp |} 'H :
    sequent { <H>; x: nat{'k}; <J['x]> >- 'x in int }
+
+interactive finiteNatIsNat {| nth_hyp |} 'H :
+   sequent { <H>; x: nat{'k}; <J['x]> >- 'x in nat }
+
+interactive finiteNatIsSmall {| nth_hyp |} 'H :
+   sequent { <H>; x: nat{'k}; <J['x]> >- 'x < 'k }
+
+interactive finiteNatIsInt2 {| nth_hyp |} 'H :
+   sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'x in int }
+
+interactive finiteNatIsNat2 {| nth_hyp |} 'H :
+   sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'x in nat }
+
+interactive finiteNatIsSmall2 {| nth_hyp |} 'H :
+   sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'x < 'k }
 
 doc <:doc< @docoff >>
 

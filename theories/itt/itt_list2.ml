@@ -1004,26 +1004,36 @@ interactive list_induction2 :
    sequent { <H>; h1:'A; t1:list{'A}; h2:'B; t2:list{'B};  'P['t1;'t2] >- 'P['h1::'t1;'h2::'t2] } -->
    sequent { <H>; l1:list{'A}; l2:list{'B} >- 'P['l1; 'l2] }
 
-(*
+define unfold_list_of_fun:
+   list_of_fun{k.'f['k]; 'n}
+   <-->
+   ind{'n; lambda{f.nil}; k,r. lambda{f.'f 0:: 'r lambda{k. 'f ('k +@ 1)}}} lambda{k.'f['k]}
 
-l
-define list_of_fun{k.'f[k];'n} <--> ind{'n; nil; k,l. 'f[0]:: list_of_fun{k.'f[k+1]} }
+interactive_rw reduce_list_of_fun_base {| reduce |}:
+   list_of_fun{k.'f['k]; 0} <--> nil
 
+interactive_rw reduce_list_of_fun_step {| reduce |}:
+   'n in nat -->
+   list_of_fun{k.'f['k]; 'n +@ 1} <--> 'f[0]:: list_of_fun{k.'f['k +@ 1]; 'n}
 
-interactive list_elements_id {| intro [] |} :
-   [wf] sequent { <H> >- 'l in list } -->
-   sequent { <H> >- 'l ~ list_of_fun{k.nth{'l;'k}; length{l}} }
+interactive_rw reduce_length_lof {| reduce |}:
+   'n in nat -->
+   length{list_of_fun{k.'f['k]; 'n}} <--> 'n
 
-h::t <-->
-t ~ lof {k.t@k}
-h::t
-   l@0 :: lof{k. h::t @ k+1}
-   append{l_o_f [nth[h::t;k]
-   if k = 0 then
+interactive list_of_fun_id {| intro [] |} :
+   sequent { <H> >- 'n1 = 'n2 in nat } -->
+   sequent { <H>; k: nat; 'k < 'n1 >- 'f1['k] ~ 'f2['k] } -->
+   sequent { <H> >- list_of_fun{k.'f1['k]; 'n1} ~ list_of_fun{k.'f2['k]; 'n2} }
 
-*)
+interactive_rw list_elements_id {| reduce |} :
+   'l in list -->
+   list_of_fun{k.nth{'l;'k}; length{'l}} <--> 'l
 
-
+interactive list_of_fun_wf {| intro [] |} :
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H>; k: nat; 'k < 'n >- 'f['k] in 'A } -->
+   sequent { <H> >- 'A Type } -->
+   sequent { <H> >- list_of_fun{k.'f['k]; 'n} in list{'A} }
 
 define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} -@ 'k}; 'r} }
 

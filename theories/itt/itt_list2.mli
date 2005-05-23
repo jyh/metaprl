@@ -52,6 +52,8 @@ declare tl{'l}
 
 declare tail{'l;'n}
 
+declare list_of_fun{k.'f['k]; 'n}
+
 (*
  * Boolean test if a list is empty.
  *)

@@ -107,6 +107,7 @@ MPFILES[] =
    itt_hoas_base
    itt_hoas_vector
    itt_hoas_operator
+   itt_hoas_debruijn
    itt_synt_var
    itt_synt_operator
    itt_synt_bterm

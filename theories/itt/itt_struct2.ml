@@ -419,3 +419,44 @@ let assertEqT =
 
 let assertSquashT = cutSquash 0
 let assertSquashAtT = cutSquash
+
+(* lambda-based generalization *)
+
+let genSOVarT = argfunT (fun s p ->
+   let t = concl p in
+   if not (is_squiggle_term t) then
+      raise (RefineError("Itt_subst2.genSOVarT", StringTermError("not a squiggle term", t)));
+   let a, b = dest_squiggle t in
+   let v = Lm_symbol.add s in
+   let v' = maybe_new_var_set v (free_vars_set t) in
+   let t' = mk_var_term v' in
+   let expand = ref None in
+   let map t =
+      if is_so_var_term t then
+         let vv, conts, ts = dest_so_var t in
+            if Lm_symbol.eq v vv then begin
+               begin match ts with
+                  [] -> ()
+                | [t] ->
+                     let x = maybe_new_var (Lm_symbol.add "x") [vv] in
+                        expand := Some (mk_apply_term (mk_lambda_term x (mk_so_var_term vv conts [mk_var_term x])) t)
+                | _ ->
+                     eprintf "Warning: Itt_subst2.genSOVarT: collapse/expand code not sully implemented@."
+               end;
+               List.fold_left mk_apply_term t' ts
+            end else
+               t
+      else
+         t
+   in
+   let a' = mk_lambda_term v' (map_down map a) in
+   let expand, collapse = match !expand with
+      None ->
+         idT, idT
+    | Some t ->
+         rwh (foldC t reduce_beta) 0, rwh reduce_beta 0
+   in
+   let b' = mk_lambda_term v' (map_down map b) in
+      assertT (mk_squiggle_term a' b') thenMT
+      tryT (expand thenT (hypSubstT (-1) 0 thenT collapse thenT trivialT)))
+

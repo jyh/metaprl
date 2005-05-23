@@ -41,7 +41,6 @@ extends Itt_list2
 
 declare bind{'n; x.'t['x]}
 declare subst{'n; 'bt; 't}
+declare substl{'bt; 'tl}
 
-declare iform bind{'n; 't}
-
-iform simple_bindn: bind{'n; 't} <-->  bind{'n; x.'t}
+define iform simple_bindn: bind{'n; 't} <-->  bind{'n; x.'t}

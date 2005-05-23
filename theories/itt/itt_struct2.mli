@@ -48,6 +48,8 @@ topval assertEqT  : term -> tactic
 topval assertSquashT  : term -> tactic
 topval assertSquashAtT  : int -> term -> tactic
 
+topval genSOVarT : string -> tactic
+
 (*
  * -*-
  * Local Variables:

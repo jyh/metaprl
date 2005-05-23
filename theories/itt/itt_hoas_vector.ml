@@ -54,7 +54,7 @@ open Itt_list
 doc <:doc<
    @begin[doc]
    @terms
-   The <<bind{'n; x.'t['x]}>> expression, where $n$ is a natural number,
+   The <<bind{'n; x.'t['x]}>> expression, where <<'n>> is a natural number,
    represents a ``telescope'' of $n$ nested @tt[bind] operations. Namely, it
    stands for <<bind{v_0.bind{v_1.math_ldots bind{v_n.'t['v0::'v1::math_ldots::'v_n::nil]}}}>>.
 
@@ -62,7 +62,11 @@ doc <:doc<
    binding that introduces a variable that does not occur freely in the bterm body.
 
    The <<subst{'n; 'bt; 't}>> expression represents the result of substituting term
-   $t$ for the $n+1$-st variable of the bterm $bt$.
+   <<'t>> for the <<'n+@1>>-st binding of the bterm <<'bt>>.
+
+   The <<substl{'bt; 'tl}>> expression represents the result of simultaneous substitution
+   of terms <<'tl>> (<<'tl>> must be a list) for the first <<length{'tl}>> bindings of the
+   bterm <<'bt>>.
 
    @end[doc]
 >>
@@ -75,9 +79,11 @@ define (*private*) unfold_substn:
    subst{'n; 'bt; 't} <-->
    ind{'n; lambda{bt. subst{'bt; 't}}; "_", r. lambda{bt. bind{v. 'r subst{'bt; 'v}}}} 'bt
 
-declare iform bind{'n; 't}
+define (*private*) unfold_substl:
+   substl{'bt; 'tl} <-->
+   list_ind{'tl; lambda{b.'b}; h, "_", f. lambda{b. 'f subst{'b; 'h}}} 'bt
 
-iform simple_bindn: bind{'n; 't} <-->  bind{'n; "_".'t}
+define iform simple_bindn: bind{'n; 't} <-->  bind{'n; "_".'t}
 
 doc "doc"{rewrites}
 
@@ -142,6 +148,39 @@ interactive_rw reduce_substn_bindn2 {| reduce |} :
    'n >= 'm -->
    subst{'m; bind{'n +@ 1; l.'bt['l]}; 't} <--> bind{'n; l. 'bt[insert_at{'l; 'm; 't}]}
 
+interactive_rw reduce_substl_base {| reduce |} :
+   substl{'bt; nil} <--> 'bt
+
+interactive_rw reduce_substl_step1 {| reduce |} :
+   substl{bind{v. 'bt['v]}; 'h :: 't} <--> substl{'bt['h]; 't}
+
+interactive_rw reduce_substl_step2 {| reduce |} :
+   'n in nat -->
+   substl{bind{'n +@ 1; v. 'bt['v]}; 'h :: 't} <--> substl{bind{'n; v. 'bt['h::'v]}; 't}
+
+interactive_rw reduce_substl_bindn1 {| reduce |} :
+   'l in list -->
+   substl{bind{length{'l}; v.'bt['v]}; 'l} <--> 'bt['l]
+
+interactive_rw reduce_substl_bindn2 :
+   'l in list -->
+   'n in nat -->
+   'n >= length{'l} -->
+   substl{bind{'n; v.'bt['v]}; 'l} <--> bind{'n -@ length{'l}; v. 'bt[append{'l; 'v}]}
+
+interactive_rw reduce_bsb1 {| reduce |} :
+   'n in nat -->
+   bind{'n; v. substl{bind{'n; w.'bt['w]}; 'v}} <--> bind{'n; w.'bt['w]}
+
+interactive_rw reduce_bsb2 {| reduce |} :
+   'n in nat -->
+   'm in nat -->
+   bind{'n; v. substl{bind{'n +@ 'm; w.'bt['w]}; 'v}} <--> bind{'n +@ 'm; w.'bt['w]}
+
+interactive_rw unfold_bindnsub :
+   'n in nat -->
+   bind{'n +@ 1; v. substl{'bt['v]; 'v}} <--> bind{u.bind{'n; v. substl{subst{'bt['u :: 'v]; 'u}; 'v}}}
+
 doc docoff
 
 dform bind_df : "prec"[prec_apply] :: mode[prl] :: bind{'n; x.'t} =
@@ -156,3 +195,5 @@ dform subst_df : parens :: "prec"[prec_apply] :: mode[prl] :: subst{'n; 'bt; 't}
 dform subst_df2 : parens :: "prec"[prec_apply] :: mode[html] :: mode[tex] :: subst{'n; 'bt; 't} =
    szone pushm[3] slot["lt"]{'bt} `" @" sub{slot["none"]{'n}} space slot["le"]{'t} popm ezone
 
+dform substl_df : parens :: "prec"[prec_apply] :: substl{'bt; 'tl} =
+      slot["lt"]{'bt} `"@" Nuprl_font!subl slot["le"]{'tl}

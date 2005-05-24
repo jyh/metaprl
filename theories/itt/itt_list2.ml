@@ -1029,6 +1029,31 @@ interactive_rw list_elements_id {| reduce |} :
    'l in list -->
    list_of_fun{k.nth{'l;'k}; length{'l}} <--> 'l
 
+doc <:doc<
+   @begin[doc]
+   We also provide the @conv[listIntoElementsC] for exploding a list according to the above
+   @hrefrewrite[list_elements_id] rewrite.
+   @end[doc]
+   @docoff
+>>
+let listIntoElementsC =
+   let k = Lm_symbol.add "k" in
+   fun l ->
+      let k = maybe_new_var_set k (free_vars_set l) in
+      foldC <:con< list_of_fun{$k$.nth{$l$;'$k$}; length{$l$}} >> list_elements_id
+
+doc docon
+
+interactive_rw map_list_of_fun {| reduce |} :
+   'n in nat -->
+   map{v.'f1['v]; list_of_fun{k.'f2['k]; 'n}} <--> list_of_fun{k.'f1['f2['k]]; 'n}
+
+interactive_rw nth_map_list_of_fun {| reduce |} :
+   'n in nat -->
+   'm in nat -->
+   'm < 'n -->
+   nth{list_of_fun{k.'f['k]; 'n}; 'm} <--> 'f['m]
+
 interactive list_of_fun_wf {| intro [] |} :
    sequent { <H> >- 'n in nat } -->
    sequent { <H>; k: nat; 'k < 'n >- 'f['k] in 'A } -->

@@ -97,7 +97,7 @@ define unfold_get_op:
    <-->
    fix{f. lambda{bt. weak_dest_bterm{'bt; bind{v. 'f subst{'bt; 'v}}; "_", btl. nth{'btl; 'n}}}} 'bt
 
-define (*private*) undold_subterms:
+define (*private*) unfold_subterms:
    subterms{'bt} <--> list_of_fun{n.nth_subterm{'bt; 'n}; num_subterms{'bt}}
 
 doc <:doc< @doc{@rewrites} >>
@@ -144,14 +144,15 @@ interactive_rw num_subterms_id {| reduce |} :
 
 interactive_rw nth_subterm_id {| reduce |} :
    'n in nat -->
-   'btl in list -->
-   'k in Index{'btl} -->
-   nth_subterm{mk_bterm{'n; 'op; 'btl}; 'k} <--> nth{'btl; 'k}
+   'm in nat -->
+   'k in nat -->
+   'k < 'm -->
+   nth_subterm{mk_bterm{'n; 'op; list_of_fun{x.'f['x]; 'm}}; 'k} <--> bind{'n; v. substl{'f['k]; 'v}}
 
 interactive_rw subterms_id {| reduce |} :
    'btl in list -->
    'n in nat -->
-   subterms{mk_bterm{'n; 'op; 'btl}} <--> 'btl
+   subterms{mk_bterm{'n; 'op; 'btl}} <--> map{bt. bind{'n; v. substl{'bt; 'v}}; 'btl}
 
 doc docoff
 

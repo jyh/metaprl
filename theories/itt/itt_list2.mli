@@ -199,6 +199,8 @@ topval fold_replace_nth : conv
 topval fold_length : conv
 topval fold_rev : conv
 
+topval listIntoElementsC : term -> conv
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

@@ -96,15 +96,15 @@ struct
       else raise (Invalid_argument "Variable index should be non-negative")
 end
 
+module Var =
+struct
+	type t = term
+	let equal = alpha_equal
+	let hash = Term_hash_code.hash_term
+end
+
 module Var2Index(Ring : RingSig) =
 struct
-	module Var =
-	struct
-		type t = term
-		let equal = alpha_equal
-		let hash = Hashtbl.hash
-	end
-
    module Table=Hashtbl.Make(Var)
 
    type t=int ref * int Table.t
@@ -871,6 +871,10 @@ struct
 		let equal a1 a2 =
          Lm_array_util.for_all2 Ring.equal a1 a2
 
+      (*
+       * XXX: BUG: This isn't quite right, because Lm_num has multiple
+       * representations for the same number.
+       *)
 		let hash = Hashtbl.hash
 	end
 
@@ -962,13 +966,6 @@ struct
 end
 
 module C=Constraints(IntRing)(AF)
-
-module Var =
-struct
-	type t = term
-	let equal = alpha_equal
-	let hash = Hashtbl.hash
-end
 
 (*
 let ge_normC = (addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)

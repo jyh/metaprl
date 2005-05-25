@@ -137,7 +137,7 @@ doc <:doc< @begin[doc]
    Suppose the shape of an operator << 'op >> is $[b_1;@ldots;b_n]$ ($n @ge 0$)
    and its binding depth is << 'd >>. We say << 'mbtl >> and << 'op >> have
    compatible shapes if << 'mbtl >> is a list of length << 'n >> where the
-   binding depth of the $i$-th element is $b_i+d$ (for each $i @in 1..n$).
+   binding depth of the $i$-@misspelled{th} element is $b_i+d$ (for each $i @in 1..n$).
    @end[doc]
 >>
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
@@ -281,7 +281,7 @@ dform dest_bterm_df : dest_bterm{'bt; v.'var_case; op,subterms. 'op_case } =
    `"| " pushm[3] `"make_bterm(" slot{'op} `";" slot{'subterms} `") ->" hspace slot{'op_case} popm popm ezone
 *)
 doc <:doc< @begin[doc]
-   << Vars_of{'bt} >> defines the set of vars whose depth is less than or
+   << Vars_of{'bt} >> defines the set of variables whose depth is less than or
    equal to the depth of << 'bt >>.
 @end[doc] >>
 

@@ -1,7 +1,9 @@
 doc <:doc<
    @begin[doc]
-   The @tt[Itt_hoas_debruij] module defines a mapping from de Bruijn-like
-   representation of syntax into the HOAS.
+   @module[Itt_hoas_destterm]
+   The @tt[Itt_hoas_destterm] module defines destructors for extracting
+   from a bterm the components corresponding to the de Bruijn-like representation
+   of that bterm.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -35,13 +37,30 @@ doc <:doc<
    @end[license]
 >>
 
+doc <:doc< @doc{@parents} >>
+
 extends Itt_hoas_base
 extends Itt_hoas_vector
-extends Itt_nat
-extends Itt_list2
+extends Itt_hoas_operator
+extends Itt_hoas_debruijn
 
-declare var{'left; 'right}
-declare mk_bterm{'n; 'op; 'btl}
-declare depth{'bt}
-declare get_op{'bt; 'op}
-declare subterms{'bt}
+doc docoff
+
+open Basic_tactics
+
+doc <:doc<
+   @begin[doc]
+   @terms
+   The @hrefterm[is_var] operator decides whether a bterm is a @hrefterm[var] or a
+   @hrefterm[mk_bterm]. The @hrefterm[left] and @hrefterm[right] operators compute
+   the left and right indices of a @hrefterm[var] bterm. Finally, the
+   @hrefterm[dest_bterm] operator is a generic destructor that can extract all the
+   components of the de Bruijn-like representation of a bterm.
+   @end[doc]
+>>
+declare is_var{'bt}
+declare left{'var}
+declare right{'var}
+declare dest_bterm{'bt; l,r.'var_case['l; 'r]; op,subterms. 'op_case['op; 'subterms] }
+
+doc docoff

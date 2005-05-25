@@ -342,9 +342,9 @@ doc <:doc<
    @modsection{Mutually recursive functions}
    Using records, one can define a module with mutually recursive functions.
    E.g. let us define the module with two functions:
-     foo x = if x>0 then fee (x-1) else 0
+     @code{foo x = if x>0 then fee (x-1) else 0}
    and
-     fee x = if x>0 then foo (x-1) else 1
+     @code{fee x = if x>0 then foo (x-1) else 1}
    @end[doc]
 >>
 

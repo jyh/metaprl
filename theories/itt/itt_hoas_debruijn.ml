@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[doc]
-   The @tt[Itt_hoas_debruij] module defines a mapping from deBruijn-like
+   The @tt[Itt_hoas_debruij] module defines a mapping from de Bruijn-like
    representation of syntax into the HOAS.
    @end[doc]
 
@@ -49,13 +49,13 @@ open Itt_rfun
 doc <:doc<
    @begin[doc]
    @terms
-   @modsubsection{deBruijn-like representation of syntax}
-   Our deBruijn-like representation of (bound) terms consists of two operators. <<var{'left; 'right}>>
+   @modsubsection{A de Bruijn-like representation of syntax}
+   Our de Bruijn-like representation of (bound) terms consists of two operators. <<var{'left; 'right}>>
    represents a variable bterm, whose ``left index'' is <<'left>> and whose ``right index'' is <<'right>>.
    Namely, it represent the term
    <<bind{x_1.math_ldots bind{x_left.bind{y.bind{z_1.math_ldots bind{z_right. 'v} math_ldots}}} math_ldots}>>.
 
-   The <<mk_bterm{'n; 'op; 'btl}>> represents the compound term of depth $n$. In oder words,
+   The <<mk_bterm{'n; 'op; 'btl}>> represents the compound term of depth $n$. In other words,
    <<mk_bterm{'n; 'op; (bind{'n; v.'bt_1['v]} :: math_ldots :: bind{'n; v.'bt_k['v]}::nil)}>> is
    <<bind{'n; v. mk_term{'op; ('bt_1['v] :: math_ldots :: 'bt_k['v]::nil)}}>>.
    @end[doc]
@@ -73,7 +73,7 @@ define (*private*) unfold_mk_bterm:
 
 doc <:doc<
    @modsubsection{Basic operations on syntax}
-   <<depth{'bt}>> is the ``binding depth'' (i.e. the numbere of outer bindings) of a bterm <<'bt>>.
+   <<depth{'bt}>> is the ``binding depth'' (i.e. the number of outer bindings) of a bterm <<'bt>>.
 
    <<get_op{'bt; 'op}>> returns the <<'bt>>'s operator, if <<'bt>> is a @tt[mk_bterm] and returns
    <<'op>> if <<'bt>> is a variable.

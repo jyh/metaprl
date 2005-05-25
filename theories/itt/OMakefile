@@ -108,6 +108,7 @@ MPFILES[] =
    itt_hoas_vector
    itt_hoas_debruijn
    itt_hoas_operator
+   itt_hoas_destterm
    itt_synt_var
    itt_synt_operator
    itt_synt_bterm
@@ -241,14 +242,14 @@ PRINT_THEORIES[] =
     itt_field_e
     itt_order
     itt_rat
-    itt_synt_var
-    itt_synt_operator
-    itt_synt_bterm
-    itt_synt_subst
-    itt_reflection_new
     itt_collection
     itt_pointwise
     itt_pointwise2
+    itt_hoas_base
+    itt_hoas_vector
+    itt_hoas_debruijn
+    itt_hoas_operator
+    itt_hoas_destterm
 
 TheoryDocumentInstall(itt, $(PRINT_THEORIES))
 

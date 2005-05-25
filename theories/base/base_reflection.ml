@@ -5,7 +5,7 @@ doc <:doc<
    The @tt[Base_reflection] module defines computation over bterms. In
    this module, we formalize the bterm constants and computational
    operations on them by exposing some of the system internals to the user.
-  @end[doc]
+   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -147,7 +147,7 @@ let dest_bterm_sequent_and_rename term vars =
 
 doc <:doc< @begin[doc]
    @modsection{Computational Operations on Bterms}
-   @modsubsection{If_quoted_op}
+   @modsubsection{@tt[If_quoted_op]}
 
    << if_quoted_op{'op; 'tt} >> evaluates to << 'tt >> when << 'op >> is a
    quoted bterm operator and must fail to evaluate otherwise.
@@ -159,7 +159,7 @@ doc <:doc<
    @begin[doc]
    << fake_mlrw[reduce_if_quoted_op]{
          if_quoted_op{bterm{|<H> >-
-            <:doc<@underline{op}@{
+            <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}; 'tt};
          'tt} >>
@@ -202,13 +202,13 @@ doc <:doc<
    @begin[doc]
    << fake_mlrw[reduce_ifbterm2]{
          if_bterm{bterm{|<H> >-
-            <:doc<@underline{op}@{
+            <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}; 'tt};
          <:doc<if_bterm{bterm{|<H>; <J_1> >- 't_1|};
          @~@~@~ if_bterm{bterm{|<H>; <J_2> >- 't_2|};
          @~@~@~@~@~@~ @ldots
-         @~@~@~@~@~@~@~@~@~ if_bterm{bterm{|<H>; <J_n> >- 't_n|}; 'tt} @ldots }} >>} >>
+         @~@~@~@~@~@~@~@~@~ <<if_bterm{bterm{|<H>; <J_n> >- 't_n|}; 'tt}>> @ldots }} >>} >>
    @end[doc]
    @docoff
 >>
@@ -269,7 +269,7 @@ doc <:doc<
    @begin[doc]
    << fake_mlrw[reduce_subterms2]{
          subterms{bterm{|<H> >-
-            <:doc<@underline{op}@{
+            <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}};
          <:doc<[<<bterm{|<H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>> ] >>} >>
@@ -331,12 +331,12 @@ doc <:doc<
    @begin[doc]
    << fake_mlrw[reduce_make_bterm2]{
          make_bterm{bterm{|<H> >-
-            <:doc<@underline{op}@{
+            <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 'r_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 'r_n<|H|> >>@}>>|};
                <:doc< [<<bterm{| <H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>>]>> };
          bterm{|<H> >-
-            <:doc<@underline{op}@{
+            <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|} } >>
    @end[doc]
@@ -390,11 +390,11 @@ let resource reduce +=
  *)
 
 doc <:doc< @begin[doc]
-   @modsubsection{If_same_op}
+   @modsubsection{@tt[If_same_op]}
 
    << if_same_op{'bt1; 'bt2; 'tt; 'ff} >> evaluates to << 'tt >> if << 'bt1 >>
    and << 'bt2 >> are two well-formed bterms with the same top-level operator
-   (including all the params and all the arities) and to << 'ff >> when
+   (including all the parameters and all the arities) and to << 'ff >> when
    operators are distinct. Undefined if either << 'bt1 >> or << 'bt2 >> is
    ill-formed.
    @end[doc]
@@ -465,7 +465,7 @@ let resource reduce +=
  *)
 
 doc <:doc< @begin[doc]
-   @modsubsection{If_var_bterm}
+   @modsubsection{@tt[If_var_bterm]}
 
    << if_var_bterm{'bt; 'tt; 'ff} >> evaluates to << 'tt >> when << 'bt >>
    is a well-formed bterm with a bound variable body, to << 'ff >> when
@@ -481,7 +481,7 @@ doc <:doc<
    @begin[doc]
    << fake_mlrw[reduce_if_var_bterm2]{
          if_var_bterm{bterm{|<H> >-
-            <:doc<@underline{op}@{@ldots@}>>|}; 'tt; 'ff};
+            <:doc<@underline{<<'op>>}@{@ldots@}>>|}; 'tt; 'ff};
          'ff (*<:doc< << 'ff >> >>*)} >>
    @end[doc]
    @docoff
@@ -513,7 +513,7 @@ let resource reduce +=
  *)
 
 doc <:doc< @begin[doc]
-   @modsubsection{Subst}
+   @modsubsection{Substitution}
 
    << subst{'bt; 't} >> substitutes << 't >> for the first bound variable
    of << 'bt >>.

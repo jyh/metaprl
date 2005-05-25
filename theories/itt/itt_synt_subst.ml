@@ -55,7 +55,7 @@ doc <:doc<
    @modsubsection{Make a new variable}
 
    << new_var{'bt} >> creates a new variable:
-   $$ new@_var(<<Gamma>>.t) = <<Gamma>>,x.x$$
+   $$ <<new_var{<:doc< @Gamma.t>>}>> = @Gamma,x.x$$
    @end[doc]
 >>
 define unfold_new_var: new_var{'bt} <--> var{bdepth{'bt};0}
@@ -84,8 +84,8 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Last variable}
 
-   << last_var{'bt} >> is the last variable of the term $bt$:
-   $$ new@_var(<<Gamma>>,x.t) = <<Gamma>>,x.x$$
+   << last_var{'bt} >> is the last variable of the term <<'bt>>:
+   $$ <<last_var{<:doc< @Gamma,'x.t>>}>> = @Gamma,x.x$$
    @end[doc]
 >>
 define unfold_last_var: last_var{'bt} <--> var{bdepth{'bt}-@1;0}
@@ -123,7 +123,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Add a binding variable}
 
-   $$ add@_var(<<Gamma>>, <<Delta>>.s; <<Gamma>>,x,<<Delta>>_1.x) = <<Gamma>>,x,<<Delta>>.s$$
+   $$ <<add_var{<:doc< @Gamma, @Delta.s>>; <:doc< @Gamma,x,@Delta_1.x >>}>> = @Gamma,x,@Delta.s$$
    @end[doc]
 >>
 define unfold_add_var:
@@ -176,7 +176,7 @@ doc <:doc<
    @begin[doc]
 
    Another version of @tt[add_var]:
-   $$ add@_var(<<Gamma>>.s) = <<Gamma>>,x.s$$
+   $$ <<add_var{<:doc< @Gamma.s >>}>> = @Gamma,x.s$$
    @end[doc]
 >>
 define unfold_add_new_var:
@@ -235,7 +235,7 @@ let fold_make_depth = makeFoldC << make_depth{'s;'n} >> unfold_make_depth
 doc <:doc<
    @begin[doc]
    <<add_vars_upto{'s;'t}>> adds variables to the term $s$  to match its binding depth to the term $t$:
-   $$ add@_vars@_upto(<<Gamma>>.s; <<Gamma>>,<<Delta>>.t) = <<Gamma>>,<<Delta>>.s$$
+   $$ <<add_vars_upto{<:doc< @Gamma.s>>; <:doc< @Gamma,@Delta.t>>}>> = @Gamma,@Delta.s$$
    It is undefined when <<bdepth{'t} < bdepth{'s}>>.
    @end[doc]
 >>
@@ -265,7 +265,10 @@ doc <:doc<
    @modsection{Substitution}
 
    << subst{'t;'v;'s} >> substitutes << 's >> for the variable << 'v >> of bterm << 't >>:
-   $$ subst(<<Gamma>>,x,<<Delta>>_1,<<Delta>>_2.t[x]; <<Gamma>>,x,<<Delta>>_3.x; <<Gamma>>,x,<<Delta>>_1.s[x]) = <<Gamma>>,x,<<Delta>>_1, <<Delta>>_2.t[s[x]] $$
+   $$ <<subst{<:doc< @Gamma,x,@Delta_1,@Delta_2.t[x]>>;
+              <:doc< @Gamma,x,@Delta_3.x>>;
+              <:doc< @Gamma,x,@Delta_1.s[x]>> }>>
+   = @Gamma,x,@Delta_1, @Delta_2.t[s[x]] $$
    @end[doc]
 >>
 define unfold_subst:

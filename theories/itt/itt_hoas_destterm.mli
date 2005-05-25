@@ -1,7 +1,9 @@
 doc <:doc<
    @begin[doc]
-   The @tt[Itt_hoas_debruij] module defines a mapping from de Bruijn-like
-   representation of syntax into the HOAS.
+   @module[Itt_hoas_destterm]
+   The @tt[Itt_hoas_destterm] module defines destructors for extracting
+   from a bterm the components corresponding to the de Bruijn-like representation
+   of that bterm.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -37,11 +39,11 @@ doc <:doc<
 
 extends Itt_hoas_base
 extends Itt_hoas_vector
-extends Itt_nat
-extends Itt_list2
+extends Itt_hoas_operator
+extends Itt_hoas_debruijn
 
-declare var{'left; 'right}
-declare mk_bterm{'n; 'op; 'btl}
-declare depth{'bt}
-declare get_op{'bt; 'op}
-declare subterms{'bt}
+declare left{'var}
+declare right{'var}
+declare is_var{'bt}
+declare dest_bterm{'bt; l,r.'var_case['l; 'r]; op,subterms. 'op_case['op; 'subterms] }
+

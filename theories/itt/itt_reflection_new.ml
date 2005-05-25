@@ -16,7 +16,7 @@ doc <:doc<
    on bterms act as expected, and that the syntactic operations we defined
    (such as substitution) correspond exactly to the built-in operations of
    the meta-theory. In a way, this theory establishes the bterm expressions
-   as denotions for constants of the << BTerm >> type --- this is similar
+   as denotations for constants of the << BTerm >> type --- this is similar
    to how numerals denote constants of type <<int>>.
 
    @end[doc]
@@ -63,16 +63,12 @@ extends Itt_synt_bterm
 extends Itt_synt_subst
 doc docoff
 
-
-open Dtactic
-
 open Base_reflection
 open Basic_tactics
 open Itt_nat
 open Itt_equal
 open Itt_struct
 open Itt_squash
-
 
 (************************************************************************
  * Xlist                                                                *
@@ -115,9 +111,9 @@ doc <:doc< @begin[doc]
 
    First, we define a concrete representation for operators. We will represent
    an operator by a bterm of the form
-   $bterm@{<<Gamma>>.op[quote]@{<<Delta>>_{1}.t_{1},@ldots,<<Delta>>_{n}.t_{n}@}@}$,
-   in which the length of <<Gamma>> is the binding depth of the operator, and
-   $<<Delta>>_{i}$'s are the binding variables of $t_{i}$. The operator is
+   $bterm@{@Gamma.<<'op>>[quote]@{@Delta_{1}.t_{1},@ldots,@Delta_{n}.t_{n}@}@}$,
+   in which the length of @Gamma is the binding depth of the operator, and
+   $@Delta_{i}$'s are the binding variables of $t_{i}$. The operator is
    solely defined by its binding depth, name and shape. We define the shape
    of an operator, equality of two operators and binding depth using operations
    from @hrefmodule[Itt_synt_operator] and @hrefmodule[Itt_synt_bterm].
@@ -164,9 +160,9 @@ doc <:doc< @begin[doc]
    $bterm@{@ldots@}$ to elements of the type <<BTerm>> defined in
    @hrefmodule[Itt_synt_bterm].
 
-   @modsubsection{Var}
+   @modsubsection{<<Var>>}
 
-   In the case of a variable, $bterm@{<<Gamma>>,x,<<Delta>>.x@}$ evaluates
+   In the case of a variable, $bterm@{@Gamma,x,@Delta.x@}$ evaluates
    to <<var{length{Gamma}; length{Delta}}>>.
 @end[doc] >>
 

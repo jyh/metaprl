@@ -38,7 +38,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{parents} >>
+doc <:doc< @doc{@parents} >>
 extends Itt_nat
 extends Itt_list2
 doc docoff

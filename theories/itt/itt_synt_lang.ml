@@ -4,7 +4,8 @@ doc <:doc<
 
    The @tt[Itt_synt_lang]  module defines a type of syntactic terms that are built with a fixed list of operators.
 
-   If $ops$ is a list of operators, then <<Lang{'ops}>> is a subtype of type <<BTerm>> that contains all terms built with operators from the list $ops$.
+   If <<'ops>> is a list of operators, then <<Lang{'ops}>> is a subtype of type <<BTerm>> that contains all terms built
+   with operators from the list <<'ops>>.
    @end[doc]
 >>
 
@@ -24,14 +25,12 @@ doc docoff
 
 open Basic_tactics
 
-
 doc <:doc<
    @begin[doc]
      We define the type <<Lang{'ops}>> as the recursive type.
 
    @end[doc]
 >>
-
 
 define unfold_dom: dom{'ops;'T} <--> Var + (i:Index{'ops} * depth : nat * { bts: list{BTerm isect 'T} | compatible_shapes{inject{nth{'ops;'i};'depth};'bts} })
 

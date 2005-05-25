@@ -2,7 +2,7 @@ doc <:doc<
    @begin[doc]
    @module[Itt_synt_var]
     Our simple theory of syntax has three core parts.
-    The first part @hrefmodule[Itt_synt_var] defines a type of variables <<Var>> in a deBruijn-like style @cite[deb72].
+    The first part @hrefmodule[Itt_synt_var] defines a type of variables <<Var>> in a de Bruijn-like style @cite[deb72].
     The second part @hrefmodule[Itt_synt_operators] defines a type of operators @tt[BOperator].
     The third part @hrefmodule[Itt_synt_bterm] defines a type of terms @tt[BTerm].
    @end[doc]
@@ -53,7 +53,7 @@ doc <:doc< @begin[doc]
    <<Var>> consists of terms of the form <<var{'i;'j}>>, where <<'i>> and <<'j>>
    are arbitrary natural numbers, and <<var{it;it}>> is a new constructor.
    The expression <<var{'i;'j}>> is meant to represent the bterm
-   $bterm(<<Gamma>>; x; <<Delta>>. x)$ where $|<<Gamma>>|=i$ and $|<<Delta>>|=j$.
+   $bterm(@Gamma; x; @Delta. x)$ where $|@Gamma|=i$ and $|@Delta|=j$.
 @end[doc] >>
 
 declare Var
@@ -94,7 +94,7 @@ define unfold_var: Var{'n} <--> {v:Var| depth{'v} = 'n in int }
 doc <:doc< @begin[doc]
    @modsubsection{Equality}
    Variables <<var{'i;'j}>> and <<var{'i;'k}>> represent the same binding
-   << 'x >> in $bterm(<<Gamma>>; x; <<Delta>>. t[x])$ where $|<<Gamma>>|=i$.
+   << 'x >> in $bterm(@Gamma; x; @Delta. t[x])$ where $|@Gamma|=i$.
    We define:
 @end[doc] >>
 

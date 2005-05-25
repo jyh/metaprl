@@ -69,7 +69,6 @@ doc docoff
 open Basic_tactics
 open Itt_struct
 
-
 doc <:doc<
    @begin[doc]
    @modsection{Operators}
@@ -85,7 +84,7 @@ define unfold_Operators: Operators[i:l]{'T} <-->
 doc <:doc<
    @begin[doc]
     We will interpret <<'F>> from <<Operators[i:l]{'T}>> as the collection of
-    operators $'F^f('op)$ for all <<'op>> from <<'F^car>>
+    operators <<'F^f('op)>> for all <<'op>> from <<'F^car>>
     with the domain <<'F^car('op)>>.
    @end[doc]
 >>

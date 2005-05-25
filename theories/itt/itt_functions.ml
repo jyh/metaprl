@@ -1,4 +1,5 @@
 doc <:doc<
+   @spelling{reversibility}
    @begin[doc]
    @module[Itt_functions]
 
@@ -35,7 +36,7 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Authors:
-    Alexei Kopylov @email{kopylov@cs.caltech.edu}
+   Alexei Kopylov @email{kopylov@cs.caltech.edu}
 
    @end[license]
 >>

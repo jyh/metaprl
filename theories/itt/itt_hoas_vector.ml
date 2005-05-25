@@ -36,7 +36,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{parents} >>
+doc <:doc< @doc{@parents} >>
 extends Itt_hoas_base
 extends Itt_nat
 extends Itt_list2
@@ -62,7 +62,7 @@ doc <:doc<
    binding that introduces a variable that does not occur freely in the bterm body.
 
    The <<subst{'n; 'bt; 't}>> expression represents the result of substituting term
-   <<'t>> for the <<'n+@1>>-st binding of the bterm <<'bt>>.
+   <<'t>> for the <<'n+@1>>-@misspelled{st} binding of the bterm <<'bt>>.
 
    The <<substl{'bt; 'tl}>> expression represents the result of simultaneous substitution
    of terms <<'tl>> (<<'tl>> must be a list) for the first <<length{'tl}>> bindings of the

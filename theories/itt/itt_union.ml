@@ -144,9 +144,9 @@ dform inr_df : except_mode[src] :: parens :: "prec"[prec_inl] :: inr{'a} =
    `"inr" " " slot{'a}
 
 dform decide_df : except_mode[src] :: decide{'x; y. 'a; z. 'b} =
-   szone pushm[1] pushm[3] `"match" " " slot{'x} " " `"with" hspace
+   pushm[1] szone pushm[3] keyword["match"] " " slot{'x} " " keyword["with"] hspace
    pushm[3] `"inl " 'y `" -> " slot{'a} popm popm hspace
-   `"| " pushm[3] `"inr " 'z `" -> " slot{'b} popm popm ezone
+   `"| " pushm[3] `"inr " 'z `" -> " slot{'b} popm ezone popm
 
 (************************************************************************
  * RULES                                                                *

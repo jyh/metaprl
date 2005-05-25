@@ -36,7 +36,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{parents} >>
+doc <:doc< @doc{@parents} >>
 extends Base_theory
 
 extends Itt_fun
@@ -54,7 +54,7 @@ open Itt_rfun
 doc <:doc<
    @begin[doc]
    @terms
-   The <<bind{x.'t['x]}>> expression represents a ``bound'' term (``bterm'')
+   The expression <<bind{x.'t['x]}>> represents a ``bound'' term (``bterm'')
    with a potentially free variable $x$. In order for it to be well-formed,
    $t$ must be a ``substitution function''.
 
@@ -114,7 +114,7 @@ dform mk_term_df : mk_term{'op; 'subterms} =
    pushm[0] szone pushm[3] `"T(" slot{'op} `";" hspace slot{'subterms} popm `")" ezone popm
 
 dform wdt_df : weak_dest_bterm{'bt; 'bind_case; op, sbt. 'mkterm_case} =
-   szone pushm[1] pushm[3] `"match" " " slot{'bt} " " `"with" hspace
-   pushm[3] `"B _ -> " slot{'bind_case} popm popm hspace
-   `"| " pushm[3] mk_term{'op; 'sbt} `" -> " slot{'mkterm_case} popm popm ezone
+   pushm[0] szone szone pushm[3] keyword["match"] hspace slot{'bt} popm hspace ezone pushm[1] pushm[3]
+   keyword["with"] hspace pushm[3] `"B _ -> " slot{'bind_case} popm popm hspace
+   `"| " pushm[3] mk_term{'op; 'sbt} `" -> " slot{'mkterm_case} popm popm ezone popm
 

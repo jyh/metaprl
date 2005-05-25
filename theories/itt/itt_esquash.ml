@@ -58,7 +58,7 @@ extends Itt_void
 extends Itt_equal
 extends Itt_squash
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Refiner.Refiner.RefineError
 open Tactic_type
@@ -78,7 +78,7 @@ doc <:doc<
    @end[doc]
 >>
 declare esquash{'P}
-doc <:doc< @docoff >>
+doc docoff
 
 dform esquash_df : except_mode[src] :: esquash{'P} =
    Nuprl_font!esquash{'P}
@@ -96,8 +96,6 @@ prim esquash_type {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'P} } -->
    sequent { <H> >- "type"{esquash{'P}} } =
    it
-
-docoff
 
 doc <:doc<
    @begin[doc]

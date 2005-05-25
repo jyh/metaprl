@@ -1306,7 +1306,7 @@ P	p660	String rename_rcrd_reduce
 O	o660	rewrite p660
 P	p661	MToken c
 O	o661	rcrd p661
-VItt_labels!x	x	x\\ \\
+NItt_labels!x	x	x Itt_labels
 NItt_labels!y	y	y Itt_labels
 NItt_labels!z	z	z Itt_labels
 P	p383	Number 4666
@@ -1316,7 +1316,8 @@ B	b433	t433
 T	t434	o b b433
 B	b434	t434
 P	p446	String Refiner
-B	b661	x
+Vx xx  x\\ \\
+B	b661	xx
 T	t661	o661 b661 b507
 B	b662	t661
 T	t662	o507 b662

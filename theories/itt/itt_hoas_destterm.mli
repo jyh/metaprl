@@ -42,8 +42,6 @@ extends Itt_hoas_vector
 extends Itt_hoas_operator
 extends Itt_hoas_debruijn
 
-declare left{'var}
-declare right{'var}
 declare is_var{'bt}
 declare dest_bterm{'bt; l,r.'var_case['l; 'r]; op,subterms. 'op_case['op; 'subterms] }
 

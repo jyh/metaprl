@@ -44,6 +44,7 @@ extends Itt_list2
 doc docoff
 
 open Basic_tactics
+open Itt_struct
 
 (************************************************************************
  * TERMS                                                                *
@@ -110,11 +111,17 @@ prim is_same_op_eq {| intro [AutoMustComplete] |} :
    = it
 
 prim is_same_op_rev_eq :
+   [wf] sequent { <H> >- 'op_1 in Operator } -->
+   [wf] sequent { <H> >- 'op_2 in Operator } -->
    sequent { <H> >- "assert"{is_same_op{'op_1;'op_2}} } -->
-   sequent { <H> >- 'op_1 in Operator } -->
-   sequent { <H> >- 'op_2 in Operator } -->
    sequent { <H> >- 'op_1 = 'op_2 in Operator }
    = it
+
+interactive is_same_op_elim {| elim [ThinOption thinT] |} 'H :
+   [wf] sequent { <H>; x: "assert"{is_same_op{'op_1;'op_2}}; <J['x]> >- 'op_1 in Operator } -->
+   [wf] sequent { <H>; x: "assert"{is_same_op{'op_1;'op_2}}; <J['x]> >- 'op_2 in Operator } -->
+   [main] sequent { <H>; x: "assert"{is_same_op{'op_1;'op_2}}; 'op_1 = 'op_2 in Operator; <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: "assert"{is_same_op{'op_1;'op_2}}; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]

@@ -52,15 +52,75 @@ doc <:doc<
    @begin[doc]
    @terms
    The @hrefterm[is_var] operator decides whether a bterm is a @hrefterm[var] or a
-   @hrefterm[mk_bterm]. The @hrefterm[left] and @hrefterm[right] operators compute
-   the left and right indices of a @hrefterm[var] bterm. Finally, the
-   @hrefterm[dest_bterm] operator is a generic destructor that can extract all the
+   @hrefterm[mk_bterm]. In order to implement the @refterm[is_var] operator we
+   assume that there exist at least two distinct operators (for any concrete
+   notion of operators this would, of course, be trivially derivable but we would
+   like to keep the operators type abstract at this point).
+
+   The @hrefterm[dest_bterm] operator is a generic destructor that can extract all the
    components of the de Bruijn-like representation of a bterm.
    @end[doc]
 >>
-declare is_var{'bt}
-declare left{'var}
-declare right{'var}
-declare dest_bterm{'bt; l,r.'var_case['l; 'r]; op,subterms. 'op_case['op; 'subterms] }
+declare op1
+declare op2
+
+define (*private*) unfold_isvar:
+   is_var{'bt} <--> bnot{is_same_op{get_op{'bt; op1}; get_op{'bt; op2}}}
+
+define (*private*) unfold_dest_bterm:
+   dest_bterm{'bt; l,r.'var_case['l; 'r]; depth,op,subterms. 'op_case['depth; 'op; 'subterms] }
+   <-->
+   ifthenelse{is_var{'bt}; 'var_case[left{'bt}; right{'bt}]; 'op_case[depth{'bt}; get_op{'bt; it}; subterms{'bt}]}
+
+doc <:doc< @doc{@rules} >>
+
+prim op1_op {| intro [] |}:
+   sequent { <H> >- op1 in Operator }
+   = it
+
+prim op2_op {| intro [] |}:
+   sequent { <H> >- op2 in Operator }
+   = it
+
+doc <:doc< @doc{@rewrites} >>
+
+prim_rw ops_distict {| reduce |}:
+   is_same_op{op1; op2} <--> bfalse
+
+interactive_rw same_op_id {| reduce |} :
+   'op in Operator -->
+   is_same_op{'op; 'op} <--> btrue
+
+interactive_rw is_var_var {| reduce |} :
+   'm in nat -->
+   'n in nat -->
+   is_var{var{'m; 'n}} <--> btrue
+
+interactive_rw is_var_mk_bterm {| reduce |} :
+   'op in Operator -->
+   'n in nat -->
+   is_var{mk_bterm{'n; 'op; 'btl}} <--> bfalse
+
+interactive_rw dest_bterm_var {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   dest_bterm{var{'l; 'r}; l,r.'var_case['l; 'r]; d,o,s. 'op_case['d; 'o; 's] } <--> 'var_case['l; 'r]
+
+interactive_rw dest_bterm_mk_bterm {| reduce |} :
+   'n in nat -->
+   'op in Operator -->
+   'subterms in list -->
+   dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; depth,op,subterms. 'op_case['depth; 'op; 'subterms] }
+   <-->
+   'op_case['n; 'op; map{bt. bind{'n; v. substl{'bt; 'v}}; 'subterms}]
 
 doc docoff
+
+dform is_var_df : is_var{'bt} =
+   pushm[3] tt["is_var"] `"(" slot{'bt} `")" popm
+
+dform dest_bterm_df : dest_bterm{'bt; l,r.'var_case; d,o,sb. 'op_case } =
+   pushm[0] szone szone pushm[3] keyword["match"] hspace slot{'bt} popm hspace ezone pushm[1] pushm[3]
+   keyword["with"] hspace pushm[3] var{'l; 'r} `" -> " slot{'var_case} popm popm hspace
+   `"| " pushm[3] mk_bterm{'d; 'o; 'sb} `" -> " slot{'op_case} popm popm ezone popm
+

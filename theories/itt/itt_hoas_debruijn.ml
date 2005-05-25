@@ -75,16 +75,25 @@ doc <:doc<
    @modsubsection{Basic operations on syntax}
    <<depth{'bt}>> is the ``binding depth'' (i.e. the number of outer bindings) of a bterm <<'bt>>.
 
+   <<left{'v}>> and <<right{'v}>> provide a way of computing the $l$ and $r$ indeces of a variable <<var{'l; 'r}>>.
+
    <<get_op{'bt; 'op}>> returns the <<'bt>>'s operator, if <<'bt>> is a @tt[mk_bterm] and returns
    <<'op>> if <<'bt>> is a variable.
 
    <<subterms{'bt}>> computes the subterms of the bterm <<'bt>>.
 >>
 
-define unfold_depth:
+define (*private*) unfold_depth:
    depth{'bt} <--> fix{f.lambda{bt. weak_dest_bterm{'bt; 1 +@ 'f subst{'bt; mk_term{it; nil}}; "_", "_". 0}}} 'bt
 
-define unfold_get_op:
+define (*private*) unfold_left:
+   left{'bt} <-->
+   fix{f.lambda{bt. lambda{l. weak_dest_bterm{'bt; 'f subst{'bt; mk_term{'l; nil}} ('l +@ 1); op, "_". 'op}}}} 'bt 0
+
+define (*private*) unfold_right:
+   right{'bt} <--> depth{'bt} -@ left{'bt} -@ 1
+
+define (*private*) unfold_get_op:
    get_op{'bt; 'op} <--> fix{f.lambda{bt. weak_dest_bterm{'bt;  'f subst{'bt; mk_term{'op; nil}}; op, "_". 'op}}} 'bt
 
 (*private*) define unfold_num_subterms:
@@ -135,7 +144,7 @@ interactive_rw reduce_getop_var {| reduce |} :
 
 interactive_rw reduce_getop_mkbterm {| reduce |} :
    'n in nat -->
-   get_op{mk_bterm{'n; 'op; nil}; 'op'} <--> 'op
+   get_op{mk_bterm{'n; 'op; 'btl}; 'op'} <--> 'op
 
 interactive_rw num_subterms_id {| reduce |} :
    'btl in list -->
@@ -154,6 +163,16 @@ interactive_rw subterms_id {| reduce |} :
    'n in nat -->
    subterms{mk_bterm{'n; 'op; 'btl}} <--> map{bt. bind{'n; v. substl{'bt; 'v}}; 'btl}
 
+interactive_rw left_id {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   left{var{'l; 'r}} <--> 'l
+
+interactive_rw right_id {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   right{var{'l; 'r}} <--> 'r
+
 doc docoff
 
 dform var_df : var{'l; 'r} =
@@ -164,6 +183,12 @@ dform mk_bterm_df : mk_bterm{'n; 'op; 'btl} =
 
 dform depth_df: parens :: "prec"[prec_apply] :: depth{'bt} =
    tt["D"] space slot["le"]{'bt}
+
+dform depth_df: parens :: "prec"[prec_apply] :: left{'bt} =
+   tt["l"] space slot["le"]{'bt}
+
+dform depth_df: parens :: "prec"[prec_apply] :: right{'bt} =
+   tt["r"] space slot["le"]{'bt}
 
 dform get_op_df: get_op{'bt; 'op} =
    pushm[0] szone pushm[3] keyword["try"] hspace tt["get_op"] space slot{'bt}

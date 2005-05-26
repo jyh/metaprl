@@ -186,6 +186,13 @@ interactive tunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
                        u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
+interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'f :
+   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'f 'x in 'A } -->
+   [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'x in 'B['f 'x] } -->
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 'C['z] } -->
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
+
+
 interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 'f :
    [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'f 'z = 'w in 'A } -->

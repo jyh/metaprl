@@ -1,4 +1,4 @@
-doc <:doc<
+ doc <:doc<
    @begin[doc]
    @module[Itt_hoas_vector]
    The @tt[Itt_hoas_vector] module defines the ``vector bindings''

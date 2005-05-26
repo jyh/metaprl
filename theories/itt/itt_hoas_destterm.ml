@@ -68,9 +68,9 @@ define (*private*) unfold_isvar:
    is_var{'bt} <--> bnot{is_same_op{get_op{'bt; op1}; get_op{'bt; op2}}}
 
 define (*private*) unfold_dest_bterm:
-   dest_bterm{'bt; l,r.'var_case['l; 'r]; depth,op,subterms. 'op_case['depth; 'op; 'subterms] }
+   dest_bterm{'bt; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
    <-->
-   ifthenelse{is_var{'bt}; 'var_case[left{'bt}; right{'bt}]; 'op_case[depth{'bt}; get_op{'bt; it}; subterms{'bt}]}
+   ifthenelse{is_var{'bt}; 'var_case[left{'bt}; right{'bt}]; 'op_case[bdepth{'bt}; get_op{'bt; it}; subterms{'bt}]}
 
 doc <:doc< @doc{@rules} >>
 
@@ -110,7 +110,7 @@ interactive_rw dest_bterm_mk_bterm {| reduce |} :
    'n in nat -->
    'op in Operator -->
    'subterms in list -->
-   dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; depth,op,subterms. 'op_case['depth; 'op; 'subterms] }
+   dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
    <-->
    'op_case['n; 'op; map{bt. bind{'n; v. substl{'bt; 'v}}; 'subterms}]
 

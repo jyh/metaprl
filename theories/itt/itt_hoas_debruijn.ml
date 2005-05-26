@@ -73,7 +73,7 @@ define (*private*) unfold_mk_bterm:
 
 doc <:doc<
    @modsubsection{Basic operations on syntax}
-   <<depth{'bt}>> is the ``binding depth'' (i.e. the number of outer bindings) of a bterm <<'bt>>.
+   <<bdepth{'bt}>> is the ``binding depth'' (i.e. the number of outer bindings) of a bterm <<'bt>>.
 
    <<left{'v}>> and <<right{'v}>> provide a way of computing the $l$ and $r$ indeces of a variable <<var{'l; 'r}>>.
 
@@ -83,18 +83,23 @@ doc <:doc<
    <<subterms{'bt}>> computes the subterms of the bterm <<'bt>>.
 >>
 
-define (*private*) unfold_depth:
-   depth{'bt} <--> fix{f.lambda{bt. weak_dest_bterm{'bt; 1 +@ 'f subst{'bt; mk_term{it; nil}}; "_", "_". 0}}} 'bt
+define (*private*) unfold_bdepth:
+   bdepth{'bt} <--> fix{f.lambda{bt. weak_dest_bterm{'bt; 1 +@ 'f subst{'bt; mk_term{it; nil}}; "_", "_". 0}}} 'bt
 
 define (*private*) unfold_left:
    left{'bt} <-->
    fix{f.lambda{bt. lambda{l. weak_dest_bterm{'bt; 'f subst{'bt; mk_term{'l; nil}} ('l +@ 1); op, "_". 'op}}}} 'bt 0
 
 define (*private*) unfold_right:
-   right{'bt} <--> depth{'bt} -@ left{'bt} -@ 1
+   right{'bt} <--> bdepth{'bt} -@ left{'bt} -@ 1
 
 define (*private*) unfold_get_op:
    get_op{'bt; 'op} <--> fix{f.lambda{bt. weak_dest_bterm{'bt;  'f subst{'bt; mk_term{'op; nil}}; op, "_". 'op}}} 'bt
+
+declare not_found
+
+define iform unfold_get_op1:
+   get_op{'bt} <--> get_op{'bt; not_found}
 
 (*private*) define unfold_num_subterms:
    num_subterms{'bt}
@@ -122,20 +127,20 @@ interactive_rw reduce_mk_bterm_empty {| reduce |}:
    'n in nat -->
    mk_bterm{'n; 'op; nil} <--> bind{'n; mk_term{'op; nil}}
 
-interactive_rw reduce_depth_mk_term {| reduce |}:
-   depth{mk_term{'op; 'btl}} <--> 0
+interactive_rw reduce_bdepth_mk_term {| reduce |}:
+   bdepth{mk_term{'op; 'btl}} <--> 0
 
-interactive_rw reduce_depth_bind {| reduce |} :
-   depth{bind{v.'t['v]}} <--> 1 +@ depth{'t[mk_term{it; nil}]}
+interactive_rw reduce_bdepth_bind {| reduce |} :
+   bdepth{bind{v.'t['v]}} <--> 1 +@ bdepth{'t[mk_term{it; nil}]}
 
-interactive_rw reduce_depth_var {| reduce |} :
+interactive_rw reduce_bdepth_var {| reduce |} :
    'l in nat -->
    'r in nat -->
-   depth{var{'l; 'r}} <--> 'l +@ 'r +@ 1
+   bdepth{var{'l; 'r}} <--> 'l +@ 'r +@ 1
 
-interactive_rw reduce_depth_mk_bterm {| reduce |} :
+interactive_rw reduce_bdepth_mk_bterm {| reduce |} :
    'n in nat -->
-   depth{mk_bterm{'n; 'op; 'btl}} <--> 'n
+   bdepth{mk_bterm{'n; 'op; 'btl}} <--> 'n
 
 interactive_rw reduce_getop_var {| reduce |} :
    'l in nat -->
@@ -181,13 +186,13 @@ dform var_df : var{'l; 'r} =
 dform mk_bterm_df : mk_bterm{'n; 'op; 'btl} =
    szone pushm[3] tt["mk_bterm"] `"(" slot{'n} `";" hspace slot{'op} `";" hspace slot{'btl} `")" popm ezone
 
-dform depth_df: parens :: "prec"[prec_apply] :: depth{'bt} =
+dform bdepth_df: parens :: "prec"[prec_apply] :: bdepth{'bt} =
    tt["D"] space slot["le"]{'bt}
 
-dform depth_df: parens :: "prec"[prec_apply] :: left{'bt} =
+dform bdepth_df: parens :: "prec"[prec_apply] :: left{'bt} =
    tt["l"] space slot["le"]{'bt}
 
-dform depth_df: parens :: "prec"[prec_apply] :: right{'bt} =
+dform bdepth_df: parens :: "prec"[prec_apply] :: right{'bt} =
    tt["r"] space slot["le"]{'bt}
 
 dform get_op_df: get_op{'bt; 'op} =

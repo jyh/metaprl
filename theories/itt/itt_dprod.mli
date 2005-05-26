@@ -49,6 +49,8 @@ declare prod{'A; 'B}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
 
+define iform unfold_spread3:  spread{'e; u1,u2,u3. 'b['u1; 'u2; 'u3]} <-->  spread{'e; u1,v. spread{'v; u2,u3. 'b['u1; 'u2; 'u3]}}
+
 define unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
 define unfoldSnd : snd{'e} <--> spread{'e; u, v. 'v}
 

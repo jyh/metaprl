@@ -2353,7 +2353,7 @@ P	p922	String compound
 O	o922	comment_string p922
 T	t922	o922
 B	b923	t922
-P	p923	String depth
+P	p923	String bdepth
 O	o923	comment_string p923
 T	t923	o923
 B	b924	t923
@@ -2814,8 +2814,8 @@ T	t1129	o856 b1128
 B	b1129	t1129
 T	t1130	o5 b1129
 B	b1130	t1130
-NItt_hoas_debruijn!depth	depth	depth Itt_hoas_debruijn
-O	o1130	depth
+NItt_hoas_debruijn!bdepth	bdepth	bdepth Itt_hoas_debruijn
+O	o1130	bdepth
 Vbt	bt	bt\\ \\
 B	b1131	bt
 T	t1131	o1130 b1131
@@ -2957,7 +2957,7 @@ T	t1191	o1130
 B	b1191	t1191
 T	t1192	o1085 b1132 b1191 b26 b1089 b1087
 B	b1192	t1192
-P	p1192	String unfold_depth
+P	p1192	String unfold_bdepth
 O	o1192	term_def p1192
 NItt_rfun!fix	fix	fix Itt_rfun
 O	o1193	fix
@@ -3099,13 +3099,13 @@ P	p1283	String "hypSubstT (-1) 0 ttca"
 O	o1283	ext_rule p1283
 P	p1284	String ""
 O	o1284	tactic_arg p1284
-P	p1295	String reduce_depth_mk_term
+P	p1295	String reduce_bdepth_mk_term
 O	o1295	rewrite p1295
 T	t1295	o1130 b1225
 B	b1295	t1295
-P	p1296	String "byDefsT [unfold_depth; reduce_fix; reduceC]"
+P	p1296	String "byDefsT [unfold_bdepth; reduce_fix; reduceC]"
 O	o1296	ext_rule p1296
-P	p1307	String reduce_depth_bind
+P	p1307	String reduce_bdepth_bind
 O	o1307	rewrite p1307
 Vt	t1307	t\\ \\ t933
 B	b1307	t1307 v
@@ -3119,9 +3119,9 @@ T	t1311	o1130 b1310
 B	b1311	t1311
 T	t1312	o1195 b1196 b1311
 B	b1312	t1312
-P	p1312	String "rw (addrC [1] unfold_depth) 0 thenT byDefsT [reduce_fix; reduceC; unfold_depth]"
+P	p1312	String "rw (addrC [1] unfold_bdepth) 0 thenT byDefsT [reduce_fix; reduceC; unfold_bdepth]"
 O	o1312	ext_rule p1312
-P	p1324	String reduce_depth_var
+P	p1324	String reduce_bdepth_var
 O	o1324	cond_rewrite p1324
 Vl	l	l\\ \\
 B	b1324	l
@@ -3257,7 +3257,7 @@ S	s1397	t1231\\ h h1271 h1395 h1341 h1396\\ t1397
 B	b1397	s1397
 P	p1401	String "int_sqequal thenT omegaT ttca"
 O	o1401	ext_rule p1401
-P	p1413	String reduce_depth_mk_bterm
+P	p1413	String reduce_bdepth_mk_bterm
 O	o1413	cond_rewrite p1413
 T	t1414	o1130 b918
 B	b1414	t1414
@@ -5188,7 +5188,7 @@ B	b1647	t1633
 P	p1647	Number 6080
 P	p1648	Number 6173
 O	o1648	location p1647 p1648
-P	p1528	String depth_df
+P	p1528	String bdepth_df
 O	o1528	dform p1528
 NSummary!prec_df	prec_df	prec_df Summary
 P	p1529	String prec_apply

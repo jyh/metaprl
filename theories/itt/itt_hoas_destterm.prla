@@ -2796,11 +2796,11 @@ B	b1123	t1123
 P	p1123	Number 2287
 P	p1124	Number 2543
 O	o1124	location p1123 p1124
-P	p1125	Var depth
+P	p1125	Var bdepth
 O	o1125	var p1125
 T	t1125	o1125
 Vop_case	op_case1125	op_case\\ \\ t1125 t8 t9
-B	b1125	op_case1125 depth op subterms
+B	b1125	op_case1125 bdepth op subterms
 T	t1126	o5 b5 b7 b1125
 B	b1126	t1126
 T	t1127	o b13 b16
@@ -2827,8 +2827,8 @@ O	o1135	right
 T	t1135	o1135 b5
 Vvar_case	var_case1135	var_case\\ \\ t1134 t1135
 B	b1135	var_case1135
-NItt_hoas_debruijn!depth	depth	depth Itt_hoas_debruijn
-O	o1136	depth
+NItt_hoas_debruijn!bdepth	bdepth	bdepth Itt_hoas_debruijn
+O	o1136	bdepth
 T	t1136	o1136 b5
 NBase_trivial	Base_trivial	Base_trivial NIL
 NBase_trivial!it	it	it Base_trivial
@@ -3321,7 +3321,7 @@ B	b1323	subterms1322
 T	t1323	o1256 b1239 b1213 b1323
 B	b1324	t1323
 Vop_case	op_case1324	op_case\\ H\\ t1125 t8 t9
-B	b1325	op_case1324 depth op subterms
+B	b1325	op_case1324 bdepth op subterms
 T	t1325	o5 b1324 b1288 b1325
 B	b1326	t1325
 T	t1326	o1316 b1239 b1320

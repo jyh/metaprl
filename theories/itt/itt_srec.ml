@@ -100,9 +100,9 @@ dform srec_df : except_mode[src] :: srec{T. 'B} =
 
 dform srecind_df : except_mode[src] :: srecind{'a; p, h. 'g} =
    szone pushm[3]
-   `"srecind(" slot{'a} `";" hspace
+   tt["srecind"] `"(" slot{'a} `";" hspace
    slot{'p} `"," slot{'h} `"." hspace
-   slot{'g}
+   slot{'g} `")"
    popm ezone
 
 (************************************************************************
@@ -149,10 +149,10 @@ prim srecEquality {| intro [] |} :
    sequent { <H> >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[i:l] } =
    it
 
-prim srecType {| intro [] |} univ[i:l] :
+interactive srecType {| intro [] |} univ[i:l] :
+   [wf] sequent { <H>; T: univ[i:l] >- 'B['T] in univ[i:l] } -->
    [wf] sequent { <H>; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B['S1]; 'B['S2]} } -->
-   sequent { <H> >- "type"{srec{T. 'B['T]}} } =
-   it
+   sequent { <H> >- "type"{srec{T. 'B['T]}} }
 
 doc <:doc<
    @docoff

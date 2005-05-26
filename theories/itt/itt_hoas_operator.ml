@@ -95,6 +95,16 @@ interactive op_type {| intro [] |}:
 
 doc <:doc<
    @begin[doc]
+   Equal operators must be identical.
+   @end[doc]
+>>
+prim op_sqeq {| nth_hyp |} :
+   sequent { <H> >- 'op1 = 'op2 in Operator } -->
+   sequent { <H> >- 'op1 ~ 'op2 }
+   = it
+
+doc <:doc<
+   @begin[doc]
    @tt[is_same_op] decides the equality of << Operator >>.
    @end[doc]
 >>

@@ -141,7 +141,7 @@ define unfold_Closure: Closure{'F; 'T} <-->
 let fold_Closure = makeFoldC <<Closure{'F; 'T}>>  unfold_Closure
 
 interactive closure_wf {| intro[] |} univ[i:l]:
-   sequent{ <H> >- "type"{'T} } -->
+   sequent{ <H> >- 'T in univ[i:l] } -->
    sequent{ <H> >- 'F in Operators[i:l]{'T} } -->
    sequent{ <H> >- "type"{Closure{'F;'T}} }
 
@@ -160,7 +160,7 @@ interactive closure_elim {| elim[] |} 'H univ[i:l]:
    sequent{ <H>; x : Closure{'F;'T}; <J> >- 'P['x]}
 
 interactive closure_intro {| intro[] |} univ[i:l]:
-   [wf] sequent{ <H> >- "type"{'T} } -->
+   [wf] sequent{ <H> >- 'T in univ[i:l] } -->
    [wf] sequent{ <H> >- 'F in Operators[i:l]{'T} } -->
    sequent{ <H> >- 'op in 'F^car } -->
    sequent{ <H> >- 'l in 'F^dom('op)  } -->

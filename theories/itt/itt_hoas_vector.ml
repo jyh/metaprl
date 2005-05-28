@@ -151,6 +151,9 @@ interactive_rw reduce_substn_bindn2 {| reduce |} :
 interactive_rw reduce_substl_base {| reduce |} :
    substl{'bt; nil} <--> 'bt
 
+interactive_rw reduce_substl_step {| reduce |} :
+   substl{'bt; 'h :: 't} <--> substl{subst{'bt;'h}; 't}
+
 interactive_rw reduce_substl_step1 {| reduce |} :
    substl{bind{v. 'bt['v]}; 'h :: 't} <--> substl{'bt['h]; 't}
 
@@ -180,6 +183,9 @@ interactive_rw reduce_bsb2 {| reduce |} :
 interactive_rw unfold_bindnsub :
    'n in nat -->
    bind{'n +@ 1; v. substl{'bt['v]; 'v}} <--> bind{u.bind{'n; v. substl{subst{'bt['u :: 'v]; 'u}; 'v}}}
+
+
+
 
 doc docoff
 

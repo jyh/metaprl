@@ -253,6 +253,11 @@ interactive squashAssert 'A :
    sequent { <H>; squash{'A} >- 'C } -->
    sequent { <H> >- 'C }
 
+interactive assertSquash :
+   [sqstable] sequent { <H>;  squash{'C} >- 'C } -->
+   [main] sequent { <H> >- squash{'C} } -->
+   sequent { <H> >- 'C }
+
 (*
  * H >- Ui ext squash(A)
  * by squashFormation

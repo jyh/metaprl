@@ -119,10 +119,30 @@ interactive_rw bind_eta {| reduce |} :
    bdepth{'bt} > 0 -->
    bind{x. subst{'bt; 'x}} <--> 'bt
 
+interactive_rw lemma1 {| reduce |} :
+   'r in nat -->
+   'n in nat -->
+   'r >= 'n  -->
+   bind{'n; gamma. substl{bind{'r; 't}; 'gamma}} <--> bind{'r; 't}
+
+interactive_rw lemma2 {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   'n in nat -->
+   'l+@'r+@1 >= 'n  -->
+   bind{'n; gamma. substl{var{'l;'r}; 'gamma}} <--> var{'l;'r}
+
+interactive_rw lemma3 {| reduce |} :
+   'm in nat -->
+   'n in nat -->
+   'm >= 'n  -->
+   bind{'n; gamma. substl{mk_bterm{'m;'op;'btl}; 'gamma}} <--> mk_bterm{'m;'op;'btl}
+
 interactive_rw bind_vec_eta {| reduce |} :
    'n in nat -->
    'bt in BTerm -->
-    bind{'n; v. substl{'bt; 'v}} <--> 'bt
+    bdepth{'bt} >= 'n -->
+    bind{'n; gamma. substl{'bt; 'gamma}} <--> 'bt
 
 interactive_rw subterms_lemma {| reduce |} :
    'n in nat -->

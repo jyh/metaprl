@@ -69,8 +69,9 @@ define (*private*) unfold_isvar:
 
 define (*private*) unfold_dest_bterm:
    dest_bterm{'bt; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
-   <-->
-   ifthenelse{is_var{'bt}; 'var_case[left{'bt}; right{'bt}]; 'op_case[bdepth{'bt}; get_op{'bt; it}; subterms{'bt}]}
+   <--> if is_var{'bt}
+           then 'var_case[left{'bt}; right{'bt}]
+           else 'op_case[bdepth{'bt}; get_op{'bt; it}; subterms{'bt}]
 
 doc <:doc< @doc{@rules} >>
 

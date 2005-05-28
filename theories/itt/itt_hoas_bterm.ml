@@ -24,9 +24,7 @@ define (*private*) unfold_mk: mk{'x} <--> decide{'x;
                                                   v.spread{'v;left,right. var{'left;'right}};
                                                   t.spread{'t;d,op,st. mk_bterm{'d;'op;'st}}}
 
-define (*private*) unfold_dest: dest{'bt} <--> if is_var{'bt}
-                                               then inl {(left{'bt},right{'bt})}
-                                               else (bdepth{'bt},(get_op{'bt},subterms{'bt}))
+define (*private*) unfold_dest: dest{'bt} <--> dest_bterm{'bt; l,r. inl{('l,'r)}; d,op,ts. inr{('d,('op,'ts))}}
 
 
 define (*private*) unfold_Iter: Iter{'X} <--> Img{dom{'X};x.mk{'x}}
@@ -116,9 +114,32 @@ interactive  bterm_elim_squash {| elim [] |} 'H :
                compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BTerm; <J> >- squash{'P['t]} }
 
-interactive_rw dest_ml_reduce {| reduce |}:
+interactive_rw bind_eta {| reduce |} :
+   'bt in BTerm -->
+   bdepth{'bt} > 0 -->
+   bind{x. subst{'bt; 'x}} <--> 'bt
+
+interactive_rw bind_vec_eta {| reduce |} :
+   'n in nat -->
+   'bt in BTerm -->
+    bind{'n; v. substl{'bt; 'v}} <--> 'bt
+
+interactive_rw subterms_lemma {| reduce |} :
+   'n in nat -->
+   'subterms in list{BTerm} -->
+    map{bt. bind{'n; v. substl{'bt; 'v}};'subterms} <--> 'subterms
+
+interactive_rw dest_bterm_mk_bterm2 {| reduce |} :
+   'n in nat -->
+   'op in Operator -->
+   'subterms in list{BTerm} -->
+   dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
+   <-->
+   'op_case['n; 'op; 'subterms]
+
+interactive_rw mk_dest_reduce {| reduce |}:
    't in BTerm  -->
-   dest{mk{'t}} <--> 't
+   mk{dest{'t}} <--> 't
 
 interactive dest_wf {| intro[] |}:
    sequent{ <H> >- 't in BTerm } -->

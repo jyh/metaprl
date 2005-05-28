@@ -178,6 +178,36 @@ interactive_rw right_id {| reduce |} :
    'r in nat -->
    right{var{'l; 'r}} <--> 'r
 
+interactive_rw subst_var0 {| reduce |} :
+   'r in nat -->
+   subst{var{0; 'r};'t} <--> bind{'r;'t}
+
+interactive_rw subst_var {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   subst{var{'l+@1; 'r};'t} <--> var{'l;'r}
+
+interactive_rw subst_mkbterm {| reduce |} :
+   'bdepth in nat -->
+   subst{mk_bterm{'bdepth+@1;'op;'btl};'t} <-->  mk_bterm{'bdepth; 'op; map{bt. subst{'bt; 't}; 'btl}}
+
+interactive_rw bind_var {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   bind{x.var{'l; 'r}} <--> var{'l+@1;'r}
+
+interactive_rw lemma {| reduce |} :
+   'btl in list -->
+   map{bt. subst{'bt; 'v}; map{bt. bind{x. 'bt}; 'btl}} <--> 'btl
+
+interactive_rw bind_mkbterm  {| reduce |} :
+   'bdepth in nat -->
+   'btl in list -->
+   bind{x.mk_bterm{'bdepth;'op;'btl}} <-->  mk_bterm{'bdepth+@1; 'op; map{bt. bind{x.'bt}; 'btl}}
+
+
+
+
 doc docoff
 
 dform var_df : var{'l; 'r} =

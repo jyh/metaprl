@@ -188,8 +188,15 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_subtype {| intro [] |} :
-   sequent { <H> >- "type"{ { a: 'A | 'B['a] } } } -->
-   sequent { <H> >- \subtype{ { a: 'A | 'B['a] }; 'A } }
+   sequent { <H> >- { a: 'A | 'B['a] } Type } -->
+   sequent { <H> >- { a: 'A | 'B['a] } subtype 'A  }
+
+interactive set_monotone {| intro [] |} :
+   [wf] sequent { <H> >-  { a: 'A_1 | 'B_1['a] } Type } -->
+   [wf] sequent { <H>; a:'A_2 >- 'B_2['a] Type } -->
+   sequent { <H> >- 'A_1 subtype 'A_2 } -->
+   sequent { <H>; a:'A_1; 'B_1['a] >-  squash{'B_2['a]} } -->
+   sequent { <H> >- { a: 'A_1 | 'B_1['a] } subtype { a: 'A_2 | 'B_2['a] } }
 
 doc docoff
 

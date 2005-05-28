@@ -19,7 +19,7 @@ define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
                    ind{'n; i,j.it; 'base; k,l . 'up['k;'l]}
 
 define iform unfoldInd1 : ind{'n; 'base; l. 'up['l]} <-->
-                    ind{'n; i,j.it; 'base; k,l . 'up['l]}
+                    ind{'n; 'base; k,l . 'up['l]}
 
 topval foldInd : conv
 

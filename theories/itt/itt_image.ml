@@ -134,6 +134,11 @@ interactive img_elim3 {| elim [ThinOption thinT] |} 'H 'g :
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'C['f['a]] } -->
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 'C['y] }
 
+interactive img_monotone {| intro[] |} :
+   [wf] sequent { <H> >-  'A_1 Type } -->
+   sequent { <H> >-  'A_1 subtype 'A_2 } -->
+   sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subtype  Img{'A_2; x.'f<||>['x]} }
+
 doc docoff
 
 dform img_df : Img{'A; x.'f} =

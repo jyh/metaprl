@@ -71,7 +71,7 @@ define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
                    ind{'n; i,j.it; 'base; k,l . 'up['k;'l]}
 
 define iform unfoldInd1 : ind{'n; 'base; l. 'up['l]} <-->
-                    ind{'n; i,j.it; 'base; k,l . 'up['l]}
+                    ind{'n; 'base; k,l . 'up['l]}
 
 doc <:doc< @docoff >>
 
@@ -265,7 +265,7 @@ doc <:doc< @docoff >>
 let natBackInductionT =
    argfunT (fun n p -> natBackInduction n (get_bind_from_arg_or_concl_subst p <<0>>))
 
-interactive max_nat_wf :
+interactive max_nat_wf {| intro[AutoMustComplete] |} :
    [wf] sequent { <H> >- 'a in nat } -->
    [wf] sequent { <H> >- 'b in nat } -->
    sequent { <H> >- max{'a; 'b} in nat }

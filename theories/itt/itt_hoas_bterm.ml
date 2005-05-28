@@ -7,6 +7,7 @@ doc docoff
 
 open Basic_tactics
 open Itt_struct
+open Itt_squash
 
 define unfold_compatible_shapes: compatible_shapes{'bdepth; 'op; 'btl} <-->
       length{shape{'op}} = length{'btl} in int &
@@ -68,6 +69,11 @@ interactive compatible_shapes_wf {| intro[] |}:
    sequent{ <H> >- 'btl in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'bdepth; 'op; 'btl} Type }
 
+interactive compatible_shapes_sqstable (*{| squash |}*) :
+   sequent{ <H> >- 'btl in list } -->
+   sequent{ <H> >- squash{compatible_shapes{'bdepth; 'op; 'btl}}  } -->
+   sequent{ <H> >- compatible_shapes{'bdepth; 'op; 'btl} }
+
 interactive  bt_subtype_bterm  {| intro[] |} :
    sequent{ <H> >- 'n in nat} -->
    sequent{ <H> >- BT{'n} subtype BTerm }
@@ -97,17 +103,26 @@ interactive mk_bterm_wf {| intro[] |}:
    sequent{ <H> >- compatible_shapes{'depth;'op;'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth;'op;'subterms} in BTerm }
 
+interactive  bt_elim_squash2  {| elim [] |} 'H :
+   [wf] sequent { <H>; <J> >- 'n in nat } -->
+   [base] sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   [step] sequent { <H>; 'n>0; <J>; depth: nat; op:Operator; subterms:list{BT{'n-@1}};
+               compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
+   sequent { <H>; t: BT{'n}; <J> >- squash{'P['t]} }
+
 interactive  bterm_elim_squash {| elim [] |} 'H :
    sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    sequent { <H>; <J>; depth: nat; op:Operator; subterms:list{BTerm};
                compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BTerm; <J> >- squash{'P['t]} }
 
-interactive  bt_elim  {| elim [] |} 'H :
-   sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
-   sequent { <H>; <J>; depth: nat; op:Operator; subterms:list{BT{'n}};
-               compatible_shapes{'depth;'op;'subterms} >- 'P[mk_bterm{'depth;'op;'subterms}] } -->
-   sequent { <H>; t: BT{'n+@1}; <J> >- 'P['t] }
+interactive_rw dest_ml_reduce {| reduce |}:
+   't in BTerm  -->
+   dest{mk{'t}} <--> 't
+
+interactive dest_wf {| intro[] |}:
+   sequent{ <H> >- 't in BTerm } -->
+   sequent{ <H> >-  dest{'t} in dom{BTerm} }
 
 interactive bterm_elim  {| elim [] |} 'H :
    sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->

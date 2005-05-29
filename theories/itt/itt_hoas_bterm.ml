@@ -147,12 +147,14 @@ interactive_rw bind_vec_eta {| reduce |} :
 interactive_rw subterms_lemma {| reduce |} :
    'n in nat -->
    'subterms in list{BTerm} -->
-    map{bt. bind{'n; v. substl{'bt; 'v}};'subterms} <--> 'subterms
+   all i:Index{'subterms}. bdepth{nth{'subterms;'i}} >=  'n -->
+   map{bt. bind{'n; v. substl{'bt; 'v}};'subterms} <--> 'subterms
 
 interactive_rw dest_bterm_mk_bterm2 {| reduce |} :
    'n in nat -->
    'op in Operator -->
    'subterms in list{BTerm} -->
+   compatible_shapes{'n;'op;'subterms} -->
    dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
    <-->
    'op_case['n; 'op; 'subterms]
@@ -161,14 +163,22 @@ interactive_rw mk_dest_reduce {| reduce |}:
    't in BTerm  -->
    mk{dest{'t}} <--> 't
 
+interactive dest_bterm_wf {| intro[] |}:
+   sequent{ <H> >- 'bt in BTerm } -->
+   sequent{ <H>; l:nat; r:nat >- 'var_case['l;'r] in 'T } -->
+   sequent{ <H>; bdepth: nat; op:Operator; subterms:list{BTerm};
+                 compatible_shapes{'bdepth;'op;'subterms}
+                 >- 'op_case['bdepth; 'op; 'subterms] in 'T } -->
+   sequent{ <H> >- dest_bterm{'bt; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms]} in 'T }
+
 interactive dest_wf {| intro[] |}:
    sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >-  dest{'t} in dom{BTerm} }
 
 interactive bterm_elim  {| elim [] |} 'H :
    sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
-   sequent { <H>; <J>; depth: nat; op:Operator; subterms:list{BTerm};
-               compatible_shapes{'depth;'op;'subterms} >- 'P[mk_bterm{'depth;'op;'subterms}] } -->
+   sequent { <H>; <J>; bdepth: nat; op:Operator; subterms:list{BTerm};
+               compatible_shapes{'bdepth;'op;'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
    sequent { <H>; t: BTerm; <J> >- 'P['t] }
 
 (*

@@ -98,7 +98,7 @@ interactive neq_univ {| intro [] |} :
    sequent { <H> >- ('x1 <> 'y1 in 'T1)  = ('x2 <> 'y2 in 'T2 ) in univ[i:l] }
 
 
-interactive neq_intro :
+interactive neq_intro {| intro[AutoMustComplete] |}:
    [wf] sequent { <H> >- 'x in 'T } -->
    [wf] sequent { <H> >- 'y in 'T } -->
    sequent { <H>; 'x ='y in 'T >- "false" } -->

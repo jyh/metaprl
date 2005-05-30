@@ -423,6 +423,12 @@ interactive not_nequal :
    [wf] sequent { <H> >- not{'a <> 'b} } -->
    sequent { <H> >- 'a = 'b in int }
 
+interactive not_equal {| intro[AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- not{'a = 'b in int} } -->
+   sequent { <H> >- 'a <> 'b }
+
 let notNequalT = not_nequal
 
 interactive le_refl {| intro [] |} :

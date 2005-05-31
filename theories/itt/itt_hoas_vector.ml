@@ -1,4 +1,4 @@
- doc <:doc<
+doc <:doc<
    @begin[doc]
    @module[Itt_hoas_vector]
    The @tt[Itt_hoas_vector] module defines the ``vector bindings''
@@ -183,9 +183,6 @@ interactive_rw reduce_bsb2 {| reduce |} :
 interactive_rw unfold_bindnsub :
    'n in nat -->
    bind{'n +@ 1; v. substl{'bt['v]; 'v}} <--> bind{u.bind{'n; v. substl{subst{'bt['u :: 'v]; 'u}; 'v}}}
-
-
-
 
 doc docoff
 

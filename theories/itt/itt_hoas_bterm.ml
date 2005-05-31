@@ -15,17 +15,13 @@ define unfold_compatible_shapes: compatible_shapes{'bdepth; 'op; 'btl} <-->
 
 dform compatible_shapes_df: compatible_shapes{'bdepth;'op;'btl} = `"compatible_shapes(" slot{'bdepth} `";" slot{'op} `";" slot{'btl} `")"
 
-
-
 define (*private*) unfold_dom: dom{'BT} <--> nat*nat + depth:nat * op:Operator * {subterms:list{'BT} | compatible_shapes{'depth;'op;'subterms} }
-
 
 define (*private*) unfold_mk: mk{'x} <--> decide{'x;
                                                   v.spread{'v;left,right. var{'left;'right}};
                                                   t.spread{'t;d,op,st. mk_bterm{'d;'op;'st}}}
 
 define (*private*) unfold_dest: dest{'bt} <--> dest_bterm{'bt; l,r. inl{('l,'r)}; d,op,ts. inr{('d,('op,'ts))}}
-
 
 define (*private*) unfold_Iter: Iter{'X} <--> Img{dom{'X};x.mk{'x}}
 
@@ -35,9 +31,7 @@ interactive_rw bt_reduce_base {| reduce |}: BT{0} <--> void
 
 interactive_rw bt_reduce_step {| reduce |}: 'n in nat --> BT{'n+@1} <--> Iter{BT{'n}}
 
-
 (*private *) define unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
-
 
 interactive  bt_elim_squash  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->

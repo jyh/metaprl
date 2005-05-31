@@ -205,9 +205,6 @@ interactive_rw bind_mkbterm  {| reduce |} :
    'btl in list -->
    bind{x.mk_bterm{'bdepth;'op;'btl}} <-->  mk_bterm{'bdepth+@1; 'op; map{bt. bind{x.'bt}; 'btl}}
 
-
-
-
 doc docoff
 
 dform var_df : var{'l; 'r} =
@@ -219,10 +216,10 @@ dform mk_bterm_df : mk_bterm{'n; 'op; 'btl} =
 dform bdepth_df: parens :: "prec"[prec_apply] :: bdepth{'bt} =
    tt["D"] space slot["le"]{'bt}
 
-dform bdepth_df: parens :: "prec"[prec_apply] :: left{'bt} =
+dform left_df: parens :: "prec"[prec_apply] :: left{'bt} =
    tt["l"] space slot["le"]{'bt}
 
-dform bdepth_df: parens :: "prec"[prec_apply] :: right{'bt} =
+dform right_df: parens :: "prec"[prec_apply] :: right{'bt} =
    tt["r"] space slot["le"]{'bt}
 
 dform get_op_df: get_op{'bt; 'op} =

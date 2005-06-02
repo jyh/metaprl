@@ -35,8 +35,8 @@ PRINT_THEORIES[] =
     ocaml_doc_patt1
     ocaml_doc_expr2
     ocaml_doc_expr3
-    ocaml_doc_exn1
     ocaml_doc_expr4
+    ocaml_doc_exn1
     ocaml_doc_io1
     ocaml_doc_mod1
     ocaml_doc_mod2
@@ -44,12 +44,34 @@ PRINT_THEORIES[] =
 
 LocalTeXGeneratedFiles(theory.tex theory-body.tex)
 TheoryDocument(theory, $(PRINT_THEORIES))
-# XXX: TODO: Whether to use book2 or book3 should depend on a configuration
-# option. See also bug 267 RFE - http://cvs.metaprl.org:12000/bugzilla/show_bug.cgi?id=267
-LaTeXDocumentInstall(tex doc, $(DOCDIR), ocaml-book, book2, theory-body)
-LaTeXDocumentInstall(jyh_tex jyh_doc, $(DOCDIR), ocaml-book-jyh, book3, theory-body)
 
-watch.ps: book2.ps
+#
+# Try to figure out if we have the MathTimes fonts.
+# For now the check is really simple, but we may want
+# to do something smarter.
+#
+static. =
+    eprint(-- Checking for MathTimes... )
+    MATHTIMES_ENABLED = $(file-exists /usr/share/texmf/fonts/type1/times)
+    if $(MATHTIMES_ENABLED)
+        eprintln($'(enabled)')
+    else
+        eprintln($'(disabled)')
+
+if $(MATHTIMES_ENABLED)
+    BOOK = book3
+    export
+else
+    BOOK = book2
+    export
+
+LaTeXDocumentInstall(tex doc, $(DOCDIR), ocaml-book, $(BOOK), theory-body)
+
+watch.ps: $(BOOK).ps
+    cp $< tmp.ps
+    mv tmp.ps $@
+
+watch.pdf: $(BOOK).pdf
     cp $< tmp.ps
     mv tmp.ps $@
 

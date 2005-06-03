@@ -52,7 +52,7 @@ doc <:doc<
    @begin[doc]
    @terms
    The @hrefterm[is_var] operator decides whether a bterm is a @hrefterm[var] or a
-   @hrefterm[mk_bterm]. In order to implement the @refterm[is_var] operator we
+   @hrefterm[mk_bterm]. In order to implement the @hrefterm[is_var] operator we
    assume that there exist at least two distinct operators (for any concrete
    notion of operators this would, of course, be trivially derivable but we would
    like to keep the operators type abstract at this point).

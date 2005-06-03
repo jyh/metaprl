@@ -1,3 +1,41 @@
+doc <:doc<
+   @begin[doc]
+   @module[Itt_hoas_bterm]
+   The @tt[Itt_hoas_bterm] module defines the inductive type <<BTerm>>
+   and establishes the appropriate induction rules for this type.
+   @end[doc]
+
+   ----------------------------------------------------------------
+
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+
+   Copyright (C) 2005, MetaPRL Group
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Author: Aleksey Kopylov @email{kopylov@cs.caltech.edu}
+
+   @end[license]
+>>
+
 doc <:doc< @doc{@parents} >>
 extends Itt_hoas_destterm
 extends Itt_image
@@ -9,29 +47,31 @@ open Basic_tactics
 open Itt_struct
 open Itt_squash
 
+doc <:doc< @doc{@terms} >>
+
 define unfold_compatible_shapes: compatible_shapes{'bdepth; 'op; 'btl} <-->
       length{shape{'op}} = length{'btl} in int &
       all i:Index{'btl}. bdepth{nth{'btl;'i}} =  'bdepth +@ nth{shape{'op};'i} in int
 
-dform compatible_shapes_df: compatible_shapes{'bdepth;'op;'btl} = `"compatible_shapes(" slot{'bdepth} `";" slot{'op} `";" slot{'btl} `")"
+(*private*) define unfold_dom: dom{'BT} <--> nat*nat + depth:nat * op:Operator * {subterms:list{'BT} | compatible_shapes{'depth;'op;'subterms} }
 
-define (*private*) unfold_dom: dom{'BT} <--> nat*nat + depth:nat * op:Operator * {subterms:list{'BT} | compatible_shapes{'depth;'op;'subterms} }
-
-define (*private*) unfold_mk: mk{'x} <--> decide{'x;
+(*private*) define unfold_mk: mk{'x} <--> decide{'x;
                                                   v.spread{'v;left,right. var{'left;'right}};
                                                   t.spread{'t;d,op,st. mk_bterm{'d;'op;'st}}}
 
-define (*private*) unfold_dest: dest{'bt} <--> dest_bterm{'bt; l,r. inl{('l,'r)}; d,op,ts. inr{('d,('op,'ts))}}
+(*private*) define unfold_dest: dest{'bt} <--> dest_bterm{'bt; l,r. inl{('l,'r)}; d,op,ts. inr{('d,('op,'ts))}}
 
-define (*private*) unfold_Iter: Iter{'X} <--> Img{dom{'X};x.mk{'x}}
+(*private*) define unfold_Iter: Iter{'X} <--> Img{dom{'X};x.mk{'x}}
 
-define (*private*) unfold_BT: BT{'n} <--> ind{'n; void; X.Iter{'X}}
+(*private*) define unfold_BT: BT{'n} <--> ind{'n; void; X.Iter{'X}}
+
+define (*private*) unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
+
+doc <:doc< @doc{@rules} >>
 
 interactive_rw bt_reduce_base {| reduce |}: BT{0} <--> void
 
 interactive_rw bt_reduce_step {| reduce |}: 'n in nat --> BT{'n+@1} <--> Iter{BT{'n}}
-
-(*private *) define unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
 
 interactive  bt_elim_squash  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
@@ -175,17 +215,9 @@ interactive bterm_elim  {| elim [] |} 'H :
                compatible_shapes{'bdepth;'op;'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
    sequent { <H>; t: BTerm; <J> >- 'P['t] }
 
-(*
-define (*private*) unfold_dom: dom{'BT} <--> nat*nat + op:Operator * depth:nat * all_list{shape{'op};x.'BT ('depth-'x)}
+doc docoff
 
+dform compatible_shapes_df: compatible_shapes{'bdepth;'op;'btl} =
+   tt["compatible_shapes"] `"(" slot{'bdepth} `";" slot{'op} `";" slot{'btl} `")"
 
-
-define (*private*) unfold_f: f{'x} <--> decide{x.
-                                                  v.spread{'v;left,right. var{left;'right}};
-                                                  t.speaad{'t;op,n,p. mk_bterm{'n;list_from_prod{length{'op};'p}}}}
-
-
-
-define unfold_BTerm: BTerm{'n} <--> prec{BT;n . Image{dom{'BT};x.f{'x}}; 'n }
-
-*)
+dform bterm_df: BTerm = keyword["BTerm"]

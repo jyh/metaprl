@@ -51,12 +51,12 @@ TheoryDocument(theory, $(PRINT_THEORIES))
 # to do something smarter.
 #
 static. =
-    eprint(-- Checking for MathTimes... )
+    print(--- Checking for MathTimes... )
     MATHTIMES_ENABLED = $(file-exists /usr/share/texmf/fonts/type1/times)
     if $(MATHTIMES_ENABLED)
-        eprintln($'(enabled)')
+        println($'(enabled)')
     else
-        eprintln($'(disabled)')
+        println($'(disabled)')
 
 if $(MATHTIMES_ENABLED)
     BOOK = book3

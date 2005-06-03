@@ -251,6 +251,7 @@ PRINT_THEORIES[] =
     itt_hoas_debruijn
     itt_hoas_operator
     itt_hoas_destterm
+    itt_hoas_bterm
 
 TheoryDocumentInstall(itt, $(PRINT_THEORIES))
 

@@ -1,4 +1,4 @@
-doc <:doc< -*- Mode: text -*-
+doc <:doc< -*- Mode: text; fill-column: 100 -*-
 
    @begin[spelling]
    Dereferencing blit bool doesn downto fields int
@@ -39,16 +39,13 @@ extends Base_theory
 doc <:doc<
 @begin[doc]
 
-As we have seen, functional programming has one principal
-feature---functions are first-class.  Functions may be passed as
-arguments, returned as the result of function calls, and stored in
-data structures just like any other value.  Indeed, the presence of
-first-class functions is the only requirement for a programming
-language to be considered functional.  By this definition, many
-programming languages are functional, including not only the usual
-examples like OCaml, Lisp, and Haskell, but also languages like
-Javascript (where functions are associated with fields on a web page),
-or even C (where functions are represented with pointers).
+As we have seen, functional programming has one central feature---functions are first-class.
+Functions may be passed as arguments, returned as the result of function calls, and stored in data
+structures just like any other value.  Indeed, the presence of first-class functions is the only
+requirement for a programming language to be considered functional.  By this definition, many
+programming languages are functional, including not only the usual examples like OCaml, Lisp, and
+Haskell, but also languages like Javascript (where functions are associated with fields on a web
+page), or even C (where functions are represented with pointers).
 
 Another property of a programming language is purity.  A @emph{pure}
 programming language is one without assignment, where variables cannot
@@ -273,7 +270,8 @@ properties ``simple'' and ``clear'' are never simple and clear in the
 context of programming language, most OCaml programmers would find the
 pure functional versions easier to read.
 
----JYH: need to add a "difficult" section. ---
+---JYH: need to add a @bf[difficult] marker ---
+
 Another reason is that the pure functional version is likely to be
 more efficient because there is no penalty for the overhead of
 assigning to and dereferencing reference cells.  In addition, the
@@ -324,6 +322,79 @@ somewhat more efficient tail-recursive implementation.
 @end[caption]
 @end[figure]
 
+@subsection["splay-trees"]{Splay trees using reference cells}
+
+To illustrate the use of reference cells, we revisit the example of balanced binary trees.  One
+surprisingly simple implementation is based on the @emph{splay trees} invented by Sleator and
+Tarjan.  The key property of splay trees is that balancing occurs not only when the tree is
+constructed, but also during the test for membership.  Since the membership function returns a
+Boolean value, not a tree, we'll use references to perform the balancing in-place, by side-effect.
+However, we will be careful to ensure that the implementation @emph{appears} functional---that is,
+client programs may continue to be blissfully unaware that the tree is implemented imperatively.
+
+Let's first start with the definitions.  A @emph{splay tree} is an ordered binary tree $S$, that
+supports the following operations.
+
+@begin[itemize]
+@item{$@bf[empty]$: the empty tree.}
+@item{$@bf[member](i, S)$: determine whether element $i$ is in splay tree $S$.}
+@item{$@bf[insert](i, S)$: insert element $i$ into splay tree $S$ (returning a new tree $S'$).}
+@end[itemize]
+
+All operations have an amortized cost $O(@emph{log}@space n)$, where $n$ is the number of elements
+in the tree.  The splay tree operations are all implemented in terms of a single, basic operation
+called @emph{splay}.
+
+@begin[itemize]
+@item{$@bf[splay](i, S)$: reorganize the splay tree $S$ so that element $i$ is at the root if $i
+  @in S$, and otherwise the new root is either the next smaller value if one exists, or the next
+  larger value otherwise.}
+@end[itemize]
+
+All of the other operations can be implemented in terms of @bf[splay].
+
+@begin[itemize]
+@item{$@bf[member](i, S)$: call $@bf[splay](i, S)$ to bring $i$ to the root if it is there, then
+  check the root against $i$.  The result of the splay should be saved.}
+@item{$@bf[insert](i, S)$: call $@bf[splay](i, S)$ to produce a new tree $S'$.  If $i$ is not at
+  the root, create a new root node labeled $i$, and split $S'$ to produce the children.}
+@end[itemize]
+
+@section["splay-implementation"]{Implementation design}
+
+The @bf[splay] operation can be implemented in terms of an even more elementary operation @bf[rotate].  Given a binary tree $S$ and a node $x$ with parent $y$, the operation $@bf[rotate](x)$
+  moves $x$ up and $y$ down, according to the following picture.
+
+@includegraphics{rotate.eps}
+
+Note that the @bf[rotate] operation preseves the inorder numbering of the tree.
+
+To implement $@bf[splay](x, S)$, we distinguish three separate cases:
+
+@begin[enumerate]
+@item{If $x$ has a parent, but no grandparent, we just $@bf[rotate](x)$.}
+@item{If $x$ has parent $y$ and a grandparent, and if $x$ and $y$ are either both left children or
+  right children, we first $@bf[rotate](y)$ and then $@bf[rotate](x)$.}
+@item{If $x$ has parent $y$, and a grandparent, and if one of $x$ or $y$ is a left child and the
+  other is a right child, we first $@bf[rotate](x)$ and then $@bf[rotate](x)$ again.}
+@end[enumerate]
+
+Here is an example of applying $@bf[splay](1, S)$ to the following tree $S$:
+
+@includegraphics{splay1.eps}
+
+@includegraphics{splay2.eps}
+
+@includegraphics{splay3.eps}
+
+Applying $@bf[splay](2)$ to the resuling tree yields:
+
+@includegraphics{splay4.eps}
+
+Note that the tree seems to become more balanced with each @bf[splay] operation.
+
+@section["splay-implementation"]{Splay implementation}
+
 @end[doc]
 @docoff
 >>
@@ -331,6 +402,7 @@ somewhat more efficient tail-recursive implementation.
 (*
  * -*-
  * Local Variables:
+ * fill-column: 100
  * Caml-master: "compile"
  * End:
  * -*-

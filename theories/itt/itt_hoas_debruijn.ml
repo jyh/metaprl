@@ -1,6 +1,7 @@
 doc <:doc<
    @begin[doc]
-   The @tt[Itt_hoas_debruij] module defines a mapping from de Bruijn-like
+   @module[Itt_hoas_debruijn]
+   The @tt[Itt_hoas_debruijn] module defines a mapping from de Bruijn-like
    representation of syntax into the HOAS.
    @end[doc]
 

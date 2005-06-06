@@ -92,15 +92,6 @@ define unfold_is_exec : is_exec{'e} <-->
 (*
  * Display forms.
  *)
-dform on_df : on = `"on"
-dform open_df : "open" = `"open"
-dform oven_df : oven = `"oven"
-dform button_df : button = `"button"
-dform door_df : door = `"door"
-dform action_df : action = `"action"
-dform state_df : state = `"state"
-dform exec_df : exec = `"exec"
-
 dform eq_oven_df : parens :: "prec"[prec_bor] :: except_mode[src] :: eq_oven{'o1; 'o2} =
    slot{'o1} `" =o" " " slot{'o2}
 

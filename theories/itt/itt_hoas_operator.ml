@@ -77,7 +77,6 @@ dform shape_df: shape{'op} = `"shape(" slot{'op} `")"
 dform issameop_df : is_same_op{'op1;'op2} =
    `"is_same_op(" slot{'op1} `"; " slot{'op2} `")"
 dform arity_df: arity{'op} = `"arity(" slot{'op} `")"
-dform operator_df: Operator = `"Operator"
 
 doc <:doc<
    @begin[doc]

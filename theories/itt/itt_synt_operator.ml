@@ -95,7 +95,6 @@ doc docoff
 
 let fold_op = makeFoldC << Operator >> unfold_op
 
-dform boperator_df: BOperator = `"BOperator"
 dform op_bdepth_df: op_bdepth{'op} = `"bdepth" sub["o"] "(" slot{'op} ")"
 dform shape_df: shape{'op} = `"shape(" slot{'op} `")"
 dform issameop_df : is_same_op{'op1;'op2} =
@@ -107,7 +106,6 @@ dform bind_df : bind{'op;'n} =
    `"bind(" slot{'op} `"; " slot{'n} `")"
 dform bind_df1: bind{'op} = `"bind(" slot{'op} `")"
 dform arity_df: arity{'op} = `"arity(" slot{'op} `")"
-dform operator_df: Operator = `"Operator"
 
 doc "doc"{rewrites}
 

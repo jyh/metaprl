@@ -210,7 +210,6 @@ doc <:doc< @docoff >>
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform vars_df : Var = `"Var"
 dform var_df : var{'l; 'r} = `"var(" slot{'l} `"," slot{'r} `")"
 dform left_df : left{'v} = pi sub["L"] `"("slot{'v} `")"
 dform right_df : right{'v} = pi sub["R"] `"(" slot{'v} `")"

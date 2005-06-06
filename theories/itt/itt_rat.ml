@@ -365,8 +365,6 @@ dform sub_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: sub_rat{'a
  =
    slot["lt"]{'a} `" -" Nuprl_font!subq `" " slot["le"]{'b}
 
-dform rationals_prl_df : except_mode [src] :: rationals = `"rationals"
-
 dform ge_bool_rat_df1 : except_mode[src] :: ge_bool_rat{'a; 'b}
  =
    slot["le"]{'a} `" " Nuprl_font!ge Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}

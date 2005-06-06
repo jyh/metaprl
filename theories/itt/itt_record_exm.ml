@@ -384,11 +384,6 @@ dform space:  space = mathbbS `"pace"
 dform colored_plane:  cplane = mathbbC `"olored" plane
 dform colored_space:  cspace = mathbbC `"olored" space
 
-dform o: O = `"O"
-dform a: A = `"A"
-dform b: B = `"B"
-dform redA: redA = `"redA"
-
 dform point2: point{'a;'b;'e} = `"point(" 'a `"," 'b ")"
 dform point3: point{'a;'b;'c;'e} = `"point(" 'a `"," 'b `"," 'c ")"
 

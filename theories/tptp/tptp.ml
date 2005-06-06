@@ -103,25 +103,8 @@ dform exists_df2 : exists_df{"exists"{v. 'b}} =
 dform exists_df3 : exists_df{'b} =
    `"." " " slot{'b}
 
-dform t_df : t =
-   `"t"
-
 dform atomic_df : mode[prl] :: parens :: "prec"[prec_apply] :: atomic{'x} =
    slot{'x} `" atomic"
-
-dform atom0_df : mode[prl] :: atom0 = `"atom0"
-dform atom1_df : mode[prl] :: atom1 = `"atom1"
-dform atom2_df : mode[prl] :: atom2 = `"atom2"
-dform atom3_df : mode[prl] :: atom3 = `"atom3"
-dform atom4_df : mode[prl] :: atom4 = `"atom4"
-dform atom5_df : mode[prl] :: atom5 = `"atom5"
-
-dform prop0_df : mode[prl] :: prop0 = `"prop0"
-dform prop1_df : mode[prl] :: prop1 = `"prop1"
-dform prop2_df : mode[prl] :: prop2 = `"prop2"
-dform prop3_df : mode[prl] :: prop3 = `"prop3"
-dform prop4_df : mode[prl] :: prop4 = `"prop4"
-dform prop5_df : mode[prl] :: prop5 = `"prop5"
 
 dform apply2_df : mode[prl] :: parens :: "prec"[prec_apply] :: apply{'f; 'x1; 'x2} =
    szone pushm[0] slot{'f} hspace slot{'x1} hspace slot{'x2} popm ezone

@@ -24,10 +24,8 @@ define unfold_cons: cons <-->
 	   (sequent [IndTypes] { List: Set >-
 		   (sequent [IndConstrs] { nil: 'List; cons: 'B -> 'List -> 'List >- 'cons })})}
 
-dform list_df : List = `"List"
 dform nil_df : nil = `"[]"
 dform nil_app_df : (nil 'T) = `"[]_" slot{'T}
-dform cons_df : cons = `"cons"
 dform cons_app_df : apply{apply{apply{cons;'T}; 'a}; 'l} = slot{'a} `" ::_" slot{'T} " " slot{'l}
 
 interactive listDef_wf {| intro [] |} :

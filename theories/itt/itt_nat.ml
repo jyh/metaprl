@@ -82,7 +82,6 @@ let foldInd = makeFoldC << ind{'n; 'base; k,l. 'up['k;'l]} >> unfoldInd
  ******************)
 
 dform nat_prl_df : except_mode [src] :: nat = mathbbN
-dform nat_src_df : mode[src] :: nat = `"nat"
 dform finite_nat_df1 : except_mode [src] :: nat{'k} = mathbbN sub{'k}
 dform finite_nat_df2 : mode[src] :: nat{'k} = `"{0..(" slot{'k} `"-1)}"
 

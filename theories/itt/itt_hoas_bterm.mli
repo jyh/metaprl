@@ -39,4 +39,4 @@ doc <:doc<
 extends Itt_hoas_destterm
 
 declare BTerm
-declare compatible_sapes{'bdepth;'op;'subterms}
+declare compatible_shapes{'bdepth;'op;'subterms}

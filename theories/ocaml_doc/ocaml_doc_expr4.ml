@@ -322,78 +322,121 @@ somewhat more efficient tail-recursive implementation.
 @end[caption]
 @end[figure]
 
-@subsection["splay-trees"]{Splay trees using reference cells}
+@section["ref-examples"]{Examples of using reference cells}
 
-To illustrate the use of reference cells, we revisit the example of balanced binary trees.  One
-surprisingly simple implementation is based on the @emph{splay trees} invented by Sleator and
-Tarjan.  The key property of splay trees is that balancing occurs not only when the tree is
-constructed, but also during the test for membership.  Since the membership function returns a
-Boolean value, not a tree, we'll use references to perform the balancing in-place, by side-effect.
-However, we will be careful to ensure that the implementation @emph{appears} functional---that is,
-client programs may continue to be blissfully unaware that the tree is implemented imperatively.
+@subsection["ref-queue"]{Queues}
 
-Let's first start with the definitions.  A @emph{splay tree} is an ordered binary tree $S$, that
-supports the following operations.
+A @emph{queue} is a data structure that supports an @emph{enqueue} operation that adds a new value
+to the queue, and a @emph{dequeue} operation that removes an element from the queue.  The elements
+are dequeued in FIFO (first-in-first-out) order.  Queues are often implemented as imperatide data
+structures, where the operations are performed by side-effect.  The following signature gives the
+types of the functions to be implemented.
+
+@begin[iverbatim]
+    type 'a queue
+
+    val create  : unit -> 'a queue
+    val enqueue : 'a queue -> 'a -> unit
+    val dequeue : 'a queue -> 'a
+@end[iverbatim]
+
+For efficiency, we would like the queue operations to take constant time.  One simple implementation
+is to represent the queue as two lists, an @emph{enqueue} list and a @emph{dequeue} list.  When a
+value is enqueued, it is added to the enqueue list.  When an element is dequeued, it is taken from
+the dequeue list.  If the dequeue list is empty, the queue is @emph{shifted} by setting the dequeue
+list to the reverasl of the enqueue list.
+
+@begin[iverbatim]
+    (* 'a queue = (enqueue_list, dequeue_list) *)
+    type 'a queue = ('a list ref, 'a list ref)
+
+    (* Create a new empty queue *)
+    let create () =
+       (ref [], ref [])
+
+    (* Add to the element to the enqueue list *)
+    let enqueue (eq, _) x =
+       eq := x :: !eq
+
+    (* Remove an element from the dequeue list *)
+    let rec dequeue ((eq, dq) as queue) =
+        match !dq with
+           x :: rest ->
+              dq := rest;
+              x
+         | [] ->  (* Shift the queue *)
+              if !eq = [] then
+                 raise Not_found;
+              dq := List.rev !eq;
+              eq := [];
+              dequeue queue
+@end[iverbatim]
+
+Note that the @code{dequeue} function is defined recursively.  When the @code{dq} list is empty, the
+function raises an error if the @code{eq} list is also empty; otherwise, the lists are shifted and
+the operation is retried.  The explicit check for an empty queue prevents infinite recursion.
+
+@subsection["ref-tree"]{Cyclic data structures}
+
+Suppose we wish to develop a functional version of the queue data structure.  That is, the
+@emph{enqueue} function returns a new queue, without modifying the old one; and the @emph{dequeue}
+operation returns a the last element, and a new queue, but does not modify the existing queue.  The
+functional version will have the following signature.
+
+@begin[iverbatim]
+    type 'a queue
+
+    val create  : unit -> 'a queue
+    val enqueue : 'a queue -> 'a -> 'a queue
+    val dequeue : 'a queue -> 'a * 'a queue
+@end[iverbatim]
+
+One solution would we to rework our previous code so that it doesn't contain reference cells, but
+there is a more attractive option.  A @emph{circular linked list} is a list that forms a cycle.  We
+can represent the queue elements in a circular list, where each element points to the next younger
+element, and the newest points to the oldest.  If we have a pointer to the newest element, then we
+can implement the queue operations in constant time.
 
 @begin[itemize]
-@item{$@bf[empty]$: the empty tree.}
-@item{$@bf[member](i, S)$: determine whether element $i$ is in splay tree $S$.}
-@item{$@bf[insert](i, S)$: insert element $i$ into splay tree $S$ (returning a new tree $S'$).}
+@item{To enqueue an element to the queue, add it beween the newest and the oldest.}
+@item{The oldest element is the next one after the first.  To dequeue it, remove it from the queue.}
 @end[itemize]
 
-All operations have an amortized cost $O(@emph{log}@space n)$, where $n$ is the number of elements
-in the tree.  The splay tree operations are all implemented in terms of a single, basic operation
-called @emph{splay}.
+This implementation seems straightforward enough, we simply need to construct a circular linked
+list.  But this is a problem.  In a pure functional language, cyclic data structures of this form
+are not implementable.  When a data value is constructed, it can only be constructed from values
+that already exist, not itself.
 
-@begin[itemize]
-@item{$@bf[splay](i, S)$: reorganize the splay tree $S$ so that element $i$ is at the root if $i
-  @in S$, and otherwise the new root is either the next smaller value if one exists, or the next
-  larger value otherwise.}
-@end[itemize]
+Once again, reference cells provide a simple way to get around the problem by allowing links in the
+list to be set after the elements have already been created.  The queue data structure will
+@emph{appear} functional, but internally we will use reference cells in the implementation.
 
-All of the other operations can be implemented in terms of @bf[splay].
+To begin, we first need to choose a representation for the queue.  First, the elements in the
+circular list are of type @code{elem}, which is a pair @code{(x, next)}, where @code{x} is the value
+of the element, and @code{next} is the pointer to the next element of the queue.  The queue itself
+can be empty, so we define the type as an @code{elem option}.
 
-@begin[itemize]
-@item{$@bf[member](i, S)$: call $@bf[splay](i, S)$ to bring $i$ to the root if it is there, then
-  check the root against $i$.  The result of the splay should be saved.}
-@item{$@bf[insert](i, S)$: call $@bf[splay](i, S)$ to produce a new tree $S'$.  If $i$ is not at
-  the root, create a new root node labeled $i$, and split $S'$ to produce the children.}
-@end[itemize]
+@begin[iverbatim]
+   type 'a elem = 'a * 'a elem ref
+   type 'a queue = 'a elem option
 
-@section["splay-implementation"]{Implementation design}
+   let create () =
+      None
+@end[iverbatim]
 
-The @bf[splay] operation can be implemented in terms of an even more elementary operation @bf[rotate].  Given a binary tree $S$ and a node $x$ with parent $y$, the operation $@bf[rotate](x)$
-  moves $x$ up and $y$ down, according to the following picture.
+The invariant of the queue data structure is that the each element in the circular list points to
+the next newer element, and the newest points to the oldest.  The queue itself refers to the
+youngest element.  When adding an element to the queue, we insert it after the current newest
+element.
 
-@includegraphics{rotate.eps}
+@begin[iverbatim]
+   let enqueue queue x =
+      match queue with
+         Some youngest ->
+            let (_, oldest_ref) = youngest in
+@end[iverbatim]
 
-Note that the @bf[rotate] operation preseves the inorder numbering of the tree.
-
-To implement $@bf[splay](x, S)$, we distinguish three separate cases:
-
-@begin[enumerate]
-@item{If $x$ has a parent, but no grandparent, we just $@bf[rotate](x)$.}
-@item{If $x$ has parent $y$ and a grandparent, and if $x$ and $y$ are either both left children or
-  right children, we first $@bf[rotate](y)$ and then $@bf[rotate](x)$.}
-@item{If $x$ has parent $y$, and a grandparent, and if one of $x$ or $y$ is a left child and the
-  other is a right child, we first $@bf[rotate](x)$ and then $@bf[rotate](x)$ again.}
-@end[enumerate]
-
-Here is an example of applying $@bf[splay](1, S)$ to the following tree $S$:
-
-@includegraphics{splay1.eps}
-
-@includegraphics{splay2.eps}
-
-@includegraphics{splay3.eps}
-
-Applying $@bf[splay](2)$ to the resuling tree yields:
-
-@includegraphics{splay4.eps}
-
-Note that the tree seems to become more balanced with each @bf[splay] operation.
-
-@section["splay-implementation"]{Splay implementation}
+...TODO...
 
 @end[doc]
 @docoff

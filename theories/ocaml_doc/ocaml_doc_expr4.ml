@@ -344,11 +344,11 @@ For efficiency, we would like the queue operations to take constant time.  One s
 is to represent the queue as two lists, an @emph{enqueue} list and a @emph{dequeue} list.  When a
 value is enqueued, it is added to the enqueue list.  When an element is dequeued, it is taken from
 the dequeue list.  If the dequeue list is empty, the queue is @emph{shifted} by setting the dequeue
-list to the reverasl of the enqueue list.
+list to the reversal of the enqueue list.
 
 @begin[iverbatim]
     (* 'a queue = (enqueue_list, dequeue_list) *)
-    type 'a queue = ('a list ref, 'a list ref)
+    type 'a queue = 'a list ref * 'a list ref
 
     (* Create a new empty queue *)
     let create () =
@@ -378,24 +378,12 @@ the operation is retried.  The explicit check for an empty queue prevents infini
 
 @subsection["ref-tree"]{Cyclic data structures}
 
-Suppose we wish to develop a functional version of the queue data structure.  That is, the
-@emph{enqueue} function returns a new queue, without modifying the old one; and the @emph{dequeue}
-operation returns a the last element, and a new queue, but does not modify the existing queue.  The
-functional version will have the following signature.
-
-@begin[iverbatim]
-    type 'a queue
-
-    val create  : unit -> 'a queue
-    val enqueue : 'a queue -> 'a -> 'a queue
-    val dequeue : 'a queue -> 'a * 'a queue
-@end[iverbatim]
-
-One solution would we to rework our previous code so that it doesn't contain reference cells, but
-there is a more attractive option.  A @emph{circular linked list} is a list that forms a cycle.  We
-can represent the queue elements in a circular list, where each element points to the next younger
-element, and the newest points to the oldest.  If we have a pointer to the newest element, then we
-can implement the queue operations in constant time.
+One issue with the previous implementation is that the queue must be shifted whenever the dequeue
+list becomes empty, which means that the time to perform a dequeue operation can be unpredictable.
+In situations where timing is an issue, another common implementation of queues uses a
+@emph{circular linked list}, where each element in the list points to the previous element that was
+inserted, and the newest element points to the oldest.  If we have a pointer to the newest element,
+then we can implement the queue operations in constant time as follows.
 
 @begin[itemize]
 @item{To enqueue an element to the queue, add it beween the newest and the oldest.}
@@ -408,35 +396,234 @@ are not implementable.  When a data value is constructed, it can only be constru
 that already exist, not itself.
 
 Once again, reference cells provide a simple way to get around the problem by allowing links in the
-list to be set after the elements have already been created.  The queue data structure will
-@emph{appear} functional, but internally we will use reference cells in the implementation.
+list to be set after the elements have already been created.
 
 To begin, we first need to choose a representation for the queue.  First, the elements in the
 circular list are of type @code{elem}, which is a pair @code{(x, next)}, where @code{x} is the value
 of the element, and @code{next} is the pointer to the next element of the queue.  The queue itself
-can be empty, so we define the type as an @code{elem option}.
+can be empty, so we define the type as a reference to an @code{elem option}.
 
 @begin[iverbatim]
-   type 'a elem = 'a * 'a elem ref
-   type 'a queue = 'a elem option
+   (* An element is a pair (value, previous-element) *)
+   type 'a elem = 'a * 'a pointer
+   and 'a pointer = Pointer of 'a elem ref
+
+   type 'a queue = 'a elem option ref
 
    let create () =
       None
 @end[iverbatim]
 
-The invariant of the queue data structure is that the each element in the circular list points to
-the next newer element, and the newest points to the oldest.  The queue itself refers to the
-youngest element.  When adding an element to the queue, we insert it after the current newest
-element.
+You might wonder why not give the @code{'a elem} type a more straightforward definition as @code{'a
+* 'a elem ref}.  The problem with this type definition is that it is @emph{cyclic} (since the type
+@code{'a elem} appears in its own definition).  By default, OCaml rejects cyclic definitions because
+they can be confusing.
+
+@begin[iverbatim]
+   % ocaml
+        Objective Caml version 3.08.3
+
+   # type 'a elem = 'a * 'a elem ref;;
+   The type abbreviation elem is cyclic
+@end[iverbatim]
+
+The solution is to introduce a union type (@code{pointer} in this case).  This introduces the
+@code{Pointer} constructor, which makes the definition acceptable because the recursive occurence of
+@code{elem} in @code{Pointer of 'a elem ref} is now within a constructor.
+
+Next, let's consider the function to add an element to the queue.  The invariant of the queue data
+structure is that the each element in the circular list points to the next newer element, and the
+newest points to the oldest.  The one exception is when the queue is empty, since there are no
+elements.  In this case, when adding the element, we need to create it so that it refers to itself,
+since it is simultaneously the oldest and newest element.  This is done with a recursive value
+definition, @code{let rec elem = (x, Pointer (ref elem))}, where the element @code{elem} is
+defined to point to itself.
 
 @begin[iverbatim]
    let enqueue queue x =
-      match queue with
-         Some youngest ->
-            let (_, oldest_ref) = youngest in
+      match !queue with
+        None ->
+            (* The element should point to itself *)
+            let rec elem = (x, Pointer (ref elem)) in
+                queue := Some elem
+       | Some (_, Pointer prev_next) ->
+            (* Insert after the previous element *)
+            let oldest = !prev_next in
+            let elem = (x, Pointer (ref oldest)) in
+               prev_next := elem;
+               queue := Some elem
 @end[iverbatim]
 
-...TODO...
+For the second case, where the queue is non-empty, we create a new element @code{elem} that
+points to the oldest element, modify the previous element so that it points to the new element (by
+setting the @code{prev_next} reference), and set the queue to point to the new element.
+
+To finish off the implementation, we need to add a function to dequeue an element from the queue.
+According to the queue invariant, the oldest element is the element after the newest.  To dequeue
+it, we simply unlink it from the queue, with one exception.  If the queue contains only one element,
+then that element will point to itself.  We can test for this using the operator @code{==} for
+pointer equality; and if so, set the queue to @code{None} to indicate that it is empty.
+
+@begin[iverbatim]
+   let dequeue queue =
+      match !queue with
+         None ->
+            (* The queue is empty *)
+            raise Not_found
+       | Some (_, Pointer oldest_ref) ->
+            let oldest = !oldest_ref in
+            let (x, Pointer next_ref) = oldest in
+            let next = !next_ref in
+               (* Test whether the element points to itself *)
+               if next == oldest then
+                  (* It does, so the queue becomes empty *)
+                  queue := None
+               else
+                  (* It doesn't, unlink it *)
+                  oldest_ref := next;
+               x
+@end[iverbatim]
+
+There are a few things to learn from this example.  For one, it is much more complicated than the
+first implementation using two lists.  The type definitions and the data structure itself are
+cyclic, and so the implementation is less natural.  For another, we had to make use of two new
+operations, the comparison @code{==} for pointer equality, and a @code{let rec} for a recursive
+value definition.  In the end, the data structure is more difficult to understand than the two-list
+version, and is less likely to be encountered in practice.
+
+@subsection["ref-functional"]{Functional queues with reference cells}
+
+The previous two examples of queues are imperative, meaning that the @code{enqueue} and
+@code{dequeue} functions modify the queue in-place.  One might also wonder if there are efficient
+functional implementations---that is, rather than modifying the queue in place, the @code{enqueue}
+and @code{dequeue} operations produce new queues without effecting the old one.  There are many
+advantages to functional data structures.  Among the most important is that functional data
+structures are @emph{persistent}---their operations produce new data without destroying old.
+
+It is easy enough to construct a functional version for queues.  Since the operations now return new queues, the signature changes
+to the following.
+
+@begin[iverbatim]
+    type 'a queue
+
+    val empty   : 'a queue
+    val enqueue : 'a queue -> 'a -> 'a queue
+    val dequeue : 'a queue -> 'a * 'a queue
+@end[iverbatim]
+
+Note that there is no longer a need for a @code{create} function to create a new queue, we can
+simply use a canonical empty queue.
+
+For the implementation, let's return to the simpler implementation using two lists.  The first step
+is to eliminate all reference cells.  The following code provides this translation.  Note that the
+@code{enqueue} operation returns a new queue, and the @code{dequeue} operation returns a pair of an
+element and a new queue.
+
+@begin[iverbatim]
+    (* The queue is (enqueue_list, dequeue_list) *)
+    type 'a queue = 'a list * 'a list
+
+    (* Construct an empty queue *)
+    let create () =
+       ([], [])
+
+    (* Add the new element to the enqueue_list *)
+    let enqueue (eq, dq) x =
+       (x :: eq, dq)
+
+    (* Take an element from the dequeue list *)
+    let rec dequeue = function
+       (eq, x :: dq) ->
+          x, (eq, dq)
+     | ([], []) ->
+          raise Not_found
+     | (eq, []) ->
+          (* Shift the queue, and dequeue again *)
+          dequeue ([], List.rev eq)
+@end[iverbatim]
+
+This seems simple enough, and indeed the code is simpler and smaller than the original imperative
+version.  Unfortunately, the @code{dequeue} function no longer takes constant time!  Imagine a
+scenario where a large number of elements are added to a queue without any intervening dequeue
+operations.  The result will be a queue that is maximally imbalanced, with all the elements in the
+enqueue list.  If we wish to use the queue multiple times, each time we use the dequeue function,
+the queue will have to be shifted by reversing the enqueue list, taking time linear in the number of
+elements.
+
+The solution around this uses reference cells to ``remember'' the results of the shift operation.
+After all, the shift doesn't change the elements in the queue, it just changes their representation.
+Externally, we can preserve the functional appearance of the queue data structure; the
+implementation will still be a queue, and it will still be persistent.  The modification that is
+needed is to add a reference cell that can be used to shift the queue in-place.
+
+@begin[iverbatim]
+    (* The queue is (enqueue_list, dequeue_list) *)
+    type 'a queue = ('a list * 'a list) ref
+
+    (* The empty queue is a value *)
+    let create () =
+       ref ([], [])
+
+    (* Add the new element to the enqueue_list *)
+    let enqueue queue x =
+       let (eq, dq) = !queue in
+          ref (x :: eq, dq)
+
+    (* Take an element from the dequeue list *)
+    let rec dequeue queue =
+       match !queue with
+          (eq, x :: dq) ->
+             x, ref (eq, dq)
+        | ([], []) ->
+             raise Not_found
+        | (eq, []) ->
+             (* Shift the queue in-place *)
+	     queue := ([], List.rev eq);
+             dequeue queue
+@end[iverbatim]
+
+In this revised version, reference cells are used purely as an optimization.  To preserve the
+behavior of the original functional version, when a new queue is created, it is created with a new
+reference cell.  This prevents operations on one queue from affecting any others; the data remains persistent.
+
+@subsection["ref-summary"]{Summary}
+
+@subsection["ref-exercises"]{Exercises}
+
+JYH: these are just thoughts for now.
+
+@begin[enumerate]
+@item{{In the implementation of queues as circular lists, we used a recursive value definition.
+
+@begin[iverbatim]
+   let rec elem = (x, Pointer (ref elem)) in ...
+@end[iverbatim]
+
+Many languages do not have this feature.  What would you need to do if values could not be defined recursively?
+What would be the impact on performance?}}
+
+@item{{While the comparison @code{==} is frequently understood as physical (pointer) equality, the
+OCaml documentation gives a weaker definition, ``For any two values @code{x} and @code{y}, if
+@code{x == y} then @code{x = y}.''  According to this definition, it would be acceptable if the
+@code{==} comparison always returns @code{false}.  What would happen to the implementation of queues
+using circular linked lists if so?  How could it be fixed?}}
+
+@item{{The functional versions of the queue have a @code{create} function that returns a fresh, empty queue.
+Since the data structure is functional, it would be reasonable to replace the @code{create} function with a value
+@code{code} empty that represents the empty queue.  For example, in the purely function version, we could define
+the empty queue as the following, and remove the @code{create} function.
+
+@begin[iverbatim]
+    let empty = ([], [])
+@end[iverbatim]
+
+Why won't this work in the version of the queue that uses reference cells?}}
+
+@item{{Is it possible to implement a persistent queue using circular linked lists, and all
+operations are $O(1)$ (constant time)?  If so, provide an implementation.  If not, explain why
+not.}}
+
+@end[enumerate]
 
 @end[doc]
 @docoff

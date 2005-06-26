@@ -1364,7 +1364,7 @@ let base_jproverT def_mult = funT (fun p ->
    with
       [t] ->
          let substs =
-            try [Lm_symbol.make "vnewj" 0, get_with_arg p] with RefineError _ -> []
+            try [Lm_symbol.make "n_jprover" 0, get_with_arg p] with RefineError _ -> []
          in
             t substs assums
     | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof"))

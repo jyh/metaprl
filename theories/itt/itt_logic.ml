@@ -1228,11 +1228,11 @@ struct
    let is_all_term = is_all_term
    let dest_all t =
       let v, t1, t2 = dest_all t in
-         string_of_symbol v, t1, t2
+         v, t1, t2
    let is_exists_term = is_exists_term
    let dest_exists t =
       let v, t1, t2 = dest_exists t in
-         string_of_symbol v, t1, t2
+         v, t1, t2
    let is_and_term t = is_and_term t || is_iff_term t
    let dest_and t =
       if is_iff_term t then let a, b = dest_iff t in

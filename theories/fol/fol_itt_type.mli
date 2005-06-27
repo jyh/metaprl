@@ -34,7 +34,7 @@ extends Itt_theory
 
 derive Fol_type
 
-open Tactic_type.Tactic
+open Basic_tactics
 
 topval fold_type : conv
 

@@ -4,7 +4,7 @@
 
 extends Fol_type
 
-open Dtactic
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

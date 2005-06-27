@@ -34,11 +34,7 @@ extends Itt_theory
 extends Fol_type_itt
 extends Fol_univ
 
-open Refiner.Refiner.RefineError
-
-open Mp_resource
-
-open Tactic_type.Tacticals
+open Basic_tactics
 
 (************************************************************************
  * SYNTAX                                                               *

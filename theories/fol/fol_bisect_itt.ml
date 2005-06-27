@@ -32,9 +32,7 @@
 
 extends Itt_theory
 
-open Mp_resource
-
-open Refiner.Refiner.RefineError
+open Basic_tactics
 
 (*
  * Intersection bounded by a type.

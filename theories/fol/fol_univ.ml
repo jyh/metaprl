@@ -4,12 +4,7 @@
 
 extends Fol_type
 
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Auto_tactic
+open Basic_tactics
 
 declare univ
 declare prop{'t}

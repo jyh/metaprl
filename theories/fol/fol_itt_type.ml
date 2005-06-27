@@ -34,7 +34,7 @@ extends Itt_theory
 
 derive Fol_type
 
-open Tactic_type.Conversionals
+open Basic_tactics
 
 prim_rw unfold_type : Fol_type!"type"{'t} <--> Itt_equal!"type"{'t}
 

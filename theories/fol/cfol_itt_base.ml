@@ -37,11 +37,7 @@ derive Fol_false
 derive Fol_true
 derive Fol_pred
 
-open Tactic_type
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
-
-open Dtactic
+open Basic_tactics
 
 open Itt_equal
 

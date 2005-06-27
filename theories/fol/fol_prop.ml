@@ -48,13 +48,7 @@ interactive distrib_or :
    sequent { <H> >- (('A or 'B) => 'C) => (('A => 'C) & ('B => 'C)) }
 
 (* Automation *)
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-open Dtactic
-open Auto_tactic
+open Basic_tactics
 open Fol_not
 open Fol_struct
 

@@ -35,7 +35,7 @@ extends Fol_itt_type
 
 derive Fol_or
 
-open Tactic_type.Tactic
+open Basic_tactics
 
 topval fold_or : conv
 topval fold_inl : conv

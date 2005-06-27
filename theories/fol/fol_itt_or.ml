@@ -35,7 +35,7 @@ extends Fol_itt_type
 
 derive Fol_or
 
-open Tactic_type.Conversionals
+open Basic_tactics
 
 prim_rw unfold_or : Fol_or!"or"{'A; 'B} <--> Itt_union!union{'A; 'B}
 prim_rw unfold_inl : Fol_or!inl{'a} <--> Itt_union!inl{'a}

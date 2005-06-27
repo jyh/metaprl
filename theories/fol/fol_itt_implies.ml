@@ -35,7 +35,7 @@ extends Fol_itt_type
 
 derive Fol_implies
 
-open Tactic_type.Conversionals
+open Basic_tactics
 
 prim_rw unfold_implies : Fol_implies!implies{'A; 'B} <--> Itt_rfun!"fun"{'A; 'B}
 prim_rw unfold_lambda : Fol_implies!lambda{x. 'b['x]} <--> Itt_rfun!"lambda"{x. 'b['x]}

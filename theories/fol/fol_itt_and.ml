@@ -35,7 +35,7 @@ extends Fol_itt_type
 
 derive Fol_and
 
-open Tactic_type.Conversionals
+open Basic_tactics
 
 prim_rw unfold_and : "and"{'A; 'B} <--> prod{'A; 'B}
 prim_rw unfold_pair : Fol_and!pair{'a; 'b} <--> Itt_dprod!pair{'a; 'b}

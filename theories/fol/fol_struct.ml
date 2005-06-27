@@ -4,10 +4,7 @@
 
 extends Base_theory
 
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Auto_tactic
+open Basic_tactics
 
 (*
  * Hypothesis.

@@ -33,7 +33,7 @@
 extends Itt_theory
 extends Cfol_itt_base
 
-open Dtactic
+open Basic_tactics
 
 derive Fol_and
 

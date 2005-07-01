@@ -1,13 +1,12 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_singleton]
 
    The @tt{Czf_itt_singleton} module defines the singleton
    sets $@sing{s}$, which is a set that contains the single element
    $s$.  The singleton is used as a building block for pairing,
    defined in the @hrefmodule[Czf_itt_pair] module.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -39,7 +38,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_member
 doc docoff
 
@@ -55,7 +54,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc <:doc< @terms >>
 declare sing{'s}
 
 (************************************************************************
@@ -63,14 +62,12 @@ declare sing{'s}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The singleton set $@sing{s}$ is defined as a set
    with an index type $@unit$, and an element function
    that returns the set $s$.  Note that @emph{any}
    non-empty type can be used as the index type.
-   @end[doc]
 >>
 prim_rw unfold_sing : sing{'s} <--> collect{unit; x. 's}
 doc docoff
@@ -87,25 +84,21 @@ dform sing_df : sing{'s} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The singleton $@sing{s}$ is well-formed if
    $s$ is a set.
-   @end[doc]
 >>
 interactive sing_isset {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
    sequent { <H> >- isset{sing{'s}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and elimination}
 
    The @emph{only} element of the singleton set $@sing{s}$ is
    the set $s$.
-   @end[doc]
 >>
 interactive sing_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; sing{'s}}; <J['x]>; w: eq{'y; 's} >- 'T['x] } -->
@@ -118,11 +111,9 @@ interactive sing_member_intro {| intro [] |} :
    sequent { <H> >- mem{'s1; sing{'s2}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The singleton is functional in it's set argument.
-   @end[doc]
 >>
 interactive sing_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's['z]} } -->

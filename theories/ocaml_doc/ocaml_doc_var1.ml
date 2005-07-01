@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    Obfuscated Ok expr
@@ -32,13 +31,11 @@ doc <:doc<
    @email{jyh@cs.caltech.edu}
    @end[license]
 
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-   @begin[doc]
 
 So far, we have considered only simple expressions not involving
 variables. In ML, variables are @emph{names} for values.
@@ -442,7 +439,6 @@ by its first character in the operator name.  For example an operator
 named @code{+/-} would have the same precedence and associativity as
 the @code{+} operator.
 
-@end[doc]
 >>
 
 (*

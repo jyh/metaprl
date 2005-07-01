@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @spelling{th}
 
    @module[Mfir_list]
@@ -36,13 +35,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_bool
@@ -58,13 +54,11 @@ open Mfir_int
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The term @tt[nil] is the empty list, and the term @tt[cons] adds a
    term @tt[elt] to the list @tt[tail].  Unless otherwise stated, it
    will be assumed that lists are nil-terminated.
-   @end[doc]
 >>
 
 declare nil
@@ -72,20 +66,16 @@ declare cons{ 'elt; 'tail }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[length] returns the number of elements in a list @tt[l].
-   @end[doc]
 >>
 
 declare length{ 'l }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[nth_elt] returns the $n$th element of a list @tt[l].
-   @end[doc]
 >>
 
 declare nth_elt{ 'n; 'l }
@@ -96,12 +86,10 @@ declare nth_elt{ 'n; 'l }
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    Computing the length of a list and the $n$th element of a list
    is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_length_base {| reduce |} :

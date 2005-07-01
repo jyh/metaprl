@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_hom]
 
    The @tt[Czf_itt_hom] module defines the @emph{homomorphism}.
@@ -34,8 +33,8 @@ doc <:doc<
    @end[array]
    $$
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -67,7 +66,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 extends Czf_itt_subgroup
 extends Czf_itt_abel_group
@@ -86,7 +85,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc <:doc< @terms >>
 declare hom{'g1; 'g2; x. 'f['x]}
 doc docoff
 
@@ -95,13 +94,11 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    The @tt[hom] judgment requires that $g_1$ and $g_2$ be
    groups, $f$ be a mapping from $@car{g_1}$ into $@car{g_2}$,
    and for any $a$ and $b$ in $@car{g_1}$, $f$ map
    $@op{g_{1}; a; b}$ into $@op{g_{2}; f[a]; f[b]}$.
-   @end[doc]
 >>
 prim_rw unfold_hom : hom{'g1; 'g2; x. 'f['x]} <-->
    (group{'g1} & group{'g2} & (all a: set. (mem{'a; car{'g1}} => member{'f['a]; car{'g2}})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => eq{'a; 'b} => eq{'f['a]; 'f['b]})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => eq{'f[op{'g1; 'a; 'b}]; op{'g2; 'f['a]; 'f['b]}})))
@@ -119,13 +116,11 @@ dform hom_df : parens :: except_mode[src] :: hom{'g1; 'g2; x. 'f} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The @tt[hom] is well-formed if $g1$ and $g2$ are labels,
    and $f[x]$ is a set for any set argument $x$.
-   @end[doc]
 >>
 interactive hom_type {| intro [] |} :
    sequent { <H> >- 'g1 IN label } -->
@@ -134,7 +129,6 @@ interactive hom_type {| intro [] |} :
    sequent { <H> >- "type"{hom{'g1; 'g2; x. 'f['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The proposition $@hom{x; g1; g2; f[x]}$ is true if it
@@ -143,7 +137,6 @@ doc <:doc<
    $b$ of $@car{g_2}$, and $f$ maps $@op{g_{1}; a; b}$
    into $@op{g_{2}; f[a]; f[b]}$ for any $a$ and $b$ in
    $@car{g_1}$.
-   @end[doc]
 >>
 interactive hom_intro {| intro [] |} :
    sequent { <H> >- 'g1 IN label } -->
@@ -156,12 +149,10 @@ interactive hom_intro {| intro [] |} :
    sequent { <H> >- hom{'g1; 'g2; x. 'f['x]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The @tt[hom] judgment is functional in the function
    argument.
-   @end[doc]
 >>
 interactive hom_fun {| intro [] |} :
    sequent { <H> >- 'g1 IN label } -->
@@ -173,14 +164,12 @@ interactive hom_fun {| intro [] |} :
    sequent { <H> >- fun_prop{z. hom{'g1; 'g2; y. 'f['z; 'y]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Trivial homomorphism}
 
    For any groups $g_1$ and $g_2$, there is always at least
    one homomorphism $f@colon g_1 @rightarrow g_2$ which
    maps all elements of $@car{g_1}$ into $@id{g_2}$. This
    is called the trivial homomorphism.
-   @end[doc]
 >>
 interactive trivial_hom1 :
    sequent { <H> >- 'g1 IN label } -->
@@ -191,7 +180,6 @@ interactive trivial_hom1 :
    sequent { <H> >- hom{'g1; 'g2; x. 'f['x]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
    Let $f@colon g_1 @rightarrow g_2$ be a group
@@ -201,14 +189,11 @@ doc <:doc<
 
    If $f$ is @emph{onto}, then $g_1$ is abelian
    implies $g_2$ is abelian.
-   @end[doc]
 >>
 (*doc <:doc<
-   @begin[doc]
 
    If $f$ is @emph{onto}, then $g_1$ is abelian
    implies $g_2$ is abelian.
-   @end[doc]
   )*)
 interactive hom_abel hom{'g1; 'g2; x. 'f['x]} :
    sequent { <H> >- 'g1 IN label } -->
@@ -226,10 +211,8 @@ interactive hom_id {| intro [] |} hom{'g1; 'g2; x. 'f['x]} :
    sequent { <H> >- eq{'f[id{'g1}]; id{'g2}} }
 
 doc <:doc<
-   @begin[doc]
 
      $f$ maps the identity of $g_1$ into the identity of $g_2$.
-   @end[doc]
 >>
 interactive hom_id_elim (*{| elim [] |}*) 'H :
    sequent { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
@@ -247,11 +230,9 @@ interactive hom_inv {| intro [] |} 'a hom{'g1; 'g2; x. 'f['x]} :
    sequent { <H> >- eq{'f[inv{'g1; 'a}]; inv{'g2; 'f['a]}} }
 
 doc <:doc<
-   @begin[doc]
 
      $f$ maps the inverse of an element $a$ in $@car{g_1}$ into
      the inverse of $f[a]$ in $@car{g_2}$.
-   @end[doc]
 >>
 interactive hom_inv_elim (*{| elim [] |}*) 'H 'a :
    sequent { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
@@ -263,11 +244,9 @@ interactive hom_inv_elim (*{| elim [] |}*) 'H 'a :
    sequent { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 
 doc <:doc<
-   @begin[doc]
 
      If $h$ is a subgroup of $g_1$, then the image of $h$ under
      $f$ is a subgroup of $g_2$.
-   @end[doc]
 >>
 (*
  * Let f: G -> G' be a group homomorphism of G into G'.
@@ -287,11 +266,9 @@ interactive hom_subg1 hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
    sequent { <H> >- subgroup{'h2; 'g2} }
 
 doc <:doc<
-   @begin[doc]
 
      If $k$ is a subgroup of $g_2$, then the inverse image of
      $k$ under $f$ is a subgroup of $g_1$.
-   @end[doc]
 >>
 (*
  * Let f: G -> G' be a group homomorphism of G into G'.
@@ -316,7 +293,6 @@ interactive hom_subg2 hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -327,7 +303,6 @@ doc <:doc<
       inverse between two groups under a homomorphism.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let homIdT = hom_id_elim
 let homInvT t i = hom_inv_elim i t

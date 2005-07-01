@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_set]
 
    The @tt{Czf_itt_set} module provides the basic definition
@@ -69,8 +68,8 @@ doc <:doc<
    One avenue for improvement in this theory would be to stratify
    the set types to arbitrary type universes $@univ{i}$, which would
    allow for higher-order reasoning on sets, classes, etc.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -103,7 +102,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @doc{@parents}
+   @parents
 >>
 extends Itt_theory
 extends Itt_eta
@@ -134,7 +133,6 @@ let debug_czf_set =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{set} term defines the type of sets; the @tt{collect}
@@ -144,7 +142,6 @@ doc <:doc<
    @i{s} argument represents the set; @i{T} is it's index type,
    @i{f} is it's function value, and @i{g} is used to perform
    recursive computations on the children.
-   @end[doc]
 >>
 declare set
 declare isset{'s}
@@ -157,11 +154,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    The following four rewrites give the primitive definitions
    of the set constructions from the terms in the @Nuprl type theory.
-   @end[doc]
 >>
 prim_rw unfold_set : set <--> w{univ[1:l]; x. 'x}
 prim_rw unfold_isset : isset{'s} <--> ('s = 's in set)
@@ -170,11 +165,9 @@ prim_rw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[set_ind] term performs a pattern match;
    the normal reduction sequence can be derived from the
    computational behavior of the @hrefterm[tree_ind] term.
-   @end[doc]
 >>
 
 interactive_rw reduce_set_ind {| reduce |} :
@@ -211,7 +204,6 @@ dform set_ind_df : parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
@@ -220,7 +212,6 @@ doc <:doc<
    @tt[isset] well-formedness judgment.  The @tt[isset_assum]
    is added to the @hreftactic[trivialT] tactic for use as
    default reasoning.
-   @end[doc]
 >>
 interactive set_type {| intro [] |} :
    sequent { <H> >- "type"{set} }
@@ -239,11 +230,9 @@ interactive isset_assum {| nth_hyp |} 'H :
    sequent { <H>; x: set; <J['x]> >- isset{'x} }
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[collect] terms are well-formed, if their
    index type $T$ is a type in $@univ{1}$, and their element function
    $a$ produces a set for any argument $x @in T$.
-   @end[doc]
 >>
 interactive isset_collect {| intro [] |} :
    sequent { <H> >- 'T = 'T in univ[1:l] } -->
@@ -257,14 +246,13 @@ interactive isset_collect2 {| intro [] |} :
 
 doc <:doc<
    @docoff
-   This is how a set is constructed.
+   (* This is how a set is constructed. *)
 >>
 interactive isset_apply {| intro [] |} :
    sequent { <H> >- ('f 'a) IN set } -->
    sequent { <H> >- isset{.'f 'a} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form performs induction on the
@@ -274,7 +262,6 @@ doc <:doc<
    is true on every child $f(x)$ for $x @in T$.  By definition,
    induction requires that tree representing the set be well-founded
    (which is true for all $W$-types).
-   @end[doc]
 >>
 interactive set_elim {| elim [ThinOption thinT] |} 'H :
    sequent { <H>;
@@ -290,8 +277,8 @@ interactive set_elim {| elim [ThinOption thinT] |} 'H :
 
 doc <:doc<
    @docoff
-   The next two rules allow any set argument to be replaced with
-   an @tt{collect} argument.  These rules are never used.
+   (* The next two rules allow any set argument to be replaced with
+   an @tt{collect} argument.  These rules are never used. *)
 >>
 interactive set_split_hyp 'H 's (bind{v. 'A['v]}) :
    sequent { <H>; x: 'A['s]; <J['x]> >- isset{'s} } -->
@@ -312,14 +299,12 @@ interactive set_split_concl 's (bind{v. 'C['v]}) :
    sequent { <H> >- 'C['s] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
    The induction combinator computes a value of type $T$ if its
    argument $z$ is a set, and the body $b[z, f, g]$ computes a value
    of type $T$, for any type $z @in @univ{1}$, any function
    $f @in z @rightarrow @set$, and a recursive invocation
    $g @in x@colon @univ{1} @rightarrow x @rightarrow T$.
-   @end[doc]
 >>
 interactive set_ind_equality2 {| intro [] |} :
    ["wf"]   sequent { <H> >- 'z1 = 'z2 in set } -->

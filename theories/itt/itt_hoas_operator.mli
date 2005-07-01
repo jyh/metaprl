@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_operator]
    The @tt[Itt_hoas_operator] module defines a type << Operator >> of abstract
    operators.
-   @end[doc]
 
    ----------------------------------------------------------------
 

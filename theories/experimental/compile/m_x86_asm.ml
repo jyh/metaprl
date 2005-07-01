@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @spelling{MUL DIV cc}
    @module[M_x86_asm]
 
@@ -30,13 +29,10 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Base_theory
 
@@ -45,9 +41,7 @@ extends Base_theory
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{x86 operands}
-   @end[doc]
 >>
 declare ImmediateNumber[i:n]
 declare ImmediateLabel[label:s]{'R}
@@ -65,12 +59,10 @@ declare MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Condition codes}
 
    These condition codes are used in the @tt[Jcc] (conditional jump)
    instruction below.
-   @end[doc]
 >>
 declare CC[cc:s]
 
@@ -79,7 +71,6 @@ declare CC[cc:s]
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Instructions}
 
    We want the assembly to have ``semi-functional'' property,
@@ -107,7 +98,6 @@ doc <:doc<
    @item{$@tt[Cmp][<<'opname>>]$: a comparison@; both operands are sources}
    @item{$@tt[Set][<<'opname>>]$: the set/cc instruction}
    @end[itemize]
-   @end[doc]
 >>
 declare Mov{'src; dst. 'rest['dst]}
 declare Spill[opcode:s]{'src; dst. 'rest['dst]}
@@ -137,28 +127,22 @@ declare Jmp[opcode:s]{'label; 'args}
 declare Jcc[opcode:s]{'cc; 'rest1; 'rest2}
 
 doc <:doc<
-   @begin[doc]
    This is a pseudo-instruction that calls the garbage collector to ensure
    that the specified number of words is available.  The parameters are the
    live registers (normally the parameters to the current function).
-   @end[doc]
 >>
 declare AsmReserve[words:n]{'params}
 
 doc <:doc<
-   @begin[doc]
    The @tt[Comment] instruction is not a real instruction.  It is used to
    include a comment in the program output; the text is given in the string
    parameter.
-   @end[doc]
 >>
 declare Comment[comment:s]{'rest}
 
 doc <:doc<
-   @begin[doc]
    The program initialization is wrapped in the @tt[Init] term; we don't
    include the initialization code in the program output.
-   @end[doc]
 >>
 declare Init{'rest}
 
@@ -167,14 +151,12 @@ declare Init{'rest}
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Programs}
 
    A program is a set of recursive definitions, just like it is
    in the IR.  The labels in the assembly correspond to functions,
    and the register allocator is responsible for ensuring that the
    calling convention is respected.
-   @end[doc]
 >>
 declare LabelAsm[label:s]{'R}
 

@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_base]
    The @tt[Itt_hoas_base] module defines the basic operations of the
    Higher Order Abstract Syntax (HOAS).
-   @end[doc]
 
    ----------------------------------------------------------------
 

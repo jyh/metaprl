@@ -1,13 +1,12 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_bunion]
 
    The @tt{Itt_bunion} module defines a binary union $@bunion{A; B}$
    of type types $A$ and $B$.  The elements include the elements of $A$
    as well as the elements of $B$.  Two elements are equal
    if they are equal in @emph{either} of the types.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,9 +39,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_tunion
 extends Itt_bool
@@ -62,12 +59,10 @@ open Itt_struct
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The binary union is defined using the @hrefterm[tunion]
    over the space of Booleans.
-   @end[doc]
 >>
 define unfold_bunion : "bunion"{'A; 'B} <-->
                           Union x: bool. ifthenelse{'x; 'A; 'B}
@@ -93,13 +88,11 @@ let fold_bunion = makeFoldC << 'A bunion 'B >> unfold_bunion
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The union $@bunion{A; B}$ is well-formed if
    both $A$ and $B$ are types.
-   @end[doc]
 >>
 interactive bunionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -112,7 +105,7 @@ interactive bunionType {| intro [] |} :
    sequent { <H> >- "type"{'A bunion 'B} }
 
 doc <:doc<
-   Formation.
+   (* Formation. *)
    @docoff
 >>
 interactive bunionFormation :
@@ -121,12 +114,10 @@ interactive bunionFormation :
    sequent { <H> >- univ[i:l] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    Two terms are equal in the binary union if they are equal
    in either type.
-   @end[doc]
 >>
 interactive bunionMemberEqualityLeft {| intro [SelectOption 1] |} :
    [wf] sequent { <H> >- 'x = 'y in 'A } -->
@@ -139,7 +130,6 @@ interactive bunionMemberEqualityRight {| intro [SelectOption 2] |} :
    sequent { <H> >- 'x = 'y in 'A bunion 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form retains the limitations of the
@@ -147,7 +137,6 @@ doc <:doc<
    can be used only for equality judgments.  The elimination form
    for a union type $@bunion{A; B}$ produces two cases: one for
    membership in $A$, and another for membership in $B$.
-   @end[doc]
 >>
 interactive bunionElimination {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'A >- 't1['y] = 't2['y] in 'C['y] } -->

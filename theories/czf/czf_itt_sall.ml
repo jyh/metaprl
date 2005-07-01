@@ -1,12 +1,11 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_sall]
 
    The @tt[Czf_itt_sall] module defines the @emph{unrestricted} universal
    quantification $@sall{x; P[x]}$ over all sets $x$.  The proposition
    $P[x]$ must be well-formed for all sets $x$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,7 +37,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_set
 doc docoff
 
@@ -59,12 +58,10 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The quantification $@sall{x; P[x]}$ is defined using the universal
    quantifier @hrefterm[all] from the @hrefmodule[Itt_logic] module.
-   @end[doc]
 >>
 define unfold_sall : "sall"{x. 'A['x]} <--> (all x: set. 'A['x])
 doc docoff
@@ -83,37 +80,31 @@ dform sall_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sall"{x. '
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The quantification $@sall{x; A[x]}$ is well-formed if
    $A[x]$ is a proposition for any set $x$.
-   @end[doc]
 >>
 interactive sall_type {| intro [] |} :
    sequent { <H>; y: set >- "type"{'A['y]} } -->
    sequent { <H> >- "type"{."sall"{x. 'A['x]} } }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The quantification $@sall{x; A[x]}$ is true if it is well-formed,
    and if $A[x]$ is true for every set $x$.
-   @end[doc]
 >>
 interactive sall_intro {| intro [] |} :
    sequent { <H>; a: set >- 'A['a] } -->
    sequent { <H> >- "sall"{x. 'A['x]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form instantiates the universal assumption
    on a particular set argument $z$.
-   @end[doc]
 >>
 interactive sall_elim {| elim [] |} 'H 'z :
    ["wf"]   sequent { <H>; x: "sall"{y. 'A['y]}; <J['x]> >- isset{'z} } -->

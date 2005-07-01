@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    IR inlined binop relop op
    @end[spelling]
@@ -30,12 +29,10 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_ir
 
 doc <:doc<
-@begin[doc]
 
 Many optimizations on the intermediate representation are quite easy to express.  For illustration,
 we include two very simple optimizations: dead-code elimination and constant folding.
@@ -101,7 +98,6 @@ $$
 $$
 
 @docoff
-@end[doc]
 >>
 
 (*

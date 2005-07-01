@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_sqsimple]
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,9 +36,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Itt_logic
@@ -51,21 +47,16 @@ open Itt_equal
 open Itt_struct
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definition}
    A type is said to be squiggle simple if only squiggle equal elements are equal in this type.
-   @end[doc]
 >>
-
 
 define unfold_sqsimple: sqsimple{'T} <--> all x:'T. all y:'T. ('x='y in 'T => 'x~'y)
 
 define unfold_sqsimple_type: sqsimple_type{'T} <--> "type"{'T} & sqsimple{'T}
 
 doc <:doc<
-   @begin[doc]
    @modsection{Basic Rules}
-   @end[doc]
 >>
 
 let resource intro +=

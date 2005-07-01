@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_group_power]
 
    The @tt[Czf_itt_group_power] module defines the power operation
@@ -13,8 +12,8 @@ doc <:doc<
      @ind{n; i; j; @op{g; @inv{g; z}; @power{g; z; (n + 1)}}; @id{g}; k; l; @op{g; z; @power{g; z; (n - 1)}}}}}
    @end[array]
    $$
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -46,7 +45,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 extends Itt_int_base
 doc docoff
@@ -65,7 +64,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare power{'g; 'z; 'n}
 doc docoff
 
@@ -74,11 +73,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{power} is defined by induction.
-   @end[doc]
 >>
 prim_rw unfold_power : power{'g; 'z; 'n} <-->
    ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
@@ -98,13 +95,11 @@ dform power_df : parens :: except_mode[src] :: power{'g; 'z; 'n} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The $@power{g; z; n}$ is well-formed if $g$ is a label,
    $z$ is a set, and $n$ is an integer in ITT.
-   @end[doc]
 >>
 interactive power_wf {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
@@ -113,12 +108,10 @@ interactive power_wf {| intro [] |} :
    sequent { <H> >- isset{power{'g; 'z; 'n}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    If $z$ is a member of $@car{g}$, then $@power{g; z; n}$
    is also in $@car{g}$ for any integer $n$.
-   @end[doc]
 >>
 interactive power_mem {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
@@ -129,11 +122,9 @@ interactive power_mem {| intro [] |} :
    sequent { <H> >- mem{power{'g; 'z; 'n}; car{'g}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The @tt{power} is functional in its set argument.
-   @end[doc]
 >>
 interactive power_fun {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
@@ -163,11 +154,9 @@ interactive power_more {| intro [] |} :
    sequent { <H> >- eq{op{'g; power{'g; 'x; 'n}; 'x}; power{'g; 'x; ('n +@ 1)}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Power reduction}
 
    $x^m * x^n = x^{m + n}$
-   @end[doc]
 >>
 interactive power_reduce1 {| intro [] |} :
    sequent { <H> >- 'g IN label } -->

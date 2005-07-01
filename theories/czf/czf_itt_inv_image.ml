@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_inv_image]
 
    The @tt[Czf_itt_inv_image] module defines the @emph{inverse image}
@@ -8,8 +7,7 @@ doc <:doc<
    be sets, and $a[x]$ must be functional. The elements of the inverse
    image are the elements of $x$ in $s$ for which $a[x]$ in $t$ is true.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -41,7 +39,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_sep
 doc docoff
 
@@ -59,7 +57,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare inv_image{'s; x. 'a['x]; 't}
 doc docoff
 
@@ -68,11 +66,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{inv_image} term is defined by separation.
-   @end[doc]
 >>
 prim_rw unfold_inv_image: inv_image{'s; x. 'a['x]; 't} <-->
    sep{'s; x. mem{'a['x]; 't}}
@@ -92,13 +88,11 @@ dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The inverse image $@invimage{x; s; a[x]; t}$ is well-formed
    if $s$ and $t$ are sets, and $a[x]$ is functional.
-   @end[doc]
 >>
 interactive inv_image_isset {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
@@ -107,13 +101,11 @@ interactive inv_image_isset {| intro [] |} :
    sequent { <H> >- isset{inv_image{'s; x. 'a['x]; 't}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    A set $y$ is a member of $@invimage{x; s; a[x]; t}$ if
    the inverse image is well-formed; if $@mem{y; s}$;
    and if $@mem{a[y]; t}$.
-   @end[doc]
 >>
 interactive inv_image_intro {| intro [] |} :
    sequent { <H> >- isset{'y} } -->
@@ -125,12 +117,10 @@ interactive inv_image_intro {| intro [] |} :
    sequent { <H> >- mem{'y; inv_image{'s; x. 'a['x]; 't}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    An assumption $@mem{y; @invimage{x; s; a[x]; t}}$ implies two facts:
    $@mem{y; s}$ and $@mem{a[y]; t}$.
-   @end[doc]
 >>
 interactive inv_image_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- isset{'y} } -->

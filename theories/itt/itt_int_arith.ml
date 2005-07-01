@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_int_arith]
 
 	This module defines @hrefconv[normalizeC] and @hreftactic[arithT].
@@ -7,8 +6,8 @@ doc <:doc<
    @noindent @hrefconv[normalizeC] converts polynomials to the canonical form.
 
    @noindent @hreftactic[arithT] proves simple inequalities.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,6 +37,8 @@ doc <:doc<
    Author: Yegor Bryukhov
    @email{ynb@mail.ru}
    @end[license]
+   @docon
+   @parents
 >>
 extends Itt_equal
 extends Itt_rfun
@@ -693,7 +694,6 @@ let resource arith_unfold +=[
 ]
 
 doc <:doc<
-	@begin[doc]
 
 	@begin[description]
 	@item{@conv[normalizeC];
@@ -731,7 +731,6 @@ doc <:doc<
 	}
 	@end[description]
 
-	@end[doc]
 >>
 doc docoff
 
@@ -998,7 +997,6 @@ let reduceContradRelT =
 		 reduceC)
 
 doc <:doc<
-	@begin[doc]
 
 	@begin[description]
 	@item{@tactic[arithT];
@@ -1055,7 +1053,6 @@ doc <:doc<
 	@end[enumerate]}
 	@end[description]
 
-	@end[doc]
 	@docoff
 >>
 

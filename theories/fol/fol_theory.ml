@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @theory{First-order logic}
    @module[Fol_theory]
 
    Hello world.
-   @end[doc]
+   @docoff
 
    @begin[license]
    This file is part of Nuprl-Light, a modular, higher order
@@ -33,7 +32,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @docoff
 >>
 
 extends Fol_type

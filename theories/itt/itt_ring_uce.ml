@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_ring_uce]
 
    This theory defines commutative unit rings with decidable equality.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_unitring
 extends Itt_ring_e
 extends Itt_labels
@@ -59,11 +58,9 @@ let _ =
  * Commutative unitring with Decidable Equality                             *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Commutative unit ring with decidable equality}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_preunitringE1 : preunitringE[i:l] <-->
    record["eq":t]{r. ('r^car -> 'r^car -> bool); preunitring[i:l]}
@@ -92,10 +89,8 @@ let resource elim +=
    [<<unitringCE[i:l]>>, unitringCEDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive preunitringE_wf {| intro [] |} :
    sequent { <H> >- preunitringE[i:l] Type }
@@ -110,10 +105,8 @@ interactive unitringCE_wf {| intro [] |} :
    sequent { <H> >- unitringCE[i:l] Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive preunitringE_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'f in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car; "eq": ^car -> ^car -> bool} } -->
@@ -189,10 +182,8 @@ interactive unitringCE_elim {| elim [] |} 'H :
    sequent { <H>; f: unitringCE[i:l]; <J['f]> >- 'C['f] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
-   @end[doc]
 >>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
@@ -428,10 +419,8 @@ interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitrin
    sequent { <H> >- 'c *['R] 'a = 'c *['R] 'b in 'R^car }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Hierarchy}
 
-   @end[doc]
 >>
 interactive unitringCE_subtype_unitring {| intro [] |} :
    sequent { <H> >- unitringCE[i:l] subtype unitring[i:l] }
@@ -444,11 +433,9 @@ doc docoff
  * Polynomials                                                          *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Polynomial ring}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_poly_ring : poly_ring{'F} <-->
    { car = poly{'F};
@@ -627,10 +614,8 @@ interactive ringpoly_eqdec2 unitringCE[i:l] :
    sequent { <H> >- 'p = 'q in poly{'F} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
-   @end[doc]
 >>
 interactive poly_ring_uce {| intro [] |} :
    [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->

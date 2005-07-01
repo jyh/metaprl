@@ -1,13 +1,12 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_abel_group]
 
    The @tt[Czf_itt_abel_group] module defines abelian groups.
    A group is @emph{abelian} if its binary operation is
    commutative.
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -39,7 +38,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 doc docoff
 
@@ -55,7 +54,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare abel{'g}
 doc docoff
 
@@ -64,11 +63,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    A group $g$ is abelian if its operation is commutative.
-   @end[doc]
 >>
 prim_rw unfold_abel: abel{'g} <-->
    (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
@@ -86,25 +83,21 @@ dform abel_df : except_mode[src] :: abel{'g} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood}
 
    The @tt[abel] judgment is well-formed if its
    argument is a label.
-   @end[doc]
 >>
 interactive abel_type {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
    sequent { <H> >- "type"{abel{'g}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The proposition $@abel{g}$ is true if it is well-formed, $g$
    is a group, and @tt[op] is commutative.
-   @end[doc]
 >>
 interactive abel_intro {| intro[] |} :
    sequent { <H> >- 'g IN label } -->

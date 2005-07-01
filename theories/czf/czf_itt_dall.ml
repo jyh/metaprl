@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_dall]
 
    The @tt{Czf_itt_dall} theory defines @emph{restricted}
@@ -13,8 +12,8 @@ doc <:doc<
    an implication on the elements of $s$.
 
    $$@dall{x; @collect{y; T; f[y]}; P[x]} @equiv @forall x@colon T. P[f(x)]$$
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -46,7 +45,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_all
 extends Czf_itt_set_ind
 doc docoff
@@ -66,7 +65,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare "dall"{'T; x. 'A['x]}
 
 (************************************************************************
@@ -74,13 +73,11 @@ declare "dall"{'T; x. 'A['x]}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{dall} term is defined by set induction on the
    set argument as a universal quantification over the
    index type.
-   @end[doc]
 >>
 prim_rw unfold_dall : "dall"{'s; x. 'A['x]} <-->
    set_ind{'s; a, f, g. (x: 'a -> 'A['f 'x])}
@@ -101,14 +98,12 @@ dform dall_df1 : parens :: except_mode[src] :: "prec"[prec_lambda] :: "dall"{'s;
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The $@dall{x; s; P[x]}$ proposition is well-formed
    if $s$ is a set, and $P[x]$ is a proposition for any
    set $x$.
-   @end[doc]
 >>
 interactive dall_type {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s} } -->
@@ -116,12 +111,10 @@ interactive dall_type {| intro [] |} :
    sequent { <H> >- "type"{."dall"{'s; x. 'A['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The proposition $@dall{x; s; P[x]}$ is true if it is
    well-formed, and $P[a]$ is true for any set $@mem{a; s}$.
-   @end[doc]
 >>
 interactive dall_intro {| intro [] |} :
    ["wf"]   sequent { <H> >- isset{'s} } -->
@@ -130,13 +123,11 @@ interactive dall_intro {| intro [] |} :
    sequent { <H> >- "dall"{'s; x. 'A['x]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form instantiates the universal quantification
    $@dall{x; s; P[x]}$ on a particular argument $@mem{z; s}$.  It
    produces an additional assumption $A[z]$.
-   @end[doc]
 >>
 interactive dall_elim {| elim [] |} 'H 'z :
    ["wf"]   sequent { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]>; w: set >- "type"{'A['w]} } -->
@@ -146,12 +137,10 @@ interactive dall_elim {| elim [] |} 'H 'z :
    sequent { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The @tt{dall} proposition is functional in it's set
    and proposition arguments.
-   @end[doc]
 >>
 interactive dall_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'A['z]} } -->
@@ -161,14 +150,12 @@ interactive dall_fun {| intro [] |} :
    sequent { <H> >- fun_prop{z. "dall"{'A['z]; y. 'B['z; 'y]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Restriction}
 
    The proposition $@dall{x; s; P[x]}$ is restricted for any
    set $s$ because the proposition quantifies over the @emph{index}
    type of the set argument (which is a restricted proposition
    itself).
-   @end[doc]
 >>
 interactive dall_res {| intro [] |} :
    ["wf"]   sequent { <H> >- isset{'A} } -->

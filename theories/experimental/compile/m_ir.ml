@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @spelling{CPS IR}
    @module[M_ir]
 
@@ -60,17 +59,14 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
 
      Modules in @MetaPRL are organized in a theory hierarchy.  Each theory
      module extends its parent theories.  In this case, the @tt[M_ir] module
      extends base theories that define generic proof automation.
-   @end[doc]
 >>
 extends Base_theory
 doc docoff
@@ -79,11 +75,9 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The IR defines several binary operators for arithmetic and Boolean operations.
-   @end[doc]
 >>
 declare AddOp
 declare SubOp
@@ -98,7 +92,6 @@ declare GeOp
 declare GtOp
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Atoms}
 
    Atoms represent expressions that are values: integers, variables, binary operations
@@ -106,7 +99,6 @@ doc <:doc<
 
    @tt[AtomFun] is a lambda-abstraction, and @tt[AtomFunVar] is the projection
    of a function from a recursive function definition (defined below).
-   @end[doc]
 >>
 declare AtomFalse
 declare AtomTrue
@@ -118,12 +110,10 @@ declare AtomVar{'v}
 declare AtomFunVar{'R; 'v}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Expressions}
 
      General expressions are not values.  There are several simple kinds of expressions,
      for conditionals, allocation, function calls, and array operations.
-   @end[doc]
 >>
 declare LetAtom{'a; v. 'e['v]}
 declare If{'a; 'e1; 'e2}
@@ -140,14 +130,12 @@ declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
 doc <:doc<
-   @begin[doc]
      Reserve statements are used to specify how much memory may be allocated
      in a function body.  The M_reserve module defines an explicit phase that
      calculates memory usage and adds reserve statements.  In the << Reserve[words:n]{'args; 'e} >>
      expressions, the @it[words] constant defines how much memory is to be reserved; the @it[args]
      defines the set of live variables (this information is used by the garbage collector), and @it[e]
      is the nested expression that performs the allocation.
-   @end[doc]
 >>
 declare Reserve[words:n]{'e}
 declare Reserve[words:n]{'args; 'e}
@@ -155,20 +143,17 @@ declare ReserveCons{'a; 'rest}
 declare ReserveNil
 
 doc <:doc<
-     @begin[doc]
    @tt[LetApply], @tt[Return] are eliminated during CPS conversion.
    @tt[LetClosure] is like @tt[LetApply], but it represents a partial application.
-   @end[doc]
 >>
 declare LetApply{'f; 'a; v. 'e['v]}
 declare LetClosure{'a1; 'a2; f. 'e['f]}
 declare Return{'a}
 
 doc <:doc<
-   This is the most problematic part of the description so far.
-   This documentation discusses two possible approaches.
+   (* This is the most problematic part of the description so far.
+      This documentation discusses two possible approaches. *)
 
-   @begin[doc]
    @modsubsection{Recursive values}
 
      We need some way to represent mutually recursive functions.
@@ -185,19 +170,16 @@ doc <:doc<
    in
       r2.f(1)
    @end[verbatim]
-   @end[doc]
 >>
 declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 
 doc <:doc<
-     @begin[doc]
      The following terms define the set of tagged fields used in the record definition.
      We require that all the fields be functions.
 
      The record construction is recursive.  The @tt[Label] term is used for
      field tags; the @tt[FunDef] defines a new field in the record; and the
      @tt[EndDef] term terminates the record fields.
-   @end[doc]
 >>
 declare Fields{'fields}
 declare Label[tag:s]
@@ -205,20 +187,17 @@ declare FunDef{'label; 'exp; 'rest}
 declare EndDef
 
 doc <:doc<
-   @begin[doc]
    To simplify the presentation, we usually project the record fields
    before each of the field branches so that we can treat functions
    as if they were variables.
-   @end[doc]
 >>
 declare LetFun{'R; 'label; f. 'e['f]}
 
-doc <:doc< @doc{Include a term representing initialization code.} >>
+doc <:doc< Include a term representing initialization code. >>
 
 declare Initialize{'e}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Program sequent representation}
 
    Programs are represented as sequents:
@@ -226,7 +205,6 @@ doc <:doc<
 
    For now the language is untyped, so each declaration
    has the form @tt["v = exp"].  A definition is an equality judgment.
-   @end[doc]
 >>
 declare exp
 declare def{'v; 'e}
@@ -260,10 +238,9 @@ prec prec_fun < prec_if
 prec prec_comma < prec_fun
 prec prec_compilable < prec_comma
 
-doc <:doc< Some convenient keywords (used in only display forms and do not have a formal meaning). >>
-declare xlet
-declare xin
-doc docoff
+(* Some convenient keywords (used in only display forms and do not have a formal meaning). *)
+declare xlet : Dform
+declare xin : Dform
 
 dform xlet_df : xlet = bf["let"]
 dform xin_df : xin = bf["in"]
@@ -494,7 +471,6 @@ let letrec_opname    = opname_of_term letrec_term
 let is_letrec_term   = is_dep1_dep1_term letrec_opname
 let dest_letrec_term = dest_dep1_dep1_term letrec_opname
 let mk_letrec_term   = mk_dep1_dep1_term letrec_opname
-
 
 (*
  * -*-

@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_token]
 
    The @tt[Mfir_token] module defines tokens, a syntactic mechanism
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_bool
@@ -55,20 +51,16 @@ open Top_conversionals
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The term @tt[token] represents a string with value @tt[str].
-   @end[doc]
 >>
 
 declare token[str:s]
 
 doc <:doc<
-   @begin[doc]
 
    Equality is the only relation defined on tokens.
-   @end[doc]
 >>
 
 declare token_eq{ 'tok1; 'tok2 }
@@ -78,12 +70,10 @@ declare token_eq{ 'tok1; 'tok2 }
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    Token equality is reduced to a boolean value using a meta operation from
    the @tt[Base_meta] module.
-   @end[doc]
 >>
 
 prim_rw reduce_token_eq_main :

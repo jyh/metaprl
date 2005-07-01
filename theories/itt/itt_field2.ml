@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_field]
 
    This theory defines fields.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_ring2
 extends Itt_record_renaming
 doc docoff
@@ -61,11 +60,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Field}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_prefield1 : prefield[i:l] <-->
    record["inv":t]{r. ({x: 'r^car| 'x <> 'r^"0" in 'r^car} -> {x: 'r^car| 'x <> 'r^"0" in 'r^car}); record["1":t]{r. 'r^car; prering[i:l]}}
@@ -94,10 +91,8 @@ let resource elim +=
    [<<field[i:l]>>, fieldDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive prefield_wf {| intro [] |} :
    sequent { <H> >- prefield[i:l] Type }
@@ -115,10 +110,8 @@ interactive field_wf {| intro [] |} :
    sequent { <H> >- field[i:l] Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive prefield_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'f in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car; inv: {x: ^car| 'x <> ^"0" in ^car} -> {x: ^car| 'x <> ^"0" in ^car}} } -->
@@ -199,10 +192,8 @@ interactive field_elim {| elim [] |} 'H :
    sequent { <H>; f: field[i:l]; <J['f]> >- 'C['f] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
-   @end[doc]
 >>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
@@ -395,11 +386,9 @@ interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i
    sequent { <H> >- 'c *['f] 'a = 'c *['f] 'b in 'f^car }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Hierarchy}
    A field is also a ring. If << 'F >> is a field, then << 'F >> is an Abelian group over addition and << carNo0{'F} >> is an Abelian group over multiplication. A field is also an integral domain.
 
-   @end[doc]
 >>
 define unfold_carNo0 : carNo0{'r} <-->
    rcrd["car":t]{{x: 'r^car|'x <> 'r^"0" in 'r^car}; 'r}
@@ -496,17 +485,13 @@ doc docoff
  * FIELD EXAMPLES                                                        *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Field Examples}
 
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
-   @end[doc]
 >>
 *)
 

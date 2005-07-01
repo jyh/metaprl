@@ -1,6 +1,5 @@
 doc <:doc<
    @spelling{unrollings}
-   @begin[doc]
    @module[Itt_prec]
 
    The @tt[Itt_prec] module define the @emph{parameterized}
@@ -20,8 +19,8 @@ doc <:doc<
    operation is the right injection contains a pair of an integer $k$ that
    is larger than the parameter and a list increasing integers
    larger than $k$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -54,9 +53,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_subtype
@@ -91,13 +88,11 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{prec} term defines the parameterized recursive type.
    The @tt{precind} term is the induction combinator, for computation
    over the elements in the recursive type.
-   @end[doc]
 >>
 declare "prec"{T, x. 'B['T; 'x]; 'a}
 declare precind{'a; p, h. 'g['p; 'h]}
@@ -107,7 +102,6 @@ declare precind{'a; p, h. 'g['p; 'h]}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{precind} term takes two arguments.  The argument $a$
@@ -116,7 +110,6 @@ doc <:doc<
    first parameter in the body, $p$, represents the result of
    the recursive computation, and the second parameter $h$
    represents the argument $a$ itself.
-   @end[doc]
 >>
 prim_rw reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. precind{'a; p, h. 'g['p; 'h]}}; 'a]
@@ -141,7 +134,6 @@ dform precind_df : except_mode[src] :: precind{'a; p, h. 'g} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Equality}
 
@@ -151,7 +143,6 @@ doc <:doc<
    @emph{any} type $T @in @univ{i}$.  In addition, $B[T, x]$ must be
    @emph{monotone} in the type argument $T$.  If $T_1 @subseteq T_2$, then
    $B[T_1, x] @subseteq B[T_2, x]$.
-   @end[doc]
 >>
 prim precEquality {| intro [] |} 'A :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
@@ -180,13 +171,11 @@ prim precMemberFormation {| intro [] |} :
    't
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The elements of the parameterized recursive type $@prec{T; x; B[T, x]; a}$ are the
    elements in the body $B[@lambda{a'; @prec{T; x; B[T, x]; a'}}, a]$, where the
    definition of the type has been unrolled.
-   @end[doc]
 >>
 prim precMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
@@ -195,14 +184,12 @@ prim precMemberEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form performs induction on the recursive type
    definition.  The conclusion $G[p]$ holds on any element $p$ of the
    recursive type $@prec{T; x; B[T, x]; a}$ if, given that it holds
    on all the unrollings of $p$, it also holds on $p$.
-   @end[doc]
 >>
 prim precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[i:l] :
    [wf] sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'a in 'A } -->
@@ -217,10 +204,8 @@ prim precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[
    precind{'a; p, h. 'g['r; lambda{x.void}; lambda{x. it}; 'p; 'h]}
 
 doc <:doc<
-   @begin[doc]
    The second form of elimination performs an unrolling of the
    type definition of the parameterized recursive type.
-   @end[doc]
 >>
 prim precUnrollElimination {| elim [ThinOption thinT] |} 'H :
    ('g['r; 'y; 'u] : sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
@@ -232,7 +217,6 @@ prim precUnrollElimination {| elim [ThinOption thinT] |} 'H :
    'g['r; 'r; it]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    The @hrefterm[precind] term $@precind{r; h; z; t[h, z]}$ produces
@@ -241,7 +225,6 @@ doc <:doc<
    and the body $t[h, z]$ produces values of type $S$ given the
    argument $r$, and a function $h$ that computes the result on the
    unrollings.
-   @end[doc]
 >>
 prim precindEquality {| intro [] |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
    [wf] sequent { <H> >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->

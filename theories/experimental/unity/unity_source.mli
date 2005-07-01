@@ -2,12 +2,10 @@ doc <:doc<
    @begin[spelling]
    @end[spelling]
 
-   @begin[doc]
    @module[UNITY]
    This module defines a set of abstract language primitives.
    By customizing this module, you can provide the translation
    to another target language.
-   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -37,10 +35,8 @@ extends Base_theory
 extends M_theory
 
 doc <:doc<
-   @begin[doc]
    @terms
    Translation operators and helper terms.
-   @end[doc]
 >>
 declare Source_set{'e1; 'e2; 'cont}
 declare Source_if{'e1; 'e2; 'e3; 'cont}

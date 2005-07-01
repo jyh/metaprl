@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    CPS grunge Liang Morrisett Necula FDL
    @end[spelling]
@@ -30,12 +29,10 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_comment
 
 doc <:doc<
-@begin[doc]
 
 One of the points we have stressed in this presentation is that the formalized versions of these
 algorithms is easy, in fact easier than the definition using traditional general-purpose languages.
@@ -170,7 +167,6 @@ programming constructs and proof carrying code.  In this scheme,
 well-typed assembly programs cannot ``go wrong.''
 
 @docoff
-@end[doc]
 >>
 
 (*

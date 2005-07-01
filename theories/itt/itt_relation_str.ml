@@ -1,11 +1,10 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_relation_str]
 
    The @tt[Itt_relation_str] module defines algebraic structures such as
    ordered sets, @misspelled{PERs}, types with decidable equality and so on.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -37,9 +36,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_int_ext
@@ -71,13 +68,11 @@ let soft_reduce term unfold  = term, (reduceByDefC unfold)
 let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Order}
    @modsubsection{Definition}
    Order is a type  <<label["car":t]>> with an irreflexive transitive complete
   relation:
      $$<<label["<":t]>>  : <<label["car":t]-> label["car":t] -> bool>>$$
-   @end[doc]
 >>
 
 define preorder : preorder[i:l] <-->
@@ -117,12 +112,10 @@ dform less_df : parens :: except_mode[src] :: less{'self; 'a;'b}
  = 'a  bf[" <"]sub{'self} `" " 'b
 
 doc <:doc<
-   @begin[doc]
    @modsection{Decidable Equality}
    @modsubsection{Definition}
    @tt[DecEquality] is a type (@tt[car]) with an equality solver:
   $$<<label["=":t]>> : <<label[car:t]-> label[car:t] -> bool>>$$
-   @end[doc]
 >>
 
 define decEquality : DecEquality[i:l] <-->
@@ -147,7 +140,7 @@ let order = preorder thenC higherC fold_less
 
 let resource elim += soft_elim <<preorder[i:l]>> order
 
-doc "doc"{rules}
+doc rules
 
 interactive le_wf  {| intro[intro_typeinf <<'ord>>] |} preorder[i:l] :
    [wf] sequent { <H> >- 'ord in preorder[i:l] }  -->
@@ -312,9 +305,8 @@ interactive irref_less_eq {| elim[elim_typeinf <<'ord>> ] |} preorder[i:l] 'H :
    sequent { <H>; less{'ord;'x;'x}; <J> >- 'C }
 
 (*
-doc <:doc< @begin[doc]
+doc <:doc<
   Corollary: The equality is decidable in ordered sets
-  @end[doc]
 >>
 
 interactive dec_equalaty  order[i:l] :
@@ -325,9 +317,8 @@ interactive dec_equalaty  order[i:l] :
 *)
 
 
-doc <:doc< @begin[doc]
+doc <:doc<
 @modsection{Product}
-  @end[doc]
 >>
 
 define type_product_ord: type_product_ord{'T;'Ord} <-->
@@ -355,9 +346,8 @@ doc docoff
 
 dform  type_product_ord_df: type_product_ord{'T;'Ord} = ('T * 'Ord)
 
-doc <:doc< @begin[doc]
+doc <:doc<
 @modsection{Example: integers}
-  @end[doc]
 >>
 
 define int_order: int_order <--> {car= int; "<"= lambda{a.lambda{b.lt_bool{'a;'b}}};"<="= lambda{a.lambda{b.le_bool{'a;'b}}}}

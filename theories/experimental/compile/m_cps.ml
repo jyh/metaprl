@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    CPS EMRE compilable op IR
    @end[spelling]
@@ -33,15 +32,12 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
      @parents
 
      CPS conversion is a direct logical extension of the IR language.
-   @end[doc]
 >>
 extends M_ir
 doc docoff
@@ -55,7 +51,6 @@ open Basic_tactics
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    @bf{The @Comment!resource[cps] resource}
@@ -67,7 +62,6 @@ doc <:doc<
    The implementation of the @tt[cps] resource and the @tt[cpsC]
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
-   @end[doc]
    @docoff
 >>
 let resource (term * conv, conv) cps =
@@ -88,7 +82,6 @@ let cpsC =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Application}
 
      CPS conversion is formalized by adding @tt[CPS] terms that
@@ -118,7 +111,6 @@ doc <:doc<
       unless $a$ includes function variables).}
 
    @end[itemize]
-   @end[doc]
 >>
 declare CPSRecordVar{'R}
 declare CPSFunVar{'f}
@@ -145,7 +137,6 @@ dform cps_fields_df : CPS{cont. 'e} =
    szone pushm[1] bf["CPS["] 'cont bf["."] hspace 'e popm bf["]"] ezone
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Formalizing CPS conversion}
 
    CPS conversion is specified as a transformation of function application.
@@ -154,7 +145,6 @@ doc <:doc<
 
    For atoms, the transformation is a no-op unless the atom is
    a function variable.  If so, the function must be partially applied.
-   @end[doc]
 >>
 prim_rw cps_atom_true {| cps |} : CPS{AtomTrue} <-->
    AtomTrue
@@ -194,11 +184,9 @@ prim_rw cps_length {| cps |} : CPS{Length[i:n]} <-->
    Length[i:n]
 
 doc <:doc<
-   @begin[doc]
      CPS transformation for expressions.  In the following cases, the
      transformation is defined by the CPS conversion of the subterms.
      In other words, CPS conversion commutes with the following terms.
-   @end[doc]
 >>
 prim_rw cps_let_atom {| cps |} : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
    LetAtom{CPS{'a}; v. CPS{'cont; 'e['v]}}
@@ -236,10 +224,8 @@ prim_rw cps_let_apply {| cps |} :
           TailCall{AtomVar{'f}; ArgCons{AtomVar{'g}; ArgCons{CPS{'a2}; ArgNil}}}}}
 
 doc <:doc<
-     @begin[doc]
      The following rules specify CPS transformation of functions and application
      expressions.
-     @end[doc]
 >>
 prim_rw cps_let_rec {| cps |} : CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
    LetRec{R1. CPS{cont. CPS{'cont; 'fields[CPSRecordVar{'R1}]}};
@@ -270,10 +256,8 @@ prim_rw cps_fun_var_cleanup {| cps |} :
    AtomVar{CPSFunVar{'f}} <--> CPSFunVar{'f}
 
 doc <:doc<
-     @begin[doc]
      CPS conversion is specified as a proof rule: a program is ``compilable''
      if the CPS conversion of the program is also compilable.
-     @end[doc]
 >>
 prim cps_prog :
    sequent { <H>; cont: exp >-

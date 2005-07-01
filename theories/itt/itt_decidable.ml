@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_decidable]
 
    It is occasionally useful to assert the @emph{decidability}
@@ -10,8 +9,8 @@ doc <:doc<
    The @tt{Itt_decidable} module defines a generic
    tactic @hreftactic[decideT] to help prove the decidability
    of propositions.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -43,9 +42,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_logic
 doc docoff
@@ -67,11 +64,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The definition of $@decidable{P}$ is $@or{P; @not{P}}$.
-   @end[doc]
 >>
 define unfold_decidable : decidable{'p} <--> ( 'p or not {'p} )
 doc docoff
@@ -81,12 +76,10 @@ dform decidable_df : except_mode[src] :: decidable{'p} = `"Decidable(" 'p `")"
 interactive_rw fold_decidable : ( 'p or not {'p} ) <--> decidable{'p}
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    The @tt{assert_decidable} rule allows case analysis
    over a decidable proposition $p$.
-   @end[doc]
 >>
 interactive assert_decidable 'p :
    [decidable] sequent { <H> >- decidable {'p} } -->
@@ -103,7 +96,6 @@ let mk_decidable_term = mk_dep0_term decidable_opname
 let dest_decidable_term = dest_dep0_term decidable_opname
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    The @tactic[decideT] tactic applies the @hrefrule[assert_decidable]
@@ -118,17 +110,14 @@ doc <:doc<
    $$
 
    @docoff
-   @end[doc]
 >>
 let decideT t =
    assert_decidable t thenLT [tcaT; idT; idT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Basic decidability}
 
    The propositions $@true$ and $@false$ are always decidable.
-   @end[doc]
 >>
 interactive dec_false {| intro [] |} :
    sequent { <H> >- decidable{"false"} }

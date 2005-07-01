@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_subset]
 
    The @tt[Itt_subset] module provides the set-theoretic definition of
@@ -24,8 +23,7 @@ doc <:doc<
    Type-theoretic intersection and union (Sections @refmodule[Itt_isect] and @refmodule[Itt_tunion])
    behaves on subsets of a given type  like usual intersection and union.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -63,9 +61,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_subtype
@@ -104,10 +100,8 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definitions}
 
-   @end[doc]
 >>
 
 define mem : mem{'a; 'A; 'B} <--> (singleton{'a;'B} subtype 'A)
@@ -150,9 +144,7 @@ dform subset_df1 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subset 'B)
  * RULES                                                                *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Basic Rules}
-   @end[doc]
 >>
 
 interactive mem_univ {| intro [] |}  :
@@ -171,13 +163,11 @@ interactive mem_intro {| intro [] |}  :
    sequent { <H> >- mem{'a;'A;'B} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subset}
    @modsubsection{Typehood and equality}
    Type <<'A subset 'B>> is well-formed whenever $A$ and $B$ are types.
    Two subset-types are equal if their subterms are equal and any element
    in one of the first subterm is also in the other.
-   @end[doc]
 >>
 
 interactive subset_univ {| intro [] |} :
@@ -191,9 +181,7 @@ interactive subset_wf {| intro [] |} :
    sequent { <H> >- "type"{'A subset 'B} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction Rule}
-   @end[doc]
 >>
 
 interactive subset_intro {| intro [AutoMustComplete] |}  :
@@ -210,11 +198,9 @@ interactive subset_sqstable {| squash |} :
    sequent { <H> >- 'A subset 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination Rules}
 
    By definition if <<'A subset 'B>> then  <<'A subtype 'B>>. (The opposite is not true --- see @hrefrule[counterexample1] below).
-   @end[doc]
 >>
 
 interactive subset_is_subtype  :
@@ -222,9 +208,7 @@ interactive subset_is_subtype  :
    sequent { <H> >- 'A subtype 'B }
 
 doc <:doc<
-   @begin[doc]
    As a corollary we have that if two element are equal in a subset then they are equal in a superset.
-   @end[doc]
 >>
 
 interactive use_subset  'A :
@@ -233,9 +217,7 @@ interactive use_subset  'A :
    sequent { <H> >- 'x = 'y in 'B }
 
 doc <:doc<
-   @begin[doc]
    If two elements are equal in a type $B$ then they are equal in a subtype $A$ of $B$, if at least one of them is in $A$.
-   @end[doc]
 >>
 
 interactive use_superset1  'B :
@@ -251,9 +233,7 @@ interactive use_superset2  'B :
    sequent { <H> >- 'x = 'y in 'A }
 
 doc <:doc<
-   @begin[doc]
     As a corollary we have that if two element are equal in $B$ then if one of them is in $A$ then another one is also in $A$.
-   @end[doc]
 >>
 interactive use_superset 'B 'y:
    [assertion] sequent { <H> >- 'A subset 'B } -->
@@ -262,19 +242,15 @@ interactive use_superset 'B 'y:
    sequent { <H> >- 'x  in 'A }
 
 doc <:doc<
-   @begin[doc]
    Note that the rule @hrefrule[subset_is_subtype] is not reversible: <<'A subtype 'B>> does not imply <<'A subset 'B>>.
    For example, any type is subtype of <<top>>, but not every type is @emph{subset} of <<top>>.
-   @end[doc]
 >>
 
 interactive counterexample1 :
    sequent { <H> >- not{(bool subset top)} }
 
 doc <:doc<
-   @begin[doc]
    If <<'A subset 'B>> is true, then both $A$ and $B$ are types.
-   @end[doc]
 >>
 (* Note than if would have reverse functionality we could say that if A subset B Type then both A and B are types *)
 
@@ -287,12 +263,10 @@ interactive subsetTypeLeft  'A :
    sequent { <H> >- "type"{'B} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
    Proposition <<'a in 'A subset 'B>> is almost equal to conjunction of
    <<'a in 'A>> and <<'A subset 'B>>, but its well-formedness is more liberal.
    Indeed, <<'a in 'A subset 'B>> is well-formed whenever <<'a in 'B>> and $A$ and $B$ are types.
-   @end[doc]
 >>
 
 (* Note that we don't need this membership if we add a rule: A subset B --> x in B --> x in A Type  *)
@@ -312,10 +286,8 @@ interactive member_wf {| intro [] |}  :
    sequent { <H> >- "type"{'a in 'A subset 'B} }
 
 doc <:doc<
-   @begin[doc]
    Introduction and elimination rules reflect the fact that <<'a in 'A subset 'B>>
    if and only if <<'a in 'A>> and <<'A subset 'B>>.
-   @end[doc]
 >>
 
 interactive member_intro {| intro [] |}  :
@@ -328,11 +300,9 @@ interactive member_elim {| elim [] |} 'H :
    sequent { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }
 
 doc <:doc<
-   @begin[doc]
    Note that the truth of predicate <<'a in 'A subset 'B>> does not depend on $B$ whenever
    <<'A subtype 'B>> and this predicate is well-formed.
    This fact establishes a validity of introducing a binary membership <<'a in 'A>> with the liberal well-formedness rule.
-   @end[doc]
 >>
 
 interactive member_doesnot_depend_on_B :

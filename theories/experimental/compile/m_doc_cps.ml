@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    CPS compilable exp
    @end[spelling]
@@ -30,7 +29,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_ir
 
@@ -57,7 +55,6 @@ dform math_CPS_df2 : mode[tex] :: math_CPS{'cont; 'e} =
    math_semleft slot{'e} math_subscript{math_semright; math_cont}
 
 doc <:doc<
-@begin[doc]
 
 CPS conversion is an optional phase of the compiler that converts the program to
 continuation-passing style.  That is, instead of returning a value, functions pass their results to
@@ -159,7 +156,6 @@ $$
 $$
 
 @docoff
-@end[doc]
 >>
 
 (*

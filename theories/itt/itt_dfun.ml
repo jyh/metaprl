@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_dfun]
 
    The @tt[Itt_dfun] module is @emph{derived} from the
@@ -10,8 +9,8 @@ doc <:doc<
    (since the range type $B[x]$ never invokes $f$).
    The @tt{Itt_dfun} module derives the dependent-function
    rules.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -44,9 +43,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_rfun
@@ -75,11 +72,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt[unfold_dfun] gives the definition of the dependent-function space.
-   @end[doc]
 >>
 prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
 
@@ -88,7 +83,6 @@ prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Lemmas}
 
@@ -96,19 +90,16 @@ doc <:doc<
    useful for proving the well-formedness of the
    dependent-function space.  The @hrefterm[void]
    type is trivially well-founded, since it has no elements.
-   @end[doc]
 >>
 interactive void_well_founded {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- well_founded{'A; a1, a2. void} }
 
 (*
- * @begin[doc]
  * @modsubsection{Typehood and equality}
  *
  * The dependent-function space retains the intensional type
  * equality of the very-dependent type.
- * @end[doc]
  *)
 interactive functionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -124,14 +115,12 @@ interactive functionType {| intro [] |} :
    sequent { <H> >- "type"{ a:'A -> 'B['a] } }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The propositional interpretation of the dependent-function
    is the universal quantification @hrefterm[all], $@all{a; A; B[a]}$.  The
    universal quantification is true, if it is a type,
    and $B[a]$ is true for any $a @in A$.
-   @end[doc]
 >>
 interactive lambdaFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -139,11 +128,9 @@ interactive lambdaFormation {| intro [] |} :
    sequent { <H> >- a:'A -> 'B['a] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The dependent function space contains the @hrefterm[lambda] functions.
-   @end[doc]
 >>
 interactive lambdaEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -151,13 +138,11 @@ interactive lambdaEquality {| intro [] |} :
    sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Extensionality}
 
    The dependent-function retains the extensional membership
    equality of the very-dependent function type.  This rule is
    derived from the @hrefrule[rfunctionExtensionality] rule.
-   @end[doc]
 >>
 interactive functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
    [main] sequent { <H>; x: 'A >- ('f 'x) = ('g 'x) in 'B['x] } -->
@@ -167,13 +152,11 @@ interactive functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
    sequent { <H> >- 'f = 'g in x:'A -> 'B['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination rule @emph{instantiates} the function
    $f@colon @fun{x; A; B[x]}$ with an argument $a @in A$, to
    obtain a proof of $B[a]$.
-   @end[doc]
 >>
 interactive functionElimination {| elim [] |} 'H 'a :
    [wf] sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'a in 'A } -->
@@ -181,12 +164,10 @@ interactive functionElimination {| elim [] |} 'H 'a :
    sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    Applications have (at least) an @emph{intensional} equality; they are
    equal if their functions and arguments are equal.
-   @end[doc]
 >>
 
 interactive applyEquality {| intro[intro_typeinf <<'f1>>] |} (x:'A -> 'B['x]) :
@@ -195,14 +176,12 @@ interactive applyEquality {| intro[intro_typeinf <<'f1>>] |} (x:'A -> 'B['x]) :
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    Function spaces are @emph{contravariant} in the domains, and
    @emph{covariant} in their ranges.  More specifically, the
    ranges must be pointwise covariant.
 
-   @end[doc]
 >>
 interactive functionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A2 subtype 'A1 } -->

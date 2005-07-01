@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    Coercions Subclassing Superclassing
@@ -33,12 +32,10 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 OCaml includes a unique object system with classes, parameterized
 classes, and objects, and the usual features of inheritance and
@@ -874,7 +871,6 @@ val p4 : colored_point = <obj>
 - : color = Black
 @end[iverbatim]
 
-@end[doc]
 >>
 
 (*

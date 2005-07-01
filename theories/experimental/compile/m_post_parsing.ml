@@ -1,12 +1,10 @@
 doc <:doc<
-   @begin[doc]
 
    @module[M_post_parsing]
    Following parsing, we perform currying of function applications,
    and identify function variables in the body of the program.
 
    Note that at this point, function definitions had been curried.
-   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -33,9 +31,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends M_ir
 extends M_ast
@@ -65,7 +61,6 @@ open Tactic_type.Sequent
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    @bf{The @Comment!resource[pp_resource]}
@@ -78,7 +73,6 @@ doc <:doc<
    conversions for the reduction.
 
    @docoff
-   @end[doc]
 >>
 (*
  * Resource PP.
@@ -99,12 +93,10 @@ let ppC =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Application}
 
    Add an application that we will map through the program.
    This should be eliminated by the end of PP conversion.
-   @end[doc]
 >>
 declare PP{'e}
 
@@ -112,7 +104,6 @@ dform ps_df : PP{'e} =
    szone pushm[1] bf["POST-PARSING["] 'e popm bf["]"] ezone
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Currying function applications}
 
    We curry each tailcall or function application with multiple
@@ -120,7 +111,6 @@ doc <:doc<
    are stored in temporary variables.
    Calls with one argument are mapped as identity (after removing
    the useless pair wrapper from around the argument).
-   @end[doc]
 >>
 (*
  * Atoms.

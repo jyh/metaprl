@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    inlined inlining
    @end[spelling]
@@ -33,10 +32,9 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Base_theory
 extends M_ir
 doc docoff
@@ -45,20 +43,17 @@ open Basic_tactics
 open Base_meta
 
 doc <:doc<
-   @begin[doc]
    @modsection{Meta-arithmetic}
 
    We use the @MetaPRL built-in meta-arithmetic to fold constants.
    Arithmetic is performed using meta-terms, so we need a
    way to convert back to a number (i.e., atom).
-   @end[doc]
 >>
 declare MetaInt{'e}
 
 prim_rw meta_int_elim {| reduce |} : MetaInt{meta_num[i:n]} <--> AtomInt[i:n]
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    Each of the rewrites below is added to the @tt{reduce_resource}.
@@ -69,7 +64,6 @@ doc <:doc<
 
    Constant folding is straightforward given the meta-arithmetic
    provided by @MetaPRL.
-   @end[doc]
 >>
 prim_rw reduce_add :
    AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_sum[i:n, j:n]}
@@ -84,12 +78,10 @@ prim_rw reduce_div :
    AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_quot[i:n, j:n]}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Constant inlining}
 
    Constant inlining is also straightforward.  We can inline the branches
    of conditional expressions if we know the guards at compile time.
-   @end[doc]
 >>
 prim_rw reduce_let_atom_true {| reduce |} :
    LetAtom{AtomTrue; v. 'e['v]} <--> 'e[AtomTrue]
@@ -110,11 +102,9 @@ prim_rw reduce_if_false {| reduce |} :
    If{AtomFalse; 'e1; 'e2} <--> 'e2
 
 doc <:doc<
-   @begin[doc]
    We need these last three rewrites to ensure that the final program
    produced is well-formed.  Variables whose values have been inlined
    are rewritten to their value.
-   @end[doc]
 >>
 prim_rw unfold_atom_var_true {| reduce |} :
    AtomVar{AtomTrue} <--> AtomTrue

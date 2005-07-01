@@ -1,8 +1,6 @@
 (*!
- * @begin[doc]
  * @module[Itt_pairwise]
  * @parents
- * @end[doc]
  *)
 
 extends Itt_subtype

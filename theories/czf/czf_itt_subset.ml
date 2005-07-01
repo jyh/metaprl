@@ -1,6 +1,5 @@
 
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_subset]
 
    The @tt{Czf_itt_subset} module defines the subset proposition
@@ -9,8 +8,8 @@ doc <:doc<
    as follows.
 
    $$@\subset{s_1; s_2} @equiv @dall{x; s_1; @mem{x; s_2}}$$
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,20 +34,18 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_dall
 
 open Dtactic
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare \subset{'s1; 's2}
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The subset is defined using restricted universal quantification.
-   @end[doc]
 >>
 prim_rw unfold_subset : ('s1 subset 's2) <--> dall{'s1; x. mem{'x; 's2}}
 doc docoff
@@ -59,13 +56,11 @@ dform subset_df : parens :: "prec"[prec_subset] :: \subset{'s1; 's2} =
    slot{'s1} `" " Nuprl_font!subseteq `"s " slot{'s2}
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The subset proposition $@\subset{s_1; s_2}$ is well-formed
    if $s_1$ and $s_2$ are both sets.
-   @end[doc]
 >>
 interactive subset_type {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -73,12 +68,10 @@ interactive subset_type {| intro [] |} :
    sequent { <H> >- "type"{.'s1  subset 's2} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The subset proposition $@\subset{s_1; s_2}$ is true if every
    element $@mem{x; s_1}$ is also an element of $s_2$.
-   @end[doc]
 >>
 interactive subset_intro {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -87,13 +80,11 @@ interactive subset_intro {| intro [] |} :
    sequent { <H> >- 's1  subset 's2 }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form of the proposition $@\subset{s_1; s_2}$
    takes an element $@mem{x; s_1}$ and it produces a proof that
    $@mem{x; s_2}$.
-   @end[doc]
 >>
 interactive subset_elim {| elim [] |} 'H 's :
    ["wf"] sequent { <H>; x: 's1 subset 's2; <J['x]> >- isset{'s} } -->
@@ -104,12 +95,10 @@ interactive subset_elim {| elim [] |} 'H 's :
    sequent { <H>; x: 's1  subset 's2; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The subset proposition is functional in both set
    arguments, and it is a restricted proposition.
-   @end[doc]
 >>
 interactive subset_res {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->

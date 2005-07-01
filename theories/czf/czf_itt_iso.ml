@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_iso]
 
    The @tt[Czf_itt_iso] module defines the isomorphism.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,7 +35,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 extends Czf_itt_hom
 doc docoff
@@ -53,7 +52,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare iso{'g1; 'g2; x. 'f['x]}
 doc docoff
 
@@ -62,10 +61,8 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    An isomorphism is a homomorphism that is one-to-one and onto G2.
-   @end[doc]
 >>
 prim_rw unfold_iso : iso{'g1; 'g2; x. 'f['x]} <-->
    (hom{'g1; 'g2; x. 'f['x]} & (all c: set. all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => eq{'f['c]; 'f['d]} => eq{'c; 'd})) & (all e: set. (mem{'e; car{'g2}} => (exst p: set. (mem{'p; car{'g1}} & eq{'e; 'f['p]})))))
@@ -83,14 +80,12 @@ dform iso_df : parens :: except_mode[src] :: iso{'g1; 'g2; x. 'f} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The proposition $@iso{x; g1; g2; f[x]}$ is well-formed
    if $g1$ and $g2$ are labels, and $f[x]$ is a set for any
    set argument $x$.
-   @end[doc]
 >>
 interactive iso_type {| intro [] |} :
    sequent { <H> >- 'g1 IN label } -->
@@ -99,12 +94,10 @@ interactive iso_type {| intro [] |} :
    sequent { <H> >- "type"{iso{'g1; 'g2; x. 'f['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The @tt{iso} judgment is functional in the function
    argument.
-   @end[doc]
 >>
 interactive iso_fun {| intro [] |} :
    sequent { <H> >- 'g1 IN label } -->

@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    Dereferencing blit bool doesn downto fields int
@@ -32,13 +31,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 In this chapter we discuss the remaining data types, all of which
 allow side-effects.  A record can be viewed as a tuple with labeled
@@ -476,7 +473,6 @@ val array_mem : 'a -> 'a array -> bool = <fun>
 - : bool = false
 @end[iverbatim]
 
-@end[doc]
 >>
 
 (*

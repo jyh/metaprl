@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_group]
 
    The @tt[Czf_itt_group] module defines groups. Each group
@@ -13,7 +12,7 @@ doc <:doc<
    inverse. Any group should satisfy these axioms; all
    properties of groups are derived constructively from the
    axioms of groups and the axioms of set theory.
-   @end[doc]
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -45,7 +44,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_record_label0
 extends Czf_itt_dall
 doc docoff
@@ -62,7 +61,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare group{'g}
 declare car{'g}         (* The "carrier" set for the group *)
 declare op{'g; 'a; 'b}
@@ -94,7 +93,6 @@ dform inv_df : parens :: except_mode[src] :: inv{'g; 'a} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Axioms}
 
    The @tt{group} is defined by a set of axioms.
@@ -104,7 +102,6 @@ doc <:doc<
    The @tt[group], @tt[car], @tt[op], @tt[inv], and @tt[id]
    are well-formed if the group argument is a label and the
    set argument is a set (if there is any).
-   @end[doc]
 >>
 prim group_type {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
@@ -135,7 +132,6 @@ prim inv_isset {| intro[] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Binary operation}
 
    Every @tt[op] is a @emph{binary operation} on @tt[car], which means:
@@ -143,7 +139,6 @@ doc <:doc<
    is @emph{again} in $@car{g}$; second, it assigns each ordered
    pair exactly one element, i.e., @tt[op] is functional in its
    set arguments.
-   @end[doc]
 >>
 prim op_closure {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -163,11 +158,9 @@ prim op_fun {| intro[] |} :
    'A, 'B
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Associativity}
 
    Every @tt[op] is associative.
-   @end[doc]
 >>
 prim op_assoc1 {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -182,12 +175,10 @@ prim op_assoc1 {| intro[] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Identity}
 
    Each group $g$ has an identity $@id{g}$ such that
    for any $s @in @car{g}$, $@eq{@op{g; @id{g}; s}; s}$.
-   @end[doc]
 >>
 prim id_mem {| intro[] |} :
    sequent { <H> >- 'g IN label } -->
@@ -204,12 +195,10 @@ prim id_eq1 {| intro[] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Inverse}
 
    Every @tt[inv] is a @emph{unary operation} on @tt[car] such that
    $@eq{@op{g; @inv{g; s}; s}; @id{g}}$ for any $a @in @car{g}$.
-   @end[doc]
 >>
 prim inv_fun {| intro[] |} :
    sequent { <H> >- 'g IN label } -->
@@ -233,7 +222,7 @@ prim inv_id1 {| intro[] |} :
    sequent { <H> >- eq{op{'g; inv{'g; 's}; 's}; id{'g}} } =
    it
 
-doc <:doc<@docoff >>
+doc docoff
 interactive op_assoc2 {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
    sequent { <H> >- isset{'s2} } -->
@@ -270,7 +259,6 @@ interactive op_eq2 {| intro[] |} :
    sequent { <H> >- eq{op{'g; 's1; 's3}; op{'g; 's2; 's3}} }
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Lemmas}
 
@@ -281,7 +269,6 @@ doc <:doc<
    @item{the left inverse is also the right inverse.}
    @item{the left identity is also the right identity.}
    @end[enumerate]
-   @end[doc]
 >>
 interactive id_judge_elim {| elim [] |} 'H :
    sequent { <H>; x: eq{op{'g; 's; 's}; 's}; <J['x]> >- isset{'s} } -->
@@ -306,13 +293,11 @@ interactive id_eq2 {| intro[] |} :
    sequent { <H> >- eq{op{'g; 's; id{'g}}; 's} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
    $@space @space$
 
    The left and right cancellation laws.
-   @end[doc]
 >>
 (* Cancellation: a * b = a * c => b = c *)
 interactive cancel1 (*{| elim [] |}*) 'H :
@@ -337,16 +322,14 @@ interactive cancel2 (*{| elim [] |}*) 'H :
    sequent { <H>; x: eq{op{'g; 's1; 's3}; op{'g; 's2; 's3}}; <J['x]> >- mem{'s2; car{'g}} } -->
    sequent { <H>; x: eq{op{'g; 's1; 's3}; op{'g; 's2; 's3}}; <J['x]> >- mem{'s3; car{'g}} } -->
    sequent { <H>; x: eq{op{'g; 's1; 's3}; op{'g; 's2; 's3}}; <J['x]> >- eq{'s1; 's2} }
-doc <:doc<@docoff >>
+doc docoff
 
 let groupCancelLeftT = cancel1
 let groupCancelRightT = cancel2
 
 doc <:doc<
-   @begin[doc]
 
    Unique identity (left and right).
-   @end[doc]
 >>
 interactive unique_id1 :
    sequent { <H> >- isset{'e2} } -->
@@ -365,10 +348,8 @@ interactive unique_id2 :
    sequent { <H> >- eq{'e2; id{'g}} }
 
 doc <:doc<
-   @begin[doc]
 
    Unique inverse (left and right).
-   @end[doc]
 >>
 interactive unique_inv1 {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
@@ -389,7 +370,7 @@ interactive unique_inv2 {| intro [] |} :
    sequent { <H> >- mem{'s2; car{'g}} } -->
    sequent { <H> >- eq{op{'g; 's; 's2}; id{'g}} } -->
    sequent { <H> >- eq{'s2; inv{'g; 's}} }
-doc <:doc<@docoff >>
+doc docoff
 
 interactive unique_inv_elim1 (*{| elim [] |}*) 'H :
    sequent { <H>; x: eq{op{'g; 's2; 's}; id{'g}}; <J['x]> >- isset{'s} } -->
@@ -415,10 +396,8 @@ let uniqueInvLeftT = unique_inv_elim1
 let uniqueInvRightT = unique_inv_elim2
 
 doc <:doc<
-   @begin[doc]
 
    Unique solution.
-   @end[doc]
 >>
 (* Unique solution for a * x = b : x = a' * b *)
 interactive unique_sol1 {| intro [] |} :
@@ -447,10 +426,8 @@ interactive unique_sol2 {| intro [] |} :
    sequent { <H> >- eq{'y; op{'g; 'b; inv{'g; 'a}}} }
 
 doc <:doc<
-   @begin[doc]
 
    Inverse simplification.
-   @end[doc]
 >>
 (* (a * b)' = b' * a'  *)
 interactive inv_simplify {| intro [] |} :
@@ -461,7 +438,7 @@ interactive inv_simplify {| intro [] |} :
    sequent { <H> >- mem{'a; car{'g}} } -->
    sequent { <H> >- mem{'b; car{'g}} } -->
    sequent { <H> >- eq{inv{'g; op{'g; 'a; 'b}}; op{'g; inv{'g; 'b}; inv{'g; 'a}}} }
-doc <:doc<@docoff >>
+doc docoff
 
 (* Inverse of id *)
 interactive inv_of_id {| intro [] |} :
@@ -490,7 +467,6 @@ interactive id_commut2 {| intro [] |} :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -507,7 +483,6 @@ doc <:doc<
       $x * y$ is the identity respectively.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 
 (*

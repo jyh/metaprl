@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_comment]
 
    Terms used for comments in the @Nuprl type theory.
@@ -27,7 +26,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory

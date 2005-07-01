@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    Arg ArgName ArgSig Elt EltSig FsetSig Int IntSet MakeFset
@@ -32,13 +31,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 The compilation units discussed in the Chapter @refchapter[files] are not the
 only way to create modules.  OCaml provides a general module system
@@ -532,7 +529,6 @@ val s : IntSet.t = <abstr>
 @end[iverbatim]
 
 @docoff
-@end[doc]
 >>
 
 (*

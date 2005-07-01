@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_power]
 
    The @tt[Czf_itt_power] module defines @emph{subset} collection.
@@ -15,8 +14,8 @@ doc <:doc<
 
    There is only one significant rule in this module: the
    axiom of subset collection.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -41,7 +40,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_subset
 extends Czf_itt_rel
 doc docoff
@@ -59,7 +58,7 @@ open Czf_itt_rel
  * TERMS
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare power{'s1; 's2}
 
 (************************************************************************
@@ -67,12 +66,10 @@ declare power{'s1; 's2}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The subset collection is defined by simultaneous induction
    on the two set arguments.
-   @end[doc]
 >>
 prim_rw unfold_scoll : power{'s1; 's2} <-->
    set_ind{'s1; T1, f1, g1.
@@ -97,13 +94,11 @@ dform power_df3 : power{'s1; 's2} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The subset collection is well-formed if its arguments
    are sets.
-   @end[doc]
 >>
 interactive power_isset1 {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -111,12 +106,10 @@ interactive power_isset1 {| intro [] |} :
    sequent { <H> >- isset{power{'s1; 's2}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{The subset collection axiom}
 
    There is an element of the power set for each computable
    function $@fun{s_1; s_2}$.
-   @end[doc]
 >>
 interactive power_thm bind{x. bind{y. 'P['x; 'y]}} 'a 'b :
    ["wf"] sequent { <H> >- isset{'a} } -->
@@ -129,7 +122,6 @@ interactive power_thm bind{x. bind{y. 'P['x; 'y]}} 'a 'b :
    sequent { <H> >- 'C }
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -140,7 +132,6 @@ doc <:doc<
      the arguments to the @tt{power_@misspelled{thm}}.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let powerT = funT (fun p ->
    let x, y, prop, a, b = dest_rel (Sequent.concl p) in

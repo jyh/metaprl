@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    hoc cons deconstructed destructed doesn ll namespace
@@ -31,13 +30,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-   @begin[doc]
 
 In the chapters leading up to this one, we have seen simple
 expressions involving numbers, characters, strings, functions and
@@ -491,7 +488,6 @@ Note that commas separate the elements of the pairs in the list,
 and semicolon separates the items of the list.
 
 @docoff
-@end[doc]
 >>
 
 (*

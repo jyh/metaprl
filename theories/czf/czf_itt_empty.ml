@@ -1,12 +1,11 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_empty]
 
    The @tt{Czf_itt_empty} module defines an empty set
    as the set $@collect{x; <<void>>; x}$.  Since the <<void>>
    type is empty, the set has no elements.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,7 +37,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_member
 doc docoff
 
@@ -54,7 +53,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare "empty"
 
 (************************************************************************
@@ -62,11 +61,9 @@ declare "empty"
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The empty set uses the empty index type <<void>>.
-   @end[doc]
 >>
 prim_rw unfold_empty : empty <--> collect{void; x. 'x}
 doc docoff
@@ -83,12 +80,10 @@ dform empty_df : empty =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    There are only two rules for the empty set: it is
    a well-formed set, and it has no elements.
-   @end[doc]
 >>
 interactive empty_isset {| intro [] |} :
    sequent { <H> >- isset{empty} }

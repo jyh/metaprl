@@ -1,12 +1,11 @@
 doc <:doc<
-   @begin[doc]
    @module[Base_reflection]
 
    The @tt[Base_reflection] module defines computation over bterms. In
    this module, we formalize the bterm constants and computational
    operations on them by exposing some of the system internals to the user.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,9 +37,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Perv
 extends Shell_theory
@@ -97,7 +94,7 @@ let rec mk_rlist_term = function
  | [] ->
       rnil_term
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsection{Bterm}
 
    We use sequents for representing bterms internally. The internal
@@ -108,7 +105,7 @@ doc <:doc< @begin[doc]
    meta-variables that denote arbitrary sequences of bterm bindings.
    For example, $bterm@{<<Gamma>>,x,<<Delta>>.x@}$ is a schema for an
    arbitrary bterm variable.
-@end[doc] >>
+>>
 
 declare typeclass BtermType -> Term
 declare sequent [bterm] { Quote : BtermType >- Quote } : Term
@@ -145,25 +142,23 @@ let dest_bterm_sequent_and_rename term vars =
          SeqHyp.to_list seq.sequent_hyps, seq.sequent_concl
       else raise (RefineError ("dest_bterm_sequent_and_rename", StringTermError ("not a bterm sequent", term)))
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsection{Computational Operations on Bterms}
    @modsubsection{@tt[If_quoted_op]}
 
    << if_quoted_op{'op; 'tt} >> evaluates to << 'tt >> when << 'op >> is a
    quoted bterm operator and must fail to evaluate otherwise.
-@end[doc] >>
+>>
 
 declare if_quoted_op{'op; 'tt}
 
 doc <:doc<
-   @begin[doc]
    << fake_mlrw[reduce_if_quoted_op]{
          if_quoted_op{bterm{|<H> >-
             <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}; 'tt};
          'tt} >>
-   @end[doc]
    @docoff
 >>
 ml_rw reduce_if_quoted_op {| reduce |} : ('goal :  if_quoted_op{ bterm{| <H> >- 't |}; 'tt }) =
@@ -186,12 +181,12 @@ ml_rw reduce_if_quoted_op {| reduce |} : ('goal :  if_quoted_op{ bterm{| <H> >- 
  *            if_bterm{bterm{<H>; <Jn> >- 'tn}; 'tt}...}}
  *)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{If_bterm}
 
    << if_bterm{'bt; 'tt} >> evaluates to << 'tt >> when << 'bt >> is a
    well-formed bterm operator and must fail to evaluate otherwise.
-@end[doc] >>
+>>
 
 declare if_bterm{'bt; 'tt}
 
@@ -199,7 +194,6 @@ prim_rw reduce_ifbterm1 'H :
    if_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; 'tt } <--> 'tt
 
 doc <:doc<
-   @begin[doc]
    << fake_mlrw[reduce_ifbterm2]{
          if_bterm{bterm{|<H> >-
             <:doc<@underline{<<'op>>}@{
@@ -209,7 +203,6 @@ doc <:doc<
          @~@~@~ if_bterm{bterm{|<H>; <J_2> >- 't_2|};
          @~@~@~@~@~@~ @ldots
          @~@~@~@~@~@~@~@~@~ <<if_bterm{bterm{|<H>; <J_n> >- 't_n|}; 'tt}>> @ldots }} >>} >>
-   @end[doc]
    @docoff
 >>
 
@@ -253,12 +246,12 @@ let resource reduce +=
  *    [ bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn} ]
  *)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{Subterms}
 
    << subterms{'bt} >> returns a list of sub-bterms of << 'bt >>, undefined
    if << 'bt >> is not a well-formed bterm.
-@end[doc] >>
+>>
 
 declare subterms{'bt}
 
@@ -266,14 +259,12 @@ prim_rw reduce_subterms1 'H :
    subterms{ bterm{| <H>; x: term; <J> >- 'x |} } <--> rnil
 
 doc <:doc<
-   @begin[doc]
    << fake_mlrw[reduce_subterms2]{
          subterms{bterm{|<H> >-
             <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}};
          <:doc<[<<bterm{|<H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>> ] >>} >>
-   @end[doc]
    @docoff
 >>
 
@@ -314,13 +305,13 @@ let resource reduce +=
  * (ri's are ignored).
  *)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{Make_bterm}
 
    << make_bterm{'bt; 'btl} >> takes the top-level operator of << 'bt >>
    and replaces the subterms with the ones in << 'btl >> (provided they
    have a correct arity).
-@end[doc] >>
+>>
 
 declare make_bterm{'bt; 'bt1}
 
@@ -328,7 +319,6 @@ prim_rw reduce_make_bterm1 'H :
    make_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; rnil } <--> bterm{| <H>; x: term; <J> >- 'x |}
 
 doc <:doc<
-   @begin[doc]
    << fake_mlrw[reduce_make_bterm2]{
          make_bterm{bterm{|<H> >-
             <:doc<@underline{<<'op>>}@{
@@ -339,7 +329,6 @@ doc <:doc<
             <:doc<@underline{<<'op>>}@{
                <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
                <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|} } >>
-   @end[doc]
    @docoff
 >>
 
@@ -389,7 +378,7 @@ let resource reduce +=
  * distinct. Undefined if either 'bt1 or 'bt2 is ill-formed.
  *)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{@tt[If_same_op]}
 
    << if_same_op{'bt1; 'bt2; 'tt; 'ff} >> evaluates to << 'tt >> if << 'bt1 >>
@@ -397,7 +386,6 @@ doc <:doc< @begin[doc]
    (including all the parameters and all the arities) and to << 'ff >> when
    operators are distinct. Undefined if either << 'bt1 >> or << 'bt2 >> is
    ill-formed.
-   @end[doc]
 >>
 
 declare if_same_op{'bt1; 'bt2; 'tt; 'ff}
@@ -425,13 +413,12 @@ ml_rw reduce_if_same_op {| reduce |} : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'f
  *                if_simple_bterm{bterm{ >- 't}; 'tt; 'ff} <--> 'tt
  *)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{If_simple_bterm}
 
    << if_simple_bterm{'bt; 'tt; 'ff} >> evaluates to << 'tt >> when << 'bt >>
    has $0$ bound variables, to << 'ff >> when it is a bterm with non-$0$ bound
    variables and is undefined otherwise.
-   @end[doc]
 >>
 
 declare if_simple_bterm{'bt; 'tt; 'ff}
@@ -464,13 +451,13 @@ let resource reduce +=
  *     if_var_bterm{bterm{<H> >- _op_{...}}; 'tt; 'ff} <--> 'ff
  *)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{@tt[If_var_bterm]}
 
    << if_var_bterm{'bt; 'tt; 'ff} >> evaluates to << 'tt >> when << 'bt >>
    is a well-formed bterm with a bound variable body, to << 'ff >> when
    it is a bterm with a non-variable top-level operator.
-@end[doc] >>
+>>
 
 declare if_var_bterm{'bt; 'tt; 'ff}
 
@@ -478,12 +465,10 @@ prim_rw reduce_if_var_bterm1 'H :
    if_var_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; 'tt; 'ff } <--> 'tt
 
 doc <:doc<
-   @begin[doc]
    << fake_mlrw[reduce_if_var_bterm2]{
          if_var_bterm{bterm{|<H> >-
             <:doc<@underline{<<'op>>}@{@ldots@}>>|}; 'tt; 'ff};
          'ff (*<:doc< << 'ff >> >>*)} >>
-   @end[doc]
    @docoff
 >>
 ml_rw reduce_if_var_bterm2 : ('goal :  if_var_bterm{ bterm{| <H> >- 't |}; 'tt; 'ff }) =
@@ -512,12 +497,11 @@ let resource reduce +=
  * bterm{<H> >- 't1['t2] }
  *)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{Substitution}
 
    << subst{'bt; 't} >> substitutes << 't >> for the first bound variable
    of << 'bt >>.
-   @end[doc]
 >>
 
 declare subst{'bt; 't}

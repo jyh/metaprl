@@ -1,13 +1,11 @@
 doc <:doc<
    @spelling{renamings th}
-   @begin[doc]
    @module[Itt_record_renaming]
 
    This theory defines the function for renaming record fields.
-   @end[doc]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 
 extends Base_theory
 extends Itt_record
@@ -22,12 +20,10 @@ open Basic_tactics
 open Itt_record_label
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definition}
 
    If we have a record $r$ then  <<rename[a:t, b:t]{'r}>> is the same record
    where fields with the names <<label[a:t]>> and <<label[b:t]>> are interchanged.
-   @end[doc]
 >>
 
 define rename: rename[a:t, b:t]{'r} <--> rcrd[a:t]{ field[b:t]{'r}; rcrd[b:t]{ field[a:t]{'r}; 'r} }
@@ -61,10 +57,8 @@ let resource reduce +=
 
 
 doc <:doc<
-   @begin[doc]
      For example, <<rename[ "x":t, "y":t]{ {x=1;y=2;z=3} } ~ {y=1;x=2;z=3}>>.
      In general the following reduction rules describe how renaming works on records.
-   @end[doc]
 >>
 
 interactive_rw rename_rcrd_reduce1 :
@@ -82,14 +76,12 @@ interactive_rw rename_empty_rcrd {| reduce |}:
    rename[a:t, b:t]{ rcrd } <--> rcrd
 
 doc <:doc<
-   @begin[doc]
      These reductions with constant labels are in the @hrefresource[reduce_resource] resource.
      Thus, the @hrefconv[reduceC] does such reduction whenever <<label[a:t]>>,  <<label[b:t]>>, and  <<label[c:t]>> are concrete labels.
 
      @modsection{Properties}
      The main properties of the renaming are the following reductions:
-   @end[doc]
-@docoff
+   @docoff
 >>
 
 interactive_rw rename_rw:
@@ -105,8 +97,7 @@ let rename_reduceC = rename_rw thenC reduce_eq_label thenC tryC reduce_eq_label
 let resource reduce +=
    << field[c:t]{rename[a:t, b:t]{'r}} >>, rename_reduceC
 
-doc <:doc< doc>>
-
+doc docon
 
 interactive_rw rename_rw1 :
    field[a:t]{rename[a:t, b:t]{'r}} <--> field[b:t]{'r}
@@ -120,11 +111,9 @@ interactive_rw rename_rw3:
    field[c:t]{rename[a:t, b:t]{'r}} <--> field[c:t]{'r}
 
 doc <:doc<
-   @begin[doc]
      These reductions with constant labels are also added to the @hrefresource[reduce_resource] resource.
 
      The trivial renaming is identity:
-   @end[doc]
 >>
 
 interactive_rw rename_id {| reduce |}:
@@ -132,9 +121,7 @@ interactive_rw rename_id {| reduce |}:
    rename[a:t, a:t]{'r} <--> 'r
 
 doc <:doc<
-   @begin[doc]
    Two opposite renamings could be canceled:
-   @end[doc]
 >>
 
 
@@ -146,21 +133,17 @@ interactive_rw rename_cancel1 {| reduce |}:
 
 
 doc <:doc<
-   @begin[doc]
    Our definition of the renaming is symmetrical. Therefore,
-   @end[doc]
 >>
 
 interactive_rw rename_sym :
    rename[a:t, b:t]{'r} <--> rename[b:t, a:t]{'r}
 
 doc <:doc<
-   @begin[doc]
    @begin[small]
    Usually we will consider this property as side effect and will not use it.
    But sometimes this property could be useful. See for example Section @refsection[Inverse_order].
    @end[small]
-   @end[doc]
    @docoff
 >>
 
@@ -170,9 +153,7 @@ interactive_rw rename_cancel2 {| reduce |}:
    rename[a:t, b:t]{rename[a:t, b:t]{'r}} <-->   'r
 
 doc <:doc<
-   @begin[doc]
    The order of renamings does not matter as soon as the renamed fields are different:
-   @end[doc]
 >>
 
 interactive_rw rename_exchange :
@@ -184,7 +165,6 @@ interactive_rw rename_exchange :
    rename[c:t, d:t]{rename[a:t, b:t]{'r}}
 
 doc <:doc<
-   @begin[doc]
    @modsection{Tactics}
    @modsubsection{Reductions}
      Most of the above reductions are added to the @hrefresource[reduce_resource] resource.
@@ -213,7 +193,6 @@ doc <:doc<
            First, it replaces $r$ by <<rename[b:t,a:t]{ rename[a:t,b:t]{'r} }>> in the immediate subterms of the term and then do @em{exactly one} reduction on the term.
            (It fails if it can not do the reduction).
      @end[small]
-   @end[doc]
    @docoff
 >>
 
@@ -225,9 +204,7 @@ interactive_rw rename_fields rename[a:t,b:t]{'r}:
 let renameFieldC term = allSubThenC (rename_fields term) (reduceTopC)
 
 doc <:doc<
-   @begin[doc]
      The tactic @tactic[renameFieldT]  @tt["= rwhAll  renameFieldC"] applies the above conversion to all subterms of the goal sequence.
-   @end[doc]
 >>
 
 doc docoff
@@ -237,12 +214,10 @@ let renameFieldT term = rwhAll  (renameFieldC term)
 (******************* additive **********************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Renaming of Additive Operations}
    One of the application of the renaming is in the theory of algebraic structures such as @hrefmodule[groups] and @hrefmodule[rings].
    Suppose we have a field. We want to consider it as a multiplicative group as well as an additive group.
    We need the following renamings that renames additive operations to their multiplicative analogs and visa versa:
-   @end[doc]
 >>
 
 let rename_mul_add_length = 4
@@ -263,7 +238,6 @@ dform rename_mul_add_df : except_mode[src] ::  rename_mul_add{'mul} = rename["<m
 dform rename_add_mul_df : except_mode[src] :: rename_add_mul{'add} = rename["<add>":t, "<mul>" :t]{'add}
 
 doc <:doc<
-   @begin[doc]
      @begin[small]
      Of course since the renaming is symmetrical (rule @hrefrule[rename_sym]) the above definitions are essentially the same.
      But the theory is intuitively clearer if we forget about symmetry and consider <<rename[a:t,b:t]{'r}>> as replacement <<label[a:t]>> by <<label[b:t]>>.
@@ -273,7 +247,6 @@ doc <:doc<
      Formally additive groups are not groups according to this definition. If we want to consider it as a @em{standard} group, then we need to do renaming.
      We introduce an operation <<as_additive{'r}>> that consider structure $r$ as an additive structure (such as group).
      This operation is defined just as renaming <<rename_add_mul{'r}>>:
-   @end[doc]
 >>
 
 define unfold_as_additive: as_additive{'r} <-->  rename_add_mul{'r}
@@ -281,19 +254,15 @@ define unfold_as_additive: as_additive{'r} <-->  rename_add_mul{'r}
 dform as_additive_df : except_mode[src] :: parens :: as_additive{'add} = slot{'add} bf[" as additive"]
 
 doc <:doc<
-   @begin[doc]
      but this operation has a different meaning behind it and has different reduction rules in the @hrefresource[reduce_resource] resource (see the next section).
 
      Example. If $r$ is a ring then <<as_additive{'r}>> is a group (the additive group of the ring $r$).
-   @end[doc]
 >>
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Reductions}
      The following reductions  immediately follow from the definitions:
-   @end[doc]
 >>
 
 interactive_rw mul_add_cancel {| reduce |}:  rename_mul_add{ rename_add_mul{'add} } <--> 'add
@@ -301,10 +270,8 @@ interactive_rw mul_add_cancel {| reduce |}:  rename_mul_add{ rename_add_mul{'add
 interactive_rw add_mul_cancel {| reduce |}:  rename_add_mul{ rename_mul_add{ 'mul }} <--> 'mul
 
 doc <:doc<
-   @begin[doc]
      These reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
     <<field[c:t]{rename_mul_add{'r}}>>, <<field[c:t]{rename_add_mul{'r}}>>.
-   @end[doc]
    @docoff
 >>
 
@@ -317,10 +284,8 @@ let resource reduce +=
   ]
 
 doc <:doc<
-   @begin[doc]
     We do not include reduction for  <<field[c:t]{as_additive{'r}}>> because we do not want to reduce it immediately.
     (To reduce such term use the @hrefconv[unfoldAdditiveC] $r$ conversion).
-   @end[doc]
    @docoff
 >>
 
@@ -329,7 +294,6 @@ interactive_rw additive_reduce (* {| reduce |} *):
    as_additive{  rename_mul_add{ 'mul }} <--> 'mul
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Tactics}
 
      The following tools are used to apply theorems for multiplicative structures (e.g. groups) to additive ones.
@@ -353,7 +317,6 @@ doc <:doc<
 
      The @tactic[useAdditiveWithAutoT] $r$ @i[tac] tactic applies @tt[useAdditiveWithT] $r$
      @tt[autoT] and then runs @tt[autoT] again.
-   @end[doc]
    @docoff
 >>
 
@@ -374,7 +337,6 @@ let useAdditiveWithAutoT term  = useAdditiveWithT term autoT thenT autoT
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Examples}
    Let $F$ be a filed. Suppose we want to prove that <<'a +['F] 'F^"0" = 'a in 'F^car>>.
    If we run tactic  @tt[foldAdditiveT] <<'F>>
@@ -399,15 +361,12 @@ doc <:doc<
 
    The @hreftactic[useAdditiveWithT] tactic allows us to use the three above steps in one.
    And the @hreftactic[useAdditiveWithAutoT] tactic also use @tt[autoT] on the final goal.
-   @end[doc]
 >>
 
 
 doc <:doc<
-   @begin[doc]
    Now consider another example.
    If we have a group $G$, an element of this group $a$ and  a  number $n$ then we can define the $n$-th power of $a$ in $G$: <<group_power{'G; 'a; 'n}>>
-   @end[doc]
 >>
 
 declare group_power{'g; 'a; 'n}
@@ -416,9 +375,7 @@ dform group_power_df : except_mode[src] :: group_power{'G; 'a; 'n} =
    slot{'a} sup{'n} sub{'G}
 
 doc <:doc<
-   @begin[doc]
       Then we can define the analog of this operation for additive groups:
-   @end[doc]
 >>
 
 define group_mult: group_mult{'g; 'a; 'n} <--> group_power{as_additive{'g}; 'a; 'n}
@@ -427,9 +384,7 @@ dform group_mult_df : except_mode[src] :: group_mult{'G; 'a; 'n} =
    slot{'n} times sub{'G} slot{'a}
 
 doc <:doc<
-   @begin[doc]
          We also need two reductions to be added to @hrefresource[reduce_resource]:
-   @end[doc]
 >>
 
 interactive_rw mult_is_power {| reduce |}:
@@ -439,7 +394,6 @@ interactive_rw power_is_mult {| reduce |}:
    group_power{rename_add_mul{ 'g }; 'a; 'n} <-->   group_mult{'g; 'a; 'n}
 
 doc <:doc<
-   @begin[doc]
          Then @hrefconv[foldAdditiveC] and @hrefconv[unfoldAdditiveC] would replace
          <<group_mult{'R;'a;'n}>> by <<group_power{as_additive{'R}; 'a; 'n}>>
         and visa versa:
@@ -455,7 +409,6 @@ doc <:doc<
      <<sequent [dummy_arg] { <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>}
    $$
 
-   @end[doc]
    @docoff
 >>
 
@@ -469,11 +422,9 @@ let test t =
 let reverse_order_length = 7
 
 doc <:doc<
-   @begin[doc]
    @modsection{Inverse Order}
    Let we have a data structure $(O,<,>)$ with some order.
    Then we can reverse the order just by  renaming:
-   @end[doc]
 >>
 
 define unfold_reverse_order: reverse_order{'ord} <-->
@@ -491,19 +442,15 @@ doc docoff
 dform reverse_order_df: except_mode[src] ::parens :: reverse_order{'ord} = slot["le"]{'ord} sup["-1"]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Reductions}
      The following reduction holds:
-   @end[doc]
 >>
 
 interactive_rw reverse_order_cancel {| reduce |}:  reverse_order{reverse_order{'ord}} <--> 'ord
 
 doc <:doc<
-   @begin[doc]
      These reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
     <<field[c:t]{reverse_order{'ord}}>>.
-   @end[doc]
    @docoff
 >>
 
@@ -513,7 +460,6 @@ let resource reduce +=
   ]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Tactics}
 
      To reverse order one can apply the conversion @conv[reverseOrderC] <<'ord>>.
@@ -522,7 +468,6 @@ doc <:doc<
      The @tt[reduceC] conversion should undo this conversion.
 
      The @tactic[reverseOrderT] @i[ord] tactic apply the above conversions to all subterms of the goal sequent (using @hreftactic[rwhAll]).
-   @end[doc]
 >>
 
 interactive_rw reverse_order_rw ('ord :> Term) :  'ord <-->   reverse_order{reverse_order{'ord}}
@@ -535,12 +480,10 @@ let reverseOrderT term  = rwhAll (reverseOrderC term)
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Examples}
      Suppose we have an operator <<max{'ord;'a;'b}>> that takes the maximum of <<'a>> and <<'b>>
      w.r.t. order <<'ord>>.  Then we can define  <<min{'ord;'a;'b}>> as a maximum w.r.t. reverse
      order:
-   @end[doc]
 >>
 
 declare max{'ord;'a;'b}
@@ -553,9 +496,7 @@ dform max_df : max{'ord;'a;'b} = `"max(" 'ord `";" 'a `";" 'b `")"
 dform min_df : min{'ord;'a;'b} = `"min(" 'ord `";" 'a `";" 'b `")"
 
 doc <:doc<
-   @begin[doc]
          Then add the following rewrites to the reduce resource:
-   @end[doc]
 >>
 
 interactive_rw max_rev_rw {| reduce |} :
@@ -566,14 +507,12 @@ interactive_rw min_rev_rw {| reduce |} :
 
 
 doc <:doc<
-   @begin[doc]
          Then we can use @hreftactic[reverseOrderT] tactic on the goal << min{'ord;'a;'b} <['ord] 'a>>:
          $$
             @rulebox{reverseOrderT; <<'ord>>;
                <<sequent{ <H> >-  min{'ord;'a;'b} <['ord] 'a } >>;
                <<sequent{ <H> >-  max{reverse_order{'ord};'a;'b} >[reverse_order{'ord}] 'a }>>}
          $$
-   @end[doc]
 >>
 
 interactive example :

@@ -22,7 +22,7 @@ let _ =
 (*  Definitions   *)
 (******************)
 
-doc <:doc< >>
+doc docon
 
 
 (*** Single Record Type ***)

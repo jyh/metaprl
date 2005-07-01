@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_vector]
    The @tt[Itt_hoas_vector] module defines the ``vector bindings''
    extensions for the basic ITT HOAS.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,7 +35,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_hoas_base
 extends Itt_nat
 extends Itt_list2
@@ -52,7 +51,6 @@ open Itt_list
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
    The <<bind{'n; x.'t['x]}>> expression, where <<'n>> is a natural number,
    represents a ``telescope'' of $n$ nested @tt[bind] operations. Namely, it
@@ -68,7 +66,6 @@ doc <:doc<
    of terms <<'tl>> (<<'tl>> must be a list) for the first <<length{'tl}>> bindings of the
    bterm <<'bt>>.
 
-   @end[doc]
 >>
 
 define (*private*) unfold_bindn:
@@ -85,7 +82,7 @@ define (*private*) unfold_substl:
 
 define iform simple_bindn: bind{'n; 't} <-->  bind{'n; "_".'t}
 
-doc "doc"{rewrites}
+doc rewrites
 
 interactive_rw reduce_bindn_base {| reduce |} :
    bind{0; x.'t['x]} <--> 't[nil]

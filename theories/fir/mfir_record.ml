@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_record]
 
    The @tt[Mfir_record] module defines a syntactic mechanism for
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_bool
@@ -57,14 +53,12 @@ open Mfir_token
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    Records are used to represent maps from labels to values.
    The term @tt[recordEnd] is an empty record.  The term  @tt[record]
    is a record that binds the label @tt[tag] to the value @tt[data].
    The subterm @tt[remaining] is the remainder of the record.
-   @end[doc]
 >>
 
 declare recordEnd
@@ -72,12 +66,10 @@ declare record[tag:s]{ 'data; 'remaining }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[field] is used to retrieve the data from the field
    labelled @tt[tag] in the given record.  The term @tt[field_mem]
    tests if there is a binding for @tt[tag] in the given record.
-   @end[doc]
 >>
 
 declare field[tag:s]{ 'record }
@@ -90,11 +82,9 @@ doc docoff
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    Reducing a field operation is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_field_main :
@@ -116,10 +106,8 @@ let resource reduce +=
       reduce_field
 
 doc <:doc<
-   @begin[doc]
 
    Determining whether or not a label is bound in a record is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_field_mem_base :

@@ -1,11 +1,10 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_destterm]
    The @tt[Itt_hoas_destterm] module defines destructors for extracting
    from a bterm the components corresponding to the de Bruijn-like representation
    of that bterm.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -37,7 +36,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 
 extends Itt_hoas_base
 extends Itt_hoas_vector
@@ -49,7 +48,6 @@ doc docoff
 open Basic_tactics
 
 doc <:doc<
-   @begin[doc]
    @terms
    The @hrefterm[is_var] operator decides whether a bterm is a @hrefterm[var] or a
    @hrefterm[mk_bterm]. In order to implement the @hrefterm[is_var] operator we
@@ -59,7 +57,6 @@ doc <:doc<
 
    The @hrefterm[dest_bterm] operator is a generic destructor that can extract all the
    components of the de Bruijn-like representation of a bterm.
-   @end[doc]
 >>
 declare op1
 declare op2
@@ -73,7 +70,7 @@ define (*private*) unfold_dest_bterm:
            then 'var_case[left{'bt}; right{'bt}]
            else 'op_case[bdepth{'bt}; get_op{'bt; it}; subterms{'bt}]
 
-doc <:doc< @doc{@rules} >>
+doc rules
 
 prim op1_op {| intro [] |}:
    sequent { <H> >- op1 in Operator }
@@ -83,7 +80,7 @@ prim op2_op {| intro [] |}:
    sequent { <H> >- op2 in Operator }
    = it
 
-doc <:doc< @doc{@rewrites} >>
+doc rewrites
 
 prim_rw ops_distict {| reduce |}:
    is_same_op{op1; op2} <--> bfalse

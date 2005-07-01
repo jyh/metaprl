@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_tunion]
 
    The @tt[Itt_tunion] module defines a (joint) union type
@@ -18,8 +17,8 @@ doc <:doc<
    <<void -> void>>, in which all functions are equal.
    As a consequence, the union space also has the trivial
    equality, and thus it has no useful elimination form.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -52,9 +51,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_struct
 extends Itt_struct2
@@ -78,11 +75,9 @@ open Itt_equal
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{tunion} term defines the union type.
-   @end[doc]
 >>
 
 define (*private*) unfold_tunion :
@@ -103,13 +98,11 @@ dform isect_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: tunion{'A;
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The union type $@tunion{x; A; B[x]}$ is well-formed if $A$ is
    a type, and $B[a]$ is a type for any $a @in A$.
-   @end[doc]
 >>
 interactive tunionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -132,14 +125,12 @@ interactive tunionFormation 'A :
    (* = tunion{'A; x. 'B['x]} *)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The elements $t$ of the union type are the elements in
    any one of the branches $t @in B[a]$ for any $a @in A$.
    Two elements are equal if they are equal in @emph{any}
    of the branches $B[a]$.
-   @end[doc]
 >>
 interactive tunionMemberEquality {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
@@ -148,14 +139,12 @@ interactive tunionMemberEquality {| intro [] |} 'a :
    sequent { <H> >- 'x1 = 'x2 in Union x:'A. 'B['x]  }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The propositional interpretation of the union type
    is similar to the existential $@exists{x; A; B[x]}$.
    The union is inhabited if-and-only-if the existential
    is also inhabited.
-   @end[doc]
 >>
 interactive tunionMemberFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
@@ -164,14 +153,12 @@ interactive tunionMemberFormation {| intro [] |} 'a :
    sequent { <H> >- Union x:'A. 'B['x]  }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form is weak.  The desired rule would be that if
    $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some
    $a @in A$.  This rule is allowed, but only for equality goals,
    where the computational content of the proof can be omitted.
-   @end[doc]
 >>
 interactive tunionElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->

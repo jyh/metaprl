@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @spelling{IR AST}
    @module[M_ast]
    This file defines the terms needed to represent the M AST.
@@ -46,20 +45,15 @@ doc <:doc<
    Author: Adam Granicz
    @email{granicz@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Summary
 
 doc <:doc<
-   @begin[doc]
    Operators.
-   @end[doc]
 >>
 declare AstAddOp
 declare AstSubOp
@@ -74,9 +68,7 @@ declare AstEqOp
 declare AstNeqOp
 
 doc <:doc<
-   @begin[doc]
    Expressions
-   @end[doc]
 >>
 declare TrueExpr
 declare FalseExpr
@@ -94,18 +86,14 @@ declare ApplyExpr{'f; 'args}
 declare LetVarExpr{'e1; v. 'e2['v]}
 
 doc <:doc<
-   @begin[doc]
    Arguments.
-   @end[doc]
 >>
 declare AstArgNil
 declare AstArgCons{'head; 'tail}
 
 doc <:doc<
-   @begin[doc]
    Mutually recursive functions.
    We need post-parsing rewrite rules (relaxed mode) to create these.
-   @end[doc]
 >>
 declare AstLetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 declare AstFields{'fields}
@@ -115,18 +103,14 @@ declare AstEndDef
 declare AstLetFun{'R; 'label; f. 'cont['f]}
 
 doc <:doc<
-   @begin[doc]
    Tuples.
-   @end[doc]
 >>
 declare AstAllocTupleNil
 declare AstAllocTupleCons{'e; 'rest}
 declare TupleExpr{'tuple}
 
 doc <:doc<
-   @begin[doc]
    The parsed program is represented as an AST term.
-   @end[doc]
 >>
 declare AST{'e}
 

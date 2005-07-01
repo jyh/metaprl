@@ -1,13 +1,12 @@
 doc <:doc<
    @spelling{th}
 
-   @begin[doc]
    @module[Itt_struct2]
 
    The @tt[Itt_struct2] module contains some @emph{derived} rules similar
    to @hrefrule[cut] and @hrefrule[substitution] in the @hrefmodule[Itt_struct] theory.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -42,9 +41,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_struct
@@ -77,7 +74,6 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Substitution}
 
@@ -88,7 +84,6 @@ doc <:doc<
    the type $A$ is
    functional only for such $x$ @emph{that equals to $t_1$ and $t_2$ in $T$} (not @emph{for all} $x$ as in
    original substitution rules).
-   @end[doc]
 >>
 
 interactive substitution2 ('t1 = 't2 in 'T) bind{x. 'C['x]} :
@@ -105,17 +100,14 @@ interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
 
    The @tt{Itt_struct2} module redefines tactic @hreftactic[substT].
    From now @tt[substT] uses the above version of substitution
    instead of original one.
 
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Cut rules}
 
    There are three advanced versions of the @hrefrule[cut] rule.
@@ -123,7 +115,6 @@ doc <:doc<
    and $T[x]$ is true for any $x$ from $S$ such that $x=s @in S$,
    then $T[s]$ is certainly true.
 
-   @end[doc]
 >>
 
 interactive cutMem 's 'S bind{x.'T['x]} :
@@ -132,7 +123,6 @@ interactive cutMem 's 'S bind{x.'T['x]} :
    sequent { <H> >- 'T['s]}
 
 doc <:doc<
-   @begin[doc]
    The corresponding tactic is the @tt[letT] tactic.
    This tactic takes a term $x=s @in S$ as an argument
    and a term <<bind{x.'T['x]}>> as an optional with-argument.
@@ -142,7 +132,6 @@ doc <:doc<
    This tactic is usually used when we have an assumption $s @in S$,
    and want to use the elimination rule corresponding to $S$.
 
-   @end[doc]
 >>
 
 (*
@@ -158,10 +147,8 @@ interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} :
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution in a type}
 
-   @end[doc]
 >>
 
 interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} :
@@ -172,7 +159,6 @@ interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 
    sequent { <H> >- 'c_1 = 'c_2 in 'C['t_1] }
 
 doc <:doc<
-   @begin[doc]
 
    The sequent <<sequent{ <H>; x: 'S; <J['x]> >- 't['x] in 'T}>>
    actually means not only that <<'t['x] in 'T>> for any <<'x in 'S>>, but also
@@ -180,7 +166,6 @@ doc <:doc<
    $t[s_1]$ and $t[s_2]$ should be equal in $T$.
 
    The following rule states this explicitly.
-   @end[doc]
 >>
 
 interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
@@ -189,33 +174,27 @@ interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
 
 doc <:doc<
-   @begin[doc]
    Elimination rule for set equality
-   @end[doc]
 >>
 interactive setEqualityElim {| elim [] |} 'H :
    sequent { <H>; 'a = 'b in 'A; squash{'B['a]}; squash{'B['b]}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: 'a = 'b in { y: 'A | 'B['y] }; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
 
    The @tt[assertEqT] tactic applies this rule.
    This tactic takes a term $s1=s2 @in S$ as an argument
    and a term <<bind{x.'t['x]}>> as an optional with-argument.
    This tactic helps us to prove an equality from a membership.
 
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
 
    The @tt[cutSquash] rule is similar to the @hrefrule[cut] rule.
    If we prove $S$, but do not show the extract term, then we can assert
    $S$ as a @emph{squashed} hypothesis, that is we are not allow to use its extract
    (see @hrefmodule[Itt_squash]).
-   @end[doc]
 >>
 
 interactive cutSquash 'H 'S :
@@ -224,7 +203,6 @@ interactive cutSquash 'H 'S :
    sequent { <H>; <J> >- 'T}
 
 doc <:doc<
-   @begin[doc]
    There are two tactics that used this rule: @tt[assertSquashT] and
    @tt[assertSquashAtT].
    They are similar to @hreftactic[assertT] and  @hreftactic[assertAtT].
@@ -234,7 +212,6 @@ doc <:doc<
 
    Next we implement ``third-order'' rewriting using the lambda binding to represent
    arbitrary SO contexts.
-   @end[doc]
 >>
 interactive fun_sqeq_elim {| elim[ThinOption thinT] |} 'H 'a :
    sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>; 't1['a]~'t2['a]  >- 'C } -->

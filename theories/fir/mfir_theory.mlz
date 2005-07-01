@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @theory{Mojave FIR Theory}
 
    The Mojave FIR Theory (hereafter the FIR theory) seeks to formalize
@@ -15,8 +14,8 @@ doc <:doc<
 
    Our current goal is to formalize the FIR type system, and then use that
    formalization to type-check programs from the Mojave compiler.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -48,11 +47,9 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @module[Mfir_theory]
 
    The @tt[Mfir_theory] module collects all the modules of the FIR theory.
-   @end[doc]
 >>
 
 extends Base_theory

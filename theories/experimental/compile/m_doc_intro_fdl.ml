@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    CPS ML Mojave compilable Necula Liang HOAS FDL Girard Moggi Plotkin Sabry Wadler Morrisett
    @end[spelling]
@@ -31,12 +30,10 @@ doc <:doc<
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
    Modified By:
    @end[license]
-   @end[doc]
 >>
 extends M_doc_comment
 
 doc <:doc<
-@begin[doc]
 
 A @emph{logical framework} is a system that allows the definition and
 use of @emph{multiple} logics, supporting derivation in any of the
@@ -294,7 +291,6 @@ rewriting the source program $e$ to an equivalent assembly program
 $e'$.
 
 @docoff
-@end[doc]
 >>
 
 

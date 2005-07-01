@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_tr_types]
 
    The @tt[Mfir_tr_types] module defines type equality judgments, which are
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_option
@@ -57,12 +53,10 @@ extends Mfir_sequent
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Mutable types}
 
    The types must be equal, and the flags should be identical booleans.
-   @end[doc]
 >>
 
 prim wf_mutable_ty :
@@ -73,11 +67,9 @@ prim wf_mutable_ty :
                                   'k } }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Numbers}
 
    The type << tyInt >> is well-formed.
-   @end[doc]
 >>
 
 prim wf_tyInt :
@@ -85,13 +77,11 @@ prim wf_tyInt :
 
 
 doc <:doc<
-   @begin[doc]
 
    Enumeration types are well-formed if the parameter $i$ is within the
    allowed range of values.  This latter restriction assists the Mojave
    compiler's garbage collector in differentiating between enumeration
    constants and pointers.
-   @end[doc]
 >>
 
 prim wf_tyEnum :
@@ -100,13 +90,11 @@ prim wf_tyEnum :
 
 
 doc <:doc<
-   @begin[doc]
 
    The types << tyRawInt[p:n, sign:s] >> and << tyFloat[p:n] >>
    are well-formed if their parameters are well-formed.  Note that
    << tyRawInt[p:n, sign:s] >> and << tyFloat[p:n] >> cannot be
    used as << small_type >> types.
-   @end[doc]
 >>
 
 prim wf_tyRawInt1 :
@@ -138,12 +126,10 @@ prim wf_tyFloat :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functions}
 
    Function types are well-formed if the argument and result types
    are well-formed.
-   @end[doc]
 >>
 
 prim wf_tyFun :
@@ -155,12 +141,10 @@ prim wf_tyFun :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Tuples}
 
    Two union types are equal if they name the same union definition, select
    the same subset of cases, and instantiate the definition at equal types.
-   @end[doc]
 >>
 
 prim wf_tyUnion 'H :
@@ -186,11 +170,9 @@ prim wf_tyUnion 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    Two tuple types are equal if they are the same kind of tuple and their
    projections are pointwise equal.  Note that box tuples must have arity one.
-   @end[doc]
 >>
 
 prim wf_tyTuple_normal :
@@ -213,10 +195,8 @@ prim wf_tyTuple_box :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -241,11 +221,9 @@ prim wf_tyTag 'H :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Other aggregates}
 
    Two array types are equal if their element types are equal.
-   @end[doc]
 >>
 
 prim wf_tyArray :
@@ -254,10 +232,8 @@ prim wf_tyArray :
 
 
 doc <:doc<
-   @begin[doc]
 
    The type << tyRawData >> is well-formed.
-   @end[doc]
 >>
 
 prim wf_tyRawData :
@@ -265,10 +241,8 @@ prim wf_tyRawData :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -283,12 +257,10 @@ prim wf_tyFrame 'H :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Polymorphism}
 
    Two type variables are considered equal if they name the same variable
    and the variable is declared in the context with the specified kind.
-   @end[doc]
 >>
 
 (*
@@ -305,11 +277,9 @@ prim wf_tyVar 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    Two type applications are equal if they name the same parametrized type
    and instantiate that type at equal types.
-   @end[doc]
 >>
 
 (*
@@ -331,11 +301,9 @@ doc <:doc<
 
 
 doc <:doc<
-   @begin[doc]
 
    Two existential types are equal if when instantiated at the same
    << small_type >> type, the resulting types are equal.
-   @end[doc]
 >>
 
 prim wf_tyExists :
@@ -346,11 +314,9 @@ prim wf_tyExists :
 
 
 doc <:doc<
-   @begin[doc]
 
    Two universal types are equal if when instantiated at the same
    << small_type >> type, the resulting types are equal.
-   @end[doc]
 >>
 
 prim wf_tyAll :
@@ -361,10 +327,8 @@ prim wf_tyAll :
 
 
 doc <:doc<
-   @begin[doc]
 
    Type projections are well-formed if $i$ is in bounds.
-   @end[doc]
 >>
 
 (*
@@ -391,12 +355,10 @@ doc <:doc<
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Type definitions}
 
    Two parametrized types are equal if when instantiated at the same
    << small_type >>, the resulting types are equal.
-   @end[doc]
 >>
 
 prim wf_tyDefPoly :
@@ -408,10 +370,8 @@ prim wf_tyDefPoly :
 
 
 doc <:doc<
-   @begin[doc]
 
    Well-formedness of frames and records is straightforward.
-   @end[doc]
 >>
 
 prim wf_recordEnd_record :
@@ -450,12 +410,10 @@ declare union_type_eq_list{ 'cases1; 'cases2 }
 
 
 doc <:doc<
-   @begin[doc]
 
    Two union definitions are equal if the cases they define are equal, and if
    they define the same kind of union.  Note that a union definition may
    define zero cases.
-   @end[doc]
 >>
 
 prim wf_tyDefUnion :
@@ -467,10 +425,8 @@ prim wf_tyDefUnion :
 
 
 doc <:doc<
-   @begin[doc]
 
    Equality of union case definitions is straightforward.
-   @end[doc]
 >>
 
 prim wf_tyDefUnion_cases1 :
@@ -483,10 +439,8 @@ prim wf_tyDefUnion_cases2 :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)

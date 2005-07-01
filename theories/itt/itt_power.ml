@@ -1,11 +1,10 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_power]
 
    A power of a type <<'T>> is a type of all @i{subsets} of <<'T>>.
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,9 +39,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_subset
 
@@ -52,9 +49,7 @@ open Basic_tactics
 
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definition}
-   @end[doc]
 >>
 
 define unfold_Power: Power[i:l]{'T} <--> {X : univ[i:l] | 'X subset 'T}
@@ -78,9 +73,7 @@ dform power_df :  Power[i:l]{'T} = `"P" sub[i:l] `"(" slot{'T} `")"
 *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Basic Rules}
-   @end[doc]
 >>
 
 interactive power_wf {| intro[] |} :
@@ -112,9 +105,7 @@ interactive power_type {| intro[intro_typeinf <<'X>>] |}  Power[i:l]{'T}:
    sequent{ <H> >- "type"{'X} }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Trivia}
-   @end[doc]
 >>
 
 

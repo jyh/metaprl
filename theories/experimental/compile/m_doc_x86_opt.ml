@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @spelling{max}
 
    @subsection[m_doc_x86_opt]{Assembly optimization}
@@ -28,13 +27,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_x86_asm
 
 doc <:doc<
 
-@begin[doc]
 
 There are several simple optimizations that can be performed on the generated assembly, including
 dead-code elimination and reserve coalescing.  Dead-code elimination has a simple specification: any
@@ -77,7 +74,6 @@ $$
 $$
 
 @docoff
-@end[doc]
 
 >>
 

@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    acts Fibonacci inexhaustive ll patt wildcard
@@ -32,13 +31,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-   @begin[doc]
 
 One of ML's more powerful features is the use of @emph{pattern
 matching} to define expressions by case analysis.  Pattern matching is
@@ -357,7 +354,6 @@ val is_unit : unit -> bool = <fun>
 - : bool = true
 @end[iverbatim]
 
-@end[doc]
 >>
 
 (*

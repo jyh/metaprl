@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_well_founded]
 
    The @tt{Itt_well_founded} module provides a more convenient
@@ -7,8 +6,8 @@ doc <:doc<
    term formalized in the @hrefmodule[Itt_rfun] module.  The definition
    of well-foundness requires the derivation of an induction
    principle.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -41,9 +40,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_fun
 extends Itt_logic
@@ -55,7 +52,6 @@ open Dtactic
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{partial_order} term specifies that $R$ is a partial
@@ -70,7 +66,6 @@ doc <:doc<
    used to prove any predicate $P$ on $A$.  This is different from the
    classical definition (that there are no infinite descending chains),
    but the induction principle implies that classical property.
-   @end[doc]
 >>
 define unfold_partial_order : partial_order{'A; x, y. 'R['x; 'y]} <-->
    ((all x: 'A. "not"{'R['x; 'x]})
@@ -99,14 +94,12 @@ dform well_founded_df : except_mode[src] :: well_founded[i:l]{'A; x, y. 'R} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The @tt{partial_order} and @tt{well_founded} predicates are
    both well-formed if their domain $A$ is a type, and their
    relation $R$ is a binary relation.
-   @end[doc]
 >>
 interactive partial_order_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -119,7 +112,6 @@ interactive well_founded_type {| intro [] |} :
    sequent { <H> >- "type"{well_founded[i:l]{'A; x, y. 'R['x; 'y]}} }
 
 doc <:doc<
-   @begin[doc]
    The purpose of this definition is to give a more convenient
    specification of well-foundness that uses normal quantification
    in its formalization (the @hrefterm[well_founded_prop] predicate defined
@@ -127,7 +119,6 @@ doc <:doc<
    definition).  The following rule specifies that the new
    description of well-foundness is sufficient to derive the
    primitive definition.
-   @end[doc]
 >>
 interactive well_founded_reduction univ[i:l] :
    [wf] sequent { <H> >- 'A in univ[i:l] } -->

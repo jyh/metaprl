@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_pair]
 
    The @tt{Czf_itt_pair} module defines the binary pairing
@@ -9,8 +8,8 @@ doc <:doc<
    $$@pair{s_1; s_2} @equiv @union{@sing{s_1}; @sing{s_2}}$$
 
    The pair has two elements: the set $s_1$ and the set $s_2$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_union
 extends Czf_itt_singleton
 doc docoff
@@ -46,7 +45,7 @@ open Dtactic
  * TERMS
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare pair{'s1; 's2}
 doc docoff
 
@@ -55,10 +54,8 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    The pair is a union of two singleton sets.
-   @end[doc]
 >>
 prim_rw unfold_pair : pair{'s1; 's2} <-->
    union{sing{'s1}; sing{'s2}}
@@ -76,12 +73,10 @@ dform pair_df : pair{'s1; 's2} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The pair is a set if both arguments are sets.
-   @end[doc]
 >>
 interactive pair_isset {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -89,12 +84,10 @@ interactive pair_isset {| intro [] |} :
    sequent { <H> >- isset{pair{'s1; 's2}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The elements of the pair $@pair{s_1; s_2}$ are the
    sets $s_1$ and $s_2$.
-   @end[doc]
 >>
 interactive pair_member_intro_left {| intro [SelectOption 1] |} :
    ["wf"] sequent { <H> >- isset{'x} } -->
@@ -111,12 +104,10 @@ interactive pair_member_intro_right {| intro [SelectOption 2] |} :
    sequent { <H> >- mem{'x; pair{'s1; 's2}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The @emph{only} elements of the pair $@pair{s_1; s_2}$ are
    the sets $s_1$ and $s_2$.
-   @end[doc]
 >>
 interactive pair_member_elim {| elim [] |} 'H :
    ["wf"] sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- isset{'y} } -->
@@ -127,11 +118,9 @@ interactive pair_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The pair is functional in both its arguments.
-   @end[doc]
 >>
 interactive pair_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's1['z]} } -->

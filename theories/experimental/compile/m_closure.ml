@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[M_closure]
 
    Closure conversion for the @emph{M} language.  The program is
@@ -22,8 +21,7 @@ doc <:doc<
       up.}
    @end[enumerate]
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -49,9 +47,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Base_meta
 extends M_ir
@@ -69,12 +65,10 @@ open Base_meta
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    @bf{The @Comment!resource[closure_resource]}
    @docoff
-   @end[doc]
 >>
 let resource (term * conv, conv) closure =
    table_resource_info extract_data
@@ -92,7 +86,6 @@ let closureC =
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Terms}
 
    We define several auxiliary terms.
@@ -120,7 +113,6 @@ doc <:doc<
 
    <<CloseFrame{frame. 'e['frame]}>> is the term that adds an extra
    frame argument to each of the functions in the record.
-   @end[doc]
 >>
 declare CloseVar{v. 'e['v]; 'a}
 declare CloseRecVar{'R; 'frame}
@@ -168,12 +160,10 @@ let dest_close_rec_term = dest_dep2_dep2_dep0_dep0_term close_rec_opname
 let mk_close_rec_term   = mk_dep2_dep2_dep0_dep0_term close_rec_opname
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Phase 1}
 
    Convert all @tt[LetRec] to @tt[CloseRec] so that each function will
    have a frame variable for its free variables.
-   @end[doc]
 >>
 prim_rw add_frame : LetRec{R1. 'fields['R1]; R2. 'e['R2]} <-->
    CloseRec{R1, frame. 'fields[CloseRecVar{'R1; 'frame}];
@@ -182,7 +172,6 @@ prim_rw add_frame : LetRec{R1. 'fields['R1]; R2. 'e['R2]} <-->
             AllocTupleNil}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Phase 2}
 
    In the first phase, we abstract free variables using inverse beta-reduction.
@@ -225,11 +214,10 @@ doc <:doc<
    @end[verbatim]
 
    Variable closure is a beta-rewrite.
-   @end[doc]
 >>
 prim_rw reduce_beta : CloseVar{v. 'e['v]; 'a} <--> 'e['a]
 
-doc <:doc< @doc{This is the main function to lift out free variables.} >>
+doc <:doc< This is the main function to lift out free variables. >>
 declare Length{'length}
 
 prim_rw wrap_length : Length{meta_num[i:n]} <--> Length[i:n]
@@ -250,12 +238,10 @@ doc docoff
 dform length_df : Length{'t} = math_it["Length"] `"(" 't `")"
 
 doc <:doc<
-   @begin[doc]
    Now, a conversional to apply the inverse-beta reduction.
    The <<'vars>> parameter is the set of function variables.
    Function variables are not treated as free; we don't
    need closure conversion for them.
-   @end[doc]
 >>
 let abstractTopC =
    let convC e =
@@ -284,11 +270,9 @@ let abstractTopC =
       funC convC
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Phase 3}
 
    Convert the @tt[CloseRec] term to a @tt[LetRec] plus a frame allocation.
-   @end[doc]
 >>
 prim_rw close_close_rec :
    CloseRec{R1, frame1. 'fields['R1; 'frame1];
@@ -299,11 +283,9 @@ prim_rw close_close_rec :
           R2. LetTuple{'length; 'tuple; frame2. 'body['R2; 'frame2]}}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Phase 4}
 
    Generally clean up and move code around.
-   @end[doc]
 >>
 prim_rw close_fields :
    CloseSubscript{'a1; 'a2; v. Fields{'fields['v]}} <-->

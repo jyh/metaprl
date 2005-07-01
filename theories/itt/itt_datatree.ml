@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_datatree]
 
    This is a theory of binary trees with data.
-   @end[doc]
 >>
 
 extends Itt_bintree
@@ -26,9 +24,7 @@ let _ =
    show_loading "Loading Itt_datatree%t"
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definition}
-   @end[doc]
 >>
 
 define bindatatree : DataTree{'A} <--> BinTree{{"data":'A}}
@@ -46,12 +42,10 @@ interactive datatree_subtype {| intro[] |} :
 
 
 doc <:doc<
-   @begin[doc]
    @modsection{Set of elements}
     A data tree is defined as set of elements.
 
   First let us define whether an element is in a tree:
-   @end[doc]
 >>
 
 
@@ -80,9 +74,7 @@ interactive in_tree_univ {| intro[] |} :
 
 
 doc <:doc<
-   @begin[doc]
    Now we can define set of elements of the tree:
-   @end[doc]
 >>
 
 
@@ -112,9 +104,7 @@ interactive set_from_tree_subtype {| intro[] |} :
 
 
 doc <:doc<
-   @begin[doc]
    @modsection{Examples}
-   @end[doc]
 >>
 
 

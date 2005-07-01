@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_test]
 
    The @tt[Mfir_test] module is used to test the FIR theory.  Its contents
@@ -34,15 +33,12 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Mfir_theory
 
 doc <:doc<
-   @begin[doc]
    Tactic to try: @tt["repeatT (autoT thenT rwh reduceC 0)"]
-   @end[doc]
 >>
 
 interactive bool1 :

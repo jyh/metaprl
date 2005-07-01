@@ -1,12 +1,11 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_axioms]
 
    The @tt[Czf_itt_axioms] defines the remaining axioms of
    the set theory as axioms.  This includes the set induction
    scheme, and the strong collection.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -39,14 +38,12 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
 
    The @tt[Czf_itt_axiom] module includes the
    entire logical part of the theory, as well as the
    definition of the @hrefterm[rel] (for use in the definition
    of the strong collection theorem).
-   @end[doc]
 >>
 extends Czf_itt_true
 extends Czf_itt_false
@@ -69,7 +66,6 @@ let _ =
    show_loading "Loading CZF_itt_axioms%t"
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Set induction}
 
@@ -79,7 +75,6 @@ doc <:doc<
 
    The proof of induction follows directly from $W$-type
    induction.
-   @end[doc]
 >>
 interactive set_induction :
    sequent { <H>; x: set >- "type"{'P['x]} } -->
@@ -99,7 +94,6 @@ interactive set_induction2 'H :
 let setInduction = set_induction2
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Strong Collection}
 
    The strong collection axiom states that for every proof
@@ -112,7 +106,6 @@ doc <:doc<
    that inhabits the function space $T @rightarrow @set$.  The canonical
    form of the proof is a @tt[lambda]-function $@lambda{x; s_x}$,
    which can be used to form the set collection $@collect{x; T; s_x}$.
-   @end[doc]
 >>
 interactive collection 's1 (bind{x. bind{y. 'P['x; 'y]}}) :
    sequent { <H> >- isset{'s1} } -->
@@ -122,13 +115,11 @@ interactive collection 's1 (bind{x. bind{y. 'P['x; 'y]}}) :
    sequent { <H> >- 'C }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subset collection}
 
    The @hrefmodule[Czf_itt_power] module defines the subset collection
    set constructor $@power{s_1; s_2}$.  For completeness, we reprove the
    axiom form of the subset collection.
-   @end[doc]
 >>
 interactive subset_collection 'a 'b bind{u. bind{x. bind{y. 'P['u; 'x; 'y]}}} :
    sequent { <H> >- isset{'a} } -->

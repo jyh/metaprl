@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_tr_base]
 
    The @tt[Mfir_tr_base] module defines the basic axioms of the FIR type
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_bool
@@ -54,12 +50,10 @@ extends Mfir_sequent
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Basic axioms}
 
    The @tt[truth_intro] rule allows proofs of side-conditions to be completed.
-   @end[doc]
 >>
 
 prim truth_intro :
@@ -67,11 +61,9 @@ prim truth_intro :
 
 
 doc <:doc<
-   @begin[doc]
 
    The next two rules are convenient for making sure that the atoms in a list each
    have the appropriate type (given by a list of types).
-   @end[doc]
 >>
 
 prim ty_atom_list1 :
@@ -85,10 +77,8 @@ prim ty_atom_list2 :
 
 
 doc <:doc<
-   @begin[doc]
 
    Two lists of types are equal if they are pointwise equal.
-   @end[doc]
 >>
 
 prim wf_ty_list1 :
@@ -102,13 +92,11 @@ prim wf_ty_list2 :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Kind well-formedness}
 
    The kind well-formedness rules specify how kinds may be used
    in classifying FIR types.  Specifically, some kinds << 'k >>
    may only appear as << polyKind{ 'i; 'k } >>.
-   @end[doc]
 >>
 
 prim wf_small_type :
@@ -142,12 +130,10 @@ prim wf_polyKind_frame :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Kind equivalence}
 
    The @tt[wf_small_type] rule allows any << small_type >> type
    to be used as a << large_type >> type.
-   @end[doc]
 >>
 
 prim ty_small_as_large :
@@ -156,11 +142,9 @@ prim ty_small_as_large :
 
 
 doc <:doc<
-   @begin[doc]
 
    If two types are equal in some kind << 'k >>,
    then they are equal equal in << polyKind{ 0; 'k } >>.
-   @end[doc]
 >>
 
 prim ty_polyKind_as_normal_kind :

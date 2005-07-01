@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_int]
 
    The @tt[Mfir_int] module defines integers and operations on integers.
@@ -33,13 +32,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_bool
@@ -55,21 +51,17 @@ open Mfir_bool
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The term @tt{number[i:n]} represents the integer $i$.
-   @end[doc]
 >>
 
 declare number[i:n]
 
 
 doc <:doc<
-   @begin[doc]
 
    Basic arithmetic operations can be applied to integers.
-   @end[doc]
 >>
 
 declare add{ 'num1; 'num2 }
@@ -84,10 +76,8 @@ declare int_max{ 'num1; 'num2 }
 
 
 doc <:doc<
-   @begin[doc]
 
    Integers can be compared using the following six binary operators.
-   @end[doc]
 >>
 
 declare int_eq{ 'num1; 'num2 }
@@ -103,13 +93,11 @@ declare int_ge{ 'num1; 'num2 }
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The arithmetic and comparison operators above can be rewritten to numbers
    and booleans using meta operations from the @tt[Base_meta] module.  These
    rewrites are straightforward, and we omit an explicit listing of them.
-   @end[doc]
 >>
 
 doc <:doc<

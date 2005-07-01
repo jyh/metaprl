@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    CPS
    @end[spelling]
@@ -30,7 +29,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_ir
 
@@ -83,7 +81,6 @@ dform math_frame_df : mode[tex] :: math_frame =
    math_it["Fr"]
 
 doc <:doc<
-@begin[doc]
 
 The program intermediate representation includes higher-order and nested functions.  The function
 nesting must be eliminated before code generation, and the lexical scoping of function definitions
@@ -169,7 +166,6 @@ $$
 $$
 
 @docoff
-@end[doc]
 >>
 
 (*

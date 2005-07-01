@@ -26,9 +26,7 @@
  *)
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Base_theory
 doc docoff

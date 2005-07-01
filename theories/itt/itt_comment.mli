@@ -1,9 +1,7 @@
 (*
- * @begin[doc]
  * @theory[Itt_comment]
  *
  * Terms used for comments in the @Nuprl type theory.
- * @end[doc]
  *
  * ----------------------------------------------------------------
  *
@@ -26,7 +24,6 @@
  *
  * Author: Jason Hickey
  * @email{jyh@cs.caltech.edu}
- * @end[doc]
  *)
 
 extends Base_theory

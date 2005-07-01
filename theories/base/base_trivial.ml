@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Base_trivial]
 
    Logics that include ``trivial'' reasoning need a ``squash'' term
@@ -38,14 +37,13 @@ doc <:doc<
    @email{jyh@cs.caltech.edu}
 
    @end[license]
-   @end[doc]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Summary
 extends Shell_theory
 
-doc "doc"{terms}
+doc terms
 declare it
 define unfold_trivial : trivial <--> it (* A better name for it *)
 doc docoff

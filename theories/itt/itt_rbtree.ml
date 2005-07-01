@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_rbtree]
 
    This is a theory of red-black trees.
-   @end[doc]
 >>
 
 extends Itt_sortedtree
@@ -49,10 +47,8 @@ let _ =
    show_loading "Loading Itt_redblacktree%t"
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definitions of Red-Black Trees}
    @modsubsection{Color}
-   @end[doc]
 >>
 
 define color: Color <--> unit + unit
@@ -73,7 +69,6 @@ define sons_type: sons_type{'parent_color}  <--> black_or_red{'parent_color; Col
 define cost: cost{'color}  <-->  black_or_red{'color; 1; 0}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Red-black Tree}
    Red-black tree is a tree that satisfy the following conditions:
    @begin[enumerate]
@@ -82,7 +77,6 @@ doc <:doc<
     @item{ Any child of a red color is black;}
     @item{ All paths from the root to any leaf have the same number of black nodes.}
    @end[enumerate]
-   @end[doc]
 >>
 
 define rbtree: RBTreeOf{'A} <--> fix {rbtree. lambda {n. lambda {parent_color.
@@ -102,18 +96,14 @@ define btree2: BTree{'A} <--> tunion{ nat; n.BTree{'A;'n} }
 define rbtree2: RBTree{'A} <--> tunion{ nat; n.RBTree{'A;'n} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Insert function}
-   @end[doc]
 >>
 
 
 
 
 doc <:doc<
-   @begin[doc]
    << red_tree{'t}>> checks whether <<'t>> has a red root (empty trees are not red):
-   @end[doc]
 >>
 define red_tree {| reduce |} :
    red_tree{'t} <--> match_tree{'t; bfalse; self. black_or_red{^color;bfalse;btrue} }
@@ -122,9 +112,7 @@ define recolor_root {| reduce |} :
    recolor_root{'t; 'color} <--> match_tree{'t; emptytree; self. tree{^color:='color}}
 
 doc <:doc<
-   @begin[doc]
    Make red root, and black sons:
-   @end[doc]
 >>
 define recolor_rbb {| reduce |} :
    recolor_rbb{'t} <--> recolor_root{match_tree{'t; emptytree; self. tree{(^left:=recolor_root{^left; black})^right:=recolor_root{^right; black}}  }; red}
@@ -180,10 +168,8 @@ let resource reduce += [
 ]
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Color}
-   @end[doc]
 >>
 
 interactive color_wf {| intro[] |} :
@@ -223,10 +209,8 @@ interactive black_subtype {| intro[] |}:
 (* == == *)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-   @end[doc]
 >>
 
 interactive rbtree_wf {| intro[] |} :
@@ -260,10 +244,8 @@ interactive rbtree_subtype {| intro[] |} :
 (* == induction == *)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Induction}
-   @end[doc]
 >>
 
 define black_depth: black_depth{'t} <--> tree_ind{'t; 0; L,R,self. 'L +@ cost{^color}}
@@ -280,9 +262,7 @@ interactive rbtree_wf {| intro[] |} :
 
 
 doc <:doc<
-   @begin[doc]
    @modsection{Defining Set Data Structure using Red-Black Trees}
-   @end[doc]
 >>
 
 define rbtree_set {| reduce |} : rbtree_set{'ord} <-->
@@ -293,9 +273,7 @@ define rbtree_set {| reduce |} : rbtree_set{'ord} <-->
    }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Main Theorem}
-   @end[doc]
 >>
 
 interactive rbtree_correctness {| intro[] |} :
@@ -303,10 +281,8 @@ interactive rbtree_correctness {| intro[] |} :
    sequent{ <H> >- rbtree_set{'ord} in Set[i:l]{'ord^car} }
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsection{Example}
-   @end[doc]
 >>
 
 define intset {| reduce |} : intset <--> rbtree_set{int_order}

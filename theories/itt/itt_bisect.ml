@@ -1,13 +1,12 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_bisect]
 
    The @tt{Itt_bisect} module derives a binary intersection
    $@bisect{A; B}$ from the intersection @hrefterm[isect] defined
    in the @hrefmodule[Itt_isect] theory, and the Boolean values
    defined in the @hrefmodule[Itt_bool] theory.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,9 +39,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_isect
 extends Itt_bool
@@ -57,12 +54,10 @@ open Itt_struct
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The definition of the binary intersection $@bisect{A; B}$
    is an intersection over the Booleans.
-   @end[doc]
 >>
 define unfold_bisect : bisect{'A; 'B} <-->
                           "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
@@ -82,13 +77,11 @@ dform bisect_df : except_mode[src] :: parens :: "prec"[prec_bisect] :: bisect{'A
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The binary intersection $@bisect{A; B}$ is well-formed if both $A$
    and $B$ are types.
-   @end[doc]
 >>
 interactive bisectEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -109,14 +102,12 @@ interactive bisectFormation :
    sequent { <H> >- univ[i:l] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    Two terms $x$ and $y$ are equal in the binary intersection
    $@bisect{A; B}$ if they are equal in both $A$ and $B$.  Put another
    way, the elements of the binary intersection are the terms that
    are members of both $A$ and $B$.
-   @end[doc]
 >>
 interactive bisectMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- 'x = 'y in 'A } -->
@@ -124,14 +115,12 @@ interactive bisectMemberEquality {| intro [] |} :
    sequent { <H> >- 'x = 'y in 'A isect 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination rule for an assumption $x@colon @bisect{A; B}$ states that  $x$ can be replaced by
    $a @in A$ or by $b @in B$.
 
    @docoff
-   @end[doc]
 >>
 
 interactive bisectElimination_eq 'H bind{x.bind{a,b.'C['x;'a;'b]}} :
@@ -157,19 +146,17 @@ let bisectEliminationT = argfunT (fun n p ->
 
 let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 
-doc <:doc< >>
+doc docon
 
 interactive bisectElimination 'H bind{a,b.'C['a;'b]} :
    sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; b: 'B >- 'C['a;'b] } -->
    sequent { <H>; x: 'A isect 'B; <J['x]> >- 'C['x;'x] }
 
 doc <:doc<
-   @begin[doc]
 
    The elimination rule has also two simpler forms.
    The first produces a witness that $x @in A$, and the second produces a witness
    for $x @in B$.
-   @end[doc]
 >>
 
 interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H :
@@ -192,19 +179,17 @@ let bisectEliminationT = argfunT (fun n p ->
 
 let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 
-doc <:doc< @doc{Equality elimination.} >>
+doc <:doc< Equality elimination. >>
 
 interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H :
    sequent{ <H>; x: 't1 = 't2 in 'A isect 'B; u : 't1 = 't2 in 'A; v : 't1 = 't2 in 'B; <J['x]> >- 'C['x] } -->
    sequent{ <H>; x: 't1 = 't2 in 'A isect 'B; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The binary intersection $@bisect{A; B}$ is covariant
    in both $A$ and $B$.
-   @end[doc]
 >>
 interactive bisectSubtypeLeft {| intro [SelectOption 1] |} :
    sequent { <H> >- "type"{'B} } -->

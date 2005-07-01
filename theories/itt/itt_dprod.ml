@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_dprod]
 
    The @emph{dependent product} $@prod{x; A; B}$ is a space of @emph{pairs},
@@ -78,8 +77,8 @@ doc <:doc<
    encoding, but it is probably too weak to be useful.  For this reason
    the @tt{Itt_dprod} module and the @tt{prod} type are defined
    as primitive.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -111,7 +110,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 
 extends Itt_void
 extends Itt_equal
@@ -147,7 +146,6 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{prod} term defines the dependent-product space,
@@ -156,7 +154,6 @@ doc <:doc<
    performs a pattern match on the argument @i{e}.  The
    @tt{fst} and @tt{snd} terms are the normal projections
    derived from the @tt{spread} term.
-   @end[doc]
 >>
 declare prod{'A; x. 'B['x]}
 declare prod{'A; 'B}
@@ -198,26 +195,22 @@ let mk_spread_term = mk_dep0_dep2_term spread_opname
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @hrefterm[spread] term performs a pattern match
    and substitutes the components of the pair into the
    body term $c$.  This reduction is added to the
    @hrefconv[reduceC] resource.
-   @end[doc]
 >>
 prim_rw reduceSpread {| reduce |} : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 
 doc docoff
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[fst] and @hrefterm[snd] terms are simplified forms
    of @hrefterm[spread] that produce the first and second projections.
    They also have derived reduction rules that are also added to the
    @hrefconv[reduceC] resource.
-   @end[doc]
 >>
 interactive_rw reduceFst {| reduce |} : fst{pair{'a; 'b}} <--> 'a
 interactive_rw reduceSnd {| reduce |} : snd{pair{'a; 'b}} <--> 'b
@@ -271,14 +264,12 @@ prim productFormation 'A :
    x:'A * 'B['x]
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The type equality is intensional.  A product type
    << x: 'A * 'B['x] >> is a type if $A$ is a type, and
    $B[x]$ is a family of types indexed by $x @in A$.
-   @end[doc]
 >>
 prim productEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -296,7 +287,6 @@ prim productType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The elements of the product space are the pairs.  For
@@ -305,7 +295,6 @@ doc <:doc<
    a type, and the second ensures that $B[a_1]$ is a type,
    but $B[y]$ must be well-formed for @emph{any} element
    $y @in A$, which is the purpose of the third subgoal.
-   @end[doc]
 >>
 prim pairEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
@@ -315,14 +304,12 @@ prim pairEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The propositional interpretation of the product space
    is the bounded existential $@exists{x; A; B[x]}$.  The
    proposition is true if it is a type, and if there is
    some element $a @in A$ where $B[a]$ is true.
-   @end[doc]
 >>
 interactive pairFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a in 'A } -->
@@ -331,7 +318,6 @@ interactive pairFormation {| intro [] |} 'a :
    sequent { <H> >- x:'A * 'B['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination rule performs a case analysis on the
@@ -339,7 +325,6 @@ doc <:doc<
    elements are the pairs, and the rule splits the hypothesis
    into its parts.  The proof extract term is the @hrefterm[spread]
    induction combinator.
-   @end[doc]
 >>
 prim productElimination {| elim [ThinOption thinT] |} 'H :
    ('t['z; 'x; 'y] : sequent { <H>; z: x:'A * 'B['x]; x: 'A; y: 'B['x]; <J['x, 'y]> >- 'T['x, 'y] }) -->
@@ -347,12 +332,10 @@ prim productElimination {| elim [ThinOption thinT] |} 'H :
    spread{'z; x, y. 't['z; 'x; 'y]}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    The @hrefterm[spread] combinator is well-formed if all
    its parts are well-formed.
-   @end[doc]
 >>
 prim spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) :
    [wf] sequent { <H> >- 'e1 = 'e2 in w:'A * 'B['w] } -->
@@ -372,13 +355,11 @@ interactive productEqElimination {| elim [] |} 'H :
    sequent { <H>; u: ('x1,'y1) = ('x2,'y2) in x:'A * 'B['x]; <J['u]> >- 'T['u] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The subtype judgment is @emph{covariant} in the
    first type $A$, and @emph{pointwise-covariant} in the second
    type $B[a]$ for each $a @in A$.
-   @end[doc]
 >>
 interactive productSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->

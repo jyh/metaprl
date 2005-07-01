@@ -1,13 +1,12 @@
 doc <:doc<
    @spelling{reversibility}
-   @begin[doc]
    @module[Itt_functions]
 
       In this module we define the basic concepts of functions: image,
    surjection, reversible function and so on.
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -42,9 +41,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Itt_tunion
@@ -64,11 +61,9 @@ open Itt_equal
 
 
 doc <:doc<
-   @begin[doc]
    @modsection{Image of a function}
    @modsubsection{Definitions}
    If we have a function f: A -> B, then we can define an image of A in B.
-   @end[doc]
 >>
 
 define unfold_Img: Img{'f;'A;'B} <--> { b:'B | exst a:'A. 'f('a) = 'b in 'B }
@@ -77,12 +72,10 @@ dform image_df :  Img{'f;'A;'B} = `"Img" sup{'B} slot{'f} `"(" slot{'A} `")"
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Basic Rules}
    <<Img{'f;'A;'B}>> is a well-formed type
    whenever $A$ and $B$ are types and $f$ is a function from $A$ to $B$.
    Moreover image is a @i{subset} of $B$.
-   @end[doc]
 >>
 
 interactive img_wf {| intro[] |} :
@@ -111,9 +104,7 @@ interactive img_wf4 {| intro[] |} :
 
 
 doc <:doc<
-   @begin[doc]
    Introduction rule is simple: if <<'a>> is in <<'A>> then of course <<'f('a)>> is in <<Img{'f;'A;'B}>>.
-   @end[doc]
 >>
 
 interactive img_intro {| intro[] |} :
@@ -123,7 +114,6 @@ interactive img_intro {| intro[] |} :
 
 
 doc <:doc<
-   @begin[doc]
    Basically, the elimination rule says that if we want to prove something for all elements of <<Img{'f;'A;'B}>>,
    then it is enough to prove it for all elements of the form <<'f('a)>> where <<'a in 'A>>.
    But the rule has extra conditions.
@@ -132,7 +122,6 @@ doc <:doc<
 
    Later we will prove that these conditions could be abandoned if $f$ is @i{reversible}
    (rule @hrefrule[img_elim_reversible]).
-@end[doc]
 >>
 
 interactive img_elim {| elim[] |} 'H:
@@ -142,10 +131,8 @@ interactive img_elim {| elim[] |} 'H:
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
    Image is monotone w.r.t. subtyping.
-   @end[doc]
 >>
 interactive img_subtyping {| intro[] |} :
    sequent{ <H> >- 'A_1 subtype 'A_2 } -->
@@ -156,9 +143,7 @@ interactive img_subtyping {| intro[] |} :
 (* TODO: Also monotone w.r.t subseting *)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Alternative definitions}
-   @end[doc]
 >>
 
 define alternative_Img: "Img'"{'f;'A;'B} <--> Union a:'A.  singleton{'f('a); 'B}
@@ -173,20 +158,16 @@ interactive equivalence_of_definions:
 
 
 doc <:doc<
-   @begin[doc]
    @modsection{Inverse functions}
    @modsubsection{Definitions}
 
-   @end[doc]
 >>
 
 define unfold_inverse: inverse{'g;'f;'A} <--> compose{'g;'f} = id in 'A -> 'A
 
 doc <:doc<
-   @begin[doc]
    If << compose{'g;'f} = id in 'A -> 'A>> then function $f$ is called @i{right inverse} of function $g$ and
    $g$ is a @i{left inverse} of $f$.
-   @end[doc]
 >>
 
 
@@ -196,13 +177,11 @@ define unfold_LInverse: LInverse{'f;'A;'B} <--> {g:'B -> 'A | inverse{'g;'f;'A} 
 define unfold_RInverse: RInverse{'f;'A;'B} <--> {g:'B -> 'A | inverse{'f;'g;'B} }
 
 doc <:doc<
-   @begin[doc]
    A function <<f:'A->'B>> is a surjection if it has a right inverse.
    That is, for any element in <<'B>> we can find its prototype in <<'A>>.
    A function is an injection if it has a left inverse,
    Note that in constructive theory is a stronger statement than just saying
    that $f$ does not map two elements of $A$ to one element of $B$.
-   @end[doc]
 >>
 
 (* This should be IO-abstraction ??? *)
@@ -219,14 +198,12 @@ dform  is_surjection_df: is_surjection{'f;'A;'B} = slot{'f} `" is surjection(" (
 *)
 
 doc <:doc<
-   @begin[doc]
    A function <<f:'A->'B>> is @i{reversible} if it has an inverse function $g$ from its image
    to $A$. In this case $g$ is a @i{reverse} function of $f$.
    In other words, a function is reversible if it is a surjection onto its own image.
    In classical mathematics
    all functions are reversible. However, in constructive theory some functions are
    computable only one way. Such functions are not reversible.
-   @end[doc]
 >>
 
 define unfold_RReverse: RReverse{'f;'A;'B} <--> RInverse{'f;'A;Img{'f;'A;'B}}
@@ -238,10 +215,8 @@ dform  is_reversible_df: is_reversible{'f;'A;'B} = slot{'f} `" is reversible(" (
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Basic Rules}
    @paragraph{Well-formedness}
-   @end[doc]
 >>
 
 
@@ -252,11 +227,9 @@ interactive inverse_wf {| intro[] |} 'B:
    sequent { <H> >-  "type"{inverse{'g;'f;'A}}  }
 
 doc <:doc<
-   @begin[doc]
    Note that <<inverse{'g;'f;'A}>> could be true and well-formed even
    if there is no such $B$ that <<'f in 'A->'B>> and <<'g in 'B->'A>>.
    In this case well-formedness could be proved by @hrefrule[inverse_intro].
-   @end[doc]
 >>
 
 interactive linverse_wf {| intro[] |} :
@@ -284,9 +257,7 @@ interactive lreverse_wf {| intro[] |} :
    sequent { <H> >-  "type"{LReverse{'f;'A;'B}}  }
 
 doc <:doc<
-   @begin[doc]
    @paragraph{Elimination}
-   @end[doc]
 >>
 
 
@@ -317,9 +288,7 @@ interactive lreverse_elim {| elim[] |} 'H:
 
 
 doc <:doc<
-   @begin[doc]
    @paragraph{Introduction}
-   @end[doc]
 >>
 
 interactive inverse_intro {| intro[AutoMustComplete] |}:
@@ -355,7 +324,6 @@ interactive rreverse_intro {| intro[AutoMustComplete] |}:
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
     Unfortunately the above introduction rules for reverse type are not very helpful,
     since after applying those rule we need to eliminate <<Img{'f;'A;'B}>> in hypothesis.
@@ -364,7 +332,6 @@ doc <:doc<
    which is exactly what we are trying to prove!
    But if $B$ is simple then we can prove that if $g$ is a left inverse of $f$ then $g$ is also
    a right inverse of $f$ as a function from the image of $f$:
-@end[doc]
 >>
 
 interactive linverse_is_rinverse {| intro[SelectOption 1] |}:
@@ -374,9 +341,7 @@ interactive linverse_is_rinverse {| intro[SelectOption 1] |}:
    sequent{ <H> >-  LReverse{'f;'A;'B} subtype RReverse{'f;'A;'B} }
 
 doc <:doc<
-   @begin[doc]
     Thus, the following rules hold:
-   @end[doc]
 >>
 
 interactive rreverse_mem_intro_simple {| intro[SelectOption 1] |}:
@@ -428,20 +393,16 @@ interactive rreverse_subtype 'A:
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Squiggle reversible functions }
    @paragraph{Definition}
-   @end[doc]
 >>
 
 define sq_reverse: sq_reverse{'f;'g;'A;'B} <-->  all y:Img{'f;'A;'B}. ('g('y) in 'A & 'f('g('y))~'y)
 
 
 doc <:doc<
-   @begin[doc]
    @paragraph{Basic Rules}
    There is no special well-formedness rule. This proposition is well-formed only if it is true.
-   @end[doc]
 >>
 
 let resource intro +=
@@ -459,9 +420,7 @@ interactive sqreverse_elim {| elim[] |} 'H 'y:
    sequent{ <H>; sq_reverse{'f;'g;'A;'B}; <J> >- 'C  }
 
 doc <:doc<
-   @begin[doc]
    If $B$ is simple then usual reversibility implies squiggle reversibility.
-   @end[doc]
 >>
 
 interactive sqreverse_intro_simple {| intro[SelectOption 1] |}:
@@ -471,10 +430,8 @@ interactive sqreverse_intro_simple {| intro[SelectOption 1] |}:
    sequent{ <H> >- sq_reverse{'f;'g;'A;'B}  }
 
 doc <:doc<
-   @begin[doc]
    @paragraph{Image Elimination Rule for Reversible Functions}
    For squiggle reversible functions we can formulate a stronger image elimination rule:
-   @end[doc]
 >>
 
 interactive img_elim_reversible {| elim[] |} 'H 'g:
@@ -489,9 +446,7 @@ interactive img_elim_reversible {| elim[] |} 'H 'g:
 *)
 
 doc <:doc<
-   @begin[doc]
     Rules @hrefrule[img_elim_reversible] and @hrefrule[sqreverse_intro_simple] implies that
-   @end[doc]
 >>
 
 interactive img_elim_reversible_simple {| elim[] |} 'H:

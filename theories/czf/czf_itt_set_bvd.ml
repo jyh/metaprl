@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_set_bvd]
 
    The @tt[Czf_itt_set_bvd] module defines the @emph{image} of a set
@@ -11,8 +10,8 @@ doc <:doc<
 
    The image constructor $@setbvd{z; @collect{x; T; f[x]}; a[z]}$
    is defined as the set $@collect{y; T; a[f(y)]}$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -44,7 +43,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+
 extends Czf_itt_dall
 extends Czf_itt_dexists
 doc docoff
@@ -62,7 +61,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+
 declare set_bvd{'s; x. 'a['x]}            (* { a(x) | x in s } *)
 doc docoff
 
@@ -71,11 +70,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{set_bvd} term is defined by set induction.
-   @end[doc]
 >>
 prim_rw unfold_set_bvd: set_bvd{'s; x. 'a['x]} <-->
    set_ind{'s; t, f, g. collect{'t; y. 'a['f 'y]}}
@@ -97,13 +94,11 @@ dform set_bvd_df : parens :: except_mode[src] :: set_bvd{'s; x. 'a} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The set builder $@setbvd{x; s; a[x]}$ is well-formed
    if $s$ is a set, and $a[x]$ is a family of sets.
-   @end[doc]
 >>
 interactive set_bvd_isset {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
@@ -111,14 +106,12 @@ interactive set_bvd_isset {| intro [] |} :
    sequent { <H> >- isset{set_bvd{'s; x. 'a['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    A set $y$ is a member of $@setbvd{x; s; a[x]}$
    if the set builder is well-formed; if $a[x]$ is
    functional on any set argument $x$; and if
    $@dexists{z; s; @eq{y; a[z]}}$.
-   @end[doc]
 >>
 interactive set_bvd_member_intro {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
@@ -129,12 +122,10 @@ interactive set_bvd_member_intro {| intro [] |} :
    sequent { <H> >- mem{'y; set_bvd{'s; x. 'a['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form for the set builder $@mem{y; @setbvd{x; s; a[x]}}$
    produces a witness $@mem{z; s}$ for which $@eq{y; a[z]}$.
-   @end[doc]
 >>
 interactive set_bvd_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]> >- isset{'y} } -->
@@ -145,12 +136,10 @@ interactive set_bvd_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The image constructor is functional in both the set
    argument and the mapping.
-   @end[doc]
 >>
 interactive set_bvd_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'A['z]} } -->

@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @spelling{compilable}
 
    @module[M_x86_codegen]
@@ -29,10 +28,9 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends M_ir
 extends M_x86_frame
 doc docoff
@@ -42,7 +40,6 @@ open Tactic_type.Tacticals
 open Top_conversionals
 
 doc <:doc<
-   @begin[doc]
    @modsection{Terms}
 
    We define several terms to represent the assembly translation. All these
@@ -58,7 +55,6 @@ doc <:doc<
    @item{<<ASM{'R; 'e}>> represents the translation of the mutually recursive IR @emph{functions}
    in record $R$ and the rest of the program.}
    @end[itemize]
-   @end[doc]
 >>
 declare ASM{'e}
 declare ASM{'a; v. 'e['v]}
@@ -95,9 +91,7 @@ dform asm_df4 : ASM{'R; 'e} =
    popm ezone
 
 doc <:doc<
-   @begin[doc]
    Helper terms to store fields into a tuple.
-   @end[doc]
 >>
 declare store_tuple{'v; 'tuple; 'rest}
 declare store_tuple{'v; 'off; 'tuple; 'rest}
@@ -131,9 +125,7 @@ dform store_tuple_df2 : store_tuple{'v; 'off; 'tuple; 'rest} =
     bf["store_tuple[ "] slot{'v} `", " slot{'off} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
 
 doc <:doc<
-   @begin[doc]
    Terms used to reverse the order of the atoms in tuples.
-   @end[doc]
 >>
 declare reverse_tuple{'tuple}
 declare reverse_tuple{'dst; 'src}
@@ -166,9 +158,7 @@ dform reverse_tuple_df2 : reverse_tuple{'dst; 'src} =
  *)
 
 doc <:doc<
-   @begin[doc]
    Reverse the order of arguments.
-   @end[doc]
 >>
 declare reverse_args{'args}
 declare reverse_args{'args1; 'args2}
@@ -197,9 +187,7 @@ dform reverse_args_df2 : reverse_args{'dst; 'src} =
    bf["reverse_args[ src = "] slot{'src} bf[" dst = "] slot{'dst} bf[" ]"]
 
 doc <:doc<
-   @begin[doc]
    Copy the arguments into registers.
-   @end[doc]
 >>
 declare copy_args{'args; v. 'e['v]}
 declare copy_args{'args1; 'args2; v. 'e['v]}
@@ -229,9 +217,7 @@ dform copy_args_df2 : copy_args{'dst; 'src; v. 'e} =
    bf["let "] slot{'v} bf[" = copy_args[ src = "] slot{'src} bf[" dst = "] slot{'dst} bf[" ] in"] hspace slot{'e}
 
 doc <:doc<
-   @begin[doc]
    Assemble function arguments.
-   @end[doc]
 >>
 prim_rw asm_arg_cons {| reduce |} :
    ASM{ArgCons{'a; 'rest}; 'args; v. 'e['v]}
@@ -249,7 +235,6 @@ prim_rw asm_arg_nil {| reduce |} :
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Code generation}
    In our runtime, integers are shifted to the left and use the upper
    31 bits only. The least significant bit is set to 1, so that we can
@@ -259,7 +244,6 @@ doc <:doc<
    Booleans are translated to integers. We use the standard encodings,
    0 for false and 1 for true, which in our integer representation
    translate to 1 and 3, respectively.
-   @end[doc]
 >>
 prim_rw asm_atom_false {| reduce |} :
    ASM{AtomFalse; v. 'e['v]}
@@ -272,9 +256,7 @@ prim_rw asm_atom_true {| reduce |} :
   'e[ImmediateNumber[3:n]]
 
 doc <:doc<
-   @begin[doc]
    Integers are adjusted for our runtime representation.
-   @end[doc]
 >>
 prim_rw asm_atom_int {| reduce |} :
    ASM{AtomInt[i:n]; v. 'e['v]}
@@ -282,9 +264,7 @@ prim_rw asm_atom_int {| reduce |} :
    'e[ImmediateNumber{add{mul{number[i:n]; number[2:n]}; number[1:n]}}]
 
 doc <:doc<
-   @begin[doc]
    Variables are translated to registers.
-   @end[doc]
 >>
 prim_rw asm_atom_var {| reduce |} :
    ASM{AtomVar{'v1}; v2. 'e['v2]}
@@ -292,9 +272,7 @@ prim_rw asm_atom_var {| reduce |} :
    'e[Register{'v1}]
 
 doc <:doc<
-   @begin[doc]
    Function labels become labels.
-   @end[doc]
 >>
 prim_rw asm_atom_fun_var {| reduce |} :
    ASM{AtomFunVar{'R; Label[label:s]}; v2. 'e['v2]}
@@ -302,9 +280,7 @@ prim_rw asm_atom_fun_var {| reduce |} :
    'e[ImmediateCLabel[label:s]{'R}]
 
 doc <:doc<
-   @begin[doc]
    Functions are assembled.
-   @end[doc]
 >>
 prim_rw asm_atom_fun {| reduce |} :
    ASM{AtomFun{v. 'e['v]}}
@@ -312,13 +288,11 @@ prim_rw asm_atom_fun {| reduce |} :
    LabelFun{v. ASM{'e['v]}}
 
 doc <:doc<
-   @begin[doc]
    Binary operators are translated to a sequence of assembly
    instructions that implement that operation.
    Note that each operation is followed by adjusting
    the result so that it conforms with our 31-bit
    integer representation.
-   @end[doc]
 >>
 prim_rw asm_atom_binop_add {| reduce |} :
    ASM{AtomBinop{AddOp; 'a1; 'a2}; v. 'e['v]}
@@ -341,11 +315,9 @@ prim_rw asm_atom_binop_sub {| reduce |} :
    'e[Register{'diff}]}}}}}
 
 doc <:doc<
-   @begin[doc]
    In multiplication and division we first obtain the
    standard integer representation, perform the appropriate
    operation, and adjust the result.
-   @end[doc]
 >>
 prim_rw asm_atom_binop_mul {| reduce |} :
    ASM{AtomBinop{MulOp; 'a1; 'a2}; v. 'e['v]}
@@ -375,10 +347,8 @@ prim_rw asm_atom_binop_div {| reduce |} :
    'e[Register{'quot1}]}}}}}}}}}
 
 doc <:doc<
-   @begin[doc]
    Assembling IR relational operators is a mapping to the appropriate
    condition codes. The operations themselves become assembly comparisons.
-   @end[doc]
 >>
 prim_rw asm_eq  {| reduce |} : ASM{EqOp}  <--> CC["z"]
 prim_rw asm_neq {| reduce |} : ASM{NeqOp} <--> CC["nz"]
@@ -402,9 +372,7 @@ prim_rw asm_atom_relop {| reduce |} :
  * Instructions.
  *)
 doc <:doc<
-   @begin[doc]
    Reserve memory.
-   @end[doc]
 >>
 prim_rw asm_reserve_1 {| reduce |} :
    ASM{Reserve[reswords:n]{'params; 'e}}
@@ -423,11 +391,9 @@ prim_rw asm_reserve_2 {| reduce |} :
    ASM{'e}
 
 doc <:doc<
-   @begin[doc]
    The translation of @tt[LetAtom] is straightforward: we
    first translate the atom a into an operand <<'v1>>, which is then moved
    into <<'v>>.
-   @end[doc]
 >>
 prim_rw asm_let_atom {| reduce |} :
    ASM{LetAtom{'a; v. 'e['v]}}
@@ -438,10 +404,8 @@ prim_rw asm_let_atom {| reduce |} :
    ASM{'e['v]}}}}
 
 doc <:doc<
-   @begin[doc]
    Conditionals are translated into a comparison followed by
    a conditional branch.
-   @end[doc]
 >>
 (* granicz: Shouldn't we compare against 1? *)
 prim_rw asm_if_1 {| reduce |} :
@@ -453,10 +417,8 @@ prim_rw asm_if_1 {| reduce |} :
    Jcc["j"]{CC["z"]; ASM{'e2}; ASM{'e1}}}}}
 
 doc <:doc<
-   @begin[doc]
    If the condition is a relational operation, we carry over
    the relational operator to the conditional jump.
-   @end[doc]
 >>
 prim_rw asm_if_2 {| reduce |} :
    ASM{If{AtomRelop{'op; 'a1; 'a2}; 'e1; 'e2}}
@@ -468,11 +430,9 @@ prim_rw asm_if_2 {| reduce |} :
    Jcc["j"]{ASM{'op}; ASM{'e1}; ASM{'e2}}}}}}
 
 doc <:doc<
-   @begin[doc]
    Reading from the memory involves assembling the pointer to the
    appropriate block and the index within that block. We then fetch
    the value from the specified memory location and move it into <<'v>>.
-   @end[doc]
 >>
 prim_rw asm_let_subscript_1 {| reduce |} :
    ASM{LetSubscript{'a1; 'a2; v. 'e['v]}}
@@ -496,11 +456,9 @@ prim_rw asm_let_subscript_2 {| reduce |} :
    ASM{'e['v]}}}}}
 
 doc <:doc<
-   @begin[doc]
    Changing a memory location involves assembling the block pointer and
    the index within the block. The value to be written is assembled and
    moved into the specified memory location.
-   @end[doc]
 >>
 (* granicz: we are not doing any bounds checking *)
 
@@ -528,12 +486,10 @@ prim_rw asm_set_subscript_2 {| reduce |} :
    ASM{'e}}}}}}
 
 doc <:doc<
-   @begin[doc]
    Allocating a tuple involves obtaining a block from the store by
    advancing the @bf[next] pointer by the size of the tuple
    (plus its header), creating the header for the
    new block, and storing the tuple elements in that block.
-   @end[doc]
 >>
 prim_rw asm_alloc_tuple {| reduce |} :
    ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}}
@@ -547,9 +503,7 @@ prim_rw asm_alloc_tuple {| reduce |} :
    ASM{'e['p]}}}}}}}
 
 doc <:doc<
-   @begin[doc]
    Allocating a closure is similar to 2-tuple allocation.
-   @end[doc]
 >>
 prim_rw asm_let_closure {| reduce |} :
    ASM{LetClosure{'a1; 'a2; v. 'e['v]}}
@@ -566,11 +520,9 @@ prim_rw asm_let_closure {| reduce |} :
    ASM{'e['p]}}}}}}}}}}
 
 doc <:doc<
-   @begin[doc]
    Assembling tail-calls to IR functions involve assembling
    the function arguments and jumping to the appropriate
    function label.
-   @end[doc]
 >>
 prim_rw asm_tailcall_direct {| reduce |} :
    ASM{TailCall{AtomFunVar{'R; Label[label:s]}; 'args}}
@@ -592,10 +544,8 @@ prim_rw asm_tailcall_indirect {| reduce |} :
    Jmp["jmp"]{MemReg{'closure}; AsmArgCons{Register{'env}; 'args2}}}}}}}}
 
 doc <:doc<
-   @begin[doc]
    An IR program is a set of recursive functions. These are
    assembled and identified by function labels.
-   @end[doc]
 >>
 prim_rw asm_letrec {| reduce |} :
    ASM{LetRec{R1. 'fields['R1]; R2. 'e['R2]}}
@@ -702,9 +652,7 @@ dform register_df : register =
    bf["register"]
 
 doc <:doc<
-   @begin[doc]
    The program is compilable if the assembly is compilable.
-   @end[doc]
 >>
 prim codegen_prog :
    sequent { <H> >- compilable{ASM{'e}} } -->

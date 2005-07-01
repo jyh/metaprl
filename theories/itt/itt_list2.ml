@@ -1,13 +1,12 @@
 doc <:doc<
    @spelling{th}
-   @begin[doc]
    @module[Itt_list2]
 
    The @tt{Itt_list2} module defines a ``library'' of
    additional operations on the lists defined in
    the @hrefmodule[Itt_list] module.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -41,7 +40,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_list
 extends Itt_logic
 extends Itt_bool
@@ -71,11 +70,9 @@ open Itt_list
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt[all_list] and @tt[exists_list] term define quantifiers for lists.
-   @end[doc]
 >>
 define unfold_all_list : all_list{'l; x. 'P['x]} <-->
    list_ind{'l; "true"; x, t, g. 'P['x] and 'g}
@@ -87,10 +84,8 @@ define unfold_exists_list : exists_list{'l; x. 'P['x]} <-->
    list_ind{'l; "false"; x, t, g. 'P['x] or 'g}
 
 doc <:doc<
-   @begin[doc]
      The @em[head] of the list is the first element of a list, and the @em[tail] is the rest.
      Both these operations undefined when list is empty.
-   @end[doc]
 >>
 declare undefined
 
@@ -101,69 +96,57 @@ define unfold_tl :
    tl{'l} <--> list_ind{'l; undefined; h, t, g. 't}
 
 doc <:doc<
-   @begin[doc]
    @noindent
 
    The @tt{is_nil} term defines a Boolean value that is true
    @emph{iff} the argument list $l$ is empty.
-   @end[doc]
 >>
 define unfold_is_nil :
    is_nil{'l} <--> list_ind{'l; btrue; h, t, g. bfalse}
 
 doc <:doc<
-   @begin[doc]
    @noindent
 
    The @tt[mem] term defines list membership.
-   @end[doc]
 >>
 define unfold_mem :
    mem{'x; 'l; 'T} <-->
       list_ind{'l; "false"; h, t, g. "or"{('x = 'h in 'T); 'g}}
 
 doc <:doc<
-   @begin[doc]
    @noindent
 
    The @tt{subset} term determines whether the elements in $<<'l_1>>$ are also
    in $<<'l_2>>$.
-   @end[doc]
 >>
 define unfold_subset :
    \subset{'l1; 'l2; 'T} <-->
       list_ind{'l1; "true"; h, t, g. "and"{mem{'h; 'l2; 'T}; 'g}}
 
 doc <:doc<
-   @begin[doc]
    @noindent
 
    The @tt[sameset] term determines whether the two lists contain the same
    set of elements.
-   @end[doc]
 >>
 define unfold_sameset :
    sameset{'l1; 'l2; 'T} <-->
       "and"{\subset{'l1; 'l2; 'T}; \subset{'l2; 'l1; 'T}}
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt{append} term takes two lists and concatenates them.
-   @end[doc]
 >>
 define unfold_append :
    append{'l1; 'l2} <-->
       list_ind{'l1; 'l2; h, t, g. 'h :: 'g}
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt{ball2} term defines a Boolean universal quantification
    over two lists.  The test $b[x, y]$ must compute a Boolean value
    given elements of the two lists, and the test is $@bfalse$ if
    the lists have different lengths.
-   @end[doc]
 >>
 define unfold_ball2 :
    ball2{'l1; 'l2; x, y. 'b['x; 'y]} <-->
@@ -172,7 +155,6 @@ define unfold_ball2 :
                      h2, t2, g2. band{'b['h1; 'h2]; .'g1 't2}}}} 'l2)
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt[assoc] term defines an associative lookup on
    the list $l$.  The list $l$ should be a list of pairs.
@@ -180,7 +162,6 @@ doc <:doc<
    the first element of one of the pairs.  On the first
    occurrence of a pair $(x, y)$, the value $b[y]$ is returned.
    The $z$ term is returned if a pair is not found.
-   @end[doc]
 >>
 define unfold_assoc :
    assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
@@ -189,11 +170,9 @@ define unfold_assoc :
             ifthenelse{'eq 'u 'x; 'b['v]; 'g}}}
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt[rev_assoc] term also performs an associative search,
    but it keys on the second element of each pair.
-   @end[doc]
 >>
 define unfold_rev_assoc :
    rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z} <-->
@@ -202,12 +181,10 @@ define unfold_rev_assoc :
             ifthenelse{'eq 'v 'x; 'b['u]; 'g}}}
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt{map} term applies the function $f$ to each element
    of the list $l$, and returns the list of the results (in
    the same order).
-   @end[doc]
 >>
 define unfold_map : map{'f; 'l} <-->
    list_ind{'l; nil; h, t, g. cons{'f 'h; 'g}}
@@ -216,102 +193,84 @@ define unfold_map2 : map{x.'f['x]; 'l} <--> map{lambda{x.'f['x]};'l}
 
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt{fold_left} term applies the function $f$ to each element
    of the list $l$, together with an extra argument $v$.  The result
    of each computation is passed as the argument $v$ to the
    next stage of the computation.
-   @end[doc]
 >>
 define unfold_fold_left :
    fold_left{'f; 'v; 'l} <-->
       (list_ind{'l; lambda{x. 'x}; h, t, g. lambda{x. 'g ('f 'h 'x)}} 'v)
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt[nth] term returns the $i$-th element of list $l$.
    The argument $i$ must be within the bounds of the list.
-   @end[doc]
 >>
 define unfold_nth :
    nth{'l; 'i} <-->
       (list_ind{'l; undefined; u, v, g. lambda{j. if 'j =@  0 then  'u else ('g ('j -@ 1))}} 'i)
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt[replace_nth] term replaces the $i$-th element of list $l$
    with the term $v$.
-   @end[doc]
 >>
 define unfold_replace_nth :
    replace_nth{'l; 'i; 't} <-->
       (list_ind{'l; nil; u, v, g. lambda{j. if 'j =@ 0 then  cons{'t; 'v} else cons{'u; .'g ('j -@ 1)}}} 'i)
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt[insert_at] term inserts a new element into the $i$-th position of list $l$
    with the term $v$.
-   @end[doc]
 >>
 define unfold_insert_at :
    insert_at{'l; 'i; 't} <-->
       ind{'i; lambda{l.cons{'t; 'l}}; "_",r. lambda{l. hd{'l} :: ('r tl{'l})}} 'l
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt{length} term returns the total number of elements in
    the list $l$.
-   @end[doc]
 >>
 define unfold_length :
    length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
 
 
 doc <:doc<
-   @begin[doc]
       <<Index{'l}>> of the list is a set of indexes of the list $l$, that is
-   @end[doc]
 >>
 
 define unfold_index :
    Index{'l} <--> nat{length{'l}}
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tt[rev] function returns a list with the same elements as
    list $l$, but in reverse order.
-   @end[doc]
 >>
 define unfold_rev : rev{'l} <-->
    list_ind{'l; nil; u, v, g. append{'g; cons{'u; nil} }}
 
 doc <:doc<
-   @begin[doc]
    @noindent
    If $f$ is a function then  $<<mklist{'n;'f}>>$ is the list $<<'f(0) :: 'f(1) :: math_ldots :: 'f('n):: nil>>$.
-   @end[doc]
 >>
 
 define unfold_mklist: mklist{'n;'f} <-->
    ind{'n; nil; x,l.('f ('n-@ 'x)) :: 'l}
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The type <<list>> contains all lists. It is defined as <<top>> <<list>>.
    Note that all lists of the same length are equal in the <<list>> type.
-   @end[doc]
 >>
 
 define iform unfold_list: list <--> list{top}
 
-doc <:doc< @doc{Maximal element of a list} >>
+doc <:doc< Maximal element of a list >>
 
 define unfold_list_max: list_max{'l} <-->
    list_ind{'l; 0; h, t, g. max{'h; 'g}}
@@ -421,9 +380,7 @@ interactive_rw reduce_hd {| reduce |} : hd{cons{'h; 't}} <--> 'h
 interactive_rw reduce_tl {| reduce |} : tl{cons{'h; 't}} <--> 't
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[all_list] term performs induction over the list.
-   @end[doc]
 >>
 
 interactive_rw reduce_all_list_nil {| reduce |} : all_list{nil; x. 'P['x]} <--> "true"
@@ -439,13 +396,11 @@ interactive_rw reduce_all_list_witness_cons {| reduce |} :
 
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @hrefterm[is_nil] term is defined with the
    @hrefterm[list_ind] term, with a base case $@btrue$,
    and step case $@bfalse$.
-   @end[doc]
 >>
 interactive_rw reduce_is_nil_nil {| reduce |} : is_nil{nil} <--> btrue
 
@@ -455,9 +410,7 @@ doc docoff
 let fold_is_nil = makeFoldC << is_nil{'l} >> unfold_is_nil
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[mem] term performs induction over the list.
-   @end[doc]
 >>
 
 interactive_rw reduce_mem_nil {| reduce |} : mem{'x; nil; 'T} <--> "false"
@@ -469,9 +422,7 @@ doc docoff
 let fold_mem = makeFoldC << mem{'x; 'l; 'T} >> unfold_mem
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[subset] term performs induction over the first list.
-   @end[doc]
 >>
 interactive_rw reduce_subset_nil {| reduce |} : \subset{nil; 'l; 'T} <--> "true"
 
@@ -485,10 +436,8 @@ let fold_subset = makeFoldC << \subset{'l1; 'l2; 'T} >> unfold_subset
 let fold_sameset = makeFoldC << sameset{'l1; 'l2; 'T} >> unfold_sameset
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[append] term performs induction over the
    first list.
-   @end[doc]
 >>
 interactive_rw reduce_append_nil {| reduce |} : append{nil; 'l2} <--> 'l2
 
@@ -509,11 +458,9 @@ doc docoff
 let fold_append = makeFoldC << append{'l1; 'l2} >> unfold_append
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[ball2] term performs simultaneous induction
    over both lists, comparing the elements of the lists with
    the comparison $b[x, y]$.
-   @end[doc]
 >>
 interactive_rw reduce_ball2_nil_nil {| reduce |} :
    ball2{nil; nil; x, y. 'b['x; 'y]} <--> btrue
@@ -533,10 +480,8 @@ doc docoff
 let fold_ball2 = makeFoldC << ball2{'l1; 'l2; x, y. 'b['x; 'y]} >> unfold_ball2
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[assoc] term performs induction over the list,
    splitting each pair and comparing it with the key.
-   @end[doc]
 >>
 interactive_rw reduce_assoc_nil {| reduce |} :
    assoc{'eq; 'x; nil; y. 'b['y]; 'z} <--> 'z
@@ -550,10 +495,8 @@ doc docoff
 let fold_assoc = makeFoldC << assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_assoc
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[rev_assoc] term also performs induction over the list,
    but it keys on the second element of each pair.
-   @end[doc]
 >>
 interactive_rw reduce_rev_assoc_nil {| reduce |} :
    rev_assoc{'eq; 'x; nil; y. 'b['y]; 'z} <--> 'z
@@ -567,11 +510,9 @@ doc docoff
 let fold_rev_assoc = makeFoldC << rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_rev_assoc
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[fold_left] term performs induction over the
    list argument, applying the function to the head element
    and the argument computed by the previous stage of the computation.
-   @end[doc]
 >>
 interactive_rw reduce_fold_left_nil {| reduce |} :
    fold_left{'f; 'v; nil} <--> 'v
@@ -585,10 +526,8 @@ doc docoff
 let fold_fold_left = makeFoldC << fold_left{'f; 'v; 'l} >> unfold_fold_left
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[length] function counts the total number of elements in the
    list.
-   @end[doc]
 >>
 interactive_rw reduce_length_nil {| reduce |} : length{nil} <--> 0
 
@@ -599,11 +538,9 @@ doc docoff
 let fold_length = makeFoldC << length{'l} >> unfold_length
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[nth] term performs induction over the
    list, comparing the index to 0 at each step and returning the head element
    if it reaches 0.  The $@it$ term is returned if the index never reaches 0.
-   @end[doc]
 >>
 interactive_rw reduce_nth_cons {| reduce |} :
    nth{cons{'u; 'v}; 'i} <--> ifthenelse{beq_int{'i; 0}; 'u; nth{'v; .'i -@ 1}}
@@ -613,11 +550,9 @@ doc docoff
 let fold_nth = makeFoldC << nth{'l; 'i} >> unfold_nth
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[replace_nth] term is similar to the @hrefterm[nth]
    term, but it collects the list, and replaces the head element
    when the index reaches 0.
-   @end[doc]
 >>
 interactive_rw reduce_replace_nth_cons {| reduce |} :
    replace_nth{cons{'u; 'v}; 'i; 't} <-->
@@ -628,9 +563,7 @@ doc docoff
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[inset_at] inserts a new element into a list at the given location.
-   @end[doc]
 >>
 interactive_rw insert_at_base {| reduce |} :
    insert_at{'l; 0; 't} <--> 't :: 'l
@@ -644,11 +577,9 @@ interactive_rw insert_at_cons {| reduce |} :
    insert_at{'hd::'tl; 'n +@ 1; 't} <--> 'hd :: insert_at{'tl; 'n; 't}
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[rev] term reverses the list.
    This particular computation is rather inefficient;
    it appends the head of the list to the reversed tail.
-   @end[doc]
 >>
 interactive_rw reduce_rev_nil {| reduce |} : rev{nil} <--> nil
 
@@ -659,10 +590,8 @@ doc docoff
 let fold_rev = makeFoldC << rev{'l} >> unfold_rev
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[map] term performs induction over the list $l$,
    applying the function to each element, and collecting the results.
-   @end[doc]
 >>
 interactive_rw reduce_map_nil {| reduce |} :
    map{'f; nil} <--> nil
@@ -731,12 +660,10 @@ let resource typeinf += [
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    The rules in the @hrefmodule[Itt_list2] are mostly limited to
    well-formedness of each of the constructions.
-   @end[doc]
 >>
 
 interactive listelim {| elim [] |} 'H :
@@ -960,7 +887,7 @@ interactive_rw rev_append 'A :
    ('b in list{'A}) -->
    rev{append{'a;'b}} <--> append{rev{'b};rev{'a}}
 
-doc <:doc< @doc{Double-reverse is identity.} >>
+doc <:doc< Double-reverse is identity. >>
 
 interactive_rw rev2 'A :
    ('l in list{'A}) -->
@@ -968,10 +895,8 @@ interactive_rw rev2 'A :
 
 
 doc <:doc<
-   @begin[doc]
    @rules
    Rules for the @tt[mem] operator.
-   @end[doc]
 >>
 interactive mem_nil {| intro[] |} :
    sequent { <H> >- "false" } -->
@@ -994,9 +919,7 @@ interactive restrict_list {| intro[] |} :
    sequent { <H> >- 'l in list{{x:'A | mem{'x;'l;'A}}} }
 
 doc <:doc<
-   @begin[doc]
     The following induction principle is used for simultaneous induction on two lists.
-   @end[doc]
 >>
 
 interactive list_induction2 :
@@ -1032,10 +955,8 @@ interactive_rw list_elements_id {| reduce |} :
    list_of_fun{k.nth{'l;'k}; length{'l}} <--> 'l
 
 doc <:doc<
-   @begin[doc]
    We also provide the @conv[listIntoElementsC] for exploding a list according to the above
    @hrefrewrite[list_elements_id] rewrite.
-   @end[doc]
    @docoff
 >>
 let listIntoElementsC =
@@ -1104,10 +1025,8 @@ interactive tail_induction 'H :
    sequent { <H>; l:list{'A}; <J['l]> >-  'P['l] }
 
 doc <:doc<
-   @begin[doc]
    @rules
    Rules for quantifiers are the following:
-   @end[doc]
 >>
 interactive all_list_wf  {| intro[] |} :
    sequent { <H> >- 'l in list  } -->
@@ -1176,9 +1095,7 @@ interactive map_wf3 {| intro [] |} :
    sequent { <H> >- map{x.'f['x]; 'l} in list }
 
 doc <:doc<
-   @begin[doc]
    A list $v$ is a subset of the list <<cons{'u; 'v}>>.
-   @end[doc]
 >>
 interactive subset_cons {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -1189,11 +1106,9 @@ interactive subset_cons {| intro [AutoMustComplete] |} :
    sequent { <H> >- \subset{'v; cons{'u; 'l}; 'A} }
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    @tt[subset] is reflexive and transitive.
-   @end[doc]
 >>
 interactive subset_ref {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -1210,11 +1125,9 @@ interactive subset_trans 'l2 :
    sequent { <H> >- \subset{'l1; 'l3; 'A} }
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    @tt[sameset] is reflexive, symmetric, and transitive.
-   @end[doc]
 >>
 interactive sameset_ref {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -1238,11 +1151,9 @@ interactive sameset_trans 'l2 :
    sequent { <H> >- sameset{'l1; 'l3; 'A} }
 
 doc <:doc<
-   @begin[doc]
     The <<find{'l; 'a; x,y.'eq['x;'y]}>> returns an index of an element in the list $l$ equal to the element $a$
     according to equality $@it[eq]$.
     It returns the length of the list otherwise.
-   @end[doc]
 >>
 
 define unfold_find: find{'l; 'a; x,y.'eq['x;'y]} <--> list_ind{'l; 0; hd,tl,r. if 'eq['hd;'a] then 0 else 'r +@ 1}
@@ -1288,9 +1199,7 @@ interactive find_when_not_found_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T}
    sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} = length{'l} in int }
 
 doc <:doc<
-   @begin[doc]
     The <<diff_list{'T}>> defines a type of lists with @emph{different} elements.
-   @end[doc]
 >>
 
 define unfold_diff_list: diff_list{'T} <--> {l:list{'T} | all i:Index{'l}. all j:Index{'l}. ('i < 'j => nth{'l;'i} <> nth{'l;'j} in 'T)}
@@ -1313,7 +1222,7 @@ interactive diff_list_elim {| elim [] |} 'H :
 interactive difflist {| nth_hyp |} 'H :
    sequent { <H>; l : diff_list{'A}; <J['l]> >- 'l in list{'A} }
 
-doc <:doc< @doc{ The <<list_max{'l}>> defines the maximal element of a list of natural numbers. } >>
+doc <:doc<  The <<list_max{'l}>> defines the maximal element of a list of natural numbers.  >>
 
 interactive_rw reduce_list_max_nil {| reduce |} :
    list_max{nil} <--> 0
@@ -1329,11 +1238,8 @@ interactive list_max_wf2 {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'l in list{nat} } -->
    sequent { <H> >- list_max{'l} in int }
 
-
 doc <:doc<
-   @begin[doc]
     The <<list{'X}>> operator is a continuous operator with respect to topology generated by subtyping relation.
-   @end[doc]
 >>
 
 interactive list_continuous {| intro[] |}:

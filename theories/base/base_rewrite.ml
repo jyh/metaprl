@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @spelling{rewriter}
 
    @module[Base_rewrite]
@@ -50,13 +49,10 @@ doc <:doc<
    Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Auto_tactic
 extends Base_trivial
@@ -78,42 +74,34 @@ open Auto_tactic
  *)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    This theory uses its own semantics of sequents: a @tt[Base_rewrite] sequent
    of a form <<sequent { <H> >- Perv!"rewrite"{'a; 'b} }>> means that <<'a>> and <<'b>>
    are interchangeable in context <<df_context_var[H:v]>>.
-   @end[doc]
 >>
 declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    The following rule defines the rewrite reflexivity.  A term
    @it{a} always rewrites to itself.
-   @end[doc]
 >>
 prim rewriteAxiom1 :
    sequent { <H> >- Perv!"rewrite"{'a; 'a} } = it
 
 doc <:doc<
-   @begin[doc]
    The @tt[rewriteAxiom2] conditional rewrite provides a link to the primitive
    rewriter: a proof of <<Perv!"rewrite"{'a; 'b}>> shows that the terms
    $a$ and $b$ are computationally equivalent.
-   @end[doc]
 >>
 prim_rw rewriteAxiom2 Perv!"rewrite"{'a; 'b} : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
 
 doc <:doc<
-   @begin[doc]
    A rule for symmetry is also defined.  The rules for symmetry and
    transitivity can be derived from reflexivity @hrefrule[rewriteAxiom1] and
    substitution @hrefrewrite[rewriteAxiom2].
-   @end[doc]
 >>
 interactive rewriteSym :
    sequent { <H> >- Perv!"rewrite"{'a; 'b} } -->
@@ -133,11 +121,9 @@ let rewriteT t =
 let rewriteSymT = rewriteSym
 
 doc <:doc<
-   @begin[doc]
    The reflexive rule @hrefrule[rewriteAxiom1] is also added to the
    @hreftactic[trivialT] resource.
    @docoff
-   @end[doc]
 >>
 
 let resource auto += {

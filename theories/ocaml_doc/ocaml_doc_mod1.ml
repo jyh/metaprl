@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    ADT ADTs Fset acts expr fset goto grep linenum ll
@@ -32,13 +31,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 One of the principles of modern programming is @emph{data hiding}
 using @emph{encapsulation}.  An @emph{abstract data type} (ADT) is a
@@ -71,11 +68,9 @@ be defined in a @code{.mli} file with the same name.  If there is no
 @code{.mli} file, the default signature includes all type and
 functions defined in the @code[".ml"] file.
 
-@end[doc]
 >>
 
 doc <:doc<
-@begin[doc]
 
 @section[signatures]{Signatures}
 
@@ -172,11 +167,9 @@ other program modules.  If we define helper functions in the
 implementation, these functions will be private to the
 implementation and inaccessible to other program modules.
 
-@end[doc]
 >>
 
 doc <:doc<
-@begin[doc]
 
 @section[implementations]{Implementations}
 
@@ -273,11 +266,9 @@ let insert x s =
        | Leaf -> raise (Invalid_argument "insert")
 @end[iverbatim]
 
-@end[doc]
 >>
 
 doc <:doc<
-@begin[doc]
 
 @section["using-comp-unit"]{Building a program}
 
@@ -337,11 +328,9 @@ top level expression.  Another way to accomplish this is by adding the
 @code{;;} terminator after the last @code{()} expression in the
 @code{loop} function.
 
-@end[doc]
 >>
 
 doc <:doc<
-@begin[doc]
 
 @section[compiling]{Compiling the program}
 
@@ -533,11 +522,9 @@ or @code{test.cmo} needs to be recompiled.  In general, we don't know
 which file is out of date, and the best solution is to recompile them
 all.
 
-@end[doc]
 >>
 
 doc <:doc<
-@begin[doc]
 
 @section[open]{Using @tt{open} to expose a namespace}
 
@@ -609,11 +596,9 @@ definition.  True, this is an annoying feature of OCaml.  But it
 preserves a simple semantics: the implementation must provide a
 definition for each declaration in the signature.
 
-@end[doc]
 >>
 
 doc <:doc<
-@begin[doc]
 
 @section[debugging]{Debugging a program}
 
@@ -785,7 +770,6 @@ continue from here, examining the remaining functions and variables.
 You may wish to explore the other features of the debugger.  Further
 documentation can be found in the OCaml reference manual.
 
-@end[doc]
 >>
 
 (*

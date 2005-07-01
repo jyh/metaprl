@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_option]
 
    The @tt[Mfir_option] module implements a representation of
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Base_theory
@@ -51,12 +47,10 @@ extends Base_theory
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The terms @tt[none] and @tt[some] correspond to
    @tt[None] and @tt["Some t"] in @OCaml.
-   @end[doc]
 >>
 
 declare none

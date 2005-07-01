@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    CPS grunge Liang Morrisett Necula untrusted Hannan LF Pfenning Pnueli Resler Singerman Danvy
    Fellinski HOAS compilable
@@ -31,13 +30,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_comment
 extends M_doc_cps
 
 doc <:doc<
-@begin[doc]
 
 One of the points we have stressed in this presentation is that the implementation of formal
 compilers is easy, perhaps easier than traditional compiler development using a general-purpose
@@ -200,7 +197,6 @@ programming constructs and proof carrying code.  In this scheme,
 well-typed assembly programs cannot ``go wrong.''
 
 @docoff
-@end[doc]
 >>
 
 (*

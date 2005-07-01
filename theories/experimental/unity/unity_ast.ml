@@ -2,10 +2,8 @@ doc <:doc<
    @begin[spelling]
    @end[spelling]
 
-   @begin[doc]
    @module[UNITY]
    This module defines a UNITY abstract syntax.
-   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -33,10 +31,8 @@ doc <:doc<
 extends Base_theory
 
 doc <:doc<
-   @begin[doc]
    @terms
    Binary operators.
-   @end[doc]
 >>
 declare AddOp
 declare SubOp
@@ -51,17 +47,13 @@ declare GeOp
 declare GtOp
 
 doc <:doc<
-   @begin[doc]
    Types.
-   @end[doc]
 >>
 declare TyInt{'pos}
 declare TyArray{'array; 'size; 'pos}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Expressions}
-   @end[doc]
 >>
 declare TrueExp{'pos}
 declare FalseExp{'pos}
@@ -72,10 +64,8 @@ declare SubscriptExp{'e1; 'e2; 'pos}
 declare ApplyExp{'f; 'args; 'pos}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Statements}
    We have simple, conditional and quantified assignment statements.
-   @end[doc]
 >>
 declare Body{'inits; 'assigns}
 
@@ -83,62 +73,46 @@ declare Declare{'ty; 'pos; v. 'rest['v]}
 declare Identity{'e1; 'e2; 'pos; 'rest}
 
 doc <:doc<
-   @begin[doc]
    Simple assignment statements assign a list of values to
    a list of lvalues.
-   @end[doc]
 >>
 declare Statement{'lvalues; 'values; 'pos; 'next}
 
 doc <:doc<
-   @begin[doc]
    Conditional assignment statements assign a list of values to
    a list of lvalues when a given condition holds.
-   @end[doc]
 >>
 declare Statement{'lvalues; 'values; 'cond; 'pos; 'next}
 
 doc <:doc<
-   @begin[doc]
    Quantified assignment statements assign a list of values to
    a list of lvalues over a range when a given condition holds.
-   @end[doc]
 >>
 declare Statement{'range; 'cond; 'pos; 'assign; 'next}
 
 doc <:doc<
-   @begin[doc]
     We need a skip (leave state unchanged).
-   @end[doc]
 >>
 declare StatementSkip
 
 doc <:doc<
-   @begin[doc]
    Programs.
-   @end[doc]
 >>
 declare Program[name:s]{'program; 'pos}
 
 doc <:doc<
-   @begin[doc]
    Dummy position term.
-   @end[doc]
 >>
 declare DummyPos
 
 doc <:doc<
-   @begin[doc]
    Generic list terms.
-   @end[doc]
 >>
 declare UCons{'el; 'list}
 declare UNil
 
 doc <:doc<
-   @begin[doc]
    Sequent tag.
-   @end[doc]
 >>
 declare unity
 

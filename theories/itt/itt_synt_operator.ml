@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_synt_operator]
    The @tt[Itt_synt_operator] module defines a type of operators << BOperator >>
    for our simple theory of syntax.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,7 +37,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc "doc"{parents}
+doc <:doc< @parents >>
 
 extends Itt_quotient
 extends Itt_int_base
@@ -53,7 +52,6 @@ open Basic_tactics
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{BOperator} type is an abstract type with a decidable equality.
@@ -73,7 +71,6 @@ doc <:doc<
    The << inject{'op;'n} >> operator gives the operator << 'op >> a ``new''
    binding depth << 'n >>.
 
-   @end[doc]
 >>
 
 declare BOperator
@@ -107,14 +104,14 @@ dform bind_df : bind{'op;'n} =
 dform bind_df1: bind{'op} = `"bind(" slot{'op} `")"
 dform arity_df: arity{'op} = `"arity(" slot{'op} `")"
 
-doc "doc"{rewrites}
+doc rewrites
 
 prim_rw op_bdepth_inject_id {| reduce |} :
    'op in Operator -->
    'n in nat -->
    op_bdepth{inject{'op; 'n}} <--> 'n
 
-doc "doc"{rules}
+doc rules
 
 prim bop_univ {| intro [] |}:
    sequent { <H> >- BOperator in univ[l:l] } = it
@@ -122,9 +119,9 @@ prim bop_univ {| intro [] |}:
 interactive bop_type {| intro [] |}:
    sequent { <H> >- BOperator Type }
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @tt[is_same_op] is an equivalence relation on << BOperator >>.
-@end[doc] >>
+>>
 prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'op_1 in BOperator } -->
    sequent { <H> >- 'op_2 in BOperator } -->
@@ -151,9 +148,9 @@ prim is_same_op_trans 'op2 :
    sequent { <H> >- "assert"{is_same_op{'op2;'op3}} } -->
    sequent { <H> >- "assert"{is_same_op{'op1;'op3}} } = it
 
-doc <:doc< @begin[doc]
+doc <:doc<
    << BOperator >> is a subtype of << Operator >>.
-@end[doc] >>
+>>
 interactive op_univ {| intro [] |}:
    sequent { <H> >- Operator in univ[l:l] }
 
@@ -167,9 +164,9 @@ interactive bop_subtype_op {| intro [AutoMustComplete] |}:
 interactive bop_subtype_op2 {| nth_hyp |} 'H :
    sequent { <H>; op: BOperator; <J['op]> >- 'op in Operator }
 
-doc <:doc< @begin[doc]
+doc <:doc<
    Some well-formedness rules.
-@end[doc] >>
+>>
 prim op_bdepth_wf {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- op_bdepth{'op} in nat }
@@ -204,11 +201,9 @@ interactive is_same_op_wf2 {| intro [] |} :
    sequent { <H> >- 'op_2 in Operator } -->
    sequent { <H> >- is_same_op{'op_1;'op_2} in bool }
 
-
-
-doc <:doc< @begin[doc]
+doc <:doc<
    Properties of the operators.
-@end[doc] >>
+>>
 prim inject_id {| intro [] |} :
    [wf] sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- inject{'op; op_bdepth{'op}} = 'op in BOperator }
@@ -297,10 +292,7 @@ interactive shape_int_list2 {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
    sequent { <H> >- shape{'op1} ~ shape{'op2} }
 
-
-
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc docon
 interactive_rw shape_inject {| reduce |} :
    'op in Operator -->
    'n in nat -->

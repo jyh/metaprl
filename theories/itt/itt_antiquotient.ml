@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_antiquotient]
 
    See @cite[Nog02c], Section 6 for explanations.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,9 +35,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_subtype
 extends Itt_logic
@@ -47,10 +44,8 @@ extends Itt_quotient
 extends Itt_ext_equal
 
 doc <:doc<
-   @begin[doc]
    The following rule says that a type is uniquely determined
    by its equality relation.
-   @end[doc]
 >>
 
 prim eq_mem_eq :

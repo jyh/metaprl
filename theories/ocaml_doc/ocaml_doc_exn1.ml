@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
    @spelling{doesn ii wildcard}
 
    @chapter[exceptions]{Exceptions}
@@ -28,13 +27,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 Exceptions are used in OCaml as a control mechanism, either to signal
 errors, or control the flow of execution in some other way.  In their
@@ -577,7 +574,6 @@ use of open union types is more appropriate.  Needless to say, it can
 be quite confusing to encounter data structures constructed from
 exceptions!
 
-@end[doc]
 >>
 
 (*

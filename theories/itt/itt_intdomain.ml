@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_intdomain]
 
    This theory defines integral domains.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_unitring
 extends Itt_labels
 doc docoff
@@ -56,11 +55,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Integral Domain}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_noDiv0 : noDiv0{'f} <-->
    all a: 'f^car. all b: 'f^car. ('a <> 'f^"0" in 'f^car & 'b <> 'f^"0" in 'f^car & 'a *['f] 'b = 'f^"0" in 'f^car => "false")
@@ -87,10 +84,8 @@ let resource elim +=
    [<<intDomain[i:l]>>, intDomainDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive noDiv0_wf {| intro [] |} :
    [wf] sequent { <H> >- 'f^"0" in 'f^car} -->
@@ -109,10 +104,8 @@ interactive intDomain_wf {| intro [] |} :
    sequent { <H> >- intDomain[i:l] Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive noDiv0_intro {| intro [] |} :
    [wf] sequent { <H> >- 'f^"0" in 'f^car} -->
@@ -183,10 +176,8 @@ interactive intDomain_elim {| elim [] |} 'H :
    sequent { <H>; f: intDomain[i:l]; <J['f]> >- 'C['f] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
-   @end[doc]
 >>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
@@ -364,11 +355,9 @@ interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDoma
    sequent { <H> >- 'c *['f] 'a = 'c *['f] 'b in 'f^car }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Hierarchy}
    An integral domain is a ring, and also a unit ring.
 
-   @end[doc]
 >>
 interactive intDomain_subtype_unitring {| intro [] |} :
    sequent { <H> >- intDomain[i:l] subtype unitring[i:l] }
@@ -397,10 +386,8 @@ interactive intdomain_noDiv02 {| intro [intro_typeinf <<'f>>] |} intDomain[i:l] 
  * INTEGRAL DOMAIN EXAMPLES                                             *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Integral Domain Examples}
 
-   @end[doc]
 >>
 interactive int_noDiv0 {| intro [] |}:
    [wf] sequent { <H> >- 'x in int } -->
@@ -416,10 +403,8 @@ interactive int_intdomain {| intro [] |}:
  * THEOREMS                                                             *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
-   @end[doc]
 >>
 *)
 

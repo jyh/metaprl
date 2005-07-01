@@ -1,12 +1,11 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_synt_var]
     Our simple theory of syntax has three core parts.
     The first part @hrefmodule[Itt_synt_var] defines a type of variables <<Var>> in a de Bruijn-like style @cite[deb72].
     The second part @hrefmodule[Itt_synt_operators] defines a type of operators @tt[BOperator].
     The third part @hrefmodule[Itt_synt_bterm] defines a type of terms @tt[BTerm].
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,7 +39,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc "doc"{parents}
+doc <:doc< @parents >>
 extends Itt_int_base
 extends Itt_nat
 extends Itt_omega
@@ -48,13 +47,13 @@ doc docoff
 
 open Basic_tactics
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsection{Abstract type}
    <<Var>> consists of terms of the form <<var{'i;'j}>>, where <<'i>> and <<'j>>
    are arbitrary natural numbers, and <<var{it;it}>> is a new constructor.
    The expression <<var{'i;'j}>> is meant to represent the bterm
    $bterm(@Gamma; x; @Delta. x)$ where $|@Gamma|=i$ and $|@Delta|=j$.
-@end[doc] >>
+>>
 
 declare Var
 declare var{'left; 'right} (* depth = left + right + 1 *)
@@ -71,11 +70,11 @@ prim_rw right_id {| reduce |} :
    'right in nat -->
    right {var{'left; 'right}} <--> 'right
 
-doc <:doc< @begin[doc]
+doc <:doc<
  @modsection{Definitions}
  @modsubsection{Depth}
  The depth of a variable <<var{'i;'j}>> is <<'i+@'j+@1>>.
-@end[doc] >>
+>>
 
 define unfold_depth:
    depth{'v} <--> left{'v} +@ right{'v} +@ 1
@@ -85,18 +84,18 @@ interactive_rw depth_reduce {| reduce |} :
    'r in nat -->
    depth{var{'l;'r}} <--> 'l +@ 'r +@ 1
 
-doc <:doc< @begin[doc]
+doc <:doc<
    <<Var{'n}>> is a set of variables with depth <<'n>>.
-@end[doc] >>
+>>
 
 define unfold_var: Var{'n} <--> {v:Var| depth{'v} = 'n in int }
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{Equality}
    Variables <<var{'i;'j}>> and <<var{'i;'k}>> represent the same binding
    << 'x >> in $bterm(@Gamma; x; @Delta. t[x])$ where $|@Gamma|=i$.
    We define:
-@end[doc] >>
+>>
 
 define unfold_is_eq:
    is_eq{'v;'u} <--> (left{'v} =@ left{'u})
@@ -108,7 +107,7 @@ interactive_rw eq_equal {| reduce |} :
    'right_2 in nat -->
    is_eq{var{'left_1; 'right_1};var{'left_2; 'right_2}} <--> ('left_1 =@ 'left_2)
 
-doc "doc"{rules}
+doc rules
 
 prim var_univ {| intro [] |}:
    sequent { <H> >- Var in univ[l:l] } = it

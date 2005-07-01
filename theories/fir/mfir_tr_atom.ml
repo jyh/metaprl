@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_tr_atom]
 
    The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
@@ -33,13 +32,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_list
@@ -56,12 +52,10 @@ extends Mfir_tr_atom_base
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Normal atoms}
 
    The type of the nil-value of a type is simply that type.
-   @end[doc]
 >>
 
 prim ty_atomNil :
@@ -70,11 +64,9 @@ prim ty_atomNil :
 
 
 doc <:doc<
-   @begin[doc]
 
    The atom <<atomInt{'i}>> has type <<tyInt>> if <<'i>> is in the
    set of 31-bit, signed integers.
-   @end[doc]
 >>
 
 prim ty_atomInt :
@@ -82,11 +74,9 @@ prim ty_atomInt :
    sequent { <H> >- has_type["atom"]{ atomInt{'i}; tyInt } }
 
 doc <:doc<
-   @begin[doc]
 
    An enumeration atom <<atomEnum[i:n]{'n}>> has type <<tyEnum[i:n]>>
    if $ 0 <<le>> n < i $, and if <<tyEnum[i:n]>> is a well-formed type.
-   @end[doc]
 >>
 
 prim ty_atomEnum :
@@ -96,12 +86,10 @@ prim ty_atomEnum :
 
 
 doc <:doc<
-   @begin[doc]
 
    The atom << atomRawInt[p:n, sign:s]{'i} >> has type
    << tyRawInt[p:n, sign:s] >>, if $i$ is in the appropriate set of
    integers, and if << tyRawInt[p:n, sign:s] >> is a well-formed type.
-   @end[doc]
 >>
 
 prim ty_atomRawInt :
@@ -114,12 +102,10 @@ prim ty_atomRawInt :
 
 
 doc <:doc<
-   @begin[doc]
 
    Due to the representation of floating-point values in the FIR theory,
    the typing rule for << atomFloat[p:n, value:s] >> reduces to
    checking if << tyFloat[p:n] >> is a well-formed type.
-   @end[doc]
 >>
 
 prim ty_atomFloat :
@@ -130,11 +116,9 @@ prim ty_atomFloat :
 
 
 doc <:doc<
-   @begin[doc]
 
    A variable << atomVar{'v} >> has type << 'ty >> if it is declared in
    the context to have type << 'ty >>.
-   @end[doc]
 >>
 
 prim ty_atomVar 'H :
@@ -143,7 +127,6 @@ prim ty_atomVar 'H :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Frames and constant constructors}
 
    The atom << atomLabel[field:s, subfield:s]{ 'frame; 'num } >>
@@ -151,7 +134,6 @@ doc <:doc<
    treated as 32-bit, signed integers.  To be well-formed, the frame
    named must have the specified field and subfield, and << 'num >>
    should be a 32-bit, signed integer.
-   @end[doc]
 >>
 
 prim ty_atomLabel 'H :
@@ -165,14 +147,12 @@ prim ty_atomLabel 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    The atom << atomSizeof{ 'tvl; 'num } >> is a constant representing
    the size of the frames named in the list << 'tvl >> plus some constant
    << 'num >>.  To be well-formed, each element of << 'tvl >> should
    be a type variable << tyVar{'tv} >> that names a frame definition,
    and << 'num >> should be a 32-bit, signed integer.
-   @end[doc]
 >>
 
 prim ty_atomSizeof :
@@ -192,12 +172,10 @@ prim ty_atomSizeof_aux_ind 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    The atom << atomConst{ 'ty; 'tv; 'n } >> is a constant constructor
    for case << 'n >> of a union.  It is well-formed if it references
    a constant case of a union type and if the union type is well-formed.
-   @end[doc]
 >>
 
 prim ty_atomConst 'H :
@@ -213,13 +191,11 @@ prim ty_atomConst 'H :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Polymorphism}
 
    The atom << atomTyApply{ atomVar{'v}; 'u1; 'types } >> instantiates
    << atomVar{'v} >> at a list of types, where << atomVar{'v} >> should
    have a universal type.
-   @end[doc]
 >>
 
 prim ty_atomTyApply 'H :
@@ -251,12 +227,10 @@ prim ty_atomTyApply 'H :
                         'u2 } }
 
 doc <:doc<
-   @begin[doc]
 
    The atom << atomTyPack{ 'var; 'u; 'types } >> is the introduction
    form for type packing.  A value is packaged with a list of types
    to form a value with an existential type.
-   @end[doc]
 >>
 
 prim ty_atomTyPack :
@@ -271,13 +245,11 @@ prim ty_atomTyPack :
                         tyExists{ t. 'ty['t] } } }
 
 doc <:doc<
-   @begin[doc]
 
    The atom << atomTyUnpack{ atomVar{'v} } >> is the elimination
    form for type packing.  If << atomVar{'v} >> has an existential type
    $t$, then the type unpacking has a type equal to $t$ instantiated
    at the types from the original packing.
-   @end[doc]
 >>
 
 prim ty_atomTyUnpack 'H :
@@ -293,14 +265,12 @@ prim ty_atomTyUnpack 'H :
       has_type["atom"]{ atomTyUnpack{ atomVar{'v} }; 'u } }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Unary and binary operators}
 
    For the atoms << atomUnop{ 'unop; 'a } >> and
    << atomBinop{ 'binop; 'a1; 'a2 } >>, the typing rules are
    straightforward.  The arguments should have the correct type, and
    the result type of the operator should be equal to << 'ty >>.
-   @end[doc]
 >>
 
 prim ty_atomUnop :

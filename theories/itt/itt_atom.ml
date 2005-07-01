@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_atom]
 
    The @tt{Itt_atom} module defines the $@atom$ type---a type of strings
@@ -9,8 +8,8 @@ doc <:doc<
 
    The $@atom$ type is defined as primitive.  This is not strictly necessary;
    the type can be derived from the recursive type (Section @refmodule[Itt_srec]).
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -45,9 +44,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_squiggle
@@ -72,7 +69,6 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{atom} term defines the $@atom$ type.
@@ -80,7 +76,6 @@ doc <:doc<
    that defines the token.  The display representation of a
    token $@token{@misspelled{tok}}$ is the quoted form
    @misspelled{``tok''}.
-   @end[doc]
 >>
 declare atom
 declare token[t:t]
@@ -112,12 +107,10 @@ dform token_df2 : df_token[t:t] =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    @modsubsection{Equality and typehood}
    The $@atom$ term is a member of every universe, and it is a type.
-   @end[doc]
 >>
 prim atomEquality {| intro [] |} :
    sequent { <H> >- atom in univ[i:l] } =
@@ -130,34 +123,28 @@ interactive atomType {| intro [] |} :
    sequent { <H> >- "type"{atom} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    Two tokens are equal in the token type only if they are exactly the
    same token.
-   @end[doc]
 >>
 prim tokenEquality {| intro [] |} :
    sequent { <H> >- token[t:t] in atom } =
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The $@atom$ type is always provable; the token ``t'' is
    a witness.
-   @end[doc]
 >>
 interactive tokenFormation {| intro [] |} :
    sequent { <H> >- atom }
 
 doc <:doc<
-   @begin[doc]
    @noindent
    Two tokens in $@atom$ are computationally equivalent if they
    are equal.
-   @end[doc]
 >>
 prim atomSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in atom } -->

@@ -1,8 +1,6 @@
 doc <:doc<
-   @begin[doc]
    The @tt[Itt_hoas_vector] module defines the ``vector bindings''
    extensions for the basic ITT HOAS.
-   @end[doc]
 
    ----------------------------------------------------------------
 

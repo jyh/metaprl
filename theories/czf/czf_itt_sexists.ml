@@ -1,13 +1,12 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_sexists]
 
    The @tt[Czf_itt_sexists] module defines the @emph{unrestricted}
    existential quantification $@sexists{x; P[x]}$.  The proposition
    $P[x]$ must be well-formed for any set argument.  The existential
    is true, if $P[a]$ is true for some set $a$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -39,7 +38,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_and
 doc docoff
 
@@ -60,13 +59,11 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The unrestricted existential is defined with the type-theoretic
    existential @hrefterm[exists] from the @hrefmodule[Itt_logic]
    module.
-   @end[doc]
 >>
 define unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
 doc docoff
@@ -85,25 +82,21 @@ dform sexists_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sexists
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The unrestricted existential $@sexists{x; P[x]}$ is well-formed
    if $P[x]$ is a well-formed proposition for any set argument $x$.
-   @end[doc]
 >>
 interactive sexists_type {| intro [] |} :
    sequent { <H>; y: set >- "type"{'A['y]} } -->
    sequent { <H> >- "type"{."sexists"{x. 'A['x]} } }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The existential $@sexists{x; P[x]}$ is true if $P[a]$
    is true for some set $a$.
-   @end[doc]
 >>
 interactive sexists_intro  {| intro [] |} 'z :
    ["wf"]   sequent { <H> >- isset{'z} } -->
@@ -112,12 +105,10 @@ interactive sexists_intro  {| intro [] |} 'z :
    sequent { <H> >- "sexists"{x. 'A['x]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The proof of the existential $@sexists{x; P[x]}$ is a pair of a witness
    set $a$ and a proof $P[a]$.
-   @end[doc]
 >>
 interactive sexists_elim {| elim [] |} 'H :
    sequent { <H>;

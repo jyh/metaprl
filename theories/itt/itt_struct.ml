@@ -1,13 +1,12 @@
 doc <:doc<
    @spelling{thinned thins}
-   @begin[doc]
    @module[Itt_struct]
 
    The @tt[Itt_struct] module defines @emph{structural} rules.
    Structural rules are logical operations like thinning and substitution
    that are not associated with a particular type.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -42,9 +41,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 doc docoff
@@ -69,7 +66,6 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    @modsubsection{Structural rules}
@@ -84,7 +80,6 @@ doc <:doc<
    may not occur free in <<df_context_var[K:v]>> or <<'C>>.
 
    The proof extract term <<'t>> is unchanged.
-   @end[doc]
 >>
 prim thin_many 'H 'J :
    ('t : sequent { <H>; <K> >- 'C }) -->
@@ -101,7 +96,6 @@ prim exchange 'H 'K 'L:
    't
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Cut (lemma instantiation)}
 
    The @tt{cut} rule is an alternate form of @emph{modus-ponens}.
@@ -111,7 +105,6 @@ doc <:doc<
 
    The extract term is formed by instantiating the proof <<'a>> of the lemma
    in the abstracted proof <<'f['x]>>, to get a proof <<'f['a]>> of <<'T>>.
-   @end[doc]
 >>
 prim cut 'H 'S :
    [assertion] ('a : sequent { <H>; <J> >- 'S }) -->
@@ -119,24 +112,19 @@ prim cut 'H 'S :
    sequent { <H>; <J> >- 'T } =
    'f['a]
 
-doc <:doc<
-   @docoff
-
-   This is usually used for performance testing.
->>
+doc docoff
+(* This is usually used for performance testing. *)
 interactive dup :
    sequent { <H> >- 'T } -->
    sequent { <H> >- 'T } -->
    sequent { <H> >- 'T}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Explicit proof introduction}
 
    The @tt{introduction} rule performs proof by explicit introduction
    of a proof term.  If the program $t$ has type $T$, then $T$ is
    provable with proof extract $t$.
-   @end[doc]
 >>
 prim introduction 't :
    [wf] sequent { <H> >- 't in 'T } -->
@@ -144,12 +132,10 @@ prim introduction 't :
    't
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Axiom}
 
    The @tt{hypothesis} rule defines proof by assumption: if $A$ is
    assumed, then it is true.
-   @end[doc]
 >>
 
 (*
@@ -178,7 +164,6 @@ interactive equalityRefHyp2 {| nth_hyp |} 'H :
    sequent { <H>; e: 'x = 'y in 'T; <J['e]> >- 'y in 'T }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution}
 
    There are three rules to define substitution.
@@ -194,7 +179,6 @@ doc <:doc<
 
    The << bind{x. 'T_1['x]} >> argument specifies the exact location
    of the subterm to be replaced.
-   @end[doc]
 >>
 prim substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    [equality] sequent { <H> >- 't1 = 't2 in 'T2 } -->
@@ -204,7 +188,6 @@ prim substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    't
 
 doc <:doc<
-   @begin[doc]
    Hypothesis substitution is defined with two rules.  The @tt{hypReplacement}
    performs entire replacement of a hypothesis $A$ with another $B$.  The
    two types must be equal (in some universe).  The proof extract is
@@ -212,7 +195,6 @@ doc <:doc<
 
    The @tt{hypSubstitution} rule performs replacement of an arbitrary
    subterm in a hypothesis, in a similar manner to conclusion substitution.
-   @end[doc]
 >>
 prim hypReplacement 'H 'B univ[i:l] :
    [main] ('t['x] : sequent { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
@@ -228,11 +210,9 @@ prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
    't['x]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Equality in a type}
 
    Equality in any term $T$ means that $T$ is a type.
-   @end[doc]
 >>
 interactive equalityTypeIsTypeHyp {| nth_hyp |} 'H :
    sequent { <H>; x: 'a = 'b in 'T; <J['x]> >- "type"{'T} }
@@ -246,7 +226,6 @@ interactive equalityTypeIsType 'a 'b :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @tactics
    @modsubsection{Thinning}
    The @tactic[thinT] tactic uses the @hrefrule[thin] rule to
@@ -271,7 +250,6 @@ doc <:doc<
    to do thinning. This new @tt[nthAssumT] is added to @hreftactic[trivialT].
 
    @docoff
-   @end[doc]
 >>
 let thinT = thin
 
@@ -290,7 +268,6 @@ let nthAssumT = argfunT (fun i p ->
       Top_tacticals.thinMatchT thin_many assum thenT nthAssumT i)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Lemma assertion}
 
    The @tactic[assertT] tactic uses the @hrefrule[cut] rule to
@@ -304,7 +281,6 @@ doc <:doc<
    $$
 
    @docoff
-   @end[doc]
 >>
 let assertT = cut 0
 
@@ -313,7 +289,6 @@ let tryAssertT s ta tm = funT (fun p ->
       assertT s thenLT [ta;tm])
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The @tactic[assertAtT] introduces the lemma at a specific
    location in the hypothesis list.
@@ -326,7 +301,6 @@ doc <:doc<
    $$
 
    @docoff
-   @end[doc]
 >>
 let assertAtT i s =
    let i = if i < 0 then i + 1 else i in
@@ -338,7 +312,6 @@ let copyHypT i j = funT (fun p ->
 let dupT = dup
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Explicit witness introduction}
 
    The @tactic[useWitnessT] tactic uses the @hrefrule[introduction] rule
@@ -351,12 +324,10 @@ doc <:doc<
    $$
 
    @docoff
-   @end[doc]
 >>
 let useWitnessT = introduction
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution}
 
    The three substitution rules are unified into a single
@@ -374,7 +345,6 @@ doc <:doc<
    $$
 
    @docoff
-   @end[doc]
 >>
 let substConclT = argfunT (fun t p ->
    let _, a, _ = dest_equal t in
@@ -435,14 +405,12 @@ let autoAssumT i =
    nthAssumT i orelseT equalityAssumT i
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    The (@tt["onSomeAssumT equalityAssumT"]) tactic is added to the @hreftactic[trivialT]
    resource.
 
    @docoff
-   @end[doc]
 >>
 let resource auto += {
    auto_name = "Itt_struct.autoAssumT";

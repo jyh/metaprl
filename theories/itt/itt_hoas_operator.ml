@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_operator]
    The @tt[Itt_hoas_operator] module defines a type << Operator >> of abstract
    operators.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,7 +37,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_nat
 extends Itt_list2
 doc docoff
@@ -51,7 +50,6 @@ open Itt_struct
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{Operator} type is an abstract type with a decidable equality.
@@ -62,9 +60,6 @@ doc <:doc<
    bindings the operator adds to the corresponding subterm; the length of
    this list is the arity of an operator.
 
-   @terms
-
-   @end[doc]
 >>
 
 declare Operator
@@ -79,11 +74,9 @@ dform issameop_df : is_same_op{'op1;'op2} =
 dform arity_df: arity{'op} = `"arity(" slot{'op} `")"
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    <<Operator>> is an abstract type.
-   @end[doc]
 >>
 
 prim op_univ {| intro [] |}:
@@ -93,9 +86,7 @@ interactive op_type {| intro [] |}:
    sequent { <H> >- Operator Type }
 
 doc <:doc<
-   @begin[doc]
    Equal operators must be identical.
-   @end[doc]
 >>
 prim op_sqeq {| nth_hyp |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
@@ -103,9 +94,7 @@ prim op_sqeq {| nth_hyp |} :
    = it
 
 doc <:doc<
-   @begin[doc]
    @tt[is_same_op] decides the equality of << Operator >>.
-   @end[doc]
 >>
 
 prim is_same_op_wf {| intro [] |} :
@@ -133,11 +122,9 @@ interactive is_same_op_elim {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: "assert"{is_same_op{'op_1;'op_2}}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    Each operator has a @tt[shape] --- a list of natural numbers that are meant
    to represent the number of bindings in each of the arguments. The length of
    of the list is the operator's arity.
-   @end[doc]
 >>
 
 define iform unfold_arity : arity{'op} <--> length{shape{'op}}
@@ -170,5 +157,3 @@ interactive arity_int {| intro [] |} :
 interactive shape_int_list_sq {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
    sequent { <H> >- shape{'op1} ~ shape{'op2} }
-
-doc docoff

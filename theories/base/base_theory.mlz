@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @theory{Base Meta-Theory}
    @module[Base_theory]
 
@@ -33,8 +32,8 @@ doc <:doc<
    module.  Descendent theories (such as the @MartinLof-style Computational
    Type Theory, Section @refmodule[Itt_theory], and the Constructive Set Theory,
    Section @refmodule[Czf_itt_theory]) include the @hrefmodule[Base_theory] directly.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -69,12 +68,10 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
    The @tt[Base_theory] brings together modules from the @tt["support/display"],
    @tt["support/shell"], @tt["support/tactics"] and @tt["theories/base"] source tree
    directories.
-   @end[doc]
 >>
 extends Summary
 extends Shell_theory

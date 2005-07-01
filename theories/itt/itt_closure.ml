@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_closure]
 
       If we have a function <<f:'T ->'T>> and a subset <<'X>> of <<'T>> then
@@ -11,8 +10,8 @@ doc <:doc<
       we can define a closure set <<Closure{'"Ф";'T}>> as a set of all elements
       of $T$ that can be constructed using operators from <<'"Ф">>.
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -47,9 +46,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Itt_srec
@@ -70,23 +67,19 @@ open Basic_tactics
 open Itt_struct
 
 doc <:doc<
-   @begin[doc]
    @modsection{Operators}
    An operator on $T$ is a function of an arbitrary arity on $T$.
    That is, an operator is defined on a subset of <<list{'T}>> and range over $T$.
    We define <<Operators[i:l]{'T}>> as a collection of operators.
-   @end[doc]
 >>
 
 define unfold_Operators: Operators[i:l]{'T} <-->
    {car: univ[i:l]; dom: ^car -> Power[i:l]{list{'T}};  f: op:(^car) -> ^dom ('op) -> 'T}
 
 doc <:doc<
-   @begin[doc]
     We will interpret <<'F>> from <<Operators[i:l]{'T}>> as the collection of
     operators <<'F^f('op)>> for all <<'op>> from <<'F^car>>
     with the domain <<'F^car('op)>>.
-   @end[doc]
 >>
 
 interactive operators_wf {| intro[] |} :
@@ -99,10 +92,8 @@ let resource intro += <<'F in Operators[i:l]{'T}>>, wrap_intro (rw (addrC [Subte
 
 
 doc <:doc<
-   @begin[doc]
      A collection of operators <<'F>> could be wrapped into one function
       $$<<app{'F} in (op:('F^car) * ('F^dom ('op))) -> 'T>>$$
-   @end[doc]
 >>
 
 define unfold_app: app{'F} <--> lambda{op_l. spread{'op_l; op,l. 'F^f 'op 'l }}
@@ -115,9 +106,7 @@ interactive app_wf {| intro[] |} univ[i:l]:
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Reversible Sets of Operators}
-   @end[doc]
 >>
 
 define unfold_reverse: ReversibleOperators[i:l]{'F;  'T} <-->
@@ -129,9 +118,7 @@ define unfold_reverse: ReversibleOperators[i:l]{'F;  'T} <-->
 
 
 doc <:doc<
-   @begin[doc]
    @modsection{Closure}
-   @end[doc]
 >>
 
 

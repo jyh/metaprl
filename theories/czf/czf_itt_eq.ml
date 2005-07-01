@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_eq]
 
    The @tt[Czf_itt_eq] module defines @emph{extensional} equality
@@ -47,8 +46,8 @@ doc <:doc<
 
    The @tt{dfun_prop} term is used for functionality judgments
    on dependent types.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -80,7 +79,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_set
 doc docoff
 
@@ -97,7 +96,7 @@ open Czf_itt_set
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare eq{'s1; 's2}
 declare equal{'s1; 's2}
 declare fun_set{z. 'f['z]}
@@ -132,12 +131,10 @@ let mk_fun_prop_term = mk_dep1_term fun_prop_opname
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{eq} judgment requires that the two sets
    have the same elements.
-   @end[doc]
 >>
 prim_rw unfold_eq : eq{'s1; 's2} <-->
    set_ind{'s1; T1, f1, g1.
@@ -150,10 +147,8 @@ interactive_rw reduce_eq {| reduce |} : eq{collect{'T1; x1. 'f1['x1]}; collect{'
     & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]}))
 
 doc <:doc<
-   @begin[doc]
    The @tt{unfold_equal} term requires that, in addition, the two arguments
    must be sets.
-   @end[doc]
 >>
 prim_rw unfold_equal : ('s1='s2) <-->
    ((isset{'s1} & isset{'s2}) & eq{'s1; 's2})
@@ -164,9 +159,7 @@ interactive_rw reduce_equal {| reduce |} : (collect{'T1; x1. 'f1['x1]} = collect
      & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]})))
 
 doc <:doc<
-   @begin[doc]
    The following four rewrites define the functionality judgments.
-   @end[doc]
 >>
 prim_rw unfold_fun_set : fun_set{z. 'f['z]} <-->
     (all s1: set. all s2: set. ('s1 = 's2 => 'f['s1] = 'f['s2]))
@@ -207,13 +200,11 @@ dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_pr
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
    The @tt{eq} judgment is well-formed if both arguments are
    sets.  The @emph{equality} if the @tt{eq} judgment requires
    the set arguments to be equal (in the native @hrefterm[set] type).
-   @end[doc]
 >>
 interactive eq_equality1 {| intro [] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -237,11 +228,9 @@ interactive eq_equality2 {| intro [] |} :
    sequent { <H> >-  eq{'s1; 's2}=  eq{'s3; 's4} in univ[1:l]  }
 
 doc <:doc<
-   @begin[doc]
    The @tt{eq} judgment also requires the arguments to be sets,
    but in addition, and equality judgment $@equal{s_1; s_2}$ @emph{implies}
    that both $s_1$ and $s_2$ are types.
-   @end[doc]
 >>
 interactive equal_type {| intro [] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -266,11 +255,9 @@ interactive equal_isset_right 's1 :
    sequent { <H> >- isset{'s2} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Equality is an equivalence relation}
    The @tt{eq} judgment is reflexive, symmetric, and
    transitive.
-   @end[doc]
 >>
 interactive eq_ref {| intro [] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -297,11 +284,9 @@ interactive eq_trans 's2 :
    sequent { <H> >- eq{'s1; 's3} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
    The $@funset{z; f[z]}$ judgment implies that $f[z]$ is a
    set for any set $z$.
-   @end[doc]
 >>
 interactive eq_isset 'H fun_set{z. 'f['z]} :
    sequent { <H>; z: set; <J['z]> >- fun_set{z. 'f['z]} } -->
@@ -315,10 +300,8 @@ let funSetT = argfunT (fun i p ->
       eq_isset (Sequent.get_pos_hyp_num p i) t)
 
 doc <:doc<
-   @begin[doc]
    The @tt{eq} and @tt{equal} judgments are
    @emph{functional} with respect to their set arguments.
-   @end[doc]
 >>
 interactive eq_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'f1['z]} } -->
@@ -331,14 +314,12 @@ interactive equal_fun {| intro [] |} :
    sequent { <H> >- fun_prop{z. 'f1['z] = 'f2['z]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution}
 
    The following two rules define substitution.
    Set $s_1$ can be replaced by set $s_2$ in a context
    $P[s_1]$ if $s_1$ an $s_2$ are equal, and the
    context $P[x]$ is @emph{functional} on set arguments.
-   @end[doc]
 >>
 interactive eq_hyp_subst 'H 's1 's2 (bind{v. 'P['v]}) :
    sequent { <H>; x: 'P['s1]; <J['x]> >- equal{'s1; 's2} } -->
@@ -353,12 +334,10 @@ interactive eq_concl_subst 's1 's2 (bind{v. 'C['v]}) :
    sequent { <H> >- 'C['s1] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Typehood of the functionality judgments}
    The @tt{fun_set} judgment requires that it's argument
    be a family of sets, and the @tt{fun_prop} judgment requires that
    it's argument be a family of propositions.
-   @end[doc]
 >>
 interactive fun_set_type {| intro [] |} :
    sequent { <H>; z: set >- isset{'f['z]} } -->
@@ -369,11 +348,9 @@ interactive fun_prop_type {| intro [] |} :
    sequent { <H> >- "type"{fun_prop{z. 'f['z]}} }
 
 doc <:doc<
-   @begin[doc]
    The trivial cases, where the functionality argument
    does not depend on the set argument, are functional.
    The identity function is also functional.
-   @end[doc]
 >>
 interactive fun_set {| intro [] |} :
    sequent { <H> >- isset{'u} } -->
@@ -391,7 +368,6 @@ interactive fun_prop {| intro [] |} :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution}
 
    @begin[description]
@@ -402,7 +378,6 @@ doc <:doc<
      $s_2$ in clause $i$.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let setConclSubstT = argfunT (fun t p ->
    let s1, s2 = dest_eq t in
@@ -429,7 +404,6 @@ let setSubstT t i =
       setHypSubstT t i
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -438,7 +412,6 @@ doc <:doc<
       relation reasoning for the @hrefterm[eq] set judgment.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let eqSetRefT = eq_ref
 let eqSetSymT = eq_sym

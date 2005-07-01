@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_unitring]
 
    This theory defines unit rings.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_ring2
 extends Itt_labels
 doc docoff
@@ -56,12 +55,10 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Unit ring}
    @modsubsection{Rewrites}
    A ring with a multiplicative identity is called a ring @emph{with identity}, or sometimes @tt{unit ring}.
 
-   @end[doc]
 >>
 define unfold_preunitring1 : preunitring[i:l] <-->
    record["1":t]{r. 'r^car; prering[i:l]}
@@ -84,10 +81,8 @@ let fold_unitring1 = makeFoldC << unitring[i:l] >> unfold_unitring1
 let fold_unitring = makeFoldC << unitring[i:l] >> unfold_unitring
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive preunitring_wf {| intro [] |} :
    sequent { <H> >- preunitring[i:l] Type }
@@ -104,10 +99,8 @@ interactive unitring_wf {| intro [] |} :
    sequent { <H> >- unitring[i:l] Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive preunitring_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car} } -->
@@ -179,11 +172,9 @@ interactive unitring_elim {| elim [] |} 'H :
    sequent { <H>; R: unitring[i:l]; <J['R]> >- 'C['R] }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Hierarchy}
    A unit ring is a ring and a monoid.
 
-   @end[doc]
 >>
 interactive unitring_subtype_ring {| intro [] |} :
    sequent { <H> >- unitring[i:l] subtype ring[i:l] }
@@ -239,20 +230,16 @@ interactive unitring_right_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] 
  * UNITS                                                                *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Units}
    An element << 'x >> of the unit ring << 'R >> is a @tt{unit} if there exists an element << 'a >> such that << 'a *['R] 'x = 'R^"1" in 'R^car >> and << 'x *['R] 'a = 'R^"1" in 'R^car >> . This element << 'a >> is uniquely determined by << 'x >> and is called the multiplicative inverse of << 'x >>.
 
-   @end[doc]
 >>
 define unfold_isUnit : isUnit{'x; 'R} <-->
    exst a: 'R^car. ('a *['R] 'x = 'R^"1" in 'R^car & 'x *['R] 'a = 'R^"1" in 'R^car)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness, Introduction, and Elimination}
 
-   @end[doc]
 >>
 interactive isUnit_wf {| intro [] |} :
    [wf] sequent { <H>; a: 'R^car >- 'a *['R] 'x in 'R^car } -->
@@ -281,11 +268,9 @@ interactive isUnit_elim {| elim [] |} 'H :
    sequent { <H>; u: isUnit{'x; 'R}; <J['u]> >- 'C['u] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
    The set of units forms a group under multiplication.
 
-   @end[doc]
 >>
 interactive unitset_group {| intro [] |} :
    [wf] sequent { <H> >- 'R in unitring[i:l] } -->

@@ -1,8 +1,6 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_unit2]
    Simple facts about disjoint union.
-   @end[doc]
 >>
 extends Itt_bool
 extends Itt_isect (* top *)

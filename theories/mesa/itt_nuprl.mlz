@@ -1,8 +1,6 @@
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_theory
 extends Itt_nat

@@ -1,9 +1,8 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_reflection]
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,9 +34,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_theory
 extends Base_reflection

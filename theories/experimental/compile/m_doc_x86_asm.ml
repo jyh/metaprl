@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    mem reg CMP DIV INC JEQ JGT JLT JMP MOV MUL cc cmp eax ebp ebx ecx
    edi edx esi esp inst jcc jmp mov opcodes
@@ -31,7 +30,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_ir
 
@@ -322,7 +320,6 @@ dform label_asm_df : mode[tex] :: math_LabelAsm{'R; 'label} =
 
 doc <:doc<
 
-@begin[doc]
 
 Once closure conversion has been performed, all function definitions are top-level and closed, and
 it becomes possible to generate assembly code.  When formalizing the assembly code, we continue to
@@ -516,7 +513,6 @@ The compiler back-end then has three stages: 1) code generation, 2) register all
 peephole optimization, described in the following sections.
 
 @docoff
-@end[doc]
 
 >>
 

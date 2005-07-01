@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
    @chapter["ocaml-doc-type1"]{The OCaml type system}
 
    @docoff
@@ -26,16 +25,13 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-   @begin[doc]
 
 
-   @end[doc]
 >>
 
 (*

@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_nat]
 
    Theory of natural numbers.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,9 +35,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_rfun
@@ -58,7 +55,7 @@ open Itt_bool
 open Itt_subtype
 open Itt_int_arith
 
-doc <:doc< @doc{@terms} >>
+doc terms
 
 define unfold_nat : nat <--> ({x:int | 'x>=0})
 define unfold_finite_nat : nat{'k} <--> int_seg{0; 'k}
@@ -97,7 +94,7 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
      math_implies{math_gt{display_n; 0}; display_ind_eq{display_ind_n; 'up[display_n; display_ind{math_sub{display_n;1}}]}}
    popm ezone
 
-doc <:doc< @doc{@rewrites} >>
+doc rewrites
 
 interactive_rw reduce_ind_up {| reduce |} :
    ('x in nat) -->
@@ -121,7 +118,7 @@ let is_ind_term = is_dep0_dep0_dep2_term ind_opname
 let dest_ind = dest_dep0_dep0_dep2_term ind_opname
 let mk_ind_term = mk_dep0_dep0_dep2_term ind_opname
 
-doc <:doc< @doc{@rules} >>
+doc rules
 
 interactive natType {| intro [] |} :
    sequent { <H> >- "type"{nat} }

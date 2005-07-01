@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_synt_subst]
 
    The @tt[Itt_synt_subst] module defines substitution on bterms.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -37,7 +36,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_theory
 extends Itt_nat
 extends Itt_fun2
@@ -50,13 +49,11 @@ doc docoff
 open Basic_tactics
 
 doc <:doc<
-   @begin[doc]
    @modsection{Auxiliary Operations for Defining Substitution}
    @modsubsection{Make a new variable}
 
    << new_var{'bt} >> creates a new variable:
    $$ <<new_var{<:doc< @Gamma.t>>}>> = @Gamma,x.x$$
-   @end[doc]
 >>
 define unfold_new_var: new_var{'bt} <--> var{bdepth{'bt};0}
 
@@ -81,12 +78,10 @@ interactive new_var_wf {| intro [] |} :
    sequent { <H> >- new_var{'bt} in Var }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Last variable}
 
    << last_var{'bt} >> is the last variable of the term <<'bt>>:
    $$ <<last_var{<:doc< @Gamma,'x.t>>}>> = @Gamma,x.x$$
-   @end[doc]
 >>
 define unfold_last_var: last_var{'bt} <--> var{bdepth{'bt}-@1;0}
 
@@ -120,11 +115,9 @@ interactive last_var_wf2 {| intro [] |} :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Add a binding variable}
 
    $$ <<add_var{<:doc< @Gamma, @Delta.s>>; <:doc< @Gamma,x,@Delta_1.x >>}>> = @Gamma,x,@Delta.s$$
-   @end[doc]
 >>
 define unfold_add_var:
    add_var{'bt;'v} <-->
@@ -139,8 +132,8 @@ doc docoff
 
 let fold_add_var = makeFoldC << add_var{'bt;'v} >> unfold_add_var
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc <:doc<
+>>
 interactive_rw add_var_reduce1 {| reduce |} :
       add_var{make_bterm{'op;'subterms}; 'v} <--> make_bterm{bind{'op}; map{x.add_var{'x;'v}; 'subterms}}
 
@@ -173,11 +166,9 @@ interactive add_var_wf2 {| intro [] |} :
    sequent { <H> >- add_var{'bt;'v} in Var }
 
 doc <:doc<
-   @begin[doc]
 
    Another version of @tt[add_var]:
    $$ <<add_var{<:doc< @Gamma.s >>}>> = @Gamma,x.s$$
-   @end[doc]
 >>
 define unfold_add_new_var:
    add_var{'bt} <--> add_var{'bt; new_var{'bt}}
@@ -203,12 +194,10 @@ interactive add_new_var_wf {| intro [] |} :
    sequent { <H> >- add_var{'bt} in BTerm }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Add zero or more binding variables}
 
    <<make_depth{'s;'n}>> adds some variables to the term $s$ to make its binding depth to be equal to $n$.
    It is defined only if <<'n >= bdepth{'s}>>.
-   @end[doc]
 >>
 
 define unfold_make_depth: make_depth{'s;'n} <--> ind{'n -@ bdepth{'s};'s; k,s.add_var{'s}}
@@ -233,11 +222,9 @@ doc docoff
 let fold_make_depth = makeFoldC << make_depth{'s;'n} >> unfold_make_depth
 
 doc <:doc<
-   @begin[doc]
    <<add_vars_upto{'s;'t}>> adds variables to the term $s$  to match its binding depth to the term $t$:
    $$ <<add_vars_upto{<:doc< @Gamma.s>>; <:doc< @Gamma,@Delta.t>>}>> = @Gamma,@Delta.s$$
    It is undefined when <<bdepth{'t} < bdepth{'s}>>.
-   @end[doc]
 >>
 
 
@@ -261,7 +248,6 @@ interactive add_vars_upto_wf {| intro [] |} :
    sequent { <H> >- add_vars_upto{'s;'t} in BTerm }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Substitution}
 
    << subst{'t;'v;'s} >> substitutes << 's >> for the variable << 'v >> of bterm << 't >>:
@@ -269,7 +255,6 @@ doc <:doc<
               <:doc< @Gamma,x,@Delta_3.x>>;
               <:doc< @Gamma,x,@Delta_1.s[x]>> }>>
    = @Gamma,x,@Delta_1, @Delta_2.t[s[x]] $$
-   @end[doc]
 >>
 define unfold_subst:
    subst{'t;'v;'s} <-->
@@ -282,8 +267,8 @@ doc docoff
 
 let fold_subst = makeFoldC << subst{'t;'v;'s} >> unfold_subst
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc <:doc<
+>>
 interactive_rw subst_reduce1 {| reduce |} :
       subst{make_bterm{'op;'subterms}; 'v; 's} <--> make_bterm{'op; map{x.subst{'x;'v;'s}; 'subterms}}
 
@@ -312,9 +297,9 @@ interactive subst_wf {| intro [] |} :
    sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
    sequent { <H> >- subst{'t;'v;'s} in BTerm }
 
-doc <:doc< @begin[doc]
+doc <:doc<
    << not_free{'v;'t} >> decides whether << 'v >> is not free in << 't >>.
-@end[doc] >>
+>>
 define unfold_not_free: not_free{'v;'t} <-->
       fix{not_free.lambda{t.
           dest_bterm{'t;
@@ -326,8 +311,8 @@ doc docoff
 
 let fold_not_free = makeFoldC << not_free{'v;'t} >> unfold_not_free
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc <:doc<
+>>
 interactive_rw not_free_reduce1 {| reduce |} :
       not_free{'v; make_bterm{'op;'subterms}} <-->
       all_list{'subterms; t.not_free{'v;'t}}
@@ -344,7 +329,7 @@ interactive not_free_wf {| intro[] |}:
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- not_free{'v;'t} Type  }
 
-doc "doc"{rules}
+doc rules
 
 interactive subst_not_free :
    sequent { <H> >- 't in BTerm } -->
@@ -418,9 +403,9 @@ interactive subst_add_vars_upto :
    sequent { <H> >- not_free{'v2;'v} } -->
    sequent { <H> >- subst{add_vars_upto{'s1;'v};'v2;'s2} ~ add_vars_upto{'s1;'v} }
 
-doc <:doc< @begin[doc]
+doc <:doc<
    Two substitutions commute.
-@end[doc] >>
+>>
 interactive subst_commutativity {| intro [] |} :
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- 'v1 in Vars_of{'s2} } -->

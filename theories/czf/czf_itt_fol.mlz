@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_fol]
 
    The @tt[Czf_itt_fol] module defines the first-order logic for
@@ -70,8 +69,6 @@ doc <:doc<
    @end[description]
 
    @docoff
-   @end[doc]
-
    ----------------------------------------------------------------
 
    @begin[license]

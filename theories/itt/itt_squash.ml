@@ -1,6 +1,5 @@
 doc <:doc<
    @spelling{th unsquash unsquashed}
-   @begin[doc]
    @module[Itt_squash]
 
    The @tt[Itt_squash] module defines a @i[squash] type.
@@ -32,8 +31,7 @@ doc <:doc<
    @hreftactic[squashT] and @hreftactic[unsquashT]
    make use of the @hrefresource[squash_resource].
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -70,9 +68,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_struct
@@ -98,11 +94,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt[squash] term defines the @tt[squash] type.
-   @end[doc]
 >>
 declare squash{'A}
 doc docoff
@@ -124,12 +118,10 @@ dform squash_df : except_mode[src] :: squash{'A} = math_squash{'A}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Equality and typehood}
 
    <<squash{'A}>> is a type if $A$ is a type.
-   @end[doc]
 >>
 prim squashEquality {| intro [] |}  :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -141,13 +133,11 @@ prim squashType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    A squashed type <<squash{'A}>> is true if $A$ is true.
    This rule is irreversible, so we use @tt[AutoMustComplete] to prevent
    @hreftactic[autoT] from using it.
-   @end[doc]
 >>
 prim squashMemberFormation {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'A } -->
@@ -155,14 +145,12 @@ prim squashMemberFormation {| intro [AutoMustComplete] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The first rule, @tt[unsquashEqual], allows equalities to
    be unsquashed (because the proof can always be inferred).
    The second rule, @tt[squashElim] shows that $@it$ is the only element
    of a non-empty squashed type.
-   @end[doc]
 >>
 prim unsquashEqualWeak 'H :
    sequent { <H>; 'P; <J> >- 'x = 'y in 'A } -->
@@ -187,12 +175,10 @@ let resource typeinf += (squash_term,  Typeinf.infer_map dest_squash)
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Derived Rules}
 
    First, we can prove a stronger version of @tt[unsquashEqualWeak] by
    combining it with @tt[squashElim].
-   @end[doc]
 >>
 interactive unsquashEqual 'H :
    sequent { <H>; 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
@@ -204,20 +190,16 @@ interactive unsquashWWitness 'H 't:
    sequent { <H>; u: squash{'P}; <J['u]> >- 'A['u] }
 
 doc <:doc<
-   @begin[doc]
    Next, we show that a witness of a provable hidden type is $@it$.
-   @end[doc]
 >>
 interactive squashMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- squash{'A} } -->
    sequent { <H> >- it in squash{'A} }
 
 doc <:doc<
-   @begin[doc]
    The @tt[squashStable] rule establishes that we can unsquash a proposition
    when it is possible to recover its witness from simply knowing the proposition
    to be true.
-   @end[doc]
 >>
 interactive squashStable 't :
    [main] sequent { <H> >- squash{'A} } -->
@@ -272,7 +254,6 @@ interactive squashFormation :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    The @Comment!resource[squash_resource] keeps 4 kind of tactics, as described by the
@@ -296,7 +277,6 @@ doc <:doc<
 
    The squash resource represents data using a shape table.
    @docoff
-   @end[doc]
 >>
 type squash_inf =
    SqUnsquash of (int -> tactic)
@@ -410,7 +390,6 @@ let resource squash += [
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    The @tactic[squashT] tactic uses @hrefresource[squash_resource]
@@ -437,7 +416,6 @@ doc <:doc<
    so @hreftactic[autoT] will unsquash the hypotheses whenever possible.
    @docoff
    @comment{Squash a goal}
-   @end[doc]
 >>
 let unsquashT = argfunT (fun i p ->
    Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i))

@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_nat]
 
    The @tt[Czf_itt_nat] module defines the infinite set $@inf$.
@@ -25,8 +24,8 @@ doc <:doc<
 
    We also define the usual ordering $@lt{i; j}$ on numbers (this
    is just a membership judgment).
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -58,7 +57,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_member
 extends Czf_itt_singleton
 extends Czf_itt_union
@@ -79,7 +78,7 @@ open Itt_int_base
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc <:doc< @terms >>
 declare inf
 declare zero
 declare succ{'i}
@@ -91,13 +90,11 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The following four rewrites give the definition
    of the natural numbers.  The $@inf$ set itself is an
    ordinal construction.
-   @end[doc]
 >>
 prim_rw unfold_zero : zero <--> empty
 
@@ -133,13 +130,11 @@ dform lt_df : parens :: "prec"[prec_compare] :: lt{'i; 'j} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    Zero is a set, and the successor of @emph{any} set
    is a set.  Infinity is also a set.
-   @end[doc]
 >>
 interactive zero_isset {| intro [] |} :
    sequent { <H> >- isset{zero} }
@@ -156,11 +151,9 @@ interactive succ_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. succ{'s['z]}} }
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The zero is also a number, and the successor is a number
    if it's argument is a number.
-   @end[doc]
 >>
 interactive zero_isnat {| intro [] |} :
    sequent { <H> >- mem{zero; inf} }
@@ -171,7 +164,6 @@ interactive succ_isnat {| intro [] |} :
    sequent { <H> >- mem{succ{'i}; inf} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Induction}
 
    The induction rule performs induction on an
@@ -181,7 +173,6 @@ doc <:doc<
    prove $C[@zero]$, and given $C[i]$, prove $C[@succ{i}]$.
    The proof of this rule is rather extensive, but it
    is derived from usual inductive reasoning on sets.
-   @end[doc]
 >>
 interactive nat_elim bind{z. 'C['z]} 'i :
    ["wf"] sequent { <H> >- member{'i; inf} } -->
@@ -191,12 +182,10 @@ interactive nat_elim bind{z. 'C['z]} 'i :
    sequent { <H> >- 'C['i] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The $@lt{i; j}$ relation is functional on its arguments,
    and it is also a restricted proposition.
-   @end[doc]
 >>
 interactive lt_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's1['z]} } -->
@@ -209,7 +198,6 @@ interactive lt_restricted {| intro [] |} :
    sequent { <H> >- restricted{lt{'s1; 's2}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Zero}
 
    The following three rules characterize the @tt{zero}
@@ -220,7 +208,6 @@ doc <:doc<
    induction rule is valid if all the numbers are equal.  The
    zero rules state that the zero term, at least, is different
    from any successor.
-   @end[doc]
 >>
 interactive zero_member_intro {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'i} } -->
@@ -232,14 +219,12 @@ interactive zero_member_elim {| elim [] |} 'H :
    sequent { <H>; x: lt{'i; zero}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Successor}
 
    The following two rules characterize the successor.
    The relation $@lt{@succ{i}; @succ{j}}$ is true if-and-only-if
    $@lt{i; j}$.  With these final rules, we can show that
    $i @neq @succ{i}$, so the set $@inf$ is actually infinite.
-   @end[doc]
 >>
 interactive succ_member_intro1 {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'i} } -->
@@ -257,7 +242,6 @@ interactive succ_member_elim1 {| elim [] |} 'H :
    sequent { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -266,7 +250,6 @@ doc <:doc<
       the expression $t$, which must be a well-formed number.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let natIndT = argfunT (fun t p ->
    let goal = Sequent.concl p in

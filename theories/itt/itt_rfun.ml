@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_rfun]
 
    The @tt[Itt_rfun] module defines the @emph{very-dependent function
@@ -21,8 +20,8 @@ doc <:doc<
    well-founded with a partial order on $A$, and the type $B[f, x]$
    must be well-formed if $f$ is restricted to arguments smaller
    than $x$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -54,7 +53,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_equal
 extends Itt_void
 extends Itt_set
@@ -83,7 +82,6 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{rfun} type defines the very-dependent function $@rfun{f; x; A; B}$;
@@ -96,7 +94,6 @@ doc <:doc<
 
    The @tt{well_founded} terms are used to define the well-founded order
    on the domain; the definition is given with the well-founded rules below.
-   @end[doc]
 >>
 
 declare "fun"{'A; 'B}
@@ -229,7 +226,6 @@ dform well_founded_df : except_mode[src] :: well_founded{'A; a, b. 'R} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{reduce_beta} rewrite defines normal beta-reduction.
@@ -237,7 +233,6 @@ doc <:doc<
    combinator.  The @tt{reduce_fix} rewrite can be derived by defining
    the $Y$-combinator $Y @equiv @lambda f. @lambda x. (f@space (x@space x))@space (f@space (x@space x))$
    and defining $@fix{x; b[x]} @equiv Y@space (<<lambda{x.'b['x]}>>)$.
-   @end[doc]
 >>
 
 prim_rw reduce_beta {| reduce |} : (lambda{v. 'b['v]} 'a) <--> 'b['a]
@@ -254,7 +249,6 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-foundness}
 
    The following three rules are used to define a well-founded order.
@@ -268,7 +262,6 @@ doc <:doc<
    well-foundness must be given @emph{before} defining functions and application.
    The @hrefmodule[Itt_well_founded] module provides simplified definitions
    of @emph{well-foundness}.
-   @end[doc]
 >>
 prim well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'a :
    [main] sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'a in 'A } -->
@@ -303,14 +296,12 @@ prim rfunctionFormation { f | a: 'A -> 'B['f; 'a] } :
    { f | a: 'A -> 'B['f; 'a] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Typehood and equality}
 
    The well-formedness of the very-dependent function
    requires that the domain type $A$ be a type, that the domain
    be well-founded with some relation $R$, and that $B[f, x]$ be
    a type for any restricted function $@rfun{f; y; @set{z; A; R[z, y]}; B[f, y]}$.
-   @end[doc]
 >>
 prim rfunctionEquality  {| intro [] |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -338,7 +329,6 @@ prim rfunctionType  {| intro [] |} bind{a,b. 'R['a; 'b]} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    Viewed as a proposition, the very-dependent function type
@@ -350,7 +340,6 @@ doc <:doc<
    hypothesis).  The proof extract term contains a fixpoint, due to
    the induction.  The fixpoint is guaranteed to terminate
    because the domain is well-founded.
-   @end[doc]
 >>
 prim rfunction_lambdaFormation {| intro [] |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -360,14 +349,12 @@ prim rfunction_lambdaFormation {| intro [] |} bind{a,b. 'R['a; 'b]} :
    lambda{y. fix{g. 'ext['g; 'y]}}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The members of the function space are the @hrefterm[lambda] terms.
    The function space must be well-formed, and the body of the function
    must inhabit the range type $B$ where the @tt{lambda} function is
    substituted for the function argument.
-   @end[doc]
 >>
 prim rfunction_lambdaEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
@@ -376,7 +363,6 @@ prim rfunction_lambdaEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Extensional equality}
 
    The function space is one of the few types in the @Nuprl type
@@ -387,7 +373,6 @@ doc <:doc<
    equal arguments.  The functions and the function type must all be
    well-formed (and in fact, this implicitly requires that $f_1$ and
    $f_2$ both be @tt{lambda} terms).
-   @end[doc]
 >>
 prim rfunctionExtensionality
         ({ g1 | x1:'A1 -> 'B1['g1; 'x1] })
@@ -400,13 +385,11 @@ prim rfunctionExtensionality
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form for a function type $f@colon @rfun{g; x; A; B[g, x]}$
    allows @emph{instantiation} of the function on an argument $a$, to
    get a proof $B[f, a]$.
-   @end[doc]
 >>
 prim rfunctionElimination {| elim [] |} 'H 'a :
    [wf] sequent { <H>; f: { g | x:'A -> 'B['g; 'x] }; <J['f]> >- 'a in 'A } -->
@@ -420,12 +403,10 @@ prim rfunctionElimination {| elim [] |} 'H 'a :
    't['f; 'f 'a; it]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    Two @emph{applications} are equal if their functions are equal,
    and their arguments are equal.
-   @end[doc]
 >>
 prim rfunction_applyEquality {| intro[] |} ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent { <H> >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
@@ -435,13 +416,11 @@ prim rfunction_applyEquality {| intro[] |} ({ f | x:'A -> 'B['f; 'x] }) :
 doc docoff
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    Function subtyping is @emph{contravariant} in the domain and
    @emph{covariant} in the range.  The range subtyping is given using
    an arbitrary instance $f$ in the function space.
-   @end[doc]
 >>
 interactive rfunction_rfunction_subtype {| intro [] |} :
    [main] sequent { <H> >- \subtype{'A2; 'A1} } -->

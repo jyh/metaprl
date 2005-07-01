@@ -1,10 +1,8 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_supinf]
 
    SupInf decision procedure (eventually it'll become a true tactic).
 
-   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -37,13 +35,6 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc<
-   @begin[doc]
-   @parents
-   @end[doc]
->>
-doc <:doc< @docoff >>
-
 open Basic_tactics
 open Tactic_type.Tactic
 
@@ -57,5 +48,3 @@ topval ge_int2ratT : int -> tactic
 topval coreT : tactic
 topval core2T : tactic
 topval supinfT : tactic
-
-doc <:doc< @docoff >>

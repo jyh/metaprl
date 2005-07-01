@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_subset2]
 
    In this theory we prove some facts about subset relation defines in Section @refmodule[Itt_subset].
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,9 +37,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_subset
 extends Itt_set
@@ -65,12 +62,10 @@ let _ =
    show_loading "Loading Itt_subset2%t"
 
 doc <:doc<
- @begin[doc]
    @modsection{Sets}
   The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
   <<'A subset 'B>> if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
   <<ext_equal{'A; {x:'B | 'P['x]}}>>.
- @end[doc]
 >>
 
 interactive set_subset {| intro [] |}  :
@@ -88,13 +83,11 @@ interactive subset_iff  :
    sequent { <H> >- iff{'A subset 'B; exst P:'B -> univ[i:l]. ext_equal{{x:'B| 'P 'x}; 'A}} }
 
 doc <:doc<
- @begin[doc]
  @modsection{Lattice}
   Subsets of a given type forms a lattice with respect to <<space subset space>> relation and intersection and union operations.
 
   @modsubsection{Order}
   Subset relation forms a partial order on types.
- @end[doc]
 >>
 
 interactive subset_ref {| intro [] |}  :
@@ -112,13 +105,11 @@ interactive subset_exact:
    sequent { <H> >- ext_equal{'A;'B} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Union and Intersection}
    Although intersection and union on types do not behave as set-theoretic union and intersection,
    they works exactly as set-theoretic union and intersection on @em{subsets} of a given type.
 
    Intersection of @emph{non-empty} family of subsets of a given type is subset of this type.
-   @end[doc]
 >>
 
 interactive subset_isect {| intro[AutoMustComplete] |}:
@@ -132,19 +123,15 @@ interactive subset_bisect {| intro[AutoMustComplete] |}:
    sequent { <H> >- 'A isect 'B subset 'T }
 
 doc <:doc<
-   @begin[doc]
    Note that if only one of types is subset of $T$ then it does not mean that their intersection is subset of $T$.
-   @end[doc]
 >>
 
 interactive counterexample2 :
    sequent { <H> >- not{(bool isect top subset top)} }
 
 doc <:doc<
-   @begin[doc]
 
    Union of a family of subsets of a given type is subset of this type.
-   @end[doc]
 >>
 
 interactive subset_union {| intro[] |}:
@@ -158,10 +145,8 @@ interactive subset_bunion {| intro[] |}:
    sequent { <H> >- 'A bunion 'B subset 'T }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Monotonicity}
     Most of the type constructors are monotone with respect to <<space subset space>>.
-   @end[doc]
 >>
 
 interactive prod_subset {| intro [] |} :

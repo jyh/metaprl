@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_fun]
 
    The @tt[Itt_fun] module defines the non-dependent function type.
@@ -11,8 +10,8 @@ doc <:doc<
    with domain $A$, and range $B$.  It is equivalent to the
    dependent function space $@fun{x; A; B}$, where $x$ is not
    bound in $B$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -45,9 +44,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_dfun
@@ -76,12 +73,10 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The non-dependent function $@fun{A; B}$ is defined as the
    dependent function $@fun{x; A; B}$ (where $x$ is new).
-   @end[doc]
 >>
 prim_rw unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
 
@@ -101,12 +96,10 @@ let mk_fun_term = mk_dep0_dep0_term fun_opname
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The non-dependent function has an intensional type equality.
-   @end[doc]
 >>
 interactive independentFunctionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -122,14 +115,12 @@ interactive independentFunctionType {| intro [] |} :
    sequent { <H> >- "type"{ 'A1 -> 'B1 } }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The propositional interpretation of the function space $@fun{A; B}$
    is the implication term @hrefterm[implies], $@implies{A; B}$.
    The proposition is true if it is a type, and for any proof of $A$,
    there is a proof of $B$.
-   @end[doc]
 >>
 interactive independentLambdaFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -137,14 +128,12 @@ interactive independentLambdaFormation {| intro [] |} :
    sequent { <H> >- 'A -> 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The elements in the function space $@fun{A; B}$ are the
    @hrefterm[lambda] functions.  The space $@fun{A; B}$ must be a
    type, and the body of the function must be in $B$ for any argument
    in $A$.
-   @end[doc]
 >>
 interactive independentLambdaEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -152,13 +141,11 @@ interactive independentLambdaEquality {| intro [] |} :
    sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Extensionality}
 
    The independent function retains the extensional membership
    equality of the dependent function type.  This rule is
    derived from the @hrefrule[functionExtensionality] rule.
-   @end[doc]
 >>
 interactive independentFunctionExtensionality ('C -> 'D) ('E -> 'F) :
 (*
@@ -180,7 +167,6 @@ interactive independentFunctionExtensionality2 :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    There are two elimination forms.  The @tt{independentFunctionElimination}
@@ -188,7 +174,6 @@ doc <:doc<
    space $@fun{A; B}$: if there is a proof of $A$, then there is also a proof
    of $B$.  The second form, @tt{independentFunctionElimination2}, is
    more appropriate for the functional application to a specific argument $a @in A$.
-   @end[doc]
 >>
 interactive independentFunctionElimination 'H :
    [assertion] sequent { <H>; f: 'A -> 'B; <J['f]> >- 'A } -->
@@ -210,12 +195,10 @@ interactive independentFunctionEqElimination {| elim[] |} 'H 'a :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    Applications have an intensional equality; they are equal if their
    functions and arguments are equal.
-   @end[doc]
 >>
 interactive independentApplyEquality ('A -> 'B) :
    [wf] sequent { <H> >- 'f1 = 'f2 in 'A -> 'B } -->
@@ -223,14 +206,12 @@ interactive independentApplyEquality ('A -> 'B) :
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The function space is @emph{contravariant} in their domains,
    and @emph{covariant} in their ranges.
 
    @docoff
-   @end[doc]
 >>
 interactive independentFunctionSubtype {| intro [] |} :
    sequent { <H> >- \subtype{'A2; 'A1} } -->

@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_ring]
 
    This theory defines rings.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_group
 extends Itt_record_renaming
 doc docoff
@@ -65,11 +64,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Ring}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_prering : prering[i:l] <-->
    {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car}
@@ -154,10 +151,8 @@ interactive isDistrib_elim {| elim [] |} 'H :
    sequent { <H>; u: isDistrib{'R}; <J['u]> >- 'C['u] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive prering_wf {| intro [] |} :
    sequent { <H> >- prering[i:l] Type }
@@ -178,10 +173,8 @@ interactive as_additive_car_wf {| intro [] |} :
    sequent { <H> >- as_additive{'R}^car Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive prering_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car} } -->
@@ -253,10 +246,8 @@ interactive ring_elim {| elim [] |} 'H :
    sequent { <H>; R: ring[i:l]; <J['R]> >- 'C['R] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
-   @end[doc]
 >>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
@@ -406,11 +397,9 @@ interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:
    sequent { <H> >- 'c *['R] 'a = 'c *['R] 'b in 'R^car }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Hierarchy}
    A ring is an Abelian group under addition and a semigroup under multiplication.
 
-   @end[doc]
 >>
 interactive ring_subtype_semigroup {| intro [] |} :
    sequent { <H> >- ring[i:l] subtype semigroup[i:l] }
@@ -457,10 +446,8 @@ let inf_add_group _ _ _ eqs opt_eqs defs t =
 let resource typeinf += (<< as_additive{'R}>>, inf_add_group)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Properties}
 
-   @end[doc]
 >>
 interactive neg_neg1 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
@@ -485,12 +472,10 @@ doc docoff
  * RING EXAMPLES                                                        *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Ring Examples}
    Zero Ring - The singleton set {0}. It is the simplest possible ring and
    is also called trivial ring.
 
-   @end[doc]
 >>
 define unfold_ZeroRing : ZeroRing <-->
    {car=singleton{0; int}; "*"=lambda{x. lambda{y. 'x *@ 'y}}; "+"=lambda{x. lambda{y. 'x +@ 'y}}; "0"=0; neg=lambda{x. (-'x)}}
@@ -504,9 +489,7 @@ interactive zero_ring {| intro [] |}:
    sequent { <H> >- ZeroRing in ring[i:l] }
 
 doc <:doc<
-   @begin[doc]
    Ring of Integers.
-   @end[doc]
 >>
 define unfold_Z : Z <-->
 	{
@@ -535,9 +518,7 @@ interactive integer_ring_is_int {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'i in int }
 
 doc <:doc<
-   @begin[doc]
    Ring of Even Integers.
-   @end[doc]
 >>
 define unfold_Zeven : Zeven <-->
    {car={x:int|'x %@ 2 = 0 in int}; "*"=lambda{x. lambda{y. 'x *@ 'y}}; "+"=lambda{x. lambda{y. 'x +@ 'y}}; "0"=0; neg=lambda{x. (-'x)}}
@@ -555,10 +536,8 @@ doc docoff
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
-   @end[doc]
 >>
 interactive mul_addid1 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
@@ -593,11 +572,9 @@ interactive neg_mul_neg {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Subring}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_subring : subring[i:l]{'S; 'R} <-->
    ((('S in ring[i:l]) & ('R in ring[i:l])) & subStructure{'S; 'R}) & subStructure{as_additive{'S}; as_additive{'R}}
@@ -616,10 +593,8 @@ let resource elim +=
    [<<subring[i:l]{'S; 'R}>>, subringDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive subring_wf {| intro [] |} :
    [wf] sequent { <H> >- 'S in ring[i:l] } -->
@@ -629,10 +604,8 @@ interactive subring_wf {| intro [] |} :
    sequent { <H> >- "type"{subring[i:l]{'S; 'R}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive subring_intro {| intro [] |} :
    [wf] sequent { <H> >- 'S in ring[i:l] } -->
@@ -646,21 +619,17 @@ interactive subring_elim {| elim [] |} 'H :
    sequent { <H>; x: subring[i:l]{'S; 'R}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Rules}
 
    Subring is squash-stable.
-   @end[doc]
 >>
 interactive subring_sqStable {| squash |} :
    [wf] sequent { <H> >- squash{subring[i:l]{'S; 'R}} } -->
    sequent { <H> >- subring[i:l]{'S; 'R} }
 
 doc <:doc<
-   @begin[doc]
 
    If <<'S>> is a subring of <<'R>>, then <<'S>> is also a subgroup of <<'R>> under addition.
-   @end[doc]
 >>
 interactive subring_subgroup :
    sequent { <H> >- subring[i:l]{'S; 'R} } -->
@@ -672,11 +641,9 @@ interactive subring_ref {| intro [] |} :
    sequent { <H> >- subring[i:l]{'R; 'R} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Examples}
 
    Zero ring is a subring of the ring of integers.
-   @end[doc]
 >>
 interactive zeroring_subring_int {| intro [] |} :
    sequent { <H> >- subring[i:l]{ZeroRing; Z} }
@@ -686,10 +653,8 @@ doc docoff
  **** incompleteness of axioms about the rem operation  ****
  **** in Itt_int_ext.                                   ****)
 doc <:doc<
-   @begin[doc]
    The ring of even integers is a subring of the ring of integers.
 
-   @end[doc]
 >>
 interactive evenint_subring_int {| intro [] |} :
    sequent { <H> >- subring[i:l]{Zeven; Z} }

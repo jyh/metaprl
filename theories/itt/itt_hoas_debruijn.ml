@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_debruijn]
    The @tt[Itt_hoas_debruijn] module defines a mapping from de Bruijn-like
    representation of syntax into the HOAS.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,7 +35,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_hoas_base
 extends Itt_hoas_vector
 extends Itt_nat
@@ -48,7 +47,6 @@ open Basic_tactics
 open Itt_rfun
 
 doc <:doc<
-   @begin[doc]
    @terms
    @modsubsection{A de Bruijn-like representation of syntax}
    Our de Bruijn-like representation of (bound) terms consists of two operators. <<var{'left; 'right}>>
@@ -59,7 +57,6 @@ doc <:doc<
    The <<mk_bterm{'n; 'op; 'btl}>> represents the compound term of depth $n$. In other words,
    <<mk_bterm{'n; 'op; (bind{'n; v.'bt_1['v]} :: math_ldots :: bind{'n; v.'bt_k['v]}::nil)}>> is
    <<bind{'n; v. mk_term{'op; ('bt_1['v] :: math_ldots :: 'bt_k['v]::nil)}}>>.
-   @end[doc]
 >>
 define unfold_var:
    var{'left; 'right} <--> bind{'left; bind{v. bind{'right; 'v}}}
@@ -115,7 +112,7 @@ define iform unfold_get_op1:
 define (*private*) unfold_subterms:
    subterms{'bt} <--> list_of_fun{n.nth_subterm{'bt; 'n}; num_subterms{'bt}}
 
-doc <:doc< @doc{@rewrites} >>
+doc <:doc< @rewrites >>
 
 interactive_rw reduce_mk_bterm_base {| reduce |}:
    mk_bterm{0; 'op; 'btl} <--> mk_term{'op; 'btl }

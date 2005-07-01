@@ -1,12 +1,10 @@
 doc <:doc<
-   @begin[doc]
    @spelling{AST compilable}
    @module[M_ir_ast]
 
    @docoff
    Convert AST to IR.
    We name all intermediate computations.
-   @end[doc]
 
    @begin[license]
    Copyright (C) 2003 Adam Granicz, Caltech
@@ -28,28 +26,29 @@ doc <:doc<
    Author: Adam Granicz
    @email{granicz@cs.caltech.edu}
    @end[license]
-   @doc{@parents}
+   @docon
+   @parents
 >>
 
 extends Base_theory
 extends M_ast
 extends M_ir
 
-doc <<docoff>>
+doc docoff
 
 open Basic_tactics
 
 open Base_meta
 open M_util
 
-doc <<"doc"{terms}>>
+doc terms
 
 declare IR{'e}
 declare IR{'e1; v. 'e2['v]}
 declare IR{'args; 'f; v. 'e['v]}
 declare IR_size{'tuple; 'init : MetaNum}
 
-doc <<docoff>>
+doc docoff
 
 dform ir_df1 : IR{'e} =
    keyword["IR["] slot{'e} `"]"
@@ -68,7 +67,6 @@ dform ir_df4 : IR_size{'tuple; 'init} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    @bf{The @Comment!resource[ir_resource]}
@@ -81,7 +79,6 @@ doc <:doc<
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
 
-   @end[doc]
    @docoff
 >>
 let resource (term * conv, conv) ir =
@@ -90,9 +87,7 @@ let resource (term * conv, conv) ir =
 let process_ir_resource_rw_annotation = redex_and_conv_of_rw_annotation "ir"
 
 doc <:doc<
-   @begin[doc]
    Convert AST operators.
-   @end[doc]
 >>
 prim_rw ir_add_op {| ir |} : IR{AstAddOp} <--> AddOp
 prim_rw ir_sub_op {| ir |} : IR{AstSubOp} <--> SubOp
@@ -107,9 +102,7 @@ prim_rw ir_eq_op {| ir |} :  IR{AstEqOp}  <--> EqOp
 prim_rw ir_neq_op {| ir |} : IR{AstNeqOp} <--> NeqOp
 
 doc <:doc<
-   @begin[doc]
    Translating simple expressions.
-   @end[doc]
 >>
 prim_rw ir_num {| ir |} :
    IR{IntExpr[i:n]; v. 'e['v]} <--> 'e[AtomInt[i:n]]
@@ -124,9 +117,7 @@ prim_rw ir_var {| ir |} :
    IR{VarExpr{'v}; v2. 'e['v2]} <--> 'e[AtomVar{'v}]
 
 doc <:doc<
-   @begin[doc]
    Translating simple operations.
-   @end[doc]
 >>
 prim_rw ir_binop {| ir |} :
    IR{BinopExpr{'op; 'e1; 'e2}; v. 'e['v]}
@@ -139,9 +130,7 @@ prim_rw ir_relop {| ir |} :
    IR{'e1; v1. IR{'e2; v2. 'e[AtomRelop{IR{'op}; 'v1; 'v2}]}}
 
 doc <:doc<
-   @begin[doc]
    Translating a function in a let definition.
-   @end[doc]
 >>
 prim_rw ir_fun_lambda {| ir |} :
    IR{FunLambdaExpr{v1. 'body['v1]}; v2. 'e['v2]}
@@ -149,9 +138,7 @@ prim_rw ir_fun_lambda {| ir |} :
    AtomFun{v1. IR{'body['v1]; v2. 'e['v2]}}
 
 doc <:doc<
-   @begin[doc]
    Translating an unnamed function.
-   @end[doc]
 >>
 prim_rw ir_lambda {| ir |} :
    IR{LambdaExpr{v1. 'body['v1]}; v2. 'e['v2]}
@@ -163,9 +150,7 @@ prim_rw ir_lambda {| ir |} :
    R. LetFun{'R; Label["g":s]; g. 'e[AtomVar{'g}]}}
 
 doc <:doc<
-   @begin[doc]
    Translating an if expression.
-   @end[doc]
 >>
 prim_rw ir_if {| ir |} :
    IR{IfExpr{'e1; 'e2; 'e3}; v. 'e['v]}
@@ -180,9 +165,7 @@ prim_rw ir_if {| ir |} :
             IR{'e3; v3. TailCall{AtomVar{'g}; ArgCons{'v3; ArgNil}}}}}}}
 
 doc <:doc<
-   @begin[doc]
    Translating recursive functions.
-   @end[doc]
 >>
 prim_rw ir_let_rec {| ir |} :
    IR{AstLetRec{R. 'bodies['R]; R. 'e1['R]}; v. 'e2['v]}
@@ -209,9 +192,7 @@ prim_rw ir_let_fun {| ir |} :
    LetFun{'R; IR{'label}; f. IR{'e['f]; v. 'cont['v]}}
 
 doc <:doc<
-   @begin[doc]
    Translating a let variable definition.
-   @end[doc]
 >>
 prim_rw ir_let_var {| ir |} :
    IR{LetVarExpr{'e1; v. 'e2['v]}; v2. 'e3['v2]}
@@ -221,9 +202,7 @@ prim_rw ir_let_var {| ir |} :
    IR{'e2['v]; v2. 'e3['v2]}}}
 
 doc <:doc<
-   @begin[doc]
    Translating a function application.
-   @end[doc]
 >>
 prim_rw ir_apply {| ir |} :
    IR{ApplyExpr{'fe; 'args}; v. 'e['v]}
@@ -232,9 +211,7 @@ prim_rw ir_apply {| ir |} :
    IR{'args; 'f; v. 'e['v]}}
 
 doc <:doc<
-   @begin[doc]
    Translating a list of arguments.
-   @end[doc]
 >>
 prim_rw ir_arg_cons {| ir |} :
    IR{AstArgCons{'hd; 'tl}; 'f; v. 'e['v]}
@@ -249,10 +226,8 @@ prim_rw ir_arg_nil {| ir |} :
    'e['f]
 
 doc <:doc<
-   @begin[doc]
    Tuples.
    We use Base_meta arithmetic to figure out the size of a tuple.
-   @end[doc]
 >>
 declare succ{'e : MetaNum} : MetaNum
 
@@ -294,9 +269,7 @@ let resource ir +=
    [ <<meta_sum[i1:n, i2:n]>>, reduce_meta_sum]
 
 doc <:doc<
-   @begin[doc]
    Subscripting.
-   @end[doc]
 >>
 prim_rw ir_subscript_expr {| ir |} :
    IR{SubscriptExpr{'e1; 'e2}; v. 'e['v]}
@@ -306,10 +279,8 @@ prim_rw ir_subscript_expr {| ir |} :
    LetSubscript{'v1; 'v2; v. 'e[AtomVar{'v}]}}}
 
 doc <:doc<
-   @begin[doc]
    Assignments.
    They are *always* followed by an expression.
-   @end[doc]
 >>
 prim_rw ir_assign_expr {| ir |} :
    IR{AssignExpr{'e1; 'e2; 'e3; 'e4}; v. 'e['v]}
@@ -320,9 +291,7 @@ prim_rw ir_assign_expr {| ir |} :
    SetSubscript{'v1; 'v2; 'v3; IR{'e4; v. 'e['v]}}}}}
 
 doc <:doc<
-   @begin[doc]
    Some optimizations.
-   @end[doc]
 >>
 prim_rw opt_let_var {| ir |} :
    LetAtom{AtomVar{'v1}; v2. 'e['v2]}
@@ -332,10 +301,8 @@ prim_rw opt_let_var {| ir |} :
 (* *)
 
 doc <:doc<
-   @begin[doc]
    A program is compilable if it can be converted to an atom
    that is the return value of the program.
-   @end[doc]
 >>
 prim prog_ir :
     sequent { <H> >- compilable{IR{'e; v. Return{'v}}} } -->
@@ -355,9 +322,7 @@ let irC =
 let irT =
    prog_ir thenT rw irC 0
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

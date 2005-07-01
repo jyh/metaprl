@@ -1,6 +1,5 @@
 doc <:doc<
    @spelling{squashes}
-   @begin[doc]
    @module[Itt_esquash]
 
    The @hrefterm[squash] operator in @hrefmodule[Itt_squash] theory
@@ -16,8 +15,8 @@ doc <:doc<
    equality $P_1 @Leftrightarrow P_2$.
 
    For more information on the @tt[esquash] operator see @cite["Nog02a,Nog02b"].
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -50,9 +49,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_void
 extends Itt_equal
@@ -71,11 +68,9 @@ open Itt_equal
 open Itt_squash
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt[esquash] operator @i{extensionally squashes} a proposition.
-   @end[doc]
 >>
 declare esquash{'P}
 doc docoff
@@ -84,13 +79,11 @@ dform esquash_df : except_mode[src] :: esquash{'P} =
    Nuprl_font!esquash{'P}
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The @tt[esquash] term inhabits the type universe $@univ{i}$
    if the proposition $P$ is also in $@univ{i}$.
-   @end[doc]
 >>
 prim esquash_type {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'P} } -->
@@ -98,10 +91,8 @@ prim esquash_type {| intro [AutoMustComplete] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    Two squashed propositions <<esquash{'A}>> and <<esquash{'B}>>
    are equal if both are types, and if each one implies another.
-   @end[doc]
 >>
 prim esquash_equal {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- esquash{'P1} in univ[i:l] } -->
@@ -117,7 +108,6 @@ prim esquash_univ :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The <<esquash{'P}>> proposition is true if $P$ is true.
@@ -125,7 +115,6 @@ doc <:doc<
    @hrefresource[intro_resource] directly.  Instead, the
    @hreftactic[esquashT] tactic is defined below to
    apply this rule.
-   @end[doc]
 >>
 prim esquash_intro {| intro [AutoMustComplete] |} :
    [main] sequent { <H> >- squash{'P} } -->
@@ -133,12 +122,10 @@ prim esquash_intro {| intro [AutoMustComplete] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The element in the <<esquash{'P}>> term is always the term
    $@it$.
-   @end[doc]
 >>
 prim esquash_elim {| elim [] |} 'H :
    ( 't['x] : sequent { <H>; x: esquash{'A}; <J[it]> >- 'C[it] }) -->
@@ -146,20 +133,16 @@ prim esquash_elim {| elim [] |} 'H :
    't[it]
 
 doc <:doc<
-   @begin[doc]
    It can also be formulated as an introduction rule.
-   @end[doc]
 >>
 interactive esquash_mem {| intro []; squash |} :
    sequent { <H> >- esquash{'A} } -->
    sequent { <H> >- it in esquash{'A} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
    When a proposition is a type (i.e, functional), its @tt[esquash] is
    true if and only if its @tt[squash] is true.
-   @end[doc]
 >>
 prim esquash :
    [wf] sequent { <H> >- "type"{'P} } -->
@@ -168,9 +151,7 @@ prim esquash :
    it
 
 doc <:doc<
-   @begin[doc]
    The following rule is equivalent to the previous one.
-   @end[doc]
 >>
 interactive unesquash 'H :
    [wf] sequent { <H>; x: esquash{'P}; <J[it]> >- "type"{'P} } -->
@@ -178,9 +159,7 @@ interactive unesquash 'H :
    sequent { <H>; x: esquash{'P}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    The <<esquash{void}>> can not be inhabited.
-   @end[doc]
 >>
 interactive esquash_void_elim {| elim [] |} 'H :
    sequent { <H>; x: esquash{void}; <J['x]> >- 'C['x] }
@@ -193,7 +172,6 @@ interactive esquash_equal_intro :
    sequent { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] }
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -202,7 +180,6 @@ doc <:doc<
      @tt[esquashT] @i{i} applies the @hrefrule[unesquash] rule.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let esquashT i =
    if i = 0 then esquash else unesquash i

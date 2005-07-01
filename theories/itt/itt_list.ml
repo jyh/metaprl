@@ -1,7 +1,5 @@
 doc <:doc<
    @spelling{cons}
-
-   @begin[doc]
    @module[Itt_list]
 
    The @tt[Itt_list] module defines the type of finite
@@ -10,8 +8,8 @@ doc <:doc<
    However, the lists have a simpler semantics, and they are defined
    as primitive, so that lists can be used without including
    the recursive type.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -43,7 +41,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_struct
@@ -61,21 +59,17 @@ open Itt_struct
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt[nil] term is the empty list, the @tt[cons] term
    adds an element $a$ to list $b$.
-   @end[doc]
 >>
 declare nil
 declare cons{'a; 'b}
 
 doc <:doc<
-   @begin[doc]
    The @tt[list] term defines the list type.  The @tt[list_ind]
    term defines the induction combinator.
-   @end[doc]
 >>
 declare list{'a}
 declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
@@ -85,7 +79,6 @@ declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @hrefterm[list_ind] term computes values on lists.
@@ -93,7 +86,6 @@ doc <:doc<
    defines the value on empty lists, and the $@i{step}[h, t, f]$
    term defines values on $@cons{h; t}$, where $f$ represents
    the value computed on the tail $t$ of the list.
-   @end[doc]
 >>
 prim_rw reduce_listindNil {| reduce |} :
    list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]} <--> 'base
@@ -107,13 +99,11 @@ prim_rw reduce_listindCons {| reduce |} :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The $@list{T}$ term is a well-formed type if
    $T$ is a type.
-   @end[doc]
 >>
 prim listType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -126,11 +116,9 @@ prim listEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The @hrefterm[nil] term is a member of every list type $@list{A}$.
-   @end[doc]
 >>
 prim nilEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{list{'A}} } -->
@@ -142,11 +130,9 @@ interactive nilFormation {| intro [] |} :
    sequent { <H> >- list{'A} }
 
 doc <:doc<
-   @begin[doc]
    The @hrefterm[cons] term $@cons{h; t}$ is a member of the list
    type $@list{A}$ if $h$ is an element of $A$, and $t$ is an element
    of $@list{A}$.
-   @end[doc]
 >>
 prim consEquality {| intro [] |} :
    [wf] sequent { <H> >- 'u1 = 'u2 in 'A } -->
@@ -160,14 +146,12 @@ interactive consSquiggleEq {| intro [] |} :
    sequent  { <H> >- 'h1 :: 't1 ~ 'h2 :: 't2 }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
    computes a value of type $T$ if 1) the argument $l$ is a list of type $@list{A}$,
    2) the @i{base} term has type $T$, and 3) the @i{step} term computes a value
    of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
-   @end[doc]
 >>
 prim list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
    [wf] sequent { <H> >- 'e1 = 'e2 in list{'A} } -->
@@ -182,7 +166,6 @@ prim list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination for performs induction over the assumption
@@ -191,7 +174,6 @@ doc <:doc<
    in the induction step, $C[@cons{h; t}]$ must hold for any elements
    $h @in A$ and $t @in @list{A}$, where the induction hypothesis
    $C[t]$ holds on $t$.
-   @end[doc]
 >>
 prim listElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('base['l] : sequent { <H>; l: list{'A}; <J['l]> >- 'C[nil] }) -->
@@ -200,12 +182,10 @@ prim listElimination {| elim [ThinOption thinT] |} 'H :
    list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Contradiction}
 
    The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
    every list type.
-   @end[doc]
 >>
 interactive nil_neq_cons {| elim [] |} 'H :
    sequent { <H>; x: nil = cons{'h; 't} in list{'T}; <J['x]> >- 'C['x] }
@@ -214,9 +194,7 @@ interactive cons_neq_nil {| elim [] |} 'H :
    sequent { <H>; x: cons{'h; 't} = nil in list{'T}; <J['x]> >- 'C['x] }
 
 (*
- * @begin[doc]
  * @modsubsection{Equality elimination}
- * @end[doc]
  *)
 interactive consEqElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A};
@@ -224,12 +202,10 @@ interactive consEqElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; <J['u]> >- 'C['u] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Computation}
 
    The @emph{only} representative on the empty list is the
    @hrefterm[nil] term.
-   @end[doc]
 >>
 prim nilSqequal {| nth_hyp |} 'T :
    sequent { <H> >- 'u = nil in list{'T} } -->
@@ -237,11 +213,9 @@ prim nilSqequal {| nth_hyp |} 'T :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The list type $@list{A}$ is covariant in the type argument $A$.
-   @end[doc]
 >>
 interactive listSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->

@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
    @chapter["ocaml-doc-name1"]{Variables, naming, and binding}
 
    @docoff
@@ -26,13 +25,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-   @begin[doc]
 
 So far, we can only considered simple expressions, not involving
 variables.  In ML, variables are @emph{names} for values.  In a purely
@@ -382,7 +379,6 @@ val ** : float -> int -> float = <fun>
 - : float = 100000
 @end[verbatim]
 
-@end[doc]
 >>
 
 (*

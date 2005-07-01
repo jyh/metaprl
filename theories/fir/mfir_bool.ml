@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_bool]
 
    The @tt[Mfir_bool] module implements meta-booleans; the booleans in this
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Base_theory
@@ -54,11 +50,9 @@ open Top_conversionals
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The terms @tt[true] and @tt[false] are boolean constants.
-   @end[doc]
 >>
 
 declare "true"
@@ -66,10 +60,8 @@ declare "false"
 
 
 doc <:doc<
-   @begin[doc]
 
    The terms @tt[or], @tt[and], and @tt[not] are boolean connectives.
-   @end[doc]
 >>
 
 declare "or"{ 'bool1; 'bool2 }
@@ -78,10 +70,8 @@ declare "not"{ 'boolean }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[ifthenelse] performs a case analysis on @tt[test].
-   @end[doc]
 >>
 
 declare ifthenelse{ 'test; 'true_case; 'false_case }
@@ -92,11 +82,9 @@ declare ifthenelse{ 'test; 'true_case; 'false_case }
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    Case analysis on booleans is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_ifthenelse_true {| reduce |} :
@@ -108,10 +96,8 @@ prim_rw reduce_ifthenelse_false {| reduce |} :
    'f
 
 doc <:doc<
-   @begin[doc]
 
    The logical connectives are treated classically.
-   @end[doc]
 >>
 
 prim_rw reduce_and {| reduce |} :

@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_sep]
 
    The @tt[Czf_itt_sep] module defines @emph{restricted separation}.
@@ -20,8 +19,8 @@ doc <:doc<
    The separation constructor $@sep{z; @collect{x; T; f[x]}; P[z]}$
    is defined with the product type as the set
    $@collect{z; (@prod{x; A; P[x]}); f(@fst{z})}$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -53,7 +52,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_member
 doc docoff
 
@@ -72,7 +71,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc <:doc< @terms >>
 declare sep{'s; x. 'P['x]}
 declare restricted{'P}
 
@@ -81,11 +80,9 @@ declare restricted{'P}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{sep} term is defined by set induction.
-   @end[doc]
 >>
 
 prim_rw unfold_sep : sep{'s; x. 'P['x]} <-->
@@ -95,10 +92,8 @@ interactive_rw reduce_sep {| reduce |} : sep{collect{'T; x. 'f['x]}; z. 'P['z]} 
    collect{. "prod"{'T; t. 'P['f['t]]}; w. 'f[fst{'w}]}
 
 doc <:doc<
-   @begin[doc]
    The $@restricted{P}$ predicate means that the proposition is
    well-formed in $@univ{1}$.
-   @end[doc]
 >>
 prim_rw unfold_restricted : restricted{'P} <-->
    Itt_equal!equal{univ[1:l]; 'P; 'P}
@@ -131,12 +126,10 @@ interactive squash_restricted :
 let squash_restrictedT = squash_restricted
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Equality and membership are restricted judgments}
 
    The next two rules show that equality and membership
    are restricted for any @hrefterm[set] arguments.
-   @end[doc]
 >>
 interactive eq_restricted {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -149,13 +142,11 @@ interactive member_restricted {| intro [] |} :
    sequent { <H> >- restricted{mem{'s1; 's2}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
    The separation $@sep{x; s; P[x]}$ is well-formed
    if $s$ is a set, and $P[x]$ is restricted and functional
    on any set argument $x$.
-   @end[doc]
 >>
 interactive sep_isset {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s} } -->
@@ -164,13 +155,11 @@ interactive sep_isset {| intro [] |} :
    sequent { <H> >- isset{.sep{'s; x. 'P['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    A set $x$ is a member of $@sep{z; s; P[z]}$ if
    the separation is well-formed; if $@member{x; s}$;
    and $P[x]$.
-   @end[doc]
 >>
 interactive sep_intro2 {| intro [] |} :
    ["wf"]   sequent { <H>; w: set >- restricted{'P['w]} } -->
@@ -180,14 +169,12 @@ interactive sep_intro2 {| intro [] |} :
    sequent { <H> >- mem{'x; sep{'s; z. 'P['z]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    An assumption $@mem{x; @sep{y; s; P[y]}}$ implies two facts:
    $@mem{x; s}$ and $P[x]$.  The computational content of the
    predicate $P[x]$ is visible (unlike the separation ``set''
    constructor in the @Nuprl type theory module @hrefmodule[Itt_set]).
-   @end[doc]
 >>
 interactive sep_elim {| elim [] |} 'H :
    ["wf"]   sequent { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]> >- isset{'x} } -->
@@ -198,12 +185,10 @@ interactive sep_elim {| elim [] |} 'H :
    sequent { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]> >- 'T['w] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The separation constructor is functional in both the
    set argument and the proposition.
-   @end[doc]
 >>
 interactive sep_fun {| intro [] |} :
    sequent { <H>; u: set; v: set >- restricted{'P['u; 'v]} } -->

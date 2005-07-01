@@ -1,11 +1,10 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_rat]
 
    Rational numbers axiomatization.
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,9 +37,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_rfun
@@ -572,11 +569,7 @@ interactive_rw add_rat_Assoc2_rw {| reduce |} :
 let add_rat_Assoc2C = add_rat_Assoc2_rw
 
 doc <:doc<
-   @begin[doc]
-
    <<rat{0; 1}>> is neutral element for <<add_rat{cdot;cdot}>> in <<rationals>>.
-
-	@end[doc]
 >>
 
 interactive add_rat_Id {| nth_hyp |} :

@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_bterm]
    The @tt[Itt_hoas_bterm] module defines the inductive type <<BTerm>>
    and establishes the appropriate induction rules for this type.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,7 +35,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_hoas_destterm
 extends Itt_image
 extends Itt_tunion
@@ -47,7 +46,7 @@ open Basic_tactics
 open Itt_struct
 open Itt_squash
 
-doc <:doc< @doc{@terms} >>
+doc terms
 
 define unfold_compatible_shapes: compatible_shapes{'bdepth; 'op; 'btl} <-->
       length{shape{'op}} = length{'btl} in int &
@@ -67,7 +66,7 @@ define unfold_compatible_shapes: compatible_shapes{'bdepth; 'op; 'btl} <-->
 
 define (*private*) unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
 
-doc <:doc< @doc{@rules} >>
+doc rules
 
 interactive_rw bt_reduce_base {| reduce |}: BT{0} <--> void
 

@@ -1,6 +1,5 @@
 doc <:doc<
    @spelling{bi}
-   @begin[doc]
    @module[Itt_logic]
 
    The @tt[Itt_logic] module defines the propositional
@@ -9,8 +8,8 @@ doc <:doc<
    terms of the existing types.
 
    This module also defines several tactics.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -44,9 +43,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_esquash
@@ -93,7 +90,6 @@ let debug_auto =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The following terms define the propositional connectives.
@@ -120,7 +116,6 @@ doc <:doc<
    The @emph{conditional} forms $@cand{A; B}$ and
    $@cor{A; B}$ encode the propositional truth
    from left to right.
-   @end[doc]
 >>
 define unfold_true : "true" <--> unit
 define unfold_false : "false" <--> void
@@ -152,7 +147,6 @@ let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    The rules are divided into groups for each of the
@@ -165,7 +159,6 @@ doc <:doc<
    both types.  The @tt{true} term is always true; there is
    no elimination form.  The @tt{false} term is always false;
    there is no introduction form.
-   @end[doc]
 >>
 interactive true_univ {| intro [] |} :
    sequent { <H> >- "true" in univ[i:l] }
@@ -194,7 +187,6 @@ interactive false_esquash_elim {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: esquash{"false"}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Negation}
 
    The negation << "not"{'t} >> is well-formed if
@@ -203,7 +195,6 @@ doc <:doc<
    <<void>>.  To prove the negation, assume $t$ and find
    a contradiction.  The elimination form forms a proof
    of the goal from a proof of $t$.
-   @end[doc]
 >>
 interactive not_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
@@ -229,14 +220,12 @@ interactive not_membership {| intro []; squash |} :
    sequent { <H> >- lambda{x.'f['x]} in not{'t} }
 *)
 doc <:doc<
-   @begin[doc]
    @modsubsection{Conjunction}
 
    The conjunction << "and"{'a_1; 'a_2} >> is well-formed if
    both $a_1$ and $a_2$ are types.  It is true if both $a_1$ and
    $a_2$ are true.  The elimination form splits the assumption
    into its two component proofs.
-   @end[doc]
 >>
 interactive and_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
@@ -267,7 +256,6 @@ interactive and_squash_elim {| elim [] |} 'H :
    sequent { <H>; x: squash{('a1 & 'a2)}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Disjunction}
 
    The disjunction << "or"{'a_1; 'a_2} >> is well-formed if both
@@ -280,7 +268,6 @@ doc <:doc<
    a case analysis on the disjunctive assumption, producing
    a case for the left proof of $a_1$, and another for the
    right proof of $a_2$.
-   @end[doc]
 >>
 interactive or_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
@@ -308,7 +295,6 @@ interactive or_elim {| elim [] |} 'H :
    sequent { <H>; x: "or"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Implication}
 
    The implication << implies{'a_1; 'a_2} >> is well-formed if both
@@ -317,7 +303,6 @@ doc <:doc<
    $a_1$.  The elimination rule corresponds to @emph{modus-ponens}:
    if a proof of $a_1$ can be found, so can a proof of $a_2$ by
    application of the proof of << implies{'a_1; 'a_2} >>.
-   @end[doc]
 >>
 interactive implies_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
@@ -340,13 +325,11 @@ interactive implies_elim {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: "implies"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Bi-implication}
 
    The bi-implication << 'a_1 <=> 'a_2 >> is well-formed if
    both $a_1$ and $a_2$ are types.  The introduction and elimination rules
    perform the top-level conjunctive reasoning.
-   @end[doc]
 >>
 interactive iff_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
@@ -368,14 +351,12 @@ interactive iff_elim {| elim [] |} 'H :
    sequent { <H>; x: 'a1 <=> 'a2; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Conditional conjunction}
 
    The conditional conjunction << "cand"{'a_1; 'a_2} >> differs from
    the conjunction only in the introduction rule.  The conjunction
    is true if $a_1$ is true, and a proof of $a_2$ can be produced from
    a proof of $a_1$.
-   @end[doc]
 >>
 interactive cand_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
@@ -397,7 +378,6 @@ interactive cand_elim {| elim [] |} 'H :
    sequent { <H>; x: "cand"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Conditional disjunction}
 
    The conditional disjunction << "cor"{'a_1; 'a_2} >> differs from
@@ -407,7 +387,6 @@ doc <:doc<
    $a_1$ is false.  The elimination rule produces the two cases,
    one where there is a proof of $a_1$, and another where
    there is a proof of $a_2$ and a proof of falsehood for $a_1$.
-   @end[doc]
 >>
 interactive cor_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
@@ -436,7 +415,6 @@ interactive cor_elim {| elim [] |} 'H :
    sequent { <H>; x: "cor"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Universal quantification}
 
    The universal quantification << all x: 'A. 'B['x] >> is well-formed
@@ -446,7 +424,6 @@ doc <:doc<
    form allows @emph{instantiation} of quantification on
    a particular element $a @in A$, to produce a proof of
    $B[a]$.
-   @end[doc]
 >>
 interactive all_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
@@ -469,7 +446,6 @@ interactive all_elim {| elim [ThinOption thinT] |} 'H 'z :
    sequent { <H>; x: all a: 'A. 'B['a]; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Existential quantification}
 
    The existential quantification << exst x: 'A. 'B['x] >> is well-formed
@@ -477,7 +453,6 @@ doc <:doc<
    is true if it is well-formed and there is a proof $a @in A$ where $B[a]$
    is also true.  The elimination form splits the proof of $@exists{x; A; B[x]}$
    into its parts.
-   @end[doc]
 >>
 interactive exists_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
@@ -714,7 +689,6 @@ let rec intersects vars fv =
             intersects tl fv
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    The @hrefmodule[Itt_logic] module defines several tactics for
@@ -745,7 +719,6 @@ doc <:doc<
    }}
    @end[description]
    @docoff
-   @end[doc]
 >>
 
 let none_var = Lm_symbol.add "none"
@@ -791,7 +764,6 @@ let moveToConclT =
                   tac len (Sequent.concl p) (collect hyps len (i+1) [v] [i, v, hyp]))
 
 doc <:doc<
-   @begin[doc]
    @begin[description]
    @item{@tactic[univCDT], @tactic[genUnivCDT];
     {   The @tt[univCDT] and @tt[genUnivCDT] tactics
@@ -810,7 +782,6 @@ doc <:doc<
         $$}}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let univCDT =
    let rec tac p =
@@ -844,7 +815,6 @@ let genUnivCDT =
       funT tac
 
 doc <:doc<
-   @begin[doc]
    @begin[description]
    @item{@tactic[instHypT];
     {   The @tt[instHypT] tactic performs instantiation
@@ -864,7 +834,6 @@ doc <:doc<
         $$}}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let instHypT args i =
    let rec inst i firstp args = funT (fun p ->
@@ -1004,7 +973,6 @@ let rec match_goal args form goal =
             raise (RefineError ("match_goal", StringError "no match"))
 
 doc <:doc<
-   @begin[doc]
    @begin[description]
    @item{@tactic[backThruHypT];
     {   The @tt[backThruHypT] performs backward-chaining through a
@@ -1027,7 +995,6 @@ doc <:doc<
         the goal with the hypothesis.}}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let backThruHypT = argfunT (fun i p ->
    if !debug_auto then
@@ -1064,7 +1031,6 @@ let backThruHypT = argfunT (fun i p ->
       thinningT false (tac info i true))
 
 doc <:doc<
-   @begin[doc]
    @begin[description]
    @item{@tactic[assumT];
     {   @emph{Assumptions} correspond to the subgoals of the outermost
@@ -1094,7 +1060,6 @@ doc <:doc<
         $$}}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let assum_term goal assum =
    (*
@@ -1147,20 +1112,17 @@ let assumT = argfunT (fun i p ->
       make_assumT i goal assum form index (addHiddenLabelT "main"))
 
 doc <:doc<
-   @begin[doc]
    @begin[description]
    @item{@tactic[backThruAssumT];
     { The @tt[backThruAssumT] performs backward chaining similar
       to the @hreftactic[backThruHypT], but on an @emph{assumption}.}}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let backThruAssumT i =
    assumT i thenMT (backThruHypT (-1) thenT thinT (-1))
 
 doc <:doc<
-   @begin[doc]
    @begin[description]
    @item{@tactic[genAssumT];
     {The @tt[genAssumT] generalizes on an assumption.
@@ -1185,7 +1147,6 @@ doc <:doc<
      $$}}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let genAssumT =
    let var_v = Lm_symbol.add "v" in argfunT (fun indices p ->

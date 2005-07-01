@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    ML binop relop op AST compilable
    @end[spelling]
@@ -30,7 +29,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_comment
 
@@ -242,7 +240,6 @@ dform math_EndDef_df : mode[tex] :: math_EndDef =
    epsilon
 
 doc <:doc<
-@begin[doc]
 
 The intermediate representation of the program must serve two
 conflicting purposes.  It should be a fairly low-level language so
@@ -296,7 +293,6 @@ arithmetic, conditionals, tuples, functions, and function definitions.
 A fragment of the language is shown in Figure @reffigure[ir].
 
 @docoff
-@end[doc]
 >>
 
 declare math_CloseVar{'v; 'e; 'a}
@@ -344,7 +340,6 @@ dform math_frame_df : mode[tex] :: math_frame =
    math_it["Fr"]
 
 doc <:doc<
-@begin[doc]
 @subsubsection[m_doc_closure]{Closure Conversion}
 
 The program intermediate representation includes higher-order and nested functions.  The function
@@ -432,7 +427,6 @@ $$
 $$
 
 @docoff
-@end[doc]
 >>
 
 (*

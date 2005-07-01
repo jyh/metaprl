@@ -2,11 +2,9 @@ doc <:doc<
    @begin[spelling]
    @end[spelling]
 
-   @begin[doc]
    @module[UNITY]
    This module defines the translation between UNITY and
    an abstract source language.
-   @end[doc]
 
    ----------------------------------------------------------------
 

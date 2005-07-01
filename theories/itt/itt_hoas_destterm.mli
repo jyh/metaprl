@@ -1,10 +1,8 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_destterm]
    The @tt[Itt_hoas_destterm] module defines destructors for extracting
    from a bterm the components corresponding to the de Bruijn-like representation
    of that bterm.
-   @end[doc]
 
    ----------------------------------------------------------------
 

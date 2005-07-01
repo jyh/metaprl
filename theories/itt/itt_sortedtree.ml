@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_sortedtree]
 
    This is a theory of sorted binary trees.
-   @end[doc]
 >>
 
 extends Itt_datatree
@@ -43,9 +41,7 @@ let _ =
    show_loading "Loading Itt_binatatree%t"
 
 doc <:doc<
-   @begin[doc]
    @terms
-   @end[doc]
 >>
 
 define dataNode: DataNode{'D;data.'N['data]} <--> record["data":t]{'D;data.'N['data]}

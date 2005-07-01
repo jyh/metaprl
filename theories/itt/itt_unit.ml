@@ -1,13 +1,12 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_unit]
 
    The @tt{Itt_unit} module defines a term containing exactly
    one element, <<it>>.  The element is the same term that inhabits
    the equality (Section @refmodule[Itt_equal]) and subtype
    (Section @refmodule[Itt_subtype]) judgments.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -42,9 +41,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_squash
@@ -70,7 +67,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare unit
 doc docoff
 
@@ -92,13 +89,11 @@ dform unit_df1 : except_mode[src] :: unit = `"Unit"
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The <<unit>> type is a member of every universe, and it
    is also a type.
-   @end[doc]
 >>
 prim unitEquality {| intro [] |} :
    sequent { <H> >- unit in univ[i:l] } =
@@ -111,32 +106,26 @@ interactive unitType {| intro [] |} :
    sequent { <H> >- "type"{unit} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
    The unique inhabitant of the <<unit>> type is the term <<it>>.
-   @end[doc]
 >>
 prim unit_memberEquality {| intro []; squash |} :
    sequent { <H> >- it in unit } =
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The <<unit>> type is always provable.  The proof is the unique term
    <<it>>.
-   @end[doc]
 >>
 interactive unit_memberFormation {| intro [] |} :
    sequent { <H> >- unit }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
    The elimination rule @tt[unitElimination] performs a case analysis
    on $x@colon @unit$.  The witness is replaced with the term <<it>>.
-   @end[doc]
 >>
 prim unitElimination {| elim [ThinOption thinT] |} 'H :
    ('t['x] : sequent{ <H>; x: unit; <J[it]> >- 'C[it] }) -->
@@ -144,10 +133,8 @@ prim unitElimination {| elim [ThinOption thinT] |} 'H :
    't[it]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Rewriting}
    Two terms in <<unit>> are always computationally equivalent.
-   @end[doc]
 >>
 prim unitSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in unit } -->

@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_group_bvd]
 
    The @tt[Czf_itt_group_bvd] module defines the @emph{group builder}
@@ -9,8 +8,8 @@ doc <:doc<
    requires that $a *_1 b$ is equal to $a *_2 b$ for any $a$ and $b$
    in $g_1$. Examples of use of @tt[group_bvd] are subgroups, kernels,
    cyclic subgroups, etc.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -42,7 +41,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 extends Czf_itt_subset
 doc docoff
@@ -59,7 +58,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare group_bvd{'h; 'g; 's}
 doc docoff
 
@@ -68,13 +67,11 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The $@groupbvd{h; g; s}$ builds a group $h$ from group $g$ which
    satisfies $@equal{@car{h}; s}$ and the operation of $h$ is the
    same as that of $g$. Here $s$ must be a subset of $@car{g}$
-   @end[doc]
 >>
 prim_rw unfold_group_bvd : group_bvd{'h; 'g; 's} <-->
    (group{'h} & group{'g} & isset{'s} & \subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
@@ -92,13 +89,11 @@ dform group_bvd_df : parens :: except_mode[src] :: group_bvd{'h; 'g; 's} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The group builder $@groupbvd{h; g; s}$ is well-formed
    if $h$ and $g$ are labels and $s$ is a set.
-   @end[doc]
 >>
 interactive group_bvd_wf {| intro [] |} :
    sequent { <H> >- 'h IN label } -->
@@ -107,14 +102,12 @@ interactive group_bvd_wf {| intro [] |} :
    sequent { <H> >- "type"{group_bvd{'h; 'g; 's}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The proposition $@groupbvd{h; g; s}$ is true if it is
    well-formed; if $h$ and $g$ are both groups; if
    $@equal{@car{h}; s}$; and if for any $a$ and $b$ $@in$
    $@car{h}$, $@op{h; a; b}$ is equal to $@op{g; a; b}$.
-   @end[doc]
 >>
 interactive group_bvd_intro {| intro [] |} :
    sequent { <H> >- 'h IN label } -->
@@ -128,12 +121,10 @@ interactive group_bvd_intro {| intro [] |} :
    sequent { <H> >- group_bvd{'h; 'g; 's} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
    If $h$ is built from $g$, then $@eq{@id{h}; @id{g}}$ and
    for all $a @in @car{h}$, $@eq{@inv{h; a}; @inv{g; a}}$.
-   @end[doc]
 >>
 interactive group_bvd_id {| intro [] |} 's :
    sequent { <H> >- 'h IN label } -->

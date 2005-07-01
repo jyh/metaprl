@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_record_exm]
 
    This theory contains some examples of how to use records.
-   @end[doc]
 >>
 
 extends Itt_record
@@ -23,10 +21,8 @@ open Basic_tactics
 open Itt_rfun
 
 doc <:doc<
-   @begin[doc]
    @modsection{Simple Records}
    First, let us define two record types: <<plane>> and <<space>>.
-   @end[doc]
 >>
 
 define unfold_plane:  plane <--> {x:int; y:int}
@@ -40,9 +36,7 @@ interactive spaceType {|intro[] |} :
    sequent{ <H> >- "type"{space} }
 
 doc <:doc<
-   @begin[doc]
    The elements of these types are records. E.g., the point <<O>> is an element of the type <<space>>:
-   @end[doc]
 >>
 
 define unfold_O: O <-->  {x=0; y=0; z=0}
@@ -51,27 +45,21 @@ interactive oInSpace {|intro[] |} :
    sequent{ <H> >- O in space }
 
 doc <:doc<
-   @begin[doc]
    <<O>> also can be considered as an element of the type <<plane>>:
-   @end[doc]
 >>
 
 interactive oInPlane {|intro[] |} :
    sequent{ <H> >- O in plane }
 
 doc <:doc<
-   @begin[doc]
    In general <<space>> is a subtype of <<plane>>.
-   @end[doc]
 >>
 
 interactive spacePlane {|intro[] |} :
    sequent{ <H> >- space  subtype plane }
 
 doc <:doc<
-   @begin[doc]
    Let us consider two points <<A>> and <<B>>:
-   @end[doc]
 >>
 
 define unfold_A: A <--> {x=1; y=2; z=3}
@@ -86,11 +74,9 @@ interactive bInSpace {|intro[] |} :
    sequent{ <H> >- B in space }
 
 doc <:doc<
-   @begin[doc]
    These points are equal in <<plane>>, since they have
    the same <<label["x":t]>> and <<label["y":t]>> coordinates,
    But they are not equal in <<space>>, since they differ in <<label["z":t]>> coordinate.
-   @end[doc]
 >>
 
 interactive abInPlane {|intro[] |} :
@@ -100,36 +86,28 @@ interactive abInSpace {|intro[] |} :
    sequent{ <H> >- not{A = B in space} }
 
 doc <:doc<
-   @begin[doc]
    We can change the order of fields with different labels. E.g.,
-   @end[doc]
 >>
 
 interactive_rw a_rw  :
    A <--> {y=2; z=3; x=1}
 
 doc <:doc<
-   @begin[doc]
    However if two fields have the same label, then the rightmost field covers others. E.g.,
-   @end[doc]
 >>
 
 interactive_rw cover_rw  :
    {x=3; x=2} <-->    {x=2}
 
 doc <:doc<
-   @begin[doc]
    The field operator <<field[x:t]{'r}>> gets the field <<label[x:t]>> of the record <<'r>>. E.g.,
-   @end[doc]
 >>
 
 interactive_rw a_z_rw  :
    (A^y) <--> 2
 
 doc <:doc<
-   @begin[doc]
    Let us define
-   @end[doc]
 >>
 
 define plane_point: point{'a;'b;'e} <--> rcrd["x":t]{'a; rcrd["y":t]{'b;'e }}
@@ -157,9 +135,7 @@ interactive spaceIntro {|intro[] |} :
    sequent{ <H> >- point{'a;'b;'c;rcrd} in space}
 
 doc <:doc<
-   @begin[doc]
    Then we have the following reductions:
-   @end[doc]
 >>
 
 interactive_rw point_beta1_rw {| reduce |} : (point{'a;'b;'e}^x) <--> 'a
@@ -171,10 +147,8 @@ interactive point_eta :
    sequent{ <H> >-   point{'p^x;.'p^y;'p} ~ 'p }
 
 doc <:doc<
-   @begin[doc]
    The last reduction says that any element of <<plane>> is a point of the form <<point{'a;'b;rcrd}>>.
    Therefore we have the following elimination rule:
-   @end[doc]
 >>
 
 interactive planeElim {|elim[] |} 'H :
@@ -188,34 +162,26 @@ interactive spaceElim {|elim[] |} 'H :
    sequent{ <H>; p:space; <J['p]> >- 'C['p] }
 
 doc <:doc<
-   @begin[doc]
    Now we can define length of a point:
-   @end[doc]
 >>
 
 define unfold_length: length{'p} <--> ('p^x *@ 'p^x  +@  'p^y *@  'p^y)
 
 doc <:doc<
-   @begin[doc]
    That is,
-   @end[doc]
 >>
 
 interactive_rw reduce_length {| reduce |} : length{point{'a;'b;'e}} <--> ('a *@ 'a +@ 'b *@ 'b)
 
 doc <:doc<
-   @begin[doc]
    For example,
-   @end[doc]
 >>
 
 interactive length_A {|intro[] |} :
    sequent{ <H> >- length{point{3;4;'e}} = 25 in int }
 
 doc <:doc<
-   @begin[doc]
    Now, using the @tt[reduce_length] and @hrefrule[planeElim] rule, we can prove that
-   @end[doc]
 >>
 
 interactive length_wf {|intro[] |} :
@@ -223,9 +189,7 @@ interactive length_wf {|intro[] |} :
    sequent{ <H> >- length{'p} in int }
 
 doc <:doc<
-   @begin[doc]
    Record can be extended. For example we can define <<cplane>> and <<cspace>> types.
-   @end[doc]
 >>
 
 define unfold_colored_plane:  cplane <--> record["color":t]{atom;plane}
@@ -241,11 +205,9 @@ interactive cspaceElim {|elim[] |} 'H :
    sequent{ <H>; p:cspace; <J['p]> >- 'C['p] }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Dependent Records}
    @modsubsection{Algebraic structures}
 
-   @end[doc]
 >>
 
 define unfold_semigroup1 : semigroup[G:t,mul:t,i:l] <-->
@@ -310,9 +272,7 @@ interactive semigroupAssos4 semigroup[i:l] :
       }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Data structures}
-   @end[doc]
 >>
 
 define unfold_stack :
@@ -338,14 +298,12 @@ interactive stack_as_list_wf {| intro [] |}:
    sequent{ <H> >- list_stack{'A} in Stack[i:l]{'A}}
 
 doc <:doc<
-   @begin[doc]
    @modsection{Mutually recursive functions}
    Using records, one can define a module with mutually recursive functions.
    E.g. let us define the module with two functions:
      @code{foo x = if x>0 then fee (x-1) else 0}
    and
      @code{fee x = if x>0 then foo (x-1) else 1}
-   @end[doc]
 >>
 
 define unfold_a_module : a_module <-->

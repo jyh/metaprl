@@ -1,12 +1,11 @@
 doc <:doc<
    @spelling{groupoid semigroup}
-   @begin[doc]
    @module[Itt_grouplikeobj]
 
    This theory defines group-like objects: groupoid, semigroup,
    and monoid.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -37,7 +36,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_atom
 extends Itt_record
 extends Itt_set
@@ -65,11 +64,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Groupoid}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_groupoid : groupoid[i:l] <-->
    {car: univ[i:l]; "*": ^car -> ^car -> ^car}
@@ -83,19 +80,15 @@ let resource elim +=
    [<<groupoid[i:l]>>, groupoidDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive groupoid_wf {| intro [] |} :
    sequent { <H> >- "type"{groupoid[i:l]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive groupoid_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car} } -->
@@ -111,11 +104,9 @@ interactive groupoid_intro {| intro [AutoMustComplete] |} :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Semigroup}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_isSemigroup : isSemigroup{'g} <-->
    all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car)
@@ -136,10 +127,8 @@ let resource elim +=
    [<<semigroup[i:l]>>, semigroupDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 
 interactive isSemigroup_wf {| intro [] |} :
@@ -151,10 +140,8 @@ interactive semigroup_wf {| intro [] |} :
    sequent { <H> >- "type"{semigroup[i:l]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive isSemigroup_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'g^car} } -->
@@ -175,10 +162,8 @@ interactive semigroup_elim {| elim [] |} 'H :
    sequent { <H>; g: semigroup[i:l]; <J['g]> >- 'C['g] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Hierarchy}
 
-   @end[doc]
 >>
 interactive semigrp_subtype_grpoid :
    sequent { <H> >- semigroup[i:l] subtype groupoid[i:l] }
@@ -188,11 +173,9 @@ interactive semigrp_subtype_grpoid :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Monoid}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_premonoid1 : premonoid[i:l] <-->
    record["1":t]{r. 'r^car; groupoid[i:l]}
@@ -221,10 +204,8 @@ let resource elim +=
    [<<monoid[i:l]>>, monoidDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive premonoid_wf {| intro [] |} :
    sequent { <H> >- "type"{premonoid[i:l]} }
@@ -242,10 +223,8 @@ interactive monoid_wf {| intro [] |} :
    sequent { <H> >- "type"{monoid[i:l]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive premonoid_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car} } -->
@@ -280,10 +259,8 @@ interactive monoid_car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} m
    sequent { <H> >- "type"{'G^car} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Hierarchy}
 
-   @end[doc]
 >>
 interactive monoid_subtype_semigrp :
    sequent { <H> >- monoid[i:l] subtype semigroup[i:l] }
@@ -293,11 +270,9 @@ interactive monoid_subtype_semigrp :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Commutative Operation}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_isCommutative : isCommutative{'g} <-->
    all x: 'g^car. all y: 'g^car. ('x *['g] 'y = 'y *['g] 'x in 'g^car)
@@ -322,10 +297,8 @@ let resource elim +=
    ]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive isCommutative_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A^car} } -->
@@ -339,10 +312,8 @@ interactive cmonoid_wf {| intro [] |} :
    sequent { <H> >- "type"{cmonoid[i:l]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive isCommutative_intro {| intro [] |} :
    [wf] sequent { <H> >- "type"{'g^car} } -->
@@ -372,10 +343,8 @@ interactive cmonoid_elim {| elim [] |} 'H :
    sequent { <H>; g: cmonoid[i:l]; <J['g]> >- 'C['g] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Hierarchy}
 
-   @end[doc]
 >>
 interactive csemigrp_subtype_semigrp :
    sequent { <H> >- csemigroup[i:l] subtype semigroup[i:l] }
@@ -388,11 +357,9 @@ interactive cmonoid_subtype_monoid :
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Substructure}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_subStructure : subStructure{'s; 'g} <-->
    ('s^car subset 'g^car) & ('g^"*" = 's^"*" in 's^car -> 's^car -> 's^car)
@@ -401,10 +368,8 @@ doc docoff
 let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive subStructure_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A^car} } -->
@@ -413,10 +378,8 @@ interactive subStructure_wf {| intro [] |} :
    sequent { <H> >- "type"{subStructure{'A; 'B}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive subStructure_intro {| intro [] |} :
    [wf] sequent { <H> >- 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car } -->
@@ -428,11 +391,9 @@ interactive subStructure_elim {| elim [] |} 'H :
    sequent { <H>; u: subStructure{'s; 'g}; <J['u]> >- 'C['u] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Rules}
 
    Substructure is squash-stable.
-   @end[doc]
 >>
 interactive subStructure_sqStable {| squash |} :
    [wf] sequent { <H> >- squash{subStructure{'s; 'g}} } -->

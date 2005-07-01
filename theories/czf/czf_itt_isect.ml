@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_isect]
 
    The @tt[Czf_itt_isect] module gives defines a binary
@@ -14,8 +13,8 @@ doc <:doc<
    the elements of $s$.
 
    $$@isect{s} @equiv @sep{x; @union{s}; @dall{y; s; @mem{x; y}}}$$
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -47,7 +46,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_union
 doc docoff
 
@@ -65,7 +64,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare "isect"{'s1; 's2}
 declare "isect"{'s1}
 
@@ -74,13 +73,11 @@ declare "isect"{'s1}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The intersections are derived from the separation
    set constructor in the @hrefmodule[Czf_itt_sep] module,
    and the union in the @hrefmodule[Czf_itt_union] module.
-   @end[doc]
 >>
 prim_rw unfold_bisect : "isect"{'s1; 's2} <--> sep{'s1; x. mem{'x; 's2}}
 prim_rw unfold_isect : "isect"{'s} <--> sep{union{'s}; x. dall{'s; y. mem{'x; 'y}}}
@@ -101,12 +98,10 @@ dform isect_df2 : parens :: "prec"[prec_and] :: "isect"{'s} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    Both forms of intersection are well-formed if their arguments are sets.
-   @end[doc]
 >>
 interactive bisect_isset {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -118,12 +113,10 @@ interactive isect_isset {| intro [] |} :
    sequent { <H> >- isset{."isect"{'s1}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The binary intersection $@isect{s_1; s_2}$ requires membership
    in both sets $s_1$ and $s_2$.
-   @end[doc]
 >>
 interactive bisect_member_intro {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'x} } -->
@@ -134,10 +127,8 @@ interactive bisect_member_intro {| intro [] |} :
    sequent { <H> >- mem{'x; ."isect"{'s1; 's2}} }
 
 doc <:doc<
-   @begin[doc]
    A set $x$ is in the general intersection $@isect{s}$ if
    $@mem{x; y}$ for all $@mem{y; s}$.
-   @end[doc]
 >>
 interactive isect_member_intro {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'x} } -->
@@ -147,12 +138,10 @@ interactive isect_member_intro {| intro [] |} :
    sequent { <H> >- mem{'x; ."isect"{'s}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form for membership in the binary intersection
    produces the proofs for membership in both types.
-   @end[doc]
 >>
 interactive bisect_member_elim {| elim [] |} 'H :
    ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- isset{'y} } -->
@@ -163,10 +152,8 @@ interactive bisect_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    The elimination form for the general intersection $@mem{x; @isect{s}}$ performs
    instantiation of the assumption on a particular set $@mem{z; 's}$.
-   @end[doc]
 >>
 interactive isect_member_elim {| elim [] |} 'H 'z :
    ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- isset{'z} } -->
@@ -177,9 +164,7 @@ interactive isect_member_elim {| elim [] |} 'H 'z :
    sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    The intersection types are both functional in their arguments.
-   @end[doc]
 >>
 interactive bisect_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's1['z]} } -->

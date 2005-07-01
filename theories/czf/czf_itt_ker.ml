@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_ker]
 
    The @tt[Czf_itt_ker] module defines the kernel proposition
@@ -7,8 +6,8 @@ doc <:doc<
    $g1$ into $g2$, i.e., $@hom{x; g1; g2; f}$, and $h$ is a
    group formed by the elements of $g1$ that are mapped into
    the identity of $g2$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,7 +39,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_hom
 extends Czf_itt_coset
 extends Czf_itt_normal_subgroup
@@ -58,7 +57,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare ker{'h; 'g1; 'g2; x. 'f['x]}
 doc docoff
 
@@ -67,13 +66,11 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    The @tt[ker] judgment requires that $@hom{x; g1; g2; f[x]}$
    and $h$ be a group which has the same binary operation as
    $g1$ and the elements of whose carrier are all mapped into
    the identity of $g2$.
-   @end[doc]
 >>
 prim_rw unfold_ker : ker{'h; 'g1; 'g2; x. 'f['x]} <-->
    (hom{'g1; 'g2; x. 'f['x]} & group{'h} & equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}})))
@@ -91,14 +88,12 @@ dform ker_df : parens :: except_mode[src] :: ker{'h; 'g1; 'g2; x. 'f} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The kernel proposition $@ker{x; h; g1; g2; f[x]}$ is well-formed if
    $g1$, $g2$, and $h$ are labels, and $f[x]$ is functional in any
    set argument $x$.
-   @end[doc]
 >>
 interactive ker_type {| intro [] |} :
    sequent { <H> >- 'g1 IN label } -->
@@ -108,13 +103,11 @@ interactive ker_type {| intro [] |} :
    sequent { <H> >- "type"{ker{'h; 'g1; 'g2; x. 'f['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The proposition $@ker{x; h; g1; g2; f[x]}$ is true if
    $@hom{x; g1; g2; f}$ is true and $h$ is a group formed
    by the elements of group $g1$ that are mapped into $@id{g2}$.
-   @end[doc]
 >>
 interactive ker_intro {| intro [] |} :
    sequent { <H> >- 'g1 IN label } -->
@@ -151,12 +144,10 @@ interactive ker_subgroup hom{'g1; 'g2; x. 'f['x]} 'h :
    sequent { <H> >- subgroup{'h; 'g1} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
    The kernel of a group homomorphism from $g1$ into $g2$ is a subgroup
    of $g1$.
-   @end[doc]
 >>
 interactive ker_subgroup_elim (*{| elim [] |}*) 'H :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
@@ -188,11 +179,9 @@ interactive ker_rcoset_i {| intro [] |} 'g2 :
    sequent { <H> >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} }
 
 doc <:doc<
-   @begin[doc]
    If the proposition $@ker{x; h; g1; g2; f[x]}$ is true, then
    the set $@sep{x; @car{g1}; @eq{f[x]; f[a]}}$
    is equal to $@lcoset{h; g1; a}$ and $@rcoset{h; g1; a}$.
-   @end[doc]
 >>
 interactive ker_lcoset_e (*{| elim [] |}*) 'H 'g2 'a :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
@@ -215,11 +204,9 @@ interactive ker_rcoset_e (*{| elim [] |}*) 'H 'g2 'a :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 
 doc <:doc<
-   @begin[doc]
    A group homomorphism $f$ from $g1$ into $g2$ is called a
    @emph{monomorphism} if it is @emph{one to one}; this is the
    case if and only if the kernel of $f$ equals $@sing{@id{g1}}$.
-   @end[doc]
 >>
 interactive ker_mono1 (*{| elim [] |}*) 'H :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
@@ -238,10 +225,8 @@ interactive ker_mono2 (*{| elim [] |}*) 'H :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} }
 
 doc <:doc<
-   @begin[doc]
    The kernel of a group homomorphism $f$ from $g1$ into $g2$ is
    a normal subgroup of $g1$.
-   @end[doc]
 >>
 interactive ker_normalSubg (*{| elim [] |}*) 'H :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
@@ -257,7 +242,6 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -271,7 +255,6 @@ doc <:doc<
       @hrefrule[ker_normalSubg] rule.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let kerSubgT = ker_subgroup_elim
 let kerLcosetT t1 t2 i = ker_lcoset_e i t1 t2

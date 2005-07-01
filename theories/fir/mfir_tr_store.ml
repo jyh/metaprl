@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_tr_store]
 
    The @tt[Mfir_tr_store] module defines the typing rules for store values.
@@ -33,13 +32,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_list
@@ -56,12 +52,10 @@ extends Mfir_tr_atom
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Tuple and array values}
 
    Store values of a tuple types are represented as lists of atoms.
-   @end[doc]
 >>
 
 prim ty_store_tuple_normal :
@@ -79,10 +73,8 @@ prim ty_store_tuple_box :
 
 
 doc <:doc<
-   @begin[doc]
 
    Store values of array types are also represented as lists of atoms.
-   @end[doc]
 >>
 
 prim ty_store_array1 :
@@ -95,13 +87,11 @@ prim ty_store_array2 :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functions}
 
    The typing rules for functions are straightforward.  These rules use the
    ``@tt[exp]'' tag since in << polyFun{ x. 'f['x] } >> and
    << lambda{ x. 'f['x] } >>, $f$ may be an expression.
-   @end[doc]
 >>
 
 prim ty_store_lambda :
@@ -119,13 +109,11 @@ prim ty_store_polyFun :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Union values}
 
    A value << union_val[i:n]{ 'tv; 'atom_list } >> belongs to a union type
    if the union type is well-formed, and if the atoms belong to the specific
    case of the union definition given by the union type.
-   @end[doc]
 >>
 
 prim ty_store_union 'H :
@@ -152,11 +140,9 @@ prim ty_store_union 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    The next two rules check that the atoms used to initialize a union value
    have the appropriate types.
-   @end[doc]
 >>
 
 prim ty_store_union_atoms1 :
@@ -171,11 +157,9 @@ prim ty_store_union_atoms2 :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Raw data values}
 
    Raw data is represented abstractly as the value << raw_data >>.
-   @end[doc]
 >>
 
 prim ty_store_raw_data :

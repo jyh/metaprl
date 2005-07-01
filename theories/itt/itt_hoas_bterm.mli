@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_bterm]
    The @tt[Itt_hoas_bterm] module defines the inductive type <<BTerm>>
    and establishes the appropriate induction rules for this type.
-   @end[doc]
 
    ----------------------------------------------------------------
 

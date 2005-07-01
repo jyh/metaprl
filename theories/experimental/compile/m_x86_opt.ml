@@ -1,11 +1,10 @@
 doc <:doc<
-   @begin[doc]
    @module[M_x86_opt]
 
    This module implements some easy assembly optimizations, including
    dead instruction elimination and removal of null reserves.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -30,7 +29,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Base_theory
 extends M_x86_asm
 doc docoff
@@ -44,7 +43,6 @@ open M_util
  *)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    The @tt[before_ra] resource provides a generic method for defining
@@ -59,7 +57,6 @@ doc <:doc<
    are similar.
 
    @docoff
-   @end[doc]
 >>
 let resource (term * conv, conv) before_ra =
    table_resource_info extract_data
@@ -88,7 +85,6 @@ let after_raC =
  *)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    @modsubsection{Dead instruction elimination}
 
@@ -98,7 +94,6 @@ doc <:doc<
    instruction that can raise an exception is eliminated.  These rewrites
    are added to the @tt[before_ra] resource, although they may be applied
    after register allocation as well.
-   @end[doc]
 >>
 prim_rw dead_mov :
    Mov{'src; dst. 'e}
@@ -135,13 +130,11 @@ prim_rw dead_set :
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Null reserve elimination}
 
    Null reserves may be eliminated from the program.  The rewrite below is
    added to the @tt[after_ra] resource since it is valid only after register
    allocation.
-   @end[doc]
 >>
 prim_rw delete_null_reserve :
    Cmp["cmp"]{'a1; 'a2;

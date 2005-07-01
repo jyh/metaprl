@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_int_base]
 
    The integers are formalized as a @emph{primitive}
@@ -18,8 +17,7 @@ doc <:doc<
    converting polynomials to their canonical forms, and @hreftactic[arithT], that
    is capable of proving simple integer inequalities.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -52,9 +50,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_squash
@@ -131,23 +127,19 @@ let arith_unfoldC =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt[int] term is the type of integers with elements
    $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2},
  @ldots$$
-   @end[doc]
 >>
 declare int
 declare number[n:n]
 declare number{'a}
 
 doc <:doc<
-   @begin[doc]
    The basic arithmetic operators are defined with
    the following terms. Basic predicates are boolean.
-   @end[doc]
 >>
 declare "add"{'a; 'b}
 declare minus{'a}
@@ -156,9 +148,7 @@ declare beq_int{'a; 'b}
 declare lt_bool{'a; 'b}
 
 doc <:doc<
-   @begin[doc]
    Subtraction is composition of addition and unary minus
-   @end[doc]
 >>
 define unfold_sub :
    "sub"{'a ; 'b} <--> ('a +@ minus{'b})
@@ -166,10 +156,8 @@ define unfold_sub :
 let fold_sub = makeFoldC << 'a -@ 'b >> unfold_sub
 
 doc <:doc<
-   @begin[doc]
    Derived propositional relation:
 
-   @end[doc]
 >>
 
 define unfold_lt :
@@ -178,10 +166,8 @@ define unfold_lt :
 let fold_lt = makeFoldC << 'a < 'b >> unfold_lt
 
 doc <:doc<
-   @begin[doc]
    The @tt[ind] term is the induction combinator for building
    loops indexed by an integer argument.
-   @end[doc]
 >>
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
@@ -315,14 +301,12 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    popm ezone
 
 doc <:doc<
-   @begin[doc]
    @modsection{Rules and rewrites}
    @modsubsection{Operations and relations on literals}
 
    The binary arithmetic operators on literal integers are defined using the
    the @emph{meta} arithmetic operators that are @MetaPRL
    builtin operations.
-   @end[doc]
 >>
 prim_rw reduce_numeral : number{meta_num[n:n]} <--> number[n:n]
 
@@ -383,9 +367,7 @@ let sqFromRwT t =
    thenT t thenT trivialT
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Integers are canonical}
-   @end[doc]
 >>
 
 prim int_sqequal {| nth_hyp |} :
@@ -399,12 +381,10 @@ interactive_rw int_sqequal_rw ('a ~ 'b) :
 let int_sqequalC = int_sqequal_rw
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Typehood and well-formedness of @tt[int] and @tt[number]}
 
    The $@int$ type inhabits every universe, and it
    is a type.
-   @end[doc]
 >>
 (*
  * H >- Z = Z in Ui ext Ax
@@ -436,10 +416,8 @@ prim numberFormation {| intro [] |} number[n:n] :
 let resource intro += (<<int>>, wrap_intro (numberFormation <<0>>))
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness of operations and relations}
 
-   @end[doc]
 >>
 
 prim add_wf {| intro [complete_unless_member] |} :
@@ -481,10 +459,8 @@ interactive lt_univ {| intro [] |} :
    sequent { <H> >- lt{'a; 'b} in univ[i:l] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Correspondence between <<beq_int{'a;'b}>> and <<'a='b in int>> }
 
-   @end[doc]
 >>
 prim beq_int2prop :
    [main] sequent { <H> >- "assert"{beq_int{'a; 'b}} } -->
@@ -524,11 +500,9 @@ interactive lt_bool_member {| intro [] |} :
   sequent { <H> >- "assert"{lt_bool{'a; 'b}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Decidability}
    The following rules establish decidability of integer relations and
    improve the @hreftactic[decideT] tactic.
-   @end[doc]
 >>
 interactive lt_decidable {| intro [] |} :
    [wf] sequent{ <H> >- 'a in int } -->
@@ -541,11 +515,9 @@ interactive eq_int_decidable {| intro [] |} :
    sequent{ <H> >- decidable{('a = 'b in int)} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The $@int$ type contains the @hrefterm[number] terms.
-   @end[doc]
 >>
 (*
  * H >- i = i in int
@@ -555,12 +527,10 @@ prim numberEquality {| intro [] |} :
    sequent { <H> >- number[n:n] in int } = it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Order relation properties}
 
    <<lt_bool{'a;'b}>> defines irreflexive, asymmetric, transitive and
    discrete order on @tt[int]
-   @end[doc]
 >>
 
 prim lt_Reflex :
@@ -640,6 +610,7 @@ doc <:doc<
       reasoning into three cases - when <<'a>> is less then, equal to or
       greater then <<'b>>.}}
    @end[description]
+   @docoff
 >>
 
 let splitIntT = splitInt
@@ -686,14 +657,12 @@ interactive_rw lt_Discret_rw :
 let lt_DiscretC = lt_Discret_rw
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    Induction on an integer assumption produces three cases:
    one for the base case $0$, one for induction on negative arguments,
    and another for induction on positive arguments.  The proof extract term
    uses the @tt[ind] term, which performs a case analysis on its argument.
-   @end[doc]
 >>
 (*
  * Induction:
@@ -717,7 +686,6 @@ prim intElimination {| elim [ThinOption thinT] |} 'H :
       ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection {Induction and recursion}
    Reduction of the induction combinator @tt[ind] has three cases.
    If the argument $x$ is $0$, the combinator reduces to the @i{base}
@@ -726,7 +694,6 @@ doc <:doc<
    The first argument in the @i{up} and @i{down} cases represents
    the induction value, and the second argument represents the
    ``next'' computational step.
-   @end[doc]
 >>
 (*
  * Reduction on induction combinator:
@@ -774,12 +741,10 @@ let reduce_ind_numberC =
  thenC addrC [Subterm 1] reduce_eq_int thenC reduceTopC
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Addition properties}
 
    @tt[add] is commutative and associative.
 
-   @end[doc]
 >>
 prim add_Commut :
    [wf] sequent { <H> >- 'a in int } -->
@@ -816,11 +781,9 @@ interactive_rw add_Assoc2_rw {| reduce |} :
 let add_Assoc2C = add_Assoc2_rw
 
 doc <:doc<
-   @begin[doc]
 
    0 is neutral element for @tt[add] in @tt[int]
 
-   @end[doc]
 >>
 prim add_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -855,11 +818,9 @@ interactive_rw add_Id4_rw ('a :> Term) :
 let add_Id4C = termC add_Id4_rw
 
 doc <:doc<
-   @begin[doc]
 
    Monotonicity:
 
-   @end[doc]
 >>
 prim lt_addMono :
    [wf] sequent { <H> >- 'a in int } -->
@@ -912,11 +873,9 @@ let lt_addMonoC = lt_addMono_rw
 let lt_add_ltT = lt_add_lt
 
 doc <:doc<
-   @begin[doc]
 
    <<- 'a>> is an inverse element for <<'a>> in <<int>>
 
-   @end[doc]
 >>
 prim minus_add_inverse {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -975,12 +934,10 @@ interactive_rw minus_plus_rw {| reduce |} :
    (('a -@ 'b) +@ 'b) <--> 'a
 
 (*
- * @begin[doc]
  * @modsubsection{Combinator equality}
  *
  * Two @tt[ind] term compute values of type $T$ if each of the three
  * cases (zero, positive, and negative) produces values of type $T$.
- * @end[doc]
  *)
 (*
  * Equality on induction combinator:

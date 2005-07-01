@@ -1,13 +1,12 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_prod]
 
    The product type $@prod{A; B}$ is @emph{derived} from the
    dependent production module @hrefmodule[Itt_dprod].  The
    non-dependent product $@prod{A; B}$ is equivalent to
    $@prod{x; A; B}$, where $x$ is not free in $B$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,9 +39,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_dprod
@@ -68,23 +65,19 @@ let _ =
 (* debug_string DebugLoad "Loading itt_prod..." *)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    The @tt{unfold_prod} rewrite unfolds the non-dependent
    product to a dependent-product with a @emph{new} variable
    $x$.
-   @end[doc]
 >>
 prim_rw unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The product space $@prod{A; B}$ is well-formed if
    both $A$ and $B$ are types.
-   @end[doc]
 >>
 interactive independentProductEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -111,24 +104,20 @@ interactive independentProductFormation :
    sequent { <H> >- univ[i:l] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form splits the hypothesis $z@colon @prod{A; B}$ into
    its parts $u@colon A$ and $v@colon B$.
-   @end[doc]
 >>
 interactive independentProductElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
    sequent { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The members of the non-dependent product $@prod{A; B}$
    are the pairs $@pair{a; b}$, where $a @in A$ and $b @in B$.
-   @end[doc]
 >>
 interactive independentPairEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
@@ -136,14 +125,12 @@ interactive independentPairEquality {| intro [] |} :
    sequent { <H> >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The propositional interpretation of the
    non-dependent product space $@prod{A; B}$ is the
    conjunction $@and{A; B}$.  The proposition is
    true if both $A$ and $B$ are true.
-   @end[doc]
 >>
 interactive independentPairFormation {| intro [] |} :
    [wf] ('a : sequent { <H> >- 'A }) -->
@@ -151,11 +138,9 @@ interactive independentPairFormation {| intro [] |} :
    sequent { <H> >- 'A * 'B }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The product space is covariant in both parts.
-   @end[doc]
 >>
 interactive independentProductSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->

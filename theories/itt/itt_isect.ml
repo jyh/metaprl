@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_isect]
 
    The @tt[Itt_isect] module defines the @emph{intersection}
@@ -31,8 +30,8 @@ doc <:doc<
    label $l$.  The intersection of two record types $@record{l_1@colon T_1}
    @bigcap @record{l_2@colon T_2}$ is isomorphic to the
    record space $@record{{l_1@colon T_1; l_2@colon T_2}}$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -65,9 +64,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_set
@@ -97,13 +94,11 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt[isect] term denotes the intersection type.
    The @tt[top] type defines the type of all terms
    <<Isect x:void.void>>.
-   @end[doc]
 >>
 declare "isect"{'A; x. 'B['x]}
 
@@ -139,14 +134,12 @@ prim intersectionFormation 'A :
    Isect x: 'A. 'B['x]
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The intersection $@isect{x; A; B[x]}$ is well-formed if
    $A$ is a type, and $B[x]$ is a family of types indexed by
    $x @in A$.
-   @end[doc]
 >>
 prim intersectionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -161,10 +154,8 @@ prim intersectionType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    The well-formedness of the $@top$ type is derived.
    The $@top$ type is a member of every type universe.
-   @end[doc]
 >>
 interactive topUniv {| intro [] |} :
    sequent { <H> >- top in univ[i:l] }
@@ -173,7 +164,6 @@ interactive topType {| intro [] |} :
    sequent { <H> >- "type"{top} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
    The elements in the intersection $@isect{x; A; B[x]}$ are the
    terms $b$ that inhabit $B[z]$ for @emph{every} $a @in A$.
@@ -184,7 +174,6 @@ doc <:doc<
 
    The @hrefterm[top] type contains every program.  The equality here
    is trivial; all terms are equal in $@top$.
-   @end[doc]
 >>
 prim intersectionMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -196,14 +185,12 @@ interactive topMemberEquality {| intro [] |} :
    sequent { <H> >- 'b1 = 'b2 in top }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    In general the only one way to introduce intersection is
    to show @emph{explicitly} its witness.
    The following introduction rule is @emph{derived} from the
    @hrefrule[intersectionMemberEquality].
-   @end[doc]
 >>
 
 interactive intersectionMemberFormation {| intro [] |} 'b :
@@ -212,12 +199,10 @@ interactive intersectionMemberFormation {| intro [] |} 'b :
    sequent { <H> >-  Isect x: 'A. 'B['x] }
 
 doc <:doc<
-   @begin[doc]
    In one special case when $B$ does not depend on $x$  we can derive
    simpler rule:
    $@isect{x; A; B}$ is inhabited if we can prove $B$ with the
    @emph{squashed} hypothesis $A$ (see @hrefterm[squash]).
-   @end[doc]
 >>
 
 interactive intersectionMemberFormation2 {| intro [] |} :
@@ -226,24 +211,20 @@ interactive intersectionMemberFormation2 {| intro [] |} :
     sequent { <H> >- Isect x: 'A. 'B }
 
 doc <:doc<
-   @begin[doc]
 
    Of course $@top$ is inhabited.
-   @end[doc]
 >>
 
 interactive topMemberFormation {| intro [] |} :
    sequent { <H> >-  top }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form performs instantiation of the
    intersection space.  If $a @in A$, the elimination form
    instantiates the intersection assumption $x@colon @isect{y; A; B[y]}$
    to get a proof that $x @in B[a]$.
-   @end[doc]
 >>
 prim intersectionElimination {| elim [] |} 'H 'a :
    [wf] sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'a in 'A } -->
@@ -283,9 +264,7 @@ let intersectionEliminationT = argfunT (fun n p ->
      intersectionEliminationT n thenT thinIfThinningT [-1;n])
 
 doc <:doc<
-   @begin[doc]
    We can derive a simpler elimination rule for the case when $B$ does not contain $x$.
-   @end[doc]
 >>
 
 interactive intersectionElimination2 (*{| elim [] |}*) 'H :
@@ -303,11 +282,9 @@ let intersectionEliminationT = argfunT (fun n p ->
 let resource elim += (<<Isect y: 'A. 'B['y]>>, intersectionEliminationT)
 
 doc <:doc<
-   @begin[doc]
    As a corollary of elimination rule we have that if
    two terms are equal in the intersection, they are also
    equal in each of the case of the intersection.
-   @end[doc]
 >>
 
 interactive intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
@@ -315,7 +292,7 @@ interactive intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
    [wf] sequent { <H> >- 'a in 'A } -->
    sequent { <H> >- 'b1 = 'b2 in 'B['a] }
 
-doc <:doc< @doc{The elimination form of @hrefrule[intersectionMemberCaseEquality].} >>
+doc <:doc< The elimination form of @hrefrule[intersectionMemberCaseEquality]. >>
 
 interactive intersectionEqualityElim {| elim [] |} 'H 'a :
    [wf] sequent{ <H>; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; <J['u]> >- 'a in 'A } -->
@@ -332,14 +309,12 @@ interactive intersectionEliminationFromCaseEquality 'H 'a :
    sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The intersection type conforms to the subtyping properties
    of the dependent-function space.  The type is @emph{contravariant}
    in the quantified type $A$, and pointwise-covariant in the
    domain type $B[a]$ for each $a @in A$.
-   @end[doc]
 >>
 interactive intersectionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- \subtype{'A2; 'A1} } -->
@@ -348,13 +323,11 @@ interactive intersectionSubtype {| intro [] |} :
    sequent { <H> >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }
 
 doc <:doc<
-   @begin[doc]
    The alternate subtyping rules are for cases where one of
    the types is not an intersection.  The intersection is a subtype
    of another type $T$ if @emph{one} of the cases $B[a] @subseteq T$.
    A type $T$ is a subtype of the intersection if it is a subtype
    of @emph{every} case $B[a]$ for $a @in A$.
-   @end[doc]
 >>
 interactive intersectionSubtype2 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
@@ -369,10 +342,8 @@ interactive intersectionSubtype3 :
    sequent { <H> >- \subtype{'C; ."isect"{'A; x. 'B['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @noindent
    @emph{Every} type is a subtype of $@top$.
-   @end[doc]
 >>
 interactive topSubtype {| intro [] |} :
    sequent { <H> >- "type"{'T} } -->

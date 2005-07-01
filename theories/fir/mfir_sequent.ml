@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_sequent]
 
    The @tt[Mfir_sequent] module declares terms used in FIR theory sequents.
@@ -37,13 +36,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Base_theory
@@ -54,20 +50,17 @@ extends Base_theory
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
    @modsubsection{Sequent tags}
 
    The term @tt[sequent_arg] is used to tag FIR theory sequents.  The term @tt[default_extract]
    is a trivial term that has no meaning.
-   @end[doc]
 >>
 
 declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 declare default_extract
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Kinds}
 
    Kinds are used to classify FIR types and type definitions.  Types may be
@@ -75,28 +68,23 @@ doc <:doc<
    large; all other types are small.  The distinction between small and large
    types is necessary to assist the garbage collector in the Mojave compiler.
    Values of a small type can be tagged to distinguish them from pointers.
-   @end[doc]
 >>
 
 declare small_type
 declare large_type
 
 doc <:doc<
-   @begin[doc]
 
    Union definitions (@hrefterm[tyDefUnion]) belong to the @tt[union_type]
    kind, where the parameter $i$ indicates the number of cases in the union.
-   @end[doc]
 >>
 
 declare union_type[i:n]
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -106,10 +94,8 @@ declare frame_type
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -118,24 +104,20 @@ declare dtuple_type
 
 
 doc <:doc<
-   @begin[doc]
 
    All types, including parametrized type definitions, belong to the
    @tt[polyKind] kind.  The subterm @tt[i] is the number of parameters in the
    definition, and the subterm @tt[k] is the kind of the type once all the
    parameters are instantiated.  We allow the case $i = 0$.
-   @end[doc]
 >>
 
 declare polyKind{ 'i; 'k }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Contexts}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -148,7 +130,6 @@ declare variable
 
 
 doc <:doc<
-   @begin[doc]
 
    The terms @tt[ty_def], @tt[var_def], and @tt[global_def] are used for
    definitions in the context.  The first subterm is the variable being
@@ -158,7 +139,6 @@ doc <:doc<
    subterm is @tt[no_def].  A definition is well-formed if the corresponding
    declaration is well-formed, and if the value/type in the definition has the
    specified kind or type.
-   @end[doc]
 >>
 
 declare ty_def{ 'var; 'k; 'def }
@@ -168,7 +148,6 @@ declare no_def
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Store values}
 
    The term @tt[polyFun] is a polymorphic function that takes one type
@@ -177,7 +156,6 @@ doc <:doc<
    (polymorphic) union type @tt[ty_var], initialized with the atoms in the
    list @tt[atom_list].  The term @tt[raw_data] is an opaque representation of
    raw data (see @hrefterm[tyRawData]).
-   @end[doc]
 >>
 
 declare polyFun{ t. 'f['t] }
@@ -186,25 +164,21 @@ declare union_val[i:n]{ 'ty_var; 'atom_list }
 declare raw_data
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Judgments}
 
    The judgment @tt[wf_kind] says that the kind @tt[k] is well-formed.
-   @end[doc]
 >>
 
 declare wf_kind{ 'k }
 
 
 doc <:doc<
-   @begin[doc]
 
    A proof of @tt[type_eq] says that two types (or type definitions)
    @tt[ty1] and @tt[ty2] are equal in the kind @tt[k], and that @tt[k]
    is well-formed.  A proof of @tt[type_eq_list] says that two lists of types
    (or type definitions) are pointwise equal in the specified kind, and that
    the kind is well-formed.
-   @end[doc]
 >>
 
 declare type_eq{ 'ty1; 'ty2; 'k }
@@ -212,13 +186,11 @@ declare type_eq_list{ 'tyl1; 'tyl2; 'k }
 
 
 doc <:doc<
-   @begin[doc]
 
    A proof of @tt[has_type] says that a term @tt[t] has type @tt[ty],
    and that @tt[ty] is a well-formed type.  The string parameter is an
    annotation that is intended to describe some aspect of @tt[t] or
    the typing relation.
-   @end[doc]
 >>
 
 declare has_type[str:s]{ 't; 'ty }

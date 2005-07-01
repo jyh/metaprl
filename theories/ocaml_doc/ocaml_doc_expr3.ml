@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    btree iff log Okasaki ll rebalancing
@@ -32,13 +31,11 @@ doc <:doc<
    @email{jyh@cs.caltech.edu}
    @end[license]
 
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 Disjoint unions, also called tagged unions or variant records, are an
 important part of the OCaml type system.  A disjoint union, or union
@@ -607,7 +604,6 @@ The @tt{None} case is intended to represent a NIL value, while the
 @tt{Some} case handles non-NIL values.
 
 @docoff
-@end[doc]
 >>
 
 (*

@@ -1,13 +1,11 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_record]
 
    This is a theory of record type.
    Record type is defined as dependent intersection.
-   @end[doc]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 
 extends Itt_record_label
 extends Itt_record0
@@ -34,8 +32,6 @@ open Itt_record_label
 let _ =
    show_loading "Loading Itt_record%t"
 
-doc <:doc< >>
-
 (**********************************************)
 (*                                            *)
 (*  Records with token labels                 *)
@@ -46,7 +42,7 @@ doc <:doc< >>
 (*  Definitions   *)
 (******************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 
 doc docoff
 
@@ -59,9 +55,7 @@ define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
 doc <:doc<
-   @begin[doc]
    Records are defined as intersections. Dependent records are defined as dependent intersections:
-   @end[doc]
 >>
 
 define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> self: 'R  isect  record[n:t]{'A['self]}
@@ -97,16 +91,12 @@ let mk_field_term t f =
 (******************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    The following rule are derivable using the above definitions.
-   @end[doc]
 >>
 
 (*** Typing ***)
@@ -136,7 +126,7 @@ interactive recordTypeI {| intro [] |} :
 
 (*** Reductions ***)
 
-doc <:doc< @doc{@modsubsection{Reductions}} >>
+doc <:doc< @modsubsection{Reductions} >>
 
 interactive_rw record_beta1 {| reduce |} :
    field[n:t]{rcrd[n:t]{'a; 'r}} <--> 'a
@@ -181,7 +171,7 @@ interactive_rw record_same_reduce {| reduce |}:  (* This should not be in eval, 
 
 
 (*** Introductions ***)
-doc <:doc< @doc{@modsubsection{Introduction}} >>
+doc <:doc< @modsubsection{Introduction} >>
 
 interactive recordIntroE1 {| intro[] |} :
    sequent{ <H> >- 'r in recordTop } -->
@@ -329,7 +319,7 @@ let resource intro += [
 *)
 
 (*** Eliminations ***)
-doc <:doc< @doc{@modsubsection{Elimination}} >>
+doc <:doc< @modsubsection{Elimination} >>
 
 (* Single Records *)
 
@@ -423,7 +413,7 @@ let resource elim += [
 ]
 
 (*** Orthogonality ***)
-doc <:doc< @doc{@modsubsection{Orthogonality}} >>
+doc <:doc< @modsubsection{Orthogonality} >>
 
 interactive functionOrtDinter {| intro[] |} :
    [wf] sequent{ <H> >- "type"{bisect{'A;a.'B['a]}} } -->

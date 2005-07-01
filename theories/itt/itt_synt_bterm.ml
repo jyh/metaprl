@@ -1,11 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_synt_bterm]
    The @tt[Itt_synt_bterm] module defines a type of bterms << BTerm >>
    for our simple theory of syntax.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -39,9 +37,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_theory
 extends Itt_nat
@@ -61,7 +57,7 @@ open Itt_squash
  * The BTerm type                                                       *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsection{BTerm}
 
    The << BTerm >> type is defined recursively. A syntactic term is either
@@ -72,7 +68,7 @@ doc <:doc< @begin[doc]
 
    The @tt[bterm_ind] defines the induction combinator for the << BTerm >> type.
 
-@end[doc] >>
+>>
 
 
 declare BTerm
@@ -112,13 +108,11 @@ dform bterm_ind_df : bterm_ind{'bt; v.'var_case; op,subterms,ind. 'op_case } =
    `"| " pushm[3] `"make_bterm(" slot{'op} `";" slot{'subterms} `")." slot{'ind} `" ->" hspace slot{'op_case} popm popm ezone
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Depth}
    When a bterm << 'bt >> is a variable, its binding depth << bdepth{'bt} >>
    is defined as the depth of << 'bt >> as defined in @hrefmodule[Itt_synt_var].
    When << 'bt >> is a composed term of the form << make_bterm{'op; 'mbtl} >>,
    its binding depth is defined as the binding depth of the operator << 'op >>.
-   @end[doc]
 >>
 
 define unfold_bdepth: bdepth{'bt} <--> bterm_ind{'bt; v. depth{'v}; op,btl,ind. op_bdepth{'op}}
@@ -131,14 +125,13 @@ interactive_rw bdepth_var_reduce: ('v in Var) --> bdepth{'v} <--> depth{'v}
 doc docoff
 dform bdepth_df: bdepth{'bt} = `"bdepth(" slot{'bt} `")"
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{Compatible shapes}
 
    Suppose the shape of an operator << 'op >> is $[b_1;@ldots;b_n]$ ($n @ge 0$)
    and its binding depth is << 'd >>. We say << 'mbtl >> and << 'op >> have
    compatible shapes if << 'mbtl >> is a list of length << 'n >> where the
    binding depth of the $i$-@misspelled{th} element is $b_i+d$ (for each $i @in 1..n$).
-   @end[doc]
 >>
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
       length{shape{'op}} = length{'btl} in int &
@@ -147,7 +140,7 @@ doc docoff
 
 dform compatible_shapes_df: compatible_shapes{'op;'btl} = `"compatible_shapes(" slot{'op} `";" slot{'btl} `")"
 
-doc "doc"{rules}
+doc rules
 
 prim btermUniv {| intro [] |} :
    sequent { <H> >- BTerm in univ[i:l] } =
@@ -236,14 +229,14 @@ interactive subterms_have_greater_bdepth {| intro [AutoMustComplete] |} :
    sequent { <H> >- compatible_shapes{'op;'btl} } -->
    sequent { <H> >- all_list{'btl; bt. bdepth{'bt} >= op_bdepth{'op}} }
 
-doc <:doc< @begin[doc]
+doc <:doc<
    <<BTerm{'n}>> is a set of bterms with depth <<'n>>; <<BTerm_plus{'n}>> is a set of bterms with depth greater than or equal to <<'n>>.
-@end[doc] >>
+>>
 
 define iform bterm: BTerm{'n} <--> { bt:BTerm | bdepth{'bt} = 'n in nat }
 define iform bterm_plus: BTerm_plus{'n} <--> { bt:BTerm | bdepth{'bt} >= 'n }
 
-doc <:doc< @begin[doc]
+doc <:doc<
 
    << make_bterm{'op;'bdepth;'subterms} >> is a version of a bterm that
    takes the depth as an argument.
@@ -253,7 +246,7 @@ doc <:doc< @begin[doc]
    @tt[bterm_ind] can also be defined using @tt[dest_bterm] and the
    @tt[fix] operator.
 
-@end[doc] >>
+>>
 
 define iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
 
@@ -280,10 +273,10 @@ dform dest_bterm_df : dest_bterm{'bt; v.'var_case; op,subterms. 'op_case } =
    pushm[3] slot{'v} `" ->" hspace slot{'var_case} popm popm hspace
    `"| " pushm[3] `"make_bterm(" slot{'op} `";" slot{'subterms} `") ->" hspace slot{'op_case} popm popm ezone
 *)
-doc <:doc< @begin[doc]
+doc <:doc<
    << Vars_of{'bt} >> defines the set of variables whose depth is less than or
    equal to the depth of << 'bt >>.
-@end[doc] >>
+>>
 
 define unfold_vars_of: Vars_of{'bt} <--> { v: Var | bdepth{'v} <= bdepth{'bt} }
 
@@ -309,10 +302,10 @@ dform vars_of_df: Vars_of{'bt} = `"Vars_of(" slot{'bt} `")"
 (************************************************************************
  * Var_bterm                                                            *
  ************************************************************************)
-doc <:doc< @begin[doc]
+doc <:doc<
    << var_bterm{'bt} >> returns <<"true">> if << 'bt >> is in << Var >>,
    <<"false">> otherwise.
-@end[doc] >>
+>>
 
 define unfold_is_var_bterm: is_var_bterm{'bt} <--> dest_bterm{'bt; v.btrue; op,btl. bfalse}
 define unfold_var_bterm: var_bterm{'bt} <--> "assert"{is_var_bterm{'bt}}
@@ -325,8 +318,8 @@ dform var_bterm_df : except_mode[src] :: var_bterm{'bt} =
 
 let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc <:doc<
+>>
 interactive_rw is_var_reduce1 {| reduce |}: is_var_bterm{var{'l;'r}} <--> btrue
 interactive_rw is_var_reduce2 {| reduce |}: is_var_bterm{make_bterm{'op;'btl}} <--> bfalse
 interactive_rw var_reduce1 {| reduce |}: var_bterm{var{'l;'r}} <--> "assert"{btrue}
@@ -384,10 +377,10 @@ interactive var_bterm {| intro [] |} :
  * OpBTerm                                                              *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    << OpBTerm >> is the set of non-variable bterms. So, a bterm is either in
    << Var >> or in << OpBTerm >>, but not in both.
-@end[doc] >>
+>>
 define unfold_opbterm:
    OpBTerm <--> { bt: BTerm |  not{ var_bterm{'bt} } }
 doc docoff
@@ -395,8 +388,8 @@ doc docoff
 dform opbterm_df : except_mode[src] :: OpBTerm =
    `"OpBTerm"
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc <:doc<
+>>
 interactive opbterm_univ {| intro [] |} :
    sequent { <H> >- OpBTerm in univ[i:l] }
 
@@ -435,17 +428,17 @@ interactive var_or_opbterm_hyp 'H bind{x. 'A['x]} 'b :
  * Op_of                                                                *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    << op_of{'t} >> returns the operator of a bterm << 't >>.
-@end[doc] >>
+>>
 define unfold_op_of:
    op_of{'t} <--> dest_bterm{'t; v.'v; op,subterms.'op}
 doc docoff
 
 dform op_of_df: op_of{'bt} = `"op_of(" slot{'bt} `")"
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc <:doc<
+>>
 interactive_rw op_of_reduce {| reduce |}: op_of{make_bterm{'op;'btl}} <--> 'op
 
 interactive op_of_wf {| intro [] |} :
@@ -470,9 +463,9 @@ interactive op_of_eq 'bl1 'bl2 :
  * Subterms                                                             *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    << subterms{'t} >> returns the subterms of a bterm << 't >>.
-@end[doc] >>
+>>
 define unfold_subterms:
    subterms{'t} <--> dest_bterm{'t; v.nil; op,subterms.'subterms}
 doc docoff
@@ -480,8 +473,8 @@ doc docoff
 dform subterms_df : except_mode[src] :: subterms{'bt} =
    `"subterms(" slot{'bt} `")"
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc <:doc<
+>>
 interactive_rw subterms_reduce1 {| reduce |}:  subterms{var{'l;'r}} <--> nil
 interactive_rw subterms_reduce2 {| reduce |}:  subterms{make_bterm{'op;'btl}} <--> 'btl
 
@@ -493,9 +486,9 @@ interactive_rw subterms_var :
    ('bt in Var) -->
    subterms{'bt} <--> nil
 
-doc <:doc< @begin[doc]
+doc <:doc<
    We can prove if two bterms are equal, then they are squiggle equal.
-@end[doc] >>
+>>
 interactive btermSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- 'b1 ~ 'b2 }
@@ -519,12 +512,12 @@ let resource typeinf += (<< subterms{'bt} >>, infer_const << list{BTerm} >>)
  * Same_op_of                                                              *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    << same_op_of{'b1; 'b2} >> decides whether two bterms have the same operator.
    If both are variables, it returns << "true" >>; if both are composed bterms,
    its result depends on whether their operators are the same; otherwise, it
    returns << "false">>.
-@end[doc] >>
+>>
 define unfold_is_same_op_of: is_same_op_of{'b1; 'b2} <-->
    dest_bterm{'b1;
                v1. dest_bterm{'b2; v2. is_eq{'v1;'v2}; op2,btl2.bfalse};
@@ -539,8 +532,7 @@ dform is_same_op_of_df : except_mode[src] :: is_same_op_of{'b1; 'b2} =
 dform same_op_of_df : except_mode[src] :: same_op_of{'b1; 'b2} =
    `"same_op_of(" slot{'b1} `"; " slot{'b2} `")"
 
-doc <:doc< @begin[doc]
-@end[doc] >>
+doc docon
 interactive is_same_op_of_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->

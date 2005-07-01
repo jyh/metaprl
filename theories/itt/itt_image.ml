@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_image]
 
    The @tt{Itt_image} adds a new type constructor <<Img{'A; x.'f['x]}>> with the
@@ -40,13 +39,10 @@ doc <:doc<
    @email{nogin@cs.caltech.edu}
 
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Base_theory
 extends Itt_equal
@@ -58,15 +54,13 @@ open Basic_tactics
 open Itt_equal
 open Itt_struct
 
-doc <:doc< @doc{@terms} >>
+doc terms
 
 declare Img{'A; x.'f['x]}
 
 doc <:doc<
-   @begin[doc]
    @rules
    <<Img{'A; x.'f['x]}>> is a type when $A$ is a type and $f$ is closed,
-   @end[doc]
 >>
 
 prim img_type {| intro [] |}:
@@ -82,9 +76,7 @@ interactive img_univ_eq {| intro [] |}:
    sequent { <H> >- Img{'A; x.'f<||>['x]} = Img{'B; x.'f<||>['x]} in univ[i:l] }
 
 doc <:doc<
-   @begin[doc]
    The elements of <<Img{'A; x.'f['x]}>> are $f[a]$ for <<'a in 'A>>.
-   @end[doc]
 >>
 prim img_mem 'a :
    sequent { <H> >- 'a in 'A } -->
@@ -110,7 +102,7 @@ let img_introT = funT (fun p ->
 
 let resource intro += (<< 'a = 'b in Img{'A; x.'f<||>['x]} >>, wrap_intro img_introT)
 
-doc <:doc< @doc{ } >>
+doc <:doc<   >>
 
 prim img_elim {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- squash{'C['f['a]]} } -->
@@ -121,9 +113,7 @@ interactive img_elim2 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 't1['y] = 't2['y] in 'T['y] }
 
 doc <:doc<
-   @begin[doc]
    When $f$ is squiggle-reversible, we can have elimination for non-squash-stable goals.
-   @end[doc]
 >>
 extends Itt_squiggle
 extends Itt_fun

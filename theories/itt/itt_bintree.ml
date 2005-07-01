@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_bintree]
 
    This is a theory of binary trees.
-   @end[doc]
 >>
 
 extends Itt_record
@@ -29,10 +27,8 @@ let _ =
    show_loading "Loading Itt_bintree%t"
 
 doc <:doc<
-   @begin[doc]
    @modsection{Simple Trees}
    @modsection{Basic Definitions}
-   @end[doc]
 >>
 
 define nodetype: Node{'T} <--> {left:'T; right:'T}
@@ -82,9 +78,7 @@ dform indtree_df : except_mode[src] :: tree_ind{'tree; 'empty; L,R,node. 'f} =
    pushm[3] `" | " 'L `"." 'R `"." tree{'node} `" -> " slot{'f} popm popm ezone
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Basic Rules}
-   @end[doc]
 >>
 
 interactive node_wf {| intro[] |}:
@@ -99,9 +93,7 @@ interactive bintree_wf {| intro[] |} :
  sequent{ <H> >-"type"{ BinTree}}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functions on trees}
-   @end[doc]
 >>
 
 define match_tree: match_tree{'t; 'empty_case; self.'nonempty_case['self]} <--> tree_ind{'t; 'empty_case; L,R,self.'nonempty_case['self]}
@@ -152,9 +144,7 @@ interactive height_weight  {| intro[] |} : (* make two theorems *)
 (* ==================== *)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Example}
-   @end[doc]
 >>
 
 (*     17     *)
@@ -174,10 +164,8 @@ dform simpletree_df : except_mode[src] :: simpletree = `"simpletree"
 
 (* ==================== *)
 doc <:doc<
-   @begin[doc]
    @modsection{Parametrized trees}
    @modsubsection{Definitions}
-   @end[doc]
 >>
 
 define node: node{'l;'r;'nd} <--> ( ('nd^left:='l)^right:='r )
@@ -213,7 +201,7 @@ let resource intro +=
 let resource elim +=
    << Node{'T;l,r.'R['l;'r]} >>, (fun n -> rw nodetype2 n thenT dT n)
 
-doc <:doc< @doc{@rules} >>
+doc rules
 
 interactive tree_monotone2 {| intro[] |} :
  sequent{ <H> >-"type"{ BinTree{l,r.'S['l;'r]}} }  -->
@@ -258,9 +246,7 @@ interactive node_wf2  {| intro[] |} :
  sequent{ <H> >-node{'l;'r;'nd} in Node{'T;ll,rr.'R['ll;'rr]} }
 
 doc <:doc<
-   @begin[doc]
    Induction rule
-   @end[doc]
 >>
 
 interactive treeInduction {| elim [ThinOption thinT] |} 'H :

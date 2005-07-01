@@ -1,12 +1,11 @@
 doc <:doc<
-   @begin[doc]
    @module[M_prog]
 
    This module defines rewrites to lift closed function definitions to
    the top level of the program.  Ideally, these transformations would
    be applied after closure conversion.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -32,9 +31,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends M_ir
 doc docoff
@@ -48,7 +45,6 @@ open M_util
  *)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    The @tt[prog] resource provides a generic method for defining a method
@@ -58,7 +54,6 @@ doc <:doc<
    The implementation of the @tt[prog_resource] and the @tt[progC]
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
-   @end[doc]
    @docoff
 >>
 let resource (term * conv, conv) prog =
@@ -77,12 +72,10 @@ let progC =
  *)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The rewrites for this transformation are straightforward.  They swap a
    closed function definition with any expression that comes before it.
-   @end[doc]
 >>
 prim_rw letrec_atom_fun :
    AtomFun{x. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'x]}} <-->

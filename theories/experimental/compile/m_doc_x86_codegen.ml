@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    env gc op tmp args vargs NZ
    @end[spelling]
@@ -30,7 +29,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_x86_asm
 
@@ -79,7 +77,6 @@ dform math_ReverseArgs_df1 : mode[tex] :: math_ReverseArgs{'e} =
 
 doc <:doc<
 
-@begin[doc]
 
 The production of assembly code is primarily a straightforward translation of operations in the
 intermediate code to operations in the assembly.  There are two main kinds of translations:
@@ -272,7 +269,6 @@ $$
 @end[figure]
 
 @docoff
-@end[doc]
 
 >>
 

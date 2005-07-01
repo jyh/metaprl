@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_exp]
 
    The @tt[Mfir_exp] module declares terms to represent FIR expressions.
@@ -33,13 +32,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_ty
@@ -49,7 +45,6 @@ extends Mfir_ty
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
    @modsubsection{Unary operators}
 
@@ -57,7 +52,6 @@ doc <:doc<
    operators that safely transform a value between two types.  We omit
    an explicit listing these terms.
    @docoff
-   @end[doc]
 >>
 
 declare notEnumOp[i:n]
@@ -110,13 +104,11 @@ declare rawDataOfFrameOp{ 'ty_var; 'tyl }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Binary operators}
 
    The FIR binary operators include various arithmetic operators, and
    pointer equality operators.  We omit an explicit listing of these terms.
    @docoff
-   @end[doc]
 >>
 
 declare andEnumOp[i:n]
@@ -194,7 +186,6 @@ declare eqEqOp{ 'ty }
 declare neqEqOp{ 'ty }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Atoms}
 
    Atoms represent values, including numbers, variables, and basic
@@ -202,14 +193,12 @@ doc <:doc<
    they are functional; the order of atom evaluation does not matter.
 
    The term @tt[atomNil] is the nil value for the given type.
-   @end[doc]
 >>
 
 declare atomNil{ 'ty }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomInt] corresponds to integers of type @hrefterm[tyInt]. The
    term @tt[atomEnum] corresponds to constants of type @hrefterm[tyEnum].  The
@@ -219,7 +208,6 @@ doc <:doc<
    is encoded in the string parameter.  The parameters of these terms specify
    the relevant parameters of their respective types, and their subterms
    specify their values.
-   @end[doc]
 >>
 
 declare atomInt{ 'num }
@@ -229,104 +217,86 @@ declare atomFloat[precision:n, value:s]
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomVar] is used to represent variables in the FIR.
-   @end[doc]
 >>
 
 declare atomVar{ 'var }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomLabel] is an offset of @tt[num] into the subfield
    @tt[subfield] of field @tt[field] of frame @tt[frame].  The offset
    is treated as a signed, 32-bit integer.
-   @end[doc]
 >>
 
 declare atomLabel[field:s, subfield:s]{ 'frame; 'num }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomSizeof] is the size of the frames in the list
    @tt[ty_var_list] plus a constant @tt[num].  The constant is treated
    as a signed, 32-bit integer.
-   @end[doc]
 >>
 
 declare atomSizeof{ 'ty_var_list; 'num }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomConst] is a constant constructor used to construct
    a value for case @tt[num] of the union given by @tt[ty_var].  The
    type of the atom is given by @tt[ty].
-   @end[doc]
 >>
 
 declare atomConst{ 'ty; 'ty_var; 'num }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomTyApply] is the polymorphic type application of an atom
    @tt[atom] to a list of type arguments @tt[ty_list].  The second subterm is
    the type of the @tt[atomTyApply] atom.
-   @end[doc]
 >>
 
 declare atomTyApply{ 'atom; 'ty; 'ty_list }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomTyPack] abstracts a variable @tt[var] over a list of types
    @tt[ty_list].  The second subterm is the type of the @tt[atomTyPack] atom.
-   @end[doc]
 >>
 
 declare atomTyPack{ 'var; 'ty; 'ty_list }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[atomTyUnpack] is the elimination form for type abstraction.
    The variable @tt[var] is instantiated with the types from the original pack
    operation.
-   @end[doc]
 >>
 
 declare atomTyUnpack{ 'var }
 
 
 doc <:doc<
-   @begin[doc]
 
    The FIR supports both unary and binary arithmetic. The term @tt[atomUnop]
    has subterms for a unary operator and its argument.  The term
    @tt[atomBinop] has subterms for a binary operator and its two arguments.
-   @end[doc]
 >>
 
 declare atomUnop{ 'unop; 'atom }
 declare atomBinop{ 'binop; 'atom1; 'atom2 }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Allocation operators}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -335,32 +305,26 @@ declare allocArray{ 'ty; 'atom_list }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[allocVArray] allocates an array of size @tt[atom1] of type
    @tt[ty].  All the elements of the array are initialized to @tt[atom2].
-   @end[doc]
 >>
 
 declare allocVArray{ 'ty; 'atom1; 'atom2 }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[allocMalloc] is used to allocate a raw data block with type
    @tt[ty].  The size of the allocated area is given by @tt[atom].
-   @end[doc]
 >>
 
 declare allocMalloc{ 'ty; 'atom }
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -368,7 +332,6 @@ doc <:doc<
 declare allocFrame{ 'tv; 'ty_list }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Expressions}
 
    Expressions combine the atoms and operators above to define FIR
@@ -378,40 +341,34 @@ doc <:doc<
 
    The term @tt[letAtom] forms a new scope, where an atom @tt[atom] of
    type @tt[ty] is bound to @tt[v] in @tt[exp].
-   @end[doc]
 >>
 
 declare letAtom{ 'ty; 'atom; v. 'exp['v] }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[letExt] is used to access a function @tt[str] that is part of
    the runtime or operating system.  The function has argument types
    @tt[fun_arg_types], returns a result of type @tt[fun_res_type], and is
    called with arguments @tt[fun_args].  The value returned is bound to @tt[v]
    in @tt[exp].
-   @end[doc]
 >>
 
 declare letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp['v] }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[tailCall] is a function call to the function given by
    @tt[atom].  The arguments to the function are given by @tt[atom_list].
    There is no way to bind the value returned by the function.
-   @end[doc]
 >>
 
 declare tailCall{ 'atom; 'atom_list }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[matchExp] is a pattern matching expression that matches an
    atom @tt[atom] against a list of cases @tt[matchCase_list]. A match case is
@@ -419,7 +376,6 @@ doc <:doc<
    set or a raw integer set) @tt[set], and an expression @tt[exp].
    Operationally, the first case for which @tt[atom] is an element of the
    case's set is selected for evaluation.
-   @end[doc]
 >>
 
 declare matchCase{ 'set; 'exp }
@@ -427,19 +383,16 @@ declare matchExp{ 'atom; 'matchCase_list }
 
 
 doc <:doc<
-   @begin[doc]
 
    The @tt[letAlloc] term is used to allocate a data aggregate using
    @tt[alloc_op].  A pointer to the allocated area is bound to @tt[v]
    in @tt[exp].
-   @end[doc]
 >>
 
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 
 doc <:doc<
-   @begin[doc]
 
    The terms @tt[letSubscript] and @tt[setSubscript] are used to subscript
    data aggregates.  In both terms, @tt[atom1] refers to a data aggregate,
@@ -447,7 +400,6 @@ doc <:doc<
    should have type @tt[ty].  In the case of @tt[letSubscript], the value is
    bound to @tt[v] in @tt[exp].  In the case of @tt[setSubscript], the value
    is set to @tt[atom3].
-   @end[doc]
 >>
 
 declare letSubscript{ 'ty; 'atom1; 'atom2; v. 'exp['v] }
@@ -455,13 +407,11 @@ declare setSubscript{ 'atom1; 'atom2; 'ty; 'atom3; 'exp }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[letGlobal] is used to bind the value of global variable
    @tt[label], of type @tt[ty], to @tt[v] in @tt[exp]. The term @tt[setGlobal]
    is used to set the value of a global variable @tt[label], of type @tt[ty],
    to the value @tt[atom].
-   @end[doc]
 >>
 
 declare letGlobal{ 'ty; 'label; v. 'exp['v] }

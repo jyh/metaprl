@@ -1,6 +1,5 @@
 doc <:doc<
    @spelling{handedness}
-   @begin[doc]
    @module[Itt_union]
 
    The union type $T_1 + T_2$ defines a union space containing the
@@ -16,8 +15,7 @@ doc <:doc<
    define the Boolean values, where @emph{false} is <<inl{it}>> and
    @emph{true} is <<inr{it}>>.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -51,7 +49,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_void
 extends Itt_equal
 extends Itt_struct
@@ -79,13 +77,11 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{union} type is the binary union of two types $A$ and $B$.
    The elements are $@inl{a}$ for $a @in A$ and $@inr{b}$ for $b @in B$.
    The @tt{decide} term @emph{decides} the handedness of the term $x @in A + B$.
-   @end[doc]
 >>
 declare \union{'A; 'B}
 declare inl{'x}
@@ -103,7 +99,6 @@ define unfold_out: out{'x} <--> decide{'x; y. 'y; z. 'z}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The following two rules define the computational behavior of the
@@ -112,7 +107,6 @@ doc <:doc<
    and @tt{reduceDecideInr} describes reduction on the @hrefterm[inr] term.
    The rewrites are added to the @hrefconv[reduceC] resource.
 
-   @end[doc]
 >>
 
 interactive_rw reduce_outl_inl {| reduce |} :  outl{inl{'x}} <--> 'x
@@ -165,13 +159,11 @@ prim unionFormation :
    'A + 'B
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The equality of the @hrefterm[union] type is intensional; the
    union $A + B$ is a type if both $A$ and $B$ are types.
-   @end[doc]
 >>
 prim unionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -189,7 +181,6 @@ prim unionType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The union type $A + B$ is true if both $A$ and $B$ are types,
@@ -198,7 +189,6 @@ doc <:doc<
    uses the @hreftactic[selT] tactic to choose the handedness; the
    @tt{inlFormation} rule is applied with the tactic @tt{selT 1 (dT 0)}
    and the @tt{inrFormation} is applied with @tt{selT 2 (dT 0)}.
-   @end[doc]
 >>
 prim inlFormation {| intro [SelectOption 1] |} :
    [main] ('a : sequent { <H> >- 'A }) -->
@@ -219,13 +209,11 @@ prim inrFormation {| intro [SelectOption 2] |} :
    inr{'b}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The following two rules define membership, $@inl{a} @in A + B$
    if $a @in A$ and $@inr{b} @in A + B$ if $b @in B$.  Both
    $A$ and $B$ must be types.
-   @end[doc]
 >>
 prim inlEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
@@ -246,7 +234,6 @@ prim inrEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The handedness of the union membership is @emph{decidable}.  The
@@ -254,7 +241,6 @@ doc <:doc<
    the first for the @tt{inl} case, and the second for the @tt{inr}.  The proof
    extract term is the @tt{decide} combinator (which performs a decision
    on element membership).
-   @end[doc]
 >>
 prim unionElimination {| elim [ThinOption thinT] |} 'H :
    [left] ('left['u;'p] : sequent { <H>; p: 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
@@ -263,12 +249,10 @@ prim unionElimination {| elim [ThinOption thinT] |} 'H :
    decide{'x; u. 'left['u;'x]; v. 'right['v;'x]}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    The @tt{decide} term equality is true if there is @emph{some} type
    $A + B$ for which all the subterms are equal.
-   @end[doc]
 >>
 prim decideEquality {| intro [] |} bind{z. 'T['z]} ('A + 'B) :
    [wf] sequent { <H> >- 'e1 = 'e2 in 'A + 'B } -->
@@ -280,13 +264,11 @@ prim decideEquality {| intro [] |} bind{z. 'T['z]} ('A + 'B) :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The union type $A_1 + A_2$ is a subtype of type $A_2 + B_2$ if
    $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.  This rule is added
    to the @hrefresource[subtype_resource].
-   @end[doc]
 >>
 prim unionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->

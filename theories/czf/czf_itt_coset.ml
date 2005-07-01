@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_coset]
 
    The @tt[Czf_itt_coset] module defines the @emph{left coset}
@@ -12,8 +11,8 @@ doc <:doc<
    those in $@car{g}$ which are equal to $@op{g; y; a}$ for some
    $y @in @car{h}$. The cosets are defined by separation.
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -45,7 +44,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 extends Czf_itt_dexists
 extends Czf_itt_subgroup
@@ -63,7 +62,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare lcoset{'h; 'g; 'a}
 declare rcoset{'h; 'g; 'a}
 doc docoff
@@ -73,11 +72,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @hrefterm[lcoset] and @hrefterm[rcoset] terms are defined by separation.
-   @end[doc]
 >>
 prim_rw unfold_lcoset : lcoset{'h; 'g; 'a} <-->
    sep{car{'g}; x. "dexists"{car{'h}; y. eq{'x; op{'g; 'a; 'y}}}}
@@ -101,13 +98,11 @@ dform rcoset_df : parens :: except_mode[src] :: rcoset{'h; 'g; 'a} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The $@lcoset{h; g; a}$ and $@rcoset{h; g; a}$ are well-formed
    if $h$ and $g$ are labels, and $a$ is a set.
-   @end[doc]
 >>
 interactive lcoset_isset {| intro [] |} :
    sequent { <H> >- 'h IN label } -->
@@ -124,7 +119,6 @@ interactive rcoset_isset {| intro [] |} :
    sequent { <H> >- isset{rcoset{'h; 'g; 'a}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    A set $x$ is a member of $@lcoset{h; g; a}$ if the
@@ -133,7 +127,6 @@ doc <:doc<
    exists a set $y$ such that $y$ is a member of
    $@car{h}$ and $x$ is equal to $@op{g; a; y}$
    in $@car{g}$. The case for @tt[rcoset] is similar.
-   @end[doc]
 >>
 interactive lcoset_intro {| intro [] |} 'z :
    sequent { <H> >- 'h IN label } -->
@@ -162,14 +155,12 @@ interactive rcoset_intro {| intro [] |} 'z :
    sequent { <H> >- mem{'x; rcoset{'h; 'g; 'a}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form for the left coset
    $@mem{y; @lcoset{h; g; a}}$ implies $@mem{y; @car{g}}$ and
    also produces a witness $@mem{z; @car{h}}$ for which
    $@eq{y; @op{g; a; z}}$. The case for @tt[rcoset] is similar.
-   @end[doc]
 >>
 interactive lcoset_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- 'h IN label } -->
@@ -192,13 +183,11 @@ interactive rcoset_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
    If $h$ is a subgroup of group $g$, both the left and right
    cosets of $h$ containing $a$ are subsets of the carrier of
    $g$.
-   @end[doc]
 >>
 interactive lcoset_subset {| intro [] |} :
    sequent { <H> >- 'h IN label } -->

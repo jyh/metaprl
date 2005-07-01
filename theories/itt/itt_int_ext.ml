@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_int_ext]
 
    Here we define multiplicative operations on integers
@@ -10,8 +9,8 @@ doc <:doc<
    <<nequal{('x) ; ('x)}>>) and boolean
    (<<gt_bool{('x) ; ('x)}>>, <<le_bool{('x) ; ('x)}>>,
    <<ge_bool{('x) ; ('x)}>>, <<bneq_int{('x) ; ('x)}>>) forms.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -43,7 +42,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_logic
@@ -66,10 +65,8 @@ let _ = show_loading "Loading Itt_int_ext%t"
  * TERMS                                                                *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @terms
    Multiplicative operations on <<int>>
-   @end[doc]
 >>
 declare "mul"{'a; 'b}
 declare "div"{'a; 'b}
@@ -79,7 +76,7 @@ declare "rem"{'a; 'b}
  Definitions of >b <=b >=b
  *)
 
-doc <:doc< @doc{More boolean inequalities} >>
+doc <:doc< More boolean inequalities >>
 
 define unfold_gt_bool {| reduce |} :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
@@ -173,11 +170,9 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
    slot["lt"]{'a} `" > " slot["le"]{'b}
 
 doc <:doc<
-	@begin[doc]
    More propositional inequalities.
    As it was said in @hrefmodule[Itt_int_base], we define propositional inequalities
    via correspondent boolean inequalities.
-	@end[doc]
 >>
 
 define unfold_le :
@@ -287,7 +282,7 @@ dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
 dform nequal_df1 : parens :: "prec"[prec_compare] :: nequal{'a; 'b} =
    slot["lt"]{'a} `" " Nuprl_font!neq `" " slot["le"]{'b}
 
-doc <:doc< @doc{Integer segmentation} >>
+doc <:doc< Integer segmentation >>
 
 define unfold_int_seg : int_seg{'i; 'j} <--> {x:int | 'x >= 'i & 'x < 'j}
 
@@ -316,14 +311,12 @@ define unfold_sign : sign{'a} <--> ind{'a;x,y.(-1);0;x,y.1}
 (*if 'a <@ 0 then number[(-1):n] else if 0 <@ 'a then 1 else 0*)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Rules and rewrites}
    @modsubsection{Operations on literals}
 
    The binary arithmetic operators on literal integers are defined using the
    the @emph{meta} arithmetic operators that are @MetaPRL
    builtin operations.
-   @end[doc]
 >>
 
 prim_rw reduce_mul_meta : (number[i:n] *@ number[j:n]) <-->
@@ -357,10 +350,8 @@ let resource reduce += [
 ]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness of inequalities}
 
-   @end[doc]
 >>
 
 interactive gt_bool_wf {| intro [complete_unless_member] |} :
@@ -603,9 +594,7 @@ interactive min_reduce2 {| intro [] |} :
    sequent { <H> >- min{'a; 'b} = 'b in int }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Well-formedness and algebraic properties of <<('x) *@ ('x)>>}
-   @end[doc]
 >>
 
 prim mul_wf {| intro [complete_unless_member] |} :
@@ -822,9 +811,7 @@ interactive_rw beq_mulMono_rw 'c :
 	beq_int{'a;'b} <--> beq_int{'c *@ 'a; 'c *@ 'b}
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definition and well-formedness of <<'x %@ 'x>>}
-   @end[doc]
 >>
 prim rem_baseReduce :
    sequent { <H> >- 0 <= 'a } -->
@@ -879,9 +866,7 @@ interactive rem_wf {| intro [] |} :
    sequent { <H> >- ('a %@ 'b) in int }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definition and properties of <<'x /@ 'x>>}
-   @end[doc]
 >>
 prim div_baseReduce :
    sequent { <H> >- 0 <= 'a } -->
@@ -979,9 +964,7 @@ interactive_rw div_Assoc_rw :
 let div_AssocC = div_Assoc_rw
 
 doc <:doc<
-   @begin[doc]
    @modsection{Integer segmentation properties}
-   @end[doc]
 >>
 interactive intSegUniv {| intro [] |} :
    sequent { <H> >- 'a in int} -->

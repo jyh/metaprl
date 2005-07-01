@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_subgroup]
 
    The @tt[Czf_itt_subgroup] module defines subgroups.
@@ -7,8 +6,7 @@ doc <:doc<
    is a subset of $g$ and who shares the same binary
    operation as $g$.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,7 +38,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 extends Czf_itt_subset
 extends Czf_itt_isect
@@ -58,7 +56,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare subgroup{'s; 'g}
 doc docoff
 
@@ -67,13 +65,11 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    A group $s$ is a subgroup of group $g$ if the carrier of $s$
    is a subset of that of $g$ and the operation of $s$ is the same
    as that of $g$.
-   @end[doc]
 >>
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
    (group{'s} & group{'g} & \subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
@@ -91,12 +87,10 @@ dform subgroup_df : except_mode[src] :: subgroup{'s; 'g} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood}
 
    The $@subgroup{s; g}$ is well-formed if its arguments are labels.
-   @end[doc]
 >>
 interactive subgroup_wf {| intro [] |} :
    sequent { <H> >- 's IN label } -->
@@ -104,13 +98,11 @@ interactive subgroup_wf {| intro [] |} :
    sequent { <H> >- "type"{subgroup{'s; 'g}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The proposition $@subgroup{s; g}$ is true if it is well-formed,
    $s$ and $g$ are groups, $@car{s}$ is a subset of $@car{g}$, and
    $@op{s; a; b}$ is defined as $@op{g; a; b}$ for $a, b @in @car{s}$.
-   @end[doc]
 >>
 interactive subgroup_intro {| intro [] |} :
    sequent { <H> >- 's IN label } -->
@@ -122,7 +114,6 @@ interactive subgroup_intro {| intro [] |} :
    sequent { <H> >- subgroup{'s; 'g} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
    If $s$ is a subgroup of $g$, then
@@ -131,7 +122,6 @@ doc <:doc<
    @item{the identity of $s$ is the identity of $g$.}
    @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
    @end[enumerate]
-   @end[doc]
 >>
 interactive subgroup_op {| intro [] |} :
    sequent { <H> >- 's IN label } -->
@@ -172,12 +162,10 @@ interactive subgroup_inv2 {| intro [] |} :
    sequent { <H> >- mem{inv{'g; 'a}; car{'s}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
    The intersection group of subgroups $h_1$ and $h_2$ of
    a group $g$ is again a subgroup of $g$.
-   @end[doc]
 >>
 interactive subgroup_isect 'h1 'h2 :
    sequent { <H> >- 'g IN label } -->
@@ -197,7 +185,6 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -207,7 +194,6 @@ doc <:doc<
       intersection of two subgroups of $g$.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let subgroupIsectT = subgroup_isect
 

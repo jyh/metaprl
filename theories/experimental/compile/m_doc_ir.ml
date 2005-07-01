@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    ML binop relop op AST compilable marks
    @end[spelling]
@@ -29,7 +28,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_comment
 
@@ -241,7 +239,6 @@ dform math_EndDef_df : mode[tex] :: math_EndDef =
    epsilon
 
 doc <:doc<
-@begin[doc]
 
 The intermediate representation of the program must serve two
 conflicting purposes.  It should be a fairly low-level language so
@@ -391,7 +388,6 @@ $$
 @end[array]
 $$
 
-@end[doc]
 >>
 
 (*

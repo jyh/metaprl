@@ -3,7 +3,6 @@ doc <:doc<
    CPS SpillRegister dst vars
    @end[spelling]
 
-   @begin[doc]
    @module[M_x86_spill]
 
    This module defines a tactic @tt[spillT] that takes as input the program
@@ -11,8 +10,8 @@ doc <:doc<
    and generates the appropriate spills, rewriting the assembly as needed.
    The tactic splits the live ranges of all spilled registers as an
    optimization.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,9 +37,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends M_x86_backend
 doc docoff
@@ -56,7 +53,6 @@ open M_util
  *)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    The @tt{spill} resource provides a generic method for defining a method
@@ -66,7 +62,6 @@ doc <:doc<
    store the shape of redices, together with the conversions for the
    reduction.
 
-   @end[doc]
    @docoff
 >>
 let resource (term * conv, conv) spill =
@@ -85,11 +80,9 @@ let spillC =
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Generating spills}
 
    Code to spill registers is generated in two phases.
-   @end[doc]
 >>
 
 (************************************************************************
@@ -97,7 +90,6 @@ doc <:doc<
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Phase 1}
 
    When the register allocator first asks that a register be spilled, we
@@ -106,7 +98,6 @@ doc <:doc<
    Register{'v} >> to << SpillRegister{'v; 'spill} >> where << 'spill >> is
    the new spill location.  The following rules add the spill after a
    binding occurrence.
-   @end[doc]
 >>
 prim_rw spill_mov :
    Mov{'src; dst. 'rest['dst]}
@@ -158,11 +149,9 @@ prim_rw spill_set :
    'rest[SpillRegister{'dst; 'spill}]}}
 
 doc <:doc<
-   @begin[doc]
    We define a conversion (implemented in @OCaml, and not shown here) for
    the first phase that searches for the spill binding occurrences and
    applies the appropriate rewrites.
-   @end[doc]
    @docoff
 >>
 let phase1C vars =
@@ -200,21 +189,17 @@ let phase1C vars =
       funC convC
 
 doc <:doc<
-   @begin[doc]
    In the next part of @tt[phase1], we find all instructions that now have a
    << SpillRegister{'v; 'spill} >> operand, and copy the operand.  This
    splits the live range, but keeps the spill location.  Note that we use
    this rewrite in reverse (i.e., rewrite the contractum into the redex).
-   @end[doc]
 >>
 prim_rw spill_split bind{v. 'e['v]} :
    Spill["copy"]{SpillRegister{'v1; 'spill}; v2. 'e[SpillRegister{'v2; 'spill}]} <--> 'e[SpillRegister{'v1; 'spill}]
 
 doc <:doc<
-   @begin[doc]
    We define a conversion (implemented in @OCaml, and not shown here) to
    actually split the live range.
-   @end[doc]
 >>
 let rec splitC_aux vars =
    match vars with
@@ -323,10 +308,8 @@ let splitTopC =
 let splitC = sweepUpFailC splitTopC
 
 doc <:doc<
-   @begin[doc]
    Once the splits have been added, we cleanup the remaining instructions
    by removing spill variables.
-   @end[doc]
 >>
 prim_rw register_spill_register :
    Register{SpillRegister{'v; 'spill}}
@@ -370,7 +353,6 @@ let phase1T vars =
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Phase 2}
 
    In this section, we define the @tt[phase2T] tactic.  We assume that the
@@ -382,7 +364,6 @@ doc <:doc<
    uses the following rewrite.  @OCaml code (not listed here) is used to guide
    the application of the rewrite.
 
-   @end[doc]
 >>
 prim_rw spill_fetch :
    Spill["copy"]{SpillRegister{'v1; 'spill}; v2. 'e['v2]}
@@ -422,7 +403,6 @@ let phase2T vars =
  *)
 
 doc <:doc<
-   @begin[doc]
    @modsection{The @tt[spillT] tactic}
 
    The main spill code generator, i.e., the @tt[spillT] tactic, gets a set
@@ -444,7 +424,6 @@ doc <:doc<
    @noindent The main spiller then runs @tt[phase1T] on the @tt[phase1] vars,
    and @tt[phase2T] on the @tt[phase2] vars.
 
-   @end[doc]
    @docoff
 >>
 

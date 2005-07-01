@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_subtype]
 
    The @tt[Itt_subtype] module provides the definition of
@@ -16,8 +15,8 @@ doc <:doc<
    The subtype-type has trivial computational content, like equality.
    The subtype contains only the <<it>> term if it is true; it is
    empty otherwise.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -52,9 +51,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_struct
@@ -84,11 +81,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{subtype} term is a binary relation.
-   @end[doc]
 >>
 declare \subtype{'A; 'B}
 doc docoff
@@ -116,7 +111,6 @@ dform subtype_df2 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subtype '
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    @modsubsection{Typehood and equality}
@@ -124,7 +118,6 @@ doc <:doc<
    The << \subtype{'A; 'B} >> term is a type if both
    $A$ and $B$ are types.  The equality is @emph{intensional}:
    two subtype-types are equal if their subterms are equal.
-   @end[doc]
 >>
 prim subtypeEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -139,11 +132,9 @@ prim subtypeType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    The intensional interpretation of typehood also means that if
    the subtype judgment <<'A subtype 'B>> is true, then both $A$
    and $B$ are types.
-   @end[doc]
 >>
 prim subtypeTypeRight 'B :
    [main] sequent { <H> >- 'A subtype 'B } -->
@@ -162,14 +153,12 @@ interactive subtypeElimTypeLeft  {| nth_hyp |} 'H :
 	sequent { <H>; w: 'A subtype 'B; <J['w]> >- 'B Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The @tt[subtype_axiomFormation] rule gives the introduction form
    for the subtype judgment.  A type <<'A subtype 'B>> is true if $A$
    and $B$ are types, and any term $t @in A$ is also in $B$.  The
    proof extract term is always the $@it$ term.
-   @end[doc]
 >>
 prim subtype_axiomFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -178,7 +167,6 @@ prim subtype_axiomFormation {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    Subtype elimination has two forms.  The standard @tt[subtypeElimination]
@@ -187,7 +175,6 @@ doc <:doc<
    @tt[use_subtypeT] postulates that <<'A subtype 'B>> with <<'a in 'A>>
    imply <<'a in 'B>>. Finally, @hrefrule[subtypeElimination2] reformulates
    @tt[use_subtypeT] in an elimination form.
-   @end[doc]
 >>
 prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t['x] : sequent { <H>; x: 'A subtype 'B; <J[it]> >- 'C[it] }) -->
@@ -206,12 +193,10 @@ interactive subtypeElimination2 'H 'a 'b :
    sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Member equality}
    The subtype-type, if true, contains only the term $@it$.
    For $@it$ to be in <<'A subtype 'B>>, the subtype judgment
    must be true.
-   @end[doc]
 >>
 interactive subtype_axiomEquality {| intro []; squash |} :
    [main] sequent { <H> >- 'A subtype 'B } -->
@@ -231,14 +216,12 @@ type sub_resource_info =
  | DSubtype of sub_info_type
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    The @tt{Itt_subtype} module defines the @resource[subtype_resource], which is
    used to prove subtyping judgments.  The @tt[sub_resource_info] argument
    requires two terms <<'t_1 subtype 't_2>> that match the goal term, and
    a tactic that can be used to refine goals of that form.
-   @end[doc]
    @docoff
 >>
 

@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_quotient]
 
    The @tt[Itt_quotient] module defines the @emph{quotient}
@@ -87,8 +86,8 @@ doc <:doc<
 
    This theory implements axiomatization of quotient types
    described in @cite["Nog02a,Nog02b"].
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -121,9 +120,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_set
@@ -155,11 +152,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{quot} type defines the quotient type $@quot{A; x; y; E[x, y]}$.
-   @end[doc]
 >>
 declare "quot"{'A; x, y. 'E['x; 'y]}
 doc docoff
@@ -181,7 +176,6 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Equality and well-formedness}
 
@@ -192,7 +186,6 @@ doc <:doc<
    @item{$E$ is symmetric: $E[x, y] @Rightarrow E[y, x]$}
    @item{$E$ is transitive: $E[x, y] @Rightarrow E[y, z] @Rightarrow E[x, z]$}
    @end[itemize]
-   @end[doc]
 >>
 prim quotientType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -204,11 +197,9 @@ prim quotientType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    Two quotient types $@quot{A_1; x; y; E_1[x, y]}$ and
    $@quot{A_2; x; y; E_2[x, y]}$ are equal if the types $A_1$ and $A_2$ and
    the equivalence relations $E_1$ and $E_2$ are equal.
-   @end[doc]
 >>
 prim quotientEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -221,13 +212,11 @@ prim quotientEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    In the @emph{weak} form, any two elements in $A$ are also
    in the quotient $@quot{A; x; y; E[x, y]}$ for @emph{any}
    equivalence relation $E$.
-   @end[doc]
 >>
 prim quotient_memberWeakEquality {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
@@ -244,11 +233,9 @@ interactive quotient_memberFormation {| intro [] |} :
    sequent { <H> >- quot x, y: 'A // 'E['x; 'y] }
 
 doc <:doc<
-   @begin[doc]
    In the @emph{strong} form, two elements $a_1$ and $a_2$ are in
    the quotient type $@quot{A; x; y; E[x, y]}$ if they are equal
    in $A$, and they are related with the equivalence relation $E[a_1, a_2]$.
-   @end[doc]
 >>
 prim quotient_memberEquality :
    [wf] sequent { <H> >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
@@ -272,7 +259,6 @@ let resource intro += [
 ]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The first two elimination forms are valid only if the goal
@@ -282,7 +268,6 @@ doc <:doc<
 
    The @hreftactic[dT] tactic would use the first and third rules;
    for the second one use the @tactic[quotientT] tactic.
-   @end[doc]
 >>
 prim quotientElimination1 {| elim [ThinOption thinT] |} 'H :
    [wf] sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
@@ -314,10 +299,8 @@ doc docoff
 let quotientT = quotientElimination1_eq
 
 doc <:doc<
-   @begin[doc]
    An equality assumption $a_1 = a_2 @in @quot{A; x; y; E[x, y]}$ implies
    that $E[a_1, a_2]$.
-   @end[doc]
 >>
 prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('g['e; 'v] : sequent { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]>; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
@@ -325,12 +308,10 @@ prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H :
    'g['e; it]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The quotient $@quot{A; x; y; E[x, y]}$ is covariant in  the type $A$ and the
    the equivalence relation $E$ (the relation must become coarser).
-   @end[doc]
 >>
 interactive quotientSubtype :
    ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->

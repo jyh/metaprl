@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_union]
 
    The @tt{Czf_itt_union} module gives two definitions of
@@ -41,8 +40,7 @@ doc <:doc<
    @end[array]
    $$
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -74,7 +72,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_dexists
 extends Czf_itt_subset
 doc docoff
@@ -94,7 +92,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare "union"{'s1; 's2}
 declare "union"{'s1}
 
@@ -103,13 +101,11 @@ declare "union"{'s1}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The binary union $@union{s_1; s_2}$ is defined by simultaneous
    induction on the set arguments.  The index type of the result is
    the disjoint union of their index types.
-   @end[doc]
 >>
 
 prim_rw unfold_bunion : union{'s1; 's2} <-->
@@ -126,11 +122,9 @@ doc docoff
 let fold_bunion = makeFoldC << union{'s1; 's2} >> unfold_bunion
 
 doc <:doc<
-   @begin[doc]
    The general union is formed by a nested induction on the
    set argument.  This term formalizes the informal discussion
    above.
-   @end[doc]
 >>
 
 prim_rw unfold_union : union{'s} <-->
@@ -155,13 +149,11 @@ dform union_df2 : parens :: "prec"[prec_or] :: union{'s} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    Both forms of union are well-formed if their arguments
    are sets.
-   @end[doc]
 >>
 interactive bunion_isset {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -173,13 +165,11 @@ interactive union_isset {| intro [] |} :
    sequent { <H> >- isset{union{'s1}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The binary union $@union{s_1; s_2}$ has two membership introduction forms
    for an argument set $x$; the set $x$ may be a member of $s_1$ or it may
    be a member of $s_2$.
-   @end[doc]
 >>
 interactive bunion_member_intro_left {| intro [SelectOption 1] |} :
    ["wf"] sequent { <H> >- isset{'x} } -->
@@ -196,11 +186,9 @@ interactive bunion_member_intro_right {| intro [SelectOption 2] |} :
    sequent { <H> >- mem{'x; union{'s1; 's2}} }
 
 doc <:doc<
-   @begin[doc]
    @noindent
    A set $x$ is in the general union $@union{s}$ if there is some
    element $@mem{y; s}$ for which $@mem{x; y}$.
-   @end[doc]
 >>
 interactive union_member_intro {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'x} } -->
@@ -209,14 +197,12 @@ interactive union_member_intro {| intro [] |} :
    sequent { <H> >- mem{'x; union{'s}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    @noindent
    The elimination form for membership in the binary union
    performs a case analysis on membership in the two sets in
    the binary union.
-   @end[doc]
 >>
 interactive bunion_member_elim {| elim [] |} 'H :
    ["wf"] sequent { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]> >- isset{'y} } -->
@@ -227,11 +213,9 @@ interactive bunion_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    @noindent
    The elimination form for the general union $@mem{x; @union{s}}$ produces
    a witness $@mem{z; y}$ for which $@mem{x; z}$.
-   @end[doc]
 >>
 interactive union_member_elim {| elim [] |} 'H :
    ["wf"] sequent { <H>; x: mem{'y; union{'s}}; <J['x]> >- isset{'y} } -->
@@ -240,9 +224,7 @@ interactive union_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; union{'s}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    The union types are both functional in their arguments.
-   @end[doc]
 >>
 interactive bunion_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's1['z]} } -->

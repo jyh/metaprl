@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_disect]
 
    The @tt[Itt_disect] module defines the @emph{dependent intersection}
@@ -32,8 +31,8 @@ doc <:doc<
 
    Sets also can be defined as dependent intersection
    $@set{x;A;P[x]} = @bisect{x@colon A;squash(P[x])}$
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -66,9 +65,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Itt_equal
@@ -107,11 +104,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{disect} term denotes the dependent intersection type.
-   @end[doc]
 >>
 
 declare bisect{'A; x. 'B['x]}
@@ -142,14 +137,12 @@ prim dintersectionFormation 'A :
    bisect{'A; x.'B['x]}
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The intersection $@bisect{x@colon A; B[x]}$ is well-formed if
    $A$ is a type, and $B[x]$ is a family of types indexed by
    $x @in A$.
-   @end[doc]
 >>
 
 prim dintersectionEquality {| intro [] |} :
@@ -172,12 +165,10 @@ prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
    't['u;it]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
    Two elements $t1$ and $t2$ are equal in $@bisect{x@colon A; B[x]}$ if
    they are equal both in $A$ and in $B[t1]$.
    That is $t @in @bisect{x@colon A; B[x]}$ if $t @in A$ and $t @in B[t]$.
-   @end[doc]
 >>
 
 prim dintersectionMemberEquality {| intro [] |} :
@@ -188,12 +179,10 @@ prim dintersectionMemberEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
    There is no special rule for introduction.
    The only one way to introduce dependent intersection is to present
    its witness @emph{explicitly} and use the above rule.
-   @end[doc]
 >>
 
 interactive dintersectionMemberFormation {| intro [] |} 't:
@@ -203,11 +192,9 @@ interactive dintersectionMemberFormation {| intro [] |} 't:
    sequent { <H> >- bisect{'A; x.'B['x]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
    The elimination rule for an assumption $x@colon @bisect{y@colon A;B[y]}$
    produces two witnesses that $x @in A$ and that $x @in B[x]$
-   @end[doc]
 >>
 
 prim disectElimination {| elim [] |} 'H  bind{a,b.'T['a;'b]}:
@@ -217,12 +204,10 @@ prim disectElimination {| elim [] |} 'H  bind{a,b.'T['a;'b]}:
    't['x; 'x; 'x]
 
 doc <:doc<
-   @begin[doc]
    As a corollary of elimination rule we have that if
    two terms are equal in dependent intersection, they are also
    equal in both cases of the intersection.
    The @tactic[disectCaseEqualityT] applies this rule
-   @end[doc]
 >>
 
 interactive disectMemberCaseEquality1 (bisect{'A;x.'B['x]}) :
@@ -268,12 +253,10 @@ let disectEliminationT = argfunT (fun n p ->
 let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 
 doc <:doc<
-   @begin[doc]
 
    The elimination rule has also two simpler forms.
    The first produces a witness $a$ for $A$, and the second produces two witness $a$ for $A$
    and $b$ for $B[a]$.
-   @end[doc]
 >>
 
 interactive disectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H :
@@ -299,12 +282,10 @@ let disectEliminationT = argfunT (fun n p ->
 let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The dependent intersection $@bisect{x@colon A; B[x]}$ is covariant
    in both $A$ and $B[x]$.
-   @end[doc]
 >>
 
 prim dintersectionSubtype :
@@ -327,21 +308,17 @@ interactive dinter_associativity :
                   }}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Set type as dependent intersection}
 
    As an example of using dependent intersection we show that
    sets (@hrefmodule[Itt_set]) are extensionally equal to dependent intersections.
 
    First let us define $[A]$ as $@set{x;Top;A}$.
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    Now we can prove that
    $@set{x;A;P[x]} = @bisect{x@colon A;[P[x]]}$
-   @end[doc]
 >>
 
 interactive set_is_disect {| intro [] |} :

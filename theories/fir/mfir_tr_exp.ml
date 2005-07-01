@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_tr_exp]
 
    The @tt[Mfir_tr_exp] module defines the typing rules for FIR expressions.
@@ -33,13 +32,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_ty
@@ -56,7 +52,6 @@ extends Mfir_tr_store
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Basic expressions}
 
@@ -64,7 +59,6 @@ doc <:doc<
    binds << 'atom >> to << 'v >> in << 'exp >>.  The expression has type
    << 'ty2 >> if << 'atom >> has type << 'ty1 >>, and << 'exp['v] >>
    has type << 'ty2 >> assuming that << 'v >> has type << 'ty1 >>.
-   @end[doc]
 >>
 
 prim ty_letAtom :
@@ -76,14 +70,12 @@ prim ty_letAtom :
 
 
 doc <:doc<
-   @begin[doc]
 
    The expression << letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] } >> binds
    the result of a call to an external (e.g.~standard library) function
    << 'str >> to << 'v >> in << 'exp >>.  We make no attempt to see that
    the types in the expression correspond to the actual types for the function
    @tt[str].
-   @end[doc]
 >>
 
 prim ty_letExt :
@@ -96,13 +88,11 @@ prim ty_letExt :
 
 
 doc <:doc<
-   @begin[doc]
 
    The next three rules assume that FIR programs are written in continuation
    passing style.  A function call is well-formed if the variable
    << atomVar{'v} >> is a function, and if the arguments have the
    appropriate types.
-   @end[doc]
 >>
 
 prim ty_tailCall 'H :
@@ -126,7 +116,6 @@ doc <:doc<
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Pattern matching}
 
    Match statements allow pattern matching on numbers, where each pattern
@@ -137,7 +126,6 @@ doc <:doc<
    of the number (atom) being matched.
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -153,10 +141,8 @@ prim ty_match_cases_ind :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -193,10 +179,8 @@ prim ty_matchExp_tyInt_var 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -234,10 +218,8 @@ prim ty_matchExp_tyEnum_var 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 prim ty_matchExp_tyRawInt_atom :
@@ -273,10 +255,8 @@ prim ty_matchExp_tyRawInt_var 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -316,14 +296,12 @@ prim ty_matchExp_tyUnion_cases_ind 'H :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Offsets}
 
    An offset atom should either be an integer or a raw integer.
    Note that offsets cannot be negative, but in the case of variables,
    this cannot be checked; variables are not defined (with some value)
    during type checking.
-   @end[doc]
 >>
 
 prim ty_offset_tyInt :
@@ -348,22 +326,18 @@ prim ty_offset_tyRawInt_var 'H :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Allocation}
 
    The rules for the expression << letAlloc{ 'op; v. 'exp['v] } >>
    defer, when possible, to the rules for the well-formedness of
    the value allocated.  The result of the allocation is bound to << 'v >>
    in << 'exp >>.
-   @end[doc]
 >>
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -378,10 +352,8 @@ prim ty_letAlloc_array :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -398,10 +370,8 @@ prim ty_letAlloc_varray :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -422,10 +392,8 @@ prim ty_letAlloc_malloc :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -442,11 +410,9 @@ prim ty_letAlloc_frame :
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subscripting}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -479,10 +445,8 @@ prim ty_setSubscript_tyTuple 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -505,10 +469,8 @@ prim ty_setSubscript_tyArray :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -521,10 +483,8 @@ prim ty_letSubscript_tyUnion 'H :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -547,10 +507,8 @@ prim ty_setSubscript_rawdata :
 
 
 doc <:doc<
-   @begin[doc]
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -558,7 +516,6 @@ doc <:doc<
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Global Values}
 
    The expression << letGlobal{ 'ty1; 'label; v. 'exp['v] } >> is used to
@@ -566,7 +523,6 @@ doc <:doc<
    << setGlobal{ 'label; 'ty1; 'atom; 'exp } >> is used to set a global
    value.  There is no way to use global values directly.  The typing rules
    for these expressions are straightforward.
-   @end[doc]
 >>
 
 prim ty_label 'H :

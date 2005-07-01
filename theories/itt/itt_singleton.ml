@@ -1,11 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_singleton]
 
    The @tt[Itt_singleton] module defines a singleton type.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,9 +38,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_subtype
 extends Itt_struct
@@ -66,11 +62,9 @@ let _ =
    show_loading "Loading Itt_singleton%t"
 
 doc <:doc<
-   @begin[doc]
    @modsection{Definition}
    By definition <<singleton{'a;'A}>> is a subtype of $A$ that contain only one element $a$
    (and of course all elements equal to $a$).
-   @end[doc]
 >>
 
 define singleton: singleton{'a;'A} <--> {x:'A | 'a='x in 'A}
@@ -80,10 +74,8 @@ doc docoff
 dform singleton_df: singleton{'a;'A} = `"{" slot{'a} `"}" sub{'A}
 
 doc <:doc<
-   @begin[doc]
    @modsection{Rules}
    Rules for singleton follow immediately from the definition.
-   @end[doc]
 >>
 
 interactive singletonEquality {| intro [] |} :

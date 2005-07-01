@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_member]
 
    The @tt[Czf_itt_member] module defines membership in a set.
@@ -10,8 +9,8 @@ doc <:doc<
    Note that equality has to be defined @emph{before} membership.
    We also prove the @emph{extensionality} judgment here; two sets
    are equal if they have the same members.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -43,7 +42,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_eq
 doc docoff
 
@@ -57,11 +56,9 @@ open Itt_rfun
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{member} term defines the membership judgment.
-   @end[doc]
 >>
 declare mem{'x; 'y}
 declare member{'x; 'y}
@@ -71,12 +68,10 @@ declare member{'x; 'y}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{member} judgment is defined using the @hrefterm[set_ind]
    induction combinator.
-   @end[doc]
 >>
 prim_rw unfold_mem : mem{'x; 'y} <-->
    set_ind{'y; T, f, g. exst t: 'T. eq{'x; .'f 't}}
@@ -107,13 +102,11 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_apply] :: member{'x;
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The @tt{member} judgment is well-formed if-and-only-if its arguments are
    sets.
-   @end[doc]
 >>
 interactive mem_type {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -149,12 +142,10 @@ interactive set_isset 'x :
    sequent { <H> >- isset{'y} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
    The @tt{member} judgment is functional in both its arguments.
    The next two rules provide simple functionality judgments
    for the two set arguments.
-   @end[doc]
 >>
 interactive mem_fun_left 's1 :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -167,7 +158,7 @@ doc docoff
 
 let memSubstLeftT = mem_fun_left
 
-doc <:doc< @doc{nil} >>
+doc <:doc< nil >>
 interactive mem_fun_right 's1 :
    ["wf"] sequent { <H> >- isset{'s1} } -->
    ["wf"] sequent { <H> >- isset{'s2} } -->
@@ -180,10 +171,8 @@ doc docoff
 let memSubstRightT = mem_fun_right
 
 doc <:doc<
-   @begin[doc]
    The @tt{member_fun} rule proves the general functionality
    judgment.
-   @end[doc]
 >>
 interactive member_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'f1['z]} } -->
@@ -191,7 +180,6 @@ interactive member_fun {| intro [] |} :
    sequent { <H> >- fun_prop{z. mem{'f1['z]; 'f2['z]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Set extensionality}
 
    Two sets are equal if-and-only-if they have the same elements.
@@ -199,7 +187,6 @@ doc <:doc<
    goals are the functions that ``choose,'' for any element of
    one set, an equal element in the other set.  The equality judgment
    can be proved with the pair of both choice functions.
-   @end[doc]
 >>
 interactive set_ext :
    ["wf"] sequent { <H> >- isset{'s1} } -->
@@ -214,7 +201,6 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -225,13 +211,11 @@ doc <:doc<
      or equality judgment.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let memberOfT = elem_isset
 let setOfT = set_isset
 
 doc <:doc<
-   @begin[doc]
    @begin[description]
    @item{@tactic[setExtT];
       The @tt{setExtT} tactic refines a set-equality
@@ -241,7 +225,6 @@ doc <:doc<
       in simpler ways.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let setExtT = set_ext
 

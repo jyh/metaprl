@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @docoff
    ----------------------------------------------------------------
 
@@ -23,7 +22,6 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends Base_theory
 

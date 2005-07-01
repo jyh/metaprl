@@ -1,11 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_set_str]
 
-  In this module we define the most common data structures: Sets and Tables.
+   In this module we define the most common data structures: Sets and Tables.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -38,10 +36,8 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
    This module depends on the following ones:
-   @end[doc]
 >>
 extends Itt_record
 extends Itt_algebra_df
@@ -53,13 +49,11 @@ doc docoff
 open Dtactic
 
 doc <:doc<
-   @begin[doc]
    @modsection{Set data structure}
    Set is a data structures for storing collection of values.
    @modsubsection{Definitions}
 
    Here is a definition of a data structure Set.
-   @end[doc]
 >>
 
 define set_sig: Set[i:l]{'T} <-->
@@ -90,7 +84,6 @@ interactive set_intro  {| intro[] |}:
    sequent { <H> >- 'set in Set[i:l]{'T} }
 
  doc <:doc<
-   @begin[doc]
    The <<label["car":t]>> is an abstract carrier for sets (in concrete implementations it could be, for example, list or tree type),
    <<label["empty":t]>> is a constant of this type for an empty set.
    Set data type has also the following functions:
@@ -110,11 +103,9 @@ interactive set_intro  {| intro[] |}:
 
      guarantees that  <<label["delete":t] 'S 'b>> has all elements that $S$ had except element $b$.}
    @end[itemize]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Example: Sets as lists}
 
    The simplest example of an implementation of Set data structure uses lists.
@@ -130,13 +121,12 @@ doc <:doc<
    Since @hrefmodule[Itt_fset]'s definition of sets needs a  decidable equality,
    we will define a functor that take a type with decidable equality $A$
    and construct a data structure of the type <<Set[i:l]{'A^car}>>.
-   @end[doc]
 >>
 extends Itt_fset
 extends Itt_relation_str
 
 doc <:doc<
-   @doc{Definition:}
+   Definition:
 >>
 define set_as_list: set_as_list{'A} <-->
    {car    = fset{'A^"=";'A^car};
@@ -151,19 +141,17 @@ doc docoff
 dform sal_df : except_mode[src] :: set_as_list{'A} = `"set_as_list" "(" 'A ")"
 
 doc <:doc<
-   @doc{Theorem:}
+   Theorem:
 >>
 interactive set_as_list_correct :
    sequent { <H> >- 'A in  DecEquality[i:l] } -->
    sequent { <H> >- set_as_list{'A} in Set[i:l]{'A^car} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Remarks}
     Note that decidable equality is important to define @tt[set_as_list].
     Actually we can prove that it is necessary for a type $T$ to have a decidable equality
     to implement a Set data structure:
-   @end[doc]
 >>
 
 interactive necessity_of_deicidability univ[i:l]:
@@ -172,21 +160,17 @@ interactive necessity_of_deicidability univ[i:l]:
    sequent { <H> >- all a:'T. all b:'T. decidable{'a='b in 'T} }
 
 doc <:doc<
-   @begin[doc]
 More efficient implementation of Sets could be defined when type have an order.
 We will define such structures in  @hrefmodule[Itt_sorted_tree] and  @hrefmodule[Itt_rbtree].
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @modsection{Map data structure}
 
    Another common data structure is Table. A table is a partial function with a finite domain.
    It can be viewed as a set of pairs <<('argument,'value)>>, where the first components of all pairs are different.
 
    @modsubsection{Definitions}
-   @end[doc]
 >>
 
 define dep_table_sig: Table[i:l]{'T; x.'M['x]} <-->
@@ -215,7 +199,6 @@ define table_sig: Table[i:l]{'T;'M} <--> Table[i:l]{'T; x.'M}
 dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{slot[i:l]} "(" ('T -> 'M)  ")"
 
  doc <:doc<
-   @begin[doc]
    This definitions says that table data structure has a constant <<label["empty":t]>>
    (an empty table, i.e. function that undefined on all elements).
    Table has also the following functions:
@@ -252,15 +235,12 @@ dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{s
    $<< (not{'x_1='x_2 in 'T} => label[apply:t] (label[delete:t] 'F 'x_2) 'x_1 = label[apply:t] 'F 'x_1 in  'M['x_1] + unit) >>$
     }
    @end[itemize]
-   @end[doc]
 >>
 
  doc <:doc<
-   @begin[doc]
    @modsubsection{Sets as tables}
    Set is partial case of Table. We can construct a data structure $Set:<<Set[i:l]{'T}>>$ of sets of elements of type $T$
    from a given table $Table:<<Table[i:l]{'T; unit}>>$.
-   @end[doc]
 >>
 
 define set_as_table: set_as_table{'Table} <-->
@@ -278,13 +258,11 @@ interactive set_as_table_correct :
 
 (*
 doc <:doc<
-   @begin[doc]
    @modsubsection{Tables as lists}
 
    The simplest way to implement Tables is to use lists as carrier in the same way as we defined sets.
 
    Let us construct a <<Table[i:l]{'A^car; x.'S['x]}>>, where $A$ is an ordered set.
-   @end[doc]
 >>
 
 doc docoff
@@ -305,7 +283,7 @@ doc docoff
 dform sal_df : except_mode[src] :: set_as_list{'A} = `"set_as_list" "(" 'A ")"
 
 doc <:doc<
-   @doc{Theorem:}
+   Theorem:
 >>
 interactive set_as_list_correct :
    sequent { <H> >- 'A in  DecEquality[i:l] } -->

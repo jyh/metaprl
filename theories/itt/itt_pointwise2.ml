@@ -1,7 +1,5 @@
 doc <:doc<
- @begin[doc]
  @module[Itt_pointwise2]
- @end[doc]
 >>
 
 extends Itt_equal
@@ -32,10 +30,8 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
- @begin[doc]
   The following rules are derived only in pointwise functionality.
    They both contradict to Let rule.
- @end[doc]
 >>
 
 interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H :

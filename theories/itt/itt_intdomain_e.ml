@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_intdomain_e]
 
    This theory defines integral domains with decidable equality.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_intdomain
 extends Itt_ring_uce
 extends Itt_labels
@@ -58,11 +57,9 @@ let _ =
  * Commutative intDomain with Decidable Equality                             *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Commutative integral domain with decidable equality}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_isIntDomainE1 : isIntDomainE{'f} <-->
    isIntDomain{'f} & eqDecidable{'f}
@@ -85,10 +82,8 @@ let resource elim +=
    [<<intDomainE[i:l]>>, intDomainEDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive isIntDomainE_wf {| intro [] |} :
    [wf] sequent { <H> >- isIntDomain{'f} Type } -->
@@ -100,10 +95,8 @@ interactive intDomainE_wf {| intro [] |} :
    sequent { <H> >- intDomainE[i:l] Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive isIntDomainE_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- isIntDomain{'f} } -->
@@ -168,10 +161,8 @@ doc docoff
  * Polynomials                                                          *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Polynomial ring}
 
-   @end[doc]
 >>
 interactive poly_intdomain {| intro [] |} :
    [wf] sequent { <H> >- 'F in intDomainE[i:l] } -->

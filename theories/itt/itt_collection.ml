@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_collection]
    The @tt{Itt_collection} module formalized the type of indexed collections.
    See @cite["Nog02a,Nog02b"] for more information.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,9 +39,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Itt_bool
@@ -54,24 +51,16 @@ extends Itt_logic
 
 doc docoff
 
+open Basic_tactics
+
 open Itt_struct
 open Itt_squash
 open Itt_tunion
 open Itt_int_base
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
-open Top_conversionals
-
-open Typeinf
-open Dtactic
-
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Basic definitions}
-   @end[doc]
 >>
 
 (*--- col ---*)
@@ -217,7 +206,7 @@ interactive col_type_wf {| intro [intro_univ_arg] |} univ[l:l] :
    sequent{ <H> >- 'C in Col[l:l]{'T} } -->
    sequent{ <H> >- "type"{col_type{'C;'T}}}
 
-doc <:doc< @doc{@modsubsection{Basic operations}} >>
+doc <:doc< @modsubsection{Basic operations} >>
 
 (*--- singleton ---*)
 
@@ -269,7 +258,7 @@ interactive member_union_elim {| elim [ThinOption thinT] |} 'H :
    sequent{ <H>; u:col_member{"union"{'X;x.'Y['x]};'y}; x:'X; v: col_member{'Y['x];'y}; <J> >- squash{'Z} } -->
    sequent{ <H>; u:col_member{"union"{'X;x.'Y['x]};'y}; <J> >- squash{'Z} }
 
-doc <:doc< @doc{@modsubsection{Other operations}} >>
+doc <:doc< @modsubsection{Other operations} >>
 
 (*--- col_filter ---*)
 

@@ -1,8 +1,6 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_pointwise]
    @parents
-   @end[doc]
 >>
 
 extends Itt_equal
@@ -21,11 +19,9 @@ let _ = show_loading "Loading Itt_pointwise%t"
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    The following two rules are valid only for pointwise functionality.
    They both contradict to @hrefrule[Let] rule.
-   @end[doc]
 >>
 
 prim hypSubstPointwise 'H 'J_1 bind{t.'t1['t]}  bind{y. 'A['y]} :

@@ -2,11 +2,9 @@ doc <:doc<
    @begin[spelling]
    @end[spelling]
 
-   @begin[doc]
    @module[UNITY]
    This module defines the translation between UNITY and
    an abstract source language.
-   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -37,10 +35,8 @@ extends Unity_ast
 extends Unity_source
 
 doc <:doc<
-   @begin[doc]
    @terms
    Translation operators and helper terms.
-   @end[doc]
 >>
 declare Alias{'e}
 declare Alias_args{'args}
@@ -48,11 +44,9 @@ declare Lv{'e}
 declare Syncronize{'vars; 'xxxx}
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    Translation rewrites.
    First, we define the alias operator on each expression.
-   @end[doc]
 >>
 
 prim_rw alias_int :
@@ -83,9 +77,7 @@ prim_rw alias_apply :
    ApplyExp{Lv{'f}; Alias_args{'args}; 'pos}
 
 doc <:doc<
-   @begin[doc]
    Translating a list of arguments.
-   @end[doc]
 >>
 
 prim_rw alias_args1 :
@@ -95,9 +87,7 @@ prim_rw alias_args2 :
    Alias_args{UNil} <--> UNil
 
 doc <:doc<
-   @begin[doc]
    Second, we define the left-value operator on each expression.
-   @end[doc]
 >>
 
 prim_rw lv_int :
@@ -128,9 +118,7 @@ prim_rw lv_apply :
    ApplyExp{Lv{'f}; Alias_args{'args}; 'pos}
 
 doc <:doc<
-   @begin[doc]
    The syncronization operator.
-   @end[doc]
 >>
 
 prim_rw sync_vars :
@@ -141,7 +129,7 @@ prim_rw sync_vars :
                         Source_set{Alias{VarExp{'var_v; 'pos}}; Lv{VarExp{'var_v; 'pos}}; StatementSkip}};
              StatementSkip;
              Syncronize{'rest; 'var_changed}}
-                        
+
 (************************************************************************
  * Display forms
  *)

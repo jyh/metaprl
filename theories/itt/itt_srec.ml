@@ -1,6 +1,5 @@
 doc <:doc<
    @spelling{unrollings}
-   @begin[doc]
    @module[Itt_srec]
 
    The @tt[Itt_srec] module defines a ``simple'' recursive type,
@@ -12,8 +11,8 @@ doc <:doc<
    interpretation $T = B[T]$.  The body $B[T]$ must be a type for
    @emph{any} type $T @in @univ{i}$, and in addition $B[T]$ must be
    monotone in the type argument $T$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -46,9 +45,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_equal
 extends Itt_prec
@@ -80,12 +77,10 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{srec} term defines the recursive type.  The @tt{srecind}
    term defines an induction combinator over elements of the recursive type.
-   @end[doc]
 >>
 declare srec{T. 'B['T]}
 declare srecind{'a; p, h. 'g['p; 'h]}
@@ -110,14 +105,12 @@ dform srecind_df : except_mode[src] :: srecind{'a; p, h. 'g} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{srecind} induction combinator takes an argument
    $a$ that belongs to a recursive type definition.  The computation
    is defined through the body $g[p, h]$, which takes a
    recursive instance $p$, and the argument element $h$.
-   @end[doc]
 >>
 prim_rw unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. srecind{'a; p, h. 'g['p; 'h]}}; 'a]
@@ -135,13 +128,11 @@ prim srecFormation :
    srec{T. 'B['T]}
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
 
    The simple recursive type $@srec{T; B[T]}$ is a type if $B[T]$ is
    a monotone type over types type $T @in @univ{i}$.
-   @end[doc]
 >>
 prim srecEquality {| intro [] |} :
    [wf] sequent { <H>; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
@@ -164,12 +155,10 @@ prim srec_memberFormation {| intro [] |} :
    'g
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    The elements of the recursive type $@srec{T; B[T]}$ are the
    elements of $B[@srec{T; B[T]}]$.
-   @end[doc]
 >>
 
 prim srec_memberEquality {| intro [] |} :
@@ -179,14 +168,12 @@ prim srec_memberEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The elimination form performs induction over the
    assumption $x@colon @srec{T; B[T]}$.  The conclusion $C[x]$ is
    true for the arbitrary element $x$, if, given that it holds on
    the unrollings, it also holds on $x$.
-   @end[doc]
 >>
 
 prim srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
@@ -204,10 +191,8 @@ prim srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
    srecind{'x; p, h. 'g['x; srec{X. 'B['X]}; it; 'p; 'h]}
 
 doc <:doc<
-   @begin[doc]
    The second elimination form performs unrolling of the recursive
    type definition.
-   @end[doc]
 >>
 
 prim srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H :
@@ -216,14 +201,12 @@ prim srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H :
    'g['x; 'x; it]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Combinator equality}
 
    The @hrefterm[srecind] term produces a value of type $S$ if the
    argument belongs to some recursive type, and the body computes
    a value of type $S$ given the argument $r$ and a function
    $h$ to compute the values of the recursive calls.
-   @end[doc]
 >>
 prim srecindEquality {| intro [] |} bind{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
    [wf] sequent { <H> >- 'r1 = 'r2 in srec{T. 'B['T]} } -->

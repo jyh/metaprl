@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    redeces
    @end[spelling]
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends M_ir
 doc docoff
@@ -54,7 +50,6 @@ open Basic_tactics
  *)
 
 doc <:doc<
-   @begin[doc]
    @resources
 
    The @tt{dead} resource provides a generic method for
@@ -65,7 +60,6 @@ doc <:doc<
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
 
-   @end[doc]
    @docoff
 >>
 let resource (term * conv, conv) dead =
@@ -84,13 +78,11 @@ let deadC =
  *)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The rewrites are straightforward.  Note that in the redeces below, $v$ is
    not allowed to be free in $e$.  Each of these rewrites is added to the
    @tt{dead_resource}.
-   @end[doc]
 >>
 prim_rw dead_let_atom :
    LetAtom{'a; v. 'e} <--> 'e

@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_hoas_base]
    The @tt[Itt_hoas_base] module defines the basic operations of the
    Higher Order Abstract Syntax (HOAS).
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,7 +35,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Base_theory
 
 extends Itt_fun
@@ -52,7 +51,6 @@ open Itt_rfun
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
    The expression <<bind{x.'t['x]}>> represents a ``bound'' term (``bterm'')
    with a potentially free variable $x$. In order for it to be well-formed,
@@ -70,7 +68,6 @@ doc <:doc<
 
    Finally, the @tt[weak_dest_bterm] operator allows testing whether a term is a @tt[bind]
    or a @tt[mk_term] and to get the <<'op>> and $subterms$ in the latter case.
-   @end[doc]
 >>
 
 define (*private*) unfold_bind:
@@ -89,7 +86,7 @@ define (*private*) unfold_wdt:
    <-->
    decide{'bt; f. 'bind_case; opt. spread{'opt; op, sbt. 'mkterm_case['op; 'sbt]}}
 
-doc "doc"{rewrites}
+doc rewrites
 
 interactive_rw reduce_subst {| reduce |} :
    subst{bind{x.'bt['x]}; 't} <--> 'bt['t]

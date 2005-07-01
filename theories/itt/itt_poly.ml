@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_poly]
 
    This theory defines polynomials.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_cyclic_group
 extends Itt_labels
 doc docoff
@@ -56,11 +55,9 @@ let _ =
  * Polynomials                                                          *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Polynomials}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_isZero : isZero{'a; 'F} <-->
    'F^eq 'a 'F^"0"
@@ -220,10 +217,8 @@ let resource reduce +=
    << normalize{(0,'v); 'F} >>, unfold_normalize
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness, Introduction, Elimination}
 
-   @end[doc]
 >>
 interactive isZero_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in 'F^car } -->
@@ -363,10 +358,8 @@ interactive eq_poly_wf {| intro [] |} :
    sequent { <H> >- eq_poly{'p; 'q; 'F} in bool }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Properties}
 
-   @end[doc]
 >>
 interactive poly_normalize {| intro [] |} :
    [wf] sequent { <H> >- 'p in poly{'F} } -->

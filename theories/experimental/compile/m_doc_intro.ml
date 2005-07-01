@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    CPS ML Mojave untrusted compilable Necula Liang HOAS
    Morrisett
@@ -31,12 +30,10 @@ doc <:doc<
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
    Modified By:
    @end[license]
-   @end[doc]
 >>
 extends M_doc_comment
 
 doc <:doc<
-@begin[doc]
 
 The task of designing and implementing a compiler can be difficult
 even for a small language.  There are many phases in the translation
@@ -255,7 +252,6 @@ rewriting the source program $e$ to an equivalent assembly program
 $e'$.
 
 @docoff
-@end[doc]
 >>
 
 

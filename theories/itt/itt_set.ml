@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_set]
 
    The @tt[Itt_set] module defines a ``set'' type, or more precisely,
@@ -12,8 +11,8 @@ doc <:doc<
    dependent product $x@colon T @times P[x]$ (Section @refmodule[Itt_dprod]),
    but the proof $P[x]$ is omitted (squashed).  The set type <<{x: 'T| 'P['x]}>>
    is always a subtype of $T$.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -48,9 +47,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Itt_squash
 extends Itt_equal
@@ -81,11 +78,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The @tt{set} term defines the set type.
-   @end[doc]
 >>
 declare set{'A; x. 'B['x]}
 doc docoff
@@ -107,7 +102,6 @@ dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Equality and typehood}
 
@@ -117,7 +111,6 @@ doc <:doc<
    parts are equal. Note that it is possible to define
    an @emph{extensional} version of a set type using the @emph{intensional} one
    by applying the @hrefterm[esquash] operator to the set predicate.
-   @end[doc]
 >>
 prim setEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -132,12 +125,10 @@ prim setType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
 
    Two terms $a_1$ and $a_2$ are equal in the set type $@set{a; A; B[a]}$
    if they are equal in $A$ and also $B[a_1]$ is true.
-   @end[doc]
 >>
 prim setMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
@@ -147,12 +138,10 @@ prim setMemberEquality {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    A set type $@set{x; A; B[x]}$ is true if there is an element $a @in A$
    where $B[a]$ is true.
-   @end[doc]
 >>
 interactive setMemberFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
@@ -161,14 +150,12 @@ interactive setMemberFormation {| intro [] |} 'a :
    sequent { <H> >- { x:'A | 'B['x] } }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    An assumption with a set type $u@colon @set{x; A; B[x]}$ asserts two facts:
    that $u @in A$ and $B[u]$.  However, the proof of $B[u]$ is unavailable.  The
    $@squash{B[u]}$ hypothesis states that $B[u]$ is true, but its proof is
    omitted.
-   @end[doc]
 >>
 prim setElimination {| elim [] |} 'H :
    ('t['u;'i] : sequent { <H>; u: 'A; i: squash{'B['u]}; <J['u]> >- 'T['u] }) -->
@@ -179,13 +166,11 @@ interactive set_member {| nth_hyp |} 'H :
    sequent { <H>; u: { x: 'A | 'B['x] }; <J['u]> >- 'u in 'A }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subtyping}
 
    The set type $@set{x; A; B[x]}$ is always a subtype of $A$ if
    the set type is really a type.  This rule is added to the
    @hrefresource[subtype_resource].
-   @end[doc]
 >>
 interactive set_subtype {| intro [] |} :
    sequent { <H> >- { a: 'A | 'B['a] } Type } -->

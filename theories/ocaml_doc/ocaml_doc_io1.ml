@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    bprintf dd ddd dddd deallocates eprintf excl fprintf gen int ll nonblock
@@ -32,13 +31,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 The I/O library in OCaml is fairly expressive, including a @tt{Unix}
 library that implements most of the portable Unix system calls.  In
@@ -361,7 +358,6 @@ val bprintf: Buffer.t -> ('a, Buffer.t, unit) format -> 'a
 @end[iverbatim]
 
 @docoff
-@end[doc]
 >>
 
 (*

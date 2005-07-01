@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_int_set]
 
    The @tt[Mfir_int_set] module defines integer sets and operations on them.
@@ -33,13 +32,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_bool
@@ -58,7 +54,6 @@ open Mfir_int
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
    @modsubsection{Integer sets}
 
@@ -74,7 +69,6 @@ doc <:doc<
    should be less then or equal to the right endpoint.  The term @tt[intset]
    consists of a sorted list of intervals.  The parameters are tags to
    indicate the precision and signedness of the endpoints of each interval.
-   @end[doc]
 >>
 
 declare interval{ 'left; 'right }
@@ -82,34 +76,28 @@ declare intset[precision:n, sign:s]{ 'interval_list }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Set operations}
 
    The term @tt[member] tests if @tt[num] is a member of the set @tt[s].
-   @end[doc]
 >>
 
 declare member{ 'num; 's }
 
 
 doc <:doc<
-   @begin[doc]
 
    The term @tt[normalize] is used to normalize a set by joining intervals
    of the form $[a,i],[i+1,b]$.  It performs no other actions in normalizing
    a set.
-   @end[doc]
 >>
 
 declare normalize{ 'set }
 
 
 doc <:doc<
-   @begin[doc]
    The term @tt[subset] is used to determine whether or not @tt[set1]
    is a subset of @tt[set2].  The term @tt[set_eq] is used to test two
    sets for equality.  The term @tt[union] takes the union of two sets.
-   @end[doc]
 >>
 
 declare "subset"{ 'set1; 'set2 }
@@ -118,7 +106,6 @@ declare union{ 'set1; 'set2 }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Constants}
 
    The term @tt[intset_max] is the set of all integers with the given
@@ -126,7 +113,6 @@ doc <:doc<
    currently supported.  The signedness may be ``signed'' or ``unsigned''.
    The term @tt[enum_max] is the set of allowed values for the parameter
    of @hrefterm[tyEnum]
-   @end[doc]
 >>
 
 declare intset_max[precision:n, sign:s]
@@ -157,14 +143,12 @@ doc <:doc<
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    @modsubsection{Interval operations}
 
    Rewriting of interval operations is straightforward. Note that in
    taking the union of two intervals, we assume that the two intervals
    overlap.
-   @end[doc]
 >>
 
 prim_rw reduce_interval_lt_main :
@@ -205,11 +189,9 @@ let reduce_subset_interval =
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Set operations}
 
    Testing for set membership is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_member_intset_base :
@@ -247,12 +229,10 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
 
    Set normalization is limited to combining intervals of the form
    $[a,i],[i+1,b]$.  We assume that the intervals are sorted and
    non-overlapping.
-   @end[doc]
 >>
 
 prim_rw reduce_normalize_aux :
@@ -298,13 +278,11 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
 
    The @tt[reduce_subset] conversional uses the three rewrites below to reduce
    <<'set1 subset 'set2>>.  The cases in which one of the sets is
    empty are straightforward.  The case in which both sets are non-empty
    reduces to a case analysis on the first interval in each set.
-   @end[doc]
 >>
 
 prim_rw reduce_subset_base1 :
@@ -353,13 +331,11 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
 
    Computing the union of two integer sets is rather involved.
    The cases in which one of the sets is empty are straightforward.
    The case in which both sets are non-empty reduces to a case
    analysis on the first interval in each set.
-   @end[doc]
 >>
 
 prim_rw reduce_union_start :
@@ -424,10 +400,8 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
 
    Set equality is defined in the usual way.
-   @end[doc]
 >>
 
 prim_rw reduce_set_eq_aux :
@@ -450,13 +424,11 @@ let resource reduce += [
 ]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Constants}
 
    Set constants can be rewritten into their actual values.  These rewrites
    are straightforward, and we omit an explicit listing of them.
    @docoff
-   @end[doc]
 >>
 
 prim_rw reduce_enum_max :

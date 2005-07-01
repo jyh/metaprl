@@ -1,8 +1,6 @@
 (*!
- * @begin[doc]
  * @module[Itt_pairwise]
  * @parents
- * @end[doc]
  *)
 
 extends Itt_equal
@@ -24,11 +22,9 @@ open Itt_struct2
  ************************************************************************)
 
 (*!
- * @begin[doc]
  * @rules
  * The following two rules are valid only for pairwise functionality.
  * They are invalid in pointwise functionality and contradict, for example, to @hrefrule[quotientElimination2] rule.
- * @end[doc]
  *)
 
 prim let_rule 'H ('z='s in 'S):

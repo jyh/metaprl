@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_squiggle]
 
    The @tt[Itt_squiggle] module defines the squiggle equality.
@@ -12,8 +11,8 @@ doc <:doc<
    $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
    The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
    define when such substitution would be valid.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -45,9 +44,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Itt_equal
@@ -78,11 +75,9 @@ let _ =
  ************************************************************************)
 
 (*************************************************************************
- * @begin[doc]
  * @terms
  * The @tt[sqeq] term defines the squiggle equality.
  *
- * @end[doc]
  *)
 (*
 declare "sqeq"{'t;'s}
@@ -99,13 +94,11 @@ let dest_squiggle = dest_dep0_dep0_term squiggle_opname
 let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    @modsubsection{Typehood and equality}
    The squiggle relation <<'t ~ 's>> is a type if and only if
    it holds.  Two squiggle relation <<'t_1 ~ 's_1>> and <<'t_2 ~ 's_2>>
    are equal as types whenever they are correct types.
-   @end[doc]
 >>
 prim squiggleEquality {| intro [] |} :
   [wf] sequent{ <H> >- 't1 ~ 's1 } -->
@@ -118,11 +111,9 @@ interactive squiggleType {| intro [] |} :
   sequent{ <H> >- "type"{'t ~ 's}}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Membership}
    The <<it>> term is the one-and-only element
    in a provable squiggle equality type.
-   @end[doc]
 >>
 
 prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
@@ -135,11 +126,9 @@ interactive squiggle_memberEquality {| intro []; squash |} :
   sequent{ <H> >- it in ('t ~ 's)}
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Squiggle equality is an equivalence relation}
    Squiggle equality is reflexive, symmetric and transitive
    (the symmetry and transitivity rules are proven in the Substitution section below).
-   @end[doc]
 >>
 
 prim squiggleRef {|  intro [] |} :
@@ -147,11 +136,9 @@ prim squiggleRef {|  intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution}
    If we can prove that <<'t ~ 's>>, then we can substitute $s$ for $t$
    in any place without generating any well-formedness subgoals.
-   @end[doc]
 >>
 
 prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
@@ -166,14 +153,12 @@ interactive squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
    sequent { <H> >-  'A['t] }
 
 doc <:doc<
-   @begin[doc]
    The  @tt[sqSubstT] tactic takes a clause number $i$, and
    a term <<'t ~ 's>> and applies one of two above rules.
    This tactic substitutes the term $s$ for
    @emph{all} occurrences of the term $t$ in the clause.
    One can give a term  << bind{x. 'A['x]} >> as an optional with-argument
    to specify exact location of the subterm to be replaced.
-   @end[doc]
 >>
 
 interactive squiggleSym {| nth_hyp |} :

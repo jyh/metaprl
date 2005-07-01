@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_normal_subgroup]
 
    The @tt[Czf_itt_normal_subgroup] module defines normal subgroups.
@@ -7,8 +6,7 @@ doc <:doc<
    right cosets coincide, that is, if
    $$@forall a @in @car{g}. @equal{@lcoset{h; g; a}; @rcoset{h; g; a}}$$
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,7 +38,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_subgroup
 extends Czf_itt_abel_group
 extends Czf_itt_coset
@@ -58,7 +56,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare normal_subg{'s; 'g}
 doc docoff
 
@@ -67,11 +65,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    A subgroup $s$ of $g$ is normal if its left and right cosets coincides.
-   @end[doc]
 >>
 prim_rw unfold_normal_subg : normal_subg{'s; 'g} <-->
    (subgroup{'s; 'g} & (all a: set. (mem{'a; car{'g}} => equal{lcoset{'s; 'g; 'a}; rcoset{'s; 'g; 'a}})))
@@ -89,13 +85,11 @@ dform normal_subg_df : except_mode[src] :: normal_subg{'s; 'g} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood}
 
    The @tt[normal_subg] judgment is well-formed if its
    arguments are labels.
-   @end[doc]
 >>
 interactive normalSubg_wf {| intro [] |} :
    sequent { <H> >- 's IN label } -->
@@ -103,13 +97,11 @@ interactive normalSubg_wf {| intro [] |} :
    sequent { <H> >- "type"{normal_subg{'s; 'g}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The proposition $@normalsubg{s; g}$ is true if it is well-formed,
    $s$ is a subgroup of $g$, and for any $a$ in $@car{g}$,
    $@equal{@lcoset{s; g; a}; @rcoset{s; g; a}}$.
-   @end[doc]
 >>
 interactive normalSubg_intro {| intro [] |} :
    sequent { <H> >- 's IN label } -->
@@ -119,11 +111,9 @@ interactive normalSubg_intro {| intro [] |} :
    sequent { <H> >- normal_subg{'s; 'g} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Theorems}
 
    All subgroups of abelian groups are normal.
-   @end[doc]
 >>
 interactive abel_subg_normal 'H 's :
    sequent { <H>; x: abel{'g}; <J['x]> >- 's IN label } -->

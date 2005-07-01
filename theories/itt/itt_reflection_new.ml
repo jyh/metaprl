@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_reflection_new]
 
    The @tt[Itt_reflection_new] module defines the @emph{reflection theory
@@ -19,8 +18,7 @@ doc <:doc<
    as denotations for constants of the << BTerm >> type --- this is similar
    to how numerals denote constants of type <<int>>.
 
-   @end[doc]
-
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -51,11 +49,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc<
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @parents >>
 extends Itt_theory
 extends Base_reflection
 extends Itt_nat
@@ -106,7 +100,7 @@ dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
  * Operator                                                             *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsection{Operators}
 
    First, we define a concrete representation for operators. We will represent
@@ -117,7 +111,7 @@ doc <:doc< @begin[doc]
    solely defined by its binding depth, name and shape. We define the shape
    of an operator, equality of two operators and binding depth using operations
    from @hrefmodule[Itt_synt_operator] and @hrefmodule[Itt_synt_bterm].
-@end[doc] >>
+>>
 
 declare bterm{x.'bt['x]}
 prim_rw bterm_reduce: bterm{x.bterm{| <K> >- 't['x] |}} <-->  bterm{| x:term; <K> >- 't['x] |}
@@ -153,7 +147,7 @@ prim_rw bterm_inject: inject{bterm{| <K> >- 'op<||> |}; 'n} <--> ind{'n; bterm{|
  * Var                                                                  *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsection{BTerms}
 
    Second, we define the evaluation rules for bterms that map expressions
@@ -164,7 +158,7 @@ doc <:doc< @begin[doc]
 
    In the case of a variable, $bterm@{@Gamma,x,@Delta.x@}$ evaluates
    to <<var{length{Gamma}; length{Delta}}>>.
-@end[doc] >>
+>>
 
 prim_rw bterm_var 'H :
   bterm{| <H>; x : term; <J<||> > >- 'x |} <--> var{ op_bdepth{bterm{| <H> >- it[@] |}}; op_bdepth{bterm{| <J> >- it[@] |}} }
@@ -176,12 +170,12 @@ interactive_rw bterm_var_1 :
  * Make_bterm                                                           *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsubsection{Make_bterm}
 
    If << 'bt >> is a compound bterm, then << 'bt >> evaluates to
    << make_bterm{'bt; subterms{'bt}} >>.
-@end[doc] >>
+>>
 
 prim_rw make_bterm_eval:
  if_quoted_op{ bterm{| <J> >- 'T |} ;"true"} -->
@@ -192,12 +186,12 @@ prim_rw make_bterm_eval:
  * Reflection rule for substitution                                     *
  ************************************************************************)
 
-doc <:doc< @begin[doc]
+doc <:doc<
    @modsection{Substitution}
    This reflection rule for the substitution operator states that the
    substitution we have defined syntactically agrees with  the second
    order substitution that we have internally in the system.
-@end[doc] >>
+>>
 
 prim_rw reflection_subst 'H :
  (if_bterm{bterm{| <H>;x:term;<J> >- 't['x] |};"true"} ) -->

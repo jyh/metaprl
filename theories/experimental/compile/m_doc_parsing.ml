@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    YACC lexing params LetAtom op lexer regex LALR pos
    EQ ID exp
@@ -31,12 +30,10 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_ir
 
 doc <:doc<
-@begin[doc]
 
 The abstract syntax of the language of our compiler is shown in Figure @reffigure[syntax]. In order
 to use the formal system for program transformation, the concrete syntax of the source-level
@@ -71,7 +68,6 @@ $$
 @end[figure]
 
 @docoff
-@end[doc]
 >>
 
 (*

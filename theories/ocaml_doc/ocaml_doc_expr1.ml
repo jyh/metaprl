@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @spelling{doesn ll newline aren ooo bbb hhh ddd hh th}
 
@@ -29,12 +28,10 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 Many functional programming implementations include a significant
 runtime environment that defines a standard library and a garbage
@@ -570,7 +567,6 @@ your programs.  The usage is a lot like @tt{gdb}, with one major
 exception: execution can go backwards.  The @tt{back} command will
 go back one instruction.
 
-@end[doc]
 >>
 
 (*

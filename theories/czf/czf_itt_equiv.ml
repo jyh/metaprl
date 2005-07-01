@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_equiv]
 
    The @tt[Czf_itt_equiv] module defines equivalence relations on sets.
@@ -39,8 +38,8 @@ doc <:doc<
    requires that for any two equivalence sets $s_1$ and $s_2$: $P[s_1]
    @Rightarrow P[s_2]$.
 
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -72,12 +71,12 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc<@doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_set
 extends Czf_itt_member
 extends Czf_itt_pair
 extends Czf_itt_set_bvd
-doc <:doc<@docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -94,7 +93,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc<@doc{@terms} >>
+doc terms
 declare equiv{'s; 'r}
 
 doc docoff
@@ -104,28 +103,24 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The @tt{equiv} judgment requires that the two elements $a$
    and $b$ are both in the set $s$ and $@pair{a; b}$ is in $r$.
-   @end[doc]
 >>
 define unfold_equiv : equiv{'s; 'r; 'a; 'b} <-->
    (((isset{'s} & isset{'r} & isset{'a} & isset{'b}) & mem{'a; 's} & mem{'b; 's}) & mem{pair{'a; 'b}; 'r})
 
 doc <:doc<
-   @begin[doc]
    The following two rewrites define the functionality judgments
    in the sense of equivalence.
-   @end[doc]
 >>
 define unfold_equiv_fun_set : equiv_fun_set{'s; 'r; z. 'f['z]} <-->
    (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => equiv{'s; 'r; 'f['a]; 'f['b]}))
 
 define unfold_equiv_fun_prop : equiv_fun_prop{'s; 'r; z. 'P['z]} <-->
     (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => 'P['a] => 'P['b]))
-doc <:doc<@docoff >>
+doc docoff
 
 (*define unfold_equiv_dfun_prop : equiv_dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
    (all s: set. all r: set. all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => (u1: 'A['a] -> 'B['a; 'u1] -> u2: 'A['b] -> 'B['b; 'u2])))
@@ -181,13 +176,11 @@ dform equiv_fun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: eq
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Typehood}
 
    Both of the @tt{equiv} judgments are well-formed if their
    arguments are sets.
-   @end[doc]
 >>
 prim equiv_rel_type {| intro [] |} :
    sequent { <H> >- isset{'s} } -->
@@ -203,11 +196,9 @@ interactive equiv_type {| intro [] |} :
    sequent { <H> >- "type"{equiv{'s; 'r; 'a; 'b}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Definition and property}
 
    The binary relation @tt{equiv} is defined reflexive.
-   @end[doc]
 >>
 prim equiv_ref_intro {| intro [] |} :
    [wf] sequent { <H> >- isset{'s} } -->
@@ -218,11 +209,9 @@ prim equiv_ref_intro {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
 
    An equivalence relation on a set S is a relation
    on S satisfying reflexivity, symmetry, and transitivity.
-   @end[doc]
 >>
 (* XXX BUG: Aleksey: For now, I put "it" as an extract here, probably needs ot be fixed *)
 prim equiv_rel_intro {| intro [] |} :
@@ -235,10 +224,8 @@ prim equiv_rel_intro {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
 
    The @tt{equiv} judgment is reflexive, symmetric, and transitive.
-   @end[doc]
 >>
 (*
 (*
@@ -285,7 +272,7 @@ prim equiv_trans 'b :
    sequent { <H> >- equiv{'s; 'r; 'a; 'c} } =
    ('E, ('A, 'B))
 
-doc <:doc<@docoff >>
+doc docoff
 (*
  * Symmetry in another form.
  *)
@@ -302,13 +289,11 @@ prim equiv_sym1 'H :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The $@equivfunset{s; r; z; f[z]}$ judgment implies that if $r$ is
    an equivalence relation on $s$, then for any set $z @in s$,
    $f[z]$ is a set and is also in $s$.
-   @end[doc]
 >>
 interactive equiv_fun_isset 'H equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent { <H>; z: set; <J['z]> >- isset{'s} } -->
@@ -326,7 +311,7 @@ interactive equiv_fun_mem 'H equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent { <H>; z: set; <J['z]> >- equiv_fun_set{'s; 'r; z. 'f['z]} } -->
    sequent { <H>; z: set; <J['z]> >- mem{'f['z]; 's} }
 
-doc <:doc<@docoff >>
+doc docoff
 let equivFunSetT = argfunT (fun i p ->
    let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in
@@ -355,11 +340,9 @@ let equivFunMemT t i = funT (fun p ->
       equiv_fun_mem i t)
 
 doc <:doc<
-   @begin[doc]
 
    The two @tt{equiv} judgments are both  @emph{functional}
    with respect to their set arguments.
-   @end[doc]
 >>
 interactive equiv_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'f1['z]} } -->
@@ -373,7 +356,7 @@ interactive equiv_rel_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'f2['z]} } -->
    sequent { <H> >- fun_prop{z. equiv{'f1['z]; 'f2['z]}} }
 
-doc <:doc<@docoff >>
+doc docoff
 interactive equiv_set_fun1 {| intro [] |} :
    [wf] sequent { <H> >- isset{'a} } -->
    [wf] sequent { <H> >- isset{'b} } -->
@@ -466,7 +449,6 @@ interactive equiv_elem_equiv_fun5 {| intro [] |} :
    sequent { <H> >- equiv_fun_prop{'s; 'r; z. equiv{'s; 'r; 'z; 'b}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution}
 
    The following two rules define substitution.
@@ -474,7 +456,6 @@ doc <:doc<
    $P[s_1]$ if $s_1$ and $s_2$ are equivalent, and the
    context $P[x]$ is @emph{functional} (in the sense of
    equivalence) on set arguments.
-   @end[doc]
 >>
 interactive equiv_hyp_subst 'H 's 'r 's1 's2 (bind{w. 'P['w]}) :
    sequent { <H>; x: 'P['s1]; <J['x]> >- equiv{'s; 'r} } -->
@@ -491,7 +472,6 @@ interactive equiv_concl_subst 's 'r 's1 's2 (bind{w. 'C['w]}) :
    sequent { <H> >- 'C['s1] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Typehood of the functionality judgments}
 
    The @tt{equiv_fun_set} judgment $@equivfunset{s; r; x; f[x]}$
@@ -500,7 +480,6 @@ doc <:doc<
    judgment $@equivfunprop{s; r; x; P[x]}$ requires $s$ and $r$
    be sets, $P[x]$ be a family of propositions, and $r$ be an
    equivalence relation on $s$.
-   @end[doc]
 >>
 interactive equiv_fun_set_type {| intro [] |} :
    [wf] sequent { <H> >- isset{'s} } -->
@@ -517,12 +496,10 @@ interactive equiv_fun_prop_type {| intro [] |} :
    sequent { <H> >- "type"{equiv_fun_prop{'s; 'r; z. 'f['z]}} }
 
 doc <:doc<
-   @begin[doc]
 
    The trivial cases, where the functionality argument
    does not depend on the set argument, are functional.
    The identity function is also functional.
-   @end[doc]
 >>
 interactive equiv_fun_set {| intro [] |} :
    [wf] sequent { <H> >- isset{'s} } -->
@@ -546,13 +523,11 @@ interactive equiv_fun_prop {| intro [] |} :
    sequent { <H> >- equiv_fun_prop{'s; 'r; z. 'P} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Equivalence relation and Equality}
 
    If $@eq{a; b}$, then $a$ is equivalent with $b$ under any equivalence
    relation. On the other hand, if $a$ and $b$ are equivalent under all
    equivalence relations, then $a$ is equal to $b$.
-   @end[doc]
 >>
 interactive eq_equiv_elim {| elim [] |} 'H 's 'r :
    sequent { <H>; x: eq{'a; 'b}; <J['x]> >- isset{'s} } -->
@@ -565,7 +540,7 @@ interactive eq_equiv_elim {| elim [] |} 'H 's 'r :
    sequent { <H>; x: eq{'a; 'b}; <J['x]>; y: equiv{'s; 'r; 'a; 'b} >- 'C['x] } -->
    sequent { <H>; x: eq{'a; 'b}; <J['x]> >- 'C['x] }
 
-doc <:doc<@docoff >>
+doc docoff
 interactive equal_equiv_elim {| elim [] |} 'H 's 'r :
    sequent { <H>; x: equal{'a; 'b}; <J['x]> >- isset{'s} } -->
    sequent { <H>; x: equal{'a; 'b}; <J['x]> >- isset{'r} } -->
@@ -593,8 +568,6 @@ interactive pair_eq {| elim [] |} 'H :
    sequent { <H>; x: eq{pair{'a; 'b}; pair{'z; 'z}}; <J['x]> >- 'C['x] }
 *)
 doc <:doc<
-   @begin[doc]
-   @end[doc]
 >>
 interactive equiv_equal_elim {| elim [] |} 'H :
    sequent { <H>; x: (all r: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b})); <J['x]> >- isset{'s} } -->
@@ -605,13 +578,12 @@ interactive equiv_equal_elim {| elim [] |} 'H :
    sequent { <H>; x: (all r: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b})); <J['x]>; y: equal{'a; 'b} >- 'C['x] } -->
    sequent { <H>; x: (all r: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b})); <J['x]> >- 'C['x] }
 
-doc <:doc<@docoff >>
+doc docoff
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Substitution}
 
    @begin[description]
@@ -622,7 +594,6 @@ doc <:doc<
      clause $i$.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let equivConclSubstT = argfunT (fun t p ->
    let s, r, s1, s2 = dest_equiv t in
@@ -663,7 +634,6 @@ let equivSubstT t i =
       equivHypSubstT t i
 
 doc <:doc<
-   @begin[doc]
    @tactics
 
    @begin[description]
@@ -672,7 +642,6 @@ doc <:doc<
       relation reasoning for the @hrefterm[equiv] set judgment.}
    @end[description]
    @docoff
-   @end[doc]
 >>
 let equivRefT = equiv_ref_intro
 let equivSymT = equiv_sym

@@ -1,6 +1,5 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
-   @begin[doc]
    @begin[spelling]
    Chaitin NP
    @end[spelling]
@@ -30,13 +29,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 extends M_doc_x86_asm
 
 doc <:doc<
 
-@begin[doc]
 
 Register allocation is one of the easier phases of the compiler formally: the main objective of
 register allocation is to rename the variables in the program to use register names.  Because we are using higher-order abstract syntax, the formal
@@ -204,7 +201,6 @@ spilled, the $@SpillRegister{v; s}$ operands are selectively eliminated with the
 $$@xrewrite[spill]{@SpillRegister{v; s}; @SpillMemory{s}}$$
 
 @docoff
-@end[doc]
 
 >>
 

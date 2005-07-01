@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_image]
 
    The @tt{Itt_image} adds a new type constructor <<Img{'A, x.'f['x]}>> with ther
@@ -42,9 +41,7 @@ doc <:doc<
 >>
 
 doc <:doc< ************************************************************************
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Base_theory
 extends Itt_equal

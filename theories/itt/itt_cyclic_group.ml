@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_cyclic_group]
 
    This theory defines cyclic groups.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_group
 extends Itt_int_base
 extends Itt_int_ext
@@ -59,7 +58,7 @@ let _ =
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< @doc{@rewrites} >>
+doc rewrites
 
 define unfold_group_power : group_power{'g; 'a; 'n} <-->
    ind{'n; i, j. ('g^inv 'a) *['g] 'j; .'g^"1"; k, l. 'a *['g] 'l}
@@ -126,12 +125,10 @@ let natpowerC = natpower_group_power
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Rules}
    @modsubsection{Group power operation}
 
    Well-formedness.
-   @end[doc]
 >>
 interactive natpower_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in 'g^car } -->
@@ -176,10 +173,8 @@ interactive group_power_more {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent { <H> >- group_power{'g; 'a; 'n} *['g] 'a = group_power{'g; 'a; ('n +@ 1)} in 'g^car }
 
 doc <:doc<
-   @begin[doc]
 
    Power reduction 1: $a^m * a^n = a^{m + n}$
-   @end[doc]
 >>
 interactive group_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent { <H> >- 'g in group[i:l] } -->
@@ -196,10 +191,8 @@ interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l]
    sequent { <H> >- 'g^inv group_power{'g; 'a; 'n} = group_power{'g; 'a; (-'n)} in 'g^car }
 
 doc <:doc<
-   @begin[doc]
 
    Power reduction 2: $(a^m)^n = a^{m * n}$
-   @end[doc]
 >>
 interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent { <H> >- 'g in group[i:l] } -->
@@ -209,11 +202,9 @@ interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:
    sequent { <H> >- group_power{'g; group_power{'g; 'a; 'm}; 'n} = group_power{'g; 'a; ('m *@ 'n)} in 'g^car }
 
 doc <:doc<
-   @begin[doc]
 
    If $s$ is a subgroup of $g$, the power operation on $s$ is the same as
    that on $g$.
-   @end[doc]
 >>
 interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
    [main] sequent { <H> >- subgroup[i:l]{'s; 'g} } -->
@@ -222,10 +213,8 @@ interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 
    sequent { <H> >- group_power{'g; 'a; 'n} = group_power{'s; 'a; 'n} in 's^car }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Cyclic group}
 
-   @end[doc]
 >>
 interactive isCyclic_type {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent { <H> >- 'g in group[i:l] } -->
@@ -243,10 +232,8 @@ interactive isCyclic_elim {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
    sequent { <H>; x: isCyclic{'g}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
 
    Every cyclic group is abelian.
-   @end[doc]
 >>
 interactive isCyclic_commutative group[i:l] :
    [wf] sequent { <H> >- 'g in group[i:l] } -->
@@ -260,10 +247,8 @@ interactive isCyclic_abelian :
 doc docoff
 
 doc <:doc<
-   @begin[doc]
 
    Every non-trivial subgroup of a cyclic group is cyclic.
-   @end[doc]
 >>
 interactive subg_isCyclic group[i:l] 'g :
    [main] sequent { <H> >- isCyclic{'g} } -->
@@ -273,10 +258,8 @@ interactive subg_isCyclic group[i:l] 'g :
    sequent { <H> >- isCyclic{'s} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Cyclic subgroup}
 
-   @end[doc]
 >>
 interactive cycSubg_intro {| intro [] |} :
    [wf] sequent { <H> >- 'g in group[i:l] } -->
@@ -284,10 +267,8 @@ interactive cycSubg_intro {| intro [] |} :
    sequent { <H> >- cycSubg{'g; 'a} in group[i:l] }
 
 doc <:doc<
-   @begin[doc]
 
    A cyclic subgroup is a subgroup.
-   @end[doc]
 >>
 interactive cycSubg_subgroup {| intro [] |} :
    [wf] sequent { <H> >- 'g in group[i:l] } -->

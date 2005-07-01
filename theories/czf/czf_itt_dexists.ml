@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_dexists]
 
    The @tt{Czf_itt_dexists} theory defines @emph{restricted}
@@ -13,8 +12,8 @@ doc <:doc<
    an implication on the elements of $s$.
 
    $$@dexists{x; @collect{y; T; f[y]}; P[x]} @equiv @prod{x; T; P[x]}$$
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -46,7 +45,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_sep
 extends Czf_itt_set_ind
 doc docoff
@@ -66,7 +65,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare "dexists"{'T; x. 'A['x]}
 doc docoff
 
@@ -75,12 +74,10 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The existential is defined by set induction on the set
    argument as a dependent product type.
-   @end[doc]
 >>
 prim_rw unfold_dexists : "dexists"{'s; x. 'A['x]} <-->
    set_ind{'s; T, f, g. x: 'T * 'A['f 'x]}
@@ -101,14 +98,12 @@ dform dexists_df : parens :: "prec"[prec_lambda] :: "dexists"{'s; x. 'A} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The proposition $@dexists{x; s; P[x]}$ is well-formed
    if $s$ is a set, and $P[x]$ is a well-formed proposition
    for @emph{any} set argument $x$.
-   @end[doc]
 >>
 interactive dexists_type {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s} } -->
@@ -116,13 +111,11 @@ interactive dexists_type {| intro [] |} :
    sequent { <H> >- "type"{."dexists"{'s; x. 'A['x]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction}
 
    The existential $@dexists{x; s; P[x]}$ is true if
    it is well-formed and if $P[a]$ is true for some
    element $@mem{a; s}$.
-   @end[doc]
 >>
 interactive dexists_intro {| intro [] |} 'z :
    ["wf"] sequent { <H>; w: set >- "type"{'A['w]} } -->
@@ -132,13 +125,11 @@ interactive dexists_intro {| intro [] |} 'z :
    sequent { <H> >- "dexists"{'s; x. 'A['x]} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Elimination}
 
    The proof of the existential $@dexists{x; s; P[x]}$ has two parts:
    an element $@mem{a; s}$, and a proof $P[a]$.  The elimination form
    produces these parts.
-   @end[doc]
 >>
 interactive dexists_elim {| elim [] |} 'H :
    ["wf"] sequent { <H>; x: "dexists"{'s; y. 'A['y]}; <J['x]> >- isset{'s} } -->
@@ -155,12 +146,10 @@ interactive dexists_elim {| elim [] |} 'H :
    sequent { <H>; x: "dexists"{'s; y. 'A['y]}; <J['x]> >- 'C['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Functionality}
 
    The existential is functional in both its set and proposition
    arguments.
-   @end[doc]
 >>
 interactive dexists_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'A['z]} } -->
@@ -170,13 +159,11 @@ interactive dexists_fun {| intro [] |} :
    sequent { <H> >- fun_prop{z. "dexists"{'A['z]; y. 'B['z; 'y]}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Restriction}
 
    The existential is a restricted formula because it is
    a quantification over the @emph{index} type of the set
    argument.
-   @end[doc]
 >>
 interactive dexists_res2 {| intro [] |} :
    ["wf"]   sequent { <H> >- isset{'A} } -->

@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_util]
 
    The @tt[Mfir_util] module defines terms and rewrites for working
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_bool
@@ -63,36 +59,30 @@ open Mfir_int_set
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
    @modsubsection{Offset type}
 
    The term @tt[offset] represents the type of offset atoms, atoms
    that are used to index aggregate data.
-   @end[doc]
 >>
 
 declare offset
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Type application}
 
    If @tt[poly_ty] is a parametrized type definition or quantified type, then
    @tt[do_tyApply] instantiates it at the types in the list @tt[ty_list].
-   @end[doc]
 >>
 
 declare apply_types{ 'poly_ty; 'ty_list }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Definition extraction}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -101,11 +91,9 @@ declare get_core{ 'num; 'poly_ty }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Type projection}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -114,24 +102,20 @@ declare project_in_bounds{ 'num; 'ty }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Existential unpacking}
 
    The term @tt[instantiate_tyExists] is used to instantiate
    an existential type @tt[ty] using type projections (@hrefterm[tyProject])
    of @tt[var], starting at @tt[num].
-   @end[doc]
 >>
 
 declare unpack_exists{ 'ty; 'var; 'num }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Union of match cases}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -140,11 +124,9 @@ declare union_cases{ 'set; 'cases }
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Conversions}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -158,13 +140,11 @@ declare ty_of_mutable_ty{ 'mutable_ty }
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
    @modsubsection{Type application}
 
    Instantiating a parameterized type definition or quantified type
    at a given list of types is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_apply_types_base :
@@ -198,11 +178,9 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Definition extraction}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -230,11 +208,9 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Type projection}
 
    (Documentation incomplete.)
-   @end[doc]
 >>
 
 (* XXX: documentation needs to be completed. *)
@@ -265,14 +241,12 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Existential unpacking}
 
    The following rewrites are the basis for reducing
    << unpack_exists{ 'ty; 'var; 'num } >>. The following two
    rewrites are combined into the @tt[reduce_instantiate_tyExists]
    conversional in order to control the order of their application.
-   @end[doc]
 >>
 
 (*
@@ -310,11 +284,9 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Union of match cases}
 
    Taking the union of the sets in a list of match cases is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_union_cases_base :
@@ -341,7 +313,6 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Conversions}
 
    Raw integer subscripts represent byte offsets, while integer
@@ -349,7 +320,6 @@ doc <:doc<
    on four byte boundaries.  If this is not the case, then the result
    of converting the subscript to a (logical) index is $-1$, which is
    an invalid index.
-   @end[doc]
 >>
 
 prim_rw reduce_index_of_subscript_atomInt :
@@ -381,11 +351,9 @@ let resource reduce += [
 
 
 doc <:doc<
-   @begin[doc]
 
    Converting a mutable type << mutable_ty{ 'ty; 'flag } >> to
    a plain type << 'ty >> is straightforward.
-   @end[doc]
 >>
 
 prim_rw reduce_ty_of_mutable_ty :

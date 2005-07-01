@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_auto]
 
    The @tt[Mfir_auto] module defines the basic constructs needed
@@ -34,7 +33,6 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory

@@ -1,6 +1,5 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    API CS Caml LCF ML Milner Monolithic Scalability Vino rec scalability
@@ -32,13 +31,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 This document is an introduction to ML programming, specifically for
 the Objective Caml (@emph{OCaml}) programming language from @misspelled{INRIA}
@@ -225,7 +222,6 @@ OCaml home page @url["http://www.ocaml.org/"].
 
 The author can be reached at @email{jyh@cs.caltech.edu}.
 
-@end[doc]
 >>
 
 (*

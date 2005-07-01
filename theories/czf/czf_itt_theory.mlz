@@ -1,7 +1,6 @@
 doc <:doc<
    @spelling{CST Errett Myhill ZF eq practise}
 
-   @begin[doc]
    @theory{Type Theory Implementation of CZF Theory}
    The @emph{CZF} theory formalizes Aczel's constructive
    set theory @cite[Acz86].  In @emph{Notes on Constructive
@@ -238,8 +237,8 @@ doc <:doc<
       as well as the total order $@lt{i; j}$.}}
 
    @end[description]
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -264,11 +263,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc<
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @parents >>
 extends Czf_itt_subset
 extends Czf_itt_power
 doc docoff

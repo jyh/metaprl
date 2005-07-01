@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Mfir_tr_atom_base]
 
    The @tt[Mfir_tr_atom_base] module defines the argument types
@@ -34,13 +33,10 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 
 extends Mfir_ty
@@ -54,14 +50,12 @@ extends Mfir_sequent
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The term @tt[res_type] returns the result type of an operator @tt[op].
    The terms @tt[arg1_type] and @tt[arg2_type] return the types of
    first and second arguments of an operator @tt[op] (@tt[arg2_type] is
    undefined if @tt[op] is a unary operator).
-   @end[doc]
 >>
 
 declare res_type{ 'op }
@@ -94,14 +88,12 @@ dform arg2_type_df : except_mode[src] ::
  **************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    Rewrites are used to define the argument and result types of the
    FIR unary and binary operators.  The types may not be well-formed
    if the original operator is not well-formed.  We omit an explicit
    listing of these rewrites.
-   @end[doc]
 >>
 
 doc docoff

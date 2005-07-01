@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_order]
 
    This theory defines ordered sets.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_bisect
 (*extends Itt_subset
 extends Itt_subset2
@@ -61,11 +60,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Non-strict Partial Order}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 
 define unfold_isRelation : isRelation{'car; 'rel} <-->
@@ -182,10 +179,8 @@ let resource intro += [
 	]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 
 interactive isRelation_wf {| intro [] |} :
@@ -285,14 +280,12 @@ let resource intro += [
 	]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Decidability of equality for type with total order}
 
 	For type with total order equality can be expressed via order relation.
 	Since we consider decidable relations it implies decidability of equality
 	for types with total order.
 
-   @end[doc]
 >>
 
 interactive unstrict2eqIfEqual {| intro [] |} 'car :
@@ -316,13 +309,11 @@ interactive totalOrderThenDecidableEquality 'rel :
 	sequent { <H> >- decidable{'a = 'b in 'car} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Non-strict (total) order @em[vs] strict (total) order}
 
 	For totally ordered types we can express strict order via non-strict one and
 	vice versa.
 
-   @end[doc]
 >>
 
 interactive strict2unstrictTotalOrder :
@@ -334,10 +325,8 @@ interactive unstrict2strictTotalOrder :
 	sequent { <H> >- isStrictTotalOrder{'car; unstrict2strict{'rel}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Inverse order inherits all properties defined here}
 
-   @end[doc]
 >>
 
 interactive inverseRelation {| intro [] |} :
@@ -389,13 +378,11 @@ interactive inverseStrictTotalOrder {| intro [] |} :
 	sequent { <H> >- isStrictTotalOrder{'car; inverse_order{'rel}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Inverse order @em[vs] conversions between strict and non-strict order}
 
 	@tt[Inverse_order] commutes with @tt[strict2unstrict], @tt[unstrict2strict].
 	@tt[Unstrict2eq] absorbs @tt[inverse_order].
 
-   @end[doc]
 >>
 
 interactive inverse_strict2unstrict 'car :
@@ -411,10 +398,8 @@ interactive inverse_unstrict2eq 'car :
 	sequent { <H> >- inverse_order{unstrict2eq{'rel}} = unstrict2eq{'rel} in 'car -> 'car -> bool }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Integers are totally ordered}
 
-   @end[doc]
 >>
 
 interactive int_lt_boolIsStrictTotalOrder :
@@ -463,10 +448,8 @@ interactive minIntro {| intro [intro_typeinf <<'a>>] |} 'car :
 	sequent { <H> >- "assert"{'rel 'x (min{'rel} 'a 'b)} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Record wrappers of previously defined concepts}
 
-   @end[doc]
 >>
 
 define unfold_relation : relation[i:l, rel:t] <-->
@@ -507,9 +490,7 @@ let resource elim += [
 	]
 
 doc <:doc<
-   @begin[doc]
    Well-formedness rules
-   @end[doc]
 >>
 interactive relation_wf {| intro [] |} :
    sequent { <H> >- relation[i:l,rel:t] Type }

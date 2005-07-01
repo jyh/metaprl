@@ -1,9 +1,7 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_synt_var]
    A deBruijn-like implementation of a type of bound variables.
 
-   @end[doc]
 
    ----------------------------------------------------------------
 

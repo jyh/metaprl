@@ -1,5 +1,4 @@
 doc <:doc<
-   @begin[doc]
    @module[Czf_itt_rel]
 
    The @tt[Czf_itt_rel] module defines Aczel's @emph{collection}
@@ -12,8 +11,8 @@ doc <:doc<
 
    There are no rules in this module, except for well-formedness.
    The @tt{rel} term is just a definition.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -45,7 +44,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_dall
 extends Czf_itt_dexists
 doc docoff
@@ -64,9 +63,7 @@ open Itt_logic
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
-   @end[doc]
 >>
 declare rel{a, b. 'P['a; 'b]; 's1; 's2}
 doc docoff
@@ -95,9 +92,7 @@ let dest_rel t =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
-   @end[doc]
 >>
 prim_rw unfold_rel : rel{a, b. 'P['a; 'b]; 's1; 's2} <-->
    (dall{'s1; x. dexists{'s2; y. 'P['x; 'y]}} & dall{'s2; y. dexists{'s1; x. 'P['x; 'y]}})
@@ -119,12 +114,10 @@ dform rel_df : parens :: "prec"[prec_quant] :: rel{a, b. 'P; 's1; 's2} =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    The @tt{rel} term is well-formed if the proposition $P$
    is well-formed, and if the arguments $s_1$ and $s_2$ are sets.
-   @end[doc]
 >>
 interactive rel_type {| intro [] |} :
    sequent { <H>; u: set; v: set >- "type"{'P['u; 'v]} } -->

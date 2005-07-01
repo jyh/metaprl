@@ -1,7 +1,6 @@
 doc <:doc<
    @spelling{klein}
 
-   @begin[doc]
    @module[Czf_itt_kleingroup]
 
    The @tt[Czf_itt_kleingroup] module defines the klein 4-group, which
@@ -42,7 +41,7 @@ doc <:doc<
    operation, identity, and inverse are all rewritten in terms of
    its elements $@k0$, $@k1$, $@k2$, and $@k3$. By showing all the
    axioms for groups are satisfied, we prove that $@klein4$ is a group.
-   @end[doc]
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -73,7 +72,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Czf_itt_group
 extends Czf_itt_singleton
 extends Czf_itt_union
@@ -91,7 +90,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< @doc{@terms} >>
+doc terms
 declare klein4          (* The label representing the klein 4-group *)
 declare k0              (* Identity of the group *)
 declare k1              (* Element of the group *)
@@ -104,11 +103,9 @@ doc docoff
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rewrites
 
    The definition of the klein 4-group.
-   @end[doc]
 >>
 prim_rw unfold_klein4_car : car{klein4} <-->
    union{sing{k0}; union{sing{k1}; union{sing{k2}; sing{k3}}}}
@@ -159,13 +156,11 @@ dform k3_df : except_mode[src] :: k3 =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @rules
    @modsubsection{Well-formedness}
 
    The @tt[klein4] is a label and @tt[k0], @tt[k1], @tt[k2], @tt[k3]
    are all sets. These are axioms.
-   @end[doc]
 >>
 prim klein4_label {| intro [] |} :
    sequent { <H> >- klein4 IN label } = it
@@ -183,13 +178,11 @@ prim k3_isset {| intro [] |} :
    sequent { <H> >- isset{k3} } = it
 
 doc <:doc<
-   @begin[doc]
 
    The $@car{@klein4}$, $@id{@klein4}$ are well-formed; the
    $@op{@klein4; s_1; s_2}$ is well-formed if its set
    arguments are both sets; the $@inv{@klein4; s}$ is
   well-formed if its set argument is a set.
-   @end[doc]
 >>
 interactive klein4_car_isset {| intro[] |} :
    sequent { <H> >- isset{car{klein4}} }
@@ -207,11 +200,9 @@ interactive klein4_inv_isset {| intro[] |} :
    sequent { <H> >- isset{inv{klein4; 's1}} }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and elimination for the carrier set}
 
    The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$ only.
-   @end[doc]
 >>
 interactive car_klein0 {| intro[] |} :
    sequent { <H> >- mem{k0; car{klein4}} }
@@ -234,11 +225,9 @@ interactive car_klein0_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; car{klein4}}; <J['x]> >- 'T['x] }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Verification of the group axioms}
 
    The @tt[op] for @tt[klein4] is functional and is a mapping.
-   @end[doc]
 >>
 interactive klein4_op_fun {| intro[] |} :
    sequent { <H> >- fun_set{z. 's1['z]} } -->
@@ -274,10 +263,8 @@ interactive klein4_op_eq2 {| intro[] |} :
    sequent { <H> >- eq{op{klein4; 's1; 's3}; op{klein4; 's2; 's3}} }
 
 doc <:doc<
-   @begin[doc]
 
    The @tt[op] for @tt[klein4] is associative.
-   @end[doc]
 >>
 interactive klein4_op_assoc1 {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -299,10 +286,8 @@ interactive klein4_op_assoc2 {| intro[] |} :
    sequent { <H> >- eq{op{klein4; 's1; op{klein4; 's2; 's3}}; op{klein4; op{klein4; 's1; 's2}; 's3}} }
 
 doc <:doc<
-   @begin[doc]
 
    The axioms for the identity are satisfied.
-   @end[doc]
 >>
 interactive klein4_id_mem {| intro[] |} :
    sequent { <H> >- mem{id{klein4}; car{klein4}} }
@@ -313,10 +298,8 @@ interactive klein4_id_eq1 {| intro[] |} :
    sequent { <H> >- eq{op{klein4; id{klein4}; 's}; 's} }
 
 doc <:doc<
-   @begin[doc]
 
    The axioms for the inverse are satisfied.
-   @end[doc]
 >>
 interactive klein4_inv_fun {| intro[] |} :
    sequent { <H> >- fun_set{z. inv{klein4; 'z}} }
@@ -331,7 +314,6 @@ interactive klein4_inv_id1 {| intro[] |} :
    sequent { <H> >- mem{'s1; car{klein4}} } -->
    sequent { <H> >- eq{op{klein4; inv{klein4; 's1}; 's1}; id{klein4}} }
 
-doc docoff
 (*
  * -*-
  * Local Variables:

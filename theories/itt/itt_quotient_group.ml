@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_quotient_group]
 
    This theory defines quotient groups.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_group
 extends Itt_quotient
 extends Itt_subset
@@ -58,11 +57,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Rewrites}
 
    The quotient group of $A$ in $B$, or the Factor Group of $B$ relative to $A$.
-   @end[doc]
 >>
 define unfold_quotGroup : quotGroup{'A; 'B} <-->
    {car=quot x, y: 'B^car // ('x *['B] ('B^inv 'y) in 'A^car subset 'B^car); "*"='B^"*"; "1"='B^"1"; inv='B^inv}
@@ -102,21 +99,17 @@ interactive quotG_equiv_type2 {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    sequent { <H> >- "type"{(quotGroup{'A; 'B}^car)} }
 
 doc <:doc<
-   @begin[doc]
    @modsection{Rules}
 
    Introduction
-   @end[doc]
 >>
 interactive quotGroup_intro {| intro [] |} :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- quotGroup{'A; 'B} in group[i:l] }
 
 doc <:doc<
-   @begin[doc]
 
    If <<normalSubg[i:l]{'A; 'B}>> and $B$ is abelian, then <<quotGroup{'A; 'B}>> is abelian.
-   @end[doc]
 >>
 interactive quotGroup_abel {| intro [AutoMustComplete] |} :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
@@ -124,10 +117,8 @@ interactive quotGroup_abel {| intro [AutoMustComplete] |} :
    sequent { <H> >- quotGroup{'A; 'B} in abelg[i:l] }
 
 doc <:doc<
-   @begin[doc]
 
    If <<normalSubg[i:l]{'A; 'B}>>, then $f: ('B -> <<quotGroup{'A; 'B}>>)$ defined by $f a = a$ is an epimorphism of $B$ to <<quotGroup{'A; 'B}>> with kernel $A$.
-   @end[doc]
 >>
 interactive quotGroup_hom {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
@@ -142,12 +133,10 @@ interactive quotGroup_ker_ext {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    sequent { <H> >- groupExtEqual{groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}}; {car='A^car; "*"='A^"*"; "1"='A^"1"; inv='A^inv}} }
 
 doc <:doc<
-   @begin[doc]
 
    First Isomorphism Theorem for Groups. Let $f$ be a group epimorphism
    from $B$ to $A$ and let $K$ be the kernel of $f$. Then $A$ is isomorphism
    to the quotient group <<quotGroup{'K; 'B}>>.
-   @end[doc]
 >>
 interactive quotGroup_iso {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->

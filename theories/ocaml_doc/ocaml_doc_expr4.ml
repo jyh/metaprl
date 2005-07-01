@@ -1,6 +1,5 @@
 (* -*- Mode: text; fill-column: 100 -*- *)
 doc <:doc<
-   @begin[doc]
 
    @begin[spelling]
    Dereferencing blit bool doesn downto fields int
@@ -32,13 +31,11 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @end[doc]
 >>
 
 extends Base_theory
 
 doc <:doc<
-@begin[doc]
 
 As we have seen, functional programming has one central feature---functions are first-class.
 Functions may be passed as arguments, returned as the result of function calls, and stored in data
@@ -626,7 +623,6 @@ not.}}
 
 @end[enumerate]
 
-@end[doc]
 >>
 
 (*

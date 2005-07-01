@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_field_e]
 
    This theory defines fields with decidable equality.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_field2
 extends Itt_intdomain_e
 doc docoff
@@ -58,11 +57,9 @@ let _ =
  * Field with Decidable Equality                                        *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Field with decidable equality}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_prefieldE1 : prefieldE[i:l] <-->
    record["eq":t]{r. ('r^car -> 'r^car -> bool); prefield[i:l]}
@@ -91,10 +88,8 @@ let resource elim +=
    [<<fieldE[i:l]>>, fieldEDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive prefieldE_wf {| intro [] |} :
    sequent { <H> >- prefieldE[i:l] Type }
@@ -108,10 +103,8 @@ interactive fieldE_wf {| intro [] |} :
    sequent { <H> >- fieldE[i:l] Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive prefieldE_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'f in prefield[i:l] } -->
@@ -171,10 +164,8 @@ doc docoff
  * Polynomials                                                          *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Polynomial ring}
 
-   @end[doc]
 >>
 interactive poly_field {| intro [] |} :
    [wf] sequent { <H> >- 'F in fieldE[i:l] } -->

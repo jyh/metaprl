@@ -1,10 +1,9 @@
 doc <:doc<
-   @begin[doc]
    @module[Itt_ring_e]
 
    This theory defines rings with decidable equality.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -35,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< @doc{@parents} >>
+doc <:doc< @parents >>
 extends Itt_ring2
 extends Itt_labels
 doc docoff
@@ -56,11 +55,9 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @modsection{Decidable Equality}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_eqDecidable : eqDecidable{'f} <-->
    all x: 'f^car. all y: 'f^car. "iff"{'x = 'y in 'f^car; "assert"{'f^eq 'x 'y}}
@@ -70,11 +67,9 @@ let fold_eqDecidable = makeFoldC << eqDecidable{'f} >> unfold_eqDecidable
 
 (* Rules about eqDecidable *)
 doc <:doc<
-   @begin[doc]
    @modsection{Well-formedness, Introduction, Elimination}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 interactive eqDecidable_wf {| intro [] |} :
    [wf] sequent { <H> >- 'f^car Type } -->
@@ -97,11 +92,9 @@ doc docoff
  * Ring with Decidable Equality                                        *
  ************************************************************************)
 doc <:doc<
-   @begin[doc]
    @modsection{Ring with decidable equality}
    @modsubsection{Rewrites}
 
-   @end[doc]
 >>
 define unfold_preringE1 : preringE[i:l] <-->
    record["eq":t]{r. ('r^car -> 'r^car -> bool); prering[i:l]}
@@ -130,10 +123,8 @@ let resource elim +=
    [<<ringE[i:l]>>, ringEDT]
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness}
 
-   @end[doc]
 >>
 interactive preringE_wf {| intro [] |} :
    sequent { <H> >- preringE[i:l] Type }
@@ -147,10 +138,8 @@ interactive ringE_wf {| intro [] |} :
    sequent { <H> >- ringE[i:l] Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Introduction and Elimination}
 
-   @end[doc]
 >>
 interactive preringE_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'f in prering[i:l] } -->

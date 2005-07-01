@@ -2,10 +2,8 @@ doc <:doc<
    @begin[spelling]
    @end[spelling]
 
-   @begin[doc]
    @module[UNITY]
    This module defines a UNITY abstract syntax.
-   @end[doc]
 
    ----------------------------------------------------------------
 
@@ -74,5 +72,5 @@ declare UNil
 
 declare unity
 
-doc <:doc< @docoff >>
+doc docoff
 

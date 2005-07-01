@@ -1,12 +1,11 @@
 doc <:doc<
    @spelling{cumulativity}
-   @begin[doc]
    @module[Itt_equal]
 
    The @tt{Itt_equal} module defines type @emph{universes},
    @emph{cumulativity} of type universes, and @emph{equality}.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -41,9 +40,7 @@ doc <:doc<
 >>
 
 doc <:doc<
-   @begin[doc]
    @parents
-   @end[doc]
 >>
 extends Base_theory
 doc docoff
@@ -67,7 +64,6 @@ let _ =
  ************************************************************************)
 
 doc <:doc<
-   @begin[doc]
    @terms
 
    The universe type $@univ{i}$ is a @emph{type of types}.  The individual type
@@ -84,7 +80,6 @@ doc <:doc<
    @item{$t_1$ and $t_2$ are well-formed elements of type $T$,}
    @item{and $t_1$ and $t_2$ are equal using the equality of type $T$.}
    @end[enumerate]
-   @end[doc]
 >>
 declare "type"{'a}
 declare equal{'T; 'a; 'b}
@@ -102,11 +97,9 @@ declare "true"
 declare "false"
 
 doc <:doc<
-   @begin[doc]
    The $@cumulativity{i; j}$ term is a primitive judgment that defines level
    @emph{inclusion} (this is a built-in judgment in @MetaPRL).
    <<cumulativity[i:l, j:l]>> is true iff universe level $i$ is @i{strictly} less than $j$.
-   @end[doc]
 >>
 define unfold_cumulativity :
    cumulativity[i:l, j:l] <--> meta_lt[i:l, j:l]{"true"; "false"}
@@ -201,28 +194,24 @@ prim trueIntro {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @rules
 
    @modsubsection{Equality axiom}
 
    The @emph{axiom} rule declares that if a program $x$ has type
    $T$ by assumption, then $T$ is a type, and $x$ is a member of $T$.
-   @end[doc]
 >>
 prim equalityAxiom {| nth_hyp |} 'H :
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } =
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Equality is an equivalence relation}
 
    The next three rules specify that equality is an equivalence relation.
    The @emph{reflexivity} rule differs from the standard definition:
    a program $x$ has type $T$ if it is equal to any other
    element of $T$.
-   @end[doc]
 >>
 
 (*
@@ -265,13 +254,11 @@ prim equalityFormation 'T :
    'a = 'b in 'T
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Well-formedness of equality}
 
    The next two rules describe well-formedness of the equality judgment.
    Equality is @emph{intensional}: two equalities are equal if all of their
    parts are equal.
-   @end[doc]
 >>
 
 (*
@@ -299,12 +286,10 @@ prim equalityType {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Inhabitants of the equality types}
 
    The two following rules state that $@it$ is the one-and-only element
    in a provable equality or a provable @tt{Type} type.
-   @end[doc]
 >>
 
 (*
@@ -335,14 +320,12 @@ prim type_axiomMember {| intro [] |} :
    it
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Truth implies typehood}
 
    For any sequent judgment <<sequent{ <H> >- 'T}>> the term $T$ must be a
    type.  The following rule allows us to infer well-formedness of a
    type from its provability.  Note that this rule is useless for types $T$
    that are not true.
-   @end[doc]
 >>
 
 (*
@@ -361,13 +344,11 @@ interactive type_type {| intro[] |} :
    sequent { <H> >- ('T Type) Type }
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Universe cumulativity}
 
    The following two rules describe universe @emph{cumulativity}.
    The $@cumulativity{i:l; j:l}$ term is a built-in judgment
    describing level inclusion.
-   @end[doc]
 >>
 
 (*
@@ -402,12 +383,10 @@ let resource intro +=
    (wrap_intro (universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)))
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{The type universe is a type}
 
    The next three rules state that every universe $@univ{l}$ is a type, and
    every inhabitant $x @in @univ{l}$ is also a type.
-   @end[doc]
 >>
 prim universeMemberType univ[i:l] :
    [wf] sequent { <H> >- 'x in univ[i:l] } -->

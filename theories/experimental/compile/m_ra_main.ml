@@ -211,7 +211,7 @@ struct
     *)
    let registers =
       Array.mapi (fun i vars ->
-            SymbolSet.subtract_list (SymbolSet.of_list vars) Frame.registers_special.(i)) Frame.registers
+            SymbolSet.subtract_list (SymbolSet.of_sorted_list vars) Frame.registers_special.(i)) Frame.registers
 
    (*
     * Add all the special registers to a list so we can

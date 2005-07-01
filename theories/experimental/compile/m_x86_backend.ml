@@ -928,7 +928,7 @@ let get_operands_jcc inst rest1 rest2 =
 
 let get_operands_reserve inst args =
       { code_dst = SymbolSet.empty;
-        code_src = SymbolSet.of_list args;
+        code_src = SymbolSet.of_sorted_list args;
         code_class = CodeNormal;
         code_inst = inst;
         code_rest = []

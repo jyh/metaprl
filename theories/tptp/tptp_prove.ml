@@ -80,7 +80,7 @@ let dest_exists t =
       List.map string_of_symbol bvars, t
 
 let symbol_set_of_string_set s =
-   SymbolSet.of_list (List.map Lm_symbol.add (StringSet.elements s))
+   SymbolSet.of_sorted_list (List.map Lm_symbol.add (StringSet.elements s))
 
 (************************************************************************
  * RULES                                                                *

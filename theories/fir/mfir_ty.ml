@@ -1,12 +1,12 @@
 doc <:doc<
+   @begin[doc]
    @spelling{th}
 
-   @begin[doc]
    @module[Mfir_ty]
 
    The @tt[Mfir_ty] module declares terms to represent the FIR type system.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -35,6 +35,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -45,10 +46,6 @@ doc <:doc<
 
 extends Mfir_int
 extends Mfir_list
-
-doc <:doc<
-   @docoff
->>
 
 (**************************************************************************
  * Declarations.
@@ -72,7 +69,7 @@ declare "mutable"
 declare immutable
 declare mutable_ty{ 'ty; 'flag }
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Type definitions}
 
@@ -116,7 +113,7 @@ doc <:doc<
 
 declare tyDefDTuple{ 'ty_var }
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Numbers}
 
@@ -134,7 +131,7 @@ declare tyEnum[i:n]
 declare tyRawInt[precision:n, sign:s]
 declare tyFloat[precision:n]
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Functions}
 
@@ -145,7 +142,7 @@ doc <:doc< ************************************
 
 declare tyFun{ 'arg_type; 'res_type }
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Tuples}
 
@@ -186,7 +183,7 @@ doc <:doc<
 declare tyDTuple{ 'ty_var; 'mtyl_option }
 declare tyTag{ 'ty_var; 'mtyl }
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Other aggregates}
 
@@ -220,7 +217,7 @@ doc <:doc<
 
 declare tyFrame{ 'ty_var; 'tyl }
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Polymorphism}
 
@@ -264,9 +261,7 @@ doc <:doc<
 
 declare tyProject[i:n]{ 'var }
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 (**************************************************************************
  * Display forms.

@@ -51,7 +51,7 @@ doc <:doc<
 >>
 extends Itt_equal
 extends Itt_squiggle
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -84,7 +84,7 @@ doc <:doc<
 >>
 declare atom
 declare token[t:t]
-doc <:doc< @docoff >>
+doc docoff
 
 let atom_term = << atom >>
 let token_term = << token[x:t] >>
@@ -163,7 +163,7 @@ prim atomSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in atom } -->
    sequent { <H> >- 'x ~ 'y } =
    it
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

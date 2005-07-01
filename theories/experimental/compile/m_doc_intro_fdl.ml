@@ -1,14 +1,14 @@
-doc <:doc< -*- mode: text; -*-
+(* -*- mode: text; -*- *)
+doc <:doc<
+   @begin[doc]
    @begin[spelling]
    CPS ML Mojave compilable Necula Liang HOAS FDL Girard Moggi Plotkin Sabry Wadler Morrisett
    @end[spelling]
 
-   @begin[doc]
    @chapter[m_doc_compiler_fdl]{Logical frameworks and the FDL}
    @section[m_doc_intro_fdl]{Introduction}
-   @docoff
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,6 +31,7 @@ doc <:doc< -*- mode: text; -*-
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
    Modified By:
    @end[license]
+   @end[doc]
 >>
 extends M_doc_comment
 

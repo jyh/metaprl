@@ -50,7 +50,7 @@ extends Itt_set
 extends Itt_logic
 extends Itt_equal
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -75,7 +75,7 @@ doc <:doc<
 
 define singleton: singleton{'a;'A} <--> {x:'A | 'a='x in 'A}
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform singleton_df: singleton{'a;'A} = `"{" slot{'a} `"}" sub{'A}
 
@@ -108,4 +108,4 @@ interactive singleton_equal {| intro[] |}:
    sequent{ <H> >- 'c  in singleton{'a;'A}} -->
    sequent{ <H> >- 'b = 'c in singleton{'a;'A} }
 
-doc <:doc< @docoff >>
+doc docoff

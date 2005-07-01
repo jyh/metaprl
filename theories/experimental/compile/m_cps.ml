@@ -1,16 +1,16 @@
 doc <:doc<
+   @begin[doc]
    @begin[spelling]
    CPS EMRE compilable op IR
    @end[spelling]
 
-   @begin[doc]
    @module[M_cps]
 
      Here we define the CPS transformation in a way that aims at making the preservation of program
      semantics easy to verify (see Section @refsection[m_doc_summary] for a discussion of advantages
      and disadvantages of this approach).
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -43,7 +44,7 @@ doc <:doc<
    @end[doc]
 >>
 extends M_ir
-doc <:doc< @docoff >>
+doc docoff
 
 open M_util
 
@@ -126,7 +127,7 @@ declare CPS{'cont; 'e}
 declare CPS{cont. 'fields['cont]}
 declare CPS{'a}
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform cps_record_var_df : CPSRecordVar{'R} =
    bf["CPSRecordVar["] slot{'R} bf["]"]
@@ -267,7 +268,6 @@ prim_rw cps_tailcall {| cps |} : CPS{'cont; TailCall{CPSFunVar{'f}; 'args}} <-->
 
 prim_rw cps_fun_var_cleanup {| cps |} :
    AtomVar{CPSFunVar{'f}} <--> CPSFunVar{'f}
-doc <:doc< @docoff >>
 
 doc <:doc<
      @begin[doc]
@@ -281,7 +281,7 @@ prim cps_prog :
                         R. LetFun{'R; Label[".init":s]; init. Initialize{TailCall{AtomVar{'init}; ArgCons{AtomVar{'cont}; ArgNil}}}}}} } -->
    sequent { <H> >- compilable{'e} }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * Toplevel CPS conversion tactic.

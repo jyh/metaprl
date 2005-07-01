@@ -41,7 +41,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -57,7 +57,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare abel{'g}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -72,7 +72,7 @@ doc <:doc<
 >>
 prim_rw unfold_abel: abel{'g} <-->
    (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -111,7 +111,7 @@ interactive abel_intro {| intro[] |} :
    sequent { <H> >- group{'g} } -->
    sequent { <H>; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->
    sequent { <H> >- abel{'g} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

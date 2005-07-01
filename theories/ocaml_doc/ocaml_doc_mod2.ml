@@ -1,14 +1,15 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    Arg ArgName ArgSig Elt EltSig FsetSig Int IntSet MakeFset
    SigName arg doesn elt int ll mem namespace sig struct val
    @end[spelling]
 
-   @begin[doc]
    @chapter[modules]{The OCaml Module System}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,9 +32,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -530,8 +531,8 @@ val s : IntSet.t = <abstr>
 - : bool = false
 @end[iverbatim]
 
-@end[doc]
 @docoff
+@end[doc]
 >>
 
 (*

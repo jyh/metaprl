@@ -37,7 +37,7 @@ doc <:doc<
    @end[doc]
 >>
 extends M_ir
-doc <:doc< @docoff >>
+doc docoff
 
 open Basic_tactics
 
@@ -124,7 +124,7 @@ prim_rw letrec_letrec :
    LetRec{R1. LetRec{R2. 'fields['R2]; R3. 'e1['R1; 'R3]}; R4. 'e2['R4]} <-->
    LetRec{R2. 'fields['R2]; R3. LetRec{R1. 'e1['R1; 'R3]; R4. 'e2['R4]}}
 
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * Add all these rules to the prog resource.

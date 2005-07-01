@@ -44,7 +44,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -54,7 +54,7 @@ extends Itt_equal
 extends Itt_struct
 extends Itt_squash
 
-doc <:doc< @docoff >>
+doc docoff
 extends Itt_comment
 
 open Lm_debug

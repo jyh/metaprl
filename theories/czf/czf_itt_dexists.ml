@@ -68,7 +68,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare "dexists"{'T; x. 'A['x]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -182,7 +182,7 @@ interactive dexists_res2 {| intro [] |} :
    ["wf"]   sequent { <H> >- isset{'A} } -->
    sequent { <H>; u: set >- restricted{'B['u]} } -->
    sequent { <H> >- restricted{."dexists"{'A; y. 'B['y]}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

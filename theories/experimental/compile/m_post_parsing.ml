@@ -39,7 +39,7 @@ doc <:doc<
 >>
 extends M_ir
 extends M_ast
-doc <:doc< @docoff >>
+doc docoff
 
 open M_ir
 open M_ast

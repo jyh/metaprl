@@ -197,7 +197,7 @@ interactive field_member {| intro[] |} :
 (*  Display Forms *)
 (******************)
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform emptyRecord_df : except_mode [src] :: record = `"{}"
 

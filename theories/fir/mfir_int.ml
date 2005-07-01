@@ -3,8 +3,8 @@ doc <:doc<
    @module[Mfir_int]
 
    The @tt[Mfir_int] module defines integers and operations on integers.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -43,14 +44,11 @@ doc <:doc<
 
 extends Mfir_bool
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 open Basic_tactics
 open Base_meta
 open Mfir_bool
-
 
 (**************************************************************************
  * Declarations.

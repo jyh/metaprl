@@ -38,7 +38,7 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]

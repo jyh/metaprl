@@ -40,7 +40,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_member
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -69,7 +69,7 @@ doc <:doc<
    @end[doc]
 >>
 prim_rw unfold_empty : empty <--> collect{void; x. 'x}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -98,7 +98,7 @@ interactive empty_isset {| intro [] |} :
  *)
 interactive empty_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; empty}; <J['x]> >- 'T['x] }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

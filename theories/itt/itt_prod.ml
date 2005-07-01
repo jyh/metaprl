@@ -47,7 +47,7 @@ doc <:doc<
 extends Itt_equal
 extends Itt_dprod
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -161,7 +161,7 @@ interactive independentProductSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
    ["subtype"] sequent { <H> >- \subtype{'B1; 'B2} } -->
    sequent { <H> >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

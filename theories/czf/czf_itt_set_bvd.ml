@@ -64,7 +64,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare set_bvd{'s; x. 'a['x]}            (* { a(x) | x in s } *)
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -158,7 +158,7 @@ interactive set_bvd_fun {| intro [] |} :
    sequent { <H>; z: set >- fun_set{x. 'B['x; 'z]} } -->
    ["wf"] sequent { <H>; z: set; x: set >- isset{'B['z; 'x]} } -->
    sequent { <H> >- fun_set{z. set_bvd{'A['z]; y. 'B['z; 'y]}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

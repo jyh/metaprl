@@ -10,7 +10,7 @@ extends Itt_struct
 extends Itt_tunion
 extends Itt_bunion
 extends Itt_pointwise
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -54,4 +54,4 @@ interactive bunionElimination2 {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; x: 'B; <J['x]> >- squash{'C['x]} } -->
    sequent { <H>; x: 'A bunion 'B; <J['x]> >- squash{'C['x]} }
 
-doc <:doc< @docoff >>
+doc docoff

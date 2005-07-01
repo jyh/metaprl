@@ -1,14 +1,15 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    ADT ADTs Fset acts expr fset goto grep linenum ll
    mem namespace stdin timestep cc ed
    @end[spelling]
 
-   @begin[doc]
    @chapter[files]{Files, Compilation Units, and Programs}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,9 +32,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -785,7 +786,6 @@ You may wish to explore the other features of the debugger.  Further
 documentation can be found in the OCaml reference manual.
 
 @end[doc]
-@docoff
 >>
 
 (*

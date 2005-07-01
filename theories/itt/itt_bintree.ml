@@ -13,7 +13,7 @@ extends Itt_bisect
 extends Itt_struct
 extends Itt_labels
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf

@@ -1,13 +1,13 @@
 doc <:doc<
+   @begin[doc]
    @spelling{th}
 
-   @begin[doc]
    @module[Mfir_list]
 
    The @tt[Mfir_list] module defines lists and list operations.  Lists
    are used in FIR programs to represent entities whose arity may vary.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -36,6 +36,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<

@@ -40,13 +40,13 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
 >>
 extends Base_theory
-doc <:doc< @docoff >>
+doc docoff
 extends Itt_comment
 
 open Lm_debug
@@ -200,7 +200,7 @@ prim trueIntro {| intro [] |} :
    sequent { <H> >- "true" } =
    it
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @rules
 
@@ -214,7 +214,7 @@ prim equalityAxiom {| nth_hyp |} 'H :
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } =
    it
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Equality is an equivalence relation}
 
@@ -264,7 +264,7 @@ prim equalityFormation 'T :
    sequent { <H> >- univ[i:l] } =
    'a = 'b in 'T
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness of equality}
 
@@ -298,7 +298,7 @@ prim equalityType {| intro [] |} :
    sequent { <H> >- ('a = 'b in 'T) Type } =
    it
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Inhabitants of the equality types}
 
@@ -334,7 +334,7 @@ prim type_axiomMember {| intro [] |} :
    sequent { <H> >- it in ('T Type) } =
    it
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Truth implies typehood}
 
@@ -360,7 +360,7 @@ interactive type_type {| intro[] |} :
    [main] sequent { <H> >- 'T Type } -->
    sequent { <H> >- ('T Type) Type }
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Universe cumulativity}
 
@@ -401,7 +401,7 @@ let resource intro +=
    << univ[i:l] in univ[j:l] >>,
    (wrap_intro (universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)))
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{The type universe is a type}
 
@@ -424,7 +424,7 @@ interactive universeAssumType {| nth_hyp |} 'H :
 interactive universeType {| intro [] |} :
    sequent { <H> >- univ[l:l] Type }
 
-doc <:doc< @docoff >>
+doc docoff
 let univTypeT = universeMemberType
 
 (*

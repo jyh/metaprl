@@ -56,7 +56,7 @@ extends Itt_subtype
 extends Itt_void
 extends Itt_struct
 extends Itt_logic
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_symbol
@@ -89,7 +89,7 @@ doc <:doc<
 >>
 declare srec{T. 'B['T]}
 declare srecind{'a; p, h. 'g['p; 'h]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -237,7 +237,7 @@ prim srecindEquality {| intro [] |} bind{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
                    in 'S['r1]
            } =
    it
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

@@ -7,8 +7,8 @@ doc <:doc<
    sequent is not well-formed, then it holds trivially.  A well-formed
    sequent is closed, and the context (list of hypotheses) must be
    well-formed.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -37,6 +37,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -65,7 +66,7 @@ doc <:doc<
 declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 declare default_extract
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Kinds}
 
@@ -79,7 +80,6 @@ doc <:doc< ************************************
 
 declare small_type
 declare large_type
-
 
 doc <:doc<
    @begin[doc]
@@ -130,7 +130,7 @@ doc <:doc<
 declare polyKind{ 'i; 'k }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Contexts}
 
@@ -167,7 +167,7 @@ declare global_def{ 'var; 'ty; 'def }
 declare no_def
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Store values}
 
@@ -185,8 +185,7 @@ declare lambda{ v. 'f['v] }
 declare union_val[i:n]{ 'ty_var; 'atom_list }
 declare raw_data
 
-
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Judgments}
 

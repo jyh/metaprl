@@ -150,7 +150,7 @@ declare set
 declare isset{'s}
 declare collect{'T; x. 'a['x]}
 declare set_ind{'s; T, f, g. 'b['T; 'f; 'g]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -328,7 +328,7 @@ interactive set_ind_equality2 {| intro [] |} :
    sequent { <H> >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * PRIMITIVES                                                           *

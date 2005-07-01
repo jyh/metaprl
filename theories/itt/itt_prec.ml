@@ -64,7 +64,7 @@ extends Itt_void
 extends Itt_fun
 extends Itt_prod
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_symbol
@@ -120,7 +120,7 @@ doc <:doc<
 >>
 prim_rw reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. precind{'a; p, h. 'g['p; 'h]}}; 'a]
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -256,7 +256,7 @@ prim precindEquality {| intro [] |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T
                    in 'S['r1]
            } =
    it
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

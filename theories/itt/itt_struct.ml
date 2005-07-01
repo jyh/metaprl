@@ -47,7 +47,7 @@ doc <:doc<
    @end[doc]
 >>
 extends Itt_equal
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -227,7 +227,7 @@ prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] } =
    't['x]
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Equality in a type}
 

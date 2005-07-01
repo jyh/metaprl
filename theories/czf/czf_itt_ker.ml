@@ -44,7 +44,7 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_hom
 extends Czf_itt_coset
 extends Czf_itt_normal_subgroup
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -60,7 +60,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare ker{'h; 'g1; 'g2; x. 'f['x]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -77,7 +77,7 @@ doc <:doc<
 >>
 prim_rw unfold_ker : ker{'h; 'g1; 'g2; x. 'f['x]} <-->
    (hom{'g1; 'g2; x. 'f['x]} & group{'h} & equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}})))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -125,7 +125,7 @@ interactive ker_intro {| intro [] |} :
    sequent { <H> >- equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} } -->
    sequent { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}} } -->
    sequent { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * If f is a group homomorphism of G into G', then the mapping of any
@@ -140,7 +140,7 @@ interactive ker_mem_id {| elim [] |} 'H 'y :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'y; car{'h}} } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: mem{'y; car{'g1}}; w: eq{'f['y]; id{'g2}} >- 'C['u] } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive ker_subgroup hom{'g1; 'g2; x. 'f['x]} 'h :
    sequent { <H> >- 'g1 IN label } -->
@@ -165,7 +165,7 @@ interactive ker_subgroup_elim (*{| elim [] |}*) 'H :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: subgroup{'h; 'g1} >- 'C['u] } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive ker_lcoset_i {| intro [] |} 'g2 :
    sequent { <H> >- 'g1 IN label } -->
@@ -250,7 +250,7 @@ interactive ker_normalSubg (*{| elim [] |}*) 'H :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: normal_subg{'h; 'g1} >- 'C['u] } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

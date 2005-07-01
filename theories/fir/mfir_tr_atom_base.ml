@@ -4,8 +4,8 @@ doc <:doc<
 
    The @tt[Mfir_tr_atom_base] module defines the argument types
    and result types of the FIR operators.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -34,6 +34,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<

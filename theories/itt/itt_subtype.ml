@@ -59,7 +59,7 @@ doc <:doc<
 extends Itt_equal
 extends Itt_struct
 extends Itt_squash
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -91,7 +91,7 @@ doc <:doc<
    @end[doc]
 >>
 declare \subtype{'A; 'B}
-doc <:doc< @docoff >>
+doc docoff
 
 let subtype_term = << 'A subtype 'B >>
 let subtype_opname = opname_of_term subtype_term

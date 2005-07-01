@@ -44,7 +44,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_group_power
 extends Czf_itt_subgroup
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -62,7 +62,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare cyc_subg{'s; 'g; 'a}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -80,7 +80,7 @@ doc <:doc<
 >>
 prim_rw unfold_cyc_subg : cyc_subg{'s; 'g; 'a} <-->
    (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_cyc_subg = makeFoldC << cyc_subg{'s; 'g; 'a} >> unfold_cyc_subg
 
@@ -159,7 +159,7 @@ interactive cycsubg_subgroup 'a :
    sequent { <H> >- cyc_subg{'s; 'g; 'a} } -->
    sequent { <H> >- subgroup{'s; 'g} }
 
-doc <:doc< @docoff >>
+doc docoff
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

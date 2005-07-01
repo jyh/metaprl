@@ -44,7 +44,7 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_subgroup
 extends Czf_itt_abel_group
 extends Czf_itt_coset
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -60,7 +60,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare normal_subg{'s; 'g}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -75,7 +75,7 @@ doc <:doc<
 >>
 prim_rw unfold_normal_subg : normal_subg{'s; 'g} <-->
    (subgroup{'s; 'g} & (all a: set. (mem{'a; car{'g}} => equal{lcoset{'s; 'g; 'a}; rcoset{'s; 'g; 'a}})))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -132,7 +132,7 @@ interactive abel_subg_normal 'H 's :
    sequent { <H>; x: abel{'g}; <J['x]>; y: normal_subg{'s; 'g} >- 'C['x] } -->
    sequent { <H>; x: abel{'g}; <J['x]> >- 'C['x] }
 
-doc <:doc< @docoff >>
+doc docoff
 let abelNormalSubgT t i = abel_subg_normal i t
 
 (*

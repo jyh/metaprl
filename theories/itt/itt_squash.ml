@@ -76,7 +76,7 @@ doc <:doc<
 >>
 extends Itt_equal
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -105,7 +105,7 @@ doc <:doc<
    @end[doc]
 >>
 declare squash{'A}
-doc <:doc< @docoff >>
+doc docoff
 
 let squash_term = << squash{'a} >>
 let squash_opname = opname_of_term squash_term
@@ -198,7 +198,7 @@ interactive unsquashEqual 'H :
    sequent { <H>; 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
    sequent { <H>; u: squash{'P}; <J['u]> >- 'x['u] = 'y['u] in 'A['u] }
 
-doc <:doc< @docoff >>
+doc docoff
 interactive unsquashWWitness 'H 't:
    sequent { <H>; 'P; <J[it]> >- 't in 'A[it] } -->
    sequent { <H>; u: squash{'P}; <J['u]> >- 'A['u] }
@@ -232,7 +232,7 @@ interactive unsquash 'H :
    sequent { <H>; 'P; <J[it]> >- squash{'T[it]} } -->
    sequent { <H>; u: squash{'P}; <J['u]> >- squash{'T['u]} }
 
-doc <:doc< @docoff >>
+doc docoff
 interactive unsquashStableGoal 'H :
    sequent { <H>; 'A; <J[it]> >- 'C[it] } -->
    sequent { <H>; u: squash{'A}; <J['u]>; squash{'C['u]} >- 'C['u] } -->

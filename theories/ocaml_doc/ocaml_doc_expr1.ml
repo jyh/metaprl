@@ -1,11 +1,12 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @spelling{doesn ll newline aren ooo bbb hhh ddd hh th}
 
-   @begin[doc]
    @chapter["ocaml-doc-expr1"]{Simple Expressions}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -28,9 +29,8 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
-
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -571,7 +571,6 @@ exception: execution can go backwards.  The @tt{back} command will
 go back one instruction.
 
 @end[doc]
-@docoff
 >>
 
 (*

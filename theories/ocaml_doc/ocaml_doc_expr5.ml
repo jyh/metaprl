@@ -1,14 +1,15 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    Dereferencing blit bool doesn downto fields int
    jason ll namespace permissable rec ref toplevel
    @end[spelling]
 
-   @begin[doc]
    @chapter[records]{Records, Arrays, References, and Side-Effects}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,9 +32,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -476,7 +477,6 @@ val array_mem : 'a -> 'a array -> bool = <fun>
 @end[iverbatim]
 
 @end[doc]
-@docoff
 >>
 
 (*

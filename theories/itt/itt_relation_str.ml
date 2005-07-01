@@ -103,7 +103,7 @@ dform porder_df : except_mode[src] :: PartialOrder[i:l] = `"PartialOrder" sub{sl
 define order1 : order[i:l] <-->  { self : PartialOrder[i:l] | all x:^car.all y:^car. ("assert"{'x ^< 'y} or  "assert"{'y ^< 'x} or 'x='y in ^car) }
 *)
 
-doc <:doc< @docoff >>
+doc docoff
 
 define le: le{'self; 'a;'b} <--> "assert"{'b ^<= 'a}
 
@@ -131,7 +131,7 @@ define decEquality : DecEquality[i:l] <-->
        all x:^car. all y:^car. iff{"assert"{'x ^= 'y}; 'x='y in ^car}
     }
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform preorder_df : except_mode[src] :: preorder[i:l] = `"preOrder" sub{slot[i:l]}
 

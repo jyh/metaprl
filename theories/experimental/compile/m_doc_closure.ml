@@ -1,35 +1,36 @@
-doc <:doc< -*- mode: text; -*-
+(* -*- mode: text; -*- *)
+doc <:doc<
+   @begin[doc]
    @begin[spelling]
    CPS
    @end[spelling]
-  
-   @begin[doc]
+
    @subsection[m_doc_closure]{Closure conversion}
+
    @docoff
-   @end[doc]
-  
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 extends M_doc_ir
 
@@ -49,11 +50,11 @@ dform math_CloseVar_df1 : mode[tex] :: math_CloseVar{'v; 'e; 'a} =
    math_CloseVar{'v; 'a} slot{'e}
 
 dform math_CloseVar_df2 : mode[tex] :: math_CloseVar{'v; 'a} =
-   math_xlet slot{'v} `"=" slot{'a} math_xin   
-   
+   math_xlet slot{'v} `"=" slot{'a} math_xin
+
 dform math_CloseRecVar_df : mode[tex] :: math_CloseRecVar{'R; 'frame} =
    slot{'R} `"(" slot{'frame} `")"
-   
+
 dform math_CloseRec_df_1 : mode[tex] :: math_CloseRec{'R; 'frame; 'tuple; 'd; 'e} =
    math_CloseRec{'R; 'frame; 'tuple}
    slot{'d} math_xin slot{'e}
@@ -66,7 +67,7 @@ dform math_CloseRecDefs_df : mode[tex] :: math_CloseRecDefs{'d} =
 
 dform math_CloseRecBody_df : mode[tex] :: math_CloseRecBody{'e} =
    math_xin slot{'e}
-   
+
 dform math_CloseSubscript_df : mode[tex] :: math_CloseSubscript{'a1; 'a2; 'v} =
     math_xlet slot{'v} `"= " slot{'a1} `".[" slot{'a2} `"]" math_xin
 
@@ -80,8 +81,8 @@ declare math_frame
 
 dform math_frame_df : mode[tex] :: math_frame =
    math_it["Fr"]
-   
-doc <:doc< 
+
+doc <:doc<
 @begin[doc]
 
 The program intermediate representation includes higher-order and nested functions.  The function
@@ -112,7 +113,7 @@ $$
 The second part of closure conversion does the closure operation using two operations.  For the first part,
 suppose we have some expression $e$ with a free variable $v$.  We can abstract this variable using a
 call-by-name function application as the expression $@CloseVar{v; e; v}$, which reduces to $e$ by
-simple $@beta$-reduction.  
+simple $@beta$-reduction.
 $$@xrewrite[abs]{e[v]; @CloseVar{v; e[v]; v}}$$
 
 By selectively applying this rule, we can quantify variables that occur free in the

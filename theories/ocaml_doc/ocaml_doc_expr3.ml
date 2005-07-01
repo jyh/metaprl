@@ -1,13 +1,14 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    btree iff log Okasaki ll rebalancing
    @end[spelling]
 
-   @begin[doc]
    @chapter[unions]{Unions}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,7 +32,7 @@ doc <:doc< -*- Mode: text -*-
    @email{jyh@cs.caltech.edu}
    @end[license]
 
-   @docoff
+   @end[doc]
 >>
 
 extends Base_theory
@@ -605,9 +606,8 @@ type 'a option = | None | Some of 'a
 The @tt{None} case is intended to represent a NIL value, while the
 @tt{Some} case handles non-NIL values.
 
-@end[doc]
-
 @docoff
+@end[doc]
 >>
 
 (*

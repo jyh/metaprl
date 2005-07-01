@@ -57,7 +57,7 @@ extends Itt_equal
 extends Itt_unit
 extends Itt_subtype
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -88,7 +88,7 @@ doc <:doc<
    @end[doc]
 >>
 declare set{'A; x. 'B['x]}
-doc <:doc< @docoff >>
+doc docoff
 
 let set_term = << { a: 'A | 'B['a] } >>
 let set_opname = opname_of_term set_term

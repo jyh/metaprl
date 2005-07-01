@@ -174,7 +174,7 @@ interactive dall_res {| intro [] |} :
    ["wf"]   sequent { <H> >- isset{'A} } -->
    sequent { <H>; x: set >- restricted{'B['x]} } -->
    sequent { <H> >- restricted{. "dall"{'A; y. 'B['y]}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

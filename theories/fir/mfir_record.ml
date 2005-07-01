@@ -4,8 +4,8 @@ doc <:doc<
 
    The @tt[Mfir_record] module defines a syntactic mechanism for
    representing records and operations on records.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -34,6 +34,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -45,14 +46,11 @@ doc <:doc<
 extends Mfir_bool
 extends Mfir_token
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 open Basic_tactics
 open Mfir_bool
 open Mfir_token
-
 
 (**************************************************************************
  * Declarations.
@@ -85,10 +83,7 @@ doc <:doc<
 declare field[tag:s]{ 'record }
 declare field_mem[tag:s]{ 'record }
 
-doc <:doc<
-   @docoff
->>
-
+doc docoff
 
 (**************************************************************************
  * Rewrites.
@@ -109,9 +104,7 @@ prim_rw reduce_field_main :
    else
       field[tag1:s]{ 'remaining })
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 let reduce_field =
    reduce_field_main thenC
@@ -138,9 +131,7 @@ prim_rw reduce_field_mem_ind :
    "or"{ token_eq{ token[tag1:s]; token[tag2:s] };
          field_mem[tag1:s]{ 'remaining } }
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 let reduce_field_mem =
    reduce_field_mem_base orelseC

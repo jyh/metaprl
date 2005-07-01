@@ -64,7 +64,7 @@ extends Czf_itt_singleton
 extends Czf_itt_union
 extends Czf_itt_empty
 extends Czf_itt_implies
-doc <:doc< @docoff >>
+doc docoff
 
 open Tactic_type
 open Tactic_type.Conversionals
@@ -84,7 +84,7 @@ declare inf
 declare zero
 declare succ{'i}
 declare lt{'i; 'j}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -107,7 +107,7 @@ prim_rw unfold_inf : inf <-->
    collect{list{unit}; l. list_ind{'l; empty; h, t, g. succ{'g}}}
 
 prim_rw unfold_lt : lt{'i; 'j} <--> mem{'i; 'j}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_zero = makeFoldC << zero >> unfold_zero
 let fold_succ = makeFoldC << succ{'i} >> unfold_succ

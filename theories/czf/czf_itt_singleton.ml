@@ -41,7 +41,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_member
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -73,7 +73,7 @@ doc <:doc<
    @end[doc]
 >>
 prim_rw unfold_sing : sing{'s} <--> collect{unit; x. 's}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -127,7 +127,7 @@ doc <:doc<
 interactive sing_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's['z]} } -->
    sequent { <H> >- fun_set{z. sing{'s['z]}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

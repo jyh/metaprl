@@ -5,7 +5,7 @@ doc <:doc<
    Logics that include ``trivial'' reasoning need a ``squash'' term
    to denote proofs that contain no computational content, and an
    ``it'' term to denote the proof that has the squash type.
-   @end[doc]
+   @docoff
 
    ----------------------------------------------------------------
 
@@ -38,6 +38,7 @@ doc <:doc<
    @email{jyh@cs.caltech.edu}
 
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc< @doc{@parents} >>

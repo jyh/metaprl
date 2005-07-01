@@ -17,7 +17,7 @@ extends Itt_tunion
 extends Itt_nat
 extends Itt_labels
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf

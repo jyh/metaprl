@@ -52,7 +52,7 @@ prim subst 'e2 :
    ["wf"] sequent { <H> >- equal{'e1; 'e2} } -->
    sequent { <H> >- 'e1 }
 
-doc <:doc< @docoff >>
+doc docoff
 
 let standardizeT =
    funT (fun p -> subst (standardize (concl p)))

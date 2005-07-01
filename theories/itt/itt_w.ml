@@ -65,7 +65,7 @@ extends Itt_rfun
 extends Itt_struct
 extends Itt_struct2
 extends Itt_inv_typing
-doc <:doc< @docoff >>
+doc docoff
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -255,7 +255,7 @@ interactive tree_indEquality {| intro [] |} (w{'A; x. 'B['x]}) bind{z.'T['z]} :
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T['z1] }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * PRIMITIVES                                                           *

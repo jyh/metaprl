@@ -1,14 +1,15 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    API CS Caml LCF ML Milner Monolithic Scalability Vino rec scalability
    stance filesystems ll gcd updatable coercions destructors vs
    @end[spelling]
 
-   @begin[doc]
    @chapter["ocaml-doc-intro"]{Introduction}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,9 +32,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -227,11 +228,10 @@ The author can be reached at @email{jyh@cs.caltech.edu}.
 @end[doc]
 >>
 
-doc <:doc<
-   @docoff
+(*
    -*-
    Local Variables:
    Caml-master: "compile"
    End:
    -*-
->>
+*)

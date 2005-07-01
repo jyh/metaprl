@@ -39,7 +39,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Czf_itt_hom
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -55,7 +55,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare iso{'g1; 'g2; x. 'f['x]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -69,7 +69,7 @@ doc <:doc<
 >>
 prim_rw unfold_iso : iso{'g1; 'g2; x. 'f['x]} <-->
    (hom{'g1; 'g2; x. 'f['x]} & (all c: set. all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => eq{'f['c]; 'f['d]} => eq{'c; 'd})) & (all e: set. (mem{'e; car{'g2}} => (exst p: set. (mem{'p; car{'g1}} & eq{'e; 'f['p]})))))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -115,7 +115,7 @@ interactive iso_fun {| intro [] |} :
    sequent { <H>; z: set >- fun_set{x. 'f['x; 'z]} } -->
    sequent { <H> >- fun_prop{z. iso{'g1; 'g2; y. 'f['z; 'y]}} }
 
-doc <:doc< @docoff >>
+doc docoff
 (*
  * -*-
  * Local Variables:

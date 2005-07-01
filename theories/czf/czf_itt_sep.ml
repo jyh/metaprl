@@ -103,7 +103,7 @@ doc <:doc<
 prim_rw unfold_restricted : restricted{'P} <-->
    Itt_equal!equal{univ[1:l]; 'P; 'P}
 
-doc <:doc< @docoff >>
+doc docoff
 let fold_restricted = makeFoldC << restricted{'P} >> unfold_restricted
 
 (************************************************************************
@@ -211,7 +211,7 @@ interactive sep_fun {| intro [] |} :
    sequent { <H>; u: set >- fun_prop{z. 'P['u; 'z]} } -->
    sequent { <H> >- fun_set{z. 's['z]} } -->
    sequent { <H> >- fun_set{z. sep{'s['z]; x. 'P['x; 'z]}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

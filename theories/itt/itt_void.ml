@@ -48,7 +48,7 @@ doc <:doc<
 extends Itt_equal
 extends Itt_squash
 extends Itt_subtype
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -75,7 +75,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare void
-doc <:doc< @docoff >>
+doc docoff
 
 let void_term = << void >>
 let void_opname = opname_of_term void_term

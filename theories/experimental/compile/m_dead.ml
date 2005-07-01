@@ -1,17 +1,17 @@
 doc <:doc<
+   @begin[doc]
    @begin[spelling]
    redeces
    @end[spelling]
 
-   @begin[doc]
    @module[M_dead]
 
    This module implements an aggressive form of dead-code elimination.
    A let-definition is considered dead if the variable it defines is not
    used.  If the defining value would normally raise an exception (e.g.,
    division by zero), the semantics of the program could change.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -34,6 +34,7 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -42,7 +43,7 @@ doc <:doc<
    @end[doc]
 >>
 extends M_ir
-doc <:doc< @docoff >>
+doc docoff
 
 open M_util
 
@@ -103,7 +104,7 @@ prim_rw dead_let_subscript :
 prim_rw dead_let_closure :
    LetClosure{'a1; 'a2; v. 'e} <--> 'e
 
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * Add all these rules to the dead resource.

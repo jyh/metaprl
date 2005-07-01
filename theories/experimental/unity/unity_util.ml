@@ -31,7 +31,7 @@ doc <:doc<
    @end[doc]
 >>
 extends Base_theory
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf

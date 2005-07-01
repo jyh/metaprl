@@ -1,9 +1,9 @@
-doc <:doc< -*- Mode: text -*-
-
+(* -*- Mode: text -*- *)
+doc <:doc<
    @begin[doc]
    @chapter["ocaml-doc-type1"]{The OCaml type system}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -26,9 +26,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -38,11 +38,10 @@ doc <:doc<
    @end[doc]
 >>
 
-doc <:doc<
-   @docoff
+(*
    -*-
    Local Variables:
    Caml-master: "compile"
    End:
    -*-
->>
+*)

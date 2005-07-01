@@ -11,7 +11,7 @@ extends Czf_itt_nat
 extends Czf_itt_sep
 extends Itt_bool
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -38,7 +38,7 @@ prim_rw unfold_setdiff : setdiff{'s1; 's2} <-->
 (*   set_ind{'s1; T1, f1, g1.
          collect{'T1; x. ifthenelse{mem{.'f1 'x; 's2}; empty; .'f1 'x}}} *)
 
-doc <:doc< @docoff >>
+doc docoff
 let fold_setdiff = makeFoldC << setdiff{'s1; 's2} >> unfold_setdiff
 
 prec prec_setdiff

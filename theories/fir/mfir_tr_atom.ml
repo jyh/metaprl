@@ -3,8 +3,8 @@ doc <:doc<
    @module[Mfir_tr_atom]
 
    The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -49,7 +50,6 @@ extends Mfir_sequent
 extends Mfir_tr_base
 extends Mfir_tr_types
 extends Mfir_tr_atom_base
-
 
 (**************************************************************************
  * Rules.
@@ -80,7 +80,6 @@ doc <:doc<
 prim ty_atomInt :
    sequent { <H> >- member{ 'i; intset_max[31, "signed"] } } -->
    sequent { <H> >- has_type["atom"]{ atomInt{'i}; tyInt } }
-
 
 doc <:doc<
    @begin[doc]
@@ -143,7 +142,7 @@ prim ty_atomVar 'H :
       has_type["atom"]{ atomVar{'v}; 'ty } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Frames and constant constructors}
 
@@ -213,7 +212,7 @@ prim ty_atomConst 'H :
          intset[31, "signed"]{ (interval{ 'n; 'n } :: nil) } } } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Polymorphism}
 
@@ -252,11 +251,6 @@ prim ty_atomTyApply 'H :
                         'u2 } }
 
 doc <:doc<
-   @docoff
->>
-
-
-doc <:doc<
    @begin[doc]
 
    The atom << atomTyPack{ 'var; 'u; 'types } >> is the introduction
@@ -275,7 +269,6 @@ prim ty_atomTyPack :
    sequent { <H> >-
       has_type["atom"]{ atomTyPack{ 'var; 'u; 'types };
                         tyExists{ t. 'ty['t] } } }
-
 
 doc <:doc<
    @begin[doc]
@@ -300,11 +293,6 @@ prim ty_atomTyUnpack 'H :
       has_type["atom"]{ atomTyUnpack{ atomVar{'v} }; 'u } }
 
 doc <:doc<
-   @docoff
->>
-
-
-doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Unary and binary operators}
 
@@ -325,7 +313,3 @@ prim ty_atomBinop :
    sequent { <H> >- has_type["atom"]{ 'a1; arg1_type{ 'op } } } -->
    sequent { <H> >- has_type["atom"]{ 'a2; arg2_type{ 'op } } } -->
    sequent { <H> >- has_type["atom"]{ atomBinop{ 'op; 'a1; 'a2 }; 'ty } }
-
-doc <:doc<
-   @docoff
->>

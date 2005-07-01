@@ -13,7 +13,7 @@ extends Itt_record
 extends Itt_logic
 extends Itt_labels
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf

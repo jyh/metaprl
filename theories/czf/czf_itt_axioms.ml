@@ -60,7 +60,7 @@ extends Czf_itt_sexists
 extends Czf_itt_dall
 extends Czf_itt_dexists
 extends Czf_itt_rel
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -86,7 +86,7 @@ interactive set_induction :
    sequent { <H> >- fun_prop{z. 'P['z]} } -->
    sequent { <H>; x: set; w: dall{'x; z. 'P['z]} >- 'P['x] } -->
    sequent { <H> >- sall{z. 'P['z]} }
-doc <:doc< @docoff >>
+doc docoff
 
 let setInduction1 = set_induction
 
@@ -137,7 +137,7 @@ interactive subset_collection 'a 'b bind{u. bind{x. bind{y. 'P['u; 'x; 'y]}}} :
    sequent { <H>; u: set; x: set >- fun_prop{y. 'P['u; 'x; 'y]} } -->
    sequent { <H>; w: sexists{c. sall{u. dall{'a; x. dexists{'b; y. 'P['u; 'x; 'y]}} => dexists{'c; z. rel{x, y. 'P['u; 'x; 'y]; 'a; 'z}}}} >- 'C } -->
    sequent { <H> >- 'C }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

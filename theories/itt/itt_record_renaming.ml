@@ -32,7 +32,7 @@ doc <:doc<
 
 define rename: rename[a:t, b:t]{'r} <--> rcrd[a:t]{ field[b:t]{'r}; rcrd[b:t]{ field[a:t]{'r}; 'r} }
 
-doc <:doc< @docoff>>
+doc docoff
 
 declare over{'a;'b}
 

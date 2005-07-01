@@ -189,7 +189,7 @@ define unfold_ge {| reduce |} :
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_le = makeFoldC << le{'a; 'b} >> unfold_le
 let fold_ge = makeFoldC << ge{'a; 'b} >> unfold_ge
@@ -291,7 +291,7 @@ doc <:doc< @doc{Integer segmentation} >>
 
 define unfold_int_seg : int_seg{'i; 'j} <--> {x:int | 'x >= 'i & 'x < 'j}
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform intSeg_df1 : except_mode [src] :: except_mode [prl] :: int_seg{'i; 'j} =
    `"{" slot{'i} `".." slot{'j} sup["-":s] `"}"
@@ -1008,7 +1008,7 @@ interactive intSegElimination {| elim [] |} 'H :
 interactive intSegIsInt {| nth_hyp |} 'H :
    sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'x in int }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (*
 Incorrect but there has to be some assoc/commut/composition property

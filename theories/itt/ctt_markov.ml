@@ -1,7 +1,7 @@
 extends Itt_theory
 extends Itt_nat
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf

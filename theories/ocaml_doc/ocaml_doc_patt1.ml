@@ -1,14 +1,15 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    acts Fibonacci inexhaustive ll patt wildcard
    aren expr
    @end[spelling]
 
-   @begin[doc]
    @chapter["ocaml-doc-patt1"]{Basic Pattern Matching}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,9 +32,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -357,7 +358,6 @@ val is_unit : unit -> bool = <fun>
 @end[iverbatim]
 
 @end[doc]
-@docoff
 >>
 
 (*

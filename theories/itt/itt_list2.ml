@@ -56,7 +56,7 @@ extends Itt_pairwise
 extends Itt_omega
 extends Itt_tunion
 extends Itt_ext_equal
-doc <:doc< @docoff >>
+doc docoff
 
 open Basic_tactics
 
@@ -316,7 +316,7 @@ doc <:doc< @doc{Maximal element of a list} >>
 define unfold_list_max: list_max{'l} <-->
    list_ind{'l; 0; h, t, g. max{'h; 'g}}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let length_term = << length{'l} >>
 let length_opname = opname_of_term length_term
@@ -1341,9 +1341,7 @@ interactive list_continuous {| intro[] |}:
    [monotone] sequent { <H>; i:nat >- 'A['i] subtype 'A['i+@1] } -->
    sequent { <H> >- ext_equal{ list{Union i:nat.'A['i]}; Union i:nat.list{'A['i]} } }
 
-doc <:doc< @docoff >>
-
-
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

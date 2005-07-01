@@ -1,14 +1,15 @@
-doc <:doc< -*- Mode: text; fill-column: 100 -*-
+(* -*- Mode: text; fill-column: 100 -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    Dereferencing blit bool doesn downto fields int
    jason ll namespace permissable rec ref toplevel
    @end[spelling]
 
-   @begin[doc]
    @chapter[records]{Reference cells, Side-Effects, and Loops}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,9 +32,9 @@ doc <:doc< -*- Mode: text; fill-column: 100 -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -626,7 +627,6 @@ not.}}
 @end[enumerate]
 
 @end[doc]
-@docoff
 >>
 
 (*

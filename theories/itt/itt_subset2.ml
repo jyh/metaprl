@@ -50,7 +50,7 @@ extends Itt_bisect
 extends Itt_bunion
 extends Itt_ext_equal
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -174,7 +174,7 @@ interactive union_subset {| intro [] |} :
    sequent { <H> >- 'B subset '"B'" } -->
    sequent { <H> >- 'A + 'B subset '"A'" + '"B'" }
 
-doc <:doc< @docoff >>
+doc docoff
 
 
 (*

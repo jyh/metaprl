@@ -293,7 +293,7 @@ prim unionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'B1 subtype 'B2 } -->
    sequent { <H> >- 'A1 + 'B1 subtype 'A2 + 'B2  } =
    it
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * Interactive.

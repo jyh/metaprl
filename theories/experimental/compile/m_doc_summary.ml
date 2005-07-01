@@ -1,14 +1,14 @@
-doc <:doc< -*- mode: text; -*-
+(* -*- mode: text; -*- *)
+doc <:doc<
+   @begin[doc]
    @begin[spelling]
    CPS grunge Liang Morrisett Necula untrusted Hannan LF Pfenning Pnueli Resler Singerman Danvy
    Fellinski HOAS compilable
    @end[spelling]
 
-   @begin[doc]
    @section[m_doc_summary]{Summary and Future Work}
-   @docoff
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,6 +31,7 @@ doc <:doc< -*- mode: text; -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 extends M_doc_comment
 extends M_doc_cps

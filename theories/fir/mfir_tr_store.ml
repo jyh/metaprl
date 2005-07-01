@@ -3,8 +3,8 @@ doc <:doc<
    @module[Mfir_tr_store]
 
    The @tt[Mfir_tr_store] module defines the typing rules for store values.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -93,7 +94,7 @@ prim ty_store_array2 :
    sequent { <H> >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Functions}
 
@@ -117,7 +118,7 @@ prim ty_store_polyFun :
       has_type["exp"]{ polyFun{ x. 'f['x] }; tyAll{ t. 'ty['t] } } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Union values}
 
@@ -169,7 +170,7 @@ prim ty_store_union_atoms2 :
                                cons{ mutable_ty{'ty; 'flag}; 'rest } } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Raw data values}
 
@@ -179,7 +180,3 @@ doc <:doc< ************************************
 
 prim ty_store_raw_data :
    sequent { <H> >- has_type["store"]{ raw_data; tyRawData } }
-
-doc <:doc<
-   @docoff
->>

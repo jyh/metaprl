@@ -1,13 +1,13 @@
 doc <:doc<
-   @spelling{MUL DIV cc}
    @begin[doc]
+   @spelling{MUL DIV cc}
    @module[M_x86_asm]
 
    This module defines our representation of x86 assembly code.
    The one difference here, compared to traditional approaches,
    is that we continue to use variable scoping.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -30,6 +30,7 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -38,7 +39,6 @@ doc <:doc<
    @end[doc]
 >>
 extends Base_theory
-doc <:doc< @docoff >>
 
 (*************************************************************************
  * Operands.
@@ -184,7 +184,7 @@ declare LabelEnd
 
 declare LabelFun{v. 'insts['v]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * Display forms.

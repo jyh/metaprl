@@ -10,7 +10,7 @@ doc <:doc<
 extends Itt_record
 extends Itt_labels
 
-doc <:doc< @docoff >>
+doc docoff
 
 (** carrier **)
 

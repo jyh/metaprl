@@ -1,13 +1,14 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    Obfuscated Ok expr
    @end[spelling]
 
-   @begin[doc]
    @chapter["ocaml-doc-name1"]{Variables and Functions}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -30,9 +31,10 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -441,7 +443,6 @@ named @code{+/-} would have the same precedence and associativity as
 the @code{+} operator.
 
 @end[doc]
-@docoff
 >>
 
 (*

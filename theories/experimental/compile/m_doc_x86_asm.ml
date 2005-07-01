@@ -1,14 +1,14 @@
-doc <:doc< -*- mode: text; -*-
+(* -*- mode: text; -*- *)
+doc <:doc<
+   @begin[doc]
    @begin[spelling]
    mem reg CMP DIV INC JEQ JGT JLT JMP MOV MUL cc cmp eax ebp ebx ecx
    edi edx esi esp inst jcc jmp mov opcodes
    @end[spelling]
 
-   @begin[doc]
    @section[m_doc_x86_asm]{Scoped x86 assembly language}
-   @docoff
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,6 +31,7 @@ doc <:doc< -*- mode: text; -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 extends M_doc_ir
 

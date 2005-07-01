@@ -43,7 +43,7 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Czf_itt_cyclic_subgroup
 extends Czf_itt_abel_group
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -62,7 +62,7 @@ let _ =
 doc <:doc< @doc{@terms} >>
 declare cycg{'g}
 declare cycgroup{'g; 'a}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -81,7 +81,7 @@ prim_rw unfold_cycg : cycg{'g} <-->
 
 prim_rw unfold_cycgroup : cycgroup{'g; 'a} <-->
    (group{'g} & mem{'a; car{'g}} & equal{car{'g}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}})
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_cycgroup = makeFoldC << cycgroup{'g; 'a} >> unfold_cycgroup
 
@@ -129,7 +129,7 @@ interactive cycgroup_fun {| intro [] |} :
    sequent { <H> >- 'g IN label } -->
    sequent { <H> >- group{'g} } -->
    sequent { <H> >- fun_prop{z. cycgroup{'g; 'z}} }
-doc <:doc< @docoff >>
+doc docoff
 
 doc <:doc<
    @begin[doc]
@@ -192,7 +192,7 @@ interactive cycg_abel :
    sequent { <H> >- cycg{'g} } -->
    sequent { <H> >- abel{'g} }
 
-doc <:doc< @docoff >>
+doc docoff
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

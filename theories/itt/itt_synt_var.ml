@@ -204,7 +204,7 @@ interactive varSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in Var } -->
    sequent { <H> >- 'b1 ~ 'b2 }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

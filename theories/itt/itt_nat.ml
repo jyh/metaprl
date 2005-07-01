@@ -48,7 +48,7 @@ extends Itt_struct3
 extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
-doc <:doc< @docoff >>
+doc docoff
 
 open Basic_tactics
 
@@ -73,7 +73,7 @@ define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
 define iform unfoldInd1 : ind{'n; 'base; l. 'up['l]} <-->
                     ind{'n; 'base; k,l . 'up['l]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let foldInd = makeFoldC << ind{'n; 'base; k,l. 'up['k;'l]} >> unfoldInd
 
@@ -259,7 +259,7 @@ interactive finiteNatIsNat2 {| nth_hyp |} 'H :
 interactive finiteNatIsSmall2 {| nth_hyp |} 'H :
    sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'x < 'k }
 
-doc <:doc< @docoff >>
+doc docoff
 
 let natBackInductionT =
    argfunT (fun n p -> natBackInduction n (get_bind_from_arg_or_concl_subst p <<0>>))

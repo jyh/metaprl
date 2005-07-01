@@ -51,7 +51,7 @@ doc <:doc<
 >>
 extends Itt_equal
 extends Itt_dfun
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -85,7 +85,7 @@ doc <:doc<
 >>
 prim_rw unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * Constructors/Destructors                                             *

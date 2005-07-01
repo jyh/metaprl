@@ -4,8 +4,8 @@ doc <:doc<
 
    The @tt[Mfir_util] module defines terms and rewrites for working
    with the @MetaPRL representation of the FIR.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -34,6 +34,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -50,9 +51,7 @@ extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 open Basic_tactics
 open Mfir_bool
@@ -76,7 +75,7 @@ doc <:doc<
 declare offset
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Type application}
 
@@ -88,7 +87,7 @@ doc <:doc< ************************************
 declare apply_types{ 'poly_ty; 'ty_list }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Definition extraction}
 
@@ -101,7 +100,7 @@ doc <:doc< ************************************
 declare get_core{ 'num; 'poly_ty }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Type projection}
 
@@ -114,7 +113,7 @@ doc <:doc< ************************************
 declare project_in_bounds{ 'num; 'ty }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Existential unpacking}
 
@@ -127,7 +126,7 @@ doc <:doc< ************************************
 declare unpack_exists{ 'ty; 'var; 'num }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Union of match cases}
 
@@ -140,7 +139,7 @@ doc <:doc< ************************************
 declare union_cases{ 'set; 'cases }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Conversions}
 
@@ -184,9 +183,7 @@ prim_rw reduce_apply_types_ind_exists :
    apply_types{ tyExists{ t. 'ty['t] }; cons{ 'a; 'b } } <-->
    apply_types{ 'ty['a]; 'b }
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 let reduce_apply_types =
    firstC [reduce_apply_types_base;
@@ -200,7 +197,7 @@ let resource reduce += [
 ]
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Definition extraction}
 
@@ -219,9 +216,7 @@ prim_rw reduce_get_core_main :
    else
       get_core{ number[i:n]; 'ty })
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 let reduce_get_core =
    reduce_get_core_main thenC
@@ -234,7 +229,7 @@ let resource reduce += [
 ]
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Type projection}
 
@@ -269,7 +264,7 @@ let resource reduce += [
 ]
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Existential unpacking}
 
@@ -314,7 +309,7 @@ let resource reduce += [
 ]
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Union of match cases}
 
@@ -345,7 +340,7 @@ let resource reduce += [
 ]
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Conversions}
 

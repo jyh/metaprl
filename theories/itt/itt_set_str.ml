@@ -48,7 +48,7 @@ extends Itt_algebra_df
 extends Itt_logic
 extends Itt_union2
 extends Itt_labels
-doc <:doc< @docoff >>
+doc docoff
 
 open Dtactic
 
@@ -73,7 +73,7 @@ define set_sig: Set[i:l]{'T} <-->
     all S:^car. all a:'T. all b:'T. iff{"assert"{^member (^delete 'S 'b) 'a}; ."assert"{^member 'S 'a} and not{'a='b in 'T}}
    }
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform set_df : except_mode[src] :: Set[i:l]{'T} = mathbbS `"et" sub{slot[i:l]} "(" 'T ")"
 
@@ -146,7 +146,7 @@ define set_as_list: set_as_list{'A} <-->
     delete = lambda {S. lambda{x.fsub{'A^"="; 'S;  fsingleton{'x}} }}
    }
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform sal_df : except_mode[src] :: set_as_list{'A} = `"set_as_list" "(" 'A ")"
 
@@ -206,7 +206,7 @@ define dep_table_sig: Table[i:l]{'T; x.'M['x]} <-->
        (not{'x_1='x_2 in 'T} => ^apply (^delete 'F 'x_2) 'x_1 = ^apply 'F 'x_1 in  'M['x_1] + unit)
    }
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform table_df : except_mode[src] :: Table[i:l]{'T; x.'M} = mathbbT `"able" sub{slot[i:l]} "(" (x:'T -> 'M)  ")"
 
@@ -287,7 +287,7 @@ doc <:doc<
    @end[doc]
 >>
 
-doc <:doc< @docoff >>
+doc docoff
 define rel_prod: rel_prod{'R_1;'R_2} <--> lambda {a. lambda {b. 'R_1 fst{'a} fst{'b} band  'R_2 snd{'a} snd{'b} }}
 define rel_true: rel_true <--> lambda {a. lambda {b. btrue }}
 doc <:doc< @doc >>
@@ -300,7 +300,7 @@ define set_as_list: set_as_list{'A} <-->
     delete = lambda {S. lambda{x.lambda{y.fsub{'A^"="; 'S;  fsingleton{'x,'y}} }}
    }
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform sal_df : except_mode[src] :: set_as_list{'A} = `"set_as_list" "(" 'A ")"
 
@@ -313,4 +313,4 @@ interactive set_as_list_correct :
 
 *)
 
-doc <:doc< @docoff >>
+doc docoff

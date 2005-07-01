@@ -3,8 +3,8 @@ doc <:doc<
    @module[Mfir_int_set]
 
    The @tt[Mfir_int_set] module defines integer sets and operations on them.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -45,9 +46,7 @@ extends Mfir_bool
 extends Mfir_int
 extends Mfir_list
 
-doc <:doc<
-   @docoff
->>
+doc docoff
 
 open Basic_tactics
 open Mfir_bool
@@ -82,7 +81,7 @@ declare interval{ 'left; 'right }
 declare intset[precision:n, sign:s]{ 'interval_list }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Set operations}
 
@@ -118,7 +117,7 @@ declare set_eq{ 'set1; 'set2 }
 declare union{ 'set1; 'set2 }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Constants}
 
@@ -205,7 +204,7 @@ let reduce_subset_interval =
    reduce_ifthenelse
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Set operations}
 
@@ -450,18 +449,14 @@ let resource reduce += [
    << set_eq{ 's1; 's2 } >>, reduce_set_eq
 ]
 
-
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Constants}
 
    Set constants can be rewritten into their actual values.  These rewrites
    are straightforward, and we omit an explicit listing of them.
-   @end[doc]
->>
-
-doc <:doc<
    @docoff
+   @end[doc]
 >>
 
 prim_rw reduce_enum_max :

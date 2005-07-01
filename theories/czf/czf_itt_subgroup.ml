@@ -44,7 +44,7 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Czf_itt_subset
 extends Czf_itt_isect
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -60,7 +60,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare subgroup{'s; 'g}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -77,7 +77,7 @@ doc <:doc<
 >>
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
    (group{'s} & group{'g} & \subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -191,7 +191,7 @@ interactive subgroup_isect 'h1 'h2 :
    sequent { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
    sequent { <H> >- subgroup{'h; 'g} }
 
-doc <:doc< @docoff >>
+doc docoff
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

@@ -49,7 +49,7 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Czf_itt_dexists
 extends Czf_itt_subgroup
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -66,7 +66,7 @@ let _ =
 doc <:doc< @doc{@terms} >>
 declare lcoset{'h; 'g; 'a}
 declare rcoset{'h; 'g; 'a}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -84,7 +84,7 @@ prim_rw unfold_lcoset : lcoset{'h; 'g; 'a} <-->
 
 prim_rw unfold_rcoset : rcoset{'h; 'g; 'a} <-->
    sep{car{'g}; x. "dexists"{car{'h}; y. eq{'x; op{'g; 'y; 'a}}}}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -216,7 +216,7 @@ interactive rcoset_subset {| intro [] |} :
    sequent { <H> >- subgroup{'h; 'g} } -->
    sequent { <H> >- \subset{rcoset{'h; 'g; 'a}; car{'g}} }
 
-doc <:doc< @docoff >>
+doc docoff
 (*
  * -*-
  * Local Variables:

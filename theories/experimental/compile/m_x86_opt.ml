@@ -150,7 +150,7 @@ prim_rw delete_null_reserve :
    <-->
    'rest
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * Resources.

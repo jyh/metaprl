@@ -1,12 +1,12 @@
 doc <:doc<
+   @begin[doc]
    @spelling{compilable}
 
-   @begin[doc]
    @module[M_x86_codegen]
    This module implements the translation of IR terms to
    x86 assembly.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -29,6 +29,7 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc< @doc{@parents} >>
@@ -64,7 +65,7 @@ declare ASM{'a; v. 'e['v]}
 declare ASM{'args1; 'args2; v. 'e['v]}
 declare ASM{'R; 'e}
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform asm_df1 : ASM{'e} =
    szone pushm[0] pushm[3]
@@ -625,7 +626,7 @@ prim_rw asm_initialize {| reduce |} :
 (*
  * Cleanup.  It is debatiable whether we should have cleanup here...
  *)
-doc <:doc< @docoff >>
+doc docoff
 
 prim_rw mem_reg_reg_off_mul_cleanup_1 {| reduce |} :
    MemRegRegOffMul[off:n, mul:n]{Register{'r1}; 'r2}
@@ -709,7 +710,7 @@ prim codegen_prog :
    sequent { <H> >- compilable{ASM{'e}} } -->
    sequent { <H> >- compilable{'e} }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * Assembler.

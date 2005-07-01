@@ -72,7 +72,7 @@ extends Czf_itt_group
 extends Czf_itt_subgroup
 extends Czf_itt_abel_group
 extends Czf_itt_inv_image
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -88,7 +88,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare hom{'g1; 'g2; x. 'f['x]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -105,7 +105,7 @@ doc <:doc<
 >>
 prim_rw unfold_hom : hom{'g1; 'g2; x. 'f['x]} <-->
    (group{'g1} & group{'g2} & (all a: set. (mem{'a; car{'g1}} => member{'f['a]; car{'g2}})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => eq{'a; 'b} => eq{'f['a]; 'f['b]})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => eq{'f[op{'g1; 'a; 'b}]; op{'g2; 'f['a]; 'f['b]}})))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -217,7 +217,7 @@ interactive hom_abel hom{'g1; 'g2; x. 'f['x]} :
    sequent { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
    sequent { <H> >- abel{'g1} } -->
    sequent { <H> >- abel{'g2} }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive hom_id {| intro [] |} hom{'g1; 'g2; x. 'f['x]} :
    sequent { <H> >- 'g1 IN label } -->
@@ -236,7 +236,7 @@ interactive hom_id_elim (*{| elim [] |}*) 'H :
    sequent { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
    sequent { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]>; v: eq{'f[id{'g1}]; id{'g2}} >- 'C['u] } -->
    sequent { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive hom_inv {| intro [] |} 'a hom{'g1; 'g2; x. 'f['x]} :
    sequent { <H> >- 'g1 IN label } -->
@@ -332,7 +332,7 @@ doc <:doc<
 let homIdT = hom_id_elim
 let homInvT t i = hom_inv_elim i t
 
-doc <:doc< @docoff >>
+doc docoff
 (*
  * -*-
  * Local Variables:

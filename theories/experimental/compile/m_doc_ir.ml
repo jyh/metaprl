@@ -1,13 +1,12 @@
-doc <:doc< -*- mode: text; -*-
+(* -*- mode: text; -*- *)
+doc <:doc<
+   @begin[doc]
    @begin[spelling]
    ML binop relop op AST compilable marks
    @end[spelling]
 
-   @begin[doc]
    @section[m_doc_ir]{Intermediate representation}
    @docoff
-   @end[doc]
-
    ----------------------------------------------------------------
 
    @begin[license]
@@ -30,6 +29,7 @@ doc <:doc< -*- mode: text; -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 extends M_doc_comment
 
@@ -391,7 +391,6 @@ $$
 @end[array]
 $$
 
-@docoff
 @end[doc]
 >>
 

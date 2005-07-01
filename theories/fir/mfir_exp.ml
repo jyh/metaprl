@@ -3,8 +3,8 @@ doc <:doc<
    @module[Mfir_exp]
 
    The @tt[Mfir_exp] module declares terms to represent FIR expressions.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -42,7 +43,6 @@ doc <:doc<
 >>
 
 extends Mfir_ty
-
 
 (**************************************************************************
  * Declarations.
@@ -56,11 +56,8 @@ doc <:doc<
    The FIR unary operators include arithmetic operators and coercion
    operators that safely transform a value between two types.  We omit
    an explicit listing these terms.
-   @end[doc]
->>
-
-doc <:doc<
    @docoff
+   @end[doc]
 >>
 
 declare notEnumOp[i:n]
@@ -112,17 +109,14 @@ declare unionOfUnionOp{ 'ty_var; 'tyl; 'intset_dest; 'intset_src }
 declare rawDataOfFrameOp{ 'ty_var; 'tyl }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Binary operators}
 
    The FIR binary operators include various arithmetic operators, and
    pointer equality operators.  We omit an explicit listing of these terms.
-   @end[doc]
->>
-
-doc <:doc<
    @docoff
+   @end[doc]
 >>
 
 declare andEnumOp[i:n]
@@ -199,8 +193,7 @@ declare ldExpFloatIntOp[precision:n]
 declare eqEqOp{ 'ty }
 declare neqEqOp{ 'ty }
 
-
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Atoms}
 
@@ -328,8 +321,7 @@ doc <:doc<
 declare atomUnop{ 'unop; 'atom }
 declare atomBinop{ 'binop; 'atom1; 'atom2 }
 
-
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Allocation operators}
 
@@ -375,8 +367,7 @@ doc <:doc<
 
 declare allocFrame{ 'tv; 'ty_list }
 
-
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Expressions}
 
@@ -476,10 +467,7 @@ doc <:doc<
 declare letGlobal{ 'ty; 'label; v. 'exp['v] }
 declare setGlobal{ 'label; 'ty; 'atom; 'exp }
 
-doc <:doc<
-   @docoff
->>
-
+doc docoff
 
 (**************************************************************************
  * Display forms.
@@ -499,7 +487,6 @@ dform uminusIntOp_df2 : mode[tex] ::
    uminusIntOp =
    izone `"\\sim\\!\\!-" ezone sub{tyInt}
 
-
 (*
  * Binary operators.
  *)
@@ -509,7 +496,6 @@ dform uminusIntOp_df2 : mode[tex] ::
 dform plusIntOp_df : except_mode[src] ::
    plusIntOp =
    `"+" sub{tyInt}
-
 
 (*
  * Atoms.

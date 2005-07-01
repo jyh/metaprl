@@ -4,8 +4,8 @@ doc <:doc<
 
    The @tt[Mfir_tr_types] module defines type equality judgments, which are
    used to determine the well-formedness of FIR types.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -34,6 +34,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -71,8 +72,7 @@ prim wf_mutable_ty :
                                   mutable_ty{ 'ty2; 'flag };
                                   'k } }
 
-
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Numbers}
 
@@ -137,7 +137,7 @@ prim wf_tyFloat :
    sequent { <H> >- type_eq{ tyFloat[p:n]; tyFloat[p:n]; large_type } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Functions}
 
@@ -154,7 +154,7 @@ prim wf_tyFun :
                                    small_type } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Tuples}
 
@@ -240,7 +240,7 @@ prim wf_tyTag 'H :
       type_eq{ tyTag{ 'tv; 'mtyl1 }; tyTag{ 'tv; 'mtyl2 }; small_type } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Other aggregates}
 
@@ -282,7 +282,7 @@ prim wf_tyFrame 'H :
       type_eq{ tyFrame{ 'tv; 'tyl1 }; tyFrame{ 'tv; 'tyl2 }; small_type } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Polymorphism}
 
@@ -390,7 +390,7 @@ doc <:doc<
 >>
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Type definitions}
 
@@ -495,10 +495,7 @@ prim wf_tyDefDTuple 'H :
    sequent { <H>; a: ty_def{ 'tv; dtuple_type; tyDefDTuple{'tv} }; <J> >-
       type_eq{ tyDefDTuple{ 'tv }; tyDefDTuple{ 'tv }; dtuple_type } }
 
-doc <:doc<
-   @docoff
->>
-
+doc docoff
 
 (**************************************************************************
  * Display forms.

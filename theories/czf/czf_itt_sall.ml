@@ -40,7 +40,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_set
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -119,7 +119,7 @@ interactive sall_elim {| elim [] |} 'H 'z :
    ["wf"]   sequent { <H>; x: "sall"{y. 'A['y]}; <J['x]> >- isset{'z} } -->
    ["main"] sequent { <H>; x: "sall"{y. 'A['y]}; <J['x]>; w: 'A['z] >- 'T['x] } -->
    sequent { <H>; x: "sall"{y. 'A['y]}; <J['x]> >- 'T['x] }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

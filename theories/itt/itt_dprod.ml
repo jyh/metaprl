@@ -167,7 +167,7 @@ define iform unfold_spread3:  spread{'e; u1,u2,u3. 'b['u1; 'u2; 'u3]} <-->  spre
 
 define unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
 define unfoldSnd : snd{'e} <--> spread{'e; u, v. 'v}
-doc <:doc< @docoff >>
+doc docoff
 
 let dprod_term = << x: 'A * 'B['x] >>
 let dprod_opname = opname_of_term dprod_term
@@ -385,7 +385,7 @@ interactive productSubtype {| intro [] |} :
    ["subtype"] sequent { <H>; a1: 'A1 >- 'B1['a1] subtype 'B2['a1] } -->
    ["subtype"] sequent { <H>; a2: 'A2 >- 'B2['a2] Type } -->
    sequent { <H> >- (a1:'A1 * 'B1['a1]) subtype (a2:'A2 * 'B2['a2]) }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

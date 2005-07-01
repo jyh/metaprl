@@ -1,7 +1,7 @@
 doc <:doc<
+   @begin[doc]
    @spelling{rewriter}
 
-   @begin[doc]
    @module[Base_rewrite]
 
    The rewrite judgment $t_1 @longleftrightarrow t_2$ is used in rewrite
@@ -17,8 +17,8 @@ doc <:doc<
 
    The @hrefmodule[Base_rewrite] module lifts the rewrite judgment to the sequent
    level.  It also defines rules for reflexivity and symmetry.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -50,6 +50,7 @@ doc <:doc<
    Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -117,7 +118,7 @@ doc <:doc<
 interactive rewriteSym :
    sequent { <H> >- Perv!"rewrite"{'a; 'b} } -->
    sequent { <H> >- Perv!"rewrite"{'b; 'a} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * Substitution.

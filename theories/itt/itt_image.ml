@@ -43,7 +43,7 @@ doc <:doc<
    @end[doc]
 >>
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -51,7 +51,7 @@ doc <:doc< *********************************************************************
 extends Base_theory
 extends Itt_equal
 extends Itt_squash
-doc <:doc< @docoff >>
+doc docoff
 extends Itt_comment
 
 open Basic_tactics

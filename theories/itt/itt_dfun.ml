@@ -53,7 +53,7 @@ extends Itt_rfun
 extends Itt_struct
 extends Itt_void
 extends Itt_unit
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -208,7 +208,7 @@ interactive functionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A2 subtype 'A1 } -->
    ["subtype"] sequent { <H>; a1: 'A1 >- 'B1['a1] subtype 'B2['a1] } -->
    sequent { <H> >- a1:'A1 -> 'B1['a1]  subtype  a2:'A2 -> 'B2['a2] }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
 (*

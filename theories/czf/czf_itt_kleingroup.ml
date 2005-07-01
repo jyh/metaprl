@@ -77,7 +77,7 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Czf_itt_singleton
 extends Czf_itt_union
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -97,7 +97,7 @@ declare k0              (* Identity of the group *)
 declare k1              (* Element of the group *)
 declare k2              (* Element of the group *)
 declare k3              (* Element of the group *)
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -133,7 +133,7 @@ prim_rw unfold_klein4_inv0 : inv{klein4; k0} <--> k0
 prim_rw unfold_klein4_inv1 : inv{klein4; k1} <--> k1
 prim_rw unfold_klein4_inv2 : inv{klein4; k2} <--> k2
 prim_rw unfold_klein4_inv3 : inv{klein4; k3} <--> k3
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -251,7 +251,7 @@ interactive klein4_op_closure {| intro[] |} :
    sequent { <H> >- mem{'s1; car{klein4}} } -->
    sequent { <H> >- mem{'s2; car{klein4}} } -->
    sequent { <H> >- mem{op{klein4; 's1; 's2}; car{klein4}} }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive klein4_op_eq1 {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -287,7 +287,7 @@ interactive klein4_op_assoc1 {| intro[] |} :
    sequent { <H> >- mem{'s2; car{klein4}} } -->
    sequent { <H> >- mem{'s3; car{klein4}} } -->
    sequent { <H> >- eq{op{klein4; op{klein4; 's1; 's2}; 's3}; op{klein4; 's1; op{klein4; 's2; 's3}}} }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive klein4_op_assoc2 {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
@@ -331,7 +331,7 @@ interactive klein4_inv_id1 {| intro[] |} :
    sequent { <H> >- mem{'s1; car{klein4}} } -->
    sequent { <H> >- eq{op{klein4; inv{klein4; 's1}; 's1}; id{klein4}} }
 
-doc <:doc< @docoff >>
+doc docoff
 (*
  * -*-
  * Local Variables:

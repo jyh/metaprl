@@ -45,7 +45,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Czf_itt_subset
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -61,7 +61,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare group_bvd{'h; 'g; 's}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -78,7 +78,7 @@ doc <:doc<
 >>
 prim_rw unfold_group_bvd : group_bvd{'h; 'g; 's} <-->
    (group{'h} & group{'g} & isset{'s} & \subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -151,7 +151,7 @@ interactive group_bvd_inv {| intro [] |} 's :
    sequent { <H> >- mem{'a; car{'h}} } -->
    sequent { <H> >- eq{inv{'h; 'a}; inv{'g; 'a}} }
 
-doc <:doc< @docoff >>
+doc docoff
 (*
  * -*-
  * Local Variables:

@@ -59,7 +59,7 @@ extends Itt_union
 extends Itt_void
 extends Itt_unit
 extends Itt_struct
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -133,7 +133,7 @@ define unfold_cand : "cand"{'a; 'b} <--> ('a & 'b)
 define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{"not"{'a}; 'b}}
 define unfold_all : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
 define unfold_exists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_true    = makeFoldC << "true" >> unfold_true
 let fold_false   = makeFoldC << "false" >> unfold_false
@@ -498,7 +498,7 @@ interactive exists_intro {| intro [] |} 'z :
 interactive exists_elim {| elim [] |} 'H :
    [main] sequent { <H>; v: 'a; z: 'b['v]; <J['v, 'z]> >- 'C['v, 'z] } -->
    sequent { <H>; x: exst v: 'a. 'b['v]; <J['x]> >- 'C['x] }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS							*

@@ -163,7 +163,7 @@ interactive mem_fun_left 's1 :
    sequent { <H> >- eq{'s1; 's2} } -->
    sequent { <H> >- mem{'s1; 's3} } -->
    sequent { <H> >- mem{'s2; 's3} }
-doc <:doc< @docoff >>
+doc docoff
 
 let memSubstLeftT = mem_fun_left
 
@@ -175,7 +175,7 @@ interactive mem_fun_right 's1 :
    sequent { <H> >- eq{'s1; 's2} } -->
    sequent { <H> >- mem{'s3; 's1} } -->
    sequent { <H> >- mem{'s3; 's2} }
-doc <:doc< @docoff >>
+doc docoff
 
 let memSubstRightT = mem_fun_right
 
@@ -207,7 +207,7 @@ interactive set_ext :
    ["main"] sequent { <H>; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
    ["main"] sequent { <H>; x: set; y: mem{'x; 's2} >- mem{'x; 's1} } -->
    sequent { <H> >- eq{'s1; 's2} }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

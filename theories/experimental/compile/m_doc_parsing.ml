@@ -1,14 +1,14 @@
-doc <:doc< -*- mode: text; -*-
+(* -*- mode: text; -*- *)
+doc <:doc<
+   @begin[doc]
    @begin[spelling]
    YACC lexing params LetAtom op lexer regex LALR pos
    EQ ID exp
    @end[spelling]
 
-   @begin[doc]
    @section[m_doc_parsing]{Language}
-   @docoff
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,8 +31,7 @@ doc <:doc< -*- mode: text; -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-
-   @docoff
+   @end[doc]
 >>
 extends M_doc_ir
 

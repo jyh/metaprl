@@ -6,7 +6,7 @@ doc <:doc<
 >>
 
 extends Itt_equal
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -40,4 +40,4 @@ prim contextSubstPointwise 'H 'J_1 'J 't1  :
    sequent { <H>; t:'T; <J_1['t]>;  <J['t]>; <J_2['t]> >- 'C['t] } =
    'c['t]
 
-doc <:doc< @docoff >>
+doc docoff

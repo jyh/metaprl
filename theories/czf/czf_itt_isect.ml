@@ -49,7 +49,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_union
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -84,7 +84,7 @@ doc <:doc<
 >>
 prim_rw unfold_bisect : "isect"{'s1; 's2} <--> sep{'s1; x. mem{'x; 's2}}
 prim_rw unfold_isect : "isect"{'s} <--> sep{union{'s}; x. dall{'s; y. mem{'x; 'y}}}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -189,7 +189,7 @@ interactive bisect_fun {| intro [] |} :
 interactive isect_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's['z]} } -->
    sequent { <H> >- fun_set{z. "isect"{'s['z]}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

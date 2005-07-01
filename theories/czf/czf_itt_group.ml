@@ -48,7 +48,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Itt_record_label0
 extends Czf_itt_dall
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -68,7 +68,7 @@ declare car{'g}         (* The "carrier" set for the group *)
 declare op{'g; 'a; 'b}
 declare id{'g}
 declare inv{'g; 'a}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

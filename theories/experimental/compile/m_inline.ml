@@ -1,16 +1,16 @@
 doc <:doc<
+   @begin[doc]
    @begin[spelling]
    inlined inlining
    @end[spelling]
 
-   @begin[doc]
    @module[M_inline]
 
    This module implements a simple form of constant folding and
    constant inlining.  We do not inline functions due to our somewhat
    cumbersome choice of representation for function definitions.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc< @doc{@parents} >>

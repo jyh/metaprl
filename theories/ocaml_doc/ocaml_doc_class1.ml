@@ -1,4 +1,6 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    Coercions Subclassing Superclassing
@@ -6,10 +8,9 @@ doc <:doc< -*- Mode: text -*-
    superclass superclasses typecase
    @end[spelling]
 
-   @begin[doc]
    @chapter[classes]{The OCaml Object System}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -32,9 +33,8 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
-
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -875,7 +875,6 @@ val p4 : colored_point = <obj>
 @end[iverbatim]
 
 @end[doc]
-@docoff
 >>
 
 (*

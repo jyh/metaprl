@@ -131,7 +131,7 @@ extends Itt_rfun
 extends Itt_struct
 extends Itt_struct2
 extends Itt_esquash
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -162,7 +162,7 @@ doc <:doc<
    @end[doc]
 >>
 declare "quot"{'A; x, y. 'E['x; 'y]}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -257,7 +257,7 @@ prim quotient_memberEquality :
    sequent { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
-doc <:doc< @docoff >>
+doc docoff
 let quotientIntroT weak = funT (fun p ->
    let _, a1, a2 = dest_equal (Sequent.concl p) in
    if alpha_equal a1 a2 then begin
@@ -338,7 +338,7 @@ interactive quotientSubtype :
    [wf] sequent { <H> >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
    [wf] sequent { <H> >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
    sequent { <H> >- (quot x1, y1: 'A1 // 'E1['x1; 'y1]) subtype (quot x2, y2: 'A2 // 'E2['x2; 'y2]) }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

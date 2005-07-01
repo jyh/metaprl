@@ -4,8 +4,8 @@ doc <:doc<
 
    The @tt[Mfir_tr_base] module defines the basic axioms of the FIR type
    system.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -34,6 +34,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -100,7 +101,7 @@ prim wf_ty_list2 :
    sequent { <H> >- type_eq_list{ cons{'h1; 't1}; cons{'h2; 't2}; 'k } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Kind well-formedness}
 
@@ -140,7 +141,7 @@ prim wf_polyKind_frame :
    sequent { <H> >- wf_kind{ polyKind{ 'i; frame_type } } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Kind equivalence}
 
@@ -165,7 +166,3 @@ doc <:doc<
 prim ty_polyKind_as_normal_kind :
    sequent { <H> >- type_eq{ 't1; 't2; 'k } } -->
    sequent { <H> >- type_eq{ 't1; 't2; polyKind{ 0; 'k } } }
-
-doc <:doc<
-   @docoff
->>

@@ -3,8 +3,8 @@ doc <:doc<
    @module[Mfir_tr_exp]
 
    The @tt[Mfir_tr_exp] module defines the typing rules for FIR expressions.
-   @end[doc]
 
+   @docoff
    ------------------------------------------------------------------------
 
    @begin[license]
@@ -33,6 +33,7 @@ doc <:doc<
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -124,7 +125,7 @@ doc <:doc<
 >>
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Pattern matching}
 
@@ -314,7 +315,7 @@ prim ty_matchExp_tyUnion_cases_ind 'H :
                                't } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Offsets}
 
@@ -346,7 +347,7 @@ prim ty_offset_tyRawInt_var 'H :
       has_type["offset"]{ atomVar{'v}; offset } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Allocation}
 
@@ -440,7 +441,7 @@ prim ty_letAlloc_frame :
       has_type["exp"]{ letAlloc{ allocFrame{ 'tv; 'tyl }; v. 'exp['v] }; 't } }
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Subscripting}
 
@@ -556,7 +557,7 @@ doc <:doc<
 (* XXX: frame subscripting rules need to be completed. *)
 
 
-doc <:doc< ************************************
+doc <:doc<
    @begin[doc]
    @modsubsection{Global Values}
 
@@ -585,7 +586,3 @@ prim ty_setGlobal :
    sequent { <H> >- has_type["exp"]{ 'exp; 'ty2 } } -->
    sequent { <H> >-
       has_type["exp"]{ setGlobal{ 'label; 'ty1; 'atom; 'exp }; 'ty2 } }
-
-doc <:doc<
-   @docoff
->>

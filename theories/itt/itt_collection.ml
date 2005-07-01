@@ -52,7 +52,7 @@ extends Itt_esquash
 extends Itt_quotient
 extends Itt_logic
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Itt_struct
 open Itt_squash

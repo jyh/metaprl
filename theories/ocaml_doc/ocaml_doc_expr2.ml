@@ -1,13 +1,14 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    hoc cons deconstructed destructed doesn ll namespace
    @end[spelling]
 
-   @begin[doc]
    @chapter[tuples]{Tuples, Lists, and Polymorphism}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -30,7 +31,7 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-   @docoff
+   @end[doc]
 >>
 
 extends Base_theory
@@ -489,8 +490,8 @@ val entry : (string * string) list =
 Note that commas separate the elements of the pairs in the list,
 and semicolon separates the items of the list.
 
-@end[doc]
 @docoff
+@end[doc]
 >>
 
 (*

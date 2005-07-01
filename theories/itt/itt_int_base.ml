@@ -64,7 +64,7 @@ extends Itt_logic
 extends Itt_struct
 extends Itt_struct2
 extends Itt_decidable
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -185,7 +185,7 @@ doc <:doc<
 >>
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let int_term = << int >>
 let int_opname = opname_of_term int_term
@@ -1027,4 +1027,4 @@ let resource reduce += [
    <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
 ]
 
-doc <:doc< @docoff >>
+doc docoff

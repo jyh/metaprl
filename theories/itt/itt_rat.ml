@@ -53,7 +53,7 @@ extends Itt_order
 extends Itt_int_arith
 extends Itt_field2
 extends Itt_labels
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf

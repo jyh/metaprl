@@ -50,7 +50,7 @@ extends Itt_equal
 extends Itt_squash
 extends Itt_struct
 extends Itt_squiggle
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -72,7 +72,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare unit
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * Standard term.

@@ -85,7 +85,7 @@ extends Base_trivial
 extends Auto_tactic
 extends Dtactic
 extends Base_rewrite
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * This are very basic theories; not included in

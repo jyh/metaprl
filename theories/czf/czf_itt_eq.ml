@@ -179,7 +179,7 @@ prim_rw unfold_fun_prop : fun_prop{z. 'P['z]} <-->
  *)
 prim_rw unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
   (all s1: set. all s2: set. ('s1 = 's2 => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -307,7 +307,7 @@ interactive eq_isset 'H fun_set{z. 'f['z]} :
    sequent { <H>; z: set; <J['z]> >- fun_set{z. 'f['z]} } -->
    sequent { <H>; z: set; <J['z]> >- isset{'f['z]} }
 
-doc <:doc< @docoff >>
+doc docoff
 let funSetT = argfunT (fun i p ->
    let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in

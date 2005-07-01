@@ -117,7 +117,7 @@ define unfold_fix: fix{f. 'b['f]} <--> ycomb (lambda{f. 'b['f]})
 
 define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
 
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_ycomb = makeFoldC << ycomb >> unfold_ycomb
 let fold_fix = makeFoldC << fix{f. 'b['f]} >> unfold_fix
@@ -432,7 +432,7 @@ prim rfunction_applyEquality {| intro[] |} ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
    it
-doc <:doc< @docoff >>
+doc docoff
 
 doc <:doc<
    @begin[doc]
@@ -451,7 +451,7 @@ interactive rfunction_rfunction_subtype {| intro [] |} :
                           \subtype{'B1['f; 'a]; 'B2['f; 'a]}
                     } -->
    sequent { <H> >- \subtype{ { f1 | x1: 'A1 -> 'B1['f1; 'x1] }; { f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * D TACTIC                                                             *

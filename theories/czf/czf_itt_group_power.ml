@@ -49,7 +49,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Itt_int_base
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -67,7 +67,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare power{'g; 'z; 'n}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -82,7 +82,7 @@ doc <:doc<
 >>
 prim_rw unfold_power : power{'g; 'z; 'n} <-->
    ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_power = makeFoldC << power{'g; 'z; 'n} >> unfold_power
 
@@ -142,7 +142,7 @@ interactive power_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'f['z]} } -->
    sequent { <H>; z: set >- mem{'f['z]; car{'g}} } -->
    sequent { <H> >- fun_set{z. power{'g; 'f['z]; 'n}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (* x ^ (n + 1) * x ^ (-1) = x ^ n *)
 interactive power_less {| intro [] |} :
@@ -178,7 +178,7 @@ interactive power_reduce1 {| intro [] |} :
    sequent { <H> >- mem{'x; car{'g}} } -->
    sequent { <H> >- eq{op{'g; power{'g; 'x; 'm}; power{'g; 'x; 'n}}; power{'g; 'x; ('m +@ 'n)}} }
 
-doc <:doc< @docoff >>
+doc docoff
 (*
  * -*-
  * Local Variables:

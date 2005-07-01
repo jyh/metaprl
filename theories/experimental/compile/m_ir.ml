@@ -1,6 +1,6 @@
 doc <:doc<
-   @spelling{CPS IR}
    @begin[doc]
+   @spelling{CPS IR}
    @module[M_ir]
 
    This module defines the intermediate language for
@@ -36,8 +36,8 @@ doc <:doc<
    A program is a set of function definitions and an program
    expressed in a sequent.  Each function must be declared, and
    defined separately.
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -60,6 +60,7 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -72,7 +73,7 @@ doc <:doc<
    @end[doc]
 >>
 extends Base_theory
-doc <:doc< @docoff >>
+doc docoff
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -231,7 +232,7 @@ declare exp
 declare def{'v; 'e}
 declare compilable{'e}
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * Display forms
@@ -262,7 +263,7 @@ prec prec_compilable < prec_comma
 doc <:doc< Some convenient keywords (used in only display forms and do not have a formal meaning). >>
 declare xlet
 declare xin
-doc <:doc< @docoff >>
+doc docoff
 
 dform xlet_df : xlet = bf["let"]
 dform xin_df : xin = bf["in"]
@@ -387,7 +388,7 @@ doc <:doc<
 declare alloc_tuple{'l1; 'l2} : Dform
 declare alloc_tuple{'l} : Dform
 
-doc <:doc< @docoff >>
+doc docoff
 
 dform length_df : Length[i:n] =
    slot[i:n]

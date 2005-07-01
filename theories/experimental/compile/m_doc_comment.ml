@@ -1,4 +1,5 @@
 doc <:doc<
+   @begin[doc]
    @docoff
    ----------------------------------------------------------------
 
@@ -22,6 +23,7 @@ doc <:doc<
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 extends Base_theory
 
@@ -150,13 +152,10 @@ dform small_df : mode[tex] :: small{'e} =
 dform math_small_df : mode[tex] :: math_small{'e} =
    izone `"{\\footnotesize " ezone 'e izone `"}" ezone
 
-
-doc <:doc<
-   @docoff
-
+(*
    -*-
    Local Variables:
    fill-column: 100
    End:
    -*-
->>
+*)

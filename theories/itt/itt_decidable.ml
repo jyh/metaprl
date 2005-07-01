@@ -48,7 +48,7 @@ doc <:doc<
    @end[doc]
 >>
 extends Itt_logic
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -74,7 +74,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_decidable : decidable{'p} <--> ( 'p or not {'p} )
-doc <:doc< @docoff >>
+doc docoff
 
 dform decidable_df : except_mode[src] :: decidable{'p} = `"Decidable(" 'p `")"
 
@@ -135,4 +135,4 @@ interactive dec_false {| intro [] |} :
 
 interactive dec_true {| intro [] |} :
    sequent { <H> >- decidable{"true"} }
-doc <:doc< @docoff >>
+doc docoff

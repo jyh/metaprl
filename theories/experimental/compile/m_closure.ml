@@ -55,7 +55,7 @@ doc <:doc<
 >>
 extends Base_meta
 extends M_ir
-doc <:doc< @docoff >>
+doc docoff
 
 open M_ir
 open M_util

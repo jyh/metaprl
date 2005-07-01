@@ -142,7 +142,7 @@ doc <:doc<
 >>
 declare unity
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * Display forms

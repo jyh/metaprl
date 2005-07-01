@@ -1,14 +1,15 @@
-doc <:doc< -*- Mode: text -*-
+(* -*- Mode: text -*- *)
+doc <:doc<
+   @begin[doc]
 
    @begin[spelling]
    bprintf dd ddd dddd deallocates eprintf excl fprintf gen int ll nonblock
    printf rdonly sprintf stderr stdout trunc wronly creat
    @end[spelling]
 
-   @begin[doc]
    @chapter[io]{Input and Output}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -31,9 +32,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -359,8 +360,8 @@ string, and formats output to a buffer.
 val bprintf: Buffer.t -> ('a, Buffer.t, unit) format -> 'a
 @end[iverbatim]
 
-@end[doc]
 @docoff
+@end[doc]
 >>
 
 (*

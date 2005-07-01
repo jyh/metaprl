@@ -11,7 +11,7 @@ extends Itt_record
 extends Itt_logic
 extends Itt_labels
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -125,4 +125,4 @@ interactive example_wf2 {| intro[] |} :
 interactive example_19 {| intro[] |} :
  sequent{ <H> >- in_tree{19; simpletree; int} }
 
-doc <:doc< @docoff >>
+doc docoff

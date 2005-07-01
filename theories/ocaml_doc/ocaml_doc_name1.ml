@@ -1,9 +1,9 @@
-doc <:doc< -*- Mode: text -*-
-
+(* -*- Mode: text -*- *)
+doc <:doc<
    @begin[doc]
    @chapter["ocaml-doc-name1"]{Variables, naming, and binding}
-   @end[doc]
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -26,9 +26,9 @@ doc <:doc< -*- Mode: text -*-
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
-doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
@@ -382,14 +382,13 @@ val ** : float -> int -> float = <fun>
 - : float = 100000
 @end[verbatim]
 
-   @end[doc]
+@end[doc]
 >>
 
-doc <:doc<
-   @docoff
+(*
    -*-
    Local Variables:
    Caml-master: "compile"
    End:
    -*-
->>
+*)

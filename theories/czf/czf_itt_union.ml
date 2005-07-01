@@ -77,7 +77,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_dexists
 extends Czf_itt_subset
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -252,7 +252,7 @@ interactive bunion_fun {| intro [] |} :
 interactive union_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's['z]} } -->
    sequent { <H> >- fun_set{z. union{'s['z]}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

@@ -51,7 +51,7 @@ extends Itt_union
 extends Itt_set
 extends Itt_logic
 extends Itt_decidable
-doc <:doc< @docoff >>
+doc docoff
 
 open Basic_tactics
 
@@ -105,7 +105,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_bool = makeFoldC << bool >> unfold_bool
 let fold_btrue = makeFoldC << btrue >> unfold_btrue
@@ -303,7 +303,7 @@ doc <:doc<
 interactive boolSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in bool } -->
    sequent { <H> >- 'x ~ 'y }
-doc <:doc< @docoff >>
+doc docoff
 
 let resource intro += [
    << 'e ~ btrue >>, wrap_intro boolSqequal;
@@ -511,7 +511,7 @@ interactive assert_bimplies_intro {| intro [] |} :
    [main] sequent { <H>; x: "assert"{'t1} >- "assert"{'t2} } -->
    sequent { <H> >- "assert"{bimplies{'t1; 't2}} }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

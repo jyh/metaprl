@@ -43,7 +43,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_sep
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -61,7 +61,7 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare inv_image{'s; x. 'a['x]; 't}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -76,7 +76,7 @@ doc <:doc<
 >>
 prim_rw unfold_inv_image: inv_image{'s; x. 'a['x]; 't} <-->
    sep{'s; x. mem{'a['x]; 't}}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_inv_image = makeFoldC << inv_image{'s; x. 'a['x]; 't} >> unfold_inv_image
 
@@ -139,7 +139,7 @@ interactive inv_image_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- fun_set{x. 'a['x]} } -->
    sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]>; v: mem{'y; 's}; w: mem{'a['y]; 't} >- 'C['x] } -->
    sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- 'C['x] }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

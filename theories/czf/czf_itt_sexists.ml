@@ -41,7 +41,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_and
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -127,7 +127,7 @@ interactive sexists_elim {| elim [] |} 'H :
                     >- 'T[pair{'z; 'w}]
                   } -->
    sequent { <H>; x: "sexists"{y. 'A['y]}; <J['x]> >- 'T['x] }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

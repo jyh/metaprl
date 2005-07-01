@@ -1,9 +1,8 @@
 doc <:doc<
-   @spelling{IR AST}
    @begin[doc]
+   @spelling{IR AST}
    @module[M_ast]
    This file defines the terms needed to represent the M AST.
-   @end[doc]
 
    @begin[verbatim]
    e ::= i                          (numbers)
@@ -24,6 +23,7 @@ doc <:doc<
          ...
          in e3
    @end[verbatim]
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -46,6 +46,7 @@ doc <:doc<
    Author: Adam Granicz
    @email{granicz@cs.caltech.edu}
    @end[license]
+   @end[doc]
 >>
 
 doc <:doc<
@@ -54,7 +55,6 @@ doc <:doc<
    @end[doc]
 >>
 extends Summary
-doc <:doc< @docoff >>
 
 doc <:doc<
    @begin[doc]

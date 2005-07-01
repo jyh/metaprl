@@ -43,7 +43,7 @@ doc <:doc<
    @end[doc]
 >>
 extends M_x86_backend
-doc <:doc< @docoff >>
+doc docoff
 
 open Basic_tactics
 
@@ -389,7 +389,7 @@ prim_rw spill_fetch :
    <-->
    Spill["get"]{SpillMemory{'spill}; v2. 'e['v2]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let phase2C vars =
    let convC inst =

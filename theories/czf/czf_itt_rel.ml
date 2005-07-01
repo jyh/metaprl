@@ -48,7 +48,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_dall
 extends Czf_itt_dexists
-doc <:doc< @docoff >>
+doc docoff
 
 open Term_sig
 open Refiner.Refiner.TermType
@@ -69,7 +69,7 @@ doc <:doc<
    @end[doc]
 >>
 declare rel{a, b. 'P['a; 'b]; 's1; 's2}
-doc <:doc< @docoff >>
+doc docoff
 
 let rel_term = << rel{a, b. 'P['a; 'b]; 's1; 's2} >>
 let rel_opname = opname_of_term rel_term
@@ -101,7 +101,7 @@ doc <:doc<
 >>
 prim_rw unfold_rel : rel{a, b. 'P['a; 'b]; 's1; 's2} <-->
    (dall{'s1; x. dexists{'s2; y. 'P['x; 'y]}} & dall{'s2; y. dexists{'s1; x. 'P['x; 'y]}})
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -131,7 +131,7 @@ interactive rel_type {| intro [] |} :
    sequent { <H> >- isset{'s1} } -->
    sequent { <H> >- isset{'s2} } -->
    sequent { <H> >- "type"{rel{x, y. 'P['x; 'y]; 's1; 's2}} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

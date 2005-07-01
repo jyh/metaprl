@@ -40,15 +40,13 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< ************************************************************************
-   @parents
->>
+doc <:doc< @parents >>
 extends Base_theory
 extends Itt_equal
 extends Itt_squash
 extends Itt_struct2
 
-doc <:doc< @doc{@terms} >>
+doc terms
 
 declare Img{'A; x.'f['x]}
 

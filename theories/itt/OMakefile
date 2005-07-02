@@ -138,8 +138,6 @@ section
     gen_int_bench$(EXT_OBJ) gen_int_bench.cmx gen_int_bench.cmo gen_int_bench.cmi:
     .SCANNER: scan-ocaml-gen_int_bench.mli scan-ocaml-gen_int_bench.ml
 
-    return 0
-
 GEN = gen_int_bench$(EXE)
 
 BENCH_FILES[] =

@@ -1,0 +1,19 @@
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../base
+
+# Library files
+MPFILES[] =
+	s4_logic
+#   hilbert
+#   lp_hilbert
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
+
+all: theory$(LIB_SUFFIX)

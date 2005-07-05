@@ -1207,6 +1207,10 @@ struct
    let is_not_term = is_not_term
    let dest_not = dest_not
 
+   let is_box_term _ = false
+   let dest_box _ =
+      raise (Invalid_argument "Itt_logic: at this time there is no box-modlaity in ITT")
+
    type inference = (term_subst -> (term * (tactic -> tactic)) list -> tactic) list
    let empty_inf = []
 

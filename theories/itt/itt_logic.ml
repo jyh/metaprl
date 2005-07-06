@@ -1313,6 +1313,12 @@ let rec make_j_assums p goal len i =
          (form, make_assumT i goal assum form index) :: rest
    with RefineError _ -> rest
 
+let jprogressT = argfunT (fun t p ->
+   if alpha_equal (Sequent.concl p) t then
+      raise (RefineError ("Itt_logic.jprogressT", StringError "JProver failed to make progress"))
+   else
+      idT)
+
 (* input a list_term of hyps,concl *)
 let base_jproverT def_mult = funT (fun p ->
    let mult_limit =
@@ -1331,7 +1337,7 @@ let base_jproverT def_mult = funT (fun p ->
          let substs =
             try [Lm_symbol.make "n_jprover" 0, get_with_arg p] with RefineError _ -> []
          in
-            t substs assums
+            t substs assums thenT jprogressT seq.sequent_concl
     | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof"))
 
 let simple_jproverT = base_jproverT (Some 1)

@@ -118,4 +118,4 @@ declare conj{'t1 : Linear; 't2 : Linear} : Linear
 declare one : Linear
 
 (* This theory does not use proof terms *)
-declare default_extract : LinearSeq
+declare default_extract

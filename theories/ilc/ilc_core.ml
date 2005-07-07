@@ -247,5 +247,7 @@ dform ilc_seq_df : seq_sep{ilc} = bf["|| "]
 
 dform linear_seq_df : linear = subl
 
-dform default_extract_df : ilc{| <H> >- default_extract |} = `""
+dform erase_seq_df : erase = sube
+
+dform default_extract_df : sequent('arg){ <H> >- default_extract } = `""
 dform default_extract_df2 : default_extract = `""

@@ -1,0 +1,28 @@
+THEORYNAME = ilc
+THEORYDESCR = ILC\: A Froundation for Automated Reasoning About Pointer Programs
+
+OCAMLINCLUDES[] +=
+    $(SUPPORT_DIRS)
+    ../itt
+    ../base
+
+# MetaPRL "theory" files.
+MPFILES[] =
+    ilc_core
+
+Theory($(MPFILES))
+
+#
+# Documentation
+#
+LocalTeXGeneratedFiles(ilc.tex ilc-body.tex)
+TheoryDocument(ilc, $(MPFILES))
+LaTeXDocumentInstall(tex doc, $(DOCDIR), ilc, ilc, ilc-body)
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN) ilc.tex ilc-body.tex ilc_print.ml
+
+all: theory$(LIB_SUFFIX)

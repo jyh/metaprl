@@ -1,0 +1,3 @@
+This directory contains an attempt to formalize the ILC calculus based on the
+"ILC: A foundation for Automated Reasoning About Pointer Programs" LICS'05
+short paper by Limin Jia and David Walker.

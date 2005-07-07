@@ -1,4 +1,4 @@
-(* -*- Mode: text -*- *)
+(* -*- Mode: text; fill-column: 100 -*- *)
 doc <:doc<
 
    @begin[spelling]
@@ -37,139 +37,27 @@ extends Base_theory
 
 doc <:doc<
 
-One of the principles of modern programming is @emph{data hiding}
-using @emph{encapsulation}.  An @emph{abstract data type} (ADT) is a
-program unit that defines a data type and functions (also called
-@emph{methods}) that operate on that data type.  An ADT has two parts:
-a @emph{signature} (or @emph{interface}) that declares the accessible
-data structures and methods, and an @emph{implementation} that defines
-concrete implementations of the objects declared in the signature.
-The implementation is hidden: all access to the ADT must be
-through the methods defined in the signature.
+One of the principles of modern programming is @emph{data hiding} using @emph{encapsulation}.  An
+@emph{abstract data type} (ADT) is a program unit that defines a data type and functions that
+operate on that data type.  An ADT in OCaml has two parts: a @emph{signature} (or @emph{interface})
+that declares the accessible data structures and functions, and an @emph{implementation} that
+defines concrete implementations of the objects declared in the signature.  The implementation is
+hidden: all access to the ADT must be through the functions defined in the signature.
 
-There are several ideas behind data hiding using ADTs.
-First, by separating a program into distinct program units (called
-@emph{modules}), the program may be easier to understand.  Ideally,
-each module encapsulates a single concept needed to address the
-problem at hand.
+There are several ideas behind data hiding using ADTs.  First, by separating a program into distinct
+program units (called @emph{modules}), the program may be easier to understand.  Ideally, each
+module encapsulates a single concept needed to address the problem at hand.
 
-Second, by hiding the implementation of a program module,
-dependencies between program modules become tightly controlled.  Since
-all interactions must be through a module's methods, the
-implementation of the module can be changed without affecting the
-correctness of the program (as long as the behavior of the methods is
-preserved).
+Second, by hiding the implementation of a program module, dependencies between program modules
+become tightly controlled.  Since all interactions must be through a module's functions, the
+implementation of the module can be changed without affecting the correctness of the program (as
+long as the behavior of functions is preserved).
 
-OCaml provides a @emph{module system} that makes it easy to use the
-concepts of encapsulation and data hiding.  In fact, in OCaml every
-program file acts as an abstract module, called a @emph{compilation
-unit} in the OCaml terminology.  A signature for the file can
-be defined in a @code{.mli} file with the same name.  If there is no
-@code{.mli} file, the default signature includes all type and
-functions defined in the @code[".ml"] file.
-
->>
-
-doc <:doc<
-
-@section[signatures]{Signatures}
-
-In OCaml, a signature contains type definitions and function
-declarations for the visible types and methods in the module.  To see
-how this works, let's revisit the binary trees we defined in Chapter
-@refchapter[unions].  A binary tree defines a simple, distinct
-concept, and it is an ideal candidate for encapsulation.
-
-A module signature usually contains three parts:
-
-@begin[enumerate]
-@item{Data types used by the module.}
-@item{Exceptions used by the module.}
-@item{Method type declarations for all the externally visible methods
-   defined by the module.}
-@end[enumerate]
-
-For the binary tree, the signature will need to include a type
-for binary trees, and type declarations for the methods for operating
-on the tree.  First, we need to choose a filename for the compilation
-unit.  The filename should reflect the @emph{function} of the data
-structure defined by the module.  For our purposes, the binary tree is
-a data structure used for defining a finite set of values, and
-an appropriate filename for the signature would be @code{fset.mli}.
-
-The data structure defines a type for sets, and three methods: an
-@tt{empty} set, a @tt{mem} membership function, and an @tt{insert}
-insertion function.  The complete signature is defined below; we'll
-discuss each of the parts in the following sections.
-
-@begin[iverbatim]
-(* The abstract type of sets *)
-type 'a t
-
-(* Empty set *)
-val empty : 'a t
-
-(* Membership function *)
-val mem : 'a -> 'a t -> bool
-
-(* Insertion is functional *)
-val insert : 'a -> 'a t -> 'a t
-@end[iverbatim]
-
-@subsection["sig-types"]{Type declarations}
-
-Type declarations in a signature can be either @emph{transparent} or
-@emph{abstract}.  An abstract type declaration declares a type without
-giving the type definition; a transparent type declaration includes
-the type definition.
-
-For the binary tree, the declaration @code{type 'a t} is abstract
-because the type definition is left unspecified.  In this case, the
-type definition won't be visible to other program units; they will be
-forced to use the methods if they want to operate on the data type.
-Note that the abstract type definition is polymorphic: it is
-parameterized by the type variable @code{'a}.
-
-Alternatively, we could have chosen a transparent definition that
-would make the type visible to other program modules.  For example, if
-we intend to use the unbalanced tree representation, we might include
-the following type declaration in the signature.
-
-@begin[iverbatim]
-type 'a t =
-   Node of 'a t * 'a * 'a t
- | Leaf
-@end[iverbatim]
-
-By doing this, we would make the binary tree structure visible
-to other program components; they can now use the type definition to
-access the binary tree directly.  This would be
-undesirable for several reasons.  First, we may want to change the
-representation later (by using red-black trees for example).  If we did
-so, we would have to find and modify all the other modules that
-accessed the unbalanced structure directly.  Second, we may be
-assuming that there are some invariants on values in the data
-structure.  For example, we may be assuming that the nodes in the
-binary tree are ordered.  If the type definition is visible, it would
-be possible for other program modules to construct trees that violate
-the invariant, leading to errors that may be difficult to find.
-
-@subsection["method-declarations"]{Method declarations}
-
-The method declarations include all the functions and values that are
-visible to other program modules.  For the @tt{Fset} module, the
-visible methods are the @tt{empty}, @tt{mem}, and @tt{insert}
-methods.  The signature gives only the type declarations for these
-methods.
-
-It should be noted that @emph{only} these methods will be visible to
-other program modules.  If we define helper functions in the
-implementation, these functions will be private to the
-implementation and inaccessible to other program modules.
-
->>
-
-doc <:doc<
+OCaml provides a @emph{module system} that makes it easy to use the concepts of encapsulation and
+data hiding.  In fact, in OCaml every program file acts as an abstract module, called a
+@emph{compilation unit} in the OCaml terminology.  A signature for the file can be defined in a
+@code{.mli} file with the same name.  If there is no @code{.mli} file, the default signature
+includes all types and functions defined in the @code[".ml"] file.
 
 @section[implementations]{Implementations}
 
@@ -266,9 +154,100 @@ let insert x s =
        | Leaf -> raise (Invalid_argument "insert")
 @end[iverbatim]
 
->>
+@section[signatures]{Signatures}
 
-doc <:doc<
+In OCaml, a signature contains type definitions and function
+declarations for the visible types and methods in the module.  To see
+how this works, let's revisit the binary trees we defined in Chapter
+@refchapter[unions].  A binary tree defines a simple, distinct
+concept, and it is an ideal candidate for encapsulation.
+
+A module signature usually contains three parts:
+
+@begin[enumerate]
+@item{Data types used by the module.}
+@item{Exceptions used by the module.}
+@item{Method type declarations for all the externally visible methods
+   defined by the module.}
+@end[enumerate]
+
+For the binary tree, the signature will need to include a type
+for binary trees, and type declarations for the methods for operating
+on the tree.  First, we need to choose a filename for the compilation
+unit.  The filename should reflect the @emph{function} of the data
+structure defined by the module.  For our purposes, the binary tree is
+a data structure used for defining a finite set of values, and
+an appropriate filename for the signature would be @code{fset.mli}.
+
+The data structure defines a type for sets, and three methods: an
+@tt{empty} set, a @tt{mem} membership function, and an @tt{insert}
+insertion function.  The complete signature is defined below; we'll
+discuss each of the parts in the following sections.
+
+@begin[iverbatim]
+(* The abstract type of sets *)
+type 'a t
+
+(* Empty set *)
+val empty : 'a t
+
+(* Membership function *)
+val mem : 'a -> 'a t -> bool
+
+(* Insertion is functional *)
+val insert : 'a -> 'a t -> 'a t
+@end[iverbatim]
+
+@subsection["sig-types"]{Type declarations}
+
+Type declarations in a signature can be either @emph{transparent} or
+@emph{abstract}.  An abstract type declaration declares a type without
+giving the type definition; a transparent type declaration includes
+the type definition.
+
+For the binary tree, the declaration @code{type 'a t} is abstract
+because the type definition is left unspecified.  In this case, the
+type definition won't be visible to other program units; they will be
+forced to use the methods if they want to operate on the data type.
+Note that the abstract type definition is polymorphic: it is
+parameterized by the type variable @code{'a}.
+
+Alternatively, we could have chosen a transparent definition that
+would make the type visible to other program modules.  For example, if
+we intend to use the unbalanced tree representation, we might include
+the following type declaration in the signature.
+
+@begin[iverbatim]
+type 'a t =
+   Node of 'a t * 'a * 'a t
+ | Leaf
+@end[iverbatim]
+
+By doing this, we would make the binary tree structure visible
+to other program components; they can now use the type definition to
+access the binary tree directly.  This would be
+undesirable for several reasons.  First, we may want to change the
+representation later (by using red-black trees for example).  If we did
+so, we would have to find and modify all the other modules that
+accessed the unbalanced structure directly.  Second, we may be
+assuming that there are some invariants on values in the data
+structure.  For example, we may be assuming that the nodes in the
+binary tree are ordered.  If the type definition is visible, it would
+be possible for other program modules to construct trees that violate
+the invariant, leading to errors that may be difficult to find.
+
+@subsection["method-declarations"]{Method declarations}
+
+The method declarations include all the functions and values that are
+visible to other program modules.  For the @tt{Fset} module, the
+visible methods are the @tt{empty}, @tt{mem}, and @tt{insert}
+methods.  The signature gives only the type declarations for these
+methods.
+
+It should be noted that @emph{only} these methods will be visible to
+other program modules.  If we define helper functions in the
+implementation, these functions will be private to the
+implementation and inaccessible to other program modules.
 
 @section["using-comp-unit"]{Building a program}
 
@@ -327,10 +306,6 @@ loop, we include the line @code{let _ = loop ()}.  The
 top level expression.  Another way to accomplish this is by adding the
 @code{;;} terminator after the last @code{()} expression in the
 @code{loop} function.
-
->>
-
-doc <:doc<
 
 @section[compiling]{Compiling the program}
 
@@ -522,10 +497,6 @@ or @code{test.cmo} needs to be recompiled.  In general, we don't know
 which file is out of date, and the best solution is to recompile them
 all.
 
->>
-
-doc <:doc<
-
 @section[open]{Using @tt{open} to expose a namespace}
 
 Using the full name @tt{@emph{Module_name}.@emph{method_name}} to
@@ -595,10 +566,6 @@ won't work---the implementation must include an identical type
 definition.  True, this is an annoying feature of OCaml.  But it
 preserves a simple semantics: the implementation must provide a
 definition for each declaration in the signature.
-
->>
-
-doc <:doc<
 
 @section[debugging]{Debugging a program}
 

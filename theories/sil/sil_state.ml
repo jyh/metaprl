@@ -7,8 +7,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1999 Jason Hickey, Cornell University
  *
@@ -128,7 +128,7 @@ dform fetch_df : parens :: "prec"[prec_fetch] :: fetch{'s; 'v} =
    slot{'s} `"." slot{'v}
 
 dform store_df : parens :: "prec"[prec_store] :: store{'s; 'v1; 'v2} =
-   szone pushm[3] slot{'s} `"." slot{'v1} " " Nuprl_font!leftarrow hspace slot{'v2} popm ezone
+   szone pushm[3] slot{'s} `"." slot{'v1} " " Mpsymbols!leftarrow hspace slot{'v2} popm ezone
 
 (*
  * -*-

@@ -7,8 +7,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1999 Jason Hickey, Cornell University
  *
@@ -57,7 +57,7 @@ dform unit_df : unit =
    `"#Unit"
 
 dform int_df : int =
-   `"#" Nuprl_font!mathbbZ
+   `"#" Mpsymbols!mathbbZ
 
 (*
  * Unions.
@@ -82,10 +82,10 @@ dform prod_df1 : parens :: "prec"[prec_prod] :: prod{'A; v. 'B} =
    szone pushm[0] slot{'v} `":" slot["le"]{'A} prod_df{'B} popm ezone
 
 dform prod_df2 : prod_df{prod{'A; v. 'B}} =
-   hspace Nuprl_font!times `"# " slot{'v} `":" slot["le"]{'A} prod_df{'B}
+   hspace Mpsymbols!times `"# " slot{'v} `":" slot["le"]{'A} prod_df{'B}
 
 dform prod_df3 : prod_df{'A} =
-   hspace Nuprl_font!times `"# " slot{'A}
+   hspace Mpsymbols!times `"# " slot{'A}
 
 (*
  * Functions.
@@ -96,10 +96,10 @@ dform fun_df1 : parens :: "prec"[prec_fun] :: "fun"{'A; v. 'B} =
    szone pushm[0] slot{'v} `":" slot["le"]{'A} fun_df{'B} popm ezone
 
 dform fun_df2 : fun_df{."fun"{'A; v. 'B}} =
-   hspace Nuprl_font!rightarrow `"# " slot{'v} `":" slot["le"]{'A} fun_df{'B}
+   hspace Mpsymbols!rightarrow `"# " slot{'v} `":" slot["le"]{'A} fun_df{'B}
 
 dform fun_df3 : fun_df{'A} =
-   hspace Nuprl_font!rightarrow `"# " slot{'A}
+   hspace Mpsymbols!rightarrow `"# " slot{'A}
 
 (*
  * Reference cells.

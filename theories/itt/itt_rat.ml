@@ -12,8 +12,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -69,7 +69,7 @@ open Itt_int_arith
 declare cdot
 
 dform cdot_df : cdot =
-   Nuprl_font!cdot
+   Mpsymbols!cdot
 
 (********************************************
  *	THIS PART SHOULD GO TO A SEPARATE MODULE *
@@ -328,7 +328,7 @@ dform ratn_df1 : except_mode[src] :: "prec"[prec_mul] :: ratn{'a; 'b}
 
 dform int_ratn_df1 : except_mode[src] :: ratn{'a;1}
  =
-   slot{'a} Nuprl_font!subq
+   slot{'a} Mpsymbols!subq
 
 dform rat_df1 : except_mode[src] :: "prec"[prec_mul] :: rat{'a; 'b}
  =
@@ -336,63 +336,63 @@ dform rat_df1 : except_mode[src] :: "prec"[prec_mul] :: rat{'a; 'b}
 
 dform zero_rat_df1 : except_mode[src] :: rat{0;'a}
  =
-   `"0" Nuprl_font!subq
+   `"0" Mpsymbols!subq
 
 dform unit_rat_df1 : except_mode[src] :: rat{'a;'a}
  =
-   `"1" Nuprl_font!subq
+   `"1" Mpsymbols!subq
 
 dform int_rat_df1 : except_mode[src] :: rat{'a;1}
  =
-   slot{'a} Nuprl_font!subq
+   slot{'a} Mpsymbols!subq
 
 dform rat_of_int_df1 : except_mode[src] :: rat_of_int{'a}
  =
-   slot{'a} Nuprl_font!subq
+   slot{'a} Mpsymbols!subq
 
 dform add_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: add_rat{'a; 'b}
  =
-   slot["le"]{'a} `" +" Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" +" Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform mul_rat_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_rat{'a; 'b}
  =
-   slot["le"]{'a} `" *" Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" *" Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform sub_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: sub_rat{'a; 'b}
  =
-   slot["lt"]{'a} `" -" Nuprl_font!subq `" " slot["le"]{'b}
+   slot["lt"]{'a} `" -" Mpsymbols!subq `" " slot["le"]{'b}
 
 dform ge_bool_rat_df1 : except_mode[src] :: ge_bool_rat{'a; 'b}
  =
-   slot["le"]{'a} `" " Nuprl_font!ge Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" " Mpsymbols!ge Mpsymbols!subb Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform le_bool_rat_df1 : except_mode[src] :: le_bool_rat{'a; 'b}
  =
-   slot["le"]{'a} `" " Nuprl_font!le Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" " Mpsymbols!le Mpsymbols!subb Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform gt_bool_rat_df1 : except_mode[src] :: gt_bool_rat{'a; 'b}
  =
-   slot["le"]{'a} `" >" Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" >" Mpsymbols!subb Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform lt_bool_rat_df1 : except_mode[src] :: lt_bool_rat{'a; 'b}
  =
-   slot["le"]{'a} `" <" Nuprl_font!subb Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" <" Mpsymbols!subb Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform ge_rat_df1 : except_mode[src] :: ge_rat{'a; 'b}
  =
-   slot["le"]{'a} `" " Nuprl_font!ge Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" " Mpsymbols!ge Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform le_rat_df1 : except_mode[src] :: le_rat{'a; 'b}
  =
-   slot["le"]{'a} `" " Nuprl_font!le Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" " Mpsymbols!le Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform gt_rat_df1 : except_mode[src] :: gt_rat{'a; 'b}
  =
-   slot["le"]{'a} `" >" Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" >" Mpsymbols!subq `" " slot["lt"]{'b}
 
 dform lt_rat_df1 : except_mode[src] :: lt_rat{'a; 'b}
  =
-   slot["le"]{'a} `" <" Nuprl_font!subq `" " slot["lt"]{'b}
+   slot["le"]{'a} `" <" Mpsymbols!subq `" " slot["lt"]{'b}
 
 interactive int0_mem {| intro [] |} :
 	[wf] sequent { <H> >- 'x in int } -->

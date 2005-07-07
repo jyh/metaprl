@@ -33,8 +33,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -120,7 +120,7 @@ dform succ_df : succ{'i} =
    `"s(" slot{'i} `")"
 
 dform inf_df : inf =
-   Nuprl_font!mathbbN `"s"
+   Mpsymbols!mathbbN `"s"
 
 dform lt_df : parens :: "prec"[prec_compare] :: lt{'i; 'j} =
    pushm[0] szone slot{'i} `" <" hspace slot{'j} ezone popm

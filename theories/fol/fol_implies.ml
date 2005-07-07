@@ -30,7 +30,7 @@ dform implies_df : parens :: "prec"["prec_implies"] :: implies{'A; 'B} =
    szone pushm[0] slot["le"]{'A} hspace Rightarrow `" " slot{'B} popm ezone
 
 dform lambda_df : parens :: "prec"["prec_lambda"] :: lambda{x. 'b} =
-   szone pushm[3] Nuprl_font!lambda slot{'x} `"." slot{'b} popm ezone
+   szone pushm[3] Mpsymbols!lambda slot{'x} `"." slot{'b} popm ezone
 
 dform apply_df : parens :: "prec"["prec_apply"] :: apply{'f; 'a} =
    slot{'f} hspace slot{'a}

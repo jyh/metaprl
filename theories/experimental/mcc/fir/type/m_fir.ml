@@ -389,19 +389,19 @@ declare TyMutable{'ty; 'mutable_flag}
 doc docoff
 
 dform ty_int_df : TyInt =
-   Nuprl_font!mathbbZ
+   Mpsymbols!mathbbZ
 
 dform ty_enum_df : TyEnum[i:n] =
-   Nuprl_font!mathbbN `"[" slot[i:n] `"]"
+   Mpsymbols!mathbbN `"[" slot[i:n] `"]"
 
 dform ty_raw_int_df : TyRawInt[p:n, s:t] =
-   Nuprl_font!mathbbZ `":" M_rawint!precision[p:n, s:t]
+   Mpsymbols!mathbbZ `":" M_rawint!precision[p:n, s:t]
 
 dform ty_float_df : TyFloat[p:n] =
-   Nuprl_font!mathbbR `":" M_rawfloat!precision[p:n]
+   Mpsymbols!mathbbR `":" M_rawfloat!precision[p:n]
 
 dform ty_fun_df : parens :: "prec"[prec_fun] :: TyFun{'ty_args; 'ty_res} =
-   `"(" display_list["*"]{'ty_args} `") " Nuprl_font!rightarrow slot{'ty_res}
+   `"(" display_list["*"]{'ty_args} `") " Mpsymbols!rightarrow slot{'ty_res}
 
 dform ty_union_df : TyUnion{'ty_var; 'ty_list; 'int_set} =
    bf["union "] slot{'ty_var} `"(" display_list[","]{'ty_list} `": " slot{'int_set} `")"
@@ -434,10 +434,10 @@ dform ty_apply_df : TyApply{'ty_var; 'ty_list} =
    slot{'ty_var} `"(" display_list[","]{'ty_list} `")"
 
 dform ty_exists_df : parens :: "prec"[prec_exists] :: TyExists{v. 'ty} =
-   Nuprl_font!exists slot{'v} `"." slot{'ty}
+   Mpsymbols!exists slot{'v} `"." slot{'ty}
 
 dform ty_all_df : parens :: "prec"[prec_exists] :: TyAll{v. 'ty} =
-   Nuprl_font!forall slot{'v} `"." slot{'ty}
+   Mpsymbols!forall slot{'v} `"." slot{'ty}
 
 dform ty_project_df : TyProject[i:n]{'v} =
    slot{'v} `"." slot[i:n]
@@ -497,7 +497,7 @@ dform display_Lambda2_df2 : display_Lambda2{'ty} =
    `"." hspace slot{'ty}
 
 dform ty_lambda_df1 : TyLambda{v. 'ty} =
-   Nuprl_font!lambda display_Lambda1{TyLambda{v. 'ty}}
+   Mpsymbols!lambda display_Lambda1{TyLambda{v. 'ty}}
 
 dform ty_def_union_list_df : parens :: "prec"[prec_union] :: TyDefUnionList{'ty_list_list} =
    szone pushm[0] display_Union{'ty_list_list} popm ezone
@@ -786,19 +786,19 @@ dform eq_int_op_df : EqIntOp =
    bf["="]
 
 dform neq_int_op_df : NeqIntOp =
-   Nuprl_font!neq
+   Mpsymbols!neq
 
 dform lt_int_op_df : LtIntOp =
    bf["<"]
 
 dform le_int_op_df : LeIntOp =
-   Nuprl_font!le
+   Mpsymbols!le
 
 dform gt_int_op_df : GtIntOp =
    bf[">"]
 
 dform ge_int_op_df : GeIntOp =
-   Nuprl_font!ge
+   Mpsymbols!ge
 
 dform cmp_int_op_df : CmpIntOp =
    bf["cmp"]
@@ -889,19 +889,19 @@ dform eq_raw_int_op_df : EqRawIntOp[p:n, s:t] =
    bf["="] M_rawint!precision[p:n, s:t]
 
 dform neq_raw_int_op_df : NeqRawIntOp[p:n, s:t] =
-   Nuprl_font!neq M_rawint!precision[p:n, s:t]
+   Mpsymbols!neq M_rawint!precision[p:n, s:t]
 
 dform lt_raw_int_op_df : LtRawIntOp[p:n, s:t] =
    bf["<"] M_rawint!precision[p:n, s:t]
 
 dform le_raw_int_op_df : LeRawIntOp[p:n, s:t] =
-   Nuprl_font!le M_rawint!precision[p:n, s:t]
+   Mpsymbols!le M_rawint!precision[p:n, s:t]
 
 dform gt_raw_int_op_df : GtRawIntOp[p:n, s:t] =
    bf[">"] M_rawint!precision[p:n, s:t]
 
 dform ge_raw_int_op_df : GeRawIntOp[p:n, s:t] =
-   Nuprl_font!ge M_rawint!precision[p:n, s:t]
+   Mpsymbols!ge M_rawint!precision[p:n, s:t]
 
 dform cmp_raw_int_op_df : CmpRawIntOp[p:n, s:t] =
    bf["cmp"] M_rawint!precision[p:n, s:t]
@@ -953,19 +953,19 @@ dform eq_float_op_df : EqFloatOp[p:n] =
    bf["="] M_rawfloat!precision[p:n]
 
 dform neq_float_op_df : NeqFloatOp[p:n] =
-   Nuprl_font!neq M_rawfloat!precision[p:n]
+   Mpsymbols!neq M_rawfloat!precision[p:n]
 
 dform lt_float_op_df : LtFloatOp[p:n] =
    bf["<"] M_rawfloat!precision[p:n]
 
 dform le_float_op_df : LeFloatOp[p:n] =
-   Nuprl_font!le M_rawfloat!precision[p:n]
+   Mpsymbols!le M_rawfloat!precision[p:n]
 
 dform gt_float_op_df : GtFloatOp[p:n] =
    bf[">"] M_rawfloat!precision[p:n]
 
 dform ge_float_op_df : GeFloatOp[p:n] =
-   Nuprl_font!ge M_rawfloat!precision[p:n]
+   Mpsymbols!ge M_rawfloat!precision[p:n]
 
 dform cmp_float_op_df : CmpFloatOp[p:n] =
    bf["cmp"] M_rawfloat!precision[p:n]
@@ -1012,7 +1012,7 @@ dform eq_eq_op_df : EqEqOp{'ty} =
    bf["==["] slot{'ty} bf["]"]
 
 dform neq_eq_op_df : NeqEqOp{'ty} =
-   Nuprl_font!neq bf["["] slot{'ty} bf["]"]
+   Mpsymbols!neq bf["["] slot{'ty} bf["]"]
 
 (*
  * Pointer arithmetic. The pointer in the first argument, and the
@@ -1436,10 +1436,10 @@ dform match_dtuple_df : MatchDTuple{'a; 'cases} =
    popm ezone
 
 dform match_case_df : MatchCase[label:t]{'set; 'e} =
-   hspace szone pushm[3] bf["|["] slot[label:t] `"] " slot{'set} `" " Nuprl_font!rightarrow hspace slot{'e} popm ezone
+   hspace szone pushm[3] bf["|["] slot[label:t] `"] " slot{'set} `" " Mpsymbols!rightarrow hspace slot{'e} popm ezone
 
 dform match_dtuple_case_df : MatchDTupleCase[label:t]{'atom_opt; 'e} =
-   hspace szone pushm[3] bf["|["] slot[label:t] `"] " slot{'atom_opt} `" " Nuprl_font!rightarrow hspace slot{'e} popm ezone
+   hspace szone pushm[3] bf["|["] slot[label:t] `"] " slot{'atom_opt} `" " Mpsymbols!rightarrow hspace slot{'e} popm ezone
 
 (* Allocation *)
 declare LetAlloc{'alloc_op; v. 'e['v]}
@@ -1511,13 +1511,13 @@ dform let_subscript_df : LetSubscript{'subop; 'ty; 'a1; 'a2; v. 'e} =
    bf["let "] slot{'v} bf[" : "] slot{'ty} bf[" = "] slot{'a1} bf["["] slot{'a2} bf["] in"] hspace slot{'e}
 
 dform set_subscript_df : SetSubscript[label:t]{'subop; 'a1; 'a2; 'ty; 'a3; 'e} =
-   slot{'a1} bf["["] slot{'a2} bf["] : "] slot{'ty} `" " Nuprl_font!leftarrow `" " slot{'a3} bf[";"] hspace slot{'e}
+   slot{'a1} bf["["] slot{'a2} bf["] : "] slot{'ty} `" " Mpsymbols!leftarrow `" " slot{'a3} bf[";"] hspace slot{'e}
 
 dform let_global_df : LetGlobal[label:t]{'sub_value; 'ty; v. 'e} =
    bf["let global "] slot{'v} bf[" : "] slot{'ty} bf[" = "] slot[label:t] bf[" in"] hspace slot{'e}
 
 dform set_global_df : SetGlobal[label:t, global:t]{'sub_value; 'ty; 'a; 'e} =
-   bf["set global "] slot[global:t] `" " Nuprl_font!leftarrow `" " slot{'a} bf[";"] hspace slot{'e}
+   bf["set global "] slot[global:t] `" " Mpsymbols!leftarrow `" " slot{'a} bf[";"] hspace slot{'e}
 
 dform memcpy_df : Memcpy[label:t]{'subop; 'a1; 'a2; 'a3; 'a4; 'a5; 'e} =
    bf["memcpy("] slot{'a1} `", " slot{'a2} `", " slot{'a3} `", " slot{'a4} `", " slot{'a5} `");" hspace slot{'e}
@@ -1574,7 +1574,7 @@ declare FunDef{'ty; 'body}
 doc docoff
 
 dform lambda_df : lambda{v. 'e} =
-   Nuprl_font!lambda slot{'v} `"." slot{'e}
+   Mpsymbols!lambda slot{'v} `"." slot{'e}
 
 dform fun_def_df : FunDef{'ty; 'body} =
    szone pushm[3] bf["fun["] slot{'ty} bf["] ="] hspace slot{'body} popm ezone

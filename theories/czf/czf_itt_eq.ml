@@ -55,8 +55,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -185,14 +185,14 @@ dform eq_df : except_mode[src] :: eq{'s1; 's2} =
    `"eq(" slot {'s1} `"; " slot{'s2} `")"
 
 dform fun_set_df : except_mode[src] :: parens :: "prec"[prec_apply] :: fun_set{x. 'P} =
-   Nuprl_font!forall slot{'x} `"." slot{'P} `" fun_set"
+   Mpsymbols!forall slot{'x} `"." slot{'P} `" fun_set"
 
 dform fun_set_df : except_mode[src] :: parens :: "prec"[prec_apply] :: fun_prop{x. 'P} =
-   Nuprl_font!forall slot{'x} `"." slot{'P} `" fun_prop"
+   Mpsymbols!forall slot{'x} `"." slot{'P} `" fun_prop"
 
 dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_prop{u. 'A; x, y. 'P} =
    szone pushm[0]
-   Nuprl_font!forall slot{'u} `":" slot{'A} `"." hspace slot{'x} `"," slot{'y} `"." slot{'P} `" fun_prop"
+   Mpsymbols!forall slot{'u} `":" slot{'A} `"." hspace slot{'x} `"," slot{'y} `"." slot{'P} `" fun_prop"
    popm ezone
 
 (************************************************************************

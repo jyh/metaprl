@@ -87,7 +87,7 @@ doc docoff
  ************************************************************************)
 
 dform power_df3 : power{'s1; 's2} =
-   mathbbP `"(" pushm[0] szone slot{'s1} " " Nuprl_font!rightarrow hspace  slot{'s2} `")" ezone popm
+   mathbbP `"(" pushm[0] szone slot{'s1} " " Mpsymbols!rightarrow hspace  slot{'s2} `")" ezone popm
 
 (************************************************************************
  * RULES

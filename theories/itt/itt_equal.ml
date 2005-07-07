@@ -14,8 +14,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -156,14 +156,14 @@ prec prec_type
 prec prec_equal
 
 dform equal_df : except_mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
-   szone pushm slot["le"]{'a} space `"= " slot["le"]{'b} space Nuprl_font!member `" " slot["le"]{'T} popm ezone
+   szone pushm slot["le"]{'a} space `"= " slot["le"]{'b} space Mpsymbols!member `" " slot["le"]{'T} popm ezone
 
 dform equal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
    szone pushm slot["le"]{'a} space `"= " slot["le"]{'b} space `"in " slot["le"]{'T} popm ezone
 
 (* HACK! - this should be replaced with a proper I/O abstraction *)
 dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
-   szone pushm slot["le"]{'x} space Nuprl_font!member hspace slot["le"]{'T} popm ezone
+   szone pushm slot["le"]{'x} space Mpsymbols!member hspace slot["le"]{'T} popm ezone
 
 dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
    szone pushm slot["le"]{'x} space `"in" hspace slot["le"]{'T} popm ezone

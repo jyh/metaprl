@@ -7,8 +7,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1999 Jason Hickey, Cornell University
  *
@@ -54,7 +54,7 @@ prec prec_eq_int
 prec prec_evalsto < prec_eq_int
 
 dform evalsto_df : parens :: "prec"[prec_evalsto] :: evalsto{'e1; 'e2} =
-   slot{'e1} " " Nuprl_font!downarrow " " slot{'e2}
+   slot{'e1} " " Mpsymbols!downarrow " " slot{'e2}
 
 dform eval_df : eval{'e; 's} =
    `"eval(" slot{'e} `"," slot{'s} `")"
@@ -66,7 +66,7 @@ dform eq_int_df : parens :: "prec"[prec_eq_int] :: "eq_int"{'t1; 't2} =
    slot{'t1} hspace `"= " slot{'t2}
 
 dform neq_int_df : parens :: "prec"[prec_eq_int] :: "neq_int"{'t1; 't2} =
-   slot{'t1} hspace Nuprl_font!neq " " slot{'t2}
+   slot{'t1} hspace Mpsymbols!neq " " slot{'t2}
 
 (************************************************************************
  * NATURAL SEMANTICS                                                    *

@@ -15,8 +15,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 2002 Xin Yu, Caltech
 
@@ -81,7 +81,7 @@ let fold_inv_image = makeFoldC << inv_image{'s; x. 'a['x]; 't} >> unfold_inv_ima
  ************************************************************************)
 
 dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
-   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
+   pushm[0] `"{" slot{'x} " " Mpsymbols!member `"s " slot{'s} mid slot{'a} " " Mpsymbols!member `"s " slot{'t} `"}" popm
 
 (************************************************************************
  * RULES                                                                *

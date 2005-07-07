@@ -12,8 +12,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -73,7 +73,7 @@ define unfold_nequal: nequal{'T; 'a; 'b} <--> not{'a='b in 'T}
  ************************************************************************)
 
 dform nequal_df : except_mode[src] :: parens :: "prec"[prec_equal] :: nequal{'T; 'a; 'b} =
-   szone pushm slot["le"]{'a} space neq space slot["le"]{'b} space Nuprl_font!member `" " slot["le"]{'T} popm ezone
+   szone pushm slot["le"]{'a} space neq space slot["le"]{'b} space Mpsymbols!member `" " slot["le"]{'T} popm ezone
 
 dform nequal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: nequal{'T; 'a; 'b} =
    szone pushm slot["le"]{'a} space `"<> " slot["le"]{'b} space `"in " slot["le"]{'T} popm ezone

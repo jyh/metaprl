@@ -144,7 +144,7 @@ interactive sqst_ex6 :
 define unfold_delta: delta{'A} <--> (quot x,y:'A//"true")
 
 dform delta_df : except_mode[src] :: delta{'A} =
-   Nuprl_font!Delta slot["le"]{'A}
+   Mpsymbols!Delta slot["le"]{'A}
 
 interactive delta1 :
    [wf] sequent { <H> >- "type"{'A} } -->

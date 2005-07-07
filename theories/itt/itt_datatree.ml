@@ -51,7 +51,11 @@ doc <:doc<
 
 define in_tree: in_tree{'a;'t; 'A} <--> tree_ind{ 't;  ."false"; L,R,self. 'L or 'R or 'a = ^data in 'A}
 
-dform in_tree_df : except_mode[src] ::  in_tree{'a;'t; 'A} = 'a Nuprl_font!member 't Nuprl_font!member DataTree{'A}
+doc docoff
+
+dform in_tree_df : except_mode[src] ::  in_tree{'a;'t; 'A} = 'a Mpsymbols!member 't Mpsymbols!member DataTree{'A}
+
+doc docon
 
 interactive_rw in_tree_base {| reduce |} :
    in_tree{'a; emptytree; 'A} <--> "false"
@@ -72,17 +76,17 @@ interactive in_tree_univ {| intro[] |} :
  sequent{ <H> >- 't in DataTree{'A} } -->
  sequent{ <H> >- in_tree{'a;'t; 'A} in univ[i:l] }
 
-
 doc <:doc<
    Now we can define set of elements of the tree:
 >>
 
-
-
 define set_from_tree: set_from_tree{'t;'A} <--> {a:'A |  in_tree{'a;'t; 'A}}
+
+doc docoff
 
 dform dt_df : except_mode[src] ::  set_from_tree{'t;'A} = `"|" 't `"|" sub{'A}
 
+doc docon
 
 interactive set_from_tree_wf {| intro[] |} :
  sequent{ <H> >- "type"{'A}} -->

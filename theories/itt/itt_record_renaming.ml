@@ -251,6 +251,8 @@ doc <:doc<
 
 define unfold_as_additive: as_additive{'r} <-->  rename_add_mul{'r}
 
+doc docoff
+
 dform as_additive_df : except_mode[src] :: parens :: as_additive{'add} = slot{'add} bf[" as additive"]
 
 doc <:doc<
@@ -379,6 +381,8 @@ doc <:doc<
 >>
 
 define group_mult: group_mult{'g; 'a; 'n} <--> group_power{as_additive{'g}; 'a; 'n}
+
+doc docoff
 
 dform group_mult_df : except_mode[src] :: group_mult{'G; 'a; 'n} =
    slot{'n} times sub{'G} slot{'a}

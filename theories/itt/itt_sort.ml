@@ -3,12 +3,12 @@
  *
  * ----------------------------------------------------------------
  *
- * This file is part of Nuprl-Light, a modular, higher order
+ * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1999 Jason Hickey, Cornell University
  *
@@ -103,7 +103,7 @@ let fold_sort = makeFoldC << sort{'l; 'lt} >> unfold_sort
  * Type for partial order.
  *)
 dform partial_order_df : except_mode[src] :: partial_order{'A; 'lt} =
-   `"PartialOrder(" slot{'lt} " " Nuprl_font!member " " slot{'A} `")"
+   `"PartialOrder(" slot{'lt} " " Mpsymbols!member " " slot{'A} `")"
 
 dform compare_lt_df : except_mode[src] :: compare_lt{'lt; 'a; 'b} =
    `"(" slot{'a} " " `"<[" slot{'lt} `"] " slot{'b} `")"
@@ -115,7 +115,7 @@ dform sorted_df : except_mode[src] :: sorted{'l; 'lt} =
    `"Sorted[" slot{'lt} `"](" slot{'l} `")"
 
 dform bounded_df : except_mode[src] :: bounded{'u; 'l; 'lt} =
-   `"(" slot{'u} " " Nuprl_font!le `"[" slot{'lt} `"] " slot{'l} `")"
+   `"(" slot{'u} " " Mpsymbols!le `"[" slot{'lt} `"] " slot{'l} `")"
 
 (*
  * Sorting algorithm.

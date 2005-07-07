@@ -28,4 +28,4 @@ interactive tsquashElimination {| elim [ThinOption thinT] |} 'H :
    sequent{ <H>; u:top; x: squash{'A}; <J['u]> >- 'C['u]} -->
    sequent{ <H>; u:tsquash{'A}; <J['u]> >- 'C['u]}
 
-dform tsquash_df : except_mode[src] :: tsquash{'A} = `"[" slot{'A} `"]" Nuprl_font!subt
+dform tsquash_df : except_mode[src] :: tsquash{'A} = `"[" slot{'A} `"]" Mpsymbols!subt

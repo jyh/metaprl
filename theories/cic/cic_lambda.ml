@@ -72,7 +72,7 @@ let mk_fun_term = mk_dep0_dep0_term fun_opname
  * DISPLAY FORMS                                     *
  *****************************************************)
 
-(*extends Nuprl_font*)
+(*extends Mpsymbols*)
 
 prec prec_fun
 prec prec_apply
@@ -129,7 +129,7 @@ dform prop_set_df : except_mode[src] :: prop_set{'s} =
 
 (* HACK! - this should be replaced with a proper I/O abstraction *)
 dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
-   szone pushm slot["le"]{'x} space Nuprl_font!member hspace slot["le"]{'T} popm ezone
+   szone pushm slot["le"]{'x} space Mpsymbols!member hspace slot["le"]{'T} popm ezone
 
 dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
    szone pushm slot["le"]{'x} space `"in" hspace slot["le"]{'T} popm ezone
@@ -146,7 +146,7 @@ dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
 dform fun_df2 : "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
 
 dform lambda_df : parens :: except_mode [src] :: "prec"[prec_lambda] :: lambda{'T;x. 'b} =
-   Nuprl_font!lambda slot{'x} `":" slot{'T} `"." slot{'b}
+   Mpsymbols!lambda slot{'x} `":" slot{'T} `"." slot{'b}
 
 dform apply_df : parens :: "prec"[prec_apply] :: apply{'t; 'u} =
    slot["lt"]{'t} " " slot["le"]{'u}

@@ -74,7 +74,7 @@ dform math_cumulativity_df1 : mode[tex] :: math_cumulativity{'i; 'j} =
  *)
 
 dform equal_df : except_mode[tex] :: parens :: "prec"[prec_equal] :: math_equal{'T; 'a; 'b} =
-   szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member `" " slot{'T} popm ezone
+   szone pushm slot{'a} space `"= " slot{'b} space Mpsymbols!member `" " slot{'T} popm ezone
 
 dform member_df2 : mode[tex] :: parens :: "prec"[prec_equal] :: math_member{'T; 'a} =
    szone pushm slot{'a} space `"IN" hspace slot{'T} popm ezone
@@ -115,7 +115,7 @@ dform math_it_df1 : mode[tex] :: math_it =
    izone `"\\cdot " ezone
 
 dform math_it_df2 : except_mode[tex] :: math_it =
-   Nuprl_font!cdot
+   Mpsymbols!cdot
 
 (************************************************************************
  * ATOM
@@ -305,7 +305,7 @@ dform mul_df1 : except_mode[tex] :: parens :: "prec"[prec_mul] :: math_mul{'a; '
    slot["lt"]{'a} `" * " slot["le"]{'b}
 
 dform div_df1 : except_mode[tex] :: parens :: "prec"[prec_mul] :: math_div{'a; 'b} =
-   slot["lt"]{'a} Nuprl_font!"div" slot["le"]{'b}
+   slot["lt"]{'a} Mpsymbols!"div" slot["le"]{'b}
 
 dform rem_df1 : except_mode[tex] :: parens :: "prec"[prec_mul] :: math_rem{'a; 'b} =
    slot["lt"]{'a} `" % " slot["le"]{'b}
@@ -314,10 +314,10 @@ dform lt_df1 : except_mode[tex] :: parens :: "prec"[prec_compare] :: math_lt{'a;
    slot["le"]{'a} `" < " slot["le"]{'b}
 
 dform le_df1 : except_mode[tex] :: parens :: "prec"[prec_compare] :: math_le{'a; 'b} =
-   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
+   slot["lt"]{'a} Mpsymbols!le slot["le"]{'b}
 
 dform ge_df1 : except_mode[tex] :: parens :: "prec"[prec_compare] :: math_ge{'a; 'b} =
-   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
+   slot["lt"]{'a} Mpsymbols!ge slot["le"]{'b}
 
 dform gt_df1 : except_mode[tex] :: parens :: "prec"[prec_compare] :: math_gt{'a; 'b} =
    slot["lt"]{'a} `" > " slot["le"]{'b}
@@ -401,7 +401,7 @@ dform or_df2 : or_df{math_or{'a; 'b}} =
    or_df{'a} or_df{'b}
 
 dform or_df3 : or_df{'a} =
-   hspace Nuprl_font!vee " " slot{'a}
+   hspace Mpsymbols!vee " " slot{'a}
 
 declare cor_df{'a : Dform} : Dform
 
@@ -412,7 +412,7 @@ dform cor_df2 : cor_df{math_cor{'a; 'b}} =
    cor_df{'a} cor_df{'b}
 
 dform cor_df3 : cor_df{'a} =
-   hspace Nuprl_font!vee `"c" " " slot{'a}
+   hspace Mpsymbols!vee `"c" " " slot{'a}
 
 (************************************************************************
  * FUNCTIONS
@@ -546,7 +546,7 @@ dform apply_df1 : parens :: "prec"[prec_apply] :: except_mode[tex] :: math_apply
    slot["lt"]{'f} " " slot["le"]{'a}
 
 dform lambda_df1 : parens :: "prec"[prec_lambda] :: except_mode[tex] :: math_lambda{'x; 'b} =
-   Nuprl_font!lambda slot{'x} `"." slot{'b}
+   Mpsymbols!lambda slot{'x} `"." slot{'b}
 
 dform fix_df1 : except_mode[tex] :: except_mode[tex] :: math_fix{'f; 'b} =
    `"fix" `"(" slot{'f} `"." slot{'b} `")"
@@ -558,8 +558,8 @@ dform well_founded_apply_df : except_mode[tex] :: except_mode[tex] :: math_well_
    slot{'P} `"[" slot{'a} `"]"
 
 dform well_founded_assum_df : except_mode[tex] :: except_mode[tex] :: math_well_founded_assum{'A; 'a1; 'a2; 'R; 'P} =
-   szone pushm[3] `"WellFounded " Nuprl_font!forall slot{'a2} `":" slot{'A} `"."
-   `"(" Nuprl_font!forall slot{'a1} `":" slot{'A} `". " slot{'R} " " Rightarrow math_well_founded_apply{'P; 'a1} `")"
+   szone pushm[3] `"WellFounded " Mpsymbols!forall slot{'a2} `":" slot{'A} `"."
+   `"(" Mpsymbols!forall slot{'a1} `":" slot{'A} `". " slot{'R} " " Rightarrow math_well_founded_apply{'P; 'a1} `")"
    Rightarrow math_well_founded_apply{'P; 'a2} popm ezone
 
 dform well_founded_df : except_mode[tex] :: except_mode[tex] :: math_well_founded{'A; 'a; 'b; 'R} =
@@ -569,16 +569,16 @@ dform well_founded_df : except_mode[tex] :: except_mode[tex] :: math_well_founde
  * Quantifiers.
  *)
 dform not_df1 : except_mode[tex] :: parens :: "prec"[prec_not] :: math_not{'a} =
-   Nuprl_font!tneg slot["le"]{'a}
+   Mpsymbols!tneg slot["le"]{'a}
 
 dform implies_df : except_mode[tex] :: parens :: "prec"[prec_implies] :: math_implies{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!Rightarrow " " slot["lt"]{'b}
+   slot["le"]{'a} " " Mpsymbols!Rightarrow " " slot["lt"]{'b}
 
 dform iff_df : except_mode[tex] :: parens :: "prec"[prec_iff] :: math_iff{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
+   slot["le"]{'a} " " Mpsymbols!Leftrightarrow " " slot["lt"]{'b}
 
 dform all_df1 : except_mode[tex] :: parens :: "prec"[prec_quant] :: except_mode[tex] :: math_all{'x; 'A; 'B} =
-   pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 (************************************************************************
  * PRODUCT
@@ -676,7 +676,7 @@ dform pair_prl_df : except_mode[tex] :: except_mode[tex] :: math_pair{'a; 'b} =
 dform spread_prl_df1 : parens :: "prec"[prec_spread] :: except_mode[tex] :: except_mode[tex] :: math_spread{'e; 'u; 'v; 'b} =
    szone pushm[1]
    keyword["match"] `" " slot{'e} `" " keyword["with"] hspace
-      math_pair{'u; 'v} `" " Nuprl_font!rightarrow hspace
+      math_pair{'u; 'v} `" " Mpsymbols!rightarrow hspace
          slot{'b}
    popm ezone
 
@@ -695,7 +695,7 @@ dform and_df2 : and_df{math_and{'a; 'b}} =
    and_df{'a} and_df{'b}
 
 dform and_df3 : and_df{'a} =
-   hspace Nuprl_font!wedge " " slot{'a}
+   hspace Mpsymbols!wedge " " slot{'a}
 
 declare cand_df{'a : Dform} : Dform
 
@@ -706,10 +706,10 @@ dform cand_df2 : and_df{math_cand{'a; 'b}} =
    cand_df{'a} cand_df{'b}
 
 dform cand_df3 : cand_df{'a} =
-   hspace Nuprl_font!wedge `"c" " " slot{'a}
+   hspace Mpsymbols!wedge `"c" " " slot{'a}
 
 dform exists_df1 : except_mode[tex] :: parens :: "prec"[prec_quant] :: except_mode[tex] :: math_exists{'x; 'A; 'B} =
-   pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 (************************************************************************
  * SET TYPE

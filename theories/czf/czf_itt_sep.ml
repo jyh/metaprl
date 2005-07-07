@@ -28,8 +28,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -106,7 +106,7 @@ let fold_restricted = makeFoldC << restricted{'P} >> unfold_restricted
  ************************************************************************)
 
 dform sep_df : except_mode[src] :: sep{'s; x. 'P} =
-   szone pushm[3] `"{ " slot{'x} " " Nuprl_font!member `"s " slot{'s} `" |"
+   szone pushm[3] `"{ " slot{'x} " " Mpsymbols!member `"s " slot{'s} `" |"
    hspace slot{'P} " " `"}" popm ezone
 
 dform restricted_df : except_mode[src] :: parens :: "prec"[prec_quant] :: restricted{'P} =

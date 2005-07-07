@@ -32,8 +32,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -126,10 +126,10 @@ let mk_subset_term = mk_dep0_dep0_term subset_opname
  ************************************************************************)
 
 dform subset_df1 : except_mode[src] :: parens :: "prec"[prec_equal] :: mem{'a;'A; 'B} =
-    szone pushm slot{'a} space Nuprl_font!member sub{'B} hspace slot{'A} popm ezone
+    szone pushm slot{'a} space Mpsymbols!member sub{'B} hspace slot{'A} popm ezone
 
 dform subset_df1 : except_mode[src] :: parens :: "prec"[prec_equal] :: ('a in 'A subset 'B) =
-    szone pushm slot{'a} space Nuprl_font!member hspace ('A subset 'B) popm ezone
+    szone pushm slot{'a} space Mpsymbols!member hspace ('A subset 'B) popm ezone
 
 dform subset_df1 : mode[src] :: parens :: "prec"[prec_equal] :: member{'a;'A; 'B} =
     'a `" in " 'A `" subset " 'B

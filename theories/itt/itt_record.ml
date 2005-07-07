@@ -665,7 +665,7 @@ dform var_df : var{'x} =
    'x
 
 dform cdot_df : cdot =
-   Nuprl_font!cdot
+   Mpsymbols!cdot
 
 declare "{" : Dform
 declare "}" : Dform

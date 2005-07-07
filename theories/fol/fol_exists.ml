@@ -20,7 +20,7 @@ declare "exists"{x. 'B['x]}
 prec prec_exists
 
 dform exists_df : parens :: "prec"["prec_exists"] :: "exists"{x. 'B} =
-   szone pushm[3] Nuprl_font!"exists" slot{'x} `"." hspace slot{'B} popm ezone
+   szone pushm[3] Mpsymbols!"exists" slot{'x} `"." hspace slot{'B} popm ezone
 
 (************************************************************************
  * RULES                                                                *

@@ -266,7 +266,7 @@ dform default_extract_df : default_extract =
    `""
 
 dform member_df : parens :: "prec"[prec_equal] :: member{'e; 't} =
-   szone pushm[0] slot{'e} hspace Nuprl_font!member `" " slot{'t} popm ezone
+   szone pushm[0] slot{'e} hspace Mpsymbols!member `" " slot{'t} popm ezone
 
 dform type_df : "type"{'t} =
    slot{'t} `" Type"
@@ -281,19 +281,19 @@ dform apply_df : parens :: "prec"[prec_apply] :: apply{'f; 'x} =
    slot["lt"]{'f} " " slot["le"]{'x}
 
 dform lambda_df : parens :: "prec"[prec_lambda] :: lambda{'ty; x. 'e} =
-   szone pushm[3] Nuprl_font!lambda slot{'x} `":" slot{'ty} `"." hspace slot{'e} popm ezone
+   szone pushm[3] Mpsymbols!lambda slot{'x} `":" slot{'ty} `"." hspace slot{'e} popm ezone
 
 dform bool_df : bool =
    mathbbB
 
 dform ind_df : ind =
-   Nuprl_font!omega
+   Mpsymbols!omega
 
 dform fun_df : parens :: "prec"[prec_fun] :: "fun"{'t1; 't2} =
-   szone pushm[3] slot["le"]{'t1} hspace Nuprl_font!rightarrow `" " slot{'t2} popm ezone
+   szone pushm[3] slot["le"]{'t1} hspace Mpsymbols!rightarrow `" " slot{'t2} popm ezone
 
 dform ty_df : ty =
-   Nuprl_font!Omega
+   Mpsymbols!Omega
 
 dform true_df : "true" =
    `"True"
@@ -302,34 +302,34 @@ dform false_df : "false" =
    `"False"
 
 dform not_df : parens :: "prec"[prec_not] :: "not"{'P} =
-   szone pushm[1] Nuprl_font!tneg slot{'P} popm ezone
+   szone pushm[1] Mpsymbols!tneg slot{'P} popm ezone
 
 dform and_df : parens :: "prec"[prec_and] :: "and"{'P1; 'P2} =
-   szone pushm[3] slot["lt"]{'P1} hspace Nuprl_font!wedge `" " slot["le"]{'P2} popm ezone
+   szone pushm[3] slot["lt"]{'P1} hspace Mpsymbols!wedge `" " slot["le"]{'P2} popm ezone
 
 dform or_df : parens :: "prec"[prec_or] :: "or"{'P1; 'P2} =
-   szone pushm[3] slot["lt"]{'P1} hspace Nuprl_font!vee `" " slot["le"]{'P2} popm ezone
+   szone pushm[3] slot["lt"]{'P1} hspace Mpsymbols!vee `" " slot["le"]{'P2} popm ezone
 
 dform implies_df : parens :: "prec"[prec_implies] :: "implies"{'P1; 'P2} =
-   szone pushm[3] slot["le"]{'P1} hspace Nuprl_font!Rightarrow `" " slot["lt"]{'P2} popm ezone
+   szone pushm[3] slot["le"]{'P1} hspace Mpsymbols!Rightarrow `" " slot["lt"]{'P2} popm ezone
 
 dform all_df1 : parens :: "prec"[prec_quant] :: "all"{'ty} =
-   Nuprl_font!forall slot{'ty}
+   Mpsymbols!forall slot{'ty}
 
 dform all_df2 : parens :: "prec"[prec_quant] :: "all"{'ty; x. 'P} =
-   szone pushm[3] Nuprl_font!forall slot{'x} `":" slot{'ty} `"." hspace slot{'P} popm ezone
+   szone pushm[3] Mpsymbols!forall slot{'x} `":" slot{'ty} `"." hspace slot{'P} popm ezone
 
 dform exists_df1 : "exists"{'ty} =
-   Nuprl_font!exists slot{'ty}
+   Mpsymbols!exists slot{'ty}
 
 dform exists_df2 : parens :: "prec"[prec_quant] :: "exists"{'ty; x. 'P} =
-   szone pushm[3] Nuprl_font!exists slot{'x} `":" slot{'ty} `"." hspace slot{'P} popm ezone
+   szone pushm[3] Mpsymbols!exists slot{'x} `":" slot{'ty} `"." hspace slot{'P} popm ezone
 
 dform select_df1 : parens :: "prec"[prec_apply] :: select{'ty} =
-   Nuprl_font!epsilon slot{'ty}
+   Mpsymbols!epsilon slot{'ty}
 
 dform select_df2 : parens :: "prec"[prec_quant] :: select{'ty; x. 'P} =
-   szone pushm[3] Nuprl_font!epsilon slot{'x} `":" slot{'ty} `"." hspace slot{'P} popm ezone
+   szone pushm[3] Mpsymbols!epsilon slot{'x} `":" slot{'ty} `"." hspace slot{'P} popm ezone
 
 (************************************************************************
  * Tests.

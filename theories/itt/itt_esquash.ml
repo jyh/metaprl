@@ -20,12 +20,12 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   This file is part of Nuprl-Light, a modular, higher order
+   This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -76,7 +76,7 @@ declare esquash{'P}
 doc docoff
 
 dform esquash_df : except_mode[src] :: esquash{'P} =
-   Nuprl_font!esquash{'P}
+   Mpsymbols!esquash{'P}
 
 doc <:doc<
    @rules

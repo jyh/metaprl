@@ -14,8 +14,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998-2005 MetaPRL Group
 
@@ -294,22 +294,22 @@ prec prec_assoc
 dform list_df : list = `"List"
 
 dform all_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "all_list"{'A; x. 'B} =
-   szone pushm[3] Nuprl_font!forall slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm ezone
+   szone pushm[3] Mpsymbols!forall slot{'x} Mpsymbols!member slot{'A} sbreak["",". "] slot{'B} popm ezone
 
 dform exists_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "exists_list"{'A; x. 'B} =
-   szone pushm[3] Nuprl_font!"exists" slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm ezone
+   szone pushm[3] Mpsymbols!"exists" slot{'x} Mpsymbols!member slot{'A} sbreak["",". "] slot{'B} popm ezone
 
 dform is_nil_df : except_mode[src] :: parens :: "prec"[prec_equal] :: is_nil{'l} =
    slot{'l} `" =" subb `" []"
 
 dform mem_df : except_mode[src] :: mem{'x; 'l; 'T} =
-   `"(" slot{'x} " " Nuprl_font!member `" " slot{'l} `" in " slot{list{'T}} `")"
+   `"(" slot{'x} " " Mpsymbols!member `" " slot{'l} `" in " slot{list{'T}} `")"
 
 dform index_df : except_mode[src] :: Index{'l} =
    `"Index(" slot{'l} `")"
 
 dform subset_df : except_mode[src] :: \subset{'l1; 'l2; 'T} =
-   `"(" slot{'l1} " " Nuprl_font!subseteq `"[" slot{'T} `"] " slot{'l2} `")"
+   `"(" slot{'l1} " " Mpsymbols!subseteq `"[" slot{'T} `"] " slot{'l2} `")"
 
 dform sameset_df : except_mode[src] :: sameset{'l1; 'l2; 'T} =
    pushm[3] szone
@@ -320,15 +320,15 @@ dform append_df : except_mode[src] :: parens :: "prec"[prec_append] :: append{'l
    slot["le"]{'l1} `" @" space slot{'l2}
 
 dform ball2_df : except_mode[src] :: parens :: "prec"[prec_ball] :: ball2{'l1; 'l2; x, y. 'b} =
-   pushm[3] Nuprl_font!forall subb slot{'x} `", " slot{'y} space
-      Nuprl_font!member space slot{'l1} `", " slot{'l2} sbreak["",". "]
+   pushm[3] Mpsymbols!forall subb slot{'x} `", " slot{'y} space
+      Mpsymbols!member space slot{'l1} `", " slot{'l2} sbreak["",". "]
       slot{'b} popm
 
 dform assoc_df : except_mode[src] :: parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l; v. 'b; 'z} =
    szone pushm[0] pushm[3]
    keyword["try"] hspace szone
       pushm[3]
-      keyword["let "] slot{'v} keyword[" ="] hspace tt["assoc "] slot{'x} space Nuprl_font!member slot{'eq} space slot{'l} popm hspace
+      keyword["let "] slot{'v} keyword[" ="] hspace tt["assoc "] slot{'x} space Mpsymbols!member slot{'eq} space slot{'l} popm hspace
       pushm[3] keyword["in"] hspace
       slot{'b} popm ezone popm hspace
    pushm[3] keyword["with "] tt[ "Not_found ->"] hspace
@@ -338,7 +338,7 @@ dform rev_assoc_df : except_mode[src] :: parens :: "prec"[prec_assoc] :: rev_ass
    szone pushm[0] pushm[3]
    keyword["try"] hspace
       pushm[3]
-      keyword["let "] slot{'v} keyword[" ="] hspace tt["rev_assoc "] slot{'x} space Nuprl_font!member slot{'eq} space slot{'l} popm hspace
+      keyword["let "] slot{'v} keyword[" ="] hspace tt["rev_assoc "] slot{'x} space Mpsymbols!member slot{'eq} space slot{'l} popm hspace
       pushm[3] keyword["in"] hspace
       slot{'b} popm popm hspace
    pushm[3] keyword["with "] tt["Not_found ->"] hspace
@@ -369,7 +369,7 @@ dform rev_df : except_mode[src] :: rev{'l} =
    tt["rev"] `"(" slot{'l} `")"
 
 dform list_max_df : list_max{'l} =
-   pushm[0] szone pushm[3] tt["max"] Nuprl_font!subl `"(" slot{'l} popm `")" ezone popm
+   pushm[0] szone pushm[3] tt["max"] Mpsymbols!subl `"(" slot{'l} popm `")" ezone popm
 
 (************************************************************************
  * REWRITES                                                             *

@@ -142,7 +142,7 @@ dform close_subscript_df : parens :: "prec"[prec_let] :: CloseSubscript{'a1; 'a2
    szone bf["close "] slot{'v} bf[" = "] slot{'a1} bf[".["] slot{'a2} bf["] in"] hspace slot["lt"]{'e} ezone
 
 dform close_frame : parens :: "prec"[prec_fun] :: CloseFrame{frame. 'e} =
-   szone pushm[3] Nuprl_font!lambda Nuprl_font!subq slot{'frame} `"." hspace slot{'e} popm ezone
+   szone pushm[3] Mpsymbols!lambda Mpsymbols!subq slot{'frame} `"." hspace slot{'e} popm ezone
 
 (*
  * ML functions on terms.

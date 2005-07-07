@@ -25,8 +25,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -238,7 +238,7 @@ dform number_df : number[n:n] =
    slot[n:n]
 
 dform beq_int_df1 : parens :: "prec"[prec_compare] :: beq_int{'a; 'b} =
-   slot["lt"]{'a} `" =" Nuprl_font!subb `" " slot["le"]{'b}
+   slot["lt"]{'a} `" =" Mpsymbols!subb `" " slot["le"]{'b}
 
 dform add_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b}
  =
@@ -261,7 +261,7 @@ dform lt_df1 : parens :: "prec"[prec_compare] :: lt{'a; 'b} =
    slot["lt"]{'a} `" < " slot["le"]{'b}
 
 dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
-   slot["lt"]{'a} `" <" Nuprl_font!subb `" " slot["le"]{'b}
+   slot["lt"]{'a} `" <" Mpsymbols!subb `" " slot["le"]{'b}
 
 (*
  * XXX: JYH: this display form is rather poorly designed.

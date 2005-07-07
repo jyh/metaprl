@@ -10,8 +10,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -157,7 +157,7 @@ dform false_df : except_mode[src] :: "false" =
    `"False"
 
 dform not_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: "not"{'a} =
-   Nuprl_font!tneg slot["le"]{'a}
+   Mpsymbols!tneg slot["le"]{'a}
 
 dform not_df2 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
    `"\"not\"{" 'a `"}"
@@ -174,7 +174,7 @@ dform implies_df2 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: implies
    implies_df{'a} implies_df{'b}
 
 dform implies_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: implies_df{'a} =
-   hspace Nuprl_font!Rightarrow `" " slot{'a}
+   hspace Mpsymbols!Rightarrow `" " slot{'a}
 
 (*
  * Disjunction.
@@ -188,7 +188,7 @@ dform or_df2 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: or_df{"or"{'
    or_df{'a} or_df{'b}
 
 dform or_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: or_df{'a} =
-   hspace Nuprl_font!vee `" " slot{'a}
+   hspace Mpsymbols!vee `" " slot{'a}
 
 (*
  * Conjunction.
@@ -202,7 +202,7 @@ dform and_df2 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: and_df{"and
    and_df{'a} and_df{'b}
 
 dform and_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: and_df{'a} =
-   hspace Nuprl_font!wedge `" " slot{'a}
+   hspace Mpsymbols!wedge `" " slot{'a}
 
 (*
  * Box

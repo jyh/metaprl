@@ -8,8 +8,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1999 Jason Hickey, Cornell University
  *
@@ -66,7 +66,7 @@ dform eq_label_df : parens :: "prec"[prec_eq_label] :: eq_label{'l1; 'l2} =
    slot{'l1} `"=l " slot{'l2}
 
 dform le_label_df : parens :: "prec"[prec_le_label] :: le_label{'l1; 'l2} =
-   slot{'l1} Nuprl_font!le `"l " slot{'l2}
+   slot{'l1} Mpsymbols!le `"l " slot{'l2}
 
 dform empty_df : empty =
    `"{}"
@@ -75,7 +75,7 @@ dform fetch_df : parens :: "prec"[prec_fetch] :: fetch{'s; 'v} =
    slot{'s} `"(" slot{'v} `")"
 
 dform store_df : parens :: "prec"[prec_store] :: store{'s; 'v1; 'v2} =
-   slot{'s} `"(" slot{'v1} Nuprl_font!leftarrow slot{'v2} `")"
+   slot{'s} `"(" slot{'v1} Mpsymbols!leftarrow slot{'v2} `")"
 
 dform alloc_df : parens :: "prec"[prec_alloc] :: alloc{'s; 'v; s2, l. 't} =
    szone pushm[3] `"let# " slot{'s2} `"," slot{'l} `"= alloc(" slot{'s} `"," hspace slot{'v} `") in" hspace slot{'t} popm ezone

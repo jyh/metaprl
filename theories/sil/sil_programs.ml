@@ -7,8 +7,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1999 Jason Hickey, Cornell University
  *
@@ -152,16 +152,16 @@ dform deref_df : deref{'e1} =
    keyword["!"] slot{'e1}
 
 dform assign_df : parens :: "prec"["prec_assign"] :: assign{'e1; 'e2} =
-   pushm[3] slot{'e1} " " Nuprl_font!leftarrow hspace slot{'e2} popm
+   pushm[3] slot{'e1} " " Mpsymbols!leftarrow hspace slot{'e2} popm
 
 dform dot_df : dot =
-   Nuprl_font!cdot
+   Mpsymbols!cdot
 
 (*
  * Functions.
  *)
 dform lambda_df : parens :: "prec"["prec_lambda"] :: lambda{v. 'e1} =
-   Nuprl_font!lambda slot{'v} `"." slot{'e1}
+   Mpsymbols!lambda slot{'v} `"." slot{'e1}
 
 dform apply_df : parens :: "prec"["prec_apply"] :: apply{'e1; 'e2} =
    slot["le"]{'e1} " " slot{'e2}

@@ -29,8 +29,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -196,9 +196,9 @@ dform apply_df : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
    slot["lt"]{'f} " " slot["le"]{'a}
 
 dform lambda_df : parens :: except_mode [src] :: "prec"[prec_lambda] :: lambda{x. 'b} =
-   Nuprl_font!lambda slot{'x} `"." slot{'b}
+   Mpsymbols!lambda slot{'x} `"." slot{'b}
 
-dform ycomb_df : except_mode[src] :: ycomb = Nuprl_font!mathbbY
+dform ycomb_df : except_mode[src] :: ycomb = Mpsymbols!mathbbY
 
 dform fix_df : except_mode[src] :: fix{f. 'b} =
    `"fix" `"(" slot{'f} `"." slot{'b} `")"
@@ -214,8 +214,8 @@ dform well_founded_apply_df : except_mode[src] :: well_founded_apply{'P; 'a} =
    slot{'P} `"[" slot{'a} `"]"
 
 dform well_founded_assum_df : except_mode[src] :: well_founded_assum{'A; a1, a2. 'R; 'P} =
-   szone pushm[3] `"WellFounded " Nuprl_font!forall slot{'a2 :> Term} `":" slot{'A} `"."
-   `"(" Nuprl_font!forall slot{'a1 :> Term} `":" slot{'A} `". " slot{'R} " " Rightarrow well_founded_apply{'P; 'a1} `")"
+   szone pushm[3] `"WellFounded " Mpsymbols!forall slot{'a2 :> Term} `":" slot{'A} `"."
+   `"(" Mpsymbols!forall slot{'a1 :> Term} `":" slot{'A} `". " slot{'R} " " Rightarrow well_founded_apply{'P; 'a1} `")"
    Rightarrow well_founded_apply{'P; 'a2} popm ezone
 
 dform well_founded_df : except_mode[src] :: well_founded{'A; a, b. 'R} =

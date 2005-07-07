@@ -86,7 +86,7 @@ declare all_df{'b : Dform} : Dform
 declare exists_df{'b : Dform} : Dform
 
 dform all_df1 : "all"{v. 'b} =
-   Nuprl_font!"forall" slot{'v} all_df{'b}
+   Mpsymbols!"forall" slot{'v} all_df{'b}
 
 dform all_df2 : all_df{"all"{v. 'b}} =
    `"," slot{'v} all_df{'b}
@@ -95,7 +95,7 @@ dform all_df3 : all_df{'b} =
    `"." " " slot{'b}
 
 dform exists_df1 : "exists"{v. 'b} =
-   Nuprl_font!"exists" slot{'v} exists_df{'b}
+   Mpsymbols!"exists" slot{'v} exists_df{'b}
 
 dform exists_df2 : exists_df{"exists"{v. 'b}} =
    `"," slot{'v} exists_df{'b}

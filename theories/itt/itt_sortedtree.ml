@@ -40,9 +40,7 @@ let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
 let _ =
    show_loading "Loading Itt_binatatree%t"
 
-doc <:doc<
-   @terms
->>
+doc terms
 
 define dataNode: DataNode{'D;data.'N['data]} <--> record["data":t]{'D;data.'N['data]}
 

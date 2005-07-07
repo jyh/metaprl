@@ -124,10 +124,10 @@ dform eq_inner_df : except_mode[tex] :: math_eq{'s1; 's2} =
    slot{'s1} `" =s " slot{'s2}
 
 dform fun_set_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_funset{'x; 'P} =
-   Nuprl_font!forall slot{'x} `"." slot{'P} `" fun_set"
+   Mpsymbols!forall slot{'x} `"." slot{'P} `" fun_set"
 
 dform fun_prop_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_funprop{'x; 'P} =
-   Nuprl_font!forall slot{'x} `"." slot{'P} `" fun_prop"
+   Mpsymbols!forall slot{'x} `"." slot{'P} `" fun_prop"
 
 (************************************************************************
  * MEMBERSHIP
@@ -148,10 +148,10 @@ dform member_df1 : mode[tex] :: math_member{'s1; 's2} =
    izone `"}" ezone
 
 dform mem_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_mem{'x; 't} =
-   slot{'x} " " Nuprl_font!member `"s" " " slot{'t}
+   slot{'x} " " Mpsymbols!member `"s" " " slot{'t}
 
 dform member_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_member{'x; 't} =
-   slot{'x} " " Nuprl_font!member `"S" " " slot{'t}
+   slot{'x} " " Mpsymbols!member `"S" " " slot{'t}
 
 (************************************************************************
  * SEPARATION
@@ -170,7 +170,7 @@ dform restricted_df1 : mode[tex] :: math_restricted{'P} =
    izone `")}" ezone
 
 dform sep_df : except_mode[tex] :: math_sep{'x; 's; 'P} =
-   szone pushm[3] `"{ " slot{'x} " " Nuprl_font!member " " slot{'s} `" |"
+   szone pushm[3] `"{ " slot{'x} " " Mpsymbols!member " " slot{'s} `" |"
    hspace slot{'P} " " `"}" popm ezone
 
 dform restricted_df : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_restricted{'P} =
@@ -266,37 +266,37 @@ dform false_df : except_mode[tex] :: except_mode[src] :: math_sfalse =
    `"False_s"
 
 dform not_df1 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_not] :: math_snot{'a} =
-   Nuprl_font!tneg slot["le"]{'a}
+   Mpsymbols!tneg slot["le"]{'a}
 
 dform implies_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_implies] :: math_simplies{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!Rightarrow " " slot["lt"]{'b}
+   slot["le"]{'a} " " Mpsymbols!Rightarrow " " slot["lt"]{'b}
 
 dform and_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_and] :: math_sand{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!wedge " " slot["lt"]{'b}
+   slot["le"]{'a} " " Mpsymbols!wedge " " slot["lt"]{'b}
 
 dform or_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_or] :: math_sor{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!vee " " slot["lt"]{'b}
+   slot["le"]{'a} " " Mpsymbols!vee " " slot["lt"]{'b}
 
 dform iff_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_iff] :: math_siff{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
+   slot["le"]{'a} " " Mpsymbols!Leftrightarrow " " slot["lt"]{'b}
 
 dform all_df1 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sall{'x; 'A; 'B} =
-   pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 dform exists_df1 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sexists{'x; 'A; 'B} =
-   pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 dform all_df2 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_dall{'x; 'A; 'B} =
-   pushm[3] Nuprl_font!forall slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!forall slot{'x} Mpsymbols!member slot{'A} sbreak["",". "] slot{'B} popm
 
 dform exists_df2 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_dexists{'x; 'A; 'B} =
-   pushm[3] Nuprl_font!"exists" slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!"exists" slot{'x} Mpsymbols!member slot{'A} sbreak["",". "] slot{'B} popm
 
 dform all_df3 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sall{'x; 'B} =
-   pushm[3] Nuprl_font!forall slot{'x} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!forall slot{'x} sbreak["",". "] slot{'B} popm
 
 dform exists_df3 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sexists{'x; 'B} =
-   pushm[3] Nuprl_font!"exists" slot{'x} sbreak["",". "] slot{'B} popm
+   pushm[3] Mpsymbols!"exists" slot{'x} sbreak["",". "] slot{'B} popm
 
 (************************************************************************
  * EMPTY
@@ -391,7 +391,7 @@ dform subset_df1 : mode[tex] :: math_subset{'s1; 's2} =
    izone `"}" ezone
 
 dform subset_df : except_mode[tex] :: math_subset{'s1; 's2} =
-   slot{'s1} `" " Nuprl_font!subseteq `"s " slot{'s2}
+   slot{'s1} `" " Mpsymbols!subseteq `"s " slot{'s2}
 
 (************************************************************************
  * INFINITY
@@ -422,7 +422,7 @@ dform succ_df2 : except_mode[tex] :: math_succ{'i} =
    `"s(" slot{'i} `")"
 
 dform inf_df2 : except_mode[tex] :: math_inf =
-   Nuprl_font!mathbbN `"s"
+   Mpsymbols!mathbbN `"s"
 
 dform lt_df2 : except_mode[tex] :: parens :: "prec"[prec_compare] :: math_lt{'i; 'j} =
    pushm[0] szone slot{'i} `" <" hspace slot{'j} ezone popm
@@ -446,8 +446,8 @@ dform rel_df1 : mode[tex] :: math_rel{'x; 'y; 'P; 's1; 's2} =
 
 dform rel_df : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_rel{'a; 'b; 'P; 's1; 's2} =
    szone pushm[3]
-   Nuprl_font!mathbbB slot{'a} " " Nuprl_font!member slot{'s1} `"," hspace
-   slot{'b} " " Nuprl_font!member " " slot{'s2} `"." hspace
+   Mpsymbols!mathbbB slot{'a} " " Mpsymbols!member slot{'s1} `"," hspace
+   slot{'b} " " Mpsymbols!member " " slot{'s2} `"." hspace
    slot{'P}
    popm ezone
 
@@ -530,10 +530,10 @@ dform equiv__df : parens :: except_mode[tex] :: math_equiv{'s; 'r; 'a; 'b} =
    `"equiv(" slot{'s} `"; " slot{'r} `"; " slot{'a} `"; " slot{'b} `")"
 
 dform equiv_fun_set_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_equivfunset{'s; 'r; 'z; 'f} =
-   Nuprl_font!forall slot{'z} `"." slot{'f} `" equiv_fun_set"
+   Mpsymbols!forall slot{'z} `"." slot{'f} `" equiv_fun_set"
 
 dform equiv_fun_prop_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_equivfunprop{'s; 'r; 'z; 'P} =
-   Nuprl_font!forall slot{'z} `"." slot{'P} `" equiv_fun_prop"
+   Mpsymbols!forall slot{'z} `"." slot{'P} `" equiv_fun_prop"
 
 (************************************************************************
  * SET BUILDER
@@ -548,7 +548,7 @@ dform set_bvd_df1 : mode[tex] :: math_setbvd{'x; 's; 'a} =
    izone `"\\right\\}}" ezone
 
 dform set_bvd_df : parens :: except_mode[tex] :: math_setbvd{'x; 's; 'a} =
-   pushm[0] `"{" slot{'a} mid slot{'x} " " Nuprl_font!member `"s " slot{'s} `"}" popm
+   pushm[0] `"{" slot{'a} mid slot{'x} " " Mpsymbols!member `"s " slot{'s} `"}" popm
 
 (************************************************************************
  * INVERSE IMAGE
@@ -565,7 +565,7 @@ dform inv_image_df1 : mode[tex] :: math_invimage{'x; 's; 'a; 't} =
    izone `"\\right\\}}" ezone
 
 dform inv_image_df : parens :: except_mode[tex] :: math_invimage{'x; 's; 'a; 't} =
-   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
+   pushm[0] `"{" slot{'x} " " Mpsymbols!member `"s " slot{'s} mid slot{'a} " " Mpsymbols!member `"s " slot{'t} `"}" popm
 
 (************************************************************************
  * GROUP

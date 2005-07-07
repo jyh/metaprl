@@ -256,7 +256,7 @@ dform atom_int_df : AtomInt[i:n] =
    `"#" slot[i:n]
 
 dform atom_var_df : AtomVar{'v} =
-   Nuprl_font!downarrow slot{'v}
+   Mpsymbols!downarrow slot{'v}
 
 dform atom_fun_var_df : parens :: "prec"[prec_var] :: AtomFunVar{'R; 'v} =
    slot{'R} `"." slot{'v}
@@ -277,19 +277,19 @@ dform atom_binop_lt_df : parens :: "prec"[prec_rel] :: AtomRelop{LtOp; 'e1; 'e2}
    slot["lt"]{'e1} " " `"< " slot["le"]{'e2}
 
 dform atom_binop_le_df : parens :: "prec"[prec_rel] :: AtomRelop{LeOp; 'e1; 'e2} =
-   slot["lt"]{'e1} " " Nuprl_font!le `" " slot["le"]{'e2}
+   slot["lt"]{'e1} " " Mpsymbols!le `" " slot["le"]{'e2}
 
 dform atom_binop_gt_df : parens :: "prec"[prec_rel] :: AtomRelop{GtOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"> " slot["le"]{'e2}
 
 dform atom_binop_ge_df : parens :: "prec"[prec_rel] :: AtomRelop{GeOp; 'e1; 'e2} =
-   slot["lt"]{'e1} " " Nuprl_font!ge `" " slot["le"]{'e2}
+   slot["lt"]{'e1} " " Mpsymbols!ge `" " slot["le"]{'e2}
 
 dform atom_binop_eq_df : parens :: "prec"[prec_rel] :: AtomRelop{EqOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"= " slot["le"]{'e2}
 
 dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomRelop{NeqOp; 'e1; 'e2} =
-   slot["lt"]{'e1} " " Nuprl_font!neq `" " slot["le"]{'e2}
+   slot["lt"]{'e1} " " Mpsymbols!neq `" " slot["le"]{'e2}
 
 (* General bin/relop *)
 dform atom_binop_gen_df : parens :: "prec"[prec_rel] :: AtomRelop{'op; 'e1; 'e2} =
@@ -299,7 +299,7 @@ dform atom_binop_gen_df : parens :: "prec"[prec_rel] :: AtomBinop{'op; 'e1; 'e2}
    slot["lt"]{'e1} `" " slot{'op} `" " slot["le"]{'e2}
 
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
-   szone pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." hspace slot{'e} popm ezone
+   szone pushm[3] Mpsymbols!lambda Mpsymbols!suba slot{'x} `"." hspace slot{'e} popm ezone
 
 (* Expressions *)
 dform exp_let_atom_df : parens :: "prec"[prec_let] :: LetAtom{'a; v. 'e} =

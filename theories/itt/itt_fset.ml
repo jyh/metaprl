@@ -12,8 +12,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
  *
@@ -210,7 +210,7 @@ dform fequal_df1 : parens :: "prec"[prec_fsubseteq] :: except_mode[src] :: fequa
    slot{'A} `" =" sub{slot{'eq}} space slot{'B}
 
 dform fmember_df : parens :: "prec"[prec_fmember] :: except_mode[src] :: fmember{'eq; 'x; 's} =
-   slot{'x} space Nuprl_font!member sub{slot{'eq}} space slot{'s}
+   slot{'x} space Mpsymbols!member sub{slot{'eq}} space slot{'s}
 
 dform fset_df : except_mode[src] :: fset{'eq; 'T} =
    `"FSet(" slot{'eq} `"; " slot{'T} `")"
@@ -234,21 +234,21 @@ dform fsquash_df : fsquash{'eq; 's1} =
    `"|" slot{'s1} `"|" sub{slot{'eq}}
 
 dform fball_df : parens :: "prec"[prec_fall] :: except_mode[src] :: fball{'s; x. 'b} =
-   pushm[3] Nuprl_font!"forall" subb slot{'x} space Nuprl_font!member space slot{'s} sbreak["",". "]
+   pushm[3] Mpsymbols!"forall" subb slot{'x} space Mpsymbols!member space slot{'s} sbreak["",". "]
       slot{'b} popm
 
 dform fbexists_df : parens :: "prec"[prec_fexists] :: except_mode[src] :: fbexists{'s; x. 'b} =
-   pushm[3] Nuprl_font!"exists" subb slot{'x} space Nuprl_font!member space slot{'s} sbreak["",". "]
+   pushm[3] Mpsymbols!"exists" subb slot{'x} space Mpsymbols!member space slot{'s} sbreak["",". "]
       slot{'b} popm
 
 dform fall_df : parens :: "prec"[prec_fall] :: except_mode[src] :: fall{'eq; 'T; 's; x. 'b} =
-   pushm[3] Nuprl_font!"forall" slot{'x} space Nuprl_font!member sub{slot{'eq}} space slot{'s}
-   Nuprl_font!member space slot{'T} sbreak["",". "]
+   pushm[3] Mpsymbols!"forall" slot{'x} space Mpsymbols!member sub{slot{'eq}} space slot{'s}
+   Mpsymbols!member space slot{'T} sbreak["",". "]
       slot{'b} popm
 
 dform fexists_df : parens :: "prec"[prec_fexists] :: except_mode[src] :: fexists{'eq; 'T; 's; x. 'b} =
-   pushm[3] Nuprl_font!"exists" slot{'x} space Nuprl_font!member sub{slot{'eq}} space slot{'s}
-   Nuprl_font!member space slot{'T} sbreak["",". "]
+   pushm[3] Mpsymbols!"exists" slot{'x} space Mpsymbols!member sub{slot{'eq}} space slot{'s}
+   Mpsymbols!member space slot{'T} sbreak["",". "]
       slot{'b} popm
 
 dform feset_df : parens :: "prec"[prec_feset] :: except_mode[src] :: feset{'eq; 'T} =

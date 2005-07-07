@@ -275,7 +275,7 @@ prim_rw lambdaHStep {| reduce |} :
 	lambdaH{|<H>; x:'s >-'t['x]|} <--> lambdaH{|<H> >-lambda{'s; x.'t['x]}|}
 
 dform lambdaH_df : parens :: "prec"[prec_apply] :: except_mode[src] :: sequent [lambdaH] { <H> >- 't } =
-	Nuprl_font!lambda slot{display_hyps_emph{sequent { <H> >- 't }}} `"." slot{display_concl{sequent { <H> >- 't }}}
+	Mpsymbols!lambda slot{display_hyps_emph{sequent { <H> >- 't }}} `"." slot{display_concl{sequent { <H> >- 't }}}
 
 let fold_lambdaHBase = makeFoldC <<lambdaH{| >-'t|}>> lambdaHBase
 let fold_lambdaHStep = makeFoldC <<lambdaH{|<H>; x:'s >-'t|}>> lambdaHStep

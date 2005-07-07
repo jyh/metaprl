@@ -153,7 +153,7 @@ dform false_expr_df : FalseExpr =
 
 (* Variables *)
 dform var_expr_df : VarExpr{'v} =
-   Nuprl_font!downarrow slot{'v}
+   Mpsymbols!downarrow slot{'v}
 
 (* Binary operations *)
 dform add_binop_expr_df : parens :: "prec"[prec_add] :: BinopExpr{AstAddOp; 'e1; 'e2} =
@@ -173,26 +173,26 @@ dform lt_relop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstLtOp; 'e1; '
    slot["lt"]{'e1} `" < " slot["le"]{'e2}
 
 dform le_binop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstLeOp; 'e1; 'e2} =
-   slot["lt"]{'e1} `" " Nuprl_font!le `" " slot["le"]{'e2}
+   slot["lt"]{'e1} `" " Mpsymbols!le `" " slot["le"]{'e2}
 
 dform gt_relop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstGtOp; 'e1; 'e2} =
    slot["lt"]{'e1} `" > " slot["le"]{'e2}
 
 dform ge_binop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstGeOp; 'e1; 'e2} =
-   slot["lt"]{'e1} `" " Nuprl_font!ge `" " slot["le"]{'e2}
+   slot["lt"]{'e1} `" " Mpsymbols!ge `" " slot["le"]{'e2}
 
 dform eq_relop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstEqOp; 'e1; 'e2} =
    slot["lt"]{'e1} `" = " slot["le"]{'e2}
 
 dform neq_binop_expr_df : parens :: "prec"[prec_rel] :: RelopExpr{AstNeqOp; 'e1; 'e2} =
-   slot["lt"]{'e1} `" " Nuprl_font!neq `" " slot["le"]{'e2}
+   slot["lt"]{'e1} `" " Mpsymbols!neq `" " slot["le"]{'e2}
 
 (* (Unnamed) functions *)
 dform lambda_expr_df : parens :: "prec"[prec_fun] :: LambdaExpr{v. 'e} =
-   szone pushm[3] Nuprl_font!lambda slot{'v} `"." hspace slot{'e} popm ezone
+   szone pushm[3] Mpsymbols!lambda slot{'v} `"." hspace slot{'e} popm ezone
 
 dform fun_lambda_expr_df : parens :: "prec"[prec_fun] :: FunLambdaExpr{v. 'e} =
-   szone pushm[3] Nuprl_font!lambda `"*" slot{'v} `"." hspace slot{'e} popm ezone
+   szone pushm[3] Mpsymbols!lambda `"*" slot{'v} `"." hspace slot{'e} popm ezone
 
 (* if expressions *)
 dform if_expr_df1 : parens :: "prec"[prec_if] :: except_mode[tex] :: IfExpr{'e1; 'e2; 'e3} =

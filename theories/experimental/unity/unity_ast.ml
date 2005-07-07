@@ -177,19 +177,19 @@ dform binop_exp_df5 : parens :: "prec"[prec_bool] :: BinopExp{LtOp; 'e1; 'e2; 'p
    slot["lt"]{'e1} `"<" slot["le"]{'e2}
 
 dform binop_exp_df6 : parens :: "prec"[prec_bool] :: BinopExp{LeOp; 'e1; 'e2; 'pos} =
-   slot["lt"]{'e1} Nuprl_font!le slot["le"]{'e2}
+   slot["lt"]{'e1} Mpsymbols!le slot["le"]{'e2}
 
 dform binop_exp_df7 : parens :: "prec"[prec_bool] :: BinopExp{GtOp; 'e1; 'e2; 'pos} =
    slot["lt"]{'e1} `">" slot["le"]{'e2}
 
 dform binop_exp_df8 : parens :: "prec"[prec_bool] :: BinopExp{GeOp; 'e1; 'e2; 'pos} =
-   slot["lt"]{'e1} Nuprl_font!ge slot["le"]{'e2}
+   slot["lt"]{'e1} Mpsymbols!ge slot["le"]{'e2}
 
 dform binop_exp_df9 : parens :: "prec"[prec_bool] :: BinopExp{EqOp; 'e1; 'e2; 'pos} =
    slot["lt"]{'e1} `"=" slot["le"]{'e2}
 
 dform binop_exp_df10 : parens :: "prec"[prec_bool] :: BinopExp{NeqOp; 'e1; 'e2; 'pos} =
-   slot["lt"]{'e1} Nuprl_font!neq slot["le"]{'e2}
+   slot["lt"]{'e1} Mpsymbols!neq slot["le"]{'e2}
 
 
 dform subscript_exp_df : SubscriptExp{'e1; 'e2; 'pos} =

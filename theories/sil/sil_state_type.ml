@@ -7,8 +7,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 1999 Jason Hickey, Cornell University
  *
@@ -63,7 +63,7 @@ dform decl_type_df : decl_type[i:l] =
    `"Decl[" slot[i:l] `"]"
 
 dform in_domain_df : in_domain{'r; 'l} =
-   slot{'l} " " Nuprl_font!member `" Dom(" slot{'r} `")"
+   slot{'l} " " Mpsymbols!member `" Dom(" slot{'r} `")"
 
 dform state_empty_decl_df : state_empty_decl =
    `"[]"

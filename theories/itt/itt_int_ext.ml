@@ -18,8 +18,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 1998 Jason Hickey, Cornell University
 
@@ -156,7 +156,7 @@ dform mul_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
 
 dform div_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b}
  =
-   slot["lt"]{'a} Nuprl_font!"div" slot["le"]{'b}
+   slot["lt"]{'a} Mpsymbols!"div" slot["le"]{'b}
 dform div_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
    slot["lt"]{'a} `" /@ " slot["le"]{'b}
 
@@ -257,30 +257,30 @@ let dest_neq_int = dest_dep0_dep0_term neq_int_opname
 
 dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b}
  =
-   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
+   slot["lt"]{'a} Mpsymbols!le slot["le"]{'b}
 dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
    slot["lt"]{'a} `" <= " slot["le"]{'b}
 
 dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b}
  =
-   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
+   slot["lt"]{'a} Mpsymbols!ge slot["le"]{'b}
 dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
    slot["lt"]{'a} `" >= " slot["le"]{'b}
 
 dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
-   slot["lt"]{'a} `" " Nuprl_font!neq Nuprl_font!subb `" " slot["le"]{'b}
+   slot["lt"]{'a} `" " Mpsymbols!neq Mpsymbols!subb `" " slot["le"]{'b}
 
 dform le_bool_df1 : parens :: "prec"[prec_compare] :: le_bool{'a; 'b} =
-   slot["lt"]{'a} `" " Nuprl_font!le Nuprl_font!subb `" " slot["le"]{'b}
+   slot["lt"]{'a} `" " Mpsymbols!le Mpsymbols!subb `" " slot["le"]{'b}
 
 dform gt_bool_df1 : parens :: "prec"[prec_compare] :: gt_bool{'a; 'b} =
-   slot["lt"]{'a} `" >" Nuprl_font!subb `" " slot["le"]{'b}
+   slot["lt"]{'a} `" >" Mpsymbols!subb `" " slot["le"]{'b}
 
 dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
-   slot["lt"]{'a} `" " Nuprl_font!ge Nuprl_font!subb `" " slot["le"]{'b}
+   slot["lt"]{'a} `" " Mpsymbols!ge Mpsymbols!subb `" " slot["le"]{'b}
 
 dform nequal_df1 : parens :: "prec"[prec_compare] :: nequal{'a; 'b} =
-   slot["lt"]{'a} `" " Nuprl_font!neq `" " slot["le"]{'b}
+   slot["lt"]{'a} `" " Mpsymbols!neq `" " slot["le"]{'b}
 
 doc <:doc< Integer segmentation >>
 

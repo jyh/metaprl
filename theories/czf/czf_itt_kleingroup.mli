@@ -7,8 +7,8 @@
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
+ * See the file doc/htmlman/default.html or visit http://metaprl.org/
+ * for more information.
  *
  * Copyright (C) 2002 Xin Yu, Caltech
  *
@@ -60,7 +60,7 @@ declare k3              (* Element of the group *)
  *
  *)
 rewrite unfold_klein4_car : car{klein4} <-->
-   union{sing{k0}; union{sing{k1}; union{sing{k2}; sing{k3}}}} 
+   union{sing{k0}; union{sing{k1}; union{sing{k2}; sing{k3}}}}
 rewrite unfold_klein4_op00 : op{klein4; k0; k0} <--> k0
 rewrite unfold_klein4_op01 : op{klein4; k0; k1} <--> k1
 rewrite unfold_klein4_op02 : op{klein4; k0; k2} <--> k2

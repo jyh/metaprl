@@ -47,8 +47,8 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
-   OCaml, and more information about this system.
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
 
    Copyright (C) 2002 Xin Yu, Caltech
 
@@ -161,14 +161,14 @@ dform equiv_df2 : parens :: except_mode[src] :: equiv{'s; 'r; 'a; 'b} =
    `"equiv(" slot{'s} `"; " slot{'r} `"; " slot{'a} `"; " slot{'b} `")"
 
 dform equiv_fun_set_df : except_mode[src] :: parens :: "prec"[prec_apply] :: equiv_fun_set{'s; 'r; x. 'P} =
-   Nuprl_font!forall slot{'x} `"." slot{'P} `" equiv_fun_set"
+   Mpsymbols!forall slot{'x} `"." slot{'P} `" equiv_fun_set"
 
 dform equiv_fun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: equiv_fun_prop{'s; 'r; z. 'P} =
-   Nuprl_font!forall slot{'z} `"." slot{'P} `" equiv_fun_prop"
+   Mpsymbols!forall slot{'z} `"." slot{'P} `" equiv_fun_prop"
 
 (*dform equiv_dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: equiv_dfun_prop{u. 'A; x, y. 'P} =
    szone pushm[0]
-   Nuprl_font!forall slot{'u} `":" slot{'A} `"." hspace slot{'x} `"," slot{'y} `"." slot{'P} `" equiv_dfun_prop"
+   Mpsymbols!forall slot{'u} `":" slot{'A} `"." hspace slot{'x} `"," slot{'y} `"." slot{'P} `" equiv_dfun_prop"
    popm ezone
 *)
 (************************************************************************

@@ -53,7 +53,7 @@ doc docoff
 prec prec_subset
 
 dform subset_df : parens :: "prec"[prec_subset] :: \subset{'s1; 's2} =
-   slot{'s1} `" " Nuprl_font!subseteq `"s " slot{'s2}
+   slot{'s1} `" " Mpsymbols!subseteq `"s " slot{'s2}
 
 doc <:doc<
    @rules

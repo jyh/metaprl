@@ -4,6 +4,7 @@ OCAMLINCLUDES[] +=
 
 # Library files
 MPFILES[] =
+	hilbert_internal
 	s4_logic
 #   hilbert
 #   lp_hilbert

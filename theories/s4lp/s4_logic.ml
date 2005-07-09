@@ -433,3 +433,6 @@ interactive box_box_k 'J :
 
 interactive or_commute 'J :
    sequent { >- concl {| <#J>; (box{'a} or box{'b}) => box{'a or 'b}; <#K> >- it |} }
+
+interactive lp_multiplicity :
+	sequent { >- concl {| (box{'a} & box{'b})=>(box{'a=>'c} or box{'b=>'c})=>box{'c}>-it|} }

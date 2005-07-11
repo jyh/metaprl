@@ -1,6 +1,6 @@
 open Lm_symbol
 
-module Derivation =
+module LP =
 struct
 	type proof_term =
 		Var of symbol
@@ -18,13 +18,13 @@ struct
 	 | Pr of proof_term * formula
 
 	type derivation =
-		Axiom of formula * int
-	 | MP of formula * formula * derivation * derivation
+		Axiom of int
+	 | MP of formula * derivation * derivation
 	 | Concat of derivation * derivation
 	 | Hyp of int
 end
 
-open Derivation
+open LP
 
 (*
 let rec pt2term = function
@@ -84,10 +84,10 @@ let axiom_index = function
 
 let rec check_proof hyps d f =
 	match d with
-		Axiom(a,i) ->
-			(a = f) && (i > 0) && (axiom_index f = i)
-	 | MP(a,b,d1,d2) ->
-	 		(f = b) && (check_proof hyps d1 a) && (check_proof hyps d2 (Implies(a,f)))
+		Axiom(i) ->
+			(i > 0) && (axiom_index f = i)
+	 | MP(a,d1,d2) ->
+	 		(check_proof hyps d1 a) && (check_proof hyps d2 (Implies(a,f)))
 	 | Concat(d1,d2) ->
 	 		(check_proof hyps d1 f) || (check_proof hyps d2 f)
 	 | Hyp i ->
@@ -97,60 +97,43 @@ exception Unliftable
 exception Not_proof
 
 let rec lift hyps d f =
-	match d with
-		Concat(d1,d2) ->
+	match d, f with
+		Concat(d1,d2), _ ->
 			begin try
 				lift hyps d1 f
 			with Not_proof | Unliftable ->
 				lift hyps d2 f
 			end
-	 | Axiom((Pr(t,a) as f1),i) when f1=f ->
+	 | Axiom i, Pr(t,a) ->
 	 		if i > 0 && axiom_index f = i then
-		 		MP(f,Pr(Check(t),f),d,Axiom(Implies(f,Pr(Check(t),f)),14)),
+		 		MP(f,d,Axiom(14)),
 				Check(t)
 			else
 				raise Not_proof
-	 | Axiom(f1,i) when f1=f -> (* propositional axiom *)
+	 | Axiom i, _ -> (* propositional axiom *)
 	 		if i > 0 && prop_axiom_index f = i then
-				Axiom(Pr(Const(i), f), i+prop_axiom_count),
+				Axiom(i+prop_axiom_count),
 				Const(i)
 			else
 				raise Not_proof
-	 | Axiom _ ->
-	 		raise Not_proof
-	 | Hyp i ->
-			if f = List.nth hyps i then
-				match f with
-					Pr(t,a) ->
-						MP(f,Pr(Check(t),f),d,Axiom(Implies(f,Pr(Check(t),f)),14)),
-						Check(t)
-				 | _ ->
-				 		raise Unliftable
-			else
-				raise Not_proof
-	 | MP(a,b,d1,d2) ->
-	 		if b=f then
-		 		let ld1, a_pt = lift hyps d1 a in
-				let ld2, ab_pt = lift hyps d2 (Implies(a,b)) in
+	 | Hyp i, Pr(t,a) when f = List.nth hyps i ->
+				MP(f,d,Axiom(14)),
+				Check(t)
+	 | Hyp i, _ ->
+				raise Unliftable
+	 | MP(a,d1,d2), _ ->
+	 		let ld1, a_pt = lift hyps d1 a in
+			let ld2, af_pt = lift hyps d2 (Implies(a,f)) in
+			MP(
+				Pr(a_pt,a),
+				ld1,
 				MP(
-					Pr(a_pt,a),
-					Pr(App(ab_pt,a_pt),b),
-					ld1,
-					MP(
-						Pr(ab_pt,Implies(a,b)),
-						Implies(Pr(a_pt,a),Pr(App(ab_pt,a_pt),b)),
-						ld2,
-						Axiom(
-							Implies(
-								Pr(ab_pt,Implies(a,b)),
-								Implies(Pr(a_pt,a),Pr(App(ab_pt,a_pt),b))),
-							12
-						)
-					)
-				),
-				App(ab_pt,a_pt)
-			else
-				raise Not_proof
+					Pr(af_pt,Implies(a,f)),
+					ld2,
+					Axiom(12)
+				)
+			),
+			App(af_pt,a_pt)
 
 let rec deduction_theorem h hyps d f =
 	match d with
@@ -160,54 +143,37 @@ let rec deduction_theorem h hyps d f =
 			with Not_proof ->
 				deduction_theorem h hyps d2 f
 			end
-	 | Axiom(a,i) when f=a ->
-	 		if i > 0 && axiom_index f = i then
-		 		MP(a,Implies(h,a),Axiom(a,i),Axiom(Implies(a,Implies(h,a)),1))
-			else
-				raise Not_proof
+	 | Axiom i when i > 0 && axiom_index f = i ->
+	 		MP(f,Axiom(i),Axiom(1))
 	 | Axiom _ ->
 	 		raise Not_proof
-	 | Hyp 0 ->
-	 		if h=f then
-		 		MP(
-					Implies(f,Implies(f,f)),
-					Implies(f,f),
-					Axiom(Implies(f,Implies(f,f)),1),
-					MP(
-						Implies(f,Implies(Implies(f,f),f)),
-						Implies(Implies(f,Implies(f,f)),Implies(f,f)),
-						Axiom(Implies(f,Implies(Implies(f,f),f)),1),
-						Axiom(
-							Implies(
-								Implies(f,Implies(Implies(f,f),f)),
-								Implies(Implies(f,Implies(f,f)),Implies(f,f))
-							),
-							2
-						)
-					)
+	 | Hyp 0 when h=f ->
+	 		MP(
+				Implies(f,Implies(f,f)),
+				Axiom(1),
+				MP(
+					Implies(f,Implies(Implies(f,f),f)),
+					Axiom(1),
+					Axiom(2)
 				)
-			else
+			)
+	 | Hyp 0 ->
 				raise Not_proof
 	 | Hyp i ->
 	 		let i' = pred i in
 	 		if List.nth hyps i' = f then
-		 		MP(f,Implies(h,f),Hyp(i'),Axiom(Implies(f,Implies(h,f)),1))
+		 		MP(f,Hyp(i'),Axiom(1))
 			else
 				raise Not_proof
-	 | MP(a,b,d1,d2) ->
-	 		if b=f then
-				let dd1 = deduction_theorem h hyps d1 a in
-				let dd2 = deduction_theorem h hyps d2 (Implies(a,b)) in
+	 | MP(a,d1,d2) ->
+			let dd1 = deduction_theorem h hyps d1 a in
+			let dd2 = deduction_theorem h hyps d2 (Implies(a,f)) in
+			MP(
+				Implies(h,a),
+				dd1,
 				MP(
-					Implies(h,a),
-					Implies(h,b),
-					dd1,
-					MP(
-						Implies(h,Implies(a,b)),
-						Implies(Implies(h,a),Implies(h,b)),
-						dd2,
-						Axiom(Implies(Implies(h,Implies(a,b)),Implies(Implies(h,a),Implies(h,b))),2)
-					)
+					Implies(h,Implies(a,f)),
+					dd2,
+					Axiom(2)
 				)
-			else
-				raise Not_proof
+			)

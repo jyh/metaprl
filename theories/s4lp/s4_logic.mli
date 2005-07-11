@@ -41,9 +41,10 @@ open Basic_tactics
 declare default_extract
 declare it
 declare typeclass Proposition -> Term
+
 declare sequent { Proposition : Term >- Judgment } : Judgment
 declare sequent [concl] { Proposition : Term >- Term } : Judgment
-declare sequent [boxed] { Proposition : Term >- Term } : Judgment
+declare sequent [boxed[i:n]] { Proposition : Term >- Term } : Judgment
 
 declare "true" : Proposition
 declare "false" : Proposition
@@ -51,7 +52,7 @@ declare "not"{'a} : Proposition
 declare "and"{'a; 'b} : Proposition
 declare "or"{'a; 'b} : Proposition
 declare "implies"{'a; 'b} : Proposition
-declare box{'a} : Proposition
+declare box[i:n]{'a} : Proposition
 (************************************************************************
  * DISPLAY FORMS							*
  ************************************************************************)
@@ -94,7 +95,7 @@ topval thin_nonboxedT : tactic
 topval prove_boxedT : tactic
 topval box_introT : int -> tactic
 
-(* JProver for itt_logic *)
+(* S4-Prover for s4_logic *)
 topval proverT : tactic
 topval simple_proverT : tactic (* JProver with max multiplicity 1; used by autoT *)
 

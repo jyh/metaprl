@@ -66,7 +66,7 @@ declare it
 declare typeclass Proposition -> Term
 declare sequent { Proposition : Term >- Judgment } : Judgment
 declare sequent [concl] { Proposition : Term >- Term } : Judgment
-declare sequent [boxed] { Proposition : Term >- Term } : Judgment
+declare sequent [boxed[i:n]] { Proposition : Term >- Term } : Judgment
 
 declare "true" : Proposition
 declare "false" : Proposition
@@ -74,7 +74,7 @@ declare "not"{'a} : Proposition
 declare "and"{'a; 'b} : Proposition
 declare "or"{'a; 'b} : Proposition
 declare "implies"{'a; 'b} : Proposition
-declare "box"{'a} : Proposition
+declare "box"[i:n]{'a} : Proposition
 
 prim ax 'H 'K :
    sequent { <#H>; 'a; <#J> >- concl{| <#K>; 'a; <#L> >- it |} }
@@ -118,24 +118,28 @@ prim implies_elim 'H :
    sequent { <#H>; 'a => 'b; <#J> >- concl{| <#K> >- it|} }
 
 prim box_elim 'H :
-   sequent { <#H>; 'a; box{'a}; <#J> >- concl{| <#K> >- it|} } -->
-   sequent { <#H>; box{'a}; <#J> >- concl{| <#K> >- it|} }
+   sequent { <#H>; 'a; box[i:n]{'a}; <#J> >- concl{| <#K> >- it|} } -->
+   sequent { <#H>; box[i:n]{'a}; <#J> >- concl{| <#K> >- it|} }
 
 prim box_intro 'J :
-   [aux] sequent { >- boxed{| <#H> >- it |} } -->
+   [aux] sequent { >- boxed[i:n]{| <#H> >- it |} } -->
    sequent { <#H> >- concl{| 'a >- it |} } -->
-   sequent { <#H> >- concl{| <#J>; box{'a}; <#K> >- it |} }
+   sequent { <#H> >- concl{| <#J>; box[i:n]{'a}; <#K> >- it |} }
 
 prim thin 'H :
    sequent { <#H>; <#J> >- 'C } -->
    sequent { <#H>; 'a; <#J> >- 'C }
 
 prim boxed_step :
-   sequent { >- boxed{| <#H> >- it |} } -->
-   sequent { >- boxed{| box{'a}; <#H> >- it |} }
+   sequent { >- boxed[i:n]{| <#H> >- it |} } -->
+   sequent { >- boxed[i:n]{| box[i:n]{'a}; <#H> >- it |} }
+
+prim boxed_step0 :
+   sequent { >- boxed[i:n]{| <#H> >- it |} } -->
+   sequent { >- boxed[i:n]{| box[0]{'a}; <#H> >- it |} }
 
 prim boxed_base :
-   sequent { >- boxed{| >- it |} }
+   sequent { >- boxed[i:n]{| >- it |} }
 
 (************************************************************************
  * DISPLAY FORMS							*
@@ -207,8 +211,8 @@ dform and_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: and_df{'a} 
 (*
  * Box
  *)
-dform box_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: box{'a} =
-   `"[]" slot["lt"]{'a}
+dform box_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: box[i:n]{'a} =
+   `"[" 'i `"]" slot["lt"]{'a}
 
 (************************************************************************
  * TACTICS                                                              *
@@ -241,7 +245,7 @@ let is_not_term = is_dep0_term not_opname
 let dest_not = dest_dep0_term not_opname
 let mk_not_term = mk_dep0_term not_opname
 
-let box_term = << box{'a} >>
+let box_term = << box[0]{'a} >>
 let box_opname = opname_of_term box_term
 let is_box_term = is_dep0_term box_opname
 let dest_box = dest_dep0_term box_opname
@@ -280,7 +284,7 @@ struct
    let dest_not = dest_not
 
    let is_box_term = is_box_term
-   let dest_box t = dest_box t
+   let dest_box t = 0, dest_box t
 
    let is_exists_term _ = false
    let dest_exists _ = raise (Invalid_argument "S4 is propositional logic")
@@ -402,37 +406,38 @@ let proverT = base_proverT (Some 100)
 (* TESTS *)
 
 interactive refl0 :
-   sequent { box{'a} >- concl {| 'a >- it |} }
+   sequent { box[1:n]{'a} >- concl {| 'a >- it |} }
 
 interactive refl 'J :
-   sequent { >- concl {| <#J>; box{'a} => 'a; <#K> >- it |} }
+   sequent { >- concl {| <#J>; box[1]{'a} => 'a; <#K> >- it |} }
 
 interactive trans 'J :
-   sequent { >- concl {| <#J>; box{'a} => box{box{'a}}; <#K> >- it |} }
+   sequent { >- concl {| <#J>; box[1]{'a} => box[1]{box[1]{'a}}; <#K> >- it |} }
 
 interactive norm 'J :
-   sequent { >- concl {| <#J>; box{'a => 'b} => box{'a} => box{'b}; <#K> >- it |} }
+   sequent { >- concl {| <#J>; box[1]{'a => 'b} => box[1]{'a} => box[1]{'b}; <#K> >- it |} }
 
 interactive nec_test :
-   sequent { 'c; box{'a}; 'b; box{'b}; 'd >- concl {| box{box{'a}} >- it |} }
+   sequent { 'c; box[1]{'a}; 'b; box[1]{'b}; 'd >- concl {| box[1]{box[1]{'a}} >- it |} }
 
 interactive selfref :
-   sequent { >- concl {| "not"{box{"not"{'a => box{'a}}}} >- it |} }
+   sequent { >- concl {| "not"{box[1]{"not"{'a => box[1]{'a}}}} >- it |} }
 
 interactive and_commute1 'J :
-   sequent { >- concl {| <#J>; (box{'a} & box{'b}) => box{'a & 'b}; <#K> >- it |} }
+   sequent { >- concl {| <#J>; (box[1]{'a} & box[1]{'b}) => box[1]{'a & 'b}; <#K> >- it |} }
 
 interactive and_commute2 'J :
-   sequent { >- concl {| <#J>; box{'a & 'b} => (box{'a} & box{'b}); <#K> >- it |} }
+   sequent { >- concl {| <#J>; box[1]{'a & 'b} => (box[1]{'a} & box[1]{'b}); <#K> >- it |} }
 
 interactive box_k 'J :
-   sequent { >- concl {| <#J>; box{'a => 'a}; <#K> >- it |} }
+   sequent { >- concl {| <#J>; box[1]{'a => 'a}; <#K> >- it |} }
 
 interactive box_box_k 'J :
-   sequent { >- concl {| <#J>; box{box{'a => 'a}}; <#K> >- it |} }
+   sequent { >- concl {| <#J>; box[1]{box[1]{'a => 'a}}; <#K> >- it |} }
 
 interactive or_commute 'J :
-   sequent { >- concl {| <#J>; (box{'a} or box{'b}) => box{'a or 'b}; <#K> >- it |} }
+   sequent { >- concl {| <#J>; (box[1]{'a} or box[1]{'b}) => box[1]{'a or 'b}; <#K> >- it |} }
 
 interactive lp_multiplicity :
-	sequent { >- concl {| (box{'a} & box{'b})=>(box{'a=>'c} or box{'b=>'c})=>box{'c}>-it|} }
+	sequent { >- concl {| (box[1]{'a} & box[1]{'b})=>(box[1]{'a=>'c} or box[1]{'b=>'c})=>box[1]{'c}>-it|} }
+

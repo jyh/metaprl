@@ -1,4 +1,13 @@
+open Basic_tactics
+open S4_logic
+
 extends S4_logic
+
+interactive test0 :
+	sequent { box[0]{'a} >- concl{| box[1]{'a} |} }
+
+interactive test1 :
+	sequent { box[2]{box[0]{'a}} >- concl{| box[1]{'a} |} }
 
 (********************************
  * WISE MEN                     *
@@ -16,6 +25,8 @@ define unfold_kao : KAO <-->
 
 define unfold_w0 : w0 <--> box[0]{KAO} & box[0]{not{not{m1} & not{m2} & not{m3}}}
 define unfold_w2 : w2 <--> w0 and box[0]{not{kwh[1]{m1}}} and box[0]{not{kwh[2]{m2}}}
+
+let wmT = byDefsT [unfold_kwh; unfold_kao; unfold_w0; unfold_w2] thenT proverT
 
 interactive box0_m3 :
 	sequent { w2 >- concl{| box[0]{m3} |} }

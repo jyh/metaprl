@@ -185,9 +185,9 @@ prim plus_elim 'L:
    ilc{| <H> >- linear{| <#L>; 'C2 ;<M> >- 'C |} |} -->
    ilc{| <H> >- linear{| <#L>; plus{'C1; 'C2}; <M> >- 'C |} |}
 
-prim impl_intro 'L1 :
-   ilc{| <H> >- linear{| <#L1>; 'C1; <#L2> >- 'C2 |} |} -->
-   ilc{| <H> >- linear{| <#L1>; <#L2> >- impl{'C1; 'C2} |} |}
+prim impl_intro {| intro [] |} :
+   ilc{| <H> >- linear{| <#L>; 'C1 >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <#L> >- impl{'C1; 'C2} |} |}
 
 prim impl_elim 'L1 :
    ilc{| <H> >- linear{| <#L1>; 'C1 >- 'C1 |} |} -->
@@ -228,6 +228,8 @@ doc <:doc<
    @modsubsection{Structural Rules}
    Thinning (AKA weakening) rule.
 >>
+prim axiom 'L :
+   ilc{| <H> >- linear{| <L>; 'A; <M> >- 'A |} |}
 
 prim thin 'H 'J:
    ilc{| <H>; <K> >- linear{| <L> >- 'C |} |} -->

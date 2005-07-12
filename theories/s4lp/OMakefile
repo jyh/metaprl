@@ -6,6 +6,7 @@ OCAMLINCLUDES[] +=
 MPFILES[] =
 	hilbert_internal
 	s4_logic
+	s4_tests
 #   hilbert
 #   lp_hilbert
 

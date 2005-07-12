@@ -39,20 +39,18 @@ open Basic_tactics
  * TERMS                                                                *
  ************************************************************************)
 declare default_extract
-declare it
-declare typeclass Proposition -> Term
+declare typeclass Concl -> Dform
+declare sequent { Ignore : Term >- Concl } : Judgment
+declare sequent [concl] { Ignore : Term >- Ignore } : Concl
+declare sequent [boxed[i:n]] { Ignore : Term >- Ignore } : Judgment
 
-declare sequent { Proposition : Term >- Judgment } : Judgment
-declare sequent [concl] { Proposition : Term >- Term } : Judgment
-declare sequent [boxed[i:n]] { Proposition : Term >- Term } : Judgment
-
-declare "true" : Proposition
-declare "false" : Proposition
-declare "not"{'a} : Proposition
-declare "and"{'a; 'b} : Proposition
-declare "or"{'a; 'b} : Proposition
-declare "implies"{'a; 'b} : Proposition
-declare box[i:n]{'a} : Proposition
+declare "true"
+declare "false"
+declare "not"{'a}
+declare "and"{'a; 'b}
+declare "or"{'a; 'b}
+declare "implies"{'a; 'b}
+declare "box"[i:n]{'a}
 (************************************************************************
  * DISPLAY FORMS							*
  ************************************************************************)

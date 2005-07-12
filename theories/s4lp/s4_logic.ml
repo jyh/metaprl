@@ -250,22 +250,39 @@ let is_box_term = is_number_dep0_term box_opname
 let dest_box t = dest_number_dep0_term box_opname t
 let mk_box_term i t = mk_number_dep0_term box_opname i t
 
-let rec thin_nonboxed_aux i p =
+let is_sorted_box_term sort t =
+	if is_box_term t then
+		let num_s, _ = dest_box t in
+		let s = Lm_num.int_of_num num_s in
+		(s = sort) || (s = 0)
+	else
+		false
+
+let rec thin_nonboxed_aux sort i p =
    if i > Sequent.hyp_count p then
       idT
    else
       let hyp = Sequent.nth_hyp p i in
-      if is_box_term hyp then
-         funT (fun p -> thin_nonboxed_aux (succ i) p)
+      if is_sorted_box_term sort hyp then
+         argfunT (fun sort p -> thin_nonboxed_aux sort (succ i) p) sort
       else
-         thin i thenT funT (fun p -> thin_nonboxed_aux i p)
+         thin i thenT argfunT (fun sort p -> thin_nonboxed_aux sort i p) sort
 
-let thin_nonboxedT = funT (fun p -> thin_nonboxed_aux 1 p)
+let thin_nonboxedT = argfunT (fun sort p -> thin_nonboxed_aux sort 1 p)
 
 let prove_boxedT = repeatT (boxed_step orelseT boxed_step0) thenT boxed_base
 
-let box_introT i =
-   thin_nonboxedT thenT box_intro i thenAT prove_boxedT
+let box_introT = argfunT ( fun i p ->
+   let concl = (explode_sequent_arg p).sequent_concl in
+   let concls = (TermMan.explode_sequent concl).sequent_hyps in
+	match SeqHyp.get concls (pred i) with
+      Hypothesis(_,t) ->
+			let num_sort, _ = dest_box t in
+			let sort = Lm_num.int_of_num num_sort in
+		   thin_nonboxedT sort thenT box_intro i thenAT prove_boxedT
+	 | _ ->
+	 		raise (RefineError("box_introT applied to a hypothesis",IntError(i)))
+)
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
 

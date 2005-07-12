@@ -26,7 +26,7 @@ define unfold_kao : KAO <-->
 define unfold_w0 : w0 <--> box[0]{KAO} & box[0]{not{not{m1} & not{m2} & not{m3}}}
 define unfold_w2 : w2 <--> w0 and box[0]{not{kwh[1]{m1}}} and box[0]{not{kwh[2]{m2}}}
 
-let wmT = byDefsT [unfold_kwh; unfold_kao; unfold_w0; unfold_w2] thenT proverT
+let wmT = byDefsT [unfold_w2; unfold_w0; unfold_kao; unfold_kwh] thenT proverT
 
 interactive box0_m3 :
 	sequent { w2 >- concl{| box[0]{m3} |} }

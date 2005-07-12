@@ -89,7 +89,7 @@ val mk_not_term : term -> term
  * AUTOMATION                                                           *
  ************************************************************************)
 
-topval thin_nonboxedT : tactic
+topval thin_nonboxedT : int -> tactic
 topval prove_boxedT : tactic
 topval box_introT : int -> tactic
 

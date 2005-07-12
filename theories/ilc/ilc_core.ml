@@ -124,6 +124,9 @@ declare plus{'t1 : Linear; 't2 : Linear} : Linear
 declare impl{'t1 : Linear; 't2 : Linear} : Linear
 declare conj{'t1 : Linear; 't2 : Linear} : Linear
 declare one : Linear
+declare top : Linear
+declare exists{x.'B['x] : Linear} : Linear
+declare forall{x.'B['x] : Linear} : Linear
 
 doc <:doc<
    @rules
@@ -141,6 +144,9 @@ doc <:doc<
  *   the commutativity rule first.
  *)
 
+prim top_intro {| intro [] |} :
+   ilc{| <H> >- linear{| <L> >- top |} |}
+
 prim one_intro {| intro [] |} :
    ilc{| <H> >- linear{| >- one |} |}
 
@@ -152,6 +158,71 @@ prim tensor_intro 'L1 :
    ilc{| <H> >- linear{| <#L1> >- 'C1 |} |} -->
    ilc{| <H> >- linear{| <#L2> >- 'C2 |} |} -->
    ilc{| <H> >- linear{| <#L1>; <#L2> >- tensor{'C1; 'C2} |} |}
+
+prim conj_intro {| intro [] |} :
+   ilc{| <H> >- linear{| <#L> >- 'C1 |} |} -->
+   ilc{| <H> >- linear{| <#L> >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <#L> >- conj{'C1; 'C2} |} |}
+
+prim conj_elim_left 'L:
+   ilc{| <H> >- linear{| <#L>; 'C1 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <#L>; conj{'C1; 'C2}; <M> >- 'C |} |}
+
+prim conj_elim_right 'L:
+   ilc{| <H> >- linear{| <#L>; 'C2 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <#L>; conj{'C1; 'C2}; <M> >- 'C |} |}
+
+prim plus_intro_left{| intro[SelectOption 1]|} :
+   ilc{| <H> >- linear{| <#L> >- 'C1 |} |} -->
+   ilc{| <H> >- linear{| <#L> >- plus{'C1; 'C2} |} |}
+
+prim plus_intro_right{| intro[SelectOption 2]|} :
+   ilc{| <H> >- linear{| <#L> >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <#L> >- plus{'C1; 'C2} |} |}
+
+prim plus_elim 'L:
+   ilc{| <H> >- linear{| <#L>; 'C1 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <#L>; 'C2 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <#L>; plus{'C1; 'C2}; <M> >- 'C |} |}
+
+prim impl_intro 'L1 :
+   ilc{| <H> >- linear{| <#L1>; 'C1; <#L2> >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <#L1>; <#L2> >- impl{'C1; 'C2} |} |}
+
+prim impl_elim 'L1 :
+   ilc{| <H> >- linear{| <#L1>; 'C1 >- 'C1 |} |} -->
+   ilc{| <H> >- linear{| <#L2>; 'C2 >- 'C |} |} -->
+   ilc{| <H> >- linear{| <#L1>;<#L2>; impl{'C1; 'C2} >- 'C |} |}
+
+prim forall_intro{| intro[] |} 'T :
+   ilc{| <H>; x: data{'T} >- linear{| <L> >- 'B['x] |} |} -->
+   ilc{| <H> >- linear{| <L> >- forall{y.'B['y]} |} |}
+
+prim forall_elim 'L 'a :
+   ilc{| <H> >- linear {| <L>; 'B['a]; <M> >- 'C |} |} -->
+   ilc{| <H> >- linear {| <L>; forall{x.'B['x]} ; <M> >- 'C |} |}
+
+prim exists_intro{| intro[] |} 'a :
+   ilc{| <H> >- linear{| <L> >- 'B['a] |} |} -->
+   ilc{| <H> >- linear{| <L> >- exists{x.'B['x]} |} |}
+
+prim existsl_elim 'L 'T :
+   ilc{| <H>; x: data{'T} >- linear {| <L>; 'B['x]; <M> >- 'C |} |} -->
+   ilc{| <H> >- linear {| <L>; exists{x.'B['x]} ; <M> >- 'C |} |}
+
+prim bang_intro {| intro[] |}:
+   ilc{| <H> >- linear{| >- 'A |} |} -->
+   ilc{| <H> >- linear{| >- bang{'A} |} |}
+
+prim bang_elim 'L :
+   ilc{| <H>; bang{'A} >- linear{| <#L>; <M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <#L>; bang{'A}; <M> >- 'C |} |}
+
+prim lin_hyp :
+   ilc{| <H> >- linear{| 'A >- 'A |} |}
+
+prim un_hyp 'H:
+   ilc{| <H> ; bang{'A} ; <M> >- linear{| >- 'A |} |}
 
 doc <:doc<
    @modsubsection{Structural Rules}
@@ -181,6 +252,10 @@ doc <:doc<
 
 (* Note: we keep "erase" somewhat "internal" by not declaring it in the .mli interface file *)
 declare sequent[erase] { exst a : TyScope. TyElem{'a} : 'a >- Term } : Term
+
+prim circ_elim 'L :
+   ilc{| <H>; circ{'A} >- linear{| <#L>; <M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <#L>; circ{'A}; <M> >- 'C |} |}
 
 prim circ_intro {| intro [] |} :
    sequent{ >- erase{| <H> >- 'C |} } -->
@@ -237,6 +312,14 @@ dform conj_df : parens :: "prec"[prec_or] :: conj{'t1; 't2} =
    slot["le"]{'t1} `"&" slot["le"]{'t2}
 
 dform one_df : one = bf["1"]
+
+dform top_df : top = bf["T"]
+
+dform forall_df : parens :: "prec"[prec_quant] :: forall{x. 'B} =
+   szone pushm[3] forall slot{'x} `"." hspace slot{'B} popm ezone
+
+dform exists_df : parens :: "prec"[prec_quant] :: exists{x. 'B} =
+   szone pushm[3] exists slot{'x} `"." hspace slot{'B} popm ezone
 
 (*
  * Sequents

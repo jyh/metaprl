@@ -593,7 +593,7 @@ dform exists_df1 : except_mode[src] :: parens :: "prec"[prec_quant] :: "exists"{
    szone pushm[3] Mpsymbols!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm ezone
 
 dform exists_df2 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
-  `"exists " slot[x:s] `": " slot{'A} `"." slot{'B}
+  `"exst " slot[x:s] `": " slot{'A} `"." slot{'B}
 
 (************************************************************************
  * TACTICS                                                              *

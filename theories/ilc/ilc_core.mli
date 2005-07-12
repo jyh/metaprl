@@ -116,6 +116,9 @@ declare plus{'t1 : Linear; 't2 : Linear} : Linear
 declare impl{'t1 : Linear; 't2 : Linear} : Linear
 declare conj{'t1 : Linear; 't2 : Linear} : Linear
 declare one : Linear
+declare top : Linear
+declare exists{x.'B['x] : Linear} : Linear
+declare forall{x.'B['x] : Linear} : Linear
 
 (* This theory does not use proof terms *)
 declare default_extract

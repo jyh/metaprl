@@ -212,7 +212,7 @@ dform and_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: and_df{'a} 
  * Box
  *)
 dform box_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: box[i:n]{'a} =
-   `"[" 'i `"]" slot["lt"]{'a}
+   `"[" slot[i] `"]" slot["lt"]{'a}
 
 (************************************************************************
  * TACTICS                                                              *
@@ -247,9 +247,9 @@ let mk_not_term = mk_dep0_term not_opname
 
 let box_term = << box[0]{'a} >>
 let box_opname = opname_of_term box_term
-let is_box_term = is_dep0_term box_opname
-let dest_box = dest_dep0_term box_opname
-let mk_box_term = mk_dep0_term box_opname
+let is_box_term = is_number_dep0_term box_opname
+let dest_box t = dest_number_dep0_term box_opname t
+let mk_box_term i t = mk_number_dep0_term box_opname i t
 
 let rec thin_nonboxed_aux i p =
    if i > Sequent.hyp_count p then
@@ -263,7 +263,7 @@ let rec thin_nonboxed_aux i p =
 
 let thin_nonboxedT = funT (fun p -> thin_nonboxed_aux 1 p)
 
-let prove_boxedT = repeatT boxed_step thenT boxed_base
+let prove_boxedT = repeatT (boxed_step orelseT boxed_step0) thenT boxed_base
 
 let box_introT i =
    thin_nonboxedT thenT box_intro i thenAT prove_boxedT
@@ -284,7 +284,9 @@ struct
    let dest_not = dest_not
 
    let is_box_term = is_box_term
-   let dest_box t = 0, dest_box t
+   let dest_box t =
+		let n, t = dest_box t in
+		Lm_num.int_of_num n, t
 
    let is_exists_term _ = false
    let dest_exists _ = raise (Invalid_argument "S4 is propositional logic")

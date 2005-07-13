@@ -133,10 +133,9 @@ MPFILES[] =
 section
     export $(STANDARD_BUILD_ENV)
 
-    OCamlProgram(gen_int_bench, gen_int_bench)
+    gen_int_bench$(EXT_OBJ) gen_int_bench.cmx gen_int_bench.cmo gen_int_bench.cmi: :scanner: scan-ocaml-gen_int_bench.ml
 
-    gen_int_bench$(EXT_OBJ) gen_int_bench.cmx gen_int_bench.cmo gen_int_bench.cmi:
-    .SCANNER: scan-ocaml-gen_int_bench.mli scan-ocaml-gen_int_bench.ml
+    OCamlProgram(gen_int_bench, gen_int_bench)
 
 GEN = gen_int_bench$(EXE)
 

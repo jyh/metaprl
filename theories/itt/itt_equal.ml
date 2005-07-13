@@ -107,6 +107,8 @@ doc docoff
 
 let cumulativity_term = << cumulativity[i:l, j:l] >>
 
+let itt_sequent_arg = (explode_sequent << sequent { >- 'C } >>).sequent_args
+
 let equal_term = << 'a = 'b in 'c >>
 let equal_opname = opname_of_term equal_term
 let is_equal_term = is_dep0_dep0_dep0_term equal_opname

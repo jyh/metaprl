@@ -210,6 +210,8 @@ rule universeFormation univ[j:l] :
  * PRIMITIVES AND TACTICS                                               *
  ************************************************************************)
 
+val itt_sequent_arg : term
+
 val equal_term : term
 val is_equal_term : term -> bool
 val is_member_term : term -> bool

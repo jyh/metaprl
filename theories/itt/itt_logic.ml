@@ -1321,15 +1321,17 @@ let jprogressT = argfunT (fun t p ->
 
 (* input a list_term of hyps,concl *)
 let base_jproverT def_mult = funT (fun p ->
+   let goal = Sequent.goal p in
+   let seq = TermMan.explode_sequent goal in
+   if not (alpha_equal itt_sequent_arg seq.sequent_args) then
+      raise (RefineError("Itt_logic.base_jproverT", StringError "Not an ITT sequent"));
+   let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
+   let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
    let mult_limit =
       match Sequent.get_int_arg p "jprover" with
          None -> def_mult
        | Some _ as ml -> ml
    in
-   let goal = Sequent.goal p in
-   let seq = TermMan.explode_sequent goal in
-   let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
-   let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
    match
       ITT_JProver.prover mult_limit hyps seq.sequent_concl
    with

@@ -9,6 +9,12 @@ interactive test0 :
 interactive test1 :
 	sequent { box[2]{box[0]{'a}} >- concl{| box[1]{'a} |} }
 
+interactive test2 :
+	sequent { >- concl {| box[1]{box[2]{'a}} => box[1]{box[2]{box[2]{'a}}} |} }
+
+interactive test3 :
+   sequent { >- concl {| box[1]{box[2]{'a}} => box[1]{'a} |} }
+
 (********************************
  * WISE MEN                     *
  ********************************)

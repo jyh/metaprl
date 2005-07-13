@@ -41,6 +41,9 @@ interactive lemma0 :
 interactive lemma1 :
    sequent { box[0]{kwh[1]{m2}}; m2 >- concl{| box[0]{m2} |} }
 
+interactive lemma2 :
+   sequent { box[1]{kwh[1]{m2}}; m2 >- concl{| box[1]{m2} |} }
+
 interactive box0_m3 :
 	sequent { w2 >- concl{| box[0]{m3} |} }
 

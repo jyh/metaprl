@@ -42,19 +42,8 @@ let debug_arith_dtactic =
         debug_value = false
       }
 
-let debug_rewrite =
-   create_debug (**)
-      { debug_name = "rewrite";
-        debug_description = "Itt_omega debug messages";
-        debug_value = false
-      }
-
-let debug_refine =
-   create_debug (**)
-      { debug_name = "refine";
-        debug_description = "Itt_omega debug messages";
-        debug_value = false
-      }
+let debug_rewrite = load_debug "rewrite"
+let debug_refine = load_debug "refine"
 
 module type RingSig =
 sig

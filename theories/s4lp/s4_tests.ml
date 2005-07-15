@@ -15,6 +15,9 @@ interactive test2 :
 interactive test3 :
    sequent { >- concl {| box[1]{box[2]{'a}} => box[1]{'a} |} }
 
+interactive test4 :
+	sequent { box[1]{not{box[2]{'a}}} >- concl {| box[1]{not{box[2]{'a & 'b}}} |} }
+
 (********************************
  * WISE MEN                     *
  ********************************)

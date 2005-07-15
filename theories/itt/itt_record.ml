@@ -150,7 +150,7 @@ let resource reduce +=
 
 let record_reduce = repeatC (higherC (firstC [unfoldRcrdS;record_beta1;record_beta_rw]))
 
-let record_reduceT = rwhAll record_reduce
+let record_reduceT = rwAll record_reduce
 
 doc docon
 

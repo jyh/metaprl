@@ -140,7 +140,7 @@ interactive mch3_3 :
 interactive mch3 :
    sequent { s3_0; s3_1; s3_2 >- concl{| kwh[1]{c1} & kwh[2]{c2} & kwh[3]{c3} |} }
 
-doc <:doc< 4 children >>
+doc <:doc< @modsubsection{4 children} >>
 
 define unfold_mch4_KAO : mch4_KAO <-->
 	box[0]{

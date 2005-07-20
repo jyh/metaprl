@@ -1209,13 +1209,15 @@ struct
 
    let is_box_term _ = false
    let dest_box _ =
-      raise (Invalid_argument "Itt_logic: at this time there is no box-modlaity in ITT")
+      raise (Invalid_argument "Itt_logic: at this time there is no box-modality in ITT")
 
    type inference = (term_subst -> (term * (tactic -> tactic)) list -> tactic) list
    let empty_inf = []
 
    let rec find_in_assums term tac = function
-      [] -> raise (Invalid_argument "Itt_logic.Itt_JLogic.find_hyp failed");
+      [] -> raise
+         raise (RefineError("Itt_logic.Itt_JLogic.find_hyp failed",
+                  TermError(term)))
     | (t, tac') :: _ when alpha_equal term t -> tac' (tac (-1))
     | _ :: assums -> find_in_assums term tac assums
 

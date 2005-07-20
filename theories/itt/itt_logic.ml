@@ -1215,7 +1215,7 @@ struct
    let empty_inf = []
 
    let rec find_in_assums term tac = function
-      [] -> raise
+      [] ->
          raise (RefineError("Itt_logic.Itt_JLogic.find_hyp failed",
                   TermError(term)))
     | (t, tac') :: _ when alpha_equal term t -> tac' (tac (-1))

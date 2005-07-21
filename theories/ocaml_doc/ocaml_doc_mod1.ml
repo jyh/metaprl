@@ -39,10 +39,8 @@ doc <:doc<
 
 One of the principles of modern programming is @emph{data hiding} using @emph{encapsulation}.  An
 @emph{abstract data type} (ADT) is a program unit that defines a data type and functions that
-operate on that data type.  An ADT in OCaml has two parts: a @emph{signature} (or @emph{interface})
-that declares the accessible data structures and functions, and an @emph{implementation} that
-defines concrete implementations of the objects declared in the signature.  The implementation is
-hidden: all access to the ADT must be through the functions defined in the signature.
+operate on that data type.  In an ADT, the data is @emph{abstract}, meaning that it is not directly
+accessible.  Clients that make use of the ADT are required to use the ADT's functions.
 
 There are several ideas behind data hiding using ADTs.  First, by separating a program into distinct
 program units (called @emph{modules}), the program may be easier to understand.  Ideally, each
@@ -53,259 +51,299 @@ become tightly controlled.  Since all interactions must be through a module's fu
 implementation of the module can be changed without affecting the correctness of the program (as
 long as the behavior of functions is preserved).
 
-OCaml provides a @emph{module system} that makes it easy to use the concepts of encapsulation and
-data hiding.  In fact, in OCaml every program file acts as an abstract module, called a
-@emph{compilation unit} in the OCaml terminology.  A signature for the file can be defined in a
-@code{.mli} file with the same name.  If there is no @code{.mli} file, the default signature
-includes all types and functions defined in the @code[".ml"] file.
+Finally, the principal motivation of data hiding is that it allows the enforcement of data structure
+invariants.  In general, an @emph{invariant} is a property of a data structure that is always true
+in a correct program.  Said another way, if the invariant is ever false, then something ``bad'' has
+happened and the program has an error.  Invariants are used both for correctness and performance.
+For example, balanced binary trees are a frequently-used data structure with the following
+invariants 1) each node in the has no more than two children, 2) the nodes are ordered, and 3) the
+depth of the tree is logarithmic in the total number of nodes.  The first invariant can be enforced
+with the type system (by specifying a type for nodes that allows at most two children), but the
+second and third invariants are not so simple to maintain.  When we implement this data structure,
+it is more than likely that our implementation will fail if the given a tree that is not properly
+ordered (invariant 2).  It may work correctly, though at lower performance, if the tree is not
+balanced (invariant 3).
 
-@section[implementations]{Implementations}
+Given the importance of invariants, how can we be sure that they are maintained?  This is where data
+hiding comes in.  By restricting the ADT so that only its own functions can directly access the
+data, we also limit the amount of reasoning that we have to do.  If each function in the ADT
+preserves the invariants, then we can be sure that the invariants are @emph{always} preserved,
+because no other part of the program can access the data directly.
 
-The module implementation is defined in a @code[".ml"] file with the
-same base name as the signature file.  The implementation contains parts
-that correspond to each of the parts in the signature.
+Of course, these restrictions can also be awkward.  Often we want partial @emph{transparency} where
+some parts of a data structre are abstract but others are directly accessible.  OCaml provides a
+general mechanism for data hiding and encapsulation called a @emph{module system}.  An module in
+OCaml has two parts: an @emph{implementation} that implements the types, functions, and values in
+the module; and a @emph{signarture} that specifies which parts of the implementation are publically
+accessible.  That is, a signature provides type declarations for the visible parts of the
+implementation---everything else is hidden.
 
-@begin[enumerate]
-@item{Data types used by the module.}
-@item{Exceptions used by the module.}
-@item{Method definitions.}
-@end[enumerate]
-
-The definitions do not have to occur in the same order as declarations in the
-signature, but there must be a definition for every item in the
-signature.
-
-@subsection["type-definitions"]{Type definitions}
-
-In the implementation, definitions must be given for each of the types
-in the signature.  The implementation may also include other types.
-These types will be private to the implementation; they will
-not be visible outside the implementation.
-
-For the @tt{Fset} module, let's use the red-black implementation of
-balanced binary trees.  We need two type definitions: the definition
-of the @tt{Red} and @tt{Black} labels, and the tree definition itself.
-
-@begin[iverbatim]
-type color =
-   Red
- | Black
-
-type 'a t =
-   Node of color * 'a t * 'a * 'a t
- | Leaf
-@end[iverbatim]
-
-The @tt{color} type is a private type, the @code{'a t} type gives the
-type definition for the abstract type declaration @code{type 'a t} in
-the signature.
-
-@subsection["method-definitions"]{Method definitions}
-
-In the implementation we need to implement each of the methods
-declared in the signature.  The @tt{empty} method is easy: the
-@tt{Leaf} node is used to implement the empty set.
-
-@begin[iverbatim]
-let empty = Leaf
-@end[iverbatim]
-
-The @tt{mem} method performs a search over the binary tree.  The nodes
-in the tree are ordered, and we can use a binary search.
-
-@begin[iverbatim]
-let rec mem x = function
-   Leaf -> false
- | Node (_, a, y, b) ->
-      if x < y then mem x a
-      else if x > y then mem x b
-      else true
-@end[iverbatim]
-
-The implement the @tt{insert} method we need two methods: one is the
-actual @tt{insert} function, and another is the helper function
-@tt{balance} that keeps the tree balanced.  We can include both
-functions in the implementation.  The @tt{balance} function will be
-private, since it is not declared in the signature.
-
-@begin[iverbatim]
-let balance = function
-   Black, Node (Red, Node (Red, a, x, b), y, c), z, d ->
-      Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
- | Black, Node (Red, a, x, Node (Red, b, y, c)), z, d ->
-      Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
- | Black, a, x, Node (Red, Node (Red, b, y, c), z, d) ->
-      Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
- | Black, a, x, Node (Red, b, y, Node (Red, c, z, d)) ->
-      Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
- | a, b, c, d ->
-      Node (a, b, c, d)
-
-let insert x s =
-   let rec ins = function
-      Leaf -> Node (Red, Leaf, x, Leaf)
-    | Node (color, a, y, b) as s ->
-         if x < y then balance (color, ins a, y, b)
-         else if x > y then balance (color, a, y, ins b)
-         else s
-   in
-      match ins s with  (* guaranteed to be non-empty *)
-         Node (_, a, y, b) -> Node (Black, a, y, b)
-       | Leaf -> raise (Invalid_argument "insert")
-@end[iverbatim]
+In fact, in OCaml every source file is a module called a @emph{compilation unit}.  Signatures are
+specified in separate files called @emph{interfaces}.  In general, a program will have many files
+and signatures for its modules, where each module represents a program (and compilation) unit that
+implements part of the program.  When planning an application, the first step is
+@emph{factoring}---deciding how to partition the application into its parts.  The next step is then
+to implement the parts.  Normally in OCaml, this starts with the @emph{signatures} rather than the
+implementations because the signatures summarize the requirements and determine what must be
+implemented.
 
 @section[signatures]{Signatures}
 
-In OCaml, a signature contains type definitions and function
-declarations for the visible types and methods in the module.  To see
-how this works, let's revisit the binary trees we defined in Chapter
-@refchapter[unions].  A binary tree defines a simple, distinct
-concept, and it is an ideal candidate for encapsulation.
-
-A module signature usually contains three parts:
+In OCaml, a signature contains declarations for the types and values in the implementation.
+A interface file has a @code{.mli} suffix.  The interface has three main parts.
 
 @begin[enumerate]
-@item{Data types used by the module.}
-@item{Exceptions used by the module.}
-@item{Method type declarations for all the externally visible methods
-   defined by the module.}
+@item{type definitions and declarations,},
+@item{any exceptions defined in the module,}
+@item{declarations for any public functions and values defined by the module.}
 @end[enumerate]
 
-For the binary tree, the signature will need to include a type
-for binary trees, and type declarations for the methods for operating
-on the tree.  First, we need to choose a filename for the compilation
-unit.  The filename should reflect the @emph{function} of the data
-structure defined by the module.  For our purposes, the binary tree is
-a data structure used for defining a finite set of values, and
-an appropriate filename for the signature would be @code{fset.mli}.
+To illustrate, let's build a simple database-style application, where we will have a set of accounts
+indexed by number.  For example, we might be building a banking system where each account has a
+number, the name of the owner, and the account balance.  Instead of defining the entire application
+in one file, we can factor this application by breaking it into two parts, where the first part is a
+generic (polymorphic) table indexed by number, and the second adds a concrete definition of the
+account format.
 
-The data structure defines a type for sets, and three methods: an
-@tt{empty} set, a @tt{mem} membership function, and an @tt{insert}
-insertion function.  The complete signature is defined below; we'll
-discuss each of the parts in the following sections.
+The first step is to define a signature for the generic table.  We'll need functions to create a new
+table, and to store and fetch entries from the table.  We'll also include a function to copy the
+table.  Since there is no reason to expose the representation of the table, the type is defined as
+abstract.  The following signature, in the file @code{table.mli}, specifies the complete table.
 
 @begin[iverbatim]
-(* The abstract type of sets *)
+(* -- File: table.mli -- *)
+(* The abstract type of tables *)
 type 'a t
 
-(* Empty set *)
-val empty : 'a t
+(* Create a new table *)
+val create : unit -> 'a t
 
-(* Membership function *)
-val mem : 'a -> 'a t -> bool
+(* Fetch an entry from the table.
+ * Raises the Not_found exception if the entry
+ * doesn't exist *)
+val get : 'a t -> int -> 'a
 
-(* Insertion is functional *)
-val insert : 'a -> 'a t -> 'a t
+(* Set an entry in the table *)
+val set : 'a t -> int -> 'a -> unit
+
+(* Copy the table *)
+val copy : 'a t -> 'a t
 @end[iverbatim]
 
-@subsection["sig-types"]{Type declarations}
+Note that the type declaration @code{type 'a t} does not provide a definition (of the form
+@code{type 'a t = ...}).  This is an @emph{abstract} declaration stating that @code{'a t} is a type,
+but the specific representation is not publically visible.  The functions in the signature are
+declared with the @code{val} keyword. giving the name and the type of the function.  The function
+types use the abstract @code{'a t} type, but it should be clear from the declarations that the only
+way to create a new table is with the @code{create} function.
 
-Type declarations in a signature can be either @emph{transparent} or
-@emph{abstract}.  An abstract type declaration declares a type without
-giving the type definition; a transparent type declaration includes
-the type definition.
-
-For the binary tree, the declaration @code{type 'a t} is abstract
-because the type definition is left unspecified.  In this case, the
-type definition won't be visible to other program units; they will be
-forced to use the methods if they want to operate on the data type.
-Note that the abstract type definition is polymorphic: it is
-parameterized by the type variable @code{'a}.
-
-Alternatively, we could have chosen a transparent definition that
-would make the type visible to other program modules.  For example, if
-we intend to use the unbalanced tree representation, we might include
-the following type declaration in the signature.
+For the next step, let's define a signature for a bank account database.  For this module, we want
+the type of accounts to be transparent (visible).  We will need functions to perform the usual
+operations for withdrawal, deposit, and account transfer.  In our simple bank, we won't allow
+accounts to be overdrawn, so we'll include an exception @code{Overdrawn}.
 
 @begin[iverbatim]
-type 'a t =
-   Node of 'a t * 'a * 'a t
- | Leaf
+(* -- File: bank.mli -- *)
+(* Accounts are specified by number *)
+type account = int
+
+(* Information about an account *)
+type account_info = { owner : string; balance : float }
+
+(* Exception for overdrawn accounts *)
+exception Overdrawn of account
+
+(* Get the information for an account *)
+val query : account -> account_info
+
+(* Withdraw from the account, may raise Overdrawn. *)
+val withdraw : account -> float -> unit
+val deposit  : account -> float -> unit
+
+(* Perform several account transfers at once.
+ * If any account would be overdrawn, it raises
+ * the Overdrawn exception and has no effect. *)
+val transaction : (account * account * float) list -> unit
 @end[iverbatim]
 
-By doing this, we would make the binary tree structure visible
-to other program components; they can now use the type definition to
-access the binary tree directly.  This would be
-undesirable for several reasons.  First, we may want to change the
-representation later (by using red-black trees for example).  If we did
-so, we would have to find and modify all the other modules that
-accessed the unbalanced structure directly.  Second, we may be
-assuming that there are some invariants on values in the data
-structure.  For example, we may be assuming that the nodes in the
-binary tree are ordered.  If the type definition is visible, it would
-be possible for other program modules to construct trees that violate
-the invariant, leading to errors that may be difficult to find.
+In this signature, the types @code{account} and @code{account_info} are @emph{transparent}, meaning
+that their definitions are given (without this, the @code{query} function would be rather useless).
+The @code{transaction} function is intended to perform multiple transfers at once.  If any of them
+fail because of an overdrawn account, the entire transaction should be aborted and the
+@code{Overdrawn} exception raised.
 
-@subsection["method-declarations"]{Method declarations}
+As these signatures show, an interface is a collection of declarations for the types (both
+transparent and abstract), exceptions, and values.  Once the signatures are defined, the next step
+is to implement them.
 
-The method declarations include all the functions and values that are
-visible to other program modules.  For the @tt{Fset} module, the
-visible methods are the @tt{empty}, @tt{mem}, and @tt{insert}
-methods.  The signature gives only the type declarations for these
-methods.
+@section["implementation"]{Implementations}
 
-It should be noted that @emph{only} these methods will be visible to
-other program modules.  If we define helper functions in the
-implementation, these functions will be private to the
-implementation and inaccessible to other program modules.
-
-@section["using-comp-unit"]{Building a program}
-
-Once a compilation unit is defined, the types and methods can be used
-in other files by prefixing the names of the methods with the
-@emph{capitalized} file name.  For example, the @tt{empty} set can be
-used in another file with the name @code{Fset.empty}.
-
-Let's define another module to test the @code{Fset} implementation.
-This will be a simple program with an input loop where we can type in
-a string.  If the string is not in the set, it is added;
-otherwise, the loop will print out a message that the string is
-already added.  To implement this program, we need to add another
-file; we'll call it @code["test.ml"].
-
-The @tt{Test} compilation unit has no externally visible types or
-methods.  By default, the @code{test.mli} file should be empty.  The
-@tt{Test} implementation should contain a function that recursively:
+A module implementation is defined in a @code[".ml"] file with the same base name as the signature
+file.  For each part of the signature, there is a corresponding definition in the implementation.
+An implementation has the following parts:
 
 @begin[enumerate]
-@item{prints a prompt}
-@item{reads a line from @tt{stdin}}
-@item{checks if the line is already in the set}
-@item{if it is, then print a message}
-@item{repeat}
+@item{type definitions,}
+@item{exception definitions,}
+@item{function and value definitions.}
 @end[enumerate]
 
-We'll implement this as a @tt{loop} method.
+@subsection["table-implementation"]{Table implementation}
+
+Let's return to the bank example, beginning with the implementation of a generic table indexed by
+number.  One possible implementation is as a hash table, with an array of buckets index by hashed
+account number.  To keep the example managable, we'll use a fixed-size hash table.  For the first
+step, we define the type @code{'a t} as an array of buckets, where each bucket is a list of entries
+and their index.  The @code{create} function creates a new array of empty buckets for the table,
+using the @code{Array.create} function.  In addition, the @code{copy} function uses the
+@code{Array.copy} function to duplicate the table.
 
 @begin[iverbatim]
-let loop () =
-   let set = ref Fset.empty in
-      try
-         while true do
-            output_string stdout "set> ";
-            flush stdout;
-            let line = input_line stdin in
-               if Fset.mem line !set then
-                  Lm_printf.printf "%s is already in the set\n" line
-               else
-                  Lm_printf.printf "%s added to the set\n" line;
-               set := Fset.insert line !set
-         done
-      with
-         End_of_file ->
-            ()
+(* -- File: table.ml -- *)
+(* The type of hash tables is an array of entry lists *)
+type 'a t = (int * 'a) list array
 
-let _ = loop ()
+(* Large, fixed-size table *)
+let create () = Array.create table_size 100000
+
+(* Copy the table *)
+let copy table = Array.copy table
 @end[iverbatim]
 
-There are a few things to note.  First, we need to catch the
-@code{End_of_file} exception that is raised when the end of the input
-file is reached.  In this case, we exit without comment.  To run the
-loop, we include the line @code{let _ = loop ()}.  The
-@code{let _ = ...} may seem strange: it tells the OCaml parser that this is a new
-top level expression.  Another way to accomplish this is by adding the
-@code{;;} terminator after the last @code{()} expression in the
-@code{loop} function.
+Let's implement the @code{get} function next.  For this, we need to search for an entry in the table
+based on its hash index.  To implement this, the @code{get} function must search through the bucket
+based on the hashed index.  We define two helper functions: the @code{hash} function computes the
+hash of the index, and the @code{find_in_bucket} function search the bucket for the entry.  Since
+these functions are not declare in the signature, they are @emph{private} to this implementation.
+
+@begin[iverbatim]
+(* -- File: table.ml (continued) -- *)
+(* Simple hash into the table *)
+let hash table index =
+   index mod (Array.length table)
+
+(* Find an entry in the bucket *)
+let rec find_in_bucket index bucket =
+   match bucket with
+      (index', entry) :: _ when index' = index ->
+         entry
+    | _ :: rest ->
+         find_in_bucket index rest
+    | [] ->
+         raise Not_found
+
+(* Get an entry in the table *)
+let get table index =
+   find_in_bucket index table.(hash table index)
+@end[iverbatim]
+
+Finally, the @code{set} function is similar, but it replace an entry in the table, using another
+private helper function @code{replace_in_bucket}.
+
+@begin[iverbatim]
+(* -- File: table.ml (continued) -- *)
+(* Replace an entry in the bucket *)
+let rec replace_in_bucket index entry bucket =
+   match bucket with
+      (index', _) :: rest when index' = index ->
+         (index, entry) :: rest
+    | head :: rest ->
+         head :: replace_in_bucket index entry rest
+    | [] ->  (* The entry is new *)
+         [(index, entry)]
+
+(* Set the entry *)
+let set table index entry =
+   let i = hash index in
+      table.(i) <- replace_in_bucket index entry table.(i)
+@end[iverbatim]
+
+At this point, the signature for the table is fully implemented, and we can move on the the bank
+implementation.
+
+@subsection["bank-implementation"]{Bank implementation}
+
+The implementation of the bank is defined in the file @code{bank.ml}.  The first step here is to
+give definitions to the types and exceptions in the interface @code{bank.mli}.  These redefinitions
+may seem like useless work, but they @emph{must} be defined to satisfy the requirements of the
+signature.
+
+@begin[iverbatim]
+(* -- File: bank.ml -- *)
+(* Accounts are specified by number *)
+type account = int
+
+(* Information about an account *)
+type account_info = { owner : string; balance : float }
+
+(* Exception for overdrawn accounts *)
+exception Overdrawn of account
+@end[iverbatim]
+
+To implement the remaining functions, we first create the table for the bank database, and use the
+table functions to implement the account operations.  The @code{withdraw} function subtracts the
+withdrawn amount, raising an exception if the balance becomes negative, and stores the new entry
+otherwise.  The @code{deposit} function has no need for exception handling (although
+
+@begin[iverbatim]
+(* Allocate a table *)
+let db = ref (Table.create ())
+
+(* Get an account *)
+let query account =
+   Table.get !db account
+
+(* Withdraw from an account *)
+let withdraw_table table account amount =
+   let info = Table.get table account in
+   let new_balance = info.balance -. amount in
+
+   (* Don't let the balance become negative *)
+   if new_balance < 0.0 then
+      raise (Overdrawn account);
+
+   (* Add the new entry *)
+   let new_info = { info with balance = new_balance } in
+      Table.set table account new_info
+
+let withdraw account amount =
+   withdraw_from_table !db amount
+
+(* Deposit to an account *)
+let deposit account amount =
+   withdraw_from_table !db account (-.amount)
+@end[iverbatim]
+
+The @code{transaction} function requires a bit more thought.  A simple implementation would iterate
+through the list of operations, performing a sequence of transfers.  However, this would not satisfy
+the requirement that the @emph{entire} transaction should be abort if any transfer fails.  To
+satisfy this requirement, we can copy the table before the transaction, and only commit the copy if
+the entire transaction succeeds.
+
+@begin[iverbatim]
+let transfer table (from_account, to_account, amount) =
+   withdraw_from_table table from_account amount;
+   withdraw_from_table table to_account (-.amount)
+
+let transaction transfers =
+   let table = Table.copy !db in
+      (* An exception may occur during any transfer *)
+      List.iter (transfer table) transfers;
+
+      (* All transfers succeeded; commit the result *)
+      db := table
+@end[iverbatim]
+
+With this definition, the @code{bank.ml} implementation is finished.  The implementation is
+functionally correct, but it has a major flaw---the performance of the @code{transaction} function
+suffers because the @emph{entire} table is copied on each transaction, even if only a few accounts
+are modified.
+
+@subsection["revisiting-the-implementation"]{Revisiting the implementation}
+
+Clearly, our choice of using a hash table is suboptimal for representing accounts.
+
+--- Let's replace the table with a functional one ---
 
 @section[compiling]{Compiling the program}
 

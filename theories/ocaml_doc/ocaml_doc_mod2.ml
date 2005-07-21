@@ -37,6 +37,49 @@ extends Base_theory
 
 doc <:doc<
 
+One of the principles of modern programming is @emph{data hiding} using @emph{encapsulation}.  An
+@emph{abstract data type} (ADT) is a program unit that defines a data type and functions that
+operate on that data type.  In an ADT, the data is @emph{abstract}, meaning that it is not directly
+accessible.  Clients that make use of the ADT are required to use the ADT's functions.
+
+There are several ideas behind data hiding using ADTs.  First, by separating a program into distinct
+program units (called @emph{modules}), the program may be easier to understand.  Ideally, each
+module encapsulates a single concept needed to address the problem at hand.
+
+Second, by hiding the implementation of a program module, dependencies between program modules
+become tightly controlled.  Since all interactions must be through a module's functions, the
+implementation of the module can be changed without affecting the correctness of the program (as
+long as the behavior of functions is preserved).
+
+Finally, the principal motivation of data hiding is that it allows the enforcement of data structure
+invariants.  In general, an @emph{invariant} is a property of a data structure that is always true
+in a correct program.  Said another way, if the invariant is ever false, then something ``bad'' has
+happened and the program has an error.  Invariants are used both for correctness and performance.
+For example, balanced binary trees are a frequently-used data structure with the following
+invariants 1) each node in the has no more than two children, 2) the nodes are ordered, and 3) the
+depth of the tree is logarithmic in the total number of nodes.  The first invariant can be enforced
+with the type system (by specifying a type for nodes that allows at most two children), but the
+second and third invariants are not so simple to maintain.  When we implement this data structure,
+it is more than likely that our implementation will fail if the given a tree that is not properly
+ordered (invariant 2).  It may work correctly, though at lower performance, if the tree is not
+balanced (invariant 3).
+
+Given the importance of invariants, how can we be sure that they are maintained?  This is where data
+hiding comes in.  By restricting the ADT so that only its own functions can directly access the
+data, we also limit the amount of reasoning that we have to do.  If each function in the ADT
+preserves the invariants, then we can be sure that the invariants are @emph{always} preserved,
+because no other part of the program can access the data directly.
+
+Of course, these restrictions can also be awkward.  Often we want partial @emph{transparency} where
+some parts of a data structure are abstract but others are directly accessible.  OCaml provides a
+general mechanism for data hiding and encapsulation called a @emph{module system}.  An module in
+OCaml has two parts: an @emph{implementation} that implements the types, functions, and values in
+the module; and a @emph{signature} that specifies which parts of the implementation are publically
+accessible.  That is, a signature provides type declarations for the visible parts of the
+implementation---everything else is hidden.
+
+------------------------------------------------------------------------
+
 The compilation units discussed in the Chapter @refchapter[files] are not the
 only way to create modules.  OCaml provides a general module system
 where modules can be created explicitly using the @code{module}

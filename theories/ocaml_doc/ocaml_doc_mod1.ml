@@ -37,607 +37,585 @@ extends Base_theory
 
 doc <:doc<
 
-One of the principles of modern programming is @emph{data hiding} using @emph{encapsulation}.  An
-@emph{abstract data type} (ADT) is a program unit that defines a data type and functions that
-operate on that data type.  In an ADT, the data is @emph{abstract}, meaning that it is not directly
-accessible.  Clients that make use of the ADT are required to use the ADT's functions.
+As programs get larger, it is natural to want to divide them into parts that can be implemented in
+separate files.  There are several advantages to doing so, beyond just the ability to save and share
+programs.  Ideally, every file in a program implements a single, distinct concept or data structure.
+By dividing the program into separate files, each conceptual part of the program can be written and
+compiled separately, making it easier to construct and maintain the program.  In addition, OCaml
+uses files as a basic unit for providing data hiding and encapsulation, two important properties
+that can be used to strengthen the guarantees provided by the implementation.  We will see more
+about data hiding and encapsulation in Chapter @refchapter[modules], but for now the important part
+is that each file can be assigned a @emph{signature} that declares types for all the accessible
+parts of the implementation, and everything @emph{not} declared is inaccessible outside the file.
 
-There are several ideas behind data hiding using ADTs.  First, by separating a program into distinct
-program units (called @emph{modules}), the program may be easier to understand.  Ideally, each
-module encapsulates a single concept needed to address the problem at hand.
-
-Second, by hiding the implementation of a program module, dependencies between program modules
-become tightly controlled.  Since all interactions must be through a module's functions, the
-implementation of the module can be changed without affecting the correctness of the program (as
-long as the behavior of functions is preserved).
-
-Finally, the principal motivation of data hiding is that it allows the enforcement of data structure
-invariants.  In general, an @emph{invariant} is a property of a data structure that is always true
-in a correct program.  Said another way, if the invariant is ever false, then something ``bad'' has
-happened and the program has an error.  Invariants are used both for correctness and performance.
-For example, balanced binary trees are a frequently-used data structure with the following
-invariants 1) each node in the has no more than two children, 2) the nodes are ordered, and 3) the
-depth of the tree is logarithmic in the total number of nodes.  The first invariant can be enforced
-with the type system (by specifying a type for nodes that allows at most two children), but the
-second and third invariants are not so simple to maintain.  When we implement this data structure,
-it is more than likely that our implementation will fail if the given a tree that is not properly
-ordered (invariant 2).  It may work correctly, though at lower performance, if the tree is not
-balanced (invariant 3).
-
-Given the importance of invariants, how can we be sure that they are maintained?  This is where data
-hiding comes in.  By restricting the ADT so that only its own functions can directly access the
-data, we also limit the amount of reasoning that we have to do.  If each function in the ADT
-preserves the invariants, then we can be sure that the invariants are @emph{always} preserved,
-because no other part of the program can access the data directly.
-
-Of course, these restrictions can also be awkward.  Often we want partial @emph{transparency} where
-some parts of a data structre are abstract but others are directly accessible.  OCaml provides a
-general mechanism for data hiding and encapsulation called a @emph{module system}.  An module in
-OCaml has two parts: an @emph{implementation} that implements the types, functions, and values in
-the module; and a @emph{signarture} that specifies which parts of the implementation are publically
-accessible.  That is, a signature provides type declarations for the visible parts of the
-implementation---everything else is hidden.
-
-In fact, in OCaml every source file is a module called a @emph{compilation unit}.  Signatures are
-specified in separate files called @emph{interfaces}.  In general, a program will have many files
-and signatures for its modules, where each module represents a program (and compilation) unit that
-implements part of the program.  When planning an application, the first step is
-@emph{factoring}---deciding how to partition the application into its parts.  The next step is then
-to implement the parts.  Normally in OCaml, this starts with the @emph{signatures} rather than the
-implementations because the signatures summarize the requirements and determine what must be
-implemented.
-
-@section[signatures]{Signatures}
-
-In OCaml, a signature contains declarations for the types and values in the implementation.
-A interface file has a @code{.mli} suffix.  The interface has three main parts.
+In general, a program will have many files and signatures.  An implementation file is defined in a
+file with a @code{.ml} suffix, called a @emph{compilation unit}.  A signature for a file
+@emph{filename.ml} is defined in a file named @emph{filename.mli}, called an @emph{interface}.
+There are four major steps to planning and building a program.
 
 @begin[enumerate]
-@item{type definitions and declarations,},
-@item{any exceptions defined in the module,}
-@item{declarations for any public functions and values defined by the module.}
+
+@item{{Decide how to @emph{factor} the program into separate parts.  Each part will be implemented
+in a separate compilation unit.}}
+
+@item{{Implement each of compilation units as a file with a @code{.ml} suffix, and optionally define
+an interface for the compilation unit in a file with a @code{.mli} suffix.}}
+
+@item{{Compile each file and signature with the OCaml compiler.}}
+
+@item{{Link the compiled files to produce an executable program.}}
+
 @end[enumerate]
 
-To illustrate, let's build a simple database-style application, where we will have a set of accounts
-indexed by number.  For example, we might be building a banking system where each account has a
-number, the name of the owner, and the account balance.  Instead of defining the entire application
-in one file, we can factor this application by breaking it into two parts, where the first part is a
-generic (polymorphic) table indexed by number, and the second adds a concrete definition of the
-account format.
+One nice consequence of implementing the parts of a program in separate files is that each file can
+be compiled separately.  When a project is modified, all the files that are affected must be
+recompiled, but there is there is usually no need to recompile the entire project.
 
-The first step is to define a signature for the generic table.  We'll need functions to create a new
-table, and to store and fetch entries from the table.  We'll also include a function to copy the
-table.  Since there is no reason to expose the representation of the table, the type is defined as
-abstract.  The following signature, in the file @code{table.mli}, specifies the complete table.
+Before describing the programming steps in more detail, it is worthwile discussing the OCaml compiler.
 
-@begin[iverbatim]
-(* -- File: table.mli -- *)
-(* The abstract type of tables *)
-type 'a t
+@section[compilers]{OCaml compilers}
 
-(* Create a new table *)
-val create : unit -> 'a t
-
-(* Fetch an entry from the table.
- * Raises the Not_found exception if the entry
- * doesn't exist *)
-val get : 'a t -> int -> 'a
-
-(* Set an entry in the table *)
-val set : 'a t -> int -> 'a -> unit
-
-(* Copy the table *)
-val copy : 'a t -> 'a t
-@end[iverbatim]
-
-Note that the type declaration @code{type 'a t} does not provide a definition (of the form
-@code{type 'a t = ...}).  This is an @emph{abstract} declaration stating that @code{'a t} is a type,
-but the specific representation is not publically visible.  The functions in the signature are
-declared with the @code{val} keyword. giving the name and the type of the function.  The function
-types use the abstract @code{'a t} type, but it should be clear from the declarations that the only
-way to create a new table is with the @code{create} function.
-
-For the next step, let's define a signature for a bank account database.  For this module, we want
-the type of accounts to be transparent (visible).  We will need functions to perform the usual
-operations for withdrawal, deposit, and account transfer.  In our simple bank, we won't allow
-accounts to be overdrawn, so we'll include an exception @code{Overdrawn}.
-
-@begin[iverbatim]
-(* -- File: bank.mli -- *)
-(* Accounts are specified by number *)
-type account = int
-
-(* Information about an account *)
-type account_info = { owner : string; balance : float }
-
-(* Exception for overdrawn accounts *)
-exception Overdrawn of account
-
-(* Get the information for an account *)
-val query : account -> account_info
-
-(* Withdraw from the account, may raise Overdrawn. *)
-val withdraw : account -> float -> unit
-val deposit  : account -> float -> unit
-
-(* Perform several account transfers at once.
- * If any account would be overdrawn, it raises
- * the Overdrawn exception and has no effect. *)
-val transaction : (account * account * float) list -> unit
-@end[iverbatim]
-
-In this signature, the types @code{account} and @code{account_info} are @emph{transparent}, meaning
-that their definitions are given (without this, the @code{query} function would be rather useless).
-The @code{transaction} function is intended to perform multiple transfers at once.  If any of them
-fail because of an overdrawn account, the entire transaction should be aborted and the
-@code{Overdrawn} exception raised.
-
-As these signatures show, an interface is a collection of declarations for the types (both
-transparent and abstract), exceptions, and values.  Once the signatures are defined, the next step
-is to implement them.
-
-@section["implementation"]{Implementations}
-
-A module implementation is defined in a @code[".ml"] file with the same base name as the signature
-file.  For each part of the signature, there is a corresponding definition in the implementation.
-An implementation has the following parts:
+The OCaml implementation from INRIA (most likely the one you are using) provides two compilers---the
+@code{ocamlc} byte-code compiler, and the @code{ocamlopt} native-code compiler.  Programs compiled
+with @code{ocamlc} are @emph{interpreted}, while programs compiled with @code{ocamlopt} are compiled
+to native machine code to be run on a specific operating system and machine architecture.  While the
+two compilers produce programs that behave identically functionally, there are a few differences.
 
 @begin[enumerate]
-@item{type definitions,}
-@item{exception definitions,}
-@item{function and value definitions.}
+
+@item{{Compile time is shorter with the @code{ocamlc} compiler.  Compiled byte-code is portable to
+any operating system and architecture supported by OCaml, without the need to recompile.  Some
+tasks, like debugging, work only with byte-code executables.}}
+
+@item{{Compile time is longer with the @code{ocamlopt} compiler, but program execution is usually
+faster.  Program executables are not portable, and not every operating system and machine
+architecture is supported.}}
+
 @end[enumerate]
 
-@subsection["table-implementation"]{Table implementation}
+We generally won't be concerned with the compiler being used, since the two compilers produce
+programs that behave identically (arapart from performance).  During rapid development, it may be
+useful to use the byte-code compiler because compilation times are shorter.  If performance becomes
+an issue, it is usually a straightforward process to begin using the native-code compiler.
 
-Let's return to the bank example, beginning with the implementation of a generic table indexed by
-number.  One possible implementation is as a hash table, with an array of buckets index by hashed
-account number.  To keep the example managable, we'll use a fixed-size hash table.  For the first
-step, we define the type @code{'a t} as an array of buckets, where each bucket is a list of entries
-and their index.  The @code{create} function creates a new array of empty buckets for the table,
-using the @code{Array.create} function.  In addition, the @code{copy} function uses the
-@code{Array.copy} function to duplicate the table.
+@section["file-example"]{Writing and compiling a program}
 
-@begin[iverbatim]
-(* -- File: table.ml -- *)
-(* The type of hash tables is an array of entry lists *)
-type 'a t = (int * 'a) list array
+@subsection["single-file-example"]{Compiling a program as a single file}
 
-(* Large, fixed-size table *)
-let create () = Array.create table_size 100000
+To illustrate the process of program construction, let's begin by building a simple program modeled
+after the Unix @code{uniq} program, which removes duplicate lines in a file.  That is, the program
+should read its input a line at a time, and print the line if it hasn't seen it before.
 
-(* Copy the table *)
-let copy table = Array.copy table
-@end[iverbatim]
+To begin, we can start with a program in a single file, using a list to keep track of which lines
+have been read.  The outline for the program to define a single recursive function that 1) reads a
+line of input, 2) compares it with lines that have been previously read, and 3) outputs the line if
+it has not been read.  The entire program is implemented in the single file @code{uniq.ml}, shown in
+Figure @reffigure[uniq] with an example run.
 
-Let's implement the @code{get} function next.  For this, we need to search for an entry in the table
-based on its hash index.  To implement this, the @code{get} function must search through the bucket
-based on the hashed index.  We define two helper functions: the @code{hash} function computes the
-hash of the index, and the @code{find_in_bucket} function search the bucket for the entry.  Since
-these functions are not declare in the signature, they are @emph{private} to this implementation.
+In this case, we can compile the entire program in a single step with the command @code{ocamlc -o
+uniq uniq.ml}, where the @code{-o} option is used to specify the output file.
 
-@begin[iverbatim]
-(* -- File: table.ml (continued) -- *)
-(* Simple hash into the table *)
-let hash table index =
-   index mod (Array.length table)
-
-(* Find an entry in the bucket *)
-let rec find_in_bucket index bucket =
-   match bucket with
-      (index', entry) :: _ when index' = index ->
-         entry
-    | _ :: rest ->
-         find_in_bucket index rest
-    | [] ->
-         raise Not_found
-
-(* Get an entry in the table *)
-let get table index =
-   find_in_bucket index table.(hash table index)
-@end[iverbatim]
-
-Finally, the @code{set} function is similar, but it replace an entry in the table, using another
-private helper function @code{replace_in_bucket}.
-
-@begin[iverbatim]
-(* -- File: table.ml (continued) -- *)
-(* Replace an entry in the bucket *)
-let rec replace_in_bucket index entry bucket =
-   match bucket with
-      (index', _) :: rest when index' = index ->
-         (index, entry) :: rest
-    | head :: rest ->
-         head :: replace_in_bucket index entry rest
-    | [] ->  (* The entry is new *)
-         [(index, entry)]
-
-(* Set the entry *)
-let set table index entry =
-   let i = hash index in
-      table.(i) <- replace_in_bucket index entry table.(i)
-@end[iverbatim]
-
-At this point, the signature for the table is fully implemented, and we can move on the the bank
-implementation.
-
-@subsection["bank-implementation"]{Bank implementation}
-
-The implementation of the bank is defined in the file @code{bank.ml}.  The first step here is to
-give definitions to the types and exceptions in the interface @code{bank.mli}.  These redefinitions
-may seem like useless work, but they @emph{must} be defined to satisfy the requirements of the
-signature.
-
-@begin[iverbatim]
-(* -- File: bank.ml -- *)
-(* Accounts are specified by number *)
-type account = int
-
-(* Information about an account *)
-type account_info = { owner : string; balance : float }
-
-(* Exception for overdrawn accounts *)
-exception Overdrawn of account
-@end[iverbatim]
-
-To implement the remaining functions, we first create the table for the bank database, and use the
-table functions to implement the account operations.  The @code{withdraw} function subtracts the
-withdrawn amount, raising an exception if the balance becomes negative, and stores the new entry
-otherwise.  The @code{deposit} function has no need for exception handling (although
-
-@begin[iverbatim]
-(* Allocate a table *)
-let db = ref (Table.create ())
-
-(* Get an account *)
-let query account =
-   Table.get !db account
-
-(* Withdraw from an account *)
-let withdraw_table table account amount =
-   let info = Table.get table account in
-   let new_balance = info.balance -. amount in
-
-   (* Don't let the balance become negative *)
-   if new_balance < 0.0 then
-      raise (Overdrawn account);
-
-   (* Add the new entry *)
-   let new_info = { info with balance = new_balance } in
-      Table.set table account new_info
-
-let withdraw account amount =
-   withdraw_from_table !db amount
-
-(* Deposit to an account *)
-let deposit account amount =
-   withdraw_from_table !db account (-.amount)
-@end[iverbatim]
-
-The @code{transaction} function requires a bit more thought.  A simple implementation would iterate
-through the list of operations, performing a sequence of transfers.  However, this would not satisfy
-the requirement that the @emph{entire} transaction should be abort if any transfer fails.  To
-satisfy this requirement, we can copy the table before the transaction, and only commit the copy if
-the entire transaction succeeds.
-
-@begin[iverbatim]
-let transfer table (from_account, to_account, amount) =
-   withdraw_from_table table from_account amount;
-   withdraw_from_table table to_account (-.amount)
-
-let transaction transfers =
-   let table = Table.copy !db in
-      (* An exception may occur during any transfer *)
-      List.iter (transfer table) transfers;
-
-      (* All transfers succeeded; commit the result *)
-      db := table
-@end[iverbatim]
-
-With this definition, the @code{bank.ml} implementation is finished.  The implementation is
-functionally correct, but it has a major flaw---the performance of the @code{transaction} function
-suffers because the @emph{entire} table is copied on each transaction, even if only a few accounts
-are modified.
-
-@subsection["revisiting-the-implementation"]{Revisiting the implementation}
-
-Clearly, our choice of using a hash table is suboptimal for representing accounts.
-
---- Let's replace the table with a functional one ---
-
-@section[compiling]{Compiling the program}
-
-Once the files for the program are defined, the next step is to
-compile them using @tt[ocamlc].  The usage of @tt[ocamlc] is much like
-@tt{cc}.  Normally, the files are compiled separately and linked into
-an executable.  Signatures must be compiled first, followed by the
-implementations.
-
-For the @tt{fset} module, the signature can be compiled with the
-following command.
-
-@begin[iverbatim]
-% ocamlc -c fset.mli
-@end[iverbatim]
-
-If there are no errors in the signature, this step produces a file
-called @code{fset.cmi}.
-
-The implementations are compiled with the following command.
-
-@begin[iverbatim]
-% ocamlc -c fset.ml
-% ocamlc -c test.ml
-@end[iverbatim]
-
-If this step is successful, the compiler produces the files
-@code{fset.cmo} and @code{test.cmo}.
-
-The modules can now be linked into a complete program using the
-@tt[ocamlc] linker.  The command is as follows.
-
-@begin[iverbatim]
-% ocamlc -o test fset.cmo test.cmo
-@end[iverbatim]
-
-The linker requires all of the @code{.cmo} files to be included in the
-program.  The order of these files is important!  Each module in the
-link line can refer only to the modules listed @emph{before} it.  If
-we reverse the order of the modules on the link line, we will get an
-error.
-
-@begin[iverbatim]
-% ocamlc -o test test.cmo fset.cmo
-Error while linking test.cmo: Reference to undefined global `Fset'
-Exit 2
-@end[iverbatim]
-
-Once the program is linked, we can run it.
-
-@begin[iverbatim]
-% ./test
-set> hello
-hello added to the set
-set> world
-world added to the set
-set> hello
-hello is already in the set
-set> x
-x added to the set
-set> world
-world is already in the set
-@end[iverbatim]
+@begin[figure,uniq]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{File: @code{uniq.ml}}}
+@hline
+@line{{@bf[let] @bf[rec] uniq already_read =}}
+@line{{$@quad$ output_string stdout @code{"> ";}}}
+@line{{$@quad$ flush stdout;}}
+@line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
+@line{{$@quad @quad$ @bf[if] not (List.mem line already_read) @bf[then] @bf[begin]}}
+@line{{$@quad @quad @quad$ output_string stdout line;}}
+@line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
+@line{{$@quad @quad @quad$ uniq (line :: already_read)}}
+@line{{$@quad @quad$ @bf[end] @bf[else]}}
+@line{{$@quad @quad @quad$ uniq already_read;;}}
+@line{{}}
+@line{{@it{{(}{*} ``Main program'' {*}{)}}}}
+@line{{@bf[try] uniq {[{}]} @bf[with]}}
+@line{{$@quad$ End_of_file ->}}
+@line{{$@quad @quad$ ();;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Example run}}
+@hline
+@line{{@code{%} ocamlc -o uniq uniq.ml}}
+@line{{@code{%} ./uniq}}
+@line{{@code{>} Great Expectations}}
+@line{{Great Expectations}}
+@line{{@code{>} Vanity Fair}}
+@line{{Vanity Fair}}
+@line{{@code{>} The First Circle}}
+@line{{The First Circle}}
+@line{{@code{>} Vanity Fair}}
+@line{{@code{>} Paradise Lost}}
+@line{{Paradise Lost}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
 
 @subsection[main]{Where is the main function?}
 
-Unlike C programs, OCaml program do not have a ``@tt{main}''
-function.  When an OCaml program is evaluated, all the statements in
-the files in the program are evaluated in the order specified on the
-link line.  Program files contain type and method definitions.  They
-can also contain arbitrary expressions to be evaluated.  The @tt{let
-_ = loop ()} statement in the @code["test.ml"] file is an example: it
-evaluates the @code{loop} function.  Informally, this is the main
-loop; it is the last expression to be executed in the program.
+Unlike C programs, OCaml program do not have a ``@tt{main}'' function.  When an OCaml program is
+evaluated, all the statements in the implementation files are evaluated.  In general, implementation
+files can contain arbitrary expressions, not just function definitions.  For this example, the
+``main program'' is the @bf[try] expression in the @code{uniq.ml} file, when gets evaluated when the
+@code{uniq.cmo} file is evaluated.
 
-@subsection["common-errors"]{Some common errors}
+@subsection["multiple-file-example"]{Multiple files}
 
-When a @code[".ml"] file is compiled, the compiler compares the
-implementation with the signature in the @code{.cmi} file.  If a
-definition does not match the signature, the compiler will print an
-error and refuse to compile the file.
+Even for this simple example, the implementation is already too concrete.  We chose to use a list to
+represent the set of lines that have been read, but one problem with using lists is that checking
+for membership (with @code{List.mem}) takes time linear in the length of the list, which means that
+the time to process a file is quadratic in the number of lines in the file!  There are clearly
+better representations for lists.
+
+As a first step, let's partition the program into two files.  The first file @code{set.ml} is to
+provide an implementation of sets, and the file @code{uniq.ml} provides the @code{uniq} function as
+before.  For now, we'll keep the list representation in hopes of improving it later---for now we
+just want to factor the project.
+
+@begin[figure,uniq2]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{File: set.ml}}
+@hline
+@line{{@bf[let] empty = []}}
+@line{{@bf[let] add x l = x @code{::} l}}
+@line{{@bf[let] mem x l = List.mem x l}}
+@line{{}}
+@line{{File: uniq.ml}}
+@hline
+@line{{@bf[let] @bf[rec] uniq already_read =}}
+@line{{$@quad$ output_string stdout @code{"> ";}}}
+@line{{$@quad$ flush stdout;}}
+@line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
+@line{{$@quad @quad$ @bf[if] not (Set.mem line already_read) @bf[then] @bf[begin]}}
+@line{{$@quad @quad @quad$ output_string stdout line;}}
+@line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
+@line{{$@quad @quad @quad$ uniq (line :: already_read)}}
+@line{{$@quad @quad$ @bf[end] @bf[else]}}
+@line{{$@quad @quad @quad$ uniq already_read;;}}
+@line{{}}
+@line{{@it{{(}{*} Main program {*}{)}}}}
+@line{{@bf[try] uniq [] @bf[with]}}
+@line{{$@quad$ End_of_file ->}}
+@line{{$@quad @quad$ ();;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Example run}}
+@hline
+@line{{@code{%} ocamlc -c set.ml}}
+@line{{@code{%} ocamlc -c uniq.ml}}
+@line{{@code{%} ocamlc -o uniq set.cmo uniq.cmo}}
+@line{{@code{%} ./uniq}}
+@line{{@code{>} Adam Bede}}
+@line{{Adam Bede}}
+@line{{@code{>} A Passage to India}}
+@line{{A Passage to India}}
+@line{{@code{>} Adam Bede}}
+@line{{@code{>} Moby Dick}}
+@line{{Moby Dick}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+The new project is shown in Figure @reffigure[uniq2].  We have split the set operations into a file
+called @code{set.ml}, and instead of using the @code{List.mem} function we now use the
+@code{Set.mem} function.  This naming convention is standard throughout OCaml---to way to refer to a
+definition $f$ in a file named @emph{filename} is by capitalizing the filename and using the infix
+@code{.} operator to project the value.  The @code{Set.mem} expression refers to the @code{mem}
+function in the @code{set.ml} file.  In fact, the @code{List.mem} function is the same way!  The
+OCaml standard library contains a file @code{list.ml} that defines a function @code{mem}.
+
+Compilation is now several steps.  In the first step, the @code{set.ml}
+and @code{uniq.ml} files are compiled with the @code{-c} option, which specifies that the compiler
+should produce an intermediate file with a @code{.cmo} suffix.  These files are then linked to
+produce an executable with the command @code{ocamlc -o uniq set.cmo uniq.cmo}.
+
+The order of compilation and linking here is significant.  The @code{uniq.ml} file refers to the
+@code{set.ml} file by using the @code{Set.mem} function.  Due to this dependency, the @code{set.ml}
+file must be compiled before the @code{uniq.ml} file, and the @code{set.cmo} file must appear before
+the @code{uniq.cmo} file during linking.  Note that cyclic dependencies are @emph{not allowed}.  It
+is not legal to have a file @code{a.ml} refer to a value @code{B.x}, and a file @code{b.ml} that
+refers to a value @code{A.y}.
+
+@subsection["defining-signature"]{Defining a signature}
+
+One of the reasons for factoring the program was to be able to improve the implementation of sets.
+To begin, we should make the type of sets @emph{abstract}---that is, we should hide the details of
+how it is implemented so that we can be sure the rest of the program does not uninitentionally
+depend on the implementation details.  To do this, we can define an abstract signature for sets, in
+a file @code{set.mli}.
+
+A signature should declare types for each of the values that are publicly accessible in a module, as
+well as any needed type declarations or definitions.  For our purposes, we need to define a
+polymorphic type of sets @code{'a set} abstractly.  That is, in the signature we will declare a type
+@code{'a set} without giving a definition, preventing other parts of the program from knowing, or
+depending on, the particular representation of sets we have chosen.  The signature also needs to
+declare types for the public values @code{empty}, @code{add}, and @code{mem} values, as a
+declaration of the form ``@bf{val} @it{name} : @it{type}''.  The complete signature is shown in
+Figure @reffigure[uniq3].  The implementation remains mostly unchanged, except that a specific,
+concrete type definition must be given for the type @code{'a set}.
+
+@begin[figure,uniq2]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{File: set.mli}}
+@hline
+@line{{@bf[type] 'a set}}
+@line{{@bf[val] empty : 'a set}}
+@line{{@bf[val] add   : 'a -> 'a set -> 'a set}}
+@line{{@bf[val] mem   : 'a -> 'a set -> bool}}
+@line{{}}
+@line{{File: set.ml}}
+@hline
+@line{{@bf[type] 'a set = 'a list}}
+@line{{@bf[let] empty = []}}
+@line{{@bf[let] add x l = x @code{::} l}}
+@line{{@bf[let] mem x l = List.mem x l}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Example run}}
+@hline
+@line{{@code{%} ocamlc -c set.mli}}
+@line{{@code{%} ocamlc -c set.ml}}
+@line{{@code{%} ocamlc -c uniq.ml}}
+@line{{File "uniq.ml", line 8, characters 14-36:}}
+@line{{This expression has type 'a list but is}}
+@line{{$@quad$ here used with type string Set.set}}
+@end[tabular]}}
+
+@line{{} {} {}}
+@line{
+{@begin[tabular,t,l]
+@line{{File: uniq.ml}}
+@hline
+@line{{@bf[let] @bf[rec] uniq already_read =}}
+@line{{$@quad$ output_string stdout @code{"> ";}}}
+@line{{$@quad$ flush stdout;}}
+@line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
+@line{{$@quad @quad$ @bf[if] not (Set.mem line already_read) @bf[then] @bf[begin]}}
+@line{{$@quad @quad @quad$ output_string stdout line;}}
+@line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
+@line{{$@quad @quad @quad$ @it{{(}{*} uniq (line :: already_read) {*}{)}}}}
+@line{{$@quad @quad @quad$ uniq (Set.add line already_read)}}
+@line{{$@quad @quad$ @bf[end] @bf[else]}}
+@line{{$@quad @quad @quad$ uniq already_read;;}}
+@line{{}}
+@line{{@it{{(}{*} Main program {*}{)}}}}
+@line{{@bf[try] uniq Set.empty @bf[with]}}
+@line{{$@quad$ End_of_file ->}}
+@line{{$@quad @quad$ ();;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Example run}}
+@hline
+@line{{@code{%} ocamlc -c set.mli}}
+@line{{@code{%} ocamlc -c set.ml}}
+@line{{@code{%} ocamlc -c uniq.ml}}
+@line{{@code{%} ocamlc -o uniq set.cmo uniq.cmo}}
+@line{{@code{%} ./uniq}}
+@line{{@code{>} Siddhartha}}
+@line{{Siddhartha}}
+@line{{@code{>} Siddhartha}}
+@line{{@code{>} Siddharta}}
+@line{{Siddharta}}
+@end[tabular]}}
+
+@end[tabular]
+@end[center]
+@end[figure]
+
+Now, when we compile the program, we first compile the interface file @code{set.mli}, then the
+implementations @code{set.ml} and @code{uniq.ml}.  But something has changed, the @code{uniq.ml}
+file no longer compiles!  Following the error message, we find that the error is due to the
+expression @code{line :: already_read}, which uses a @code{List} operation instead of a @code{Set}
+operation.  Since the @code{'a set} type is abstract, it is now an error to treat the set as a list,
+and the compiler complains appropriately.
+
+Changing this expression to @code{Set.add line already_read} fixes the error.  Note that, while the
+@code{set.mli} file must be compiled, it does not need to be specified during linking @code{ocamlc
+-o uniq set.cmo uniq.cmo}.
+
+At this point, the @code{set.ml} implementation is fully abstract, making it easy to replace the
+implementation with a better one (for example, the implementation of sets using red-black trees in
+Chapter @refchapter["red-black"]).
+
+@subsection["transparent-types"]{Transparent type definitions}
+
+In some cases, abstract type definitions are too strict.  There are times when we want a type
+definition to be @emph{transparent}---that is, visible outside the file.  For example, suppose we
+wanted to add a @code{choose} function to the set implementation, where, given a set $s$, the
+expression (@code{choose} $s$) returns some element of the set if the set is non-empty, and nothing
+otherwise.  One possible way to write this function is to define a union type @code{choice} that
+defines the two cases, as shown in Figure @reffigure[uniq4].
+
+The type definition for @code{choice} must be transparent (otherwise there isn't much point in
+defining the function).  For the type to be transparent, the signature simply need to provide the
+definition.  The implementation must contain the @emph{same} definition.
+
+@begin[figure,uniq4]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{File: set.mli}}
+@hline
+@line{{@bf[type] 'a set}}
+@line{{@bf[type] 'a choice =}}
+@line{{$@quad$ | Element of 'a}}
+@line{{$@quad$ | Empty}}
+@line{{@bf[val] empty  : 'a set}}
+@line{{@bf[val] add    : 'a -> 'a set -> 'a set}}
+@line{{@bf[val] mem    : 'a -> 'a set -> bool}}
+@line{{@bf[val] choose : 'a set -> 'a choice}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{File: set.ml}}
+@hline
+@line{{@bf[type] 'a set = 'a list}}
+@line{{@bf[type] 'a choice =}}
+@line{{$@quad$ | Element of 'a}}
+@line{{$@quad$ | Empty}}
+@line{{@bf[let] empty = []}}
+@line{{@bf[let] add x l = x @code{::} l}}
+@line{{@bf[let] mem x l = List.mem x l}}
+@line{{@bf[let] choose = @bf[function]}}
+@line{{$@quad$ | x :: _ -> Element x}}
+@line{{$@quad$ | [] -> Empty}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+@section["common-errors"]{Some common errors}
+
+As you develop programs with several files, you will undoubtably encounter some errors.  The
+following subsections list some of the more common errors.
+
+@subsection["interface-errors"]{Interface errors}
+
+When a @code[".ml"] file is compiled, the compiler compares the implementation with the signature in
+a @code{.cmi} file compile from the @code{.mli} file.  If a definition does not match the signature,
+the compiler will print an error and refuse to compile the file.
 
 @subsubsection["type-mismatch-error"]{Type errors}
 
-For example, suppose we had reversed the order of arguments in the
-@code{Fset.insert} function so that the set argument is first.
+For example, suppose we had reversed the order of arguments in the @code{Set.add} function so that
+the set argument is first.
 
 @begin[iverbatim]
-let insert s x =
-   ...
+let add s x = x :: s
 @end[iverbatim]
 
-When we compile the file, we get an error.  The compiler prints the
-types of the mismatched values, and exits with an error code.
+When we compile the file, we get an error.  The compiler prints the types of the mismatched values,
+and exits with an error code.
 
 @begin[iverbatim]
-% ocamlc -c fset.ml
-The implementation fset.ml does not match the interface fset.cmi:
+% ocamlc -c set.mli
+% ocamlc -c set.ml
+The implementation set.ml does not match the interface set.cmi:
 Values do not match:
-  val insert : 'a t -> 'a -> 'a t
+  val add : 'a list -> 'a -> 'a list
 is not included in
-  val insert : 'a -> 'a t -> 'a t
-Exit 2
+  val add : 'a -> 'a set -> 'a set
 @end[iverbatim]
+
+The first declaration is the type the compiler infered for the definition; the second declaration is
+from the signature.  Note that the definition's type is not abstract (using @code{'a list} instead
+of @code{'a set}).  For this example, it is clear that the argument ordering doesn't match, and the
+definition or the signature must be changed.
 
 @subsubsection["missing-def-error"]{Missing definition errors}
 
-Another common error occurs when a method declared in the signature is
-not defined in the implementation.  For example, suppose we had
-defined an @tt{add} method rather than an @tt{insert} method.  In this
-case, the compiler prints the name of the missing method, and exits
-with an error code.
+Another common error occurs when a function declared in the signature is not defined in the
+implementation.  For example, suppose we had defined an @tt{insert} function istead of an @tt{add}
+function.  In this case, the compiler prints the name of the missing function, and exits with an
+error code.
 
 @begin[iverbatim]
-% ocamlc -c fset.ml
-The implementation fset.ml does not match the interface fset.cmi:
-The field `insert' is required but not provided
-Exit 2
+% ocamlc -c set.ml
+The implementation set.ml does not match the interface set.cmi:
+The field `add' is required but not provided
 @end[iverbatim]
 
 @subsubsection["type-def-errors"]{Type definition mismatch errors}
 
-@emph{Transparent} type definitions in the signature can also cause an
-error if the type definition in the implementation does not match.
-Suppose we were to export the definition for @code{type 'a t}.  We
-need to include exactly the same definition in the implementation.
-A correct @code{fset.mli} file would contain the following definition.
+@emph{Transparent} type definitions in the signature can also cause an error if the type definition
+in the implementation does not match.  For example, in the definition of the @code{choice} type,
+suppose we had declared the cases in different orders.
 
-@begin[iverbatim]
-type color
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{File: set.mli}}
+@hline
+@line{{@bf[type] 'a set}}
+@line{{@bf[type] 'a choice =}}
+@line{{$@quad$ | Element of 'a}}
+@line{{$@quad$ | Empty}}
+@line{{$@vdots$}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{File: set.ml}}
+@hline
+@line{{@bf[type] 'a set = 'a list}}
+@line{{@bf[type] 'a choice =}}
+@line{{$@quad$ | Empty}}
+@line{{$@quad$ | Element of 'a}}
+@line{{$@vdots$}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
 
-type 'a t =
-   Node of color * 'a t * 'a * 'a t
- | Leaf
-@end[iverbatim]
-
-Note that we must include a type definition for @code{color}, since it
-is used in the definition of the set type @code{'a t}.  The type
-definition for @code{color} may be transparent or abstract.
-
-Now, suppose we reorder the constructors in the interface definition
-for @code{'a t} by placing the @code{Leaf} constructor first.
-
-@begin[iverbatim]
-type color
-
-type 'a t =
-   Leaf
- | Node of color * 'a t * 'a * 'a t
-@end[iverbatim]
-
-When we compile the file, the compiler will produce an error with
+When we compile the @code{set.ml} file, the compiler will produce an error with
 the mismatched types.
 
 @begin[iverbatim]
-% ocamlc -c fset.mli
-% ocamlc -c fset.ml
-The implementation fset.ml does not match the interface fset.cmi:
+% ocamlc -c set.mli
+% ocamlc -c set.ml
+The implementation set.ml does not match the interface set.cmi:
 Type declarations do not match:
-  type 'a t = | Node of color * 'a t * 'a * 'a t | Leaf
+  type 'a choice = Empty | Element of 'a
 is not included in
-  type 'a t = | Leaf | Node of color * 'a t * 'a * 'a t
-Exit 2
+  type 'a choice = Element of 'a | Empty
 @end[iverbatim]
+
+The type definitions are required to be @emph{exactly} the same.  Some programmers find this
+duplication of type definitions to be annoying.  While it is difficult to avoid all duplication of
+type definitions, one common solution is to define the transparent types in a separate @code{.ml}
+file without a signature, for example by moving the definition of @code{'a choice} to a file
+@code{set_types.ml}.  By default, when an interface file does not exist, all definitions from the
+implementation are fully visible.  As a result, the type in @code{set_types.ml} needs to be defined
+just once.
 
 @subsubsection["compile-errors"]{Compile dependency errors}
 
-The compiler will also produce errors if the compile state is
-inconsistent.  Each time an interface is compile, all the files that
-uses that interface must be recompiled.  For example, suppose we
-update the @code{fset.mli} file, and recompile it and the
-@code{test.ml} file (but we forget to recompile the @code{fset.ml}
-file).  The compiler produces the following error.
+The compiler will also produce errors if the compile state is inconsistent.  Each time an interface
+is compile, all the files that uses that interface must be recompiled.  For example, suppose we
+update the @code{set.mli} file, and recompile it and the @code{uniq.ml} file (but we forget to
+recompile the @code{set.ml} file).  The compiler produces the following error.
 
 @begin[iverbatim]
-% ocamlc -c fset.mli
-% ocamlc -c test.ml
-% ocamlc -o test fset.cmo test.cmo
-Files test.cmo and fset.cmo make inconsistent
-assumptions over interface Fset
-Exit 2
+% ocamlc -c set.mli
+% ocamlc -c uniq.ml
+% ocamlc -o uniq set.cmo uniq.cmo
+Files uniq.cmo and set.cmo make inconsistent
+assumptions over interface Set
 @end[iverbatim]
 
-It takes a little work to detect the cause of the error.  The compiler
-says that the files make inconsistent assumptions for interface
-@code{Fset}.  The interface is defined in the file @code{fset.cmi},
-and so this error message states that at least one of @code{fset.ml}
-or @code{test.cmo} needs to be recompiled.  In general, we don't know
-which file is out of date, and the best solution is to recompile them
-all.
+It takes a little work to detect the cause of the error.  The compiler says that the files make
+inconsistent assumptions for interface @code{Set}.  The interface is defined in the file
+@code{set.cmi}, and so this error message states that at least one of @code{set.ml} or
+@code{uniq.ml} needs to be recompiled.  In general, we don't know which file is out of date, and
+the best solution is usually to recompile them all.
 
 @section[open]{Using @tt{open} to expose a namespace}
 
-Using the full name @tt{@emph{Module_name}.@emph{method_name}} to
-refer to the methods in a module can get tedious.  The
-@tt{open @emph{Module_name}} statement can be used to ``open'' a module
-interface, which will allow the use of unqualified names for types,
-exceptions, and methods.  For example, the @code{test.ml} module can
-be somewhat simplified by using the @code{open} statements for the
-@code{Lm_printf} and @code{Fset} modules.
+Using the full name @tt{@emph{File_name}.@emph{name}} to refer to the values in a module can get
+tedious.  The @tt{open @emph{File_name}} statement can be used to ``open'' an interface, allowing
+the use of unqualified names for types, exceptions, and values.  For example, the @code{uniq.ml}
+module can be somewhat simplified by using the @code{open} directive for the @code{Set} module.  In
+the following listing, the @underline{underlined} variables refer to the value in the Set
+implementation.
 
-@begin[iverbatim]
+@begin[center]
+@begin[tabular,t,l]
+@line{{File: uniq.ml}}
+@hline
+@line{{@bf[open] Set}}
+@line{{@bf[let] @bf[rec] uniq already_read =}}
+@line{{$@quad$ output_string stdout @code{"> ";}}}
+@line{{$@quad$ flush stdout;}}
+@line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
+@line{{$@quad @quad$ @bf[if] not (@underline{mem} line already_read) @bf[then] @bf[begin]}}
+@line{{$@quad @quad @quad$ output_string stdout line;}}
+@line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
+@line{{$@quad @quad @quad$ uniq (@underline{add} line already_read)}}
+@line{{$@quad @quad$ @bf[end] @bf[else]}}
+@line{{$@quad @quad @quad$ uniq already_read;;}}
+@line{{}}
+@line{{@it{{(}{*} Main program {*}{)}}}}
+@line{{@bf[try] uniq @underline{empty} @bf[with]}}
+@line{{$@quad$ End_of_file ->}}
+@line{{$@quad @quad$ ();;}}
+@end[tabular]
+@end[center]
 
-let loop () =
-   let set = ref empty in
-      try
-         while true do
-            output_string stdout "set> ";
-            flush stdout;
-            let line = input_line stdin in
-               if mem line !set then
-                  printf "%s is already in the set\n" line
-               else
-                  printf "%s added to the set\n" line;
-               set := insert line !set
-         done
-      with
-         End_of_file ->
-            ()
-
-let _ = loop ()
-@end[iverbatim]
-
-Sometimes multiple @tt{open}ed modules will define the same name.  In
-this case, the @emph{last} module with an @tt{open} statement will
-determine the value of that symbol.  Fully qualified names (of the
-form @tt{@emph{Module_name}.@emph{name}}) may still be used even if
-the module has been opened.  Fully qualified names can be used to
-access values that may have been hidden by an @tt{open} statement.
+Sometimes multiple @tt{open}ed files will define the same name.  In this case, the @emph{last} file
+with an @tt{open} statement will determine the value of that symbol.  Fully qualified names (of the
+form @tt{@emph{File_name}.@emph{name}}) may still be used even if the file has been opened.  Fully
+qualified names can be used to access values that may have been hidden by an @tt{open} statement.
 
 @subsection["open-errors"]{A note about @tt{open}}
 
-Be careful with the use of @tt{open}.  In general, fully qualified
-names provide more information, specifying not only the name of the
-value, but the name of the module where the value is defined.  For
-example, the @tt{Fset} and @tt{List} modules both define a @tt{mem}
-function.  In the @tt{Test} module we just defined, it may not be
-immediately obvious to a programmer that the @tt{mem} symbol refers
-to @code{Fset.mem}, not @code{List.mem}.
+Be careful with the use of @tt{open}.  In general, fully qualified names provide more information,
+specifying not only the name of the value, but the name of the module where the value is defined.
+For example, the @tt{Set} and @tt{List} modules both define a @tt{mem} function.  In the @tt{Uniq}
+module we just defined, it may not be immediately obvious to a programmer that the @tt{mem} symbol
+refers to @code{Set.mem}, not @code{List.mem}.
 
-In general, you should use @code{open} statement sparingly.  Also, as
-a matter of style, it is better not to @tt{open} most of the library
-modules, like the @code{Array}, @code{List}, and @code{String}
-modules, all of which define methods (like @code{create}) with common
-names.  Also, you should @emph{never} @tt{open} the @code{Unix},
-@code{Obj}, and @code{Marshal} modules!  The functions in these modules
-are not completely portable, and the fully qualified names identify
-all the places where portability may be a problem (for instance,
-the Unix @tt{grep} command can be used to find all the places where
-@code{Unix} functions are used).
+In general, you should use @code{open} statement sparingly.  Also, as a matter of style, it is
+better not to @tt{open} most of the library modules, like the @code{Array}, @code{List}, and
+@code{String} modules, all of which define methods (like @code{create}) with common names.  Also,
+you should @emph{never} @tt{open} the @code{Unix}, @code{Obj}, and @code{Marshal} modules!  The
+functions in these modules are not completely portable, and the fully qualified names identify all
+the places where portability may be a problem (for instance, the Unix @tt{grep} command can be used
+to find all the places where @code{Unix} functions are used).
 
-The behavior of the @tt{open} statement is not like an @code{#include}
-statement in C.  An implementation file @code{mod.ml} should not include
-an @code{open Mod} statement.  One common source of errors is defining a type in a
-@code{.mli} interface, then attempting to use @code{open} to
-``include'' the definition in the @code{.ml} implementation.  This
-won't work---the implementation must include an identical type
-definition.  True, this is an annoying feature of OCaml.  But it
-preserves a simple semantics: the implementation must provide a
+The behavior of the @tt{open} statement is not like an @code{#include} statement in C.  An
+implementation file @code{mod.ml} should not include an @code{open Mod} statement.  One common
+source of errors is defining a type in a @code{.mli} interface, then attempting to use @code{open}
+to ``include'' the definition in the @code{.ml} implementation.  This won't work---the
+implementation must include an identical type definition.  True, this might be considered to be an
+annoying feature of OCaml.  But it preserves a simple semantics: the implementation must provide a
 definition for each declaration in the signature.
 
 @section[debugging]{Debugging a program}
 
-The @code{ocamldebug} program can be used to debug a program compiled
-with @code{ocamlc}.  The @code{ocamldebug} program is a little like
-the GNU @code{gdb} program; it allows breakpoints to be set.  When a
-breakpoint is reached, control is returned to the debugger so that
-program variables can be examined.
+The @code{ocamldebug} program can be used to debug a program compiled with @code{ocamlc}.  The
+@code{ocamldebug} program is a little like the GNU @code{gdb} program; it allows breakpoints to be
+set.  When a breakpoint is reached, control is returned to the debugger so that program variables
+can be examined.
 
 To use @code{ocamldebug}, the program must be compiled with the
 @code{-g} flag.
 
 @begin[iverbatim]
-% ocamlc -c -g fset.mli
-% ocamlc -c -g fset.ml
-% ocamlc -c -g test.ml
-% ocamlc -o test -g fset.cmo test.cmo
+% ocamlc -c -g set.mli
+% ocamlc -c -g set.ml
+% ocamlc -c -g uniq.ml
+% ocamlc -o uniq -g set.cmo uniq.cmo
 @end[iverbatim]
 
 The debugger is invoked using by specifying the program to be debugged
 on the @code{ocamldebug} command line.
 
 @begin[iverbatim]
-% ocamldebug ./test
-	Objective Caml Debugger version 2.04
+% ocamldebug ./uniq
+	Objective Caml Debugger version 3.08.3
 
 (ocd) help
-List of commands :
-cd complete pwd directory kill help quit run reverse step
-backstep goto finish next start previous print display source
-break delete set show info frame backtrace bt up down last
-list load_printer install_printer remove_printer
-
-(ocd)
+List of commands :cd complete pwd directory kill help quit shell run reverse
+step backstep goto finish next start previous print display source break
+delete set show info frame backtrace bt up down last list load_printer
+install_printer remove_printer
 @end[iverbatim]
 
 There are several commands that can be used.  The basic commands are
@@ -664,116 +642,85 @@ There are several commands that can be used.  The basic commands are
 @end[description]
 @end[quote]
 
-For debugging the @code{test} program, we need to know the line
-numbers.  Let's set a breakpoint in the @code{loop} function, which
-starts in line 27 in the @code{Test} module.  We'll want to stop at
+For debugging the @code{uniq} program, we need to know the line
+numbers.  Let's set a breakpoint in the @code{uniq} function, which
+starts in line 1 in the @code{Uniq} module.  We'll want to stop at
 the first line of the function.
 
 @begin[iverbatim]
-(ocd) break @ Test 28
+(ocd) break @ Uniq 1
 Loading program... done.
-Breakpoint 1 at 24476 : file Test, line 28 column 4
+Breakpoint 1 at 21656 : file uniq.ml, line 2, character 4
 (ocd) run
-Time : 7 - pc : 24476 - module Test
+Time : 12 - pc : 21656 - module Uniq
 Breakpoint : 1
-28    <|b|>let set = ref Fset.empty in
+2    <|b|>output_string stdout "> ";
 (ocd) n
-Time : 8 - pc : 24488 - module Test
-29       <|b|>try
-(ocd) p set
-set : string Fset.t ref = {contents=Fset.Leaf}
+Time : 14 - pc : 21692 - module Uniq
+2    output_string stdout "> "<|a|>;
+(ocd) n
+> Time : 15 - pc : 21720 - module Uniq
+3    flush stdout<|a|>;
+(ocd) n
+Robinson Crusoe
+Time : 29 - pc : 21752 - module Uniq
+5       <|b|>if not (Set.mem line already_read) then begin
+(ocd) p line
+line : string = "Robinson Crusoe"
 @end[iverbatim]
 
-Next, let's set a breakpoint after the next input line is read and
-continue execution to that point.
+Next, let's set a breakpoint just before calling the @code{uniq} function recursively.
 
 @begin[iverbatim]
 (ocd) list
-27 let loop () =
-28    let set = ref Fset.empty in
-29       <|b|>try
-30          while true do
-31             output_string stdout "set> ";
-32             flush stdout;
-33             let line = input_line stdin in
-34                if Fset.mem line !set then
-35                   Lm_printf.printf "%s is already in the set\n" line
-36                else
-37                   Lm_printf.printf "%s added to the set\n" line;
-38                set := Fset.insert line !set
-39          done
-(ocd) break @ 34
-Breakpoint 2 at 24600 : file Test, line 33 column 40
+1 let rec uniq already_read =
+2    output_string stdout "> ";
+3    flush stdout;
+4    let line = input_line stdin in
+5       <|b|>if not (Set.mem line already_read) then begin
+6          output_string stdout line;
+7          output_char stdout '\n';
+8          uniq (Set.add line already_read)
+9       end
+10       else
+11          uniq already_read;;
+12
+13 (* Main program *)
+14 try uniq Set.empty with
+15    End_of_file ->
+16       ();;
+Position out of range.
+(ocd) break @ 8
+Breakpoint 2 at 21872 : file uniq.ml, line 8, character 42
 (ocd) run
-set> hello
-Time : 22 - pc : 24604 - module Test
+Time : 38 - pc : 21872 - module Uniq
 Breakpoint : 2
-34                <|b|>if Fset.mem line !set then
-(ocd) p line
-line : string = "hello"
+8          uniq (Set.add line already_read)<|a|>
 @end[iverbatim]
 
-When we run the program, the evaluation prompts us for an input line,
-and we can see the value of the line in the @code{line} variable.
-Let's continue and view the set after the line is added.
+Next, suppose we don't like adding this line.  We can go back to time @code{15} (the time just
+before the @code{input_line} function is called).
 
 @begin[iverbatim]
+(ocd) goto 15
+> Time : 15 - pc : 21720 - module Uniq
+3    flush stdout<|a|>;
 (ocd) n
-Time : 24 - pc : 24628 - module Test
-34                if Fset.mem line !set<|a|> then
-(ocd) n
-Time : 25 - pc : 24672 - module Test
-37                   <|b|>Lm_printf.printf "%s added to the set\n" line;
-(ocd) n
-Time : 135 - pc : 24700 - module Test
-37                   Lm_printf.printf "%s added to the set\n" line<|a|>;
-(ocd) n
-Time : 141 - pc : 24728 - module Test
-38                set := Fset.insert line !set<|a|>
-(ocd) n
-Time : 142 - pc : 24508 - module Test
-31             <|b|>output_string stdout "set> ";
-(ocd) p set
-set : string Fset.t ref =
-  {contents=Fset.Node (<abstr>, Fset.Leaf, "hello", Fset.Leaf)}
-(ocd)
+Mrs Dalloway
+Time : 29 - pc : 21752 - module Uniq
+5       <|b|>if not (Set.mem line already_read) then begin
 @end[iverbatim]
 
-This value seems to be correct.  Next, suppose we want to go back a
-descend into the @code{Fset.mem} function.  We can go back to time
-@code{22} (the time just before the @code{Fset.mem} function is called),
-and use the @code{step} command to descend into the membership
-function.
+Note that when we go back in time, the program prompts us again for an input line.  This is due to
+way time travel is implemented in @code{ocamldebug}.  Periodically, the debugger takes a checkpoint
+of the program (using the Unix @code{fork()} system call).  When reverse time travel is requested,
+the debugger restarts the program from the closest checkpoint before the time requested.  In this
+case, the checkpoint was taken before the call to @code{input_line}, and the program resumption
+requires another input value.
 
-@begin[iverbatim]
-(ocd) goto 22
-set> hello
-Time : 22 - pc : 24604 - module Test
-Breakpoint : 7
-34                <|b|>if Fset.mem line !set then
-(ocd) s
-Time : 23 - pc : 22860 - module Fset
-39    Leaf -> <|b|>false
-(ocd) s
-Time : 24 - pc : 24628 - module Test
-34                if Fset.mem line !set<|a|> then
-(ocd)
-@end[iverbatim]
-
-Note that when we go back in time, the program prompts us again for an
-input line.  This is due to way time travel is implemented in
-@code{ocamldebug}.  Periodically, the debugger takes a checkpoint of
-the program (using the Unix @code{fork()} system call).  When reverse
-time travel is requested, the debugger restarts the program from the
-closest checkpoint before the time requested.  In this case, the
-checkpoint was taken sometime before the call to @code{input_line},
-and the program resumption requires another input value.
-
-When we step into the @code{Fset.mem} function, we see that the
-membership is false (the set is the @code{Leaf} empty value).  We can
-continue from here, examining the remaining functions and variables.
-You may wish to explore the other features of the debugger.  Further
-documentation can be found in the OCaml reference manual.
+We can continue from here, examining the remaining functions and variables.  You may wish to explore
+the other features of the debugger.  Further documentation can be found in the OCaml reference
+manual.
 
 >>
 

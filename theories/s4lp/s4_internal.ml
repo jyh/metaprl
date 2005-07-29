@@ -328,14 +328,16 @@ let add_families families index concl hilb =
 	 | _ ->
 	 		raise (Invalid_argument "add_families: unexpected shape of term")
 
-let rec realize families terms d hyps concls =
+let rec realize families terms d =
 	match d with
-		ImplRight(f01, f02, d0) ->
-	 		let concls0 = FSet.add (FSet.remove concls (Implies(f01, f02))) f02 in
-			let hyps0 = FSet.add hyps f01 in
-			let pterm0, concl0, hilb0 = realize families terms d0 hyps0 concls0 in
+		ImplRight(a, b, d0) ->
+			let pterm0, concl0, hilb0, hyps0, concls0 = realize families terms d0 in
 			(*let hilb1, f1 = hilbert_impl_right hyps concls hyps0 concls0 hilb0 concl0 f01 f02 in
 			let hilb2, pterm2 = lift [] hilb1 f1 in*)
+			let a = box2pr a in
+			let b = box2pr b in
+			let hyps = FSet.remove hyps0 a in
+			let concls = FSet.add (FSet.remove concls0 b) (Implies(a, b)) in
 			let concl = one_implication hyps concls in
 			let f1 = Implies(concl0, concl) in
 			let hilb2 = ConstSpec in
@@ -350,15 +352,15 @@ let rec realize families terms d hyps concls =
                hilb2,
                LP.Axiom(12)
             )
-         )
-	 | ImplLeft(f01, f02, d01, d02) ->
-	 		let f = Implies(f01, f02) in
-	 		let concls01 = FSet.add concls f01 in
-			let hyps01 = FSet.remove hyps f in
-			let concls02 = concls in
-			let hyps02 = FSet.add hyps01 f02 in
-			let pterm01, concl01, hilb01 = realize families terms d01 hyps01 concls01 in
-			let pterm02, concl02, hilb02 = realize families terms d02 hyps02 concls02 in
+         ),
+			hyps, concls
+	 | ImplLeft(a, b, d01, d02) ->
+			let pterm01, concl01, hilb01, hyps01, concls01 = realize families terms d01 in
+			let pterm02, concl02, hilb02, hyps02, concls02 = realize families terms d02 in
+			let a = box2pr a in
+			let b = box2pr b in
+			let hyps = FSet.add hyps01 (Implies(a,b)) in
+			let concls = concls02 in
 			(*let hilb1, f1 =
 				hilbert_impl_left
 					hyps concls
@@ -371,8 +373,6 @@ let rec realize families terms d hyps concls =
 			let f1 = Implies(concl01, Implies(concl02, concl)) in
          let hilb2 = ConstSpec in
          let pterm2 = PropTaut(f1) in
-			App(App(pterm2, pterm02), pterm01),
-			concl,
 			let subproof =
 				MP(
 					Pr(pterm01, concl01),
@@ -384,6 +384,8 @@ let rec realize families terms d hyps concls =
 					)
 				)
 			in
+         App(App(pterm2, pterm02), pterm01),
+         concl,
 			MP(
 				Pr(pterm02,concl02),
 				hilb02,
@@ -392,8 +394,12 @@ let rec realize families terms d hyps concls =
 					subproof,
 					LP.Axiom(12)
 				)
-			)
-	 | Axiom(f, _, _) ->
+			),
+			hyps, concls
+	 | Axiom(f, hyps0, concls0) ->
+	 		let f = box2pr f in
+			let hyps = FSet.add (box2pr_set hyps0) f in
+			let concls = FSet.add (box2pr_set concls0) f in
 	 		(*let hilb1, f1 = hilbert_axiom hyps concls f in
 			let hilb2, pterm2 = lift [] hilb1 f1 in*)
 			let f1 = one_implication hyps concls in
@@ -401,8 +407,11 @@ let rec realize families terms d hyps concls =
          let pterm2 = PropTaut(f1) in
 			pterm2,
 			f1,
-			hilb2
-	 | FalsumLeft(_, _) ->
+			hilb2,
+			hyps, concls
+	 | FalsumLeft(hyps0, concls0) ->
+	 		let hyps = FSet.add (box2pr_set hyps0) Falsum in
+			let concls = box2pr_set concls0 in
 	 		(*let hilb1, f1 = hilbert_falsum_left hyps concls f in
 			let hilb2, pterm2 = lift [] hilb1 f1 in*)
 			let f1 = one_implication hyps concls in
@@ -410,10 +419,14 @@ let rec realize families terms d hyps concls =
          let pterm2 = PropTaut(f1) in
 			pterm2,
 			f1,
-			hilb2
+			hilb2,
+			hyps, concls
 	 | BoxLeft((Box(Evidence e,f0)) as f, d0) ->
-	 		let hyps0 = FSet.add hyps f0 in
-			let pterm0, concl0, hilb0 = realize families terms d0 hyps0 concls in
+			let pterm0, concl0, hilb0, hyps0, concls0 = realize families terms d0 in
+			let f0 = box2pr f0 in
+			let f = Pr(Provisional e, f0) in
+			let hyps = FSet.remove hyps0 f0 in
+			let concls = concls0 in
 			(*let hilb1, f1 = hilbert_box_left hyps concls hyps0 hilb0 in
 			let hilb2, pterm2 = lift [] hilb1 f1 in*)
 			let concl = one_implication hyps concls in
@@ -430,11 +443,14 @@ let rec realize families terms d hyps concls =
                hilb2,
                LP.Axiom(12)
             )
-         )
+         ),
+			hyps, concls
 	 | BoxRight((Box(Evidence e,f0)) as f, new_hyps, new_concls, d0) ->
-	 		let hyps0 = boxed_only_hyps hyps in
-			let concls0 = FSet.singleton f0 in
-			let pterm0, concl0, hilb0 = realize families terms d0 hyps0 concls0 in
+			let pterm0, concl0, hilb0, hyps0, concls0 = realize families terms d0 in
+			let f0 = FSet.choose concls0 in
+			let new_hyps = box2pr_set new_hyps in
+			let new_concls = box2pr_set new_concls in
+			let hyps = FSet.union hyps0 new_hyps in
 			let s, concl1, hilb1 = lemma3 hyps0 in
 			let hilb2 =
 				MP(
@@ -457,13 +473,14 @@ let rec realize families terms d hyps concls =
 			(*let concl5, hilb5 = hilbert_box_right hyps concls concl4 hilb4 in
 			let hilb6, pterm6 = lift [] hilb5 concl5 in*)
 			begin match concl4 with
-				Implies(a, b) ->
-					let concl5 = one_implication hyps (FSet.add new_concls b) in
+				Implies(a, box_b) ->
+					let concls = FSet.add new_concls box_b in
+					let concl5 = one_implication hyps concls in
 					let concl6 = Implies(concl4, concl5) in
 					let pterm6 = PropTaut(concl6) in
 					let hilb6 = ConstSpec in
 					let hilb7, pterm7 = lift [] (MP(concl4, hilb4, hilb6)) concl5 in
-					pterm7, concl5, hilb7
+					pterm7, concl5, hilb7, hyps, concls
 			 | _ ->
 					raise (Invalid_argument "realize bug: unexpected conclusion of add_families")
 			end

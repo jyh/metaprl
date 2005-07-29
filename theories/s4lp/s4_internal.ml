@@ -221,18 +221,14 @@ let rec deduction_all hyps hilb f =
 		[] ->
 			hilb, f
 	 | h::rest ->
-	 		eprintf"before deduction@.";
 			let hilb' = deduction h rest hilb f in
-			eprintf"after deduction@.";
 			deduction_all rest hilb' (Implies(h, f))
 
 let lemma3 set =
 	let concl0 = set2conj set in
 	let hilb0 = Hyp(new_number ()) in
 	let list = FSet.to_list set in
-	eprintf"before lift@.";
 	let hilb, pterm = lift list hilb0 concl0 in
-	eprintf"after list@.";
 	let concl = Pr(pterm, concl0) in
 	let hilb1, concl1 = deduction_all list hilb concl in
 	let concl2 = Implies(concl0, concl) in
@@ -453,12 +449,9 @@ let rec realize families terms d =
 			hyps, concls
 	 | BoxRight((Box(Evidence e,f0)) as f, new_hyps, new_concls, d0) ->
 			let pterm0, concl0, hilb0, hyps0, concls0 = realize families terms d0 in
-			eprintf"before choose@.";
 			let f0 = FSet.choose concls0 in
-			eprintf"after choose@.";
 			let new_hyps = box2pr_set new_hyps in
 			let new_concls = box2pr_set new_concls in
-			eprintf"before union@.";
 			if FSet.is_empty hyps0 then
 				let hyps = new_hyps in
 				let e_term = pterm0 in
@@ -473,9 +466,7 @@ let rec realize families terms d =
 				pterm7, concl5, hilb7, hyps, concls
 			else
 				let hyps = FSet.union hyps0 new_hyps in
-				eprintf"before lemma3@.";
 				let s, concl1, hilb1 = lemma3 hyps0 in
-				eprintf"after lemma3";
 				let hilb2 =
 					MP(
 						Pr(pterm0,concl0),
@@ -491,13 +482,9 @@ let rec realize families terms d =
 					 | _ ->
 					 		raise (Invalid_argument "realize bug: unexpected conclusion of lemma3")
 				in
-				eprintf"before syllogism@.";
 				let concl3, hilb3 = syllogism concl1 hilb1 concl2 hilb2 in
-				eprintf"before array set@.";
 				terms.(e) <- e_term;
-				eprintf"before add_families@.";
 				let concl4, hilb4 = add_families families e concl3 hilb3 in
-				eprintf"after add_families@.";
 				(*let concl5, hilb5 = hilbert_box_right hyps concls concl4 hilb4 in
 				let hilb6, pterm6 = lift [] hilb5 concl5 in*)
 				begin match concl4 with

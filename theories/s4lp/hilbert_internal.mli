@@ -46,5 +46,6 @@ end
 
 module FSet : Lm_set_sig.LmSet with type elt = OrderedFormula.t
 
+val check_proof : formula list -> derivation -> formula -> bool
 val lift : formula list -> derivation -> formula -> derivation * proof_term
 val deduction : formula -> formula list -> derivation -> formula -> derivation

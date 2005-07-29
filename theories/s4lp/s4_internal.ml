@@ -1,20 +1,21 @@
 open Hilbert_internal
 open Lm_int_set
 open Lm_symbol
+open Lm_printf
 open LP
 open OrderedFormula
 
-type derivation =
-   NegLeft of formula * derivation
- | NegRight of formula * derivation
- | AndLeft of formula * derivation
- | AndRight of formula * derivation * derivation
- | OrLeft of formula * derivation * derivation
- | OrRight of formula * derivation
- | ImplLeft of formula * formula * derivation * derivation
- | ImplRight of formula * formula * derivation
- | BoxLeft of formula * derivation
- | BoxRight of formula * FSet.t * FSet.t * derivation
+type s4_derivation =
+   NegLeft of formula * s4_derivation
+ | NegRight of formula * s4_derivation
+ | AndLeft of formula * s4_derivation
+ | AndRight of formula * s4_derivation * s4_derivation
+ | OrLeft of formula * s4_derivation * s4_derivation
+ | OrRight of formula * s4_derivation
+ | ImplLeft of formula * formula * s4_derivation * s4_derivation
+ | ImplRight of formula * formula * s4_derivation
+ | BoxLeft of formula * s4_derivation
+ | BoxRight of formula * FSet.t * FSet.t * s4_derivation
  | Axiom of formula * FSet.t * FSet.t
  | FalsumLeft of FSet.t * FSet.t
 
@@ -59,7 +60,8 @@ let rec join_families info f1 f2 =
 
 let rec assign_fresh_families info n f =
 	match f with
-		Falsum -> info, n, f
+		Falsum
+	 | Atom _ -> info, n ,f
 	 | Implies(f1, f2) ->
 	 		let info1, n1, f1' = assign_fresh_families info n f1 in
 			let info2, n2, f2' =  assign_fresh_families info1 n1 f2 in
@@ -74,16 +76,18 @@ let rec assign_fresh_families info n f =
 	 | _ ->
 	 		raise (Invalid_argument "assign_fresh_families: unsupported connective")
 
-let rec box2pr = function
-   Falsum -> Falsum
- | Implies(f1, f2) ->
- 		Implies(box2pr f1, box2pr f2)
- | Box((Modal fam) as m, f0) ->
-      Box(m, box2pr f0)
- | Box(Evidence e, f0) ->
- 		Pr(Provisional e, box2pr f0)
- | _ ->
-      raise (Invalid_argument "box2pr: unsupported connective")
+let rec box2pr f =
+	match f with
+	   Falsum
+	 | Atom _ -> f
+	 | Implies(f1, f2) ->
+	 		Implies(box2pr f1, box2pr f2)
+	 | Box((Modal fam) as m, f0) ->
+	      Box(m, box2pr f0)
+	 | Box(Evidence e, f0) ->
+			Pr(Provisional e, box2pr f0)
+	 | _ ->
+   	   raise (Invalid_argument "box2pr: unsupported connective")
 
 let box2pr_set set =
 	FSet.fold (fun acc f -> FSet.add acc (box2pr f)) FSet.empty set
@@ -212,45 +216,23 @@ let one_implication hyps concls =
 		let a = set2conj hyps in
 		Implies(a, b)
 
-(*
-let hilbert_impl_right hyps concls hyps0 concls0 hilb0 concl0 f01 f02 =
-	let concl = one_implication hyps concls in
-	MP(
-		concl0,
-		hilb0,
-		Hyp(new_number ())
-	),
-	Implies(concl0, concl)
-
-let hilbert_impl_left
-	hyps concls hyps01 concls01 concl01 hyps02 concls02 concl02 hilb01 hilb02
-	=
-	let concl = one_implication hyps concls in
-	MP(
-		concl02,
-		hilb02,
-		MP(
-			concl01.
-			hilb01,
-			Hyp(new_number ())
-		)
-	),
-	Implies(concl01, Implies(concl02, concl))
-*)
-
 let rec deduction_all hyps hilb f =
 	match hyps with
 		[] ->
 			hilb, f
 	 | h::rest ->
+	 		eprintf"before deduction@.";
 			let hilb' = deduction h rest hilb f in
+			eprintf"after deduction@.";
 			deduction_all rest hilb' (Implies(h, f))
 
 let lemma3 set =
 	let concl0 = set2conj set in
 	let hilb0 = Hyp(new_number ()) in
 	let list = FSet.to_list set in
+	eprintf"before lift@.";
 	let hilb, pterm = lift list hilb0 concl0 in
+	eprintf"after list@.";
 	let concl = Pr(pterm, concl0) in
 	let hilb1, concl1 = deduction_all list hilb concl in
 	let concl2 = Implies(concl0, concl) in
@@ -327,6 +309,30 @@ let add_families families index concl hilb =
 			add_lesser_terms concl1 hilb1 less'
 	 | _ ->
 	 		raise (Invalid_argument "add_families: unexpected shape of term")
+
+let rec add_lesser_terms0 t f hilb = function
+   [] -> t, f, hilb
+ | i::tl ->
+      let t1 = Plus(Provisional i, t) in
+		let hilb1 = MP(Pr(t, f), hilb, LP.Axiom(15)) in
+      add_lesser_terms0 t1 f hilb1 tl
+
+let add_families0 families index t f hilb =
+   let family = families.(index) in
+   let family' = IntSet.remove family index in
+   let fam_list = IntSet.to_list family' in
+   let less, greater = List.partition (fun i -> i < index) fam_list in
+   let less' = List.rev less in
+   let t1, f1, hilb1 =
+	   match greater with
+   		[] -> t, f, hilb
+	    | _::_ ->
+  			   let greater_term = sum_provisionals greater in
+      	   let t1 = Plus(t, greater_term) in
+  		   	t1, f, MP(Pr(t, f), hilb, LP.Axiom(16))
+  	in
+   let t2, f2, hilb2 = add_lesser_terms0 t1 f1 hilb1 less' in
+	Pr(t2, f2), hilb2
 
 let rec realize families terms d =
 	match d with
@@ -447,42 +453,75 @@ let rec realize families terms d =
 			hyps, concls
 	 | BoxRight((Box(Evidence e,f0)) as f, new_hyps, new_concls, d0) ->
 			let pterm0, concl0, hilb0, hyps0, concls0 = realize families terms d0 in
+			eprintf"before choose@.";
 			let f0 = FSet.choose concls0 in
+			eprintf"after choose@.";
 			let new_hyps = box2pr_set new_hyps in
 			let new_concls = box2pr_set new_concls in
-			let hyps = FSet.union hyps0 new_hyps in
-			let s, concl1, hilb1 = lemma3 hyps0 in
-			let hilb2 =
-				MP(
-					Pr(pterm0,concl0),
-					hilb0,
-					LP.Axiom(12)
-				)
-			in
-			let e_term = App(pterm0, s) in
-			let concl2 =
-				match concl1 with
-					Implies(_, (Pr(s, conj) as a)) ->
-						Implies(a, Pr(e_term, f0))
+			eprintf"before union@.";
+			if FSet.is_empty hyps0 then
+				let hyps = new_hyps in
+				let e_term = pterm0 in
+				terms.(e) <- e_term;
+				let concl4, hilb4 = add_families0 families e e_term concl0 hilb0 in
+				let concls = FSet.add new_concls concl4 in
+				let concl5 = one_implication hyps concls in
+				let concl6 = Implies(concl4, concl5) in
+				let pterm6 = PropTaut(concl6) in
+				let hilb6 = MP(Pr(pterm6, concl6), ConstSpec, LP.Axiom(13)) in
+				let hilb7, pterm7 = lift [] (MP(concl4, hilb4, hilb6)) concl5 in
+				pterm7, concl5, hilb7, hyps, concls
+			else
+				let hyps = FSet.union hyps0 new_hyps in
+				eprintf"before lemma3@.";
+				let s, concl1, hilb1 = lemma3 hyps0 in
+				eprintf"after lemma3";
+				let hilb2 =
+					MP(
+						Pr(pterm0,concl0),
+						hilb0,
+						LP.Axiom(12)
+					)
+				in
+				let e_term = App(pterm0, s) in
+				let concl2 =
+					match concl1 with
+						Implies(_, (Pr(s, conj) as a)) ->
+							Implies(a, Pr(e_term, f0))
+					 | _ ->
+					 		raise (Invalid_argument "realize bug: unexpected conclusion of lemma3")
+				in
+				eprintf"before syllogism@.";
+				let concl3, hilb3 = syllogism concl1 hilb1 concl2 hilb2 in
+				eprintf"before array set@.";
+				terms.(e) <- e_term;
+				eprintf"before add_families@.";
+				let concl4, hilb4 = add_families families e concl3 hilb3 in
+				eprintf"after add_families@.";
+				(*let concl5, hilb5 = hilbert_box_right hyps concls concl4 hilb4 in
+				let hilb6, pterm6 = lift [] hilb5 concl5 in*)
+				begin match concl4 with
+					Implies(a, box_b) ->
+						let concls = FSet.add new_concls box_b in
+						let concl5 = one_implication hyps concls in
+						let concl6 = Implies(concl4, concl5) in
+						let pterm6 = PropTaut(concl6) in
+						let hilb6 = ConstSpec in
+						let hilb7, pterm7 = lift [] (MP(concl4, hilb4, hilb6)) concl5 in
+						pterm7, concl5, hilb7, hyps, concls
 				 | _ ->
-				 		raise (Invalid_argument "realize bug: unexpected conclusion of lemma3")
-			in
-			let concl3, hilb3 = syllogism concl1 hilb1 concl2 hilb2 in
-			terms.(e) <- e_term;
-			let concl4, hilb4 = add_families families e concl3 hilb3 in
-			(*let concl5, hilb5 = hilbert_box_right hyps concls concl4 hilb4 in
-			let hilb6, pterm6 = lift [] hilb5 concl5 in*)
-			begin match concl4 with
-				Implies(a, box_b) ->
-					let concls = FSet.add new_concls box_b in
-					let concl5 = one_implication hyps concls in
-					let concl6 = Implies(concl4, concl5) in
-					let pterm6 = PropTaut(concl6) in
-					let hilb6 = ConstSpec in
-					let hilb7, pterm7 = lift [] (MP(concl4, hilb4, hilb6)) concl5 in
-					pterm7, concl5, hilb7, hyps, concls
-			 | _ ->
-					raise (Invalid_argument "realize bug: unexpected conclusion of add_families")
-			end
+						raise (Invalid_argument "realize bug: unexpected conclusion of add_families")
+				end
 	 | _ ->
 	 		raise (Invalid_argument "realize: a rule for an unsupported connective")
+
+let a = Atom (Lm_symbol.add "a")
+let a_impl_a = Implies(a, a)
+
+let proof0 = Axiom(a, FSet.empty, FSet.empty)
+let proof1 = ImplRight(a, a, proof0)
+let proof2 = BoxRight(Box(Evidence 0, a_impl_a), FSet.empty, FSet.empty, proof1)
+let families, proof, hyps, concls = allocate proof2
+let terms = Array.make 1 (PropTaut Falsum)
+let t, f, hilb, hyps, concls = realize families terms proof
+let result = check_proof [] hilb (Pr(t, f))

@@ -31,32 +31,29 @@ let map (info: IntSet.t IntTable.t) n f (set : FSet.t) =
 		(info, n, FSet.empty)
 		set
 
-let map2_aux f set2 (info, acc) item =
+let map2_aux f set2 info item =
 	let item2, _ = extract set2 item in
-	let info', item3 = f info item item2 in
-	info', FSet.add acc item3
+	let info' = f info item item2 in
+	info'
 
 let map2 f info set1 set2 =
-	FSet.fold (map2_aux f set2) (info, FSet.empty) set1
+	FSet.fold (map2_aux f set2) info set1
 
 let rec join_families info f1 f2 =
    match f1, f2 with
       Falsum, Falsum ->
-			info, f1
+			info
     | Implies(f11, f12), Implies(f21, f22) ->
-	 		let info1, f1' = join_families info f11 f21 in
-			let info2, f2' = join_families info1 f12 f22 in
-         info2, Implies(f1', f2')
+	 		let info1 = join_families info f11 f21 in
+			join_families info1 f12 f22
     | Box((Modal fam1) as m1, f10), Box((Modal fam2) as m2, f20) when fam_cmp m1 m2 = 0 ->
-	 		let info', f' = join_families info f10 f20 in
-         info', Box(m1, f')
+	 		join_families info f10 f20
     | Box(Evidence e1, f10), Box(Evidence e2, f20) ->
 	 		let set1 = IntTable.find info e1 in
 			let set2 = IntTable.find info e2 in
-			let info' = IntTable.remove (IntTable.remove info e1) e2 in
-			let info'' = IntTable.add info' e1 (IntSet.union set1 set2) in
-			let info''', f' = join_families info'' f10 f20 in
-         info''', Box(Evidence e1, f')
+			let info1 = IntTable.remove (IntTable.remove info e1) e2 in
+			let info2 = IntTable.add info1 e1 (IntSet.union set1 set2) in
+			join_families info2 f10 f20
     | _ ->
          raise (Invalid_argument "assign_fresh_families: unsupported connective")
 
@@ -76,6 +73,20 @@ let rec assign_fresh_families info n f =
 			info'', succ n', Box(Evidence n', f0')
 	 | _ ->
 	 		raise (Invalid_argument "assign_fresh_families: unsupported connective")
+
+let rec box2pr = function
+   Falsum -> Falsum
+ | Implies(f1, f2) ->
+ 		Implies(box2pr f1, box2pr f2)
+ | Box((Modal fam) as m, f0) ->
+      Box(m, box2pr f0)
+ | Box(Evidence e, f0) ->
+ 		Pr(Provisional e, box2pr f0)
+ | _ ->
+      raise (Invalid_argument "box2pr: unsupported connective")
+
+let box2pr_set set =
+	FSet.fold (fun acc f -> FSet.add acc (box2pr f)) FSet.empty set
 
 (*
 let rec count_boxes_fml n = function
@@ -122,9 +133,9 @@ let rec assign_families (info: IntSet.t IntTable.t) n = function
       let info2, n2, d2', hyps2, concls2 = assign_families info1 n1 d2 in
       let a', concls1' = extract concls1 a in
       let b', hyps2' = extract hyps2 b in
-      let info3, hyps = map2 join_families info2 hyps1 hyps2' in
-      let info4, concls = map2 join_families info3 concls1' concls2 in
-      info4, n2, ImplLeft(a', b', d1', d2'), FSet.add hyps (Implies(a', b')), concls
+      let info3 = map2 join_families info2 hyps1 hyps2' in
+      let info4 = map2 join_families info3 concls1' concls2 in
+      info4, n2, ImplLeft(a', b', d1', d2'), FSet.add hyps1 (Implies(a', b')), concls1'
  | ImplRight(a, b, d) ->
       let info', n', d', hyps, concls = assign_families info n d in
       let a', hyps' = extract hyps a in
@@ -136,9 +147,8 @@ let rec assign_families (info: IntSet.t IntTable.t) n = function
       let f', hyps'' = extract hyps' f in
       begin match f' with
          Box(Evidence i as e, a'') ->
-            let info'', a''' = join_families info' a' a'' in
-            let f'' = Box(e, a''') in
-            info'', n', BoxLeft(f'', d'), FSet.add hyps'' f'', concls
+            let info'' = join_families info' a' a'' in
+            info'', n', BoxLeft(f', d'), FSet.add hyps'' f', concls
        | _ ->
             raise (Invalid_argument "assign_families bug: evidence box expected")
 		end

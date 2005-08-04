@@ -1,4 +1,4 @@
-(* -*- Mode: text -*- *)
+(* -*- Mode: text; fill-column: 100 -*- *)
 doc <:doc<
 
    @begin[spelling]
@@ -57,10 +57,10 @@ in a correct program.  Said another way, if the invariant is ever false, then so
 happened and the program has an error.  Invariants are used both for correctness and performance.
 For example, balanced binary trees are a frequently-used data structure with the following
 invariants 1) each node in the has no more than two children, 2) the nodes are ordered, and 3) the
-depth of the tree is logarithmic in the total number of nodes.  The first invariant can be enforced
+depth of the tree is logarithmic in the total number of nodes.  The first invariants can be enforced
 with the type system (by specifying a type for nodes that allows at most two children), but the
 second and third invariants are not so simple to maintain.  When we implement this data structure,
-it is more than likely that our implementation will fail if the given a tree that is not properly
+it is more than likely that our implementation will fail if given a tree that is not properly
 ordered (invariant 2).  It may work correctly, though at lower performance, if the tree is not
 balanced (invariant 3).
 
@@ -72,27 +72,545 @@ because no other part of the program can access the data directly.
 
 Of course, these restrictions can also be awkward.  Often we want partial @emph{transparency} where
 some parts of a data structure are abstract but others are directly accessible.  OCaml provides a
-general mechanism for data hiding and encapsulation called a @emph{module system}.  An module in
+general mechanism for data hiding and encapsulation called a @emph{module system}.  A module in
 OCaml has two parts: an @emph{implementation} that implements the types, functions, and values in
 the module; and a @emph{signature} that specifies which parts of the implementation are publically
 accessible.  That is, a signature provides type declarations for the visible parts of the
 implementation---everything else is hidden.
 
-------------------------------------------------------------------------
+In fact, the compilation units discussed in Chapter @refchapter[files] are a form of modules, where
+the implementation is defined in a @code{.ml} file and the interface is defined in a @code{.mli}
+file.  However, compilation units are not the only way to create modules.  OCaml provides a general
+module system where modules can be created explicitly using the @code{module} keyword.  There are
+three key parts in the module system: @emph{signatures}, @emph{structures}, and @emph{functors}.  In
+this chapter, we will discuss the first two; we'll leave discussion of functors in Chapter
+@refchapter[functors].
 
-The compilation units discussed in the Chapter @refchapter[files] are not the
-only way to create modules.  OCaml provides a general module system
-where modules can be created explicitly using the @code{module}
-keyword.  There are three key parts in the module system:
-@emph{signatures}, @emph{structures}, and @emph{functors}.
+@section["simple-modules"]{Simple modules}
 
-Module signatures correspond to the signatures defined in a
-@code{.mli} file, and module structures correspond to the
-implementations defined in a @code{.ml} file.  There is one major
-difference.  Each compilation unit has at most one signature, defined
-by the @code{.mli} file.  The module system is more general: a single
-signature can be used to specify multiple structures; and a structure
-can have multiple signatures.
+Modules are defined with the @tt{module} keyword using the following syntax.
+
+@begin[center]
+@tt{module} @emph{Name} @tt{= struct} @emph{implementation} @tt{end}
+@end[center]
+
+The module @emph{Name} must begin with an uppercase letter.  The @emph{implementation} is exactly
+the same as the contents of a @code{.ml} file.  It can include any of the following.
+
+@begin[itemize]
+@item{@tt{type} definitions}
+@item{@tt{exception} definitions}
+@item{@tt{let} definitions}
+@item{@tt{open} statements to open the namespace of another module}
+@item{@tt{include} statements that include the contents of another module}
+@item{signature definitions}
+@item{nested structure definitions}
+@end[itemize]
+
+Let's return to the simple list-based implementation of sets from the previous chapter.  To define
+the Set as a module, we can use an explicit @code{module/struct} definition, a shown in Figure
+@reffigure[mset1].  For this example, we'll use the OCaml toploop, which will infer a signature
+for the module, as shown on the right in the figure.
+
+@begin[figure,mset1]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{Module definition}}
+@hline
+@line{{@bf[module] Set = @bf[struct]}}
+@line{{$@quad$ @bf[type] 'a set = 'a list}}
+@line{{$@quad$ @bf[let] empty = []}}
+@line{{$@quad$ @bf[let] add x l = x @code{::} l}}
+@line{{$@quad$ @bf[let] mem x l = List.mem x l}}
+@line{{@bf[end]@code{;;}}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Inferred type}}
+@hline
+@line{{@bf[module] Set : @bf[sig]}}
+@line{{$@quad$ @bf[type] 'a set = 'a list}}
+@line{{$@quad$ @bf[val] empty : 'a list}}
+@line{{$@quad$ @bf[val] add : 'a @code{->} 'a list @code{->} 'a list}}
+@line{{$@quad$ @bf[val] mem : 'a @code{->} 'a list @code{->} bool}}
+@line{{@bf[end]}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+One problem with this module is that the inferred type exposes all of the information in the module.
+As usual, we would like to hide the @code{'a set} type, making it easier to replace the
+implementation later if we wish to improve its performance.  To do this, we should assign an
+explicit signature.  A module signature is declared with a @code{module type} declaration.
+
+@begin[center]
+@tt{module type} @emph{Name} @tt{= sig} @emph{signature} @tt{end}
+@end[center]
+
+As before, the name of the signature must begin with an uppercase letter.  The signature can contain
+any of the items that can occur in an interface @code{.mli} file, including any of the following.
+
+@begin[itemize]
+@item{@tt{type} declarations}
+@item{@tt{exception} definitions}
+@item{@tt{val} declarations}
+@item{@tt{open} statements to open the namespace of another signature}
+@item{@tt{include} statements that include the contents of another signature}
+@item{nested signature declarations}
+@end[itemize]
+
+For our example, the signature should include an abstract type declaration for the @code{'a set}
+type, a transparent type definition for the @code{'a choice} type, and @code{val} declarations for
+each of the values.  The @code{Set} module's signature is constrained by specifying the signature
+after a colon in the module definition @bf[module] Set : SetSig = @bf[struct] $@cdots$ @bf[end].
+For this example, the toploop simply validates the type assignment, printing @bf[module] Set :
+SetSig.
+
+@begin[figure,mset2]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{Signature definition}}
+@hline
+@line{{@bf{module type} SetSig = @bf[sig]}}
+@line{{$@quad$ @bf[type] 'a set}}
+@line{{$@quad$ @bf[val] empty : 'a set}}
+@line{{$@quad$ @bf[val] add : 'a @code{->} 'a set @code{->} 'a set}}
+@line{{$@quad$ @bf[val] mem : 'a @code{->} 'a set @code{->} bool}}
+@line{{}}
+@line{{Inferred type}}
+@hline
+@line{{@bf[module] Set : SetSig}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Module definition}}
+@hline
+@line{{@bf[module] Set : SetSig = @bf[struct]}}
+@line{{$@quad$ @bf[type] 'a set = 'a list}}
+@line{{$@quad$ @bf[let] empty = []}}
+@line{{$@quad$ @bf[let] add x l = x @code{::} l}}
+@line{{$@quad$ @bf[let] mem x l = List.mem x l}}
+@line{{@bf[end]@code{;;}}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+@section[include]{Using include to extend modules}
+
+The @tt{include} statement can be used to create modules and signatures that re-use existing
+definitions.  For example, suppose we wish to add a @code{choose} function that returns an element
+of the set if one exists.  Instead of re-typing the entire signature, we can use the @code{include}
+statement to include the existing signature, as shown in Figure @reffigure[mset3].  The resulting
+signature includes all of the types and declarations from SetSig as well as the new (transparent)
+type definition @code{'a choice} and function declaration @code{val choose}.
+
+@begin[figure,mset3]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{Signature definition}}
+@hline
+@line{{@bf{module type} ChooseSetSig = @bf[sig]}}
+@line{{$@quad$ @bf[include] SetSig}}
+@line{{$@quad$ @bf[type] 'a choice = Element of 'a | Empty}}
+@line{{$@quad$ @bf[val] choose : 'a set @code{->} 'a choice}}
+@line{{@bf[end];;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Inferred type (from the toploop)}}
+@hline
+@line{{@bf{module type} ChooseSetSig = @bf[sig]}}
+@line{{$@quad$ @bf[type] 'a set}}
+@line{{$@quad$ @bf[val] empty : 'a set}}
+@line{{$@quad$ @bf[val] add : 'a @code{->} 'a set @code{->} 'a set}}
+@line{{$@quad$ @bf[val] mem : 'a @code{->} 'a set @code{->} bool}}
+@line{{$@quad$ @bf[type] 'a choice = Element of 'a | Empty}}
+@line{{$@quad$ @bf[val] choose : 'a set @code{->} 'a choice}}
+@line{{@bf[end];;}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+@subsection["include-struct"]{Using include to extend implementations}
+
+The @tt{include} statement can also be used in implementations.  For our example, however, there is
+a problem.  The straightforward approach in defining a module @code{ChooseSet} is to include the
+@code{Set} module, then define the new type @code{'a choice} and the new function @code{choose}.
+The result of this attempt is shown in Figure @reffigure[mset4], where the toploop prints out an
+extensive error message (the toploop prints out the full signature, which we have elided in @bf[sig]
+$@cdots$ @bf[end]).
+
+@begin[figure,mset4]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{Module definition}}
+@hline
+@line{{@bf{module} ChooseSet : ChooseSetSig = @bf[struct]}}
+@line{{$@quad$ @bf[include] Set}}
+@line{{$@quad$ @bf[type] 'a choice = Element of 'a | Empty}}
+@line{{$@quad$ @bf[let] choose = @bf[function]}}
+@line{{$@quad @quad$ | x :: _ @code{->} Element x}}
+@line{{$@quad @quad$ | [] @code{->} Empty}}
+@line{{@bf[end];;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Inferred type (from the toploop)}}
+@hline
+@line{{Signature mismatch:}}
+@line{{Modules do not match:}}
+@line{{$@quad$ @bf[sig] $@cdots$ @bf[end]}}
+@line{{is not included in}}
+@line{{$@quad$ ChooseSetSig}}
+@line{{Values do not match:}}
+@line{{$@quad$ @bf[val] choose : 'a list @code{->} 'a choice}}
+@line{{is not included in:}}
+@line{{$@quad$ @bf[val] choose : 'a set @code{->} 'a choice}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+The problem is apparent from the last few lines of the error message---the @code{choose} function
+has type @code{'a list -> 'a choice}, not @code{'a set -> 'a choice} as it should.  The issue is
+that we included the @emph{abstract} module @code{Set}, where the type @code{'a set} is an abstract
+type, not a list.
+
+One solution is to manually copy the code from the @code{Set} module into the @code{ChooseSet}
+module.  This has its drawbacks of course.  We aren't able to re-use the existing implementation,
+our code base gets larger, etc.  If we have access to the original non-abstract set implementation,
+there is another solution--we can just include the non-abstract set implementation, where it is
+known that the set is represented as a list.
+
+Suppose we start with a non-abstract implementation @code{SetInternal} of sets as lists.  Then the
+module @code{Set} is the same implementation, with the signature @code{SetSig}; and the
+@code{ChooseSet} includes the @code{SetInternal} module instead of @code{Set}.  Figure
+@reffigure[mset5] shows the definitions in this order, together with the types inferred by the
+toploop.
+
+@begin[figure,mset5]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{Module definitions}}
+@hline
+@line{{@bf[module] SetInternal = @bf[struct]}}
+@line{{$@quad$ @bf[type] 'a set = 'a list}}
+@line{{$@quad$ @bf[let] empty = []}}
+@line{{$@quad$ @bf[let] add x l = x :: l}}
+@line{{$@quad$ @bf[let] mem x l = List.mem x l}}
+@line{{@bf[end];;}}
+@line{{}}
+@line{{@bf[module] Set : SetSig = SetInternal}}
+@line{{}}
+@line{{@bf{module} ChooseSet : ChooseSetSig = @bf[struct]}}
+@line{{$@quad$ @bf[include] SetInternal}}
+@line{{$@quad$ @bf[type] 'a choice = Element of 'a | Empty}}
+@line{{$@quad$ @bf[let] choose = @bf[function]}}
+@line{{$@quad @quad$ | x :: _ @code{->} Element x}}
+@line{{$@quad @quad$ | [] @code{->} Empty}}
+@line{{@bf[end];;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Inferred types (from the toploop)}}
+@hline
+@line{{@bf[module] SetInternal : @bf[sig]}}
+@line{{$@quad$ @bf[type] 'a set = 'a list}}
+@line{{$@quad$ @bf[val] empty : 'a list}}
+@line{{$@quad$ @bf[val] add : 'a @code{->} 'a list @code{->} 'a list}}
+@line{{$@quad$ @bf[val] mem : 'a @code{->} 'a list @code{->} bool}}
+@line{{@bf[end];;}}
+@line{{}}
+@line{{@bf[module] Set : SetSig}}
+@line{{}}
+@line{{@bf[module] ChooseSet : ChooseSetSig}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+Note that for the module @code{Set} it is not necessary to use a @bf[struct] $@cdots$ @bf[end]
+definition because the @code{Set} module is @emph{equivalent} to the @code{SetInternal} module, it
+just has a different signature.  The modules @code{Set} and @code{ChooseSet} are ``friends,'' in
+that they share internal knowledge of each other's implementation, while keeping their public
+signatures abstract.
+
+@subsection["module-hiding"]{Module hiding}
+
+From a software engineering perspective, there isn't much danger in leaving the @code{SetInternal}
+module publicly accessible.  A @code{SetInternal.set} can't be used in place of a @code{Set.set} or
+a @code{ChooseSet.set}, because the latter types are abstract.  However, we might still want to keep
+the definition private so that other parts of the program do not accidentally use it.  To do this,
+we can enclose the definitions in yet another module that declares on the @code{Set} and
+@code{ChooseSet} modules, hiding the @code{SetInternal} module.  In fact, in the @code{Sets} module
+we don't need the @code{SetInternal} module at all; we can keep the @code{Set} and @code{ChooseSet}
+implementations non-abstract, and constrain them in the signature for the @code{Sets} module.  The
+code for this is shown in Figure@reffigure[mset6].
+
+@begin[figure,mset6]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{Module definitions}}
+@hline
+@line{{@bf[module] Sets : @bf[sig]}}
+@line{{$@quad$ @bf[module] Set : SetSig}}
+@line{{$@quad$ @bf[module] ChooseSet : ChooseSetSig}}
+@line{{@bf[end] = @bf[struct]}}
+@line{{$@quad$ @bf[module] Set = @bf[struct]}}
+@line{{$@quad @quad$ @bf[type] 'a set = 'a list}}
+@line{{$@quad @quad$ @bf[let] empty = []}}
+@line{{$@quad @quad$ @bf[let] add x l = x :: l}}
+@line{{$@quad @quad$ @bf[let] mem x l = List.mem x l}}
+@line{{$@quad$ @bf[end]}}
+@line{{$@quad$ @bf{module} ChooseSet = @bf[struct]}}
+@line{{$@quad @quad$ @bf[include] Set}}
+@line{{$@quad @quad$ @bf[type] 'a choice = Element of 'a | Empty}}
+@line{{$@quad @quad$ @bf[let] choose = @bf[function]}}
+@line{{$@quad @quad @quad$ | x :: _ @code{->} Element x}}
+@line{{$@quad @quad @quad$ | [] @code{->} Empty}}
+@line{{$@quad$ @bf[end]}}
+@line{{@bf[end];;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Inferred types (from the toploop)}}
+@hline
+@line{{@bf[module] Sets : @bf[sig]}}
+@line{{$@quad$ @bf[module] Set : SetSig}}
+@line{{$@quad$ @bf[module] ChooseSet : ChooseSetSig}}
+@line{{@bf[end]}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+There are a few things to note of this definition.
+@begin[enumerate]
+
+@item{{The @code{Sets} module uses an @emph{anonymous} signature (meaning that the signature has no
+name).  Anonymous signatures and @bf[struct] implementations are perfectly acceptable any place
+where a signature or structure is needed.}}
+
+@item{{Within the @code{Sets} module the @code{Set} and @code{ChooseSet} modules are not
+constrained, so that their implementations are public.  This allows the @code{ChooseSet} to refer to
+the @code{Set} implementation directly (so in this case, the @code{Set} and @code{ChooseSet} modules
+are firends).  The signature for the @code{Sets} module makes them abstract.}}
+
+@end[enumerate]
+
+@subsection["incompatible-include"]{Using include with incompatible signatures}
+
+In our current example, it might seem that there isn't much need to have two separate modules
+@code{ChooseSet} (with @code{choice}) and @code{Set} (without @code{choice}).  In practice it is
+perhaps more likely that we would simply add a @code{choice} function to the @code{Set} module.  The
+addition would not affect any existing code, since any existing code doesn't refer to the
+@code{choice} function anyway.
+
+Surprisingly, this kind of example occurs in practice more than it might seem, due to programs being
+developed with incompatible signatures.  For example, suppose we are writing a program that is going
+to make use of two independently-developed libraries.  Both libraries have their own @code{Set}
+implementation, and we decide that we would like to use a single @code{Set} implementation in the
+combined program.  Unfortunately, the signatures are incompatible---in the first library, the
+@code{add} function was defined with type @code{val add : 'a -> 'a set -> 'a set}; but in the second
+library, it was defined with type @code{val add : 'a set -> 'a -> 'a set}.  Let's say that the first
+library uses the desired signature.  Then, one solution would be to hunt through the second library,
+finding all calls to the @code{Set.add} function, reordering the arguments to fit a common
+signature.  Of course, the process is tedious, and it is unlikely we would want to do it.
+
+An alternative is to @emph{derive} a wrapper module @code{Set2} for use in the second library.  The
+process is simple, 1) @code{include} the @code{Set} module, and 2) redefine the @code{add} to match
+the desired signature; this is shown in Figure @reffigure[mset7].
+
+@begin[figure,mset7]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{Signature}}
+@hline
+@line{{@bf{module type} Set2Sig = @bf[sig]}}
+@line{{$@quad$ @bf[type] 'a set}}
+@line{{$@quad$ @bf[val] empty : 'a set}}
+@line{{$@quad$ @bf[val] add : 'a set @code{->} 'a @code{->} 'a set}}
+@line{{$@quad$ @bf[val] mem : 'a @code{->} 'a set @code{->} bool}}
+@line{{@bf[end]}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Implementation}}
+@hline
+@line{{@bf[module] Set2 : Set2Sig = @bf[struct]}}
+@line{{$@quad$ @bf[include] Set}}
+@line{{$@quad$ @bf[let] add l x = Set.add x l}}
+@line{{@bf[end];;}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+The @code{Set2} module is just a wrapper.  Apart from the @code{add} function, the types and values
+in the @code{Set} and @code{Set2} modules are the same, and the @code{Set2.add} function simply
+reorders the arguments before calling the @code{Set.add} function.  There is little or no
+performance penalty for the wrapper---in most cases the native-code OCaml compiler will
+@emph{inline} the @code{Set2.add} function (in other words, it will perform the argument reordering
+at compile time).
+
+@section["sharing-constraints"]{Sharing constraints}
+
+There is one remaining problem with this example.  In the combined program, the first library uses
+the original @code{Set} module, and the second library uses @code{Set2}.  It is likely that we will
+want to pass values, including sets, from one library to the other.  However, as defined, the
+@code{'a Set.set} and @code{'a Set2.set} types are distinct abstract types, and it is an error to
+use a value of type @code{'a Set.set} in a place where a value of type @code{'a Set2.set} is
+expected, and @emph{vice-versa}.  The following error message is typical.
+
+@begin[iverbatim]
+# Set2.add Set.empty 1;;
+This expression has type 'a Set.set
+   but is here used with type 'b Set2.set
+@end[iverbatim]
+
+Of course, we might want the types to be distinct.  But in this case, it is more likely that we want
+the definition to be transparent.  We know that the two kinds of sets are really the
+same---@code{Set2} is really just a wrapper for @code{Set}.  How do we establish the equivalence of
+@code{'a Set.set} and @code{'a Set2.set}.
+
+The solution is called a @emph{sharing constraint}.  The syntax for a sharing constraint uses the
+@code{with} keyword to specify a type equivalence for a module signature in the following form.
+@begin[center]
+@it{signature} ::= @it{signature} @bf{with type} @it{typename} @bf{=} @it{type}.
+@end[center]
+In this particular case, we wish to say that the @code{'a Set2.set} type is equal to the @code{'a
+Set.set} type, which we can do by adding a sharing constraint when the @code{Set2} module is
+defined, as shown in Figure @reffigure[mset8].
+
+@begin[figure,mset8]
+@begin[center]
+@begin[tabular,lcl]
+@line{{@begin[tabular,t,l]
+@line{{Module definition}}
+@hline
+@line{{@bf[module] Set2 : Set2Sig @bf{with type} 'a set = 'a Set.set}}
+@line{{= @bf[struct]}}
+@line{{$@quad$ @bf[include] Set}}
+@line{{$@quad$ @bf[let] add l x = Set.add x l}}
+@line{{@bf[end]}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Toploop}}
+@hline
+@line{{@bf["#"] @bf[let] s = Set2.add Set.empty 1;;}}
+@line{{@bf[val] s : int Set2.set = <abstr>}}
+@line{{@bf["#"] Set.mem 1 s;;}}
+@line{{- : bool = true}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
+
+The constraint specifies that the types @code{'a Set2.set} and @code{'a Set.set} are the same.  In
+other words, they @emph{share} a common type.  Since the two types are equal, set values can be
+freely passed between the two set implementations.
+
+@section["mod2-summary"]{Summary}
+
+JYH: still to write.
+
+@begin[itemize]
+@item{{Simple modules}}
+@item{{Modules with multiple signatures}}
+@item{{Sharing constraints}}
+@end[itemize]
+
+@section["mod2-exercises"]{Exercises}
+
+@begin[enumerate]
+
+@item{{One could argue that sharing constraints are never necessary for unparameterized modules like
+the ones in this chapter.  In the example of Figure @reffigure[mset8], there are at least two other
+solutions that allow the @code{Set2} and @code{Set} modules to share values, without having to use
+sharing constraints.  Present two alternate solutions without sharing constraints.}}
+
+@item{{In OCaml 3.08.3, signatures can apparently contain multiple declarations for the same value.
+
+@begin[iverbatim]
+# module type ASig = sig
+   val x : int
+   val x : bool
+  end;;
+module type ASig = sig val x : int val x : bool end
+@end[iverbatim]
+
+However, these declarations are really just an illusion, only the first declaration counts, any
+others are ignored.  Based on what you know, is this behavior expected?  If multiple declarations
+are allowed, which one should be the ``real'' declaration?}}
+
+@item{{Unlike @code{val} declarations, @code{type} declarations must have distinct names in any
+structure or signature.
+
+@begin[iverbatim]
+# module type ASig = sig
+     type t = int
+     type t = bool
+  end;;
+Multiple definition of the type name t.
+Names must be unique in a given structure or signature.
+@end[iverbatim]
+
+While this particular example may seem silly, the real problem is that all modules included with
+@bf[include] must have disjoint type names.
+
+@begin[iverbatim]
+# module type XSig = sig
+     type t
+     val x : t
+  end;;
+# module A : XSig = struct
+     type t = bool
+     let x = false
+  end;;
+# module B : XSig = struct
+     type t = int
+     let x = 0
+  end;;
+# module C = struct
+     include A
+     include B
+  end;;
+Multiple definition of the type name t.
+Names must be unique in a given structure or signature.
+@end[iverbatim]
+
+Is this a problem?  If it is not, argue that conflicting includes should not be allowed in practice.
+If it is, propose a possible solution to the problem.}}
+
+@end[enumerate]
+
+@docoff
+
+@section["old-text"]{Old text}
+
+Module signatures correspond to the signatures defined in a @code{.mli} file, and module structures
+correspond to the implementations defined in a @code{.ml} file.  There is one major difference.
+Each compilation unit has at most one signature, defined by the @code{.mli} file.  The module system
+is more general: a single signature can be used to specify multiple structures; and a structure can
+have multiple signatures.
 
 This ability to share signatures and structures can have
 important effects on code re-use.  For example, in Chapter
@@ -118,381 +636,6 @@ simple way to generalize the implementation of a structure.
 In the following sections, we'll describe the three different parts of
 the module system by developing the finite set example in the context
 of the module system.
-
-@section["modules-signatures"]{Module signatures}
-
-A module signature is declared with a @code{module type} declaration.
-
-@begin[center]
-@tt{module type} @emph{Name} @tt{= sig} @emph{signature} @tt{end}
-@end[center]
-
-The name of the signature must begin with an uppercase letter.
-The signature can contain any of the items that can occur in an
-interface @code{.mli} file, including any of the following.
-
-@begin[itemize]
-@item{@tt{type} declarations}
-@item{@tt{exception} definitions}
-@item{method type declarations, using the @tt{val} keyword}
-@item{@tt{open} statements to open the namespace of another signature}
-@item{@tt{include} statements that include the contents of another
-   signature}
-@item{nested signature declarations}
-@end[itemize]
-
-Signatures can be defined in an interface, implementation, or in the
-OCaml toploop.  A signature is like a type declaration---if a
-@code{.mli} file defines a signature, the @emph{same} signature
-must also be defined in the @code{.ml} file.
-
-For the finite set example, the signature should include a type
-declaration for the set type, and method declarations for the @tt{empty},
-@tt{mem}, and @tt{insert} methods.  For this example, we'll return to
-the OCaml toploop, which will display the types of the modules we define.
-
-@begin[iverbatim]
-# module type FsetSig =
-  sig
-     type 'a t
-     val empty : 'a t
-     val mem : 'a -> 'a t -> bool
-     val insert : 'a -> 'a t -> 'a t
-  end;;
-module type FsetSig =
-  sig
-    type 'a t
-    val empty : 'a t
-    val mem : 'a -> 'a t -> bool
-    val insert : 'a -> 'a t -> 'a t
-  end
-@end[iverbatim]
-
-The @tt{include} statement can be used to create a new signature that
-@emph{extends} an existing signature.  For example, suppose we would
-like to define a signature for finite sets that includes a @tt{delete}
-function to remove an element of a set.  One way to be to re-type the
-entire signature for finite sets followed by the @tt{delete}
-declaration.  The @tt{include} statement performs this inclusion
-automatically.
-
-@begin[iverbatim]
-# module type FsetDSig =
-  sig
-     include Fset
-     val delete : 'a -> 'a t -> 'a t
-  end;;
-module type FsetDSig =
-  sig
-    type 'a t
-    val empty : 'a t
-    val mem : 'a -> 'a t -> bool
-    val insert : 'a -> 'a t -> 'a t
-    val delete : 'a -> 'a t -> 'a t
-  end
-@end[iverbatim]
-
-@section["modules-structures"]{Module structures}
-
-Module structures are defined with the @tt{module} keyword.
-
-@begin[center]
-@tt{module} @emph{Name} @tt{= struct} @emph{implementation} @tt{end}
-@end[center]
-
-Once again, the module @emph{name} must begin with an uppercase
-letter.  The @emph{implementation} is exactly the same as the contents
-of a @code{.ml} file.  It can include any of the following.
-
-@begin[itemize]
-@item{@tt{type} definitions}
-@item{@tt{exception} definitions}
-@item{method definitions, using the @tt{let} keyword}
-@item{@tt{open} statements to open the namespace of another module}
-@item{@tt{include} statements that include the contents of another
-   module}
-@item{signature declarations}
-@item{nested structure definitions}
-@end[itemize]
-
-Let's try this with the balanced binary tree example (the complete
-definitions for the @tt{balance} and @tt{insert} functions are given
-in Section @refsubsection["method-definitions"]).
-
-@begin[iverbatim]
-# module Fset =
-  struct
-     type color =
-        Red
-      | Black
-
-     type 'a t =
-        Node of color * 'a t * 'a * 'a t
-      | Leaf
-
-     let empty = Leaf
-
-     let rec mem x = function
-        Leaf -> false
-      | Node (_, a, y, b) ->
-           if x < y then mem x a
-           else if x > y then mem x b
-           else true
-
-     let balance = ...
-
-     let insert x s = ...
-  end;;
-module Fset :
-  sig
-    type color = | Red | Black
-    and 'a t = | Node of color * 'a t * 'a * 'a t | Leaf
-    val empty : 'a t
-    val mem : 'a -> 'a t -> bool
-    val balance : color * 'a t * 'a * 'a t -> 'a t
-    val insert : 'a -> 'a t -> 'a t
-  end
-# Fset.empty;;
-- : 'a Fset.t = Fset.Leaf
-# Fset.balance;;
-- : Fset.color * 'a Fset.t * 'a * 'a Fset.t -> 'a Fset.t = <fun>
-@end[iverbatim]
-
-@subsection["sig-assignment"]{Assigning a signature}
-
-Note that the default signature assigned to the structure exposes
-@emph{all} of the types and functions in the structure, including the
-type definitions for the @tt{color} and @code{'a t} types, as well as
-the @tt{balance} function, which would normally be hidden.  To assign
-a signature to a structure, we include a type constraint using a
-@code{:} modifier of the following form.
-
-@begin[center]
-@tt{module} @emph{Name} @tt{:} @emph{SigName} @tt{= struct} @emph{implementation} @tt{end}
-@end[center]
-
-In the finite set example, we want to assign the @code{FsetSig}
-signature to the module.
-
-@begin[iverbatim]
-# module Fset : FsetSig =
-  struct
-     type color =
-        Red
-      | Black
-
-     type 'a t =
-        Node of color * 'a t * 'a * 'a t
-      | Leaf
-
-     let empty = Leaf
-     let rec mem x = ...
-     let balance = ...
-     let insert x s = ...
-  end;;
-module Fset : FsetSig
-# Fset.empty;;
-- : 'a Fset.t = <abstr>
-# Fset.balance;;
-Characters 0-12:
-Unbound value Fset.balance
-@end[iverbatim]
-
-When we assign this signature, the type definition for @code{'a t}
-becomes @emph{abstract}, and the @tt{balance} function is no longer
-visible outside the module definition.
-
-@section[functors]{Functors}
-
-One problem with the implementation of finite sets that we have been
-using is the use of the built-in @code{<} comparison operation to
-compare values in the set.  The definition of the @code{<} operator is
-implementation-specific, and it may not always define the exact ordering that
-we want.
-
-To fix this problem, we can define our own comparison function, but we
-will need to define a separate finite set implementation for each
-different element type.  For this purpose, we can use
-@emph{functors}.  A functor is a @emph{function} on modules; the
-function requires a module argument, and it produces a module.
-Functors can be defined with the @tt{functor} keyword, or with a more
-common alternate syntax.
-
-@begin[quote]
-@tt{module} @emph{Name} @tt{= functor} @emph{(ArgName} @tt{:}
-@emph{ArgSig)} @tt{->}@cr
-@tt{struct} @emph{implementation} @tt{end}
-
-@tt{module} @emph{Name (Arg @tt{:} ArgSig)} @tt{=}@cr
-@tt{struct} @emph{implementation} @tt{end}
-@end[quote]
-
-For the finite set example, we'll need to define an argument structure
-that includes a type @tt{elt} of elements, and a comparison function @tt{compare}.
-We'll have the @tt{compare} function return one of three kinds of values:
-
-@begin[itemize]
-@item{a @emph{negative} number if the first argument is smaller than
-   the second,}
-@item{@emph{zero} if the two arguments are equal,}
-@item{a @emph{positive} number if the first argument is larger than
-   the second.}
-@end[itemize]
-
-@begin[iverbatim]
-module type EltSig =
-sig
-   type elt
-   val compare : elt -> elt -> int
-end
-@end[iverbatim]
-
-The finite set signature @code{FsetSig} must also be modified to used
-a specific element type @tt{elt}.  Note that the set itself is no
-longer polymorphic, it is defined for a specific type of elements.
-
-@begin[iverbatim]
-module type FsetSig =
-sig
-   type elt
-   type t
-
-   val empty : t
-   val mem : elt -> t -> bool
-   val insert : elt -> t -> t
-end
-@end[iverbatim]
-
-Next, we redefine the set implementation as a functor.  The
-implementation must be modified to include a type definition for the
-@tt{elt} type, and the @tt{mem} and @tt{insert} functions must be
-modified to make use of the comparison function from @code{Elt}.
-
-@begin[iverbatim]
-# module MakeFset (Elt : EltSig) =
-  struct
-     type elt = Elt.elt
-     type color = ...
-     type t =
-        Node of color * t * elt * t
-      | Leaf
-
-     let empty = Leaf
-
-     let rec mem x = function
-        Leaf -> false
-      | Node (_, a, y, b) ->
-           let i = Elt.compare x y in
-              if i < 0 then mem x a
-              else if i > 0 then mem x b
-              else true
-
-     let balance = ...
-
-     let insert x s =
-        let rec ins = function
-           Leaf -> Node (Red, Leaf, x, Leaf)
-         | Node (color, a, y, b) as s ->
-              let i = Elt.compare x y in
-                 if i < 0 then balance (color, ins a, y, b)
-                 else if i > 0 then balance (color, a, y, ins b)
-                 else s
-        in
-           match ins s with  (* guaranteed to be non-empty *)
-              Node (_, a, y, b) -> Node (Black, a, y, b)
-            | Leaf -> raise (Invalid_argument "insert")
-  end;;
-module MakeFset :
-  functor(Elt : EltSig) ->
-    sig
-      type elt = Elt.elt
-      and color = | Red | Black
-      and t = | Node of color * t * elt * t | Leaf
-      val empty : t
-      val mem : Elt.elt -> t -> bool
-      val balance : color * t * elt * t -> t
-      val insert : elt -> t -> t
-    end
-@end[iverbatim]
-
-Note the return type.  The argument type is right: the functor takes
-an argument module @tt{Elt} with signature @tt{EltSig}.  But the
-returned module makes the implementation fully visible.  To fix this
-problem, we need to add a type constraint using the @code{:} modifier.
-
-@begin[iverbatim]
-# module MakeFset (Elt : EltSig) : FsetSig =
-  struct
-     type elt = Elt.elt
-     type color = ...
-     type t = ...
-     let empty = ...
-     let rec mem x = ...
-     let balance = ...
-     let insert x s = ...
-  end;;
-module MakeFset : functor(Elt : EltSig) -> FsetSig
-@end[iverbatim]
-
-@subsection["using-functors"]{Using a functor}
-
-To @emph{use} the module produced by the functor, we need to
-@emph{apply} it to a specific module implementation the
-@tt{EltSig} signature.  Let's define a comparison function for a
-finite set of integers.  The comparison function is straightforward.
-
-@begin[iverbatim]
-# module Int =
-  struct
-     type elt = int
-     let compare i j =
-        if i < j then
-           -1
-        else if i > j then
-           1
-        else (* i = j *)
-           0
-  end;;
-module Int : sig type elt = int val compare : int -> int -> int end
-# Int.compare 3 5;;
-- : int = -1
-@end[iverbatim]
-
-We @emph{must not} give the @tt{Int} module the signature @tt{EltSig}.
-In the @tt{EltSig} signature, the @tt{elt} type is @emph{abstract}.
-Since there is no way to create a value of the abstract type @tt{elt},
-it would become impossible to use the @tt{compare} function, and the
-module would become useless.
-
-@begin[iverbatim]
-# module Int' = (Int : EltSig);;
-module Int' : EltSig
-# Int'.compare 3 5;;
-Characters 13-14:
-This expression has type int but is here used with type Int'.elt
-@end[iverbatim]
-
-A functor is applied to an argument with the syntax
-@tt{@emph{Functor_name} (@emph{Arg_name})}.  To build a finite set of
-integers, we apply the @tt{MakeFset} functor to the @tt{Int} module.
-
-@begin[iverbatim]
-# module IntSet = MakeFset (Int);;
-module IntSet :
-  sig
-    type elt = MakeFset(Int).elt
-    and t = MakeFset(Int).t
-    val empty : t
-    val mem : elt -> t -> bool
-    val insert : elt -> t -> t
-  end
-# IntSet.empty;;
-- : IntSet.t = <abstr>
-@end[iverbatim]
-
-Note the type definitions for @tt{elt} and @tt{t}: both types are abstract.
-
-@subsection["sharing-constraints"]{Sharing constraints}
 
 In its current state, the @tt{IntSet} module is actually useless.
 Once again, the problem is with type abstraction: the @tt{elt} type is
@@ -571,7 +714,6 @@ val s : IntSet.t = <abstr>
 - : bool = false
 @end[iverbatim]
 
-@docoff
 >>
 
 (*

@@ -21,6 +21,7 @@ MPFILES[] =
     ocaml_doc_io1
     ocaml_doc_mod1
     ocaml_doc_mod2
+    ocaml_doc_mod3
     ocaml_doc_class1
 
 Theory($(MPFILES))
@@ -40,6 +41,7 @@ PRINT_THEORIES[] =
     ocaml_doc_io1
     ocaml_doc_mod1
     ocaml_doc_mod2
+    ocaml_doc_mod3
     ocaml_doc_class1
 
 LocalTeXGeneratedFiles(theory.tex theory-body.tex)

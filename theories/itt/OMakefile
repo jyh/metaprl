@@ -131,7 +131,7 @@ MPFILES[] =
 # gen_int_bench uses the standard OCaml compiler
 #
 section
-    export $(STANDARD_BUILD_ENV)
+    value $(STANDARD_BUILD_ENV)
 
     gen_int_bench$(EXT_OBJ) gen_int_bench.cmx gen_int_bench.cmo gen_int_bench.cmi: :scanner: scan-ocaml-gen_int_bench.ml
 

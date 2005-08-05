@@ -37,45 +37,85 @@ extends Base_theory
 
 doc <:doc<
 
-As programs get larger, it is natural to want to divide them into parts that can be implemented in
-separate files.  There are several advantages to doing so, beyond just the ability to save and share
-programs.  Ideally, every file in a program implements a single, distinct concept or data structure.
-By dividing the program into separate files, each conceptual part of the program can be written and
-compiled separately, making it easier to construct and maintain the program.  In addition, OCaml
-uses files as a basic unit for providing data hiding and encapsulation, two important properties
-that can be used to strengthen the guarantees provided by the implementation.  We will see more
-about data hiding and encapsulation in Chapter @refchapter[modules], but for now the important part
-is that each file can be assigned a @emph{signature} that declares types for all the accessible
-parts of the implementation, and everything @emph{not} declared is inaccessible outside the file.
+Until now, we have been writing programs using the OCaml toploop.  As programs get larger, it is
+natural to want to save them in files so that they can be re-used and shared with others.  There are
+other advantages to doing so, including the ability to partition a program into multiple files that
+can be written and compiled separately, making it easier to construct and maintain the program.
+Perhaps the most important reason to use files is that they serve as @emph{abstraction boundaries}
+that divide a program into conceptual parts.  We will see more about abstraction during the next few
+chapters as we cover the OCaml module system, but for now let's begin with an example of a complete
+program implemented in a single file.
 
-In general, a program will have many files and signatures.  An implementation file is defined in a
-file with a @code{.ml} suffix, called a @emph{compilation unit}.  A signature for a file
-@emph{filename.ml} is defined in a file named @emph{filename.mli}, called an @emph{interface}.
-There are four major steps to planning and building a program.
+@section["uniq-example"]{Single-file programs}
 
-@begin[enumerate]
+For this example, let's build a simple program that removes duplicate lines in an input file.  That
+is, the program should read its input a line at a time, printing the line only if it hasn't seen it
+before.
 
-@item{{Decide how to @emph{factor} the program into separate parts.  Each part will be implemented
-in a separate compilation unit.}}
+One of the simplest implementations is to use a list to keep track of which lines have been read.
+The program can be implemented as a single recursive function that 1) reads a line of input, 2)
+compares it with lines that have been previously read, and 3) outputs the line if it has not been
+read.  The entire program is implemented in the single file @code{unique.ml}, shown in Figure
+@reffigure[uniq1] with an example run.
 
-@item{{Implement each of compilation units as a file with a @code{.ml} suffix, and optionally define
-an interface for the compilation unit in a file with a @code{.mli} suffix.}}
+In this case, we can compile the entire program in a single step with the command @code{ocamlc -o
+unique unique.ml}, where @code{ocamlc} is the OCaml compiler, @code{unique.ml} is the program file,
+and the @code{-o} option is used to specify the program executable @code{unique}.
 
-@item{{Compile each file and signature with the OCaml compiler.}}
+@begin[figure,uniq1]
+@begin[center]
+@begin[tabular,lcl]
+@line{
+{@begin[tabular,t,l]
+@line{{File: @code{unique.ml}}}
+@hline
+@line{{@bf[let] @bf[rec] unique already_read =}}
+@line{{$@quad$ output_string stdout @code{"> ";}}}
+@line{{$@quad$ flush stdout;}}
+@line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
+@line{{$@quad @quad$ @bf[if] not (List.mem line already_read) @bf{then begin}}}
+@line{{$@quad @quad @quad$ output_string stdout line;}}
+@line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
+@line{{$@quad @quad @quad$ unique (line :: already_read)}}
+@line{{$@quad @quad$ @bf[end] @bf[else]}}
+@line{{$@quad @quad @quad$ unique already_read;;}}
+@line{{}}
+@line{{@it{{(}{*} ``Main program'' {*}{)}}}}
+@line{{@bf[try] unique {[{}]} @bf[with]}}
+@line{{$@quad$ End_of_file ->}}
+@line{{$@quad @quad$ ();;}}
+@end[tabular]}
+{$@quad$}
+{@begin[tabular,t,l]
+@line{{Example run}}
+@hline
+@line{{@code{%} ocamlc -o unique unique.ml}}
+@line{{@code{%} ./unique}}
+@line{{@code{>} Great Expectations}}
+@line{{Great Expectations}}
+@line{{@code{>} Vanity Fair}}
+@line{{Vanity Fair}}
+@line{{@code{>} The First Circle}}
+@line{{The First Circle}}
+@line{{@code{>} Vanity Fair}}
+@line{{@code{>} Paradise Lost}}
+@line{{Paradise Lost}}
+@end[tabular]}}
+@end[tabular]
+@end[center]
+@end[figure]
 
-@item{{Link the compiled files to produce an executable program.}}
+@subsection[main]{Where is the main function?}
 
-@end[enumerate]
+Unlike C programs, OCaml program do not have a ``@tt{main}'' function.  When an OCaml program is
+evaluated, all the statements in the implementation files are evaluated.  In general, implementation
+files can contain arbitrary expressions, not just function definitions.  For this example, the
+``main program'' is the @bf[try] expression in the @code{unique.ml} file, which gets evaluated when the
+@code{unique.cmo} file is evaluated.
 
-One nice consequence of implementing the parts of a program in separate files is that each file can
-be compiled separately.  When a project is modified, all the files that are affected must be
-recompiled, but there is there is usually no need to recompile the entire project.
+@subsection[compilers]{OCaml compilers}
 
-Before describing the programming steps in more detail, it is worthwile discussing the OCaml compiler.
-
-@section[compilers]{OCaml compilers}
-
-The OCaml implementation from INRIA (most likely the one you are using) provides two compilers---the
+The INRIA OCaml implementation, most likely the one you are using,  provides two compilers---the
 @code{ocamlc} byte-code compiler, and the @code{ocamlopt} native-code compiler.  Programs compiled
 with @code{ocamlc} are @emph{interpreted}, while programs compiled with @code{ocamlopt} are compiled
 to native machine code to be run on a specific operating system and machine architecture.  While the
@@ -98,86 +138,48 @@ programs that behave identically (arapart from performance).  During rapid devel
 useful to use the byte-code compiler because compilation times are shorter.  If performance becomes
 an issue, it is usually a straightforward process to begin using the native-code compiler.
 
-@section["file-example"]{Writing and compiling a program}
+@section["multiple-files"]{Multiple files and abstraction}
 
-@subsection["single-file-example"]{Compiling a program as a single file}
+OCaml uses files as a basic unit for providing data hiding and encapsulation, two important
+properties that can be used to strengthen the guarantees provided by the implementation.  We will
+see more about data hiding and encapsulation in Chapter @refchapter[modules], but for now the
+important part is that each file can be assigned a @emph{interface} that declares types for all the
+accessible parts of the implementation, and everything @emph{not} declared is inaccessible outside
+the file.
 
-To illustrate the process of program construction, let's begin by building a simple program modeled
-after the Unix @code{uniq} program, which removes duplicate lines in a file.  That is, the program
-should read its input a line at a time, and print the line if it hasn't seen it before.
+In general, a program will have many files and interfaces.  An implementation file is defined in a
+file with a @code{.ml} suffix, called a @emph{compilation unit}.  An interface for a file
+@emph{filename.ml} is defined in a file named @emph{filename.mli}.  There are four major steps to
+planning and building a program.
 
-To begin, we can start with a program in a single file, using a list to keep track of which lines
-have been read.  The outline for the program to define a single recursive function that 1) reads a
-line of input, 2) compares it with lines that have been previously read, and 3) outputs the line if
-it has not been read.  The entire program is implemented in the single file @code{uniq.ml}, shown in
-Figure @reffigure[uniq] with an example run.
+@begin[enumerate]
 
-In this case, we can compile the entire program in a single step with the command @code{ocamlc -o
-uniq uniq.ml}, where the @code{-o} option is used to specify the output file.
+@item{{Decide how to @emph{factor} the program into separate parts.  Each part will be implemented
+in a separate compilation unit.}}
 
-@begin[figure,uniq]
-@begin[center]
-@begin[tabular,lcl]
-@line{
-{@begin[tabular,t,l]
-@line{{File: @code{uniq.ml}}}
-@hline
-@line{{@bf[let] @bf[rec] uniq already_read =}}
-@line{{$@quad$ output_string stdout @code{"> ";}}}
-@line{{$@quad$ flush stdout;}}
-@line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
-@line{{$@quad @quad$ @bf[if] not (List.mem line already_read) @bf[then] @bf[begin]}}
-@line{{$@quad @quad @quad$ output_string stdout line;}}
-@line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
-@line{{$@quad @quad @quad$ uniq (line :: already_read)}}
-@line{{$@quad @quad$ @bf[end] @bf[else]}}
-@line{{$@quad @quad @quad$ uniq already_read;;}}
-@line{{}}
-@line{{@it{{(}{*} ``Main program'' {*}{)}}}}
-@line{{@bf[try] uniq {[{}]} @bf[with]}}
-@line{{$@quad$ End_of_file ->}}
-@line{{$@quad @quad$ ();;}}
-@end[tabular]}
-{$@quad$}
-{@begin[tabular,t,l]
-@line{{Example run}}
-@hline
-@line{{@code{%} ocamlc -o uniq uniq.ml}}
-@line{{@code{%} ./uniq}}
-@line{{@code{>} Great Expectations}}
-@line{{Great Expectations}}
-@line{{@code{>} Vanity Fair}}
-@line{{Vanity Fair}}
-@line{{@code{>} The First Circle}}
-@line{{The First Circle}}
-@line{{@code{>} Vanity Fair}}
-@line{{@code{>} Paradise Lost}}
-@line{{Paradise Lost}}
-@end[tabular]}}
-@end[tabular]
-@end[center]
-@end[figure]
+@item{{Implement each of compilation units as a file with a @code{.ml} suffix, and optionally define
+an interface for the compilation unit in a file with a @code{.mli} suffix.}}
 
-@subsection[main]{Where is the main function?}
+@item{{Compile each file and interface with the OCaml compiler.}}
 
-Unlike C programs, OCaml program do not have a ``@tt{main}'' function.  When an OCaml program is
-evaluated, all the statements in the implementation files are evaluated.  In general, implementation
-files can contain arbitrary expressions, not just function definitions.  For this example, the
-``main program'' is the @bf[try] expression in the @code{uniq.ml} file, when gets evaluated when the
-@code{uniq.cmo} file is evaluated.
+@item{{Link the compiled files to produce an executable program.}}
 
-@subsection["multiple-file-example"]{Multiple files}
+@end[enumerate]
 
-Even for this simple example, the implementation is already too concrete.  We chose to use a list to
-represent the set of lines that have been read, but one problem with using lists is that checking
-for membership (with @code{List.mem}) takes time linear in the length of the list, which means that
-the time to process a file is quadratic in the number of lines in the file!  There are clearly
-better representations for lists.
+One nice consequence of implementing the parts of a program in separate files is that each file can
+be compiled separately.  When a project is modified, only the files that are affected must be
+recompiled; there is there is usually no need to recompile the entire project.
+
+Getting back to the example @code{unique.ml}, the implementation is already too concrete.  We chose
+to use a list to represent the set of lines that have been read, but one problem with using lists is
+that checking for membership (with @code{List.mem}) takes time linear in the length of the list,
+which means that the time to process a file is quadratic in the number of lines in the file!  There
+are clearly better data structures than lists for the set of lines that have been read.
 
 As a first step, let's partition the program into two files.  The first file @code{set.ml} is to
-provide an implementation of sets, and the file @code{uniq.ml} provides the @code{uniq} function as
-before.  For now, we'll keep the list representation in hopes of improving it later---for now we
-just want to factor the project.
+provide a generic implementation of sets, and the file @code{unique.ml} provides the @code{unique}
+function as before.  For now, we'll keep the list representation in hopes of improving it
+later---for now we just want to factor the project.
 
 @begin[figure,uniq2]
 @begin[center]
@@ -190,21 +192,21 @@ just want to factor the project.
 @line{{@bf[let] add x l = x @code{::} l}}
 @line{{@bf[let] mem x l = List.mem x l}}
 @line{{}}
-@line{{File: uniq.ml}}
+@line{{File: unique.ml}}
 @hline
-@line{{@bf[let] @bf[rec] uniq already_read =}}
+@line{{@bf[let] @bf[rec] unique already_read =}}
 @line{{$@quad$ output_string stdout @code{"> ";}}}
 @line{{$@quad$ flush stdout;}}
 @line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
-@line{{$@quad @quad$ @bf[if] not (Set.mem line already_read) @bf[then] @bf[begin]}}
+@line{{$@quad @quad$ @bf[if] not (Set.mem line already_read) @bf{then begin}}}
 @line{{$@quad @quad @quad$ output_string stdout line;}}
 @line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
 @line{{$@quad @quad @quad$ uniq (line :: already_read)}}
 @line{{$@quad @quad$ @bf[end] @bf[else]}}
-@line{{$@quad @quad @quad$ uniq already_read;;}}
+@line{{$@quad @quad @quad$ unique already_read;;}}
 @line{{}}
 @line{{@it{{(}{*} Main program {*}{)}}}}
-@line{{@bf[try] uniq [] @bf[with]}}
+@line{{@bf[try] unique [] @bf[with]}}
 @line{{$@quad$ End_of_file ->}}
 @line{{$@quad @quad$ ();;}}
 @end[tabular]}
@@ -213,9 +215,9 @@ just want to factor the project.
 @line{{Example run}}
 @hline
 @line{{@code{%} ocamlc -c set.ml}}
-@line{{@code{%} ocamlc -c uniq.ml}}
-@line{{@code{%} ocamlc -o uniq set.cmo uniq.cmo}}
-@line{{@code{%} ./uniq}}
+@line{{@code{%} ocamlc -c unique.ml}}
+@line{{@code{%} ocamlc -o unique set.cmo unique.cmo}}
+@line{{@code{%} ./unique}}
 @line{{@code{>} Adam Bede}}
 @line{{Adam Bede}}
 @line{{@code{>} A Passage to India}}
@@ -230,21 +232,21 @@ just want to factor the project.
 
 The new project is shown in Figure @reffigure[uniq2].  We have split the set operations into a file
 called @code{set.ml}, and instead of using the @code{List.mem} function we now use the
-@code{Set.mem} function.  This naming convention is standard throughout OCaml---to way to refer to a
+@code{Set.mem} function.  This naming convention is standard throughout OCaml---the way to refer to a
 definition $f$ in a file named @emph{filename} is by capitalizing the filename and using the infix
 @code{.} operator to project the value.  The @code{Set.mem} expression refers to the @code{mem}
-function in the @code{set.ml} file.  In fact, the @code{List.mem} function is the same way!  The
+function in the @code{set.ml} file.  In fact, the @code{List.mem} function is the same way.  The
 OCaml standard library contains a file @code{list.ml} that defines a function @code{mem}.
 
-Compilation is now several steps.  In the first step, the @code{set.ml}
-and @code{uniq.ml} files are compiled with the @code{-c} option, which specifies that the compiler
-should produce an intermediate file with a @code{.cmo} suffix.  These files are then linked to
-produce an executable with the command @code{ocamlc -o uniq set.cmo uniq.cmo}.
+Compilation is now several steps.  In the first step, the @code{set.ml} and @code{unique.ml} files
+are compiled with the @code{-c} option, which specifies that the compiler should produce an
+intermediate file with a @code{.cmo} suffix.  These files are then linked to produce an executable
+with the command @code{ocamlc -o unique set.cmo unique.cmo}.
 
-The order of compilation and linking here is significant.  The @code{uniq.ml} file refers to the
+The order of compilation and linking here is significant.  The @code{unique.ml} file refers to the
 @code{set.ml} file by using the @code{Set.mem} function.  Due to this dependency, the @code{set.ml}
-file must be compiled before the @code{uniq.ml} file, and the @code{set.cmo} file must appear before
-the @code{uniq.cmo} file during linking.  Note that cyclic dependencies are @emph{not allowed}.  It
+file must be compiled before the @code{unique.ml} file, and the @code{set.cmo} file must appear before
+the @code{unique.cmo} file during linking.  Note that cyclic dependencies are @emph{not allowed}.  It
 is not legal to have a file @code{a.ml} refer to a value @code{B.x}, and a file @code{b.ml} that
 refers to a value @code{A.y}.
 
@@ -530,7 +532,7 @@ the best solution is usually to recompile them all.
 
 Using the full name @tt{@emph{File_name}.@emph{name}} to refer to the values in a module can get
 tedious.  The @tt{open @emph{File_name}} statement can be used to ``open'' an interface, allowing
-the use of unqualified names for types, exceptions, and values.  For example, the @code{uniq.ml}
+the use of unqualified names for types, exceptions, and values.  For example, the @code{unique.ml}
 module can be somewhat simplified by using the @code{open} directive for the @code{Set} module.  In
 the following listing, the @underline{underlined} variables refer to the value in the Set
 implementation.

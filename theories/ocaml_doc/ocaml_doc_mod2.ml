@@ -37,137 +37,103 @@ extends Base_theory
 
 doc <:doc<
 
-One of the principles of modern programming is @emph{data hiding} using @emph{encapsulation}.  An
-@emph{abstract data type} (ADT) is a program unit that defines a data type and functions that
-operate on that data type.  In an ADT, the data is @emph{abstract}, meaning that it is not directly
-accessible.  Clients that make use of the ADT are required to use the ADT's functions.
+As we saw in the previous chapter, programs can be divided into parts that can be implemented in
+files, and each file can be given an interface that specifies what its public types and values are.
+Files are not the only way to partition a program, OCaml also provides a @emph{module system} that
+allows programs to be partitioned even within a single file.  There are three key parts in the
+module system: @emph{signatures}, @emph{structures}, and @emph{functors}, where signatures
+correspond to interfaces, structures correspond to implementations, and functors are functions over
+structures.  In this chapter, we will discuss the first two; we'll leave discussion of functors in
+Chapter @refchapter[functors].
 
-There are several ideas behind data hiding using ADTs.  First, by separating a program into distinct
-program units (called @emph{modules}), the program may be easier to understand.  Ideally, each
-module encapsulates a single concept needed to address the problem at hand.
-
-Second, by hiding the implementation of a program module, dependencies between program modules
-become tightly controlled.  Since all interactions must be through a module's functions, the
-implementation of the module can be changed without affecting the correctness of the program (as
-long as the behavior of functions is preserved).
-
-Finally, the principal motivation of data hiding is that it allows the enforcement of data structure
-invariants.  In general, an @emph{invariant} is a property of a data structure that is always true
-in a correct program.  Said another way, if the invariant is ever false, then something ``bad'' has
-happened and the program has an error.  Invariants are used both for correctness and performance.
-For example, balanced binary trees are a frequently-used data structure with the following
-invariants 1) each node in the has no more than two children, 2) the nodes are ordered, and 3) the
-depth of the tree is logarithmic in the total number of nodes.  The first invariants can be enforced
-with the type system (by specifying a type for nodes that allows at most two children), but the
-second and third invariants are not so simple to maintain.  When we implement this data structure,
-it is more than likely that our implementation will fail if given a tree that is not properly
-ordered (invariant 2).  It may work correctly, though at lower performance, if the tree is not
-balanced (invariant 3).
-
-Given the importance of invariants, how can we be sure that they are maintained?  This is where data
-hiding comes in.  By restricting the ADT so that only its own functions can directly access the
-data, we also limit the amount of reasoning that we have to do.  If each function in the ADT
-preserves the invariants, then we can be sure that the invariants are @emph{always} preserved,
-because no other part of the program can access the data directly.
-
-Of course, these restrictions can also be awkward.  Often we want partial @emph{transparency} where
-some parts of a data structure are abstract but others are directly accessible.  OCaml provides a
-general mechanism for data hiding and encapsulation called a @emph{module system}.  A module in
-OCaml has two parts: an @emph{implementation} that implements the types, functions, and values in
-the module; and a @emph{signature} that specifies which parts of the implementation are publically
-accessible.  That is, a signature provides type declarations for the visible parts of the
-implementation---everything else is hidden.
-
-In fact, the compilation units discussed in Chapter @refchapter[files] are a form of modules, where
-the implementation is defined in a @code{.ml} file and the interface is defined in a @code{.mli}
-file.  However, compilation units are not the only way to create modules.  OCaml provides a general
-module system where modules can be created explicitly using the @code{module} keyword.  There are
-three key parts in the module system: @emph{signatures}, @emph{structures}, and @emph{functors}.  In
-this chapter, we will discuss the first two; we'll leave discussion of functors in Chapter
-@refchapter[functors].
+There are several reasons for using the module system.  Perhaps the simplest reason is that each
+structure has its own namespace, so name conflicts are less likely when modules are used.  Another
+reason is that abstraction can be specified explicitly by assigning a signature to a structure.
+To begin, let's return to the @code{unique} example from the previous chapter, this time using modules
+instead of separate files.
 
 @section["simple-modules"]{Simple modules}
 
-Modules are defined with the @tt{module} keyword using the following syntax.
+Named structures are defined with the @tt{module} and @tt{struct} keywords using the following syntax.
 
 @begin[center]
 @tt{module} @emph{Name} @tt{= struct} @emph{implementation} @tt{end}
 @end[center]
 
-The module @emph{Name} must begin with an uppercase letter.  The @emph{implementation} is exactly
-the same as the contents of a @code{.ml} file.  It can include any of the following.
-
-@begin[itemize]
-@item{@tt{type} definitions}
-@item{@tt{exception} definitions}
-@item{@tt{let} definitions}
-@item{@tt{open} statements to open the namespace of another module}
-@item{@tt{include} statements that include the contents of another module}
-@item{signature definitions}
-@item{nested structure definitions}
-@end[itemize]
-
-Let's return to the simple list-based implementation of sets from the previous chapter.  To define
-the Set as a module, we can use an explicit @code{module/struct} definition, a shown in Figure
-@reffigure[mset1].  For this example, we'll use the OCaml toploop, which will infer a signature
-for the module, as shown on the right in the figure.
+The module @emph{Name} must begin with an uppercase letter.  The @emph{implementation} can include
+definition that might occur in a @code{.ml} file.  Let's return to the @code{unique.ml} example from
+the previous chapter, using a simple list-based implementation of sets.  This time, instead of
+defining the set data structure in a separate file, let's define it as a module, called @code{Set},
+using an explicit @code{module/struct} definition.  The program is shown in Figure
+@reffigure[mset1].
 
 @begin[figure,mset1]
 @begin[center]
 @begin[tabular,lcl]
 @line{
 {@begin[tabular,t,l]
-@line{{Module definition}}
+@line{{File: unique.ml}}
 @hline
 @line{{@bf[module] Set = @bf[struct]}}
-@line{{$@quad$ @bf[type] 'a set = 'a list}}
 @line{{$@quad$ @bf[let] empty = []}}
 @line{{$@quad$ @bf[let] add x l = x @code{::} l}}
 @line{{$@quad$ @bf[let] mem x l = List.mem x l}}
-@line{{@bf[end]@code{;;}}}
+@line{{@bf[end];;}}
+@line{{}}
+@line{{@bf[let] @bf[rec] unique already_read =}}
+@line{{$@quad$ output_string stdout @code{"> ";}}}
+@line{{$@quad$ flush stdout;}}
+@line{{$@quad$ @bf[let] line = input_line stdin @bf[in]}}
+@line{{$@quad @quad$ @bf[if] not (Set.mem line already_read) @bf{then begin}}}
+@line{{$@quad @quad @quad$ output_string stdout line;}}
+@line{{$@quad @quad @quad$ output_char stdout @code{'\n'};}}
+@line{{$@quad @quad @quad$ uniq (Set.add line already_read)}}
+@line{{$@quad @quad$ @bf[end] @bf[else]}}
+@line{{$@quad @quad @quad$ unique already_read;;}}
+@line{{}}
+@line{{@it{{(}{*} Main program {*}{)}}}}
+@line{{@bf[try] unique Set.empty @bf[with]}}
+@line{{$@quad$ End_of_file ->}}
+@line{{$@quad @quad$ ();;}}
 @end[tabular]}
 {$@quad$}
 {@begin[tabular,t,l]
-@line{{Inferred type}}
+@line{{Example run}}
 @hline
-@line{{@bf[module] Set : @bf[sig]}}
-@line{{$@quad$ @bf[type] 'a set = 'a list}}
-@line{{$@quad$ @bf[val] empty : 'a list}}
-@line{{$@quad$ @bf[val] add : 'a @code{->} 'a list @code{->} 'a list}}
-@line{{$@quad$ @bf[val] mem : 'a @code{->} 'a list @code{->} bool}}
-@line{{@bf[end]}}
+@line{{@code{%} ocamlc -o unique unique.ml}}
+@line{{@code{%} ./unique}}
+@line{{@code{>} Adam Bede}}
+@line{{Adam Bede}}
+@line{{@code{>} A Passage to India}}
+@line{{A Passage to India}}
+@line{{@code{>} Adam Bede}}
+@line{{@code{>} Moby Dick}}
+@line{{Moby Dick}}
 @end[tabular]}}
 @end[tabular]
 @end[center]
 @end[figure]
 
-One problem with this module is that the inferred type exposes all of the information in the module.
-As usual, we would like to hide the @code{'a set} type, making it easier to replace the
-implementation later if we wish to improve its performance.  To do this, we should assign an
-explicit signature.  A module signature is declared with a @code{module type} declaration.
+In this new program, the main role of the module @code{Set} is to collect the set functions into a
+single block of code that has an explicit name.  The values are now named using the module name as a
+prefix as @code{Set.empty}, @code{Set.add}, and @code{Set.mem}.  Otherwise, the program is as
+before.
+
+One problem with this program is that the implementation of the @code{Set} module is visible.  As
+usual, we would like to hide the type of set, making it easier to replace the implementation later
+if we wish to improve its performance.  To do this, we can assign an explicit signature that hides
+the set implementation.  A named signature is defined with a @code{module type} definition.
 
 @begin[center]
 @tt{module type} @emph{Name} @tt{= sig} @emph{signature} @tt{end}
 @end[center]
 
 As before, the name of the signature must begin with an uppercase letter.  The signature can contain
-any of the items that can occur in an interface @code{.mli} file, including any of the following.
-
-@begin[itemize]
-@item{@tt{type} declarations}
-@item{@tt{exception} definitions}
-@item{@tt{val} declarations}
-@item{@tt{open} statements to open the namespace of another signature}
-@item{@tt{include} statements that include the contents of another signature}
-@item{nested signature declarations}
-@end[itemize]
-
-For our example, the signature should include an abstract type declaration for the @code{'a set}
-type, a transparent type definition for the @code{'a choice} type, and @code{val} declarations for
-each of the values.  The @code{Set} module's signature is constrained by specifying the signature
-after a colon in the module definition @bf[module] Set : SetSig = @bf[struct] $@cdots$ @bf[end].
-For this example, the toploop simply validates the type assignment, printing @bf[module] Set :
-SetSig.
+any of the items that can occur in an interface @code{.mli} file.  For our example, the signature
+should include an abstract type declaration for the @code{'a set} type and @code{val} declarations
+for each of the values.  The @code{Set} module's signature is constrained by specifying the
+signature after a colon in the module definition @bf[module] Set : SetSig = @bf[struct] $@cdots$
+@bf[end], as shown in Figure @reffigure[mset2].
 
 @begin[figure,mset2]
 @begin[center]
@@ -181,34 +147,65 @@ SetSig.
 @line{{$@quad$ @bf[val] empty : 'a set}}
 @line{{$@quad$ @bf[val] add : 'a @code{->} 'a set @code{->} 'a set}}
 @line{{$@quad$ @bf[val] mem : 'a @code{->} 'a set @code{->} bool}}
-@line{{}}
-@line{{Inferred type}}
-@hline
-@line{{@bf[module] Set : SetSig}}
+@line{{@bf[end];;}}
 @end[tabular]}
 {$@quad$}
 {@begin[tabular,t,l]
-@line{{Module definition}}
+@line{{Structure definition}}
 @hline
 @line{{@bf[module] Set : SetSig = @bf[struct]}}
 @line{{$@quad$ @bf[type] 'a set = 'a list}}
 @line{{$@quad$ @bf[let] empty = []}}
 @line{{$@quad$ @bf[let] add x l = x @code{::} l}}
 @line{{$@quad$ @bf[let] mem x l = List.mem x l}}
-@line{{@bf[end]@code{;;}}}
+@line{{@bf[end];;}}
 @end[tabular]}}
 @end[tabular]
 @end[center]
 @end[figure]
 
-@section[include]{Using include to extend modules}
+@section["module-contents"]{Module definitions}
 
-The @tt{include} statement can be used to create modules and signatures that re-use existing
-definitions.  For example, suppose we wish to add a @code{choose} function that returns an element
-of the set if one exists.  Instead of re-typing the entire signature, we can use the @code{include}
-statement to include the existing signature, as shown in Figure @reffigure[mset3].  The resulting
-signature includes all of the types and declarations from SetSig as well as the new (transparent)
-type definition @code{'a choice} and function declaration @code{val choose}.
+In general, structures and signatures are just like implementation files and their interfaces.
+Structures are allowed to contain any of the definitions that might occur in a implementation,
+including any of the following.
+
+@begin[itemize]
+@item{@tt{type} definitions}
+@item{@tt{exception} definitions}
+@item{@tt{let} definitions}
+@item{@tt{open} statements to open the namespace of another module}
+@item{@tt{include} statements that include the contents of another module}
+@item{signature definitions}
+@item{nested structure definitions}
+@end[itemize]
+
+Similarly, signatures may contain any of the declarations that might occur in an interface file,
+including any of the following.
+
+@begin[itemize]
+@item{@tt{type} declarations}
+@item{@tt{exception} definitions}
+@item{@tt{val} declarations}
+@item{@tt{open} statements to open the namespace of another signature}
+@item{@tt{include} statements that include the contents of another signature}
+@item{nested signature declarations}
+@end[itemize]
+
+We have seen most of these constructs before.  However, one new construct we haven't seen is
+@code{include}, which allows the entire contents of a structure or signature to be included in
+another.  The @tt{include} statement can be used to create modules and signatures that re-use
+existing definitions.
+
+@subsection[include]{Using include to extend modules}
+
+Suppose we wish to defined a new kind of sets @code{ChooseSet} that have a @code{choose} function
+that returns an element of the set if one exists.  Instead of re-typing the entire signature, we can
+use the @code{include} statement to include the existing signature, as shown in Figure
+@reffigure[mset3].  The resulting signature includes all of the types and declarations from
+@code{SetSig} as well as the new (transparent) type definition @code{'a choice} and function
+declaration @code{val choose}.  For this example, we are using the toploop to display the infered
+signature for the new module.
 
 @begin[figure,mset3]
 @begin[center]
@@ -348,17 +345,27 @@ just has a different signature.  The modules @code{Set} and @code{ChooseSet} are
 that they share internal knowledge of each other's implementation, while keeping their public
 signatures abstract.
 
-@subsection["module-hiding"]{Module hiding}
+@section["module-hiding"]{Abstraction, friends, and module hiding}
 
-From a software engineering perspective, there isn't much danger in leaving the @code{SetInternal}
-module publicly accessible.  A @code{SetInternal.set} can't be used in place of a @code{Set.set} or
-a @code{ChooseSet.set}, because the latter types are abstract.  However, we might still want to keep
-the definition private so that other parts of the program do not accidentally use it.  To do this,
-we can enclose the definitions in yet another module that declares on the @code{Set} and
-@code{ChooseSet} modules, hiding the @code{SetInternal} module.  In fact, in the @code{Sets} module
-we don't need the @code{SetInternal} module at all; we can keep the @code{Set} and @code{ChooseSet}
-implementations non-abstract, and constrain them in the signature for the @code{Sets} module.  The
-code for this is shown in Figure@reffigure[mset6].
+So far, we have seen that modules provide two main features, 1) the ability to divide a program into
+separate program units (modules) that each have a separate namespace, and 2) the ability to assign
+signatures that make each structure partially or totally abstract.  In addition, as we have seen in
+the previous example, a structure like @code{SetInternal} can be given more than one signature (the
+module @code{Set} is equal to @code{SetInternal} but it has a different signature).
+
+Another frequent use of modules uses nesting to define multiple levels of abstraction.  For example,
+we might define a module container in which several modules are defined and implementation are
+visible, but the container type is abstract.  This is akin to the C++ notion of ``friend'' classes,
+where a set of friend classes may mutually refer to class implementations, but the publicly visible
+fields remain protected.
+
+In our example, there isn't much danger in leaving the @code{SetInternal} module publicly
+accessible.  A @code{SetInternal.set} can't be used in place of a @code{Set.set} or a
+@code{ChooseSet.set}, because the latter types are abstract.  However, there is a cleaner solution
+that nests the @code{Set} and @code{ChooseSet} structures in an outer @code{Sets} module.  The
+signatures are left unconstrained within the @code{Sets} module, allowing the @code{ChooseSet}
+structure to refer to the implementation of the @code{Set} structure, but the signature of the
+@code{Sets} module is constrained.  The code for this is shown in Figure@reffigure[mset6].
 
 @begin[figure,mset6]
 @begin[center]

@@ -36,5 +36,17 @@ doc <:doc<
 
 extends Itt_hoas_destterm
 
+open Tactic_type.Tactic
+
 declare BTerm
 declare compatible_shapes{'bdepth;'op;'subterms}
+declare dom{'BT}
+declare mk{'x}
+declare dest{'bt}
+declare Iter{'X}
+declare BT{'n}
+
+topval fold_dom : conv
+topval fold_mk : conv
+topval fold_Iter : conv
+topval fold_dest : conv

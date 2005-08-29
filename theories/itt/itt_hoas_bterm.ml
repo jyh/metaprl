@@ -43,8 +43,7 @@ extends Itt_tunion
 doc docoff
 
 open Basic_tactics
-open Itt_struct
-open Itt_squash
+open Itt_hoas_destterm
 
 doc terms
 
@@ -65,6 +64,13 @@ define unfold_compatible_shapes: compatible_shapes{'bdepth; 'op; 'btl} <-->
 (*private*) define unfold_BT: BT{'n} <--> ind{'n; void; X.Iter{'X}}
 
 define (*private*) unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
+
+doc docoff
+
+let fold_dom = makeFoldC << dom{'BT} >> unfold_dom
+let fold_mk = makeFoldC << mk{'x} >> unfold_mk
+let fold_Iter = makeFoldC << Iter{'X} >> unfold_Iter
+let fold_dest = makeFoldC << dest{'bt} >> unfold_dest
 
 doc rules
 
@@ -99,6 +105,10 @@ interactive compatible_shapes_wf {| intro[] |}:
    sequent{ <H> >- 'op in Operator } -->
    sequent{ <H> >- 'btl in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'bdepth; 'op; 'btl} Type }
+
+interactive dom_wf {| intro[] |}:
+   sequent{ <H> >- 'T subtype BTerm } -->
+   sequent{ <H> >-  dom{'T} Type }
 
 interactive compatible_shapes_sqstable (*{| squash |}*) :
    sequent{ <H> >- 'btl in list } -->
@@ -214,6 +224,115 @@ interactive bterm_elim  {| elim [] |} 'H :
                compatible_shapes{'bdepth;'op;'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
    sequent { <H>; t: BTerm; <J> >- 'P['t] }
 
+(* *** *)
+interactive dom_elim  {| elim [] |} 'H :
+   sequent { <H>; t: dom{'T}; u: nat*nat; <J[inl{'u}]> >- 'P[inl{'u}] } -->
+   sequent { <H>; t: dom{'T}; v: depth:nat * op:Operator * {subterms:list{'T} | compatible_shapes{'depth;'op;'subterms}}; <J[inr{'v}]>
+               >- 'P[inr{'v}] } -->
+   sequent { <H>; t: dom{'T}; <J['t]> >- 'P['t] }
+
+interactive_rw dest_mk_reduce 'n :
+   'n in nat -->
+   't in dom{BT{'n}}  -->
+   dest{mk{'t}} <--> 't
+(*
+interactive_rw dest_mk_reduce2 'T :
+   'T subtype BTerm -->
+   't in dom{'T}  -->
+   dest{mk{'t}} <--> 't
+
+interactive_rw mk_dest_reduce2 'T :
+   't in 'T  -->
+   'T subtype BTerm -->
+   mk{dest{'t}} <--> 't
+*)
+interactive  bt_elim_squash1  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [base] sequent { <H>; t: BT{'n+@1}; <J['t]>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   [step] sequent { <H>; t: BT{'n+@1}; <J['t]>; depth: nat; op:Operator; subterms:list{BT{'n}};
+               compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
+   sequent { <H>; t: BT{'n+@1}; <J['t]> >- squash{'P['t]} }
+
+interactive  bt_elim1  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [step] sequent { <H>; t: BT{'n+@1}; <J['t]>; x: dom{BT{'n}} >- 'P[mk{'x}] } -->
+   sequent { <H>; t: BT{'n+@1}; <J['t]> >- 'P['t] }
+
+(*interactive  bt_elim_squash3  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [base] sequent { <H>; l: nat; r:nat; <J[var{'l;'r}]> >- squash{'P[var{'l;'r}]} } -->
+   [step] sequent { <H>; depth: nat; op:Operator; subterms:list{BT{'n}};
+               compatible_shapes{'depth;'op;'subterms}; <J[mk_bterm{'depth;'op;'subterms}]> >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
+   sequent { <H>; t: BT{'n+@1}; <J['t]> >- squash{'P['t]} }
+*)
+
+interactive  bterm_elim_squash1 {| elim [] |} 'H :
+   sequent { <H>; t: BTerm; <J['t]>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   sequent { <H>; t: BTerm; <J['t]>; depth: nat; op:Operator; subterms:list{BTerm};
+               compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
+   sequent { <H>; t: BTerm; <J['t]> >- squash{'P['t]} }
+
+(*interactive bterm_elim3  {| elim [] |} 'H :
+   sequent { <H>; t: BTerm; l: nat; r:nat; <J[var{'l;'r}]>  >- 'P[var{'l;'r}] } -->
+   sequent { <H>; t: BTerm; bdepth: nat; op:Operator; subterms:list{BTerm};
+               compatible_shapes{'bdepth;'op;'subterms}; <J[mk_bterm{'bdepth;'op;'subterms}]> >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
+   sequent { <H>; t: BTerm; <J['t]> >- 'P['t] }
+*)
+
+interactive bterm_elim2  {| elim [] |} 'H :
+   sequent { <H>; t: BTerm; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   sequent { <H>; t: BTerm; <J['t]>; bdepth: nat; op:Operator; subterms:list{BTerm};
+               compatible_shapes{'bdepth;'op;'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
+   sequent { <H>; t: BTerm; <J['t]> >- 'P['t] }
+
+interactive is_var_wf {| intro[] |}:
+   sequent{ <H> >- 't in BTerm } -->
+   sequent{ <H> >-  is_var{'t} in bool }
+
+interactive subterms_depth {| intro[] |} 'op :
+   sequent{ <H> >- 'bdepth in nat } -->
+   sequent{ <H> >- 'op in Operator } -->
+   sequent{ <H> >- 'btl in list{BTerm} } -->
+   sequent{ <H> >- compatible_shapes{'bdepth; 'op; 'btl} } -->
+   sequent{ <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} >= 'bdepth }
+
+interactive subterms_wf1 {| intro[] |}:
+   sequent{ <H> >- 't in BTerm } -->
+   sequent{ <H> >- not{"assert"{is_var{'t}}} } -->
+   sequent{ <H> >- subterms{'t} in list{BTerm} }
+
+(*interactive subterms_wf {| intro[] |}:
+   sequent{ <H> >- 't in 'T } -->
+   sequent{ <H> >- 'T subtype BTerm } -->
+   sequent{ <H> >- not{"assert"{is_var{'t}}} } -->
+   sequent{ <H> >- subterms{'t} in list{'T} }
+
+interactive dest_wf1 {| intro[] |}:
+   sequent{ <H> >- 't in 'T } -->
+   sequent{ <H> >- 'T subtype BTerm} -->
+   sequent{ <H> >- dest{'t} in dom{'T} }
+
+interactive bterm_subtype_elim1 'H :
+   sequent { <H>; t: 'T; <J['t]> >- 'T subtype BTerm } -->
+   sequent { <H>; t: 'T; <J['t]>; x: dom{'T} >- 'P[mk{'x}] } -->
+   sequent { <H>; t: 'T; <J['t]> >- 'P['t] }
+
+interactive bterm_subtype_elim 'H :
+   sequent { <H>; t: 'T; <J['t]> >- 'T subtype BTerm } -->
+   sequent { <H>; t: 'T; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   sequent { <H>; t: 'T; <J['t]>; bdepth: nat; op:Operator; subterms:list{'T};
+               compatible_shapes{'bdepth;'op;'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
+   sequent { <H>; t: 'T; <J['t]> >- 'P['t] }
+
+interactive dest_bterm_wf1 {| intro[] |} 'ST :
+   sequent{ <H> >- 'bt in 'ST } -->
+   sequent{ <H> >- 'ST subtype BTerm} -->
+   sequent{ <H>; l:nat; r:nat >- 'var_case['l;'r] in 'T } -->
+   sequent{ <H>; bdepth: nat; op:Operator; subterms:list{'ST};
+                 compatible_shapes{'bdepth;'op;'subterms}
+                 >- 'op_case['bdepth; 'op; 'subterms] in 'T } -->
+   sequent{ <H> >- dest_bterm{'bt; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms]} in 'T }
+*)
 doc docoff
 
 dform compatible_shapes_df: compatible_shapes{'bdepth;'op;'btl} =

@@ -110,6 +110,7 @@ MPFILES[] =
    itt_hoas_operator
    itt_hoas_destterm
    itt_hoas_bterm
+   itt_hoas_lang
    itt_synt_var
    itt_synt_operator
    itt_synt_bterm

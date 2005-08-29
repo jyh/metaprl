@@ -2,4 +2,4 @@ open Tactic_type.Tactic
 
 declare Lang{'ops}
 
-topval fold_lang : conv
+topval fold_Lang : conv

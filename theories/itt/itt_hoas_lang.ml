@@ -54,7 +54,9 @@ doc <:doc<
      We define the type <<Lang{'ops}>> as the recursive type.
 
 >>
-define unfold_Ldom: dom{'ops; 'BT} <--> nat*nat + depth:nat * op: {op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} } * {subterms:list{'BT} | compatible_shapes{'depth;'op;'subterms} }
+define iform unfold_SubOp : SubOp{'ops} <--> {op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} }
+
+define unfold_Ldom: dom{'ops; 'BT} <--> nat*nat + depth:nat * op: SubOp{'ops} * {subterms:list{'BT} | compatible_shapes{'depth;'op;'subterms} }
 (*
 define unfold_mk: mk{'x} <--> decide{'x;
                                                   v.spread{'v;left,right. var{'left;'right}};
@@ -83,8 +85,8 @@ interactive_rw lbt_reduce_step {| reduce |}: 'n in nat --> BT{'ops; 'n+@1} <--> 
 interactive  lbt_elim_squash  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
    [base] sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
-   [step] sequent { <H>; <J>; depth: nat; op:{op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} };
-             subterms:list{BT{'ops; 'n}}; compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
+   [step] sequent { <H>; <J>; depth: nat; op:SubOp{'ops}; subterms:list{BT{'ops; 'n}};
+             compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BT{'ops; 'n+@1}; <J> >- squash{'P['t]} }
 
 interactive  lbt_wf_and_bdepth_wf  {| intro[] |}:
@@ -110,7 +112,7 @@ interactive compatible_shapes_wf {| intro[AutoMustComplete] |} BT{'ops; 'n} :
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- 'n in nat } -->
    sequent { <H> >- 'bdepth in nat } -->
-   sequent { <H> >- 'op in {op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} } } -->
+   sequent { <H> >- 'op in SubOp{'ops} } -->
    sequent { <H> >- 'btl in list{BT{'ops; 'n}} } -->
    sequent { <H> >- compatible_shapes{'bdepth; 'op; 'btl} Type }
 
@@ -159,7 +161,7 @@ interactive lbt_intro_mk_bterm {| intro[] |}:
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent{ <H> >- 'n in nat } -->
    sequent{ <H> >- 'depth in nat } -->
-   sequent{ <H> >- 'op in {op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} } } -->
+   sequent{ <H> >- 'op in SubOp{'ops} } -->
    sequent{ <H> >- 'subterms in list{BT{'ops; 'n}} } -->
    sequent{ <H> >- compatible_shapes{'depth;'op;'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth;'op;'subterms} in BT{'ops; 'n+@1} }
@@ -167,7 +169,7 @@ interactive lbt_intro_mk_bterm {| intro[] |}:
 interactive lang_intro_mk_bterm_wf1 {| intro[] |}:
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent{ <H> >- 'depth in nat } -->
-   sequent{ <H> >- 'op in {op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} } } -->
+   sequent{ <H> >- 'op in SubOp{'ops} } -->
    sequent{ <H> >- 'subterms in list{Lang{'ops}} } -->
    sequent{ <H> >- compatible_shapes{'depth;'op;'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth;'op;'subterms} in Lang{'ops} }
@@ -181,13 +183,94 @@ interactive lang_intro_mk_bterm_wf2 {| intro[] |}:
    sequent { <H> >- compatible_shapes{'depth;'op;'subterms} } -->
    sequent { <H> >- mk_bterm{'depth;'op;'subterms} in Lang{'ops} }
 
+
+interactive  lbt_elim_squash1  {| elim [] |} 'H :
+   [wf] sequent { <H>; <J> >- 'n in nat } -->
+   [wf] sequent { <H>; <J> >- 'ops in list{Operator} } -->
+   [base] sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   [step] sequent { <H>; 'n>0; <J>; depth: nat; op: SubOp{'ops}; subs: list{BT{'ops; 'n-@1}};
+               compatible_shapes{'depth;'op;'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
+   sequent { <H>; t: BT{'ops; 'n}; <J> >- squash{'P['t]} }
+
+interactive  lang_elim_squash {| elim [] |} 'H :
+   [wf] sequent { <H>; <J> >- 'ops in list{Operator} } -->
+   sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   sequent { <H>; <J>; depth: nat; op: SubOp{'ops}; subs: list{Lang{'ops}};
+                compatible_shapes{'depth;'op;'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
+   sequent { <H>; t: Lang{'ops}; <J> >- squash{'P['t]} }
+
+interactive_rw mk_dest_reduce 'ops :
+   'ops in list{Operator} -->
+   't in Lang{'ops}  -->
+   mk{dest{'t}} <--> 't
+
+interactive dest_bterm_wf {| intro[intro_typeinf <<'bt>>] |} Lang{'ops} :
+   sequent { <H> >- 'ops in list{Operator} } -->
+   sequent{ <H> >- 'bt in Lang{'ops} } -->
+   sequent{ <H>; l:nat; r:nat >- 'var_case['l;'r] in 'T } -->
+   sequent{ <H>; bdepth: nat; op: SubOp{'ops}; subterms: list{Lang{'ops}};
+                 compatible_shapes{'bdepth;'op;'subterms} >- 'op_case['bdepth; 'op; 'subterms] in 'T } -->
+   sequent{ <H> >- dest_bterm{'bt; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms]} in 'T }
+
+interactive dest_wf {| intro[] |}:
+   sequent { <H> >- 'ops in list{Operator} } -->
+   sequent{ <H> >- 't in Lang{'ops} } -->
+   sequent{ <H> >-  dest{'t} in dom{'ops; Lang{'ops}} }
+
+interactive lang_elim  {| elim [] |} 'H :
+   [wf] sequent { <H>; <J> >- 'ops in list{Operator} } -->
+   sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   sequent { <H>; <J>; bdepth: nat; op: SubOp{'ops}; subs: list{Lang{'ops}};
+               compatible_shapes{'bdepth;'op;'subs} >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
+   sequent { <H>; t: Lang{'ops}; <J> >- 'P['t] }
+
+interactive  lbt_elim_squash2  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [base] sequent { <H>; t: BT{'ops; 'n+@1}; <J['t]>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   [step] sequent { <H>; t: BT{'ops; 'n+@1}; <J['t]>; depth: nat; op: SubOp{'ops}; subs: list{BT{'ops; 'n}};
+                compatible_shapes{'depth;'op;'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
+   sequent { <H>; t: BT{'ops; 'n+@1}; <J['t]> >- squash{'P['t]} }
+
+interactive ldom_elim  {| elim [] |} 'H :
+   sequent { <H>; t: dom{'ops; 'T}; u: nat*nat; <J[inl{'u}]> >- 'P[inl{'u}] } -->
+   sequent { <H>; t: dom{'ops;'T}; v: depth:nat * op:SubOp{'ops} * {subterms:list{'T} | compatible_shapes{'depth;'op;'subterms}}; <J[inr{'v}]>
+               >- 'P[inr{'v}] } -->
+   sequent { <H>; t: dom{'ops;'T}; <J['t]> >- 'P['t] }
+
+interactive_rw dest_mk_reduce BT{'ops; 'n} :
+   'ops in list{Operator} -->
+   'n in nat -->
+   't in dom{'ops; BT{'ops; 'n}}  -->
+   dest{mk{'t}} <--> 't
+
+interactive  lbt_elim1  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [step] sequent { <H>; t: BT{'ops; 'n+@1}; <J['t]>; x: dom{'ops; BT{'ops; 'n}} >- 'P[mk{'x}] } -->
+   sequent { <H>; t: BT{'ops; 'n+@1}; <J['t]> >- 'P['t] }
+
+interactive  lang_elim_squash1 {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H>; t: Lang{'ops}; <J['t]>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   sequent { <H>; t: Lang{'ops}; <J['t]>; depth: nat; op: SubOp{'ops}; subs: list{Lang{'ops}};
+               compatible_shapes{'depth;'op;'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
+   sequent { <H>; t: Lang{'ops}; <J['t]> >- squash{'P['t]} }
+
+interactive lang_induction  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [base] sequent { <H>; t: Lang{'ops}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   [step] sequent { <H>; t: Lang{'ops}; <J['t]>; bdepth: nat; op: SubOp{'ops}; subs: list{Lang{'ops}};
+               compatible_shapes{'bdepth;'op;'subs} >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
+   sequent { <H>; t: Lang{'ops}; <J['t]> >- 'P['t] }
+(*
 interactive lang_induction  {| elim[] |} 'H:
    [wf] sequent { <H> >- 'ops in list{Operator} } -->
    [base] sequent { <H>; x: Lang{'ops}; <J['x]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
-   [step] sequent { <H>; x: Lang{'ops}; <J['x]>; bdepth: nat; op:Operator; subterms:list{Lang{'ops}};
-               compatible_shapes{'bdepth;'op;'subterms}(*; all_list{'subterms; t.'P['t]}*) >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
+   [step] sequent { <H>; x: Lang{'ops}; <J['x]>; bdepth: nat; op: SubOp{'ops}; subs: list{Lang{'ops}};
+               compatible_shapes{'bdepth;'op;'subs}(*; all_list{'subs; t.'P['t]}*) >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
    sequent { <H>; x: Lang{'ops}; <J['x]> >- 'P['x] }
-
+*)
 doc docoff
 
 dform lang_df: Lang{'op} =

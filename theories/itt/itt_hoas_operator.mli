@@ -1,7 +1,9 @@
 doc <:doc<
    @module[Itt_hoas_operator]
    The @tt[Itt_hoas_operator] module defines a type << Operator >> of abstract
-   operators.
+   operators; it also estabishes the connection between abstract operator type
+   and the internal notion of syntax that is exposed by the computational bterms
+   theory (@hrefmodule[Base_operator]).
 
    ----------------------------------------------------------------
 
@@ -38,9 +40,13 @@ doc <:doc<
 
 extends Itt_nat
 extends Itt_list2
+extends Base_operator
 
 declare Operator
 declare shape{'op}
 declare is_same_op{'op_1;'op_2}
 
 define iform unfold_arity : arity{'op} <--> length{shape{'op}}
+
+rewrite bterm_same_op:
+   is_same_op{'op1;'op2} <--> Base_operator!if_same_op{'op1;'op2;btrue;bfalse}

@@ -1,7 +1,9 @@
 doc <:doc<
    @module[Itt_hoas_operator]
    The @tt[Itt_hoas_operator] module defines a type << Operator >> of abstract
-   operators.
+   operators; it also estabishes the connection between abstract operator type
+   and the internal notion of syntax that is exposed by the computational bterms
+   theory (@hrefmodule[Base_operator]).
 
    @docoff
    ----------------------------------------------------------------
@@ -38,10 +40,13 @@ doc <:doc<
 >>
 
 doc <:doc< @parents >>
+extends Itt_theory
+extends Base_operator
 extends Itt_nat
 extends Itt_list2
 doc docoff
 
+open Base_operator
 open Basic_tactics
 open Itt_struct
 
@@ -157,3 +162,103 @@ interactive arity_int {| intro [] |} :
 interactive shape_int_list_sq {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
    sequent { <H> >- shape{'op1} ~ shape{'op2} }
+
+doc <:doc<
+   @modsection{Concrete Operators}
+
+   This section establishes the connection between the abstract notion
+   of operator and the internal notion of opertor that is exposed by
+   the computational bterms theory (@hrefmodule[Base_operator]).
+
+   Essentially, it @emph{postulates} that the abstract operator is
+   compatible with the notion of operators that we have defined
+   computationally, that the computationally-defined operations on
+   operators act as expected, and that the syntactic operations we
+   defined (such as shape) correspond exactly to the built-in
+   operations of the meta-theory. In a way, this theory establishes
+   the operator expressions as denotations for constants of the
+   << Operator >> type --- this is similar to how numerals denote
+   constants of type <<int>>.
+
+   First, we define a concrete representation for operators. We will represent
+   an operator by a bterm of the form
+   $bterm@{@Gamma.<<'op>>[quote]@{@Delta_{1}.t_{1},@ldots,@Delta_{n}.t_{n}@}@}$,
+   in which the length of @Gamma is the binding depth of the operator, and
+   $@Delta_{i}$'s are the binding variables of $t_{i}$. The operator is
+   solely defined by its binding depth, name and shape. We define the shape
+   of an operator, equality of two operators and binding depth using operations
+   from @hrefmodule[Itt_synt_operator] and @hrefmodule[Itt_synt_bterm].
+>>
+doc docoff
+(************************************************************************
+ * Xlist                                                                *
+ ************************************************************************)
+
+(* XXX: This part should be in a separate theory *)
+
+declare rlist_of_list{'l}
+
+prim_rw rlist_list_cons {| reduce |} :
+   rlist_of_list{ 'hd :: 'tl } <--> rcons{'hd; rlist_of_list{'tl}}
+
+prim_rw rlist_list_nil {| reduce |} :
+   rlist_of_list{ nil } <--> rnil
+
+declare list_of_rlist{'l}
+
+prim_rw reduce_rlist_cons {| reduce |} :
+   list_of_rlist{rcons{'hd; 'tl}} <--> ('hd :: list_of_rlist{'tl})
+
+prim_rw reduce_rlist_nil {| reduce |} :
+   list_of_rlist{rnil} <--> nil
+
+let rec reduce_rlist t =
+   if is_rnil_term (one_subterm t) then
+      reduce_rlist_nil
+   else
+      reduce_rlist_cons thenC addrC [Subterm 2] (termC reduce_rlist)
+
+dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
+   `"list_of_rlist(" slot{'l} `")"
+
+(* ********************************************************************* *)
+
+doc docon
+prim bterm_op {| intro[AutoMustComplete] |} :
+   sequent { <H> >- if_quoted_op{'op;"true"} } -->
+   sequent { <H> >- 'op in Operator }
+   = it
+
+let resource intro +=
+ (<<'op in Operator>>,wrap_intro (bterm_op thenT rw reduce_if_quoted_op 0 thenT trivialT) )
+
+prim_rw bterm_shape :
+   if_quoted_op{'op<||>;"true"} -->
+   shape{'op} <-->  list_of_rlist{Base_operator!shape{'op}}
+
+let resource reduce += (<<shape{'op}>>,bterm_shape)
+
+prim_rw bterm_same_op:
+   is_same_op{'op1;'op2} <--> Base_operator!if_same_op{'op1;'op2;btrue;bfalse}
+
+doc docoff
+
+(* ********** Examples ************* *)
+interactive op_exam1 {| intro[] |}:
+   sequent{ <H> >- apply[@]{'x;'y} in Operator }
+
+interactive op_exam2 {| intro[] |}:
+   sequent{ <H> >- lambda[@]{x.it[@]} in Operator }
+
+interactive op_exam3 {| intro[] |}:
+   sequent{ <H> >- apply[@]{'x; union[@]{'y; 'z}} = apply[@]{it[@]; int[@]} in Operator }
+
+interactive op_exam4 {| intro[] |}:
+   sequent{ <H> >- lambda[@]{x.it[@]} = lambda[@]{x.'P['x]} in Operator }
+
+(*interactive shape_exam1 {| intro[] |}:
+   sequent{ <H> >- shape{apply[@]{'x; union[@]{'y; 'z}}} = 0::0::nil in list{int} }
+
+interactive shape_exam2 {| intro[] |}:
+   sequent{ <H> >- shape{lambda[@]{x.it[@]}} = 1::nil in list{int} }
+*)

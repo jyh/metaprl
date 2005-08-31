@@ -12,7 +12,7 @@ MPFILES[] =
     base_meta
     base_rewrite
     base_reflection
-    base_reflection_hoas
+    base_operator
     base_theory
 
 Theory($(MPFILES))

@@ -106,7 +106,7 @@ doc <:doc<
    First, we define a concrete representation for operators. We will represent
    an operator by a bterm of the form
    $bterm@{@Gamma.<<'op>>[quote]@{@Delta_{1}.t_{1},@ldots,@Delta_{n}.t_{n}@}@}$,
-   in which the length of @Gamma is the binding depth of the operator, and
+   in which the length of $@Gamma$ is the binding depth of the operator, and
    $@Delta_{i}$'s are the binding variables of $t_{i}$. The operator is
    solely defined by its binding depth, name and shape. We define the shape
    of an operator, equality of two operators and binding depth using operations

@@ -181,13 +181,7 @@ doc <:doc<
    constants of type <<int>>.
 
    First, we define a concrete representation for operators. We will represent
-   an operator by a bterm of the form
-   $bterm@{@Gamma.<<'op>>[quote]@{@Delta_{1}.t_{1},@ldots,@Delta_{n}.t_{n}@}@}$,
-   in which the length of @Gamma is the binding depth of the operator, and
-   $@Delta_{i}$'s are the binding variables of $t_{i}$. The operator is
-   solely defined by its binding depth, name and shape. We define the shape
-   of an operator, equality of two operators and binding depth using operations
-   from @hrefmodule[Itt_synt_operator] and @hrefmodule[Itt_synt_bterm].
+   an operator by a bterm of the form <<operator[op:sh]>>
 >>
 doc docoff
 (************************************************************************
@@ -224,9 +218,11 @@ dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
 (* ********************************************************************* *)
 
 doc docon
-prim bterm_op {| intro[AutoMustComplete] |} :
-   sequent { <H> >- if_quoted_op{'op;"true"} } -->
-   sequent { <H> >- 'op in Operator }
+
+declare operator[op:sh]
+
+prim op_constant {| intro[AutoMustComplete] |} :
+   sequent { <H> >- operator[op:sh] in Operator }
    = it
 
 let resource intro +=

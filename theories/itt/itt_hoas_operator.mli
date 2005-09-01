@@ -47,6 +47,3 @@ declare shape{'op}
 declare is_same_op{'op_1;'op_2}
 
 define iform unfold_arity : arity{'op} <--> length{shape{'op}}
-
-rewrite bterm_same_op:
-   is_same_op{'op1;'op2} <--> Base_operator!if_same_op{'op1;'op2;btrue;bfalse}

@@ -221,27 +221,21 @@ doc docon
 
 declare operator[op:sh]
 
-prim op_constant {| intro[AutoMustComplete] |} :
+prim op_constant {| intro [] |} :
    sequent { <H> >- operator[op:sh] in Operator }
    = it
 
-let resource intro +=
- (<<'op in Operator>>,wrap_intro (bterm_op thenT rw reduce_if_quoted_op 0 thenT trivialT) )
+prim_rw bterm_shape {| reduce |} :
+   shape{operator[op:sh]} <-->  list_of_rlist{Base_operator!shape[op:sh]}
 
-prim_rw bterm_shape :
-   if_quoted_op{'op<||>;"true"} -->
-   shape{'op} <-->  list_of_rlist{Base_operator!shape{'op}}
-
-let resource reduce += (<<shape{'op}>>,bterm_shape)
-
-prim_rw bterm_same_op:
-   is_same_op{'op1;'op2} <--> Base_operator!if_same_op{'op1;'op2;btrue;bfalse}
+prim_rw bterm_same_op {| reduce |} :
+   is_same_op{operator[op1:sh]; operator[op2:sh]} <--> meta_eq[op1:sh, op2:sh]{btrue;bfalse}
 
 doc docoff
 
 (* ********** Examples ************* *)
 interactive op_exam1 {| intro[] |}:
-   sequent{ <H> >- apply[@]{'x;'y} in Operator }
+   sequent{ <H> >- operator[(apply{'x;'y})] in Operator }
 
 interactive op_exam2 {| intro[] |}:
    sequent{ <H> >- lambda[@]{x.it[@]} in Operator }

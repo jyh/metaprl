@@ -5,9 +5,7 @@ open Basic_tactics
 declare rnil
 declare rcons{'hd; 'tl}
 
-declare if_quoted_op{'op; 'tt}
-declare shape{'op}
-declare if_same_op{'bt1; 'bt2; 'tt; 'ff}
+declare shape[op:sh]
 
 (*
  * Primitive lists.

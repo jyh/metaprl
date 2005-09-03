@@ -34,6 +34,8 @@
 extends Shell_theory
 extends Summary
 
+open Basic_tactics
+
 (*
  * Meta-operations.
  *)
@@ -51,6 +53,7 @@ declare meta_eq[a:s, b:s]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:t, b:t]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:l, b:l]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:sh,b:sh]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:op,b:op]{'tt : 'a; 'ff : 'a} : 'a
 
 declare meta_lt[a:n, b:n]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_lt[a:s, b:s]{'tt : 'a; 'ff : 'a} : 'a
@@ -70,10 +73,14 @@ ml_rw reduce_meta_eq_num : meta_eq[a:n, b:n]{'tt; 'ff}
 ml_rw reduce_meta_eq_str : meta_eq[a:s, b:s]{'tt; 'ff}
 ml_rw reduce_meta_eq_tok : meta_eq[a:t, b:t]{'tt; 'ff}
 ml_rw reduce_meta_eq_lev : meta_eq[a:l, b:l]{'tt; 'ff}
+ml_rw reduce_meta_eq_shp : meta_eq[a:sh, b:sh]{'tt; 'ff}
+ml_rw reduce_meta_eq_ops : meta_eq[a:op, b:op]{'tt; 'ff}
 
 ml_rw reduce_meta_lt_num : meta_lt[a:n, b:n]{'tt; 'ff}
 ml_rw reduce_meta_lt_str : meta_lt[a:s, b:s]{'tt; 'ff}
 ml_rw reduce_meta_lt_lev : meta_lt[a:l, b:l]{'tt; 'ff}
+
+val mk_meta_num : int -> term
 
 (*
  * -*-

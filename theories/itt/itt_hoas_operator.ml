@@ -181,7 +181,7 @@ doc <:doc<
    constants of type <<int>>.
 
    First, we define a concrete representation for operators. We will represent
-   an operator by a bterm of the form <<operator[op:sh]>>
+   an operator by a bterm of the form <<operator[op:op]>>
 >>
 doc docoff
 (************************************************************************
@@ -219,23 +219,23 @@ dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
 
 doc docon
 
-declare operator[op:sh]
+declare operator[op:op]
 
 prim op_constant {| intro [] |} :
-   sequent { <H> >- operator[op:sh] in Operator }
+   sequent { <H> >- operator[op:op] in Operator }
    = it
 
 prim_rw bterm_shape {| reduce |} :
-   shape{operator[op:sh]} <-->  list_of_rlist{Base_operator!shape[op:sh]}
+   shape{operator[op:op]} <-->  list_of_rlist{Base_operator!shape[op:op]}
 
 prim_rw bterm_same_op {| reduce |} :
-   is_same_op{operator[op1:sh]; operator[op2:sh]} <--> meta_eq[op1:sh, op2:sh]{btrue;bfalse}
+   is_same_op{operator[op1:op]; operator[op2:op]} <--> meta_eq[op1:op, op2:op]{btrue;bfalse}
 
 doc docoff
 
 (* ********** Examples ************* *)
 interactive op_exam1 {| intro[] |}:
-   sequent{ <H> >- operator[(apply{'x;'y})] in Operator }
+   sequent{ <H> >- operator[(apply{'x;'y}):op] in Operator }
 
 interactive op_exam2 {| intro[] |}:
    sequent{ <H> >- lambda[@]{x.it[@]} in Operator }

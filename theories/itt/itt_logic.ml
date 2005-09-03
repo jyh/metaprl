@@ -1216,7 +1216,7 @@ struct
 
    let rec find_in_assums term tac = function
       [] ->
-         raise (RefineError("Itt_logic.Itt_JLogic.find_hyp failed",
+         raise (RefineForceError("Itt_logic.Itt_JLogic.find_in_assums", "internal error",
                   TermError(term)))
     | (t, tac') :: _ when alpha_equal term t -> tac' (tac (-1))
     | _ :: assums -> find_in_assums term tac assums

@@ -27,6 +27,15 @@ interactive test3 :
 interactive test4 :
 	sequent { box[1]{not{box[2]{'a}}} >- concl {| box[1]{not{box[2]{'a & 'b}}} |} }
 
+interactive test5 :
+	sequent { box[0]{'a} >- concl {| box[1]{box[2]{'a}} |} }
+
+interactive test6 :
+	sequent { box[1]{box[2]{'a}} >- concl {| box[1]{box[1]{box[2]{'a}}} |} }
+
+interactive test7 :
+	sequent { box[1]{box[2]{'a}} >- concl {| box[2]{box[2]{'a}} |} }
+
 doc <:doc< @modsection{Wise Men} >>
 
 declare m1

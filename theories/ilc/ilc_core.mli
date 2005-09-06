@@ -92,6 +92,9 @@ doc <:doc<
 declare sequent[ilc]    { exst a : TyScope. TyElem{'a} : 'a >- LinearSeq } : Judgment
 declare sequent[linear] { Ignore : Linear >- Linear } : LinearSeq
 
+
+declare Parameter
+
 doc <:doc<
    @modsubsection{Theory Transitions}
 >>
@@ -117,6 +120,7 @@ declare impl{'t1 : Linear; 't2 : Linear} : Linear
 declare conj{'t1 : Linear; 't2 : Linear} : Linear
 declare one : Linear
 declare top : Linear
+declare zero : Linear
 declare exists{x.'B['x] : Linear} : Linear
 declare forall{x.'B['x] : Linear} : Linear
 

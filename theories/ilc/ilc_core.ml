@@ -100,6 +100,8 @@ doc <:doc<
 declare sequent[ilc]    { exst a : TyScope. TyElem{'a} : 'a >- LinearSeq } : Judgment
 declare sequent[linear] { Ignore : Linear >- Linear } : LinearSeq
 
+
+
 doc <:doc<
    @modsubsection{Theory Transitions}
 >>
@@ -118,6 +120,7 @@ doc <:doc<
  *
  * This is not a complete list (yet).
  *)
+declare Parameter
 declare bang{'t : Linear} : AffLinear
 declare tensor{'t1 : Linear; 't2 : Linear} : Linear
 declare plus{'t1 : Linear; 't2 : Linear} : Linear
@@ -125,6 +128,7 @@ declare impl{'t1 : Linear; 't2 : Linear} : Linear
 declare conj{'t1 : Linear; 't2 : Linear} : Linear
 declare one : Linear
 declare top : Linear
+declare zero : Linear
 declare exists{x.'B['x] : Linear} : Linear
 declare forall{x.'B['x] : Linear} : Linear
 
@@ -149,6 +153,14 @@ prim top_intro {| intro [] |} :
 
 prim one_intro {| intro [] |} :
    ilc{| <H> >- linear{| >- one |} |}
+
+prim one_elim 'L :
+   ilc{| <H> >- linear{| <L>; <M> >- 'C |} |} -->
+     ilc{| <H> >- linear{| <L>; one ; <M> >- 'C |} |}
+
+prim zero_elim 'L :
+   ilc{| <H> >- linear{| <L>; zero ; <M> >- 'C |} |}
+
 
 prim tensor_elim 'L :
    ilc{| <H> >- linear{| <L>; 'A1; 'A2; <M> >- 'C |} |} -->
@@ -194,8 +206,8 @@ prim impl_elim 'L1 :
    ilc{| <H> >- linear{| <#L2>; 'C2 >- 'C |} |} -->
    ilc{| <H> >- linear{| <#L1>;<#L2>; impl{'C1; 'C2} >- 'C |} |}
 
-prim forall_intro{| intro[] |} 'T :
-   ilc{| <H>; x: data{'T} >- linear{| <L> >- 'B['x] |} |} -->
+prim forall_intro{| intro[] |}  :
+   ilc{| <H>; x: data{Parameter} >- linear{| <L> >- 'B['x] |} |} -->
    ilc{| <H> >- linear{| <L> >- forall{y.'B['y]} |} |}
 
 prim forall_elim 'L 'a :
@@ -206,8 +218,8 @@ prim exists_intro{| intro[] |} 'a :
    ilc{| <H> >- linear{| <L> >- 'B['a] |} |} -->
    ilc{| <H> >- linear{| <L> >- exists{x.'B['x]} |} |}
 
-prim existsl_elim 'L 'T :
-   ilc{| <H>; x: data{'T} >- linear {| <L>; 'B['x]; <M> >- 'C |} |} -->
+prim exists_elim 'L  :
+   ilc{| <H>; x: data{Parameter} >- linear {| <L>; 'B['x]; <M> >- 'C |} |} -->
    ilc{| <H> >- linear {| <L>; exists{x.'B['x]} ; <M> >- 'C |} |}
 
 prim bang_intro {| intro[] |}:
@@ -223,6 +235,8 @@ prim lin_hyp :
 
 prim un_hyp 'H:
    ilc{| <H> ; bang{'A} ; <M> >- linear{| >- 'A |} |}
+
+
 
 doc <:doc<
    @modsubsection{Structural Rules}
@@ -282,6 +296,9 @@ prim absurdity :
    ilc{| <H> >- linear{| >- circ{"false"} |} |} -->
    ilc{| <H> >- linear{| <J> >- 'C |} |}
 
+prim hole:
+       ilc{| <H> >- linear{| <L> >- 'C |} |}
+
 doc docoff
 
 (*******************************************************
@@ -316,6 +333,8 @@ dform conj_df : parens :: "prec"[prec_or] :: conj{'t1; 't2} =
 dform one_df : one = bf["1"]
 
 dform top_df : top = bf["T"]
+
+dform zero_df : zero = bf["0"]
 
 dform forall_df : parens :: "prec"[prec_quant] :: forall{x. 'B} =
    szone pushm[3] forall slot{'x} `"." hspace slot{'B} popm ezone

@@ -55,6 +55,7 @@ extends Itt_pairwise
 extends Itt_omega
 extends Itt_tunion
 extends Itt_ext_equal
+extends Itt_sqsimple
 doc docoff
 
 open Basic_tactics
@@ -1246,6 +1247,44 @@ interactive list_continuous {| intro[] |}:
    [wf] sequent { <H>; i:nat >- 'A['i] Type} -->
    [monotone] sequent { <H>; i:nat >- 'A['i] subtype 'A['i+@1] } -->
    sequent { <H> >- ext_equal{ list{Union i:nat.'A['i]}; Union i:nat.list{'A['i]} } }
+
+doc <:doc<
+    <<listmem_set{'l; 'T}>> defines the set of elements in <<'T>> that are members of list <<'l>>.
+>>
+define unfold_listmem_set: listmem_set{'l; 'T} <--> { t: 'T | mem{'t; 'l; 'T} }
+
+interactive mem_sqstable (*{| squash |}*) :
+   sequent { <H> >- 'l in list{'T} } -->
+   sequent { <H> >- 't in 'T } -->
+   sequent { <H>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
+   sequent { <H> >- squash{mem{'t; 'l; 'T}}  } -->
+   sequent { <H> >- mem{'t; 'l; 'T} }
+
+interactive listmem_set_wf {| intro [] |} :
+   sequent { <H> >- 'T Type } -->
+   sequent { <H> >- 'l in list{'T} } -->
+   sequent { <H> >- listmem_set{'l; 'T} Type }
+
+interactive listmem_set_intro {| intro [] |} :
+   sequent { <H> >- 'x in 'T } -->
+   sequent { <H> >- 'l in list{'T} } -->
+   sequent { <H> >- squash{mem{'x; 'l; 'T}} } -->
+   sequent { <H> >- 'x in listmem_set{'l; 'T} }
+
+interactive listmem_set_elim {| elim [] |} 'H :
+   sequent { <H>; x: 'T; i: squash{mem{'x;'l;'T}}; <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: listmem_set{'l; 'T}; <J['x]> >- 'C['x] }
+
+interactive listmem_set_elim1 {| elim [] |} 'H :
+   sequent { <H>; <J> >- 'h in 'T } -->
+   sequent { <H>; <J> >- 't in list{'T} } -->
+   sequent { <H>; <J> >- sqsimple{'T} } -->
+   sequent { <H>; <J>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
+   sequent { <H>; <J> >- 'C['h] } -->
+   sequent { <H>; <J>; x: listmem_set{'t; 'T} >- 'C['x] } -->
+   sequent { <H>; x: listmem_set{'h::'t; 'T}; <J> >- 'C['x] }
+
+
 
 doc docoff
 

@@ -143,6 +143,11 @@ declare diff_list{'T}
 declare list_max{'l}
 
 (*
+ * The set of elements in 'T that are members of list 'l.
+ *)
+declare listmem_set{'l; 'T}
+
+(*
  * I/O abstraction for list{top}
  *)
 define iform unfold_list: list <--> list{top}

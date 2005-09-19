@@ -29,6 +29,7 @@ MPFILES[] =
    itt_fun
    itt_esquash
    itt_logic
+   itt_sqsimple
    itt_nequal
    itt_well_founded
    itt_decidable
@@ -119,7 +120,6 @@ MPFILES[] =
    itt_reflection
    itt_reflection_test
    itt_power
-   itt_sqsimple
    itt_functions
    itt_closure
    itt_synt_lang

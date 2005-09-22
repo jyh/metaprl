@@ -10,6 +10,7 @@ MLZFILES =
 
 # Library files
 MPFILES[] =
+    ocaml_doc_comment
     ocaml_doc_intro
     ocaml_doc_expr1
     ocaml_doc_var1
@@ -23,6 +24,7 @@ MPFILES[] =
     ocaml_doc_mod2
     ocaml_doc_mod3
     ocaml_doc_class1
+    ocaml_doc_class2
 
 Theory($(MPFILES))
 
@@ -43,6 +45,7 @@ PRINT_THEORIES[] =
     ocaml_doc_mod2
     ocaml_doc_mod3
     ocaml_doc_class1
+    ocaml_doc_class2
 
 LocalTeXGeneratedFiles(theory.tex theory-body.tex)
 TheoryDocument(theory, $(PRINT_THEORIES))

@@ -470,15 +470,28 @@ val rng : '_a choose_rng = <obj>
 - : int = 1
 # rng#choose [|1; 2; 3|];;
 - : int = 2
+# rng;;
+- : int choose_rng = <obj>
 # rng#choose [|"Red"; "Green"; "Blue"|];;
 This expression has type string array but is here used with type int array
 @end[verbatim]
 
-Unfortunetely, while the object is polymorphic, it is polymorphic at only one type!
+Unfortunately, the object is not polymorphic in the way that we want.
+The type @code{'_a choose_rng} specifies that the generator can be
+used with some type @code{'_a} of elements.  When we use the
+@code{rng} with an array of integers, the type becomes @code{int choose_rng},
+and any attempt to use it with any other type (such as an
+array of strings) results in a type error.
 
----- JYH: ran out of time, but I want to give this example ---
-
-Solution.
+The problem here is that it isn't the @emph{object} that should be
+polymorphic, is the the @emph{method}.  In other words, the
+@code{choose} method should be polymorphic, having type @code{'a array
+-> 'a} for any type @code{'a}, but the object itself is not
+polymorphic.  OCaml provides a way to specify this directly, using
+explicit type quanitification.  The method @code{choose} gets the type
+@code{'a . 'a array -> 'a}, where the @code{'a .} prefix specifies
+that polymorphism is restricted to the @code{choose} method, as
+presented in the following example.
 
 @begin[verbatim]
 class choose_rng =

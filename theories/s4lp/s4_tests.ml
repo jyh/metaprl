@@ -36,6 +36,24 @@ interactive test6 :
 interactive test7 :
 	sequent { box[1]{box[2]{'a}} >- concl {| box[2]{box[2]{'a}} |} }
 
+interactive test8 :
+	sequent { box[1]{box[2]{'a}} >- concl {| box[1]{not{box[1]{not{box[2]{'a}}}}} |} }
+
+interactive test9 :
+	sequent { not{box[1]{not{box[1]{box[2]{'a}}}}} >- concl {| not{box[1]{not{box[2]{'a}}}} |} }
+
+interactive test10 :
+	sequent { box[1]{not{box[2]{'a}}} >- concl {| box[1]{not{box[1]{box[2]{'a}}}} |} }
+
+interactive test11 :
+	sequent { box[0]{box[0]{'a}} >- concl {| not{box[1]{not{'a}}} |} }
+
+interactive test12 :
+	sequent { box[1]{'a} >- concl {| not{box[0]{box[0]{not{'a}}}} |} }
+
+interactive test13 :
+	sequent { box[0]{box[0]{'a} or box[2]{'b}} >- concl {| not{box[1]{not{'a}}}; box[2]{'b} |} }
+
 doc <:doc< @modsection{Wise Men} >>
 
 declare m1
@@ -116,10 +134,22 @@ interactive mch2_2 :
    sequent { s2_0; s2_2 >- concl{| box[1]{c1} |} }
 
 interactive mch2_3 :
-   sequent { mch2_KAO; s2_1; s2_2 >- concl{| box[2]{not{c2}} |} }
+   sequent { s2_0; s2_2; box[0]{box[1]{c1}} >- concl{| box[2]{not{c2}} |} }
 
 interactive mch2 :
 	sequent { mch2_KAO; s2_1; s2_2 >- concl{| kwh[1]{c1} & kwh[2]{c2} |} }
+
+interactive mch2_4 : (* mult 3 reached, probably unprovable *)
+	sequent { mch2_KAO; s2_2; box[0]{(mch2_KAO & s2_2) => box[1]{c1}} >- concl {| box[2]{not{c2}} |} }
+
+interactive mch2_5 : (* mult 3 reached, probably unprovable *)
+	sequent { mch2_KAO; s2_2; box[0]{(mch2_KAO & s2_2) => box[1]{c1}} >- concl {| kwh[2]{c2} |} }
+
+interactive mch2_6 :
+	sequent { box[0]{(c1 & not{c2}) or (not{c1} & c2)}; mch2_KAO >- concl {| kwh[1]{c1} |} }
+
+interactive mch2_7 :
+	sequent { box[0]{(c1 & not{c2}) or (not{c1} & c2)}; mch2_KAO >- concl {| kwh[2]{c2} |} }
 
 doc <:doc< @modsubsection{3 children} >>
 
@@ -146,6 +176,9 @@ interactive mch3_2 :
 interactive mch3_3 :
    sequent { s3_0; s3_1; s3_2 >- concl{| box[2]{not{c2}} |} }
 
+interactive mch3_4 :
+   sequent { s3_0; s3_1; s3_2 >- concl{| box[1]{c1} & box[2]{not{c2}} & box[3]{not{c3}} |} }
+
 interactive mch3 :
    sequent { s3_0; s3_1; s3_2 >- concl{| kwh[1]{c1} & kwh[2]{c2} & kwh[3]{c3} |} }
 
@@ -158,6 +191,9 @@ define unfold_mch4_KAO : mch4_KAO <-->
 	   kwh[3]{c1} & kwh[3]{c2} & kwh[3]{c4} &
    	kwh[4]{c1} & kwh[4]{c2} & kwh[4]{c3}
 	}
+
+define unfold_S : S <-->
+	kwh[1]{c1} or kwh[2]{c2} or kwh[3]{c3} or kwh[4]{c4}
 
 define unfold_NBK : NBK <-->
 	box[0]{
@@ -184,21 +220,32 @@ define unfold_s3 : s3 <-->
 
 
 let unfold_mchT = byDefsT
-	[unfold_s3; unfold_s2; unfold_s1; unfold_s0;
+	[unfold_s3; unfold_s2; unfold_s1; unfold_s0; unfold_S;
 	 unfold_NBK; unfold_mch4_KAO; unfold_kwh]
 
 interactive lemma3 :
 	sequent { s0; s2 >- concl {| kwh[1]{c1} & kwh[2]{c2} |} }
 
-interactive wrong :
-	sequent { s0; NBK; s2 >- concl {| kwh[1]{c1} & kwh[2]{c2} & kwh[3]{c3} & kwh[4]{c4} |} }
-
 interactive lemma4 :
-   sequent { s0; s2; NBK >- concl {| kwh[3]{c3} |} }
-
-interactive lemma5 :
-   sequent { s0; s2; NBK >- concl {| kwh[3]{c3} |} }
+   sequent { s0; s2; NBK >- concl {| 'c6 |} }
 
 interactive muddy_children :
-   sequent { s0; s2; NBK; s3 >- concl {| kwh[1]{c1} & kwh[2]{c2} & kwh[3]{c3} & kwh[4]{c4} |} }
+   sequent { s0; s2; NBK >- concl {| box[1]{c1} & box[2]{c2} & box[3]{not{c3}} & box[4]{not{c4}} |} }
 
+interactive lemma5 :
+   sequent { NBK; s3 >- concl{| 'c6 |} }
+
+interactive lemma6 :
+	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[1]{c1} |} }
+
+interactive lemma6b :
+	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[2]{c2} |} }
+
+interactive muddy_children2 :
+	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[1]{c1} & box[2]{c2} |} }
+
+interactive wrong :
+	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[3]{not{c3}} |} }
+
+interactive wrong2 :
+   sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| 'c6 |} }

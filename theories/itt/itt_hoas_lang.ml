@@ -44,6 +44,7 @@ doc <:doc< @parents >>
 extends Itt_hoas_bterm
 extends Itt_image
 extends Itt_tunion
+extends Itt_list2
 doc docoff
 
 open Basic_tactics
@@ -54,7 +55,7 @@ doc <:doc<
      We define the type <<Lang{'ops}>> as the recursive type.
 
 >>
-define iform unfold_SubOp : SubOp{'ops} <--> {op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} }
+define iform unfold_SubOp : SubOp{'ops} <--> listmem_set{'ops; Operator}
 
 define unfold_Ldom: dom{'ops; 'BT} <--> nat*nat + depth:nat * op: SubOp{'ops} * {subterms:list{'BT} | compatible_shapes{'depth;'op;'subterms} }
 (*
@@ -263,14 +264,17 @@ interactive lang_induction  {| elim [] |} 'H :
    [step] sequent { <H>; t: Lang{'ops}; <J['t]>; bdepth: nat; op: SubOp{'ops}; subs: list{Lang{'ops}};
                compatible_shapes{'bdepth;'op;'subs} >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
    sequent { <H>; t: Lang{'ops}; <J['t]> >- 'P['t] }
-(*
-interactive lang_induction  {| elim[] |} 'H:
+
+interactive lang_induction2  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'h in Operator } -->
    [wf] sequent { <H> >- 'ops in list{Operator} } -->
-   [base] sequent { <H>; x: Lang{'ops}; <J['x]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
-   [step] sequent { <H>; x: Lang{'ops}; <J['x]>; bdepth: nat; op: SubOp{'ops}; subs: list{Lang{'ops}};
-               compatible_shapes{'bdepth;'op;'subs}(*; all_list{'subs; t.'P['t]}*) >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
-   sequent { <H>; x: Lang{'ops}; <J['x]> >- 'P['x] }
-*)
+   sequent { <H>; t: Lang{'h::'ops}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   sequent { <H>; t: Lang{'h::'ops}; <J['t]>; bdepth: nat; subs: list{Lang{'h::'ops}};
+               compatible_shapes{'bdepth;'h;'subs} >- 'P[mk_bterm{'bdepth;'h;'subs}] } -->
+   sequent { <H>; t: Lang{'h::'ops}; <J['t]>; bdepth: nat; op: SubOp{'ops}; subs: list{Lang{'h::'ops}};
+               compatible_shapes{'bdepth;'op;'subs} >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
+   sequent { <H>; t: Lang{'h::'ops}; <J['t]> >- 'P['t] }
+
 doc docoff
 
 dform lang_df: Lang{'op} =

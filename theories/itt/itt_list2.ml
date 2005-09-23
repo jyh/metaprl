@@ -1284,8 +1284,6 @@ interactive listmem_set_elim1 {| elim [] |} 'H :
    sequent { <H>; <J>; x: listmem_set{'t; 'T} >- 'C['x] } -->
    sequent { <H>; x: listmem_set{'h::'t; 'T}; <J> >- 'C['x] }
 
-
-
 doc docoff
 
 (************************************************************************

@@ -38,7 +38,7 @@ extends Itt_hoas_bterm
 
 open Tactic_type.Tactic
 
-define iform unfold_SubOp : SubOp{'ops} <--> {op:Operator | find{'ops; 'op; x,y.is_same_op{'x; 'y}} <> length{'ops} }
+define iform unfold_SubOp : SubOp{'ops} <--> listmem_set{'ops; Operator}
 
 declare Lang{'ops}
 

@@ -45,6 +45,8 @@ extends Base_operator
 extends Itt_nat
 extends Itt_list2
 doc docoff
+extends Itt_int_base
+extends Itt_nequal
 
 open Base_operator
 open Basic_tactics
@@ -119,6 +121,11 @@ prim is_same_op_rev_eq :
    sequent { <H> >- "assert"{is_same_op{'op_1;'op_2}} } -->
    sequent { <H> >- 'op_1 = 'op_2 in Operator }
    = it
+
+interactive op_decidable {| intro [] |} :
+   sequent { <H> >- 'op_1 in Operator } -->
+   sequent { <H> >- 'op_2 in Operator } -->
+   sequent { <H> >- decidable{'op_1 = 'op_2 in Operator} }
 
 interactive is_same_op_elim {| elim [ThinOption thinT] |} 'H :
    [wf] sequent { <H>; x: "assert"{is_same_op{'op_1;'op_2}}; <J['x]> >- 'op_1 in Operator } -->
@@ -246,9 +253,11 @@ interactive op_exam3 {| intro[] |}:
 interactive op_exam4 {| intro[] |}:
    sequent{ <H> >- lambda[@]{x.it[@]} = lambda[@]{x.'P['x]} in Operator }
 
-(*interactive shape_exam1 {| intro[] |}:
+interactive diffops {| intro[] |}:
+   sequent{ <H> >- apply[@]{it[@]; it[@]} <> lambda[@]{x.it[@]} in Operator }
+
+interactive shape_exam1 {| intro[] |}:
    sequent{ <H> >- shape{apply[@]{'x; union[@]{'y; 'z}}} = 0::0::nil in list{int} }
 
 interactive shape_exam2 {| intro[] |}:
    sequent{ <H> >- shape{lambda[@]{x.it[@]}} = 1::nil in list{int} }
-*)

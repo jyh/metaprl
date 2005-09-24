@@ -34,7 +34,7 @@ doc <:doc<
    @end[license]
 >>
 
-extends Itt_hoas_bterm
+extends Itt_hoas_destterm
 
 open Tactic_type.Tactic
 

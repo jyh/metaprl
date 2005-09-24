@@ -203,6 +203,25 @@ interactive_rw bind_mkbterm  {| reduce |} :
    'btl in list -->
    bind{x.mk_bterm{'bdepth;'op;'btl}} <-->  mk_bterm{'bdepth+@1; 'op; map{bt. bind{x.'bt}; 'btl}}
 
+interactive_rw lemma1 {| reduce |} :
+   'r in nat -->
+   'n in nat -->
+   'r >= 'n  -->
+   bind{'n; gamma. substl{bind{'r; 't}; 'gamma}} <--> bind{'r; 't}
+
+interactive_rw lemma2 {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   'n in nat -->
+   'l+@'r+@1 >= 'n  -->
+   bind{'n; gamma. substl{var{'l;'r}; 'gamma}} <--> var{'l;'r}
+
+interactive_rw lemma3 {| reduce |} :
+   'm in nat -->
+   'n in nat -->
+   'm >= 'n  -->
+   bind{'n; gamma. substl{mk_bterm{'m;'op;'btl}; 'gamma}} <--> mk_bterm{'m;'op;'btl}
+
 doc docoff
 
 dform var_df : var{'l; 'r} =

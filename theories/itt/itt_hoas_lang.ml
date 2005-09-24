@@ -76,6 +76,10 @@ define unfold_Lang: Lang{'sop} <--> Union n:nat. BT{'sop; 'n}
 
 doc docoff
 
+let fold_Ldom = makeFoldC << dom{'sop; 'BT} >> unfold_Ldom
+let fold_mk = makeFoldC << mk{'x} >> unfold_mk
+let fold_dest = makeFoldC << dest{'bt} >> unfold_dest
+let fold_LIter = makeFoldC << Iter{'sop; 'X} >> unfold_LIter
 let fold_Lang = makeFoldC << Lang{'sop} >> unfold_Lang
 
 doc rules

@@ -40,6 +40,23 @@ open Tactic_type.Tactic
 
 define iform unfold_SubOp : SubOp{'ops} <--> listmem_set{'ops; Operator}
 
+declare compatible_shapes{'bdepth;'op;'subterms}
+declare dom{'sop; 'BT}
+declare mk{'x}
+declare dest{'bt}
+declare Iter{'sop; 'X}
+declare BT{'sop; 'n}
 declare Lang{'ops}
 
+topval unfold_compatible_shapes : conv
+topval unfold_Ldom : conv
+topval unfold_mk : conv
+topval unfold_dest : conv
+topval unfold_LIter : conv
+topval unfold_LBT : conv
+topval unfold_Lang : conv
+topval fold_Ldom : conv
+topval fold_mk : conv
+topval fold_LIter : conv
+topval fold_dest : conv
 topval fold_Lang : conv

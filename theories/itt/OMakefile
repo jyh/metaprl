@@ -110,8 +110,8 @@ MPFILES[] =
    itt_hoas_debruijn
    itt_hoas_operator
    itt_hoas_destterm
-   itt_hoas_bterm
    itt_hoas_lang
+   itt_hoas_bterm
    itt_synt_var
    itt_synt_operator
    itt_synt_bterm
@@ -249,6 +249,7 @@ PRINT_THEORIES[] =
     itt_hoas_debruijn
     itt_hoas_operator
     itt_hoas_destterm
+    itt_hoas_lang
     itt_hoas_bterm
 
 TheoryDocumentInstall(itt, $(PRINT_THEORIES))

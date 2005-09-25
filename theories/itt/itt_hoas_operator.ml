@@ -245,19 +245,19 @@ interactive op_exam1 {| intro[] |}:
    sequent{ <H> >- operator[(apply{'x;'y}):op] in Operator }
 
 interactive op_exam2 {| intro[] |}:
-   sequent{ <H> >- lambda[@]{x.it[@]} in Operator }
+   sequent{ <H> >- operator[(lambda{x.it}):op] in Operator }
 
 interactive op_exam3 {| intro[] |}:
-   sequent{ <H> >- apply[@]{'x; union[@]{'y; 'z}} = apply[@]{it[@]; int[@]} in Operator }
+   sequent{ <H> >- operator[(apply{'x;union{'y;'z}}):op] = operator[(apply{it;int}):op] in Operator }
 
 interactive op_exam4 {| intro[] |}:
-   sequent{ <H> >- lambda[@]{x.it[@]} = lambda[@]{x.'P['x]} in Operator }
+   sequent{ <H> >- operator[(lambda{x.it}):op] = operator[(lambda{x.'P['x]}):op] in Operator }
 
 interactive diffops {| intro[] |}:
-   sequent{ <H> >- apply[@]{it[@]; it[@]} <> lambda[@]{x.it[@]} in Operator }
+   sequent{ <H> >- operator[(apply{it; it}):op] <> operator[(lambda{x.it}):op] in Operator }
 
 interactive shape_exam1 {| intro[] |}:
-   sequent{ <H> >- shape{apply[@]{'x; union[@]{'y; 'z}}} = 0::0::nil in list{int} }
+   sequent{ <H> >- shape{operator[(apply{'x;union{'y;'z}}):op]} = 0::0::nil in list{int} }
 
 interactive shape_exam2 {| intro[] |}:
-   sequent{ <H> >- shape{lambda[@]{x.it[@]}} = 1::nil in list{int} }
+   sequent{ <H> >- shape{operator[(lambda{x.it}):op]} = 1::nil in list{int} }

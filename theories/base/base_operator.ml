@@ -42,11 +42,9 @@ doc <:doc<
 extends Perv
 extends Shell_theory
 extends Top_conversionals
-extends Base_meta
 doc docoff
 
 open Basic_tactics
-open Base_meta
 
 open Lm_debug
 open Lm_symbol
@@ -66,26 +64,26 @@ let rnil_term = << rnil >>
 let rnil_opname = opname_of_term rnil_term
 let is_rnil_term = alpha_equal rnil_term
 
-let rcons_term = << rcons{'a; 'b} >>
+let rcons_term = << rcons[a:n]{'b} >>
 let rcons_opname = opname_of_term rcons_term
 
-let is_rcons_term = is_dep0_dep0_term rcons_opname
-let mk_rcons_term = mk_dep0_dep0_term rcons_opname
-let dest_rcons = dest_dep0_dep0_term rcons_opname
+let is_rcons_term = is_number_dep0_term rcons_opname
+let mk_rcons_term = mk_number_dep0_term rcons_opname
+let dest_rcons = dest_number_dep0_term rcons_opname
 
-let rec is_rlist_term t =
-   is_rnil_term t || (is_rcons_term t && is_rlist_term (snd (dest_rcons t)))
+let rec is_numlist_term t =
+   is_rnil_term t || (is_rcons_term t && is_numlist_term (snd (dest_rcons t)))
 
-let rec dest_rlist t =
+let rec dest_numlist t =
    if is_rnil_term t then
       []
    else
       let hd, tl = dest_rcons t in
-         hd :: (dest_rlist tl)
+         hd :: (dest_numlist tl)
 
-let rec mk_rlist_term = function
+let rec mk_numlist_term = function
    h::t ->
-      mk_rcons_term h (mk_rlist_term t)
+      mk_rcons_term (Lm_num.num_of_int h) (mk_numlist_term t)
  | [] ->
       rnil_term
 
@@ -105,7 +103,7 @@ doc docoff
 ml_rw reduce_shape {| reduce |} : ('goal :  shape[op:op] ) =
    match dest_params (dest_op (dest_term goal).term_op).op_params with
       [ Operator op ] ->
-         mk_rlist_term (List.map mk_meta_num op.opparam_arities)
+         mk_numlist_term op.opparam_arities
     | _ ->
          raise (RefineForceError("Base_operator.reduce_shape", "Internal error", TermError goal))
 

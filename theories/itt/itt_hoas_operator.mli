@@ -40,7 +40,6 @@ doc <:doc<
 
 extends Itt_nat
 extends Itt_list2
-extends Base_operator
 
 declare Operator
 declare shape{'op}

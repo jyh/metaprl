@@ -191,36 +191,24 @@ doc <:doc<
    an operator by a bterm of the form <<operator[op:op]>>
 >>
 doc docoff
+
 (************************************************************************
- * Xlist                                                                *
+ * Meta-number lists.                                                   *
  ************************************************************************)
 
-(* XXX: This part should be in a separate theory *)
+(* private *) declare list_of_numlist{'l}
 
-declare rlist_of_list{'l}
+prim_rw reduce_numlist_cons :
+   list_of_numlist{rcons[hd:n]{'tl}} <--> (number[hd:n] :: list_of_numlist{'tl})
 
-prim_rw rlist_list_cons {| reduce |} :
-   rlist_of_list{ 'hd :: 'tl } <--> rcons{'hd; rlist_of_list{'tl}}
+prim_rw reduce_numlist_nil :
+   list_of_numlist{rnil} <--> nil
 
-prim_rw rlist_list_nil {| reduce |} :
-   rlist_of_list{ nil } <--> rnil
-
-declare list_of_rlist{'l}
-
-prim_rw reduce_rlist_cons {| reduce |} :
-   list_of_rlist{rcons{'hd; 'tl}} <--> ('hd :: list_of_rlist{'tl})
-
-prim_rw reduce_rlist_nil {| reduce |} :
-   list_of_rlist{rnil} <--> nil
-
-let rec reduce_rlist t =
+let rec reduce_numlist t =
    if is_rnil_term (one_subterm t) then
-      reduce_rlist_nil
+      reduce_numlist_nil
    else
-      reduce_rlist_cons thenC addrC [Subterm 2] (termC reduce_rlist)
-
-dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
-   `"list_of_rlist(" slot{'l} `")"
+      reduce_numlist_cons thenC addrC [Subterm 2] (termC reduce_numlist)
 
 (* ********************************************************************* *)
 
@@ -232,11 +220,17 @@ prim op_constant {| intro [] |} :
    sequent { <H> >- operator[op:op] in Operator }
    = it
 
-prim_rw bterm_shape {| reduce |} :
-   shape{operator[op:op]} <-->  list_of_rlist{Base_operator!shape[op:op]}
+(* private *) prim_rw bterm_shape :
+   shape{operator[op:op]} <--> list_of_numlist{Base_operator!shape[op:op]}
 
-prim_rw bterm_same_op {| reduce |} :
-   is_same_op{operator[op1:op]; operator[op2:op]} <--> meta_eq[op1:op, op2:op]{btrue;bfalse}
+let resource reduce +=
+   <<shape{operator[op:op]}>>, (bterm_shape thenC addrC [Subterm 1] reduce_shape thenC termC reduce_numlist)
+
+(* private *) prim_rw bterm_same_op :
+   is_same_op{operator[op1:op]; operator[op2:op]} <--> meta_eq[op1:op, op2:op]{btrue; bfalse}
+
+let resource reduce +=
+   << is_same_op{operator[op1:op]; operator[op2:op]} >>, (bterm_same_op thenC Base_meta.reduce_meta_eq_ops)
 
 doc docoff
 

@@ -76,66 +76,66 @@ declare "implies"{'a; 'b}
 declare "box"[i:n]{'a}
 
 prim ax 'H 'K :
-   sequent { <#H>; 'a; <#J> >- concl{| <#K>; 'a; <#L> |} }
+   sequent { <H>; 'a; <J> >- concl{| <K>; 'a; <L> |} }
 
 prim ax_false 'H :
-   sequent { <#H>; "false"; <#J> >- concl{| <#K> |} }
+   sequent { <H>; "false"; <J> >- concl{| <K> |} }
 
 prim not_intro 'J :
-   sequent { <#H>; 'a >- concl{| <#J>; <#K> |} } -->
-   sequent { <#H> >- concl{| <#J>; "not"{'a}; <#K> |} }
+   sequent { <H>; 'a >- concl{| <J>; <K> |} } -->
+   sequent { <H> >- concl{| <J>; "not"{'a}; <K> |} }
 
 prim not_elim 'H :
-   sequent { <#H>; <#J> >- concl{| <#K>; 'a |} } -->
-   sequent { <#H>; "not"{'a}; <#J> >- concl{| <#K> |} }
+   sequent { <H>; <J> >- concl{| <K>; 'a |} } -->
+   sequent { <H>; "not"{'a}; <J> >- concl{| <K> |} }
 
 prim and_intro 'J :
-   sequent { <#H> >- concl{| <#J>; 'a; <#K> |} } -->
-   sequent { <#H> >- concl{| <#J>; 'b; <#K> |} } -->
-   sequent { <#H> >- concl{| <#J>; 'a & 'b; <#K> |} }
+   sequent { <H> >- concl{| <J>; 'a; <K> |} } -->
+   sequent { <H> >- concl{| <J>; 'b; <K> |} } -->
+   sequent { <H> >- concl{| <J>; 'a & 'b; <K> |} }
 
 prim and_elim 'H :
-   sequent { <#H>; 'a; 'b; <#J> >- concl{| <#K> |} } -->
-   sequent { <#H>; 'a & 'b; <#J> >- concl{| <#K> |} }
+   sequent { <H>; 'a; 'b; <J> >- concl{| <K> |} } -->
+   sequent { <H>; 'a & 'b; <J> >- concl{| <K> |} }
 
 prim or_intro 'J :
-   sequent { <#H> >- concl{| <#J>; 'a; 'b; <#K> |} } -->
-   sequent { <#H> >- concl{| <#J>; 'a or 'b; <#K> |} }
+   sequent { <H> >- concl{| <J>; 'a; 'b; <K> |} } -->
+   sequent { <H> >- concl{| <J>; 'a or 'b; <K> |} }
 
 prim or_elim 'H :
-   sequent { <#H>; 'a; <#J> >- concl{| <#K> |} } -->
-   sequent { <#H>; 'b; <#J> >- concl{| <#K> |} } -->
-   sequent { <#H>; 'a or 'b; <#J> >- concl{| <#K> |} }
+   sequent { <H>; 'a; <J> >- concl{| <K> |} } -->
+   sequent { <H>; 'b; <J> >- concl{| <K> |} } -->
+   sequent { <H>; 'a or 'b; <J> >- concl{| <K> |} }
 
 prim implies_intro 'J :
-   sequent { <#H>; 'a >- concl{| <#J>; 'b; <#K> |} } -->
-   sequent { <#H> >- concl{| <#J>; 'a => 'b; <#K> |} }
+   sequent { <H>; 'a >- concl{| <J>; 'b; <K> |} } -->
+   sequent { <H> >- concl{| <J>; 'a => 'b; <K> |} }
 
 prim implies_elim 'H :
-   [assertion] sequent { <#H>; 'a => 'b; <#J> >- concl{| <#K>; 'a |} } -->
-   sequent { <#H>; 'a => 'b; <#J>; 'b >- concl{| <#K> |} } -->
-   sequent { <#H>; 'a => 'b; <#J> >- concl{| <#K> |} }
+   [assertion] sequent { <H>; 'a => 'b; <J> >- concl{| <K>; 'a |} } -->
+   sequent { <H>; 'a => 'b; <J>; 'b >- concl{| <K> |} } -->
+   sequent { <H>; 'a => 'b; <J> >- concl{| <K> |} }
 
 prim box_elim 'H :
-   sequent { <#H>; 'a; box[i:n]{'a}; <#J> >- concl{| <#K> |} } -->
-   sequent { <#H>; box[i:n]{'a}; <#J> >- concl{| <#K> |} }
+   sequent { <H>; 'a; box[i:n]{'a}; <J> >- concl{| <K> |} } -->
+   sequent { <H>; box[i:n]{'a}; <J> >- concl{| <K> |} }
 
 prim box_intro 'J :
-   [aux] boxed[i:n]{| <#H> |} -->
-   sequent { <#H> >- concl{| 'a |} } -->
-   sequent { <#H> >- concl{| <#J>; box[i:n]{'a}; <#K> |} }
+   [aux] boxed[i:n]{| <H> |} -->
+   sequent { <H> >- concl{| 'a |} } -->
+   sequent { <H> >- concl{| <J>; box[i:n]{'a}; <K> |} }
 
 prim thin 'H :
-   sequent { <#H>; <#J> >- 'C } -->
-   sequent { <#H>; 'a; <#J> >- 'C }
+   sequent { <H>; <J> >- 'C } -->
+   sequent { <H>; 'a; <J> >- 'C }
 
 prim boxed_step :
-   boxed[i:n]{| <#H> |} -->
-   boxed[i:n]{| box[i:n]{'a}; <#H> |}
+   boxed[i:n]{| <H> |} -->
+   boxed[i:n]{| box[i:n]{'a}; <H> |}
 
 prim boxed_step0 :
-   boxed[i:n]{| <#H> |} -->
-   boxed[i:n]{| box[0]{'a}; <#H> |}
+   boxed[i:n]{| <H> |} -->
+   boxed[i:n]{| box[0]{'a}; <H> |}
 
 prim boxed_base :
    boxed[i:n]{| |}
@@ -427,13 +427,13 @@ interactive refl0 :
    sequent { box[1:n]{'a} >- concl {| 'a |} }
 
 interactive refl 'J :
-   sequent { >- concl {| <#J>; box[1]{'a} => 'a; <#K> |} }
+   sequent { >- concl {| <J>; box[1]{'a} => 'a; <K> |} }
 
 interactive trans 'J :
-   sequent { >- concl {| <#J>; box[1]{'a} => box[1]{box[1]{'a}}; <#K> |} }
+   sequent { >- concl {| <J>; box[1]{'a} => box[1]{box[1]{'a}}; <K> |} }
 
 interactive norm 'J :
-   sequent { >- concl {| <#J>; box[1]{'a => 'b} => box[1]{'a} => box[1]{'b}; <#K> |} }
+   sequent { >- concl {| <J>; box[1]{'a => 'b} => box[1]{'a} => box[1]{'b}; <K> |} }
 
 interactive nec_test :
    sequent { 'c; box[1]{'a}; 'b; box[1]{'b}; 'd >- concl {| box[1]{box[1]{'a}} |} }
@@ -442,19 +442,19 @@ interactive selfref :
    sequent { >- concl {| "not"{box[1]{"not"{'a => box[1]{'a}}}} |} }
 
 interactive and_commute1 'J :
-   sequent { >- concl {| <#J>; (box[1]{'a} & box[1]{'b}) => box[1]{'a & 'b}; <#K> |} }
+   sequent { >- concl {| <J>; (box[1]{'a} & box[1]{'b}) => box[1]{'a & 'b}; <K> |} }
 
 interactive and_commute2 'J :
-   sequent { >- concl {| <#J>; box[1]{'a & 'b} => (box[1]{'a} & box[1]{'b}); <#K> |} }
+   sequent { >- concl {| <J>; box[1]{'a & 'b} => (box[1]{'a} & box[1]{'b}); <K> |} }
 
 interactive box_k 'J :
-   sequent { >- concl {| <#J>; box[1]{'a => 'a}; <#K> |} }
+   sequent { >- concl {| <J>; box[1]{'a => 'a}; <K> |} }
 
 interactive box_box_k 'J :
-   sequent { >- concl {| <#J>; box[1]{box[1]{'a => 'a}}; <#K> |} }
+   sequent { >- concl {| <J>; box[1]{box[1]{'a => 'a}}; <K> |} }
 
 interactive or_commute 'J :
-   sequent { >- concl {| <#J>; (box[1]{'a} or box[1]{'b}) => box[1]{'a or 'b}; <#K> |} }
+   sequent { >- concl {| <J>; (box[1]{'a} or box[1]{'b}) => box[1]{'a or 'b}; <K> |} }
 
 interactive lp_multiplicity :
 	sequent { >- concl {| (box[1]{'a} & box[1]{'b})=>(box[1]{'a=>'c} or box[1]{'b=>'c})=>box[1]{'c} |} }

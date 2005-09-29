@@ -140,7 +140,7 @@ doc <:doc<
 (*
  * Aleksey:
  * - for now, I only wrote down a few rules to provide an example
- * - syntax: <#X> is the same thing as <X>, except it stands for a context that
+ * - syntax: <X> is the same thing as <X>, except it stands for a context that
  *   may _not_ introduce bindings. Strictly speaking, all the linear contexts
  *   should be annotated this way, but in most cases it does not really matter.
  * - tensor_elim allows emininating tensor from any linear formula (not just the
@@ -167,44 +167,44 @@ prim tensor_elim 'L :
    ilc{| <H> >- linear{| <L>; tensor{'A1; 'A2}; <M> >- 'C |} |}
 
 prim tensor_intro 'L1 :
-   ilc{| <H> >- linear{| <#L1> >- 'C1 |} |} -->
-   ilc{| <H> >- linear{| <#L2> >- 'C2 |} |} -->
-   ilc{| <H> >- linear{| <#L1>; <#L2> >- tensor{'C1; 'C2} |} |}
+   ilc{| <H> >- linear{| <L1> >- 'C1 |} |} -->
+   ilc{| <H> >- linear{| <L2> >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <L1>; <L2> >- tensor{'C1; 'C2} |} |}
 
 prim conj_intro {| intro [] |} :
-   ilc{| <H> >- linear{| <#L> >- 'C1 |} |} -->
-   ilc{| <H> >- linear{| <#L> >- 'C2 |} |} -->
-   ilc{| <H> >- linear{| <#L> >- conj{'C1; 'C2} |} |}
+   ilc{| <H> >- linear{| <L> >- 'C1 |} |} -->
+   ilc{| <H> >- linear{| <L> >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <L> >- conj{'C1; 'C2} |} |}
 
 prim conj_elim_left 'L:
-   ilc{| <H> >- linear{| <#L>; 'C1 ;<M> >- 'C |} |} -->
-   ilc{| <H> >- linear{| <#L>; conj{'C1; 'C2}; <M> >- 'C |} |}
+   ilc{| <H> >- linear{| <L>; 'C1 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <L>; conj{'C1; 'C2}; <M> >- 'C |} |}
 
 prim conj_elim_right 'L:
-   ilc{| <H> >- linear{| <#L>; 'C2 ;<M> >- 'C |} |} -->
-   ilc{| <H> >- linear{| <#L>; conj{'C1; 'C2}; <M> >- 'C |} |}
+   ilc{| <H> >- linear{| <L>; 'C2 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <L>; conj{'C1; 'C2}; <M> >- 'C |} |}
 
 prim plus_intro_left{| intro[SelectOption 1]|} :
-   ilc{| <H> >- linear{| <#L> >- 'C1 |} |} -->
-   ilc{| <H> >- linear{| <#L> >- plus{'C1; 'C2} |} |}
+   ilc{| <H> >- linear{| <L> >- 'C1 |} |} -->
+   ilc{| <H> >- linear{| <L> >- plus{'C1; 'C2} |} |}
 
 prim plus_intro_right{| intro[SelectOption 2]|} :
-   ilc{| <H> >- linear{| <#L> >- 'C2 |} |} -->
-   ilc{| <H> >- linear{| <#L> >- plus{'C1; 'C2} |} |}
+   ilc{| <H> >- linear{| <L> >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <L> >- plus{'C1; 'C2} |} |}
 
 prim plus_elim 'L:
-   ilc{| <H> >- linear{| <#L>; 'C1 ;<M> >- 'C |} |} -->
-   ilc{| <H> >- linear{| <#L>; 'C2 ;<M> >- 'C |} |} -->
-   ilc{| <H> >- linear{| <#L>; plus{'C1; 'C2}; <M> >- 'C |} |}
+   ilc{| <H> >- linear{| <L>; 'C1 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <L>; 'C2 ;<M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <L>; plus{'C1; 'C2}; <M> >- 'C |} |}
 
 prim impl_intro {| intro [] |} :
-   ilc{| <H> >- linear{| <#L>; 'C1 >- 'C2 |} |} -->
-   ilc{| <H> >- linear{| <#L> >- impl{'C1; 'C2} |} |}
+   ilc{| <H> >- linear{| <L>; 'C1 >- 'C2 |} |} -->
+   ilc{| <H> >- linear{| <L> >- impl{'C1; 'C2} |} |}
 
 prim impl_elim 'L1 :
-   ilc{| <H> >- linear{| <#L1>; 'C1 >- 'C1 |} |} -->
-   ilc{| <H> >- linear{| <#L2>; 'C2 >- 'C |} |} -->
-   ilc{| <H> >- linear{| <#L1>;<#L2>; impl{'C1; 'C2} >- 'C |} |}
+   ilc{| <H> >- linear{| <L1>; 'C1 >- 'C1 |} |} -->
+   ilc{| <H> >- linear{| <L2>; 'C2 >- 'C |} |} -->
+   ilc{| <H> >- linear{| <L1>;<L2>; impl{'C1; 'C2} >- 'C |} |}
 
 prim forall_intro{| intro[] |}  :
    ilc{| <H>; x: data{Parameter} >- linear{| <L> >- 'B['x] |} |} -->
@@ -227,8 +227,8 @@ prim bang_intro {| intro[] |}:
    ilc{| <H> >- linear{| >- bang{'A} |} |}
 
 prim bang_elim 'L :
-   ilc{| <H>; bang{'A} >- linear{| <#L>; <M> >- 'C |} |} -->
-   ilc{| <H> >- linear{| <#L>; bang{'A}; <M> >- 'C |} |}
+   ilc{| <H>; bang{'A} >- linear{| <L>; <M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <L>; bang{'A}; <M> >- 'C |} |}
 
 prim lin_hyp :
    ilc{| <H> >- linear{| 'A >- 'A |} |}
@@ -270,8 +270,8 @@ doc <:doc<
 declare sequent[erase] { exst a : TyScope. TyElem{'a} : 'a >- Term } : Term
 
 prim circ_elim 'L :
-   ilc{| <H>; circ{'A} >- linear{| <#L>; <M> >- 'C |} |} -->
-   ilc{| <H> >- linear{| <#L>; circ{'A}; <M> >- 'C |} |}
+   ilc{| <H>; circ{'A} >- linear{| <L>; <M> >- 'C |} |} -->
+   ilc{| <H> >- linear{| <L>; circ{'A}; <M> >- 'C |} |}
 
 prim circ_intro {| intro [] |} :
    sequent{ >- erase{| <H> >- 'C |} } -->

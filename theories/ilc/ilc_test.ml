@@ -28,7 +28,7 @@ extends Ilc_extend
   ilc{| <H> >- linear {| >- circ{"and"{"true";'b}} |} |}
 
    interactive con_exists:
-   ilc{| <H> >- linear{| <#J> >- impl{'P[upd{alpha;1;3}]; exists{x.'P['x]}} |} |}
+   ilc{| <H> >- linear{| <J> >- impl{'P[upd{alpha;1;3}]; exists{x.'P['x]}} |} |}
 
 (*   interactive conc_exists: *)
 (*    ilc{| <H> >- linear{|  'B[data{1}] >- exists{y.'B['y]}  |} |} *)

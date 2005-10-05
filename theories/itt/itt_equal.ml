@@ -392,7 +392,7 @@ doc <:doc<
 >>
 prim universeMemberType univ[i:l] :
    [wf] sequent { <H> >- 'x in univ[i:l] } -->
-   sequent { <H> >- 'x Type } =
+   sequent { <H> >- "type"{'x} } =
    it
 
 (*

@@ -116,7 +116,7 @@ rule srec_memberEquality :
  * >- C[z]
  *)
 
-rule srecElimination  'H univ[i:l] :
+rule srecElimination 'H univ[i:l] :
   sequent {
              <H>;
              x: srec{X. 'B['X]};

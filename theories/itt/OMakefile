@@ -25,8 +25,8 @@ MPFILES[] =
    itt_prod
    itt_rfun
    itt_dfun
-   itt_eta
    itt_fun
+   itt_eta
    itt_esquash
    itt_logic
    itt_sqsimple

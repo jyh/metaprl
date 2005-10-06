@@ -1,4 +1,4 @@
-extends Itt_dfun
+extends Itt_fun
 
 open Basic_tactics
 

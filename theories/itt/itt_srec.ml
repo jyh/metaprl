@@ -86,29 +86,6 @@ declare srec{T. 'B['T]}
 declare srecind{'a; p, h. 'g['p; 'h]}
 doc docoff
 
-(*
- * JYH:
- *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *             THIS IS BAD BAD BAD, COMPLETELY UNACCEPTABLE
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * This is to get around severe Bug #529
- *)
-prim srecElimination2 {| elim [ThinOption thinT] |} 'H :
-   [main] ('g['x; 'T; 'u; 'w; 'z] : sequent {
-             <H>;
-             x: srec{X. 'B['X]};
-             <J['x]>;
-             T: univ[1:l];
-             u: \subtype{'T; srec{X. 'B['X]}};
-             w: all v:'T. 'C['v];
-             z: 'B['T]
-           >- 'C['z]
-           }) -->
-   sequent { <H>; x: srec{X. 'B['X]}; <J['x]> >- 'C['x] } =
-   srecind{'x; p, h. 'g['x; srec{X. 'B['X]}; it; 'p; 'h]}
-
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)

@@ -10,7 +10,7 @@ open Basic_tactics
 
 (*! @docoff *)
 
-interactive supertype 'H 'B:  (* Can't prove it because of the BUG #3.14 *)
+interactive supertype 'H 'B:
    [wf] sequent  { <H>; x:'A; <J['x]> >- 'A subtype 'B} -->
    sequent  { <H>; x:'B; <J['x]> >- 'T['x]} -->
    sequent  { <H>; x:'A; <J['x]> >- 'T['x]}

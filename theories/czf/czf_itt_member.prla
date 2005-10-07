@@ -310,7 +310,8 @@ O	o805	ext_rule p805
 H	h813	T t736
 NItt_rfun!fun	fun	fun Itt_rfun
 O	o813	fun
-T	t813	o813 b549 b719
+Bdfunhack	b719dep	t719 ""
+T	t813	o813 b549 b719dep
 H	h814	f t813
 H	h823	x t549
 T	t823	o551 b552 b538
@@ -381,7 +382,7 @@ P	p1440	Var T_1
 O	o1440	var p1440
 T	t1440	o1440
 B	b1440	t1440
-T	t1441	o813 b1440 b719
+T	t1441	o813 b1440 b719dep
 H	h1441	f_1 t1441
 P	p1441	Var f_1
 O	o1441	var p1441
@@ -5390,7 +5391,7 @@ P	p2642	Var T1
 O	o2642	var p2642
 T	t2642	o2642
 B	b2643	t2642
-T	t2643	o813 b2643 b719
+T	t2643	o813 b2643 b719dep
 H	h2643	f1 t2643
 T	t2644	o1764
 B	b2644	t2644

@@ -41,6 +41,7 @@ doc <:doc<
 >>
 
 doc <:doc< @parents >>
+extends Itt_dfun
 extends Itt_list
 extends Itt_logic
 extends Itt_bool

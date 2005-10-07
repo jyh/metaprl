@@ -1,5 +1,4 @@
 extends Itt_bool
-extends Itt_fun
 extends Itt_esquash
 extends Itt_quotient
 extends Itt_logic

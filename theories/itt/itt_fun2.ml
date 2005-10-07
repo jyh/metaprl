@@ -1,4 +1,4 @@
-extends Itt_fun
+extends Itt_dfun
 extends Itt_nat
 
 open Basic_tactics
@@ -27,10 +27,10 @@ interactive comp_assoc {|  intro [intro_typeinf <<'g>>] |} ('"B"->'"C")  :
    [wf] sequent { <H> >- "type"{'"B"} }  -->
    [wf] sequent { <H> >- "type"{'"C"} }  -->
    [wf] sequent { <H> >- "type"{'"D"} }  -->
-   [wf] sequent { <H> >- '"f" in "fun"[]{'"A";'"B"} }  -->
-   [wf] sequent { <H> >- '"g" in "fun"[]{'"B";'"C"} }  -->
-   [wf] sequent { <H> >- '"h" in "fun"[]{'"C";'"D"} }  -->
-   sequent { <H> >- "equal"[]{"fun"[]{'"A";"".'"D"};"compose"[]{'"h";"compose"[]{'"g";'"f"}};"compose"[]{"compose"[]{'"h";'"g"};'"f"}} }
+   [wf] sequent { <H> >- '"f" in ('A -> 'B) }  -->
+   [wf] sequent { <H> >- '"g" in ('B -> 'C) }  -->
+   [wf] sequent { <H> >- '"h" in ('C -> 'D) }  -->
+   sequent { <H> >- "equal"{('A -> 'D);"compose"{'"h";"compose"{'"g";'"f"}};"compose"{"compose"{'"h";'"g"};'"f"}} }
 
 define unfold_id: id <--> lambda{x.'x}
 

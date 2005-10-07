@@ -17,7 +17,7 @@ doc <:doc<
    In some sense the dependent intersection is similar to
    the dependent product type $@prod{x;A;B[x]}$
    (when $@isect{x;A;B[x]}$ is similar to the function space
-   $@fun{x; A; B[x]}$).
+   <<x:'A -> 'B['x]>>).
 
    The ordinary binary intersection can be defined just as dependent
    intersection with a constant second argument:

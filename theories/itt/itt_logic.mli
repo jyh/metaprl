@@ -34,7 +34,6 @@
 extends Itt_equal
 extends Itt_rfun
 extends Itt_dfun
-extends Itt_fun
 extends Itt_dprod
 extends Itt_prod
 extends Itt_union

@@ -32,7 +32,7 @@
 
 extends Itt_record
 extends Itt_set
-extends Itt_fun
+extends Itt_dfun
 extends Itt_disect
 
 open Tactic_type.Tactic

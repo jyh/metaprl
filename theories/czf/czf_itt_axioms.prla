@@ -2726,7 +2726,8 @@ P	p662	Var T
 O	o663	var p662
 T	t663	o663
 B	b663	t663
-T	t664	o662 b663 b611
+Bdfunhack	b611dep	t584 ""
+T	t664	o662 b663 b611dep
 H	h664	f t664
 NItt_rfun!apply	apply664	apply Itt_rfun
 O	o664	apply664
@@ -6450,7 +6451,7 @@ P	p2192	Var T1
 O	o2192	var p2192
 T	t2193	o2192
 B	b2193	t2193
-T	t2196	o662 b2193 b611
+T	t2196	o662 b2193 b611dep
 H	h2196	f1 t2196
 P	p2196	Var f1
 O	o2196	var p2196
@@ -6465,7 +6466,8 @@ T	t2227	o668 b2223
 H	h2227	t2227
 P	p2266	String "withT << collect{.'T -> 'T1; u. collect{'T; v. 'f1 ('u 'v)}} >> (dT 0)"
 O	o2266	ext_rule p2266
-T	t2266	o662 b663 b2193
+Bdfunhack	b2193dep	t2193 ""
+T	t2266	o662 b663 b2193dep
 B	b2267	t2266
 T	t2267	o664 b2197 b1912
 B	b2268	t2267 v
@@ -6844,7 +6846,8 @@ T	t5091	o603 b5070 b5091
 B	b5092	t5091
 VT1	T1	T1\\ \\
 B	b5093	T1
-T	t5093	o662 b2027 b5093
+Bdfunhack	b5093dep	T1 ""
+T	t5093	o662 b2027 b5093dep
 B	b5094	t5093
 Vf1	f1	f1\\ \\
 B	b5095	f1
@@ -8510,7 +8513,8 @@ T	t5820	o2307 b602 b5147 b5820 b4
 B	b5821	t5820
 VT_1	T_1	T_1\\ \\
 B	b5822	T_1
-T	t5822	o662 b2027 b5822
+Bdfunhack	b5822dep	T_1 ""
+T	t5822	o662 b2027 b5822dep
 B	b5823	t5822
 Vf_1	f_1	f_1\\ \\
 B	b5824	f_1

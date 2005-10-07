@@ -104,9 +104,8 @@ declare math_cor{'a : Dform; 'b : Dform} : Dform
  * FUNCTIONS
  ************************************************************************)
 
-declare math_rfun{'f : Dform; 'x : Dform; 'A : Dform; 'B : Dform} : Dform
-declare math_fun{'x : Dform; 'A : Dform; 'B : Dform} : Dform
-declare math_fun{'A : Dform; 'B : Dform} : Dform
+declare math_rfun[x]{'f : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_fun[x:s]{'A : Dform; 'B : Dform} : Dform
 declare math_lambda{'v : Dform; 'b : Dform} : Dform
 declare math_apply{'f : Dform; 'a : Dform} : Dform
 declare math_well_founded{'A : Dform; 'x : Dform; 'y : Dform; 'R : Dform} : Dform

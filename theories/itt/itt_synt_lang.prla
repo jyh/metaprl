@@ -1569,7 +1569,8 @@ P	p616	String mk_wf
 O	o616	rule p616
 NItt_rfun!fun	fun	fun Itt_rfun
 O	o617	fun
-T	t617	o617 b528 b54
+Bdfunhack	b54dep	t54 ""
+T	t617	o617 b528 b54dep
 B	b617	t617
 T	t618	o485 b522
 B	b618	t618
@@ -2853,7 +2854,8 @@ NItt_void!void	void	void Itt_void
 O	o1441	void
 T	t1442	o1441
 B	b1442	t1442
-T	t1443	o617 b1442 b1442
+Bdfunhack	b1442dep	t1442 ""
+T	t1443	o617 b1442 b1442dep
 B	b1443	t1443
 T	t1444	o519 b1443 b801 b801
 S	s1989	t518\\ h h813 h814\\ t1444

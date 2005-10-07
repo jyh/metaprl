@@ -116,7 +116,7 @@ doc <:doc<
    When $f$ is squiggle-reversible, we can have elimination for non-squash-stable goals.
 >>
 extends Itt_squiggle
-extends Itt_fun
+extends Itt_dfun
 extends Itt_struct2
 
 interactive img_elim3 {| elim [ThinOption thinT] |} 'H 'g :

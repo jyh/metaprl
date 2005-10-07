@@ -2,8 +2,8 @@ doc <:doc<
    @module[Itt_dfun]
 
    The @tt[Itt_dfun] module is @emph{derived} from the
-   @hrefmodule[Itt_rfun] module.  The type $@fun{x; A; B[x]}$ is
-   equivalent to the type $@rfun{f; x; A; B[x]}$, where $f$ is
+   @hrefmodule[Itt_rfun] module.  The type <<x:'A -> 'B['x]>> is
+   equivalent to the type $@rfun[x]{f; A; B[x]}$, where $f$ is
    not bound in $B[x]$.  The @emph{well-founded} restriction
    for the very-dependent function type is always trivially satisfied
    (since the range type $B[x]$ never invokes $f$).
@@ -55,7 +55,7 @@ doc docoff
 open Lm_debug
 open Lm_printf
 
-open Dtactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_subtype
@@ -155,13 +155,32 @@ doc <:doc<
    @modsubsection{Elimination}
 
    The elimination rule @emph{instantiates} the function
-   $f@colon @fun{x; A; B[x]}$ with an argument $a @in A$, to
-   obtain a proof of $B[a]$.
+   $f@colon <<x:'A -> 'B['x]>>$ with an argument $a @in A$, to
+   obtain a proof of $B[a]$. The second form, @tt[independentFunctionElimination],
+   is more appropriate for the propositional interpretation of the function
+   space <<'A -> 'B>>: if there is a proof of $A$, then there is also a proof
+   of $B$.
 >>
 interactive functionElimination {| elim [] |} 'H 'a :
    [wf] sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'a in 'A } -->
    sequent { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
    sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
+
+interactive independentFunctionElimination 'H :
+   [assertion] sequent { <H>; f: 'A -> 'B; <J['f]> >- 'A } -->
+   [main] sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B >- 'T['f] } -->
+   sequent { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
+
+doc docoff
+let d_hyp_fun = argfunT (fun i p ->
+   try
+      let a = get_with_arg p in
+         functionElimination i a
+   with
+      RefineError _ ->
+         independentFunctionElimination i)
+
+let resource elim += (dfun_term, d_hyp_fun)
 
 doc <:doc<
    @modsubsection{Combinator equality}
@@ -170,10 +189,34 @@ doc <:doc<
    equal if their functions and arguments are equal.
 >>
 
-interactive applyEquality {| intro[intro_typeinf <<'f1>>] |} (x:'A -> 'B['x]) :
+interactive applyEquality {| intro[intro_typeinf <<'f1>>; complete_unless_member] |} (x:'A -> 'B['x]) :
    sequent { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
+
+doc docoff
+
+(*
+ * Typehood of application depends on the ability to infer a type.
+ *)
+let d_apply_typeT = funT (fun p ->
+   let app = dest_type_term (Sequent.concl p) in
+   let f, _ = dest_apply app in
+   let f_type =
+      try get_with_arg p with
+         RefineError _ ->
+            infer_type p f
+   in
+   let tac, univ =
+     let _, _, univ = dest_dfun f_type in
+         applyEquality, univ
+   in
+      if is_univ_term univ then
+         univTypeT univ thenT tac f_type
+      else
+         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ))))
+
+let resource intro += << "type"{'f 'a} >>, wrap_intro d_apply_typeT
 
 doc <:doc<
    @modsubsection{Subtyping}
@@ -242,7 +285,15 @@ interactive functionFormation 'A :
 (*
  * Takes two arguments.
  *)
-let dfun_extensionalityT = functionExtensionality
+let fnExtensionalityT t1 t2 = funT (fun p ->
+   let t, _, _ = dest_equal (concl p) in
+      if is_fun_term t then
+         functionExtensionality t1 t2 thenMT nameHypT (-1) "x"
+      else
+         functionExtensionality t1 t2)
+
+let fnExtenT t = fnExtensionalityT t t
+let fnExtenVoidT = fnExtenT << void -> void >>
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

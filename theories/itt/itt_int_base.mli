@@ -33,7 +33,6 @@
  *)
 
 extends Itt_equal
-extends Itt_rfun
 extends Itt_bool
 extends Itt_logic
 extends Itt_decidable

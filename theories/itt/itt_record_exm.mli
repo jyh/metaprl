@@ -1,5 +1,5 @@
 extends Itt_record
-extends Itt_fun
+extends Itt_dfun
 extends Itt_int_base
 
 open Tactic_type.Tactic

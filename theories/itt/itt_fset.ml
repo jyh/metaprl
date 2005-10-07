@@ -36,7 +36,7 @@
  *
  *)
 extends Itt_bool
-extends Itt_fun
+extends Itt_dfun
 extends Itt_quotient
 extends Itt_list
 extends Itt_list2

@@ -53,7 +53,6 @@ extends Itt_set
 extends Itt_union
 extends Itt_rfun
 extends Itt_dfun
-extends Itt_fun
 extends Itt_well_founded
 extends Itt_dprod
 extends Itt_prod

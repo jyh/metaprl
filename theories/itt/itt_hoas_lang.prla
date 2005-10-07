@@ -5908,7 +5908,8 @@ NItt_rfun!fun	fun	fun Itt_rfun
 O	o1795	fun
 T	t1796	o1693 b1275 b1657
 B	b1796	t1796
-T	t1803	o1795 b1796 b1661
+Bdfunhack	b1661dep	t1661 ""
+T	t1803	o1795 b1796 b1661dep
 H	h1803	"" t1803
 T	t1817	o970 b1405 b1657 b1657
 S	s1817	t969\\ h h1656 h1803\\ t1817

@@ -3,19 +3,18 @@ doc <:doc<
 
    The @tt[Itt_rfun] module defines the @emph{very-dependent function
    type}.  This is the root type for the function types
-   for the dependent-function @hrefmodule[Itt_dfun] and
-   the nondependent-function @hrefmodule[Itt_fun].
+   @hrefmodule[Itt_dfun].
 
    A complete description of the semantics of the type is given
    in @cite[Hic96a].  The type can be described
    informally as follows.
-   The syntax of the type is $@rfun{f; x; A; B[f, x]}$.
+   The syntax of the type is $@rfun[x]{f; A; B[f, x]}$.
    The term $f$ represents the functions $f$ that are members of
    the type, the term $A$ is the type of the @emph{domain}, and
    given any particular function $f$ in the type, and any argument
    $x @in A$, the type of the function @emph{value} is the type
    $B[f, x]$.  Roughly speaking, a function $g$ is in the
-   type $@rfun{f; x; A; B[f, x]}$ if $g(x)$ has type $B[g, x]$ for
+   type $@rfun[x]{f; A; B[f, x]}$ if $g(x)$ has type $B[g, x]$ for
    any element $x @in A$.  In addition, the domain $A$ must be
    well-founded with a partial order on $A$, and the type $B[f, x]$
    must be well-formed if $f$ is restricted to arguments smaller
@@ -84,9 +83,9 @@ let _ =
 doc <:doc<
    @terms
 
-   The @tt{rfun} type defines the very-dependent function $@rfun{f; x; A; B}$;
-   the @tt{fun} type is used to define dependent functions $@fun{x; A; B[x]}$ and
-   nondependent functions $@fun{A; B}$.
+   The @tt{rfun} type defines the very-dependent function $@rfun[x]{f; A; B}$;
+   the @tt{fun} type is used to define dependent functions <<x: 'A -> 'B['x]>> and
+   nondependent functions <<'A -> 'B>>.
 
    The elements of the function types are
    the functions <<lambda{x.'b['x]}>>, and the induction combinator is the
@@ -96,7 +95,6 @@ doc <:doc<
    on the domain; the definition is given with the well-founded rules below.
 >>
 
-declare "fun"{'A; 'B}
 declare "fun"{'A; x. 'B['x]}
 declare rfun{'A; f, x. 'B['f; 'x]}
 
@@ -158,11 +156,22 @@ let is_dfun_term = is_dep0_dep1_term dfun_opname
 let dest_dfun = dest_dep0_dep1_term dfun_opname
 let mk_dfun_term = mk_dep0_dep1_term dfun_opname
 
-let fun_term = << 'A -> 'B >>
-let fun_opname = opname_of_term fun_term
-let is_fun_term = is_dep0_dep0_term fun_opname
-let dest_fun = dest_dep0_dep0_term fun_opname
-let mk_fun_term = mk_dep0_dep0_term fun_opname
+let empty_var = Lm_symbol.add ""
+let mk_fun_term t1 t2 =
+   let v = maybe_new_var_set empty_var (free_vars_set t2) in
+      mk_dfun_term v t1 t2
+
+let is_fun_term t =
+   is_dfun_term t && 
+      let v, t1, t2 = dest_dfun t in
+         not (SymbolSet.mem (free_vars_set t2) v)
+
+let dest_fun t =
+      let v, t1, t2 = dest_dfun t in
+         if SymbolSet.mem (free_vars_set t2) v then
+            raise (RefineError("Itt_rfun.dest_fun",StringTermError("The function term is a dependent function", t)))
+         else
+            t1, t2
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -186,10 +195,9 @@ dform decl_df : except_mode [src] :: declaration{'decl;lambda{x.'a}}
 dform decl_df : except_mode [src] :: declaration{'decl;fix{f.'a['f :> Dform]}}
    = declaration{'decl; 'a['decl]}
 
-dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
-dform fun_df2 : "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
+dform fun_df : "fun"{'A; x. 'B} = math_fun[x]{'A; 'B}
 
-dform fun_df3 : rfun{'A; f, x. 'B} =
+dform rfun_df : rfun{'A; f, x. 'B} =
    "{" " " slot{bvar{'f}} mid  "fun"{'A; x. 'B} `" }"
 
 dform apply_df : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
@@ -301,7 +309,7 @@ doc <:doc<
    The well-formedness of the very-dependent function
    requires that the domain type $A$ be a type, that the domain
    be well-founded with some relation $R$, and that $B[f, x]$ be
-   a type for any restricted function $@rfun{f; y; @set{z; A; R[z, y]}; B[f, y]}$.
+   a type for any restricted function $@rfun[y]{f; @set{z; A; R[z, y]}; B[f, y]}$.
 >>
 prim rfunctionEquality  {| intro [] |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
@@ -333,10 +341,10 @@ doc <:doc<
 
    Viewed as a proposition, the very-dependent function type
    represents a @emph{recursive} proposition.  The function type
-   $@rfun{f; x; A; B[f, x]}$ must be well-formed with a well-founded
+   $@rfun[x]{f; A; B[f, x]}$ must be well-formed with a well-founded
    order $R$ on $A$, and $B[f, x]$ must be true for each $B[g, y]$
    for $y @in A$ and $g$ a function in the restricted function space
-   $@rfun{f; x; @set{z; A; R[z, y]}; B[f, x]}$ (the induction
+   $@rfun[x]{f; @set{z; A; R[z, y]}; B[f, x]}$ (the induction
    hypothesis).  The proof extract term contains a fixpoint, due to
    the induction.  The fixpoint is guaranteed to terminate
    because the domain is well-founded.
@@ -387,7 +395,7 @@ prim rfunctionExtensionality
 doc <:doc<
    @modsubsection{Elimination}
 
-   The elimination form for a function type $f@colon @rfun{g; x; A; B[g, x]}$
+   The elimination form for a function type $f@colon @rfun[x]{g; A; B[g, x]}$
    allows @emph{instantiation} of the function on an argument $a$, to
    get a proof $B[f, a]$.
 >>

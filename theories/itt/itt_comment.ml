@@ -421,7 +421,7 @@ dform cor_df3 : cor_df{'a} =
 (************************************************
  * TeX mode
  *)
-dform math_rfun_df1 : mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
+dform math_rfun_df1 : mode[tex] :: math_rfun[x]{'f; 'A; 'B} =
    izone `"\\left\\{" ezone
    'f `"|" 'x
    izone `"\\colon " ezone
@@ -430,14 +430,9 @@ dform math_rfun_df1 : mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
    'B
    izone `"\\right\\}" ezone
 
-dform math_dfun_df1 : mode[tex] :: math_fun{'x; 'A; 'B} =
-   'x
-   izone `"\\colon " ezone
-   'A
-   izone `"\\rightarrow " ezone
-   'B
-
-dform math_fun_df1 : mode[tex] :: math_fun{'A; 'B} =
+dform math_dfun_df1 : mode[tex] :: math_fun[x:s]{'A; 'B} =
+   ifvar[x:v]{'x}
+   ifvar[x:v]{izone} ifvar[x:v]{slot["\\colon "]} ifvar[x:v]{ezone}
    'A
    izone `"\\rightarrow " ezone
    'B
@@ -533,14 +528,11 @@ prec prec_quant
 prec prec_iff
 prec prec_implies
 
-dform fun_df1 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'A; 'B} =
-   slot["le"]{'A} " " rightarrow " " slot["lt"]{'B}
+dform dfun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun[x:s]{'A; 'B} =
+   ifvar[x:v]{bvar{'x}} ifvar[x:v]{slot[":"]} slot{'A} " " rightarrow " " slot{'B}
 
-dform fun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'x; 'A; 'B} =
-   bvar{'x} `":" slot{'A} " " rightarrow " " slot{'B}
-
-dform fun_df3 : except_mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
-   "{" " " slot{bvar{'f}} mid math_fun{'x; 'A; 'B} `" }"
+dform fun_df3 : except_mode[tex] :: math_rfun[x]{'f; 'A; 'B} =
+   "{" " " slot{bvar{'f}} mid math_fun[x]{'A; 'B} `" }"
 
 dform apply_df1 : parens :: "prec"[prec_apply] :: except_mode[tex] :: math_apply{'f; 'a} =
    slot["lt"]{'f} " " slot["le"]{'a}

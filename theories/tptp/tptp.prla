@@ -489,28 +489,38 @@ P	p999	String typeinf
 O	o1008	resource p999
 P	p1045	String typeinf_subst
 O	o1054	resource p1045
-T	t1181	o688 b601 b601
+Bdfunhack	b601dep	t601 ""
+T	t1181	o688 b601 b601dep
 B	b1181	t1181
-T	t1204	o688 b601 b1181
+Bdfunhack	b1181dep	t1181 ""
+T	t1204	o688 b601 b1181dep
 B	b1204	t1204
-T	t1227	o688 b601 b1204
+Bdfunhack	b1204dep	t1204 ""
+T	t1227	o688 b601 b1204dep
 B	b1227	t1227
-T	t1238	o688 b601 b1227
+Bdfunhack	b1227dep	t1227 ""
+T	t1238	o688 b601 b1227dep
 B	b1247	t1238
 P	p1258	Number 1154
-T	t1274	o688 b601 b1247
+Bdfunhack	b1247dep	t1238 ""
+T	t1274	o688 b601 b1247dep
 B	b1274	t1274
-T	t1312	o688 b601 b708
+Bdfunhack	b708dep	t708 ""
+T	t1312	o688 b601 b708dep
 B	b1312	t1312
-T	t1327	o688 b601 b1312
+Bdfunhack	b1312dep	t1312 ""
+T	t1327	o688 b601 b1312dep
 B	b1327	t1327
-T	t1341	o688 b601 b1327
+Bdfunhack	b1327dep	t1327 ""
+T	t1341	o688 b601 b1327dep
 B	b1341	t1341
 P	p1349	Number 1492
 P	p1350	Number 1598
-T	t1355	o688 b601 b1341
+Bdfunhack	b1341dep	t1341 ""
+T	t1355	o688 b601 b1341dep
 B	b1355	t1355
-T	t1369	o688 b601 b1355
+Bdfunhack	b1355dep	t1355 ""
+T	t1369	o688 b601 b1355dep
 B	b1369	t1369
 NTptp!apply	apply1379	apply Tptp
 O	o1380	apply1379

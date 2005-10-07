@@ -1830,7 +1830,8 @@ T	t699	o538 b576 b698
 B	b699	t699 u2
 T	t700	o695 b580 b699
 B	b700	t700
-T	t701	o695 b697 b700
+Bdfunhack	b700dep	t700 ""
+T	t701	o695 b697 b700dep
 B	b701	t701 u1
 T	t702	o695 b584 b701
 B	b702	t702
@@ -1865,7 +1866,7 @@ T	t713	o565 b692 b713
 B	b714	t713
 T	t714	o538 b637 b696
 B	b715	t714
-T	t715	o695 b715 b700
+T	t715	o695 b715 b700dep
 B	b716	t715 u1
 T	t716	o695 b639 b716
 B	b717	t716
@@ -1885,7 +1886,8 @@ T	t721	o538 b646 b698
 B	b722	t721 u2
 T	t722	o695 b648 b722
 B	b723	t722
-T	t723	o695 b697 b723
+Bdfunhack	b723dep	t722 ""
+T	t723	o695 b697 b723dep
 B	b724	t723 u1
 T	t724	o695 b584 b724
 B	b725	t724
@@ -1951,7 +1953,7 @@ P	p749	String "withT << 'u >> (dT 10) ttca"
 O	o749	ext_rule p749
 H	h749	v t702
 B	b750	t579
-T	t750	o695 b750 b700
+T	t750	o695 b750 b700dep
 H	h750	y t750
 NItt_equal!equal	equal750	equal Itt_equal
 O	o750	equal750

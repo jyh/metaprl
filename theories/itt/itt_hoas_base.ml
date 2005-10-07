@@ -38,7 +38,7 @@ doc <:doc<
 doc <:doc< @parents >>
 extends Base_theory
 
-extends Itt_fun
+extends Itt_dfun
 extends Itt_union
 extends Itt_prod
 doc docoff

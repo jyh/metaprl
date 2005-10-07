@@ -33,7 +33,6 @@
 
 extends Itt_rfun
 extends Itt_dfun
-extends Itt_fun
 extends Itt_unit
 extends Itt_union
 

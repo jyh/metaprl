@@ -40,7 +40,7 @@ doc <:doc<
 
    $$
    @begin[array, rcl]
-   @line{@prod{x; A; B[x]} @equiv @rfun{f; x; @bool; @if{x; A; B[f(@bfalse)]}}}
+   @line{@prod{x; A; B[x]} @equiv @rfun[x]{f; @bool; @if{x; A; B[f(@bfalse)]}}}
    @end[array]
    $$
 
@@ -59,7 +59,7 @@ doc <:doc<
    This encoding is satisfactory in all respects except for the
    elimination form.  The problem is that the function space uses
    an @emph{extensional} equality; the elements of the function
-   space $@rfun{f; x; @bool; @if{x; A; B[f(@false)]}}$ are not
+   space $@rfun[x]{f; @bool; @if{x; A; B[f(@false)]}}$ are not
    just the terms $@lambda{x; @if{x; a; b}}$, but all equal functions.
 
    One alternative is to weaken the elimination form to a

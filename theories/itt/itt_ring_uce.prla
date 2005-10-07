@@ -2284,9 +2284,11 @@ NItt_bool!bool	bool	bool Itt_bool
 O	o879	bool
 T	t880	o879
 B	b880	t880
-T	t881	o876 b879 b880
+Bdfunhack	b880dep	t880 ""
+T	t881	o876 b879 b880dep
 B	b881	t881
-T	t882	o876 b879 b881
+Bdfunhack	b881dep	t881 ""
+T	t882	o876 b879 b881dep
 B	b882	t882 r
 NItt_unitring	Itt_unitring	Itt_unitring NIL
 NItt_unitring!preunitring	preunitring	preunitring Itt_unitring
@@ -3500,23 +3502,26 @@ T	t1331	o1331
 B	b1331	t1331
 T	t1332	o877 b1331
 B	b1332	t1332
-T	t1333	o876 b1332 b880
+T	t1333	o876 b1332 b880dep
 B	b1333	t1333
-T	t1334	o876 b1332 b1333
+Bdfunhack	b1333dep	t1333 ""
+T	t1334	o876 b1332 b1333dep
 B	b1334	t1334 self
 P	p1334	Token 1
 O	o1334	record p1334
 B	b1335	t1332 self
 P	p1335	Token neg
 O	o1335	record p1335
-T	t1335	o876 b1332 b1332
+Bdfunhack	b1332dep	t1332 ""
+T	t1335	o876 b1332 b1332dep
 B	b1336	t1335 self
 P	p1336	Token 0
 O	o1336	record p1336
 P	p1337	Token +
 O	o1337	record p1337
 B	b1337	t1335
-T	t1337	o876 b1332 b1337
+Bdfunhack	b1337dep	t1335 ""
+T	t1337	o876 b1332 b1337dep
 B	b1338	t1337 self
 P	p1338	Token *
 O	o1338	record p1338
@@ -4829,9 +4834,11 @@ P	p2360	Number 9032
 O	o2360	location p2359 p2360
 P	p2361	String add_wf
 O	o2361	rule p2361
-T	t2361	o876 b2307 b2307
+Bdfunhack	b2307dep	t2306 ""
+T	t2361	o876 b2307 b2307dep
 B	b2361	t2361
-T	t2362	o876 b2307 b2361
+Bdfunhack	b2361dep	t2361 ""
+T	t2362	o876 b2307 b2361dep
 B	b2362	t2362
 T	t2363	o1534 b2303
 B	b2363	t2363
@@ -5073,9 +5080,10 @@ P	p2458	Number 9629
 O	o2458	location p2457 p2458
 P	p2459	String eq_wf
 O	o2459	rule p2459
-T	t2459	o876 b2307 b880
+T	t2459	o876 b2307 b880dep
 B	b2459	t2459
-T	t2460	o876 b2307 b2459
+Bdfunhack	b2459dep	t2459 ""
+T	t2460	o876 b2307 b2459dep
 B	b2460	t2460
 T	t2461	o1591 b2303
 B	b2461	t2461
@@ -9305,7 +9313,8 @@ T	t4129	o4128
 B	b4129	t4129
 T	t4130	o877 b4129
 B	b4130	t4130
-T	t4131	o876 b4128 b4130
+Bdfunhack	b4130dep	t4130 ""
+T	t4131	o876 b4128 b4130dep
 H	h4131	v1 t4131
 NItt_logic!implies	implies	implies Itt_logic
 O	o4131	implies
@@ -9571,7 +9580,7 @@ T	t4241	o4125 b1190 b4126
 B	b4242	t4241
 T	t4242	o4124 b4242
 B	b4243	t4242
-T	t4243	o876 b4243 b4130
+T	t4243	o876 b4243 b4130dep
 B	b4244	t4243 n
 T	t4244	o4241 b4241 b4244
 B	b4245	t4244
@@ -9695,7 +9704,7 @@ T	t4291	o4125 b4143 b4126
 B	b4292	t4291
 T	t4292	o4124 b4292
 B	b4293	t4292
-T	t4293	o876 b4293 b4130
+T	t4293	o876 b4293 b4130dep
 B	b4294	t4293
 T	t4294	o1330 b4294 b4153 b4135
 S	s4294	t1246\\ h h4124 h4125 h4131 h4140 h4233 h4291\\ t4294
@@ -11024,7 +11033,7 @@ T	t4856	o4125 b4361 b4126
 B	b4856	t4856
 T	t4857	o4124 b4856
 B	b4857	t4857
-T	t4858	o876 b4857 b4130
+T	t4858	o876 b4857 b4130dep
 H	h4858	v1 t4858
 T	t4859	o4132 b4133 b4361
 B	b4859	t4859
@@ -12013,7 +12022,8 @@ S	s5292	t1246\\ h h4124 h5272\\ t5292
 B	b5293	s5292
 T	t5293	o1253 b5293 b5226
 B	b5294	t5293
-T	t5294	o876 b5292 b5292
+Bdfunhack	b5292dep	t5272 ""
+T	t5294	o876 b5292 b5292dep
 B	b5295	t5294
 T	t5295	o1330 b5295 b5260 b5260
 S	s5295	t1246\\ h h4124\\ t5295

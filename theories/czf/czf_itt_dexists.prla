@@ -4346,7 +4346,8 @@ T	t828	o828
 H	h828	T t828
 NItt_rfun!fun	fun	fun Itt_rfun
 O	o829	fun
-T	t829	o829 b559 b722
+Bdfunhack	b722dep	t710 ""
+T	t829	o829 b559 b722dep
 H	h829	f t829
 P	p3110	Var x1
 O	o3110	var p3110

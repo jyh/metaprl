@@ -12,7 +12,7 @@ extends Itt_int_base
 extends Itt_int_ext
 extends Itt_atom
 extends Itt_set
-extends Itt_fun
+extends Itt_dfun
 extends Itt_tsquash
 extends Itt_list
 extends Itt_labels

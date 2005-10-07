@@ -30,7 +30,6 @@
  * jyh@cs.cornell.edu
  *)
 
-extends Itt_fun
 extends Itt_prod
 extends Itt_struct
 extends Itt_logic

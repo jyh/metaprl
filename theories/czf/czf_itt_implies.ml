@@ -52,15 +52,15 @@ interactive fun_fun {| intro [] |} :
    ["wf"] sequent { <H>; w: set >- "type"{'B['w]} } -->
    sequent { <H> >- fun_prop{x. 'A['x]} } -->
    sequent { <H> >- fun_prop{x. 'B['x]} } -->
-   sequent { <H> >- fun_prop{x. "fun"{'A['x]; 'B['x]}} }
+   sequent { <H> >- fun_prop{x. 'A['x] -> 'B['x]} }
 
 (*
  * Implication is restricted.
  *)
 interactive fun_res1 {| intro [] |} :
-   sequent { <H> >- restricted{. 'A} } -->
-   sequent { <H> >- restricted{. 'B} } -->
-   sequent { <H> >- restricted{. "fun"{'A; 'B}} }
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H> >- restricted{'B} } -->
+   sequent { <H> >- restricted{'A -> 'B} }
 
 (*
  * Implication is restricted.

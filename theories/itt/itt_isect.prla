@@ -6025,7 +6025,8 @@ NItt_rfun!fun	fun	fun Itt_rfun
 O	o1139	fun
 B	b2647	t2629
 B	b2648	B2629
-T	t2648	o1139 b2647 b2648
+Bdfunhack	b2648dep	B2629 ""
+T	t2648	o1139 b2647 b2648dep
 H	h2648	t2648
 S	s2648	tbrarg\\ h1829 h2648\\ t2633
 B	b2649	s2648

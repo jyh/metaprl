@@ -187,7 +187,9 @@ rule function_equalityElimination 'H 'x 'y 'z 'a :
    sequent { <H>; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l]; <J['x]> >- 'T['x] }
  *)
 
-topval dfun_extensionalityT : term -> term -> tactic
+topval fnExtensionalityT : term -> term -> tactic
+topval fnExtenT : term -> tactic
+topval fnExtenVoidT : tactic
 
 (*
  * -*-

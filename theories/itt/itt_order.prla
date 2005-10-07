@@ -2352,9 +2352,11 @@ NItt_bool!bool	bool	bool Itt_bool
 O	o917	bool
 T	t917	o917
 B	b917	t917
-T	t918	o916 b911 b917
+Bdfunhack	b917dep	t917 ""
+T	t918	o916 b911 b917dep
 B	b918	t918
-T	t919	o916 b911 b918
+Bdfunhack	b918dep	t918 ""
+T	t919	o916 b911 b918dep
 B	b919	t919
 T	t920	o915 b919 b912 b912
 B	b920	t920
@@ -5991,9 +5993,10 @@ T	t2298	o2298
 C	h	H\\ \\
 Vcar	car2298	car\\ H\\
 B	b2298	car2298
-T	t2299	o916 b2298 b917
+T	t2299	o916 b2298 b917dep
 B	b2299	t2299
-T	t2300	o916 b2298 b2299
+Bdfunhack	b2299dep	t2299 ""
+T	t2300	o916 b2298 b2299dep
 B	b2300	t2300
 Vrel	rel2300	rel\\ H\\
 B	b2301	rel2300
@@ -10356,9 +10359,11 @@ S	s4292	t2298\\ h\\ t2307
 B	b4292	s4292
 T	t4292	o2297 b4292
 B	b4293	t4292
-T	t4336	o916 b2298 b2298
+Bdfunhack	b2298dep	car2298 ""
+T	t4336	o916 b2298 b2298dep
 B	b4337	t4336
-T	t4337	o916 b2298 b4337
+Bdfunhack	b4337dep	t4336 ""
+T	t4337	o916 b2298 b4337dep
 B	b4338	t4337
 T	t4338	o19 b2301
 B	b4339	t4338
@@ -11886,9 +11891,10 @@ T	t5009	o2317 b5007 b14
 B	b5009	t5009
 T	t5010	o2832 b5009 b14 b2320
 B	b5010	t5010
-T	t5011	o916 b4733 b917
+T	t5011	o916 b4733 b917dep
 B	b5011	t5011
-T	t5012	o916 b4733 b5011
+Bdfunhack	b5011dep	t5011 ""
+T	t5012	o916 b4733 b5011dep
 B	b5012	t5012
 T	t5013	o915 b5012 b5006 b4987
 S	s5013	t2298\\ h\\ t5013
@@ -13286,9 +13292,10 @@ T	t5196	o5196
 B	b5196	t5196
 T	t5197	o5195 b5196
 B	b5197	t5197
-T	t5198	o916 b5197 b917
+T	t5198	o916 b5197 b917dep
 B	b5198	t5198
-T	t5199	o916 b5197 b5198
+Bdfunhack	b5198dep	t5198 ""
+T	t5199	o916 b5197 b5198dep
 B	b5199	t5199 r
 O	o5199	record p5194
 NItt_equal!univ	univ	univ Itt_equal

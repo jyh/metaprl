@@ -630,7 +630,8 @@ NBase_reflection!term	term	term Base_reflection
 O	o228	term p226
 T	t228	o228
 B	b228	t228
-T	t229	o227 b228 b228
+Bdfunhack	b228dep	t228 ""
+T	t229	o227 b228 b228dep
 S	s	t226\\ \\ t229
 B	b229	s
 NSummary!prim	prim	prim Summary

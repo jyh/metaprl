@@ -16,7 +16,7 @@ doc <:doc<
    be derived from the recursive type @hrefmodule[Itt_srec], with
    the definition:
 
-   $$@w{x; A; B[x]} @equiv @srec{T; @prod{x; A; @fun{B[a]; T}}}.$$
+   $$@w{x; A; B[x]} @equiv @srec{T; @prod{x; A; <<'B['a] -> 'T>>}}.$$
 
    However, the $W$ type has a simpler semantics than the recursive
    type.  We keep it as primitive so that the recursive type can
@@ -80,7 +80,7 @@ open Itt_struct
 doc <:doc<
    @terms
 
-   The $W$ type is type of trees, $W = @prod{a; A; @fun{B[a]; W}}$.
+   The $W$ type is type of trees, $W = @prod{a; A; <<'B['a] -> 'W>>}$.
 >>
 declare w{'A; x. 'B['x]}
 

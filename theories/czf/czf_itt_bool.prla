@@ -6557,7 +6557,8 @@ T	t6053	o1685 b1284 b6053 b4 b4
 B	b6054	t6053
 P	p3155	String "rwh unfold_implies 0 thenT autoT"
 O	o3155	ext_rule p3155
-T	t3155	o2737 b2597 b1851
+Bdfunhack	b1851dep	t1851 ""
+T	t3155	o2737 b2597 b1851dep
 B	b3156	t3155 t
 T	t3156	o2338 b681 b3156
 B	b3157	t3156

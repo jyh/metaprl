@@ -2672,9 +2672,11 @@ T	t1043	o1043
 B	b1043	t1043
 T	t1044	o853 b1043
 B	b1044	t1044
-T	t1045	o1042 b1044 b929
+Bdfunhack	b929dep	t929 ""
+T	t1045	o1042 b1044 b929dep
 B	b1045	t1045
-T	t1046	o1042 b1044 b1045
+Bdfunhack	b1045dep	t1045 ""
+T	t1046	o1042 b1044 b1045dep
 B	b1046	t1046 r
 NItt_ring2	Itt_ring2	Itt_ring2 NIL
 NItt_ring2!prering	prering	prering Itt_ring2
@@ -3706,9 +3708,10 @@ T	t1447	o922 b1446
 B	b1447	t1447
 T	t1448	o921 b1447
 B	b1448	t1448
-T	t1449	o1042 b925 b929
+T	t1449	o1042 b925 b929dep
 B	b1449	t1449
-T	t1450	o1042 b925 b1449
+Bdfunhack	b1449dep	t1449 ""
+T	t1450	o1042 b925 b1449dep
 B	b1450	t1450
 T	t1451	o1041 b1450
 B	b1451	t1451
@@ -3793,9 +3796,10 @@ T	t1484	o921 b1484
 B	b1485	t1484
 T	t1485	o853 b1481
 B	b1486	t1485
-T	t1486	o1042 b1486 b929
+T	t1486	o1042 b1486 b929dep
 B	b1487	t1486
-T	t1487	o1042 b1486 b1487
+Bdfunhack	b1487dep	t1486 ""
+T	t1487	o1042 b1486 b1487dep
 B	b1488	t1487
 T	t1488	o1041 b1488
 B	b1489	t1488
@@ -3870,9 +3874,10 @@ O	o1519	rule p1519
 H	h1519	f t1047
 T	t1519	o853 b1063
 B	b1519	t1519
-T	t1520	o1042 b1519 b929
+T	t1520	o1042 b1519 b929dep
 B	b1520	t1520
-T	t1521	o1042 b1519 b1520
+Bdfunhack	b1520dep	t1520 ""
+T	t1521	o1042 b1519 b1520dep
 H	h1521	x t1521
 NItt_record!rcrd	rcrd	rcrd Itt_record
 O	o1521	rcrd p859
@@ -3910,9 +3915,10 @@ T	t1530	o1530
 B	b1530	t1530
 T	t1531	o853 b1530
 B	b1531	t1531
-T	t1532	o1042 b1531 b929
+T	t1532	o1042 b1531 b929dep
 B	b1532	t1532
-T	t1533	o1042 b1531 b1532
+Bdfunhack	b1532dep	t1532 ""
+T	t1533	o1042 b1531 b1532dep
 H	h1533	x t1533
 NItt_record!record_ort	record_ort	record_ort Itt_record
 O	o1533	record_ort p859
@@ -3945,7 +3951,8 @@ T	t1543	o1543
 B	b1543	t1543
 T	t1544	o853 b1543
 B	b1544	t1544
-T	t1545	o1042 b1544 b1544
+Bdfunhack	b1544dep	t1544 ""
+T	t1545	o1042 b1544 b1544dep
 B	b1545	t1545 self
 P	p1545	Token 0
 O	o1545	record p1545
@@ -3953,7 +3960,8 @@ B	b1546	t1544 self
 P	p1546	Token +
 O	o1546	record p1546
 B	b1547	t1545
-T	t1547	o1042 b1544 b1547
+Bdfunhack	b1547dep	t1545 ""
+T	t1547	o1042 b1544 b1547dep
 B	b1548	t1547 self
 P	p1548	Token *
 O	o1548	record p1548

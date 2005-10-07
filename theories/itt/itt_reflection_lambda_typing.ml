@@ -6,7 +6,7 @@ extends Itt_reflection_lambda_reduction
 open Basic_tactics
 
 declare fun_term
-iform fun_term: fun_term <--> bterm{| >- "fun"[@]{term[@];term[@]} |}
+iform fun_term: fun_term <--> bterm{| >- "fun"[@]{term[@];"".term[@]} |}
 dform fun_df: fun_term = `"\"fun\""
 
 define unfold_mk_fun: mk_fun{'t;'s} <--> let depth=max{bdepth{'t};bdepth{'s}} in  make_bterm{fun_term; 'depth; make_depth{'t;'depth}::make_depth{'s;'depth}::nil}

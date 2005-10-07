@@ -42,7 +42,6 @@ open Basic_tactics
  ************************************************************************)
 
 declare "fun"{'A; x. 'B['x]}
-declare "fun"{'A; 'B}
 declare rfun{'A; f, x. 'B['f; 'x]}
 
 declare lambda{x. 'b['x]}
@@ -199,7 +198,9 @@ val is_dfun_term : term -> bool
 val dest_dfun : term -> var * term * term
 val mk_dfun_term : var -> term -> term -> term
 
-val fun_term : term
+(*
+ * Dfun terms, where the image type does not depend on the variable
+ *)
 val is_fun_term : term -> bool
 val dest_fun : term -> term * term
 val mk_fun_term : term -> term -> term

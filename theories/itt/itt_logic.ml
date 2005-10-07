@@ -49,7 +49,6 @@ extends Itt_equal
 extends Itt_esquash
 extends Itt_rfun
 extends Itt_dfun
-extends Itt_fun
 extends Itt_dprod
 extends Itt_prod
 extends Itt_union
@@ -106,9 +105,9 @@ doc <:doc<
    @line{@not{A}  @equiv  <<'A -> void>>}
    @line{@and{A; B}  @equiv  @prod{A; B}}
    @line{@or{A; B}  @equiv  @union{A; B}}
-   @line{@implies{A; B}  @equiv  @fun{A; B}}
-   @line{@iff{A; B}  @equiv  @and{(@fun{A; B}); (@fun{B; A})}}
-   @line{@all{x; A; B[x]}  @equiv  @fun{x; A; B[x]}}
+   @line{@implies{A; B}  @equiv  <<'A -> 'B>>}
+   @line{@iff{A; B}  @equiv  @and{(<<'A -> 'B>>); (<<'B -> 'A>>)}}
+   @line{@all{x; A; B[x]}  @equiv  <<x:'A -> 'B['x]>>}
    @line{@exists{x; A; B[x]}  @equiv  @prod{x; A; B[x]}}
    @end[array]
    $$
@@ -789,7 +788,6 @@ let univCDT =
          if is_all_term concl
             or is_dfun_term concl
             or is_implies_term concl
-            or is_fun_term concl
          then
             dT 0 thenMT (funT tac)
          else
@@ -803,7 +801,6 @@ let genUnivCDT =
          if is_all_term concl
             or is_dfun_term concl
             or is_implies_term concl
-            or is_fun_term concl
             or is_and_term concl
             or is_prod_term concl
             or is_iff_term concl

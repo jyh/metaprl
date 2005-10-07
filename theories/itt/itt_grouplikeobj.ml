@@ -41,7 +41,7 @@ extends Itt_atom
 extends Itt_record
 extends Itt_set
 extends Itt_subset
-extends Itt_fun
+extends Itt_dfun
 extends Itt_disect
 extends Itt_labels
 doc docoff
@@ -51,8 +51,8 @@ open Lm_printf
 
 open Basic_tactics
 
+open Itt_rfun
 open Itt_record
-open Itt_fun
 open Itt_subtype
 open Itt_squash
 

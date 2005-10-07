@@ -755,7 +755,8 @@ T	t680	o680
 H	h680	T t680
 NItt_rfun!fun	fun	fun Itt_rfun
 O	o681	fun
-T	t681	o681 b567 b666
+Bdfunhack	b666dep	t653 ""
+T	t681	o681 b567 b666dep
 H	h681	f t681
 T	t682	o555 b556 b545
 B	b682	t682
@@ -5167,7 +5168,7 @@ P	p2869	Var T1
 O	o2869	var p2869
 T	t2869	o2869
 B	b2870	t2869
-T	t2870	o681 b2870 b666
+T	t2870	o681 b2870 b666dep
 H	h2870	f t2870
 T	t1248	o542 b2844 b127
 B	b1248	t1248

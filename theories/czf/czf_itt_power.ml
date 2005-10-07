@@ -8,9 +8,9 @@ doc <:doc<
    $s_2$ are sets.  If the canonical forms are $s_1 = @collect{x_1; T_1; f_1[x_1]}$
    and $s_2 = @collect{x_2; T_2; f_2[x_2]}$, the elements of the
    power set are the subsets of $s_2$ that are defined by
-   the images of the computable functions in the space $@fun{T_1; T_2}$.
+   the images of the computable functions in the space <<'T_1 -> 'T_2>>.
 
-   $$@power{s_1; s_2} @equiv @collect{g; @fun{T_1; T_2}; @collect{x; T_1; f_2[g(x)]}}$$
+   $$@power{s_1; s_2} @equiv @collect{g; <<'T_1 -> 'T_2>>; @collect{x; T_1; f_2[g(x)]}}$$
 
    There is only one significant rule in this module: the
    axiom of subset collection.
@@ -109,7 +109,7 @@ doc <:doc<
    @modsubsection{The subset collection axiom}
 
    There is an element of the power set for each computable
-   function $@fun{s_1; s_2}$.
+   function <<'s_1 -> 's_2>>.
 >>
 interactive power_thm bind{x. bind{y. 'P['x; 'y]}} 'a 'b :
    ["wf"] sequent { <H> >- isset{'a} } -->

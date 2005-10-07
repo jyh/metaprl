@@ -758,7 +758,8 @@ B	b487	t487
 NItt_rfun	Itt_rfun	Itt_rfun NIL
 NItt_rfun!fun	fun	fun Itt_rfun
 O	o487	fun
-T	t488	o487 b485 b486
+Bdfunhack	b486dep	t486 ""
+T	t488	o487 b485 b486dep
 B	b488	t488
 NSummary!prim	prim	prim Summary
 O	o488	prim

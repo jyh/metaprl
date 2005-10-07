@@ -596,7 +596,8 @@ P	p1168	String f
 P	p1170	String z
 H	h1177	a t692
 H	h1179	T t725
-T	t1179	o1101 b705 b692
+Bdfunhack	b692dep	t692 ""
+T	t1179	o1101 b705 b692dep
 H	h1180	f t1179
 NItt_logic	Itt_logic	Itt_logic NIL
 NItt_logic!all	all	all Itt_logic
@@ -615,13 +616,14 @@ P	p1194	Var a_1
 O	o1194	var p1194
 T	t1194	o1194
 B	b1194	t1194
-T	t1195	o1101 b1194 b727
+Bdfunhack	b727dep	t726 ""
+T	t1195	o1101 b1194 b727dep
 H	h1195	f t1195
 T	t1196	o715
 B	b1196	t1196
 T	t1197	o1142 b716 b1196
 T	t1200	o738 b1194 b716
-T	t1211	o1101 b1194 b692
+T	t1211	o1101 b1194 b692dep
 H	h1211	f t1211
 P	p1225	String "assertT << isset{collect{'a_1; x. 'f 'x}} >>"
 O	o1225	ext_rule p1225
@@ -713,7 +715,7 @@ P	p1610	Var a1
 O	o1611	var p1610
 T	t1611	o1611
 B	b1611	t1611
-T	t1612	o1101 b1611 b692
+T	t1612	o1101 b1611 b692dep
 H	h1612	f1 t1612
 P	p1615	Var f1
 O	o1615	var p1615
@@ -730,7 +732,7 @@ O	o1624	var p1624
 T	t1624	o1624
 P	p1631	String "rwh unfold_set_ind 0"
 O	o1631	ext_rule p1631
-T	t1657	o1101 b1611 b727
+T	t1657	o1101 b1611 b727dep
 H	h1657	f1 t1657
 P	p1662	String "rwh fold_set 0 thenT trivialT"
 O	o1662	ext_rule p1662
@@ -8260,7 +8262,7 @@ S	s3622	tbrarg\\ h3244\\ t3622
 B	b3623	s3622
 T	t3623	o761 b3623 b3590
 B	b3624	t3623
-T	t3624	o1101 b3572 b727
+T	t3624	o1101 b3572 b727dep
 B	b3625	t3624
 T	t3625	o733 b3625 b3605 b3605
 S	s3625	tbrarg\\ h3244\\ t3625
@@ -9027,7 +9029,7 @@ T	t3842	o b3842 b4
 B	b3843	t3842
 T	t3843	o759 b3833 b3843
 B	b3844	t3843
-P	p4337	String "rw unfold_fun 5 thenT autoT"
+P	p4337	String "autoT"
 O	o4337	ext_rule p4337
 T	t3844	o759 b3842 b4
 B	b3845	t3844
@@ -9354,7 +9356,7 @@ P	p4208	Var T1
 O	o4208	var p4208
 T	t4208	o4208
 B	b4209	t4208
-T	t4209	o1101 b4209 b692
+T	t4209	o1101 b4209 b692dep
 B	b4210	t4209
 T	t4210	o704 b4209 b1325
 VA	A4210	A\\ H\\ t4210

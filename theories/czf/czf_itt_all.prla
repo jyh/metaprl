@@ -1506,7 +1506,8 @@ T	t816	o630 b689 b815
 B	b816	t816 u2
 T	t817	o644 b691 b816
 B	b817	t817
-T	t818	o644 b814 b817
+Bdfunhack	b817dep	t817 ""
+T	t818	o644 b814 b817dep
 B	b818	t818 u1
 T	t819	o644 b700 b818
 B	b819	t819
@@ -1516,11 +1517,12 @@ T	t832	o630 b668 b815
 B	b833	t832 u2
 T	t833	o644 b676 b833
 B	b834	t833
-T	t834	o644 b832 b834
+Bdfunhack	b834dep	t833 ""
+T	t834	o644 b832 b834dep
 B	b835	t834 u1
 T	t835	o644 b670 b835
 B	b836	t835
-T	t838	o644 b832 b817
+T	t838	o644 b832 b817dep
 B	b839	t838 u1
 T	t839	o644 b670 b839
 B	b840	t839
@@ -2312,7 +2314,7 @@ B	b741	t740
 P	p741	String "withT <<'y>> (dT (-1)) ttca"
 O	o741	ext_rule p741
 H	h741	v_2 t835
-T	t741	o644 b675 b834
+T	t741	o644 b675 b834dep
 H	h742	y_2 t741
 B	b742	t741
 P	p742	Var v_2

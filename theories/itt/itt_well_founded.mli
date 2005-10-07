@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-extends Itt_fun
+extends Itt_dfun
 
 declare partial_order{'A; x, y. 'R['x; 'y]}
 declare well_founded[i:l]{'A; x, y. 'R['x; 'y]}

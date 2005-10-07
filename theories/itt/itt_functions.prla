@@ -2211,7 +2211,8 @@ T	t1014	o1008 b1014
 B	b1015	t1014
 NItt_rfun!fun	fun	fun Itt_rfun
 O	o1015	fun
-T	t1015	o1015 b1010 b1013
+Bdfunhack	b1013dep	B1012 ""
+T	t1015	o1015 b1010 b1013dep
 B	b1016	t1015
 Vf	f1016	f\\ H\\
 B	b1017	f1016
@@ -3577,7 +3578,8 @@ B	b1411	t1410
 NSummary!meta_labeled	meta_labeled	meta_labeled Summary
 P	p1411	String wf
 O	o1411	meta_labeled p1411
-T	t1411	o1015 b1405 b1408
+Bdfunhack	b1408dep	B_1 ""
+T	t1411	o1015 b1405 b1408dep
 B	b1412	t1411
 T	t1412	o878 b1412 b1017 b1017
 S	s1412	t1009\\ h\\ t1412
@@ -3941,7 +3943,8 @@ Vg	g	g\\ \\
 B	b2170	g
 T	t2170	o2170 b2170 b873 b874
 B	b2171	t2170
-T	t2171	o1015 b874 b874
+Bdfunhack	b874dep	A ""
+T	t2171	o1015 b874 b874dep
 B	b2172	t2171
 NItt_fun2	Itt_fun2	Itt_fun2 NIL
 NItt_fun2!compose	compose	compose Itt_fun2
@@ -4101,7 +4104,7 @@ NItt_functions!LInverse	LInverse	LInverse Itt_functions
 O	o2243	LInverse
 T	t2243	o2243 b873 b874 b875
 B	b2243	t2243
-T	t2244	o1015 b875 b874
+T	t2244	o1015 b875 b874dep
 B	b2244	t2244
 P	p2244	Var g
 O	o2244	var p2244
@@ -4504,7 +4507,8 @@ P	p2429	String " is injection("
 O	o2429	string890 p2429
 T	t2429	o2429
 B	b2429	t2429
-T	t2430	o1015 b874 b875
+Bdfunhack	b875dep	B ""
+T	t2430	o1015 b874 b875dep
 B	b2430	t2430
 T	t2431	o b2430 b897
 B	b2431	t2431
@@ -4940,7 +4944,8 @@ T	t2650	o2650 b1013
 B	b2650	t2650
 T	t2651	o b2650 b28
 B	b2651	t2651
-T	t2652	o1015 b1013 b1010
+Bdfunhack	b1010dep	A1010 ""
+T	t2652	o1015 b1013 b1010dep
 B	b2652	t2652
 Vg	g2652	g\\ H\\
 B	b2653	g2652
@@ -4980,7 +4985,7 @@ T	t2667	o1028 b2667 b28
 B	b2668	t2667
 P	p2668	String "compose_wf2 <<x:'A -> 'B>>"
 O	o2668	ext_rule p2668
-T	t2668	o1015 b1010 b1010
+T	t2668	o1015 b1010 b1010dep
 B	b2669	t2668
 T	t2669	o2172 b2653 b1017
 B	b2670	t2669
@@ -5614,7 +5619,7 @@ T	t3105	o1025 b3105
 B	b3106	t3105
 P	p3120	String rreverse_mem_intro
 O	o3120	rule p3120
-T	t3120	o1015 b1592 b1010
+T	t3120	o1015 b1592 b1010dep
 B	b3120	t3120
 T	t3121	o878 b3120 b2653 b2653
 S	s3121	t1009\\ h\\ t3121
@@ -6239,7 +6244,8 @@ NItt_void!void	void	void Itt_void
 O	o3466	void
 T	t3466	o3466
 B	b3466	t3466
-T	t3467	o1015 b3466 b3466
+Bdfunhack	b3466dep	t3466 ""
+T	t3467	o1015 b3466 b3466dep
 B	b3467	t3467
 T	t3468	o878 b3467 b2653 b2653
 S	s3468	t1009\\ h\\ t3468

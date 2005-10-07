@@ -48,7 +48,7 @@ open Lm_printf
 open Basic_tactics
 
 open Itt_struct
-open Itt_fun
+open Itt_rfun
 open Itt_record
 open Itt_group
 open Itt_grouplikeobj

@@ -922,7 +922,8 @@ NItt_rfun!fun	fun	fun Itt_rfun
 O	o577	fun
 B	b578	t572
 B	b579	t575
-T	t579	o577 b578 b579
+Bdfunhack	b579dep	t575 ""
+T	t579	o577 b578 b579dep
 B	b580	t579 x
 T	t580	o570 b580
 S	s580	tbrarg h
@@ -973,7 +974,8 @@ H	h602	z t601
 T	t602	o567 b599
 B	b604	t601
 B	b605	t602
-T	t605	o577 b604 b605
+Bdfunhack	b605dep	t602 ""
+T	t605	o577 b604 b605dep
 NItt_logic	Itt_logic	Itt_logic NIL
 NItt_logic!implies	implies	implies Itt_logic
 O	o607	implies
@@ -993,7 +995,8 @@ T	t618	o563 b617
 B	b619	t618
 T	t619	o567 b617
 B	b620	t619
-T	t620	o577 b619 b620
+Bdfunhack	b620dep	t619 ""
+T	t620	o577 b619 b620dep
 B	b621	t620
 T	t621	o607 b608 b621
 B	b622	t621
@@ -1005,7 +1008,8 @@ T	t627	o563 b626
 B	b628	t627
 T	t628	o567 b626
 B	b629	t628
-T	t629	o577 b628 b629
+Bdfunhack	b629dep	t628 ""
+T	t629	o577 b628 b629dep
 B	b630	t629
 T	t630	o607 b630 b621
 B	b631	t630
@@ -1959,7 +1963,8 @@ G	s774	t774
 B	b774	s774
 T	t775	o559 b774
 B	b775	t775
-T	t776	o577 b764 b768
+Bdfunhack	b768dep	t768 ""
+T	t776	o577 b764 b768dep
 B	b776	t776
 T	t777	o771 b776
 S	s777	tbrarg h

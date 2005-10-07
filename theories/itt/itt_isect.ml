@@ -4,7 +4,7 @@ doc <:doc<
    The @tt[Itt_isect] module defines the @emph{intersection}
    type <<Isect x:'A.'B['x]>>.  The elements of the intersection
    are the terms that inhabit $B[x]$ for @emph{every} $x @in A$.
-   The intersection is similar to the function space $@fun{x; A; B[x]}$;
+   The intersection is similar to the function space <<x:'A -> 'B['x]>>;
    the intersection is inhabited if-and-only-if there is a constant
    function in the dependent-function space.
 

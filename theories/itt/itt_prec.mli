@@ -33,7 +33,7 @@
 
 extends Itt_equal
 extends Itt_subtype
-extends Itt_fun
+extends Itt_dfun
 extends Itt_prod
 
 open Lm_symbol

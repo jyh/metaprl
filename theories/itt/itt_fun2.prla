@@ -422,7 +422,8 @@ H	h235	x A
 B	b236	B
 VC	C	C\\ H\\ t208
 B	b237	C
-T	t237	o226 b236 b237
+Bdfunhack	b237dep	C ""
+T	t237	o226 b236 b237dep
 B	b238	t237
 Vf	f238	f\\ H\\
 B	b239	f238
@@ -482,7 +483,8 @@ P	p278	String compose_wf2
 O	o278	rule p278
 VB	B278	B\\ H\\
 B	b279	B278
-T	t279	o226 b226 b279
+Bdfunhack	b279dep	B278 ""
+T	t279	o226 b226 b279dep
 B	b280	t279
 T	t280	o225 b280
 B	b281	t280
@@ -495,14 +497,15 @@ T	t283	o231 b283
 B	b284	t283
 VC	C284	C\\ H\\
 B	b285	C284
-T	t285	o226 b279 b285
+Bdfunhack	b285dep	C284 ""
+T	t285	o226 b279 b285dep
 B	b286	t285
 T	t286	o233 b286 b239 b239
 S	s286	t232\\ h h235\\ t286
 B	b287	s286
 T	t287	o231 b287
 B	b288	t287
-T	t288	o226 b226 b285
+T	t288	o226 b226 b285dep
 B	b289	t288
 T	t289	o233 b289 b244 b244
 S	s289	t232\\ h\\ t289
@@ -541,7 +544,7 @@ T	t322	o322
 B	b322	t322
 P	p335	String compose_wf3
 O	o335	rule p335
-T	t335	o226 b302 b285
+T	t335	o226 b302 b285dep
 B	b335	t335
 T	t336	o233 b335 b244 b244
 S	s336	t232\\ h\\ t336
@@ -597,7 +600,8 @@ T	t363	o231 b363
 B	b364	t363
 T	t364	o347 b364
 B	b365	t364
-T	t365	o226 b285 b356
+Bdfunhack	b356dep	D ""
+T	t365	o226 b285 b356dep
 B	b366	t365
 Vh	h366	h\\ H\\
 B	b367	h366
@@ -634,7 +638,8 @@ T	t412	o207 b406 b215
 B	b412	t412
 P	p419	String id_wf
 O	o419	rule p419
-T	t419	o226 b226 b226
+Bdfunhack	b226dep	A ""
+T	t419	o226 b226 b226dep
 B	b419	t419
 T	t420	o233 b419 b406 b406
 S	s420	t232\\ h\\ t420
@@ -1018,7 +1023,8 @@ P	p624	String funexp_wf
 O	o624	rule p624
 VT	T	T\\ H\\
 B	b624	T
-T	t624	o226 b624 b624
+Bdfunhack	b624dep	T ""
+T	t624	o226 b624 b624dep
 B	b625	t624
 T	t625	o233 b625 b239 b239
 S	s625	t232\\ h\\ t625

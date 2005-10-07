@@ -1238,7 +1238,8 @@ P	p653	MLevel 1
 O	o653	univ p653
 T	t653	o653
 H	h653	T t653
-T	t654	o610 b611 b634
+Bdfunhack	b634dep	t603 ""
+T	t654	o610 b611 b634dep
 H	h654	f t654
 T	t655	o609 b615 b617
 B	b655	t655
@@ -1585,7 +1586,7 @@ P	p978	Var T_1
 O	o978	var p978
 T	t978	o978
 B	b978	t978
-T	t979	o610 b978 b634
+T	t979	o610 b978 b634dep
 H	h979	f_1 t979
 P	p979	Var f_1
 O	o979	var p979

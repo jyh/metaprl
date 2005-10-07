@@ -29,7 +29,7 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
+extends Itt_dfun
 extends Itt_list
 extends Itt_logic
 extends Itt_bool

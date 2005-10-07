@@ -2592,7 +2592,8 @@ T	t1212	o1212
 B	b1212	t1212
 T	t1213	o1210 b1211 b1212
 B	b1213	t1213
-T	t1214	o13 b1213 b13
+Bdfunhack	b13dep	T ""
+T	t1214	o13 b1213 b13dep
 B	b1214	t1214 op
 T	t1215	o13 b1210 b1214
 B	b1215	t1215 self
@@ -2602,7 +2603,8 @@ NItt_power!Power	Power	Power Itt_power
 O	o1216	Power p1113
 T	t1216	o1216 b93
 B	b1216	t1216
-T	t1217	o13 b1210 b1216
+Bdfunhack	b1216dep	t1216 ""
+T	t1217	o13 b1210 b1216dep
 B	b1217	t1217 self
 O	o1217	record p1208
 NItt_equal!univ	univ	univ Itt_equal
@@ -3223,7 +3225,8 @@ T	t1330	o92 b1316
 B	b1330	t1330
 T	t1331	o1216 b1330
 B	b1331	t1331
-T	t1332	o13 b1210 b1331
+Bdfunhack	b1331dep	t1331 ""
+T	t1332	o13 b1210 b1331dep
 B	b1332	t1332 self
 T	t1333	o1215 b1332 b1219
 H	h1333	self t1333
@@ -3248,7 +3251,7 @@ P	p1341	Var x2
 O	o1341	var p1341
 T	t1341	o1341
 B	b1341	t1341
-T	t1342	o13 b1341 b1331
+T	t1342	o13 b1341 b1331dep
 H	h1342	x1 t1342
 H	h1343	x t1341
 P	p1343	Var x1
@@ -3373,7 +3376,7 @@ T	t1457	o1210 b1456 b1212
 B	b1457	t1457 op
 T	t1458	o1456 b1251 b1457
 B	b1458	t1458
-T	t1459	o13 b1458 b13
+T	t1459	o13 b1458 b13dep
 B	b1459	t1459
 NItt_closure!app	app	app Itt_closure
 O	o1459	app
@@ -3822,7 +3825,8 @@ T	t1534	o1210 b1534 b1212
 B	b1535	t1534 op
 T	t1535	o1456 b1533 b1535
 B	b1536	t1535
-T	t1536	o13 b1536 b1316
+Bdfunhack	b1316dep	T1316 ""
+T	t1536	o13 b1536 b1316dep
 B	b1537	t1536
 T	t1537	o1459 b1530
 B	b1538	t1537
@@ -3848,7 +3852,7 @@ T	t1544	o1544
 H	h1544	dum t1544
 T	t1545	o1210 b1343 b1212
 B	b1545	t1545
-T	t1546	o13 b1545 b1316
+T	t1546	o13 b1545 b1316dep
 B	b1546	t1546 op
 T	t1547	o13 b1341 b1546
 H	h1547	x t1547
@@ -4043,11 +4047,11 @@ B	b1661	t1661
 T	t1664	o92 b1658
 B	b1664	t1664
 H	h2342	x3 t1218
-T	t2342	o13 b1548 b1331
+T	t2342	o13 b1548 b1331dep
 H	h2343	x2 t2342
 T	t2343	o1210 b1341 b1212
 B	b2343	t2343
-T	t2344	o13 b2343 b1316
+T	t2344	o13 b2343 b1316dep
 B	b2344	t2344 op
 T	t2345	o13 b1548 b2344
 H	h2345	x1 t2345
@@ -4056,7 +4060,7 @@ T	t1671	o1616 b1664 b1545
 B	b1671	t1671 op
 T	t1672	o1456 b1341 b1671
 B	b1672	t1672
-T	t1673	o13 b1672 b1316
+T	t1673	o13 b1672 b1316dep
 B	b1673	t1673
 NItt_record!rcrd	rcrd	rcrd Itt_record
 O	o1673	rcrd p1207
@@ -4746,7 +4750,7 @@ T	t1508	o1616 b1618 b1545
 B	b1508	t1508 op
 T	t1522	o1456 b1341 b1508
 B	b1522	t1522
-T	t1523	o13 b1522 b1316
+T	t1523	o13 b1522 b1316dep
 B	b1523	t1523
 T	t1524	o71 b1523 b1680 b1680
 S	s1524	t1315\\ h h1340 h1544 h1342 h1547 h1496\\ t1524
@@ -4979,14 +4983,15 @@ B	b1822	t1821
 T	t1966	o71 b1947 b1965 b1965
 S	s1966	t1315\\ h\\ t1966
 B	b1966	s1966
-P	p2469	String "repeatT (dT 0) thenT tryT independentFunctionExtensionality2 thenT autoT"
+P	p2469	String "repeatT (dT 0) thenT tryT fnExtenVoidT thenT autoT"
 O	o2469	ext_rule p2469
 NItt_void	Itt_void	Itt_void NIL
 NItt_void!void	void	void Itt_void
 O	o1982	void
 T	t1982	o1982
 B	b1983	t1982
-T	t1983	o13 b1983 b1983
+Bdfunhack	b1983dep	t1982 ""
+T	t1983	o13 b1983 b1983dep
 B	b1984	t1983
 T	t1984	o71 b1984 b1538 b1538
 S	s1984	t1315\\ h\\ t1984

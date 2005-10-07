@@ -3716,7 +3716,8 @@ VA	A	A\\ \\
 B	b1150	A
 VB	B	B\\ \\
 B	b1166	B
-T	t1167	o527 b1150 b1166
+Bdfunhack	b1166dep	B ""
+T	t1167	o527 b1150 b1166dep
 B	b1167	t1167
 VB	B1179	B\\ \\ t530
 B	b1179	B1179 x

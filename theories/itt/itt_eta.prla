@@ -827,7 +827,8 @@ VA	A297	A\\ H\\
 B	b297	A297
 VB	B297	B\\ H\\
 B	b298	B297
-T	t298	o266 b297 b298
+Bdfunhack	b298dep	B297 ""
+T	t298	o266 b297 b298dep
 H	h298	f t298
 P	p298	Var f
 O	o298	var p298
@@ -919,7 +920,7 @@ T	t329	o b329 b9
 B	b330	t329
 T	t330	o308 b324 b330
 B	b331	t330
-P	p331	String "rwh unfold_fun 2 thenT trivialT"
+P	p331	String "trivialT"
 O	o331	ext_rule p331
 T	t331	o308 b329 b9
 B	b332	t331
@@ -941,7 +942,7 @@ T	t339	o293 b295 b305 b339 b9
 B	b340	t339
 T	t340	o292 b340
 B	b341	t340
-P	p341	String elim_eta_dep
+P	p341	String elim_eta
 O	o341	rule p341
 VB	B341	B\\ H\\ t267
 B	b342	B341 x

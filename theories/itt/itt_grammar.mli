@@ -68,6 +68,9 @@ lex_prec nonassoc [prec_min]
 (* Identifiers *)
 declare tok_id[v:s]            : Terminal
 
+(* Numbers *)
+declare tok_int[i:n]           : Terminal
+
 (*
  * Keywords.
  * Most of the keywords are defined in subtheories.
@@ -105,6 +108,9 @@ declare tok_right_paren        : Terminal
 
 (* Identifiers *)
 lex_token itt : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
+
+(* Numbers *)
+lex_token itt : "[[:digit:]]+" --> tok_int[lexeme:n]
 
 (* Keywords *)
 lex_token itt : "let"        --> tok_let

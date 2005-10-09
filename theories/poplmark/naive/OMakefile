@@ -11,5 +11,6 @@ OCAMLINCLUDES[] +=
 
 FILES[] =
     pmn_core_soas_terms
+    pmn_core_soas_model
 
 Theory($(FILES))

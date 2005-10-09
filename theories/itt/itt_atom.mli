@@ -83,6 +83,23 @@ val mk_token_term : opname -> term
 
 topval atomSqequalT : tactic
 
+(************************************************************************
+ * Grammar.
+ *)
+extends Itt_grammar
+
+declare tok_atom         : Terminal
+declare tok_token[s:t]   : Terminal
+
+lex_token itt : "atom"                 --> tok_atom
+lex_token itt : "\"\(([^\"]|\\.)*\)\"" --> tok_token[arg1:t]
+
+production itt_term{atom} <--
+   tok_atom
+
+production itt_term{token[s:t]} <--
+    tok_token[s:t]
+
 (*
  * -*-
  * Local Variables:

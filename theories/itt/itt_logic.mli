@@ -30,7 +30,6 @@
  * jyh@cs.cornell.edu
  *
  *)
-
 extends Itt_equal
 extends Itt_rfun
 extends Itt_dfun
@@ -40,6 +39,7 @@ extends Itt_union
 extends Itt_void
 extends Itt_unit
 extends Itt_struct
+extends Itt_grammar
 
 open Basic_tactics
 
@@ -171,6 +171,54 @@ topval jAutoT : int -> tactic
 
 (* Tries various backThruHyp and backThruAssum *)
 topval logicAutoT : tactic
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_not        : Terminal
+declare tok_or         : Terminal
+declare tok_and        : Terminal
+declare tok_implies    : Terminal
+declare tok_iff        : Terminal
+declare tok_all        : Terminal
+declare tok_exists     : Terminal
+
+lex_token itt : "not"       --> tok_not
+lex_token itt : "all"       --> tok_all
+lex_token itt : "exists"    --> tok_exists
+
+lex_token itt : "/"         --> tok_not
+lex_token itt : "[|][|]"    --> tok_or
+lex_token itt : "&&"        --> tok_and
+lex_token itt : "=>"        --> tok_implies
+lex_token itt : "<=>"       --> tok_iff
+
+lex_prec right [tok_or] = prec_or
+lex_prec right [tok_and] = prec_and
+lex_prec right [tok_implies] = prec_implies
+lex_prec right [tok_iff] = prec_iff
+lex_prec right [tok_not] = prec_not
+
+production itt_term{not{'t}} <--
+   tok_not; itt_term{'t}
+
+production itt_term{'t1 or 't2} <--
+   itt_term{'t1}; tok_or; itt_term{'t2}
+
+production itt_term{'t1 & 't2} <--
+   itt_term{'t1}; tok_and; itt_term{'t2}
+
+production itt_term{'t1 => 't2} <--
+   itt_term{'t1}; tok_implies; itt_term{'t2}
+
+production itt_term{'t1 <=> 't2} <--
+   itt_term{'t1}; tok_iff; itt_term{'t2}
+
+production itt_term{all x: 't1. 't2} <--
+   tok_all; tok_id[v:s]; tok_colon; itt_term{'t1}; tok_dot; itt_term{'t2}
+
+production itt_term{exst x: 't1. 't2} <--
+   tok_exists; tok_id[v:s]; tok_colon; itt_term{'t1}; tok_dot; itt_term{'t2}
 
 (*
  * -*-

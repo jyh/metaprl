@@ -56,6 +56,8 @@ extends Itt_struct
 extends Itt_subtype
 doc docoff
 
+extends Itt_grammar
+
 open Lm_debug
 open Lm_printf
 open Unify_mm

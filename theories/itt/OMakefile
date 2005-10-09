@@ -9,6 +9,7 @@ MLZFILES =
 
 # Library files
 MPFILES[] =
+   itt_grammar
    itt_comment
    itt_labels
    itt_equal
@@ -38,6 +39,7 @@ MPFILES[] =
    itt_pointwise
    itt_struct2
    itt_struct3
+   itt_match
    itt_pairwise
    itt_pairwise2
    itt_image

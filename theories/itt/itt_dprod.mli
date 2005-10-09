@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *
  *)
-
 extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
+extends Itt_grammar
 
 open Lm_symbol
 
@@ -177,6 +177,51 @@ val spread_term : term
 val is_spread_term : term -> bool
 val dest_spread : term -> var * var * term * term
 val mk_spread_term : var -> var -> term -> term -> term
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_Prod      : Terminal
+
+lex_token itt : "Prod" --> tok_Prod
+
+production itt_term{pair{'t1; 't2}} <--
+   itt_term{'t1}; tok_comma; itt_term{'t2}
+
+production itt_term{'t1 * 't2} <--
+   itt_term{'t1}; tok_star; itt_term{'t2}
+
+production itt_term{x: 't1 * 't2} <--
+   tok_Prod; tok_id[x:s]; tok_colon; itt_apply_term{'t1}; tok_star; itt_term{'t2}
+
+(*
+ * Comma-separated identifiers.
+ *)
+declare typeclass TuplePatt
+
+declare sequent [parsed_tuple_patt] { Term : Term >- Term } : TuplePatt
+declare parsed_spread{'p : TuplePatt; 't1 : Term; 't2 : Term} : Term
+
+declare itt_tuple_patt{'p : TuplePatt} : Nonterminal
+
+production itt_tuple_patt{parsed_tuple_patt{| x: it |}} <--
+   tok_id[x:s]
+
+production itt_tuple_patt{parsed_tuple_patt{| <H>; x: it |}} <--
+   itt_tuple_patt{parsed_tuple_patt{| <H> |}}; tok_comma; tok_id[x:s]
+
+production itt_term{parsed_spread{'p; 't1; 't2}} <--
+   tok_let; itt_tuple_patt{'p}; tok_equal; itt_term{'t1}; tok_in; itt_term{'t2}
+
+iform parsed_spread_pair :
+    parsed_spread{parsed_tuple_patt{| x: it; y: it |}; 't1; 't2}
+    <-->
+    spread{'t1; x, y. 't2}
+
+iform parsed_spread_cons :
+    parsed_spread{parsed_tuple_patt{| x: it; y: it; z: it; <H> |}; 't1; 't2}
+    <-->
+    spread{'t1; x, w. parsed_spread{parsed_tuple_patt{| y: it; z: it; <H> |}; 'w; 't2}}
 
 (*
  * -*-

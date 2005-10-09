@@ -49,6 +49,8 @@ extends Itt_struct
 extends Itt_squiggle
 doc docoff
 
+extends Itt_grammar
+
 open Lm_debug
 open Lm_printf
 

@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *
  *)
-
 extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
+extends Itt_grammar
 
 open Lm_symbol
 
@@ -209,6 +209,31 @@ val decide_term : term
 val is_decide_term : term -> bool
 val dest_decide : term -> term * var * term * var * term
 val mk_decide_term : term -> var -> term -> var -> term -> term
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_inl       : Terminal
+declare tok_inr       : Terminal
+
+lex_token itt : "inl"  --> tok_inl
+lex_token itt : "inr"  --> tok_inr
+
+lex_prec right [tok_inl; tok_inr] = prec_not
+
+production itt_term{inl{'t}} <--
+   tok_inl; itt_term{'t}
+
+production itt_term{inr{'t}} <--
+   tok_inr; itt_term{'t}
+
+production itt_term{'t1 + 't2} <--
+   itt_term{'t1}; tok_plus; itt_term{'t2}
+
+production itt_term{decide{'t1; x. 't2; y. 't3}} <--
+   tok_decide; itt_term{'t1}; tok_with;
+   tok_inl; tok_id[x:s]; tok_arrow; itt_term{'t2};
+   tok_pipe; tok_inr; tok_id[y:s]; tok_arrow; itt_term{'t3}
 
 (*
  * -*-

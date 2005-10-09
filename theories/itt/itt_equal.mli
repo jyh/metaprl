@@ -31,9 +31,9 @@
  * jyh@cs.cornell.edu
  *
  *)
-
 extends Base_theory
 extends Itt_comment
+extends Itt_grammar
 
 open Basic_tactics
 
@@ -253,6 +253,26 @@ topval equalTransT : term -> tactic
 
 topval univTypeT : term -> tactic
 topval cumulativityT : term -> tactic
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_IN : Terminal
+declare tok_type : Terminal
+
+lex_token itt : "IN"   --> tok_IN
+lex_token itt : "type" --> tok_type
+
+lex_prec right [tok_IN] = prec_in
+
+production itt_term{'t1 = 't2 in 't3} <--
+   itt_term{'t1}; tok_equal; itt_term{'t2}; tok_in; itt_term{'t3}
+
+production itt_term{'t1 in 't2} <--
+   itt_term{'t1}; tok_IN; itt_term{'t2}
+
+production itt_term{"type"{'t}} <--
+   itt_term{'t}; tok_type
 
 (*
  * -*-

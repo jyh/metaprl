@@ -1,0 +1,15 @@
+#
+# Naive POPLmark
+#
+THEORYNAME = naive
+THEORYDESCR = A POPLmark solution based on SOAS
+
+OCAMLINCLUDES[] +=
+    $(SUPPORT_DIRS)
+    ../../base
+    ../../itt
+
+FILES[] =
+    pmn_core_soas_terms
+
+Theory($(FILES))

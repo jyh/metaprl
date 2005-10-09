@@ -29,6 +29,7 @@
  *)
 extends Itt_union
 extends Itt_dprod
+extends Itt_dfun
 extends Itt_grammar
 
 (*!

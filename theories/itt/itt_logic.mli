@@ -214,10 +214,10 @@ production itt_term{'t1 => 't2} <--
 production itt_term{'t1 <=> 't2} <--
    itt_term{'t1}; tok_iff; itt_term{'t2}
 
-production itt_term{all x: 't1. 't2} <--
+production itt_term{all v: 't1. 't2} <--
    tok_all; tok_id[v:s]; tok_colon; itt_term{'t1}; tok_dot; itt_term{'t2}
 
-production itt_term{exst x: 't1. 't2} <--
+production itt_term{exst v: 't1. 't2} <--
    tok_exists; tok_id[v:s]; tok_colon; itt_term{'t1}; tok_dot; itt_term{'t2}
 
 (*

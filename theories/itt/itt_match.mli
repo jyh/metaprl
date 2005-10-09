@@ -29,6 +29,7 @@
  *)
 extends Itt_union
 extends Itt_dprod
+extends Itt_dfun
 extends Itt_grammar
 
 declare typeclass Case
@@ -43,7 +44,7 @@ declare itt_match_cases{'cases : Cases} : Nonterminal
 declare opt_pipe : Nonterminal
 
 production itt_term{parsed_match{'e; 'cases}} <--
-   tok_match; itt_term{'e}; tok_with; itt_match_cases{'cases}
+   tok_match; itt_term{'e}; tok_with; itt_match_cases{'cases}; tok_end
 
 production itt_match_case{'p; 'e} <--
    itt_tuple_patt{'p}; tok_arrow; itt_term{'e}
@@ -72,6 +73,21 @@ iform parsed_match_triple :
     <-->
     decide{'e; x. parsed_spread{'p1; 'x; 'e1};
                y. parsed_match{'y; parsed_cases{| parsed_case{'p2; 'e2}; parsed_case{'p3; 'e3}; <H> |}}}
+
+iform parsed_spread_single :
+    parsed_spread{parsed_tuple_patt{| x: it |}; 'y; 'e}
+    <-->
+    lambda{x. 'e} 'y
+
+iform parsed_spread_pair :
+    parsed_spread{parsed_tuple_patt{| x: it; y: it |}; 't1; 't2}
+    <-->
+    spread{'t1; x, y. 't2}
+
+iform parsed_spread_triple :
+    parsed_spread{parsed_tuple_patt{| x: it; y: it; z: it; <H> |}; 't1; 't2}
+    <-->
+    spread{'t1; x, www. parsed_spread{parsed_tuple_patt{| y: it; z: it; <H> |}; 'www; 't2}}
 
 (*!
  * @docoff

@@ -213,16 +213,6 @@ production itt_tuple_patt{parsed_tuple_patt{| <H>; x: it |}} <--
 production itt_term{parsed_spread{'p; 't1; 't2}} <--
    tok_let; itt_tuple_patt{'p}; tok_equal; itt_term{'t1}; tok_in; itt_term{'t2}
 
-iform parsed_spread_pair :
-    parsed_spread{parsed_tuple_patt{| x: it; y: it |}; 't1; 't2}
-    <-->
-    spread{'t1; x, y. 't2}
-
-iform parsed_spread_cons :
-    parsed_spread{parsed_tuple_patt{| x: it; y: it; z: it; <H> |}; 't1; 't2}
-    <-->
-    spread{'t1; x, w. parsed_spread{parsed_tuple_patt{| y: it; z: it; <H> |}; 'w; 't2}}
-
 (*
  * -*-
  * Local Variables:

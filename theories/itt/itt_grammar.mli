@@ -77,6 +77,7 @@ declare tok_in                 : Terminal
 declare tok_decide             : Terminal
 declare tok_match              : Terminal
 declare tok_with               : Terminal
+declare tok_end                : Terminal
 
 (* Symbols *)
 declare tok_dot                : Terminal
@@ -111,6 +112,7 @@ lex_token itt : "decide"     --> tok_decide
 lex_token itt : "match"      --> tok_match
 lex_token itt : "with"       --> tok_with
 lex_token itt : "in"         --> tok_in
+lex_token itt : "end"        --> tok_end
 
 (* Symbols *)
 lex_token itt : "[.]"        --> tok_dot
@@ -362,13 +364,18 @@ production itt_meta_rewrite{meta_iff{'e1; 'e2}} <--
 (*
  * Add a toplevel production.
  *)
+declare itt{'e : Term} : Nonterminal
 declare itt_mterm{'e : MTerm} : Nonterminal
 declare itt_rule{'e : MTerm} : Nonterminal
 declare itt_rw{'e : MTerm} : Nonterminal
 
+parser itt{'e} : itt
 parser itt_mterm{'e} : itt
 parser itt_rule{'e} : itt
 parser itt_rw{'e} : itt
+
+production itt{'e} <--
+   itt_term{'e}; tok_eof
 
 production itt_mterm{'e} <--
    itt_meta_term{'e}; tok_eof
@@ -382,6 +389,11 @@ production itt_rw{'e} <--
 (************************************************************************
  * Iforms.
  *)
+iform unfold_itt :
+   itt{'e}
+   <-->
+   'e
+
 iform unfold_itt_mterm :
    itt_mterm{'e}
    <-->

@@ -90,6 +90,7 @@ declare tok_colon              : Terminal
 declare tok_bang               : Terminal
 declare tok_hash               : Terminal
 declare tok_plus               : Terminal
+declare tok_minus              : Terminal
 declare tok_star               : Terminal
 declare tok_pipe               : Terminal
 declare tok_equal              : Terminal
@@ -105,6 +106,8 @@ declare tok_longrightarrow     : Terminal
 declare tok_longleftrightarrow : Terminal
 declare tok_left_paren         : Terminal
 declare tok_right_paren        : Terminal
+declare tok_left_curly         : Terminal
+declare tok_right_curly        : Terminal
 
 (* Identifiers *)
 lex_token itt : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
@@ -128,6 +131,7 @@ lex_token itt : ":"          --> tok_colon
 lex_token itt : "!"          --> tok_bang
 lex_token itt : "#"          --> tok_hash
 lex_token itt : "[+]"        --> tok_plus
+lex_token itt : "-"          --> tok_minus
 lex_token itt : "[*]"        --> tok_star
 lex_token itt : "[|]"        --> tok_pipe
 lex_token itt : "="          --> tok_equal
@@ -137,6 +141,8 @@ lex_token itt : "[(]"        --> tok_left_paren
 lex_token itt : "[)]"        --> tok_right_paren
 lex_token itt : "\["         --> tok_left_brack
 lex_token itt : "\]"         --> tok_right_brack
+lex_token itt : "[{]"        --> tok_left_curly
+lex_token itt : "[}]"        --> tok_right_curly
 lex_token itt : "<[|]"       --> tok_left_context
 lex_token itt : "[|]>"       --> tok_right_context
 lex_token itt : "->"         --> tok_arrow
@@ -193,7 +199,7 @@ lex_prec right    [prec_not] > prec_apply
 
 lex_prec right    [tok_longrightarrow; tok_longleftrightarrow] = prec_mimplies
 lex_prec right    [tok_turnstile] = prec_turnstile
-lex_prec right    [tok_plus] = prec_union
+lex_prec right    [tok_plus; tok_minus] = prec_union
 lex_prec right    [tok_star] = prec_prod
 lex_prec right    [tok_arrow] = prec_arrow
 lex_prec nonassoc [tok_colon] = prec_colon

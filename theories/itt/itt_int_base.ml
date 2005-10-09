@@ -62,6 +62,8 @@ extends Itt_struct2
 extends Itt_decidable
 doc docoff
 
+extends Itt_grammar
+
 open Lm_debug
 open Lm_printf
 

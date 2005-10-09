@@ -1,10 +1,10 @@
 (*
- * Typed AST.
+ * ITT model for the HOAS.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003-2005 Mojave Group, Caltech
+ * Copyright (C) 2005 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,14 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Pmn_core_soas_terms
+extends Pmn_core_hoas_terms
+
+(************************************************************************
+ * Type model.
+ *)
+define unfold_tenv : TEnv <--> <:itt<
+    Prod n: int * ({ 0..n- } -> TyExp)
+>>
 
 (*!
  * @docoff

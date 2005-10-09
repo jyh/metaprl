@@ -1,10 +1,10 @@
 (*
- * Typed AST.
+ * ITT model of HOAS.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003-2005 Mojave Group, Caltech
+ * Copyright (C) 2005 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Pmn_core_soas_terms
+extends Pmn_core_hoas_terms
 
 (*!
  * @docoff

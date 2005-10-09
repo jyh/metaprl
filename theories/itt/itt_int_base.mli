@@ -31,11 +31,11 @@
  * Author: Yegor Bryukhov
  * @email{ynb@mail.ru}
  *)
-
 extends Itt_equal
 extends Itt_bool
 extends Itt_logic
 extends Itt_decidable
+extends Itt_grammar
 
 open Basic_tactics
 
@@ -139,10 +139,8 @@ val mk_number_term : Lm_num.num -> term
 
 val ind_term : term
 val is_ind_term : term -> bool
-val dest_ind : term -> term * var * var * term * term * var * var *
- term
-val mk_ind_term : term -> var -> var -> term -> term -> var -> var
- -> term -> term
+val dest_ind : term -> term * var * var * term * term * var * var * term
+val mk_ind_term : term -> var -> var -> term -> term -> var -> var -> term -> term
 
 val reduce_numeral: conv
 
@@ -449,3 +447,24 @@ val process_arith_unfold_resource_rw_annotation : (prim_rewrite, term*conv) rw_a
 
 topval arith_unfoldTopC : conv
 topval arith_unfoldC : conv
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_int            : Terminal
+
+lex_token itt : "int"     --> tok_int
+
+production itt_simple_term{number[i:n]} <--
+   tok_int[i:n]
+
+production itt_simple_term{int} <--
+   tok_int
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

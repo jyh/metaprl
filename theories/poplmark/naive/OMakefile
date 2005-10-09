@@ -14,5 +14,6 @@ FILES[] =
     pmn_core_soas_model
     pmn_core_soas_final
     pmn_core_hoas_terms
+    pmn_core_hoas_model
 
 Theory($(FILES))

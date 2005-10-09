@@ -29,7 +29,6 @@
  * Author: Yegor Bryukhov
  * @email{ynb@mail.ru}
  *)
-
 extends Itt_equal
 extends Itt_logic
 extends Itt_bool
@@ -40,6 +39,7 @@ open Basic_tactics
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
+
 declare "mul"{'a; 'b}
 declare "div"{'a; 'b}
 declare "rem"{'a; 'b}

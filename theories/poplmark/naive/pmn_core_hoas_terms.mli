@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_theory
+extends Pmn_core_soas_terms
 
 (************************************************************************
  * Typeclasses for the different kinds of expressions in the theory.
@@ -117,7 +117,6 @@ declare "subtype"{'tsub : TyExp; 'tsup : TyExp} : Prop   (* 'tsub is a subtype o
 (************************************************
  * Lexing.
  *)
-declare tok_itt          : Terminal
 declare tok_top          : Terminal
 declare tok_exp          : Terminal
 declare tok_Var          : Terminal
@@ -125,27 +124,12 @@ declare tok_Exp          : Terminal
 declare tok_TyVar        : Terminal
 declare tok_TyExp        : Terminal
 
-declare tok_tilde        : Terminal
-declare tok_dt           : Terminal
-declare tok_st           : Terminal
-declare tok_left_curly   : Terminal
-declare tok_right_curly  : Terminal
-
-lex_token itt : "itt"    --> tok_itt
 lex_token itt : "top"    --> tok_top
 lex_token itt : "exp"    --> tok_exp
 lex_token itt : "Var"    --> tok_Var
 lex_token itt : "Exp"    --> tok_Exp
 lex_token itt : "TyVar"  --> tok_TyVar
 lex_token itt : "TyExp"  --> tok_TyExp
-
-lex_token itt : "~"      --> tok_tilde
-lex_token itt : "::"     --> tok_dt
-lex_token itt : "<:"     --> tok_st
-lex_token itt : "[{]"    --> tok_left_curly
-lex_token itt : "[}]"    --> tok_right_curly
-
-lex_prec nonassoc [tok_st; tok_dt] = prec_in
 
 (************************************************
  * Parsing.
@@ -156,35 +140,35 @@ lex_prec nonassoc [tok_st; tok_dt] = prec_in
  *)
 declare typeclass parsed_type_exp -> TyExp
 
-declare soas_type{'ty : TyExp} : Nonterminal
-declare soas_proper_type{'ty : TyExp} : Nonterminal
+declare hoas_type{'ty : TyExp} : Nonterminal
+declare hoas_proper_type{'ty : TyExp} : Nonterminal
 
-production soas_type{'e} <--
+production hoas_type{'e} <--
    itt_sovar{'e}
 
-production soas_type{'e} <--
+production hoas_type{'e} <--
    tok_quotation{'e}
 
-production soas_type{'e} <--
+production hoas_type{'e} <--
    tok_itt; tok_left_curly; itt_term{'e}; tok_right_curly
 
-production soas_type{TyVar{'v}} <--
+production hoas_type{TyVar{'v}} <--
    tok_tilde; tok_id[v:s]
 
-production soas_type{'e} <--
-   soas_proper_type{'e}
+production hoas_type{'e} <--
+   hoas_proper_type{'e}
 
-production soas_proper_type{'e} <--
-   tok_left_paren; soas_proper_type{'e}; tok_right_paren
+production hoas_proper_type{'e} <--
+   tok_left_paren; hoas_proper_type{'e}; tok_right_paren
 
-production soas_proper_type{TyTop} <--
+production hoas_proper_type{TyTop} <--
    tok_top
 
-production soas_proper_type{TyFun{'ty1; 'ty2}} <--
-   soas_type{'ty1}; tok_arrow; soas_type{'ty2}
+production hoas_proper_type{TyFun{'ty1; 'ty2}} <--
+   hoas_type{'ty1}; tok_arrow; hoas_type{'ty2}
 
-production soas_proper_type{TyAll{'ty1; v. 'ty2}} <--
-   tok_all; tok_id[v:s]; tok_st; soas_type{'ty1}; tok_dot; soas_type{'ty2}
+production hoas_proper_type{TyAll{'ty1; v. 'ty2}} <--
+   tok_all; tok_id[v:s]; tok_st; hoas_type{'ty1}; tok_dot; hoas_type{'ty2}
 
 (************************************************
  * Expressions.
@@ -195,45 +179,45 @@ production soas_proper_type{TyAll{'ty1; v. 'ty2}} <--
  *)
 declare typeclass parsed_exp -> Exp
 
-declare soas_exp{'e : Exp} : Nonterminal
-declare soas_exp_apply{'e : Exp} : Nonterminal
-declare soas_exp_simple{'e : Exp} : Nonterminal
+declare hoas_exp{'e : Exp} : Nonterminal
+declare hoas_exp_apply{'e : Exp} : Nonterminal
+declare hoas_exp_simple{'e : Exp} : Nonterminal
 
 (* Simple expressions that can be used in an application *)
-production soas_exp_simple{'e} <--
+production hoas_exp_simple{'e} <--
    itt_sovar{'e}
 
-production soas_exp_simple{'e} <--
+production hoas_exp_simple{'e} <--
    tok_quotation{'e}
 
-production soas_exp_simple{'e} <--
+production hoas_exp_simple{'e} <--
    tok_itt; tok_left_curly; itt_term{'e}; tok_right_curly
 
-production soas_exp_simple{Var{'v}} <--
+production hoas_exp_simple{Var{'v}} <--
    tok_tilde; tok_id[v:s]
 
-production soas_exp_simple{'e} <--
-   tok_left_paren; soas_exp{'e}; tok_right_paren
+production hoas_exp_simple{'e} <--
+   tok_left_paren; hoas_exp{'e}; tok_right_paren
 
 (* Applications *)
-production soas_exp_apply{'e} <--
-   soas_exp_simple{'e}
+production hoas_exp_apply{'e} <--
+   hoas_exp_simple{'e}
 
-production soas_exp_apply{Apply{'e1; 'e2}} <--
-   soas_exp_apply{'e1}; soas_exp_simple{'e2}
+production hoas_exp_apply{Apply{'e1; 'e2}} <--
+   hoas_exp_apply{'e1}; hoas_exp_simple{'e2}
 
 (* All expressions *)
-production soas_exp{'e} <--
-   soas_exp_apply{'e}
+production hoas_exp{'e} <--
+   hoas_exp_apply{'e}
 
-production soas_exp{Lambda{'ty; v. 'e}} <--
-   tok_fun; tok_id[v:s]; tok_colon; soas_type{'ty}; tok_arrow; soas_exp{'e}
+production hoas_exp{Lambda{'ty; v. 'e}} <--
+   tok_fun; tok_id[v:s]; tok_colon; hoas_type{'ty}; tok_arrow; hoas_exp{'e}
 
-production soas_exp{TyLambda{'ty; v. 'e}} <--
-   tok_Fun; tok_id[v:s]; tok_st; soas_type{'ty}; tok_arrow; soas_exp{'e}
+production hoas_exp{TyLambda{'ty; v. 'e}} <--
+   tok_Fun; tok_id[v:s]; tok_st; hoas_type{'ty}; tok_arrow; hoas_exp{'e}
 
-production soas_exp{TyApply{'e; 'ty}} <--
-   soas_exp{'e}; tok_left_curly; soas_type{'ty}; tok_right_curly
+production hoas_exp{TyApply{'e; 'ty}} <--
+   hoas_exp{'e}; tok_left_curly; hoas_type{'ty}; tok_right_curly
 
 (************************************************
  * Propositions.
@@ -260,10 +244,10 @@ production itt_term{"subtype"{'ty1; 'ty2}} <--
     itt_term{'ty1}; tok_st; itt_term{'ty2}
 
 production itt_term{'e} <--
-    tok_type; tok_left_curly; soas_type{'e}; tok_right_curly
+    tok_type; tok_left_curly; hoas_type{'e}; tok_right_curly
 
 production itt_term{'e} <--
-    tok_exp; tok_left_curly; soas_exp{'e}; tok_right_curly
+    tok_exp; tok_left_curly; hoas_exp{'e}; tok_right_curly
 
 (*!
  * @docoff

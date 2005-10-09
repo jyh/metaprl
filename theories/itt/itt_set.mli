@@ -30,12 +30,12 @@
  * jyh@cs.cornell.edu
  *
  *)
-
 extends Itt_equal
 extends Itt_squash
 extends Itt_subtype
 extends Itt_unit
 extends Itt_struct
+extends Itt_grammar
 
 open Lm_symbol
 
@@ -124,6 +124,12 @@ rule set_subtype :
 val is_set_term : term -> bool
 val dest_set : term -> var * term * term
 val mk_set_term : var -> term -> term -> term
+
+(************************************************************************
+ * Grammar.
+ *)
+production itt_term{{ x: 't1 | 't2}} <--
+   tok_left_curly; tok_id[x:s]; tok_colon; itt_term{'t1}; tok_pipe; itt_term{'t2}; tok_right_curly
 
 (*
  * -*-

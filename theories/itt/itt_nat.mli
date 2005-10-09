@@ -1,4 +1,31 @@
+(*
+ * Natural numbers.
+ *
+ * ----------------------------------------------------------------
+ *
+ * @begin[license]
+ * Copyright (C) 2005 Mojave Group, Caltech
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Alexei Kopylov
+ * @email{kopylov@cs.cornell.edu}
+ * @end[license]
+ *)
 extends Itt_int_ext
+extends Itt_grammar
 
 open Basic_tactics
 
@@ -31,3 +58,26 @@ topval natBackInductionT : term -> tactic
 
 topval positiveRule1T : tactic
 topval positiveRule2T : tactic
+
+(************************************************************************
+ * Grammar for integer ranges.
+ *)
+declare tok_dot_dot    : Terminal
+
+lex_token itt : "[.][.]"   --> tok_dot_dot
+
+production itt_term{{ i: int | 'j <= 'i & 'i <= 'k }} <--
+   tok_left_curly; itt_apply_term{'j}; tok_dot_dot; itt_apply_term{'k}; tok_right_curly
+
+production itt_term{{ i: int | 'j <= 'i & 'i < 'k }} <--
+   tok_left_curly; itt_apply_term{'j}; tok_dot_dot; itt_apply_term{'k}; tok_minus; tok_right_curly
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

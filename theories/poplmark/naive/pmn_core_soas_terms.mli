@@ -117,9 +117,8 @@ declare tok_soas_TyVar   : Terminal
 declare tok_soas_TyExp   : Terminal
 
 declare tok_tilde        : Terminal
+declare tok_dt           : Terminal
 declare tok_st           : Terminal
-declare tok_left_curly   : Terminal
-declare tok_right_curly  : Terminal
 
 lex_token itt : "itt"         --> tok_itt
 lex_token itt : "soas_type"   --> tok_soas_type
@@ -131,9 +130,10 @@ lex_token itt : "soas_TyVar"  --> tok_soas_TyVar
 lex_token itt : "soas_TyExp"  --> tok_soas_TyExp
 
 lex_token itt : "~"      --> tok_tilde
-lex_token itt : "[{]"    --> tok_left_curly
-lex_token itt : "[}]"    --> tok_right_curly
 lex_token itt : "<:"     --> tok_st
+lex_token itt : "::"     --> tok_dt
+
+lex_prec nonassoc [tok_st; tok_dt] = prec_in
 
 (************************************************
  * Parsing.

@@ -73,6 +73,7 @@ extends Itt_list
 extends Itt_list2
 extends Itt_esquash
 extends Itt_quotient
+extends Itt_nat
 
 doc <:doc<
    (* Theories we do not want to include in the documentation. *)

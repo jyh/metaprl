@@ -68,4 +68,5 @@ extends Itt_derive
 extends Itt_prop_decide
 extends Itt_fset
 extends Itt_int_arith
+extends Itt_nat
 extends Itt_match

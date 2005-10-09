@@ -1,0 +1,21 @@
+#
+# Naive POPLmark
+#
+OCAMLINCLUDES[] +=
+    $(SUPPORT_DIRS)
+    ../../../base
+    ../../../itt
+    ../../util
+
+FILES[] =
+    pmn_core_tast
+    pmn_core_model
+    pmn_core_final
+    pmn_core_type
+    pmn_core_subtype
+    pmn_core_transitive
+    pmn_core_type_model
+    pmn_core_sos
+    pmn_core_safety
+
+Theory($(FILES))

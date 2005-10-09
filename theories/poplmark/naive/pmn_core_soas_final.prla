@@ -7,12 +7,12 @@ NSummary!location	location	location Summary
 P	p	Number -1
 O	o1	location p p
 NSummary!id	id	id Summary
-P	p6	Number 583682032
-O	o8	id p6
-T	t208	o8
-B	b209	t208
-T	t209	o1 b209
-B	b211	t209
+P	p1	Number 871225948
+O	o2	id p1
+T	t	o2
+B	b	t
+T	t2	o1 b
+B	b2	t2
 P	p2	Number 997
 P	p216	Number 1024
 O	o216	location p2 p216
@@ -702,7 +702,8 @@ B	b373	t372
 T	t373	o368 b373
 B	b375	t373
 P	p375	Number 1216
-O	o375	location p375 p315
+P	p3	Number 1742
+O	o3	location p375 p3
 NSummary!rule	rule	rule Summary
 NSummary!meta_theorem	meta_theorem	meta_theorem Summary
 O	o266	meta_theorem
@@ -1321,10 +1322,10 @@ T	t594	o b593 b6
 B	b594	t594
 T	t595	o273 b275 b402 b588 b594
 B	b595	t595
-T	t596	o375 b595
-B	b596	t596
-P	p596	Number 2237
-O	o596	location p214 p596
+T	t3	o3 b595
+B	b3	t3
+P	p4	Number 1744
+O	o5	location p4 p75
 NPmn_core_soas_terms!Exp	Exp596	Exp Pmn_core_soas_terms
 O	o597	Exp596
 T	t598	o597
@@ -1818,35 +1819,35 @@ T	t1105	o20 b305 b944 b1105 b6
 B	b1106	t1105
 T	t1106	o303 b1106
 B	b1107	t1106
-P	p1107	Number 1688
-P	p1108	Number 1695
-O	o1108	resource_defs p1107 p1108 p44
-P	p1109	Number 1693
-O	o1109	uid p1109 p1108
-T	t1109	o1109 b414
-B	b1109	t1109
-T	t1110	o b1109 b6
-B	b1110	t1110
-T	t1111	o1108 b1110
-B	b1111	t1111
-T	t1112	o b1111 b6
-B	b1112	t1112
-T	t1113	o421 b275 b898 b1107 b1112
-B	b1113	t1113
-T	t1114	o596 b1113
-B	b1114	t1114
-T	t1115	o b1114 b6
-B	b1115	t1115
-T	t1116	o b596 b1115
-B	b1116	t1116
-T	t1117	o b375 b1116
-B	b1117	t1117
-T	t1118	o b366 b1117
-B	b1118	t1118
-T	t1119	o b363 b1118
-B	b1119	t1119
-T	t1120	o b362 b1119
-B	b1120	t1120
-T	t1121	o b356 b1120
-B	b1121	t1121
-T	t1122	o b211 b1121
+P	p5	Number 1768
+P	p20	Number 1775
+O	o21	resource_defs p5 p20 p44
+P	p22	Number 1773
+O	o23	uid p22 p20
+T	t45	o23 b414
+B	b45	t45
+T	t46	o b45 b6
+B	b46	t46
+T	t47	o21 b46
+B	b47	t47
+T	t50	o b47 b6
+B	b50	t50
+T	t51	o421 b275 b898 b1107 b50
+B	b51	t51
+T	t59	o5 b51
+B	b59	t59
+T	t64	o b59 b6
+B	b64	t64
+T	t65	o b3 b64
+B	b65	t65
+T	t67	o b375 b65
+B	b67	t67
+T	t75	o b366 b67
+B	b75	t75
+T	t77	o b363 b75
+B	b77	t77
+T	t78	o b362 b77
+B	b78	t78
+T	t84	o b356 b78
+B	b84	t84
+T	t86	o b2 b84

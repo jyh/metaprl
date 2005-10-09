@@ -84,6 +84,16 @@ declare TyLambda{'ty_bound : TyExp; x : TyVar. 'e['x] : Exp} : Exp
 declare TyApply{'e : Exp; 'ty_arg : TyExp} : Exp
 
 (************************************************************************
+ * Judgments.
+ *)
+
+(*
+ * Propositions (also called judgments).
+ *)
+declare "member"{'e : Exp; 'ty : TyExp} : Prop           (* 'e is an expression with type 'ty *)
+declare "subtype"{'tsub : TyExp; 'tsup : TyExp} : Prop   (* 'tsub is a subtype of 'tsup *)
+
+(************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing
  * types and expressions in Fsub.  This isn't really necessary, since
  * we can always use the native MetaPRL term syntax to construct
@@ -108,32 +118,34 @@ declare TyApply{'e : Exp; 'ty_arg : TyExp} : Exp
  * Lexing.
  *)
 declare tok_itt          : Terminal
-declare tok_soas_type    : Terminal
-declare tok_soas_exp     : Terminal
-declare tok_soas_top     : Terminal
-declare tok_soas_Var     : Terminal
-declare tok_soas_Exp     : Terminal
-declare tok_soas_TyVar   : Terminal
-declare tok_soas_TyExp   : Terminal
+declare tok_top          : Terminal
+declare tok_exp          : Terminal
+declare tok_Var          : Terminal
+declare tok_Exp          : Terminal
+declare tok_TyVar        : Terminal
+declare tok_TyExp        : Terminal
 
 declare tok_tilde        : Terminal
+declare tok_dt           : Terminal
 declare tok_st           : Terminal
 declare tok_left_curly   : Terminal
 declare tok_right_curly  : Terminal
 
-lex_token itt : "itt"         --> tok_itt
-lex_token itt : "soas_type"   --> tok_soas_type
-lex_token itt : "soas_exp"    --> tok_soas_exp
-lex_token itt : "soas_top"    --> tok_soas_top
-lex_token itt : "soas_Var"    --> tok_soas_Var
-lex_token itt : "soas_Exp"    --> tok_soas_Exp
-lex_token itt : "soas_TyVar"  --> tok_soas_TyVar
-lex_token itt : "soas_TyExp"  --> tok_soas_TyExp
+lex_token itt : "itt"    --> tok_itt
+lex_token itt : "top"    --> tok_top
+lex_token itt : "exp"    --> tok_exp
+lex_token itt : "Var"    --> tok_Var
+lex_token itt : "Exp"    --> tok_Exp
+lex_token itt : "TyVar"  --> tok_TyVar
+lex_token itt : "TyExp"  --> tok_TyExp
 
 lex_token itt : "~"      --> tok_tilde
+lex_token itt : "::"     --> tok_dt
+lex_token itt : "<:"     --> tok_st
 lex_token itt : "[{]"    --> tok_left_curly
 lex_token itt : "[}]"    --> tok_right_curly
-lex_token itt : "<:"     --> tok_st
+
+lex_prec nonassoc [tok_st; tok_dt] = prec_in
 
 (************************************************
  * Parsing.
@@ -166,7 +178,7 @@ production soas_proper_type{'e} <--
    tok_left_paren; soas_proper_type{'e}; tok_right_paren
 
 production soas_proper_type{TyTop} <--
-   tok_soas_top
+   tok_top
 
 production soas_proper_type{TyFun{'ty1; 'ty2}} <--
    soas_type{'ty1}; tok_arrow; soas_type{'ty2}
@@ -227,25 +239,31 @@ production soas_exp{TyApply{'e; 'ty}} <--
  * Propositions.
  *)
 production itt_term{Var} <--
-    tok_soas_Var
+    tok_Var
 
 production itt_term{Exp} <--
-    tok_soas_Exp
+    tok_Exp
 
 production itt_term{TyVar} <--
-    tok_soas_TyVar
+    tok_TyVar
 
 production itt_term{TyExp} <--
-    tok_soas_TyExp
+    tok_TyExp
 
 production itt_term{TyTop} <--
-    tok_soas_top
+    tok_top
+
+production itt_term{"member"{'ty1; 'ty2}} <--
+    itt_term{'ty1}; tok_dt; itt_term{'ty2}
+
+production itt_term{"subtype"{'ty1; 'ty2}} <--
+    itt_term{'ty1}; tok_st; itt_term{'ty2}
 
 production itt_term{'e} <--
-    tok_soas_type; tok_left_curly; soas_type{'e}; tok_right_curly
+    tok_type; tok_left_curly; soas_type{'e}; tok_right_curly
 
 production itt_term{'e} <--
-    tok_soas_exp; tok_left_curly; soas_exp{'e}; tok_right_curly
+    tok_exp; tok_left_curly; soas_exp{'e}; tok_right_curly
 
 (*!
  * @docoff

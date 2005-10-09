@@ -36,28 +36,28 @@ open Basic_tactics
  * Define a model in ITT.
  *)
 interactive ty_elim {| elim [] |} 'H : <:itt_rule<
-    <H>; x: TyExp; <J[x]> >- C[top] -->
-    <H>; x: TyExp; <J[x]>; v: TyVar >- C[type { ~v }] -->
-    <H>; x: TyExp; <J[x]>; ty1: TyExp; ty2: TyExp; u: C[ty1]; v: C[ty2] >- C[type { ty1 -> ty2 }] -->
-    <H>; x: TyExp; <J[x]>;
-        ty1: TyExp; v: C[ty1];
-        f: TyVar -> TyExp; all x: TyVar. C[f x]
-        >- C[type { all x <: ty1. itt { f x } }] -->
-    <H>; x: TyExp; <J[x]> >- C[x]
+    <H>; x: soas_TyExp; <J[x]> >- C[soas_top] -->
+    <H>; x: soas_TyExp; <J[x]>; v: soas_TyVar >- C[soas_type { ~v }] -->
+    <H>; x: soas_TyExp; <J[x]>; ty1: soas_TyExp; ty2: soas_TyExp; u: C[ty1]; v: C[ty2] >- C[soas_type { ty1 -> ty2 }] -->
+    <H>; x: soas_TyExp; <J[x]>;
+        ty1: soas_TyExp; v: C[ty1];
+        f: soas_TyVar -> soas_TyExp; all x: soas_TyVar. C[f x]
+        >- C[soas_type { all x <: ty1. itt { f x } }] -->
+    <H>; x: soas_TyExp; <J[x]> >- C[x]
 >>
 
 interactive exp_elim {| elim [] |} 'H : <:itt_rule<
-    <H>; x: Exp; <J[x]>; v: Var >- C[exp { ~v }] -->
-    <H>; x: Exp; <J[x]>;
-        e1: Exp; e2: Exp; u: C[e1]; v: C[e2] >- C[exp { e1 e2 }] -->
-    <H>; x: Exp; <J[x]>;
-        ty: TyExp;
-        f: Var -> Exp; all x: Var. C[f x] >- C[exp { fun x: ty -> itt { f x } }] -->
-    <H>; x: Exp; <J[x]>; e: Exp; u: C[e]; ty: TyExp >- C[exp { e{ty} }] -->
-    <H>; x: Exp; <J[x]>;
-        ty: TyExp;
-        f: TyVar -> Exp; all x: TyVar. C[f x] >- C[exp { Fun x <: ty -> itt { f x } }] -->
-    <H>; x: Exp; <J[x]> >- C[x]
+    <H>; x: soas_Exp; <J[x]>; v: soas_Var >- C[soas_exp { ~v }] -->
+    <H>; x: soas_Exp; <J[x]>;
+        e1: soas_Exp; e2: soas_Exp; u: C[e1]; v: C[e2] >- C[soas_exp { e1 e2 }] -->
+    <H>; x: soas_Exp; <J[x]>;
+        ty: soas_TyExp;
+        f: soas_Var -> soas_Exp; all x: soas_Var. C[f x] >- C[soas_exp { fun x: ty -> itt { f x } }] -->
+    <H>; x: soas_Exp; <J[x]>; e: soas_Exp; u: C[e]; ty: soas_TyExp >- C[soas_exp { e{ty} }] -->
+    <H>; x: soas_Exp; <J[x]>;
+        ty: soas_TyExp;
+        f: soas_TyVar -> soas_Exp; all x: soas_TyVar. C[f x] >- C[soas_exp { Fun x <: ty -> itt { f x } }] -->
+    <H>; x: soas_Exp; <J[x]> >- C[x]
 >>
 
 (*!

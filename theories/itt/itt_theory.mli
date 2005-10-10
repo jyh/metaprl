@@ -71,3 +71,4 @@ extends Itt_int_arith
 extends Itt_nat
 extends Itt_match
 extends Itt_finite_fun1
+extends Itt_finite_fun_weak1

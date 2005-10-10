@@ -75,6 +75,7 @@ extends Itt_esquash
 extends Itt_quotient
 extends Itt_nat
 extends Itt_finite_fun1
+extends Itt_finite_fun_weak1
 
 doc <:doc<
    (* Theories we do not want to include in the documentation. *)

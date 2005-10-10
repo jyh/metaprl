@@ -70,3 +70,4 @@ extends Itt_fset
 extends Itt_int_arith
 extends Itt_nat
 extends Itt_match
+extends Itt_finite_fun1

@@ -70,6 +70,7 @@ MPFILES[] =
    itt_singleton
    itt_subset
    itt_subset2
+   itt_finite_fun1
    itt_theory
    itt_pointwise2
    itt_collection

@@ -403,3 +403,100 @@ rule div_Assoc :
 topval div_AssocC : conv
 
 topval fold_int_seg : conv
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_le      : Terminal
+declare tok_ge      : Terminal
+declare tok_eqeq    : Terminal
+
+declare tok_lt_bool : Terminal
+declare tok_gt_bool : Terminal
+declare tok_le_bool : Terminal
+declare tok_ge_bool : Terminal
+declare tok_eq_bool : Terminal
+
+declare tok_add     : Terminal
+declare tok_sub     : Terminal
+declare tok_mul     : Terminal
+declare tok_div     : Terminal
+
+lex_token itt : "<="    --> tok_le
+lex_token itt : ">="    --> tok_ge
+lex_token itt : "=="    --> tok_eqeq
+
+lex_token itt : "<b"    --> tok_lt_bool
+lex_token itt : ">b"    --> tok_gt_bool
+lex_token itt : "<=b"   --> tok_le_bool
+lex_token itt : ">=b"   --> tok_ge_bool
+lex_token itt : "==b"   --> tok_eq_bool
+
+lex_token itt : "+@"    --> tok_add
+lex_token itt : "-@"    --> tok_sub
+lex_token itt : "*@"    --> tok_mul
+lex_token itt : "/@"    --> tok_div
+
+lex_prec nonassoc [tok_lt; tok_le; tok_gt; tok_ge; tok_eqeq] = prec_rel
+lex_prec nonassoc [tok_lt_bool; tok_gt_bool; tok_le_bool; tok_ge_bool; tok_eq_bool] = prec_rel
+lex_prec left [tok_add; tok_sub] = prec_add
+lex_prec left [tok_mul; tok_div] = prec_mul
+
+(*
+ * Propositions.
+ *)
+production itt_term{'i < 'j} <--
+   itt_term{'i}; tok_lt; itt_term{'j}
+
+production itt_term{'i > 'j} <--
+   itt_term{'i}; tok_gt; itt_term{'j}
+
+production itt_term{'i <= 'j} <--
+   itt_term{'i}; tok_le; itt_term{'j}
+
+production itt_term{'i >= 'j} <--
+   itt_term{'i}; tok_ge; itt_term{'j}
+
+production itt_term{'i = 'j in int} <--
+   itt_term{'i}; tok_eqeq; itt_term{'j}
+
+(*
+ * Boolean expressions.
+ *)
+production itt_term{lt_bool{'i; 'j}} <--
+   itt_term{'i}; tok_lt_bool; itt_term{'j}
+
+production itt_term{gt_bool{'i; 'j}} <--
+   itt_term{'i}; tok_gt_bool; itt_term{'j}
+
+production itt_term{le_bool{'i; 'j}} <--
+   itt_term{'i}; tok_le_bool; itt_term{'j}
+
+production itt_term{ge_bool{'i; 'j}} <--
+   itt_term{'i}; tok_ge_bool; itt_term{'j}
+
+production itt_term{beq_int{'i; 'j}} <--
+   itt_term{'i}; tok_eq_bool; itt_term{'j}
+
+(*
+ * Arithmetic.
+ *)
+production itt_term{'i +@ 'j} <--
+   itt_term{'i}; tok_add; itt_term{'j}
+
+production itt_term{'i -@ 'j} <--
+   itt_term{'i}; tok_sub; itt_term{'j}
+
+production itt_term{'i *@ 'j} <--
+   itt_term{'i}; tok_mul; itt_term{'j}
+
+production itt_term{'i /@ 'j} <--
+   itt_term{'i}; tok_div; itt_term{'j}
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

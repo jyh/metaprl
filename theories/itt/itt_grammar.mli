@@ -89,6 +89,7 @@ declare tok_semi               : Terminal
 declare tok_colon              : Terminal
 declare tok_bang               : Terminal
 declare tok_hash               : Terminal
+declare tok_at                 : Terminal
 declare tok_plus               : Terminal
 declare tok_minus              : Terminal
 declare tok_star               : Terminal
@@ -130,6 +131,7 @@ lex_token itt : ";"          --> tok_semi
 lex_token itt : ":"          --> tok_colon
 lex_token itt : "!"          --> tok_bang
 lex_token itt : "#"          --> tok_hash
+lex_token itt : "@"          --> tok_at
 lex_token itt : "[+]"        --> tok_plus
 lex_token itt : "-"          --> tok_minus
 lex_token itt : "[*]"        --> tok_star
@@ -177,6 +179,7 @@ declare prec_prod      : Precedence
 declare prec_iff       : Precedence
 declare prec_apply     : Precedence
 declare prec_not       : Precedence
+declare prec_rel       : Precedence
 
 lex_prec right    [prec_mimplies] > prec_min
 lex_prec nonassoc [prec_turnstile] > prec_mimplies
@@ -191,7 +194,8 @@ lex_prec nonassoc [prec_in; prec_equal] > prec_and
 lex_prec left     [prec_union] > prec_equal
 lex_prec right    [prec_arrow] > prec_union
 lex_prec right    [prec_prod] > prec_arrow
-lex_prec left     [prec_add] > prec_prod
+lex_prec nonassoc [prec_rel] > prec_prod
+lex_prec left     [prec_add] > prec_rel
 lex_prec left     [prec_mul] > prec_add
 lex_prec left     [prec_band] > prec_mul
 lex_prec left     [prec_apply] > prec_band
@@ -205,6 +209,7 @@ lex_prec right    [tok_arrow] = prec_arrow
 lex_prec nonassoc [tok_colon] = prec_colon
 lex_prec right    [tok_comma] = prec_comma
 lex_prec nonassoc [tok_let; tok_in; tok_decide; tok_match; tok_with] = prec_let
+lex_prec left     [tok_at] = prec_apply
 
 (************************************************
  * Second-order variables and contexts.

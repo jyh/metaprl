@@ -29,7 +29,6 @@
  * Author: Jason Hickey <jyh@cs.cornell.edu>
  * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
-
 extends Itt_equal
 extends Itt_struct
 extends Itt_union
@@ -156,6 +155,58 @@ topval reduce_bnot_bnotC : conv
 topval eq_bfalse2assertT : tactic
 topval assert2eq_bfalseT : tactic
 topval xor_propertyC : term -> conv
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_if         : Terminal
+declare tok_then       : Terminal
+declare tok_else       : Terminal
+declare tok_btrue      : Terminal
+declare tok_bfalse     : Terminal
+
+declare tok_bnot       : Terminal
+declare tok_bor        : Terminal
+declare tok_band       : Terminal
+declare tok_bimplies   : Terminal
+
+lex_token itt : "if"     --> tok_if
+lex_token itt : "then"   --> tok_then
+lex_token itt : "else"   --> tok_else
+lex_token itt : "btrue"  --> tok_btrue
+lex_token itt : "bfalse" --> tok_bfalse
+
+lex_token itt : "/b"         --> tok_bnot
+lex_token itt : "[|][|]b"    --> tok_bor
+lex_token itt : "&&b"        --> tok_band
+lex_token itt : "=>b"        --> tok_bimplies
+
+lex_prec nonassoc [tok_if; tok_then; tok_else] = prec_let
+lex_prec right [tok_bnot] = prec_not
+lex_prec right [tok_bor] = prec_or
+lex_prec right [tok_band] = prec_and
+lex_prec right [tok_bimplies] = prec_implies
+
+production itt_term{ifthenelse{'e1; 'e2; 'e3}} <--
+   tok_if; itt_term{'e1}; tok_then; itt_term{'e2}; tok_else; itt_term{'e3}
+
+production itt_term{btrue} <--
+   tok_btrue
+
+production itt_term{bfalse} <--
+   tok_bfalse
+
+production itt_term{bnot{'e}} <--
+   tok_bnot; itt_term{'e}
+
+production itt_term{bor{'e1; 'e2}} <--
+   itt_term{'e1}; tok_bor; itt_term{'e2}
+
+production itt_term{band{'e1; 'e2}} <--
+   itt_term{'e1}; tok_band; itt_term{'e2}
+
+production itt_term{bimplies{'e1; 'e2}} <--
+   itt_term{'e1}; tok_bimplies; itt_term{'e2}
 
 (*
  * -*-

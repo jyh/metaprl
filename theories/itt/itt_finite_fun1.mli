@@ -1,5 +1,5 @@
 (*
- * ITT model for the HOAS.
+ * Finite functions.
  *
  * ----------------------------------------------------------------
  *
@@ -24,64 +24,50 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Pmn_core_hoas_terms
+extends Itt_nat
+
+(*
+ * Type of simple finite functions.
+ *)
+declare simple_ffun{'T}
+
+(*
+ * Total number of alements.
+ *)
+declare length_ffun{'f}
+
+(*
+ * Add an element.
+ *)
+declare add_ffun{'f; 'x}
+
+(*
+ * Get an element.
+ *)
+declare apply_ffun{'f; 'i}
 
 (************************************************************************
- * Type classes.
+ * Grammar.
  *)
-define unfold_tenv : TEnv <--> <:itt< sff soas_TyExp >>
-define unfold_venv : VEnv <--> <:itt< sff soas_Exp >>
+declare tok_sff      : Terminal
+declare tok_plus_eq  : Terminal
 
-prim_rw unfold_ty_var_type : <:itt_rw<
-    TyVar
-    <-->
-    int
->>
+lex_token itt : "sff"  --> tok_sff
+lex_token itt : "+="   --> tok_plus_eq
 
-prim_rw unfold_ty_exp : <:itt_rw<
-    TyExp
-    <-->
-    << TEnv >> -> soas_TyExp
->>
+lex_prec right [tok_sff] = prec_not
 
-prim_rw unfold_var_type : <:itt_rw<
-    Var
-    <-->
-    int
->>
+production itt_term{simple_ffun{'t}} <--
+   tok_sff; itt_term{'t}
 
-prim_rw unfold_exp : <:itt_rw<
-    Exp
-    <-->
-    << VEnv >> -> soas_Exp
->>
+production itt_term{length_ffun{'f}} <--
+   tok_sff; tok_pipe; itt_term{'f}; tok_pipe
 
-(************************************************************************
- * Type expressions.
- *)
-prim_rw unfold_ty_top : <:itt_rw<
-    top
-    <-->
-    fun tenv -> soas_top
->>
+production itt_term{add_ffun{'f; 'x}} <--
+   tok_sff; tok_left_curly; itt_term{'f}; tok_plus_eq; itt_term{'x}; tok_right_curly
 
-prim_rw unfold_ty_var : <:itt_rw<
-    type { ~v }
-    <-->
-    fun tenv -> tenv v
->>
-
-prim_rw unfold_ty_fun : <:itt_rw<
-   type { t1 -> t2 }
-   <-->
-   fun tenv -> soas_type { itt { t1 tenv } -> itt { t2 tenv } }
->>
-
-prim_rw unfold_ty_all : <:itt_rw<
-   type { all X <: t1. t2[X] }
-   <-->
-   fun tenv -> soas_type { all X <: itt { t1 tenv }. itt { t2[sff |tenv| ] (sff { tenv += X }) } }
->>
+production itt_term{apply_ffun{'f; 'x}} <--
+   tok_sff; tok_left_curly; itt_term{'f}; tok_at; itt_term{'x}; tok_right_curly
 
 (*!
  * @docoff

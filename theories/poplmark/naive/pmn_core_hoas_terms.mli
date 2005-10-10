@@ -141,33 +141,33 @@ lex_token itt : "TyExp"  --> tok_TyExp
 declare typeclass parsed_type_exp -> TyExp
 
 declare hoas_type{'ty : TyExp} : Nonterminal
-declare hoas_proper_type{'ty : TyExp} : Nonterminal
+declare hoas_simple_type{'ty : TyExp} : Nonterminal
 
-production hoas_type{'e} <--
+production hoas_simple_type{'e} <--
    itt_sovar{'e}
 
-production hoas_type{'e} <--
+production hoas_simple_type{'e} <--
    tok_quotation{'e}
 
-production hoas_type{'e} <--
+production hoas_simple_type{'e} <--
    tok_itt; tok_left_curly; itt_term{'e}; tok_right_curly
 
-production hoas_type{TyVar{'v}} <--
+production hoas_simple_type{'e} <--
+   tok_left_paren; hoas_type{'e}; tok_right_paren
+
+production hoas_simple_type{TyVar{'v}} <--
    tok_tilde; tok_id[v:s]
 
-production hoas_type{'e} <--
-   hoas_proper_type{'e}
-
-production hoas_proper_type{'e} <--
-   tok_left_paren; hoas_proper_type{'e}; tok_right_paren
-
-production hoas_proper_type{TyTop} <--
+production hoas_simple_type{TyTop} <--
    tok_top
 
-production hoas_proper_type{TyFun{'ty1; 'ty2}} <--
+production hoas_type{'ty} <--
+   hoas_simple_type{'ty}
+
+production hoas_type{TyFun{'ty1; 'ty2}} <--
    hoas_type{'ty1}; tok_arrow; hoas_type{'ty2}
 
-production hoas_proper_type{TyAll{'ty1; v. 'ty2}} <--
+production hoas_type{TyAll{'ty1; v. 'ty2}} <--
    tok_all; tok_id[v:s]; tok_st; hoas_type{'ty1}; tok_dot; hoas_type{'ty2}
 
 (************************************************
@@ -211,10 +211,10 @@ production hoas_exp{'e} <--
    hoas_exp_apply{'e}
 
 production hoas_exp{Lambda{'ty; v. 'e}} <--
-   tok_fun; tok_id[v:s]; tok_colon; hoas_type{'ty}; tok_arrow; hoas_exp{'e}
+   tok_fun; tok_id[v:s]; tok_colon; hoas_simple_type{'ty}; tok_arrow; hoas_exp{'e}
 
 production hoas_exp{TyLambda{'ty; v. 'e}} <--
-   tok_Fun; tok_id[v:s]; tok_st; hoas_type{'ty}; tok_arrow; hoas_exp{'e}
+   tok_Fun; tok_id[v:s]; tok_st; hoas_simple_type{'ty}; tok_arrow; hoas_exp{'e}
 
 production hoas_exp{TyApply{'e; 'ty}} <--
    hoas_exp{'e}; tok_left_curly; hoas_type{'ty}; tok_right_curly

@@ -145,33 +145,33 @@ lex_prec nonassoc [tok_st; tok_dt] = prec_in
 declare typeclass parsed_type_exp -> TyExp
 
 declare soas_type{'ty : TyExp} : Nonterminal
-declare soas_proper_type{'ty : TyExp} : Nonterminal
+declare soas_simple_type{'ty : TyExp} : Nonterminal
 
-production soas_type{'e} <--
+production soas_simple_type{'e} <--
    itt_sovar{'e}
 
-production soas_type{'e} <--
+production soas_simple_type{'e} <--
    tok_quotation{'e}
 
-production soas_type{'e} <--
+production soas_simple_type{'e} <--
    tok_itt; tok_left_curly; itt_term{'e}; tok_right_curly
 
-production soas_type{TyVar{'v}} <--
+production soas_simple_type{TyVar{'v}} <--
    tok_tilde; tok_id[v:s]
 
-production soas_type{'e} <--
-   soas_proper_type{'e}
+production soas_simple_type{'e} <--
+   tok_left_paren; soas_type{'e}; tok_right_paren
 
-production soas_proper_type{'e} <--
-   tok_left_paren; soas_proper_type{'e}; tok_right_paren
-
-production soas_proper_type{TyTop} <--
+production soas_simple_type{TyTop} <--
    tok_soas_top
 
-production soas_proper_type{TyFun{'ty1; 'ty2}} <--
+production soas_type{'e} <--
+   soas_simple_type{'e}
+
+production soas_type{TyFun{'ty1; 'ty2}} <--
    soas_type{'ty1}; tok_arrow; soas_type{'ty2}
 
-production soas_proper_type{TyAll{'ty1; v. 'ty2}} <--
+production soas_type{TyAll{'ty1; v. 'ty2}} <--
    tok_all; tok_id[v:s]; tok_st; soas_type{'ty1}; tok_dot; soas_type{'ty2}
 
 (************************************************
@@ -215,10 +215,10 @@ production soas_exp{'e} <--
    soas_exp_apply{'e}
 
 production soas_exp{Lambda{'ty; v. 'e}} <--
-   tok_fun; tok_id[v:s]; tok_colon; soas_type{'ty}; tok_arrow; soas_exp{'e}
+   tok_fun; tok_id[v:s]; tok_colon; soas_simple_type{'ty}; tok_arrow; soas_exp{'e}
 
 production soas_exp{TyLambda{'ty; v. 'e}} <--
-   tok_Fun; tok_id[v:s]; tok_st; soas_type{'ty}; tok_arrow; soas_exp{'e}
+   tok_Fun; tok_id[v:s]; tok_st; soas_simple_type{'ty}; tok_arrow; soas_exp{'e}
 
 production soas_exp{TyApply{'e; 'ty}} <--
    soas_exp{'e}; tok_left_curly; soas_type{'ty}; tok_right_curly

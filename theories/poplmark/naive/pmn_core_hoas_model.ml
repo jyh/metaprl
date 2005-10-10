@@ -25,6 +25,9 @@
  * @end[license]
  *)
 extends Pmn_core_hoas_terms
+extends Pmn_core_soas_model
+
+open Basic_tactics
 
 (************************************************************************
  * Type classes.
@@ -53,7 +56,7 @@ prim_rw unfold_var_type : <:itt_rw<
 prim_rw unfold_exp : <:itt_rw<
     Exp
     <-->
-    << VEnv >> -> soas_Exp
+    << TEnv * VEnv >> -> soas_Exp
 >>
 
 (************************************************************************
@@ -68,7 +71,7 @@ prim_rw unfold_ty_top : <:itt_rw<
 prim_rw unfold_ty_var : <:itt_rw<
     type { ~v }
     <-->
-    fun tenv -> tenv v
+    fun tenv -> sff { tenv @ v }
 >>
 
 prim_rw unfold_ty_fun : <:itt_rw<
@@ -81,6 +84,75 @@ prim_rw unfold_ty_all : <:itt_rw<
    type { all X <: t1. t2[X] }
    <-->
    fun tenv -> soas_type { all X <: itt { t1 tenv }. itt { t2[sff |tenv| ] (sff { tenv += X }) } }
+>>
+
+(************************************************************************
+ * Expressions.
+ *)
+prim_rw unfold_var : <:itt_rw<
+   exp { ~v }
+   <-->
+   fun env ->
+      let tenv, venv = env in
+         sff { venv @ v }
+>>
+
+prim_rw unfold_apply : <:itt_rw<
+   exp { e1 e2 }
+   <-->
+   fun env -> soas_exp { (itt { e1 env }) (itt { e2 env }) }
+>>
+
+prim_rw unfold_lambda : <:itt_rw<
+   exp { fun x : ty -> e[x] }
+   <-->
+   fun env ->
+      let tenv, venv = env in
+          soas_exp {
+             fun x : itt { ty tenv } ->
+                itt { e[sff |venv| ] (tenv, sff { venv += x }) }
+          }
+>>
+
+prim_rw unfold_ty_apply : <:itt_rw<
+   exp { e{ty} }
+   <-->
+   fun env ->
+      let tenv, venv = env in
+         soas_exp {
+            (itt { e env }){ itt { ty tenv } }
+         }
+>>
+
+prim_rw unfold_ty_lambda : <:itt_rw<
+   exp { Fun X <: ty -> e[X] }
+   <-->
+   fun env ->
+      let tenv, venv = env in
+         soas_exp {
+            Fun X <: (itt { ty tenv }) ->
+               itt { e[sff |tenv| ] (sff { tenv += X }, venv) }
+         }
+>>
+
+(************************************************************************
+ * Well-formedness.
+ *)
+interactive tenv_wf {| intro [] |} : <:itt_rule<
+   <H> >- << "type"{TEnv} >>
+>>
+
+interactive venv_wf {| intro [] |} : <:itt_rule<
+   <H> >- << "type"{VEnv} >>
+>>
+
+interactive ty_top_wf {| intro [] |} : <:itt_rule<
+    <H> >- top IN TyExp
+>>
+
+interactive ty_var_wf {| intro [] |} : <:itt_rule<
+    <H> >- v IN TyVar -->
+    <H> >- type { ~v } IN TyExp
 >>
 
 (*!

@@ -644,6 +644,10 @@ interactive eq_bfalse2assert {| intro [] |} :
 
 let eq_bfalse2assertT = eq_bfalse2assert
 
+interactive eq_bfalse2assert_elim {| elim [ThinOption thinT] |} 'H :
+   [main] sequent { <H>; x: 'e1 = bfalse in bool; <J['x]>; "assert"{bnot{'e1}} >- 'C['x] } -->
+   sequent { <H>; x: 'e1 = bfalse in bool; <J['x]> >- 'C['x] }
+
 interactive assert2eq_bfalse :
    [main] sequent { <H> >- 'e1 = bfalse in bool } -->
    sequent { <H> >- "assert"{bnot{'e1}} }

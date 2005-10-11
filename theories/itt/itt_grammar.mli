@@ -110,6 +110,7 @@ declare tok_right_paren        : Terminal
 declare tok_left_curly         : Terminal
 declare tok_right_curly        : Terminal
 declare tok_colon_colon        : Terminal
+declare tok_tilde              : Terminal
 
 (* Identifiers *)
 lex_token itt : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
@@ -133,6 +134,7 @@ lex_token itt : ":"          --> tok_colon
 lex_token itt : "!"          --> tok_bang
 lex_token itt : "#"          --> tok_hash
 lex_token itt : "@"          --> tok_at
+lex_token itt : "~"          --> tok_tilde
 lex_token itt : "[+]"        --> tok_plus
 lex_token itt : "-"          --> tok_minus
 lex_token itt : "[*]"        --> tok_star
@@ -215,6 +217,7 @@ lex_prec right    [tok_comma] = prec_comma
 lex_prec nonassoc [tok_let; tok_in; tok_decide; tok_match; tok_with] = prec_let
 lex_prec left     [tok_at] = prec_apply
 lex_prec right    [tok_colon_colon] = prec_cons
+lex_prec nonassoc [tok_tilde; tok_dot] = prec_not
 
 (************************************************
  * Utilities.
@@ -461,6 +464,14 @@ iform var_id :
    parsed_sovar[x:s]{'contexts; 'args}
    <-->
    xsovar[x:v]{'contexts; 'args}
+
+(************************************************************************
+ * Common utilities.
+ *)
+declare iform parsed_proj[name:s]{'t}
+
+production itt_term{parsed_proj[field:s]{'t}} %prec prec_not <--
+   itt_simple_term{'t}; tok_dot; tok_id[field:s]
 
 (*!
  * @docoff

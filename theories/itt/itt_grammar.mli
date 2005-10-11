@@ -212,6 +212,16 @@ lex_prec nonassoc [tok_let; tok_in; tok_decide; tok_match; tok_with] = prec_let
 lex_prec left     [tok_at] = prec_apply
 
 (************************************************
+ * Utilities.
+ *)
+declare opt_pipe : Nonterminal
+
+production opt_pipe <-- (* empty *)
+
+production opt_pipe <--
+   tok_pipe
+
+(************************************************
  * Second-order variables and contexts.
  *
  *     v                   : a simple variable

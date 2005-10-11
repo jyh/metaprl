@@ -26,6 +26,11 @@
  *)
 extends Pmn_core_hoas_terms
 
+open Basic_tactics
+
+topval fold_tenv : conv
+topval fold_venv : conv
+
 (*!
  * @docoff
  *

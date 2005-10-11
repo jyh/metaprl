@@ -41,7 +41,6 @@ declare iform parsed_match{'e : Term; 'cases : Cases} : Term
 
 declare itt_match_case{'p : TuplePatt; 'e : Term} : Nonterminal
 declare itt_match_cases{'cases : Cases} : Nonterminal
-declare opt_pipe : Nonterminal
 
 production itt_term{parsed_match{'e; 'cases}} <--
    tok_match; itt_term{'e}; tok_with; itt_match_cases{'cases}; tok_end
@@ -54,11 +53,6 @@ production itt_match_cases{parsed_cases{| parsed_case{'p; 'e} |}} <--
 
 production itt_match_cases{parsed_cases{| <H>; parsed_case{'p; 'e} |}} <--
    itt_match_cases{parsed_cases{| <H> |}}; tok_pipe; itt_match_case{'p; 'e}
-
-production opt_pipe <-- (* empty *)
-
-production opt_pipe <--
-   tok_pipe
 
 (*
  * Reformat as a decide+spread.

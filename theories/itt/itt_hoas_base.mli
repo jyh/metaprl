@@ -33,11 +33,52 @@ doc <:doc<
 
    @end[license]
 >>
-
 extends Base_theory
+extends Itt_grammar
 
-declare bind{x.'t['x]}
+declare bind{x. 't['x]}
 declare mk_term{'op; 'subterms}
 declare subst{'bt; 't}
 
 declare weak_dest_bterm{'bt; 'bind_case; op, sbt. 'subterms_case['op; 'sbt]}
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_bind       : Terminal
+declare tok_quote      : Terminal
+declare tok_match_term : Terminal
+
+lex_token itt : "bind"   --> tok_bind
+lex_token itt : "quote"  --> tok_quote
+lex_token itt : "match_term" --> tok_match_term
+
+(*
+ * JYH: I'm not sure exactly what is an operator or subterm.
+ *)
+declare itt_operator{'op} : Nonterminal
+declare itt_subterms{'t}  : Nonterminal
+
+production itt_term{bind{x. 't}} <--
+   tok_bind; tok_id[x:s]; tok_arrow; itt_term{'t}
+
+production itt_term{mk_term{'op; 'subterms}} <--
+   tok_quote; itt_operator{'op}; tok_left_curly; itt_subterms{'subterms}; tok_right_curly
+
+production itt_term{subst{'bt; 't}} <--
+   itt_term{'bt}; tok_at; tok_left_brack; itt_term{'t}; tok_right_brack
+
+production itt_term{weak_dest_bterm{'bt; 'base; op, subterms. 'step}} %prec prec_let <--
+   tok_match_term; itt_term{'bt}; tok_with;
+   opt_pipe; tok_arrow; itt_term{'base};
+   tok_pipe; tok_id[op:s]; tok_comma; tok_id[subterms:s]; tok_arrow; itt_term{'step}
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

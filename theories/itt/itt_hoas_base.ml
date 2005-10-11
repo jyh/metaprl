@@ -43,6 +43,8 @@ extends Itt_union
 extends Itt_prod
 doc docoff
 
+extends Itt_grammar
+
 open Basic_tactics
 open Itt_rfun
 

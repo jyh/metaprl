@@ -32,8 +32,8 @@ open Basic_tactics
 (************************************************************************
  * Type classes.
  *)
-define unfold_tenv : TEnv <--> <:itt< sff soas_TyExp >>
-define unfold_venv : VEnv <--> <:itt< sff soas_Exp >>
+define unfold_tenv : TEnv <--> <:itt< sif soas_TyExp >>
+define unfold_venv : VEnv <--> <:itt< sif soas_Exp >>
 
 prim_rw unfold_ty_var_type : <:itt_rw<
     TyVar
@@ -59,6 +59,9 @@ prim_rw unfold_exp : <:itt_rw<
     << TEnv * VEnv >> -> soas_Exp
 >>
 
+let fold_tenv = makeFoldC << TEnv >> unfold_tenv
+let fold_venv = makeFoldC << VEnv >> unfold_venv
+
 (************************************************************************
  * Type expressions.
  *)
@@ -71,7 +74,7 @@ prim_rw unfold_ty_top : <:itt_rw<
 prim_rw unfold_ty_var : <:itt_rw<
     type { ~v }
     <-->
-    fun tenv -> sff { tenv @ v }
+    fun tenv -> sif { tenv @ v }
 >>
 
 prim_rw unfold_ty_fun : <:itt_rw<
@@ -83,7 +86,7 @@ prim_rw unfold_ty_fun : <:itt_rw<
 prim_rw unfold_ty_all : <:itt_rw<
    type { all X <: t1. t2[X] }
    <-->
-   fun tenv -> soas_type { all X <: itt { t1 tenv }. itt { t2[sff |tenv| ] (sff { tenv += X }) } }
+   fun tenv -> soas_type { all X <: itt { t1 tenv }. itt { t2[<< Var{length_ifun{'tenv}} >>] (sif { tenv += X }) } }
 >>
 
 (************************************************************************
@@ -94,7 +97,7 @@ prim_rw unfold_var : <:itt_rw<
    <-->
    fun env ->
       let tenv, venv = env in
-         sff { venv @ v }
+         sif { venv @ v }
 >>
 
 prim_rw unfold_apply : <:itt_rw<
@@ -110,7 +113,7 @@ prim_rw unfold_lambda : <:itt_rw<
       let tenv, venv = env in
           soas_exp {
              fun x : itt { ty tenv } ->
-                itt { e[sff |venv| ] (tenv, sff { venv += x }) }
+                itt { e[sif |venv| ] (tenv, sif { venv += x }) }
           }
 >>
 
@@ -131,7 +134,7 @@ prim_rw unfold_ty_lambda : <:itt_rw<
       let tenv, venv = env in
          soas_exp {
             Fun X <: (itt { ty tenv }) ->
-               itt { e[sff |tenv| ] (sff { tenv += X }, venv) }
+               itt { e[sif |tenv| ] (sif { tenv += X }, venv) }
          }
 >>
 
@@ -153,6 +156,18 @@ interactive ty_top_wf {| intro [] |} : <:itt_rule<
 interactive ty_var_wf {| intro [] |} : <:itt_rule<
     <H> >- v IN TyVar -->
     <H> >- type { ~v } IN TyExp
+>>
+
+interactive ty_fun_wf {| intro [] |} : <:itt_rule<
+   <H> >- t1 IN TyExp -->
+   <H> >- t2 IN TyExp -->
+   <H> >- type { t1 -> t2 } IN TyExp
+>>
+
+interactive ty_all_wf {| intro [] |} : <:itt_rule<
+   <H> >- t1 IN TyExp -->
+   <H>; X: TyExp >- t2[X] IN TyExp -->
+   <H> >- type { all X <: t1. t2[X] } IN TyExp
 >>
 
 (*!

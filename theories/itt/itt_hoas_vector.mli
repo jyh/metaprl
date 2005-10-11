@@ -32,7 +32,6 @@ doc <:doc<
 
    @end[license]
 >>
-
 extends Itt_hoas_base
 extends Itt_nat
 extends Itt_list2
@@ -42,3 +41,31 @@ declare subst{'n; 'bt; 't}
 declare substl{'bt; 'tl}
 
 define iform simple_bindn: bind{'n; 't} <-->  bind{'n; x.'t}
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_at_at : Terminal
+
+lex_token itt : "@@" --> tok_at_at
+
+lex_prec left [tok_at_at] = prec_apply
+
+production itt_term{bind{'n; x. 't}} <--
+   tok_bind; tok_id[x:s]; tok_colon; itt_simple_term{'n}; tok_arrow; itt_term{'t}
+
+production itt_term{subst{'n; 'bt; 't}} <--
+   itt_term{'bt}; tok_at; tok_left_curly; itt_term{'n}; tok_right_curly; itt_term{'t}
+
+production itt_term{substl{'bt; 'tl}} <--
+   itt_term{'bt}; tok_at_at; itt_term{'tl}
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

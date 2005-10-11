@@ -109,6 +109,7 @@ declare tok_left_paren         : Terminal
 declare tok_right_paren        : Terminal
 declare tok_left_curly         : Terminal
 declare tok_right_curly        : Terminal
+declare tok_colon_colon        : Terminal
 
 (* Identifiers *)
 lex_token itt : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
@@ -147,6 +148,7 @@ lex_token itt : "[{]"        --> tok_left_curly
 lex_token itt : "[}]"        --> tok_right_curly
 lex_token itt : "<[|]"       --> tok_left_context
 lex_token itt : "[|]>"       --> tok_right_context
+lex_token itt : "::"         --> tok_colon_colon
 lex_token itt : "->"         --> tok_arrow
 lex_token itt : ">-"         --> tok_turnstile
 lex_token itt : "-->"        --> tok_longrightarrow
@@ -180,6 +182,7 @@ declare prec_iff       : Precedence
 declare prec_apply     : Precedence
 declare prec_not       : Precedence
 declare prec_rel       : Precedence
+declare prec_cons      : Precedence
 
 lex_prec right    [prec_mimplies] > prec_min
 lex_prec nonassoc [prec_turnstile] > prec_mimplies
@@ -194,7 +197,8 @@ lex_prec nonassoc [prec_in; prec_equal] > prec_and
 lex_prec left     [prec_union] > prec_equal
 lex_prec right    [prec_arrow] > prec_union
 lex_prec right    [prec_prod] > prec_arrow
-lex_prec nonassoc [prec_rel] > prec_prod
+lex_prec right    [prec_cons] > prec_prod
+lex_prec nonassoc [prec_rel] > prec_cons
 lex_prec left     [prec_add] > prec_rel
 lex_prec left     [prec_mul] > prec_add
 lex_prec left     [prec_band] > prec_mul
@@ -210,6 +214,7 @@ lex_prec nonassoc [tok_colon] = prec_colon
 lex_prec right    [tok_comma] = prec_comma
 lex_prec nonassoc [tok_let; tok_in; tok_decide; tok_match; tok_with] = prec_let
 lex_prec left     [tok_at] = prec_apply
+lex_prec right    [tok_colon_colon] = prec_cons
 
 (************************************************
  * Utilities.

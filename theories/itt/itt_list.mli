@@ -218,6 +218,30 @@ val mk_list_ind_term : term -> term -> var -> var -> var -> term -> term
 
 val mk_list_of_list : term list -> term
 
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_nil    : Terminal
+
+lex_token itt : "\[\]"   --> tok_nil
+
+declare itt_list{'l} : Nonterminal
+
+production itt_term{nil} <--
+   tok_nil
+
+production itt_term{cons{'t1; 't2}} <--
+   itt_term{'t1}; tok_colon_colon; itt_term{'t2}
+
+production itt_term{'l} <--
+   tok_left_brack; itt_list{'l}; tok_right_brack
+
+production itt_list{cons{'t; nil}} <--
+   itt_term{'t}
+
+production itt_list{cons{'t; 'l}} <--
+   itt_term{'t}; tok_semi; itt_list{'l}
+
 (*
  * -*-
  * Local Variables:

@@ -53,6 +53,8 @@ lex_token itt : "bind"   --> tok_bind
 lex_token itt : "quote"  --> tok_quote
 lex_token itt : "match_term" --> tok_match_term
 
+lex_prec right [tok_bind; tok_quote; tok_match_term] = prec_let
+
 (*
  * JYH: I'm not sure exactly what is an operator or subterm.
  *)
@@ -66,7 +68,7 @@ production itt_term{mk_term{'op; 'subterms}} <--
    tok_quote; itt_operator{'op}; tok_left_curly; itt_subterms{'subterms}; tok_right_curly
 
 production itt_term{subst{'bt; 't}} <--
-   itt_term{'bt}; tok_at; tok_left_brack; itt_term{'t}; tok_right_brack
+   itt_term{'bt}; tok_at; itt_term{'t}
 
 production itt_term{weak_dest_bterm{'bt; 'base; op, subterms. 'step}} %prec prec_let <--
    tok_match_term; itt_term{'bt}; tok_with;

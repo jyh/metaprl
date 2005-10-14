@@ -45,7 +45,10 @@ extends Itt_isect
 extends Itt_union
 extends Itt_bisect
 extends Itt_bunion
+extends Itt_list2
 extends Itt_ext_equal
+extends Itt_nat
+extends Itt_struct3
 
 doc docoff
 
@@ -81,6 +84,10 @@ interactive subset_iff  :
    [wf] sequent { <H> >- 'A in univ[i:l] } -->
    [wf] sequent { <H> >- 'B in univ[i:l] } -->
    sequent { <H> >- iff{'A subset 'B; exst P:'B -> univ[i:l]. ext_equal{{x:'B| 'P 'x}; 'A}} }
+
+interactive nat_subset_int {| intro [] |}  :
+   sequent { <H> >- nat subset int }
+
 
 doc <:doc<
  @modsection{Lattice}
@@ -145,6 +152,22 @@ interactive subset_bunion {| intro[] |}:
    sequent { <H> >- 'A bunion 'B subset 'T }
 
 doc <:doc<
+
+   It is not always the case that <<'A['i] subset Union i:'I. 'A['i]>>.
+   But it is true with some additional conditions.
+>>
+
+interactive member_is_subset_of_union {| intro[] |} bind{x.'f['x]} 'n:
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H>; i: nat >- 'A['i] Type } -->
+   sequent { <H>; x: Union i:nat. 'A['i] >- 'f['x] in nat } -->
+   sequent { <H>; x: Union i:nat. 'A['i] >- 'x in 'A['f['x]] } -->
+   sequent { <H>; i: nat; j:nat; 'i <= 'j >- 'A['i] subset 'A['j] } -->
+   sequent { <H> >- 'A['n] subset Union i:nat. 'A['i]}
+(* Can we prove the above without existence of such f[x]? *)
+
+
+doc <:doc<
    @modsection{Monotonicity}
     Most of the type constructors are monotone with respect to <<space subset space>>.
 >>
@@ -154,12 +177,41 @@ interactive prod_subset {| intro [] |} :
    sequent { <H> >- 'B subset '"B'" } -->
    sequent { <H> >- 'A * 'B subset '"A'" * '"B'" }
 
+
+interactive dprod_subset {| intro [] |} :
+   [wf] sequent { <H>; x:'"A'" >- '"B'"['x] Type } -->
+   sequent { <H> >- 'A subset '"A'" } -->
+   sequent { <H>; x:'A >- 'B['x] subset '"B'"['x] } -->
+   sequent { <H> >- x:'A * 'B['x] subset y:'"A'" * '"B'"['y] }
+
+
 interactive union_subset {| intro [] |} :
    sequent { <H> >- 'A subset '"A'" } -->
    sequent { <H> >- 'B subset '"B'" } -->
    sequent { <H> >- 'A + 'B subset '"A'" + '"B'" }
 
+interactive list_subset {| intro [] |} :
+   sequent { <H> >- 'A subset '"A'" } -->
+   sequent { <H> >- list{'A}  subset list{'"A'"}}
+
+
+interactive set_monotone {| intro [] |} :
+   [wf] sequent { <H>; x:'A >- 'P['x] Type } -->
+   [wf] sequent { <H>; x:'B >- 'Q['x] Type } -->
+   sequent { <H>; x:'A; 'P['x] >- squash{'Q['x]} } -->
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- {x:'A | 'P['x]} subset {x:'B | 'Q['x]}}
+
+
+interactive superset 'H 'B:
+   sequent  { <H>; x:'A; <J['x]> >- 'A subset 'B} -->
+   sequent  { <H>; x:'B; <J['x]> >- 'T['x]} -->
+   sequent  { <H>; x:'A; <J['x]> >- 'T['x]}
+
+
 doc docoff
+
+
 
 
 (*

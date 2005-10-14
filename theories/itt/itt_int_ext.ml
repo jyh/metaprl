@@ -450,6 +450,24 @@ interactive ne_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a <> 'b } -->
    sequent { <H> >- it in ('a <> 'b) }
 
+doc <:doc<
+   The following rules establish decidability of integer relations and
+   improve the @hreftactic[decideT] tactic.
+>>
+
+interactive le_decidable {| intro [] |} :
+   [wf] sequent{ <H> >- 'a in int } -->
+   [wf] sequent{ <H> >- 'b in int } -->
+   sequent{ <H> >- decidable{('a <= 'b)} }
+
+interactive ge_decidable {| intro [] |} :
+   [wf] sequent{ <H> >- 'a in int } -->
+   [wf] sequent{ <H> >- 'b in int } -->
+   sequent{ <H> >- decidable{('a >= 'b)} }
+
+
+
+
 interactive ge_addWeakMono {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -592,6 +610,14 @@ interactive min_reduce2 {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- min{'a; 'b} = 'b in int }
+
+interactive_rw min_reduce {| reduce |} :
+   'a in int -->
+   min{'a; 'a} <--> 'a
+
+interactive_rw max_reduce {| reduce |} :
+   'a in int -->
+   max{'a; 'a} <--> 'a
 
 doc <:doc<
    @modsection{Well-formedness and algebraic properties of <<('x) *@ ('x)>>}

@@ -47,6 +47,7 @@ doc <:doc<
 extends Base_theory
 extends Itt_equal
 extends Itt_squash
+extends Itt_subset
 doc docoff
 extends Itt_comment
 
@@ -125,9 +126,13 @@ interactive img_elim3 {| elim [ThinOption thinT] |} 'H 'g :
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 'C['y] }
 
 interactive img_monotone {| intro[] |} :
-   [wf] sequent { <H> >-  'A_1 Type } -->
    sequent { <H> >-  'A_1 subtype 'A_2 } -->
    sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subtype  Img{'A_2; x.'f<||>['x]} }
+
+interactive img_monotone_subset {| intro[] |} bind{x.'g['x]}:
+   sequent { <H>; x:'A_2 >- 'g['f<||>['x]]='x in 'A_2 } -->
+   sequent { <H> >-  'A_1 subset 'A_2 } -->
+   sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subset  Img{'A_2; x.'f<||>['x]} }
 
 doc docoff
 

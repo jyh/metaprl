@@ -38,8 +38,7 @@ extends Itt_logic
 extends Itt_singleton
 extends Itt_squash
 extends Itt_isect
-extends Itt_bool
-extends Itt_int_base
+
 extends Itt_ext_equal
 
 open Basic_tactics

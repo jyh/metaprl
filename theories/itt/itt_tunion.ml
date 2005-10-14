@@ -178,7 +178,9 @@ interactive tunionElimination_eq (* {| elim [ThinOption thinLastT] |} *) 'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
 interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'f :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'f 'x in 'A } -->
+   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A >- 'B['w] Type } -->
+      (* can we get rid of the above wf-assumption? *)
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'f 'x in 'A } -->
    [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'x in 'B['f 'x] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 'C['z] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
@@ -190,6 +192,30 @@ interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'C['z] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
+
+doc <:doc<
+   @modsubsection{Subtyping}
+
+   The union is @emph{covariant}
+   in the quantified type $A$, and pointwise-covariant in the
+   domain type $B[a]$ for each $a @in A$.
+>>
+interactive unionSubtype {| intro [] |} :
+   sequent { <H> >- 'A1 subtype 'A2} -->
+   sequent { <H>; a: 'A1 >- 'B1['a]  subtype  'B2['a] } -->
+   [wf] sequent { <H> >- (Union a2:'A2. 'B2['a2]) Type } -->
+   sequent { <H> >- (Union a1:'A1. 'B1['a1]) subtype (Union a2:'A2. 'B2['a2]) }
+
+interactive unionSubtype2 'a:
+   [wf] sequent { <H> >- 'a in 'A } -->
+   [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent { <H> >- 'B['a] subtype Union x:'A.'B['x] }
+
+interactive unionSubtype3 :
+   [wf] sequent { <H> >- "type"{'A} } -->
+   ["subtype"] sequent { <H>; x: 'A >- 'B['x] subtype 'T } -->
+   sequent { <H> >- Union x:'A. 'B['x] subtype 'T }
+
 
 doc docoff
 

@@ -113,6 +113,11 @@ interactive independentProductElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
    sequent { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
 
+interactive independentProductEqElimination {| elim [] |} 'H :
+   sequent { <H>; 'x1 = 'x2 in 'A; 'y1= 'y2 in 'B;  <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: ('x1,'y1) = ('x2,'y2) in 'A * 'B; <J['u]> >- 'T['u] }
+
+
 doc <:doc<
    @modsubsection{Membership}
 

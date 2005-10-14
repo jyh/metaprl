@@ -47,6 +47,8 @@ declare dest{'bt}
 declare Iter{'sop; 'X}
 declare BT{'sop; 'n}
 declare Lang{'ops}
+define iform unfold_BTerm: BTerm <--> Lang{Operator}
+
 
 topval unfold_compatible_shapes : conv
 topval unfold_Ldom : conv
@@ -60,3 +62,4 @@ topval fold_mk : conv
 topval fold_LIter : conv
 topval fold_dest : conv
 topval fold_Lang : conv
+topval fold_ndepth : conv

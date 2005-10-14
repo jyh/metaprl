@@ -173,12 +173,30 @@ interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
    [main]      sequent { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
 
+
+interactive applyFun 'f 'B 'H :
+   [wf] sequent { <H>; u:'a = 'b in 'A; <J['u]> >- 'f in 'A -> 'B} -->
+   sequent { <H>; u:'a = 'b in 'A; 'f('a)='f('b) in 'B; <J['u]> >- 'C['u]} -->
+   sequent { <H>; u:'a = 'b in 'A; <J['u]> >- 'C['u]}
+
+
 doc <:doc<
-   Elimination rule for set equality
+   Elimination rule for equalities:
 >>
 interactive setEqualityElim {| elim [] |} 'H :
    sequent { <H>; 'a = 'b in 'A; squash{'B['a]}; squash{'B['b]}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: 'a = 'b in { y: 'A | 'B['y] }; <J['x]> >- 'C['x] }
+
+(*
+
+interactive productEqElimination {| elim [] |} 'H :
+   sequent { <H>; 'x1 = 'x2 in 'A; 'y1= 'y2 in 'B['x1];  <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: ('x1,'y1) = ('x2,'y2) in x:'A * 'B['x]; <J['u]> >- 'T['u] }
+
+interactive independentProductEqElimination {| elim [] |} 'H :
+   sequent { <H>; 'x1 = 'x2 in 'A; 'y1= 'y2 in 'B;  <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: ('x1,'y1) = ('x2,'y2) in 'A * 'B; <J['u]> >- 'T['u] }
+*)
 
 doc <:doc<
 

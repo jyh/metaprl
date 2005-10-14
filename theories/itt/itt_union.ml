@@ -288,6 +288,15 @@ interactive unionContradiction1 {| elim [] |} 'H :
 interactive unionContradiction2 {| elim [] |} 'H :
    sequent { <H>; x: inr{'y} = inl{'z} in 'A+'B; <J['x]> >- 'C['x] }
 
+interactive unionEqElimination1 {| elim [] |} 'H :
+   sequent { <H>; u: 'x = 'y in 'A; <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: inl{'x} = inl{'y} in 'A + 'B; <J['u]> >- 'T['u] }
+
+interactive unionEqElimination2 {| elim [] |} 'H :
+   sequent { <H>; u: 'x = 'y in 'B; <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: inr{'x} = inr{'y} in 'A + 'B; <J['u]> >- 'T['u] }
+
+
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)

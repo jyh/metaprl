@@ -1,3 +1,4 @@
+
 doc <:doc<
    @module[Itt_hoas_lang]
    The @tt[Itt_hoas_lang] module defines the type of a language over
@@ -44,6 +45,7 @@ extends Itt_hoas_destterm
 extends Itt_image
 extends Itt_tunion
 extends Itt_list2
+extends Itt_subset2
 doc docoff
 
 open Basic_tactics
@@ -74,6 +76,17 @@ define unfold_LBT: BT{'sop; 'n} <--> ind{'n; void; X.Iter{'sop; 'X}}
 
 define unfold_Lang: Lang{'sop} <--> Union n:nat. BT{'sop; 'n}
 
+define iform unfold_BTerm: BTerm <--> Lang{Operator}
+
+
+define (*privite *) unfold_ndepth:
+   ndepth{'t} <-->
+    fix{ndepth. lambda{t.
+      dest_bterm{'t; l,r.1; bdepth,op,subterms. list_max{map{x.'ndepth 'x;'subterms}}+@ 1 }
+    }} 't
+
+let fold_ndepth = makeFoldC << ndepth{'t} >> unfold_ndepth
+
 doc docoff
 
 let fold_Ldom = makeFoldC << dom{'sop; 'BT} >> unfold_Ldom
@@ -95,6 +108,9 @@ interactive  lbt_elim_squash  {| elim [] |} 'H :
              compatible_shapes{'depth;'op;'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BT{'sop; 'n+@1}; <J> >- squash{'P['t]} }
 
+interactive  lbt_elim_squash0  {| nth_hyp |} 'H :
+   sequent { <H>; t: BT{'sop; 0}; <J> >- 'P['t] }
+
 interactive  lbt_wf_and_bdepth_wf  {| intro[] |}:
    sequent { <H> >- 'n in nat } -->
    sequent { <H> >- 'sop subtype Operator } -->
@@ -109,6 +125,9 @@ interactive lang_wf  {| intro[] |} :
    sequent { <H> >- 'sop subtype Operator } -->
    sequent { <H> >- Lang{'sop} Type }
 
+(* Should be:
+interactive  bdepth_wf  {| intro[intro_typeinf <<'t>>] |} Lang{'sop} :
+*)
 interactive  bdepth_wf  {| intro[] |} 'sop :
    sequent { <H> >- 'sop subtype Operator } -->
    sequent{ <H> >- 't in Lang{'sop} } -->
@@ -121,6 +140,9 @@ interactive  bdepth_wf  {| intro[] |} 'sop :
    sequent { <H> >- 'op in 'sop } -->
    sequent { <H> >- 'btl in list{BT{'sop; 'n}} } -->
    sequent { <H> >- compatible_shapes{'bdepth; 'op; 'btl} Type }
+*)
+(* SHould be:
+interactive compatible_shapes_wf {| intro[intro_typeinf <<'op>>] |} 'sop :
 *)
 interactive compatible_shapes_wf {| intro[] |} 'sop :
    sequent { <H> >- 'sop subtype Operator } -->
@@ -162,6 +184,30 @@ interactive compatible_shapes_sqstable (*{| squash |}*) :
    sequent{ <H> >- squash{compatible_shapes{'bdepth; 'op; 'btl}}  } -->
    sequent{ <H> >- compatible_shapes{'bdepth; 'op; 'btl} }
 
+interactive ldom_wf {| intro[] |}:
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- 'T subtype Lang{'sop} } -->
+   sequent { <H> >-  dom{'sop; 'T} Type }
+
+interactive dom_monotone {| intro[] |}:
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
+   sequent{ <H> >- 'T subtype 'S } -->
+   sequent { <H> >- 'S subtype Lang{'sop} } -->
+   sequent{ <H> >-  dom{'sop;'T} subtype dom{'sop;'S} }
+
+interactive dom_monotone_set {| intro[] |}:
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
+   sequent{ <H> >- 'T subset 'S } -->
+   sequent { <H> >- 'S subtype Lang{'sop} } -->
+   sequent{ <H> >-  dom{'sop;'T} subset dom{'sop;'S} }
+
+interactive iter_monotone {| intro[] |}:
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
+   sequent{ <H> >- 'T subtype 'S } -->
+   sequent { <H> >- 'S subtype Lang{'sop} } -->
+   sequent{ <H> >-  Iter{'sop;'T} subtype Iter{'sop;'S} }
+
+
 (*interactive  lbt_subtype_bt  {| intro[] |} :
    sequent { <H> >- 'sop subtype Operator } -->
    sequent { <H> >- 'n in nat} -->
@@ -177,16 +223,22 @@ interactive  lbt_subtype_bterm  {| intro[] |} :
    sequent { <H> >- BT{'sop; 'n} subtype BTerm }
 *)
 
+interactive  lbt_subtype_bterm  {| intro[] |} :
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- 'n in nat} -->
+   sequent { <H> >- BT{'sop; 'n} subtype Lang{'sop} }
+
 interactive lbt_monotone  {| intro[] |} :
    sequent { <H> >- 'sop subtype Operator } -->
    sequent { <H> >- 'n in nat} -->
    sequent { <H> >- BT{'sop; 'n} subtype BT{'sop; 'n+@1} }
 
-interactive ldom_wf {| intro[] |}:
+interactive lang_intro_var0 {| intro[] |}:
+   sequent { <H> >- 'X subtype Lang{'sop} } -->
+   sequent { <H> >- 'l in nat } -->
+   sequent { <H> >- 'r in nat } -->
    sequent { <H> >- 'sop subtype Operator } -->
-   sequent { <H> >- 'T subtype Lang{'sop} } -->
-   sequent { <H> >-  dom{'sop; 'T} Type }
-
+   sequent { <H> >- var{'l;'r} in Iter{'sop;'X} }
 
 interactive lang_intro_var {| intro[] |}:
    sequent { <H> >- 'l in nat } -->
@@ -202,7 +254,16 @@ interactive lbt_intro_mk_bterm {| intro[] |}:
    sequent{ <H> >- 'subterms in list{BT{'sop; 'n}} } -->
    sequent{ <H> >- compatible_shapes{'depth;'op;'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth;'op;'subterms} in BT{'sop; 'n+@1} }
-
+(*
+interactive lang_intro_mk_bterm_wf0 {| intro[] |}:
+   sequent { <H> >- 'X subtype Lang{'sop} } -->
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent{ <H> >- 'depth in nat } -->
+   sequent{ <H> >- 'op in 'sop } -->
+   sequent{ <H> >- 'subterms in list{'X} } -->
+   sequent{ <H> >- compatible_shapes{'depth;'op;'subterms} } -->
+   sequent{ <H> >- mk_bterm{'depth;'op;'subterms} in Iter{'sop;'X} }
+*)
 interactive lang_intro_mk_bterm_wf1 {| intro[] |}:
    sequent { <H> >- 'sop subtype Operator } -->
    sequent{ <H> >- 'depth in nat } -->
@@ -231,9 +292,13 @@ interactive  lbt_elim_squash1  {| elim [] |} 'H :
 interactive  lang_elim_squash {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
    sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
-   sequent { <H>; <J>; depth: nat; op: 'sop; subs: list{Lang{'sop}};
-                compatible_shapes{'depth;'op;'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
+   sequent { <H>; <J>; n:nat;
+                depth: nat; op: 'sop; subs: list{BT{'sop;'n}};
+                compatible_shapes{'depth;'op;'subs};
+                all_list{'subs;t.squash{'P['t]}}
+                >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
    sequent { <H>; t: Lang{'sop}; <J> >- squash{'P['t]} }
+
 
 (* ???????????? *)
 interactive_rw bind_eta 'sop :
@@ -265,14 +330,98 @@ interactive_rw dest_bterm_mk_bterm2 'sop :
    dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
    <-->
    'op_case['n; 'op; 'subterms]
+
 (* ???????????? *)
+
+interactive lang_monotone {| intro[] |}:
+   sequent { <H> >- 'sop1 subtype 'sop2 } -->
+   sequent { <H> >- 'sop2 subtype Operator } -->
+   sequent { <H> >- Lang{'sop1} subtype Lang{'sop2} }
+
+interactive lang_is_btrem {| intro[intro_typeinf <<'t>>] |} <<Lang{'sop}>> :
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- 't in Lang{'sop} } -->
+   sequent { <H> >- 't in BTerm }
+
+
+interactive iter_monotone_set {| intro[] |}:
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
+   sequent{ <H> >- 'T subset 'S } -->
+   sequent { <H> >- 'S subtype Lang{'sop} } -->
+   sequent{ <H> >-  Iter{'sop;'T} subset Iter{'sop;'S} }
+
+interactive lbt_monotone_set  {| intro[] |} :
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- 'n in nat} -->
+   sequent { <H> >- BT{'sop; 'n} subset BT{'sop; 'n+@1} }
+
+interactive lbt_monotone_set2  {| intro[] |} :
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- 'k in nat} -->
+   sequent { <H> >- 'n in nat} -->
+   sequent { <H> >- 'k <= 'n} -->
+   sequent { <H> >- BT{'sop; 'k} subset BT{'sop; 'n} }
+
+
+interactive_rw reduce_ndepth1 {| reduce |}:
+   ('l in nat) -->
+   ('r in nat) -->
+   ndepth{var{'l;'r}} <--> 1
+
+interactive_rw reduce_ndepth2 {| reduce |}:
+   'op in Operator -->
+   'bdepth in nat -->
+   'subs in list{BTerm} -->
+   compatible_shapes{'bdepth;'op;'subs} -->
+   ndepth{mk_bterm{'bdepth;'op;'subs}} <--> list_max{map{x.ndepth{'x};'subs}}+@ 1
+
+
+interactive ndepth_wf {| intro[] |}:
+   sequent{ <H> >- 't in BTerm } -->
+   sequent { <H> >-  ndepth{'t} in nat }
+(*
+interactive ndepth_less {| intro[intro_typeinf <<'t>>] |} <<BT{'sop;'m}>> :
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent{ <H> >- 'n in nat } -->
+   sequent{ <H> >- 'm in nat } -->
+   sequent{ <H> >- 'm <= 'n } -->
+   sequent{ <H> >- 't in BT{'sop; 'm} } -->
+   sequent { <H> >-  ndepth{'t} <= 'n }
+*)
+interactive ndepth_correct {| intro[] |} :
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent{ <H> >- 't in Lang{'sop} } -->
+   sequent { <H> >-  't in BT{'sop; ndepth{'t}} }
+
+
+interactive  lbt_subset_bterm  {| intro[] |} :
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- 'n in nat} -->
+   sequent { <H> >- BT{'sop; 'n} subset Lang{'sop} }
+
+
+
+interactive  lang_elim_sq {| elim [] |} 'H :
+   [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
+   sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
+   sequent { <H>; <J>; n:nat;
+                depth: nat; op: 'sop; subs: list{Lang{'sop}};
+                compatible_shapes{'depth;'op;'subs};
+                all_list{'subs;t.squash{'P['t]}}
+                >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
+   sequent { <H>; t: Lang{'sop}; <J> >- squash{'P['t]} }
+
+
 
 interactive_rw mk_dest_reduce 'sop :
    'sop subtype Operator -->
    't in Lang{'sop}  -->
    mk{dest{'t}} <--> 't
 
+(* Should be:
 interactive dest_bterm_wf {| intro[intro_typeinf <<'bt>>] |} Lang{'sop} :
+*)
+interactive dest_bterm_wf {| intro[] |} 'sop :
    sequent { <H> >- 'sop subtype Operator } -->
    sequent{ <H> >- 'bt in Lang{'sop} } -->
    sequent{ <H>; l:nat; r:nat >- 'var_case['l;'r] in 'T } -->
@@ -284,13 +433,6 @@ interactive dest_wf {| intro[] |}:
    sequent { <H> >- 'sop subtype Operator } -->
    sequent{ <H> >- 't in Lang{'sop} } -->
    sequent{ <H> >-  dest{'t} in dom{'sop; Lang{'sop}} }
-
-interactive lang_elim  {| elim [] |} 'H :
-   [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
-   sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
-   sequent { <H>; <J>; bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
-               compatible_shapes{'bdepth;'op;'subs} >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
-   sequent { <H>; t: Lang{'sop}; <J> >- 'P['t] }
 
 interactive  lbt_elim_squash2  {| elim [] |} 'H :
    [wf] sequent { <H> >- 'n in nat } -->
@@ -325,6 +467,16 @@ interactive  lang_elim_squash1 {| elim [] |} 'H :
                compatible_shapes{'depth;'op;'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
    sequent { <H>; t: Lang{'sop}; <J['t]> >- squash{'P['t]} }
 
+
+interactive lang_elim  {| elim [] |} 'H :
+   [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
+   sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   sequent { <H>; <J>; bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
+               compatible_shapes{'bdepth;'op;'subs};
+               all_list{'subs;t.'P['t]}
+               >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
+   sequent { <H>; t: Lang{'sop}; <J> >- 'P['t] }
+
 interactive lang_induction  {| elim [] |} 'H :
    [wf] sequent { <H> >- 'sop subtype Operator } -->
    [base] sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
@@ -346,3 +498,4 @@ doc docoff
 
 dform lang_df: Lang{'op} =
    tt["Language"] `"[" slot{'op} `"]"
+

@@ -42,7 +42,6 @@ MPFILES[] =
    itt_match
    itt_pairwise
    itt_pairwise2
-   itt_image
    itt_int_base
    itt_int_ext
    itt_int_arith
@@ -52,6 +51,9 @@ MPFILES[] =
    itt_isect
    itt_tsquash
    itt_disect
+   itt_singleton
+   itt_subset
+   itt_image
    itt_tunion
    itt_bisect
    itt_bunion
@@ -67,8 +69,6 @@ MPFILES[] =
    itt_prop_decide
    itt_fset
    itt_antiquotient
-   itt_singleton
-   itt_subset
    itt_subset2
    itt_finite_fun1
    itt_finite_fun_weak1

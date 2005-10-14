@@ -10,8 +10,8 @@ doc <:doc<
    elements of $A$. That is, for any two elements of $A$ if they are equal in $B$,
    then they are also equal in $A$ (see rule @hrefrule[use_superset1]).
 
-   Not every subtype is subset. For example, <<int  subtype (int subtwo)>>
-   but not <<int subset (int subtwo)>>. See also @hrefrule[counterexample1].
+   Not every subtype is subset. For example, <<'Z  subtype ('Z subtwo)>>
+   but not <<'Z subset ('Z subtwo)>>. See also @hrefrule[counterexample1].
 
    The main property of <<'A subset 'B>> is that the membership in $A$ could
    be defined for all elements in $B$.
@@ -71,7 +71,6 @@ extends Itt_singleton
 extends Itt_squash
 extends Itt_isect
 extends Itt_bool
-extends Itt_int_base
 extends Itt_ext_equal
 
 doc docoff
@@ -135,7 +134,7 @@ dform subset_df1 : mode[src] :: parens :: "prec"[prec_equal] :: member{'a;'A; 'B
     'a `" in " 'A `" subset " 'B
 
 dform subset_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: ('A subset 'B) =
-   slot{'A} `" " subseteq space slot{'A}
+   slot{'A} `" " subseteq space slot{'B}
 
 dform subset_df1 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subset 'B) =
    slot{'A} `" subset " slot{'B}
@@ -193,9 +192,17 @@ doc docoff
 
 (* mem, member and subset are squash stable: *)
 
+interactive mem_sqstable {| squash |} :
+   sequent { <H> >- squash{mem{'x;'A;'B}} } -->
+   sequent { <H> >- mem{'x;'A;'B} }
+
 interactive subset_sqstable {| squash |} :
    sequent { <H> >- squash{'A subset 'B} } -->
    sequent { <H> >- 'A subset 'B }
+
+interactive member_sqstable {| squash |} :
+   sequent { <H> >- squash{'x in 'A subset 'B} } -->
+   sequent { <H> >- 'x in 'A subset 'B }
 
 doc <:doc<
    @modsubsection{Elimination Rules}

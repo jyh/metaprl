@@ -117,7 +117,7 @@ interactive bisectMemberEquality {| intro [] |} :
 doc <:doc<
    @modsubsection{Elimination}
 
-   The elimination rule for an assumption $x@colon @bisect{A; B}$ states that  $x$ can be replaced by
+   The elimination rule for an assumption $x@colon @bisect{A; B}$ states that $x$ can be replaced by
    $a @in A$ or by $b @in B$.
 
    @docoff
@@ -193,35 +193,34 @@ doc <:doc<
 >>
 interactive bisectSubtypeLeft {| intro [SelectOption 1] |} :
    sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- 'A  subtype 'C } -->
-   sequent { <H> >- 'A isect 'B  subtype 'C}
+   sequent { <H> >- 'A subtype 'C } -->
+   sequent { <H> >- 'A isect 'B subtype 'C}
 
 interactive bisectSubtypeRight {| intro [SelectOption 2] |} :
    sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- 'B  subtype 'C } -->
-   sequent { <H> >- 'A isect 'B  subtype  'C }
+   sequent { <H> >- 'B subtype 'C } -->
+   sequent { <H> >- 'A isect 'B subtype 'C }
 
 interactive bisectSubtypeBelow {| intro [] |}:
-   sequent { <H> >- 'C  subtype 'A } -->
-   sequent { <H> >- 'C  subtype 'B } -->
-   sequent { <H> >- 'C  subtype   'A isect 'B}
-
-
-interactive bisectSubtype1 {| intro [] |} :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- 'A isect 'B  subtype 'A}
-
-interactive bisectSubtype2 {| intro [] |} :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- 'A isect 'B  subtype 'B}
+   sequent { <H> >- 'C subtype 'A } -->
+   sequent { <H> >- 'C subtype 'B } -->
+   sequent { <H> >- 'C subtype 'A isect 'B}
 
 interactive bisectTrivial1 {| nth_hyp |} 'H:
    sequent { <H>; x:'A isect 'B; <J['x]>  >- 'x in 'A}
 
 interactive bisectTrivial2 {| nth_hyp |} 'H:
    sequent { <H>; x:'A isect 'B; <J['x]>  >- 'x in 'B}
+
+interactive bisectSubtype1 {| intro [] |} :
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- 'A isect 'B subtype 'A}
+
+interactive bisectSubtype2 {| intro [] |} :
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- 'A isect 'B subtype 'B}
 
 doc docoff
 

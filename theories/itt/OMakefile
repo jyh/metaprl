@@ -192,7 +192,6 @@ PRINT_THEORIES[] =
     itt_union
     itt_rfun
     itt_dfun
-    itt_fun
     itt_dprod
     itt_prod
     itt_logic

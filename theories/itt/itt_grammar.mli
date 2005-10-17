@@ -71,6 +71,9 @@ declare tok_id[v:s]            : Terminal
 (* Numbers *)
 declare tok_int[i:n]           : Terminal
 
+(* Strings *)
+declare tok_string[s:s]        : Terminal
+
 (*
  * Keywords.
  * Most of the keywords are defined in subtheories.
@@ -81,6 +84,7 @@ declare tok_decide             : Terminal
 declare tok_match              : Terminal
 declare tok_with               : Terminal
 declare tok_end                : Terminal
+declare tok_bterm              : Terminal
 
 (* Symbols *)
 declare tok_dot                : Terminal
@@ -118,6 +122,9 @@ lex_token itt : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
 (* Numbers *)
 lex_token itt : "[[:digit:]]+" --> tok_int[lexeme:n]
 
+(* Strings *)
+lex_token itt : "\"\(\\.|[^\"]*\)\"" --> tok_string[arg1:s]
+
 (* Keywords *)
 lex_token itt : "let"        --> tok_let
 lex_token itt : "decide"     --> tok_decide
@@ -125,6 +132,7 @@ lex_token itt : "match"      --> tok_match
 lex_token itt : "with"       --> tok_with
 lex_token itt : "in"         --> tok_in
 lex_token itt : "end"        --> tok_end
+lex_token itt : "bterm"      --> tok_bterm
 
 (* Symbols *)
 lex_token itt : "[.]"        --> tok_dot
@@ -342,6 +350,56 @@ production itt_simple_term{'e} <--
 
 production itt_simple_term{'e} <--
     tok_left_paren; itt_term{'e}; tok_right_paren
+
+(************************************************
+ * Generic terms using the normal syntax.
+ *)
+declare parsed_bterms{x : Dform. 't['x] : Dform} : Dform
+
+declare itt_bterm{'t : Dform} : Nonterminal
+declare itt_bterm_tail{'t : Dform} : Nonterminal
+declare itt_bterms_list{'t : Dform} : Nonterminal
+declare itt_bterms_nonempty_list{'t : Dform} : Nonterminal
+
+(*
+ * Bterms are a single term,
+ * or (bterm id ... id -> term)
+ *)
+production itt_bterm{'t} <--
+   itt_term{'t}
+
+production itt_bterm{'t} <--
+   tok_bterm; itt_bterm_tail{'t}
+
+production itt_bterm_tail{'t} <--
+   tok_arrow; itt_term{'t}
+
+production itt_bterm_tail{xbterm{x. 't}} <--
+   tok_id[x:s]; itt_bterm_tail{'t}
+
+(*
+ * Bterms are {...}
+ *)
+production itt_bterms_list{xnil} <--
+   (* empty *)
+
+production itt_bterms_list{'t[xnil]} <--
+   itt_bterms_nonempty_list{parsed_bterms{x. 't['x]}}
+
+production itt_bterms_nonempty_list{parsed_bterms{x. xcons{'t; 'x}}} <--
+   itt_bterm{'t}
+
+production itt_bterms_nonempty_list{parsed_bterms{x. 't1[xcons{'t2; 'x}]}} <--
+   itt_bterms_nonempty_list{parsed_bterms{x. 't1['x]}}; tok_semi; itt_bterm{'t2}
+
+(*
+ * The operator must be quoted.
+ *)
+production itt_term{xterm[op:s]{xnil}} <--
+   tok_string[op:s]
+
+production itt_term{xterm[op:s]{'t}} <--
+   tok_string[op:s]; tok_left_curly; itt_bterms_list{'t}; tok_right_curly
 
 (************************************************************************
  * Meta-terms.

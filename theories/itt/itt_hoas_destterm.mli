@@ -34,7 +34,6 @@ doc <:doc<
 
    @end[license]
 >>
-
 extends Itt_hoas_base
 extends Itt_hoas_vector
 extends Itt_hoas_operator

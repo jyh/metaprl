@@ -63,8 +63,13 @@ topval positiveRule2T : tactic
  * Grammar for integer ranges.
  *)
 declare tok_dot_dot    : Terminal
+declare tok_Nat        : Terminal
 
 lex_token itt : "[.][.]"   --> tok_dot_dot
+lex_token itt : "Nat"      --> tok_Nat
+
+production itt_term{nat} <--
+   tok_Nat
 
 production itt_term{{ i: int | 'j <= 'i & 'i <= 'k }} <--
    tok_left_curly; itt_apply_term{'j}; tok_dot_dot; itt_apply_term{'k}; tok_right_curly

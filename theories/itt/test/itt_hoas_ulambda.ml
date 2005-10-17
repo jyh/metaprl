@@ -26,6 +26,8 @@
  *)
 extends Itt_hoas_lang
 
+open Basic_tactics
+
 (*
  * The language.
  *)
@@ -33,8 +35,17 @@ define unfold_ulambda : ULambda <--> <:itt<
    Lang ([#(fun x -> e); #(f x)])
 >>
 
+let fold_ulambda = makeFoldC << ULambda >> unfold_ulambda
+
 interactive ulambda_type : <:itt_rule<
    <H> >- << ULambda Type >>
+>>
+
+interactive ulambda_elim1 'H : <:itt_rule<
+   <H>; e: ULambda; <J[e]>; l: Nat; r: Nat >- P[~<l; r>] -->
+   <H>; e: ULambda; <J[e]>; bdepth: Nat; e1: ULambda; e2: ULambda; P[e1]; P[e2] >- P[mk_bterm{bdepth; #(f x); [e1; e2]}] -->
+   <H>; e: ULambda; <J[e]>; bdepth: Nat; e1: ULambda; P[e1] >- P[mk_bterm{bdepth; #(fun x -> y); [e1]}] -->
+   <H>; e: ULambda; <J[e]> >- P[e]
 >>
 
 (*!

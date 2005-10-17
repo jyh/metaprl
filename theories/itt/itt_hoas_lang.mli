@@ -33,7 +33,6 @@ doc <:doc<
 
    @end[license]
 >>
-
 extends Itt_hoas_destterm
 
 open Tactic_type.Tactic
@@ -63,6 +62,18 @@ topval fold_LIter : conv
 topval fold_dest : conv
 topval fold_Lang : conv
 topval fold_ndepth : conv
+
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_Lang       : Terminal
+
+lex_token itt : "Lang"     --> tok_Lang
+
+lex_prec right [tok_Lang]       = prec_not
+
+production itt_term{Lang{listmem_set{'ops; Operator}}} <--
+   tok_Lang; itt_term{'ops}
 
 (*!
  * @docoff

@@ -52,17 +52,17 @@ define iform unfold_get_op1:
 (************************************************************************
  * Grammar.
  *)
-declare tok_bterm     : Terminal
+declare tok_mk_bterm     : Terminal
 
-lex_token itt : "bterm"     --> tok_bterm
+lex_token itt : "mk_bterm" --> tok_mk_bterm
 
-lex_prec right [tok_bterm] = prec_let
+lex_prec right [tok_mk_bterm] = prec_let
 
 production itt_term{var{'left; 'right}} <--
    tok_tilde; tok_lt; itt_term{'left}; tok_semi; itt_term{'right}; tok_gt
 
 production itt_term{mk_bterm{'n; 'op; 'btl}} <--
-   tok_bterm; itt_apply_term{'n}; tok_arrow; itt_term{'op}; tok_hash; itt_term{'btl}
+   tok_mk_bterm; tok_left_curly; itt_term{'n}; tok_semi; itt_term{'op}; tok_semi; itt_term{'btl}; tok_right_curly
 
 (*
  * Various projections.

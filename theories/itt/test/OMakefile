@@ -1,0 +1,15 @@
+#
+# Naive POPLmark
+#
+THEORYNAME = ITT tests
+THEORYDESCR = Test theories for ITT
+
+OCAMLINCLUDES[] +=
+    $(SUPPORT_DIRS)
+    ../../base
+    ..
+
+FILES[] =
+    itt_hoas_ulambda
+
+Theory($(FILES))

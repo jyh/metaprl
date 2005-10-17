@@ -53,13 +53,16 @@ define iform unfold_arity : arity{'op} <--> length{shape{'op}}
 (* JYH: This was not public, is it really supposed to be hidden? *)
 declare operator[op:op]
 
+declare tok_Lang       : Terminal
 declare tok_Operator   : Terminal
 declare tok_is_same_op : Terminal
 
+lex_token itt : "Lang"     --> tok_Lang
 lex_token itt : "Operator" --> tok_Operator
 lex_token itt : "=\[op\]=" --> tok_is_same_op
 
 lex_prec right [tok_is_same_op] = prec_equal
+lex_prec right [tok_Lang]       = prec_not
 
 production itt_simple_term{Operator} <--
    tok_Operator
@@ -70,10 +73,13 @@ production itt_term{is_same_op{'op1; 'op2}} <--
 production itt_term{operator[t:op]} <--
    tok_hash; itt_term{'t}
 
+production itt_term{listmem_set{'ops; Operator}} <--
+   tok_Lang; itt_term{'ops}
+
 iform unfold_shape :
-    parsed_proj["shape"]{'t}
-    <-->
-    shape{'t}
+   parsed_proj["shape"]{'t}
+   <-->
+   shape{'t}
 
 (*!
  * @docoff

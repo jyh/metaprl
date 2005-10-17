@@ -47,3 +47,17 @@ declare BTerm
 
 topval unfold_BTerm : conv
 topval fold_BTerm : conv
+
+(************************************************************************
+ * Grammar.
+ *)
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

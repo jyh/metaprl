@@ -217,7 +217,7 @@ lex_prec right    [tok_comma] = prec_comma
 lex_prec nonassoc [tok_let; tok_in; tok_decide; tok_match; tok_with] = prec_let
 lex_prec left     [tok_at] = prec_apply
 lex_prec right    [tok_colon_colon] = prec_cons
-lex_prec nonassoc [tok_tilde; tok_dot] = prec_not
+lex_prec nonassoc [tok_tilde; tok_dot; tok_hash] = prec_not
 
 (************************************************
  * Utilities.

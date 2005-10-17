@@ -63,3 +63,13 @@ topval fold_LIter : conv
 topval fold_dest : conv
 topval fold_Lang : conv
 topval fold_ndepth : conv
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

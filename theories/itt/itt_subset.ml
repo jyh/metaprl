@@ -77,12 +77,8 @@ doc docoff
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 
-open Tactic_type.Conversionals
-
-open Dtactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_subtype
@@ -210,7 +206,7 @@ doc <:doc<
    By definition if <<'A subset 'B>> then  <<'A subtype 'B>>. (The opposite is not true --- see @hrefrule[counterexample1] below).
 >>
 
-interactive subset_is_subtype  :
+interactive subset_is_subtype {| nth_hyp |} :
    [assertion] sequent { <H> >- 'A subset 'B } -->
    sequent { <H> >- 'A subtype 'B }
 
@@ -313,8 +309,7 @@ doc <:doc<
 >>
 
 interactive member_doesnot_depend_on_B :
-   sequent { <H> >- 'A subtype 'B } -->
-   sequent { <H> >- 'A subtype '"B'" } -->
+   sequent { <H> >- 'A subset '"B'" } -->
    sequent { <H>; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
 
 doc docoff

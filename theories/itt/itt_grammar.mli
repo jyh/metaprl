@@ -84,7 +84,6 @@ declare tok_decide             : Terminal
 declare tok_match              : Terminal
 declare tok_with               : Terminal
 declare tok_end                : Terminal
-declare tok_bterm              : Terminal
 
 (* Symbols *)
 declare tok_dot                : Terminal
@@ -115,6 +114,7 @@ declare tok_left_curly         : Terminal
 declare tok_right_curly        : Terminal
 declare tok_colon_colon        : Terminal
 declare tok_tilde              : Terminal
+declare tok_backslash          : Terminal
 
 (* Identifiers *)
 lex_token itt : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
@@ -132,7 +132,6 @@ lex_token itt : "match"      --> tok_match
 lex_token itt : "with"       --> tok_with
 lex_token itt : "in"         --> tok_in
 lex_token itt : "end"        --> tok_end
-lex_token itt : "bterm"      --> tok_bterm
 
 (* Symbols *)
 lex_token itt : "[.]"        --> tok_dot
@@ -154,6 +153,7 @@ lex_token itt : "[(]"        --> tok_left_paren
 lex_token itt : "[)]"        --> tok_right_paren
 lex_token itt : "\["         --> tok_left_brack
 lex_token itt : "\]"         --> tok_right_brack
+lex_token itt : "\\"         --> tok_backslash
 lex_token itt : "[{]"        --> tok_left_curly
 lex_token itt : "[}]"        --> tok_right_curly
 lex_token itt : "<[|]"       --> tok_left_context
@@ -358,18 +358,18 @@ declare parsed_bterms{x : Dform. 't['x] : Dform} : Dform
 
 declare itt_bterm{'t : Dform} : Nonterminal
 declare itt_bterm_tail{'t : Dform} : Nonterminal
+declare itt_bterms{'t : Dform} : Nonterminal
 declare itt_bterms_list{'t : Dform} : Nonterminal
 declare itt_bterms_nonempty_list{'t : Dform} : Nonterminal
 
 (*
- * Bterms are a single term,
- * or (bterm id ... id -> term)
+ * Bterms are a single term, or \v1 ... vn -> term.
  *)
 production itt_bterm{'t} <--
    itt_term{'t}
 
 production itt_bterm{'t} <--
-   tok_bterm; itt_bterm_tail{'t}
+   tok_backslash; itt_bterm_tail{'t}
 
 production itt_bterm_tail{'t} <--
    tok_arrow; itt_term{'t}
@@ -380,6 +380,12 @@ production itt_bterm_tail{xbterm{x. 't}} <--
 (*
  * Bterms are {...}
  *)
+production itt_bterms{xnil} <--
+   (* empty *)
+
+production itt_bterms{'t} <--
+   tok_left_curly; itt_bterms_list{'t}; tok_right_curly
+
 production itt_bterms_list{xnil} <--
    (* empty *)
 
@@ -395,11 +401,8 @@ production itt_bterms_nonempty_list{parsed_bterms{x. 't1[xcons{'t2; 'x}]}} <--
 (*
  * The operator must be quoted.
  *)
-production itt_term{xterm[op:s]{xnil}} <--
-   tok_string[op:s]
-
 production itt_term{xterm[op:s]{'t}} <--
-   tok_string[op:s]; tok_left_curly; itt_bterms_list{'t}; tok_right_curly
+   tok_string[op:s]; itt_bterms{'t}
 
 (************************************************************************
  * Meta-terms.

@@ -36,7 +36,7 @@ open Basic_tactics
  * Definitions.
  *)
 define unfold_simple_ifun : simple_ifun{'T} <--> <:itt<
-   int * (int -> T)
+   "int" * ("int" -> T)
 >>
 
 define unfold_empty_ifun : empty_ifun{'x} <--> <:itt<
@@ -91,15 +91,15 @@ interactive empty_ifun_wf {| intro [] |} : <:itt_rule<
 >>
 
 interactive length_ifun_wf {| intro [intro_typeinf << 'f >>] |} simple_ifun{'T} : <:itt_rule<
-    <H> >- T type -->
+    <H> >- T Type -->
     <H> >- f IN sif T -->
     <H> >- sif |f| IN int
 >>
 
 interactive apply_ifun_wf {| intro [] |} : <:itt_rule<
-    <H> >- T type -->
+    <H> >- T Type -->
     <H> >- f IN sif T -->
-    <H> >- i IN int -->
+    <H> >- i IN "int" -->
     <H> >- sif { f @ i } IN T
 >>
 

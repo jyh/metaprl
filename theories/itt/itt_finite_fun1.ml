@@ -35,7 +35,7 @@ open Basic_tactics
  * Definitions.
  *)
 define unfold_simple_ffun : simple_ffun{'T} <--> <:itt<
-   Prod n: int * ({ 0..n- } -> T)
+   Prod n: "int" * ({ 0..n- } -> T)
 >>
 
 define unfold_length_ffun : length_ffun{'f} <-->
@@ -68,25 +68,25 @@ dform add_ffun_df : add_ffun{'f; 'x} =
  * Well-formedness.
  *)
 interactive simple_ffun_univ {| intro [] |} : <:itt_rule<
-    <H> >- T IN << univ[i:l] >> -->
-    <H> >- sff T IN << univ[i:l] >>
+    <H> >- T IN "univ"[i:l] -->
+    <H> >- sff T IN "univ"[i:l]
 >>
 
 interactive simple_ffun_wf {| intro [] |} : <:itt_rule<
-    <H> >- T type -->
-    <H> >- (sff T) type
+    <H> >- T Type -->
+    <H> >- (sff T) Type
 >>
 
 interactive length_ffun_wf {| intro [intro_typeinf << 'f >>] |} simple_ffun{'T} : <:itt_rule<
-    <H> >- T type -->
+    <H> >- T Type -->
     <H> >- f IN sff T -->
-    <H> >- sff |f| IN int
+    <H> >- sff |f| IN "int"
 >>
 
 interactive apply_ffun_wf {| intro [] |} : <:itt_rule<
-    <H> >- T type -->
+    <H> >- T Type -->
     <H> >- f IN sff T -->
-    <H> >- i IN int -->
+    <H> >- i IN "int" -->
     <H> >- 0 <= i -->
     <H> >- i < sff |f| -->
     <H> >- sff { f @ i } IN T

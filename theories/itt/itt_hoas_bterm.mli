@@ -33,7 +33,6 @@ doc <:doc<
 
    @end[license]
 >>
-
 extends Itt_hoas_destterm
 extends Itt_hoas_lang
 
@@ -47,10 +46,6 @@ declare BTerm
 
 topval unfold_BTerm : conv
 topval fold_BTerm : conv
-
-(************************************************************************
- * Grammar.
- *)
 
 (*!
  * @docoff

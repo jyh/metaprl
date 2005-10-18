@@ -119,11 +119,13 @@ declare "subtype"{'tsub : TyExp; 'tsup : TyExp} : Prop   (* 'tsub is a subtype o
  *)
 declare tok_top          : Terminal
 declare tok_exp          : Terminal
+declare tok_type         : Terminal
 declare tok_Var          : Terminal
 declare tok_Exp          : Terminal
 declare tok_TyVar        : Terminal
 declare tok_TyExp        : Terminal
 
+lex_token itt : "type"   --> tok_type
 lex_token itt : "top"    --> tok_top
 lex_token itt : "exp"    --> tok_exp
 lex_token itt : "Var"    --> tok_Var

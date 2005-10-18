@@ -43,35 +43,16 @@ declare subst{'bt; 't}
 declare weak_dest_bterm{'bt; 'bind_case; op, sbt. 'subterms_case['op; 'sbt]}
 
 (************************************************************************
- * Grammar.
+ * Grammar for destructor.
  *)
-declare tok_bind       : Terminal
-declare tok_quote      : Terminal
-declare tok_match_term : Terminal
+declare tok_weak_dest_bterm : Terminal
 
-lex_token itt : "bind"   --> tok_bind
-lex_token itt : "quote"  --> tok_quote
-lex_token itt : "match_term" --> tok_match_term
+lex_token itt : "weak_dest_bterm" --> tok_weak_dest_bterm
 
-lex_prec right [tok_bind; tok_quote; tok_match_term] = prec_let
-
-(*
- * JYH: I'm not sure exactly what is an operator or subterm.
- *)
-declare itt_operator{'op} : Nonterminal
-declare itt_subterms{'t}  : Nonterminal
-
-production itt_term{bind{x. 't}} <--
-   tok_bind; tok_id[x:s]; tok_arrow; itt_term{'t}
-
-production itt_term{mk_term{'op; 'subterms}} <--
-   tok_quote; itt_operator{'op}; tok_left_curly; itt_subterms{'subterms}; tok_right_curly
-
-production itt_term{subst{'bt; 't}} <--
-   itt_term{'bt}; tok_at; itt_term{'t}
+lex_prec right [tok_weak_dest_bterm] = prec_let
 
 production itt_term{weak_dest_bterm{'bt; 'base; op, subterms. 'step}} %prec prec_let <--
-   tok_match_term; itt_term{'bt}; tok_with;
+   tok_weak_dest_bterm; itt_term{'bt}; tok_with;
    opt_pipe; tok_arrow; itt_term{'base};
    tok_pipe; tok_id[op:s]; tok_comma; tok_id[subterms:s]; tok_arrow; itt_term{'step}
 

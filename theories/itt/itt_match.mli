@@ -32,6 +32,28 @@ extends Itt_dprod
 extends Itt_dfun
 extends Itt_grammar
 
+(************************************************************************
+ * Tuple patterns.
+ *)
+declare typeclass TuplePatt
+
+declare sequent [parsed_tuple_patt] { Term : Term >- Term } : TuplePatt
+declare iform parsed_spread{'p : TuplePatt; 't1 : Term; 't2 : Term} : Term
+
+declare itt_tuple_patt{'p : TuplePatt} : Nonterminal
+
+production itt_tuple_patt{parsed_tuple_patt{| x: it |}} <--
+   tok_id[x:s]
+
+production itt_tuple_patt{parsed_tuple_patt{| <H>; x: it |}} <--
+   itt_tuple_patt{parsed_tuple_patt{| <H> |}}; tok_comma; tok_id[x:s]
+
+production itt_term{parsed_spread{'p; 't1; 't2}} %prec prec_let <--
+   tok_let; itt_tuple_patt{'p}; tok_equal; itt_term{'t1}; tok_in; itt_term{'t2}
+
+(************************************************************************
+ * Multiple cases.  We assume the union is outermost.
+ *)
 declare typeclass Case
 declare typeclass Cases
 
@@ -82,6 +104,74 @@ iform parsed_spread_triple :
     parsed_spread{parsed_tuple_patt{| x: it; y: it; z: it; <H> |}; 't1; 't2}
     <-->
     spread{'t1; x, www. parsed_spread{parsed_tuple_patt{| y: it; z: it; <H> |}; 'www; 't2}}
+
+(************************************************************************
+ * Curried functions.
+ *)
+declare tok_fun   : Terminal
+declare tok_fix   : Terminal
+
+lex_token itt : "fun" --> tok_fun
+lex_token itt : "fix" --> tok_fix
+
+lex_prec right [tok_fun; tok_fix] = prec_let
+
+(*
+ * Parameter lists are a list of identifiers.
+ *)
+declare typeclass Params
+
+declare sequent [parsed_params] { Term : Term >- Term } : Params
+declare itt_params{'p : Params} : Nonterminal
+
+production itt_params{parsed_params{||}} <-- (* empty *)
+
+production itt_params{parsed_params{| <H>; x: it |}} <--
+    itt_params{parsed_params{| <H> |}}; tok_id[x:s]
+
+(*
+ * Functions have the syntax
+ *    fun v1 ... vn -> e
+ *)
+declare iform parsed_fun{'e : Params} : Term
+
+production itt_term{parsed_fun{parsed_params{| <H> >- 't |}}} %prec prec_let <--
+   tok_fun; itt_params{parsed_params{| <H> |}}; tok_arrow; itt_term{'t}
+
+iform unfold_parsed_fun_cons :
+    parsed_fun{parsed_params{| <H>; x: 't1 >- 't2 |}}
+    <-->
+    parsed_fun{parsed_params{| <H> >- lambda{x. 't2} |}}
+
+iform unfold_parsed_fun_nil :
+    parsed_fun{parsed_params{| >- 't |}}
+    <-->
+    't
+
+(*
+ * A fixpoint has the syntax
+ *     fix f v1 ... vn -> e
+ *)
+declare iform parsed_fix{f : Term. 'e : Params} : Term
+declare iform parsed_fix{f : Term. 'e : Term; 'p : Params} : Term
+
+production itt_term{parsed_fix{f. parsed_params{| <H> >- 't |}}} %prec prec_let <--
+   tok_fix; tok_id[f:s]; itt_params{parsed_params{| <H> |}}; tok_arrow; itt_term{'t}
+
+iform unfold_parsed_fix_start :
+   parsed_fix{f. parsed_params{| <H> >- 't |}}
+   <-->
+   parsed_fix{f. 't; parsed_params{| <H> |}}
+
+iform unfold_parsed_fix_cons :
+   parsed_fix{f. 't1; parsed_params{| <H>; x: 't2 |}}
+   <-->
+   parsed_fix{f. lambda{x. 't1}; parsed_params{| <H> |}}
+
+iform unfold_parsed_fix_nil :
+   parsed_fix{f. 't; parsed_params{||}}
+   <-->
+   fix{f. 't}
 
 (*!
  * @docoff

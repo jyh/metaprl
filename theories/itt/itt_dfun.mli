@@ -194,62 +194,18 @@ topval fnExtenVoidT : tactic
 (************************************************************************
  * Grammar.
  *)
-declare tok_fun       : Terminal
 declare tok_Fun       : Terminal
-declare tok_fix       : Terminal
 
-lex_token itt : "fun" --> tok_fun
 lex_token itt : "Fun" --> tok_Fun
-lex_token itt : "fix" --> tok_fix
 
 production itt_apply_term{'e1 'e2} <--
    itt_apply_term{'e1}; itt_simple_term{'e2}
-
-production itt_term{lambda{x. 't}} <--
-   tok_fun; tok_id[x:s]; tok_arrow; itt_term{'t}
 
 production itt_term{'t1 -> 't2} <--
    itt_term{'t1}; tok_arrow; itt_term{'t2}
 
 production itt_term{x: 't1 -> 't2} <--
    tok_Fun; tok_id[x:s]; tok_colon; itt_apply_term{'t1}; tok_arrow; itt_term{'t2}
-
-(*
- * Parameter lists are a list of identifiers.
- *)
-declare typeclass Params
-
-declare sequent [parsed_params] { Term : Term >- Term } : Params
-declare itt_params{'p : Params} : Nonterminal
-
-production itt_params{parsed_params{||}} <-- (* empty *)
-
-production itt_params{parsed_params{| <H>; x: it |}} <--
-    itt_params{parsed_params{| <H> |}}; tok_id[x:s]
-
-(*
- * Fixpoint.
- *)
-declare iform parsed_fix{f : Term. 'e : Params} : Term
-declare iform parsed_fix{f : Term. 'e : Term; 'p : Params} : Term
-
-production itt_term{parsed_fix{f. parsed_params{| <H> >- 't |}}} <--
-   tok_fix; tok_id[f:s]; itt_params{parsed_params{| <H> |}}; tok_arrow; itt_term{'t}
-
-iform unfold_parsed_start :
-    parsed_fix{f. parsed_params{| <H> >- 't |}}
-    <-->
-    parsed_fix{f. 't; parsed_params{| <H> |}}
-
-iform unfold_parsed_fix_cons :
-    parsed_fix{f. 't1; parsed_params{| <H>; x: 't2 |}}
-    <-->
-    parsed_fix{f. lambda{x. 't1}; parsed_params{| <H> |}}
-
-iform unfold_parsed_fix_nil :
-    parsed_fix{f. 't; parsed_params{||}}
-    <-->
-    fix{f. 't}
 
 (*
  * -*-

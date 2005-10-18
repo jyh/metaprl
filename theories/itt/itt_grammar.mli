@@ -115,6 +115,7 @@ declare tok_right_curly        : Terminal
 declare tok_colon_colon        : Terminal
 declare tok_tilde              : Terminal
 declare tok_backslash          : Terminal
+declare tok_squote             : Terminal
 
 (* Identifiers *)
 lex_token itt : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
@@ -156,6 +157,7 @@ lex_token itt : "\]"         --> tok_right_brack
 lex_token itt : "\\"         --> tok_backslash
 lex_token itt : "[{]"        --> tok_left_curly
 lex_token itt : "[}]"        --> tok_right_curly
+lex_token itt : "'"          --> tok_squote
 lex_token itt : "<[|]"       --> tok_left_context
 lex_token itt : "[|]>"       --> tok_right_context
 lex_token itt : "::"         --> tok_colon_colon
@@ -195,15 +197,16 @@ declare prec_rel       : Precedence
 declare prec_cons      : Precedence
 
 lex_prec right    [prec_mimplies] > prec_min
-lex_prec nonassoc [prec_turnstile] > prec_mimplies
-lex_prec nonassoc [prec_let] > prec_turnstile
+lex_prec right    [prec_turnstile] > prec_mimplies
+lex_prec right    [prec_let] > prec_turnstile
 lex_prec right    [prec_comma] > prec_let
-lex_prec nonassoc [prec_colon] > prec_comma
+lex_prec right    [prec_colon] > prec_comma
 lex_prec right    [prec_iff] > prec_colon
 lex_prec right    [prec_implies] > prec_iff
 lex_prec right    [prec_or] > prec_implies
 lex_prec right    [prec_and] > prec_or
-lex_prec nonassoc [prec_in; prec_equal] > prec_and
+lex_prec right    [prec_in] > prec_and
+lex_prec right    [prec_equal] > prec_in
 lex_prec left     [prec_union] > prec_equal
 lex_prec right    [prec_arrow] > prec_union
 lex_prec right    [prec_prod] > prec_arrow
@@ -220,22 +223,30 @@ lex_prec right    [tok_turnstile] = prec_turnstile
 lex_prec right    [tok_plus; tok_minus] = prec_union
 lex_prec right    [tok_star] = prec_prod
 lex_prec right    [tok_arrow] = prec_arrow
-lex_prec nonassoc [tok_colon] = prec_colon
+lex_prec right    [tok_colon] = prec_colon
 lex_prec right    [tok_comma] = prec_comma
-lex_prec nonassoc [tok_let; tok_in; tok_decide; tok_match; tok_with] = prec_let
+lex_prec right    [tok_let; tok_decide; tok_match; tok_with; tok_in] = prec_let
 lex_prec left     [tok_at] = prec_apply
 lex_prec right    [tok_colon_colon] = prec_cons
-lex_prec nonassoc [tok_tilde; tok_dot; tok_hash] = prec_not
+lex_prec nonassoc [tok_tilde; tok_dot; tok_hash; tok_squote] = prec_not
+lex_prec right    [tok_pipe] = prec_let
 
 (************************************************
  * Utilities.
  *)
-declare opt_pipe : Nonterminal
+declare opt_pipe       : Nonterminal
+declare comma_or_semi  : Nonterminal
 
 production opt_pipe <-- (* empty *)
 
 production opt_pipe <--
    tok_pipe
+
+production comma_or_semi <--
+   tok_comma
+
+production comma_or_semi <--
+   tok_semi
 
 (************************************************
  * Second-order variables and contexts.
@@ -354,55 +365,160 @@ production itt_simple_term{'e} <--
 (************************************************
  * Generic terms using the normal syntax.
  *)
-declare parsed_bterms{x : Dform. 't['x] : Dform} : Dform
 
+(*
+ * An operator is a pathname of quoted identifiers.
+ *)
+declare itt_opname{'op : Dform} : Nonterminal
+
+production itt_opname{xlist_sequent{| xopname[x:s] |}} <--
+   tok_string[x:s]
+
+production itt_opname{xlist_sequent{| <H>; xopname[x:s] |}} <--
+   itt_opname{xlist_sequent{| <H> |}}; tok_dot; tok_string[x:s]
+
+(*
+ * Parameter kinds are a list of string-or-word.
+ *    kind ::= sw
+ *          | kind ! sw
+ *)
+declare itt_param_kind_exp{'p : Dform} : Nonterminal
+declare itt_param_kind{'p : Dform} : Nonterminal
+
+production itt_param_kind_exp{xparam_id[x:s]} <--
+   tok_id[x:s]
+
+production itt_param_kind_exp{xparam_string[x:s]} <--
+   tok_string[x:s]
+
+production itt_param_kind{xlist_sequent{| 'p |}} <--
+   itt_param_kind_exp{'p}
+
+production itt_param_kind{xlist_sequent{| <H>; 'p |}} <--
+   itt_param_kind{xlist_sequent{| <H> |}}; tok_bang; itt_param_kind_exp{'p}
+
+(*
+ * A param is:
+ *    kind : string_or_id+
+ *
+ *    p_exp ::= <int>
+ *           |  - <int>
+ *           |  <string>
+ *           |  <id>
+ *           |  p_exp'
+ *           |  p_exp | p_exp
+ *           |  ( term )
+ *
+ *    p ::= p_exp
+ *       |  p_exp : kind
+ *)
+declare itt_param_exp{'p : Dform} : Nonterminal
+declare itt_param{'p : Dform} : Nonterminal
+declare itt_param_list{'p : Dform} : Nonterminal
+declare itt_param_nonempty_list{'l : Dform} : Nonterminal
+declare itt_params{'l : Dform} : Nonterminal
+
+production itt_param_exp{xparam_int[i:n]} <--
+   tok_int[i:n]
+
+production itt_param_exp{xparam_neg[i:n]} <--
+   tok_minus; tok_int[i:n]
+
+production itt_param_exp{xparam_string[s:s]} <--
+   tok_string[s:s]
+
+production itt_param_exp{xparam_id[x:s]} <--
+   tok_id[x:s]
+
+production itt_param_exp{xparam_succ{'p}} <--
+   itt_param_exp{'p}; tok_squote
+
+production itt_param_exp{xparam_max{'p1; 'p2}} <--
+   itt_param_exp{'p1}; tok_pipe; itt_param_exp{'p2}
+
+production itt_param{xparam{'p}} <--
+   itt_param_exp{'p}
+
+production itt_param{xparam{'p; 'k}} <--
+   itt_param_exp{'p}; tok_colon; itt_param_kind{'k}
+
+production itt_param_exp{xparam_term{'t; 'k}} <--
+   tok_left_paren; itt_term{'t}; tok_right_paren; itt_param_kind{'k}
+
+(*
+ * A param list is [param, ..., param]
+ *)
+production itt_params{xlist_sequent{||}} <--
+   (* empty *)
+
+production itt_params{'l} <--
+   tok_left_brack; itt_param_list{'l}; tok_right_brack
+
+production itt_param_list{xlist_sequent{||}} <--
+   (* empty *)
+
+production itt_param_list{'l} <--
+   itt_param_nonempty_list{'l}
+
+production itt_param_nonempty_list{xlist_sequent{| 'p |}} <--
+   itt_param{'p}
+
+production itt_param_nonempty_list{xlist_sequent{| <H>; 'p |}} <--
+   itt_param_nonempty_list{xlist_sequent{| <H> |}}; comma_or_semi; itt_param{'p}
+
+(*
+ * Bterms.
+ *)
 declare itt_bterm{'t : Dform} : Nonterminal
-declare itt_bterm_tail{'t : Dform} : Nonterminal
+declare itt_bterm_bind{'t : Dform} : Nonterminal
 declare itt_bterms{'t : Dform} : Nonterminal
 declare itt_bterms_list{'t : Dform} : Nonterminal
 declare itt_bterms_nonempty_list{'t : Dform} : Nonterminal
 
 (*
- * Bterms are a single term, or \v1 ... vn -> term.
+ * A bterm is a single term, or \v1, ..., vn. term
  *)
 production itt_bterm{'t} <--
    itt_term{'t}
 
 production itt_bterm{'t} <--
-   tok_backslash; itt_bterm_tail{'t}
+   itt_bterm_bind{'t}
 
-production itt_bterm_tail{'t} <--
-   tok_arrow; itt_term{'t}
+production itt_bterm_bind{xbterm{| x: it |}} <--
+   tok_backslash; tok_id[x:s]
 
-production itt_bterm_tail{xbterm{x. 't}} <--
-   tok_id[x:s]; itt_bterm_tail{'t}
+production itt_bterm_bind{xbterm{| <H>; x: it |}} <--
+   itt_bterm_bind{xbterm{| <H> |}}; tok_comma; tok_id[x:s]
+
+production itt_bterm_bind{xbterm{| <H> >- 't |}} <--
+   itt_bterm_bind{xbterm{| <H> |}}; tok_dot; itt_term{'t}
 
 (*
  * Bterms are {...}
  *)
-production itt_bterms{xnil} <--
+production itt_bterms{xlist_sequent{||}} <--
    (* empty *)
 
 production itt_bterms{'t} <--
    tok_left_curly; itt_bterms_list{'t}; tok_right_curly
 
-production itt_bterms_list{xnil} <--
+production itt_bterms_list{xlist_sequent{||}} <--
    (* empty *)
 
-production itt_bterms_list{'t[xnil]} <--
-   itt_bterms_nonempty_list{parsed_bterms{x. 't['x]}}
+production itt_bterms_list{'l} <--
+   itt_bterms_nonempty_list{'l}
 
-production itt_bterms_nonempty_list{parsed_bterms{x. xcons{'t; 'x}}} <--
+production itt_bterms_nonempty_list{xlist_sequent{| 't |}} <--
    itt_bterm{'t}
 
-production itt_bterms_nonempty_list{parsed_bterms{x. 't1[xcons{'t2; 'x}]}} <--
-   itt_bterms_nonempty_list{parsed_bterms{x. 't1['x]}}; tok_semi; itt_bterm{'t2}
+production itt_bterms_nonempty_list{xlist_sequent{| <H>; 't |}} <--
+   itt_bterms_nonempty_list{xlist_sequent{| <H> |}}; tok_semi; itt_bterm{'t}
 
 (*
  * The operator must be quoted.
  *)
-production itt_term{xterm[op:s]{'t}} <--
-   tok_string[op:s]; itt_bterms{'t}
+production itt_simple_term{xterm{'op; 'p; 't}} <--
+   itt_opname{'op}; itt_params{'p}; itt_bterms{'t}
 
 (************************************************************************
  * Meta-terms.
@@ -525,14 +641,6 @@ iform var_id :
    parsed_sovar[x:s]{'contexts; 'args}
    <-->
    xsovar[x:v]{'contexts; 'args}
-
-(************************************************************************
- * Common utilities.
- *)
-declare iform parsed_proj[name:s]{'t}
-
-production itt_term{parsed_proj[field:s]{'t}} %prec prec_not <--
-   itt_simple_term{'t}; tok_dot; tok_id[field:s]
 
 (*!
  * @docoff

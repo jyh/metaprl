@@ -195,25 +195,6 @@ production itt_term{x: 't1 * 't2} <--
    tok_Prod; tok_id[x:s]; tok_colon; itt_apply_term{'t1}; tok_star; itt_term{'t2}
 
 (*
- * Comma-separated identifiers.
- *)
-declare typeclass TuplePatt
-
-declare sequent [parsed_tuple_patt] { Term : Term >- Term } : TuplePatt
-declare parsed_spread{'p : TuplePatt; 't1 : Term; 't2 : Term} : Term
-
-declare itt_tuple_patt{'p : TuplePatt} : Nonterminal
-
-production itt_tuple_patt{parsed_tuple_patt{| x: it |}} <--
-   tok_id[x:s]
-
-production itt_tuple_patt{parsed_tuple_patt{| <H>; x: it |}} <--
-   itt_tuple_patt{parsed_tuple_patt{| <H> |}}; tok_comma; tok_id[x:s]
-
-production itt_term{parsed_spread{'p; 't1; 't2}} <--
-   tok_let; itt_tuple_patt{'p}; tok_equal; itt_term{'t1}; tok_in; itt_term{'t2}
-
-(*
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

@@ -46,51 +46,8 @@ declare right{'v}
 declare get_op{'bt; 'op}
 declare subterms{'bt}
 declare not_found
-define iform unfold_get_op1:
+define iform unfold_get_op1 :
    get_op{'bt} <--> get_op{'bt; not_found}
-
-(************************************************************************
- * Grammar.
- *)
-declare tok_mk_bterm     : Terminal
-
-lex_token itt : "mk_bterm" --> tok_mk_bterm
-
-lex_prec right [tok_mk_bterm] = prec_let
-
-production itt_term{var{'left; 'right}} <--
-   tok_tilde; tok_lt; itt_term{'left}; tok_semi; itt_term{'right}; tok_gt
-
-production itt_term{mk_bterm{'n; 'op; 'btl}} <--
-   tok_mk_bterm; tok_left_curly; itt_term{'n}; tok_semi; itt_term{'op}; tok_semi; itt_term{'btl}; tok_right_curly
-
-(*
- * Various projections.
- *)
-iform unfold_depth :
-    parsed_proj["depth"]{'t}
-    <-->
-    bdepth{'t}
-
-iform unfold_left :
-    parsed_proj["left"]{'t}
-    <-->
-    left{'t}
-
-iform unfold_right :
-    parsed_proj["right"]{'t}
-    <-->
-    right{'t}
-
-iform unfold_get_op :
-    parsed_proj["op"]{'t}
-    <-->
-    get_op{'t}
-
-iform unfold_subterms :
-    parsed_proj["subterms"]{'t}
-    <-->
-    subterms{'t}
 
 (*!
  * @docoff

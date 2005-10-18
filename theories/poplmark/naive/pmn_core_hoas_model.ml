@@ -38,7 +38,7 @@ define unfold_venv : VEnv <--> <:itt< sif soas_Exp >>
 prim_rw unfold_ty_var_type : <:itt_rw<
     TyVar
     <-->
-    int
+    "int"
 >>
 
 prim_rw unfold_ty_exp : <:itt_rw<
@@ -50,7 +50,7 @@ prim_rw unfold_ty_exp : <:itt_rw<
 prim_rw unfold_var_type : <:itt_rw<
     Var
     <-->
-    int
+    "int"
 >>
 
 prim_rw unfold_exp : <:itt_rw<

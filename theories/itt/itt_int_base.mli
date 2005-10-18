@@ -451,15 +451,8 @@ topval arith_unfoldC : conv
 (************************************************************************
  * Grammar.
  *)
-declare tok_int            : Terminal
-
-lex_token itt : "int"     --> tok_int
-
 production itt_simple_term{number[i:n]} <--
    tok_int[i:n]
-
-production itt_simple_term{int} <--
-   tok_int
 
 (*
  * -*-

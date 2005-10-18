@@ -48,7 +48,6 @@ declare BT{'sop; 'n}
 declare Lang{'ops}
 define iform unfold_BTerm: BTerm <--> Lang{Operator}
 
-
 topval unfold_compatible_shapes : conv
 topval unfold_Ldom : conv
 topval unfold_mk : conv
@@ -66,11 +65,11 @@ topval fold_ndepth : conv
 (************************************************************************
  * Grammar.
  *)
-declare tok_Lang       : Terminal
+declare tok_Lang          : Terminal
 
-lex_token itt : "Lang"     --> tok_Lang
+lex_token itt : "Lang"    --> tok_Lang
 
-lex_prec right [tok_Lang]       = prec_not
+lex_prec right [tok_Lang] = prec_not
 
 production itt_term{Lang{listmem_set{'ops; Operator}}} <--
    tok_Lang; itt_term{'ops}

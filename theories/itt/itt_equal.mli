@@ -257,40 +257,23 @@ topval cumulativityT : term -> tactic
 (************************************************************************
  * Grammar.
  *)
-declare tok_IN    : Terminal
-declare tok_type  : Terminal
-declare tok_univ  : Terminal
-declare tok_univ1 : Terminal
+declare tok_Type : Terminal
+declare tok_IN   : Terminal
 
-lex_token itt : "IN"    --> tok_IN
-lex_token itt : "type"  --> tok_type
-lex_token itt : "univ"  --> tok_univ
-lex_token itt : "univ1" --> tok_univ1
+lex_token itt : "IN" --> tok_IN
+lex_token itt : "Type" --> tok_Type
 
+lex_prec nonassoc [tok_Type] = prec_not
 lex_prec right [tok_IN] = prec_in
 
-production itt_term{'t1 = 't2 in 't3} <--
+production itt_term{'t1 = 't2 in 't3} %prec prec_equal <--
    itt_term{'t1}; tok_equal; itt_term{'t2}; tok_in; itt_term{'t3}
 
-production itt_term{'t1 in 't2} <--
+production itt_term{'t1 = 't1 in 't2} <--
    itt_term{'t1}; tok_IN; itt_term{'t2}
 
-production itt_term{"type"{'t}} <--
-   itt_term{'t}; tok_type
-
-(*
- * Universes.  It isn't clear at the moment whether
- * we can parse and use level expressions, so we just
- * include the simple ones.
-production itt_term{univ[i:l]} <--
-   tok_univ; tok_left_brack; tok_id[i:s]; tok_right_brack
-
-production itt_term{univ[i:l]} <--
-   tok_univ; tok_left_brack; tok_int[i:n]; tok_right_brack
- *)
-
-production itt_term{univ[1:l]} <--
-   tok_univ1
+production itt_term{'t Type} <--
+   itt_term{'t}; tok_Type
 
 (*
  * -*-

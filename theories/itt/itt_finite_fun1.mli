@@ -52,22 +52,22 @@ declare apply_ffun{'f; 'i}
 declare tok_sff      : Terminal
 declare tok_plus_eq  : Terminal
 
-lex_token itt : "sff"  --> tok_sff
-lex_token itt : "+="   --> tok_plus_eq
+lex_token xterm : "sff"  --> tok_sff
+lex_token xterm : "+="   --> tok_plus_eq
 
 lex_prec right [tok_sff] = prec_not
 
-production itt_term{simple_ffun{'t}} <--
-   tok_sff; itt_term{'t}
+production xterm_term{simple_ffun{'t}} <--
+   tok_sff; xterm_term{'t}
 
-production itt_term{length_ffun{'f}} <--
-   tok_sff; tok_pipe; itt_term{'f}; tok_pipe
+production xterm_term{length_ffun{'f}} <--
+   tok_sff; tok_pipe; xterm_term{'f}; tok_pipe
 
-production itt_term{add_ffun{'f; 'x}} <--
-   tok_sff; tok_left_curly; itt_term{'f}; tok_plus_eq; itt_term{'x}; tok_right_curly
+production xterm_term{add_ffun{'f; 'x}} <--
+   tok_sff; tok_left_curly; xterm_term{'f}; tok_plus_eq; xterm_term{'x}; tok_right_curly
 
-production itt_term{apply_ffun{'f; 'x}} <--
-   tok_sff; tok_left_curly; itt_term{'f}; tok_at; itt_term{'x}; tok_right_curly
+production xterm_term{apply_ffun{'f; 'x}} <--
+   tok_sff; tok_left_curly; xterm_term{'f}; tok_at; xterm_term{'x}; tok_right_curly
 
 (*!
  * @docoff

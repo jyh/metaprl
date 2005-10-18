@@ -67,12 +67,12 @@ topval fold_ndepth : conv
  *)
 declare tok_Lang          : Terminal
 
-lex_token itt : "Lang"    --> tok_Lang
+lex_token xterm : "Lang"    --> tok_Lang
 
 lex_prec right [tok_Lang] = prec_not
 
-production itt_term{Lang{listmem_set{'ops; Operator}}} <--
-   tok_Lang; itt_term{'ops}
+production xterm_term{Lang{listmem_set{'ops; Operator}}} <--
+   tok_Lang; xterm_term{'ops}
 
 (*!
  * @docoff

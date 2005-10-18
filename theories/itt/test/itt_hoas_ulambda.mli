@@ -32,16 +32,6 @@ declare ULambda
 
 topval fold_ulambda : conv
 
-(************************************************************************
- * Grammar.
- *)
-declare tok_ULambda : Terminal
-
-lex_token itt : "ULambda" --> tok_ULambda
-
-production itt_term{ULambda} <--
-   tok_ULambda
-
 (*!
  * @docoff
  *

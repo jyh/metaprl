@@ -30,7 +30,6 @@
 extends Itt_union
 extends Itt_dprod
 extends Itt_dfun
-extends Itt_grammar
 
 (************************************************************************
  * Tuple patterns.
@@ -48,8 +47,8 @@ production itt_tuple_patt{parsed_tuple_patt{| x: it |}} <--
 production itt_tuple_patt{parsed_tuple_patt{| <H>; x: it |}} <--
    itt_tuple_patt{parsed_tuple_patt{| <H> |}}; tok_comma; tok_id[x:s]
 
-production itt_term{parsed_spread{'p; 't1; 't2}} %prec prec_let <--
-   tok_let; itt_tuple_patt{'p}; tok_equal; itt_term{'t1}; tok_in; itt_term{'t2}
+production xterm_term{parsed_spread{'p; 't1; 't2}} %prec prec_let <--
+   tok_let; itt_tuple_patt{'p}; tok_equal; xterm_term{'t1}; tok_in; xterm_term{'t2}
 
 (************************************************************************
  * Multiple cases.  We assume the union is outermost.
@@ -64,11 +63,11 @@ declare iform parsed_match{'e : Term; 'cases : Cases} : Term
 declare itt_match_case{'p : TuplePatt; 'e : Term} : Nonterminal
 declare itt_match_cases{'cases : Cases} : Nonterminal
 
-production itt_term{parsed_match{'e; 'cases}} <--
-   tok_match; itt_term{'e}; tok_with; itt_match_cases{'cases}; tok_end
+production xterm_term{parsed_match{'e; 'cases}} <--
+   tok_match; xterm_term{'e}; tok_with; itt_match_cases{'cases}; tok_end
 
 production itt_match_case{'p; 'e} <--
-   itt_tuple_patt{'p}; tok_arrow; itt_term{'e}
+   itt_tuple_patt{'p}; tok_arrow; xterm_term{'e}
 
 production itt_match_cases{parsed_cases{| parsed_case{'p; 'e} |}} <--
    opt_pipe; itt_match_case{'p; 'e}
@@ -111,8 +110,8 @@ iform parsed_spread_triple :
 declare tok_fun   : Terminal
 declare tok_fix   : Terminal
 
-lex_token itt : "fun" --> tok_fun
-lex_token itt : "fix" --> tok_fix
+lex_token xterm : "fun" --> tok_fun
+lex_token xterm : "fix" --> tok_fix
 
 lex_prec right [tok_fun; tok_fix] = prec_let
 
@@ -135,8 +134,8 @@ production itt_params{parsed_params{| <H>; x: it |}} <--
  *)
 declare iform parsed_fun{'e : Params} : Term
 
-production itt_term{parsed_fun{parsed_params{| <H> >- 't |}}} %prec prec_let <--
-   tok_fun; itt_params{parsed_params{| <H> |}}; tok_arrow; itt_term{'t}
+production xterm_term{parsed_fun{parsed_params{| <H> >- 't |}}} %prec prec_let <--
+   tok_fun; itt_params{parsed_params{| <H> |}}; tok_arrow; xterm_term{'t}
 
 iform unfold_parsed_fun_cons :
     parsed_fun{parsed_params{| <H>; x: 't1 >- 't2 |}}
@@ -155,8 +154,8 @@ iform unfold_parsed_fun_nil :
 declare iform parsed_fix{f : Term. 'e : Params} : Term
 declare iform parsed_fix{f : Term. 'e : Term; 'p : Params} : Term
 
-production itt_term{parsed_fix{f. parsed_params{| <H> >- 't |}}} %prec prec_let <--
-   tok_fix; tok_id[f:s]; itt_params{parsed_params{| <H> |}}; tok_arrow; itt_term{'t}
+production xterm_term{parsed_fix{f. parsed_params{| <H> >- 't |}}} %prec prec_let <--
+   tok_fix; tok_id[f:s]; itt_params{parsed_params{| <H> |}}; tok_arrow; xterm_term{'t}
 
 iform unfold_parsed_fix_start :
    parsed_fix{f. parsed_params{| <H> >- 't |}}

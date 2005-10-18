@@ -33,7 +33,6 @@
 extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
-extends Itt_grammar
 
 open Lm_symbol
 
@@ -183,16 +182,16 @@ val mk_spread_term : var -> var -> term -> term -> term
  *)
 declare tok_Prod      : Terminal
 
-lex_token itt : "Prod" --> tok_Prod
+lex_token xterm : "Prod" --> tok_Prod
 
-production itt_term{pair{'t1; 't2}} <--
-   itt_term{'t1}; tok_comma; itt_term{'t2}
+production xterm_term{pair{'t1; 't2}} <--
+   xterm_term{'t1}; tok_comma; xterm_term{'t2}
 
-production itt_term{'t1 * 't2} <--
-   itt_term{'t1}; tok_star; itt_term{'t2}
+production xterm_term{'t1 * 't2} <--
+   xterm_term{'t1}; tok_star; xterm_term{'t2}
 
-production itt_term{x: 't1 * 't2} <--
-   tok_Prod; tok_id[x:s]; tok_colon; itt_apply_term{'t1}; tok_star; itt_term{'t2}
+production xterm_term{x: 't1 * 't2} <--
+   tok_Prod; tok_id[x:s]; tok_colon; xterm_apply_term{'t1}; tok_star; xterm_term{'t2}
 
 (*
  * -*-

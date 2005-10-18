@@ -28,52 +28,42 @@ extends Itt_hoas_lang
 
 open Basic_tactics
 
+declare Apply{'e1; 'e2}
+declare Lambda{x. 'e['x]}
+
 (*
  * The language.
  *)
-define unfold_ulambda : ULambda <--> <:itt<
-   Lang [#(fun x -> e); #(f x)]
+define unfold_ulambda : ULambda <--> <:xterm<
+   Lang [#"Apply"{e1; e2}; #"Lambda"{\x. y}]
 >>
 
-define unfold_lambda : Lambda{'depth; 'e} <--> <:itt<
-   "mk_bterm"{depth; #(fun x -> y); [e]}
+define unfold_apply_c : ApplyC{'depth; 'e1; 'e2} <--> <:xterm<
+   "mk_bterm"{depth; #"Apply"{e1; e2}; [e1; e2]}
 >>
 
-define unfold_apply : Apply{'depth; 'e1; 'e2} <--> <:itt<
-   "mk_bterm"{depth; #(f x); [e1; e2]}
+define unfold_lambda_c : LambdaC{'depth; 'e} <--> <:xterm<
+   "mk_bterm"{depth; #"Lambda"{\x. x}; [e]}
 >>
 
-let fold_ulambda = makeFoldC << ULambda >> unfold_ulambda
-let fold_lambda  = makeFoldC << Lambda{'depth; 'e} >> unfold_lambda
-let fold_apply   = makeFoldC << Apply{'depth; 'e1; 'e2} >> unfold_apply
+let fold_ulambda   = makeFoldC << ULambda >> unfold_ulambda
+let fold_lambda_c  = makeFoldC << LambdaC{'depth; 'e} >> unfold_lambda_c
+let fold_apply_c   = makeFoldC << ApplyC{'depth; 'e1; 'e2} >> unfold_apply_c
 
-interactive ulambda_type : <:itt_rule<
+interactive ulambda_type : <:xrule<
    <H> >- "ULambda" Type
 >>
 
-interactive var_wf {| intro [] |} : <:itt_rule<
+interactive var_wf {| intro [] |} : <:xrule<
    <H> >- l IN "nat" -->
    <H> >- r IN "nat" -->
    <H> >- "var"{l; r} IN "ULambda"
 >>
 
-interactive apply_wf {| intro [] |} : <:itt_rule<
-   <H> >- depth IN "nat" -->
-   <H> >- e1 IN "ULambda" -->
-   <H> >- e2 IN "ULambda" -->
-   <H> >- "Apply"{depth; e1; e2} IN "ULambda"
->>
-
-interactive lambda_wf {| intro [] |} : <:itt_rule<
-   <H> >- depth IN "nat" -->
-   <H> >- e IN "ULambda" -->
-   <H> >- "Lambda"{depth; e} IN "ULambda"
->>
-
-interactive ulambda_elim1 'H : <:itt_rule<
+interactive ulambda_elim1 'H : <:xrule<
    <H>; e: "ULambda"; <J[e]>; l: "nat"; r: "nat" >- P["var"{l; r}] -->
-   <H>; e: "ULambda"; <J[e]>; bdepth: "nat"; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2] >- P["mk_bterm"{bdepth; #(f x); [e1; e2]}] -->
-   <H>; e: "ULambda"; <J[e]>; bdepth: "nat"; e1: "ULambda"; P[e1] >- P["mk_bterm"{bdepth; #(fun x -> y); [e1]}] -->
+   <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2] >- P["mk_bterm"{depth; #(f x); [e1; e2]}] -->
+   <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; P[e1] >- P["mk_bterm"{depth; #(fun x -> y); [e1]}] -->
    <H>; e: "ULambda"; <J[e]> >- P[e]
 >>
 

@@ -13,6 +13,7 @@ MPFILES[] =
     base_rewrite
     base_reflection
     base_operator
+    base_grammar
     base_theory
 
 Theory($(MPFILES))

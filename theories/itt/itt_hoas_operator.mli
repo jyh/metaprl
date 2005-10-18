@@ -55,15 +55,15 @@ declare operator[op:op]
 
 declare tok_is_same_op : Terminal
 
-lex_token itt : "=\[op\]=" --> tok_is_same_op
+lex_token xterm : "=\[op\]=" --> tok_is_same_op
 
 lex_prec right [tok_is_same_op] = prec_equal
 
-production itt_term{is_same_op{'op1; 'op2}} <--
-   itt_term{'op1}; tok_is_same_op; itt_term{'op2}
+production xterm_term{is_same_op{'op1; 'op2}} <--
+   xterm_term{'op1}; tok_is_same_op; xterm_term{'op2}
 
-production itt_term{operator[t:op]} <--
-   tok_hash; itt_term{'t}
+production xterm_term{operator[t:op]} <--
+   tok_hash; xterm_term{'t}
 
 (*!
  * @docoff

@@ -35,24 +35,24 @@ open Basic_tactics
 (************************************************************************
  * Definitions.
  *)
-define unfold_simple_ifun : simple_ifun{'T} <--> <:itt<
+define unfold_simple_ifun : simple_ifun{'T} <--> <:xterm<
    "int" * ("int" -> T)
 >>
 
-define unfold_empty_ifun : empty_ifun{'x} <--> <:itt<
+define unfold_empty_ifun : empty_ifun{'x} <--> <:xterm<
    0, fun y -> x
 >>
 
-define unfold_length_ifun : length_ifun{'f} <--> <:itt<
+define unfold_length_ifun : length_ifun{'f} <--> <:xterm<
    let len, _ = f in len
 >>
 
-define unfold_apply_ifun : apply_ifun{'f; 'i} <--> <:itt<
+define unfold_apply_ifun : apply_ifun{'f; 'i} <--> <:xterm<
    let _, g = f in
       g i
 >>
 
-define unfold_add_ifun : add_ifun{'f; 'x} <--> <:itt<
+define unfold_add_ifun : add_ifun{'f; 'x} <--> <:xterm<
    let len, g = f in
       len +@ 1, (fun i -> if i ==b len then x else g i)
 >>
@@ -75,35 +75,35 @@ dform add_ifun_df : add_ifun{'f; 'x} =
 (************************************************************************
  * Well-formedness.
  *)
-interactive simple_ifun_univ {| intro [] |} : <:itt_rule<
+interactive simple_ifun_univ {| intro [] |} : <:xrule<
     <H> >- T IN << univ[i:l] >> -->
     <H> >- sif T IN << univ[i:l] >>
 >>
 
-interactive simple_ifun_wf {| intro [] |} : <:itt_rule<
+interactive simple_ifun_wf {| intro [] |} : <:xrule<
     <H> >- T type -->
     <H> >- (sif T) type
 >>
 
-interactive empty_ifun_wf {| intro [] |} : <:itt_rule<
+interactive empty_ifun_wf {| intro [] |} : <:xrule<
     <H> >- x IN T -->
     <H> >- sif { x } IN sif T
 >>
 
-interactive length_ifun_wf {| intro [intro_typeinf << 'f >>] |} simple_ifun{'T} : <:itt_rule<
+interactive length_ifun_wf {| intro [intro_typeinf << 'f >>] |} simple_ifun{'T} : <:xrule<
     <H> >- T Type -->
     <H> >- f IN sif T -->
     <H> >- sif |f| IN int
 >>
 
-interactive apply_ifun_wf {| intro [] |} : <:itt_rule<
+interactive apply_ifun_wf {| intro [] |} : <:xrule<
     <H> >- T Type -->
     <H> >- f IN sif T -->
     <H> >- i IN "int" -->
     <H> >- sif { f @ i } IN T
 >>
 
-interactive add_ifun_wf {| intro [] |} : <:itt_rule<
+interactive add_ifun_wf {| intro [] |} : <:xrule<
    <H> >- f IN sif T -->
    <H> >- x IN T -->
    <H> >- sif { f += x } IN sif T

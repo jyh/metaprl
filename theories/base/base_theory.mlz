@@ -97,6 +97,7 @@ extends Typeinf
 extends Simp_typeinf
 extends Base_cache
 extends Base_meta
+extends Base_grammar
 
 (*
  * -*-

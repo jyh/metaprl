@@ -34,7 +34,7 @@ open Basic_tactics
 (************************************************************************
  * Definitions.
  *)
-define unfold_simple_ffun : simple_ffun{'T} <--> <:itt<
+define unfold_simple_ffun : simple_ffun{'T} <--> <:xterm<
    Prod n: "int" * ({ 0..n- } -> T)
 >>
 
@@ -44,7 +44,7 @@ define unfold_length_ffun : length_ffun{'f} <-->
 define unfold_apply_ffun : apply_ffun{'f; 'i} <-->
    snd{'f} 'i
 
-define unfold_add_ffun : add_ffun{'f; 'x} <--> <:itt<
+define unfold_add_ffun : add_ffun{'f; 'x} <--> <:xterm<
    let len, g = f in
       len +@ 1, (fun i -> if i ==b len then x else g i)
 >>
@@ -67,23 +67,23 @@ dform add_ffun_df : add_ffun{'f; 'x} =
 (************************************************************************
  * Well-formedness.
  *)
-interactive simple_ffun_univ {| intro [] |} : <:itt_rule<
+interactive simple_ffun_univ {| intro [] |} : <:xrule<
     <H> >- T IN "univ"[i:l] -->
     <H> >- sff T IN "univ"[i:l]
 >>
 
-interactive simple_ffun_wf {| intro [] |} : <:itt_rule<
+interactive simple_ffun_wf {| intro [] |} : <:xrule<
     <H> >- T Type -->
     <H> >- (sff T) Type
 >>
 
-interactive length_ffun_wf {| intro [intro_typeinf << 'f >>] |} simple_ffun{'T} : <:itt_rule<
+interactive length_ffun_wf {| intro [intro_typeinf << 'f >>] |} simple_ffun{'T} : <:xrule<
     <H> >- T Type -->
     <H> >- f IN sff T -->
     <H> >- sff |f| IN "int"
 >>
 
-interactive apply_ffun_wf {| intro [] |} : <:itt_rule<
+interactive apply_ffun_wf {| intro [] |} : <:xrule<
     <H> >- T Type -->
     <H> >- f IN sff T -->
     <H> >- i IN "int" -->
@@ -92,7 +92,7 @@ interactive apply_ffun_wf {| intro [] |} : <:itt_rule<
     <H> >- sff { f @ i } IN T
 >>
 
-interactive add_ffun_wf {| intro [] |} : <:itt_rule<
+interactive add_ffun_wf {| intro [] |} : <:xrule<
    <H> >- f IN sff T -->
    <H> >- x IN T -->
    <H> >- sff { f += x } IN sff T

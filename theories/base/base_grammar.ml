@@ -27,7 +27,9 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Base_theory
+extends Perv
+extends Base_trivial
+extends Base_rewrite
 
 (*!
  * @docoff

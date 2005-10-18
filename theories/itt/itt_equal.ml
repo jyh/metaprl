@@ -46,8 +46,6 @@ extends Base_theory
 doc docoff
 extends Itt_comment
 
-extends Itt_grammar
-
 open Lm_debug
 open Lm_printf
 open Simple_print

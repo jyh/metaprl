@@ -47,8 +47,6 @@ extends Itt_int_ext
 extends Itt_int_arith
 doc docoff
 
-extends Itt_grammar
-
 open Basic_tactics
 
 open Itt_struct

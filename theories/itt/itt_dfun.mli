@@ -32,7 +32,6 @@
  *)
 extends Itt_equal
 extends Itt_rfun
-extends Itt_grammar
 
 open Basic_tactics
 
@@ -196,16 +195,16 @@ topval fnExtenVoidT : tactic
  *)
 declare tok_Fun       : Terminal
 
-lex_token itt : "Fun" --> tok_Fun
+lex_token xterm : "Fun" --> tok_Fun
 
-production itt_apply_term{'e1 'e2} <--
-   itt_apply_term{'e1}; itt_simple_term{'e2}
+production xterm_apply_term{'e1 'e2} <--
+   xterm_apply_term{'e1}; xterm_simple_term{'e2}
 
-production itt_term{'t1 -> 't2} <--
-   itt_term{'t1}; tok_arrow; itt_term{'t2}
+production xterm_term{'t1 -> 't2} <--
+   xterm_term{'t1}; tok_arrow; xterm_term{'t2}
 
-production itt_term{x: 't1 -> 't2} <--
-   tok_Fun; tok_id[x:s]; tok_colon; itt_apply_term{'t1}; tok_arrow; itt_term{'t2}
+production xterm_term{x: 't1 -> 't2} <--
+   tok_Fun; tok_id[x:s]; tok_colon; xterm_apply_term{'t1}; tok_arrow; xterm_term{'t2}
 
 (*
  * -*-

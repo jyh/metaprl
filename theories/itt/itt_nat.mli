@@ -25,7 +25,6 @@
  * @end[license]
  *)
 extends Itt_int_ext
-extends Itt_grammar
 
 open Basic_tactics
 
@@ -64,13 +63,13 @@ topval positiveRule2T : tactic
  *)
 declare tok_dot_dot    : Terminal
 
-lex_token itt : "[.][.]"   --> tok_dot_dot
+lex_token xterm : "[.][.]"   --> tok_dot_dot
 
-production itt_term{{ i: int | 'j <= 'i & 'i <= 'k }} <--
-   tok_left_curly; itt_apply_term{'j}; tok_dot_dot; itt_apply_term{'k}; tok_right_curly
+production xterm_term{{ i: int | 'j <= 'i & 'i <= 'k }} <--
+   tok_left_curly; xterm_apply_term{'j}; tok_dot_dot; xterm_apply_term{'k}; tok_right_curly
 
-production itt_term{{ i: int | 'j <= 'i & 'i < 'k }} <--
-   tok_left_curly; itt_apply_term{'j}; tok_dot_dot; itt_apply_term{'k}; tok_minus; tok_right_curly
+production xterm_term{{ i: int | 'j <= 'i & 'i < 'k }} <--
+   tok_left_curly; xterm_apply_term{'j}; tok_dot_dot; xterm_apply_term{'k}; tok_minus; tok_right_curly
 
 (*!
  * @docoff

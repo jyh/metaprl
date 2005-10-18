@@ -170,16 +170,16 @@ declare tok_bor        : Terminal
 declare tok_band       : Terminal
 declare tok_bimplies   : Terminal
 
-lex_token itt : "if"     --> tok_if
-lex_token itt : "then"   --> tok_then
-lex_token itt : "else"   --> tok_else
-lex_token itt : "btrue"  --> tok_btrue
-lex_token itt : "bfalse" --> tok_bfalse
+lex_token xterm : "if"     --> tok_if
+lex_token xterm : "then"   --> tok_then
+lex_token xterm : "else"   --> tok_else
+lex_token xterm : "btrue"  --> tok_btrue
+lex_token xterm : "bfalse" --> tok_bfalse
 
-lex_token itt : "/b"         --> tok_bnot
-lex_token itt : "[|][|]b"    --> tok_bor
-lex_token itt : "&&b"        --> tok_band
-lex_token itt : "=>b"        --> tok_bimplies
+lex_token xterm : "/b"         --> tok_bnot
+lex_token xterm : "[|][|]b"    --> tok_bor
+lex_token xterm : "&&b"        --> tok_band
+lex_token xterm : "=>b"        --> tok_bimplies
 
 lex_prec nonassoc [tok_if; tok_then; tok_else] = prec_let
 lex_prec right [tok_bnot] = prec_not
@@ -187,26 +187,26 @@ lex_prec right [tok_bor] = prec_or
 lex_prec right [tok_band] = prec_and
 lex_prec right [tok_bimplies] = prec_implies
 
-production itt_term{ifthenelse{'e1; 'e2; 'e3}} <--
-   tok_if; itt_term{'e1}; tok_then; itt_term{'e2}; tok_else; itt_term{'e3}
+production xterm_term{ifthenelse{'e1; 'e2; 'e3}} <--
+   tok_if; xterm_term{'e1}; tok_then; xterm_term{'e2}; tok_else; xterm_term{'e3}
 
-production itt_term{btrue} <--
+production xterm_term{btrue} <--
    tok_btrue
 
-production itt_term{bfalse} <--
+production xterm_term{bfalse} <--
    tok_bfalse
 
-production itt_term{bnot{'e}} <--
-   tok_bnot; itt_term{'e}
+production xterm_term{bnot{'e}} <--
+   tok_bnot; xterm_term{'e}
 
-production itt_term{bor{'e1; 'e2}} <--
-   itt_term{'e1}; tok_bor; itt_term{'e2}
+production xterm_term{bor{'e1; 'e2}} <--
+   xterm_term{'e1}; tok_bor; xterm_term{'e2}
 
-production itt_term{band{'e1; 'e2}} <--
-   itt_term{'e1}; tok_band; itt_term{'e2}
+production xterm_term{band{'e1; 'e2}} <--
+   xterm_term{'e1}; tok_band; xterm_term{'e2}
 
-production itt_term{bimplies{'e1; 'e2}} <--
-   itt_term{'e1}; tok_bimplies; itt_term{'e2}
+production xterm_term{bimplies{'e1; 'e2}} <--
+   xterm_term{'e1}; tok_bimplies; xterm_term{'e2}
 
 (*
  * -*-

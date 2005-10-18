@@ -34,7 +34,6 @@ doc <:doc<
    @end[license]
 >>
 extends Base_theory
-extends Itt_grammar
 
 declare bind{x. 't['x]}
 declare mk_term{'op; 'subterms}
@@ -47,14 +46,14 @@ declare weak_dest_bterm{'bt; 'bind_case; op, sbt. 'subterms_case['op; 'sbt]}
  *)
 declare tok_weak_dest_bterm : Terminal
 
-lex_token itt : "weak_dest_bterm" --> tok_weak_dest_bterm
+lex_token xterm : "weak_dest_bterm" --> tok_weak_dest_bterm
 
 lex_prec right [tok_weak_dest_bterm] = prec_let
 
-production itt_term{weak_dest_bterm{'bt; 'base; op, subterms. 'step}} %prec prec_let <--
-   tok_weak_dest_bterm; itt_term{'bt}; tok_with;
-   opt_pipe; tok_arrow; itt_term{'base};
-   tok_pipe; tok_id[op:s]; tok_comma; tok_id[subterms:s]; tok_arrow; itt_term{'step}
+production xterm_term{weak_dest_bterm{'bt; 'base; op, subterms. 'step}} %prec prec_let <--
+   tok_weak_dest_bterm; xterm_term{'bt}; tok_with;
+   opt_pipe; tok_arrow; xterm_term{'base};
+   tok_pipe; tok_id[op:s]; tok_comma; tok_id[subterms:s]; tok_arrow; xterm_term{'step}
 
 (*!
  * @docoff

@@ -33,7 +33,6 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
 extends Itt_squiggle
 
 open Refiner.Refiner.TermType
@@ -95,23 +94,6 @@ rule unitElimination 'H :
 
 val unit_term : term
 val is_unit_term : term -> bool
-
-(************************************************************************
- * Grammar
- *)
-extends Itt_grammar
-
-declare tok_unit            : Terminal
-declare tok_it              : Terminal
-
-lex_token itt : "unit"     --> tok_unit
-lex_token itt : "it"       --> tok_it
-
-production itt_term{unit} <--
-    tok_unit
-
-production itt_term{it} <--
-    tok_it
 
 (*
  * -*-

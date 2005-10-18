@@ -35,7 +35,6 @@ extends Itt_equal
 extends Itt_bool
 extends Itt_logic
 extends Itt_decidable
-extends Itt_grammar
 
 open Basic_tactics
 
@@ -451,7 +450,7 @@ topval arith_unfoldC : conv
 (************************************************************************
  * Grammar.
  *)
-production itt_simple_term{number[i:n]} <--
+production xterm_simple_term{number[i:n]} <--
    tok_int[i:n]
 
 (*

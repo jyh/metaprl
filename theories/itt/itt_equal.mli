@@ -33,7 +33,6 @@
  *)
 extends Base_theory
 extends Itt_comment
-extends Itt_grammar
 
 open Basic_tactics
 
@@ -260,20 +259,20 @@ topval cumulativityT : term -> tactic
 declare tok_Type : Terminal
 declare tok_IN   : Terminal
 
-lex_token itt : "IN" --> tok_IN
-lex_token itt : "Type" --> tok_Type
+lex_token xterm : "IN" --> tok_IN
+lex_token xterm : "Type" --> tok_Type
 
 lex_prec nonassoc [tok_Type] = prec_not
 lex_prec right [tok_IN] = prec_in
 
-production itt_term{'t1 = 't2 in 't3} %prec prec_equal <--
-   itt_term{'t1}; tok_equal; itt_term{'t2}; tok_in; itt_term{'t3}
+production xterm_term{'t1 = 't2 in 't3} %prec prec_equal <--
+   xterm_term{'t1}; tok_equal; xterm_term{'t2}; tok_in; xterm_term{'t3}
 
-production itt_term{'t1 = 't1 in 't2} <--
-   itt_term{'t1}; tok_IN; itt_term{'t2}
+production xterm_term{'t1 = 't1 in 't2} <--
+   xterm_term{'t1}; tok_IN; xterm_term{'t2}
 
-production itt_term{'t Type} <--
-   itt_term{'t}; tok_Type
+production xterm_term{'t Type} <--
+   xterm_term{'t}; tok_Type
 
 (*
  * -*-

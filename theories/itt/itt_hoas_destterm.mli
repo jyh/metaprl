@@ -47,14 +47,14 @@ declare dest_bterm{'bt; l, r. 'var_case['l; 'r]; bdepth, op, subterms. 'op_case[
  *)
 declare tok_dest_bterm  : Terminal
 
-lex_token itt : "dest_bterm" --> tok_dest_bterm
+lex_token xterm : "dest_bterm" --> tok_dest_bterm
 
 lex_prec left  [tok_dest_bterm] = prec_let
 
-production itt_term{dest_bterm{'t; l, r. 'var_case; bdepth, op, subterms. 'op_case}} <--
-   tok_dest_bterm; itt_term{'t}; tok_with;
-   opt_pipe; tok_id[l:s]; tok_comma; tok_id[r:s]; tok_arrow; itt_term{'var_case};
-   tok_pipe; tok_id[bdepth:s]; tok_comma; tok_id[op:s]; tok_comma; tok_id[subterms:s]; tok_arrow; itt_term{'op_case}
+production xterm_term{dest_bterm{'t; l, r. 'var_case; bdepth, op, subterms. 'op_case}} <--
+   tok_dest_bterm; xterm_term{'t}; tok_with;
+   opt_pipe; tok_id[l:s]; tok_comma; tok_id[r:s]; tok_arrow; xterm_term{'var_case};
+   tok_pipe; tok_id[bdepth:s]; tok_comma; tok_id[op:s]; tok_comma; tok_id[subterms:s]; tok_arrow; xterm_term{'op_case}
 
 (*!
  * @docoff

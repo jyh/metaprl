@@ -60,24 +60,24 @@ declare apply_ifun{'f; 'i}
  *)
 declare tok_sif      : Terminal
 
-lex_token itt : "sif"  --> tok_sif
+lex_token xterm : "sif"  --> tok_sif
 
 lex_prec right [tok_sif] = prec_not
 
-production itt_term{simple_ifun{'t}} <--
-   tok_sif; itt_term{'t}
+production xterm_term{simple_ifun{'t}} <--
+   tok_sif; xterm_term{'t}
 
-production itt_term{empty_ifun{'x}} <--
-   tok_sif; tok_left_curly; itt_term{'x}; tok_right_curly
+production xterm_term{empty_ifun{'x}} <--
+   tok_sif; tok_left_curly; xterm_term{'x}; tok_right_curly
 
-production itt_term{length_ifun{'f}} <--
-   tok_sif; tok_pipe; itt_term{'f}; tok_pipe
+production xterm_term{length_ifun{'f}} <--
+   tok_sif; tok_pipe; xterm_term{'f}; tok_pipe
 
-production itt_term{add_ifun{'f; 'x}} <--
-   tok_sif; tok_left_curly; itt_term{'f}; tok_plus_eq; itt_term{'x}; tok_right_curly
+production xterm_term{add_ifun{'f; 'x}} <--
+   tok_sif; tok_left_curly; xterm_term{'f}; tok_plus_eq; xterm_term{'x}; tok_right_curly
 
-production itt_term{apply_ifun{'f; 'x}} <--
-   tok_sif; tok_left_curly; itt_term{'f}; tok_at; itt_term{'x}; tok_right_curly
+production xterm_term{apply_ifun{'f; 'x}} <--
+   tok_sif; tok_left_curly; xterm_term{'f}; tok_at; xterm_term{'x}; tok_right_curly
 
 (*!
  * @docoff

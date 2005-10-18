@@ -30,7 +30,6 @@
  * jyh@cs.cornell.edu
  *
  *)
-
 extends Itt_equal
 extends Itt_rfun
 
@@ -221,26 +220,26 @@ val mk_list_of_list : term list -> term
 (************************************************************************
  * Grammar.
  *)
-declare tok_nil    : Terminal
-
-lex_token itt : "\[\]"   --> tok_nil
-
 declare itt_list{'l} : Nonterminal
+declare itt_nonempty_list{'l} : Nonterminal
 
-production itt_term{nil} <--
-   tok_nil
+production xterm_term{cons{'t1; 't2}} <--
+   xterm_term{'t1}; tok_colon_colon; xterm_term{'t2}
 
-production itt_term{cons{'t1; 't2}} <--
-   itt_term{'t1}; tok_colon_colon; itt_term{'t2}
-
-production itt_term{'l} <--
+production xterm_term{'l} <--
    tok_left_brack; itt_list{'l}; tok_right_brack
 
-production itt_list{cons{'t; nil}} <--
-   itt_term{'t}
+production itt_list{nil} <--
+   (* empty *)
 
-production itt_list{cons{'t; 'l}} <--
-   itt_term{'t}; tok_semi; itt_list{'l}
+production itt_list{'l} <--
+   itt_nonempty_list{'l}
+
+production itt_nonempty_list{cons{'t; nil}} <--
+   xterm_term{'t}
+
+production itt_nonempty_list{cons{'t; 'l}} <--
+   xterm_term{'t}; tok_semi; itt_list{'l}
 
 (*
  * -*-

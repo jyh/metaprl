@@ -35,7 +35,6 @@ extends Itt_squash
 extends Itt_subtype
 extends Itt_unit
 extends Itt_struct
-extends Itt_grammar
 
 open Lm_symbol
 
@@ -128,8 +127,8 @@ val mk_set_term : var -> term -> term -> term
 (************************************************************************
  * Grammar.
  *)
-production itt_term{{ x: 't1 | 't2}} <--
-   tok_left_curly; tok_id[x:s]; tok_colon; itt_term{'t1}; tok_pipe; itt_term{'t2}; tok_right_curly
+production xterm_term{{ x: 't1 | 't2}} <--
+   tok_left_curly; tok_id[x:s]; tok_colon; xterm_term{'t1}; tok_pipe; xterm_term{'t2}; tok_right_curly
 
 (*
  * -*-

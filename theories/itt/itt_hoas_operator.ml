@@ -255,8 +255,3 @@ interactive shape_exam1 {| intro[] |}:
 
 interactive shape_exam2 {| intro[] |}:
    sequent{ <H> >- shape{operator[(lambda{x.it}):op]} = 1::nil in list{int} }
-
-(* ********** Examples ************* *)
-interactive op_exam10 {| intro [] |} : <:itt_rule<
-   <H> >- #(x y) IN Operator
->>

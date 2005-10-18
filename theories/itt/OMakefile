@@ -9,7 +9,6 @@ MLZFILES =
 
 # Library files
 MPFILES[] =
-   itt_grammar
    itt_comment
    itt_labels
    itt_equal

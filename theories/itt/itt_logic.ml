@@ -57,8 +57,6 @@ extends Itt_unit
 extends Itt_struct
 doc docoff
 
-extends Itt_grammar
-
 open Lm_debug
 open Lm_printf
 open Simple_print

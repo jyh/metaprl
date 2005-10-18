@@ -52,8 +52,6 @@ extends Itt_void
 extends Itt_unit
 doc docoff
 
-extends Itt_grammar
-
 open Lm_debug
 open Lm_printf
 

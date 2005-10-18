@@ -38,17 +38,7 @@ define unfold_ulambda : ULambda <--> <:xterm<
    Lang [#"Apply"{e1; e2}; #"Lambda"{\x. y}]
 >>
 
-define unfold_apply_c : ApplyC{'depth; 'e1; 'e2} <--> <:xterm<
-   "mk_bterm"{depth; #"Apply"{e1; e2}; [e1; e2]}
->>
-
-define unfold_lambda_c : LambdaC{'depth; 'e} <--> <:xterm<
-   "mk_bterm"{depth; #"Lambda"{\x. x}; [e]}
->>
-
 let fold_ulambda   = makeFoldC << ULambda >> unfold_ulambda
-let fold_lambda_c  = makeFoldC << LambdaC{'depth; 'e} >> unfold_lambda_c
-let fold_apply_c   = makeFoldC << ApplyC{'depth; 'e1; 'e2} >> unfold_apply_c
 
 interactive ulambda_type : <:xrule<
    <H> >- "ULambda" Type
@@ -58,6 +48,13 @@ interactive var_wf {| intro [] |} : <:xrule<
    <H> >- l IN "nat" -->
    <H> >- r IN "nat" -->
    <H> >- "var"{l; r} IN "ULambda"
+>>
+
+interactive apply_wf {| intro [] |} : <:xrule<
+   <H> >- depth IN "nat" -->
+   <H> >- e1 IN "ULambda" -->
+   <H> >- e2 IN "ULambda" -->
+   <H> >- ($`[depth] "Apply"{e1; e2}) IN "ULambda"
 >>
 
 interactive ulambda_elim1 'H : <:xrule<

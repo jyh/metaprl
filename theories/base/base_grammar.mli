@@ -118,6 +118,7 @@ declare tok_colon_colon        : Terminal
 declare tok_tilde              : Terminal
 declare tok_backslash          : Terminal
 declare tok_squote             : Terminal
+declare tok_bquote             : Terminal
 
 (* Identifiers *)
 lex_token xterm : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]

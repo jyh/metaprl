@@ -49,6 +49,11 @@ declare not_found
 define iform unfold_get_op1 :
    get_op{'bt} <--> get_op{'bt; not_found}
 
+(*
+ * More abstract vars.
+ *)
+declare Var
+
 (*!
  * @docoff
  *

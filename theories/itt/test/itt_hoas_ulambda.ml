@@ -51,9 +51,11 @@ interactive var_wf {| intro [] |} : <:xrule<
 >>
 
 interactive apply_wf {| intro [] |} : <:xrule<
-   <H> >- depth IN "nat" -->
    <H> >- e1 IN "ULambda" -->
    <H> >- e2 IN "ULambda" -->
+   <H> >- depth IN "nat" -->
+   <H> >- "bdepth"{e1} = depth in "nat" -->
+   <H> >- "bdepth"{e2} = depth in "nat" -->
    <H> >- ($`[depth] "Apply"{e1; e2}) IN "ULambda"
 >>
 

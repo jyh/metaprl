@@ -485,10 +485,10 @@ production xterm_bterm{'t} <--
    xterm_term{'t}
 
 production xterm_bterm{'t} <--
-   xterm_bterm_bind{'t}
+   tok_backslash; xterm_bterm_bind{'t}
 
 production xterm_bterm_bind{xbterm{| x: it |}} <--
-   tok_backslash; tok_id[x:s]
+   tok_id[x:s]
 
 production xterm_bterm_bind{xbterm{| <H>; x: it |}} <--
    xterm_bterm_bind{xbterm{| <H> |}}; tok_comma; tok_id[x:s]

@@ -35,7 +35,7 @@ declare Lambda{x. 'e['x]}
  * The language.
  *)
 define unfold_ulambda : ULambda <--> <:xterm<
-   Lang [#"Apply"{e1; e2}; #"Lambda"{\x. y}]
+   Lang [#"Apply"{x; x}; #"Lambda"{\x. x}]
 >>
 
 let fold_ulambda   = makeFoldC << ULambda >> unfold_ulambda
@@ -44,10 +44,9 @@ interactive ulambda_type : <:xrule<
    <H> >- "ULambda" Type
 >>
 
-interactive var_wf {| intro [] |} : <:xrule<
-   <H> >- l IN "nat" -->
-   <H> >- r IN "nat" -->
-   <H> >- "var"{l; r} IN "ULambda"
+interactive var_wf : <:xrule<
+   <H> >- v IN "Var" -->
+   <H> >- v IN "ULambda"
 >>
 
 interactive apply_wf {| intro [] |} : <:xrule<

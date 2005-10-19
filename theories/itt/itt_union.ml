@@ -259,8 +259,8 @@ prim decideEquality {| intro [] |} bind{z. 'T['z]} ('A + 'B) :
    [wf] sequent { <H>; u: 'A; 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    [wf] sequent { <H>; v: 'B; 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
    sequent { <H> >- decide{'e1; u1. 'l1['u1]; v1. 'r1['v1]} =
-                   decide{'e2; u2. 'l2['u2]; v2. 'r2['v2]} in
-                   'T['e1] } =
+                    decide{'e2; u2. 'l2['u2]; v2. 'r2['v2]} in
+                    'T['e1] } =
    it
 
 doc <:doc<

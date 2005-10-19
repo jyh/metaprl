@@ -53,6 +53,8 @@ define iform unfold_arity : arity{'op} <--> length{shape{'op}}
 (* JYH: This was not public, is it really supposed to be hidden? *)
 declare operator[op:op]
 
+declare iform parsed_operator{'t}
+
 declare tok_is_same_op : Terminal
 
 lex_token xterm : "=\[op\]=" --> tok_is_same_op
@@ -62,8 +64,13 @@ lex_prec right [tok_is_same_op] = prec_equal
 production xterm_term{is_same_op{'op1; 'op2}} <--
    xterm_term{'op1}; tok_is_same_op; xterm_term{'op2}
 
-production xterm_term{operator[t:op]} <--
+production xterm_term{parsed_operator{'t}} <--
    tok_hash; xterm_term{'t}
+
+iform unfold_parsed_operator :
+   parsed_operator{'t}
+   <-->
+   operator[t:op]
 
 (*!
  * @docoff

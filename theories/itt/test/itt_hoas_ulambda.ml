@@ -49,7 +49,6 @@ interactive var_wf : <:xrule<
    <H> >- v IN "ULambda"
 >>
 
-(*
 interactive apply_wf {| intro [] |} : <:xrule<
    <H> >- e1 IN "ULambda" -->
    <H> >- e2 IN "ULambda" -->
@@ -66,6 +65,7 @@ interactive lambda_wf {| intro [] |} : <:xrule<
    <H> >- ($`[depth] "Lambda"{\x. e[x]}) IN "ULambda"
 >>
 
+(*
 interactive ulambda_elim1 'H : <:xrule<
    <H>; e: "ULambda"; <J[e]>; l: "nat"; r: "nat" >- P["var"{l; r}] -->
    <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2] >- P["mk_bterm"{depth; #(f x); [e1; e2]}] -->

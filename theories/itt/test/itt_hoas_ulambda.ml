@@ -24,8 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_lang
-extends Itt_hoas_jyh
+extends Itt_hoas_lang2
 
 open Basic_tactics
 

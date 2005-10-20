@@ -49,6 +49,7 @@ interactive var_wf : <:xrule<
    <H> >- v IN "ULambda"
 >>
 
+(*
 interactive apply_wf {| intro [] |} : <:xrule<
    <H> >- e1 IN "ULambda" -->
    <H> >- e2 IN "ULambda" -->
@@ -59,6 +60,7 @@ interactive apply_wf {| intro [] |} : <:xrule<
 >>
 
 interactive lambda_wf {| intro [] |} : <:xrule<
+   <H> >- "bind"{\x. e[x]} IN "ULambda" -->
    <H> >- depth IN "nat" -->
    <H>; x: "Var" >- "bdepth"{e[x]} = depth in "int" -->
    <H> >- ($`[depth] "Lambda"{\x. e[x]}) IN "ULambda"
@@ -67,9 +69,10 @@ interactive lambda_wf {| intro [] |} : <:xrule<
 interactive ulambda_elim1 'H : <:xrule<
    <H>; e: "ULambda"; <J[e]>; l: "nat"; r: "nat" >- P["var"{l; r}] -->
    <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2] >- P["mk_bterm"{depth; #(f x); [e1; e2]}] -->
-   <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; P[e1] >- P["mk_bterm"{depth; #(fun x -> y); [e1]}] -->
+   <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; P[e1] >- P[$`[depth] Lambda{x. $, e@x}]
    <H>; e: "ULambda"; <J[e]> >- P[e]
 >>
+*)
 
 (*!
  * @docoff

@@ -57,6 +57,7 @@ extends Itt_omega
 extends Itt_tunion
 extends Itt_ext_equal
 extends Itt_sqsimple
+extends Itt_esquash
 doc docoff
 
 open Basic_tactics
@@ -709,6 +710,12 @@ interactive is_nil_wf {| intro [] |} :
 (*
  * Membership.
  *)
+interactive mem_univ_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'T1 = 'T2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'x1 = 'x2 in 'T1 } -->
+   [wf] sequent { <H> >- 'l1 = 'l2 in list{'T1} } -->
+   sequent { <H> >- mem{'x1; 'l1; 'T1} = mem{'x2; 'l2; 'T2} in univ[i:l] }
+
 interactive mem_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'x in 'T } -->
@@ -1313,6 +1320,49 @@ interactive listmem_set_elim1 {| elim [] |} 'H :
    sequent { <H>; <J> >- 'C['h] } -->
    sequent { <H>; <J>; x: listmem_set{'t; 'T} >- 'C['x] } -->
    sequent { <H>; x: listmem_set{'h::'t; 'T}; <J> >- 'C['x] }
+
+doc <:doc<
+    <<elistmem_set{'l; 'T}>> defines the set of elements in <<'T>> that are members of list <<'l>>,
+    where we use extensional list membership.  This means that two types are equal if they have
+    the same elements.  The ordering of elements in the list doesn't matter.
+>>
+define unfold_elistmem_set: elistmem_set{'l; 'T} <--> { t: 'T | esquash{mem{'t; 'l; 'T}} }
+
+dform elistmem_set_df : elistmem_set{'l; 'T} =
+   szone `"EListmem{" slot{'l} hspace `": " slot{'T} `" list }" ezone
+
+interactive elistmem_set_equal {| intro [] |} :
+   [wf] sequent { <H> >- 'T1 = 'T2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H> >- 'l2 in list{'T2} } -->
+   sequent { <H>; x: 'T1; mem{'x; 'l1; 'T1} >- squash{mem{'x; 'l2; 'T2}} } -->
+   sequent { <H>; x: 'T2; mem{'x; 'l2; 'T2} >- squash{mem{'x; 'l1; 'T1}} } -->
+   sequent { <H> >- elistmem_set{'l1; 'T1} = elistmem_set{'l2; 'T2} in univ[i:l] }
+
+interactive elistmem_set_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'T Type } -->
+   [wf] sequent { <H> >- 'l in list{'T} } -->
+   sequent { <H> >- elistmem_set{'l; 'T} Type }
+
+interactive elistmem_set_intro {| intro [] |} :
+   [wf] sequent { <H> >- 'x in 'T } -->
+   [wf] sequent { <H> >- 'l in list{'T} } -->
+   sequent { <H> >- squash{mem{'x; 'l; 'T}} } -->
+   sequent { <H> >- 'x in elistmem_set{'l; 'T} }
+
+interactive elistmem_set_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; x: elistmem_set{'l; 'T}; <J['x]> >- 'l in list{'T} } -->
+   sequent { <H>; x: 'T; i: squash{mem{'x;'l;'T}}; <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: elistmem_set{'l; 'T}; <J['x]> >- 'C['x] }
+
+interactive elistmem_set_elim1 {| elim [] |} 'H :
+   sequent { <H>; <J> >- 'h in 'T } -->
+   sequent { <H>; <J> >- 't in list{'T} } -->
+   sequent { <H>; <J> >- sqsimple{'T} } -->
+   sequent { <H>; <J>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
+   sequent { <H>; <J> >- 'C['h] } -->
+   sequent { <H>; <J>; x: elistmem_set{'t; 'T} >- 'C['x] } -->
+   sequent { <H>; x: elistmem_set{'h::'t; 'T}; <J> >- 'C['x] }
 
 doc docoff
 

@@ -30,12 +30,50 @@ extends Itt_hoas_lang
 
 open Basic_tactics
 
+(*
+ * Fold up Aleksey's dummy term.
+ *)
 define unfold_dummy :
    dummy
    <-->
    mk_term{it; nil}
 
 let fold_dummy = makeFoldC << dummy >> unfold_dummy
+
+(************************************************************************
+ * Operators.
+ *)
+
+(*
+ * Case analysis on operators in a language.
+ *)
+interactive operator_elim_cons {| elim [] |} 'H :
+   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'h in Operator } -->
+   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 't in list{Operator} } -->
+   sequent { <H>; op: SubOp{'h :: 't}; <J['h]> >- 'C['h] } -->
+   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'C['op] }
+
+interactive operator_elim_nil {| elim [] |} 'H :
+   sequent { <H>; op: SubOp{nil}; <J['op]> >- 'C['op] }
+
+(************************************************************************
+ * Shapes.
+ *)
+
+(*
+ * compatible_shapes{depth; op; subs} is very hard to work with.
+ * Use compatible_depths{depth; shape; subs} instead.
+ *)
+define unfold_compatible_depths :
+   compatible_depths{'depth; 'shape; 'subs}
+   <-->
+   map{i. 'depth +@ 'i; 'shape} = map{e. bdepth{'e}; 'subs} in list{int}
+
+interactive compatible_shapes_intro {| intro [] |} :
+    sequent { <H> >- 'depth in nat } -->
+    sequent { <H> >- 'op in Operator } -->
+    sequent { <H> >- compatible_depths{'depth; shape{'op}; 'subs} } -->
+    sequent { <H> >- compatible_shapes{'depth; 'op; 'subs} }
 
 (*!
  * @docoff

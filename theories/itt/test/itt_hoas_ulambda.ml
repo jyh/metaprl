@@ -66,14 +66,13 @@ interactive lambda_wf {| intro [] |} : <:xrule<
    <H> >- ($`[depth] "Lambda"{\x. e[x]}) IN "ULambda"
 >>
 
-(*
-interactive ulambda_elim1 'H : <:xrule<
-   <H>; e: "ULambda"; <J[e]>; l: "nat"; r: "nat" >- P["var"{l; r}] -->
-   <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2] >- P["mk_bterm"{depth; #(f x); [e1; e2]}] -->
-   <H>; e: "ULambda"; <J[e]>; depth: "nat"; e1: "ULambda"; P[e1] >- P[$`[depth] Lambda{x. $, e@x}]
-   <H>; e: "ULambda"; <J[e]> >- P[e]
+interactive ulambda_elim 'H : <:xrule<
+   <H>; <J>; v: "Var" >- P[v] -->
+   <H>; <J>; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2];
+      "bdepth"{e1} = "bdepth"{e2} in "int" >- P[$`["bdepth"{e1}] "Apply"{e1; e2}] -->
+   <H>; <J>; e: "ULambda"; P[e] >- P[$`["bdepth"{e}] "Lambda"{\x. $,"subst"{e; x}}] -->
+   <H>; e: "ULambda"; <J> >- P[e]
 >>
-*)
 
 (*!
  * @docoff

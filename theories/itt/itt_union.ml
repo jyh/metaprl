@@ -109,6 +109,10 @@ doc <:doc<
 
 >>
 
+prim_rw reduceDecideInl {| reduce |} : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
+prim_rw reduceDecideInr {| reduce |} : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
+
+
 interactive_rw reduce_outl_inl {| reduce |} :  outl{inl{'x}} <--> 'x
 
 interactive_rw reduce_outr_inr {| reduce |} :  outr{inr{'x}} <--> 'x
@@ -117,8 +121,6 @@ interactive_rw reduce_out_inl {| reduce |} :  out{inl{'x}} <--> 'x
 
 interactive_rw reduce_out_inr {| reduce |} :  out{inr{'x}} <--> 'x
 
-prim_rw reduceDecideInl {| reduce |} : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
-prim_rw reduceDecideInr {| reduce |} : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
 doc docoff
 
 (************************************************************************
@@ -286,13 +288,6 @@ interactive unionContradiction1 {| elim [] |} 'H :
 interactive unionContradiction2 {| elim [] |} 'H :
    sequent { <H>; x: inr{'y} = inl{'z} in 'A+'B; <J['x]> >- 'C['x] }
 
-interactive unionEqElimination1 {| elim [] |} 'H :
-   sequent { <H>; u: 'x = 'y in 'A; <J[it]> >- 'T[it] } -->
-   sequent { <H>; u: inl{'x} = inl{'y} in 'A + 'B; <J['u]> >- 'T['u] }
-
-interactive unionEqElimination2 {| elim [] |} 'H :
-   sequent { <H>; u: 'x = 'y in 'B; <J[it]> >- 'T[it] } -->
-   sequent { <H>; u: inr{'x} = inr{'y} in 'A + 'B; <J['u]> >- 'T['u] }
 
 
 (************************************************************************

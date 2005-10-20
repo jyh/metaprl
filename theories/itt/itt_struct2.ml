@@ -187,6 +187,15 @@ interactive setEqualityElim {| elim [] |} 'H :
    sequent { <H>; 'a = 'b in 'A; squash{'B['a]}; squash{'B['b]}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: 'a = 'b in { y: 'A | 'B['y] }; <J['x]> >- 'C['x] }
 
+interactive unionEqElimination1 {| elim [] |} 'H :
+   sequent { <H>; u: 'x = 'y in 'A; <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: inl{'x} = inl{'y} in 'A + 'B; <J['u]> >- 'T['u] }
+
+interactive unionEqElimination2 {| elim [] |} 'H :
+   sequent { <H>; u: 'x = 'y in 'B; <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: inr{'x} = inr{'y} in 'A + 'B; <J['u]> >- 'T['u] }
+
+
 (*
 
 interactive productEqElimination {| elim [] |} 'H :

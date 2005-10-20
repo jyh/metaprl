@@ -203,7 +203,7 @@ doc <:doc<
 interactive unionSubtype {| intro [] |} :
    sequent { <H> >- 'A1 subtype 'A2} -->
    sequent { <H>; a: 'A1 >- 'B1['a]  subtype  'B2['a] } -->
-   [wf] sequent { <H> >- (Union a2:'A2. 'B2['a2]) Type } -->
+   [wf] sequent { <H>; a:'A2 >- 'B2['a] Type } -->
    sequent { <H> >- (Union a1:'A1. 'B1['a1]) subtype (Union a2:'A2. 'B2['a2]) }
 
 interactive unionSubtype2 'a:

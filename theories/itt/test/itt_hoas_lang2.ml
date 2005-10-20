@@ -51,6 +51,7 @@ interactive operator_elim_cons {| elim [] |} 'H :
    sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'h in Operator } -->
    sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 't in list{Operator} } -->
    sequent { <H>; op: SubOp{'h :: 't}; <J['h]> >- 'C['h] } -->
+   sequent { <H>; op: SubOp{'t}; <J['op]> >- 'C['op] } -->
    sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'C['op] }
 
 interactive operator_elim_nil {| elim [] |} 'H :

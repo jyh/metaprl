@@ -174,7 +174,7 @@ doc <:doc<
    @modsection{Concrete Operators}
 
    This section establishes the connection between the abstract notion
-   of operator and the internal notion of opertor that is exposed by
+   of operator and the internal notion of operator that is exposed by
    the computational bterms theory (@hrefmodule[Base_operator]).
 
    Essentially, it @emph{postulates} that the abstract operator is

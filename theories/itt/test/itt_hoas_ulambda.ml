@@ -25,6 +25,7 @@
  * @end[license]
  *)
 extends Itt_hoas_lang
+extends Itt_hoas_jyh
 
 open Basic_tactics
 
@@ -61,7 +62,7 @@ interactive apply_wf {| intro [] |} : <:xrule<
 interactive lambda_wf {| intro [] |} : <:xrule<
    <H> >- "bind"{\x. e[x]} IN "ULambda" -->
    <H> >- depth IN "nat" -->
-   <H>; x: "Var" >- "bdepth"{e[x]} = depth in "int" -->
+   <H> >- "bdepth"{e["dummy"]} = depth in "int" -->
    <H> >- ($`[depth] "Lambda"{\x. e[x]}) IN "ULambda"
 >>
 

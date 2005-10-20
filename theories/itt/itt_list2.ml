@@ -67,6 +67,7 @@ open Itt_rfun
 open Itt_logic
 open Itt_squash
 open Itt_list
+open Itt_struct
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -1266,13 +1267,13 @@ interactive list_max_wf2 {| intro [AutoMustComplete] |} :
    sequent { <H> >- list_max{'l} in int }
 
 interactive list_max1 {| intro [] |} 'i:
-   sequent { <H> >- 'l in list{nat} } -->
-   sequent { <H> >- 'i in Index{'l} } -->
+   [wf] sequent { <H> >- 'l in list{nat} } -->
+   [wf] sequent { <H> >- 'i in Index{'l} } -->
    sequent { <H> >- 'a <= nth{'l;'i} } -->
    sequent { <H> >- 'a <= list_max{'l}}
 
 interactive list_max2 {| intro [] |}:
-   sequent { <H> >- 'l in list{nat} } -->
+   [wf] sequent { <H> >- 'l in list{nat} } -->
    sequent { <H>; i : Index{'l}  >- nth{'l;'i} <= 'a } -->
    sequent { <H> >- list_max{'l} <= 'a }
 
@@ -1290,21 +1291,24 @@ doc <:doc<
 >>
 define unfold_listmem_set: listmem_set{'l; 'T} <--> { t: 'T | mem{'t; 'l; 'T} }
 
+dform listmem_set_df : listmem_set{'l; 'T} =
+   szone `"Mem{" slot{'l} hspace `": " slot{'T} `" list}" ezone
+
 interactive mem_sqstable (*{| squash |}*) :
-   sequent { <H> >- 'l in list{'T} } -->
-   sequent { <H> >- 't in 'T } -->
-   sequent { <H>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
+   [wf] sequent { <H> >- 'l in list{'T} } -->
+   [wf] sequent { <H> >- 't in 'T } -->
+   [aux] sequent { <H>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
    sequent { <H> >- squash{mem{'t; 'l; 'T}}  } -->
    sequent { <H> >- mem{'t; 'l; 'T} }
 
 interactive listmem_set_wf {| intro [] |} :
-   sequent { <H> >- 'T Type } -->
-   sequent { <H> >- 'l in list{'T} } -->
+   [wf] sequent { <H> >- 'T Type } -->
+   [wf] sequent { <H> >- 'l in list{'T} } -->
    sequent { <H> >- listmem_set{'l; 'T} Type }
 
 interactive listmem_set_intro {| intro [] |} :
-   sequent { <H> >- 'x in 'T } -->
-   sequent { <H> >- 'l in list{'T} } -->
+   [wf] sequent { <H> >- 'x in 'T } -->
+   [wf] sequent { <H> >- 'l in list{'T} } -->
    sequent { <H> >- squash{mem{'x; 'l; 'T}} } -->
    sequent { <H> >- 'x in listmem_set{'l; 'T} }
 
@@ -1312,14 +1316,14 @@ interactive listmem_set_elim {| elim [] |} 'H :
    sequent { <H>; x: 'T; i: squash{mem{'x;'l;'T}}; <J['x]> >- 'C['x] } -->
    sequent { <H>; x: listmem_set{'l; 'T}; <J['x]> >- 'C['x] }
 
-interactive listmem_set_elim1 {| elim [] |} 'H :
-   sequent { <H>; <J> >- 'h in 'T } -->
-   sequent { <H>; <J> >- 't in list{'T} } -->
-   sequent { <H>; <J> >- sqsimple{'T} } -->
-   sequent { <H>; <J>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
-   sequent { <H>; <J> >- 'C['h] } -->
-   sequent { <H>; <J>; x: listmem_set{'t; 'T} >- 'C['x] } -->
-   sequent { <H>; x: listmem_set{'h::'t; 'T}; <J> >- 'C['x] }
+interactive listmem_set_elim2 {| elim [ThinOption thinT] |} 'H :
+   [wf] sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]> >- 'h in 'T } -->
+   [wf] sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]> >- 't in list{'T} } -->
+   [aux] sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]> >- sqsimple{'T} } -->
+   [aux] sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]>; u: 'T; v: 'T >- decidable{'u = 'v in 'T} } -->
+   sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['h]> >- 'C['h] } -->
+   sequent { <H>; x: listmem_set{'t; 'T}; <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]> >- 'C['x] }
 
 doc <:doc<
     <<elistmem_set{'l; 'T}>> defines the set of elements in <<'T>> that are members of list <<'l>>,
@@ -1356,10 +1360,10 @@ interactive elistmem_set_elim {| elim [] |} 'H :
    sequent { <H>; x: elistmem_set{'l; 'T}; <J['x]> >- 'C['x] }
 
 interactive elistmem_set_elim1 {| elim [] |} 'H :
-   sequent { <H>; <J> >- 'h in 'T } -->
-   sequent { <H>; <J> >- 't in list{'T} } -->
-   sequent { <H>; <J> >- sqsimple{'T} } -->
-   sequent { <H>; <J>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
+   [wf] sequent { <H>; <J> >- 'h in 'T } -->
+   [wf] sequent { <H>; <J> >- 't in list{'T} } -->
+   [aux] sequent { <H>; <J> >- sqsimple{'T} } -->
+   [aux] sequent { <H>; <J>; x: 'T; y: 'T >- decidable{'x = 'y in 'T} } -->
    sequent { <H>; <J> >- 'C['h] } -->
    sequent { <H>; <J>; x: elistmem_set{'t; 'T} >- 'C['x] } -->
    sequent { <H>; x: elistmem_set{'h::'t; 'T}; <J> >- 'C['x] }

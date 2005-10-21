@@ -1,0 +1,33 @@
+THEORYNAME = itt_reflection_obsolete
+THEORYDESCR = Syntax Reflection for Computational Type Theory - Obsolete
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../../base
+   ../../core
+   ../../applications/function_spaces
+   ../../extensions
+
+# Library files
+MPFILES[] =
+   itt_synt_var
+   itt_synt_operator
+   itt_synt_bterm
+   itt_synt_subst
+   itt_reflection_new
+   itt_reflection
+   itt_reflection_test
+   itt_synt_lang
+   itt_reflection_example_lambda
+   itt_reflection_lambda_reduction
+   itt_reflection_lambda_typing
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

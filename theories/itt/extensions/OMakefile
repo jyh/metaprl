@@ -1,0 +1,25 @@
+THEORYNAME = itt_extensions
+THEORYDESCR = Extensions to Computational Type Theory (Some are Experimental)
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../base
+   ../core
+
+# Library files
+MPFILES[] =
+   itt_eta
+   itt_pairwise
+   itt_pairwise2
+   itt_antiquotient
+   ctt_markov
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

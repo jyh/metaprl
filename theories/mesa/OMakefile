@@ -1,7 +1,7 @@
 OCAMLINCLUDES[] +=
    $(SUPPORT_DIRS)
    ../base
-   ../itt
+   ../itt/core
 
 # Library files
 MPFILES[] = itt_nuprl

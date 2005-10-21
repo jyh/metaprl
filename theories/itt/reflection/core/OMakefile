@@ -1,0 +1,25 @@
+THEORYNAME = itt_reflection_core
+THEORYDESCR = Syntax Reflection for Computational Type Theory - Core
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../../base
+   ../../core
+
+# Library files
+MPFILES[] =
+   itt_hoas_base
+   itt_hoas_vector
+   itt_hoas_debruijn
+   itt_hoas_operator
+   itt_hoas_destterm
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

@@ -1,0 +1,30 @@
+THEORYNAME = itt_datatypes
+THEORYDESCR = Datatypes Formalized in Computational Type Theory (Work in Progress)
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../../base
+   ../../core
+
+# Library files
+MPFILES[] =
+   itt_fset
+   itt_collection
+   itt_relation_str
+   itt_set_str
+   itt_bintree
+   itt_datatree
+   itt_sortedtree
+   itt_rbtree
+   itt_sort
+   itt_example
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

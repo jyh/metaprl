@@ -3,8 +3,8 @@ THEORYDESCR = First-Order Logic
 
 OCAMLINCLUDES[] +=
     $(SUPPORT_DIRS)
-    ../itt
     ../base
+    ../itt/core
 
 # Library files
 MPFILES[] =

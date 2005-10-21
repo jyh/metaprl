@@ -1,2 +1,0 @@
-extends Itt_theory
-

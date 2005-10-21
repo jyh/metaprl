@@ -1,0 +1,33 @@
+THEORYNAME = itt_algebra
+THEORYDESCR = Abstract Algebra Formalization in the Computational Type Theory
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../../base
+   ../../core
+
+# Library files
+MPFILES[] =
+   itt_grouplikeobj
+   itt_group
+   itt_cyclic_group
+   itt_quotient_group
+   itt_ring2
+   itt_ring_e
+   itt_poly
+   itt_unitring
+   itt_ring_uce
+   itt_intdomain
+   itt_intdomain_e
+   itt_field2
+   itt_field_e
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

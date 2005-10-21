@@ -1,0 +1,17 @@
+DIRS[] =
+    algebra
+    datatypes
+    function_spaces
+    objects
+    supinf
+
+FILES[] =
+
+.SUBDIRS: $(DIRS)
+    include OMakefile
+    FILES[] += $(file $(MPFILES))
+    export FILES
+
+MPFILES[] = $(FILES)
+
+Theory($(MPFILES))

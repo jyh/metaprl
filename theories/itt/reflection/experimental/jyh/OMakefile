@@ -1,0 +1,24 @@
+THEORYNAME = itt_reflection_experimental_jyh
+THEORYDESCR = Syntax Reflection for Computational Type Theory - Jason's expriments
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../../../base
+   ../../../core
+   ../../core
+   ..
+
+# Library files
+MPFILES[] =
+   itt_hoas_lang2
+   itt_hoas_ulambda
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

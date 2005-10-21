@@ -31,6 +31,7 @@
  *)
 
 extends Itt_theory
+extends Tptp_derive
 
 open Basic_tactics
 

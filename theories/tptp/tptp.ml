@@ -3,13 +3,14 @@
  *)
 
 extends Itt_theory
+extends Tptp_derive
 
 open Basic_tactics
 
 open Itt_equal
 open Itt_rfun
 open Itt_logic
-open Itt_derive
+open Tptp_derive
 
 (************************************************************************
  * TERMS                                                                *

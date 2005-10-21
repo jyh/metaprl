@@ -1,0 +1,21 @@
+THEORYNAME = itt_objects
+THEORYDESCR = Objects Formalized in Computational Type Theory (Initial)
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../../base
+   ../../core
+
+# Library files
+MPFILES[] =
+   itt_obj_base_rewrite
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

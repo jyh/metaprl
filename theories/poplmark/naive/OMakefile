@@ -7,7 +7,7 @@ THEORYDESCR = A POPLmark solution based on SOAS
 OCAMLINCLUDES[] +=
     $(SUPPORT_DIRS)
     ../../base
-    ../../itt
+    ../../itt/core
 
 FILES[] =
     pmn_core_soas_terms

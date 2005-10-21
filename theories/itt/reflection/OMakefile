@@ -1,0 +1,15 @@
+DIRS[] =
+    core
+    experimental
+    obsolete
+
+REFL_FILES[] =
+
+.SUBDIRS: $(DIRS)
+    include OMakefile
+    REFL_FILES[] += $(file $(MPFILES))
+    export REFL_FILES
+
+MPFILES[] = $(REFL_FILES)
+
+Theory($(MPFILES))

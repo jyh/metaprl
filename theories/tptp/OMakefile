@@ -1,7 +1,7 @@
 OCAMLINCLUDES[] +=
     $(SUPPORT_DIRS)
-    ../itt
     ../base
+    ../itt/core
 
 MLZFILES[] =
     tptp_type
@@ -11,6 +11,7 @@ MPFILES[] =
     tptp_type
     tptp_parse
     tptp_lex
+    tptp_derive
     tptp
     tptp_load
     tptp_cache

@@ -3,8 +3,8 @@ THEORYDESCR = ILC\: A Froundation for Automated Reasoning About Pointer Programs
 
 OCAMLINCLUDES[] +=
     $(SUPPORT_DIRS)
-    ../itt
     ../base
+    ../itt/core
 
 # MetaPRL "theory" files.
 MPFILES[] =

@@ -40,7 +40,6 @@ extends Itt_hoas_base
 extends Itt_hoas_vector
 extends Itt_nat
 extends Itt_list2
-extends Itt_image
 
 doc docoff
 
@@ -222,17 +221,6 @@ interactive_rw lemma3 {| reduce |} :
    'n in nat -->
    'm >= 'n  -->
    bind{'n; gamma. substl{mk_bterm{'m;'op;'btl}; 'gamma}} <--> mk_bterm{'m;'op;'btl}
-
-(************************************************************************
- * More abstract version of vars.
- *)
-define unfold_Var : Var <--> Img{nat * nat; v. spread{'v; i, j. var{'i; 'j}}}
-
-interactive var_type_univ {| intro [] |} :
-   sequent { <H> >- Var in univ[i:l] }
-
-interactive var_type_wf {| intro [] |} :
-   sequent { <H> >- Var Type }
 doc docoff
 
 dform var_df : var{'l; 'r} =

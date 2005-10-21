@@ -27,8 +27,13 @@
  * @end[license]
  *)
 extends Itt_hoas_lang
+extends Itt_image
 
 open Basic_tactics
+
+(************************************************************************
+ * Utilities.
+ *)
 
 (*
  * Fold up Aleksey's dummy term.
@@ -39,6 +44,54 @@ define unfold_dummy :
    mk_term{it; nil}
 
 let fold_dummy = makeFoldC << dummy >> unfold_dummy
+
+(************************************************************************
+ * Variables.
+ * The main objective here is to hide the deBruijn representation.
+ *)
+define unfold_Var : Var <--> Img{nat * nat; v. spread{'v; i, j. var{'i; 'j}}}
+
+interactive var_type_univ {| intro [] |} :
+   sequent { <H> >- Var in univ[i:l] }
+
+interactive var_type_wf {| intro [] |} :
+   sequent { <H> >- Var Type }
+
+interactive var_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'l in nat } -->
+   [wf] sequent { <H> >- 'r in nat } -->
+   sequent { <H> >- var{'l; 'r} in Var }
+
+(************************************************************************
+ * Our version of a language is defined by a list of operators.
+ *)
+define unfold_olang :
+   olang{'ops}
+   <-->
+   Lang{SubOp{'ops}}
+
+let fold_olang = makeFoldC << olang{'ops} >> unfold_olang
+
+dform olang_df : olang{'ops} =
+   `"OLang(" slot{'ops} `")"
+
+interactive olang_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- olang{'ops} Type }
+
+(*
+ * This is really a private definition until we get a proper compatible_shapes
+ * definition.
+ *)
+interactive olang_elim1 'H :
+   [wf] sequent { <H>; e: olang{'ops}; <J['e]> >- 'ops in list{Operator} } -->
+   [base] sequent { <H>; e: olang{'ops}; <J['e]>; x: Var >- 'P['x] } -->
+   [step] sequent { <H>; e: olang{'ops}; <J['e]>;
+       depth: nat;
+       op: listmem_set{'ops; Operator};
+       subs: list{olang{'ops}};
+       compatible_shapes{'depth; 'op; 'subs} >- 'P[mk_bterm{'depth; 'op; 'subs}] } -->
+   sequent { <H>; e: olang{'ops}; <J['e]> >- 'P['e] }
 
 (************************************************************************
  * Operators.
@@ -62,6 +115,19 @@ interactive operator_elim_nil {| elim [] |} 'H :
  *)
 
 (*
+ * Basic well-formedness we could not prove before.
+ *)
+interactive bdepth_wf {| intro [intro_typeinf << 'e >>] |} olang{'ops} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H> >- 'e in olang{'ops} } -->
+   sequent { <H> >- bdepth{'e} in nat }
+
+interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} Lang{SubOp{'ops}} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H> >- 'e in olang{'ops} } -->
+   sequent { <H> >- bdepth{'e} in int }
+
+(*
  * compatible_shapes{depth; op; subs} is very hard to work with.
  * Use compatible_depths{depth; shape; subs} instead.
  *)
@@ -70,7 +136,33 @@ define unfold_compatible_depths :
    <-->
    map{i. 'depth +@ 'i; 'shape} = map{e. bdepth{'e}; 'subs} in list{int}
 
-interactive compatible_shapes_intro {| intro [] |} :
+(*
+ * Well-formedness.
+ *)
+interactive compatible_depths_wf {| intro [intro_typeinf << 'l2 >>] |} list{olang{'ops}} :
+    [wf] sequent { <H> >- 'ops in list{Operator} } -->
+    [wf] sequent { <H> >- 'depth in int } -->
+    [wf] sequent { <H> >- 'l1 in list{int} } -->
+    [wf] sequent { <H> >- 'l2 in list{olang{'ops}} } -->
+    sequent { <H> >- compatible_depths{'depth; 'l1; 'l2} Type }
+
+(*
+ * Useful lemmas for proving the compatible_shapes_intro rule.
+ *)
+interactive compatible_shapes_length_equal 'depth list{Lang{SubOp{'ops}}} :
+    [wf] sequent { <H> >- 'ops in list{Operator} } -->
+    [wf] sequent { <H> >- 'depth in nat } -->
+    [wf] sequent { <H> >- 'l1 in list{int} } -->
+    [wf] sequent { <H> >- 'l2 in list{Lang{SubOp{'ops}}} } -->
+    sequent { <H> >- compatible_depths{'depth; 'l1; 'l2} } -->
+    sequent { <H> >- length{'l1} = length{'l2} in int }
+
+(*
+ * Reduce compatible_shapes to compatible_depths.
+ *)
+interactive compatible_shapes_intro {| intro [intro_typeinf << 'subs >>] |} list{Lang{SubOp{'ops}}} :
+    sequent { <H> >- 'ops in list{Operator} } -->
+    sequent { <H> >- 'subs in list{Lang{SubOp{'ops}}} } -->
     sequent { <H> >- 'depth in nat } -->
     sequent { <H> >- 'op in Operator } -->
     sequent { <H> >- compatible_depths{'depth; shape{'op}; 'subs} } -->

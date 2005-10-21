@@ -30,14 +30,26 @@ extends Itt_hoas_lang
 
 open Basic_tactics
 
-(*
+(************************************************************************
  * Aleksey's dummy term.
  *)
 declare dummy
 
 topval fold_dummy : conv
 
-(*
+(************************************************************************
+ * Variables.
+ *)
+declare Var
+
+(************************************************************************
+ * A version of languages based on operator lists.
+ *)
+declare olang{'ops}
+
+topval fold_olang : conv
+
+(************************************************************************
  * compatible_shapes{depth; op; subs} is very hard to work with.
  * Use compatible_depths{depth; shape; subs} instead.
  *)

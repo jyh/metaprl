@@ -1,5 +1,5 @@
 THEORYNAME = itt_reflection_experimental_jyh
-THEORYDESCR = Syntax Reflection for Computational Type Theory - Jason's expriments
+THEORYDESCR = $"Syntax Reflection for Computational Type Theory - Jason's experimental work"
 
 OCAMLINCLUDES[] +=
    $(SUPPORT_DIRS)

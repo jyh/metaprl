@@ -7,10 +7,21 @@ OCAMLINCLUDES[] +=
    ../../core
    ../core
 
+DIRS[] =
+   jyh
+
 # Library files
+EXPERIMENTAL_FILES[] =
+
+.SUBDIRS: $(DIRS)
+    include OMakefile
+    EXPERIMENTAL_FILES[] += $(file $(MPFILES))
+    export EXPERIMENTAL_FILES
+
 MPFILES[] =
    itt_hoas_lang
    itt_hoas_bterm
+   $(EXPERIMENTAL_FILES)
 
 Theory($(MPFILES))
 

@@ -749,8 +749,8 @@ B	b263	t262
 NSummary!interactive	interactive	interactive Summary
 O	o263	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p263	String "assertT << 'op = 'h in Operator or (\"not\"{'op = 'h in Operator} & mem{'op; 't; Operator}) >>"
-O	o264	ext_rule p263
+P	p5	String "thinningT false (dT 2) thenT autoT"
+O	o8	ext_rule p5
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o265	status_incomplete
 T	t265	o265
@@ -774,233 +774,14 @@ T	t272	o268 b258 b271
 B	b272	t272
 T	t273	o267 b272 b6
 B	b273	t273
-P	p273	String assertion
-O	o273	tactic_arg p273
-NItt_logic	Itt_logic	Itt_logic NIL
-NItt_logic!or	or	or Itt_logic
-O	o274	or
-B	b274	t248
-T	t274	o248 b247 b274 b244
-B	b275	t274
-NItt_logic!and	and	and Itt_logic
-O	o275	and
-NItt_logic!not	not	not Itt_logic
-O	o276	not
-T	t276	o276 b275
-B	b276	t276
-NItt_list2!mem	mem	mem Itt_list2
-O	o277	mem
-T	t277	o277 b274 b245 b247
-B	b277	t277
-T	t278	o275 b276 b277
-B	b278	t278
-T	t279	o274 b275 b278
-S	s279	t242\\ h h247 h248\\ t279
-B	b279	s279
-T	t280	o268 b279 b271
-B	b280	t280
-T	t281	o273 b280 b6
-B	b281	t281
-H	h281	x t279
-S	s281	t242\\ h h247 h248 h281\\ C255
-B	b282	s281
-T	t282	o268 b282 b271
-B	b283	t282
-T	t283	o267 b283 b6
-B	b284	t283
-T	t284	o b284 b6
-B	b285	t284
-T	t285	o b281 b285
-B	b286	t285
-T	t286	o266 b273 b286
-B	b287	t286
+T	t8	o266 b273 b6
+B	b8	t8
+T	t9	o8 b265 b8 b6 b6
+B	b9	t9
+T	t10	o263 b9
+B	b10	t10
 NSummary!ext_goal	ext_goal	ext_goal Summary
 O	o287	ext_goal
-T	t287	o287 b281
-B	b288	t287
-P	p288	String "dT 4"
-O	o288	ext_rule p288
-H	h288	y t274
-S	s288	t242\\ h h247 h248 h288\\ C255
-B	b289	s288
-T	t289	o268 b289 b271
-B	b290	t289
-T	t290	o267 b290 b6
-B	b291	t290
-H	h291	y t278
-S	s291	t242\\ h h247 h248 h291\\ C255
-B	b292	s291
-T	t292	o268 b292 b271
-B	b293	t292
-T	t293	o267 b293 b6
-B	b294	t293
-T	t294	o b294 b6
-B	b295	t294
-T	t295	o b291 b295
-B	b296	t295
-T	t296	o266 b284 b296
-B	b297	t296
-T	t297	o b291 b6
-B	b298	t297
-T	t298	o266 b291 b298
-B	b299	t298
-P	p299	String "hypReplacement 2 << listmem_set{'t; Operator} >> << univ[i:l] >>"
-O	o299	ext_rule p299
-S	s299	t242\\ h h255 h248 h288\\ C255
-B	b300	s299
-T	t300	o268 b300 b271
-B	b301	t300
-T	t301	o267 b301 b6
-B	b302	t301
-P	p302	String equality
-O	o302	tactic_arg p302
-NItt_equal!univ	univ	univ Itt_equal
-P	p303	MLevel 0 i 0
-O	o303	univ p303
-T	t303	o303
-B	b303	t303
-B	b304	t247
-B	b305	t255
-T	t305	o248 b303 b304 b305
-S	s305	t242\\ h h247 h248 h288\\ t305
-B	b306	s305
-T	t306	o268 b306 b271
-B	b307	t306
-T	t307	o302 b307 b6
-B	b308	t307
-T	t308	o b308 b6
-B	b309	t308
-T	t309	o b302 b309
-B	b310	t309
-T	t310	o266 b291 b310
-B	b311	t310
-P	p311	String autoT
-O	o311	ext_rule p311
-T	t311	o266 b302 b6
-B	b312	t311
-T	t312	o311 b265 b312 b6 b6
-B	b313	t312
-P	p313	String "rwh unfold_listmem_set 0 thenT autoT"
-O	o313	ext_rule p313
-P	p314	String wf
-O	o314	tactic_arg p314
-H	h314	t1 t246
-P	p315	Var t1
-O	o315	var p315
-T	t315	o315
-B	b315	t315
-T	t316	o277 b315 b246 b247
-B	b316	t316
-T	t317	o277 b315 b245 b247
-B	b317	t317
-T	t318	o248 b303 b316 b317
-S	s318	t242\\ h h247 h248 h288 h314\\ t318
-B	b318	s318
-T	t319	o268 b318 b271
-B	b319	t319
-T	t320	o314 b319 b6
-B	b320	t320
-T	t321	o b320 b6
-B	b321	t321
-T	t322	o266 b308 b321
-B	b322	t322
-T	t323	o287 b320
-B	b323	t323
-T	t324	o b323 b6
-B	b324	t324
-T	t325	o313 b265 b322 b324 b6
-B	b325	t325
-T	t326	o b325 b6
-B	b326	t326
-T	t327	o b313 b326
-B	b327	t327
-T	t328	o299 b265 b311 b327 b6
-B	b328	t328
-T	t329	o b328 b6
-B	b329	t329
-T	t330	o288 b265 b299 b329 b6
-B	b330	t330
-H	h330	y t276
-H	h331	z t277
-S	s331	t242\\ h h247 h248 h330 h331\\ C255
-B	b331	s331
-T	t331	o268 b331 b271
-B	b332	t331
-T	t332	o267 b332 b6
-B	b333	t332
-T	t333	o b333 b6
-B	b334	t333
-T	t334	o266 b294 b334
-B	b335	t334
-S	s335	t242\\ h h255 h248 h330 h331\\ C255
-B	b336	s335
-T	t336	o268 b336 b271
-B	b337	t336
-T	t337	o267 b337 b6
-B	b338	t337
-S	s338	t242\\ h h247 h248 h330 h331\\ t305
-B	b339	s338
-T	t339	o268 b339 b271
-B	b340	t339
-T	t340	o302 b340 b6
-B	b341	t340
-T	t341	o b341 b6
-B	b342	t341
-T	t342	o b338 b342
-B	b343	t342
-T	t343	o266 b333 b343
-B	b344	t343
-T	t344	o266 b338 b6
-B	b345	t344
-T	t345	o311 b265 b345 b6 b6
-B	b346	t345
-P	p346	String "rwh unfold_listmem_set 0 thenT autoT thenT rw reduceC 0 thenT autoT"
-O	o346	ext_rule p346
-T	t346	o248 b247 b315 b244
-B	b347	t346
-T	t347	o274 b347 b317
-B	b348	t347
-T	t348	o248 b303 b348 b317
-S	s348	t242\\ h h247 h248 h330 h331 h314\\ t348
-B	b349	s348
-T	t349	o268 b349 b271
-B	b350	t349
-T	t350	o314 b350 b6
-B	b351	t350
-T	t351	o b351 b6
-B	b352	t351
-T	t352	o266 b341 b352
-B	b353	t352
-T	t353	o287 b351
-B	b354	t353
-T	t354	o b354 b6
-B	b355	t354
-T	t355	o346 b265 b353 b355 b6
-B	b356	t355
-T	t356	o b356 b6
-B	b357	t356
-T	t357	o b346 b357
-B	b358	t357
-T	t358	o299 b265 b344 b358 b6
-B	b359	t358
-T	t359	o b359 b6
-B	b360	t359
-T	t360	o288 b265 b335 b360 b6
-B	b361	t360
-T	t361	o b361 b6
-B	b362	t361
-T	t362	o b330 b362
-B	b363	t362
-T	t363	o288 b265 b297 b363 b6
-B	b364	t363
-T	t364	o b364 b6
-B	b365	t364
-T	t365	o b288 b365
-B	b366	t365
-T	t366	o264 b265 b287 b366 b6
-B	b367	t366
-T	t367	o263 b367
-B	b368	t367
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p368	Number 1440
 P	p369	Number 1447
@@ -1020,10 +801,13 @@ T	t374	o369 b373
 B	b374	t374
 T	t375	o b374 b6
 B	b375	t375
-T	t376	o238 b240 b263 b368 b375
-B	b376	t376
-T	t377	o237 b376
-B	b377	t377
+T	t11	o238 b240 b263 b10 b375
+B	b11	t11
+T	t22	o237 b11
+B	b22	t22
+P	p32	Number 1790
+P	p33	Number 1894
+O	o33	location p32 p33
 P	p377	String operator_elim_nil
 O	o377	rule p377
 T	t378	o243 b210 b247
@@ -1055,8 +839,8 @@ T	t388	o b387 b6
 B	b388	t388
 T	t389	o377 b240 b379 b383 b388
 B	b389	t389
-T	t390	o1 b389
-B	b390	t390
+T	t37	o33 b389
+B	b37	t37
 P	p390	Number 2112
 P	p391	Number 2270
 O	o391	location p390 p391
@@ -1124,6 +908,9 @@ T	t413	o202 b203 b401 b412
 B	b413	t413
 T	t414	o391 b413
 B	b414	t414
+P	p42	Number 2272
+P	p43	Number 2541
+O	o43	location p42 p43
 P	p414	String compatible_shapes_intro
 O	o414	rule p414
 NItt_nat	Itt_nat	Itt_nat NIL
@@ -1199,22 +986,22 @@ T	t442	o b441 b6
 B	b442	t442
 T	t443	o414 b6 b430 b437 b442
 B	b443	t443
-T	t444	o1 b443
-B	b444	t444
-T	t445	o b444 b6
-B	b445	t445
-T	t446	o b414 b445
-B	b446	t446
-T	t447	o b390 b446
-B	b447	t447
-T	t448	o b377 b447
-B	b448	t448
-T	t449	o b236 b448
-B	b449	t449
-T	t450	o b214 b449
-B	b450	t450
-T	t451	o b200 b450
-B	b451	t451
-T	t452	o b192 b451
-B	b452	t452
-T	t453	o b2 b452
+T	t45	o43 b443
+B	b45	t45
+T	t46	o b45 b6
+B	b46	t46
+T	t49	o b414 b46
+B	b49	t49
+T	t50	o b37 b49
+B	b50	t50
+T	t57	o b22 b50
+B	b57	t57
+T	t58	o b236 b57
+B	b58	t58
+T	t60	o b214 b58
+B	b60	t60
+T	t61	o b200 b60
+B	b61	t61
+T	t62	o b192 b61
+B	b62	t62
+T	t70	o b2 b62

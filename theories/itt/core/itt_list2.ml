@@ -1315,6 +1315,9 @@ interactive listmem_set_elim {| elim [] |} 'H :
    sequent { <H>; x: 'T; i: squash{mem{'x;'l;'T}}; <J['x]> >- 'C['x] } -->
    sequent { <H>; x: listmem_set{'l; 'T}; <J['x]> >- 'C['x] }
 
+interactive listmem_set_elim_nil {| elim [] |} 'H :
+   sequent { <H>; x: listmem_set{nil; 'T}; <J['x]> >- 'C['x] }
+
 interactive listmem_set_elim2 {| elim [ThinOption thinT] |} 'H :
    [wf] sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]> >- 'h in 'T } -->
    [wf] sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]> >- 't in list{'T} } -->

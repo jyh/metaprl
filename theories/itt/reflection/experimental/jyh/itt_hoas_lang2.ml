@@ -63,6 +63,23 @@ interactive var_wf {| intro [] |} :
    sequent { <H> >- var{'l; 'r} in Var }
 
 (************************************************************************
+ * Operators.
+ *)
+
+(*
+ * Case analysis on operators in a language.
+ *)
+interactive operator_elim_cons {| elim [] |} 'H :
+   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'h in Operator } -->
+   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 't in list{Operator} } -->
+   sequent { <H>; op: SubOp{'h :: 't}; <J['h]> >- 'C['h] } -->
+   sequent { <H>; op: SubOp{'t}; <J['op]> >- 'C['op] } -->
+   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'C['op] }
+
+interactive operator_elim_nil {| elim [] |} 'H :
+   sequent { <H>; op: SubOp{nil}; <J['op]> >- 'C['op] }
+
+(************************************************************************
  * Our version of a language is defined by a list of operators.
  *)
 define unfold_olang :
@@ -94,23 +111,6 @@ interactive olang_elim1 'H :
    sequent { <H>; e: olang{'ops}; <J['e]> >- 'P['e] }
 
 (************************************************************************
- * Operators.
- *)
-
-(*
- * Case analysis on operators in a language.
- *)
-interactive operator_elim_cons {| elim [] |} 'H :
-   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'h in Operator } -->
-   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 't in list{Operator} } -->
-   sequent { <H>; op: SubOp{'h :: 't}; <J['h]> >- 'C['h] } -->
-   sequent { <H>; op: SubOp{'t}; <J['op]> >- 'C['op] } -->
-   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'C['op] }
-
-interactive operator_elim_nil {| elim [] |} 'H :
-   sequent { <H>; op: SubOp{nil}; <J['op]> >- 'C['op] }
-
-(************************************************************************
  * Shapes.
  *)
 
@@ -122,7 +122,7 @@ interactive bdepth_wf {| intro [intro_typeinf << 'e >>] |} olang{'ops} :
    [wf] sequent { <H> >- 'e in olang{'ops} } -->
    sequent { <H> >- bdepth{'e} in nat }
 
-interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} Lang{SubOp{'ops}} :
+interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} olang{'ops} :
    [wf] sequent { <H> >- 'ops in list{Operator} } -->
    [wf] sequent { <H> >- 'e in olang{'ops} } -->
    sequent { <H> >- bdepth{'e} in int }
@@ -132,9 +132,29 @@ interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} Lang{SubOp{'ops}}
  * Use compatible_depths{depth; shape; subs} instead.
  *)
 define unfold_compatible_depths :
-   compatible_depths{'depth; 'shape; 'subs}
+   compatible_depths{'depth; 'l1; 'l2}
    <-->
-   map{i. 'depth +@ 'i; 'shape} = map{e. bdepth{'e}; 'subs} in list{int}
+   all2{'l1; 'l2; x, y. ('depth +@ 'x) = bdepth{'y} in int}
+
+interactive_rw compatible_depths_nil_nil {| reduce |} :
+   compatible_depths{'depth; nil; nil}
+   <-->
+   "true"
+
+interactive_rw compatible_depths_nil_cons {| reduce |} :
+   compatible_depths{'depth; nil; 'h2 :: 't2}
+   <-->
+   "false"
+
+interactive_rw compatible_depths_cons_nil {| reduce |} :
+   compatible_depths{'depth; 'h1 :: 't1; nil}
+   <-->
+   "false"
+
+interactive_rw compatible_depths_cons_cons {| reduce |} :
+   compatible_depths{'depth; 'h1 :: 't1; 'h2 :: 't2}
+   <-->
+   (('depth +@ 'h1) = bdepth{'h2} in int) & compatible_depths{'depth; 't1; 't2}
 
 (*
  * Well-formedness.
@@ -149,11 +169,11 @@ interactive compatible_depths_wf {| intro [intro_typeinf << 'l2 >>] |} list{olan
 (*
  * Useful lemmas for proving the compatible_shapes_intro rule.
  *)
-interactive compatible_shapes_length_equal 'depth list{Lang{SubOp{'ops}}} :
+interactive compatible_shapes_length_equal 'depth list{olang{'ops}} :
     [wf] sequent { <H> >- 'ops in list{Operator} } -->
     [wf] sequent { <H> >- 'depth in nat } -->
     [wf] sequent { <H> >- 'l1 in list{int} } -->
-    [wf] sequent { <H> >- 'l2 in list{Lang{SubOp{'ops}}} } -->
+    [wf] sequent { <H> >- 'l2 in list{olang{'ops}} } -->
     sequent { <H> >- compatible_depths{'depth; 'l1; 'l2} } -->
     sequent { <H> >- length{'l1} = length{'l2} in int }
 

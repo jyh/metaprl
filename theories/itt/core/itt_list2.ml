@@ -146,6 +146,19 @@ define unfold_append :
 
 doc <:doc<
    @noindent
+   The @tt{all2} term defines a universal quantification
+   over two lists.  The test $p[x, y]$ must compute a proposition
+   given elements of the two lists, and the test is $@false$ if
+   the lists have different lengths.
+>>
+define unfold_all2 :
+   all2{'l1; 'l2; x, y. 'p['x; 'y]} <-->
+      (list_ind{'l1; lambda{z. list_ind{'z; "true"; h, t, g. "false"}};
+                     h1, t1, g1. lambda{z. list_ind{'z; "false";
+                     h2, t2, g2. "and"{'p['h1; 'h2]; .'g1 't2}}}} 'l2)
+
+doc <:doc<
+   @noindent
    The @tt{ball2} term defines a Boolean universal quantification
    over two lists.  The test $b[x, y]$ must compute a Boolean value
    given elements of the two lists, and the test is $@bfalse$ if
@@ -322,6 +335,11 @@ dform sameset_df : except_mode[src] :: sameset{'l1; 'l2; 'T} =
 dform append_df : except_mode[src] :: parens :: "prec"[prec_append] :: append{'l1; 'l2} =
    slot["le"]{'l1} `" @" space slot{'l2}
 
+dform all2_df : except_mode[src] :: parens :: "prec"[prec_ball] :: all2{'l1; 'l2; x, y. 'b} =
+   pushm[3] Mpsymbols!forall slot{'x} `", " slot{'y} space
+      Mpsymbols!member space slot{'l1} `", " slot{'l2} sbreak["",". "]
+      slot{'b} popm
+
 dform ball2_df : except_mode[src] :: parens :: "prec"[prec_ball] :: ball2{'l1; 'l2; x, y. 'b} =
    pushm[3] Mpsymbols!forall subb slot{'x} `", " slot{'y} space
       Mpsymbols!member space slot{'l1} `", " slot{'l2} sbreak["",". "]
@@ -459,6 +477,28 @@ interactive_rw append_assoc 'A:
 doc docoff
 
 let fold_append = makeFoldC << append{'l1; 'l2} >> unfold_append
+
+doc <:doc<
+   The @hrefterm[all2] term performs simultaneous induction
+   over both lists, comparing the elements of the lists with
+   the comparison $b[x, y]$.
+>>
+interactive_rw reduce_all2_nil_nil {| reduce |} :
+   all2{nil; nil; x, y. 'b['x; 'y]} <--> "true"
+
+interactive_rw reduce_all2_nil_cons {| reduce |} :
+   all2{nil; cons{'h; 't}; x, y.'b['x; 'y]} <--> "false"
+
+interactive_rw reduce_all2_cons_nil {| reduce |} :
+   all2{cons{'h; 't}; nil; x, y. 'b['x; 'y]} <--> "false"
+
+interactive_rw reduce_all2_cons_cons {| reduce |} :
+   all2{cons{'h1; 't1}; cons{'h2; 't2}; x, y. 'b['x; 'y]} <-->
+      "and"{'b['h1; 'h2]; all2{'t1; 't2; x, y. 'b['x; 'y]}}
+
+doc docoff
+
+let fold_all2 = makeFoldC << all2{'l1; 'l2; x, y. 'b['x; 'y]} >> unfold_all2
 
 doc <:doc<
    The @hrefterm[ball2] term performs simultaneous induction
@@ -747,6 +787,17 @@ interactive append_wf2 {| intro [] |} :
    [wf] sequent { <H> >- 'l1 in list{'T} } -->
    [wf] sequent { <H> >- 'l2 in list{'T} } -->
    sequent { <H> >- append{'l1; 'l2} in list{'T} }
+
+(*
+ * All2.
+ *)
+interactive all2_wf2 {| intro [] |} 'T1 'T2 :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v] Type } -->
+   sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} Type }
 
 (*
  * Ball2.

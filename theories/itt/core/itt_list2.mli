@@ -85,6 +85,11 @@ declare append{'l1; 'l2}
 declare ball2{'l1; 'l2; x, y. 'b['x; 'y]}
 
 (*
+ * Propositional quantifiers.
+ *)
+declare all2{'l1; 'l2; x, y. 'p['x; 'y]}
+
+(*
  * Association lists.
  *)
 declare assoc{'eq; 'x; 'l; y. 'b['y]; 'z}

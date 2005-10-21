@@ -29,7 +29,7 @@ interactive mk_fun_wf  {| intro[] |} :
 (* define unfold_is_type: is_type{'t;'Tv; 'T} <-->
 *) declare is_type{'t;'Tv; 'T}
 
-interactive_rw is_type_rw {| reduce |}: is_type{'t;'Tv; 'T} <-->
+interactive_rw is_type_rw: is_type{'t;'Tv; 'T} <-->
    dest_lambda_term{'t;
               v. 'T = nth{'Tv; right{'v}} in TypeTerm;
               f. exst A:TypeTerm. exst B:TypeTerm. (is_type{'f;'A::'Tv;'B} & 'T=mk_fun{'A;'B} in TypeTerm);

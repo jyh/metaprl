@@ -3,13 +3,12 @@ THEORYDESCR = Tests and Benchmarks for Computational Type Theory
 
 OCAMLINCLUDES[] +=
    $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
+   ../../base
    ../core
+   ../applications/supinf
 
 # Library files
 MPFILES[] =
-   itt_bugs
    jprover_tests
    itt_int_test
    itt_int_bench

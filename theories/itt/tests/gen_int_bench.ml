@@ -81,11 +81,12 @@ let gen_bench ~name ~seed ~nrules ~nineq ~nvars ~intrange ~maxdepth =
 	done;
 	flush co
 
-let _ = gen_bench ~name:"../../theories/itt/itt_int_bench.ml"
+(* XXX: JYH: is there some reason to go up and back down for these pathnames? *)
+let _ = gen_bench ~name:"../../../theories/itt/tests/itt_int_bench.ml"
 	~seed:0 ~nrules:10 ~nineq:10 ~nvars:5 ~intrange:10 ~maxdepth:3
 
-let _ = gen_bench ~name:"../../theories/itt/itt_int_bench2.ml"
+let _ = gen_bench ~name:"../../../theories/itt/tests/itt_int_bench2.ml"
 	~seed:0 ~nrules:10 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
 
-let _ = gen_bench ~name:"../../theories/itt/itt_int_bench3.ml"
+let _ = gen_bench ~name:"../../../theories/itt/tests/itt_int_bench3.ml"
 	~seed:0 ~nrules:100 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2

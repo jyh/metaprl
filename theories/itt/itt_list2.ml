@@ -52,7 +52,6 @@ extends Itt_nequal
 extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
-extends Itt_pairwise
 extends Itt_omega
 extends Itt_tunion
 extends Itt_ext_equal

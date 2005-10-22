@@ -7446,7 +7446,7 @@ T	t1125	o b1125 b28
 B	b1126	t1125
 T	t1126	o1028 b1105 b1126
 B	b1127	t1126
-P	p1127	String "sqsimple <<'B>> ttca"
+P	p1127	String "sqsimple_sq <<'B>> ttca"
 O	o1127	ext_rule p1127
 T	t1127	o b1965 b28
 B	b1128	t1127

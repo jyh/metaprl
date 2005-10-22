@@ -45,11 +45,14 @@ extends Base_theory
 extends Itt_equal
 extends Itt_squash
 extends Itt_struct2
+extends Itt_sqsimple
 
 doc terms
 
 declare Img{'A; x.'f['x]}
 
 open Basic_tactics
+
+topval imgElimSimpleT : int -> term -> tactic
 
 val dest_img_term : term -> var * term * term

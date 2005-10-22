@@ -48,6 +48,7 @@ extends Base_theory
 extends Itt_equal
 extends Itt_squash
 extends Itt_subset
+extends Itt_sqsimple
 doc docoff
 extends Itt_comment
 
@@ -121,8 +122,14 @@ extends Itt_dfun
 extends Itt_struct2
 
 interactive img_elim3 {| elim [ThinOption thinT] |} 'H 'g :
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'g 'f['a] ~ 'a } -->
+   [aux] sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'g 'f['a] ~ 'a } -->
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'C['f['a]] } -->
+   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 'C['y] }
+
+interactive img_elim_sqsimple 'H 'g :
+   [aux] sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- sqsimple{'A} } -->
+   [aux] sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'g 'f['a] ~ 'a } -->
+   sequent { <H>; y: Img{'A; x.'f<||>['x]}; a: 'A; <J['f['a]]> >- 'C['f['a]] } -->
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 'C['y] }
 
 interactive img_monotone {| intro[] |} :
@@ -135,6 +142,13 @@ interactive img_monotone_subset {| intro[] |} bind{x.'g['x]}:
    sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subset  Img{'A_2; x.'f<||>['x]} }
 
 doc docoff
+
+let imgElimSimpleT i t = funT (fun p ->
+   if get_thinning_arg p then
+      let i = Sequent.get_pos_hyp_num p i in
+         img_elim_sqsimple i t thenT tryT (thinT i)
+   else
+      img_elim_sqsimple i t)
 
 dform img_df : Img{'A; x.'f} =
    pushm[0] szone pushm[3] `"Img(" 'x `":" slot{'A} `"." slot{'f} popm `")" ezone popm

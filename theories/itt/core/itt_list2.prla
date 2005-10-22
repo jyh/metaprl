@@ -26745,7 +26745,7 @@ T	t12348	o b12344 b12348
 B	b12349	t12348
 T	t12349	o2701 b12341 b12349
 B	b12350	t12349
-P	p12350	String "assertT << 'x ~ 'h >> thenAT sqsimple << 'T >> ttca"
+P	p12350	String "sqsimple (-1) ttca"
 O	o12350	ext_rule p12350
 H	h12350	x2 t14657
 S	s12350	t2704\\ h2704 h14609 h5562 h12341 h12350\\ C5562

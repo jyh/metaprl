@@ -2476,9 +2476,6 @@ T	t975	o890 b974
 B	b975	t975
 T	t976	o889 b975
 B	b976	t976
-P	p976	Number 1959
-P	p977	Number 2130
-O	o977	location p976 p977
 NSummary!rule	rule	rule Summary
 P	p978	String sqsimple_elim
 O	o978	rule p978
@@ -2519,10 +2516,6 @@ T	t988	o981 b988
 B	b989	t988
 T	t989	o980 b987 b989
 B	b990	t989
-NSummary!incomplete	incomplete	incomplete Summary
-O	o990	incomplete
-T	t990	o990
-B	b991	t990
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p991	Number 1989
 P	p992	Number 2011
@@ -2565,13 +2558,6 @@ T	t1006	o992 b1005
 B	b1006	t1006
 T	t1007	o b1006 b132
 B	b1007	t1007
-T	t1008	o978 b980 b990 b991 b1007
-B	b1008	t1008
-T	t1009	o977 b1008
-B	b1009	t1009
-P	p1009	Number 2132
-P	p1010	Number 2318
-O	o1010	location p1009 p1010
 P	p1011	String sqsimple_type_elim1
 O	o1011	rule p1011
 T	t1011	o869 b982
@@ -2619,13 +2605,6 @@ T	t1027	o1016 b1026
 B	b1027	t1027
 T	t1028	o b1027 b132
 B	b1028	t1028
-T	t1029	o1011 b980 b1015 b991 b1028
-B	b1029	t1029
-T	t1030	o1010 b1029
-B	b1030	t1030
-P	p1030	Number 2320
-P	p1031	Number 2428
-O	o1031	location p1030 p1031
 P	p1032	String sqsimple_type_elim2
 O	o1032	rule p1032
 T	t1032	o873 b982
@@ -2640,11 +2619,7 @@ T	t1034	o1034 b132
 B	b1034	t1034
 T	t1035	o b1034 b132
 B	b1035	t1035
-T	t1036	o1032 b980 b1033 b991 b1035
-B	b1036	t1036
-T	t1037	o1031 b1036
-B	b1037	t1037
-P	p1037	String sqsimple
+P	p1037	String sqsimple_sq
 O	o1037	rule p1037
 NSummary!term_param	term_param	term_param Summary
 O	o1038	term_param
@@ -2676,6 +2651,8 @@ T	t1048	o980 b1041 b1048
 B	b1049	t1048
 NSummary!interactive	interactive	interactive Summary
 O	o1049	interactive
+NSummary!ext_goal	ext_goal	ext_goal Summary
+O	o133	ext_goal
 NSummary!ext_rule	ext_rule	ext_rule Summary
 P	p1049	String "assumT 2 thenT  byDefT unfold_sqsimple"
 O	o1050	ext_rule p1049
@@ -2690,6 +2667,49 @@ P	p1052	String main
 O	o1053	tactic_arg p1052
 NSummary!msequent	msequent	msequent Summary
 O	o1054	msequent
+T	t570	o b986 b132
+B	b570	t570
+T	t576	o1054 b988 b570
+B	b576	t576
+T	t577	o1053 b576 b132
+B	b577	t577
+T	t580	o133 b577
+B	b580	t580
+T	t581	o1049 b580
+B	b581	t581
+T	t584	o978 b980 b990 b581 b1007
+B	b584	t584
+T	t585	o1 b584
+B	b585	t585
+T	t586	o b1011 b132
+B	b586	t586
+T	t597	o1054 b1013 b586
+B	b597	t597
+T	t598	o1053 b597 b132
+B	b598	t598
+T	t601	o133 b598
+B	b601	t601
+T	t605	o1049 b601
+B	b605	t605
+T	t606	o1011 b980 b1015 b605 b1028
+B	b606	t606
+T	t609	o1 b606
+B	b609	t609
+T	t610	o1054 b1032 b132
+B	b610	t610
+T	t617	o1053 b610 b132
+B	b617	t617
+T	t618	o133 b617
+B	b618	t618
+T	t619	o1049 b618
+B	b619	t619
+T	t622	o1032 b980 b1033 b619 b1035
+B	b622	t622
+T	t623	o1 b622
+B	b623	t623
+P	p626	Number 2430
+P	p627	Number 2572
+O	o627	location p626 p627
 T	t1054	o b1044 b132
 B	b1054	t1054
 T	t1055	o b1040 b1054
@@ -2706,38 +2726,87 @@ T	t1060	o1049 b1059
 B	b1060	t1060
 T	t1061	o1037 b1039 b1049 b1060 b132
 B	b1061	t1061
-T	t1062	o1 b1061
-B	b1062	t1062
-T	t1063	o b1062 b132
-B	b1063	t1063
-T	t1064	o b1037 b1063
-B	b1064	t1064
-T	t1065	o b1030 b1064
-B	b1065	t1065
-T	t1066	o b1009 b1065
-B	b1066	t1066
-T	t1067	o b976 b1066
-B	b1067	t1067
-T	t1068	o b888 b1067
-B	b1068	t1068
-T	t1069	o b877 b1068
-B	b1069	t1069
-T	t1070	o b867 b1069
-B	b1070	t1070
-T	t1071	o b844 b1070
-B	b1071	t1071
-T	t1072	o b790 b1071
-B	b1072	t1072
-T	t1073	o b783 b1072
-B	b1073	t1073
-T	t1074	o b776 b1073
-B	b1074	t1074
-T	t1075	o b768 b1074
-B	b1075	t1075
-T	t1076	o b754 b1075
-B	b1076	t1076
-T	t1077	o b575 b1076
-B	b1077	t1077
-T	t1078	o b569 b1077
-B	b1078	t1078
-T	t1079	o b2 b1078
+T	t631	o627 b1061
+B	b631	t631
+P	p634	String sqsimple
+O	o634	rule p634
+H	h634	u t1043
+P	p641	Var u
+O	o641	var p641
+T	t647	o641
+C	h647	J\\ H\\ t647
+S	s647	t982\\ h h634 h647\\ t983
+B	b647	s647
+T	t649	o981 b647
+B	b649	t649
+H	h649	"" t1045
+VC	C	C\\ J H\\ t647
+S	s649	t982\\ h h634 h647 h649\\ C
+B	b650	s649
+T	t650	o981 b650
+B	b655	t650
+S	s655	t982\\ h h634 h647\\ C
+B	b656	s655
+T	t656	o981 b656
+B	b658	t656
+T	t658	o980 b655 b658
+B	b660	t658
+T	t660	o980 b649 b660
+B	b661	t660
+P	p664	String "assertT << 'x ~ 'y >> thenAT sqsimple_sq << 'T >> ttca"
+O	o664	ext_rule p664
+P	p665	String ""
+O	o665	tactic_arg p665
+T	t669	o b650 b132
+B	b669	t669
+T	t674	o b647 b669
+B	b674	t674
+T	t675	o1054 b656 b674
+B	b675	t675
+T	t677	o665 b675 b132
+B	b677	t677
+T	t685	o1052 b677 b132
+B	b685	t685
+T	t686	o664 b1051 b685 b132 b132
+B	b686	t686
+T	t689	o1049 b686
+B	b689	t689
+T	t693	o634 b980 b661 b689 b132
+B	b693	t693
+T	t694	o1 b693
+B	b694	t694
+T	t697	o b694 b132
+B	b697	t697
+T	t702	o b631 b697
+B	b702	t702
+T	t703	o b623 b702
+B	b703	t703
+T	t708	o b609 b703
+B	b708	t708
+T	t709	o b585 b708
+B	b709	t709
+T	t712	o b976 b709
+B	b712	t712
+T	t713	o b888 b712
+B	b713	t713
+T	t714	o b877 b713
+B	b714	t714
+T	t723	o b867 b714
+B	b723	t723
+T	t724	o b844 b723
+B	b724	t724
+T	t727	o b790 b724
+B	b727	t727
+T	t731	o b783 b727
+B	b731	t731
+T	t732	o b776 b731
+B	b732	t732
+T	t735	o b768 b732
+B	b735	t735
+T	t755	o b754 b735
+B	b755	t755
+T	t769	o b575 b755
+B	b769	t769
+T	t770	o b569 b769
+B	b770	t770
+T	t771	o b2 b770

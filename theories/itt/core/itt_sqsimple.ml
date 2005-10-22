@@ -78,10 +78,15 @@ interactive sqsimple_type_elim1 {| elim[ThinOption thinT] |} 'H:
 interactive sqsimple_type_elim2 {| nth_hyp |} 'H:
       sequent{ <H>; sqsimple_type{'T}; <J> >- "type"{'T} }
 
-interactive sqsimple 'T:
+interactive sqsimple_sq 'T:
       sequent{ <H> >- sqsimple{'T} } -->
       sequent{ <H> >- 'x = 'y in 'T } -->
       sequent{ <H> >- 'x ~ 'y }
+
+interactive sqsimple 'H :
+      [aux] sequent{ <H>; u: 'x = 'y in 'T; <J['u]> >- sqsimple{'T} } -->
+      sequent{ <H>; u: 'x = 'y in 'T; <J['u]>; 'x ~ 'y >- 'C['u] } -->
+      sequent{ <H>; u: 'x = 'y in 'T; <J['u]> >- 'C['u] }
 
 (* TODO: prove that basic types and operators are sqsimple (exept fun, top, //) *)
 (* TODO: subset and subtype of sqsimple type is sqsimple. if X subtupe Y and Y is sqsimple => X subset Y *)

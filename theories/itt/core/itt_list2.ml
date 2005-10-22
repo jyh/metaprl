@@ -799,6 +799,21 @@ interactive all2_wf2 {| intro [] |} 'T1 'T2 :
    [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v] Type } -->
    sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} Type }
 
+doc <:doc<
+   The following lemmas about all2 are generally useful for elimination
+   reasoning.  For example, if you know << all2{'l1; 'l2; x, y. 'P['x; 'y]} >>
+   then you also know that the two lists << 'l1 >> and << 'l2 >> have the
+   same length.
+>>
+interactive all2_length_elim 'H 'T1 'T2 :
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T1 Type } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T2 Type } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]>; x: 'T1; y: 'T2 >- 'P['x; 'y] Type } -->
+   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; length{'l1} = length{'l2} in int; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'C['u] }
+
 (*
  * Ball2.
  *)
@@ -891,8 +906,8 @@ interactive index_mem {| intro [AutoMustComplete] |} :
     sequent { <H> >- 'i in Index{'l} }
 
 interactive index_elim {| elim [] |} 'H :
-   sequent { <H>; i:nat; 'i<length{'l}; <J['i]> >-  'P['i] } -->
-   sequent { <H>; i:Index{'l}; <J['i]> >-  'P['i] }
+   sequent { <H>; i: nat; 'i < length{'l}; <J['i]> >-  'P['i] } -->
+   sequent { <H>; i: Index{'l}; <J['i]> >-  'P['i] }
 
 interactive index_is_int {| nth_hyp |} 'H :
     sequent { <H>; i:Index{'l}; <J['i]> >- 'i in int }

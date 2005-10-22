@@ -1370,6 +1370,10 @@ interactive listmem_set_elim2 {| elim [ThinOption thinT] |} 'H :
 (************************************************************************
  * All2.
  *)
+doc <:doc<
+   The << all2{'l1; 'l2; x, y. 'P['x; 'y]} >> is true iff
+   << 'P['x; 'y] >> holds for the pairwise elements of << 'l1 >> and << 'l2 >>
+>>
 interactive all2_wf2 {| intro [] |} 'T1 'T2 :
    [wf] sequent { <H> >- "type"{'T1} } -->
    [wf] sequent { <H> >- "type"{'T2} } -->
@@ -1401,6 +1405,16 @@ interactive all2_index_elim 'H 'T1 'T2 :
    [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]>; x: 'T1; y: 'T2 >- 'P['x; 'y] Type } -->
    sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]>; all i: Index{'l1}. 'P[nth{'l1; 'i}; nth{'l2; 'i}] >- 'C['u] } -->
    sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'C['u] }
+
+interactive all2_intro2 'T1 'T2 :
+   [wf] sequent { <H> >- 'T1 Type } -->
+   [wf] sequent { <H> >- 'T2 Type } -->
+   [wf] sequent { <H> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; x: 'T1; y: 'T2 >- 'P['x; 'y] Type } -->
+   sequent { <H> >- length{'l1} = length{'l2} in int } -->
+   sequent { <H>; i: Index{'l1} >- 'P[nth{'l1; 'i}; nth{'l2; 'i}] } -->
+   sequent { <H> >- all2{'l1; 'l2; x, y. 'P['x; 'y]} }
 
 doc docoff
 

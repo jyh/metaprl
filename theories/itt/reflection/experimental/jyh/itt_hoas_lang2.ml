@@ -90,7 +90,8 @@ interactive olang_elim1 'H :
        depth: nat;
        op: listmem_set{'ops; Operator};
        subs: list{olang{'ops}};
-       compatible_shapes{'depth; 'op; 'subs} >- 'P[mk_bterm{'depth; 'op; 'subs}] } -->
+       compatible_shapes{'depth; 'op; 'subs};
+       all_list{'subs; t. 'P['t]} >- 'P[mk_bterm{'depth; 'op; 'subs}] } -->
    sequent { <H>; e: olang{'ops}; <J['e]> >- 'P['e] }
 
 (************************************************************************
@@ -181,13 +182,34 @@ interactive compatible_shapes_intro {| intro [intro_typeinf << 'subs >>] |} olan
     sequent { <H> >- compatible_depths{'depth; shape{'op}; 'subs} } -->
     sequent { <H> >- compatible_shapes{'depth; 'op; 'subs} }
 
-interactive compatible_depths_intro olang{'ops} 'ops :
+interactive compatible_depths_intro 'ops :
     [wf] sequent { <H> >- 'ops in list{Operator} } -->
     [wf] sequent { <H> >- 'subs in list{olang{'ops}} } -->
     [wf] sequent { <H> >- 'depth in nat } -->
     [wf] sequent { <H> >- 'op in Operator } -->
     sequent { <H> >- compatible_shapes{'depth; 'op; 'subs} } -->
     sequent { <H> >- compatible_depths{'depth; shape{'op}; 'subs} }
+
+doc <:doc<
+   The general form of induction using << compatible_depths{'depth; 'l1; 'l2} >>
+>>
+interactive olang_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; e: olang{'ops}; <J['e]> >- 'ops in list{Operator} } -->
+   [base] sequent { <H>; e: olang{'ops}; <J['e]>; x: Var >- 'P['x] } -->
+   [step] sequent { <H>; e: olang{'ops}; <J['e]>;
+       depth: nat;
+       op: listmem_set{'ops; Operator};
+       subs: list{olang{'ops}};
+       compatible_depths{'depth; shape{'op}; 'subs};
+       all_list{'subs; t. 'P['t]} >- 'P[mk_bterm{'depth; 'op; 'subs}] } -->
+   sequent { <H>; e: olang{'ops}; <J['e]> >- 'P['e] }
+
+doc <:doc<
+   When using induction on a specific language, it is useful to have elimination
+   rules for each of the specific operators in the language.  The << listmem_set{'ops; Operator} >>
+   term can be used for a case analysis on the operators.  Once given a specific
+   operator, we need to split the subterm list into a list of a specific length.
+>>
 
 (*!
  * @docoff

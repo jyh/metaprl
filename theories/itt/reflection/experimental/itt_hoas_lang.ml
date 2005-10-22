@@ -468,7 +468,7 @@ interactive  lang_elim_squash1 {| elim [] |} 'H :
    sequent { <H>; t: Lang{'sop}; <J['t]> >- squash{'P['t]} }
 
 
-interactive lang_elim  {| elim [] |} 'H :
+interactive lang_elim  'H :
    [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
    sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    sequent { <H>; <J>; bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
@@ -476,6 +476,24 @@ interactive lang_elim  {| elim [] |} 'H :
                all_list{'subs;t.'P['t]}
                >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
    sequent { <H>; t: Lang{'sop}; <J> >- 'P['t] }
+
+(*
+ * The previous rule does not conform to the usual induction standard,
+ * which makes it hard to use because the hyp must usually be the last
+ * one in the sequent.  Instead, use this rule, which allows induction
+ * on any sequent.  Note that it does not increase the expressive power,
+ * it just makes the rule easier to use.
+ *)
+interactive lang_elim2 {| elim [] |} 'H :
+   [wf] sequent { <H>; t: Lang{'sop}; <J['t]> >- 'sop subtype Operator } -->
+   sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   sequent { <H>; t: Lang{'sop}; <J['t]>;
+               bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
+               compatible_shapes{'bdepth; 'op; 'subs};
+               all_list{'subs; t. 'P['t]}
+               >- 'P[mk_bterm{'bdepth; 'op; 'subs}]
+           } -->
+   sequent { <H>; t: Lang{'sop}; <J['t]> >- 'P['t] }
 
 interactive lang_induction  {| elim [] |} 'H :
    [wf] sequent { <H> >- 'sop subtype Operator } -->

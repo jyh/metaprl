@@ -119,6 +119,8 @@ define unfold_compatible_depths :
    <-->
    all2{'l1; 'l2; x, y. ('depth +@ 'x) = bdepth{'y} in int}
 
+let fold_compatible_depths = makeFoldC << compatible_depths{'depth; 'l1; 'l2} >> unfold_compatible_depths
+
 interactive_rw compatible_depths_nil_nil {| reduce |} :
    compatible_depths{'depth; nil; nil}
    <-->
@@ -152,24 +154,40 @@ interactive compatible_depths_wf {| intro [intro_typeinf << 'l2 >>] |} list{olan
 (*
  * Useful lemmas for proving the compatible_shapes_intro rule.
  *)
-interactive compatible_shapes_length_equal 'depth list{olang{'ops}} :
-    [wf] sequent { <H> >- 'ops in list{Operator} } -->
-    [wf] sequent { <H> >- 'depth in nat } -->
-    [wf] sequent { <H> >- 'l1 in list{int} } -->
-    [wf] sequent { <H> >- 'l2 in list{olang{'ops}} } -->
-    sequent { <H> >- compatible_depths{'depth; 'l1; 'l2} } -->
-    sequent { <H> >- length{'l1} = length{'l2} in int }
+interactive compatible_depths_length_elim 'H 'ops :
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'depth in nat } -->
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l1 in list{int} } -->
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l2 in list{olang{'ops}} } -->
+   sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; length{'l1} = length{'l2} in int; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'C['u] }
+
+interactive compatible_depths_index_elim 'H 'ops :
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'depth in nat } -->
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l1 in list{int} } -->
+   [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l2 in list{olang{'ops}} } -->
+   sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]>; all i: Index{'l1}. 'depth +@ nth{'l1; 'i} = bdepth{nth{'l2; 'i}} in int >- 'C['u] } -->
+   sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'C['u] }
 
 (*
  * Reduce compatible_shapes to compatible_depths.
  *)
-interactive compatible_shapes_intro {| intro [intro_typeinf << 'subs >>] |} list{Lang{SubOp{'ops}}} :
-    sequent { <H> >- 'ops in list{Operator} } -->
-    sequent { <H> >- 'subs in list{Lang{SubOp{'ops}}} } -->
-    sequent { <H> >- 'depth in nat } -->
-    sequent { <H> >- 'op in Operator } -->
+interactive compatible_shapes_intro {| intro [intro_typeinf << 'subs >>] |} olang{'ops} :
+    [wf] sequent { <H> >- 'ops in list{Operator} } -->
+    [wf] sequent { <H> >- 'subs in list{olang{'ops}} } -->
+    [wf] sequent { <H> >- 'depth in nat } -->
+    [wf] sequent { <H> >- 'op in Operator } -->
     sequent { <H> >- compatible_depths{'depth; shape{'op}; 'subs} } -->
     sequent { <H> >- compatible_shapes{'depth; 'op; 'subs} }
+
+interactive compatible_depths_intro olang{'ops} 'ops :
+    [wf] sequent { <H> >- 'ops in list{Operator} } -->
+    [wf] sequent { <H> >- 'subs in list{olang{'ops}} } -->
+    [wf] sequent { <H> >- 'depth in nat } -->
+    [wf] sequent { <H> >- 'op in Operator } -->
+    sequent { <H> >- compatible_shapes{'depth; 'op; 'subs} } -->
+    sequent { <H> >- compatible_depths{'depth; shape{'op}; 'subs} }
 
 (*!
  * @docoff

@@ -50,6 +50,8 @@ topval fold_olang : conv
  *)
 declare compatible_depths{'depth; 'shape; 'subs}
 
+topval fold_compatible_depths : conv
+
 (*!
  * @docoff
  *

@@ -789,32 +789,6 @@ interactive append_wf2 {| intro [] |} :
    sequent { <H> >- append{'l1; 'l2} in list{'T} }
 
 (*
- * All2.
- *)
-interactive all2_wf2 {| intro [] |} 'T1 'T2 :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- "type"{'T2} } -->
-   [wf] sequent { <H> >- 'l1 in list{'T1} } -->
-   [wf] sequent { <H> >- 'l2 in list{'T2} } -->
-   [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v] Type } -->
-   sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} Type }
-
-doc <:doc<
-   The following lemmas about all2 are generally useful for elimination
-   reasoning.  For example, if you know << all2{'l1; 'l2; x, y. 'P['x; 'y]} >>
-   then you also know that the two lists << 'l1 >> and << 'l2 >> have the
-   same length.
->>
-interactive all2_length_elim 'H 'T1 'T2 :
-   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T1 Type } -->
-   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T2 Type } -->
-   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l1 in list{'T1} } -->
-   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l2 in list{'T2} } -->
-   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]>; x: 'T1; y: 'T2 >- 'P['x; 'y] Type } -->
-   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; length{'l1} = length{'l2} in int; <J['u]> >- 'C['u] } -->
-   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'C['u] }
-
-(*
  * Ball2.
  *)
 interactive ball2_wf2 {| intro [] |} 'T1 'T2 :
@@ -1392,6 +1366,41 @@ interactive listmem_set_elim2 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['h]> >- 'C['h] } -->
    sequent { <H>; x: listmem_set{'t; 'T}; <J['x]> >- 'C['x] } -->
    sequent { <H>; x: listmem_set{'h::'t; 'T}; <J['x]> >- 'C['x] }
+
+(************************************************************************
+ * All2.
+ *)
+interactive all2_wf2 {| intro [] |} 'T1 'T2 :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v] Type } -->
+   sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} Type }
+
+doc <:doc<
+   The following lemmas about all2 are generally useful for elimination
+   reasoning.  For example, if you know << all2{'l1; 'l2; x, y. 'P['x; 'y]} >>
+   then you also know that the two lists << 'l1 >> and << 'l2 >> have the
+   same length.
+>>
+interactive all2_length_elim 'H 'T1 'T2 :
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T1 Type } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T2 Type } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]>; x: 'T1; y: 'T2 >- 'P['x; 'y] Type } -->
+   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; length{'l1} = length{'l2} in int; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'C['u] }
+
+interactive all2_index_elim 'H 'T1 'T2 :
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T1 Type } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'T2 Type } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]>; x: 'T1; y: 'T2 >- 'P['x; 'y] Type } -->
+   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]>; all i: Index{'l1}. 'P[nth{'l1; 'i}; nth{'l2; 'i}] >- 'C['u] } -->
+   sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'C['u] }
 
 doc docoff
 

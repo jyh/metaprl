@@ -141,6 +141,12 @@ interactive img_monotone_subset {| intro[] |} bind{x.'g['x]}:
    sequent { <H> >-  'A_1 subset 'A_2 } -->
    sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subset  Img{'A_2; x.'f<||>['x]} }
 
+interactive img_sqsimple 'g :
+   [wf] sequent { <H> >- 'A Type } -->
+   [wf] sequent { <H> >- 'g in Img{'A; x. 'f['x]} -> 'A } -->
+   sequent { <H> >- sqsimple{'A} } -->
+   sequent { <H>; a: 'A >- 'g 'f['a] ~ 'a } -->
+   sequent { <H> >- sqsimple{Img{'A; x. 'f<||>['x]}} }
 doc docoff
 
 let imgElimSimpleT i t = funT (fun p ->

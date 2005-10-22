@@ -486,8 +486,8 @@ interactive lang_elim  'H :
  *)
 interactive lang_elim2 {| elim [] |} 'H :
    [wf] sequent { <H>; t: Lang{'sop}; <J['t]> >- 'sop subtype Operator } -->
-   sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
-   sequent { <H>; t: Lang{'sop}; <J['t]>;
+   [base] sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   [step] sequent { <H>; t: Lang{'sop}; <J['t]>;
                bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
                compatible_shapes{'bdepth; 'op; 'subs};
                all_list{'subs; t. 'P['t]}

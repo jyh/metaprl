@@ -55,6 +55,11 @@ define unfold_sqsimple: sqsimple{'T} <--> all x:'T. all y:'T. ('x='y in 'T => 'x
 
 define unfold_sqsimple_type: sqsimple_type{'T} <--> "type"{'T} & sqsimple{'T}
 
+doc docoff
+
+let fold_sqsimple = makeFoldC << sqsimple{'T} >> unfold_sqsimple
+let fold_sqsimple_type = makeFoldC << sqsimple_type{'T} >> unfold_sqsimple_type
+
 doc <:doc<
    @modsection{Basic Rules}
 >>
@@ -91,4 +96,10 @@ interactive sqsimple 'H :
 (* TODO: prove that basic types and operators are sqsimple (exept fun, top, //) *)
 (* TODO: subset and subtype of sqsimple type is sqsimple. if X subtupe Y and Y is sqsimple => X subset Y *)
 
+interactive sqsimple_prod {| intro [] |} :
+   [wf] sequent { <H> >- 'A Type } -->
+   [wf] sequent { <H> >- 'B Type } -->
+   sequent { <H> >- sqsimple{'A} } -->
+   sequent { <H> >- sqsimple{'B} } -->
+   sequent { <H> >- sqsimple{'A * 'B} }
 

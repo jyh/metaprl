@@ -263,6 +263,9 @@ interactive var_wf {| intro [] |} :
    [wf] sequent { <H> >- 'r in nat } -->
    sequent { <H> >- var{'l; 'r} in Var }
 
+interactive var_elim {| elim [] |} 'H :
+   sequent { <H>; i: nat; j: nat; <J[var{'i; 'j}]> >- 'C[var{'i; 'j}] } -->
+   sequent { <H>; x: Var; <J['x]> >- 'C['x] }
 doc docoff
 
 (*!

@@ -28,6 +28,7 @@
  *)
 extends Itt_hoas_lang
 extends Itt_image
+extends Itt_subset
 
 open Basic_tactics
 
@@ -78,6 +79,22 @@ dform olang_df : olang{'ops} =
 interactive olang_wf {| intro [] |} :
    [wf] sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- olang{'ops} Type }
+
+(*
+ * Squiggle equality.
+ *)
+interactive olang_subtype {| intro [] |} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- olang{'ops} subset BTerm }
+
+interactive subtype_sqsimple 'T2 :
+   sequent { <H> >- sqsimple{'T2} } -->
+   sequent { <H> >- 'T1 subtype 'T2 } -->
+   sequent { <H> >- sqsimple{'T1} }
+
+interactive olang_sqsimple {| intro [] |} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- sqsimple{olang{'ops}} }
 
 (*
  * This is really a private definition until we get a proper compatible_shapes
@@ -210,6 +227,14 @@ doc <:doc<
    term can be used for a case analysis on the operators.  Once given a specific
    operator, we need to split the subterm list into a list of a specific length.
 >>
+
+interactive subterm_cons_elim 'H 'depth ('h :: 't) :
+   [wf] sequent { <H>; l: list{olang{'ops}}; <J['l]> >- 'depth in nat } -->
+   [wf] sequent { <H>; l: list{olang{'ops}}; <J['l]> >- 'h in int } -->
+   [wf] sequent { <H>; l: list{olang{'ops}}; <J['l]> >- 't in list{int} } -->
+   [aux] sequent { <H>; l: list{olang{'ops}}; <J['l]> >- compatible_depths{'depth; 'h :: 't; 'l} } -->
+   sequent { <H>; e: olang{'ops}; l: list{olang{'ops}}; <J['e :: 'l]> >- 'C['e :: 'l] } -->
+   sequent { <H>; l: list{olang{'ops}}; <J['l]> >- 'C['l] }
 
 (*!
  * @docoff

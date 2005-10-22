@@ -60,6 +60,7 @@ extends Itt_logic
 extends Itt_struct
 extends Itt_struct2
 extends Itt_decidable
+extends Itt_sqsimple
 doc docoff
 
 open Lm_debug
@@ -398,6 +399,12 @@ prim intEquality {| intro [] |} :
  *)
 interactive intType {| intro [] |} :
    sequent { <H> >- "type"{int} }
+
+(*
+ * Int is a sqsimple type.
+ *)
+interactive int_sqsimple {| intro [] |} :
+   sequent { <H> >- sqsimple{int} }
 
 (*
  * H >- Ui ext Z

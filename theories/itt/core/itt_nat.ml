@@ -45,6 +45,7 @@ extends Itt_struct3
 extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
+extends Itt_sqsimple
 doc docoff
 
 open Basic_tactics
@@ -144,6 +145,9 @@ interactive nat_is_int2 {| nth_hyp |} 'H :
 interactive nat_is_subtype_of_int  {| intro[] |} :
    sequent { <H> >- nat subtype int }
 
+interactive nat_sqsimple {| intro [] |} :
+   sequent { <H> >- sqsimple{nat} }
+
 let resource sub += (RLSubtype ([<< nat >>, << int>>], nat_is_subtype_of_int  ))
 
 interactive eq_nat_decidable {| intro [] |} :
@@ -199,6 +203,12 @@ interactive natBackInduction 'n bind{x.'C['x]}  :
    sequent { <H>; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
    sequent { <H>  >- 'C[0] }
 
+(*
+ * JYH: someone added this and didn't prove it.
+ * This is unfortunate because the rule is false,
+ * For example, (all i: P[i]) is a counterexample.
+ * We shouldn't leave dangerous stuff like this lying around.
+ *)
 interactive well_ordering_principle bind{i.'P['i]} 'i :
    [wf] sequent { <H>; n: nat >- "type"{'P['n]} } -->
    [wf] sequent { <H> >- 'i in nat } -->
@@ -309,3 +319,10 @@ let positiveRule2T = smallest_positive
 *)
 
 
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

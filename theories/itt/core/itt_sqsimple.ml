@@ -103,3 +103,17 @@ interactive sqsimple_prod {| intro [] |} :
    sequent { <H> >- sqsimple{'B} } -->
    sequent { <H> >- sqsimple{'A * 'B} }
 
+interactive sqsimple_union {| intro [] |} :
+   [wf] sequent { <H> >- 'A Type } -->
+   [wf] sequent { <H> >- 'B Type } -->
+   sequent { <H> >- sqsimple{'A} } -->
+   sequent { <H> >- sqsimple{'B} } -->
+   sequent { <H> >- sqsimple{'A + 'B} }
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

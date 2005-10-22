@@ -252,6 +252,8 @@ doc <:doc<
 >>
 define unfold_Var : Var <--> Img{nat * nat; v. spread{'v; i, j. var{'i; 'j}}}
 
+let fold_Var = makeFoldC << Var >> unfold_Var
+
 interactive var_type_univ {| intro [] |} :
    sequent { <H> >- Var in univ[i:l] }
 
@@ -266,6 +268,9 @@ interactive var_wf {| intro [] |} :
 interactive var_elim {| elim [] |} 'H :
    sequent { <H>; i: nat; j: nat; <J[var{'i; 'j}]> >- 'C[var{'i; 'j}] } -->
    sequent { <H>; x: Var; <J['x]> >- 'C['x] }
+
+interactive var_sqsimple {| intro [] |} :
+   sequent { <H> >- sqsimple{Var} }
 doc docoff
 
 (*!

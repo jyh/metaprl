@@ -29,9 +29,10 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
 extends Itt_equal
 extends Itt_set
+
+open Basic_tactics
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -40,6 +41,9 @@ extends Itt_set
 declare tunion{'A; x. 'B['x]}
 
 prec prec_tunion
+
+(* Private *)
+topval fold_tunion : conv
 
 (************************************************************************
  * RULES                                                                *

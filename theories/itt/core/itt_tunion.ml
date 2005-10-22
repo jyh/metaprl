@@ -59,7 +59,10 @@ extends Itt_equal
 extends Itt_set
 extends Itt_logic
 extends Itt_image
+extends Itt_sqsimple
 doc docoff
+
+open Basic_tactics
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -83,6 +86,8 @@ doc <:doc<
 define (*private*) unfold_tunion :
    tunion{'A; x. 'B['x]} <--> Img{x: 'A * 'B['x]; p.snd{'p}}
 doc docoff
+
+let fold_tunion = makeFoldC << tunion{'A; x. 'B['x]} >> unfold_tunion
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -173,6 +178,8 @@ let thinLastT n = (thinT (-1) thenT tryT (thinT n))
 doc docon
 
 interactive tunionElimination_eq (* {| elim [ThinOption thinLastT] |} *) 'H :
+   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A >- 'B['w] Type } -->
+      (* can we get rid of the above wf-assumption? *)
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
@@ -187,6 +194,8 @@ interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'f :
 
 
 interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 'f :
+   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A >- 'B['w] Type } -->
+      (* can we get rid of the above wf-assumption? *)
    [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'f 'z = 'w in 'A } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
@@ -216,6 +225,17 @@ interactive unionSubtype3 :
    ["subtype"] sequent { <H>; x: 'A >- 'B['x] subtype 'T } -->
    sequent { <H> >- Union x:'A. 'B['x] subtype 'T }
 
+doc <:doc<
+   The union uses squiggle equality if each of its types
+   do.
+>>
+interactive tunion_sqsimple {| intro [] |} 'g :
+   [wf] sequent { <H> >- 'A Type } -->
+   [wf] sequent { <H>; x: 'A >- 'B['x] Type } -->
+   [wf] sequent { <H> >- 'g in (Union x: 'A. 'B['x]) -> (x: 'A * 'B['x]) } -->
+   sequent { <H>; z: (x: 'A * 'B['x]) >- 'g snd{'z} ~ 'z } -->
+   sequent { <H> >- sqsimple{x: 'A * 'B['x]} } -->
+   sequent { <H> >- sqsimple{Union x: 'A. 'B['x]} }
 
 doc docoff
 

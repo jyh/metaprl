@@ -39,6 +39,8 @@ extends Itt_nat
 extends Itt_list2
 extends Itt_image
 
+open Basic_tactics
+
 declare var{'left; 'right}
 declare mk_bterm{'n; 'op; 'btl}
 declare bdepth{'bt}
@@ -55,6 +57,8 @@ define iform unfold_get_op1 :
  * The type Var contains all the var{l; r} terms.
  *)
 declare Var
+
+topval fold_Var : conv
 
 (*!
  * @docoff

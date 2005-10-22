@@ -46,23 +46,6 @@ define unfold_dummy :
 let fold_dummy = makeFoldC << dummy >> unfold_dummy
 
 (************************************************************************
- * Variables.
- * The main objective here is to hide the deBruijn representation.
- *)
-define unfold_Var : Var <--> Img{nat * nat; v. spread{'v; i, j. var{'i; 'j}}}
-
-interactive var_type_univ {| intro [] |} :
-   sequent { <H> >- Var in univ[i:l] }
-
-interactive var_type_wf {| intro [] |} :
-   sequent { <H> >- Var Type }
-
-interactive var_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'l in nat } -->
-   [wf] sequent { <H> >- 'r in nat } -->
-   sequent { <H> >- var{'l; 'r} in Var }
-
-(************************************************************************
  * Operators.
  *)
 

@@ -38,11 +38,6 @@ declare dummy
 topval fold_dummy : conv
 
 (************************************************************************
- * Variables.
- *)
-declare Var
-
-(************************************************************************
  * A version of languages based on operator lists.
  *)
 declare olang{'ops}

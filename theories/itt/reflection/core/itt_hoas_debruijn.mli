@@ -37,6 +37,7 @@ extends Itt_hoas_base
 extends Itt_hoas_vector
 extends Itt_nat
 extends Itt_list2
+extends Itt_image
 
 declare var{'left; 'right}
 declare mk_bterm{'n; 'op; 'btl}
@@ -48,6 +49,12 @@ declare subterms{'bt}
 declare not_found
 define iform unfold_get_op1 :
    get_op{'bt} <--> get_op{'bt; not_found}
+
+(*
+ * More abstract variable representation.
+ * The type Var contains all the var{l; r} terms.
+ *)
+declare Var
 
 (*!
  * @docoff

@@ -203,19 +203,6 @@ interactive natBackInduction 'n bind{x.'C['x]}  :
    sequent { <H>; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
    sequent { <H>  >- 'C[0] }
 
-(*
- * JYH: someone added this and didn't prove it.
- * This is unfortunate because the rule is false,
- * For example, (all i: P[i]) is a counterexample.
- * We shouldn't leave dangerous stuff like this lying around.
- *)
-interactive well_ordering_principle bind{i.'P['i]} 'i :
-   [wf] sequent { <H>; n: nat >- "type"{'P['n]} } -->
-   [wf] sequent { <H> >- 'i in nat } -->
-   sequent{ <H> >-
-      all n:nat. ("not"{'P['n]} or "not"{all n2:nat. ('P['n2] => 'n < 'n2)})} -->
-   sequent{ <H> >- "not"{'P['i]}}
-
 interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :
    sequent { <H> >- 'n1 = 'n2 in nat } -->
    sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->

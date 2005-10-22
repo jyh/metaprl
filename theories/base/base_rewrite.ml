@@ -54,7 +54,7 @@ doc <:doc<
 doc <:doc<
    @parents
 >>
-extends Auto_tactic
+extends Dtactic
 extends Base_trivial
 doc docoff
 
@@ -65,7 +65,7 @@ open Refiner.Refiner.TermMan
 
 open Tactic_type.Conversionals
 
-open Auto_tactic
+open Dtactic
 
 (*
  * XXX HACK: Currently Base_rewrite covers both conditional and unconditional rewrites.
@@ -88,7 +88,7 @@ doc <:doc<
    The following rule defines the rewrite reflexivity.  A term
    @it{a} always rewrites to itself.
 >>
-prim rewriteAxiom1 :
+prim rewriteAxiom1 {| intro [] |} :
    sequent { <H> >- Perv!"rewrite"{'a; 'a} } = it
 
 doc <:doc<
@@ -125,13 +125,6 @@ doc <:doc<
    @hreftactic[trivialT] resource.
    @docoff
 >>
-
-let resource auto += {
-   auto_name = "Base_rewrite.triv_equalT";
-   auto_prec = trivial_prec;
-   auto_tac = rewriteAxiom1;
-   auto_type = AutoTrivial;
-}
 
 dform sequent_arg_df : sequent_arg = `"" (* sub["BR"] *)
 

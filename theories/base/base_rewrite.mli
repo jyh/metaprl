@@ -31,7 +31,7 @@
  *)
 
 extends Perv
-extends Auto_tactic
+extends Dtactic
 
 open Refiner.Refiner.TermType
 open Tactic_type.Tactic

@@ -319,7 +319,7 @@ dform is_nil_df : except_mode[src] :: parens :: "prec"[prec_equal] :: is_nil{'l}
    slot{'l} `" =" subb `" []"
 
 dform mem_df : except_mode[src] :: mem{'x; 'l; 'T} =
-   `"(" slot{'x} " " Mpsymbols!member `" " slot{'l} `" in " slot{list{'T}} `")"
+   `"mem(" slot{'x} " " Mpsymbols!member `" " slot{'l} `" in " slot{list{'T}} `")"
 
 dform index_df : except_mode[src] :: Index{'l} =
    `"Index(" slot{'l} `")"

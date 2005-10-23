@@ -172,6 +172,23 @@ interactive compatible_depths_index_elim 'H 'ops :
    sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]>; all i: Index{'l1}. 'depth +@ nth{'l1; 'i} = bdepth{nth{'l2; 'i}} in int >- 'C['u] } -->
    sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'C['u] }
 
+interactive compatible_depths_depth_bound_elim 'H 'ops :
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'depth in nat } -->
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'ops in list{Operator} } -->
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l1 in list{nat} } -->
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l2 in list{olang{'ops}} } -->
+    sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]>; all i: Index{'l2}. bdepth{nth{'l2; 'i}} >= 'depth >- 'C['u] } -->
+    sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'C['u] }
+
+interactive compatible_depths_map_bind_vec_equal 'H 'ops :
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'depth in nat } -->
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'ops in list{Operator} } -->
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l1 in list{nat} } -->
+    [wf] sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'l2 in list{olang{'ops}} } -->
+    sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]>;
+       map{bt. bind{'depth; x. substl{'bt; 'x}}; 'l2} = 'l2 in list{olang{'ops}} >- 'C['u] } -->
+    sequent { <H>; u: compatible_depths{'depth; 'l1; 'l2}; <J['u]> >- 'C['u] }
+
 (*
  * Reduce compatible_shapes to compatible_depths.
  *)

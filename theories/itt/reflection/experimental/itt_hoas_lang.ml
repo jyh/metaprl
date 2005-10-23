@@ -1,4 +1,3 @@
-
 doc <:doc<
    @module[Itt_hoas_lang]
    The @tt[Itt_hoas_lang] module defines the type of a language over

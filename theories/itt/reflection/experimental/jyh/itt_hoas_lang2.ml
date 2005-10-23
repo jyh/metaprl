@@ -81,18 +81,6 @@ interactive olang_wf {| intro [] |} :
    sequent { <H> >- olang{'ops} Type }
 
 (*
- * Squiggle equality.
- *)
-interactive olang_subtype {| intro [] |} :
-   [wf] sequent { <H> >- 'ops in list{Operator} } -->
-   sequent { <H> >- olang{'ops} subset BTerm }
-
-interactive subtype_sqsimple 'T2 :
-   sequent { <H> >- sqsimple{'T2} } -->
-   sequent { <H> >- 'T1 subtype 'T2 } -->
-   sequent { <H> >- sqsimple{'T1} }
-
-(*
  * This is really a private definition until we get a proper compatible_shapes
  * definition.
  *)
@@ -217,10 +205,72 @@ interactive olang_elim {| elim [] |} 'H :
        all_list{'subs; t. 'P['t]} >- 'P[mk_bterm{'depth; 'op; 'subs}] } -->
    sequent { <H>; e: olang{'ops}; <J['e]> >- 'P['e] }
 
+(************************************************************************
+ * Basic membership.
+ *)
+interactive var_in_olang {| intro [intro_typeinf << 'x >>] |} Var :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H> >- 'x in Var } -->
+   sequent { <H> >- 'x in olang{'ops} }
+
+interactive bterm_in_olang {| intro [] |} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H> >- 'depth in nat } -->
+   [wf] sequent { <H> >- 'op in SubOp{'ops} } -->
+   [wf] sequent { <H> >- 'subs in list{olang{'ops}} } -->
+   [aux] sequent { <H> >- compatible_depths{'depth; shape{'op}; 'subs} } -->
+   sequent { <H> >- mk_bterm{'depth; 'op; 'subs} in olang{'ops} }
+
+(************************************************************************
+ * Squiggle equality.
+ *)
+doc <:doc<
+   The language << olang{'ops} >> has a trivial equality.
+   The following lemmas are needed to prove it.
+>>
+interactive var_olang_squiggle 'ops :
+   [wf] sequent { <H> >- 'x in Var } -->
+   [wf] sequent { <H> >- 'y in Var } -->
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [aux] sequent { <H> >- 'x = 'y in olang{'ops} } -->
+   sequent { <H> >- 'x ~ 'y }
+
+interactive var_neq_bterm 'H :
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'l in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'r in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'depth in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'op in Operator } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'subterms in list{olang{'ops}} } -->
+   sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'C['u] }
+
+interactive bterm_neq_var 'H :
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'l in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'r in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'depth in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'op in Operator } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in olang{'ops}; <J['u]> >- 'subterms in list{olang{'ops}} } -->
+   sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in olang{'ops}; <J['u]> >- 'C['u] }
+
+interactive subs_equal 'depth 'op :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H> >- 'depth in nat } -->
+   [wf] sequent { <H> >- 'op in SubOp{'ops} } -->
+   [wf] sequent { <H> >- 's1 in list{olang{'ops}} } -->
+   [wf] sequent { <H> >- 's2 in list{olang{'ops}} } -->
+   [aux] sequent { <H> >- compatible_depths{'depth; shape{'op}; 's1} } -->
+   [aux] sequent { <H> >- compatible_depths{'depth; shape{'op}; 's2} } -->
+   sequent { <H> >- mk_bterm{'depth; 'op; 's1} = mk_bterm{'depth; 'op; 's2} in olang{'ops} } -->
+   sequent { <H> >- 's1 = 's2 in list{olang{'ops}} }
+
 interactive olang_sqsimple {| intro [] |} :
    [wf] sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- sqsimple{olang{'ops}} }
 
+(************************************************************************
+ * Properties of compatible_depths.
+ *)
 doc <:doc<
    When using induction on a specific language, it is useful to have elimination
    rules for each of the specific operators in the language.  The << listmem_set{'ops; Operator} >>

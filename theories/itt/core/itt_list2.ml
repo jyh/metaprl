@@ -1145,10 +1145,22 @@ interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
    [wf] sequent { <H> >- 'l in list{'T1} } -->
    sequent { <H> >- map{'f; 'l} in list{'T2} }
 
-interactive map_wf2 {| intro [] |} :
+interactive map_wf4 {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H>; x: 'T1 >- 'f['x] in 'T2 } -->
+   [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H> >- map{x. 'f['x]; 'l} in list{'T2} }
+
+(*
+ * JYH: keep this rule with a select option.
+ * We don't want to use this rule by default because it is hard to use.
+ * However, the Itt_hoas_lang theory needs to use it by default.
+ *)
+interactive map_wf2 {| intro [SelectOption 5] |} :
    [wf] sequent { <H> >- "type"{'T2} } -->
    [wf] sequent { <H> >- 'l in list } -->
-   [wf] sequent { <H> >- all_list{'l;x.'f['x] in 'T2} } -->
+   [wf] sequent { <H> >- all_list{'l; x. 'f['x] in 'T2} } -->
    sequent { <H> >- map{x.'f['x]; 'l} in list{'T2} }
 
 interactive list_wf2  :

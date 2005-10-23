@@ -227,7 +227,9 @@ interactive unionSubtype3 :
 
 doc <:doc<
    The union uses squiggle equality if each of its types
-   do.
+   do.  This rule is not very useful because there must
+   be a function << 'g >> that computes the exact index
+   for each element of the union (so the union is disjoint).
 >>
 interactive tunion_sqsimple {| intro [] |} 'g :
    [wf] sequent { <H> >- 'A Type } -->

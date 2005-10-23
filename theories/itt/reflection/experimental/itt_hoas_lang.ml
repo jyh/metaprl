@@ -518,19 +518,6 @@ dform lang_df: Lang{'op} =
    tt["Language"] `"[" slot{'op} `"]"
 
 (*
- * BTerm uses squiggle equality.
- *)
-interactive dom_sqsimple {| intro [] |} :
-   [wf] sequent { <H> >- 'ops subtype Operator } -->
-   [wf] sequent { <H> >- 'BT Type } -->
-   sequent { <H> >- sqsimple{'ops} } -->
-   sequent { <H> >- sqsimple{'BT} } -->
-   sequent { <H> >- sqsimple{dom{'ops; 'BT}} }
-
-interactive bterm_sqsimple :
-   sequent { <H> >- sqsimple{BTerm} }
-
-(*
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

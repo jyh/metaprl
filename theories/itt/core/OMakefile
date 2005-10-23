@@ -61,7 +61,6 @@ MPFILES[] =
    itt_union2
    itt_prop_decide
    itt_subset2
-   itt_sqsimple2
    itt_pointwise2
    itt_record_label0
    itt_record_label

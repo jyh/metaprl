@@ -92,10 +92,6 @@ interactive subtype_sqsimple 'T2 :
    sequent { <H> >- 'T1 subtype 'T2 } -->
    sequent { <H> >- sqsimple{'T1} }
 
-interactive olang_sqsimple {| intro [] |} :
-   [wf] sequent { <H> >- 'ops in list{Operator} } -->
-   sequent { <H> >- sqsimple{olang{'ops}} }
-
 (*
  * This is really a private definition until we get a proper compatible_shapes
  * definition.
@@ -220,6 +216,10 @@ interactive olang_elim {| elim [] |} 'H :
        compatible_depths{'depth; shape{'op}; 'subs};
        all_list{'subs; t. 'P['t]} >- 'P[mk_bterm{'depth; 'op; 'subs}] } -->
    sequent { <H>; e: olang{'ops}; <J['e]> >- 'P['e] }
+
+interactive olang_sqsimple {| intro [] |} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- sqsimple{olang{'ops}} }
 
 doc <:doc<
    When using induction on a specific language, it is useful to have elimination

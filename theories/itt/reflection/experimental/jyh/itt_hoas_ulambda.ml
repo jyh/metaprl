@@ -38,7 +38,7 @@ define unfold_ulambda : ULambda <--> <:xterm<
    Lang [#"Apply"{x; x}; #"Lambda"{\x. x}]
 >>
 
-let fold_ulambda   = makeFoldC << ULambda >> unfold_ulambda
+let fold_ulambda = makeFoldC << ULambda >> unfold_ulambda
 
 interactive ulambda_type : <:xrule<
    <H> >- "ULambda" Type
@@ -66,11 +66,12 @@ interactive lambda_wf {| intro [] |} : <:xrule<
 >>
 
 interactive ulambda_elim 'H : <:xrule<
-   <H>; <J>; v: "Var" >- P[v] -->
-   <H>; <J>; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2];
+   <H>; e: "ULambda"; <J[e]>; v: "Var" >- P[v] -->
+   <H>; e: "ULambda"; <J[e]>; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2];
       "bdepth"{e1} = "bdepth"{e2} in "int" >- P[$`["bdepth"{e1}] "Apply"{e1; e2}] -->
-   <H>; <J>; e: "ULambda"; P[e] >- P[$`["bdepth"{e}] "Lambda"{\x. $,"subst"{e; x}}] -->
-   <H>; e: "ULambda"; <J> >- P[e]
+   <H>; e: "ULambda"; <J[e]>; e1: "ULambda"; P[e1]; "bdepth"{e1} > 0
+       >- P[$`["bdepth"{e1} -@ 1] "Lambda"{\x. $,"subst"{e1; x}}] -->
+   <H>; e: "ULambda"; <J[e]> >- P[e]
 >>
 
 (*!

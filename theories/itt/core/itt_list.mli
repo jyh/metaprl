@@ -206,6 +206,7 @@ val dest_list : term -> term
 val mk_list_term : term -> term
 
 val nil_term : term
+val is_nil_term : term -> bool
 
 val is_cons_term : term -> bool
 val dest_cons : term -> term * term

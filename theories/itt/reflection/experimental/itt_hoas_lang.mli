@@ -62,18 +62,6 @@ topval fold_dest : conv
 topval fold_Lang : conv
 topval fold_ndepth : conv
 
-(************************************************************************
- * Grammar.
- *)
-declare tok_Lang          : Terminal
-
-lex_token xterm : "Lang"    --> tok_Lang
-
-lex_prec right [tok_Lang] = prec_not
-
-production xterm_term{Lang{listmem_set{'ops; Operator}}} <--
-   tok_Lang; xterm_term{'ops}
-
 (*!
  * @docoff
  *

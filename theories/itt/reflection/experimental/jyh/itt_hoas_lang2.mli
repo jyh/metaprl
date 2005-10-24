@@ -52,6 +52,23 @@ declare compatible_depths{'depth; 'shape; 'subs}
 
 topval fold_compatible_depths : conv
 
+(************************************************************************
+ * Grammar.
+ *)
+declare tok_Lang          : Terminal
+
+lex_token xterm : "Lang" --> tok_Lang
+
+lex_prec right [tok_Lang] = prec_not
+
+production xterm_term{olang{'ops}} <--
+   tok_Lang; xterm_term{'ops}
+
+(************************************************************************
+ * Rewrites.
+ *)
+topval etaExpandC : term -> conv
+
 (*!
  * @docoff
  *

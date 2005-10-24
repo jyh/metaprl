@@ -303,6 +303,8 @@ let dest_list = dest_dep0_term list_opname
 let mk_list_term = mk_dep0_term list_opname
 
 let nil_term = << nil >>
+let nil_opname = opname_of_term nil_term
+let is_nil_term = is_no_subterms_term nil_opname
 
 let cons_term = << cons{'a; 'b} >>
 let cons_opname = opname_of_term cons_term
@@ -317,7 +319,7 @@ let dest_list_ind = dest_dep0_dep0_dep3_term list_ind_opname
 let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
 
 let rec mk_list_of_list = function
-	h::t -> mk_cons_term h (mk_list_of_list t)
+   h::t -> mk_cons_term h (mk_list_of_list t)
  | [] -> nil_term
 
 (************************************************************************

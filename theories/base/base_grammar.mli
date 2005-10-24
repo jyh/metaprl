@@ -86,6 +86,7 @@ declare tok_decide             : Terminal
 declare tok_match              : Terminal
 declare tok_with               : Terminal
 declare tok_end                : Terminal
+declare tok_type               : Terminal
 
 (* Symbols *)
 declare tok_dot                : Terminal
@@ -112,8 +113,8 @@ declare tok_longrightarrow     : Terminal
 declare tok_longleftrightarrow : Terminal
 declare tok_left_paren         : Terminal
 declare tok_right_paren        : Terminal
-declare tok_left_curly         : Terminal
-declare tok_right_curly        : Terminal
+declare tok_left_brace         : Terminal
+declare tok_right_brace        : Terminal
 declare tok_colon_colon        : Terminal
 declare tok_tilde              : Terminal
 declare tok_backslash          : Terminal
@@ -136,6 +137,7 @@ lex_token xterm : "match"      --> tok_match
 lex_token xterm : "with"       --> tok_with
 lex_token xterm : "in"         --> tok_in
 lex_token xterm : "end"        --> tok_end
+lex_token xterm : "type"       --> tok_type
 
 (* Symbols *)
 lex_token xterm : "[.]"        --> tok_dot
@@ -158,8 +160,8 @@ lex_token xterm : "[)]"        --> tok_right_paren
 lex_token xterm : "\["         --> tok_left_brack
 lex_token xterm : "\]"         --> tok_right_brack
 lex_token xterm : "\\"         --> tok_backslash
-lex_token xterm : "[{]"        --> tok_left_curly
-lex_token xterm : "[}]"        --> tok_right_curly
+lex_token xterm : "[{]"        --> tok_left_brace
+lex_token xterm : "[}]"        --> tok_right_brace
 lex_token xterm : "'"          --> tok_squote
 lex_token xterm : "<[|]"       --> tok_left_context
 lex_token xterm : "[|]>"       --> tok_right_context
@@ -503,7 +505,7 @@ production xterm_bterms{xlist_sequent{||}} <--
    (* empty *)
 
 production xterm_bterms{'t} <--
-   tok_left_curly; xterm_bterms_list{'t}; tok_right_curly
+   tok_left_brace; xterm_bterms_list{'t}; tok_right_brace
 
 production xterm_bterms_list{xlist_sequent{||}} <--
    (* empty *)

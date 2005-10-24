@@ -93,29 +93,37 @@ lex_token xterm : "<:"          --> tok_st
 
 lex_prec nonassoc [tok_st] = prec_equal
 
+(************************************************************************
+ * Atomic terms.
+ *)
+declare fsub_atomic{'e} : Nonterminal
+
+production fsub_atomic{'e} <--
+   xterm_sovar{'e}
+
+production fsub_atomic{'e} <--
+   tok_quotation{'e}
+
+production fsub_atomic{xunquote{'e}} <--
+   tok_itt; tok_left_brace; xterm_term{'e}; tok_right_brace
+
 (************************************************
  * Types.
  *)
 declare fsub_type{'ty} : Nonterminal
-declare fsub_simple_type{'ty} : Nonterminal
+declare fsub_type_simple{'ty} : Nonterminal
 
-production fsub_simple_type{'e} <--
-   xterm_sovar{'e}
+production fsub_type_simple{'e} <--
+   fsub_atomic{'e}
 
-production fsub_simple_type{'e} <--
-   tok_quotation{'e}
-
-production fsub_simple_type{'e} <--
-   tok_itt; tok_left_curly; xterm_term{'e}; tok_right_curly
-
-production fsub_simple_type{'e} <--
+production fsub_type_simple{'e} <--
    tok_left_paren; fsub_type{'e}; tok_right_paren
 
-production fsub_simple_type{TyTop} <--
+production fsub_type_simple{TyTop} <--
    tok_top
 
 production fsub_type{'e} <--
-   fsub_simple_type{'e}
+   fsub_type_simple{'e}
 
 production fsub_type{TyFun{'ty1; 'ty2}} <--
    fsub_type{'ty1}; tok_arrow; fsub_type{'ty2}
@@ -136,13 +144,7 @@ declare fsub_exp_simple{'e} : Nonterminal
 
 (* Simple expressions that can be used in an application *)
 production fsub_exp_simple{'e} <--
-   xterm_sovar{'e}
-
-production fsub_exp_simple{'e} <--
-   tok_quotation{'e}
-
-production fsub_exp_simple{'e} <--
-   tok_itt; tok_left_curly; xterm_term{'e}; tok_right_curly
+   fsub_atomic{'e}
 
 production fsub_exp_simple{'e} <--
    tok_left_paren; fsub_exp{'e}; tok_right_paren
@@ -159,13 +161,22 @@ production fsub_exp{'e} <--
    fsub_exp_apply{'e}
 
 production fsub_exp{Lambda{'ty; v. 'e}} <--
-   tok_fun; tok_id[v:s]; tok_colon; fsub_simple_type{'ty}; tok_arrow; fsub_exp{'e}
+   tok_fun; tok_id[v:s]; tok_colon; fsub_type_simple{'ty}; tok_arrow; fsub_exp{'e}
 
 production fsub_exp{TyLambda{'ty; v. 'e}} <--
-   tok_Fun; tok_id[v:s]; tok_st; fsub_simple_type{'ty}; tok_arrow; fsub_exp{'e}
+   tok_Fun; tok_id[v:s]; tok_st; fsub_type_simple{'ty}; tok_arrow; fsub_exp{'e}
 
 production fsub_exp{TyApply{'e; 'ty}} <--
-   fsub_exp{'e}; tok_left_curly; fsub_type{'ty}; tok_right_curly
+   fsub_exp{'e}; tok_left_brace; fsub_type{'ty}; tok_right_brace
+
+(************************************************************************
+ * Integrate into the ITT language.
+ *)
+production xterm_term{xquote{'depth; 'e}} <--
+   tok_fsub; tok_type; tok_left_brack; xterm_term{'depth}; tok_right_brack; tok_left_brace; fsub_type{'e}; tok_right_brace
+
+production xterm_term{xquote{'depth; 'e}} <--
+   tok_fsub; tok_left_brack; xterm_term{'depth}; tok_right_brack; tok_left_brace; fsub_exp{'e}; tok_right_brace
 
 (*!
  * @docoff

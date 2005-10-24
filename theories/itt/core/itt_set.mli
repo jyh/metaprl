@@ -128,7 +128,7 @@ val mk_set_term : var -> term -> term -> term
  * Grammar.
  *)
 production xterm_term{{ x: 't1 | 't2}} <--
-   tok_left_curly; tok_id[x:s]; tok_colon; xterm_term{'t1}; tok_pipe; xterm_term{'t2}; tok_right_curly
+   tok_left_brace; tok_id[x:s]; tok_colon; xterm_term{'t1}; tok_pipe; xterm_term{'t2}; tok_right_brace
 
 (*
  * -*-

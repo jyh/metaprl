@@ -66,10 +66,10 @@ declare tok_dot_dot    : Terminal
 lex_token xterm : "[.][.]"   --> tok_dot_dot
 
 production xterm_term{{ i: int | 'j <= 'i & 'i <= 'k }} <--
-   tok_left_curly; xterm_apply_term{'j}; tok_dot_dot; xterm_apply_term{'k}; tok_right_curly
+   tok_left_brace; xterm_apply_term{'j}; tok_dot_dot; xterm_apply_term{'k}; tok_right_brace
 
 production xterm_term{{ i: int | 'j <= 'i & 'i < 'k }} <--
-   tok_left_curly; xterm_apply_term{'j}; tok_dot_dot; xterm_apply_term{'k}; tok_minus; tok_right_curly
+   tok_left_brace; xterm_apply_term{'j}; tok_dot_dot; xterm_apply_term{'k}; tok_minus; tok_right_brace
 
 (*!
  * @docoff

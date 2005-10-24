@@ -1434,6 +1434,7 @@ doc docoff
  * Squiggle equality.
  *)
 interactive list_sqsimple {| intro [] |} :
+   [wf] sequent { <H> >- 'T Type } -->
    sequent { <H> >- sqsimple{'T} } -->
    sequent { <H> >- sqsimple{list{'T}} }
 

@@ -27,6 +27,40 @@
 extends Itt_theory
 extends Itt_hoas_lang2
 
+open Basic_tactics
+
+(************************************************************************
+ * The reflected language.
+ *)
+define unfold_fsub_core : FSubCore <--> <:xterm<
+   Lang [#"TyTop";
+         #"TyFun"{ty1; ty2};
+         #"TyAll"{ty1; \x. ty2};
+         #"Lambda"{ty; \x. e};
+         #"Apply"{e1; e2};
+         #"TyLambda"{ty; \x. e};
+         #"TyApply"{e; ty}]
+>>
+
+let fold_fsub_core = makeFoldC << FSubCore >> unfold_fsub_core
+
+interactive fsub_core_wf : <:xrule<
+   <H> >- "FSubCore" Type
+>>
+
+interactive top_wf : <:xrule<
+   <H> >- d IN "nat" -->
+   <H> >- fsub type [d] { top } IN "FSubCore"
+>>
+
+interactive ty_fun_wf : <:xrule<
+   <H> >- "bdepth"{ty1} = d in "nat" -->
+   <H> >- "bdepth"{ty2} = d in "nat" -->
+   <H> >- ty1 IN "FSubCore" -->
+   <H> >- ty2 IN "FSubCore" -->
+   <H> >- fsub type [d] { ty1 -> ty2 } IN "FSubCore"
+>>
+
 (*!
  * @docoff
  *

@@ -27,6 +27,8 @@
 extends Itt_theory
 extends Itt_hoas_lang2
 
+open Basic_tactics
+
 (************************************************************************
  * Types.
  *)
@@ -54,6 +56,8 @@ declare TyApply{'e; 'ty_arg}
  * The language.
  *)
 declare FSubCore
+
+topval fold_fsub_core : conv
 
 (************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing

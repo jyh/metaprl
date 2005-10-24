@@ -1,0 +1,18 @@
+#
+# Naive POPLmark
+#
+THEORYNAME = poplmark_naive
+THEORYDESCR = A naive POPLmark solution
+
+OCAMLINCLUDES[] +=
+    $(SUPPORT_DIRS)
+    ../../base
+    ../../itt/core
+    ../../itt/reflection/core
+    ../../itt/reflection/experimental
+    ../../itt/reflection/experimental/jyh
+
+FILES[] =
+    pmn_core_terms
+
+Theory($(FILES))

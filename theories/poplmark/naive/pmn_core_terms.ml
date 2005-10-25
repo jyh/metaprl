@@ -29,6 +29,9 @@ extends Itt_hoas_lang2
 
 open Basic_tactics
 
+open Itt_rfun
+open Itt_logic
+
 (************************************************************************
  * The reflected language.
  *)
@@ -44,6 +47,21 @@ define unfold_fsub_core : FSubCore <--> <:xterm<
 
 let fold_fsub_core = makeFoldC << FSubCore >> unfold_fsub_core
 
+(************************************************************************
+ * Display forms.
+ *)
+dform top_df : <:xterm< fsub type [d] { top } >> =
+   `"Top[" slot{'d} `"]"
+
+dform ty_fun_df : parens :: "prec"[prec_fun] :: <:xterm< fsub type [d] { ty1 -> ty2 } >> =
+   szone pushm[3] slot{'ty1} `" ->[" slot{'d} `"]" hspace slot{'ty2} popm ezone
+
+dform ty_all_df : parens :: "prec"[prec_quant] :: <:xterm< fsub type [d] { all x <: ty1. ty2 } >> =
+   szone pushm[3] `"all[" slot{'d} `" " slot{'x} `" <: " slot{'ty1} `"." hspace slot{'ty2} popm ezone
+
+(************************************************************************
+ * Basic well-formedness.
+ *)
 interactive fsub_core_wf : <:xrule<
    <H> >- "FSubCore" Type
 >>
@@ -59,6 +77,14 @@ interactive ty_fun_wf : <:xrule<
    <H> >- ty1 IN "FSubCore" -->
    <H> >- ty2 IN "FSubCore" -->
    <H> >- fsub type [d] { ty1 -> ty2 } IN "FSubCore"
+>>
+
+interactive ty_all_wf : <:xrule<
+   <H> >- "bdepth"{ty1} = d in "nat" -->
+   <H> >- "bdepth"{ty2["dummy"]} = d in "nat" -->
+   <H> >- ty1 IN "FSubCore" -->
+   <H> >- "bind"{\x. ty2[x]} IN "FSubCore" -->
+   <H> >- fsub type [d] { all x <: ty1. ty2[x] } IN "FSubCore"
 >>
 
 (*!

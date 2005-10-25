@@ -59,6 +59,18 @@ dform ty_fun_df : parens :: "prec"[prec_fun] :: <:xterm< fsub type [d] { ty1 -> 
 dform ty_all_df : parens :: "prec"[prec_quant] :: <:xterm< fsub type [d] { all x <: ty1. ty2 } >> =
    szone pushm[3] `"all[" slot{'d} `" " slot{'x} `" <: " slot{'ty1} `"." hspace slot{'ty2} popm ezone
 
+dform lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< fsub [d] { fun x : ty -> e } >> =
+   szone pushm[3] `"fun[" slot{'d} `" " slot{'x} `" : " slot{'ty} `" ->" hspace slot{'e} popm ezone
+
+dform apply_df : parens :: "prec"[prec_apply] :: <:xterm< fsub [d] { e1 e2 } >> =
+   szone pushm[3] slot{'e1} `" @[" slot{'d} `"]" hspace slot{'e2} popm ezone
+
+dform ty_lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< fsub [d] { Fun x <: ty -> e } >> =
+   szone pushm[3] `"Fun[" slot{'d} `" " slot{'x} `" <: " slot{'ty} `" ->" hspace slot{'e} popm ezone
+
+dform ty_apply_df : parens :: "prec"[prec_apply] :: <:xterm< fsub [d] { e{ty} } >> =
+   szone pushm[3] slot{'e} `"@[" slot{'d} `"]{" slot{'ty} `"}" popm ezone
+
 (************************************************************************
  * Basic well-formedness.
  *)
@@ -85,6 +97,38 @@ interactive ty_all_wf : <:xrule<
    <H> >- ty1 IN "FSubCore" -->
    <H> >- "bind"{\x. ty2[x]} IN "FSubCore" -->
    <H> >- fsub type [d] { all x <: ty1. ty2[x] } IN "FSubCore"
+>>
+
+interactive lambda_wf : <:xrule<
+   <H> >- "bdepth"{ty} = d in "nat" -->
+   <H> >- "bdepth"{e["dummy"]} = d in "nat" -->
+   <H> >- ty IN "FSubCore" -->
+   <H> >- "bind"{\x. e[x]} IN "FSubCore" -->
+   <H> >- fsub [d] { fun x : ty -> e[x] } IN "FSubCore"
+>>
+
+interactive apply_wf : <:xrule<
+   <H> >- "bdepth"{e1} = d in "nat" -->
+   <H> >- "bdepth"{e2} = d in "nat" -->
+   <H> >- e1 IN "FSubCore" -->
+   <H> >- e2 IN "FSubCore" -->
+   <H> >- fsub [d] { e1 e2 } IN "FSubCore"
+>>
+
+interactive ty_lambda_wf : <:xrule<
+   <H> >- "bdepth"{ty} = d in "nat" -->
+   <H> >- "bdepth"{e["dummy"]} = d in "nat" -->
+   <H> >- ty IN "FSubCore" -->
+   <H> >- "bind"{\x. e[x]} IN "FSubCore" -->
+   <H> >- fsub [d] { Fun x <: ty -> e[x] } IN "FSubCore"
+>>
+
+interactive ty_apply_wf : <:xrule<
+   <H> >- "bdepth"{e1} = d in "nat" -->
+   <H> >- "bdepth"{e2} = d in "nat" -->
+   <H> >- e1 IN "FSubCore" -->
+   <H> >- e2 IN "FSubCore" -->
+   <H> >- fsub [d] { e1{e2} } IN "FSubCore"
 >>
 
 (*!

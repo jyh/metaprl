@@ -184,8 +184,16 @@ declare tok_Prod      : Terminal
 
 lex_token xterm : "Prod" --> tok_Prod
 
-production xterm_term{pair{'t1; 't2}} <--
+declare xterm_tuple{'args} : Nonterminal
+
+production xterm_term{'t} <--
+   tok_left_paren; xterm_tuple{'t}; tok_right_paren
+
+production xterm_tuple{pair{'t1; 't2}} <--
    xterm_term{'t1}; tok_comma; xterm_term{'t2}
+
+production xterm_tuple{pair{'t1; 't2}} <--
+   xterm_term{'t1}; tok_comma; xterm_tuple{'t2}
 
 production xterm_term{'t1 * 't2} <--
    xterm_term{'t1}; tok_star; xterm_term{'t2}

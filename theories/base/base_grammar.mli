@@ -486,17 +486,14 @@ declare xterm_bterms_nonempty_list{'t : Dform} : Nonterminal
 production xterm_bterm{'t} <--
    xterm_term{'t}
 
-production xterm_bterm{'t} <--
-   tok_backslash; xterm_bterm_bind{'t}
+production xterm_bterm{xbterm{| <H> >- 't |}} <--
+   xterm_bterm_bind{xbterm{| <H> |}}; tok_dot; xterm_term{'t}
 
 production xterm_bterm_bind{xbterm{| x: it |}} <--
    tok_id[x:s]
 
 production xterm_bterm_bind{xbterm{| <H>; x: it |}} <--
    xterm_bterm_bind{xbterm{| <H> |}}; tok_comma; tok_id[x:s]
-
-production xterm_bterm_bind{xbterm{| <H> >- 't |}} <--
-   xterm_bterm_bind{xbterm{| <H> |}}; tok_dot; xterm_term{'t}
 
 (*
  * Bterms are {...}

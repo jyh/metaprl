@@ -38,10 +38,10 @@ open Itt_logic
 define unfold_fsub_core : FSubCore <--> <:xterm<
    Lang [#"TyTop";
          #"TyFun"{ty1; ty2};
-         #"TyAll"{ty1; \x. ty2};
-         #"Lambda"{ty; \x. e};
+         #"TyAll"{ty1; x. ty2};
+         #"Lambda"{ty; x. e};
          #"Apply"{e1; e2};
-         #"TyLambda"{ty; \x. e};
+         #"TyLambda"{ty; x. e};
          #"TyApply"{e; ty}]
 >>
 
@@ -95,7 +95,7 @@ interactive ty_all_wf : <:xrule<
    <H> >- "bdepth"{ty1} = d in "nat" -->
    <H> >- "bdepth"{ty2["dummy"]} = d in "nat" -->
    <H> >- ty1 IN "FSubCore" -->
-   <H> >- "bind"{\x. ty2[x]} IN "FSubCore" -->
+   <H> >- "bind"{x. ty2[x]} IN "FSubCore" -->
    <H> >- fsub type [d] { all x <: ty1. ty2[x] } IN "FSubCore"
 >>
 
@@ -103,7 +103,7 @@ interactive lambda_wf : <:xrule<
    <H> >- "bdepth"{ty} = d in "nat" -->
    <H> >- "bdepth"{e["dummy"]} = d in "nat" -->
    <H> >- ty IN "FSubCore" -->
-   <H> >- "bind"{\x. e[x]} IN "FSubCore" -->
+   <H> >- "bind"{x. e[x]} IN "FSubCore" -->
    <H> >- fsub [d] { fun x : ty -> e[x] } IN "FSubCore"
 >>
 
@@ -119,7 +119,7 @@ interactive ty_lambda_wf : <:xrule<
    <H> >- "bdepth"{ty} = d in "nat" -->
    <H> >- "bdepth"{e["dummy"]} = d in "nat" -->
    <H> >- ty IN "FSubCore" -->
-   <H> >- "bind"{\x. e[x]} IN "FSubCore" -->
+   <H> >- "bind"{x. e[x]} IN "FSubCore" -->
    <H> >- fsub [d] { Fun x <: ty -> e[x] } IN "FSubCore"
 >>
 

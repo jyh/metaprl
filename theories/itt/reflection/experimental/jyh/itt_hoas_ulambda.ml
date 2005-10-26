@@ -35,7 +35,7 @@ declare Lambda{x. 'e['x]}
  * The language.
  *)
 define unfold_ulambda : ULambda <--> <:xterm<
-   Lang [#"Apply"{x; x}; #"Lambda"{\x. x}]
+   Lang [#"Apply"{x; x}; #"Lambda"{x. x}]
 >>
 
 let fold_ulambda = makeFoldC << ULambda >> unfold_ulambda
@@ -59,10 +59,10 @@ interactive apply_wf {| intro [] |} : <:xrule<
 >>
 
 interactive lambda_wf {| intro [] |} : <:xrule<
-   <H> >- "bind"{\x. e[x]} IN "ULambda" -->
+   <H> >- "bind"{x. e[x]} IN "ULambda" -->
    <H> >- depth IN "nat" -->
    <H> >- "bdepth"{e["dummy"]} = depth in "int" -->
-   <H> >- ($`[depth] "Lambda"{\x. e[x]}) IN "ULambda"
+   <H> >- ($`[depth] "Lambda"{x. e[x]}) IN "ULambda"
 >>
 
 interactive ulambda_elim 'H : <:xrule<
@@ -70,7 +70,7 @@ interactive ulambda_elim 'H : <:xrule<
    <H>; e: "ULambda"; <J[e]>; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2];
       "bdepth"{e1} = "bdepth"{e2} in "int" >- P[$`["bdepth"{e1}] "Apply"{e1; e2}] -->
    <H>; e: "ULambda"; <J[e]>; e1: "ULambda"; P[e1]; "bdepth"{e1} > 0
-       >- P[$`["bdepth"{e1} -@ 1] "Lambda"{\x. $,"subst"{e1; x}}] -->
+       >- P[$`["bdepth"{e1} -@ 1] "Lambda"{x. $,"subst"{e1; x}}] -->
    <H>; e: "ULambda"; <J[e]> >- P[e]
 >>
 

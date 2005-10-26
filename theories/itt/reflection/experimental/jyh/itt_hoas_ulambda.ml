@@ -35,8 +35,8 @@ declare Lambda{x. 'e['x]}
  * The language.
  *)
 define unfold_ulambda : ULambda <--> <:xterm<
-   Lang ["operator"[(Apply{x; x}):op];
-         "operator"[(Lambda{x. x}):op]]
+   Lang [$Apply{x; x};
+         $Lambda{x. x}]
 >>
 
 let fold_ulambda = makeFoldC << ULambda >> unfold_ulambda

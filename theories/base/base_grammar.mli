@@ -120,6 +120,7 @@ declare tok_tilde              : Terminal
 declare tok_backslash          : Terminal
 declare tok_squote             : Terminal
 declare tok_bquote             : Terminal
+declare tok_dollar             : Terminal
 
 (* Identifiers *)
 lex_token xterm : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
@@ -152,6 +153,7 @@ lex_token xterm : "[+]"        --> tok_plus
 lex_token xterm : "-"          --> tok_minus
 lex_token xterm : "[*]"        --> tok_star
 lex_token xterm : "[|]"        --> tok_pipe
+lex_token xterm : "[$]"        --> tok_dollar
 lex_token xterm : "="          --> tok_equal
 lex_token xterm : "<"          --> tok_lt
 lex_token xterm : ">"          --> tok_gt
@@ -233,14 +235,14 @@ lex_prec right    [tok_comma] = prec_comma
 lex_prec right    [tok_let; tok_decide; tok_match; tok_with; tok_in] = prec_let
 lex_prec left     [tok_at] = prec_apply
 lex_prec right    [tok_colon_colon] = prec_cons
-lex_prec nonassoc [tok_tilde; tok_dot; tok_hash; tok_squote] = prec_not
+lex_prec nonassoc [tok_tilde; tok_dot; tok_hash; tok_squote; tok_dollar] = prec_not
 lex_prec right    [tok_pipe] = prec_let
 
 (************************************************
  * Utilities.
  *)
 declare opt_pipe                : Nonterminal
-declare comma_or_semi           : Nonterminal
+declare xterm_comma_or_semi     : Nonterminal
 declare xterm_id_or_string[x:s] : Nonterminal
 
 production opt_pipe <-- (* empty *)
@@ -248,10 +250,10 @@ production opt_pipe <-- (* empty *)
 production opt_pipe <--
    tok_pipe
 
-production comma_or_semi <--
+production xterm_comma_or_semi <--
    tok_comma
 
-production comma_or_semi <--
+production xterm_comma_or_semi <--
    tok_semi
 
 production xterm_id_or_string[x:s] <--
@@ -479,7 +481,7 @@ production xterm_param_nonempty_list{xlist_sequent{| 'p |}} <--
    xterm_param{'p}
 
 production xterm_param_nonempty_list{xlist_sequent{| <H>; 'p |}} <--
-   xterm_param_nonempty_list{xlist_sequent{| <H> |}}; comma_or_semi; xterm_param{'p}
+   xterm_param_nonempty_list{xlist_sequent{| <H> |}}; xterm_comma_or_semi; xterm_param{'p}
 
 (*
  * Bterms.
@@ -536,8 +538,8 @@ production xterm_bterms_nonempty_list{xlist_sequent{| <H>; 't |}} <--
 production xterm_simple_term{xterm{'op; 'p; 't}} <--
    xterm_opname{'op}; xterm_params{'p}; xterm_bterms{'t}
 
-production xterm_simple_term{xterm{'op; xlist_sequent{||}; 't}} <--
-   tok_id[op:s]; xterm_bterms_proper{'t}
+production xterm_simple_term{xterm{xlist_sequent{| xopname[x:s] |}; xlist_sequent{||}; 't}} <--
+   tok_id[x:s]; xterm_bterms_proper{'t}
 
 (************************************************************************
  * Meta-terms.

@@ -42,13 +42,24 @@ extends Itt_nat
 extends Itt_list2
 
 declare Operator
+declare operator[op:op]
 declare shape{'op}
 declare is_same_op{'op_1;'op_2}
 
 define iform unfold_arity : arity{'op} <--> length{shape{'op}}
 
-(* JYH: This was not public, is it really supposed to be hidden? *)
-declare operator[op:op]
+(************************************************************************
+ * Grammar.
+ *)
+declare iform parsed_operator{'t}
+
+production xterm_term{parsed_operator{'t}} <--
+   tok_dollar; xterm_term{'t}
+
+iform unfold_parsed_operator :
+   parsed_operator{'t}
+   <-->
+   operator[t:op]
 
 (*!
  * @docoff

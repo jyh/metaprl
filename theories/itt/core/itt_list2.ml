@@ -1395,6 +1395,19 @@ interactive all2_wf2 {| intro [] |} 'T1 'T2 :
    sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} Type }
 
 doc <:doc<
+   << all2{'l1; 'l2; x, y. 'P['x; 'y]} >> is squash stable if << 'P['x; 'y] >> is well-formed and squash stable.
+>>
+interactive all2_sqstable (*{| squash |}*) 'T1 'T2 :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v] Type } -->
+   [wf] sequent { <H>; u: 'T1; v: 'T2; squash{'b['u; 'v]} >- 'b['u; 'v] } -->
+   sequent { <H> >- squash{all2{'l1; 'l2; x, y. 'b['x; 'y]}} } -->
+   sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} }
+
+doc <:doc<
    The following lemmas about all2 are generally useful for elimination
    reasoning.  For example, if you know << all2{'l1; 'l2; x, y. 'P['x; 'y]} >>
    then you also know that the two lists << 'l1 >> and << 'l2 >> have the

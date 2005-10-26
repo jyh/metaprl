@@ -186,7 +186,7 @@ lex_token xterm : "Prod" --> tok_Prod
 
 declare xterm_tuple{'args} : Nonterminal
 
-production xterm_term{'t} <--
+production xterm_simple_term{'t} <--
    tok_left_paren; xterm_tuple{'t}; tok_right_paren
 
 production xterm_tuple{pair{'t1; 't2}} <--

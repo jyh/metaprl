@@ -36,13 +36,13 @@ open Itt_logic
  * The reflected language.
  *)
 define unfold_fsub_core : FSubCore <--> <:xterm<
-   Lang [#"TyTop";
-         #"TyFun"{ty1; ty2};
-         #"TyAll"{ty1; x. ty2};
-         #"Lambda"{ty; x. e};
-         #"Apply"{e1; e2};
-         #"TyLambda"{ty; x. e};
-         #"TyApply"{e; ty}]
+   Lang ["operator"[(TyTop{}):op];
+         "operator"[(TyFun{ty1; ty2}):op];
+         "operator"[(TyAll{ty1; x. ty2}):op];
+         "operator"[(Lambda{ty; x. e}):op];
+         "operator"[(Apply{e1; e2}):op];
+         "operator"[(TyLambda{ty; x. e}):op];
+         "operator"[(TyApply{e; ty}):op]]
 >>
 
 let fold_fsub_core = makeFoldC << FSubCore >> unfold_fsub_core

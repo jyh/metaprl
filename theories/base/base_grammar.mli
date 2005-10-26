@@ -239,8 +239,9 @@ lex_prec right    [tok_pipe] = prec_let
 (************************************************
  * Utilities.
  *)
-declare opt_pipe       : Nonterminal
-declare comma_or_semi  : Nonterminal
+declare opt_pipe                : Nonterminal
+declare comma_or_semi           : Nonterminal
+declare xterm_id_or_string[x:s] : Nonterminal
 
 production opt_pipe <-- (* empty *)
 
@@ -252,6 +253,12 @@ production comma_or_semi <--
 
 production comma_or_semi <--
    tok_semi
+
+production xterm_id_or_string[x:s] <--
+   tok_id[x:s]
+
+production xterm_id_or_string[x:s] <--
+   tok_string[x:s]
 
 (************************************************
  * Second-order variables and contexts.
@@ -284,9 +291,6 @@ declare xterm_so_nonempty_args{next : Dform. 'l : Dform} : Nonterminal
 (* Second-order vars *)
 production xterm_sovar{'v} <--
    tok_id[v:s]
-
-production xterm_sovar{parsed_fovar[v:s]} <--
-   tok_bang; tok_id[v:s]
 
 production xterm_sovar{parsed_sovar[v:s]{xcons{'v; xnil}; 'args}} <--
    tok_id[v:s]; xterm_so_args{'args}
@@ -352,20 +356,23 @@ production xterm_context{xhypcontext[v:v]{xcons{parsed_var["#"]; 'contexts}; 'ar
 declare xterm_apply_term{'e : Term} : Nonterminal
 declare xterm_simple_term{'e : Term} : Nonterminal
 
+production xterm_term{parsed_fovar[v:s]} <--
+   tok_bang; tok_id[v:s]
+
 production xterm_term{'e} <--
-    xterm_apply_term{'e}
+   xterm_apply_term{'e}
 
 production xterm_apply_term{'e} <--
-    xterm_simple_term{'e}
+   xterm_simple_term{'e}
 
 production xterm_simple_term{'e} <--
-    xterm_sovar{'e}
+   xterm_sovar{'e}
 
 production xterm_simple_term{'e} <--
-    tok_quotation{'e}
+   tok_quotation{'e}
 
 production xterm_simple_term{'e} <--
-    tok_left_paren; xterm_term{'e}; tok_right_paren
+   tok_left_paren; xterm_term{'e}; tok_right_paren
 
 (************************************************
  * Generic terms using the normal syntax.
@@ -379,8 +386,11 @@ declare xterm_opname{'op : Dform} : Nonterminal
 production xterm_opname{xlist_sequent{| xopname[x:s] |}} <--
    tok_string[x:s]
 
+production xterm_opname{xlist_sequent{| xopname[x:s]; xopname[y:s] |}} <--
+   tok_id[x:s]; tok_bang; xterm_id_or_string[y:s]
+
 production xterm_opname{xlist_sequent{| <H>; xopname[x:s] |}} <--
-   xterm_opname{xlist_sequent{| <H> |}}; tok_dot; tok_string[x:s]
+   xterm_opname{xlist_sequent{| <H> |}}; tok_bang; xterm_id_or_string[x:s]
 
 (*
  * Parameter kinds are a list of string-or-word.
@@ -447,8 +457,8 @@ production xterm_param{xparam{'p}} <--
 production xterm_param{xparam{'p; 'k}} <--
    xterm_param_exp{'p}; tok_colon; xterm_param_kind{'k}
 
-production xterm_param_exp{xparam_term{'t; 'k}} <--
-   tok_left_paren; xterm_term{'t}; tok_right_paren; xterm_param_kind{'k}
+production xterm_param{xparam_term{'t; 'k}} <--
+   tok_left_paren; xterm_term{'t}; tok_right_paren; tok_colon; xterm_param_kind{'k}
 
 (*
  * A param list is [param, ..., param]
@@ -477,6 +487,7 @@ production xterm_param_nonempty_list{xlist_sequent{| <H>; 'p |}} <--
 declare xterm_bterm{'t : Dform} : Nonterminal
 declare xterm_bterm_bind{'t : Dform} : Nonterminal
 declare xterm_bterms{'t : Dform} : Nonterminal
+declare xterm_bterms_proper{'t : Dform} : Nonterminal
 declare xterm_bterms_list{'t : Dform} : Nonterminal
 declare xterm_bterms_nonempty_list{'t : Dform} : Nonterminal
 
@@ -502,6 +513,9 @@ production xterm_bterms{xlist_sequent{||}} <--
    (* empty *)
 
 production xterm_bterms{'t} <--
+   xterm_bterms_proper{'t}
+
+production xterm_bterms_proper{'t} <--
    tok_left_brace; xterm_bterms_list{'t}; tok_right_brace
 
 production xterm_bterms_list{xlist_sequent{||}} <--
@@ -521,6 +535,9 @@ production xterm_bterms_nonempty_list{xlist_sequent{| <H>; 't |}} <--
  *)
 production xterm_simple_term{xterm{'op; 'p; 't}} <--
    xterm_opname{'op}; xterm_params{'p}; xterm_bterms{'t}
+
+production xterm_simple_term{xterm{'op; xlist_sequent{||}; 't}} <--
+   tok_id[op:s]; xterm_bterms_proper{'t}
 
 (************************************************************************
  * Meta-terms.

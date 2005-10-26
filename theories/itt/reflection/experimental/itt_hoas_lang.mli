@@ -55,6 +55,7 @@ topval unfold_dest : conv
 topval unfold_LIter : conv
 topval unfold_LBT : conv
 topval unfold_Lang : conv
+topval fold_compatible_shapes : conv
 topval fold_Ldom : conv
 topval fold_mk : conv
 topval fold_LIter : conv

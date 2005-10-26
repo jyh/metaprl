@@ -72,10 +72,29 @@ dform ty_apply_df : parens :: "prec"[prec_apply] :: <:xterm< fsub [d] { e{ty} } 
    szone pushm[3] slot{'e} `"@[" slot{'d} `"]{" slot{'ty} `"}" popm ezone
 
 (************************************************************************
+ * Immediately separate the terms into types and expressions.
+ *)
+define unfold_isTyExp : isTyExp{'e} <--> <:xterm<
+   (fix is_ty e ->
+      dest_bterm e with
+         l, r -> "true"
+       | d, o, s ->
+            ((o = $TyTop{} in Operator{}
+              || o = $TyFun{t1; t2} in Operator{}
+              || o = $TyAll{t1; x. t2[x]} in Operator{})
+             && all_list{s; x. is_ty x})) e
+>>
+
+(************************************************************************
  * Basic well-formedness.
  *)
 interactive fsub_core_wf : <:xrule<
    <H> >- "FSubCore" Type
+>>
+
+interactive isTyExp_wf : <:xrule<
+   <H> >- e IN FSubCore{} -->
+   <H> >- isTyExp{e} Type
 >>
 
 interactive top_wf : <:xrule<

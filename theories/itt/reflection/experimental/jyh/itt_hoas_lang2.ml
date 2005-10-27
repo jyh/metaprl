@@ -138,6 +138,8 @@ interactive olang_elim {| elim [] |} 'H :
        all_list{'subs; t. 'P['t]} >- 'P[mk_bterm{'depth; 'op; 'subs}] } -->
    sequent { <H>; e: olang{'ops}; <J['e]> >- 'P['e] }
 
+doc docoff
+
 (************************************************************************
  * Shapes.
  *)
@@ -346,6 +348,8 @@ interactive_rw eta_reduce_term 'ops :
    bdepth{'e} > 0 -->
    bind{x. subst{'e; 'x}} <--> 'e
 
+doc docoff
+
 let bind_opname = opname_of_term << bind{x. 'e} >>
 let mk_bind_term = mk_dep1_term bind_opname
 
@@ -376,6 +380,22 @@ let eta_expand e env =
 
 let etaExpandC e =
    funC (eta_expand e)
+
+(************************************************************************
+ * Restate the reduction on mk_bterm.
+ *)
+interactive_rw reduce_dest_bterm_mk_bterm 'ops :
+   'ops in list{Operator} -->
+   'depth in nat -->
+   'op in Operator -->
+   mem{'op; 'ops; Operator} -->
+   'subs in list{olang{'ops}} -->
+   compatible_shapes{'depth; shape{'op}; 'subs} -->
+   dest_bterm{mk_bterm{'depth; 'op; 'subs};
+      l, r. 'var_case['l; 'r];
+      depth, op, subs. 'op_case['depth; 'op; 'subs] }
+   <-->
+   'op_case['depth; 'op; 'subs]
 
 (*!
  * @docoff

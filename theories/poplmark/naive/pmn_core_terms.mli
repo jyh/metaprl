@@ -60,6 +60,13 @@ declare FSubCore
 topval fold_fsub_core : conv
 
 (************************************************************************
+ * Predicates.
+ *)
+declare isTyExp{'e}
+
+topval fold_isTyExp : conv
+
+(************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing
  * types and expressions in Fsub.  This isn't really necessary, since
  * we can always use the native MetaPRL term syntax to construct

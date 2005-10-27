@@ -57,44 +57,25 @@ dform ty_fun_df : parens :: "prec"[prec_fun] :: <:xterm< fsub type [d] { ty1 -> 
    szone pushm[3] slot{'ty1} `" ->[" slot{'d} `"]" hspace slot{'ty2} popm ezone
 
 dform ty_all_df : parens :: "prec"[prec_quant] :: <:xterm< fsub type [d] { all x <: ty1. ty2 } >> =
-   szone pushm[3] `"all[" slot{'d} `" " slot{'x} `" <: " slot{'ty1} `"." hspace slot{'ty2} popm ezone
+   szone pushm[3] `"all[" slot{'d} `"] " slot{'x} `" <: " slot{'ty1} `"." hspace slot{'ty2} popm ezone
 
 dform lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< fsub [d] { fun x : ty -> e } >> =
-   szone pushm[3] `"fun[" slot{'d} `" " slot{'x} `" : " slot{'ty} `" ->" hspace slot{'e} popm ezone
+   szone pushm[3] `"fun[" slot{'d} `"] " slot{'x} `" : " slot{'ty} `" ->" hspace slot{'e} popm ezone
 
 dform apply_df : parens :: "prec"[prec_apply] :: <:xterm< fsub [d] { e1 e2 } >> =
    szone pushm[3] slot{'e1} `" @[" slot{'d} `"]" hspace slot{'e2} popm ezone
 
 dform ty_lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< fsub [d] { Fun x <: ty -> e } >> =
-   szone pushm[3] `"Fun[" slot{'d} `" " slot{'x} `" <: " slot{'ty} `" ->" hspace slot{'e} popm ezone
+   szone pushm[3] `"Fun[" slot{'d} `"] " slot{'x} `" <: " slot{'ty} `" ->" hspace slot{'e} popm ezone
 
 dform ty_apply_df : parens :: "prec"[prec_apply] :: <:xterm< fsub [d] { e{ty} } >> =
    szone pushm[3] slot{'e} `"@[" slot{'d} `"]{" slot{'ty} `"}" popm ezone
-
-(************************************************************************
- * Immediately separate the terms into types and expressions.
- *)
-define unfold_isTyExp : isTyExp{'e} <--> <:xterm<
-   (fix is_ty e ->
-      dest_bterm e with
-         l, r -> "true"
-       | d, o, s ->
-            ((o = $TyTop{} in Operator{}
-              || o = $TyFun{t1; t2} in Operator{}
-              || o = $TyAll{t1; x. t2[x]} in Operator{})
-             && all_list{s; x. is_ty x})) e
->>
 
 (************************************************************************
  * Basic well-formedness.
  *)
 interactive fsub_core_wf : <:xrule<
    <H> >- "FSubCore" Type
->>
-
-interactive isTyExp_wf : <:xrule<
-   <H> >- e IN FSubCore{} -->
-   <H> >- isTyExp{e} Type
 >>
 
 interactive top_wf : <:xrule<
@@ -148,6 +129,59 @@ interactive ty_apply_wf : <:xrule<
    <H> >- e1 IN "FSubCore" -->
    <H> >- e2 IN "FSubCore" -->
    <H> >- fsub [d] { e1{e2} } IN "FSubCore"
+>>
+
+(************************************************************************
+ * Induction principle for the entire language.
+ *)
+interactive fsub_core_elim {| elim [] |} 'H : <:xrule<
+   <H>; e: FSubCore{}; <J[e]>; v: Var{} >- P[v] -->
+
+   <H>; e: FSubCore{}; <J[e]>; d: nat{} >- P[fsub type[d] { top }] -->
+
+   <H>; e: FSubCore{}; <J[e]>; t1: FSubCore{}; t2: FSubCore{}; P[t1]; P[t2];
+      bdepth{t1} = bdepth{t2} in nat{} >- P[fsub type[bdepth{t1}] { t1 -> t2 }] -->
+
+   <H>; e: FSubCore{}; <J[e]>; t1: FSubCore{}; t2: FSubCore{}; P[t1]; P[t2];
+      bdepth{t2} = bdepth{t1} +@ 1 in nat{}
+      >- P[fsub type[bdepth{t1}] { all x <: t1. itt { subst{t2; x} } }] -->
+
+   <H>; e: FSubCore{}; <J[e]>; t1: FSubCore{}; e1: FSubCore{}; P[t1]; P[e1];
+      bdepth{e1} = bdepth{t1} +@ 1 in nat{}
+      >- P[fsub [bdepth{t1}] { fun x: t1 -> itt { subst{e1; x} } }] -->
+
+   <H>; e: FSubCore{}; <J[e]>; e1: FSubCore{}; e2: FSubCore{}; P[e1]; P[e2];
+      bdepth{e1} = bdepth{e2} in nat{} >- P[fsub [bdepth{e1}] { e1 e2 }] -->
+
+   <H>; e: FSubCore{}; <J[e]>; t1: FSubCore{}; e1: FSubCore{}; P[t1]; P[e1];
+      bdepth{e1} = bdepth{t1} +@ 1 in nat{}
+      >- P[fsub [bdepth{t1}] { Fun x <: t1 -> itt { subst{e1; x} } }] -->
+
+   <H>; e: FSubCore{}; <J[e]>; e1: FSubCore{}; t1: FSubCore{}; P[e1]; P[t1];
+      bdepth{e1} = bdepth{t1} in nat{} >- P[fsub [bdepth{e1}] { e1{t1} }] -->
+
+   <H>; e: FSubCore{}; <J[e]> >- P[e]
+>>
+
+(************************************************************************
+ * Immediately separate the terms into types and expressions.
+ *)
+define unfold_isTyExp : isTyExp{'e} <--> <:xterm<
+   (fix is_ty e ->
+      dest_bterm e with
+         l, r -> "true"
+       | d, o, s ->
+            ((o = $TyTop{} in Operator{}
+              || o = $TyFun{t1; t2} in Operator{}
+              || o = $TyAll{t1; x. t2[x]} in Operator{})
+             && all_list{s; x. is_ty x})) e
+>>
+
+let fold_isTyExp = makeFoldC << isTyExp{'e} >> unfold_isTyExp
+
+interactive isTyExp_wf : <:xrule<
+   <H> >- e IN FSubCore{} -->
+   <H> >- isTyExp{e} Type
 >>
 
 (*!

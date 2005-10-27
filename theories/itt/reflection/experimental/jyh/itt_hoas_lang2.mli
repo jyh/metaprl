@@ -45,14 +45,6 @@ declare olang{'ops}
 topval fold_olang : conv
 
 (************************************************************************
- * compatible_shapes{depth; op; subs} is very hard to work with.
- * Use compatible_depths{depth; shape; subs} instead.
- *)
-declare compatible_depths{'depth; 'shape; 'subs}
-
-topval fold_compatible_depths : conv
-
-(************************************************************************
  * Grammar.
  *)
 declare tok_Lang          : Terminal

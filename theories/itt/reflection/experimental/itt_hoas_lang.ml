@@ -154,17 +154,6 @@ interactive  bdepth_wf2  {| intro[intro_typeinf <<'t>>] |} Lang{'sop} :
    [wf] sequent{ <H> >- 't in Lang{'sop} } -->
    sequent{ <H> >- bdepth{'t} in int }
 
-(*interactive compatible_shapes_wf {| intro[] |} 'sop 'n :
-   sequent { <H> >- 'sop subtype Operator } -->
-   sequent { <H> >- 'n in nat } -->
-   sequent { <H> >- 'bdepth in nat } -->
-   sequent { <H> >- 'op in 'sop } -->
-   sequent { <H> >- 'btl in list{BT{'sop; 'n}} } -->
-   sequent { <H> >- compatible_shapes{'bdepth; 'op; 'btl} Type }
-*)
-(* SHould be:
-interactive compatible_shapes_wf {| intro[intro_typeinf <<'op>>] |} 'sop :
-*)
 interactive compatible_shapes_wf {| intro[intro_typeinf <<'btl>>] |} list{Lang{'sop}} :
    [wf] sequent { <H> >- 'sop subtype Operator } -->
    [wf] sequent { <H> >- 'bdepth in nat } -->
@@ -442,10 +431,7 @@ interactive_rw mk_dest_reduce 'sop :
    't in Lang{'sop}  -->
    mk{dest{'t}} <--> 't
 
-(* Should be:
 interactive dest_bterm_wf {| intro[intro_typeinf <<'bt>>] |} Lang{'sop} :
-*)
-interactive dest_bterm_wf {| intro[] |} 'sop :
    sequent { <H> >- 'sop subtype Operator } -->
    [wf] sequent{ <H> >- 'bt in Lang{'sop} } -->
    [wf] sequent{ <H>; l:nat; r:nat >- 'var_case['l;'r] in 'T } -->

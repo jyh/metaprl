@@ -1,335 +1,459 @@
-(*
- * Note - this file is an internal working document for AK and AN. If you name
- * is not Alexei (however it is spelled), please ignore this.
- *)
+(
+doc <:doc<
+   This file logs the effort of re-verifying that all the ITT Core rules are valid under the ``pairwise'' semantics of
+   sequents. We assume that each rule was already found valid in the ``pointwise'' semantics.
+>>
 
-prim itt_equal.trueIntro {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.trueIntro {| intro [] |} :
    sequent { <H> >- "true" } =
    it
 
-prim itt_equal.equalityAxiom {| nth_hyp |} 'H :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.equalityAxiom {| nth_hyp |} 'H :
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } =
    it
 
-prim itt_equal.equalityRef 'y :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.equalityRef 'y :
    sequent { <H> >- 'x = 'y in 'T } -->
    sequent { <H> >- 'x in 'T } =
    it
 
-prim itt_equal.equalitySym :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.equalitySym :
    sequent { <H> >- 'y = 'x in 'T } -->
    sequent { <H> >- 'x = 'y in 'T } =
    it
 
-prim itt_equal.equalityTrans 'z :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.equalityTrans 'z :
    sequent { <H> >- 'x = 'z in 'T } -->
    sequent { <H> >- 'z = 'y in 'T } -->
    sequent { <H> >- 'x = 'y in 'T } =
    it
 
-prim itt_equal.equalityFormation 'T :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.equalityFormation 'T :
    [main] ('a : sequent { <H> >- 'T }) -->
    [main] ('b : sequent { <H> >- 'T }) -->
    sequent { <H> >- univ[i:l] } =
    'a = 'b in 'T
 
-prim itt_equal.equalityEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.equalityEquality {| intro [] |} :
    [wf] sequent { <H> >- 'T1 = 'T2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'T1 } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'T1 } -->
    sequent { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
    it
 
-prim itt_equal.equalityType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.equalityType {| intro [] |} :
    [wf] sequent { <H> >- 'a in 'T } -->
    [wf] sequent { <H> >- 'b in 'T } -->
    sequent { <H> >- ('a = 'b in 'T) Type } =
    it
 
-prim itt_equal.axiomMember {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.axiomMember {| intro [] |} :
    [wf] sequent { <H> >- 'a = 'b in 'T } -->
    sequent { <H> >- it in ('a = 'b in 'T) } =
    it
 
-prim itt_equal.equalityElimination {| elim [] |} 'H :
+doc <:doc< In << 'a = 'b in 'T >>, <<it>> is the only member, so the rule is trivially true >>
+   
+(*OK*) prim itt_equal.equalityElimination {| elim [] |} 'H :
    ('t['x] : sequent { <H>; x: 'a = 'b in 'T; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] } =
    't[it]
 
-prim itt_equal.type_axiomMember {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.type_axiomMember {| intro [] |} :
    sequent { <H> >- 'T Type } -->
    sequent { <H> >- it in ('T Type) } =
    it
 
-prim itt_equal.typeEquality :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.typeEquality :
    [main] sequent { <H> >- 'T } -->
    sequent { <H> >- 'T Type } =
    it
 
-prim itt_equal.universeMember :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.universeMember :
    sequent { <H> >- cumulativity[j:l, i:l] } -->
    sequent { <H> >- univ[j:l] in univ[i:l] } =
   it
 
-prim itt_equal.universeCumulativity univ[j:l] :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.universeCumulativity univ[j:l] :
    sequent { <H> >- cumulativity[j:l, i:l] } -->
    sequent { <H> >- 'x = 'y in univ[j:l] } -->
    sequent { <H> >- 'x = 'y in univ[i:l] } =
    it
 
-prim itt_equal.universeMemberType univ[i:l] :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.universeMemberType univ[i:l] :
    [wf] sequent { <H> >- 'x in univ[i:l] } -->
    sequent { <H> >- 'x Type } =
    it
 
-prim itt_equal.universeFormation univ[j:l] :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_equal.universeFormation univ[j:l] :
    sequent { <H> >- cumulativity[j:l, i:l] } -->
    sequent { <H> >- univ[i:l] } =
    univ[j:l]
 
-prim itt_struct.thin_many 'H 'J :
+doc <:doc< In pairwise, the truth semantics of a sequent is monotone  >>
+
+(*OK*) prim itt_struct.thin_many 'H 'J :
    ('t : sequent { <H>; <K> >- 'C }) -->
    sequent { <H>; <J>; < K<|H|> > >- 'C<|H;K|> } =
    't
 
-prim itt_struct.exchange 'H 'K 'L:
+doc <:doc< ... and commutative (for independent hyps). >>
+
+(*OK*) prim itt_struct.exchange 'H 'K 'L:
    ('t : sequent { <H>; <L>; <K>; <J> >- 'C }) -->
    sequent { <H>; <K>; < L<|H|> >; <J> >- 'C } =
    't
 
-prim itt_struct.cut 'H 'S :
+doc <:doc< A and A : we proved it >>
+   
+(*OK*) prim itt_struct.cut 'H 'S :
    [assertion] ('a : sequent { <H>; <J> >- 'S }) -->
    [main] ('f['x] : sequent { <H>; x: 'S; <J> >- 'T }) -->
    sequent { <H>; <J> >- 'T } =
    'f['a]
 
-prim itt_struct.introduction 't :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_struct.introduction 't :
    [wf] sequent { <H> >- 't in 'T } -->
    sequent { <H> >- 'T } =
    't
 
-prim itt_struct.substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_struct.substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    [equality] sequent { <H> >- 't1 = 't2 in 'T2 } -->
    [main] ('t : sequent { <H> >- 'T1['t2] }) -->
    [wf] sequent { <H>; x: 'T2 >- "type"{'T1['x]} } -->
    sequent { <H> >- 'T1['t1] } =
    't
 
-prim itt_struct.hypReplacement 'H 'B univ[i:l] :
+doc <:doc< In pairwise semantic, much stronger hypReplacement is valid; this one may be derived >>
+
+(*OK*) prim itt_struct.hypReplacement 'H 'B univ[i:l] :
    [main] ('t['x] : sequent { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
    [equality] sequent { <H>; x: 'A; <J['x]> >- 'A = 'B<|H|> in univ[i:l] } -->
    sequent { <H>; x: 'A; <J['x]> >- 'T['x] } =
    't['x]
 
-prim itt_struct.hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
+doc <:doc< And the same is true here as well >>
+   
+(*OK*) prim itt_struct.hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
    [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2<|H|> in 'T2 } -->
    [main] ('t['x] : sequent { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] }) -->
    [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T2 >- "type"{'A['z]} } -->
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] } =
    't['x]
 
-prim itt_squash.squashEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_squash.squashEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H> >- squash{'A1} = squash{'A2} in univ[i:l] } = it
 
-prim itt_squash.squashType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_squash.squashType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- "type"{squash{'A}} } =
    it
 
-prim itt_squash.squashMemberFormation {| intro [AutoMustComplete] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_squash.squashMemberFormation {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'A } -->
    sequent { <H> >- squash{'A} } =
    it
 
-prim itt_squash.unsquashEqualWeak 'H :
+doc <:doc< Since <<'J>> does not depend on a variable here, the pairwise and pointwise semantics still agree >>
+   
+(*OK*) prim itt_squash.unsquashEqualWeak 'H :
    sequent { <H>; 'P; <J> >- 'x = 'y in 'A } -->
    sequent { <H>; squash{'P}; <J> >- 'x = 'y in 'A } =
    it
 
-prim itt_squash.squashElim 'H :
+doc <:doc< Since << squash{'P} >> has << it >> as its only member, the rule is trivially true >>
+   
+(*OK*) prim itt_squash.squashElim 'H :
    ('t['u] : sequent { <H>; u: squash{'P}; <J[it]> >- 'C[it] }) -->
    sequent { <H>; u: squash{'P}; <J['u]> >- 'C['u] } =
    't[it]
 
-prim itt_squiggle.squiggleEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_squiggle.squiggleEquality {| intro [] |} :
   [wf] sequent{ <H> >- 't1 ~ 's1 } -->
   [wf] sequent{ <H> >- 't2 ~ 's2 } -->
   sequent{ <H> >- ('t1 ~ 's1) = ('t2 ~ 's2) in univ[i:l]} =
   it
 
-prim itt_squiggle.squiggleElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< Since << 't ~ 's >> has << it >> as its only member, the rule is trivially true >>
+
+(*OK*) prim itt_squiggle.squiggleElimination {| elim [ThinOption thinT] |} 'H :
    ('f['x] : sequent{ <H>; x: ('t ~ 's); <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
    'f['x]
 
-prim itt_squiggle.squiggleRef {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_squiggle.squiggleRef {| intro [] |} :
    sequent { <H> >- 't ~ 't } =
    it
 
-prim itt_squiggle.squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
+doc <:doc< The rule does not deal with equality in any fashion >>
+
+(*OK*) prim itt_squiggle.squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
    [equality] sequent { <H>; x: 'A['t]; <J['x]> >- 't ~ 's } -->
    [main] ('f['x]: sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }) -->
    sequent { <H>; x: 'A['t]; <J['x]> >- 'C['x] } =
    'f['x]
 
-prim itt_subtype.subtypeEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_subtype.subtypeEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- 'A1 subtype 'B1 = 'A2 subtype 'B2 in univ[i:l] } =
    it
 
-prim itt_subtype.subtypeType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_subtype.subtypeType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- "type"{'A subtype 'B} } =
    it
 
-prim itt_subtype.subtypeTypeRight 'B :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_subtype.subtypeTypeRight 'B :
    [main] sequent { <H> >- 'A subtype 'B } -->
    sequent { <H> >- "type"{'A} } =
    it
 
-prim itt_subtype.subtypeTypeLeft 'A :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_subtype.subtypeTypeLeft 'A :
    [main] sequent { <H> >- 'A subtype 'B }  -->
    sequent { <H> >- "type"{'B} } =
    it
 
-prim itt_subtype.subtype_axiomFormation {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_subtype.subtype_axiomFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [main] sequent { <H>; x: 'A >- 'x in 'B } -->
    sequent { <H> >- 'A subtype 'B } =
    it
 
-prim itt_subtype.subtypeElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< Since << 'A subtype 'B >> has << it >> as its only member, the rule is trivially true >>
+
+(*OK*) prim itt_subtype.subtypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t['x] : sequent { <H>; x: 'A subtype 'B; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't[it]
 
-prim itt_subtype.useSubtype 'A :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_subtype.useSubtype 'A :
    sequent { <H> >- 'A subtype 'B } -->
    sequent { <H> >- 'a = 'b in 'A } -->
    sequent { <H> >- 'a = 'b in 'B } =
    it
 
-prim itt_void.voidEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_void.voidEquality {| intro [] |} :
    sequent { <H> >- void in univ[i:l] } =
    it
 
-prim itt_void.voidElimination {| elim []; squash; nth_hyp |} 'H :
+doc <:doc< Obvious >>
+
+(*OK*) prim itt_void.voidElimination {| elim []; squash; nth_hyp |} 'H :
    sequent { <H>; x: void; <J['x]> >- 'C['x] } =
    it
 
-prim itt_unit.unitEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_unit.unitEquality {| intro [] |} :
    sequent { <H> >- unit in univ[i:l] } =
    it
 
-prim itt_unit.unit_memberEquality {| intro []; squash |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_unit.unit_memberEquality {| intro []; squash |} :
    sequent { <H> >- it in unit } =
    it
 
-prim itt_unit.unitElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< Since << unit >> has << it >> as its only member, the rule is trivially true >>
+
+(*OK*) prim itt_unit.unitElimination {| elim [ThinOption thinT] |} 'H :
    ('t['x] : sequent{ <H>; x: unit; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: unit; <J['x]> >- 'C['x] } =
    't[it]
 
-prim itt_unit.unitSqequal {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_unit.unitSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in unit } -->
    sequent { <H> >- 'x ~ 'y } = it
 
-prim itt_atom.atomEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_atom.atomEquality {| intro [] |} :
    sequent { <H> >- atom in univ[i:l] } =
    it
 
-prim itt_atom.tokenEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_atom.tokenEquality {| intro [] |} :
    sequent { <H> >- token[t:t] in atom } =
    it
 
-prim itt_atom.atomSqequal {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_atom.atomSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in atom } -->
    sequent { <H> >- 'x ~ 'y } =
    it
-doc docoff
 
-prim itt_set.setEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_set.setEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ[i:l] } -->
    sequent { <H> >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
    it
 
-prim itt_set.setType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_set.setType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
    sequent { <H> >- "type"{ { a:'A | 'B['a] } } } =
    it
 
-prim itt_set.setMemberEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_set.setMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [assertion] sequent { <H> >- squash{'B['a1]} } -->
    [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
    sequent { <H> >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
 
-prim itt_set.setElimination {| elim [] |} 'H :
+doc <:doc< A and A: this is fairly straightforward >>
+
+(*OK*) prim itt_set.setElimination {| elim [] |} 'H :
    ('t['u;'i] : sequent { <H>; u: 'A; i: squash{'B['u]}; <J['u]> >- 'T['u] }) -->
    sequent { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] } =
    't['u;it]
 
-prim itt_set.setFormation 'A :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_set.setFormation 'A :
    [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
    ('B['a] : sequent { <H>; a: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    { a: 'A | 'B['a] }
 
-prim itt_union.unionFormation :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.unionFormation :
    ('A : sequent { <H> >- univ[i:l] }) -->
    ('B : sequent { <H> >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    'A + 'B
 
-prim itt_union.unionEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.unionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
    it
 
-prim itt_union.unionType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.unionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- "type"{'A + 'B} } =
    it
 
-prim itt_union.inlFormation {| intro [SelectOption 1] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.inlFormation {| intro [SelectOption 1] |} :
    [main] ('a : sequent { <H> >- 'A }) -->
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- 'A + 'B } =
    inl{'a}
 
-prim itt_union.inrFormation {| intro [SelectOption 2] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.inrFormation {| intro [SelectOption 2] |} :
    [main] ('b : sequent { <H> >- 'B }) -->
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- 'A + 'B } =
    inr{'b}
 
-prim itt_union.inlEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.inlEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- inl{'a1} = inl{'a2} in 'A + 'B } =
    it
 
-prim itt_union.inrEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.inrEquality {| intro [] |} :
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B } -->
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- inr{'b1} = inr{'b2} in 'A + 'B } =
    it
 
-prim itt_union.unionElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< A and A: fairly straightforward >>
+
+(*OK*) prim itt_union.unionElimination {| elim [ThinOption thinT] |} 'H :
    [left] ('left['u;'p] : sequent { <H>; p: 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
    [right] ('right['v;'p] : sequent { <H>; p: 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] }) -->
    sequent { <H>; x: 'A + 'B; <J['x]> >- 'T['x] } =
    decide{'x; u. 'left['u;'x]; v. 'right['v;'x]}
 
-prim itt_union.decideEquality {| intro [] |} bind{z. 'T['z]} ('A + 'B) :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.decideEquality {| intro [] |} bind{z. 'T['z]} ('A + 'B) :
    [wf] sequent { <H> >- 'e1 = 'e2 in 'A + 'B } -->
    [wf] sequent { <H>; u: 'A; 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    [wf] sequent { <H>; v: 'B; 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
@@ -338,44 +462,57 @@ prim itt_union.decideEquality {| intro [] |} bind{z. 'T['z]} ('A + 'B) :
                     'T['e1] } =
    it
 
-prim itt_union.unionSubtype {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_union.unionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
    ["subtype"] sequent { <H> >- 'B1 subtype 'B2 } -->
    sequent { <H> >- 'A1 + 'B1 subtype 'A2 + 'B2  } =
    it
-doc docoff
 
-prim itt_dprod.productFormation 'A :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_dprod.productFormation 'A :
    [wf] sequent { <H> >- 'A in univ[i:l] } -->
    [main] ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    x:'A * 'B['x]
 
-prim itt_dprod.productEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_dprod.productEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x1: 'A1 >- 'B1['x1] = 'B2['x1] in univ[i:l] } -->
    sequent { <H> >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
    it
 
-prim itt_dprod.productType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_dprod.productType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
    sequent { <H> >- "type"{x:'A1 * 'A2['x]} } =
    it
 
-prim itt_dprod.pairEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_dprod.pairEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B['a1] } -->
    [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
    sequent { <H> >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
 
-prim itt_dprod.productElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< A and A: this is fairly straightforward >>
+
+(*OK*) prim itt_dprod.productElimination {| elim [ThinOption thinT] |} 'H :
    ('t['z; 'x; 'y] : sequent { <H>; z: x:'A * 'B['x]; x: 'A; y: 'B['x]; <J['x, 'y]> >- 'T['x, 'y] }) -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
    spread{'z; x, y. 't['z; 'x; 'y]}
 
-prim itt_dprod.spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(*OK*) prim itt_dprod.spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) :
    [wf] sequent { <H> >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent { <H>; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
@@ -475,7 +612,6 @@ prim itt_rfun.rfunction_applyEquality {| intro[] |} ({ f | x:'A -> 'B['f; 'x] })
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
    it
-doc docoff
 
 prim itt_esquash.esquash_type {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'P} } -->
@@ -977,7 +1113,6 @@ prim itt_prec.precindEquality {| intro [] |} lambda{x. 'S['x]} (a:'A * "prec"{T,
                    in 'S['r1]
            } =
    it
-doc docoff
 
 prim itt_srec.srecFormation :
    ('B['T] : sequent { <H>; T: univ[i:l] >- univ[i:l] }) -->
@@ -1033,7 +1168,6 @@ prim itt_srec.srecindEquality {| intro [] |} bind{x. 'S['x]} srec{T. 'B['T]} uni
                    in 'S['r1]
            } =
    it
-doc docoff
 
 prim itt_quotient.quotientType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->

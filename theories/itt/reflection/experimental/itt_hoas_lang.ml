@@ -530,6 +530,21 @@ dform lang_df: Lang{'op} =
    tt["Language"] `"[" slot{'op} `"]"
 
 (*
+ * JYH: define a reduction rule that can be added to the reduceC
+ * conversion.
+ *)
+interactive_rw dest_bterm_mk_bterm3 {| reduce |} :
+   'n in nat -->
+   'op in Operator -->
+   'subterms in list{BTerm} -->
+   compatible_shapes{'n; shape{'op}; 'subterms} -->
+   dest_bterm{mk_bterm{'n; 'op; 'subterms};
+      l, r. 'var_case['l; 'r];
+      bdepth, op, subterms. 'op_case['bdepth; 'op; 'subterms]}
+   <-->
+   'op_case['n; 'op; 'subterms]
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

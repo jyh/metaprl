@@ -1318,14 +1318,16 @@ interactive list_max_wf2 {| intro [AutoMustComplete] |} :
    sequent { <H> >- list_max{'l} in int }
 
 interactive list_max1 {| intro [] |} 'i:
+   [wf] sequent { <H> >- 'a in nat } -->
    [wf] sequent { <H> >- 'l in list{nat} } -->
    [wf] sequent { <H> >- 'i in Index{'l} } -->
    sequent { <H> >- 'a <= nth{'l;'i} } -->
    sequent { <H> >- 'a <= list_max{'l}}
 
 interactive list_max2 {| intro [] |}:
+   [wf] sequent { <H> >- 'a in nat } -->
    [wf] sequent { <H> >- 'l in list{nat} } -->
-   sequent { <H>; i : Index{'l}  >- nth{'l;'i} <= 'a } -->
+   sequent { <H> >- all_list{'l;x. 'x <= 'a} } -->
    sequent { <H> >- list_max{'l} <= 'a }
 
 doc <:doc<

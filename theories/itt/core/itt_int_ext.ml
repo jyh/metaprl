@@ -619,6 +619,97 @@ interactive_rw max_reduce {| reduce |} :
    'a in int -->
    max{'a; 'a} <--> 'a
 
+interactive max_ge_left {| intro [SelectOption 0] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'x <= 'a } -->
+   sequent { <H> >- 'x <= max{'a; 'b} }
+
+interactive max_ge_right {| intro [SelectOption 1] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'x <= 'b } -->
+   sequent { <H> >- 'x <= max{'a; 'b} }
+
+interactive max_le {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'a <= 'x } -->
+   sequent { <H> >- 'b <= 'x } -->
+   sequent { <H> >- max{'a; 'b} <= 'x }
+
+interactive max_ge_left2 {| intro [SelectOption 0] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'a >= 'x } -->
+   sequent { <H> >- max{'a; 'b} >= 'x }
+
+interactive max_ge_right2 {| intro [SelectOption 1] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'b >= 'x } -->
+   sequent { <H> >- max{'a; 'b} >= 'x }
+
+interactive max_le2 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'x >= 'a } -->
+   sequent { <H> >- 'x >= 'b } -->
+   sequent { <H> >- 'x >=  max{'a; 'b} }
+
+
+interactive min_ge_left {| intro [SelectOption 0] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'x >= 'a } -->
+   sequent { <H> >- 'x >= min{'a; 'b} }
+
+interactive min_ge_right {| intro [SelectOption 1] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'x >= 'b } -->
+   sequent { <H> >- 'x >= min{'a; 'b} }
+
+interactive min_le {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'a >= 'x } -->
+   sequent { <H> >- 'b >= 'x } -->
+   sequent { <H> >- min{'a; 'b} >= 'x }
+
+interactive min_ge_left2 {| intro [SelectOption 0] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'a <= 'x } -->
+   sequent { <H> >- min{'a; 'b} <= 'x }
+
+interactive min_ge_right2 {| intro [SelectOption 1] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'b <= 'x } -->
+   sequent { <H> >- min{'a; 'b} <= 'x }
+
+interactive min_le2 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'x <= 'a } -->
+   sequent { <H> >- 'x <= 'b } -->
+   sequent { <H> >- 'x <= min{'a; 'b} }
+
+
+
 doc <:doc<
    @modsection{Well-formedness and algebraic properties of <<('x) *@ ('x)>>}
 >>

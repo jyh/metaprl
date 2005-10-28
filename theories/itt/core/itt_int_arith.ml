@@ -499,15 +499,8 @@ interactive eq2pair_of_ineq :
 
 doc docoff
 
-let eqInConcl2HypT t =
-	let (t,a,b)=dest_equal t in
-   if alpha_equal t <<int>> then
-   	if alpha_equal a b then
-      	idT
-		else
-			eq2pair_of_ineq thenMT geInConcl2HypT
-   else
-   	idT
+let eqInConcl2HypT =
+	eq2pair_of_ineq thenMT geInConcl2HypT
 
 let neqInConcl2HypT =
 	(rw (unfold_neq_int thenC (addrC [Subterm 1] unfold_bneq_int)) 0)
@@ -516,14 +509,16 @@ let neqInConcl2HypT =
 
 let arithRelInConcl2HypT = funT (fun p ->
    let t=Sequent.concl p in
-   if is_lt_term t then ltInConcl2HypT
-   else if is_gt_term t then gtInConcl2HypT
-   else if is_le_term t then leInConcl2HypT
-   else if is_ge_term t then geInConcl2HypT
-   else if is_equal_term t then eqInConcl2HypT t
-   else if is_neq_int_term t then neqInConcl2HypT
-   else if is_not_term t then not_intro
-   else concl2geT)
+	match explode_term t with
+		<<'a < 'b>> -> ltInConcl2HypT
+	 | <<'a > 'b>> -> gtInConcl2HypT
+	 | <<'a <= 'b>> -> leInConcl2HypT
+	 | <<'a >= 'b>> -> geInConcl2HypT
+	 | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2HypT
+	 | <<'a <> 'b>> -> neqInConcl2HypT
+	 | <<not{'a}>> -> not_intro
+	 | _ -> concl2geT
+)
 
 let arith_rels=[
 	opname_of_term << 'x<'y >>;

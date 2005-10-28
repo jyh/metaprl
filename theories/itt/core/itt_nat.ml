@@ -168,6 +168,13 @@ interactive ge2nat {| ge_intro |} :
    sequent { <H>; (-1) >= 'n >- "false" } -->
    sequent { <H> >- 'n in nat }
 
+interactive ge_eq2nat {| ge_intro |} :
+   [wf] sequent { <H> >- 'n in int }  -->
+   [wf] sequent { <H> >- 'm in int }  -->
+   sequent { <H>; 'n <> 'm >- "false" }  -->
+   sequent { <H>; (-1) >= 'n; (-1) >= 'm >- "false" } -->
+   sequent { <H> >- 'n = 'm in nat }
+
 interactive nat_plusone {| nth_hyp |} 'H :
    sequent { <H>; a: nat; <J['a]> >- 'a +@ 1 in nat }
 

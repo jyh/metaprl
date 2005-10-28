@@ -140,6 +140,27 @@ interactive olang_elim {| elim [] |} 'H :
 
 doc docoff
 
+(*
+ * Subtyping.   These rules are mainly for directing autoT.
+ *)
+interactive olang_bterm_intro {| intro [intro_typeinf << 'e >>] |} olang{'ops} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H> >- 'e in olang{'ops} } -->
+   sequent { <H> >- 'e in BTerm }
+
+interactive olang_bterm_list_intro {| intro [intro_typeinf << 'e >>] |} list{olang{'ops}} :
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
+   [wf] sequent { <H> >- 'e in list{olang{'ops}} } -->
+   sequent { <H> >- 'e in list{BTerm} }
+
+interactive olang_bterm_list_nil_intro {| intro [] |} :
+   sequent { <H> >- nil in list{BTerm} }
+
+interactive olang_bterm_list_cons_intro {| intro [] |} :
+   [wf] sequent { <H> >- 'e in BTerm } -->
+   [wf] sequent { <H> >- 'l in list{BTerm} } -->
+   sequent { <H> >- 'e :: 'l in list{BTerm} }
+
 (************************************************************************
  * Shapes.
  *)
@@ -352,12 +373,29 @@ doc docoff
 
 let bind_opname = opname_of_term << bind{x. 'e} >>
 let mk_bind_term = mk_dep1_term bind_opname
+let dest_bind_term = dest_dep1_term bind_opname
 
 let subst_opname = opname_of_term << subst{'e1; 'e2} >>
 let mk_subst_term = mk_dep0_dep0_term subst_opname
+let dest_subst_term = dest_dep0_dep0_term subst_opname
 
 let olang_opname = opname_of_term << olang{'ops} >>
 let dest_olang_term = dest_dep0_term olang_opname
+
+let eta_reduce env =
+   let t = env_term env in
+   let _, e = dest_bind_term t in
+   let e, _ = dest_subst_term e in
+   let p = env_arg env in
+   let ops =
+      try get_with_arg p with
+         RefineError _ ->
+            dest_olang_term (infer_type p e)
+   in
+      eta_reduce_term ops
+
+let etaReduceC =
+   funC eta_reduce
 
 let var_x = Lm_symbol.add "x"
 let eta_expand e env =

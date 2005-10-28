@@ -59,6 +59,7 @@ production xterm_term{olang{'ops}} <--
 (************************************************************************
  * Rewrites.
  *)
+topval etaReduceC : conv
 topval etaExpandC : term -> conv
 
 (*!

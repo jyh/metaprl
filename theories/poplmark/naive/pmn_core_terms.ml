@@ -164,8 +164,179 @@ interactive fsub_core_elim {| elim [] |} 'H : <:xrule<
 >>
 
 (************************************************************************
- * Immediately separate the terms into types and expressions.
+ * Define a generic induction combinator.
  *)
+interactive fsub_core_bterm {| intro [intro_typeinf << 'e >>] |} FSubCore :
+   sequent { <H> >- 'e in FSubCore } -->
+   sequent { <H> >- 'e in BTerm }
+
+define unfold_dest_fsub_exp :
+   dest_exp{'e;
+      x. 'base['x];
+      'ty_top;
+      ty1, ty2. 'ty_fun['ty1; 'ty2];
+      ty1, ty2. 'ty_all['ty1; 'ty2];
+      ty, e. 'lam['ty; 'e];
+      e1, e2. 'apply['e1; 'e2];
+      ty, e. 'ty_lam['ty; 'e];
+      e, ty. 'ty_apply['e; 'ty]} <--> <:xterm<
+   dest_bterm e with
+      l, r -> base[var{l; r}]
+    | d, o, s ->
+      if is_same_op{o; $TyTop{}} then
+         ty_top
+      else if is_same_op{o; $TyFun{ty1; ty2}} then
+         ty_fun[nth{s; 0}; nth{s; 1}]
+      else if is_same_op{o; $TyAll{ty1; x. ty2}} then
+         ty_all[nth{s; 0}; nth{s; 1}]
+      else if is_same_op{o; $Lambda{ty; x. e}} then
+         lam[nth{s; 0}; nth{s; 1}]
+      else if is_same_op{o; $Apply{e1; e2}} then
+         apply[nth{s; 0}; nth{s; 1}]
+      else if is_same_op{o; $TyLambda{ty; x. e}} then
+         ty_lam[nth{s; 0}; nth{s; 1}]
+      else if is_same_op{o; $TyApply{e; ty}} then
+         ty_apply[nth{s; 0}; nth{s; 1}]
+      else
+         it{}
+>>
+
+interactive_rw dest_fsub_exp_var {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+<:xrewrite<
+   dest_exp{var{l; r};
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   base[var{l; r}]
+>>
+
+interactive_rw dest_fsub_exp_top {| reduce |} :
+   'd in nat -->
+<:xrewrite<
+   dest_exp{fsub type[d] { top };
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   ty_top
+>>
+
+interactive_rw dest_fsub_exp_fun {| reduce |} :
+   'd in nat -->
+   bdepth{'ty1} = 'd in nat -->
+   bdepth{'ty2} = 'd in nat -->
+   'ty1 in FSubCore -->
+   'ty2 in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub type[d] { ty1 -> ty2 };
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   ty_fun[ty1; ty2]
+>>
+
+interactive_rw dest_fsub_exp_ty_all {| reduce |} :
+   'd in nat -->
+   bdepth{'ty1} = 'd in nat -->
+   bdepth{'ty2[dummy]} = 'd in nat -->
+   'ty1 in FSubCore -->
+   bind{x. 'ty2['x]} in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub type[d] { all x <: ty1. ty2[x] };
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   ty_all[ty1; bind{x. ty2[x]}]
+>>
+
+interactive dest_fsub_wf {| intro [] |} : <:xrule<
+   <H> >- e IN FSubCore{} -->
+   <H>; x: Var{} >- base[x] Type -->
+   <H> >- ty_top Type -->
+   <H>; ty1: FSubCore{}; ty2: FSubCore{}; bdepth{ty1} = bdepth{ty2} in nat{} >- ty_fun[ty1; ty2] Type -->
+   <H>; ty1: FSubCore{}; ty2: FSubCore{}; bdepth{ty1} = bdepth{ty1} +@ 1 in nat{} >- ty_all[ty1; ty2] Type -->
+   <H>; ty: FSubCore{}; e: FSubCore{}; bdepth{e} = bdepth{ty} +@ 1 in nat{} >- lam[ty; e] Type -->
+   <H>; e1: FSubCore{}; e2: FSubCore{}; bdepth{e1} = bdepth{e2} in nat{} >- apply[e1; e2] Type -->
+   <H>; ty: FSubCore{}; e: FSubCore{}; bdepth{e} = bdepth{ty} +@ 1 in nat{} >- ty_lam[ty; e] Type -->
+   <H>; e: FSubCore{}; ty: FSubCore{}; bdepth{e} = bdepth{ty} in nat{} >- ty_apply[e; ty] Type -->
+   <H> >- dest_exp{e;
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]} Type
+>>
+
+(************************************************************************
+ * Separate the language into types and expressions.
+ *)
+interactive bdepth_wf {| intro [intro_typeinf << 'e >>] |} FSubCore :
+   [wf] sequent { <H> >- 'e in FSubCore } -->
+   sequent { <H> >- bdepth{'e} in nat }
+
+interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} FSubCore :
+   [wf] sequent { <H> >- 'e in FSubCore } -->
+   sequent { <H> >- bdepth{'e} in int }
+
+interactive_rw reduce_dest_bterm_mk_bterm {| reduce |} :
+   'depth in nat -->
+   'op in Operator -->
+   'subs in list{FSubCore} -->
+   compatible_shapes{'depth; shape{'op}; 'subs} -->
+   dest_bterm{mk_bterm{'depth; 'op; 'subs};
+      l, r. 'var_case['l; 'r];
+      depth, op, subs. 'op_case['depth; 'op; 'subs] }
+   <-->
+   'op_case['depth; 'op; 'subs]
+
+interactive_rw bind_eta :
+   'e in FSubCore -->
+   bdepth{'e} > 0 -->
+   bind{x. subst{'e; 'x}}
+   <-->
+   'e
+
+define unfold_isVar : isVar{'e} <--> <:xterm<
+   dest_bterm e with
+      l, r -> "true"
+    | d, o, s -> "false"
+>>
+
+let fold_isVar = makeFoldC << isVar{'e} >> unfold_isVar
+
+interactive isVar_wf : <:xrule<
+   <H> >- e IN FSubCore{} -->
+   <H> >- isVar{e} Type
+>>
+
 define unfold_isTyExp : isTyExp{'e} <--> <:xterm<
    (fix is_ty e ->
       dest_bterm e with

@@ -237,7 +237,6 @@ interactive disectElimination_eq {| elim [] |} 'H bind{x.bind{a,b.'C['x;'a;'b]}}
 
 let disectEliminationT = argfunT (fun n p ->
    let x = Sequent.nth_binding p n in
-   let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then
          let bind = mk_bind1_term x bind in

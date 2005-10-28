@@ -310,13 +310,6 @@ struct
 
    let create constants =
       let is_constant = StringSet.mem constants in
-      let compare t1 t2 =
-         match compare_terms is_constant [] t1 t2 with
-            Equal _ -> 0
-          | LessThan -> -1
-          | GreaterThan -> 1
-      in
-      let print _ _ = () in
          { cache_constants = is_constant;
            cache_table = TermTable.empty
          }

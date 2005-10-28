@@ -150,13 +150,13 @@ let rec assign_families (info: IntSet.t IntTable.t) n = function
       let a', hyps' = extract hyps a in
       let f', hyps'' = extract hyps' f in
       begin match f' with
-         Box(Evidence i as e, a'') ->
+         Box(Evidence i, a'') ->
             let info'' = join_families info' a' a'' in
             info'', n', BoxLeft(f', d'), FSet.add hyps'' f', concls
        | _ ->
             raise (Invalid_argument "assign_families bug: evidence box expected")
 		end
- | BoxRight(Box(Evidence _, b) as f, hyps, concls, d) ->
+ | BoxRight(Box(Evidence _, b), hyps, concls, d) ->
       let info1, n1, hyps' = map info n assign_fresh_families hyps in
       let info2, n2, concls' = map info1 n1 assign_fresh_families concls in
       let info3, n3, d', hyps'', concls'' = assign_families info2 n2 d in
@@ -423,10 +423,10 @@ let rec realize families terms d =
 			f1,
 			hilb2,
 			hyps, concls
-	 | BoxLeft((Box(Evidence e,f0)) as f, d0) ->
+	 | BoxLeft(Box(Evidence e,f0), d0) ->
 			let pterm0, concl0, hilb0, hyps0, concls0 = realize families terms d0 in
 			let f0 = box2pr f0 in
-			let f = Pr(Provisional e, f0) in
+			(* let f = Pr(Provisional e, f0) in *)
 			let hyps = FSet.remove hyps0 f0 in
 			let concls = concls0 in
 			(*let hilb1, f1 = hilbert_box_left hyps concls hyps0 hilb0 in
@@ -447,7 +447,7 @@ let rec realize families terms d =
             )
          ),
 			hyps, concls
-	 | BoxRight((Box(Evidence e,f0)) as f, new_hyps, new_concls, d0) ->
+	 | BoxRight(Box(Evidence e,f0), new_hyps, new_concls, d0) ->
 			let pterm0, concl0, hilb0, hyps0, concls0 = realize families terms d0 in
 			let f0 = FSet.choose concls0 in
 			let new_hyps = box2pr_set new_hyps in
@@ -491,8 +491,8 @@ let rec realize families terms d =
 					Implies(a, box_b) ->
 						let concls = FSet.add new_concls box_b in
 						let concl5 = one_implication hyps concls in
-						let concl6 = Implies(concl4, concl5) in
-						let pterm6 = PropTaut(concl6) in
+						(* let concl6 = Implies(concl4, concl5) in *)
+						(* let pterm6 = PropTaut(concl6) in *)
 						let hilb6 = ConstSpec in
 						let hilb7, pterm7 = lift [] (MP(concl4, hilb4, hilb6)) concl5 in
 						pterm7, concl5, hilb7, hyps, concls

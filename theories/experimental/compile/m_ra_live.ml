@@ -194,7 +194,7 @@ struct
              | CodeMove ->
                   dtable
          in
-            List.fold_left (collect (succ depth) defs) dtable rest
+            List.fold_left (collect (succ depth) defs) dtables rest
       in
          collect 0 SymbolSet.empty [] code
 

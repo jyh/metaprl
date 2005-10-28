@@ -163,8 +163,8 @@ doc <:doc<
 >>
 ml_rw reduce_if_quoted_op {| reduce |} : ('goal :  if_quoted_op{ bterm{| <H> >- 't |}; 'tt }) =
    let bt, tt = two_subterms goal in
-   let hyps, t = dest_bterm_sequent bt in
-   let t' = unquote_term t in
+   let _, t = dest_bterm_sequent bt in
+      ignore (unquote_term t);
       tt
 
 (*************************************************************************

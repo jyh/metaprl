@@ -953,14 +953,13 @@ struct
    let classify_moves ra nodes moves =
       if !debug_regalloc >= 1 then
          eprintf "Classify moves@.";
-      let edges = ra.ra_edges in
-         AsymSymbolMatrix.iter (fun dst src { M_ra_type.move_depth = depth } ->
-               if not (Lm_symbol.eq dst src) then
-                  let dst_node = SymbolTable.find nodes dst in
-                  let src_node = SymbolTable.find nodes src in
-                  let move = new_move ra dst_node src_node depth MoveWL in
-                     dst_node.node_moves <- move :: dst_node.node_moves;
-                     src_node.node_moves <- move :: src_node.node_moves) moves
+      AsymSymbolMatrix.iter (fun dst src { M_ra_type.move_depth = depth } ->
+            if not (Lm_symbol.eq dst src) then
+               let dst_node = SymbolTable.find nodes dst in
+               let src_node = SymbolTable.find nodes src in
+               let move = new_move ra dst_node src_node depth MoveWL in
+                  dst_node.node_moves <- move :: dst_node.node_moves;
+                  src_node.node_moves <- move :: src_node.node_moves) moves
 
    (*
     * Reclassify all the nodes.

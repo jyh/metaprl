@@ -29,7 +29,7 @@
  *)
 doc <:doc< @parents >>
 
-extends Itt_hoas_lang
+extends Itt_hoas_bterm
 extends Itt_image
 extends Itt_subset
 

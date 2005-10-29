@@ -801,6 +801,24 @@ define unfold_dest_ty_exp :
       ty, e. it;
       e, ty. it}
 
+define unfold_dest_exp :
+   dest_exp{'e;
+      x. 'base['x];
+      ty, e. 'lam['ty; 'e];
+      e1, e2. 'apply['e1; 'e2];
+      ty, e. 'ty_lam['ty; 'e];
+      e, ty. 'ty_apply['e; 'ty]}
+   <-->
+   dest_fsub_exp{'e;
+      x. 'base['x];
+      it;
+      ty1, ty2. it;
+      ty1, ty2. it;
+      ty, e. 'lam['ty; 'e];
+      e1, e2. 'apply['e1; 'e2];
+      ty, e. 'ty_lam['ty; 'e];
+      e, ty. 'ty_apply['e; 'ty]}
+
 interactive_rw dest_ty_exp_var {| reduce |} :
    'l in nat -->
    'r in nat -->
@@ -856,6 +874,74 @@ interactive_rw dest_ty_exp_ty_all {| reduce |} :
       ty1, ty2. ty_all[ty1; ty2]}
    <-->
    ty_all[ty1; bind{x. ty2[x]}]
+>>
+
+interactive_rw dest_exp_apply {| reduce |} :
+   'd in nat -->
+   bdepth{'e1} = 'd in nat -->
+   bdepth{'e2} = 'd in nat -->
+   'e1 in FSubCore -->
+   'e2 in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { e1 e2 };
+      x. base[x];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   apply[e1; e2]
+>>
+
+interactive_rw dest_exp_lambda {| reduce |} :
+   'd in nat -->
+   bdepth{'ty} = 'd in nat -->
+   bdepth{'e[dummy]} = 'd in nat -->
+   'ty in FSubCore -->
+   bind{x. 'e['x]} in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { fun x : ty -> e[x] };
+      x. base[x];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   lam[ty; bind{x. e[x]}]
+>>
+
+interactive_rw dest_exp_ty_apply {| reduce |} :
+   'd in nat -->
+   bdepth{'e} = 'd in nat -->
+   bdepth{'ty} = 'd in nat -->
+   'e in FSubCore -->
+   'ty in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { e{ty} };
+      x. base[x];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   ty_apply[e; ty]
+>>
+
+interactive_rw dest_exp_ty_lambda {| reduce |} :
+   'd in nat -->
+   bdepth{'ty} = 'd in nat -->
+   bdepth{'e[dummy]} = 'd in nat -->
+   'ty in FSubCore -->
+   bind{x. 'e['x]} in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { Fun x <: ty -> e[x] };
+      x. base[x];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   ty_lam[ty; bind{x. e[x]}]
 >>
 
 (*!

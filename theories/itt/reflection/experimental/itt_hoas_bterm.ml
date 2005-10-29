@@ -49,10 +49,10 @@ open Itt_hoas_destterm
 doc terms
 
 define iform unfold_dom : dom{'BT} <--> dom{Operator; 'BT}
-define iform unfold_Iter: Iter{'X} <--> Iter{Operator; 'X}
-define iform unfold_BT: BT{'n} <--> BT{Operator; 'n}
+define iform unfold_Iter : Iter{'X} <--> Iter{Operator; 'X}
+define iform unfold_BT : BT{'n} <--> BT{Operator; 'n}
 
-define unfold_BTerm: BTerm <--> Lang{Operator}
+define unfold_BTerm : BTerm <--> Lang{Operator}
 
 doc docoff
 
@@ -62,13 +62,14 @@ doc rules
 
 interactive_rw bt_reduce_base {| reduce |}: BT{0} <--> void
 
-interactive_rw bt_reduce_step {| reduce |}: 'n in nat --> BT{'n+@1} <--> Iter{BT{'n}}
+interactive_rw bt_reduce_step {| reduce |}: 'n in nat --> BT{'n +@ 1} <--> Iter{BT{'n}}
 
 interactive  bt_elim_squash  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
    [base] sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    [step] sequent { <H>; <J>; depth: nat; op:Operator; subterms:list{BT{'n}};
-               compatible_shapes{'depth;shape{'op};'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
+               compatible_shapes{'depth; shape{'op}; 'subterms}
+               >- squash{'P[mk_bterm{'depth; 'op; 'subterms}]} } -->
    sequent { <H>; t: BT{'n+@1}; <J> >- squash{'P['t]} }
 
 interactive  bt_wf_and_bdepth_wf  {| intro[] |}:
@@ -85,6 +86,10 @@ interactive  bterm_wf {| intro[] |}:
 interactive  bdepth_wf  {| intro[] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- bdepth{'t} in nat }
+
+interactive  bdepth_wf_int  {| intro[] |}:
+   [wf] sequent{ <H> >- 't in BTerm } -->
+   sequent{ <H> >- bdepth{'t} in int }
 
 interactive compatible_shapes_wf {| intro[] |}:
    [wf] sequent{ <H> >- 'bdepth in nat } -->
@@ -119,15 +124,15 @@ interactive mk_bterm_bt_wf {| intro[] |}:
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
    [wf] sequent{ <H> >- 'subterms in list{BT{'n}} } -->
-   sequent{ <H> >- compatible_shapes{'depth;shape{'op};'subterms} } -->
-   sequent{ <H> >- mk_bterm{'depth;'op;'subterms} in BT{'n+@1} }
+   sequent{ <H> >- compatible_shapes{'depth; shape{'op}; 'subterms} } -->
+   sequent{ <H> >- mk_bterm{'depth; 'op; 'subterms} in BT{'n+@1} }
 
 interactive mk_bterm_wf {| intro[] |}:
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
    [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
-   sequent{ <H> >- compatible_shapes{'depth;shape{'op};'subterms} } -->
-   sequent{ <H> >- mk_bterm{'depth;'op;'subterms} in BTerm }
+   sequent{ <H> >- compatible_shapes{'depth; shape{'op}; 'subterms} } -->
+   sequent{ <H> >- mk_bterm{'depth; 'op; 'subterms} in BTerm }
 
 interactive  bt_elim_squash2  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
@@ -156,7 +161,7 @@ interactive_rw bind_vec_eta {| reduce |} :
 interactive_rw subterms_lemma {| reduce |} :
    'n in nat -->
    'subterms in list{BTerm} -->
-   all i:Index{'subterms}. bdepth{nth{'subterms;'i}} >=  'n -->
+   all i:Index{'subterms}. bdepth{nth{'subterms;'i}} >= 'n -->
    map{bt. bind{'n; v. substl{'bt; 'v}};'subterms} <--> 'subterms
 
 interactive_rw dest_bterm_mk_bterm2 {| reduce |} :
@@ -247,4 +252,34 @@ doc docoff
 dform compatible_shapes_df: compatible_shapes{'bdepth;'op;'btl} =
    tt["compatible_shapes"] `"(" slot{'bdepth} `";" slot{'op} `";" slot{'btl} `")"
 
-dform bterm_df: BTerm = keyword["BTerm"]
+dform bterm_df : BTerm = keyword["BTerm"]
+
+(************************************************************************
+ * Fold up Aleksey's dummy term.
+ *)
+define unfold_dummy :
+   dummy
+   <-->
+   mk_term{it; nil}
+
+let fold_dummy = makeFoldC << dummy >> unfold_dummy
+
+(************************************************************************
+ * Conversions.
+ *)
+interactive_rw reduce_bdepth_bind {| reduce |} :
+   'e in BTerm -->
+   bdepth{'e} > 0 -->
+   bdepth{subst{'e; dummy}}
+   <-->
+   bdepth{'e} -@ 1
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

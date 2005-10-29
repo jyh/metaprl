@@ -47,6 +47,8 @@ declare BTerm
 topval unfold_BTerm : conv
 topval fold_BTerm : conv
 
+topval fold_dummy : conv
+
 (*!
  * @docoff
  *

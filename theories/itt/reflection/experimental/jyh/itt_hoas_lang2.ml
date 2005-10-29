@@ -419,31 +419,6 @@ let eta_expand e env =
 let etaExpandC e =
    funC (eta_expand e)
 
-(************************************************************************
- * Some useful utilities.
- *)
-interactive_rw reduce_bdepth_bind {| reduce |} :
-   bdepth{'e} > 0 -->
-   bdepth{subst{'e; dummy}}
-   <-->
-   bdepth{'e} -@ 1
-
-(************************************************************************
- * Restate the reduction on mk_bterm.
- *)
-interactive_rw reduce_dest_bterm_mk_bterm 'ops :
-   'ops in list{Operator} -->
-   'depth in nat -->
-   'op in Operator -->
-   mem{'op; 'ops; Operator} -->
-   'subs in list{olang{'ops}} -->
-   compatible_shapes{'depth; shape{'op}; 'subs} -->
-   dest_bterm{mk_bterm{'depth; 'op; 'subs};
-      l, r. 'var_case['l; 'r];
-      depth, op, subs. 'op_case['depth; 'op; 'subs] }
-   <-->
-   'op_case['depth; 'op; 'subs]
-
 (*!
  * @docoff
  *

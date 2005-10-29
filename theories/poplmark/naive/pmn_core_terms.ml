@@ -198,7 +198,7 @@ interactive fsub_core_bterm {| intro [intro_typeinf << 'e >>] |} FSubCore :
    sequent { <H> >- 'e in BTerm }
 
 define unfold_dest_fsub_exp :
-   dest_exp{'e;
+   dest_fsub_exp{'e;
       x. 'base['x];
       'ty_top;
       ty1, ty2. 'ty_fun['ty1; 'ty2];
@@ -232,7 +232,7 @@ interactive_rw dest_fsub_exp_var {| reduce |} :
    'l in nat -->
    'r in nat -->
 <:xrewrite<
-   dest_exp{var{l; r};
+   dest_fsub_exp{var{l; r};
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -248,7 +248,7 @@ interactive_rw dest_fsub_exp_var {| reduce |} :
 interactive_rw dest_fsub_exp_top {| reduce |} :
    'd in nat -->
 <:xrewrite<
-   dest_exp{fsub type[d] { top };
+   dest_fsub_exp{fsub type[d] { top };
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -268,7 +268,7 @@ interactive_rw dest_fsub_exp_fun {| reduce |} :
    'ty1 in FSubCore -->
    'ty2 in FSubCore -->
 <:xrewrite<
-   dest_exp{fsub type[d] { ty1 -> ty2 };
+   dest_fsub_exp{fsub type[d] { ty1 -> ty2 };
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -288,7 +288,7 @@ interactive_rw dest_fsub_exp_ty_all {| reduce |} :
    'ty1 in FSubCore -->
    bind{x. 'ty2['x]} in FSubCore -->
 <:xrewrite<
-   dest_exp{fsub type[d] { all x <: ty1. ty2[x] };
+   dest_fsub_exp{fsub type[d] { all x <: ty1. ty2[x] };
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -308,7 +308,7 @@ interactive_rw dest_fsub_exp_apply {| reduce |} :
    'e1 in FSubCore -->
    'e2 in FSubCore -->
 <:xrewrite<
-   dest_exp{fsub[d] { e1 e2 };
+   dest_fsub_exp{fsub[d] { e1 e2 };
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -328,7 +328,7 @@ interactive_rw dest_fsub_exp_lambda {| reduce |} :
    'ty in FSubCore -->
    bind{x. 'e['x]} in FSubCore -->
 <:xrewrite<
-   dest_exp{fsub[d] { fun x : ty -> e[x] };
+   dest_fsub_exp{fsub[d] { fun x : ty -> e[x] };
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -348,7 +348,7 @@ interactive_rw dest_fsub_exp_ty_apply {| reduce |} :
    'e in FSubCore -->
    'ty in FSubCore -->
 <:xrewrite<
-   dest_exp{fsub[d] { e{ty} };
+   dest_fsub_exp{fsub[d] { e{ty} };
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -368,7 +368,7 @@ interactive_rw dest_fsub_exp_ty_lambda {| reduce |} :
    'ty in FSubCore -->
    bind{x. 'e['x]} in FSubCore -->
 <:xrewrite<
-   dest_exp{fsub[d] { Fun x <: ty -> e[x] };
+   dest_fsub_exp{fsub[d] { Fun x <: ty -> e[x] };
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -391,7 +391,7 @@ interactive dest_fsub_wf {| intro [] |} : <:xrule<
    <H>; e1: FSubCore{}; e2: FSubCore{}; bdepth{e1} = bdepth{e2} in nat{} >- apply[e1; e2] Type -->
    <H>; ty: FSubCore{}; e: FSubCore{}; bdepth{e} = bdepth{ty} +@ 1 in nat{} >- ty_lam[ty; e] Type -->
    <H>; e: FSubCore{}; ty: FSubCore{}; bdepth{e} = bdepth{ty} in nat{} >- ty_apply[e; ty] Type -->
-   <H> >- dest_exp{e;
+   <H> >- dest_fsub_exp{e;
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -412,7 +412,7 @@ interactive dest_fsub_member {| intro [] |} : <:xrule<
    <H>; e1: FSubCore{}; e2: FSubCore{}; bdepth{e1} = bdepth{e2} in nat{} >- apply[e1; e2] IN T -->
    <H>; ty: FSubCore{}; e: FSubCore{}; bdepth{e} = bdepth{ty} +@ 1 in nat{} >- ty_lam[ty; e] IN T -->
    <H>; e: FSubCore{}; ty: FSubCore{}; bdepth{e} = bdepth{ty} in nat{} >- ty_apply[e; ty] IN T -->
-   <H> >- dest_exp{e;
+   <H> >- dest_fsub_exp{e;
       x. base[x];
       ty_top;
       ty1, ty2. ty_fun[ty1; ty2];
@@ -428,7 +428,7 @@ interactive dest_fsub_member {| intro [] |} : <:xrule<
  *)
 define unfold_isTyExp : isTyExp{'e} <--> <:xterm<
    (fix is_ty e ->
-      dest_exp{e;
+      dest_fsub_exp{e;
          x. "true";
          "true";
          ty1, ty2. is_ty ty1 && is_ty ty2;
@@ -540,7 +540,7 @@ interactive isTyExp_wf {| intro [] |} : <:xrule<
  *)
 define unfold_isExp : isExp{'e} <--> <:xterm<
    (fix is_exp e ->
-      dest_exp{e;
+      dest_fsub_exp{e;
          x. "true";
          "false";
          ty1, ty2. "false";
@@ -791,7 +791,7 @@ define unfold_dest_ty_exp :
       ty1, ty2. 'ty_fun['ty1; 'ty2];
       ty1, ty2. 'ty_all['ty1; 'ty2]}
    <-->
-   dest_exp{'e;
+   dest_fsub_exp{'e;
       x. 'base['x];
       'ty_top;
       ty1, ty2. 'ty_fun['ty1; 'ty2];

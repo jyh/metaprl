@@ -4882,8 +4882,8 @@ T	t3402	o2135 b399 b2950 b3401 b6
 B	b3402	t3402
 T	t3403	o397 b3402
 B	b3403	t3403
-NPmn_core_terms!dest_exp	dest_exp	dest_exp Pmn_core_terms
-O	o2128	dest_exp
+NPmn_core_terms!dest_fsub_exp	dest_fsub_exp	dest_fsub_exp Pmn_core_terms
+O	o2128	dest_fsub_exp
 Vbase	base	base\\ \\ t24
 B	b2128	base x
 Vty_top	ty_top	ty_top\\ \\

@@ -108,19 +108,6 @@ interactive olang_bterm_list_cons_intro {| intro [] |} :
  *)
 
 (*
- * Basic well-formedness we could not prove before.
- *)
-interactive bdepth_wf {| intro [intro_typeinf << 'e >>] |} olang{'ops} :
-   [wf] sequent { <H> >- 'ops in list{Operator} } -->
-   [wf] sequent { <H> >- 'e in olang{'ops} } -->
-   sequent { <H> >- bdepth{'e} in nat }
-
-interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} olang{'ops} :
-   [wf] sequent { <H> >- 'ops in list{Operator} } -->
-   [wf] sequent { <H> >- 'e in olang{'ops} } -->
-   sequent { <H> >- bdepth{'e} in int }
-
-(*
  * Well-formedness.
  *)
 doc <:doc<

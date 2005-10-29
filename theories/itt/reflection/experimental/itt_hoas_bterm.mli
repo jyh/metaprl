@@ -36,18 +36,20 @@ doc <:doc<
 extends Itt_hoas_destterm
 extends Itt_hoas_lang
 
-open Tactic_type.Tactic
+open Basic_tactics
 
-define iform unfold_dom : dom{'BT} <--> dom{Operator; 'BT}
-define iform unfold_Iter: Iter{'X} <--> Iter{Operator; 'X}
-define iform unfold_BT: BT{'n} <--> BT{Operator; 'n}
+define iform unfold_dom  : dom{'BT} <--> dom{Operator; 'BT}
+define iform unfold_Iter : Iter{'X} <--> Iter{Operator; 'X}
+define iform unfold_BT   : BT{'n} <--> BT{Operator; 'n}
 
 declare BTerm
+declare dummy
 
 topval unfold_BTerm : conv
 topval fold_BTerm : conv
 
 topval fold_dummy : conv
+topval etaExpandC : term -> conv
 
 (*!
  * @docoff

@@ -72,40 +72,40 @@ interactive  bt_elim_squash  {| elim [] |} 'H :
                >- squash{'P[mk_bterm{'depth; 'op; 'subterms}]} } -->
    sequent { <H>; t: BT{'n+@1}; <J> >- squash{'P['t]} }
 
-interactive  bt_wf_and_bdepth_wf  {| intro[] |}:
+interactive  bt_wf_and_bdepth_wf  {| intro [] |}:
    [wf] sequent{ <H> >- 'n in nat } -->
    sequent{ <H> >- BT{'n} Type & all t: BT{'n}. bdepth{'t} in nat }
 
-interactive  bt_wf {| intro[] |}:
+interactive  bt_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'n in nat } -->
    sequent{ <H> >- BT{'n} Type }
 
-interactive  bterm_wf {| intro[] |}:
+interactive  bterm_wf {| intro [] |}:
    sequent{ <H> >- BTerm Type }
 
-interactive  bdepth_wf  {| intro[] |}:
+interactive  bdepth_wf  {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- bdepth{'t} in nat }
 
-interactive  bdepth_wf_int  {| intro[] |}:
+interactive  bdepth_wf_int  {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- bdepth{'t} in int }
 
-interactive compatible_shapes_wf {| intro[] |}:
+interactive compatible_shapes_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'bdepth in nat } -->
    [wf] sequent{ <H> >- 'shape in list{int} } -->
    [wf] sequent{ <H> >- 'btl in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'bdepth; 'shape; 'btl} Type }
 
-interactive dom_wf {| intro[] |}:
+interactive dom_wf {| intro [] |}:
    sequent{ <H> >- 'T subtype BTerm } -->
    sequent{ <H> >-  dom{'T} Type }
 
-interactive bt_subtype_bterm  {| intro[] |} :
+interactive bt_subtype_bterm  {| intro [] |} :
    [wf] sequent{ <H> >- 'n in nat} -->
    sequent{ <H> >- BT{'n} subtype BTerm }
 
-interactive bt_monotone  {| intro[] |} :
+interactive bt_monotone  {| intro [] |} :
    [wf] sequent{ <H> >- 'n in nat} -->
    sequent{ <H> >- BT{'n} subtype BT{'n+@1} }
 
@@ -114,12 +114,12 @@ interactive lang_is_bterm {| intro[intro_typeinf <<'t>>] |} <<Lang{'sop}>> :
    [wf] sequent { <H> >- 't in Lang{'sop} } -->
    sequent { <H> >- 't in BTerm }
 
-interactive var_wf {| intro[] |}:
+interactive var_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'l in nat } -->
    [wf] sequent{ <H> >- 'r in nat } -->
    sequent{ <H> >- var{'l;'r} in BTerm }
 
-interactive mk_bterm_bt_wf {| intro[] |}:
+interactive mk_bterm_bt_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'n in nat } -->
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
@@ -127,7 +127,7 @@ interactive mk_bterm_bt_wf {| intro[] |}:
    sequent{ <H> >- compatible_shapes{'depth; shape{'op}; 'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth; 'op; 'subterms} in BT{'n+@1} }
 
-interactive mk_bterm_wf {| intro[] |}:
+interactive mk_bterm_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
    [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
@@ -177,7 +177,7 @@ interactive_rw mk_dest_reduce {| reduce |}:
    't in BTerm  -->
    mk{dest{'t}} <--> 't
 
-interactive dest_bterm_wf {| intro[] |}:
+interactive dest_bterm_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'bt in BTerm } -->
    [wf] sequent{ <H>; l:nat; r:nat >- 'var_case['l;'r] in 'T } -->
    [wf] sequent{ <H>; bdepth: nat; op:Operator; subterms:list{BTerm};
@@ -185,7 +185,7 @@ interactive dest_bterm_wf {| intro[] |}:
                  >- 'op_case['bdepth; 'op; 'subterms] in 'T } -->
    sequent{ <H> >- dest_bterm{'bt; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms]} in 'T }
 
-interactive dest_wf {| intro[] |}:
+interactive dest_wf {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >-  dest{'t} in dom{BTerm} }
 
@@ -231,18 +231,18 @@ interactive bterm_elim2  {| elim [] |} 'H :
                compatible_shapes{'bdepth;shape{'op};'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
    sequent { <H>; t: BTerm; <J['t]> >- 'P['t] }
 
-interactive is_var_wf {| intro[] |}:
+interactive is_var_wf {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >-  is_var{'t} in bool }
 
-interactive subterms_depth {| intro[] |} 'shape :
+interactive subterms_depth {| intro [] |} 'shape :
    [wf] sequent{ <H> >- 'bdepth in nat } -->
    [wf] sequent{ <H> >- 'shape in list{nat} } -->
    [wf] sequent{ <H> >- 'btl in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'bdepth; 'shape; 'btl} } -->
    sequent{ <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} >= 'bdepth }
 
-interactive subterms_wf1 {| intro[] |}:
+interactive subterms_wf1 {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- not{"assert"{is_var{'t}}} } -->
    sequent{ <H> >- subterms{'t} in list{BTerm} }
@@ -273,6 +273,33 @@ interactive_rw reduce_bdepth_bind {| reduce |} :
    bdepth{subst{'e; dummy}}
    <-->
    bdepth{'e} -@ 1
+
+(************************************************************************
+ * Eta-expansion.
+ * When proving facts about specific terms and languages, we often need
+ * eta-expansion because the representation of specific terms with binders
+ * uses an explicit bind term.
+ *)
+let bind_opname = opname_of_term << bind{x. 'e} >>
+let mk_bind_term = mk_dep1_term bind_opname
+let dest_bind_term = dest_dep1_term bind_opname
+
+let subst_opname = opname_of_term << subst{'e1; 'e2} >>
+let mk_subst_term = mk_dep0_dep0_term subst_opname
+let dest_subst_term = dest_dep0_dep0_term subst_opname
+
+let var_x = Lm_symbol.add "x"
+let eta_expand e t =
+   if alpha_equal t e then
+      (* The result term *)
+      let x = maybe_new_var_set var_x (free_vars_set e) in
+      let bind = mk_bind_term x (mk_subst_term e (mk_var_term x)) in
+         foldC bind bind_eta
+   else
+      failC
+
+let etaExpandC e =
+   termC (eta_expand e)
 
 (*!
  * @docoff

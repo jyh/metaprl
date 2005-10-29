@@ -45,16 +45,10 @@ declare tok_Lang          : Terminal
 
 lex_token xterm : "Lang" --> tok_Lang
 
-lex_prec right [tok_Lang] = prec_not
+lex_prec nonassoc [tok_Lang] = prec_not
 
 production xterm_term{olang{'ops}} <--
    tok_Lang; xterm_term{'ops}
-
-(************************************************************************
- * Rewrites.
- *)
-topval etaReduceC : conv
-topval etaExpandC : term -> conv
 
 (*!
  * @docoff

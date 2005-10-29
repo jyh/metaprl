@@ -25,7 +25,7 @@
  * @end[license]
  *)
 extends Itt_theory
-extends Itt_hoas_lang2
+extends Itt_hoas_olang
 
 open Basic_tactics
 
@@ -70,6 +70,13 @@ dform ty_lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< fsub [d] { Fun x 
 
 dform ty_apply_df : parens :: "prec"[prec_apply] :: <:xterm< fsub [d] { e{ty} } >> =
    szone pushm[3] slot{'e} `"@[" slot{'d} `"]{" slot{'ty} `"}" popm ezone
+
+(************************************************************************
+ * Utilities.
+ *)
+interactive olang_bterm_intro {| intro [intro_typeinf << 'e >>] |} FSubCore :
+   [wf] sequent { <H> >- 'e in FSubCore } -->
+   sequent { <H> >- 'e in BTerm }
 
 (************************************************************************
  * Basic well-formedness.

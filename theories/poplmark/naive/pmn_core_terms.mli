@@ -25,7 +25,7 @@
  * @end[license]
  *)
 extends Itt_theory
-extends Itt_hoas_lang2
+extends Itt_hoas_olang
 
 open Basic_tactics
 

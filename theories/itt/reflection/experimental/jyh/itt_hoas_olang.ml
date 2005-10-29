@@ -83,7 +83,7 @@ interactive olang_elim {| elim [] |} 'H :
 doc docoff
 
 (*
- * Subtyping.   These rules are mainly for directing autoT.
+ * Subtyping.  These rules are mainly for directing autoT.
  *)
 interactive olang_bterm_intro {| intro [intro_typeinf << 'e >>] |} olang{'ops} :
    [wf] sequent { <H> >- 'ops in list{Operator} } -->
@@ -282,71 +282,6 @@ let resource elim +=
     [<< compatible_shapes{'depth; 'h :: 't; !v} >>, dest_compatible_shapesT;
      << compatible_shapes{'depth; nil; !v} >>, dest_compatible_shapesT;
      << compatible_shapes{'depth; shape{'op}; !v} >>, dest_compatible_shapes_shapeT]
-
-(************************************************************************
- * Eta-expansion.
- *)
-
-doc <:doc<
-   When proving facts about specific terms and languages, we often need
-   eta-expansion because the representation of specific terms with binders
-   uses an explicit bind term.
->>
-interactive_rw eta_reduce_term 'ops :
-   'ops in list{Operator} -->
-   'e in olang{'ops} -->
-   bdepth{'e} > 0 -->
-   bind{x. subst{'e; 'x}} <--> 'e
-
-doc docoff
-
-let bind_opname = opname_of_term << bind{x. 'e} >>
-let mk_bind_term = mk_dep1_term bind_opname
-let dest_bind_term = dest_dep1_term bind_opname
-
-let subst_opname = opname_of_term << subst{'e1; 'e2} >>
-let mk_subst_term = mk_dep0_dep0_term subst_opname
-let dest_subst_term = dest_dep0_dep0_term subst_opname
-
-let olang_opname = opname_of_term << olang{'ops} >>
-let dest_olang_term = dest_dep0_term olang_opname
-
-let eta_reduce env =
-   let t = env_term env in
-   let _, e = dest_bind_term t in
-   let e, _ = dest_subst_term e in
-   let p = env_arg env in
-   let ops =
-      try get_with_arg p with
-         RefineError _ ->
-            dest_olang_term (infer_type p e)
-   in
-      eta_reduce_term ops
-
-let etaReduceC =
-   funC eta_reduce
-
-let var_x = Lm_symbol.add "x"
-let eta_expand e env =
-   let t = env_term env in
-      if alpha_equal t e then
-         (* The result term *)
-         let x = maybe_new_var_set var_x (free_vars_set e) in
-         let bind = mk_bind_term x (mk_subst_term e (mk_var_term x)) in
-
-         (* The type of the term *)
-         let p = env_arg env in
-         let ops =
-            try get_with_arg p with
-               RefineError _ ->
-                  dest_olang_term (infer_type p e)
-         in
-            foldC bind (eta_reduce_term ops)
-      else
-         failC
-
-let etaExpandC e =
-   funC (eta_expand e)
 
 (*!
  * @docoff

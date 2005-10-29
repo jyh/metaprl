@@ -420,6 +420,15 @@ let etaExpandC e =
    funC (eta_expand e)
 
 (************************************************************************
+ * Some useful utilities.
+ *)
+interactive_rw reduce_bdepth_bind {| reduce |} :
+   bdepth{'e} > 0 -->
+   bdepth{subst{'e; dummy}}
+   <-->
+   bdepth{'e} -@ 1
+
+(************************************************************************
  * Restate the reduction on mk_bterm.
  *)
 interactive_rw reduce_dest_bterm_mk_bterm 'ops :

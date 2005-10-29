@@ -166,6 +166,21 @@ interactive fsub_core_elim {| elim [] |} 'H : <:xrule<
 (************************************************************************
  * Define a generic induction combinator.
  *)
+interactive bdepth_wf {| intro [intro_typeinf << 'e >>] |} FSubCore :
+   [wf] sequent { <H> >- 'e in FSubCore } -->
+   sequent { <H> >- bdepth{'e} in nat }
+
+interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} FSubCore :
+   [wf] sequent { <H> >- 'e in FSubCore } -->
+   sequent { <H> >- bdepth{'e} in int }
+
+interactive_rw bind_eta :
+   'e in FSubCore -->
+   bdepth{'e} > 0 -->
+   bind{x. subst{'e; 'x}}
+   <-->
+   'e
+
 interactive fsub_core_bterm {| intro [intro_typeinf << 'e >>] |} FSubCore :
    sequent { <H> >- 'e in FSubCore } -->
    sequent { <H> >- 'e in BTerm }
@@ -274,12 +289,92 @@ interactive_rw dest_fsub_exp_ty_all {| reduce |} :
    ty_all[ty1; bind{x. ty2[x]}]
 >>
 
+interactive_rw dest_fsub_exp_apply {| reduce |} :
+   'd in nat -->
+   bdepth{'e1} = 'd in nat -->
+   bdepth{'e2} = 'd in nat -->
+   'e1 in FSubCore -->
+   'e2 in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { e1 e2 };
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   apply[e1; e2]
+>>
+
+interactive_rw dest_fsub_exp_lambda {| reduce |} :
+   'd in nat -->
+   bdepth{'ty} = 'd in nat -->
+   bdepth{'e[dummy]} = 'd in nat -->
+   'ty in FSubCore -->
+   bind{x. 'e['x]} in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { fun x : ty -> e[x] };
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   lam[ty; bind{x. e[x]}]
+>>
+
+interactive_rw dest_fsub_exp_ty_apply {| reduce |} :
+   'd in nat -->
+   bdepth{'e} = 'd in nat -->
+   bdepth{'ty} = 'd in nat -->
+   'e in FSubCore -->
+   'ty in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { e{ty} };
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   ty_apply[e; ty]
+>>
+
+interactive_rw dest_fsub_exp_ty_lambda {| reduce |} :
+   'd in nat -->
+   bdepth{'ty} = 'd in nat -->
+   bdepth{'e[dummy]} = 'd in nat -->
+   'ty in FSubCore -->
+   bind{x. 'e['x]} in FSubCore -->
+<:xrewrite<
+   dest_exp{fsub[d] { Fun x <: ty -> e[x] };
+      x. base[x];
+      ty_top;
+      ty1, ty2. ty_fun[ty1; ty2];
+      ty1, ty2. ty_all[ty1; ty2];
+      ty, e. lam[ty; e];
+      e1, e2. apply[e1; e2];
+      ty, e. ty_lam[ty; e];
+      e, ty. ty_apply[e; ty]}
+   <-->
+   ty_lam[ty; bind{x. e[x]}]
+>>
+
 interactive dest_fsub_wf {| intro [] |} : <:xrule<
    <H> >- e IN FSubCore{} -->
    <H>; x: Var{} >- base[x] Type -->
    <H> >- ty_top Type -->
    <H>; ty1: FSubCore{}; ty2: FSubCore{}; bdepth{ty1} = bdepth{ty2} in nat{} >- ty_fun[ty1; ty2] Type -->
-   <H>; ty1: FSubCore{}; ty2: FSubCore{}; bdepth{ty1} = bdepth{ty1} +@ 1 in nat{} >- ty_all[ty1; ty2] Type -->
+   <H>; ty1: FSubCore{}; ty2: FSubCore{}; bdepth{ty2} = bdepth{ty1} +@ 1 in nat{} >- ty_all[ty1; ty2] Type -->
    <H>; ty: FSubCore{}; e: FSubCore{}; bdepth{e} = bdepth{ty} +@ 1 in nat{} >- lam[ty; e] Type -->
    <H>; e1: FSubCore{}; e2: FSubCore{}; bdepth{e1} = bdepth{e2} in nat{} >- apply[e1; e2] Type -->
    <H>; ty: FSubCore{}; e: FSubCore{}; bdepth{e} = bdepth{ty} +@ 1 in nat{} >- ty_lam[ty; e] Type -->
@@ -298,14 +393,6 @@ interactive dest_fsub_wf {| intro [] |} : <:xrule<
 (************************************************************************
  * Separate the language into types and expressions.
  *)
-interactive bdepth_wf {| intro [intro_typeinf << 'e >>] |} FSubCore :
-   [wf] sequent { <H> >- 'e in FSubCore } -->
-   sequent { <H> >- bdepth{'e} in nat }
-
-interactive bdepth_wf_int {| intro [intro_typeinf << 'e >>] |} FSubCore :
-   [wf] sequent { <H> >- 'e in FSubCore } -->
-   sequent { <H> >- bdepth{'e} in int }
-
 interactive_rw reduce_dest_bterm_mk_bterm {| reduce |} :
    'depth in nat -->
    'op in Operator -->
@@ -316,13 +403,6 @@ interactive_rw reduce_dest_bterm_mk_bterm {| reduce |} :
       depth, op, subs. 'op_case['depth; 'op; 'subs] }
    <-->
    'op_case['depth; 'op; 'subs]
-
-interactive_rw bind_eta :
-   'e in FSubCore -->
-   bdepth{'e} > 0 -->
-   bind{x. subst{'e; 'x}}
-   <-->
-   'e
 
 define unfold_isVar : isVar{'e} <--> <:xterm<
    dest_bterm e with

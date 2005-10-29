@@ -27,34 +27,8 @@
  * @end[license]
  *)
 extends Itt_hoas_bterm
-extends Itt_hoas_util
 
 open Basic_tactics
-
-(************************************************************************
- * A version of languages based on operator lists.
- *)
-declare olang{'ops}
-
-topval fold_olang : conv
-
-(************************************************************************
- * Grammar.
- *)
-declare tok_Lang          : Terminal
-
-lex_token xterm : "Lang" --> tok_Lang
-
-lex_prec right [tok_Lang] = prec_not
-
-production xterm_term{olang{'ops}} <--
-   tok_Lang; xterm_term{'ops}
-
-(************************************************************************
- * Rewrites.
- *)
-topval etaReduceC : conv
-topval etaExpandC : term -> conv
 
 (*!
  * @docoff

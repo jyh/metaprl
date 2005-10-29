@@ -30,6 +30,7 @@
 doc <:doc< @parents >>
 
 extends Itt_hoas_bterm
+extends Itt_hoas_util
 extends Itt_image
 extends Itt_subset
 
@@ -41,65 +42,6 @@ open Simple_print
 open Basic_tactics
 open Itt_list
 open Itt_struct
-
-(************************************************************************
- * Utilities.
- *)
-
-(*
- * Fold up Aleksey's dummy term.
- *)
-define unfold_dummy :
-   dummy
-   <-->
-   mk_term{it; nil}
-
-let fold_dummy = makeFoldC << dummy >> unfold_dummy
-
-(************************************************************************
- * Operators.
- *)
-
-doc <:doc<
-   A language is defined by a set of operators << SubOp{'ops} >>, where
-   << 'ops >> is a list of operators.  The following rules define case
-   analysis on the operator set.
->>
-
-(*
- * Case analysis on operators in a language.
- *)
-interactive operator_elim_cons {| elim [] |} 'H :
-   [wf] sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'h in Operator } -->
-   [wf] sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 't in list{Operator} } -->
-   [base] sequent { <H>; op: SubOp{'h :: 't}; <J['h]> >- 'C['h] } -->
-   [main] sequent { <H>; op: SubOp{'t}; <J['op]> >- 'C['op] } -->
-   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'C['op] }
-
-interactive operator_elim_nil {| elim [] |} 'H :
-   sequent { <H>; op: SubOp{nil}; <J['op]> >- 'C['op] }
-
-doc docoff
-
-let listmem_opname = opname_of_term << SubOp{'ops} >>
-let dest_listmem_term = dest_dep0_dep0_term listmem_opname
-
-let rec opset_elim i p =
-   let t = nth_hyp p i in
-   let ops, _ = dest_listmem_term t in
-      if is_cons_term ops then
-         operator_elim_cons i thenLT [idT; idT; thinT i; funT (opset_elim i)]
-      else if is_nil_term ops then
-         operator_elim_nil i
-      else
-         raise (RefineError ("elim_operator", StringTermError ("non-constant term", t)))
-
-let opset_elimT i =
-   funT (opset_elim i)
-
-let resource elim +=
-    [<< SubOp{'h :: 't} >>, opset_elimT;
-     << SubOp{nil} >>,      opset_elimT]
 
 (************************************************************************
  * Our version of a language is defined by a list of operators.

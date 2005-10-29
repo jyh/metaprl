@@ -348,6 +348,18 @@ interactive bterm_sqsimple {| intro [] |} :
 
 doc docoff
 
+(*
+ * Define a real induction principle.
+ *)
+interactive bterm_elim3 {| elim [] |} 'H :
+   sequent { <H>; t: BTerm; <J['t]>; x: Var >- 'P['x] } -->
+   sequent { <H>; t: BTerm; <J['t]>; bdepth: nat; op: Operator;
+               subterms: list{BTerm};
+               compatible_shapes{'bdepth; shape{'op}; 'subterms};
+               all_list{'subterms; t. 'P['t]}
+               >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
+   sequent { <H>; t: BTerm; <J['t]> >- 'P['t] }
+
 (*!
  * @docoff
  *

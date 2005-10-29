@@ -1,5 +1,5 @@
 (*
- * Reflected sequents.
+ * Native sequent representation.
  *
  * ----------------------------------------------------------------
  *
@@ -28,18 +28,7 @@ extends Itt_hoas_util
 
 open Basic_tactics
 
-(*
- * The sequent parts.
- *)
-declare hyp{'e; x. 'rest['x]}
-declare concl{'e}
-
-(*
- * Well-formedness predicate.
- *)
-declare is_sequent{'e}
-
-topval fold_is_sequent : conv
+topval fold_hyp_depths : conv
 
 (*!
  * @docoff

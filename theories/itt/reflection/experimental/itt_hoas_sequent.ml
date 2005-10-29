@@ -26,6 +26,7 @@ doc <:doc<
 
    @parents
 >>
+extends Itt_match
 extends Itt_hoas_util
 
 doc docoff
@@ -126,6 +127,24 @@ interactive dest_sequent_type {| intro [] |} : <:xrule<
    "wf" : <H>; e: BTerm{} >- concl[e] Type -->
    "wf" : <H> >- other Type -->
    <H> >- dest_sequent{e1; e, rest. hyp[e; rest]; e. concl[e]; other} Type
+>>
+
+doc <:doc<
+   Define a predicate for valid sequents.
+>>
+define unfold_is_sequent : is_sequent{'e} <--> <:xterm<
+   (fix is_sequent e ->
+      dest_sequent{e;
+         e, rest. is_sequent rest;
+         e. "true";
+         "false"}) e
+>>
+
+let fold_is_sequent = makeFoldC << is_sequent{'e} >> unfold_is_sequent
+
+interactive is_sequent_type {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "BTerm" -->
+   <H> >- is_sequent{e} Type
 >>
 
 (*!

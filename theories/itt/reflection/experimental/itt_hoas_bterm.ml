@@ -276,10 +276,12 @@ interactive_rw reduce_bdepth_bind {| reduce |} :
 
 (************************************************************************
  * Eta-expansion.
- * When proving facts about specific terms and languages, we often need
- * eta-expansion because the representation of specific terms with binders
- * uses an explicit bind term.
  *)
+doc <:doc<
+   When proving facts about specific terms and languages, we often need
+   eta-expansion because the representation of specific terms with binders
+   uses an explicit bind term.
+>>
 let bind_opname = opname_of_term << bind{x. 'e} >>
 let mk_bind_term = mk_dep1_term bind_opname
 let dest_bind_term = dest_dep1_term bind_opname
@@ -300,6 +302,51 @@ let eta_expand e t =
 
 let etaExpandC e =
    termC (eta_expand e)
+
+(************************************************************************
+ * Squiggle equality.
+ *)
+doc docoff
+
+interactive var_squiggle  :
+   [wf] sequent { <H> >- 'x in Var } -->
+   [wf] sequent { <H> >- 'y in Var } -->
+   [aux] sequent { <H> >- 'x = 'y in BTerm } -->
+   sequent { <H> >- 'x ~ 'y }
+
+interactive var_neq_bterm 'H :
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'l in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'r in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'depth in nat } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'op in Operator } -->
+   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'subterms in list{BTerm} } -->
+   sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'C['u] }
+
+interactive bterm_neq_var 'H :
+   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'l in nat } -->
+   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'r in nat } -->
+   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'depth in nat } -->
+   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'op in Operator } -->
+   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'subterms in list{BTerm} } -->
+   sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'C['u] }
+
+interactive subs_equal 'depth 'op :
+   [wf] sequent { <H> >- 'depth in nat } -->
+   [wf] sequent { <H> >- 'op in Operator } -->
+   [wf] sequent { <H> >- 's1 in list{BTerm} } -->
+   [wf] sequent { <H> >- 's2 in list{BTerm} } -->
+   [aux] sequent { <H> >- compatible_shapes{'depth; shape{'op}; 's1} } -->
+   [aux] sequent { <H> >- compatible_shapes{'depth; shape{'op}; 's2} } -->
+   sequent { <H> >- mk_bterm{'depth; 'op; 's1} = mk_bterm{'depth; 'op; 's2} in BTerm } -->
+   sequent { <H> >- 's1 = 's2 in list{BTerm} }
+
+doc <:doc<
+   << BTerm >> has a trivial squiggle equality.
+>>
+interactive bterm_sqsimple {| intro [] |} :
+   sequent { <H> >- sqsimple{BTerm} }
+
+doc docoff
 
 (*!
  * @docoff

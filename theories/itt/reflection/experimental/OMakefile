@@ -22,6 +22,7 @@ MPFILES[] =
    itt_hoas_lang
    itt_hoas_bterm
    itt_hoas_util
+   itt_hoas_sequent
    itt_hoas_olang
    $(EXPERIMENTAL_FILES)
 

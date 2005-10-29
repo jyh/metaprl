@@ -66,7 +66,7 @@ interactive lambda_wf {| intro [] |} : <:xrule<
    <H> >- ($`[depth] "Lambda"{x. e[x]}) IN "ULambda"
 >>
 
-interactive ulambda_elim 'H : <:xrule<
+interactive ulambda_elim {| elim [] |} 'H : <:xrule<
    <H>; e: "ULambda"; <J[e]>; v: "Var" >- P[v] -->
    <H>; e: "ULambda"; <J[e]>; e1: "ULambda"; e2: "ULambda"; P[e1]; P[e2];
       "bdepth"{e1} = "bdepth"{e2} in "int" >- P[$`["bdepth"{e1}] "Apply"{e1; e2}] -->

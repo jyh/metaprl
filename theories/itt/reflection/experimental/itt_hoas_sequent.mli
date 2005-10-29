@@ -1,7 +1,5 @@
 (*
- * Some utilities for simplifying the reflection theory.
- * These should eventually be migrated into the reflection
- * theory proper as necessary.
+ * Reflected sequents.
  *
  * ----------------------------------------------------------------
  *
@@ -26,7 +24,13 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_bterm
+extends Itt_hoas_util
+
+(*
+ * The sequent parts.
+ *)
+declare hyp{'e; x. 'rest['x]}
+declare concl{'e}
 
 (*!
  * @docoff

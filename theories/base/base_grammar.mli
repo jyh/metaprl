@@ -87,6 +87,7 @@ declare tok_match              : Terminal
 declare tok_with               : Terminal
 declare tok_end                : Terminal
 declare tok_type               : Terminal
+declare tok_sequent            : Terminal
 
 (* Symbols *)
 declare tok_dot                : Terminal
@@ -139,6 +140,7 @@ lex_token xterm : "with"       --> tok_with
 lex_token xterm : "in"         --> tok_in
 lex_token xterm : "end"        --> tok_end
 lex_token xterm : "type"       --> tok_type
+lex_token xterm : "sequent"    --> tok_sequent
 
 (* Symbols *)
 lex_token xterm : "[.]"        --> tok_dot
@@ -182,6 +184,7 @@ lex_token xterm : "<-->"       --> tok_longleftrightarrow
  *    lex_prec ... prec_new < prec_after
  *)
 declare prec_mimplies  : Precedence
+declare prec_miff      : Precedence
 declare prec_turnstile : Precedence
 declare prec_let       : Precedence
 declare prec_comma     : Precedence
@@ -204,7 +207,8 @@ declare prec_rel       : Precedence
 declare prec_cons      : Precedence
 
 lex_prec right    [prec_mimplies] > prec_min
-lex_prec right    [prec_turnstile] > prec_mimplies
+lex_prec right    [prec_miff] > prec_mimplies
+lex_prec right    [prec_turnstile] > prec_miff
 lex_prec right    [prec_let] > prec_turnstile
 lex_prec right    [prec_comma] > prec_let
 lex_prec right    [prec_colon] > prec_comma
@@ -225,7 +229,8 @@ lex_prec left     [prec_band] > prec_mul
 lex_prec left     [prec_apply] > prec_band
 lex_prec right    [prec_not] > prec_apply
 
-lex_prec right    [tok_longrightarrow; tok_longleftrightarrow] = prec_mimplies
+lex_prec right    [tok_longrightarrow] = prec_mimplies
+lex_prec right    [tok_longleftrightarrow] = prec_miff
 lex_prec right    [tok_turnstile] = prec_turnstile
 lex_prec right    [tok_plus; tok_minus] = prec_union
 lex_prec right    [tok_star] = prec_prod
@@ -542,28 +547,23 @@ production xterm_simple_term{xterm{xlist_sequent{| xopname[x:s] |}; xlist_sequen
    tok_id[x:s]; xterm_bterms_proper{'t}
 
 (************************************************************************
- * Meta-terms.
+ * Sequents.
  *)
 declare typeclass parsed_hyps_exp
 
-declare sequent [parsed_hyps] { Term : Term >- Ignore } : parsed_hyps_exp
+declare iform parsed_sequent{'e : Judgment} : Term
 
-declare xterm_meta_term{'p : MTerm} : Nonterminal
 declare xterm_hyps{'e : parsed_hyps_exp} : Nonterminal
-
-production xterm_meta_term{meta_theorem{sequent { <H> >- 'e }}} <--
-   xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}
-
-production xterm_meta_term{meta_implies{'e1; 'e2}} <--
-   xterm_meta_term{'e1}; tok_longrightarrow; xterm_meta_term{'e2}
-
-(*
- * Hypothesis.
- *)
 declare xterm_nonempty_hyps{'e : parsed_hyps_exp} : Nonterminal
 declare xterm_hyp[x:s]{'e : 'a} : Nonterminal
 
-production xterm_hyps{parsed_hyps{||}} <-- (* empty *)
+declare sequent [parsed_hyps] { Term : Term >- Ignore } : parsed_hyps_exp
+
+production xterm_simple_term{parsed_sequent{sequent { <H> >- 'e }}} <--
+   tok_sequent; tok_left_brace; xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}; tok_right_brace
+
+production xterm_hyps{parsed_hyps{||}} <--
+   (* empty *)
 
 production xterm_hyps{'e} <--
    xterm_nonempty_hyps{'e}
@@ -583,19 +583,29 @@ production xterm_hyp["_"]{'e} <--
 production xterm_hyp[""]{'c} <--
    xterm_context{'c}
 
-(*
- * Meta-rewrite allows any term, not just sequents.
+(************************************************************************
+ * Meta-terms.
  *)
-declare xterm_meta_rewrite{'e : MTerm} : Nonterminal
+declare xterm_meta_term{'t : MTerm} : Nonterminal
 
-production xterm_meta_rewrite{meta_theorem{'e}} <--
-   xterm_term{'e}
+production xterm_meta_term{meta_theorem{'t}} <--
+   xterm_term{'t}
 
-production xterm_meta_rewrite{meta_iff{'e1; 'e2}} <--
-   xterm_meta_rewrite{'e1}; tok_longleftrightarrow; xterm_meta_rewrite{'e2}
+production xterm_meta_term{meta_labeled[label:s]{'e}} <--
+   tok_string[label:s]; tok_colon; xterm_meta_term{'e}
 
-(*
- * Add a toplevel production.
+production xterm_meta_term{meta_implies{'e1; 'e2}} <--
+   xterm_meta_term{'e1}; tok_longrightarrow; xterm_meta_term{'e2}
+
+production xterm_meta_term{meta_iff{'e1; 'e2}} <--
+   xterm_meta_term{'e1}; tok_longleftrightarrow; xterm_meta_term{'e2}
+
+(* Allow a relaxed form of sequents in meta-terms *)
+production xterm_meta_term{meta_theorem{sequent { <H> >- 'e }}} <--
+   xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}
+
+(************************************************************************
+ * Toplevel productions.
  *)
 declare xterm{'e : Term} : Nonterminal
 declare xmterm{'e : MTerm} : Nonterminal
@@ -617,7 +627,7 @@ production xrule{'e} <--
    xterm_meta_term{'e}; tok_eof
 
 production xrewrite{'e} <--
-   xterm_meta_rewrite{'e}; tok_eof
+   xterm_meta_term{'e}; tok_eof
 
 (************************************************************************
  * Iforms.
@@ -662,6 +672,14 @@ iform var_id :
    parsed_sovar[x:s]{'contexts; 'args}
    <-->
    xsovar[x:v]{'contexts; 'args}
+
+(*
+ * Sequents.
+ *)
+iform parsed_sequent :
+   parsed_sequent{'e}
+   <-->
+   'e
 
 (*!
  * @docoff

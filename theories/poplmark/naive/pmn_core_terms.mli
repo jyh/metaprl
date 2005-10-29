@@ -63,8 +63,10 @@ topval fold_fsub_core : conv
  * Predicates.
  *)
 declare isTyExp{'e}
+declare isExp{'e}
 
 topval fold_isTyExp : conv
+topval fold_isExp : conv
 
 (************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing

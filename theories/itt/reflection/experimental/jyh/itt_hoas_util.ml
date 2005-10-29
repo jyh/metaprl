@@ -83,6 +83,20 @@ let resource elim +=
     [<< SubOp{'h :: 't} >>, opset_elimT;
      << SubOp{nil} >>,      opset_elimT]
 
+(************************************************************************
+ * Other junk.
+ *)
+
+(*
+ * OmegaT is failing on some artihmetic, so make it simpler.
+ *)
+interactive elim_bdepth {| elim [] |} 'H :
+   [wf] sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]> >- 't1 in BTerm } -->
+   [wf] sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]> >- 't2 in BTerm } -->
+   sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]>;
+      bdepth{'t1} > 0; bdepth{'t1} -@ 1 = bdepth{'t2} in nat >- 'C['u] } -->
+   sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]> >- 'C['u] }
+
 (*!
  * @docoff
  *

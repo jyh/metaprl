@@ -391,12 +391,6 @@ struct
                upper' info tl v
             else
                let k=BField.neg (BField.inv v_coef) in
-					let src=AF.getSource f in
-					let hyp=
-						(match src with
-							Source.Shypothesis i -> i
-						 | _ -> raise (Invalid_argument "upper' not an Shypothesis source")
-						) in
                let rest=AF.remove f v in
 					let u0=AF.scale k rest in
 					let u1=AF.extract2rightSource v u0 in
@@ -493,7 +487,6 @@ let suppa' info (x:AF.vars) (f:AF.af) =
    let b = AF.coef f x in
    let c = AF.remove f x in
 	let af_x=AF.mk_var x in
-   let saf_x=SAF.affine af_x in
       if compare b fieldUnit < 0 then
          let result0=AF.scale (inv (sub fieldUnit b)) c in
 			AF.extract2rightSource x result0
@@ -553,7 +546,6 @@ let inffa' info (x:AF.vars) (f:AF.af) =
    let b = AF.coef f x in
    let c = AF.remove f x in
 	let af_x=AF.mk_var x in
-   let saf_x=SAF.affine af_x in
       if compare b fieldUnit < 0 then
          let result0=AF.scale (inv (sub fieldUnit b)) c in
 			AF.extract2leftSource x result0
@@ -647,7 +639,6 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 											if !debug_supinf_trace then
 												(eprintf "supa case 1001@.");
 											let r0 = SACS.upper info c v in
-											let saf_v=SAF.affine af_v in
 											let r1 = sup info c r0 (CS.add h v) in
 											let r1'=SAF.transitiveLeftSource r1 r0 v in
 											supp info v r1'
@@ -682,7 +673,6 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 							let scaled_av=AF.scale r af_v in
 							let scaled_v=SAF.affine scaled_av in
 							let f'=SAF.add scaled_v b' in
-							let saf_f=SAF.affine f in
 							(*let f''=SAF.addVarSource r v f' in*)
 								if SAF.occurs v b' then
                            begin
@@ -792,7 +782,6 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                      let b' = inf info c (SAF.affine b) (CS.add h v) in
                      let scaled_v=SAF.affine (AF.scale r af_v) in
                      let f'=SAF.add scaled_v b' in
-                     let saf_f=SAF.affine f in
 							(*let f''=SAF.addVarSource r v f' in*)
                         if SAF.occurs v b' then
                            begin

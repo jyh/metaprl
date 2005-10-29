@@ -10,9 +10,6 @@ OCAMLINCLUDES[] +=
 
 # Library files
 MPFILES[] =
-   itt_hoas_util
-   itt_hoas_olang
-   itt_hoas_lang2
    itt_hoas_ulambda
 
 Theory($(MPFILES))

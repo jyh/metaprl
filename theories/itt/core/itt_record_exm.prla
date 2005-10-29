@@ -2654,7 +2654,7 @@ P	p792	Number 330
 P	p793	Number 343
 O	o793	location p792 p793
 O	o794	str_open p792 p793
-P	p794	String Itt_rfun
+P	p794	String Itt_dfun
 O	o795	string p794
 T	t798	o795
 B	b798	t798
@@ -4396,8 +4396,8 @@ B	b3135	T2
 T	t3135	o646 b3135
 S	s3135	tbrarg\\ h1063\\ t3135
 B	b3136	s3135
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o3684	fun
 NItt_bool!bool	bool	bool Itt_bool
 O	o3136	bool
@@ -4862,7 +4862,7 @@ B	b3687	t3687
 NItt_tsquash	Itt_tsquash	Itt_tsquash NIL
 NItt_tsquash!tsquash	tsquash	tsquash Itt_tsquash
 O	o3687	tsquash
-NItt_rfun!apply	apply3688	apply Itt_rfun
+NItt_dfun!apply	apply3688	apply Itt_dfun
 O	o3689	apply3688
 P	p3689	Var mul
 O	o3690	var p3689
@@ -4978,7 +4978,7 @@ T	t3857	o3857
 B	b3857	t3857
 P	p3860	Token +
 O	o3861	rcrd p3860
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3862	lambda
 T	t3862	o1091 b948 b3692
 B	b3862	t3862 y
@@ -5118,7 +5118,7 @@ O	o26	a_module
 T	t152	o26
 B	b152	t152
 P	p154	String unfold_a_module
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o1803	fix
 P	p157	Token foo
 O	o157	rcrd p157

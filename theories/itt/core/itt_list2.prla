@@ -863,7 +863,7 @@ T	t963	o963
 B	b963	t963
 T	t964	o671 b963 b677
 B	b964	t964
-P	p969	String Itt_rfun
+P	p969	String Itt_dfun
 O	o970	string p969
 T	t970	o970
 B	b970	t970
@@ -1531,10 +1531,10 @@ T	t1507	o1029 b1501 b1502 b15 b1507 b1034
 B	b1508	t1507
 P	p1508	String unfold_ball2
 O	o1508	term_def p1508
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o1509	apply
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1510	lambda
 P	p1510	Var z
 O	o1511	var p1510
@@ -8253,7 +8253,7 @@ T	t4650	o b4650 b15
 B	b4651	t4650
 T	t4651	o b4647 b4651
 B	b4652	t4651
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o4652	fun
 Bdfunhack	b4365dep	t4365 ""
 T	t4652	o4652 b4519 b4365dep

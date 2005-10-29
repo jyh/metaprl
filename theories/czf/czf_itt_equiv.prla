@@ -15,7 +15,7 @@ NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
-P	p65	String Itt_rfun
+P	p65	String Itt_dfun
 P	p119	String Dtactic
 P	p121	String Auto_tactic
 P	p129	String Var

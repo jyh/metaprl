@@ -31,7 +31,7 @@
  *
  *)
 extends Itt_equal
-extends Itt_rfun
+extends Itt_dfun
 
 open Lm_symbol
 

@@ -986,7 +986,7 @@ P	p	Number 1000
 P	p1	Number 1013
 O	o1	location p p1
 O	o8	str_open p p1
-P	p8	String Itt_rfun
+P	p8	String Itt_dfun
 O	o10	string p8
 T	t10	o10
 B	b10	t10
@@ -4672,12 +4672,12 @@ T	t1915	o4 b1913 b1914 b6 b17 b7
 B	b1915	t1915
 P	p1915	String unfold_isTyExp
 O	o1915	term_def p1915
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1915	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1915	apply Itt_dfun
 O	o1916	apply1915
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o1917	fix
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1918	lambda
 NItt_hoas_destterm	Itt_hoas_destterm	Itt_hoas_destterm NIL
 NItt_hoas_destterm!dest_bterm	dest_bterm	dest_bterm Itt_hoas_destterm

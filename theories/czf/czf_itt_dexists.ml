@@ -56,7 +56,7 @@ open Lm_printf
 open Dtactic
 open Top_conversionals
 
-open Itt_rfun
+open Itt_dfun
 
 let _ =
    show_loading "Loading Czf_itt_dexists%t"

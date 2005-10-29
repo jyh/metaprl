@@ -1851,8 +1851,8 @@ NItt_record	Itt_record	Itt_record NIL
 NItt_record!record	record	record Itt_record
 P	p1188	Token *
 O	o1188	record p1188
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1189	fun
 NItt_record!field	field	field Itt_record
 P	p2	Token car
@@ -1895,7 +1895,7 @@ T	t867	o11 b1204
 B	b867	t867
 NItt_equal!equal	equal	equal Itt_equal
 O	o1209	equal
-NItt_rfun!apply	apply1209	apply Itt_rfun
+NItt_dfun!apply	apply1209	apply Itt_dfun
 O	o1210	apply1209
 O	o1211	field p1188
 T	t1211	o1211 b1204
@@ -6733,7 +6733,7 @@ T	t2488	o631 b2466
 B	b2489	t2488
 T	t2489	o1293 b2488 b10 b2489
 B	b2490	t2489
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o2490	lambda
 B	b2491	t2357 z
 T	t2491	o2490 b2491

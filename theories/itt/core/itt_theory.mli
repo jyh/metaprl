@@ -45,7 +45,6 @@ extends Itt_set
 extends Itt_union
 extends Itt_dprod
 extends Itt_prod
-extends Itt_rfun
 extends Itt_dfun
 extends Itt_esquash
 extends Itt_logic

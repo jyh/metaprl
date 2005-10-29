@@ -12,7 +12,7 @@ O	o4	nil3
 T	t4	o4
 B	b4	t4
 P	p53	String Itt_logic
-P	p63	String Itt_rfun
+P	p63	String Itt_dfun
 P	p97	String Dtactic
 P	p105	String Top_conversionals
 NSummary!resource	resource	resource Summary
@@ -173,14 +173,14 @@ B	b571	t571
 NCzf_itt_set	Czf_itt_set	Czf_itt_set NIL
 NCzf_itt_set!set_ind	set_ind	set_ind Czf_itt_set
 O	o572	set_ind
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o573	fun
 P	p573	Var a
 O	o574	var p573
 T	t574	o574
 B	b574	t574
-NItt_rfun!apply	apply574	apply Itt_rfun
+NItt_dfun!apply	apply574	apply Itt_dfun
 O	o575	apply574
 P	p575	Var f
 O	o576	var p575

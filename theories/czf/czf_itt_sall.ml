@@ -48,7 +48,7 @@ open Tactic_type.Conversionals
 
 open Dtactic
 
-open Itt_rfun
+open Itt_dfun
 
 let _ =
    show_loading "Loading Czf_itt_sall%t"

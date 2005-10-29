@@ -5702,8 +5702,8 @@ H	h2493	x t2460
 T	t2493	o2450 b2029 b1547
 B	b2494	t2493
 H	h2501	T t1893
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o2501	fun
 P	p2501	Var T
 O	o2502	var p2501
@@ -5712,7 +5712,7 @@ B	b2502	t2502
 Bdfunhack	b2479dep	t2460 ""
 T	t2503	o2501 b2502 b2479dep
 H	h2503	f t2503
-NItt_rfun!apply	apply2503	apply Itt_rfun
+NItt_dfun!apply	apply2503	apply Itt_dfun
 O	o2503	apply2503
 P	p2503	Var f
 O	o2504	var p2503
@@ -7511,7 +7511,7 @@ B	b4247	t4247 x
 B	b4250	t2029 x
 T	t4250	o1644 b4201 b4250
 B	b4251	t4250
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o4254	lambda
 P	p4262	Var a1
 O	o4262	var p4262

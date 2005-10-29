@@ -44,7 +44,7 @@ extends Itt_prod
 doc docoff
 
 open Basic_tactics
-open Itt_rfun
+open Itt_dfun
 
 (************************************************************************
  * TERMS                                                                *

@@ -1363,8 +1363,8 @@ NSummary!msequent	msequent	msequent Summary
 O	o2019	msequent
 P	p2022	String assertion
 O	o2022	tactic_arg p2022
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o2023	fun
 NItt_void	Itt_void	Itt_void NIL
 NItt_void!void	void	void Itt_void
@@ -1394,7 +1394,7 @@ B	b2035	t2035
 P	p2052	String "useWitnessT <<lambda{x.it}>> thenT dT 4"
 O	o2052	ext_rule p2052
 O	o2053	tactic_arg p1449
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o2055	lambda
 B	b2056	t1569 x
 T	t2056	o2055 b2056
@@ -4637,7 +4637,7 @@ T	t3243	o b3243 b8
 B	b3244	t3243
 T	t2606	o b2449 b3244
 B	b2606	t2606
-NItt_rfun!apply	apply2437	apply Itt_rfun
+NItt_dfun!apply	apply2437	apply Itt_dfun
 O	o2437	apply2437
 T	t3245	o2437 b3242 b1977
 B	b3246	t3245

@@ -38,8 +38,8 @@ derive Fol_implies
 open Basic_tactics
 
 prim_rw unfold_implies : Fol_implies!implies{'A; 'B} <--> ('A -> 'B)
-prim_rw unfold_lambda : Fol_implies!lambda{x. 'b['x]} <--> Itt_rfun!"lambda"{x. 'b['x]}
-prim_rw unfold_apply : Fol_implies!apply{'f; 'a} <--> Itt_rfun!apply{'f; 'a}
+prim_rw unfold_lambda : Fol_implies!lambda{x. 'b['x]} <--> Itt_dfun!"lambda"{x. 'b['x]}
+prim_rw unfold_apply : Fol_implies!apply{'f; 'a} <--> Itt_dfun!apply{'f; 'a}
 
 let fold_implies = makeFoldC << Fol_implies!"implies"{'A; 'B} >> unfold_implies
 let fold_lambda = makeFoldC << Fol_implies!lambda{x. 'b['x]} >> unfold_lambda

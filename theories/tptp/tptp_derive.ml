@@ -46,7 +46,7 @@ open Lm_symbol
 open Tactic_type
 open Tactic_type.Tacticals
 
-open Itt_rfun
+open Itt_dfun
 open Itt_logic
 open Itt_equal
 

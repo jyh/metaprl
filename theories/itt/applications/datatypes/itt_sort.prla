@@ -871,8 +871,8 @@ NItt_sort!sort	sort	sort Itt_sort
 O	o575	sort
 NSummary!rewrite	rewrite	rewrite Summary
 P	p579	String unfold_compare_lt
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o580	apply
 P	p586	String unfold_partial_order
 NItt_logic	Itt_logic	Itt_logic NIL
@@ -1135,7 +1135,7 @@ O	o1439	meta_theorem
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o1441	equal
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1442	fun
 NItt_bool!bool	bool	bool Itt_bool
 O	o1443	bool

@@ -115,7 +115,7 @@ T	t180	o179
 B	b180	t180
 T	t182	o b180 b4
 B	b182	t182
-P	p7	String Itt_rfun
+P	p7	String Itt_dfun
 P	p19	String Itt_equal
 P	p39	String Typeinf
 NSummary!resource	resource	resource Summary
@@ -317,8 +317,8 @@ P	p486	String applyIntro
 O	o486	rule p486
 NSummary!term_param	term_param	term_param Summary
 O	o488	term_param
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o489	fun
 Nvar	var	var NIL
 P	p491	Var x
@@ -356,7 +356,7 @@ O	obrarg	brwsqarg
 T	tbrarg	obrarg
 P	p527	String main
 O	o527	meta_labeled p527
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o531	apply
 NSummary!interactive	interactive	interactive Summary
 O	o539	interactive

@@ -43,7 +43,7 @@ extends Itt_fun2
 doc docoff
 
 open Basic_tactics
-open Itt_rfun
+open Itt_dfun
 open Itt_list
 
 (************************************************************************

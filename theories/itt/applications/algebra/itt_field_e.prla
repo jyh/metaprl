@@ -2222,8 +2222,8 @@ NItt_record	Itt_record	Itt_record NIL
 NItt_record!record	record	record Itt_record
 P	p871	Token eq
 O	o871	record p871
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o872	fun
 NItt_record!field	field	field Itt_record
 P	p872	Token car
@@ -3321,7 +3321,7 @@ H	h1285	x1 t1272
 H	h1286	t1280
 NItt_equal!equal	equal	equal Itt_equal
 O	o1286	equal
-NItt_rfun!apply	apply1286	apply Itt_rfun
+NItt_dfun!apply	apply1286	apply Itt_dfun
 O	o1287	apply1286
 P	p1287	Var x3
 O	o1288	var p1287

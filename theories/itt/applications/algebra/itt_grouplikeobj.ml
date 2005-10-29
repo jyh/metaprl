@@ -51,7 +51,7 @@ open Lm_printf
 
 open Basic_tactics
 
-open Itt_rfun
+open Itt_dfun
 open Itt_record
 open Itt_subtype
 open Itt_squash

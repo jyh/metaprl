@@ -2338,8 +2338,8 @@ O	o917	implies
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o918	equal
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply918	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply918	apply Itt_dfun
 O	o919	apply918
 P	p919	Token *
 O	o920	field p919
@@ -3301,7 +3301,7 @@ B	b1690	t1690
 T	t1691	o916 b1690
 B	b1691	t1691 self
 O	o1691	record p1302
-NItt_rfun!fun	fun1691	fun Itt_rfun
+NItt_dfun!fun	fun1691	fun Itt_dfun
 O	o1692	fun1691
 B	b1692	t1691
 T	t1692	o1692 b1692 b1692
@@ -7878,7 +7878,7 @@ O	o3351	number p1001
 T	t3351	o3351
 B	b3351	t3351
 O	o3352	rcrd p1302
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3353	lambda
 NItt_int_base!minus	minus	minus Itt_int_base
 O	o3354	minus

@@ -6033,8 +6033,8 @@ VF	F	F\\ \\
 B	b4057	F
 T	t4057	o3533 b4057
 B	b4058	t4057
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply4058	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply4058	apply Itt_dfun
 O	o4058	apply4058
 T	t4058	o3523 b4057
 B	b4059	t4058
@@ -6846,7 +6846,7 @@ B	b4624	t4624
 NOcaml!patt_string	patt_string	patt_string Ocaml
 P	p4624	String lambda
 NOcaml!patt_apply_end	patt_apply_end	patt_apply_end Ocaml
-P	p4626	String Itt_rfun
+P	p4626	String Itt_dfun
 O	o4628	patt_uid p3349
 T	t4628	o4628
 B	b4628	t4628

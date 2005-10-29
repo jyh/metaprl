@@ -199,8 +199,8 @@ P	p562	Var x
 O	o563	var p562
 T	t563	o563
 B	b563	t563
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply563	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply563	apply Itt_dfun
 O	o564	apply563
 P	p564	Var f1
 O	o565	var p564
@@ -365,7 +365,7 @@ P	p749	MLevel 1
 O	o749	univ p749
 T	t749	o749
 H	h749	T t749
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o750	fun
 P	p750	Var T
 O	o751	var p750
@@ -3559,7 +3559,7 @@ B	b3437	t3436 y
 T	t3437	o558 b3435 b3437
 B	b3438	t3437
 T	t3438	o715 b3438
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3440	lambda
 T	t3440	o3440 b758
 B	b3441	t3440

@@ -10,7 +10,7 @@ open Simple_print
 open Basic_tactics
 open Itt_equal
 open Itt_struct
-open Itt_rfun
+open Itt_dfun
 open Itt_record
 open Itt_list
 open Itt_ring2

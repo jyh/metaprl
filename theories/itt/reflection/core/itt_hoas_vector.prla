@@ -2141,7 +2141,7 @@ B	b653	t653
 T	t656	o650 b653
 B	b656	t656
 P	p662	Number 1472
-P	p847	String Itt_rfun
+P	p847	String Itt_dfun
 O	o848	string p847
 T	t848	o848
 B	b848	t848
@@ -2270,8 +2270,8 @@ B	b879	t879
 NItt_hoas_base	Itt_hoas_base	Itt_hoas_base NIL
 NItt_hoas_base!bind	bind879	bind Itt_hoas_base
 O	o879	bind879
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o880	apply
 NComment!math_ldots	math_ldots	math_ldots Comment
 O	o881	math_ldots
@@ -2466,7 +2466,7 @@ O	o1116	term_def p1116
 NItt_nat	Itt_nat	Itt_nat NIL
 NItt_nat!ind	ind	ind Itt_nat
 O	o1117	ind
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1118	lambda
 P	p1118	Var f
 O	o1119	var p1118

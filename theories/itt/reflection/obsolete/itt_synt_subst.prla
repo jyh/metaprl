@@ -2426,12 +2426,12 @@ P	p649	String unfold_new_var
 O	o649	term_def p649
 P	p899	String unfold_add_var
 O	o899	term_def p899
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o900	apply
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o901	fix
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o902	lambda
 NItt_synt_bterm	Itt_synt_bterm	Itt_synt_bterm NIL
 Nvar	var	var NIL

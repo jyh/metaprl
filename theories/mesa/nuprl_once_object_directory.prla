@@ -1828,8 +1828,8 @@ T	t671	o667 b670 b660 b659
 B	b671	t671
 NNuprl_message__automata!ma-single-effect0	ma-single-effect0	ma-single-effect0 Nuprl_message__automata
 O	o671	ma-single-effect0
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o672	lambda
 NItt_bool!btrue	btrue	btrue Itt_bool
 O	o673	btrue

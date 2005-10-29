@@ -10,7 +10,7 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1998-2005 MetaPRL Group, Cornell University and Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,16 +26,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified By: Alexei Kopylov <kopylov@cs.caltech.edu>
+ *              Aleksey Nogin <nogin@cs.caltech.edu>
  *
  *)
 extends Itt_equal
-extends Itt_rfun
+extends Itt_set
+extends Itt_void
 
 open Basic_tactics
 
-rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
+declare "fun"{'A; x. 'B['x]}
+
+declare lambda{x. 'b['x]}
+declare apply{'f; 'a}
+
+declare ycomb
+declare fix{f. 'b['f]}
+
+define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
+
+topval fold_fix : conv
+topval fold_ycomb : conv
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+rewrite reduce_beta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+rewrite reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 
 (************************************************************************
  * RULES                                                                *
@@ -186,9 +210,50 @@ rule function_equalityElimination 'H 'x 'y 'z 'a :
    sequent { <H>; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l]; <J['x]> >- 'T['x] }
  *)
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val dfun_term : term
+val is_dfun_term : term -> bool
+val dest_dfun : term -> var * term * term
+val mk_dfun_term : var -> term -> term -> term
+
+(*
+ * Dfun terms, where the image type does not depend on the variable
+ *)
+val is_fun_term : term -> bool
+val dest_fun : term -> term * term
+val mk_fun_term : term -> term -> term
+
+val lambda_term : term
+val is_lambda_term : term -> bool
+val dest_lambda : term -> var * term
+val mk_lambda_term : var -> term -> term
+
+val fix_term : term
+val is_fix_term : term -> bool
+val dest_fix : term -> var * term
+val mk_fix_term : var -> term -> term
+
+val apply_term : term
+val is_apply_term : term -> bool
+val dest_apply : term -> term * term
+val mk_apply_term : term -> term -> term
+
 topval fnExtensionalityT : term -> term -> tactic
 topval fnExtenT : term -> tactic
 topval fnExtenVoidT : tactic
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_fun
+prec prec_apply
+prec prec_lambda
+
+declare declaration{'decl : Dform ;'term : Dform } : Dform
 
 (************************************************************************
  * Grammar.

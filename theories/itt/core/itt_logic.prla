@@ -83,7 +83,7 @@ P	p296	String typeinf_subst_info
 O	o296	type_lid p296
 T	t296	o296
 B	b296	t296
-P	p317	String Itt_rfun
+P	p317	String Itt_dfun
 P	p318	String Itt_void
 P	p326	String Itt_struct
 P	p339	String sub_resource_info
@@ -2760,8 +2760,8 @@ T	t3249	o3248 b3248
 B	b3249	t3249
 T	t3250	o12 b3249
 B	b3250	t3250
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o717	fun
 NItt_comment!math_and	math_and	math_and Itt_comment
 O	o3260	math_and
@@ -7420,7 +7420,7 @@ T	t7744	o1023 b7730 b4 b7744
 B	b7745	t7744
 H	h7745	y B7700
 B	b7746	B7700
-NItt_rfun!apply	apply1258	apply Itt_rfun
+NItt_dfun!apply	apply1258	apply Itt_dfun
 O	o1258	apply1258
 T	t7746	o1258 b690 b7692
 B	b7747	t7746

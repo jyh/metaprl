@@ -2266,8 +2266,8 @@ NItt_record	Itt_record	Itt_record NIL
 NItt_record!record	record	record Itt_record
 P	p875	Token eq
 O	o875	record p875
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o876	fun
 NItt_record!field	field	field Itt_record
 P	p876	Token car
@@ -3985,7 +3985,7 @@ P	p1517	String isUnitRingCE_elim
 O	o1517	rule p1517
 NItt_logic!all	all	all Itt_logic
 O	o1518	all
-NItt_rfun!apply	apply1518	apply Itt_rfun
+NItt_dfun!apply	apply1518	apply Itt_dfun
 O	o1519	apply1518
 O	o1520	field p1338
 T	t1520	o1520 b1266
@@ -8474,7 +8474,7 @@ T	t3791	o3791 b1859
 B	b3791	t3791
 NItt_record!rcrd	rcrd	rcrd Itt_record
 O	o3792	rcrd p875
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3793	lambda
 NItt_poly!eq_poly	eq_poly	eq_poly Itt_poly
 O	o3794	eq_poly

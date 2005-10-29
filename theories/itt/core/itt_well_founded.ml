@@ -111,21 +111,6 @@ interactive well_founded_type {| intro [] |} :
    [wf] sequent { <H>; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
    sequent { <H> >- "type"{well_founded[i:l]{'A; x, y. 'R['x; 'y]}} }
 
-doc <:doc<
-   The purpose of this definition is to give a more convenient
-   specification of well-foundness that uses normal quantification
-   in its formalization (the @hrefterm[well_founded_prop] predicate defined
-   in the @hrefmodule[Itt_rfun] can't use the function type in its
-   definition).  The following rule specifies that the new
-   description of well-foundness is sufficient to derive the
-   primitive definition.
->>
-interactive well_founded_reduction univ[i:l] :
-   [wf] sequent { <H> >- 'A in univ[i:l] } -->
-   [wf] sequent { <H>; a: 'A; b: 'A >- 'R['a; 'b] in univ[i:l] } -->
-   [main] sequent { <H> >- well_founded[i:l]{'A; x, y. 'R['x; 'y]} } -->
-   sequent { <H> >- Itt_rfun!well_founded{'A; x, y. 'R['x; 'y]} }
-
 doc docoff
 
 (*

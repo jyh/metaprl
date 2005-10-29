@@ -2353,8 +2353,8 @@ T	t872	o622 b871
 B	b872	t872
 T	t437	o641 b872
 B	b437	t437
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o872	apply
 B	b873	t867
 T	t873	o872 b873 b864

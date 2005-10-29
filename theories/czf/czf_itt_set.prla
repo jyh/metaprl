@@ -17,7 +17,7 @@ P	p19	String Itt_quotient
 P	p25	String Itt_w
 P	p43	String Itt_logic
 P	p47	String Itt_dprod
-P	p53	String Itt_rfun
+P	p53	String Itt_dfun
 P	p65	String Itt_union
 P	p71	String Itt_struct
 P	p73	String Itt_equal
@@ -367,8 +367,8 @@ P	p737	String unfold_collect
 O	o737	rewrite p737
 NItt_w!tree	tree	tree Itt_w
 O	o738	tree
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o739	lambda
 P	p744	String unfold_set_ind
 O	o744	rewrite p744
@@ -572,7 +572,7 @@ P	p1099	String autoT
 O	o1099	ext_rule p1099
 P	p1100	String wf
 O	o1100	tactic_arg p1100
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1101	fun
 P	p1115	String "univTypeT << univ[1:l] >> thenT autoT"
 O	o1115	ext_rule p1115
@@ -584,7 +584,7 @@ P	p1132	String "rwh fold_isset 0 thenT autoT"
 O	o1132	ext_rule p1132
 P	p1141	String isset_apply
 O	o1141	rule p1141
-NItt_rfun!apply	apply1141	apply Itt_rfun
+NItt_dfun!apply	apply1141	apply Itt_dfun
 O	o1142	apply1141
 P	p1147	String "rwh unfold_isset 0"
 O	o1147	ext_rule p1147

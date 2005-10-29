@@ -2000,8 +2000,8 @@ B	b744	t744
 NNuprl_distributed__systems	Nuprl_distributed__systems	Nuprl_distributed__systems NIL
 NNuprl_distributed__systems!d-feasible	d-feasible	d-feasible Nuprl_distributed__systems
 O	o744	d-feasible
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o745	lambda
 NNuprl_message__automata!ma-join-list	ma-join-list	ma-join-list Nuprl_message__automata
 O	o746	ma-join-list

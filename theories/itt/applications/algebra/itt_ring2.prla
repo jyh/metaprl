@@ -2112,8 +2112,8 @@ NItt_record	Itt_record	Itt_record NIL
 NItt_record!record	record	record Itt_record
 P	p898	Token neg
 O	o898	record p898
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o899	fun
 NItt_record!field	field	field Itt_record
 P	p899	Token car
@@ -2172,7 +2172,7 @@ T	t919	o900 b918
 B	b920	t919
 NItt_equal!equal	equal	equal Itt_equal
 O	o920	equal
-NItt_rfun!apply	apply920	apply Itt_rfun
+NItt_dfun!apply	apply920	apply Itt_dfun
 O	o921	apply920
 O	o922	field p906
 T	t922	o922 b918
@@ -6371,7 +6371,7 @@ P	p3509	String zero_ring
 O	o3509	rule p3509
 NItt_record!rcrd	rcrd	rcrd Itt_record
 O	o3510	rcrd p898
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3511	lambda
 NItt_int_base	Itt_int_base	Itt_int_base NIL
 NItt_int_base!minus	minus	minus Itt_int_base

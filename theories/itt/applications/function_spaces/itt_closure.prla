@@ -61,8 +61,8 @@ T	t12	o11
 B	b12	t12
 NComment!math	math	math Comment
 O	o12	math
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o13	fun
 VT	T	T\\ \\
 B	b13	T
@@ -2580,7 +2580,7 @@ T	t1209	o1209
 B	b1209	t1209
 T	t1210	o1208 b1209
 B	b1210	t1210
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o1210	apply
 P	p1210	Token dom
 O	o1211	field p1210
@@ -3453,7 +3453,7 @@ B	b2298	t2298
 T	t2299	o2 b2298
 B	b2299	t2299
 P	p1497	String unfold_app
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1498	lambda
 NItt_dprod!spread	spread	spread Itt_dprod
 O	o1499	spread

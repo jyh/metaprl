@@ -3422,8 +3422,8 @@ O	o1401	location p1400 p1401
 NSummary!rewrite	rewrite	rewrite Summary
 P	p1402	String unfold_srecind
 O	o1402	rewrite p1402
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1403	lambda
 P	p1403	Var a
 O	o1404	var p1403
@@ -4769,7 +4769,7 @@ H	h1968	T1 t1416
 B	b1969	t1505
 T	t1969	o1498 b1969 b1534
 H	h1969	z t1969
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1969	fun
 VS	S1969	S\\ H\\ t1756
 B	b1970	S1969 w

@@ -3149,8 +3149,8 @@ O	o1295	term_def p1295
 NItt_union	Itt_union	Itt_union NIL
 NItt_union!inl	inl	inl Itt_union
 O	o1296	inl
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1297	lambda
 T	t1297	o1297 b854
 B	b1297	t1297
@@ -3218,7 +3218,7 @@ P	p1320	String unfold_subst
 O	o1320	term_def p1320
 NItt_union!decide	decide	decide Itt_union
 O	o1321	decide
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o1322	apply
 P	p1322	Var f
 O	o1323	var p1322

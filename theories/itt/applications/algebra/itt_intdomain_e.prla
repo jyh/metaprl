@@ -3272,8 +3272,8 @@ T	t1272	o1272 b1150
 B	b1272	t1272
 NItt_equal!equal	equal	equal Itt_equal
 O	o1273	equal
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1273	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1273	apply Itt_dfun
 O	o1274	apply1273
 P	p1274	Token *
 O	o1275	field p1274
@@ -3781,7 +3781,7 @@ P	p1488	String intDomainE_elim
 O	o1488	rule p1488
 NItt_record!record	record	record Itt_record
 O	o1489	record p1359
-NItt_rfun!fun	fun1489	fun Itt_rfun
+NItt_dfun!fun	fun1489	fun Itt_dfun
 O	o1490	fun1489
 P	p1490	Var self
 O	o1491	var p1490

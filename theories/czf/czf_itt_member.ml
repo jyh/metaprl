@@ -49,7 +49,7 @@ doc docoff
 open Dtactic
 open Top_conversionals
 
-open Itt_rfun
+open Itt_dfun
 
 (************************************************************************
  * TERMS                                                                *

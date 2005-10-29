@@ -40,7 +40,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_equal
-extends Itt_rfun
+extends Itt_dfun
 extends Itt_bool
 extends Itt_logic
 extends Itt_struct
@@ -58,7 +58,7 @@ open Lm_printf
 open Basic_tactics
 
 open Itt_equal
-open Itt_rfun
+open Itt_dfun
 open Itt_struct
 open Itt_squash
 open Itt_int_base

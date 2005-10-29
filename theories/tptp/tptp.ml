@@ -8,7 +8,7 @@ extends Tptp_derive
 open Basic_tactics
 
 open Itt_equal
-open Itt_rfun
+open Itt_dfun
 open Itt_logic
 open Tptp_derive
 

@@ -2161,7 +2161,7 @@ P	p179	Number 1477
 P	p180	Number 1490
 O	o180	location p179 p180
 O	o181	str_open p179 p180
-P	p848	String Itt_rfun
+P	p848	String Itt_dfun
 O	o849	string p848
 T	t849	o849
 B	b849	t849
@@ -2299,8 +2299,8 @@ B	b898	t897
 NItt_hoas_base	Itt_hoas_base	Itt_hoas_base NIL
 NItt_hoas_base!bind	bind	bind Itt_hoas_base
 O	o898	bind
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o899	apply
 NComment!math_ldots	math_ldots	math_ldots Comment
 O	o900	math_ldots
@@ -2721,7 +2721,7 @@ O	o1101	term_def p1101
 NItt_nat	Itt_nat	Itt_nat NIL
 NItt_nat!ind	ind	ind Itt_nat
 O	o1102	ind
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1103	lambda
 P	p1103	Var btl
 O	o1104	var932 p1103
@@ -2897,7 +2897,7 @@ T	t1192	o1085 b1132 b1191 b26 b1089 b1087
 B	b1192	t1192
 P	p1192	String unfold_bdepth
 O	o1192	term_def p1192
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o1193	fix
 NItt_hoas_base!weak_dest_bterm	weak_dest_bterm	weak_dest_bterm Itt_hoas_base
 O	o1194	weak_dest_bterm

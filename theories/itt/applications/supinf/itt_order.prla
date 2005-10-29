@@ -2222,7 +2222,7 @@ P	p2	Number 1714
 P	p3	Number 1727
 O	o14	location p2 p3
 O	o15	str_open p2 p3
-P	p15	String Itt_rfun
+P	p15	String Itt_dfun
 O	o16	string p15
 T	t587	o16
 B	b587	t587
@@ -2344,8 +2344,8 @@ T	t914	o914 b911
 B	b914	t914
 NItt_equal!equal	equal	equal Itt_equal
 O	o915	equal
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o916	fun
 NItt_bool	Itt_bool	Itt_bool NIL
 NItt_bool!bool	bool	bool Itt_bool
@@ -2379,7 +2379,7 @@ NItt_logic!all	all	all Itt_logic
 O	o927	all
 NItt_bool!assert	assert	assert Itt_bool
 O	o928	assert
-NItt_rfun!apply	apply928	apply Itt_rfun
+NItt_dfun!apply	apply928	apply Itt_dfun
 O	o929	apply928
 Nvar	var	var NIL
 P	p929	Var a
@@ -2622,7 +2622,7 @@ NItt_order!strict2unstrict	strict2unstrict	strict2unstrict Itt_order
 O	o1028	strict2unstrict
 T	t1028	o1028 b912
 B	b1028	t1028
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1029	lambda
 NItt_bool!bnot	bnot	bnot Itt_bool
 O	o1030	bnot

@@ -59,8 +59,8 @@ declare "value"{'v; 's}
 declare "match"{'t1; x, y. 't2['x; 'y]}
 
 prim_rw unfold_evalsto : evalsto{'e1; 'e2} <--> Perv!"rewrite"{'e1; 'e2}
-prim_rw unfold_eval : eval{'e; 's} <--> Itt_rfun!apply{'e; 's}
-prim_rw unfold_prog : prog{s. 'e['s]} <--> Itt_rfun!lambda{s. 'e['s]}
+prim_rw unfold_eval : eval{'e; 's} <--> Itt_dfun!apply{'e; 's}
+prim_rw unfold_prog : prog{s. 'e['s]} <--> Itt_dfun!lambda{s. 'e['s]}
 prim_rw unfold_value : "value"{'v; 's} <--> Itt_dprod!pair{'v; 's}
 prim_rw unfold_match : "match"{'t1; x, y. 't2['x; 'y]} <--> spread{'t1; x, y. 't2['x; 'y]}
 
@@ -204,7 +204,7 @@ prim_rw unfold_assign : assign{'e1; 'e2} <-->
  * Functions.
  *)
 prim_rw unfold_lambda : Sil_syntax!lambda{v. 'e1['v]} <-->
-   prog{s1. "value"{.Itt_rfun!lambda{v. 'e1['v]}; 's1}}
+   prog{s1. "value"{.Itt_dfun!lambda{v. 'e1['v]}; 's1}}
 
 prim_rw unfold_apply : Sil_syntax!apply{'e1; 'e2} <-->
    prog{s1.
@@ -300,11 +300,11 @@ interactive assign_eval 's2 :
  * Functions.
  *)
 interactive lambda_eval :
-   sequent { <H> >- evalsto{eval{.Sil_syntax!lambda{v. 'e1['v]}; 's1}; ."value"{.Itt_rfun!lambda{v. 'e1['v]}; 's1}} }
+   sequent { <H> >- evalsto{eval{.Sil_syntax!lambda{v. 'e1['v]}; 's1}; ."value"{.Itt_dfun!lambda{v. 'e1['v]}; 's1}} }
 
-interactive apply_eval 'v2 's2 (Itt_rfun!lambda{v. 'e3['v]}) 's3 :
+interactive apply_eval 'v2 's2 (Itt_dfun!lambda{v. 'e3['v]}) 's3 :
    [main] sequent { <H> >- evalsto{eval{'e2; 's1}; ."value"{'v2; 's2}} } -->
-   [main] sequent { <H> >- evalsto{eval{'e1; 's2}; ."value"{.Itt_rfun!lambda{v. 'e3['v]}; 's3}} } -->
+   [main] sequent { <H> >- evalsto{eval{'e1; 's2}; ."value"{.Itt_dfun!lambda{v. 'e3['v]}; 's3}} } -->
    [main] sequent { <H> >- evalsto{eval{'e3['v2]; 's3}; ."value"{'v3; 's4}} } -->
    sequent { <H> >- evalsto{eval{.Sil_syntax!apply{'e1; 'e2}; 's1}; ."value"{'v3; 's4}} }
 

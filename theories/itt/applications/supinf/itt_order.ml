@@ -50,7 +50,7 @@ open Lm_printf
 
 open Basic_tactics
 
-open Itt_rfun
+open Itt_dfun
 
 let _ =
    show_loading "Loading Itt_order%t"

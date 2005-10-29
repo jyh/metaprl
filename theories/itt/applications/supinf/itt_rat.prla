@@ -2339,7 +2339,7 @@ P	p899	Number 1635
 P	p851	Number 1648
 O	o1093	location p899 p851
 O	o1094	str_open p899 p851
-P	p1094	String Itt_rfun
+P	p1094	String Itt_dfun
 O	o1095	string p1094
 T	t1095	o1095
 B	b1095	t1095
@@ -2589,12 +2589,12 @@ T	t1247	o1134 b1240 b1244 b12 b1245 b1140
 B	b1247	t1247
 P	p1247	String unfold_gcd
 O	o1247	term_def p1247
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1535	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1535	apply Itt_dfun
 O	o1536	apply1535
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o1248	fix
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1483	lambda
 NItt_int_base!beq_int	beq_int	beq_int Itt_int_base
 O	o999	beq_int
@@ -11648,7 +11648,7 @@ T	t7533	o1065 b1364 b7531 b7531
 H	h7533	x1 t7533
 NItt_logic!all	all	all Itt_logic
 O	o7533	all
-NItt_rfun!fun	fun7533	fun Itt_rfun
+NItt_dfun!fun	fun7533	fun Itt_dfun
 O	o7534	fun7533
 P	p7534	Var n
 O	o7535	var p7534

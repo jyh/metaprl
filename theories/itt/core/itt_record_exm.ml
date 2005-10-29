@@ -18,7 +18,7 @@ extends Itt_list
 extends Itt_labels
 
 open Basic_tactics
-open Itt_rfun
+open Itt_dfun
 
 doc <:doc<
    @modsection{Simple Records}

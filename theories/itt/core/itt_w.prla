@@ -4219,10 +4219,10 @@ Vbody	body3540	body\\ \\ t1772 t1773 t1774
 B	b3541	body3540 a2 f2 g2
 T	t3541	o1600 b3540 b3541
 B	b3542	t3541
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1776	lambda
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o1777	apply
 T	t3542	o1777 b3539 b1547
 B	b3543	t3542
@@ -4898,7 +4898,7 @@ S	s3700	tbrarg\\ h3615\\ f3700
 B	b3701	s3700
 P	p2062	String main
 O	o2062	meta_labeled p2062
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o2063	fun
 VB	B3701	B\\ H\\ a3695
 B	b3702	B3701

@@ -14,7 +14,7 @@ NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
-P	p55	String Itt_rfun
+P	p55	String Itt_dfun
 P	p73	String Itt_struct
 P	p75	String Itt_equal
 P	p89	String Dtactic
@@ -381,8 +381,8 @@ NItt_logic!implies	implies	implies Itt_logic
 O	o1001	implies
 P	p1010	String unfold_fun_prop
 O	o1010	rewrite p1010
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1021	fun
 P	p1021	Var u1
 O	o1022	var p1021
@@ -5793,7 +5793,7 @@ P	p2229	Number 5819
 O	o2229	location p2228 p2229
 NCzf_itt_set!set_ind	set_ind	set_ind Czf_itt_set
 O	o7768	set_ind
-NItt_rfun!apply	apply1145	apply Itt_rfun
+NItt_dfun!apply	apply1145	apply Itt_dfun
 O	o1145	apply1145
 T	t7783	o843
 B	b7783	t7783

@@ -10415,8 +10415,8 @@ T	t8907	o5128 b8906
 B	b8907	t8907
 P	p5209	String subrecordR_df
 O	o5209	dform p5209
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!declaration	declaration	declaration Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!declaration	declaration	declaration Itt_dfun
 O	o8086	declaration
 T	t8908	o8086 b1830 b960
 B	b8908	t8908

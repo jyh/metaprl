@@ -193,7 +193,7 @@ T	t60	o59
 B	b60	t60
 T	t61	o b60 b4
 B	b61	t61
-P	p61	String Itt_rfun
+P	p61	String Itt_dfun
 O	o61	parent p61
 T	t62	o61
 B	b62	t62

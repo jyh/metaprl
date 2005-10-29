@@ -2209,8 +2209,8 @@ B	b858	t858
 NItt_bool	Itt_bool	Itt_bool NIL
 NItt_bool!assert	assert	assert Itt_bool
 O	o858	assert
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply858	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply858	apply Itt_dfun
 O	o859	apply858
 P	p859	Token eq
 O	o860	field p859
@@ -2664,7 +2664,7 @@ T	t1040	o1040
 B	b1040	t1040
 NItt_record!record	record	record Itt_record
 O	o1041	record p859
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1042	fun
 P	p1042	Var r
 O	o1043	var p1042

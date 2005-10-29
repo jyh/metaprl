@@ -48,7 +48,7 @@ prim_rw unfold_prod : Sil_types!dprod{'A; v. 'B['v]} <-->
    lambda{s. Itt_dprod!prod{.'A 's; v. 'B['v] 's}}
 
 prim_rw unfold_fun : Sil_types!"fun"{'A; v. 'B['v]} <-->
-   lambda{s. Itt_rfun!"fun"{.'A 's; v. 'B['v] 's}}
+   lambda{s. Itt_dfun!"fun"{.'A 's; v. 'B['v] 's}}
 
 prim_rw unfold_ref_type : Sil_types!ref_type <-->
    lambda{s. label_type}

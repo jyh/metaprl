@@ -605,8 +605,8 @@ Vrecord	record	record\\ \\ t200
 B	b200	record self
 T	t201	o199 b200
 B	b201	t201
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o201	lambda
 T	t202	o201 b200
 B	b202	t202
@@ -655,7 +655,7 @@ B	b216	t215
 NItt_record	Itt_record	Itt_record NIL
 NItt_record!field	field	field Itt_record
 O	o216	field p215
-NItt_rfun!apply	apply216	apply Itt_rfun
+NItt_dfun!apply	apply216	apply Itt_dfun
 O	o217	apply216
 T	t217	o217 b215 b215
 B	b217	t217
@@ -845,7 +845,7 @@ P	p124	Number 1136
 P	p133	Number 1149
 O	o133	location p124 p133
 O	o135	str_open p124 p133
-P	p289	String Itt_rfun
+P	p289	String Itt_dfun
 O	o290	string p289
 T	t290	o290
 B	b290	t290

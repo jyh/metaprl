@@ -622,8 +622,8 @@ NBase_reflection	Base_reflection	Base_reflection NIL
 NBase_reflection!bterm	bterm	bterm Base_reflection
 O	o226	bterm
 T	t226	o226
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 P	p226	Quote
 O	o227	fun p226
 NBase_reflection!term	term	term Base_reflection
@@ -691,7 +691,7 @@ B	b250	t249
 NSummary!term_def	term_def	term_def Summary
 P	p250	String unfold_mk_fun
 O	o250	term_def p250
-NItt_rfun!let	let	let Itt_rfun
+NItt_dfun!let	let	let Itt_dfun
 O	o251	let
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
 NItt_int_ext!max	max	max Itt_int_ext
@@ -1491,9 +1491,9 @@ O	o488	rule p488
 O	o489	term
 T	t489	o489
 H	h489	a t489
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o490	apply p226
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o491	lambda p226
 B	b491	t310 x
 T	t491	o491 b491

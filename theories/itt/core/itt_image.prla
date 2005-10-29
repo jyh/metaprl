@@ -3869,8 +3869,8 @@ P	p511	String aux
 O	o511	meta_labeled p511
 NPerv!rewrite	rewrite	rewrite Perv
 O	o1641	rewrite
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1641	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1641	apply Itt_dfun
 O	o1642	apply1641
 B	b1642	f1497
 T	t1642	o1642 b1638 b1642

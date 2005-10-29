@@ -21,7 +21,7 @@ T	t39	o b38 b4
 B	b39	t39
 P	p11	String Itt_derive
 P	p43	String Itt_logic
-P	p53	String Itt_rfun
+P	p53	String Itt_dfun
 P	p73	String Itt_equal
 NSummary!resource	resource	resource Summary
 P	p39	String arith_unfold
@@ -218,8 +218,8 @@ P	p679	String unfold_t
 NItt_atom!token	token	token Itt_atom
 P	p684	String unfold_atom0
 P	p687	String unfold_atom1
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o688	fun
 P	p692	String unfold_atom2
 P	p695	String unfold_atom3
@@ -244,7 +244,7 @@ O	o665	resource p662
 P	p751	String reduce
 O	o751	resource p751
 P	p732	String unfold_apply2
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o733	apply
 P	p742	String unfold_apply3
 P	p749	String unfold_apply4

@@ -2132,8 +2132,8 @@ O	o1217	field p1214
 NItt_subset	Itt_subset	Itt_subset NIL
 NItt_subset!member	member	member Itt_subset
 O	o1218	member
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1218	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1218	apply Itt_dfun
 O	o1219	apply1218
 P	p1219	Var x
 O	o1220	var p1219
@@ -2243,7 +2243,7 @@ NItt_grouplikeobj!subStructure	subStructure	subStructure Itt_grouplikeobj
 O	o1288	subStructure
 NItt_subset!subset	subset	subset Itt_subset
 O	o1289	subset
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1290	fun
 P	p1295	Var u
 O	o1295	var p1295
@@ -6995,7 +6995,7 @@ NItt_group!groupHom	groupHom	groupHom Itt_group
 O	o4470	groupHom
 T	t10369	o4470 b6650 b6876
 B	b10370	t10369
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o4471	lambda
 B	b4471	t2266 a
 T	t4471	o4471 b4471

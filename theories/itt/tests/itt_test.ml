@@ -34,7 +34,7 @@ extends Itt_theory
 
 open Top_conversionals
 
-open Itt_rfun
+open Itt_dfun
 open Itt_bool
 open Itt_int_base
 open Itt_int_ext

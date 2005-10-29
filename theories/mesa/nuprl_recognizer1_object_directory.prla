@@ -1831,12 +1831,12 @@ T	t678	o675 b677 b673 b667
 B	b678	t678
 NNuprl_message__automata!ma-single-effect1	ma-single-effect1	ma-single-effect1 Nuprl_message__automata
 O	o678	ma-single-effect1
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o679	lambda
 NItt_bool!bor	bor	bor Itt_bool
 O	o680	bor
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o681	apply
 Nvar	var	var NIL
 P	p681	Var x

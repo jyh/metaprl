@@ -757,8 +757,8 @@ O	o1343	and
 NItt_subtype	Itt_subtype	Itt_subtype NIL
 NItt_subtype!subtype	subtype	subtype Itt_subtype
 O	o1344	subtype
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1369	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1369	apply Itt_dfun
 O	o1369	apply1369
 P	p1387	String counterexample1
 O	o1387	hrefrule p1387
@@ -934,7 +934,7 @@ P	p1419	String P
 O	o1420	comment_string p1419
 T	t1420	o1420
 B	b1420	t1420
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1421	fun
 NItt_equal!univ	univ	univ Itt_equal
 P	p1421	MLevel 0 i 0

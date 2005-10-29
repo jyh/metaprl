@@ -47,7 +47,7 @@ open Lm_printf
 open Basic_tactics
 
 open Itt_bool
-open Itt_rfun
+open Itt_dfun
 open Itt_list
 open Itt_quotient
 

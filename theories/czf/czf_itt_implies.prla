@@ -205,7 +205,7 @@ T	t62	o61
 B	b62	t62
 T	t63	o b62 b4
 B	b63	t63
-P	p63	String Itt_rfun
+P	p63	String Itt_dfun
 O	o63	parent p63
 T	t64	o63
 B	b64	t64
@@ -917,8 +917,8 @@ G	s576	t576
 B	b576	s576
 T	t577	o559 b576
 B	b577	t577
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o577	fun
 B	b578	t572
 B	b579	t575

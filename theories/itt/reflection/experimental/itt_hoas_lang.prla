@@ -4090,12 +4090,12 @@ B	b1681	t1681
 T	t1682	o984 b1681 b23
 B	b1682	t1682
 H	h1682	"" t1663
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply958	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply958	apply Itt_dfun
 O	o959	apply958
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o963	fix
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1683	lambda
 B	b964	t1291 l r
 NItt_list2!list_max	list_max	list_max Itt_list2
@@ -4627,7 +4627,7 @@ P	p1790	String "byDefT unfold_implies"
 O	o1790	ext_rule p1790
 T	t1795	o984 b1687 b23
 B	b1795	t1795
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1795	fun
 T	t1796	o1693 b1275 b1657
 B	b1796	t1796

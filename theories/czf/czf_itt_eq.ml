@@ -88,7 +88,7 @@ open Itt_equal
 open Basic_tactics
 
 open Itt_equal
-open Itt_rfun
+open Itt_dfun
 
 open Czf_itt_set
 

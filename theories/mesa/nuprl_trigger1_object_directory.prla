@@ -1947,8 +1947,8 @@ T	t718	o702 b718
 B	b719	t718
 H	h719	x A715
 H	h720	x1 T711
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o720	apply
 VP	P720	P\\ H\\
 B	b720	P720
@@ -2163,7 +2163,7 @@ O	o806	rule p806
 NNuprl_distributed__systems	Nuprl_distributed__systems	Nuprl_distributed__systems NIL
 NNuprl_distributed__systems!d-feasible	d-feasible	d-feasible Nuprl_distributed__systems
 O	o807	d-feasible
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o808	lambda
 P	p808	Var loc
 O	o809	var p808

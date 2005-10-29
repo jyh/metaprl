@@ -42,7 +42,7 @@ interactive_rw update_m_reduce {| reduce |}:
 (*  Display Forms *)
 (******************)
 
-open Itt_rfun
+open Itt_dfun
 
 declare obj_dot
 dform obj_dot_df : obj_dot = subzero

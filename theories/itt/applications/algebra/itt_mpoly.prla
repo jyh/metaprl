@@ -854,7 +854,7 @@ P	p314	Number 453
 P	p315	Number 466
 O	o315	location p314 p315
 O	o316	str_open p314 p315
-P	p316	String Itt_rfun
+P	p316	String Itt_dfun
 O	o317	string p316
 T	t317	o317
 B	b317	t317
@@ -958,8 +958,8 @@ NItt_int_base!number	number	number Itt_int_base
 O	o360	number p
 T	t360	o360
 B	b360	t360
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o361	lambda
 B	b361	a i
 T	t361	o361 b361
@@ -994,7 +994,7 @@ T	t372	o371 b369
 B	b372	t372
 T	t373	o370 b371 b372
 B	b373	t373
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o373	apply
 NItt_record	Itt_record	Itt_record NIL
 NItt_record!field	field	field Itt_record

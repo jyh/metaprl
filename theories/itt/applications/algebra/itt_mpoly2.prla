@@ -870,7 +870,7 @@ T	t310	o310
 B	b310	t310
 T	t311	o b310 b4
 B	b311	t311
-P	p316	String Itt_rfun
+P	p316	String Itt_dfun
 O	o317	string p316
 T	t317	o317
 B	b317	t317
@@ -962,8 +962,8 @@ B	b354	t353
 NItt_dprod	Itt_dprod	Itt_dprod NIL
 NItt_dprod!prod	prod	prod Itt_dprod
 O	o354	prod
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o355	fun
 NItt_nat	Itt_nat	Itt_nat NIL
 NItt_nat!nat	nat	nat Itt_nat
@@ -1015,7 +1015,7 @@ T	t381	o377 b380 b381
 B	b382	t381
 T	t382	o370 b379 b382 b352
 B	b383	t382
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o383	apply
 NItt_record	Itt_record	Itt_record NIL
 NItt_record!field	field	field Itt_record
@@ -1204,7 +1204,7 @@ T	t460	o383 b459 b377
 B	b460	t460
 T	t461	o383 b460 b380
 B	b461	t461
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o461	lambda
 NItt_int_base	Itt_int_base	Itt_int_base NIL
 NItt_int_base!add	add	add Itt_int_base

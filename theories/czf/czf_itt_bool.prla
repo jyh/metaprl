@@ -3985,8 +3985,8 @@ B	b1576	t1576
 NItt_w	Itt_w	Itt_w NIL
 NItt_w!tree	tree	tree Itt_w
 O	o1581	tree
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1582	lambda
 T	t1582	o1582 b682
 B	b1582	t1582
@@ -5633,7 +5633,7 @@ B	b3639	t3632
 P	p4757	Number 9698
 P	p4758	Number 9873
 O	o4758	location p4757 p4758
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o2737	fun
 P	p2769	String snot_in_boolset
 O	o2769	rule p2769

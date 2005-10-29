@@ -6020,8 +6020,8 @@ T	t2642	o647 b2634 b2642
 B	b2645	t2642
 T	t2646	o646 b2645 b4 b650
 B	b2646	t2646
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1139	fun
 B	b2647	t2629
 B	b2648	B2629

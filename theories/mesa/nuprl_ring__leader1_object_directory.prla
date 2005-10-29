@@ -1824,8 +1824,8 @@ B	b678	t677
 NItt_bool	Itt_bool	Itt_bool NIL
 NItt_bool!ifthenelse	ifthenelse	ifthenelse Itt_bool
 O	o678	ifthenelse
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o679	apply
 T	t679	o679 b674 b673
 B	b679	t679
@@ -1858,7 +1858,7 @@ T	t686	o686
 B	b686	t686
 T	t687	o684 b685 b686
 B	b687	t687
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o687	lambda
 Nvar	var	var NIL
 P	p687	Var x

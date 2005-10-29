@@ -169,7 +169,7 @@ T	t52	o51
 B	b52	t52
 T	t53	o b52 b4
 B	b53	t53
-P	p53	String Itt_rfun
+P	p53	String Itt_dfun
 O	o53	parent p53
 T	t54	o53
 B	b54	t54
@@ -755,8 +755,8 @@ T	t486	o486
 B	b486	t486
 T	t487	o484 b485 b486
 B	b487	t487
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o487	fun
 Bdfunhack	b486dep	t486 ""
 T	t488	o487 b485 b486dep
@@ -785,7 +785,7 @@ T	t496	o494 b495
 B	b496	t496 x
 T	t497	o493 b496
 B	b497	t497
-NItt_rfun!lambda	lambda497	lambda Itt_rfun
+NItt_dfun!lambda	lambda497	lambda Itt_dfun
 O	o497	lambda497
 T	t498	o497 b496
 B	b498	t498
@@ -809,7 +809,7 @@ T	t504	o504
 B	b504	t504
 T	t505	o502 b503 b504
 B	b505	t505
-NItt_rfun!apply	apply505	apply Itt_rfun
+NItt_dfun!apply	apply505	apply Itt_dfun
 O	o505	apply505
 T	t506	o505 b503 b504
 B	b506	t506

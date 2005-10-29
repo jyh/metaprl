@@ -352,10 +352,10 @@ Vg	g	g\\ \\
 B	b205	g
 T	t205	o204 b204 b205
 B	b206	t205
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o206	lambda
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o207	apply
 Nvar	var	var NIL
 P	p207	Var x
@@ -387,7 +387,7 @@ P	p224	String compose_wf
 O	o224	rule p224
 NSummary!term_param	term_param	term_param Summary
 O	o225	term_param
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o226	fun
 VA	A	A\\ H\\
 B	b226	A

@@ -14,7 +14,7 @@ O	o4	nil3
 T	t4	o4
 B	b4	t4
 P	p49	String Itt_logic
-P	p59	String Itt_rfun
+P	p59	String Itt_dfun
 P	p67	String Itt_set
 P	p93	String Dtactic
 P	p101	String Top_conversionals
@@ -184,8 +184,8 @@ P	p568	Var T
 O	o569	var p568
 T	t569	o569
 B	b569	t569
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply569	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply569	apply Itt_dfun
 O	o570	apply569
 P	p570	Var f
 O	o571	var p570
@@ -260,7 +260,7 @@ T	t671	o671
 B	b671	t671
 P	p679	String unfold_restricted
 O	o679	rewrite p679
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o680	fun
 NCzf_itt_set!set	set	set Czf_itt_set
 O	o681	set

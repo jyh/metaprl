@@ -1741,8 +1741,8 @@ Vb	b641	b\\ \\
 B	b642	b641
 T	t642	o640 b640 b642
 B	b643	t642
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply643	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply643	apply Itt_dfun
 O	o643	apply643
 P	p643	Token +
 O	o644	field p643

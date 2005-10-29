@@ -47,7 +47,6 @@ doc <:doc<
 >>
 extends Itt_equal
 extends Itt_esquash
-extends Itt_rfun
 extends Itt_dfun
 extends Itt_dprod
 extends Itt_prod
@@ -67,7 +66,7 @@ open Basic_tactics
 
 open Itt_squash
 open Itt_equal
-open Itt_rfun
+open Itt_dfun
 open Itt_dprod
 open Itt_struct
 

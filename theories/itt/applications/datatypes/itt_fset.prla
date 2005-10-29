@@ -88,7 +88,7 @@ O	o323	type_lid p323
 T	t323	o323
 B	b323	t323
 P	p344	Number 1394
-P	p348	String Itt_rfun
+P	p348	String Itt_dfun
 P	p359	Number 1415
 P	p360	String Itt_quotient
 P	p364	Number 1416
@@ -430,8 +430,8 @@ P	p898	Var y
 O	o898	var p898
 T	t898	o898
 B	b898	t898
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o899	apply
 P	p130	String intro
 O	o130	resource p130
@@ -461,7 +461,7 @@ O	o907	and
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o2121	equal
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o909	fun
 NItt_bool	Itt_bool	Itt_bool NIL
 NItt_bool!bool	bool	bool Itt_bool
@@ -11651,7 +11651,7 @@ T	t9250	o940 b7714 b9249
 H	h9640	s1_1 t9250
 H	h9652	s2_1 t9250
 B	b9912	t9896
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o14428	lambda
 B	b14428	t1010 b
 T	t14428	o14428 b14428

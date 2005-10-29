@@ -475,7 +475,7 @@ P	p232	String in
 O	o232	comment_string p232
 T	t233	o232
 B	b233	t233
-P	p233	String Itt_rfun
+P	p233	String Itt_dfun
 P	p235	String )
 O	o235	comment_string p235
 T	t236	o235

@@ -2512,7 +2512,7 @@ T	t1064	o1063
 B	b1064	t1064
 T	t1065	o b1064 b14
 B	b1065	t1065
-P	p1065	String Itt_rfun
+P	p1065	String Itt_dfun
 O	o1065	parent p1065
 T	t1066	o1065
 B	b1066	t1066

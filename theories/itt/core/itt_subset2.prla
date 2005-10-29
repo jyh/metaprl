@@ -234,8 +234,8 @@ P	p111	String P
 O	o111	comment_string p111
 T	t112	o111
 B	b112	t112
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o112	fun
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!univ	univ	univ Itt_equal
@@ -979,7 +979,7 @@ NItt_logic!iff	iff	iff Itt_logic
 O	o1743	iff
 NItt_logic!exists	exists	exists Itt_logic
 O	o1744	exists
-NItt_rfun!apply	apply1744	apply Itt_rfun
+NItt_dfun!apply	apply1744	apply Itt_dfun
 O	o1745	apply1744
 T	t1745	o130
 B	b1745	t1745
@@ -991,7 +991,7 @@ NItt_logic!implies	implies	implies Itt_logic
 O	o1759	implies
 P	p1784	String "withT <<lambda{x. 'x in 'A subset 'B}>> (dT 0) thenT rwh reduceC 0 thenT autoT"
 O	o1784	ext_rule p1784
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1787	lambda
 P	p1811	String "dT 2"
 O	o1811	ext_rule p1811

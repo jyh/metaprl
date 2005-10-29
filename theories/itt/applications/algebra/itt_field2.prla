@@ -2297,8 +2297,8 @@ NItt_record!record	record	record Itt_record
 NItt_labels!inv	inv	inv Itt_labels
 P	p908	Token inv
 O	o908	record p908
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o909	fun
 NItt_set	Itt_set	Itt_set NIL
 NItt_set!set	set	set Itt_set
@@ -2390,7 +2390,7 @@ B	b931	t931
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o932	equal
-NItt_rfun!apply	apply932	apply Itt_rfun
+NItt_dfun!apply	apply932	apply Itt_dfun
 O	o933	apply932
 P	p933	Token *
 O	o934	field p933

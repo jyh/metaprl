@@ -199,7 +199,7 @@ T	t60	o59
 B	b60	t60
 T	t61	o b60 b4
 B	b61	t61
-P	p61	String Itt_rfun
+P	p61	String Itt_dfun
 O	o61	parent p61
 T	t62	o61
 B	b62	t62
@@ -1322,8 +1322,8 @@ G	s642	t642
 B	b642	s642
 T	t643	o621 b642
 B	b643	t643
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o644	fun
 B	b645	t636
 P	p645	Var w
@@ -1480,7 +1480,7 @@ P	p797	Var y
 O	o798	var p797
 T	t798	o798
 B	b798	t798
-NItt_rfun!apply	apply798	apply Itt_rfun
+NItt_dfun!apply	apply798	apply Itt_dfun
 O	o799	apply798
 T	t804	o b796 b4
 B	b804	t804

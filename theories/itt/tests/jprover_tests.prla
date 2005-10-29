@@ -2149,8 +2149,8 @@ S	s867	t325\\ h\\ t867
 B	b868	s867
 T	t868	o324 b868
 B	b869	t868
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o869	apply
 T	t869	o869 b860 b855
 B	b870	t869

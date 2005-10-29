@@ -1200,8 +1200,8 @@ P	p674	Var t
 O	o675	var p674
 T	t675	o675
 B	b675	t675
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply675	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply675	apply Itt_dfun
 O	o676	apply675
 P	p676	Var p
 O	o677	var p676
@@ -3840,7 +3840,7 @@ B	b1622	t1622
 B	b2707	t2677
 T	t2707	o886 b1622 b2707
 H	h2707	t2707
-NItt_rfun!fun	fun1623	fun Itt_rfun
+NItt_dfun!fun	fun1623	fun Itt_dfun
 O	o1623	fun1623
 P	p1623	Var v
 O	o1624	var p1623

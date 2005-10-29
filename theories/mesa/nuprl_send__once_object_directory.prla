@@ -1816,10 +1816,10 @@ NNuprl_messages__and__kinds!locl	locl	locl Nuprl_messages__and__kinds
 O	o672	locl
 T	t672	o672 b658
 B	b672	t672
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o673	lambda
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o674	apply
 Nvar	var	var NIL
 P	p674	Var a

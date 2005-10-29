@@ -3081,10 +3081,10 @@ B	b2268	t2267
 P	p2279	String unfold_var_arity
 NItt_reflection!var_arity	var_arity	var_arity Itt_reflection
 O	o2280	var_arity
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o2281	fix
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o2282	lambda
 NItt_bool!ifthenelse	ifthenelse2282	ifthenelse Itt_bool
 O	o2283	ifthenelse2282
@@ -3095,7 +3095,7 @@ O	o2284	add
 O	o2285	number p1118
 T	t2285	o2285
 B	b2285	t2285
-NItt_rfun!apply	apply2285	apply Itt_rfun
+NItt_dfun!apply	apply2285	apply Itt_dfun
 O	o2286	apply2285
 P	p2286	Var f
 O	o2287	var p2286

@@ -2308,8 +2308,8 @@ NCzf_itt_set!set_ind	set_ind	set_ind Czf_itt_set
 O	o1408	set_ind
 NCzf_itt_set!collect	collect	collect Czf_itt_set
 O	o1409	collect
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1410	fun
 P	p1410	Var T1
 O	o1411	var p1410
@@ -2322,7 +2322,7 @@ B	b1412	t1412
 Bdfunhack	b1412dep	t1412 ""
 T	t1413	o1410 b1411 b1412dep
 B	b1413	t1413
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o1413	apply
 P	p1413	Var f2
 O	o1414	var p1413
@@ -2831,7 +2831,7 @@ T	t1964	o1413 b1668 b1963
 O	o2006	tactic_arg p1595
 NItt_equal!equal	equal	equal Itt_equal
 O	o2007	equal
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o2008	lambda
 NItt_dprod!fst	fst	fst Itt_dprod
 O	o2009	fst

@@ -4995,8 +4995,8 @@ B	b817	t817
 P	p825	Number 8070
 P	p3254	String op_exam1
 O	o3254	rule p3254
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply3254	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply3254	apply Itt_dfun
 O	o830	apply3254
 Vt	t830	t\\ \\
 B	b830	t830
@@ -5163,7 +5163,7 @@ T	t873	o1136 b848
 B	b873	t873
 P	p3273	String op_exam2
 O	o3273	rule p3273
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o28	lambda
 B	b33	t830 x
 T	t33	o28 b33

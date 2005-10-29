@@ -2292,8 +2292,8 @@ NItt_equal!equal	equal	equal Itt_equal
 O	o1181	equal
 VT	T3804	T\\ \\
 B	b3806	T3804
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1181	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1181	apply Itt_dfun
 O	o1182	apply1181
 NItt_record	Itt_record	Itt_record NIL
 NItt_record!field	field	field Itt_record
@@ -2476,7 +2476,7 @@ NItt_record!record	record	record Itt_record
 NItt_labels!inv	inv	inv Itt_labels
 P	p1160	Token inv
 O	o1160	record p1160
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1161	fun
 P	p2	Token car
 O	o9	field p2
@@ -14855,7 +14855,7 @@ P	p2972	String groupHom_id
 O	o2972	rule p2972
 P	p13010	String "byDefT unfold_groupHom1"
 O	o13010	ext_rule p13010
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1089	lambda
 P	p10263	String B
 O	o10263	comment_string p10263

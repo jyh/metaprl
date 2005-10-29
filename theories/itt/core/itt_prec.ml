@@ -73,7 +73,7 @@ open Dtactic
 
 open Itt_equal
 open Itt_struct
-open Itt_rfun
+open Itt_dfun
 
 (*
  * Show that the file is loading.

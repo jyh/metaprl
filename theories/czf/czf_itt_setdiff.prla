@@ -199,7 +199,7 @@ T	t64	o63
 B	b64	t64
 T	t65	o b64 b4
 B	b65	t65
-P	p65	String Itt_rfun
+P	p65	String Itt_dfun
 O	o65	parent p65
 T	t66	o65
 B	b66	t66

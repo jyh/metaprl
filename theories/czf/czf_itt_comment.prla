@@ -169,7 +169,7 @@ T	t52	o51
 B	b52	t52
 T	t53	o b52 b4
 B	b53	t53
-P	p53	String Itt_rfun
+P	p53	String Itt_dfun
 O	o53	parent p53
 T	t54	o53
 B	b54	t54

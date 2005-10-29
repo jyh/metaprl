@@ -725,8 +725,8 @@ NSummary!cond_rewrite	cond_rewrite	cond_rewrite Summary
 O	o264	cond_rewrite p206
 NSummary!term_param	term_param	term_param Summary
 O	o265	term_param
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o266	fun
 VA	A	A\\ \\
 B	b266	A
@@ -751,9 +751,9 @@ T	t271	o270 b268 b271 b271
 B	b272	t271
 T	t272	o b272 b9
 B	b273	t272
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o273	lambda
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o274	apply
 B	b274	t267
 T	t274	o274 b271 b274

@@ -330,8 +330,8 @@ NItt_reflection_example_lambda!app_term	app_term	app_term Itt_reflection_example
 O	o239	app_term
 T	t239	o239
 B	b239	t239
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 P	p239	Quote
 O	o240	apply p239
 NBase_reflection	Base_reflection	Base_reflection NIL
@@ -345,7 +345,7 @@ NItt_reflection_example_lambda!lambda_term	lambda_term	lambda_term Itt_reflectio
 O	o247	lambda_term
 T	t247	o247
 B	b247	t247
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o248	lambda p239
 B	b248	t241 x
 T	t248	o248 b248
@@ -1944,7 +1944,7 @@ T	t1960	o916 b1958 b1959 b4 b1090 b928
 B	b1960	t1960
 P	p1960	String unfold_mk_apply
 O	o1960	term_def p1960
-NItt_rfun!let	let	let Itt_rfun
+NItt_dfun!let	let	let Itt_dfun
 O	o1961	let
 NItt_int_ext!max	max	max Itt_int_ext
 O	o1962	max

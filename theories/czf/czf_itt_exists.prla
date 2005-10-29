@@ -217,7 +217,7 @@ T	t70	o69
 B	b70	t70
 T	t71	o b70 b4
 B	b71	t71
-P	p71	String Itt_rfun
+P	p71	String Itt_dfun
 O	o71	parent p71
 T	t72	o71
 B	b72	t72
@@ -1813,8 +1813,8 @@ T	t693	o565 b682 b693
 B	b694	t693
 P	p694	String "assumT 4 thenT rwh unfold_dfun_prop (-1)"
 O	o694	ext_rule p694
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o695	fun
 P	p695	Var u1
 O	o696	var p695
@@ -1962,7 +1962,7 @@ P	p751	Var y
 O	o751	var p751
 T	t751	o751
 B	b752	t751
-NItt_rfun!apply	apply752	apply Itt_rfun
+NItt_dfun!apply	apply752	apply Itt_dfun
 O	o752	apply752
 T	t752	o752 b549 b534
 B	b753	t752

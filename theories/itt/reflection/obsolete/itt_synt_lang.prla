@@ -1281,8 +1281,8 @@ T	t487	o3 b485 b486 b6 b9 b7
 B	b487	t487
 P	p487	String unfold_mk
 O	o487	term_def p487
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o488	lambda
 NItt_union!decide	decide	decide Itt_union
 O	o489	decide
@@ -1567,7 +1567,7 @@ T	t606	o532 b606
 B	b607	t606
 P	p616	String mk_wf
 O	o616	rule p616
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o617	fun
 Bdfunhack	b54dep	t54 ""
 T	t617	o617 b528 b54dep
@@ -1997,7 +1997,7 @@ B	b813	t813
 H	h813	y t522
 H	h814	z t525
 H	h815	x1 t527
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o815	apply
 P	p815	Var x1
 O	o816	var p815

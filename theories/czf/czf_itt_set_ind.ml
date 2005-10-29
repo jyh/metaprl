@@ -38,7 +38,7 @@ open Lm_printf
 open Basic_tactics
 
 open Itt_equal
-open Itt_rfun
+open Itt_dfun
 open Itt_dprod
 
 open Czf_itt_set

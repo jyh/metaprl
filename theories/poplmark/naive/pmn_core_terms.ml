@@ -29,7 +29,7 @@ extends Itt_hoas_lang2
 
 open Basic_tactics
 
-open Itt_rfun
+open Itt_dfun
 open Itt_logic
 
 (************************************************************************

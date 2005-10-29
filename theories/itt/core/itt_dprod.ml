@@ -16,67 +16,8 @@ doc <:doc<
       <<sequent{ <H>; x: (u:'A * 'B['u]); <J['x]> >- 'C['x]}>>.}
    $$
 
-   Because of this intensional equality, the @tt{Itt_dprod} module is
-   primitive.  An alternative formulation would be to @emph{derive}
-   the product space from the very-dependent function @hrefterm[rfun]
-   (in the @hrefmodule[Itt_rfun] module), the @hrefterm[union] (in the
-   @hrefmodule[Itt_union] module), and the @hrefterm[unit] type (in the
-   and @hrefmodule[Itt_union]) module).  The construction is as follows.
-
-   First, the Boolean values are defined with the @tt{union} and @tt{unit}
-   types.
-
-   $$
-   @begin[array; rcl]
-   @line{@item{@bool} @item{@equiv} @item{@unit + @unit}}
-   @line{@item{@bfalse} @item{@equiv} @item{@inl{@it}}}
-   @line{@item{@btrue} @item{@equiv} @item{@inr{@it}}}
-   @line{@item{@if{e_1; e_2; e_3}} @item{@equiv} @item{@decide{e_1; @_; e_2; @_; e_3}}}
-   @end[array]
-   $$
-
-   Next, the dependent product space is defined as a function on
-   a Boolean domain.
-
-   $$
-   @begin[array, rcl]
-   @line{@prod{x; A; B[x]} @equiv @rfun[x]{f; @bool; @if{x; A; B[f(@bfalse)]}}}
-   @end[array]
-   $$
-
-   The elements of this type are the functions that return the first
-   projection on the $@false$ argument, and the second projection on
-   the $@btrue$ argument.
-
-   $$
-   @begin[array, rcl]
-   @line{@pair{a; b} @equiv @lambda{x; @if{x; a; b}}}
-   @line{@fst{p} @equiv @item{p(@false)}}
-   @line{@snd{p} @equiv @item{p(@btrue)}}
-   @end[array]
-   $$
-
-   This encoding is satisfactory in all respects except for the
-   elimination form.  The problem is that the function space uses
-   an @emph{extensional} equality; the elements of the function
-   space $@rfun[x]{f; @bool; @if{x; A; B[f(@false)]}}$ are not
-   just the terms $@lambda{x; @if{x; a; b}}$, but all equal functions.
-
-   One alternative is to weaken the elimination form to a
-   more extensional version:
-
-   $$
-   @defrule[weakProductElimination]{p;
-     <<sequent{ math_ldots;
-                      a: 'A; b: 'B['a];
-                      ('a,'b) = 'p in (x:'A * 'B['x]); <J['p]> >- 'C['p]}>>;
-     <<sequent{ <H>; p: (x:'A * 'B['x]); <J['p]> >- 'C['p]}>>.}
-   $$
-
-   This rule @emph{can} be derived from the very-dependent function
-   encoding, but it is probably too weak to be useful.  For this reason
-   the @tt{Itt_dprod} module and the @tt{prod} type are defined
-   as primitive.
+   This intensional equality is one of the reasons for making the
+   @tt[Itt_dprod] module primitive.
 
    @docoff
    ----------------------------------------------------------------
@@ -89,7 +30,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2005 MetaPRL Group, Cornell University and Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -105,8 +46,9 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified By: Alexei Kopylov @email{kopylov@cs.caltech.edu}
+                Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 

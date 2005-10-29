@@ -1644,8 +1644,8 @@ P	p1181	String unfold_group_power
 NItt_int_base	Itt_int_base	Itt_int_base NIL
 NItt_int_base!ind	ind	ind Itt_int_base
 O	o1182	ind
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1182	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1182	apply Itt_dfun
 O	o1183	apply1182
 NItt_record	Itt_record	Itt_record NIL
 NItt_record!field	field	field Itt_record
@@ -1714,7 +1714,7 @@ NItt_record0!rcrd	rcrd861	rcrd Itt_record0
 O	o862	rcrd861
 T	t866	o862
 B	b866	t866
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1221	fun
 NOcaml!str_let	str_let	str_let Ocaml
 NOcaml!patt_var	patt_var	patt_var Ocaml

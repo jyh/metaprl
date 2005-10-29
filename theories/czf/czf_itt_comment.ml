@@ -26,7 +26,7 @@
 extends Itt_theory
 
 open Itt_equal
-open Itt_rfun
+open Itt_dfun
 open Itt_logic
 open Itt_int_base
 open Itt_w

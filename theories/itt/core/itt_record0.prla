@@ -315,10 +315,10 @@ O	o824	var p824
 T	t824	o824
 B	b824	t824
 P	p827	String unfoldRcrd
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply827	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply827	apply Itt_dfun
 O	o828	apply827
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o829	lambda
 NItt_dprod!pair	pair	pair Itt_dprod
 O	o830	pair
@@ -755,7 +755,7 @@ B	b313	t313 n
 T	t314	o313 b726 b313
 B	b314	t314
 P	p320	String unfoldRcrdE
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o321	fix
 T	t386	o830 b1568 b1568
 B	b386	t386 x

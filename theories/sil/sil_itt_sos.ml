@@ -69,8 +69,8 @@ prim_rw unfold_evalsto : evalsto{'e1; 'e2} <-->
 prim_rw unfold_eq_int : Sil_sos!eq_int{number[i:n]; number[j:n]} <--> "assert"{.Itt_int_base!beq_int{.Itt_int_base!number[i:n]; .Itt_int_base!number[j:n]}}
 prim_rw unfold_neq_int : Sil_sos!neq_int{number[i:n]; number[j:n]} <--> "assert"{bnot{.Itt_int_base!beq_int{.Itt_int_base!number[i:n]; .Itt_int_base!number[j:n]}}}
 
-prim_rw unfold_eval : eval{'e; 's} <--> Itt_rfun!apply{'e; 's}
-prim_rw unfold_prog : prog{s. 'e['s]} <--> Itt_rfun!lambda{s. 'e['s]}
+prim_rw unfold_eval : eval{'e; 's} <--> Itt_dfun!apply{'e; 's}
+prim_rw unfold_prog : prog{s. 'e['s]} <--> Itt_dfun!lambda{s. 'e['s]}
 prim_rw unfold_val : "val"{'v; 's} <--> Itt_dprod!pair{'v; 's}
 prim_rw unfold_match : "match"{'t1; x, y. 't2['x; 'y]} <--> Itt_dprod!spread{'t1; x, y. 't2['x; 'y]}
 prim_rw unfold_progof : progof{'t} <--> "match"{'t; x, y. 'x}
@@ -310,13 +310,13 @@ prim_rw unfold_assign : assign{'e1; 'e2} <-->
  * Functions.
  *)
 prim_rw unfold_lambda : Sil_programs!lambda{v. 'e1['v]} <-->
-   exprof{.Itt_rfun!lambda{v. 'e1['v]}}
+   exprof{Itt_dfun!lambda{v. 'e1['v]}}
 
 prim_rw unfold_apply : Sil_programs!apply{'e1; 'e2} <-->
    prog{s1.
       "match"{.eval{'e2; 's1}; v2, s2.
       "match"{.eval{'e1; 's2}; v1, s3.
-         eval{.Itt_rfun!apply{'v1; exprof{'v2}}; 's3}}}}
+         eval{.Itt_dfun!apply{'v1; exprof{'v2}}; 's3}}}}
 
 (************************************************************************
  * NATURAL SEMANTICS                                                    *

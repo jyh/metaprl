@@ -2056,8 +2056,8 @@ B	b954	t954
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o955	equal
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply955	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply955	apply Itt_dfun
 O	o956	apply955
 P	p956	Token *
 O	o957	field p956
@@ -3242,7 +3242,7 @@ B	b1311	t1311
 T	t1312	o942 b1311
 B	b1312	t1312 self
 O	o1312	record p1243
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1313	fun
 B	b1313	t1312
 Bdfunhack	b1313dep	t1312 ""
@@ -6091,7 +6091,7 @@ B	b2463	t2463
 NItt_record!rcrd	rcrd	rcrd Itt_record
 P	p2463	Token inv
 O	o2464	rcrd p2463
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o2465	lambda
 O	o2466	rcrd p941
 O	o2467	rcrd p956

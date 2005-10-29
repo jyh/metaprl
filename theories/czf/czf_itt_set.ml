@@ -114,7 +114,7 @@ open Lm_printf
 
 open Basic_tactics
 
-open Itt_rfun
+open Itt_dfun
 open Itt_struct
 open Itt_w
 

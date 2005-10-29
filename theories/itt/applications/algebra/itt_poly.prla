@@ -1713,8 +1713,8 @@ B	b925	t925
 NItt_bool	Itt_bool	Itt_bool NIL
 NItt_bool!assert	assert	assert Itt_bool
 O	o926	assert
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply926	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply926	apply Itt_dfun
 O	o927	apply926
 P	p927	Token eq
 O	o928	field p927
@@ -1805,7 +1805,7 @@ P	p1057	Var H
 P	p1062	Var u
 O	o1062	var p1062
 T	t1063	o1062
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1109	fun
 NItt_logic!and	and	and Itt_logic
 O	o1121	and
@@ -1955,7 +1955,7 @@ B	b3310	t3310
 P	p3318	String unfold_zero_poly
 NItt_poly!zero_poly	zero_poly	zero_poly Itt_poly
 O	o3319	zero_poly
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3320	lambda
 P	p3326	String unfold_isZero
 NItt_poly!isZero	isZero	isZero Itt_poly

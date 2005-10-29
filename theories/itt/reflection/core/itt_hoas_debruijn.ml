@@ -45,7 +45,7 @@ extends Itt_image
 doc docoff
 
 open Basic_tactics
-open Itt_rfun
+open Itt_dfun
 
 doc <:doc<
    @terms

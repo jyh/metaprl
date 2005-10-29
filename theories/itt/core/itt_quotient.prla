@@ -7682,10 +7682,10 @@ T	t2337	o3477 b2309 b10
 B	b2337	t2337
 P	p3482	String assertion
 O	o3482	tactic_arg p3482
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply3482	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply3482	apply Itt_dfun
 O	o3483	apply3482
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3484	lambda
 B	b2507	s2472 it
 T	t2507	o3484 b2507
@@ -7723,7 +7723,7 @@ O	o11	ext_rule p2
 H	h2208	_1010 E2207
 H	h2501	_1010 t2493
 H	h2502	_1010 t2494
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o3021	fun
 P	p3428	Var t
 O	o3428	var p3428

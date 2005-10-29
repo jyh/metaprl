@@ -38,7 +38,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_equal
-extends Itt_rfun
+extends Itt_dfun
 extends Itt_logic
 extends Itt_bool
 extends Itt_struct3

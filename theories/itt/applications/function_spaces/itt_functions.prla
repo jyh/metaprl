@@ -1946,8 +1946,8 @@ O	o877	exists
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o878	equal
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o879	apply
 Nvar	var	var NIL
 P	p879	Var a
@@ -2209,7 +2209,7 @@ S	s1013	t1009\\ h\\ t1013
 B	b1014	s1013
 T	t1014	o1008 b1014
 B	b1015	t1014
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o1015	fun
 Bdfunhack	b1013dep	B1012 ""
 T	t1015	o1015 b1010 b1013dep

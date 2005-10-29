@@ -1,4 +1,4 @@
-doc <:doc<
+doc <:doc< 
    @module[Itt_record]
 
    This is a theory of record type.

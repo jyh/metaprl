@@ -1577,8 +1577,8 @@ NItt_nat!nat	nat	nat Itt_nat
 O	o1538	nat
 T	t1538	o1538
 H	h1538	n t1538
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply1538	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply1538	apply Itt_dfun
 O	o1539	apply1538
 P	p1539	Var n
 O	o1540	var p1539
@@ -1597,9 +1597,9 @@ T	t1570	o1570
 B	b1570	t1570
 P	p1584	String "thinT 3"
 O	o1584	ext_rule p1584
-NItt_rfun!fix	fix	fix Itt_rfun
+NItt_dfun!fix	fix	fix Itt_dfun
 O	o1591	fix
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1592	lambda
 NItt_union	Itt_union	Itt_union NIL
 NItt_union!decide	decide	decide Itt_union

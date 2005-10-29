@@ -2198,7 +2198,7 @@ B	b622	t622
 P	p626	Number 1721
 T	t627	o110 b414 b119
 B	b627	t627
-P	p632	String Itt_rfun
+P	p632	String Itt_dfun
 O	o634	string p632
 T	t634	o634
 B	b634	t634
@@ -4461,8 +4461,8 @@ T	t3677	o1269 b3301 b3676 b3677
 B	b3678	t3677
 T	t3678	o1268 b3678
 B	b3679	t3678
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply430	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply430	apply Itt_dfun
 O	o431	apply430
 Vt_1	t_1	t_1\\ H\\ t1276
 B	b3680	t_1
@@ -5776,7 +5776,7 @@ P	p3620	Var u
 O	o3620	var p3620
 T	t3620	o3620
 C	h3621	J\\ H\\ t3620
-NItt_rfun!fun	fun3621	fun Itt_rfun
+NItt_dfun!fun	fun3621	fun Itt_dfun
 O	o3621	fun3621
 B	b9	B ""
 T	t9	o3621 b4283 b9
@@ -7070,7 +7070,7 @@ T	t3900	o b1065 b3900
 B	b3901	t3900
 NPerv!rewrite	rewrite	rewrite Perv
 O	o3901	rewrite
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3902	lambda
 Vt1	t13902	t1\\ H\\ t1276
 B	b3949	t13902 x

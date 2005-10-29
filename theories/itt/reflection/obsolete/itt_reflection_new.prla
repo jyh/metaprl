@@ -4486,8 +4486,8 @@ B	b1800	t1799
 NItt_list2	Itt_list2	Itt_list2 NIL
 NItt_list2!map	map	map Itt_list2
 O	o1800	map
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1801	lambda
 NItt_int_base!sub	sub	sub Itt_int_base
 O	o1802	sub

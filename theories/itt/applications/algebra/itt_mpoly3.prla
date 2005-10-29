@@ -883,7 +883,7 @@ P	p326	Number 489
 P	p327	Number 502
 O	o327	location p326 p327
 O	o328	str_open p326 p327
-P	p328	String Itt_rfun
+P	p328	String Itt_dfun
 O	o329	string p328
 T	t329	o329
 B	b329	t329
@@ -1962,8 +1962,8 @@ T	t736	o735 b735 b736
 B	b737	t736
 NItt_w!tree	tree	tree Itt_w
 O	o737	tree
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o738	lambda
 P	p738	Var child
 O	o739	var p738
@@ -2085,7 +2085,7 @@ P	p784	Var op
 O	o785	var p784
 T	t785	o785
 B	b785	t785
-NItt_rfun!apply	apply785	apply Itt_rfun
+NItt_dfun!apply	apply785	apply Itt_dfun
 O	o786	apply785
 P	p786	Token +
 O	o787	field p786

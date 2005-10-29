@@ -2719,8 +2719,8 @@ P	p661	MLevel 1
 O	o661	univ p661
 T	t661	o661
 H	h661	T t661
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o662	fun
 P	p662	Var T
 O	o663	var p662
@@ -2729,7 +2729,7 @@ B	b663	t663
 Bdfunhack	b611dep	t584 ""
 T	t664	o662 b663 b611dep
 H	h664	f t664
-NItt_rfun!apply	apply664	apply Itt_rfun
+NItt_dfun!apply	apply664	apply Itt_dfun
 O	o664	apply664
 P	p664	Var f
 O	o665	var p664
@@ -6394,7 +6394,7 @@ B	b1912	t1911
 H	h1929	w t584
 T	t1946	o664 b681 b1031
 B	b1946	t1946
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1985	lambda
 T	t1985	o664 b586 b1031
 B	b1985	t1985

@@ -339,8 +339,8 @@ NItt_equal!univ	univ	univ Itt_equal
 O	o2595	univ p2589
 T	t2595	o2595
 B	b2595	t2595
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun2595	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun2595	fun Itt_dfun
 O	o2596	fun2595
 T	t2600	o675 b4
 B	b2600	t2600
@@ -362,7 +362,7 @@ O	o2919	col_member
 P	p2923	String unfold_col_member
 NItt_logic!exists	exists	exists Itt_logic
 O	o2924	exists
-NItt_rfun!apply	apply2925	apply Itt_rfun
+NItt_dfun!apply	apply2925	apply Itt_dfun
 O	o2926	apply2925
 P	p2994	String col_member_univ
 O	o2994	rule p2994
@@ -4772,7 +4772,7 @@ B	b2134	t2133
 NItt_collection!type_col	type_col	type_col Itt_collection
 O	o3377	type_col
 P	p3381	String unfold_type_col
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o3382	lambda
 P	p3388	String type_col_wf
 O	o3388	rule p3388

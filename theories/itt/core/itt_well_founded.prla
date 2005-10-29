@@ -13,7 +13,7 @@ NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
-P	p7	String Itt_rfun
+P	p7	String Itt_dfun
 P	p33	String Dtactic
 NSummary!resource	resource	resource Summary
 NOcaml	Ocaml	Ocaml NIL
@@ -175,15 +175,15 @@ P	p440	Var z
 O	o440	var p440
 T	t440	o440
 P	p455	String unfold_well_founded
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o456	fun
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!univ	univ	univ Itt_equal
 O	o457	univ p378
 T	t457	o457
 B	b457	t457
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o458	apply
 P	p458	Var P
 O	o459	var p458
@@ -252,7 +252,7 @@ B	b529	t529
 NItt_equal!equal	equal	equal Itt_equal
 O	o532	equal
 O	o538	meta_labeled p502
-NItt_rfun!well_founded	well_founded541	well_founded Itt_rfun
+NItt_dfun!well_founded	well_founded541	well_founded Itt_dfun
 O	o541	well_founded541
 P	p546	String "assertT << well_founded[i:l]{'A; x, y. 'R['x; 'y]} >> thenAT trivialT"
 O	o546	ext_rule p546
@@ -288,11 +288,11 @@ P	p704	Var a3
 O	o704	var p704
 T	t705	o704
 B	b705	t705
-NItt_rfun!well_founded_prop	well_founded_prop	well_founded_prop Itt_rfun
+NItt_dfun!well_founded_prop	well_founded_prop	well_founded_prop Itt_dfun
 O	o709	well_founded_prop
-NItt_rfun!well_founded_assum	well_founded_assum	well_founded_assum Itt_rfun
+NItt_dfun!well_founded_assum	well_founded_assum	well_founded_assum Itt_dfun
 O	o710	well_founded_assum
-NItt_rfun!well_founded_apply	well_founded_apply	well_founded_apply Itt_rfun
+NItt_dfun!well_founded_apply	well_founded_apply	well_founded_apply Itt_dfun
 O	o711	well_founded_apply
 T	t712	o711 b459 b694
 NSummary!arg_named	arg_named	arg_named Summary
@@ -319,7 +319,7 @@ P	p864	String autoT
 O	o864	ext_rule p864
 P	p874	String "withT << lambda{v. well_founded_apply{'P; 'v}} >> (dT 5)"
 O	o874	ext_rule p874
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o875	lambda
 P	p875	Var v
 O	o876	var p875

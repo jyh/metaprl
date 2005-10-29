@@ -360,8 +360,8 @@ P	p553	Var t
 O	o554	var p553
 T	t554	o554
 B	b554	t554
-NItt_rfun	Itt_rfun	Itt_rfun NIL
-NItt_rfun!apply	apply	apply Itt_rfun
+NItt_dfun	Itt_dfun	Itt_dfun NIL
+NItt_dfun!apply	apply	apply Itt_dfun
 O	o555	apply
 P	p555	Var f
 O	o556	var p555
@@ -753,7 +753,7 @@ P	p680	MLevel 1
 O	o680	univ p680
 T	t680	o680
 H	h680	T t680
-NItt_rfun!fun	fun	fun Itt_rfun
+NItt_dfun!fun	fun	fun Itt_dfun
 O	o681	fun
 Bdfunhack	b666dep	t653 ""
 T	t681	o681 b567 b666dep
@@ -4676,7 +4676,7 @@ B	b578	s577
 T	t578	o578 b578 b322
 B	b579	t578
 B	b802	t802
-NItt_rfun!lambda	lambda	lambda Itt_rfun
+NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o806	lambda
 T	t807	o806 b685
 B	b807	t807

@@ -32,15 +32,31 @@ open Lm_printf
 open Simple_print
 
 (*
- * The derivations are based on a proof checker.
- * For now, rather than defining the proof checker,
- * we will specify it.
+ * Define the rules.
  *)
-declare is_valid_step{'p}
-declare is_valid_derivation{'p}
+define unfold_sa_top : sa_top <--> <:xquoterule<
+   <H> >- T <: "TyTop"
+>>
 
-define unfold_fsub_axiom : fsub_axiom{'step} <--> <:xquoterule< step.
-   <A>; x: T; <B> >- T
+define unfold_sa_tvar : sa_tvar <--> <:xquoterule<
+   <H>; X: T; <J[X]> >- X <: X
+>>
+
+define unfold_sa_trans_tvar : sa_trans_tvar <--> <:xquoterule<
+   <H>; X: U; <J[X]> >- U <: T -->
+   <H>; X: U; <J[X]> >- X <: T
+>>
+
+define unfold_sa_arrow : sa_arrow <--> <:xquoterule<
+   <H> >- T1 <: S1 -->
+   <H> >- S2 <: T2 -->
+   <H> >- TyFun{S1; S2} <: TyFun{T1; T2}
+>>
+
+define unfold_sa_all : sa_all <--> <:xquoterule<
+   <H> >- T1 <: S1 -->
+   <H>; X: T1 >- S2[X] <: T2[X] -->
+   <H> >- TyAll{S1; X. S2[X]} <: TyAll{T1; X. T2[X]}
 >>
 
 (*!

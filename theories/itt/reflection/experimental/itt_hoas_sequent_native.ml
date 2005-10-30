@@ -56,6 +56,15 @@ define unfold_is_sequent : is_sequent{'d; 's} <-->
       bdepth{'arg} = 'd in nat
       & hyp_depths{'d; 'hyps}
       & bdepth{'concl} = 'd +@ length{'hyps} in nat}}
+
+define unfold_SOVar : SOVar{'d} <-->
+   { e: BTerm | bdepth{'e} = 'd in nat }
+
+define unfold_CVar : CVar{'d} <-->
+   { l: list{BTerm} | hyp_depths{'d; 'l} }
+
+define unfold_ProofStep : ProofStep <-->
+   list{BTerm} * BTerm
 doc docoff
 
 let fold_hyp_depths = makeFoldC << hyp_depths{'d; 'l} >> unfold_hyp_depths

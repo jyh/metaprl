@@ -38,6 +38,10 @@ declare "sequent"{'arg; 'hyps; 'concl}
  *)
 topval fold_hyp_depths : conv
 
+declare SOVar{'d}
+declare CVar{'d}
+declare ProofStep
+
 (*!
  * @docoff
  *

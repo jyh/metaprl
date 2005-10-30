@@ -53,10 +53,12 @@ define iform unfold_Iter : Iter{'X} <--> Iter{Operator; 'X}
 define iform unfold_BT : BT{'n} <--> BT{Operator; 'n}
 
 define unfold_BTerm : BTerm <--> Lang{Operator}
+define unfold_BTerm2 : BTerm{'i} <--> { e: BTerm | bdepth{'e} = 'i in nat }
 
 doc docoff
 
 let fold_BTerm = makeFoldC << BTerm >> unfold_BTerm
+let fold_BTerm2 = makeFoldC << BTerm{'i} >> unfold_BTerm2
 
 doc rules
 

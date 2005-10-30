@@ -26,6 +26,14 @@
  *)
 extends Pmn_core_terms
 
+(************************************************************************
+ * The subtyping judgment.
+ *)
+declare "subtype"{'ty1; 'ty2}
+
+production xterm_term{"subtype"{'ty1; 'ty2}} <--
+   xterm_term{'ty1}; tok_st; xterm_term{'ty2}
+
 (*!
  * @docoff
  *

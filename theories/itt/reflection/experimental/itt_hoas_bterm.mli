@@ -43,6 +43,7 @@ define iform unfold_Iter : Iter{'X} <--> Iter{Operator; 'X}
 define iform unfold_BT   : BT{'n} <--> BT{Operator; 'n}
 
 declare BTerm
+declare BTerm{'i}
 declare dummy
 
 topval unfold_BTerm : conv

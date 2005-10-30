@@ -611,13 +611,13 @@ declare xterm{'e : Term} : Nonterminal
 declare xmterm{'e : MTerm} : Nonterminal
 declare xrule{'e : MTerm} : Nonterminal
 declare xrewrite{'e : MTerm} : Nonterminal
-declare xquoterule{x. 'e : MTerm} : Nonterminal
+declare xquoterule{'e : MTerm} : Nonterminal
 
 parser xterm{'e} : xterm
 parser xmterm{'e} : xterm
 parser xrule{'e} : xterm
 parser xrewrite{'e} : xterm
-parser xquoterule{x. 'e} : xterm
+parser xquoterule{'e} : xterm
 
 production xterm{'e} <--
    xterm_term{'e}; tok_eof
@@ -631,8 +631,8 @@ production xrule{'e} <--
 production xrewrite{'e} <--
    xterm_meta_term{'e}; tok_eof
 
-production xquoterule{x. 'e} <--
-   tok_id[x:s]; tok_dot; xterm_meta_term{'e}; tok_eof
+production xquoterule{'e} <--
+   xterm_meta_term{'e}; tok_eof
 
 (************************************************************************
  * Iforms.
@@ -658,9 +658,9 @@ iform unfold_term_xrewrite :
    'e
 
 iform unfold_term_xquoterule :
-   xquoterule{x. 'e['x]}
+   xquoterule{'e}
    <-->
-   xrulequote{x. 'e['x]}
+   xrulequote{'e}
 
 (*
  * First-order variables.

@@ -192,7 +192,7 @@ topval fnExtenVoidT : tactic
 
 (************************************************************************
  * Grammar.
- *)
+ *
 declare tok_Fun       : Terminal
 
 lex_token xterm : "Fun" --> tok_Fun
@@ -205,6 +205,7 @@ production xterm_term{'t1 -> 't2} <--
 
 production xterm_term{x: 't1 -> 't2} <--
    tok_Fun; tok_id[x:s]; tok_colon; xterm_apply_term{'t1}; tok_arrow; xterm_term{'t2}
+ *)
 
 (*
  * -*-

@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-extends Itt_dfun
+extends Itt_dfun_imp
 
 (*
  * -*-

@@ -1,0 +1,24 @@
+THEORYNAME = itt_rfun
+THEORYDESCR = Extensions to Computational Type Theory - Very Dependent Functions
+
+OCAMLINCLUDES[] +=
+   $(SUPPORT_DIRS)
+   ../../../base
+   ../../core
+
+# Library files
+MPFILES[] =
+   itt_rfun
+   itt_dfun_imp
+   #itt_dprod_imp
+   itt_well_founded_equiv
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

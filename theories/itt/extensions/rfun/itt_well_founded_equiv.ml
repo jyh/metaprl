@@ -44,7 +44,7 @@ doc <:doc<
 >>
 extends Itt_rfun
 extends Itt_well_founded
-extends Itt_dfun
+extends Itt_dfun_imp
 extends Itt_logic
 
 doc <:doc<

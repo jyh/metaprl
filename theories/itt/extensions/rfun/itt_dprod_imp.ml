@@ -114,10 +114,7 @@ dform two_order_df : except_mode[src] :: two_order{'a; 'b} =
 prec prec_prod
 prec prec_spread
 
-dform prod_df : parens :: "prec"[prec_prod] :: prod{'A; 'B} =
-   pushm[0] slot{'A} " " times " " slot{'B} popm
-
-dform prod_df2 :  parens :: "prec"[prec_prod] :: prod{'A; x. 'B} =
+dform prod_df :  parens :: "prec"[prec_prod] :: prod{'A; x. 'B} =
    slot{'x} `":" slot{'A} " " times " " slot{'B}
 
 dform pair_prl_df : except_mode[src] :: pair{'a; 'b} =

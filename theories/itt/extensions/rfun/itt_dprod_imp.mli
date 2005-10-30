@@ -34,9 +34,7 @@ extends Itt_rfun
 extends Itt_unit
 extends Itt_union
 
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
+open Basic_tactics
 
 topval pairFormation' : term -> tactic
 

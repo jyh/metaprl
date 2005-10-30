@@ -39,7 +39,6 @@ PRINT_THEORIES[] =
     core/itt_atom
     core/itt_set
     core/itt_union
-    core/itt_rfun
     core/itt_dfun
     core/itt_dprod
     core/itt_prod

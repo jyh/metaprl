@@ -10,7 +10,7 @@ OCAMLINCLUDES[] +=
 MPFILES[] =
    itt_rfun
    itt_dfun_imp
-   #itt_dprod_imp
+   itt_dprod_imp
    itt_well_founded_equiv
 
 Theory($(MPFILES))

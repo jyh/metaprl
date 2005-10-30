@@ -36,7 +36,7 @@ extends Itt_union
 
 open Basic_tactics
 
-topval pairFormation' : term -> tactic
+topval pairFormation : term -> tactic
 
 topval fold_two : conv
 topval fold_left : conv

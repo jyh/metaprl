@@ -32,7 +32,7 @@
  *)
 
 extends Itt_rfun
-extends Itt_dfun
+extends Itt_dfun_imp
 extends Itt_unit
 extends Itt_union
 
@@ -162,15 +162,10 @@ interactive two_well_founded {| intro [] |} :
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-interactive productEquality {| intro [] |} 'y :
+interactive productEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] }
-
-interactive productMember {| intro [] |} 'y :
-   [wf] sequent { <H> >- 'A in univ[i:l] } -->
-   [wf] sequent { <H>; y: 'A >- 'B['y] in univ[i:l] } -->
-   sequent { <H> >- (x:'A * 'B['x]) in univ[i:l] }
 
 (*
  * H >- Ui ext x:A * B
@@ -178,7 +173,7 @@ interactive productMember {| intro [] |} 'y :
  * H >- A = A in Ui
  * H, x:A >- Ui ext B
  *)
-interactive productFormation 'A 'x :
+interactive productFormation 'A :
    [wf] sequent { <H> >- 'A in univ[i:l] } -->
    [main] ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] }
@@ -186,7 +181,7 @@ interactive productFormation 'A 'x :
 (*
  * Typehood.
  *)
-interactive productType {| intro [] |} 'x :
+interactive productType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
    sequent { <H> >- "type"{y:'A1 * 'A2['y]} }

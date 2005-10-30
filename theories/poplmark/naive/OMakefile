@@ -14,5 +14,6 @@ OCAMLINCLUDES[] +=
 
 FILES[] =
     pmn_core_terms
+    pmn_core_judgments
 
 Theory($(FILES))

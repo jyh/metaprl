@@ -28,6 +28,14 @@ extends Itt_hoas_util
 
 open Basic_tactics
 
+(*
+ * The sequent term.
+ *)
+declare "sequent"{'arg; 'hyps; 'concl}
+
+(*
+ * Predicates on sequents.
+ *)
 topval fold_hyp_depths : conv
 
 (*!

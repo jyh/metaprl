@@ -1,7 +1,5 @@
 (*
- * Some utilities for simplifying the reflection theory.
- * These should eventually be migrated into the reflection
- * theory proper as necessary.
+ * The judgments for FSub.
  *
  * ----------------------------------------------------------------
  *
@@ -27,27 +25,23 @@
  * @end[license]
  *)
 extends Itt_hoas_sequent_native
+extends Pmn_core_terms
 
-open Basic_tactics
+open Lm_printf
 
-(************************************************************************
- * A version of languages based on operator lists.
+open Simple_print
+
+(*
+ * The derivations are based on a proof checker.
+ * For now, rather than defining the proof checker,
+ * we will specify it.
  *)
-declare olang{'ops}
+declare is_valid_step{'p}
+declare is_valid_derivation{'p}
 
-topval fold_olang : conv
-
-(************************************************************************
- * Grammar.
- *)
-declare tok_Lang          : Terminal
-
-lex_token xterm : "Lang" --> tok_Lang
-
-lex_prec nonassoc [tok_Lang] = prec_not
-
-production xterm_term{olang{'ops}} <--
-   tok_Lang; xterm_term{'ops}
+define unfold_fsub_axiom : fsub_axiom{'step} <--> <:xquoterule< step.
+   <A>; x: T; <B> >- T
+>>
 
 (*!
  * @docoff

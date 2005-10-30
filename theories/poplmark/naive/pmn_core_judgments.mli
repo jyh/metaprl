@@ -1,7 +1,5 @@
 (*
- * Some utilities for simplifying the reflection theory.
- * These should eventually be migrated into the reflection
- * theory proper as necessary.
+ * Judgments for FSub.
  *
  * ----------------------------------------------------------------
  *
@@ -26,28 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_sequent_native
-
-open Basic_tactics
-
-(************************************************************************
- * A version of languages based on operator lists.
- *)
-declare olang{'ops}
-
-topval fold_olang : conv
-
-(************************************************************************
- * Grammar.
- *)
-declare tok_Lang          : Terminal
-
-lex_token xterm : "Lang" --> tok_Lang
-
-lex_prec nonassoc [tok_Lang] = prec_not
-
-production xterm_term{olang{'ops}} <--
-   tok_Lang; xterm_term{'ops}
+extends Pmn_core_terms
 
 (*!
  * @docoff

@@ -417,6 +417,16 @@ interactive_rw reduce_all_list_witness_cons {| reduce |} :
 
 
 doc <:doc<
+   The @hrefterm[exists_list] term performs induction over the list.
+>>
+
+interactive_rw reduce_exists_list_nil {| reduce |} : exists_list{nil; x. 'P['x]} <--> "false"
+
+interactive_rw reduce_exists_list_cons {| reduce |} :
+   exists_list{cons{'u; 'v}; x. 'P['x]} <--> 'P['u] or exists_list{'v; x.'P['x]}
+doc docoff
+
+doc <:doc<
    @rewrites
 
    The @hrefterm[is_nil] term is defined with the
@@ -1134,6 +1144,38 @@ interactive all_list_witness_wf2  {| intro[] |} :
    sequent { <H> >- 'l in list } -->
    sequent { <H> >- all_list{'l;  x. 'p['x] in 'P['x]}  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
+
+doc <:doc<
+   @rules
+   Rules for quantifiers are the following:
+>>
+interactive exists_list_wf1  {| intro [intro_typeinf << 'l >>] |} list{'T} :
+   sequent { <H> >- 'l in list{'T}  } -->
+   sequent { <H>; x: 'T >- 'P['x] Type } -->
+   sequent { <H> >- exists_list{'l;  x. 'P['x]} Type }
+
+interactive exists_list_wf2  {| intro [SelectOption 5] |} :
+   sequent { <H> >- 'l in list  } -->
+   sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] Type } -->
+   sequent { <H> >- exists_list{'l;  x. 'P['x]} Type }
+
+interactive exists_list_intro_cons  {| intro [] |} :
+   sequent { <H> >- 'P['a] or exists_list{'l; x. 'P['x]} } -->
+   sequent { <H> >- exists_list{cons{'a; 'l};  x. 'P['x]} }
+
+interactive exists_list_intro  {| intro [] |} 'i :
+   sequent { <H> >- 'l in list  } -->
+   sequent { <H> >- 'i in Index{'l}  } -->
+   sequent { <H> >- 'P[nth{'l; 'i}]  } -->
+   sequent { <H>; i: Index{'l} >- 'P[nth{'l; 'i}] Type } -->
+   sequent { <H> >- exists_list{'l;  x. 'P['x]} }
+
+interactive exists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} 'i :
+   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'A Type } -->
+   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
+   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; x: 'A >- 'P['x] Type  } -->
+   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; i: Index{'l}; 'P[nth{'l; 'i}] >- 'C['u] } -->
+   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
 
 (*
  * map.

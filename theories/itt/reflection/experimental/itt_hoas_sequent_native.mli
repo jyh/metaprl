@@ -29,18 +29,34 @@ extends Itt_hoas_util
 open Basic_tactics
 
 (*
- * The sequent term.
+ * An actual sequent term.
  *)
 declare "sequent"{'arg; 'hyps; 'concl}
+
+(*
+ * The type of sequents.
+ *)
+declare Sequent{'d; 'ty_arg; 'ty_hyp; 'ty_concl}
+
+(*
+ * A second-order variable of type 'ty.
+ *)
+declare SOVar{'d; 'ty}
+
+(*
+ * A sequent context variable.
+ *)
+declare CVar{'d; 'ty_hyp}
+
+(*
+ * A step in a proof.
+ *)
+declare ProofStep{'ty_sequent}
 
 (*
  * Predicates on sequents.
  *)
 topval fold_hyp_depths : conv
-
-declare SOVar{'d}
-declare CVar{'d}
-declare ProofStep
 
 (*!
  * @docoff

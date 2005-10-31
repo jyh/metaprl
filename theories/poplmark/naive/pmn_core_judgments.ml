@@ -33,7 +33,6 @@ open Simple_print
 
 (*
  * Define the rules.
- *)
 define unfold_sa_top : sa_top <--> <:xquoterule<
    <H> >- T <: "TyTop"
 >>
@@ -58,6 +57,7 @@ define unfold_sa_all : sa_all <--> <:xquoterule<
    <H>; X: T1 >- S2[X] <: T2[X] -->
    <H> >- TyAll{S1; X. S2[X]} <: TyAll{T1; X. T2[X]}
 >>
+ *)
 
 (*!
  * @docoff

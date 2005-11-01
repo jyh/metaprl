@@ -29,7 +29,7 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_srec
+extends Itt_tunion
 extends Itt_match
 extends Itt_hoas_util
 
@@ -205,20 +205,44 @@ define unfold_Logic : Logic{'ty} <-->
    list{ProofRule{'ty}}
 
 doc <:doc<
-   The term << ValidStep{'step; 'logic} >> is the predicate that determines
+   A derivation has three parts, 1) the premises << DerivationPremises{'d} >>,
+   the goal << DerivationGoal{'d} >>, and the justification.
+>>
+define unfold_DerivationPremises : DerivationPremises{'d} <-->
+   fst{'d}
+
+define unfold_DerivationGoal : DerivationGoal{'d} <-->
+   fst{snd{'d}}
+
+doc <:doc<
+   The term << ValidStep{'premises; 'goal; 'logic} >> is the predicate that determines
    if the proof step matches one of the proof rules in the logic.
 >>
-define unfold_ValidStep : ValidStep{'step; 'logic} <-->
-   exists_list{'logic; check. 'check (spread{'step; premises, goal. (map{x. snd{'x}; 'premises}, 'goal)})}
+define unfold_ValidStep : ValidStep{'premises; 'goal; 'logic} <-->
+   exists_list{'logic; check. 'check (map{x. DerivationGoal{'x}; 'premises}, 'goal)}
+
+doc <:doc<
+   A << DerivationStep{'premises; 'goal; 'p} >> forms one step of a derivation,
+   where << 'p >> is the proof that the << 'goal >> follows from the << 'premises >>.
+>>
+define unfold_DerivationStep : DerivationStep{'premises; 'goal; 'p} <-->
+   pair{'premises; pair{'goal; 'p}}
 
 doc <:doc<
    The term << Derivation{'ty_sequent; 'logic} >> represents the set of
-   valid derivations in the logic.
+   valid derivations in the logic.  We define it as the finite unrollings of
+   proof trees.
 >>
-define unfold_Derivation : Derivation{'ty_sequent; 'logic} <-->
-   srec{T. { step: (list{'T} * 'ty_sequent) | "subtype"{'T; top * 'ty_sequent} & ValidStep{'step; 'logic} }}
+define unfold_Derivation_indexed : Derivation{'n; 'ty_sequent; 'logic} <-->
+   ind{'n; void; m, T. premises: list{'T} * goal: 'ty_sequent * ValidStep{'premises; 'goal; 'logic}}
 
+define unfold_Derivation : Derivation{'ty_sequent; 'logic} <-->
+   tunion{nat; n. Derivation{'n; 'ty_sequent; 'logic}}
 doc docoff
+
+let fold_Logic = makeFoldC << Logic{'ty_sequent} >> unfold_Logic
+let fold_DerivationStep = makeFoldC << DerivationStep{'premises; 'goal; 'proof} >> unfold_DerivationStep
+let fold_Derivation_indexed = makeFoldC << Derivation{'n; 'ty_sequent; 'logic} >> unfold_Derivation_indexed
 
 (*
  * A ProofRule is a type for any type.
@@ -234,12 +258,148 @@ interactive logic_wf {| intro [] |} : <:xrule<
 >>
 
 (*
+ * A ValidStep requires a derivation and a goal.
+ *)
+interactive derivation_premises_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- t IN ty_premises * "top" * "top" -->
+   <H> >- DerivationPremises{t} IN ty_premises
+>>
+
+interactive derivation_goal_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- t IN "top" * ty_sequent * "top" -->
+   <H> >- DerivationGoal{t} IN ty_sequent
+>>
+
+interactive valid_step_wf {| intro [intro_typeinf << 'goal >>] |} 'ty_sequent : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- premises IN list{"top" * ty_sequent * "top"} -->
+   "wf" : <H> >- goal IN ty_sequent -->
+   "wf" : <H> >- logic IN Logic{ty_sequent} -->
+   <H> >- ValidStep{premises; goal; logic} Type
+>>
+
+(*
  * The step discards some of the information.
  *)
+interactive_rw reduce_derivation_indexed_base {| reduce |} : <:xrewrite<
+   Derivation{0; ty_sequent; logic}
+   <-->
+   "void"
+>>
+
+interactive_rw reduce_derivation_indexed_step {| reduce |} : <:xrewrite<
+   n IN "nat" -->
+   Derivation{n +@ 1; ty_sequent; logic}
+   <-->
+   Prod premises: list{Derivation{n; ty_sequent; logic}} * Prod goal: ty_sequent * ValidStep{premises; goal; logic}
+>>
+
+interactive derivation_indexed_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n IN "nat" -->
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- logic IN Logic{ty_sequent} -->
+   <H> >- Derivation{n; ty_sequent; logic} Type
+>>
+
 interactive derivation_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- ty_sequent IN "univ"[1:l] -->
+   "wf" : <H> >- ty_sequent Type -->
    "wf" : <H> >- logic IN "Logic"{ty_sequent} -->
    <H> >- "Derivation"{ty_sequent; logic} Type
+>>
+
+(*
+ * Derivations contain valid steps.
+ *)
+interactive valid_step_wf2 {| intro [intro_typeinf << 'premises >>] |} list{Derivation{'n; 'ty_sequent; 'logic}} : <:xrule<
+   "wf" : <H> >- n IN "nat" -->
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- premises IN list{Derivation{n; ty_sequent; logic}} -->
+   "wf" : <H> >- goal IN ty_sequent -->
+   "wf" : <H> >- logic IN Logic{ty_sequent} -->
+   <H> >- ValidStep{premises; goal; logic} Type
+>>
+
+(*
+ * The type of derivations is monotone.
+ *)
+interactive derivation_indexed_monotone 'i : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- logic IN Logic{ty_sequent} -->
+   "wf" : <H> >- i IN "nat" -->
+   "wf" : <H> >- j IN "nat" -->
+   "aux" : <H> >- i <= j -->
+   <H> >- e IN Derivation{i; ty_sequent; logic} -->
+   <H> >- e IN Derivation{j; ty_sequent; logic}
+>>
+
+(*
+ * The depth of a derivation is computable.
+ *)
+define unfold_DerivationDepth : DerivationDepth{'d} <--> <:xterm<
+   (fix depth d ->
+       list_max{map{premise. depth premise; DerivationPremises{d}}} +@ 1) d
+>>
+
+let fold_DerivationDepth = makeFoldC << DerivationDepth{'d} >> unfold_DerivationDepth
+
+interactive derivation_depth_wf1 {| intro [intro_typeinf << 'd >>] |} Derivation{'n; 'ty_sequent; 'ty_logic} : <:xrule<
+   "wf" : <H> >- n IN "nat" -->
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- ty_logic IN Logic{ty_sequent} -->
+   "wf" : <H> >- d IN Derivation{n; ty_sequent; ty_logic} -->
+   <H> >- DerivationDepth{d} IN "nat"
+>>
+
+interactive derivation_depth_wf {| intro [intro_typeinf << 'd >>] |} Derivation{'ty_sequent; 'ty_logic} : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- ty_logic IN Logic{ty_sequent} -->
+   "wf" : <H> >- d IN Derivation{ty_sequent; ty_logic} -->
+   <H> >- DerivationDepth{d} IN "nat"
+>>
+
+interactive derivation_depth_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- ty_sequent Type -->
+   "wf" : <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- logic IN Logic{ty_sequent} -->
+   <H>; e: Derivation{ty_sequent; logic}; <J[e]>; e IN Derivation{DerivationDepth{e}; ty_sequent; logic} >- C[e] -->
+   <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- C[e]
+>>
+
+interactive derivation_depth_bound {| intro [intro_typeinf << 'e >>] |} Derivation{'n; 'ty_sequent; 'logic} : <:xrule<
+   "wf" : <H> >- n IN "nat" -->
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- logic IN Logic{ty_sequent} -->
+   "wf" : <H> >- e IN Derivation{n; ty_sequent; logic} -->
+   <H> >- DerivationDepth{e} <= n
+>>
+
+interactive derivation_depth_elim2 'H : <:xrule<
+   "wf" : <H>; e: Derivation{n; ty_sequent; logic}; <J[e]> >- n IN "nat" -->
+   "wf" : <H>; e: Derivation{n; ty_sequent; logic}; <J[e]> >- ty_sequent Type -->
+   "wf" : <H>; e: Derivation{n; ty_sequent; logic}; <J[e]> >- logic IN Logic{ty_sequent} -->
+   <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- C[e] -->
+   <H>; e: Derivation{n; ty_sequent; logic}; <J[e]> >- C[e]
+>>
+
+interactive derivation_depth_list_elim2 'H : <:xrule<
+   "wf" : <H>; e: list{Derivation{n; ty_sequent; logic}}; <J[e]> >- n IN "nat" -->
+   "wf" : <H>; e: list{Derivation{n; ty_sequent; logic}}; <J[e]> >- ty_sequent Type -->
+   "wf" : <H>; e: list{Derivation{n; ty_sequent; logic}}; <J[e]> >- logic IN Logic{ty_sequent} -->
+   <H>; e: list{Derivation{ty_sequent; logic}}; <J[e]> >- C[e] -->
+   <H>; e: list{Derivation{n; ty_sequent; logic}}; <J[e]> >- C[e]
+>>
+
+doc <:doc<
+   This is the general proof induction principle.
+>>
+interactive derivation_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- ty_sequent Type -->
+   "wf" : <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- logic IN Logic{ty_sequent} -->
+   <H>; e: Derivation{ty_sequent; logic}; <J[e]>;
+       premises: list{Derivation{ty_sequent; logic}};
+       goal: ty_sequent;
+       all_list{premises; premise. P[premise]};
+       p: ValidStep{premises; goal; logic} >- P[DerivationStep{premises; goal; p}] -->
+   <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- P[e]
 >>
 
 (*!

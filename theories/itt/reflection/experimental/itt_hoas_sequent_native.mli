@@ -54,9 +54,13 @@ declare CVar{'d; 'ty_hyp}
 declare ProofStep{'ty_sequent}
 
 (*
- * Predicates on sequents.
+ * Rewrites.
  *)
 topval fold_hyp_depths : conv
+topval fold_Logic : conv
+topval fold_Derivation_indexed : conv
+topval fold_DerivationDepth : conv
+topval fold_DerivationStep : conv
 
 (*!
  * @docoff

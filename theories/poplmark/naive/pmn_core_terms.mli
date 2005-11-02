@@ -53,13 +53,16 @@ declare TyLambda{'ty_bound; x. 'e['x]}
 declare TyApply{'e; 'ty_arg}
 
 (************************************************************************
- * Predicates.
+ * Types.
  *)
 declare isTyExp{'e}
 declare isExp{'e}
 
 topval fold_isTyExp : conv
 topval fold_isExp : conv
+
+declare TyExp
+declare Exp
 
 (************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing

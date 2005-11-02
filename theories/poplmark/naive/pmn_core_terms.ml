@@ -32,8 +32,6 @@ open Basic_tactics
 open Itt_dfun
 open Itt_logic
 
-declare FSubCore
-
 (************************************************************************
  * Display forms.
  *)
@@ -153,14 +151,14 @@ interactive replace_ty_exp 'H : <:xrule<
  * Derive a more useful induction principle.
  *)
 interactive ty_exp_elim {| elim [] |} 'H : <:xrule<
-   <H>; e: TyExp{}; <J[e]>; v: Var{} >- P[v] -->
+   "base" : <H>; e: TyExp{}; <J[e]>; v: Var{} >- P[v] -->
 
-   <H>; e: TyExp{}; <J[e]>; d: nat{} >- P[fsub type[d] { top }] -->
+   "base" : <H>; e: TyExp{}; <J[e]>; d: nat{} >- P[fsub type[d] { top }] -->
 
-   <H>; e: TyExp{}; <J[e]>; t1: TyExp{}; t2: TyExp{}; P[t1]; P[t2];
+   "step" : <H>; e: TyExp{}; <J[e]>; t1: TyExp{}; t2: TyExp{}; P[t1]; P[t2];
       bdepth{t1} = bdepth{t2} in nat{} >- P[fsub type[bdepth{t1}] { t1 -> t2 }] -->
 
-   <H>; e: TyExp{}; <J[e]>; t1: TyExp{}; t2: TyExp{}; P[t1]; P[t2];
+   "step" : <H>; e: TyExp{}; <J[e]>; t1: TyExp{}; t2: TyExp{}; P[t1]; P[t2];
       bdepth{t2} = bdepth{t1} +@ 1 in nat{}
       >- P[fsub type[bdepth{t1}] { all x <: t1. itt { subst{t2; x} } }] -->
 
@@ -280,19 +278,19 @@ interactive replace_exp 'H : <:xrule<
  * Derive a more useful induction principle.
  *)
 interactive exp_elim {| elim [] |} 'H : <:xrule<
-   <H>; e: Exp{}; <J[e]>; v: Var{} >- P[v] -->
+   "base" : <H>; e: Exp{}; <J[e]>; v: Var{} >- P[v] -->
 
-   <H>; e: Exp{}; <J[e]>; e1: Exp{}; e2: Exp{}; P[e1]; P[e2];
+   "step" : <H>; e: Exp{}; <J[e]>; e1: Exp{}; e2: Exp{}; P[e1]; P[e2];
       bdepth{e1} = bdepth{e2} in nat{} >- P[fsub[bdepth{e1}] { e1 e2 }] -->
 
-   <H>; e: Exp{}; <J[e]>; ty: TyExp{}; e1: Exp{}; P[e1];
+   "step" : <H>; e: Exp{}; <J[e]>; ty: TyExp{}; e1: Exp{}; P[e1];
       bdepth{e1} = bdepth{ty} +@ 1 in nat{}
       >- P[fsub[bdepth{ty}] { fun x: ty -> itt{ subst{e1; x} } }] -->
 
-   <H>; e: Exp{}; <J[e]>; e1: Exp{}; ty: TyExp{}; P[e1];
+   "step" : <H>; e: Exp{}; <J[e]>; e1: Exp{}; ty: TyExp{}; P[e1];
       bdepth{e1} = bdepth{ty} in nat{} >- P[fsub[bdepth{e1}] { e1{ty} }] -->
 
-   <H>; e: Exp{}; <J[e]>; ty: TyExp{}; e1: Exp{}; P[e1];
+   "step" : <H>; e: Exp{}; <J[e]>; ty: TyExp{}; e1: Exp{}; P[e1];
       bdepth{e1} = bdepth{ty} +@ 1 in nat{}
       >- P[fsub[bdepth{ty}] { Fun x <: ty -> itt { subst{e1; x} } }] -->
 

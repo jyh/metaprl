@@ -1,5 +1,5 @@
 (*
- * The judgments for FSub.
+ * Subtyping judgments in Fsub.
  *
  * ----------------------------------------------------------------
  *
@@ -24,57 +24,10 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_sequent_native
-extends Pmn_core_terms
-
-open Lm_printf
-
-open Simple_print
-open Basic_tactics
+extends Pmn_core_judgments
 
 (*
- * Judgments include subtyping.
- *)
-define unfold_isJudgment : isJudgment{'e} <--> <:xterm<
-   (fix is_judgment e ->
-       dest_bterm e with
-          l, r ->
-             "false"
-        | d, o, s ->
-             if is_same_op{o; $"fsub_subtype"{t1; t2}} then
-                isTyExp{nth{s; 0}} && isTyExp{nth{s; 1}}
-             else if is_same_op{o; $"fsub_member"{e; ty}} then
-                isExp{nth{s; 0}} && isTyExp{nth{s; 1}}
-             else
-                "false") e
->>
-
-let fold_isJudgment = makeFoldC << isJudgment{'e} >> unfold_isJudgment
-
-interactive isJudgment_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- e IN "BTerm" -->
-   <H> >- isJudgment{e} Type
->>
-
-define unfold_JudgmentExp : JudgmentExp <--> <:xterm<
-   { e: "BTerm" | isJudgment{e} }
->>
-
-interactive wf_JudgmentExp {| intro [] |} : <:xrule<
-   <H> >- "JudgmentExp" Type
->>
-
-(*
- * Define all the parts of a sequent.
- *)
-define unfold_SOVar : SOVar{'d} <--> SOVar{'d; TyExp}
-define unfold_CVar : CVar{'d} <--> CVar{'d; TyExp}
-
-define unfold_Sequent : Sequent <--> Sequent{0; BTerm; TyExp; JudgmentExp}
-define unfold_ProofStep : ProofStep <--> ProofStep{Sequent}
-
-(*
- * Define the rules.
+ * The subtyping rules.
  *)
 define unfold_sa_top : sa_top <--> <:xquoterule<
    <H> >- T <: "TyTop"

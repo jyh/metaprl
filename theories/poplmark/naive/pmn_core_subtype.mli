@@ -1,5 +1,5 @@
 (*
- * Judgments for FSub.
+ * Subtyping judgments in FSub.
  *
  * ----------------------------------------------------------------
  *
@@ -24,44 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_sequent_native
-extends Pmn_core_terms
-
-open Basic_tactics
-
-(************************************************************************
- * The subtyping judgment.
- *)
-declare "fsub_subtype"{'ty1; 'ty2}
-declare "fsub_member"{'e; 'ty}
-
-(************************************************************************
- * Tactics.
- *)
-topval fold_isJudgment : conv
-
-(************************************************************************
- * The hooks for reflected rules.
- *)
-declare SOVar{'d}
-declare CVar{'d}
-declare Sequent
-declare ProofStep
-
-(************************************************************************
- * Grammar.
- *)
-declare tok_colon_in_colon : Terminal
-
-lex_token xterm : ":in:" --> tok_colon_in_colon
-
-lex_prec nonassoc [tok_colon_in_colon] = prec_in
-
-production xterm_term{"fsub_subtype"{'ty1; 'ty2}} <--
-   xterm_term{'ty1}; tok_st; xterm_term{'ty2}
-
-production xterm_term{"fsub_member"{'e; 'e}} <--
-   xterm_term{'e}; tok_colon_in_colon; xterm_term{'ty2}
+extends Pmn_core_judgments
 
 (*!
  * @docoff

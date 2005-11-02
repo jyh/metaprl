@@ -30,6 +30,50 @@ extends Pmn_core_terms
 open Lm_printf
 
 open Simple_print
+open Basic_tactics
+
+(*
+ * Judgments include subtyping.
+ *)
+define unfold_dest_judgment :
+   dest_judgment{'e;
+      x. 'base['x];
+      t1, t2. 'sub['t1; 't2];
+      'other}
+   <-->
+<:xterm<
+   dest_bterm e with
+      l, r ->
+         base[var{l; r}]
+    | d, o, s ->
+         if is_same_op{o; $"subtype"{t1; t2}} then
+            sub[nth{s; 0}; nth{s; 1}]
+         else
+            other
+>>
+
+interactive dest_judgment_type {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "BTerm" -->
+   "wf" : <H>; x: "Var" >- base[x] Type -->
+   "wf" : <H>; t1: "BTerm"; t2: "BTerm" >- subtype[t1; t2] Type -->
+   "wf" : <H> >- other Type -->
+   <H> >- dest_judgment{e; x. base[x]; t1, t2. subtype[t1; t2]; other} Type
+>>
+
+(*
+ * Define the language of judgments.
+ *)
+define unfold_is_judgment : isJudgment{'e} <--> <:xterm<
+   dest_judgment{e;
+      x. "true";
+      t1, t2. isTyExp{t1} && isTyExp{t2};
+      "false"}
+>>
+
+interactive is_judgment_type {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "BTerm" -->
+   <H> >- isJudgment{e} Type
+>>
 
 (*
  * Define the rules.

@@ -13,6 +13,7 @@ OCAMLINCLUDES[] +=
     ../../itt/reflection/experimental/jyh
 
 FILES[] =
+    pmn_core_terms_old
     pmn_core_terms
     pmn_core_judgments
 

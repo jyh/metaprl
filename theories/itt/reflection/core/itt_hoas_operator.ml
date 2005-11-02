@@ -50,7 +50,10 @@ extends Itt_nequal
 
 open Base_operator
 open Basic_tactics
+open Itt_equal
 open Itt_struct
+open Itt_squiggle
+open Itt_decidable
 
 (************************************************************************
  * TERMS                                                                *
@@ -255,3 +258,32 @@ interactive shape_exam1 {| intro[] |}:
 
 interactive shape_exam2 {| intro[] |}:
    sequent{ <H> >- shape{operator[(lambda{x.it}):op]} = 1::nil in list{int} }
+
+(*
+ * Case analysis on operators.
+ *)
+let operator_term = << Operator >>
+
+let is_same_op_opname = opname_of_term << is_same_op{'op1; 'op2} >>
+let mk_is_same_op_term = mk_dep0_dep0_term is_same_op_opname
+
+let bfalse_term = << bfalse >>
+
+let opCaseT t =
+   let t1, t2 = dest_squiggle t in
+   let eq = mk_equal_term operator_term t1 t2 in
+   let neq = mk_squiggle_term (mk_is_same_op_term t1 t2) bfalse_term in
+      assert_decidable eq thenLT (**)
+         [tcaT;
+          assertT t thenLT [tcaT; rwhAll (hypC (-1)) thenT thinT (-1) thenT thinT (-1)];
+          assertT neq thenLT [tcaT; rwhAll (hypC (-1)) thenT thinT (-1)]]
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

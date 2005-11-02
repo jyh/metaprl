@@ -40,3 +40,14 @@ define unfold_decidable : decidable{'p} <--> ('p or not {'p})
    that tries to eliminate the first subgoal using autoT *)
 topval decideT : term -> tactic
 
+val assert_decidable : term -> tactic
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

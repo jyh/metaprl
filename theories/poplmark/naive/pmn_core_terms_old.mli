@@ -25,7 +25,7 @@
  * @end[license]
  *)
 extends Itt_theory
-extends Itt_hoas_util
+extends Itt_hoas_olang
 
 open Basic_tactics
 
@@ -51,6 +51,13 @@ declare Apply{'e1; 'e2}
  *)
 declare TyLambda{'ty_bound; x. 'e['x]}
 declare TyApply{'e; 'ty_arg}
+
+(************************************************************************
+ * The language.
+ *)
+declare FSubCore
+
+topval fold_fsub_core : conv
 
 (************************************************************************
  * Predicates.

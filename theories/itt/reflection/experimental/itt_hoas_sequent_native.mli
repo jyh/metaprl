@@ -54,6 +54,11 @@ declare CVar{'d; 'ty_hyp}
 declare ProofStep{'ty_sequent}
 
 (*
+ * A Logic is a list of rules.
+ *)
+declare Logic{'rules}
+
+(*
  * Rewrites.
  *)
 topval fold_hyp_depths : conv

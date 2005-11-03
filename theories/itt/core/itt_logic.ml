@@ -1298,18 +1298,22 @@ struct
     (* | Orr, ->  *)
        | Fail,_ -> raise (RefineError("Itt_JLogic.create_inf", StringError "failed"))
        | _ -> raise (Invalid_argument "Itt_JLogic.create_inf")
-end
+end;;
 
-module ITT_JProver = Jall.JProver(Itt_JLogic)
+module ITT_JProver = Jall.JProver (Itt_JLogic);;
 
 let rec make_j_assums p goal len i =
-   if i>len then [] else
-   let assum = Sequent.nth_assum p i in
-   let rest = make_j_assums p goal len (succ i) in
-   try
-      let form, index = assum_term goal assum in
-         (form, make_assumT i goal assum form index) :: rest
-   with RefineError _ -> rest
+   if i > len then
+      []
+   else
+      let assum = Sequent.nth_assum p i in
+      let rest = make_j_assums p goal len (succ i) in
+         try
+            let form, index = assum_term goal assum in
+               (form, make_assumT i goal assum form index) :: rest
+         with
+            RefineError _ ->
+               rest
 
 let jprogressT = argfunT (fun t p ->
    if alpha_equal (Sequent.concl p) t then
@@ -1318,30 +1322,40 @@ let jprogressT = argfunT (fun t p ->
       idT)
 
 (* input a list_term of hyps,concl *)
-let base_jproverT def_mult = funT (fun p ->
+let base_jproverT def_mult p =
    let goal = Sequent.goal p in
    let seq = TermMan.explode_sequent goal in
-   if not (alpha_equal itt_sequent_arg seq.sequent_args) then
-      raise (RefineError("Itt_logic.base_jproverT", StringError "Not an ITT sequent"));
-   let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
+   let () =
+      if not (alpha_equal itt_sequent_arg seq.sequent_args) then
+         raise (RefineError("Itt_logic.base_jproverT", StringError "Not an ITT sequent"))
+   in
+   let assums =
+      if get_option_arg p "jprover:ignore-assums" then begin
+         eprintf "Ignore assums@.";
+         []
+      end
+      else
+         make_j_assums p goal (Sequent.num_assums p) 1
+   in
    let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
    let mult_limit =
       match Sequent.get_int_arg p "jprover" with
          None -> def_mult
        | Some _ as ml -> ml
    in
-   match
-      ITT_JProver.prover mult_limit hyps seq.sequent_concl
-   with
-      [t] ->
-         let substs =
-            try [Lm_symbol.make "n_jprover" 0, get_with_arg p] with RefineError _ -> []
-         in
-            t substs assums thenT jprogressT seq.sequent_concl
-    | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof"))
+      match ITT_JProver.prover mult_limit hyps seq.sequent_concl with
+         [t] ->
+            let substs =
+               try [Lm_symbol.make "n_jprover" 0, get_with_arg p] with
+                  RefineError _ ->
+                     []
+            in
+               t substs assums thenT jprogressT seq.sequent_concl
+       | _ ->
+            raise (Invalid_argument "Problems decoding ITT_JProver.prover proof")
 
-let simple_jproverT = base_jproverT (Some 1)
-let jproverT = base_jproverT (Some 100)
+let simple_jproverT = funT (base_jproverT (Some 1))
+let jproverT = funT (base_jproverT (Some 100))
 
 (************************************************************************
  * AUTO TACTIC                                                          *
@@ -1353,29 +1367,29 @@ let jproverT = base_jproverT (Some 100)
 let logic_autoT = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
       if is_and_term hyp
-         or is_prod_term hyp
-         or is_dprod_term hyp
-         or is_exists_term hyp
-         or is_and_term (dest_squash hyp)
+         || is_prod_term hyp
+         || is_dprod_term hyp
+         || is_exists_term hyp
+         || is_and_term (dest_squash hyp)
       then
          dT i
       else
          raise (RefineError ("logic_autoT", StringError "unknown formula")))
 
 let logic_prec = create_auto_prec [trivial_prec] [d_prec]
-let jprover_prec = create_auto_prec [trivial_prec;logic_prec] [d_prec]
+let jprover_prec = create_auto_prec [trivial_prec; logic_prec] [d_prec]
 
-let resource auto += [{
-   auto_name = "logic_autoT";
-   auto_prec = logic_prec;
-   auto_tac = onSomeHypT logic_autoT;
-   auto_type = AutoNormal;
-}; {
-   auto_name = "simple_jproverT";
-   auto_prec = jprover_prec;
-   auto_tac = simple_jproverT;
-   auto_type = AutoComplete;
-}]
+let resource auto +=
+    [{ auto_name = "logic_autoT";
+       auto_prec = logic_prec;
+       auto_tac = onSomeHypT logic_autoT;
+       auto_type = AutoNormal
+     };
+     { auto_name = "simple_jproverT";
+       auto_prec = jprover_prec;
+       auto_tac = simple_jproverT;
+       auto_type = AutoComplete;
+     }]
 
 let jAutoT i = withIntT "jprover" i autoT
 
@@ -1383,28 +1397,28 @@ let resource menubar +=
     [<< menuitem["refine", "jAutoT 5", "Command('refine jAutoT 5')"] >>, refine_is_enabled]
 
 (* aux is either a hyp or an assum *)
-let autoBackT compare_aux get_aux tac_aux onsome auto_aux =
-   let mem aux goal (aux', goal') =
-      compare_aux aux aux' && alpha_equal goal goal'
-   in
-   let backHyp tac history (i:int) = funT (fun p ->
-      let goal = Sequent.goal p in
-      let aux = get_aux p i in
-      let tac' =
-         if List.exists (mem aux goal) history then failT else
-         tac_aux i thenT tac ((aux,goal)::history)
-      in
-         tac')
-   in
-   let rec auto_back history =
-      auto_aux thenT tryT (onsome (backHyp auto_back history))
-   in
-      auto_back []
+    let autoBackT compare_aux get_aux tac_aux onsome auto_aux =
+       let mem aux goal (aux', goal') =
+          compare_aux aux aux' && alpha_equal goal goal'
+       in
+       let backHyp tac history (i: int) = funT (fun p ->
+          let goal = Sequent.goal p in
+          let aux = get_aux p i in
+          let tac' =
+             if List.exists (mem aux goal) history then failT else
+                tac_aux i thenT tac ((aux,goal)::history)
+          in
+             tac')
+       in
+       let rec auto_back history =
+          auto_aux thenT tryT (onsome (backHyp auto_back history))
+       in
+          auto_back []
 
-let hypAutoT =
-      autoBackT alpha_equal Sequent.nth_hyp backThruHypT onSomeHypT autoT
+    let hypAutoT =
+       autoBackT alpha_equal Sequent.nth_hyp backThruHypT onSomeHypT autoT
 
-let logicAutoT = autoBackT (==) (fun p _ -> p) backThruAssumT onSomeAssumT hypAutoT
+    let logicAutoT = autoBackT (==) (fun p _ -> p) backThruAssumT onSomeAssumT hypAutoT
 
 (*
  * -*-

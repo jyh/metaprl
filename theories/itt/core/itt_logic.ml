@@ -1330,10 +1330,8 @@ let base_jproverT def_mult p =
          raise (RefineError("Itt_logic.base_jproverT", StringError "Not an ITT sequent"))
    in
    let assums =
-      if get_option_arg p "jprover:ignore-assums" then begin
-         eprintf "Ignore assums@.";
+      if get_option_arg p "jprover:ignore-assums" then
          []
-      end
       else
          make_j_assums p goal (Sequent.num_assums p) 1
    in

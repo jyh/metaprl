@@ -150,7 +150,7 @@ interactive replace_ty_exp 'H : <:xrule<
 (*
  * Derive a more useful induction principle.
  *)
-interactive ty_exp_elim {| elim [] |} 'H : <:xrule<
+interactive ty_exp_elim3 {| elim [] |} 'H : <:xrule<
    "base" : <H>; e: TyExp{}; <J[e]>; v: Var{} >- P[v] -->
 
    "base" : <H>; e: TyExp{}; <J[e]>; d: nat{} >- P[fsub type[d] { top }] -->
@@ -277,7 +277,7 @@ interactive replace_exp 'H : <:xrule<
 (*
  * Derive a more useful induction principle.
  *)
-interactive exp_elim {| elim [] |} 'H : <:xrule<
+interactive exp_elim2 {| elim [] |} 'H : <:xrule<
    "base" : <H>; e: Exp{}; <J[e]>; v: Var{} >- P[v] -->
 
    "step" : <H>; e: Exp{}; <J[e]>; e1: Exp{}; e2: Exp{}; P[e1]; P[e2];

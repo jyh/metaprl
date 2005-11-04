@@ -150,6 +150,21 @@ interactive replace_ty_exp 'H : <:xrule<
 (*
  * Derive a more useful induction principle.
  *)
+interactive ty_exp_elim_slow {| elim [] |} 'H : <:xrule<
+   "base" : <H>; e: TyExp{}; <J[e]>; v: Var{} >- P[v] -->
+
+   "base" : <H>; e: TyExp{}; <J[e]>; d: nat{} >- P[fsub type[d] { top }] -->
+
+   "step" : <H>; e: TyExp{}; <J[e]>; t1: TyExp{}; t2: TyExp{}; P[t1]; P[t2];
+      bdepth{t1} = bdepth{t2} in nat{} >- P[fsub type[bdepth{t1}] { t1 -> t2 }] -->
+
+   "step" : <H>; e: TyExp{}; <J[e]>; t1: TyExp{}; t2: TyExp{}; P[t1]; P[t2];
+      bdepth{t2} = bdepth{t1} +@ 1 in nat{}
+      >- P[fsub type[bdepth{t1}] { all x <: t1. itt { subst{t2; x} } }] -->
+
+   <H>; e: TyExp{}; <J[e]> >- P[e]
+>>
+
 interactive ty_exp_elim3 {| elim [] |} 'H : <:xrule<
    "base" : <H>; e: TyExp{}; <J[e]>; v: Var{} >- P[v] -->
 

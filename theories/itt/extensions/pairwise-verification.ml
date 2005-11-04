@@ -519,99 +519,49 @@ doc <:doc< Introduction rules have identical semantics in pairwise and pointwise
    sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
-prim itt_rfun.well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'a :
-   [main] sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'a in 'A } -->
-   [main] sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; a3: 'A; 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
-   [main] ('t['p; 'u] : sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
-   sequent { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'C['p] } =
-   't['p; it]
-
-prim itt_rfun.well_founded {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H>; a1: 'A; a2: 'A >- "type"{'R['a1; 'a2]} } -->
-   [main] sequent { <H>; a1: 'A; 'R['a1; 'a1] >- void } -->
-   [main] sequent { <H>; a1: 'A; a2: 'A; 'R['a1; 'a2]; 'R['a2; 'a1] >- void } -->
-   [main] sequent { <H>; a1: 'A; a2: 'A; a3: 'A; 'R['a1; 'a2]; 'R['a2; 'a3] >- 'R['a1; 'a3] } -->
-   [main] sequent { <H>; a1: 'A; P: well_founded_prop{'A}; well_founded_assum{'A; a2, a3. 'R['a2; 'a3]; 'P} >- well_founded_apply{'P; 'a1} } -->
-   sequent { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } =
-   it
-
-prim itt_rfun.well_founded_apply_type {| intro [] |} 'A :
-   [wf] sequent { <H> >- 'P in well_founded_prop{'A} } -->
-   [wf] sequent { <H> >- 'A in univ[i:l] } -->
-   [wf] sequent { <H> >- 'a in 'A } -->
-   sequent { <H> >- well_founded_apply{'P; 'a} in univ[i:l] } =
-   it
-
-prim itt_rfun.rfunctionFormation { f | a: 'A -> 'B['f; 'a] } :
-   [wf] sequent { <H> >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[i:l] } -->
-   sequent { <H> >- univ[i:l] } =
-   { f | a: 'A -> 'B['f; 'a] }
-
-prim itt_rfun.rfunctionEquality {| intro [] |} bind{a,b. 'R['a; 'b]} :
+prim itt_dfun.functionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent { <H> >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
-   [wf] sequent { <H>;
-             y: 'A1;
-             g: { f1 | x1: { z: 'A1 | 'R['z; 'y] } -> 'B1['f1; 'x1] }
-             >- 'B1['g; 'y] = 'B2['g; 'y] in univ[i:l]
-           } -->
-   sequent { <H> >- { f1 | a1:'A1 -> 'B1['f1; 'a1] }
-                   = { f2 | a2:'A2 -> 'B2['f2; 'a2] }
-                   in univ[i:l]
-           } =
-   it
+   [wf] sequent { <H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ[i:l] } -->
+   sequent { <H> >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
+   = it
 
-prim itt_rfun.rfunctionType {| intro [] |} bind{a,b. 'R['a; 'b]} :
+prim itt_dfun.functionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } -->
-   [wf] sequent { <H>;
-             y: 'A;
-             g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] }
-             >- "type"{'B['g; 'y]}
-           } -->
-   sequent { <H> >- "type"{ { f | a:'A -> 'B['f; 'a] } } } =
-   it
+   [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
+   sequent { <H> >- "type"{ a:'A -> 'B['a] } }
+   = it
 
-prim itt_rfun.rfunction_lambdaFormation {| intro [] |} bind{a,b. 'R['a; 'b]} :
+prim itt_dfun.lambdaFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } -->
-   ('ext['g; 'y] : sequent { <H>; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] }) -->
-   sequent { <H> >- { f | x:'A -> 'B['f; 'x] } } =
-   lambda{y. fix{g. 'ext['g; 'y]}}
+   [main] ('b['a] : sequent { <H>; a: 'A >- 'B['a] }) -->
+   sequent { <H> >- a:'A -> 'B['a] }
+   = lambda{a.'b['a]}
 
-prim itt_rfun.rfunction_lambdaEquality {| intro [] |} :
-   [wf] sequent { <H> >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
-   [wf] sequent { <H>; y: 'A >- 'b1['y] = 'b2['y] in 'B[lambda{x1. 'b1['x1]}; 'y] } -->
-   sequent { <H> >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
-   it
+prim itt_dfun.lambdaEquality {| intro [] |} :
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; a1: 'A >- 'b1['a1] = 'b2['a1] in 'B['a1] } -->
+   sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
+   = it
 
-prim itt_rfun.rfunctionExtensionality
-        ({ g1 | x1:'A1 -> 'B1['g1; 'x1] })
-        ({ g2 | x2:'A2 -> 'B2['g2; 'x2] }) :
-   [wf] sequent { <H> >- "type"{{ g | x:'A -> 'B['g; 'x] }} } -->
-   [main] sequent { <H>; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'y] } -->
-   [wf] sequent { <H> >- 'f1 in { g1 | x1:'A1 -> 'B1['g1; 'x1] } } -->
-   [wf] sequent { <H> >- 'f2 in { g2 | x2:'A2 -> 'B2['g2; 'x2] } } -->
-   sequent { <H> >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } } =
-   it
+prim itt_dfun.functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
+   [main] sequent { <H>; x: 'A >- ('f 'x) = ('g 'x) in 'B['x] } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- 'f in y:'C -> 'D['y] } -->
+   [wf] sequent { <H> >- 'g in z:'E -> 'F['z] } -->
+   sequent { <H> >- 'f = 'g in x:'A -> 'B['x] }
+   = it
 
-prim itt_rfun.rfunctionElimination {| elim [] |} 'H 'a :
-   [wf] sequent { <H>; f: { g | x:'A -> 'B['g; 'x] }; <J['f]> >- 'a in 'A } -->
-   ('t['f; 'y; 'v] : sequent { <H>;
-                               f: { g | x:'A -> 'B['g; 'x] };
-                               <J['f]>;
-                               y: 'B['f; 'a];
-                               v: 'y = 'f 'a in 'B['f; 'a]
-                               >- 'T['f] }) -->
-   sequent { <H>; f: { g | x:'A -> 'B['g; 'x] }; <J['f]> >- 'T['f] } =
-   't['f; 'f 'a; it]
+prim itt_dfun.functionElimination {| elim [] |} 'H 'a :
+   [wf] sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'a in 'A } -->
+   ('t['f; 'y; 'it] : sequent { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; it: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
+   sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
+   = 't['f; 'f 'a; it]
 
-prim itt_rfun.rfunction_applyEquality {| intro[] |} ({ f | x:'A -> 'B['f; 'x] }) :
-   [wf] sequent { <H> >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
-   [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
-   sequent { <H> >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
-   it
+prim itt_dfun.applyEquality {| intro[intro_typeinf <<'f1>>; complete_unless_member] |} (x:'A -> 'B['x]) :
+   sequent { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
+   sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
+   = it
 
 prim itt_esquash.esquash_type {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'P} } -->
@@ -691,17 +641,11 @@ prim itt_list.nilSqequal {| nth_hyp |} 'T :
    sequent { <H> >- 'u ~ nil } =
    it
 
-prim itt_pointwise.hypSubstPointwise 'H 'J_1 bind{t.'t1['t]} bind{y. 'A['y]} :
-   [equality] sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t]; <J_2['x;'t]> >- 't = 't1<|H;J_1|>['t] in 'T } -->
-   [main] ('c['t;'x] : sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t1<|H;J_1|>['t]]; <J_2['x;'t]> >- 'C['x;'t] }) -->
-   sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t]; <J_2['x;'t]> >- 'C['x;'t] } =
-   'c['t;'x]
-
-prim itt_pointwise.contextSubstPointwise 'H 'J_1 'J 't1 :
-   [equality] sequent { <H>; t:'T; <J_1['t]>;  <J['t]>; <J_2['t]> >- 't = 't1 in 'T } -->
-   [main] ('c['t] : sequent { <H>; t:'T; <J_1['t]>;  <J['t1]>; <J_2['t]> >- 'C['t] }) -->
-   sequent { <H>; t:'T; <J_1['t]>;  <J['t]>; <J_2['t]> >- 'C['t] } =
-   'c['t]
+prim ../extensions/itt_pairwise.let_rule 'H ('z='s in 'S):
+  [assertion] sequent { <H>; <J> >- 's in 'S } -->
+   [main]    ('t['x; 'u]:  sequent { <H>; x: 'S;  <J>; u:'s ~ 'x  >- 'T } )-->
+   sequent { <H>; <J>  >- 'T}
+      = 't['s; it]
 
 prim itt_int_base.int_sqequal {| nth_hyp |} :
    sequent { <H> >- 'a = 'b in int } -->

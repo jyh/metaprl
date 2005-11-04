@@ -166,11 +166,11 @@ doc <:doc<
    where the computational content of the proof can be omitted.
 >>
 interactive tunionElimination {| elim [ThinOption thinT] |} 'H :
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y] >- 't1['z] = 't2['z] in 'C['z] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
 
 interactive tunionElimination_sq {| elim [ThinOption thinT] |}  'H :
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- squash{'C['z]} } -->
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y] >- squash{'C['z]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
 doc docoff
@@ -178,27 +178,27 @@ let thinLastT n = (thinT (-1) thenT tryT (thinT n))
 doc docon
 
 interactive tunionElimination_eq (* {| elim [ThinOption thinLastT] |} *) 'H :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A >- 'B['w] Type } -->
+   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
       (* can we get rid of the above wf-assumption? *)
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
 interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'f :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A >- 'B['w] Type } -->
+   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
       (* can we get rid of the above wf-assumption? *)
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'f 'x in 'A } -->
    [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'x in 'B['f 'x] } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 'C['z] } -->
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y] >- 'C['z] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
 
 
 interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 'f :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A >- 'B['w] Type } -->
+   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
       (* can we get rid of the above wf-assumption? *)
-   [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
-                       u: 'z='x in tunion{'A; y. 'B['y]} >- 'f 'z = 'w in 'A } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
+   [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
+                       u: 'z='x in tunion{'A; y. 'B['y]} >- 'f 'z = 'y in 'A } -->
+   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'C['z] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
 

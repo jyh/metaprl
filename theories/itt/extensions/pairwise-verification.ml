@@ -519,56 +519,74 @@ doc <:doc< Introduction rules have identical semantics in pairwise and pointwise
    sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
-prim itt_dfun.functionEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_dfun.functionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ[i:l] } -->
    sequent { <H> >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
    = it
 
-prim itt_dfun.functionType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_dfun.functionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
    sequent { <H> >- "type"{ a:'A -> 'B['a] } }
    = it
 
-prim itt_dfun.lambdaFormation {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_dfun.lambdaFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [main] ('b['a] : sequent { <H>; a: 'A >- 'B['a] }) -->
    sequent { <H> >- a:'A -> 'B['a] }
    = lambda{a.'b['a]}
 
-prim itt_dfun.lambdaEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_dfun.lambdaEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; a1: 'A >- 'b1['a1] = 'b2['a1] in 'B['a1] } -->
    sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
    = it
 
-prim itt_dfun.functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_dfun.functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
    [main] sequent { <H>; x: 'A >- ('f 'x) = ('g 'x) in 'B['x] } -->
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'f in y:'C -> 'D['y] } -->
    [wf] sequent { <H> >- 'g in z:'E -> 'F['z] } -->
    sequent { <H> >- 'f = 'g in x:'A -> 'B['x] }
    = it
+   
+doc <:doc< This follows from functions being functional and reverse functionality for function types.>>
 
-prim itt_dfun.functionElimination {| elim [] |} 'H 'a :
+(* OK *) prim itt_dfun.functionElimination {| elim [] |} 'H 'a :
    [wf] sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'a in 'A } -->
    ('t['f; 'y; 'it] : sequent { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; it: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
    sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
    = 't['f; 'f 'a; it]
 
-prim itt_dfun.applyEquality {| intro[intro_typeinf <<'f1>>; complete_unless_member] |} (x:'A -> 'B['x]) :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_dfun.applyEquality {| intro[intro_typeinf <<'f1>>; complete_unless_member] |} (x:'A -> 'B['x]) :
    sequent { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
    = it
 
-prim itt_esquash.esquash_type {| intro [AutoMustComplete] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_esquash.esquash_type {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{'P} } -->
    sequent { <H> >- "type"{esquash{'P}} } =
    it
 
-prim itt_esquash.esquash_equal {| intro [AutoMustComplete] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_esquash.esquash_equal {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- esquash{'P1} in univ[i:l] } -->
    [wf] sequent { <H> >- esquash{'P2} in univ[i:l] } -->
    sequent { <H>; esquash{'P1} >- esquash{'P2} } -->
@@ -576,49 +594,70 @@ prim itt_esquash.esquash_equal {| intro [AutoMustComplete] |} :
    sequent { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 
-prim itt_esquash.esquash_univ :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_esquash.esquash_univ :
    [wf] sequent { <H> >- 'P in univ[i:l] } -->
    sequent { <H> >- esquash{'P} in univ[i:l] } =
    it
 
-prim itt_esquash.esquash_intro {| intro [AutoMustComplete] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_esquash.esquash_intro {| intro [AutoMustComplete] |} :
    [main] sequent { <H> >- squash{'P} } -->
    sequent { <H> >- esquash{'P} } =
    it
 
-prim itt_esquash.esquash_elim {| elim [] |} 'H :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_esquash.esquash_elim {| elim [] |} 'H :
    ( 't['x] : sequent { <H>; x: esquash{'A}; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: esquash{'A}; <J['x]> >- 'C['x] } =
    't[it]
 
-prim itt_esquash.esquash :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_esquash.esquash :
    [wf] sequent { <H> >- "type"{'P} } -->
    sequent { <H> >- esquash{'P} } -->
    sequent { <H> >- squash{'P} } =
    it
 
-prim itt_list.listType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_list.listType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- "type"{list{'A}} } =
    it
 
-prim itt_list.listEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_list.listEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A = 'B in univ[i:l] } -->
    sequent { <H> >- list{'A} = list{'B} in univ[i:l] } =
    it
 
-prim itt_list.nilEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify 
+
+XXX: Note that this rule is a bit strong, with "type"{'A} the rule will be derivable from an Img implementation of
+lists, which is not the case now.>>
+
+(* OK *) prim itt_list.nilEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{list{'A}} } -->
    sequent { <H> >- nil in list{'A} } =
    it
 
-prim itt_list.consEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_list.consEquality {| intro [] |} :
    [wf] sequent { <H> >- 'u1 = 'u2 in 'A } -->
    [wf] sequent { <H> >- 'v1 = 'v2 in list{'A} } -->
    sequent { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
 
-prim itt_list.list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_list.list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
    [wf] sequent { <H> >- 'e1 = 'e2 in list{'A} } -->
    [wf] sequent { <H> >- 'base1 = 'base2 in 'T[nil] } -->
    [wf] sequent { <H>; u: 'A; v: list{'A}; w: 'T['v] >-
@@ -630,18 +669,22 @@ prim itt_list.list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
            } =
    it
 
-prim itt_list.listElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< Straighfowrard induction on 'l (or, more precisely, on first variant of 'l) works out correctly >>
+
+(* OK *) prim itt_list.listElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('base['l] : sequent { <H>; l: list{'A}; <J['l]> >- 'C[nil] }) -->
    [main] ('step['l; 'u; 'v; 'w] : sequent { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
    sequent { <H>; l: list{'A}; <J['l]> >- 'C['l] } =
    list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
 
-prim itt_list.nilSqequal {| nth_hyp |} 'T :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_list.nilSqequal {| nth_hyp |} 'T :
    sequent { <H> >- 'u = nil in list{'T} } -->
    sequent { <H> >- 'u ~ nil } =
    it
 
-prim ../extensions/itt_pairwise.let_rule 'H ('z='s in 'S):
+prim itt_pairwise.let_rule 'H ('z='s in 'S):
   [assertion] sequent { <H>; <J> >- 's in 'S } -->
    [main]    ('t['x; 'u]:  sequent { <H>; x: 'S;  <J>; u:'s ~ 'x  >- 'T } )-->
    sequent { <H>; <J>  >- 'T}

@@ -207,10 +207,9 @@ doc <:doc<
    The @emph{only} representative on the empty list is the
    @hrefterm[nil] term.
 >>
-prim nilSqequal {| nth_hyp |} 'T :
+interactive nilSqequal {| nth_hyp |} 'T :
    sequent { <H> >- 'u = nil in list{'T} } -->
-   sequent { <H> >- 'u ~ nil } =
-   it
+   sequent { <H> >- 'u ~ nil }
 
 doc <:doc<
    @modsubsection{Subtyping}

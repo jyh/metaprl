@@ -25,7 +25,7 @@
  * @end[license]
  *)
 extends Itt_theory
-extends Itt_hoas_olang
+extends Itt_hoas_util
 
 open Basic_tactics
 
@@ -53,20 +53,16 @@ declare TyLambda{'ty_bound; x. 'e['x]}
 declare TyApply{'e; 'ty_arg}
 
 (************************************************************************
- * The language.
- *)
-declare FSubCore
-
-topval fold_fsub_core : conv
-
-(************************************************************************
- * Predicates.
+ * Types.
  *)
 declare isTyExp{'e}
 declare isExp{'e}
 
 topval fold_isTyExp : conv
 topval fold_isExp : conv
+
+declare TyExp
+declare Exp
 
 (************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing

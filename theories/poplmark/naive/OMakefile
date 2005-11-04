@@ -14,6 +14,7 @@ OCAMLINCLUDES[] +=
 
 FILES[] =
     pmn_core_terms
+    pmn_core_terms_test
     pmn_core_judgments
     pmn_core_subtype
 

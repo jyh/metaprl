@@ -1,5 +1,5 @@
 (*
- * Subtyping judgments in Fsub.
+ * Logical rules for core Fsub.
  *
  * ----------------------------------------------------------------
  *
@@ -24,78 +24,102 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Pmn_core_judgments
+extends Pmn_core_terms
+extends Itt_hoas_sequent_native
 
 open Basic_tactics
 
 (*
- * The subtyping rules.
+ * Proof steps are over sequents.
  *)
-define unfold_sa_top : sa_top <--> <:xquoterule<
-   <H> >- T <: "TyTop"
+define unfold_ProofStep : ProofStep <--> ProofStep{Sequent}
+
+(*
+ * Type well-formedness.
+ *)
+define unfold_ty_top_wf : ty_top_wf <--> <:xquoterule<
+   fsub{| <H> >- top <: top |}
 >>
 
-define unfold_sa_tvar : sa_tvar <--> <:xquoterule<
-   <H>; X: T; <J[X]> >- X <: X
+define unfold_ty_fun_wf : ty_fun_wf <--> <:xquoterule<
+   fsub{| <H> >- ty1 <: top |} -->
+   fsub{| <H> >- ty2 <: top |} -->
+   fsub{| <H> >- ty1 -> ty2 <: top |}
 >>
 
-define unfold_sa_trans_tvar : sa_trans_tvar <--> <:xquoterule<
-   <H>; X: U; <J[X]> >- U <: T -->
-   <H>; X: U; <J[X]> >- X <: T
->>
-
-define unfold_sa_arrow : sa_arrow <--> <:xquoterule<
-   <H> >- T1 <: S1 -->
-   <H> >- S2 <: T2 -->
-   <H> >- TyFun{S1; S2} <: TyFun{T1; T2}
->>
-
-define unfold_sa_all : sa_all <--> <:xquoterule<
-   <H> >- T1 <: S1 -->
-   <H>; X: T1 >- S2[X] <: T2[X] -->
-   <H> >- TyAll{S1; X. S2[X]} <: TyAll{T1; X. T2[X]}
+define unfold_ty_all_wf : ty_all_wf <--> <:xquoterule<
+   fsub{| <H> >- ty1 <: top |} -->
+   fsub{| <H>; X <: top >- ty2[X] <: top |} -->
+   fsub{| <H> >- all X <: ty1. ty2[X] <: top |}
 >>
 
 (*
- * Typing rules.
+ * Subtyping rules.
+ *)
+define unfold_sa_tvar : sa_tvar <--> <:xquoterule<
+   fsub{| <H>; X: T; <J[X]> >- X <: X |}
+>>
+
+define unfold_sa_trans_tvar : sa_trans_tvar <--> <:xquoterule<
+   fsub{| <H>; X: U; <J[X]> >- U <: T |} -->
+   fsub{| <H>; X: U; <J[X]> >- X <: T |}
+>>
+
+define unfold_sa_arrow : sa_arrow <--> <:xquoterule<
+   fsub{| <H> >- T1 <: S1 |} -->
+   fsub{| <H> >- S2 <: T2 |} -->
+   fsub{| <H> >- S1 -> S2 <: T1 -> T2 |}
+>>
+
+define unfold_sa_all : sa_all <--> <:xquoterule<
+   fsub{| <H> >- T1 <: S1 |} -->
+   fsub{| <H>; X: T1 >- S2[X] <: T2[X] |} -->
+   fsub{| <H> >- all X <: S1. S2[X] <: all X <: T1. T2[X] |}
+>>
+
+(*
+ * Expression typing rules.
  *)
 define unfold_t_var : t_var <--> <:xquoterule<
-   <H>; x: T; <J[x]> >- x :in: T
+   fsub{| <H>; x: T; <J[x]> >- x : T |}
 >>
 
 define unfold_t_abs : t_abs <--> <:xquoterule<
-   <H>; x: T1 >- e[x] :in: T2 -->
-   <H> >- Lambda{T1; x. e[x]} :in: TyFun{T1; T2}
+   fsub{| <H> >- T1 <: top |} -->
+   fsub{| <H>; x: T1 >- e[x] : T2 |} -->
+   fsub{| <H> >- fun x : T1 -> e[x] : T1 -> T2 |}
 >>
 
 define unfold_t_app : t_app <--> <:xquoterule<
-   <H> >- e1 :in: TyFun{T11; T12} -->
-   <H> >- e2 :in: T11 -->
-   <H> >- Apply{e1; e2} :in: T12
+   fsub{| <H> >- e1 : T11 -> T12 |} -->
+   fsub{| <H> >- e2 : T11 |} -->
+   fsub{| <H> >- e1 e2 : T12 |}
 >>
 
 define unfold_t_tabs : t_tabs <--> <:xquoterule<
-   <H>; X: T1 >- t2 :in: T2 -->
-   <H> >- TyLambda{T1; X. e[X]} :in: TyAll{T1; X. T2[X]}
+   fsub{| <H> >- T1 <: top |} -->
+   fsub{| <H>; X: T1 >- t2 : T2 |} -->
+   fsub{| <H> >- Fun X <: T1 -> e[X] : all X <: T1. T2[X] |}
 >>
 
 define unfold_t_tapp : t_tapp <--> <:xquoterule<
-   <H> >- e :in: TyAll{T11; X. T12[X]} -->
-   <H> >- T2 <: T11 -->
-   <H> >- TyApply{e; T2} :in: T12[T2]
+   fsub{| <H> >- e : all X <: T11. T12[X] |} -->
+   fsub{| <H> >- T2 <: T11  |}-->
+   fsub{| <H> >- e{T2} : T12[T2] |}
 >>
 
 define unfold_t_sub : t_sub <--> <:xquoterule<
-   <H> >- e :in: S -->
-   <H> >- S <: T -->
-   <H> >- e :in: T
+   fsub{| <H> >- e : S |} -->
+   fsub{| <H> >- S <: T |} -->
+   fsub{| <H> >- e : T |}
 >>
 
 (*
  * Define the logic.
  *)
 define unfold_fsub_logic : FSubLogic <--> <:xterm<
-   ["sa_top"; "sa_tvar"; "sa_trans_tvar"; "sa_arrow"; "sa_all";
+   ["ty_top_wf"; "ty_fun_wf"; "ty_all_wf";
+    "sa_tvar"; "sa_trans_tvar"; "sa_arrow"; "sa_all";
     "t_var"; "t_abs"; "t_app"; "t_tabs"; "t_tapp"; "t_sub"]
 >>
 

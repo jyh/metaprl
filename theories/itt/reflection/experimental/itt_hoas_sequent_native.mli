@@ -36,17 +36,17 @@ declare "sequent"{'arg; 'hyps; 'concl}
 (*
  * The type of sequents.
  *)
-declare Sequent{'d; 'ty_arg; 'ty_hyp; 'ty_concl}
+declare Sequent
 
 (*
  * A second-order variable of type 'ty.
  *)
-declare SOVar{'d; 'ty}
+declare SOVar{'d}
 
 (*
  * A sequent context variable.
  *)
-declare CVar{'d; 'ty_hyp}
+declare CVar{'d}
 
 (*
  * A step in a proof.

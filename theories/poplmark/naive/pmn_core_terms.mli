@@ -53,16 +53,16 @@ declare TyLambda{'ty_bound; x. 'e['x]}
 declare TyApply{'e; 'ty_arg}
 
 (************************************************************************
- * Types.
+ * Judgments.
  *)
-declare isTyExp{'e}
-declare isExp{'e}
+declare fsub_subtype{'ty1; 'ty2}
+declare fsub_member{'e; 'ty}
 
-topval fold_isTyExp : conv
-topval fold_isExp : conv
-
-declare TyExp
-declare Exp
+(*
+ * The << TyPower{'ty} >> is used in hypothesis lists to represent
+ * subtyping assumptions.
+ *)
+declare TyPower{'ty}
 
 (************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing
@@ -88,19 +88,22 @@ declare Exp
 (************************************************
  * Lexing.
  *)
-declare tok_itt          : Terminal
-declare tok_fsub         : Terminal
-declare tok_top          : Terminal
+declare tok_itt            : Terminal
+declare tok_fsub           : Terminal
+declare tok_top            : Terminal
 
-declare tok_st           : Terminal
+declare tok_st             : Terminal
+declare tok_colon_in_colon : Terminal
 
 lex_token xterm : "fsub"        --> tok_fsub
 lex_token xterm : "itt"         --> tok_itt
 lex_token xterm : "top"         --> tok_top
 
 lex_token xterm : "<:"          --> tok_st
+lex_token xterm : ":in:" --> tok_colon_in_colon
 
 lex_prec nonassoc [tok_st] = prec_equal
+lex_prec nonassoc [tok_colon_in_colon] = prec_in
 
 (************************************************************************
  * Atomic terms.
@@ -113,32 +116,8 @@ production fsub_atomic{'e} <--
 production fsub_atomic{'e} <--
    tok_quotation{'e}
 
-production fsub_atomic{xunquote{'e}} <--
+production fsub_atomic{'e} <--
    tok_itt; tok_left_brace; xterm_term{'e}; tok_right_brace
-
-(************************************************
- * Types.
- *)
-declare fsub_type{'ty} : Nonterminal
-declare fsub_type_simple{'ty} : Nonterminal
-
-production fsub_type_simple{'e} <--
-   fsub_atomic{'e}
-
-production fsub_type_simple{'e} <--
-   tok_left_paren; fsub_type{'e}; tok_right_paren
-
-production fsub_type_simple{TyTop} <--
-   tok_top
-
-production fsub_type{'e} <--
-   fsub_type_simple{'e}
-
-production fsub_type{TyFun{'ty1; 'ty2}} <--
-   fsub_type{'ty1}; tok_arrow; fsub_type{'ty2}
-
-production fsub_type{TyAll{'ty1; v. 'ty2}} <--
-   tok_all; tok_id[v:s]; tok_st; fsub_type{'ty1}; tok_dot; fsub_type{'ty2}
 
 (************************************************
  * Expressions.
@@ -165,27 +144,34 @@ production fsub_exp_apply{'e} <--
 production fsub_exp_apply{Apply{'e1; 'e2}} <--
    fsub_exp_apply{'e1}; fsub_exp_simple{'e2}
 
-(* All expressions *)
 production fsub_exp{'e} <--
    fsub_exp_apply{'e}
 
+(* Type expressions *)
+production fsub_exp{TyTop} <--
+   tok_top
+
+production fsub_exp{TyFun{'ty1; 'ty2}} <--
+   fsub_exp{'ty1}; tok_arrow; fsub_exp{'ty2}
+
+production fsub_exp{TyAll{'ty1; v. 'ty2}} <--
+   tok_all; tok_id[v:s]; tok_st; fsub_exp{'ty1}; tok_dot; fsub_exp{'ty2}
+
+(* Normal expressions *)
 production fsub_exp{Lambda{'ty; v. 'e}} <--
-   tok_fun; tok_id[v:s]; tok_colon; fsub_type_simple{'ty}; tok_arrow; fsub_exp{'e}
+   tok_fun; tok_id[v:s]; tok_colon; fsub_exp{'ty}; tok_arrow; fsub_exp{'e}
 
 production fsub_exp{TyLambda{'ty; v. 'e}} <--
-   tok_Fun; tok_id[v:s]; tok_st; fsub_type_simple{'ty}; tok_arrow; fsub_exp{'e}
+   tok_Fun; tok_id[v:s]; tok_st; fsub_exp{'ty}; tok_arrow; fsub_exp{'e}
 
 production fsub_exp{TyApply{'e; 'ty}} <--
-   fsub_exp{'e}; tok_left_brace; fsub_type{'ty}; tok_right_brace
+   fsub_exp{'e}; tok_left_brace; fsub_exp{'ty}; tok_right_brace
 
 (************************************************************************
  * Integrate into the ITT language.
  *)
-production xterm_term{xquote{'depth; 'e}} <--
-   tok_fsub; tok_type; tok_left_brack; xterm_term{'depth}; tok_right_brack; tok_left_brace; fsub_type{'e}; tok_right_brace
-
-production xterm_term{xquote{'depth; 'e}} <--
-   tok_fsub; tok_left_brack; xterm_term{'depth}; tok_right_brack; tok_left_brace; fsub_exp{'e}; tok_right_brace
+production xterm_term{'e} <--
+   tok_fsub; tok_left_brace; fsub_exp{'e}; tok_right_brace
 
 (*!
  * @docoff

@@ -56,47 +56,36 @@ define unfold_hyp_depths : hyp_depths{'d; 'l} <-->
    list_ind{'l; lambda{d. "true"}; h, t, g. lambda{d. bdepth{'h} = 'd in nat & 'g ('d +@ 1)}} 'd
 
 doc <:doc<
-   The << is_sequent{'d; 's} >> predicate tests whether a sequent is well-formed
-   with respect to binding depths.  If the binding depth of the sequent is << 'd >>,
-   then the argument must have depth << 'd >>, the hypotheses must have binding depths
-   starting with << 'd >>, and the conclusion must have binding depth
-   << 'd +@ length{'hyps} >>.
+   The << is_sequent{'s} >> predicate tests whether a sequent << 's >> is well-formed
+   with respect to binding depths.
+   The argument must have depth << 0 >>, the hypotheses must have binding depths
+   starting with << 0 >>, and the conclusion must have binding depth
+   << length{'hyps} >>.
 >>
-define unfold_is_sequent : is_sequent{'d; 's} <-->
+define unfold_is_sequent : is_sequent{'s} <-->
    spread{'s; arg, rest. spread{'rest; hyps, concl.
-      bdepth{'arg} = 'd in nat
-      & hyp_depths{'d; 'hyps}
-      & bdepth{'concl} = 'd +@ length{'hyps} in nat}}
+      bdepth{'arg} = 0 in nat
+      & hyp_depths{0; 'hyps}
+      & bdepth{'concl} = length{'hyps} in nat}}
 
 doc <:doc<
-   A term << Sequent{'d; 'ty_arg; 'ty_hyps; 'ty_concl} >> is the type of
-   sequents at binding depth << 'd >>.  The argument must have type
-   << 'ty_arg >>, each hypothesis must have type << 'ty_hyps >>, and the
-   conclusion must have type << 'ty_concl >>.
+   The term << Sequent >> represents the type of sequents.
 >>
-define unfold_Sequent : Sequent{'d; 'ty_arg; 'ty_hyp; 'ty_concl} <-->
-   { s: ('ty_arg * list{'ty_hyp} * 'ty_concl) | is_sequent{'d; 's} }
+define unfold_Sequent : Sequent <-->
+   { s: BTerm * list{BTerm} * BTerm | is_sequent{'s} }
 
 doc <:doc<
-   The << SOVar{'d; 'ty} >> term represents a second-order variable of type
-   << 'ty >> at binding depth << 'd >>.
+   The << SOVar{'d} >> term represents a second-order variable
+   with binding depth << 'd >>.
 >>
-define unfold_SOVar : SOVar{'d; 'ty} <-->
-   { e: 'ty | bdepth{'e} = 'd in nat }
+define unfold_SOVar : SOVar{'d} <-->
+   { e: BTerm | bdepth{'e} = 'd in nat }
 
 doc <:doc<
-   The << CVar{'d; 'ty} >> represents a sequent context at binding depth << 'd >>.
-   The sequent context represents a list of hypotheses of type << 'ty >>.
+   The << CVar{'d} >> represents a sequent context at binding depth << 'd >>.
 >>
-define unfold_CVar : CVar{'d; 'ty} <-->
-   { l: list{'ty} | hyp_depths{'d; 'l} }
-
-doc <:doc<
-   A proof step << ProofStep{'ty_sequent} >> represents one rule application
-   in a proof.  The proof step has a list of premises, and a goal.
->>
-define unfold_ProofStep : ProofStep{'ty_sequent} <-->
-   list{'ty_sequent} * 'ty_sequent
+define unfold_CVar : CVar{'d} <-->
+   { l: list{BTerm} | hyp_depths{'d; 'l} }
 
 doc docoff
 
@@ -115,20 +104,18 @@ interactive hyp_depths_wf {| intro [] |} : <:xrule<
  * is_sequent is well-formed if applied to a sequent triple.
  *)
 interactive is_sequent_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- d IN "nat" -->
    "wf" : <H> >- s IN "BTerm" * list{"BTerm"} * "BTerm" -->
-   <H> >- is_sequent{d; s} Type
+   <H> >- is_sequent{s} Type
 >>
 
 (*
  * This is similar, but we have an explicit sequent triple.
  *)
 interactive is_sequent_wf2 {| intro [] |} : <:xrule<
-   "wf" : <H> >- d IN "nat" -->
    "wf" : <H> >- arg IN "BTerm" -->
    "wf" : <H> >- hyps IN list{"BTerm"} -->
    "wf" : <H> >- concl IN "BTerm" -->
-   <H> >- is_sequent{d; "sequent"{arg; hyps; concl}} Type
+   <H> >- is_sequent{"sequent"{arg; hyps; concl}} Type
 >>
 
 (*
@@ -136,11 +123,7 @@ interactive is_sequent_wf2 {| intro [] |} : <:xrule<
  * of BTerm.
  *)
 interactive sequent_wf {| intro [] |} : <:xrule<
-   "aux" : <H> >- "subtype"{ty_arg; "BTerm"} -->
-   "aux" : <H> >- "subtype"{ty_hyp; "BTerm"} -->
-   "aux" : <H> >- "subtype"{ty_concl; "BTerm"} -->
-   "wf" : <H> >- d IN "nat" -->
-   <H> >- Sequent{d; ty_arg; ty_hyp; ty_concl} Type
+   <H> >- "Sequent" Type
 >>
 
 (*
@@ -148,17 +131,13 @@ interactive sequent_wf {| intro [] |} : <:xrule<
  * and depths match up.
  *)
 interactive sequent_term_wf {| intro [] |} : <:xrule<
-   "aux" : <H> >- "subtype"{ty_arg; "BTerm"} -->
-   "aux" : <H> >- "subtype"{ty_hyp; "BTerm"} -->
-   "aux" : <H> >- "subtype"{ty_concl; "BTerm"} -->
-   "wf" : <H> >- d IN "nat" -->
-   "wf" : <H> >- arg IN ty_arg -->
-   "wf" : <H> >- hyps IN list{ty_hyp} -->
-   "wf" : <H> >- concl IN ty_concl -->
-   "wf" : <H> >- bdepth{arg} = d in "nat" -->
-   "wf" : <H> >- hyp_depths{d; hyps} -->
-   "wf" : <H> >- bdepth{concl} = d +@ length{hyps} in "nat" -->
-   <H> >- "sequent"{arg; hyps; concl} IN Sequent{d; ty_arg; ty_hyp; ty_concl}
+   "wf" : <H> >- arg IN "BTerm" -->
+   "wf" : <H> >- hyps IN list{"BTerm"} -->
+   "wf" : <H> >- concl IN "BTerm" -->
+   "wf" : <H> >- bdepth{arg} = 0 in "nat" -->
+   "wf" : <H> >- hyp_depths{0; hyps} -->
+   "wf" : <H> >- bdepth{concl} = length{hyps} in "nat" -->
+   <H> >- "sequent"{arg; hyps; concl} IN "Sequent"
 >>
 
 (*
@@ -166,8 +145,7 @@ interactive sequent_term_wf {| intro [] |} : <:xrule<
  *)
 interactive sovar_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
-   "wf" : <H> >- "subtype"{ty; "BTerm"} -->
-   <H> >- SOVar{d; ty} Type
+   <H> >- SOVar{d} Type
 >>
 
 (*
@@ -175,16 +153,7 @@ interactive sovar_wf {| intro [] |} : <:xrule<
  *)
 interactive cvar_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
-   "wf" : <H> >- "subtype"{ty; "BTerm"} -->
-   <H> >- CVar{d; ty} Type
->>
-
-(*
- * A proof step can range over any type.
- *)
-interactive proof_step_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- ty Type -->
-   <H> >- ProofStep{ty} Type
+   <H> >- CVar{d} Type
 >>
 
 (************************************************************************
@@ -192,17 +161,24 @@ interactive proof_step_wf {| intro [] |} : <:xrule<
  *)
 
 doc <:doc<
-   The term << ProofRule{'ty} >> represents a proof checker for
-   proof steps with terms of type << 'ty >>.
+   A proof step << ProofStep{'ty_sequent} >> represents one rule application
+   in a proof.  The proof step has a list of premises, and a goal.
 >>
-define unfold_ProofRule : ProofRule{'ty} <-->
-   ProofStep{'ty} -> univ[1:l]
+define unfold_ProofStep : ProofStep{'ty_sequent} <-->
+   list{'ty_sequent} * 'ty_sequent
 
 doc <:doc<
-   The term << Logic{'ty} >> represents a set of proof rules.
+   The term << ProofRule{'ty_sequent} >> represents a proof checker for
+   a single proof step.
 >>
-define unfold_Logic : Logic{'ty} <-->
-   list{ProofRule{'ty}}
+define unfold_ProofRule : ProofRule{'ty_sequent} <-->
+   ProofStep{'ty_sequent} -> univ[1:l]
+
+doc <:doc<
+   The term << Logic{'ty_sequent} >> represents a set of proof rules.
+>>
+define unfold_Logic : Logic{'ty_sequent} <-->
+   list{ProofRule{'ty_sequent}}
 
 doc <:doc<
    A derivation has three parts, 1) the premises << DerivationPremises{'d} >>,
@@ -245,11 +221,19 @@ let fold_DerivationStep = makeFoldC << DerivationStep{'premises; 'goal; 'proof} 
 let fold_Derivation_indexed = makeFoldC << Derivation{'n; 'ty_sequent; 'logic} >> unfold_Derivation_indexed
 
 (*
+ * A proof step can range over any type.
+ *)
+interactive proof_step_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
+   <H> >- ProofStep{ty} Type
+>>
+
+(*
  * A ProofRule is a type for any type.
  *)
 interactive proof_rule_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
-   <H> >- "ProofRule"{ty} Type
+   <H> >- ProofRule{ty} Type
 >>
 
 interactive logic_wf {| intro [] |} : <:xrule<
@@ -260,12 +244,12 @@ interactive logic_wf {| intro [] |} : <:xrule<
 (*
  * A ValidStep requires a derivation and a goal.
  *)
-interactive derivation_premises_wf {| intro [] |} : <:xrule<
+interactive derivation_premises_wf1 : <:xrule<
    "wf" : <H> >- t IN ty_premises * "top" * "top" -->
    <H> >- DerivationPremises{t} IN ty_premises
 >>
 
-interactive derivation_goal_wf {| intro [] |} : <:xrule<
+interactive derivation_goal_wf1 : <:xrule<
    "wf" : <H> >- t IN "top" * ty_sequent * "top" -->
    <H> >- DerivationGoal{t} IN ty_sequent
 >>

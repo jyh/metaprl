@@ -122,6 +122,8 @@ declare tok_backslash          : Terminal
 declare tok_squote             : Terminal
 declare tok_bquote             : Terminal
 declare tok_dollar             : Terminal
+declare tok_left_sequent       : Terminal
+declare tok_right_sequent      : Terminal
 
 (* Identifiers *)
 lex_token xterm : "[_[:alpha:]][_[:alnum:]]*" --> tok_id[lexeme:s]
@@ -174,6 +176,8 @@ lex_token xterm : "->"         --> tok_arrow
 lex_token xterm : ">-"         --> tok_turnstile
 lex_token xterm : "-->"        --> tok_longrightarrow
 lex_token xterm : "<-->"       --> tok_longleftrightarrow
+lex_token xterm : "[{][|]"     --> tok_left_sequent
+lex_token xterm : "[|][}]"     --> tok_right_sequent
 
 (*
  * Precedences.  Pre-declare most of the precedence levels here
@@ -552,6 +556,7 @@ production xterm_simple_term{xterm{xlist_sequent{| xopname[x:s] |}; xlist_sequen
 declare typeclass parsed_hyps_exp
 
 declare iform parsed_sequent{'e : Judgment} : Term
+declare iform parsed_sequent_arg{'e} : 'a
 
 declare xterm_hyps{'e : parsed_hyps_exp} : Nonterminal
 declare xterm_nonempty_hyps{'e : parsed_hyps_exp} : Nonterminal
@@ -561,6 +566,9 @@ declare sequent [parsed_hyps] { Term : Term >- Ignore } : parsed_hyps_exp
 
 production xterm_simple_term{parsed_sequent{sequent { <H> >- 'e }}} <--
    tok_sequent; tok_left_brace; xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}; tok_right_brace
+
+production xterm_simple_term{parsed_sequent{sequent [parsed_sequent_arg{'arg}] { <H> >- 'e }}} <--
+   xterm_simple_term{'arg}; tok_left_sequent; xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}; tok_right_sequent
 
 production xterm_hyps{parsed_hyps{||}} <--
    (* empty *)
@@ -688,6 +696,11 @@ iform var_id :
  *)
 iform parsed_sequent :
    parsed_sequent{'e}
+   <-->
+   'e
+
+iform parsed_sequent_arg :
+   parsed_sequent_arg{'e}
    <-->
    'e
 

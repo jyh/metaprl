@@ -221,6 +221,19 @@ let fold_DerivationStep = makeFoldC << DerivationStep{'premises; 'goal; 'proof} 
 let fold_Derivation_indexed = makeFoldC << Derivation{'n; 'ty_sequent; 'logic} >> unfold_Derivation_indexed
 
 (*
+ * Some reductions.
+ *)
+interactive_rw reduce_derivation_premises {| reduce |} :
+   DerivationPremises{DerivationStep{'premises; 'goal; 'p}}
+   <-->
+   'premises
+
+interactive_rw reduce_derivation_goal {| reduce |} :
+   DerivationGoal{DerivationStep{'premises; 'goal; 'p}}
+   <-->
+   'goal
+
+(*
  * A proof step can range over any type.
  *)
 interactive proof_step_wf {| intro [] |} : <:xrule<
@@ -384,6 +397,34 @@ interactive derivation_elim {| elim [] |} 'H : <:xrule<
        all_list{premises; premise. P[premise]};
        p: ValidStep{premises; goal; logic} >- P[DerivationStep{premises; goal; p}] -->
    <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- P[e]
+>>
+
+doc docoff
+
+(*
+ * Restate some of the well-formedness goals.
+ *)
+interactive derivation_goal_wf2 {| intro [intro_typeinf << 'e >>] |} Derivation{'ty_sequent; 'logic} : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- logic IN "Logic"{ty_sequent} -->
+   "wf" : <H> >- e IN Derivation{ty_sequent; logic} -->
+   <H> >- DerivationGoal{e} IN ty_sequent
+>>
+
+doc <:doc<
+   The << Provable{'ty_sequent; 'logic; 't} >> predicate specifies that a particular
+   term << 't >> is the root of a derivation in a logic.
+>>
+define unfold_Provable : Provable{'ty_sequent; 'logic; 't} <-->
+   exst e: Derivation{'ty_sequent; 'logic}.
+      DerivationGoal{'e} = 't in 'ty_sequent
+doc docoff
+
+interactive wf_Provable {| intro [] |} : <:xrule<
+    "wf" : <H> >- ty_sequent Type -->
+    "wf" : <H> >- logic IN Logic{ty_sequent} -->
+    "wf" : <H> >- t IN ty_sequent -->
+    <H> >- Provable{ty_sequent; logic; t} Type
 >>
 
 (*!

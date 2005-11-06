@@ -190,7 +190,7 @@ interactive black_wf2 {| intro[] |} :
 interactive red_wf {| intro[] |} :
    sequent{ <H> >- red in Color }
 
-interactive color_elim {| elim[] |} 'H:
+interactive color_elim {| elim[] |} 'H :
    sequent{ <H>; <J[red]> >- 'C[red] } -->
    sequent{ <H>; <J[black]> >- 'C[black] } -->
    sequent{ <H>; c:Color; <J['c]> >- 'C['c] }

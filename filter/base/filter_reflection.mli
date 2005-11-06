@@ -1,5 +1,5 @@
 (*
- * Native sequent representation.
+ * Managing reflected terms.
  *
  * ----------------------------------------------------------------
  *
@@ -24,58 +24,39 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_util
-
-open Basic_tactics
-
-(*
- * An actual sequent term.
- *)
-declare "sequent"{'arg; 'hyps; 'concl}
+open Opname
+open Term_sig
+open Term_shape_sig
+open Refiner.Refiner.TermType
+open Refiner.Refiner.TermShape
 
 (*
- * The type of sequents.
+ * For expanding quotations.
  *)
-declare Sequent
+type parse_state =
+   { parse_quotation : string -> string -> term;
+     parse_opname : op_kind -> string list -> shape_param list -> int list -> Opname.opname;
+     parse_param : term -> param
+   }
 
 (*
- * A second-order variable of type 'ty.
+ * Hooks.
  *)
-declare SOVar{'d}
+val is_xquote_term : term -> bool
+val is_xrulequote_term : term -> bool
 
 (*
- * A sequent context variable.
+ * Reflection processing.
  *)
-declare CVar{'d}
+val dest_xquote_term : parse_state -> term -> term
+val dest_xrulequote_term : parse_state -> term -> term
+val dest_xrulequote_term_raw : parse_state -> term -> term
 
 (*
- * A checking rule for a single step of a proof.
+ * Constructing rules and theorems.
  *)
-declare ProofRule{'ty_sequent}
-
-(*
- * A step in a proof.
- *)
-declare ProofStep{'ty_sequent}
-
-(*
- * A Logic is a list of ProofRules.
- *)
-declare Logic{'rules}
-
-(*
- * A formula is provable in a logic.
- *)
-declare Provable{'ty_sequent; 'logic; 't}
-
-(*
- * Rewrites.
- *)
-topval fold_hyp_depths : conv
-topval fold_Logic : conv
-topval fold_Derivation_indexed : conv
-topval fold_DerivationDepth : conv
-topval fold_DerivationStep : conv
+val mk_rule_wf_thm : parse_state -> term -> meta_term
+val mk_infer_thm : parse_state -> meta_term -> meta_term
 
 (*!
  * @docoff

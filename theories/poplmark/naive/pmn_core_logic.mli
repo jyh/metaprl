@@ -29,7 +29,7 @@ extends Pmn_core_terms
 (*
  * Declare a sequent argument for fsub rules.
  *)
-declare sequent [fsub] { Term : Term >- Term } : Term
+declare sequent [fsub] { Term : Term >- Term } : Judgment
 
 (************************************************************************
  * Judgments.
@@ -48,7 +48,6 @@ production fsub_judgment{fsub_member{'e; 'ty}} <--
 declare typeclass parsed_hyps_exp
 
 declare iform parsed_sequent{'e : Judgment} : Term
-declare iform parsed_sequent_arg{'e} : 'a
 
 declare fsub_hyps{'e : parsed_hyps_exp} : Nonterminal
 declare fsub_nonempty_hyps{'e : parsed_hyps_exp} : Nonterminal
@@ -56,7 +55,7 @@ declare fsub_hyp[x:s]{'e : 'a} : Nonterminal
 
 declare sequent [parsed_hyps] { Term : Term >- Ignore } : parsed_hyps_exp
 
-production xterm_simple_term{sequent [fsub] { <H> >- 'e }} <--
+production xterm_simple_term{parsed_sequent{sequent [fsub] { <H> >- 'e }}} <--
    tok_fsub; tok_left_sequent; fsub_hyps{parsed_hyps{| <H> |}}; tok_turnstile; fsub_judgment{'e}; tok_right_sequent
 
 production fsub_hyps{parsed_hyps{||}} <--
@@ -79,6 +78,11 @@ production fsub_hyp[x:s]{TyPower{'e}} <--
 
 production fsub_hyp[""]{'c} <--
    xterm_context{'c}
+
+iform parsed_sequent :
+   parsed_sequent{'e}
+   <-->
+   'e
 
 (*!
  * @docoff

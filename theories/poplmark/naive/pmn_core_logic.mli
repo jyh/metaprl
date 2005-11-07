@@ -26,20 +26,22 @@
  *)
 extends Pmn_core_terms
 
-(*
- * Declare a sequent argument for fsub rules.
+(************************************************************************
+ * Sequents.
+ *
+ * We care only about sequents that use appropriate terms from Fsub.
  *)
-declare sequent [fsub] { Term : Term >- Term } : Judgment
+declare Sequent
 
 (************************************************************************
- * Judgments.
+ * Propositions.
  *)
-declare fsub_judgment{'e} : Nonterminal
+declare fsub_prop{'e : Prop} : Nonterminal
 
-production fsub_judgment{fsub_subtype{'ty1; 'ty2}} <--
+production fsub_prop{fsub_subtype{'ty1; 'ty2}} <--
    fsub_exp{'ty1}; tok_st; fsub_exp{'ty2}
 
-production fsub_judgment{fsub_member{'e; 'ty}} <--
+production fsub_prop{fsub_member{'e; 'ty}} <--
    fsub_exp{'e}; tok_colon; fsub_exp{'ty}
 
 (************************************************************************
@@ -53,10 +55,10 @@ declare fsub_hyps{'e : parsed_hyps_exp} : Nonterminal
 declare fsub_nonempty_hyps{'e : parsed_hyps_exp} : Nonterminal
 declare fsub_hyp[x:s]{'e : 'a} : Nonterminal
 
-declare sequent [parsed_hyps] { Term : Term >- Ignore } : parsed_hyps_exp
+declare sequent [parsed_hyps] { exst a: Hyp. TyElem{'a} : 'a >- Ignore } : parsed_hyps_exp
 
 production xterm_simple_term{parsed_sequent{sequent [fsub] { <H> >- 'e }}} <--
-   tok_fsub; tok_left_sequent; fsub_hyps{parsed_hyps{| <H> |}}; tok_turnstile; fsub_judgment{'e}; tok_right_sequent
+   tok_fsub; tok_left_sequent; fsub_hyps{parsed_hyps{| <H> |}}; tok_turnstile; fsub_prop{'e}; tok_right_sequent
 
 production fsub_hyps{parsed_hyps{||}} <--
    (* empty *)
@@ -70,7 +72,7 @@ production fsub_nonempty_hyps{parsed_hyps{| x: 'e |}} <--
 production fsub_nonempty_hyps{parsed_hyps{| <hyps>; x : 'e |}} <--
    fsub_nonempty_hyps{parsed_hyps{| <hyps> |}}; tok_semi; fsub_hyp[x:s]{'e}
 
-production fsub_hyp[x:s]{'e} <--
+production fsub_hyp[x:s]{TyVal{'e}} <--
    tok_id[x:s]; tok_colon; fsub_exp{'e}
 
 production fsub_hyp[x:s]{TyPower{'e}} <--

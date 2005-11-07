@@ -184,16 +184,16 @@ interactive_rw unfold_bindnsub :
 doc docoff
 
 dform bind_df : "prec"[prec_apply] :: mode[prl] :: bind{'n; x.'t} =
-   szone pushm[3] `"B^" slot["le"]{'n} space 'x `"." slot["le"]{'t} popm ezone
+   szone pushm[3] `"B^" 'x `":" slot["le"]{'n} "." hspace slot["le"]{'t} popm ezone
 
 dform bind_df2 : mode[html] :: mode[tex] :: bind{'n; x.'t} =
-   szone pushm[3] `"B" sup{slot{'n}} space 'x `"." slot["le"]{'t} popm ezone
+   szone pushm[3] `"B " 'x `":" sup{slot{'n}} `"." hspace slot["le"]{'t} popm ezone
 
 dform subst_df : parens :: "prec"[prec_apply] :: mode[prl] :: subst{'n; 'bt; 't} =
-   szone pushm[3] slot["lt"]{'bt} `" @(" slot["none"]{'n} `")" space slot["le"]{'t} popm ezone
+   szone pushm[3] slot["lt"]{'bt} `" @(" slot["none"]{'n} `")" hspace slot["le"]{'t} popm ezone
 
 dform subst_df2 : parens :: "prec"[prec_apply] :: mode[html] :: mode[tex] :: subst{'n; 'bt; 't} =
-   szone pushm[3] slot["lt"]{'bt} `" @" sub{slot["none"]{'n}} space slot["le"]{'t} popm ezone
+   szone pushm[3] slot["lt"]{'bt} `" @" sub{slot["none"]{'n}} hspace slot["le"]{'t} popm ezone
 
 dform substl_df : parens :: "prec"[prec_apply] :: substl{'bt; 'tl} =
       slot["lt"]{'bt} `"@" Mpsymbols!subl slot["le"]{'tl}

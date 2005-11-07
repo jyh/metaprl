@@ -24,45 +24,77 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_theory
-extends Itt_hoas_util
+extends Itt_hoas_theory
 
 open Basic_tactics
 
 (************************************************************************
  * Types.
  *)
-declare TyTop
-declare TyFun{'ty_domain; 'ty_range}
-declare TyAll{'ty_bound; x. 'ty['x]}
+declare typeclass TyExp -> Term
+
+declare TyTop : TyExp
+declare TyFun{'ty_domain : TyExp; 'ty_range : TyExp} : TyExp
+declare TyAll{'ty_bound : TyExp; x : TyExp. 'ty['x] : TyExp} : TyExp
 
 (************************************************************************
  * Expressions.
  *)
+declare typeclass Exp -> Term
 
 (*
  * Normal abstraction and application.
  *)
-declare Lambda{'ty_arg; x. 'e['x]}
-declare Apply{'e1; 'e2}
+declare Lambda{'ty_arg : TyExp; x : Exp. 'e['x] : Exp} : Exp
+declare Apply{'e1 : Exp; 'e2 : Exp} : Exp
 
 (*
  * Type abstraction and application.
  *)
-declare TyLambda{'ty_bound; x. 'e['x]}
-declare TyApply{'e; 'ty_arg}
+declare TyLambda{'ty_bound : TyExp; x : TyExp. 'e['x] : Exp} : Exp
+declare TyApply{'e : Exp; 'ty_arg : TyExp} : Exp
 
 (************************************************************************
  * Judgments.
  *)
-declare fsub_subtype{'ty1; 'ty2}
-declare fsub_member{'e; 'ty}
+declare typeclass Prop -> Term
 
-(*
+declare fsub_subtype{'ty1 : TyExp; 'ty2 : TyExp} : Prop
+declare fsub_member{'e : Exp; 'ty : TyExp} : Prop
+
+(************************************************************************
+ * Sequents.
+ *
+ * Hypotheses are wrapped.  The << TyVal{'ty} >> represents the
+ * programs that have type << 'ty >>.
+ *
  * The << TyPower{'ty} >> is used in hypothesis lists to represent
  * subtyping assumptions.
  *)
-declare TyPower{'ty}
+declare typeclass Judgment -> Perv!Judgment
+
+declare typeclass Hyp -> Ty
+
+declare typeclass TyVal : Hyp -> Term
+declare typeclass TyPower : Hyp -> Term
+
+declare TyVal{'ty : TyExp} : TyVal
+declare TyPower{'ty : TyExp} : TyPower
+
+(*
+ * Sequents have dependent types.
+ *)
+declare type TyElem{'a : Ty} : Ty
+
+declare rewrite TyElem{TyVal} <--> Exp
+declare rewrite TyElem{TyPower} <--> TyExp
+
+declare sequent [fsub] { exst a: Hyp. TyElem{'a} : 'a >- Prop } : Judgment
+
+(*
+ * Provability.
+ *)
+declare Provable{'e}
 
 (************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing
@@ -108,7 +140,7 @@ lex_prec nonassoc [tok_colon_in_colon] = prec_in
 (************************************************************************
  * Atomic terms.
  *)
-declare fsub_atomic{'e} : Nonterminal
+declare fsub_atomic{'e : 'a} : Nonterminal
 
 production fsub_atomic{'e} <--
    xterm_sovar{'e}
@@ -126,9 +158,9 @@ production fsub_atomic{'e} <--
  * Applications are only allowed on identifiers and parenthesized
  * expressions.
  *)
-declare fsub_exp{'e} : Nonterminal
-declare fsub_exp_apply{'e} : Nonterminal
-declare fsub_exp_simple{'e} : Nonterminal
+declare fsub_exp{'e : 'a} : Nonterminal
+declare fsub_exp_apply{'e : 'a} : Nonterminal
+declare fsub_exp_simple{'e : 'a} : Nonterminal
 
 (* Simple expressions that can be used in an application *)
 production fsub_exp_simple{'e} <--

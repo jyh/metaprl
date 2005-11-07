@@ -166,6 +166,11 @@ val is_length_term : term -> bool
 val mk_length_term : term -> term
 val dest_length : term -> term
 
+val append_term : term
+val is_append_term : term -> bool
+val mk_append_term : term -> term -> term
+val dest_append : term -> term * term
+
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)

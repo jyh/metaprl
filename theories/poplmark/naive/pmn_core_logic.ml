@@ -25,48 +25,37 @@
  * @end[license]
  *)
 extends Pmn_core_terms
-extends Itt_hoas_sequent_native
 
 open Basic_tactics
+
+doc <:doc<
+   Sequents must include only terms from fsub.
+>>
+define unfold_fsub_Sequent : Sequent <--> <:xterm<
+   { s: Itt_hoas_sequent_native!Sequent | Pmn_core_terms!Provable{$`[0] "meta_type"{| >- meta_member{s; "Judgment"} |}} }
+>>
+
+doc docoff
 
 (*
  * Proof steps are over sequents.
  *)
-define unfold_ProofRule : ProofRule <--> ProofRule{Sequent}
-define unfold_ProofStep : ProofStep <--> ProofStep{Sequent}
-define unfold_Provable  : Provable{'t} <--> Provable{Sequent; it; 't}
-
 reflected_logic fsub_core =
 struct
    (*
-    * Type well-formedness.
-    *)
-   interactive top_wf : <:xrule<
-      fsub{| <H> >- top <: top |}
-   >>
-
-   interactive ty_fun_wf : <:xrule<
-      fsub{| <H> >- ty1 <: top |} -->
-      fsub{| <H> >- ty2 <: top |} -->
-      fsub{| <H> >- ty1 -> ty2 <: top |}
-   >>
-
-   interactive ty_all_wf : <:xrule<
-      fsub{| <H> >- ty1 <: top |} -->
-      fsub{| <H>; X <: top >- ty2[X] <: top |} -->
-      fsub{| <H> >- all X <: ty1. ty2[X] <: top |}
-   >>
-
-   (*
     * Subtyping rules.
     *)
+   interactive sa_top : <:xrule<
+      fsub{| <H> >- T <: top |}
+   >>
+
    interactive sa_tvar 'H : <:xrule<
-      fsub{| <H>; X: T; <J[X]> >- X <: X |}
+      fsub{| <H>; X <: T; <J[X]> >- X <: X |}
    >>
 
    interactive sa_trans_tvar 'H : <:xrule<
-      fsub{| <H>; X: U; <J[X]> >- U <: T |} -->
-      fsub{| <H>; X: U; <J[X]> >- X <: T |}
+      fsub{| <H>; X <: U; <J[X]> >- U <: T |} -->
+      fsub{| <H>; X <: U; <J[X]> >- X <: T |}
    >>
 
    interactive sa_arrow : <:xrule<
@@ -77,7 +66,7 @@ struct
 
    interactive sa_all : <:xrule<
       fsub{| <H> >- T1 <: S1 |} -->
-      fsub{| <H>; X: T1 >- S2[X] <: T2[X] |} -->
+      fsub{| <H>; X <: T1 >- S2[X] <: T2[X] |} -->
       fsub{| <H> >- all X <: S1. S2[X] <: all X <: T1. T2[X] |}
    >>
 
@@ -89,37 +78,39 @@ struct
    >>
 
    interactive t_abs : <:xrule<
-      fsub{| <H> >- T1 <: top |} -->
       fsub{| <H>; x: T1 >- e[x] : T2 |} -->
       fsub{| <H> >- fun x : T1 -> e[x] : T1 -> T2 |}
    >>
 
-(*
-   interactive t_app 'T11 : <:xrule<
+   interactive t_app TyVal{'T11} : <:xrule<
       fsub{| <H> >- e1 : T11 -> T12 |} -->
       fsub{| <H> >- e2 : T11 |} -->
       fsub{| <H> >- e1 e2 : T12 |}
    >>
 
    interactive t_tabs : <:xrule<
-      fsub{| <H> >- T1 <: top |} -->
-      fsub{| <H>; X: T1 >- e[X] : T2[X] |} -->
+      fsub{| <H>; X <: T1 >- e[X] : T2[X] |} -->
       fsub{| <H> >- Fun X <: T1 -> e[X] : all X <: T1. T2[X] |}
    >>
 
-   interactive t_tapp 'T11 bind{x. 'T12['x]} : <:xrule<
+   interactive t_tapp TyVal{'T11} bind{x. TyVal{'T12['x]}} : <:xrule<
       fsub{| <H> >- e : all X <: T11. T12[X] |} -->
       fsub{| <H> >- T2 <: T11  |}-->
       fsub{| <H> >- e{T2} : T12[T2] |}
    >>
 
-   interactive t_sub 'S : <:xrule<
+   interactive t_sub TyVal{'S} : <:xrule<
       fsub{| <H> >- e : S |} -->
       fsub{| <H> >- S <: T |} -->
       fsub{| <H> >- e : T |}
    >>
-*)
 end
+
+(*
+ * Display forms.
+ *)
+dform provable_df : Provable{'e} =
+   szone pushm[0] `"<< " slot{'e} hspace `">>" popm ezone
 
 (*!
  * @docoff

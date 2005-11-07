@@ -102,7 +102,7 @@ interactive_rw reduce_wdt_mk_term {| reduce |} :
 doc docoff
 
 dform bind_df : parens :: "prec"[prec_lambda] :: bind{x.'t} =
-   `"B " 'x `"." slot{'t}
+   szone pushm[3] `"B " 'x `"." hspace slot{'t} popm ezone
 
 dform subst_df : parens :: "prec"[prec_apply] :: subst{'bt; 't} =
    slot["lt"]{'bt} `"@" slot["le"]{'t}

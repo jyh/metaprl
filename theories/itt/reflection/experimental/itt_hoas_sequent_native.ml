@@ -35,7 +35,12 @@ extends Itt_hoas_util
 
 doc docoff
 
+open Dform
 open Basic_tactics
+
+open Itt_list
+open Itt_list2
+open Itt_dfun
 
 doc <:doc<
    A sequent is represented as a 3-tuple << BTerm * list{BTerm} * BTerm >>,
@@ -426,6 +431,61 @@ interactive wf_Provable {| intro [] |} : <:xrule<
     "wf" : <H> >- t IN ty_sequent -->
     <H> >- Provable{ty_sequent; logic; t} Type
 >>
+
+(************************************************************************
+ * Display.
+ *)
+
+(*
+ * Change the display of substitutions to look like
+ * second-order variables.
+ *)
+dform subst_df : parens :: "prec"[prec_apply] :: subst{'t1; 't2} =
+   szone pushm[3] slot["lt"]{'t1} `"[" slot["none"]{'t2} `"]" popm ezone
+
+dform substl_df : parens :: "prec"[prec_apply] :: substl{'bt; 'tl} =
+   szone pushm[3] slot["lt"]{'bt} `"<|" slot["none"]{'tl} `"|>" popm ezone
+
+(*
+ * Convert the term back to a sequent for display.
+ *)
+let no_var = Lm_symbol.add "_"
+let sequent_opname = opname_of_term << "sequent"{'arg; 'hyps; 'concl} >>
+
+let format_sequent format_term buf t =
+   let arg, hyps, concl = dest_dep0_dep0_dep0_term sequent_opname t in
+   let rec collect_hyps l hyps =
+      if is_append_term hyps then
+         let hyp, hyps = dest_append hyps in
+         let hyp =
+            if is_cons_term hyp then
+               let h, t = dest_cons hyp in
+                  if is_nil_term t then
+                     h
+                  else
+                     hyp
+            else
+               hyp
+         in
+            collect_hyps (hyp :: l) hyps
+      else
+         hyps :: l
+   in
+   let hyps =
+      List.fold_left (fun hyps h ->
+            Hypothesis (no_var, h) :: hyps) [] (collect_hyps [] hyps)
+   in
+   let info =
+      { sequent_args = arg;
+        sequent_hyps = SeqHyp.of_list hyps;
+        sequent_concl = concl
+      }
+   in
+   let t = mk_sequent_term info in
+      format_term buf NOParens t
+
+ml_dform sequent_df : "sequent"{'arg; 'hyps; 'concl} format_term buf =
+   format_sequent format_term buf
 
 (*!
  * @docoff

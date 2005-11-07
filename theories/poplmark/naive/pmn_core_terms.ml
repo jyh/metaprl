@@ -24,15 +24,71 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_theory
-extends Itt_hoas_util
+extends Itt_hoas_theory
 
+open Itt_equal
 open Itt_dfun
 open Itt_logic
 
 (************************************************************************
+ * Define the reflected logic.
+ *)
+
+(*
+ * Type expressions.
+ *)
+reflected_logic types =
+struct
+   (* Type expressions *)
+   declare typeclass TyExp -> Term
+
+   declare TyTop : TyExp
+   declare TyFun{'ty1 : TyExp; 'ty2 : TyExp} : TyExp
+   declare TyAll{'ty1 : TyExp; x : TyExp. 'ty2 : TyExp} : TyExp
+
+   (* Expressions *)
+   declare typeclass Exp -> Term
+
+   declare Apply{'e1 : Exp; 'e2 : Exp} : Exp
+   declare Lambda{'ty : TyExp; x : Exp. 'e : Exp} : Exp
+   declare TyApply{'e : Exp; 'ty : TyExp} : Exp
+   declare TyLambda{'ty : TyExp; x : TyExp. 'e : Exp} : Exp
+
+   (* Judgments *)
+   declare typeclass Prop -> Term
+
+   declare fsub_subtype{'ty1 : TyExp; 'ty2 : TyExp} : Prop
+   declare fsub_member{'e : Exp; 'ty : TyExp} : Prop
+
+   (* Sequents *)
+   declare typeclass Judgment -> Perv!Judgment
+
+   declare typeclass Hyp -> Ty
+
+   declare typeclass TyVal : Hyp -> Term
+   declare typeclass TyPower : Hyp -> Term
+
+   declare TyVal{'ty : TyExp} : TyVal
+   declare TyPower{'ty : TyExp} : TyPower
+
+   (* Sequents have dependent types *)
+   declare type TyElem{'a : Ty} : Ty
+
+   declare rewrite TyElem{TyVal} <--> Exp
+   declare rewrite TyElem{TyPower} <--> TyExp
+
+   declare sequent [fsub] { exst a: Hyp. TyElem{'a} : 'a >- Prop } : Judgment
+end;;
+
+(************************************************************************
  * Display forms.
  *)
+dform ty_exp_df : <:xterm< xquote{d; "TyExp"} >> =
+   `"TyExp"
+
+dform exp_df : <:xterm< xquote{d; "Exp"} >> =
+   `"Exp"
+
 dform top_df : <:xterm< xquote{d; fsub { top }} >> =
    `"Top[" slot{'d} `"]"
 
@@ -53,6 +109,30 @@ dform ty_lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< xquote{d; fsub { 
 
 dform ty_apply_df : parens :: "prec"[prec_apply] :: <:xterm< xquote{d; fsub { e{ty} }} >> =
    szone pushm[3] slot{'e} `"@[" slot{'d} `"]{" slot{'ty} `"}" popm ezone
+
+dform ty_power_df : <:xterm< xquote{d; "TyPower"} >> =
+   `"Power"
+
+dform ty_val_df : <:xterm< xquote{d; "TyVal"} >> =
+   `"Val"
+
+dform ty_power_df : <:xterm< xquote{d; TyPower{ty}} >> =
+   `"Power(" slot{'ty} `")"
+
+dform ty_power_df : <:xterm< xquote{d; TyVal{ty}} >> =
+   `"Val(" slot{'ty} `")"
+
+dform fsub_df : <:xterm< xquote{d; "fsub"} >> =
+   `"fsub"
+
+dform fsub_subtype_df : parens :: "prec"[prec_equal] :: <:xterm< xquote{d; fsub_subtype{t1; t2}} >> =
+   szone pushm[3] slot{'t1} `" <:[" slot{'d} `"]" hspace slot{'t2} popm ezone
+
+dform fsub_member_df : parens :: "prec"[prec_apply] :: <:xterm< xquote{d; fsub_member{e; ty}} >> =
+   szone pushm[3] slot{'e} `" " Mpsymbols!member `"[" slot{'d} `"]" hspace slot{'ty} popm ezone
+
+dform fsub_Judgment_df : <:xterm< xquote{d; "Judgment"} >> =
+   `"Judgment[" slot{'d} `"]"
 
 (*!
  * @docoff

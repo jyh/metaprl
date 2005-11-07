@@ -299,6 +299,12 @@ let is_length_term = is_dep0_term length_opname
 let mk_length_term = mk_dep0_term length_opname
 let dest_length = dest_dep0_term length_opname
 
+let append_term = << append{'l1; 'l2} >>
+let append_opname = opname_of_term append_term
+let is_append_term = is_dep0_dep0_term append_opname
+let mk_append_term = mk_dep0_dep0_term append_opname
+let dest_append = dest_dep0_dep0_term append_opname
+
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)

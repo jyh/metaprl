@@ -1101,6 +1101,30 @@ interactive tail_induction 'H :
    sequent { <H>; l:list{'A}; <J['l]>; n:Index{'l}; 'P[tail{'l;'n}] >- 'P[ cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n}}] } -->
    sequent { <H>; l:list{'A}; <J['l]> >-  'P['l] }
 
+(*
+ * This is a general form that can be used on any list.
+ *)
+interactive tail_induction2 bind{list{'T}; l. 'P['l]} 'l :
+   [wf] sequent { <H> >- 'l IN list{'T} } -->
+   [base] sequent { <H> >- 'P[nil] } -->
+   [step] sequent { <H>; n: Index{'l}; 'P[tail{'l; 'n}] >- 'P[cons{nth{'l; length{'l} -@ ('n +@ 1)}; tail{'l;'n}}] } -->
+   sequent { <H> >- 'P['l] }
+
+doc docoff
+
+let tail_ind l p =
+   let t_bind =
+      try get_with_arg p with
+         RefineError _ ->
+            let ty = infer_type p l in
+            let t = concl p in
+            let v = maybe_new_var_set (Lm_symbol.add "l") (free_vars_set t) in
+               mk_ty_bind1_term v ty (var_subst t l v)
+   in
+      tail_induction2 t_bind l
+
+let tailIndT l = funT (tail_ind l)
+
 doc <:doc<
    @rules
    Rules for quantifiers are the following:

@@ -224,6 +224,8 @@ topval listIntoElementsC : term -> conv
 topval samesetSymT : tactic
 topval samesetTransT : term -> tactic
 
+topval tailIndT : term -> tactic
+
 (*
  * -*-
  * Local Variables:

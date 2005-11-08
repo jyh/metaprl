@@ -348,11 +348,10 @@ doc <:doc<
 interactive bterm_sqsimple {| intro [] |} :
    sequent { <H> >- sqsimple{BTerm} }
 
-doc docoff
-
-(*
- * Define a real induction principle.
- *)
+doc <:doc<
+   The following is the actual induction principle (the previous
+   rules are just elimination rules).
+>>
 interactive bterm_elim3 {| elim [] |} 'H :
    sequent { <H>; t: BTerm; <J['t]>; x: Var >- 'P['x] } -->
    sequent { <H>; t: BTerm; <J['t]>; bdepth: nat; op: Operator;
@@ -361,6 +360,87 @@ interactive bterm_elim3 {| elim [] |} 'H :
                all_list{'subterms; t. 'P['t]}
                >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
    sequent { <H>; t: BTerm; <J['t]> >- 'P['t] }
+
+<:doc<
+   Define a Boolean equality (alpha equality) on BTerms.
+>>
+define unfold_beq_bterm : beq_bterm{'t1; 't2} <-->
+   fix{beq_bterm. lambda{t1. lambda{t2.
+      dest_bterm{'t1;
+         l1, r1.
+            dest_bterm{'t2;
+               l2, r2. beq_var{var{'l1; 'r1}; var{'l2; 'r2}};
+               d1, o1, s1. bfalse};
+         d1, o1, s1.
+            dest_bterm{'t2;
+               l2, r2. bfalse;
+               d2, o2, s2.
+                  band{beq_int{'d1; 'd2};
+                  band{is_same_op{'o1; 'o2};
+                  ball2{'s1; 's2; t1, t2. 'beq_bterm 't1 't2}}}}}}}} 't1 't2
+
+let fold_beq_bterm = makeFoldC << beq_bterm{'t1; 't2} >> unfold_beq_bterm
+
+interactive_rw reduce_beq_bterm_var_var {| reduce |} :
+   'l1 in nat -->
+   'r1 in nat -->
+   'l2 in nat -->
+   'r2 in nat -->
+   beq_bterm{var{'l1; 'r1}; var{'l2; 'r2}}
+   <-->
+   beq_var{var{'l1; 'r1}; var{'l2; 'r2}}
+
+interactive_rw reduce_beq_bterm_var_bterm {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   'd in nat -->
+   'o in Operator -->
+   's in list{BTerm} -->
+   compatible_shapes{'d; shape{'o}; 's} -->
+   beq_bterm{var{'l; 'r}; mk_bterm{'d; 'o; 's}}
+   <-->
+   bfalse
+
+interactive_rw reduce_beq_bterm_bterm_var {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   'd in nat -->
+   'o in Operator -->
+   's in list{BTerm} -->
+   compatible_shapes{'d; shape{'o}; 's} -->
+   beq_bterm{mk_bterm{'d; 'o; 's}; var{'l; 'r}}
+   <-->
+   bfalse
+
+interactive_rw reduce_beq_bterm_bterm_bterm {| reduce |} :
+   'd1 in nat -->
+   'o1 in Operator -->
+   's1 in list{BTerm} -->
+   'd2 in nat -->
+   'o2 in Operator -->
+   's2 in list{BTerm} -->
+   compatible_shapes{'d1; shape{'o1}; 's1} -->
+   compatible_shapes{'d2; shape{'o2}; 's2} -->
+   beq_bterm{mk_bterm{'d1; 'o1; 's1}; mk_bterm{'d2; 'o2; 's2}}
+   <-->
+   band{beq_int{'d1; 'd2};
+   band{is_same_op{'o1; 'o2};
+   ball2{'s1; 's2; t1, t2. beq_bterm{'t1; 't2}}}}
+
+interactive beq_bterm_wf {| intro [] |} :
+   [wf] sequent { <H> >- 't1 in BTerm } -->
+   [wf] sequent { <H> >- 't2 in BTerm } -->
+   sequent { <H> >- beq_bterm{'t1; 't2} in bool }
+
+interactive beq_bterm_intro {| intro [] |} :
+   sequent { <H> >- 't1 = 't2 in BTerm } -->
+   sequent { <H> >- "assert"{beq_bterm{'t1; 't2}} }
+
+interactive beq_bterm_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; u: "assert"{beq_bterm{'t1; 't2}}; <J['u]> >- 't1 in BTerm } -->
+   [wf] sequent { <H>; u: "assert"{beq_bterm{'t1; 't2}}; <J['u]> >- 't2 in BTerm } -->
+   sequent { <H>; u: 't1 = 't2 in BTerm; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: "assert"{beq_bterm{'t1; 't2}}; <J['u]> >- 'C['u] }
 
 (*!
  * @docoff

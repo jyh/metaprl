@@ -60,6 +60,8 @@ declare Var
 
 topval fold_Var : conv
 
+declare beq_var{'x; 'y}
+
 (*!
  * @docoff
  *

@@ -46,10 +46,16 @@ declare BTerm
 declare BTerm{'i}
 declare dummy
 
+(* Conversions *)
 topval unfold_BTerm : conv
 topval fold_BTerm : conv
-
 topval fold_dummy : conv
+
+(* Boolean equality *)
+declare beq_bterm{'t1; 't2}
+topval fold_beq_bterm : conv
+
+(* 'e --> bind{x. 'e['x]} *)
 topval etaExpandC : term -> conv
 
 (*!

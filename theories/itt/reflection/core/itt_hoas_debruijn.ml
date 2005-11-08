@@ -271,6 +271,37 @@ interactive var_elim {| elim [] |} 'H :
 
 interactive var_sqsimple {| intro [] |} :
    sequent { <H> >- sqsimple{Var} }
+
+doc <:doc<
+   Boolean operations on vars.
+>>
+define unfold_beq_var : beq_var{'x; 'y} <-->
+   band{beq_int{left{'x}; left{'y}}; beq_int{right{'x}; right{'y}}}
+
+interactive_rw reduce_beq_var :
+   'l1 in nat -->
+   'r1 in nat -->
+   'l2 in nat -->
+   'r2 in nat -->
+   beq_var{var{'l1; 'r1}; var{'l2; 'r2}}
+   <-->
+   band{beq_int{'l1; 'l2}; beq_int{'r1; 'r2}}
+
+interactive beq_var_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'x in Var } -->
+   [wf] sequent { <H> >- 'y in Var } -->
+   sequent { <H> >- beq_var{'x; 'y} in bool }
+
+interactive beq_var_assert_intro {| intro [] |} :
+   sequent { <H> >- 'x = 'y in Var } -->
+   sequent { <H> >- "assert"{beq_var{'x; 'y}} }
+
+interactive beq_var_assert_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; u: "assert"{beq_var{'x; 'y}}; <J['u]> >- 'x in Var } -->
+   [wf] sequent { <H>; u: "assert"{beq_var{'x; 'y}}; <J['u]> >- 'y in Var } -->
+   sequent { <H>; u: 'x = 'y in Var; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: "assert"{beq_var{'x; 'y}}; <J['u]> >- 'C['u] }
+
 doc docoff
 
 (*!

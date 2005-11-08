@@ -1,5 +1,5 @@
 (*
- * Native sequent representation.
+ * A more natural formulation of sequents.
  *
  * ----------------------------------------------------------------
  *
@@ -24,63 +24,11 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_util
+extends Itt_hoas_sequent_native
 
 open Basic_tactics
 
-(*
- * An actual sequent term.
- *)
-declare "sequent"{'arg; 'hyps; 'concl}
-
-(*
- * The type of sequents.
- *)
-declare Sequent
-
-(*
- * A second-order variable of type 'ty.
- *)
-declare SOVar{'d}
-
-(*
- * A sequent context variable.
- *)
-declare CVar{'d}
-
-(*
- * A checking rule for a single step of a proof.
- *)
-declare ProofRule{'ty_sequent}
-
-(*
- * A step in a proof.
- *)
-declare ProofStep{'ty_sequent}
-
-(*
- * A Logic is a list of ProofRules.
- *)
-declare Logic{'rules}
-
-(*
- * A formula is provable in a logic.
- *)
-declare Provable{'ty_sequent; 'logic; 't}
-
-(*
- * Hypothesis depth check.
- *)
-declare hyp_depths{'d; 'hyps}
-
-(*
- * Rewrites.
- *)
-topval fold_hyp_depths : conv
-topval fold_Logic : conv
-topval fold_Derivation_indexed : conv
-topval fold_DerivationDepth : conv
-topval fold_DerivationStep : conv
+topval reduce_make_sequent : conv
 
 (*!
  * @docoff

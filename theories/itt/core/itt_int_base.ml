@@ -681,16 +681,18 @@ up[n, m, it, z])
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-prim intElimination {| elim [ThinOption thinT] |} 'H :
-   ( 'down['n; 'm; 'v; 'z] :
-      sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1]
- >- 'C['m] } ) -->
-   ( 'base['n] : sequent { <H>; n: int; <J['n]> >- 'C[0] } ) -->
-   ( 'up['n; 'm; 'v; 'z] :
-      sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1]
- >- 'C['m] } ) -->
-   sequent { <H>; n: int; <J['n]> >- 'C['n] } =
-      ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
+prim intEliminationLast :
+      ( 'down['m; 'v; 'z] : sequent { <H>; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
+      ( 'base : sequent { <H> >- 'C[0] } ) -->
+      ( 'up['m; 'v; 'z] : sequent { <H>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
+      sequent { <H>; n: int >- 'C['n] } = ind{'n; m, z. 'down['m; it; 'z]; 'base; m,z. 'up['m; it; 'z]}
+
+
+interactive intElimination {| elim [ThinOption thinT] |} 'H :
+   [downcase] sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
+   [basecase] sequent { <H>; n: int; <J['n]> >- 'C[0] } -->
+   [upcase] sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
+   sequent { <H>; n: int; <J['n]> >- 'C['n] }
 
 doc <:doc<
    @modsubsection {Induction and recursion}
@@ -960,11 +962,11 @@ interactive_rw minus_plus_rw {| reduce |} :
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
 interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :
-   sequent { <H> >- 'x1 = 'x2 in int } -->
-   sequent { <H>; x: int; 'x < 0; 'x1 < 'x +@ 1; y: 'T['x +@ 1] >- 'down1['x; 'y] =
+   [wf] sequent { <H> >- 'x1 = 'x2 in int } -->
+   [downcase] sequent { <H>; x: int; 'x < 0; 'x1 < 'x +@ 1; y: 'T['x +@ 1] >- 'down1['x; 'y] =
  'down2['x; 'y] in 'T['x] } -->
-   sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
-   sequent { <H>; x: int; 0 < 'x; 'x < 'x1 +@ 1; y: 'T['x -@ 1] >- 'up1['x; 'y] =
+   [basecase] sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
+   [upcase] sequent { <H>; x: int; 0 < 'x; 'x < 'x1 +@ 1; y: 'T['x -@ 1] >- 'up1['x; 'y] =
  'up2['x; 'y] in 'T['x] } -->
    sequent { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
  'up1['k1; 'l1]}

@@ -46,6 +46,7 @@ extends Itt_equal
 extends Itt_dfun
 extends Itt_struct
 extends Itt_logic
+extends Itt_struct2
 doc docoff
 
 open Basic_tactics
@@ -175,11 +176,16 @@ doc <:doc<
    $h @in A$ and $t @in @list{A}$, where the induction hypothesis
    $C[t]$ holds on $t$.
 >>
-prim listElimination {| elim [ThinOption thinT] |} 'H :
-   [main] ('base['l] : sequent { <H>; l: list{'A}; <J['l]> >- 'C[nil] }) -->
-   [main] ('step['l; 'u; 'v; 'w] : sequent { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
-   sequent { <H>; l: list{'A}; <J['l]> >- 'C['l] } =
-   list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
+prim listEliminationLast :
+   [base] ('base : sequent { <H> >- 'C[nil] }) -->
+   [step] ('step['u; 'v; 'w] : sequent { <H>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
+   sequent { <H>; l: list{'A} >- 'C['l] } =
+   list_ind{'l; 'base; u, v, w. 'step['u; 'v; 'w]}
+
+interactive listElimination {| elim [ThinOption thinT] |} 'H :
+   [base] sequent { <H>; l: list{'A}; <J['l]> >- 'C[nil] } -->
+   [step] sequent { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
+   sequent { <H>; l: list{'A}; <J['l]> >- 'C['l] }
 
 doc <:doc<
    @modsubsection{Contradiction}

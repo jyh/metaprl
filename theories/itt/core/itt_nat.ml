@@ -184,15 +184,15 @@ interactive nat_plus {| intro [AutoMustComplete] |} :
    sequent { <H> >- ('a +@ 'b) in nat }
 
 interactive natInduction {| elim [ThinOption thinT] |} 'H  :
-   sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
-   sequent { <H>; n: nat; <J['n]>; m: nat;  'C['m] >- 'C['m +@ 1] }  -->
+   [base] sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
+   [step] sequent { <H>; n: nat; <J['n]>; m: nat;  'C['m] >- 'C['m +@ 1] }  -->
    sequent { <H>; n: nat; <J['n]> >- 'C['n] }
 
 let thinNextLastT n = (thinT (-2) thenT thinT n)
 
 interactive natInduction2 {| elim [ThinOption thinNextLastT] |} 'H  :
-   sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
-   sequent { <H>; n: nat; <J['n]>; m: nat; 'm<'n; 'C['m] >- 'C['m +@ 1] }  -->
+   [base] sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
+   [step] sequent { <H>; n: nat; <J['n]>; m: nat; 'm<'n; 'C['m] >- 'C['m +@ 1] }  -->
    sequent { <H>; n: nat; <J['n]> >- 'C['n] }
 
 interactive natFullInduction (* {| elim [SelectOption 1; ThinOption thinT] |} *) 'H  :
@@ -206,14 +206,14 @@ interactive natBasedFullInduction 'H bind{x.'f['x]} :
 
 interactive natBackInduction 'n bind{x.'C['x]}  :
    [wf] sequent { <H> >- 'n in nat }  -->
-   sequent { <H> >- 'C['n] }  -->
-   sequent { <H>; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
+   [base] sequent { <H> >- 'C['n] }  -->
+   [step] sequent { <H>; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
    sequent { <H>  >- 'C[0] }
 
 interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :
-   sequent { <H> >- 'n1 = 'n2 in nat } -->
-   sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
-   sequent { <H>; x: nat; 0<'x; le{'x;'n1}; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   [wf] sequent { <H> >- 'n1 = 'n2 in nat } -->
+   [base] sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
+   [step] sequent { <H>; x: nat; 0<'x; le{'x;'n1}; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent { <H> >- ind{'n1; 'base1; k1, l1. 'up1['k1; 'l1]} = ind{'n2; 'base2; k2, l2. 'up2['k2; 'l2]} in 'T['n1] }
 
 interactive finiteNatType {| intro [] |} :

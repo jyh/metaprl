@@ -671,81 +671,104 @@ doc <:doc< Introduction rules have identical semantics in pairwise and pointwise
 
 doc <:doc< Straighfowrard induction on 'l (or, more precisely, on first variant of 'l) works out correctly >>
 
-(* OK *) prim itt_list.listElimination {| elim [ThinOption thinT] |} 'H :
-   [main] ('base['l] : sequent { <H>; l: list{'A}; <J['l]> >- 'C[nil] }) -->
-   [main] ('step['l; 'u; 'v; 'w] : sequent { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
-   sequent { <H>; l: list{'A}; <J['l]> >- 'C['l] } =
-   list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
+(* OK *) prim itt_list.listEliminationLast :
+   [base] ('base : sequent { <H> >- 'C[nil] }) -->
+   [step] ('step['u; 'v; 'w] : sequent { <H>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
+   sequent { <H>; l: list{'A} >- 'C['l] } =
+   list_ind{'l; 'base; u, v, w. 'step['u; 'v; 'w]}
 
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
 
-(* OK *) prim itt_list.nilSqequal {| nth_hyp |} 'T :
-   sequent { <H> >- 'u = nil in list{'T} } -->
-   sequent { <H> >- 'u ~ nil } =
-   it
+doc <:doc< This is a fairly simple consequence of the definition of the pairwise functionality semantics. >>
 
-prim itt_pairwise.let_rule 'H ('z='s in 'S):
+(* OK *) prim itt_pairwise.let_rule 'H ('z='s in 'S):
   [assertion] sequent { <H>; <J> >- 's in 'S } -->
    [main]    ('t['x; 'u]:  sequent { <H>; x: 'S;  <J>; u:'s ~ 'x  >- 'T } )-->
    sequent { <H>; <J>  >- 'T}
       = 't['s; it]
 
-prim itt_int_base.int_sqequal {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.int_sqequal {| nth_hyp |} :
    sequent { <H> >- 'a = 'b in int } -->
    sequent { <H> >- 'a ~ 'b } = it
 
-prim itt_int_base.intEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.intEquality {| intro [] |} :
    sequent { <H> >- int in univ[i:l] } = it
 
-prim itt_int_base.numberFormation {| intro [] |} number[n:n] :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.numberFormation {| intro [] |} number[n:n] :
    sequent { <H> >- int } = number[n:n]
 
-prim itt_int_base.add_wf {| intro [complete_unless_member] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.add_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a +@ 'b = 'a1 +@ 'b1 in int } = it
 
-prim itt_int_base.minus_wf {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.minus_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    sequent { <H> >- (-'a) = (-'a1) in int } = it
 
-prim itt_int_base.lt_bool_wf {| intro [complete_unless_member] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.lt_bool_wf {| intro [complete_unless_member] |} :
    sequent { <H> >- 'a='a1 in int } -->
    sequent { <H> >- 'b='b1 in int } -->
    sequent { <H> >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool } = it
 
-prim itt_int_base.beq_wf {| intro [complete_unless_member] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.beq_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
 
-prim itt_int_base.beq_int2prop :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.beq_int2prop :
+
    [main] sequent { <H> >- "assert"{beq_int{'a; 'b}} } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'a = 'b in int } = it
 
-prim itt_int_base.beq_int_is_true {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.beq_int_is_true {| nth_hyp |} :
    sequent { <H> >- 'a = 'b in int } -->
    sequent { <H> >- beq_int{'a; 'b} ~ btrue } = it
 
-prim itt_int_base.numberEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.numberEquality {| intro [] |} :
    sequent { <H> >- number[n:n] in int } = it
 
-prim itt_int_base.lt_Reflex :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.lt_Reflex :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse } =
  it
 
-prim itt_int_base.lt_Trichot :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.lt_Trichot :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent {
      <H> >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue
  } = it
 
-prim itt_int_base.lt_Transit 'b :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.lt_Transit 'b :
    [main] sequent {
       <H> >- band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool } -->
    [wf] sequent { <H> >- 'a in int } -->
@@ -753,101 +776,130 @@ prim itt_int_base.lt_Transit 'b :
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- lt_bool{'a; 'c} ~ btrue } = it
 
-prim itt_int_base.lt_Discret :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.lt_Discret :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- lt_bool{'a; 'b} ~
                           bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}} }
  = it
 
-prim itt_int_base.intElimination {| elim [ThinOption thinT] |} 'H :
-   ( 'down['n; 'm; 'v; 'z] :
-      sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1]
- >- 'C['m] } ) -->
-   ( 'base['n] : sequent { <H>; n: int; <J['n]> >- 'C[0] } ) -->
-   ( 'up['n; 'm; 'v; 'z] :
-      sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1]
- >- 'C['m] } ) -->
-   sequent { <H>; n: int; <J['n]> >- 'C['n] } =
-      ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
+doc <:doc< Fairly straightforward induction on n >>
 
-prim itt_int_base.add_Commut :
+(* OK *) prim itt_int_base.intElimination {| elim [ThinOption thinT] |} 'H :
+      ( 'down['m; 'v; 'z] : sequent { <H>; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
+      ( 'base : sequent { <H> >- 'C[0] } ) -->
+      ( 'up['m; 'v; 'z] : sequent { <H>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
+      sequent { <H>; n: int >- 'C['n] } = ind{'n; m, z. 'down['m; it; 'z]; 'base; m,z. 'up['m; it; 'z]}
+
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.add_Commut :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a +@ 'b) ~ ('b +@ 'a) } = it
 
-prim itt_int_base.add_Assoc :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.add_Assoc :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ('a +@ ('b +@ 'c)) ~ (('a +@ 'b) +@ 'c) } = it
 
-prim itt_int_base.add_Id {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.add_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a +@ 0) ~ 'a } = it
 
-prim itt_int_base.lt_addMono :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.lt_addMono :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- lt_bool{('a +@ 'c); ('b +@ 'c)} ~ lt_bool{'a; 'b} } =
  it
 
-prim itt_int_base.minus_add_inverse {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_base.minus_add_inverse {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
-prim itt_int_ext.mul_wf {| intro [complete_unless_member] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.mul_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
 
-prim itt_int_ext.mul_Commut :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.mul_Commut :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a *@ 'b) ~ ('b *@ 'a) } = it
 
-prim itt_int_ext.mul_Assoc :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.mul_Assoc :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) } = it
 
-prim itt_int_ext.mul_add_Distrib :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.mul_add_Distrib :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) } = it
 
-prim itt_int_ext.mul_Id {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.mul_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a } = it
 
-prim itt_int_ext.mul_Zero {| nth_hyp |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.mul_Zero {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (0 *@ 'a) ~ 0 } = it
 
-prim itt_int_ext.rem_baseReduce :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.rem_baseReduce :
    sequent { <H> >- 0 <= 'a } -->
    sequent { <H> >- 'a < 'b } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ 'a } = it
 
-prim itt_int_ext.rem_neg :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.rem_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) } = it
 
-prim itt_int_ext.rem_indReduce :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.rem_indReduce :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) } = it
 
-prim itt_int_ext.div_baseReduce :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_int_ext.div_baseReduce :
    sequent { <H> >- 0 <= 'a } -->
    sequent { <H> >- 'a < 'b } -->
    [wf] sequent { <H> >- 'a in int } -->

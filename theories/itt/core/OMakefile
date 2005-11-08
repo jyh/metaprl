@@ -25,10 +25,10 @@ MPFILES[] =
    itt_well_founded
    itt_decidable
    itt_bool
-   itt_list
    itt_ext_equal
    itt_pointwise
    itt_struct2
+   itt_list
    itt_struct3
    itt_match
    itt_int_base

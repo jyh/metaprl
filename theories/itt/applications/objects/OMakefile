@@ -1,7 +1,7 @@
 THEORYNAME = itt_objects
 THEORYDESCR = Objects Formalized in Computational Type Theory (Initial)
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
    itt/core
 
 # Library files

@@ -4,7 +4,7 @@
 THEORYNAME = poplmark_naive
 THEORYDESCR = A naive POPLmark solution
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/reflection/core
     itt/reflection/experimental

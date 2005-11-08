@@ -1,4 +1,4 @@
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     experimental/compile
 
 CORE_FILES[] =

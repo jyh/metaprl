@@ -1,7 +1,7 @@
 THEORYNAME = itt_datatypes
 THEORYDESCR = Datatypes Formalized in Computational Type Theory (Work in Progress)
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
 
 # Library files

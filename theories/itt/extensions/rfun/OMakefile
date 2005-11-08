@@ -1,7 +1,7 @@
 THEORYNAME = itt_rfun
 THEORYDESCR = Extensions to Computational Type Theory - Very Dependent Functions
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
 
 # Library files

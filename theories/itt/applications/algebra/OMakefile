@@ -1,7 +1,7 @@
 THEORYNAME = itt_algebra
 THEORYDESCR = Abstract Algebra Formalization in the Computational Type Theory
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
 
 # Library files

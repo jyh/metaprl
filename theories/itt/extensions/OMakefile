@@ -1,7 +1,7 @@
 THEORYNAME = itt_extensions
 THEORYDESCR = Extensions to Computational Type Theory (Some are Experimental)
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/extensions/rfun
 

@@ -1,7 +1,7 @@
 THEORYNAME = itt_tests
 THEORYDESCR = Tests and Benchmarks for Computational Type Theory
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/applications/supinf
 

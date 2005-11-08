@@ -1,4 +1,4 @@
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
 
 # Library files

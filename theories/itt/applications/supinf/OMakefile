@@ -1,7 +1,7 @@
 THEORYNAME = itt_supinf
 THEORYDESCR = SupInf Tactic for Computational Type Theory (Obsolete)
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
    itt/core
    itt/applications/algebra
 

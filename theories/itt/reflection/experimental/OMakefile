@@ -1,7 +1,7 @@
 THEORYNAME = itt_reflection_experimental
 THEORYDESCR = Syntax Reflection for Computational Type Theory - Work in progress
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/reflection/core
 

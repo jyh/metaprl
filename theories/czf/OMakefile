@@ -2,7 +2,7 @@ THEORYNAME = czf
 THEORYDESCR = Constructive Set Theory
 
 # ITT extensions are included for itt_eta
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/extensions
     itt/applications/supinf

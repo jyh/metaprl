@@ -1,7 +1,7 @@
 THEORYNAME = itt_function_spaces
 THEORYDESCR = Function Spaces Formalized in Computational Type Theory (Incomplete)
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/extensions
 

@@ -1,7 +1,7 @@
 THEORYNAME = itt_reflection_obsolete
 THEORYDESCR = Syntax Reflection for Computational Type Theory - Obsolete
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/applications/function_spaces
     itt/extensions

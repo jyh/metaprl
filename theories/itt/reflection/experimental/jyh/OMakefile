@@ -1,7 +1,7 @@
 THEORYNAME = itt_reflection_experimental_jyh
 THEORYDESCR = $"Syntax Reflection for Computational Type Theory - Jason's experimental work"
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
     itt/reflection/core
     itt/reflection/experimental

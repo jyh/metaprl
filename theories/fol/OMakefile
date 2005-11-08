@@ -1,7 +1,7 @@
 THEORYNAME = fol
 THEORYDESCR = First-Order Logic
 
-THEORY_DEPENCIES[] +=
+THEORY_DEPS[] +=
     itt/core
 
 # Library files

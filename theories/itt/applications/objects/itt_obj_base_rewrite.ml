@@ -36,7 +36,9 @@ interactive_rw update_f_reduce {| reduce |}:
 interactive_rw update_m_reduce {| reduce |}:
    update[m:t]{self.'f['self];obj{self. 'record['self]}} <--> obj{self.rcrd[m:t]{'f['self];'record['self]}}
 
-
+interactive_rw unfold_update_field2:
+   update[m:t]{'f;'obj} <-->
+   update[m:t]{self.'f;'obj}
 
 (******************)
 (*  Display Forms *)

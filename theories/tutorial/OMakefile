@@ -1,7 +1,5 @@
-OCAMLINCLUDES[] +=
-    $(SUPPORT_DIRS)
-    ../base
-    ../itt/core
+THEORY_DEPENCIES[] +=
+    itt/core
 
 # Library files
 MPFILES = fol_false

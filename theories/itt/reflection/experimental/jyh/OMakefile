@@ -1,12 +1,10 @@
 THEORYNAME = itt_reflection_experimental_jyh
 THEORYDESCR = $"Syntax Reflection for Computational Type Theory - Jason's experimental work"
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../../base
-   ../../../core
-   ../../core
-   ..
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/reflection/core
+    itt/reflection/experimental
 
 # Library files
 MPFILES[] =

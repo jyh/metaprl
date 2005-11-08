@@ -1,12 +1,10 @@
 THEORYNAME = itt_reflection_obsolete
 THEORYDESCR = Syntax Reflection for Computational Type Theory - Obsolete
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
-   ../../applications/function_spaces
-   ../../extensions
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/applications/function_spaces
+    itt/extensions
 
 # Library files
 MPFILES[] =

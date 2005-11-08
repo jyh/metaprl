@@ -1,11 +1,9 @@
 THEORYNAME = itt_function_spaces
 THEORYDESCR = Function Spaces Formalized in Computational Type Theory (Incomplete)
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
-   ../../extensions
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/extensions
 
 # Library files
 MPFILES[] =

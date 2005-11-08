@@ -1,20 +1,9 @@
 THEORYNAME = itt_extensions
 THEORYDESCR = Extensions to Computational Type Theory (Some are Experimental)
 
-DIRS[] =
-    rfun
-
-EXT_FILES[] =
-
-.SUBDIRS: $(DIRS)
-    include OMakefile
-    EXT_FILES += $(file $(MPFILES))
-    export EXT_FILES
-
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../base
-   ../core
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/extensions/rfun
 
 # Library files
 MPFILES[] =
@@ -23,7 +12,6 @@ MPFILES[] =
    itt_pairwise2
    itt_antiquotient
    ctt_markov
-   $(EXT_FILES)
 
 Theory($(MPFILES))
 

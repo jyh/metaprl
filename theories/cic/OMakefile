@@ -1,7 +1,3 @@
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../base
-
 # Library files
 MPFILES[] =
    cic_lambda

@@ -1,10 +1,8 @@
 THEORYNAME = ilc
-THEORYDESCR = ILC\: A Froundation for Automated Reasoning About Pointer Programs
+THEORYDESCR = $"ILC: A Froundation for Automated Reasoning About Pointer Programs"
 
-OCAMLINCLUDES[] +=
-    $(SUPPORT_DIRS)
-    ../base
-    ../itt/core
+THEORY_DEPENCIES[] +=
+    itt/core
 
 # MetaPRL "theory" files.
 MPFILES[] =

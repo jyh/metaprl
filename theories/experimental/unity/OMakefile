@@ -1,8 +1,5 @@
-OCAMLINCLUDES[] +=
-    $(ROOT)/support/display
-    $(SUPPORT_INCLUDE)
-    ../../base
-    ../compile
+THEORY_DEPENCIES[] +=
+    experimental/compile
 
 CORE_FILES[] =
     unity_util

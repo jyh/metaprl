@@ -5,13 +5,4 @@ DIRS[] =
     objects
     supinf
 
-FILES[] =
-
-.SUBDIRS: $(DIRS)
-    include OMakefile
-    FILES[] += $(file $(MPFILES))
-    export FILES
-
-MPFILES[] = $(FILES)
-
-Theory($(MPFILES))
+VirtualTheory($(DIRS))

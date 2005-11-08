@@ -2,12 +2,10 @@ THEORYNAME = czf
 THEORYDESCR = Constructive Set Theory
 
 # ITT extensions are included for itt_eta
-OCAMLINCLUDES[] +=
-    $(SUPPORT_DIRS)
-    ../base
-    ../itt/core
-    ../itt/extensions
-    ../itt/applications/supinf
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/extensions
+    itt/applications/supinf
 
 # Library files
 MPFILES[] =

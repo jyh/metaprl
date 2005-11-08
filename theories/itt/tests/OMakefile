@@ -1,11 +1,9 @@
 THEORYNAME = itt_tests
 THEORYDESCR = Tests and Benchmarks for Computational Type Theory
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../base
-   ../core
-   ../applications/supinf
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/applications/supinf
 
 # Library files
 MPFILES[] =

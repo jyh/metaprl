@@ -4,13 +4,10 @@
 THEORYNAME = poplmark_naive
 THEORYDESCR = A naive POPLmark solution
 
-OCAMLINCLUDES[] +=
-    $(SUPPORT_DIRS)
-    ../../base
-    ../../itt/core
-    ../../itt/reflection/core
-    ../../itt/reflection/experimental
-    ../../itt/reflection/experimental/jyh
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/reflection/core
+    itt/reflection/experimental
 
 FILES[] =
     pmn_core_terms_test

@@ -1,21 +1,9 @@
 THEORYNAME = itt_reflection_experimental
 THEORYDESCR = Syntax Reflection for Computational Type Theory - Work in progress
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
-   ../core
-
-DIRS[] =
-
-# Library files
-EXPERIMENTAL_FILES[] =
-
-.SUBDIRS: $(DIRS)
-    include OMakefile
-    EXPERIMENTAL_FILES[] += $(file $(MPFILES))
-    export EXPERIMENTAL_FILES
+THEORY_DEPENCIES[] +=
+    itt/core
+    itt/reflection/core
 
 MPFILES[] =
    itt_hoas_lang
@@ -24,7 +12,6 @@ MPFILES[] =
    itt_hoas_sequent_native
    itt_hoas_meta_types
    itt_hoas_theory
-   $(EXPERIMENTAL_FILES)
 
 Theory($(MPFILES))
 

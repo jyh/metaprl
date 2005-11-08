@@ -1,7 +1,3 @@
-OCAMLINCLUDES[] +=
-        $(dir ../../base)
-        $(SUPPORT_DIRS)
-
 MLZFILES[] =
         m_ra_type
         m_x86_inst_type

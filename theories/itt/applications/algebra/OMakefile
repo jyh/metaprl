@@ -1,10 +1,8 @@
 THEORYNAME = itt_algebra
 THEORYDESCR = Abstract Algebra Formalization in the Computational Type Theory
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
+THEORY_DEPENCIES[] +=
+    itt/core
 
 # Library files
 MPFILES[] =

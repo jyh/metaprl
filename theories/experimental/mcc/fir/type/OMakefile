@@ -1,17 +1,4 @@
 #
-# Include directories
-#
-OCAMLINCLUDES[] +=
-    $(MCC)/fir/type
-    $(ROOT)/support/display
-    $(ROOT)/support/shell
-    $(ROOT)/support/tactics
-    $(ROOT)/theories/ocaml
-    $(ROOT)/theories/base
-    $(ROOT)/libmojave/stdlib
-    $(ROOT)/libmojave/util
-
-#
 # Library files
 #
 MPFILES[] =

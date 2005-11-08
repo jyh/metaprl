@@ -1,10 +1,8 @@
 THEORYNAME = itt_reflection_core
 THEORYDESCR = Syntax Reflection for Computational Type Theory - Core
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
+THEORY_DEPENCIES[] +=
+    itt/core
 
 # Library files
 MPFILES[] =

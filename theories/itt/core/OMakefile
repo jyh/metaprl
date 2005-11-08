@@ -1,10 +1,6 @@
 THEORYNAME = itt_core
 THEORYDESCR = Computational Type Theory (Core Logic)
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../base
-
 # Library files
 MPFILES[] =
    itt_comment

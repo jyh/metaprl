@@ -1,10 +1,8 @@
 THEORYNAME = itt_datatypes
 THEORYDESCR = Datatypes Formalized in Computational Type Theory (Work in Progress)
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
+THEORY_DEPENCIES[] +=
+    itt/core
 
 # Library files
 MPFILES[] =

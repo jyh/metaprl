@@ -1,10 +1,6 @@
 THEORYNAME = ocaml_doc
 THEORYDESCR = "Introduction to OCaml" Book
 
-OCAMLINCLUDES[] +=
-    $(SUPPORT_DIRS)
-    ../base
-
 # Common files
 MLZFILES =
 

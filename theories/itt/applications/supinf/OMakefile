@@ -1,11 +1,9 @@
 THEORYNAME = itt_supinf
 THEORYDESCR = SupInf Tactic for Computational Type Theory (Obsolete)
 
-OCAMLINCLUDES[] +=
-   $(SUPPORT_DIRS)
-   ../../../base
-   ../../core
-   ../algebra
+THEORY_DEPENCIES[] +=
+   itt/core
+   itt/applications/algebra
 
 # Library files
 MPFILES[] =

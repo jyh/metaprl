@@ -13,16 +13,7 @@ if $(TESTS_ENABLED)
     DIRS[] += tests
     export
 
-ITT_FILES[] =
-
-.SUBDIRS: $(DIRS)
-    include OMakefile
-    ITT_FILES[] += $(file $(MPFILES))
-    export ITT_FILES
-
-MPFILES[] = $(ITT_FILES)
-
-Theory($(MPFILES))
+VirtualTheory($(DIRS))
 
 #
 # Documentation

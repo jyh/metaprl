@@ -2,6 +2,8 @@ OCAMLINCLUDES += $(SUPPORT_DIRS)
 THEORYNAME = base
 THEORYDESCR = Basic Meta-Theory
 
+THEORY_DEPENCIES[] =
+
 # Common files
 MLZFILES[] =
     base_theory

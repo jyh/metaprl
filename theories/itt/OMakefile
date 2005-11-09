@@ -93,20 +93,7 @@ PRINT_THEORIES[] =
     reflection/experimental/itt_hoas_lang
     reflection/experimental/itt_hoas_bterm
 
-section
-    EXTRA_INCLUDES[] =
-        ../base
-        core
-        extensions
-        applications/datatypes
-        applications/algebra
-        applications/supinf
-        reflection/core
-        reflection/experimental
-
-    OCAMLINCLUDES[] += $(SUPPORT_DIRS) $(dir $(EXTRA_INCLUDES))
-
-    TheoryDocumentInstall(itt, $(PRINT_THEORIES))
+TheoryDocumentInstall(itt, $(PRINT_THEORIES))
 
 #
 # Clean up

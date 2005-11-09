@@ -76,11 +76,21 @@ declare hyp_depths{'d; 'hyps}
 (*
  * Rewrites.
  *)
+topval fold_sequent : conv
 topval fold_hyp_depths : conv
 topval fold_Logic : conv
 topval fold_Derivation_indexed : conv
 topval fold_DerivationDepth : conv
 topval fold_DerivationStep : conv
+topval fold_proof_step : conv
+
+(*
+ * Boolean comparisons.
+ *)
+declare beq_sequent{'seq1; 'seq2}
+declare beq_sequent_list{'l1; 'l2}
+
+topval fold_beq_sequent_list : conv
 
 (*!
  * @docoff

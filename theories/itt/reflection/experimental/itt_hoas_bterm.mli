@@ -53,7 +53,9 @@ topval fold_dummy : conv
 
 (* Boolean equality *)
 declare beq_bterm{'t1; 't2}
+declare beq_bterm_list{'l1; 'l2}
 topval fold_beq_bterm : conv
+topval fold_beq_bterm_list : conv
 
 (* 'e --> bind{x. 'e['x]} *)
 topval etaExpandC : term -> conv

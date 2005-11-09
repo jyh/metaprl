@@ -95,6 +95,7 @@ define unfold_CVar : CVar{'d} <-->
 doc docoff
 
 let fold_hyp_depths = makeFoldC << hyp_depths{'d; 'l} >> unfold_hyp_depths
+let fold_sequent = makeFoldC << "sequent"{'arg; 'hyps; 'goal} >> unfold_sequent
 
 (*
  * hyp_depths rules.
@@ -146,6 +147,15 @@ interactive sequent_term_wf {| intro [] |} : <:xrule<
 >>
 
 (*
+ * Elimination, to the three parts.
+ *)
+interactive sequent_elim {| elim [] |} 'H : <:xrule<
+   <H>; arg: "BTerm"; hyps: list{"BTerm"}; goal: "BTerm"; squash{is_sequent{"sequent"{arg; hyps; goal}}};
+      <J["sequent"{arg; hyps; goal}]> >- C["sequent"{arg; hyps; goal}] -->
+   <H>; s: "Sequent"; <J[s]> >- C[s]
+>>
+
+(*
  * An SOVar is well-formed over subtypes of BTerm.
  *)
 interactive sovar_wf {| intro [] |} : <:xrule<
@@ -172,12 +182,15 @@ doc <:doc<
 define unfold_ProofStep : ProofStep{'ty_sequent} <-->
    list{'ty_sequent} * 'ty_sequent
 
+define unfold_proof_step : proof_step{'premises; 'goal} <-->
+   'premises, 'goal
+
 doc <:doc<
    The term << ProofRule{'ty_sequent} >> represents a proof checker for
    a single proof step.
 >>
 define unfold_ProofRule : ProofRule{'ty_sequent} <-->
-   ProofStep{'ty_sequent} -> univ[1:l]
+   ProofStep{'ty_sequent} -> bool
 
 doc <:doc<
    The term << Logic{'ty_sequent} >> represents a set of proof rules.
@@ -200,7 +213,7 @@ doc <:doc<
    if the proof step matches one of the proof rules in the logic.
 >>
 define unfold_ValidStep : ValidStep{'premises; 'goal; 'logic} <-->
-   exists_list{'logic; check. 'check (map{x. DerivationGoal{'x}; 'premises}, 'goal)}
+   "assert"{bexists_list{'logic; check. 'check (map{x. DerivationGoal{'x}; 'premises}, 'goal)}}
 
 doc <:doc<
    A << DerivationStep{'premises; 'goal; 'p} >> forms one step of a derivation,
@@ -224,6 +237,7 @@ doc docoff
 let fold_Logic = makeFoldC << Logic{'ty_sequent} >> unfold_Logic
 let fold_DerivationStep = makeFoldC << DerivationStep{'premises; 'goal; 'proof} >> unfold_DerivationStep
 let fold_Derivation_indexed = makeFoldC << Derivation{'n; 'ty_sequent; 'logic} >> unfold_Derivation_indexed
+let fold_proof_step = makeFoldC << proof_step{'premises; 'goal} >> unfold_proof_step
 
 (*
  * Some reductions.
@@ -244,6 +258,17 @@ interactive_rw reduce_derivation_goal {| reduce |} :
 interactive proof_step_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
    <H> >- ProofStep{ty} Type
+>>
+
+interactive proof_step_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- premises IN list{ty} -->
+   "wf" : <H> >- goal IN ty -->
+   <H> >- proof_step{premises; goal} IN ProofStep{ty}
+>>
+
+interactive proof_step_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; premises: list{ty}; goal: ty; <J[proof_step{premises; goal}]> >- C[proof_step{premises; goal}] -->
+   <H>; s: ProofStep{ty}; <J[s]> >- C[s]
 >>
 
 (*
@@ -430,6 +455,121 @@ interactive wf_Provable {| intro [] |} : <:xrule<
     "wf" : <H> >- logic IN Logic{ty_sequent} -->
     "wf" : <H> >- t IN ty_sequent -->
     <H> >- Provable{ty_sequent; logic; t} Type
+>>
+
+(************************************************************************
+ * Alpha-equality.
+ *)
+doc <:doc<
+   Define alpha-equality on sequents.
+>>
+define unfold_beq_sequent : beq_sequent{'seq1; 'seq2} <--> <:xterm<
+   let arg1, hyps1, goal1 = seq1 in
+   let arg2, hyps2, goal2 = seq2 in
+      beq_bterm{arg1; arg2} &&b beq_bterm_list{hyps1; hyps2} &&b beq_bterm{goal1; goal2}
+>>
+
+doc docoff
+
+interactive_rw reduce_beq_sequent_cons {| reduce |} : <:xrewrite<
+   beq_sequent{"sequent"{arg1; hyps1; goal1}; "sequent"{arg2; hyps2; goal2}}
+   <-->
+   beq_bterm{arg1; arg2} &&b beq_bterm_list{hyps1; hyps2} &&b beq_bterm{goal1; goal2}
+>>
+
+interactive beq_sequent_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- s1 IN "Sequent" -->
+   "wf" : <H> >- s2 IN "Sequent" -->
+   <H> >- beq_sequent{s1; s2} IN "bool"
+>>
+
+interactive beq_sequent_intro {| intro [] |} : <:xrule<
+   <H> >- s1 = s2 in "Sequent" -->
+   <H> >- "assert"{beq_sequent{s1; s2}}
+>>
+
+interactive beq_sequent_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; u: "assert"{beq_sequent{s1; s2}}; <J[u]> >- s1 IN "Sequent" -->
+   "wf" : <H>; u: "assert"{beq_sequent{s1; s2}}; <J[u]> >- s2 IN "Sequent" -->
+   <H>; u: s1 = s2 in "Sequent"; <J[u]> >- C[u] -->
+   <H>; u: "assert"{beq_sequent{s1; s2}}; <J[u]> >- C[u]
+>>
+
+(*
+ * Equality on lists of Sequents.
+ *)
+define unfold_beq_sequent_list : beq_sequent_list{'l1; 'l2} <-->
+   ball2{'l1; 'l2; t1, t2. beq_sequent{'t1; 't2}}
+
+let fold_beq_sequent_list = makeFoldC << beq_sequent_list{'l1; 'l2} >> unfold_beq_sequent_list
+
+interactive_rw reduce_beq_sequent_list_nil_nil {| reduce |} :
+   beq_sequent_list{nil; nil}
+   <-->
+   btrue
+
+interactive_rw reduce_beq_sequent_list_nil_cons {| reduce |} :
+   beq_sequent_list{nil; 'u::'v}
+   <-->
+   bfalse
+
+interactive_rw reduce_beq_sequent_list_cons_nil {| reduce |} :
+   beq_sequent_list{'u::'v; nil}
+   <-->
+   bfalse
+
+interactive_rw reduce_beq_sequent_list_cons_cons {| reduce |} :
+   beq_sequent_list{'u1::'v1; 'u2::'v2}
+   <-->
+   band{beq_sequent{'u1; 'u2}; beq_sequent_list{'v1; 'v2}}
+
+interactive beq_sequent_list_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'l1 in list{Sequent} } -->
+   [wf] sequent { <H> >- 'l2 in list{Sequent} } -->
+   sequent { <H> >- beq_sequent_list{'l1; 'l2} in bool }
+
+interactive beq_sequent_list_intro {| intro [] |} :
+   sequent { <H> >- 't1 = 't2 in list{Sequent} } -->
+   sequent { <H> >- "assert"{beq_sequent_list{'t1; 't2}} }
+
+interactive beq_sequent_list_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; u: "assert"{beq_sequent_list{'t1; 't2}}; <J['u]> >- 't1 in list{Sequent} } -->
+   [wf] sequent { <H>; u: "assert"{beq_sequent_list{'t1; 't2}}; <J['u]> >- 't2 in list{Sequent} } -->
+   sequent { <H>; u: 't1 = 't2 in list{Sequent}; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: "assert"{beq_sequent_list{'t1; 't2}}; <J['u]> >- 'C['u] }
+
+doc <:doc<
+   Define alpha-equality on proof steps that can be used
+   to specify proof rules.
+>>
+define unfold_beq_ProofStep : beq_ProofStep{'step1; 'step2} <--> <:xterm<
+   let premises1, goal1 = step1 in
+   let premises2, goal2 = step2 in
+      beq_sequent_list{premises1; premises2} &&b beq_sequent{goal1; goal2}
+>>
+
+interactive_rw reduce_beq_ProofStep {| reduce |} : <:xrewrite<
+   beq_ProofStep{proof_step{premises1; goal1}; proof_step{premises2; goal2}}
+   <-->
+   beq_sequent_list{premises1; premises2} &&b beq_sequent{goal1; goal2}
+>>
+
+interactive beq_ProofStep_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- step1 IN ProofStep{"Sequent"} -->
+   "wf" : <H> >- step2 IN ProofStep{"Sequent"} -->
+   <H> >- beq_ProofStep{step1; step2} IN "bool"
+>>
+
+interactive beq_ProofStep_intro {| intro [] |} : <:xrule<
+   <H> >- s1 = s2 in ProofStep{"Sequent"} -->
+   <H> >- "assert"{beq_ProofStep{s1; s2}}
+>>
+
+interactive beq_ProofStep_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; u: "assert"{beq_ProofStep{s1; s2}}; <J[u]> >- s1 IN ProofStep{"Sequent"} -->
+   "wf" : <H>; u: "assert"{beq_ProofStep{s1; s2}}; <J[u]> >- s2 IN ProofStep{"Sequent"} -->
+   <H>; u: s1 = s2 in ProofStep{"Sequent"}; <J[u]> >- C[u] -->
+   <H>; u: "assert"{beq_ProofStep{s1; s2}}; <J[u]> >- C[u]
 >>
 
 (************************************************************************

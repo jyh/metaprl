@@ -442,6 +442,49 @@ interactive beq_bterm_elim {| elim [] |} 'H :
    sequent { <H>; u: 't1 = 't2 in BTerm; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: "assert"{beq_bterm{'t1; 't2}}; <J['u]> >- 'C['u] }
 
+(*
+ * Equality on lists of BTerms.
+ *)
+define unfold_beq_bterm_list : beq_bterm_list{'l1; 'l2} <-->
+   ball2{'l1; 'l2; t1, t2. beq_bterm{'t1; 't2}}
+
+let fold_beq_bterm_list = makeFoldC << beq_bterm_list{'l1; 'l2} >> unfold_beq_bterm_list
+
+interactive_rw reduce_beq_bterm_list_nil_nil {| reduce |} :
+   beq_bterm_list{nil; nil}
+   <-->
+   btrue
+
+interactive_rw reduce_beq_bterm_list_nil_cons {| reduce |} :
+   beq_bterm_list{nil; 'u::'v}
+   <-->
+   bfalse
+
+interactive_rw reduce_beq_bterm_list_cons_nil {| reduce |} :
+   beq_bterm_list{'u::'v; nil}
+   <-->
+   bfalse
+
+interactive_rw reduce_beq_bterm_list_cons_cons {| reduce |} :
+   beq_bterm_list{'u1::'v1; 'u2::'v2}
+   <-->
+   band{beq_bterm{'u1; 'u2}; beq_bterm_list{'v1; 'v2}}
+
+interactive beq_bterm_list_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'l1 in list{BTerm} } -->
+   [wf] sequent { <H> >- 'l2 in list{BTerm} } -->
+   sequent { <H> >- beq_bterm_list{'l1; 'l2} in bool }
+
+interactive beq_bterm_list_intro {| intro [] |} :
+   sequent { <H> >- 't1 = 't2 in list{BTerm} } -->
+   sequent { <H> >- "assert"{beq_bterm_list{'t1; 't2}} }
+
+interactive beq_bterm_list_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 't1 in list{BTerm} } -->
+   [wf] sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 't2 in list{BTerm} } -->
+   sequent { <H>; u: 't1 = 't2 in list{BTerm}; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 'C['u] }
+
 (*!
  * @docoff
  *

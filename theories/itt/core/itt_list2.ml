@@ -146,6 +146,17 @@ define unfold_append :
 
 doc <:doc<
    @noindent
+   The @tt{bexists_list} term defines a Boolean universal quantification
+   over two lists.  The test $b[x, y]$ must compute a Boolean value
+   given elements of the two lists, and the test is $@bfalse$ if
+   the lists have different lengths.
+>>
+define unfold_bexists_list :
+   bexists_list{'l; x. 'b['x]} <-->
+      list_ind{'l; bfalse; h, t, g. bor{'b['h]; 'g}}
+
+doc <:doc<
+   @noindent
    The @tt{all2} term defines a universal quantification
    over two lists.  The test $p[x, y]$ must compute a proposition
    given elements of the two lists, and the test is $@false$ if
@@ -321,6 +332,9 @@ dform all_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "all_list"{'A
 dform exists_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "exists_list"{'A; x. 'B} =
    szone pushm[3] Mpsymbols!"exists" slot{'x} Mpsymbols!member slot{'A} sbreak["",". "] slot{'B} popm ezone
 
+dform exists_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "bexists_list"{'A; x. 'B} =
+   szone pushm[3] Mpsymbols!"exists" `"b " slot{'x} Mpsymbols!member slot{'A} sbreak["",". "] slot{'B} popm ezone
+
 dform is_nil_df : except_mode[src] :: parens :: "prec"[prec_equal] :: is_nil{'l} =
    slot{'l} `" =" subb `" []"
 
@@ -425,11 +439,19 @@ interactive_rw reduce_all_list_witness_cons {| reduce |} :
 doc <:doc<
    The @hrefterm[exists_list] term performs induction over the list.
 >>
-
 interactive_rw reduce_exists_list_nil {| reduce |} : exists_list{nil; x. 'P['x]} <--> "false"
 
 interactive_rw reduce_exists_list_cons {| reduce |} :
    exists_list{cons{'u; 'v}; x. 'P['x]} <--> 'P['u] or exists_list{'v; x.'P['x]}
+doc docoff
+
+doc <:doc<
+   The @hrefterm[bexists_list] term performs induction over the list.
+>>
+interactive_rw reduce_bexists_list_nil {| reduce |} : bexists_list{nil; x. 'P['x]} <--> "bfalse"
+
+interactive_rw reduce_bexists_list_cons {| reduce |} :
+   bexists_list{cons{'u; 'v}; x. 'P['x]} <--> bor{'P['u]; bexists_list{'v; x.'P['x]}}
 doc docoff
 
 doc <:doc<
@@ -1206,6 +1228,34 @@ interactive exists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} 'i :
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; x: 'A >- 'P['x] Type  } -->
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; i: Index{'l}; 'P[nth{'l; 'i}] >- 'C['u] } -->
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
+
+doc <:doc<
+   @rules
+   Rules for the Boolean existential.
+>>
+interactive bexists_list_wf1  {| intro [intro_typeinf << 'l >>] |} list{'T} :
+   sequent { <H> >- 'l in list{'T}  } -->
+   sequent { <H>; x: 'T >- 'P['x] in bool } -->
+   sequent { <H> >- bexists_list{'l;  x. 'P['x]} in bool }
+
+interactive bexists_list_wf2  {| intro [SelectOption 5] |} :
+   sequent { <H> >- 'l in list  } -->
+   sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] in bool } -->
+   sequent { <H> >- bexists_list{'l;  x. 'P['x]} in bool }
+
+interactive bexists_list_intro  {| intro [] |} 'i :
+   sequent { <H> >- 'l in list  } -->
+   sequent { <H> >- 'i in Index{'l}  } -->
+   sequent { <H> >- "assert"{'P[nth{'l; 'i}]}  } -->
+   sequent { <H>; i: Index{'l} >- 'P[nth{'l; 'i}] in bool } -->
+   sequent { <H> >- "assert"{bexists_list{'l;  x. 'P['x]}} }
+
+interactive bexists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} 'i :
+   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'A Type } -->
+   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'l in list{'A}  } -->
+   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]>; x: 'A >- 'P['x] in bool  } -->
+   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]>; i: Index{'l}; "assert"{'P[nth{'l; 'i}]} >- 'C['u] } -->
+   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'C['u] }
 
 (*
  * map.

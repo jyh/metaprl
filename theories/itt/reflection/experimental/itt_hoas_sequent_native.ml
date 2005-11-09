@@ -190,7 +190,7 @@ doc <:doc<
    a single proof step.
 >>
 define unfold_ProofRule : ProofRule{'ty_sequent} <-->
-   ProofStep{'ty_sequent} -> bool
+   ProofStep{'ty_sequent} -> univ[1:l]
 
 doc <:doc<
    The term << Logic{'ty_sequent} >> represents a set of proof rules.
@@ -213,7 +213,7 @@ doc <:doc<
    if the proof step matches one of the proof rules in the logic.
 >>
 define unfold_ValidStep : ValidStep{'premises; 'goal; 'logic} <-->
-   "assert"{bexists_list{'logic; check. 'check (map{x. DerivationGoal{'x}; 'premises}, 'goal)}}
+   exists_list{'logic; check. 'check (map{x. DerivationGoal{'x}; 'premises}, 'goal)}
 
 doc <:doc<
    A << DerivationStep{'premises; 'goal; 'p} >> forms one step of a derivation,

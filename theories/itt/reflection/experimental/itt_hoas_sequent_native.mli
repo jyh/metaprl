@@ -37,6 +37,8 @@ declare "sequent"{'arg; 'hyps; 'concl}
  * The type of sequents.
  *)
 declare Sequent
+declare beq_sequent{'s1; 's2}
+declare beq_sequent_list{'l1; 's2}
 
 (*
  * A second-order variable of type 'ty.
@@ -57,6 +59,8 @@ declare ProofRule{'ty_sequent}
  * A step in a proof.
  *)
 declare ProofStep{'ty_sequent}
+declare proof_step{'premises; 'goal}
+declare beq_ProofStep{'step1; 'step2}
 
 (*
  * A Logic is a list of ProofRules.
@@ -83,13 +87,6 @@ topval fold_Derivation_indexed : conv
 topval fold_DerivationDepth : conv
 topval fold_DerivationStep : conv
 topval fold_proof_step : conv
-
-(*
- * Boolean comparisons.
- *)
-declare beq_sequent{'seq1; 'seq2}
-declare beq_sequent_list{'l1; 'l2}
-
 topval fold_beq_sequent_list : conv
 
 (*!

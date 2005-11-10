@@ -505,6 +505,32 @@ interactive wf_Provable {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
+ * Managing the proof witness.
+ *)
+
+(*
+ * These let-forms are Boolean formulas that require that
+ * the indexing be in bounds, and the depths match up.
+ *)
+define unfold_let_sovar : let_sovar{'d; 'witness; 'i; v. 'e['v]} <-->
+   spread{'witness; sovars, cvars.
+      band{gt_bool{length{'sovars}; 'i};
+      band{beq_int{bdepth{nth{'sovars; 'i}}; 'd};
+      'e[nth{'sovars; 'i}]}}}
+
+define unfold_let_cvar : let_cvar{'d; 'witness; 'i; v. 'e['v]} <-->
+   spread{'witness; sovars, cvars.
+      band{gt_bool{length{'cvars}; 'i};
+      band{beq_int{bdepth{nth{'cvars; 'i}}; 'd};
+      'e[nth{'cvars; 'i}]}}}
+
+dform let_sovar_df : let_sovar{'d; 'witness; 'i; v. 'e} =
+   szone pushm[0] `"let " slot{'v} `" : SOVar{" slot{'d} `"} = " slot{'witness} `".sovars.[" slot{'i} `"] in" hspace slot{'e} popm ezone
+
+dform let_cvar_df : let_cvar{'d; 'witness; 'i; v. 'e} =
+   szone pushm[0] `"let " slot{'v} `" : CVar{" slot{'d} `"} = " slot{'witness} `".cvars.[" slot{'i} `"] in" hspace slot{'e} popm ezone
+
+(************************************************************************
  * Alpha-equality.
  *)
 doc <:doc<

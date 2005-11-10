@@ -44,11 +44,13 @@ declare beq_sequent_list{'l1; 's2}
  * A second-order variable of type 'ty.
  *)
 declare SOVar{'d}
+declare let_sovar{'d; 'witness; 'i; v. 'e}
 
 (*
  * A sequent context variable.
  *)
 declare CVar{'d}
+declare let_cvar{'d; 'witness; 'i; v. 'e}
 
 (*
  * A checking rule for a single step of a proof.

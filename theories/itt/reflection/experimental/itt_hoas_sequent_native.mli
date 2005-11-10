@@ -60,7 +60,7 @@ declare ProofRule{'ty_sequent}
  *)
 declare ProofStep{'ty_sequent}
 declare proof_step{'premises; 'goal}
-declare beq_ProofStep{'step1; 'step2}
+declare beq_proof_step{'step1; 'step2}
 
 (*
  * A Logic is a list of ProofRules.
@@ -84,8 +84,8 @@ topval fold_sequent : conv
 topval fold_hyp_depths : conv
 topval fold_Logic : conv
 topval fold_Derivation_indexed : conv
-topval fold_DerivationDepth : conv
-topval fold_DerivationStep : conv
+topval fold_derivation_depth : conv
+topval fold_derivation_step : conv
 topval fold_proof_step : conv
 topval fold_beq_sequent_list : conv
 

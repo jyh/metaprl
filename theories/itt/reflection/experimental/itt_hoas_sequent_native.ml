@@ -186,11 +186,23 @@ define unfold_proof_step : proof_step{'premises; 'goal} <-->
    'premises, 'goal
 
 doc <:doc<
+   A << ProofStepWitness >> is an additional argument to a proof checker
+   that allows it to check that an inference is valid.  We define a
+   single type for all witnesses, including values for the second-order
+   and context-variables.
+>>
+define unfold_ProofStepWitness : ProofStepWitness <-->
+   list{BTerm} * list{list{BTerm}}
+
+define unfold_proof_step_witness : proof_step_witness{'sovars; 'cvars} <-->
+   'sovars, 'cvars
+
+doc <:doc<
    The term << ProofRule{'ty_sequent} >> represents a proof checker for
-   a single proof step.
+   a single proof step.  Proof checking is always decidable.
 >>
 define unfold_ProofRule : ProofRule{'ty_sequent} <-->
-   ProofStep{'ty_sequent} -> univ[1:l]
+   ProofStep{'ty_sequent} * ProofStepWitness -> bool
 
 doc <:doc<
    The term << Logic{'ty_sequent} >> represents a set of proof rules.
@@ -199,28 +211,28 @@ define unfold_Logic : Logic{'ty_sequent} <-->
    list{ProofRule{'ty_sequent}}
 
 doc <:doc<
-   A derivation has three parts, 1) the premises << DerivationPremises{'d} >>,
-   the goal << DerivationGoal{'d} >>, and the justification.
+   A derivation has three parts, 1) the premises << derivation_premises{'d} >>,
+   the goal << derivation_goal{'d} >>, and the justification.
 >>
-define unfold_DerivationPremises : DerivationPremises{'d} <-->
+define unfold_derivation_premises : derivation_premises{'d} <-->
    fst{'d}
 
-define unfold_DerivationGoal : DerivationGoal{'d} <-->
+define unfold_derivation_goal : derivation_goal{'d} <-->
    fst{snd{'d}}
 
 doc <:doc<
-   The term << ValidStep{'premises; 'goal; 'logic} >> is the predicate that determines
+   The term << ValidStep{'premises; 'goal; 'witness; 'logic} >> is the predicate that determines
    if the proof step matches one of the proof rules in the logic.
 >>
-define unfold_ValidStep : ValidStep{'premises; 'goal; 'logic} <-->
-   exists_list{'logic; check. 'check (map{x. DerivationGoal{'x}; 'premises}, 'goal)}
+define unfold_ValidStep : ValidStep{'premises; 'goal; 'witness; 'logic} <-->
+   exists_list{'logic; check. "assert"{'check (proof_step{map{x. derivation_goal{'x}; 'premises}; 'goal}, 'witness)}}
 
 doc <:doc<
-   A << DerivationStep{'premises; 'goal; 'p} >> forms one step of a derivation,
+   A << derivation_step{'premises; 'goal; 'witness; 'p} >> forms one step of a derivation,
    where << 'p >> is the proof that the << 'goal >> follows from the << 'premises >>.
 >>
-define unfold_DerivationStep : DerivationStep{'premises; 'goal; 'p} <-->
-   pair{'premises; pair{'goal; 'p}}
+define unfold_derivation_step : derivation_step{'premises; 'goal; 'witness; 'p} <-->
+   pair{'premises; pair{'goal; pair{'witness; 'p}}}
 
 doc <:doc<
    The term << Derivation{'ty_sequent; 'logic} >> represents the set of
@@ -228,27 +240,27 @@ doc <:doc<
    proof trees.
 >>
 define unfold_Derivation_indexed : Derivation{'n; 'ty_sequent; 'logic} <-->
-   ind{'n; void; m, T. premises: list{'T} * goal: 'ty_sequent * ValidStep{'premises; 'goal; 'logic}}
+   ind{'n; void; m, T. premises: list{'T} * goal: 'ty_sequent * witness: ProofStepWitness * ValidStep{'premises; 'goal; 'witness; 'logic}}
 
 define unfold_Derivation : Derivation{'ty_sequent; 'logic} <-->
    tunion{nat; n. Derivation{'n; 'ty_sequent; 'logic}}
 doc docoff
 
 let fold_Logic = makeFoldC << Logic{'ty_sequent} >> unfold_Logic
-let fold_DerivationStep = makeFoldC << DerivationStep{'premises; 'goal; 'proof} >> unfold_DerivationStep
-let fold_Derivation_indexed = makeFoldC << Derivation{'n; 'ty_sequent; 'logic} >> unfold_Derivation_indexed
+let fold_derivation_step = makeFoldC << derivation_step{'premises; 'goal; 'witness; 'proof} >> unfold_derivation_step
 let fold_proof_step = makeFoldC << proof_step{'premises; 'goal} >> unfold_proof_step
+let fold_Derivation_indexed = makeFoldC << Derivation{'n; 'ty_sequent; 'logic} >> unfold_Derivation_indexed
 
 (*
  * Some reductions.
  *)
 interactive_rw reduce_derivation_premises {| reduce |} :
-   DerivationPremises{DerivationStep{'premises; 'goal; 'p}}
+   derivation_premises{derivation_step{'premises; 'goal; 'witness; 'p}}
    <-->
    'premises
 
 interactive_rw reduce_derivation_goal {| reduce |} :
-   DerivationGoal{DerivationStep{'premises; 'goal; 'p}}
+   derivation_goal{derivation_step{'premises; 'goal; 'witness; 'p}}
    <-->
    'goal
 
@@ -272,6 +284,19 @@ interactive proof_step_elim {| elim [] |} 'H : <:xrule<
 >>
 
 (*
+ * The ProofStepWitness is a type.
+ *)
+interactive proof_step_witness_wf {| intro [] |} : <:xrule<
+   <H> >- "ProofStepWitness" Type
+>>
+
+interactive proof_step_witness_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- sovars IN list{"BTerm"} -->
+   "wf" : <H> >- cvars IN list{list{"BTerm"}} -->
+   <H> >- proof_step_witness{sovars; cvars} IN "ProofStepWitness"
+>>
+
+(*
  * A ProofRule is a type for any type.
  *)
 interactive proof_rule_wf {| intro [] |} : <:xrule<
@@ -289,20 +314,21 @@ interactive logic_wf {| intro [] |} : <:xrule<
  *)
 interactive derivation_premises_wf1 : <:xrule<
    "wf" : <H> >- t IN ty_premises * "top" * "top" -->
-   <H> >- DerivationPremises{t} IN ty_premises
+   <H> >- derivation_premises{t} IN ty_premises
 >>
 
 interactive derivation_goal_wf1 : <:xrule<
    "wf" : <H> >- t IN "top" * ty_sequent * "top" -->
-   <H> >- DerivationGoal{t} IN ty_sequent
+   <H> >- derivation_goal{t} IN ty_sequent
 >>
 
 interactive valid_step_wf {| intro [intro_typeinf << 'goal >>] |} 'ty_sequent : <:xrule<
    "wf" : <H> >- ty_sequent Type -->
    "wf" : <H> >- premises IN list{"top" * ty_sequent * "top"} -->
    "wf" : <H> >- goal IN ty_sequent -->
+   "wf" : <H> >- witness IN "ProofStepWitness" -->
    "wf" : <H> >- logic IN Logic{ty_sequent} -->
-   <H> >- ValidStep{premises; goal; logic} Type
+   <H> >- ValidStep{premises; goal; witness; logic} Type
 >>
 
 (*
@@ -318,7 +344,10 @@ interactive_rw reduce_derivation_indexed_step {| reduce |} : <:xrewrite<
    n IN "nat" -->
    Derivation{n +@ 1; ty_sequent; logic}
    <-->
-   Prod premises: list{Derivation{n; ty_sequent; logic}} * Prod goal: ty_sequent * ValidStep{premises; goal; logic}
+   Prod premises: list{Derivation{n; ty_sequent; logic}}
+   * Prod goal: ty_sequent
+   * Prod witness: "ProofStepWitness"
+   * ValidStep{premises; goal; witness; logic}
 >>
 
 interactive derivation_indexed_wf {| intro [] |} : <:xrule<
@@ -342,8 +371,9 @@ interactive valid_step_wf2 {| intro [intro_typeinf << 'premises >>] |} list{Deri
    "wf" : <H> >- ty_sequent Type -->
    "wf" : <H> >- premises IN list{Derivation{n; ty_sequent; logic}} -->
    "wf" : <H> >- goal IN ty_sequent -->
+   "wf" : <H> >- witness IN "ProofStepWitness" -->
    "wf" : <H> >- logic IN Logic{ty_sequent} -->
-   <H> >- ValidStep{premises; goal; logic} Type
+   <H> >- ValidStep{premises; goal; witness; logic} Type
 >>
 
 (*
@@ -359,35 +389,51 @@ interactive derivation_indexed_monotone 'i : <:xrule<
    <H> >- e IN Derivation{j; ty_sequent; logic}
 >>
 
+interactive derivation_indexed_list_monotone 'i : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- logic IN Logic{ty_sequent} -->
+   "wf" : <H> >- i IN "nat" -->
+   "wf" : <H> >- j IN "nat" -->
+   "aux" : <H> >- i <= j -->
+   <H> >- e IN list{Derivation{i; ty_sequent; logic}} -->
+   <H> >- e IN list{Derivation{j; ty_sequent; logic}}
+>>
+
 (*
  * The depth of a derivation is computable.
  *)
-define unfold_DerivationDepth : DerivationDepth{'d} <--> <:xterm<
+define unfold_derivation_depth : derivation_depth{'d} <--> <:xterm<
    (fix depth d ->
-       list_max{map{premise. depth premise; DerivationPremises{d}}} +@ 1) d
+       list_max{map{premise. depth premise; derivation_premises{d}}} +@ 1) d
 >>
 
-let fold_DerivationDepth = makeFoldC << DerivationDepth{'d} >> unfold_DerivationDepth
+let fold_derivation_depth = makeFoldC << derivation_depth{'d} >> unfold_derivation_depth
+
+interactive_rw reduce_derivation_depth {| reduce |} : <:xrewrite<
+    derivation_depth{(premises, goal, witness, p)}
+    <-->
+    list_max{map{premise. derivation_depth{premise}; premises}} +@ 1
+>>
 
 interactive derivation_depth_wf1 {| intro [intro_typeinf << 'd >>] |} Derivation{'n; 'ty_sequent; 'ty_logic} : <:xrule<
    "wf" : <H> >- n IN "nat" -->
    "wf" : <H> >- ty_sequent Type -->
    "wf" : <H> >- ty_logic IN Logic{ty_sequent} -->
    "wf" : <H> >- d IN Derivation{n; ty_sequent; ty_logic} -->
-   <H> >- DerivationDepth{d} IN "nat"
+   <H> >- derivation_depth{d} IN "nat"
 >>
 
 interactive derivation_depth_wf {| intro [intro_typeinf << 'd >>] |} Derivation{'ty_sequent; 'ty_logic} : <:xrule<
    "wf" : <H> >- ty_sequent Type -->
    "wf" : <H> >- ty_logic IN Logic{ty_sequent} -->
    "wf" : <H> >- d IN Derivation{ty_sequent; ty_logic} -->
-   <H> >- DerivationDepth{d} IN "nat"
+   <H> >- derivation_depth{d} IN "nat"
 >>
 
 interactive derivation_depth_elim {| elim [] |} 'H : <:xrule<
    "wf" : <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- ty_sequent Type -->
    "wf" : <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- logic IN Logic{ty_sequent} -->
-   <H>; e: Derivation{ty_sequent; logic}; <J[e]>; e IN Derivation{DerivationDepth{e}; ty_sequent; logic} >- C[e] -->
+   <H>; e: Derivation{ty_sequent; logic}; <J[e]>; e IN Derivation{derivation_depth{e}; ty_sequent; logic} >- C[e] -->
    <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- C[e]
 >>
 
@@ -396,7 +442,7 @@ interactive derivation_depth_bound {| intro [intro_typeinf << 'e >>] |} Derivati
    "wf" : <H> >- ty_sequent Type -->
    "wf" : <H> >- logic IN Logic{ty_sequent} -->
    "wf" : <H> >- e IN Derivation{n; ty_sequent; logic} -->
-   <H> >- DerivationDepth{e} <= n
+   <H> >- derivation_depth{e} <= n
 >>
 
 interactive derivation_depth_elim2 'H : <:xrule<
@@ -424,8 +470,9 @@ interactive derivation_elim {| elim [] |} 'H : <:xrule<
    <H>; e: Derivation{ty_sequent; logic}; <J[e]>;
        premises: list{Derivation{ty_sequent; logic}};
        goal: ty_sequent;
+       witness: "ProofStepWitness";
        all_list{premises; premise. P[premise]};
-       p: ValidStep{premises; goal; logic} >- P[DerivationStep{premises; goal; p}] -->
+       p: ValidStep{premises; goal; witness; logic} >- P[derivation_step{premises; goal; witness; p}] -->
    <H>; e: Derivation{ty_sequent; logic}; <J[e]> >- P[e]
 >>
 
@@ -438,7 +485,7 @@ interactive derivation_goal_wf2 {| intro [intro_typeinf << 'e >>] |} Derivation{
    "wf" : <H> >- ty_sequent Type -->
    "wf" : <H> >- logic IN "Logic"{ty_sequent} -->
    "wf" : <H> >- e IN Derivation{ty_sequent; logic} -->
-   <H> >- DerivationGoal{e} IN ty_sequent
+   <H> >- derivation_goal{e} IN ty_sequent
 >>
 
 doc <:doc<
@@ -447,7 +494,7 @@ doc <:doc<
 >>
 define unfold_Provable : Provable{'ty_sequent; 'logic; 't} <-->
    exst e: Derivation{'ty_sequent; 'logic}.
-      DerivationGoal{'e} = 't in 'ty_sequent
+      derivation_goal{'e} = 't in 'ty_sequent
 doc docoff
 
 interactive wf_Provable {| intro [] |} : <:xrule<
@@ -542,34 +589,34 @@ doc <:doc<
    Define alpha-equality on proof steps that can be used
    to specify proof rules.
 >>
-define unfold_beq_ProofStep : beq_ProofStep{'step1; 'step2} <--> <:xterm<
+define unfold_beq_proof_step : beq_proof_step{'step1; 'step2} <--> <:xterm<
    let premises1, goal1 = step1 in
    let premises2, goal2 = step2 in
       beq_sequent_list{premises1; premises2} &&b beq_sequent{goal1; goal2}
 >>
 
-interactive_rw reduce_beq_ProofStep {| reduce |} : <:xrewrite<
-   beq_ProofStep{proof_step{premises1; goal1}; proof_step{premises2; goal2}}
+interactive_rw reduce_beq_proof_step {| reduce |} : <:xrewrite<
+   beq_proof_step{proof_step{premises1; goal1}; proof_step{premises2; goal2}}
    <-->
    beq_sequent_list{premises1; premises2} &&b beq_sequent{goal1; goal2}
 >>
 
-interactive beq_ProofStep_wf {| intro [] |} : <:xrule<
+interactive beq_proof_step_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- step1 IN ProofStep{"Sequent"} -->
    "wf" : <H> >- step2 IN ProofStep{"Sequent"} -->
-   <H> >- beq_ProofStep{step1; step2} IN "bool"
+   <H> >- beq_proof_step{step1; step2} IN "bool"
 >>
 
-interactive beq_ProofStep_intro {| intro [] |} : <:xrule<
+interactive beq_proof_step_intro {| intro [] |} : <:xrule<
    <H> >- s1 = s2 in ProofStep{"Sequent"} -->
-   <H> >- "assert"{beq_ProofStep{s1; s2}}
+   <H> >- "assert"{beq_proof_step{s1; s2}}
 >>
 
-interactive beq_ProofStep_elim {| elim [] |} 'H : <:xrule<
-   "wf" : <H>; u: "assert"{beq_ProofStep{s1; s2}}; <J[u]> >- s1 IN ProofStep{"Sequent"} -->
-   "wf" : <H>; u: "assert"{beq_ProofStep{s1; s2}}; <J[u]> >- s2 IN ProofStep{"Sequent"} -->
+interactive beq_proof_step_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- s1 IN ProofStep{"Sequent"} -->
+   "wf" : <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- s2 IN ProofStep{"Sequent"} -->
    <H>; u: s1 = s2 in ProofStep{"Sequent"}; <J[u]> >- C[u] -->
-   <H>; u: "assert"{beq_ProofStep{s1; s2}}; <J[u]> >- C[u]
+   <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- C[u]
 >>
 
 (************************************************************************

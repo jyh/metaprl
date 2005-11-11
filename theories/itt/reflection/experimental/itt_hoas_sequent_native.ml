@@ -60,6 +60,9 @@ doc <:doc<
 define unfold_hyp_depths : hyp_depths{'d; 'l} <-->
    list_ind{'l; lambda{d. "true"}; h, t, g. lambda{d. bdepth{'h} = 'd in nat & 'g ('d +@ 1)}} 'd
 
+define unfold_bhyp_depths : bhyp_depths{'d; 'l} <-->
+   list_ind{'l; lambda{d. "btrue"}; h, t, g. lambda{d. band{beq_int{bdepth{'h}; 'd}; 'g ('d +@ 1)}}} 'd
+
 doc <:doc<
    The << is_sequent{'s} >> predicate tests whether a sequent << 's >> is well-formed
    with respect to binding depths.
@@ -95,15 +98,63 @@ define unfold_CVar : CVar{'d} <-->
 doc docoff
 
 let fold_hyp_depths = makeFoldC << hyp_depths{'d; 'l} >> unfold_hyp_depths
+let fold_bhyp_depths = makeFoldC << bhyp_depths{'d; 'l} >> unfold_bhyp_depths
 let fold_sequent = makeFoldC << "sequent"{'arg; 'hyps; 'goal} >> unfold_sequent
 
 (*
  * hyp_depths rules.
  *)
+interactive_rw reduce_hyp_depths_nil {| reduce |} : <:xrewrite<
+   hyp_depths{d; "nil"}
+   <-->
+   "true"
+>>
+
+interactive_rw reduce_hyp_depths_cons {| reduce |} : <:xrewrite<
+   hyp_depths{d; u::v}
+   <-->
+   bdepth{u} = d in "nat" && hyp_depths{d +@ 1; v}
+>>
+
 interactive hyp_depths_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
    "wf" : <H> >- l IN list{"BTerm"} -->
    <H> >- hyp_depths{d; l} Type
+>>
+
+(*
+ * bhyp_depths (Boolean version).
+ *)
+interactive_rw reduce_bhyp_depths_nil {| reduce |} : <:xrewrite<
+   bhyp_depths{d; "nil"}
+   <-->
+   "btrue"
+>>
+
+interactive_rw reduce_bhyp_depths_cons {| reduce |} : <:xrewrite<
+   bhyp_depths{d; u::v}
+   <-->
+   beq_int{bdepth{u}; d} &&b bhyp_depths{d +@ 1; v}
+>>
+
+interactive bhyp_depths_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- l IN list{"BTerm"} -->
+   <H> >- bhyp_depths{d; l} IN "bool"
+>>
+
+interactive bhyp_depths_intro {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- l IN list{"BTerm"} -->
+   <H> >- hyp_depths{d; l} -->
+   <H> >- "assert"{bhyp_depths{d; l}}
+>>
+
+interactive bhyp_depths_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; u: "assert"{bhyp_depths{d; l}}; <J[u]> >- d IN "nat" -->
+   "wf" : <H>; u: "assert"{bhyp_depths{d; l}}; <J[u]> >- l IN list{"BTerm"} -->
+   <H>; hyp_depths{d; l}; <J["it"]> >- C["it"] -->
+   <H>; u: "assert"{bhyp_depths{d; l}}; <J[u]> >- C[u]
 >>
 
 (*
@@ -250,6 +301,7 @@ let fold_Logic = makeFoldC << Logic{'ty_sequent} >> unfold_Logic
 let fold_derivation_step = makeFoldC << derivation_step{'premises; 'goal; 'witness; 'proof} >> unfold_derivation_step
 let fold_proof_step = makeFoldC << proof_step{'premises; 'goal} >> unfold_proof_step
 let fold_Derivation_indexed = makeFoldC << Derivation{'n; 'ty_sequent; 'logic} >> unfold_Derivation_indexed
+let fold_proof_step_witness = makeFoldC << proof_step_witness{'sovars; 'cvars} >> unfold_proof_step_witness
 
 (*
  * Some reductions.
@@ -294,6 +346,11 @@ interactive proof_step_witness_wf2 {| intro [] |} : <:xrule<
    "wf" : <H> >- sovars IN list{"BTerm"} -->
    "wf" : <H> >- cvars IN list{list{"BTerm"}} -->
    <H> >- proof_step_witness{sovars; cvars} IN "ProofStepWitness"
+>>
+
+interactive proof_step_witness_elim {| elim [] |} 'H : <:xrule<
+   <H>; sovars: list{"BTerm"}; cvars: list{list{"BTerm"}}; <J[proof_step_witness{sovars; cvars}]> >- C[proof_step_witness{sovars; cvars}] -->
+   <H>; x: "ProofStepWitness"; <J[x]> >- C[x]
 >>
 
 (*
@@ -521,7 +578,7 @@ define unfold_let_sovar : let_sovar{'d; 'witness; 'i; v. 'e['v]} <-->
 define unfold_let_cvar : let_cvar{'d; 'witness; 'i; v. 'e['v]} <-->
    spread{'witness; sovars, cvars.
       band{gt_bool{length{'cvars}; 'i};
-      band{beq_int{bdepth{nth{'cvars; 'i}}; 'd};
+      band{bhyp_depths{'d; nth{'cvars; 'i}};
       'e[nth{'cvars; 'i}]}}}
 
 dform let_sovar_df : let_sovar{'d; 'witness; 'i; v. 'e} =
@@ -529,6 +586,37 @@ dform let_sovar_df : let_sovar{'d; 'witness; 'i; v. 'e} =
 
 dform let_cvar_df : let_cvar{'d; 'witness; 'i; v. 'e} =
    szone pushm[0] `"let " slot{'v} `" : CVar{" slot{'d} `"} = " slot{'witness} `".cvars.[" slot{'i} `"] in" hspace slot{'e} popm ezone
+interactive_rw reduce_let_sovar {| reduce |} : <:xrewrite<
+   let_sovar{d; proof_step_witness{sovars; cvars}; i; v. e[v]}
+   <-->
+   band{gt_bool{length{sovars}; i};
+   band{beq_int{bdepth{nth{sovars; i}}; d};
+   e[nth{sovars; i}]}}
+>>
+
+interactive_rw reduce_let_cvar {| reduce |} : <:xrewrite<
+   let_cvar{d; proof_step_witness{sovars; cvars}; i; v. e[v]}
+   <-->
+   band{gt_bool{length{cvars}; i};
+   band{bhyp_depths{d; nth{cvars; i}};
+   e[nth{cvars; i}]}}
+>>
+
+interactive let_sovar_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- witness IN "ProofStepWitness" -->
+   "wf" : <H> >- i IN "nat" -->
+   "wf" : <H>; v: SOVar{d} >- e[v] IN "bool" -->
+   <H> >- let_sovar{d; witness; i; v. e[v]} IN "bool"
+>>
+
+interactive let_cvar_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- witness IN "ProofStepWitness" -->
+   "wf" : <H> >- i IN "nat" -->
+   "wf" : <H>; v: CVar{d} >- e[v] IN "bool" -->
+   <H> >- let_cvar{d; witness; i; v. e[v]} IN "bool"
+>>
 
 (************************************************************************
  * Alpha-equality.

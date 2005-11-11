@@ -84,12 +84,14 @@ declare hyp_depths{'d; 'hyps}
  *)
 topval fold_sequent : conv
 topval fold_hyp_depths : conv
+topval fold_bhyp_depths : conv
 topval fold_Logic : conv
 topval fold_Derivation_indexed : conv
 topval fold_derivation_depth : conv
 topval fold_derivation_step : conv
 topval fold_proof_step : conv
 topval fold_beq_sequent_list : conv
+topval fold_proof_step_witness : conv
 
 (*!
  * @docoff

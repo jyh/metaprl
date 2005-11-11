@@ -132,15 +132,32 @@ interactive  lbt_elim_squash  {| elim [] |} 'H :
 interactive  lbt_elim_squash0  {| nth_hyp |} 'H :
    sequent { <H>; t: BT{'sop; 0}; <J> >- 'P['t] }
 
+interactive  lbt_wf_and_bdepth_univ  {| intro[] |}:
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- 'sop in univ[l:l] } -->
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- BT{'sop; 'n} in univ[l:l] & all t: BT{'sop; 'n}. bdepth{'t} in nat }
+
 interactive  lbt_wf_and_bdepth_wf  {| intro[] |}:
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- 'sop subtype Operator } -->
    sequent { <H> >- BT{'sop; 'n} Type & all t: BT{'sop; 'n}. bdepth{'t} in nat }
 
+interactive  lbt_univ {| intro[] |}:
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- 'sop in univ[l:l] } -->
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- BT{'sop; 'n} in univ[l:l] }
+
 interactive  lbt_wf {| intro[] |}:
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- 'sop subtype Operator } -->
    sequent { <H> >- BT{'sop; 'n} Type }
+
+interactive lang_univ  {| intro[] |} :
+   sequent { <H> >- 'sop in univ[l:l] } -->
+   sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H> >- Lang{'sop} in univ[l:l] }
 
 interactive lang_wf  {| intro[] |} :
    sequent { <H> >- 'sop subtype Operator } -->
@@ -155,6 +172,14 @@ interactive  bdepth_wf2  {| intro[intro_typeinf <<'t>>] |} Lang{'sop} :
    sequent { <H> >- 'sop subtype Operator } -->
    [wf] sequent{ <H> >- 't in Lang{'sop} } -->
    sequent{ <H> >- bdepth{'t} in int }
+
+interactive compatible_shapes_univ {| intro[intro_typeinf <<'btl>>] |} list{Lang{'sop}} :
+   [wf] sequent { <H> >- 'sop in univ[l:l] } -->
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
+   [wf] sequent { <H> >- 'bdepth in nat } -->
+   [wf] sequent { <H> >- 'shape in list{int} } -->
+   [wf] sequent { <H> >- 'btl in list{Lang{'sop}} } -->
+   sequent { <H> >- compatible_shapes{'bdepth; 'shape; 'btl} in univ[l:l] }
 
 interactive compatible_shapes_wf {| intro[intro_typeinf <<'btl>>] |} list{Lang{'sop}} :
    [wf] sequent { <H> >- 'sop subtype Operator } -->

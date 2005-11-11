@@ -1522,6 +1522,14 @@ interactive all2_wf2 {| intro [] |} 'T1 'T2 :
    [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v] Type } -->
    sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} Type }
 
+interactive all2_univ {| intro [] |} 'T1 'T2 :
+   [wf] sequent { <H> >-  'T1 in univ[l:l] } -->
+   [wf] sequent { <H> >-  'T2 in univ[l:l] } -->
+   [wf] sequent { <H> >- 'l1 in list{'T1} } -->
+   [wf] sequent { <H> >- 'l2 in list{'T2} } -->
+   [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v]  in univ[l:l] } -->
+   sequent { <H> >- all2{'l1; 'l2; x, y. 'b['x; 'y]} in univ[l:l] }
+
 doc <:doc<
    << all2{'l1; 'l2; x, y. 'P['x; 'y]} >> is squash stable if << 'P['x; 'y] >> is well-formed and squash stable.
 >>

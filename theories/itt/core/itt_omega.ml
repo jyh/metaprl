@@ -1145,7 +1145,7 @@ let rec min_index_aux pool result current =
 
 let rec min_index pool current =
 	if current = Array.length pool then
-		0
+		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
 	else
 		if gt_num pool.(current) ringZero then
 			min_index_aux pool current (succ current)
@@ -1688,6 +1688,15 @@ let omegaPrepT = funT (fun p ->
 let omegaT =
 	(*startT 2 thenMT*) arithRelInConcl2HypT thenMT
 	omegaPrepT thenT rw relNormC 0 (*thenMT endT 2*)
+
+let omega_intro = "omegaT", None, [], AutoComplete, (rw reduceC 0 thenMT omegaT)
+
+let resource intro += [
+   << 'a < 'b >>, omega_intro;
+   << 'a > 'b >>, omega_intro;
+   << 'a <= 'b >>, omega_intro;
+   << 'a >= 'b >>, omega_intro;
+]
 
 let getTimeT = funT (fun p ->
 	eprintf "spent %f seconds in omegaPrepT@." !total;

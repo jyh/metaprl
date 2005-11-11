@@ -1,5 +1,48 @@
+doc <:doc<
+   @spelling{unrollings}
+   @module[Itt_srec]
+
+   The @tt[Itt_obj_base_rewrite] module defines basic operations of @em{object calculas}.
+   It does not define types of objects yet.
+
+   @docoff
+
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
+
+   Copyright (C) 1998 Jason Hickey, Cornell University
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Author: Alexei Kopylov
+   @email{kopylov@cs.caltech.edu}
+   @end[license]
+>>
+
+doc <:doc<
+   @parents
+>>
 extends Itt_record
 extends Itt_labels
+
+doc docoff
 
 open Basic_tactics
 
@@ -7,13 +50,16 @@ open Basic_tactics
 (*  Terms         *)
 (******************)
 
-
-(* canonical terms *)
+doc <:doc<
+  @terms
+  @modsubsection{Canonical Terms }
+>>
 
 define unfold_obj: obj{self. 'record['self]} <--> lambda {self. 'record['self]}
 
-
-(* non-canonical terms*)
+doc <:doc<
+  @modsubsection{Non-canonical Terms }
+>>
 
 define unfold_empty_obj {| reduce |}: obj{} <--> obj{self.rcrd}
 
@@ -23,9 +69,21 @@ define unfold_update_field:  update[m:t]{'f;'obj} <--> lambda {self. rcrd[m:t]{'
 
 define unfold_update_method: update[m:t]{self.'f['self];'obj} <--> lambda {self. rcrd[m:t]{'f['self]; 'obj 'self}}
 
-(******************)
-(*  Rewrites      *)
-(******************)
+doc <:doc<
+  @bf{Alternative definition of field update.}
+>>
+
+interactive_rw unfold_update_field2:
+   update[m:t]{'f;'obj} <-->
+   update[m:t]{self.'f;'obj}
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+doc <:doc<
+  @rewrites
+>>
 
 interactive_rw apply_reduce {| reduce |}:
    apply[m:t]{obj{self. 'record['self]}} <--> field[m:t]{'record[ obj{self. 'record['self]} ]}
@@ -36,14 +94,13 @@ interactive_rw update_f_reduce {| reduce |}:
 interactive_rw update_m_reduce {| reduce |}:
    update[m:t]{self.'f['self];obj{self. 'record['self]}} <--> obj{self.rcrd[m:t]{'f['self];'record['self]}}
 
-interactive_rw unfold_update_field2:
-   update[m:t]{'f;'obj} <-->
-   update[m:t]{self.'f;'obj}
+doc docoff
 
 (******************)
 (*  Display Forms *)
 (******************)
 
+doc docoff
 open Itt_dfun
 
 declare obj_dot
@@ -71,6 +128,13 @@ dform update_method_df  : parens :: except_mode [src] ::
 (*  Examples      *)
 (******************)
 
+doc <:doc<
+  @modsection{Examples}
+  @modsubsection{Basic Examples}
+>>
+
+
+
 define flea : flea <-->
    obj{ self.
            {x=1;
@@ -90,6 +154,9 @@ interactive_rw example2 : apply["getX":t]{apply["move":t]{apply["move":t]{fastFl
 (******************)
 (*  Recursion     *)
 (******************)
+doc <:doc<
+  @modsubsection{Recursion}
+>>
 
 define recursiveFlea:  recursiveFlea <-->
    update["moveBy":t]{self.
@@ -100,6 +167,9 @@ define recursiveFlea:  recursiveFlea <-->
 
 interactive_rw example3 : apply["getX":t]{apply["moveBy":t]{recursiveFlea} 5} <--> 6
 
+doc <:doc<
+  @modsubsection{Mutual Recursion}
+>>
 
 define feeFoo: feeFoo <-->
    obj{ self.

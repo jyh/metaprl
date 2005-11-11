@@ -1089,6 +1089,10 @@ interactive_rw tail_reduce1 {| reduce |}:
 interactive_rw tail_reduce2 {| reduce |}: ('n in nat) -->
    tail{'l;'n+@1} <-->  cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n} }
 
+interactive_rw length_of_tail {| reduce |}:
+  'n in nat -->
+   length{tail{'l; 'n}} <--> 'n
+
 interactive tail_does_not_depend_on_the_head {| intro[] |}:
    sequent { <H> >-  'l in list } -->
    sequent { <H> >-  'n in nat } -->

@@ -1,7 +1,7 @@
 doc <:doc<
    @module[Itt_hoas_operator]
    The @tt[Itt_hoas_operator] module defines a type << Operator >> of abstract
-   operators; it also estabishes the connection between abstract operator type
+   operators; it also establishes the connection between abstract operator type
    and the internal notion of syntax that is exposed by the computational bterms
    theory (@hrefmodule[Base_operator]).
 

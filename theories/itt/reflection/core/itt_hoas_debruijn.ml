@@ -74,7 +74,7 @@ doc <:doc<
    @modsubsection{Basic operations on syntax}
    <<bdepth{'bt}>> is the ``binding depth'' (i.e. the number of outer bindings) of a bterm <<'bt>>.
 
-   <<left{'v}>> and <<right{'v}>> provide a way of computing the $l$ and $r$ indeces of a variable <<var{'l; 'r}>>.
+   <<left{'v}>> and <<right{'v}>> provide a way of computing the $l$ and $r$ indices of a variable <<var{'l; 'r}>>.
 
    <<get_op{'bt; 'op}>> returns the <<'bt>>'s operator, if <<'bt>> is a @tt[mk_bterm] and returns
    <<'op>> if <<'bt>> is a variable.
@@ -248,7 +248,7 @@ dform subterms_df: "prec"[prec_apply] :: parens :: subterms{'bt} =
 
 doc <:doc<
    Define a type of variables << Var >> that is more abstract than the
-   raw deBruijn representation.
+   raw de Bruijn representation.
 >>
 define unfold_Var : Var <--> Img{nat * nat; v. spread{'v; i, j. var{'i; 'j}}}
 
@@ -273,7 +273,7 @@ interactive var_sqsimple {| intro [] |} :
    sequent { <H> >- sqsimple{Var} }
 
 doc <:doc<
-   Boolean operations on vars.
+   Boolean operations on variables.
 >>
 define unfold_beq_var : beq_var{'x; 'y} <-->
    band{beq_int{left{'x}; left{'y}}; beq_int{right{'x}; right{'y}}}

@@ -936,7 +936,7 @@ P	p597	Var z
 O	o597	var p597
 T	t597	o597
 B	b598	t597
-P	p926	String "exchange 3 2 4 thenT contextSubstPointwise 2 4 2 <<'z>> ttca"
+P	p926	String "moveHypT 3 6 thenT contextSubstPointwise 2 4 2 <<'z>> ttca"
 O	o926	ext_rule p926
 P	p943	Number 1559
 P	p945	Number 1564
@@ -946,7 +946,7 @@ O	o640	rule p640
 NItt_bunion	Itt_bunion	Itt_bunion NIL
 NItt_bunion!bunion	bunion	bunion Itt_bunion
 O	o646	bunion
-P	p960	String "doNotThinT(dT 2) thenT exchange 3 2 3 thenT contextSubstPointwise 2 3 2 <<'y>> thenET equalSymT thenT autoT"
+P	p960	String "doNotThinT(dT 2) thenT moveHypT 3 5 thenT contextSubstPointwise 2 3 2 <<'y>> thenET equalSymT thenT autoT"
 O	o960	ext_rule p960
 P	p962	Number 1817
 O	o432	type_prod p432 p962
@@ -1762,7 +1762,7 @@ T	t1154	o b1153 b4
 B	b1154	t1154
 T	t1155	o527 b1148 b1154
 B	b1155	t1155
-P	p1155	String "exchange 3 2 6 thenT contextSubstPointwise 2 6 2 <<'v>> ttca"
+P	p1155	String "moveHypT 3 8 thenT contextSubstPointwise 2 6 2 <<'v>> ttca"
 O	o1155	ext_rule p1155
 T	t1156	o511 b1149 b503 b508
 S	s1156	tbrarg\\ h1123 h1125 h1129 h1130 h1144 h1149 h1150 h1126\\ t1156

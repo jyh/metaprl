@@ -9964,7 +9964,7 @@ P	p5362	String "splitBoolT << 't1 >> 2 thenT (rwh unfold_assert 2 thenT dT 2 the
 O	o5362	ext_rule p5362
 P	p8830	String "genAssumT [1]"
 O	o8830	ext_rule p8830
-P	p8842	String "exchange 2 2 2 ttca"
+P	p8842	String "moveHypT 2 3 ttca"
 O	o8842	ext_rule p8842
 P	p8846	String "dT (-1) ttca"
 O	o8846	ext_rule p8846

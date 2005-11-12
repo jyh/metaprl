@@ -2359,7 +2359,7 @@ T	t1800	o854 b1800 b4
 B	b1801	t1800
 T	t1801	o4172 b853 b1801 b4 b4
 B	b1803	t1801
-P	p4174	String "rw reduceC (-1) thenT exchange 3 2 5 thenT trivialT"
+P	p4174	String "rw reduceC (-1) thenT moveHypT 3 7 ttca"
 O	o4174	ext_rule p4174
 H	h2725	_1010 t2713
 S	s2725	tbrarg\\ h2134 h2576 h2580 h2599 h2650 h2586 h2725\\ C2580

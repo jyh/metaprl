@@ -18,7 +18,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2005 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -266,6 +267,25 @@ let thinAllT i j = funT (fun p ->
 let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
       Top_tacticals.thinMatchT thin_many assum thenT nthAssumT i)
+
+doc <:doc<
+   @modsubsection{Reordering}
+   The @tactic[moveHypT] $i$ $j$ tactic used the @hrefrule[exchange] rule to @emph{move} a hypothesis
+   in the current goal from position $i$ to position $j$. For example, when $j>i$,
+   $$
+   @rulebox{moveHypT; i j;
+     <<sequent{ <H>; <J>; "j. x": 'A; <K> >- 'C}>>;
+     <<sequent{ <H>; "i. x": 'A; <J>; <K> >- 'C}>>}
+   $$
+   @docoff
+>>
+let moveHypT i j = funT (fun p ->
+   let i = get_pos_hyp_num p i in
+   let j = get_pos_hyp_num p j in
+      if j > i then
+         exchange i 2 (j - i + 1)
+      else
+         exchange j (i - j + 1) 2)
 
 doc <:doc<
    @modsubsection{Lemma assertion}

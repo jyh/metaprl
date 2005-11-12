@@ -8382,7 +8382,7 @@ S	s3062	tbrarg\\ h2169 h2425 h2426 h2174 h2207 h2208\\ t3062
 B	b3066	s3062
 T	t3068	o3478 b3066 b3056
 B	b3069	t3068
-P	p1250	String "exchange 3 2 2 ttca"
+P	p1250	String "moveHypT 3 4 ttca"
 O	o1250	ext_rule p1250
 T	t3835	o3477 b3069 b10
 B	b3836	t3835
@@ -8476,7 +8476,7 @@ T	t4602	o b4602 b10
 B	b4603	t4602
 T	t4603	o3476 b4598 b4603
 B	b4604	t4603
-P	p4604	String "univTypeT <<univ[i:l]>> thenT dT 2 thenMT exchange 2 2 3 ttca"
+P	p4604	String "univTypeT <<univ[i:l]>> thenT dT 2 thenMT moveHypT 2 4 ttca"
 O	o4604	ext_rule p4604
 T	t4604	o2455 b4601 b10
 B	b4605	t4604

@@ -4370,7 +4370,7 @@ T	t583	o b582 b14
 B	b583	t583
 T	t584	o1184 b579 b583
 B	b584	t584
-P	p584	String "exchange 3 3 2 thenT rwhAll (revHypC (-1)) ttca"
+P	p584	String "moveHypT 5 3 thenT rwhAll (revHypC (-1)) ttca"
 O	o584	ext_rule p584
 T	t585	o1184 b582 b14
 B	b585	t585

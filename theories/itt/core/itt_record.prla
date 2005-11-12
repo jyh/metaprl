@@ -3964,7 +3964,7 @@ T	t4261	o b4261 b4
 B	b4262	t4261
 T	t4262	o978 b4259 b4262
 B	b4263	t4262
-P	p4887	String "exchange 2 2 2 thenT withT <<'self>> (dT 3) thenT autoT"
+P	p4887	String "moveHypT 2 3 thenT withT <<'self>> (dT 3) thenT autoT"
 O	o4889	ext_rule p4887
 T	t4263	o978 b4261 b4
 B	b4294	t4263
@@ -5185,7 +5185,7 @@ T	t5389	o b5389 b4
 B	b5390	t5389
 T	t5390	o978 b5388 b5390
 B	b5391	t5390
-P	p3854	String "exchange 2 2 3 thenT autoT"
+P	p3854	String "moveHypT 2 4 thenT autoT"
 O	o3854	ext_rule p3854
 T	t5391	o978 b5389 b4
 B	b5392	t5391

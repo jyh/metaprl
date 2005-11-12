@@ -1610,7 +1610,7 @@ B	b2745	t2739
 H	h2097	l t1189
 H	h2745	_2 t1192
 H	h2746	_3 t1219
-P	p770	String "exchange 7 2 2 thenT onHypsT [0;8] (rwh (int_sqequalC << 'm ~ 'l +@ 1 >>)) taa"
+P	p770	String "moveHypT 7 8 thenT onHypsT [0;8] (rwh (int_sqequalC << 'm ~ 'l +@ 1 >>)) taa"
 O	o770	ext_rule p770
 S	s2097	tbrarg\\ h3741 h1556 h3909 h1587 h1621 h1590 h4036 h2097 h1192 h1219\\ C3911
 B	b2099	s2097
@@ -3259,7 +3259,7 @@ T	t1032	o b1032 b13
 B	b1033	t1032
 T	t1033	o1310 b1029 b1033
 B	b1034	t1033
-P	p1034	String "exchange 6 2 2 thenT rwh (int_sqequalC << ('n -@ 'm) ~ ('l +@ 1) >>) (-3) ttca"
+P	p1034	String "moveHypT 6 7 thenT rwh (int_sqequalC << ('n -@ 'm) ~ ('l +@ 1) >>) (-3) ttca"
 O	o1034	ext_rule p1034
 P	p1039	String "rwh unfold_nat (-2) thenT dT (-2) thenT hypSubstT 8 0 twa"
 O	o1039	ext_rule p1039

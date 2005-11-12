@@ -529,7 +529,7 @@ B	b626	t626
 O	o627	tactic_arg p601
 P	p637	String "sqSymT thenT autoT"
 O	o637	ext_rule p637
-P	p645	String "exchange 3 2 2"
+P	p645	String "moveHypT 3 4"
 O	o645	ext_rule p645
 P	p651	String "contextSubstPointwise 2 2 2 <<'f['y]>>"
 O	o651	ext_rule p651

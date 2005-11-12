@@ -494,7 +494,7 @@ P	p1016	Var x_2
 O	o1016	var p1016
 T	t1016	o1016
 B	b1016	t1016
-P	p1045	String "exchange 2 2 4 thenT autoT"
+P	p1045	String "moveHypT 2 5 thenT autoT"
 O	o1045	ext_rule p1045
 NSummary!ext_goal	ext_goal	ext_goal Summary
 O	o1051	ext_goal
@@ -3641,7 +3641,7 @@ T	t2497	o b2497 b4
 B	b2498	t2497
 T	t2498	o653 b2495 b2498
 B	b2499	t2498
-P	p5301	String "exchange 3 2 2 thenT rwhAll (record_exchangeC 0) ttca"
+P	p5301	String "moveHypT 3 4 thenT rwhAll (record_exchangeC 0) ttca"
 O	o5301	ext_rule p5301
 C	h2547	J\\ H\\ t5195
 VC	C2547	C\\ J H\\ t5195
@@ -3678,7 +3678,7 @@ B	b5317	t5317
 T	t5318	o1482 b949 b5317
 B	b5318	t5318
 T	t5319	o1483 b948 b5318
-P	p5772	String "exchange 3 2 3 thenT rwhAll (record_exchangeC 0 thenC record_exchangeC 1 thenC record_exchangeC 0) ttca"
+P	p5772	String "moveHypT 3 5 thenT rwhAll (record_exchangeC 0 thenC record_exchangeC 1 thenC record_exchangeC 0) ttca"
 O	o5772	ext_rule p5772
 C	h2942	J\\ H\\ t5319
 VC	C2942	C\\ J H\\ t5319

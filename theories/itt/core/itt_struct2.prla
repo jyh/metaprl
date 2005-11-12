@@ -4907,7 +4907,7 @@ T	t2539	o b2539 b23
 B	b2540	t2539
 T	t2540	o1306 b2518 b2540
 B	b2541	t2540
-P	p1142	String "exchange 5 2 2 thenT autoT"
+P	p1142	String "moveHypT 5 6 thenT autoT"
 O	o1142	ext_rule p1142
 H	h4091	_1010 C4020
 H	h4092	_1010 t3995

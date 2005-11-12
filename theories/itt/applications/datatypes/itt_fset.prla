@@ -12767,7 +12767,7 @@ T	t9525	o b9524 b4
 B	b9525	t9525
 T	t9526	o1378 b9521 b9525
 B	b9526	t9526
-P	p5935	String "exchange 2 3 2"
+P	p5935	String "moveHypT 4 2"
 O	o5935	ext_rule p5935
 H	h10531	_1010 t10531
 S	s5907	tbrarg\\ h6076 h10377 h10349 h10531\\ C10361
@@ -15608,7 +15608,7 @@ T	t11278	o b11278 b4
 B	b11279	t11278
 T	t11279	o1378 b11275 b11279
 B	b11280	t11279
-P	p12280	String "exchange 2 2 3 ttca"
+P	p12280	String "moveHypT 2 4 ttca"
 O	o12280	ext_rule p12280
 S	s12256	tbrarg\\ h6076 h10349 h10381 h11950\\ C10361
 B	b12257	s12256

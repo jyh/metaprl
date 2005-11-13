@@ -32,7 +32,7 @@ doc <:doc<
    Sequents must include only terms from fsub.
 >>
 define unfold_fsub_Sequent : Sequent <--> <:xterm<
-   { s: Itt_hoas_sequent_native!Sequent | Pmn_core_terms!Provable{$`[0] "meta_type"{| >- meta_member{s; "Judgment"} |}} }
+   { s: Itt_hoas_sequent!Sequent | Pmn_core_terms!Provable{$`[0] "meta_type"{| >- meta_member{s; "Judgment"} |}} }
 >>
 
 doc docoff

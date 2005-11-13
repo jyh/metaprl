@@ -29,7 +29,7 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_hoas_sequent_native
+extends Itt_hoas_sequent
 
 doc docoff
 

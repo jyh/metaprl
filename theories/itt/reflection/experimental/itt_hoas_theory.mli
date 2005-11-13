@@ -32,7 +32,7 @@ doc <:doc<
 extends Itt_theory
 extends Itt_hoas_bterm
 extends Itt_hoas_util
-extends Itt_hoas_sequent_native
+extends Itt_hoas_sequent
 extends Itt_hoas_meta_types
 
 (*!

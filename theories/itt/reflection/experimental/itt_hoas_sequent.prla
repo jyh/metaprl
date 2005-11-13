@@ -2065,8 +2065,8 @@ T	t935	o935
 B	b935	t935
 NSummary!ty_term	ty_term	ty_term Summary
 O	o936	ty_term
-NItt_hoas_sequent_native	Itt_hoas_sequent_native	Itt_hoas_sequent_native NIL
-NItt_hoas_sequent_native!sequent	sequent	sequent Itt_hoas_sequent_native
+NItt_hoas_sequent	Itt_hoas_sequent	Itt_hoas_sequent NIL
+NItt_hoas_sequent!sequent	sequent	sequent Itt_hoas_sequent
 O	o937	sequent
 Varg	arg	arg\\ \\
 B	b937	arg
@@ -2139,7 +2139,7 @@ P	p1287	String The
 O	o1287	comment_string p1287
 T	t1288	o1287
 B	b1288	t1288
-NItt_hoas_sequent_native!hyp_depths	hyp_depths	hyp_depths Itt_hoas_sequent_native
+NItt_hoas_sequent!hyp_depths	hyp_depths	hyp_depths Itt_hoas_sequent
 O	o954	hyp_depths
 Vd	d	d\\ \\
 B	b954	d
@@ -2244,7 +2244,7 @@ T	t979	o958 b978 b125
 B	b979	t979
 T	t980	o934 b935 b958 b979
 B	b980	t980
-NItt_hoas_sequent_native!is_sequent	is_sequent	is_sequent Itt_hoas_sequent_native
+NItt_hoas_sequent!is_sequent	is_sequent	is_sequent Itt_hoas_sequent
 O	o983	is_sequent
 Vs	s	s\\ \\
 B	b983	s
@@ -2915,7 +2915,7 @@ B	b798	t798
 P	p40	Number 2069
 P	p124	Number 2225
 O	o129	location p40 p124
-NItt_hoas_sequent_native!bhyp_depths	bhyp_depths	bhyp_depths Itt_hoas_sequent_native
+NItt_hoas_sequent!bhyp_depths	bhyp_depths	bhyp_depths Itt_hoas_sequent
 O	o130	bhyp_depths
 T	t565	o130 b954 b955
 B	b565	t565
@@ -2945,7 +2945,7 @@ T	t1399	o1398
 B	b1399	t1399
 T	t1400	o995 b938
 B	b1400	t1400
-NItt_hoas_sequent_native!Sequent	Sequent	Sequent Itt_hoas_sequent_native
+NItt_hoas_sequent!Sequent	Sequent	Sequent Itt_hoas_sequent
 O	o1236	Sequent
 P	p1513	String type
 O	o1513	comment_string p1513
@@ -2962,7 +2962,7 @@ P	p1239	Var s
 O	o1240	var p1239
 T	t1240	o1240
 B	b1240	t1240
-NItt_hoas_sequent_native!SOVar	SOVar	SOVar Itt_hoas_sequent_native
+NItt_hoas_sequent!SOVar	SOVar	SOVar Itt_hoas_sequent
 O	o1601	SOVar
 P	p1604	String represents
 O	o1604	comment_string p1604
@@ -3000,7 +3000,7 @@ T	t1643	o966 b1642
 B	b1643	t1643
 T	t1644	o964 b965 b1643 b954
 B	b1644	t1644 e
-NItt_hoas_sequent_native!CVar	CVar	CVar Itt_hoas_sequent_native
+NItt_hoas_sequent!CVar	CVar	CVar Itt_hoas_sequent
 O	o1650	CVar
 P	p1652	String context
 O	o1652	comment_string p1652
@@ -3024,7 +3024,7 @@ P	p1710	String step
 O	o1710	comment_string p1710
 T	t1710	o1710
 B	b1710	t1710
-NItt_hoas_sequent_native!ProofStep	ProofStep	ProofStep Itt_hoas_sequent_native
+NItt_hoas_sequent!ProofStep	ProofStep	ProofStep Itt_hoas_sequent
 O	o1711	ProofStep
 Vty_sequent	ty_sequent	ty_sequent\\ \\
 B	b1711	ty_sequent
@@ -3241,7 +3241,7 @@ T	t2117	o2112 b1049 b2116 b125 b125
 B	b2117	t2117
 T	t2118	o1047 b2117
 B	b2118	t2118
-NItt_hoas_sequent_native!ProofRule	ProofRule	ProofRule Itt_hoas_sequent_native
+NItt_hoas_sequent!ProofRule	ProofRule	ProofRule Itt_hoas_sequent
 O	o2127	ProofRule
 P	p2129	String checker
 O	o2129	comment_string p2129
@@ -3253,7 +3253,7 @@ P	p2159	String unfold_ProofRule
 O	o2159	term_def p2159
 NItt_dfun!fun	fun	fun Itt_dfun
 O	o2160	fun
-NItt_hoas_sequent_native!Logic	Logic	Logic Itt_hoas_sequent_native
+NItt_hoas_sequent!Logic	Logic	Logic Itt_hoas_sequent
 O	o2167	Logic
 P	p2169	String set
 O	o2169	comment_string p2169
@@ -3329,7 +3329,7 @@ NItt_dprod!fst	fst	fst Itt_dprod
 O	o2675	fst
 T	t2675	o2675 b954
 B	b2675	t2675
-NItt_hoas_sequent_native!ValidStep	ValidStep	ValidStep Itt_hoas_sequent_native
+NItt_hoas_sequent!ValidStep	ValidStep	ValidStep Itt_hoas_sequent
 O	o2199	ValidStep
 Vpremises	premises	premises\\ \\
 B	b	premises
@@ -3549,7 +3549,7 @@ P	p2260	Var goal
 O	o2260	var p2260
 T	t2261	o2260
 B	b2261	t2261
-NItt_hoas_sequent_native!Derivation	Derivation	Derivation Itt_hoas_sequent_native
+NItt_hoas_sequent!Derivation	Derivation	Derivation Itt_hoas_sequent
 O	o2270	Derivation
 T	t2270	o2270 b1711 b2200
 B	b2270	t2270
@@ -5175,7 +5175,7 @@ B	b1478	t1477
 T	t1478	o1047 b1478
 B	b1479	t1478
 P	p1511	Number 5584
-NItt_hoas_sequent_native!proof_step	proof_step	proof_step Itt_hoas_sequent_native
+NItt_hoas_sequent!proof_step	proof_step	proof_step Itt_hoas_sequent
 O	o1514	proof_step
 T	t1514	o1514 b b2
 B	b1515	t1514
@@ -5191,7 +5191,7 @@ T	t1518	o1517 b1518 b125
 B	b1519	t1518
 T	t1519	o934 b935 b1517 b1519
 B	b1520	t1519
-NItt_hoas_sequent_native!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_sequent_native
+NItt_hoas_sequent!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_sequent
 O	o578	ProofStepWitness
 T	t591	o578
 B	b627	t591
@@ -5405,7 +5405,7 @@ T	t1635	o1632 b1633 b125
 B	b1635	t1635
 T	t1636	o934 b935 b1631 b1635
 B	b1636	t1636
-NItt_hoas_sequent_native!proof_step_witness	proof_step_witness	proof_step_witness Itt_hoas_sequent_native
+NItt_hoas_sequent!proof_step_witness	proof_step_witness	proof_step_witness Itt_hoas_sequent
 O	o1639	proof_step_witness
 Vsovars	sovars	sovars\\ \\
 B	b1641	sovars
@@ -5528,7 +5528,7 @@ T	t1887	o2159 b1887 b125
 B	b1888	t1887
 T	t1888	o934 b935 b2495 b1888
 B	b1889	t1888
-NItt_hoas_sequent_native!derivation_premises	derivation_premises	derivation_premises Itt_hoas_sequent_native
+NItt_hoas_sequent!derivation_premises	derivation_premises	derivation_premises Itt_hoas_sequent
 O	o1897	derivation_premises
 T	t1897	o1897 b954
 B	b1897	t1897
@@ -5536,7 +5536,7 @@ T	t1898	o b1897 b125
 B	b1898	t1898
 T	t1899	o771 b1898
 B	b1899	t1899
-NItt_hoas_sequent_native!derivation_goal	derivation_goal	derivation_goal Itt_hoas_sequent_native
+NItt_hoas_sequent!derivation_goal	derivation_goal	derivation_goal Itt_hoas_sequent
 O	o1899	derivation_goal
 T	t1900	o1899 b954
 B	b1900	t1900
@@ -5666,7 +5666,7 @@ T	t1992	o2252 b1991 b125
 B	b1992	t1992
 T	t1993	o934 b935 b1973 b1992
 B	b1993	t1993
-NItt_hoas_sequent_native!derivation_step	derivation_step	derivation_step Itt_hoas_sequent_native
+NItt_hoas_sequent!derivation_step	derivation_step	derivation_step Itt_hoas_sequent
 O	o1996	derivation_step
 T	t1998	o1996 b b2 b1956 b2696
 B	b1998	t1998
@@ -6685,7 +6685,7 @@ P	p2893	Var _$item_bnd13
 O	o2893	var p2893
 T	t2893	o2893
 B	b2893	t2893
-NItt_hoas_sequent_native!Provable	Provable	Provable Itt_hoas_sequent_native
+NItt_hoas_sequent!Provable	Provable	Provable Itt_hoas_sequent
 O	o2907	Provable
 Vt	t2944	t\\ \\
 B	b2945	t2944
@@ -6860,7 +6860,7 @@ T	t3612	o5 b3593
 B	b3612	t3612
 T	t3613	o4 b3612
 B	b3613	t3613
-NItt_hoas_sequent_native!beq_sequent	beq_sequent	beq_sequent Itt_hoas_sequent_native
+NItt_hoas_sequent!beq_sequent	beq_sequent	beq_sequent Itt_hoas_sequent
 O	o3616	beq_sequent
 Vseq1	seq1	seq1\\ \\
 B	b3618	seq1
@@ -7739,7 +7739,7 @@ T	t6227	o6202 b1049 b6216 b6226 b125
 B	b6227	t6227
 T	t6228	o1047 b6227
 B	b6228	t6228
-NItt_hoas_sequent_native!derivation_depth	derivation_depth	derivation_depth Itt_hoas_sequent_native
+NItt_hoas_sequent!derivation_depth	derivation_depth	derivation_depth Itt_hoas_sequent
 O	o6232	derivation_depth
 T	t6232	o6232 b954
 B	b6232	t6232
@@ -9588,7 +9588,7 @@ T	t5102	o4810 b1049 b4900 b5101 b125
 B	b5102	t5102
 T	t5103	o1047 b5102
 B	b5103	t5103
-NItt_hoas_sequent_native!beq_sequent_list	beq_sequent_list	beq_sequent_list Itt_hoas_sequent_native
+NItt_hoas_sequent!beq_sequent_list	beq_sequent_list	beq_sequent_list Itt_hoas_sequent
 O	o5112	beq_sequent_list
 Vl1	l1	l1\\ \\
 B	b5112	l1
@@ -12330,7 +12330,7 @@ B	b5523	t5523
 T	t5524	o4 b5523
 B	b5524	t5524
 P	p7244	Number 20143
-NItt_hoas_sequent_native!beq_proof_step	beq_proof_step	beq_proof_step Itt_hoas_sequent_native
+NItt_hoas_sequent!beq_proof_step	beq_proof_step	beq_proof_step Itt_hoas_sequent
 O	o7246	beq_proof_step
 Vstep1	step1	step1\\ \\
 B	b5527	step1
@@ -12719,7 +12719,7 @@ B	b3195	t3194
 P	p3195	Number 19311
 P	p3196	Number 19536
 O	o3196	location p3195 p3196
-NItt_hoas_sequent_native!let_sovar	let_sovar	let_sovar Itt_hoas_sequent_native
+NItt_hoas_sequent!let_sovar	let_sovar	let_sovar Itt_hoas_sequent
 O	o3198	let_sovar
 Vi	i3198	i\\ \\
 B	b3198	i3198
@@ -12774,7 +12774,7 @@ B	b3290	t3289
 P	p3290	Number 19538
 P	p3291	Number 19754
 O	o3291	location p3290 p3291
-NItt_hoas_sequent_native!let_cvar	let_cvar	let_cvar Itt_hoas_sequent_native
+NItt_hoas_sequent!let_cvar	let_cvar	let_cvar Itt_hoas_sequent
 O	o3292	let_cvar
 T	t3317	o3292 b954 b1956 b3198 b3199
 B	b3317	t3317

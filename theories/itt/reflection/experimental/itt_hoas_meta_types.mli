@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_sequent_native
+extends Itt_hoas_sequent
 
 (*
  * The type of membership judgments.

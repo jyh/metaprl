@@ -10,7 +10,6 @@ MPFILES[] =
    itt_hoas_bterm
    itt_hoas_util
    itt_hoas_sequent_native
-   itt_hoas_sequent
    itt_hoas_meta_types
    itt_hoas_theory
 

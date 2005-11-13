@@ -28,7 +28,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2005 MetaPRL Group, Cornell University, Moscow State
+   University, City University of New York, and California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -44,8 +45,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Yegor Bryukhov
-   @email{ynb@mail.ru}
+   Author: Yegor Bryukhov @email{ynb@mail.ru}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 
@@ -564,7 +565,10 @@ interactive irrefl_Elimination 'H 'J :
 	[wf] sequent { <H> >- 'b in int } -->
 	sequent { <H>; x: 'a < 'b; <J['x]>; y: 'b < 'a; <K['x;'y]> >- 'C['x;'y] }
 
-let irrefl_EliminationT i j = irrefl_Elimination i (j-i)
+let irrefl_EliminationT i j = funT (fun p ->
+   let i = get_pos_hyp_num p i in
+   let j = get_pos_hyp_num p j in
+      irrefl_Elimination i (j-i))
 
 interactive irreflElim {| elim [] |} 'H :
 	[wf] sequent { <H> >- 'a in int } -->
@@ -687,11 +691,10 @@ prim intEliminationLast :
       ( 'up['m; 'v; 'z] : sequent { <H>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
       sequent { <H>; n: int >- 'C['n] } = ind{'n; m, z. 'down['m; it; 'z]; 'base; m,z. 'up['m; it; 'z]}
 
-
 interactive intElimination {| elim [ThinOption thinT] |} 'H :
-   [downcase] sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
+   [downcase] sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; 'C['m +@ 1] >- 'C['m] } -->
    [basecase] sequent { <H>; n: int; <J['n]> >- 'C[0] } -->
-   [upcase] sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
+   [upcase] sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; 'C['m -@ 1] >- 'C['m] } -->
    sequent { <H>; n: int; <J['n]> >- 'C['n] }
 
 doc <:doc<

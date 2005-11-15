@@ -21,7 +21,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2005 MetaPRL Group, Cornell University, Moscow State
+   University, City University of New York, and California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -37,8 +38,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Yegor Bryukhov
-   @email{ynb@mail.ru}
+   Author: Yegor Bryukhov @email{ynb@mail.ru}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 
@@ -57,6 +58,7 @@ open Basic_tactics
 open Base_meta
 
 open Itt_equal
+open Itt_struct
 open Itt_squash
 open Itt_int_base
 
@@ -422,31 +424,31 @@ interactive not_equal {| intro[AutoMustComplete] |} :
 
 let notNequalT = not_nequal
 
-interactive le_refl {| intro [] |} :
+interactive le_refl {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- le{'a;'a} }
 
-interactive ge_refl {| intro [] |} :
+interactive ge_refl {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ge{'a;'a} }
 
-interactive ge_sqstable {| squash; intro [] |} :
+interactive ge_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- it in ('a >= 'b) }
 
-interactive le_sqstable {| squash; intro [] |} :
+interactive le_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a <= 'b } -->
    sequent { <H> >- it in ('a <= 'b) }
 
-interactive lt_sqstable {| squash; intro [] |} :
+interactive lt_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a < 'b } -->
    sequent { <H> >- it in ('a < 'b) }
 
-interactive gt_sqstable {| squash; intro [] |} :
+interactive gt_sqstable {| squash; intro []; nth_hyp|} :
    sequent { <H> >- 'a > 'b } -->
    sequent { <H> >- it in ('a > 'b) }
 
-interactive ne_sqstable {| squash; intro [] |} :
+interactive ne_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a <> 'b } -->
    sequent { <H> >- it in ('a <> 'b) }
 
@@ -464,9 +466,6 @@ interactive ge_decidable {| intro [] |} :
    [wf] sequent{ <H> >- 'a in int } -->
    [wf] sequent{ <H> >- 'b in int } -->
    sequent{ <H> >- decidable{('a >= 'b)} }
-
-
-
 
 interactive ge_addWeakMono {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -514,6 +513,44 @@ interactive_rw lt_bool2le_bool_rw :
 let lt_bool2le_boolC = lt_bool2le_bool_rw
 
 let le_bool2lt_boolC = foldC <<'a <@ 'b>> lt_bool2le_boolC
+
+doc <:doc<
+   @modsubsection{A more convenient induction rule}
+>>
+interactive intElimination2 'H :
+   [downcase] sequent { <H>; n: int; <J['n]>; m: int; 'm <= 0; 'C['m] >- 'C['m -@ 1] } -->
+   [basecase] sequent { <H>; n: int; <J['n]> >- 'C[0] } -->
+   [upcase] sequent { <H>; n: int; <J['n]>; m: int; 'm >= 0; 'C['m] >- 'C['m +@ 1] } -->
+   sequent { <H>; n: int; <J['n]> >- 'C['n] }
+
+interactive_rw guarded_ind_down 'x :
+   ('x in int) -->
+   ('x <= 0) -->
+   ind{'x -@ 1; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+    ('down['x -@ 1; ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+
+interactive_rw guarded_ind_up 'x :
+   ('x in int) -->
+   ('x >= 0) -->
+   ind{'x +@ 1; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+   ('up['x +@ 1; ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+
+doc docoff
+
+let mkGuardT conv = 
+   let auxT = argfunT (fun i p ->
+      if is_equal_term (concl p) then equalityAxiom (i-1) else hypothesis i)
+   in funT (fun p ->
+      let hyps = hyp_count p in
+      let v = nth_binding p (hyps - 2) in
+      let x = mk_var_term v in
+         rwh (conv x) 0 thenAT auxT (hyps - 1))
+
+let indDownT = mkGuardT guarded_ind_down
+let indUpT = mkGuardT guarded_ind_up
+
+let resource elim +=
+   <<int>>, (fun i -> (intElimination2 i thenT thinIfThinningT [i]) thenLT [indDownT; rwh reduce_ind_base 0; indUpT])
 
 interactive min_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->

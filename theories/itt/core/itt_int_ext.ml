@@ -70,7 +70,7 @@ doc <:doc<
    @terms
    Multiplicative operations on <<int>>
 >>
-declare "mul"{'a; 'b}
+define (*private*) unfold_mul : "mul"{'a; 'b} <--> ind{'a; m, z. 'z -@ 'b; 0; m, z. 'z +@ 'b }
 declare "div"{'a; 'b}
 declare "rem"{'a; 'b}
 
@@ -537,7 +537,7 @@ interactive_rw guarded_ind_up 'x :
 
 doc docoff
 
-let mkGuardT conv = 
+let mkGuardT conv =
    let auxT = argfunT (fun i p ->
       if is_equal_term (concl p) then equalityAxiom (i-1) else hypothesis i)
    in funT (fun p ->
@@ -700,7 +700,6 @@ interactive max_le2 {| intro [] |} :
    sequent { <H> >- 'x >= 'b } -->
    sequent { <H> >- 'x >=  max{'a; 'b} }
 
-
 interactive min_ge_left {| intro [SelectOption 0] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -745,21 +744,96 @@ interactive min_le2 {| intro [] |} :
    sequent { <H> >- 'x <= 'b } -->
    sequent { <H> >- 'x <= min{'a; 'b} }
 
-
-
 doc <:doc<
    @modsection{Well-formedness and algebraic properties of <<('x) *@ ('x)>>}
 >>
 
-prim mul_wf {| intro [complete_unless_member] |} :
+interactive mul_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
-   sequent { <H> >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
+   sequent { <H> >- 'a *@ 'b = 'a1 *@ 'b1 in int }
 
-prim mul_Commut :
+interactive mul_add_Distrib :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- ('a *@ 'b) ~ ('b *@ 'a) } = it
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) }
+
+interactive_rw mul_add_Distrib_rw {| arith_unfold |} :
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c))
+
+let mul_add_DistribC = mul_add_Distrib_rw
+
+interactive mul_Id {| intro []; nth_hyp |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- (1 *@ 'a) ~ 'a }
+
+interactive_rw mul_Id_rw {| reduce; arith_unfold |} :
+   'a in int -->
+   (1 *@ 'a) <--> 'a
+
+let mul_IdC = mul_Id_rw
+
+interactive mul_Id2 {| nth_hyp |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- ('a *@ 1) ~ 'a }
+
+interactive_rw mul_Id2_rw {| reduce; arith_unfold |} :
+   ('a in int) -->
+   ('a *@ 1) <--> 'a
+
+let mul_Id2C = mul_Id2_rw
+
+interactive mul_Id3 {| nth_hyp |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- 'a ~ (1 *@ 'a) }
+
+interactive_rw mul_Id3_rw ('a :> Term) :
+   ('a in int) -->
+   'a <--> (1 *@ 'a)
+
+let mul_Id3C = termC mul_Id3_rw
+
+interactive mul_Zero {| intro[] |} :
+   sequent { <H> >- (0 *@ 'a) ~ 0 }
+
+interactive_rw mul_Zero_rw {| reduce; arith_unfold |} :
+   (0 *@ 'a) <--> 0
+
+let mul_ZeroC = mul_Zero_rw
+
+interactive mul_Zero2 {| nth_hyp |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- ('a *@ 0) ~ 0 }
+
+interactive_rw mul_Zero2_rw {| reduce; arith_unfold |} :
+   ('a in int) -->
+   ('a *@ 0) <--> 0
+
+let mul_Zero2C = mul_Zero2_rw
+
+interactive_rw mul_Zero3C 'a :
+   0 <--> (0 *@ 'a)
+
+interactive_rw negative1_2uniC {| reduce |} :
+	('a in int) -->
+	((-1) *@ 'a) <--> (- 'a)
+
+interactive_rw negative1_2uni2C {| reduce |} :
+	'a in int -->
+	'a *@ (-1) <--> (- 'a)
+
+interactive_rw uni2negative1C :
+	('a in int) -->
+	(- 'a) <--> ((-1) *@ 'a)
+
+interactive mul_Commut :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a *@ 'b) ~ ('b *@ 'a) }
 
 interactive_rw mul_Commut_rw :
    ('a in int) -->
@@ -768,11 +842,28 @@ interactive_rw mul_Commut_rw :
 
 let mul_CommutC = mul_Commut_rw
 
-prim mul_Assoc :
+interactive_rw mul_add_Distrib2C :
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   (('a *@ 'b) +@ ('a *@ 'c)) <--> ('a *@ ('b +@ 'c))
+
+interactive_rw mul_add_Distrib3C {| arith_unfold |} :
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   (('a +@ 'b) *@ 'c) <--> (('a *@ 'c) +@ ('b *@ 'c))
+
+interactive_rw minus_mul_assoc_rw {| reduce |} :
+   'a in int -->
+   'b in int -->
+   ((-'a) *@ 'b) <--> - ('a *@ 'b)
+
+interactive mul_Assoc :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) } = it
+   sequent { <H> >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) }
 
 interactive_rw mul_Assoc_rw :
    ('a in int) -->
@@ -790,98 +881,10 @@ interactive_rw mul_Assoc2_rw {| reduce |} :
 
 let mul_Assoc2C = mul_Assoc2_rw
 
-prim mul_add_Distrib :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) } = it
-
-interactive_rw mul_add_Distrib_rw {| arith_unfold |} :
-   ('a in int) -->
-   ('b in int) -->
-   ('c in int) -->
-   ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c))
-
-let mul_add_DistribC = mul_add_Distrib_rw
-
-interactive_rw mul_add_Distrib2C :
-   ('a in int) -->
-   ('b in int) -->
-   ('c in int) -->
-   (('a *@ 'b) +@ ('a *@ 'c)) <--> ('a *@ ('b +@ 'c))
-
-interactive_rw mul_add_Distrib3C {| arith_unfold |} :
-   ('a in int) -->
-   ('b in int) -->
-   ('c in int) -->
-   (('a +@ 'b) *@ 'c) <--> (('a *@ 'c) +@ ('b *@ 'c))
-
-prim mul_Id {| nth_hyp |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   sequent { <H> >- (1 *@ 'a) ~ 'a } = it
-
-interactive_rw mul_Id_rw {| reduce; arith_unfold |} :
-   ('a in int) -->
-   (1 *@ 'a) <--> 'a
-
-let mul_IdC = mul_Id_rw
-
-interactive mul_Id2 {| nth_hyp |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   sequent { <H> >- ('a *@ 1) ~ 'a }
-
-interactive_rw mul_Id2_rw {| reduce |} :
-   ('a in int) -->
-   ('a *@ 1) <--> 'a
-
-let mul_Id2C = mul_Id2_rw
-
-interactive mul_Id3 {| nth_hyp |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   sequent { <H> >- 'a ~ (1 *@ 'a) }
-
-interactive_rw mul_Id3_rw ('a :> Term) :
-   ('a in int) -->
-   'a <--> (1 *@ 'a)
-
-let mul_Id3C = termC mul_Id3_rw
-
-prim mul_Zero {| nth_hyp |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   sequent { <H> >- (0 *@ 'a) ~ 0 } = it
-
-interactive_rw mul_Zero_rw {| reduce; arith_unfold |} :
-   ('a in int) -->
-   (0 *@ 'a) <--> 0
-
-let mul_ZeroC = mul_Zero_rw
-
-interactive mul_Zero2 {| nth_hyp |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   sequent { <H> >- ('a *@ 0) ~ 0 }
-
-interactive_rw mul_Zero2_rw {| reduce; arith_unfold |} :
-   ('a in int) -->
-   ('a *@ 0) <--> 0
-
-let mul_Zero2C = mul_Zero2_rw
-
-interactive_rw mul_Zero3C 'a :
-   ('a in int) -->
-   0 <--> (0 *@ 'a)
-
-interactive_rw negative1_2uniC :
-	('a in int) -->
-	((-1) *@ 'a) <--> (- 'a)
-
-interactive_rw uni2negative1C :
-	('a in int) -->
-	(- 'a) <--> ((-1) *@ 'a)
-
 doc docoff
 
 let resource arith_unfold +=[
-	<<- 'a>>, (uni2negative1C thenC (addrC [Subterm 1] reduce_minus));
+	<<- 'a>>, uni2negative1C;
 ]
 
 doc docon

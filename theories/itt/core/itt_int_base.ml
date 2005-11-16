@@ -497,11 +497,11 @@ let beq_int_is_trueC = beq_int_is_true_rw
 (*
  Derived from previous rewrite
  *)
-interactive eq_2beq_int {| intro [] |} :
+interactive eq_2beq_int {| intro []; nth_hyp |} :
    sequent { <H> >- 'a = 'b in int } -->
    sequent { <H> >- "assert"{beq_int{'a; 'b}} }
 
-interactive lt_bool_member {| intro [] |} :
+interactive lt_bool_member {| intro []; nth_hyp |} :
   [main]  sequent { <H> >- 'a < 'b } -->
 (*  [wf] sequent { <H> >- 'a in int } -->
   [wf] sequent { <H> >- 'b in int } --> *)
@@ -635,7 +635,7 @@ prim lt_Transit 'b :
    sequent { <H> >- lt_bool{'a; 'c} ~ btrue } = it
 
 interactive_rw lt_Transit_rw 'b :
-   ( band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool ) -->
+   band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool -->
    ( 'a in int ) -->
    ( 'b in int ) -->
    ( 'c in int ) -->
@@ -916,11 +916,6 @@ interactive_rw add_Functionality_rw 'b 'c ('a :> Term) :
 let add_FunctionalityC b c =
    termC (add_Functionality_rw b c)
 
-interactive minus_add_Distrib :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- (-('a +@ 'b)) ~ ((-'a) +@ (-'b)) }
-
 interactive minus_minus_reduce {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (-(-'a)) ~ 'a }
@@ -934,6 +929,10 @@ let minus_minus_reduceC = minus_minus_reduce_rw
 interactive_rw minus_same_rw {| reduce |} :
    ('a in int) -->
    ('a -@ 'a) <--> 0
+   
+interactive_rw minus_same_rw2 {| reduce |} :
+   ('a in int) -->
+   (- 'a) +@ 'a <--> 0
 
 interactive_rw plus_minus_rw {| reduce |} :
    ('a in int) -->
@@ -944,6 +943,18 @@ interactive_rw minus_plus_rw {| reduce |} :
    ('a in int) -->
    ('b in int) -->
    (('a -@ 'b) +@ 'b) <--> 'a
+
+interactive minus_add_Distrib {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- (-('a +@ 'b)) ~ ((-'a) +@ (-'b)) }
+
+interactive_rw minus_add_Distrib_rw :
+   'a in int -->
+   'b in int -->
+    (-('a +@ 'b)) <--> ((-'a) +@ (-'b))
+
+let minusDistribC = minus_add_Distrib_rw
 
 (*
  * @modsubsection{Combinator equality}

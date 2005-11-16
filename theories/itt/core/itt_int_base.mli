@@ -433,6 +433,8 @@ rule minus_add_Distrib :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- (- ('a +@ 'b)) ~ ( (- 'a) +@ (- 'b) ) }
 
+topval minusDistribC : conv
+
 rule minus_minus_reduce :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (-(-'a)) ~ 'a }

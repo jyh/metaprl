@@ -265,7 +265,6 @@ topval mul_Id2C: conv
 topval mul_Id3C: conv
 
 rule mul_Zero :
-   [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (0 *@ 'a) ~ 0 }
 
 rewrite uni2negative1C :

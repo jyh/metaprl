@@ -820,7 +820,7 @@ prim mul_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a } = it
 
-interactive_rw mul_Id_rw {| reduce |} :
+interactive_rw mul_Id_rw {| reduce; arith_unfold |} :
    ('a in int) -->
    (1 *@ 'a) <--> 'a
 
@@ -850,7 +850,7 @@ prim mul_Zero {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (0 *@ 'a) ~ 0 } = it
 
-interactive_rw mul_Zero_rw {| reduce |} :
+interactive_rw mul_Zero_rw {| reduce; arith_unfold |} :
    ('a in int) -->
    (0 *@ 'a) <--> 0
 
@@ -860,7 +860,7 @@ interactive mul_Zero2 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a *@ 0) ~ 0 }
 
-interactive_rw mul_Zero2_rw {| reduce |} :
+interactive_rw mul_Zero2_rw {| reduce; arith_unfold |} :
    ('a in int) -->
    ('a *@ 0) <--> 0
 

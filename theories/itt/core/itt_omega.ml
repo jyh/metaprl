@@ -1085,12 +1085,14 @@ interactive_rw factor_out 'cleft 'tleft 'cright 'tright :
 	('left >= 'right) <-->
 	('cleft *@ 'tleft >= 'cright *@ 'tright)
 
+(*
 interactive_rw factor_out2 number[l:n] 'tleft number[r:n] 'tright :
 	('tleft in int) -->
 	('tright in int) -->
 	('left = (number[l:n] *@ 'tleft) -@ (number[r:n] *@ 'tright) in int) -->
 	('left >= 0) <-->
 	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright)
+*)
 
 interactive var_elim2 'v number[l:n] 'tleft number[r:n] 'tright :
 	[wf] sequent { <H> >- 'tleft in int } -->
@@ -1708,7 +1710,7 @@ let getTimeT = funT (fun p ->
  * Currently I skip alternative branches only if first branch actually ignored current node constraint;
  * it actually should be done with all branches - if any branch ignored the current state constraint then we don't
  * need current node at all.
- ****************************)
+ ***************************
 
 interactive dark_shadow_or_splinters 'c 'L 'd 'U :
 	[wf] sequent { <H> >- 'c in int } -->
@@ -1761,3 +1763,4 @@ interactive splinters_test :
 		4 >= 7 *@ 'x -@ 9 *@ 'y
 		>- 'C
 	}
+*)

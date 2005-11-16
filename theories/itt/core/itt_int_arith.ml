@@ -729,7 +729,7 @@ doc <:doc<
 >>
 doc docoff
 
-let normalizeC = reduceC thenC arith_unfoldC thenC reduceC
+let normalizeC = reduceC thenC arith_unfoldC
 
 interactive_rw ge_addContract_rw :
    ( 'a in int ) -->

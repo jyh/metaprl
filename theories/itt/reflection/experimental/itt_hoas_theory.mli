@@ -33,6 +33,9 @@ extends Itt_theory
 extends Itt_hoas_bterm
 extends Itt_hoas_util
 extends Itt_hoas_sequent
+extends Itt_hoas_proof
+extends Itt_hoas_sequent_proof
+extends Itt_hoas_sequent_tactics
 extends Itt_hoas_meta_types
 
 (*!

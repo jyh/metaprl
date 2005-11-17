@@ -1,5 +1,5 @@
 (*
- * Native sequent representation.
+ * Tactics for proving things about sequents.
  *
  * ----------------------------------------------------------------
  *
@@ -24,42 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_util
-
-open Basic_tactics
-
-(*
- * Sequents and their types.
- *)
-declare "sequent"{'arg; 'hyps; 'concl}
-
-declare Sequent
-declare beq_sequent{'s1; 's2}
-declare beq_sequent_list{'l1; 's2}
-
-(*
- * A second-order variable with 'd arguments.
- *)
-declare SOVar{'d}
-
-(*
- * A sequent context variable at depth 'd.
- *)
-declare CVar{'d}
-
-(*
- * Hypothesis depth check.
- *)
-declare hyp_depths{'d; 'hyps}
-declare bhyp_depths{'d; 'hyps}
-
-(*
- * Rewrites.
- *)
-topval fold_sequent : conv
-topval fold_hyp_depths : conv
-topval fold_bhyp_depths : conv
-topval fold_beq_sequent_list : conv
 
 (*!
  * @docoff

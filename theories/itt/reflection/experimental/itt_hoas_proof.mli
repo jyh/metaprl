@@ -29,37 +29,37 @@ extends Itt_hoas_util
 open Basic_tactics
 
 (*
- * Sequents and their types.
+ * A step in a proof.
  *)
-declare "sequent"{'arg; 'hyps; 'concl}
-
-declare Sequent
-declare beq_sequent{'s1; 's2}
-declare beq_sequent_list{'l1; 's2}
-
-(*
- * A second-order variable with 'd arguments.
- *)
-declare SOVar{'d}
+declare ProofStep{'ty_sequent}
+declare ProofStepWitness
+declare proof_step{'premises; 'goal}
+declare proof_step_witness{'sovars; 'cvars}
 
 (*
- * A sequent context variable at depth 'd.
+ * A checking rule for a single step of a proof.
  *)
-declare CVar{'d}
+declare ProofRule{'ty_sequent}
 
 (*
- * Hypothesis depth check.
+ * A Logic is a list of ProofRules.
  *)
-declare hyp_depths{'d; 'hyps}
-declare bhyp_depths{'d; 'hyps}
+declare Logic{'rules}
+
+(*
+ * A formula is provable in a logic.
+ *)
+declare Provable{'ty_sequent; 'logic; 't}
 
 (*
  * Rewrites.
  *)
-topval fold_sequent : conv
-topval fold_hyp_depths : conv
-topval fold_bhyp_depths : conv
-topval fold_beq_sequent_list : conv
+topval fold_Logic : conv
+topval fold_Derivation_indexed : conv
+topval fold_derivation_depth : conv
+topval fold_derivation_step : conv
+topval fold_proof_step : conv
+topval fold_proof_step_witness : conv
 
 (*!
  * @docoff

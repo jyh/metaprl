@@ -29,14 +29,35 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_theory
-extends Itt_hoas_bterm
-extends Itt_hoas_util
-extends Itt_hoas_sequent
-extends Itt_hoas_proof
 extends Itt_hoas_sequent_proof
-extends Itt_hoas_sequent_tactics
-extends Itt_hoas_meta_types
+
+doc docoff
+
+open Basic_tactics
+
+(************************************************************************
+ * Basic rules tactics.
+ *)
+interactive cvar_elim1 {| intro [intro_typeinf << 'C >>] |} CVar{'i} : <:xrule<
+   "wf" : <H> >- C IN CVar{i} -->
+   <H> >- C IN list{"BTerm"}
+>>
+
+interactive hyp_depths_elim1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- C IN CVar{i} -->
+   <H> >- hyp_depths{i; C}
+>>
+
+(************************************************************************
+ * Tactics for proving well-formedness of rule checkers.
+ *)
+interactive proof_rule_wf1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H>; step: ProofStep{ty_sequent}; witness: "ProofStepWitness" >- e[step; witness] IN "bool" -->
+   <H> >-
+      lambda{proof_step. spread{proof_step; step, witness. e[step; witness]}}
+      IN ProofRule{ty_sequent}
+>>
 
 (*!
  * @docoff

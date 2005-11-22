@@ -1,0 +1,31 @@
+OCAMLINCLUDES += $(SUPPORT_DIRS)
+THEORYNAME = base-extensions
+THEORYDESCR = Basic Meta-Theory Extensiions
+
+THEORY_DEPS[] = base
+
+# Common files
+MLZFILES[] =
+    meta_extensions_theory
+
+# Library files
+MPFILES[] =
+    meta_context_terms
+
+Theory($(MPFILES))
+
+#
+# Documentation
+#
+PRINT_THEORIES[] =
+    meta_context_terms
+
+TheoryDocumentInstall(base-extensions, $(PRINT_THEORIES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
+
+all: theory$(LIB_SUFFIX)

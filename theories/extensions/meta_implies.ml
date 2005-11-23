@@ -1,4 +1,4 @@
-(*x
+(*
  * Add terms and ML rules for higher-order rules.
  *
  * ----------------------------------------------------------------

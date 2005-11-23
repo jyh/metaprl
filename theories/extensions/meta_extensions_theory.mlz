@@ -24,6 +24,10 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
+extends Meta_util
+extends Meta_dtactic
+extends Meta_struct
+extends Meta_implies
 extends Meta_context_terms
 
 (*!

@@ -27,6 +27,7 @@
 extends Base_theory
 extends Meta_util
 extends Meta_dtactic
+extends Meta_struct
 
 open Lm_printf
 
@@ -36,6 +37,8 @@ open Refiner.Refiner.Refine
 
 open Base_meta
 open Meta_util
+open Meta_struct
+open Meta_dtactic
 
 (************************************************************************
  * Terms.
@@ -148,6 +151,23 @@ ml_rule mimplies_elim_rule 'i : 'T =
 let mimplies_elim i =
    eprintf "mimplies_elim@.";
    mimplies_elim_rule (mk_meta_num i)
+
+(************************************************************************
+ * Tactics.
+ *)
+let moveToGoalT i = funT (fun p ->
+   let i = Sequent.get_pos_assum_num p i in
+   let t1 = Sequent.nth_assum p i in
+   let t2 = Sequent.goal p in
+   let t = mk_mimplies_term t1 t2 in
+   let thinT =
+      if get_thinning_arg p then
+         metaThinT i
+      else
+         idT
+   in
+      metaAssertT t
+      thenLT [thinT; meta_dT (-1) thenT trivialT])
 
 (************************************************************************
  * Resources.

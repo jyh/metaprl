@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Meta_implies
+extends Meta_util
 
 open Basic_tactics
 
@@ -32,7 +32,6 @@ topval metaAssertAtT : int -> term -> tactic
 topval metaAssertT : term -> tactic
 topval metaThinT : int -> tactic
 topval moveToAssumT : int -> int -> tactic
-topval moveToGoalT : int -> tactic
 
 (*!
  * @docoff

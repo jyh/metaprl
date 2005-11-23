@@ -25,6 +25,7 @@
  * @end[license]
  *)
 extends Base_theory
+extends Meta_struct
 
 open Basic_tactics
 
@@ -40,6 +41,11 @@ declare mapply{'e1; 'e2}
  *)
 val mk_mimplies_term : term -> term -> term
 val dest_mimplies_term : term -> term * term
+
+(*
+ * Tactics.
+ *)
+topval moveToGoalT : int -> tactic
 
 (*!
  * @docoff

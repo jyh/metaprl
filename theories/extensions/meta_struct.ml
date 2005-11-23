@@ -1,8 +1,6 @@
 doc <:doc<
-   @module[Dtactic]
-
-   The @tactic[meta_dT] tactic is the analog of @tactic[dT], but
-   for the meta-logic.
+   @module["meta-struct"]
+   Structural rules in the meta-logic
 
    @begin[license]
 
@@ -13,7 +11,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005 Mojave Group, Caltech
+   Copyright (C) 2005 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,14 +28,11 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
-   Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
    @end[license]
 
    @parents
 >>
 extends Meta_util
-extends Meta_dtactic
-extends Meta_implies
 
 doc docoff
 
@@ -48,8 +43,6 @@ open Refiner.Refiner.Refine
 open Basic_tactics
 open Base_meta
 open Meta_util
-open Meta_implies
-open Meta_dtactic
 
 (************************************************************************
  * Cut.
@@ -102,7 +95,7 @@ let metaAssertAtT i t =
    mcut (mk_meta_num i) t
 
 let metaAssertT t =
-   mcut (mk_meta_num (-1)) t
+   metaAssertAtT (-1) t
 
 (************************************************************************
  * Thinning.
@@ -148,20 +141,6 @@ let moveToAssumT i j = funT (fun p ->
    let t = Sequent.nth_assum p i in
       metaAssertAtT j t
       thenLT [nthAssumT i; metaThinT k])
-
-let moveToGoalT i = funT (fun p ->
-   let i = Sequent.get_pos_assum_num p i in
-   let t1 = Sequent.nth_assum p i in
-   let t2 = Sequent.goal p in
-   let t = mk_mimplies_term t1 t2 in
-   let thinT =
-      if get_thinning_arg p then
-         metaThinT i
-      else
-         idT
-   in
-      metaAssertT t
-      thenLT [thinT; meta_dT (-1) thenT trivialT])
 
 (************************************************************************
  * Tests.x

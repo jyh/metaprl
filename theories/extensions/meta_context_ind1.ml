@@ -66,6 +66,20 @@ let context_ind_code addrs params goal assums =
 ml_rule context_ind 't : 'T =
    context_ind_code
 
+(************************************************************************
+ * Testing.
+ *)
+
+(*
+ * Second-order variables are not allowed to occur with
+ * more-than one arity.  This means that we can't actually
+ * just add the variable in the induction step.  We'll
+ * have to invent new variable names.
+ *
+interactive test1 :
+   sequent { <H>; x: 'A >- mimplies{'S; 'S['x]} }
+ *)
+
 (*!
  * @docoff
  *

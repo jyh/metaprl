@@ -30,6 +30,9 @@ open Basic_tactics
 
 topval metaAssertAtT : int -> term -> tactic
 topval metaAssertT : term -> tactic
+topval metaThinT : int -> tactic
+topval moveToAssumT : int -> int -> tactic
+topval moveToGoalT : int -> tactic
 
 (*!
  * @docoff

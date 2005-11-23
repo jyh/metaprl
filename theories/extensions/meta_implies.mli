@@ -35,6 +35,12 @@ declare mimplies{'premise : Judgment; 'rest : Judgment} : Judgment
 declare mlambda{x. 'e['x]}
 declare mapply{'e1; 'e2}
 
+(*
+ * ML terms.
+ *)
+val mk_mimplies_term : term -> term -> term
+val dest_mimplies_term : term -> term * term
+
 (*!
  * @docoff
  *

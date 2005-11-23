@@ -41,13 +41,17 @@ extends Meta_implies
 
 doc docoff
 
+open Lm_printf
+
 open Refiner.Refiner.Refine
 
 open Basic_tactics
 open Base_meta
 open Meta_util
+open Meta_implies
+open Meta_dtactic
 
-(*
+(************************************************************************
  * Cut.
  *
  *    S1 --> ... --> Sn --> T1
@@ -91,6 +95,62 @@ let metaAssertAtT i t =
 
 let metaAssertT t =
    mcut (mk_meta_num (-1)) t
+
+(************************************************************************
+ * Thinning.
+ *
+ *    S1 --> ... --> S_{i - 1} --> S_{i + 1} --> ... --> Sn
+ *    ------------------------------------------------------------
+ *    S1 --> ... --> S_{i - 1} --> Si --> S_{i + 1} --> ... --> Sn
+ *)
+let mthin_extract addrs params goal subgoals =
+   raise (Invalid_argument "mthin_extract: not implemented")
+
+let mthin_code addrs params goal assums =
+   let i = get_pos_assum_from_params params assums in
+   let seq = mk_msequent goal (Lm_list_util.remove_nth (i - 1) assums) in
+      [seq], mthin_extract
+
+ml_rule mthin 'i : 'T =
+   mthin_code
+
+let metaThinT i =
+   mthin (mk_meta_num i)
+
+(************************************************************************
+ * Tactics.
+ *)
+
+(*
+ * Move an assumption to a new location.
+ *)
+let moveToAssumT i j = funT (fun p ->
+   let i = Sequent.get_pos_assum_num p i in
+   let j = Sequent.get_pos_assum_num p j in
+   let k, j =
+      if j > i then
+         i, j + 1
+      else
+         i + 1, j
+   in
+   let t = Sequent.nth_assum p i in
+      eprintf "k = %d, j = %d@." k j;
+      metaAssertAtT j t
+      thenLT [nthAssumT i; metaThinT k])
+
+let moveToGoalT i = funT (fun p ->
+   let i = Sequent.get_pos_assum_num p i in
+   let t1 = Sequent.nth_assum p i in
+   let t2 = Sequent.goal p in
+   let t = mk_mimplies_term t1 t2 in
+   let thinT =
+      if get_thinning_arg p then
+         metaThinT i
+      else
+         idT
+   in
+      metaAssertT t
+      thenLT [thinT; meta_dT (-1) thenT trivialT])
 
 (************************************************************************
  * Tests.x

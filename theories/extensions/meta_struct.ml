@@ -54,13 +54,21 @@ open Meta_dtactic
 (************************************************************************
  * Cut.
  *
- *    S1 --> ... --> Sn --> T1
- *    S1 --> ... --> Sn --> T1 --> T2
- *    -------------------------------
- *    S1 --> ... --> Sn --> T2
+ *    S1 --> ... --> Si --> ... --> Sn --> T1
+ *    S1 --> ... --> T1 --> Si --> ... --> Sn --> T2
+ *    ----------------------------------------------
+ *    S1 --> ... --> Si --> ... --> Sn --> T2
+ *
+ * Cut is already primitive in the refiner.
+ * However, we would like a more general form that allows
+ * the position of the cut-in goal to be specified.
  *)
-let mcut_extract addrs params goal subgoals =
-   raise (Invalid_argument "mcut_extract: not implemented")
+let mcut_extract i addrs params goal subgoals args rest =
+   match rest with
+      [cut_lemma; cut_then] ->
+         cut_then (Lm_list_util.insert_nth i (cut_lemma args) args)
+    | _ ->
+         raise (RefineError ("mcut_extract", StringError "illegal extract"))
 
 let mcut_code addrs params goal assums =
    let i, t =
@@ -85,7 +93,7 @@ let mcut_code addrs params goal assums =
    in
    let seq1 = mk_msequent t assums in
    let seq2 = mk_msequent goal (Lm_list_util.insert_nth i t assums) in
-      [seq1; seq2], mcut_extract
+      [seq1; seq2], mcut_extract i
 
 ml_rule mcut 'i 't : 'T =
    mcut_code
@@ -103,13 +111,17 @@ let metaAssertT t =
  *    ------------------------------------------------------------
  *    S1 --> ... --> S_{i - 1} --> Si --> S_{i + 1} --> ... --> Sn
  *)
-let mthin_extract addrs params goal subgoals =
-   raise (Invalid_argument "mthin_extract: not implemented")
+let mthin_extract i addrs params goal subgoals args rest =
+   match rest with
+      [f] ->
+         f (Lm_list_util.remove_nth i args)
+    | _ ->
+         raise (RefineError ("mthin_extract", StringError "illegal extract"))
 
 let mthin_code addrs params goal assums =
-   let i = get_pos_assum_from_params params assums in
-   let seq = mk_msequent goal (Lm_list_util.remove_nth (i - 1) assums) in
-      [seq], mthin_extract
+   let i = get_pos_assum_from_params params assums - 1 in
+   let seq = mk_msequent goal (Lm_list_util.remove_nth i assums) in
+      [seq], mthin_extract i
 
 ml_rule mthin 'i : 'T =
    mthin_code
@@ -134,7 +146,6 @@ let moveToAssumT i j = funT (fun p ->
          i + 1, j
    in
    let t = Sequent.nth_assum p i in
-      eprintf "k = %d, j = %d@." k j;
       metaAssertAtT j t
       thenLT [nthAssumT i; metaThinT k])
 

@@ -73,6 +73,8 @@ let mapply_opname = opname_of_term << mapply{'e1; 'e2} >>
 let mk_mapply_term = mk_dep0_dep0_term mapply_opname
 let dest_mapply_term = dest_dep0_dep0_term mapply_opname
 
+let var_x = Lm_symbol.add "x"
+
 (************************************************************************
  * ML rules.
  *
@@ -95,10 +97,14 @@ let dest_mapply_term = dest_dep0_dep0_term mapply_opname
  *
  * For the moment, this is completely wrong.
  *)
-let mimplies_intro_extract addrs params goal subgoals =
-   let subgoals, ext = Lm_list_util.split_last subgoals in
-   let v = dest_var ext in
-      mk_mlambda_term v goal
+let (mimplies_intro_extract : ml_extract) = fun addrs params goal subgoals args rest ->
+      match rest with
+         [f] ->
+            let fv = free_vars_terms args in
+            let v = maybe_new_var_set var_x fv in
+               mk_mlambda_term v (f (args @ [mk_var_term v]))
+       | _ ->
+            raise (RefineError ("mimplies_intro_extract", StringError "illegal extract"))
 
 let mimplies_intro_code addrs params goal assums =
    let t1, t2 = dest_mimplies_term goal in
@@ -112,26 +118,29 @@ ml_rule mimplies_intro : mimplies{'t1; 't2} =
  * Elimination rule.
  *
  *     S1 --> ... --> (T1 ==> T2) --> ... --> T1
- *     S1 --> ... --> (T1 ==> T2) --> ... --> T1 -->  Sn
+ *     S1 --> ... --> (T1 ==> T2) --> ... --> T2 -->  Sn
  *     ------------------------------------------------- [elim]
  *     S1 --> ... --> (T1 ==> T2) --> ... --> Sn
  *
  * JYH: this should be checked.  We build a function
  * by quantifying over T1, which must be a variable.
  *)
-let mimplies_elim_extract addrs params goal subgoals =
-   let subgoals, ext = Lm_list_util.split_last subgoals in
-   let v = dest_var ext in
-      mk_mlambda_term v goal
+let mimplies_elim_extract i addrs params goal subgoals args rest =
+   match rest with
+      [assum1; assum2] ->
+         let f = List.nth args i in
+         let x = assum1 args in
+            assum2 (args @ [mk_mapply_term f x])
+    | _ ->
+         raise (RefineError ("mimplies_elim_extract", StringError "illegal extract"))
 
 let mimplies_elim_code addrs params goal assums =
-   eprintf "mimplies_elim_code@.";
    let i = get_pos_assum_from_params params assums in
    let t = nth_assum assums i in
    let t1, t2 = dest_mimplies_term t in
    let seq1 = mk_msequent t1 assums in
    let seq2 = mk_msequent goal (assums @ [t2]) in
-      [seq1; seq2], mimplies_elim_extract
+      [seq1; seq2], mimplies_elim_extract i
 
 ml_rule mimplies_elim_rule 'i : 'T =
    mimplies_elim_code

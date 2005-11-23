@@ -28,6 +28,9 @@ extends Base_theory
 extends Meta_util
 extends Meta_dtactic
 
+open Lm_printf
+
+open Simple_print
 open Basic_tactics
 open Refiner.Refiner.Refine
 
@@ -122,17 +125,19 @@ let mimplies_elim_extract addrs params goal subgoals =
       mk_mlambda_term v goal
 
 let mimplies_elim_code addrs params goal assums =
+   eprintf "mimplies_elim_code@.";
    let i = get_pos_assum_from_params params assums in
    let t = nth_assum assums i in
    let t1, t2 = dest_mimplies_term t in
    let seq1 = mk_msequent t1 assums in
-   let seq2 = mk_msequent goal (assums @ [t1]) in
+   let seq2 = mk_msequent goal (assums @ [t2]) in
       [seq1; seq2], mimplies_elim_extract
 
-ml_rule mimplies_elim_rule 'i : mimplies{'t1; 't2} =
+ml_rule mimplies_elim_rule 'i : 'T =
    mimplies_elim_code
 
 let mimplies_elim i =
+   eprintf "mimplies_elim@.";
    mimplies_elim_rule (mk_meta_num i)
 
 (************************************************************************
@@ -151,6 +156,10 @@ interactive test1 'S :
    sequent { <H> >- 'S } -->
    mimplies{sequent { <H> >- 'S }; sequent { <H> >- 'T }} -->
    sequent { <H> >- 'T }
+
+interactive test2 :
+   mimplies{sequent { <H> >- 'S }; sequent { <H> >- 'T }} -->
+   mimplies{sequent { <H> >- 'S }; sequent { <H> >- 'T }}
 
 (*!
  * @docoff

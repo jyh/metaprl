@@ -15,6 +15,7 @@ MPFILES[] =
     meta_struct
     meta_implies
     meta_context_terms
+    meta_context_ind1
     meta_extensions_theory
 
 Theory($(MPFILES))
@@ -27,6 +28,7 @@ PRINT_THEORIES[] =
     meta_struct
     meta_implies
     meta_context_terms
+    meta_context_ind1
 
 TheoryDocumentInstall(base-extensions, $(PRINT_THEORIES))
 

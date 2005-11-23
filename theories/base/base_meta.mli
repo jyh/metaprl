@@ -81,6 +81,7 @@ ml_rw reduce_meta_lt_str : meta_lt[a:s, b:s]{'tt; 'ff}
 ml_rw reduce_meta_lt_lev : meta_lt[a:l, b:l]{'tt; 'ff}
 
 val mk_meta_num : int -> term
+val dest_meta_num : term -> int
 
 (*
  * -*-

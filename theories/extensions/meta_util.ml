@@ -1,5 +1,4 @@
 (*
- * Forms for context induction.
  *
  * ----------------------------------------------------------------
  *
@@ -26,27 +25,37 @@
  *)
 extends Base_theory
 
-(*
- * The meta-lambda calculus.
- *)
-declare type HFun{'a : Ty; 'b : Ty; 'c : Ty}
+open Basic_tactics
 
-declare hlambda{'B : 'b; x : 'a. 'e['x] : 'c} : HFun{'a; 'b; 'c}
-declare happly{'h : HFun{'a; 'b; 'c}; 'e : 'a} : 'c
-declare htype{'h : HFun{'a; 'b; 'c}} : 'b
+open Base_meta
 
 (*
- * Sequent constructors.
+ * Translate an assumption number.
  *)
-declare concl{'arg : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}; 'concl : 'c} : 'd
-declare hyp{'B : 'b; x : 'a. 'e['x] : 'd} : 'd
+let get_pos_assum_num i assums =
+   let len = List.length assums in
+   let i =
+      if i < 0 then
+         len - i + 1
+      else
+         i
+   in
+      if i < 1 || i > len then
+         raise (RefineError ("get_nth_assum", StringIntError ("assumption number is out of range", i)));
+      i
 
-(*
- * Destructors.
- *)
-declare sequent_ind{x : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}, y : 'c. 'concl['x; 'y] : 'result;
-                    h : HFun{'a; 'b; 'result}. 'step['h] : 'result;
-                    'e : 'd} : 'result
+let get_pos_assum_from_params params assums =
+   let i =
+      match params with
+         t :: _ ->
+            dest_meta_num t
+       | [] ->
+            raise (RefineError ("move_to_goal_code", StringError "no arguments"))
+   in
+      get_pos_assum_num i assums
+
+let nth_assum assums i =
+   List.nth assums (i - 1)
 
 (*!
  * @docoff

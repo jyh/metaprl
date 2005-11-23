@@ -24,7 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Perv
 extends Base_theory
 
 open Basic_tactics

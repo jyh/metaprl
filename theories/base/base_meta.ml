@@ -161,6 +161,10 @@ dform prod_df : meta_prod[m:n,n:n] = slot[m:n] `" *" subm space slot[n:n]
 let mk_meta_num i =
    <:con< meta_num[$int:i$] >>
 
+let meta_num_opname = opname_of_term << meta_num[i:n] >>
+let dest_meta_num t =
+   Lm_num.int_of_num (dest_number_term meta_num_opname t)
+
 (*
  * -*-
  * Local Variables:

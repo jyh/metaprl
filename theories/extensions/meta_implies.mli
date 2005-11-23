@@ -1,5 +1,5 @@
 (*
- * Forms for context induction.
+ * Add terms and ML rules for higher-order rules.
  *
  * ----------------------------------------------------------------
  *
@@ -26,27 +26,14 @@
  *)
 extends Base_theory
 
-(*
- * The meta-lambda calculus.
- *)
-declare type HFun{'a : Ty; 'b : Ty; 'c : Ty}
-
-declare hlambda{'B : 'b; x : 'a. 'e['x] : 'c} : HFun{'a; 'b; 'c}
-declare happly{'h : HFun{'a; 'b; 'c}; 'e : 'a} : 'c
-declare htype{'h : HFun{'a; 'b; 'c}} : 'b
+open Basic_tactics
 
 (*
- * Sequent constructors.
+ * The meta-implication and proof terms.
  *)
-declare concl{'arg : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}; 'concl : 'c} : 'd
-declare hyp{'B : 'b; x : 'a. 'e['x] : 'd} : 'd
-
-(*
- * Destructors.
- *)
-declare sequent_ind{x : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}, y : 'c. 'concl['x; 'y] : 'result;
-                    h : HFun{'a; 'b; 'result}. 'step['h] : 'result;
-                    'e : 'd} : 'result
+declare mimplies{'premise : Judgment; 'rest : Judgment} : Judgment
+declare mlambda{x. 'e['x]}
+declare mapply{'e1; 'e2}
 
 (*!
  * @docoff

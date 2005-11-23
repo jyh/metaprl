@@ -10,7 +10,11 @@ MLZFILES[] =
 
 # Library files
 MPFILES[] =
+    meta_util
+    meta_dtactic
+    meta_implies
     meta_context_terms
+    meta_extensions_theory
 
 Theory($(MPFILES))
 
@@ -18,6 +22,8 @@ Theory($(MPFILES))
 # Documentation
 #
 PRINT_THEORIES[] =
+    meta_dtactic
+    meta_implies
     meta_context_terms
 
 TheoryDocumentInstall(base-extensions, $(PRINT_THEORIES))

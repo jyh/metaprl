@@ -1,0 +1,28 @@
+THEORYNAME = base-extensions
+THEORYDESCR = Basic Meta-Theory Extensions
+
+THEORY_DEPS[] = meta/base
+
+# Common files
+MLZFILES[] =
+    meta_extensions_theory
+
+# Library files
+MPFILES[] =
+    meta_util
+    meta_dtactic
+    meta_struct
+    meta_implies
+    meta_context_terms
+    meta_context_ind1
+    meta_extensions_theory
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

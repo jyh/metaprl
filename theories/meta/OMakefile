@@ -1,43 +1,36 @@
-OCAMLINCLUDES += $(SUPPORT_DIRS)
-THEORYNAME = base
+THEORYNAME = meta
 THEORYDESCR = Basic Meta-Theory
 
-THEORY_DEPS[] =
+MLZFILES =
 
-# Common files
-MLZFILES[] =
-    base_theory
+DIRS[] =
+    base
+    extensions
 
-# Library files
-MPFILES[] =
-    base_trivial
-    base_meta
-    base_rewrite
-    base_reflection
-    base_operator
-    base_grammar
-    base_theory
-
-Theory($(MPFILES))
+VirtualTheory($(DIRS))
 
 #
 # Documentation
 #
 PRINT_THEORIES[] =
-    base_theory
+    base/base_theory
     $(SUPPORT)/tactics/top_tacticals
     $(SUPPORT)/tactics/top_conversionals
     $(SUPPORT)/tactics/var
     $(SUPPORT)/tactics/auto_tactic
     $(SUPPORT)/tactics/dtactic
-    base_trivial
-    base_rewrite
+    base/base_trivial
+    base/base_rewrite
     $(SUPPORT)/display/summary
     $(SUPPORT)/display/comment
     $(SUPPORT)/shell/mptop
-#    base_reflection
+    extensions/meta_dtactic
+    extensions/meta_struct
+    extensions/meta_implies
+    extensions/meta_context_terms
+    extensions/meta_context_ind1
 
-TheoryDocumentInstall(base, $(PRINT_THEORIES))
+TheoryDocumentInstall(itt, $(PRINT_THEORIES))
 
 #
 # Clean up

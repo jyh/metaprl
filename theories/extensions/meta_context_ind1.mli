@@ -26,6 +26,12 @@
  *)
 extends Meta_implies
 
+open Basic_tactics
+
+topval contextIndT : term -> term -> tactic
+topval contextPushIndT : term -> int -> tactic
+topval contextHoistIndT : term -> int -> tactic
+
 (*!
  * @docoff
  *

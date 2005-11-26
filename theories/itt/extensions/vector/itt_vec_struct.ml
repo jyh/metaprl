@@ -40,6 +40,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_struct
+extends Meta_extensions_theory
 doc docoff
 
 open Basic_tactics
@@ -47,6 +48,18 @@ open Basic_tactics
 interactive context_thin 'H 'J :
    sequent { <H>; <K> >- 'C } -->
    sequent { <H>; <J<||> >; <K<|H|> > >- 'C<|H;K|> }
+
+interactive exchange 'H :
+   sequent { <H>; y: 'A2; x: 'A1; <J['x; 'y]> >- 'C['x; 'y] } -->
+   sequent { <H>; x: 'A1; y: 'A2; <J['x; 'y]> >- 'C['x; 'y] }
+
+interactive context_exchange_lemma 'H 'J :
+   sequent { <H>; <J>; x: 'A; <K['x]> >- 'C['x] } -->
+   sequent { <H>; x: 'A; <J>; <K['x]> >- 'C['x] }
+
+interactive context_exchange 'H 'J 'K :
+   sequent { <H>; <K>; <J>; <L> >- 'C } -->
+   sequent { <H>; <J>; <K<|H|> >; <L> >- 'C }
 
 (*!
  * @docoff

@@ -68,6 +68,8 @@ val dest_hyp_term : term -> var * term * term
 val mk_hlambda_term : var -> term -> term -> term
 val dest_hlambda_term : term -> var * term * term
 
+topval reduce_concl_conv : conv
+
 (*!
  * @docoff
  *

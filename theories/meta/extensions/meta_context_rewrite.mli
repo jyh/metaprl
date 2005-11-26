@@ -27,6 +27,15 @@
 extends Meta_rewrite
 extends Meta_context_ind1
 
+(*
+ * Split the hyp.
+ *)
+declare sequent_ind{u : 'b, v : HFun{'a; 'b; 'c}. 'step['u; 'v] : 'c; 'e : SequentCore{'a; 'b; 'c}} : 'c
+
+declare sequent_ind{x : 'c. 'concl['x] : 'result;
+                    u : 'b, v : HFun{'a; 'b; 'result}. 'step['u; 'v] : 'result;
+                    'e : SequentCore{'a; 'b; 'c}} : 'result
+
 (*!
  * @docoff
  *

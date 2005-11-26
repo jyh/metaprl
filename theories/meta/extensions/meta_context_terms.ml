@@ -26,7 +26,10 @@
  *)
 extends Base_theory
 
+open Lm_printf
+
 open Basic_tactics
+open Simple_print
 
 doc <:doc<
    The meta-lambda calculus includes typed functions << hlambda{'A; x. 'e['x]} >>
@@ -162,14 +165,17 @@ let reduce_concl t =
    let x, y, concl, h, step, s = dest_sequent_ind_term t in
    let arg = Refiner.Refiner.TermMan.args s in
    let c = mk_concl_constrain_term x y arg concl in
+      eprintf "Term: %s@." (SimplePrint.string_of_term c);
       reduce_sequent_ind_base1 c
+
+let reduce_concl_conv = termC reduce_concl
 
 (*
  * Add the reductions.
  *)
 let resource reduce +=
    [<< hyp{'A; x. sequent ['arg] { <H['x]> >- 'C['x] }} >>, termC reduce_hyp;
-    << sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { >- 'C }} >>, termC reduce_concl]
+    << sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { <H> >- 'C }} >>, termC reduce_concl]
 
 (*!
  * @docoff

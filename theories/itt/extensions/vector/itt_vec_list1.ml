@@ -61,7 +61,7 @@ doc docoff
 let fold_vlist = makeFoldC << vlist{| <H> |} >> unfold_vlist
 
 doc <:doc<
-   Reductions.
+   Reductions.x
 >>
 interactive_rw reduce_vlist_nil {| reduce |} :
    vlist{||}
@@ -69,7 +69,7 @@ interactive_rw reduce_vlist_nil {| reduce |} :
    nil
 
 interactive_rw reduce_vlist_cons :
-   vlist{| x: 'e; <J['x]> |}
+   vlist{| y: 'e; <J['y]> |}
    <-->
    cons{'e; vlist{| <J['e]> |}}
 

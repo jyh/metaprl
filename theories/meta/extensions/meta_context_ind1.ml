@@ -51,6 +51,7 @@ doc docoff
 
 open Lm_printf
 
+open Perv
 open Simple_print
 open Term_man_sig
 open Basic_tactics
@@ -205,15 +206,17 @@ let state_trans state var_mode =
 (*
  * Generalize to the left version of the term.
  *
- *    mode: one of the replacement modes
+ *    f: terms can be transformed during induction
+ *    bv: base context name
+ *    t: the term to be transformed
  *    v: the original context var
  *    vsrc: the src context var
  *    vdst: the target context var
  *    cv1, x, cv2: the context it is being replaced with
  *    info: the map to new variable names
- *
+ *    mode: one of the replacement modes
  *)
-let generalize_term t v vsrc vdst cv1 x x_A cv2 info mode =
+let generalize_term f bv t v vsrc vdst cv1 x x_A cv2 info mode =
    let x_t = mk_var_term x in
    let rec generalize_term state t =
       if is_var_term t then
@@ -310,9 +313,10 @@ let generalize_term t v vsrc vdst cv1 x x_A cv2 info mode =
                               hyps
 
                            (* original context *)
-                         | SrcVar, FinalMode, _
-                         | DstVar, BaseMode, _ ->
+                         | SrcVar, FinalMode, _ ->
                               Context (v, remove_context_vars cs vsrc vdst, ts) :: hyps
+                         | DstVar, BaseMode, _ ->
+                              Context (bv, remove_context_vars cs vsrc vdst, ts) :: hyps
 
                            (* context 1 *)
                          | SrcVar, LeftMode, StartState
@@ -326,16 +330,23 @@ let generalize_term t v vsrc vdst cv1 x x_A cv2 info mode =
                                  Context (cv2, cs, x_t :: ts) :: hyps
 
                            (* context 1, var *)
-                         | SrcVar, RightMode, StartState
+                         | SrcVar, RightMode, StartState ->
+                              let t_A = mk_so_var_term x_A (cv1 :: cs) [] in
+                                 Hypothesis (x, t_A) :: Context (cv1, cs, ts) :: hyps
                          | DstVar, LeftMode, StartState ->
                               let t_A = mk_so_var_term x_A (cv1 :: cs) [] in
+                              let t_A = f t_A in
                                  Hypothesis (x, t_A) :: Context (cv1, cs, ts) :: hyps
 
                            (* var, context 2 *)
-                         | SrcVar, RightMode, DstState
+                         | SrcVar, RightMode, DstState ->
+                              let cs = replace_var2 cs vsrc vdst cv1 in
+                              let t_A = mk_so_var_term x_A cs [] in
+                                 Context (cv2, cs, x_t :: ts) :: Hypothesis (x, t_A) :: hyps
                          | DstVar, LeftMode, SrcState ->
                               let cs = replace_var2 cs vsrc vdst cv1 in
                               let t_A = mk_so_var_term x_A cs [] in
+                              let t_A = f t_A in
                                  Context (cv2, cs, x_t :: ts) :: Hypothesis (x, t_A) :: hyps
 
                            (* Some other context *)
@@ -408,8 +419,9 @@ let v_x = Lm_symbol.add "x"
 let v_A = Lm_symbol.add "A"
 let v_S = Lm_symbol.add "S"
 let v_T = Lm_symbol.add "T"
+let v_B = Lm_symbol.add "B"
 
-let generalize_of_term v t =
+let generalize_of_term f b v t =
    let fv, info = new_vars_table t in
 
    (* We want to allow these to be passed on the command line *)
@@ -427,7 +439,16 @@ let generalize_of_term v t =
    let fv = SymbolSet.add fv x_A in
 
    let cv2 = maybe_new_var_set v_T fv in
-      generalize_term t v vsrc vdst cv1 x x_A cv2 info
+   let fv = SymbolSet.add fv x_A in
+
+   (* Base variable *)
+   let bv =
+      if b then
+         maybe_new_var_set v_B fv
+      else
+         v
+   in
+      generalize_term f bv t v vsrc vdst cv1 x x_A cv2 info
 
 (************************************************************************
  * Context induction.
@@ -436,15 +457,29 @@ let context_ind_extract addrs params goal subgoals args rest =
    raise (Invalid_argument "context_ind_extract: not implemented")
 
 let context_ind_code addrs params goal assums =
-   let t_v, t_step =
+   let t_v, t_step, t_trans =
       match params with
-         [t_v; t_step] ->
-            t_v, t_step
+         [t_v; t_step; t_trans] ->
+            t_v, t_step, t_trans
        | _ ->
-            raise (RefineError ("Meta_context_ind1", StringError "context_ind_code requires two arguments"))
+            raise (RefineError ("Meta_context_ind1", StringError "context_ind_code requires three arguments"))
    in
+
+   (* Context variable on which to perform induction *)
    let v = context_var_of_sequent t_v in
-   let gen = generalize_of_term v t_step in
+
+   (* Possibly transform the term as it is shifted *)
+   let b = is_bind1_term t_trans in
+   let f =
+      if b then
+         let x, t = dest_bind1 t_trans in
+            (fun v -> subst1 t x v)
+      else
+         (fun v -> v)
+   in
+
+   (* Term generalization *)
+   let gen = generalize_of_term f b v t_step in
 
    (* Base case *)
    let seq_base = mk_msequent (gen BaseMode) assums in
@@ -458,14 +493,23 @@ let context_ind_code addrs params goal assums =
    let seq_final = mk_msequent goal (assums @ [gen FinalMode]) in
       [seq_base; seq_step; seq_final], context_ind_extract
 
-ml_rule context_ind 't_v 't_step : 'T =
+ml_rule context_ind 't_v 't_step 't_trans : 'T =
    context_ind_code
 
-let contextIndT t_v t_step =
-   context_ind t_v t_step
-   thenLT [addHiddenLabelT "base";
-           addHiddenLabelT "step";
-           addHiddenLabelT "main"]
+let it_term = << it >>
+
+let context_ind_p t_v t_step p =
+   let t_trans =
+      try get_with_arg p with
+         RefineError _ ->
+            it_term
+   in
+      context_ind t_v t_step t_trans
+      thenLT [addHiddenLabelT "base";
+              addHiddenLabelT "step";
+              addHiddenLabelT "main"]
+
+let contextIndT t_v t_step = funT (context_ind_p t_v t_step)
 
 (************************************************************************
  * Variation: push the context in by a number of turnstiles.
@@ -756,7 +800,6 @@ and search_hoist_bterm_list v i btl =
 let context_hoist_ind t_v i p =
    let v = context_var_of_sequent t_v in
    let _, t_step = search_hoist_term v i (Sequent.goal p) in
-      eprintf "Sequent term: %s@." (SimplePrint.string_of_term t_step);
       contextIndT t_v t_step
 
 let contextHoistIndT t_v i =

@@ -28,16 +28,16 @@ extends Base_theory
 
 open Basic_tactics
 
-declare guard{'e}
-declare sequent ["rewrite_context"] { Term : Term >- Term }
-
-topval fold_guard : conv
-topval rewriteSOVarT : tactic
+(*
+ * Term quantifier for rewrites.
+ *)
+declare Term{'e}
 
 (*
- * ML code.
+ * Tactics.
  *)
-val dest_rewrite_context_term : term -> SeqHyp.t * term
+topval rewriteSOVarT : tactic
+topval rewriteHLambdaT : tactic
 
 (*!
  * @docoff

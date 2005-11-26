@@ -34,28 +34,8 @@ open Meta_rewrite
 open Meta_context_terms
 
 doc <:doc<
-   Two functions are equal if their bodies are equal.
+   There is a corresponding reduction rule on the right.
 >>
-interactive hlambda_equal bind{x. 'e1['x]} bind{x. 'e2['x]} :
-   sequent { <H> >- rewrite_context{| <J>; x: 'A >- Perv!"rewrite"{'e1['x]; 'e2['x]} |} } -->
-   sequent { <H> >- rewrite_context{| <J> >- Perv!"rewrite"{hlambda{'A; x. 'e1['x]}; hlambda{'A; x. 'e2['x]}} |} }
-
-doc docoff
-
-let hlambda_rw p =
-   let t = Sequent.concl p in
-   let _, t = dest_rewrite_context_term t in
-   let t1, t2 = dest_rewrite_term t in
-   let x1, _, t1 = dest_hlambda_term t1 in
-   let x2, _, t2 = dest_hlambda_term t2 in
-   let t1 = mk_bind1_term x1 t1 in
-   let t2 = mk_bind1_term x2 t2 in
-      hlambda_equal t1 t2
-
-let hlambda_rw = funT hlambda_rw
-
-open Basic_tactics
-
 interactive_rw reduce_sequent_ind_right {| reduce |} :
    sequent_ind{h. 'step['h]; Sequent{| <J>; x: 'A >- 'C['x] |}}
    <-->

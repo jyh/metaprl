@@ -906,8 +906,8 @@ T	t366	o363
 B	b366	t366
 NSummary!ty_term	ty_term	ty_term Summary
 O	o372	ty_term
-NMeta_context_rewrite	Meta_context_rewrite	Meta_context_rewrite NIL
-NMeta_context_rewrite!sequent_ind	sequent_ind372	sequent_ind Meta_context_rewrite
+NMeta_context_terms2	Meta_context_terms2	Meta_context_terms2 NIL
+NMeta_context_terms2!sequent_ind	sequent_ind372	sequent_ind Meta_context_terms2
 O	o374	sequent_ind372
 P	p374	Var u
 O	o375	var p374

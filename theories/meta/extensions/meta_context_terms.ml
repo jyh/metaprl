@@ -165,7 +165,6 @@ let reduce_concl t =
    let x, y, concl, h, step, s = dest_sequent_ind_term t in
    let arg = Refiner.Refiner.TermMan.args s in
    let c = mk_concl_constrain_term x y arg concl in
-      eprintf "Term: %s@." (SimplePrint.string_of_term c);
       reduce_sequent_ind_base1 c
 
 let reduce_concl_conv = termC reduce_concl

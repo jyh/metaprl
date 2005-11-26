@@ -31,7 +31,7 @@ extends Meta_implies
 extends Meta_context_terms
 extends Meta_context_ind1
 extends Meta_rewrite
-extends Meta_context_rewrite
+extends Meta_context_terms2
 
 (*!
  * @docoff

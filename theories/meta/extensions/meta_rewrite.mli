@@ -1,5 +1,5 @@
 (*
- * Context induction.
+ * Extended rewrites.
  *
  * ----------------------------------------------------------------
  *
@@ -24,14 +24,20 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Meta_implies
-extends Meta_context_terms
+extends Base_theory
 
 open Basic_tactics
 
-topval contextIndT : term -> term -> tactic
-topval contextPushIndT : term -> int -> tactic
-topval contextHoistIndT : term -> int -> tactic
+declare guard{'e}
+declare sequent ["rewrite_context"] { Term : Term >- Term }
+
+topval fold_guard : conv
+topval rewriteSOVarT : tactic
+
+(*
+ * ML code.
+ *)
+val dest_rewrite_context_term : term -> SeqHyp.t * term
 
 (*!
  * @docoff

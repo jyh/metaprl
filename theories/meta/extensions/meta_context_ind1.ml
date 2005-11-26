@@ -45,9 +45,13 @@ doc <:doc<
    @parents
 >>
 extends Meta_implies
+extends Meta_context_terms
 
 doc docoff
 
+open Lm_printf
+
+open Simple_print
 open Term_man_sig
 open Basic_tactics
 open Refiner.Refiner.Refine
@@ -311,25 +315,25 @@ let generalize_term t v vsrc vdst cv1 x x_A cv2 info mode =
                               Context (v, remove_context_vars cs vsrc vdst, ts) :: hyps
 
                            (* context 1 *)
-                         | SrcVar, RightMode, StartState
-                         | DstVar, LeftMode, StartState ->
+                         | SrcVar, LeftMode, StartState
+                         | DstVar, RightMode, StartState ->
                               Context (cv1, cs, ts) :: hyps
 
                            (* context 2 *)
-                         | SrcVar, RightMode, DstState
-                         | DstVar, LeftMode, SrcState ->
+                         | SrcVar, LeftMode, DstState
+                         | DstVar, RightMode, SrcState ->
                               let cs = replace_var2 cs vsrc vdst cv1 in
                                  Context (cv2, cs, x_t :: ts) :: hyps
 
                            (* context 1, var *)
-                         | SrcVar, LeftMode, StartState
-                         | DstVar, RightMode, StartState ->
+                         | SrcVar, RightMode, StartState
+                         | DstVar, LeftMode, StartState ->
                               let t_A = mk_so_var_term x_A (cv1 :: cs) [] in
                                  Hypothesis (x, t_A) :: Context (cv1, cs, ts) :: hyps
 
                            (* var, context 2 *)
-                         | SrcVar, LeftMode, DstState
-                         | DstVar, RightMode, SrcState ->
+                         | SrcVar, RightMode, DstState
+                         | DstVar, LeftMode, SrcState ->
                               let cs = replace_var2 cs vsrc vdst cv1 in
                               let t_A = mk_so_var_term x_A cs [] in
                                  Context (cv2, cs, x_t :: ts) :: Hypothesis (x, t_A) :: hyps
@@ -697,8 +701,8 @@ and search_hoist_hyps v i = function
          Hypothesis (x, t) ->
             let hoist1, t = search_hoist_term v i t in
             let hoist2, hyps = search_hoist_hyps v i hyps in
-            let hoist2, hyps =
-               match hoist2 with
+            let hoist1, hyps =
+               match hoist1 with
                   Some (0, cs, ts) ->
                      None, Context (v_dst, cs, ts) :: Hypothesis (x, t) :: hyps
                 | Some (i, cs, ts) ->
@@ -713,7 +717,10 @@ and search_hoist_hyps v i = function
             let hoist2, hyps = search_hoist_hyps v i hyps in
             let hoist3, hyps =
                if Lm_symbol.eq x v then
-                  Some (i, cs, ts), Context (v_src, v_dst :: cs, ts) :: hyps
+                  if i = 0 then
+                     None, Context (v_dst, cs, ts) :: Context (v_src, v_dst :: cs, ts) :: hyps
+                  else
+                     Some (pred i, cs, ts), Context (v_src, v_dst :: cs, ts) :: hyps
                else
                   None, Context (x, cs, ts) :: hyps
             in
@@ -749,6 +756,7 @@ and search_hoist_bterm_list v i btl =
 let context_hoist_ind t_v i p =
    let v = context_var_of_sequent t_v in
    let _, t_step = search_hoist_term v i (Sequent.goal p) in
+      eprintf "Sequent term: %s@." (SimplePrint.string_of_term t_step);
       contextIndT t_v t_step
 
 let contextHoistIndT t_v i =

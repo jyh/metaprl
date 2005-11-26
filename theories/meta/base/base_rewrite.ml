@@ -106,6 +106,7 @@ doc <:doc<
 interactive rewriteSym :
    sequent { <H> >- Perv!"rewrite"{'a; 'b} } -->
    sequent { <H> >- Perv!"rewrite"{'b; 'a} }
+
 doc docoff
 
 (*

@@ -54,9 +54,6 @@ declare hyp_constrain{'arg : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}; 'B : 'b; x : 'a
 declare concl_constrain{'arg : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd};
                         x : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}, y: 'c. 'concl : 'e}
 
-declare step_constrain{'arg : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd};
-                       h : HFun{'a; 'b; 'c}. 'step : 'e}
-
 doc <:doc<
    The << concl{'arg; 'c} >> produces a sequent with no hypotheses,
    conclusion << 'c >>, and sequent argument << 'arg >>.
@@ -78,20 +75,23 @@ doc <:doc<
    argument and << 'c >> is the conclusion.  In the step case, << 'h >> is a
    meta-lambda << hlambda{'A; x. 's['x]} >> that represents a hypothesis.
 >>
-prim_rw reduce_sequent_ind_base concl_constrain{'arg; x, y. 'concl['x; 'y]} :
-   sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { >- 'C }}
+prim_rw reduce_sequent_ind_base1 concl_constrain{'arg; x, y. 'concl['x; 'y]} :
+   sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { <H> >- 'C }}
    <-->
-   'concl['arg; 'C]
+   sequent_ind{h. 'step['h]; Sequent{| <H> >- 'concl['arg; 'C] |}}
 
-prim_rw reduce_sequent_ind_left step_constrain{'arg; h. 'step['h]} :
-   sequent_ind{a, c. 'concl['a; 'c]; h. 'step['h]; sequent ['arg] { x: 'A; <H['x]> >- 'C['x] }}
+(*
+ * Reduce the inner induction form.
+ *)
+prim_rw reduce_sequent_ind_base2 {| reduce |} :
+   sequent_ind{h. 'step['h]; Sequent{| >- 'C |}}
    <-->
-   'step[hlambda{'A; x. sequent_ind{a, c. 'concl['a; 'c]; h. 'step['h]; sequent ['arg] { <H['x]> >- 'C['x] }}}]
+   'C
 
-prim_rw reduce_sequent_ind_right step_constrain{'arg; h. 'step['h]} :
-   sequent_ind{a, c. 'concl['a; 'c]; h. 'step['h]; sequent ['arg] { <H>; x: 'A >- 'C['x] }}
+prim_rw reduce_sequent_ind_left {| reduce |} :
+   sequent_ind{h. 'step['h]; Sequent{| x: 'A; <H['x]> >- 'C['x] |}}
    <-->
-   sequent_ind{a, c. 'concl['a; 'c]; h. 'step['h]; sequent ['arg] { <H> >- 'step[hlambda{'A; x. 'C['x]}] }}
+   'step[hlambda{'A; x. sequent_ind{h. 'step['h]; Sequent{| <H['x]> >- 'C['x] |}}}]
 
 doc docoff
 
@@ -105,6 +105,10 @@ doc docoff
 let hyp_opname = opname_of_term << hyp{'A; x. 'e} >>
 let mk_hyp_term = mk_dep0_dep1_term hyp_opname
 let dest_hyp_term = dest_dep0_dep1_term hyp_opname
+
+let hlambda_opname = opname_of_term << hlambda{'A; x. 'e} >>
+let mk_hlambda_term = mk_dep0_dep1_term hlambda_opname
+let dest_hlambda_term = dest_dep0_dep1_term hlambda_opname
 
 let hyp_constrain_opname = opname_of_term << hyp_constrain{'arg; 'A; x. 'e} >>
 let mk_hyp_constrain_term = mk_dep0_dep0_dep1_term hyp_constrain_opname
@@ -154,36 +158,18 @@ let concl_constrain_opname = opname_of_term << concl_constrain{'arg; x, y. 'e} >
 let mk_concl_constrain_term = mk_dep0_dep2_term concl_constrain_opname
 let dest_concl_constrain_term = dest_dep0_dep2_term concl_constrain_opname
 
-let step_constrain_opname = opname_of_term << step_constrain{'arg; h. 'step} >>
-let mk_step_constrain_term = mk_dep0_dep1_term step_constrain_opname
-let dest_step_constrain_term = dest_dep0_dep1_term step_constrain_opname
-
 let reduce_concl t =
    let x, y, concl, h, step, s = dest_sequent_ind_term t in
    let arg = Refiner.Refiner.TermMan.args s in
    let c = mk_concl_constrain_term x y arg concl in
-      reduce_sequent_ind_base c
-
-let reduce_left t =
-   let x, y, concl, h, step, s = dest_sequent_ind_term t in
-   let arg = Refiner.Refiner.TermMan.args s in
-   let c = mk_step_constrain_term h arg step in
-      reduce_sequent_ind_left c
-
-let reduce_right t =
-   let x, y, concl, h, step, s = dest_sequent_ind_term t in
-   let arg = Refiner.Refiner.TermMan.args s in
-   let c = mk_step_constrain_term h arg step in
-      reduce_sequent_ind_right c
+      reduce_sequent_ind_base1 c
 
 (*
  * Add the reductions.
  *)
 let resource reduce +=
    [<< hyp{'A; x. sequent ['arg] { <H['x]> >- 'C['x] }} >>, termC reduce_hyp;
-    << sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { >- 'C }} >>, termC reduce_concl;
-    << sequent_ind{a, c. 'concl['a; 'c]; h. 'step['h]; sequent ['arg] { x: 'A; <H['x]> >- 'C['x] }} >>, termC reduce_left;
-    << sequent_ind{a, c. 'concl['a; 'c]; h. 'step['h]; sequent ['arg] { <H>; x: 'A >- 'C['x] }} >>, termC reduce_right]
+    << sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { >- 'C }} >>, termC reduce_concl]
 
 (*!
  * @docoff

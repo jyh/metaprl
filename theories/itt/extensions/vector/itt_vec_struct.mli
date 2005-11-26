@@ -1,5 +1,5 @@
 (*
- * Context induction.
+ * Structural rules for contexts.
  *
  * ----------------------------------------------------------------
  *
@@ -24,14 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Meta_implies
-extends Meta_context_terms
-
-open Basic_tactics
-
-topval contextIndT : term -> term -> tactic
-topval contextPushIndT : term -> int -> tactic
-topval contextHoistIndT : term -> int -> tactic
+extends Itt_struct
 
 (*!
  * @docoff

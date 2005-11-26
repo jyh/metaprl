@@ -26,6 +26,8 @@
  *)
 extends Base_theory
 
+open Basic_tactics
+
 (*
  * The meta-lambda calculus.
  *)
@@ -47,6 +49,24 @@ declare hyp{'B : 'b; x : 'a. 'e['x] : 'd} : 'd
 declare sequent_ind{x : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}, y : 'c. 'concl['x; 'y] : 'result;
                     h : HFun{'a; 'b; 'result}. 'step['h] : 'result;
                     'e : 'd} : 'result
+
+(*
+ * Core destructor.
+ *)
+declare type SequentCore{'a : Ty; 'b : Ty; 'c : Ty}
+
+declare sequent [Sequent] { 'a : 'b >- 'c } : SequentCore{'a; 'b; 'c}
+
+declare sequent_ind{h: HFun{'a; 'b; 'result}. 'step['h] : 'result; 'e : SequentCore{'a; 'b; 'result}} : 'result
+
+(*
+ * Terms.
+ *)
+val mk_hyp_term : var -> term -> term -> term
+val dest_hyp_term : term -> var * term * term
+
+val mk_hlambda_term : var -> term -> term -> term
+val dest_hlambda_term : term -> var * term * term
 
 (*!
  * @docoff

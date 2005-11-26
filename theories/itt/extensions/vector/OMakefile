@@ -1,0 +1,20 @@
+THEORYNAME = itt_vector
+THEORYDESCR = Extensions to Computational Type Theory - Vector operations
+
+THEORY_DEPS[] +=
+    meta/extensions
+    itt/core
+
+# Library files
+MPFILES[] =
+   itt_vec_struct
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

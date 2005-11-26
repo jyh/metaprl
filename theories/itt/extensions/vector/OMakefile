@@ -7,7 +7,9 @@ THEORY_DEPS[] +=
 
 # Library files
 MPFILES[] =
+   itt_vec_dform
    itt_vec_struct
+   itt_vec_list1
 
 Theory($(MPFILES))
 

@@ -79,6 +79,42 @@ interactive_rw reduce_sequent_ind_nil3 {| reduce |} :
    <-->
    sequent_ind{u, v. 'step['u; 'v]; Sequent{| <J> >- 'c['C] |}}
 
+doc <:doc<
+   Derive the rules for the term sequent.
+>>
+prim_rw unfold_TermSequent : TermSequent{| <J> >- 'C |} <-->
+   Sequent{| <J> >- 'C |}
+
+interactive_rw reduce_term_sequent_ind_nil1 {| reduce |} :
+   sequent_ind{h. 'step['h]; TermSequent{| >- 'C |}}
+   <-->
+   'C
+
+interactive_rw reduce_term_sequent_ind_left1 {| reduce |} :
+   sequent_ind{h. 'step['h]; TermSequent{| x: 'A; <J['x]> >- 'C['x] |}}
+   <-->
+   'step[hlambda{'A; x. sequent_ind{h. 'step['h]; TermSequent{| <J['x]> >- 'C['x] |}}}]
+
+interactive_rw reduce_term_sequent_ind_right1 {| reduce |} :
+   sequent_ind{h. 'step['h]; TermSequent{| <J>; x: 'A >- 'C['x] |}}
+   <-->
+   sequent_ind{h. 'step['h]; TermSequent{| <J> >- 'step[hlambda{'A; x. 'C['x]}] |}}
+
+interactive_rw reduce_term_sequent_ind_nil2 {| reduce |} :
+   sequent_ind{u, v. 'step['u; 'v]; TermSequent{| >- 'C |}}
+   <-->
+   'C
+
+interactive_rw reduce_term_sequent_ind_left2 {| reduce |} :
+   sequent_ind{u, v. 'step['u; 'v]; TermSequent{| x: 'A; <J['x]> >- 'C['x] |}}
+   <-->
+   'step['A; hlambda{'A; x. sequent_ind{u, v. 'step['u; 'v]; TermSequent{| <J['x]> >- 'C['x] |}}}]
+
+interactive_rw reduce_term_sequent_ind_right2 {| reduce |} :
+   sequent_ind{u, v. 'step['u; 'v]; TermSequent{| <J>; x: 'A >- 'C['x] |}}
+   <-->
+   sequent_ind{u, v. 'step['u; 'v]; TermSequent{| <J> >- 'step['A; hlambda{'A; x. 'C['x]}] |}}
+
 (*!
  * @docoff
  *

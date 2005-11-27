@@ -427,6 +427,7 @@ let num_equal t p =
 let check_num_equalT n t = funT (fun p ->
    if num_equal t p >= n then raise eq_exn else idT)
 
+(*
 let auto_dT =
    argfunT (fun i p ->
       let t = Sequent.nth_assum p i in
@@ -453,6 +454,7 @@ let resource auto += [ {
    auto_tac = onSomeHypT auto_dT;
    auto_type = AutoComplete;
 }]
+ *)
 
 (*
  * Add meta_dT 0 to the browser.

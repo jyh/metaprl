@@ -28,6 +28,11 @@ extends Meta_rewrite
 extends Meta_context_ind1
 
 (*
+ * In the common case, the sequents are defined over terms.
+ *)
+declare sequent [TermSequent] { Term : Term >- Term } : SequentCore{Term; Term; Term}
+
+(*
  * Split the hyp.
  *)
 declare sequent_ind{u : 'b, v : HFun{'a; 'b; 'c}. 'step['u; 'v] : 'c; 'e : SequentCore{'a; 'b; 'c}} : 'c

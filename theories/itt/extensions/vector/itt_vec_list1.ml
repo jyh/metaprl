@@ -104,6 +104,8 @@ interactive vlist_split_wf 'J :
    [wf] sequent { <H> >- vlist{| <J> >- vlist{| <K> >- 'l |} |} in list{'A} } -->
    sequent { <H> >- vlist{| <J>; <K> >- 'l |} in list{'A} }
 
+doc docoff
+
 (************************************************************************
  * Display forms.
  *)

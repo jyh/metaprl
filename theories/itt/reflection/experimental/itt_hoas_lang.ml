@@ -52,7 +52,7 @@ open Basic_tactics
 doc terms
 
 doc <:doc<
-     We define the type <<Lang{'sop}>> as the recursive type.
+    We define the type <<Lang{'sop}>> as a recursive type.
     The << compatible_shapes{'depth; 'shape; 'subterms} >> predicate defines when
     a list of subterms << 'subterms >> is compatible with a specific operator.
 

@@ -59,16 +59,21 @@ production xterm_term{dest_bterm{'t; l, r. 'var_case; bdepth, op, subterms. 'op_
 (*
  * Define a grammar of reflected terms.
  *)
-declare tok_quote_term   : Terminal
+declare tok_bquote_term  : Terminal
+declare tok_squote_term  : Terminal
 declare tok_unquote_term : Terminal
 
-lex_token xterm : "[$]`"  --> tok_quote_term
+lex_token xterm : "[$]`"  --> tok_bquote_term
+lex_token xterm : "[$]'"  --> tok_squote_term
 lex_token xterm : "[$],"  --> tok_unquote_term
 
-lex_prec nonassoc [tok_quote_term; tok_unquote_term] = prec_not
+lex_prec nonassoc [tok_squote_term; tok_bquote_term; tok_unquote_term] = prec_not
 
 production xterm_term{xquote{'depth; 't}} <--
-   tok_quote_term; tok_left_brack; xterm_term{'depth}; tok_right_brack; xterm_term{'t}
+   tok_squote_term; tok_left_brack; xterm_term{'depth}; tok_right_brack; xterm_term{'t}
+
+production xterm_term{xquote{0; 't}} <--
+   tok_bquote_term; xterm_term{'t}
 
 production xterm_term{xunquote{'t}} <--
    tok_unquote_term; xterm_term{'t}

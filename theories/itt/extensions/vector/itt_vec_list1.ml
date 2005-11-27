@@ -54,7 +54,7 @@ doc <:doc<
    The vector list produces a list from the hyps.
 >>
 prim_rw unfold_vlist : vlist{| <H> >- 'C |} <-->
-   sequent_ind{c. nil; u, v. cons{'u; happly{'v; 'u}}; Sequent{| <H> >- 'C |}}
+   sequent_ind{u, v. cons{'u; happly{'v; 'u}}; Sequent{| <H> >- 'C |}}
 
 doc docoff
 
@@ -64,31 +64,45 @@ doc <:doc<
    Reductions.x
 >>
 interactive_rw reduce_vlist_nil {| reduce |} :
-   vlist{||}
+   vlist{| >- 'l |}
    <-->
-   nil
+   'l
 
 interactive_rw reduce_vlist_cons :
-   vlist{| y: 'e; <J['y]> |}
+   vlist{| y: 'e; <J['y]> >- 'l['y] |}
    <-->
-   cons{'e; vlist{| <J['e]> |}}
+   cons{'e; vlist{| <J['e]> >- 'l['e] |}}
+
+interactive_rw reduce_vlist_tail :
+   vlist{| <J>; x: 'e >- 'l['x] |}
+   <-->
+   vlist{| <J> >- cons{'e; 'l['e]} |}
+
+interactive_rw hoist_vlist_tail :
+   vlist{| <J> >- cons{'e; 'l} |}
+   <-->
+   vlist{| <J>; 'e >- 'l |}
+
+interactive_rw flatten_tail :
+   vlist{| <J>; x: 'e >- 'l['x] |}
+   <-->
+   vlist{| <J>; 'e >- 'l['e] |}
 
 doc <:doc<
    Well-formedness for vector sequents.
 >>
 interactive vlist_nil_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'A Type } -->
-   sequent { <H> >- vlist{||} in list{'A} }
+   [wf] sequent { <H> >- 'l in list{'A} } -->
+   sequent { <H> >- vlist{| >- 'l |} in list{'A} }
 
 interactive vlist_cons_wf {| intro [] |} :
    [wf] sequent { <H> >- 'e in 'A } -->
-   [wf] sequent { <H> >- vlist{| <J['e]> |} in list{'A} } -->
-   sequent { <H> >- vlist{| x: 'e; <J['x]> |} in list{'A} }
+   [wf] sequent { <H> >- vlist{| <J['e]> >- 'l['e] |} in list{'A} } -->
+   sequent { <H> >- vlist{| x: 'e; <J['x]> >- 'l['x] |} in list{'A} }
 
 interactive vlist_split_wf 'J :
-   [wf] sequent { <H> >- vlist{| <J> |} in list{'A} } -->
-   [wf] sequent { <H> >- vlist{| <K> |} in list{'A} } -->
-   sequent { <H> >- vlist{| <J>; <K<|H|> > |} in list{'A} }
+   [wf] sequent { <H> >- vlist{| <J> >- vlist{| <K> >- 'l |} |} in list{'A} } -->
+   sequent { <H> >- vlist{| <J>; <K> >- 'l |} in list{'A} }
 
 (************************************************************************
  * Display forms.

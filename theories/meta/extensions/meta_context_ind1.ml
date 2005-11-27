@@ -657,6 +657,7 @@ and search_push_bterm_list v i btl =
 let context_push_ind t_v i p =
    let v = context_var_of_sequent t_v in
    let t_step = search_push_term v i (Sequent.goal p) in
+      eprintf "Step: %s@." (SimplePrint.string_of_term t_step);
       contextIndT t_v t_step
 
 let contextPushIndT t_v i =

@@ -100,6 +100,13 @@ type context_var =
  *)
 
 (*
+ * Canonical term.
+ *)
+let it_term = << it >>
+let it_opname = opname_of_term it_term
+let is_it_term = is_no_subterms_term it_opname
+
+(*
  * Get the first context var in a sequent.
  *)
 let context_var_of_sequent t =
@@ -188,13 +195,13 @@ let context_var_mode v vsrc vdst =
  *)
 let state_trans state var_mode =
    match state, var_mode with
-      StartState, SrcVar ->
+      SrcState, DstVar
+    | DstState, SrcVar ->
+         FinalState
+    | StartState, SrcVar ->
          SrcState
     | StartState, DstVar ->
          DstState
-    | SrcState, DstVar
-    | DstState, SrcVar ->
-         FinalState
     | _, NoVar ->
          state
     | SrcState, SrcVar
@@ -421,12 +428,8 @@ let v_S = Lm_symbol.add "S"
 let v_T = Lm_symbol.add "T"
 let v_B = Lm_symbol.add "B"
 
-let generalize_of_term f b v t =
+let generalize_of_term f b v t vsrc vdst =
    let fv, info = new_vars_table t in
-
-   (* We want to allow these to be passed on the command line *)
-   let vsrc = v_src in
-   let vdst = v_dst in
 
    (* Induction vars *)
    let x = maybe_new_var_set v_x fv in
@@ -479,7 +482,7 @@ let context_ind_code addrs params goal assums =
    in
 
    (* Term generalization *)
-   let gen = generalize_of_term f b v t_step in
+   let gen = generalize_of_term f b v t_step v_src v_dst in
 
    (* Base case *)
    let seq_base = mk_msequent (gen BaseMode) assums in
@@ -496,8 +499,9 @@ let context_ind_code addrs params goal assums =
 ml_rule context_ind 't_v 't_step 't_trans : 'T =
    context_ind_code
 
-let it_term = << it >>
-
+(*
+ * Shifting form of context induction.
+ *)
 let context_ind_p t_v t_step p =
    let t_trans =
       try get_with_arg p with

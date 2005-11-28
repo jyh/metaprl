@@ -5,11 +5,15 @@ THEORY_DEPS[] +=
     meta/extensions
     itt/core
 
+MLZFILES[] =
+   itt_vec_theory
+
 # Library files
 MPFILES[] =
    itt_vec_dform
    itt_vec_struct
    itt_vec_list1
+   itt_vec_theory
 
 Theory($(MPFILES))
 

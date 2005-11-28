@@ -5,18 +5,20 @@ THEORY_DEPS[] +=
     meta/extensions
     itt/core
     itt/reflection/core
+    itt/extensions/vector
 
 MPFILES[] =
-   itt_hoas_lang
-   itt_hoas_bterm
-   itt_hoas_util
-   itt_hoas_sequent
-   itt_hoas_sequent_term
-   itt_hoas_proof
-   itt_hoas_sequent_proof
-   itt_hoas_sequent_tactics
-   itt_hoas_meta_types
-   itt_hoas_theory
+    itt_hoas_vec_bind
+    itt_hoas_lang
+    itt_hoas_bterm
+    itt_hoas_util
+    itt_hoas_sequent
+    itt_hoas_sequent_term
+    itt_hoas_proof
+    itt_hoas_sequent_proof
+    itt_hoas_sequent_tactics
+    itt_hoas_meta_types
+    itt_hoas_theory
 
 Theory($(MPFILES))
 

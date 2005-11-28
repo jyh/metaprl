@@ -121,7 +121,7 @@ interactive var_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'r in nat } -->
    sequent{ <H> >- var{'l;'r} in BTerm }
 
-interactive mk_bterm_bt_wf {| intro [] |}:
+interactive mk_bterm_bt_wf {| intro [] |} :
    [wf] sequent{ <H> >- 'n in nat } -->
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
@@ -129,24 +129,37 @@ interactive mk_bterm_bt_wf {| intro [] |}:
    sequent{ <H> >- compatible_shapes{'depth; shape{'op}; 'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth; 'op; 'subterms} in BT{'n+@1} }
 
-interactive mk_bterm_wf {| intro [] |}:
+interactive mk_bterm_wf {| intro [] |} :
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
    [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'depth; shape{'op}; 'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth; 'op; 'subterms} in BTerm }
 
-interactive mk_term_wf {| intro [] |}:
+interactive mk_bterm_wf2 {| intro [] |} :
+   [wf] sequent{ <H> >- 'd1 = 'd2 in nat } -->
+   [wf] sequent{ <H> >- 'op in Operator } -->
+   [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
+   sequent{ <H> >- compatible_shapes{'d1; shape{'op}; 'subterms} } -->
+   sequent{ <H> >- mk_bterm{'d1; 'op; 'subterms} in BTerm{'d2} }
+
+interactive_rw fold_mk_term :
+   mk_term{'op; 'subterms}
+   <-->
+   mk_bterm{0; 'op; 'subterms}
+
+interactive mk_term_wf {| intro [] |} :
    [wf] sequent{ <H> >- 'op in Operator } -->
    [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{0; shape{'op}; 'subterms} } -->
    sequent{ <H> >- mk_term{'op; 'subterms} in BTerm }
 
-interactive mk_term_wf2 {| intro [] |}:
-   [wf] sequent{ <H> >- 'op in Operator } -->
-   [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
-   sequent{ <H> >- compatible_shapes{0; shape{'op}; 'subterms} } -->
-   sequent{ <H> >- mk_term{'op; 'subterms} in BTerm{0} }
+interactive mk_term_wf2 {| intro [] |} :
+   [wf] sequent { <H> >- 'd = 0 in "nat" } -->
+   [wf] sequent { <H> >- 'op in Operator } -->
+   [wf] sequent { <H> >- 'subterms in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{0; shape{'op}; 'subterms} } -->
+   sequent { <H> >- mk_term{'op; 'subterms} in BTerm{'d} }
 
 interactive  bt_elim_squash2  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
@@ -186,11 +199,6 @@ interactive_rw dest_bterm_mk_bterm2 {| reduce |} :
    dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
    <-->
    'op_case['n; 'op; 'subterms]
-
-interactive_rw fold_mk_term :
-   mk_term{'op; 'subterms}
-   <-->
-   mk_bterm{0; 'op; 'subterms}
 
 interactive_rw dest_bterm_mk_term2 {| reduce |} :
    'op in Operator -->
@@ -509,15 +517,6 @@ interactive beq_bterm_list_elim {| elim [] |} 'H :
    [wf] sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 't2 in list{BTerm} } -->
    sequent { <H>; u: 't1 = 't2 in list{BTerm}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 'C['u] }
-
-let _ = ();;
-
-(************************************************************************
- * Extensionality.
- *)
-interactive bind_extensionality :
-   sequent { <H>; z: BTerm{0} >- subst{bind{x. 'e1['x]}; 'z} = subst{bind{x. 'e2['x]}; 'z} in BTerm } -->
-   sequent { <H> >- bind{x. 'e1['x]} = bind{x. 'e2['x]} in BTerm }
 
 (*!
  * @docoff

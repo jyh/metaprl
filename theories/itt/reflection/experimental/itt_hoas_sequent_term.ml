@@ -169,6 +169,23 @@ interactive_rw reduce_is_std_sequent_hyp {| reduce |} : <:xrewrite<
    is_std_sequent{e2}
 >>
 
+interactive_rw reduce_is_std_sequent_concl_bterm {| reduce |} : <:xrewrite<
+   d IN "nat" -->
+   e IN BTerm{d} -->
+   is_std_sequent{$'[d] sconcl{e}}
+   <-->
+   "btrue"
+>>
+
+interactive_rw reduce_is_std_sequent_hyp_bterm {| reduce |} : <:xrewrite<
+   d IN "nat" -->
+   e1 IN BTerm{d} -->
+   e2 IN BTerm{d +@ 1} -->
+   is_std_sequent{mk_bterm{d; $shyp{e; x. r}; [e1; e2]}}
+   <-->
+   is_std_sequent{e2}
+>>
+
 interactive is_std_sequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- e IN "BTerm" -->
    <H> >- is_std_sequent{e} IN "bool"
@@ -273,38 +290,18 @@ interactive flatten_sequent_wf1 {| intro [] |} : <:xrule<
    <H> >- flatten_sequent{e} IN PreSequent{bdepth{e}}
 >>
 
+interactive flatten_sequent_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN StdSequent{d} -->
+   <H> >- flatten_sequent{e} IN PreSequent{d}
+>>
+
 (************************************************************************
  * Well-formedness of sequents.
  *)
-doc <:doc<
-   A sequent is well-formed if the conclusion and all hypotheses are
-   closed BTerms.
->>
-declare sequent [sequent_wf] { Term : Term >- Term } : Term
-
-prim_rw unfold_sequent_wf : <:xrewrite<
-   "sequent_wf"{| <J> >- C |}
-   <-->
-   sequent_ind{u, v. (u IN BTerm{0} && all x: BTerm{0}. happly{v; x}); "TermSequent"{| <J> >- C IN BTerm{0} |}}
->>
-
-doc docoff
 
 (*
  * Reductions.
  *)
-interactive_rw wf_sequent_concl {| reduce |} : <:xrewrite<
-   "sequent_wf"{| >- C |}
-   <-->
-   C IN BTerm{0}
->>
-
-interactive_rw wf_sequent_left {| reduce |} : <:xrewrite<
-   "sequent_wf"{| x: A; <J[x]> >- C[x] |}
-   <-->
-   A IN BTerm{0} && all x: BTerm{0}. "sequent_wf"{| <J[x]> >- C[x] |}
->>
-
 interactive_rw std_sequent_concl {| reduce |} : <:xrewrite<
    "std_sequent"{| >- C |}
    <-->
@@ -320,20 +317,39 @@ interactive_rw std_sequent_left {| reduce |} : <:xrewrite<
 (*
  * Well-formedness.
  *)
-interactive std_sequent_concl_wf {| intro [] |} : <:xrule<
+interactive std_sequent_concl_wf1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- d1 = d2 in "nat" -->
+   "wf" : <H> >- e IN BTerm{d2} -->
+   <H> >- $'[d1] sconcl{e} IN StdSequent{d2}
+>>
+
+interactive std_sequent_concl_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- d = 0 in "nat" -->
    "wf" : <H> >- e IN BTerm{0} -->
-   <H> >- $`sconcl{e} IN "StdSequent"
+   <H> >- $`sconcl{e} IN StdSequent{d}
 >>
 
-interactive std_sequent_hyp_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- h IN BTerm{0} -->
-   "wf" : <H>; x: BTerm{0} >- e[x] IN StdSequent{0} -->
-   <H> >- $`shyp{h; x. e[x]} IN StdSequent{0}
+interactive std_sequent_hyp_wf1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- d1 = d2 in "nat" -->
+   "wf" : <H> >- e1 IN BTerm{d2} -->
+   "wf" : <H> >- e2 IN StdSequent{d2 +@ 1} -->
+   <H> >- mk_bterm{d1; $shyp{e; x. r}; [e1; e2]} IN StdSequent{d2}
 >>
 
-interactive std_sequent_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- "sequent_wf"{| <J> >- C |} -->
-   <H> >- "std_sequent"{| <J> >- C |} IN StdSequent{0}
+interactive std_sequent_hyp_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- d = 0 in "nat" -->
+   "wf" : <H> >- e1 IN BTerm{0} -->
+   "wf" : <H> >- e2 IN StdSequent{1} -->
+   <H> >- mk_term{$shyp{e; x. r}; [e1; e2]} IN StdSequent{d}
+>>
+
+(************************************************************************
+ * The final theorem.
+ *)
+interactive bsequent_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- arg IN BTerm{0} -->
+   "wf" : <H> >- "std_sequent"{| <J> >- C |} IN StdSequent{0} -->
+   <H> >- bsequent{arg}{| <J> >- C |} IN "Sequent"
 >>
 
 (************************************************************************

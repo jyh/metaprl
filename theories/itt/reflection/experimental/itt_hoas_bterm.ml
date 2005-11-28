@@ -136,6 +136,18 @@ interactive mk_bterm_wf {| intro [] |}:
    sequent{ <H> >- compatible_shapes{'depth; shape{'op}; 'subterms} } -->
    sequent{ <H> >- mk_bterm{'depth; 'op; 'subterms} in BTerm }
 
+interactive mk_term_wf {| intro [] |}:
+   [wf] sequent{ <H> >- 'op in Operator } -->
+   [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
+   sequent{ <H> >- compatible_shapes{0; shape{'op}; 'subterms} } -->
+   sequent{ <H> >- mk_term{'op; 'subterms} in BTerm }
+
+interactive mk_term_wf2 {| intro [] |}:
+   [wf] sequent{ <H> >- 'op in Operator } -->
+   [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->
+   sequent{ <H> >- compatible_shapes{0; shape{'op}; 'subterms} } -->
+   sequent{ <H> >- mk_term{'op; 'subterms} in BTerm{0} }
+
 interactive  bt_elim_squash2  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
    [base] sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
@@ -174,6 +186,19 @@ interactive_rw dest_bterm_mk_bterm2 {| reduce |} :
    dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
    <-->
    'op_case['n; 'op; 'subterms]
+
+interactive_rw fold_mk_term :
+   mk_term{'op; 'subterms}
+   <-->
+   mk_bterm{0; 'op; 'subterms}
+
+interactive_rw dest_bterm_mk_term2 {| reduce |} :
+   'op in Operator -->
+   'subterms in list{BTerm} -->
+   compatible_shapes{0; shape{'op}; 'subterms} -->
+   dest_bterm{mk_term{'op; 'subterms}; l, r.'var_case['l; 'r]; bdepth, op, subterms. 'op_case['bdepth; 'op; 'subterms] }
+   <-->
+   'op_case[0; 'op; 'subterms]
 
 interactive_rw mk_dest_reduce {| reduce |}:
    't in BTerm  -->
@@ -484,6 +509,15 @@ interactive beq_bterm_list_elim {| elim [] |} 'H :
    [wf] sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 't2 in list{BTerm} } -->
    sequent { <H>; u: 't1 = 't2 in list{BTerm}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 'C['u] }
+
+let _ = ();;
+
+(************************************************************************
+ * Extensionality.
+ *)
+interactive bind_extensionality :
+   sequent { <H>; z: BTerm{0} >- subst{bind{x. 'e1['x]}; 'z} = subst{bind{x. 'e2['x]}; 'z} in BTerm } -->
+   sequent { <H> >- bind{x. 'e1['x]} = bind{x. 'e2['x]} in BTerm }
 
 (*!
  * @docoff

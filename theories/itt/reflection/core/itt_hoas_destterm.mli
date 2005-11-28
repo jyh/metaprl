@@ -72,7 +72,7 @@ lex_prec nonassoc [tok_squote_term; tok_bquote_term; tok_unquote_term] = prec_no
 production xterm_term{xquote{'depth; 't}} <--
    tok_squote_term; tok_left_brack; xterm_term{'depth}; tok_right_brack; xterm_term{'t}
 
-production xterm_term{xquote{0; 't}} <--
+production xterm_term{xquote{'t}} <--
    tok_bquote_term; xterm_term{'t}
 
 production xterm_term{xunquote{'t}} <--

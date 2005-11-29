@@ -11,7 +11,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2003 Jason Hickey, Caltech
+   Copyright (C) 2003-2005 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
-   Modified By:
+   Modified By: Mojave Group
    @end[license]
 >>
 extends M_doc_comment
@@ -56,11 +56,10 @@ bidirectional and neither imply nor presuppose any particular order of
 application.  Rewrite application is guided by programs in the
 meta-language of the logical framework.
 
-There are many advantages to using higher-order abstract syntax and formal rewrites.
-Program scoping
-and substitution are managed implicitly by the logical framework; it
-is not possible to specify a program transformation that modifies the
-program scope.  Perhaps most importantly, the correctness of the
+There are many advantages to using higher-order abstract syntax and formal rewrites.  Program
+scoping and substitution are managed implicitly by the logical framework; it is not possible to
+specify a program transformation that modifies the program scope @cite[NH02].
+Perhaps most importantly, the correctness of the
 compiler is dependent only on the rewriting rules.  Programs that
 guide the application of rewrites do not have to be trusted because
 they are required to use rewrites for all program transformations.  If
@@ -100,8 +99,8 @@ language, means that variables cannot be manipulated directly in the
 formal system; operations that modify the program scope, such as
 capturing substitution, are difficult if not impossible to express
 formally.  In addition, global program transformations, in which
-several parts of a program are modified simultaneously, can sometimes
-be difficult to express with term rewriting.
+several parts of a program are modified simultaneously, have to be split into a sequence of ``small
+step'' term rewrites, which be difficult at times.
 
 The most significant impact of using a formal system is that program
 representations must permit a substitution semantics.  Put another
@@ -258,7 +257,7 @@ $e'$.
 (*
  * -*-
  * Local Variables:
- * fill-column: 70
+ * fill-column: 100
  * End:
  * -*-
  *)

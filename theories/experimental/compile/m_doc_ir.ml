@@ -9,7 +9,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2003 Jason Hickey, Caltech
+   Copyright (C) 2003-2005 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Mojave Group
    @end[license]
 >>
 extends M_doc_comment
@@ -351,6 +351,12 @@ $$
     @end[array]}}
 @end[array]
 $$
+Here @xrewref[int] and @xrewref[var] specify that variables and numerical constants do not have to
+be further translated --- so we simply pass the original variable or numerical constant to
+meta-continuation. The @xrewref[add] rewrite specifies that in order to translate $e_1 + e_2$, we
+need to first translate $e_1$ (passing the result as $v_1), continuing with translation of $e_2$
+(passing the result as $v_2), continuing with passing the IR expression $@AtomBinop{+; v_1; v_2}$ to
+the original meta-continuation.
 
 For conditionals, code duplication is avoided by wrapping the code
 after the conditional in a function, and calling the function at the

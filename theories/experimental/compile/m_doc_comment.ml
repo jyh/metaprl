@@ -120,6 +120,9 @@ dform math_xand_df1 : mode[tex] :: math_xand =
 dform math_xand_df2 : except_mode[tex] :: math_xand =
    math_bf["and "]
 
+dform xrewref_df : mode[tex] :: xrewref[label:s] =
+   izone `"{\\xrewref{" ezone slot[label:s] izone `"}}" ezone
+
 dform math_xrewrite_df : mode[tex] :: math_xrewrite[label:s]{'e1; 'e2} =
    izone `"{\\xrewrite{" ezone
    slot[label:s]

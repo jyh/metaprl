@@ -435,7 +435,7 @@ $$}}
 
 @item{{The comparison operand has the form $@Cmp[CMP]{o_1; o_2; e}$, where the processor's
 condition code register is modified by the instruction.  We do not model the condition code register
-explicitly in our current account.  However, doing so would allow more greater flexibility during
+explicitly in our current account.  However, doing so would allow greater flexibility during
 code-motion optimizations on the assembly.}}
 
 @item{{The unconditional branch operation $@Jmp[JMP]{o; {o_1, @ldots, o_n}}$ branches to the

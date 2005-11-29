@@ -37,6 +37,7 @@ declare math_xthen
 declare math_xelse
 declare math_xreserve
 declare math_xand
+declare xrewref[label:s]
 declare math_xrewrite[label:s]{'e1; 'e2}
 declare math_xrewrite2[label:s]{'e1; 'e2}
 declare math_semleft

@@ -113,13 +113,14 @@ approach of Danvy and Fellinski @cite[DF92]. We currently use this approach in o
 compiler @cite["GHNT04,HNG05"]; the specification of the CPS transformation ends up being even
 simpler than Danvy and Fellinski's because of the efficiency of the HOAS language that we use.
 
-This paper can be considered to be a first step in a much larger project. Of of our main goals for
+This paper can be considered to be a first step in a much larger project. One of our main goals for
 this step was to investigate the feasibility of this approach in a small case study. We believe that
 we have demonstrated that at least on this level the approach we propose is definitely feasible. In
-fact, almost every time the reality of this work did not match our expectations it was because tis
+fact, almost every time the reality of this work did not match our expectations it was because this
 approach turned out to be @emph{easier} than we have originally anticipated. Now that this case
 study have demonstrated the feasibility of this approach @emph{in principle}, we have moved on to
 implementing a more realistic compiler for a strongly-typed ML-like language @cite["GHNT04,HNG05"].
+
 This second-generation formal compiler is already implemented, for the most part. In addition to
 taking advantage of the lessons learned in this case study (such as using Danvy an Fellinski's
 approach to CPS and using nested sequents @cite[GHNT04] to represent recursive functions), one of

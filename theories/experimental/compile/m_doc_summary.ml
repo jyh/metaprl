@@ -109,9 +109,35 @@ all the rewrites for the CPS term become simply parts of the @emph{definition} o
 transformation. All the work required to prove that the transformation does not change the meaning
 of the program goes into establishing that the corresponding @tt[cps_prog] rule is valid. This
 approach makes it much easier to specify the CPS transformation in an optimal way, following the
-approach of Danvy and Fellinski @cite[DF92]. We currently use this approach in our work-in-progress compiler; the
-specification of the CPS transformation ends up being even simpler than Danvy and Fellinski's
-because of the efficiency of the HOAS language that we use.
+approach of Danvy and Fellinski @cite[DF92]. We currently use this approach in our work-in-progress
+compiler @cite["GHNT04,HNG05"]; the specification of the CPS transformation ends up being even
+simpler than Danvy and Fellinski's because of the efficiency of the HOAS language that we use.
+
+This paper can be considered to be a first step in a much larger project. Of of our main goals for
+this step was to investigate the feasibility of this approach in a small case study. We believe that
+we have demonstrated that at least on this level the approach we propose is definitely feasible. In
+fact, almost every time the reality of this work did not match our expectations it was because tis
+approach turned out to be @emph{easier} than we have originally anticipated. Now that this case
+study have demonstrated the feasibility of this approach @emph{in principle}, we have moved on to
+implementing a more realistic compiler for a strongly-typed ML-like language @cite["GHNT04,HNG05"].
+This second-generation formal compiler is already implemented, for the most part. In addition to
+taking advantage of the lessons learned in this case study (such as using Danvy an Fellinski's
+approach to CPS and using nested sequents @cite[GHNT04] to represent recursive functions), one of
+the main goals of the second-generation compiler work was to explore the issues of @emph{modularity}
+and @emph{feature isolation}. This goal was successfully achieved as well --- we were able to
+structure the compiler in such a way that different language features are cleanly isolated and
+experimentation with one of the language features can not break compilation of unrelated features.
+
+The fact that in our approach all the program transformations are @emph{individually} semantics
+preserving, together with feature isolation and modularity of the second-generation compiler makes
+our compilers readily amenable to incremental verification (including both on-paper verification
+and computer-aided formal proofs). While verification was not among the goals of our compiler case
+studies, it is among the gaols of the larger project. It is also one of our larger goals to explore
+formally the issues of correctness and programming language meta-theory.  In a related
+effort @cite[NKYH05], we are investigating the use of reflection as a means for meta-reasoning
+about formal artifacts.  We expect that reflection will provide a generic mechanism for
+automatically internalizing the artifacts specified in a prover, including those presented here, and
+programming language meta-theory in general.
 
 @section["related-work"]{Related work}
 

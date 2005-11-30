@@ -146,12 +146,14 @@ $$
    @line{@Mov{v'; v}}
    @line{@ASM{e[v]}}
    @end[array]}}}
+@line{{}}
 @line{@xrewrite2[if1]{@ASM{@If{a; e_1; e_2}};
   {@begin[array,t,l]
    @line{@ASM{a; @it{test}}}
    @line{@Cmp[CMP]{@ImmediateNumber{0}; @it{test}}}
    @line{@Jcc[J]{NZ; @ASM{e_1}; @ASM{e_2}}}
    @end[array]}}}
+@line{{}}
 @line{@xrewrite2[if2]{@ASM{@If{@AtomRelop{@it{op}; a_1; a_2}; e_1; e_2}};
   {@begin[array,t,l]
    @line{@ASM{a_1; v_1}}
@@ -159,6 +161,7 @@ $$
    @line{@Cmp[CMP]{v_1; v_2}}
    @line{@Jcc[J]{@ASM{@it{op}}; @ASM{e_1}; @ASM{e_2}}}
    @end[array]}}}
+@line{{}}
 @line{@xrewrite2[sub]{@ASM{@LetSubscript{a_1; a_2; v; e[v]}};
   {@begin[array,t,l]
    @line{@ASM{a_1; v_1}}
@@ -201,6 +204,7 @@ $$
    @line{@StoreTuple{p; 0; @it{tuple}}}
    @line{@ASM{e[v]}}
    @end[array]}}
+@line{{}}
 @line{@xrewrite2[closure]{@ASM{@LetClosure{a_1; a_2; v; e[v]}};
    @begin[array,t,l]
    @line{@Reserve{@ImmediateNumber{3}}}
@@ -214,6 +218,7 @@ $$
    @line{@Inst2Reg[ADD]{@ImmediateNumber{4}; @Register{v}; p}}
    @line{@ASM{e[p]}}
    @end[array]}}
+@line{{}}
 @line{@xrewrite2[call]{@ASM{@TailCall{'a; @it{args}}};
    @begin[array,t,l]
    @line{@ASM{a; @it{closure}}}
@@ -226,9 +231,12 @@ $$
 @caption{Translation of memory operations to x86 assembly}
 @end[figure]
 
-During a subscript operation, shown in the @tt{sub} translation, the index is compared against the
-number of words in the block as indicated in the header word, and a bounds-check exception is raised
-if the index is out-of-bounds (denoted with the instruction $@Jcc[J]{@it[AE]; @it{bounds.error}}$).
+The @tt{sub} rule shows the translation of an array subscripting operation.  Here the index is
+compared against the number of words in the block as indicated in the header word, and a
+bounds-check exception is raised if the index is out-of-bounds (denoted with the instruction
+$@Jcc[J]{@it[AE]; @it{bounds.error}}$).  There is a similar rule for projecting values from
+the tuples for closure environments, where the bounds-check may be omitted.
+
 When a block of memory is allocated in the @misspelled{@tt{alloc}} and @misspelled{@tt{closure}}
 rules, the first step reserves storage with the $@Reserve{i}$ term, and then the data is allocated
 and initialized.  Figure @reffigure[asmhelp] shows the implementation of some of
@@ -249,19 +257,23 @@ $$
    @line{@Cmp[CMP]{i; @Register{@it{free}}}}
    @line{@Jcc[J]{@CC["b"]; @it{gc}(i); e}}
    @end[array]}}
+@line{{}}
 @line{@xrewrite2[stuple1]{@StoreTuple{p; i; {(a :: @it{args})}; e};
    @begin[array,t,l]
    @line{@ASM{a; v}}
    @line{@Inst2Mem[MOV]{v; @MemRegOff{p; i}}}
    @line{@StoreTuple{p; i+4; @it{args}; e}}
    @end[array]}}
+@line{{}}
 @line{@xrewrite[stuple2]{@StoreTuple{p; i; (); e}; e}}
+@line{{}}
 @line{@xrewrite2[copy1]{@CopyArgs{{(a :: @it{args})}; @it{vargs}; v; e[v]};
    @begin[array,t,l]
    @line{@ASM{a; v'}}
    @line{@Mov{v'; v}}
    @line{@CopyArgs{@it{args}; {(@Register{v} :: @it{vargs})}; v; e[v]}}
    @end[array]}}
+@line{{}}
 @line{@xrewrite2[copy2]{@CopyArgs{(); @it{vargs}; v; e[v]}; e[@ReverseArgs{@it{vargs}}]}}
 @end[array]
 $$

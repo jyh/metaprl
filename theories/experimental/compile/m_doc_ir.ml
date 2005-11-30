@@ -245,7 +245,8 @@ conflicting purposes.  It should be a fairly low-level language so
 that translation to machine code is as straightforward as possible.
 However, it should be abstract enough that program transformations and
 optimizations need not be overly concerned with implementation detail.
-The intermediate representation we use is similar to the functional
+The intermediate representations we use throughout this work are variants of A-normal form
+@cite[FSDF93].  These representations are similar to the functional
 intermediate representations used by several groups
 @cite["App92,fir-tr1,Tar97"], in which the language retains a similarity to an
 ML-like language where all intermediate values apart from arithmetic

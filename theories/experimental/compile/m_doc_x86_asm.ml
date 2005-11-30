@@ -465,12 +465,13 @@ functions.
 
 Since the source language contains first-class functions (and we have introduced continuations as
 well), the most straightforward approach to memory management is to use a garbage collector.  We
-adopt a data representation similar to that used in the Objective Caml runtime @cite[OCaml], where
+adopt a data representation similar to that used in the Objective Caml runtime @cite[OCaml97], where
 all heap data has one of two forms, it is either 1) a block of memory, with a header word that
 specifies the size of the block, or 2) it is a single machine word that specifies an integer.
 Furthermore, we adopt the OCaml convention that all blocks are aligned to machine-word boundaries,
 and integer values have 31 significant bits, where the least significant bit in the machine word is
-always 1.  A diagram of these values is shown in Figure @reffigure[datarep].
+always 1.
+A diagram of these values is shown in Figure @reffigure[datarep].
 
 @begin[figure,datarep]
 @begin[center]

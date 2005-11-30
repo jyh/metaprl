@@ -394,6 +394,11 @@ $$
 @end[array]
 $$
 
+All the rewrites for the AST to IR translation are automatically collected by the @MetaPRL system
+into a syntax-directed lookup table (each rewrite is annotated with the name of the appropriate table)
+and creates the tactic for sweeping the program and performing all the applicable transformations
+@cite[HN04].
+
 >>
 
 (*

@@ -91,7 +91,7 @@ function body is modified so that references to variables that were defined outs
 now references to the environment parameter.  In addition, when a function is passed as a value, the
 function is paired with the environment as a @emph{closure}.
 
-The difficult part of closure conversion is the construction of the environment, and the
+The difficult part of closure conversion in HOAS setting is the construction of the environment, and the
 modification of variables in the function bodies.  We can formalize closure conversion as a sequence
 of steps, each of which preserves the program's semantics.  In the first step, we must modify each
 function definition by adding a new environment parameter.  To represent this, we replace each

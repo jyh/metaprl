@@ -106,6 +106,9 @@ $$
             {d[@CloseRecVar{R; @frame}]};
             {e[@CloseRecVar{R; @frame}]}}}
 $$
+The new $@CloseRec{R; @frame; f; d; e[@frame]}$ expression is an administrative term that helps up keep track
+of the progress of the closure conversion; it will be eliminated from the program by the end of the
+closure conversion.
 
 The second part of closure conversion does the closure operation using two operations.  For the first part,
 suppose we have some expression $e$ with a free variable $v$.  We can abstract this variable using a

@@ -231,15 +231,23 @@ reflexively.  Normally, when a second-order variable $v[]$ has an
 empty free-variable set $[]$, we omit the brackets and use the simpler
 notation $v$.
 
+Rewrites provide a mechanism for transforming programs, but they are not self-directed.
+LCF-style @cite{GMW79} @emph{tactics} direct the compilation process, deciding when and where to
+apply rewrites.  @MetaPRL's tactic language is @OCaml @cite[Caml99].  When a rewrite is defined in
+@MetaPRL, the framework creates an @OCaml expression that can be used to apply the rewrite.  Code to
+guide the application of rewrites is then written in @OCaml, using a rich set of primitives provided
+by @MetaPRL.
 
-@MetaPRL is a tactic-based prover that uses @OCaml @cite[Caml99] as
-its meta-language.  When a rewrite is defined in @MetaPRL, the
-framework creates an @OCaml expression that can be used to apply the
-rewrite.  Code to guide the application of rewrites is written in
-@OCaml, using a rich set of primitives provided by @MetaPRL.  @MetaPRL
-automates the construction of most guidance code; we describe rewrite
-strategies only when necessary.  For clarity, we will describe syntax
-and rewrites using the displayed forms of terms.
+Tactic code can use any possible technique for deciding which rule or rewrite to apply next,
+including inspecting the program intentionally,  manufacturing terms, or even consulting oracles.
+However, the @emph{only} way for a tactic to manipulate the compilation is by applying rules or
+rewrites.  A beneficial consequence of this is that if all the rules and rewrites in the compiler
+are semantics-preserving, then tactics need not be trusted.  Under these circumstances, errors in
+tactics can prevent compilation progress, but they cannot corrupt a compilation.  The desire to keep
+rules and rewrites semantics-preserving is one of the primary design goals in our methodology.
+
+@MetaPRL automates the construction of most guidance code; we describe rewrite strategies only when
+necessary.  For clarity, we will describe syntax and rewrites using the displayed forms of terms.
 
 The compilation process is expressed in @MetaPRL as a judgment of
 the form ${@Gamma @vdash @compilable{e}}$, which states the the

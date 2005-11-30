@@ -11,7 +11,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2003 Jason Hickey, Caltech
+   Copyright (C) 2003-2005 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified By: Mojave Group
    @end[license]
 >>
 extends M_doc_comment
@@ -133,7 +133,7 @@ The fact that in our approach all the program transformations are @emph{individu
 preserving, together with feature isolation and modularity of the second-generation compiler makes
 our compilers readily amenable to incremental verification (including both on-paper verification
 and computer-aided formal proofs). While verification was not among the goals of our compiler case
-studies, it is among the gaols of the larger project. It is also one of our larger goals to explore
+studies, it is among the goals of the larger project. It is also one of our larger goals to explore
 formally the issues of correctness and programming language meta-theory.  In a related
 effort @cite[NKYH05], we are investigating the use of reflection as a means for meta-reasoning
 about formal artifacts.  We expect that reflection will provide a generic mechanism for

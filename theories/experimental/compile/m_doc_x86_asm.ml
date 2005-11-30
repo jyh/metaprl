@@ -2,7 +2,7 @@
 doc <:doc<
    @begin[spelling]
    mem reg CMP DIV INC JEQ JGT JLT JMP MOV MUL cc cmp eax ebp ebx ecx
-   edi edx esi esp inst jcc jmp mov opcodes
+   edi edx esi esp inst jcc jmp mov opcodes Caml
    @end[spelling]
 
    @section[m_doc_x86_asm]{Scoped x86 assembly language}

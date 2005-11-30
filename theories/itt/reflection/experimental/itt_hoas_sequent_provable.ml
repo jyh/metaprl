@@ -32,7 +32,7 @@ extends Itt_tunion
 extends Itt_match
 extends Itt_hoas_proof
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_term
+extends Itt_hoas_sequent_term1
 extends Itt_hoas_sequent_proof
 extends Itt_hoas_vec_bind
 

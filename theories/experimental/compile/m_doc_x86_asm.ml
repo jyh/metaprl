@@ -502,7 +502,7 @@ These conventions provide run-time tags for the garbage collector.  Given a mach
 represents a heap-allocated value, the value is an integer if the least-significant-bit is set,
 otherwise it is a pointer to a heap-allocated block.
 
-We do not treat the topic of garbage collection verification in this paper.
+In this paper, we assume that the garbage collector is trusted.
 
 @subsubsection[calling]{Calling convention}
 

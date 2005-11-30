@@ -89,12 +89,11 @@ $a$ and substitutes it for the variable $v$ in assembly expression $e[v]$.
 
 The translation of atoms is primarily a translation of the IR names for values and the assembly
 names for operands.  A representative set of atom translations is shown in Figure
-@reffigure[asmatomtrans].  Since the language is untyped, we use a 31-bit representation of
-integers, where the least-significant-bit is always set to 1.  Since pointers are always
-word-aligned, this allows the garbage collector to differentiate between integers and pointers.  The
-division operation is the most complicated translation: first the operands $a_1$ and $a_2$ are
-shifted to obtain the standard integer representation, the division operation is performed, and the
-result is converted to a 31-bit representation.
+@reffigure[asmatomtrans].  As mentioned in Section @refsection[gc], we use a 31-bit representation
+of integers, where the least-significant-bit is always set to 1.  The division operation is the most
+complicated translation: first the operands $a_1$ and $a_2$ are shifted to obtain the standard
+integer representation, the division operation is performed, and the result is converted to a 31-bit
+representation.
 
 @begin[figure,asmatomtrans]
 $$
@@ -104,6 +103,7 @@ $$
 @line{@xrewrite[int]{@ASM{@AtomInt[i]; v; e[v]}; e[@ImmediateNumber{i*2+1}]}}
 @line{@xrewrite[var]{@ASM{@AtomVar{v_1}; v_2; e[v_2]}; e[@Register{v_1}]}}
 @line{@xrewrite[label]{@ASM{@AtomFunVar{R; l}; v; e[v]}; e[@ImmediateCLabel{R; l}]}}
+@line{{}}
 @line{@xrewrite2[add]{@ASM{@AtomBinop{+; a_1; a_2}; v; e[v]};
    {@begin[array,t,l]
     @line{@ASM{a_1; v_1}}
@@ -112,6 +112,7 @@ $$
     @line{@Inst1Reg[DEC]{@Register{@it{tmp}}; @it{sum}}}
     @line{{e[@Register{@it{sum}}]}}
     @end[array]}}}
+@line{{}}
 @line{@xrewrite2[div]{@ASM{@AtomBinop{/; a_1; a_2}; v; e[v]};
    {@begin[array,t,l]
     @line{@ASM{a_1; v_1}}
@@ -182,10 +183,7 @@ $$
 @end[figure]
 
 The memory operations shown in Figure @reffigure[asmmemtrans] are among the most complicated
-translations.  For the runtime, we use a contiguous heap and a copying garbage collector.
-The representation of all memory blocks in the heap includes a header word containing the number of
-bytes in the block (the number of bytes is always a multiple of the word size), following by one
-word for each field.  A pointer to a block points to the first field of the block (the word after
+translations.  By convention, a pointer to a block points to the first field of the block (the word after
 the header word).  The heap area itself is contiguous, delimited by $@it{base}$ and $@it{limit}$
 pointers; the next allocation point is in the $@it{next}$ pointer.  These pointers are accessed
 through the $@ContextRegister[name]$ pseudo-operand, which is later translated to an absolute memory

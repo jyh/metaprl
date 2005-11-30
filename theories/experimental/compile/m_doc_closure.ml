@@ -155,6 +155,7 @@ $$
 @line{@xrewrite2[arg]{@CloseFrame{@frame; @FunDef{l; @AtomFun{v; {e[@frame; v]}}; {d[@frame]}}};
    @FunDef{l; @AtomFun{@frame; @AtomFun{v; {e[@frame; v]}}}; @CloseFrame{@frame; {d[@frame]}}}}}
 
+@line{{}}
 @line{@xrewrite2[sub]{
    @begin[array,t,l]
    @line{@CloseSubscript{a_1; a_2; v_1}}

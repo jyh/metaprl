@@ -57,6 +57,7 @@ statement.  The following rewrites illustrate the process.
 $$
 @begin[array,l]
 @line{@xrewrite2[rmov]{@Mov{o; v; @AsmReserve{i; e[v]}}; @AsmReserve{i; @Mov{o; v; e[v]}}}}
+@line{{}}
 @line{@xrewrite2[rinst2]{@Inst2Reg[inst2]{o; o_r; v; @AsmReserve{i; e[v]}}; @AsmReserve{i; @Inst2Reg[inst2]{o; o_r; v; e[v]}}}}
 @end[array]
 $$
@@ -69,6 +70,7 @@ a reserve, it is always legal to introduce a reservation for $0$ bytes of storag
 $$
 @begin[array,l]
 @line{@xrewrite2[rif]{@Jcc[J]{@it[cc]; @AsmReserve{i_1; e_1}; @AsmReserve{i_2; e_2}}; @AsmReserve{{@it{max}(i_1; i_2)}; @Jcc[J]{@it[cc]; e_1; e_2}}}}
+@line{{}}
 @line{@xrewrite[rzero]{e; @AsmReserve{0; e}}}
 @end[array]
 $$

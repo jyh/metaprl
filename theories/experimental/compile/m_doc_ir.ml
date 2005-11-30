@@ -339,9 +339,12 @@ specified implicitly using higher-order abstract syntax.
 $$
 @begin[array,l]
 @line{@xrewrite[int]{@IR{i; v; e[v]}; e[@AtomInt[i]]}}
+@line{{}}
 @line{@xrewrite[var]{@IR{v_1; v_2; e[v_2]}; e[@AtomVar{v_1}]}}
+@line{{}}
 @line{@xrewrite2[add]{@IR{{e_1 + e_2}; v; e[v]};
 		        @IR{e_1; v_1; @IR{e_2; v_2; e[@AtomBinop{+; v_1; v_2}]}}}}
+@line{{}}
 @line{@xrewrite2[set]{@IR{e_1.[e_2] @leftarrow e_3; v; e_4[v]};
     @begin[array,t,l]
     @line{@IR{e_1; v_1}}
@@ -383,9 +386,12 @@ $$
 @begin[array,l]
 @line{@xrewrite2[letrec]{@IR{@LetRec{R; d; e_1}; v; e_2[v]};
     @LetRec{R; @IR{d}; @IR{e_1; v; e_2[v]}}}}
+@line{{}}
 @line{@xrewrite2[fun]{@IR{@FunDef{l; e; d}}; @FunDef{l; @IR{e; v; @Return{v}}; @IR{d}}}}
+@line{{}}
 @line{@xrewrite2[param]{@IR{@AtomParam{v_1; e_1[v_1]}; v_2; e_2[v_2]};
    @AtomFun{v_1; (@IR{e_1[v_1]; v_2; e_2[v_2]})}}}
+@line{{}}
 @line{@xrewrite2[abs]{@IR{@AtomFun{v_1; e_1[v_1]}; v_2; e_2[v_2]};
    @begin[array,t,l]
    @line{@LetRec{R}}

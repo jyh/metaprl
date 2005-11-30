@@ -37,11 +37,6 @@ doc docoff
 
 open Basic_tactics
 
-(*
- * Error term.
- *)
-declare Invalid_argument
-
 doc <:doc<
    A ``standard'' sequent is a << BTerm >> composed of hypotheses
    << shyp{'h; x. 'seq['x]} >> where << 'seq['x] >> must be
@@ -109,6 +104,7 @@ doc <:doc<
    as a list of BTerms of increasing depth.
 >>
 declare sequent [std_sequent] { Term : Term >- Term } : Term
+declare sequent [pre_sequent] { Term : Term >- Term } : Term
 
 prim_rw unfold_std_sequent : <:xrewrite<
    "std_sequent"{| <J> >- C |}
@@ -116,10 +112,16 @@ prim_rw unfold_std_sequent : <:xrewrite<
    sequent_ind{u, v. $`shyp{u; x. $,happly{v; x}}; "TermSequent"{| <J> >- $`sconcl{C} |}}
 >>
 
+prim_rw unfold_pre_sequent : <:xrewrite<
+   "pre_sequent"{| <J> >- C |}
+   <-->
+   flatten_sequent{"std_sequent"{| <J> >- C |}}
+>>
+
 prim_rw unfold_bsequent : <:xrewrite<
    bsequent{arg}{| <J> >- C |}
    <-->
-   let hyps, concl = flatten_sequent{"std_sequent"{| <J> >- C |}} in
+   let hyps, concl = "pre_sequent"{| <J> >- C |} in
       "sequent"{arg; hyps; concl}
 >>
 
@@ -254,10 +256,26 @@ interactive_rw reduce_flatten_sequent_concl {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw reduce_flatten_sequent_hyp {| reduce |} : <:xrewrite<
-   e1 IN "BTerm" -->
-   e2 IN "BTerm" -->
-   bdepth{e2} = bdepth{e1} +@ 1 in "nat" -->
-   flatten_sequent{mk_bterm{bdepth{e1}; $shyp{e1; x. e2}; [e1; e2]}}
+   d IN "nat" -->
+   e1 IN BTerm{d} -->
+   e2 IN BTerm{d +@ 1} -->
+   flatten_sequent{mk_bterm{d; $shyp{e1; x. e2}; [e1; e2]}}
+   <-->
+   let hyps, concl = flatten_sequent{e2} in
+      (e1 :: hyps, concl)
+>>
+
+interactive_rw reduce_flatten_sequent_concl_term {| reduce |} : <:xrewrite<
+   e IN BTerm{0} -->
+   flatten_sequent{$`sconcl{e}}
+   <-->
+   ([], e)
+>>
+
+interactive_rw reduce_flatten_sequent_hyp_term {| reduce |} : <:xrewrite<
+   e1 IN BTerm{0} -->
+   e2 IN BTerm{1} -->
+   flatten_sequent{mk_term{$shyp{e1; x. e2}; [e1; e2]}}
    <-->
    let hyps, concl = flatten_sequent{e2} in
       (e1 :: hyps, concl)
@@ -344,11 +362,34 @@ interactive std_sequent_hyp_wf2 {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
- * The final theorem.
+ * More sequent wf.
+ *)
+declare sequent [sequent_wf] { Term : Term >- Term } : Term
+
+prim_rw unfold_sequent_wf : sequent_wf{| <J> >- 'C |} <-->
+   std_sequent{| <J> >- 'C |} in StdSequent{0}
+
+(************************************************************************
+ * Pre-sequents.
+ *)
+interactive pre_sequent_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- "sequent_wf"{| <J> >- C |} -->
+   <H> >- "pre_sequent"{| <J> >- C |} IN PreSequent{0}
+>>
+
+interactive_rw reduce_pre_sequent_concl {| reduce |} : <:xrule<
+   C IN BTerm{0} -->
+   "pre_sequent"{| >- C |}
+   <-->
+   ([], C)
+>>
+
+(************************************************************************
+ * The wf theorem.
  *)
 interactive bsequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- arg IN BTerm{0} -->
-   "wf" : <H> >- "std_sequent"{| <J> >- C |} IN StdSequent{0} -->
+   "wf" : <H> >- "sequent_wf"{| <J> >- C |} -->
    <H> >- bsequent{arg}{| <J> >- C |} IN "Sequent"
 >>
 

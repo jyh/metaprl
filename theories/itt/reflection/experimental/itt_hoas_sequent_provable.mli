@@ -1,7 +1,5 @@
 (*
- * Some utilities for simplifying the reflection theory.
- * These should eventually be migrated into the reflection
- * theory proper as necessary.
+ * Provability in a sequent logic.
  *
  * ----------------------------------------------------------------
  *
@@ -26,22 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_bterm
-
-(*
- * Error term.
- *)
-declare Invalid_argument
-
-(*
- * A "dummy" term.
- *)
-declare dummy_bterm
-
-(*
- * This expands to dummy_bterm.
- *)
-declare sequent [ignore] { Term : Term >- Term } : Term
 
 (*!
  * @docoff

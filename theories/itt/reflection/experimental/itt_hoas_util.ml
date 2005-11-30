@@ -39,6 +39,26 @@ open Itt_list
 open Itt_struct
 
 (************************************************************************
+ * Ignore terms.
+ *)
+doc <:doc<
+   The << dummy_term >> is used for constants that don't mean anything.
+>>
+declare dummy_term
+
+define unfold_dummy_bterm {| reduce |} : dummy_bterm <--> <:xterm<
+   $`"dummy_term"
+>>
+
+declare sequent [ignore] { Term : Term >- Term } : Term
+
+prim_rw unfold_ignore : <:xrewrite<
+   "ignore"{| <J> >- C |}
+   <-->
+   "dummy_bterm"
+>>
+
+(************************************************************************
  * Operators.
  *)
 

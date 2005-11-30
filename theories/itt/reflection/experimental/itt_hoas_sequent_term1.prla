@@ -16,8 +16,8 @@ B	b	t
 NSummary!ty_term	ty_term	ty_term Summary
 O	o4	ty_term
 NItt_hoas_util	Itt_hoas_util	Itt_hoas_util NIL
-NItt_hoas_sequent_term	Itt_hoas_sequent_term	Itt_hoas_sequent_term NIL
-NItt_hoas_sequent_term!bsequent	bsequent	bsequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1	Itt_hoas_sequent_term1	Itt_hoas_sequent_term1 NIL
+NItt_hoas_sequent_term1!bsequent	bsequent	bsequent Itt_hoas_sequent_term1
 O	o5	bsequent
 Varg	arg	arg\\ \\
 B	b5	arg
@@ -2127,7 +2127,7 @@ P	p836	String hypotheses
 O	o836	comment_string p836
 T	t837	o836
 B	b837	t837
-NItt_hoas_sequent_term!shyp	shyp	shyp Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!shyp	shyp	shyp Itt_hoas_sequent_term1
 O	o837	shyp
 Vh	h	h\\ \\
 B	b838	h
@@ -2158,7 +2158,7 @@ P	p846	String conclusion
 O	o846	comment_string p846
 T	t846	o846
 B	b847	t846
-NItt_hoas_sequent_term!sconcl	sconcl	sconcl Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!sconcl	sconcl	sconcl Itt_hoas_sequent_term1
 O	o847	sconcl
 Vc	c	c\\ \\
 B	b848	c
@@ -2312,7 +2312,7 @@ P	p918	Number 1897
 O	o918	location p917 p918
 NSummary!define_term	define_term	define_term Summary
 O	o919	define_term
-NItt_hoas_sequent_term!is_std_sequent	is_std_sequent	is_std_sequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!is_std_sequent	is_std_sequent	is_std_sequent Itt_hoas_sequent_term1
 O	o920	is_std_sequent
 Ve	e	e\\ \\
 B	b920	e
@@ -2411,7 +2411,7 @@ B	b952	t952
 P	p952	Number 1899
 P	p629	Number 1999
 O	o629	location p952 p629
-NItt_hoas_sequent_term!StdSequent	StdSequent	StdSequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!StdSequent	StdSequent	StdSequent Itt_hoas_sequent_term1
 O	o954	StdSequent
 T	t954	o954
 B	b954	t954
@@ -2434,7 +2434,7 @@ T	t960	o955 b959 b8
 B	b960	t960
 T	t961	o919 b b955 b960
 B	b961	t961
-NItt_hoas_sequent_term!is_pre_sequent	is_pre_sequent	is_pre_sequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!is_pre_sequent	is_pre_sequent	is_pre_sequent Itt_hoas_sequent_term1
 O	o964	is_pre_sequent
 Vi	i	i\\ \\
 B	b19	i
@@ -2514,7 +2514,7 @@ NItt_list2!length	length	length Itt_list2
 O	o977	length
 T	t978	o977 b972
 B	b978	t978
-NItt_hoas_sequent_term!PreSequent	PreSequent	PreSequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!PreSequent	PreSequent	PreSequent Itt_hoas_sequent_term1
 O	o986	PreSequent
 T	t986	o986
 B	b986	t986
@@ -2531,7 +2531,7 @@ T	t989	o989 b833
 B	b989	t989
 T	t990	o988 b989 b833
 B	b990	t990
-NItt_hoas_sequent_term!flatten_sequent	flatten_sequent	flatten_sequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!flatten_sequent	flatten_sequent	flatten_sequent Itt_hoas_sequent_term1
 O	o997	flatten_sequent
 T	t997	o997 b920
 B	b997	t997
@@ -2773,7 +2773,7 @@ T	t1101	o21 b1101
 B	b1102	t1101
 T	t1102	o20 b1102
 B	b1103	t1102
-NItt_hoas_sequent_term!std_sequent	std_sequent	std_sequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!std_sequent	std_sequent	std_sequent Itt_hoas_sequent_term1
 O	o1106	std_sequent
 T	t1106	o1106
 B	b1106	t1106
@@ -3182,7 +3182,7 @@ B	b815	t815
 P	p602	Number 3450
 P	p603	Number 3510
 O	o603	location p602 p603
-NItt_hoas_sequent_term!pre_sequent	pre_sequent	pre_sequent Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!pre_sequent	pre_sequent	pre_sequent Itt_hoas_sequent_term1
 O	o605	pre_sequent
 T	t639	o605
 B	b639	t639
@@ -7809,7 +7809,7 @@ B	b3596	t3596
 P	p3596	Number 10243
 P	p3597	Number 10302
 O	o3597	location p3596 p3597
-NItt_hoas_sequent_term!sequent_wf	sequent_wf	sequent_wf Itt_hoas_sequent_term
+NItt_hoas_sequent_term1!sequent_wf	sequent_wf	sequent_wf Itt_hoas_sequent_term1
 O	o3598	sequent_wf
 T	t3598	o3598
 B	b3598	t3598

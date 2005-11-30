@@ -570,6 +570,12 @@ production xterm_simple_term{parsed_sequent{sequent { <H> >- 'e }}} <--
 production xterm_simple_term{parsed_sequent{sequent [parsed_sequent_arg{'arg}] { <H> >- 'e }}} <--
    xterm_simple_term{'arg}; tok_left_sequent; xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}; tok_right_sequent
 
+production xterm_simple_term{parsed_sequent{sequent { <H> }}} <--
+   tok_sequent; tok_left_brace; xterm_hyps{parsed_hyps{| <H> |}}; tok_right_brace
+
+production xterm_simple_term{parsed_sequent{sequent [parsed_sequent_arg{'arg}] { <H> }}} <--
+   xterm_simple_term{'arg}; tok_left_sequent; xterm_hyps{parsed_hyps{| <H> |}}; tok_right_sequent
+
 production xterm_hyps{parsed_hyps{||}} <--
    (* empty *)
 

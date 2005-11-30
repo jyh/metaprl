@@ -50,6 +50,15 @@ doc <:doc<
 define unfold_sequent : "sequent"{'arg; 'hyps; 'concl} <-->
    ('arg, ('hyps, 'concl))
 
+define unfold_sequent_arg : sequent_arg{'s} <-->
+   fst{'s}
+
+define unfold_sequent_hyps : sequent_hyps{'s} <-->
+   fst{snd{'s}}
+
+define unfold_sequent_concl : sequent_concl{'s} <-->
+   snd{snd{'s}}
+
 doc <:doc<
    A sequent is well-formed only if the hypotheses have depths increasing
    by one, and the conclusion is also at the right nesting depth.
@@ -220,6 +229,53 @@ interactive sovar_wf {| intro [] |} : <:xrule<
 interactive cvar_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
    <H> >- CVar{d} Type
+>>
+
+(*
+ * Sequent projections.
+ *)
+interactive_rw reduce_sequent_arg {| reduce |} : <:xrewrite<
+   sequent_arg{"sequent"{arg; hyps; concl}}
+   <-->
+   arg
+>>
+
+interactive_rw reduce_sequent_hyps {| reduce |} : <:xrewrite<
+   sequent_hyps{"sequent"{arg; hyps; concl}}
+   <-->
+   hyps
+>>
+
+interactive_rw reduce_sequent_concl {| reduce |} : <:xrewrite<
+   sequent_concl{"sequent"{arg; hyps; concl}}
+   <-->
+   concl
+>>
+
+interactive_rw reduce_is_sequent {| reduce |} : <:xrewrite<
+   is_sequent{"sequent"{arg; hyps; concl}}
+   <-->
+   bdepth{arg} = 0 in "nat"
+   && hyp_depths{0; hyps}
+   && bdepth{concl} = length{hyps} in "nat"
+>>
+
+interactive sequent_arg_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d = 0 in "nat" -->
+   "wf" : <H> >- s IN "Sequent" -->
+   <H> >- sequent_arg{s} IN BTerm{d}
+>>
+
+interactive sequent_hyps_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d = 0 in "nat" -->
+   "wf" : <H> >- s IN "Sequent" -->
+   <H> >- sequent_hyps{s} IN CVar{d}
+>>
+
+interactive sequent_concl_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d = length{sequent_hyps{s}} in "nat" -->
+   "wf" : <H> >- s IN "Sequent" -->
+   <H> >- sequent_concl{s} IN BTerm{d}
 >>
 
 (************************************************************************

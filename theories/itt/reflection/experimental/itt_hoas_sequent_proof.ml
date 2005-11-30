@@ -31,10 +31,8 @@ doc <:doc<
 >>
 extends Itt_tunion
 extends Itt_match
-extends Itt_hoas_vec_bind
-extends Itt_hoas_proof
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_term
+extends Itt_hoas_proof
 
 doc docoff
 
@@ -137,14 +135,6 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- i IN "nat" -->
    "wf" : <H>; v: CVar{d} >- e[v] IN "bool" -->
    <H> >- let_cvar{d; witness; i; v. e[v]} IN "bool"
->>
-
-(************************************************************************
- * Provability.
- *)
-interactive provable_intro : <:xrule<
-   <H>; A: CVar{0} >- Provable{"Sequent"; logic; "sequent"{arg; A; "vbind"{| <J> >- C |}}} -->
-   <H> >- Provable{"Sequent"; logic; bsequent{arg}{| <J> >- C |}}
 >>
 
 (*!

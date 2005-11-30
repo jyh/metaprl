@@ -1,8 +1,7 @@
 doc <:doc<
-   Native sequent representation.  This representation of sequents
-   is not a BTerm itself.  If you want to work in a theory where
-   sequents are not part of your language, then you should probably
-   use this representation, because it is easier to use.
+   @module[Itt_hoas_sequent_provable]
+
+   Provability theorems in a sequent logic.
 
    ----------------------------------------------------------------
 
@@ -29,16 +28,34 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_theory
-extends Itt_hoas_bterm
-extends Itt_hoas_util
-extends Itt_hoas_sequent
+extends Itt_tunion
+extends Itt_match
 extends Itt_hoas_proof
-extends Itt_hoas_vec_bind
+extends Itt_hoas_sequent
+extends Itt_hoas_sequent_term
 extends Itt_hoas_sequent_proof
-extends Itt_hoas_sequent_provable
-extends Itt_hoas_sequent_tactics
-extends Itt_hoas_meta_types
+extends Itt_hoas_vec_bind
+
+doc docoff
+
+open Basic_tactics
+
+(************************************************************************
+ * Defined terms.
+ *)
+define unfold_SeqProvable : SeqProvable{'logic; 'e} <-->
+   Provable{Sequent; 'logic; 'e}
+
+(************************************************************************
+ * Provability.
+ *)
+interactive provable_intro : <:xrule<
+   "wf" : <H> >- arg IN BTerm{0} -->
+   "wf" : <H> >- "sequent_wf"{| <J> >- C |} -->
+   <H>; A: CVar{0}; length{A} = bdepth{"vbind"{| <J> >- C |}} in "nat" >-
+      SeqProvable{logic; "sequent"{arg; A; "vbind"{| <J> >- C |}}} -->
+   <H> >- SeqProvable{logic; bsequent{arg}{| <J> >- C |}}
+>>
 
 (*!
  * @docoff

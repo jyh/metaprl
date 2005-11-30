@@ -29,16 +29,14 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_theory
-extends Itt_hoas_bterm
-extends Itt_hoas_util
-extends Itt_hoas_sequent
-extends Itt_hoas_proof
-extends Itt_hoas_vec_bind
-extends Itt_hoas_sequent_proof
-extends Itt_hoas_sequent_provable
-extends Itt_hoas_sequent_tactics
-extends Itt_hoas_meta_types
+extends Itt_hoas_sequent_term
+
+open Basic_tactics
+
+(*
+ * Tactics.
+ *)
+topval fold_concl_sequent : conv
 
 (*!
  * @docoff

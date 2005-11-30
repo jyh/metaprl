@@ -32,6 +32,9 @@ open Basic_tactics
  * Sequents and their types.
  *)
 declare "sequent"{'arg; 'hyps; 'concl}
+declare sequent_arg{'s}
+declare sequent_hyps{'s}
+declare sequent_concl{'s}
 
 declare Sequent
 declare beq_sequent{'s1; 's2}

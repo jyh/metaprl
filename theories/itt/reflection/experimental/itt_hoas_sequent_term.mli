@@ -35,6 +35,11 @@ extends Itt_hoas_sequent
 open Basic_tactics
 
 (*
+ * Sequent well-formedness (no argument).
+ *)
+declare sequent [sequent_wf] { Term : Term >- Term } : Term
+
+(*
  * BTerm sequents.
  *)
 declare sequent [bsequent{'arg}] { Term : Term >- Term } : Term
@@ -44,6 +49,26 @@ declare sequent [bsequent{'arg}] { Term : Term >- Term } : Term
  *)
 topval fold_is_std_sequent : conv
 topval fold_flatten_sequent : conv
+
+(************************************************************************
+ * Private values.
+ *)
+
+(* Type of standard sequents (hyp/concl terms) *)
+declare StdSequent{'d}
+
+(* Type of sequent pairs, without the argument *)
+declare PreSequent{'d}
+
+(* Conversion from a normal sequent to a standard sequent *)
+declare sequent [std_sequent] { Term : Term >- Term } : Term
+
+(* Full conversion to a sequent triple *)
+declare sequent [pre_sequent] { Term : Term >- Term } : Term
+
+(* The terms in a standard sequent *)
+declare sconcl{'e}
+declare shyp{'e1; x. 'e2['x]}
 
 (*!
  * @docoff

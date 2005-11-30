@@ -29,16 +29,29 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_theory
-extends Itt_hoas_bterm
-extends Itt_hoas_util
-extends Itt_hoas_sequent
-extends Itt_hoas_proof
 extends Itt_hoas_vec_bind
-extends Itt_hoas_sequent_proof
-extends Itt_hoas_sequent_provable
-extends Itt_hoas_sequent_tactics
-extends Itt_hoas_meta_types
+extends Itt_hoas_sequent
+
+open Basic_tactics
+
+(*
+ * Sequent well-formedness (no argument).
+ *)
+declare sequent [sequent_wf] { Term : Term >- Term } : Term
+
+(*
+ * BTerm sequents.
+ *)
+declare sequent [bsequent{'arg}] { Term : Term >- Term } : Term
+
+(*
+ * ML code.
+ *)
+topval fold_hyps_length : conv
+topval fold_hyps_nth : conv
+topval fold_hyps_flatten : conv
+topval fold_hypconslist : conv
+topval fold_hyplist : conv
 
 (*!
  * @docoff

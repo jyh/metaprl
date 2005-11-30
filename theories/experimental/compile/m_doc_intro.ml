@@ -1,7 +1,7 @@
 (* -*- mode: text; -*- *)
 doc <:doc<
    @begin[spelling]
-   CPS ML Mojave untrusted compilable Necula Liang HOAS
+   CPS ML Mojave untrusted compilable Necula Liang HOAS LCF
    Morrisett
    @end[spelling]
 
@@ -232,7 +232,7 @@ empty free-variable set $[]$, we omit the brackets and use the simpler
 notation $v$.
 
 Rewrites provide a mechanism for transforming programs, but they are not self-directed.
-LCF-style @cite{GMW79} @emph{tactics} direct the compilation process, deciding when and where to
+LCF-style @cite[GMW79] @emph{tactics} direct the compilation process, deciding when and where to
 apply rewrites.  @MetaPRL's tactic language is @OCaml @cite[Caml99].  When a rewrite is defined in
 @MetaPRL, the framework creates an @OCaml expression that can be used to apply the rewrite.  Code to
 guide the application of rewrites is then written in @OCaml, using a rich set of primitives provided
@@ -260,7 +260,6 @@ $e'$.
 
 @docoff
 >>
-
 
 (*
  * -*-

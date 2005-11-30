@@ -354,8 +354,8 @@ $$
 Here @xrewref[int] and @xrewref[var] specify that variables and numerical constants do not have to
 be further translated --- so we simply pass the original variable or numerical constant to
 meta-continuation. The @xrewref[add] rewrite specifies that in order to translate $e_1 + e_2$, we
-need to first translate $e_1$ (passing the result as $v_1), continuing with translation of $e_2$
-(passing the result as $v_2), continuing with passing the IR expression $@AtomBinop{+; v_1; v_2}$ to
+need to first translate $e_1$ (passing the result as $v_1$), continuing with translation of $e_2$
+(passing the result as $v_2$), continuing with passing the IR expression $@AtomBinop{+; v_1; v_2}$ to
 the original meta-continuation.
 
 For conditionals, code duplication is avoided by wrapping the code

@@ -424,7 +424,8 @@ $@Inst2Mem[ADD]{@Register{r_1}; @MemReg{r_2}; e}$ performs the operation $@MemRe
 the form $@Inst3Reg[inst3]{o_1; v_2; v_3; v_4; v_5; e}$.  For example, the instruction
 $@Inst3Reg[DIV]{@Register{r_1}; @Register{r_2}; @Register{r_3}; r_4; r_5; e}$ performs the following
 operation, where $(r_2, r_3)$ is the 64-bit value $r_2 * 2^32 + r_3$.  The Intel specification
-requires that $r_4$ be the register $@it{eax}$, and $r_5$ the register $@it{edx}$.
+requires that $r_4$ be the register $@it{eax}$, and $r_5$ the register $@it{edx}$ ($@it{eax}$ and
+$@it{edx}$ are two specific processor registers).
 $$
 @begin[array,l]
 @line{{@xlet r_4 = (r_2, r_3) / r_1 @xin}}
@@ -440,7 +441,8 @@ code-motion optimizations on the assembly.}}
 
 @item{{The unconditional branch operation $@Jmp[JMP]{o; {o_1, @ldots, o_n}}$ branches to the
 function specified by operand $o$, with arguments $(o_1, @ldots, o_n)$.  The arguments are provided
-so that the calling convention may be enforced.}}
+so that the calling convention may be enforced (the calling convention is described in the next
+section).}}
 
 @item{{The conditional branch operation $@Jcc[J]{@it{cc}; e_1; e_2}$ is a conditional.  If the
 condition-code matches the value in the processor's condition-code register, then the instruction
@@ -453,14 +455,75 @@ e}$, where $v$ is a function parameter in instruction sequence $e$.}}
 
 @end[itemize]
 
+@subsection[runtime]{The runtime environment}
+
+Before generating code, we must consider the role of the runtime.  There are two important parts to
+consider, including data representation and memory management, and the calling convention for
+functions.
+
+@subsubsection[gc]{Heap representation and garbage collection}
+
+Since the source language contains first-class functions (and we have introduced continuations as
+well), the most straightforward approach to memory management is to use a garbage collector.  We
+adopt a data representation similar to that used in the Objective Caml runtime @cite[OCaml], where
+all heap data has one of two forms, it is either 1) a block of memory, with a header word that
+specifies the size of the block, or 2) it is a single machine word that specifies an integer.
+Furthermore, we adopt the OCaml convention that all blocks are aligned to machine-word boundaries,
+and integer values have 31 significant bits, where the least significant bit in the machine word is
+always 1.  A diagram of these values is shown in Figure @reffigure[datarep].
+
+@begin[figure,datarep]
+@begin[center]
+@begin[tabular,"cc"]
+@line{{Data block} {Integer}}
+@line{
+@begin[tabular,t,"|c|"]
+@hline
+@line{{@phantom{(} $n$ @phantom{1}}}
+@hline
+@line{{$v_1$}}
+@line{{$@vdots$}}
+@line{{$v_n$}}
+@hline
+@end[tabular]
+@begin[tabular,t,"|c|c|"]
+@hline
+@line{{$i@qquad$ (31 bits)} {1}}
+@hline
+@end[tabular]
+}
+@end[tabular]
+@end[center]
+@caption{Runtime data representation}
+@end[figure]
+
+These conventions provide run-time tags for the garbage collector.  Given a machine word that
+represents a heap-allocated value, the value is an integer if the least-significant-bit is set,
+otherwise it is a pointer to a heap-allocated block.
+
+We do not treat the topic of garbage collection verification in this paper.
+
+@subsubsection[calling]{Calling convention}
+
+The second runtime issue of interest is the calling convention.  As specified by our instruction
+set, functions $e_@lambda$ are specified together with their parameters, and branches $@Jmp[JMP]{o;
+{o_1, @ldots, o_n}}$ specify the arguments to the function call.  The purpose of the calling
+convention is to ensure that the locations of the arguments in the call are the same as the
+locations of the parameters to the function.
+
+The particular locations do not matter, they just need to be the same.  The register allocator
+(Section @refsection[m_doc_x86_regalloc]) is given the task of ensuring that the calling convention
+is followed, and that the arguments are passed in the expected locations.  For calls to external
+functions (for example, for input/output), we adopt the policy of passing all arguments on the
+stack.
+
 @subsection[concreteasm]{Translation to concrete assembly}
 
-Since the instruction set as defined is abstract, and contains binding structure, it must be
-translated before actual generation of machine code.  The first step in doing this is register
-allocation: every variable in the assembly program must be assigned to an actual machine register.
-This step corresponds to an $@alpha$-conversion where variables are renamed to be the names of
-actual registers; the formal system merely validates the renaming.  We describe this phase in the
-section on register allocation @refsection[m_doc_x86_regalloc].
+Perhaps the first question to consider is how to generate concrete machine code from the HOAS
+representation.  As mentioned previously, the first step in doing this is register allocation.
+Every variable in the assembly program must be assigned to an actual machine register.  This step
+corresponds to an $@alpha$-conversion where variables are renamed to be the names of actual
+registers; the formal system merely validates the renaming.
 
 The final step is to generate the actual program from the abstract program.  This requires only
 local modifications, and is implemented during printing of the program (that is, it is implemented

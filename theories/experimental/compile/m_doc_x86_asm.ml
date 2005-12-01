@@ -347,25 +347,25 @@ For example, the instruction $@Inst2Mem[ADD]{v_1; @MemReg{v_2}; e}$ performs the
 $$
 @begin[array,"r@{}c@{}ll"]
 @line{l       {@space::=@space}   @it{string}                                                   @hbox{Function labels}}
-@line{@it{r}  {::=}   {@it{eax} {@pipe} @it{ebx} {@pipe} @it{ecx} {@pipe} @it{edx}} @hbox{Registers}}
-@line{{}      {@pipe} {@it{esi} {@pipe} @it{edi} {@pipe} @it{esp} {@pipe} @it{ebp}} {}}
-@line{@it{v}  {::=}   {r {@pipe} v_1, v_2, @ldots}                                  @hbox{Variables}}
+@line{@it{r}  {::=}   {@it{eax} {@vbar} @it{ebx} {@vbar} @it{ecx} {@vbar} @it{edx}} @hbox{Registers}}
+@line{{}      {@pipe} {@it{esi} {@vbar} @it{edi} {@vbar} @it{esp} {@vbar} @it{ebp}} {}}
+@line{@it{v}  {::=}   {r {@vbar} v_1, v_2, @ldots}                                  @hbox{Variables}}
 @line{{} {} {} {}}
 @line{o_m     {::=}   @MemReg{v}                                                    @hbox{Memory operands}}
 @line{{}      {@pipe} @MemRegOff{v; i}                                              {}}
 @line{{}      {@pipe} @MemRegRegOffMul{v_1; v_2; i_1; i_2}                          {}}
 @line{o_r     {::=}   @Register{v}                                                  @hbox{Register operand}}
-@line{@it{o}  {::=}   {o_m @pipe o_r}                                               @hbox{General operands}}
+@line{@it{o}  {::=}   {o_m @vbar o_r}                                               @hbox{General operands}}
 @line{{}      {@pipe} @ImmediateNumber{i}                                           @hbox{Constant number}}
 @line{{}      {@pipe} @ImmediateCLabel{v; l}                                        @hbox{Label}}
 @line{{} {} {} {}}
 @line{@it{cc} {::=}   {= {@pipe} <> {@pipe} < {@pipe} > {@pipe} {@le} {@pipe} @ge}  @hbox{Condition codes}}
-@line{@it{inst1} {::=}   {@it{INC} @pipe @it{DEC} @pipe @cdots}                     @hbox{1-operand opcodes}}
-@line{@it{inst2} {::=}   {@it{ADD} @pipe @it{SUB} @pipe @it{AND} @pipe @cdots}      @hbox{2-operand opcodes}}
-@line{@it{inst3} {::=}   {@it{MUL} @pipe @it{DIV}}                                  @hbox{3-operand opcodes}}
-@line{@it{cmp}   {::=}   {@it{CMP} @pipe @it{TEST}}                                 @hbox{comparisons}}
+@line{@it{inst1} {::=}   {@it{INC} @vbar @it{DEC} @vbar @cdots}                     @hbox{1-operand opcodes}}
+@line{@it{inst2} {::=}   {@it{ADD} @vbar @it{SUB} @vbar @it{AND} @vbar @cdots}      @hbox{2-operand opcodes}}
+@line{@it{inst3} {::=}   {@it{MUL} @vbar @it{DIV}}                                  @hbox{3-operand opcodes}}
+@line{@it{cmp}   {::=}   {@it{CMP} @vbar @it{TEST}}                                 @hbox{comparisons}}
 @line{@it{jmp}   {::=}   {@it{JMP}}                                                 @hbox{unconditional branch}}
-@line{@it{jcc}   {::=}   {@it{JEQ} @pipe @it{JLT} @pipe @it{JGT} @pipe @cdots}      @hbox{conditional branch}}
+@line{@it{jcc}   {::=}   {@it{JEQ} @vbar @it{JLT} @vbar @it{JGT} @vbar @cdots}      @hbox{conditional branch}}
 @line{@it{e}  {::=}   @Mov{o; v; e}                                                 @hbox{Copy}}
 @line{{}      {@pipe} @Inst1Mem[inst1]{o_m; e}                                      @hbox{1-operand mem inst}}
 @line{{}      {@pipe} @Inst1Reg[inst1]{o_r; v; e}                                   @hbox{1-operand reg inst}}
@@ -376,9 +376,9 @@ $$
 @line{{}      {@pipe} @Jmp[jmp]{o; {o_r; @ldots; o_r}}                              @hbox{Unconditional branch}}
 @line{{}      {@pipe} @Jcc[j]{@it{cc}; e_1; e_2}                                    @hbox{Conditional branch}}
 @line{{} {} {} {}}
-@line{p       {@pipe} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
-@line{d       {@pipe} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
-@line{{e_@lambda} {::=} {@LabelFun{v; e_@lambda} @pipe e}                           @hbox{Functions}}
+@line{p       {@pipe} {@LabelRec{R; d; p} {@vbar} e}                                @hbox{Programs}}
+@line{d       {@pipe} {@LabelDef{l; e_@lambda; d} {@vbar} @LabelEnd}                @hbox{Function definition}}
+@line{{e_@lambda} {::=} {@LabelFun{v; e_@lambda} @vbar e}                           @hbox{Functions}}
 @end[array]
 $$
 @caption{Scoped Intel x86 instruction set}

@@ -45,10 +45,10 @@ framework.  A Phobos language specification resembles a typical parser definitio
 @begin[figure,syntax]
 $$
 @begin[array,rcll]
-@line{@it{op} {::=}   {+ @pipe - @pipe * @pipe /} @hbox{Binary operators}}
+@line{@it{op} {::=}   {+ @vbar - @vbar * @vbar /} @hbox{Binary operators}}
 @line{{}      {@pipe} {= @pipe <> @pipe < @pipe @le @pipe > @pipe @ge} {}}
 @line{{} {} {} {}}
-@line{@it{e} {::=} {@AtomTrue @pipe @AtomFalse} @hbox{Booleans}}
+@line{@it{e} {::=} {@AtomTrue @vbar @AtomFalse} @hbox{Booleans}}
 @line{{} {@pipe} @AtomInt[i] @hbox{Integers}}
 @line{{} {@pipe} v @hbox{Variables}}
 @line{{} {@pipe} {e @space @it{op} @space e @space} @hbox{Binary expressions}}
@@ -57,11 +57,11 @@ $$
 @line{{} {@pipe} {e.[e]} @hbox{Subscripting}}
 @line{{} {@pipe} {e.[e] @leftarrow e} @hbox{Assignment}}
 @line{{} {@pipe} {e; e} @hbox{Sequencing}}
-@line{{} {@pipe} {e(e_1, @ldots, e_n)} @hbox{Application}}
+@line{{} {@pipe} {e(e, @ldots, e)} @hbox{Application}}
 @line{{} {@pipe} @LetAtom{e; v; e} @hbox{Let definitions}}
-@line{{} {@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} @hbox{Recursive functions}}
+@line{{} {@pipe} {@xlet @xrec f_1 (v, @ldots, v) = e} @hbox{Recursive functions}}
 @line{{} {} @vdots {}}
-@line{{} {} {@xand f_n (v_1, @ldots, v_n) = e}}
+@line{{} {} {@xand f_n (v, @ldots, v) = e}}
 @end[array]
 $$
 @caption{Program syntax}

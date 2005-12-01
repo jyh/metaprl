@@ -106,7 +106,7 @@ $$
             {d[@CloseRecVar{R; @frame}]};
             {e[@CloseRecVar{R; @frame}]}}}
 $$
-The new $@CloseRec{R; @frame; f; d; e[@frame]}$ expression is an administrative term that helps up keep track
+The new $@CloseRec{R; @frame; f; d; e[@frame]}$ expression is an administrative term that helps us keep track
 of the progress of the closure conversion; it will be eliminated from the program by the end of the
 closure conversion.
 
@@ -133,8 +133,8 @@ $$
    @end[array]}
 $$
 
-Once all free variables have been added to the frame, the $@CloseRec{R; @frame; @it{tuple}; d; e}$
-is rewritten to use explicit tuple allocation.
+Once all free variables have been added to the frame, all instances of the term $@CloseRec{R; @frame; @it{tuple}; d; e}$
+are rewritten to use explicit tuple allocation.
 $$
 @xrewrite2[alloc]{@begin[array,t,l]
 	          @line{@CloseRec{R; @frame; @it{tuple}}}
@@ -149,7 +149,6 @@ $$
 
 The final step of closure conversion is to propagate the subscript operations into the function bodies.
 $$
-@arraystretch{2}
 @begin[array,l]
 
 @line{@xrewrite2[arg]{@CloseFrame{@frame; @FunDef{l; @AtomFun{v; {e[@frame; v]}}; {d[@frame]}}};

@@ -71,6 +71,7 @@ spilled.  The following two rules give an example.
 $$
 @begin[array,l]
 @line{@xrewrite["smov"]{@Mov{o; v; e[v]}; @Mov{o; @it{spill}_i; e[@it{spill}_i]}}}
+@line{{}}
 @line{@xrewrite2["sinst2"]{@Inst2Reg[inst2]{o; o_r; v; e[v]};
    @begin[array,t,l]
    @line{@Mov{o_r; @it{spill}_i}}
@@ -84,16 +85,6 @@ those occurrences that could have been assigned to a register.  Furthermore, the
 $@it{spill}_i$ would presumably be represented as the label of a memory location, not a variable,
 allowing a conflicting assignment of another variable to the same spill location.
 
-To address both of these concerns, we treat spill locations as variables, and introduce scoping for
-spill variables.  We introduce two new pseudo-operands, and two new instructions, shown in Figure
-@reffigure[spilling].  The instruction $@Spill[set]{o_r; s; e[s]}$ generates a new
-spill location
-represented in the variable $s$, and stores the operand $o_r$ in that spill location.  The operand
-$@SpillRegister{v; s}$ represents the value in spill location $s$, and it also specifies that the
-values in spill location $s$ and in the register $v$ are the same.  The operand $@SpillMemory{s}$
-refers the the value in spill location $s$.  The value in a spill operand is retrieved with the
-$@Spill[get]{o_s; v; e[v]}$ and placed in the variable $v$.
-
 @begin[figure,spilling]
 $$
 @begin[array,rcll]
@@ -106,6 +97,16 @@ $$
 $$
 @caption{Spill pseudo-operands and instructions}
 @end[figure]
+
+To address both of these concerns, we treat spill locations as variables, and introduce scoping for
+spill variables.  We introduce two new pseudo-operands, and two new instructions, shown in Figure
+@reffigure[spilling].  The instruction $@Spill[set]{o_r; s; e[s]}$ generates a new
+spill location
+represented in the variable $s$, and stores the operand $o_r$ in that spill location.  The operand
+$@SpillRegister{v; s}$ represents the value in spill location $s$, and it also specifies that the
+values in spill location $s$ and in the register $v$ are the same.  The operand $@SpillMemory{s}$
+refers the the value in spill location $s$.  The value in a spill operand is retrieved with the
+$@Spill[get]{o_s; v; e[v]}$ and placed in the variable $v$.
 
 The actual generation of spill code then proceeds in two main phases.  Given a variable to spill,
 the first phase generates the code to store the value in a new spill location, then adds copy
@@ -180,6 +181,7 @@ $$
    @line{@Spill[set]{@Register{v}; s}}
    @line{{e[@SpillRegister{v; s}]}}
    @end[array]}}
+@line{{}}
 @line{@xrewrite2["sinst2"]{@Inst2Reg[inst2]{o; o_r; v; e[v]};
    @begin[array,t,l]
    @line{@Inst2Reg[inst2]{o; o_r; v; e[v]}}

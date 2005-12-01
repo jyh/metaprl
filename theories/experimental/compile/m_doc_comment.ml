@@ -26,8 +26,9 @@ doc <:doc<
 extends Base_theory
 
 (*
- * Come convenient terms.
+ * Some convenient terms.
  *)
+declare math_vbar
 declare math_curry
 declare math_xrec
 declare math_xwith
@@ -152,6 +153,9 @@ dform small_df : mode[tex] :: small{'e} =
 
 dform math_small_df : mode[tex] :: math_small{'e} =
    izone `"{\\footnotesize " ezone 'e izone `"}" ezone
+
+dform math_vbar_df : mode[tex] :: math_vbar =
+   math_mathrel{math_pipe}
 
 (*
    -*-

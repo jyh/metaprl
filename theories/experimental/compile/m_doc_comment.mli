@@ -26,6 +26,7 @@
  *)
 extends Base_theory
 
+declare math_vbar
 declare math_curry
 declare math_xrec
 declare math_xwith

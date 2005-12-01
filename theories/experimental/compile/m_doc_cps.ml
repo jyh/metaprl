@@ -56,12 +56,15 @@ dform math_CPS_df2 : mode[tex] :: math_CPS{'cont; 'e} =
 
 doc <:doc<
 
-CPS conversion is an optional phase of the compiler that converts the program to
+CPS conversion is a phase of the compiler that converts the program to
 continuation-passing style.  That is, instead of returning a value, functions pass their results to
 a continuation function that is passed as an argument.  In this phase, all functions become
 tail-calls, and all occurrences of $@LetApply{a_1; a_2; v; e}$ and $@Return{a}$ are eliminated.  The
 main objective in CPS conversion is to pass the result of the computation to a continuation
 function.
+
+CPS conversion is not a requsite part of our methodology.  However, it represents an important style
+of transformation, and therefore we choose to illustrate it in this case study.
 
 There are different ways of formalizing the CPS conversion (see Section @refsection[m_doc_summary]
 for a discussion). In this compiler we used the following inference rule, which states that a program $e$

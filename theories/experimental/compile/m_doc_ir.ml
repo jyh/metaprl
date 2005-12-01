@@ -255,7 +255,7 @@ expressions are explicitly named.
 @begin[figure,ir]
 $$
 @begin[array,"r@{}c@{}ll"]
-@line{@it{binop} {@space ::= @space} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{Binary arithmetic}}
+@line{@it{binop} {@space ::= @space} {@AddOp @vbar @SubOp @vbar @MulOp @vbar @DivOp} @hbox{Binary arithmetic}}
 @line{@it{relop} {::=} {@EqOp @pipe @NeqOp @pipe @LeOp @pipe @LtOp @pipe @GeOp @pipe @GtOp} @hbox{Binary relations}}
 @line{{l}        {::=} {@it{string}} @hbox{Function label}}
 
@@ -279,7 +279,7 @@ $$
 @line{{}  {@pipe} @TailCall{a; {a_1, @ldots, a_n}}         @hbox{Tail-call}}
 @line{{}  {@pipe} @LetRec{R; d; e}                         @hbox{Recursive functions}}
 @line{{}{}{}{}}
-@line{{e_@lambda} {::=} {@AtomFun{v; e_@lambda} @pipe @AtomFun{v; e}} @hbox{Functions}}
+@line{{e_@lambda} {::=} {@AtomFun{v; e_@lambda} @vbar @AtomFun{v; e}} @hbox{Functions}}
 @line{{d} {::=}   @FunDef{l; e_@lambda; d}                 @hbox{Function definitions}}
 @line{{}  {@pipe} @EndDef                                  {}}
 @end[array]
@@ -315,9 +315,9 @@ function), while in the IR, the branches of the conditional must be
 terminated by a $@Return{a}$ expression or tail-call.
 
 The translation from AST to IR is straightforward, but we use it to
-illustrate a style of translation we use frequently.  The term
+illustrate a style of translation we use frequently.  We introduce an administrative term
 $@tt{IR} @lbrace e_1; v. e_2[v] @rbrace$ (displayed as $@IR{e_1; v;
-e_2[v]}$) is the translation of an expression $e_1$ to an IR atom. The second argument ($e_2[v]$)
+e_2[v]}$) that represents the translation of an expression $e_1$ to an IR atom. The second argument ($e_2[v]$)
 is a @emph{meta-continuation} of the translation process. In other words, $e_2$ represents @emph{the
 rest} of the program and $v$ marks the location where the IR for $e_1$ would go.
 
@@ -388,7 +388,10 @@ $$
     @LetRec{R; @IR{d}; @IR{e_1; v; e_2[v]}}}}
 @line{{}}
 @line{@xrewrite2[fun]{@IR{@FunDef{l; e; d}}; @FunDef{l; @IR{e; v; @Return{v}}; @IR{d}}}}
-@line{{}}
+@end[array]
+$$
+$$
+@begin[array,l]
 @line{@xrewrite2[param]{@IR{@AtomParam{v_1; e_1[v_1]}; v_2; e_2[v_2]};
    @AtomFun{v_1; (@IR{e_1[v_1]; v_2; e_2[v_2]})}}}
 @line{{}}

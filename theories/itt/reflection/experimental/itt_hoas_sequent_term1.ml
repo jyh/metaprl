@@ -149,57 +149,84 @@ interactive_rw reduce_hyps_flatten_list {| reduce |} : <:xrewrite<
    e
 >>
 
-interactive_rw reduce_hyps_flatten_singleton {| reduce |} : <:xrewrite<
-   hyps_flatten{"vbind"{| <J> >- inr{[e]} |}}
-   <-->
-   ["vbind"{| <J> >- e |}]
->>
-
 (************************************************************************
- * Vector theorems.
+ * Vector hyps_length.
  *)
-declare sequent [vhyps_length] { Term : Term >- Term } : Term
+declare sequent [vsubst_dummy] { Term : Term >- Term } : Term
 
-prim_rw unfold_vhyps_length : <:xrewrite<
-   "vhyps_length"{| <J> >- C |}
+prim_rw unfold_vsubst_dummy : <:xrewrite<
+   "vsubst_dummy"{| <J> >- C |}
    <-->
-   sequent_ind{u, v. happly{v; "dummy_bterm"}; "TermSequent"{| <J> >- hyps_length{C} |}}
+   sequent_ind{u, v. happly{v; "dummy_bterm"}; "TermSequent"{| <J> >- C |}}
 >>
 
-interactive_rw reduce_vhyps_length_concl {| reduce |} : <:xrewrite<
-   "vhyps_length"{| >- C |}
+interactive_rw reduce_vsubst_dummy_nil {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| >- C |}
    <-->
-   hyps_length{C}
+   C
 >>
 
-interactive_rw reduce_vhyps_length_left {| reduce |} : <:xrewrite<
-   "vhyps_length"{| x: A; <J[x]> >- C[x] |}
+interactive_rw reduce_vsubst_dummy_left {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| x: A; <J[x]> >- C[x] |}
    <-->
-   "vhyps_length"{| <J["dummy_bterm"]> >- C["dummy_bterm"] |}
+   "vsubst_dummy"{| <J["dummy_bterm"]> >- C["dummy_bterm"] |}
 >>
 
-interactive_rw reduce_vhyps_length_right {| reduce |} : <:xrewrite<
-   "vhyps_length"{| <J>; x: A >- C[x] |}
+interactive_rw reduce_vsubst_dummy_right {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| <J>; x: A >- C[x] |}
    <-->
-   "vhyps_length"{| <J> >- C["dummy_bterm"] |}
+   "vsubst_dummy"{| <J> >- C["dummy_bterm"] |}
 >>
 
-interactive_rw reduce_vhyps_length_hoist {| reduce |} : <:xrewrite<
-   "vhyps_length"{| <J> >- "vbind"{| x: A; <K[x]> >- C[x] |} |}
+interactive_rw reduce_subst_dummy_null : <:xrewrite<
+   "vsubst_dummy"{| <J> >- e<||> |}
    <-->
-   "vhyps_length"{| <J>; x: A >- "vbind"{| <K[x]> >- C[x] |} |}
+   e
 >>
 
-interactive_rw reduce_hyps_length_vec_nil {| reduce |} : <:xrewrite<
+interactive_rw reduce_subst_dummy_inr {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| <J> >- inr{e} |}
+   <-->
+   inr{"vsubst_dummy"{| <J> >- e |}}
+>>
+
+interactive_rw reduce_subst_dummy_cons {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| <J> >- e1 :: e2 |}
+   <-->
+   "vsubst_dummy"{| <J> >- e1 |} :: "vsubst_dummy"{| <J> >- e2 |}
+>>
+
+interactive_rw hyps_length_shift {| reduce |} : <:xrewrite<
+   hyps_length{"vbind"{| <J> >- e |}}
+   <-->
+   hyps_length{"vsubst_dummy"{| <J> >- e |}}
+>>
+
+interactive_rw hyps_length_vec_nil {| reduce |} : <:xrewrite<
    hyps_length{"vbind"{| <J> >- inr{[]} |}}
    <-->
    0
 >>
 
-interactive_rw reduce_hyps_length_vec_cons {| reduce |} : <:xrewrite<
+interactive_rw hyps_length_vec_cons {| reduce |} : <:xrewrite<
    hyps_length{"vbind"{| <J> >- inr{e1 :: e2} |}}
    <-->
-   1 +@ hyps_length{"vbind"{| <J> >- inr{e2} |}}
+   hyps_length{"vbind"{| <J> >- inr{e2} |}} +@ 1
+>>
+
+(************************************************************************
+ * Vector hyps_flatten.
+ *)
+interactive_rw hyps_flatten_nil {| reduce |} : <:xrewrite<
+   hyps_flatten{"vbind"{| <J> >- inr{[]} |}}
+   <-->
+   []
+>>
+
+interactive_rw hyps_flatten_cons {| reduce |} : <:xrewrite<
+   hyps_flatten{"vbind"{| <J> >- inr{e1 :: e2} |}}
+   <-->
+   "vbind"{| <J> >- e1 |} :: hyps_flatten{"vbind"{| <J> >- inr{e2} |}}
 >>
 
 (************************************************************************

@@ -4,7 +4,7 @@ THEORYDESCR = Constructive Set Theory
 # ITT extensions are included for itt_eta
 THEORY_DEPS[] +=
     itt/core
-    itt/extensions
+    itt/extensions/base
     itt/applications/supinf
 
 # Library files

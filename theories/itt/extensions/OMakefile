@@ -1,24 +1,7 @@
-THEORYNAME = itt_extensions
-THEORYDESCR = Extensions to Computational Type Theory (Some are Experimental)
+DIRS[] =
+    base
+#    experimental
+    rfun
+    vector
 
-THEORY_DEPS[] +=
-    itt/core
-    itt/extensions/rfun
-
-# Library files
-MPFILES[] =
-   itt_eta
-   itt_pairwise
-   itt_pairwise2
-   itt_antiquotient
-   ctt_markov
-
-Theory($(MPFILES))
-
-#
-# Clean up
-#
-clean:
-    $(CLEAN)
-
-all: theory$(LIB_SUFFIX)
+VirtualTheory($(DIRS))

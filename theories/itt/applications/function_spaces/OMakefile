@@ -3,7 +3,7 @@ THEORYDESCR = Function Spaces Formalized in Computational Type Theory (Incomplet
 
 THEORY_DEPS[] +=
     itt/core
-    itt/extensions
+    itt/extensions/base
 
 # Library files
 MPFILES[] =

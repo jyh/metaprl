@@ -201,8 +201,8 @@ interactive cons_elim {| elim [] |} 'H : <:xrule<
 interactive cons_is_sqequal : <:xrule<
    "wf" : <H> >- e1 IN "Cons" -->
    "wf" : <H> >- e2 IN "Cons" -->
-   <H> >- hyps_hd{mk_core{e1}} ~ hyps_hd{mk_core{e2}} -->
-   <H> >- hyps_tl{mk_core{e1}} ~ hyps_tl{mk_core{e2}} -->
+   <H> >- hd{e1} ~ hd{e2} -->
+   <H> >- tl{e1} ~ tl{e2} -->
    <H> >- e1 ~ e2
 >>
 

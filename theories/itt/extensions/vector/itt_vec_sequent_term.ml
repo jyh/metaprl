@@ -27,12 +27,14 @@ doc <:doc<
    @parents
 >>
 extends Meta_extensions_theory
+extends Itt_pairwise
 extends Itt_vec_bind
 extends Itt_match
 
 doc docoff
 
 open Basic_tactics
+open Itt_struct
 
 declare Invalid_argument
 
@@ -168,7 +170,51 @@ interactive_rw reduce_hyps_flatten : <:xrewrite<
 >>
 
 (************************************************************************
- * Vector hyps_length.
+ * Squiggle equality reasoning.
+ *)
+define unfold_Nil : Nil <--> <:xterm<
+   Img{"unit"; x. []}
+>>
+
+define unfold_Cons : Cons <--> <:xterm<
+   Img{"top" * "top"; x. let u, v = x in cons{u; v}}
+>>
+
+interactive nil_intro {| intro [] |} : <:xrule<
+   <H> >- [] IN "Nil"
+>>
+
+interactive nil_elim {| elim [ThinOption thin] |} 'H : <:xrule<
+   <H>; x: "Nil"; <J[ [] ]> >- C[ [] ] -->
+   <H>; x: "Nil"; <J[x]> >- C[x]
+>>
+
+interactive cons_intro {| intro [] |} : <:xrule<
+   <H> >- cons{e1; e2} IN "Cons"
+>>
+
+interactive cons_elim {| elim [] |} 'H : <:xrule<
+   <H>; u: "top"; v: "top"; <J[cons{u; v}]> >- C[cons{u; v}] -->
+   <H>; x: "Cons"; <J[x]> >- C[x]
+>>
+
+interactive cons_is_sqequal : <:xrule<
+   "wf" : <H> >- e1 IN "Cons" -->
+   "wf" : <H> >- e2 IN "Cons" -->
+   <H> >- hyps_hd{mk_core{e1}} ~ hyps_hd{mk_core{e2}} -->
+   <H> >- hyps_tl{mk_core{e1}} ~ hyps_tl{mk_core{e2}} -->
+   <H> >- e1 ~ e2
+>>
+
+interactive_rw reduce_hyps_flatten_nil {| reduce |} : <:xrewrite<
+   e["it"] IN "Nil" -->
+   hyps_flatten{mk_bind{x. mk_core{e[x]}}}
+   <-->
+   []
+>>
+
+(************************************************************************
+ * Vector lemmas.
  *)
 declare sequent [vsubst_dummy] { Term : Term >- Term } : Term
 

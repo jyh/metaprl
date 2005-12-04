@@ -303,7 +303,7 @@ declare xterm_so_nonempty_args{next : Dform. 'l : Dform} : Nonterminal
 production xterm_sovar{'v} <--
    tok_id[v:s]
 
-production xterm_sovar{parsed_sovar[v:s]{xcons{'v; xnil}; 'args}} <--
+production xterm_sovar{parsed_sovar[v:s]{xcons{parsed_var["!!"]; xnil}; 'args}} <--
    tok_id[v:s]; xterm_so_args{'args}
 
 production xterm_sovar{parsed_sovar[v:s]{'contexts; 'args}} <--
@@ -345,13 +345,13 @@ production xterm_so_nonempty_args{next. 'args[xcons{'arg; 'next}]} <--
 (* Contexts *)
 declare xterm_context{'e : 'a} : Nonterminal
 
-production xterm_context{xhypcontext[v:v]{xcons{'v; xnil}; 'args}} <--
+production xterm_context{xhypcontext[v:v]{xcons{parsed_var["!!"]; xnil}; 'args}} <--
    tok_lt; tok_id[v:s]; xterm_opt_so_args{'args}; tok_gt
 
 production xterm_context{xhypcontext[v:v]{'contexts; 'args}} <--
    tok_lt; tok_id[v:s]; xterm_contexts{'contexts}; xterm_opt_so_args{'args}; tok_gt
 
-production xterm_context{xhypcontext[v:v]{xcons{parsed_var["#"]; xcons{'v; xnil}}; 'args}} <--
+production xterm_context{xhypcontext[v:v]{xcons{parsed_var["#"]; xcons{parsed_var["!!"]; xnil}}; 'args}} <--
    tok_lt; tok_hash; tok_id[v:s]; xterm_opt_so_args{'args}; tok_gt
 
 production xterm_context{xhypcontext[v:v]{xcons{parsed_var["#"]; 'contexts}; 'args}} <--

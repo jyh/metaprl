@@ -78,7 +78,7 @@ doc <:doc<
 
    This theory uses its own semantics of sequents: a @tt[Base_rewrite] sequent
    of a form <<sequent { <H> >- Perv!"rewrite"{'a; 'b} }>> means that <<'a>> and <<'b>>
-   are interchangeable in context <<df_context_var[H:v]>>.
+   are interchangeable in context <<df_context_var[H]>>.
 >>
 declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 

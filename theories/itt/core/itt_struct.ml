@@ -72,13 +72,13 @@ doc <:doc<
    @modsubsection{Structural rules}
 
    The @tt[thin_many] rule states that if the conclusion <<'C>> can be proved
-   from hypotheses defined in <<df_context_var[H:v]>> and <<df_context_var[K:v]>>,
-   then it can also be proved with additional assumptions <<df_context_var[J:v]>>.
-   The name comes from the goal-directed view: the hypotheses <<df_context_var[J:v]>>
+   from hypotheses defined in <<df_context_var[H]>> and <<df_context_var[K]>>,
+   then it can also be proved with additional assumptions <<df_context_var[J]>>.
+   The name comes from the goal-directed view: the hypotheses <<df_context_var[J]>>
    are removed (``thinned'') by the application of the rule.
 
-   Note that the rule requires that variables introduced by <<df_context_var[J:v]>>
-   may not occur free in <<df_context_var[K:v]>> or <<'C>>.
+   Note that the rule requires that variables introduced by <<df_context_var[J]>>
+   may not occur free in <<df_context_var[K]>> or <<'C>>.
 
    The proof extract term <<'t>> is unchanged.
 >>
@@ -100,8 +100,8 @@ doc <:doc<
    @modsubsection{Cut (lemma instantiation)}
 
    The @tt{cut} rule is an alternate form of @emph{modus-ponens}.
-   If the lemma <<'S>> can be proved from the current assumptions <<df_context_var[H:v]>>
-   and <<df_context_var[J:v]>>, and the goal <<'T>> can be proved with
+   If the lemma <<'S>> can be proved from the current assumptions <<df_context_var[H]>>
+   and <<df_context_var[J]>>, and the goal <<'T>> can be proved with
    this additional assumption, the lemma can be instantiated to obtain a proof of the goal.
 
    The extract term is formed by instantiating the proof <<'a>> of the lemma

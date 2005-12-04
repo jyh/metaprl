@@ -9,6 +9,7 @@ MPFILES[] =
    itt_eta
    itt_pairwise
    itt_pairwise2
+   itt_list3
    itt_antiquotient
    ctt_markov
 

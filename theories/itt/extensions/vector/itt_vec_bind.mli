@@ -26,6 +26,8 @@
  *)
 extends Itt_theory
 
+open Basic_tactics
+
 (*
  * A single binder.
  *)
@@ -38,6 +40,26 @@ declare bind_subst{'e1; 'e2}
  * The binder.
  *)
 declare sequent [mk_vbind] { Term : Term >- Term } : Term
+
+(*
+ * A dummy substitution.
+ *)
+declare sequent [vsubst_dummy] { Term : Term >- Term } : Term
+
+(*
+ * List bindings.
+ *)
+declare mk_lbind{'n; x. 'e['x]}
+declare bind_substl{'e; 'l}
+declare sequent [vbind_arity] { Term : Term >- Term } : Term
+
+(*
+ * Tactics.
+ *)
+topval wrapVBindT : tactic
+
+topval pushVBindSubstC : term -> conv
+topval foldClose1C : term -> term -> conv
 
 (*!
  * @docoff

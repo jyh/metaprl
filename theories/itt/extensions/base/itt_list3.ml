@@ -109,10 +109,16 @@ interactive cons_elim {| elim [] |} 'H :
    sequent { <H>; u: top; v: top; <J[cons{'u; 'v}]> >- 'C[cons{'u; 'v}] } -->
    sequent { <H>; x: Cons; <J['x]> >- 'C['x] }
 
+doc <:doc<
+   The @tt[list_elim] lemma is extremely useful for splitting lists.
+   It is elimination only, not an induction principle.
+>>
 interactive list_elim 'H :
    [base] sequent { <H>; <J[nil]> >- 'C[nil] } -->
    [step] sequent { <H>; u: top; v: list; <J[cons{'u; 'v}]> >- 'C[cons{'u; 'v}] } -->
    sequent { <H>; x: list; <J['x]> >- 'C['x] }
+
+doc docoff
 
 interactive cons_elim_member 'H :
    sequent { <H>; x: ('y in Cons); <J['x]>; 'y ~ cons{hd{'y}; tl{'y}} >- 'C['x] } -->
@@ -126,8 +132,6 @@ interactive cons_of_list_intro {| intro [] |} :
    [wf] sequent { <H> >- 'l in list } -->
    [wf] sequent { <H> >- length{'l} = 'i +@ 1 in nat } -->
    sequent { <H> >- cons_of_list{'l} in Cons{'i} }
-
-doc docoff
 
 define unfold_list_of_cons : list_of_cons{'i; 'x} <-->
    ind{'i; lambda{x. 'x :: nil}; j, g. lambda{x. list_ind{'x; it; u, v, h. 'u :: 'g 'v}}} 'x
@@ -169,8 +173,13 @@ interactive list_of_cons_is_cons {| intro [] |} :
    [wf] sequent { <H> >- 'x in Cons{'n} } -->
    sequent { <H> >- list_of_cons{'n; 'x} in Cons }
 
+doc <:doc<
+   The type << Cons{0} >> is the same as << top >>.
+>>
 interactive cons_n_intro_nil {| intro [] |} :
    sequent { <H> >- 'e in Cons{0} }
+
+doc docoff
 
 interactive cons_n_elim_expand 'H :
    [wf] sequent { <H>; x: Cons{'n}; <J['x]> >- 'n in nat } -->
@@ -178,6 +187,9 @@ interactive cons_n_elim_expand 'H :
    sequent { <H>; x: Cons{'n}; <J['x]>; 'x ~ cons_of_list{list_of_cons{'n; 'x}} >- 'C['x] } -->
    sequent { <H>; x: Cons{'n}; <J['x]> >- 'C['x] }
 
+doc <:doc<
+   These are the main introduction and elimination lemmmas for the sloppy lists.
+>>
 interactive cons_n_elim {| elim [] |} 'H :
    [wf] sequent { <H>; x: Cons{'n}; <J['x]> >- 'n in nat } -->
    [wf] sequent { <H>; x: Cons{'n}; <J['x]> >- 'n > 0 } -->
@@ -193,11 +205,19 @@ interactive cons_n_intro_cons {| intro [] |} :
 (************************************************************************
  * Squiggle equality.
  *)
+
+doc <:doc<
+   One of the reasons to define sloppy lists is to allow general lemmas
+   about squiggle equality of lists.  The general form split the list using
+   the << nth_prefix{'l; 'i} >> and << nth_suffix{'l; 'i} >> terms.
+>>
 define unfold_nth_prefix : nth_prefix{'l; 'i} <-->
    ind{'i; lambda{l. nil}; j, g. lambda{l. list_ind{'l; it; u, v, h. 'u :: 'g 'v}}} 'l
 
 define unfold_nth_suffix : nth_suffix{'l; 'i} <-->
    ind{'i; lambda{l. 'l}; j, g. lambda{l. list_ind{'l; it; u, v, h. 'g 'v}}} 'l
+
+doc docoff
 
 interactive_rw reduce_nth_prefix_zero {| reduce |} :
    nth_prefix{'l; 0}
@@ -228,6 +248,10 @@ interactive split_list 'i 'n :
    [wf] sequent { <H> >- 'i < 'n } -->
    sequent { <H> >- 'l ~ append{nth_prefix{'l; 'i}; nth_suffix{'l; 'i}} }
 
+doc <:doc<
+   This is a key equality lemma.  Two lists are equal if they are split
+   at an arbitrary point, and the prefixes and suffixes are equal.
+>>
 interactive split_list_pair 'i 'n :
    [wf] sequent { <H> >- 'n in nat } -->
    [wf] sequent { <H> >- 'l1 in Cons{'n} } -->
@@ -237,9 +261,60 @@ interactive split_list_pair 'i 'n :
    sequent { <H> >- append{nth_prefix{'l1; 'i}; nth_suffix{'l1; 'i}} ~ append{nth_prefix{'l2; 'i}; nth_suffix{'l2; 'i}} } -->
    sequent { <H> >- 'l1 ~ 'l2 }
 
+doc <:doc<
+   The << nth{'l; 'i} >> is defined by list induction.
+   Instead, define << nth_elem{'l; 'i} >> that uses integer induction.
+>>
+define unfold_nth_elem : nth_elem{'l; 'i} <-->
+   ind{'i; lambda{l. hd{'l}}; j, g. lambda{l. 'g tl{'l}}} 'l
+
+interactive_rw reduce_nth_elem_zero {| reduce |} :
+   nth_elem{'l; 0}
+   <-->
+   hd{'l}
+
+interactive_rw reduce_nth_elem_succ {| reduce |} :
+   'i in nat -->
+   nth_elem{'l; 'i +@ 1}
+   <-->
+   nth_elem{tl{'l}; 'i}
+
+(************************************************************************
+ * Induction lemmas.
+ *)
+interactive_rw reduce_last_suffix_list :
+   'e in list -->
+   length{'e} = 'n in nat -->
+   nth_suffix{'e; 'n}
+   <-->
+   nil
+
+interactive_rw reduce_last_suffix {| reduce |} :
+   'n in nat -->
+   'e in Cons{'n} -->
+   nth_suffix{nth_prefix{'e; 'n}; 'n}
+   <-->
+   nil
+
+doc <:doc<
+   Two lists are equal if all their suffixes are equal.
+   This rule looks strange because it will be used in
+   a proof by context induction.
+>>
+interactive cons_suffixes_sqequal 'n :
+   [wf] sequent { <H> >- 'l1 in Cons{'n} } -->
+   [wf] sequent { <H> >- 'l2 in Cons{'n} } -->
+   [base] sequent { <H> >- nth_suffix{'l1; 'n} ~ nth_suffix{'l2; 'n} } -->
+   [step] sequent { <H>; i: nat; 'i < 'n >- nth_elem{'l1; 'i} ~ nth_elem{'l2; 'i} } -->
+   sequent { <H> >- 'l1 ~ 'l2 }
+
 (************************************************************************
  * Tactics.
  *)
+doc docoff
+
+let fold_nth_elem = makeFoldC << nth_elem{'l; 'i} >> unfold_nth_elem
+
 let cons_type_term = << Cons >>
 
 (*

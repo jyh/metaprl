@@ -30,13 +30,13 @@ extends Meta_extensions_theory
 extends Itt_pairwise
 extends Itt_vec_bind
 extends Itt_match
+extends Itt_list3
 
 doc docoff
 
 open Basic_tactics
 open Itt_struct
-
-declare Invalid_argument
+open Itt_squiggle
 
 doc <:doc<
    The basic tool is a flattening operation, where given a list
@@ -56,15 +56,11 @@ define unfold_hyps_are_nil : hyps_are_nil{'e} <--> <:xterm<
 >>
 
 define unfold_hyps_hd : hyps_hd{'e} <--> <:xterm<
-   (fix f e -> dest_bind{e;
-       mk_bind{x. f bind_subst{e; x}};
-       l. list_ind{l; "Invalid_argument"; u, v, g. u}}) e
+   (fix f e -> dest_bind{e; mk_bind{x. f bind_subst{e; x}}; l. hd{l}}) e
 >>
 
 define unfold_hyps_tl : hyps_tl{'e} <--> <:xterm<
-   (fix f e -> dest_bind{e;
-       mk_bind{x. f bind_subst{e; x}};
-       l. list_ind{l; "Invalid_argument"; u, v, g. v}}) e
+   (fix f e -> dest_bind{e; mk_bind{x. f bind_subst{e; x}}; l. mk_core{tl{l}}}) e
 >>
 
 define unfold_hyps_flatten : hyps_flatten{'e} <--> <:xterm<
@@ -137,9 +133,9 @@ interactive_rw reduce_hyps_are_nil_bind {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw reduce_hyps_hd_cons {| reduce |} : <:xrewrite<
-   hyps_hd{mk_core{e1 :: e2}}
+   hyps_hd{mk_core{e}}
    <-->
-   e1
+   hd{e}
 >>
 
 interactive_rw reduce_hyps_hd_bind {| reduce |} : <:xrewrite<
@@ -149,9 +145,9 @@ interactive_rw reduce_hyps_hd_bind {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw reduce_hyps_tl_cons {| reduce |} : <:xrewrite<
-   hyps_tl{mk_core{e1 :: e2}}
+   hyps_tl{mk_core{e}}
    <-->
-   e2
+   mk_core{tl{e}}
 >>
 
 interactive_rw reduce_hyps_tl_bind {| reduce |} : <:xrewrite<
@@ -169,96 +165,21 @@ interactive_rw reduce_hyps_flatten : <:xrewrite<
       hyps_hd{e} :: hyps_flatten{hyps_tl{e}}
 >>
 
-(************************************************************************
- * Squiggle equality reasoning.
- *)
-define unfold_Nil : Nil <--> <:xterm<
-   Img{"unit"; x. []}
->>
-
-define unfold_Cons : Cons <--> <:xterm<
-   Img{"top" * "top"; x. let u, v = x in cons{u; v}}
->>
-
-interactive nil_intro {| intro [] |} : <:xrule<
-   <H> >- [] IN "Nil"
->>
-
-interactive nil_elim {| elim [ThinOption thin] |} 'H : <:xrule<
-   <H>; x: "Nil"; <J[ [] ]> >- C[ [] ] -->
-   <H>; x: "Nil"; <J[x]> >- C[x]
->>
-
-interactive cons_intro {| intro [] |} : <:xrule<
-   <H> >- cons{e1; e2} IN "Cons"
->>
-
-interactive cons_elim {| elim [] |} 'H : <:xrule<
-   <H>; u: "top"; v: "top"; <J[cons{u; v}]> >- C[cons{u; v}] -->
-   <H>; x: "Cons"; <J[x]> >- C[x]
->>
-
-interactive cons_is_sqequal : <:xrule<
-   "wf" : <H> >- e1 IN "Cons" -->
-   "wf" : <H> >- e2 IN "Cons" -->
-   <H> >- hd{e1} ~ hd{e2} -->
-   <H> >- tl{e1} ~ tl{e2} -->
-   <H> >- e1 ~ e2
->>
-
 interactive_rw reduce_hyps_flatten_nil {| reduce |} : <:xrewrite<
-   e["it"] IN "Nil" -->
-   hyps_flatten{mk_bind{x. mk_core{e[x]}}}
+   hyps_flatten{mk_core{[]}}
    <-->
    []
+>>
+
+interactive_rw reduce_hyps_flatten_cons {| reduce |} : <:xrewrite<
+   hyps_flatten{mk_core{e1 :: e2}}
+   <-->
+   e1 :: hyps_flatten{mk_core{e2}}
 >>
 
 (************************************************************************
  * Vector lemmas.
  *)
-declare sequent [vsubst_dummy] { Term : Term >- Term } : Term
-
-prim_rw unfold_vsubst_dummy : <:xrewrite<
-   "vsubst_dummy"{| <J> >- C |}
-   <-->
-   sequent_ind{u, v. happly{v; "it"}; "TermSequent"{| <J> >- C |}}
->>
-
-interactive_rw reduce_vsubst_dummy_nil {| reduce |} : <:xrewrite<
-   "vsubst_dummy"{| >- C |}
-   <-->
-   C
->>
-
-interactive_rw reduce_vsubst_dummy_left {| reduce |} : <:xrewrite<
-   "vsubst_dummy"{| x: A; <J[x]> >- C[x] |}
-   <-->
-   "vsubst_dummy"{| <J["it"]> >- C["it"] |}
->>
-
-interactive_rw reduce_vsubst_dummy_right {| reduce |} : <:xrewrite<
-   "vsubst_dummy"{| <J>; x: A >- C[x] |}
-   <-->
-   "vsubst_dummy"{| <J> >- C["it"] |}
->>
-
-interactive_rw reduce_vsubst_dummy_null : <:xrewrite<
-   "vsubst_dummy"{| <J> >- e<||> |}
-   <-->
-   e
->>
-
-interactive_rw reduce_vsubst_dummy_core {| reduce |} : <:xrewrite<
-   "vsubst_dummy"{| <J> >- mk_core{e} |}
-   <-->
-   mk_core{"vsubst_dummy"{| <J> >- e |}}
->>
-
-interactive_rw reduce_vsubst_dummy_cons {| reduce |} : <:xrewrite<
-   "vsubst_dummy"{| <J> >- e1 :: e2 |}
-   <-->
-   "vsubst_dummy"{| <J> >- e1 |} :: "vsubst_dummy"{| <J> >- e2 |}
->>
 
 (*
  * hyps_are_nil reductions.
@@ -287,7 +208,7 @@ interactive_rw reduce_hyps_hd_vec {| reduce |} : <:xrewrite<
 interactive_rw reduce_hyps_tl_vec {| reduce |} : <:xrewrite<
    hyps_tl{"mk_vbind"{| <J> >- mk_core{e1 :: e2} |}}
    <-->
-   "mk_vbind"{| <J> >- e2 |}
+   "mk_vbind"{| <J> >- mk_core{e2} |}
 >>
 
 (*
@@ -302,11 +223,11 @@ interactive_rw reduce_hyps_flatten_vec_nil {| reduce |} : <:xrewrite<
 interactive_rw reduce_hyps_flatten_vec_cons {| reduce |} : <:xrewrite<
    hyps_flatten{"mk_vbind"{| <J> >- mk_core{e1 :: e2} |}}
    <-->
-   "mk_vbind"{| <J> >- e1 |} :: hyps_flatten{"mk_vbind"{| <J> >- e2 |}}
+   "mk_vbind"{| <J> >- e1 |} :: hyps_flatten{"mk_vbind"{| <J> >- mk_core{e2} |}}
 >>
 
 (************************************************************************
- * List reductions.
+ * Basic hypconslist reductions.
  *)
 interactive_rw reduce_hypconslist_concl {| reduce |} : <:xrewrite<
    "hypconslist"{| >- C |}
@@ -332,28 +253,101 @@ interactive_rw reduce_hypconslist_shift {| reduce |} : <:xrewrite<
    "hypconslist"{| <J> >- "hypconslist"{| x: A; <K[x]> >- C[x] |} |}
 >>
 
-interactive_rw reduce_hypflatten_append0 : <:xrewrite<
-   "hypconslist"{| >- hyps_flatten{"hypconslist"{| <J> >- C |}} |}
-   <-->
-   "hypconslist"{| >- append{"hypconslist"{| <J> >- [] |}; hyps_flatten{"mk_vbind"{| <J> >- C |}}} |}
+(************************************************************************
+ * Sloppy list reductions.
+ *)
+interactive hyps_flatten_cons {| intro [] |} : <:xrule<
+   "wf" : <H> >- e["it"] IN "Cons" -->
+   <H> >- hyps_flatten{mk_bind{x. mk_core{e[x]}}} IN "Cons"
 >>
 
-interactive_rw reduce_hypflatten_append1 : <:xrewrite<
-   hyps_flatten{mk_bind{x. mk_core{append{"hypconslist"{| <J[x]> >- [] |}; e[x]}}}}
-   <-->
-   append{hyps_flatten{mk_bind{x. mk_core{"hypconslist"{| <J[x]> >- [] |}}}}; mk_bind{x. e[x]}}
+interactive hyps_flatten_cons_depth {| intro [] |} : <:xrule<
+   "wf" : <H> >- n IN "nat" -->
+   "wf" : <H> >- e["it"] IN Cons{n} -->
+   <H> >- hyps_flatten{mk_bind{x. mk_core{e[x]}}} IN Cons{n}
 >>
 
-interactive_rw reduce_hypflatten_append {| reduce |} : <:xrewrite<
-   hyps_flatten{mk_bind{x. mk_core{append{"hypconslist"{| <J[x]> >- [] |}; hyps_flatten{"mk_vbind"{| <J[x]> >- e[x] |}}}}}}
+interactive hyps_flatten_list {| intro [] |} : <:xrule<
+   "wf" : <H> >- e["it"] IN "list" -->
+   <H> >- hyps_flatten{mk_bind{x. mk_core{e[x]}}} IN "list"
+>>
+
+interactive_rw reduce_hyps_flatten_length_bind {| reduce |} : <:xrewrite<
+   e["it"] IN "list" -->
+   length{hyps_flatten{mk_bind{x. mk_core{e[x]}}}}
    <-->
-   append{hyps_flatten{mk_bind{x. mk_core{"hypconslist"{| <J[x]> >- [] |}}}}; hyps_flatten{mk_bind{x. "mk_vbind"{| <J[x]> >- e[x] |}}}}
+   length{hyps_flatten{mk_core{e["it"]}}}
+>>
+
+interactive_rw reduce_hyps_flatten_length_list {| reduce |} : <:xrewrite<
+   e IN "list" -->
+   length{hyps_flatten{mk_core{e}}}
+   <-->
+   length{e}
+>>
+
+interactive_rw reduce_hyps_flatten_nth_bind 'n : <:xrewrite<
+   n IN "nat" -->
+   i IN "nat" -->
+   i < n -->
+   e["it"] IN Cons{n} -->
+   nth_elem{hyps_flatten{mk_bind{x. mk_core{e[x]}}}; i}
+   <-->
+   mk_bind{x. nth_elem{e[x]; i}}
+>>
+
+interactive_rw reduce_hyps_flatten_bind_nth 'n : <:xrewrite<
+   n IN "nat" -->
+   i IN "nat" -->
+   i < n -->
+   e["it"] IN Cons{n} -->
+   mk_bind{x. nth_elem{hyps_flatten{mk_core{e[x]}}; i}}
+   <-->
+   mk_bind{x. nth_elem{e[x]; i}}
+>>
+
+interactive_rw reduce_hyps_flatten_nth_vec_bind 'n : <:xrewrite<
+   n IN "nat" -->
+   i IN "nat" -->
+   i < n -->
+   "vsubst_dummy"{| <J> >- e |} IN Cons{n} -->
+   nth_elem{hyps_flatten{"mk_vbind"{| <J> >- mk_core{e} |}}; i}
+   <-->
+   "mk_vbind"{| <J> >- nth_elem{e; i} |}
+>>
+
+interactive_rw reduce_hyps_flatten_vec_nth_bind 'n : <:xrewrite<
+   n IN "nat" -->
+   i IN "nat" -->
+   i < n -->
+   "vsubst_dummy"{| <J> >- e["it"] |} IN Cons{n} -->
+   "mk_vbind"{| <J> >- nth_elem{hyps_flatten{mk_bind{x. mk_core{e[x]}}}; i<||>} |}
+   <-->
+   "mk_vbind"{| <J> >- mk_bind{x. nth_elem{e[x]; i}} |}
+>>
+
+(************************************************************************
+ * Reductions to append.
+ *)
+interactive hypconslist_is_list {| intro [] |} : <:xrule<
+   <H> >- "hypconslist"{| <J> >- [] |} IN "list"
+>>
+
+interactive hypconslist_is_cons {| intro [] |} : <:xrule<
+   <H> >- "hypconslist"{| <J> >- C |} IN Cons{length{"hypconslist"{| <J> >- [] |}}}
+>>
+
+interactive_rw nth_prefix_hypconslist : <:xrewrite<
+   i = length{"hypconslist"{| <J> >- [] |}} in "nat" -->
+   nth_prefix{"hypconslist"{| <J> >- C |}; i}
+   <-->
+   "hypconslist"{| <J> >- [] |}
 >>
 
 interactive_rw hypconslist_nest_lemma {| reduce |} : <:xrewrite<
-   "hypconslist"{| >- "hypconslist"{| <J> >- "hypconslist"{| <K> >- C |} |} |}
+   "hypconslist"{| <J> >- C |}
    <-->
-   "hypconslist"{| >- append{"hypconslist"{| <J> >- [] |}; hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- C |}} |}}} |}
+   append{"hypconslist"{| <J> >- [] |}; hyps_flatten{"mk_vbind"{| <J> >- C |}}}
 >>
 
 (*!

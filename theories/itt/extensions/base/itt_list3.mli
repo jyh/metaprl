@@ -30,12 +30,34 @@ extends Itt_list2
 
 open Basic_tactics
 
+(*
+ * The type containing nil
+ *)
 declare Nil
+
+(*
+ * The type containing << cons{'e1; 'e2} >> for any << 'e1 >> and
+ * << 'e2 >>.
+ *)
 declare Cons
+
+(*
+ * The type of conses that are nested correctly for depth << 'n >>.
+ *)
+declare Cons{'n}
+
+(*
+ * Prefix and suffix operations.
+ *)
+declare nth_prefix{'l; 'i}
+declare nth_suffix{'l; 'i}
+declare nth_elem{'l; 'i}
 
 (************************************************************************
  * Tactics.
  *)
+topval fold_nth_elem : conv
+
 topval splitConsT : term -> tactic
 
 (*!

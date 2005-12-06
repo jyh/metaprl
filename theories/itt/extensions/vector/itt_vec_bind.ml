@@ -30,10 +30,17 @@ doc <:doc<
 >>
 extends Meta_extensions_theory
 extends Itt_theory
+extends Itt_match
 
 doc docoff
 
+open Lm_printf
+
 open Basic_tactics
+open Simple_print
+open Itt_squiggle
+open Itt_struct
+open Itt_dfun
 
 declare Invalid_argument
 
@@ -107,6 +114,209 @@ interactive_rw reduce_mk_vbind_right {| reduce |} : <:xrewrite<
    <-->
    "mk_vbind"{| <J> >- mk_bind{x. C[x]} |}
 >>
+
+(************************************************************************
+ * Dummy substitution.
+ *)
+declare sequent [vsubst_dummy] { Term : Term >- Term } : Term
+
+prim_rw unfold_vsubst_dummy : <:xrewrite<
+   "vsubst_dummy"{| <J> >- C |}
+   <-->
+   sequent_ind{u, v. happly{v; "it"}; "TermSequent"{| <J> >- C |}}
+>>
+
+interactive_rw reduce_vsubst_dummy_nil {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| >- C |}
+   <-->
+   C
+>>
+
+interactive_rw reduce_vsubst_dummy_left {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| x: A; <J[x]> >- C[x] |}
+   <-->
+   "vsubst_dummy"{| <J["it"]> >- C["it"] |}
+>>
+
+interactive_rw reduce_vsubst_dummy_right {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| <J>; x: A >- C[x] |}
+   <-->
+   "vsubst_dummy"{| <J> >- C["it"] |}
+>>
+
+interactive_rw reduce_vsubst_dummy_null : <:xrewrite<
+   "vsubst_dummy"{| <J> >- e<||> |}
+   <-->
+   e
+>>
+
+interactive_rw reduce_vsubst_dummy_core {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| <J> >- mk_core{e} |}
+   <-->
+   mk_core{"vsubst_dummy"{| <J> >- e |}}
+>>
+
+interactive_rw reduce_vsubst_dummy_cons {| reduce |} : <:xrewrite<
+   "vsubst_dummy"{| <J> >- e1 :: e2 |}
+   <-->
+   "vsubst_dummy"{| <J> >- e1 |} :: "vsubst_dummy"{| <J> >- e2 |}
+>>
+
+(************************************************************************
+ * List version.
+ *)
+doc <:doc<
+   The list binding is like a vector binding, but wraps the binders
+   in a list.  Use unit lists (unary natural numbers) instead of
+   << nat >> to avoid wf subgoals.
+>>
+define unfold_mk_lbind : mk_lbind{'n; x. 'e['x]} <--> <:xterm<
+   list_ind{n; lambda{f. f "nil"}; u, v, g. lambda{f. mk_bind{x. g (lambda{l. f (x :: l)})}}} lambda{x. e[x]}
+>>
+
+define unfold_bind_substl : bind_substl{'e; 'l} <--> <:xterm<
+   list_ind{l; lambda{e. e}; u, v, g. lambda{e. g bind_subst{e; u}}} e
+>>
+
+declare sequent [vbind_arity] { Term : Term >- Term } : Term
+
+prim_rw unfold_vbind_arity : <:xrewrite<
+   "vbind_arity"{| <J> >- C |}
+   <-->
+   sequent_ind{u, v. "it" :: happly{v; "it"}; "TermSequent"{| <J> >- [] |}}
+>>
+
+doc docoff
+
+(*
+ * Reductions.
+ *)
+interactive_rw reduce_vbind_arity_nil {| reduce |} : <:xrewrite<
+   "vbind_arity"{| >- C |}
+   <-->
+   []
+>>
+
+interactive_rw reduce_mk_lbind_zero {| reduce |} : <:xrewrite<
+   mk_lbind{[]; x. e[x]}
+   <-->
+   e["nil"]
+>>
+
+interactive_rw reduce_bind_substl_nil {| reduce |} : <:xrewrite<
+   bind_substl{e; []}
+   <-->
+   e
+>>
+
+interactive_rw reduce_vbind_arity_cons {| reduce |} : <:xrewrite<
+   "vbind_arity"{| x: A; <J[x]> >- C[x] |}
+   <-->
+   "it" :: "vbind_arity"{| <J["it"]> >- C["it"] |}
+>>
+
+interactive_rw reduce_mk_lbind_succ {| reduce |} : <:xrewrite<
+   mk_lbind{z::n; l. e[l]}
+   <-->
+   mk_bind{x. mk_lbind{n; l. e[x:: l]}}
+>>
+
+interactive_rw reduce_bind_substl_cons {| reduce |} : <:xrewrite<
+   bind_substl{e; u::v}
+   <-->
+   bind_substl{bind_subst{e; u}; v}
+>>
+
+(*
+ * Well-formedness rules.
+ *)
+interactive vbind_arity_wf {| intro [] |} : <:xrule<
+   <H> >- "vbind_arity"{| <J> >- C |} IN list{"unit"}
+>>
+
+interactive vsubst_dummy_vbind_arity_wf {| intro [] |} : <:xrule<
+   <H> >- "vsubst_dummy"{| <J> >- "vbind_arity"{| <K> >- C |} |} IN list{"unit"}
+>>
+
+doc <:doc<
+   The most important use of << mk_lbind{'n; x. 'e['x]} >> is to
+   eta-expand a vector binding.
+>>
+
+interactive_rw vbind_eta_expand : <:xrewrite<
+   "mk_vbind"{| <J> >- C |}
+   <-->
+   mk_lbind{"vbind_arity"{| <J> |}; l. bind_substl{"mk_vbind"{| <J> >- C |}; l}}
+>>
+
+doc <:doc<
+   Move the binder inward.
+>>
+interactive_rw vbind_subst_push Perv!bind{x. 'C['x]} 'e : <:xrewrite<
+   mk_lbind{"vbind_arity"{| <J> |}; l. bind_substl{"mk_vbind"{| <J> >- C<||>[e] |}; l}}
+   <-->
+   mk_lbind{"vbind_arity"{| <J> |}; l. C[bind_substl{"mk_vbind"{| <J> >- e |}; l}]}
+>>
+
+(************************************************************************
+ * Tactics.
+ *)
+let mk_empty_vbind_term t =
+   <:con< sequent [mk_vbind] { >- $t$ } >>
+
+let mk_lbind_term = << mk_lbind{'n; l. 'e} >>
+let mk_lbind_opname = opname_of_term mk_lbind_term
+let is_mk_lbind_term = is_dep0_dep1_term mk_lbind_opname
+let dest_mk_lbind_term = dest_dep0_dep1_term mk_lbind_opname
+
+let bind_substl_term = << bind_substl{'e1; 'e2} >>
+let bind_substl_opname = opname_of_term bind_substl_term
+let dest_bind_substl_term = dest_dep0_dep0_term bind_substl_opname
+
+let wrap_vbind p =
+   let t = concl p in
+   let t1, t2 = dest_squiggle t in
+   let t1 = mk_empty_vbind_term t1 in
+   let t2 = mk_empty_vbind_term t2 in
+   let t = mk_squiggle_term t1 t2 in
+      assertT t
+      thenLT [idT; rw (addrC [Subterm 1] reduceTopC thenC addrC [Subterm 2] reduceTopC) (-1) thenT nthHypT (-1)]
+
+let wrapVBindT = funT wrap_vbind
+
+(*
+ * Bind pushing.
+ *)
+let var_x = Lm_symbol.add "x"
+
+let push_vbind_subst t1 t =
+   if is_mk_lbind_term t then
+      let _, _, c = dest_mk_lbind_term t in
+      let c, _ = dest_bind_substl_term c in
+      let c = TermMan.concl c in
+      let fv = free_vars_set c in
+      let x = maybe_new_var_set var_x fv in
+      let t_var = var_subst c t1 x in
+      let t_bind = mk_bind1_term x t_var in
+         vbind_subst_push t_bind t1
+   else
+      raise (RefineError ("push_vbind_subst", StringError "not a mk_lbind term"))
+
+let pushVBindSubstC t1 = termC (push_vbind_subst t1)
+
+(*
+ * Lambda-closing.
+ *)
+let foldClose1C x t1 =
+   let v = dest_var x in
+   let t_app = mk_apply_term (mk_lambda_term v t1) x in
+   let fold t =
+      if alpha_equal t t1 then
+         foldC t_app reduce_beta
+      else
+         raise (RefineError ("fold_close", StringError "term mismatch"))
+   in
+      termC fold
 
 (*!
  * @docoff

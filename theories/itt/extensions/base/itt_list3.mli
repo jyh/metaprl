@@ -57,8 +57,10 @@ declare nth_elem{'l; 'i}
  * Tactics.
  *)
 topval fold_nth_elem : conv
+topval fold_guard : conv
 
 topval splitConsT : term -> tactic
+topval splitConsFunT : term -> tactic
 
 (*!
  * @docoff

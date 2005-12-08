@@ -300,7 +300,7 @@ interactive_rw reduce_hyps_flatten_bind_nth 'n : <:xrewrite<
    n IN "nat" -->
    i IN "nat" -->
    i < n -->
-   e["it"] IN Cons{n} -->
+   lambda{x. e[x]} IN ConsFun{n} -->
    mk_bind{x. nth_elem{hyps_flatten{mk_core{e[x]}}; i}}
    <-->
    mk_bind{x. nth_elem{e[x]; i}}

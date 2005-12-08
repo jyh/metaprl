@@ -47,6 +47,12 @@ declare Cons
 declare Cons{'n}
 
 (*
+ * The type of lambda-expressions producing cons's.
+ *)
+declare ConsFun
+declare ConsFun{'n}
+
+(*
  * Prefix and suffix operations.
  *)
 declare nth_prefix{'l; 'i}

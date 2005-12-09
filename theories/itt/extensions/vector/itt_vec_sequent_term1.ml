@@ -134,10 +134,6 @@ interactive_rw reduce_hyps_flatten_core {| reduce |} : <:xrewrite<
 >>
 
 (************************************************************************
- * Vector lemmas.
- *)
-
-(************************************************************************
  * Basic hypconslist reductions.
  *)
 interactive_rw reduce_hypconslist_concl {| reduce |} : <:xrewrite<
@@ -165,14 +161,94 @@ interactive_rw reduce_hypconslist_shift {| reduce |} : <:xrewrite<
 >>
 
 (************************************************************************
- * Reductions to append.
+ * Well-formedness.
  *)
+interactive hyps_length_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "list" -->
+   <H> >- hyps_length{mk_core{e}} IN "nat"
+>>
+
+interactive hyps_flatten_is_list {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "list" -->
+   <H> >- hyps_flatten{mk_core{e}} IN "list"
+>>
+
 interactive hypconslist_is_list {| intro [] |} : <:xrule<
    <H> >- "hypconslist"{| <J> >- [] |} IN "list"
 >>
 
-interactive hypconslist_is_cons {| intro [] |} : <:xrule<
-   <H> >- "hypconslist"{| <J> >- C |} IN Cons{length{"hypconslist"{| <J> >- [] |}}}
+(************************************************************************
+ * Hyps_length.
+ *)
+declare sequent [squashlist] { Term : Term >- Term } : Term
+
+prim_rw unfold_squashlist : <:xrewrite<
+   "squashlist"{| <J> >- C |}
+   <-->
+   sequent_ind{u, v. "it"::happly{v; "it"}; "TermSequent"{| <J> >- C |}}
+>>
+
+interactive_rw reduce_squashlist_concl {| reduce |} : <:xrewrite<
+   "squashlist"{| >- C |}
+   <-->
+   C
+>>
+
+interactive_rw reduce_squashlist_left {| reduce |} : <:xrewrite<
+   "squashlist"{| x: A; <J[x]> >- C[x] |}
+   <-->
+   "it" :: "squashlist"{| <J["it"]> >- C["it"] |}
+>>
+
+interactive_rw reduce_squashlist_right {| reduce |} : <:xrewrite<
+   "squashlist"{| <J>; x: A >- C[x] |}
+   <-->
+   "squashlist"{| <J> >- "it"::C["it"] |}
+>>
+
+interactive_rw reduce_hyps_length_squashlist {| reduce |} : <:xrewrite<
+   hyps_length{mk_core{"hypconslist"{| <J> >- [] |}}}
+   <-->
+   length{"squashlist"{| <J> >- [] |}}
+>>
+
+interactive_rw hoist_hyps_length 'i Perv!bind{x. 'S['x]} : <:xrewrite<
+   i = hyps_length{"mk_vbind"{| <J> >- "hypconslist"{| <K> >- [] |} |}} in "nat" -->
+   "mk_vbind"{| <J> >- S[hyps_length{"hypconslist"{| <K> >- [] |}}] |}
+   <-->
+   "mk_vbind"{| <J> >- S[i<||>] |}
+>>
+
+interactive_rw reduce_hyps_flatten_vec_nth_bind 'n : <:xrewrite<
+   n IN "nat" -->
+   i IN "nat" -->
+   i < n -->
+   "mk_vbind"{| <J> >- nth{hyps_flatten{mk_core{"hypconslist"{| <K> >- [] |}}}; i<||>} |}
+   <-->
+   "mk_vbind"{| <J> >- nth{"hypconslist"{| <K> >- [] |}; i} |}
+>>
+
+interactive_rw nth_inner {| reduce |} : <:xrewrite<
+   nth{"hypconslist"{| <J> >- "hypconslist"{| x: A; <K[x]> >- [] |} |}; length{"hypconslist"{| <J> >- [] |}}}
+   <-->
+   "mk_vbind"{| <J> >- A |}
+>>
+
+(************************************************************************
+ * Reductions to append.
+ *)
+interactive_rw nth_suffix_hypconslist : <:xrewrite<
+   i = length{"hypconslist"{| <J> >- [] |}} in "nat" -->
+   nth_suffix{"hypconslist"{| <J> >- C |}; i}
+   <-->
+   hyps_flatten{"mk_vbind"{| <J> >- C |}}
+>>
+
+interactive_rw nth_prefix_hypconslist_lemma : <:xrewrite<
+   i = length{"hypconslist"{| <J> >- "vsubst_dummy"{| >- [] |} |}} in "nat" -->
+   nth_prefix{"hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}; i}
+   <-->
+   nth_prefix{"hypconslist"{| <J> >- "hypconslist"{| >- [] |} |}; i}
 >>
 
 interactive_rw nth_prefix_hypconslist : <:xrewrite<

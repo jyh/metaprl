@@ -1082,6 +1082,10 @@ interactive list_of_fun_wf {| intro [] |} :
    sequent { <H> >- 'A Type } -->
    sequent { <H> >- list_of_fun{k.'f['k]; 'n} in list{'A} }
 
+interactive list_of_fun_wf2 {| intro [] |} :
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- list_of_fun{k.'f['k]; 'n} in list }
+
 define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} -@ 'k}; 'r} }
 
 interactive_rw tail_reduce1 {| reduce |}:

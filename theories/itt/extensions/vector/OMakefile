@@ -16,6 +16,7 @@ MPFILES[] =
    itt_vec_list1
    itt_vec_bind
    itt_vec_sequent_term
+   itt_vec_sequent_term1
    itt_vec_theory
 
 Theory($(MPFILES))

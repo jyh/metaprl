@@ -239,6 +239,37 @@ interactive_rw reduce_nth_elem_succ {| reduce |} :
    <-->
    nth_elem{tl{'l}; 'i}
 
+interactive list_squiggle_nth_elem :
+   [wf] sequent { <H> >- 'l1 in list } -->
+   [wf] sequent { <H> >- 'l2 in list } -->
+   [wf] sequent { <H> >- length{'l1} = length{'l2} in nat } -->
+   sequent { <H>; i: Index{'l1} >- nth_elem{'l1; 'i} ~ nth_elem{'l2; 'i} } -->
+   sequent { <H> >- 'l1 ~ 'l2 }
+
+interactive_rw reduce_nth_elem_nth_prefix {| reduce |} :
+   'l in list -->
+   'n in nat -->
+   'n <= length{'l} -->
+   'i in nat -->
+   'i < 'n -->
+   nth_elem{nth_prefix{'l; 'n}; 'i}
+   <-->
+   nth_elem{'l; 'i}
+
+interactive_rw reduce_length_of_nth_prefix {| reduce |} :
+   'l in list -->
+   'i in nat -->
+   'i <= length{'l} -->
+   length{nth_prefix{'l; 'i}}
+   <-->
+   'i
+
+interactive nth_prefix_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list } -->
+   [wf] sequent { <H> >- 'i in nat } -->
+   [wf] sequent { <H> >- 'i <= length{'l} } -->
+   sequent { <H> >- nth_prefix{'l; 'i} in list }
+
 (************************************************************************
  * Lemmas for the introduction rule.
  *)
@@ -438,6 +469,14 @@ interactive split_list 'i 'n :
    [wf] sequent { <H> >- 'i < 'n } -->
    sequent { <H> >- 'l ~ append{nth_prefix{'l; 'i}; nth_suffix{'l; 'i}} }
 
+interactive_rw split_list_sqequal 'i ('l :> Term) :
+   'l in list -->
+   'i in nat -->
+   'i <= length{'l} -->
+   'l
+   <-->
+   append{nth_prefix{'l; 'i}; nth_suffix{'l; 'i}}
+
 doc <:doc<
    This is a key equality lemma.  Two lists are equal if they are split
    at an arbitrary point, and the prefixes and suffixes are equal.
@@ -467,18 +506,6 @@ interactive_rw reduce_last_suffix {| reduce |} :
    nth_suffix{nth_prefix{'e; 'n}; 'n}
    <-->
    nil
-
-doc <:doc<
-   Two lists are equal if all their suffixes are equal.
-   This rule looks strange because it will be used in
-   a proof by context induction.
->>
-interactive cons_suffixes_sqequal 'n :
-   [wf] sequent { <H> >- 'l1 in Cons{'n} } -->
-   [wf] sequent { <H> >- 'l2 in Cons{'n} } -->
-   [base] sequent { <H> >- nth_suffix{'l1; 'n} ~ nth_suffix{'l2; 'n} } -->
-   [step] sequent { <H>; i: nat; 'i < 'n >- nth_elem{'l1; 'i} ~ nth_elem{'l2; 'i} } -->
-   sequent { <H> >- 'l1 ~ 'l2 }
 
 (************************************************************************
  * Tactics.

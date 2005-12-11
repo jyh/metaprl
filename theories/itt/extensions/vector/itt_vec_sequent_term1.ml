@@ -27,6 +27,7 @@ doc <:doc<
    @parents
 >>
 extends Meta_extensions_theory
+extends Itt_vec_dform
 extends Itt_pairwise
 extends Itt_vec_bind
 extends Itt_match
@@ -90,7 +91,7 @@ prim_rw unfold_hyplist : <:xrewrite<
 doc <:doc<
    The bsequent is the sequent representation of a sequent triple.
 >>
-prim_rw unfold_bsequent : <:xrewrite<
+prim_rw unfold_fsequent : <:xrewrite<
    fsequent{arg}{| <J> >- C |}
    <-->
    (arg, "hyplist"{| <J> |}, "mk_vbind"{| <J> >- C |})
@@ -163,6 +164,12 @@ interactive_rw reduce_hypconslist_shift {| reduce |} : <:xrewrite<
    "hypconslist"{| <J>; x: A >- "hypconslist"{| <K[x]> >- C[x] |} |}
    <-->
    "hypconslist"{| <J> >- "hypconslist"{| x: A; <K[x]> >- C[x] |} |}
+>>
+
+interactive_rw reduce_hypconslist_merge : <:xrewrite<
+   "hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}
+   <-->
+   "hypconslist"{| <J>; <K> >- [] |}
 >>
 
 (************************************************************************
@@ -267,6 +274,10 @@ interactive hypconslist_is_list2 {| intro [] |} : <:xrule<
    <H> >- "hypconslist"{| <J> >- l<|H|> |} IN "list"
 >>
 
+interactive hypconslist_is_list3 {| intro [] |} : <:xrewrite<
+   <H> >- "hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |} IN "list"
+>>
+
 interactive hyps_length_bind_hypconslist_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- l IN "list" -->
    <H> >- hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l<|H|> |}} |}} IN "nat"
@@ -320,6 +331,10 @@ interactive_rw reduce_hyps_length_right {| reduce |} : <:xrewrite<
    length{"hypconslist"{| <J>; x: A >- l<||> |}}
    <-->
    length{"hypconslist"{| <J> >- l |}} +@ 1
+>>
+
+interactive hypconslist_length_lt {| intro [] |} : <:xrewrite<
+   <H> >- length{"hypconslist"{| <J> >- [] |}} <= length{"hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}}
 >>
 
 interactive_rw reduce_hyps_flatten_length {| reduce |} : <:xrewrite<
@@ -391,6 +406,12 @@ interactive_rw reduce_hyps_length_bind_cons {| reduce |} : <:xrewrite<
    hyps_length{"mk_vbind"{| <J> >- mk_core{l} |}} +@ 1
 >>
 
+interactive_rw reduce_hyps_length_bind_squashlist_cons {| reduce |} : <:xrewrite<
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K> >- x :: l |}} |}}
+   <-->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K> >- l |}} |}} +@ 1
+>>
+
 (************************************************
  * hyps_flatten reductions.
  *)
@@ -428,31 +449,59 @@ interactive_rw reduce_hyps_flatten_bind_cons {| reduce |} : <:xrewrite<
 (************************************************************************
  * Reductions to append.
  *)
-interactive_rw nth_suffix_hypconslist : <:xrewrite<
+interactive_rw nth_suffix_hypconslist {| reduce |} : <:xrewrite<
    i = length{"hypconslist"{| <J> >- [] |}} in "nat" -->
    nth_suffix{"hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}; i}
    <-->
    hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}}
 >>
 
-interactive_rw nth_prefix_hypconslist_lemma : <:xrewrite<
-   i = length{"hypconslist"{| <J> >- "vsubst_dummy"{| >- [] |} |}} in "nat" -->
-   nth_prefix{"hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}; i}
-   <-->
-   nth_prefix{"hypconslist"{| <J> >- "hypconslist"{| >- [] |} |}; i}
->>
-
-interactive_rw nth_prefix_hypconslist : <:xrewrite<
+interactive_rw nth_prefix_hypconslist {| reduce |} : <:xrewrite<
    i = length{"hypconslist"{| <J> >- [] |}} in "nat" -->
-   nth_prefix{"hypconslist"{| <J> >- C |}; i}
+   nth_prefix{"hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}; i}
    <-->
    "hypconslist"{| <J> >- [] |}
 >>
 
 interactive_rw hypconslist_nest_lemma {| reduce |} : <:xrewrite<
-   "hypconslist"{| <J> >- C |}
+   "hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}
    <-->
-   append{"hypconslist"{| <J> >- [] |}; hyps_flatten{"mk_vbind"{| <J> >- C |}}}
+   append{"hypconslist"{| <J> >- [] |}; hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}}}
+>>
+
+interactive_rw hypconslist_nest 'J : <:xrewrite<
+   "hypconslist"{| <J>; <K> >- [] |}
+   <-->
+   append{"hypconslist"{| <J> >- [] |}; hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}}}
+>>
+
+interactive_rw hyplist_nest 'J : <:xrewrite<
+   "hyplist"{| <J>; <K> |}
+   <-->
+   append{"hyplist"{| <J> |}; hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hyplist"{| <K> |}} |}}}
+>>
+
+(************************************************************************
+ * hyplist rewrites and well-formedness.
+ *)
+interactive hyplist_wf {| intro [] |} : <:xrule<
+   <H> >- "hyplist"{| <J> |} IN "list"
+>>
+
+interactive hyplist_flatten_wf {| intro [] |} : <:xrule<
+   <H> >- hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hyplist"{| <K> |}} |}} IN "list"
+>>
+
+interactive_rw reduce_hyplist_single {| reduce |} : <:xrule<
+   "hyplist"{| x: A |}
+   <-->
+   [A]
+>>
+
+interactive_rw reduce_hyplist_flatten_single {| reduce |} : <:xrule<
+   hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hyplist"{| x: A |}} |}}
+   <-->
+   ["mk_vbind"{| <J> >- A |}]
 >>
 
 (************************************************************************
@@ -527,6 +576,63 @@ let hoist_hyps_length_tac p =
       thenLT [withT t_length (dT 0) ttca; dT (-1) thenT rw (addrC addr (conv t_i t_bind)) 0]
 
 let hoistHypsLengthT = funT hoist_hyps_length_tac
+
+(************************************************************************
+ * Apply the rewrite.
+ *)
+let rec split_hyplist_conv hyps i t =
+   if i = 0 then
+      idC
+   else if i = 1 then
+      match SeqHyp.get hyps 0 with
+         Hypothesis _ ->
+            reduce_hyplist_single
+       | Context _ ->
+            idC
+   else
+      let j = pred i in
+      let c =
+         match SeqHyp.get hyps j with
+            Hypothesis _ ->
+               addrC [Subterm 2] reduce_hyplist_flatten_single
+          | Context _ ->
+               idC
+      in
+         hyplist_nest i thenC c thenC (addrC [Subterm 1] (termC (split_hyplist_conv hyps j)))
+
+let flatten_fsequent t =
+   let hyps = (explode_sequent t).sequent_hyps in
+   let i = SeqHyp.length hyps in
+      unfold_fsequent thenC (addrC [Subterm 2; Subterm 1] (termC (split_hyplist_conv hyps i)))
+
+let reduce_fsequent = termC flatten_fsequent
+
+interactive test_intro : <:xrule<
+   <H> >- fsequent{it}{| <J> >- C |} IN "top"
+>>
+
+interactive test_elim1 'J : <:xrule<
+   <H> >- fsequent{it}{| <J>; x: A; <K[x]> >- C[x] |} IN "top"
+>>
+
+interactive test_elim2 'J 'K : <:xrule<
+   <H> >- fsequent{it}{| <J>; x: A; <K[x]>; y: B[x]; z: C[x; y]; <L[x; y; z]> >- P[x; y] |} IN "top"
+>>
+
+(************************************************************************
+ * Display forms.
+ *)
+dform hyplist_df : hyplist{| <H> >- 'C |} =
+   szone pushm[3] `"hyplist[" display_sequent{hyplist{| <H> >- 'C |}} `"]" popm ezone
+
+dform hyplist_hyp_df : display_hyp{hyplist; v. 'e} =
+   slot{'v} `" : " slot{'e}
+
+dform hyplist_concl_df : display_concl{hyplist; xconcl} =
+   `""
+
+dform hyplist_concl_df2 : display_concl{hyplist; 'C} =
+   slot{'C}
 
 (*!
  * @docoff

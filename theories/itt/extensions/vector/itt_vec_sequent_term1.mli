@@ -48,6 +48,7 @@ topval fold_hyplist : conv
  * Tactics.
  *)
 topval hoistHypsLengthT : tactic
+topval reduce_fsequent : conv
 
 (*!
  * @docoff

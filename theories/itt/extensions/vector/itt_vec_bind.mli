@@ -60,6 +60,14 @@ topval wrapVBindT : tactic
 
 topval pushVBindSubstC : term -> conv
 topval foldClose1C : term -> term -> conv
+topval reduceVBindC : conv
+
+(*
+ * Term operations.
+ *)
+val is_mk_vbind_term : term -> bool
+val mk_mk_vbind_term : seq_hyps -> term -> term
+val dest_mk_vbind_term : term -> seq_hyps * term
 
 (*!
  * @docoff

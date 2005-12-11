@@ -103,17 +103,25 @@ interactive_rw reduce_mk_vbind_nil {| reduce |} : <:xrewrite<
    C
 >>
 
-interactive_rw reduce_mk_vbind_left {| reduce |} : <:xrewrite<
+interactive_rw reduce_mk_vbind_left : <:xrewrite<
    "mk_vbind"{| x: A; <J[x]> >- C[x] |}
    <-->
    mk_bind{x. "mk_vbind"{| <J[x]> >- C[x] |}}
 >>
 
-interactive_rw reduce_mk_vbind_right {| reduce |} : <:xrewrite<
+interactive_rw reduce_mk_vbind_right : <:xrewrite<
    "mk_vbind"{| <J>; x: A >- C[x] |}
    <-->
    "mk_vbind"{| <J> >- mk_bind{x. C[x]} |}
 >>
+
+interactive_rw reduce_mk_vbind_merge : <:xrewrite<
+   "mk_vbind"{| <J> >- "mk_vbind"{| <K> >- C |} |}
+   <-->
+   "mk_vbind"{| <J>; <K> >- C |}
+>>
+
+let reduceVBindC = repeatC (reduceC thenC (higherC reduce_mk_vbind_left) thenC (higherC reduce_mk_vbind_right))
 
 (************************************************************************
  * Dummy substitution.
@@ -258,11 +266,44 @@ interactive_rw vbind_subst_push Perv!bind{x. 'C['x]} 'e : <:xrewrite<
    mk_lbind{"vbind_arity"{| <J> |}; l. C[bind_substl{"mk_vbind"{| <J> >- e |}; l}]}
 >>
 
+interactive_rw vbind_subst_push2 Perv!bind{x. 'C['x]} 'e : <:xrewrite<
+   mk_lbind{"vbind_arity"{| <J> |}; l. bind_substl{"mk_vbind"{| <J> >- C[e] |}; l}}
+   <-->
+   mk_lbind{"vbind_arity"{| <J> |}; l. bind_substl{"mk_vbind"{| <J> >- C[bind_substl{"mk_vbind"{| <J> >- e |}; l}] |}; l}}
+>>
+
 (************************************************************************
  * Tactics.
  *)
 let mk_empty_vbind_term t =
    <:con< sequent [mk_vbind] { >- $t$ } >>
+
+let mk_vbind_arg_term = << mk_vbind >>
+let mk_vbind_arg_opname = opname_of_term mk_vbind_arg_term
+let is_mk_vbind_arg_term = is_no_subterms_term mk_vbind_arg_opname
+
+let is_mk_vbind_term t =
+   is_sequent_term t && is_mk_vbind_arg_term (TermMan.args t)
+
+let mk_mk_vbind_term hyps t =
+   let s =
+      { sequent_args = mk_vbind_arg_term;
+        sequent_hyps = hyps;
+        sequent_concl = t
+      }
+   in
+      mk_sequent_term s
+
+let dest_mk_vbind_term t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+      if is_mk_vbind_arg_term arg then
+         hyps, concl
+      else
+         raise (RefineError ("dest_vbind_term", StringTermError ("not a mk_vbind term", t)))
 
 let mk_lbind_term = << mk_lbind{'n; l. 'e} >>
 let mk_lbind_opname = opname_of_term mk_lbind_term
@@ -298,7 +339,7 @@ let push_vbind_subst t1 t =
       let x = maybe_new_var_set var_x fv in
       let t_var = var_subst c t1 x in
       let t_bind = mk_bind1_term x t_var in
-         vbind_subst_push t_bind t1
+         vbind_subst_push t_bind t1 orelseC vbind_subst_push2 t_bind t1
    else
       raise (RefineError ("push_vbind_subst", StringError "not a mk_lbind term"))
 

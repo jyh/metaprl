@@ -34,9 +34,14 @@ extends Itt_list3
 
 doc docoff
 
+open Lm_printf
 open Basic_tactics
+open Simple_print
 open Itt_struct
 open Itt_squiggle
+open Itt_vec_bind
+open Itt_logic
+open Itt_equal
 
 doc <:doc<
    The basic tool is a flattening operation, where given a list
@@ -161,25 +166,42 @@ interactive_rw reduce_hypconslist_shift {| reduce |} : <:xrewrite<
 >>
 
 (************************************************************************
- * Well-formedness.
+ * Hyps length.
  *)
-interactive hyps_length_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- e IN "list" -->
-   <H> >- hyps_length{mk_core{e}} IN "nat"
->>
+doc <:doc<
+   The following section defines the internal rewrites on @tt[hyps_length].
 
-interactive hyps_flatten_is_list {| intro [] |} : <:xrule<
-   "wf" : <H> >- e IN "list" -->
-   <H> >- hyps_flatten{mk_core{e}} IN "list"
->>
+   The key to getting rewriting to work in general is to lift the destructor
+   @tt[hyps_length] out of the scope of binders, allowing a case analysis
+   to be performed.
 
-interactive hypconslist_is_list {| intro [] |} : <:xrule<
-   <H> >- "hypconslist"{| <J> >- [] |} IN "list"
->>
+   Consider the following term.
+   << mk_vbind{| <J> >- hyps_length{mk_core{hypconslist{| <K> >- nil |}}} |} >>
+   Even though the @tt[hyps_length] is in the scope of the binders
+   @code{<J>}, and the values @code{<K>} depend on @code{<J>}, the
+   length does not depend on the values of the individual terms in @code{<K>}.
+   On the surface, it seems like it should be easy to rewrite within the
+   scope of the binders.
 
-(************************************************************************
- * Hyps_length.
- *)
+   However, rewriting in the scope of a binder is hard in general.
+   Any kind of destructor that has a side condition will fail.  For example,
+   the induction combinator for natural numbers has a side-condition that
+   requires that its argument be a natural number.  With some work, the
+   side-condition can be hoisted, but the many occurrences of such
+   arguments are painful.
+
+   As a workaround, we introduce the << squashlist{| <J> >- 'l |} >> term,
+   which reduces to an << it >> list (a << list{unit} >>), squashing
+   the hypothesis values.  We also establish the equivalence
+   << hyps_length{mk_core{hypconslist{| <J> >- nil |}}} ~ length{squashlist{| <J> >- nil |}} >>
+   as an unconditional rewrite.  Once converted to a @tt[squashlist], the
+   dependencies can be broken, and the length term can be hoisted out of the scope
+   of the binders.
+
+   Literally, the use of @tt[squashlist] doesn't break any dependencies
+   immediately.  However, by ``shaking'' it back and forth (using induction),
+   we can show that in any particular case the dependencies do not matter.
+>>
 declare sequent [squashlist] { Term : Term >- Term } : Term
 
 prim_rw unfold_squashlist : <:xrewrite<
@@ -187,6 +209,8 @@ prim_rw unfold_squashlist : <:xrewrite<
    <-->
    sequent_ind{u, v. "it"::happly{v; "it"}; "TermSequent"{| <J> >- C |}}
 >>
+
+doc docoff
 
 interactive_rw reduce_squashlist_concl {| reduce |} : <:xrewrite<
    "squashlist"{| >- C |}
@@ -206,32 +230,199 @@ interactive_rw reduce_squashlist_right {| reduce |} : <:xrewrite<
    "squashlist"{| <J> >- "it"::C["it"] |}
 >>
 
-interactive_rw reduce_hyps_length_squashlist {| reduce |} : <:xrewrite<
+interactive squashlist_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- l IN "list" -->
+   <H> >- "squashlist"{| <J> >- l<|H|> |} IN "list"
+>>
+
+interactive squashlist_length_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- l IN "list" -->
+   <H> >- length{"squashlist"{| <J> >- l<|H|> |}} IN "nat"
+>>
+
+(************************************************************************
+ * Well-formedness.
+ *)
+interactive hyps_length_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "list" -->
+   <H> >- hyps_length{mk_core{e}} IN "nat"
+>>
+
+interactive hyps_length_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "list" -->
+   <H> >- hyps_length{"mk_vbind"{| <J> >- mk_core{e<|H|>} |}} IN "nat"
+>>
+
+interactive hyps_flatten_is_list {| intro [] |} : <:xrule<
+   "wf" : <H> >- e IN "list" -->
+   <H> >- hyps_flatten{mk_core{e}} IN "list"
+>>
+
+interactive hypconslist_is_list {| intro [] |} : <:xrule<
+   <H> >- "hypconslist"{| <J> >- [] |} IN "list"
+>>
+
+interactive hypconslist_is_list2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- l IN "list" -->
+   <H> >- "hypconslist"{| <J> >- l<|H|> |} IN "list"
+>>
+
+interactive hyps_length_bind_hypconslist_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- l IN "list" -->
+   <H> >- hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l<|H|> |}} |}} IN "nat"
+>>
+
+interactive hyps_length_bind_squashlist_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- l IN "list" -->
+   <H> >- hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K> >- l<|H|> |}} |}} IN "nat"
+>>
+
+interactive hyps_flatten_bind_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- l IN "list" -->
+   <H> >- hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l<||> |}} |}} IN "list"
+>>
+
+(************************************************
+ * Hyps length reductions.
+ *)
+interactive_rw reduce_hyps_length_squashlist : <:xrewrite<
    hyps_length{mk_core{"hypconslist"{| <J> >- [] |}}}
    <-->
    length{"squashlist"{| <J> >- [] |}}
 >>
 
+interactive_rw reduce_hyps_length_squashlist_list {| reduce |} : <:xrewrite<
+   l IN "list" -->
+   hyps_length{mk_core{"hypconslist"{| <J> >- l<||> |}}}
+   <-->
+   length{"squashlist"{| <J> >- l |}}
+>>
+
+interactive_rw reduce_hyps_length_bind_squashlist {| reduce |} : <:xrewrite<
+   l IN "list" -->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l<||> |}} |}}
+   <-->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K> >- l |}} |}}
+>>
+
+(************************************************
+ * Length reductions.
+ *)
+interactive_rw reduce_length_hypconslist {| reduce |} : <:xrewrite<
+   l IN "list" -->
+   length{"hypconslist"{| <J> >- l<||> |}}
+   <-->
+   length{"squashlist"{| <J> >- l |}}
+>>
+
+interactive_rw reduce_hyps_length_right {| reduce |} : <:xrewrite<
+   l IN "list" -->
+   length{"hypconslist"{| <J>; x: A >- l<||> |}}
+   <-->
+   length{"hypconslist"{| <J> >- l |}} +@ 1
+>>
+
+interactive_rw reduce_hyps_flatten_length {| reduce |} : <:xrewrite<
+   l IN "list" -->
+   length{hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l<||> |}} |}}}
+   <-->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l |}} |}}
+>>
+
+(************************************************
+ * Now the hoisting lemmas for occurrences
+ * of << hyps_length{'e} >>.
+ *)
+interactive_rw hyps_length_null : <:xrewrite<
+   hyps_length{"mk_vbind"{| <J> >- mk_core{l<||>} |}}
+   <-->
+   length{l}
+>>
+
+interactive_rw hyps_length_bind_int 'i : <:xrewrite<
+   i = hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}} in "nat" -->
+   "mk_vbind"{| <J> >- hyps_length{mk_core{"hypconslist"{| <K> >- [] |}}} |}
+   <-->
+   "mk_vbind"{| <J> >- i<||> |}
+>>
+
 interactive_rw hoist_hyps_length 'i Perv!bind{x. 'S['x]} : <:xrewrite<
-   i = hyps_length{"mk_vbind"{| <J> >- "hypconslist"{| <K> >- [] |} |}} in "nat" -->
-   "mk_vbind"{| <J> >- S[hyps_length{"hypconslist"{| <K> >- [] |}}] |}
+   i = hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}} in "nat" -->
+   "mk_vbind"{| <J> >- S[hyps_length{mk_core{"hypconslist"{| <K> >- [] |}}}] |}
    <-->
    "mk_vbind"{| <J> >- S[i<||>] |}
 >>
 
-interactive_rw reduce_hyps_flatten_vec_nth_bind 'n : <:xrewrite<
-   n IN "nat" -->
-   i IN "nat" -->
-   i < n -->
-   "mk_vbind"{| <J> >- nth{hyps_flatten{mk_core{"hypconslist"{| <K> >- [] |}}}; i<||>} |}
+interactive_rw hyps_length_bind_int_vec 'i : <:xrewrite<
+   i = hyps_length{"mk_vbind"{| <J>; <K> >- mk_core{"squashlist"{| <L> >- [] |}} |}} in "nat" -->
+   "mk_vbind"{| <J> >- hyps_length{"mk_vbind"{| <K> >- mk_core{"squashlist"{| <L> >- [] |}} |}} |}
    <-->
-   "mk_vbind"{| <J> >- nth{"hypconslist"{| <K> >- [] |}; i} |}
+   "mk_vbind"{| <J> >- i<||> |}
 >>
 
-interactive_rw nth_inner {| reduce |} : <:xrewrite<
-   nth{"hypconslist"{| <J> >- "hypconslist"{| x: A; <K[x]> >- [] |} |}; length{"hypconslist"{| <J> >- [] |}}}
+interactive_rw hoist_hyps_length_vec 'i Perv!bind{x. 'S['x]} : <:xrewrite<
+   i = hyps_length{"mk_vbind"{| <J>; <K> >- mk_core{"squashlist"{| <L> >- [] |}} |}} in "nat" -->
+   "mk_vbind"{| <J> >- S[hyps_length{"mk_vbind"{| <K> >- mk_core{"squashlist"{| <L> >- [] |}} |}}] |}
    <-->
-   "mk_vbind"{| <J> >- A |}
+   "mk_vbind"{| <J> >- S[i<||>] |}
+>>
+
+interactive_rw reduce_hyps_nth_vec_bind {| reduce |} : <:xrewrite<
+   "mk_vbind"{| <J> >- hyps_nth{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}; i<||>} |}
+   <-->
+   "mk_vbind"{| <J>; <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+>>
+
+interactive_rw reduce_hyps_nth_vec_bind_tail {| reduce |} : <:xrewrite<
+   hyps_nth{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}; i<||>}
+   <-->
+   "mk_vbind"{| <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+>>
+
+interactive_rw reduce_hyps_length_bind_right {| reduce |} : <:xrewrite<
+   hyps_length{"mk_vbind"{| <J>; x: A >- mk_core{"squashlist"{| <K[x]> >- [] |}} |}}
+   <-->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K["it"]> >- [] |}} |}}
+>>
+
+interactive_rw reduce_hyps_length_bind_cons {| reduce |} : <:xrewrite<
+   hyps_length{"mk_vbind"{| <J> >- mk_core{x :: l} |}}
+   <-->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{l} |}} +@ 1
+>>
+
+(************************************************
+ * hyps_flatten reductions.
+ *)
+interactive_rw reduce_nth_elem_of_list_of_fun {| reduce |} : <:xrewrite<
+   n IN "nat" -->
+   j IN "nat" -->
+   j < n -->
+   nth_elem{list_of_fun{i. f[i]; n}; j}
+   <-->
+   f[j]
+>>
+
+interactive_rw reduce_hyps_nth_flatten_bind {| reduce |} : <:xrewrite<
+   i IN "nat" -->
+   i < hyps_length{"mk_vbind"{| <J>; <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}} -->
+   "mk_vbind"{| <J> >- hyps_nth{mk_core{hyps_flatten{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}}}; i<||>} |}
+   <-->
+   "mk_vbind"{| <J>; <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+>>
+
+interactive_rw reduce_hyps_nth_flatten_bind_normalized {| reduce |} : <:xrewrite<
+   i IN "nat" -->
+   i < hyps_length{"mk_vbind"{| <J>; <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}} -->
+   "mk_vbind"{| <J> >- nth_elem{hyps_flatten{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}}; i<||>} |}
+   <-->
+   "mk_vbind"{| <J>; <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+>>
+
+interactive_rw reduce_hyps_flatten_bind_cons {| reduce |} : <:xrewrite<
+   hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| x: A; <K[x]> >- [] |}} |}}
+   <-->
+   "mk_vbind"{| <J> >- A |} :: hyps_flatten{"mk_vbind"{| <J>; x: A >- mk_core{"hypconslist"{| <K[x]> >- [] |}} |}}
 >>
 
 (************************************************************************
@@ -239,9 +430,9 @@ interactive_rw nth_inner {| reduce |} : <:xrewrite<
  *)
 interactive_rw nth_suffix_hypconslist : <:xrewrite<
    i = length{"hypconslist"{| <J> >- [] |}} in "nat" -->
-   nth_suffix{"hypconslist"{| <J> >- C |}; i}
+   nth_suffix{"hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}; i}
    <-->
-   hyps_flatten{"mk_vbind"{| <J> >- C |}}
+   hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}}
 >>
 
 interactive_rw nth_prefix_hypconslist_lemma : <:xrewrite<
@@ -263,6 +454,79 @@ interactive_rw hypconslist_nest_lemma {| reduce |} : <:xrewrite<
    <-->
    append{"hypconslist"{| <J> >- [] |}; hyps_flatten{"mk_vbind"{| <J> >- C |}}}
 >>
+
+(************************************************************************
+ * Tactics.
+ *)
+let hyps_length_term = << hyps_length{'e} >>
+let hyps_length_opname = opname_of_term hyps_length_term
+let is_hyps_length_term = is_dep0_term hyps_length_opname
+let dest_hyps_length_term = dest_dep0_term hyps_length_opname
+let mk_hyps_length_term = mk_dep0_term hyps_length_opname
+
+let t_nat = << nat >>
+
+let var_i = Lm_symbol.add "i"
+
+let hoist_hyps_length_tac p =
+   let t = concl p in
+   let info = all_vars_info SymbolTable.empty t in
+   let fv = SymbolTable.fold (fun fv v _ -> SymbolSet.add fv v) SymbolSet.empty info in
+   let v_i = maybe_new_var_set var_i fv in
+   let t_i = mk_var_term v_i in
+
+   (*
+    * Find a term mk_vbind{| <J> >- S[hyps_length{e}] |} at address "addr"
+    * and return a 4-tuple:
+    *
+    *    addr, <J>, bind{x. S[x]}, hyps_length{e}
+    *)
+   let rec search addrs =
+      match addrs with
+         addr1 :: addrs ->
+            let t_vbind = term_subterm t addr1 in
+            let { sequent_hyps = hyps;
+                  sequent_concl = c
+                } = explode_sequent t_vbind
+            in
+               (match find_subterm c (fun t _ -> is_hyps_length_term t) with
+                   addr2 :: _ ->
+                      let t_length = term_subterm c addr2 in
+                      let t_var = replace_subterm c addr2 (mk_var_term v_i) in
+                      let t_bind = mk_bind1_term v_i t_var in
+                      let addr1 = dest_address addr1 in
+                         addr1, hyps, t_bind, t_length
+                 | [] ->
+                      search addrs)
+       | [] ->
+            raise (RefineError ("hoist_hyps_length_conv", StringError "no hyps_length subterm"))
+   in
+   let addrs = find_subterm t (fun t _ -> is_mk_vbind_term t) in
+   let addr, hyps, t_bind, t_length = search addrs in
+
+   (*
+    * Build the term hyps_length{mk_vbind{| <J> >- e |}}
+    *)
+   let e = dest_hyps_length_term t_length in
+   let t_length, conv =
+      if is_mk_vbind_term e then
+         let hyps2, e = dest_mk_vbind_term e in
+         let t_length = mk_hyps_length_term (mk_mk_vbind_term (SeqHyp.concat hyps hyps2) e) in
+            t_length, hoist_hyps_length_vec
+      else
+         let t_length = mk_hyps_length_term (mk_mk_vbind_term hyps e) in
+            t_length, hoist_hyps_length
+   in
+
+   (*
+    * Define a variable of that name.
+    *)
+   let t_equal = mk_equal_term t_nat t_i t_length in
+   let t_exists = mk_exists_term v_i t_nat t_equal in
+      assertT t_exists
+      thenLT [withT t_length (dT 0) ttca; dT (-1) thenT rw (addrC addr (conv t_i t_bind)) 0]
+
+let hoistHypsLengthT = funT hoist_hyps_length_tac
 
 (*!
  * @docoff

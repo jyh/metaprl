@@ -189,7 +189,7 @@ define unfold_nth_prefix : nth_prefix{'l; 'i} <-->
    ind{'i; lambda{l. nil}; j, g. lambda{l. list_ind{'l; it; u, v, h. 'u :: 'g 'v}}} 'l
 
 define unfold_nth_suffix : nth_suffix{'l; 'i} <-->
-   ind{'i; lambda{l. 'l}; j, g. lambda{l. list_ind{'l; it; u, v, h. 'g 'v}}} 'l
+   ind{'i; lambda{l. 'l}; j, g. lambda{l. 'g tl{'l}}} 'l
 
 doc <:doc<
    The << nth{'l; 'i} >> is defined by list induction.
@@ -218,9 +218,15 @@ interactive_rw reduce_nth_prefix_cons {| reduce |} :
 
 interactive_rw reduce_nth_suffix_cons {| reduce |} :
    'i in nat -->
-   nth_suffix{'u::'v; 'i +@ 1}
+   nth_suffix{'l; 'i +@ 1}
    <-->
-   nth_suffix{'v; 'i}
+   nth_suffix{tl{'l}; 'i}
+
+interactive_rw nth_suffix_swap_tl :
+   'i in nat -->
+   nth_suffix{tl{'l}; 'i}
+   <-->
+   tl{nth_suffix{'l; 'i}}
 
 interactive_rw reduce_nth_elem_zero {| reduce |} :
    nth_elem{'l; 0}

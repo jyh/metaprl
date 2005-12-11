@@ -44,6 +44,11 @@ topval fold_hyps_flatten : conv
 topval fold_hypconslist : conv
 topval fold_hyplist : conv
 
+(*
+ * Tactics.
+ *)
+topval hoistHypsLengthT : tactic
+
 (*!
  * @docoff
  *

@@ -34,7 +34,6 @@ extends Itt_hoas_proof
 extends Itt_hoas_sequent
 extends Itt_hoas_sequent_term1
 extends Itt_hoas_sequent_proof
-extends Itt_hoas_vec_bind
 
 doc docoff
 

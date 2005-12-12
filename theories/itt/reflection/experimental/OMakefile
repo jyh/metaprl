@@ -8,7 +8,6 @@ THEORY_DEPS[] +=
     itt/extensions/vector
 
 MPFILES[] =
-    itt_hoas_vec_bind
     itt_hoas_lang
     itt_hoas_bterm
     itt_hoas_util

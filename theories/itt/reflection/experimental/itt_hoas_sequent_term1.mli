@@ -29,7 +29,7 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_hoas_vec_bind
+extends Itt_hoas_vbind
 extends Itt_hoas_sequent
 
 open Basic_tactics
@@ -47,11 +47,7 @@ declare sequent [bsequent{'arg}] { Term : Term >- Term } : Term
 (*
  * ML code.
  *)
-topval fold_hyps_length : conv
-topval fold_hyps_nth : conv
-topval fold_hyps_flatten : conv
-topval fold_hypconslist : conv
-topval fold_hyplist : conv
+topval fold_bterm_of_vterm : conv
 
 (*!
  * @docoff

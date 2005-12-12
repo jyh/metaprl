@@ -15,8 +15,8 @@ T	t	o3
 B	b	t
 NSummary!ty_term	ty_term	ty_term Summary
 O	o4	ty_term
-NItt_vec_sequent_term1	Itt_vec_sequent_term1	Itt_vec_sequent_term1 NIL
-NItt_vec_sequent_term1!fsequent	fsequent	fsequent Itt_vec_sequent_term1
+NItt_vec_sequent_term	Itt_vec_sequent_term	Itt_vec_sequent_term NIL
+NItt_vec_sequent_term!fsequent	fsequent	fsequent Itt_vec_sequent_term
 O	o13	fsequent
 Varg	arg	arg\\ \\
 B	b5	arg
@@ -2669,7 +2669,7 @@ B	b1526	t1526
 P	p1528	Number 1669
 P	p1529	Number 1797
 O	o1529	location p1528 p1529
-NItt_vec_sequent_term1!hyps_length	hyps_length	hyps_length Itt_vec_sequent_term1
+NItt_vec_sequent_term!hyps_length	hyps_length	hyps_length Itt_vec_sequent_term
 O	o33	hyps_length
 T	t35	o33 b920
 B	b35	t35
@@ -2769,7 +2769,7 @@ T	t829	o924 b937 b828
 B	b829	t829 x
 T	t830	o828 b829
 B	b830	t830
-NItt_vec_sequent_term1!hyps_flatten	hyps_flatten856	hyps_flatten Itt_vec_sequent_term1
+NItt_vec_sequent_term!hyps_flatten	hyps_flatten856	hyps_flatten Itt_vec_sequent_term
 O	o857	hyps_flatten856
 T	t857	o857 b920
 B	b857	t857
@@ -2972,7 +2972,7 @@ T	t3464	o21 b3464
 B	b3465	t3464
 T	t3465	o20 b3465
 B	b3466	t3465
-NItt_vec_sequent_term1!hypconslist	hypconslist874	hypconslist Itt_vec_sequent_term1
+NItt_vec_sequent_term!hypconslist	hypconslist874	hypconslist Itt_vec_sequent_term
 O	o875	hypconslist874
 T	t875	o875
 B	b875	t875
@@ -3001,7 +3001,7 @@ T	t884	o1114 b883 b3482
 B	b884	t884
 T	t885	o3476 b879 b884 b1130 b8
 B	b885	t885
-NItt_vec_sequent_term1!hyplist	hyplist887	hyplist Itt_vec_sequent_term1
+NItt_vec_sequent_term!hyplist	hyplist887	hyplist Itt_vec_sequent_term
 O	o888	hyplist887
 T	t888	o888
 B	b888	t888
@@ -3455,7 +3455,7 @@ B	b1529	t1529
 P	p1530	Number 1799
 P	p1531	Number 1939
 O	o1531	location p1530 p1531
-NItt_vec_sequent_term1!hyps_nth	hyps_nth	hyps_nth Itt_vec_sequent_term1
+NItt_vec_sequent_term!hyps_nth	hyps_nth	hyps_nth Itt_vec_sequent_term
 O	o530	hyps_nth
 T	t531	o530 b920 b4128
 B	b531	t531
@@ -4829,7 +4829,7 @@ T	t2065	o4791 b1168 b2061 b2064 b8
 B	b2065	t2065
 T	t2066	o1166 b2065
 B	b2066	t2066
-NItt_vec_sequent_term1!squashlist	squashlist	squashlist Itt_vec_sequent_term1
+NItt_vec_sequent_term!squashlist	squashlist	squashlist Itt_vec_sequent_term
 O	o792	squashlist
 T	t803	o792
 B	b803	t803

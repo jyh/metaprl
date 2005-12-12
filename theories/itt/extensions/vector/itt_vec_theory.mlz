@@ -40,6 +40,8 @@ doc <:doc<
 extends Itt_vec_dform
 extends Itt_vec_struct
 extends Itt_vec_list1
+extends Itt_vec_bind
+extends Itt_vec_sequent_term
 
 (*!
  * @docoff

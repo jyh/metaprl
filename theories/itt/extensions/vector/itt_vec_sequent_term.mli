@@ -31,6 +31,16 @@ extends Itt_vec_bind
 open Basic_tactics
 
 (*
+ * Flatten a binder over a list of hyps.
+ *)
+declare hyps_flatten{'e}
+
+(*
+ * A list of hypotheses.
+ *)
+declare sequent [hyplist] { Term : Term >- Term } : Term
+
+(*
  * Compute the flat representation of a sequent.
  *)
 declare sequent [fsequent{'arg}] { Term : Term >- Term } : Term

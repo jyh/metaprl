@@ -377,6 +377,26 @@ interactive wf_Provable {| intro [] |} : <:xrule<
     <H> >- Provable{ty_sequent; logic; t} Type
 >>
 
+(************************************************************************
+ * More well-formedness.
+ *)
+interactive nil_logic_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
+   <H> >- [] IN Logic{ty}
+>>
+
+interactive cons_logic_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- u IN ProofRule{ty} -->
+   "wf" : <H> >- v IN Logic{ty} -->
+   <H> >- u::v IN Logic{ty}
+>>
+
+interactive proof_rule_start_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
+   "wf" : <H>; s: ProofStep{ty}; w: ProofStepWitness{} >- e[s; w] IN "bool" -->
+   <H> >- lambda{step. spread{step; s, w. e[s; w]}} IN ProofRule{ty}
+>>
+
 (*!
  * @docoff
  *

@@ -73,12 +73,18 @@ define unfold_bhyp_depths : bhyp_depths{'d; 'l} <-->
    list_ind{'l; lambda{d. "btrue"}; h, t, g. lambda{d. band{beq_int{bdepth{'h}; 'd}; 'g ('d +@ 1)}}} 'd
 
 doc <:doc<
-   The << is_sequent{'s} >> predicate tests whether a sequent << 's >> is well-formed
+   The << is_sequent{'d; 's} >> predicate tests whether a sequent << 's >> is well-formed
    with respect to binding depths.
    The argument must have depth << 0 >>, the hypotheses must have binding depths
-   starting with << 0 >>, and the conclusion must have binding depth
-   << length{'hyps} >>.
+   starting with << 'd >>, and the conclusion must have binding depth
+   << length{'hyps} +@ 'd >>.
 >>
+define unfold_is_sequent_depth : is_sequent{'d; 's} <-->
+   spread{'s; arg, rest. spread{'rest; hyps, concl.
+      bdepth{'arg} = 0 in nat
+      & hyp_depths{'d; 'hyps}
+      & bdepth{'concl} = length{'hyps} +@ 'd in nat}}
+
 define unfold_is_sequent : is_sequent{'s} <-->
    spread{'s; arg, rest. spread{'rest; hyps, concl.
       bdepth{'arg} = 0 in nat
@@ -88,6 +94,9 @@ define unfold_is_sequent : is_sequent{'s} <-->
 doc <:doc<
    The term << Sequent >> represents the type of sequents.
 >>
+define unfold_Sequent_depth : Sequent{'d} <-->
+   { s: BTerm * list{BTerm} * BTerm | is_sequent{'d; 's} }
+
 define unfold_Sequent : Sequent <-->
    { s: BTerm * list{BTerm} * BTerm | is_sequent{'s} }
 
@@ -174,6 +183,12 @@ interactive is_sequent_wf {| intro [] |} : <:xrule<
    <H> >- is_sequent{s} Type
 >>
 
+interactive is_sequent_depth_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- s IN "BTerm" * list{"BTerm"} * "BTerm" -->
+   <H> >- is_sequent{d; s} Type
+>>
+
 (*
  * This is similar, but we have an explicit sequent triple.
  *)
@@ -182,6 +197,14 @@ interactive is_sequent_wf2 {| intro [] |} : <:xrule<
    "wf" : <H> >- hyps IN list{"BTerm"} -->
    "wf" : <H> >- concl IN "BTerm" -->
    <H> >- is_sequent{"sequent"{arg; hyps; concl}} Type
+>>
+
+interactive is_sequent_depth_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- arg IN "BTerm" -->
+   "wf" : <H> >- hyps IN list{"BTerm"} -->
+   "wf" : <H> >- concl IN "BTerm" -->
+   <H> >- is_sequent{d; "sequent"{arg; hyps; concl}} Type
 >>
 
 (*
@@ -360,6 +383,26 @@ interactive beq_sequent_list_elim {| elim [] |} 'H :
    sequent { <H>; u: "assert"{beq_sequent_list{'t1; 't2}}; <J['u]> >- 'C['u] }
 
 (************************************************************************
+ * Sequents with depths.
+ *)
+interactive sequent_depth_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   <H> >- Sequent{d} Type
+>>
+
+interactive sequent_depth_elim :
+   [wf] sequent { <H> >- 'e in Sequent{0} } -->
+   sequent { <H> >- 'e in Sequent }
+
+interactive sequent_depth_mem {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- arg IN BTerm{0} -->
+   "wf" : <H> >- hyps IN CVar{d} -->
+   "wf" : <H> >- concl IN BTerm{length{hyps} +@ d} -->
+   <H> >- "sequent"{arg; hyps; concl} IN Sequent{d}
+>>
+
+(************************************************************************
  * Display.
  *)
 
@@ -411,8 +454,10 @@ let format_sequent format_term buf t =
    let t = mk_sequent_term info in
       format_term buf NOParens t
 
+(*
 ml_dform sequent_df : "sequent"{'arg; 'hyps; 'concl} format_term buf =
    format_sequent format_term buf
+ *)
 
 (*!
  * @docoff

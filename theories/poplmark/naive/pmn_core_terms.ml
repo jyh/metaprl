@@ -1,4 +1,4 @@
-(*
+(*x
  * Typed AST.
  *
  * ----------------------------------------------------------------
@@ -31,21 +31,25 @@ open Itt_dfun
 open Itt_logic
 
 (************************************************************************
- * Define the reflected logic.
+ * Define the reflected logic.x
  *)
 
 (*
  * Type expressions.
  *)
-reflected_logic types =
+reflected_logic Types =
 struct
    (* Type expressions *)
    declare typeclass TyExp -> Term
 
    declare TyTop : TyExp
+(*
    declare TyFun{'ty1 : TyExp; 'ty2 : TyExp} : TyExp
    declare TyAll{'ty1 : TyExp; x : TyExp. 'ty2 : TyExp} : TyExp
+ *)
+end;;
 
+(*
    (* Expressions *)
    declare typeclass Exp -> Term
 
@@ -78,19 +82,19 @@ struct
    declare rewrite TyElem{TyPower} <--> TyExp
 
    declare sequent [fsub] { exst a: Hyp. TyElem{'a} : 'a >- Prop } : Judgment
-end;;
+*)
 
 (************************************************************************
  * Display forms.
  *)
-dform ty_exp_df : <:xterm< xquote{d; "TyExp"} >> =
+dform ty_exp_df : <:xterm< $`"TyExp" >> =
    `"TyExp"
 
-dform exp_df : <:xterm< xquote{d; "Exp"} >> =
+dform exp_df : <:xterm< $`"Exp" >> =
    `"Exp"
 
-dform top_df : <:xterm< xquote{d; fsub { top }} >> =
-   `"Top[" slot{'d} `"]"
+dform top_df : <:xterm< $`"TyTop" >> =
+   `"Top"
 
 dform ty_fun_df : parens :: "prec"[prec_fun] :: <:xterm< xquote{d; fsub { ty1 -> ty2 }} >> =
    szone pushm[3] slot{'ty1} `" ->[" slot{'d} `"]" hspace slot{'ty2} popm ezone

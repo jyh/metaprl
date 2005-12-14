@@ -58,7 +58,13 @@ topval fold_hyplist : conv
  * Tactics.
  *)
 topval hoistHypsLengthT : tactic
+topval reduce_hyplist : conv
 topval reduce_fsequent : conv
+
+(*
+ * Terms.
+ *)
+val is_hyplist_term : term -> bool
 
 (*!
  * @docoff

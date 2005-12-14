@@ -158,6 +158,12 @@ interactive_rw reduce_vsubst_dummy_null : <:xrewrite<
    e
 >>
 
+interactive_rw reduce_vsubst_dummy_middle 'J : <:xrewrite<
+   "vsubst_dummy"{| <J>; x: A; <K[x]> >- e[x] |}
+   <-->
+   "vsubst_dummy"{| <J>; <K["it"]> >- e["it"] |}
+>>
+
 interactive_rw reduce_vsubst_dummy_core {| reduce |} : <:xrewrite<
    "vsubst_dummy"{| <J> >- mk_core{e} |}
    <-->

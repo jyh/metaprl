@@ -77,7 +77,7 @@ declare sequent [hypconslist] { Term : Term >- Term } : Term
 prim_rw unfold_hypconslist : <:xrewrite<
    "hypconslist"{| <J> >- C |}
    <-->
-   sequent_ind{u, v. u :: hyps_flatten{mk_bind{x. mk_core{happly{v; x}}}}; "TermSequent"{| <J> >- C |}}
+   sequent_ind{u, v. mk_core{u} :: hyps_flatten{mk_bind{x. mk_core{happly{v; x}}}}; "TermSequent"{| <J> >- C |}}
 >>
 
 declare sequent [hyplist] { Term : Term >- Term } : Term
@@ -94,7 +94,7 @@ doc <:doc<
 prim_rw unfold_fsequent : <:xrewrite<
    fsequent{arg}{| <J> >- C |}
    <-->
-   (arg, "hyplist"{| <J> |}, "mk_vbind"{| <J> >- C |})
+   (arg, "hyplist"{| <J> |}, "mk_vbind"{| <J> >- mk_core{C} |})
 >>
 
 (************************************************************************
@@ -151,13 +151,13 @@ interactive_rw reduce_hypconslist_concl {| reduce |} : <:xrewrite<
 interactive_rw reduce_hypconslist_left : <:xrewrite<
    "hypconslist"{| x: A; <J[x]> >- C[x] |}
    <-->
-   A :: hyps_flatten{"mk_vbind"{| x : A >- mk_core{"hypconslist"{| <J[x]> >- C[x] |}} |}}
+   mk_core{A} :: hyps_flatten{"mk_vbind"{| x : A >- mk_core{"hypconslist"{| <J[x]> >- C[x] |}} |}}
 >>
 
 interactive_rw reduce_hypconslist_right : <:xrewrite<
    "hypconslist"{| <J>; x: A >- C[x] |}
    <-->
-   "hypconslist"{| <J> >- A :: hyps_flatten{"mk_vbind"{| x: A >- mk_core{C[x]} |}} |}
+   "hypconslist"{| <J> >- mk_core{A} :: hyps_flatten{"mk_vbind"{| x: A >- mk_core{C[x]} |}} |}
 >>
 
 interactive_rw reduce_hypconslist_shift {| reduce |} : <:xrewrite<
@@ -443,7 +443,7 @@ interactive_rw reduce_hyps_nth_flatten_bind_normalized {| reduce |} : <:xrewrite
 interactive_rw reduce_hyps_flatten_bind_cons {| reduce |} : <:xrewrite<
    hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| x: A; <K[x]> >- [] |}} |}}
    <-->
-   "mk_vbind"{| <J> >- A |} :: hyps_flatten{"mk_vbind"{| <J>; x: A >- mk_core{"hypconslist"{| <K[x]> >- [] |}} |}}
+   "mk_vbind"{| <J> >- mk_core{A} |} :: hyps_flatten{"mk_vbind"{| <J>; x: A >- mk_core{"hypconslist"{| <K[x]> >- [] |}} |}}
 >>
 
 (************************************************************************
@@ -495,13 +495,13 @@ interactive hyplist_flatten_wf {| intro [] |} : <:xrule<
 interactive_rw reduce_hyplist_single {| reduce |} : <:xrule<
    "hyplist"{| x: A |}
    <-->
-   [A]
+   [mk_core{A}]
 >>
 
 interactive_rw reduce_hyplist_flatten_single {| reduce |} : <:xrule<
    hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hyplist"{| x: A |}} |}}
    <-->
-   ["mk_vbind"{| <J> >- A |}]
+   ["mk_vbind"{| <J> >- mk_core{A} |}]
 >>
 
 (************************************************************************
@@ -512,6 +512,12 @@ let hyps_length_opname = opname_of_term hyps_length_term
 let is_hyps_length_term = is_dep0_term hyps_length_opname
 let dest_hyps_length_term = dest_dep0_term hyps_length_opname
 let mk_hyps_length_term = mk_dep0_term hyps_length_opname
+
+let hyplist_arg_term = << hyplist >>
+let hyplist_arg_opname = opname_of_term hyplist_arg_term
+let is_hyplist_arg_term = is_no_subterms_term hyplist_arg_opname
+let is_hyplist_term t =
+   is_sequent_term t && is_hyplist_arg_term (TermMan.args t)
 
 let t_nat = << nat >>
 
@@ -599,6 +605,19 @@ let rec split_hyplist_conv hyps i t =
                idC
       in
          hyplist_nest i thenC c thenC (addrC [Subterm 1] (termC (split_hyplist_conv hyps j)))
+
+let reduce_hyplist_conv t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps
+       } = explode_sequent t
+   in
+      if is_hyplist_arg_term arg then
+         let i = SeqHyp.length hyps in
+            split_hyplist_conv hyps i t
+      else
+         raise (RefineError ("reduce_hyplist_conv", StringTermError ("not a hyplist term", t)))
+
+let reduce_hyplist = termC reduce_hyplist_conv
 
 let flatten_fsequent t =
    let hyps = (explode_sequent t).sequent_hyps in

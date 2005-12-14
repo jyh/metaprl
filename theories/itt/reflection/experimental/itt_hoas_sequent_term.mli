@@ -35,19 +35,34 @@ extends Itt_hoas_sequent
 open Basic_tactics
 
 (*
- * Sequent well-formedness (no argument).
- *)
-declare sequent [sequent_wf] { Term : Term >- Term } : Term
-
-(*
- * BTerm sequents.
+ * BTerm sequent.  Hyps are in normal form.
  *)
 declare sequent [bsequent{'arg}] { Term : Term >- Term } : Term
 
 (*
+ * BTerm sequent.  Hyps are in "ugly" form.
+ *)
+declare sequent [vsequent{'arg}] { Term : Term >- Term } : Term
+
+(*
+ * The sequent is provable in "ugly" form.
+ *)
+declare sequent [provable_sequent{'syntax; 'logic; 'arg}] { Term : Term >- Term } : Term
+
+(*
+ * The sequent is provable in "pretty" form.
+ *)
+declare sequent [ProvableSequent{'syntax; 'logic; 'arg}] { Term : Term >- Term } : Term
+
+(*
  * ML code.
  *)
+topval fold_hyp_term : conv
+topval fold_hyp_context : conv
 topval fold_bterm_of_vterm : conv
+
+topval reduce_bsequent : conv
+topval reduce_ProvableSequent : conv
 
 (*!
  * @docoff

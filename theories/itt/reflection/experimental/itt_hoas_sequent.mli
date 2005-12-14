@@ -41,6 +41,11 @@ declare beq_sequent{'s1; 's2}
 declare beq_sequent_list{'l1; 's2}
 
 (*
+ * A sequent with depth 'd.
+ *)
+declare Sequent{'d}
+
+(*
  * A second-order variable with 'd arguments.
  *)
 declare SOVar{'d}

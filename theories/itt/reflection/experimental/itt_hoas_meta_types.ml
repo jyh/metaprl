@@ -49,11 +49,11 @@ doc docoff
 (************************************************************************
  * Display forms.
  *)
-dform meta_type_df : <:xterm< xquote{d; "meta_type"} >> =
+dform meta_type_df : <:xterm< $`"meta_type" >> =
    `"meta_type"
 
-dform meta_member_df : <:xterm< xquote{d; meta_member{e; ty}} >> =
-   szone pushm[3] slot{'e} `" " Mpsymbols!member `"[" slot{'d} `"]M" hspace slot{'ty} popm ezone
+dform meta_member_df : <:xterm< $`meta_member{e; ty} >> =
+   szone pushm[3] slot{'e} `" " Mpsymbols!member `"M" hspace slot{'ty} popm ezone
 
 (*!
  * @docoff

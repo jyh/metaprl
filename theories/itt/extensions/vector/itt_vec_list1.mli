@@ -31,14 +31,21 @@ extends Meta_extensions_theory
 open Basic_tactics
 
 (*
+ * Normal list terms.
+ *)
+declare flatten{'l}
+
+(*
  * Vector forms of lists.
  *)
 declare sequent [vlist] { Term : Term >- Term } : Term
+declare sequent [vflatten] { Term : Term >- Term } : Term
 
 (*
  * ML code.
  *)
 topval fold_vlist : conv
+topval fold_vflatten : conv
 
 (*!
  * @docoff

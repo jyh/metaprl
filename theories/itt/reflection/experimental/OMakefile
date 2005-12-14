@@ -7,16 +7,17 @@ THEORY_DEPS[] +=
     itt/reflection/core
     itt/extensions/vector
 
+MLZFILES[] =
+    itt_hoas_theory
+
 MPFILES[] =
     itt_hoas_lang
     itt_hoas_bterm
     itt_hoas_util
+    itt_hoas_proof
     itt_hoas_sequent
     itt_hoas_sequent_term
-    itt_hoas_proof
-    itt_hoas_sequent_proof
-    itt_hoas_sequent_provable
-    itt_hoas_sequent_tactics
+    itt_hoas_sequent_proof_step
     itt_hoas_meta_types
     itt_hoas_theory
 

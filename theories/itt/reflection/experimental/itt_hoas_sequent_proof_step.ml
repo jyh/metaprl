@@ -137,6 +137,10 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
    <H> >- let_cvar{d; witness; i; v. e[v]} IN "bool"
 >>
 
+(************************************************************************
+ * Well-formedness.
+ *)
+
 (*!
  * @docoff
  *

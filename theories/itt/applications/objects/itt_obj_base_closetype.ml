@@ -36,7 +36,9 @@ doc <:doc<
 extends Itt_union_of
 extends Itt_subtype
 extends Itt_dfun
+extends Itt_record
 extends Itt_monotone_subtyping
+extends Itt_obj_base_rewrite
 
 doc <:doc< @docoff >>
 
@@ -103,6 +105,14 @@ interactive objElimination {| elim [] |} 'H :
    [wf] sequent { <H>; obj: Obj[l:l]{Self.'M['Self]}; <J['obj]>  >- monotone[l':l]{X.'M['X]} } -->
    sequent { <H>; obj: Obj[l:l]{Self.'M['Self]}; <J['obj]>; 'obj 'obj in 'M[Obj[l:l]{Self.'M['Self]}]  >- 'C['obj]  } -->
    sequent { <H>; obj: Obj[l:l]{Self.'M['Self]}; <J['obj]> >- 'C['obj]  }
+
+
+interactive apply_object_wf {| intro[AutoMustComplete; intro_typeinf<<'obj>> ] |} <<Obj[l:l]{X.'X -> 'M['X]}>> :
+   sequent{ <H> >- monotone[l':l]{X.'M['X]} } -->
+   sequent{ <H> >- 'obj in  Obj[l:l]{Self.'M['Self]}  } -->
+   sequent{ <H> >- 'M[ Obj[l:l]{Self.'M['Self]} ] subtype record[m:t]{'A} } -->
+   sequent{ <H> >- apply[m:t]{'obj} in 'A }
+
 
 
 doc <:doc<

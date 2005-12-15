@@ -50,14 +50,6 @@ define unfold_dummy_bterm {| reduce |} : dummy_bterm <--> <:xterm<
    $`"dummy_term"
 >>
 
-declare sequent [ignore] { Term : Term >- Term } : Term
-
-prim_rw unfold_ignore : <:xrewrite<
-   "ignore"{| <J> >- C |}
-   <-->
-   "dummy_bterm"
->>
-
 (************************************************************************
  * Operators.
  *)

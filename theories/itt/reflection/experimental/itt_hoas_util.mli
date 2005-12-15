@@ -38,11 +38,6 @@ declare Invalid_argument
  *)
 declare dummy_bterm
 
-(*
- * This expands to dummy_bterm.
- *)
-declare sequent [ignore] { Term : Term >- Term } : Term
-
 (*!
  * @docoff
  *

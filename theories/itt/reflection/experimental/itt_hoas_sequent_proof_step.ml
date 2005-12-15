@@ -138,7 +138,7 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
- * Well-formedness.
+ * Additional well-formedness.
  *)
 
 (*!

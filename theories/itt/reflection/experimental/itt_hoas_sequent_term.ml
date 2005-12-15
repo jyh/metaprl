@@ -149,7 +149,7 @@ doc <:doc<
 declare sequent [vsequent{'arg}] { Term : Term >- Term } : Term
 
 prim_rw unfold_vsequent : vsequent{'arg}{| <J> >- 'C |} <--> <:xterm<
-   "sequent"{arg; "vflatten"{| <J> >- [] |}; "vsubst_dummy"{| <J> >- C |}}
+   "sequent"{arg; "vflatten"{| <J> |}; "vsubst_dummy"{| <J> >- C |}}
 >>
 
 define unfold_vsequent_of_triple : vsequent_of_triple{'e} <--> <:xterm<
@@ -240,27 +240,6 @@ interactive hyp_context_wf {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
- * Reductions.
- *)
-doc <:doc<
-   Reductions on << hyp_context{| <J> >- "hyplist"{| <K> |} |} >>.
->>
-interactive_rw reduce_hyp_context_left {| reduce |} : <:xrewrite<
-   "hyp_context"{| <J> >- "hyplist"{| x: A; <K[x]> |} |}
-   <-->
-   append{"hyp_term"{| <J> >- A |}; "hyp_context"{| <J>; x: A >- "hyplist"{| <K[x]> |} |}}
->>
-
-(*
- * Length facts.
- *)
-interactive_rw hyp_context_length : <:xrewrite<
-   length{"hyp_context"{| <J> >- "hyplist"{| <K> |} |}}
-   <-->
-   "vsubst_dummy"{| <J> >- bdepth{"vbind"{| <K> >- "dummy_bterm" |}} |}
->>
-
-(************************************************************************
  * Well-formedness of vsequents.
  *)
 doc <:doc<
@@ -268,30 +247,21 @@ doc <:doc<
 >>
 interactive vsequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- arg IN BTerm{0} -->
-   "wf" : <H> >- "vflatten"{| <J> >- [] |} IN CVar{length{"vflatten"{| >- [] |}}} -->
-   "wf" : <H> >- C IN BTerm{length{"vflatten"{| <J> >- [] |}}} -->
+   "wf" : <H> >- "vflatten"{| <J> |} IN CVar{length{"vflatten"{| |}}} -->
+   "wf" : <H> >- C IN BTerm{length{"vflatten"{| <J> |}}} -->
    <H> >- vsequent{arg}{| <J> >- C<|H|> |} IN Itt_hoas_sequent!Sequent
 >>
 
 interactive vflatten_hyp_concl_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
-   <H> >- "vflatten"{| >- [] |} IN CVar{d}
+   <H> >- "vflatten"{| |} IN CVar{d}
 >>
 
 interactive vflatten_hyp_left_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- A IN CVar{length{"vflatten"{| <K> >- [] |}}} -->
-   "wf" : <H> >- "vflatten"{| <J["it"]> >- [] |} IN CVar{length{"vflatten"{| <K>; x: A >- [] |}}} -->
-   <H> >- "vflatten"{| x: A; <J[x]> >- [] |} IN CVar{length{"vflatten"{| <K> >- [] |}}}
->>
-
-(*
- * Well-formedness of bsequents.
- *)
-interactive bsequent_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- arg IN BTerm{0} -->
-   "wf" : <H> >- "hyp_context"{| >- "hyplist"{| <J> |} |} IN CVar{bdepth{"vbind"{| >- "dummy_bterm" |}}} -->
-   "wf" : <H> >- "vbind"{| <J> >- C |} IN BTerm{bdepth{"vbind"{| <J> >- "dummy_bterm" |}}} -->
-   <H> >- bsequent{arg}{| <J> >- C |} IN Itt_hoas_sequent!Sequent
+   "wf" : <H> >- "vlist"{| <K> |} IN list{"list"} -->
+   "wf" : <H> >- A IN CVar{length{"vflatten"{| <K> |}}} -->
+   "wf" : <H> >- "vflatten"{| <J["it"]> |} IN CVar{length{"vflatten"{| <K>; x: A |}}} -->
+   <H> >- "vflatten"{| x: A; <J[x]> |} IN CVar{length{"vflatten"{| <K> |}}}
 >>
 
 (************************************************************************

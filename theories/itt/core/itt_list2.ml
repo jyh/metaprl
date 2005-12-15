@@ -1591,6 +1591,16 @@ interactive list_sqsimple {| intro [] |} :
    sequent { <H> >- sqsimple{'T} } -->
    sequent { <H> >- sqsimple{list{'T}} }
 
+(*
+ * Combined theorems.
+ *)
+interactive_rw length_of_append :
+   'l1 in list -->
+   'l2 in list -->
+   length{append{'l1; 'l2}}
+   <-->
+   length{'l1} +@ length{'l2}
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

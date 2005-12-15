@@ -1,6 +1,5 @@
 (*
- * The @tt[Itt_vec_list1] module defines lists expressed as
- * sequents.
+ * Additional well-formedness rule for bterms.
  *
  * ----------------------------------------------------------------
  *
@@ -25,27 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_theory
-extends Meta_extensions_theory
-
-open Basic_tactics
-
-(*
- * Normal list terms.
- *)
-declare flatten{'l}
-
-(*
- * Vector forms of lists.
- *)
-declare sequent [vlist] { Term : Term >- Term } : Term
-declare sequent [vflatten] { Term : Term >- Term } : Term
-
-(*
- * ML code.
- *)
-topval fold_vlist_nest : conv
-topval fold_vflatten_nest : conv
+extends Itt_hoas_bterm
 
 (*!
  * @docoff

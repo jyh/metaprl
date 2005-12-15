@@ -46,6 +46,10 @@ doc docoff
 
 open Basic_tactics
 
+(************************************************************************
+ * Vlist.
+ *)
+
 (*
  * BUG: Unfortunately, we don't have define forms for sequents.
  * Temporarily use the declare/prim_rw form.
@@ -53,53 +57,96 @@ open Basic_tactics
 doc <:doc<
    The vector list produces a list from the hyps.
 >>
-prim_rw unfold_vlist : vlist{| <H> >- 'C |} <-->
-   sequent_ind{u, v. cons{'u; happly{'v; 'u}}; Sequent{| <H> >- 'C |}}
+declare sequent [vlist_nest] { Term : Term >- Term } : Term
+
+prim_rw unfold_vlist_nest : vlist_nest{| <H> >- 'C |} <-->
+   sequent_ind{u, v. cons{'u; happly{'v; it}}; Sequent{| <H> >- 'C |}}
 
 doc <:doc<
    Reductions.
 >>
-interactive_rw reduce_vlist_nil {| reduce |} :
-   vlist{| >- 'l |}
+interactive_rw reduce_vlist_nest_nil {| reduce |} :
+   vlist_nest{| >- 'l |}
    <-->
    'l
 
-interactive_rw reduce_vlist_cons :
-   vlist{| y: 'e; <J['y]> >- 'l['y] |}
+interactive_rw reduce_vlist_nest_left :
+   vlist_nest{| y: 'e; <J['y]> >- 'l['y] |}
    <-->
-   cons{'e; vlist{| <J['e]> >- 'l['e] |}}
+   cons{'e; vlist_nest{| <J[it]> >- 'l[it] |}}
 
-interactive_rw reduce_vlist_tail :
-   vlist{| <J>; x: 'e >- 'l['x] |}
+interactive_rw reduce_vlist_nest_right :
+   vlist_nest{| <J>; x: 'e >- 'l['x] |}
    <-->
-   vlist{| <J> >- cons{'e; 'l['e]} |}
+   vlist_nest{| <J> >- cons{'e; 'l[it]} |}
 
-interactive_rw hoist_vlist_tail :
-   vlist{| <J> >- cons{'e; 'l} |}
+interactive_rw hoist_vlist_nest_concl :
+   vlist_nest{| <J> >- cons{'e; 'l} |}
    <-->
-   vlist{| <J>; 'e >- 'l |}
+   vlist_nest{| <J>; 'e >- 'l |}
 
-interactive_rw flatten_tail :
-   vlist{| <J>; x: 'e >- 'l['x] |}
+interactive_rw reduce_vlist_nest_bind_right :
+   vlist_nest{| <J>; x: 'e >- 'l['x] |}
    <-->
-   vlist{| <J>; 'e >- 'l['e] |}
+   vlist_nest{| <J>; 'e >- 'l[it] |}
+
+interactive_rw reduce_vlist_nest_split 'J :
+   vlist_nest{| <J>; <K> >- 'l |}
+   <-->
+   vlist_nest{| <J> >- vlist_nest{| <K> >- 'l |} |}
 
 doc <:doc<
-   Well-formedness for vector lists.
+   Well-formedness for the nested version of vector lists.
 >>
-interactive vlist_nil_wf {| intro [] |} :
+interactive vlist_nest_concl_wf {| intro [] |} :
    [wf] sequent { <H> >- 'l in list{'A} } -->
-   sequent { <H> >- vlist{| >- 'l |} in list{'A} }
+   sequent { <H> >- vlist_nest{| >- 'l |} in list{'A} }
 
-interactive vlist_cons_wf {| intro [] |} :
+interactive vlist_nest_left_wf {| intro [] |} :
    [wf] sequent { <H> >- 'e in 'A } -->
-   [wf] sequent { <H> >- vlist{| <J['e]> >- 'l['e] |} in list{'A} } -->
-   sequent { <H> >- vlist{| x: 'e; <J['x]> >- 'l['x] |} in list{'A} }
+   [wf] sequent { <H> >- vlist_nest{| <J[it]> >- 'l[it] |} in list{'A} } -->
+   sequent { <H> >- vlist_nest{| x: 'e; <J['x]> >- 'l['x] |} in list{'A} }
+
+doc <:doc<
+   The actual << vlist{| <J> |} >> ignores its conclusion.
+>>
+declare sequent [vlist] { Term : Term >- Term } : Term
+
+prim_rw unfold_vlist : vlist{| <J> >- 'C |} <-->
+   vlist_nest{| <J> >- nil |}
+
+interactive_rw reduce_vlist_nil {| reduce |} :
+   vlist{||}
+   <-->
+   nil
+
+interactive_rw reduce_vlist_left :
+   vlist{| x: 'A; <J['x]> |}
+   <-->
+   'A :: vlist{| <J[it]> |}
+
+interactive_rw reduce_vlist_split 'J :
+   vlist{| <J>; <K<||> > |}
+   <-->
+   append{vlist{| <J> |}; vlist{| <K> |}}
+
+interactive vlist_nil_wf :
+   [wf] sequent { <H> >- 'A Type } -->
+   sequent { <H> >- vlist{||} in list{'A} }
+
+interactive vlist_left_wf :
+   [wf] sequent { <H> >- 'e in 'A } -->
+   [wf] sequent { <H> >- vlist{| <J[it]> |} in list{'A} } -->
+   sequent { <H> >- vlist{| x: 'e; <J['x]> |} in list{'A} }
 
 interactive vlist_split_wf 'J :
-   [wf] sequent { <H> >- vlist{| <J> >- vlist{| <K> >- 'l |} |} in list{'A} } -->
-   sequent { <H> >- vlist{| <J>; <K> >- 'l |} in list{'A} }
+   [wf] sequent { <H> >- vlist{| <J> |} in list{'A} } -->
+   [wf] sequent { <H> >- vlist{| <K> |} in list{'A} } -->
+   sequent { <H> >- vlist{| <J>; <K<|H|> > |} in list{'A} }
 
+(************************************************************************
+ * Flattening.
+ *)
 doc <:doc<
    The << flatten{'l} >> term flattens a list using << append{'l1; 'l2} >>.
 >>
@@ -121,50 +168,62 @@ interactive flatten_wf {| intro [] |} :
    sequent { <H> >- flatten{'l} in list }
 
 doc <:doc<
-   The << vflatten{| <J> >- 'l |} >> term provides a sequent version of
+   The << vflatten_nest{| <J> >- 'l |} >> term provides a sequent version of
    flattening.
+>>
+declare sequent [vflatten_nest] { Term : Term >- Term } : Term
+
+prim_rw unfold_vflatten_nest : vflatten_nest{| <J> >- 'C |} <-->
+   sequent_ind{u, v. append{'u; happly{'v; it}}; TermSequent{| <J> >- 'C |}}
+
+interactive_rw reduce_vflatten_nest_nil {| reduce |} :
+   vflatten_nest{| >- 'C |}
+   <-->
+   'C
+
+interactive_rw reduce_vflatten_nest_left :
+   vflatten_nest{| x: 'A; <J['x]> >- 'C['x] |}
+   <-->
+   append{'A; vflatten_nest{| <J[it]> >- 'C[it] |}}
+
+interactive_rw reduce_vflatten_nest_right :
+   vflatten_nest{| <J>; x: 'A >- 'C['x] |}
+   <-->
+   vflatten_nest{| <J> >- append{'A; 'C[it]} |}
+
+interactive_rw reduce_vflatten_nest_split 'J :
+   vflatten_nest{| <J>; <K> >- 'C |}
+   <-->
+   vflatten_nest{| <J> >- vflatten_nest{| <K> >- 'C |} |}
+
+doc <:doc<
+   The << vflatten{| <J> |} >> term ignores the conclusion.
 >>
 declare sequent [vflatten] { Term : Term >- Term } : Term
 
 prim_rw unfold_vflatten : vflatten{| <J> >- 'C |} <-->
-   sequent_ind{u, v. append{'u; happly{'v; it}}; TermSequent{| <J> >- 'C |}}
+   vflatten_nest{| <J> >- nil |}
 
 interactive_rw reduce_vflatten_nil {| reduce |} :
-   vflatten{| >- 'C |}
+   vflatten{||}
    <-->
-   'C
+   nil
 
 interactive_rw reduce_vflatten_left :
-   vflatten{| x: 'A; <J['x]> >- 'C['x] |}
+   vflatten{| x: 'A; <J['x]> |}
    <-->
-   append{'A; vflatten{| <J[it]> >- 'C[it] |}}
+   append{'A; vflatten{| <J[it]> |}}
 
-interactive_rw reduce_vflatten_right :
-   vflatten{| <J>; x: 'A >- 'C['x] |}
-   <-->
-   vflatten{| <J> >- append{'A; 'C[it]} |}
+doc <:doc<
+   Well-formedness reasoning.
+>>
+interactive vflatten_list_wf {| intro [] |} :
+   [wf] sequent { <H> >- vlist{| <J> |} in list{list} } -->
+   sequent { <H> >- vflatten{| <J> |} in list }
 
-interactive_rw reduce_vflatten_split 'J :
-   vflatten{| <J>; <K> >- 'C |}
-   <-->
-   vflatten{| <J> >- vflatten{| <K> >- 'C |} |}
-
-(*
- * Reversed rewrites.
- *)
-interactive_rw collect_vflatten_left :
-   append{'l; vflatten{| <J> >- 'C |}}
-   <-->
-   vflatten{| 'l; <J> >- 'C |}
-
-interactive_rw reduce_vflatten_join :
-   vflatten{| <J> >- vflatten{| <K> >- 'C |} |}
-   <-->
-   vflatten{| <J>; <K> >- 'C |}
-
-(*
- * Nested appends.
- *)
+doc <:doc<
+   Associative properties.
+>>
 interactive_rw reduce_append_assoc :
    'l1 in "list" -->
    'l2 in "list" -->
@@ -172,38 +231,92 @@ interactive_rw reduce_append_assoc :
    <-->
    append{'l1; append{'l2; 'l3}}
 
+interactive_rw reduce_vflatten_split 'J :
+   vlist{| <J> |} in list{list} -->
+   vflatten{| <J>; <K<||> > |}
+   <-->
+   append{vflatten{| <J> |}; vflatten{| <K> |}}
+
+interactive_rw vflatten_collect 'J 'K :
+   vlist{| <J> |} in list{list} -->
+   vlist{| <K> |} in list{list} -->
+   vflatten{| <J>; <K<||> >; <L<||> > |}
+   <-->
+   vflatten{| <J>; vflatten{| <K> |}; <L> |}
+
+interactive_rw vflatten_flatten 'J :
+   vlist{| <J> |} in list{list} -->
+   vlist{| <K> |} in list{list} -->
+   vflatten{| <J>; vflatten{| <K<||> > |}; <L<||> > |}
+   <-->
+   vflatten{| <J>; <K>; <L> |}
+
+doc <:doc<
+   Forming flatten vectors out of nested appends.
+>>
+interactive_rw vflatten_of_append :
+   'l1 in list -->
+   'l2 in list -->
+   append{'l1; 'l2}
+   <-->
+   vflatten{| 'l1; 'l2 |}
+
 interactive_rw reduce_vflatten_append 'J :
    'l1 in "list" -->
    'l2 in "list" -->
-   vflatten{| <J>; x: append{'l1<||>; 'l2<||>}; <K['x]> >- 'C['x] |}
+   vflatten{| <J>; x: append{'l1<||>; 'l2<||>}; <K['x]> |}
    <-->
-   vflatten{| <J>; 'l1; 'l2; <K[it]> >- 'C[it] |}
+   vflatten{| <J>; 'l1; 'l2; <K[it]> |}
 
 (************************************************************************
  * Display forms.
  *)
 doc docoff
 
-dform vlist_df : vlist{| <H> |} =
-   szone pushm[1] `"[" display_sequent{vlist{| <H> |}} `"]" popm ezone
+dform vlist_nest_df : vlist_nest{| <H> |} =
+   szone pushm[1] `"[" display_sequent{vlist_nest{| <H> |}} `"]" popm ezone
 
-dform vlist_hyp_df : display_hyp{vlist; x. 'e} =
+dform vlist_nest_hyp_df : display_hyp{vlist_nest; x. 'e} =
    szone pushm[3] slot{'x} `":" hspace slot{'e} popm ezone
 
-dform vlist_sep_df : display_hyp_sep{vlist} =
+dform vlist_nest_sep_df : display_hyp_sep{vlist_nest} =
    `";" hspace
 
-dform vlist_concl_df : display_concl{vlist; 'c} =
+dform vlist_nest_concl_df : display_concl{vlist_nest; 'c} =
    `"???"
 
-dform vlist_concl_df : display_concl{vlist; xconcl} =
+dform vlist_nest_concl_df : display_concl{vlist_nest; xconcl} =
    `""
 
 (************************************************************************
  * Tactics.
  *)
-let fold_vlist = makeFoldC << vlist{| <H> >- 'C |} >> unfold_vlist
-let fold_vflatten = makeFoldC << vflatten{| <J> >- 'C |} >> unfold_vflatten
+let fold_vlist_nest = makeFoldC << vlist_nest{| <H> >- 'C |} >> unfold_vlist_nest
+let fold_vflatten_nest = makeFoldC << vflatten_nest{| <J> >- 'C |} >> unfold_vflatten_nest
+
+dform vlist_df : vlist{| <H> >- 'C |} =
+   szone pushm[3] `"vlist[" display_sequent{vlist{| <H> >- 'C |}} `"]" popm ezone
+
+dform vlist_hyp_df : display_hyp{vlist; v. 'e} =
+   slot{'e}
+
+dform vlist_concl_df : display_concl{vlist; xconcl} =
+   `""
+
+dform vlist_concl_df2 : display_concl{vlist; 'C} =
+   slot{'C}
+
+dform vflatten_df : vflatten{| <H> >- 'C |} =
+   szone pushm[3] `"vflatten[" display_sequent{vflatten{| <H> >- 'C |}} `"]" popm ezone
+
+dform vflatten_hyp_df : display_hyp{vflatten; v. 'e} =
+   slot{'e}
+
+dform vflatten_concl_df : display_concl{vflatten; xconcl} =
+   `""
+
+dform vflatten_concl_df2 : display_concl{vflatten; 'C} =
+   slot{'C}
 
 (*!
  * @docoff

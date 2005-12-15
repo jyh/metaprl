@@ -403,6 +403,30 @@ interactive sequent_depth_mem {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
+ * Additional well-formedness.
+ *)
+doc <:doc<
+   Additional well-formedness theorems for the various types.
+>>
+interactive cvar_nil_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   <H> >- [] IN CVar{d}
+>>
+
+interactive cvar_cons_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- u IN BTerm{d} -->
+   "wf" : <H> >- v IN CVar{d +@ 1} -->
+   <H> >- u::v IN CVar{d}
+>>
+
+interactive cvar_append_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- d IN "nat" -->
+   "wf" : <H> >- l1 IN CVar{d} -->
+   "wf" : <H> >- l2 IN CVar{d +@ length{l1}} -->
+   <H> >- append{l1; l2} IN CVar{d}
+>>
+(************************************************************************
  * Display.
  *)
 

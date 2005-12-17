@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1998-2005 MetaPRL Group, Cornell University and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,11 +35,8 @@ extends Itt_atom
 extends Itt_bool
 extends Itt_struct
 
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
+open Basic_tactics
 open Base_meta
-open Dtactic
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -65,7 +63,8 @@ prim_rw reduce_eq_atom' : eq_atom{token[x:t]; token[y:t]} <-->
 let reduce_eq_atom =
    reduce_eq_atom' thenC reduce_meta_eq_tok
 
-let resource reduce += << eq_atom{token[x:t]; token[y:t]} >>, reduce_eq_atom
+let resource reduce +=
+   << eq_atom{token[x:t]; token[y:t]} >>, reduce_eq_atom
 
 (************************************************************************
  * RULES                                                                *
@@ -77,23 +76,29 @@ prim eq_atom_wf {| intro [] |} :
    sequent { <H> >- eq_atom{'x; 'y} in bool } =
    it
 
-prim eq_atom_assert_intro {| intro [] |} :
+prim eq_atom_assert_intro {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'x = 'y in atom } -->
    sequent { <H> >- "assert"{eq_atom{'x; 'y}} } =
    it
 
-prim eq_atom_assert_elim {| elim [] |} 'H :
-   [main] sequent { <H>; x: 'a = 'b in atom; <J[it]> >- 'C[it] } -->
-   sequent { <H>; x: "assert"{eq_atom{'a; 'b}}; <J['x]> >- 'C['x] } =
+prim assert_implies_eq_atom {| nth_hyp |} :
+   sequent { <H> >- "assert"{eq_atom{'x; 'y}} } -->
+   sequent { <H> >- 'x = 'y in atom } =
    it
 
+interactive eq_atom_assert_elim {| elim [] |} 'H :
+   sequent { <H>; x: 'a = 'b in atom; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: "assert"{eq_atom{'a; 'b}}; <J['x]> >- 'C['x] }
+
 interactive eq_atom_elim 'H :
-   sequent { <H>; u: meta_eq[x:t, y:t]{"true"; "false"}; <J[it]> >- 'C[it] } -->
-   sequent { <H>; u: token[x:t] = token[y:t] in atom; <J['u]> >- 'C['u] }
+   sequent { <H>; u: "assert"{eq_atom{'a; 'b}}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: 'a = 'b in atom; <J['u]> >- 'C['u] }
 
-let eq_atom_assert_elimT n = eq_atom_elim n thenT rw reduce_meta_eq_tok n thenT dT n
+let eq_atom_assert_elimT n =
+   eq_atom_elim n thenT rw reduce_eq_atom n thenT dT n
 
-let resource elim += <<token[x:t] = token[y:t] in atom>>,  eq_atom_assert_elimT
+let resource elim +=
+   <<token[x:t] = token[y:t] in atom>>,  eq_atom_assert_elimT
 
 (*
  * -*-

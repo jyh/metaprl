@@ -829,77 +829,29 @@ doc <:doc< Introduction rules have identical semantics in pairwise and pointwise
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+doc <:doc< Division/reminder axioms are incorrect and need to be fixed! >>
 
-(* OK *) prim itt_int_ext.mul_wf {| intro [complete_unless_member] |} :
-   [wf] sequent { <H> >- 'a = 'a1 in int } -->
-   [wf] sequent { <H> >- 'b = 'b1 in int } -->
-   sequent { <H> >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
-
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.mul_Commut :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- ('a *@ 'b) ~ ('b *@ 'a) } = it
-
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.mul_Assoc :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) } = it
-
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.mul_add_Distrib :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) } = it
-
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.mul_Id {| nth_hyp |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   sequent { <H> >- (1 *@ 'a) ~ 'a } = it
-
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.mul_Zero {| nth_hyp |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   sequent { <H> >- (0 *@ 'a) ~ 0 } = it
-
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.rem_baseReduce :
+prim itt_int_ext.rem_baseReduce :
    sequent { <H> >- 0 <= 'a } -->
    sequent { <H> >- 'a < 'b } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ 'a } = it
 
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.rem_neg :
+prim itt_int_ext.rem_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) } = it
 
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.rem_indReduce :
+prim itt_int_ext.rem_indReduce :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) } = it
 
-doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
-
-(* OK *) prim itt_int_ext.div_baseReduce :
+prim itt_int_ext.div_baseReduce :
    sequent { <H> >- 0 <= 'a } -->
    sequent { <H> >- 'a < 'b } -->
    [wf] sequent { <H> >- 'a in int } -->
@@ -919,41 +871,55 @@ prim itt_int_ext.div_indReduce :
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) } = it
 
-prim itt_atom_bool.eq_atom_wf {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_atom_bool.eq_atom_wf {| intro [] |} :
    [wf] sequent { <H> >- 'x in atom } -->
    [wf] sequent { <H> >- 'y in atom } -->
    sequent { <H> >- eq_atom{'x; 'y} in bool } =
    it
 
-prim itt_atom_bool.eq_atom_assert_intro {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_atom_bool.eq_atom_assert_intro {| intro [] |} :
    [wf] sequent { <H> >- 'x = 'y in atom } -->
    sequent { <H> >- "assert"{eq_atom{'x; 'y}} } =
    it
 
-prim itt_atom_bool.eq_atom_assert_elim {| elim [] |} 'H :
-   [main] sequent { <H>; x: 'a = 'b in atom; <J[it]> >- 'C[it] } -->
-   sequent { <H>; x: "assert"{eq_atom{'a; 'b}}; <J['x]> >- 'C['x] } =
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim assert_implies_eq_atom {| nth_hyp |} :
+   sequent { <H> >- "assert"{eq_atom{'x; 'y}} } -->
+   sequent { <H> >- 'x = 'y in atom } =
    it
 
-prim itt_isect.intersectionFormation 'A :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_isect.intersectionFormation 'A :
    [wf] sequent { <H> >- 'A in univ[i:l] } -->
    ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    Isect x: 'A. 'B['x]
 
-prim itt_isect.intersectionEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_isect.intersectionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
-prim itt_isect.intersectionType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_isect.intersectionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    sequent { <H> >- "type"{"isect"{'A; x. 'B['x]}} } =
    it
 
-prim itt_isect.intersectionMemberEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_isect.intersectionMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } =

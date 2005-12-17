@@ -302,6 +302,25 @@ interactive beq_var_assert_elim {| elim [] |} 'H :
    sequent { <H>; u: 'x = 'y in Var; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: "assert"{beq_var{'x; 'y}}; <J['u]> >- 'C['u] }
 
+doc <:doc<
+   This is the main theorem that shows that << bind{x. 'e['x]} >> commutes with
+   << mk_bterm{'n; 'op; 'subterms} >>.
+>>
+interactive_rw reduce_bind_of_mk_bterm_of_list_of_fun :
+   'n in nat -->
+   'm in nat -->
+   bind{x. mk_bterm{'n; 'op; list_of_fun{y. 'f['x; 'y]; 'm}}}
+   <-->
+   mk_bterm{'n +@ 1; 'op; list_of_fun{y. bind{x. 'f['x; 'y]}; 'm}}
+
+interactive_rw reduce_vec_bind_of_mk_bterm_of_list_of_fun :
+   'i in nat -->
+   'n in nat -->
+   'm in nat -->
+   bind{'i; x. mk_bterm{'n; 'op; list_of_fun{y. 'f['x; 'y]; 'm}}}
+   <-->
+   mk_bterm{'n +@ 'i; 'op; list_of_fun{y. bind{'i; x. 'f['x; 'y]}; 'm}}
+
 doc docoff
 
 (*!

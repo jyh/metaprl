@@ -94,11 +94,20 @@ interactive_rw reduce_bindn_up {| reduce |} :
 interactive_rw bind_into_bindone :
    bind{v. 't['v]} <--> bind{1; l. 't[hd{'l}]}
 
+interactive_rw bindone_into_bind :
+   bind{1; l. 't['l]}
+   <-->
+   bind{v. 't[cons{'v; nil}]}
+
 interactive_rw split_bind_sum :
    'm in nat -->
    'n in nat -->
    bind{'m +@ 'n; l. 't['l]} <-->
    bind{'m; l1. bind{'n; l2. 't[append{'l1;'l2}]}}
+
+interactive_rw reduce_bindn_right :
+   'n in nat -->
+   bind{'n +@ 1; l. 't['l]} <--> bind{'n; l. bind{v. 't[append{'l; cons{'v; nil}}]}}
 
 interactive_rw merge_bindn {| reduce |} :
    'm in nat -->

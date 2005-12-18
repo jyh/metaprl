@@ -426,6 +426,13 @@ interactive cvar_append_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- l2 IN CVar{d +@ length{l1}} -->
    <H> >- append{l1; l2} IN CVar{d}
 >>
+
+interactive cvar_is_list {| intro [intro_typeinf << 'l >>] |} CVar{'n} : <:xrule<
+   "wf" : <H> >- n IN "nat" -->
+   "wf" : <H> >- l IN CVar{n} -->
+   <H> >- l IN "list"
+>>
+
 (************************************************************************
  * Display.
  *)

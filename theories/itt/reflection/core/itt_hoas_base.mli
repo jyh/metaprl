@@ -35,11 +35,17 @@ doc <:doc<
 >>
 extends Base_theory
 
+open Basic_tactics
+
 declare bind{x. 't['x]}
 declare mk_term{'op; 'subterms}
 declare subst{'bt; 't}
 
 declare weak_dest_bterm{'bt; 'bind_case; op, sbt. 'subterms_case['op; 'sbt]}
+
+(* This is useful for working with subterm lists *)
+declare mk_terms{'terms}
+declare weak_dest_terms{'bt; 'bind_case; terms. 'terms_case['terms]}
 
 (************************************************************************
  * Grammar for destructor.
@@ -54,6 +60,17 @@ production xterm_term{weak_dest_bterm{'bt; 'base; op, subterms. 'step}} %prec pr
    tok_weak_dest_bterm; xterm_term{'bt}; tok_with;
    opt_pipe; tok_arrow; xterm_term{'base};
    tok_pipe; tok_id[op:s]; tok_comma; tok_id[subterms:s]; tok_arrow; xterm_term{'step}
+
+(************************************************************************
+ * Tactics.
+ *)
+val is_bind_term : term -> bool
+val mk_bind_term : var -> term -> term
+val dest_bind_term : term -> var * term
+
+val is_mk_term_term : term -> bool
+val mk_mk_term_term : term -> term -> term
+val dest_mk_term_term : term -> term * term
 
 (*!
  * @docoff

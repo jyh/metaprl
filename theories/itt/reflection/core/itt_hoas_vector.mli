@@ -36,11 +36,20 @@ extends Itt_hoas_base
 extends Itt_nat
 extends Itt_list2
 
+open Basic_tactics
+
 declare bind{'n; x.'t['x]}
 declare subst{'n; 'bt; 't}
 declare substl{'bt; 'tl}
 
 define iform simple_bindn: bind{'n; 't} <-->  bind{'n; x.'t}
+
+(************************************************************************
+ * Tactics.
+ *)
+val is_bindn_term : term -> bool
+val mk_bindn_term : var -> term -> term -> term
+val dest_bindn_term : term -> var * term * term
 
 (*!
  * @docoff

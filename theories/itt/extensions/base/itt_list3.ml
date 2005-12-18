@@ -270,6 +270,12 @@ interactive nth_prefix_wf {| intro [] |} :
    [wf] sequent { <H> >- 'i <= length{'l} } -->
    sequent { <H> >- nth_prefix{'l; 'i} in list }
 
+interactive_rw list_elements_id_elem :
+   'l in list -->
+   list_of_fun{k. nth_elem{'l; 'k}; length{'l}}
+   <-->
+   'l
+
 (************************************************************************
  * Lemmas for the introduction rule.
  *)

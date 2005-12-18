@@ -206,3 +206,22 @@ dform subst_df2 : parens :: "prec"[prec_apply] :: mode[html] :: mode[tex] :: sub
 
 dform substl_df : parens :: "prec"[prec_apply] :: substl{'bt; 'tl} =
       slot["lt"]{'bt} `"@" Mpsymbols!subl slot["le"]{'tl}
+
+(************************************************************************
+ * Tactics.
+ *)
+let bindn_term = << bind{'n; x. 'e['x]} >>
+let bindn_opname = opname_of_term bindn_term
+let is_bindn_term = is_dep0_dep1_term bindn_opname
+let dest_bindn_term = dest_dep0_dep1_term bindn_opname
+let mk_bindn_term = mk_dep0_dep1_term bindn_opname
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

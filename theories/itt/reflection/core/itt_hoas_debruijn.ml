@@ -118,6 +118,11 @@ doc <:doc< @rewrites >>
 interactive_rw reduce_mk_bterm_base {| reduce |}:
    mk_bterm{0; 'op; 'btl} <--> mk_term{'op; 'btl }
 
+interactive_rw fold_mk_term :
+   mk_term{'op; 'subterms}
+   <-->
+   mk_bterm{0; 'op; 'subterms}
+
 interactive_rw reduce_mk_bterm_step {| reduce |}:
    'n in nat -->
    mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; map{bt. subst{'bt; 'v}; 'btl}}}
@@ -336,6 +341,15 @@ interactive_rw t2 :
    <-->
    mk_bterm{'n +@ 'i; 'op; list_of_fun{y. bind{'i; x. 'f['x; 'y]}; 'm}}
 doc docoff
+
+(************************************************************************
+ * Tactics and terms.
+ *)
+let mk_bterm_term = << mk_bterm{'n; 'op; 'subterms} >>
+let mk_bterm_opname = opname_of_term mk_bterm_term
+let is_mk_bterm_term = is_dep0_dep0_dep0_term mk_bterm_opname
+let dest_mk_bterm_term = dest_dep0_dep0_dep0_term mk_bterm_opname
+let mk_mk_bterm_term = mk_dep0_dep0_dep0_term mk_bterm_opname
 
 (*!
  * @docoff

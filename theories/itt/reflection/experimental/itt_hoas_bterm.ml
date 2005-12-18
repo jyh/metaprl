@@ -143,11 +143,6 @@ interactive mk_bterm_wf2 {| intro [] |} :
    sequent{ <H> >- compatible_shapes{'d1; shape{'op}; 'subterms} } -->
    sequent{ <H> >- mk_bterm{'d1; 'op; 'subterms} in BTerm{'d2} }
 
-interactive_rw fold_mk_term :
-   mk_term{'op; 'subterms}
-   <-->
-   mk_bterm{0; 'op; 'subterms}
-
 interactive mk_term_wf {| intro [] |} :
    [wf] sequent{ <H> >- 'op in Operator } -->
    [wf] sequent{ <H> >- 'subterms in list{BTerm} } -->

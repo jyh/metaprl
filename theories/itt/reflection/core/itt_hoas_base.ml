@@ -99,6 +99,29 @@ interactive_rw reduce_wdt_mk_term {| reduce |} :
    <-->
    'mkterm_case['op; 'subterms]
 
+doc <:doc<
+   On occasion, it is also useful to work with subterm lists directly, without
+   the operator.  Define another constructor << mk_terms{'l} >> that represents
+   a list of terms << 'l >>.
+>>
+define (*private*) unfold_mk_terms :
+   mk_terms{'l} <--> inr{'l}
+
+define unfold_weak_dest_terms :
+   weak_dest_terms{'bt; 'bind_case; l. 'terms_case['l]}
+   <-->
+   decide{'bt; x. 'bind_case; y. 'terms_case['y]}
+
+interactive_rw reduce_weak_dest_terms_bind {| reduce |} :
+   weak_dest_terms{bind{x. 't['x]}; 'bind_case; terms. 'terms_case['terms]}
+   <-->
+   'bind_case
+
+interactive_rw reduce_weak_dest_terms_mk_terms {| reduce |} :
+   weak_dest_terms{mk_terms{'l}; 'bind_case; terms. 'terms_case['terms]}
+   <-->
+   'terms_case['l]
+
 doc docoff
 
 dform bind_df : parens :: "prec"[prec_lambda] :: bind{x.'t} =
@@ -115,3 +138,17 @@ dform wdt_df : weak_dest_bterm{'bt; 'bind_case; op, sbt. 'mkterm_case} =
    keyword["with"] hspace pushm[3] `"B _ -> " slot{'bind_case} popm popm hspace
    `"| " pushm[3] mk_term{'op; 'sbt} `" -> " slot{'mkterm_case} popm popm ezone popm
 
+(************************************************************************
+ * Tactics.
+ *)
+let bind_term = << bind{x. 'e['x]} >>
+let bind_opname = opname_of_term bind_term
+let is_bind_term = is_dep1_term bind_opname
+let dest_bind_term = dest_dep1_term bind_opname
+let mk_bind_term = mk_dep1_term bind_opname
+
+let mk_term_term = << mk_term{'op; 'subterms} >>
+let mk_term_opname = opname_of_term mk_term_term
+let is_mk_term_term = is_dep0_dep0_term mk_term_opname
+let dest_mk_term_term = dest_dep0_dep0_term mk_term_opname
+let mk_mk_term_term = mk_dep0_dep0_term mk_term_opname

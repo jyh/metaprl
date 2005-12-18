@@ -31,6 +31,7 @@ doc <:doc<
 >>
 extends Itt_theory
 extends Itt_hoas_bterm
+extends Itt_hoas_bterm_wf
 extends Itt_hoas_util
 extends Itt_hoas_proof
 extends Itt_hoas_sequent

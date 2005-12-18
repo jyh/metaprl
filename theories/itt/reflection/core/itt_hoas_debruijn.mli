@@ -59,8 +59,27 @@ define iform unfold_get_op1 :
 declare Var
 
 topval fold_Var : conv
+topval fold_mk_term : conv
 
 declare beq_var{'x; 'y}
+
+(************************************************************************
+ * Tactics.
+ *)
+
+(*
+ * Some reductions useful in wf proving (later, in Itt_hoas_bterm_wf).
+ *)
+val reduce_bind_of_mk_bterm_of_list_of_fun : conv
+val reduce_vec_bind_of_mk_bterm_of_list_of_fun : conv
+val reduce_bdepth_mk_bterm : conv
+
+(*
+ * Terms.
+ *)
+val is_mk_bterm_term : term -> bool
+val dest_mk_bterm_term : term -> term * term * term
+val mk_mk_bterm_term : term -> term -> term -> term
 
 (*!
  * @docoff

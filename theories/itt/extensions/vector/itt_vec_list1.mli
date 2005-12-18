@@ -47,6 +47,11 @@ declare sequent [vflatten] { Term : Term >- Term } : Term
 topval fold_vlist_nest : conv
 topval fold_vflatten_nest : conv
 
+topval assert_reduce_length_of_fun_term1 : term
+
+topval reduce_length_fun_termC : conv
+topval vlist_of_concrete_listC : conv
+
 (*!
  * @docoff
  *

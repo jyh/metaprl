@@ -40,11 +40,17 @@ doc <:doc<
 >>
 extends Itt_theory
 extends Itt_vec_dform
+extends Itt_list3
 extends Meta_extensions_theory
 
 doc docoff
 
+open Lm_printf
 open Basic_tactics
+open Simple_print
+open Itt_equal
+open Itt_list2
+open Itt_list
 
 (************************************************************************
  * Vlist.
@@ -143,6 +149,119 @@ interactive vlist_split_wf 'J :
    [wf] sequent { <H> >- vlist{| <J> |} in list{'A} } -->
    [wf] sequent { <H> >- vlist{| <K> |} in list{'A} } -->
    sequent { <H> >- vlist{| <J>; <K<|H|> > |} in list{'A} }
+
+doc docoff
+
+(*
+ * Define a tactic for the case analysis on vlist.
+ *)
+let vlist_wf_tac p =
+   let t = concl p in
+   let _, t1, _ = dest_equal t in
+   let hyps = (explode_sequent t1).sequent_hyps in
+   let len = SeqHyp.length hyps in
+      if len = 0 then
+         vlist_nil_wf
+      else
+         match SeqHyp.get hyps 0 with
+            Hypothesis _ ->
+               vlist_left_wf
+          | Context _ ->
+               vlist_split_wf 2
+
+let resource intro +=
+   [<< vlist{| <J> |} in list{'A} >>, wrap_intro (funT vlist_wf_tac)]
+
+doc <:doc<
+   A vlist is @emph{always} a list.
+>>
+interactive vlist_wf {| intro [] |} :
+   sequent { <H> >- vlist{| <J> |} in list }
+
+doc <:doc<
+   The @refmodule[Itt_list2] module defines a conditional rewrite
+   << 'l in list => 'l ~ list_of_fun{i. nth{'l; 'i}; length{'l}} >>.
+   Define an equivalent form that is unconditional.
+>>
+interactive_rw vlist_of_nil :
+   nil
+   <-->
+   vlist{||}
+
+interactive_rw expand_vlist_left :
+   'A :: vlist{| <J> |}
+   <-->
+   vlist{| 'A; <J> |}
+
+interactive_rw list_of_fun_of_vlist :
+   vlist{| <J> |}
+   <-->
+   list_of_fun{i. nth{vlist{| <J> |}; 'i}; length{vlist{| <J> |}}}
+
+interactive_rw list_of_fun_of_vlist_elem :
+   vlist{| <J> |}
+   <-->
+   list_of_fun{i. nth_elem{vlist{| <J> |}; 'i}; length{vlist{| <J> |}}}
+
+(************************************************************************
+ * Squash list.
+ *)
+doc <:doc<
+   The << vsquashlist{| <J> >- 'l |} >> is the list where all hyps are
+   replaced by the term << it >>.  Most commonly, the << vsquashlist{| <J> >- 'l |} >>
+   term is used in << length{'e} >> reasoning, where the elements don't matter.
+>>
+declare sequent [vsquashlist] { Term : Term >- Term } : Term
+
+prim_rw unfold_vsquashlist :
+   vsquashlist{| <J> >- 'l |}
+   <-->
+   sequent_ind{u, v. it :: happly{'v; it}; TermSequent{| <J> >- 'l |}}
+
+interactive_rw reduce_vsquashlist_concl {| reduce |} :
+   vsquashlist{| >- 'l |}
+   <-->
+   'l
+
+interactive_rw reduce_vsquashlist_left :
+   vsquashlist{| x: 'A; <J['x]> >- 'l['x] |}
+   <-->
+   it :: vsquashlist{| <J[it]> >- 'l[it] |}
+
+interactive_rw reduce_vsquashlist_right :
+   vsquashlist{| <J>; x : 'A >- 'l['x] |}
+   <-->
+   vsquashlist{| <J> >- it :: 'l[it] |}
+
+doc <:doc<
+   The length of a list does not depend on the elements.
+>>
+interactive_rw reduce_length_of_vlist :
+   length{vlist{| <J> |}}
+   <-->
+   length{vsquashlist{| <J> >- nil |}}
+
+doc <:doc<
+   This is the primary hoisting theorem, where we show that the length
+   of the list does not depend on any free variables.
+>>
+interactive_rw reduce_length_fun :
+   lambda{x. length{vlist{| <J['x]> |}}}
+   <-->
+   lambda{x. length{vlist{| <J[it]> |}}}
+
+interactive_rw reduce_length_fun_term Perv!bind{x. length{vlist{| <J['x]> |}}} :
+   length{vlist{| <J['x]> |}}
+   <-->
+   length{vlist{| <J[it]> |}}
+
+(* Auxiliary goal *)
+let assert_reduce_length_of_fun_term1 = <<
+   all l: list{unit}.
+   lambda{x. length{vsquashlist{| <J['x]> >- 'l |}}}
+   ~
+   lambda{x. lambda{x. length{vsquashlist{| <J['x]> >- 'l |}}} it}
+>>
 
 (************************************************************************
  * Flattening.
@@ -268,6 +387,21 @@ interactive_rw reduce_vflatten_append 'J :
    <-->
    vflatten{| <J>; 'l1; 'l2; <K[it]> |}
 
+doc <:doc<
+   Length reductions.
+>>
+interactive_rw length_of_vflatten_nil {| reduce |} :
+   length{vflatten{||}}
+   <-->
+   0
+
+interactive_rw length_of_vflatten_cons {| reduce |} :
+   'l in list -->
+   vlist{| <J> |} in list{list} -->
+   length{vflatten{| 'l; <J> |}}
+   <-->
+   length{'l} +@ length{vflatten{| <J> |}}
+
 (************************************************************************
  * Display forms.
  *)
@@ -294,6 +428,76 @@ dform vlist_nest_concl_df : display_concl{vlist_nest; xconcl} =
 let fold_vlist_nest = makeFoldC << vlist_nest{| <H> >- 'C |} >> unfold_vlist_nest
 let fold_vflatten_nest = makeFoldC << vflatten_nest{| <J> >- 'C |} >> unfold_vflatten_nest
 
+let var_x = Lm_symbol.add "x"
+
+(*
+ * Squash vlist{| <J[x]> |} terms to vlist{| <J[it]> |}.
+ *)
+let reduce_length_fun_term_conv t =
+   let s = dest_length t in
+
+   (*
+    * Find the term to be replaced.
+    *)
+   let hyps = (explode_sequent s).sequent_hyps in
+   let len = SeqHyp.length hyps in
+   let rec search i =
+      if i = len then
+         raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("empty sequent", t)))
+      else
+         match SeqHyp.get hyps i with
+            Context (_, _, [t]) ->
+               t
+          | _ ->
+               search (succ i)
+   in
+   let v_term = search 0 in
+
+   (*
+    * Make a new variable, and replace the subterm.
+    *)
+   let x = maybe_new_var_set var_x (free_vars_set t) in
+   let t_var = var_subst t v_term x in
+   let t_bind = mk_bind1_term x t_var in
+      reduce_length_fun_term t_bind
+
+let reduce_length_fun_termC = termC reduce_length_fun_term_conv
+
+let resource reduce +=
+   [<< length{vlist{| <J> |}} >>, reduce_length_fun_termC]
+
+doc <:doc<
+   The @tt[vlist_of_concrete_listC] conversion collects the elements
+   of a concrete list in a << vlist{| <J> |} >>.
+
+   @docoff
+>>
+let rec find_nil_rev_address addr t =
+   if is_cons_term t then
+      let _, t = dest_cons t in
+      let addr = Subterm 2 :: addr in
+         find_nil_rev_address addr t
+   else if is_nil_term t then
+      addr
+   else
+      raise (RefineError ("find_nil_rev_address", StringTermError ("not a list term", t)))
+
+let vlist_of_concrete_list t =
+   let raddr = find_nil_rev_address [] t in
+   let rec foldC raddr =
+      match raddr with
+         [] ->
+            idC
+       | _ :: rest ->
+            addrC (List.rev rest) expand_vlist_left thenC foldC rest
+   in
+      addrC raddr vlist_of_nil thenC foldC raddr
+
+let vlist_of_concrete_listC = termC vlist_of_concrete_list
+
+(************************************************************************
+ * Display forms.
+ *)
 dform vlist_df : vlist{| <H> >- 'C |} =
    szone pushm[3] `"vlist[" display_sequent{vlist{| <H> >- 'C |}} `"]" popm ezone
 

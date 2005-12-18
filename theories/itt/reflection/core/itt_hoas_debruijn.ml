@@ -321,6 +321,20 @@ interactive_rw reduce_vec_bind_of_mk_bterm_of_list_of_fun :
    <-->
    mk_bterm{'n +@ 'i; 'op; list_of_fun{y. bind{'i; x. 'f['x; 'y]}; 'm}}
 
+interactive_rw t1 :
+   'n in nat -->
+   'm in nat -->
+   bind{x. mk_bterm{'n; 'op; list_of_fun{y. 'f['x; 'y]; 'm}}}
+   <-->
+   mk_bterm{'n +@ 1; 'op; list_of_fun{y. bind{x. 'f['x; 'y]}; 'm}}
+
+interactive_rw t2 :
+   'i in nat -->
+   'n in nat -->
+   'm in nat -->
+   bind{'i; x. mk_bterm{'n; 'op; list_of_fun{y. 'f['x; 'y]; 'm}}}
+   <-->
+   mk_bterm{'n +@ 'i; 'op; list_of_fun{y. bind{'i; x. 'f['x; 'y]}; 'm}}
 doc docoff
 
 (*!

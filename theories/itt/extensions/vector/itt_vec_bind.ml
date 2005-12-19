@@ -1,5 +1,5 @@
 doc <:doc<
-   @module[Itt_hoas_vec_bind]
+   @module[Itt_vec_bind]
 
    Vector binder.
 

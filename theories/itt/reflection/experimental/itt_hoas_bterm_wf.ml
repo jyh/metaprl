@@ -128,7 +128,7 @@ doc <:doc<
 interactive_rw reduce_subterms_bind1_nil {| reduce |} : <:xrewrite<
    subterms_bind{bind{x. mk_terms{"vlist"{||}}}}
    <-->
-   "vlist"{||}
+   []
 >>
 
 interactive_rw reduce_subterms_bind1_cons {| reduce |} : <:xrewrite<
@@ -141,7 +141,7 @@ interactive_rw reduce_subterms_bindn_nil {| reduce |} : <:xrewrite<
    n IN "nat" -->
    subterms_bind{bind{n; x. mk_terms{"vlist"{||}}}}
    <-->
-   "vlist"{||}
+   []
 >>
 
 interactive_rw reduce_subterms_bindn_cons {| reduce |} : <:xrewrite<
@@ -217,19 +217,19 @@ let reduce_bind_term t =
                raise (RefineError ("reduce_push_bind", StringTermError ("not a mk_[b]term", t)))
          in
             mk_term_flag, false
-   else if is_bindn_term t then
-      let n, v, t = dest_bindn_term t in
-      let mk_term_flag =
-         if is_mk_term_term t then
-            true
-         else if is_mk_bterm_term t then
-            false
-         else
-            raise (RefineError ("reduce_push_bind", StringTermError ("not a mk_[b]term", t)))
-      in
-         mk_term_flag, true
-   else
-      raise (RefineError ("reduce_push_bind", StringTermError ("not a bind term", t)))
+      else if is_bindn_term t then
+         let n, v, t = dest_bindn_term t in
+         let mk_term_flag =
+            if is_mk_term_term t then
+               true
+            else if is_mk_bterm_term t then
+               false
+            else
+               raise (RefineError ("reduce_push_bind", StringTermError ("not a mk_[b]term", t)))
+         in
+            mk_term_flag, true
+      else
+         raise (RefineError ("reduce_push_bind", StringTermError ("not a bind term", t)))
    in
 
    (* Address of the mk_[b]term part *)
@@ -363,6 +363,29 @@ let reduceDepthBTerm2C = funC reduce_depth_of_exp
 
 let resource reduce +=
    [<< bdepth{'e} >>, reduceDepthBTerm2C]
+
+(************************************************************************
+ * Bind coalescing.
+ *)
+interactive_rw coalesce_bind_bind {| reduce |} : <:xrewrite<
+   bind{x. bind{y. e[x; y]}}
+   <-->
+   bind{2; x. e[nth_elem{x; 0}; nth_elem{x; 1}]}
+>>
+
+interactive_rw coalesce_bind_bindn : <:xrewrite<
+   n IN "nat" -->
+   bind{y. bind{n; x. e[y; x]}}
+   <-->
+   bind{n +@ 1; x. e[hd{x}; tl{x}]}
+>>
+
+interactive_rw coalesce_bindn_bind : <:xrewrite<
+   n IN "nat" -->
+   bind{n; x. bind{y. e[x; y]}}
+   <-->
+   bind{n +@ 1; x. e[nth_prefix{x; n}; nth_elem{x; n}]}
+>>
 
 (*!
  * @docoff

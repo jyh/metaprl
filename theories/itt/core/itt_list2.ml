@@ -902,6 +902,14 @@ interactive listTop {| nth_hyp |} 'H :
 interactive listTop2 {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A} :
    sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- 'l in list }
+
+interactive listTop_nil {| intro [] |} :
+   sequent { <H> >- nil in list }
+
+interactive listTop_cons {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list } -->
+   sequent { <H> >- cons{'e; 'l} in list }
+
 (*
 interactive listTop3 {| intro[AutoMustComplete; intro_typeinf <<'l1>>] |} list{'A} :
    sequent { <H> >- 'l1 = 'l2 in list{'A} } -->

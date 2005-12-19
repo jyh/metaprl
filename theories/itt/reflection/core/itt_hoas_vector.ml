@@ -40,6 +40,7 @@ extends Itt_hoas_base
 extends Itt_nat
 extends Itt_list2
 extends Itt_fun2
+extends Itt_list3
 doc docoff
 
 open Basic_tactics
@@ -189,6 +190,22 @@ interactive_rw reduce_bsb2 {| reduce |} :
 interactive_rw unfold_bindnsub :
    'n in nat -->
    bind{'n +@ 1; v. substl{'bt['v]; 'v}} <--> bind{u.bind{'n; v. substl{subst{'bt['u :: 'v]; 'u}; 'v}}}
+
+(*
+ * Additional theorems for subst association.
+ *)
+interactive_rw bindn_to_list_of_fun :
+   'n in nat -->
+   bind{'n; x. 'e['x]}
+   <-->
+   bind{'n; x. 'e[list_of_fun{i. nth_elem{'x; 'i}; 'n}]}
+
+interactive_rw append_of_substl_substl Perv!bind{x. 'S['x]} 'e :
+   'n in nat -->
+   'm in nat -->
+   bind{'n; x. bind{'m; y. 'S[substl{substl{'e; 'x}; 'y}]}}
+   <-->
+   bind{'n; x. bind{'m; y. 'S[substl{'e; append{'x; 'y}}]}}
 
 doc docoff
 

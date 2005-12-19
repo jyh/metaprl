@@ -387,6 +387,14 @@ interactive_rw coalesce_bindn_bind : <:xrewrite<
    bind{n +@ 1; x. e[nth_prefix{x; n}; nth_elem{x; n}]}
 >>
 
+interactive_rw coalesce_bindn_bindn : <:xrewrite<
+   n IN "nat" -->
+   m IN "nat" -->
+   bind{n; x. bind{m; y. e[x; y]}}
+   <-->
+   bind{n +@ m; x. e[nth_prefix{x; n}; nth_suffix{x; n}]}
+>>
+
 (*!
  * @docoff
  *

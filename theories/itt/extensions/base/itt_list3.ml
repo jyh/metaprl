@@ -276,6 +276,12 @@ interactive_rw list_elements_id_elem :
    <-->
    'l
 
+interactive_rw list_of_fun_nth_elem_succ {| reduce |} :
+   'n in nat -->
+   list_of_fun{i. nth_elem{'u::'v; 'i +@ 1}; 'n}
+   <-->
+   list_of_fun{i. nth_elem{'v; 'i}; 'n}
+
 (************************************************************************
  * Lemmas for the introduction rule.
  *)

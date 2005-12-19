@@ -351,6 +351,12 @@ let is_mk_bterm_term = is_dep0_dep0_dep0_term mk_bterm_opname
 let dest_mk_bterm_term = dest_dep0_dep0_dep0_term mk_bterm_opname
 let mk_mk_bterm_term = mk_dep0_dep0_dep0_term mk_bterm_opname
 
+let bdepth_term = << bdepth{'e} >>
+let bdepth_opname = opname_of_term bdepth_term
+let is_bdepth_term = is_dep0_term bdepth_opname
+let dest_bdepth_term = dest_dep0_term bdepth_opname
+let mk_bdepth_term = mk_dep0_term bdepth_opname
+
 (*!
  * @docoff
  *

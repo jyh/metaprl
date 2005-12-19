@@ -101,13 +101,6 @@ define unfold_Sequent : Sequent <-->
    { s: BTerm * list{BTerm} * BTerm | is_sequent{'s} }
 
 doc <:doc<
-   The << SOVar{'d} >> term represents a second-order variable
-   with binding depth << 'd >>.
->>
-define unfold_SOVar : SOVar{'d} <-->
-   { e: BTerm | bdepth{'e} = 'd in nat }
-
-doc <:doc<
    The << CVar{'d} >> represents a sequent context at binding depth << 'd >>.
 >>
 define unfold_CVar : CVar{'d} <-->
@@ -236,14 +229,6 @@ interactive sequent_elim {| elim [] |} 'H : <:xrule<
    <H>; arg: "BTerm"; hyps: list{"BTerm"}; goal: "BTerm"; squash{is_sequent{"sequent"{arg; hyps; goal}}};
       <J["sequent"{arg; hyps; goal}]> >- C["sequent"{arg; hyps; goal}] -->
    <H>; s: "Sequent"; <J[s]> >- C[s]
->>
-
-(*
- * An SOVar is well-formed over subtypes of BTerm.
- *)
-interactive sovar_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- d IN "nat" -->
-   <H> >- SOVar{d} Type
 >>
 
 (*
@@ -433,6 +418,12 @@ interactive cvar_is_list {| intro [intro_typeinf << 'l >>] |} CVar{'n} : <:xrule
    <H> >- l IN "list"
 >>
 
+interactive bterm2_is_bterm {| intro [intro_typeinf << 'e >>] |} BTerm{'n} : <:xrule<
+   "wf" : <H> >- n IN "nat" -->
+   "wf" : <H> >- e IN BTerm{n} -->
+   <H> >- e IN "BTerm"
+>>
+
 (************************************************************************
  * Display.
  *)
@@ -442,10 +433,10 @@ interactive cvar_is_list {| intro [intro_typeinf << 'l >>] |} CVar{'n} : <:xrule
  * second-order variables.
  *)
 dform subst_df : parens :: "prec"[prec_apply] :: subst{'t1; 't2} =
-   szone pushm[3] slot["lt"]{'t1} `"[" slot["none"]{'t2} `"]" popm ezone
+   szone pushm[3] slot["lt"]{'t1} `"@[" slot["none"]{'t2} `"]" popm ezone
 
 dform substl_df : parens :: "prec"[prec_apply] :: substl{'bt; 'tl} =
-   szone pushm[3] slot["lt"]{'bt} `"<|" slot["none"]{'tl} `"|>" popm ezone
+   szone pushm[3] slot["lt"]{'bt} `"@<|" slot["none"]{'tl} `"|>" popm ezone
 
 (*
  * Convert the term back to a sequent for display.

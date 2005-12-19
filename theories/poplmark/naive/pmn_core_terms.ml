@@ -43,8 +43,8 @@ struct
    declare typeclass TyExp -> Term
 
    declare TyTop : TyExp
-(*
    declare TyFun{'ty1 : TyExp; 'ty2 : TyExp} : TyExp
+(*
    declare TyAll{'ty1 : TyExp; x : TyExp. 'ty2 : TyExp} : TyExp
  *)
 end;;

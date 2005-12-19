@@ -49,6 +49,7 @@ open Itt_vec_list1
 open Itt_hoas_base
 open Itt_hoas_vector
 open Itt_hoas_debruijn
+open Itt_equal
 
 (************************************************************************
  * Subterm bind lists.
@@ -293,9 +294,29 @@ let reduceBindTermC = termC reduce_bind_term_conv
 (*
  * Define the tactic.
  *)
-let bindWFT =
-   rw (addrC [Subterm 2] reduceBindTermC thenC addrC [Subterm 3] reduceBindTermC) 0
-   thenT dT 0
+let rec is_bind_mk_term t =
+   if Itt_hoas_base.is_bind_term t then
+      let _, t = Itt_hoas_base.dest_bind_term t in
+         is_bind_mk_term t
+   else if is_bindn_term t then
+      let _, _, t = dest_bindn_term t in
+         is_bind_mk_term t
+   else
+      is_mk_term_term t || is_mk_bterm_term t
+
+let bind_wf p =
+   let t = concl p in
+      if is_equal_term t then
+         let _, t1, t2 = dest_equal t in
+            if is_bind_mk_term t1 && is_bind_mk_term t2 then
+               rw (addrC [Subterm 2] reduceBindTermC thenC addrC [Subterm 3] reduceBindTermC) 0
+               thenT dT 0
+            else
+               raise (RefineError ("bind_wf", StringTermError ("not a bterm equality", t)))
+      else
+         raise (RefineError ("bind_wf", StringTermError ("not a bterm equality", t)))
+
+let bindWFT = funT bind_wf
 
 let bind_wf = wrap_intro bindWFT
 
@@ -316,6 +337,32 @@ let resource reduce +=
 
 let proofRuleWFT =
    repeatT (autoT thenT tryT bindWFT thenT rw reduceC 0)
+
+(************************************************************************
+ * Depth wf.
+ *)
+interactive_rw reduce_bind_of_bterm2 BTerm{'d} : <:xrewrite<
+   e IN BTerm{d} -->
+   bdepth{e}
+   <-->
+   d
+>>
+
+let reduce_depth_of_exp e =
+   let t = env_term e in
+   let t = dest_bdepth_term t in
+   let p = env_arg e in
+   let ty =
+      try get_with_arg p with
+         RefineError _ ->
+            infer_type p t
+   in
+      reduce_bind_of_bterm2 ty
+
+let reduceDepthBTerm2C = funC reduce_depth_of_exp
+
+let resource reduce +=
+   [<< bdepth{'e} >>, reduceDepthBTerm2C]
 
 (*!
  * @docoff

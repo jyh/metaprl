@@ -81,6 +81,10 @@ val is_mk_bterm_term : term -> bool
 val dest_mk_bterm_term : term -> term * term * term
 val mk_mk_bterm_term : term -> term -> term -> term
 
+val is_bdepth_term : term -> bool
+val dest_bdepth_term : term -> term
+val mk_bdepth_term : term -> term
+
 (*!
  * @docoff
  *

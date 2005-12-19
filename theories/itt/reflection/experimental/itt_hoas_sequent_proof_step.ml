@@ -101,7 +101,7 @@ define unfold_let_cvar : let_cvar{'d; 'witness; 'i; v. 'e['v]} <-->
       'e[nth{'cvars; 'i}]}}}
 
 dform let_sovar_df : let_sovar{'d; 'witness; 'i; v. 'e} =
-   szone pushm[0] `"let " slot{'v} `" : SOVar{" slot{'d} `"} = " slot{'witness} `".sovars.[" slot{'i} `"] in" hspace slot{'e} popm ezone
+   szone pushm[0] `"let " slot{'v} `" : BTerm{" slot{'d} `"} = " slot{'witness} `".sovars.[" slot{'i} `"] in" hspace slot{'e} popm ezone
 
 dform let_cvar_df : let_cvar{'d; 'witness; 'i; v. 'e} =
    szone pushm[0] `"let " slot{'v} `" : CVar{" slot{'d} `"} = " slot{'witness} `".cvars.[" slot{'i} `"] in" hspace slot{'e} popm ezone
@@ -125,7 +125,7 @@ interactive let_sovar_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
    "wf" : <H> >- witness IN "ProofStepWitness" -->
    "wf" : <H> >- i IN "nat" -->
-   "wf" : <H>; v: SOVar{d} >- e[v] IN "bool" -->
+   "wf" : <H>; v: BTerm{d} >- e[v] IN "bool" -->
    <H> >- let_sovar{d; witness; i; v. e[v]} IN "bool"
 >>
 

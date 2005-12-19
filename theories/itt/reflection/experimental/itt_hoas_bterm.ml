@@ -93,6 +93,10 @@ interactive  bdepth_wf_int  {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- bdepth{'t} in int }
 
+interactive bterm2_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- BTerm{'n} Type }
+
 interactive compatible_shapes_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'bdepth in nat } -->
    [wf] sequent{ <H> >- 'shape in list{int} } -->

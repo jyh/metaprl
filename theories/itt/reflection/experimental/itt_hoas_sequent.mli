@@ -46,11 +46,6 @@ declare beq_sequent_list{'l1; 's2}
 declare Sequent{'d}
 
 (*
- * A second-order variable with 'd arguments.
- *)
-declare SOVar{'d}
-
-(*
  * A sequent context variable at depth 'd.
  *)
 declare CVar{'d}

@@ -29,18 +29,11 @@ extends Itt_hoas_bterm
 open Basic_tactics
 
 (*
- * Push the bind into the term.
+ * Debugging.
  *)
-topval reduceBindTermC : conv
-topval bindWFT : tactic
-topval proofRuleWFT : tactic
-
-(*
- * Private conversions.
- *)
-topval fold_subterms_length : conv
-topval fold_subterms_nth : conv
-topval fold_subterms_bind : conv
+topval fold_list_of_funC : conv
+topval normalize_term_subtermsC : conv
+topval push_bindC : conv
 
 (*!
  * @docoff

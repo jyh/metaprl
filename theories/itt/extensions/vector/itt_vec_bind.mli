@@ -59,7 +59,6 @@ declare sequent [vbind_arity] { Term : Term >- Term } : Term
 topval wrapVBindT : tactic
 
 topval pushVBindSubstC : term -> conv
-topval foldClose1C : term -> term -> conv
 topval reduceVBindC : conv
 
 (*

@@ -351,20 +351,6 @@ let push_vbind_subst t1 t =
 
 let pushVBindSubstC t1 = termC (push_vbind_subst t1)
 
-(*
- * Lambda-closing.
- *)
-let foldClose1C x t1 =
-   let v = dest_var x in
-   let t_app = mk_apply_term (mk_lambda_term v t1) x in
-   let fold t =
-      if alpha_equal t t1 then
-         foldC t_app reduce_beta
-      else
-         raise (RefineError ("fold_close", StringError "term mismatch"))
-   in
-      termC fold
-
 (*!
  * @docoff
  *

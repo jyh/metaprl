@@ -66,6 +66,7 @@ doc <:doc<
    The << hyp_depths{'d; 'l} >> predicate tests whether the list << 'l >>
    is a valid list of terms with binding depths started with << 'd >>.
 >>
+(* XXX: BUG: define the propositional form using assert *)
 define unfold_hyp_depths : hyp_depths{'d; 'l} <-->
    list_ind{'l; lambda{d. "true"}; h, t, g. lambda{d. bdepth{'h} = 'd in nat & 'g ('d +@ 1)}} 'd
 

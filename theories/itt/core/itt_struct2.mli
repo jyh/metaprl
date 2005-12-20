@@ -50,6 +50,8 @@ topval assertSquashAtT  : int -> term -> tactic
 
 topval genSOVarT : string -> tactic
 
+topval foldClose1C : term -> term -> conv
+
 (*
  * -*-
  * Local Variables:

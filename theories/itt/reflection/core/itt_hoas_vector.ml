@@ -194,6 +194,12 @@ interactive_rw unfold_bindnsub :
 (*
  * Additional theorems for subst association.
  *)
+(* bind{x.'e['x::nil]} <--> bind{x. 'e[list_of_fun{i. nth_elem{'x::nil; 'i}; 1}]} *)
+interactive_rw bind_to_list_of_fun :
+   bind{1; x. 'e['x]}
+   <-->
+   bind{1; x. 'e[list_of_fun{i. nth_elem{'x; 'i}; 1}]}
+
 interactive_rw bindn_to_list_of_fun :
    'n in nat -->
    bind{'n; x. 'e['x]}

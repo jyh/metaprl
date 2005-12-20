@@ -40,7 +40,7 @@ let thinT = thin
 
 let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thin_many assum)
+      Top_tacticals.thinMatchT thin_many alpha_equal assum)
 
 let assertT = cut
 

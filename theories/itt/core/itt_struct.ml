@@ -264,9 +264,33 @@ let thinAllT i j = funT (fun p ->
    let j = get_pos_hyp_num p j in
       thin_many i (j-i+2) )
 
+let matchAssumsT = argfunT (fun i p ->
+   let assum = TermMan.explode_sequent (Sequent.nth_assum p i) in
+   let goal = Sequent.explode_sequent_arg p in
+   let len = SeqHyp.length goal.sequent_hyps in
+   let () =
+      if len <> SeqHyp.length assum.sequent_hyps then
+         raise (Invalid_argument "Itt_struct.matchAssumsT: internal error")
+   in
+   let rec vars subst i =
+      if i = len then
+         subst
+      else
+         match SeqHyp.get goal.sequent_hyps i, SeqHyp.get assum.sequent_hyps i with
+            Hypothesis (v, _), Hypothesis (v', _) ->
+               vars ((v', mk_var_term v)::subst) (i + 1)
+          | _ ->
+               vars subst (i + 1)
+   in
+   let assum = apply_subst (vars [] 0) assum.sequent_concl in
+      if alpha_equal assum goal.sequent_concl then
+         nthAssumT i
+      else
+         cut 0 assum thenLT [nthAssumT i; nthHypT (-1)])
+
 let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thin_many assum thenT nthAssumT i)
+      Top_tacticals.thinMatchT thin_many (nth_hyp_mem p) assum thenT matchAssumsT i)
 
 doc <:doc<
    @modsubsection{Reordering}

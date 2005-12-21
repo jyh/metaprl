@@ -478,3 +478,14 @@ let foldClose1C x t1 =
    in
       termC fold
 
+let foldClose2C x1 x2 t1 =
+   let v1 = dest_var x1 in
+   let v2 = dest_var x2 in
+   let t_app = mk_apply_term (mk_apply_term (mk_lambda_term v1 (mk_lambda_term v2 t1)) x1) x2 in
+   let fold t =
+      if alpha_equal t t1 then
+         repeatC (foldC t_app (sweepUpC reduce_beta))
+      else
+         raise (RefineError ("fold_close", StringError "term mismatch"))
+   in
+      termC fold

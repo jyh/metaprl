@@ -445,7 +445,7 @@ let genSOVarT = argfunT (fun s p ->
                      let x = maybe_new_var (Lm_symbol.add "x") [vv] in
                         expand := Some (mk_apply_term (mk_lambda_term x (mk_so_var_term vv conts [mk_var_term x])) t)
                 | _ ->
-                     eprintf "Warning: Itt_subst2.genSOVarT: collapse/expand code not sully implemented@."
+                     eprintf "Warning: Itt_subst2.genSOVarT: collapse/expand code not fully implemented@."
                end;
                List.fold_left mk_apply_term t' ts
             end else

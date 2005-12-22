@@ -18,7 +18,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2001-2005 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,8 +35,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Alexei Kopylov
-   @email{kopylov@cs.caltech.edu}
+   Authors: Alexei Kopylov @email{kopylov@cs.caltech.edu}
+            Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
 >>
@@ -100,12 +101,53 @@ interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'C['x] }
 
 doc <:doc<
+   A special case of the substitution rule.
+>>
 
-   The @tt{Itt_struct2} module redefines tactic @hreftactic[substT].
+interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} :
+   [equality] sequent { <H> >- 't_1 = 't_2 in 'T } -->
+   [main]  sequent { <H> >-  'c_1 = 'c_2 in 'C['t_2] } -->
+   [wf] sequent { <H>; x: 'T; v: 't_1='x in 'T; w: 't_2='x in 'T
+                           >- "type"{'C['x]} } -->
+   sequent { <H> >- 'c_1 = 'c_2 in 'C['t_1] }
+
+doc <:doc<
+   The @tt{Itt_struct2} module updates the @hreftactic[substT] resource.
    From now @tt[substT] uses the above version of substitution
    instead of original one.
-
+   @docoff
 >>
+
+(* substitution *)
+
+let substConclT = argfunT (fun t p ->
+   let _, a, _ = dest_equal t in
+   let bind = get_bind_from_arg_or_concl_subst p a in
+   let tac = 
+      let v, t = dest_bind1 bind in
+         if is_equal_term t && 
+            let _, a, b = dest_equal t in
+               not (is_var_free v a || is_var_free v b)
+         then
+            substitutionInType
+         else
+            substitution2
+   in
+      tac t bind thenWT thinIfThinningT [-1;-1])
+
+(*
+ * Hyp substitution requires a replacement.
+ *)
+let substHypT i t = funT (fun p ->
+   let i = Sequent.get_pos_hyp_num p i in
+   let _, a, _ = dest_equal t in
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
+     if get_thinning_arg p
+       then hypSubstitution i t bind
+       else hypSubstitution2 i t bind)
+
+let resource subst +=
+   equal_term, (fun t i -> if i = 0 then substConclT t else substHypT i t)
 
 doc <:doc<
    @modsubsection{Cut rules}
@@ -145,18 +187,6 @@ interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} :
    [assertion] sequent{ <H> >- 's_1='s_2 in 'S } -->
    [main]      sequent { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T } -->
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T}
-
-doc <:doc<
-   @modsubsection{Substitution in a type}
-
->>
-
-interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} :
-   [equality] sequent { <H> >- 't_1 = 't_2 in 'T } -->
-   [main]  sequent { <H> >-  'c_1 = 'c_2 in 'C['t_2] } -->
-   [wf] sequent { <H>; x: 'T; v: 't_1='x in 'T; w: 't_2='x in 'T
-                           >- "type"{'C['x]} } -->
-   sequent { <H> >- 'c_1 = 'c_2 in 'C['t_1] }
 
 doc <:doc<
 
@@ -274,34 +304,9 @@ doc docoff
  * TACTICS                                                              *
  ************************************************************************)
 
-(* substitution *)
-
-let substConclT = argfunT (fun t p ->
-   let _, a, _ = dest_equal t in
-   let bind = get_bind_from_arg_or_concl_subst p a in
-      (substitutionInType t bind orelseT substitution2 t bind) thenWT thinIfThinningT [-1;-1])
-
-(*
- * Hyp substitution requires a replacement.
- *)
-let substHypT i t = funT (fun p ->
-   let i = Sequent.get_pos_hyp_num p i in
-   let _, a, _ = dest_equal t in
-   let bind = get_bind_from_arg_or_hyp_subst p i a in
-     if get_thinning_arg p
-       then hypSubstitution i t bind
-       else hypSubstitution2 i t bind)
-
 (*
  * General substition.
  *)
-
-let eqSubstT t i =
-   if i = 0 then
-      substConclT t
-   else
-      substHypT i t
-
 let lambdaSqSubstT t i = funT (fun p ->
    let tt = if i = 0 then concl p else nth_hyp p i in
    let x, t1 = dest_lambda (fst (dest_squiggle t)) in
@@ -335,52 +340,8 @@ let lambdaSqSubstT t i = funT (fun p ->
        | _ ->
             raise(RefineError("lambdaSqSubstT", StringTermError ("Nothing appropriate found in", tt))))
 
-let substTaux t i =
-   if is_squiggle_term t then
-      let a, b = dest_squiggle t in
-         if is_lambda_term a && is_lambda_term b then
-            lambdaSqSubstT t i
-         else
-            sqSubstT t i
-   else
-      eqSubstT t i
-
-let move_and_substT t i = funT (fun p ->
-   let i = get_pos_hyp_num p i in
-      copyHypT i (-1) thenT substTaux t (-1) thenT tryT (thinT i))
-
-let substT t i =
-   if i = 0 then
-      substTaux t i
-   else
-      substTaux t i orelseT move_and_substT t i
-
-let justSubstT t i tac1 tac2 j =
-   let t1 = substTaux t i thenET (tac1 thenT tac2 j) in
-      if i = 0 then
-         t1
-      else
-         t1 orelseT funT (fun p ->
-            let j = get_pos_hyp_num p j in
-              copyHypT i (-1) thenT substTaux t (-1) thenET (tac1 thenT tac2 j) thenT tryT (thinT i))
-
-(*
- * Derived versions.
- *)
-
-let hypSubstT i j = funT (fun p ->
-   justSubstT (Sequent.nth_hyp p i) j idT hypothesis i)
-
-let revHypSubstT i j = funT (fun p ->
-   let trm = Sequent.nth_hyp p i in
-   if is_squiggle_term trm then
-      let a, b = dest_squiggle trm in
-      let h' = mk_squiggle_term  b a in
-         justSubstT h' j sqSymT hypothesis i
-   else
-      let t, a, b = dest_equal trm in
-      let h' = mk_equal_term t b a in
-         justSubstT h' j equalSymT hypothesis i)
+let resource subst +=
+   << lambda{x.'t1['x]} ~ lambda{y.'t2['y]} >>, lambdaSqSubstT
 
 (* cutMem *)
 

@@ -388,9 +388,28 @@ doc <:doc<
       <<sequent{ <H> >- <:doc< (1 + 2) < 1 * (1 + 2)>>}>>}
    $$
 
+   The @hreftactic[substT] tactic is resource-bases, which will allow adding other
+   kinds of equality-based substitutions (such as squiggle substitution) in later theories.
+
    @docoff
 >>
-let substConclT = argfunT (fun t p ->
+
+open Term_match_table
+
+let extract_subst tbl t =
+   try lookup tbl select_all t t
+   with Not_found ->
+      raise (RefineError ("Itt_struct.substT", StringTermError("Found nothing appropriate for", t)))
+
+let resource (term * (term -> int -> tactic), term -> int -> tactic) subst =
+   table_resource_info extract_subst
+
+let substTaux t i = funT (fun p ->
+   Sequent.get_resource_arg p get_subst_resource t i)
+
+let substConclT t = substTaux t 0
+
+let local_substConclT = argfunT (fun t p ->
    let _, a, _ = dest_equal t in
    let bind = get_bind_from_arg_or_concl_subst p a in
       substitution t bind)
@@ -407,22 +426,57 @@ let substHypT i t = funT (fun p ->
 (*
  * General substition.
  *)
+let resource subst +=
+   equal_term, (fun t i -> if i = 0 then local_substConclT t else substHypT i t)
+
+let move_and_substT t i = funT (fun p ->
+   let i = get_pos_hyp_num p i in
+      copyHypT i (-1) thenT substTaux t (-1) thenT tryT (thinT i))
+
 let substT t i =
    if i = 0 then
-      substConclT t
+      substTaux t i
    else
-      substHypT i t
+      substTaux t i orelseT move_and_substT t i
+
+let justSubstT t i tac j =
+   let t1 = substTaux t i thenET tac j in
+      if i = 0 then
+         t1
+      else
+         t1 orelseT funT (fun p ->
+            let j = get_pos_hyp_num p j in
+              copyHypT i (-1) thenT substTaux t (-1) thenET tac j thenT tryT (thinT i))
 
 (*
  * Derived versions.
  *)
 let hypSubstT i j = funT (fun p ->
-   substT (Sequent.nth_hyp p i) j thenET hypothesis i)
+   justSubstT (Sequent.nth_hyp p i) j hypothesis i)
+
+(*
+ * XXX: HACK (2005/12/21 nogin). A "proper" way of doing this is resource-based.
+ * However I am hoping that this hack will cover all the interesting cases.
+ *)
+let rec swap_bterm t = function
+   [t'] ->
+      let t' = dest_bterm t' in
+         [mk_bterm t'.bvars (swap t t'.bterm)]
+ | [t1; t2] when is_simple_bterm t1 && is_simple_bterm t2 ->
+      [t2; t1]
+ | []
+ | [_; _] ->
+       raise (RefineError("Itt_struct.revHypSubstT", StringTermError("Do not know how to reverse the hyp", t)))
+ | hd :: tl ->
+       hd :: (swap_bterm t tl)
+
+and swap t_orig t =
+   let t = dest_term t in
+      mk_term t.term_op (swap_bterm t_orig t.term_terms)
 
 let revHypSubstT i j = funT (fun p ->
-   let t, a, b = dest_equal (Sequent.nth_hyp p i) in
-   let h' = mk_equal_term t b a in
-      substT h' j thenET (equalSymT thenT hypothesis i))
+   let t = Sequent.nth_hyp p i in
+      justSubstT (swap t t) j nthHypT i)
 
 (*
  * Replace the entire hypothesis.

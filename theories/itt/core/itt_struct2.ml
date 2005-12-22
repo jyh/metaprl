@@ -450,3 +450,28 @@ let foldClose2C x1 x2 t1 =
          raise (RefineError ("fold_close", StringError "term mismatch"))
    in
       termC fold
+
+let foldCloseC vars t =
+   let t_app =
+      let rec gen_lam vars' =
+         match vars' with
+            [] -> t
+          | hd :: tl ->
+               let v = dest_var hd in
+                  mk_lambda_term v (gen_lam tl)
+      in
+      let rec gen_app vars' f =
+         match vars' with
+            [] -> f
+          | hd :: tl ->
+               gen_app tl (mk_apply_term f hd)
+      in
+         gen_app vars (gen_lam vars)
+   in
+   let fold t1 =
+      if alpha_equal t1 t then
+         repeatC (foldC t_app (sweepUpC reduce_beta))
+      else
+         raise (RefineError ("fold_close", StringError "term mismatch"))
+   in
+      termC fold

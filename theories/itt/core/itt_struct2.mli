@@ -47,6 +47,7 @@ topval genSOVarT : string -> tactic
 
 topval foldClose1C : term -> term -> conv
 topval foldClose2C : term -> term -> term -> conv
+topval foldCloseC : term list -> term -> conv
 
 (*
  * -*-

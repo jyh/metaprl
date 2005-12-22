@@ -32,6 +32,7 @@
  *)
 
 extends Itt_struct
+extends Itt_sqsimple
 
 open Basic_tactics
 

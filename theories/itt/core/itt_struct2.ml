@@ -50,6 +50,7 @@ extends Itt_squiggle
 extends Itt_squash
 extends Itt_set
 extends Itt_logic
+extends Itt_sqsimple
 doc docoff
 
 open Lm_debug
@@ -61,6 +62,7 @@ open Itt_equal
 open Itt_struct
 open Itt_squiggle
 open Itt_dfun
+open Itt_sqsimple
 
 (*
  * Show that the file is loading.
@@ -146,8 +148,23 @@ let substHypT i t = funT (fun p ->
        then hypSubstitution i t bind
        else hypSubstitution2 i t bind)
 
+let eqSubstT t i = funT (fun p ->
+   let tp, a, b = dest_equal t in
+      if get_resource_arg p get_sqsimple_resource tp then
+         let i = Sequent.get_pos_hyp_num p i in
+         let t' = mk_squiggle_term a b in
+            assertT t' thenLT [
+               sqsimple_sq tp thenLT [autoT thenT addHiddenLabelT "wf"; addHiddenLabelT "equality"];
+               hypSubstT (-1) i thenT thinTermT t'
+            ]
+      else
+         if i = 0 then
+            substConclT t
+         else
+            substHypT i t)
+
 let resource subst +=
-   equal_term, (fun t i -> if i = 0 then substConclT t else substHypT i t)
+   equal_term, eqSubstT
 
 doc <:doc<
    @modsubsection{Cut rules}

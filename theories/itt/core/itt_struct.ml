@@ -254,6 +254,22 @@ doc <:doc<
 >>
 let thinT = thin
 
+let thinTermT =
+   let rec findThinT t hyps i =
+      if i = 0 then
+         idT
+      else
+         let i' = i - 1 in
+            match SeqHyp.get hyps i' with
+               Hypothesis(_, t') when alpha_equal t t' ->
+                  thin i
+             | _ ->
+                  findThinT t hyps i'
+   in argfunT (fun t p ->
+      let e = explode_sequent_arg p in
+      let hyps = e.sequent_hyps in
+         findThinT t hyps (SeqHyp.length e.sequent_hyps))
+
 let thinIfThinningT = argfunT (fun hyps p ->
     if get_thinning_arg p then
        tryOnHypsT hyps thinT

@@ -55,6 +55,7 @@ open Itt_equal
 open Itt_bool
 open Itt_subtype
 open Itt_int_arith
+open Itt_sqsimple
 
 doc terms
 
@@ -145,7 +146,7 @@ interactive nat_is_int2 {| nth_hyp |} 'H :
 interactive nat_is_subtype_of_int  {| intro[] |} :
    sequent { <H> >- nat subtype int }
 
-interactive nat_sqsimple {| intro [] |} :
+interactive nat_sqsimple {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{nat} }
 
 let resource sub += (RLSubtype ([<< nat >>, << int>>], nat_is_subtype_of_int  ))

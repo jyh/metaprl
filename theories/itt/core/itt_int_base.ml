@@ -75,6 +75,7 @@ open Itt_struct
 open Itt_squash
 open Itt_bool
 open Itt_squiggle
+open Itt_sqsimple
 
 let _ = show_loading "Loading Itt_int_base%t"
 
@@ -404,7 +405,7 @@ interactive intType {| intro [] |} :
 (*
  * Int is a sqsimple type.
  *)
-interactive int_sqsimple {| intro [] |} :
+interactive int_sqsimple {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{int} }
 
 (*

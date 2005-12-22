@@ -67,6 +67,7 @@ open Itt_logic
 open Itt_squash
 open Itt_list
 open Itt_struct
+open Itt_sqsimple
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -1594,7 +1595,7 @@ doc docoff
 (*
  * Squiggle equality.
  *)
-interactive list_sqsimple {| intro [] |} :
+interactive list_sqsimple {| intro []; sqsimple |} :
    [wf] sequent { <H> >- 'T Type } -->
    sequent { <H> >- sqsimple{'T} } -->
    sequent { <H> >- sqsimple{list{'T}} }

@@ -48,6 +48,7 @@ extends Itt_union
 extends Itt_set
 extends Itt_logic
 extends Itt_decidable
+extends Itt_sqsimple
 doc docoff
 
 open Basic_tactics
@@ -55,6 +56,7 @@ open Basic_tactics
 open Itt_struct
 open Itt_equal
 open Itt_squash
+open Itt_sqsimple
 
 (************************************************************************
  * TERMS                                                                *
@@ -280,6 +282,9 @@ doc <:doc<
 interactive boolSqequal {| nth_hyp |} :
    sequent { <H> >- 'x = 'y in bool } -->
    sequent { <H> >- 'x ~ 'y }
+
+interactive sqsimple_bool {| intro []; sqsimple |} :
+   sequent { <H> >- sqsimple{bool} }
 doc docoff
 
 let resource intro += [

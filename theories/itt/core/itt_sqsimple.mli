@@ -1,6 +1,7 @@
 (*
- * This module defines thepreliminary basis for the type
- * theory, including "type", universes, and equality rules.
+ * This module defines a notion of "squiggle-simple" type,
+ * which are the type, where only squiggle-equal members 
+ * are considered equal.
  *
  * ----------------------------------------------------------------
  *
@@ -11,7 +12,7 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998--2005 Mojave Group, Caltech
+ * Copyright (C) 2004-2005 MetaPRL Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,16 +28,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.caltech.edu>
  *)
 open Basic_tactics
+
+resource (term * term list, term -> bool) sqsimple
+
+val process_sqsimple_resource_annotation :
+   ('a, term * term list) annotation_processor
 
 declare sqsimple{'T}
 declare sqsimple_type{'T}
 
 topval fold_sqsimple : conv
 topval fold_sqsimple_type : conv
+
+val sqsimple_sq: term -> tactic
 
 (*
  * -*-

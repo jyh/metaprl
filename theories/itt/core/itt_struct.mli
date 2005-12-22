@@ -144,6 +144,7 @@ topval replaceHypT : term -> int -> tactic
 topval equalTypeT : term -> term -> tactic
 topval memberTypeT : term -> tactic
 
+val thinTermT : term -> tactic
 val thinIfThinningT : int list -> tactic
 
 (*

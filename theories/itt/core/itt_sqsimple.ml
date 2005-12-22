@@ -13,7 +13,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2004-2005 MetaPRL Group, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ doc <:doc<
 
    Authors:
     Alexei Kopylov @email{kopylov@cs.caltech.edu}
+    Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
 >>
@@ -43,6 +44,7 @@ extends Itt_logic
 extends Itt_squiggle
 
 open Basic_tactics
+open Term_match_table
 open Itt_equal
 open Itt_struct
 
@@ -60,6 +62,47 @@ doc docoff
 let fold_sqsimple = makeFoldC << sqsimple{'T} >> unfold_sqsimple
 let fold_sqsimple_type = makeFoldC << sqsimple_type{'T} >> unfold_sqsimple_type
 
+let sqsimple_term = << sqsimple{'T} >>
+let sqsimple_opname = opname_of_term sqsimple_term
+let is_sqsimple_term = is_dep0_term sqsimple_opname
+let mk_sqsimple_term = mk_dep0_term sqsimple_opname
+let dest_sqsimple_term = dest_dep0_term sqsimple_opname
+
+let extract_sqsimple tbl =
+   let rec is_sqsimple t =
+      try
+         List.for_all is_sqsimple (fst (lookup_rmap tbl select_all t))
+      with
+         Not_found ->
+            false
+   in
+      is_sqsimple
+
+let resource (term * term list, term -> bool) sqsimple =
+   Functional {
+      fp_empty = empty_map_table;
+      fp_add = (fun tbl (t1, t2) -> add_map tbl t1 t2 ());
+      fp_retr = extract_sqsimple
+   }
+
+let process_assum name (_, _, t) =
+   let t = TermMan.explode_sequent t in
+      if is_sqsimple_term t.sequent_concl then
+         match SeqHyp.to_list t.sequent_hyps with
+            [Context _] ->
+               Some (dest_sqsimple_term t.sequent_concl)
+          | _ ->
+               raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ": not supported: sqsimple assumptions should not have extra hypothesis"))
+      else
+         None
+
+let process_sqsimple_resource_annotation name contexts args stmt _tac =
+   if contexts.spec_addrs <> [||] || contexts.spec_ints <> [||] || args <> [] then
+      raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ": rules with arguments are not supported yet"));
+   let assums, goal = unzip_mfunction stmt in
+   let t = dest_sqsimple_term (TermMan.concl goal) in
+      [t, Lm_list_util.some_map (process_assum name) assums]
+
 doc <:doc<
    @modsection{Basic Rules}
 >>
@@ -71,8 +114,7 @@ let resource intro +=
     <<"type"{sqsimple_type{'T}}>>, wrap_intro typeEquality
    ]
 
-
-interactive sqsimple_elim  {| elim[ThinOption thinT] |} 'H:
+interactive sqsimple_elim {| elim[ThinOption thinT] |} 'H:
       sequent{ <H>; sqsimple{'T}; <J> >- 'x = 'y in 'T } -->
       sequent{ <H>; sqsimple{'T}; <J> >- 'x ~ 'y }
 
@@ -96,14 +138,17 @@ interactive sqsimple 'H :
 (* TODO: prove that basic types and operators are sqsimple (exept fun, top, //) *)
 (* TODO: subset and subtype of sqsimple type is sqsimple. if X subtupe Y and Y is sqsimple => X subset Y *)
 
-interactive sqsimple_prod {| intro [] |} :
+interactive sqsimple_unit {| intro []; sqsimple |} :
+   sequent { <H> >- sqsimple{unit} }
+
+interactive sqsimple_prod {| intro []; sqsimple |} :
    [wf] sequent { <H> >- 'A Type } -->
    [wf] sequent { <H> >- 'B Type } -->
    sequent { <H> >- sqsimple{'A} } -->
    sequent { <H> >- sqsimple{'B} } -->
    sequent { <H> >- sqsimple{'A * 'B} }
 
-interactive sqsimple_union {| intro [] |} :
+interactive sqsimple_union {| intro []; sqsimple |} :
    [wf] sequent { <H> >- 'A Type } -->
    [wf] sequent { <H> >- 'B Type } -->
    sequent { <H> >- sqsimple{'A} } -->

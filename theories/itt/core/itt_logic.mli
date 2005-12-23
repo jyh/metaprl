@@ -94,7 +94,7 @@ rule not_intro :
 
 rule not_elim 'H :
    [main] sequent { <H>; x: "not"{'t}; <J['x]> >- 't } -->
-   sequent { <H>; x: "not"{'t}; <J['x]> >- 'C }
+   sequent { <H>; x: "not"{'t}; <J['x]> >- 'C['x] }
 
 rule exists_elim 'H :
    [main] sequent { <H>; v: 'a; z: 'b['v]; <J['v, 'z]> >- 'C['v, 'z] } -->

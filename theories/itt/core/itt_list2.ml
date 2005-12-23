@@ -933,6 +933,9 @@ interactive index_elim {| elim [] |} 'H :
 interactive index_is_int {| nth_hyp |} 'H :
     sequent { <H>; i:Index{'l}; <J['i]> >- 'i in int }
 
+interactive index_is_nat {| nth_hyp |} 'H :
+    sequent { <H>; i:Index{'l}; <J['i]> >- 'i in nat }
+
 interactive index_nil_elim {| elim []; squash; nth_hyp |} 'H :
    sequent { <H>; i:Index{nil}; <J['i]> >-  'P['i] }
 
@@ -983,6 +986,20 @@ interactive nth_eq {| intro [] |} :
    [wf] sequent { <H> >- 'i in Index{'l1} } -->
    sequent { <H> >- nth{'l1; 'i} = nth{'l2; 'i} in 'T }
 
+interactive_rw nth_of_append :
+   'l1 in list -->
+   'l2 in list -->
+   'n in nat -->
+   nth{append{'l1; 'l2}; 'n} <-->
+      if lt_bool{'n; length{'l1}} then nth{'l1; 'n} else nth{'l2; 'n -@ length{'l1}}
+
+interactive_rw length_of_append {| reduce |} :
+   'l1 in list -->
+   'l2 in list -->
+   length{append{'l1; 'l2}}
+   <-->
+   length{'l1} +@ length{'l2}
+
 (*
  * Reverse.
  *)
@@ -1000,7 +1017,6 @@ doc <:doc< Double-reverse is identity. >>
 interactive_rw rev2 'A :
    ('l in list{'A}) -->
    rev{rev{'l}} <--> 'l
-
 
 doc <:doc<
    @rules
@@ -1095,15 +1111,6 @@ interactive list_of_fun_wf2 {| intro [] |} :
    sequent { <H> >- 'n in nat } -->
    sequent { <H> >- list_of_fun{k.'f['k]; 'n} in list }
 
-interactive_rw reduce_lof_append_nil {| reduce |}:
-   'n in nat -->
-   append{list_of_fun{k.'f['k]; 'n}; nil} <--> list_of_fun{k.'f['k]; 'n}
-
-interactive_rw reduce_lof_append_lof {| reduce |}:
-   'm in nat -->
-   'n in nat -->
-   append{list_of_fun{k.'f['k]; 'm}; list_of_fun{k.'g['k]; 'n}} <--> list_of_fun{k. if lt_bool{'k; 'm} then 'f['k] else 'g['k -@ 'm]; 'm +@ 'n}
-
 define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} -@ 'k}; 'r} }
 
 interactive_rw tail_reduce1 {| reduce |}:
@@ -1143,6 +1150,15 @@ interactive listSquiggle :
    [wf] sequent { <H> >- length{'l1} = length{'l2} in nat } -->
    sequent { <H>; i: Index{'l1} >- nth{'l1; 'i} ~ nth{'l2; 'i} } -->
    sequent { <H> >- 'l1 ~ 'l2 }
+
+interactive_rw reduce_lof_append_nil {| reduce |}:
+   'n in nat -->
+   append{list_of_fun{k.'f['k]; 'n}; nil} <--> list_of_fun{k.'f['k]; 'n}
+
+interactive_rw reduce_lof_append_lof {| reduce |}:
+   'm in nat -->
+   'n in nat -->
+   append{list_of_fun{k.'f['k]; 'm}; list_of_fun{k.'g['k]; 'n}} <--> list_of_fun{k. if lt_bool{'k; 'm} then 'f['k] else 'g['k -@ 'm]; 'm +@ 'n}
 
 interactive tail_induction 'H :
    sequent { <H>; l:list{'A}; <J['l]> >-  'P[nil] } -->
@@ -1607,16 +1623,6 @@ doc docoff
 interactive list_sqsimple {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{'T} } -->
    sequent { <H> >- sqsimple{list{'T}} }
-
-(*
- * Combined theorems.
- *)
-interactive_rw length_of_append :
-   'l1 in list -->
-   'l2 in list -->
-   length{append{'l1; 'l2}}
-   <-->
-   length{'l1} +@ length{'l2}
 
 (************************************************************************
  * TACTICS                                                              *

@@ -3318,7 +3318,7 @@ T	t1474	o1454 b1461 b1462 b1474
 B	b1475	t1474 x
 T	t1475	o922 b1475
 B	b1476	t1475
-P	p1481	String "rwh (foldClose1C << 'x >> << length{vlist{| <J['x]> |}} >>) 0 thenT rwh reduce_length_fun 0 thenT rw (addrC [1] reduceC) 0 ttca"
+P	p1481	String "rwh (foldCloseC [\"x\"] << length{vlist{| <J['x]> |}} >>) 0 thenT rwh reduce_length_fun 0 thenT rw (addrC [1] reduceC) 0 ttca"
 O	o1481	ext_rule p1481
 T	t1481	o1020 b1472 b1253
 B	b1482	t1481

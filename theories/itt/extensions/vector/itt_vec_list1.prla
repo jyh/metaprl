@@ -5141,8 +5141,7 @@ O	o906	location p900 p905
 P	p2445	String list_of_fun_of_vlist_elem
 O	o2445	rewrite p2445
 NItt_list3	Itt_list3	Itt_list3 NIL
-NItt_list3!nth_elem	nth_elem	nth_elem Itt_list3
-O	o2446	nth_elem
+O	o2446	nth
 T	t2446	o2446 b1666 b1425
 B	b2446	t2446 i
 T	t2447	o1408 b2446 b1603

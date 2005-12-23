@@ -2609,8 +2609,8 @@ B	b1008	t1007 x
 T	t1008	o922 b1008
 B	b1009	t1008
 NItt_list3	Itt_list3	Itt_list3 NIL
-NItt_list3!nth_elem	nth_elem	nth_elem Itt_list3
-O	o1009	nth_elem
+NItt_list2!nth	nth	nth Itt_list2
+O	o1009	nth
 T	t1009	o1009 b991 b1001
 B	b1010	t1009 l
 T	t1010	o984 b985 b1009 b1010

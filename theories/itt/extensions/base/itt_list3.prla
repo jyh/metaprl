@@ -5928,8 +5928,7 @@ P	p2739	String Instead
 O	o2739	comment_string p2739
 T	t2739	o2739
 B	b2746	t2739
-NItt_list3!nth_elem	nth_elem	nth_elem Itt_list3
-O	o2746	nth_elem
+O	o2746	nth
 T	t2746	o2746 b24 b22
 B	b2747	t2746
 T	t2747	o b2747 b8
@@ -6010,7 +6009,7 @@ T	t2865	o2746
 B	b2865	t2865
 T	t2866	o4 b2747 b2865 b8 b29 b9
 B	b2866	t2866
-P	p2866	String unfold_nth_elem
+P	p2866	String unfold_nth
 O	o2866	term_def p2866
 T	t2867	o2095 b2842
 B	b2867	t2867 l
@@ -6030,13 +6029,13 @@ T	t2874	o2866 b2873 b8
 B	b2874	t2874
 T	t2875	o919 b b2866 b2874
 B	b2875	t2875
-P	p2878	String reduce_nth_elem_zero
+P	p2878	String reduce_nth_zero
 O	o2878	rewrite p2878
 T	t2878	o2746 b24 b1997
 B	b2878	t2878
 T	t2879	o2095 b24
 B	b2879	t2879
-P	p2879	String "rwh unfold_nth_elem 0 ttca"
+P	p2879	String "rwh unfold_nth 0 ttca"
 O	o2879	ext_rule p2879
 T	t2880	o2746 b678 b1997
 B	b2880	t2880
@@ -6055,7 +6054,7 @@ T	t2886	o2879 b1168 b2885 b8 b8
 B	b2886	t2886
 T	t2887	o1166 b2886
 B	b2887	t2887
-P	p2893	String reduce_nth_elem_succ
+P	p2893	String reduce_nth_succ
 O	o2893	cond_rewrite p2893
 T	t2893	o2746 b24 b3373
 B	b2893	t2893
@@ -6063,7 +6062,7 @@ T	t2894	o2096 b24
 B	b2894	t2894
 T	t2895	o2746 b2894 b22
 B	b2895	t2895
-P	p2895	String "rw (addrC [1] (unfold_nth_elem thenC reduceC thenC higherC fold_nth_elem)) 0 ttca"
+P	p2895	String "rw (addrC [1] (unfold_nth thenC reduceC thenC higherC fold_nth)) 0 ttca"
 O	o2895	ext_rule p2895
 T	t2919	o2746 b678 b694
 B	b2920	t2919
@@ -10931,7 +10930,7 @@ B	b5321	t5320
 P	p	Number 7088
 P	p502	Number 7385
 O	o503	location p p502
-P	p503	String list_squiggle_nth_elem
+P	p503	String list_squiggle_nth
 O	o504	rule p503
 T	t504	o1389 b1869 b1822 b1822
 S	s504	t1172\\ h1016\\ t504
@@ -10974,7 +10973,7 @@ T	t760	o1665 b617 b760
 B	b769	t760
 T	t769	o1665 b575 b769
 B	b810	t769
-P	p814	String "assertT << all l: list. all i: Index{'l}. nth_elem{'l; 'i} ~ nth{'l; 'i} >>"
+P	p814	String "assertT << all l: list. all i: Index{'l}. nth{'l; 'i} ~ nth{'l; 'i} >>"
 O	o815	ext_rule p814
 T	t828	o b683 b8
 B	b828	t828
@@ -11206,7 +11205,7 @@ T	t4081	o b4081 b8
 B	b4082	t4081
 T	t4082	o1169 b904 b4082
 B	b4083	t4082
-P	p4083	String "substT << nth{'l1; 'i} ~ nth_elem{'l1; 'i} >> 0 ttca"
+P	p4083	String "substT << nth{'l1; 'i} ~ nth{'l1; 'i} >> 0 ttca"
 O	o4083	ext_rule p4083
 T	t4083	o1173 b3638 b3309
 S	s4083	t1172\\ h1016 h877 h681\\ t4083
@@ -11234,7 +11233,7 @@ T	t4093	o1169 b4087 b8
 B	b4094	t4093
 T	t4094	o4093 b1168 b4094 b8 b8
 B	b4095	t4094
-P	p4095	String "substT << nth{'l2; 'i} ~ nth_elem{'l2; 'i} >> 0 ttca"
+P	p4095	String "substT << nth{'l2; 'i} ~ nth{'l2; 'i} >> 0 ttca"
 O	o4095	ext_rule p4095
 T	t4095	o1173 b3775 b3310
 S	s4095	t1172\\ h1016 h877 h681\\ t4095
@@ -11337,7 +11336,7 @@ B	b4143	t4142
 P	p4143	Number 7387
 P	p4144	Number 7598
 O	o4144	location p4143 p4144
-P	p4145	String reduce_nth_elem_nth_prefix
+P	p4145	String reduce_nth_nth_prefix
 O	o4145	cond_rewrite p4145
 T	t4145	o1389 b1869 b24 b24
 B	b4145	t4145
@@ -12504,7 +12503,7 @@ B	b547	t503
 P	p8	Number 8106
 P	p9	Number 8275
 O	o19	location p8 p9
-P	p547	String list_of_fun_nth_elem_succ
+P	p547	String list_of_fun_nth_succ
 O	o548	cond_rewrite p547
 T	t745	o b3170 b8
 B	b1395	t745
@@ -12548,7 +12547,7 @@ T	t3258	o548 b8 b1395 b3261 b3270 b3311 b3258
 B	b3263	t3258
 T	t3263	o19 b3263
 B	b3264	t3263
-P	p5436	String list_of_fun_nth_elem_succ2
+P	p5436	String list_of_fun_nth_succ2
 O	o5436	cond_rewrite p5436
 T	t5461	o2746 b24 b585
 B	b5461	t5461 i
@@ -12657,7 +12656,7 @@ T	t6021	o b6021 b8
 B	b6022	t6021
 T	t6022	o1169 b5988 b6022
 B	b6023	t6022
-P	p6023	String "rwh  list_of_fun_nth_elem_succ2 0 ttca"
+P	p6023	String "rwh  list_of_fun_nth_succ2 0 ttca"
 O	o6023	ext_rule p6023
 T	t6023	o2746 b2869 b577
 B	b6027	t6023 i
@@ -12750,7 +12749,7 @@ T	t6098	o b6096 b8
 B	b6098	t6098
 T	t6103	o1169 b6083 b6098
 B	b6103	t6103
-P	p6103	String "rwh list_of_fun_nth_elem_succ2 0 ttca"
+P	p6103	String "rwh list_of_fun_nth_succ2 0 ttca"
 O	o6103	ext_rule p6103
 T	t6104	o567 b6029 b2942
 B	b6104	t6104 l
@@ -14649,7 +14648,7 @@ P	p6456	Number 16821
 O	o6456	patt_var p6455 p6456
 O	o6457	patt_done p5498 p6454
 T	t6457	o6457
-B	b6457	t6457 fold_nth_elem
+B	b6457	t6457 fold_nth
 T	t6458	o6456 b6457
 B	b6458	t6458
 P	p6458	Number 16824

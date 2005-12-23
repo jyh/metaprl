@@ -90,7 +90,7 @@ let reduce_natural_number_succC =
  *)
 doc <:doc<
    The first step is to replace concrete subterm lists << 'l >> with a
-   << list_of_fun{i. nth_elem{'l; 'i}; 'n} >> term.  This is done in steps
+   << list_of_fun{i. nth{'l; 'i}; 'n} >> term.  This is done in steps
    from the tail of the list.
 >>
 

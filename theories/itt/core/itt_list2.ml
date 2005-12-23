@@ -237,8 +237,7 @@ doc <:doc<
    The argument $i$ must be within the bounds of the list.
 >>
 define unfold_nth :
-   nth{'l; 'i} <-->
-      (list_ind{'l; undefined; u, v, g. lambda{j. if 'j =@  0 then  'u else ('g ('j -@ 1))}} 'i)
+   nth{'l; 'i} <--> ind{'i; lambda{l. hd{'l}}; j, g. lambda{l. 'g tl{'l}}} 'l
 
 doc <:doc<
    @noindent
@@ -247,7 +246,7 @@ doc <:doc<
 >>
 define unfold_replace_nth :
    replace_nth{'l; 'i; 't} <-->
-      (list_ind{'l; nil; u, v, g. lambda{j. if 'j =@ 0 then  cons{'t; 'v} else cons{'u; .'g ('j -@ 1)}}} 'i)
+      ind{'i; lambda{l. cons{'t; tl{'l}}}; j, g. lambda{l. cons{hd{'l}; 'g tl{'l}}}} 'l
 
 doc <:doc<
    @noindent
@@ -619,13 +618,29 @@ doc docoff
 
 let fold_length = makeFoldC << length{'l} >> unfold_length
 
+let resource reduce += [
+   <<nth{'l; number[n:n]}>>, unfold_nth;
+   <<replace_nth{'l; number[n:n]; 't}>>, unfold_replace_nth
+]
+
 doc <:doc<
-   The @hrefterm[nth] term performs induction over the
-   list, comparing the index to 0 at each step and returning the head element
-   if it reaches 0.  The $@it$ term is returned if the index never reaches 0.
+   The @hrefterm[nth] term performs induction over the index,
+   returning the head element once the index reaches 0 and recursing only the tail of the list otherwise.
 >>
-interactive_rw reduce_nth_cons {| reduce |} :
+interactive_rw reduce_nth_zero {| reduce |} :
+   nth{'l; 0} <--> hd{'l}
+
+interactive_rw reduce_nth_succ {| reduce |} :
+   'i in nat -->
+   nth{'l; 'i +@ 1} <--> nth{tl{'l}; 'i}
+
+interactive_rw reduce_nth_cons :
+   'i in nat -->
    nth{cons{'u; 'v}; 'i} <--> ifthenelse{beq_int{'i; 0}; 'u; nth{'v; .'i -@ 1}}
+
+interactive_rw reduce_nth_cons_succ {| reduce |} :
+   'i in nat -->
+   nth{cons{'u; 'v}; 'i +@ 1} <--> nth{'v; 'i}
 
 doc docoff
 
@@ -636,13 +651,30 @@ doc <:doc<
    term, but it collects the list, and replaces the head element
    when the index reaches 0.
 >>
-interactive_rw reduce_replace_nth_cons {| reduce |} :
+interactive_rw reduce_replace_nth_zero {| reduce |} :
+   replace_nth{'l; 0; 't} <--> cons{'t; tl{'l}}
+
+interactive_rw reduce_replace_nth_succ {| reduce |} :
+   'i in nat -->
+   replace_nth{'l; 'i +@ 1; 't} <--> cons{hd{'l}; replace_nth{tl{'l}; 'i; 't}}
+
+interactive_rw reduce_replace_nth_cons :
+   'i in nat -->
    replace_nth{cons{'u; 'v}; 'i; 't} <-->
       ifthenelse{beq_int{'i; 0}; cons{'t; 'v}; cons{'u; replace_nth{'v; .'i -@ 1; 't}}}
+
+interactive_rw reduce_replace_nth_cons_succ {| reduce |} :
+   'i in nat -->
+   replace_nth{cons{'u; 'v}; 'i +@ 1; 't} <--> cons{'u; replace_nth{'v; 'i; 't}}
 
 doc docoff
 
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
+
+let resource reduce += [
+   << nth{cons{'u; 'v}; !i} >>, reduce_nth_cons;
+   << replace_nth{cons{'u; 'v}; !i; 't} >>, reduce_replace_nth_cons
+]
 
 doc <:doc<
    The @hrefterm[inset_at] inserts a new element into a list at the given location.
@@ -1074,6 +1106,12 @@ interactive list_of_fun_id {| intro [] |} :
    sequent { <H>; k: nat; 'k < 'n1 >- 'f1['k] ~ 'f2['k] } -->
    sequent { <H> >- list_of_fun{k.'f1['k]; 'n1} ~ list_of_fun{k.'f2['k]; 'n2} }
 
+interactive_rw nth_map_list_of_fun {| reduce |} :
+   'n in nat -->
+   'm in nat -->
+   'm < 'n -->
+   nth{list_of_fun{k.'f['k]; 'n}; 'm} <--> 'f['m]
+
 interactive_rw list_elements_id {| reduce |} :
    'l in list -->
    list_of_fun{k.nth{'l;'k}; length{'l}} <--> 'l
@@ -1095,12 +1133,6 @@ interactive_rw map_list_of_fun {| reduce |} :
    'n in nat -->
    map{v.'f1['v]; list_of_fun{k.'f2['k]; 'n}} <--> list_of_fun{k.'f1['f2['k]]; 'n}
 
-interactive_rw nth_map_list_of_fun {| reduce |} :
-   'n in nat -->
-   'm in nat -->
-   'm < 'n -->
-   nth{list_of_fun{k.'f['k]; 'n}; 'm} <--> 'f['m]
-
 interactive list_of_fun_wf {| intro [] |} :
    sequent { <H> >- 'n in nat } -->
    sequent { <H>; k: nat; 'k < 'n >- 'f['k] in 'A } -->
@@ -1115,8 +1147,10 @@ define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} 
 
 interactive_rw tail_reduce1 {| reduce |}:
    tail{'l;0} <--> nil
-interactive_rw tail_reduce2 {| reduce |}: ('n in nat) -->
-   tail{'l;'n+@1} <-->  cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n} }
+   
+interactive_rw tail_reduce2 {| reduce |}:
+   'n in nat -->
+   tail{'l;'n+@1} <--> cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n} }
 
 interactive_rw length_of_tail {| reduce |}:
   'n in nat -->

@@ -5779,8 +5779,8 @@ B	b29	t28
 NItt_list2!list_of_fun	list_of_fun	list_of_fun Itt_list2
 O	o535	list_of_fun
 NItt_list3	Itt_list3	Itt_list3 NIL
-NItt_list3!nth_elem	nth_elem	nth_elem Itt_list3
-O	o536	nth_elem
+NItt_list2!nth	nth	nth Itt_list2
+O	o536	nth
 P	p536	Var i
 O	o537	var p536
 T	t537	o537

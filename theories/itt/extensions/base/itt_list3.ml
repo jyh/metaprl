@@ -191,15 +191,6 @@ define unfold_nth_prefix : nth_prefix{'l; 'i} <-->
 define unfold_nth_suffix : nth_suffix{'l; 'i} <-->
    ind{'i; lambda{l. 'l}; j, g. lambda{l. 'g tl{'l}}} 'l
 
-doc <:doc<
-   The << nth{'l; 'i} >> is defined by list induction.
-   Instead, define << nth_elem{'l; 'i} >> that uses integer induction.
->>
-define unfold_nth_elem : nth_elem{'l; 'i} <-->
-   ind{'i; lambda{l. hd{'l}}; j, g. lambda{l. 'g tl{'l}}} 'l
-
-doc docoff
-
 interactive_rw reduce_nth_prefix_zero {| reduce |} :
    nth_prefix{'l; 0}
    <-->
@@ -228,33 +219,15 @@ interactive_rw nth_suffix_swap_tl :
    <-->
    tl{nth_suffix{'l; 'i}}
 
-interactive_rw reduce_nth_elem_zero {| reduce |} :
-   nth_elem{'l; 0}
-   <-->
-   hd{'l}
-
-interactive_rw reduce_nth_elem_succ {| reduce |} :
-   'i in nat -->
-   nth_elem{'l; 'i +@ 1}
-   <-->
-   nth_elem{tl{'l}; 'i}
-
-interactive list_squiggle_nth_elem :
-   [wf] sequent { <H> >- 'l1 in list } -->
-   [wf] sequent { <H> >- 'l2 in list } -->
-   [wf] sequent { <H> >- length{'l1} = length{'l2} in nat } -->
-   sequent { <H>; i: Index{'l1} >- nth_elem{'l1; 'i} ~ nth_elem{'l2; 'i} } -->
-   sequent { <H> >- 'l1 ~ 'l2 }
-
-interactive_rw reduce_nth_elem_nth_prefix {| reduce |} :
+interactive_rw reduce_nth_nth_prefix {| reduce |} :
    'l in list -->
    'n in nat -->
    'n <= length{'l} -->
    'i in nat -->
    'i < 'n -->
-   nth_elem{nth_prefix{'l; 'n}; 'i}
+   nth{nth_prefix{'l; 'n}; 'i}
    <-->
-   nth_elem{'l; 'i}
+   nth{'l; 'i}
 
 interactive_rw reduce_length_of_nth_prefix {| reduce |} :
    'l in list -->
@@ -272,31 +245,31 @@ interactive nth_prefix_wf {| intro [] |} :
 
 interactive_rw list_elements_id_elem :
    'l in list -->
-   list_of_fun{k. nth_elem{'l; 'k}; length{'l}}
+   list_of_fun{k. nth{'l; 'k}; length{'l}}
    <-->
    'l
 
-interactive_rw list_of_fun_nth_elem_succ {| reduce |} :
+interactive_rw list_of_fun_nth_succ {| reduce |} :
    'n in nat -->
-   list_of_fun{i. nth_elem{'u::'v; 'i +@ 1}; 'n}
+   list_of_fun{i. nth{'u::'v; 'i +@ 1}; 'n}
    <-->
-   list_of_fun{i. nth_elem{'v; 'i}; 'n}
+   list_of_fun{i. nth{'v; 'i}; 'n}
 
-interactive_rw list_of_fun_nth_elem_succ2 :
+interactive_rw list_of_fun_nth_succ2 :
    'n in nat -->
-   list_of_fun{i. nth_elem{'l; 'i +@ 1}; 'n}
+   list_of_fun{i. nth{'l; 'i +@ 1}; 'n}
    <-->
-   list_of_fun{i. nth_elem{tl{'l}; 'i}; 'n}
+   list_of_fun{i. nth{tl{'l}; 'i}; 'n}
 
 interactive_rw reduce_nth_prefix_append_lof {| reduce |} :
    'n in nat -->
-   nth_prefix{append{list_of_fun{i.nth_elem{'l1; 'i}; 'n}; 'l2}; 'n}
+   nth_prefix{append{list_of_fun{i.nth{'l1; 'i}; 'n}; 'l2}; 'n}
    <-->
-   list_of_fun{i.nth_elem{'l1; 'i}; 'n}
+   list_of_fun{i.nth{'l1; 'i}; 'n}
 
 interactive_rw reduce_nth_suffix_append_lof {| reduce |} :
    'n in nat -->
-   nth_suffix{append{list_of_fun{i.nth_elem{'l1; 'i}; 'n}; 'l2}; 'n}
+   nth_suffix{append{list_of_fun{i.nth{'l1; 'i}; 'n}; 'l2}; 'n}
    <-->
    'l2
 
@@ -304,7 +277,7 @@ interactive_rw reduce_nth_suffix_append_lof {| reduce |} :
  * Lemmas for the introduction rule.
  *)
 define unfold_fun_of_cons : fun_of_cons{'n; 'l} <-->
-   lambda{i. if beq_int{'i; 0} then nth_suffix{'l; 'n} else nth_elem{'l; 'n -@ 'i}}
+   lambda{i. if beq_int{'i; 0} then nth_suffix{'l; 'n} else nth{'l; 'n -@ 'i}}
 
 interactive fun_of_cons_wf {| intro [] |} :
    sequent { <H> >- fun_of_cons{'i; 'x} in nat -> top }
@@ -318,7 +291,7 @@ interactive_rw reduce_fun_of_cons_succ {| reduce |} :
    'i in nat -->
    fun_of_cons{'n; 'l} ('i +@ 1)
    <-->
-   nth_elem{'l; 'n -@ ('i +@ 1)}
+   nth{'l; 'n -@ ('i +@ 1)}
 
 interactive cons_of_fun_eq {| intro [] |} :
    [wf] sequent { <H> >- 'f1 in nat -> top } -->
@@ -541,8 +514,6 @@ interactive_rw reduce_last_suffix {| reduce |} :
  * Tactics.
  *)
 doc docoff
-
-let fold_nth_elem = makeFoldC << nth_elem{'l; 'i} >> unfold_nth_elem
 
 let cons_type_term = << Cons >>
 let cons_fun_type_term = << ConsFun >>

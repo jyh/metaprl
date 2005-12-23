@@ -198,7 +198,7 @@ interactive_rw bindn_to_list_of_fun :
    'n in nat -->
    bind{'n; x. 'e['x]}
    <-->
-   bind{'n; x. 'e[list_of_fun{i. nth_elem{'x; 'i}; 'n}]}
+   bind{'n; x. 'e[list_of_fun{i. nth{'x; 'i}; 'n}]}
 
 interactive_rw coalesce_bindn_bindn :
    'n in nat -->

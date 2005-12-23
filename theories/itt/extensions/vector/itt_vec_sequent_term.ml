@@ -59,7 +59,7 @@ define unfold_hyps_length : hyps_length{'e} <--> <:xterm<
 >>
 
 define unfold_hyps_nth : hyps_nth{'e; 'i} <--> <:xterm<
-   (fix f e -> dest_bind{e; mk_bind{x. f bind_subst{e; x}}; l. nth_elem{l; i}}) e
+   (fix f e -> dest_bind{e; mk_bind{x. f bind_subst{e; x}}; l. nth{l; i}}) e
 >>
 
 define unfold_hyps_flatten : hyps_flatten{'e} <--> <:xterm<
@@ -123,7 +123,7 @@ interactive_rw reduce_hyps_length_bind {| reduce |} : <:xrewrite<
 interactive_rw reduce_hyps_nth_core {| reduce |} : <:xrewrite<
    hyps_nth{mk_core{e}; i}
    <-->
-   nth_elem{e; i}
+   nth{e; i}
 >>
 
 interactive_rw reduce_hyps_nth_bind {| reduce |} : <:xrewrite<
@@ -385,13 +385,13 @@ interactive_rw hoist_hyps_length_vec 'i Perv!bind{x. 'S['x]} : <:xrewrite<
 interactive_rw reduce_hyps_nth_vec_bind {| reduce |} : <:xrewrite<
    "mk_vbind"{| <J> >- hyps_nth{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}; i<||>} |}
    <-->
-   "mk_vbind"{| <J>; <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+   "mk_vbind"{| <J>; <K> >- nth{"hypconslist"{| <L> >- [] |}; i} |}
 >>
 
 interactive_rw reduce_hyps_nth_vec_bind_tail {| reduce |} : <:xrewrite<
    hyps_nth{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}; i<||>}
    <-->
-   "mk_vbind"{| <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+   "mk_vbind"{| <K> >- nth{"hypconslist"{| <L> >- [] |}; i} |}
 >>
 
 interactive_rw reduce_hyps_length_bind_right {| reduce |} : <:xrewrite<
@@ -415,11 +415,11 @@ interactive_rw reduce_hyps_length_bind_squashlist_cons {| reduce |} : <:xrewrite
 (************************************************
  * hyps_flatten reductions.
  *)
-interactive_rw reduce_nth_elem_of_list_of_fun {| reduce |} : <:xrewrite<
+interactive_rw reduce_nth_of_list_of_fun {| reduce |} : <:xrewrite<
    n IN "nat" -->
    j IN "nat" -->
    j < n -->
-   nth_elem{list_of_fun{i. f[i]; n}; j}
+   nth{list_of_fun{i. f[i]; n}; j}
    <-->
    f[j]
 >>
@@ -429,15 +429,15 @@ interactive_rw reduce_hyps_nth_flatten_bind {| reduce |} : <:xrewrite<
    i < hyps_length{"mk_vbind"{| <J>; <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}} -->
    "mk_vbind"{| <J> >- hyps_nth{mk_core{hyps_flatten{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}}}; i<||>} |}
    <-->
-   "mk_vbind"{| <J>; <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+   "mk_vbind"{| <J>; <K> >- nth{"hypconslist"{| <L> >- [] |}; i} |}
 >>
 
 interactive_rw reduce_hyps_nth_flatten_bind_normalized {| reduce |} : <:xrewrite<
    i IN "nat" -->
    i < hyps_length{"mk_vbind"{| <J>; <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}} -->
-   "mk_vbind"{| <J> >- nth_elem{hyps_flatten{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}}; i<||>} |}
+   "mk_vbind"{| <J> >- nth{hyps_flatten{"mk_vbind"{| <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}}; i<||>} |}
    <-->
-   "mk_vbind"{| <J>; <K> >- nth_elem{"hypconslist"{| <L> >- [] |}; i} |}
+   "mk_vbind"{| <J>; <K> >- nth{"hypconslist"{| <L> >- [] |}; i} |}
 >>
 
 interactive_rw reduce_hyps_flatten_bind_cons {| reduce |} : <:xrewrite<

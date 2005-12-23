@@ -64,7 +64,7 @@ define unfold_subterms_length : subterms_length{'e} <--> <:xterm<
 >>
 
 define unfold_subterms_nth : subterms_nth{'e; 'i} <--> <:xterm<
-   (fix f e -> weak_dest_terms{e; bind{x. f subst{e; x}}; l. nth_elem{l; i}}) e
+   (fix f e -> weak_dest_terms{e; bind{x. f subst{e; x}}; l. nth{l; i}}) e
 >>
 
 define unfold_subterms_bind : subterms_bind{'e} <--> <:xterm<
@@ -115,7 +115,7 @@ interactive_rw reduce_subterms_nth_bindn {| reduce |} : <:xrewrite<
 interactive_rw reduce_subterms_nth_mk_terms {| reduce |} : <:xrewrite<
    subterms_nth{mk_terms{e}; i}
    <-->
-   nth_elem{e; i}
+   nth{e; i}
 >>
 
 (************************************************
@@ -167,13 +167,13 @@ let rec reduce_subterms_bindn t =
  * The bind pushing theorems.
  *)
 interactive_rw reduce_list_of_fun_of_bind_vlist {| reduce |} :
-   list_of_fun{i. bind{x. nth_elem{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
+   list_of_fun{i. bind{x. nth{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
    <-->
    subterms_bind{bind{x. mk_terms{vlist{| <J['x]> |}}}}
 
 interactive_rw reduce_list_of_fun_of_bindn_vlist {| reduce |} :
    'n in nat -->
-   list_of_fun{i. bind{'n; x. nth_elem{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
+   list_of_fun{i. bind{'n; x. nth{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
    <-->
    subterms_bind{bind{'n; x. mk_terms{vlist{| <J['x]> |}}}}
 
@@ -370,7 +370,7 @@ let resource reduce +=
 interactive_rw coalesce_bind_bind {| reduce |} : <:xrewrite<
    bind{x. bind{y. e[x; y]}}
    <-->
-   bind{2; x. e[nth_elem{x; 0}; nth_elem{x; 1}]}
+   bind{2; x. e[nth{x; 0}; nth{x; 1}]}
 >>
 
 interactive_rw coalesce_bind_bindn : <:xrewrite<
@@ -384,7 +384,7 @@ interactive_rw coalesce_bindn_bind : <:xrewrite<
    n IN "nat" -->
    bind{n; x. bind{y. e[x; y]}}
    <-->
-   bind{n +@ 1; x. e[nth_prefix{x; n}; nth_elem{x; n}]}
+   bind{n +@ 1; x. e[nth_prefix{x; n}; nth{x; n}]}
 >>
 
 interactive_rw coalesce_bindn_bindn : <:xrewrite<

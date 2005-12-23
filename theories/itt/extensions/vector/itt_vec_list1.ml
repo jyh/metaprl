@@ -201,7 +201,7 @@ interactive_rw list_of_fun_of_vlist :
 interactive_rw list_of_fun_of_vlist_elem :
    vlist{| <J> |}
    <-->
-   list_of_fun{i. nth_elem{vlist{| <J> |}; 'i}; length{vlist{| <J> |}}}
+   list_of_fun{i. nth{vlist{| <J> |}; 'i}; length{vlist{| <J> |}}}
 
 (************************************************************************
  * Squash list.

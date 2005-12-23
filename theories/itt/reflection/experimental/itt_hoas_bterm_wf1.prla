@@ -1929,8 +1929,8 @@ O	o988	it
 T	t988	o988
 NItt_list2	Itt_list2	Itt_list2 NIL
 NItt_list3	Itt_list3	Itt_list3 NIL
-NItt_list3!nth_elem	nth_elem	nth_elem Itt_list3
-O	o1009	nth_elem
+NItt_list2!nth	nth	nth Itt_list2
+O	o1009	nth
 NItt_list2!list_of_fun	list_of_fun	list_of_fun Itt_list2
 O	o1020	list_of_fun
 NSummary!term_binding	term_binding	term_binding Summary

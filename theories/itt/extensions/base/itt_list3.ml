@@ -282,6 +282,24 @@ interactive_rw list_of_fun_nth_elem_succ {| reduce |} :
    <-->
    list_of_fun{i. nth_elem{'v; 'i}; 'n}
 
+interactive_rw list_of_fun_nth_elem_succ2 :
+   'n in nat -->
+   list_of_fun{i. nth_elem{'l; 'i +@ 1}; 'n}
+   <-->
+   list_of_fun{i. nth_elem{tl{'l}; 'i}; 'n}
+
+interactive_rw reduce_nth_prefix_append_lof {| reduce |} :
+   'n in nat -->
+   nth_prefix{append{list_of_fun{i.nth_elem{'l1; 'i}; 'n}; 'l2}; 'n}
+   <-->
+   list_of_fun{i.nth_elem{'l1; 'i}; 'n}
+
+interactive_rw reduce_nth_suffix_append_lof {| reduce |} :
+   'n in nat -->
+   nth_suffix{append{list_of_fun{i.nth_elem{'l1; 'i}; 'n}; 'l2}; 'n}
+   <-->
+   'l2
+
 (************************************************************************
  * Lemmas for the introduction rule.
  *)

@@ -210,9 +210,9 @@ interactive_rw coalesce_bindn_bindn :
 interactive_rw substl_substl_lof:
    'n in nat -->
    'm in nat -->
-   substl{substl{'e; list_of_fun{x.'f1['x]; 'm}}; list_of_fun{x.'f2['x]; 'n}}
+   substl{substl{'e; list_of_fun{x.'f['x]; 'm}}; list_of_fun{x.'g['x]; 'n}}
    <-->
-   substl{'e; append{list_of_fun{x.'f1['x]; 'm}; list_of_fun{x.'f2['x]; 'n}}}
+   substl{'e; append{list_of_fun{x.'f['x]; 'm}; list_of_fun{x.'g['x]; 'n}}}
 
 interactive_rw append_of_substl_substl Perv!bind{x. 'S['x]} 'e :
    'n in nat -->

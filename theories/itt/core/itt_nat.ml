@@ -160,9 +160,13 @@ interactive natElimination 'H :
    sequent { <H>; x: int; v:'x>=0; <J['x]> >- 'C['x]}  -->
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
-interactive nat2ge {| ge_elim |} 'H :
+interactive nat2ge {| ge_elim [] |} 'H :
    sequent { <H>; x: nat; <J['x]>; 'x>=0 >- 'C['x]}  -->
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
+
+interactive nat2ge2 {| ge_elim [] |} 'H :
+   sequent { <H>; x: 'a = 'b in nat; <J['x]>; 'a >= 0; 'a = 'b in int >- 'C['x]}  -->
+   sequent { <H>; x: 'a = 'b in nat; <J['x]> >- 'C['x]}
 
 interactive ge2nat {| ge_intro |} :
    [wf] sequent { <H> >- 'n in int }  -->
@@ -233,15 +237,15 @@ interactive finiteNatElimination {| elim [] |} 'H :
    sequent { <H>; x: int; v:'x >= 0; w: 'x < 'k; <J['x]> >- 'C['x] }  -->
    sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
 
-interactive finiteNat_ge_elim {| ge_elim |} 'H :
+interactive finiteNat_ge_elim {| ge_elim [] |} 'H :
 	[wf] sequent { <H>; x: int; <J['x]> >- 'k in int } -->
    sequent { <H>; x: int; <J['x]>; 'x >= 0; 'k >= 'x+@1 >- 'C['x] }  -->
    sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
 
-interactive finiteNat_ge_elim2 {| ge_elim |} 'H :
-	[wf] sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'k in int } -->
-   sequent { <H>; t: 'x in nat{'k}; <J['t]>; 'x >= 0; 'k >= 'x+@1 >- 'C['t] }  -->
-   sequent { <H>; t: 'x in nat{'k}; <J['t]> >- 'C['t] }
+interactive finiteNat_ge_elim2 {| ge_elim [] |} 'H :
+	[wf] sequent { <H>; t: 'a = 'b in nat{'k}; <J['t]> >- 'k in int } -->
+   sequent { <H>; t: 'a = 'b in nat{'k}; <J['t]>; 'a >= 0; 'k >= 'a+@1; 'a = 'b in int >- 'C['t] }  -->
+   sequent { <H>; t: 'a = 'b in nat{'k}; <J['t]> >- 'C['t] }
 
 interactive finiteNatIsInt {| nth_hyp |} 'H :
    sequent { <H>; x: nat{'k}; <J['x]> >- 'x in int }

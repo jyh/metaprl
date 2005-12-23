@@ -41,16 +41,16 @@ open Tactic_type.Tactic
 type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
 type ge_intro_type = tactic_arg -> (term list * tactic)
 
-(*val extract_ge_elim_data : (int -> tactic) term_map_table -> int -> tactic_arg -> ((term list) * (int -> tactic))*)
-
-resource (term * (term list) * (int -> tactic), ge_elim_type) ge_elim
+resource (term * (term list) * ((term -> bool) list * (int -> tactic)), ge_elim_type) ge_elim
 resource (term * (term list) * tactic, ge_intro_type) ge_intro
 
 val process_ge_elim_resource_annotation :
-   (pre_tactic, term * (term list) * (int -> tactic)) annotation_processor
+   (pre_tactic * (term -> bool) list, term * (term list) * ((term -> bool) list * (int -> tactic))) annotation_processor
 
 val process_ge_intro_resource_annotation :
    (pre_tactic, term * (term list) * tactic) annotation_processor
+
+val not_member : term -> bool
 
 (*
 val all2ge : tactic_arg -> (term list list * tactic) list

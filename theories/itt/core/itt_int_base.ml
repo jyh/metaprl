@@ -472,14 +472,25 @@ doc <:doc<
 
 >>
 prim beq_int2prop :
-   [main] sequent { <H> >- "assert"{beq_int{'a; 'b}} } -->
+   sequent { <H> >- "assert"{beq_int{'a; 'b}} } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'a = 'b in int } = it
 
+let resource subst +=
+   << "assert"{beq_int{'a; 'b}} >>,
+   fun t i -> funT (fun p ->
+      let i = get_pos_hyp_num p i in
+      let a, b = dest_beq_int (dest_assert t) in
+      let t' = mk_equal_term int_term a b in
+         assertT t' thenLT [ 
+            beq_int2prop thenLT [ addHiddenLabelT "equality"; autoT; autoT ];
+            hypSubstT (-1) i thenT thinTermT t'
+         ])
+
 (* Derived from previous *)
 interactive eq_int_assert_elim {| elim [ThinOption thinT] |} 'H :
-   [main]sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]>;
+   sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]>;
                             y: 'a = 'b in int >- 'C[it]} -->
    [wf]sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]> >- 'a in int} -->
    [wf]sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]> >- 'b in int} -->
@@ -503,10 +514,8 @@ interactive eq_2beq_int {| intro []; nth_hyp |} :
    sequent { <H> >- "assert"{beq_int{'a; 'b}} }
 
 interactive lt_bool_member {| intro []; nth_hyp |} :
-  [main]  sequent { <H> >- 'a < 'b } -->
-(*  [wf] sequent { <H> >- 'a in int } -->
-  [wf] sequent { <H> >- 'b in int } --> *)
-  sequent { <H> >- "assert"{lt_bool{'a; 'b}} }
+   sequent { <H> >- 'a < 'b } -->
+   sequent { <H> >- "assert"{lt_bool{'a; 'b}} }
 
 doc <:doc<
    @modsubsection{Decidability}

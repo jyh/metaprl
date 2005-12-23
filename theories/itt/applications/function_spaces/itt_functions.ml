@@ -57,9 +57,6 @@ open Basic_tactics
 open Itt_struct
 open Itt_equal
 
-
-
-
 doc <:doc<
    @modsection{Image of a function}
    @modsubsection{Definitions}
@@ -125,7 +122,7 @@ doc <:doc<
 >>
 
 interactive img_elim {| elim[] |} 'H:
-   sequent{ <H>; b:Img{'f;'A;'B}; <J['b]> >- sqsimple_type{'B} } -->
+   sequent{ <H>; b:Img{'f;'A;'B}; <J['b]> >- sqsimple{'B} } -->
    sequent{ <H>; a:'A; <J['f('a)]> >-  'u['f('a)] = 'v['f('a)] in 'C['f('a)] } -->
    sequent{ <H>; b:Img{'f;'A;'B}; <J['b]> >- 'u['b] = 'v['b] in 'C['b] }
 
@@ -321,8 +318,6 @@ interactive rreverse_intro {| intro[AutoMustComplete] |}:
    sequent{ <H>; y:Img{'f;'A;'B} >- exst x:'A. 'f 'x ='y in 'B } -->
    sequent{ <H> >-  RReverse{'f;'A;'B}  }
 
-
-
 doc <:doc<
    @modsubsection{Properties}
     Unfortunately the above introduction rules for reverse type are not very helpful,
@@ -336,7 +331,7 @@ doc <:doc<
 
 interactive linverse_is_rinverse {| intro[SelectOption 1] |}:
    [wf] sequent{ <H> >- "type"{'A} } -->
-   sequent{ <H> >- sqsimple_type{'B} } -->
+   sequent{ <H> >- sqsimple{'B} } -->
    [wf] sequent{ <H> >- 'f in 'A -> 'B } -->
    sequent{ <H> >-  LReverse{'f;'A;'B} subtype RReverse{'f;'A;'B} }
 
@@ -346,21 +341,21 @@ doc <:doc<
 
 interactive rreverse_mem_intro_simple {| intro[SelectOption 1] |}:
    [wf] sequent{ <H> >- "type"{'A} } -->
-   sequent{ <H> >- sqsimple_type{'B} } -->
+   sequent{ <H> >- sqsimple{'B} } -->
    [wf] sequent{ <H> >- 'f in 'A -> 'B } -->
    sequent{ <H> >- 'g in LReverse{'f;'A;'B}  } -->
    sequent{ <H> >- 'g in RReverse{'f;'A;'B}  }
 
 interactive rreverse_intro_simple {| intro[SelectOption 1] |} :
    [wf] sequent{ <H> >- "type"{'A} } -->
-   sequent{ <H> >- sqsimple_type{'B} } -->
+   sequent{ <H> >- sqsimple{'B} } -->
    [wf] sequent{ <H> >- 'f in 'A -> 'B } -->
    sequent{ <H> >- LReverse{'f;'A;'B}  } -->
    sequent{ <H> >- RReverse{'f;'A;'B}  }
 
 interactive lreverse_mem_intro {| intro[AutoMustComplete] |}:
    [wf] sequent{ <H> >- "type"{'A} } -->
-   sequent{ <H> >- sqsimple_type{'B} } -->
+   sequent{ <H> >- sqsimple{'B} } -->
    [wf] sequent{ <H> >- 'f in 'A -> 'B } -->
    sequent{ <H> >- 'g in void -> void } -->
    sequent{ <H> >-  inverse{'g;'f;'A } } -->
@@ -368,29 +363,21 @@ interactive lreverse_mem_intro {| intro[AutoMustComplete] |}:
 
 interactive lreverse_intro {| intro[AutoMustComplete] |} 'g:
    [wf] sequent{ <H> >- "type"{'A} } -->
-   sequent{ <H> >- sqsimple_type{'B} } -->
+   sequent{ <H> >- sqsimple{'B} } -->
    [wf] sequent{ <H> >- 'f in 'A -> 'B } -->
    sequent{ <H> >- 'g in void -> void } -->
    sequent{ <H> >-  inverse{'g;'f;'A } } -->
    sequent{ <H> >-  LReverse{'f;'A;'B}  }
-
-
 
 interactive rreverse_subtype 'A:
    sequent{ <H> >- '"A'" subtype 'A  } -->
    sequent{ <H> >- RReverse{'f;'A;'B}  } -->
    sequent{ <H> >- RReverse{'f;'"A'";'B}  }
 
-
-
-
 (* TODO:
    Inverse = LInverse isect RInverse
    g_1 in LInverse, g_2 in RInvers => g_1=g_2 in Inverse
 *)
-
-
-
 
 doc <:doc<
    @modsubsection{Squiggle reversible functions }
@@ -425,7 +412,7 @@ doc <:doc<
 
 interactive sqreverse_intro_simple {| intro[SelectOption 1] |}:
    sequent{ <H> >- "type"{Img{'f;'A;'B}}  } -->
-   sequent{ <H> >- sqsimple_type{'B} } -->
+   sequent{ <H> >- sqsimple{'B} } -->
    sequent{ <H> >- 'g in RReverse{'f;'A;'B}  } -->
    sequent{ <H> >- sq_reverse{'f;'g;'A;'B}  }
 
@@ -450,13 +437,8 @@ doc <:doc<
 >>
 
 interactive img_elim_reversible_simple {| elim[] |} 'H:
-   sequent{ <H>; b:Img{'f;'A;'B}; <J['b]> >- sqsimple_type{'B} } -->
+   sequent{ <H>; b:Img{'f;'A;'B}; <J['b]> >- sqsimple{'B} } -->
    sequent{ <H>; b:Img{'f;'A;'B}; <J['b]> >- RReverse{'f;'A;'B} } -->
    sequent{ <H>; a:'A; <J['f('a)]> >-  'C['f('a)] } -->
    sequent{ <H>; b:Img{'f;'A;'B}; <J['b]> >- 'C['b] }
-
-
-
-
-
 

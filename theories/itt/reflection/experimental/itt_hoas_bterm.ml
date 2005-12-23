@@ -44,6 +44,7 @@ extends Itt_tunion
 doc docoff
 
 open Basic_tactics
+open Itt_sqsimple
 open Itt_hoas_destterm
 
 doc terms
@@ -377,7 +378,7 @@ interactive subs_equal 'depth 'op :
 doc <:doc<
    << BTerm >> has a trivial squiggle equality.
 >>
-interactive bterm_sqsimple {| intro [] |} :
+interactive bterm_sqsimple {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{BTerm} }
 
 doc <:doc<

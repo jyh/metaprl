@@ -112,7 +112,7 @@ doc <:doc<
 define unfold_reverse: ReversibleOperators[i:l]{'F;  'T} <-->
    'F in Operators[i:l]{'T}
    & RReverse{app{'F}; op:('F^car) * ('F^dom ('op)); 'T}
-   & sqsimple_type{'T}
+   & sqsimple{'T}
 
 
 

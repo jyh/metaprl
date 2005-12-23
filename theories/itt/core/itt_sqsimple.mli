@@ -39,10 +39,8 @@ val process_sqsimple_resource_annotation :
    ('a, term * term list) annotation_processor
 
 declare sqsimple{'T}
-declare sqsimple_type{'T}
 
 topval fold_sqsimple : conv
-topval fold_sqsimple_type : conv
 
 val sqsimple_sq: term -> tactic
 

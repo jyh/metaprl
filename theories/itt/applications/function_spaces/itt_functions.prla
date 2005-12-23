@@ -3366,8 +3366,8 @@ P	p1916	Number 4134
 O	o1916	location p1915 p1916
 H	h1916	b t1592
 NItt_sqsimple	Itt_sqsimple	Itt_sqsimple NIL
-NItt_sqsimple!sqsimple_type	sqsimple_type	sqsimple_type Itt_sqsimple
-O	o1917	sqsimple_type
+NItt_sqsimple!sqsimple	sqsimple	sqsimple Itt_sqsimple
+O	o1917	sqsimple
 T	t1917	o1917 b1013
 S	s1917	t1009\\ h h1916 h1342\\ t1917
 B	b1917	s1917
@@ -3448,7 +3448,6 @@ T	t1952	o1030 b1951 b1938
 B	b1952	t1952
 T	t1953	o1950 b1952 b28
 B	b1953	t1953
-NItt_sqsimple!sqsimple	sqsimple	sqsimple Itt_sqsimple
 O	o1963	sqsimple
 T	t1963	o1963 b1013
 S	s1963	t1009\\ h h1347 h1942 h1945 h1342\\ t1963

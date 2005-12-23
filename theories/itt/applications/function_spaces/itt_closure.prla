@@ -3935,8 +3935,8 @@ O	o1592	RReverse
 T	t1592	o1592 b1460 b1458 b13
 B	b1592	t1592
 NItt_sqsimple	Itt_sqsimple	Itt_sqsimple NIL
-NItt_sqsimple!sqsimple_type	sqsimple_type	sqsimple_type Itt_sqsimple
-O	o1593	sqsimple_type
+NItt_sqsimple!sqsimple	sqsimple	sqsimple Itt_sqsimple
+O	o1593	sqsimple
 T	t1593	o1593 b13
 B	b1593	t1593
 T	t1594	o1591 b1592 b1593

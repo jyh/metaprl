@@ -53,14 +53,11 @@ doc <:doc<
    A type is said to be squiggle simple if only squiggle equal elements are equal in this type.
 >>
 
-define unfold_sqsimple: sqsimple{'T} <--> all x:'T. all y:'T. ('x='y in 'T => 'x~'y)
-
-define unfold_sqsimple_type: sqsimple_type{'T} <--> "type"{'T} & sqsimple{'T}
+define unfold_sqsimple: sqsimple{'T} <--> "type"{'T} & all x:'T. all y:'T. ('x='y in 'T => 'x~'y)
 
 doc docoff
 
 let fold_sqsimple = makeFoldC << sqsimple{'T} >> unfold_sqsimple
-let fold_sqsimple_type = makeFoldC << sqsimple_type{'T} >> unfold_sqsimple_type
 
 let sqsimple_term = << sqsimple{'T} >>
 let sqsimple_opname = opname_of_term sqsimple_term
@@ -87,43 +84,37 @@ let resource (term * term list, term -> bool) sqsimple =
 
 let process_assum name (_, _, t) =
    let t = TermMan.explode_sequent t in
-      if is_sqsimple_term t.sequent_concl then
-         match SeqHyp.to_list t.sequent_hyps with
-            [Context _] ->
-               Some (dest_sqsimple_term t.sequent_concl)
-          | _ ->
-               raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ": not supported: sqsimple assumptions should not have extra hypothesis"))
-      else
-         None
+      match SeqHyp.to_list t.sequent_hyps with
+         [Context _] when is_sqsimple_term t.sequent_concl ->
+            dest_sqsimple_term t.sequent_concl
+       | _ ->
+            raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ":
+all assumptions should have the <H> >- sqsimple{...} form"))
 
 let process_sqsimple_resource_annotation name contexts args stmt _tac =
    if contexts.spec_addrs <> [||] || contexts.spec_ints <> [||] || args <> [] then
       raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ": rules with arguments are not supported yet"));
    let assums, goal = unzip_mfunction stmt in
    let t = dest_sqsimple_term (TermMan.concl goal) in
-      [t, Lm_list_util.some_map (process_assum name) assums]
+      [t, List.map (process_assum name) assums]
 
 doc <:doc<
    @modsection{Basic Rules}
 >>
 
-let resource intro +=
-   [<<sqsimple{'T}>>, wrap_intro (rw unfold_sqsimple 0);
-    <<"type"{sqsimple{'T}}>>, wrap_intro typeEquality;
-    <<sqsimple_type{'T}>>, wrap_intro (rw unfold_sqsimple_type 0);
-    <<"type"{sqsimple_type{'T}}>>, wrap_intro typeEquality
-   ]
+interactive sqsimple_intro {| intro [] |} :
+   [wf] sequent { <H> >- 'T Type } -->
+   sequent { <H>; x: 'T; y: 'T; 'x = 'y in 'T >- 'x~'y } -->
+   sequent { <H> >- sqsimple{'T} }
+
+let resource intro += <<"type"{sqsimple{'T}}>>, wrap_intro typeEquality
 
 interactive sqsimple_elim {| elim[ThinOption thinT] |} 'H:
       sequent{ <H>; sqsimple{'T}; <J> >- 'x = 'y in 'T } -->
       sequent{ <H>; sqsimple{'T}; <J> >- 'x ~ 'y }
 
-interactive sqsimple_type_elim1 {| elim[ThinOption thinT] |} 'H:
-      sequent{ <H>; sqsimple_type{'T}; <J> >- 'x = 'y in 'T } -->
-      sequent{ <H>; sqsimple_type{'T}; <J> >- 'x ~ 'y }
-
-interactive sqsimple_type_elim2 {| nth_hyp |} 'H:
-      sequent{ <H>; sqsimple_type{'T}; <J> >- "type"{'T} }
+interactive sqsimple_elim2 {| nth_hyp |} 'H:
+      sequent{ <H>; sqsimple{'T}; <J> >- "type"{'T} }
 
 interactive sqsimple_sq 'T:
       sequent{ <H> >- sqsimple{'T} } -->
@@ -142,15 +133,11 @@ interactive sqsimple_unit {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{unit} }
 
 interactive sqsimple_prod {| intro []; sqsimple |} :
-   [wf] sequent { <H> >- 'A Type } -->
-   [wf] sequent { <H> >- 'B Type } -->
    sequent { <H> >- sqsimple{'A} } -->
    sequent { <H> >- sqsimple{'B} } -->
    sequent { <H> >- sqsimple{'A * 'B} }
 
 interactive sqsimple_union {| intro []; sqsimple |} :
-   [wf] sequent { <H> >- 'A Type } -->
-   [wf] sequent { <H> >- 'B Type } -->
    sequent { <H> >- sqsimple{'A} } -->
    sequent { <H> >- sqsimple{'B} } -->
    sequent { <H> >- sqsimple{'A + 'B} }

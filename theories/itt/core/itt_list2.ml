@@ -1095,6 +1095,15 @@ interactive list_of_fun_wf2 {| intro [] |} :
    sequent { <H> >- 'n in nat } -->
    sequent { <H> >- list_of_fun{k.'f['k]; 'n} in list }
 
+interactive_rw reduce_lof_append_nil {| reduce |}:
+   'n in nat -->
+   append{list_of_fun{k.'f['k]; 'n}; nil} <--> list_of_fun{k.'f['k]; 'n}
+
+interactive_rw reduce_lof_append_lof {| reduce |}:
+   'm in nat -->
+   'n in nat -->
+   append{list_of_fun{k.'f['k]; 'm}; list_of_fun{k.'g['k]; 'n}} <--> list_of_fun{k. if lt_bool{'k; 'm} then 'f['k] else 'g['k -@ 'm]; 'm +@ 'n}
+
 define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} -@ 'k}; 'r} }
 
 interactive_rw tail_reduce1 {| reduce |}:

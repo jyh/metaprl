@@ -200,6 +200,20 @@ interactive_rw bindn_to_list_of_fun :
    <-->
    bind{'n; x. 'e[list_of_fun{i. nth_elem{'x; 'i}; 'n}]}
 
+interactive_rw coalesce_bindn_bindn :
+   'n in nat -->
+   'm in nat -->
+   bind{'n; x. bind{'m; y. 'e['x; 'y]}}
+   <-->
+   bind{'n +@ 'm; x. 'e[nth_prefix{'x; 'n}; nth_suffix{'x; 'n}]}
+
+interactive_rw substl_substl_lof:
+   'n in nat -->
+   'm in nat -->
+   substl{substl{'e; list_of_fun{x.'f1['x]; 'm}}; list_of_fun{x.'f2['x]; 'n}}
+   <-->
+   substl{'e; append{list_of_fun{x.'f1['x]; 'm}; list_of_fun{x.'f2['x]; 'n}}}
+
 interactive_rw append_of_substl_substl Perv!bind{x. 'S['x]} 'e :
    'n in nat -->
    'm in nat -->

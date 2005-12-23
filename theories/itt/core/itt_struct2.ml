@@ -125,9 +125,9 @@ doc <:doc<
 let substConclT = argfunT (fun t p ->
    let _, a, _ = dest_equal t in
    let bind = get_bind_from_arg_or_concl_subst p a in
-   let tac = 
+   let tac =
       let v, t = dest_bind1 bind in
-         if is_equal_term t && 
+         if is_equal_term t &&
             let _, a, b = dest_equal t in
                not (is_var_free v a || is_var_free v b)
          then
@@ -445,43 +445,20 @@ let genSOVarT = argfunT (fun s p ->
 (*
  * Eta-expand an expression.
  *)
-let foldClose1C x t1 =
-   let v = dest_var x in
-   let t_app = mk_apply_term (mk_lambda_term v t1) x in
-   let fold t =
-      if alpha_equal t t1 then
-         foldC t_app reduce_beta
-      else
-         raise (RefineError ("fold_close", StringError "term mismatch"))
-   in
-      termC fold
-
-let foldClose2C x1 x2 t1 =
-   let v1 = dest_var x1 in
-   let v2 = dest_var x2 in
-   let t_app = mk_apply_term (mk_apply_term (mk_lambda_term v1 (mk_lambda_term v2 t1)) x1) x2 in
-   let fold t =
-      if alpha_equal t t1 then
-         repeatC (foldC t_app (sweepUpC reduce_beta))
-      else
-         raise (RefineError ("fold_close", StringError "term mismatch"))
-   in
-      termC fold
-
 let foldCloseC vars t =
    let t_app =
       let rec gen_lam vars' =
          match vars' with
             [] -> t
           | hd :: tl ->
-               let v = dest_var hd in
+               let v = Lm_symbol.add hd in
                   mk_lambda_term v (gen_lam tl)
       in
       let rec gen_app vars' f =
          match vars' with
             [] -> f
           | hd :: tl ->
-               gen_app tl (mk_apply_term f hd)
+               gen_app tl (mk_apply_term f (mk_var_term (Lm_symbol.add hd)))
       in
          gen_app vars (gen_lam vars)
    in

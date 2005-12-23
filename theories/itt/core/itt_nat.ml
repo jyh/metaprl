@@ -165,7 +165,11 @@ interactive nat2ge {| ge_elim [] |} 'H :
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
 interactive nat2ge2 {| ge_elim [] |} 'H :
-   sequent { <H>; x: 'a = 'b in nat; <J['x]>; 'a >= 0; 'a = 'b in int >- 'C['x]}  -->
+   sequent { <H>; x: 'a in nat; <J['x]>; 'a >= 0 >- 'C['x]}  -->
+   sequent { <H>; x: 'a in nat; <J['x]> >- 'C['x]}
+
+interactive nat2ge3 {| ge_elim [not_member] |} 'H :
+   sequent { <H>; x: 'a = 'b in nat; <J['x]>; 'a >= 0; 'a >= 'b; 'b >= 'a >- 'C['x]}  -->
    sequent { <H>; x: 'a = 'b in nat; <J['x]> >- 'C['x]}
 
 interactive ge2nat {| ge_intro |} :
@@ -243,8 +247,13 @@ interactive finiteNat_ge_elim {| ge_elim [] |} 'H :
    sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
 
 interactive finiteNat_ge_elim2 {| ge_elim [] |} 'H :
+	[wf] sequent { <H>; t: 'a in nat{'k}; <J['t]> >- 'k in int } -->
+   sequent { <H>; t: 'a in nat{'k}; <J['t]>; 'a >= 0; 'k >= 'a+@1 >- 'C['t] }  -->
+   sequent { <H>; t: 'a in nat{'k}; <J['t]> >- 'C['t] }
+
+interactive finiteNat_ge_elim3 {| ge_elim [not_member] |} 'H :
 	[wf] sequent { <H>; t: 'a = 'b in nat{'k}; <J['t]> >- 'k in int } -->
-   sequent { <H>; t: 'a = 'b in nat{'k}; <J['t]>; 'a >= 0; 'k >= 'a+@1; 'a = 'b in int >- 'C['t] }  -->
+   sequent { <H>; t: 'a = 'b in nat{'k}; <J['t]>; 'a >= 0; 'k >= 'a+@1; 'a >= 'b; 'b >= 'a >- 'C['t] }  -->
    sequent { <H>; t: 'a = 'b in nat{'k}; <J['t]> >- 'C['t] }
 
 interactive finiteNatIsInt {| nth_hyp |} 'H :

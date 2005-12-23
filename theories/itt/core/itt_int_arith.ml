@@ -127,7 +127,7 @@ let resource (term * (term list) * tactic, ge_intro_type) ge_intro =
 let not_member t = not (is_member_term t)
 
 let rec filter_ge = function
-	Hypothesis(v,t)::tl when (is_ge_term t) -> t::(filter_ge tl)
+	Hypothesis(_,t)::tl when (is_ge_term t) -> t::(filter_ge tl)
  | _::tl -> filter_ge tl
  | [] -> []
 
@@ -322,23 +322,6 @@ interactive lt2ge {| ge_elim [] |} 'H :
    [main] sequent { <H>; x: 'a < 'b; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
    sequent { <H>; x: 'a < 'b; <J['x]> >- 'C['x] }
 
-interactive ltb2ge {| ge_elim [] |} 'H :
-   [wf] sequent { <H>; x: "assert"{'a <@ 'b}; <J[it]> >- 'a in int } -->
-   [wf] sequent { <H>; x: "assert"{'a <@ 'b}; <J[it]> >- 'b in int } -->
-   [main] sequent { <H>; x: "assert"{'a <@ 'b}; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
-   sequent { <H>; x: "assert"{'a <@ 'b}; <J['x]> >- 'C['x] }
-
-(*
-let resource ge_elim_data += [
-	<<'a < 'b>>, (fun l i p -> (match l with [a;b] -> mk_ge_term b (mk_add_term a <<1>>) | _ -> <<0>>));
-]
-*)
-
-(*let lt2ge_term l i p =
-	match l with
-		[a;b] -> mk_ge_term b (mk_add_term a <<1>>)
-	 | _ -> <<0>>*)
-
 interactive gt2ge {| ge_elim [] |} 'H :
    [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'b in int } -->
@@ -409,21 +392,33 @@ interactive noteq2ge_elim {| ge_elim [] |} 'H :
 interactive notneq2ge_elim {| ge_elim [] |} 'H :
    [wf] sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'b in int } -->
-   sequent { <H>; x: "not"{'a <> 'b}; <J['x]>; 'a = 'b in int >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a <> 'b}; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'C['x] }
 
 interactive nequal_elim {| elim [] |} 'H :
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'a in int } -->
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'b in int } -->
-   sequent { <H>; <J[it]>; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
+   sequent { <H>; <J[it]>; (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
 
 interactive nequal_elim2 {| ge_elim [] |} 'H :
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'a in int } -->
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'b in int } -->
-   sequent { <H>; x: nequal{'a;'b}; <J['x]>; y: ('a >= 'b +@ 1) >- 'C['x] } -->
-   sequent { <H>; x: nequal{'a;'b}; <J['x]>; y: ('b >= 'a +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: nequal{'a;'b}; <J['x]>; 'a >= 'b +@ 1 >- 'C['x] } -->
+   sequent { <H>; x: nequal{'a;'b}; <J['x]>; 'b >= 'a +@ 1 >- 'C['x] } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
+
+let dummy_var = mk_var_term (Lm_symbol.add "")
+
+let wrap_ge t tll r tac =
+   mk_pair_term dummy_var t, List.map mk_xlist_term tll, ([], fun i -> rw r i thenT tac i)
+
+let resource ge_elim += [
+   wrap_ge <<"assert"{le_bool{'a; 'b}}>> [[<<'b >= 'a>>]] fold_le le2ge;
+   wrap_ge <<"assert"{'a <@ 'b}>> [[<<'b >= ('a +@ 1)>>]] fold_lt lt2ge;
+   wrap_ge <<"assert"{bnot{'a =@ 'b}}>> [[<<'a >= 'b +@ 1>>];[<<'b >= 'a +@ 1>>]] 
+      (addrC [Subterm 1] fold_bneq_int thenC fold_neq_int) nequal_elim2;
+]
 
 interactive ltInConcl2ge {| ge_intro |} :
 	[wf] sequent { <H> >- 'a in int } -->
@@ -544,10 +539,7 @@ let negativeHyp2ConclT = argfunT (fun i p ->
 		else
       	idT
 	else if is_neq_int_term t then
-   	(rw (unfold_neq_int thenC (addrC [Subterm 1] unfold_bneq_int)) i)
-   	thenMT
-      ((assert_bnot_elim i) thenMT
-      (eq_2beq_int thenMT arithRelInConcl2HypT))
+      nequal_elim2 i
    else
    	idT)
 

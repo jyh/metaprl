@@ -1454,9 +1454,7 @@ let rec hyp2ge p tree = function
 	(i,t)::tail ->
 		if !debug_arith_dtactic then
 			eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
-		if is_member_term t then
-			hyp2ge p tree tail
-		else if is_ge_term t then
+		if is_ge_term t then
 			let tree' = Node [([(i,t,i,0,idT)], tree)] in
 			hyp2ge p tree' tail
 		else

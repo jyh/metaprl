@@ -47,6 +47,11 @@ topval assertSquashAtT  : int -> term -> tactic
 topval genSOVarT : string -> tactic
 
 topval foldCloseC : string list -> term -> conv
+topval foldApplyC : term -> conv
+
+topval lambdaSqElim1T : int -> term -> tactic
+topval lambdaSqElim2T : int -> term -> tactic
+topval lambdaSqElimFull2T : int -> term -> term -> tactic
 
 (*
  * -*-

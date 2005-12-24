@@ -1147,7 +1147,7 @@ define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} 
 
 interactive_rw tail_reduce1 {| reduce |}:
    tail{'l;0} <--> nil
-   
+
 interactive_rw tail_reduce2 {| reduce |}:
    'n in nat -->
    tail{'l;'n+@1} <--> cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n} }
@@ -1187,12 +1187,19 @@ interactive listSquiggle :
 
 interactive_rw reduce_lof_append_nil {| reduce |}:
    'n in nat -->
-   append{list_of_fun{k.'f['k]; 'n}; nil} <--> list_of_fun{k.'f['k]; 'n}
+   append{list_of_fun{k. 'f['k]; 'n}; nil}
+   <-->
+   list_of_fun{k. 'f['k]; 'n}
 
-interactive_rw reduce_lof_append_lof {| reduce |}:
+(*
+ * JYH: note that we don't want to use this if 'n is zero.
+ *)
+interactive_rw reduce_lof_append_lof :
    'm in nat -->
    'n in nat -->
-   append{list_of_fun{k.'f['k]; 'm}; list_of_fun{k.'g['k]; 'n}} <--> list_of_fun{k. if lt_bool{'k; 'm} then 'f['k] else 'g['k -@ 'm]; 'm +@ 'n}
+   append{list_of_fun{k.'f['k]; 'm}; list_of_fun{k.'g['k]; 'n}}
+   <-->
+   list_of_fun{k. if lt_bool{'k; 'm} then 'f['k] else 'g['k -@ 'm]; 'm +@ 'n}
 
 interactive tail_induction 'H :
    sequent { <H>; l:list{'A}; <J['l]> >-  'P[nil] } -->

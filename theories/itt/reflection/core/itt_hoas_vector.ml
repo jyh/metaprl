@@ -207,12 +207,31 @@ interactive_rw coalesce_bindn_bindn :
    <-->
    bind{'n +@ 'm; x. 'e[nth_prefix{'x; 'n}; nth_suffix{'x; 'n}]}
 
+interactive_rw substl_append_right :
+   'l in list -->
+   substl{'e; append{'l; cons{'x; nil}}}
+   <-->
+   subst{substl{'e; 'l}; 'x}
+
+interactive_rw substl_append_left :
+   'l in list -->
+   substl{subst{'e; 'x}; 'l}
+   <-->
+   substl{'e; cons{'x; 'l}}
+
+interactive_rw substl_substl_list :
+   'l1 in list -->
+   'l2 in list -->
+   substl{substl{'e; 'l1}; 'l2}
+   <-->
+   substl{'e; append{'l1; 'l2}}
+
 interactive_rw substl_substl_lof:
    'n in nat -->
    'm in nat -->
-   substl{substl{'e; list_of_fun{x.'f['x]; 'm}}; list_of_fun{x.'g['x]; 'n}}
+   substl{substl{'e; list_of_fun{x. 'f['x]; 'm}}; list_of_fun{x. 'g['x]; 'n}}
    <-->
-   substl{'e; append{list_of_fun{x.'f['x]; 'm}; list_of_fun{x.'g['x]; 'n}}}
+   substl{'e; append{list_of_fun{x. 'f['x]; 'm}; list_of_fun{x. 'g['x]; 'n}}}
 
 interactive_rw append_of_substl_substl Perv!bind{x. 'S['x]} 'e :
    'n in nat -->

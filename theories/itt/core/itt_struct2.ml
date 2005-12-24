@@ -287,12 +287,12 @@ doc <:doc<
    Next we implement ``third-order'' rewriting using the lambda binding to represent
    arbitrary SO contexts.
 >>
-interactive fun_sqeq_elim {| elim[ThinOption thinT] |} 'H 'a :
-   sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>; 't1['a]~'t2['a]  >- 'C } -->
-   sequent { <H>; lambda{x.'t1['x]} ~ lambda{x.'t2['x]}; <J>  >- 'C }
+interactive fun_sqeq_elim {| elim [ThinOption thinT] |} 'H 'a :
+   sequent { <H>; lambda{x. 't1['x]} ~ lambda{x. 't2['x]}; <J>; 't1['a] ~ 't2['a]  >- 'C } -->
+   sequent { <H>; lambda{x. 't1['x]} ~ lambda{x. 't2['x]}; <J>  >- 'C }
 
 interactive lambda_sqsubst_concl 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't :
-   [equality] sequent { <H> >- lambda{x. 't1['x]} ~ lambda{x.'t2['x]} } -->
+   [equality] sequent { <H> >- lambda{x. 't1['x]} ~ lambda{x. 't2['x]} } -->
    [main] sequent { <H> >- 'C[[ 't2<|H|>['t] ]] } -->
    sequent { <H> >- 'C[[ 't1<|H|>['t] ]] }
 
@@ -306,10 +306,19 @@ interactive lambda_sqsubst_hyp 'H 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't
  * the combination of type-checker "stupidity" (not knowing that in ITT a
  * subterm of a term of type Term must also have type Term) and rewriter
  * limitations (it can not not match non-sequent contexts that occur more
- * than once in redeces) make it impossible to specify this rule.
+ * than once in redices) make it impossible to specify this rule.
  *
-interactive lambda_sqsubst2_concl 'C 'C1 'C2 't1 lambda{x.'C2[['x 't2]]} bind{x.'t['x]} :
-   sequent { <H> >- lambda{x. 'C1[['x 't1]]} ~ lambda{x.'C2[['x 't2]]} } -->
+ * JYH: note that this is not a "stupidity" on the part of the typechecker.
+ * The issue is that there is no elimination rule for Term.  It is quite
+ * easy for a user to write:
+ *
+ *    declare foo{'x : Dform} : Term
+ *
+ * If you wish the invariant to hold, you must provide an elimination rule,
+ * and you must restrict what can be declared.
+ *
+interactive lambda_sqsubst2_concl 'C 'C1 'C2 't1 lambda{x. 'C2[['x 't2]]} bind{x. 't['x]} :
+   sequent { <H> >- lambda{x. 'C1[['x 't1]]} ~ lambda{x. 'C2[['x 't2]]} } -->
    sequent { <H> >- 'C[[ 'C2<|H|>[['t<|C;H|>['t2<|C2;H|>] ]] ]] } -->
    sequent { <H> >- 'C[[ 'C1<|H|>[['t<|C;H|>['t1<|C1;H|>] ]] ]] }
  *
@@ -402,8 +411,42 @@ let assertEqT =
 let assertSquashT = cutSquash 0
 let assertSquashAtT = cutSquash
 
-(* lambda-based generalization *)
+(************************************************************************
+ * Forward-chaining version.
+ *)
+doc <:doc<
+   In some cases it may also be convenient to reason by forward-chaining.
+   Given a hypothesis of the form << lambda{x. 'e1['x]} ~ lambda{x. 'e2['x]} >>,
+   rewrite the assumption to wrap the binder << 'x >> in an arbitrary
+   expression << 'e['x] >>.
 
+   The general form is currently inexpressible since the rewriter does not
+   support context matching.  For the time being, we prove several instances.
+>>
+interactive lambda_sqequal_elim 'H lambda{x. 'e['x]} :
+   sequent { <H>; lambda{x. 'e1['x]} ~ lambda{x. 'e2['x]}; <J>; lambda{x. 'e1['e['x]]} ~ lambda{x. 'e2['e['x]]} >- 'C } -->
+   sequent { <H>; lambda{x. 'e1['x]} ~ lambda{x. 'e2['x]}; <J> >- 'C }
+
+interactive lambda_sqequal_elim2 'H lambda{u. lambda{v. 'e3['u; 'v]}} lambda{w. lambda{z. 'e4['w; 'z]}} :
+   sequent { <H>; lambda{x. lambda{y. 'e1['x; 'y]}} ~ lambda{x. lambda{y. 'e2['x; 'y]}}; <J>;
+      lambda{x. lambda{y. 'e1['e3['x; 'y]; 'e4['x; 'y]]}} ~ lambda{x. lambda{y.'e2['e3['x; 'y]; 'e4['x; 'y]]}} >- 'C } -->
+   sequent { <H>; lambda{x. lambda{y. 'e1['x; 'y]}} ~ lambda{x. lambda{y. 'e2['x; 'y]}}; <J> >- 'C }
+
+doc docoff
+
+let x_var = Lm_symbol.add "x"
+
+let lambdaSqElim1T = lambda_sqequal_elim
+
+let lambdaSqElim2T i t =
+   let x = maybe_new_var_set x_var (free_vars_set t) in
+      lambda_sqequal_elim2 i << lambda{x. lambda{y. 'x}} >> <:con< lambda{$x$. $t$} >>
+
+let lambdaSqElimFull2T = lambda_sqequal_elim2
+
+(************************************************************************
+ * lambda-based generalization.
+ *)
 let genSOVarT = argfunT (fun s p ->
    let t = concl p in
    if not (is_squiggle_term t) then
@@ -466,6 +509,64 @@ let foldCloseC vars t =
       if alpha_equal t1 t then
          repeatC (foldC t_app (sweepUpC reduce_beta))
       else
-         raise (RefineError ("fold_close", StringError "term mismatch"))
+         raise (RefineError ("fold_close", StringTermError ("term mismatch", t1)))
    in
       termC fold
+
+(*
+ * This is a somewhat more general version of the above.
+ * We take a lambda expression and some arguments,
+ * and perform an inverse beta-reduction.
+ *)
+let foldApplyC t =
+   (* Apply the lambda to the arguments *)
+   let rec apply t args =
+      match args with
+         [] ->
+            t
+       | arg :: args ->
+            let v, t = dest_lambda t in
+            let t = subst1 t v arg in
+               apply t args
+   in
+
+   (* Collect the arguments from the application *)
+   let rec collect args t =
+      if is_apply_term t then
+         let t, arg = dest_apply t in
+            collect (arg :: args) t
+      else
+         t, args
+   in
+
+   (* Get the lambda and the args *)
+   let t_lam, args = collect [] t in
+   let t_core = apply t_lam args in
+
+   (* Perform the beta-reductions *)
+   let rec justify args =
+      match args with
+         [] ->
+            idC
+       | _ :: args ->
+            (addrC [Subterm 1] (justify args)) thenC reduce_beta
+   in
+
+   (* Search and replace *)
+   let fold t1 =
+      if alpha_equal t1 t_core then
+         foldC t (justify args)
+      else
+         raise (RefineError ("foldApplyC", StringTermError ("term mismatch", t1)))
+   in
+      termC fold
+
+(*!
+ * @docoff
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

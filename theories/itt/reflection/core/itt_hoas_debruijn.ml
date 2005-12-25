@@ -115,14 +115,14 @@ define (*private*) unfold_subterms:
 
 doc <:doc< @rewrites >>
 
-interactive_rw reduce_mk_bterm_base {| reduce |} :
+interactive_rw reduce_mk_bterm_base :
    mk_bterm{0; 'op; 'btl} <--> mk_term{'op; 'btl }
 
-interactive_rw reduce_mk_bterm_step {| reduce |} :
+interactive_rw reduce_mk_bterm_step :
    'n in nat -->
    mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; map{bt. subst{'bt; 'v}; 'btl}}}
 
-interactive_rw reduce_mk_bterm_empty {| reduce |} :
+interactive_rw reduce_mk_bterm_empty :
    'n in nat -->
    mk_bterm{'n; 'op; nil} <--> bind{'n; mk_term{'op; nil}}
 

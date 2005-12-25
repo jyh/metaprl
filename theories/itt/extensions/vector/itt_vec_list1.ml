@@ -343,13 +343,6 @@ interactive vflatten_list_wf {| intro [] |} :
 doc <:doc<
    Associative properties.
 >>
-interactive_rw reduce_append_assoc :
-   'l1 in "list" -->
-   'l2 in "list" -->
-   append{append{'l1; 'l2}; 'l3}
-   <-->
-   append{'l1; append{'l2; 'l3}}
-
 interactive_rw reduce_vflatten_split 'J :
    vlist{| <J> |} in list{list} -->
    vflatten{| <J>; <K<||> > |}

@@ -503,12 +503,12 @@ interactive_rw reduce_append_nil {| reduce |} : append{nil; 'l2} <--> 'l2
 interactive_rw reduce_append_cons {| reduce |} :
    append{cons{'x; 'l1}; 'l2} <--> cons{'x; append{'l1; 'l2}}
 
-interactive_rw append_nil 'A :
-   ('l in list{'A}) -->
+interactive_rw append_nil {| reduce |} :
+   ('l in list) -->
    append{'l;nil} <--> 'l
 
-interactive_rw append_assoc 'A:
-   ('l1 in list{'A}) -->
+interactive_rw append_assoc :
+   ('l1 in list) -->
    append{append{'l1;'l2};'l3} <-->
    append{'l1;append{'l2;'l3}}
 
@@ -809,9 +809,9 @@ interactive tl_wf1 {| intro [] |} :
    sequent  { <H> >- not{'l1 = nil in list{'T}} } -->
    sequent  { <H> >- tl{'l1} = tl{'l2} in list{'T} }
 
-interactive_rw tl_hd_rw list{'T} :
-   ('l in list{'T})  -->
-   (not{'l = nil in list{'T}}) -->
+interactive_rw tl_hd_rw :
+   ('l in list)  -->
+   (not{'l = nil in list}) -->
      cons{hd{'l};tl{'l}} <--> 'l
 
 interactive is_nil_wf {| intro [] |} :
@@ -1039,15 +1039,15 @@ interactive rev_wf {| intro [] |} :
    [wf] sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- rev{'l} in list{'A} }
 
-interactive_rw rev_append 'A :
-   ('a in list{'A}) -->
-   ('b in list{'A}) -->
+interactive_rw rev_append :
+   ('a in list) -->
+   ('b in list) -->
    rev{append{'a;'b}} <--> append{rev{'b};rev{'a}}
 
 doc <:doc< Double-reverse is identity. >>
 
-interactive_rw rev2 'A :
-   ('l in list{'A}) -->
+interactive_rw rev2 :
+   ('l in list) -->
    rev{rev{'l}} <--> 'l
 
 doc <:doc<
@@ -1184,12 +1184,6 @@ interactive listSquiggle :
    [wf] sequent { <H> >- length{'l1} = length{'l2} in nat } -->
    sequent { <H>; i: Index{'l1} >- nth{'l1; 'i} ~ nth{'l2; 'i} } -->
    sequent { <H> >- 'l1 ~ 'l2 }
-
-interactive_rw reduce_lof_append_nil {| reduce |}:
-   'n in nat -->
-   append{list_of_fun{k. 'f['k]; 'n}; nil}
-   <-->
-   list_of_fun{k. 'f['k]; 'n}
 
 (*
  * JYH: note that we don't want to use this if 'n is zero.

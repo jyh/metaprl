@@ -115,21 +115,30 @@ define (*private*) unfold_subterms:
 
 doc <:doc< @rewrites >>
 
-interactive_rw reduce_mk_bterm_base {| reduce |}:
+interactive_rw reduce_mk_bterm_base {| reduce |} :
    mk_bterm{0; 'op; 'btl} <--> mk_term{'op; 'btl }
+
+interactive_rw reduce_mk_bterm_step {| reduce |} :
+   'n in nat -->
+   mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; map{bt. subst{'bt; 'v}; 'btl}}}
+
+interactive_rw reduce_mk_bterm_empty {| reduce |} :
+   'n in nat -->
+   mk_bterm{'n; 'op; nil} <--> bind{'n; mk_term{'op; nil}}
+
+let reduceBTermC =
+   repeatC (higherC reduce_mk_bterm_base
+            thenC higherC reduce_mk_bterm_step
+            thenC higherC reduce_mk_bterm_empty
+            thenC reduceC)
+
+let reduceBTermT =
+   rwAll reduceBTermC
 
 interactive_rw fold_mk_term :
    mk_term{'op; 'subterms}
    <-->
    mk_bterm{0; 'op; 'subterms}
-
-interactive_rw reduce_mk_bterm_step {| reduce |}:
-   'n in nat -->
-   mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; map{bt. subst{'bt; 'v}; 'btl}}}
-
-interactive_rw reduce_mk_bterm_empty {| reduce |}:
-   'n in nat -->
-   mk_bterm{'n; 'op; nil} <--> bind{'n; mk_term{'op; nil}}
 
 interactive_rw reduce_bdepth_mk_term {| reduce |}:
    bdepth{mk_term{'op; 'btl}} <--> 0

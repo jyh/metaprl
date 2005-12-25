@@ -2994,7 +2994,7 @@ T	t1267	o945 b916 b937
 B	b1267	t1267 x
 T	t1268	o932 b915 b1267
 B	b1268	t1268
-P	p1268	String "genAssumT [1] thenT dT (-1) thenT byDefT reduceC"
+P	p1268	String "genAssumT [1] thenT dT (-1) thenT byDefT reduceBTermC"
 O	o1268	ext_rule p1268
 H	h1271	m t1245
 P	p1271	Var m
@@ -3009,7 +3009,7 @@ P	p1295	String reduce_bdepth_mk_term
 O	o1295	rewrite p1295
 T	t1295	o1130 b1225
 B	b1295	t1295
-P	p1296	String "byDefsT [unfold_bdepth; reduce_fix; reduceC]"
+P	p1296	String "byDefsT [unfold_bdepth; reduce_fix; reduceBTermC]"
 O	o1296	ext_rule p1296
 P	p1307	String reduce_bdepth_bind
 O	o1307	rewrite p1307
@@ -3025,7 +3025,7 @@ T	t1311	o1130 b1310
 B	b1311	t1311
 T	t1312	o1195 b1196 b1311
 B	b1312	t1312
-P	p1312	String "rw (addrC [1] unfold_bdepth) 0 thenT byDefsT [reduce_fix; reduceC; unfold_bdepth]"
+P	p1312	String "rw (addrC [1] unfold_bdepth) 0 thenT byDefsT [reduce_fix; reduceBTermC; unfold_bdepth]"
 O	o1312	ext_rule p1312
 P	p1324	String reduce_bdepth_var
 O	o1324	cond_rewrite p1324
@@ -3057,7 +3057,7 @@ T	t1331	o1195 b1324 b1326
 B	b1332	t1331
 T	t1332	o1195 b1332 b1196
 B	b1333	t1332
-P	p1333	String "genAssumT [1;2] thenT dT (-1) thenT byDefsT [unfold_var; reduceC]"
+P	p1333	String "genAssumT [1;2] thenT dT (-1) thenT byDefsT [unfold_var; reduceBTermC]"
 O	o1333	ext_rule p1333
 H	h1340	v t1245
 H	h1341	v1 t1245
@@ -3110,7 +3110,7 @@ B	b1362	t1362
 T	t1363	o1232 b1359 b1362
 S	s1363	t1231\\ h h1271 h1358 h1341\\ t1363
 B	b1363	s1363
-P	p1368	String "dT (-1) thenT byDefT reduceC"
+P	p1368	String "dT (-1) thenT byDefT reduceBTermC"
 O	o1368	ext_rule p1368
 T	t1369	o932 b1272 b1342
 B	b1369	t1369
@@ -4276,11 +4276,11 @@ T	t1702	o661 b1330 b916
 B	b1702	t1702
 P	p1703	String "genAssumT [1] thenT dT (-1)"
 O	o1703	ext_rule p1703
-P	p1721	String "byDefsT [unfold_get_op; reduce_fix; unfold_var; reduceC]"
+P	p1721	String "byDefsT [unfold_get_op; reduce_fix; unfold_var; reduceBTermC]"
 O	o1721	ext_rule p1721
-P	p1729	String "genAssumT [2] thenT dT (-1) thenT rwh reduce_fix 0 thenT byDefT reduceC"
+P	p1729	String "genAssumT [2] thenT dT (-1) thenT rwh reduce_fix 0 thenT byDefT reduceBTermC"
 O	o1729	ext_rule p1729
-P	p1733	String "byDefsT [unfold_get_op; unfold_var] thenT rwh reduce_fix 0 thenT byDefT reduceC"
+P	p1733	String "byDefsT [unfold_get_op; unfold_var] thenT rwh reduce_fix 0 thenT byDefT reduceBTermC"
 O	o1733	ext_rule p1733
 P	p1745	String reduce_getop_mkbterm
 O	o1745	cond_rewrite p1745
@@ -4305,7 +4305,7 @@ T	t1762	o1622 b918
 B	b1762	t1762
 T	t1763	o1625 b917
 B	b1763	t1763
-P	p1763	String "genAssumT [2;1] thenT dT (-1) thenT byDefsT [unfold_num_subterms; reduceC] thenT rwh reduce_fix 0 thenT byDefT reduceC"
+P	p1763	String "genAssumT [2;1] thenT dT (-1) thenT byDefsT [unfold_num_subterms; reduceBTermC] thenT rwh reduce_fix 0 thenT byDefT reduceBTermC"
 O	o1763	ext_rule p1763
 T	t1770	o1625 b1341
 B	b1771	t1770
@@ -4490,7 +4490,7 @@ T	t2297	o b2296 b26
 B	b2297	t2297
 T	t2298	o1228 b2287 b2297
 B	b2298	t2298
-P	p1781	String "instHypT [ << map{bt. subst{'bt;  mk_term{it; nil}}; 'v1} >> ] 3 thenT byDefT reduceC"
+P	p1781	String "instHypT [ << map{bt. subst{'bt;  mk_term{it; nil}}; 'v1} >> ] 3 thenT byDefT reduceBTermC"
 O	o1781	ext_rule p1781
 T	t2299	o1228 b2296 b26
 B	b2299	t2299
@@ -4550,7 +4550,7 @@ T	t1367	o1225 b1367
 B	b1368	t1367
 T	t1280	o661 b918 b1745
 B	b1280	t1280
-P	p1281	String "genSOVarT \"btl\" thenT genAssumT [1] thenT dT (-1) thenT byDefT unfold_get_op thenT rwh reduce_fix 0 thenT byDefT reduceC"
+P	p1281	String "genSOVarT \"btl\" thenT genAssumT [1] thenT dT (-1) thenT byDefT unfold_get_op thenT rwh reduce_fix 0 thenT byDefT reduceBTermC"
 O	o1281	ext_rule p1281
 T	t1281	o661 b2167 b2269
 B	b1281	t1281
@@ -4657,7 +4657,7 @@ T	t1319	o1305 b1319 b1110
 B	b1320	t1319 v
 T	t1320	o932 b915 b1320
 B	b1321	t1320
-P	p1321	String "genSOVarT \"f\" thenT genAssumT [1] thenT dT (-1) thenT byDefsT [unfold_nth_subterm; reduceC] thenT rwh reduce_fix 0 thenT byDefT reduceC"
+P	p1321	String "genSOVarT \"f\" thenT genAssumT [1] thenT dT (-1) thenT byDefsT [unfold_nth_subterm; reduceBTermC] thenT rwh reduce_fix 0 thenT byDefT reduceBTermC"
 O	o1321	ext_rule p1321
 Vf	f2308	f\\ H\\ t1293
 B	b2308	f2308 x
@@ -4723,7 +4723,7 @@ T	t2340	o914 b1470 b2035 b2339
 B	b2340	t2340
 T	t2344	o899 b1429 b2312
 B	b2344	t2344
-P	p1559	String "rwh (foldC <<lambda{x. subst{'f1 'x; 'v}} 'x >> reduce_beta) 0 thenT hypSubstT (-1) 0 thenT byDefsT [unfold_substl; reduceC]"
+P	p1559	String "rwh (foldC <<lambda{x. subst{'f1 'x; 'v}} 'x >> reduce_beta) 0 thenT hypSubstT (-1) 0 thenT byDefsT [unfold_substl; reduceBTermC]"
 O	o1559	ext_rule p1559
 P	p1832	String subterms_id
 O	o1832	cond_rewrite p1832
@@ -4735,7 +4735,7 @@ T	t1568	o932 b915 b1567
 B	b1621	t1568 bt
 T	t1621	o1107 b1621 b917
 B	b1633	t1621
-P	p1634	String "rwh (listIntoElementsC <<'btl>>) 0 thenT byDefsT [unfold_subterms; num_subterms_id; reduceC]"
+P	p1634	String "rwh (listIntoElementsC <<'btl>>) 0 thenT byDefsT [unfold_subterms; num_subterms_id; reduceBTermC]"
 O	o1635	ext_rule p1634
 T	t2363	o702 b2167
 B	b2363	t2363
@@ -4776,7 +4776,7 @@ T	t2377	o b2376 b26
 B	b2377	t2377
 T	t2378	o1228 b2368 b2377
 B	b2378	t2378
-P	p1698	String "rwh (listIntoElementsC <<'btl>>) 0 thenT byDefT reduceC"
+P	p1698	String "rwh (listIntoElementsC <<'btl>>) 0 thenT byDefT reduceBTermC"
 O	o1698	ext_rule p1698
 T	t2379	o1228 b2376 b26
 B	b2379	t2379
@@ -4895,7 +4895,7 @@ T	t1446	o b1442 b1446
 B	b1447	t1446
 T	t1447	o1228 b1434 b1447
 B	b1448	t1447
-P	p1448	String "genAssumT [1;2] thenT dT (-1) thenT byDefsT [unfold_var; reduceC] thenT rwh reduce_fix 0 thenT reduceT ttca"
+P	p1448	String "genAssumT [1;2] thenT dT (-1) thenT byDefsT [unfold_var; reduceBTermC] thenT rwh reduce_fix 0 thenT reduceBTermT ttca"
 O	o1448	ext_rule p1448
 H	h1448	d t1245
 T	t1448	o945 b1436 b937
@@ -4974,7 +4974,7 @@ T	t1548	o b1548 b26
 B	b1549	t1548
 T	t1549	o1228 b1476 b1549
 B	b1551	t1549
-P	p1551	String "dT 3 thenT rwh reduce_fix 0 thenT byDefT reduceC"
+P	p1551	String "dT 3 thenT rwh reduce_fix 0 thenT byDefT reduceBTermC"
 O	o1551	ext_rule p1551
 T	t1551	o1228 b1548 b26
 B	b1552	t1551
@@ -5074,7 +5074,7 @@ B	b2277	t2277
 B	b2278	t2276 x
 T	t2278	o932 b1326 b2278
 B	b2279	t2278
-P	p2279	String "byDefsT [unfold_var; reduceC]"
+P	p2279	String "byDefsT [unfold_var; reduceBTermC]"
 O	o2279	ext_rule p2279
 Vt	t2279	t\\ H\\
 B	b2280	t2279
@@ -5143,7 +5143,7 @@ T	t2407	o1107 b2407 b917
 B	b2408	t2407
 T	t2408	o914 b2401 b916 b2408
 B	b2409	t2408
-P	p2409	String "byDefsT [unfold_mk_bterm; reduceC]"
+P	p2409	String "byDefsT [unfold_mk_bterm; reduceBTermC]"
 O	o2409	ext_rule p2409
 Vbdepth	bdepth2409	bdepth\\ H\\
 B	b2410	bdepth2409
@@ -5212,7 +5212,7 @@ T	t2447	o1107 b2447 b917
 B	b2448	t2447
 T	t2448	o1107 b2445 b2448
 B	b2449	t2448
-P	p2449	String "genAssumT [1] thenT dT 2 thenT reduceT ttca"
+P	p2449	String "genAssumT [1] thenT dT 2 thenT reduceBTermT ttca"
 O	o2449	ext_rule p2449
 Vv	v2449	v\\ H\\
 B	b2450	v2449
@@ -5247,7 +5247,7 @@ T	t2468	o898 b2467
 B	b2468	t2468
 T	t2469	o914 b2404 b916 b2448
 B	b2469	t2469
-P	p2469	String "reduceT ttca"
+P	p2469	String "reduceBTermT ttca"
 O	o2469	ext_rule p2469
 T	t2470	o914 b2410 b2035 b2036
 B	b2470	t2470 x
@@ -5291,7 +5291,7 @@ T	t3296	o1305 b2279 b3295
 B	b3296	t3296 gamma
 T	t3297	o932 b915 b3296
 B	b3297	t3297
-P	p3297	String "genAssumT [2;1;3] thenT dT 2 thenT reduceT thenT autoT thenT withT <<'v1-@1>> (dT 3) thenT substT <<'v1~'v1-@1+@1>> 0 thenT reduceT ttca"
+P	p3297	String "genAssumT [2;1;3] thenT dT 2 thenT reduceBTermT thenT autoT thenT withT <<'v1-@1>> (dT 3) thenT substT <<'v1~'v1-@1+@1>> 0 thenT reduceBTermT ttca"
 O	o3297	ext_rule p3297
 T	t3298	o1305 b2305 b3295
 B	b3298	t3298 gamma
@@ -5386,7 +5386,7 @@ T	t3363	o1305 b1330 b3295
 B	b3363	t3363 gamma
 T	t3364	o932 b915 b3363
 B	b3364	t3364
-P	p3364	String "genAssumT [3;1;2;4] thenT dT 2 thenT reduceT ttca thenT dT 0 thenMT dT (-1) ttca"
+P	p3364	String "genAssumT [3;1;2;4] thenT dT 2 thenT reduceBTermT ttca thenT dT 0 thenMT dT (-1) ttca"
 O	o3364	ext_rule p3364
 T	t3365	o1305 b2123 b3295
 B	b3365	t3365 gamma
@@ -5519,13 +5519,13 @@ T	t1424	o1228 b3374 b1423
 B	b1424	t1424
 T	t3422	o1229 b3421 b26
 B	b3422	t3422
-P	p3425	String "autoT thenT rwh unfold_var 0 thenT reduceT ttca thenT omegaT ttca"
+P	p3425	String "autoT thenT rwh unfold_var 0 thenT reduceBTermT ttca thenT omegaT ttca"
 O	o3425	ext_rule p3425
 T	t3426	o1228 b3397 b26
 B	b3426	t3426
 T	t3427	o3425 b1227 b3426 b26 b26
 B	b3427	t3427
-P	p3427	String "autoT thenT reduceT ttca"
+P	p3427	String "autoT thenT reduceBTermT ttca"
 O	o3427	ext_rule p3427
 H	h3427	v2 t1245
 T	t3428	o1195 b3375 b1196
@@ -5553,7 +5553,7 @@ T	t3438	o b3437 b26
 B	b3438	t3438
 T	t3439	o1228 b3422 b3438
 B	b3439	t3439
-P	p3439	String "withT <<'m1>> (dT 3) thenMT withT <<'v2>> (dT (-1)) thenMT dT (-1) thenMT hypSubstT (-1) 0 thenT reduceT ttca thenT omegaT ttca"
+P	p3439	String "withT <<'m1>> (dT 3) thenMT withT <<'v2>> (dT (-1)) thenMT dT (-1) thenMT hypSubstT (-1) 0 thenT reduceBTermT ttca thenT omegaT ttca"
 O	o3439	ext_rule p3439
 T	t3440	o1284 b3436 b26
 B	b3440	t3440
@@ -5637,7 +5637,7 @@ T	t3478	o b3478 b26
 B	b3479	t3478
 T	t3479	o1228 b3469 b3479
 B	b3480	t3479
-P	p3480	String "genAssumT [2;1;3] thenT dT 2 thenT reduceT thenT autoT"
+P	p3480	String "genAssumT [2;1;3] thenT dT 2 thenT reduceBTermT thenT autoT"
 O	o3480	ext_rule p3480
 T	t3480	o3306 b1470 b1341
 B	b3481	t3480
@@ -5681,7 +5681,7 @@ T	t3499	o b3498 b26
 B	b3499	t3499
 T	t3500	o1228 b3478 b3499
 B	b3500	t3500
-P	p3500	String "substT <<'v1~'v1-@1+@1>> 0 thenT reduceT ttca thenAT (dT 0 ttca thenT omegaT ttca)"
+P	p3500	String "substT <<'v1~'v1-@1+@1>> 0 thenT reduceBTermT ttca thenAT (dT 0 ttca thenT omegaT ttca)"
 O	o3500	ext_rule p3500
 T	t3501	o1284 b3497 b26
 B	b3501	t3501
@@ -5713,7 +5713,7 @@ T	t3513	o b3513 b26
 B	b3514	t3513
 T	t3514	o1228 b3501 b3514
 B	b3515	t3514
-P	p3515	String "withT <<'v1-@1>> (dT 3) thenMT dT (-1) thenMT hypSubstT (-1) 0 thenT reduceT ttca"
+P	p3515	String "withT <<'v1-@1>> (dT 3) thenMT dT (-1) thenMT hypSubstT (-1) 0 thenT reduceBTermT ttca"
 O	o3515	ext_rule p3515
 T	t3515	o1284 b3512 b26
 B	b3516	t3515
@@ -6266,7 +6266,7 @@ T	t410	o1228 b378 b26
 B	b411	t410
 T	t411	o410 b1227 b411 b26 b26
 B	b412	t411
-P	p412	String "dT 4 thenT rw reduceC 0 thenT autoT"
+P	p412	String "dT 4 thenT rw reduceBTermC 0 thenT autoT"
 O	o412	ext_rule p412
 T	t412	o1228 b397 b26
 B	b413	t412
@@ -6404,7 +6404,7 @@ T	t613	o511 b209 b219
 B	b614	t613
 T	t614	o510 b613 b614
 B	b745	t614
-P	p745	String "rwh unfold_beq_var 0 thenT rw reduceC 0 ttca"
+P	p745	String "rwh unfold_beq_var 0 thenT rw reduceBTermC 0 ttca"
 O	o745	ext_rule p745
 Vl1	l1745	l1\\ H\\
 B	b746	l1745
@@ -6537,7 +6537,7 @@ T	t713	o b713 b26
 B	b714	t713
 T	t714	o1228 b710 b714
 B	b715	t714
-P	p715	String "dT (-2) thenT dT (-1) thenT rwh unfold_beq_var 0 thenT rw reduceC 0 ttca"
+P	p715	String "dT (-2) thenT dT (-1) thenT rwh unfold_beq_var 0 thenT rw reduceBTermC 0 ttca"
 O	o715	ext_rule p715
 T	t715	o1228 b713 b26
 B	b716	t715
@@ -6640,7 +6640,7 @@ T	t570	o b569 b26
 B	b570	t570
 T	t571	o1228 b551 b570
 B	b571	t571
-P	p571	String "dT (-1) thenT rwh unfold_beq_var 0 thenT rw reduceC 0 ttca"
+P	p571	String "dT (-1) thenT rwh unfold_beq_var 0 thenT rw reduceBTermC 0 ttca"
 O	o571	ext_rule p571
 T	t572	o1228 b569 b26
 B	b572	t572
@@ -6802,7 +6802,7 @@ T	t878	o b878 b26
 B	b879	t878
 T	t886	o1228 b848 b879
 B	b887	t886
-P	p887	String "dT (-3) thenT dT (-2) thenT rwh unfold_beq_var (-1) thenT rw reduceC (-1) ttca"
+P	p887	String "dT (-3) thenT dT (-2) thenT rwh unfold_beq_var (-1) thenT rw reduceBTermC (-1) ttca"
 O	o887	ext_rule p887
 H	h887	i1 t1245
 H	h888	j1 t1245
@@ -7057,7 +7057,7 @@ T	t2010	o1650 b2010 b1261
 B	b2011	t2010
 T	t2011	o914 b1248 b916 b2011
 B	b2012	t2011
-P	p2012	String "rw reduceC 0 ttca"
+P	p2012	String "rw reduceBTermC 0 ttca"
 O	o2012	ext_rule p2012
 Vsubterms	subterms454	subterms\\ H\\
 B	b455	subterms454
@@ -7842,7 +7842,7 @@ T	t1725	o b1725 b26
 B	b1726	t1725
 T	t1726	o1228 b1211 b1726
 B	b1727	t1726
-P	p1727	String "substT << 'n +@ ('m1 +@ 1) ~ ('n +@ 'm1) +@ 1 >> 0 thenT reduceT ttca"
+P	p1727	String "substT << 'n +@ ('m1 +@ 1) ~ ('n +@ 'm1) +@ 1 >> 0 thenT reduceBTermT ttca"
 O	o1727	ext_rule p1727
 B	b1728	t1671 y
 T	t1728	o1650 b1728 b2309
@@ -7924,7 +7924,7 @@ T	t1178	o b1177 b26
 B	b1178	t1178
 T	t1181	o1268 b1227 b1727 b1178 b26
 B	b1181	t1181
-P	p462	String "withT << lambda{x. lambda{y. 'f['x; 'y]}} >> (dT (-1)) thenT reduceT ttca"
+P	p462	String "withT << lambda{x. lambda{y. 'f['x; 'y]}} >> (dT (-1)) thenT reduceBTermT ttca"
 O	o462	ext_rule p462
 T	t2443	o1228 b1215 b26
 B	b2461	t2443

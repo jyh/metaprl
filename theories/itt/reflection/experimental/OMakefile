@@ -15,6 +15,7 @@ MPFILES[] =
     itt_hoas_lang
     itt_hoas_bterm
     itt_hoas_util
+    itt_hoas_normalize
     itt_hoas_bterm_wf
     itt_hoas_bterm_wf1
     itt_hoas_proof

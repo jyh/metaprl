@@ -24,15 +24,21 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_normalize
+extends Itt_hoas_bterm
 
 open Basic_tactics
 
 (*
- * Push the bind into the term.
+ * Normalize the term.
  *)
-topval bindWFT : tactic
-topval proofRuleWFT : tactic
+topval normalizeBTermC : conv
+
+(*
+ * Private conversions.
+ *)
+topval fold_subterms_length : conv
+topval fold_subterms_nth : conv
+topval fold_subterms_bind : conv
 
 (*!
  * @docoff

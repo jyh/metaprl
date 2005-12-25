@@ -55,6 +55,12 @@ dform meta_type_df : <:xterm< $`"meta_type" >> =
 dform meta_member_df : <:xterm< $`meta_member{e; ty} >> =
    szone pushm[3] slot{'e} `" " Mpsymbols!member `"M" hspace slot{'ty} popm ezone
 
+dform meta_type_df2 : <:xterm< $'[d] "meta_type" >> =
+   `"meta_type[" slot{'d} `"]"
+
+dform meta_member_df2 : <:xterm< $'[d] meta_member{e; ty} >> =
+   szone pushm[3] slot{'e} `" " Mpsymbols!member `"M[" slot{'d} `"]" hspace slot{'ty} popm ezone
+
 (*!
  * @docoff
  *

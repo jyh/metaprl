@@ -60,6 +60,10 @@ topval fold_beq_bterm_list : conv
 (* 'e --> bind{x. 'e['x]} *)
 topval etaExpandC : term -> conv
 
+(* Tactics *)
+val mk_bterm_wf : tactic
+val mk_bterm_wf2 : tactic
+
 (*!
  * @docoff
  *

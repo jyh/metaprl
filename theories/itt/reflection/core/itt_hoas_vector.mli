@@ -47,6 +47,9 @@ define iform simple_bindn: bind{'n; 't} <-->  bind{'n; x.'t}
 (************************************************************************
  * Tactics.
  *)
+val bindone_into_bind : conv
+val coalesce_bindn_bindn : conv
+
 val is_bindn_term : term -> bool
 val mk_bindn_term : var -> term -> term -> term
 val dest_bindn_term : term -> var * term * term

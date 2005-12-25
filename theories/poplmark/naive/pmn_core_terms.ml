@@ -136,6 +136,60 @@ dform fsub_member_df : parens :: "prec"[prec_apply] :: <:xterm< xquote{d; fsub_m
 dform fsub_Judgment_df : <:xterm< xquote{d; "Judgment"} >> =
    `"Judgment[" slot{'d} `"]"
 
+(*
+ * Display with depths.
+ *)
+dform ty_exp_df2 : <:xterm< $'[d] "TyExp" >> =
+   `"TyExp[" slot{'d} `"]"
+
+dform exp_df2 : <:xterm< $'[d] "Exp" >> =
+   `"Exp[" slot{'d} `"]"
+
+dform top_df2 : <:xterm< $'[d] "TyTop" >> =
+   `"Top[" slot{'d} `"]"
+
+dform ty_fun_df : parens :: "prec"[prec_fun] :: <:xterm< xquote{d; fsub { ty1 -> ty2 }} >> =
+   szone pushm[3] slot{'ty1} `" ->[" slot{'d} `"]" hspace slot{'ty2} popm ezone
+
+dform ty_all_df : parens :: "prec"[prec_quant] :: <:xterm< xquote{d; fsub { all x <: ty1. ty2 }} >> =
+   szone pushm[3] `"all[" slot{'d} `"] " slot{'x} `" <: " slot{'ty1} `"." hspace slot{'ty2} popm ezone
+
+dform lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< xquote{d; fsub { fun x : ty -> e }} >> =
+   szone pushm[3] `"fun[" slot{'d} `"] " slot{'x} `" : " slot{'ty} `" ->" hspace slot{'e} popm ezone
+
+dform apply_df : parens :: "prec"[prec_apply] :: <:xterm< xquote{d; fsub { e1 e2 }} >> =
+   szone pushm[3] slot{'e1} `" @[" slot{'d} `"]" hspace slot{'e2} popm ezone
+
+dform ty_lambda_df : parens :: "prec"[prec_lambda] :: <:xterm< xquote{d; fsub { Fun x <: ty -> e }} >> =
+   szone pushm[3] `"Fun[" slot{'d} `"] " slot{'x} `" <: " slot{'ty} `" ->" hspace slot{'e} popm ezone
+
+dform ty_apply_df : parens :: "prec"[prec_apply] :: <:xterm< xquote{d; fsub { e{ty} }} >> =
+   szone pushm[3] slot{'e} `"@[" slot{'d} `"]{" slot{'ty} `"}" popm ezone
+
+dform ty_power_df : <:xterm< xquote{d; "TyPower"} >> =
+   `"Power"
+
+dform ty_val_df : <:xterm< xquote{d; "TyVal"} >> =
+   `"Val"
+
+dform ty_power_df : <:xterm< xquote{d; TyPower{ty}} >> =
+   `"Power(" slot{'ty} `")"
+
+dform ty_power_df : <:xterm< xquote{d; TyVal{ty}} >> =
+   `"Val(" slot{'ty} `")"
+
+dform fsub_df : <:xterm< xquote{d; "fsub"} >> =
+   `"fsub"
+
+dform fsub_subtype_df : parens :: "prec"[prec_equal] :: <:xterm< xquote{d; fsub_subtype{t1; t2}} >> =
+   szone pushm[3] slot{'t1} `" <:[" slot{'d} `"]" hspace slot{'t2} popm ezone
+
+dform fsub_member_df : parens :: "prec"[prec_apply] :: <:xterm< xquote{d; fsub_member{e; ty}} >> =
+   szone pushm[3] slot{'e} `" " Mpsymbols!member `"[" slot{'d} `"]" hspace slot{'ty} popm ezone
+
+dform fsub_Judgment_df : <:xterm< xquote{d; "Judgment"} >> =
+   `"Judgment[" slot{'d} `"]"
+
 (*!
  * @docoff
  *

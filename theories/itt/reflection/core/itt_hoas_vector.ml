@@ -88,7 +88,12 @@ doc rewrites
 interactive_rw reduce_bindn_base {| reduce |} :
    bind{0; x.'t['x]} <--> 't[nil]
 
-interactive_rw reduce_bindn_up {| reduce |} :
+(*
+ * XXX: JYH: this is a denormalization rule.
+ * Don't add it to reduce.  Hopefully we'll solve this in
+ * a better way.
+ *)
+interactive_rw reduce_bindn_up :
    'n in nat -->
    bind{'n +@ 1; l.'t['l]} <--> bind{v. bind{'n; l. 't['v :: 'l]}}
 
@@ -158,7 +163,10 @@ interactive_rw reduce_substn_bindn2 {| reduce |} :
 interactive_rw reduce_substl_base {| reduce |} :
    substl{'bt; nil} <--> 'bt
 
-interactive_rw reduce_substl_step {| reduce |} :
+(*
+ * XXX: JYH: the following rule is also denormalization rules.
+ *)
+interactive_rw reduce_substl_step :
    substl{'bt; 'h :: 't} <--> substl{subst{'bt;'h}; 't}
 
 interactive_rw reduce_substl_step1 {| reduce |} :
@@ -194,6 +202,11 @@ interactive_rw unfold_bindnsub :
 (*
  * Additional theorems for subst association.
  *)
+interactive_rw subst_to_substl :
+   subst{'e; 'x}
+   <-->
+   substl{'e; cons{'x; nil}}
+
 interactive_rw bindn_to_list_of_fun :
    'n in nat -->
    bind{'n; x. 'e['x]}
@@ -265,6 +278,14 @@ let bindn_opname = opname_of_term bindn_term
 let is_bindn_term = is_dep0_dep1_term bindn_opname
 let dest_bindn_term = dest_dep0_dep1_term bindn_opname
 let mk_bindn_term = mk_dep0_dep1_term bindn_opname
+
+let reduceBTermC =
+   repeatC (higherC reduce_bindn_up
+            thenC higherC reduce_substl_step
+            thenC reduceC)
+
+let reduceBTermT =
+   rwAll reduceBTermC
 
 (*!
  * @docoff

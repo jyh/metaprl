@@ -115,6 +115,11 @@ define (*private*) unfold_subterms:
 
 doc <:doc< @rewrites >>
 
+(*
+ * XXX: JYH: the following 3 rules are "denormalization" rules,
+ * which causes trouble for the term normalizer.  For the moment,
+ * do not add them to the reduce resource.
+ *)
 interactive_rw reduce_mk_bterm_base :
    mk_bterm{0; 'op; 'btl} <--> mk_term{'op; 'btl }
 
@@ -130,7 +135,7 @@ let reduceBTermC =
    repeatC (higherC reduce_mk_bterm_base
             thenC higherC reduce_mk_bterm_step
             thenC higherC reduce_mk_bterm_empty
-            thenC reduceC)
+            thenC Itt_hoas_vector.reduceBTermC)
 
 let reduceBTermT =
    rwAll reduceBTermC

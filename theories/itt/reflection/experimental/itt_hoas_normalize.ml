@@ -194,6 +194,8 @@ doc <:doc<
    @begin[enumerate]
    @item{{Eliminate all << mk_term{'op; 'subterms} >>.}}
    @item{{Eliminate all << bind{x. 'e['x]} >>.}}
+   @item{{Coalesce binds.}}
+   @item{{Push binds down.}}
    @end[enumerate]
    @docoff
 >>
@@ -203,7 +205,8 @@ doc <:doc<
  *)
 let pre_normalize_term =
    sweepUpC fold_mk_term
-   thenC sweepUpC bindone_into_bind
+   thenC sweepUpC bind_into_bindone
+   thenC sweepUpC subst_to_substl
 
 (*
  * Push the bind into a list of concrete subterms.

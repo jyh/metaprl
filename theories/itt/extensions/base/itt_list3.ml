@@ -511,6 +511,27 @@ interactive_rw reduce_last_suffix {| reduce |} :
    nil
 
 (************************************************************************
+ * List_of_fun normalization.
+ *)
+interactive_rw nth_prefix_lof :
+   'n in nat -->
+   'm in nat -->
+   'm <= 'n -->
+   nth_prefix{list_of_fun{i. 'f['i]; 'n}; 'm}
+   <-->
+   list_of_fun{i. 'f['i]; 'm}
+
+interactive_rw nth_suffix_lof :
+   'n in nat -->
+   'm in nat -->
+   'm <= 'n -->
+   nth_suffix{list_of_fun{i. 'f['i]; 'n}; 'm}
+   <-->
+   list_of_fun{i. 'f['i +@ 'm]; 'n -@ 'm}
+
+let normalizeListOfFunC = idC
+
+(************************************************************************
  * Tactics.
  *)
 doc docoff

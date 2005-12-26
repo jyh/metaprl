@@ -272,6 +272,12 @@ let is_bindn_term = is_dep0_dep1_term bindn_opname
 let dest_bindn_term = dest_dep0_dep1_term bindn_opname
 let mk_bindn_term = mk_dep0_dep1_term bindn_opname
 
+let substl_term = << substl{'e1; 'e2} >>
+let substl_opname = opname_of_term substl_term
+let is_substl_term = is_dep0_dep0_term substl_opname
+let dest_substl_term = dest_dep0_dep0_term substl_opname
+let mk_substl_term = mk_dep0_dep0_term substl_opname
+
 let reduceBTermC =
    repeatC (higherC reduce_bindn_up
             thenC higherC reduce_substl_step

@@ -53,6 +53,7 @@ doc docoff
 
 open Lm_printf
 open Basic_tactics
+open Itt_list3
 open Itt_vec_list1
 open Itt_hoas_base
 open Itt_hoas_vector
@@ -219,6 +220,32 @@ let push_bind_into_concrete_subterms =
    addrC [Subterm 2; Subterm 3] vlist_of_concrete_listC
    thenC reduce_bindn_of_mk_bterm
    thenC (addrC [Subterm 3] (termC reduce_subterms_bindn))
+
+(*
+ * Coalesce nested substl terms.  We use substl_substl_lof,
+ * which requires that the subterms be in list_of_fun form,
+ * so process is:
+ *    1. Normalize to list_of_fun
+ *    2. Coalesce
+ *)
+let is_nested_substl t =
+   if is_substl_term t then
+      let t, _ = dest_substl_term t in
+         is_substl_term t
+   else
+      false
+
+let coalesce_substl t =
+   if is_nested_substl t then
+      addrC [Subterm 2] normalizeListOfFunC
+      thenC addrC [Subterm 1; Subterm 2] normalizeListOfFunC
+      thenC substl_substl_lof
+   else
+      raise (RefineError ("coalesce_substl", StringTermError ("not a nested substl", t)))
+
+let coalesceSubstLC =
+   sweepDnC bindn_to_list_of_fun
+   thenC sweepDnC (termC coalesce_substl)
 
 (*
  * Once the pre-normalization step is done,

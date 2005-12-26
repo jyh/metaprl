@@ -66,6 +66,8 @@ topval fold_guard : conv
 topval splitConsT : term -> tactic
 topval splitConsFunT : term -> tactic
 
+topval normalizeListOfFunC : conv
+
 (*!
  * @docoff
  *

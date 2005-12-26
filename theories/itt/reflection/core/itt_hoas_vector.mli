@@ -54,10 +54,16 @@ val subst_to_substl : conv
 val bindone_into_bind : conv
 val bind_into_bindone : conv
 val coalesce_bindn_bindn : conv
+val substl_substl_lof : conv
+val bindn_to_list_of_fun : conv
 
 val is_bindn_term : term -> bool
 val mk_bindn_term : var -> term -> term -> term
 val dest_bindn_term : term -> var * term * term
+
+val is_substl_term : term -> bool
+val dest_substl_term : term -> term * term
+val mk_substl_term : term -> term -> term
 
 (*!
  * @docoff

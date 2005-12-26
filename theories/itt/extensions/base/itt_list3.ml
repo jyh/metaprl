@@ -184,8 +184,46 @@ interactive_rw reduce_last_suffix_list :
 
 (************************************************************************
  * List_of_fun normalization.
+ *
+ * Collect the conversions into a resource.
  *)
-interactive_rw nth_prefix_lof :
+let extract_data tbl =
+   let rw t =
+      let conv =
+         try
+            (* Find and apply the right tactic *)
+            Term_match_table.lookup tbl select_all t
+         with
+            Not_found ->
+               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
+      in
+         conv
+   in
+      termC rw
+
+let process_normalize_list_of_fun_resource_rw_annotation = redex_and_conv_of_rw_annotation "normalize_list_of_fun"
+
+(*
+ * Resource.
+ *)
+let resource (term * conv, conv) normalize_list_of_fun =
+   table_resource_info extract_data
+
+let normalizeListOfFunTopC_env e =
+   get_resource_arg (env_arg e) get_normalize_list_of_fun_resource
+
+let normalizeListOfFunTopC = funC normalizeListOfFunTopC_env
+
+let normalizeListOfFunC =
+   funC (fun e -> repeatC (higherC (normalizeListOfFunTopC_env e)))
+
+let normalizeListOfFunT =
+   rwAll normalizeListOfFunC
+
+(*
+ * Now the actual rules.
+ *)
+interactive_rw nth_prefix_lof {| normalize_list_of_fun |} :
    'n in nat -->
    'm in nat -->
    'm <= 'n -->
@@ -193,7 +231,7 @@ interactive_rw nth_prefix_lof :
    <-->
    list_of_fun{i. 'f['i]; 'm}
 
-interactive_rw nth_suffix_lof :
+interactive_rw nth_suffix_lof {| normalize_list_of_fun |} :
    'n in nat -->
    'm in nat -->
    'm <= 'n -->
@@ -201,7 +239,37 @@ interactive_rw nth_suffix_lof :
    <-->
    list_of_fun{i. 'f['i +@ 'm]; 'n -@ 'm}
 
-let normalizeListOfFunC = idC
+interactive_rw hd_lof {| normalize_list_of_fun |} :
+   'n in nat -->
+   not{'n = 0 in nat} -->
+   hd{list_of_fun{i. 'f['i]; 'n}}
+   <-->
+   'f[0]
+
+interactive_rw tl_lof {| normalize_list_of_fun |} :
+   'n in nat -->
+   not{'n = 0 in nat} -->
+   tl{list_of_fun{i. 'f['i]; 'n}}
+   <-->
+   list_of_fun{i. 'f['i +@ 1]; 'n -@ 1}
+
+interactive_rw singleton_lof {| normalize_list_of_fun |} :
+   cons{'e; nil}
+   <-->
+   list_of_fun{i. 'e; 1}
+
+interactive_rw cons_lof {| normalize_list_of_fun |} :
+   'n in nat -->
+   cons{'e; list_of_fun{i. 'f['i]; 'n}}
+   <-->
+   list_of_fun{i. if beq_int{'i; 0} then 'e else 'f['i -@ 1]; 'n +@ 1}
+
+interactive_rw append_lof {| normalize_list_of_fun |} :
+   'm in nat -->
+   'n in nat -->
+   append{list_of_fun{k. 'f['k]; 'm}; list_of_fun{k. 'g['k]; 'n}}
+   <-->
+   list_of_fun{k. if lt_bool{'k; 'm} then 'f['k] else 'g['k -@ 'm]; 'm +@ 'n}
 
 (*!
  * @docoff

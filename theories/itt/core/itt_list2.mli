@@ -172,6 +172,10 @@ val is_append_term : term -> bool
 val mk_append_term : term -> term -> term
 val dest_append : term -> term * term
 
+val is_list_of_fun_term : term -> bool
+val mk_list_of_fun_term : var -> term -> term -> term
+val dest_list_of_fun_term : term -> var * term * term
+
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)

@@ -39,7 +39,13 @@ declare nth_suffix{'l; 'i}
 (************************************************************************
  * Tactics.
  *)
+resource (term * conv, conv) normalize_list_of_fun
+
+val process_normalize_list_of_fun_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
+
+topval normalizeListOfFunTopC : conv
 topval normalizeListOfFunC : conv
+topval normalizeListOfFunT : tactic
 
 (*!
  * @docoff

@@ -1,5 +1,5 @@
 (*
- * Additional well-formedness rule for bterms.
+ * Define a custom list_of_fun for normalization purposes.
  *
  * ----------------------------------------------------------------
  *
@@ -24,26 +24,21 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_bterm
+extends Itt_list3
+extends Itt_hoas_vector
 
 open Basic_tactics
 
-(*
- * Normalize the term.
+(************************************************************************
+ * Tactics.
  *)
-topval normalizeBTermC : conv
+resource (term * conv, conv) normalize_lof
 
-(*
- * Private conversions.
- *)
-topval fold_subterms_length : conv
-topval fold_subterms_nth : conv
-topval fold_subterms_bind : conv
+val process_normalize_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
 
-(*
- * Debugging.
- *)
-topval coalesceSubstLC : conv
+topval normalizeLofTopC : conv
+topval normalizeLofC : conv
+topval normalizeLofT : tactic
 
 (*!
  * @docoff

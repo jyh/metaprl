@@ -397,7 +397,10 @@ dform fold_left_df : except_mode[src] :: fold_left{'f; 'v; 'l} =
 dform length_df : except_mode[src] :: length{'l} =
    `"|" slot{'l} `"|"
 
-dform nth_df : except_mode[src] :: nth{'l; 'i} =
+dform nth_df1 : parens :: "prec"[prec_apply] :: except_mode[src] :: except_mode[html] :: nth{'l; 'i} =
+    slot{'l} `"_" slot{'i}
+
+dform nth_df2 : parens :: "prec"[prec_apply] :: mode[html] :: nth{'l; 'i} =
     slot{'l} sub{slot{'i}}
 
 dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
@@ -1662,6 +1665,12 @@ interactive list_sqsimple {| intro []; sqsimple |} :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
+
+let list_of_fun_term = << list_of_fun{i. 'e['i]; 'n} >>
+let list_of_fun_opname = opname_of_term list_of_fun_term
+let is_list_of_fun_term = is_dep1_dep0_term list_of_fun_opname
+let dest_list_of_fun_term = dest_dep1_dep0_term list_of_fun_opname
+let mk_list_of_fun_term = mk_dep1_dep0_term list_of_fun_opname
 
 let samesetSymT = sameset_sym
 let samesetTransT = sameset_trans

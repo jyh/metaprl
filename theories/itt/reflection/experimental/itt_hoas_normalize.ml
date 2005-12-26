@@ -53,6 +53,7 @@ doc docoff
 
 open Lm_printf
 open Basic_tactics
+open Itt_list2
 open Itt_list3
 open Itt_vec_list1
 open Itt_hoas_base
@@ -188,6 +189,32 @@ interactive_rw reduce_bindn_of_mk_bterm :
    mk_bterm{'n +@ 'i; 'op; subterms_bind{bind{'i; x. mk_terms{vlist{| <J['x]> |}}}}}
 
 (************************************************************************
+ * Normalization for list_of_fun.
+ *)
+doc <:doc<
+   We use << list_of_fun{i. 'f['i]; 'n} >> to normalize nested substitutions.
+   We define a stylized version << lof{i. 'f['i]; 'n} >> to make the work easier.
+>>
+define unfold_bindN : bindn{'n; x. 'e['x]} <-->
+   bind{'n; x. 'e['x]}
+
+define unfold_lof : lof{i. 'f['i]; 'n} <-->
+   list_of_fun{i. 'f['i]; 'n}
+
+doc <:doc<
+   In the stylized version << lof{i. 'f['i]; 'n} >>, define some expressions
+   for << 'f['i] >>.
+>>
+define unfold_lof_nth : lof_nth{'x; 'i} <-->
+   nth{'x; 'i}
+
+interactive_rw bindn_to_lof :
+   'n in nat -->
+   bind{'n; x. 'e['x]}
+   <-->
+   bindn{'n; x. 'e[lof{i. lof_nth{'x; 'i}; 'n}]}
+
+(************************************************************************
  * Tactics.
  *)
 doc <:doc<
@@ -240,6 +267,7 @@ let coalesce_substl t =
       addrC [Subterm 2] normalizeListOfFunC
       thenC addrC [Subterm 1; Subterm 2] normalizeListOfFunC
       thenC substl_substl_lof
+      thenC addrC [Subterm 2] normalizeListOfFunC
    else
       raise (RefineError ("coalesce_substl", StringTermError ("not a nested substl", t)))
 
@@ -268,6 +296,7 @@ let rec normalize_bterm t =
 let normalizeBTermC =
    pre_normalize_term
    thenC (termC normalize_bterm)
+   thenC coalesceSubstLC
 
 (*!
  * @docoff

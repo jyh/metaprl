@@ -260,7 +260,7 @@ interactive vflatten_hyp_concl_wf {| intro [] |} : <:xrule<
 interactive vflatten_hyp_left_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- "vlist"{| <K> |} IN list{"list"} -->
    "wf" : <H> >- A IN CVar{length{"vflatten"{| <K> |}}} -->
-   "wf" : <H> >- "vflatten"{| <J["it"]> |} IN CVar{length{"vflatten"{| <K>; x: A |}}} -->
+   "wf" : <H> >- "vflatten"{| <J[it]> |} IN CVar{length{"vflatten"{| <K>; x: A |}}} -->
    <H> >- "vflatten"{| x: A; <J[x]> |} IN CVar{length{"vflatten"{| <K> |}}}
 >>
 

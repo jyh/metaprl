@@ -246,13 +246,6 @@ interactive_rw substl_substl_lof:
    <-->
    substl{'e; append{list_of_fun{x. 'f['x]; 'm}; list_of_fun{x. 'g['x]; 'n}}}
 
-interactive_rw append_of_substl_substl Perv!bind{x. 'S['x]} 'e :
-   'n in nat -->
-   'm in nat -->
-   bind{'n; x. bind{'m; y. 'S[substl{substl{'e; 'x}; 'y}]}}
-   <-->
-   bind{'n; x. bind{'m; y. 'S[substl{'e; append{'x; 'y}}]}}
-
 doc docoff
 
 dform bind_df : "prec"[prec_apply] :: mode[prl] :: bind{'n; x.'t} =

@@ -209,6 +209,7 @@ declare prec_apply     : Precedence
 declare prec_not       : Precedence
 declare prec_rel       : Precedence
 declare prec_cons      : Precedence
+declare prec_squote    : Precedence
 
 lex_prec right    [prec_mimplies] > prec_min
 lex_prec right    [prec_miff] > prec_mimplies
@@ -232,6 +233,7 @@ lex_prec left     [prec_mul] > prec_add
 lex_prec left     [prec_band] > prec_mul
 lex_prec left     [prec_apply] > prec_band
 lex_prec right    [prec_not] > prec_apply
+lex_prec nonassoc [prec_squote] > prec_not
 
 lex_prec right    [tok_longrightarrow] = prec_mimplies
 lex_prec right    [tok_longleftrightarrow] = prec_miff
@@ -246,6 +248,7 @@ lex_prec left     [tok_at] = prec_apply
 lex_prec right    [tok_colon_colon] = prec_cons
 lex_prec nonassoc [tok_tilde; tok_dot; tok_hash; tok_squote; tok_dollar] = prec_not
 lex_prec right    [tok_pipe] = prec_let
+lex_prec nonassoc [tok_squote] = prec_squote
 
 (************************************************
  * Utilities.
@@ -300,7 +303,7 @@ declare xterm_so_inner_args{'l : Dform} : Nonterminal
 declare xterm_so_nonempty_args{next : Dform. 'l : Dform} : Nonterminal
 
 (* Second-order vars *)
-production xterm_sovar{'v} <--
+production xterm_sovar{xvar[v:s]} <--
    tok_id[v:s]
 
 production xterm_sovar{parsed_sovar[v:s]{xcons{parsed_var["!!"]; xnil}; 'args}} <--
@@ -308,6 +311,15 @@ production xterm_sovar{parsed_sovar[v:s]{xcons{parsed_var["!!"]; xnil}; 'args}} 
 
 production xterm_sovar{parsed_sovar[v:s]{'contexts; 'args}} <--
    tok_id[v:s]; xterm_contexts{'contexts}; xterm_opt_so_args{'args}
+
+production xterm_sovar{'v} <--
+   tok_squote; tok_id[v:s]
+
+production xterm_sovar{parsed_sovar[v:s]{xcons{parsed_var["!!"]; xnil}; 'args}} <--
+   tok_squote; tok_id[v:s]; xterm_so_args{'args}
+
+production xterm_sovar{parsed_sovar[v:s]{'contexts; 'args}} <--
+   tok_squote; tok_id[v:s]; xterm_contexts{'contexts}; xterm_opt_so_args{'args}
 
 production xterm_contexts{'contexts} <--
    tok_left_context; xterm_inner_contexts{'contexts}; tok_right_context

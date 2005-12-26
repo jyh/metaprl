@@ -40,6 +40,14 @@ topval normalizeLofTopC : conv
 topval normalizeLofC : conv
 topval normalizeLofT : tactic
 
+resource (term * conv, conv) reduce_lof
+
+val process_reduce_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
+
+topval reduceLofTopC : conv
+topval reduceLofC : conv
+topval reduceLofT : tactic
+
 (*!
  * @docoff
  *

@@ -133,7 +133,7 @@ interactive_rw reduce_hyps_nth_bind {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw reduce_hyps_flatten_core {| reduce |} : <:xrewrite<
-   e IN "list" -->
+   e in list -->
    hyps_flatten{mk_core{e}}
    <-->
    e

@@ -271,6 +271,9 @@ production xterm_term{'t1 = 't2 in 't3} %prec prec_equal <--
 production xterm_term{'t1 = 't1 in 't2} <--
    xterm_term{'t1}; tok_IN; xterm_term{'t2}
 
+production xterm_term{'t1 = 't1 in 't2} <--
+   xterm_term{'t1}; tok_in; xterm_term{'t2}
+
 production xterm_term{'t Type} <--
    xterm_term{'t}; tok_Type
 

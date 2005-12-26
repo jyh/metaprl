@@ -31,15 +31,34 @@ extends Itt_list2
 open Basic_tactics
 
 (*
- * Prefix and suffix operations.
+ * The type containing nil
  *)
-declare nth_prefix{'l; 'i}
-declare nth_suffix{'l; 'i}
+declare Nil
+
+(*
+ * The type containing << cons{'e1; 'e2} >> for any << 'e1 >> and
+ * << 'e2 >>.
+ *)
+declare Cons
+
+(*
+ * The type of conses that are nested correctly for depth << 'n >>.
+ *)
+declare Cons{'n}
+
+(*
+ * The type of lambda-expressions producing cons's.
+ *)
+declare ConsFun
+declare ConsFun{'n}
 
 (************************************************************************
  * Tactics.
  *)
-topval normalizeListOfFunC : conv
+topval fold_guard : conv
+
+topval splitConsT : term -> tactic
+topval splitConsFunT : term -> tactic
 
 (*!
  * @docoff

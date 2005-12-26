@@ -32,6 +32,7 @@ extends Itt_pairwise
 extends Itt_vec_bind
 extends Itt_match
 extends Itt_list3
+extends Itt_list_sloppy
 
 doc docoff
 

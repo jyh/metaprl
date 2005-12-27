@@ -505,11 +505,18 @@ let foldCloseC vars t =
       in
          gen_app vars (gen_lam vars)
    in
+   let rec justify vars =
+      match vars with
+         [] ->
+            idC
+       | _ :: vars ->
+            (addrC [Subterm 1] (justify vars)) thenC reduce_beta
+   in
    let fold t1 =
       if alpha_equal t1 t then
-         repeatC (foldC t_app (sweepUpC reduce_beta))
+         foldC t_app (justify vars)
       else
-         raise (RefineError ("fold_close", StringTermError ("term mismatch", t1)))
+         raise (RefineError ("foldCloseC", StringTermError ("term mismatch", t1)))
    in
       termC fold
 

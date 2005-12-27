@@ -43,129 +43,15 @@ doc <:doc<
    @end[license]
    @parents
 >>
-extends Itt_hoas_bterm
-extends Itt_hoas_util
 extends Itt_hoas_lof
-extends Itt_vec_list1
-extends Itt_vec_bind
-extends Itt_list3
 
 doc docoff
 
 open Lm_printf
 open Basic_tactics
-open Itt_list2
-open Itt_list3
-open Itt_vec_list1
 open Itt_hoas_lof
-open Itt_hoas_base
 open Itt_hoas_vector
 open Itt_hoas_debruijn
-open Itt_equal
-
-(************************************************************************
- * Subterm bind lists.
- *)
-doc <:doc<
-   The term << subterms_bind{'e} >> transforms a binding around a list
-   << bind{x. cons{'e1['x]; math_ldots}} >> to a list of
-   binds << cons{bind{x. 'e1['x]}; math_ldots} >>.
->>
-define unfold_subterms_length : subterms_length{'e} <--> <:xterm<
-   (fix f e -> weak_dest_terms{e; f subst{e; "it"}; l. length{l}}) e
->>
-
-define unfold_subterms_nth : subterms_nth{'e; 'i} <--> <:xterm<
-   (fix f e -> weak_dest_terms{e; bind{x. f subst{e; x}}; l. nth{l; i}}) e
->>
-
-define unfold_subterms_bind : subterms_bind{'e} <--> <:xterm<
-   list_of_fun{k. subterms_nth{e; k}; subterms_length{e}}
->>
-
-doc docoff
-
-let fold_subterms_length = makeFoldC << subterms_length{'e} >> unfold_subterms_length
-let fold_subterms_nth = makeFoldC << subterms_nth{'e; 'i} >> unfold_subterms_nth
-let fold_subterms_bind = makeFoldC << subterms_bind{'e} >> unfold_subterms_bind
-
-(************************************************
- * Term reductions.
- *)
-interactive_rw reduce_subterms_bind {| reduce |} : <:xrewrite<
-   subterms_length{bind{x. e[x]}}
-   <-->
-   subterms_length{e["it"]}
->>
-
-interactive_rw reduce_subterms_terms {| reduce |} : <:xrewrite<
-   subterms_length{mk_terms{e}}
-   <-->
-   length{e}
->>
-
-interactive_rw reduce_subterms_bindn {| reduce |} : <:xrewrite<
-   n IN "nat" -->
-   subterms_length{lof_bind{n; x. mk_terms{"vlist"{| <J[x]> |}}}}
-   <-->
-   length{"vlist"{| <J["it"]> |}}
->>
-
-interactive_rw reduce_subterms_nth_bind {| reduce |} : <:xrewrite<
-   subterms_nth{bind{x. e[x]}; i}
-   <-->
-   bind{x. subterms_nth{e[x]; i}}
->>
-
-interactive_rw reduce_subterms_nth_bindn {| reduce |} : <:xrewrite<
-   n IN "nat" -->
-   subterms_nth{lof_bind{n; x. e[x]}; i}
-   <-->
-   lof_bind{n; x. subterms_nth{e[x]; i}}
->>
-
-interactive_rw reduce_subterms_nth_mk_terms {| reduce |} : <:xrewrite<
-   subterms_nth{mk_terms{e}; i}
-   <-->
-   nth{e; i}
->>
-
-(************************************************
- * Step-by-step reductions.
- *)
-doc <:doc<
-   For concrete << subterms_bind{bind{x. mk_terms{vlist{| 'e_1['x]; math_ldots; 'e_n['x] |}}}} >>,
-   define a step-by-step reduction.
->>
-interactive_rw reduce_subterms_bindn_nil {| reduce |} : <:xrewrite<
-   n IN "nat" -->
-   subterms_bind{lof_bind{n; x. mk_terms{"vlist"{||}}}}
-   <-->
-   []
->>
-
-interactive_rw reduce_subterms_bindn_cons {| reduce |} : <:xrewrite<
-   n IN "nat" -->
-   subterms_bind{lof_bind{n; x. mk_terms{"vlist"{| A[x]; <J[x]> |}}}}
-   <-->
-   lof_bind{n; x. A[x]} :: subterms_bind{lof_bind{n; x. mk_terms{"vlist"{| <J[x]> |}}}}
->>
-
-(************************************************************************
- * The bind pushing theorems.
- *)
-interactive_rw reduce_list_of_fun_of_bindn_vlist {| reduce |} :
-   'n in nat -->
-   list_of_fun{i. lof_bind{'n; x. nth{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
-   <-->
-   subterms_bind{lof_bind{'n; x. mk_terms{vlist{| <J['x]> |}}}}
-
-interactive_rw reduce_bindn_of_mk_bterm :
-   'i in nat -->
-   'n in nat -->
-   lof_bind{'i; x. mk_bterm{'n; 'op; vlist{| <J['x]> |}}}
-   <-->
-   mk_bterm{'n +@ 'i; 'op; subterms_bind{lof_bind{'i; x. mk_terms{vlist{| <J['x]> |}}}}}
 
 (************************************************************************
  * Tactics.
@@ -190,66 +76,15 @@ let pre_normalize_term =
    thenC sweepUpC bindn_to_lof_bind
    thenC sweepUpC subst_to_substl
 
-(*
- * Push the bind into a list of concrete subterms.
- *)
-let rec reduce_subterms_bindn t =
-   (reduce_subterms_bindn_cons thenC addrC [Subterm 2] (termC reduce_subterms_bindn))
-   orelseC reduce_subterms_bindn_nil
-
-let push_bind_into_concrete_subterms =
-   addrC [Subterm 2; Subterm 3] vlist_of_concrete_listC
-   thenC reduce_bindn_of_mk_bterm
-   thenC (addrC [Subterm 3] (termC reduce_subterms_bindn))
-
-(*
- * Coalesce nested substl terms.  We use substl_substl_lof,
- * which requires that the subterms be in list_of_fun form,
- * so process is:
- *    1. Normalize to list_of_fun
- *    2. Coalesce
- *)
-let is_nested_substl t =
-   if is_substl_term t then
-      let t, _ = dest_substl_term t in
-         is_substl_term t
-   else
-      false
-
-let coalesce_substl t =
-   if is_nested_substl t then
-      addrC [Subterm 2] normalizeLofC
-      thenC addrC [Subterm 1; Subterm 2] normalizeLofC
-      thenC substl_substl_lof2
-      thenC addrC [Subterm 2] normalizeLofC
-   else
-      raise (RefineError ("coalesce_substl", StringTermError ("not a nested substl", t)))
-
-let coalesceSubstLC =
-   sweepDnC (termC coalesce_substl)
-
-(*
- * Once the pre-normalization step is done,
- * the term we are looking at should be either
- *    1. A bindn term
- *    2. A mk_bterm term
- *
- * In the first case, coalesce all nested binds,
- * then push the binds into the subterms.
- *)
-let rec normalize_bterm t =
-   if is_lof_bind_term t then
-      repeatC coalesce_lof_bind
-      thenC tryC (push_bind_into_concrete_subterms thenC termC normalize_bterm)
-   else if is_mk_bterm_term t then
-      addrC [Subterm 3] (higherC (termC normalize_bterm))
-   else
-      raise (RefineError ("normalize_bterm", StringTermError ("unknown term", t)))
-
-let normalizeBTermC =
+let normalize_bterm_conv =
    pre_normalize_term
-   thenC (termC normalize_bterm)
-   thenC coalesceSubstLC
+   thenC sweepUpC coalesce_lof_bind
+   thenC normalizeLofC
+   thenC higherC reduce_lof_bind_mk_bterm
+   thenC reduceLofC
+   thenC sweepDnC lofBindElimC
+
+let normalizeBTermC = repeatC normalize_bterm_conv
 
 (*!
  * @docoff

@@ -37,11 +37,13 @@ doc <:doc<
 >>
 extends Itt_hoas_normalize
 extends Itt_hoas_lof
+extends Itt_int_arith
 
 doc docoff
 
 open Lm_printf
 open Basic_tactics
+open Itt_int_arith
 open Itt_hoas_normalize
 open Itt_hoas_debruijn
 open Itt_hoas_vector
@@ -84,7 +86,10 @@ let resource reduce +=
  *)
 
 let proofRuleWFT =
-   repeatT (rwh normalizeBTermC 0 thenT autoT thenT rw reduceC 0)
+   repeatT (rwh normalizeBTermC 0
+            thenT autoT
+            thenT rw reduceC 0
+            thenT tryT arithT)
 
 (************************************************************************
  * Depth wf.

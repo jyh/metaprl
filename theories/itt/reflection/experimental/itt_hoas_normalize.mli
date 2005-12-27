@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_bterm
+extends Itt_hoas_lof
 
 open Basic_tactics
 
@@ -32,19 +32,6 @@ open Basic_tactics
  * Normalize the term.
  *)
 topval normalizeBTermC : conv
-
-(*
- * Private conversions.
- *)
-topval fold_subterms_length : conv
-topval fold_subterms_nth : conv
-topval fold_subterms_bind : conv
-
-(*
- * Debugging.
- *)
-topval pre_normalize_term : conv
-topval coalesceSubstLC : conv
 
 (*!
  * @docoff

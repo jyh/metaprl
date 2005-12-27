@@ -453,7 +453,7 @@ let genSOVarT = argfunT (fun s p ->
       raise (RefineError("Itt_subst2.genSOVarT", StringTermError("not a squiggle term", t)));
    let a, b = dest_squiggle t in
    let v = Lm_symbol.add s in
-   let v' = maybe_new_var_set v (SymbolSet.add (free_vars_set t) v) in
+   let v' = maybe_new_var_set v (all_vars t) in
    let t' = mk_var_term v' in
    let expand = ref None in
    let map t =

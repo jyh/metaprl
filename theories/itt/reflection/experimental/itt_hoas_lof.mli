@@ -30,7 +30,7 @@ extends Itt_hoas_vector
 open Basic_tactics
 
 (************************************************************************
- * Tactics.
+ * Resources.
  *)
 resource (term * conv, conv) normalize_lof
 
@@ -47,6 +47,14 @@ val process_reduce_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_a
 topval reduceLofTopC : conv
 topval reduceLofC : conv
 topval reduceLofT : tactic
+
+(************************************************************************
+ * Tactics.
+ *)
+val bindn_to_lof_bind : conv
+val coalesce_lof_bind : conv
+val substl_substl_lof2 : conv
+topval fold_lof_bind : conv
 
 (*!
  * @docoff

@@ -45,6 +45,7 @@ doc <:doc<
 >>
 extends Itt_hoas_bterm
 extends Itt_hoas_util
+extends Itt_hoas_lof
 extends Itt_vec_list1
 extends Itt_vec_bind
 extends Itt_list3
@@ -56,6 +57,7 @@ open Basic_tactics
 open Itt_list2
 open Itt_list3
 open Itt_vec_list1
+open Itt_hoas_lof
 open Itt_hoas_base
 open Itt_hoas_vector
 open Itt_hoas_debruijn
@@ -135,18 +137,6 @@ doc <:doc<
    For concrete << subterms_bind{bind{x. mk_terms{vlist{| 'e_1['x]; math_ldots; 'e_n['x] |}}}} >>,
    define a step-by-step reduction.
 >>
-interactive_rw reduce_subterms_bind1_nil {| reduce |} : <:xrewrite<
-   subterms_bind{bind{x. mk_terms{"vlist"{||}}}}
-   <-->
-   []
->>
-
-interactive_rw reduce_subterms_bind1_cons {| reduce |} : <:xrewrite<
-   subterms_bind{bind{x. mk_terms{"vlist"{| A[x]; <J[x]> |}}}}
-   <-->
-   bind{x. A[x]} :: subterms_bind{bind{x. mk_terms{"vlist"{| <J[x]> |}}}}
->>
-
 interactive_rw reduce_subterms_bindn_nil {| reduce |} : <:xrewrite<
    n IN "nat" -->
    subterms_bind{bind{n; x. mk_terms{"vlist"{||}}}}
@@ -164,22 +154,11 @@ interactive_rw reduce_subterms_bindn_cons {| reduce |} : <:xrewrite<
 (************************************************************************
  * The bind pushing theorems.
  *)
-interactive_rw reduce_list_of_fun_of_bind_vlist {| reduce |} :
-   list_of_fun{i. bind{x. nth{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
-   <-->
-   subterms_bind{bind{x. mk_terms{vlist{| <J['x]> |}}}}
-
 interactive_rw reduce_list_of_fun_of_bindn_vlist {| reduce |} :
    'n in nat -->
    list_of_fun{i. bind{'n; x. nth{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
    <-->
    subterms_bind{bind{'n; x. mk_terms{vlist{| <J['x]> |}}}}
-
-interactive_rw reduce_bind_of_mk_bterm :
-   'n in nat -->
-   bind{x. mk_bterm{'n; 'op; vlist{| <J['x]> |}}}
-   <-->
-   mk_bterm{'n +@ 1; 'op; subterms_bind{bind{x. mk_terms{vlist{| <J['x]> |}}}}}
 
 interactive_rw reduce_bindn_of_mk_bterm :
    'i in nat -->
@@ -187,32 +166,6 @@ interactive_rw reduce_bindn_of_mk_bterm :
    bind{'i; x. mk_bterm{'n; 'op; vlist{| <J['x]> |}}}
    <-->
    mk_bterm{'n +@ 'i; 'op; subterms_bind{bind{'i; x. mk_terms{vlist{| <J['x]> |}}}}}
-
-(************************************************************************
- * Normalization for list_of_fun.
- *)
-doc <:doc<
-   We use << list_of_fun{i. 'f['i]; 'n} >> to normalize nested substitutions.
-   We define a stylized version << lof{i. 'f['i]; 'n} >> to make the work easier.
->>
-define unfold_bindN : bindn{'n; x. 'e['x]} <-->
-   bind{'n; x. 'e['x]}
-
-define unfold_lof : lof{i. 'f['i]; 'n} <-->
-   list_of_fun{i. 'f['i]; 'n}
-
-doc <:doc<
-   In the stylized version << lof{i. 'f['i]; 'n} >>, define some expressions
-   for << 'f['i] >>.
->>
-define unfold_lof_nth : lof_nth{'x; 'i} <-->
-   nth{'x; 'i}
-
-interactive_rw bindn_to_lof :
-   'n in nat -->
-   bind{'n; x. 'e['x]}
-   <-->
-   bindn{'n; x. 'e[lof{i. lof_nth{'x; 'i}; 'n}]}
 
 (************************************************************************
  * Tactics.
@@ -234,6 +187,7 @@ doc <:doc<
 let pre_normalize_term =
    sweepUpC fold_mk_term
    thenC sweepUpC bind_into_bindone
+   thenC sweepUpC fold_lof_bind
    thenC sweepUpC subst_to_substl
 
 (*
@@ -296,7 +250,6 @@ let rec normalize_bterm t =
 let normalizeBTermC =
    pre_normalize_term
    thenC (termC normalize_bterm)
-   thenC coalesceSubstLC
 
 (*!
  * @docoff

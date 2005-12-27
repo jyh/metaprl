@@ -277,6 +277,16 @@ interactive_rw substl_substl_lof2 :
    <-->
    substl{'e; lof{i. lof_append{i. 'f['i]; i. 'g['i]; 'i; 'm; 'n}; 'm +@ 'n}}
 
+(************************************************************************
+ * Standard facts.
+ *)
+
+
+(************************************************************************
+ * Tactics.
+ *)
+let fold_lof_bind = makeFoldC << lof_bind{'n; x. 'e['x]} >> unfold_lof_bind
+
 (*!
  * @docoff
  *

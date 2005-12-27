@@ -6,6 +6,7 @@ THEORYDESCR = A naive POPLmark solution
 
 THEORY_DEPS[] +=
     itt/core
+    itt/extensions/base
     itt/reflection/core
     itt/reflection/experimental
 

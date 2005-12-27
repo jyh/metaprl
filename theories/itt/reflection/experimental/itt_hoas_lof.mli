@@ -25,9 +25,18 @@
  * @end[license]
  *)
 extends Itt_list3
-extends Itt_hoas_vector
+extends Itt_hoas_bterm
 
 open Basic_tactics
+
+(************************************************************************
+ * Terms.
+ *)
+declare lof{i. 'f['i]; 'n}
+
+declare lof_nth{'x; 'i}
+
+declare lof_bind{'n; x. 'e['x]}
 
 (************************************************************************
  * Resources.
@@ -51,10 +60,20 @@ topval reduceLofT : tactic
 (************************************************************************
  * Tactics.
  *)
+val bind_to_lof_bind : conv
 val bindn_to_lof_bind : conv
 val coalesce_lof_bind : conv
 val substl_substl_lof2 : conv
 topval fold_lof_bind : conv
+
+topval lofBindElimC : conv
+
+(************************************************************************
+ * Terms.
+ *)
+val is_lof_bind_term : term -> bool
+val mk_lof_bind_term : var -> term -> term -> term
+val dest_lof_bind_term : term -> var * term * term
 
 (*!
  * @docoff

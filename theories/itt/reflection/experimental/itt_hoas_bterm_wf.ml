@@ -36,6 +36,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_normalize
+extends Itt_hoas_lof
 
 doc docoff
 
@@ -45,6 +46,7 @@ open Itt_hoas_normalize
 open Itt_hoas_debruijn
 open Itt_hoas_vector
 open Itt_hoas_bterm
+open Itt_hoas_lof
 open Itt_equal
 
 (************************************************************************
@@ -58,7 +60,7 @@ doc <:doc<
 let bind_wf p =
    let t = concl p in
    let _, t1, t2 = dest_equal t in
-      if is_bindn_term t1 && is_bindn_term t2 then
+      if is_lof_bind_term t1 && is_lof_bind_term t2 then
          rw (higherC normalizeBTermC) 0
          thenT (mk_bterm_wf orelseT mk_bterm_wf2)
       else
@@ -69,10 +71,8 @@ let bindWFT = funT bind_wf
 let bind_wf = wrap_intro bindWFT
 
 let resource intro +=
-   [<< bind{x. 'e['x]} in BTerm >>, bind_wf;
-    << bind{'n; x. 'e['x]} in BTerm >>, bind_wf;
-    << bind{x. 'e['x]} in BTerm{'m} >>, bind_wf;
-    << bind{'n; x. 'e['x]} in BTerm{'m} >>, bind_wf]
+   [<< lof_bind{'n; x. 'e['x]} in BTerm >>, bind_wf;
+    << lof_bind{'n; x. 'e['x]} in BTerm{'m} >>, bind_wf]
 
 (*
  * Reduce a depth term.

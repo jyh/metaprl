@@ -43,6 +43,7 @@ topval fold_subterms_bind : conv
 (*
  * Debugging.
  *)
+topval pre_normalize_term : conv
 topval coalesceSubstLC : conv
 
 (*!

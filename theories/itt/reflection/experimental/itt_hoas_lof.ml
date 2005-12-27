@@ -36,7 +36,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_list3
-extends Itt_hoas_vector
+extends Itt_hoas_bterm
 
 doc docoff
 
@@ -263,6 +263,11 @@ interactive_rw bindn_to_lof_bind :
    <-->
    lof_bind{'n; x. 'e[lof{i. lof_nth{'x; 'i}; 'n}]}
 
+interactive_rw bind_to_lof_bind :
+   bind{x. 'e['x]}
+   <-->
+   lof_bind{1; x. 'e[hd{'x}]}
+
 interactive_rw coalesce_lof_bind :
    'n in nat -->
    'm in nat -->
@@ -280,12 +285,79 @@ interactive_rw substl_substl_lof2 :
 (************************************************************************
  * Standard facts.
  *)
+interactive_rw lof_bind_zero {| reduce |} :
+   lof_bind{0; x. 'e['x]}
+   <-->
+   'e[nil]
 
+interactive_rw lof_bind_succ :
+   'n in nat -->
+   lof_bind{'n +@ 1; x. 'e['x]}
+   <-->
+   bind{y. lof_bind{'n; x. 'e['y :: 'x]}}
+
+interactive_rw reduce_lof_bind_right :
+   'n in nat -->
+   lof_bind{'n +@ 1; x. 'e['x]}
+   <-->
+   lof_bind{'n; x. bind{y. 'e[append{'x; cons{'y; nil}}]}}
+
+interactive_rw reduce_lof_bind_of_mk_bterm_of_list_of_fun :
+   'i in nat -->
+   'n in nat -->
+   'm in nat -->
+   lof_bind{'i; x. mk_bterm{'n; 'op; list_of_fun{y. 'f['x; 'y]; 'm}}}
+   <-->
+   mk_bterm{'n +@ 'i; 'op; list_of_fun{y. lof_bind{'i; x. 'f['x; 'y]}; 'm}}
 
 (************************************************************************
  * Tactics.
  *)
+doc docoff
+
+let lof_bind_term = << lof_bind{'n; x. 'e['x]} >>
+let lof_bind_opname = opname_of_term lof_bind_term
+let is_lof_bind_term = is_dep0_dep1_term lof_bind_opname
+let dest_lof_bind_term = dest_dep0_dep1_term lof_bind_opname
+let mk_lof_bind_term = mk_dep0_dep1_term lof_bind_opname
+
 let fold_lof_bind = makeFoldC << lof_bind{'n; x. 'e['x]} >> unfold_lof_bind
+
+let var_i = Lm_symbol.add "i"
+
+(************************************************************************
+ * High-level normalization.
+ *)
+doc docoff
+
+interactive_rw lof_bind_elim Perv!bind{x. 'e['x]} :
+   'n in nat -->
+   lof_bind{'n; x. 'e[lof{i. lof_nth{'x; 'i}; 'n}]}
+   <-->
+   lof_bind{'n; x. 'e['x]}
+
+let lof_bind_elim_conv t =
+   if is_lof_bind_term t then
+      let x, n, e = dest_lof_bind_term t in
+      let i = maybe_new_var_set var_i (free_vars_set e) in
+      let lof = <:con< lof{$i$. lof_nth{$mk_var_term x$; $mk_var_term i$}; $n$} >> in
+      let t_bind = mk_bind1_term x (var_subst e lof x) in
+         lof_bind_elim t_bind
+   else
+      raise (RefineError ("lof_bind_elim", StringTermError ("not a lof_bind term", t)))
+
+let lofBindElimC = termC lof_bind_elim_conv
+
+doc <:doc<
+   Higher-level reductions.
+>>
+interactive_rw lof_bind_eta {| reduce |} :
+   'n in nat -->
+   'e in BTerm -->
+   bdepth{'e} >= 'n -->
+   lof_bind{'n; x. substl{'e; lof{i. lof_nth{'x; 'i}; 'n}}}
+   <-->
+   'e
 
 (*!
  * @docoff

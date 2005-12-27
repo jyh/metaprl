@@ -106,7 +106,7 @@ interactive_rw reduce_subterms_terms {| reduce |} : <:xrewrite<
 
 interactive_rw reduce_subterms_bindn {| reduce |} : <:xrewrite<
    n IN "nat" -->
-   subterms_length{bind{n; x. mk_terms{"vlist"{| <J[x]> |}}}}
+   subterms_length{lof_bind{n; x. mk_terms{"vlist"{| <J[x]> |}}}}
    <-->
    length{"vlist"{| <J["it"]> |}}
 >>
@@ -119,9 +119,9 @@ interactive_rw reduce_subterms_nth_bind {| reduce |} : <:xrewrite<
 
 interactive_rw reduce_subterms_nth_bindn {| reduce |} : <:xrewrite<
    n IN "nat" -->
-   subterms_nth{bind{n; x. e[x]}; i}
+   subterms_nth{lof_bind{n; x. e[x]}; i}
    <-->
-   bind{n; x. subterms_nth{e[x]; i}}
+   lof_bind{n; x. subterms_nth{e[x]; i}}
 >>
 
 interactive_rw reduce_subterms_nth_mk_terms {| reduce |} : <:xrewrite<
@@ -139,16 +139,16 @@ doc <:doc<
 >>
 interactive_rw reduce_subterms_bindn_nil {| reduce |} : <:xrewrite<
    n IN "nat" -->
-   subterms_bind{bind{n; x. mk_terms{"vlist"{||}}}}
+   subterms_bind{lof_bind{n; x. mk_terms{"vlist"{||}}}}
    <-->
    []
 >>
 
 interactive_rw reduce_subterms_bindn_cons {| reduce |} : <:xrewrite<
    n IN "nat" -->
-   subterms_bind{bind{n; x. mk_terms{"vlist"{| A[x]; <J[x]> |}}}}
+   subterms_bind{lof_bind{n; x. mk_terms{"vlist"{| A[x]; <J[x]> |}}}}
    <-->
-   bind{n; x. A[x]} :: subterms_bind{bind{n; x. mk_terms{"vlist"{| <J[x]> |}}}}
+   lof_bind{n; x. A[x]} :: subterms_bind{lof_bind{n; x. mk_terms{"vlist"{| <J[x]> |}}}}
 >>
 
 (************************************************************************
@@ -156,16 +156,16 @@ interactive_rw reduce_subterms_bindn_cons {| reduce |} : <:xrewrite<
  *)
 interactive_rw reduce_list_of_fun_of_bindn_vlist {| reduce |} :
    'n in nat -->
-   list_of_fun{i. bind{'n; x. nth{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
+   list_of_fun{i. lof_bind{'n; x. nth{vlist{| <J['x]> |}; 'i}}; length{vlist{| <J[it]> |}}}
    <-->
-   subterms_bind{bind{'n; x. mk_terms{vlist{| <J['x]> |}}}}
+   subterms_bind{lof_bind{'n; x. mk_terms{vlist{| <J['x]> |}}}}
 
 interactive_rw reduce_bindn_of_mk_bterm :
    'i in nat -->
    'n in nat -->
-   bind{'i; x. mk_bterm{'n; 'op; vlist{| <J['x]> |}}}
+   lof_bind{'i; x. mk_bterm{'n; 'op; vlist{| <J['x]> |}}}
    <-->
-   mk_bterm{'n +@ 'i; 'op; subterms_bind{bind{'i; x. mk_terms{vlist{| <J['x]> |}}}}}
+   mk_bterm{'n +@ 'i; 'op; subterms_bind{lof_bind{'i; x. mk_terms{vlist{| <J['x]> |}}}}}
 
 (************************************************************************
  * Tactics.
@@ -186,8 +186,8 @@ doc <:doc<
  *)
 let pre_normalize_term =
    sweepUpC fold_mk_term
-   thenC sweepUpC bind_into_bindone
-   thenC sweepUpC fold_lof_bind
+   thenC sweepUpC bind_to_lof_bind
+   thenC sweepUpC bindn_to_lof_bind
    thenC sweepUpC subst_to_substl
 
 (*
@@ -218,16 +218,15 @@ let is_nested_substl t =
 
 let coalesce_substl t =
    if is_nested_substl t then
-      addrC [Subterm 2] normalizeListOfFunC
-      thenC addrC [Subterm 1; Subterm 2] normalizeListOfFunC
-      thenC substl_substl_lof
-      thenC addrC [Subterm 2] normalizeListOfFunC
+      addrC [Subterm 2] normalizeLofC
+      thenC addrC [Subterm 1; Subterm 2] normalizeLofC
+      thenC substl_substl_lof2
+      thenC addrC [Subterm 2] normalizeLofC
    else
       raise (RefineError ("coalesce_substl", StringTermError ("not a nested substl", t)))
 
 let coalesceSubstLC =
-   sweepDnC bindn_to_list_of_fun
-   thenC sweepDnC (termC coalesce_substl)
+   sweepDnC (termC coalesce_substl)
 
 (*
  * Once the pre-normalization step is done,
@@ -239,8 +238,8 @@ let coalesceSubstLC =
  * then push the binds into the subterms.
  *)
 let rec normalize_bterm t =
-   if is_bindn_term t then
-      repeatC coalesce_bindn_bindn
+   if is_lof_bind_term t then
+      repeatC coalesce_lof_bind
       thenC tryC (push_bind_into_concrete_subterms thenC termC normalize_bterm)
    else if is_mk_bterm_term t then
       addrC [Subterm 3] (higherC (termC normalize_bterm))
@@ -250,6 +249,7 @@ let rec normalize_bterm t =
 let normalizeBTermC =
    pre_normalize_term
    thenC (termC normalize_bterm)
+   thenC coalesceSubstLC
 
 (*!
  * @docoff

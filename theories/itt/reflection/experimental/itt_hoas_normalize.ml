@@ -1,5 +1,5 @@
 doc <:doc<
-   @module[Itt_hoas_normalize]
+   @module[Itt_hoas_normalize]x
 
    The @tt[Itt_hoas_normalize] module defines a normalization procedure
    for BTerms.
@@ -86,7 +86,7 @@ let push_lof_bind_mk_bterm =
 
 let normalizeBTermAuxC =
    pre_normalize_term
-   thenC repeatC push_lof_bind_mk_bterm
+   thenC repeatC (progressC push_lof_bind_mk_bterm)
    thenC post_normalize_term
 
 let normalizeBTermC =

@@ -116,7 +116,7 @@ let reduceLofT =
    rwAll reduceLofC
 
 let rippleLofC =
-   repeatC (normalizeLofC thenC reduceLofC)
+   repeatC (progressC (normalizeLofC thenC reduceLofC))
 
 (************************************************************************
  * Normalization for list_of_fun.

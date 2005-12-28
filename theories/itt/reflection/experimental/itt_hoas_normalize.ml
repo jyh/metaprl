@@ -2,14 +2,7 @@ doc <:doc<
    @module[Itt_hoas_normalize]
 
    The @tt[Itt_hoas_normalize] module defines a normalization procedure
-   for BTerms.  Here are the rules.
-
-   @begin[itemize]
-   @item{{All << mk_term{'op; 'subterms} >> are converted to << mk_bterm{0; 'op; 'subterms} >>.}}
-   @item{{All << bind{x. 'e['x]} >> are converted to << bind{1; x. 'e[cons{'x; nil}]} >>.}}
-   @item{{All nested binds are coalesced.}}
-   @item{{All binds are pushed down into subterms as far as possible.}}
-   @end[itemize]
+   for BTerms.
 
    @docoff
    ----------------------------------------------------------------
@@ -58,11 +51,13 @@ open Itt_hoas_debruijn
  *)
 doc <:doc<
    The normalization conversion performs the following steps:
+
    @begin[enumerate]
    @item{{Eliminate all << mk_term{'op; 'subterms} >>.}}
    @item{{Eliminate all << bind{x. 'e['x]} >>.}}
    @item{{Coalesce binds.}}
    @item{{Push binds down.}}
+   @item{{Coalesce substitutions.}}
    @end[enumerate]
    @docoff
 >>
@@ -76,15 +71,24 @@ let pre_normalize_term =
    thenC sweepUpC bindn_to_lof_bind
    thenC sweepUpC subst_to_substl
 
-let normalize_bterm_conv =
+(*
+ * Push a bind through a term.
+ *)
+let push_lof_bind_mk_bterm =
+   reduce_lof_bind_mk_bterm
+   thenC addrC [Subterm 3] pushLofBindC
+
+let normalizeBTermAuxC =
    pre_normalize_term
-   thenC sweepUpC coalesce_lof_bind
+   thenC sweepUpC coalesce_bindC
    thenC normalizeLofC
-   thenC higherC reduce_lof_bind_mk_bterm
+   thenC sweepDnC push_lof_bind_mk_bterm
+   thenC sweepUpC substl_substl_lof2
+
+let normalizeBTermC =
+   normalizeBTermAuxC
    thenC reduceLofC
    thenC sweepDnC lofBindElimC
-
-let normalizeBTermC = repeatC normalize_bterm_conv
 
 (*!
  * @docoff

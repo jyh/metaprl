@@ -1,9 +1,15 @@
 doc <:doc<
    @module[Itt_hoas_lof]
 
-   During normalization, we define a custom version of list_of_fun.
+   During normalization, we define a custom version of list_of_fun,
+   called << lof{i. 'f['i]; 'n} >>.  The expressions << 'f['i] >> are
+   stylizied, and include only operations that correspond directly
+   to list operations.  The style is designed carefully to make the
+   conversion reversible.  Normal lists can be converted to @tt[lof]
+   and back without change.
 
    @docoff
+
    ----------------------------------------------------------------
 
    @begin[license]
@@ -40,13 +46,21 @@ extends Itt_hoas_bterm
 
 doc docoff
 
+open Lm_printf
 open Basic_tactics
+open Simple_print
+open Itt_hoas_vector
 
 (************************************************************************
  * Resources.
  *)
 doc <:doc<
    The << lof{i. 'f['i]; 'n} >> normalizers follow the same pattern as in Itt_list3.
+
+   Invariant: the @tt[normalize_lof] tactic works using @tt[sweepUpC] and
+   @tt[reduce_lof] works using @tt[sweepDnC].  When choosing which resource
+   to use, do not break the direction of operation.
+
    @docoff
 >>
 let extract_data tbl =
@@ -77,7 +91,7 @@ let normalizeLofTopC_env e =
 let normalizeLofTopC = funC normalizeLofTopC_env
 
 let normalizeLofC =
-   funC (fun e -> repeatC (higherC (normalizeLofTopC_env e)))
+   funC (fun e -> repeatC (sweepUpC (normalizeLofTopC_env e)))
 
 let normalizeLofT =
    rwAll normalizeLofC
@@ -96,7 +110,7 @@ let reduceLofTopC_env e =
 let reduceLofTopC = funC reduceLofTopC_env
 
 let reduceLofC =
-   funC (fun e -> repeatC (higherC (reduceLofTopC_env e)))
+   funC (fun e -> repeatC (sweepDnC (reduceLofTopC_env e)))
 
 let reduceLofT =
    rwAll reduceLofC
@@ -124,9 +138,6 @@ define unfold_lof_nth : lof_nth{'x; 'i} <-->
 define unfold_lof_nil : lof_nil <-->
    it
 
-define unfold_lof_singleton : lof_singleton{'e} <-->
-   'e
-
 define unfold_lof_tl : lof_tl{i. 'f['i]; 'i} <-->
    'f['i +@ 1]
 
@@ -147,6 +158,26 @@ define unfold_lof_append : lof_append{i. 'f['i]; j. 'g['j]; 'i; 'n; 'm} <-->
       'f['i]
    else
       'g['i -@ 'n]
+
+(************************************************************************
+ * Term functions.
+ *)
+let lof_term = << lof{i. 'f['i]; 'n} >>
+let lof_opname = opname_of_term lof_term
+let is_lof_term = is_dep1_dep0_term lof_opname
+let mk_lof_term = mk_dep1_dep0_term lof_opname
+let dest_lof_term = dest_dep1_dep0_term lof_opname
+
+let lof_bind_term = << lof_bind{'n; x. 'e['x]} >>
+let lof_bind_opname = opname_of_term lof_bind_term
+let is_lof_bind_term = is_dep0_dep1_term lof_bind_opname
+let dest_lof_bind_term = dest_dep0_dep1_term lof_bind_opname
+let mk_lof_bind_term = mk_dep0_dep1_term lof_bind_opname
+
+let fold_lof_bind = makeFoldC << lof_bind{'n; x. 'e['x]} >> unfold_lof_bind
+
+let var_i = Lm_symbol.add "i"
+let var_z = Lm_symbol.add "z"
 
 (************************************************************************
  * Some standard rules.
@@ -201,11 +232,6 @@ interactive_rw tl_lof {| normalize_lof |} :
    <-->
    lof{i. lof_tl{i. 'f['i]; 'i}; 'n -@ 1}
 
-interactive_rw singleton_lof {| normalize_lof |} :
-   cons{'e; nil}
-   <-->
-   lof{i. lof_singleton{'e}; 1}
-
 interactive_rw cons_lof {| normalize_lof |} :
    'n in nat -->
    cons{'e; lof{i. 'f['i]; 'n}}
@@ -256,12 +282,6 @@ interactive_rw reduce_tl_lof {| reduce_lof |} :
    <-->
    tl{lof{i. 'f['i]; 'n +@ 1}}
 
-interactive_rw reduce_singleton_lof {| reduce_lof |} :
-   'n = 1 in nat -->
-   lof{i. lof_singleton{'e}; 'n}
-   <-->
-   cons{'e; nil}
-
 interactive_rw reduce_cons_lof {| reduce_lof |} :
    'n in nat -->
    not{'n = 0 in nat} -->
@@ -281,19 +301,13 @@ interactive_rw reduce_append_lof {| reduce_lof |} :
  * Bind-pushing.
  *)
 doc <:doc<
-   Binds migrate inwards during reductions.
+   Binds migrate inwards during reduction.
 >>
 interactive_rw lof_bind_nil {| reduce_lof |} :
    'm = 0 in nat -->
    lof{j. lof_bind{'n; x. lof_nil}; 'm}
    <-->
    lof{j. lof_nil; 'm}
-
-interactive_rw lof_bind_singleton {| reduce_lof |} :
-   'm in nat -->
-   lof{j. lof_bind{'n; x. lof_singleton{'e['x]}}; 'm}
-   <-->
-   lof{j. lof_singleton{lof_bind{'n; x. 'e['x]}}; 'm}
 
 interactive_rw lof_bind_cons {| reduce_lof |} :
    'm in nat -->
@@ -324,6 +338,125 @@ interactive_rw lof_bind_append {| reduce_lof |} :
    lof{j. lof_bind{'n; x. lof_append{i. 'f['i; 'x]; k. 'g['k; 'x]; 'j; 'p; 'q}}; 'r}
    <-->
    lof{j. lof_append{i. lof_bind{'n; x. 'f['i; 'x]}; k. lof_bind{'n; x. 'g['k; 'x]}; 'j; 'p; 'q}; 'r}
+
+doc <:doc<
+   We also want to push binds inward in the normal form.
+>>
+interactive_rw push_lof_bind_nil Perv!bind{j, z. 'S['j; 'z]}
+ Perv!bind{j. lof_bind{'n; x. lof_nil}} :
+   'm = 0 in nat -->
+   lof{j. 'S['j; lof_bind{'n; x. lof_nil}]; 'm}
+   <-->
+   lof{j. 'S['j; lof_nil]; 'm}
+
+interactive_rw push_lof_bind_cons Perv!bind{j, z. 'S['j; 'z]}
+ Perv!bind{j. lof_bind{'n; x. lof_cons{i. 'f['j; 'i; 'x]; 'j; 'e['j; 'x]}}} :
+   'm in nat -->
+   lof{j. 'S['j; lof_bind{'n; x. lof_cons{i. 'f['j; 'i; 'x]; 'j; 'e['j; 'x]}}]; 'm}
+   <-->
+   lof{j. 'S['j; lof_cons{i. lof_bind{'n; x. 'f['j; 'i; 'x]}; 'j; lof_bind{'n; x. 'e['j; 'x]}}]; 'm}
+
+interactive_rw push_lof_bind_tl Perv!bind{j, z. 'S['j; 'z]}
+ Perv!bind{j. lof_bind{'n; x. lof_tl{i. 'f['j; 'i; 'x]; 'j}}} :
+   lof{j. 'S['j; lof_bind{'n; x. lof_tl{i. 'f['j; 'i; 'x]; 'j}}]; 'm}
+   <-->
+   lof{j. 'S['j; lof_tl{i. lof_bind{'n; x. 'f['j; 'i; 'x]}; 'j}]; 'm}
+
+interactive_rw push_lof_bind_nth_prefix Perv!bind{j, z. 'S['j; 'z]}
+ Perv!bind{j. lof_bind{'n; x. lof_nth_prefix{i. 'f['j; 'i; 'x]; 'j; 'p; 'q}}} :
+   'r in nat -->
+   lof{j. 'S['j; lof_bind{'n; x. lof_nth_prefix{i. 'f['j; 'i; 'x]; 'j; 'p; 'q}}]; 'r}
+   <-->
+   lof{j. 'S['j; lof_nth_prefix{i. lof_bind{'n; x. 'f['j; 'i; 'x]}; 'j; 'p; 'q}]; 'r}
+
+interactive_rw push_lof_bind_nth_suffix Perv!bind{j, z. 'S['j; 'z]}
+ Perv!bind{j. lof_bind{'n; x. lof_nth_suffix{i. 'f['j; 'i; 'x]; 'j; 'p; 'q}}} :
+   'r in nat -->
+   lof{j. 'S['j; lof_bind{'n; x. lof_nth_suffix{i. 'f['j; 'i; 'x]; 'j; 'p; 'q}}]; 'r}
+   <-->
+   lof{j. 'S['j; lof_nth_suffix{i. lof_bind{'n; x. 'f['j; 'i; 'x]}; 'j; 'p; 'q}]; 'r}
+
+interactive_rw push_lof_bind_append Perv!bind{j, z. 'S['j; 'z]}
+ Perv!bind{j. lof_bind{'n; x. lof_append{i. 'f['j; 'i; 'x]; k. 'g['j; 'k; 'x]; 'j; 'p; 'q}}} :
+   'r in nat -->
+   'p in nat -->
+   lof{j. 'S['j; lof_bind{'n; x. lof_append{i. 'f['j; 'i; 'x]; k. 'g['j; 'k; 'x]; 'j; 'p; 'q}}]; 'r}
+   <-->
+   lof{j. 'S['j; lof_append{i. lof_bind{'n; x. 'f['j; 'i; 'x]}; k. lof_bind{'n; x. 'g['j; 'k; 'x]}; 'j; 'p; 'q}]; 'r}
+
+doc docoff
+
+(*
+ * Standardizing.
+ *)
+let standardize_conv t =
+   foldC (standardize t) idC
+
+let standardizeC = termC standardize_conv
+
+(*
+ * Define a tactic to push the binds down through the lof term.
+ *)
+let subterm1_addr = make_address [Subterm 1]
+let subterm2_addr = make_address [Subterm 2]
+let subterm3_addr = make_address [Subterm 3]
+
+let mk_subterm1_addr addr =
+   compose_address addr subterm1_addr
+
+let mk_subterm2_addr addr =
+   compose_address addr subterm2_addr
+
+let mk_subterm3_addr addr =
+   compose_address addr subterm3_addr
+
+let rec push_bind z addr t =
+   if is_lof_term t then
+      let j, t, _ = dest_lof_term t in
+      let t_bind = term_subterm t addr in
+         if is_lof_bind_term t_bind then
+            let p_bind = mk_bind2_term j z (replace_subterm t addr (mk_var_term z)) in
+            let _, _, s = dest_lof_bind_term t_bind in
+            let t_bind = mk_bind1_term j t_bind in
+               match explode_term s with
+                  << lof_nil >> ->
+                     push_lof_bind_nil p_bind t_bind
+                | << lof_cons{i. 'f; 'j; 'e} >> ->
+                     push_lof_bind_cons p_bind t_bind
+(*
+                     thenC termC (push_bind z (mk_subterm1_addr addr))
+ *)
+                     thenC termC (push_bind z (mk_subterm3_addr addr))
+                | << lof_tl{i. 'f; 'j} >> ->
+                     push_lof_bind_tl p_bind t_bind
+                     thenC termC (push_bind z (mk_subterm1_addr addr))
+                | << lof_nth_prefix{i. 'f; 'j; 'n; 'm} >> ->
+                     push_lof_bind_nth_prefix p_bind t_bind
+                     thenC termC (push_bind z (mk_subterm1_addr addr))
+                | << lof_nth_suffix{i. 'f; 'j; 'n; 'm} >> ->
+                     push_lof_bind_nth_suffix p_bind t_bind
+                     thenC termC (push_bind z (mk_subterm1_addr addr))
+                | << lof_append{i. 'f; j. 'g; 'k; 'n; 'm} >> ->
+                     push_lof_bind_append p_bind t_bind
+                     thenC termC (push_bind z (mk_subterm1_addr addr))
+                     thenC termC (push_bind z (mk_subterm2_addr addr))
+                | _ ->
+                     idC
+         else
+            raise (RefineError ("push_bind", StringTermError ("not a lof_bind term", t_bind)))
+   else
+      raise (RefineError ("push_bind", StringTermError ("not a lof term", t)))
+
+let push_bind_conv t =
+   if is_lof_term t then
+      let t = standardize t in
+      let z = maybe_new_var_set var_z (all_vars t) in
+         foldC t idC
+         thenC termC (push_bind z (make_address []))
+   else
+      raise (RefineError ("push_bind_conv", StringTermError ("not a lof term", t)))
+
+let pushLofBindC = termC push_bind_conv
 
 (************************************************************************
  * Bind forms.
@@ -386,46 +519,89 @@ interactive_rw reduce_lof_bind_mk_bterm :
    mk_bterm{'n +@ 'i; 'op; lof{y. lof_bind{'i; x. 'f['x; 'y]}; 'm}}
 
 (************************************************************************
- * Tactics.
- *)
-doc docoff
-
-let lof_bind_term = << lof_bind{'n; x. 'e['x]} >>
-let lof_bind_opname = opname_of_term lof_bind_term
-let is_lof_bind_term = is_dep0_dep1_term lof_bind_opname
-let dest_lof_bind_term = dest_dep0_dep1_term lof_bind_opname
-let mk_lof_bind_term = mk_dep0_dep1_term lof_bind_opname
-
-let fold_lof_bind = makeFoldC << lof_bind{'n; x. 'e['x]} >> unfold_lof_bind
-
-let var_i = Lm_symbol.add "i"
-
-(************************************************************************
- * Higher-level normalization.
+ * Lof removal.
  *)
 doc <:doc<
    After a reduction, remove as many lof as possible.
 >>
-
-interactive_rw lof_bind_elim Perv!bind{x. 'e['x]} :
+interactive_rw lof_lof_elim :
    'n in nat -->
-   lof_bind{'n; x. 'e[lof{i. lof_nth{'x; 'i}; 'n}]}
+   lof{i. lof_nth{lof{j. 'f['j]; 'n}; 'i}; 'n}
    <-->
-   bind{'n; x. 'e['x]}
+   lof{i. 'f['i]; 'n}
+
+interactive_rw lof_bind_elim Perv!bind{x, z. 'e['x; 'z]} :
+   'n in nat -->
+   lof_bind{'n; x. 'e['x; lof{i. lof_nth{'x; 'i}; 'n}]}
+   <-->
+   bind{'n; x. 'e['x; 'x]}
 
 doc docoff
 
 let lof_bind_elim_conv t =
    if is_lof_bind_term t then
       let x, n, e = dest_lof_bind_term t in
-      let i = maybe_new_var_set var_i (free_vars_set e) in
+      let fv = all_vars e in
+      let i = maybe_new_var_set var_i fv in
+      let z = maybe_new_var_set var_z fv in
       let lof = <:con< lof{$i$. lof_nth{$mk_var_term x$; $mk_var_term i$}; $n$} >> in
-      let t_bind = mk_bind1_term x (var_subst e lof x) in
+      let t_bind = mk_bind2_term x z (var_subst e lof z) in
          lof_bind_elim t_bind
    else
       raise (RefineError ("lof_bind_elim", StringTermError ("not a lof_bind term", t)))
 
 let lofBindElimC = termC lof_bind_elim_conv
+
+(*
+ * During bind coalescing, eliminate the lof first, then coalesce,
+ * then re-introduce it.
+ *)
+let coalesce_bind t =
+   (* Check terms to make this faster *)
+   let _, _, s = dest_lof_bind_term t in
+      if is_lof_bind_term s then
+         lofBindElimC
+         thenC addrC [Subterm 2] lofBindElimC
+         thenC coalesce_bindn_bindn
+         thenC bindn_to_lof_bind
+      else
+         raise (RefineError ("coalesce_bind", StringTermError ("not a nested bind", t)))
+
+let coalesce_bindC = termC coalesce_bind
+
+(************************************************************************
+ * Constant reductions.
+ *
+ * XXX: JYH: I'm not to sure about constant reductions--I believe they
+ * are too fragile.
+ *)
+doc <:doc<
+   Constant reductions.
+>>
+interactive_rw reduce_nth_lof {| normalize_lof |} :
+   'n in nat -->
+   'j in nat -->
+   'j < 'n -->
+   lof_nth{lof{i. 'f['i]; 'n}; 'j}
+   <-->
+   'f['j]
+
+interactive_rw reduce_nth_suffix_const {| normalize_lof |} :
+   'j in nat -->
+   lof_nth_suffix{i. 'f['i]; 'j; 'n; 'm}
+   <-->
+   'f['j +@ 'm]
+
+(************************************************************************
+ * Optimizations.
+interactive_rw reduce_append_prefix_singleton {| normalize_lof |} :
+   'n5 in nat -->
+   lof{i. lof_append{j1. lof_nth_prefix{j2. lof_nth{'x; 'j2}; 'j1; 'n1; 'n2};
+                     j2. lof_singleton{lof_nth{'x; 'n2}};
+                     'i; 'n3; 'n4}; 'n5}
+   <-->
+   lof{i. lof_nth{'x; 'i}; 'n5}
+ *)
 
 (************************************************************************
  * Display forms.
@@ -441,9 +617,6 @@ dform lof_cons_df : lof_cons{i. 'f; 'j; 'e} =
 
 dform lof_nth_df : lof_nth{'f; 'i} =
    szone pushm[3] `"NTH(" slot{'f} `";" hspace slot{'i} `")" popm ezone
-
-dform lof_singleton_df : lof_singleton{'e} =
-   szone pushm[3] `"SINGLETON(" slot{'e} `")" popm ezone
 
 dform lof_nth_prefix_df : lof_nth_prefix{i. 'f; 'j; 'n; 'm} =
    szone pushm[3] `"PREFIX(" 'i `" -> " slot{'f} `";" hspace slot{'j} `";" hspace slot{'n} `";" hspace slot{'m} `")" popm ezone

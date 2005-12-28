@@ -33,6 +33,11 @@ open Basic_tactics
  *)
 topval normalizeBTermC : conv
 
+(*
+ * Debugging.
+ *)
+topval normalizeBTermAuxC : conv
+
 (*!
  * @docoff
  *

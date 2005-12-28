@@ -26,6 +26,7 @@
  *)
 extends Itt_hoas_theory
 
+open Basic_tactics
 open Itt_equal
 open Itt_dfun
 open Itt_logic

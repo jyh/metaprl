@@ -38,6 +38,7 @@ doc <:doc<
 extends Itt_hoas_normalize
 extends Itt_hoas_lof
 extends Itt_int_arith
+extends Itt_omega
 
 doc docoff
 
@@ -50,6 +51,7 @@ open Itt_hoas_vector
 open Itt_hoas_bterm
 open Itt_hoas_lof
 open Itt_equal
+open Itt_omega
 
 (************************************************************************
  * Tactics.
@@ -86,10 +88,12 @@ let resource reduce +=
  *)
 
 let proofRuleWFT =
-   repeatT (rwh normalizeBTermC 0
+   repeatT (rw normalizeBTermC 0
             thenT autoT
             thenT rw reduceC 0
-            thenT tryT arithT)
+            thenT tryT arithT
+            thenT tryT (completeT (rw normalizeC 0 thenT autoT))
+            thenT tcaT)
 
 (************************************************************************
  * Depth wf.

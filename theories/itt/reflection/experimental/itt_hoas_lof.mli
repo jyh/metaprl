@@ -57,6 +57,8 @@ topval reduceLofTopC : conv
 topval reduceLofC : conv
 topval reduceLofT : tactic
 
+topval rippleLofC : conv
+
 (************************************************************************
  * Tactics.
  *)
@@ -65,11 +67,6 @@ val bindn_to_lof_bind : conv
 val substl_substl_lof2 : conv
 val reduce_lof_bind_mk_bterm : conv
 topval fold_lof_bind : conv
-
-(*
- * Push a bind down through an lof expression.
- *)
-topval pushLofBindC : conv
 
 (*
  * Try to eliminatate the lof term for a lof_bind.

@@ -71,24 +71,29 @@ let pre_normalize_term =
    thenC sweepUpC bindn_to_lof_bind
    thenC sweepUpC subst_to_substl
 
+let post_normalize_term =
+   normalizeLofC
+   thenC sweepUpC substl_substl_lof2
+
 (*
  * Push a bind through a term.
  *)
 let push_lof_bind_mk_bterm =
-   reduce_lof_bind_mk_bterm
-   thenC addrC [Subterm 3] pushLofBindC
+   sweepUpC coalesce_bindC
+   thenC normalizeLofC
+   thenC higherC reduce_lof_bind_mk_bterm
+   thenC reduceLofC
 
 let normalizeBTermAuxC =
    pre_normalize_term
-   thenC sweepUpC coalesce_bindC
-   thenC normalizeLofC
-   thenC sweepDnC push_lof_bind_mk_bterm
-   thenC sweepUpC substl_substl_lof2
+   thenC repeatC push_lof_bind_mk_bterm
+   thenC post_normalize_term
 
 let normalizeBTermC =
    normalizeBTermAuxC
-   thenC reduceLofC
-   thenC sweepDnC lofBindElimC
+   thenC rippleLofC
+   thenC reduceC
+   thenC sweepUpC lofBindElimC
 
 (*!
  * @docoff

@@ -46,6 +46,7 @@ doc docoff
 
 open Basic_tactics
 open Itt_dfun
+open Itt_sqsimple
 
 doc <:doc<
    @terms
@@ -288,7 +289,7 @@ interactive var_elim {| elim [] |} 'H :
    sequent { <H>; i: nat; j: nat; <J[var{'i; 'j}]> >- 'C[var{'i; 'j}] } -->
    sequent { <H>; x: Var; <J['x]> >- 'C['x] }
 
-interactive var_sqsimple {| intro [] |} :
+interactive var_sqsimple {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{Var} }
 
 doc <:doc<

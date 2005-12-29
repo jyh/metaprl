@@ -25,7 +25,7 @@
  * @end[license]
  *)
 extends Itt_list3
-extends Itt_hoas_bterm
+extends Itt_hoas_debruijn
 
 open Basic_tactics
 

@@ -37,6 +37,7 @@ doc <:doc<
 >>
 extends Itt_hoas_normalize
 extends Itt_hoas_lof
+extends Itt_hoas_bterm
 extends Itt_int_arith
 extends Itt_omega
 

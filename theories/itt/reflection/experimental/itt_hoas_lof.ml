@@ -42,7 +42,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_list3
-extends Itt_hoas_bterm
+extends Itt_hoas_debruijn
 
 doc docoff
 

@@ -52,6 +52,13 @@ declare Logic{'rules}
 declare Provable{'ty_sequent; 'logic; 't}
 
 (*
+ * Logic operations.
+ *)
+declare empty_logic
+declare cons_logic{'r; 'logic}
+declare union_logic{'logic1; 'logic2}
+
+(*
  * Rewrites.
  *)
 topval fold_Logic : conv

@@ -378,23 +378,38 @@ interactive wf_Provable {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
- * More well-formedness.
+ * Logic operations.
  *)
+define unfold_empty_logic : empty_logic <-->
+   nil
+
+define unfold_cons_logic : cons_logic{'u; 'v} <-->
+   'u :: 'v
+
+define unfold_union_logic : union_logic{'logic1; 'logic2} <-->
+   append{'logic1; 'logic2}
+
 interactive nil_logic_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
-   <H> >- [] IN Logic{ty}
+   <H> >- empty_logic{} in Logic{ty}
 >>
 
 interactive cons_logic_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- u IN ProofRule{ty} -->
-   "wf" : <H> >- v IN Logic{ty} -->
-   <H> >- u::v IN Logic{ty}
+   "wf" : <H> >- u in ProofRule{ty} -->
+   "wf" : <H> >- v in Logic{ty} -->
+   <H> >- cons_logic{u; v} in Logic{ty}
+>>
+
+interactive union_logic_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- logic1 in Logic{ty} -->
+   "wf" : <H> >- logic2 in Logic{ty} -->
+   <H> >- union_logic{logic1; logic2} in Logic{ty}
 >>
 
 interactive proof_rule_start_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
-   "wf" : <H>; s: ProofStep{ty}; w: ProofStepWitness{} >- e[s; w] IN "bool" -->
-   <H> >- lambda{step. spread{step; s, w. e[s; w]}} IN ProofRule{ty}
+   "wf" : <H>; s: ProofStep{ty}; w: ProofStepWitness{} >- e[s; w] in "bool" -->
+   <H> >- lambda{step. spread{step; s, w. e[s; w]}} in ProofRule{ty}
 >>
 
 (*!

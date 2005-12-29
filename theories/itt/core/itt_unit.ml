@@ -68,7 +68,7 @@ let _ =
  ************************************************************************)
 
 doc terms
-declare unit
+declare const unit
 doc docoff
 
 (*

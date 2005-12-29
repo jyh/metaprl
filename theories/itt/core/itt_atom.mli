@@ -39,7 +39,7 @@ extends Itt_squiggle
 
 open Basic_tactics
 
-declare atom
+declare const atom
 declare token[t:t]
 
 (************************************************************************

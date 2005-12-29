@@ -156,7 +156,7 @@ declare listmem_set{'l; 'T}
 (*
  * I/O abstraction for list{top}
  *)
-define iform unfold_list: list <--> list{top}
+define const iform unfold_list : list <--> list{top}
 
 (************************************************************************
  * HELPERS                                                              *

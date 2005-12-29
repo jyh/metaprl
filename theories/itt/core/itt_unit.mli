@@ -37,7 +37,7 @@ extends Itt_squiggle
 
 open Refiner.Refiner.TermType
 
-declare unit
+declare const unit
 
 (************************************************************************
  * RULES                                                                *

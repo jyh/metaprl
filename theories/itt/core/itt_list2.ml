@@ -295,7 +295,7 @@ doc <:doc<
    Note that all lists of the same length are equal in the <<list>> type.
 >>
 
-define iform unfold_list: list <--> list{top}
+define const iform unfold_list: list <--> list{top}
 
 doc <:doc< Maximal element of a list >>
 

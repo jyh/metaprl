@@ -33,7 +33,7 @@ val is_ind_term : term -> bool
 val dest_ind : term -> term * term * var * var * term
 val mk_ind_term : term -> term -> var -> var -> term -> term
 
-define unfold_nat :
+define const unfold_nat :
    nat <--> ({x:int | 'x>=0})
 
 define unfold_nat_plus :

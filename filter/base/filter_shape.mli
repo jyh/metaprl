@@ -1,18 +1,10 @@
 (*
- * Logics that include "trivial" reasoning need a "squash" term
- * to denote proofs that contain no computational content, and an
- * "it" term to denote the proof that has the squash type.
+ * Opname shape classes are represented with bit fields.
  *
  * ----------------------------------------------------------------
  *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/htmlman/default.html or visit http://metaprl.org/
- * for more information.
- *
- * Copyright (C) 1999 Jason Hickey, Cornell University
+ * @begin[license]
+ * Copyright (C) 2005 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,18 +21,39 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ * @end[license]
  *)
-extends Summary
-extends Shell_theory
-
-declare const it
-declare trivial
+open Lm_num
+open Lm_printf
 
 (*
+ * Declarations have multiple classes.
+ * We represent them as a bit field.
+ *)
+type shape_class
+
+val shape_normal    : shape_class
+val shape_iform     : shape_class
+val shape_const     : shape_class
+
+val shape_combine   : shape_class -> shape_class -> shape_class
+
+val is_shape_normal : shape_class -> bool
+val is_shape_iform  : shape_class -> bool
+val is_shape_const  : shape_class -> bool
+
+val shape_class_of_num : num -> shape_class
+val num_of_shape_class : shape_class -> num
+
+val pp_print_shape_class : out_channel -> shape_class -> unit
+
+(*!
+ * @docoff
+ *
  * -*-
  * Local Variables:
- * Caml-master: "nl"
+ * Caml-master: "compile"
  * End:
  * -*-
  *)

@@ -231,7 +231,7 @@ interactive hyp_term_wf {| intro [] |} : <:xrule<
 >>
 
 interactive hyps_bterms_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- l IN "list" -->
+   "wf" : <H> >- l in list -->
    <H> >- hyps_bterms{l} IN "list"
 >>
 

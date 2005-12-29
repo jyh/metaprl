@@ -71,7 +71,7 @@ let _ =
  ************************************************************************)
 
 doc <:doc< @terms >>
-declare void
+declare const void
 doc docoff
 
 let void_term = << void >>

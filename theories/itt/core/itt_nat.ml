@@ -59,7 +59,7 @@ open Itt_sqsimple
 
 doc terms
 
-define unfold_nat : nat <--> ({x:int | 'x>=0})
+define const unfold_nat : nat <--> ({x:int | 'x>=0})
 define unfold_finite_nat : nat{'k} <--> int_seg{0; 'k}
 
 let fold_finite_nat = makeFoldC << nat{'k} >> unfold_finite_nat

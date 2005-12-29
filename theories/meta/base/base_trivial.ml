@@ -44,7 +44,7 @@ extends Summary
 extends Shell_theory
 
 doc terms
-declare it
+declare const it
 define unfold_trivial : trivial <--> it (* A better name for it *)
 doc docoff
 

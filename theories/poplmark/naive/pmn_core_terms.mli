@@ -91,11 +91,6 @@ declare rewrite TyElem{TyPower} <--> TyExp
 
 declare sequent [fsub] { exst a: Hyp. TyElem{'a} : 'a >- Prop } : Judgment
 
-(*
- * Provability.
- *)
-declare Provable{'e}
-
 (************************************************************************
  * The rest of this file defines a LALR(1) grammar for parsing
  * types and expressions in Fsub.  This isn't really necessary, since

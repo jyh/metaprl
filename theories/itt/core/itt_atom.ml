@@ -77,7 +77,7 @@ doc <:doc<
    token $@token{@misspelled{tok}}$ is the quoted form
    @misspelled{``tok''}.
 >>
-declare atom
+declare const atom
 declare token[t:t]
 doc docoff
 

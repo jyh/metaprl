@@ -105,6 +105,7 @@ dform let_sovar_df : let_sovar{'d; 'witness; 'i; v. 'e} =
 
 dform let_cvar_df : let_cvar{'d; 'witness; 'i; v. 'e} =
    szone pushm[0] `"let " slot{'v} `" : CVar{" slot{'d} `"} = " slot{'witness} `".cvars.[" slot{'i} `"] in" hspace slot{'e} popm ezone
+
 interactive_rw reduce_let_sovar {| reduce |} : <:xrewrite<
    let_sovar{d; proof_step_witness{sovars; cvars}; i; v. e[v]}
    <-->
@@ -136,10 +137,6 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
    "wf" : <H>; v: CVar{d} >- e[v] IN "bool" -->
    <H> >- let_cvar{d; witness; i; v. e[v]} IN "bool"
 >>
-
-(************************************************************************
- * Additional well-formedness.
- *)
 
 (*!
  * @docoff

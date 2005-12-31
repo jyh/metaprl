@@ -1,8 +1,5 @@
 doc <:doc<
-   Native sequent representation.  This representation of sequents
-   is not a BTerm itself.  If you want to work in a theory where
-   sequents are not part of your language, then you should probably
-   use this representation, because it is easier to use.
+   Provability in a sequent logic.
 
    ----------------------------------------------------------------
 
@@ -29,18 +26,17 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_theory
-extends Itt_hoas_bterm
-extends Itt_hoas_util
-extends Itt_hoas_lof
-extends Itt_hoas_normalize
-extends Itt_hoas_bterm_wf
-extends Itt_hoas_proof
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_term
-extends Itt_hoas_sequent_proof_step
-extends Itt_hoas_sequent_proof
-extends Itt_hoas_meta_types
+extends Itt_hoas_proof
+
+doc docoff
+
+open Basic_tactics
+
+(*
+ * Provability in a sequent logic.
+ *)
+declare Provable{'logic; 'seq}
 
 (*!
  * @docoff

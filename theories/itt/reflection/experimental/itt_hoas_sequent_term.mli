@@ -35,7 +35,7 @@ extends Itt_hoas_sequent
 open Basic_tactics
 
 (*
- * BTerm sequent.  Hyps are in normal form.
+ * BTerm sequent.  Hyps are in normal "pretty" form.
  *)
 declare sequent [bsequent{'arg}] { Term : Term >- Term } : Term
 

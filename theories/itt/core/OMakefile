@@ -52,6 +52,7 @@ MPFILES[] =
    itt_srec
    itt_quotient
    itt_list2
+   itt_list_set
    itt_fun2
    itt_union2
    itt_prop_decide

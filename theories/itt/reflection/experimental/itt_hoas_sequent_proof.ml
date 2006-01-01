@@ -71,6 +71,19 @@ interactive provable_intro 'premises : <:xrule<
    <H> >- Provable{logic; goal}
 >>
 
+doc <:doc<
+   Use an explicit rule to decompose the << SimpleStep{'premises; 'goal; 'witness; 'logic} >>.
+>>
+interactive simple_step_intro 'step : <:xrule<
+   "wf" : <H> >- logic in Logic{Sequent} -->
+   "wf" : <H> >- premises in list{Sequent} -->
+   "wf" : <H> >- goal in Sequent -->
+   "wf" : <H> >- step in ProofRule{Sequent} -->
+   "wf" : <H> >- MemLogic{Sequent; step; logic} -->
+   <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
+   <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic}
+>>
+
 (************************************************************************
  * Tactics.
  *)

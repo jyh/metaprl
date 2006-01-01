@@ -72,6 +72,11 @@ declare rules_logic{'r; 'logic}
 declare union_logic{'logic1; 'logic2}
 
 (*
+ * A rule is in a logic.
+ *)
+declare MemLogic{'ty; 'step; 'logic}
+
+(*
  * One logic is included in another.
  *)
 declare SubLogic{'ty; 'logic1; 'logic2}

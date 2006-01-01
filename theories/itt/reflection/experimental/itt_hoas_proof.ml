@@ -31,6 +31,7 @@ doc <:doc<
 >>
 extends Itt_tunion
 extends Itt_match
+extends Itt_list_set
 extends Itt_hoas_util
 
 doc docoff
@@ -414,6 +415,10 @@ define unfold_rules_logic : rules_logic{'rules; 'logic} <-->
 define unfold_union_logic : union_logic{'logic1; 'logic2} <-->
    append{'logic1; 'logic2}
 
+define unfold_MemLogic : MemLogic{'ty; 'step; 'logic} <--> <:xterm<
+   mem{step; logic; ProofRule{ty}}
+>>
+
 define unfold_SubLogic : SubLogic{'ty; 'logic1; 'logic2} <--> <:xterm<
    "subset"{logic1; logic2; ProofRule{ty}}
 >>
@@ -435,11 +440,48 @@ interactive union_logic_wf {| intro [] |} : <:xrule<
    <H> >- union_logic{logic1; logic2} in Logic{ty}
 >>
 
+interactive mem_logic_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
+   "wf" : <H> >- step in ProofRule{ty} -->
+   "wf" : <H> >- logic in Logic{ty} -->
+   <H> >- MemLogic{ty; step; logic} Type
+>>
+
 interactive sub_logic_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
    "wf" : <H> >- logic1 in Logic{ty} -->
    "wf" : <H> >- logic2 in Logic{ty} -->
    <H> >- SubLogic{ty; logic1; logic2} Type
+>>
+
+(*
+ * Membership in a logic.
+ *)
+interactive mem_rules_logic {| intro [SelectOption 0] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
+   "wf" : <H> >- step in ProofRule{ty} -->
+   "wf" : <H> >- logic in Logic{ty} -->
+   "wf" : <H> >- steps in list{ProofRule{ty}} -->
+   "wf" : <H> >- mem{step; steps; ProofRule{ty}} -->
+   <H> >- MemLogic{ty; step; rules_logic{steps; logic}}
+>>
+
+interactive mem_union_logic1 {| intro [SelectOption 1] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
+   "wf" : <H> >- step in ProofRule{ty} -->
+   "wf" : <H> >- logic1 in Logic{ty} -->
+   "wf" : <H> >- logic2 in Logic{ty} -->
+   <H> >- MemLogic{ty; step; logic1} -->
+   <H> >- MemLogic{ty; step; union_logic{logic1; logic2}}
+>>
+
+interactive mem_union_logic2 {| intro [SelectOption 2] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
+   "wf" : <H> >- step in ProofRule{ty} -->
+   "wf" : <H> >- logic1 in Logic{ty} -->
+   "wf" : <H> >- logic2 in Logic{ty} -->
+   <H> >- MemLogic{ty; step; logic2} -->
+   <H> >- MemLogic{ty; step; union_logic{logic1; logic2}}
 >>
 
 (************************************************************************

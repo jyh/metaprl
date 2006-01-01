@@ -91,6 +91,7 @@ extends Itt_prec
 extends Itt_srec
 extends Itt_quotient
 extends Itt_list2
+extends Itt_list_set
 extends Itt_fun2
 extends Itt_union2
 extends Itt_prop_decide

@@ -38,6 +38,15 @@ open Basic_tactics
  *)
 declare Provable{'logic; 'seq}
 
+(************************************************************************
+ * Tactics.
+ *)
+
+(*
+ * Tactic for proving Provability goals.
+ *)
+topval provableIntroT : tactic
+
 (*!
  * @docoff
  *

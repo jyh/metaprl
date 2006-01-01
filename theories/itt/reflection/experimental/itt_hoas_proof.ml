@@ -58,7 +58,7 @@ doc <:doc<
    single type for all witnesses, including values for the second-order
    and context-variables.
 >>
-define unfold_ProofStepWitness : ProofStepWitness <-->
+define const unfold_ProofStepWitness : ProofStepWitness <-->
    list{BTerm} * list{list{BTerm}}
 
 define unfold_proof_step_witness : proof_step_witness{'sovars; 'cvars} <-->
@@ -91,6 +91,9 @@ doc <:doc<
    The term << ValidStep{'premises; 'goal; 'witness; 'logic} >> is the predicate that determines
    if the proof step matches one of the proof rules in the logic.
 >>
+define unfold_SimpleStep : SimpleStep{'premises; 'goal; 'witness; 'logic} <-->
+   exists_list{'logic; check. "assert"{'check (proof_step{'premises; 'goal}, 'witness)}}
+
 define unfold_ValidStep : ValidStep{'premises; 'goal; 'witness; 'logic} <-->
    exists_list{'logic; check. "assert"{'check (proof_step{map{x. derivation_goal{'x}; 'premises}; 'goal}, 'witness)}}
 
@@ -361,6 +364,15 @@ interactive derivation_goal_wf2 {| intro [intro_typeinf << 'e >>] |} Derivation{
    <H> >- derivation_goal{e} IN ty_sequent
 >>
 
+interactive valid_step_wf3 {| intro [intro_typeinf << 'premises >>] |} list{Derivation{'ty_sequent; 'logic}} : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- premises in list{Derivation{ty_sequent; logic}} -->
+   "wf" : <H> >- goal in ty_sequent -->
+   "wf" : <H> >- witness in ProofStepWitness -->
+   "wf" : <H> >- logic in Logic{ty_sequent} -->
+   <H> >- ValidStep{premises; goal; witness; logic} Type
+>>
+
 doc <:doc<
    The << Provable{'ty_sequent; 'logic; 't} >> predicate specifies that a particular
    term << 't >> is the root of a derivation in a logic.
@@ -375,6 +387,19 @@ interactive wf_Provable {| intro [] |} : <:xrule<
     "wf" : <H> >- logic IN Logic{ty_sequent} -->
     "wf" : <H> >- t IN ty_sequent -->
     <H> >- Provable{ty_sequent; logic; t} Type
+>>
+
+doc <:doc<
+   Introduction forms.
+>>
+interactive derivation_step_intro {| intro [] |} : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- logic in Logic{ty_sequent} -->
+   "wf" : <H> >- premises in list{Derivation{ty_sequent; logic}} -->
+   "wf" : <H> >- goal in ty_sequent -->
+   "wf" : <H> >- witness in ProofStepWitness -->
+   "wf" : <H> >- p in ValidStep{premises; goal; witness; logic} -->
+   <H> >- derivation_step{premises; goal; witness; p} in Derivation{ty_sequent; logic}
 >>
 
 (************************************************************************
@@ -411,6 +436,7 @@ interactive union_logic_wf {| intro [] |} : <:xrule<
 >>
 
 interactive sub_logic_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- ty Type -->
    "wf" : <H> >- logic1 in Logic{ty} -->
    "wf" : <H> >- logic2 in Logic{ty} -->
    <H> >- SubLogic{ty; logic1; logic2} Type
@@ -423,6 +449,15 @@ interactive proof_rule_start_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
    "wf" : <H>; s: ProofStep{ty}; w: ProofStepWitness{} >- e[s; w] in "bool" -->
    <H> >- lambda{step. spread{step; s, w. e[s; w]}} in ProofRule{ty}
+>>
+
+interactive simple_step_wf {| intro [intro_typeinf << 'goal >>] |} 'ty_sequent : <:xrule<
+   "wf" : <H> >- ty_sequent Type -->
+   "wf" : <H> >- premises IN list{ty_sequent} -->
+   "wf" : <H> >- goal IN ty_sequent -->
+   "wf" : <H> >- witness IN ProofStepWitness -->
+   "wf" : <H> >- logic IN Logic{ty_sequent} -->
+   <H> >- SimpleStep{premises; goal; witness; logic} Type
 >>
 
 (*!

@@ -98,7 +98,7 @@ doc <:doc<
 define unfold_Sequent_depth : Sequent{'d} <-->
    { s: BTerm * list{BTerm} * BTerm | is_sequent{'d; 's} }
 
-define unfold_Sequent : Sequent <-->
+define const unfold_Sequent : Sequent <-->
    { s: BTerm * list{BTerm} * BTerm | is_sequent{'s} }
 
 doc <:doc<

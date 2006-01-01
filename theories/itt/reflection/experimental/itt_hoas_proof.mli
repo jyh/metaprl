@@ -32,7 +32,7 @@ open Basic_tactics
  * A step in a proof.
  *)
 declare ProofStep{'ty_sequent}
-declare ProofStepWitness
+declare const ProofStepWitness
 declare proof_step{'premises; 'goal}
 declare proof_step_witness{'sovars; 'cvars}
 
@@ -42,9 +42,22 @@ declare proof_step_witness{'sovars; 'cvars}
 declare ProofRule{'ty_sequent}
 
 (*
+ * A valid step in a proof.
+ *)
+declare SimpleStep{'premises; 'goal; 'witness; 'logic}
+declare ValidStep{'premises; 'goal; 'witness; 'logic}
+
+(*
  * A Logic is a list of ProofRules.
  *)
 declare Logic{'rules}
+
+(*
+ * A derivation in a logic.
+ *)
+declare Derivation{'ty_sequent; 'logic}
+declare derivation_step{'premises; 'goal; 'witness; 'logic}
+declare derivation_goal{'d}
 
 (*
  * A formula is provable in a logic.

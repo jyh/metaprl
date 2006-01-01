@@ -36,7 +36,7 @@ declare sequent_arg{'s}
 declare sequent_hyps{'s}
 declare sequent_concl{'s}
 
-declare Sequent
+declare const Sequent
 declare beq_sequent{'s1; 's2}
 declare beq_sequent_list{'l1; 's2}
 

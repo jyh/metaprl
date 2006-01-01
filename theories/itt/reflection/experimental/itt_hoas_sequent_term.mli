@@ -45,16 +45,6 @@ declare sequent [bsequent{'arg}] { Term : Term >- Term } : Term
 declare sequent [vsequent{'arg}] { Term : Term >- Term } : Term
 
 (*
- * The sequent is provable in "ugly" form.
- *)
-declare sequent [provable_sequent{'syntax; 'logic; 'arg}] { Term : Term >- Term } : Term
-
-(*
- * The sequent is provable in "pretty" form.
- *)
-declare sequent [ProvableSequent{'syntax; 'logic; 'arg}] { Term : Term >- Term } : Term
-
-(*
  * ML code.
  *)
 topval fold_hyp_term : conv
@@ -62,7 +52,6 @@ topval fold_hyp_context : conv
 topval fold_bterm_of_vterm : conv
 
 topval reduce_bsequent : conv
-topval reduce_ProvableSequent : conv
 
 (*!
  * @docoff

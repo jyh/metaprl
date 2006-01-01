@@ -30,6 +30,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_sequent
+extends Itt_hoas_sequent_term
 
 doc docoff
 
@@ -60,6 +61,12 @@ dform meta_type_df2 : <:xterm< $'[d] "meta_type" >> =
 
 dform meta_member_df2 : <:xterm< $'[d] meta_member{e; ty} >> =
    szone pushm[3] slot{'e} `" " Mpsymbols!member `"M[" slot{'d} `"]" hspace slot{'ty} popm ezone
+
+dform bsequent_meta_type_df : bsequent{meta_type} =
+   `"BM"
+
+dform vsequent_meta_type_df : vsequent{meta_type} =
+   `"VM"
 
 (*!
  * @docoff

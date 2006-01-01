@@ -383,21 +383,25 @@ interactive wf_Provable {| intro [] |} : <:xrule<
 define unfold_empty_logic : empty_logic <-->
    nil
 
-define unfold_cons_logic : cons_logic{'u; 'v} <-->
-   'u :: 'v
+define unfold_rules_logic : rules_logic{'rules; 'logic} <-->
+   append{'rules; 'logic}
 
 define unfold_union_logic : union_logic{'logic1; 'logic2} <-->
    append{'logic1; 'logic2}
+
+define unfold_SubLogic : SubLogic{'ty; 'logic1; 'logic2} <--> <:xterm<
+   "subset"{logic1; logic2; ProofRule{ty}}
+>>
 
 interactive nil_logic_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
    <H> >- empty_logic{} in Logic{ty}
 >>
 
-interactive cons_logic_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- u in ProofRule{ty} -->
-   "wf" : <H> >- v in Logic{ty} -->
-   <H> >- cons_logic{u; v} in Logic{ty}
+interactive rules_logic_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- rules in list{ProofRule{ty}} -->
+   "wf" : <H> >- logic in Logic{ty} -->
+   <H> >- rules_logic{rules; logic} in Logic{ty}
 >>
 
 interactive union_logic_wf {| intro [] |} : <:xrule<
@@ -406,6 +410,15 @@ interactive union_logic_wf {| intro [] |} : <:xrule<
    <H> >- union_logic{logic1; logic2} in Logic{ty}
 >>
 
+interactive sub_logic_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- logic1 in Logic{ty} -->
+   "wf" : <H> >- logic2 in Logic{ty} -->
+   <H> >- SubLogic{ty; logic1; logic2} Type
+>>
+
+(************************************************************************
+ * Additional wf rules.
+ *)
 interactive proof_rule_start_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
    "wf" : <H>; s: ProofStep{ty}; w: ProofStepWitness{} >- e[s; w] in "bool" -->

@@ -188,39 +188,6 @@ prim_rw unfold_bsequent : <:xrewrite<
 >>
 
 (************************************************************************
- * Provable.
- *)
-doc <:doc<
-   The << provable_sequent{'ty; 'logic; 'arg}{| <J> >- 'C |} >> term specifies
-   that the sequent is provable in the logic.
-
-   This is the flattened form.
->>
-declare sequent [provable_sequent{'syntax; 'logic; 'arg}] { Term : Term >- Term } : Term
-
-prim_rw unfold_provable_sequent : <:xrewrite<
-   provable_sequent{syntax; logic; arg}{| <J> >- C |}
-   <-->
-      Provable{"Sequent"; syntax; vsequent{arg}{| <J> >- C |}}
-   && Provable{"Sequent"; logic; vsequent{arg}{| <J> >- C |}}
->>
-
-doc <:doc<
-   The << ProvableSequent{'ty; 'logic; 'arg}{| <J> >- 'C |} >> term specifies
-   that the sequent is provable in the logic.
-
-   This is the original dependent form.
->>
-declare sequent [ProvableSequent{'syntax; 'logic; 'arg}] { Term : Term >- Term } : Term
-
-prim_rw unfold_ProvableSequent : <:xrewrite<
-   ProvableSequent{syntax; logic; arg}{| <J> >- C |}
-   <-->
-      Provable{"Sequent"; syntax; bsequent{arg}{| <J> >- C |}}
-   && Provable{"Sequent"; logic; bsequent{arg}{| <J> >- C |}}
->>
-
-(************************************************************************
  * Well-formedness.
  *)
 doc <:doc<
@@ -268,7 +235,6 @@ interactive vflatten_hyp_left_wf {| intro [] |} : <:xrule<
  * Tactics.
  *)
 let fold_bterm_of_vterm = makeFoldC << bterm_of_vterm{'e} >> unfold_bterm_of_vterm
-let fold_provable_sequent = makeFoldC << provable_sequent{'ty; 'logic; 'arg}{| <J> >- 'C |} >> unfold_provable_sequent
 let fold_hyp_term = makeFoldC << hyp_term{| <J> >- 'A |} >> unfold_hyp_term
 let fold_hyp_context = makeFoldC << hyp_context{| <J> >- 'A |} >> unfold_hyp_context
 
@@ -298,11 +264,6 @@ let reduce_bsequent =
    thenC (addrC [ClauseAddr 0] reduce_bterm_of_mk_vbind_mk_core)
    thenC (repeatC (reduce_vsequent_append 1))
 
-let reduce_ProvableSequent =
-   unfold_ProvableSequent
-   thenC (addrC [Subterm 3] reduce_bsequent)
-   thenC fold_provable_sequent
-
 (************************************************************************
  * Tests.
  *)
@@ -312,10 +273,6 @@ interactive bsequent_test_intro1 : <:xrule<
 
 interactive bsequent_test_elim1 'J : <:xrule<
    <H> >- bsequent{it}{| <J>; x: A; <K[x]> >- 1 +@ 2 |} IN "top"
->>
-
-interactive provable_sequent_test_elim1 'J : <:xrule<
-   <H> >- ProvableSequent{syntax; logic; it}{| <J>; x: A; <K[x]> >- 1 +@ 2 |}
 >>
 
 (*!

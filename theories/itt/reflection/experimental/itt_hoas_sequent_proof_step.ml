@@ -138,6 +138,43 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
    <H> >- let_cvar{d; witness; i; v. e[v]} IN "bool"
 >>
 
+(************************************************************************
+ * Terms.
+ *)
+let beq_proof_step_term = << beq_proof_step{'step1; 'step2} >>
+let beq_proof_step_opname = opname_of_term beq_proof_step_term
+let is_beq_proof_step = is_dep0_dep0_term beq_proof_step_opname
+let dest_beq_proof_step = dest_dep0_dep0_term beq_proof_step_opname
+
+let is_let_cvar_term t =
+   match explode_term t with
+      << let_cvar{'d; 'witness; 'i; v. 'e} >> ->
+         true
+    | _ ->
+         false
+
+let dest_let_cvar_term t =
+   match explode_term t with
+      << let_cvar{'d; 'witness; 'i; v. 'e} >> ->
+         d, witness, i, v, e
+    | _ ->
+         raise (RefineError ("dest_let_cvar_term", StringTermError ("not a let_cvar term", t)))
+
+let is_let_sovar_term t =
+   match explode_term t with
+      << let_sovar{'d; 'witness; 'i; v. 'e} >> ->
+         true
+    | _ ->
+         false
+
+let dest_let_sovar_term t =
+   match explode_term t with
+      << let_sovar{'d; 'witness; 'i; v. 'e} >> ->
+         d, witness, i, v, e
+    | _ ->
+         raise (RefineError ("dest_let_sovar_term", StringTermError ("not a let_sovar term", t)))
+
+
 (*!
  * @docoff
  *

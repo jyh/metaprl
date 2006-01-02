@@ -73,6 +73,31 @@ interactive_rw reduce_vbind_right :
    <-->
    vbind{| <J> >- bind{x. 'C['x]} |}
 
+(************************************************************************
+ * Tactics.
+ *)
+
+(*
+ * vbind{| <J> >- 'A |}
+ *)
+let vbind_arg_term = << vbind >>
+let vbind_arg_opname = opname_of_term vbind_arg_term
+let is_vbind_arg_term = is_no_subterms_term vbind_arg_opname
+
+let is_vbind_term t =
+   is_sequent_term t && is_vbind_arg_term (sequent_args t)
+
+let dest_vbind_term t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+      if is_vbind_arg_term arg then
+         hyps, concl
+      else
+         raise (RefineError ("dest_vbind_term", StringTermError ("not a vbind term", t)))
+
 (*
  * VBind wrapping (for induction).
  *)

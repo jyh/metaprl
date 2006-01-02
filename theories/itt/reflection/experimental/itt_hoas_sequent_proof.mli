@@ -47,6 +47,11 @@ declare Provable{'logic; 'seq}
  *)
 topval provableIntroT : tactic
 
+(*
+ * Debugging.
+ *)
+topval proofStepWitnessT : tactic
+
 (*!
  * @docoff
  *

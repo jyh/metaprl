@@ -53,6 +53,15 @@ topval fold_bterm_of_vterm : conv
 
 topval reduce_bsequent : conv
 
+(*
+ * Terms.
+ *)
+val is_vsequent_term : term -> bool
+val dest_vsequent_term : term -> term * seq_hyps * term
+
+val is_hyp_context_term : term -> bool
+val dest_hyp_context_term : term -> seq_hyps * term
+
 (*!
  * @docoff
  *

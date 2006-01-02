@@ -482,6 +482,14 @@ ml_dform sequent_df : "sequent"{'arg; 'hyps; 'concl} format_term buf =
    format_sequent format_term buf
  *)
 
+(************************************************************************
+ * Terms.
+ *)
+let beq_sequent_term = << beq_sequent{'step1; 'step2} >>
+let beq_sequent_opname = opname_of_term beq_sequent_term
+let is_beq_sequent_term = is_dep0_dep0_term beq_sequent_opname
+let dest_beq_sequent_term = dest_dep0_dep0_term beq_sequent_opname
+
 (*!
  * @docoff
  *

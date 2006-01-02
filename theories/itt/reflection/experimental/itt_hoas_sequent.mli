@@ -64,6 +64,12 @@ topval fold_hyp_depths : conv
 topval fold_bhyp_depths : conv
 topval fold_beq_sequent_list : conv
 
+(*
+ * Tactics.
+ *)
+val is_beq_sequent_term : term -> bool
+val dest_beq_sequent_term : term -> term * term
+
 (*!
  * @docoff
  *

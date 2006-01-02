@@ -40,6 +40,18 @@ declare beq_proof_step{'step1; 'step2}
 declare let_sovar{'d; 'witness; 'i; v. 'e}
 declare let_cvar{'d; 'witness; 'i; v. 'e}
 
+(*
+ * Tactics.
+ *)
+val is_beq_proof_step : term -> bool
+val dest_beq_proof_step : term -> term * term
+
+val is_let_cvar_term : term -> bool
+val dest_let_cvar_term : term -> term * term * term * var * term
+
+val is_let_sovar_term : term -> bool
+val dest_let_sovar_term : term -> term * term * term * var * term
+
 (*!
  * @docoff
  *

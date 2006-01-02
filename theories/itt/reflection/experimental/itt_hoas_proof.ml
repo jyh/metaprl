@@ -163,9 +163,9 @@ interactive proof_step_witness_wf {| intro [] |} : <:xrule<
 >>
 
 interactive proof_step_witness_wf2 {| intro [] |} : <:xrule<
-   "wf" : <H> >- sovars IN list{"BTerm"} -->
-   "wf" : <H> >- cvars IN list{list{"BTerm"}} -->
-   <H> >- proof_step_witness{sovars; cvars} IN "ProofStepWitness"
+   "wf" : <H> >- sovars in list{BTerm} -->
+   "wf" : <H> >- cvars in list{list{BTerm}} -->
+   <H> >- proof_step_witness{sovars; cvars} in ProofStepWitness
 >>
 
 interactive proof_step_witness_elim {| elim [] |} 'H : <:xrule<
@@ -501,6 +501,15 @@ interactive simple_step_wf {| intro [intro_typeinf << 'goal >>] |} 'ty_sequent :
    "wf" : <H> >- logic IN Logic{ty_sequent} -->
    <H> >- SimpleStep{premises; goal; witness; logic} Type
 >>
+
+(************************************************************************
+ * Tactics.
+ *)
+let proof_step_witness_term = << proof_step_witness{'sovars; 'cvars} >>
+let proof_step_witness_opname = opname_of_term proof_step_witness_term
+let is_proof_step_witness_term = is_dep0_dep0_term proof_step_witness_opname
+let mk_proof_step_witness_term = mk_dep0_dep0_term proof_step_witness_opname
+let dest_proof_step_witness_term = dest_dep0_dep0_term proof_step_witness_opname
 
 (*!
  * @docoff

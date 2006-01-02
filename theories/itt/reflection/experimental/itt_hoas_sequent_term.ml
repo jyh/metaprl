@@ -238,6 +238,50 @@ let fold_bterm_of_vterm = makeFoldC << bterm_of_vterm{'e} >> unfold_bterm_of_vte
 let fold_hyp_term = makeFoldC << hyp_term{| <J> >- 'A |} >> unfold_hyp_term
 let fold_hyp_context = makeFoldC << hyp_context{| <J> >- 'A |} >> unfold_hyp_context
 
+(*
+ * hyp_context{| <J> >- 'A |}
+ *)
+let hyp_context_arg_term = << hyp_context >>
+let hyp_context_arg_opname = opname_of_term hyp_context_arg_term
+let is_hyp_context_arg_term = is_no_subterms_term hyp_context_arg_opname
+
+let is_hyp_context_term t =
+   is_sequent_term t && is_hyp_context_arg_term (sequent_args t)
+
+let dest_hyp_context_term t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+      if is_hyp_context_arg_term arg then
+         hyps, concl
+      else
+         raise (RefineError ("dest_hyp_context_term", StringTermError ("not a hyp_context term", t)))
+
+(*
+ * vsequent{| <J> >- 'A |}
+ *)
+let vsequent_arg_term = << vsequent{'arg} >>
+let vsequent_arg_opname = opname_of_term vsequent_arg_term
+let is_vsequent_arg_term = is_dep0_term vsequent_arg_opname
+let dest_vsequent_arg_term = dest_dep0_term vsequent_arg_opname
+
+let is_vsequent_term t =
+   is_sequent_term t && is_vsequent_arg_term (sequent_args t)
+
+let dest_vsequent_term t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+   let arg = dest_vsequent_arg_term arg in
+      arg, hyps, concl
+
+(*
+ * hyps_bterms{'e}
+ *)
 let hyps_bterms_term = << hyps_bterms{'e} >>
 let hyps_bterms_opname = opname_of_term hyps_bterms_term
 let dest_hyps_bterms_term = dest_dep0_term hyps_bterms_opname

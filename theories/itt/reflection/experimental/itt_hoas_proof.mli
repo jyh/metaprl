@@ -91,6 +91,13 @@ topval fold_derivation_step : conv
 topval fold_proof_step : conv
 topval fold_proof_step_witness : conv
 
+(*
+ * Terms.
+ *)
+val is_proof_step_witness_term : term -> bool
+val mk_proof_step_witness_term : term -> term -> term
+val dest_proof_step_witness_term : term -> term * term
+
 (*!
  * @docoff
  *

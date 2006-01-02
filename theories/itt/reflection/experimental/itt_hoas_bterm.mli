@@ -42,7 +42,7 @@ define iform unfold_dom  : dom{'BT} <--> dom{Operator; 'BT}
 define iform unfold_Iter : Iter{'X} <--> Iter{Operator; 'X}
 define iform unfold_BT   : BT{'n} <--> BT{Operator; 'n}
 
-declare BTerm
+declare const BTerm
 declare BTerm{'i}
 declare dummy
 

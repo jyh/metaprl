@@ -116,7 +116,7 @@ interactive vlist_nest_left_wf {| intro [] |} :
 doc <:doc<
    The actual << vlist{| <J> |} >> ignores its conclusion.
 >>
-declare sequent [vlist] { Term : Term >- Term } : Term
+declare const sequent [vlist] { Term : Term >- Term } : Term
 
 prim_rw unfold_vlist : vlist{| <J> >- 'C |} <-->
    vlist_nest{| <J> >- nil |}
@@ -318,7 +318,7 @@ interactive_rw reduce_vflatten_nest_split 'J :
 doc <:doc<
    The << vflatten{| <J> |} >> term ignores the conclusion.
 >>
-declare sequent [vflatten] { Term : Term >- Term } : Term
+declare const sequent [vflatten] { Term : Term >- Term } : Term
 
 prim_rw unfold_vflatten : vflatten{| <J> >- 'C |} <-->
    vflatten_nest{| <J> >- nil |}

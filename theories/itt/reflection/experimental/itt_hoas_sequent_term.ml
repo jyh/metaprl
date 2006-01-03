@@ -112,7 +112,7 @@ prim_rw unfold_hyp_term : hyp_term{| <J> >- 'A |} <--> <:xterm<
    ["vbind"{| <J> >- A |}]
 >>
 
-declare sequent [hyp_context] { Term : Term >- Term } : Term
+declare const sequent [hyp_context] { Term : Term >- Term } : Term
 
 prim_rw unfold_hyp_context : hyp_context{| <J> >- 'A |} <--> <:xterm<
    hyps_bterms{hyps_flatten{"mk_vbind"{| <J> >- mk_core{A} |}}}
@@ -122,6 +122,12 @@ interactive_rw reduce_hyps_bterms_hyplist_simple {| reduce |} : <:xrewrite<
    hyps_bterms{"hyplist"{| <K> |}}
    <-->
    "hyp_context"{| >- "hyplist"{| <K> |} |}
+>>
+
+interactive_rw invert_hyps_bterms_hyplist_simple : <:xrewrite<
+   hyp_context{| >- hyplist{| <K> |} |}
+   <-->
+   hyps_bterms{hyplist{| <K> |}}
 >>
 
 interactive_rw reduce_hyps_bterms_hyplist {| reduce |} : <:xrewrite<

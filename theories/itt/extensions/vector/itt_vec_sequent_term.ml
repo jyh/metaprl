@@ -81,7 +81,7 @@ prim_rw unfold_hypconslist : <:xrewrite<
    sequent_ind{u, v. mk_core{u} :: hyps_flatten{mk_bind{x. mk_core{happly{v; x}}}}; "TermSequent"{| <J> >- C |}}
 >>
 
-declare sequent [hyplist] { Term : Term >- Term } : Term
+declare const sequent [hyplist] { Term : Term >- Term } : Term
 
 prim_rw unfold_hyplist : <:xrewrite<
    "hyplist"{| <J> >- C |}
@@ -480,6 +480,18 @@ interactive_rw hyplist_nest 'J : <:xrewrite<
    "hyplist"{| <J>; <K> |}
    <-->
    append{"hyplist"{| <J> |}; hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hyplist"{| <K> |}} |}}}
+>>
+
+interactive_rw reduce_hyplist_nil {| reduce |} : <:xrewrite<
+   "hyplist"{||}
+   <-->
+   []
+>>
+
+interactive_rw reduce_hyplist_left : <:xrewrite<
+   "hyplist"{| x: A; <J[x]> |}
+   <-->
+   mk_core{A} :: hyps_flatten{mk_bind{x. mk_core{"hyplist"{| <J[x]> |}}}}
 >>
 
 (************************************************************************

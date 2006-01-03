@@ -35,11 +35,15 @@ doc <:doc<
    @end[license]
    @parents
 >>
-extends Itt_hoas_normalize
-extends Itt_hoas_lof
-extends Itt_hoas_bterm
-extends Itt_int_arith
 extends Itt_omega
+extends Itt_int_arith
+extends Itt_vec_list1
+extends Itt_vec_sequent_term
+extends Itt_hoas_bterm
+extends Itt_hoas_lof
+extends Itt_hoas_lof_vec
+extends Itt_hoas_normalize
+extends Itt_hoas_sequent_term
 
 doc docoff
 
@@ -53,6 +57,21 @@ open Itt_hoas_bterm
 open Itt_hoas_lof
 open Itt_equal
 open Itt_omega
+
+(************************************************************************
+ * Helper theorems.
+ *)
+doc <:doc<
+   Helper theorems for proving wf.
+
+   These are all theorems that are specific for well-formedness
+   reasoning, and don't belong anywhere else.
+>>
+interactive_rw reduce_length_hyp_context_nil {| reduce |} : <:xrewrite<
+   length{"hyp_context"{| >- hyplist{| <J> |} |}}
+   <-->
+   length{vlist{| <J> |}}
+>>
 
 (************************************************************************
  * Tactics.
@@ -78,15 +97,6 @@ let bind_wf = wrap_intro bindWFT
 let resource intro +=
    [<< lof_bind{'n; x. 'e['x]} in BTerm >>, bind_wf;
     << lof_bind{'n; x. 'e['x]} in BTerm{'m} >>, bind_wf]
-
-(*
- * Reduce a depth term.
-let reduce_depth_termC =
-   addrC [Subterm 1] reduceBindTermC thenC reduce_bdepth_mk_bterm
-
-let resource reduce +=
-   [<< bdepth{bind{'n; x. 'e['x]}} >>, reduce_depth_termC]
- *)
 
 let proofRuleWFT =
    repeatT (rw normalizeBTermC 0

@@ -38,8 +38,8 @@ declare flatten{'l}
 (*
  * Vector forms of lists.
  *)
-declare sequent [vlist] { Term : Term >- Term } : Term
-declare sequent [vflatten] { Term : Term >- Term } : Term
+declare const sequent [vlist] { Term : Term >- Term } : Term
+declare const sequent [vflatten] { Term : Term >- Term } : Term
 
 (*
  * ML code.

@@ -39,7 +39,7 @@ open Basic_tactics
 (*
  * Context variables are represented with the << hyp_context >> term.
  *)
-declare sequent [hyp_context] { Term : Term >- Term } : Term
+declare const sequent [hyp_context] { Term : Term >- Term } : Term
 
 (*
  * BTerm sequent.  Hyps are in normal "pretty" form.

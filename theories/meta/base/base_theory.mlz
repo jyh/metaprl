@@ -81,6 +81,7 @@ extends Top_conversionals
 extends Base_trivial
 extends Auto_tactic
 extends Dtactic
+extends Forward
 extends Base_rewrite
 doc docoff
 

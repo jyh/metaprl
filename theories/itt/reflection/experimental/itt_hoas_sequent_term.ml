@@ -112,7 +112,7 @@ prim_rw unfold_hyp_term : hyp_term{| <J> >- 'A |} <--> <:xterm<
    ["vbind"{| <J> >- A |}]
 >>
 
-declare const sequent [hyp_context] { Term : Term >- Term } : Term
+declare sequent [hyp_context] { Term : Term >- Term } : Term
 
 prim_rw unfold_hyp_context : hyp_context{| <J> >- 'A |} <--> <:xterm<
    hyps_bterms{hyps_flatten{"mk_vbind"{| <J> >- mk_core{A} |}}}
@@ -125,9 +125,9 @@ interactive_rw reduce_hyps_bterms_hyplist_simple {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw invert_hyps_bterms_hyplist_simple : <:xrewrite<
-   hyp_context{| >- hyplist{| <K> |} |}
+   "hyp_context"{| >- "hyplist"{| <K> |} |}
    <-->
-   hyps_bterms{hyplist{| <K> |}}
+   hyps_bterms{"hyplist"{| <K> |}}
 >>
 
 interactive_rw reduce_hyps_bterms_hyplist {| reduce |} : <:xrewrite<
@@ -235,6 +235,33 @@ interactive vflatten_hyp_left_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- A IN CVar{length{"vflatten"{| <K> |}}} -->
    "wf" : <H> >- "vflatten"{| <J[it]> |} IN CVar{length{"vflatten"{| <K>; x: A |}}} -->
    <H> >- "vflatten"{| x: A; <J[x]> |} IN CVar{length{"vflatten"{| <K> |}}}
+>>
+
+(************************************************************************
+ * Length theorems.
+ *)
+doc <:doc<
+   Length theorems.  We try to produce a normal form.  The elements
+   of the list don't matter, so the usual goal is to produce
+   << length{vlist{| <J> |}} >>.
+>>
+interactive_rw reduce_length_hyplist {| reduce |} : <:xrewrite<
+   length{hyplist{| <J> |}}
+   <-->
+   length{vlist{| <J> |}}
+>>
+
+interactive_rw reduce_length_hyps_bterms {| reduce |} : <:xrewrite<
+   l in list -->
+   length{hyps_bterms{l}}
+   <-->
+   length{l}
+>>
+
+interactive_rw reduce_length_hyp_context_nil {| reduce |} : <:xrewrite<
+   length{hyp_context{| >- hyplist{| <J> |} |}}
+   <-->
+   length{vlist{| <J> |}}
 >>
 
 (************************************************************************

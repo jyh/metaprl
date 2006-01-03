@@ -426,6 +426,18 @@ interactive bterm2_is_bterm {| intro [intro_typeinf << 'e >>] |} BTerm{'n} : <:x
 >>
 
 (************************************************************************
+ * Forward chaining rules.
+ *)
+doc <:doc<
+   Forward-chaining.
+>>
+interactive cvar_forward {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; l in CVar{n}; <J> >- n in nat -->
+   <H>; l in CVar{n}; <J>; l in list{BTerm}; hyp_depths{n; l} >- 'C -->
+   <H>; l in CVar{n}; <J> >- 'C
+>>
+
+(************************************************************************
  * Display.
  *)
 

@@ -59,21 +59,6 @@ open Itt_equal
 open Itt_omega
 
 (************************************************************************
- * Helper theorems.
- *)
-doc <:doc<
-   Helper theorems for proving wf.
-
-   These are all theorems that are specific for well-formedness
-   reasoning, and don't belong anywhere else.
->>
-interactive_rw reduce_length_hyp_context_nil {| reduce |} : <:xrewrite<
-   length{"hyp_context"{| >- hyplist{| <J> |} |}}
-   <-->
-   length{vlist{| <J> |}}
->>
-
-(************************************************************************
  * Tactics.
  *)
 doc <:doc<

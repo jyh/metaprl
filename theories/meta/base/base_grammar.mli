@@ -210,6 +210,8 @@ declare prec_not       : Precedence
 declare prec_rel       : Precedence
 declare prec_cons      : Precedence
 declare prec_squote    : Precedence
+declare prec_sequent   : Precedence
+declare prec_bang      : Precedence
 
 lex_prec right    [prec_mimplies] > prec_min
 lex_prec right    [prec_miff] > prec_mimplies
@@ -234,6 +236,8 @@ lex_prec left     [prec_band] > prec_mul
 lex_prec left     [prec_apply] > prec_band
 lex_prec right    [prec_not] > prec_apply
 lex_prec nonassoc [prec_squote] > prec_not
+lex_prec nonassoc [prec_sequent] > prec_squote
+lex_prec left     [prec_bang] > prec_sequent
 
 lex_prec right    [tok_longrightarrow] = prec_mimplies
 lex_prec right    [tok_longleftrightarrow] = prec_miff
@@ -249,6 +253,8 @@ lex_prec right    [tok_colon_colon] = prec_cons
 lex_prec nonassoc [tok_tilde; tok_dot; tok_hash; tok_squote; tok_dollar] = prec_not
 lex_prec right    [tok_pipe] = prec_let
 lex_prec nonassoc [tok_squote] = prec_squote
+lex_prec nonassoc [tok_left_sequent] = prec_sequent
+lex_prec left     [tok_bang] = prec_bang
 
 (************************************************
  * Utilities.
@@ -582,11 +588,17 @@ production xterm_simple_term{parsed_sequent{sequent { <H> >- 'e }}} <--
 production xterm_simple_term{parsed_sequent{sequent [parsed_sequent_arg{'arg}] { <H> >- 'e }}} <--
    xterm_simple_term{'arg}; tok_left_sequent; xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}; tok_right_sequent
 
+production xterm_simple_term{parsed_sequent{sequent [parsed_sequent_arg{xterm{xlist_sequent{| xopname[x:s] |}; xlist_sequent{||}; xlist_sequent{||}}}] { <H> >- 'e }}} <--
+   tok_id[x:s]; tok_left_sequent; xterm_hyps{parsed_hyps{| <H> |}}; tok_turnstile; xterm_term{'e}; tok_right_sequent
+
 production xterm_simple_term{parsed_sequent{sequent { <H> }}} <--
    tok_sequent; tok_left_brace; xterm_hyps{parsed_hyps{| <H> |}}; tok_right_brace
 
 production xterm_simple_term{parsed_sequent{sequent [parsed_sequent_arg{'arg}] { <H> }}} <--
    xterm_simple_term{'arg}; tok_left_sequent; xterm_hyps{parsed_hyps{| <H> |}}; tok_right_sequent
+
+production xterm_simple_term{parsed_sequent{sequent [parsed_sequent_arg{xterm{xlist_sequent{| xopname[x:s] |}; xlist_sequent{||}; xlist_sequent{||}}}] { <H> }}} <--
+   tok_id[x:s]; tok_left_sequent; xterm_hyps{parsed_hyps{| <H> |}}; tok_right_sequent
 
 production xterm_hyps{parsed_hyps{||}} <--
    (* empty *)

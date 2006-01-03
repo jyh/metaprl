@@ -81,7 +81,7 @@ prim_rw unfold_hypconslist : <:xrewrite<
    sequent_ind{u, v. mk_core{u} :: hyps_flatten{mk_bind{x. mk_core{happly{v; x}}}}; "TermSequent"{| <J> >- C |}}
 >>
 
-declare const sequent [hyplist] { Term : Term >- Term } : Term
+declare sequent [hyplist] { Term : Term >- Term } : Term
 
 prim_rw unfold_hyplist : <:xrewrite<
    "hyplist"{| <J> >- C |}

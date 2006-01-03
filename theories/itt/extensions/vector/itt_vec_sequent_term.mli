@@ -38,7 +38,7 @@ declare hyps_flatten{'e}
 (*
  * A list of hypotheses.
  *)
-declare const sequent [hyplist] { Term : Term >- Term } : Term
+declare sequent [hyplist] { Term : Term >- Term } : Term
 
 (*
  * Compute the flat representation of a sequent.

@@ -187,10 +187,7 @@ let rec unify_term subst t1 t2 =
       eprintf "@[<v 3>unify_term:@ %s@ %s@]@." (**)
          (SimplePrint.string_of_term t1)
          (SimplePrint.string_of_term t2);
-   if is_hyp_context_term t1 then
-      let _, t1 = dest_hyp_context_term t1 in
-         unify_term subst t1 t2
-   else if is_vbind_term t1 then
+   if is_vbind_term t1 then
       let _, t1 = dest_vbind_term t1 in
          unify_term subst t1 t2
    else if is_bind_term t2 then

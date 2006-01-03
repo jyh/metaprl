@@ -38,7 +38,7 @@ doc <:doc<
 
 extends Itt_vec_bind
 extends Itt_hoas_base
-extends Meta_extensions_theory
+extends Meta_context_theory
 
 doc docoff
 

@@ -26,7 +26,7 @@ doc <:doc<
 
    @parents
 >>
-extends Meta_extensions_theory
+extends Meta_context_theory
 extends Itt_vec_dform
 extends Itt_pairwise
 extends Itt_vec_bind

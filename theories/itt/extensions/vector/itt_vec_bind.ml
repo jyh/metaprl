@@ -28,7 +28,7 @@ doc <:doc<
 
    @parents
 >>
-extends Meta_extensions_theory
+extends Meta_context_theory
 extends Itt_theory
 extends Itt_match
 

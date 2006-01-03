@@ -25,8 +25,8 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
+extends Meta_context_theory
 extends Itt_theory
-extends Meta_extensions_theory
 
 open Basic_tactics
 

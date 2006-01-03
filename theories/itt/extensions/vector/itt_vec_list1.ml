@@ -38,10 +38,10 @@ doc <:doc<
 
    @parents
 >>
+extends Meta_context_theory
 extends Itt_theory
 extends Itt_vec_dform
 extends Itt_list3
-extends Meta_extensions_theory
 
 doc docoff
 

@@ -17,7 +17,7 @@ MPFILES[] =
     meta_context_ind1
     meta_rewrite
     meta_context_terms2
-    meta_extensions_theory
+    meta_context_theory
 
 Theory($(MPFILES))
 

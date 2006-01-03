@@ -39,8 +39,8 @@ doc <:doc<
 
    @parents
 >>
+extends Meta_context_theory
 extends Itt_struct
-extends Meta_extensions_theory
 doc docoff
 
 open Basic_tactics

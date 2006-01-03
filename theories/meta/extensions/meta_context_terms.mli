@@ -55,7 +55,7 @@ declare sequent_ind{x : ty_sequent{ty_hyp{'a; 'b}; 'c; 'd}, y : 'c. 'concl['x; '
  *)
 declare type SequentCore{'a : Ty; 'b : Ty; 'c : Ty}
 
-declare sequent [Sequent] { 'a : 'b >- 'c } : SequentCore{'a; 'b; 'c}
+declare sequent [SequentTerm] { 'a : 'b >- 'c } : SequentCore{'a; 'b; 'c}
 
 declare sequent_ind{h: HFun{'a; 'b; 'result}. 'step['h] : 'result; 'e : SequentCore{'a; 'b; 'result}} : 'result
 

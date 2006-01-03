@@ -38,9 +38,27 @@ declare lof_nth{'x; 'i}
 
 declare lof_bind{'n; x. 'e['x]}
 
+(*
+ * Lof algebra.
+ *)
+declare lof_nil
+declare lof_cons{i. 'f['i]; 'i; 'e}
+declare lof_tl{i. 'f['i]; 'i}
+declare lof_nth_prefix{i. 'f['i]; 'i; 'n; 'm}
+declare lof_nth_suffix{i. 'f['i]; 'i; 'n; 'm}
+declare lof_append{i. 'f['i]; j. 'g['j]; 'i; 'n; 'm}
+
 (************************************************************************
  * Resources.
  *)
+resource (term * conv, conv) pre_normalize_lof
+
+val process_pre_normalize_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
+
+topval preNormalizeLofTopC : conv
+topval preNormalizeLofC : conv
+topval preNormalizeLofT : tactic
+
 resource (term * conv, conv) normalize_lof
 
 val process_normalize_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor

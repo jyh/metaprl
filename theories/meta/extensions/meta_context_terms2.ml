@@ -37,9 +37,9 @@ doc <:doc<
    There is a corresponding reduction rule on the right.
 >>
 interactive_rw reduce_sequent_ind_right {| reduce |} :
-   sequent_ind{h. 'step['h]; Sequent{| <J>; x: 'A >- 'C['x] |}}
+   sequent_ind{h. 'step['h]; SequentTerm{| <J>; x: 'A >- 'C['x] |}}
    <-->
-   sequent_ind{h. 'step['h]; Sequent{| <J> >- 'step[hlambda{'A; x. 'C['x]}] |}}
+   sequent_ind{h. 'step['h]; SequentTerm{| <J> >- 'step[hlambda{'A; x. 'C['x]}] |}}
 
 doc <:doc<
    Define a spread version of sequent induction.
@@ -50,19 +50,19 @@ define unfold_sequent_ind_uv :
    sequent_ind{h. 'step[htype{'h}; 'h]; 'e}
 
 interactive_rw reduce_sequent_ind_nil2 {| reduce |} :
-   sequent_ind{u, v. 'step['u; 'v]; Sequent{| >- 'C |}}
+   sequent_ind{u, v. 'step['u; 'v]; SequentTerm{| >- 'C |}}
    <-->
    'C
 
 interactive_rw reduce_sequent_ind_left2 {| reduce |} :
-   sequent_ind{u, v. 'step['u; 'v]; Sequent{| x: 'A; <H['x]> >- 'C['x] |}}
+   sequent_ind{u, v. 'step['u; 'v]; SequentTerm{| x: 'A; <H['x]> >- 'C['x] |}}
    <-->
-   'step['A; hlambda{'A; x. sequent_ind{u, v. 'step['u; 'v]; Sequent{| <H['x]> >- 'C['x] |}}}]
+   'step['A; hlambda{'A; x. sequent_ind{u, v. 'step['u; 'v]; SequentTerm{| <H['x]> >- 'C['x] |}}}]
 
 interactive_rw reduce_sequent_ind_right2 {| reduce |} :
-   sequent_ind{u, v. 'step['u; 'v]; Sequent{| <H>; x: 'A >- 'C['x] |}}
+   sequent_ind{u, v. 'step['u; 'v]; SequentTerm{| <H>; x: 'A >- 'C['x] |}}
    <-->
-   sequent_ind{u, v. 'step['u; 'v]; Sequent{| <H> >- 'step['A; hlambda{'A; x. 'C['x]}] |}}
+   sequent_ind{u, v. 'step['u; 'v]; SequentTerm{| <H> >- 'step['A; hlambda{'A; x. 'C['x]}] |}}
 
 doc <:doc<
    Define a complete version of sequent induction.
@@ -75,15 +75,15 @@ define unfold_sequent_ind_cuv :
    sequent_ind{y, x. 'concl['x]; h. 'step[htype{'h}; 'h]; 'e}
 
 interactive_rw reduce_sequent_ind_nil3 {| reduce |} :
-   sequent_ind{x. 'c['x]; u, v. 'step['u; 'v]; Sequent{| <J> >- 'C |}}
+   sequent_ind{x. 'c['x]; u, v. 'step['u; 'v]; SequentTerm{| <J> >- 'C |}}
    <-->
-   sequent_ind{u, v. 'step['u; 'v]; Sequent{| <J> >- 'c['C] |}}
+   sequent_ind{u, v. 'step['u; 'v]; SequentTerm{| <J> >- 'c['C] |}}
 
 doc <:doc<
    Derive the rules for the term sequent.
 >>
 prim_rw unfold_TermSequent : TermSequent{| <J> >- 'C |} <-->
-   Sequent{| <J> >- 'C |}
+   SequentTerm{| <J> >- 'C |}
 
 interactive_rw reduce_term_sequent_ind_nil1 {| reduce |} :
    sequent_ind{h. 'step['h]; TermSequent{| >- 'C |}}

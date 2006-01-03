@@ -50,6 +50,7 @@ open Lm_printf
 open Basic_tactics
 open Simple_print
 open Itt_hoas_vector
+open Itt_hoas_debruijn
 
 (************************************************************************
  * Resources.
@@ -78,7 +79,26 @@ let extract_data tbl =
       termC rw
 
 (*
- * Resource.
+ * Normalizing resource (lof lifting).
+ *)
+let process_pre_normalize_lof_resource_rw_annotation = redex_and_conv_of_rw_annotation "pre_normalize_lof"
+
+let resource (term * conv, conv) pre_normalize_lof =
+   table_resource_info extract_data
+
+let preNormalizeLofTopC_env e =
+   get_resource_arg (env_arg e) get_pre_normalize_lof_resource
+
+let preNormalizeLofTopC = funC preNormalizeLofTopC_env
+
+let preNormalizeLofC =
+   funC (fun e -> sweepUpC (preNormalizeLofTopC_env e))
+
+let preNormalizeLofT =
+   rwAll preNormalizeLofC
+
+(*
+ * Normalizing resource (lof lifting).
  *)
 let process_normalize_lof_resource_rw_annotation = redex_and_conv_of_rw_annotation "normalize_lof"
 
@@ -97,7 +117,7 @@ let normalizeLofT =
    rwAll normalizeLofC
 
 (*
- * Resource.
+ * Reduce resource (lof lowering).
  *)
 let process_reduce_lof_resource_rw_annotation = redex_and_conv_of_rw_annotation "reduce_lof"
 
@@ -348,13 +368,17 @@ interactive_rw lof_bind_append {| reduce_lof |} :
 doc <:doc<
    Convert the expression in a << bind{'n; x. 'e['x]} >> to lof form.
 >>
-interactive_rw bindn_to_lof_bind :
+let resource pre_normalize_lof +=
+   [<< mk_term{'op; 'subterms} >>, fold_mk_term;
+    << subst{'e1; 'e2} >>, subst_to_substl]
+
+interactive_rw bindn_to_lof_bind {| pre_normalize_lof |} :
    'n in nat -->
    bind{'n; x. 'e['x]}
    <-->
    lof_bind{'n; x. 'e[lof{i. lof_nth{'x; 'i}; 'n}]}
 
-interactive_rw bind_to_lof_bind :
+interactive_rw bind_to_lof_bind {| pre_normalize_lof |} :
    bind{x. 'e['x]}
    <-->
    lof_bind{1; x. 'e[hd{'x}]}

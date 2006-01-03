@@ -642,8 +642,8 @@ O	o185	var p184
 T	t185	o185
 Vstep	step	step\\ \\ t185
 B	b185	step h
-NMeta_context_terms!Sequent	Sequent	Sequent Meta_context_terms
-O	o186	Sequent
+NMeta_context_terms!Sequent	SequentTerm	SequentTerm Meta_context_terms
+O	o186	SequentTerm
 T	t186	o186
 C	h	J\\ \\
 VA	A	A\\ J\\

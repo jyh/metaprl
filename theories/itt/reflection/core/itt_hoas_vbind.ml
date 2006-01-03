@@ -73,6 +73,11 @@ interactive_rw reduce_vbind_right :
    <-->
    vbind{| <J> >- bind{x. 'C['x]} |}
 
+interactive_rw reduce_vbind_merge :
+   vbind{| <J> >- vbind{| <K> >- 'e |} |}
+   <-->
+   vbind{| <J>; <K> >- 'e |}
+
 (************************************************************************
  * Tactics.
  *)

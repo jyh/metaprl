@@ -1,10 +1,10 @@
 doc <:doc<
-   @module[Itt_hoas_normalize]x
+   @module[Itt_hoas_lof_vec]
 
-   The @tt[Itt_hoas_normalize] module defines a normalization procedure
-   for BTerms.
+   Vector counterparts for lof normalization.
 
    @docoff
+
    ----------------------------------------------------------------
 
    @begin[license]
@@ -36,56 +36,17 @@ doc <:doc<
    @end[license]
    @parents
 >>
+extends Itt_hoas_vbind
 extends Itt_hoas_lof
-extends Itt_hoas_lof_vec
 
-doc docoff
-
-open Lm_printf
 open Basic_tactics
-open Itt_hoas_lof
-open Itt_hoas_lof_vec
-open Itt_hoas_vector
-open Itt_hoas_debruijn
-
-(************************************************************************
- * Tactics.
- *)
-doc <:doc<
-   The normalization conversion performs the following steps:
-
-   @begin[enumerate]
-   @item{{Eliminate all << mk_term{'op; 'subterms} >>.}}
-   @item{{Eliminate all << bind{x. 'e['x]} >>.}}
-   @item{{Coalesce binds.}}
-   @item{{Push binds down.}}
-   @item{{Coalesce substitutions.}}
-   @end[enumerate]
-   @docoff
->>
 
 (*
- * Push a bind through a term.
+ * Tactics.
  *)
-let push_lof_bind_mk_bterm =
-   sweepUpC coalesce_bindC
-   thenC sweepUpC coalesce_lof_vbind
-   thenC normalizeLofC
-   thenC higherC reduce_lof_bind_mk_bterm
-   thenC higherC reduce_lof_vbind_mk_bterm
-   thenC reduceLofC
-
-let normalizeBTermAuxC =
-   preNormalizeLofC
-   thenC repeatC (progressC push_lof_bind_mk_bterm)
-   thenC normalizeLofC
-   thenC sweepUpC substl_substl_lof2
-
-let normalizeBTermC =
-   normalizeBTermAuxC
-   thenC rippleLofC
-   thenC reduceC
-   thenC sweepUpC lofBindElimC
+val vbind_to_lof_vbind : conv
+val coalesce_lof_vbind : conv
+val reduce_lof_vbind_mk_bterm : conv
 
 (*!
  * @docoff

@@ -457,7 +457,17 @@ interactive sub_logic_wf {| intro [] |} : <:xrule<
 (*
  * Membership in a logic.
  *)
-interactive mem_rules_logic {| intro [SelectOption 0] |} : <:xrule<
+interactive mem_logic_trans 'logic1 : <:xrule<
+   "wf" : <H> >- ty Type -->
+   "wf" : <H> >- logic1 in Logic{ty} -->
+   "wf" : <H> >- logic2 in Logic{ty} -->
+   "wf" : <H> >- step in ProofRule{ty} -->
+   <H> >- SubLogic{ty; logic1; logic2} -->
+   <H> >- MemLogic{ty; step; logic1} -->
+   <H> >- MemLogic{ty; step; logic2}
+>>
+
+interactive mem_rules_logic {| intro [] |} : <:xrule<
    "wf" : <H> >- ty Type -->
    "wf" : <H> >- step in ProofRule{ty} -->
    "wf" : <H> >- logic in Logic{ty} -->

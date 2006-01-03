@@ -2345,8 +2345,8 @@ P	p933	Var v
 O	o934	var p933
 T	t934	o934
 B	b934	t934
-NMeta_context_terms!Sequent	Sequent	Sequent Meta_context_terms
-O	o936	Sequent
+NMeta_context_terms!Sequent	SequentTerm	SequentTerm Meta_context_terms
+O	o936	SequentTerm
 T	t937	o936
 S	s937	t937\\ h\\ C
 B	b937	s937

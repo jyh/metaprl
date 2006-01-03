@@ -31,8 +31,15 @@ doc <:doc<
 >>
 extends Itt_hoas_vbind
 extends Itt_hoas_sequent
+extends Itt_vec_sequent_term
+extends Itt_vec_list1
 
 open Basic_tactics
+
+(*
+ * Context variables are represented with the << hyp_context >> term.
+ *)
+declare sequent [hyp_context] { Term : Term >- Term } : Term
 
 (*
  * BTerm sequent.  Hyps are in normal "pretty" form.

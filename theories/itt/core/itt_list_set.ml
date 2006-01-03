@@ -63,6 +63,18 @@ interactive mem_append_right {| intro [SelectOption 2] |} :
    sequent { <H> >- mem{'x; append{'l1; 'l2}; 'ty} }
 
 doc <:doc<
+   Subset membership.
+>>
+interactive subset_elim {| elim [] |} 'H 'x :
+   [wf] sequent { <H>; \subset{'l1; 'l2; 'ty}; <J> >- 'ty Type } -->
+   [wf] sequent { <H>; \subset{'l1; 'l2; 'ty}; <J> >- 'x in 'ty } -->
+   [wf] sequent { <H>; \subset{'l1; 'l2; 'ty}; <J> >- 'l1 in list{'ty} } -->
+   [wf] sequent { <H>; \subset{'l1; 'l2; 'ty}; <J> >- 'l2 in list{'ty} } -->
+   [wf] sequent { <H>; \subset{'l1; 'l2; 'ty}; <J> >- mem{'x; 'l1; 'ty} } -->
+   sequent { <H>; \subset{'l1; 'l2; 'ty}; <J>; mem{'x; 'l2; 'ty} >- 'C } -->
+   sequent { <H>; \subset{'l1; 'l2; 'ty}; <J> >- 'C }
+
+doc <:doc<
    Membership forms for the quantifiers.
 >>
 interactive exists_list_mem 'e 'ty :

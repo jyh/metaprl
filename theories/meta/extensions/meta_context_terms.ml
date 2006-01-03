@@ -81,20 +81,20 @@ doc <:doc<
 prim_rw reduce_sequent_ind_base1 concl_constrain{'arg; x, y. 'concl['x; 'y]} :
    sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { <H> >- 'C }}
    <-->
-   sequent_ind{h. 'step['h]; Sequent{| <H> >- 'concl['arg; 'C] |}}
+   sequent_ind{h. 'step['h]; SequentTerm{| <H> >- 'concl['arg; 'C] |}}
 
 (*
  * Reduce the inner induction form.
  *)
 prim_rw reduce_sequent_ind_base2 {| reduce |} :
-   sequent_ind{h. 'step['h]; Sequent{| >- 'C |}}
+   sequent_ind{h. 'step['h]; SequentTerm{| >- 'C |}}
    <-->
    'C
 
 prim_rw reduce_sequent_ind_left {| reduce |} :
-   sequent_ind{h. 'step['h]; Sequent{| x: 'A; <H['x]> >- 'C['x] |}}
+   sequent_ind{h. 'step['h]; SequentTerm{| x: 'A; <H['x]> >- 'C['x] |}}
    <-->
-   'step[hlambda{'A; x. sequent_ind{h. 'step['h]; Sequent{| <H['x]> >- 'C['x] |}}}]
+   'step[hlambda{'A; x. sequent_ind{h. 'step['h]; SequentTerm{| <H['x]> >- 'C['x] |}}}]
 
 doc docoff
 

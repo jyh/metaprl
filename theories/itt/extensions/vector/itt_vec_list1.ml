@@ -66,7 +66,7 @@ doc <:doc<
 declare sequent [vlist_nest] { Term : Term >- Term } : Term
 
 prim_rw unfold_vlist_nest : vlist_nest{| <H> >- 'C |} <-->
-   sequent_ind{u, v. cons{'u; happly{'v; it}}; Sequent{| <H> >- 'C |}}
+   sequent_ind{u, v. cons{'u; happly{'v; it}}; SequentTerm{| <H> >- 'C |}}
 
 doc <:doc<
    Reductions.

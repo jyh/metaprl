@@ -27,6 +27,7 @@ doc <:doc<
 
    @parents
 >>
+extends Itt_hoas_bterm_wf
 extends Itt_hoas_proof
 extends Itt_hoas_sequent
 extends Itt_hoas_sequent_term
@@ -42,8 +43,10 @@ open Basic_tactics
 open Simple_print
 open Itt_list
 open Itt_bool
+open Itt_dfun
 open Itt_dprod
 open Itt_logic
+open Itt_struct
 open Itt_int_base
 open Itt_hoas_base
 open Itt_hoas_vbind
@@ -52,6 +55,8 @@ open Itt_hoas_proof
 open Itt_hoas_sequent
 open Itt_hoas_sequent_term
 open Itt_hoas_sequent_proof_step
+open Itt_hoas_normalize
+open Itt_hoas_bterm_wf
 
 let debug_sequent_proof =
    create_debug (**)
@@ -110,6 +115,17 @@ interactive simple_step_intro 'step : <:xrule<
 >>
 
 (************************************************************************
+ * Forward chaining.
+ *)
+doc <:doc<
+   Forward-chaining rules, mainly for well-formedness reasoning.
+>>
+interactive provable_forward {| forward [] |} 'H : <:xrule<
+   <H>; Provable{logic; seq}; <J>; seq in Sequent >- C -->
+   <H>; Provable{logic; seq}; <J> >- C
+>>
+
+(************************************************************************
  * Tactics.
  *)
 doc docoff
@@ -117,220 +133,223 @@ doc docoff
 let provable_sequent_term = << Provable{'logic; 'seq} >>
 let provable_sequent_opname = opname_of_term provable_sequent_term
 let is_provable_sequent_term = is_dep0_dep0_term provable_sequent_opname
+let dest_provable_sequent_term = dest_dep0_dep0_term provable_sequent_opname
+
+let it_term = << it >>
+let xconcl_term = << xconcl >>
+let vbind_arg_term = << vbind >>
+let hyplist_arg_term = << hyplist >>
+let hyp_context_arg_term = << hyp_context >>
+
+let mk_hyplist_term v cvars args =
+   let seq =
+      { sequent_args = hyplist_arg_term;
+        sequent_hyps = SeqHyp.singleton (Context (v, cvars, args));
+        sequent_concl = xconcl_term
+      }
+   in
+      mk_sequent_term seq
 
 (*
- * Substitutions for sloppy unification.
+ * Build a vector of it terms.
  *)
-type subst =
-   { subst_sovars : var IntTable.t;
-     subst_cvars  : var IntTable.t;
-     subst_vars   : term SymbolTable.t
-   }
-
-let subst_empty =
-   { subst_sovars = IntTable.empty;
-     subst_cvars  = IntTable.empty;
-     subst_vars   = SymbolTable.empty
-   }
-
-let subst_add_sovar subst v i =
-   { subst with subst_sovars = IntTable.add subst.subst_sovars i v }
-
-let subst_add_cvar subst v i =
-   { subst with subst_cvars = IntTable.add subst.subst_cvars i v }
-
-let subst_add_var subst v t =
-   { subst with subst_vars = SymbolTable.add subst.subst_vars v t }
+let mk_it_vector len =
+   let rec collect l i =
+      if i = len then
+         l
+      else
+         collect (it_term :: l) (succ i)
+   in
+      collect [] 0
 
 (*
- * Construct the witness term from the unification info.
+ * Collect information about all second-order vars and contexts
+ * in a term.
  *)
-let witness_of_subst subst =
-   let { subst_sovars = sovars;
-         subst_cvars  = cvars;
-         subst_vars   = vars
-       } = subst
-   in
-   let sovars, _ =
-      IntTable.fold (fun (sovars, i) i' v ->
-            if i' <> i then
-               raise (RefineError ("Itt_hoas_sequent_proof.witness_of_subst", StringIntError ("missing sovar", i)));
-            let sovars =
-               try SymbolTable.find vars v :: sovars with
-                  Not_found ->
-                     raise (RefineError ("Itt_hoas_sequent_proof.witness_of_subst", StringVarError ("missing sovar", v)))
-            in
-               sovars, succ i) ([], 0) sovars
-   in
-   let cvars, _ =
-      IntTable.fold (fun (cvars, i) i' v ->
-            if i' <> i then
-               raise (RefineError ("Itt_hoas_sequent_proof.witness_of_subst", StringIntError ("missing sovar", i)));
-            let cvars =
-               try SymbolTable.find vars v :: cvars with
-                  Not_found ->
-                     raise (RefineError ("Itt_hoas_sequent_proof.witness_of_subst", StringVarError ("missing sovar", v)))
-            in
-               cvars, succ i) ([], 0) cvars
-   in
-
-   (* Build the witness term *)
-   let sovars = mk_list_of_list (List.rev sovars) in
-   let cvars = mk_list_of_list (List.rev cvars) in
-      mk_proof_step_witness_term sovars cvars
-
-(*
- * Sloppy unification.
- *)
-let rec unify_term subst t1 t2 =
-   if !debug_sequent_proof then
-      eprintf "@[<v 3>unify_term:@ %s@ %s@]@." (**)
-         (SimplePrint.string_of_term t1)
-         (SimplePrint.string_of_term t2);
-   if is_vbind_term t1 then
-      let _, t1 = dest_vbind_term t1 in
-         unify_term subst t1 t2
-   else if is_bind_term t2 then
-      let _, t2 = dest_bind_term t2 in
-         unify_term subst t1 t2
-   else if is_bindn_term t2 then
-      let _, _, t2 = dest_bindn_term t2 in
-         unify_term subst t1 t2
-   else if is_var_term t2 then
-      subst_add_var subst (dest_var t2) t1
-   else if is_vsequent_term t1 && is_vsequent_term t2 then
-      let _, hyps1, concl1 = dest_vsequent_term t1 in
-      let _, hyps2, concl2 = dest_vsequent_term t2 in
-      let subst = unify_hyps subst hyps1 hyps2 in
-         unify_term subst concl1 concl2
+let rec socvars_info info t =
+   if is_var_term t then
+      info
+   else if is_so_var_term t then
+      socvars_so_var_info info t
+   else if is_context_term t then
+      socvars_context_info info t
+   else if is_sequent_term t then
+      socvars_sequent_info info t
    else
-      let { term_op = op1; term_terms = terms1 } = dest_term t1 in
-      let { term_op = op2; term_terms = terms2 } = dest_term t2 in
-      let { op_name = opname1; op_params = params1 } = dest_op op1 in
-      let { op_name = opname2; op_params = params2 } = dest_op op2 in
-         if Opname.eq opname1 opname2 then
-            let subst = unify_param_list subst params1 params2 in
-               unify_bterm_list subst terms1 terms2
-         else
-            raise (RefineError ("Itt_hoas_sequent_proof.unify_term", StringError "term mismatch"))
+      socvars_bterms_info info (dest_term t).term_terms
 
-and unify_term_list subst tl1 tl2 =
-   let len1 = List.length tl1 in
-   let len2 = List.length tl2 in
-      if len1 = len2 then
-         List.fold_left2 unify_term subst tl1 tl2
-      else
-         raise (RefineError ("Itt_hoas_sequent_proof.unify_term_list", StringError "arity mismatch"))
+and socvars_terms_info info tl =
+   List.fold_left socvars_info info tl
 
-and unify_param subst p1 p2 =
-   let eq =
-      match dest_param p1, dest_param p2 with
-         Number n1, Number n2 ->
-            Lm_num.eq_num n1 n2
-       | String s1, String s2 ->
-            s1 = s2
-       | Token t1, Token t2 ->
-            Opname.eq t1 t2
-       | Var v1, Var v2 ->
-            Lm_symbol.eq v1 v2
-       | Shape s1, Shape s2 ->
-            TermShape.shape_eq s1 s2
-       | Operator o1, Operator o2 ->
-            opparam_eq o1 o2
-       | Quote, Quote ->
-            true
-       | _ ->
-            false
+and socvars_bterm_info info bt =
+   socvars_info info (dest_bterm bt).bterm
+
+and socvars_bterms_info info btl =
+   List.fold_left socvars_bterm_info info btl
+
+and socvars_so_var_info (cinfo, soinfo) t =
+   let v, cvars, args = dest_so_var t in
+   let soinfo = SymbolTable.add soinfo v (cvars, List.length args) in
+      socvars_terms_info (cinfo, soinfo) args
+
+and socvars_context_info info t =
+   let _, t, _, args = dest_context t in
+   let info = socvars_info info t in
+      socvars_terms_info info args
+
+and socvars_sequent_info info t =
+   let { sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
    in
-      if eq then
-         subst
-      else
-         raise (RefineError ("Itt_hoas_sequent_proof.unify_param", (**)
-                                StringErrorError ("parameter mismatch",
-                                ParamErrorError (p1, ParamError p2))))
-
-and unify_param_list subst pl1 pl2 =
-   let len1 = List.length pl1 in
-   let len2 = List.length pl2 in
-      if len1 = len2 then
-         List.fold_left2 unify_param subst pl1 pl2
-      else
-         raise (RefineError ("Itt_hoas_sequent_proof.unify_param_list", (**)
-                                StringErrorError ("arity mismatch",
-                                IntErrorError (len1, IntError len2))))
-
-and unify_bterm subst bt1 bt2 =
-   let { bvars = vars1; bterm = t1 } = dest_bterm bt1 in
-   let { bvars = vars2; bterm = t2 } = dest_bterm bt2 in
-   let len1 = List.length vars1 in
-   let len2 = List.length vars2 in
-      if len1 = len2 then
-         unify_term subst t1 t2
-      else
-         raise (RefineError ("Itt_hoas_sequent_proof.unify_bterm", (**)
-                                StringErrorError ("arity mismatch",
-                                IntErrorError (len1, IntError len2))))
-
-and unify_bterm_list subst btl1 btl2 =
-   let len1 = List.length btl1 in
-   let len2 = List.length btl2 in
-      if len1 = len2 then
-         List.fold_left2 unify_bterm subst btl1 btl2
-      else
-         raise (RefineError ("Itt_hoas_sequent_proof.unify_bterm_list", (**)
-                                StringErrorError ("arity mismatch",
-                                IntErrorError (len1, IntError len2))))
-
-and unify_hyps subst hyps1 hyps2 =
-   let len1 = SeqHyp.length hyps1 in
-   let len2 = SeqHyp.length hyps2 in
-   let () =
-      if len1 <> len2 then
-         raise (RefineError ("Itt_hoas_sequent_proof.unify_hyps", (**)
-                                StringErrorError ("arity mismatch",
-                                IntErrorError (len1, IntError len2))))
+   let info =
+      SeqHyp.fold (fun info _ h ->
+            match h with
+               Hypothesis (_, t) ->
+                  socvars_info info t
+             | Context (v, cvars, args) ->
+                  let cinfo, soinfo = info in
+                  let cinfo = SymbolTable.add cinfo v (cvars, List.length args) in
+                     socvars_terms_info (cinfo, soinfo) args) info hyps
    in
-   let rec unify subst i =
-      if i = len1 then
-         subst
-      else
-         match SeqHyp.get hyps1 i, SeqHyp.get hyps2 i with
-            Hypothesis (_, t1), Hypothesis (_, t2) ->
-               let subst = unify_term subst t1 t2 in
-                  unify subst (succ i)
-          | _ ->
-               raise (RefineError ("Itt_hoas_sequent_proof.unify_hyps", StringError "illegal context"))
-   in
-      unify subst 0
+      socvars_info info concl
 
-let rec unify_start subst t =
+(*
+ * Get the variable ordering in the proof witness.
+ *)
+let rec find_var_index cindex soindex t =
    if is_exists_term t then
       let _, _, t = dest_exists t in
-         unify_start subst t
+         find_var_index cindex soindex t
    else if is_assert_term t then
-      unify_start subst (dest_assert t)
+      find_var_index cindex soindex (dest_assert t)
    else if is_let_cvar_term t then
       let _, _, i, v, t = dest_let_cvar_term t in
       let i = int_of_num (dest_number i) in
-      let subst = subst_add_cvar subst v i in
-         unify_start subst t
+      let cindex = IntTable.add cindex i v in
+         find_var_index cindex soindex t
    else if is_let_sovar_term t then
       let _, _, i, v, t = dest_let_sovar_term t in
       let i = int_of_num (dest_number i) in
-      let subst = subst_add_sovar subst v i in
-         unify_start subst t
-   else if is_beq_sequent_term t then
-      let t1, t2 = dest_beq_sequent_term t in
-         unify_term subst t1 t2
+      let soindex = IntTable.add soindex i v in
+         find_var_index cindex soindex t
    else
-      raise (RefineError ("Itt_hoas_sequent_proof.unify_start", StringTermError ("unexpected term", t)))
+      cindex, soindex
+
+(*
+ * Build the context hypotheses.
+ *)
+let build_bind_context cinfo cvars arity =
+   (* Add the contexts to the hyp list *)
+   let hyps =
+      List.fold_left (fun hyps v ->
+            try
+               let cvars, arity = SymbolTable.find cinfo v in
+                  Context (v, cvars, mk_it_vector arity) :: hyps
+            with
+               Not_found ->
+                  hyps) [] cvars
+   in
+
+   (* Add scalar hyps *)
+   let rec add_scalar_hyps hyps vars i =
+      if i = arity then
+         vars, hyps
+      else
+         let v = Lm_symbol.make "x" i in
+         let vars = mk_var_term v :: vars in
+         let hyps = Hypothesis (v, it_term) :: hyps in
+            add_scalar_hyps hyps vars (succ i)
+   in
+   let vars, hyps = add_scalar_hyps hyps [] 0 in
+   let vars = List.rev vars in
+   let hyps = List.rev hyps in
+      vars, hyps
+
+(*
+ * Build the second-order witness.
+ *)
+let build_so_witness cinfo soinfo sindex =
+   let witness, _ =
+      IntTable.fold (fun (witness, index) index' v ->
+            if index' <> index then
+               raise (RefineError ("Itt_hoas_sequent_proof.build_so_witness", StringIntError ("witness ordering error", index')));
+
+            (* Info for the var *)
+            let cvars, arity =
+               try SymbolTable.find soinfo v with
+                  Not_found ->
+                     raise (RefineError ("Itt_hoas_sequent_proof.build_so_witness", StringVarError ("unknown second-order variable", v)))
+            in
+
+            (* Construct the context *)
+            let vars, hyps = build_bind_context cinfo cvars arity in
+
+            (* The conclusion is the sovar *)
+            let t = mk_so_var_term v cvars vars in
+
+            (* Now build the witness term *)
+            let seq =
+               { sequent_args = vbind_arg_term;
+                 sequent_hyps = SeqHyp.of_list (List.rev hyps);
+                 sequent_concl = t
+               }
+            in
+            let t = mk_sequent_term seq in
+               t :: witness, succ index) ([], 0) sindex
+   in
+      mk_list_of_list (List.rev witness)
+
+(*
+ * Build the second-order witness.
+ *)
+let build_context_witness cinfo cindex =
+   let witness, _ =
+      IntTable.fold (fun (witness, index) index' v ->
+            if index' <> index then
+               raise (RefineError ("Itt_hoas_sequent_proof.build_context_witness", StringIntError ("witness ordering error", index')));
+
+            (* Info for the var *)
+            let cvars, arity =
+               try SymbolTable.find cinfo v with
+                  Not_found ->
+                     raise (RefineError ("Itt_hoas_sequent_proof.build_context_witness", StringVarError ("unknown second-order variable", v)))
+            in
+
+            (* Construct the context *)
+            let vars, hyps = build_bind_context cinfo cvars arity in
+
+            (* The conclusion is the sovar *)
+            let t = mk_hyplist_term v cvars vars in
+
+            (* Now build the witness term *)
+            let seq =
+               { sequent_args = hyp_context_arg_term;
+                 sequent_hyps = SeqHyp.of_list (List.rev hyps);
+                 sequent_concl = t
+               }
+            in
+            let t = mk_sequent_term seq in
+               t :: witness, succ index) ([], 0) cindex
+   in
+      mk_list_of_list (List.rev witness)
+
+(*
+ * Build the entire witness term.
+ *)
+let build_proof_witness_term p =
+   let t = concl p in
+   let cinfo, soinfo = socvars_info (SymbolTable.empty, SymbolTable.empty) t in
+   let cindex, soindex = find_var_index IntTable.empty IntTable.empty t in
+   let cvars = build_context_witness cinfo cindex in
+   let sovars = build_so_witness cinfo soinfo soindex in
+      mk_proof_step_witness_term sovars cvars
 
 (*
  * Unify the terms, then instantiate the existential.
  *)
 let dest_proof_step_witness p =
-   let subst = unify_start subst_empty (concl p) in
-   let witness = witness_of_subst subst in
+   let witness = build_proof_witness_term p in
       exists_intro witness
 
 let proofStepWitnessT = funT dest_proof_step_witness
@@ -339,23 +358,59 @@ let proofStepWitnessT = funT dest_proof_step_witness
  * When applying the @tt[provable_intro] get the premises from
  * the assumptions.
  *)
-let provable_premises assums =
-   let premises =
-      List.fold_left (fun premises assum ->
-            let concl = (explode_sequent assum).sequent_concl in
-               if is_provable_sequent_term concl then
-                  concl :: premises
-               else
-                  premises) [] assums
+let provable_hyps hyps =
+   let hyps =
+      SeqHyp.fold (fun hyps _ h ->
+            match h with
+               Hypothesis (_, t) ->
+                  if is_provable_sequent_term t then
+                     let _, t = dest_provable_sequent_term t in
+                        t :: hyps
+                  else
+                     hyps
+             | Context _ ->
+                  hyps) [] hyps
    in
-      List.rev premises
+      List.rev hyps
 
 let provable_intro_tac p =
-   let premises = provable_premises (all_assums p) in
-   let premises_list = mk_list_of_list premises in
-      provable_intro premises_list
+   let hyps = provable_hyps (explode_sequent (Sequent.goal p)).sequent_hyps in
+   let hyps_list = mk_list_of_list hyps in
+      provable_intro hyps_list
 
 let provableIntroT = funT provable_intro_tac
+
+(************************************************************************
+ * The final tactic.
+ *)
+
+(*
+ * Bring in all the assums.
+ *)
+let rec assum_all i len =
+   if i > len then
+      idT
+   else
+      assumT i thenT assum_all (succ i) len
+
+let assumAllT =
+   funT (fun p -> assum_all 1 (Sequent.num_assums p))
+
+let simple_step t unfold =
+   simple_step_intro t
+   then_OnLastT (rw (higherC unfold thenC reduceC) 0)
+
+let provableRuleStartT t unfold =
+   assumAllT
+   thenT rwhAll reduce_bsequent
+   thenT forwardChainT
+   thenT thinDupT
+   then_OnLastT (provableIntroT then_OnLastT simple_step t unfold)
+
+let provableRuleT t unfold =
+   provableRuleStartT t unfold
+   then_OnLastT proofStepWitnessT
+   thenT proofRuleWFT
 
 (*!
  * @docoff

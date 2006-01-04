@@ -43,7 +43,6 @@ extends Itt_hoas_bterm
 extends Itt_hoas_lof
 extends Itt_hoas_lof_vec
 extends Itt_hoas_normalize
-extends Itt_hoas_sequent_term
 
 doc docoff
 
@@ -57,6 +56,33 @@ open Itt_hoas_bterm
 open Itt_hoas_lof
 open Itt_equal
 open Itt_omega
+
+(************************************************************************
+ * Forward chaining.
+ *)
+doc <:doc<
+   Some useful rules for forward chaining.
+>>
+interactive bterm2_forward {| forward [] |} 'H : <:xrule<
+   <H>; e in BTerm{d}; <J>; e in BTerm; bdepth{e} = d in nat >- C -->
+   <H>; e in BTerm{d}; <J> >- C
+>>
+
+interactive mk_bterm_depth_forward {| forward [] |} 'H : <:xrule<
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; d in nat >- C -->
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+>>
+
+interactive mk_bterm_subterms_forward1 {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- subterms in list -->
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; subterms in list{BTerm} >- C -->
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+>>
+
+interactive mk_bterm_wf_forward {| forward [] |} 'H : <:xrule<
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; compatible_shapes{d; shape{op}; subterms} >- C -->
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+>>
 
 (************************************************************************
  * Tactics.

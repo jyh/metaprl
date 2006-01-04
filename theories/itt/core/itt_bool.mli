@@ -146,6 +146,11 @@ val is_bor_term : term -> bool
 val mk_bor_term : term -> term -> term
 val dest_bor : term -> term * term
 
+val band_term : term
+val is_band_term : term -> bool
+val mk_band_term : term -> term -> term
+val dest_band : term -> term * term
+
 topval extBoolT : tactic
 topval magicT : tactic
 topval splitBoolT : term -> int -> tactic

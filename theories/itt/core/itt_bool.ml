@@ -173,19 +173,16 @@ dform bfalse_df : except_mode[src] :: bfalse =
 dform bor_df : parens :: "prec"[prec_bor] :: except_mode[src] :: bor{'a; 'b} =
    slot{'a} " " vee subb " " slot{'b}
 
-dform band_df : parens :: "prec"[prec_band] :: except_mode[src] :: band{'a; 'b}
- =
-   slot{'a} " " wedge subb " " slot{'b}
+dform band_df : parens :: "prec"[prec_band] :: except_mode[src] :: band{'a; 'b} =
+   szone pushm[0] slot{'a} hspace wedge subb " " slot{'b} popm ezone
 
-dform bimplies_df : parens :: "prec"[prec_bimplies] :: except_mode[src] ::
- bimplies{'a; 'b} =
+dform bimplies_df : parens :: "prec"[prec_bimplies] :: except_mode[src] :: bimplies{'a; 'b} =
    slot{'a} " " Rightarrow subb " " slot{'b}
 
 dform bnot_df : parens :: "prec"[prec_bnot] :: except_mode[src] :: bnot{'a} =
    tneg subb slot{'a}
 
-dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
- ifthenelse{'e1; 'e2; 'e3} =
+dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[src] :: ifthenelse{'e1; 'e2; 'e3} =
    math_if{'e1; 'e2; 'e3}
 
 dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] :: "assert"{'t} =
@@ -503,6 +500,12 @@ let bor_opname = opname_of_term bor_term
 let is_bor_term = is_dep0_dep0_term bor_opname
 let mk_bor_term = mk_dep0_dep0_term bor_opname
 let dest_bor = dest_dep0_dep0_term bor_opname
+
+let band_term = << band{'a; 'b} >>
+let band_opname = opname_of_term band_term
+let is_band_term = is_dep0_dep0_term band_opname
+let mk_band_term = mk_dep0_dep0_term band_opname
+let dest_band = dest_dep0_dep0_term band_opname
 
 let extBoolT = bool_ext_equality
 let magicT = assert_magic

@@ -122,6 +122,7 @@ rule equalityTypeIsType 'a 'b :
 
 topval thinT : int -> tactic
 topval thinAllT : int -> int -> tactic
+topval thinDupT : tactic
 topval nthAssumT : int -> tactic (* Does thinning to match against assumption *)
 topval assertT : term -> tactic
 (* do not assert if already have the right conclusion *)

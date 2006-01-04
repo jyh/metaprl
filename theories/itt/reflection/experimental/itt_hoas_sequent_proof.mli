@@ -43,14 +43,17 @@ declare Provable{'logic; 'seq}
  *)
 
 (*
- * Tactic for proving Provability goals.
+ * The main tactic for proving Provable theorems.
  *)
-topval provableIntroT : tactic
+topval provableRuleT : term -> conv -> tactic
 
-(*
+(************************************************
  * Debugging.
  *)
+
+topval provableIntroT : tactic
 topval proofStepWitnessT : tactic
+topval provableRuleStartT : term -> conv -> tactic
 
 (*!
  * @docoff

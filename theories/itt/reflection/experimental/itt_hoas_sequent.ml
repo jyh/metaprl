@@ -41,6 +41,7 @@ open Basic_tactics
 open Itt_list
 open Itt_list2
 open Itt_dfun
+open Itt_equal
 
 doc <:doc<
    A sequent is represented as a 3-tuple << BTerm * list{BTerm} * BTerm >>,
@@ -221,6 +222,16 @@ interactive sequent_term_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- hyp_depths{0; hyps} -->
    "wf" : <H> >- bdepth{concl} = length{hyps} in "nat" -->
    <H> >- "sequent"{arg; hyps; concl} IN "Sequent"
+>>
+
+interactive sequent_term_equal {| intro [] |} : <:xrule<
+   "wf" : <H> >- arg1 = arg2 in BTerm -->
+   "wf" : <H> >- hyps1 = hyps2 in list{BTerm} -->
+   "wf" : <H> >- concl1 = concl2 in BTerm -->
+   "wf" : <H> >- bdepth{arg1} = 0 in nat -->
+   "wf" : <H> >- hyp_depths{0; hyps1} -->
+   "wf" : <H> >- bdepth{concl1} = length{hyps1} in nat -->
+   <H> >- "sequent"{arg1; hyps1; concl1} = "sequent"{arg2; hyps2; concl2} in Sequent
 >>
 
 (*
@@ -419,12 +430,6 @@ interactive cvar_is_list {| intro [intro_typeinf << 'l >>] |} CVar{'n} : <:xrule
    <H> >- l IN "list"
 >>
 
-interactive bterm2_is_bterm {| intro [intro_typeinf << 'e >>] |} BTerm{'n} : <:xrule<
-   "wf" : <H> >- n IN "nat" -->
-   "wf" : <H> >- e IN BTerm{n} -->
-   <H> >- e IN "BTerm"
->>
-
 (************************************************************************
  * Forward chaining rules.
  *)
@@ -435,6 +440,14 @@ interactive cvar_forward {| forward [] |} 'H : <:xrule<
    "wf" : <H>; l in CVar{n}; <J> >- n in nat -->
    <H>; l in CVar{n}; <J>; l in list{BTerm}; hyp_depths{n; l} >- 'C -->
    <H>; l in CVar{n}; <J> >- 'C
+>>
+
+interactive append_cvar_elim {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; append{l1; l2} in CVar{d}; <J> >- d in nat -->
+   "wf" : <H>; append{l1; l2} in CVar{d}; <J> >- l1 in list{BTerm} -->
+   "wf" : <H>; append{l1; l2} in CVar{d}; <J> >- l2 in list{BTerm} -->
+   <H>; append{l1; l2} in CVar{d}; <J>; l1 in CVar{d}; l2 in CVar{d +@ length{l1}} >- C -->
+   <H>; append{l1; l2} in CVar{d}; <J> >- C
 >>
 
 (************************************************************************
@@ -450,6 +463,9 @@ dform subst_df : parens :: "prec"[prec_apply] :: subst{'t1; 't2} =
 
 dform substl_df : parens :: "prec"[prec_apply] :: substl{'bt; 'tl} =
    szone pushm[3] slot["lt"]{'bt} `"@<|" slot["none"]{'tl} `"|>" popm ezone
+
+dform beq_sequent_df : parens :: "prec"[prec_equal] :: beq_sequent{'s1; 's2} =
+   szone pushm[3] slot{'s1} hspace `"=seq " slot{'s2} popm ezone
 
 (*
  * Convert the term back to a sequent for display.

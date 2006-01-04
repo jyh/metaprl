@@ -225,6 +225,13 @@ interactive vsequent_wf {| intro [] |} : <:xrule<
    <H> >- vsequent{arg}{| <J> >- C<|H|> |} IN Itt_hoas_sequent!Sequent
 >>
 
+interactive vsequent_equal {| intro [] |} : <:xrule<
+   "wf" : <H> >- arg1 = arg2 in BTerm{0} -->
+   "wf" : <H> >- vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{length{vflatten{||}}} -->
+   "wf" : <H> >- C1 = C2 in BTerm{length{vflatten{| <J1> |}}} -->
+   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent
+>>
+
 interactive vflatten_hyp_concl_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
    <H> >- "vflatten"{| |} IN CVar{d}
@@ -235,6 +242,25 @@ interactive vflatten_hyp_left_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- A IN CVar{length{"vflatten"{| <K> |}}} -->
    "wf" : <H> >- "vflatten"{| <J[it]> |} IN CVar{length{"vflatten"{| <K>; x: A |}}} -->
    <H> >- "vflatten"{| x: A; <J[x]> |} IN CVar{length{"vflatten"{| <K> |}}}
+>>
+
+(************************************************************************
+ * Forward-chaining.
+ *)
+interactive vsequent_wf_forward {| forward [] |} 'H : <:xrule<
+   <H>; vsequent{arg}{| <J> >- C |} in Sequent; <K>;
+      arg in BTerm{0};
+      vflatten{| <J> |} in CVar{0};
+      C in BTerm{length{vflatten{| <J> |}}} >- D -->
+   <H>; vsequent{arg}{| <J> >- C<|H|> |} in Sequent; <K> >- D
+>>
+
+interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- n in nat -->
+   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- A in list{BTerm} -->
+   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- vflatten{| <J> |} in list{BTerm} -->
+   <H>; vflatten{| A; <J> |} in CVar{n}; <K>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C -->
+   <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- C
 >>
 
 (************************************************************************

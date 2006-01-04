@@ -143,8 +143,8 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
  *)
 let beq_proof_step_term = << beq_proof_step{'step1; 'step2} >>
 let beq_proof_step_opname = opname_of_term beq_proof_step_term
-let is_beq_proof_step = is_dep0_dep0_term beq_proof_step_opname
-let dest_beq_proof_step = dest_dep0_dep0_term beq_proof_step_opname
+let is_beq_proof_step_term = is_dep0_dep0_term beq_proof_step_opname
+let dest_beq_proof_step_term = dest_dep0_dep0_term beq_proof_step_opname
 
 let is_let_cvar_term t =
    match explode_term t with

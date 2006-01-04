@@ -49,8 +49,10 @@ doc docoff
 
 open Lm_debug
 open Lm_printf
+open Lm_int_set
 
 open Basic_tactics
+open Term_hash_code
 
 open Itt_equal
 
@@ -279,6 +281,40 @@ let thinAllT i j = funT (fun p ->
    let i = get_pos_hyp_num p i in
    let j = get_pos_hyp_num p j in
       thin_many i (j-i+2) )
+
+(*
+ * Thin duplicates.
+ *)
+let thin_dup p =
+   let hyps = (explode_sequent (Sequent.goal p)).sequent_hyps in
+   let _, thins =
+      SeqHyp.fold (fun (table, thins) i h ->
+            match h with
+               Hypothesis (_, t) ->
+                  let code = hash_term t in
+                  let tl =
+                     try IntMTable.find_all table code with
+                        Not_found ->
+                           []
+                  in
+                     if List.exists (fun t' -> alpha_equal t' t) tl then
+                        table, i :: thins
+                     else
+                        IntMTable.add table code t, thins
+             | Context _ ->
+                  table, thins) (IntMTable.empty, []) hyps
+   in
+   let rec thin_dup thins =
+      match thins with
+         i :: thins ->
+            tryT (thinT i)
+            thenT thin_dup thins
+       | [] ->
+            idT
+   in
+      thin_dup thins
+
+let thinDupT = funT thin_dup
 
 let matchAssumsT = argfunT (fun i p ->
    let assum = TermMan.explode_sequent (Sequent.nth_assum p i) in

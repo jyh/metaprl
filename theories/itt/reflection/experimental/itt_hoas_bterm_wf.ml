@@ -63,6 +63,14 @@ open Itt_omega
 doc <:doc<
    Some useful rules for forward chaining.
 >>
+interactive  subterms_forward_lemma 'n 'op : <:xrule<
+   <H> >- 'n in nat -->
+   <H> >- 'op in "Operator" -->
+   <H> >- 'btl in list -->
+   <H> >- mk_bterm{'n; 'op; 'btl} in BTerm -->
+   <H> >- 'btl in list{BTerm}
+>>
+
 interactive bterm2_forward {| forward [] |} 'H : <:xrule<
    <H>; e in BTerm{d}; <J>; e in BTerm; bdepth{e} = d in nat >- C -->
    <H>; e in BTerm{d}; <J> >- C
@@ -73,6 +81,11 @@ interactive mk_bterm_depth_forward {| forward [] |} 'H : <:xrule<
    <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
 >>
 
+interactive mk_bterm_op_forward {| forward [] |} 'H : <:xrule<
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; op in "Operator" >- C -->
+   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+>>
+
 interactive mk_bterm_subterms_forward1 {| forward [] |} 'H : <:xrule<
    "wf" : <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- subterms in list -->
    <H>; mk_bterm{d; op; subterms} in BTerm; <J>; subterms in list{BTerm} >- C -->
@@ -80,6 +93,7 @@ interactive mk_bterm_subterms_forward1 {| forward [] |} 'H : <:xrule<
 >>
 
 interactive mk_bterm_wf_forward {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- subterms in list -->
    <H>; mk_bterm{d; op; subterms} in BTerm; <J>; compatible_shapes{d; shape{op}; subterms} >- C -->
    <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
 >>

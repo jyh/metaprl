@@ -66,7 +66,6 @@ doc <:doc<
 interactive  subterms_forward_lemma 'n 'op : <:xrule<
    <H> >- 'n in nat -->
    <H> >- 'op in "Operator" -->
-   <H> >- 'btl in list -->
    <H> >- mk_bterm{'n; 'op; 'btl} in BTerm -->
    <H> >- 'btl in list{BTerm}
 >>
@@ -87,13 +86,11 @@ interactive mk_bterm_op_forward {| forward [] |} 'H : <:xrule<
 >>
 
 interactive mk_bterm_subterms_forward1 {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- subterms in list -->
    <H>; mk_bterm{d; op; subterms} in BTerm; <J>; subterms in list{BTerm} >- C -->
    <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
 >>
 
 interactive mk_bterm_wf_forward {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- subterms in list -->
    <H>; mk_bterm{d; op; subterms} in BTerm; <J>; compatible_shapes{d; shape{op}; subterms} >- C -->
    <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
 >>

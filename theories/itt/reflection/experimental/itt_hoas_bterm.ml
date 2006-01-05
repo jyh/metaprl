@@ -277,6 +277,13 @@ interactive subterms_depth {| intro [] |} 'shape :
    sequent{ <H> >- compatible_shapes{'bdepth; 'shape; 'btl} } -->
    sequent{ <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} >= 'bdepth }
 
+interactive subterms_depth2 {| intro [] |} 'shape :
+   [wf] sequent{ <H> >- 'bdepth in nat } -->
+   [wf] sequent{ <H> >- 'shape in list{nat} } -->
+   [wf] sequent{ <H> >- 'btl in list{BTerm} } -->
+   sequent{ <H> >- compatible_shapes{'bdepth; 'shape; 'btl} } -->
+   sequent{ <H> >- all i:Index{'btl}. 'bdepth <= bdepth{nth{'btl;'i}} }
+
 interactive subterms_wf1 {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- not{"assert"{is_var{'t}}} } -->

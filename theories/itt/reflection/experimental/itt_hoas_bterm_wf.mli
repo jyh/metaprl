@@ -32,6 +32,7 @@ open Basic_tactics
  * Push the bind into the term.
  *)
 topval bindWFT : tactic
+topval proofRuleWF1T : tactic
 topval proofRuleWFT : tactic
 
 (*!

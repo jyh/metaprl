@@ -424,10 +424,22 @@ interactive cvar_append_wf {| intro [] |} : <:xrule<
    <H> >- append{l1; l2} IN CVar{d}
 >>
 
+(*
+ * XXX: JYH: These two theorems are not a good idea because
+ * they will break the compositionality of dT.
+ * Will be removed eventually in favor of forward chaining
+ * I believe.
+ *)
 interactive cvar_is_list {| intro [intro_typeinf << 'l >>] |} CVar{'n} : <:xrule<
    "wf" : <H> >- n IN "nat" -->
    "wf" : <H> >- l IN CVar{n} -->
    <H> >- l IN "list"
+>>
+
+interactive bterm2_is_bterm {| intro [intro_typeinf << 'e >>] |} BTerm{'n} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- e in BTerm{n} -->
+   <H> >- e in BTerm
 >>
 
 (************************************************************************

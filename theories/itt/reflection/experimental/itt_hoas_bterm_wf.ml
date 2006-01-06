@@ -120,6 +120,12 @@ let resource intro +=
    [<< lof_bind{'n; x. 'e['x]} in BTerm >>, bind_wf;
     << lof_bind{'n; x. 'e['x]} in BTerm{'m} >>, bind_wf]
 
+let proofRuleWF1T =
+   repeatT (rw normalizeBTermC 0
+            thenT autoT
+            thenT rw reduceC 0
+            thenT tcaT)
+
 let proofRuleWFT =
    repeatT (rw normalizeBTermC 0
             thenT autoT

@@ -1,3 +1,38 @@
+doc <:doc<
+   @module[Itt_omega]
+
+	This module defines the @tactic[omegaT] tactic capable of proving
+   systems of inequalities.
+
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
+
+   Copyright (C) 2004-2006 MetaPRL Group, City University of New York
+   and California Institute of Technology
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Author: Yegor Bryukhov @email{ynb@mail.ru}
+   @end[license]
+   @parents
+>>
 extends Itt_equal
 extends Itt_dfun
 extends Itt_logic
@@ -7,6 +42,9 @@ extends Itt_int_arith
 (*extends Itt_rat
 extends Itt_rat2
 *)
+
+doc docoff
+
 open Lm_debug
 open Lm_printf
 
@@ -1399,9 +1437,11 @@ let eval_hyp_pos n hyp_length used_hyps =
 
 let omegaCoreT info hyp_num hyp_length used_hyps tree f = funT (fun p ->
 	let hyp_pos = eval_hyp_pos hyp_num hyp_length used_hyps in
-	let h,m,mw,s = tree_stats 0 0 0 0 tree in
-	if !debug_omega then
-		eprintf "Solved (%i hyps, %i muls, %i mul&weaken, %i eliminations), reconstructing the proof@." h m mw s;
+   let () =
+   	if !debug_omega then
+	      let h,m,mw,s = tree_stats 0 0 0 0 tree in
+		      eprintf "Solved (%i hyps, %i muls, %i mul&weaken, %i eliminations), reconstructing the proof@." h m mw s
+   in
 	match tree with
 	 | Hyp i ->
 			omegaAuxT info hyp_pos tree
@@ -1453,20 +1493,20 @@ let options tree i tac t =
 let rec hyp2ge p tree = function
 	(i,t)::tail ->
 		if !debug_arith_dtactic then
-			eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
+			eprintf "Itt_omega.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
 		if is_ge_term t then
 			let tree' = Node [([(i,t,i,0,idT)], tree)] in
 			hyp2ge p tree' tail
 		else
 			(try
 				if !debug_arith_dtactic then
-					eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
+					eprintf "Itt_omega.hyp2ge: searching ge_elim resource%t" eflush;
 				let terms, tac = Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
 				let tree' = options tree i (tac i) terms in
 				hyp2ge p tree' tail
 			with Not_found ->
 				if !debug_arith_dtactic then
-					eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
+					eprintf "Itt_omega.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
 				hyp2ge p tree tail
 			)
  | [] -> tree

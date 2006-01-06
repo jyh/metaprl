@@ -1,6 +1,6 @@
 (* -*- Mode: text -*- *)
 doc <:doc<
-   @spelling{doesn ii wildcard}
+   @spelling{ii wildcard}
 
    @chapter[exceptions]{Exceptions}
 

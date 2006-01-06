@@ -3,7 +3,7 @@ doc <:doc<
 
    @begin[spelling]
    Arg ArgName ArgSig Elt EltSig FsetSig Int IntSet MakeFset
-   SigName arg doesn elt int ll mem namespace sig struct val
+   SigName arg elt int ll mem namespace sig struct val
    @end[spelling]
 
    @chapter[modules]{The OCaml Module System}

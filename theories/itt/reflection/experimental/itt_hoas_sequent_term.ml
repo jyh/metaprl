@@ -1,7 +1,8 @@
 doc <:doc<
-   Native sequent representation, based on Itt_vec_sequent_term.fsequent.
+   @module[Itt_hoas_sequent_term]
 
-   ----------------------------------------------------------------
+   Native sequent representation, based on the @hrefterm[fsequent] operator
+   defined in the @hrefmodule[Itt_vec_sequent_term] theory.
 
    @begin[license]
    Copyright (C) 2005 Mojave Group, Caltech

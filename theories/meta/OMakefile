@@ -30,7 +30,7 @@ PRINT_THEORIES[] =
     extensions/meta_context_terms
     extensions/meta_context_ind1
 
-TheoryDocumentInstall(itt, $(PRINT_THEORIES))
+TheoryDocumentInstall(meta, $(PRINT_THEORIES))
 
 #
 # Clean up

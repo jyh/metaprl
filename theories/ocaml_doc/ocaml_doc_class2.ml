@@ -238,9 +238,9 @@ val g : unit -> string = <fun>
 @end[verbatim]
 
 The @code{:>} operator @emph{casts} its argument, which must have an
-objec type, to a supertype.  In cases where the argument type can't be
+object type, to a supertype.  In cases where the argument type can't be
 inferred, a ternary form may be used.  For example, the following
-function defines a cast fomr @code{quadratic_rng} to
+function defines a cast from @code{quadratic_rng} to
 @code{linear_rng}.
 
 @begin[verbatim]

@@ -1343,16 +1343,21 @@ let rec omega pool pool2 constrs =
 			eprintf "calling omega@.";
 		omega pool pool2 new_constrs
 
-interactive_rw ge_to_ge0 :
-	('a in int) -->
-	('b in int) -->
-	('a >= 'b) <--> ('a -@ 'b >= 0)
+interactive_rw zero_ge_to_left_rw :
+   'a in int -->
+   0 >= 'a <--> (-1) *@ 'a >= 0
 
 let zero_term = <<0>>
 
 let ge_to_ge0C t =
-	if is_ge_term t && let b = snd (dest_ge t) in not (alpha_equal b zero_term) then
-		ge_to_ge0
+	if is_ge_term t then 
+      let a, b = dest_ge t in
+         if alpha_equal b zero_term then
+            idC
+         else if alpha_equal a zero_term then
+            zero_ge_to_left_rw
+         else
+		      ge_to_leftC
 	else
 		idC
 

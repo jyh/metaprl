@@ -5,3 +5,6 @@ DIRS[] =
     vector
 
 VirtualTheory($(DIRS))
+
+clean:
+    $(CLEAN)

@@ -6,3 +6,6 @@ DIRS[] =
     supinf
 
 VirtualTheory($(DIRS))
+
+clean:
+    $(CLEAN)

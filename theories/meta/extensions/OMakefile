@@ -5,7 +5,7 @@ THEORY_DEPS[] = meta/base
 
 # Common files
 MLZFILES[] =
-    meta_extensions_theory
+    meta_context_theory
 
 # Library files
 MPFILES[] =

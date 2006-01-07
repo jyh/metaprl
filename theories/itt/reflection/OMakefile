@@ -4,3 +4,6 @@ DIRS[] =
     obsolete
 
 VirtualTheory($(DIRS))
+
+clean:
+    $(CLEAN)

@@ -1348,8 +1348,10 @@ interactive_rw ge_to_ge0 :
 	('b in int) -->
 	('a >= 'b) <--> ('a -@ 'b >= 0)
 
+let zero_term = <<0>>
+
 let ge_to_ge0C t =
-	if is_ge_term t then
+	if is_ge_term t && let b = snd (dest_ge t) in not (alpha_equal b zero_term) then
 		ge_to_ge0
 	else
 		idC

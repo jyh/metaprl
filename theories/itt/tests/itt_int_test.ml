@@ -150,6 +150,12 @@ interactive test13 :
                   1 >= 5 *@ 'a
 						>- "assert"{bfalse} }
 
+interactive test14 :
+	sequent { <H>; 'a in int >- 2 *@ 'a = (2 *@ 'a) +@ 0 in int }
+
+interactive test15 :
+	sequent { <H>; 'a in int >- 2 *@ 'a <> (2 *@ 'a) +@ 1 }
+
 let rec gen_term nvars vars intrange maxdepth =
 	let choice=Random.int 2 in
 	if maxdepth>0 && choice=0 then

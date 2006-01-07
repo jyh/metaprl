@@ -1584,23 +1584,28 @@ let rec count_used_hyps used_hyps hyp_length = function
 		count_used_hyps used_hyps hyp_length t2
 
 let omegaSim dim pool pool2 used_hyps hyp_length constrs =
-	if List.length constrs = 1 then
-		begin
-			let coord,f = List.hd constrs in
-			let i, pos, len = coord in
-			used_hyps.(i) <- true;
-			hyp_length.(i) <- len;
-			(Hyp coord, f)
-		end
-	else
-		begin
-			let n = succ dim in
-			let constrs = List.rev_map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
-			let constrs = C.of_list dim constrs in
-			let tree, f = omega pool pool2 constrs in
-			count_used_hyps used_hyps hyp_length tree;
-			(tree, f)
-		end
+	match constrs with
+		[] ->
+			raise (RefineError ("omegaT", StringError "no constraints noticed"))
+	 | [coord,f] ->
+			if is_neg_number f then
+				begin
+					let i, pos, len = coord in
+					used_hyps.(i) <- true;
+					hyp_length.(i) <- len;
+					(Hyp coord, f)
+				end
+			else
+				raise (RefineError ("omegaT", StringError "the only constraint noticed has no contradiction"))
+	 | _::_::_ ->
+			begin
+				let n = succ dim in
+				let constrs = List.rev_map (fun (coord,f) -> norm (Hyp coord, AF.grow n f)) constrs in
+				let constrs = C.of_list dim constrs in
+				let tree, f = omega pool pool2 constrs in
+				count_used_hyps used_hyps hyp_length tree;
+				(tree, f)
+			end
 
 let rec foldi_aux f ar acc current =
 	if current = Array.length ar then

@@ -113,7 +113,7 @@ interactive_rw vbind_to_lof_vbind {| pre_normalize_lof |} :
    <-->
    lof_vbind{| <J> >- 'e |}
 
-interactive_rw coalesce_lof_vbind :
+interactive_rw coalesce_lof_vbind {| reduce_lof |} :
    lof_vbind{| <J> >- lof_vbind{| <K> >- 'e |} |}
    <-->
    lof_vbind{| <J>; <K> >- 'e |}
@@ -125,7 +125,7 @@ interactive_rw reduce_bind_mk_bterm_vlist :
    <-->
    mk_bterm{'n +@ (length{vlist{| <J> |}} +@ 1); 'op; lof{y. bind{x. 'f['x; 'y]}; 'm}}
 
-interactive_rw reduce_lof_vbind_mk_bterm :
+interactive_rw reduce_lof_vbind_mk_bterm {| reduce_lof |} :
    'n in nat -->
    'm in nat -->
    lof_vbind{| <J> >- mk_bterm{'n<||>; 'op<||>; lof{y. 'f['y]; 'm<||>}} |}

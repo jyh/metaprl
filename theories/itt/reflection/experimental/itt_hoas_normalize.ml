@@ -61,26 +61,27 @@ doc <:doc<
    @item{{Push binds down.}}
    @item{{Coalesce substitutions.}}
    @end[enumerate]
+
+   The @tt[preNormalizeLofC] conversion performs the first two steps.
+   The @tt[reduceLofC] conversion coalesces binds and pushes them down.
+   The @tt[reduceLofC] conversion must be run with all @tt[lof] terms
+   hoisted as much as possible---it should be run after @tt[normalizeLofC].
+   Similarly, the @tt[substl_substl_lof2] conversion should be run after
+   @tt[normalizeLofC].
    @docoff
 >>
-
-(*
- * Push a bind through a term.
- *)
-let push_lof_bind_mk_bterm =
-   sweepUpC coalesce_bindC
-   thenC sweepUpC coalesce_lof_vbind
-   thenC normalizeLofC
-   thenC higherC reduce_lof_bind_mk_bterm
-   thenC higherC reduce_lof_vbind_mk_bterm
-   thenC reduceLofC
-
 let normalizeBTermAuxC =
    preNormalizeLofC
-   thenC repeatC (progressC push_lof_bind_mk_bterm)
+   thenC normalizeLofC
+   thenC reduceLofC
    thenC normalizeLofC
    thenC sweepUpC substl_substl_lof2
 
+doc <:doc<
+   Once the binds have all been pushed, use the @tt[rippleLofC] conversion
+   to optimize the term.  Afterwards, remove all temporary terms using the
+   @tt[lofBindElimC] conversion.
+>>
 let normalizeBTermC =
    normalizeBTermAuxC
    thenC rippleLofC

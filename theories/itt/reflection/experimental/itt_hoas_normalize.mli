@@ -25,6 +25,7 @@
  * @end[license]
  *)
 extends Itt_hoas_lof
+extends Itt_hoas_lof_vec
 
 open Basic_tactics
 

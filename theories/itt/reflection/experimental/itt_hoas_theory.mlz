@@ -33,6 +33,7 @@ extends Itt_theory
 extends Itt_hoas_bterm
 extends Itt_hoas_util
 extends Itt_hoas_lof
+extends Itt_hoas_lof_vec
 extends Itt_hoas_normalize
 extends Itt_hoas_bterm_wf
 extends Itt_hoas_proof

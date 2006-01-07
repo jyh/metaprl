@@ -418,7 +418,7 @@ interactive_rw reduce_lof_bind_right :
    <-->
    lof_bind{'n; x. bind{y. 'e[append{'x; cons{'y; nil}}]}}
 
-interactive_rw reduce_lof_bind_mk_bterm :
+interactive_rw reduce_lof_bind_mk_bterm {| reduce_lof |} :
    'i in nat -->
    'n in nat -->
    'm in nat -->
@@ -476,6 +476,9 @@ let coalesce_bind t =
          raise (RefineError ("coalesce_bind", StringTermError ("not a nested bind", t)))
 
 let coalesce_bindC = termC coalesce_bind
+
+let resource reduce_lof +=
+   [<< lof_bind{'n; x. lof_bind{'m; y. 'e['x; 'y]}} >>, coalesce_bindC]
 
 (************************************************************************
  * Constant reductions.

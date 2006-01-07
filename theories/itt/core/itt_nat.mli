@@ -25,6 +25,7 @@
  * @end[license]
  *)
 extends Itt_int_ext
+extends Itt_omega
 
 open Basic_tactics
 

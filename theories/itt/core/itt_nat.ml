@@ -14,7 +14,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2001 Alexei Kopylov, Cornell University
+   Copyright (C) 2001-2006 MetaPRL Group, Cornell University, California
+   Institute of Technology and City University of New York
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,7 +31,10 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+   Author:
+      Alexei Kopylov @email{kopylov@cs.cornell.edu}
+   Modified By: 
+      Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 
@@ -46,6 +50,7 @@ extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
 extends Itt_sqsimple
+extends Itt_omega
 doc docoff
 
 open Basic_tactics
@@ -325,7 +330,6 @@ let positiveRule2T = smallest_positive
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]>; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]> >- 'C['x] }
 *)
-
 
 (*
  * -*-

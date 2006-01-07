@@ -94,10 +94,9 @@ topval preT : tactic
 topval preArithT : tactic
 topval reduceContradRelT : int -> tactic
 topval arithT : tactic
-
-(* sometimes these parts of arithT are useful to figure out why arithT does not work
-*)
-topval neqInConcl2HypT : tactic
+(*
+ * Specific phases of arithT - useful for debugging arithT
+ *)
 topval arithRelInConcl2HypT : tactic
 topval negativeHyp2ConclT : int -> tactic
 topval findContradRelT : tactic

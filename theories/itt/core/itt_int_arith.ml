@@ -420,101 +420,64 @@ let resource ge_elim += [
       (addrC [Subterm 1] fold_bneq_int thenC fold_neq_int) nequal_elim2;
 ]
 
-interactive ltInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a >= 'b >- "assert"{bfalse} } -->
-	sequent { <H> >- 'a < 'b }
-
-interactive gtInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'b >= 'a >- "assert"{bfalse} } -->
-	sequent { <H> >- 'a > 'b }
-
-interactive leInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a >= ('b +@ 1) >- "assert"{bfalse} } -->
-	sequent { <H> >- 'a <= 'b }
-
-interactive geInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'b >= ('a +@ 1) >- "assert"{bfalse} } -->
-	sequent { <H> >- 'a >= 'b }
-
-interactive eqInConcl2ge (*{| ge_intro |}*) :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a >= ('b +@ 1) >- "assert"{bfalse} } -->
-	sequent { <H>; 'b >= ('a +@ 1) >- "assert"{bfalse} } -->
-	sequent { <H> >- 'a = 'b in int }
-
-interactive neqInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a = 'b in int >- "assert"{bfalse} } -->
-	sequent { <H> >- 'a <> 'b }
-
 interactive_rw bnot_lt2ge_rw :
    ('a in int) -->
    ('b in int) -->
    "assert"{bnot{lt_bool{'a; 'b}}} <--> ('a >= 'b)
-
-doc docoff
-
-let bnot_lt2geC = bnot_lt2ge_rw
-
-let lt2ConclT = magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)]
-let ltInConcl2HypT = (rwh unfold_lt 0) thenMT lt2ConclT
-let gtInConcl2HypT = (rwh unfold_gt 0) thenMT ltInConcl2HypT
-
-doc docon
 
 interactive_rw bnot_le2gt_rw :
    ('a in int) -->
    ('b in int) -->
    "assert"{bnot{le_bool{'a; 'b}}} <--> ('a > 'b)
 
+interactive ltInConcl2ge {| ge_intro |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a >= 'b >- "false" } -->
+	sequent { <H> >- 'a < 'b }
+
+interactive gtInConcl2ge {| ge_intro |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'b >= 'a >- "false" } -->
+	sequent { <H> >- 'a > 'b }
+
+interactive leInConcl2ge {| ge_intro |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a >= ('b +@ 1) >- "false" } -->
+	sequent { <H> >- 'a <= 'b }
+
+interactive geInConcl2ge {| ge_intro |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'b >= ('a +@ 1) >- "false" } -->
+	sequent { <H> >- 'a >= 'b }
+
+interactive eqInConcl2ge (*{| ge_intro |}*) :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a >= ('b +@ 1) >- "false" } -->
+	sequent { <H>; 'b >= ('a +@ 1) >- "false" } -->
+	sequent { <H> >- 'a = 'b in int }
+
+interactive neqInConcl2ge {| ge_intro |} :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; 'a = 'b in int >- "false" } -->
+	sequent { <H> >- 'a <> 'b }
+
 doc docoff
-
-let bnot_le2gtC = bnot_le2gt_rw
-
-let leInConcl2HypT =
-   (rwh unfold_le 0) thenMT (magicT thenLT [idT;rwh bnot_le2gtC (-1)])
-
-let geInConcl2HypT =
-   (rwh unfold_ge 0) thenMT leInConcl2HypT
-
-doc docon
-
-interactive eq2pair_of_ineq :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [main] sequent { <H> >- 'a >= 'b } -->
-   [main] sequent { <H> >- 'b >= 'a } -->
-   sequent { <H> >- 'a = 'b in int }
-
-doc docoff
-
-let eqInConcl2HypT =
-	eq2pair_of_ineq thenMT geInConcl2HypT
-
-let neqInConcl2HypT =
-	(rw (unfold_neq_int thenC (addrC [Subterm 1] unfold_bneq_int)) 0)
-	thenMT
-	(assert_bnot_intro thenMT (eq_int_assert_elim (-1)) thenMT (thinT (-2)))
 
 let arithRelInConcl2HypT = funT (fun p ->
    let t=Sequent.concl p in
 	match explode_term t with
-		<<'a < 'b>> -> ltInConcl2HypT
-	 | <<'a > 'b>> -> gtInConcl2HypT
-	 | <<'a <= 'b>> -> leInConcl2HypT
-	 | <<'a >= 'b>> -> geInConcl2HypT
-	 | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2HypT
-	 | <<'a <> 'b>> -> neqInConcl2HypT
+		<<'a < 'b>> -> ltInConcl2ge
+	 | <<'a > 'b>> -> gtInConcl2ge
+	 | <<'a <= 'b>> -> leInConcl2ge
+	 | <<'a >= 'b>> -> geInConcl2ge
+	 | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2ge
+ 	 | <<'a <> 'b>> -> neqInConcl2ge thenMT eq2ge (-1) thenMT thinT (-3)
 	 | <<not{'a}>> -> not_intro
 	 | _ -> concl2geT
 )

@@ -388,6 +388,10 @@ doc <:doc<
 interactive bterm_sqsimple {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{BTerm} }
 
+interactive bterm_sqsimple2 {| intro []; sqsimple |} :
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- sqsimple{BTerm{'n}} }
+
 doc <:doc<
    The following is the actual induction principle (the previous
    rules are just elimination rules).

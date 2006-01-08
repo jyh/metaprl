@@ -84,19 +84,22 @@ let resource (term * term list, term -> bool) sqsimple =
 
 let process_assum name (_, _, t) =
    let t = TermMan.explode_sequent t in
-      match SeqHyp.to_list t.sequent_hyps with
-         [Context _] when is_sqsimple_term t.sequent_concl ->
-            dest_sqsimple_term t.sequent_concl
-       | _ ->
-            raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ":
-all assumptions should have the <H> >- sqsimple{...} form"))
+      if is_sqsimple_term t.sequent_concl then
+         match SeqHyp.to_list t.sequent_hyps with
+            [Context _] ->
+               Some (dest_sqsimple_term t.sequent_concl)
+          | _ ->
+               raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ": not supported:
+sqsimple assumptions should not have extra hypothesis"))
+      else
+         None
 
 let process_sqsimple_resource_annotation name contexts args stmt _tac =
    if contexts.spec_addrs <> [||] || contexts.spec_ints <> [||] || args <> [] then
       raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ": rules with arguments are not supported yet"));
    let assums, goal = unzip_mfunction stmt in
    let t = dest_sqsimple_term (TermMan.concl goal) in
-      [t, List.map (process_assum name) assums]
+      [t, Lm_list_util.some_map (process_assum name) assums]
 
 doc <:doc<
    @modsection{Basic Rules}

@@ -132,6 +132,11 @@ interactive_rw reduce_lof_vbind_mk_bterm {| reduce_lof |} :
    <-->
    mk_bterm{'n +@ length{vlist{| <J> |}}; 'op; lof{y. lof_vbind{| <J> >- 'f['y] |}; 'm}}
 
+(************************************************************************
+ * Tactics.
+ *)
+let lofVBindElimC = unfold_lof_vbind
+
 (*!
  * @docoff
  *

@@ -32,6 +32,7 @@ doc <:doc<
 extends Itt_tunion
 extends Itt_match
 extends Itt_hoas_util
+extends Itt_vec_list1
 
 doc docoff
 
@@ -460,6 +461,19 @@ interactive append_cvar_elim {| forward [] |} 'H : <:xrule<
    "wf" : <H>; append{l1; l2} in CVar{d}; <J> >- l2 in list{BTerm} -->
    <H>; append{l1; l2} in CVar{d}; <J>; l1 in CVar{d}; l2 in CVar{d +@ length{l1}} >- C -->
    <H>; append{l1; l2} in CVar{d}; <J> >- C
+>>
+
+interactive vflatten_cvar_forward1 {| forward [] |} 'H : <:xrule<
+   <H>; vflatten{| A |} in CVar{n}; <K>; A in CVar{n} >- C -->
+   <H>; vflatten{| A |} in CVar{n}; <K> >- C
+>>
+
+interactive vflatten_cvar_forward {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- n in nat -->
+   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- A in list{BTerm} -->
+   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- vflatten{| <J> |} in list{BTerm} -->
+   <H>; vflatten{| A; <J> |} in CVar{n}; <K>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C -->
+   <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- C
 >>
 
 (************************************************************************

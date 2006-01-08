@@ -53,6 +53,7 @@ open Lm_int_set
 
 open Basic_tactics
 open Term_hash_code
+open Simple_print
 
 open Itt_equal
 
@@ -61,8 +62,6 @@ open Itt_equal
  *)
 let _ =
    show_loading "Loading Itt_struct%t"
-
-(* debug_string DebugLoad "Loading itt_struct..." *)
 
 (************************************************************************
  * RULES                                                                *
@@ -116,6 +115,7 @@ prim cut 'H 'S :
    'f['a]
 
 doc docoff
+
 (* This is usually used for performance testing. *)
 interactive dup :
    sequent { <H> >- 'T } -->
@@ -165,6 +165,10 @@ interactive equalityRefHyp {| nth_hyp |} 'H :
 
 interactive equalityRefHyp2 {| nth_hyp |} 'H :
    sequent { <H>; e: 'x = 'y in 'T; <J['e]> >- 'y in 'T }
+
+interactive dup_hyp 'H :
+   sequent { <H>; x: 'T; <J['x]>; y: 'T >- 'C['x] } -->
+   sequent { <H>; x: 'T; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @modsubsection{Substitution}
@@ -304,10 +308,15 @@ let thin_dup p =
              | Context _ ->
                   table, thins) (IntMTable.empty, []) hyps
    in
+
+   (*
+    * Note that the hyp numbers in SeqHyp.fold start from 0,
+    * but the thinT tactic expects numbers to start from 1.
+    *)
    let rec thin_dup thins =
       match thins with
          i :: thins ->
-            tryT (thinT i)
+            tryT (thinT (succ i))
             thenT thin_dup thins
        | [] ->
             idT
@@ -379,6 +388,8 @@ doc <:doc<
    @docoff
 >>
 let assertT = cut 0
+
+let dupHypT = dup_hyp
 
 let tryAssertT s ta tm = funT (fun p ->
    if alpha_equal s (Sequent.concl p) then ta else

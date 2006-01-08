@@ -33,6 +33,8 @@ extends Itt_hoas_bterm
 
 doc docoff
 
+open Lm_printf
+
 open Basic_tactics
 
 open Itt_list
@@ -138,9 +140,9 @@ let rec dest_compatible_shapes i p =
             else if is_nil_term op then
                subterm_nil_elim j depth thenMT thinT (-1)
             else
-               raise (RefineError ("Itt_hoas_lang2.dest_compatible_shapes", StringTermError ("opname should be a constant", op)))
+               raise (RefineError ("Itt_hoas_util.dest_compatible_shapes", StringTermError ("opname should be a constant", op)))
       else
-         raise (RefineError ("Itt_hoas_lang2.dest_compatible_shapes", StringTermError ("subterms should be a variable", subs)))
+         raise (RefineError ("Itt_hoas_util.dest_compatible_shapes", StringTermError ("subterms should be a variable", subs)))
 
 let dest_compatible_shapesT i =
    funT (dest_compatible_shapes i)
@@ -149,6 +151,11 @@ let dest_compatible_shapes_shapeT i =
    rw (addrC [Subterm 2] reduceC) i thenT dest_compatible_shapesT i
 
 let resource elim +=
+    [<< compatible_shapes{'depth; 'h :: 't; !v} >>, dest_compatible_shapesT;
+     << compatible_shapes{'depth; nil; !v} >>, dest_compatible_shapesT;
+     << compatible_shapes{'depth; shape{'op}; !v} >>, dest_compatible_shapes_shapeT]
+
+let resource forward +=
     [<< compatible_shapes{'depth; 'h :: 't; !v} >>, dest_compatible_shapesT;
      << compatible_shapes{'depth; nil; !v} >>, dest_compatible_shapesT;
      << compatible_shapes{'depth; shape{'op}; !v} >>, dest_compatible_shapes_shapeT]

@@ -44,6 +44,8 @@ open Basic_tactics
 (*
  * Tactics.
  *)
+topval lofVBindElimC : conv
+
 val vbind_to_lof_vbind : conv
 val coalesce_lof_vbind : conv
 val reduce_lof_vbind_mk_bterm : conv

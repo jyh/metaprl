@@ -43,12 +43,20 @@ doc <:doc< @parents >>
 extends Summary
 extends Shell_theory
 
+doc docoff
+
+open Basic_tactics
+
 doc terms
 declare const it
 define unfold_trivial : trivial <--> it (* A better name for it *)
 doc docoff
 
 dform trivial_df : trivial = cdot
+
+let it_term = << it >>
+let it_opname = opname_of_term it_term
+let is_it_term = is_no_subterms_term it_opname
 
 (*
  * -*-

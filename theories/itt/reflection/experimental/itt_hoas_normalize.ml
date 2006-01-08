@@ -87,6 +87,7 @@ let normalizeBTermC =
    thenC rippleLofC
    thenC reduceC
    thenC sweepUpC lofBindElimC
+   thenC sweepUpC lofVBindElimC
 
 (*!
  * @docoff

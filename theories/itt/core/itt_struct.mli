@@ -125,6 +125,7 @@ topval thinAllT : int -> int -> tactic
 topval thinDupT : tactic
 topval nthAssumT : int -> tactic (* Does thinning to match against assumption *)
 topval assertT : term -> tactic
+topval dupHypT : int -> tactic
 (* do not assert if already have the right conclusion *)
 topval tryAssertT : term -> tactic -> tactic -> tactic
 topval assertAtT : int -> term -> tactic

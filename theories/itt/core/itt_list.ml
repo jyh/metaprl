@@ -297,6 +297,7 @@ dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind
    `"match " slot{'e} `" with" hspace
    pushm[3] `"[] ->" hspace slot{'base} popm popm hspace
    `"| " pushm[3] slot{'h} `"::" slot{'t} `"." slot{'f} `" ->" hspace slot{'step} popm popm ezone
+
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)

@@ -48,6 +48,8 @@ doc docoff
 open Lm_printf
 open Basic_tactics
 open Simple_print
+
+open Base_trivial
 open Itt_equal
 open Itt_list2
 open Itt_list
@@ -263,6 +265,33 @@ let assert_reduce_length_of_fun_term1 = <<
    lambda{x. lambda{x. length{vsquashlist{| <J['x]> >- 'l |}}} it}
 >>
 
+doc <:doc<
+   Length reductions.
+>>
+interactive_rw reduce_length_vlist_nil {| reduce |} : <:xrewrite<
+   length{vlist{||}}
+   <-->
+   0
+>>
+
+interactive_rw reduce_length_vlist_left : <:xrewrite<
+   length{vlist{| A; <J> |}}
+   <-->
+   length{vlist{| <J> |}} +@ 1
+>>
+
+interactive_rw reduce_length_vlist_right : <:xrewrite<
+   length{vlist{| <J>; A |}}
+   <-->
+   length{vlist{| <J> |}} +@ 1
+>>
+
+interactive_rw reduce_length_vlist_append 'J : <:xrewrite<
+   length{vlist{| <J>; <K<||> > |}}
+   <-->
+   length{vlist{| <J> |}} +@ length{vlist{| <K> |}}
+>>
+
 (************************************************************************
  * Flattening.
  *)
@@ -436,11 +465,21 @@ let reduce_length_fun_term_conv t =
    let len = SeqHyp.length hyps in
    let rec search i =
       if i = len then
-         raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("empty sequent", t)))
+         raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("already converted", t)))
       else
          match SeqHyp.get hyps i with
-            Context (_, _, [t]) ->
-               t
+            Context (_, _, args) ->
+               let rec search_args args =
+                  match args with
+                     arg :: args ->
+                        if is_it_term arg then
+                           search_args args
+                        else
+                           arg
+                   | [] ->
+                        search (succ i)
+               in
+                  search_args args
           | _ ->
                search (succ i)
    in
@@ -454,14 +493,36 @@ let reduce_length_fun_term_conv t =
    let t_bind = mk_bind1_term x t_var in
       reduce_length_fun_term t_bind
 
-let reduce_length_fun_termC = termC reduce_length_fun_term_conv
+(*
+ * Split the << length{vlist{| <J> |}} >> into a sum.
+ *)
+let rec reduce_length_vlist_term t =
+   let s = dest_length t in
+   let hyps = (explode_sequent s).sequent_hyps in
+   let len = SeqHyp.length hyps in
+      if SeqHyp.length hyps = 0 then
+         reduce_length_vlist_nil
+      else
+         match SeqHyp.get hyps 0 with
+            Hypothesis _ ->
+               reduce_length_vlist_left
+               thenC addrC [Subterm 1] (termC reduce_length_vlist_term)
+          | Context _ ->
+               if len = 1 then
+                  raise (RefineError ("reduce_length_vlist_term", StringTermError ("already reduced", s)));
+               reduce_length_vlist_append 2
+               thenC addrC [Subterm 2] (termC reduce_length_vlist_term)
+
+let reduce_length_fun_termC =
+   repeatC (termC reduce_length_fun_term_conv)
+   thenC termC reduce_length_vlist_term
 
 let resource reduce +=
    [<< length{vlist{| <J> |}} >>, reduce_length_fun_termC]
 
 doc <:doc<
    The @tt[vlist_of_concrete_listC] conversion collects the elements
-   of a concrete list in a << vlist{| <J> |} >>.
+   of a concrete list into a << vlist{| <J> |} >>.
 
    @docoff
 >>

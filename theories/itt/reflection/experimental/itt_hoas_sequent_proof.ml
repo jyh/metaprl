@@ -96,8 +96,8 @@ interactive provable_intro 'premises : <:xrule<
    "wf" : <H> >- logic in Logic{Sequent} -->
    "wf" : <H> >- premises in list{Sequent} -->
    "wf" : <H> >- goal in Sequent -->
-   <H> >- all_list{premises; premise. Provable{logic; premise}} -->
-   <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic} -->
+   "aux" : <H> >- all_list{premises; premise. Provable{logic; premise}} -->
+   "main" : <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic} -->
    <H> >- Provable{logic; goal}
 >>
 
@@ -110,7 +110,7 @@ interactive simple_step_intro 'step : <:xrule<
    "wf" : <H> >- goal in Sequent -->
    "wf" : <H> >- step in ProofRule{Sequent} -->
    "wf" : <H> >- MemLogic{Sequent; step; logic} -->
-   <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
+   "main" : <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
    <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic}
 >>
 
@@ -120,10 +120,17 @@ interactive simple_step_intro 'step : <:xrule<
 doc <:doc<
    Forward-chaining rules, mainly for well-formedness reasoning.
 >>
-interactive provable_forward {| forward [] |} 'H : <:xrule<
+interactive provable_forward 'H : <:xrule<
    <H>; Provable{logic; seq}; <J>; seq in Sequent >- C -->
    <H>; Provable{logic; seq}; <J> >- C
 >>
+
+let provable_forwardT i =
+   provable_forward i
+   thenT rw normalizeBTermC (-1)
+
+let resource forward +=
+   [<< Provable{'logic; 'seq} >>, provable_forwardT]
 
 (************************************************************************
  * Tactics.
@@ -291,7 +298,7 @@ let build_so_witness cinfo soinfo sindex =
             (* Now build the witness term *)
             let seq =
                { sequent_args = vbind_arg_term;
-                 sequent_hyps = SeqHyp.of_list (List.rev hyps);
+                 sequent_hyps = SeqHyp.of_list hyps;
                  sequent_concl = t
                }
             in
@@ -396,20 +403,18 @@ let rec assum_all i len =
 let assumAllT =
    funT (fun p -> assum_all 1 (Sequent.num_assums p))
 
-let simple_step t unfold =
-   simple_step_intro t
-   then_OnLastT (rw (higherC unfold thenC reduceC) 0)
-
 let provableRuleStartT t unfold =
    assumAllT
    thenT rwhAll reduce_bsequent
    thenT forwardChainT
    thenT thinDupT
-   then_OnLastT (provableIntroT then_OnLastT simple_step t unfold)
+   thenMT provableIntroT
+   thenMT simple_step_intro t
+   thenMT rw (higherC unfold thenC reduceC) 0
 
 let provableRuleT t unfold =
    provableRuleStartT t unfold
-   then_OnLastT proofStepWitnessT
+   thenMT proofStepWitnessT
    thenT proofRuleWFT
 
 (*!

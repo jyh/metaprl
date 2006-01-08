@@ -34,8 +34,13 @@
 extends Summary
 extends Shell_theory
 
+open Basic_tactics
+
 declare const it
 declare trivial
+
+val it_term : term
+val is_it_term : term -> bool
 
 (*
  * -*-

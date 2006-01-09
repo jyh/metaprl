@@ -47,12 +47,14 @@ extends Itt_list2
 doc docoff
 extends Itt_int_base
 extends Itt_nequal
+extends Itt_sqsimple
 
 open Base_operator
 open Basic_tactics
 open Itt_equal
 open Itt_struct
 open Itt_squiggle
+open Itt_sqsimple
 open Itt_decidable
 
 (************************************************************************
@@ -102,6 +104,9 @@ prim op_sqeq {| nth_hyp |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
    sequent { <H> >- 'op1 ~ 'op2 }
    = it
+
+interactive op_sqsimple {| intro []; sqsimple |} :
+   sequent { <H> >- sqsimple{Operator} }
 
 doc <:doc<
    @tt[is_same_op] decides the equality of << Operator >>.

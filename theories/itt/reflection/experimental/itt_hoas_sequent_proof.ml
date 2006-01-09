@@ -130,7 +130,7 @@ let provable_forwardT i =
    thenT rw normalizeBTermC (-1)
 
 let resource forward +=
-   [<< Provable{'logic; 'seq} >>, provable_forwardT]
+   [<< Provable{'logic; 'seq} >>, { forward_prec = forward_trivial_prec; forward_tac = provable_forwardT }]
 
 (************************************************************************
  * Tactics.

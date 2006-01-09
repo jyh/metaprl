@@ -503,9 +503,18 @@ interactive_rw reduce_nth_suffix_const {| normalize_lof |} :
    <-->
    'f['j +@ 'm]
 
+interactive_rw reduce_singleton {| normalize_lof |} : <:xrewrite<
+   lof_cons{i. f[i]; 0; e}
+   <-->
+   e
+>>
+
 (************************************************************************
  * Optimizations.
  *)
+doc <:doc<
+   Optimizations.
+>>
 interactive_rw reduce_append_prefix_singleton {| normalize_lof |} :
    'n2 = 'n3 in nat -->
    'n5 in nat -->

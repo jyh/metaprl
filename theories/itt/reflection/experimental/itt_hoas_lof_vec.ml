@@ -118,6 +118,12 @@ interactive_rw coalesce_lof_vbind {| reduce_lof |} :
    <-->
    lof_vbind{| <J>; <K> >- 'e |}
 
+interactive_rw coalesce_lof_vbind_bind1 {| reduce_lof |} : <:xrewrite<
+   lof_vbind{| <J> >- lof_bind{1; x. e[x]} |}
+   <-->
+   lof_vbind{| <J>; x: it >- e[ [x] ] |}
+>>
+
 interactive_rw reduce_bind_mk_bterm_vlist :
    'n in nat -->
    'm in nat -->

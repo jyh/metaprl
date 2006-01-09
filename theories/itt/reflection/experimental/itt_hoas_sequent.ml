@@ -33,6 +33,7 @@ extends Itt_tunion
 extends Itt_match
 extends Itt_hoas_util
 extends Itt_vec_list1
+extends Itt_sqsimple
 
 doc docoff
 
@@ -43,6 +44,7 @@ open Itt_list
 open Itt_list2
 open Itt_dfun
 open Itt_equal
+open Itt_sqsimple
 
 doc <:doc<
    A sequent is represented as a 3-tuple << BTerm * list{BTerm} * BTerm >>,
@@ -171,6 +173,13 @@ interactive bhyp_depths_elim {| elim [] |} 'H : <:xrule<
    <H>; u: "assert"{bhyp_depths{d; l}}; <J[u]> >- C[u]
 >>
 
+interactive bhyp_depths_forward {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; "assert"{bhyp_depths{d; l}}; <J> >- d in nat -->
+   "wf" : <H>; "assert"{bhyp_depths{d; l}}; <J> >- l in list{BTerm} -->
+   <H>; "assert"{bhyp_depths{d; l}}; <J>; hyp_depths{d; l} >- C -->
+   <H>; "assert"{bhyp_depths{d; l}}; <J> >- C
+>>
+
 (*
  * is_sequent is well-formed if applied to a sequent triple.
  *)
@@ -250,6 +259,11 @@ interactive sequent_elim {| elim [] |} 'H : <:xrule<
 interactive cvar_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
    <H> >- CVar{d} Type
+>>
+
+interactive cvar_sqsimple {| intro []; sqsimple |} : <:xrule<
+   "wf" : <H> >- d in nat -->
+   <H> >- sqsimple{CVar{d}}
 >>
 
 (*
@@ -337,6 +351,13 @@ interactive beq_sequent_elim {| elim [] |} 'H : <:xrule<
    <H>; u: "assert"{beq_sequent{s1; s2}}; <J[u]> >- C[u]
 >>
 
+interactive beq_sequent_forward {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; "assert"{beq_sequent{s1; s2}}; <J> >- s1 in Sequent -->
+   "wf" : <H>; "assert"{beq_sequent{s1; s2}}; <J> >- s2 in Sequent -->
+   <H>; "assert"{beq_sequent{s1; s2}}; <J>; s1 = s2 in Sequent >- C -->
+   <H>; "assert"{beq_sequent{s1; s2}}; <J> >- C
+>>
+
 (*
  * Equality on lists of Sequents.
  *)
@@ -418,11 +439,34 @@ interactive cvar_cons_wf {| intro [] |} : <:xrule<
    <H> >- u::v IN CVar{d}
 >>
 
+interactive cvar_cons_eq {| intro [] |} : <:xrule<
+   "wf" : <H> >- d in nat -->
+   "wf" : <H> >- u1 = u2 in BTerm{d} -->
+   "wf" : <H> >- v1 = v2 in CVar{d +@ 1} -->
+   <H> >- (u1::v1) = (u2::v2) in CVar{d}
+>>
+
 interactive cvar_append_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
    "wf" : <H> >- l1 IN CVar{d} -->
    "wf" : <H> >- l2 IN CVar{d +@ length{l1}} -->
    <H> >- append{l1; l2} IN CVar{d}
+>>
+
+interactive cvar_append_eq {| intro [] |} : <:xrule<
+   "wf" : <H> >- d in nat -->
+   "wf" : <H> >- l1 = l3 in CVar{d} -->
+   "wf" : <H> >- l2 = l4 in CVar{d +@ length{l1}} -->
+   <H> >- append{l1; l2} = append{l3; l4} in CVar{d}
+>>
+
+interactive vflatten_cvar_wf 'J1 'J2 : <:xrule<
+   "wf" : <H> >- d in nat -->
+   "wf" : <H> >- vlist{| <J1> |} in list{list} -->
+   "wf" : <H> >- vlist{| <J2> |} in list{list} -->
+   "wf" : <H> >- vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{d} -->
+   "wf" : <H> >- vflatten{| <K1> |} = vflatten{| <K2> |} in CVar{d +@ length{vflatten{| <J1> |}}} -->
+   <H> >- vflatten{| <J1>; <K1<|H|> > |} = vflatten{| <J2>; <K2<|H|> > |} in CVar{d}
 >>
 
 (*
@@ -449,7 +493,7 @@ interactive bterm2_is_bterm {| intro [intro_typeinf << 'e >>] |} BTerm{'n} : <:x
 doc <:doc<
    Forward-chaining.
 >>
-interactive cvar_forward {| forward [] |} 'H : <:xrule<
+interactive cvar_forward {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
    "wf" : <H>; l in CVar{n}; <J> >- n in nat -->
    <H>; l in CVar{n}; <J>; l in list{BTerm}; hyp_depths{n; l} >- 'C -->
    <H>; l in CVar{n}; <J> >- 'C
@@ -543,6 +587,34 @@ let beq_sequent_term = << beq_sequent{'step1; 'step2} >>
 let beq_sequent_opname = opname_of_term beq_sequent_term
 let is_beq_sequent_term = is_dep0_dep0_term beq_sequent_opname
 let dest_beq_sequent_term = dest_dep0_dep0_term beq_sequent_opname
+
+(************************************************************************
+ * Tactics.
+ *)
+let vflatten_cvar_wf_tac p =
+   let t = concl p in
+   let _, t1, t2 = dest_equal t in
+   let hyps1 = (explode_sequent t1).sequent_hyps in
+   let hyps2 = (explode_sequent t2).sequent_hyps in
+   let len1 = SeqHyp.length hyps1 in
+   let len2 = SeqHyp.length hyps2 in
+      if len1 = 0 then
+         rw (addrC [Subterm 2] reduceC) 0
+      else if len2 = 0 then
+         rw (addrC [Subterm 3] reduceC) 0
+      else if len1 = 1 || len2 = 1 then
+         raise (RefineError ("vflatten_cvar_wf_tac", StringTermError ("refinement not possible", t)))
+      else
+         match SeqHyp.get hyps1 0, SeqHyp.get hyps2 0 with
+            Hypothesis _, Hypothesis _
+          | Context _, Context _ ->
+               vflatten_cvar_wf 2 2
+          | Hypothesis _, Context _
+          | Context _, Hypothesis _ ->
+               raise (RefineError ("vflatten_cvar_wf_tac", StringTermError ("context mismatch", t)))
+
+let resource intro +=
+   [<< vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{'d} >>, wrap_intro (funT vflatten_cvar_wf_tac)]
 
 (*!
  * @docoff

@@ -38,6 +38,7 @@ extends Itt_match
 
 doc docoff
 
+open Lm_printf
 open Basic_tactics
 open Itt_list2
 open Itt_vec_sequent_term
@@ -245,8 +246,14 @@ interactive vflatten_hyp_left_wf {| intro [] |} : <:xrule<
    <H> >- "vflatten"{| x: A; <J[x]> |} IN CVar{length{"vflatten"{| <K> |}}}
 >>
 
+interactive hyp_term_cvar_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- vbind{| <J> >- e |} in BTerm{n} -->
+   <H> >- hyp_term{| <J> >- e |} in CVar{n}
+>>
+
 (************************************************************************
- * Forward-chaining.
+ * Forward reasoning.
  *)
 interactive vsequent_wf_forward {| forward [] |} 'H : <:xrule<
    <H>; vsequent{arg}{| <J> >- C |} in Sequent; <K>;
@@ -262,6 +269,12 @@ interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<
    "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- vflatten{| <J> |} in list{BTerm} -->
    <H>; vflatten{| A; <J> |} in CVar{n}; <K>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C -->
    <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- C
+>>
+
+interactive_rw reduce_vflatten_hyp_term {| reduce |} : <:xrewrite<
+   vflatten{| hyp_term{| <J> >- e |} |}
+   <-->
+   [vbind{| <J> >- e |}]
 >>
 
 (************************************************************************

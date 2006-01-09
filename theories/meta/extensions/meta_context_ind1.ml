@@ -223,7 +223,7 @@ let state_trans state var_mode =
  *    info: the map to new variable names
  *    mode: one of the replacement modes
  *)
-let generalize_term f bv t v vsrc vdst cv1 x x_A cv2 info mode =
+let generalize_term f bv squashbv t v vsrc vdst cv1 x x_A cv2 info mode =
    let x_t = mk_var_term x in
    let rec generalize_term state t =
       if is_var_term t then
@@ -323,7 +323,7 @@ let generalize_term f bv t v vsrc vdst cv1 x x_A cv2 info mode =
                          | SrcVar, FinalMode, _ ->
                               Context (v, remove_context_vars cs vsrc vdst, ts) :: hyps
                          | DstVar, BaseMode, _ ->
-                              Context (bv, remove_context_vars cs vsrc vdst, ts) :: hyps
+                              Context (bv, remove_context_vars cs vsrc vdst, squashbv ts) :: hyps
 
                            (* context 1 *)
                          | SrcVar, LeftMode, StartState
@@ -428,7 +428,7 @@ let v_S = Lm_symbol.add "S"
 let v_T = Lm_symbol.add "T"
 let v_B = Lm_symbol.add "B"
 
-let generalize_of_term f b v t vsrc vdst =
+let generalize_of_term f b squashbv v t vsrc vdst =
    let fv, info = new_vars_table t in
 
    (* Induction vars *)
@@ -451,7 +451,7 @@ let generalize_of_term f b v t vsrc vdst =
       else
          v
    in
-      generalize_term f bv t v vsrc vdst cv1 x x_A cv2 info
+      generalize_term f bv squashbv t v vsrc vdst cv1 x x_A cv2 info
 
 (************************************************************************
  * Context induction.
@@ -473,16 +473,24 @@ let context_ind_code addrs params goal assums =
 
    (* Possibly transform the term as it is shifted *)
    let b = is_bind1_term t_trans in
-   let f =
+   let squashbv, f =
       if b then
          let x, t = dest_bind1 t_trans in
-            (fun v -> subst1 t x v)
+         let squashp = SymbolSet.is_empty (free_vars_set t) in
+         let f v = subst1 t x v in
+         let squash =
+            if squashp then
+               (fun ts -> [])
+            else
+               (fun ts -> ts)
+         in
+            squash, f
       else
-         (fun v -> v)
+         (fun ts -> ts), (fun v -> v)
    in
 
    (* Term generalization *)
-   let gen = generalize_of_term f b v t_step v_src v_dst in
+   let gen = generalize_of_term f b squashbv v t_step v_src v_dst in
 
    (* Base case *)
    let seq_base = mk_msequent (gen BaseMode) assums in

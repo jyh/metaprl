@@ -43,6 +43,7 @@ extends Meta_context_theory
 doc docoff
 
 open Basic_tactics
+open Base_trivial
 open Itt_squiggle
 open Itt_struct
 
@@ -79,8 +80,24 @@ interactive_rw reduce_vbind_merge :
    vbind{| <J>; <K> >- 'e |}
 
 (************************************************************************
+ * Hyp squashing.
+ *)
+interactive_rw squash_lambda_vbind : <:xrewrite<
+   lambda{x. vbind{| <J[x]> >- e |}}
+   <-->
+   lambda{x. vbind{| <J[it]> >- e |}}
+>>
+
+interactive_rw squash_vbind Perv!bind{x. vbind{| <J['x]> >- 'e |}} : <:xrewrite<
+   vbind{| <J[x]> >- 'e |}
+   <-->
+   vbind{| <J[it]> >- 'e |}
+>>
+
+(************************************************************************
  * Tactics.
  *)
+let var_x = Lm_symbol.add "x"
 
 (*
  * vbind{| <J> >- 'A |}
@@ -119,6 +136,51 @@ let wrap_vbind p =
       thenLT [idT; rw (addrC [Subterm 1] reduceTopC thenC addrC [Subterm 2] reduceTopC) (-1) thenT nthHypT (-1)]
 
 let wrapVBindT = funT wrap_vbind
+
+(*
+ * Squash as much as possible in the << vbind{| <J> >- 'e |} >> hyp list.
+ *)
+let squash_vbind_conv t =
+   (*
+    * Find the term to be replaced.
+    *)
+   let hyps = (explode_sequent t).sequent_hyps in
+   let len = SeqHyp.length hyps in
+   let rec search i =
+      if i = len then
+         raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("already converted", t)))
+      else
+         match SeqHyp.get hyps i with
+            Context (_, _, args) ->
+               let rec search_args args =
+                  match args with
+                     arg :: args ->
+                        if is_it_term arg then
+                           search_args args
+                        else
+                           arg
+                   | [] ->
+                        search (succ i)
+               in
+                  search_args args
+          | Hypothesis (_, t) ->
+               if is_it_term t then
+                  search (succ i)
+               else
+                  t
+   in
+   let v_term = search 0 in
+
+   (*
+    * Make a new variable, and replace the subterm.
+    *)
+   let x = maybe_new_var_set var_x (free_vars_set t) in
+   let t_var = var_subst t v_term x in
+   let t_bind = mk_bind1_term x t_var in
+      squash_vbind t_bind
+
+let resource reduce +=
+    [<< vbind{| <J> >- 'e |} >>, termC squash_vbind_conv]
 
 (*!
  * @docoff

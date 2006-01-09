@@ -357,6 +357,11 @@ interactive_rw reduce_vflatten_nil {| reduce |} :
    <-->
    nil
 
+interactive_rw reduce_vflatten_singleton {| reduce |} :
+   vflatten{| cons{'e; nil} |}
+   <-->
+   cons{'e; nil}
+
 interactive_rw reduce_vflatten_left :
    vflatten{| x: 'A; <J['x]> |}
    <-->
@@ -509,9 +514,10 @@ let rec reduce_length_vlist_term t =
                thenC addrC [Subterm 1] (termC reduce_length_vlist_term)
           | Context _ ->
                if len = 1 then
-                  raise (RefineError ("reduce_length_vlist_term", StringTermError ("already reduced", s)));
-               reduce_length_vlist_append 2
-               thenC addrC [Subterm 2] (termC reduce_length_vlist_term)
+                  idC
+               else
+                  reduce_length_vlist_append 2
+                  thenC addrC [Subterm 2] (termC reduce_length_vlist_term)
 
 let reduce_length_fun_termC =
    repeatC (termC reduce_length_fun_term_conv)

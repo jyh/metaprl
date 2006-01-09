@@ -529,6 +529,45 @@ interactive beq_bterm_list_elim {| elim [] |} 'H :
    sequent { <H>; u: 't1 = 't2 in list{BTerm}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: "assert"{beq_bterm_list{'t1; 't2}}; <J['u]> >- 'C['u] }
 
+(************************************************************************
+ * Forward-chaining.
+ *)
+doc <:doc<
+   Simple rules for forward chaining.
+>>
+interactive beq_bterm_forward {| forward [] |} 'H :
+   [wf] sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J> >- 't1 in BTerm } -->
+   [wf] sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J> >- 't2 in BTerm } -->
+   sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J>; 't1 = 't2 in BTerm >- 'C } -->
+   sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J> >- 'C }
+
+interactive beq_bterm_list_forward {| forward [] |} 'H :
+   [wf] sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J> >- 't1 in list{BTerm} } -->
+   [wf] sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J> >- 't2 in list{BTerm} } -->
+   sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J>; 't1 = 't2 in list{BTerm} >- 'C } -->
+   sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J> >- 'C }
+
+(************************************************************************
+ * Equality.
+ *)
+doc <:doc<
+   Equality reasoning.
+>>
+interactive mk_bterm_simple_eq {| intro [] |} :
+   [wf] sequent{ <H> >- 'd1 = 'd2 in nat } -->
+   [wf] sequent{ <H> >- 'op1 = 'op2 in Operator } -->
+   [wf] sequent{ <H> >- 'subterms1 = 'subterms2 in list{BTerm} } -->
+   sequent{ <H> >- compatible_shapes{'d1; shape{'op1}; 'subterms1} } -->
+   sequent{ <H> >- mk_bterm{'d1; 'op1; 'subterms1} = mk_bterm{'d2; 'op2; 'subterms2} in BTerm }
+
+interactive mk_bterm_eq {| intro [] |} :
+   [wf] sequent{ <H> >- 'd1 = 'd3 in nat } -->
+   [wf] sequent{ <H> >- 'd2 = 'd3 in nat } -->
+   [wf] sequent{ <H> >- 'op1 = 'op2 in Operator } -->
+   [wf] sequent{ <H> >- 'subterms1 = 'subterms2 in list{BTerm} } -->
+   sequent{ <H> >- compatible_shapes{'d1; shape{'op1}; 'subterms1} } -->
+   sequent{ <H> >- mk_bterm{'d1; 'op1; 'subterms1} = mk_bterm{'d2; 'op2; 'subterms2} in BTerm{'d3} }
+
 (*!
  * @docoff
  *

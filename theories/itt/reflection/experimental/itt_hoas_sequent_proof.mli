@@ -50,6 +50,7 @@ topval provableRuleT : term -> conv -> tactic
 (************************************************
  * Debugging.
  *)
+topval assumAllT : tactic
 topval provableIntroT : tactic
 topval proofStepWitnessT : tactic
 topval provableRuleStartT : term -> conv -> tactic

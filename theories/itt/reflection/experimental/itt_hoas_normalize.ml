@@ -51,6 +51,100 @@ open Itt_hoas_vector
 open Itt_hoas_debruijn
 
 (************************************************************************
+ * Common cases.
+ *)
+doc <:doc<
+   Prove some common cases of normalization rules just so normalization
+   is faster.  The tactic will work in all cases, so we can just catch the
+   common ones.
+
+   @docoff
+>>
+let extract_data tbl =
+   let rw t =
+      let conv =
+         try
+            (* Find and apply the right tactic *)
+            Term_match_table.lookup tbl select_all t
+         with
+            Not_found ->
+               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
+      in
+         conv
+   in
+      termC rw
+
+(*
+ * Normalizing resource (lof lifting).
+ *)
+let process_normalize_simple_resource_rw_annotation = redex_and_conv_of_rw_annotation "normalize_simple"
+
+let resource (term * conv, conv) normalize_simple =
+   table_resource_info extract_data
+
+let normalizeSimpleTopC_env e =
+   get_resource_arg (env_arg e) get_normalize_simple_resource
+
+let normalizeSimpleTopC = funC normalizeSimpleTopC_env
+
+let normalizeSimpleC =
+   funC (fun e -> sweepUpC (normalizeSimpleTopC_env e))
+
+let normalizeSimpleT =
+   rwAll normalizeSimpleC
+
+doc <:doc<
+   Now we have a series of simple normalization theorems.
+>>
+interactive_rw bindn_of_mk_bterm0 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   bind{n; x. mk_bterm{m; op; []}}
+   <-->
+   mk_bterm{m +@ n; op; []}
+>>
+
+interactive_rw bindn_of_mk_bterm1 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   bind{n; x. mk_bterm{m; op; [e1[x]]}}
+   <-->
+   mk_bterm{m +@ n; op; [bind{n; x. e1[x]}]}
+>>
+
+interactive_rw bindn_of_mk_bterm2 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   bind{n; x. mk_bterm{m; op; [e1[x]; e2[x]]}}
+   <-->
+   mk_bterm{m +@ n; op; [bind{n; x. e1[x]}; bind{n; x. e2[x]}]}
+>>
+
+interactive_rw bindn_of_mk_bterm3 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   bind{n; x. mk_bterm{m; op; [e1[x]; e2[x]; e3[x]]}}
+   <-->
+   mk_bterm{m +@ n; op; [bind{n; x. e1[x]}; bind{n; x. e2[x]}; bind{n; x. e3[x]}]}
+>>
+
+interactive_rw bindn_of_mk_bterm4 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   bind{n; x. mk_bterm{m; op; [e1[x]; e2[x]; e3[x]; e4[x]]}}
+   <-->
+   mk_bterm{m +@ n; op; [bind{n; x. e1[x]}; bind{n; x. e2[x]}; bind{n; x. e3[x]}; bind{n; x. e4[x]}]}
+>>
+
+interactive_rw bindn_of_mk_bterm5 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   bind{n; x. mk_bterm{m; op; [e1[x]; e2[x]; e3[x]; e4[x]; e5[x]]}}
+   <-->
+   mk_bterm{m +@ n; op; [bind{n; x. e1[x]}; bind{n; x. e2[x]}; bind{n; x. e3[x]}; bind{n; x. e4[x]}; bind{n; x. e5[x]}]}
+>>
+
+(************************************************************************
  * Test whether a term has already been normalized.
  * The normalizer is expensive, so this is used to prevent
  * it from running when nothing will happen.
@@ -205,8 +299,9 @@ let normalizeBTermForceC =
 
 let normalizeBTermC =
 (*
-   normalizeCheckC
-   orelseC *) normalizeBTermForceC
+   normalizeCheckC orelseC
+ *)
+   normalizeBTermForceC
 
 (*!
  * @docoff

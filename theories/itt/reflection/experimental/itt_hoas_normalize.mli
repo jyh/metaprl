@@ -33,6 +33,7 @@ open Basic_tactics
  * Normalize the term.
  *)
 topval normalizeBTermC : conv
+topval normalizeBTermForceC : conv
 
 (*
  * Debugging.

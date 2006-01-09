@@ -61,6 +61,10 @@ val is_bindn_term : term -> bool
 val mk_bindn_term : var -> term -> term -> term
 val dest_bindn_term : term -> var * term * term
 
+val is_subst_term : term -> bool
+val dest_subst_term : term -> term * term
+val mk_subst_term : term -> term -> term
+
 val is_substl_term : term -> bool
 val dest_substl_term : term -> term * term
 val mk_substl_term : term -> term -> term

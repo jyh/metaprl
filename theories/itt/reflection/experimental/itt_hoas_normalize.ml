@@ -43,10 +43,124 @@ doc docoff
 
 open Lm_printf
 open Basic_tactics
+open Itt_hoas_base
 open Itt_hoas_lof
 open Itt_hoas_lof_vec
+open Itt_hoas_vbind
 open Itt_hoas_vector
 open Itt_hoas_debruijn
+
+(************************************************************************
+ * Test whether a term has already been normalized.
+ * The normalizer is expensive, so this is used to prevent
+ * it from running when nothing will happen.
+ *
+ * Non-normal terms:
+ *    1. Nested binds, nested substitutions
+ *    2. A mk_term, subst, bind1
+ *    3. A mk_bterm within a bind or subst
+ *)
+type norm_info =
+   { norm_bind : bool;
+     norm_subst : bool
+   }
+
+let empty_info =
+   { norm_bind = false;
+     norm_subst = false
+   }
+
+let rec is_normal_term info t =
+   if is_mk_term_term t || is_subst_term t || is_bind_term t then
+      false
+   else if is_bindn_term t then
+      is_normal_bindn_term info t
+   else if is_vbind_term t then
+      is_normal_vbind_term info t
+   else if is_substl_term t then
+      is_normal_substl_term info t
+   else if is_mk_bterm_term t then
+      is_normal_mk_bterm_term info t
+   else if is_var_term t then
+      false
+   else if is_so_var_term t then
+      is_normal_so_var_term info t
+   else if is_context_term t then
+      is_normal_context_term info t
+   else if is_sequent_term t then
+      is_normal_sequent_term info t
+   else
+      is_normal_bterm_list info (dest_term t).term_terms
+
+and is_normal_term_list info tl =
+   List.for_all (is_normal_term info) tl
+
+and is_normal_bterm info bt =
+   is_normal_term info (dest_bterm bt).bterm
+
+and is_normal_bterm_list info btl =
+   List.for_all (is_normal_bterm info) btl
+
+and is_normal_bindn_term info t =
+   if info.norm_bind then
+      false
+   else
+      let info = { info with norm_bind = true } in
+      let _, _, t = dest_bindn_term t in
+         is_normal_term info t
+
+and is_normal_vbind_term info t =
+   if info.norm_bind then
+      false
+   else
+      let _, t = dest_vbind_term t in
+         is_normal_term info t
+
+and is_normal_substl_term info t =
+   if info.norm_subst then
+      false
+   else
+      let info = { info with norm_subst = true } in
+      let t1, t2 = dest_substl_term t in
+         is_normal_term info t1 && is_normal_term info t2
+
+and is_normal_mk_bterm_term info t =
+   if info.norm_bind then
+      false
+   else
+      let _, _, t = dest_mk_bterm_term t in
+         is_normal_term info t
+
+and is_normal_so_var_term info t =
+   let _, _, tl = dest_so_var t in
+      is_normal_term_list info tl
+
+and is_normal_context_term info t =
+   let _, t, _, tl = dest_context t in
+      is_normal_term info t && is_normal_term_list info tl
+
+and is_normal_sequent_term info t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+      if is_normal_term info arg && is_normal_term info concl then
+         SeqHyp.for_all (fun h ->
+               match h with
+                  Hypothesis (_, t) ->
+                     is_normal_term info t
+                | Context (_, _, tl) ->
+                     is_normal_term_list info tl) hyps
+      else
+         false
+
+let normalizeCheckC =
+   termC (fun t -> (**)
+      if is_normal_term empty_info t then
+         idC
+      else
+         raise (RefineError ("Itt_hoas_normalize.normalizeCheckC", StringTermError ("already normalized", t))))
 
 (************************************************************************
  * Tactics.
@@ -82,12 +196,17 @@ doc <:doc<
    to optimize the term.  Afterwards, remove all temporary terms using the
    @tt[lofBindElimC] conversion.
 >>
-let normalizeBTermC =
+let normalizeBTermForceC =
    normalizeBTermAuxC
    thenC rippleLofC
    thenC reduceC
    thenC sweepUpC lofBindElimC
    thenC sweepUpC lofVBindElimC
+
+let normalizeBTermC =
+(*
+   normalizeCheckC
+   orelseC *) normalizeBTermForceC
 
 (*!
  * @docoff

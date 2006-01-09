@@ -38,6 +38,7 @@ doc <:doc<
 >>
 extends Itt_hoas_lof
 extends Itt_hoas_lof_vec
+extends Itt_vec_list1
 
 doc docoff
 
@@ -95,6 +96,7 @@ let normalizeSimpleT =
 
 doc <:doc<
    Now we have a series of simple normalization theorems.
+   The following or for pushing @tt[bindn] through @tt[mk_bterm].
 >>
 interactive_rw bindn_of_mk_bterm0 {| normalize_simple |} : <:xrewrite<
    n in nat -->
@@ -142,6 +144,58 @@ interactive_rw bindn_of_mk_bterm5 {| normalize_simple |} : <:xrewrite<
    bind{n; x. mk_bterm{m; op; [e1[x]; e2[x]; e3[x]; e4[x]; e5[x]]}}
    <-->
    mk_bterm{m +@ n; op; [bind{n; x. e1[x]}; bind{n; x. e2[x]}; bind{n; x. e3[x]}; bind{n; x. e4[x]}; bind{n; x. e5[x]}]}
+>>
+
+doc <:doc<
+   A similar set of theorems for << vbind{| <J> >- 'e |} >>.
+>>
+interactive_rw vbind_of_mk_bterm0 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   vbind{| <J> >- mk_bterm{n<||>; op<||>; []} |}
+   <-->
+   mk_bterm{n +@ length{vlist{| <J> |}}; op; []}
+>>
+
+interactive_rw vbind_of_mk_bterm1 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   vbind{| <J> >- mk_bterm{n<||>; op<||>; [e1]} |}
+   <-->
+   mk_bterm{n +@ length{vlist{| <J> |}}; op; [vbind{| <J> >- e1 |}]}
+>>
+
+interactive_rw vbind_of_mk_bterm2 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   vbind{| <J> >- mk_bterm{n<||>; op<||>; [e1; e2]} |}
+   <-->
+   mk_bterm{n +@ length{vlist{| <J> |}}; op; [vbind{| <J> >- e1 |}; vbind{| <J> >- e2 |}]}
+>>
+
+interactive_rw vbind_of_mk_bterm3 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   vbind{| <J> >- mk_bterm{n<||>; op<||>; [e1; e2; e3]} |}
+   <-->
+   mk_bterm{n +@ length{vlist{| <J> |}}; op; [vbind{| <J> >- e1 |}; vbind{| <J> >- e2 |}; vbind{| <J> >- e3 |}]}
+>>
+
+interactive_rw vbind_of_mk_bterm4 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   vbind{| <J> >- mk_bterm{n<||>; op<||>; [e1; e2; e3; e4]} |}
+   <-->
+   mk_bterm{n +@ length{vlist{| <J> |}}; op; [vbind{| <J> >- e1 |};
+                                              vbind{| <J> >- e2 |};
+                                              vbind{| <J> >- e3 |};
+                                              vbind{| <J> >- e4 |}]}
+>>
+
+interactive_rw vbind_of_mk_bterm5 {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   vbind{| <J> >- mk_bterm{n<||>; op<||>; [e1; e2; e3; e4; e5]} |}
+   <-->
+   mk_bterm{n +@ length{vlist{| <J> |}}; op; [vbind{| <J> >- e1 |};
+                                              vbind{| <J> >- e2 |};
+                                              vbind{| <J> >- e3 |};
+                                              vbind{| <J> >- e4 |};
+                                              vbind{| <J> >- e5 |}]}
 >>
 
 (************************************************************************

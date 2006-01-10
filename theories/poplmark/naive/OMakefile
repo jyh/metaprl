@@ -16,3 +16,6 @@ FILES[] =
     pmn_core_terms
 
 Theory($(FILES))
+
+clean:
+    $(CLEAN)

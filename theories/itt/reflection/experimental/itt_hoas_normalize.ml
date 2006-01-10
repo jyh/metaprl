@@ -329,7 +329,7 @@ let fold_member = makeFoldC << member{'T; 'e} >> unfold_member
 
 let memberC c =
    tryC fold_member
-   thenC addrC [Subterm 2] c
+   thenC c
    thenC tryC unfold_member
 
 let normalizeBTermForceC =

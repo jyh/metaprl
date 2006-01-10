@@ -494,17 +494,32 @@ let rec is_arith_rel t =
    (is_equal_term t && (let (t',_,_)=dest_equal t in alpha_equal t' <<int>>)) or
    (is_not_term t && is_arith_rel (dest_not t))
 
-let negativeHyp2ConclT = argfunT (fun i p ->
-   let t = Sequent.nth_hyp p i in
-	if is_not_term t then
-      if is_arith_rel (dest_not t) then
-      	(not_elim i) thenMT arithRelInConcl2HypT
-		else
-      	idT
-	else if is_neq_int_term t then
-      nequal_elim2 i
+let rec negativeHyp2Concl i p =
+   let hyps = (Sequent.explode_sequent_arg p).sequent_hyps in
+   let len = SeqHyp.length hyps in
+      negativeHyp2Concl_aux hyps len i
+
+and negativeHyp2Concl_aux hyps len i =
+   if i = len then
+      idT
    else
-   	idT)
+      let i' = i + 1 in
+      let restT = funT (negativeHyp2Concl i') in
+         match SeqHyp.get hyps i with
+            Hypothesis(_, t) ->
+               if is_not_term t then
+                  if is_arith_rel (dest_not t) then
+                     not_elim i' thenMT arithRelInConcl2HypT thenMT restT
+                  else
+                     funT (negativeHyp2Concl i')
+               else if is_neq_int_term t then
+                  nequal_elim2 i' thenMT restT
+               else
+                  restT
+          | Context _ ->
+               restT
+
+let negativeHyps2ConclT = funT (negativeHyp2Concl 0)
 
 interactive_rw mul_BubblePrimitive_rw :
    ( 'a in int ) -->
@@ -1012,15 +1027,13 @@ doc <:doc<
 
 let preT = funT (fun p ->
    arithRelInConcl2HypT thenMT
-   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
+   negativeHyps2ConclT thenMT
    all2geT)
-)
 
 let preArithT = funT (fun p ->
    arithRelInConcl2HypT thenMT
-   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
+   negativeHyps2ConclT thenMT
 	findContradRelT)
-)
 
 (* Finds and proves contradiction among ge-relations
  *)

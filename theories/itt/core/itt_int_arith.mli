@@ -98,7 +98,6 @@ topval arithT : tactic
  * Specific phases of arithT - useful for debugging arithT
  *)
 topval arithRelInConcl2HypT : tactic
-topval negativeHyp2ConclT : int -> tactic
 topval findContradRelT : tactic
 (**)
 topval hyp2geT : int -> tactic

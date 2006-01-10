@@ -158,18 +158,9 @@ let resource intro +=
    [<< lof_bind{'n; x. 'e['x]} in BTerm >>, bind_wf;
     << lof_bind{'n; x. 'e['x]} in BTerm{'m} >>, bind_wf]
 
-(*
- * Temporary, for trying to reduce the size of proofs.
- *)
-define unfold_member : member{'T; 'e} <--> 'e = 'e in 'T
-
-let fold_member = makeFoldC << member{'T; 'e} >> unfold_member
-
 let proofRuleAuxWFT =
    autoT
-   thenT tryT (rw fold_member 0)
    thenT rw normalizeBTermSimpleC 0
-   thenT tryT (rw unfold_member 0)
    thenT autoT
    thenT rw reduceC 0
    thenT tryT arithT

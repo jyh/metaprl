@@ -268,7 +268,7 @@ doc <:doc<
    case, it is necessary to fall back to the general normalizer
    @tt[normalizeBTermC] below.
 >>
-let normalizeBTermSimpleC =
+let normalizeBTermSimpleC_inner =
    preNormalizeSimpleC
    thenC normalizeSimpleC
 
@@ -303,7 +303,7 @@ doc <:doc<
    to optimize the term.  Afterwards, remove all temporary terms using the
    @tt[lofBindElimC] conversion.
 >>
-let normalizeBTermForceC =
+let normalizeBTermForceC_inner =
    normalizeBTermAuxC
    thenC rippleLofC
    thenC reduceC
@@ -314,9 +314,32 @@ doc <:doc<
    For normalization, use the simple normalizer first.
    Then use the generalized normalizer.
 >>
+let normalizeBTermC_inner =
+   normalizeBTermSimpleC_inner
+   thenC tryC (progressC normalizeBTermForceC_inner)
+
+doc <:doc<
+   The normalizers will often be used on equality goals.
+   To reduce the amount of work, convert the equality to a membership
+   if possible, and reduce a single term instead of two identical ones.
+>>
+define unfold_member : member{'T; 'e} <--> 'e = 'e in 'T
+
+let fold_member = makeFoldC << member{'T; 'e} >> unfold_member
+
+let memberC c =
+   tryC fold_member
+   thenC addrC [Subterm 2] c
+   thenC tryC unfold_member
+
+let normalizeBTermForceC =
+   memberC normalizeBTermForceC_inner
+
+let normalizeBTermSimpleC =
+   normalizeBTermSimpleC_inner
+
 let normalizeBTermC =
-   normalizeBTermSimpleC
-   thenC tryC (progressC normalizeBTermForceC)
+   memberC normalizeBTermC_inner
 
 (*!
  * @docoff

@@ -156,9 +156,9 @@ let resource elim +=
      << compatible_shapes{'depth; shape{'op}; !v} >>, dest_compatible_shapes_shapeT]
 
 let resource forward +=
-    [<< compatible_shapes{'depth; 'h :: 't; !v} >>,   { forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
-     << compatible_shapes{'depth; nil; !v} >>,        { forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
-     << compatible_shapes{'depth; shape{'op}; !v} >>, { forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapes_shapeT }]
+    [<< compatible_shapes{'depth; 'h :: 't; !v} >>,   { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
+     << compatible_shapes{'depth; nil; !v} >>,        { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
+     << compatible_shapes{'depth; shape{'op}; !v} >>, { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapes_shapeT }]
 
 (************************************************************************
  * Other junk.

@@ -1,7 +1,7 @@
 doc <:doc<
    @module[Itt_int_arith]
 
-	This module defines @hrefconv[normalizeC] and @hreftactic[arithT].
+   This module defines @hrefconv[normalizeC] and @hreftactic[arithT].
 
    @noindent @hrefconv[normalizeC] converts polynomials to the canonical form.
 
@@ -105,18 +105,18 @@ let select_ge =
       fun t (fs, _) -> List.for_all (select t) fs
 
 let extract_ge_elim_data tbl i p =
-	let t = mk_pair_term (mk_var_term (Sequent.nth_binding p i)) (Sequent.nth_hyp p i) in
+   let t = mk_pair_term (mk_var_term (Sequent.nth_binding p i)) (Sequent.nth_hyp p i) in
    if !debug_arith_dtactic then
-		eprintf "Itt_int_arith.ge_elim: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
-	let terms, (_, tac) = Term_match_table.lookup_rmap tbl (select_ge t) t in
-	terms, tac
+      eprintf "Itt_int_arith.ge_elim: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
+   let terms, (_, tac) = Term_match_table.lookup_rmap tbl (select_ge t) t in
+   terms, tac
 
 let extract_ge_intro_data tbl p =
    let t = Sequent.concl p in
    if !debug_arith_dtactic then
-		eprintf "Itt_int_arith.ge_intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
-	let terms, tac = Term_match_table.lookup_rmap tbl select_all t in
-	terms, tac
+      eprintf "Itt_int_arith.ge_intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
+   let terms, tac = Term_match_table.lookup_rmap tbl select_all t in
+   terms, tac
 
 let resource (term * (term list) * ((term -> bool) list * (int -> tactic)), ge_elim_type) ge_elim =
    rmap_table_resource_info extract_ge_elim_data
@@ -127,36 +127,36 @@ let resource (term * (term list) * tactic, ge_intro_type) ge_intro =
 let not_member t = not (is_member_term t)
 
 let rec filter_ge = function
-	Hypothesis(_,t)::tl when (is_ge_term t) -> t::(filter_ge tl)
+   Hypothesis(_,t)::tl when (is_ge_term t) -> t::(filter_ge tl)
  | _::tl -> filter_ge tl
  | [] -> []
 
 let main_labels = ""::main_labels
 
 let rec on_main_subgoals = function
-	(labels,_,seq)::tl ->
-		if !debug_arith_dtactic then
-			eprintf "Itt_int_arith.ge_elim: on_main_subgoals labels: %s%t" (String.concat ";" labels) eflush;
-		(*if List.exists (fun x -> List.mem x labels) main_labels then*)
-			let hyps=SeqHyp.to_list (TermMan.explode_sequent seq).sequent_hyps in
-			let ge_hyps=filter_ge hyps in
-			if ge_hyps=[] then
-				on_main_subgoals tl
-			else
-				let seq_terms = mk_xlist_term ge_hyps in
-				if !debug_arith_dtactic then
-					eprintf "Itt_int_arith.ge_elim: on_main_subgoals >= terms: %s%t" (SimplePrint.short_string_of_term seq_terms) eflush;
-				seq_terms::(on_main_subgoals tl)
-		(*else
-			on_main_subgoals tl*)
+   (labels,_,seq)::tl ->
+      if !debug_arith_dtactic then
+         eprintf "Itt_int_arith.ge_elim: on_main_subgoals labels: %s%t" (String.concat ";" labels) eflush;
+      (*if List.exists (fun x -> List.mem x labels) main_labels then*)
+         let hyps=SeqHyp.to_list (TermMan.explode_sequent seq).sequent_hyps in
+         let ge_hyps=filter_ge hyps in
+         if ge_hyps=[] then
+            on_main_subgoals tl
+         else
+            let seq_terms = mk_xlist_term ge_hyps in
+            if !debug_arith_dtactic then
+               eprintf "Itt_int_arith.ge_elim: on_main_subgoals >= terms: %s%t" (SimplePrint.short_string_of_term seq_terms) eflush;
+            seq_terms::(on_main_subgoals tl)
+      (*else
+         on_main_subgoals tl*)
  | [] -> []
 
-let process_ge_elim_resource_annotation name context_args term_args statement (pre_tactic, arg) =
+let process_ge_elim_resource_annotation name context_args term_args statement _loc (pre_tactic, arg) =
    let assums, goal = unzip_mfunction statement in
-	let () =
+   let () =
       if !debug_arith_dtactic then
-		   eprintf "Itt_int_arith.improve_ge_elim: %s concl: %s%t" name (SimplePrint.short_string_of_term (TermMan.concl goal)) eflush
-	in
+         eprintf "Itt_int_arith.improve_ge_elim: %s concl: %s%t" name (SimplePrint.short_string_of_term (TermMan.concl goal)) eflush
+   in
    let v,t =
       match SeqHyp.to_list (TermMan.explode_sequent goal).sequent_hyps with
          [ Context _; Hypothesis(v,t); Context _ ] -> v,t
@@ -164,42 +164,42 @@ let process_ge_elim_resource_annotation name context_args term_args statement (p
             raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_elim: %s: must be an elimination rule" name))
    in
    let seq_terms = on_main_subgoals assums in
-	let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic { arg_ints = [| i |]; arg_addrs = [||] } []) in
+   let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic { arg_ints = [| i |]; arg_addrs = [||] } []) in
    [mk_pair_term (mk_var_term v) t, seq_terms, (arg, tac)]
 
-let process_ge_intro_resource_annotation name context_args term_args statement pre_tactic =
+let process_ge_intro_resource_annotation name context_args term_args statement _loc pre_tactic =
    let assums, goal = unzip_mfunction statement in
    let t = TermMan.concl goal in
    let () =
-	   if !debug_arith_dtactic then
-	      eprintf "Itt_int_arith.improve_ge_intro: %s goal: %s%t" name (SimplePrint.short_string_of_term t) eflush
+      if !debug_arith_dtactic then
+         eprintf "Itt_int_arith.improve_ge_intro: %s goal: %s%t" name (SimplePrint.short_string_of_term t) eflush
    in
    let seq_terms = on_main_subgoals assums in
-	let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic empty_rw_args []) in
+   let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic empty_rw_args []) in
    [t, seq_terms, tac]
 
 let hyp2geT = argfunT (fun i p ->
-	try
-		let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-		if List.length terms > 1 then
-			begin
-				if !debug_arith_dtactic then
-					eprintf "Itt_int_arith.hyp2geT: hyp %i - branching is not supported yet@." i;
-				idT
-			end
-		else
-			tac i
-	with Not_found ->
-		idT
+   try
+      let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
+      if List.length terms > 1 then
+         begin
+            if !debug_arith_dtactic then
+               eprintf "Itt_int_arith.hyp2geT: hyp %i - branching is not supported yet@." i;
+            idT
+         end
+      else
+         tac i
+   with Not_found ->
+      idT
  | RefineError _ ->
-		idT
+      idT
 )
 
 let concl2geT = funT (fun p ->
-	try
-		snd (Sequent.get_resource_arg p get_ge_intro_resource p)
-	with Not_found ->
-		idT
+   try
+      snd (Sequent.get_resource_arg p get_ge_intro_resource p)
+   with Not_found ->
+      idT
 )
 
 let all2geT = onAllMHypsT hyp2geT
@@ -215,96 +215,96 @@ let rec all_hyps_aux hyps l i =
 
 let all_hyps arg =
    let hyps = (Sequent.explode_sequent_arg arg).sequent_hyps in
-	let len = Term.SeqHyp.length hyps in
+   let len = Term.SeqHyp.length hyps in
       all_hyps_aux hyps [] len
 
 let rec append tac len pos l = function
-	t::tail ->
-		append tac len (succ pos) ((t,pos,len,tac)::l) tail
+   t::tail ->
+      append tac len (succ pos) ((t,pos,len,tac)::l) tail
  | [] -> l
 
 let rec hyp2ge p l = function
-	(i,t)::tail ->
-		if !debug_arith_dtactic then
-			eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
-		if is_ge_term t then
-			hyp2ge p ((t,i,0,idT)::l) tail
-		else
-			(try
-				if !debug_arith_dtactic then
-					eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
-				let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-				match terms with
-					[t] ->
-						if !debug_arith_dtactic then
-							eprintf "Itt_int_arith.hyp2ge: found %s%t" (SimplePrint.short_string_of_term t) eflush;
-						let terms=dest_xlist t in
-						let len=List.length terms in
-						let pos= -len in
-						let l'=append (tac i) len pos l terms in
-						hyp2ge p l' tail
-				 | _ -> (*raise (Invalid_argument "Itt_int_arith: branching is not supported yet")*)
-						if !debug_arith_dtactic then
-							eprintf "Itt_int_arith.hyp2ge: hyp %i - branching is not supported yet@." i;
-						hyp2ge p l tail
-			with Not_found ->
-				if !debug_arith_dtactic then
-					eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
-				hyp2ge p l tail)
+   (i,t)::tail ->
+      if !debug_arith_dtactic then
+         eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
+      if is_ge_term t then
+         hyp2ge p ((t,i,0,idT)::l) tail
+      else
+         (try
+            if !debug_arith_dtactic then
+               eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
+            let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
+            match terms with
+               [t] ->
+                  if !debug_arith_dtactic then
+                     eprintf "Itt_int_arith.hyp2ge: found %s%t" (SimplePrint.short_string_of_term t) eflush;
+                  let terms=dest_xlist t in
+                  let len=List.length terms in
+                  let pos= -len in
+                  let l'=append (tac i) len pos l terms in
+                  hyp2ge p l' tail
+             | _ -> (*raise (Invalid_argument "Itt_int_arith: branching is not supported yet")*)
+                  if !debug_arith_dtactic then
+                     eprintf "Itt_int_arith.hyp2ge: hyp %i - branching is not supported yet@." i;
+                  hyp2ge p l tail
+         with Not_found ->
+            if !debug_arith_dtactic then
+               eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
+            hyp2ge p l tail)
  | [] -> l
 
 let concl2ge p =
-	try
-		let terms,tac=Sequent.get_resource_arg p get_ge_intro_resource p in
-		match terms with
-			[t] ->
-				let terms = dest_xlist t in
-				let len=List.length terms in
-				let pos= -len in
-				append tac len pos [] terms
-		 | _ -> raise (Invalid_argument "Itt_int_arith: branching is not supported yet")
-	with Not_found -> []
+   try
+      let terms,tac=Sequent.get_resource_arg p get_ge_intro_resource p in
+      match terms with
+         [t] ->
+            let terms = dest_xlist t in
+            let len=List.length terms in
+            let pos= -len in
+            append tac len pos [] terms
+       | _ -> raise (Invalid_argument "Itt_int_arith: branching is not supported yet")
+   with Not_found -> []
 
 let allhyps2ge p tail =
-	hyp2ge p tail (all_hyps p)
+   hyp2ge p tail (all_hyps p)
 
 let all2ge p =
-	(*let pos, l = concl2ge p (succ (Sequent.hyp_count p)) in*)
-	let l = allhyps2ge p (concl2ge p) in
-	if !debug_arith_dtactic then
-		eprintf "Itt_int_arith.all2ge: %i inequalities collected%t" (List.length l) eflush;
-	l
-	(*List.sort (fun x y -> (List.length(fst x))-(List.length(fst y))) l*)
+   (*let pos, l = concl2ge p (succ (Sequent.hyp_count p)) in*)
+   let l = allhyps2ge p (concl2ge p) in
+   if !debug_arith_dtactic then
+      eprintf "Itt_int_arith.all2ge: %i inequalities collected%t" (List.length l) eflush;
+   l
+   (*List.sort (fun x y -> (List.length(fst x))-(List.length(fst y))) l*)
 
 (*let prefix e l = List.map (fun x -> e::x) l
 
 let rec product l = function
-	hd::tl ->
-		let l=list_product l in
-		(prefix hd l)::(product l tl)
+   hd::tl ->
+      let l=list_product l in
+      (prefix hd l)::(product l tl)
  | [e] -> prefix e (list_product l)
  | [] -> raise (Invalid_argument "Itt_int_arith.product: ge_elim/ge_intro entry produced an empty >=-list")
 
 and list_product = function
-	hd::tl -> product tl hd
+   hd::tl -> product tl hd
  | [l] -> l
  | [] -> []
 
 let all2ge_flat p =
-	list_product (all2ge p)
+   list_product (all2ge p)
 *)
 
 (*
 let testT = argfunT (fun i p ->
    if i = 0 then
       (*let _=Sequent.get_resource_arg p get_ge_intro_resource in*)
-		failT
+      failT
    else
       let f = Sequent.get_resource_arg p get_ge_elim_data_resource in
-		let t = Sequent.nth_hyp p i in
-		let t' = f i p in
-		eprintf "%a -> %a%t" print_term t print_term t' eflush;
-		idT
+      let t = Sequent.nth_hyp p i in
+      let t' = f i p in
+      eprintf "%a -> %a%t" print_term t print_term t' eflush;
+      idT
 )
 *)
 
@@ -416,7 +416,7 @@ let wrap_ge t tll r tac =
 let resource ge_elim += [
    wrap_ge <<"assert"{le_bool{'a; 'b}}>> [[<<'b >= 'a>>]] fold_le le2ge;
    wrap_ge <<"assert"{'a <@ 'b}>> [[<<'b >= ('a +@ 1)>>]] fold_lt lt2ge;
-   wrap_ge <<"assert"{bnot{'a =@ 'b}}>> [[<<'a >= 'b +@ 1>>];[<<'b >= 'a +@ 1>>]] 
+   wrap_ge <<"assert"{bnot{'a =@ 'b}}>> [[<<'a >= 'b +@ 1>>];[<<'b >= 'a +@ 1>>]]
       (addrC [Subterm 1] fold_bneq_int thenC fold_neq_int) nequal_elim2;
 ]
 
@@ -431,65 +431,65 @@ interactive_rw bnot_le2gt_rw :
    "assert"{bnot{le_bool{'a; 'b}}} <--> ('a > 'b)
 
 interactive ltInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a >= 'b >- "false" } -->
-	sequent { <H> >- 'a < 'b }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H>; 'a >= 'b >- "false" } -->
+   sequent { <H> >- 'a < 'b }
 
 interactive gtInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'b >= 'a >- "false" } -->
-	sequent { <H> >- 'a > 'b }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H>; 'b >= 'a >- "false" } -->
+   sequent { <H> >- 'a > 'b }
 
 interactive leInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a >= ('b +@ 1) >- "false" } -->
-	sequent { <H> >- 'a <= 'b }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H>; 'a >= ('b +@ 1) >- "false" } -->
+   sequent { <H> >- 'a <= 'b }
 
 interactive geInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'b >= ('a +@ 1) >- "false" } -->
-	sequent { <H> >- 'a >= 'b }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H>; 'b >= ('a +@ 1) >- "false" } -->
+   sequent { <H> >- 'a >= 'b }
 
 interactive eqInConcl2ge (*{| ge_intro |}*) :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a >= ('b +@ 1) >- "false" } -->
-	sequent { <H>; 'b >= ('a +@ 1) >- "false" } -->
-	sequent { <H> >- 'a = 'b in int }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H>; 'a >= ('b +@ 1) >- "false" } -->
+   sequent { <H>; 'b >= ('a +@ 1) >- "false" } -->
+   sequent { <H> >- 'a = 'b in int }
 
 interactive neqInConcl2ge {| ge_intro |} :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
-	sequent { <H>; 'a = 'b in int >- "false" } -->
-	sequent { <H> >- 'a <> 'b }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H>; 'a = 'b in int >- "false" } -->
+   sequent { <H> >- 'a <> 'b }
 
 doc docoff
 
 let arithRelInConcl2HypT = funT (fun p ->
    let t=Sequent.concl p in
-	match explode_term t with
-		<<'a < 'b>> -> ltInConcl2ge
-	 | <<'a > 'b>> -> gtInConcl2ge
-	 | <<'a <= 'b>> -> leInConcl2ge
-	 | <<'a >= 'b>> -> geInConcl2ge
-	 | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2ge
- 	 | <<'a <> 'b>> -> neqInConcl2ge thenMT eq2ge (-1) thenMT thinT (-3)
-	 | <<not{'a}>> -> not_intro
-	 | _ -> concl2geT
+   match explode_term t with
+      <<'a < 'b>> -> ltInConcl2ge
+    | <<'a > 'b>> -> gtInConcl2ge
+    | <<'a <= 'b>> -> leInConcl2ge
+    | <<'a >= 'b>> -> geInConcl2ge
+    | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2ge
+     | <<'a <> 'b>> -> neqInConcl2ge thenMT eq2ge (-1) thenMT thinT (-3)
+    | <<not{'a}>> -> not_intro
+    | _ -> concl2geT
 )
 
 let arith_rels=[
-	opname_of_term << 'x<'y >>;
-	opname_of_term << 'x>'y >>;
-	opname_of_term << 'x<='y >>;
-	opname_of_term << 'x>='y >>]
+   opname_of_term << 'x<'y >>;
+   opname_of_term << 'x>'y >>;
+   opname_of_term << 'x<='y >>;
+   opname_of_term << 'x>='y >>]
 
 let rec is_arith_rel t =
-	let op=opname_of_term t in
+   let op=opname_of_term t in
    (List.mem op arith_rels) or
    (is_equal_term t && (let (t',_,_)=dest_equal t in alpha_equal t' <<int>>)) or
    (is_not_term t && is_arith_rel (dest_not t))
@@ -563,7 +563,7 @@ interactive_rw add_BubblePrimitive_rw :
 let add_BubblePrimitiveC = add_BubblePrimitive_rw
 
 let stripCoef t =
-	if is_mul_term t then
+   if is_mul_term t then
       let (c,t')=dest_mul t in
       if (is_number_term c) then
          t'
@@ -578,94 +578,94 @@ interactive_rw sub_elim_rw {| arith_unfold |} :
    ('a -@ 'b ) <--> ('a +@ ((-1) *@ 'b))
 
 let compare_terms a b =
-	if is_number_term a then
-		if is_number_term b then 0
-		else -1
-	else
-		if is_number_term b then 1
-		else
-			if is_mul_term a then
-				if is_mul_term b then
-					compare_terms a b
-				else
-					1
-			else
-				if is_mul_term b then
-					-1
-				else
-					compare_terms a b
+   if is_number_term a then
+      if is_number_term b then 0
+      else -1
+   else
+      if is_number_term b then 1
+      else
+         if is_mul_term a then
+            if is_mul_term b then
+               compare_terms a b
+            else
+               1
+         else
+            if is_mul_term b then
+               -1
+            else
+               compare_terms a b
 
 let addSwap1C t =
-	match explode_term t with
-		<<'a +@ 'b>> when
-			let a' = stripCoef a in
-			let b' = stripCoef b in
-			(compare_terms b' a')<0 -> add_CommutC
-	 | _ -> failC
+   match explode_term t with
+      <<'a +@ 'b>> when
+         let a' = stripCoef a in
+         let b' = stripCoef b in
+         (compare_terms b' a')<0 -> add_CommutC
+    | _ -> failC
 
 let addSwap2C t =
-	match explode_term t with
-		<<'a +@ 'b>> ->
-			(match explode_term b with
-				<<'c +@ 'd>> when
-					let a' = stripCoef a in
-					let c' = stripCoef c in
-					(compare_terms c' a')<0 -> add_BubblePrimitiveC
-			 | _ -> failC
-			)
-	 | _ -> failC
+   match explode_term t with
+      <<'a +@ 'b>> ->
+         (match explode_term b with
+            <<'c +@ 'd>> when
+               let a' = stripCoef a in
+               let c' = stripCoef c in
+               (compare_terms c' a')<0 -> add_BubblePrimitiveC
+          | _ -> failC
+         )
+    | _ -> failC
 
 let mulSwap1C t =
-	match explode_term t with
-		<<'a *@ 'b>> when
-			(compare_terms b a)<0 -> mul_CommutC
-	 | _ -> failC
+   match explode_term t with
+      <<'a *@ 'b>> when
+         (compare_terms b a)<0 -> mul_CommutC
+    | _ -> failC
 
 let mulSwap2C t =
-	match explode_term t with
-		<<'a *@ 'b>> ->
-			(match explode_term b with
-				<<'c *@ 'd>> when
-					(compare_terms c a)<0 -> mul_BubblePrimitiveC
-			 | _ -> failC
-			)
-	 | _ -> failC
+   match explode_term t with
+      <<'a *@ 'b>> ->
+         (match explode_term b with
+            <<'c *@ 'd>> when
+               (compare_terms c a)<0 -> mul_BubblePrimitiveC
+          | _ -> failC
+         )
+    | _ -> failC
 
 let resource arith_unfold +=[
-	<<'a *@ 'b>>, termC mulSwap1C;
-	<<'a *@ ('b *@ 'c)>>, termC mulSwap2C;
-	(*<<number[i:n] *@ 'a>>, failC;*)
-	<<'a *@ number[i:n]>>, mul_CommutC;
-	(*<<number[i:n] *@ ('b *@ 'c)>>, failC;*)
-	(*<<'b *@ (number[i:n] *@ 'c)>>, mul_BubblePrimitiveC;*)
-	<<number[i:n] *@ (number[j:n] *@ 'c)>>, (mul_AssocC thenC (addrC [Subterm 1] reduce_mul));
+   <<'a *@ 'b>>, termC mulSwap1C;
+   <<'a *@ ('b *@ 'c)>>, termC mulSwap2C;
+   (*<<number[i:n] *@ 'a>>, failC;*)
+   <<'a *@ number[i:n]>>, mul_CommutC;
+   (*<<number[i:n] *@ ('b *@ 'c)>>, failC;*)
+   (*<<'b *@ (number[i:n] *@ 'c)>>, mul_BubblePrimitiveC;*)
+   <<number[i:n] *@ (number[j:n] *@ 'c)>>, (mul_AssocC thenC (addrC [Subterm 1] reduce_mul));
 
-	<<'a +@ 'b>>, termC addSwap1C;
-	<<'a +@ ('b +@ 'c)>>, termC addSwap2C;
-	(*<<number[i:n] +@ 'a>>, failC;*)
-	<<'a +@ number[i:n]>>, add_CommutC;
-	(*<<number[i:n] +@ ('b +@ 'c)>>, failC;*)
-	(*<<'a +@ (number[i:n] +@ 'c)>>, add_BubblePrimitiveC;*)
-	<<number[i:n] +@ (number[j:n] +@ 'c)>>, (add_AssocC thenC (addrC [Subterm 1] reduce_add));
+   <<'a +@ 'b>>, termC addSwap1C;
+   <<'a +@ ('b +@ 'c)>>, termC addSwap2C;
+   (*<<number[i:n] +@ 'a>>, failC;*)
+   <<'a +@ number[i:n]>>, add_CommutC;
+   (*<<number[i:n] +@ ('b +@ 'c)>>, failC;*)
+   (*<<'a +@ (number[i:n] +@ 'c)>>, add_BubblePrimitiveC;*)
+   <<number[i:n] +@ (number[j:n] +@ 'c)>>, (add_AssocC thenC (addrC [Subterm 1] reduce_add));
 
-	<<('a +@ 'b) +@ 'c>>, add_Assoc2C;
-	<<('a *@ 'b) *@ 'c>>, mul_Assoc2C;
+   <<('a +@ 'b) +@ 'c>>, add_Assoc2C;
+   <<('a *@ 'b) *@ 'c>>, mul_Assoc2C;
 
-	<<(number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)>>, sum_same_products1C;
-	<<(number[i:n] *@ 'a) +@ 'a>>, sum_same_products2C;
-	<<'a +@ (number[j:n] *@ 'a)>>, sum_same_products3C;
-	<<'a +@ 'a>>, sum_same_products4C;
+   <<(number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)>>, sum_same_products1C;
+   <<(number[i:n] *@ 'a) +@ 'a>>, sum_same_products2C;
+   <<'a +@ (number[j:n] *@ 'a)>>, sum_same_products3C;
+   <<'a +@ 'a>>, sum_same_products4C;
 
-	<<(number[i:n] *@ 'a) +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products1C));
-	<<(number[i:n] *@ 'a) +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products2C));
-	<<'a +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products3C));
-	<<'a +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products4C));
+   <<(number[i:n] *@ 'a) +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products1C));
+   <<(number[i:n] *@ 'a) +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products2C));
+   <<'a +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products3C));
+   <<'a +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [Subterm 1] sum_same_products4C));
 ]
 
 doc <:doc<
 
-	@begin[description]
-	@item{@conv[normalizeC];
+   @begin[description]
+   @item{@conv[normalizeC];
    The @tt[normalizeC] converts polynomials to canonical form (normalizes),
    it is supposed to work not only when applied precisely
    on a polynomial but also when the polynomial is just a subterm of the
@@ -697,8 +697,8 @@ doc <:doc<
    @item{Get rid of zeros and ones in the resulting term using @hrefconv[reduceC]}
 
    @end[enumerate]
-	}
-	@end[description]
+   }
+   @end[description]
 
 >>
 doc docoff
@@ -737,118 +737,118 @@ interactive_rw ge_addMono2_rw 'c :
 let ge_addMono2C = ge_addMono2_rw
 
 interactive sumGe 'H 'J :
-	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'a in int } -->
-	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'b in int } -->
-	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'c in int } -->
-	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'd in int } -->
-			sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]>; ('a +@ 'c) >= ('b +@ 'd) >- 'C['v;'w] } -->
-			sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'C['v;'w] }
+   [wf]    sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'a in int } -->
+   [wf]    sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'b in int } -->
+   [wf]    sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'c in int } -->
+   [wf]    sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'd in int } -->
+         sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]>; ('a +@ 'c) >= ('b +@ 'd) >- 'C['v;'w] } -->
+         sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; <K['v;'w]> >- 'C['v;'w] }
 
 let rec printList = function
-	(a,b,n,(i,len,tac))::tl ->
-		eprintf "%i/%i: %s >= %s + %s%t" i len
-			(SimplePrint.short_string_of_term a)
-			(Lm_num.string_of_num n)
-			(SimplePrint.short_string_of_term b)
-			eflush;
-		printList tl
+   (a,b,n,(i,len,tac))::tl ->
+      eprintf "%i/%i: %s >= %s + %s%t" i len
+         (SimplePrint.short_string_of_term a)
+         (Lm_num.string_of_num n)
+         (SimplePrint.short_string_of_term b)
+         eflush;
+      printList tl
  | [] -> ()
 
 let rec sumListAuxT tac len offset i l = funT ( fun p ->
-	let k=succ (Sequent.hyp_count p) in
-	match l with
-		(_,_,_,(j,len',tac'))::tl ->
-			if tac==tac' then
-				let posj = offset+j in
-				let i'=min i posj in
-				let j'=max i posj in
-				let _ = 	if !debug_int_arith then
-								eprintf " %i%t" posj flush
-				in
-				sumGe i' (j'-i') thenMT sumListAuxT tac len offset k tl
-			else
-				let new_hyp_count = len'+k in
-				let offset' = if j>=0 then 0 else new_hyp_count in
-				let posj = offset'+j in
-				let i'=min i posj in
-				let j'=max i posj in
-				if !debug_int_arith then
-					eprintf " %i%t" posj flush;
-				tac' thenMT sumGe i' (j'-i') thenMT sumListAuxT tac' len' offset' new_hyp_count tl
-	 | [] -> idT (*raise (RefineError("Itt_int_arith.sumListT", StringError "impossible case"))*)
+   let k=succ (Sequent.hyp_count p) in
+   match l with
+      (_,_,_,(j,len',tac'))::tl ->
+         if tac==tac' then
+            let posj = offset+j in
+            let i'=min i posj in
+            let j'=max i posj in
+            let _ =    if !debug_int_arith then
+                        eprintf " %i%t" posj flush
+            in
+            sumGe i' (j'-i') thenMT sumListAuxT tac len offset k tl
+         else
+            let new_hyp_count = len'+k in
+            let offset' = if j>=0 then 0 else new_hyp_count in
+            let posj = offset'+j in
+            let i'=min i posj in
+            let j'=max i posj in
+            if !debug_int_arith then
+               eprintf " %i%t" posj flush;
+            tac' thenMT sumGe i' (j'-i') thenMT sumListAuxT tac' len' offset' new_hyp_count tl
+    | [] -> idT (*raise (RefineError("Itt_int_arith.sumListT", StringError "impossible case"))*)
 )
 
 let sumListT l = funT ( fun p ->
-	if !debug_int_arith then
-		(eprintf "contradictory list:\n"; printList l;eflush stderr);
-	match l with
-	 | [(_,_,_,(i,len,tac))] ->
-			let new_hyp_count = succ (len+(Sequent.hyp_count p)) in
-			let offset = if i>=0 then 0 else new_hyp_count in
-			let i = offset+i in
-			if !debug_int_arith then
-				eprintf "Itt_int_arith.sumList: only one inequality %i%t" i flush;
-			tac thenMT copyHypT i new_hyp_count
-	 | (_,_,_,(i,len,tac))::tl ->
-			let offset = if i>=0 then 0 else succ (len+(Sequent.hyp_count p)) in
-			let i = offset+i in
-			if !debug_int_arith then
-				eprintf "Itt_int_arith.sumList: %i items: %i%t" (List.length l) i flush;
-			tac thenMT (sumListAuxT tac len offset i tl)
-	 | [] ->	idT
+   if !debug_int_arith then
+      (eprintf "contradictory list:\n"; printList l;eflush stderr);
+   match l with
+    | [(_,_,_,(i,len,tac))] ->
+         let new_hyp_count = succ (len+(Sequent.hyp_count p)) in
+         let offset = if i>=0 then 0 else new_hyp_count in
+         let i = offset+i in
+         if !debug_int_arith then
+            eprintf "Itt_int_arith.sumList: only one inequality %i%t" i flush;
+         tac thenMT copyHypT i new_hyp_count
+    | (_,_,_,(i,len,tac))::tl ->
+         let offset = if i>=0 then 0 else succ (len+(Sequent.hyp_count p)) in
+         let i = offset+i in
+         if !debug_int_arith then
+            eprintf "Itt_int_arith.sumList: %i items: %i%t" (List.length l) i flush;
+         tac thenMT (sumListAuxT tac len offset i tl)
+    | [] ->   idT
 )
 
 let num0 = num_of_int 0
 let num1 = num_of_int 1
 
 let term2term_number p t =
-	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
-	let s=mk_sequent_term es in
-	let s'=Top_conversionals.apply_rewrite p (addrC concl_addr normalizeC) s in
-	let t'=TermMan.concl s' in
-	begin
-		if !debug_int_arith then
-			eprintf "t2t_n: %a -> %a%t" print_term t print_term t' eflush;
-		if is_add_term t' then
-			let a,b=dest_add t' in
-			if is_number_term a then
-				(b,dest_number a)
-			else
-				(t',num0)
-		else
-			if is_number_term t' then
-				(mk_number_term num0, dest_number t')
-			else
-				(t',num0)
-	end
+   let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
+   let s=mk_sequent_term es in
+   let s'=Top_conversionals.apply_rewrite p (addrC concl_addr normalizeC) s in
+   let t'=TermMan.concl s' in
+   begin
+      if !debug_int_arith then
+         eprintf "t2t_n: %a -> %a%t" print_term t print_term t' eflush;
+      if is_add_term t' then
+         let a,b=dest_add t' in
+         if is_number_term a then
+            (b,dest_number a)
+         else
+            (t',num0)
+      else
+         if is_number_term t' then
+            (mk_number_term num0, dest_number t')
+         else
+            (t',num0)
+   end
 
 let term2inequality_aux p (a,b,n,tac) =
-	let a1,a2=term2term_number p a in
-	let b1,b2=term2term_number p b in
-	(a1,b1,sub_num (add_num b2 n) a2,tac)
+   let a1,a2=term2term_number p a in
+   let b1,b2=term2term_number p b in
+   (a1,b1,sub_num (add_num b2 n) a2,tac)
 
 let term2inequality p (i,t) =
-	if is_ge_term t then
-		let a,b=dest_ge t in
-		List.map (term2inequality_aux p) [(a,b,num0,copyHypT i (-1))]
-	else if is_le_term t then
-		let a,b=dest_le t in
-		List.map (term2inequality_aux p) [(b,a,num0,((rw fold_ge i) thenT (copyHypT i (-1))))]
-	else if is_gt_term t then
-		let a,b=dest_gt t in
-		List.map (term2inequality_aux p) [(a,b,num1,gt2ge i)]
-	else if is_lt_term t then
-		let a,b=dest_lt t in
-		List.map (term2inequality_aux p) [(b,a,num1,lt2ge i)]
-	else if is_equal_term t then
-		let _,a,b=dest_equal t in
-		List.map (term2inequality_aux p) [(a,b,num0,eq2ge1 i);(b,a,num0,eq2ge2 i)]
-	else
-		raise (Invalid_argument "Itt_int_arith.term2triple - unexpected opname")
+   if is_ge_term t then
+      let a,b=dest_ge t in
+      List.map (term2inequality_aux p) [(a,b,num0,copyHypT i (-1))]
+   else if is_le_term t then
+      let a,b=dest_le t in
+      List.map (term2inequality_aux p) [(b,a,num0,((rw fold_ge i) thenT (copyHypT i (-1))))]
+   else if is_gt_term t then
+      let a,b=dest_gt t in
+      List.map (term2inequality_aux p) [(a,b,num1,gt2ge i)]
+   else if is_lt_term t then
+      let a,b=dest_lt t in
+      List.map (term2inequality_aux p) [(b,a,num1,lt2ge i)]
+   else if is_equal_term t then
+      let _,a,b=dest_equal t in
+      List.map (term2inequality_aux p) [(a,b,num0,eq2ge1 i);(b,a,num0,eq2ge2 i)]
+   else
+      raise (Invalid_argument "Itt_int_arith.term2triple - unexpected opname")
 
 (*
 let good_term t =
-	let op=opname_of_term t in
+   let op=opname_of_term t in
    (List.mem op arith_rels) or
    (match explode_term t with
       << 'l = 'r in 'tt >> when alpha_equal tt <<int>> && not (alpha_equal l r) -> true
@@ -861,8 +861,8 @@ let main_label="main"
 
 module TermPos=
 struct
-	type data = int
-	let append l1 l2 = l1 @ l2
+   type data = int
+   let append l1 l2 = l1 @ l2
 end
 
 module TTable=Term_eq_table.MakeTermTable(TermPos)
@@ -870,92 +870,92 @@ module TTable=Term_eq_table.MakeTermTable(TermPos)
 let empty _ = ref (0, 0, TTable.empty)
 
 let start_from h n =
-	let (_,k,table) = !h in
-	h:=(n,k,table)
+   let (_,k,table) = !h in
+   h:=(n,k,table)
 
 let mem h t =
-	let (n,_,table) = !h in
-	TTable.mem table t
+   let (n,_,table) = !h in
+   TTable.mem table t
 
 let lookup h t =
-	let (n,k,table) = !h in
-	begin
-		h:=(n,succ k,table);
-		TTable.find table t
-	end
+   let (n,k,table) = !h in
+   begin
+      h:=(n,succ k,table);
+      TTable.find table t
+   end
 
 let add h t =
-	let (n,k,tab) = !h in
-	begin
-		(*eprintf"%i<-%a%t" n print_term t eflush;*)
-		h:=(succ n, k, TTable.add tab t n)
-	end
+   let (n,k,tab) = !h in
+   begin
+      (*eprintf"%i<-%a%t" n print_term t eflush;*)
+      h:=(succ n, k, TTable.add tab t n)
+   end
 
 let print_stat h =
-	let (_,k,table) = !h in
-	let n = List.length (TTable.list_of table) in
-	eprintf "cacheT: %i goals, %i lookups%t" n k eflush
+   let (_,k,table) = !h in
+   let n = List.length (TTable.list_of table) in
+   eprintf "cacheT: %i goals, %i lookups%t" n k eflush
 
 let print_statT h = funT ( fun p ->
-	if !debug_int_arith then
-		print_stat h;
-	idT
+   if !debug_int_arith then
+      print_stat h;
+   idT
 )
 
 let tryAssertT info t = funT ( fun p ->
-	if mem info t then idT
-	else
-		begin
-			(*eprintf "%i<-%a%t" (succ(Sequent.hyp_count p)) print_term t eflush;*)
-			add info t;
-			assertT t
-		end
+   if mem info t then idT
+   else
+      begin
+         (*eprintf "%i<-%a%t" (succ(Sequent.hyp_count p)) print_term t eflush;*)
+         add info t;
+         assertT t
+      end
 )
 
 let rec assertListT info = function
-	[(t,_)] -> tryAssertT info t
+   [(t,_)] -> tryAssertT info t
  | (t,_)::tl -> tryAssertT info t thenMT assertListT info tl
  | _ -> idT
 
 let printT i = funT ( fun p ->
-	let t=Sequent.concl p in
-	let h=Sequent.nth_hyp p i in
-	eprintf "missed %a -> %i: %a%t" print_term t i print_term h eflush;
-	idT
+   let t=Sequent.concl p in
+   let h=Sequent.nth_hyp p i in
+   eprintf "missed %a -> %i: %a%t" print_term t i print_term h eflush;
+   idT
 )
 
 let tryInfoT info = funT ( fun p ->
-	let g=Sequent.concl p in
-	let i=lookup info g in
-	nthHypT i orelseT printT i
+   let g=Sequent.concl p in
+   let i=lookup info g in
+   nthHypT i orelseT printT i
 )
 
 let cacheT info = argfunT ( fun tac p ->
-	start_from info (succ(Sequent.hyp_count p));
-	let (goals,_) = refine (tac thenMT addHiddenLabelT main_label) p in
-	let aux_list = List.map (fun p -> (Sequent.concl p, Sequent.label p)) goals in
-	let aux_list = List.filter (fun (g,l) -> l<>main_label) aux_list in
-	assertListT info aux_list thenMT (tac thenAT (tryInfoT info)) thenMT (print_statT info)
+   start_from info (succ(Sequent.hyp_count p));
+   let (goals,_) = refine (tac thenMT addHiddenLabelT main_label) p in
+   let aux_list = List.map (fun p -> (Sequent.concl p, Sequent.label p)) goals in
+   let aux_list = List.filter (fun (g,l) -> l<>main_label) aux_list in
+   assertListT info aux_list thenMT (tac thenAT (tryInfoT info)) thenMT (print_statT info)
 )
 *)
 
 let norm_triple p a b =
-	let a1,a2=term2term_number p a in
-	let b1,b2=term2term_number p b in
-	(a1,b1,sub_num b2 a2)
+   let a1,a2=term2term_number p a in
+   let b1,b2=term2term_number p b in
+   (a1,b1,sub_num b2 a2)
 
 let four2inequality p (t,i,len,tac) =
-	let a,b = dest_ge t in
-	let a',b',n' = norm_triple p a b in
-	a',b',n',(i,len,tac)
+   let a,b = dest_ge t in
+   let a',b',n' = norm_triple p a b in
+   a',b',n',(i,len,tac)
 
 let findContradRelT = funT ( fun p ->
-	let l = all2ge p in
-	let l' = List.map (four2inequality p) l in
-	if !debug_int_arith then
-		(eprintf "total list:\n"; printList l';eflush stderr);
-	let l'' = Arith.find_contradiction l' in
-	sumListT l''
+   let l = all2ge p in
+   let l' = List.map (four2inequality p) l in
+   if !debug_int_arith then
+      (eprintf "total list:\n"; printList l';eflush stderr);
+   let l'' = Arith.find_contradiction l' in
+   sumListT l''
 )
 
 (*
@@ -963,12 +963,12 @@ let findContradRelT = funT ( fun p ->
  *)
 let reduceContradRelT =
    rw ((addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC) thenC
-		 reduceC)
+       reduceC)
 
 doc <:doc<
 
-	@begin[description]
-	@item{@tactic[arithT];
+   @begin[description]
+   @item{@tactic[arithT];
    The @tt[arithT] proves simple inequalities. More precisely it can prove
    inequalities that logically follows from hypotheses using associativity and
    commutativity of addition and multiplication, properties of <<0>> and <<1>>,
@@ -978,8 +978,8 @@ doc <:doc<
    $$
    @rulebox{lt@_addMono; c;
      <<sequent{ <H> >- 'a in int }>>@cr
-     	 <<sequent{ <H> >- 'b in int }>>@cr
-     	 <<sequent{ <H> >- 'c in int }>>;
+         <<sequent{ <H> >- 'b in int }>>@cr
+         <<sequent{ <H> >- 'c in int }>>;
      <<sequent{ <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }>>}
    $$
 
@@ -989,40 +989,40 @@ doc <:doc<
    @tt[arithT] supports addition, multiplication, unary minus and subtraction
    operations. Division and remainder operations are not supported.
    Among arithmetic relations it supports are << cdot = (cdot) in int >>,
-	<< nequal {cdot ; cdot } >>,
+   << nequal {cdot ; cdot } >>,
    << cdot < cdot >>, << cdot > cdot >>,
    << cdot <= cdot >>, and << cdot >= cdot >>. Arbitrary many negations
    of these relations are also supported. Other logical connectives are not supported.
 
    @tt[arithT] puts together everything that was defined in this module:
-	@begin[enumerate]
-	@item{First it moves arithmetic fact from conclusion to hypotheses in negated form
-	using reasoning by contradiction.}
+   @begin[enumerate]
+   @item{First it moves arithmetic fact from conclusion to hypotheses in negated form
+   using reasoning by contradiction.}
 
-	@item{Then it converts all negative arithmetic facts in hypotheses to positive
-	ones,
-	it actually adds new hypotheses and leaves originals
-	intact. Because there could be several nested negations this tactic should be
-	also applied to hypotheses that were just generated by this tactic.}
+   @item{Then it converts all negative arithmetic facts in hypotheses to positive
+   ones,
+   it actually adds new hypotheses and leaves originals
+   intact. Because there could be several nested negations this tactic should be
+   also applied to hypotheses that were just generated by this tactic.}
 
-	@item{Next it converts all positive arithmetic facts in hypotheses
-	to <<cdot >= cdot>>-inequalities.}
+   @item{Next it converts all positive arithmetic facts in hypotheses
+   to <<cdot >= cdot>>-inequalities.}
 
-	@item{Now every << cdot >= cdot >>-inequality should be normalized.}
+   @item{Now every << cdot >= cdot >>-inequality should be normalized.}
 
-	@item{Then it tries to find the contradictory inequality
-	that logically follows from that normalized <<cdot >= cdot>>-inequalities
-	and proves this implication.
+   @item{Then it tries to find the contradictory inequality
+   that logically follows from that normalized <<cdot >= cdot>>-inequalities
+   and proves this implication.
    This problem is reduced to search for positive cycle in a directed graph and
    is performed by @hrefmodule[Arith] module. If successful, found inequality
    will be derived from hypotheses.}
 
-	@item{Finally, false is derived from found inequality, this completes proof by
+   @item{Finally, false is derived from found inequality, this completes proof by
    contradiction scheme.}
-	@end[enumerate]}
-	@end[description]
+   @end[enumerate]}
+   @end[description]
 
-	@docoff
+   @docoff
 >>
 
 let preT = funT (fun p ->
@@ -1033,19 +1033,19 @@ let preT = funT (fun p ->
 let preArithT = funT (fun p ->
    arithRelInConcl2HypT thenMT
    negativeHyps2ConclT thenMT
-	findContradRelT)
+   findContradRelT)
 
 (* Finds and proves contradiction among ge-relations
  *)
 let arithT = preArithT thenMT reduceContradRelT (-1)
 
 interactive eq2ineq :
-	[wf] sequent { <H> >- 'a in int } -->
-	[wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
    [main] sequent { <H> >- 'a = 'b in int } -->
-	sequent { <H> >- 'a <= 'b }
+   sequent { <H> >- 'a <= 'b }
 
 interactive_rw beq2ineq_rw :
-	('a in int) -->
+   ('a in int) -->
    ('b in int) -->
    beq_int{'a;'b} <--> band{le_bool{'a;'b}; le_bool{'b;'a}}

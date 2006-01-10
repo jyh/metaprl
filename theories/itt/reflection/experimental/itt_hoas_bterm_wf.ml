@@ -104,7 +104,7 @@ let dupReduceT i =
    dupHypT i thenT rw reduceC (-1)
 
 let resource forward +=
-   [<< 't >>, { forward_prec = forward_normal_prec; forward_tac = dupReduceT }]
+   [<< 't >>, { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dupReduceT }]
 
 doc <:doc<
    Combine them all into a single forward-chaining theorem,

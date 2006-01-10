@@ -145,6 +145,18 @@ interactive nat_is_int {| nth_hyp |} :
    sequent { <H> >- 'a='b in nat} -->
    sequent { <H> >- 'a='b in int}
 
+interactive eq_2beq_nat 'H :
+   sequent { <H>; x: 'a = 'b in nat; <J['x]>; "assert"{beq_int{'a; 'b}} >- 'C['x] } -->
+   sequent { <H>; x: 'a = 'b in nat; <J['x]> >- 'C['x] }
+
+doc docoff
+
+let resource nth_hyp +=
+   << number[m:n] = number[n:n] in nat >>, <<'C>>,
+   (fun i -> eq_2beq_nat i thenT rw (addrC [Subterm 1] Itt_int_base.reduce_eq_int) (-1) thenT Itt_bool.assert_false (-1))
+
+doc docon
+
 interactive nat_is_int2 {| nth_hyp |} 'H :
    sequent { <H>; a: nat; <J['a]> >- 'a in int }
 

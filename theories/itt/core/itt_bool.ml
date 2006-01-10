@@ -339,7 +339,7 @@ interactive assert_univ {| intro [] |} :
 interactive assert_true {| intro [] |} :
    sequent { <H> >- "assert"{btrue} }
 
-interactive assert_false {| elim [] |} 'H :
+interactive assert_false {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: "assert"{bfalse}; <J['x]> >- 'C['x] }
 
 doc <:doc<

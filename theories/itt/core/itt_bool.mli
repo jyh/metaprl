@@ -151,6 +151,8 @@ val is_band_term : term -> bool
 val mk_band_term : term -> term -> term
 val dest_band : term -> term * term
 
+val assert_false : int -> tactic
+
 topval extBoolT : tactic
 topval magicT : tactic
 topval splitBoolT : term -> int -> tactic

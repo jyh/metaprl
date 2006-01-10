@@ -3,6 +3,7 @@ extends Itt_int_ext
 extends Itt_int_arith
 extends Itt_supinf
 extends Itt_omega
+extends Itt_nat
 
 open Lm_debug
 open Lm_printf
@@ -204,3 +205,6 @@ interactive testn :
 				'v7 in int;
 				'v8 in int;
 				'v9 in int; "assert"{bfalse} >- "assert"{bfalse} }
+
+thm calc: 
+   sequent { <H> >- "not"{(((((1+@1)+@1)+@1)+@1)+@1)+@1 = 0 in nat} } = "autoT"

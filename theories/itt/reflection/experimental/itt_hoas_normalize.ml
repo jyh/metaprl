@@ -69,14 +69,33 @@ let extract_data tbl =
             Term_match_table.lookup tbl select_all t
          with
             Not_found ->
-               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
+               raise (RefineError ("Itt_hoas_normalize.extract_data", StringTermError ("no reduction for", t)))
       in
          conv
    in
       termC rw
 
 (*
- * Normalizing resource (lof lifting).
+ * Pre-normalization.
+ *)
+let process_pre_normalize_simple_resource_rw_annotation = redex_and_conv_of_rw_annotation "pre_normalize_simple"
+
+let resource (term * conv, conv) pre_normalize_simple =
+   table_resource_info extract_data
+
+let preNormalizeSimpleTopC_env e =
+   get_resource_arg (env_arg e) get_pre_normalize_simple_resource
+
+let preNormalizeSimpleTopC = funC preNormalizeSimpleTopC_env
+
+let preNormalizeSimpleC =
+   funC (fun e -> sweepUpC (preNormalizeSimpleTopC_env e))
+
+let preNormalizeSimpleT =
+   rwAll preNormalizeSimpleC
+
+(*
+ * Simple normalizer.
  *)
 let process_normalize_simple_resource_rw_annotation = redex_and_conv_of_rw_annotation "normalize_simple"
 
@@ -89,10 +108,18 @@ let normalizeSimpleTopC_env e =
 let normalizeSimpleTopC = funC normalizeSimpleTopC_env
 
 let normalizeSimpleC =
-   funC (fun e -> sweepUpC (normalizeSimpleTopC_env e))
+   funC (fun e -> sweepDnC (repeatC (normalizeSimpleTopC_env e)))
 
 let normalizeSimpleT =
    rwAll normalizeSimpleC
+
+doc <:doc<
+   Pre-normalization.  This eliminates the non-canonical forms.
+>>
+let resource pre_normalize_simple +=
+   [<< mk_term{'op; 'subterms} >>, fold_mk_term;
+    << subst{'e1; 'e2} >>, subst_to_substl;
+    << bind{x. 'e['x]} >>, bind_into_bindone]
 
 doc <:doc<
    Now we have a series of simple normalization theorems.
@@ -198,121 +225,53 @@ interactive_rw vbind_of_mk_bterm5 {| normalize_simple |} : <:xrewrite<
                                               vbind{| <J> >- e5 |}]}
 >>
 
-(************************************************************************
- * Test whether a term has already been normalized.
- * The normalizer is expensive, so this is used to prevent
- * it from running when nothing will happen.
- *
- * Non-normal terms:
- *    1. Nested binds, nested substitutions
- *    2. A mk_term, subst, bind1
- *    3. A mk_bterm within a bind or subst
- *)
-type norm_info =
-   { norm_bind : bool;
-     norm_subst : bool
-   }
+doc <:doc<
+   Optimizations.
+>>
+interactive_rw substl_merge1 {| normalize_simple |} : <:xrewrite<
+   m in nat -->
+   bind{m +@ 1; x. substl{substl{e; nth_prefix{x; m}}; [hd{nth_suffix{x; m}}]}}
+   <-->
+   bind{m +@ 1; x. substl{e; x}}
+>>
 
-let empty_info =
-   { norm_bind = false;
-     norm_subst = false
-   }
+doc <:doc<
+   We also perform coalescing during normalization.
+>>
+let resource normalize_simple +=
+   [<< bind{'n; x. bind{'m; y. 'e['x; 'y]}} >>, coalesce_bindn_bindn]
 
-let rec is_normal_term info t =
-   if is_mk_term_term t || is_subst_term t || is_bind_term t then
-      false
-   else if is_bindn_term t then
-      is_normal_bindn_term info t
-   else if is_vbind_term t then
-      is_normal_vbind_term info t
-   else if is_substl_term t then
-      is_normal_substl_term info t
-   else if is_mk_bterm_term t then
-      is_normal_mk_bterm_term info t
-   else if is_var_term t then
-      false
-   else if is_so_var_term t then
-      is_normal_so_var_term info t
-   else if is_context_term t then
-      is_normal_context_term info t
-   else if is_sequent_term t then
-      is_normal_sequent_term info t
-   else
-      is_normal_bterm_list info (dest_term t).term_terms
-
-and is_normal_term_list info tl =
-   List.for_all (is_normal_term info) tl
-
-and is_normal_bterm info bt =
-   is_normal_term info (dest_bterm bt).bterm
-
-and is_normal_bterm_list info btl =
-   List.for_all (is_normal_bterm info) btl
-
-and is_normal_bindn_term info t =
-   if info.norm_bind then
-      false
-   else
-      let info = { info with norm_bind = true } in
-      let _, _, t = dest_bindn_term t in
-         is_normal_term info t
-
-and is_normal_vbind_term info t =
-   if info.norm_bind then
-      false
-   else
-      let _, t = dest_vbind_term t in
-         is_normal_term info t
-
-and is_normal_substl_term info t =
-   if info.norm_subst then
-      false
-   else
-      let info = { info with norm_subst = true } in
-      let t1, t2 = dest_substl_term t in
-         is_normal_term info t1 && is_normal_term info t2
-
-and is_normal_mk_bterm_term info t =
-   if info.norm_bind then
-      false
-   else
-      let _, _, t = dest_mk_bterm_term t in
-         is_normal_term info t
-
-and is_normal_so_var_term info t =
-   let _, _, tl = dest_so_var t in
-      is_normal_term_list info tl
-
-and is_normal_context_term info t =
-   let _, t, _, tl = dest_context t in
-      is_normal_term info t && is_normal_term_list info tl
-
-and is_normal_sequent_term info t =
-   let { sequent_args = arg;
-         sequent_hyps = hyps;
-         sequent_concl = concl
-       } = explode_sequent t
-   in
-      if is_normal_term info arg && is_normal_term info concl then
-         SeqHyp.for_all (fun h ->
-               match h with
-                  Hypothesis (_, t) ->
-                     is_normal_term info t
-                | Context (_, _, tl) ->
-                     is_normal_term_list info tl) hyps
-      else
-         false
-
-let normalizeCheckC =
-   termC (fun t -> (**)
-      if is_normal_term empty_info t then
-         idC
-      else
-         raise (RefineError ("Itt_hoas_normalize.normalizeCheckC", StringTermError ("already normalized", t))))
+interactive_rw coalesce_vbind_bind1 {| normalize_simple |} : <:xrewrite<
+   vbind{| <J> >- bind{1; x. e[x]} |}
+   <-->
+   vbind{| <J>; x: it >- e[ [x] ] |}
+>>
 
 (************************************************************************
  * Tactics.
  *)
+doc <:doc<
+   The ``simple'' normalizer works with a pre-defined set of theorems
+   for a finite number of different shapes.  Also, it does not perform
+   any kind of optimization.  These are the steps:
+
+   @begin[enumerate]
+   @item{{Eliminate all << mk_term{'op; 'subterms} >>.}}
+   @item{{Eliminate all << bind{x. 'e['x]} >>.}}
+   @item{{Coalesce binds.}}
+   @item{{Push binds down using the finite database.}}
+   @end[enumerate]
+
+   The simple normalizer will fail on terms that are not already part
+   of the finite database (for example, on terms with a lot of
+   subterms, for which we haven't proved the theorems).  In this
+   case, it is necessary to fall back to the general normalizer
+   @tt[normalizeBTermC] below.
+>>
+let normalizeBTermSimpleC =
+   preNormalizeSimpleC
+   thenC normalizeSimpleC
+
 doc <:doc<
    The normalization conversion performs the following steps:
 
@@ -351,11 +310,13 @@ let normalizeBTermForceC =
    thenC sweepUpC lofBindElimC
    thenC sweepUpC lofVBindElimC
 
+doc <:doc<
+   For normalization, use the simple normalizer first.
+   Then use the generalized normalizer.
+>>
 let normalizeBTermC =
-(*
-   normalizeCheckC orelseC
- *)
-   normalizeBTermForceC
+   normalizeBTermSimpleC
+   thenC tryC (progressC normalizeBTermForceC)
 
 (*!
  * @docoff

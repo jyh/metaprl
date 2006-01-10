@@ -38,6 +38,7 @@ topval normalizeBTermForceC : conv
 (*
  * Debugging.
  *)
+topval normalizeBTermSimpleC : conv
 topval normalizeBTermAuxC : conv
 
 (*!

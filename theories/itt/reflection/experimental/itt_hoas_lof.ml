@@ -525,6 +525,20 @@ interactive_rw reduce_append_prefix_singleton {| normalize_lof |} :
    <-->
    lof{i. lof_nth{'x; 'i}; 'n5}
 
+(*
+ * XXX: JYH: this should go away when Aleksey add the aggressive
+ * arithmetic normalizer.
+ *)
+interactive_rw reduce_append_prefix_singleton2 {| normalize_lof |} :
+   'n2 = 'n3 in nat -->
+   'n5 in nat -->
+   'n3 = 'n5 -@ 1 in nat -->
+   lof{i. lof_append{j1. lof_nth_prefix{j2. lof_nth{'x; 'j2}; 'j1; 'n1; 'n2};
+                     j2. lof_cons{j3. lof_nil; 'j2; lof_nth{'x; 0 +@ 'n2}};
+                     'i; 'n3; 'n4}; 'n5}
+   <-->
+   lof{i. lof_nth{'x; 'i}; 'n5}
+
 (************************************************************************
  * Display forms.
  *)

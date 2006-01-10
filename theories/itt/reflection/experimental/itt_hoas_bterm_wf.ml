@@ -168,12 +168,12 @@ let fold_member = makeFoldC << member{'T; 'e} >> unfold_member
 let proofRuleAuxWFT =
    autoT
    thenT tryT (rw fold_member 0)
-   thenT rw normalizeBTermC 0
+   thenT rw normalizeBTermSimpleC 0
    thenT tryT (rw unfold_member 0)
    thenT autoT
    thenT rw reduceC 0
    thenT tryT arithT
-   thenT tryT (completeT (rw normalizeC 0 thenT autoT))
+   thenT tcaT
 
 let proofRuleWFT =
    repeatT proofRuleAuxWFT

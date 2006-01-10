@@ -97,7 +97,7 @@ interactive provable_intro 'premises : <:xrule<
    "wf" : <H> >- premises in list{Sequent} -->
    "wf" : <H> >- goal in Sequent -->
    "aux" : <H> >- all_list{premises; premise. Provable{logic; premise}} -->
-   "main" : <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic} -->
+   <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic} -->
    <H> >- Provable{logic; goal}
 >>
 
@@ -110,7 +110,7 @@ interactive simple_step_intro 'step : <:xrule<
    "wf" : <H> >- goal in Sequent -->
    "wf" : <H> >- step in ProofRule{Sequent} -->
    "wf" : <H> >- MemLogic{Sequent; step; logic} -->
-   "main" : <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
+   <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
    <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic}
 >>
 
@@ -406,7 +406,7 @@ let assumAllT =
 let provableRuleStartT t unfold =
    assumAllT
    thenT rwhAll reduce_bsequent
-   thenT forwardChainT
+   thenMT forwardChainT
    thenT thinDupT
    thenMT provableIntroT
    thenMT simple_step_intro t

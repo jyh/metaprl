@@ -206,7 +206,7 @@ interactive boolType {| intro [] |} :
    sequent { <H> >- "type"{bool} }
 
 interactive btrue_member {| intro [] |} :
-  sequent { <H> >- btrue in "bool" }
+   sequent { <H> >- btrue in "bool" }
 
 interactive bfalse_member {| intro [] |} :
    sequent { <H> >- bfalse in "bool" }

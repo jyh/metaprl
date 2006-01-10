@@ -873,7 +873,7 @@ interactive_rw mul_Assoc_rw :
 
 let mul_AssocC = mul_Assoc_rw
 
-interactive_rw mul_Assoc2_rw {| reduce |} :
+interactive_rw mul_Assoc2_rw :
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->
@@ -883,9 +883,11 @@ let mul_Assoc2C = mul_Assoc2_rw
 
 doc docoff
 
-let resource arith_unfold +=[
-	<<- 'a>>, uni2negative1C;
-]
+let resource reduce +=
+   << ('a *@ 'b) *@ 'c>>, (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC tryC mul_Assoc2_rw)
+
+let resource arith_unfold +=
+	<<- 'a>>, uni2negative1C
 
 doc docon
 

@@ -805,7 +805,7 @@ interactive_rw add_Assoc_rw :
 
 let add_AssocC = add_Assoc_rw
 
-interactive_rw add_Assoc2_rw {| reduce |} :
+interactive_rw add_Assoc2_rw :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ( 'c in int ) -->
@@ -813,10 +813,13 @@ interactive_rw add_Assoc2_rw {| reduce |} :
 
 let add_Assoc2C = add_Assoc2_rw
 
+doc docoff
+
+let resource reduce +=
+   << ('a +@ 'b) +@ 'c>>, (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC tryC add_Assoc2_rw)
+
 doc <:doc<
-
-   0 is neutral element for @tt[add] in @tt[int]
-
+   $0$ is neutral element for @tt[add] in @tt[int]
 >>
 prim add_Id {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->

@@ -37,8 +37,8 @@ declare beq_proof_step{'step1; 'step2}
 (*
  * Proof-step destructors.
  *)
-declare let_sovar{'d; 'witness; 'i; v. 'e}
-declare let_cvar{'d; 'witness; 'i; v. 'e}
+declare let_sovar[name:s]{'d; 'witness; 'i; v. 'e}
+declare let_cvar[name:s]{'d; 'witness; 'i; v. 'e}
 
 (*
  * Tactics.
@@ -47,10 +47,10 @@ val is_beq_proof_step_term : term -> bool
 val dest_beq_proof_step_term : term -> term * term
 
 val is_let_cvar_term : term -> bool
-val dest_let_cvar_term : term -> term * term * term * var * term
+val dest_let_cvar_term : term -> string * term * term * term * var * term
 
 val is_let_sovar_term : term -> bool
-val dest_let_sovar_term : term -> term * term * term * var * term
+val dest_let_sovar_term : term -> string * term * term * term * var * term
 
 (*!
  * @docoff

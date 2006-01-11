@@ -231,12 +231,14 @@ let rec find_var_index cindex soindex t =
    else if is_assert_term t then
       find_var_index cindex soindex (dest_assert t)
    else if is_let_cvar_term t then
-      let _, _, i, v, t = dest_let_cvar_term t in
+      let v, _, _, i, _, t = dest_let_cvar_term t in
+      let v = Lm_symbol.add v in
       let i = int_of_num (dest_number i) in
       let cindex = IntTable.add cindex i v in
          find_var_index cindex soindex t
    else if is_let_sovar_term t then
-      let _, _, i, v, t = dest_let_sovar_term t in
+      let v, _, _, i, _, t = dest_let_sovar_term t in
+      let v = Lm_symbol.add v in
       let i = int_of_num (dest_number i) in
       let soindex = IntTable.add soindex i v in
          find_var_index cindex soindex t
@@ -365,6 +367,14 @@ let proofStepWitnessT = funT dest_proof_step_witness
  * When applying the @tt[provable_intro] get the premises from
  * the assumptions.
  *)
+let provable_count assums =
+   List.fold_left (fun count assum ->
+         let t = (explode_sequent assum).sequent_concl in
+            if is_provable_sequent_term t then
+               succ count
+            else
+               count) 0 assums
+
 let provable_hyps hyps =
    let hyps =
       SeqHyp.fold (fun hyps _ h ->
@@ -381,7 +391,17 @@ let provable_hyps hyps =
       List.rev hyps
 
 let provable_intro_tac p =
+   let pcount = provable_count (Sequent.all_assums p) in
    let hyps = provable_hyps (explode_sequent (Sequent.goal p)).sequent_hyps in
+   let len = List.length hyps in
+   let hyps =
+      if len < pcount then
+         raise (RefineError ("Itt_hoas_sequent_proof", StringError "not enough Provable hyps"))
+      else if len = pcount then
+         hyps
+      else
+         Lm_list_util.firstn pcount hyps
+   in
    let hyps_list = mk_list_of_list hyps in
       provable_intro hyps_list
 

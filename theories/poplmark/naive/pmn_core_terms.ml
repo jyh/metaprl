@@ -1,4 +1,4 @@
-(*
+(*x
  * Typed AST.
  *
  * ----------------------------------------------------------------
@@ -46,9 +46,7 @@ struct
    declare TyTop : TyExp
    declare TyFun{'ty1 : TyExp; 'ty2 : TyExp} : TyExp
    declare TyAll{'ty1 : TyExp; x : TyExp. 'ty2 : TyExp} : TyExp
-end;;
 
-(*
    (* Expressions *)
    declare typeclass Exp -> Term
 
@@ -56,7 +54,9 @@ end;;
    declare Lambda{'ty : TyExp; x : Exp. 'e : Exp} : Exp
    declare TyApply{'e : Exp; 'ty : TyExp} : Exp
    declare TyLambda{'ty : TyExp; x : TyExp. 'e : Exp} : Exp
+end;;
 
+(*
    (* Judgments *)
    declare typeclass Prop -> Term
 

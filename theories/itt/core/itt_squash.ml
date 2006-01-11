@@ -315,9 +315,10 @@ let unsquash_tactic tbl = argfunT (fun i p ->
     | [], [] ->
          raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc]))))
 
-let process_squash_resource_annotation name contexts args stmt _loc tac =
+let process_squash_resource_annotation name contexts args stmt loc tac =
    if contexts.spec_addrs <> [||] then
-      raise (Invalid_argument ("squash_stable resource annotation: " ^ name ^ ": contexts (address) arguments are not supported yet"));
+      raise (Invalid_argument ((string_of_loc loc) ^ ": squash_stable resource annotation:
+" ^ name ^ ": contexts (address) arguments are not supported yet"));
    let assums, goal = unzip_mfunction stmt in
    let egoal = TermMan.explode_sequent goal in
    let concl = egoal.sequent_concl in
@@ -362,7 +363,8 @@ let process_squash_resource_annotation name contexts args stmt _loc tac =
          in
             [t, SqStable(it_term, (assertT t thenMT tac))]
     | _ ->
-         raise (Invalid_argument ("squash_stable resource annotation: " ^ name ^ ": the rule is not a squash-stability rule"))
+         raise (Invalid_argument ((string_of_loc loc) ^ ": squash_stable resource annotation:
+" ^ name ^ ": the rule is not a squash-stability rule"))
 
 (*
  * Resource.

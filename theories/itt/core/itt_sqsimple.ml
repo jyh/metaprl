@@ -94,9 +94,10 @@ sqsimple assumptions should not have extra hypothesis"))
       else
          None
 
-let process_sqsimple_resource_annotation name contexts args stmt _loc _tac =
+let process_sqsimple_resource_annotation name contexts args stmt loc _tac =
    if contexts.spec_addrs <> [||] || contexts.spec_ints <> [||] || args <> [] then
-      raise (Invalid_argument ("sqsimple resource annotation: " ^ name ^ ": rules with arguments are not supported yet"));
+      raise (Invalid_argument ((string_of_loc loc) ^ ": sqsimple resource annotation:
+" ^ name ^ ": rules with arguments are not supported yet"));
    let assums, goal = unzip_mfunction stmt in
    let t = dest_sqsimple_term (TermMan.concl goal) in
       [t, Lm_list_util.some_map (process_assum name) assums]

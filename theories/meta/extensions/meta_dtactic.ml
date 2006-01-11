@@ -185,9 +185,10 @@ let one_rw_arg i =
 (*
  * Improve the intro resource from a rule.
  *)
-let process_meta_intro_resource_annotation name args term_args statement _loc (pre_tactic, options) =
+let process_meta_intro_resource_annotation name args term_args statement loc (pre_tactic, options) =
    if args.spec_addrs <> [||] then
-      raise (Invalid_argument (sprintf "intro annotation: %s: context arguments not supported yet" name));
+      raise (Invalid_argument (sprintf
+         "%s: intro annotation: %s: context arguments not supported yet" (string_of_loc loc) name));
    let assums, goal = unzip_mfunction statement in
    let goal = TermMan.explode_sequent goal in
    let t = goal.sequent_concl in
@@ -267,9 +268,10 @@ let rec get_elim_args_arg = function
  | [] ->
       None
 
-let process_meta_elim_resource_annotation name args term_args statement _loc (pre_tactic, options) =
+let process_meta_elim_resource_annotation name args term_args statement loc (pre_tactic, options) =
    if args.spec_addrs <> [||] then
-      raise (Invalid_argument (sprintf "elim annotation: %s: context arguments not supported yet" name));
+      raise (Invalid_argument (sprintf
+         "%s: elim annotation: %s: context arguments not supported yet" (string_of_loc loc) name));
    let assums, goal = unzip_mfunction statement in
    match SeqHyp.to_list (TermMan.explode_sequent goal).sequent_hyps with
       [ Context _; Hypothesis(v,t); Context _ ] ->

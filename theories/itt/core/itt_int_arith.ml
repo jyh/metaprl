@@ -151,28 +151,28 @@ let rec on_main_subgoals = function
          on_main_subgoals tl*)
  | [] -> []
 
-let process_ge_elim_resource_annotation name context_args term_args statement _loc (pre_tactic, arg) =
+let process_ge_elim_resource_annotation name context_args term_args statement loc (pre_tactic, arg) =
    let assums, goal = unzip_mfunction statement in
    let () =
       if !debug_arith_dtactic then
-         eprintf "Itt_int_arith.improve_ge_elim: %s concl: %s%t" name (SimplePrint.short_string_of_term (TermMan.concl goal)) eflush
+         eprintf "Itt_int_arith.improve_ge_elim: %s: %s concl: %s%t" (string_of_loc loc) name (SimplePrint.short_string_of_term (TermMan.concl goal)) eflush
    in
    let v,t =
       match SeqHyp.to_list (TermMan.explode_sequent goal).sequent_hyps with
          [ Context _; Hypothesis(v,t); Context _ ] -> v,t
        | _ ->
-            raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_elim: %s: must be an elimination rule" name))
+            raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_elim: %s: %s: must be an elimination rule" (string_of_loc loc) name))
    in
    let seq_terms = on_main_subgoals assums in
    let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic { arg_ints = [| i |]; arg_addrs = [||] } []) in
    [mk_pair_term (mk_var_term v) t, seq_terms, (arg, tac)]
 
-let process_ge_intro_resource_annotation name context_args term_args statement _loc pre_tactic =
+let process_ge_intro_resource_annotation name context_args term_args statement loc pre_tactic =
    let assums, goal = unzip_mfunction statement in
    let t = TermMan.concl goal in
    let () =
       if !debug_arith_dtactic then
-         eprintf "Itt_int_arith.improve_ge_intro: %s goal: %s%t" name (SimplePrint.short_string_of_term t) eflush
+         eprintf "Itt_int_arith.improve_ge_intro: %s: %s goal: %s%t" (string_of_loc loc) name (SimplePrint.short_string_of_term t) eflush
    in
    let seq_terms = on_main_subgoals assums in
    let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic empty_rw_args []) in

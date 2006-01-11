@@ -54,9 +54,7 @@ struct
    declare Lambda{'ty : TyExp; x : Exp. 'e : Exp} : Exp
    declare TyApply{'e : Exp; 'ty : TyExp} : Exp
    declare TyLambda{'ty : TyExp; x : TyExp. 'e : Exp} : Exp
-end;;
 
-(*
    (* Judgments *)
    declare typeclass Prop -> Term
 
@@ -76,6 +74,10 @@ end;;
 
    (* Sequents have dependent types *)
    declare type TyElem{'a : Ty} : Ty
+
+end;;
+
+(*
 
    declare rewrite TyElem{TyVal} <--> Exp
    declare rewrite TyElem{TyPower} <--> TyExp

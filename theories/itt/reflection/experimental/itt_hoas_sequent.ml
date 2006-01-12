@@ -63,6 +63,11 @@ define unfold_sequent_hyps : sequent_hyps{'s} <-->
 define unfold_sequent_concl : sequent_concl{'s} <-->
    snd{snd{'s}}
 
+define unfold_dest_sequent : dest_sequent{'s; arg, hyps, concl. 'e['arg; 'hyps; 'concl]} <--> <:xterm<
+   let a, h, c = s in
+      e[a; h; c]
+>>
+
 doc <:doc<
    A sequent is well-formed only if the hypotheses have depths increasing
    by one, and the conclusion is also at the right nesting depth.
@@ -285,6 +290,12 @@ interactive_rw reduce_sequent_concl {| reduce |} : <:xrewrite<
    sequent_concl{"sequent"{arg; hyps; concl}}
    <-->
    concl
+>>
+
+interactive_rw reduce_dest_sequent {| reduce |} : <:xrewrite<
+   dest_sequent{"sequent"{arg; hyps; concl}; a, h, c. e[a; h; c]}
+   <-->
+   e[arg; hyps; concl]
 >>
 
 interactive_rw reduce_is_sequent {| reduce |} : <:xrewrite<

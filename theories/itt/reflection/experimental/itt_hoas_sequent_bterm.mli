@@ -1,5 +1,5 @@
 (*
- * Native sequent representation.
+ * Representation of a sequent as a BTerm.
  *
  * ----------------------------------------------------------------
  *
@@ -24,52 +24,12 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_util
-
-open Basic_tactics
+extends Itt_hoas_sequent
 
 (*
- * Sequents and their types.
+ * Convert the sequent triple into a BTerm.
  *)
-declare "sequent"{'arg; 'hyps; 'concl}
-declare sequent_arg{'s}
-declare sequent_hyps{'s}
-declare sequent_concl{'s}
-declare dest_sequent{'s; arg, hyps, concl. 'e['arg; 'hyps; 'concl]}
-
-declare const Sequent
-declare beq_sequent{'s1; 's2}
-declare beq_sequent_list{'l1; 's2}
-
-(*
- * A sequent with depth 'd.
- *)
-declare Sequent{'d}
-
-(*
- * A sequent context variable at depth 'd.
- *)
-declare CVar{'d}
-
-(*
- * Hypothesis depth check.
- *)
-declare hyp_depths{'d; 'hyps}
-declare bhyp_depths{'d; 'hyps}
-
-(*
- * Rewrites.
- *)
-topval fold_sequent : conv
-topval fold_hyp_depths : conv
-topval fold_bhyp_depths : conv
-topval fold_beq_sequent_list : conv
-
-(*
- * Tactics.
- *)
-val is_beq_sequent_term : term -> bool
-val dest_beq_sequent_term : term -> term * term
+declare sequent_bterm{'s}
 
 (*!
  * @docoff

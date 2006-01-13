@@ -20,7 +20,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006 MetaPRL Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@ open Basic_tactics
 open Simple_print
 open Itt_hoas_vector
 open Itt_hoas_debruijn
+open Itt_hoas_util
 
 (************************************************************************
  * Resources.
@@ -81,7 +82,7 @@ let extract_data tbl =
 (*
  * Normalizing resource (lof lifting).
  *)
-let process_pre_normalize_lof_resource_rw_annotation = redex_and_conv_of_rw_annotation "pre_normalize_lof"
+let process_pre_normalize_lof_resource_rw_annotation = arith_rw_annotation "pre_normalize_lof"
 
 let resource (term * conv, conv) pre_normalize_lof =
    table_resource_info extract_data
@@ -100,7 +101,7 @@ let preNormalizeLofT =
 (*
  * Normalizing resource (lof lifting).
  *)
-let process_normalize_lof_resource_rw_annotation = redex_and_conv_of_rw_annotation "normalize_lof"
+let process_normalize_lof_resource_rw_annotation = arith_rw_annotation "normalize_lof"
 
 let resource (term * conv, conv) normalize_lof =
    table_resource_info extract_data
@@ -119,7 +120,7 @@ let normalizeLofT =
 (*
  * Reduce resource (lof lowering).
  *)
-let process_reduce_lof_resource_rw_annotation = redex_and_conv_of_rw_annotation "reduce_lof"
+let process_reduce_lof_resource_rw_annotation = arith_rw_annotation "reduce_lof"
 
 let resource (term * conv, conv) reduce_lof =
    table_resource_info extract_data
@@ -240,13 +241,6 @@ interactive_rw nth_suffix_lof {| normalize_lof |} :
    nth_suffix{lof{i. 'f['i]; 'n}; 'm}
    <-->
    lof{i. lof_nth_suffix{i. 'f['i]; 'i; 'n; 'm}; 'n -@ 'm}
-
-interactive_rw hd_lof {| normalize_lof |} :
-   'n in nat -->
-   not{'n = 0 in nat} -->
-   hd{lof{i. 'f['i]; 'n}}
-   <-->
-   'f[0]
 
 interactive_rw tl_lof {| normalize_lof |} :
    'n in nat -->
@@ -470,7 +464,7 @@ let coalesce_bind t =
       if is_lof_bind_term s then
          lofBindElimC
          thenC addrC [Subterm 2] lofBindElimC
-         thenC coalesce_bindn_bindn
+         thenC coalesce_bindn_bindn thenC addrC [Subterm 1] reduceC
          thenC bindn_to_lof_bind
       else
          raise (RefineError ("coalesce_bind", StringTermError ("not a nested bind", t)))
@@ -482,14 +476,18 @@ let resource reduce_lof +=
 
 (************************************************************************
  * Constant reductions.
- *
- * XXX: JYH: I'm not to sure about constant reductions--I believe they
- * are too fragile.
  *)
 doc <:doc<
    Constant reductions.
 >>
-interactive_rw reduce_nth_lof {| normalize_lof |} :
+interactive_rw hd_lof {| reduce; reduce_lof |} :
+   'n in nat -->
+   not{'n = 0 in nat} -->
+   hd{lof{i. 'f['i]; 'n}}
+   <-->
+   'f[0]
+
+interactive_rw reduce_nth_lof {| reduce; reduce_lof |} :
    'n in nat -->
    'j in nat -->
    'j < 'n -->
@@ -497,25 +495,34 @@ interactive_rw reduce_nth_lof {| normalize_lof |} :
    <-->
    'f['j]
 
-interactive_rw reduce_nth_suffix_const {| normalize_lof |} :
-   'j in nat -->
-   lof_nth_suffix{i. 'f['i]; 'j; 'n; 'm}
-   <-->
-   'f['j +@ 'm]
-
-interactive_rw reduce_singleton {| normalize_lof |} : <:xrewrite<
+interactive_rw reduce_singleton {| normalize_lof; reduce; reduce_lof |} : <:xrewrite<
    lof_cons{i. f[i]; 0; e}
    <-->
    e
 >>
 
+doc docoff
+
+let resource reduce_lof +=
+   << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, unfold_lof_nth_suffix
+
+let resource reduce +=
+   << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, unfold_lof_nth_suffix
+
+let resource normalize_lof += [
+   << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, (unfold_lof_nth_suffix thenC reduceC);
+   << hd{lof{i. 'f['i]; 'n}} >>, (hd_lof thenC reduceC);
+   << lof_nth{lof{i. 'f['i]; 'n}; 'j} >>, (reduce_nth_lof thenC reduceC)
+]
+
 (************************************************************************
  * Optimizations.
+ * XXX: Aleksey: it is not clear whether this is needed at all.
  *)
 doc <:doc<
    Optimizations.
 >>
-interactive_rw reduce_append_prefix_singleton {| normalize_lof |} :
+interactive_rw reduce_append_prefix_singleton {| reduce_lof |} :
    'n2 = 'n3 in nat -->
    'n5 in nat -->
    'n3 = 'n5 -@ 1 in nat -->
@@ -525,19 +532,14 @@ interactive_rw reduce_append_prefix_singleton {| normalize_lof |} :
    <-->
    lof{i. lof_nth{'x; 'i}; 'n5}
 
-(*
- * XXX: JYH: this should go away when Aleksey add the aggressive
- * arithmetic normalizer.
+(************************************************************************
+ * Add substl coalescing to normalize_lof
  *)
-interactive_rw reduce_append_prefix_singleton2 {| normalize_lof |} :
-   'n2 = 'n3 in nat -->
-   'n5 in nat -->
-   'n3 = 'n5 -@ 1 in nat -->
-   lof{i. lof_append{j1. lof_nth_prefix{j2. lof_nth{'x; 'j2}; 'j1; 'n1; 'n2};
-                     j2. lof_cons{j3. lof_nil; 'j2; lof_nth{'x; 0 +@ 'n2}};
-                     'i; 'n3; 'n4}; 'n5}
-   <-->
-   lof{i. lof_nth{'x; 'i}; 'n5}
+let resource normalize_lof +=
+    << substl{substl{'e; lof{x. 'f['x]; 'm}}; lof{x. 'g['x]; 'n}} >>,
+    (substl_substl_lof2 
+     thenC addrC [Subterm 2; Subterm 2] reduceC 
+     thenC addrC [Subterm 2] (tryC reduce_append_prefix_singleton))
 
 (************************************************************************
  * Display forms.

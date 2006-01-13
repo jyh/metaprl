@@ -49,6 +49,7 @@ open Itt_hoas_lof
 open Itt_hoas_lof_vec
 open Itt_hoas_vbind
 open Itt_hoas_vector
+open Itt_hoas_util
 open Itt_hoas_debruijn
 
 (************************************************************************
@@ -78,7 +79,7 @@ let extract_data tbl =
 (*
  * Pre-normalization.
  *)
-let process_pre_normalize_simple_resource_rw_annotation = redex_and_conv_of_rw_annotation "pre_normalize_simple"
+let process_pre_normalize_simple_resource_rw_annotation = arith_rw_annotation "pre_normalize_simple"
 
 let resource (term * conv, conv) pre_normalize_simple =
    table_resource_info extract_data
@@ -97,7 +98,7 @@ let preNormalizeSimpleT =
 (*
  * Simple normalizer.
  *)
-let process_normalize_simple_resource_rw_annotation = redex_and_conv_of_rw_annotation "normalize_simple"
+let process_normalize_simple_resource_rw_annotation = arith_rw_annotation "normalize_simple"
 
 let resource (term * conv, conv) normalize_simple =
    table_resource_info extract_data
@@ -287,8 +288,8 @@ doc <:doc<
    The @tt[reduceLofC] conversion coalesces binds and pushes them down.
    The @tt[reduceLofC] conversion must be run with all @tt[lof] terms
    hoisted as much as possible---it should be run after @tt[normalizeLofC].
-   Similarly, the @tt[substl_substl_lof2] conversion should be run after
-   @tt[normalizeLofC].
+   The @tt[normalizeLofC] convertion pushed hoists the lof terms as much as possible
+   and coalesces substl terms.
    @docoff
 >>
 let normalizeBTermAuxC =
@@ -296,7 +297,6 @@ let normalizeBTermAuxC =
    thenC normalizeLofC
    thenC reduceLofC
    thenC normalizeLofC
-   thenC sweepUpC substl_substl_lof2
 
 doc <:doc<
    Once the binds have all been pushed, use the @tt[rippleLofC] conversion

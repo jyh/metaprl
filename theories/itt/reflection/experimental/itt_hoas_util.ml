@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2005-2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
  * @end[license]
  *)
 doc <:doc< @parents >>
@@ -159,3 +159,25 @@ let resource forward +=
     [<< compatible_shapes{'depth; 'h :: 't; !v} >>,   { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
      << compatible_shapes{'depth; nil; !v} >>,        { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
      << compatible_shapes{'depth; shape{'op}; !v} >>, { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapes_shapeT }]
+
+(************************************************************************
+ * Custom rewrite annotation processor.
+ *)
+let arith_opnames =
+   OpnameSet.of_list (List.map opname_of_term [<<'a +@ 'b>>; <<-'a>>; <<'a -@ 'b>>; <<'a *@ 'b>> ])
+
+let is_arith_term t _ = 
+   OpnameSet.mem arith_opnames (opname_of_term t)
+
+let rec reduce_addrs conv = function
+   [] -> conv
+ | addr :: adrrs -> reduce_addrs conv adrrs thenC addrLiteralC addr reduceC
+
+let arith_rw_annotation name rwname redex contractum _ addrs args loc rw =
+   match addrs, args with
+      { spec_ints = [||]; spec_addrs = [||] }, [] ->
+         [redex, reduce_addrs (rewrite_of_pre_rewrite rw empty_rw_args []) (find_subterm contractum is_arith_term)]
+    | _ ->
+         raise (Invalid_argument (sprintf "%s: rewrite %s: %s resource does not support
+annotations on rewrites that take arguments" (Simple_print.string_of_loc loc) rwname name))
+

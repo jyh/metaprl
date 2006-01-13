@@ -296,16 +296,14 @@ let normalizeBTermAuxC =
    preNormalizeLofC
    thenC normalizeLofC
    thenC reduceLofC
-   thenC normalizeLofC
 
 doc <:doc<
-   Once the binds have all been pushed, use the @tt[rippleLofC] conversion
+   Once the binds have all been pushed, use the @tt[reduceC] conversion
    to optimize the term.  Afterwards, remove all temporary terms using the
    @tt[lofBindElimC] conversion.
 >>
 let normalizeBTermForceC_inner =
    normalizeBTermAuxC
-   thenC rippleLofC
    thenC reduceC
    thenC sweepUpC lofBindElimC
    thenC sweepUpC lofVBindElimC

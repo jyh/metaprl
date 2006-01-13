@@ -75,8 +75,6 @@ topval reduceLofTopC : conv
 topval reduceLofC : conv
 topval reduceLofT : tactic
 
-topval rippleLofC : conv
-
 (************************************************************************
  * Tactics.
  *)

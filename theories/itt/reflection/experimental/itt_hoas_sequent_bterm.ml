@@ -28,6 +28,8 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_sequent
+extends Itt_dprod
+extends Itt_match
 
 doc docoff
 
@@ -42,7 +44,6 @@ doc <:doc<
 
    << seq_arg{'arg; seq_hyp{'t1; x1. math_ldots seq_hyp{'tn; xn. seq_concl{'c}}}} >>.
 >>
-
 declare seq_arg{'arg; 'seq}
 declare seq_hyp{'hyp; x. 'rest['x]}
 declare seq_concl{'concl}
@@ -105,6 +106,143 @@ interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
    "wf" : <H> >- s in Sequent -->
    <H> >- sequent_bterm{s} in BTerm
 >>
+
+(************************************************************************
+ * Inversion.
+ *)
+doc <:doc<
+   Also define an inversion that produces the original << Sequent >> term from the
+   << BTerm >>.
+>>
+define unfold_is_sequent_bterm_core : is_sequent_bterm_core{'e} <--> <:xterm<
+   (fix f e ->
+      "dest_bterm"{e;
+         l, r. bfalse;
+         d, o, s.
+            if is_same_op{o; $seq_hyp{h; x. rest}} then
+               f nth{s; 1}
+            else if is_same_op{o; $seq_concl{concl}} then
+               btrue
+            else
+               bfalse}) e
+>>
+
+define unfold_is_sequent_bterm : is_sequent_bterm{'e} <--> <:xterm<
+   "dest_bterm"{e;
+      l, r. bfalse;
+      d, o, s.
+         is_same_op{o; $seq_arg{arg; rest}} &&b is_sequent_bterm_core{nth{s; 1}}}
+>>
+
+define unfold_sequent_of_bterm_core : sequent_of_bterm_core{'e} <--> <:xterm<
+   (fix f e ->
+      "dest_bterm"{e;
+         l, r. it;
+         d, o, s.
+            if is_same_op{o; $seq_hyp{h; x. rest}} then
+               let hyps, concl = f nth{s; 1} in
+                  (nth{s; 0} :: hyps, concl)
+            else (* is_same_op{o; $seq_concl{concl}} *)
+               ([], nth{s; 0})}) e
+>>
+
+define unfold_sequent_of_bterm : sequent_of_bterm{'e} <--> <:xterm<
+   "dest_bterm"{e;
+      l, r. it;
+      d, o, s.
+         let hyps, concl = sequent_of_bterm_core{nth{s; 1}} in
+            "sequent"{nth{s; 0}; hyps; concl}}
+>>
+
+(************************************************
+ * Rewrites.
+ *)
+doc <:doc<
+   Rewrites.
+>>
+interactive_rw reduce_is_sequent_bterm_core : <:xrewrite<
+   is_sequent_bterm_core{e}
+   <-->
+   "dest_bterm"{e;
+      l, r. bfalse;
+      d, o, s.
+         if is_same_op{o; $seq_hyp{h; x. rest}} then
+            is_sequent_bterm_core{nth{s; 1}}
+         else if is_same_op{o; $seq_concl{concl}} then
+            btrue
+         else
+            bfalse}
+>>
+
+interactive_rw reduce_is_sequent_bterm_core_var {| reduce |} : <:xrewrite<
+   l in nat -->
+   r in nat -->
+   is_sequent_bterm_core{var{l; r}}
+   <-->
+   bfalse
+>>
+
+interactive_rw reduce_is_sequent_bterm_core_hyp {| reduce |} : <:xrewrite<
+   d in nat -->
+   h in BTerm{d} -->
+   rest in BTerm{d +@ 1} -->
+   is_sequent_bterm_core{mk_bterm{d; $seq_hyp{h; x. rest}; [h; rest]}}
+   <-->
+   is_sequent_bterm_core{rest}
+>>
+
+interactive_rw reduce_is_sequent_bterm_core_concl {| reduce |} : <:xrewrite<
+   d in nat -->
+   c in BTerm{d} -->
+   is_sequent_bterm_core{mk_bterm{d; $seq_concl{c}; [c]}}
+   <-->
+   btrue
+>>
+
+interactive_rw reduce_is_sequent_bterm_var {| reduce |} : <:xrewrite<
+   l in nat -->
+   r in nat -->
+   is_sequent_bterm{var{l; r}}
+   <-->
+   bfalse
+>>
+
+interactive_rw reduce_is_sequent_bterm_arg {| reduce |} : <:xrewrite<
+   d in nat -->
+   arg in BTerm{d} -->
+   rest in BTerm{d} -->
+   is_sequent_bterm{mk_bterm{d; $seq_arg{arg; rest}; [arg; rest]}}
+   <-->
+   is_sequent_bterm_core{rest}
+>>
+
+(************************************************
+ * Well-formedness.
+ *)
+doc <:doc<
+   Well-formedness.
+>>
+interactive is_sequent_bterm_core_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- e in BTerm -->
+   <H> >- is_sequent_bterm_core{e} in bool
+>>
+
+interactive is_sequent_bterm_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- e in BTerm -->
+   <H> >- is_sequent_bterm{e} in bool
+>>
+
+interactive sequent_of_bterm_core_wf1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- e in BTerm{n} -->
+   "aux" : <H> >- "assert"{is_sequent_bterm_core{e}} -->
+   <H> >- sequent_of_bterm_core{e} in (Prod hyps: CVar{n} * BTerm{n +@ length{hyps}})
+>>
+
+(************************************************************************
+ * Tactics.
+ *)
+let fold_is_sequent_bterm_core = makeFoldC <:xterm< is_sequent_bterm_core{e} >> unfold_is_sequent_bterm_core
 
 (*!
  * @docoff

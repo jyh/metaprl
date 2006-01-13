@@ -76,9 +76,9 @@ doc <:doc<
    The $@true$ term is chosen to be the @emph{left} term, and $@false$
    is the @emph{right} term.
 >>
-define unfold_bool : bool <--> (unit + unit)
-define unfold_btrue : btrue <--> inl{it}
-define unfold_bfalse : bfalse <--> inr{it}
+define const unfold_bool : bool <--> (unit + unit)
+define const unfold_btrue : btrue <--> inl{it}
+define const unfold_bfalse : bfalse <--> inr{it}
 
 doc <:doc<
    The @tt{ifthenelse} term is the program that

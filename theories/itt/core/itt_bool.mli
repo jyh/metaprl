@@ -50,9 +50,9 @@ prec prec_assert
 (*
  * Definition of bool.
  *)
-define unfold_bool : bool <--> (unit + unit)
-define unfold_btrue : btrue <--> inl{it}
-define unfold_bfalse : bfalse <--> inr{it}
+define const unfold_bool : bool <--> (unit + unit)
+define const unfold_btrue : btrue <--> inl{it}
+define const unfold_bfalse : bfalse <--> inr{it}
 
 define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y.
  'e2}

@@ -26,10 +26,17 @@
  *)
 extends Itt_hoas_sequent
 
+open Basic_tactics
+
 (*
  * Convert the sequent triple into a BTerm.
  *)
 declare sequent_bterm{'s}
+
+(*
+ * Tactics.
+ *)
+topval fold_is_sequent_bterm_core : conv
 
 (*!
  * @docoff

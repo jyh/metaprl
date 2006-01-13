@@ -32,11 +32,19 @@ open Basic_tactics
  * Convert the sequent triple into a BTerm.
  *)
 declare sequent_bterm{'s}
+declare const BSequent
+
+(*
+ * Convert the BTerm back to a sequent.
+ *)
+declare sequent_of_bterm{'e}
+declare is_sequent_bterm{'e}
 
 (*
  * Tactics.
  *)
 topval fold_is_sequent_bterm_core : conv
+topval fold_sequent_of_bterm_core : conv
 
 (*!
  * @docoff

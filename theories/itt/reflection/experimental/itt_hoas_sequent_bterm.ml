@@ -77,6 +77,12 @@ interactive_rw reduce_sequent_bterm_core_cons {| reduce |} : <:xrewrite<
    mk_bterm{d; $seq_hyp{h; x. r}; [u; sequent_bterm{d +@ 1; v; concl}]}
 >>
 
+interactive_rw reduce_sequent_bterm_sequent {| reduce |} : <:xrewrite<
+   sequent_bterm{"sequent"{arg; hyps; concl}}
+   <-->
+   $`seq_arg{arg; $,sequent_bterm{0; hyps; concl}}
+>>
+
 (************************************************************************
  * Well-formedness.
  *)
@@ -158,7 +164,7 @@ define unfold_sequent_of_bterm : sequent_of_bterm{'e} <--> <:xterm<
  * Rewrites.
  *)
 doc <:doc<
-   Rewrites.
+   Rewrites for << is_sequent_bterm{'e} >>.
 >>
 interactive_rw reduce_is_sequent_bterm_core : <:xrewrite<
    is_sequent_bterm_core{e}
@@ -217,6 +223,53 @@ interactive_rw reduce_is_sequent_bterm_arg {| reduce |} : <:xrewrite<
 >>
 
 (************************************************
+ * sequent_of_bterm.
+ *)
+doc <:doc<
+   Rewrites for << sequent_of_bterm{'e} >>.
+>>
+interactive_rw reduce_sequent_of_bterm_core : <:xrewrite<
+   sequent_of_bterm_core{e}
+   <-->
+   "dest_bterm"{e;
+      l, r. it;
+      d, o, s.
+         if is_same_op{o; $seq_hyp{h; x. rest}} then
+            let hyps, concl = sequent_of_bterm_core{nth{s; 1}} in
+               (nth{s; 0} :: hyps, concl)
+         else (* is_same_op{o; $seq_concl{concl}} *)
+            ([], nth{s; 0})}
+>>
+
+interactive_rw reduce_sequent_of_bterm_core_hyp {| reduce |} : <:xrewrite<
+   d in nat -->
+   h in BTerm{d} -->
+   rest in BTerm{d +@ 1} -->
+   sequent_of_bterm_core{mk_bterm{d; $seq_hyp{h; x. rest}; [h; rest]}}
+   <-->
+   let hyps, concl = sequent_of_bterm_core{rest} in
+      (h :: hyps, concl)
+>>
+
+interactive_rw reduce_sequent_of_bterm_core_concl {| reduce |} : <:xrewrite<
+   d in nat -->
+   c in BTerm{d} -->
+   sequent_of_bterm_core{mk_bterm{d; $seq_concl{c}; [c]}}
+   <-->
+   ([], c)
+>>
+
+interactive_rw reduce_sequent_of_bterm_arg {| reduce |} : <:xrewrite<
+   d in nat -->
+   arg in BTerm{d} -->
+   rest in BTerm{d} -->
+   sequent_of_bterm{mk_bterm{d; $seq_arg{arg; rest}; [arg; rest]}}
+   <-->
+   let hyps, concl = sequent_of_bterm_core{rest} in
+      "sequent"{arg; hyps; concl}
+>>
+
+(************************************************
  * Well-formedness.
  *)
 doc <:doc<
@@ -239,10 +292,63 @@ interactive sequent_of_bterm_core_wf1 {| intro [] |} : <:xrule<
    <H> >- sequent_of_bterm_core{e} in (Prod hyps: CVar{n} * BTerm{n +@ length{hyps}})
 >>
 
+interactive sequent_of_bterm_wf1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- e in BTerm{0} -->
+   "aux" : <H> >- "assert"{is_sequent_bterm{e}} -->
+   <H> >- sequent_of_bterm{e} in Sequent
+>>
+
+(************************************************************************
+ * Inversion rewrites.
+ *)
+doc <:doc<
+   Show that the << sequent_bterm{'e} >> and << sequent_of_bterm{'e} >> are inverses
+   of each other.
+>>
+interactive sequent_bterm_core_is_bsequent_core {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- hyps in CVar{n} -->
+   "wf" : <H> >- concl in BTerm{n +@ length{hyps}} -->
+   <H> >- "assert"{is_sequent_bterm_core{sequent_bterm{n; hyps; concl}}}
+>>
+
+interactive sequent_bterm_is_bsequent {| intro [] |} : <:xrule<
+   "wf" : <H> >- s in Sequent -->
+   <H> >- "assert"{is_sequent_bterm{sequent_bterm{s}}}
+>>
+
+interactive_rw reduce_sequent_of_bterm_core_inverse : <:xrewrite<
+   n in nat -->
+   hyps in CVar{n} -->
+   concl in BTerm{n +@ length{hyps}} -->
+   sequent_of_bterm_core{sequent_bterm{n; hyps; concl}}
+   <-->
+   (hyps, concl)
+>>
+
+interactive_rw reduce_sequent_of_bterm_inverse : <:xrewrite<
+   s in Sequent -->
+   sequent_of_bterm{sequent_bterm{s}}
+   <-->
+   s
+>>
+
+(************************************************************************
+ * The BSequent type.
+ *)
+define const unfold_BSequent : BSequent <--> <:xterm<
+   { e: BTerm{0} | "assert"{is_sequent_bterm{e}} }
+>>
+
+interactive bsequent_wf {| intro [] |} : <:xrule<
+   <H> >- BSequent Type
+>>
+
 (************************************************************************
  * Tactics.
  *)
 let fold_is_sequent_bterm_core = makeFoldC <:xterm< is_sequent_bterm_core{e} >> unfold_is_sequent_bterm_core
+let fold_sequent_of_bterm_core = makeFoldC <:xterm< sequent_of_bterm_core{e} >> unfold_sequent_of_bterm_core
 
 (*!
  * @docoff

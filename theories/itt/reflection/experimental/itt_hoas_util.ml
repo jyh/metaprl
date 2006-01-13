@@ -159,27 +159,3 @@ let resource forward +=
     [<< compatible_shapes{'depth; 'h :: 't; !v} >>,   { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
      << compatible_shapes{'depth; nil; !v} >>,        { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
      << compatible_shapes{'depth; shape{'op}; !v} >>, { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapes_shapeT }]
-
-(************************************************************************
- * Other junk.
- *)
-
-(*
- * OmegaT is failing on some artihmetic, so make it simpler.
- *)
-interactive elim_bdepth {| elim [] |} 'H :
-   [wf] sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]> >- 't1 in BTerm } -->
-   [wf] sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]> >- 't2 in BTerm } -->
-   sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]>;
-      bdepth{'t1} > 0; bdepth{'t1} -@ 1 = bdepth{'t2} in nat >- 'C['u] } -->
-   sequent { <H>; u: bdepth{'t1} = bdepth{'t2} +@ 1 in nat; <J['u]> >- 'C['u] }
-
-(*!
- * @docoff
- *
- * -*-
- * Local Variables:
- * Caml-master: "compile"
- * End:
- * -*-
- *)

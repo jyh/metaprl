@@ -26,7 +26,9 @@ MPFILES[] =
     itt_hoas_sequent_term
     itt_hoas_sequent_term1
     itt_hoas_sequent_proof_step
+    itt_hoas_sequent_proof_step1
     itt_hoas_sequent_proof
+    itt_hoas_sequent_proof1
     itt_hoas_meta_types
     itt_hoas_theory
 

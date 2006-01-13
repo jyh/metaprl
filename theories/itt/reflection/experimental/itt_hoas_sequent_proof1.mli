@@ -27,7 +27,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_sequent
-extends Itt_hoas_proof
+extends Itt_hoas_proof1
 
 doc docoff
 
@@ -36,7 +36,7 @@ open Basic_tactics
 (*
  * Provability in a sequent logic.
  *)
-declare Provable{'logic; 'seq}
+declare ProvableSequent{'logic; 'seq}
 
 (************************************************************************
  * Tactics.

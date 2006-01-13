@@ -28,10 +28,11 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_bterm_wf
-extends Itt_hoas_proof
+extends Itt_hoas_proof1
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_term
-extends Itt_hoas_sequent_proof_step
+extends Itt_hoas_sequent_term1
+extends Itt_hoas_sequent_bterm
+extends Itt_hoas_sequent_proof_step1
 
 doc docoff
 
@@ -51,16 +52,16 @@ open Itt_int_base
 open Itt_hoas_base
 open Itt_hoas_vbind
 open Itt_hoas_vector
-open Itt_hoas_proof
+open Itt_hoas_proof1
 open Itt_hoas_sequent
-open Itt_hoas_sequent_term
+open Itt_hoas_sequent_term1
 open Itt_hoas_sequent_proof_step
 open Itt_hoas_normalize
 open Itt_hoas_bterm_wf
 
 let debug_sequent_proof =
    create_debug (**)
-      { debug_name = "sequent_proof";
+      { debug_name = "sequent_proof1";
         debug_description = "debug Itt_hoas_sequent_proof tactics";
         debug_value = false
       }
@@ -68,8 +69,8 @@ let debug_sequent_proof =
 doc <:doc<
    Provability in a sequent logic.
 >>
-define unfold_Provable_sequent : Provable{'logic; 'seq} <--> <:xterm<
-   (seq in Sequent) && Provable{Sequent; logic; seq}
+define unfold_Provable_sequent : ProvableSequent{'logic; 'seq} <--> <:xterm<
+   (seq in BSequent) && Provable{logic; seq}
 >>
 
 (************************************************************************
@@ -79,37 +80,37 @@ doc <:doc<
    Well-formedness.
 >>
 interactive provable_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- logic in Logic{Sequent} -->
-   "wf" : <H> >- seq in Sequent -->
-   <H> >- Provable{logic; seq} Type
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- seq in BSequent -->
+   <H> >- ProvableSequent{logic; seq} Type
 >>
 
 (************************************************************************
  * Intro rules.
  *)
 doc <:doc<
-   A @tt[Provable] judgment intro rule is provable if it can be refined
+   A @tt[ProvableSequent] judgment intro rule is provable if it can be refined
    by a rule in the logic.  Unfortunately, we have to provide the witness
    eagerly.  However, it should be easy to do so.
 >>
 interactive provable_intro 'premises : <:xrule<
-   "wf" : <H> >- logic in Logic{Sequent} -->
-   "wf" : <H> >- premises in list{Sequent} -->
-   "wf" : <H> >- goal in Sequent -->
-   "aux" : <H> >- all_list{premises; premise. Provable{logic; premise}} -->
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- premises in list{BSequent} -->
+   "wf" : <H> >- goal in BSequent -->
+   "aux" : <H> >- all_list{premises; premise. ProvableSequent{logic; premise}} -->
    <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic} -->
-   <H> >- Provable{logic; goal}
+   <H> >- ProvableSequent{logic; goal}
 >>
 
 doc <:doc<
    Use an explicit rule to decompose the << SimpleStep{'premises; 'goal; 'witness; 'logic} >>.
 >>
 interactive simple_step_intro 'step : <:xrule<
-   "wf" : <H> >- logic in Logic{Sequent} -->
-   "wf" : <H> >- premises in list{Sequent} -->
-   "wf" : <H> >- goal in Sequent -->
-   "wf" : <H> >- step in ProofRule{Sequent} -->
-   "wf" : <H> >- MemLogic{Sequent; step; logic} -->
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- premises in list{BSequent} -->
+   "wf" : <H> >- goal in BSequent -->
+   "wf" : <H> >- step in ProofRule -->
+   "wf" : <H> >- MemLogic{step; logic} -->
    <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
    <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic}
 >>
@@ -121,8 +122,8 @@ doc <:doc<
    Forward-chaining rules, mainly for well-formedness reasoning.
 >>
 interactive provable_forward 'H : <:xrule<
-   <H>; Provable{logic; seq}; <J>; seq in Sequent >- C -->
-   <H>; Provable{logic; seq}; <J> >- C
+   <H>; ProvableSequent{logic; seq}; <J>; seq in BSequent >- C -->
+   <H>; ProvableSequent{logic; seq}; <J> >- C
 >>
 
 let provable_forwardT i =
@@ -130,14 +131,14 @@ let provable_forwardT i =
    thenT rw normalizeBTermC (-1)
 
 let resource forward +=
-   [<< Provable{'logic; 'seq} >>, { forward_loc = (LOCATION); forward_prec = forward_trivial_prec; forward_tac = provable_forwardT }]
+   [<< ProvableSequent{'logic; 'seq} >>, { forward_loc = (LOCATION); forward_prec = forward_trivial_prec; forward_tac = provable_forwardT }]
 
 (************************************************************************
  * Tactics.
  *)
 doc docoff
 
-let provable_sequent_term = << Provable{'logic; 'seq} >>
+let provable_sequent_term = << ProvableSequent{'logic; 'seq} >>
 let provable_sequent_opname = opname_of_term provable_sequent_term
 let is_provable_sequent_term = is_dep0_dep0_term provable_sequent_opname
 let dest_provable_sequent_term = dest_dep0_dep0_term provable_sequent_opname

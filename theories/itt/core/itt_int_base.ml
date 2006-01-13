@@ -940,7 +940,7 @@ interactive_rw add_Functionality_rw 'b 'c ('a :> Term) :
 let add_FunctionalityC b c =
    termC (add_Functionality_rw b c)
 
-interactive minus_minus_reduce {| nth_hyp |} :
+interactive minus_minus_reduce {| nth_hyp; intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (-(-'a)) ~ 'a }
 

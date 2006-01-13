@@ -44,43 +44,6 @@ open Itt_list2
 open Itt_dfun
 
 (************************************************************************
- * Alpha-equality.
- *)
-doc <:doc<
-   Define alpha-equality on proof steps that can be used
-   to specify proof rules.
->>
-define unfold_beq_proof_step : beq_proof_step{'step1; 'step2} <--> <:xterm<
-   let premises1, goal1 = step1 in
-   let premises2, goal2 = step2 in
-      beq_sequent_list{premises1; premises2} &&b beq_sequent{goal1; goal2}
->>
-
-interactive_rw reduce_beq_proof_step {| reduce |} : <:xrewrite<
-   beq_proof_step{proof_step{premises1; goal1}; proof_step{premises2; goal2}}
-   <-->
-   beq_sequent_list{premises1; premises2} &&b beq_sequent{goal1; goal2}
->>
-
-interactive beq_proof_step_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- step1 in ProofStep -->
-   "wf" : <H> >- step2 in ProofStep -->
-   <H> >- beq_proof_step{step1; step2} in bool
->>
-
-interactive beq_proof_step_intro {| intro [] |} : <:xrule<
-   <H> >- s1 = s2 in ProofStep -->
-   <H> >- "assert"{beq_proof_step{s1; s2}}
->>
-
-interactive beq_proof_step_elim {| elim [] |} 'H : <:xrule<
-   "wf" : <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- s1 IN ProofStep -->
-   "wf" : <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- s2 IN ProofStep -->
-   <H>; u: s1 = s2 in ProofStep; <J[u]> >- C[u] -->
-   <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- C[u]
->>
-
-(************************************************************************
  * SOVar/CVar destructors.
  *)
 
@@ -141,11 +104,6 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
 (************************************************************************
  * Terms.
  *)
-let beq_proof_step_term = << beq_proof_step{'step1; 'step2} >>
-let beq_proof_step_opname = opname_of_term beq_proof_step_term
-let is_beq_proof_step_term = is_dep0_dep0_term beq_proof_step_opname
-let dest_beq_proof_step_term = dest_dep0_dep0_term beq_proof_step_opname
-
 let is_let_cvar_term t =
    match explode_term t with
       << let_cvar[name:s]{'d; 'witness; 'i; v. 'e} >> ->
@@ -173,7 +131,6 @@ let dest_let_sovar_term t =
          name, d, witness, i, v, e
     | _ ->
          raise (RefineError ("dest_let_sovar_term", StringTermError ("not a let_sovar term", t)))
-
 
 (*!
  * @docoff

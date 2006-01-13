@@ -43,9 +43,6 @@ declare let_cvar[name:s]{'d; 'witness; 'i; v. 'e}
 (*
  * Tactics.
  *)
-val is_beq_proof_step_term : term -> bool
-val dest_beq_proof_step_term : term -> term * term
-
 val is_let_cvar_term : term -> bool
 val dest_let_cvar_term : term -> string * term * term * term * var * term
 

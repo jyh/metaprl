@@ -42,6 +42,7 @@ open Basic_tactics
 open Itt_list
 open Itt_list2
 open Itt_dfun
+open Itt_sqsimple
 
 doc <:doc<
    A proof step << ProofStep >> represents one rule application
@@ -137,7 +138,7 @@ interactive_rw reduce_derivation_goal {| reduce |} :
    'goal
 
 (*
- * A proof step can range over any type.
+ * A proof step properties.
  *)
 interactive proof_step_wf {| intro [] |} : <:xrule<
    <H> >- ProofStep Type
@@ -152,6 +153,10 @@ interactive proof_step_wf2 {| intro [] |} : <:xrule<
 interactive proof_step_elim {| elim [] |} 'H : <:xrule<
    "wf" : <H>; premises: list{BTerm}; goal: BTerm; <J[proof_step{premises; goal}]> >- C[proof_step{premises; goal}] -->
    <H>; s: ProofStep; <J[s]> >- C[s]
+>>
+
+interactive proof_step_sqsimple {| intro []; sqsimple |} : <:xrule<
+   <H> >- sqsimple{ProofStep}
 >>
 
 (*
@@ -384,6 +389,42 @@ interactive derivation_step_intro {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
+ * Alpha-equality.
+ *)
+doc <:doc<
+   Define alpha-equality on proof steps.
+>>
+define unfold_beq_proof_step : beq_proof_step{'step1; 'step2} <--> <:xterm<
+   let premises1, goal1 = step1 in
+   let premises2, goal2 = step2 in
+      beq_bterm_list{premises1; premises2} &&b beq_bterm{goal1; goal2}
+>>
+
+interactive_rw reduce_beq_proof_step {| reduce |} : <:xrewrite<
+   beq_proof_step{proof_step{premises1; goal1}; proof_step{premises2; goal2}}
+   <-->
+   beq_bterm_list{premises1; premises2} &&b beq_bterm{goal1; goal2}
+>>
+
+interactive beq_proof_step_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- step1 in ProofStep -->
+   "wf" : <H> >- step2 IN ProofStep -->
+   <H> >- beq_proof_step{step1; step2} in bool
+>>
+
+interactive beq_proof_step_intro {| intro [] |} : <:xrule<
+   <H> >- s1 = s2 in ProofStep -->
+   <H> >- "assert"{beq_proof_step{s1; s2}}
+>>
+
+interactive beq_proof_step_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- s1 in ProofStep -->
+   "wf" : <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- s2 in ProofStep -->
+   <H>; u: s1 = s2 in ProofStep; <J[u]> >- C[u] -->
+   <H>; u: "assert"{beq_proof_step{s1; s2}}; <J[u]> >- C[u]
+>>
+
+(************************************************************************
  * Logic operations.
  *)
 define unfold_empty_logic : empty_logic <-->
@@ -491,6 +532,11 @@ let proof_step_witness_opname = opname_of_term proof_step_witness_term
 let is_proof_step_witness_term = is_dep0_dep0_term proof_step_witness_opname
 let mk_proof_step_witness_term = mk_dep0_dep0_term proof_step_witness_opname
 let dest_proof_step_witness_term = dest_dep0_dep0_term proof_step_witness_opname
+
+let beq_proof_step_term = << beq_proof_step{'step1; 'step2} >>
+let beq_proof_step_opname = opname_of_term beq_proof_step_term
+let is_beq_proof_step_term = is_dep0_dep0_term beq_proof_step_opname
+let dest_beq_proof_step_term = dest_dep0_dep0_term beq_proof_step_opname
 
 (*!
  * @docoff

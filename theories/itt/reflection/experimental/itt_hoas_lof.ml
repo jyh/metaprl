@@ -268,8 +268,7 @@ doc <:doc<
    normalization.
 >>
 interactive_rw reduce_nil_lof {| reduce_lof |} :
-   'n = 0 in nat -->
-   lof{i. lof_nil; 'n}
+   lof{i. lof_nil; 0}
    <-->
    nil
 
@@ -318,10 +317,9 @@ doc <:doc<
    Binds migrate inwards during reduction.
 >>
 interactive_rw lof_bind_nil {| reduce_lof |} :
-   'm = 0 in nat -->
-   lof{j. lof_bind{'n; x. lof_nil}; 'm}
+   lof{j. lof_bind{'n; x. lof_nil}; 0}
    <-->
-   lof{j. lof_nil; 'm}
+   lof{j. lof_nil; 0}
 
 interactive_rw lof_bind_cons {| reduce_lof |} :
    'm in nat -->

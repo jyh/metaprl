@@ -55,7 +55,7 @@ open Itt_hoas_vector
 open Itt_hoas_proof1
 open Itt_hoas_sequent
 open Itt_hoas_sequent_term1
-open Itt_hoas_sequent_proof_step
+open Itt_hoas_sequent_proof_step1
 open Itt_hoas_normalize
 open Itt_hoas_bterm_wf
 
@@ -79,7 +79,7 @@ define unfold_Provable_sequent : ProvableSequent{'logic; 'seq} <--> <:xterm<
 doc <:doc<
    Well-formedness.
 >>
-interactive provable_wf {| intro [] |} : <:xrule<
+interactive provable_sequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- logic in Logic -->
    "wf" : <H> >- seq in BSequent -->
    <H> >- ProvableSequent{logic; seq} Type
@@ -93,7 +93,7 @@ doc <:doc<
    by a rule in the logic.  Unfortunately, we have to provide the witness
    eagerly.  However, it should be easy to do so.
 >>
-interactive provable_intro 'premises : <:xrule<
+interactive provable_sequent_intro 'premises : <:xrule<
    "wf" : <H> >- logic in Logic -->
    "wf" : <H> >- premises in list{BSequent} -->
    "wf" : <H> >- goal in BSequent -->
@@ -365,7 +365,7 @@ let dest_proof_step_witness p =
 let proofStepWitnessT = funT dest_proof_step_witness
 
 (*
- * When applying the @tt[provable_intro] get the premises from
+ * When applying the @tt[provable_sequent_intro] get the premises from
  * the assumptions.
  *)
 let provable_count assums =
@@ -391,7 +391,7 @@ let provable_hyps hyps =
    in
       List.rev hyps
 
-let provable_intro_tac p =
+let provable_sequent_intro_tac p =
    let pcount = provable_count (Sequent.all_assums p) in
    let hyps = provable_hyps (explode_sequent (Sequent.goal p)).sequent_hyps in
    let len = List.length hyps in
@@ -404,9 +404,9 @@ let provable_intro_tac p =
          Lm_list_util.firstn pcount hyps
    in
    let hyps_list = mk_list_of_list hyps in
-      provable_intro hyps_list
+      provable_sequent_intro hyps_list
 
-let provableIntroT = funT provable_intro_tac
+let provableIntroT = funT provable_sequent_intro_tac
 
 (************************************************************************
  * The final tactic.

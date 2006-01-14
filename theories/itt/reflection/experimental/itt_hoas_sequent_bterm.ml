@@ -344,6 +344,16 @@ interactive bsequent_wf {| intro [] |} : <:xrule<
    <H> >- BSequent Type
 >>
 
+interactive bterm_of_sequent_wf2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- s in Sequent -->
+   <H> >- sequent_bterm{s} in BSequent
+>>
+
+interactive bterm_of_sequent_equal {| intro [] |} : <:xrule<
+   "wf" : <H> >- s1 = s2 in Sequent -->
+   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BSequent
+>>
+
 (************************************************************************
  * Tactics.
  *)

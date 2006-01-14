@@ -225,6 +225,10 @@ interactive sequent_wf {| intro [] |} : <:xrule<
    <H> >- "Sequent" Type
 >>
 
+interactive sequent_sqsimple {| intro []; sqsimple |} : <:xrule<
+   <H> >- sqsimple{Sequent}
+>>
+
 (*
  * An actual sequent has the sequent type if the types
  * and depths match up.

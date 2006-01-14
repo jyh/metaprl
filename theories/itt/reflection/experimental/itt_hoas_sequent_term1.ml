@@ -33,7 +33,6 @@ extends Itt_vec_sequent_term
 extends Itt_hoas_vbind
 extends Itt_hoas_sequent
 extends Itt_hoas_sequent_bterm
-extends Itt_hoas_proof
 extends Itt_theory
 extends Itt_match
 
@@ -98,7 +97,7 @@ interactive_rw reduce_hyps_bterms_cons {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw reduce_hyps_bterms_append {| reduce |} : <:xrewrite<
-   l1 IN "list" -->
+   l1 in list -->
    hyps_bterms{append{l1; l2}}
    <-->
    append{hyps_bterms{l1}; hyps_bterms{l2}}
@@ -158,7 +157,7 @@ doc <:doc<
 declare sequent [vsequent{'arg}] { Term : Term >- Term } : Term
 
 prim_rw unfold_vsequent : vsequent{'arg}{| <J> >- 'C |} <--> <:xterm<
-   "sequent"{arg; "vflatten"{| <J> |}; "vsubst_dummy"{| <J> >- C |}}
+   sequent_bterm{"sequent"{arg; "vflatten"{| <J> |}; "vsubst_dummy"{| <J> >- C |}}}
 >>
 
 define unfold_vsequent_of_triple : vsequent_of_triple{'e} <--> <:xterm<
@@ -176,8 +175,8 @@ interactive_rw reduce_vsequent_of_triple {| reduce |} : <:xrewrite<
  * Flattening append.
  *)
 interactive_rw reduce_vsequent_append 'J : <:xrewrite<
-   l1 IN "list" -->
-   l2 IN "list" -->
+   l1 in list -->
+   l2 in list -->
    vsequent{arg}{| <J>; append{l1<||>; l2<||>}; <K> >- C |}
    <-->
    vsequent{arg}{| <J>; l1; l2; <K> >- C |}
@@ -193,7 +192,7 @@ doc <:doc<
 prim_rw unfold_bsequent : <:xrewrite<
    "bsequent"{arg}{| <J> >- C |}
    <-->
-   sequent_bterm{vsequent_of_triple{"fsequent"{arg}{| <J> >- C |}}}
+   vsequent_of_triple{"fsequent"{arg}{| <J> >- C |}}
 >>
 
 (************************************************************************
@@ -203,16 +202,16 @@ doc <:doc<
    Well-formedness reasoning.
 >>
 interactive hyp_term_wf {| intro [] |} : <:xrule<
-   <H> >- "hyp_term"{| <J> >- A |} IN "list"
+   <H> >- "hyp_term"{| <J> >- A |} in list
 >>
 
 interactive hyps_bterms_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- l in list -->
-   <H> >- hyps_bterms{l} IN "list"
+   <H> >- hyps_bterms{l} in list
 >>
 
 interactive hyp_context_wf {| intro [] |} : <:xrule<
-   <H> >- "hyp_context"{| <J> >- "hyplist"{| <K> |} |} IN "list"
+   <H> >- "hyp_context"{| <J> >- "hyplist"{| <K> |} |} in list
 >>
 
 (************************************************************************
@@ -222,17 +221,17 @@ doc <:doc<
    Well-formedness of sequent terms.
 >>
 interactive vsequent_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- arg IN BTerm{0} -->
-   "wf" : <H> >- "vflatten"{| <J> |} IN CVar{length{"vflatten"{| |}}} -->
-   "wf" : <H> >- C IN BTerm{length{"vflatten"{| <J> |}}} -->
-   <H> >- vsequent{arg}{| <J> >- C<|H|> |} IN Itt_hoas_sequent!Sequent
+   "wf" : <H> >- arg in BTerm{0} -->
+   "wf" : <H> >- vflatten{| <J> |} in CVar{length{vflatten{| |}}} -->
+   "wf" : <H> >- C in BTerm{length{vflatten{| <J> |}}} -->
+   <H> >- vsequent{arg}{| <J> >- C<|H|> |} in BSequent
 >>
 
 interactive vsequent_equal {| intro [] |} : <:xrule<
    "wf" : <H> >- arg1 = arg2 in BTerm{0} -->
    "wf" : <H> >- vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{length{vflatten{||}}} -->
    "wf" : <H> >- C1 = C2 in BTerm{length{vflatten{| <J1> |}}} -->
-   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent
+   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in BSequent
 >>
 
 interactive vflatten_hyp_concl_wf {| intro [] |} : <:xrule<
@@ -257,11 +256,11 @@ interactive hyp_term_cvar_wf {| intro [] |} : <:xrule<
  * Forward reasoning.
  *)
 interactive vsequent_wf_forward {| forward [] |} 'H : <:xrule<
-   <H>; vsequent{arg}{| <J> >- C |} in Sequent; <K>;
+   <H>; vsequent{arg}{| <J> >- C |} in BSequent; <K>;
       arg in BTerm{0};
       vflatten{| <J> |} in CVar{0};
       C in BTerm{length{vflatten{| <J> |}}} >- D -->
-   <H>; vsequent{arg}{| <J> >- C<|H|> |} in Sequent; <K> >- D
+   <H>; vsequent{arg}{| <J> >- C<|H|> |} in BSequent; <K> >- D
 >>
 
 interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<

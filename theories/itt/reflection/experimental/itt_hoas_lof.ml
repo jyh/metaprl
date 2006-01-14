@@ -241,7 +241,7 @@ interactive_rw nth_suffix_lof {| normalize_lof |} :
 
 interactive_rw tl_lof {| normalize_lof |} :
    'n in nat -->
-   not{'n = 0 in nat} -->
+   'n > 0 -->
    tl{lof{i. 'f['i]; 'n}}
    <-->
    lof{i. lof_tl{i. 'f['i]; 'i}; 'n -@ 1}
@@ -298,7 +298,7 @@ interactive_rw reduce_tl_lof {| reduce_lof |} :
 
 interactive_rw reduce_cons_lof {| reduce_lof |} :
    'n in nat -->
-   not{'n = 0 in nat} -->
+   'n > 0 -->
    lof{i. lof_cons{i. 'f['i]; 'i; 'e}; 'n}
    <-->
    cons{'e; lof{i. 'f['i]; 'n -@ 1}}
@@ -479,7 +479,7 @@ doc <:doc<
 >>
 interactive_rw hd_lof {| reduce; reduce_lof |} :
    'n in nat -->
-   not{'n = 0 in nat} -->
+   'n > 0 -->
    hd{lof{i. 'f['i]; 'n}}
    <-->
    'f[0]

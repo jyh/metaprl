@@ -241,14 +241,14 @@ interactive_rw nth_suffix_lof {| normalize_list_of_fun |} :
 
 interactive_rw hd_lof {| normalize_list_of_fun |} :
    'n in nat -->
-   not{'n = 0 in nat} -->
+   'n > 0 -->
    hd{list_of_fun{i. 'f['i]; 'n}}
    <-->
    'f[0]
 
 interactive_rw tl_lof {| normalize_list_of_fun |} :
    'n in nat -->
-   not{'n = 0 in nat} -->
+   'n > 0 -->
    tl{list_of_fun{i. 'f['i]; 'n}}
    <-->
    list_of_fun{i. 'f['i +@ 1]; 'n -@ 1}

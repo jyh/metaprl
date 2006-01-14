@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -568,12 +568,6 @@ interactive mk_bterm_eq {| intro [] |} :
    sequent{ <H> >- compatible_shapes{'d1; shape{'op1}; 'subterms1} } -->
    sequent{ <H> >- mk_bterm{'d1; 'op1; 'subterms1} = mk_bterm{'d2; 'op2; 'subterms2} in BTerm{'d3} }
 
-(*!
- * @docoff
- *
- * -*-
- * Local Variables:
- * Caml-master: "compile"
- * End:
- * -*-
- *)
+interactive bterm_depth_eq {| nth_hyp |} :
+   sequent{ <H> >- 't in BTerm{'d} } -->
+   sequent{ <H> >- 'd = bdepth{'t} in int }

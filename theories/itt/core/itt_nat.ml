@@ -250,7 +250,7 @@ interactive finiteNatUniv {| intro [] |} :
    sequent { <H> >- 'k in int} -->
    sequent { <H> >- nat{'k} in univ[i:l] }
 
-interactive finiteNatMemberEquality {| intro [] |} :
+interactive finiteNatMemberEquality {| intro []; nth_hyp |} :
    sequent { <H> >- 'a = 'b in int_seg{0; 'k} } -->
    sequent { <H> >- 'a = 'b in nat{'k} }
 

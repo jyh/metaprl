@@ -72,28 +72,28 @@ interactive  subterms_forward_lemma 'n 'op : <:xrule<
 >>
 
 interactive bterm2_forward {| forward [] |} 'H : <:xrule<
-   <H>; e in BTerm{d}; <J>; e in BTerm; bdepth{e} = d in nat >- C -->
-   <H>; e in BTerm{d}; <J> >- C
+   <H>; x: e in BTerm{d}; <J[x]>; e in BTerm; bdepth{e} = d in nat >- C[x] -->
+   <H>; x: e in BTerm{d}; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_depth_forward 'H : <:xrule<
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; d in nat >- C -->
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; d in nat >- C[x] -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_op_forward 'H : <:xrule<
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; op in "Operator" >- C -->
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; op in "Operator" >- C[x] -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
-interactive mk_bterm_subterms_forward1 'H : <:xrule<
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; subterms in list{BTerm} >- C -->
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+interactive mk_bterm_subterms_forward 'H : <:xrule<
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; subterms in list{BTerm} >- C[x] -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_wf_forward 'H : <:xrule<
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J>; compatible_shapes{d; shape{op}; subterms} >- C -->
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; compatible_shapes{d; shape{op}; subterms} >- C[x] -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 doc <:doc<
@@ -111,26 +111,26 @@ doc <:doc<
    just for efficiency.
 >>
 interactive mk_bterm_wf_forward2 {| forward [] |} 'H : <:xrule<
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J>;
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>;
       d in nat;
       op in "Operator";
       subterms in list{BTerm};
       compatible_shapes{d; shape{op}; subterms}
-      >- C -->
-   <H>; mk_bterm{d; op; subterms} in BTerm; <J> >- C
+      >- C[x] -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 doc <:doc<
    Basic rules for forward chaining.
 >>
 interactive cons_wf_forward {| forward [] |} 'H : <:xrule<
-   <H>; cons{h; l} in list{t}; <J>; h in t; l in list{t} >- C -->
-   <H>; cons{h; l} in list{t}; <J> >- C
+   <H>; x: cons{h; l} in list{t}; <J[x]>; h in t; l in list{t} >- C[x] -->
+   <H>; x: cons{h; l} in list{t}; <J[x]> >- C[x]
 >>
 
 interactive and_forward {| forward [] |} 'H : <:xrule<
-   <H>; A && B; <J>; A; B >- C -->
-   <H>; A && B; <J> >- C
+   <H>; x: A && B; <J[x]>; A; B >- C[x] -->
+   <H>; x: A && B; <J[x]> >- C[x]
 >>
 
 (************************************************************************

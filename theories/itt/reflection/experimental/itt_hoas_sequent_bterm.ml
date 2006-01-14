@@ -113,6 +113,11 @@ interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
    <H> >- sequent_bterm{s} in BTerm
 >>
 
+interactive sequent_bterm_equal1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- s1 = s2 in Sequent -->
+   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BTerm{0}
+>>
+
 (************************************************************************
  * Inversion.
  *)
@@ -334,24 +339,18 @@ interactive_rw reduce_sequent_of_bterm_inverse : <:xrewrite<
 >>
 
 (************************************************************************
- * The BSequent type.
+ * Forward-chaining.
  *)
-define const unfold_BSequent : BSequent <--> <:xterm<
-   { e: BTerm{0} | "assert"{is_sequent_bterm{e}} }
+doc <:doc<
+   Forward-chaining.
 >>
-
-interactive bsequent_wf {| intro [] |} : <:xrule<
-   <H> >- BSequent Type
->>
-
-interactive bterm_of_sequent_wf2 {| intro [] |} : <:xrule<
-   "wf" : <H> >- s in Sequent -->
-   <H> >- sequent_bterm{s} in BSequent
->>
-
-interactive bterm_of_sequent_equal {| intro [] |} : <:xrule<
-   "wf" : <H> >- s1 = s2 in Sequent -->
-   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BSequent
+interactive sequent_bterm_forward1 {| forward [] |} 'H : <:xrule<
+   <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BTerm{0}; <J[x]>;
+      arg in BTerm{0};
+      hyps in CVar{0};
+      concl in BTerm{length{hyps}}
+      >- C[x] -->
+   <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BTerm{0}; <J[x]> >- C[x]
 >>
 
 (************************************************************************

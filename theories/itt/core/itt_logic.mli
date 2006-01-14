@@ -156,6 +156,7 @@ val logic_prec : auto_prec
 
 topval backThruHypT : int -> tactic
 topval assumT : int -> tactic
+topval assumsT : int list -> tactic
 topval backThruAssumT : int -> tactic
 
 topval moveToConclT : int -> tactic

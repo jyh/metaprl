@@ -224,14 +224,14 @@ interactive vsequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- arg in BTerm{0} -->
    "wf" : <H> >- vflatten{| <J> |} in CVar{length{vflatten{| |}}} -->
    "wf" : <H> >- C in BTerm{length{vflatten{| <J> |}}} -->
-   <H> >- vsequent{arg}{| <J> >- C<|H|> |} in BSequent
+   <H> >- vsequent{arg}{| <J> >- C<|H|> |} in BTerm{0}
 >>
 
 interactive vsequent_equal {| intro [] |} : <:xrule<
    "wf" : <H> >- arg1 = arg2 in BTerm{0} -->
    "wf" : <H> >- vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{length{vflatten{||}}} -->
    "wf" : <H> >- C1 = C2 in BTerm{length{vflatten{| <J1> |}}} -->
-   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in BSequent
+   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in BTerm{0}
 >>
 
 interactive vflatten_hyp_concl_wf {| intro [] |} : <:xrule<
@@ -256,11 +256,11 @@ interactive hyp_term_cvar_wf {| intro [] |} : <:xrule<
  * Forward reasoning.
  *)
 interactive vsequent_wf_forward {| forward [] |} 'H : <:xrule<
-   <H>; vsequent{arg}{| <J> >- C |} in BSequent; <K>;
+   <H>; vsequent{arg}{| <J> >- C |} in BTerm{0}; <K>;
       arg in BTerm{0};
       vflatten{| <J> |} in CVar{0};
       C in BTerm{length{vflatten{| <J> |}}} >- D -->
-   <H>; vsequent{arg}{| <J> >- C<|H|> |} in BSequent; <K> >- D
+   <H>; vsequent{arg}{| <J> >- C<|H|> |} in BTerm{0}; <K> >- D
 >>
 
 interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<

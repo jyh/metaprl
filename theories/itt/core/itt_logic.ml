@@ -1107,6 +1107,16 @@ let assumT = argfunT (fun i p ->
    let form, index = assum_term goal assum in
       make_assumT i goal assum form index (addHiddenLabelT "main"))
 
+let assumsT l =
+   match l with
+      [] ->
+         idT
+    | [i] ->
+         assumT i
+    | i :: l ->
+         List.fold_left (fun tac i ->
+               tac thenT assumT i) (assumT i) l
+
 doc <:doc<
    @begin[description]
    @item{@tactic[backThruAssumT];

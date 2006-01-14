@@ -32,7 +32,6 @@ open Basic_tactics
  * Convert the sequent triple into a BTerm.
  *)
 declare sequent_bterm{'s}
-declare const BSequent
 
 (*
  * Convert the BTerm back to a sequent.

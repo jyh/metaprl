@@ -70,7 +70,7 @@ doc <:doc<
    Provability in a sequent logic.
 >>
 define unfold_Provable_sequent : ProvableSequent{'logic; 'seq} <--> <:xterm<
-   (seq in BSequent) && Provable{logic; seq}
+   (seq in BTerm{0}) && Provable{logic; seq}
 >>
 
 (************************************************************************
@@ -81,7 +81,7 @@ doc <:doc<
 >>
 interactive provable_sequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- logic in Logic -->
-   "wf" : <H> >- seq in BSequent -->
+   "wf" : <H> >- seq in BTerm{0} -->
    <H> >- ProvableSequent{logic; seq} Type
 >>
 
@@ -95,8 +95,8 @@ doc <:doc<
 >>
 interactive provable_sequent_intro 'premises : <:xrule<
    "wf" : <H> >- logic in Logic -->
-   "wf" : <H> >- premises in list{BSequent} -->
-   "wf" : <H> >- goal in BSequent -->
+   "wf" : <H> >- premises in list{BTerm{0}} -->
+   "wf" : <H> >- goal in BTerm{0} -->
    "aux" : <H> >- all_list{premises; premise. ProvableSequent{logic; premise}} -->
    <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic} -->
    <H> >- ProvableSequent{logic; goal}
@@ -107,8 +107,8 @@ doc <:doc<
 >>
 interactive simple_step_intro 'step : <:xrule<
    "wf" : <H> >- logic in Logic -->
-   "wf" : <H> >- premises in list{BSequent} -->
-   "wf" : <H> >- goal in BSequent -->
+   "wf" : <H> >- premises in list{BTerm{0}} -->
+   "wf" : <H> >- goal in BTerm{0} -->
    "wf" : <H> >- step in ProofRule -->
    "wf" : <H> >- MemLogic{step; logic} -->
    <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
@@ -122,7 +122,7 @@ doc <:doc<
    Forward-chaining rules, mainly for well-formedness reasoning.
 >>
 interactive provable_forward 'H : <:xrule<
-   <H>; ProvableSequent{logic; seq}; <J>; seq in BSequent >- C -->
+   <H>; ProvableSequent{logic; seq}; <J>; seq in BTerm{0} >- C -->
    <H>; ProvableSequent{logic; seq}; <J> >- C
 >>
 

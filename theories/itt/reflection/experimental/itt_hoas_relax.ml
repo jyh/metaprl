@@ -152,16 +152,6 @@ interactive bdepth_int_wf {| intro [] |} : <:xrule<
    <H> >- bdepth{e} in int
 >>
 
-(*
-interactive_rw reduce_bdepth_bindn {| reduce |} : <:xrewrite<
-   n in nat -->
-   all x: top. (bdepth{e[x]} = bdepth{e[it]} in nat) -->
-   bdepth{bind{n; x. 'e['x]}}
-   <-->
-   'n +@ bdepth{'e[mk_it_vec{'n}]}
->>
- *)
-
 interactive bindn_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- n in nat -->
    <H> >- Bind{n} Type
@@ -170,10 +160,26 @@ interactive bindn_wf {| intro [] |} : <:xrule<
 (************************************************************************
  * Relaxed rewrites.
  *)
-interactive_rw bind_eta_relax : <:xrewrite<
+interactive_rw reduce_bdepth_bindn_mk_terms {| reduce |} : <:xrewrite<
+   n in nat -->
+   bdepth{bind{n; x. mk_terms{e[x]}}}
+   <-->
+   n
+>>
+
+interactive_rw bind_eta_relax {| reduce |} : <:xrewrite<
    t in Bind -->
    bdepth{t} > 0 -->
    bind{x. subst{t; x}}
+   <-->
+   t
+>>
+
+interactive_rw bindn_eta_relax {| reduce |} : <:xrewrite<
+   n in nat -->
+   t in Bind -->
+   bdepth{t} >= n -->
+   bind{n; x. substl{t; x}}
    <-->
    t
 >>

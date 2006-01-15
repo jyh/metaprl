@@ -200,10 +200,9 @@ interactive_rw dest_bterm_mk_bterm2 {| reduce |} :
    <-->
    'op_case['n; 'op; 'subterms]
 
-interactive_rw dest_bterm_mk_term2 {| reduce |} :
+interactive_rw dest_bterm_mk_term {| reduce |} :
    'op in Operator -->
-   'subterms in list{BTerm} -->
-   compatible_shapes{0; shape{'op}; 'subterms} -->
+   'subterms in list -->
    dest_bterm{mk_term{'op; 'subterms}; l, r.'var_case['l; 'r]; bdepth, op, subterms. 'op_case['bdepth; 'op; 'subterms] }
    <-->
    'op_case[0; 'op; 'subterms]

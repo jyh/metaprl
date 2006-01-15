@@ -27,6 +27,7 @@ doc <:doc<
 
    @parents
 >>
+extends Itt_hoas_bterm_wf
 extends Itt_hoas_sequent
 extends Itt_dprod
 extends Itt_match
@@ -34,6 +35,7 @@ extends Itt_match
 doc docoff
 
 open Basic_tactics
+open Itt_sqsimple
 
 (************************************************************************
  * Terms.
@@ -94,6 +96,13 @@ interactive sequent_bterm_core_wf1 {| intro [] |} : <:xrule<
    "wf" : <H> >- hyps in CVar{d} -->
    "wf" : <H> >- concl in BTerm{length{hyps} +@ d} -->
    <H> >- sequent_bterm{d; hyps; concl} in BTerm{d}
+>>
+
+interactive sequent_bterm_core_relax_wf1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- d = n in nat -->
+   "wf" : <H> >- hyps in CVar{d} -->
+   "wf" : <H> >- concl in BTerm{length{hyps} +@ d} -->
+   <H> >- sequent_bterm{d; hyps; concl} in BTerm{n}
 >>
 
 interactive sequent_bterm_core_wf2 {| intro [] |} : <:xrule<
@@ -339,19 +348,129 @@ interactive_rw reduce_sequent_of_bterm_inverse : <:xrewrite<
 >>
 
 (************************************************************************
+ * Elimination.
+ *)
+doc <:doc<
+   Types and elimination forms.
+
+   << BSequentCore >> is the type of hypothesis + conclusion terms.
+
+   << BSequentCore{'n} >> is the same, but it specifies the depth
+   of the term.
+
+   << BSequent >> is the type of complete sequents, always depth 0.
+>>
+define const unfold_BSequentCore : BSequentCore <--> <:xterm<
+   { e: BTerm | "assert"{is_sequent_bterm_core{e}} }
+>>
+
+interactive bsequent_core_type_wf {| intro [] |} : <:xrule<
+   <H> >- BSequentCore Type
+>>
+
+interactive bsequent_core_sqsimple {| intro []; sqsimple |} : <:xrule<
+   <H> >- sqsimple{BSequentCore}
+>>
+
+interactive sequent_bterm_core_bsequent_core_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- hyps in CVar{n} -->
+   "wf" : <H> >- concl in BTerm{n +@ length{hyps}} -->
+   <H> >- sequent_bterm{n; hyps; concl} in BSequentCore
+>>
+
+interactive bsequent_core_elim {| elim [] |} 'H : <:xrule<
+   "base" : <H>; x: BSequentCore; <J[x]>; n: nat; c: BTerm{n} >- C[mk_bterm{n; $seq_concl{c}; [c]}] -->
+   "step" : <H>; x: BSequentCore; <J[x]>; n: nat; h: BTerm{n}; rest: BTerm{n +@ 1}; C[rest] >- C[mk_bterm{n; $seq_hyp{h; x. rest}; [h; rest]}] -->
+   <H>; x: BSequentCore; <J[x]> >- C[x]
+>>
+
+define const unfold_BSequentCore_depth : BSequentCore{'n} <--> <:xterm<
+   { e: BTerm{'n} | "assert"{is_sequent_bterm_core{e}} }
+>>
+
+interactive bsequent_core_depth_type_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- BSequentCore{n} Type
+>>
+
+interactive bsequent_core_depth_sqsimple {| intro []; sqsimple |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- sqsimple{BSequentCore{n}}
+>>
+
+interactive sequent_bterm_core_depth_bsequent_core_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n = m in nat -->
+   "wf" : <H> >- hyps in CVar{n} -->
+   "wf" : <H> >- concl in BTerm{n +@ length{hyps}} -->
+   <H> >- sequent_bterm{n; hyps; concl} in BSequentCore{m}
+>>
+
+interactive bsequent_core_depth_elim {| elim [] |} 'H : <:xrule<
+   "wf" : <H>; x: BSequentCore{m}; <J[x]> >- m in nat -->
+   "base" : <H>; x: BSequentCore{m}; <J[x]>; n: nat; c: BTerm{n} >- C[mk_bterm{n; $seq_concl{c}; [c]}] -->
+   "step" : <H>; x: BSequentCore{m}; <J[x]>; n: nat; h: BTerm{n}; rest: BTerm{n +@ 1}; C[rest] >- C[mk_bterm{n; $seq_hyp{h; x. rest}; [h; rest]}] -->
+   <H>; x: BSequentCore{m}; <J[x]> >- C[x]
+>>
+
+(************************************************
+ * BSequent.
+ *)
+define const unfold_BSequent : BSequent <--> <:xterm<
+   { e : BTerm{0} | "assert"{is_sequent_bterm{e}} }
+>>
+
+interactive bsequent_type_wf {| intro [] |} : <:xrule<
+   <H> >- BSequent Type
+>>
+
+interactive bsequent_sqsimple {| intro []; sqsimple |} : <:xrule<
+   <H> >- sqsimple{BSequent}
+>>
+
+interactive sequent_bterm_bsequent_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- s in Sequent -->
+   <H> >- sequent_bterm{s} in BSequent
+>>
+
+interactive bsequent_type_elim {| elim [] |} 'H : <:xrule<
+   <H>; arg: BTerm{0}; rest: BSequentCore{0}; <J[mk_bterm{0; $seq_arg{arg; rest}; [arg; rest]}]> >-
+      C[mk_bterm{0; $seq_arg{arg; rest}; [arg; rest]}] -->
+   <H>; x: BSequent; <J[x]> >- C[x]
+>>
+
+(************************************************************************
  * Forward-chaining.
  *)
 doc <:doc<
    Forward-chaining.
 >>
-interactive sequent_bterm_forward1 {| forward [] |} 'H : <:xrule<
-   <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BTerm{0}; <J[x]>;
+interactive bsequent_core_parts_forward 'H : <:xrule<
+   <H>; x: BSequentCore; <J[x]>;
+      n: nat;
+      hyps: CVar{n};
+      concl: BTerm{n +@ length{hyps}};
+      x = sequent_bterm{n; hyps; concl} in BSequentCore >- C[x] -->
+   <H>; x: BSequentCore; <J[x]> >- C[x]
+>>
+
+(*
+interactive bsequent_core_mem_forward 'H : <:xrule<
+   <H>; x: sequent_bterm{n; hyps; concl} in BSequentCore; <J[x]>;
+      hyps: CVar{n};
+      concl: BTerm{n +@ length{hyps}} >- C[x] -->
+   <H>; x: sequent_bterm{n; hyps; concl} in BSequentCore; <J[x]> >- C[x]
+>>
+
+interactive bsequent_bterm_forward1 'H : <:xrule<
+   <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BSequent; <J[x]>;
       arg in BTerm{0};
       hyps in CVar{0};
       concl in BTerm{length{hyps}}
       >- C[x] -->
-   <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BTerm{0}; <J[x]> >- C[x]
+   <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BSequent; <J[x]> >- C[x]
 >>
+ *)
 
 (************************************************************************
  * Tactics.

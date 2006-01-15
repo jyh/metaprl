@@ -120,6 +120,16 @@ interactive mk_bterm_wf_forward2 {| forward [] |} 'H : <:xrule<
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
+interactive mk_bterm_wf_forward3 {| forward [] |} 'H : <:xrule<
+   <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]>;
+      d = n in nat;
+      op in "Operator";
+      subterms in list{BTerm};
+      compatible_shapes{d; shape{op}; subterms}
+      >- C[x] -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- C[x]
+>>
+
 doc <:doc<
    Basic rules for forward chaining.
 >>

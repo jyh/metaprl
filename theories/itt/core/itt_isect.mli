@@ -45,7 +45,7 @@ open Refiner.Refiner.TermType
  ************************************************************************)
 
 declare "isect"{'A; x. 'B['x]}
-define unfold_top : top <--> "isect"{void; x. void}
+define const unfold_top : top <--> "isect"{void; x. void}
 
 (************************************************************************
  * RULES                                                                *

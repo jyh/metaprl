@@ -117,6 +117,11 @@ interactive_rw reduce_weak_dest_terms_bind {| reduce |} :
    <-->
    'bind_case
 
+interactive_rw reduce_weak_dest_terms_mk_term {| reduce |} :
+   weak_dest_terms{mk_term{'op; 'subterms}; 'bind_case; terms. 'terms_case['terms]}
+   <-->
+   'terms_case[('op, 'subterms)]
+
 interactive_rw reduce_weak_dest_terms_mk_terms {| reduce |} :
    weak_dest_terms{mk_terms{'l}; 'bind_case; terms. 'terms_case['terms]}
    <-->

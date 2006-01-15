@@ -136,7 +136,7 @@ doc <:doc<
    $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2},
  @ldots$$
 >>
-declare int
+declare const int
 declare number[n:n]
 declare number{'a}
 
@@ -483,7 +483,7 @@ let resource subst +=
       let i = get_pos_hyp_num p i in
       let a, b = dest_beq_int (dest_assert t) in
       let t' = mk_equal_term int_term a b in
-         assertT t' thenLT [ 
+         assertT t' thenLT [
             beq_int2prop thenLT [ addHiddenLabelT "equality"; autoT; autoT ];
             hypSubstT (-1) i thenT thinTermT t'
          ])
@@ -953,7 +953,7 @@ let minus_minus_reduceC = minus_minus_reduce_rw
 interactive_rw minus_same_rw {| reduce |} :
    ('a in int) -->
    ('a -@ 'a) <--> 0
-   
+
 interactive_rw minus_same_rw2 {| reduce |} :
    ('a in int) -->
    (- 'a) +@ 'a <--> 0

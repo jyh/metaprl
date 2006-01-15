@@ -42,7 +42,7 @@ open Basic_tactics
  * TERMS                                                                *
  ************************************************************************)
 
-declare int
+declare const int
 declare number[n:n]
 declare number{'a}
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}

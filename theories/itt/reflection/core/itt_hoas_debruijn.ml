@@ -84,7 +84,7 @@ doc <:doc<
 >>
 
 define (*private*) unfold_bdepth:
-   bdepth{'bt} <--> fix{f.lambda{bt. weak_dest_bterm{'bt; 1 +@ 'f subst{'bt; mk_term{it; nil}}; "_", "_". 0}}} 'bt
+   bdepth{'bt} <--> fix{f.lambda{bt. weak_dest_terms{'bt; 1 +@ 'f subst{'bt; mk_term{it; nil}}; y. 0}}} 'bt
 
 define (*private*) unfold_left:
    left{'bt} <-->
@@ -148,6 +148,9 @@ interactive_rw fold_mk_term :
 
 interactive_rw reduce_bdepth_mk_term {| reduce |}:
    bdepth{mk_term{'op; 'btl}} <--> 0
+
+interactive_rw reduce_bdepth_mk_terms {| reduce |}:
+   bdepth{mk_terms{'e}} <--> 0
 
 interactive_rw reduce_bdepth_bind {| reduce |} :
    bdepth{bind{v.'t['v]}} <--> 1 +@ bdepth{'t[mk_term{it; nil}]}

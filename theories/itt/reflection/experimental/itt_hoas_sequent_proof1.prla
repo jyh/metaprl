@@ -3563,8 +3563,8 @@ B	b1525	t1525
 P	p1526	Number 1812
 P	p1527	Number 1936
 O	o1527	location p1526 p1527
-NItt_hoas_sequent_bterm	Itt_hoas_sequent_bterm	Itt_hoas_sequent_bterm NIL
-NItt_hoas_sequent_bterm!BSequent	BSequent	BSequent Itt_hoas_sequent_bterm
+NItt_hoas_sequent_bterm1	Itt_hoas_sequent_bterm1	Itt_hoas_sequent_bterm1 NIL
+NItt_hoas_sequent_bterm1!BSequent	BSequent	BSequent Itt_hoas_sequent_bterm1
 O	o1528	BSequent
 T	t1528	o1528
 B	b1528	t1528
@@ -3676,7 +3676,7 @@ H	h1575	"" t1575
 NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash	squash Itt_squash
 O	o1575	squash
-NItt_hoas_sequent_bterm!is_sequent_bterm	is_sequent_bterm	is_sequent_bterm Itt_hoas_sequent_bterm
+NItt_hoas_sequent_bterm1!is_sequent_bterm	is_sequent_bterm	is_sequent_bterm Itt_hoas_sequent_bterm1
 O	o1576	is_sequent_bterm
 T	t1576	o1576 b790
 B	b1576	t1576

@@ -32,7 +32,7 @@ extends Itt_vec_list1
 extends Itt_vec_sequent_term
 extends Itt_hoas_vbind
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_bterm
+extends Itt_hoas_sequent_bterm1
 extends Itt_theory
 extends Itt_match
 

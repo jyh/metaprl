@@ -31,7 +31,7 @@ extends Itt_hoas_bterm_wf
 extends Itt_hoas_proof1
 extends Itt_hoas_sequent
 extends Itt_hoas_sequent_term1
-extends Itt_hoas_sequent_bterm
+extends Itt_hoas_sequent_bterm1
 extends Itt_hoas_sequent_proof_step1
 
 doc docoff

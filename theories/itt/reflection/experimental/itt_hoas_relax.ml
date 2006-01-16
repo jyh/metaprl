@@ -207,12 +207,15 @@ interactive_rw bindn_eta_relax {| reduce |} : <:xrewrite<
 (************************************************************************
  * Relation to BTerms.
  *)
+doc <:doc<
+   All terms in << BTerm >> are in << Bind >>.
+>>
 interactive_rw reduce_mk_bterm_full_lof : <:xrewrite<
    n in nat -->
    m in nat -->
-   mk_bterm{n; op; list_of_fun{i. 'f['i]; 'm}}
+   mk_bterm{n; op; list_of_fun{i. f[i]; m}}
    <-->
-   bind{n; x. mk_term{op; list_of_fun{i. substl{'f['i]; 'x}; 'm}}}
+   bind{n; x. mk_term{op; list_of_fun{i. substl{f[i]; x}; m}}}
 >>
 
 interactive_rw reduce_mk_bterm_full : <:xrewrite<
@@ -224,9 +227,9 @@ interactive_rw reduce_mk_bterm_full : <:xrewrite<
 >>
 
 interactive_rw mk_terms_of_mk_term : <:xrewrite<
-   mk_term{'op; 'subterms}
+   mk_term{op; subterms}
    <-->
-   mk_terms{('op, 'subterms)}
+   mk_terms{(op, subterms)}
 >>
 
 interactive var_in_bind {| intro [] |} : <:xrule<
@@ -244,6 +247,63 @@ interactive mk_bterm_in_bind {| intro [] |} : <:xrule<
 interactive bterm_is_bind : <:xrule<
    "wf" : <H> >- e in BTerm -->
    <H> >- e in Bind
+>>
+
+interactive mk_bterm_in_bindn {| intro [] |} : <:xrule<
+   "wf" : <H> >- n = m in nat -->
+   "wf" : <H> >- subterms in list -->
+   <H> >- mk_bterm{n; op; subterms} in Bind{m}
+>>
+
+interactive bterm_is_bindn : <:xrule<
+   "wf" : <H> >- e in BTerm{n} -->
+   <H> >- e in Bind{n}
+>>
+
+interactive bterm_is_bind_hyp {| nth_hyp |} 'H : <:xrule<
+   <H>; x: BTerm; <J[x]> >- x in Bind
+>>
+
+interactive bterm2_is_bind_hyp {| nth_hyp |} 'H : <:xrule<
+   <H>; x: BTerm{n}; <J[x]> >- x in Bind
+>>
+
+interactive bterm_mem_is_bind_hyp {| nth_hyp |} 'H : <:xrule<
+   <H>; x: e in BTerm; <J[x]> >- e in Bind
+>>
+
+interactive bterm2_mem_is_bind_hyp {| nth_hyp |} 'H : <:xrule<
+   <H>; x: e in BTerm{n}; <J[x]> >- e in Bind
+>>
+
+interactive bterm_list_is_bind_list_hyp {| nth_hyp |} 'H : <:xrule<
+   <H>; x: list{BTerm}; <J[x]> >- x in list{Bind}
+>>
+
+doc <:doc<
+   Restate theorems from @tt[Itt_hoas_bterm].
+>>
+interactive_rw subterms_lemma_relax {| reduce |} : <:xrewrite<
+   n in nat -->
+   subterms in list{Bind} -->
+   all_list{subterms; x. bdepth{x} >= n} -->
+   map{bt. bind{n; v. substl{bt; v}}; subterms}
+   <-->
+   subterms
+>>
+
+doc <:doc<
+   This is the key rule, where we relax the reduction
+   << dest_bterm{'e; l, r. 'base; d, o, s. 'step} >>.
+>>
+interactive_rw dest_bterm_mk_bterm_relax {| reduce |} : <:xrewrite<
+   n in nat -->
+   op in Operator -->
+   subterms in list{Bind} -->
+   all_list{subterms; x. bdepth{x} >= n} -->
+   "dest_bterm"{mk_bterm{n; op; subterms}; l, r. var_case[l; r]; d, o, s. op_case[d; o; s] }
+   <-->
+   op_case[n; op; subterms]
 >>
 
 (*!

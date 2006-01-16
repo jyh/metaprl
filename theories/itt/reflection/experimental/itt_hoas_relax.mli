@@ -38,6 +38,17 @@ doc <:doc<
 >>
 extends Itt_hoas_bterm
 
+(*
+ * The type of all the terms in @tt[Itt_hoas_base].
+ *)
+declare const Bind
+
+(*
+ * The type << Bind{'n} >> is the type of terms with
+ * binding depth << 'n >>.
+ *)
+declare Bind{'n}
+
 (*!
  * @docoff
  *

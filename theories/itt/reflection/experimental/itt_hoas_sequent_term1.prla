@@ -4193,8 +4193,8 @@ B	b1813	t1813
 P	p1813	Number 5446
 P	p1816	Number 5595
 O	o1816	location p1813 p1816
-NItt_hoas_sequent_bterm	Itt_hoas_sequent_bterm	Itt_hoas_sequent_bterm NIL
-NItt_hoas_sequent_bterm!sequent_bterm	sequent_bterm	sequent_bterm Itt_hoas_sequent_bterm
+NItt_hoas_sequent_bterm1	Itt_hoas_sequent_bterm1	Itt_hoas_sequent_bterm1 NIL
+NItt_hoas_sequent_bterm1!sequent_bterm	sequent_bterm	sequent_bterm Itt_hoas_sequent_bterm1
 O	o1817	sequent_bterm
 T	t1818	o1817 b1639
 B	b1818	t1818

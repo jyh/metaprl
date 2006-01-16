@@ -61,12 +61,15 @@ doc <:doc<
    Define a type << Bind >> that includes all values from Itt_hoas_base.
 >>
 define const unfold_BindInfo : BindInfo <--> <:xterm<
-   Prod n: nat * ({ l : list{top} | length{l} = n in nat } -> top)
+     (nat * nat)
+   + (Prod n: nat * ({ l : list{top} | length{l} = n in nat } -> top))
 >>
 
 define unfold_bind_of_info : bind_of_info{'x} <--> <:xterm<
-   let n, f = x in
-       bind{n; y. mk_terms{f y}}
+   match x with
+      l, r -> var{l; r}
+    | n, f -> bind{n; y. mk_terms{f y}}
+   end
 >>
 
 define const unfold_Bind : Bind <--> <:xterm<
@@ -131,8 +134,14 @@ interactive bind_wf {| intro [] |} : <:xrule<
 doc <:doc<
    Well-formedness of the bounded << Bind{'n} >> type.
 >>
-interactive_rw bind_of_info_pair {| reduce |} : <:xrewrite<
-   bind_of_info{(n, f)}
+interactive_rw bind_of_info_left {| reduce |} : <:xrewrite<
+   bind_of_info{inl{(l, r)}}
+   <-->
+   var{l; r}
+>>
+
+interactive_rw bind_of_info_right {| reduce |} : <:xrewrite<
+   bind_of_info{inr{(n, f)}}
    <-->
    bind{n; x. mk_terms{f x}}
 >>
@@ -140,6 +149,13 @@ interactive_rw bind_of_info_pair {| reduce |} : <:xrewrite<
 interactive bindn_in_bind_type {| intro [] |} : <:xrule<
    "wf" : <H> >- n in nat -->
    <H> >- bind{'n; x. mk_terms{'f['x]}} in Bind
+>>
+
+interactive_rw reduce_bdepth_bindn_mk_terms {| reduce |} : <:xrewrite<
+   n in nat -->
+   bdepth{bind{n; x. mk_terms{e[x]}}}
+   <-->
+   n
 >>
 
 interactive bdepth_wf {| intro [] |} : <:xrule<
@@ -157,16 +173,20 @@ interactive bindn_wf {| intro [] |} : <:xrule<
    <H> >- Bind{n} Type
 >>
 
+doc <:doc<
+   Additional well-formedness.
+>>
+interactive bind_of_info_in_bind {| intro [] |} : <:xrule<
+   "wf" : <H> >- x in BindInfo -->
+   <H> >- bind_of_info{x} in Bind
+>>
+
 (************************************************************************
  * Relaxed rewrites.
  *)
-interactive_rw reduce_bdepth_bindn_mk_terms {| reduce |} : <:xrewrite<
-   n in nat -->
-   bdepth{bind{n; x. mk_terms{e[x]}}}
-   <-->
-   n
+doc <:doc<
+   Relaxed eta-reductions.
 >>
-
 interactive_rw bind_eta_relax {| reduce |} : <:xrewrite<
    t in Bind -->
    bdepth{t} > 0 -->
@@ -182,6 +202,48 @@ interactive_rw bindn_eta_relax {| reduce |} : <:xrewrite<
    bind{n; x. substl{t; x}}
    <-->
    t
+>>
+
+(************************************************************************
+ * Relation to BTerms.
+ *)
+interactive_rw reduce_mk_bterm_full_lof : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   mk_bterm{n; op; list_of_fun{i. 'f['i]; 'm}}
+   <-->
+   bind{n; x. mk_term{op; list_of_fun{i. substl{'f['i]; 'x}; 'm}}}
+>>
+
+interactive_rw reduce_mk_bterm_full : <:xrewrite<
+   n in nat -->
+   subterms in list -->
+   mk_bterm{n; op; subterms}
+   <-->
+   bind{n; x. mk_term{op; map{subterm. substl{subterm; x}; subterms}}}
+>>
+
+interactive_rw mk_terms_of_mk_term : <:xrewrite<
+   mk_term{'op; 'subterms}
+   <-->
+   mk_terms{('op, 'subterms)}
+>>
+
+interactive var_in_bind {| intro [] |} : <:xrule<
+   "wf" : <H> >- l in nat -->
+   "wf" : <H> >- r in nat -->
+   <H> >- var{l; r} in Bind
+>>
+
+interactive mk_bterm_in_bind {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- subterms in list -->
+   <H> >- mk_bterm{n; op; subterms} in Bind
+>>
+
+interactive bterm_is_bind : <:xrule<
+   "wf" : <H> >- e in BTerm -->
+   <H> >- e in Bind
 >>
 
 (*!

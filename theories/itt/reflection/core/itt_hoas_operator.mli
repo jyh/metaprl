@@ -43,7 +43,7 @@ extends Itt_list2
 
 open Basic_tactics
 
-declare Operator
+declare const Operator
 declare operator[op:op]
 declare shape{'op}
 declare is_same_op{'op_1;'op_2}

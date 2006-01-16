@@ -74,7 +74,7 @@ doc <:doc<
 
 >>
 
-declare Operator
+declare const Operator
 declare shape{'op}
 declare is_same_op{'op_1;'op_2}
 

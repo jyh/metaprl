@@ -155,7 +155,7 @@ interactive mk_term_wf {| intro [] |} :
    sequent{ <H> >- mk_term{'op; 'subterms} in BTerm }
 
 interactive mk_term_wf2 {| intro [] |} :
-   [wf] sequent { <H> >- 'd = 0 in "nat" } -->
+   [wf] sequent { <H> >- 'd = 0 in nat } -->
    [wf] sequent { <H> >- 'op in Operator } -->
    [wf] sequent { <H> >- 'subterms in list{BTerm} } -->
    sequent { <H> >- compatible_shapes{0; shape{'op}; 'subterms} } -->

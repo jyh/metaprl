@@ -112,6 +112,18 @@ interactive_rw dest_bterm_mk_bterm {| reduce |} :
    <-->
    'op_case['n; 'op; map{bt. bind{'n; v. substl{'bt; 'v}}; 'subterms}]
 
+interactive_rw mk_bterm_eta_lof {| reduce |} :
+   'l in nat -->
+   'n in nat -->
+   mk_bterm{'n; 'op; list_of_fun{i.bind{'n; v. substl{'f['i]; 'v}}; 'l}}
+   <-->
+   mk_bterm{'n; 'op; list_of_fun{i.'f['i]; 'l}}
+
+interactive_rw mk_bterm_eta {| reduce |} :
+   'n in nat -->
+   'subterms in list -->
+   mk_bterm{'n; 'op; map{bt. bind{'n; v. substl{'bt; 'v}}; 'subterms}} <--> mk_bterm{'n; 'op; 'subterms}
+
 doc docoff
 
 dform is_var_df : is_var{'bt} =

@@ -69,11 +69,11 @@ dform div_df : parens :: "prec"[prec_mul] :: div{'e1; 'e2} =
    slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
 
 let resource reduce +=
-    [<< add{number[i1:n]; number[i2:n]} >>, (reduce_add thenC addrC [Subterm 1] reduce_meta_sum  thenC reduce_number);
-     << sub{number[i1:n]; number[i2:n]} >>, (reduce_sub thenC addrC [Subterm 1] reduce_meta_diff thenC reduce_number);
-     << mul{number[i1:n]; number[i2:n]} >>, (reduce_mul thenC addrC [Subterm 1] reduce_meta_prod thenC reduce_number);
-     << div{number[i1:n]; number[i2:n]} >>, (reduce_div thenC addrC [Subterm 1] reduce_meta_quot thenC reduce_number);
-     << max{number[i1:n]; number[i2:n]} >>, (reduce_max thenC reduce_meta_lt_num)]
+    [<< add{number[i1:n]; number[i2:n]} >>, wrap_reduce (reduce_add thenC addrC [Subterm 1] reduce_meta_sum  thenC reduce_number);
+     << sub{number[i1:n]; number[i2:n]} >>, wrap_reduce (reduce_sub thenC addrC [Subterm 1] reduce_meta_diff thenC reduce_number);
+     << mul{number[i1:n]; number[i2:n]} >>, wrap_reduce (reduce_mul thenC addrC [Subterm 1] reduce_meta_prod thenC reduce_number);
+     << div{number[i1:n]; number[i2:n]} >>, wrap_reduce (reduce_div thenC addrC [Subterm 1] reduce_meta_quot thenC reduce_number);
+     << max{number[i1:n]; number[i2:n]} >>, wrap_reduce (reduce_max thenC reduce_meta_lt_num)]
 
 (*
  * -*-

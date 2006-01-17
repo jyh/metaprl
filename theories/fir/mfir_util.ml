@@ -173,7 +173,7 @@ let reduce_apply_types =
 
 let resource reduce += [
    << apply_types{ 'ty; nil } >>,
-      reduce_apply_types
+      wrap_reduce reduce_apply_types
 ]
 
 
@@ -203,7 +203,7 @@ let reduce_get_core =
    (tryC ((addrC [Subterm 1] reduce_int_gt) thenC reduce_ifthenelse))
 
 let resource reduce += [
-   << get_core{ number[i:n]; 'ty } >>, reduce_get_core
+   << get_core{ number[i:n]; 'ty } >>, wrap_reduce reduce_get_core
 ]
 
 
@@ -236,7 +236,7 @@ let reduce_project_in_bounds =
 
 let resource reduce += [
    << project_in_bounds{ number[i:n]; tyExists{ t. 'ty['t] } } >>,
-      reduce_project_in_bounds
+      wrap_reduce reduce_project_in_bounds
 ]
 
 
@@ -279,7 +279,7 @@ let reduce_unpack_exists =
 
 let resource reduce += [
    << unpack_exists{ 'ty; 'var; 'num } >>,
-      reduce_unpack_exists
+      wrap_reduce reduce_unpack_exists
 ]
 
 
@@ -308,7 +308,7 @@ let reduce_union_cases =
    )
 
 let resource reduce += [
-   << union_cases{ 'set; 'cases } >>, reduce_union_cases
+   << union_cases{ 'set; 'cases } >>, wrap_reduce reduce_union_cases
 ]
 
 
@@ -346,7 +346,7 @@ let reduce_index_of_subscript =
    )
 
 let resource reduce += [
-   << index_of_subscript{ 'atom } >>, reduce_index_of_subscript
+   << index_of_subscript{ 'atom } >>, wrap_reduce reduce_index_of_subscript
 ]
 
 
@@ -366,7 +366,7 @@ doc <:doc<
 
 let resource reduce += [
    << ty_of_mutable_ty{ mutable_ty{ 'ty; 'flag } } >>,
-      reduce_ty_of_mutable_ty
+      wrap_reduce reduce_ty_of_mutable_ty
 ]
 
 

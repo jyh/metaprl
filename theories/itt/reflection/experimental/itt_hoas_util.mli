@@ -43,4 +43,4 @@ declare dummy_bterm
 (*
  * Rewrite annotation processor with arithmetical simplifier
  *)
-val arith_rw_annotation : string -> (prim_rewrite, term * conv) rw_annotation_processor
+val arith_rw_annotation : string -> (term * conv) rw_annotation_processor

@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @module[Itt_record]
 
    This is a theory of record type.
@@ -146,7 +146,7 @@ let record_beta_rw = record_beta thenC reduce_eq_label
 let record_beta2_rw = record_beta2
 
 let resource reduce +=
-   << field[n:t]{rcrd[m:t]{'a; 'r}} >>, record_beta_rw
+   << field[n:t]{rcrd[m:t]{'a; 'r}} >>, wrap_reduce record_beta_rw
 
 let record_reduce = repeatC (higherC (firstC [unfoldRcrdS;record_beta1;record_beta_rw]))
 

@@ -524,7 +524,7 @@ let reduce_length_fun_termC =
    thenC termC reduce_length_vlist_term
 
 let resource reduce +=
-   [<< length{vlist{| <J> |}} >>, reduce_length_fun_termC]
+   [<< length{vlist{| <J> |}} >>, wrap_reduce reduce_length_fun_termC]
 
 doc <:doc<
    The @tt[vlist_of_concrete_listC] conversion collects the elements

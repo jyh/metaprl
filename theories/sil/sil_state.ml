@@ -31,6 +31,8 @@
  *)
 extends Base_theory
 
+open Top_conversionals
+
 (************************************************************************
  * SYNTAX                                                               *
  ************************************************************************)
@@ -69,11 +71,11 @@ prim_rw reduce_if_eq_label4 : if_eq_label{next{'l1}; next{'l2}; 'e1; 'e2} <--> i
 prim_rw reduce_fetch : fetch{store{'s; 'l1; 'v}; 'l2} <--> if_eq_label{'l2; 'l1; 'v; fetch{'s; 'l2}}
 
 let resource reduce += [
-   << fetch{store{'s; 'l1; 'v1}; 'l2} >>, reduce_fetch;
-   << if_eq_label{first; first; 'e1; 'e2} >>, reduce_if_eq_label1;
-   << if_eq_label{next{'l1}; first; 'e1; 'e2} >>, reduce_if_eq_label2;
-   << if_eq_label{first; next{'l1}; 'e1; 'e2} >>, reduce_if_eq_label3;
-   << if_eq_label{next{'l1}; next{'l2}; 'e1; 'e2} >>, reduce_if_eq_label4
+   << fetch{store{'s; 'l1; 'v1}; 'l2} >>, wrap_reduce reduce_fetch;
+   << if_eq_label{first; first; 'e1; 'e2} >>, wrap_reduce reduce_if_eq_label1;
+   << if_eq_label{next{'l1}; first; 'e1; 'e2} >>, wrap_reduce reduce_if_eq_label2;
+   << if_eq_label{first; next{'l1}; 'e1; 'e2} >>, wrap_reduce reduce_if_eq_label3;
+   << if_eq_label{next{'l1}; next{'l2}; 'e1; 'e2} >>, wrap_reduce reduce_if_eq_label4
 ]
 
 (************************************************************************

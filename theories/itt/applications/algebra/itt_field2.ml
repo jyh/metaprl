@@ -403,7 +403,7 @@ interactive_rw carNo0_rcrd_reduce :
 let carNo0_rcrd_reduceC = carNo0_rcrd_reduce thenC reduce_eq_label thenC tryC reduce_eq_label
 
 let resource reduce +=
-   << carNo0{rcrd[a:t]{'x; 'r}} >>, carNo0_rcrd_reduceC
+   << carNo0{rcrd[a:t]{'x; 'r}} >>, wrap_reduce carNo0_rcrd_reduceC
 
 let inf_carNo0 _ _ _ eqs opt_eqs defs t =
       eqs, opt_eqs, defs, <<group[i:l]>>   (* hack *)

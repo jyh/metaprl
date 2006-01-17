@@ -41,7 +41,7 @@ declare nth_suffix{'l; 'i}
  *)
 resource (term * conv, conv) normalize_list_of_fun
 
-val process_normalize_list_of_fun_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
+val process_normalize_list_of_fun_resource_rw_annotation : (term * conv) rw_annotation_processor
 
 topval normalizeListOfFunTopC : conv
 topval normalizeListOfFunC : conv

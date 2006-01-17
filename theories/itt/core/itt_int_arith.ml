@@ -151,7 +151,7 @@ let rec on_main_subgoals = function
          on_main_subgoals tl*)
  | [] -> []
 
-let process_ge_elim_resource_annotation name context_args term_args statement loc (pre_tactic, arg) =
+let process_ge_elim_resource_annotation ~options:arg name context_args term_args statement loc pre_tactic =
    let assums, goal = unzip_mfunction statement in
    let () =
       if !debug_arith_dtactic then

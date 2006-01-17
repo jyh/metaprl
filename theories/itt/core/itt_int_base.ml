@@ -347,17 +347,17 @@ let reduce_eq_int =
 
 let resource arith_unfold += [
    <<number[i:n] +@ number[j:n]>>, reduce_add;
-   <<minus{number[i:n]}>>, reduce_minus;
+   <<minus{number[i:n]}>>,         reduce_minus;
    <<number[i:n] -@ number[j:n]>>, reduce_sub;
 ]
 
 let resource reduce += [
-   <<number[i:n] +@ number[j:n]>>, reduce_add;
-   <<minus{number[i:n]}>>, reduce_minus;
-   <<number[i:n] -@ number[j:n]>>, reduce_sub;
-   <<lt_bool{number[i:n]; number[j:n]}>>, reduce_lt;
-   <<number[i:n] < number[j:n]>>, (unfold_lt thenC addrC [Subterm 1] reduce_lt);
-   <<beq_int{number[i:n]; number[j:n]}>>, reduce_eq_int;
+   <<number[i:n] +@ number[j:n]>>,        wrap_reduce reduce_add;
+   <<minus{number[i:n]}>>,                wrap_reduce reduce_minus;
+   <<number[i:n] -@ number[j:n]>>,        wrap_reduce reduce_sub;
+   <<lt_bool{number[i:n]; number[j:n]}>>, wrap_reduce reduce_lt;
+   <<number[i:n] < number[j:n]>>,         wrap_reduce (unfold_lt thenC addrC [Subterm 1] reduce_lt);
+   <<beq_int{number[i:n]; number[j:n]}>>, wrap_reduce reduce_eq_int;
 ]
 
 (*
@@ -816,7 +816,7 @@ let add_Assoc2C = add_Assoc2_rw
 doc docoff
 
 let resource reduce +=
-   << ('a +@ 'b) +@ 'c>>, (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC tryC add_Assoc2_rw)
+   << ('a +@ 'b) +@ 'c>>, wrap_reduce (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC tryC add_Assoc2_rw)
 
 doc <:doc<
    $0$ is neutral element for @tt[add] in @tt[int]
@@ -838,7 +838,7 @@ interactive_rw add_Id2_rw {| reduce; arith_unfold |} :
 let add_Id2C = add_Id2_rw
 
 let resource reduce += [
-	<<'a -@ 0>>, (unfold_sub thenC (addrC [Subterm 2] reduce_minus));
+	<<'a -@ 0>>, wrap_reduce (unfold_sub thenC (addrC [Subterm 2] reduce_minus));
 ]
 
 interactive_rw add_Id3_rw ('a :> Term) :
@@ -1027,8 +1027,8 @@ let resource typeinf += [
 ]
 
 let resource reduce += [
-   << ('a < 'a) >>, (unfold_lt thenC (addrC [Subterm 1] lt_irreflex_rw));
-   <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
+   << ('a < 'a) >>, wrap_reduce (unfold_lt thenC (addrC [Subterm 1] lt_irreflex_rw));
+   <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, wrap_reduce reduce_ind_numberC;
 ]
 
 doc docoff

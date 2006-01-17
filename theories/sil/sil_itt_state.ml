@@ -35,6 +35,7 @@ extends Itt_theory
 extends Sil_state
 
 open Sil_state
+open Top_conversionals
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -115,14 +116,14 @@ interactive_rw reduce_le_label1 : le_label{first; 'l} <--> btrue
 interactive_rw reduce_le_label2 : le_label{next{'l1}; first} <--> bfalse
 interactive_rw reduce_le_label3 : le_label{next{'l1}; next{'l2}} <--> le_label{'l1; 'l2}
 
-let resource reduce += [
-   << eq_label{first; first} >>, reduce_eq_label1;
-   << eq_label{next{'l1}; first} >>, reduce_eq_label2;
-   << eq_label{first; next{'l1}} >>, reduce_eq_label3;
-   << eq_label{next{'l1}; next{'l2}} >>, reduce_eq_label4;
-   << le_label{first; 'l} >>, reduce_le_label1;
-   << le_label{next{'l}; first} >>, reduce_le_label2;
-   << le_label{next{'l1}; next{'l2}} >>, reduce_le_label3
+let resource reduce +=[
+   << eq_label{first; first} >>, wrap_reduce reduce_eq_label1;
+   << eq_label{next{'l1}; first} >>, wrap_reduce reduce_eq_label2;
+   << eq_label{first; next{'l1}} >>, wrap_reduce reduce_eq_label3;
+   << eq_label{next{'l1}; next{'l2}} >>, wrap_reduce reduce_eq_label4;
+   << le_label{first; 'l} >>, wrap_reduce reduce_le_label1;
+   << le_label{next{'l}; first} >>, wrap_reduce reduce_le_label2;
+   << le_label{next{'l1}; next{'l2}} >>, wrap_reduce reduce_le_label3
 ]
 
 interactive_rw reduce_if_eq_label1 : if_eq_label{first; first; 'e1; 'e2} <--> 'e1

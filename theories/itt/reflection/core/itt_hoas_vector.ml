@@ -150,7 +150,7 @@ let rsbC = termC (fun t ->
       reduce_substn_bindn1 bind)
 
 let resource reduce +=
-   << subst{'m; bind{v. bind{'n; l.'bt['v::'l]}}; 't} >>, rsbC
+   << subst{'m; bind{v. bind{'n; l.'bt['v::'l]}}; 't} >>, wrap_reduce rsbC
 
 doc docon
 

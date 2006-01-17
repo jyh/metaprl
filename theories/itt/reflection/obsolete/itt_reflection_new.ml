@@ -136,7 +136,7 @@ prim_rw bterm_shape :
     if_quoted_op{'op<||>;"true"} -->
     shape{'op} <-->  map{lambda{x.(op_bdepth{'x} -@ op_bdepth{'op})}; list_of_rlist{Base_reflection!subterms{'op}} }
 
-let resource reduce += (<<shape{bterm{| <K> >- 't |}}>>,bterm_shape)
+let resource reduce += (<<shape{bterm{| <K> >- 't |}}>>, wrap_reduce bterm_shape)
 
 prim_rw bterm_same_op:
        is_same_op{'op1;'op2} <--> Base_reflection!if_same_op{'op1;'op2;btrue;bfalse}

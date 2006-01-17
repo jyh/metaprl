@@ -224,7 +224,7 @@ let reduce_member =
    )
 
 let resource reduce += [
-   << member{ number[i:n]; intset[p:n, s:s]{ 'intervals } } >>, reduce_member
+   << member{ number[i:n]; intset[p:n, s:s]{ 'intervals } } >>, wrap_reduce reduce_member
 ]
 
 
@@ -273,7 +273,7 @@ let reduce_normalize =
    (addrC [Subterm 1] (repeatC (higherC reduce_normalize_intervals)))
 
 let resource reduce += [
-   << normalize{ intset[p:n, s:s]{ 'intervals } } >>, reduce_normalize
+   << normalize{ intset[p:n, s:s]{ 'intervals } } >>, wrap_reduce reduce_normalize
 ]
 
 
@@ -326,7 +326,7 @@ let reduce_subset =
    )
 
 let resource reduce += [
-   << 'set1 subset 'set2  >>, reduce_subset
+   << 'set1 subset 'set2  >>, wrap_reduce reduce_subset
 ]
 
 
@@ -395,7 +395,7 @@ let reduce_union =
    reduce_normalize
 
 let resource reduce += [
-   << union{ 'set1; 'set2 } >>, reduce_union
+   << union{ 'set1; 'set2 } >>, wrap_reduce reduce_union
 ]
 
 
@@ -420,7 +420,7 @@ let reduce_set_eq =
    (tryC (repeatC reduce_subset))
 
 let resource reduce += [
-   << set_eq{ 's1; 's2 } >>, reduce_set_eq
+   << set_eq{ 's1; 's2 } >>, wrap_reduce reduce_set_eq
 ]
 
 doc <:doc<
@@ -488,8 +488,8 @@ let reduce_intset_max =
    reduce_intset_max_s64
 
 let resource reduce += [
-   << intset_max[precision:n, sign:s] >>, reduce_intset_max;
-   << enum_max >>, reduce_enum_max
+   << intset_max[precision:n, sign:s] >>, wrap_reduce reduce_intset_max;
+   << enum_max >>, wrap_reduce reduce_enum_max
 ]
 
 

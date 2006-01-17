@@ -115,7 +115,7 @@ let reduce_nth_elt =
    (tryC (addrC [Subterm 1] reduce_sub))
 
 let resource reduce +=
-   << nth_elt{ 'n; cons{ 'h; 't } } >>, reduce_nth_elt
+   << nth_elt{ 'n; cons{ 'h; 't } } >>, wrap_reduce reduce_nth_elt
 
 (**************************************************************************
  * Display forms.

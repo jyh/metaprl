@@ -92,8 +92,8 @@ define unfold_gcd : gcd{'x; 'y} <-->
 	}}} 'x 'y)
 
 let resource reduce += [
-	<<abs{number[i:n]}>>, unfold_abs;
-	<<gcd{number[i:n]; number[j:n]}>>, (unfold_gcd thenC reduce_fix);
+	<<abs{number[i:n]}>>, wrap_reduce unfold_abs;
+	<<gcd{number[i:n]; number[j:n]}>>, wrap_reduce (unfold_gcd thenC reduce_fix);
 ]
 
 dform gcd_df1 : except_mode[src] :: gcd{'a; 'b}
@@ -138,9 +138,9 @@ define unfold_rat_of_int :
    rat_of_int{'a} <--> rat{'a; 1}
 
 let resource reduce += [
-	<<spread{ratn{'a; 'b}; x,y.'f['x; 'y]}>>, (addrC [Subterm 1] unfold_ratn);
-(*	<<rat{number[i:n]; number[j:n]}>>, unfold_rat;*)
-	<<rat_of_int{number[i:n]}>>, unfold_rat_of_int;
+	<<spread{ratn{'a; 'b}; x,y.'f['x; 'y]}>>, wrap_reduce (addrC [Subterm 1] unfold_ratn);
+(*	<<rat{number[i:n]; number[j:n]}>>, wrap_reduce unfold_rat;*)
+	<<rat_of_int{number[i:n]}>>, wrap_reduce unfold_rat_of_int;
 ]
 
 define unfold_is_normed : is_normed{'x; 'y} <-->
@@ -300,26 +300,26 @@ let reduce_ge_rat = unfold_ge_rat thenC unfold_le_rat thenC (addrC [Subterm 1] r
 let reduce_rat_in_args = (addrC [Subterm 1] (unfold_rat thenC reduceC)) thenC (addrC [Subterm 2] (unfold_rat thenC reduceC))
 
 let resource reduce +=[
-	<<mul_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 1] unfold_ratn) thenC (addrC [Subterm 2] unfold_ratn) thenC unfold_mul_rat);
-	<<add_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 1] unfold_ratn) thenC (addrC [Subterm 2] unfold_ratn) thenC unfold_add_rat);
-	<<inv_rat{ratn{'a; 'b}}>>, ((addrC [Subterm 1] unfold_ratn) thenC unfold_inv_rat);
-	<<neg_rat{ratn{'a; 'b}}>>, ((addrC [Subterm 1] unfold_ratn) thenC unfold_neg_rat);
-	<<sub_rat{ratn{'a; 'b}; ratn{'b; 'c}}>>, unfold_sub_rat;
+	<<mul_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, wrap_reduce ((addrC [Subterm 1] unfold_ratn) thenC (addrC [Subterm 2] unfold_ratn) thenC unfold_mul_rat);
+	<<add_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, wrap_reduce ((addrC [Subterm 1] unfold_ratn) thenC (addrC [Subterm 2] unfold_ratn) thenC unfold_add_rat);
+	<<inv_rat{ratn{'a; 'b}}>>, wrap_reduce ((addrC [Subterm 1] unfold_ratn) thenC unfold_inv_rat);
+	<<neg_rat{ratn{'a; 'b}}>>, wrap_reduce ((addrC [Subterm 1] unfold_ratn) thenC unfold_neg_rat);
+	<<sub_rat{ratn{'a; 'b}; ratn{'b; 'c}}>>, wrap_reduce unfold_sub_rat;
 
-	<<lt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_lt_bool_rat;
-	<<gt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_gt_bool_rat;
-	<<ge_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_ge_bool_rat;
-	<<le_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_le_bool_rat;
+	<<lt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce reduce_lt_bool_rat;
+	<<gt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce unfold_gt_bool_rat;
+	<<ge_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce reduce_ge_bool_rat;
+	<<le_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce reduce_le_bool_rat;
 
-	<<lt_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_lt_rat;
-	<<gt_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_gt_rat;
-	<<ge_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_ge_rat;
-	<<le_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_le_rat;
+	<<lt_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce unfold_lt_rat;
+	<<gt_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce unfold_gt_rat;
+	<<ge_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce reduce_ge_rat;
+	<<le_rat{ratn{'a;'b};ratn{'c;'d}}>>, wrap_reduce unfold_le_rat;
 
-	<<lt_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC unfold_lt_rat);
-	<<gt_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC unfold_gt_rat);
-	<<ge_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC reduce_ge_rat);
-	<<le_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, (reduce_rat_in_args thenC unfold_le_rat);
+	<<lt_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, wrap_reduce (reduce_rat_in_args thenC unfold_lt_rat);
+	<<gt_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, wrap_reduce (reduce_rat_in_args thenC unfold_gt_rat);
+	<<ge_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, wrap_reduce (reduce_rat_in_args thenC reduce_ge_rat);
+	<<le_rat{rat{number[i:n];number[j:n]};rat{number[k:n];number[l:n]}}>>, wrap_reduce (reduce_rat_in_args thenC unfold_le_rat);
 ]
 
 dform ratn_df1 : except_mode[src] :: "prec"[prec_mul] :: ratn{'a; 'b}
@@ -508,10 +508,10 @@ interactive_rw reduce_add_rat {| reduce |} :
 	rat{('a *@ 'd) +@ ('b *@ 'c); 'b *@ 'd}
 
 let resource reduce += [
-	<<mul_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [Subterm 1] ratn2ratC) thenC reduce_mul_rat);
-	<<mul_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 2] ratn2ratC) thenC reduce_mul_rat);
-	<<add_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, ((addrC [Subterm 1] ratn2ratC) thenC reduce_add_rat);
-	<<add_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [Subterm 2] ratn2ratC) thenC reduce_add_rat);
+	<<mul_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, wrap_reduce ((addrC [Subterm 1] ratn2ratC) thenC reduce_mul_rat);
+	<<mul_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, wrap_reduce ((addrC [Subterm 2] ratn2ratC) thenC reduce_mul_rat);
+	<<add_rat{ratn{'a; 'b}; rat{'c; 'd}}>>, wrap_reduce ((addrC [Subterm 1] ratn2ratC) thenC reduce_add_rat);
+	<<add_rat{rat{'a; 'b}; ratn{'c; 'd}}>>, wrap_reduce ((addrC [Subterm 2] ratn2ratC) thenC reduce_add_rat);
 ]
 
 interactive_rw reduce_inv_rat {| reduce |} :
@@ -589,7 +589,7 @@ interactive_rw add_rat_Id2_rw {| reduce; arith_unfold |} :
 let add_rat_Id2C = add_rat_Id2_rw
 
 let resource reduce += [
-	<<sub_rat{'a; rat{0; 1}}>>, (unfold_sub_rat thenC (addrC [Subterm 2] reduce_sub_rat));
+	<<sub_rat{'a; rat{0; 1}}>>, wrap_reduce (unfold_sub_rat thenC (addrC [Subterm 2] reduce_sub_rat));
 ]
 
 interactive_rw add_rat_Id3_rw ('a :> Term) :

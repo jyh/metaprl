@@ -37,8 +37,8 @@ let softrec_into term unfold = term, (dByRecDefT term unfold 0)
 let reduceByDefC unfold =   unfold thenC reduceTopC
 let reduceByRecDefC term unfold = reduceByDefC unfold thenC higherC (makeFoldC term unfold)
 
-let soft_reduce term unfold  = term, (reduceByDefC unfold)
-let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
+let soft_reduce term unfold  = term, wrap_reduce (reduceByDefC unfold)
+let softrec_reduce term unfold  = term, wrap_reduce (reduceByRecDefC term unfold)
 
 (*
  * Show that the file is loading.

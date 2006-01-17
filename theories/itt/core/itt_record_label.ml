@@ -79,7 +79,7 @@ interactive_rw reduce_eq_label_trivial_rw :
 let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
                        (unfold_eq_label thenC reduce_meta_eq_tok)
 
-let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
+let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, wrap_reduce reduce_eq_label
 
 
 

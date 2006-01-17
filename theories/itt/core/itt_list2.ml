@@ -622,8 +622,8 @@ doc docoff
 let fold_length = makeFoldC << length{'l} >> unfold_length
 
 let resource reduce += [
-   <<nth{'l; number[n:n]}>>, unfold_nth;
-   <<replace_nth{'l; number[n:n]; 't}>>, unfold_replace_nth
+   <<nth{'l; number[n:n]}>>, wrap_reduce unfold_nth;
+   <<replace_nth{'l; number[n:n]; 't}>>, wrap_reduce unfold_replace_nth
 ]
 
 doc <:doc<
@@ -675,8 +675,8 @@ doc docoff
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
 
 let resource reduce += [
-   << nth{cons{'u; 'v}; !i} >>, reduce_nth_cons;
-   << replace_nth{cons{'u; 'v}; !i; 't} >>, reduce_replace_nth_cons
+   << nth{cons{'u; 'v}; !i} >>, wrap_reduce reduce_nth_cons;
+   << replace_nth{cons{'u; 'v}; !i; 't} >>, wrap_reduce reduce_replace_nth_cons
 ]
 
 doc <:doc<

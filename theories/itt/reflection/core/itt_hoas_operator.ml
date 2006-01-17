@@ -232,13 +232,13 @@ prim op_constant {| intro [] |} :
    shape{operator[op:op]} <--> list_of_numlist{Base_operator!shape[op:op]}
 
 let resource reduce +=
-   <<shape{operator[op:op]}>>, (bterm_shape thenC addrC [Subterm 1] reduce_shape thenC termC reduce_numlist)
+   <<shape{operator[op:op]}>>, wrap_reduce (bterm_shape thenC addrC [Subterm 1] reduce_shape thenC termC reduce_numlist)
 
 (* private *) prim_rw bterm_same_op :
    is_same_op{operator[op1:op]; operator[op2:op]} <--> meta_eq[op1:op, op2:op]{btrue; bfalse}
 
 let resource reduce +=
-   << is_same_op{operator[op1:op]; operator[op2:op]} >>, (bterm_same_op thenC Base_meta.reduce_meta_eq_ops)
+   << is_same_op{operator[op1:op]; operator[op2:op]} >>, wrap_reduce (bterm_same_op thenC Base_meta.reduce_meta_eq_ops)
 
 doc docoff
 

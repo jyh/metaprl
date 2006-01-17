@@ -185,7 +185,7 @@ doc docoff
 dform node_df : except_mode[src] :: node{'l;'r;'nd} = `"node(" 'l `"," 'r `"," 'nd ")"
 
 let resource reduce +=
-   <<  field[label:t]{node{'l;'r;'nd}}  >>, (addrC [Subterm 1] node thenC reduceTopC);
+   <<  field[label:t]{node{'l;'r;'nd}}  >>, wrap_reduce (addrC [Subterm 1] node thenC reduceTopC);
 
 dform node_df : except_mode[src] :: Node{'T;l,r.'R} = `"Node(" 'T `"; " 'l `"," 'r `"." 'R ")"
 

@@ -214,7 +214,7 @@ interactive_rw reduce_eval_0 {| reduce |} :
    eval_poly{(0, 'v); 'a; 'F} <--> ('v 0)
 
 let resource reduce +=
-   << normalize{(0,'v); 'F} >>, unfold_normalize
+   << normalize{(0,'v); 'F} >>, wrap_reduce unfold_normalize
 
 doc <:doc<
    @modsubsection{Well-formedness, Introduction, Elimination}

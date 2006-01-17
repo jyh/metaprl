@@ -45,10 +45,10 @@ resource (term * (term list) * ((term -> bool) list * (int -> tactic)), ge_elim_
 resource (term * (term list) * tactic, ge_intro_type) ge_intro
 
 val process_ge_elim_resource_annotation :
-   (pre_tactic * (term -> bool) list, term * (term list) * ((term -> bool) list * (int -> tactic))) annotation_processor
+   options: (term -> bool) list -> (term * (term list) * ((term -> bool) list * (int -> tactic))) annotation_processor
 
 val process_ge_intro_resource_annotation :
-   (pre_tactic, term * (term list) * tactic) annotation_processor
+   (term * (term list) * tactic) annotation_processor
 
 val not_member : term -> bool
 

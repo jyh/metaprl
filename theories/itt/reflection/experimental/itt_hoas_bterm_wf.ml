@@ -203,7 +203,7 @@ let reduce_depth_of_exp e =
 let reduceDepthBTerm2C = funC reduce_depth_of_exp
 
 let resource reduce +=
-   [<< bdepth{'e} >>, reduceDepthBTerm2C]
+   [<< bdepth{'e} >>, wrap_reduce reduceDepthBTerm2C]
 
 (*!
  * @docoff

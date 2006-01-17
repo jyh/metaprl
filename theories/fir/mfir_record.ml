@@ -103,7 +103,7 @@ let reduce_field =
 
 let resource reduce +=
    << field[tag1:s]{ record[tag2:s]{ 'data; 'remaining } } >>,
-      reduce_field
+      wrap_reduce reduce_field
 
 doc <:doc<
 
@@ -131,7 +131,7 @@ let reduce_field_mem =
 
 let resource reduce +=
    << field_mem[tag:s]{ 'record } >>,
-      reduce_field_mem
+      wrap_reduce reduce_field_mem
 
 (**************************************************************************
  * Display forms.

@@ -214,19 +214,19 @@ let reduce_int_ge =
  *)
 
 let resource reduce += [
-   << add{ 'num1; 'num2 } >>, reduce_add;
-   << sub{ 'num1; 'num2 } >>, reduce_sub;
-   << mul{ 'num1; 'num2 } >>, reduce_mul;
-   << div{ 'num1; 'num2 } >>, reduce_div;
-   << rem{ 'num1; 'num2 } >>, reduce_rem;
-   << minus{ 'num } >>, reduce_minus;
-   << numeral{ 'num } >>, reduce_numeral;
-   << int_eq{ 'num1; 'num2 } >>, reduce_int_eq;
-   << int_neq{ 'num1; 'num2 } >>, reduce_int_neq;
-   << int_lt{ 'num1; 'num2 } >>, reduce_int_lt;
-   << int_le{ 'num1; 'num2 } >>, reduce_int_le;
-   << int_gt{ 'num1; 'num2 } >>, reduce_int_gt;
-   << int_ge{ 'num1; 'num2 } >>, reduce_int_ge
+   << add{ 'num1; 'num2 } >>, wrap_reduce reduce_add;
+   << sub{ 'num1; 'num2 } >>, wrap_reduce reduce_sub;
+   << mul{ 'num1; 'num2 } >>, wrap_reduce reduce_mul;
+   << div{ 'num1; 'num2 } >>, wrap_reduce reduce_div;
+   << rem{ 'num1; 'num2 } >>, wrap_reduce reduce_rem;
+   << minus{ 'num } >>, wrap_reduce reduce_minus;
+   << numeral{ 'num } >>, wrap_reduce reduce_numeral;
+   << int_eq{ 'num1; 'num2 } >>, wrap_reduce reduce_int_eq;
+   << int_neq{ 'num1; 'num2 } >>, wrap_reduce reduce_int_neq;
+   << int_lt{ 'num1; 'num2 } >>, wrap_reduce reduce_int_lt;
+   << int_le{ 'num1; 'num2 } >>, wrap_reduce reduce_int_le;
+   << int_gt{ 'num1; 'num2 } >>, wrap_reduce reduce_int_gt;
+   << int_ge{ 'num1; 'num2 } >>, wrap_reduce reduce_int_ge
 ]
 
 
@@ -254,8 +254,8 @@ let reduce_int_max =
    reduce_ifthenelse
 
 let resource reduce += [
-   << int_min{ number[i:n]; number[j:n] } >>, reduce_int_min;
-   << int_max{ number[i:n]; number[j:n] } >>, reduce_int_max
+   << int_min{ number[i:n]; number[j:n] } >>, wrap_reduce reduce_int_min;
+   << int_max{ number[i:n]; number[j:n] } >>, wrap_reduce reduce_int_max
 ]
 
 

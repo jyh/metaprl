@@ -180,7 +180,7 @@ let squash_vbind_conv t =
       squash_vbind t_bind
 
 let resource reduce +=
-    [<< vbind{| <J> >- 'e |} >>, termC squash_vbind_conv]
+    [<< vbind{| <J> >- 'e |} >>, wrap_reduce (termC squash_vbind_conv)]
 
 (*!
  * @docoff

@@ -53,7 +53,7 @@ declare lof_append{i. 'f['i]; j. 'g['j]; 'i; 'n; 'm}
  *)
 resource (term * conv, conv) pre_normalize_lof
 
-val process_pre_normalize_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
+val process_pre_normalize_lof_resource_rw_annotation : (term * conv) rw_annotation_processor
 
 topval preNormalizeLofTopC : conv
 topval preNormalizeLofC : conv
@@ -61,7 +61,7 @@ topval preNormalizeLofT : tactic
 
 resource (term * conv, conv) normalize_lof
 
-val process_normalize_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
+val process_normalize_lof_resource_rw_annotation : (term * conv) rw_annotation_processor
 
 topval normalizeLofTopC : conv
 topval normalizeLofC : conv
@@ -69,7 +69,7 @@ topval normalizeLofT : tactic
 
 resource (term * conv, conv) reduce_lof
 
-val process_reduce_lof_resource_rw_annotation : (prim_rewrite, term * conv) rw_annotation_processor
+val process_reduce_lof_resource_rw_annotation : (term * conv) rw_annotation_processor
 
 topval reduceLofTopC : conv
 topval reduceLofC : conv

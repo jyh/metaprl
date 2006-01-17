@@ -63,7 +63,7 @@ dform ifbterm_df : except_mode[src] :: if_bterm{'bt; 'P} =
    `"ifbterm(" slot{'bt} `";" slot{'P} `")"
 
 let resource reduce +=
-   (<<is_bterm{ bterm{| <H> >- 't |} }>>, (unfold_is_bterm thenC reduce_ifbterm))
+   (<<is_bterm{ bterm{| <H> >- 't |} }>>, wrap_reduce (unfold_is_bterm thenC reduce_ifbterm))
 
 prim_rw ifbterm_reduce {| reduce |} :
    ( is_bterm{'b} ) -->
@@ -148,8 +148,8 @@ let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
 let is_var_bterm_reduce = unfold_is_var_bterm thenC Base_reflection.reduce_if_var_bterm
 let var_bterm_reduce = unfold_var_bterm thenC addrC [Subterm 1] is_var_bterm_reduce
 let resource reduce +=
-   [ << is_var_bterm{ bterm{| <H1> >- 't1 |} } >>, is_var_bterm_reduce;
-     << var_bterm{ bterm{| <H1> >- 't1 |} } >>, var_bterm_reduce ]
+   [ << is_var_bterm{ bterm{| <H1> >- 't1 |} } >>, wrap_reduce is_var_bterm_reduce;
+     << var_bterm{ bterm{| <H1> >- 't1 |} } >>, wrap_reduce var_bterm_reduce ]
 
 prim is_var_bterm_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
@@ -289,7 +289,7 @@ let reduce_subterms =
    unfold_subterms thenC addrC [Subterm 1] Base_reflection.reduce_subterms thenC termC reduce_rlist
 
 let resource reduce +=
-   ( << subterms{ bterm{| <H> >- 't |} } >>, reduce_subterms )
+   ( << subterms{ bterm{| <H> >- 't |} } >>, wrap_reduce reduce_subterms )
 
 prim subterms_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
@@ -339,8 +339,8 @@ dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
 let is_same_op_reduce = unfold_is_same_op thenC Base_reflection.reduce_if_same_op
 let same_op_reduce = unfold_same_op thenC addrC [Subterm 1] is_same_op_reduce
 let resource reduce +=
-   [ << is_same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, is_same_op_reduce;
-     << same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, same_op_reduce ]
+   [ << is_same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, wrap_reduce is_same_op_reduce;
+     << same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, wrap_reduce same_op_reduce ]
 
 prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'b1 in OpBTerm } -->
@@ -416,8 +416,8 @@ let is_simple_reduce = unfold_is_simple_bterm thenC Base_reflection.reduce_if_si
 let simple_reduce = unfold_simple_bterm thenC addrC [Subterm 1] is_simple_reduce
 
 let resource reduce +=
-   [ << is_simple_bterm{ bterm{| <H1> >- 't1 |} } >>, is_simple_reduce;
-     << simple_bterm{ bterm{| <H1> >- 't1 |} } >>, simple_reduce ]
+   [ << is_simple_bterm{ bterm{| <H1> >- 't1 |} } >>, wrap_reduce is_simple_reduce;
+     << simple_bterm{ bterm{| <H1> >- 't1 |} } >>, wrap_reduce simple_reduce ]
 
 
 prim is_simple_bterm_bool {| intro [] |} :
@@ -542,7 +542,7 @@ dform subst_df : except_mode[src] :: subst{'bt; 't} =
    `"subst(" slot{'bt} `"; " slot{'t} `")"
 
 let resource reduce +=
-   (<< subst{ bterm{| <H1> >- 't1 |}; bterm{| >- 't2 |} } >>, (unfold_subst thenC Base_reflection.reduce_subst))
+   (<< subst{ bterm{| <H1> >- 't1 |}; bterm{| >- 't2 |} } >>, wrap_reduce (unfold_subst thenC Base_reflection.reduce_subst))
 
 prim subst_wf1 {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'bt1 = 'bt2 in BBTerm } -->
@@ -723,7 +723,7 @@ dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
    `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
 
 let resource reduce +=
-   ( << make_bterm{ bterm{| <H> >- 't |}; 'btl } >>, (unfold_make_bterm thenC reduceC) )
+   ( << make_bterm{ bterm{| <H> >- 't |}; 'btl } >>, wrap_reduce (unfold_make_bterm thenC reduceC) )
 
 interactive make_bterm_itbterm {| intro [] |} :
    sequent { <H> >- make_bterm{itbterm; nil} = itbterm in BTerm }

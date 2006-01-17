@@ -53,7 +53,7 @@ let rename_rcrd_reduceC = rename_rcrd_reduce  thenC reduce_eq_label thenC tryC r
 (* BUG: rename_rcrd_reduceC does not suppose to work when labels are not constants. However it is not always a case *)
 
 let resource reduce +=
-   << rename[a:t, b:t]{rcrd[c:t]{'x;'r}} >>, rename_rcrd_reduceC
+   << rename[a:t, b:t]{rcrd[c:t]{'x;'r}} >>, wrap_reduce rename_rcrd_reduceC
 
 
 doc <:doc<
@@ -95,7 +95,7 @@ let rename_reduceC = rename_rw thenC reduce_eq_label thenC tryC reduce_eq_label
 (* BUG:  rename_reduceC does not suppose to work when labels are not constants. However it is not always a case, e.g.,  field["c":t]{rename["a":t, b:t]{'r}}  *)
 
 let resource reduce +=
-   << field[c:t]{rename[a:t, b:t]{'r}} >>, rename_reduceC
+   << field[c:t]{rename[a:t, b:t]{'r}} >>, wrap_reduce rename_reduceC
 
 doc docon
 
@@ -278,11 +278,11 @@ doc <:doc<
 >>
 
 let resource reduce +=
-  [ << field[c:t]{rename_mul_add{'r}} >>, (addrC [Subterm 1] unfold_rename_mul_add thenC repeatForC rename_mul_add_length rename_reduceC);
-    << field[c:t]{rename_add_mul{'r}} >>, (addrC [Subterm 1] unfold_rename_add_mul thenC repeatForC rename_mul_add_length rename_reduceC);
-    << rename_add_mul{rcrd[c:t]{'a;'r}} >>, unfold_rename_add_mul;
-    << rename_mul_add{rcrd[c:t]{'a;'r}} >>, unfold_rename_mul_add;
-    << as_additive{'r} >>, unfold_as_additive
+  [ << field[c:t]{rename_mul_add{'r}} >>, wrap_reduce (addrC [Subterm 1] unfold_rename_mul_add thenC repeatForC rename_mul_add_length rename_reduceC);
+    << field[c:t]{rename_add_mul{'r}} >>, wrap_reduce (addrC [Subterm 1] unfold_rename_add_mul thenC repeatForC rename_mul_add_length rename_reduceC);
+    << rename_add_mul{rcrd[c:t]{'a;'r}} >>, wrap_reduce unfold_rename_add_mul;
+    << rename_mul_add{rcrd[c:t]{'a;'r}} >>, wrap_reduce unfold_rename_mul_add;
+    << as_additive{'r} >>, wrap_reduce unfold_as_additive
   ]
 
 doc <:doc<
@@ -459,8 +459,8 @@ doc <:doc<
 >>
 
 let resource reduce +=
-  [ << field[c:t]{reverse_order{'r}} >>, (addrC [Subterm 1] unfold_reverse_order thenC repeatForC reverse_order_length rename_reduceC);
-    << reverse_order{rcrd[c:t]{'a;'r}} >>, unfold_reverse_order;
+  [ << field[c:t]{reverse_order{'r}} >>, wrap_reduce (addrC [Subterm 1] unfold_reverse_order thenC repeatForC reverse_order_length rename_reduceC);
+    << reverse_order{rcrd[c:t]{'a;'r}} >>, wrap_reduce unfold_reverse_order;
   ]
 
 doc <:doc<

@@ -121,10 +121,10 @@ doc docoff
  * Add all these rules to the reduce resource.
  *)
 let resource reduce += [
-     << AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_add thenC addrC [Subterm 1] reduce_meta_sum);
-     << AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_sub thenC addrC [Subterm 1] reduce_meta_diff);
-     << AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_mul thenC addrC [Subterm 1] reduce_meta_prod);
-     << AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_div thenC addrC [Subterm 1] reduce_meta_quot);
+     << AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} >>, wrap_reduce (reduce_add thenC addrC [Subterm 1] reduce_meta_sum);
+     << AtomBinop{SubOp; AtomInt[i:n]; AtomInt[j:n]} >>, wrap_reduce (reduce_sub thenC addrC [Subterm 1] reduce_meta_diff);
+     << AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} >>, wrap_reduce (reduce_mul thenC addrC [Subterm 1] reduce_meta_prod);
+     << AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} >>, wrap_reduce (reduce_div thenC addrC [Subterm 1] reduce_meta_quot);
 ]
 
 (*

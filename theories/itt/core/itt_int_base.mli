@@ -444,7 +444,8 @@ rule minus_minus_reduce :
  *)
 
 resource (term * conv, conv) arith_unfold
-val process_arith_unfold_resource_rw_annotation : (prim_rewrite, term*conv) rw_annotation_processor
+val process_arith_unfold_resource_rw_annotation :
+   (term * conv) rw_annotation_processor
 
 topval arith_unfoldTopC : conv
 topval arith_unfoldC : conv

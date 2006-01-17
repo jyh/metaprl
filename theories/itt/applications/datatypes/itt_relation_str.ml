@@ -106,7 +106,7 @@ define eq: eq{'self; 'a;'b} <--> le{'self; 'a;'b} and le{'self; 'b; 'a}
 
 define less: less{'self; 'a;'b} <--> le{'self; 'a; 'b} and not{eq{'self;'a;'b}}
 
-let resource reduce += <<less{rcrd[x:t]{'f;'r};'a;'b}>> , (less thenC addrC [Subterm 1; Subterm 1; Subterm 1] reduceTopC)
+let resource reduce += <<less{rcrd[x:t]{'f;'r};'a;'b}>> , wrap_reduce (less thenC addrC [Subterm 1; Subterm 1; Subterm 1] reduceTopC)
 
 dform less_df : parens :: except_mode[src] :: less{'self; 'a;'b}
  = 'a  bf[" <"]sub{'self} `" " 'b
@@ -329,7 +329,7 @@ define type_product_ord: type_product_ord{'T;'Ord} <-->
 doc docoff
 
 let resource reduce +=
-   <<field[f:t]{ type_product_ord{'T;'Ord} }>>, (addrC [Subterm 1] type_product_ord thenC reduceTopC)
+   <<field[f:t]{ type_product_ord{'T;'Ord} }>>, wrap_reduce (addrC [Subterm 1] type_product_ord thenC reduceTopC)
 
 doc docon
 
@@ -355,7 +355,7 @@ define int_order: int_order <--> {car= int; "<"= lambda{a.lambda{b.lt_bool{'a;'b
 doc docoff
 
 let resource reduce +=
-   <<compare{int_order ; number[n:n];number[m:n]; 'less_case; 'equal_case; 'greater_case}>>, (addrC [Subterm 1] int_order thenC compare)
+   <<compare{int_order ; number[n:n];number[m:n]; 'less_case; 'equal_case; 'greater_case}>>, wrap_reduce (addrC [Subterm 1] int_order thenC compare)
 
 let preorder_opname = opname_of_term <<preorder[i:l]>>
 let dest_preorder = dest_univ_term preorder_opname

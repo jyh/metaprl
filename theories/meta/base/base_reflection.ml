@@ -233,7 +233,7 @@ let reduce_ifbterm =
          else failC)
 
 let resource reduce +=
-   (<< if_bterm{ bterm{| <H> >- 't |}; 'tt } >>, reduce_ifbterm)
+   (<< if_bterm{ bterm{| <H> >- 't |}; 'tt } >>, wrap_reduce reduce_ifbterm)
 
 (***************************************************************************
  * subterms{'bt} returns a list of sub-bterms of 'bt, undefined if 'bt
@@ -288,7 +288,7 @@ let reduce_subterms =
          else failC)
 
 let resource reduce +=
-   (<< subterms{ bterm{| <H> >- 't |} } >>, reduce_subterms)
+   (<< subterms{ bterm{| <H> >- 't |} } >>, wrap_reduce reduce_subterms)
 
 (************************************************************************
  * make_bterm{'bt; 'btl} takes the top-level operator of 'bt and
@@ -369,7 +369,7 @@ let reduce_make_bterm =
          else failC)
 
 let resource reduce +=
-   (<< make_bterm{ bterm{| <H> >- 't|}; 'btl } >>, reduce_make_bterm)
+   (<< make_bterm{ bterm{| <H> >- 't|}; 'btl } >>, wrap_reduce reduce_make_bterm)
 
 (**************************************************************************
  * if_same_op{'bt1; 'bt2; 'tt; 'ff} evaluates to 'tt if 'bt1 and 'bt2
@@ -438,7 +438,7 @@ let reduce_if_simple_bterm =
          else reduce_if_simple_bterm1)
 
 let resource reduce +=
-   (<< if_simple_bterm{ bterm{| <H> >- 't|}; 'tt; 'ff } >>, reduce_if_simple_bterm)
+   (<< if_simple_bterm{ bterm{| <H> >- 't|}; 'tt; 'ff } >>, wrap_reduce reduce_if_simple_bterm)
 
 (*************************************************************************
  * if_var_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a
@@ -487,7 +487,7 @@ let reduce_if_var_bterm =
          else failC)
 
 let resource reduce +=
-   (<< if_var_bterm{ bterm{| <H> >- 't|}; 'tt; 'ff } >>, reduce_if_var_bterm)
+   (<< if_var_bterm{ bterm{| <H> >- 't|}; 'tt; 'ff } >>, wrap_reduce reduce_if_var_bterm)
 
 (************************************************************************
  * subst{'bt; 't} substitutes 't for the first bound variable of 'bt.

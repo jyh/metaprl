@@ -502,7 +502,7 @@ let resource reduce_lof +=
    << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, unfold_lof_nth_suffix
 
 let resource reduce +=
-   << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, unfold_lof_nth_suffix
+   << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, wrap_reduce unfold_lof_nth_suffix
 
 let resource normalize_lof += [
    << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, (unfold_lof_nth_suffix thenC reduceC);
@@ -532,8 +532,8 @@ interactive_rw reduce_append_prefix_singleton {| reduce_lof |} :
  *)
 let resource normalize_lof +=
     << substl{substl{'e; lof{x. 'f['x]; 'm}}; lof{x. 'g['x]; 'n}} >>,
-    (substl_substl_lof2 
-     thenC addrC [Subterm 2; Subterm 2] reduceC 
+    (substl_substl_lof2
+     thenC addrC [Subterm 2; Subterm 2] reduceC
      thenC addrC [Subterm 2] (tryC reduce_append_prefix_singleton))
 
 (************************************************************************

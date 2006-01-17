@@ -64,7 +64,7 @@ let reduce_eq_atom =
    reduce_eq_atom' thenC reduce_meta_eq_tok
 
 let resource reduce +=
-   << eq_atom{token[x:t]; token[y:t]} >>, reduce_eq_atom
+   << eq_atom{token[x:t]; token[y:t]} >>, wrap_reduce reduce_eq_atom
 
 (************************************************************************
  * RULES                                                                *

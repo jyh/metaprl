@@ -173,8 +173,8 @@ let reduce_concl_conv = termC reduce_concl
  * Add the reductions.
  *)
 let resource reduce +=
-   [<< hyp{'A; x. sequent ['arg] { <H['x]> >- 'C['x] }} >>, termC reduce_hyp;
-    << sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { <H> >- 'C }} >>, termC reduce_concl]
+   [<< hyp{'A; x. sequent ['arg] { <H['x]> >- 'C['x] }} >>, wrap_reduce (termC reduce_hyp);
+    << sequent_ind{x, y. 'concl['x; 'y]; h. 'step['h]; sequent ['arg] { <H> >- 'C }} >>, wrap_reduce (termC reduce_concl)]
 
 (*!
  * @docoff

@@ -86,7 +86,7 @@ let reduce_token_eq =
    reduce_token_eq_main thenC reduce_meta_eq_str
 
 let resource reduce +=
-   << token_eq{ token[str1:s]; token[str2:s] } >>, reduce_token_eq
+   << token_eq{ token[str1:s]; token[str2:s] } >>, wrap_reduce reduce_token_eq
 
 (**************************************************************************
  * Display forms.

@@ -1,6 +1,6 @@
 (*
  * This module defines a notion of "squiggle-simple" type,
- * which are the type, where only squiggle-equal members 
+ * which are the type, where only squiggle-equal members
  * are considered equal.
  *
  * ----------------------------------------------------------------
@@ -36,7 +36,7 @@ open Basic_tactics
 resource (term * term list, term -> bool) sqsimple
 
 val process_sqsimple_resource_annotation :
-   ('a, term * term list) annotation_processor
+   (term * term list) annotation_processor
 
 declare sqsimple{'T}
 

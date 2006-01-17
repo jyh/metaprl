@@ -115,7 +115,7 @@ type squash_info
 resource (squash_info, int -> tactic) squash
 
 val process_squash_resource_annotation :
-   (pre_tactic, squash_info) annotation_processor
+   squash_info annotation_processor
 
 (* Squashing and unsquashing *)
 topval squashT : tactic

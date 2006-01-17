@@ -153,12 +153,12 @@ interactive_rw reduce_progof : progof{."val"{'v; 's}} <--> 'v
 interactive_rw reduce_stateof : stateof{."val"{'v; 's}} <--> 's
 
 let resource reduce += [
-   << eval{prog{s1. 'e['s1]}; 's2} >>, reduce_eval;
-   << eval{exprof{'v}; 's} >>, reduce_eval_exprof;
-   (* << "value"{prog{s1. 'e['s1]}; 's2} >>, reduce_value; *)
-   << "match"{."val"{'v; 's}; x, y. 't['x; 'y]} >>, reduce_match;
-   << progof{."val"{'v; 's}} >>, reduce_progof;
-   << stateof{."val"{'v; 's}} >>, reduce_stateof
+   << eval{prog{s1. 'e['s1]}; 's2} >>, wrap_reduce reduce_eval;
+   << eval{exprof{'v}; 's} >>, wrap_reduce reduce_eval_exprof;
+   (* << "value"{prog{s1. 'e['s1]}; 's2} >>, wrap_reduce reduce_value; *)
+   << "match"{."val"{'v; 's}; x, y. 't['x; 'y]} >>, wrap_reduce reduce_match;
+   << progof{."val"{'v; 's}} >>, wrap_reduce reduce_progof;
+   << stateof{."val"{'v; 's}} >>, wrap_reduce reduce_stateof
 ]
 
 interactive evals_identity {| intro [] |} :

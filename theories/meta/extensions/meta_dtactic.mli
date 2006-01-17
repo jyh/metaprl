@@ -39,10 +39,10 @@ resource (term * (int -> tactic), int -> tactic) meta_elim
 resource (term * intro_item, tactic) meta_intro
 
 val process_meta_elim_resource_annotation :
-   (Tactic.pre_tactic * elim_option list, term * (int -> tactic)) annotation_processor
+   ?options: elim_option list -> (term * (int -> tactic)) annotation_processor
 
 val process_meta_intro_resource_annotation :
-   (Tactic.pre_tactic * intro_option list, term * intro_item) annotation_processor
+   ?options: intro_option list -> (term * intro_item) annotation_processor
 
 val wrap_intro : tactic -> intro_item
 val intro_must_select : intro_item

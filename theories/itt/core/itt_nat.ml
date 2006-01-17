@@ -33,7 +33,7 @@ doc <:doc<
 
    Author:
       Alexei Kopylov @email{kopylov@cs.cornell.edu}
-   Modified By: 
+   Modified By:
       Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
@@ -116,7 +116,7 @@ let reduce_ind_numberC =
    unfoldInd
 
 let resource reduce += [
-   <<ind{number[n:n]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
+   <<ind{number[n:n]; 'base; k, l. 'up['k; 'l]}>>, wrap_reduce reduce_ind_numberC;
 ]
 
 let ind_term = << ind{'x; 'base; k, l. 'up['k; 'l]} >>

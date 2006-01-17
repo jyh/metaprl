@@ -277,7 +277,6 @@ let extract_data base =
  *)
 let resource (sub_resource_info, tactic) sub =
    Functional {
-      fp_is_local = false;
       fp_empty = empty_dtable;
       fp_add = improve_data;
       fp_retr = extract_data

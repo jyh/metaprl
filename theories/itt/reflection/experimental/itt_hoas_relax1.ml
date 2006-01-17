@@ -61,6 +61,9 @@ declare relax
 
 let relax_option = [<< relax >>]
 
+let resource select +=
+   [<< relax >>, OptionAccept]
+
 (************************************************************************
  * General Bind type.
  *)

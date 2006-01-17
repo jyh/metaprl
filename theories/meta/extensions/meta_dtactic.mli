@@ -40,12 +40,10 @@ resource (term * intro_item, tactic) meta_intro
 
 val process_meta_elim_resource_annotation :
    ?options: elim_option list ->
-   ?select: term list ->
    (term * elim_item) annotation_processor
 
 val process_meta_intro_resource_annotation :
    ?options: intro_option list ->
-   ?select: term list ->
    (term * intro_item) annotation_processor
 
 (*

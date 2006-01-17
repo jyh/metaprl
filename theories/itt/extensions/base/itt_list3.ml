@@ -201,7 +201,9 @@ let extract_data tbl =
    in
       termC rw
 
-let process_normalize_list_of_fun_resource_rw_annotation = redex_and_conv_of_rw_annotation "normalize_list_of_fun"
+let process_normalize_list_of_fun_resource_rw_annotation ?select ?labels name redex contractum assums addrs args loc rw =
+   rule_labels_not_allowed loc select labels;
+   redex_and_conv_of_rw_annotation "normalize_list_of_fun" name redex contractum assums addrs args loc rw
 
 (*
  * Resource.

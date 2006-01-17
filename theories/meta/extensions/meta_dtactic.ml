@@ -65,11 +65,7 @@ let debug_meta_dtactic =
  *)
 let extract_elim_data =
    let select_options options (opts, _) =
-      match opts with
-         None ->
-            true
-       | Some opts ->
-            options_are_allowed options opts
+      rule_labels_are_allowed options opts
    in
    let rec firstiT i = function
       [] ->
@@ -120,41 +116,39 @@ let extract_intro_data =
              true
         | Some i ->
              match get_sel_arg p with
-                 Some i' ->
-                    i' = i
-               | None ->
-                    false)
+                Some i' ->
+                   i' = i
+              | None ->
+                   false)
       &&
-      (match options with
-          None ->
-             true
-        | Some opts ->
-             options_are_allowed_arg p opts)
+      rule_labels_are_allowed_arg p options
    in
    let extract (name, _, _, _, tac) =
       if !debug_meta_dtactic then
          eprintf "meta_d_tactic: intro: found %s%t" name eflush; tac
    in
-      (fun tbl ->
-            funT (fun p ->
-                  let t = Sequent.goal p in
-                  let () =
-                     if !debug_meta_dtactic then
-                        eprintf "meta_d_tactic: intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush
-                  in
-                  let tacs =
-                     try lookup_bucket tbl (select_intro p (Sequent.get_int_arg p "d_auto")) t with
-                        Not_found ->
-                           let msg =
-                              match get_sel_arg p with
-                                 Some _ ->
-                                    "meta_dT tactic failed: the select argument may be out of range"
-                               | None ->
-                                    "meta_dT tactic failed: the rule may not apply, or option arguments may not be valid"
-                           in
-                              raise (RefineError ("extract_intro_data", StringTermError (msg, t)))
-                  in
-                     firstT (List.map extract tacs)))
+   let tac tbl =
+      funT (fun p ->
+            let t = Sequent.goal p in
+            let () =
+               if !debug_meta_dtactic then
+                  eprintf "meta_d_tactic: intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush
+            in
+            let tacs =
+               try lookup_bucket tbl (select_intro p (Sequent.get_int_arg p "d_auto")) t with
+                  Not_found ->
+                     let msg =
+                        match get_sel_arg p with
+                           Some _ ->
+                              "meta_dT tactic failed: the select argument may be out of range"
+                         | None ->
+                              "meta_dT tactic failed: the rule may not apply, or option arguments may not be valid"
+                     in
+                        raise (RefineError ("extract_intro_data", StringTermError (msg, t)))
+            in
+               firstT (List.map extract tacs))
+   in
+      tac
 
 (*
  * Options for intro rule.
@@ -181,7 +175,7 @@ let one_rw_arg i =
 (*
  * Improve the intro resource from a rule.
  *)
-let process_meta_intro_resource_annotation ?(options = []) ?select name args term_args statement loc pre_tactic =
+let process_meta_intro_resource_annotation ?(options = []) ?select ?labels name args term_args statement loc pre_tactic =
    if args.spec_addrs <> [||] then
       raise (Invalid_argument (sprintf
          "%s: intro annotation: %s: context arguments not supported yet" (string_of_loc loc) name));
@@ -235,7 +229,7 @@ let process_meta_intro_resource_annotation ?(options = []) ?select name args ter
             raise (Invalid_argument (sprintf "meta_d_tactic.intro: %s: not an introduction rule" name))
    in
    let sel_opts = get_sel_arg options in
-   let option_opts = opset_of_opt_terms select in
+   let option_opts = rule_labels_of_opt_terms select labels in
    let rec auto_aux = function
       [] ->
          [t, (name, sel_opts, option_opts, (if assums = [] then AutoTrivial else AutoNormal), tac)]
@@ -264,7 +258,7 @@ let rec get_elim_args_arg = function
  | [] ->
       None
 
-let process_meta_elim_resource_annotation ?(options = []) ?select name args term_args statement loc pre_tactic =
+let process_meta_elim_resource_annotation ?(options = []) ?select ?labels name args term_args statement loc pre_tactic =
    if args.spec_addrs <> [||] then
       raise (Invalid_argument (sprintf
          "%s: elim annotation: %s: context arguments not supported yet" (string_of_loc loc) name));
@@ -361,7 +355,7 @@ let process_meta_elim_resource_annotation ?(options = []) ?select name args term
              | _ ->
                   raise (Invalid_argument (sprintf "meta_d_tactic: %s: not an elimination rule" name))
          in
-         let opts = opset_of_opt_terms select in
+         let opts = rule_labels_of_opt_terms select labels in
             [t, (opts, tac)]
     | _ ->
          raise (Invalid_argument (sprintf "meta_d_tactic.improve_elim: %s: must be an elimination rule" name))

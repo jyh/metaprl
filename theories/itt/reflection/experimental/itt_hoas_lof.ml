@@ -82,7 +82,8 @@ let extract_data tbl =
 (*
  * Normalizing resource (lof lifting).
  *)
-let process_pre_normalize_lof_resource_rw_annotation = arith_rw_annotation "pre_normalize_lof"
+let process_pre_normalize_lof_resource_rw_annotation =
+   arith_rw_annotation "pre_normalize_lof"
 
 let resource (term * conv, conv) pre_normalize_lof =
    table_resource_info extract_data
@@ -101,7 +102,8 @@ let preNormalizeLofT =
 (*
  * Normalizing resource (lof lifting).
  *)
-let process_normalize_lof_resource_rw_annotation = arith_rw_annotation "normalize_lof"
+let process_normalize_lof_resource_rw_annotation =
+   arith_rw_annotation "normalize_lof"
 
 let resource (term * conv, conv) normalize_lof =
    table_resource_info extract_data
@@ -120,7 +122,8 @@ let normalizeLofT =
 (*
  * Reduce resource (lof lowering).
  *)
-let process_reduce_lof_resource_rw_annotation = arith_rw_annotation "reduce_lof"
+let process_reduce_lof_resource_rw_annotation =
+   arith_rw_annotation "reduce_lof"
 
 let resource (term * conv, conv) reduce_lof =
    table_resource_info extract_data

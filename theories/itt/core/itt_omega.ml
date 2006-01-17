@@ -1741,7 +1741,7 @@ let omegaT =
 	(*startT 2 thenMT*) arithRelInConcl2HypT thenMT
 	omegaPrepT thenT rw relNormC 0 (*thenMT endT 2*)
 
-let omega_intro = "omegaT", None, None, AutoComplete, (rw reduceC 0 thenMT omegaT)
+let omega_intro = "omegaT", None, rule_labels_empty, AutoComplete, (rw reduceC 0 thenMT omegaT)
 
 let resource intro += [
    << 'a < 'b >>, omega_intro;

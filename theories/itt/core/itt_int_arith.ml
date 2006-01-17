@@ -151,7 +151,8 @@ let rec on_main_subgoals = function
          on_main_subgoals tl*)
  | [] -> []
 
-let process_ge_elim_resource_annotation ~options:arg name context_args term_args statement loc pre_tactic =
+let process_ge_elim_resource_annotation ~options:arg ?select ?labels name context_args term_args statement loc pre_tactic =
+   rule_labels_not_allowed loc select labels;
    let assums, goal = unzip_mfunction statement in
    let () =
       if !debug_arith_dtactic then
@@ -167,7 +168,8 @@ let process_ge_elim_resource_annotation ~options:arg name context_args term_args
    let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic { arg_ints = [| i |]; arg_addrs = [||] } []) in
    [mk_pair_term (mk_var_term v) t, seq_terms, (arg, tac)]
 
-let process_ge_intro_resource_annotation name context_args term_args statement loc pre_tactic =
+let process_ge_intro_resource_annotation ?select ?labels name context_args term_args statement loc pre_tactic =
+   rule_labels_not_allowed loc select labels;
    let assums, goal = unzip_mfunction statement in
    let t = TermMan.concl goal in
    let () =

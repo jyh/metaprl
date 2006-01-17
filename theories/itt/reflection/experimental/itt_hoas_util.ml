@@ -173,7 +173,8 @@ let rec reduce_addrs conv = function
    [] -> conv
  | addr :: adrrs -> reduce_addrs conv adrrs thenC addrLiteralC addr reduceC
 
-let arith_rw_annotation name rwname redex contractum _ addrs args loc rw =
+let arith_rw_annotation name ?select ?labels rwname redex contractum _ addrs args loc rw =
+   rule_labels_not_allowed loc select labels;
    match addrs, args with
       { spec_ints = [||]; spec_addrs = [||] }, [] ->
          [redex, reduce_addrs (rewrite_of_pre_rewrite rw empty_rw_args []) (find_subterm contractum is_arith_term)]

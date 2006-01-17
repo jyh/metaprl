@@ -249,7 +249,7 @@ let disectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
       disectEliminationT n thenT thinIfThinningT [-3;-1;n])
 
-let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
+let resource elim += (<<bisect{'A; x.'B['x]}>>, wrap_elim disectEliminationT)
 
 doc <:doc<
 
@@ -278,7 +278,7 @@ let disectEliminationT = argfunT (fun n p ->
     | Some 2 -> disectEliminationRight n thenT thinIfThinningT [-3;-1;n]
     | Some _ -> raise (RefineError ("disectElimination", StringError ("select option is out of range ([1,2])"))))
 
-let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
+let resource elim += (<<bisect{'A; x.'B['x]}>>, wrap_elim disectEliminationT)
 
 doc <:doc<
    @modsubsection{Subtyping}

@@ -219,15 +219,15 @@ let resource reduce += [
 ]
 
 let resource elim += [
-	<<number[i:n] > number[j:n]>>, rw reduce_gt_prop;
-	<<number[i:n] <= number[j:n]>>, rw reduce_le_prop;
-	<<number[i:n] >= number[j:n]>>, rw reduce_ge_prop;
-	<<number[i:n] < number[j:n]>>, rw reduce_lt_prop;
-   <<nequal{number[i:n]; number[j:n]}>>, rw reduce_neq_prop;
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] reduce_lt);
-	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] unfold_le_bool);
-	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt));
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, rw (addrC [Subterm 1] unfold_ge_bool);
+	<<number[i:n] > number[j:n]>>, wrap_elim (rw reduce_gt_prop);
+	<<number[i:n] <= number[j:n]>>, wrap_elim (rw reduce_le_prop);
+	<<number[i:n] >= number[j:n]>>, wrap_elim (rw reduce_ge_prop);
+	<<number[i:n] < number[j:n]>>,  wrap_elim (rw reduce_lt_prop);
+   <<nequal{number[i:n]; number[j:n]}>>, wrap_elim (rw reduce_neq_prop);
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] reduce_lt));
+	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_le_bool));
+	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)));
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_ge_bool));
 	]
 
 let resource intro += [
@@ -553,7 +553,7 @@ let indDownT = mkGuardT guarded_ind_down
 let indUpT = mkGuardT guarded_ind_up
 
 let resource elim +=
-   <<int>>, (fun i -> (intElimination2 i thenT thinIfThinningT [i]) thenLT [indDownT; rwh reduce_ind_base 0; indUpT])
+   <<int>>, wrap_elim (fun i -> (intElimination2 i thenT thinIfThinningT [i]) thenLT [indDownT; rwh reduce_ind_base 0; indUpT])
 
 interactive min_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->

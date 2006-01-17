@@ -77,6 +77,7 @@ let extract_sqsimple tbl =
 
 let resource (term * term list, term -> bool) sqsimple =
    Functional {
+      fp_is_local = false;
       fp_empty = empty_map_table;
       fp_add = (fun tbl (t1, t2) -> add_map tbl t1 t2 ());
       fp_retr = extract_sqsimple

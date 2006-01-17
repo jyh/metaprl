@@ -279,7 +279,7 @@ let intersectionEliminationT = argfunT (fun n p ->
      (intersectionElimination2 n thenT thinIfThinningT [-1;n])
        orelseT intersectionEliminationT n)
 
-let resource elim += (<<Isect y: 'A. 'B['y]>>, intersectionEliminationT)
+let resource elim += (<<Isect y: 'A. 'B['y]>>, wrap_elim intersectionEliminationT)
 
 doc <:doc<
    As a corollary of elimination rule we have that if

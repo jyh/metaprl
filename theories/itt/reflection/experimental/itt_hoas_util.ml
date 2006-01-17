@@ -94,8 +94,8 @@ let opset_elimT i =
    funT (opset_elim i)
 
 let resource elim +=
-    [<< SubOp{'h :: 't} >>, opset_elimT;
-     << SubOp{nil} >>,      opset_elimT]
+    [<< SubOp{'h :: 't} >>, wrap_elim opset_elimT;
+     << SubOp{nil} >>,      wrap_elim opset_elimT]
 
 (************************************************************************
  * Properties of compatible_shapes.
@@ -151,9 +151,9 @@ let dest_compatible_shapes_shapeT i =
    rw (addrC [Subterm 2] reduceC) i thenT dest_compatible_shapesT i
 
 let resource elim +=
-    [<< compatible_shapes{'depth; 'h :: 't; !v} >>, dest_compatible_shapesT;
-     << compatible_shapes{'depth; nil; !v} >>, dest_compatible_shapesT;
-     << compatible_shapes{'depth; shape{'op}; !v} >>, dest_compatible_shapes_shapeT]
+    [<< compatible_shapes{'depth; 'h :: 't; !v} >>,   wrap_elim dest_compatible_shapesT;
+     << compatible_shapes{'depth; nil; !v} >>,        wrap_elim dest_compatible_shapesT;
+     << compatible_shapes{'depth; shape{'op}; !v} >>, wrap_elim dest_compatible_shapes_shapeT]
 
 let resource forward +=
     [<< compatible_shapes{'depth; 'h :: 't; !v} >>,   { forward_loc = (LOCATION); forward_prec = forward_normal_prec; forward_tac = dest_compatible_shapesT };
@@ -166,7 +166,7 @@ let resource forward +=
 let arith_opnames =
    OpnameSet.of_list (List.map opname_of_term [<<'a +@ 'b>>; <<-'a>>; <<'a -@ 'b>>; <<'a *@ 'b>> ])
 
-let is_arith_term t _ = 
+let is_arith_term t _ =
    OpnameSet.mem arith_opnames (opname_of_term t)
 
 let rec reduce_addrs conv = function

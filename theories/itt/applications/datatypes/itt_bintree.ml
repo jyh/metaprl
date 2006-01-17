@@ -199,7 +199,7 @@ let resource intro +=
    [<< 'a='b in Node{'T;l,r.'R['l;'r]} >>, wrap_intro (rwh nodetype2 0 thenT dT 0)]
 
 let resource elim +=
-   << Node{'T;l,r.'R['l;'r]} >>, (fun n -> rw nodetype2 n thenT dT n)
+   << Node{'T;l,r.'R['l;'r]} >>, wrap_elim (fun n -> rw nodetype2 n thenT dT n)
 
 doc rules
 

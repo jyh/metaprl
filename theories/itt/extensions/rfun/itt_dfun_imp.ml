@@ -180,7 +180,7 @@ let d_hyp_fun = argfunT (fun i p ->
       RefineError _ ->
          independentFunctionElimination i)
 
-let resource elim += (dfun_term, d_hyp_fun)
+let resource elim += (dfun_term, wrap_elim d_hyp_fun)
 
 doc <:doc<
    @modsubsection{Combinator equality}

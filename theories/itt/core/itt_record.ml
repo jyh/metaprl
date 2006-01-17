@@ -406,10 +406,10 @@ let recordI_elim = argfunT (fun n p ->
        (*else*) (record_reduceT thenMT tryT (dT (n+1))))
 
 let resource elim += [
-   (<<record[m:t]{'A}>>,recordS_elim);
-   (<<record[m:t]{'A;'R}>>,recordI_elim);
-   (<<record[m:t]{'A;a.'R['a]}>>,recordR_elim);
-   (<<record[m:t]{self.'A['self];'R}>>,recordL_elim)
+   (<<record[m:t]{'A}>>,               wrap_elim recordS_elim);
+   (<<record[m:t]{'A;'R}>>,             wrap_elim recordI_elim);
+   (<<record[m:t]{'A;a.'R['a]}>>,       wrap_elim recordR_elim);
+   (<<record[m:t]{self.'A['self];'R}>>, wrap_elim recordL_elim)
 ]
 
 (*** Orthogonality ***)
@@ -595,7 +595,7 @@ let recordEliminationT n p =
    with
          RefineError _ -> recordDefEliminationT n p
 
-let resource elim += (<<record[n:t]{'A;'R}>>, recordEliminationT)
+let resource elim += (<<record[n:t]{'A;'R}>>, wrap_elim recordEliminationT)
 *)
 (*** Reductions ***)
 

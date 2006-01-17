@@ -103,7 +103,7 @@ let fold_ring = makeFoldC << ring[i:l] >> unfold_ring
 let ringDT n = rw unfold_ring n thenT dT n
 
 let resource elim +=
-   [<<ring[i:l]>>, ringDT]
+   [<<ring[i:l]>>, wrap_elim ringDT]
 
 (* Rules about distributivity *)
 interactive isRDistrib_wf {| intro [] |} :
@@ -590,7 +590,7 @@ let fold_subring = makeFoldC << subring[i:l]{'S; 'R} >> unfold_subring
 let subringDT n = copyHypT n (n+1) thenT rw unfold_subring (n+1) thenT dT (n+1) thenT dT (n+1) thenT dT (n+1)
 
 let resource elim +=
-   [<<subring[i:l]{'S; 'R}>>, subringDT]
+   [<<subring[i:l]{'S; 'R}>>, wrap_elim subringDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}

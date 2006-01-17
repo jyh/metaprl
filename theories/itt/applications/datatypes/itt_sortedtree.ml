@@ -23,9 +23,9 @@ open Top_conversionals
 let dByDefT unfold n = rwh unfold n thenT dT n
 let dByRecDefT term unfold n = dByDefT unfold n thenT rwhAll (makeFoldC term unfold)
 
-let soft_elim term unfold = term, (dByDefT unfold)
+let soft_elim term unfold = term, wrap_elim (dByDefT unfold)
 let soft_intro term unfold = term, wrap_intro (dByDefT unfold 0)
-let softrec_elim term unfold = term, (dByRecDefT term unfold)
+let softrec_elim term unfold = term, wrap_elim (dByRecDefT term unfold)
 let softrec_intro term unfold = term, wrap_intro (dByRecDefT term unfold 0)
 
 let reduceByDefC unfold =   unfold thenC reduceTopC

@@ -35,17 +35,18 @@ open Basic_tactics
 
 open Tactic_type
 
-resource (term * (int -> tactic), int -> tactic) meta_elim
+resource (term * elim_item, int -> tactic) meta_elim
 resource (term * intro_item, tactic) meta_intro
 
 val process_meta_elim_resource_annotation :
-   ?options: elim_option list -> (term * (int -> tactic)) annotation_processor
+   ?options: elim_option list ->
+   ?select: term list ->
+   (term * elim_item) annotation_processor
 
 val process_meta_intro_resource_annotation :
-   ?options: intro_option list -> (term * intro_item) annotation_processor
-
-val wrap_intro : tactic -> intro_item
-val intro_must_select : intro_item
+   ?options: intro_option list ->
+   ?select: term list ->
+   (term * intro_item) annotation_processor
 
 (*
  * The inherited d tactic.

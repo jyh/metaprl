@@ -120,7 +120,7 @@ let fold_ringE = makeFoldC << ringE[i:l] >> unfold_ringE
 let ringEDT n = rw unfold_ringE n thenT dT n
 
 let resource elim +=
-   [<<ringE[i:l]>>, ringEDT]
+   [<<ringE[i:l]>>, wrap_elim ringEDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}

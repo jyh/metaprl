@@ -111,7 +111,7 @@ let mk_fun_term t1 t2 =
       mk_dfun_term v t1 t2
 
 let is_fun_term t =
-   is_dfun_term t && 
+   is_dfun_term t &&
       let v, t1, t2 = dest_dfun t in
          not (SymbolSet.mem (free_vars_set t2) v)
 
@@ -286,7 +286,7 @@ let d_hyp_fun = argfunT (fun i p ->
       RefineError _ ->
          independentFunctionElimination i)
 
-let resource elim += (dfun_term, d_hyp_fun)
+let resource elim += (dfun_term, wrap_elim d_hyp_fun)
 
 doc <:doc<
    @modsubsection{Combinator equality}

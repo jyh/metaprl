@@ -151,17 +151,17 @@ let isTrichotomousDT0 = rw unfold_isTrichotomous 0 thenMT dT 0 thenMT dT 0
 let isStrictTotalOrderDT n = rw unfold_isStrictTotalOrder1 n thenT dT n
 
 let resource elim += [
-	<<isRelation{'car; 'rel}>>, isRelationDT;
-	<<isReflexive{'car; 'rel}>>, rw unfold_isReflexive;
-	<<isIrreflexive{'car; 'rel}>>, rw unfold_isIrreflexive;
-	<<isAntisym{'car; 'rel}>>, rw unfold_isAntisym;
-	<<isTransitive{'car; 'rel}>>, rw unfold_isTransitive;
-	<<isUnstrictPartialOrder{'car; 'rel}>>, isUnstrictPartialOrderDT;
-	<<isStrictPartialOrder{'car; 'rel}>>, isStrictPartialOrderDT;
-	<<isLinear{'car; 'rel}>>, rw unfold_isLinear;
-	<<isUnstrictTotalOrder{'car; 'rel}>>, isUnstrictTotalOrderDT;
-	<<isTrichotomous{'car; 'rel}>>, rw unfold_isTrichotomous;
-	<<isStrictTotalOrder{'car; 'rel}>>, isStrictTotalOrderDT
+	<<isRelation{'car; 'rel}>>,             wrap_elim (isRelationDT);
+	<<isReflexive{'car; 'rel}>>,            wrap_elim (rw unfold_isReflexive);
+	<<isIrreflexive{'car; 'rel}>>,          wrap_elim (rw unfold_isIrreflexive);
+	<<isAntisym{'car; 'rel}>>,              wrap_elim (rw unfold_isAntisym);
+	<<isTransitive{'car; 'rel}>>,           wrap_elim (rw unfold_isTransitive);
+	<<isUnstrictPartialOrder{'car; 'rel}>>, wrap_elim (isUnstrictPartialOrderDT);
+	<<isStrictPartialOrder{'car; 'rel}>>,   wrap_elim (isStrictPartialOrderDT);
+	<<isLinear{'car; 'rel}>>,               wrap_elim (rw unfold_isLinear);
+	<<isUnstrictTotalOrder{'car; 'rel}>>,   wrap_elim (isUnstrictTotalOrderDT);
+	<<isTrichotomous{'car; 'rel}>>,         wrap_elim (rw unfold_isTrichotomous);
+	<<isStrictTotalOrder{'car; 'rel}>>,     wrap_elim (isStrictTotalOrderDT)
 	]
 
 let resource intro += [
@@ -486,7 +486,7 @@ let fold_strictTotalOrder1 = makeFoldC << strictTotalOrder[i:l,rel:t] >> unfold_
 let unstrictPartialOrderDT n = rw unfold_unstrictPartialOrder1 n thenT dT n
 
 let resource elim += [
-   <<unstrictPartialOrder[i:l,rel:t]>>, unstrictPartialOrderDT;
+   <<unstrictPartialOrder[i:l,rel:t]>>, wrap_elim unstrictPartialOrderDT;
 	]
 
 doc <:doc<

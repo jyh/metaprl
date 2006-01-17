@@ -86,7 +86,7 @@ interactive operators_wf {| intro[] |} :
    sequent { <H> >- "type"{'T} } -->
    sequent { <H> >- "type"{Operators[i:l]{'T}} }
 
-let resource elim += <<Operators[i:l]{'T}>>, fun n-> rw unfold_Operators n thenT dT n
+let resource elim += <<Operators[i:l]{'T}>>, wrap_elim (fun n-> rw unfold_Operators n thenT dT n)
 
 let resource intro += <<'F in Operators[i:l]{'T}>>, wrap_intro (rw (addrC [Subterm 1] unfold_Operators) 0 thenT dT 0)
 

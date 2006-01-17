@@ -64,7 +64,7 @@ let _ =
 (* We do not want the default into handling for broup operations *)
 
 let alg_intro =
-   "alg_intro", None, [], AutoNormal, failWithT "Abstract algebra intro tactic: do not know what to do"
+   "alg_intro", None, None, AutoNormal, failWithT "Abstract algebra intro tactic: do not know what to do"
 
 let resource intro += [
    << ('a *['G] 'b) in 'T >>, alg_intro;
@@ -104,7 +104,7 @@ let fold_group = makeFoldC << group[i:l] >> unfold_group
 let groupDT n = rw unfold_group n thenT dT n
 
 let resource elim +=
-   [<<group[i:l]>>, groupDT]
+   [<<group[i:l]>>, wrap_elim groupDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}
@@ -440,7 +440,7 @@ let resource intro +=
    ]
 
 let resource elim +=
-   [<<groupExtEqual{'A; 'B}>>, groupExtEqualDT]
+   [<<groupExtEqual{'A; 'B}>>, wrap_elim groupExtEqualDT]
 
 (************************************************************************
  * ABELIAN GROUP                                                        *
@@ -467,7 +467,7 @@ let fold_isAbelg = makeFoldC << isAbelg{'G} >> unfold_isAbelg
 let abelgDT n = rw unfold_abelg n thenT dT n
 
 let resource elim +=
-   [<<abelg[i:l]>>, abelgDT]
+   [<<abelg[i:l]>>, wrap_elim abelgDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}
@@ -539,7 +539,7 @@ let fold_subgroup = makeFoldC << subgroup[i:l]{'S; 'G} >> unfold_subgroup
 let subgroupDT n = copyHypT n (n+1) thenT rw unfold_subgroup (n+1) thenT dT (n+1) thenT dT (n+1)
 
 let resource elim +=
-   [<<subgroup[i:l]{'S; 'G}>>, subgroupDT]
+   [<<subgroup[i:l]{'S; 'G}>>, wrap_elim subgroupDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}

@@ -57,7 +57,9 @@ open Basic_tactics
 (*
  * Select option for this theory.
  *)
-let relax_option = ["relax"]
+declare relax
+
+let relax_option = [<< relax >>]
 
 (************************************************************************
  * General Bind type.

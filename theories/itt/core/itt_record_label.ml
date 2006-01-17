@@ -69,8 +69,8 @@ let neq_label_elimT = argfunT (fun n p ->
 
 
 let resource elim +=
-  [ << label[x:t] = label[y:t] in label >>, eq_label_elimT;
-    << label[x:t] <> label[y:t] in label >>, neq_label_elimT ]
+  [ << label[x:t] = label[y:t] in label >>, wrap_elim eq_label_elimT;
+    << label[x:t] <> label[y:t] in label >>, wrap_elim neq_label_elimT ]
 
 
 interactive_rw reduce_eq_label_trivial_rw :

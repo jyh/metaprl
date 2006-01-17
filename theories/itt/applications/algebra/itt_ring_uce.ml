@@ -86,7 +86,7 @@ let fold_unitringCE = makeFoldC << unitringCE[i:l] >> unfold_unitringCE
 let unitringCEDT n = rw unfold_unitringCE n thenT dT n
 
 let resource elim +=
-   [<<unitringCE[i:l]>>, unitringCEDT]
+   [<<unitringCE[i:l]>>, wrap_elim unitringCEDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}

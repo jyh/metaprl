@@ -431,7 +431,7 @@ let squashT = funT (fun p ->
 let squash_elimT i =
    (progressT (squashElim i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
 
-let resource elim += (squash_term, squash_elimT)
+let resource elim += (squash_term, wrap_elim squash_elimT)
 
 let rec unsquashAllT_aux i seq hyps =
    if i > hyps then idT else

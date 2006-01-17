@@ -1339,12 +1339,7 @@ let base_jproverT def_mult p =
       if not (alpha_equal itt_sequent_arg seq.sequent_args) then
          raise (RefineError("Itt_logic.base_jproverT", StringError "Not an ITT sequent"))
    in
-   let assums =
-      if get_option_arg p "jprover:ignore-assums" then
-         []
-      else
-         make_j_assums p goal (Sequent.num_assums p) 1
-   in
+   let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
    let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
    let mult_limit =
       match Sequent.get_int_arg p "jprover" with

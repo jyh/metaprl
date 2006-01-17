@@ -76,6 +76,7 @@ doc <:doc<
 extends Summary
 extends Shell_theory
 extends Var
+extends Top_options
 extends Top_tacticals
 extends Top_conversionals
 extends Base_trivial

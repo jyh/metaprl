@@ -74,7 +74,7 @@ let resource intro +=
     <<"type"{ext_equal{'A; 'B}}>>, wrap_intro (rw (addrC [Subterm 1] unfoldExtEqual) 0 thenT dT 0 thenT dT 0)
    ]
 
-let resource elim += (<<ext_equal{'A; 'B}>>, (fun n -> rw unfoldExtEqual n thenT dT n))
+let resource elim += (<<ext_equal{'A; 'B}>>, wrap_elim (fun n -> rw unfoldExtEqual n thenT dT n))
 
 interactive extEqualSymmetry :
    sequent{ <H> >- ext_equal{'A;'B}} -->

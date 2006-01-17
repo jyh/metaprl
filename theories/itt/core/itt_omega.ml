@@ -1350,7 +1350,7 @@ interactive_rw zero_ge_to_left_rw :
 let zero_term = <<0>>
 
 let ge_to_ge0C t =
-	if is_ge_term t then 
+	if is_ge_term t then
       let a, b = dest_ge t in
          if alpha_equal b zero_term then
             idC
@@ -1741,7 +1741,7 @@ let omegaT =
 	(*startT 2 thenMT*) arithRelInConcl2HypT thenMT
 	omegaPrepT thenT rw relNormC 0 (*thenMT endT 2*)
 
-let omega_intro = "omegaT", None, [], AutoComplete, (rw reduceC 0 thenMT omegaT)
+let omega_intro = "omegaT", None, None, AutoComplete, (rw reduceC 0 thenMT omegaT)
 
 let resource intro += [
    << 'a < 'b >>, omega_intro;

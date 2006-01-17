@@ -176,7 +176,7 @@ let resource meta_intro +=
    [<< mimplies{'e1; 'e2} >>, wrap_intro mimplies_intro]
 
 let resource meta_elim +=
-   [<< mimplies{'e1; 'e2} >>, mimplies_elim]
+   [<< mimplies{'e1; 'e2} >>, wrap_elim mimplies_elim]
 
 (************************************************************************
  * Tests.

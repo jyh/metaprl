@@ -233,8 +233,8 @@ let unfold_semigroup = unfold_mul_semigroup orelseC unfold_semigroup1
 let semigroupDT n = rw unfold_semigroup n thenT dT n
 
 let resource elim +=
-   [ <<semigroup[i:l]>>,semigroupDT;
-     <<semigroup[G:t,mul:t,i:l]>>,semigroupDT
+   [ <<semigroup[i:l]>>,           wrap_elim semigroupDT;
+     <<semigroup[G:t,mul:t,i:l]>>, wrap_elim semigroupDT
    ]
 let resource intro +=
    [<<semigroup[i:l]>>,wrap_intro (semigroupDT 0);

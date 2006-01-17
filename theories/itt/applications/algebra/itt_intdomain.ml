@@ -81,7 +81,7 @@ let fold_intDomain = makeFoldC << intDomain[i:l] >> unfold_intDomain
 let intDomainDT n = rw unfold_intDomain n thenT dT n
 
 let resource elim +=
-   [<<intDomain[i:l]>>, intDomainDT]
+   [<<intDomain[i:l]>>, wrap_elim intDomainDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}

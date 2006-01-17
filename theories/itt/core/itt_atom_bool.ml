@@ -98,7 +98,7 @@ let eq_atom_assert_elimT n =
    eq_atom_elim n thenT rw reduce_eq_atom n thenT dT n
 
 let resource elim +=
-   <<token[x:t] = token[y:t] in atom>>,  eq_atom_assert_elimT
+   <<token[x:t] = token[y:t] in atom>>,  wrap_elim eq_atom_assert_elimT
 
 (*
  * -*-

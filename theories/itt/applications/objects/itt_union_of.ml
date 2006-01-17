@@ -105,7 +105,7 @@ doc <:doc<
 >>
 
 let union_ofElimT n = rwh union_of n thenT dT n
-let resource elim += (<< union_of{'T} >>, union_ofElimT)
+let resource elim += (<< union_of{'T} >>, wrap_elim union_ofElimT)
 
 doc <:doc<
    @modsubsection{Subtyping}

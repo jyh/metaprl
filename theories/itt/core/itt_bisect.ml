@@ -143,7 +143,7 @@ let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
       bisectEliminationT n thenT thinIfThinningT [-3;-1;n])
 
-let resource elim += (<<'A isect 'B>>,bisectEliminationT)
+let resource elim += (<<'A isect 'B>>, wrap_elim bisectEliminationT)
 
 doc docon
 
@@ -176,7 +176,7 @@ let bisectEliminationT = argfunT (fun n p ->
     | Some 2 -> bisectEliminationRight n thenT thinIfThinningT [-3;-1;n]
     | Some _ -> raise (RefineError ("bisectElimination", StringError ("select option is out of range ([1,2])"))))
 
-let resource elim += (<<'A isect 'B>>,bisectEliminationT)
+let resource elim += (<<'A isect 'B>>, wrap_elim bisectEliminationT)
 
 doc <:doc< Equality elimination. >>
 

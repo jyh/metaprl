@@ -85,7 +85,7 @@ let fold_fieldE = makeFoldC << fieldE[i:l] >> unfold_fieldE
 let fieldEDT n = rw unfold_fieldE n thenT dT n
 
 let resource elim +=
-   [<<fieldE[i:l]>>, fieldEDT]
+   [<<fieldE[i:l]>>, wrap_elim fieldEDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}

@@ -77,7 +77,7 @@ let fold_groupoid = makeFoldC << groupoid[i:l] >> unfold_groupoid
 let groupoidDT n = rw unfold_groupoid n thenT dT n
 
 let resource elim +=
-   [<<groupoid[i:l]>>, groupoidDT]
+   [<<groupoid[i:l]>>, wrap_elim groupoidDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}
@@ -124,7 +124,7 @@ let fold_semigroup = makeFoldC << semigroup[i:l] >> unfold_semigroup
 let semigroupDT n = rw unfold_semigroup n thenT dT n
 
 let resource elim +=
-   [<<semigroup[i:l]>>, semigroupDT]
+   [<<semigroup[i:l]>>, wrap_elim semigroupDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}
@@ -201,7 +201,7 @@ let fold_monoid = makeFoldC << monoid[i:l] >> unfold_monoid
 let monoidDT n = rw unfold_monoid n thenT dT n
 
 let resource elim +=
-   [<<monoid[i:l]>>, monoidDT]
+   [<<monoid[i:l]>>, wrap_elim monoidDT]
 
 doc <:doc<
    @modsubsection{Well-formedness}
@@ -292,8 +292,8 @@ let csemigroupDT n = rw unfold_csemigroup n thenT dT n
 let cmonoidDT n = rw unfold_cmonoid n thenT dT n
 
 let resource elim +=
-   [<<csemigroup[i:l]>>, csemigroupDT;
-    <<cmonoid[i:l]>>, cmonoidDT
+   [<<csemigroup[i:l]>>, wrap_elim csemigroupDT;
+    <<cmonoid[i:l]>>,    wrap_elim cmonoidDT
    ]
 
 doc <:doc<

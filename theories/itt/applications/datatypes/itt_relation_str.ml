@@ -56,9 +56,9 @@ open Itt_struct
 let dByDefT  unfold n = rw unfold n thenT dT n
 let dByRecDefT term unfold n = dByDefT unfold n thenT rwhAll (makeFoldC term unfold)
 
-let soft_elim term unfold = term, (dByDefT unfold)
+let soft_elim term unfold = term, wrap_elim (dByDefT unfold)
 let soft_into term unfold = term, (dByDefT unfold 0)
-let softrec_elim term unfold = term, (dByRecDefT term unfold)
+let softrec_elim term unfold = term, wrap_elim (dByRecDefT term unfold)
 let softrec_into term unfold = term, (dByRecDefT term unfold 0)
 
 let reduceByDefC unfold =   unfold thenC reduceTopC

@@ -277,6 +277,7 @@ let extract_data base =
  *)
 let resource (sub_resource_info, tactic) sub =
    Functional {
+      fp_is_local = false;
       fp_empty = empty_dtable;
       fp_add = improve_data;
       fp_retr = extract_data
@@ -289,7 +290,7 @@ let prove_subtypeT = funT (fun p ->
    Sequent.get_resource_arg p get_sub_resource)
 
 let resource intro +=
-   subtype_term, ("prove_subtype", None, [], AutoNormal, prove_subtypeT)
+   subtype_term, ("prove_subtype", None, None, AutoNormal, prove_subtypeT)
 
 (************************************************************************
  * TACTICS                                                              *
@@ -308,7 +309,7 @@ let d_hyp_subtypeT = argfunT (fun i p ->
            _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
    with RefineError ("get_attribute",_) -> subtypeElimination i)
 
-let resource elim += (subtype_term, d_hyp_subtypeT)
+let resource elim += (subtype_term, wrap_elim d_hyp_subtypeT)
 
 interactive use_subtype1 'A :
    [aux] sequent { <H> >- 'A subtype 'B } -->

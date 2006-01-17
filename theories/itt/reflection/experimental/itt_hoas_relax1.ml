@@ -206,6 +206,33 @@ interactive bterm_is_bind 'n : <:xrule<
    <H> >- e in Bind{m}
 >>
 
+(************************************************************************
+ * Relaxed reductions.
+ *)
+doc <:doc<
+   Restate theorems from @tt[Itt_hoas_bterm].
+>>
+interactive_rw subterms_lemma_relax {| reduce ~select:relax_option |} : <:xrewrite<
+   n in nat -->
+   subterms in list{Bind{n}} -->
+   map{bt. bind{n; v. substl{bt; v}}; subterms}
+   <-->
+   subterms
+>>
+
+doc <:doc<
+   This is the key rule, where we relax the reduction
+   << dest_bterm{'e; l, r. 'base; d, o, s. 'step} >>.
+>>
+interactive_rw dest_bterm_mk_bterm_relax {| reduce ~select:relax_option |} : <:xrewrite<
+   n in nat -->
+   op in Operator -->
+   subterms in list{Bind{n}} -->
+   "dest_bterm"{mk_bterm{n; op; subterms}; l, r. var_case[l; r]; d, o, s. op_case[d; o; s] }
+   <-->
+   op_case[n; op; subterms]
+>>
+
 (*!
  * @docoff
  *

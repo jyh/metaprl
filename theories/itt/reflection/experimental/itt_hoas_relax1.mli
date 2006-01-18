@@ -39,11 +39,22 @@ doc <:doc<
 extends Itt_hoas_bterm
 
 (*
+ * Relax option.  Use this if you want to used relaxed rules.
+ *)
+declare relax
+
+(*
  * The type << Bind{'n} >> is the type of terms with
  * binding depth at least << 'n >>.  The type << Bind{0} >>
  * is the same as << top >>.
  *)
 declare Bind{'n}
+
+(*
+ * The type << BindTriangle{'n} >> is the type of lists
+ * << [Bind{'n}; Bind{'n +@ 1}; math_ldots] >>.
+ *)
+declare BindTriangle{'n}
 
 (*!
  * @docoff

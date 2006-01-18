@@ -239,6 +239,62 @@ interactive_rw dest_bterm_mk_bterm_relax {| reduce ~select:relax_option |} : <:x
 >>
 
 (************************************************************************
+ * Triangle type.
+ *)
+doc <:doc<
+   The << BindTriangle{'n} >> type defines lists of terms with
+   increasing binding depth.
+>>
+define unfold_BindTriangleInfo : BindTriangleInfo{'n} <--> <:xterm<
+   { i: nat | i = n in nat }
+   * Prod len: nat
+   * (Fun j: ({ k : nat | k < len }) -> Bind{j +@ n})
+>>
+
+define unfold_bind_triangle_of_info : bind_triangle_of_info{'x} <--> <:xterm<
+   let n, len, f = x in
+      ind{len; []; i, g. cons{f (len -@ i); g}}
+>>
+
+define unfold_BindTriangle : BindTriangle{'n} <--> <:xterm<
+   Img{BindTriangleInfo{n}; f. bind_triangle_of_info{f}}
+>>
+
+(************************************************
+ * Well-formedness.
+ *)
+doc <:doc<
+   Well-formedness.
+>>
+interactive bind_triangle_info_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- BindTriangleInfo{n} Type
+>>
+
+interactive bind_triangle_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- BindTriangle{n} Type
+>>
+
+(************************************************
+ * Reductions.
+ *)
+interactive_rw reduce_bind_triangle_of_triple {| reduce |} : <:xrule<
+   bind_triangle_of_info{(n, (len, f))}
+   <-->
+   ind{len; []; i, g. cons{f (len -@ i); g}}
+>>
+
+interactive bind_triangle_is_list1 'n : <:xrule<
+   "wf" : <H> >- l in BindTriangle{n} -->
+   <H> >- l in list
+>>
+
+interactive bind_triangle_is_list2 {| nth_hyp |} 'H : <:xrule<
+   <H>; l: BindTriangle{n}; <J[l]> >- l in list
+>>
+
+(************************************************************************
  * Turn off the resource.
  *)
 let resource select +=

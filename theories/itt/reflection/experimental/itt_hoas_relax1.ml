@@ -238,6 +238,12 @@ interactive_rw dest_bterm_mk_bterm_relax {| reduce ~select:relax_option |} : <:x
    op_case[n; op; subterms]
 >>
 
+(************************************************************************
+ * Turn off the resource.
+ *)
+let resource select +=
+   [<< relax >>, OptionClear]
+
 (*!
  * @docoff
  *

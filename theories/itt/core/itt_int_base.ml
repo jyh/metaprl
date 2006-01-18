@@ -108,8 +108,8 @@ let extract_data tbl =
    in
       funC rw
 
-let process_arith_unfold_resource_rw_annotation ?select ?labels name redex contractum assums addrs args loc rw =
-   rule_labels_not_allowed loc select labels;
+let process_arith_unfold_resource_rw_annotation ?labels name redex contractum assums addrs args loc rw =
+   rule_labels_not_allowed loc labels;
    redex_and_conv_of_rw_annotation "arith_unfold" name redex contractum assums addrs args loc rw
 
 (*

@@ -175,7 +175,7 @@ let one_rw_arg i =
 (*
  * Improve the intro resource from a rule.
  *)
-let process_meta_intro_resource_annotation ?(options = []) ?select ?labels name args term_args statement loc pre_tactic =
+let process_meta_intro_resource_annotation ?(options = []) ?labels name args term_args statement loc pre_tactic =
    if args.spec_addrs <> [||] then
       raise (Invalid_argument (sprintf
          "%s: intro annotation: %s: context arguments not supported yet" (string_of_loc loc) name));
@@ -229,7 +229,7 @@ let process_meta_intro_resource_annotation ?(options = []) ?select ?labels name 
             raise (Invalid_argument (sprintf "meta_d_tactic.intro: %s: not an introduction rule" name))
    in
    let sel_opts = get_sel_arg options in
-   let option_opts = rule_labels_of_opt_terms select labels in
+   let option_opts = rule_labels_of_opt_terms labels in
    let rec auto_aux = function
       [] ->
          [t, (name, sel_opts, option_opts, (if assums = [] then AutoTrivial else AutoNormal), tac)]
@@ -258,7 +258,7 @@ let rec get_elim_args_arg = function
  | [] ->
       None
 
-let process_meta_elim_resource_annotation ?(options = []) ?select ?labels name args term_args statement loc pre_tactic =
+let process_meta_elim_resource_annotation ?(options = []) ?labels name args term_args statement loc pre_tactic =
    if args.spec_addrs <> [||] then
       raise (Invalid_argument (sprintf
          "%s: elim annotation: %s: context arguments not supported yet" (string_of_loc loc) name));
@@ -355,7 +355,7 @@ let process_meta_elim_resource_annotation ?(options = []) ?select ?labels name a
              | _ ->
                   raise (Invalid_argument (sprintf "meta_d_tactic: %s: not an elimination rule" name))
          in
-         let opts = rule_labels_of_opt_terms select labels in
+         let opts = rule_labels_of_opt_terms labels in
             [t, (opts, tac)]
     | _ ->
          raise (Invalid_argument (sprintf "meta_d_tactic.improve_elim: %s: must be an elimination rule" name))

@@ -38,8 +38,8 @@ doc docoff
 open Basic_tactics
 open Itt_sqsimple
 
-let resource select +=
-   [<< relax >>, OptionAccept]
+private let resource select +=
+   [<< relax >>, OptionAllow]
 
 (************************************************************************
  * Relaxed reductions.

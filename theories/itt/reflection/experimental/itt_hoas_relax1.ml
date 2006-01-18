@@ -59,10 +59,18 @@ open Basic_tactics
  *)
 declare relax
 
-let relax_option = [<< relax >>]
+let relax_term   = << relax >>
+let relax_option = [relax_term]
 
+(*
+ * By default reject the resource.
+ * Privately, accept it.
+ *)
 let resource select +=
-   [<< relax >>, OptionAccept]
+   [relax_term, OptionExclude]
+
+private let resource select +=
+   [relax_term, OptionAllow]
 
 (************************************************************************
  * General Bind type.
@@ -145,14 +153,14 @@ interactive bind_in_bind_ge {| intro |} : <:xrule<
 doc <:doc<
    Relaxed eta-reductions.
 >>
-interactive_rw bind_eta_relax {| reduce ~select:relax_option |} : <:xrewrite<
+interactive_rw bind_eta_relax {| reduce ~labels:relax_option |} : <:xrewrite<
    t in Bind{1} -->
    bind{x. subst{t; x}}
    <-->
    t
 >>
 
-interactive_rw bindn_eta_relax {| reduce ~select:relax_option |} : <:xrewrite<
+interactive_rw bindn_eta_relax {| reduce ~labels:relax_option |} : <:xrewrite<
    n in nat -->
    t in Bind{n} -->
    bind{n; x. substl{t; x}}
@@ -217,7 +225,7 @@ interactive bterm_is_bind 'n : <:xrule<
 doc <:doc<
    Restate theorems from @tt[Itt_hoas_bterm].
 >>
-interactive_rw subterms_lemma_relax {| reduce ~select:relax_option |} : <:xrewrite<
+interactive_rw subterms_lemma_relax {| reduce ~labels:relax_option |} : <:xrewrite<
    n in nat -->
    subterms in list{Bind{n}} -->
    map{bt. bind{n; v. substl{bt; v}}; subterms}
@@ -229,7 +237,7 @@ doc <:doc<
    This is the key rule, where we relax the reduction
    << dest_bterm{'e; l, r. 'base; d, o, s. 'step} >>.
 >>
-interactive_rw dest_bterm_mk_bterm_relax {| reduce ~select:relax_option |} : <:xrewrite<
+interactive_rw dest_bterm_mk_bterm_relax {| reduce ~labels:relax_option |} : <:xrewrite<
    n in nat -->
    op in Operator -->
    subterms in list{Bind{n}} -->
@@ -293,12 +301,6 @@ interactive bind_triangle_is_list1 'n : <:xrule<
 interactive bind_triangle_is_list2 {| nth_hyp |} 'H : <:xrule<
    <H>; l: BindTriangle{n}; <J[l]> >- l in list
 >>
-
-(************************************************************************
- * Turn off the resource.
- *)
-let resource select +=
-   [<< relax >>, OptionClear]
 
 (*!
  * @docoff

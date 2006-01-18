@@ -769,8 +769,8 @@ B	b283	t283
 T	t284	o278 b283
 B	b284	t284
 P	p284	Number 56
-P	p5	Number 678
-O	o8	location p284 p5
+P	p285	Number 678
+O	o285	location p284 p285
 NSummary!rule	rule	rule Summary
 P	p286	String provable_elim1
 O	o286	rule p286
@@ -795,1011 +795,710 @@ T	t291	o291
 C	h	H\\ \\
 C	h291	J\\ H\\
 NItt_equal	Itt_equal	Itt_equal NIL
-NItt_equal!type	type	type Itt_equal
-O	o292	type
-Vty	ty	ty\\ H\\
-B	b292	ty
-T	t292	o292 b292
 NItt_equal!equal	equal	equal Itt_equal
-O	o295	equal
+O	o292	equal
 NItt_hoas_proof1	Itt_hoas_proof1	Itt_hoas_proof1 NIL
 NItt_hoas_proof1!Logic	Logic	Logic Itt_hoas_proof1
-O	o296	Logic
-T	t296	o296
-B	b296	t296
+O	o293	Logic
+T	t293	o293
+B	b293	t293
 Vlogic	logic	logic\\ H\\
-B	b297	logic
-T	t297	o295 b296 b297 b297
-S	s297	t291\\ h h291\\ t297
-B	b298	s297
-T	t298	o290 b298
-B	b299	t298
-T	t299	o289 b299
-B	b300	t299
-H	h300	v ty
+B	b294	logic
+T	t294	o292 b293 b294 b294
+S	s	t291\\ h h291\\ t294
+B	b295	s
+T	t295	o290 b295
+B	b296	t295
+T	t296	o289 b296
+B	b297	t296
+Vty	ty	ty\\ H\\
+H	h297	v ty
 NItt_hoas_bterm	Itt_hoas_bterm	Itt_hoas_bterm NIL
 NItt_hoas_bterm!BTerm	BTerm	BTerm Itt_hoas_bterm
-O	o300	BTerm
-T	t300	o300
-B	b301	t300
+O	o297	BTerm
+T	t297	o297
+B	b298	t297
 Nvar	var	var NIL
-P	p301	Var v
-O	o301	var p301
-T	t301	o301
-VA	A	A\\ H\\ t301
-B	b302	A
-T	t302	o295 b301 b302 b302
-S	s302	t291\\ h h291 h300\\ t302
-B	b303	s302
-T	t303	o290 b303
-B	b304	t303
-T	t304	o289 b304
-B	b305	t304
+P	p298	Var v
+O	o298	var p298
+T	t298	o298
+VA	A	A\\ H\\ t298
+B	b299	A
+T	t299	o292 b298 b299 b299
+S	s299	t291\\ h h291 h297\\ t299
+B	b300	s299
+T	t300	o290 b300
+B	b301	t300
+T	t301	o289 b301
+B	b302	t301
 NItt_list	Itt_list	Itt_list NIL
 NItt_list!list	list	list Itt_list
-O	o305	list
+O	o302	list
 NItt_hoas_proof1!Derivation	Derivation	Derivation Itt_hoas_proof1
-O	o306	Derivation
-T	t306	o306 b297
-B	b306	t306
-T	t307	o305 b306
-H	h307	premises t307
-H	h308	goal t300
+O	o303	Derivation
+T	t303	o303 b294
+B	b303	t303
+T	t304	o302 b303
+H	h304	premises t304
+H	h305	goal t297
 NItt_hoas_proof1!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_proof1
-O	o308	ProofStepWitness
-T	t308	o308
-H	h309	witness t308
+O	o305	ProofStepWitness
+T	t305	o305
+H	h306	witness t305
 NItt_hoas_proof1!ValidStep	ValidStep	ValidStep Itt_hoas_proof1
-O	o309	ValidStep
-P	p309	Var premises
-O	o310	var p309
-T	t310	o310
-B	b310	t310
-P	p310	Var goal
-O	o311	var p310
-T	t311	o311
-B	b311	t311
-P	p311	Var witness
-O	o312	var p311
-T	t312	o312
-B	b312	t312
-T	t313	o309 b310 b311 b312 b297
-H	h313	"" t313
-T	t314	o295 b301 b302 b311
-H	h314	_1 t314
+O	o306	ValidStep
+P	p306	Var premises
+O	o307	var p306
+T	t307	o307
+B	b307	t307
+P	p307	Var goal
+O	o308	var p307
+T	t308	o308
+B	b308	t308
+P	p308	Var witness
+O	o309	var p308
+T	t309	o309
+B	b309	t309
+T	t310	o306 b307 b308 b309 b294
+H	h310	"" t310
+T	t311	o292 b298 b299 b308
+H	h311	_1 t311
 NItt_list2	Itt_list2	Itt_list2 NIL
 NItt_list2!all_list	all_list	all_list Itt_list2
-O	o314	all_list
+O	o311	all_list
 NItt_logic	Itt_logic	Itt_logic NIL
 NItt_logic!and	and	and Itt_logic
-O	o315	and
+O	o312	and
 NItt_hoas_proof1!Provable	Provable	Provable Itt_hoas_proof1
-O	o316	Provable
+O	o313	Provable
 NItt_hoas_proof1!derivation_goal	derivation_goal	derivation_goal Itt_hoas_proof1
-O	o317	derivation_goal
-P	p317	Var premise
-O	o318	var p317
-T	t318	o318
-B	b318	t318
-T	t319	o317 b318
-B	b319	t319
-T	t320	o316 b297 b319
-B	b320	t320
-NItt_logic!all	all	all Itt_logic
-O	o320	all
-NItt_logic!implies	implies	implies Itt_logic
-O	o321	implies
-P	p321	Var w
-O	o322	var p321
-T	t322	o322
-VA	A322	A\\ H\\ t322
-B	b322	A322
-T	t323	o295 b301 b322 b319
-B	b323	t323
-VC	C	C\\ J H\\ t322
-B	b324	C
-T	t324	o321 b323 b324
-B	b325	t324 w
-T	t325	o320 b292 b325
-B	b326	t325
-T	t326	o315 b320 b326
-B	b327	t326 premise
-T	t327	o314 b310 b327
-H	h327	_2 t327
-VC	C327	C\\ J H\\ t301
-S	s327	t291\\ h h300 h291 h307 h308 h309 h313 h314 h327\\ C327
-B	b328	s327
-T	t328	o290 b328
-B	b329	t328
-T	t329	o316 b297 b302
-H	h329	"" t329
-S	s329	t291\\ h h300 h329 h291\\ C327
-B	b330	s329
-T	t330	o290 b330
-B	b331	t330
-T	t331	o288 b329 b331
-B	b332	t331
-T	t332	o288 b305 b332
-B	b333	t332
-T	t333	o288 b300 b333
-B	b334	t333
-NSummary!interactive	interactive	interactive Summary
-O	o335	interactive
-NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p12	String "assertAtT 2 << 'ty Type >> ttca thenT moveHypT 4 (-1) thenT rwh unfold_Provable (-1) thenT autoT"
-O	o16	ext_rule p12
-NSummary!status_incomplete	status_incomplete	status_incomplete Summary
-O	o337	status_incomplete
-T	t337	o337
-B	b337	t337
-NSummary!ext_unjustified	ext_unjustified	ext_unjustified Summary
-O	o338	ext_unjustified
-NSummary!tactic_arg	tactic_arg	tactic_arg Summary
-P	p338	String main
-O	o339	tactic_arg p338
-NSummary!msequent	msequent	msequent Summary
-O	o340	msequent
-T	t340	o b328 b6
-B	b340	t340
-T	t341	o b303 b340
-B	b341	t341
-T	t342	o b298 b341
-B	b342	t342
-T	t22	o340 b330 b342
-B	b22	t22
-T	t23	o339 b22 b6
-B	b23	t23
-H	h23	x t292
-H	h345	e t306
-P	p345	Var e
-O	o345	var p345
-T	t346	o345
-B	b346	t346
-T	t347	o317 b346
-B	b347	t347
-T	t348	o295 b301 b347 b302
-H	h348	z t348
-S	s23	t291\\ h h23 h300 h291 h345 h348\\ C327
-B	b26	s23
-T	t26	o340 b26 b342
-B	b27	t26
-T	t27	o339 b27 b6
-B	b31	t27
-T	t31	o b31 b6
-B	b40	t31
-T	t40	o338 b23 b40
-B	b41	t40
-P	p45	String "moveToConclT (-1) thenT moveToConclT 3 thenT dT (-1) thenT reduceT ttca"
-O	o46	ext_rule p45
-P	p353	String assertion
-O	o353	tactic_arg p353
-T	t353	o295 b301 b319 b302
-B	b353	t353
-B	b354	C327
-T	t354	o321 b353 b354
-B	b355	t354 v
-T	t355	o320 b292 b355
-B	b356	t355 premise
-T	t356	o314 b310 b356
-H	h356	_ t356
-H	h357	p t313
-T	t357	o295 b301 b311 b302
-B	b357	t357
-T	t358	o321 b357 b354
-B	b358	t358 v
-T	t359	o320 b292 b358
-S	s46	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357\\ t359
-B	b48	s46
-T	t48	o340 b48 b342
-B	b49	t48
-T	t49	o353 b49 b6
-B	b52	t49
-T	t52	o b52 b6
-B	b53	t52
-T	t53	o338 b31 b53
-B	b60	t53
-P	p363	String autoT
-O	o363	ext_rule p363
-H	h60	x1 t357
-S	s60	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60\\ C327
-B	b61	s60
-T	t61	o340 b61 b342
-B	b63	t61
-T	t63	o339 b63 b6
-B	b64	t63
-T	t64	o b64 b6
-B	b65	t64
-T	t65	o338 b52 b65
-B	b73	t65
-P	p368	String "assertT << all_list{'premises; premise. (Provable{'logic; derivation_goal{'premise}} & all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))} >> thenT autoT"
-O	o368	ext_rule p368
-NItt_list2!Index	Index	Index Itt_list2
-O	o369	Index
-T	t369	o369 b310
-H	h369	i t369
-NItt_list2!nth	nth	nth Itt_list2
-O	o370	nth
-P	p370	Var i
-O	o371	var p370
-T	t371	o371
-B	b371	t371
-T	t372	o370 b310 b371
-B	b372	t372
-T	t373	o317 b372
-B	b373	t373
-T	t374	o316 b297 b373
-S	s73	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h369\\ t374
-B	b78	s73
-T	t78	o340 b78 b342
-B	b79	t78
-T	t79	o339 b79 b6
-B	b81	t79
-O	o376	tactic_arg p288
-H	h376	w ty
-T	t377	o295 b301 b373 b373
-S	s81	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h369 h376\\ t377
-B	b87	s81
-T	t87	o340 b87 b342
-B	b88	t87
-T	t88	o376 b88 b6
-B	b89	t88
-T	t380	o295 b301 b322 b373
-H	h89	x2 t380
-S	s89	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h369 h376 h89\\ C
-B	b91	s89
-T	t91	o340 b91 b342
-B	b100	t91
-T	t100	o339 b100 b6
-B	b101	t100
-H	h101	x2 t327
-S	s101	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h101\\ C327
-B	b103	s101
-T	t103	o340 b103 b342
-B	b111	t103
-T	t111	o339 b111 b6
-B	b113	t111
-T	t113	o b113 b6
-B	b114	t113
-T	t114	o b101 b114
-B	b119	t114
-T	t119	o b89 b119
-B	b120	t119
-T	t120	o b81 b120
-B	b122	t120
-T	t122	o338 b64 b122
-B	b124	t122
-H	h380	x1 t380
-P	p390	String "rwh unfold_Provable 0"
-O	o390	ext_rule p390
-NItt_logic!exists	exists	exists Itt_logic
-O	o391	exists
-T	t391	o295 b301 b347 b373
-B	b391	t391 e
-T	t392	o391 b306 b391
-S	s124	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h369\\ t392
-B	b125	s124
-T	t125	o340 b125 b342
-B	b133	t125
-T	t133	o339 b133 b6
-B	b134	t133
-T	t134	o b134 b6
-B	b135	t134
-T	t135	o338 b81 b135
-B	b139	t135
-P	p396	String "withT << nth{'premises; 'i} >> (dT 0) thenT autoT"
-O	o396	ext_rule p396
-S	s139	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h369\\ t377
-B	b141	s139
-T	t141	o340 b141 b342
-B	b150	t141
-T	t150	o339 b150 b6
-B	b151	t150
-H	h399	e1 t306
-S	s151	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h369 h399\\ t377
-B	b159	s151
-T	t159	o340 b159 b342
-B	b160	t159
-T	t160	o376 b160 b6
-B	b163	t160
-T	t163	o b163 b6
-B	b167	t163
-T	t167	o b151 b167
-B	b168	t167
-T	t168	o338 b134 b168
-B	b170	t168
-P	p405	String "derivation_goal_wf2 << Derivation{'logic} >> ttca"
-O	o405	ext_rule p405
-T	t170	o338 b151 b6
-B	b171	t170
-T	t171	o405 b337 b171 b6 b6
-B	b179	t171
-T	t179	o338 b163 b6
-B	b184	t179
-T	t184	o405 b337 b184 b6 b6
-B	b185	t184
-T	t185	o b185 b6
-B	b188	t185
-T	t188	o b179 b188
-B	b193	t188
-T	t193	o396 b337 b170 b193 b6
-B	b194	t193
-T	t194	o b194 b6
-B	b199	t194
-T	t199	o390 b337 b139 b199 b6
-B	b200	t199
-T	t200	o338 b89 b6
-B	b202	t200
-T	t202	o405 b337 b202 b6 b6
-B	b203	t202
-P	p208	String "withT << 'i >> (dT 8) ttca"
-O	o208	ext_rule p208
-T	t416	o295 b301 b373 b302
-B	b417	t416
-T	t417	o321 b417 b354
-B	b418	t417 v
-T	t418	o320 b292 b418
-H	h418	"" t418
-S	s208	t291\\ h h23 h291 h345 h307 h308 h309 h356 h357 h300 h60 h369 h376 h89 h418\\ C
-B	b213	s208
-T	t213	o340 b213 b342
-B	b215	t213
-T	t215	o339 b215 b6
-B	b221	t215
-T	t221	o b221 b6
-B	b222	t221
-T	t222	o338 b101 b222
-B	b225	t222
-P	p423	String "backThruHypT (-1) ttca"
-O	o423	ext_rule p423
-T	t225	o338 b221 b6
-B	b226	t225
-T	t226	o423 b337 b226 b6 b6
-B	b234	t226
-T	t234	o b234 b6
-B	b235	t234
-T	t235	o208 b337 b225 b235 b6
-B	b238	t235
-P	p240	String "thinT 8 thenT moveHypT 9 3 thenT assertAtT 10 << 'A['v] = 'goal in BTerm >> thenMT thinT 11 ttca"
-O	o240	ext_rule p240
-P	p428	String ""
-O	o428	tactic_arg p428
-T	t242	o428 b111 b6
-B	b242	t242
-T	t243	o338 b242 b6
-B	b243	t243
-T	t246	o240 b337 b243 b6 b6
-B	b246	t246
-T	t270	o b246 b6
-B	b270	t270
-T	t271	o b238 b270
-B	b271	t271
-T	t272	o b203 b271
-B	b272	t272
-T	t278	o b200 b272
-B	b278	t278
-T	t279	o368 b337 b124 b278 b6
-B	b279	t279
-T	t285	o b279 b6
-B	b285	t285
-T	t286	o363 b337 b73 b285 b6
-B	b286	t286
-T	t289	o b286 b6
-B	b289	t289
-T	t290	o46 b337 b60 b289 b6
-B	b290	t290
-T	t295	o b290 b6
-B	b307	t295
-T	t309	o16 b337 b41 b307 b6
-B	b309	t309
-T	t315	o335 b309
+O	o314	derivation_goal
+P	p314	Var premise
+O	o315	var p314
+T	t315	o315
 B	b315	t315
-T	t316	o286 b288 b334 b315 b6
+T	t316	o314 b315
 B	b316	t316
-T	t317	o8 b316
+T	t317	o313 b294 b316
 B	b317	t317
-P	p318	Number 680
-P	p319	Number 1405
-O	o319	location p318 p319
-P	p320	String provable_elim2
-O	o323	rule p320
-H	h323	x t329
-S	s323	t291\\ h h300 h323 h291\\ t297
-B	b336	s323
-T	t336	o290 b336
-B	b338	t336
-T	t338	o289 b338
-B	b339	t338
-T	t339	o295 b301 b322 b322
-S	s339	t291\\ h h300 h323 h291 h376\\ t339
-B	b369	s339
-T	t370	o290 b369
-B	b370	t370
-T	t390	o289 b370
-B	b449	t390
-S	s449	t291\\ h h300 h323 h291 h307 h308 h309 h313 h314 h327\\ C327
-B	b450	s449
-T	t450	o290 b450
+NItt_logic!all	all	all Itt_logic
+O	o317	all
+B	b318	ty
+NItt_logic!implies	implies	implies Itt_logic
+O	o318	implies
+P	p318	Var w
+O	o319	var p318
+T	t319	o319
+VA	A319	A\\ H\\ t319
+B	b319	A319
+T	t320	o292 b298 b319 b316
+B	b320	t320
+VC	C	C\\ J H\\ t319
+B	b321	C
+T	t321	o318 b320 b321
+B	b322	t321 w
+T	t322	o317 b318 b322
+B	b323	t322
+T	t323	o312 b317 b323
+B	b324	t323 premise
+T	t324	o311 b307 b324
+H	h324	_2 t324
+VC	C324	C\\ J H\\ t298
+S	s324	t291\\ h h297 h291 h304 h305 h306 h310 h311 h324\\ C324
+B	b325	s324
+T	t325	o290 b325
+B	b326	t325
+T	t326	o313 b294 b299
+H	h326	"" t326
+S	s326	t291\\ h h297 h326 h291\\ C324
+B	b327	s326
+T	t327	o290 b327
+B	b328	t327
+T	t328	o288 b326 b328
+B	b329	t328
+T	t329	o288 b302 b329
+B	b330	t329
+T	t330	o288 b297 b330
+B	b331	t330
+NSummary!interactive	interactive	interactive Summary
+O	o331	interactive
+NSummary!ext_rule	ext_rule	ext_rule Summary
+P	p331	String "assertAtT 2 << 'ty Type >> ttca thenT moveHypT 4 (-1) thenT rwh unfold_Provable (-1) thenT autoT"
+O	o332	ext_rule p331
+NSummary!status_incomplete	status_incomplete	status_incomplete Summary
+O	o333	status_incomplete
+T	t333	o333
+B	b333	t333
+NSummary!ext_unjustified	ext_unjustified	ext_unjustified Summary
+O	o334	ext_unjustified
+NSummary!tactic_arg	tactic_arg	tactic_arg Summary
+P	p334	String main
+O	o335	tactic_arg p334
+NSummary!msequent	msequent	msequent Summary
+O	o336	msequent
+T	t336	o b325 b6
+B	b336	t336
+T	t337	o b300 b336
+B	b337	t337
+T	t338	o b295 b337
+B	b338	t338
+T	t339	o336 b327 b338
+B	b339	t339
+T	t340	o335 b339 b6
+B	b340	t340
+NItt_equal!type	type	type Itt_equal
+O	o340	type
+T	t341	o340 b318
+H	h341	x t341
+H	h342	e t303
+P	p342	Var e
+O	o342	var p342
+T	t342	o342
+B	b342	t342
+T	t343	o314 b342
+B	b343	t343
+T	t344	o292 b298 b343 b299
+H	h344	z t344
+S	s344	t291\\ h h341 h297 h291 h342 h344\\ C324
+B	b344	s344
+T	t345	o336 b344 b338
+B	b345	t345
+T	t346	o335 b345 b6
+B	b346	t346
+T	t347	o b346 b6
+B	b347	t347
+T	t348	o334 b340 b347
+B	b348	t348
+P	p348	String "moveToConclT (-1) thenT moveToConclT 3 thenT dT (-1) thenT reduceT ttca"
+O	o348	ext_rule p348
+P	p349	String assertion
+O	o349	tactic_arg p349
+T	t349	o292 b298 b316 b299
+B	b349	t349
+B	b350	C324
+T	t350	o318 b349 b350
+B	b351	t350 v
+T	t351	o317 b318 b351
+B	b352	t351 premise
+T	t352	o311 b307 b352
+H	h352	_ t352
+H	h353	p t310
+T	t353	o292 b298 b308 b299
+B	b353	t353
+T	t354	o318 b353 b350
+B	b354	t354 v
+T	t355	o317 b318 b354
+S	s355	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353\\ t355
+B	b355	s355
+T	t356	o336 b355 b338
+B	b356	t356
+T	t357	o349 b356 b6
+B	b357	t357
+T	t358	o b357 b6
+B	b358	t358
+T	t359	o334 b346 b358
+B	b359	t359
+P	p359	String autoT
+O	o359	ext_rule p359
+H	h359	x1 t353
+S	s359	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359\\ C324
+B	b360	s359
+T	t360	o336 b360 b338
+B	b361	t360
+T	t361	o335 b361 b6
+B	b362	t361
+T	t362	o b362 b6
+B	b363	t362
+T	t363	o334 b357 b363
+B	b364	t363
+P	p364	String "assertT << all_list{'premises; premise. (Provable{'logic; derivation_goal{'premise}} & all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))} >> thenT autoT"
+O	o364	ext_rule p364
+NItt_list2!Index	Index	Index Itt_list2
+O	o365	Index
+T	t365	o365 b307
+H	h365	i t365
+NItt_list2!nth	nth	nth Itt_list2
+O	o366	nth
+P	p366	Var i
+O	o367	var p366
+T	t367	o367
+B	b367	t367
+T	t368	o366 b307 b367
+B	b368	t368
+T	t369	o314 b368
+B	b369	t369
+T	t370	o313 b294 b369
+S	s370	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h365\\ t370
+B	b370	s370
+T	t371	o336 b370 b338
+B	b371	t371
+T	t372	o335 b371 b6
+B	b372	t372
+O	o372	tactic_arg p288
+H	h372	w ty
+T	t373	o292 b298 b369 b369
+S	s373	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h365 h372\\ t373
+B	b373	s373
+T	t374	o336 b373 b338
+B	b374	t374
+T	t375	o372 b374 b6
+B	b375	t375
+T	t376	o292 b298 b319 b369
+H	h376	x2 t376
+S	s376	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h365 h372 h376\\ C
+B	b376	s376
+T	t377	o336 b376 b338
+B	b377	t377
+T	t378	o335 b377 b6
+B	b378	t378
+H	h378	x2 t324
+S	s378	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h378\\ C324
+B	b379	s378
+T	t379	o336 b379 b338
+B	b380	t379
+T	t380	o335 b380 b6
+B	b381	t380
+T	t381	o b381 b6
+B	b382	t381
+T	t382	o b378 b382
+B	b383	t382
+T	t383	o b375 b383
+B	b384	t383
+T	t384	o b372 b384
+B	b385	t384
+T	t385	o334 b362 b385
+B	b386	t385
+P	p386	String "rwh unfold_Provable 0"
+O	o386	ext_rule p386
+NItt_logic!exists	exists	exists Itt_logic
+O	o387	exists
+T	t387	o292 b298 b343 b369
+B	b387	t387 e
+T	t388	o387 b303 b387
+S	s388	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h365\\ t388
+B	b388	s388
+T	t389	o336 b388 b338
+B	b389	t389
+T	t390	o335 b389 b6
+B	b390	t390
+T	t391	o b390 b6
+B	b391	t391
+T	t392	o334 b372 b391
+B	b392	t392
+P	p392	String "withT << nth{'premises; 'i} >> (dT 0) thenT autoT"
+O	o392	ext_rule p392
+S	s392	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h365\\ t373
+B	b393	s392
+T	t393	o336 b393 b338
+B	b394	t393
+T	t394	o335 b394 b6
+B	b395	t394
+H	h395	e1 t303
+S	s395	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h365 h395\\ t373
+B	b396	s395
+T	t396	o336 b396 b338
+B	b397	t396
+T	t397	o372 b397 b6
+B	b398	t397
+T	t398	o b398 b6
+B	b399	t398
+T	t399	o b395 b399
+B	b400	t399
+T	t400	o334 b390 b400
+B	b401	t400
+P	p401	String "derivation_goal_wf2 << Derivation{'logic} >> ttca"
+O	o401	ext_rule p401
+T	t401	o334 b395 b6
+B	b402	t401
+T	t402	o401 b333 b402 b6 b6
+B	b403	t402
+T	t403	o334 b398 b6
+B	b404	t403
+T	t404	o401 b333 b404 b6 b6
+B	b405	t404
+T	t405	o b405 b6
+B	b406	t405
+T	t406	o b403 b406
+B	b407	t406
+T	t407	o392 b333 b401 b407 b6
+B	b408	t407
+T	t408	o b408 b6
+B	b409	t408
+T	t409	o386 b333 b392 b409 b6
+B	b410	t409
+T	t410	o334 b375 b6
+B	b411	t410
+T	t411	o401 b333 b411 b6 b6
+B	b412	t411
+P	p412	String "withT << 'i >> (dT 8) ttca"
+O	o412	ext_rule p412
+T	t412	o292 b298 b369 b299
+B	b413	t412
+T	t413	o318 b413 b350
+B	b414	t413 v
+T	t414	o317 b318 b414
+H	h414	"" t414
+S	s414	t291\\ h h341 h291 h342 h304 h305 h306 h352 h353 h297 h359 h365 h372 h376 h414\\ C
+B	b415	s414
+T	t415	o336 b415 b338
+B	b416	t415
+T	t416	o335 b416 b6
+B	b417	t416
+T	t417	o b417 b6
+B	b418	t417
+T	t418	o334 b378 b418
+B	b419	t418
+P	p419	String "backThruHypT (-1) ttca"
+O	o419	ext_rule p419
+T	t419	o334 b417 b6
+B	b420	t419
+T	t420	o419 b333 b420 b6 b6
+B	b421	t420
+T	t421	o b421 b6
+B	b422	t421
+T	t422	o412 b333 b419 b422 b6
+B	b423	t422
+P	p423	String "thinT 8 thenT moveHypT 9 3 thenT assertAtT 10 << 'A['v] = 'goal in BTerm >> thenMT thinT 11 ttca"
+O	o423	ext_rule p423
+P	p424	String ""
+O	o424	tactic_arg p424
+T	t424	o424 b380 b6
+B	b424	t424
+T	t425	o334 b424 b6
+B	b425	t425
+T	t426	o423 b333 b425 b6 b6
+B	b426	t426
+T	t427	o b426 b6
+B	b427	t427
+T	t428	o b423 b427
+B	b428	t428
+T	t429	o b412 b428
+B	b429	t429
+T	t430	o b410 b429
+B	b430	t430
+T	t431	o364 b333 b386 b430 b6
+B	b431	t431
+T	t432	o b431 b6
+B	b432	t432
+T	t433	o359 b333 b364 b432 b6
+B	b433	t433
+T	t434	o b433 b6
+B	b434	t434
+T	t435	o348 b333 b359 b434 b6
+B	b435	t435
+T	t436	o b435 b6
+B	b436	t436
+T	t437	o332 b333 b348 b436 b6
+B	b437	t437
+T	t438	o331 b437
+B	b438	t438
+T	t439	o286 b288 b331 b438 b6
+B	b439	t439
+T	t440	o285 b439
+B	b440	t440
+P	p440	Number 680
+P	p441	Number 1405
+O	o441	location p440 p441
+P	p442	String provable_elim2
+O	o442	rule p442
+H	h442	x t326
+S	s442	t291\\ h h297 h442 h291\\ t294
+B	b442	s442
+T	t442	o290 b442
+B	b443	t442
+T	t443	o289 b443
+B	b444	t443
+T	t444	o292 b298 b319 b319
+S	s444	t291\\ h h297 h442 h291 h372\\ t444
+B	b445	s444
+T	t445	o290 b445
+B	b446	t445
+T	t446	o289 b446
+B	b447	t446
+S	s447	t291\\ h h297 h442 h291 h304 h305 h306 h310 h311 h324\\ C324
+B	b448	s447
+T	t448	o290 b448
+B	b449	t448
+T	t449	o288 b449 b328
+B	b450	t449
+T	t450	o288 b447 b450
 B	b451	t450
-T	t451	o288 b451 b331
+T	t451	o288 b444 b451
 B	b452	t451
-T	t452	o288 b449 b452
+P	p452	String "assumT 1 thenT assumT 2 ttca thenT provable_elim1 2 ttca"
+O	o452	ext_rule p452
+T	t452	o b448 b6
 B	b453	t452
-T	t453	o288 b339 b453
+T	t453	o b445 b453
 B	b454	t453
-P	p454	String "assumT 1 thenT assumT 2 ttca thenT provable_elim1 2 ttca"
-O	o454	ext_rule p454
-T	t454	o b450 b6
+T	t454	o b442 b454
 B	b455	t454
-T	t455	o b369 b455
+T	t455	o336 b327 b455
 B	b456	t455
-T	t456	o b336 b456
+T	t456	o335 b456 b6
 B	b457	t456
-T	t457	o340 b330 b457
-B	b458	t457
-T	t458	o339 b458 b6
-B	b459	t458
-H	h459	x t297
-B	b460	t339 w
-T	t460	o320 b292 b460
-H	h460	x1 t460
-S	s460	t291\\ h h300 h291 h459 h460 h307 h308 h309 h313 h314 h327\\ C327
-B	b461	s460
-T	t461	o340 b461 b457
+H	h457	x t294
+B	b458	t444 w
+T	t458	o317 b318 b458
+H	h458	x1 t458
+S	s458	t291\\ h h297 h291 h457 h458 h304 h305 h306 h310 h311 h324\\ C324
+B	b459	s458
+T	t459	o336 b459 b455
+B	b460	t459
+T	t460	o335 b460 b6
+B	b461	t460
+T	t461	o b461 b6
 B	b462	t461
-T	t462	o339 b462 b6
+T	t462	o334 b457 b462
 B	b463	t462
-T	t463	o b463 b6
-B	b464	t463
-T	t464	o338 b459 b464
+P	p463	String "assertAtT 3 << Provable{'logic; 'A['v]} >> ttca"
+O	o463	ext_rule p463
+S	s463	t291\\ h h297 h291 h457 h458 h304 h305 h306 h310 h311 h324\\ t326
+B	b464	s463
+T	t464	o336 b464 b455
 B	b465	t464
-P	p465	String "assertAtT 3 << Provable{'logic; 'A['v]} >> ttca"
-O	o465	ext_rule p465
-S	s465	t291\\ h h300 h291 h459 h460 h307 h308 h309 h313 h314 h327\\ t329
-B	b466	s465
-T	t466	o340 b466 b457
+T	t465	o349 b465 b6
+B	b466	t465
+T	t466	o b466 b6
 B	b467	t466
-T	t467	o353 b467 b6
+T	t467	o334 b461 b467
 B	b468	t467
-T	t468	o b468 b6
-B	b469	t468
-T	t469	o338 b463 b469
-B	b470	t469
-P	p470	String "rwh unfold_Provable 0 ttca"
-O	o470	ext_rule p470
-B	b471	t348 e
-T	t471	o391 b306 b471
-S	s471	t291\\ h h300 h291 h459 h460 h307 h308 h309 h313 h314 h327\\ t471
-B	b472	s471
-T	t472	o340 b472 b457
+P	p468	String "rwh unfold_Provable 0 ttca"
+O	o468	ext_rule p468
+B	b469	t344 e
+T	t469	o387 b303 b469
+S	s469	t291\\ h h297 h291 h457 h458 h304 h305 h306 h310 h311 h324\\ t469
+B	b470	s469
+T	t470	o336 b470 b455
+B	b471	t470
+T	t471	o349 b471 b6
+B	b472	t471
+T	t472	o b472 b6
 B	b473	t472
-T	t473	o353 b473 b6
+T	t473	o334 b466 b473
 B	b474	t473
-T	t474	o b474 b6
+P	p474	String "nameHypT 9 \"p\" thenT withT << derivation_step{'premises; 'goal; 'witness; 'p} >> (dT 0) thenT autoT"
+O	o474	ext_rule p474
+T	t474	o334 b472 b6
 B	b475	t474
-T	t475	o338 b468 b475
+T	t475	o474 b333 b475 b6 b6
 B	b476	t475
-P	p476	String "nameHypT 9 \"p\" thenT withT << derivation_step{'premises; 'goal; 'witness; 'p} >> (dT 0) thenT autoT"
-O	o476	ext_rule p476
-T	t476	o338 b474 b6
+T	t476	o b476 b6
 B	b477	t476
-T	t477	o476 b337 b477 b6 b6
+T	t477	o468 b333 b474 b477 b6
 B	b478	t477
 T	t478	o b478 b6
 B	b479	t478
-T	t479	o470 b337 b476 b479 b6
+T	t479	o463 b333 b468 b479 b6
 B	b480	t479
 T	t480	o b480 b6
 B	b481	t480
-T	t481	o465 b337 b470 b481 b6
+T	t481	o452 b333 b463 b481 b6
 B	b482	t481
-T	t482	o b482 b6
+T	t482	o331 b482
 B	b483	t482
-T	t483	o454 b337 b465 b483 b6
+T	t483	o442 b288 b452 b483 b6
 B	b484	t483
-T	t484	o335 b484
+T	t484	o441 b484
 B	b485	t484
-T	t485	o323 b288 b454 b485 b6
-B	b486	t485
-T	t486	o319 b486
-B	b487	t486
-P	p487	Number 1407
-P	p488	Number 2166
-O	o488	location p487 p488
-P	p489	String provable_elim
-O	o489	rule p489
-P	p490	Var x
-O	o490	var p490
-T	t490	o490
-C	h490	J\\ H\\ t301 t490
-S	s490	t291\\ h h300 h323 h490\\ t297
+P	p485	Number 1407
+P	p486	Number 1612
+O	o486	location p485 p486
+P	p487	String provable_elim3
+O	o487	rule p487
+Vt	t487	t\\ H\\
+B	b487	t487
+T	t488	o292 b298 b343 b487
+H	h488	z t488
+NItt_dprod	Itt_dprod	Itt_dprod NIL
+NItt_dprod!pair	pair	pair Itt_dprod
+O	o488	pair
+NBase_trivial	Base_trivial	Base_trivial NIL
+NBase_trivial!it	it	it Base_trivial
+O	o489	it
+T	t489	o489
+B	b489	t489
+T	t490	o488 b342 b489
+C	h490	J\\ H\\ t490
+VC	C490	C\\ J H\\ t490
+S	s490	t291\\ h h342 h488 h490\\ C490
 B	b490	s490
 T	t491	o290 b490
 B	b491	t491
-T	t492	o289 b491
-B	b492	t492
-S	s492	t291\\ h h300 h323 h490 h376\\ t339
-B	b493	s492
-T	t493	o290 b493
-B	b494	t493
-T	t494	o289 b494
-B	b495	t494
-S	s495	t291\\ h h300 h323 h490 h307 h308 h309 h313 h314 h327\\ C327
-B	b496	s495
-T	t496	o290 b496
-B	b497	t496
-S	s497	t291\\ h h300 h323 h490\\ C327
-B	b498	s497
-T	t498	o290 b498
-B	b499	t498
-T	t499	o288 b497 b499
-B	b500	t499
-T	t500	o288 b495 b500
-B	b501	t500
-T	t501	o288 b492 b501
-B	b502	t501
-P	p502	String "copyHypT 3 (-1) thenT rwh unfold_Provable (-1) thenT autoT"
-O	o502	ext_rule p502
-T	t502	o b496 b6
-B	b503	t502
-T	t503	o b493 b503
-B	b504	t503
-T	t504	o b490 b504
-B	b505	t504
-T	t505	o340 b498 b505
-B	b506	t505
-T	t506	o428 b506 b6
-B	b507	t506
-S	s507	t291\\ h h300 h323 h490 h345 h348\\ C327
-B	b508	s507
-T	t508	o340 b508 b505
-B	b509	t508
-T	t509	o339 b509 b6
-B	b510	t509
-T	t510	o b510 b6
-B	b511	t510
-T	t511	o338 b507 b511
-B	b512	t511
-P	p512	String "moveToConclT (-1) thenT dT (-1) thenT byDefT reduceC"
-O	o512	ext_rule p512
-B	b513	t354 premise
-T	t513	o314 b310 b513
-H	h513	_ t513
-S	s513	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60\\ C327
-B	b514	s513
-T	t514	o340 b514 b505
+T	t492	o313 b294 b487
+H	h492	x t492
+P	p492	Var x
+O	o492	var p492
+T	t493	o492
+C	h493	J\\ H\\ t493
+VC	C493	C\\ J H\\ t493
+S	s493	t291\\ h h492 h493\\ C493
+B	b493	s493
+T	t494	o290 b493
+B	b494	t494
+T	t495	o288 b491 b494
+B	b495	t495
+P	p495	String "byDefT unfold_Provable"
+O	o495	ext_rule p495
+T	t496	o b490 b6
+B	b496	t496
+T	t497	o336 b493 b496
+B	b497	t497
+T	t498	o335 b497 b6
+B	b498	t498
+P	p498	Var z
+O	o498	var p498
+T	t499	o498
+B	b499	t499
+T	t500	o488 b342 b499
+C	h500	J\\ H\\ t500
+VC	C500	C\\ J H\\ t500
+S	s500	t291\\ h h342 h488 h500\\ C500
+B	b500	s500
+T	t501	o336 b500 b496
+B	b501	t501
+T	t502	o335 b501 b6
+B	b502	t502
+T	t503	o b502 b6
+B	b503	t503
+T	t504	o334 b498 b503
+B	b504	t504
+P	p504	String "dT 3 ttca"
+O	o504	ext_rule p504
+T	t505	o334 b502 b6
+B	b505	t505
+T	t506	o504 b333 b505 b6 b6
+B	b506	t506
+T	t507	o b506 b6
+B	b507	t507
+T	t508	o495 b333 b504 b507 b6
+B	b508	t508
+T	t509	o331 b508
+B	b509	t509
+T	t510	o487 b288 b495 b509 b6
+B	b510	t510
+T	t511	o486 b510
+B	b511	t511
+P	p511	Number 1614
+P	p512	Number 2388
+O	o512	location p511 p512
+P	p513	String provable_elim
+O	o513	rule p513
+C	h513	J\\ H\\ t298 t493
+S	s513	t291\\ h h297 h442 h513\\ t294
+B	b513	s513
+T	t513	o290 b513
+B	b514	t513
+T	t514	o289 b514
 B	b515	t514
-T	t515	o339 b515 b6
-B	b516	t515
-T	t516	o b516 b6
+S	s515	t291\\ h h297 h442 h513 h372\\ t444
+B	b516	s515
+T	t516	o290 b516
 B	b517	t516
-T	t517	o338 b510 b517
+T	t517	o289 b517
 B	b518	t517
-P	p518	String "assertT << 'A['v] = 'goal in BTerm >> ttca"
-O	o518	ext_rule p518
-T	t518	o428 b515 b6
-B	b519	t518
-H	h519	x2 t314
-S	s519	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519\\ C327
+H	h518	u ty
+P	p518	Var u
+O	o518	var p518
+T	t518	o518
+VA	A518	A\\ H\\ t518
+B	b519	A518
+T	t519	o292 b298 b519 b308
+H	h519	_1 t519
+VC	C519	C\\ J H\\ t518
+S	s519	t291\\ h h297 h442 h513 h518 h304 h305 h306 h310 h519 h324\\ C519
 B	b520	s519
-T	t520	o340 b520 b505
+T	t520	o290 b520
 B	b521	t520
-T	t521	o339 b521 b6
-B	b522	t521
-T	t522	o b522 b6
+S	s521	t291\\ h h297 h442 h513\\ C324
+B	b522	s521
+T	t522	o290 b522
 B	b523	t522
-T	t523	o338 b519 b523
+T	t523	o288 b521 b523
 B	b524	t523
-P	p524	String "assertT << all_list{'premises; premise. (Provable{'logic; derivation_goal{'premise}} & all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))} >> ttca"
-O	o524	ext_rule p524
-S	s524	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519\\ t327
-B	b525	s524
-T	t525	o340 b525 b505
+T	t524	o288 b518 b524
+B	b525	t524
+T	t525	o288 b515 b525
 B	b526	t525
-T	t526	o353 b526 b6
+P	p526	String "assertT << all v: 'ty. all x: Provable{'logic; 'A['v]}. 'C['v] >> thenT autoT"
+O	o526	ext_rule p526
+T	t526	o b520 b6
 B	b527	t526
-T	t527	o b527 b6
+T	t527	o b516 b527
 B	b528	t527
-T	t528	o338 b522 b528
+T	t528	o b513 b528
 B	b529	t528
-P	p529	String "dT 0 ttca thenT dT 0 ttca"
-O	o529	ext_rule p529
-S	s529	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519 h369\\ t374
-B	b530	s529
-T	t530	o340 b530 b505
+T	t529	o336 b522 b529
+B	b530	t529
+T	t530	o424 b530 b6
 B	b531	t530
-T	t531	o339 b531 b6
-B	b532	t531
-B	b533	t380
-T	t533	o321 b533 b324
-B	b534	t533 w
-T	t534	o320 b292 b534
-S	s534	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519 h369\\ t534
-B	b535	s534
-T	t535	o340 b535 b505
-B	b536	t535
-T	t536	o339 b536 b6
-B	b537	t536
-T	t537	o b537 b6
-B	b538	t537
-T	t538	o b532 b538
-B	b539	t538
-T	t539	o338 b527 b539
+H	h531	v1 ty
+P	p531	Var v1
+O	o531	var p531
+T	t531	o531
+VA	A531	A\\ H\\ t531
+B	b532	A531
+T	t532	o313 b294 b532
+H	h532	x1 t532
+VC	C532	C\\ J H\\ t531
+S	s532	t291\\ h h297 h442 h513 h531 h532\\ C532
+B	b533	s532
+T	t533	o336 b533 b529
+B	b534	t533
+T	t534	o335 b534 b6
+B	b535	t534
+B	b536	t326
+B	b537	C324 x
+T	t537	o317 b536 b537
+B	b538	t537 v
+T	t538	o317 b318 b538
+H	h538	x1 t538
+S	s538	t291\\ h h297 h442 h513 h538\\ C324
+B	b539	s538
+T	t539	o336 b539 b529
 B	b540	t539
-S	s540	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519 h369\\ t392
-B	b541	s540
-T	t541	o340 b541 b505
+T	t540	o335 b540 b6
+B	b541	t540
+T	t541	o b541 b6
 B	b542	t541
-T	t542	o339 b542 b6
+T	t542	o b535 b542
 B	b543	t542
-T	t543	o b543 b6
+T	t543	o334 b531 b543
 B	b544	t543
-T	t544	o338 b532 b544
+P	p544	String "provable_elim2 5 ttca"
+O	o544	ext_rule p544
+T	t544	o334 b535 b6
 B	b545	t544
-P	p545	String "withT << nth{'premises; 'i} >> (dT 0) thenT autoT thenT derivation_goal_wf2 << Derivation{'logic} >> ttca"
-O	o545	ext_rule p545
-T	t545	o338 b543 b6
+T	t545	o544 b333 b545 b6 b6
 B	b546	t545
-T	t546	o545 b337 b546 b6 b6
+T	t546	o334 b541 b6
 B	b547	t546
-T	t547	o b547 b6
+T	t547	o419 b333 b547 b6 b6
 B	b548	t547
-T	t548	o470 b337 b545 b548 b6
+T	t548	o b548 b6
 B	b549	t548
-P	p549	String "assertT << Provable{'logic; derivation_goal{nth{'premises; 'i}}} >> ttca"
-O	o549	ext_rule p549
-T	t549	o353 b531 b6
+T	t549	o b546 b549
 B	b550	t549
-H	h550	x3 t374
-S	s550	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519 h369 h550\\ t534
-B	b551	s550
-T	t551	o340 b551 b505
+T	t550	o526 b333 b544 b550 b6
+B	b551	t550
+T	t551	o331 b551
 B	b552	t551
-T	t552	o339 b552 b6
+T	t552	o513 b288 b526 b552 b6
 B	b553	t552
-T	t553	o b553 b6
+T	t553	o512 b553
 B	b554	t553
-T	t554	o b550 b554
+T	t554	o b554 b6
 B	b555	t554
-T	t555	o338 b537 b555
+T	t555	o b511 b555
 B	b556	t555
-NSummary!ext_goal	ext_goal	ext_goal Summary
-O	o556	ext_goal
-T	t556	o556 b550
+T	t556	o b485 b556
 B	b557	t556
-P	p557	String "provable_elim2 13 ttca"
-O	o557	ext_rule p557
-H	h557	w t369
-B	b558	t322
-T	t558	o370 b310 b558
+T	t557	o b440 b557
+B	b558	t557
+T	t558	o b284 b558
 B	b559	t558
-T	t559	o317 b559
+T	t559	o b277 b559
 B	b560	t559
-T	t560	o295 b301 b560 b560
-S	s560	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519 h369 h550 h557\\ t560
-B	b561	s560
-T	t561	o340 b561 b505
-B	b562	t561
-T	t562	o376 b562 b6
-B	b563	t562
-H	h563	premises1 t307
-H	h564	goal1 t300
-H	h565	witness1 t308
-P	p565	Var premises1
-O	o565	var p565
-T	t565	o565
-B	b565	t565
-P	p566	Var goal1
-O	o566	var p566
-T	t566	o566
-B	b566	t566
-P	p567	Var witness1
-O	o567	var p567
-T	t567	o567
-B	b567	t567
-T	t568	o309 b565 b566 b567 b297
-H	h568	x4 t568
-T	t569	o295 b301 b373 b566
-H	h569	_1 t569
-B	b569	t369
-T	t570	o295 b301 b560 b319
-B	b570	t570
-P	p570	Var w1
-O	o570	var p570
-T	t571	o570
-VA	A571	A\\ H\\ t571
-B	b571	A571
-T	t572	o295 b301 b571 b560
-B	b572	t572
-VC	C572	C\\ J H\\ t571
-B	b573	C572
-T	t573	o321 b572 b573
-B	b574	t573 w1
-T	t574	o320 b292 b574
-B	b575	t574
-T	t575	o321 b570 b575
-B	b576	t575 w
-T	t576	o320 b569 b576
-B	b577	t576
-T	t577	o315 b320 b577
-B	b578	t577 premise
-T	t578	o314 b565 b578
-H	h578	_2 t578
-S	s578	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519 h369 h550 h563 h564 h565 h568 h569 h578\\ t534
-B	b579	s578
-T	t579	o340 b579 b505
-B	b580	t579
-T	t580	o339 b580 b6
-B	b581	t580
-T	t581	o b581 b6
-B	b582	t581
-T	t582	o b563 b582
-B	b583	t582
-T	t583	o338 b553 b583
-B	b584	t583
-T	t584	o338 b563 b6
-B	b585	t584
-T	t585	o405 b337 b585 b6 b6
-B	b586	t585
-H	h586	x5 t380
-S	s586	t291\\ h h300 h323 h490 h345 h307 h308 h309 h513 h357 h60 h519 h369 h550 h563 h564 h565 h568 h569 h578 h376 h586\\ C
-B	b587	s586
-T	t587	o340 b587 b505
-B	b588	t587
-T	t588	o339 b588 b6
-B	b589	t588
-T	t589	o b589 b6
-B	b590	t589
-T	t590	o338 b581 b590
-B	b591	t590
-T	t591	o556 b589
-B	b592	t591
-T	t592	o b592 b6
-B	b593	t592
-T	t593	o363 b337 b591 b593 b6
-B	b594	t593
-T	t594	o b594 b6
-B	b595	t594
-T	t595	o b586 b595
-B	b596	t595
-T	t596	o557 b337 b584 b596 b6
-B	b597	t596
-T	t597	o b597 b6
-B	b598	t597
-T	t598	o b557 b598
-B	b599	t598
-T	t599	o549 b337 b556 b599 b6
-B	b600	t599
-T	t600	o b600 b6
-B	b601	t600
-T	t601	o b549 b601
-B	b602	t601
-T	t602	o529 b337 b540 b602 b6
-B	b603	t602
-T	t603	o b603 b6
-B	b604	t603
-T	t604	o524 b337 b529 b604 b6
-B	b605	t604
-T	t605	o b605 b6
-B	b606	t605
-T	t606	o518 b337 b524 b606 b6
-B	b607	t606
-T	t607	o b607 b6
-B	b608	t607
-T	t608	o512 b337 b518 b608 b6
-B	b609	t608
-T	t609	o b609 b6
-B	b610	t609
-P	p610	String "assertT << Provable{'logic; 'A['w]} >> ttca"
-O	o610	ext_rule p610
-H	h610	z t314
-S	s610	t291\\ h h300 h323 h490 h307 h308 h309 h357 h610 h369 h376 h380\\ C
-B	b611	s610
-T	t611	o340 b611 b505
-B	b612	t611
-T	t612	o339 b612 b6
-B	b613	t612
-T	t613	o316 b297 b322
-S	s613	t291\\ h h300 h323 h490 h307 h308 h309 h357 h610 h369 h376 h380\\ t613
-B	b614	s613
-T	t614	o340 b614 b505
-B	b615	t614
-T	t615	o353 b615 b6
-B	b616	t615
-H	h616	x2 t613
-S	s616	t291\\ h h300 h323 h490 h307 h308 h309 h357 h610 h369 h376 h380 h616\\ C
-B	b617	s616
-T	t617	o340 b617 b505
-B	b618	t617
-T	t618	o339 b618 b6
-B	b619	t618
-T	t619	o b619 b6
-B	b620	t619
-T	t620	o b616 b620
-B	b621	t620
-T	t621	o338 b613 b621
-B	b622	t621
-T	t622	o556 b616
-B	b623	t622
-P	p623	String "rwh unfold_Provable (-1) thenT autoT"
-O	o623	ext_rule p623
-T	t623	o295 b301 b347 b322
-H	h623	z1 t623
-S	s623	t291\\ h h300 h323 h490 h307 h308 h309 h357 h610 h369 h376 h380 h345 h623\\ C
-B	b624	s623
-T	t624	o340 b624 b505
-B	b625	t624
-T	t625	o339 b625 b6
-B	b626	t625
-T	t626	o b626 b6
-B	b627	t626
-T	t627	o338 b619 b627
-B	b628	t627
-T	t628	o556 b626
-B	b629	t628
-T	t629	o b629 b6
-B	b630	t629
-T	t630	o623 b337 b628 b630 b6
-B	b631	t630
-T	t631	o b631 b6
-B	b632	t631
-T	t632	o b623 b632
-B	b633	t632
-T	t633	o610 b337 b622 b633 b6
-B	b634	t633
-P	p634	String "assertAtT 5 << (all premises: list{Derivation{'logic}}. all goal: BTerm. all witness: ProofStepWitness. all p: ValidStep{'premises; 'goal; 'witness; 'logic}. all z: ('A['v] = 'goal in BTerm). all_list{'premises; premise. (Provable{'logic; derivation_goal{'premise}} & all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))}) Type >> ttca"
-O	o634	ext_rule p634
-B	b635	t307
-B	b636	t308
-B	b637	t313
-B	b638	t314
-B	b639	t327 z
-T	t639	o320 b638 b639
-B	b640	t639 p
-T	t640	o320 b637 b640
-B	b641	t640 witness
-T	t641	o320 b636 b641
-B	b642	t641 goal
-T	t642	o320 b301 b642
-B	b643	t642 premises
-T	t643	o320 b635 b643
-H	h643	x1 t643
-S	s643	t291\\ h h300 h323 h490 h643\\ C327
-B	b644	s643
-T	t644	o340 b644 b505
-B	b645	t644
-T	t645	o339 b645 b6
-B	b646	t645
-B	b647	t643
-T	t647	o292 b647
-H	h647	x2 t647
-S	s647	t291\\ h h300 h323 h490 h647 h643\\ C327
-B	b648	s647
-T	t648	o340 b648 b505
-B	b649	t648
-T	t649	o339 b649 b6
-B	b650	t649
-T	t650	o b650 b6
-B	b651	t650
-T	t651	o338 b646 b651
-B	b652	t651
-P	p652	String "moveToConclT (-1) thenT copyHypT 3 (-1) thenT rwh unfold_Provable (-1) thenT dT (-1) thenT moveToConclT (-1) thenT dT (-1) thenT reduceT ttca"
-O	o652	ext_rule p652
-T	t652	o321 b647 b354
-B	b653	t652
-T	t653	o321 b353 b653
-B	b654	t653 premise
-T	t654	o314 b310 b654
-H	h654	_ t654
-T	t655	o321 b357 b653
-S	s655	t291\\ h h300 h323 h490 h647 h345 h307 h308 h309 h654 h357\\ t655
-B	b655	s655
-T	t656	o340 b655 b505
-B	b656	t656
-T	t657	o353 b656 b6
-B	b657	t657
-T	t658	o b657 b6
-B	b658	t658
-T	t659	o338 b650 b658
-B	b659	t659
-H	h659	x3 t643
-S	s659	t291\\ h h300 h323 h490 h647 h345 h307 h308 h309 h654 h357 h60 h659\\ C327
-B	b660	s659
-T	t660	o340 b660 b505
-B	b661	t660
-T	t661	o339 b661 b6
-B	b662	t661
-T	t662	o b662 b6
-B	b663	t662
-T	t663	o338 b657 b663
-B	b664	t663
-P	p664	String "nameHypT 11 \"p\" thenT nameHypT 12 \"z\" thenT instHypT [<< 'premises>>; << 'goal >>; << 'witness >>; << 'p >>; << 'z >>] (-1) ttca"
-O	o664	ext_rule p664
-H	h664	z t357
-T	t664	o309 b565 b311 b312 b297
-B	b665	t664
-T	t665	o314 b565 b327
-B	b666	t665 z
-T	t666	o320 b638 b666
-B	b667	t666 p
-T	t667	o320 b665 b667
-B	b668	t667 witness
-T	t668	o320 b636 b668
-B	b669	t668 goal
-T	t669	o320 b301 b669
-B	b670	t669 premises1
-T	t670	o320 b635 b670
-H	h670	x3 t670
-B	b671	t327 z1
-T	t671	o320 b638 b671
-H	h671	w1 t671
-P	p671	Var z
-O	o671	var p671
-T	t672	o671
-B	b672	t672
-T	t673	o295 b638 b672 b672
-S	s673	t291\\ h h300 h323 h490 h647 h345 h307 h308 h309 h654 h357 h664 h670 h671\\ t673
-B	b673	s673
-T	t674	o340 b673 b505
-B	b674	t674
-T	t675	o376 b674 b6
-B	b675	t675
-H	h675	w t327
-S	s675	t291\\ h h300 h323 h490 h647 h345 h307 h308 h309 h654 h357 h664 h670 h675\\ C327
-B	b676	s675
-T	t676	o340 b676 b505
-B	b677	t676
-T	t677	o339 b677 b6
-B	b678	t677
-T	t678	o b678 b6
-B	b679	t678
-T	t679	o b675 b679
-B	b680	t679
-T	t680	o338 b662 b680
-B	b681	t680
-T	t681	o556 b675
-B	b682	t681
-T	t682	o556 b678
-B	b683	t682
-T	t683	o b683 b6
-B	b684	t683
-T	t684	o b682 b684
-B	b685	t684
-T	t685	o664 b337 b681 b685 b6
-B	b686	t685
-T	t686	o b686 b6
-B	b687	t686
-T	t687	o363 b337 b664 b687 b6
-B	b688	t687
-T	t688	o b688 b6
-B	b689	t688
-T	t689	o652 b337 b659 b689 b6
-B	b690	t689
-T	t690	o b690 b6
-B	b691	t690
-T	t691	o634 b337 b652 b691 b6
-B	b692	t691
-T	t692	o b692 b6
-B	b693	t692
-T	t693	o b634 b693
-B	b694	t693
-T	t694	o502 b337 b512 b610 b694
-B	b695	t694
-T	t695	o335 b695
-B	b696	t695
-T	t696	o489 b288 b502 b696 b6
-B	b697	t696
-T	t697	o488 b697
-B	b698	t697
-T	t698	o b698 b6
-B	b699	t698
-T	t699	o b487 b699
-B	b700	t699
-T	t700	o b317 b700
-B	b701	t700
-T	t701	o b284 b701
-B	b702	t701
-T	t702	o b277 b702
-B	b703	t702
-T	t703	o b269 b703
-B	b704	t703
-T	t704	o b2 b704
+T	t560	o b269 b560
+B	b561	t560
+T	t561	o b2 b561

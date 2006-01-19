@@ -1,5 +1,3 @@
-OCAMLINCLUDES += $(SUPPORT_DIRS)
-
 THEORYNAME = base
 THEORYDESCR = Basic Meta-Theory
 
@@ -20,6 +18,8 @@ MPFILES[] =
     base_theory
 
 Theory($(MPFILES))
+
+InstallTheoryFiles($(MPFILES))
 
 #
 # Clean up

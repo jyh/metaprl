@@ -9,6 +9,8 @@ DIRS[] =
 
 VirtualTheory($(DIRS))
 
+SUPPORT = $(dir $(ROOT)/support)
+
 #
 # Documentation
 #

@@ -216,7 +216,7 @@ let revSqTerm trm =
 
 let hypC i = funC (fun p ->
    let trm = Sequent.nth_hyp (env_arg p) i in
-   rewriteC trm  thenTC hypothesis i)
+   rewriteC trm thenTC hypothesis i)
 
 let revHypC i = funC (fun p ->
    let trm = Sequent.nth_hyp (env_arg p) i in

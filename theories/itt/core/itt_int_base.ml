@@ -90,8 +90,7 @@ let debug_arith_unfold =
  * RESOURCES USED BY arithT
  *)
 let extract_data tbl =
-   let rw e =
-      let t = env_term e in
+   let rw t =
       let conv =
          try
             (* Find and apply the right tactic *)
@@ -106,7 +105,7 @@ let extract_data tbl =
             Lm_printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
          conv
    in
-      funC rw
+      termC rw
 
 let process_arith_unfold_resource_rw_annotation ?labels name redex contractum assums addrs args loc rw =
    rule_labels_not_allowed loc labels;

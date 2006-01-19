@@ -61,18 +61,17 @@ let table_equal table v1 v2 =
  *)
 let coalesceC table =
    (* Have the rewriter search for the occurrence *)
-   let convC e =
-      let t = env_term e in
-         match dest_inst_term t with
-            Mov (Register src, dst, _)
-            when table_equal table src dst ->
-               if false then
-                  eprintf "Coalescing %a = %a@." pp_print_symbol src pp_print_symbol dst;
-               reduce_let
-          | _ ->
-               failC
+   let convC t =
+      match dest_inst_term t with
+         Mov (Register src, dst, _)
+         when table_equal table src dst ->
+            if false then
+               eprintf "Coalescing %a = %a@." pp_print_symbol src pp_print_symbol dst;
+            reduce_let
+       | _ ->
+            failC
    in
-      funC convC
+      termC convC
 
 (*
  * Split a spill.

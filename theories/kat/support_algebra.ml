@@ -19,15 +19,14 @@ open Tactic_type.Conversionals
 (* Commutative Resource *)
 
 let extract_data tbl =
-   let rw e =
-      let t = env_term e in
-         try
-            slookup tbl t
-         with
-            Not_found ->
-               raise (RefineError ("Support_algebra.extract_data", StringTermError ("Commutative resource does not know about", t)))
+   let rw t =
+      try
+         slookup tbl t
+      with
+         Not_found ->
+            raise (RefineError ("Support_algebra.extract_data", StringTermError ("Commutative resource does not know about", t)))
    in
-      funC rw
+      termC rw
 
 let resource commutative =
    stable_resource_info extract_data

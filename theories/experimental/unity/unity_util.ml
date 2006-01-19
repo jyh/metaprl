@@ -57,8 +57,7 @@ let debug_reduce =
  * Helper functions for resources like reduceC.
  *)
 let extract_data tbl =
-   let rw e =
-      let t = env_term e in
+   let rw t =
       let conv =
          try
             (* Find and apply the right tactic *)
@@ -73,7 +72,7 @@ let extract_data tbl =
             eprintf "Unity_util: applying %a%t" debug_print t eflush;
          conv
    in
-      funC rw
+      termC rw
 
 let process_resource_annotation name cvars vars args params mterm conv =
    match mterm with

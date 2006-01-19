@@ -18,7 +18,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005 MetaPRL Group, Cornell University and
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
    California Institute of Technology
 
    This program is free software; you can redistribute it and/or
@@ -169,6 +169,9 @@ interactive equalityRefHyp2 {| nth_hyp |} 'H :
 interactive dup_hyp 'H :
    sequent { <H>; x: 'T; <J['x]>; y: 'T >- 'C['x] } -->
    sequent { <H>; x: 'T; <J['x]> >- 'C['x] }
+
+interactive universeType {| nth_hyp |} 'H :
+   sequent { <H>; u: 'x in univ[l:l]; <J['u]> >- 'x Type }
 
 doc <:doc<
    @modsubsection{Substitution}
@@ -553,18 +556,6 @@ let replaceHypT t i = funT (fun p ->
 let equalTypeT = equalityTypeIsType
 let memberTypeT a = equalTypeT a a ttca
 
-let equalityAssumT = argfunT (fun i p ->
-   let t' = dest_type_term (Sequent.concl p) in
-   let t,a,b = dest_equal (TermMan.concl (Sequent.nth_assum p i)) in
-      if alpha_equal t t' then
-         equalTypeT a b thenT nthAssumT i
-      else if alpha_equal t' a && is_univ_term t then
-         univTypeT t thenT nthAssumT i
-      else failT)
-
-let autoAssumT i =
-   nthAssumT i orelseT equalityAssumT i
-
 doc <:doc<
    @resources
 
@@ -576,7 +567,7 @@ doc <:doc<
 let resource auto += {
    auto_name = "Itt_struct.autoAssumT";
    auto_prec = create_auto_prec [equality_prec] [];
-   auto_tac = onSomeAssumT autoAssumT;
+   auto_tac = onSomeAssumT nthAssumT;
    auto_type = AutoTrivial;
 }
 

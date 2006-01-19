@@ -17,7 +17,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2005 MetaPRL Group, Cornell University and California
+   Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,8 +34,10 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
+                Alexei Kopylov @email{kopylov@cs.cornell.edu}
+                Carl Witty
 
    @end[license]
 >>

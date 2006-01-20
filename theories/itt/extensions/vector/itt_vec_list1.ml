@@ -429,6 +429,11 @@ interactive_rw length_of_vflatten_cons {| reduce |} :
    <-->
    length{'l} +@ length{vflatten{| <J> |}}
 
+(*
+ * XXX: BUG!!! Meta_context_terms.reduce_sequent_ind_base1 is too strong.
+ *)
+interactive_rw bug : 0 <--> 1
+
 (************************************************************************
  * Display forms.
  *)

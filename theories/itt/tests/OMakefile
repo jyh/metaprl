@@ -12,6 +12,8 @@ MPFILES[] =
    itt_int_bench
    itt_int_bench2
    itt_test
+   test
+   prop-pigeon
 
 #
 # gen_int_bench uses the standard OCaml compiler

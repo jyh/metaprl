@@ -19,8 +19,6 @@ MPFILES[] =
 
 Theory($(MPFILES))
 
-InstallTheoryFiles($(MPFILES))
-
 #
 # Clean up
 #

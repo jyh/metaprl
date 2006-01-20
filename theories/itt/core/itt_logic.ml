@@ -1313,62 +1313,85 @@ end;;
 
 module ITT_JProver = Jall.JProver (Itt_JLogic);;
 
-let rec make_j_assums p goal len i =
-   if i > len then
-      []
-   else
-      let assum = Sequent.nth_assum p i in
-      let rest = make_j_assums p goal len (succ i) in
-         try
-            let form, index = assum_term goal assum in
-               (form, make_assumT i goal assum form index) :: rest
-         with
-            RefineError _ ->
-               rest
-
-let jprogressT = argfunT (fun t p ->
-   if alpha_equal (Sequent.concl p) t then
-      raise (RefineError ("Itt_logic.jprogressT", StringError "JProver failed to make progress"))
-   else
-      idT)
-
-let logic_opnames =
-   OpnameSet.of_list
-      [all_opname; exists_opname; or_opname; and_opname; implies_opname; iff_opname; not_opname]
-
-let logic_count n t =
-   if OpnameSet.mem logic_opnames (opname_of_term t) then n + 1 else n
-
-(* input a list_term of hyps,concl *)
-let base_jproverT def_mult p =
-   let goal = Sequent.goal p in
-   let seq = TermMan.explode_sequent goal in
-   let () =
-      if not (alpha_equal itt_sequent_arg seq.sequent_args) then
-         raise (RefineError("Itt_logic.base_jproverT", StringError "Not an ITT sequent"))
+let base_jproverT =
+   let rec make_j_assums p goal len i =
+      if i > len then
+         []
+      else
+         let assum = Sequent.nth_assum p i in
+         let rest = make_j_assums p goal len (succ i) in
+            try
+               let form, index = assum_term goal assum in
+                  (form, make_assumT i goal assum form index) :: rest
+            with
+               RefineError _ ->
+                  rest
+   in 
+   let jprogressT = argfunT (fun t p ->
+      if alpha_equal (Sequent.concl p) t then
+         raise (RefineError ("Itt_logic.jprogressT", StringError "JProver failed to make progress"))
+      else
+         idT)
    in
-   let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
-   let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
-   let concl = seq.sequent_concl in
-   let () =
-      if (List.fold_left logic_count 0 (concl :: hyps)) = 0 then
-         raise (RefineError("Itt_logic.base_jproverT", StringError "No logical formulas found in the goal"))
+   let logic_opnames =
+      OpnameSet.of_list
+         [all_opname; exists_opname; or_opname; and_opname; implies_opname; iff_opname; not_opname]
    in
-   let mult_limit =
-      match Sequent.get_int_arg p "jprover" with
-         None -> def_mult
-       | Some _ as ml -> ml
+   let logic_opnames_num = OpnameSet.cardinal logic_opnames in
+   let rec get_useful_opnames opnames t =
+      if (is_or_term t) || (is_and_term t) || (is_implies_term t) || (is_iff_term t) then
+         let t1, t2 = two_subterms t in
+            get_useful_opnames (get_useful_opnames opnames t1) t2
+      else if is_all_term t then 
+         let _, _, t = dest_all t in
+            get_useful_opnames opnames t
+      else if is_exists_term t then
+         let _, _, t = dest_exists t in
+            get_useful_opnames opnames t
+      else if is_not_term t then
+         get_useful_opnames opnames (one_subterm t)
+      else
+         OpnameSet.add opnames (opname_of_term t)
+   in 
+   let useful_opname opnames t =
+      if OpnameSet.mem logic_opnames (opname_of_term t) then
+         get_useful_opnames opnames t
+      else
+         opnames
    in
-      match ITT_JProver.prover mult_limit hyps concl with
-         [t] ->
-            let substs =
-               try [Lm_symbol.make "n_jprover" 0, get_with_arg p] with
-                  RefineError _ ->
-                     []
-            in
-               t substs assums thenT jprogressT concl
-       | _ ->
-            raise (Invalid_argument "Problems decoding ITT_JProver.prover proof")
+   let useful_hyp opnames t = OpnameSet.mem opnames (opname_of_term t) in
+   (fun def_mult p ->
+      let goal = Sequent.goal p in
+      let seq = TermMan.explode_sequent goal in
+      let () =
+         if not (alpha_equal itt_sequent_arg seq.sequent_args) then
+            raise (RefineError("Itt_logic.base_jproverT", StringError "Not an ITT sequent"))
+      in
+      let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
+      let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
+      let concl = seq.sequent_concl in
+      let opnames = List.fold_left useful_opname logic_opnames (concl :: hyps) in
+      let hyps =
+         if OpnameSet.cardinal opnames = logic_opnames_num then
+            raise (RefineError("Itt_logic.base_jproverT", StringError "No logical formulas found in the goal"))
+         else
+            List.filter (useful_hyp opnames) hyps
+      in
+      let mult_limit =
+         match Sequent.get_int_arg p "jprover" with
+            None -> def_mult
+          | Some _ as ml -> ml
+      in
+         match ITT_JProver.prover mult_limit hyps concl with
+            [t] ->
+               let substs =
+                  try [Lm_symbol.make "n_jprover" 0, get_with_arg p] with
+                     RefineError _ ->
+                        []
+               in
+                  t substs assums thenT jprogressT concl
+          | _ ->
+               raise (Invalid_argument "Problems decoding ITT_JProver.prover proof"))
 
 let simple_jproverT = funT (base_jproverT (Some 1))
 let jproverT = funT (base_jproverT (Some 100))

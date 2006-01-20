@@ -338,21 +338,21 @@ let generalize_term f bv squashbv t v vsrc vdst cv1 x x_A cv2 info mode =
 
                            (* context 1, var *)
                          | SrcVar, RightMode, StartState ->
-                              let t_A = mk_so_var_term x_A (cv1 :: cs) [] in
+                              let t_A = mk_so_var_term x_A (cv1 :: cs) ts in
                                  Hypothesis (x, t_A) :: Context (cv1, cs, ts) :: hyps
                          | DstVar, LeftMode, StartState ->
-                              let t_A = mk_so_var_term x_A (cv1 :: cs) [] in
+                              let t_A = mk_so_var_term x_A (cv1 :: cs) ts in
                               let t_A = f t_A in
                                  Hypothesis (x, t_A) :: Context (cv1, cs, ts) :: hyps
 
                            (* var, context 2 *)
                          | SrcVar, RightMode, DstState ->
                               let cs = replace_var2 cs vsrc vdst cv1 in
-                              let t_A = mk_so_var_term x_A cs [] in
+                              let t_A = mk_so_var_term x_A cs ts in
                                  Context (cv2, cs, x_t :: ts) :: Hypothesis (x, t_A) :: hyps
                          | DstVar, LeftMode, SrcState ->
                               let cs = replace_var2 cs vsrc vdst cv1 in
-                              let t_A = mk_so_var_term x_A cs [] in
+                              let t_A = mk_so_var_term x_A cs ts in
                               let t_A = f t_A in
                                  Context (cv2, cs, x_t :: ts) :: Hypothesis (x, t_A) :: hyps
 

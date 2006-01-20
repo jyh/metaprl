@@ -12,5 +12,5 @@ THEORY_DEPS[] +=
     itt/reflection/core
     itt/reflection/experimental
 
-FILES[] =
+MPFILES[] =
     pmn_core_terms

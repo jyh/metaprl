@@ -1,2 +1,10 @@
 THEORYNAME = cic
-THEORYDESCR = CIC
+THEORYDESCR = Calculus of Inductive Constructions
+MPFILES[] =
+   cic_lambda
+   cic_ind_type
+   cic_ind_elim
+   cic_ind_elim_dep
+   cic_list
+#   cic_ind_cases
+

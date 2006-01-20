@@ -1,2 +1,12 @@
 THEORYNAME = fir_type
 THEORYDESCR = FIR types
+OCAMLFLAGS += -rectypes
+
+MPFILES[] =
+    m_prec
+    m_int
+    m_rawint
+    m_rawfloat
+    m_set
+    m_fir
+    m_fir_term

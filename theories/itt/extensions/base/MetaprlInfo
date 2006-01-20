@@ -1,0 +1,15 @@
+THEORYNAME = itt_extensions_base
+THEORYDESCR = Extensions to Computational Type Theory - Some are experimental
+
+THEORY_DEPS[] +=
+    itt/core
+
+# Library files
+MPFILES[] =
+   itt_eta
+   itt_pairwise
+   itt_pairwise2
+   itt_list3
+   itt_list_sloppy
+   itt_antiquotient
+   ctt_markov

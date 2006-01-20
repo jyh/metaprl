@@ -1,6 +1,3 @@
-THEORY_DEPS[] +=
-    experimental/compile
-
 CORE_FILES[] =
     unity_util
     unity_ast

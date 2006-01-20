@@ -1,0 +1,16 @@
+#
+# Naive POPLmark
+#
+THEORYNAME = poplmark_naive
+THEORYDESCR = A naive POPLmark solution
+
+THEORY_DEPS[] +=
+    meta/extensions
+    itt/core
+    itt/extensions/base
+    itt/extensions/vector
+    itt/reflection/core
+    itt/reflection/experimental
+
+FILES[] =
+    pmn_core_terms

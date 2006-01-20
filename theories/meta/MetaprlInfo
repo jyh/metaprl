@@ -1,0 +1,34 @@
+THEORYNAME = meta
+THEORYDESCR = Basic Meta-Theory
+
+#
+# Subdirectories
+#
+DIRS[] =
+    base
+    extensions
+
+VirtualTheory($(DIRS))
+
+SUPPORT = $(dir $(ROOT)/support)
+
+#
+# Documentation
+#
+PRINT_THEORIES[] =
+    base/base_theory
+    $(SUPPORT)/tactics/top_tacticals
+    $(SUPPORT)/tactics/top_conversionals
+    $(SUPPORT)/tactics/var
+    $(SUPPORT)/tactics/auto_tactic
+    $(SUPPORT)/tactics/dtactic
+    base/base_trivial
+    base/base_rewrite
+    $(SUPPORT)/display/summary
+    $(SUPPORT)/display/comment
+    $(SUPPORT)/shell/mptop
+    extensions/meta_dtactic
+    extensions/meta_struct
+    extensions/meta_implies
+    extensions/meta_context_terms
+    extensions/meta_context_ind1

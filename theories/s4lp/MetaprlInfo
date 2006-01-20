@@ -1,0 +1,8 @@
+# Library files
+MPFILES[] =
+	hilbert_internal
+	s4_logic
+	s4_tests
+	s4_internal
+#   hilbert
+#   lp_hilbert

@@ -1,0 +1,6 @@
+THEORYNAME = hol
+THEORYDESCR = Higher Order Logic
+
+# Library files
+MPFILES[] =
+    hol_core

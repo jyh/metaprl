@@ -1,20 +1,3 @@
-THEORYNAME = itt_tests
-THEORYDESCR = Tests and Benchmarks for Computational Type Theory
-
-THEORY_DEPS[] +=
-    itt/core
-    itt/applications/supinf
-
-# Library files
-MPFILES[] =
-   jprover_tests
-   itt_int_test
-   itt_int_bench
-   itt_int_bench2
-   itt_test
-   test
-   prop-pigeon
-
 #
 # gen_int_bench uses the standard OCaml compiler
 #

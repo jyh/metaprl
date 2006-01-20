@@ -1,0 +1,13 @@
+THEORYNAME = itt_supinf
+THEORYDESCR = SupInf Tactic for Computational Type Theory (Obsolete)
+
+THEORY_DEPS[] +=
+   itt/core
+   itt/applications/algebra
+
+# Library files
+MPFILES[] =
+   itt_order
+   itt_rat
+   itt_rat2
+   itt_supinf

@@ -1,0 +1,17 @@
+THEORYNAME = itt_reflection_core
+THEORYDESCR = Syntax Reflection for Computational Type Theory - Core
+
+THEORY_DEPS[] +=
+    itt/core
+    itt/extensions/base
+    itt/extensions/vector
+    meta/extensions
+
+# Library files
+MPFILES[] =
+   itt_hoas_base
+   itt_hoas_vector
+   itt_hoas_vbind
+   itt_hoas_debruijn
+   itt_hoas_operator
+   itt_hoas_destterm

@@ -1,0 +1,38 @@
+THEORYNAME = itt_reflection_experimental
+THEORYDESCR = Syntax Reflection for Computational Type Theory - Work in progress
+
+THEORY_DEPS[] +=
+    meta/extensions
+    itt/core
+    itt/reflection/core
+    itt/extensions/base
+    itt/extensions/vector
+
+MLZFILES[] =
+    itt_hoas_theory
+
+MPFILES[] =
+    itt_hoas_lang
+    itt_hoas_bterm
+    itt_hoas_util
+    itt_hoas_relax
+    itt_hoas_lof
+    itt_hoas_lof_vec
+    itt_hoas_normalize
+    itt_hoas_bterm_wf
+    itt_hoas_sequent
+    itt_hoas_relax1
+    itt_hoas_proof1
+    itt_hoas_proof_ind
+    itt_hoas_sequent_bterm1
+    itt_hoas_sequent_term1
+    itt_hoas_sequent_proof_step1
+    itt_hoas_sequent_proof1
+    itt_hoas_sequent_bterm2
+    itt_hoas_proof
+    itt_hoas_sequent_bterm
+    itt_hoas_sequent_term
+    itt_hoas_sequent_proof_step
+    itt_hoas_sequent_proof
+    itt_hoas_meta_types
+    itt_hoas_theory

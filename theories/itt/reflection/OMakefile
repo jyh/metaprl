@@ -1,9 +1,0 @@
-DIRS[] =
-    core
-    experimental
-    obsolete
-
-VirtualTheory($(DIRS))
-
-clean:
-    $(CLEAN)

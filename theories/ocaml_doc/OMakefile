@@ -1,48 +1,11 @@
-THEORYNAME = ocaml_doc
-THEORYDESCR = "Introduction to OCaml" Book
-
-# Common files
-MLZFILES =
-
-# Library files
-MPFILES[] =
-    ocaml_doc_comment
-    ocaml_doc_intro
-    ocaml_doc_expr1
-    ocaml_doc_var1
-    ocaml_doc_patt1
-    ocaml_doc_expr2
-    ocaml_doc_expr3
-    ocaml_doc_exn1
-    ocaml_doc_expr4
-    ocaml_doc_io1
-    ocaml_doc_mod1
-    ocaml_doc_mod2
-    ocaml_doc_mod3
-    ocaml_doc_class1
-    ocaml_doc_class2
-
+#
+# Standard theory
+#
 Theory($(MPFILES))
 
 #
-# Generate the document
+# Documentation
 #
-PRINT_THEORIES[] =
-    ocaml_doc_intro
-    ocaml_doc_expr1
-    ocaml_doc_var1
-    ocaml_doc_patt1
-    ocaml_doc_expr2
-    ocaml_doc_expr3
-    ocaml_doc_expr4
-    ocaml_doc_exn1
-    ocaml_doc_io1
-    ocaml_doc_mod1
-    ocaml_doc_mod2
-    ocaml_doc_mod3
-    ocaml_doc_class1
-    ocaml_doc_class2
-
 LocalTeXGeneratedFiles(theory.tex theory-body.tex)
 TheoryDocument(theory, $(PRINT_THEORIES))
 

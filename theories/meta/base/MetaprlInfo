@@ -1,0 +1,18 @@
+THEORYNAME = base
+THEORYDESCR = Basic Meta-Theory
+
+THEORY_DEPS[] =
+
+# Common files
+MLZFILES[] =
+    base_theory
+
+# Library files
+MPFILES[] =
+    base_trivial
+    base_meta
+    base_rewrite
+    base_reflection
+    base_operator
+    base_grammar
+    base_theory

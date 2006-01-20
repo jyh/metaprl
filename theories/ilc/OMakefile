@@ -1,20 +1,3 @@
-THEORYNAME = ilc
-THEORYDESCR = $"ILC: A Froundation for Automated Reasoning About Pointer Programs"
-
-THEORY_DEPS[] +=
-    itt/core
-
-# MetaPRL "theory" files.
-MPFILES[] =
-    ilc_core
-    ilc_term
-    ilc_extend
-    ilc_listtest1
-    ilc_test
-    ilc_listtest
-    ilc_mergesort
-    ilc_longmergesort
-
 Theory($(MPFILES))
 
 #

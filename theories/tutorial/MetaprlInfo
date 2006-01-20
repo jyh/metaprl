@@ -1,0 +1,5 @@
+THEORY_DEPS[] +=
+    itt/core
+
+# Library files
+MPFILES = fol_false

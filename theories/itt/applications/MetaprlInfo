@@ -1,0 +1,8 @@
+DIRS[] =
+    algebra
+    datatypes
+    function_spaces
+    objects
+    supinf
+
+VirtualTheory($(DIRS))

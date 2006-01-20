@@ -1,20 +1,3 @@
-THEORY_DEPS[] +=
-    itt/core
-
-MLZFILES[] =
-    tptp_type
-    tptp_parse
-
-MPFILES[] =
-    tptp_type
-    tptp_parse
-    tptp_lex
-    tptp_derive
-    tptp
-    tptp_load
-    tptp_cache
-    tptp_prove
-
 #
 # Generated files
 #

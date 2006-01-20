@@ -1,0 +1,7 @@
+DIRS[] =
+    base
+#    experimental
+    rfun
+    vector
+
+VirtualTheory($(DIRS))

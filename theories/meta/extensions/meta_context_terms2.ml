@@ -45,7 +45,7 @@ doc <:doc<
    Define a spread version of sequent induction.
 >>
 define unfold_sequent_ind_uv :
-   sequent_ind{u : 'b, v : HFun{'a; 'b; 'c}. 'step['u; 'v] : 'c; 'e : SequentCore{'a; 'b; 'c}} : 'c
+   sequent_ind{u : 'b, v : HFun{'a; 'b; 'c}. 'step['u; 'v] : 'c; 'e : Sequent{'a; 'b; 'c}} : 'c
    <-->
    sequent_ind{h. 'step[htype{'h}; 'h]; 'e}
 
@@ -70,9 +70,9 @@ doc <:doc<
 define unfold_sequent_ind_cuv :
    sequent_ind{x : 'c. 'concl['x] : 'result;
                u : 'b, v : HFun{'a; 'b; 'result}. 'step['u; 'v] : 'result;
-               'e : SequentCore{'a; 'b; 'c}} : 'result
+               'e : Sequent{'a; 'b; 'c}} : 'result
    <-->
-   sequent_ind{y, x. 'concl['x]; h. 'step[htype{'h}; 'h]; 'e}
+   sequent_ind{x. 'concl['x]; h. 'step[htype{'h}; 'h]; 'e}
 
 interactive_rw reduce_sequent_ind_nil3 {| reduce |} :
    sequent_ind{x. 'c['x]; u, v. 'step['u; 'v]; SequentTerm{| <J> >- 'C |}}
@@ -82,8 +82,7 @@ interactive_rw reduce_sequent_ind_nil3 {| reduce |} :
 doc <:doc<
    Derive the rules for the term sequent.
 >>
-prim_rw unfold_TermSequent : TermSequent{| <J> >- 'C |} <-->
-   SequentTerm{| <J> >- 'C |}
+prim_rw unfold_TermSequent : TermSequent <--> SequentTerm
 
 interactive_rw reduce_term_sequent_ind_nil1 {| reduce |} :
    sequent_ind{h. 'step['h]; TermSequent{| >- 'C |}}

@@ -33,28 +33,31 @@ extends Base_theory
 
 doc <:doc<
 
-Many functional programming implementations include a significant
-runtime environment that defines a standard library and a garbage
-collector.  They also often include a toploop evaluator that can be used to
-interact with the system.  OCaml provides a compiler, a runtime, and a
-toploop.  By default, the toploop is called @tt[ocaml].  The toploop
-prints a prompt (@code{#}), reads an input expression, evaluates it,
-and prints the result .  Expressions in the toploop are terminated by
-a double-semicolon `@code{;;}'.
+Many functional programming implementations include a runtime
+environment that defines a standard library and a garbage collector.
+They also often include a toploop evaluator that can be used
+to evaluate programs interactively.
+
+OCaml provides a compiler, a runtime, and a toploop.  By default, the
+toploop is called @tt[ocaml].  The toploop prints a prompt (@code{#}),
+reads an input expression, evaluates it, and prints the result .
+Expressions in the toploop are terminated by a double-semicolon
+`@code{;;}'.
 
 @begin[iverbatim]
 % ocaml
         Objective Caml version 3.08.0
-
 # 1 + 4;;
 - : int = 5
 #
 @end[iverbatim]
 
-The toploop prints the @emph{type} of the result (in this case,
-@code{int}) and the value ($5$).  To exit the toploop, you may type
-the end-of-file character (usually Control-D in Unix, and Control-Z in
-Microsoft Windows).
+On startup, the @tt[ocaml] toploop prints its version number, then
+prompts for input with the @code{#} character.  Given an expression
+($1 + 4$ in this case), the toploop evaluates the expression, prints
+the type of the result (@code{int}) and the value ($5$).  To exit the
+toploop, you may type the end-of-file character (usually Control-D in
+Unix, and Control-Z in Microsoft Windows).
 
 @section["ocaml-doc-comments"]{Comment convention}
 
@@ -79,14 +82,15 @@ The primitive types are @code{unit}, @code{int}, @code{char}, @code{float},
 
 The simplest type in OCaml is the @tt{unit} type, which contains one
 element: @code{()}.  This type seems to be a rather silly.  However,
-in a functional language every function must return a value; @code{()} is
-commonly used as the value of a procedure that computes by
-side-effect.  It corresponds to the @code{void} type in C.
+in a functional language every function must return a value.  The
+@code{()} value is commonly used as the value of a procedure that
+computes by side-effect.  The @tt[unit] type corresponds to the
+@code{void} type in C.
 
 @subsection["ocaml-doc-expr-int"]{@tt{int}: the integers}
 
-The @code{int} type is the type of signed integers: $@ldots, -2, -1,
-0, 1, 2, @ldots$ The precision is finite.  Integer values are
+The @code{int} type is the type of signed integers $@lbrace @ldots, -2, -1,
+0, 1, 2, @ldots @rbrace$.  The precision is finite.  Integer values are
 represented by a machine word, minus one bit that is reserved for use
 by the garbage collector, so on a 32-bit machine architecture, the
 precision is 31 bits (one bit is reserved for use by the runtime), and
@@ -158,6 +162,9 @@ The precedences of the integer operators are as follows, listed in increasing or
 @end[tabular]
 @end[quote]
 
+@noindent
+Here are some example expressions.
+
 @begin[iverbatim]
 # 0b1100;;
 - : int = 12
@@ -169,8 +176,8 @@ The precedences of the integer operators are as follows, listed in increasing or
 
 @subsection["ocaml-doc-expr-float"]{@tt{float}: the floating-point numbers}
 
-The floating-point numbers provide dynamically scaled ``floating
-point'' numbers.  The syntax of a floating point includes either a
+The type @tt[float] specifies dynamically scaled ``floating
+point'' numbers.  The syntax of a floating point number includes either a
 decimal point, or an exponent (base 10) denoted by an `@code{E}' or
 `@code{e}'.  A digit is required before the decimal point.  Here are a
 few examples:
@@ -195,6 +202,9 @@ The corresponding operators include a `.' as follows:
 @end[tabular]
 @end[quote]
 
+@noindent
+Here are some example floating-point expressions.
+
 @begin[iverbatim]
 # 31.415926e-1;;
 - : float = 3.1415926
@@ -211,8 +221,9 @@ Characters 4-7:
 This expression has type float but is here used with type int
 @end[iverbatim]
 
-The final expression fails to typecheck because the @code{int} operator
-@code{+} is used with the floating-point value @code{2.0}.
+The final expression fails to typecheck because the operator @code{+},
+which works only with @tt[int] expressions, is used with a
+floating-point expression @code{2.0}.
 
 @subsection["ocaml-doc-expr-char"]{@tt{char}: the characters}
 
@@ -220,9 +231,9 @@ The character type @code{char} specifies characters from the ASCII
 character set.  The syntax for a character constants uses the single
 quote symbol @code{'}$c$@code{'}.
 
-@begin[iverbatim]
-'a', 'Z', ' ', 'W'
-@end[iverbatim]
+@begin[verbatim]
+    'a', 'Z', ' ', 'W'
+@end[verbatim]
 
 @noindent
 In addition, there are several kinds of escape sequences with an alternate syntax.
@@ -242,15 +253,14 @@ Each escape sequence begins with the backslash character `@code{\}'.
 @end[quote]
 
 @noindent
-
 A decimal escape sequence must have exactly three decimal characters
 $d$, and specifies the ASCII character with the specified decimal
 code.  A hexadecimal escape sequence must have exactly two hexadecimal
 characters $h$.
 
-@begin[iverbatim]
-'a', 'Z', '\120', '\t', '\n', '\x7e'
-@end[iverbatim]
+@begin[verbatim]
+     'a', 'Z', '\120', '\t', '\n', '\x7e'
+@end[verbatim]
 
 There are functions for converting between characters and integers.
 The function @target["char-code"]{@tt{Char.code}} returns the integer
@@ -286,9 +296,11 @@ a delimiter.  Characters in the string may use the escape sequences
 defined for characters.
 
 @begin[center]
-@begin[iverbatim]
-"Hello", "The character '\000' is not a terminator", "\072\105"
-@end[iverbatim]
+@begin[verbatim]
+    "Hello"
+    "The character '\000' is not a terminator"
+    "\072\105"
+@end[verbatim]
 @end[center]
 
 @noindent
@@ -304,8 +316,8 @@ The @code{^} operator performs string concatenation.
 @end[iverbatim]
 
 Strings also allow random access.  The expression @code{s.[i]} returns
-the $i$'th from string $s$; and the expression @code{s.[i] <- c}
-replaces the $i$'th in string $s$ by character $c$, returning a
+the $i$'th character from string $s$; and the expression @code{s.[i]
+<- c} replaces the $i$'th in string $s$ by character $c$, returning a
 @code{unit} value.  The @target[String]{@tt{String}} module (see
 Section @refsection["ocaml-doc-string"]) also defines many functions
 to manipulate strings, including the
@@ -353,14 +365,14 @@ value is implementation-dependent, and in some cases may raise a
 runtime error.  For example, functions (discussed in the next chapter)
 cannot be compared.
 
-The @code{==} deserves special mention, since we use the word
-``identical'' in an informal sense.  The exact semantics is this: if
-the expression ``$x$ @code{==} $y$'' evaluates to @code{true}, then so
-does the expression ``$x$ @code{=} $y$''.  However it is still
+The @code{==} comparison deserves special mention, since we use the
+word ``identical'' in an informal sense.  The exact semantics is this:
+if the expression ``$x$ @code{==} $y$'' evaluates to @code{true}, then
+so does the expression ``$x$ @code{=} $y$''.  However it is still
 possible for ``$x$ @code{=} $y$'' to be @code{true} even if ``$x$
 @code{==} $y$'' is not.  In the OCaml implementation from INRIA, the
-expression ``$x$ @code{==} $y$'' evaluates to @code{true} only if the two
-values $x$ and $y$ are exactly the same value.  The comparison
+expression ``$x$ @code{==} $y$'' evaluates to @code{true} only if the
+two values $x$ and $y$ are exactly the same value.  The comparison
 @code{==} is a constant-time operation that runs in a bounded number
 of machine instructions; the comparison @code{=} is not.
 
@@ -444,14 +456,14 @@ Lisp and ML are @emph{safe} languages, while C is not.
 
 What is ``safety?''  There is a formal definition based on the
 operational semantics of the programming language, but an approximate
-definition is that a valid program will never fault because of an
-invalid machine operation.  All memory accesses will be valid.  ML
-guarantees safety by proving that every program that passes the type
-checker can never produce a machine fault, and Lisp guarantees it by
-checking for validity at run time.  One surprising (some would say
-annoying) consequence is that ML has no @code{nil} or @code{NULL}
-values; these would potentially cause machine errors if used where
-a value is expected.
+definition is that the execution of a valid program will never fail
+because of an invalid machine operation.  All memory accesses will be
+valid.  ML guarantees safety by proving that every program that passes
+the type checker can never produce a machine fault, and Lisp
+guarantees it by checking for validity at run time.  One surprising
+(some would say annoying) consequence is that ML has no @code{nil} or
+@code{NULL} values; these would potentially cause machine errors if
+used where a value is expected.
 
 As you learn OCaml, you will initially spend a lot of time getting the
 OCaml type checker to accept your programs.  Be patient, you will
@@ -508,7 +520,7 @@ type no matter how the test turns out).  Since the expressions @tt[1]
 and @tt{1.3} have different types, the type checker generates an
 error.
 
-One other issue: the @tt{else} branch is not required in a conditional.
+One other point to mention---the @tt{else} branch is not required in a conditional.
 If it is omitted, the conditional is treated as if the @tt{else} case
 returns the @tt{()} value.  The following code has a type error.
 

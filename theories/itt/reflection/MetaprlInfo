@@ -3,13 +3,4 @@ DIRS[] =
     experimental
     obsolete
 
-PRINT_THEORIES[] =
-    reflection/core/itt_hoas_base
-    reflection/core/itt_hoas_vector
-    reflection/core/itt_hoas_debruijn
-    reflection/core/itt_hoas_operator
-    reflection/core/itt_hoas_destterm
-    reflection/experimental/itt_hoas_lang
-    reflection/experimental/itt_hoas_bterm
-
 VirtualTheory($(DIRS))

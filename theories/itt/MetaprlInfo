@@ -7,6 +7,7 @@ DIRS[] =
     core
     extensions
     applications
+    reflection
 
 if $(TESTS_ENABLED)
     DIRS[] += tests
@@ -84,3 +85,10 @@ PRINT_THEORIES[] =
     applications/supinf/itt_rat
     core/itt_pointwise
     core/itt_pointwise2
+    reflection/core/itt_hoas_base
+    reflection/core/itt_hoas_vector
+    reflection/core/itt_hoas_debruijn
+    reflection/core/itt_hoas_operator
+    reflection/core/itt_hoas_destterm
+    reflection/experimental/itt_hoas_lang
+    reflection/experimental/itt_hoas_bterm

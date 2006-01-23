@@ -42,6 +42,7 @@ extends Meta_context_theory
 
 doc docoff
 
+open Lm_printf
 open Basic_tactics
 open Base_trivial
 open Itt_squiggle
@@ -141,41 +142,48 @@ let wrapVBindT = funT wrap_vbind
  * Squash as much as possible in the << vbind{| <J> >- 'e |} >> hyp list.
  *)
 let squash_vbind_conv t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+
    (*
     * Find the term to be replaced.
     *)
    let hyps = (explode_sequent t).sequent_hyps in
-   let len = SeqHyp.length hyps in
-   let rec search i =
-      if i = len then
-         raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("already converted", t)))
-      else
-         match SeqHyp.get hyps i with
-            Context (_, _, args) ->
-               let rec search_args args =
-                  match args with
-                     arg :: args ->
-                        if is_it_term arg then
-                           search_args args
-                        else
-                           arg
-                   | [] ->
-                        search (succ i)
-               in
-                  search_args args
-          | Hypothesis (_, t) ->
-               if is_it_term t then
-                  search (succ i)
-               else
-                  t
+   let x = maybe_new_var_set var_x (all_vars t) in
+   let x_t = mk_var_term x in
+   let rec search rev_hyps hyps =
+      match hyps with
+         [] ->
+            raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("already converted", t)))
+       | Context (z, cv, args) as hyp :: hyps ->
+            let rec search_args rev_args args =
+               match args with
+                  arg :: args ->
+                     if is_it_term arg then
+                        search_args (arg :: rev_args) args
+                     else
+                        rev_hyps, Context (z, cv, List.rev_append rev_args (x_t :: args)), hyps
+                | [] ->
+                     search (hyp :: rev_hyps) hyps
+            in
+               search_args [] args
+       | Hypothesis (z, t) as hyp :: hyps ->
+            if is_it_term t then
+               search (hyp :: rev_hyps) hyps
+            else
+               rev_hyps, Hypothesis (z, x_t), hyps
    in
-   let v_term = search 0 in
-
-   (*
-    * Make a new variable, and replace the subterm.
-    *)
-   let x = maybe_new_var_set var_x (free_vars_set t) in
-   let t_var = var_subst t v_term x in
+   let rev_hyps, hyp, hyps = search [] (SeqHyp.to_list hyps) in
+   let eseq =
+      { sequent_args = arg;
+        sequent_hyps = SeqHyp.of_list (List.rev_append rev_hyps (hyp :: hyps));
+        sequent_concl = concl
+      }
+   in
+   let t_var = mk_sequent_term eseq in
    let t_bind = mk_bind1_term x t_var in
       squash_vbind t_bind
 

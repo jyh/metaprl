@@ -107,6 +107,18 @@ interactive cvar_is_cvar_relax : <:xrule<
    <H> >- e in CVarRelax{n}
 >>
 
+interactive nil_is_cvar_relax {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- [] in CVarRelax{n}
+>>
+
+interactive cons_is_cvar_relax {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- u in Bind{n} -->
+   "wf" : <H> >- v in CVarRelax{n +@ 1} -->
+   <H> >- u::v in CVarRelax{n}
+>>
+
 (************************************************************************
  * Rewrites.
  *)
@@ -479,6 +491,11 @@ interactive bsequent_sqsimple {| intro []; sqsimple |} : <:xrule<
 interactive sequent_bterm_bsequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- s in Sequent -->
    <H> >- sequent_bterm{s} in BSequent
+>>
+
+interactive sequent_bterm_bsequent_equal {| intro [] |} : <:xrule<
+   "wf" : <H> >- s1 = s2 in Sequent -->
+   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BSequent
 >>
 
 interactive bsequent_type_elim {| elim [] |} 'H : <:xrule<

@@ -97,6 +97,10 @@ interactive_rw reduce_bindn_up :
    'n in nat -->
    bind{'n +@ 1; l.'t['l]} <--> bind{v. bind{'n; l. 't['v :: 'l]}}
 
+interactive_rw reduce_bindn_upleft :
+   'n in nat -->
+   bind{1 +@ 'n; l.'t['l]} <--> bind{v. bind{'n; l. 't['v :: 'l]}}
+
 interactive_rw bind_into_bindone :
    bind{v. 't['v]} <--> bind{1; l. 't[hd{'l}]}
 

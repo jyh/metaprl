@@ -59,6 +59,7 @@ topval fold_hyp_context : conv
 topval fold_bterm_of_vterm : conv
 
 topval reduce_bsequent : conv
+topval reduce_vsequent : conv
 
 (*
  * Terms.

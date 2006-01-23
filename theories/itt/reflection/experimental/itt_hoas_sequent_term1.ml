@@ -30,9 +30,10 @@ doc <:doc<
 extends Itt_vec_bind
 extends Itt_vec_list1
 extends Itt_vec_sequent_term
+extends Itt_hoas_relax1
 extends Itt_hoas_vbind
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_bterm1
+extends Itt_hoas_sequent_bterm2
 extends Itt_theory
 extends Itt_match
 
@@ -214,6 +215,29 @@ interactive hyp_context_wf {| intro [] |} : <:xrule<
    <H> >- "hyp_context"{| <J> >- "hyplist"{| <K> |} |} in list
 >>
 
+(************************************************
+ * Relaxed theorems.
+ *)
+interactive_rw reduce_hyp_context_nil {| reduce |} : <:xrewrite<
+   hyp_context{| <J> >- [] |}
+   <-->
+   []
+>>
+
+interactive_rw reduce_hyp_context_cons : <:xrewrite<
+   hyp_context{| <J> >- hyplist{| x: A; <K[x]> |} |}
+   <-->
+   vbind{| <J> >- A |} :: hyp_context{| <J>; x: A >- hyplist{| <K[x]> |} |}
+>>
+
+interactive hyp_context_relax {| intro |} : <:xrule<
+   <H> >- "hyp_context"{| <J> >- "hyplist"{| <K> |} |} in CVarRelax{bdepth{vbind{| <J> >- mk_terms{hyplist{| <K> |}} |}}}
+>>
+
+interactive hyp_context_relax_base {| intro |} : <:xrule<
+   <H> >- "hyp_context"{| >- "hyplist"{| <K> |} |} in CVarRelax{0}
+>>
+
 (************************************************************************
  * Well-formedness of vsequents.
  *)
@@ -224,14 +248,14 @@ interactive vsequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- arg in BTerm{0} -->
    "wf" : <H> >- vflatten{| <J> |} in CVar{length{vflatten{| |}}} -->
    "wf" : <H> >- C in BTerm{length{vflatten{| <J> |}}} -->
-   <H> >- vsequent{arg}{| <J> >- C<|H|> |} in BTerm{0}
+   <H> >- vsequent{arg}{| <J> >- C<|H|> |} in BSequent
 >>
 
 interactive vsequent_equal {| intro [] |} : <:xrule<
    "wf" : <H> >- arg1 = arg2 in BTerm{0} -->
    "wf" : <H> >- vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{length{vflatten{||}}} -->
    "wf" : <H> >- C1 = C2 in BTerm{length{vflatten{| <J1> |}}} -->
-   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in BTerm{0}
+   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in BSequent
 >>
 
 interactive vflatten_hyp_concl_wf {| intro [] |} : <:xrule<
@@ -255,12 +279,28 @@ interactive hyp_term_cvar_wf {| intro [] |} : <:xrule<
 (************************************************************************
  * Forward reasoning.
  *)
-interactive vsequent_wf_forward {| forward [] |} 'H : <:xrule<
-   <H>; vsequent{arg}{| <J> >- C |} in BTerm{0}; <K>;
+doc <:doc<
+   Forward reasoning.  The @tt[vsequent_wf_forward] rule has some auxiliary
+   relaxed subgoals.  For the @tt[bsequent] form, these goals are automatically
+   true, so we do the actual forward chaining on the @tt[bsequent] form.
+>>
+interactive vsequent_wf_forward 'H : <:xrule<
+   "wf" : <H>; vsequent{arg}{| <J> >- C |} in BSequent; <K> >- vflatten{| <J> |} in CVarRelax{0} -->
+   "wf" : <H>; vsequent{arg}{| <J> >- C |} in BSequent; <K> >- C in Bind{length{vflatten{| <J> |}}} -->
+   <H>; vsequent{arg}{| <J> >- C |} in BSequent; <K>;
       arg in BTerm{0};
       vflatten{| <J> |} in CVar{0};
       C in BTerm{length{vflatten{| <J> |}}} >- D -->
-   <H>; vsequent{arg}{| <J> >- C<|H|> |} in BTerm{0}; <K> >- D
+   <H>; vsequent{arg}{| <J> >- C<|H|> |} in BSequent; <K> >- D
+>>
+
+interactive bsequent_wf_forward {| forward [] |} 'H : <:xrule<
+   <H>; bsequent{arg}{| <J> >- C |} in BSequent; <K>;
+      arg in BTerm{0};
+      hyp_context{| >- hyplist{| <J> |} |} in CVar{0};
+      vbind{| <J> >- C |} in BTerm{length{hyp_context{| >- hyplist{| <J> |} |}}}
+      >- D -->
+   <H>; bsequent{arg}{| <J> >- C<|H|> |} in BSequent; <K> >- D
 >>
 
 interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<
@@ -382,7 +422,7 @@ let reduce_vsequent =
 
 let reduce_bsequent =
    unfold_bsequent
-   thenC addrC [Subterm 1] reduce_vsequent
+   thenC reduce_vsequent
 
 (************************************************************************
  * Tests.

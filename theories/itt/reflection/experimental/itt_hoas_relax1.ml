@@ -48,6 +48,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_bterm
+extends Itt_hoas_vbind
 extends Itt_match
 
 doc docoff
@@ -385,6 +386,59 @@ interactive bind_triangle_elim2  'H : <:xrule<
    "base" : <H>; n: nat; l: BindTriangle{n}; <J[n; l]>; m: nat >- C[m; [] ] -->
    "step" : <H>; n: nat; l: BindTriangle{n}; <J[n; l]>; m: nat; m >= n; u: Bind{m}; v: BindTriangle{m +@ 1}; C[m +@ 1; v] >- C[m; u::v] -->
    <H>; n: nat; l: BindTriangle{n}; <J[n; l]> >- C[n; l]
+>>
+
+(************************************************************************
+ * Vector bindings.x
+ *)
+doc <:doc<
+   Vector bindings.
+>>
+interactive_rw squash_bdepth_mk_terms {| reduce |} : <:xrewrite<
+   bdepth{vbind{| <J> >- mk_terms{e} |}}
+   <-->
+   bdepth{vbind{| <J> >- mk_terms{it} |}}
+>>
+
+interactive bdepth_vec_wf {| intro [] |} : <:xrule<
+   <H> >- bdepth{vbind{| <J> >- mk_terms{e} |}} in nat
+>>
+
+interactive bdepth_vec_wf_int {| intro [] |} : <:xrule<
+   <H> >- bdepth{vbind{| <J> >- mk_terms{e} |}} in int
+>>
+
+interactive_rw reduce_bdepth_nil {| reduce |} : <:xrewrite<
+   bdepth{vbind{| >- mk_terms{e} |}}
+   <-->
+   0
+>>
+
+interactive_rw reduce_bdepth_right {| reduce |} : <:xrewrite<
+   bdepth{vbind{| <J>; x: A >- mk_terms{it} |}}
+   <-->
+   bdepth{vbind{| <J> >- mk_terms{it} |}} +@ 1
+>>
+
+interactive_rw reduce_bindn_vbind_up :
+   bind{1 +@ bdepth{vbind{| <J> >- mk_terms{'e} |}}; l. 't['l]}
+   <-->
+   bind{v. bind{bdepth{vbind{| <J> >- mk_terms{'e} |}}; l. 't['v :: 'l]}}
+
+interactive_rw vbind_eta_expand : <:xrewrite<
+   vbind{| <J> >- e |}
+   <-->
+   bind{bdepth{vbind{| <J> >- mk_terms{it} |}}; x. substl{vbind{| <J> >- e |}; x}}
+>>
+
+interactive_rw vbind_eta_reduce : <:xrewrite<
+   bind{bdepth{vbind{| <J> >- mk_terms{it} |}}; x. substl{vbind{| <J> >- e |}; x}}
+   <-->
+   vbind{| <J> >- e |}
+>>
+
+interactive vbind_in_bind {| intro |} : <:xrule<
+   <H> >- vbind{| <J> >- e1 |} in Bind{bdepth{vbind{| <J> >- mk_terms{e2} |}}}
 >>
 
 (************************************************************************

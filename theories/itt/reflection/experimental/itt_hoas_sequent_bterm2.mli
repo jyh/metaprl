@@ -34,6 +34,16 @@ open Basic_tactics
 declare sequent_bterm{'s}
 
 (*
+ * The type of BTerms that represent sequents.
+ *)
+declare const BSequent
+
+(*
+ * Relaxed types.
+ *)
+declare CVarRelax{'n}
+
+(*
  * Convert the BTerm back to a sequent.
  *)
 declare sequent_of_bterm{'e}

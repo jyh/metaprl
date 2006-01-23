@@ -147,6 +147,14 @@ interactive bind_in_bind_ge {| intro |} : <:xrule<
    <H> >- bind{n; y. e[y]} in Bind{m}
 >>
 
+interactive bind_monotone 'n : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- m in nat -->
+   "wf" : <H> >- n >= m -->
+   "wf" : <H> >- e in Bind{n} -->
+   <H> >- e in Bind{m}
+>>
+
 (************************************************************************
  * Relaxed rewrites.
  *)
@@ -261,7 +269,7 @@ define unfold_BindTriangleInfo : BindTriangleInfo{'n} <--> <:xterm<
 
 define unfold_bind_triangle_of_info : bind_triangle_of_info{'x} <--> <:xterm<
    let n, len, f = x in
-      ind{len; []; i, g. cons{f (len -@ i); g}}
+      list_of_fun{i. f i; len}
 >>
 
 define unfold_BindTriangle : BindTriangle{'n} <--> <:xterm<
@@ -290,7 +298,7 @@ interactive bind_triangle_wf {| intro [] |} : <:xrule<
 interactive_rw reduce_bind_triangle_of_triple {| reduce |} : <:xrule<
    bind_triangle_of_info{(n, (len, f))}
    <-->
-   ind{len; []; i, g. cons{f (len -@ i); g}}
+   list_of_fun{i. f i; len}
 >>
 
 interactive bind_triangle_is_list1 'n : <:xrule<
@@ -300,6 +308,97 @@ interactive bind_triangle_is_list1 'n : <:xrule<
 
 interactive bind_triangle_is_list2 {| nth_hyp |} 'H : <:xrule<
    <H>; l: BindTriangle{n}; <J[l]> >- l in list
+>>
+
+(************************************************
+ * Equality.
+ *)
+interactive_rw bind_triangle_of_info_eq <:xterm< bind_triangle_of_info{(n2, (m2, f2))} >> : <:xrewrite<
+   n1 = n2 in nat -->
+   m1 = m2 in nat -->
+   all i: nat. (i < m1 => f1 i ~ f2 i) -->
+   bind_triangle_of_info{(n1, (m1, f1))}
+   <-->
+   bind_triangle_of_info{(n2, (m2, f2))}
+>>
+
+interactive_rw bind_triangle_of_info_step : <:xrewrite<
+   m in nat -->
+   bind_triangle_of_info{(n, (m +@ 1, f))}
+   <-->
+   f 0 :: bind_triangle_of_info{(n +@ 1, (m, lambda{i. 'f ('i +@ 1)}))}
+>>
+
+(************************************************
+ * Intro/elim.
+ *)
+doc <:doc<
+   Introduction and elimination reasoning.
+>>
+interactive bind_triangle_of_info_wf {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- x in BindTriangleInfo{n} -->
+   <H> >- bind_triangle_of_info{x} in BindTriangle{n}
+>>
+
+interactive nil_bind_triangle_wf {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- [] in BindTriangle{n}
+>>
+
+interactive cons_bind_triangle_wf {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- u in Bind{n} -->
+   "wf" : <H> >- v in BindTriangle{n +@ 1} -->
+   <H> >- u::v in BindTriangle{n}
+>>
+
+interactive bind_triangle_length_wf 'n : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- l in BindTriangle{n} -->
+   <H> >- length{l} in nat
+>>
+
+interactive bind_hd_wf : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- l in BindTriangle{n} -->
+   "wf" : <H> >- length{l} > 0 -->
+   <H> >- hd{l} in Bind{n}
+>>
+
+interactive bind_tl_wf {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- n > 0 -->
+   "wf" : <H> >- l in BindTriangle{n -@ 1} -->
+   "wf" : <H> >- length{l} > 0 -->
+   <H> >- tl{l} in BindTriangle{n}
+>>
+
+interactive bind_triangle_elim {| elim |} 'H : <:xrule<
+   "wf" : <H>; l: BindTriangle{n}; <J[l]> >- n in nat -->
+   "base" : <H>; l: BindTriangle{n}; <J[l]> >- C[ [] ] -->
+   "step" : <H>; l: BindTriangle{n}; <J[l]>; m: nat; m >= n; u: Bind{m}; v: BindTriangle{m +@ 1}; C[v] >- C[u::v] -->
+   <H>; l: BindTriangle{n}; <J[l]> >- C[l]
+>>
+
+interactive bind_triangle_elim2  'H : <:xrule<
+   "base" : <H>; n: nat; l: BindTriangle{n}; <J[n; l]>; m: nat >- C[m; [] ] -->
+   "step" : <H>; n: nat; l: BindTriangle{n}; <J[n; l]>; m: nat; m >= n; u: Bind{m}; v: BindTriangle{m +@ 1}; C[m +@ 1; v] >- C[m; u::v] -->
+   <H>; n: nat; l: BindTriangle{n}; <J[n; l]> >- C[n; l]
+>>
+
+(************************************************************************
+ * Additional theorems.
+ *)
+doc <:doc<
+   Reformulate some of the standard theorems in @tt[Itt_hoas_bterm].
+>>
+interactive subterms_bind_list1 'shape : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- shape in list{nat} -->
+   "wf" : <H> >- subterms in list{BTerm} -->
+   <H> >- compatible_shapes{n; shape; subterms} -->
+   <H> >- subterms in list{Bind{n}}
 >>
 
 (*!

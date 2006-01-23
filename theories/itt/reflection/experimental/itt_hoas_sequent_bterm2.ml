@@ -101,6 +101,12 @@ interactive sequent_relax_elim {| elim [] |} 'H : <:xrule<
    <H>; x: SequentRelax; <J[x]> >- C[x]
 >>
 
+interactive cvar_is_cvar_relax : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- e in CVar{n} -->
+   <H> >- e in CVarRelax{n}
+>>
+
 (************************************************************************
  * Rewrites.
  *)
@@ -247,7 +253,7 @@ interactive_rw reduce_is_sequent_bterm_core_var {| reduce |} : <:xrewrite<
 interactive_rw reduce_is_sequent_bterm_core_hyp {| reduce |} : <:xrewrite<
    d in nat -->
    h in Bind{d} -->
-   rest in Bind{d +@ 1} -->
+   rest in Bind{d} -->
    is_sequent_bterm_core{mk_bterm{d; $seq_hyp{h; x. rest}; [h; rest]}}
    <-->
    is_sequent_bterm_core{rest}
@@ -300,7 +306,7 @@ interactive_rw reduce_sequent_of_bterm_core : <:xrewrite<
 interactive_rw reduce_sequent_of_bterm_core_hyp {| reduce |} : <:xrewrite<
    d in nat -->
    h in Bind{d} -->
-   rest in Bind{d +@ 1} -->
+   rest in Bind{d} -->
    sequent_of_bterm_core{mk_bterm{d; $seq_hyp{h; x. rest}; [h; rest]}}
    <-->
    let hyps, concl = sequent_of_bterm_core{rest} in

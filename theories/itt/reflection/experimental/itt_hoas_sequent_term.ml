@@ -251,7 +251,9 @@ interactive hyp_context_relax_base {| intro |} : <:xrule<
  * Length theorems.
  *)
 doc <:doc<
-   Length theorems.
+   Length theorems.  We try to produce a normal form.  The elements
+   of the list don't matter, so the usual goal is to produce
+   << length{vlist{| <J> |}} >>.
 >>
 interactive_rw reduce_hyps_bterms_length {| reduce |} : <:xrewrite<
    l in list -->
@@ -260,16 +262,22 @@ interactive_rw reduce_hyps_bterms_length {| reduce |} : <:xrewrite<
    length{l}
 >>
 
-interactive_rw reduce_hyp_context_length_left : <:xrewrite<
+interactive_rw reduce_hyp_context_length_left {| reduce |} : <:xrewrite<
    length{hyp_context{| x: A; <J[x]> >- hyplist{| <K[x]> |} |}}
    <-->
    length{hyp_context{| <J[it]> >- hyplist{| <K[it]> |} |}}
 >>
 
-interactive_rw reduce_hyp_context_length : <:xrewrite<
-   length{hyp_context{| >- hyplist{| <K> |} |}}
+interactive_rw reduce_length_hyplist {| reduce |} : <:xrewrite<
+   length{hyplist{| <J> |}}
    <-->
-   bdepth{vbind{| <K> >- mk_terms{it} |}}
+   length{vlist{| <J> |}}
+>>
+
+interactive_rw reduce_length_hyp_context_nil {| reduce |} : <:xrewrite<
+   length{hyp_context{| >- hyplist{| <J> |} |}}
+   <-->
+   length{vlist{| <J> |}}
 >>
 
 (************************************************************************
@@ -330,9 +338,9 @@ interactive bsequent_wf_forward {| forward |} 'H : <:xrule<
    <H>; bsequent{arg}{| <J> >- C |} in BSequent; <K>;
       arg in BTerm{0};
       hyp_context{| >- hyplist{| <J> |} |} in CVar{0};
-      vbind{| <J> >- C |} in BTerm{length{hyp_context{| >- hyplist{| <J> |} |}}}
+      vbind{| <J> >- C |} in BTerm{length{vlist{| <J> |}}}
       >- D -->
-   <H>; bsequent{arg}{| <J> >- C<|H|> |} in BSequent; <K> >- D
+   <H>; bsequent{arg}{| <J> >- C |} in BSequent; <K> >- D
 >>
 
 interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<
@@ -352,29 +360,6 @@ interactive_rw reduce_vflatten_hyp_term {| reduce |} : <:xrewrite<
 (************************************************************************
  * Length theorems.
  *)
-doc <:doc<
-   Length theorems.  We try to produce a normal form.  The elements
-   of the list don't matter, so the usual goal is to produce
-   << length{vlist{| <J> |}} >>.
->>
-interactive_rw reduce_length_hyplist {| reduce |} : <:xrewrite<
-   length{hyplist{| <J> |}}
-   <-->
-   length{vlist{| <J> |}}
->>
-
-interactive_rw reduce_length_hyps_bterms {| reduce |} : <:xrewrite<
-   l in list -->
-   length{hyps_bterms{l}}
-   <-->
-   length{l}
->>
-
-interactive_rw reduce_length_hyp_context_nil {| reduce |} : <:xrewrite<
-   length{hyp_context{| >- hyplist{| <J> |} |}}
-   <-->
-   length{vlist{| <J> |}}
->>
 
 (************************************************************************
  * Tactics.
@@ -445,7 +430,7 @@ let rec reduce_hyps t =
          orelseC reduce_hyps_bterms_mk_vbind
          orelseC reduce_hyps_bterms_hyplist
 
-let reduce_vsequent =
+let reduce_vsequent_of_triple =
    addrC [Subterm 1] reduce_fsequent
    thenC reduce_vsequent_of_triple
    thenC addrC [ClauseAddr 1] (termC reduce_hyps)
@@ -454,7 +439,7 @@ let reduce_vsequent =
 
 let reduce_bsequent =
    unfold_bsequent
-   thenC addrC [Subterm 1] reduce_vsequent
+   thenC addrC [Subterm 1] reduce_vsequent_of_triple
 
 (************************************************************************
  * Tests.

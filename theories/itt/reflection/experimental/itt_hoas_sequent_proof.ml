@@ -426,6 +426,7 @@ let assumAllT =
 
 let provableRuleStartT t unfold =
    assumAllT
+   thenT forwardChainT
    thenT rwhAll reduce_bsequent
    thenMT forwardChainT
    thenT thinDupT

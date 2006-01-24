@@ -30,11 +30,6 @@ extends Itt_hoas_proof
 open Basic_tactics
 
 (*
- * Equality on proof steps in a sequent logic.
- *)
-declare beq_proof_step{'step1; 'step2}
-
-(*
  * Proof-step destructors.
  *)
 declare let_sovar[name:s]{'d; 'witness; 'i; v. 'e}

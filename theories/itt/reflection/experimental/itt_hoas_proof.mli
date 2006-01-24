@@ -35,6 +35,7 @@ declare const ProofStep
 declare const ProofStepWitness
 declare proof_step{'premises; 'goal}
 declare proof_step_witness{'sovars; 'cvars}
+declare beq_proof_step{'step1; 'step2}
 
 (*
  * A checking rule for a single step of a proof.

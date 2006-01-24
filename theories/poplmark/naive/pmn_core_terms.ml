@@ -32,7 +32,7 @@ open Itt_dfun
 open Itt_logic
 
 (************************************************************************
- * Define the reflected logic.x
+ * Define the reflected logic.
  *)
 
 (*
@@ -45,6 +45,7 @@ struct
 
    declare TyTop : TyExp
    declare TyFun{'ty1 : TyExp; 'ty2 : TyExp} : TyExp
+(*
    declare TyAll{'ty1 : TyExp; x : TyExp. 'ty2 : TyExp} : TyExp
 
    (* Expressions *)
@@ -74,7 +75,7 @@ struct
 
    (* Sequents have dependent types *)
    declare type TyElem{'a : Ty} : Ty
-
+*)
 end;;
 
 (*

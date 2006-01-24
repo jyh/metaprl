@@ -30,7 +30,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_term
+extends Itt_hoas_sequent_term1
 
 doc docoff
 

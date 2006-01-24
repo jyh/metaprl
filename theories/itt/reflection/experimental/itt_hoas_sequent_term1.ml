@@ -224,6 +224,9 @@ interactive_rw reduce_vflatten_hyp_context_singleton {| reduce |} : <:xrule<
 (************************************************
  * Relaxed theorems.
  *)
+doc <:doc<
+   Relaxed theorems.
+>>
 interactive_rw reduce_hyp_context_nil {| reduce |} : <:xrewrite<
    hyp_context{| <J> >- [] |}
    <-->
@@ -242,6 +245,25 @@ interactive hyp_context_relax {| intro |} : <:xrule<
 
 interactive hyp_context_relax_base {| intro |} : <:xrule<
    <H> >- "hyp_context"{| >- "hyplist"{| <K> |} |} in CVarRelax{0}
+>>
+
+(************************************************************************
+ * Length theorems.
+ *)
+doc <:doc<
+   Length theorems.
+>>
+interactive_rw reduce_hyps_bterms_length {| reduce |} : <:xrewrite<
+   l in list -->
+   length{hyps_bterms{l}}
+   <-->
+   length{l}
+>>
+
+interactive_rw reduce_hyp_context_length_left : <:xrewrite<
+   length{hyp_context{| x: A; <J[x]> >- hyplist{| <K[x]> |} |}}
+   <-->
+   length{hyp_context{| <J[it]> >- hyplist{| <K[it]> |} |}}
 >>
 
 interactive_rw reduce_hyp_context_length : <:xrewrite<

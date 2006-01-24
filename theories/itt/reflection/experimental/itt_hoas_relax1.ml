@@ -26,7 +26,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -70,7 +70,7 @@ let relax_option = [relax_term]
 let resource select +=
    [relax_term, OptionExclude]
 
-private let resource select +=
+let resource private select +=
    [relax_term, OptionAllow]
 
 (************************************************************************

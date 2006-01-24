@@ -5,7 +5,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ doc docoff
 open Basic_tactics
 open Itt_sqsimple
 
-private let resource select +=
+let resource private select +=
    [<< relax >>, OptionAllow]
 
 (************************************************************************

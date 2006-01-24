@@ -38,6 +38,14 @@ extends Itt_list2
 
 open Basic_tactics
 
+(*
+ * Options.
+ *)
+declare denormalize
+
+(************************************************************************
+ * Terms.
+ *)
 declare bind{'n; x.'t['x]}
 declare subst{'n; 'bt; 't}
 declare substl{'bt; 'tl}

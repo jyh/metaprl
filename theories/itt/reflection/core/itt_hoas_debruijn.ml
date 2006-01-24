@@ -48,6 +48,16 @@ open Basic_tactics
 open Itt_dfun
 open Itt_sqsimple
 
+(*
+ * Options.
+ *)
+let denormalize_term = << denormalize >>
+
+let denormalize_option = [denormalize_term]
+
+let resource private select +=
+   [denormalize_term, OptionAllow]
+
 doc <:doc<
    @terms
    @modsubsection{A de Bruijn-like representation of syntax}
@@ -117,29 +127,20 @@ define (*private*) unfold_subterms:
 doc <:doc< @rewrites >>
 
 (*
- * XXX: JYH: the following 3 rules are "denormalization" rules,
+ * The following 3 rules are "denormalization" rules,
  * which causes trouble for the term normalizer.  For the moment,
  * do not add them to the reduce resource.
  *)
-interactive_rw reduce_mk_bterm_base :
+interactive_rw reduce_mk_bterm_base {| reduce ~labels:denormalize_option |} :
    mk_bterm{0; 'op; 'btl} <--> mk_term{'op; 'btl }
 
-interactive_rw reduce_mk_bterm_step :
+interactive_rw reduce_mk_bterm_step {| reduce ~labels:denormalize_option |} :
    'n in nat -->
    mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; map{bt. subst{'bt; 'v}; 'btl}}}
 
-interactive_rw reduce_mk_bterm_empty :
+interactive_rw reduce_mk_bterm_empty {| reduce ~labels:denormalize_option |} :
    'n in nat -->
    mk_bterm{'n; 'op; nil} <--> bind{'n; mk_term{'op; nil}}
-
-let reduceBTermC =
-   repeatC (higherC reduce_mk_bterm_base
-            thenC higherC reduce_mk_bterm_step
-            thenC higherC reduce_mk_bterm_empty
-            thenC Itt_hoas_vector.reduceBTermC)
-
-let reduceBTermT =
-   rwAll reduceBTermC
 
 interactive_rw fold_mk_term :
    mk_term{'op; 'subterms}

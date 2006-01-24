@@ -47,6 +47,21 @@ open Basic_tactics
 open Itt_dfun
 open Itt_list
 
+(*
+ * Reduce control.
+ *)
+declare denormalize
+
+let denormalize_term = << denormalize >>
+
+let denormalize_labels = [denormalize_term]
+
+let resource select +=
+   [denormalize_term, OptionExclude]
+
+let resource private select +=
+   [denormalize_term, OptionAllow]
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -89,11 +104,10 @@ interactive_rw reduce_bindn_base {| reduce |} :
    bind{0; x.'t['x]} <--> 't[nil]
 
 (*
- * XXX: JYH: this is a denormalization rule.
- * Don't add it to reduce.  Hopefully we'll solve this in
- * a better way.
+ * This is a denormalization rule, incompatible with Itt_hoas_normalize.
+ * Normally, prevent it from running.
  *)
-interactive_rw reduce_bindn_up :
+interactive_rw reduce_bindn_up {| reduce ~labels:denormalize_labels |} :
    'n in nat -->
    bind{'n +@ 1; l.'t['l]} <--> bind{v. bind{'n; l. 't['v :: 'l]}}
 
@@ -170,7 +184,7 @@ interactive_rw reduce_substl_base {| reduce |} :
 (*
  * XXX: JYH: the following rule is also denormalization rules.
  *)
-interactive_rw reduce_substl_step :
+interactive_rw reduce_substl_step {| reduce ~labels:denormalize_labels |} :
    substl{'bt; 'h :: 't} <--> substl{subst{'bt;'h}; 't}
 
 interactive_rw reduce_substl_step1 {| reduce |} :
@@ -289,9 +303,7 @@ let dest_subst_term = dest_dep0_dep0_term subst_opname
 let mk_subst_term = mk_dep0_dep0_term subst_opname
 
 let reduceBTermC =
-   repeatC (higherC reduce_bindn_up
-            thenC higherC reduce_substl_step
-            thenC reduceC)
+   withOptionC denormalize_term "allow" reduceC
 
 let reduceBTermT =
    rwAll reduceBTermC

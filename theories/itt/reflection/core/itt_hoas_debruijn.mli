@@ -66,8 +66,6 @@ declare beq_var{'x; 'y}
 (************************************************************************
  * Tactics.
  *)
-topval reduceBTermC : conv
-topval reduceBTermT : tactic
 
 (*
  * Some reductions useful in wf proving (later, in Itt_hoas_bterm_wf).

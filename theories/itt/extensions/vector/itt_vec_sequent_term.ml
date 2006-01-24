@@ -401,6 +401,12 @@ interactive_rw reduce_hyps_length_bind_right {| reduce |} : <:xrewrite<
    hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K["it"]> >- [] |}} |}}
 >>
 
+interactive_rw reduce_hyps_length_bind_nil {| reduce |} : <:xrewrite<
+   hyps_length{"mk_vbind"{| <J> >- mk_core{[]} |}}
+   <-->
+   0
+>>
+
 interactive_rw reduce_hyps_length_bind_cons {| reduce |} : <:xrewrite<
    hyps_length{"mk_vbind"{| <J> >- mk_core{x :: l} |}}
    <-->
@@ -445,6 +451,18 @@ interactive_rw reduce_hyps_flatten_bind_cons {| reduce |} : <:xrewrite<
    hyps_flatten{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| x: A; <K[x]> >- [] |}} |}}
    <-->
    "mk_vbind"{| <J> >- mk_core{A} |} :: hyps_flatten{"mk_vbind"{| <J>; x: A >- mk_core{"hypconslist"{| <K[x]> >- [] |}} |}}
+>>
+
+interactive_rw reduce_hyps_flatten_bind_nil1 {| reduce |} : <:xrewrite<
+   hyps_flatten{"mk_vbind"{| <J> >- mk_core{hypconslist{| >- [] |}} |}}
+   <-->
+   []
+>>
+
+interactive_rw reduce_hyps_flatten_bind_nil2 {| reduce |} : <:xrewrite<
+   hyps_flatten{"mk_vbind"{| <J> >- mk_core{[]} |}}
+   <-->
+   []
 >>
 
 (************************************************************************

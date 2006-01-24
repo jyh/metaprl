@@ -367,6 +367,13 @@ interactive_rw reduce_vflatten_left :
    <-->
    append{'A; vflatten{| <J[it]> |}}
 
+interactive_rw reduce_vflatten_singleton2 : <:xrule<
+   A in list -->
+   vflatten{| A |}
+   <-->
+   A
+>>
+
 doc <:doc<
    Well-formedness reasoning.
 >>

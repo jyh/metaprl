@@ -60,6 +60,11 @@ interactive rewrite_subterm 'x 'y bind{z. 's['z]} :
 doc <:doc<
    Two functions are equal if their bodies are equal.
 >>
+(*
+ * XXX: BUG (nogin 01/23/2006): This axiom (in fact, this whole theory) is only used to prove
+ * Meta_context_terms2.reduce_sequent_ind_right. This axiom is way too strong (and it also attaches 
+ * some pretty specific semantics to Base_rewrite!sequent_arg) and we need to find some way to get rid of it.
+ *)
 prim rewrite_hlambda bind{x. 'e1['x]} bind{x. 'e2['x]} :
    sequent { <H>; x: Term{'A} >- Perv!"rewrite"{'e1['x]; 'e2['x]} } -->
    sequent { <H> >- Perv!"rewrite"{hlambda{'A; x. 'e1['x]}; hlambda{'A; x. 'e2['x]}} } =

@@ -4,7 +4,7 @@
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2005-2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
  * @end[license]
  *)
 extends Meta_rewrite
@@ -30,7 +30,6 @@ extends Meta_context_ind1
 doc docoff
 
 open Basic_tactics
-open Meta_rewrite
 open Meta_context_terms
 
 doc <:doc<
@@ -82,7 +81,8 @@ interactive_rw reduce_sequent_ind_nil3 {| reduce |} :
 doc <:doc<
    Derive the rules for the term sequent.
 >>
-prim_rw unfold_TermSequent : TermSequent <--> SequentTerm
+define unfold_TermSequent :
+   TermSequent : ty_sequent{ty_hyp{Term; Term}; Term; Sequent {Term; Term; Term}} <--> SequentTerm
 
 interactive_rw reduce_term_sequent_ind_nil1 {| reduce |} :
    sequent_ind{h. 'step['h]; TermSequent{| >- 'C |}}

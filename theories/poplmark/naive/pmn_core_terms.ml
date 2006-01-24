@@ -37,7 +37,6 @@ open Itt_logic
 
 (*
  * Type expressions.
- *)
 reflected_logic Types =
 struct
    (* Type expressions *)
@@ -76,6 +75,7 @@ struct
    declare type TyElem{'a : Ty} : Ty
 
 end;;
+ *)
 
 (*
 

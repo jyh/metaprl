@@ -1757,7 +1757,7 @@ NSummary!define_term	define_term	define_term Summary
 O	o934	define_term
 NSummary!ty_term	ty_term	ty_term Summary
 O	o936	ty_term
-NItt_hoas_proof1	Itt_hoas_proof1	Itt_hoas_proof1 NIL
+NItt_hoas_proof	Itt_hoas_proof	Itt_hoas_proof NIL
 NItt_hoas_sequent	Itt_hoas_sequent	Itt_hoas_sequent NIL
 NSummary!ty_bterm	ty_bterm	ty_bterm Summary
 O	o941	ty_bterm
@@ -2099,12 +2099,12 @@ T	t3232	o1034 b3232
 B	b3233	t3232
 T	t3233	o1033 b3233
 B	b3234	t3233
-NItt_hoas_sequent_proof_step!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_proof1
+NItt_hoas_sequent_proof_step!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_proof
 O	o578	ProofStepWitness
 T	t591	o578
 B	b627	t591
 T	t1632	o774 b774
-NItt_hoas_sequent_proof_step!proof_step_witness	proof_step_witness	proof_step_witness Itt_hoas_proof1
+NItt_hoas_sequent_proof_step!proof_step_witness	proof_step_witness	proof_step_witness Itt_hoas_proof
 O	o1639	proof_step_witness
 Vsovars	sovars	sovars\\ \\
 B	b1641	sovars
@@ -2670,8 +2670,8 @@ NSummary!shape_class	shape_class	shape_class Summary
 O	o971	shape_class p1149
 T	t972	o971
 B	b972	t972
-NItt_hoas_sequent_proof_step1	Itt_hoas_sequent_proof_step1	Itt_hoas_sequent_proof_step1 NIL
-NItt_hoas_sequent_proof_step1!beq_proof_step	beq_proof_step131	beq_proof_step Itt_hoas_sequent_proof_step1
+NItt_hoas_sequent_proof_step	Itt_hoas_sequent_proof_step	Itt_hoas_sequent_proof_step NIL
+NItt_hoas_sequent_proof_step!beq_proof_step	beq_proof_step131	beq_proof_step Itt_hoas_sequent_proof_step
 O	o132	beq_proof_step131
 T	t	o132 b5527 b5528
 B	b	t
@@ -2755,7 +2755,7 @@ T	t646	o643 b645
 B	b647	t646
 P	p647	Number 1583
 O	o647	location p647 p1483
-NItt_hoas_sequent_proof_step1!let_sovar	let_sovar647	let_sovar Itt_hoas_sequent_proof_step1
+NItt_hoas_sequent_proof_step!let_sovar	let_sovar647	let_sovar Itt_hoas_sequent_proof_step
 P	p975	MString name
 O	o648	let_sovar647 p975
 T	t648	o648 b954 b1956 b3198 b3199
@@ -2779,7 +2779,7 @@ B	b656	t656
 P	p656	Number 1818
 P	p659	Number 2042
 O	o659	location p656 p659
-NItt_hoas_sequent_proof_step1!let_cvar	let_cvar659	let_cvar Itt_hoas_sequent_proof_step1
+NItt_hoas_sequent_proof_step!let_cvar	let_cvar659	let_cvar Itt_hoas_sequent_proof_step
 O	o660	let_cvar659 p975
 T	t661	o660 b954 b1956 b3198 b3199
 B	b661	t661
@@ -3353,7 +3353,7 @@ P	p1340	String let_cvar
 O	o1341	patt_string p1149 p1149 p1340
 NOcaml!patt_apply_end	patt_apply_end	patt_apply_end Ocaml
 O	o1342	patt_apply_end p1149 p1149
-P	p1064	String Itt_hoas_sequent_proof_step1
+P	p1064	String Itt_hoas_sequent_proof_step
 O	o1065	patt_string p1149 p1149 p1064
 O	o1344	patt_uid p1139
 T	t1344	o1344

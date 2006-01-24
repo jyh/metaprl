@@ -8,8 +8,8 @@ NSummary!declare_term	declare_term	declare_term Summary
 O	o2	declare_term
 NSummary!ty_term	ty_term	ty_term Summary
 O	o4	ty_term
-NItt_hoas_sequent_term1	Itt_hoas_sequent_term1	Itt_hoas_sequent_term1 NIL
-NItt_hoas_sequent_term1!bsequent	bsequent6	bsequent Itt_hoas_sequent_term1
+NItt_hoas_sequent_term	Itt_hoas_sequent_term	Itt_hoas_sequent_term NIL
+NItt_hoas_sequent_term!bsequent	bsequent6	bsequent Itt_hoas_sequent_term
 O	o13	bsequent6
 Varg	arg	arg\\ \\
 B	b5	arg
@@ -1857,7 +1857,7 @@ T	t856	o21 b856
 B	b857	t856
 T	t857	o20 b857
 B	b858	t857
-NItt_hoas_sequent_term1!bterm_of_vterm	bterm_of_vterm	bterm_of_vterm Itt_hoas_sequent_term1
+NItt_hoas_sequent_term!bterm_of_vterm	bterm_of_vterm	bterm_of_vterm Itt_hoas_sequent_term
 O	o861	bterm_of_vterm
 T	t861	o861 b920
 B	b861	t861
@@ -2128,7 +2128,7 @@ T	t1034	o21 b1034
 B	b1035	t1034
 T	t1035	o20 b1035
 B	b1036	t1035
-NItt_hoas_sequent_term1!hyps_bterms	hyps_bterms	hyps_bterms Itt_hoas_sequent_term1
+NItt_hoas_sequent_term!hyps_bterms	hyps_bterms	hyps_bterms Itt_hoas_sequent_term
 O	o1039	hyps_bterms
 Vl	l	l\\ \\
 B	b1039	l
@@ -2258,7 +2258,7 @@ H	h1122	u t4031
 H	h1123	v1 t4032
 P	p1123	Var v1
 O	o1123	var p1123
-NItt_hoas_sequent_term1!hyp_term	hyp_term	hyp_term Itt_hoas_sequent_term1
+NItt_hoas_sequent_term!hyp_term	hyp_term	hyp_term Itt_hoas_sequent_term
 O	o1167	hyp_term
 T	t1167	o1167
 S	s1167	t1167\\ h1112\\ A4131
@@ -2275,7 +2275,7 @@ P	p1174	String single
 O	o1175	comment_string p1174
 T	t1175	o1175
 B	b1175	t1175
-NItt_hoas_sequent_term1!hyp_context	hyp_context	hyp_context Itt_hoas_sequent_term1
+NItt_hoas_sequent_term!hyp_context	hyp_context	hyp_context Itt_hoas_sequent_term
 O	o1176	hyp_context
 T	t1176	o1176
 NItt_vec_sequent_term	Itt_vec_sequent_term	Itt_vec_sequent_term NIL
@@ -2598,7 +2598,7 @@ T	t975	o21 b975
 B	b980	t975
 T	t983	o20 b980
 B	b1000	t983
-NItt_hoas_sequent_term1!vsequent	vsequent	vsequent Itt_hoas_sequent_term1
+NItt_hoas_sequent_term!vsequent	vsequent	vsequent Itt_hoas_sequent_term
 O	o1009	vsequent
 T	t1020	o1009 b5
 B	b1020	t1020
@@ -2621,7 +2621,7 @@ S	s1137	t1137\\ h1112\\ C1112
 B	b1166	s1137
 T	t521	o1134 b5 b19 b1166
 B	b578	t521
-NItt_hoas_sequent_term1!vsequent_of_triple	vsequent_of_triple	vsequent_of_triple Itt_hoas_sequent_term1
+NItt_hoas_sequent_term!vsequent_of_triple	vsequent_of_triple	vsequent_of_triple Itt_hoas_sequent_term
 O	o1179	vsequent_of_triple
 T	t1227	o1179 b920
 B	b1232	t1227
@@ -4083,8 +4083,8 @@ T	t984	o21 b982
 B	b995	t984
 T	t995	o20 b995
 B	b996	t995
-NItt_hoas_sequent_bterm2	Itt_hoas_sequent_bterm2	Itt_hoas_sequent_bterm2 NIL
-NItt_hoas_sequent_bterm2!sequent_bterm	sequent_bterm	sequent_bterm Itt_hoas_sequent_bterm2
+NItt_hoas_sequent_bterm	Itt_hoas_sequent_bterm	Itt_hoas_sequent_bterm NIL
+NItt_hoas_sequent_bterm!sequent_bterm	sequent_bterm	sequent_bterm Itt_hoas_sequent_bterm
 O	o1817	sequent_bterm
 T	t3548	o53 b3416 b514 b8 b8
 B	b3548	t3548
@@ -5365,8 +5365,8 @@ P	p1968	String exclude
 O	o1968	arg_named p1968
 NSummary!arg_term	arg_term	arg_term Summary
 O	o1969	arg_term
-NItt_hoas_relax1	Itt_hoas_relax1	Itt_hoas_relax1 NIL
-NItt_hoas_relax1!relax	relax	relax Itt_hoas_relax1
+NItt_hoas_relax	Itt_hoas_relax	Itt_hoas_relax NIL
+NItt_hoas_relax!relax	relax	relax Itt_hoas_relax
 O	o1970	relax
 T	t1971	o1970
 B	b1971	t1971
@@ -5521,7 +5521,7 @@ B	b2246	s2070
 T	t2246	o898 b2246
 P	p2324	String hyp_context_relax
 O	o2324	rule p2324
-NItt_hoas_sequent_bterm2!CVarRelax	CVarRelax	CVarRelax Itt_hoas_sequent_bterm2
+NItt_hoas_sequent_bterm!CVarRelax	CVarRelax	CVarRelax Itt_hoas_sequent_bterm
 O	o2325	CVarRelax
 NItt_hoas_base!mk_terms	mk_terms	mk_terms Itt_hoas_base
 O	o2326	mk_terms
@@ -5928,7 +5928,7 @@ P	p2579	String "rw reduceC (-1) ttca"
 O	o2581	ext_rule p2579
 P	p2615	String "dT 0"
 O	o2615	ext_rule p2615
-NItt_hoas_relax1!Bind	Bind	Bind Itt_hoas_relax1
+NItt_hoas_relax!Bind	Bind	Bind Itt_hoas_relax
 O	o2616	Bind
 P	p2197	Number 6679
 O	o621	location p621 p2197
@@ -6165,7 +6165,7 @@ T	t959	o b3591 b3612
 B	b960	t959
 T	t961	o b3571 b960
 B	b967	t961
-NItt_hoas_sequent_bterm2!BSequent	BSequent	BSequent Itt_hoas_sequent_bterm2
+NItt_hoas_sequent_bterm!BSequent	BSequent	BSequent Itt_hoas_sequent_bterm
 O	o3043	BSequent
 T	t3043	o3043
 B	b3043	t3043

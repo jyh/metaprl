@@ -3806,8 +3806,8 @@ B	b574	t574
 P	p579	Number 1373
 P	p602	Number 1513
 O	o602	location p579 p602
-NItt_hoas_proof1	Itt_hoas_proof1	Itt_hoas_proof1 NIL
-NItt_hoas_proof1!ProofStep	ProofStep1437	ProofStep Itt_hoas_proof1
+NItt_hoas_proof	Itt_hoas_proof	Itt_hoas_proof NIL
+NItt_hoas_proof!ProofStep	ProofStep1437	ProofStep Itt_hoas_proof
 O	o1438	ProofStep1437
 T	t1438	o1438
 B	b1438	t1438
@@ -3855,7 +3855,7 @@ B	b634	t633
 P	p640	Number 1585
 P	p642	Number 1665
 O	o645	location p640 p642
-NItt_hoas_proof1!proof_step	proof_step1462	proof_step Itt_hoas_proof1
+NItt_hoas_proof!proof_step	proof_step1462	proof_step Itt_hoas_proof
 O	o1463	proof_step1462
 T	t1463	o1463 b b2
 B	b1463	t1463
@@ -3878,7 +3878,7 @@ B	b671	t670
 P	p705	Number 1671
 P	p714	Number 1919
 O	o714	location p705 p714
-NItt_hoas_proof1!ProofStepWitness	ProofStepWitness1474	ProofStepWitness Itt_hoas_proof1
+NItt_hoas_proof!ProofStepWitness	ProofStepWitness1474	ProofStepWitness Itt_hoas_proof
 O	o1475	ProofStepWitness1474
 T	t1475	o1475
 B	b1475	t1475
@@ -3911,7 +3911,7 @@ T	t729	o729 b1492
 B	b934	t729
 P	p936	Number 2017
 O	o938	location p936 p966
-NItt_hoas_proof1!proof_step_witness	proof_step_witness1494	proof_step_witness Itt_hoas_proof1
+NItt_hoas_proof!proof_step_witness	proof_step_witness1494	proof_step_witness Itt_hoas_proof
 O	o1495	proof_step_witness1494
 T	t1495	o1495 b1641 b1645
 B	b1495	t1495
@@ -3928,7 +3928,7 @@ B	b956	t955
 P	p960	Number 2117
 P	p961	Number 2246
 O	o962	location p960 p961
-NItt_hoas_proof1!ProofRule	ProofRule1507	ProofRule Itt_hoas_proof1
+NItt_hoas_proof!ProofRule	ProofRule1507	ProofRule Itt_hoas_proof
 O	o1508	ProofRule1507
 T	t1508	o1508
 B	b1508	t1508
@@ -3970,7 +3970,7 @@ B	b1009	t1009
 P	p1029	Number 2339
 P	p1030	Number 2405
 O	o1030	location p1029 p1030
-NItt_hoas_proof1!Logic	Logic1558	Logic Itt_hoas_proof1
+NItt_hoas_proof!Logic	Logic1558	Logic Itt_hoas_proof
 O	o1559	Logic1558
 T	t1559	o1559
 B	b1559	t1559
@@ -4010,7 +4010,7 @@ B	b1044	t1044
 P	p1051	Number 2469
 P	p1052	Number 2620
 O	o1062	location p1051 p1052
-NItt_hoas_proof1!derivation_premises	derivation_premises1615	derivation_premises Itt_hoas_proof1
+NItt_hoas_proof!derivation_premises	derivation_premises1615	derivation_premises Itt_hoas_proof
 O	o1616	derivation_premises1615
 T	t1624	o1616 b954
 B	b1625	t1624
@@ -4018,7 +4018,7 @@ T	t1628	o b1625 b125
 B	b1629	t1628
 T	t1629	o771 b1629
 B	b1630	t1629
-NItt_hoas_proof1!derivation_goal	derivation_goal1630	derivation_goal Itt_hoas_proof1
+NItt_hoas_proof!derivation_goal	derivation_goal1630	derivation_goal Itt_hoas_proof
 O	o1630	derivation_goal1630
 T	t1630	o1630 b954
 B	b1631	t1630
@@ -4113,7 +4113,7 @@ B	b1089	t1088
 P	p1096	Number 2776
 P	p1097	Number 2948
 O	o1097	location p1096 p1097
-NItt_hoas_proof1!ValidStep	ValidStep1699	ValidStep Itt_hoas_proof1
+NItt_hoas_proof!ValidStep	ValidStep1699	ValidStep Itt_hoas_proof
 O	o1700	ValidStep1699
 T	t1700	o1700 b b2 b1956 b2200
 B	b1700	t1700
@@ -4140,7 +4140,7 @@ B	b1102	t1102
 P	p1110	Number 2949
 P	p1111	Number 3116
 O	o1111	location p1110 p1111
-NItt_hoas_proof1!SimpleStep	SimpleStep1768	SimpleStep Itt_hoas_proof1
+NItt_hoas_proof!SimpleStep	SimpleStep1768	SimpleStep Itt_hoas_proof
 O	o1770	SimpleStep1768
 T	t1772	o1770 b b2 b1956 b2200
 B	b1772	t1772
@@ -4202,7 +4202,7 @@ B	b1137	t1137
 P	p1142	Number 3318
 P	p1143	Number 3504
 O	o1143	location p1142 p1143
-NItt_hoas_proof1!derivation_step	derivation_step1802	derivation_step Itt_hoas_proof1
+NItt_hoas_proof!derivation_step	derivation_step1802	derivation_step Itt_hoas_proof
 O	o1803	derivation_step1802
 T	t1803	o1803 b b2 b1956 b2696
 B	b1803	t1803
@@ -4237,7 +4237,7 @@ B	b1166	t1166
 P	p1168	Number 3647
 P	p1169	Number 3808
 O	o1169	location p1168 p1169
-NItt_hoas_proof1!Derivation	Derivation1818	Derivation Itt_hoas_proof1
+NItt_hoas_proof!Derivation	Derivation1818	Derivation Itt_hoas_proof
 O	o1819	Derivation1818
 T	t1819	o1819 b2200
 B	b1819	t1819
@@ -6352,7 +6352,7 @@ B	b2382	t2382
 P	p2383	Number 8806
 P	p2384	Number 8972
 O	o2384	location p2383 p2384
-NItt_hoas_proof1!derivation_depth	derivation_depth3825	derivation_depth Itt_hoas_proof1
+NItt_hoas_proof!derivation_depth	derivation_depth3825	derivation_depth Itt_hoas_proof
 O	o3826	derivation_depth3825
 T	t3826	o3826 b954
 B	b3826	t3826
@@ -8606,7 +8606,7 @@ B	b2584	t2583
 P	p2584	Number 12055
 P	p2585	Number 12193
 O	o2585	location p2584 p2585
-NItt_hoas_proof1!Provable	Provable7351	Provable Itt_hoas_proof1
+NItt_hoas_proof!Provable	Provable7351	Provable Itt_hoas_proof
 O	o7352	Provable7351
 T	t7422	o7352 b2200 b2945
 B	b7423	t7422
@@ -9076,7 +9076,7 @@ B	b2620	t2620
 P	p2621	Number 13060
 P	p2622	Number 13279
 O	o2622	location p2621 p2622
-NItt_hoas_proof1!empty_logic	empty_logic8229	empty_logic Itt_hoas_proof1
+NItt_hoas_proof!empty_logic	empty_logic8229	empty_logic Itt_hoas_proof
 O	o8230	empty_logic8229
 T	t8230	o8230
 B	b8230	t8230
@@ -9088,7 +9088,7 @@ T	t8232	o1125 b1065 b125
 B	b8232	t8232
 T	t8233	o934 b1078 b8231 b8232
 B	b8233	t8233
-NItt_hoas_proof1!beq_proof_step	beq_proof_step	beq_proof_step Itt_hoas_proof1
+NItt_hoas_proof!beq_proof_step	beq_proof_step	beq_proof_step Itt_hoas_proof
 O	o621	beq_proof_step
 Vstep1	step1	step1\\ \\
 B	b621	step1
@@ -9413,7 +9413,7 @@ T	t2685	o b2674 b2684
 B	b2685	t2685
 T	t2686	o1050 b999 b2685
 B	b2686	t2686
-NItt_hoas_proof1!rules_logic	rules_logic8235	rules_logic Itt_hoas_proof1
+NItt_hoas_proof!rules_logic	rules_logic8235	rules_logic Itt_hoas_proof
 O	o8236	rules_logic8235
 Vrules	rules	rules\\ \\
 B	b566	rules
@@ -9439,7 +9439,7 @@ T	t8239	o571 b571 b125
 B	b8239	t8239
 T	t8240	o934 b1078 b8238 b8239
 B	b8240	t8240
-NItt_hoas_proof1!union_logic	union_logic8242	union_logic Itt_hoas_proof1
+NItt_hoas_proof!union_logic	union_logic8242	union_logic Itt_hoas_proof
 O	o8243	union_logic8242
 T	t8243	o8243 b1141 b1142
 B	b8243	t8243
@@ -9453,7 +9453,7 @@ T	t8246	o1145 b1146 b125
 B	b8246	t8246
 T	t8247	o934 b1078 b8245 b8246
 B	b8247	t8247
-NItt_hoas_proof1!MemLogic	MemLogic8249	MemLogic Itt_hoas_proof1
+NItt_hoas_proof!MemLogic	MemLogic8249	MemLogic Itt_hoas_proof
 O	o8250	MemLogic8249
 Vstep	step	step\\ \\
 B	b4304	step
@@ -9474,7 +9474,7 @@ B	b8254	t8254
 T	t8255	o934 b1078 b8252 b8254
 B	b8255	t8255
 P	p1021	Number 14601
-NItt_hoas_proof1!SubLogic	SubLogic8257	SubLogic Itt_hoas_proof1
+NItt_hoas_proof!SubLogic	SubLogic8257	SubLogic Itt_hoas_proof
 O	o8258	SubLogic8257
 T	t8258	o8258 b1141 b1142
 B	b8258	t8258

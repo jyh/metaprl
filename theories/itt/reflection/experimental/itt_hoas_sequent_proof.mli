@@ -27,7 +27,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_sequent
-extends Itt_hoas_proof1
+extends Itt_hoas_proof
 
 doc docoff
 

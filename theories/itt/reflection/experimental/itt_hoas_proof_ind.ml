@@ -1,4 +1,4 @@
-extends Itt_hoas_proof1
+extends Itt_hoas_proof
 
 open Dform
 open Basic_tactics

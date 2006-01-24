@@ -30,10 +30,10 @@ doc <:doc<
 extends Itt_vec_bind
 extends Itt_vec_list1
 extends Itt_vec_sequent_term
-extends Itt_hoas_relax1
+extends Itt_hoas_relax
 extends Itt_hoas_vbind
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_bterm2
+extends Itt_hoas_sequent_bterm
 extends Itt_theory
 extends Itt_match
 

@@ -1863,8 +1863,8 @@ T	t754	o754
 B	b754	t754
 NSummary!ty_term	ty_term	ty_term Summary
 O	o755	ty_term
-NItt_hoas_sequent_proof1	Itt_hoas_sequent_proof1	Itt_hoas_sequent_proof1 NIL
-NItt_hoas_sequent_proof1!ProvableSequent	ProvableSequent	ProvableSequent Itt_hoas_sequent_proof1
+NItt_hoas_sequent_proof	Itt_hoas_sequent_proof	Itt_hoas_sequent_proof NIL
+NItt_hoas_sequent_proof!ProvableSequent	ProvableSequent	ProvableSequent Itt_hoas_sequent_proof
 O	o756	ProvableSequent
 Vlogic	logic	logic\\ \\
 B	b756	logic
@@ -1897,8 +1897,8 @@ O	o765	and
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o766	equal
-NItt_hoas_proof1	Itt_hoas_proof1	Itt_hoas_proof1 NIL
-NItt_hoas_proof1!Provable	Provable768	Provable Itt_hoas_proof1
+NItt_hoas_proof	Itt_hoas_proof	Itt_hoas_proof NIL
+NItt_hoas_proof!Provable	Provable768	Provable Itt_hoas_proof
 O	o768	Provable768
 P	p775	String Well
 O	o775	comment_string p775
@@ -2050,7 +2050,7 @@ T	t1680	o1680
 B	b1680	t1680
 T	t1681	o478 b1680 b484
 B	b1681	t1681
-P	p1685	String Itt_hoas_proof1
+P	p1685	String Itt_hoas_proof
 O	o1686	string p1685
 T	t1686	o1686
 B	b1686	t1686
@@ -2062,7 +2062,7 @@ T	t1693	o1693
 B	b1693	t1693
 T	t1694	o478 b1693 b484
 B	b1694	t1694
-P	p1705	String Itt_hoas_sequent_proof_step1
+P	p1705	String Itt_hoas_sequent_proof_step
 O	o1706	string p1705
 T	t1706	o1706
 B	b1706	t1706
@@ -2090,7 +2090,7 @@ NBase_rewrite!sequent_arg	sequent_arg	sequent_arg Base_rewrite
 O	o785	sequent_arg
 T	t785	o785
 C	h	H\\ \\
-NItt_hoas_proof1!Logic	Logic	Logic Itt_hoas_proof1
+NItt_hoas_proof!Logic	Logic	Logic Itt_hoas_proof
 O	o786	Logic
 Vlogic	logic786	logic\\ H\\
 B	b787	logic786
@@ -2365,11 +2365,11 @@ T	t925	o784 b924
 B	b925	t925
 NItt_logic!exists	exists	exists Itt_logic
 O	o925	exists
-NItt_hoas_proof1!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_proof1
+NItt_hoas_proof!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_proof
 O	o926	ProofStepWitness
 T	t926	o926
 B	b926	t926
-NItt_hoas_proof1!SimpleStep	SimpleStep	SimpleStep Itt_hoas_proof1
+NItt_hoas_proof!SimpleStep	SimpleStep	SimpleStep Itt_hoas_proof
 O	o927	SimpleStep
 P	p927	Var witness
 O	o928	var p927
@@ -2397,9 +2397,9 @@ T	t940	o b924 b939
 B	b940	t940
 P	p950	String "rwh unfold_Provable 0"
 O	o950	ext_rule p950
-NItt_hoas_proof1!Derivation	Derivation	Derivation Itt_hoas_proof1
+NItt_hoas_proof!Derivation	Derivation	Derivation Itt_hoas_proof
 O	o951	Derivation
-NItt_hoas_proof1!derivation_goal	derivation_goal	derivation_goal Itt_hoas_proof1
+NItt_hoas_proof!derivation_goal	derivation_goal	derivation_goal Itt_hoas_proof
 O	o952	derivation_goal
 P	p952	Var e
 O	o953	var p952
@@ -2416,7 +2416,7 @@ H	h965	witness t926
 H	h966	z t929
 P	p971	String assertion
 O	o971	tactic_arg p971
-NItt_hoas_proof1!ValidStep	ValidStep	ValidStep Itt_hoas_proof1
+NItt_hoas_proof!ValidStep	ValidStep	ValidStep Itt_hoas_proof
 O	o972	ValidStep
 P	p972	Var pl
 O	o973	var p972
@@ -2515,7 +2515,7 @@ B	b1103	t1103
 NItt_dprod	Itt_dprod	Itt_dprod NIL
 NItt_dprod!pair	pair	pair Itt_dprod
 O	o1104	pair
-NItt_hoas_proof1!proof_step	proof_step	proof_step Itt_hoas_proof1
+NItt_hoas_proof!proof_step	proof_step	proof_step Itt_hoas_proof
 O	o1105	proof_step
 T	t1105	o1105 b910 b918
 B	b1105	t1105
@@ -2529,7 +2529,7 @@ T	t1109	o1100 b787 b1108
 O	o1111	tactic_arg p912
 P	p1123	String "rwh unfold_SimpleStep 3 ttca"
 O	o1123	ext_rule p1123
-NItt_hoas_proof1!ProofRule	ProofRule	ProofRule Itt_hoas_proof1
+NItt_hoas_proof!ProofRule	ProofRule	ProofRule Itt_hoas_proof
 O	o1126	ProofRule
 H	h1147	z1 t974
 P	p1152	String "nameHypT (-1) \"p\" thenT withT << derivation_step{'pl; 'goal; 'witness; 'p} >> (dT 0) ttca"
@@ -2606,7 +2606,7 @@ T	t627	o910 b627
 B	b632	t627
 T	t632	o b632 b110
 B	b633	t632
-NItt_hoas_proof1!MemLogic	MemLogic	MemLogic Itt_hoas_proof1
+NItt_hoas_proof!MemLogic	MemLogic	MemLogic Itt_hoas_proof
 O	o644	MemLogic
 T	t651	o1102 b627 b1106
 B	b651	t651
@@ -2919,7 +2919,7 @@ P	p1447	Number 1341
 P	p1454	Number 1378
 P	p1464	Number 1440
 P	p1468	Number 1462
-P	p1469	String Itt_hoas_sequent_term1
+P	p1469	String Itt_hoas_sequent_term
 O	o1471	string p1469
 T	t1471	o1471
 B	b1471	t1471
@@ -3662,8 +3662,8 @@ B	b1293	t1293
 P	p1293	Number 1813
 P	p1294	Number 1937
 O	o1294	location p1293 p1294
-NItt_hoas_sequent_bterm2	Itt_hoas_sequent_bterm2	Itt_hoas_sequent_bterm2 NIL
-NItt_hoas_sequent_bterm2!BSequent	BSequent1294	BSequent Itt_hoas_sequent_bterm2
+NItt_hoas_sequent_bterm	Itt_hoas_sequent_bterm	Itt_hoas_sequent_bterm NIL
+NItt_hoas_sequent_bterm!BSequent	BSequent1294	BSequent Itt_hoas_sequent_bterm
 O	o1295	BSequent1294
 T	t1295	o1295
 B	b1295	t1295
@@ -3739,7 +3739,7 @@ T	t1410	o b1410 b110
 B	b1411	t1410
 T	t1411	o800 b1405 b1411
 B	b1412	t1411
-NItt_hoas_sequent_bterm2!is_sequent_bterm	is_sequent_bterm1412	is_sequent_bterm Itt_hoas_sequent_bterm2
+NItt_hoas_sequent_bterm!is_sequent_bterm	is_sequent_bterm1412	is_sequent_bterm Itt_hoas_sequent_bterm
 O	o1412	is_sequent_bterm1412
 T	t1412	o1412 b790
 B	b1416	t1412
@@ -4249,7 +4249,7 @@ B	b1871	t1870
 T	t1871	o800 b1649 b1871
 B	b1874	t1871
 H	h2394	p t974
-NItt_hoas_proof1!derivation_step	derivation_step	derivation_step Itt_hoas_proof1
+NItt_hoas_proof!derivation_step	derivation_step	derivation_step Itt_hoas_proof
 O	o2395	derivation_step
 P	p1903	String dest_dep0_dep0_term
 O	o1903	lid p1903
@@ -5065,7 +5065,7 @@ NItt_dfun!fun	fun2854	fun Itt_dfun
 O	o2856	fun2854
 NItt_dprod!prod	prod	prod Itt_dprod
 O	o2857	prod
-NItt_hoas_proof1!ProofStep	ProofStep	ProofStep Itt_hoas_proof1
+NItt_hoas_proof!ProofStep	ProofStep	ProofStep Itt_hoas_proof
 O	o2858	ProofStep
 T	t2860	o2858
 B	b2860	t2860
@@ -5908,8 +5908,8 @@ B	b2502	t2502
 P	p2503	Number 4601
 P	p2504	Number 4645
 O	o2504	location p2503 p2504
-NItt_hoas_sequent_term1	Itt_hoas_sequent_term1	Itt_hoas_sequent_term1 NIL
-NItt_hoas_sequent_term1!hyp_context	hyp_context4654	hyp_context Itt_hoas_sequent_term1
+NItt_hoas_sequent_term	Itt_hoas_sequent_term	Itt_hoas_sequent_term NIL
+NItt_hoas_sequent_term!hyp_context	hyp_context4654	hyp_context Itt_hoas_sequent_term
 O	o4655	hyp_context4654
 T	t4655	o4655
 B	b4655	t4655

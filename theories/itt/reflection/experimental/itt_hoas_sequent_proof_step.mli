@@ -1,5 +1,5 @@
 (*
- * Representation of a sequent as a BTerm.
+ * Native sequent representation.
  *
  * ----------------------------------------------------------------
  *
@@ -25,25 +25,29 @@
  * @end[license]
  *)
 extends Itt_hoas_sequent
+extends Itt_hoas_proof
 
 open Basic_tactics
 
 (*
- * Convert the sequent triple into a BTerm.
+ * Equality on proof steps in a sequent logic.
  *)
-declare sequent_bterm{'s}
+declare beq_proof_step{'step1; 'step2}
 
 (*
- * Convert the BTerm back to a sequent.
+ * Proof-step destructors.
  *)
-declare sequent_of_bterm{'e}
-declare is_sequent_bterm{'e}
+declare let_sovar[name:s]{'d; 'witness; 'i; v. 'e}
+declare let_cvar[name:s]{'d; 'witness; 'i; v. 'e}
 
 (*
  * Tactics.
  *)
-topval fold_is_sequent_bterm_core : conv
-topval fold_sequent_of_bterm_core : conv
+val is_let_cvar_term : term -> bool
+val dest_let_cvar_term : term -> string * term * term * term * var * term
+
+val is_let_sovar_term : term -> bool
+val dest_let_sovar_term : term -> string * term * term * term * var * term
 
 (*!
  * @docoff

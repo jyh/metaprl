@@ -1,3 +1,3 @@
-extends Itt_hoas_proof1
+extends Itt_hoas_proof
 
 open Basic_tactics

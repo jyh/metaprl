@@ -795,8 +795,8 @@ T	t291	o291
 C	h	H\\ \\
 Vty	ty	ty\\ H\\
 H	h291	v ty
-NItt_hoas_proof1	Itt_hoas_proof1	Itt_hoas_proof1 NIL
-NItt_hoas_proof1!Provable	Provable	Provable Itt_hoas_proof1
+NItt_hoas_proof	Itt_hoas_proof	Itt_hoas_proof NIL
+NItt_hoas_proof!Provable	Provable	Provable Itt_hoas_proof
 O	o292	Provable
 Vlogic	logic	logic\\ H\\
 B	b292	logic
@@ -815,7 +815,7 @@ C	h295	J\\ H\\ t293 t295
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o295	equal
-NItt_hoas_proof1!Logic	Logic	Logic Itt_hoas_proof1
+NItt_hoas_proof!Logic	Logic	Logic Itt_hoas_proof
 O	o296	Logic
 T	t296	o296
 B	b296	t296
@@ -848,18 +848,18 @@ H	h304	u ty
 NItt_list	Itt_list	Itt_list NIL
 NItt_list!list	list	list Itt_list
 O	o304	list
-NItt_hoas_proof1!Derivation	Derivation	Derivation Itt_hoas_proof1
+NItt_hoas_proof!Derivation	Derivation	Derivation Itt_hoas_proof
 O	o305	Derivation
 T	t305	o305 b292
 B	b305	t305
 T	t306	o304 b305
 H	h306	premises t306
 H	h307	goal t300
-NItt_hoas_proof1!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_proof1
+NItt_hoas_proof!ProofStepWitness	ProofStepWitness	ProofStepWitness Itt_hoas_proof
 O	o307	ProofStepWitness
 T	t307	o307
 H	h308	witness t307
-NItt_hoas_proof1!ValidStep	ValidStep	ValidStep Itt_hoas_proof1
+NItt_hoas_proof!ValidStep	ValidStep	ValidStep Itt_hoas_proof
 O	o308	ValidStep
 P	p308	Var premises
 O	o309	var p308
@@ -888,7 +888,7 @@ O	o314	all_list
 NItt_logic	Itt_logic	Itt_logic NIL
 NItt_logic!and	and	and Itt_logic
 O	o315	and
-NItt_hoas_proof1!derivation_goal	derivation_goal	derivation_goal Itt_hoas_proof1
+NItt_hoas_proof!derivation_goal	derivation_goal	derivation_goal Itt_hoas_proof
 O	o316	derivation_goal
 P	p316	Var premise
 O	o317	var p316

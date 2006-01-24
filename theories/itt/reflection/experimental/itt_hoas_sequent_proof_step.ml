@@ -32,7 +32,7 @@ doc <:doc<
 extends Itt_tunion
 extends Itt_match
 extends Itt_hoas_sequent
-extends Itt_hoas_proof1
+extends Itt_hoas_proof
 
 doc docoff
 

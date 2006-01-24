@@ -28,11 +28,11 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_bterm_wf
-extends Itt_hoas_proof1
+extends Itt_hoas_proof
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_term1
-extends Itt_hoas_sequent_bterm2
-extends Itt_hoas_sequent_proof_step1
+extends Itt_hoas_sequent_term
+extends Itt_hoas_sequent_bterm
+extends Itt_hoas_sequent_proof_step
 
 doc docoff
 
@@ -52,10 +52,10 @@ open Itt_int_base
 open Itt_hoas_base
 open Itt_hoas_vbind
 open Itt_hoas_vector
-open Itt_hoas_proof1
+open Itt_hoas_proof
 open Itt_hoas_sequent
-open Itt_hoas_sequent_term1
-open Itt_hoas_sequent_proof_step1
+open Itt_hoas_sequent_term
+open Itt_hoas_sequent_proof_step
 open Itt_hoas_normalize
 open Itt_hoas_bterm_wf
 

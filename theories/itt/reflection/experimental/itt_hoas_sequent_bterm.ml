@@ -5,7 +5,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006, Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -38,14 +38,18 @@ doc docoff
 open Basic_tactics
 open Itt_sqsimple
 
+let resource private select +=
+   [<< relax >>, OptionAllow]
+
 (************************************************************************
  * Relaxed reductions.
  *)
-define unfold_CVarRelax : CVarRelax{'d} <-->
-   { l: list{Bind} | hyp_depths{'d; 'l} }
+define unfold_CVarRelax : CVarRelax{'d} <--> <:xterm<
+   BindTriangle{d}
+>>
 
 define const unfold_SequentRelax : SequentRelax <--> <:xterm<
-   { s: Bind * list{Bind} * Bind | is_sequent{s} }
+   Bind{0} * Prod hyps: CVarRelax{0} * Bind{length{hyps}}
 >>
 
 (************************************************************************
@@ -78,30 +82,41 @@ define unfold_sequent_bterm : sequent_bterm{'s} <--> <:xterm<
 doc <:doc<
    Well-formedness for the relaxed types.
 >>
-interactive hyp_depths_relax_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- d in nat -->
-   "wf" : <H> >- l in list{Bind} -->
-   <H> >- hyp_depths{d; l} Type
+interactive cvar_relax_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- CVarRelax{n} Type
 >>
 
-interactive is_sequent_relax_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- s in Bind * list{Bind} * Bind -->
-   <H> >- is_sequent{s} Type
+interactive cvar_relax_is_list {| nth_hyp |} 'H : <:xrule<
+   <H>; l: CVarRelax{n}; <J[l]> >- l in list
 >>
 
 interactive sequent_relax_wf {| intro [] |} : <:xrule<
    <H> >- SequentRelax Type
 >>
 
-interactive cvar_relax_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- n in nat -->
-   <H> >- CVarRelax{n} Type
->>
-
 interactive sequent_relax_elim {| elim [] |} 'H : <:xrule<
-   <H>; arg: Bind; hyps: list{Bind}; concl: Bind; squash{is_sequent{"sequent"{arg; hyps; concl}}};
+   <H>; arg: Bind{0}; hyps: CVarRelax{0}; concl: Bind{length{hyps}};
       <J["sequent"{arg; hyps; concl}]> >- C["sequent"{arg; hyps; concl}] -->
    <H>; x: SequentRelax; <J[x]> >- C[x]
+>>
+
+interactive cvar_is_cvar_relax : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- e in CVar{n} -->
+   <H> >- e in CVarRelax{n}
+>>
+
+interactive nil_is_cvar_relax {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   <H> >- [] in CVarRelax{n}
+>>
+
+interactive cons_is_cvar_relax {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- u in Bind{n} -->
+   "wf" : <H> >- v in CVarRelax{n +@ 1} -->
+   <H> >- u::v in CVarRelax{n}
 >>
 
 (************************************************************************
@@ -169,17 +184,6 @@ interactive sequent_bterm_wf1 {| intro [] |} : <:xrule<
 interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
    "wf" : <H> >- s in Sequent -->
    <H> >- sequent_bterm{s} in BTerm
->>
-
-interactive sequent_bterm_relax_wf1 {| intro [] |} : <:xrule<
-   "wf" : <H> >- n = 0 in nat -->
-   "wf" : <H> >- s in SequentRelax -->
-   <H> >- sequent_bterm{s} in Bind{n}
->>
-
-interactive sequent_bterm_relax_wf2 {| intro [] |} : <:xrule<
-   "wf" : <H> >- s in SequentRelax -->
-   <H> >- sequent_bterm{s} in Bind
 >>
 
 interactive sequent_bterm_equal1 {| intro [] |} : <:xrule<
@@ -261,7 +265,7 @@ interactive_rw reduce_is_sequent_bterm_core_var {| reduce |} : <:xrewrite<
 interactive_rw reduce_is_sequent_bterm_core_hyp {| reduce |} : <:xrewrite<
    d in nat -->
    h in Bind{d} -->
-   rest in Bind{d +@ 1} -->
+   rest in Bind{d} -->
    is_sequent_bterm_core{mk_bterm{d; $seq_hyp{h; x. rest}; [h; rest]}}
    <-->
    is_sequent_bterm_core{rest}
@@ -314,7 +318,7 @@ interactive_rw reduce_sequent_of_bterm_core : <:xrewrite<
 interactive_rw reduce_sequent_of_bterm_core_hyp {| reduce |} : <:xrewrite<
    d in nat -->
    h in Bind{d} -->
-   rest in Bind{d +@ 1} -->
+   rest in Bind{d} -->
    sequent_of_bterm_core{mk_bterm{d; $seq_hyp{h; x. rest}; [h; rest]}}
    <-->
    let hyps, concl = sequent_of_bterm_core{rest} in
@@ -487,6 +491,11 @@ interactive bsequent_sqsimple {| intro []; sqsimple |} : <:xrule<
 interactive sequent_bterm_bsequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- s in Sequent -->
    <H> >- sequent_bterm{s} in BSequent
+>>
+
+interactive sequent_bterm_bsequent_equal {| intro [] |} : <:xrule<
+   "wf" : <H> >- s1 = s2 in Sequent -->
+   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BSequent
 >>
 
 interactive bsequent_type_elim {| elim [] |} 'H : <:xrule<

@@ -1,10 +1,10 @@
 (*
- * Typed core language.
+ * Judgments in fsub.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003-2005 Mojave Group, Caltech
+ * Copyright (C) 2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,42 +24,34 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_theory
+extends Pmn_core_terms
 
 open Basic_tactics
 
-(************************************************************************
- * Types.
- *)
-declare typeclass TyExp -> Term
+reflected_logic Judgments =
+struct
+   (* Judgments *)
+   declare typeclass Prop -> Term
 
-declare TyTop : TyExp
-declare TyFun{'ty_domain : TyExp; 'ty_range : TyExp} : TyExp
-declare TyAll{'ty_bound : TyExp; x : TyExp. 'ty['x] : TyExp} : TyExp
+   declare fsub_subtype{'ty1 : TyExp; 'ty2 : TyExp} : Prop
+   declare fsub_member{'e : Exp; 'ty : TyExp} : Prop
 
-(************************************************************************
- * Expressions.
- *)
-declare typeclass Exp -> Term
+   (* Manually code the well-formedness for sequents *)
+   declare typeclass Judgment -> Perv!Judgment
+
+   declare sequent [fsub] { Term : Term >- Term } : Term
+
+   interactive fsub_sequent_is_judgment : <:xrule<
+       meta_type{| <H> >- meta_member{C; "Prop"} |} -->
+       meta_type{| <H> >- meta_member{"fsub"{| >- C |}; "Judgment"} |}
+   >>
+end
 
 (*
- * Normal abstraction and application.
- *)
-declare Lambda{'ty_arg : TyExp; x : Exp. 'e['x] : Exp} : Exp
-declare Apply{'e1 : Exp; 'e2 : Exp} : Exp
-
-(*
- * Type abstraction and application.
- *)
-declare TyLambda{'ty_bound : TyExp; x : TyExp. 'e['x] : Exp} : Exp
-declare TyApply{'e : Exp; 'ty_arg : TyExp} : Exp
-
-(*!
- * @docoff
- *
  * -*-
  * Local Variables:
- * Caml-master: "compile"
+ * Fill-column: 120
  * End:
  * -*-
+ * vim:ts=3:et:tw=120
  *)

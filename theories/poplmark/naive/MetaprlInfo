@@ -14,3 +14,4 @@ THEORY_DEPS[] +=
 
 MPFILES[] =
     pmn_core_terms
+    pmn_core_judgments

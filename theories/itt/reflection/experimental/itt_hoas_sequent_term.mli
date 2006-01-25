@@ -59,7 +59,9 @@ topval fold_hyp_context : conv
 topval fold_bterm_of_vterm : conv
 
 topval reduce_bsequent : conv
-topval reduce_vsequent_of_triple : conv
+topval reduce_vsequent : conv
+
+topval forward_bsequent_wf : int -> tactic
 
 (*
  * Terms.

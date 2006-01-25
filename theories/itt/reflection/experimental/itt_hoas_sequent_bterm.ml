@@ -191,6 +191,11 @@ interactive sequent_bterm_equal1 {| intro [] |} : <:xrule<
    <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BTerm{0}
 >>
 
+interactive sequent_bterm_equal2 {| intro [] |} : <:xrule<
+   "wf" : <H> >- s1 = s2 in Sequent -->
+   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BTerm
+>>
+
 (************************************************************************
  * Inversion.
  *)

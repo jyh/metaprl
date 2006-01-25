@@ -149,6 +149,18 @@ interactive_rw reduce_hyps_bterms_mk_vbind {| reduce |} : <:xrewrite<
    "hyp_term"{| <J> >- A |}
 >>
 
+interactive_rw fold_hyp_term_cons : <:xrewrite<
+   vbind{| <J> >- A |} :: l
+   <-->
+   append{hyp_term{| <J> >- A |}; l}
+>>
+
+interactive_rw hyp_term_of_hyp_context {| reduce |} : <:xrewrite<
+   hyp_context{| <J> >- hyplist{| x: A |} |}
+   <-->
+   hyp_term{| <J> >- A |}
+>>
+
 (************************************************************************
  * Flattened form of the sequent.
  *)
@@ -221,11 +233,11 @@ interactive_rw reduce_vflatten_hyp_context_singleton {| reduce |} : <:xrule<
    hyp_context{| <J> >- hyplist{| <K> |} |}
 >>
 
-(************************************************
- * Relaxed theorems.
+(************************************************************************
+ * hyp_context{| ... |} reductions.
  *)
 doc <:doc<
-   Relaxed theorems.
+   Reductions for << hyp_context{| <J> >- 'C |} >>.
 >>
 interactive_rw reduce_hyp_context_nil {| reduce |} : <:xrewrite<
    hyp_context{| <J> >- [] |}
@@ -239,6 +251,18 @@ interactive_rw reduce_hyp_context_cons : <:xrewrite<
    vbind{| <J> >- A |} :: hyp_context{| <J>; x: A >- hyplist{| <K[x]> |} |}
 >>
 
+interactive_rw reduce_hyp_context_split 'K : <:xrewrite<
+   hyp_context{| >- hyplist{| <K>; <L> |} |}
+   <-->
+   append{hyp_context{| >- hyplist{| <K> |} |}; hyp_context{| <K> >- hyplist{| <L> |} |}}
+>>
+
+(************************************************
+ * Relaxed theorems.
+ *)
+doc <:doc<
+   Relaxed theorems.
+>>
 interactive hyp_context_relax {| intro |} : <:xrule<
    <H> >- "hyp_context"{| <J> >- "hyplist"{| <K> |} |} in CVarRelax{bdepth{vbind{| <J> >- mk_terms{hyplist{| <K> |}} |}}}
 >>
@@ -319,6 +343,44 @@ interactive hyp_term_cvar_wf {| intro [] |} : <:xrule<
 >>
 
 (************************************************************************
+ * Normalization.
+ *)
+doc <:doc<
+   Define the rewrites that turn a @tt[bsequent] into a normalized @tt[vsequent].
+>>
+interactive_rw reduce_bsequent_start : <:xrewrite<
+   bsequent{arg}{| <J> >- C |}
+   <-->
+   sequent_bterm{vsequent{arg}{| hyp_context{| >- hyplist{| <J> |} |} >- vbind{| <J> >- C |} |}}
+>>
+
+interactive_rw reduce_vsequent_nil {| reduce |} : <:xrewrite<
+   vsequent{arg}{| hyp_context{| >- hyplist{||} |}; <J> >- C |}
+   <-->
+   vsequent{arg}{| <J> >- C |}
+>>
+
+interactive_rw reduce_vsequent_split 'J : <:xrewrite<
+   vsequent{arg}{| hyp_context{| >- hyplist{| <J>; <K> |} |}; <L> >- C |}
+   <-->
+   vsequent{arg}{| hyp_context{| >- hyplist{| <J> |} |};
+                   hyp_context{| <J> >- hyplist{| <K> |} |};
+                   <L>
+                   >- C
+                |}
+>>
+
+interactive_rw reduce_vsequent_right : <:xrewrite<
+   vsequent{arg}{| hyp_context{| >- hyplist{| <J>; A |} |}; <L> >- C |}
+   <-->
+   vsequent{arg}{| hyp_context{| >- hyplist{| <J> |} |};
+                   hyp_term{| <J> >- A |};
+                   <L>
+                   >- C
+                |}
+>>
+
+(************************************************************************
  * Forward reasoning.
  *)
 doc <:doc<
@@ -334,7 +396,12 @@ interactive vsequent_wf_forward {| forward |} 'H : <:xrule<
    <H>; vsequent{arg}{| <J> >- C<|H|> |} in Sequent; <K> >- D
 >>
 
-interactive bsequent_wf_forward {| forward |} 'H : <:xrule<
+(*
+ * For the following two bsequent forward-chaining theorems,
+ * translate into a vsequent, then use a tactic to reduce
+ * the vsequent hyps.
+ *)
+interactive bsequent_wf_forward 'H : <:xrule<
    <H>; bsequent{arg}{| <J> >- C |} in BSequent; <K>;
       arg in BTerm{0};
       hyp_context{| >- hyplist{| <J> |} |} in CVar{0};
@@ -343,6 +410,16 @@ interactive bsequent_wf_forward {| forward |} 'H : <:xrule<
    <H>; bsequent{arg}{| <J> >- C |} in BSequent; <K> >- D
 >>
 
+interactive bsequent_wf_forward2 'H : <:xrule<
+   <H>; bsequent{arg}{| <J> >- C |} in BSequent; <K>;
+      vsequent{arg}{| hyp_context{| >- hyplist{| <J> |} |} >- vbind{| <J> >- C |} |} in Sequent
+      >- D -->
+   <H>; bsequent{arg}{| <J> >- C |} in BSequent; <K> >- D
+>>
+
+(*
+ * Hyps forward-chaining.
+ *)
 interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<
    "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- n in nat -->
    "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- A in list{BTerm} -->
@@ -356,10 +433,6 @@ interactive_rw reduce_vflatten_hyp_term {| reduce |} : <:xrewrite<
    <-->
    [vbind{| <J> >- e |}]
 >>
-
-(************************************************************************
- * Length theorems.
- *)
 
 (************************************************************************
  * Tactics.
@@ -410,36 +483,74 @@ let dest_vsequent_term t =
       arg, hyps, concl
 
 (*
- * hyps_bterms{'e}
+ * vsequent reduction.
  *)
-let hyps_bterms_term = << hyps_bterms{'e} >>
-let hyps_bterms_opname = opname_of_term hyps_bterms_term
-let dest_hyps_bterms_term = dest_dep0_term hyps_bterms_opname
+let reduce_vsequent_conv t =
+   let _, hyps, _ = dest_vsequent_term t in
+      if SeqHyp.length hyps = 0 then
+         raise (RefineError ("reduce_vsequent_conv", StringTermError ("empty hypotheses", t)));
+      match SeqHyp.get hyps 0 with
+         Context _ ->
+            raise (RefineError ("reduce_vsequent_conv", StringTermError ("illegal context", t)))
+       | Hypothesis (_, t) ->
+            let hyps, concl = dest_hyp_context_term t in
+            let hyps = dest_hyplist_term concl in
+            let len = SeqHyp.length hyps in
+               if len = 0 then
+                  reduce_vsequent_nil
+               else if len = 1 then
+                  match SeqHyp.get hyps 0 with
+                     Hypothesis _ ->
+                        reduce_vsequent_right thenC reduce_vsequent_nil
+                   | Context _ ->
+                        raise (RefineError ("reduce_vsequent_conv", StringTermError ("already reduced", t)))
+               else
+                  let finish =
+                     match SeqHyp.get hyps 0 with
+                        Hypothesis _ ->
+                           reduce_vsequent_right thenC reduce_vsequent_nil
+                      | Context _ ->
+                           idC
+                  in
+                  let rec collect i =
+                     if i = 0 then
+                        finish
+                     else
+                        match SeqHyp.get hyps i with
+                           Hypothesis _ ->
+                              reduce_vsequent_right thenC collect (pred i)
+                         | Context _ ->
+                              reduce_vsequent_split (succ i) thenC collect (pred i)
+                  in
+                     collect (pred len)
 
-(*
- * Reduce the bsequent.
- *)
-let rec reduce_hyps t =
-   let a = dest_hyps_bterms_term t in
-      if is_append_term a then
-         reduce_hyps_bterms_append
-         thenC (addrC [Subterm 1] (termC reduce_hyps))
-         thenC (addrC [Subterm 2] (termC reduce_hyps))
-      else
-         reduce_hyps_bterms_hyplist_simple
-         orelseC reduce_hyps_bterms_mk_vbind
-         orelseC reduce_hyps_bterms_hyplist
-
-let reduce_vsequent_of_triple =
-   addrC [Subterm 1] reduce_fsequent
-   thenC reduce_vsequent_of_triple
-   thenC addrC [ClauseAddr 1] (termC reduce_hyps)
-   thenC addrC [ClauseAddr 0] reduce_bterm_of_mk_vbind_mk_core
-   thenC repeatC (reduce_vsequent_append 1)
+let reduce_vsequent = termC reduce_vsequent_conv
 
 let reduce_bsequent =
-   unfold_bsequent
-   thenC addrC [Subterm 1] reduce_vsequent_of_triple
+   reduce_bsequent_start
+   thenC addrC [Subterm 1] (tryC reduce_vsequent)
+
+let resource reduce +=
+    [<:xterm< vsequent{arg}{| hyp_context{| <J> >- C |}; <K> >- D |} >>, wrap_reduce reduce_vsequent]
+
+(*
+ * Perform reduction during forward-chaining.
+ *)
+let forward_bsequent_wf i =
+    bsequent_wf_forward2 i
+    thenT rw (addrC [Subterm 2] (tryC reduce_vsequent)) (-1)
+    thenT rw (addrC [Subterm 3] (tryC reduce_vsequent)) (-2)
+
+(*
+ * JYH: we don't need this for now because the Itt_hoas_sequent_proof.provable_forwardT
+ * calls it manually.
+let resource forward +=
+    [<:xterm< bsequent{arg}{| <J> >- C |} in BSequent >>,
+        { forward_loc  = (LOCATION);
+          forward_prec = forward_trivial_prec;
+          forward_tac  = forward_bsequent_wf
+        }]
+ *)
 
 (************************************************************************
  * Tests.

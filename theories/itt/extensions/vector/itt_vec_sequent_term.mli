@@ -65,6 +65,7 @@ topval reduce_fsequent : conv
  * Terms.
  *)
 val is_hyplist_term : term -> bool
+val dest_hyplist_term : term -> SeqHyp.t
 
 (*!
  * @docoff

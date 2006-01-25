@@ -128,10 +128,15 @@ interactive provable_forward 'H : <:xrule<
 
 let provable_forwardT i =
    provable_forward i
+   thenT forward_bsequent_wf (-1)
    thenT rw normalizeBTermC (-1)
 
+(*
+ * JYH: we don't need this because we call it manually.
+ *
 let resource forward +=
    [<< ProvableSequent{'logic; 'seq} >>, { forward_loc = (LOCATION); forward_prec = forward_trivial_prec; forward_tac = provable_forwardT }]
+ *)
 
 (************************************************************************
  * Tactics.
@@ -426,8 +431,8 @@ let assumAllT =
 
 let provableRuleStartT t unfold =
    assumAllT
-   thenT forwardChainT
-   thenT rwhAll reduce_bsequent
+   thenT tryOnAllMHypsT provable_forwardT
+   thenMT rwhAll reduce_bsequent
    thenMT forwardChainT
    thenT thinDupT
    thenMT provableIntroT

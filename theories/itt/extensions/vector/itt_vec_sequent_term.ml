@@ -550,6 +550,17 @@ let is_hyplist_arg_term = is_no_subterms_term hyplist_arg_opname
 let is_hyplist_term t =
    is_sequent_term t && is_hyplist_arg_term (TermMan.args t)
 
+let dest_hyplist_term t =
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+      if is_hyplist_arg_term arg then
+         hyps
+      else
+         raise (RefineError ("dest_hyp_context_term", StringTermError ("not a hyplist term", t)))
+
 let t_nat = << nat >>
 
 let var_i = Lm_symbol.add "i"

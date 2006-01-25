@@ -27,6 +27,8 @@
 extends Pmn_core_terms
 
 open Basic_tactics
+open Itt_equal
+open Itt_dfun
 
 reflected_logic Judgments =
 struct
@@ -38,14 +40,63 @@ struct
 
    (* Manually code the well-formedness for sequents *)
    declare typeclass Judgment -> Perv!Judgment
+   declare typeclass Hyp -> Term
 
-   declare sequent [fsub] { Term : Term >- Term } : Term
+   declare TyVal{'ty : TyExp} : Hyp
+   declare TyPower{'ty : TyExp} : Hyp
 
-   interactive fsub_sequent_is_judgment : <:xrule<
+   (*
+    * Sequents have dependent types.
+    * For now, we'll define the type judgments manually,
+    * rather than using existential types.
+    *)
+   declare sequent [fsub] { Term : Hyp >- Prop } : Judgment
+
+   interactive fsub_sequent_is_judgment_concl : <:xrule<
        meta_type{| <H> >- meta_member{C; "Prop"} |} -->
-       meta_type{| <H> >- meta_member{"fsub"{| >- C |}; "Judgment"} |}
+       meta_type{| <H> >- meta_member{fsub{| >- C |}; "Judgment"} |}
    >>
+
+(*
+   interactive fsub_sequent_is_judgment_val : <:xrule<
+       meta_type{| <H> >- meta_member{ty; "TyExp"} |} -->
+       meta_type{| <H>; x: "Exp" >- meta_member{fsub{| <J[x]> >- C[x] |}; "Judgment"} |} -->
+       meta_type{| <H> >- meta_member{fsub{| x: TyVal{ty}; <J[x]> >- C[x] |}; "Judgment"} |}
+   >>
+ *)
 end
+
+(************************************************************************
+ * Display.
+ *)
+declare df_depth{'d : Dform} : Dform
+
+dform df_depth_df_any : df_depth{'d} =
+   `"[" 'd `"]"
+
+dform df_depth_df_zero : df_depth{0} =
+   `""
+
+dform ty_power_df : <:xterm< $'[d] TyPower{ty} >> =
+   `"<:" df_depth{'d} `" " slot{'ty}
+
+dform ty_val_df : <:xterm< $'[d] TyVal{ty} >> =
+   `":" df_depth{'d} `" " slot{'ty}
+
+dform fsub_df : <:xterm< $'[d] "fsub" >> =
+   `"fsub" df_depth{'d}
+
+dform fsub_subtype_df : parens :: "prec"[prec_equal] :: <:xterm< $'[d] fsub_subtype{t1; t2} >> =
+   szone pushm[3] slot{'t1} `" <:" df_depth{'d} hspace slot{'t2} popm ezone
+
+dform fsub_member_df : parens :: "prec"[prec_apply] :: <:xterm< $'[d] fsub_member{e; ty} >> =
+   szone pushm[3] slot{'e} `" " Mpsymbols!member df_depth{'d} hspace slot{'ty} popm ezone
+
+dform fsub_Prop_df : <:xterm< $'[d] "Prop" >> =
+   `"Prop" df_depth{'d}
+
+dform fsub_Judgment_df : <:xterm< $'[d] "Judgment" >> =
+   `"Judgment" df_depth{'d}
 
 (*
  * -*-

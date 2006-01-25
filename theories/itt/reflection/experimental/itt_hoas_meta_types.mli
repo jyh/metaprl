@@ -39,7 +39,7 @@ declare sequent [meta_type] { exst a : Ty. 'a : Ty >- Member } : Judgment
 (*
  * The term 'e has meta-type 'ty.
  *)
-declare meta_member{'e : Term; 'ty : Ty} : Member
+declare meta_member{'e : 'a; 'ty : Ty} : Member
 
 (*!
  * @docoff

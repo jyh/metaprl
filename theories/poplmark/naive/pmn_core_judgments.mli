@@ -29,37 +29,33 @@ extends Pmn_core_terms
 open Basic_tactics
 
 (************************************************************************
- * Judgments.
+ * Sequents.
+ *
+ * The type << Prop >> represents the "propositions" that appear
+ * as the conclusion of a sequent.
+ *
+ * In a sequent, hypotheses are wrapped.
+ *    - The << TyVal{'ty} >> represents the programs that have type << 'ty >>.
+ *    - The << TyPower{'ty} >> is used in hypothesis lists to represent
+ *      subtyping assumptions.
  *)
 declare typeclass Prop -> Term
 
 declare fsub_subtype{'ty1 : TyExp; 'ty2 : TyExp} : Prop
 declare fsub_member{'e : Exp; 'ty : TyExp} : Prop
 
-(************************************************************************
- * Sequents.
- *
- * Hypotheses are wrapped.  The << TyVal{'ty} >> represents the
- * programs that have type << 'ty >>.
- *
- * The << TyPower{'ty} >> is used in hypothesis lists to represent
- * subtyping assumptions.
- *)
 declare typeclass Judgment -> Perv!Judgment
+declare typeclass Hyp -> Term
 
-declare typeclass Hyp -> Ty
-
-declare typeclass TyVal : Hyp -> Term
-declare typeclass TyPower : Hyp -> Term
-
-declare TyVal{'ty : TyExp} : TyVal
-declare TyPower{'ty : TyExp} : TyPower
+declare TyVal{'ty : TyExp} : Hyp
+declare TyPower{'ty : TyExp} : Hyp
 
 (*
  * Sequents have dependent types.
- * We'll define the type judgments manually.
+ * For now, we'll define the type judgments manually,
+ * rather than using existential types.
  *)
-declare sequent [fsub] { Term : Term >- Term } : Term
+declare sequent [fsub] { Term : Hyp >- Prop } : Judgment
 
 (*
  * -*-

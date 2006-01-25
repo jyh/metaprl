@@ -47,7 +47,6 @@ struct
    declare TyFun{'ty1 : TyExp; 'ty2 : TyExp} : TyExp
    declare TyAll{'ty1 : TyExp; x : TyExp. 'ty2 : TyExp} : TyExp
 
-(*
    (* Expressions *)
    declare typeclass Exp -> Term
 
@@ -75,7 +74,6 @@ struct
 
    (* Sequents have dependent types *)
    declare type TyElem{'a : Ty} : Ty
-*)
 end;;
 
 (*

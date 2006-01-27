@@ -47,14 +47,11 @@ doc docoff
 open Basic_tactics
 open Itt_dfun
 open Itt_sqsimple
+open Itt_hoas_vector
 
 (*
  * Options.
  *)
-let denormalize_term = << denormalize >>
-
-let denormalize_option = [denormalize_term]
-
 let resource private select +=
    [denormalize_term, OptionAllow]
 
@@ -131,14 +128,14 @@ doc <:doc< @rewrites >>
  * which causes trouble for the term normalizer.  For the moment,
  * do not add them to the reduce resource.
  *)
-interactive_rw reduce_mk_bterm_base {| reduce ~labels:denormalize_option |} :
+interactive_rw reduce_mk_bterm_base {| reduce ~labels:denormalize_labels |} :
    mk_bterm{0; 'op; 'btl} <--> mk_term{'op; 'btl }
 
-interactive_rw reduce_mk_bterm_step {| reduce ~labels:denormalize_option |} :
+interactive_rw reduce_mk_bterm_step {| reduce ~labels:denormalize_labels |} :
    'n in nat -->
    mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; map{bt. subst{'bt; 'v}; 'btl}}}
 
-interactive_rw reduce_mk_bterm_empty {| reduce ~labels:denormalize_option |} :
+interactive_rw reduce_mk_bterm_empty {| reduce ~labels:denormalize_labels |} :
    'n in nat -->
    mk_bterm{'n; 'op; nil} <--> bind{'n; mk_term{'op; nil}}
 

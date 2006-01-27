@@ -1,5 +1,6 @@
 #PRL version 1.0.26 ASCII term
 NPerv	Perv	Perv NIL
+NPerv!select	select	select Perv
 NPerv!xcons	xcons	xcons Perv
 O	o	xcons
 NSummary	Summary	Summary NIL
@@ -3709,7 +3710,8 @@ O	o2776	location p921 p2776
 NSummary!declare_term	declare_term	declare_term Summary
 O	o1076	declare_term
 NItt_hoas_relax!relax	relax	relax Itt_hoas_relax
-O	o1077	relax
+P	prel	Token relax
+O	o1077	select prel
 T	t1077	o1077
 B	b1077	t1077
 T	t1078	o938 b1077 b1077 b138 b138 b940
@@ -4791,7 +4793,8 @@ B	b2644	t2643
 P	p2843	String exclude
 O	o2843	arg_named p2843
 NItt_hoas_vector!denormalize	denormalize	denormalize Itt_hoas_vector
-O	o2844	denormalize
+P	pden	Token denormalize
+O	o2844	select pden
 T	t2844	o2844
 B	b2844	t2844
 T	t2845	o1459 b2844

@@ -2320,7 +2320,9 @@ NSummary!term_binding	term_binding	term_binding Summary
 O	o906	term_binding
 NItt_hoas_relax	Itt_hoas_relax	Itt_hoas_relax NIL
 NItt_hoas_relax!relax	relax	relax Itt_hoas_relax
-O	o907	relax
+NPerv!select	select	select Perv
+P	prel	Token relax
+O	o907	select prel
 T	t907	o907
 B	b907	t907
 NOcaml!apply	apply	apply Ocaml
@@ -2964,7 +2966,8 @@ P	p828	String exclude
 O	o828	arg_named p828
 NItt_hoas_vector	Itt_hoas_vector	Itt_hoas_vector NIL
 NItt_hoas_vector!denormalize	denormalize	denormalize Itt_hoas_vector
-O	o829	denormalize
+P	pden	Token denormalize
+O	o829	select pden
 T	t829	o829
 B	b829	t829
 T	t831	o1218 b829
@@ -5464,7 +5467,7 @@ T	t2104	o1976 b2104
 B	b2105	t2104
 T	t2105	o1976 b2097
 B	b2106	t2105
-P	p2106	String "allowOptionT << relax >>"
+P	p2106	String "allowOptionT << select[\"relax\":t] >>"
 O	o2106	ext_rule p2106
 Vh	h2106	h\\ H\\
 B	b2107	h2106

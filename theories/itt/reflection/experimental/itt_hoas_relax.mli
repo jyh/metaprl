@@ -41,7 +41,7 @@ extends Itt_hoas_bterm
 (*
  * Relax option.  Use this if you want to used relaxed rules.
  *)
-declare relax
+declare relax : SelectOption
 
 (*
  * The type << Bind{'n} >> is the type of terms with

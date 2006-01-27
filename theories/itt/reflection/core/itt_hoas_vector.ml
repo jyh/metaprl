@@ -50,9 +50,9 @@ open Itt_list
 (*
  * Reduce control.
  *)
-declare denormalize
+declare denormalize : SelectOption
 
-let denormalize_term = << denormalize >>
+let denormalize_term = << select["denormalize":t] >>
 
 let denormalize_labels = [denormalize_term]
 

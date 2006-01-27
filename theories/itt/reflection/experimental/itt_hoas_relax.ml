@@ -59,9 +59,9 @@ open Basic_tactics
 (*
  * Select option for this theory.
  *)
-declare relax
+declare relax : SelectOption
 
-let relax_term   = << relax >>
+let relax_term   = << select["relax":t] >>
 let relax_option = [relax_term]
 
 (*

@@ -41,7 +41,10 @@ open Basic_tactics
 (*
  * Options.
  *)
-declare denormalize
+declare denormalize : SelectOption
+
+val denormalize_term : term
+val denormalize_labels: term list
 
 (************************************************************************
  * Terms.

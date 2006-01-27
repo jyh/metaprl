@@ -39,7 +39,7 @@ open Basic_tactics
 open Itt_sqsimple
 
 let resource private select +=
-   [<< relax >>, OptionAllow]
+   [<< select["relax":t] >>, OptionAllow]
 
 (************************************************************************
  * Relaxed reductions.

@@ -1,5 +1,6 @@
 #PRL version 1.0.26 ASCII term
 NPerv	Perv	Perv NIL
+NPerv!select	select	select Perv
 NPerv!xcons	xcons	xcons Perv
 O	o	xcons
 NSummary	Summary	Summary NIL
@@ -5579,7 +5580,8 @@ O	o2202	arg_named p2202
 NSummary!arg_term	arg_term	arg_term Summary
 O	o2203	arg_term
 NItt_hoas_vector!denormalize	denormalize	denormalize Itt_hoas_vector
-O	o2204	denormalize
+P	tden	Token denormalize
+O	o2204	select tden
 T	t2204	o2204
 B	b2204	t2204
 T	t2205	o2203 b2204

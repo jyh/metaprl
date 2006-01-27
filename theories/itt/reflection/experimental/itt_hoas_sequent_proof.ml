@@ -444,6 +444,12 @@ let provableRuleT t unfold =
    thenMT proofStepWitnessT
    thenT proofRuleWFT
 
+(************************************************************************
+ * Display.
+ *)
+dform provable_sequent_df : ProvableSequent{'logic; 'e} =
+   szone pushm[0] pushm[3] `"P[" slot{'logic} `"] <<" hspace slot{'e} popm hspace `">>" popm ezone
+
 (*!
  * @docoff
  *

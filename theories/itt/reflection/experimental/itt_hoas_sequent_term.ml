@@ -29,6 +29,7 @@ doc <:doc<
 >>
 extends Itt_vec_bind
 extends Itt_vec_list1
+extends Itt_vec_dform
 extends Itt_vec_sequent_term
 extends Itt_hoas_relax
 extends Itt_hoas_vbind
@@ -562,6 +563,20 @@ interactive bsequent_test_intro1 : <:xrule<
 interactive bsequent_test_elim1 'J : <:xrule<
    <H> >- bsequent{it}{| <J>; x: A; <K[x]> >- 1 +@ 2 |} IN "top"
 >>
+
+(************************************************************************
+ * Display.
+ *)
+dform vsequent_df : vsequent{'arg}{| <H> >- 'C |} =
+   szone pushm[0] pushm[3] `"vsequent[" slot{'arg} `"] {" hspace
+   hspace display_sequent{vsequent{it}{| <H> >- 'C |}}
+   popm hspace `"}" popm ezone
+
+dform vsequent_hyp_df : display_hyp{vsequent{'arg}; v. 'e} =
+   slot{'e}
+
+dform vsequent_concl_df : display_concl{vsequent{'arg}; 'C} =
+   hspace szone pushm[3] Mpsymbols!vdash `" " slot{'C} popm ezone
 
 (*!
  * @docoff

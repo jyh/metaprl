@@ -1,0 +1,21 @@
+THEORYNAME = itt_reflection_experimental_jyh
+THEORYDESCR = $"Syntax Reflection for Computational Type Theory - Jason's experimental work"
+
+THEORY_DEPS[] +=
+    itt/core
+    itt/reflection/core
+    itt/reflection/experimental
+
+# Library files
+MPFILES[] =
+   itt_hoas_ulambda
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

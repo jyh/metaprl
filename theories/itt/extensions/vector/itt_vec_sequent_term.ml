@@ -90,7 +90,7 @@ prim_rw unfold_hyplist : <:xrewrite<
 >>
 
 doc <:doc<
-   The bsequent is the sequent representation of a sequent triple.
+   The @tt[fsequent] is the sequent representation of a sequent triple.
 >>
 prim_rw unfold_fsequent : <:xrewrite<
    fsequent{arg}{| <J> >- C |}

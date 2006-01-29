@@ -16,4 +16,6 @@ MPFILES[] =
    itt_vec_list1
    itt_vec_bind
    itt_vec_sequent_term
+   itt_vec_flat_bind
+   itt_vec_flat_sequent_term
    itt_vec_theory

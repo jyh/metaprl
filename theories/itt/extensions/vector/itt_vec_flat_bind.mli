@@ -29,6 +29,11 @@ extends Itt_vec_bind
 open Basic_tactics
 
 (*
+ * Vector binder.
+ *)
+declare mk_bind{'n; x. 'e['x]}
+
+(*
  * Append forms.
  *)
 declare sequent [mk_flat_vbind] { Term : Term >- Term } : Term

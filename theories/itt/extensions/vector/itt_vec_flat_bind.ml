@@ -77,6 +77,18 @@ interactive_rw reduce_mk_bindn_succ {| reduce |} : <:xrewrite<
    mk_bind{x. mk_bind{n; y. e[x::y]}}
 >>
 
+interactive_rw reduce_mk_flat_vbind_nil : <:xrewrite<
+   mk_flat_vbind{| >- C |}
+   <-->
+   C
+>>
+
+interactive_rw reduce_mk_flat_vbind_left : <:xrewrite<
+   mk_flat_vbind{| x: A; <J[x]> >- C[x] |}
+   <-->
+   mk_bind{length{A}; x. mk_flat_vbind{| <J[x]> >- C[x] |}}
+>>
+
 (************************************************************************
  * Tactics.
  *)

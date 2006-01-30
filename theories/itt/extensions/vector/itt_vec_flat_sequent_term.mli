@@ -26,11 +26,18 @@
  *)
 extends Itt_vec_sequent_term
 
+open Basic_tactics
+
 (*
  * Append forms.
  *)
 declare sequent [flat_hyplist] { Term : Term >- Term } : Term
 declare sequent [flat_sequent{'arg}] { Term : Term >- Term } : Term
+
+(*
+ * Tactics.
+ *)
+topval fold_flat_hypconslist : conv
 
 (*
  * -*-

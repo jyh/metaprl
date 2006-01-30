@@ -46,6 +46,13 @@ declare sequent [hyplist] { Term : Term >- Term } : Term
 declare sequent [fsequent{'arg}] { Term : Term >- Term } : Term
 
 (*
+ * Private terms for defining << hyps_flatten{'e} >>.
+ *)
+declare hyps_length{'e}
+declare hyps_nth{'e; 'i}
+declare sequent [squashlist] { Term : Term >- Term } : Term
+
+(*
  * ML values.
  *)
 topval fold_hyps_length : conv

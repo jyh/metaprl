@@ -4,9 +4,9 @@ NPerv!xcons	xcons	xcons Perv
 O	o	xcons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
-P	p	Number 1015
-P	p1	Number 1077
-O	o1	location p p1
+P	p3	Number 1072
+P	p4	Number 1134
+O	o10	location p3 p4
 NSummary!declare_term	declare_term	declare_term Summary
 O	o2	declare_term
 NSummary!shape_class	shape_class	shape_class Summary
@@ -41,17 +41,17 @@ T	t12	o4 b5 b5 b6 b6 b11
 B	b12	t12
 T	t13	o2 b b12
 B	b13	t13
-T	t14	o1 b13
-B	b14	t14
+T	t17	o10 b13
+B	b17	t17
 P	p14	Number -1
 O	o14	location p14 p14
 NSummary!id	id	id Summary
-P	p15	Number -224626227
-O	o15	id p15
-T	t15	o15
-B	b15	t15
-T	t16	o14 b15
-B	b16	t16
+P	p18	Number 384932479
+O	o123	id p18
+T	t479	o123
+B	b479	t479
+T	t480	o14 b479
+B	b480	t480
 P	p16	Number 4
 P	p17	Number 969
 O	o17	location p16 p17
@@ -2664,103 +2664,178 @@ T	t1029	o1001 b6 b1005 b1008 b1012 b1026 b1028
 B	b1029	t1029
 T	t1030	o1000 b1029
 B	b1030	t1030
-P	p1030	Number 2197
-P	p1031	Number 2203
-O	o1031	location p1030 p1031
-T	t1031	o1031 b863
-B	b1031	t1031
-P	p1032	Number 2205
-P	p1033	Number 2282
-O	o1033	location p1032 p1033
+P	p481	String reduce_mk_flat_vbind_nil
+O	o483	rewrite p481
+VC	C483	C\\ \\
+S	s483	t5\\ \\ C483
+B	b483	s483
+B	b484	C483
+P	p490	String "rwh unfold_mk_flat_vbind 0 thenT rw reduceC 0 ttca"
+O	o491	ext_rule p490
+VC	C491	C\\ H\\
+S	s491	t5\\ \\ C491
+B	b493	s491
+B	b503	C491
+T	t503	o985 b493 b503
+S	s503	t984\\ h984\\ t503
+B	b504	s503
+T	t504	o983 b504 b6
+B	b507	t504
+T	t507	o982 b507 b6
+B	b511	t507
+T	t511	o981 b511 b6
+B	b512	t511
+T	t512	o491 b980 b512 b6 b6
+B	b515	t512
+T	t515	o978 b515
+B	b516	t515
+T	t516	o483 b483 b484 b516 b6
+B	b523	t516
+T	t523	o14 b523
+B	b524	t523
+P	p529	String reduce_mk_flat_vbind_left
+O	o529	rewrite p529
+VA	A	A\\ \\
+H	h529	x A
+C	h530	J\\ \\ t883
+VC	C530	C\\ J\\ t883
+S	s530	t5\\ h529 h530\\ C530
+B	b533	s530
+B	b534	A
+T	t534	o957 b534
+B	b540	t534
+S	s540	t5\\ h530\\ C530
+B	b541	s540 x
+T	t541	o882 b540 b541
+B	b543	t541
+VA	A543	A\\ H\\
+H	h543	x A543
+VC	C543	C\\ H J\\ t883
+S	s543	t5\\ h543 h530\\ C543
+B	b549	s543
+B	b550	A543
+T	t550	o957 b550
+B	b551	t550
+S	s551	t5\\ h530\\ C543
+B	b553	s551 x
+T	t553	o882 b551 b553
+B	b562	t553
+T	t562	o985 b549 b562
+S	s562	t984\\ h984\\ t562
+B	b563	s562
+T	t563	o983 b563 b6
+B	b565	t563
+T	t565	o982 b565 b6
+B	b573	t565
+T	t573	o981 b573 b6
+B	b575	t573
+T	t575	o491 b980 b575 b6 b6
+B	b576	t575
+T	t576	o978 b576
+B	b581	t576
+T	t581	o529 b533 b543 b581 b6
+B	b582	t581
+T	t582	o14 b582
+B	b588	t582
+P	p591	Number 2471
+O	o591	location p578 p591
+T	t593	o591 b863
+B	b593	t593
+P	p597	Number 2473
+P	p598	Number 2550
+O	o598	location p597 p598
 NSummary!term_binding	term_binding	term_binding Summary
 O	o1034	term_binding
 NOcaml!str_let	str_let	str_let Ocaml
-O	o1035	str_let p1032 p1033
+O	o599	str_let p597 p598
 NOcaml!patt_var	patt_var	patt_var Ocaml
-P	p1035	Number 2209
-P	p1036	Number 2222
-O	o1036	patt_var p1035 p1036
+P	p611	Number 2490
+O	o611	patt_var p576 p611
 NOcaml!patt_done	patt_done	patt_done Ocaml
-O	o1037	patt_done p1032 p1033
-T	t1037	o1037
-B	b1037	t1037 fold_mk_bindn
-T	t1038	o1036 b1037
-B	b1038	t1038
+O	o612	patt_done p597 p598
+T	t616	o612
+B	b616	t616 fold_mk_bindn
+T	t617	o611 b616
+B	b617	t617
 NOcaml!apply	apply1038	apply Ocaml
-P	p1038	Number 2225
-O	o1038	apply1038 p1038 p1033
-P	p1039	Number 2266
-O	o1039	apply1038 p1038 p1039
+P	p627	Number 2493
+O	o627	apply1038 p627 p598
+P	p633	Number 2534
+O	o633	apply1038 p627 p633
 NOcaml!lid	lid	lid Ocaml
-P	p1040	Number 2234
-O	o1040	lid p1038 p1040
+P	p634	Number 2502
+O	o634	lid p627 p634
 P	p1041	String makeFoldC
 O	o1041	lid p1041
 T	t1041	o1041
 B	b1041	t1041
-T	t1042	o1040 b1041
-B	b1042	t1042
-P	p1042	Number 2235
-O	o1042	lid p1042 p1039
+T	t640	o634 b1041
+B	b640	t640
+P	p652	Number 2503
+O	o652	lid p652 p633
 P	p1043	Var _$item_bnd1
 O	o1043	var p1043
 T	t1043	o1043
 B	b1043	t1043
-T	t1044	o1042 b1043
-B	b1044	t1044
-T	t1045	o1039 b1042 b1044
-B	b1045	t1045
-P	p1045	Number 2267
-O	o1045	lid p1045 p1033
+T	t654	o652 b1043
+B	b654	t654
+T	t655	o633 b640 b654
+B	b655	t655
+P	p659	Number 2535
+O	o659	lid p659 p598
 O	o1046	lid p891
 T	t1046	o1046
 B	b1046	t1046
-T	t1047	o1045 b1046
-B	b1047	t1047
-T	t1048	o1038 b1045 b1047
-B	b1048	t1048
-T	t1049	o1035 b1038 b1048
-B	b1049	t1049
-T	t1050	o488 b1049 b496
-B	b1050	t1050
-T	t1051	o1035 b1050
-B	b1051	t1051 _$item_bnd1
-T	t1052	o1034 b884 b1051
-B	b1052	t1052
-T	t1053	o866 b1052
-B	b1053	t1053
-T	t1054	o1033 b1053
-B	b1054	t1054
-T	t1055	o b1054 b6
-B	b1055	t1055
-T	t1056	o b1031 b1055
-B	b1056	t1056
-T	t1057	o b1030 b1056
-B	b1057	t1057
-T	t1058	o b999 b1057
-B	b1058	t1058
-T	t1059	o b974 b1058
-B	b1059	t1059
-T	t1060	o b965 b1059
-B	b1060	t1060
-T	t1061	o b953 b1060
-B	b1061	t1061
-T	t1062	o b935 b1061
-B	b1062	t1062
-T	t1063	o b914 b1062
-B	b1063	t1063
-T	t1064	o b879 b1063
-B	b1064	t1064
-T	t1065	o b872 b1064
-B	b1065	t1065
-T	t1066	o b864 b1065
-B	b1066	t1066
-T	t1067	o b860 b1066
-B	b1067	t1067
-T	t1068	o b724 b1067
-B	b1068	t1068
-T	t1069	o b478 b1068
-B	b1069	t1069
-T	t1070	o b16 b1069
-B	b1070	t1070
-T	t1071	o b14 b1070
+T	t663	o659 b1046
+B	b663	t663
+T	t667	o627 b655 b663
+B	b667	t667
+T	t668	o599 b617 b667
+B	b668	t668
+T	t671	o488 b668 b496
+B	b671	t671
+T	t675	o599 b671
+B	b675	t675 _$item_bnd1
+T	t676	o1034 b884 b675
+B	b676	t676
+T	t679	o866 b676
+B	b679	t679
+T	t680	o598 b679
+B	b680	t680
+T	t681	o b680 b6
+B	b681	t681
+T	t690	o b593 b681
+B	b690	t690
+T	t691	o b588 b690
+B	b691	t691
+T	t694	o b524 b691
+B	b694	t694
+T	t698	o b1030 b694
+B	b698	t698
+T	t699	o b999 b698
+B	b699	t699
+T	t702	o b974 b699
+B	b702	t702
+T	t725	o b965 b702
+B	b725	t725
+T	t728	o b953 b725
+B	b728	t728
+T	t729	o b935 b728
+B	b729	t729
+T	t731	o b914 b729
+B	b731	t731
+T	t739	o b879 b731
+B	b739	t739
+T	t740	o b872 b739
+B	b740	t740
+T	t742	o b864 b740
+B	b742	t742
+T	t743	o b860 b742
+B	b743	t743
+T	t747	o b724 b743
+B	b747	t747
+T	t748	o b478 b747
+B	b748	t748
+T	t750	o b480 b748
+B	b750	t750
+T	t751	o b17 b750

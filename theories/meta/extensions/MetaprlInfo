@@ -17,4 +17,5 @@ MPFILES[] =
     meta_context_ind1
     meta_rewrite
     meta_context_terms2
+    meta_context_squash_terms
     meta_context_theory

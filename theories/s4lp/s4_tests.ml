@@ -54,6 +54,12 @@ interactive test12 :
 interactive test13 :
 	sequent { box[0]{box[0]{'a} or box[2]{'b}} >- concl {| not{box[1]{not{'a}}}; box[2]{'b} |} }
 
+interactive test15 :
+   sequent { >- concl {| box[1]{'a} => box[1]{not{box[1]{not{box[1]{'a}}}}} |} }
+
+interactive test16 :
+   sequent { >- concl {| box[1]{'a} => box[1]{not{box[2]{not{box[1]{'a}}}}} |} }
+
 doc <:doc< @modsection{Wise Men} >>
 
 declare m1
@@ -75,7 +81,6 @@ let wmT = unfold_wmT thenT simple_proverT
 interactive lemma0 :
 	sequent { box[0]{kwh[1]{m2}}; m2 >- concl{| box[1]{m2} |} }
 
-doc <:doc< This one is not provable >>
 interactive lemma1 :
    sequent { box[0]{kwh[1]{m2}}; m2 >- concl{| box[0]{m2} |} }
 
@@ -200,7 +205,7 @@ define unfold_NBK : NBK <-->
 		not{kwh[1]{c1}} & not{kwh[2]{c2}} & not{kwh[3]{c3} & not{kwh[4]{c4}}}
 	}
 
-define unfold_s0 : s0 <--> c1 & c2 & not{c3} & not{c4} & mch4_KAO
+define unfold_s0 : s0 <--> c1 & c2 & not{c3} & not{c4}
 define unfold_s1 : s1 <--> box[0]{c1 or c2 or c3 or c4}
 define unfold_s2 : s2 <-->
 	box[0]{
@@ -218,34 +223,75 @@ define unfold_s3 : s3 <-->
 		kwh[2]{c2}
 	}
 
+define unfold_shortKAO : shortKAO <-->
+   box[0]{
+      kwh[1]{c2} & kwh[1]{c3} & kwh[1]{c4} &
+      kwh[2]{c1} & kwh[2]{c3} & kwh[2]{c4}
+   }
 
 let unfold_mchT = byDefsT
-	[unfold_s3; unfold_s2; unfold_s1; unfold_s0; unfold_S;
-	 unfold_NBK; unfold_mch4_KAO; unfold_kwh]
+   [unfold_s3; unfold_s2; unfold_s1; unfold_s0; unfold_S;
+    unfold_NBK; unfold_mch4_KAO; unfold_shortKAO; unfold_kwh]
 
 interactive lemma3 :
-	sequent { s0; s2 >- concl {| kwh[1]{c1} & kwh[2]{c2} |} }
+	sequent { s0; s2; mch4_KAO >- concl {| kwh[1]{c1} & kwh[2]{c2} |} }
 
 interactive lemma4 :
-   sequent { s0; s2; NBK >- concl {| 'c6 |} }
+   sequent { s0; s2; NBK; mch4_KAO >- concl {| 'c6 |} }
 
 interactive muddy_children :
-   sequent { s0; s2; NBK >- concl {| box[1]{c1} & box[2]{c2} & box[3]{not{c3}} & box[4]{not{c4}} |} }
+   sequent { s0; s2; NBK; mch4_KAO >- concl {| box[1]{c1} & box[2]{c2} & box[3]{not{c3}} & box[4]{not{c4}} |} }
 
 interactive lemma5 :
-   sequent { NBK; s3 >- concl{| 'c6 |} }
+   sequent { NBK; s3; mch4_KAO >- concl{| 'c6 |} }
 
-interactive lemma6 :
-	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[1]{c1} |} }
+interactive mch4shortM1unfold :
+   sequent { s0; s1; box[0]{not{S}}; shortKAO; shortKAO >- concl {| box[1]{c1} |} }
 
-interactive lemma6b :
-	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[2]{c2} |} }
+interactive mch4shortM1unfoldFull :
+   sequent { s0; s1; box[0]{not{S}}; shortKAO; shortKAO; box[0]{not{S}} >- concl {| box[1]{c1} & box[2]{c2} |} }
 
-interactive muddy_children2 :
-	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[1]{c1} & box[2]{c2} |} }
+interactive mch4shortM1fold :
+   sequent { s0; box[0]{not{s1 => S}}; shortKAO; shortKAO >- concl {| box[1]{c1} |} }
+
+interactive mch4shortM1foldFull :
+   sequent { s0; box[0]{not{s1 => S}}; shortKAO; shortKAO; box[0]{not{S}} >- concl {| box[1]{c1} & box[2]{c2} |} }
+
+interactive mch4shortM2unfold :
+   sequent { s0; s1; box[0]{not{S}}; shortKAO >- concl {| box[1]{c1} |} }
+
+interactive mch4shortM2unfoldFull :
+   sequent { s0; s1; box[0]{not{S}}; shortKAO >- concl {| box[1]{c1} & box[2]{c2} |} }
+
+interactive mch4shortM2fold :
+   sequent { s0; box[0]{not{s1 => S}}; shortKAO >- concl {| box[1]{c1} |} }
+
+interactive mch4shortM2foldFull :
+   sequent { s0; box[0]{not{s1 => S}}; shortKAO >- concl {| box[1]{c1} & box[2]{c2} |} }
+
+interactive mch4longM1unfold :
+   sequent { s0; s1; box[0]{not{S}}; mch4_KAO; mch4_KAO >- concl {| box[1]{c1} |} }
+
+interactive mch4longM1unfoldFull :
+   sequent { s0; s1; box[0]{not{S}}; mch4_KAO; mch4_KAO; box[0]{not{S}} >- concl {| box[1]{c1} & box[2]{c2} |} }
+
+interactive mch4longM1fold :
+   sequent { s0; box[0]{not{s1 => S}}; mch4_KAO; mch4_KAO >- concl {| box[1]{c1} |} }
+
+interactive mch4longM1foldFull :
+   sequent { s0; box[0]{not{s1 => S}}; mch4_KAO; mch4_KAO; box[0]{not{S}} >- concl {| box[1]{c1} & box[2]{c2} |} }
+
+interactive mch4longM2unfold :
+   sequent { s0; s1; box[0]{not{S}}; mch4_KAO >- concl {| box[1]{c1} |} }
+
+interactive mch4longM2fold :
+   sequent { s0; box[0]{not{s1 => S}}; mch4_KAO >- concl {| box[1]{c1} |} }
+
+interactive mch4longM2foldFull :
+   sequent { s0; box[0]{not{s1 => S}}; mch4_KAO >- concl {| box[1]{c1} & box[2]{c2} |} }
 
 interactive wrong :
-	sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| box[3]{not{c3}} |} }
+	sequent { s0; box[0]{not{s1 => S}}; mch4_KAO >- concl {| box[3]{not{c3}} |} }
 
 interactive wrong2 :
-   sequent { s0; box[0]{not{box[0]{s1} => S}} >- concl {| 'c6 |} }
+   sequent { s0; box[0]{not{s1 => S}}; mch4_KAO >- concl {| 'c6 |} }

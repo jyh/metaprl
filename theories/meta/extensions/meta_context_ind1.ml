@@ -694,43 +694,43 @@ let check_hoist3 hoist1 hoist2 hoist3 =
    check_hoist2 (check_hoist2 hoist1 hoist2) hoist3
 
 (*
- * Search for a term to push.
+ * Search for a term to hoist.
  *)
-let rec search_hoist_term v i t =
+let rec search_hoist_term cancel v i t =
    if is_var_term t then
       None, t
    else if is_so_var_term t then
-      search_hoist_so_var_term v i t
+      search_hoist_so_var_term cancel v i t
    else if is_context_term t then
-      search_hoist_context_term v i t
+      search_hoist_context_term cancel v i t
    else if is_sequent_term t then
-      search_hoist_sequent_term v i t
+      search_hoist_sequent_term cancel v i t
    else
       let { term_op = op; term_terms = bterms } = dest_term t in
-      let hoist, bterms = search_hoist_bterm_list v i bterms in
+      let hoist, bterms = search_hoist_bterm_list cancel v i bterms in
          hoist, mk_term op bterms
 
-and search_hoist_so_var_term v i t =
+and search_hoist_so_var_term cancel v i t =
    let x, cs, ts = dest_so_var t in
-   let hoist, ts = search_hoist_term_list v i ts in
+   let hoist, ts = search_hoist_term_list cancel v i ts in
       hoist, mk_so_var_term x cs ts
 
-and search_hoist_context_term v i t =
+and search_hoist_context_term cancel v i t =
    let x, t, cs, ts = dest_context t in
-   let hoist1, t = search_hoist_term v i t in
-   let hoist2, ts = search_hoist_term_list v i ts in
+   let hoist1, t = search_hoist_term cancel v i t in
+   let hoist2, ts = search_hoist_term_list cancel v i ts in
    let hoist = check_hoist2 hoist1 hoist2 in
       hoist, mk_context_term x t cs ts
 
-and search_hoist_sequent_term v i t =
+and search_hoist_sequent_term cancel v i t =
    let { sequent_args = arg;
          sequent_hyps = hyps;
          sequent_concl = concl
        } = explode_sequent t
    in
-   let hoist1, arg = search_hoist_term v i arg in
-   let hoist2, hyps = search_hoist_hyps v i (SeqHyp.to_list hyps) in
-   let hoist3, concl = search_hoist_term v i concl in
+   let hoist1, arg = search_hoist_term cancel v i arg in
+   let hoist2, cancel, hyps = search_hoist_hyps cancel v i (SeqHyp.to_list hyps) in
+   let hoist3, concl = search_hoist_term cancel v i concl in
    let hoist3, hyps =
       match hoist3 with
          Some (0, cs, ts) ->
@@ -749,14 +749,15 @@ and search_hoist_sequent_term v i t =
    in
       hoist, mk_sequent_term seq
 
-and search_hoist_hyps v i = function
+and search_hoist_hyps cancel v i = function
    [] ->
-      None, []
+      None, cancel, []
  | h :: hyps ->
       match h with
          Hypothesis (x, t) ->
-            let hoist1, t = search_hoist_term v i t in
-            let hoist2, hyps = search_hoist_hyps v i hyps in
+            let hoist1, t = search_hoist_term cancel v i t in
+            let cancel = cancel || hoist1 <> None in
+            let hoist2, cancel, hyps = search_hoist_hyps cancel v i hyps in
             let hoist1, hyps =
                match hoist1 with
                   Some (0, cs, ts) ->
@@ -767,40 +768,44 @@ and search_hoist_hyps v i = function
                      None, Hypothesis (x, t) :: hyps
             in
             let hoist = check_hoist2 hoist1 hoist2 in
-               hoist, hyps
+               hoist, cancel, hyps
        | Context (x, cs, ts) ->
-            let hoist1, ts = search_hoist_term_list v i ts in
-            let hoist2, hyps = search_hoist_hyps v i hyps in
+            let hoist1, ts = search_hoist_term_list cancel v i ts in
+            let found = Lm_symbol.eq x v in
+            let cancel2 = cancel || found in
+            let hoist2, cancel2, hyps = search_hoist_hyps cancel2 v i hyps in
             let hoist3, hyps =
-               if Lm_symbol.eq x v then
+               if found then
                   if i = 0 then
                      None, Context (v_dst, cs, ts) :: Context (v_src, v_dst :: cs, ts) :: hyps
+                  else if cancel then
+                     None, Context (v_src, v_dst :: cs, ts) :: hyps
                   else
                      Some (pred i, cs, ts), Context (v_src, v_dst :: cs, ts) :: hyps
                else
                   None, Context (x, cs, ts) :: hyps
             in
             let hoist = check_hoist3 hoist1 hoist2 hoist3 in
-               hoist, hyps
+               hoist, cancel2, hyps
 
-and search_hoist_term_list v i tl =
+and search_hoist_term_list cancel v i tl =
    let hoist, tl =
       List.fold_left (fun (hoist1, tl) t ->
-            let hoist2, t = search_hoist_term v i t in
+            let hoist2, t = search_hoist_term cancel v i t in
             let hoist = check_hoist2 hoist1 hoist2 in
                hoist, t :: tl) (None, []) tl
    in
       hoist, List.rev tl
 
-and search_hoist_bterm v i bt =
+and search_hoist_bterm cancel v i bt =
    let { bvars = vars; bterm = t } = dest_bterm bt in
-   let hoist, t = search_hoist_term v i t in
+   let hoist, t = search_hoist_term cancel v i t in
       hoist, mk_bterm vars t
 
-and search_hoist_bterm_list v i btl =
+and search_hoist_bterm_list cancel v i btl =
    let hoist, btl =
       List.fold_left (fun (hoist1, btl) bt ->
-            let hoist2, bt = search_hoist_bterm v i bt in
+            let hoist2, bt = search_hoist_bterm cancel v i bt in
             let hoist = check_hoist2 hoist1 hoist2 in
                hoist, bt :: btl) (None, []) btl
    in
@@ -811,7 +816,8 @@ and search_hoist_bterm_list v i btl =
  *)
 let context_hoist_ind t_v i p =
    let v = context_var_of_sequent t_v in
-   let _, t_step = search_hoist_term v i (Sequent.goal p) in
+   let _, t_step = search_hoist_term false v i (Sequent.goal p) in
+      (* eprintf "@[<hv 3>step: %s@]@." (SimplePrint.string_of_term t_step); *)
       contextIndT t_v t_step
 
 let contextHoistIndT t_v i =

@@ -77,7 +77,7 @@ interactive_rw reduce_mk_bindn_succ {| reduce |} : <:xrewrite<
    mk_bind{x. mk_bind{n; y. e[x::y]}}
 >>
 
-interactive_rw reduce_mk_flat_vbind_nil : <:xrewrite<
+interactive_rw reduce_mk_flat_vbind_nil {| reduce |} : <:xrewrite<
    mk_flat_vbind{| >- C |}
    <-->
    C

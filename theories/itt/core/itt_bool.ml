@@ -45,7 +45,6 @@ doc <:doc<
 extends Itt_equal
 extends Itt_struct
 extends Itt_union
-extends Itt_set
 extends Itt_logic
 extends Itt_decidable
 extends Itt_sqsimple

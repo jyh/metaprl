@@ -32,7 +32,6 @@
 extends Itt_equal
 extends Itt_struct
 extends Itt_union
-extends Itt_set
 extends Itt_decidable
 
 open Basic_tactics

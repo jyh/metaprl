@@ -287,11 +287,11 @@ doc <:doc<
    in both $A$ and $B[x]$.
 >>
 
-prim dintersectionSubtype :
-   ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
-   ["subtype"] sequent { <H>; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent { <H> >- \subtype{ bisect{'A1; a1.'B1['a1]}; bisect{'A2; a2.'B2['a2]} } } =
-   it
+interactive dintersectionSubtype :
+   ["subtype"] sequent { <H> >- 'A1 subtype 'A2 }  -->
+   ["wf"] sequent { <H>; a: 'A2 >- "type"{'B2['a]} } -->
+   ["subtype"] sequent { <H>; a: 'A1 >- 'B1['a] subtype 'B2['a]} -->
+   sequent { <H> >- bisect{'A1; a1.'B1['a1]} subtype bisect{'A2; a2.'B2['a2]} }
 
 (************************************************************************
  * INTERACTIVE RULES                                                    *

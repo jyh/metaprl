@@ -925,55 +925,62 @@ doc <:doc< Introduction rules have identical semantics in pairwise and pointwise
    sequent { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } =
    it
 
-prim itt_isect.intersectionElimination {| elim [] |} 'H 'a :
+doc <:doc< In pairwise, even a much stronger rule (with <J['z]> in the "main" subgoal) is true >>
+
+(* OK *) prim itt_isect.intersectionElimination {| elim [] |} 'H 'a :
    [wf] sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'a in 'A } -->
    [main] ('t['x; 'z] : sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]>; z: 'B['a] >- 'T['z] }) -->
    sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x] } =
    't['x; 'x]
 
-prim itt_disect.dintersectionFormation 'A :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_disect.dintersectionFormation 'A :
    [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
    ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    bisect{'A; x.'B['x]}
 
-prim itt_disect.dintersectionEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_disect.dintersectionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- bisect{'A1; x1.'B1['x1]} = bisect{'A2; x2.'B2['x2]} in univ[i:l] } =
    it
 
-prim itt_disect.dintersectionType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_disect.dintersectionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    sequent { <H> >- "type"{bisect{'A; x. 'B['x]}} } =
    it
 
-prim itt_disect.dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
+(*XXX: will try to get rid of this one! *)
+(* questionable? *) prim itt_disect.dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
    [wf] sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
    ('t['u;'v] :
    sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
    sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
    't['u;it]
 
-prim itt_disect.dintersectionMemberEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_disect.dintersectionMemberEquality {| intro [] |} :
    [wf] sequent { <H>; x:'A >- "type"{'B['x]} } -->
    sequent { <H> >- 't1 = 't2 in 'A } -->
    sequent { <H> >- 't1 = 't2 in 'B['t1] } -->
    sequent { <H> >- 't1 = 't2 in bisect{'A; x.'B['x]} } =
    it
 
-prim itt_disect.disectElimination {| elim [] |} 'H bind{a,b.'T['a;'b]}:
+doc <:doc< This weak elimination rule is clearly correct >>
+
+(* OK *) prim itt_disect.disectElimination {| elim [] |} 'H bind{a,b.'T['a;'b]}:
    [main] ('t['x; 'a; 'b] :
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]>;  a:'A; b: 'B['a]  >- 'T['a;'b] }) -->
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'T['x;'x] } =
    't['x; 'x; 'x]
-
-prim itt_disect.dintersectionSubtype :
-   ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
-   ["subtype"] sequent { <H>; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent { <H> >- \subtype{ bisect{'A1; a1.'B1['a1]}; bisect{'A2; a2.'B2['a2]} } } =
-   it
 
 prim itt_image.img_type {| intro [] |}:
    sequent { <H> >- 'A Type } -->

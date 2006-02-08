@@ -5,7 +5,6 @@ THEORY_DEPS[] +=
     meta/extensions
     itt/core
     itt/reflection/core
-    itt/extensions/base
     itt/extensions/vector
 
 MLZFILES[] =

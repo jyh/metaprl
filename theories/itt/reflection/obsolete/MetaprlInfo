@@ -4,7 +4,6 @@ THEORYDESCR = Syntax Reflection for Computational Type Theory - Obsolete
 THEORY_DEPS[] +=
     itt/core
     itt/applications/function_spaces
-    itt/extensions/base
 
 # Library files
 MPFILES[] =

@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1998-2006 MetaPRL Group, Cornell University and California
+ * Institute of Technology.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +56,7 @@ extends Itt_decidable
 extends Itt_bool
 extends Itt_list
 extends Itt_ext_equal
-extends Itt_pointwise
+extends Itt_pairwise
 extends Itt_struct2
 extends Itt_struct3
 extends Itt_match
@@ -84,7 +85,7 @@ extends Itt_fun2
 extends Itt_union2
 extends Itt_prop_decide
 extends Itt_subset2
-extends Itt_pointwise2
+extends Itt_pairwise2
 extends Itt_record_label0
 extends Itt_record_label
 extends Itt_record0

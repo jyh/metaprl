@@ -43,7 +43,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2000-2006, Cornell University and California
+   Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -59,8 +60,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Alexei Kopylov
-   @email{kopylov@cs.cornell.edu}
+   Author: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 
@@ -75,29 +76,14 @@ extends Itt_isect
 extends Itt_tsquash
 extends Itt_subtype
 extends Itt_ext_equal
+extends Itt_pairwise
 doc docoff
 
-open Lm_debug
-open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
+open Basic_tactics
 
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Dtactic
-
-open Perv
 open Itt_equal
 open Itt_subtype
 open Itt_struct
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_disect%t"
 
 (************************************************************************
  * TERMS                                                                *
@@ -157,13 +143,6 @@ prim dintersectionType {| intro [] |} :
    sequent { <H> >- "type"{bisect{'A; x. 'B['x]}} } =
    it
 
-prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
-   [wf] sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
-   ('t['u;'v] :
-   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
-   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
-   't['u;it]
-
 doc <:doc<
    @modsubsection{Membership}
    Two elements $t1$ and $t2$ are equal in $@bisect{x@colon A; B[x]}$ if
@@ -198,10 +177,17 @@ doc <:doc<
 >>
 
 prim disectElimination {| elim [] |} 'H  bind{a,b.'T['a;'b]}:
-   [main] ('t['x; 'a; 'b] :
+   ('t['x; 'a; 'b] :
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]>;  a:'A; b: 'B['a]  >- 'T['a;'b] }) -->
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'T['x;'x] } =
    't['x; 'x; 'x]
+
+interactive disect_mem1 {| nth_hyp |} 'H :
+   sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'x in 'A }
+
+(* XXX: BUG: for some reason the nthHypT does not know how to use this rule correctly *)
+interactive disect_mem2 {| nth_hyp |} 'H :
+   sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'x in 'B['x] }
 
 doc <:doc<
    As a corollary of elimination rule we have that if
@@ -226,12 +212,10 @@ let disectCaseEqualityT t =
 (* disectElimination_eq is derived from disectMemberCaseEquality1/2
    (with the help of dintersectionTypeElimination).
    Therefore we can state disectMemberCaseEquality1/2 as primitive.
-   Note that in pairwise functionality we do not need dintersectionTypeElimination
-   to derive disectElimination_eq.
 *)
 
 interactive disectElimination_eq {| elim [] |} 'H bind{x.bind{a,b.'C['x;'a;'b]}} :
-   [main] sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]>;
+   sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]>;
                            a: 'A; u: 'a = 'x in 'A; b: 'B['a]; v: 'b = 'x in 'B['a]  >- 'C['x;'a;'b] } -->
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'C['x;'x;'x] }
 

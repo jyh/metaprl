@@ -3,7 +3,6 @@ THEORYDESCR = Syntax Reflection for Computational Type Theory - Core
 
 THEORY_DEPS[] +=
     itt/core
-    itt/extensions/base
     itt/extensions/vector
     meta/extensions
 

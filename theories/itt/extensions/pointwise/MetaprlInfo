@@ -6,7 +6,6 @@ THEORY_DEPS[] +=
 
 # Library files
 MPFILES[] =
-   itt_eta
-   itt_list_sloppy
-   itt_antiquotient
-   ctt_markov
+    itt_pointwise
+    itt_pointwise2
+    itt_pointwise_struct3

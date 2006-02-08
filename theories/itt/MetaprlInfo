@@ -60,6 +60,8 @@ PRINT_THEORIES[] =
     core/itt_record
     core/itt_record_exm
     core/itt_record_renaming
+    core/itt_pairwise
+    core/itt_pairwise2
     extensions/base/itt_antiquotient
     applications/datatypes/itt_collection
     applications/datatypes/itt_relation_str
@@ -83,8 +85,6 @@ PRINT_THEORIES[] =
     applications/algebra/itt_field_e
     applications/supinf/itt_order
     applications/supinf/itt_rat
-    core/itt_pointwise
-    core/itt_pointwise2
     reflection/core/itt_hoas_base
     reflection/core/itt_hoas_vector
     reflection/core/itt_hoas_debruijn

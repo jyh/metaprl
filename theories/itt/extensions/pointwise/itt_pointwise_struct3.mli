@@ -2,7 +2,7 @@ extends Itt_squash
 extends Itt_ext_equal
 extends Itt_struct2
 extends Itt_subtype
-extends Itt_pairwise2
+extends Itt_pointwise
 
 open Basic_tactics
 
@@ -14,6 +14,7 @@ open Basic_tactics
  * difirent for these functionalities
  *)
 rule substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
+   [wf] sequent { <H>; x: 'A; <J['x]>; y: 'B >- 'f['y] in 'A } -->
    [wf] sequent { <H>; x: 'A; <J['x]> >-  'g['x] in 'B } -->
    [equality] sequent { <H>; x: 'A; <J['x]> >- 'f['g['x]] ~ 'x } -->
    [main] sequent { <H>; y: 'B; <J['f['y]]> >- 'C['f['y]] } -->

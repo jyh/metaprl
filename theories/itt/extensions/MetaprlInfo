@@ -1,5 +1,6 @@
 DIRS[] =
     base
+    pointwise
 #    experimental
     rfun
     vector

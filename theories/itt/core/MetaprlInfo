@@ -26,7 +26,8 @@ MPFILES[] =
    itt_decidable
    itt_bool
    itt_ext_equal
-   itt_pointwise
+   itt_pairwise
+   itt_pairwise2
    itt_struct2
    itt_list
    itt_struct3
@@ -53,11 +54,11 @@ MPFILES[] =
    itt_quotient
    itt_list2
    itt_list_set
+   itt_list3
    itt_fun2
    itt_union2
    itt_prop_decide
    itt_subset2
-   itt_pointwise2
    itt_record_label0
    itt_record_label
    itt_record0

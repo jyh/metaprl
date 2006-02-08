@@ -49,17 +49,6 @@ val dest_disect : term -> var * term * term
 val mk_disect_term : var -> term -> term -> term
 
 (************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-rule dintersectionTypeElimination 'H 'a :
-   [wf] sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
-   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] } -->
-   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] }
-
-
-
-(************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 

@@ -829,7 +829,7 @@ doc <:doc< Introduction rules have identical semantics in pairwise and pointwise
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
-doc <:doc< Division/reminder axioms are incorrect and need to be fixed! >>
+doc <:doc< XXX: Division/reminder axioms are incorrect and need to be fixed! >>
 
 prim itt_int_ext.rem_baseReduce :
    sequent { <H> >- 0 <= 'a } -->
@@ -957,14 +957,6 @@ doc <:doc< Introduction rules have identical semantics in pairwise and pointwise
    sequent { <H> >- "type"{bisect{'A; x. 'B['x]}} } =
    it
 
-(*XXX: will try to get rid of this one! *)
-(* questionable? *) prim itt_disect.dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
-   [wf] sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
-   ('t['u;'v] :
-   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
-   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
-   't['u;it]
-
 doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
 
 (* OK *) prim itt_disect.dintersectionMemberEquality {| intro [] |} :
@@ -982,74 +974,103 @@ doc <:doc< This weak elimination rule is clearly correct >>
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'T['x;'x] } =
    't['x; 'x; 'x]
 
-prim itt_image.img_type {| intro [] |}:
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_image.img_type {| intro [] |}:
    sequent { <H> >- 'A Type } -->
    sequent { <H> >- Img{'A; x.'f<||>['x]} Type } = it
 
-prim itt_image.img_univ {| intro [] |}:
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_image.img_univ {| intro [] |}:
    sequent { <H> >- 'A in univ[i:l] } -->
    sequent { <H> >- Img{'A; x.'f<||>['x]} in univ[i:l] } = it
 
-prim itt_image.img_mem 'a :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_image.img_mem 'a :
    sequent { <H> >- 'a in 'A } -->
    sequent { <H> >- 'f['a] in Img{'A; x.'f<||>['x]} } = it
 
-prim itt_image.img_elim {| elim [ThinOption thinT] |} 'H :
+doc <:doc< This simple elimination rule is obviously correct. >>
+
+(* OK *) prim itt_image.img_elim {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- squash{'C['f['a]]} } -->
    sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- squash{'C['y]} } = it
 
-prim itt_inv_typing.dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
+(* XXX: We need to try to get rid of the itt_inv_typing rules! *)
+
+(* XXX: questionable? *) prim itt_inv_typing.dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
    [wf] sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
    ('t['u;'v] :
    sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
    sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
    't['u;it]
 
-prim itt_inv_typing.independentProductTypeElimination {| elim [ThinOption thinT] |} 'H :
+(* XXX: questionable? *) prim itt_inv_typing.dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
+   [wf] sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
+   ('t['u;'v] :
+   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
+   sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
+   't['u;it]
+
+(* XXX: questionable? *) prim itt_inv_typing.independentProductTypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t['u;'v;'w] :
    sequent { <H>; u:"type"{'A * 'B}; v:"type"{'A}; w:"type"{'B}; <J['u]> >- 'C['u] }) -->
    sequent { <H>; u:"type"{'A * 'B}; <J['u]> >- 'C['u] } =
    't['u;it;it]
 
-prim itt_inv_typing.functionTypeElimination {| elim [ThinOption thinT] |} 'H :
+(* XXX: questionable? *) prim itt_inv_typing.functionTypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t['u;'v; 'w] :
    sequent { <H>; u:"type"{'A -> 'B }; v:"type"{'A}; w:('A -> "type"{'B}); <J['u]> >- 'C['u] }) -->
    sequent { <H>; u:"type"{'A -> 'B }; <J['u]> >- 'C['u] } =
    't['u;it;it]
 
-prim itt_w.wFormation 'A :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_w.wFormation 'A :
    sequent { <H> >- 'A = 'A in univ[i:l] } -->
    ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    w{'A; x. 'B['x]}
 
-prim itt_w.wEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_w.wEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] } =
    it
 
-prim itt_w.wType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_w.wType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
    sequent { <H> >- "type"{w{'A1; y.'A2['y]}} } =
    it
 
-prim itt_w.treeFormation {| intro [] |} 'a :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_w.treeFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
    [main] ('f : sequent { <H> >- 'B['a] -> w{'A; x. 'B['x]} }) -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    sequent { <H> >- w{'A; x. 'B['x]} } =
    tree{'a; 'f}
 
-prim itt_w.treeEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_w.treeEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    sequent { <H> >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} } =
    it
 
-prim itt_w.wElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< This "weak-style" elimination rule can be verified to be correct >>
+
+(* OK *) prim itt_w.wElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('t['z; 'a; 'f; 'g] :
    sequent { <H>;
                     z: w{'A; x. 'B['x]};
@@ -1062,7 +1083,11 @@ prim itt_w.wElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; z: w{'A; x. 'B['x]}; <J['z]> >- 'T['z] } =
       tree_ind{'z; a, f, g. 't['z; 'a; 'f; 'g]}
 
-prim itt_prec.precEquality {| intro [] |} 'A :
+(* XXX: srec and prec type constructors need to be indexed by the universe levels!!! *)
+
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_prec.precEquality {| intro [] |} 'A :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H>; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
    [wf] sequent { <H>;
@@ -1079,19 +1104,31 @@ prim itt_prec.precEquality {| intro [] |} 'A :
            } =
    it
 
-prim itt_prec.precMemberFormation {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_prec.precMemberFormation {| intro [] |} :
    [main] ('t : sequent { <H> >- 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] }) -->
    [wf] sequent { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    sequent { <H> >- "prec"{T, x. 'B['T; 'x]; 'a} } =
    't
 
-prim itt_prec.precMemberEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_prec.precMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
    sequent { <H> >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} } =
    it
 
-prim itt_prec.precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[i:l] :
+doc <:doc<
+   Alexei says this rule is OK (once the universe level problem is taken care of);
+   Note that Mendler's thesis (that defines the prec type constructor and proves its
+   admissibility used the pairwise functionality, so we should be OK here).
+
+   XXX: see Mendler's thesis and make sure we formalized his rules correctly.
+>>
+
+(* OK; XXX: fix universe level problem (bug 530) *) prim itt_prec.precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[i:l] :
    [wf] sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'a in 'A } -->
    [main] ('g['r; 'Z; 'u; 'p; 'h] : sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
       Z: 'A -> univ[i:l];
@@ -1103,7 +1140,9 @@ prim itt_prec.precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]}
    sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['a] } =
    precind{'a; p, h. 'g['r; lambda{x.void}; lambda{x. it}; 'p; 'h]}
 
-prim itt_prec.precUnrollElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< Alexei says this rule is also OK >>
+
+(* OK *) prim itt_prec.precUnrollElimination {| elim [ThinOption thinT] |} 'H :
    ('g['r; 'y; 'u] : sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
              u: 'r = 'y in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a]
@@ -1112,7 +1151,9 @@ prim itt_prec.precUnrollElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['r] } =
    'g['r; 'r; it]
 
-prim itt_prec.precindEquality {| intro [] |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
+doc <:doc< Alexei says this rule is also OK >>
+
+(* OK *) prim itt_prec.precindEquality {| intro [] |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
    [wf] sequent { <H> >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
    [wf] sequent { <H>; Z: 'A -> univ[i:l];
              u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
@@ -1126,30 +1167,40 @@ prim itt_prec.precindEquality {| intro [] |} lambda{x. 'S['x]} (a:'A * "prec"{T,
            } =
    it
 
-prim itt_srec.srecFormation :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_srec.srecFormation :
    ('B['T] : sequent { <H>; T: univ[i:l] >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    srec{T. 'B['T]}
 
-prim itt_srec.srecEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_srec.srecEquality {| intro [] |} :
    [wf] sequent { <H>; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
    [wf] sequent { <H>; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B1['S1]; 'B1['S2]} } -->
    sequent { <H> >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[i:l] } =
    it
 
-prim itt_srec.srec_memberFormation {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_srec.srec_memberFormation {| intro [] |} :
    [wf] ('g : sequent { <H> >- 'B[srec{T. 'B['T]}] }) -->
    [wf] sequent { <H> >- "type"{(srec{T. 'B['T]})} } -->
    sequent { <H> >- srec{T. 'B['T]} } =
    'g
 
-prim itt_srec.srec_memberEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_srec.srec_memberEquality {| intro [] |} :
    sequent { <H> >- 'x1 = 'x2 in 'B[srec{T. 'B['T]}] } -->
    [wf] sequent { <H> >- "type"{(srec{T. 'B['T]})} } -->
    sequent { <H> >- 'x1 = 'x2 in srec{T. 'B['T]} } =
    it
 
-prim itt_srec.srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
+doc <:doc< srec is a simplified version of prec (actually srec is derivable from prec) >>
+
+(* OK *) prim itt_srec.srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
    [main] ('g['x; 'T; 'u; 'w; 'z] : sequent {
              <H>;
              x: srec{X. 'B['X]};
@@ -1163,12 +1214,16 @@ prim itt_srec.srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
    sequent { <H>; x: srec{X. 'B['X]}; <J['x]> >- 'C['x] } =
    srecind{'x; p, h. 'g['x; srec{X. 'B['X]}; it; 'p; 'h]}
 
-prim itt_srec.srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H :
+doc <:doc< srec is a simplified version of prec (actually srec is derivable from prec) >>
+
+(* OK *) prim itt_srec.srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H :
    [main] ('g['x; 'y; 'u] : sequent { <H>; x: srec{T. 'B['T]}; <J['x]>; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
    sequent { <H>; x: srec{T. 'B['T]}; <J['x]> >- 'C['x] } =
    'g['x; 'x; it]
 
-prim itt_srec.srecindEquality {| intro [] |} bind{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
+doc <:doc<  srec is a simplified version of prec (actually srec is derivable from prec) >>
+
+(* OK *) prim itt_srec.srecindEquality {| intro [] |} bind{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
    [wf] sequent { <H> >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
    [wf] sequent { <H>; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
    [wf] sequent { <H>; T1: univ[i:l]; z: \subtype{'T1; srec{T. 'B['T]}};
@@ -1181,7 +1236,9 @@ prim itt_srec.srecindEquality {| intro [] |} bind{x. 'S['x]} srec{T. 'B['T]} uni
            } =
    it
 
-prim itt_quotient.quotientType {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_quotient.quotientType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
    [wf] sequent { <H>; u: 'A >- 'E['u; 'u] } -->
@@ -1190,7 +1247,9 @@ prim itt_quotient.quotientType {| intro [] |} :
    sequent { <H> >- "type"{quot x, y: 'A // 'E['x; 'y]} } =
    it
 
-prim itt_quotient.quotientEquality {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_quotient.quotientEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    [wf] sequent { <H> >- "type"{quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
@@ -1200,20 +1259,26 @@ prim itt_quotient.quotientEquality {| intro [] |} :
            } =
    it
 
-prim itt_quotient.quotient_memberWeakEquality {| intro [AutoMustComplete] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_quotient.quotient_memberWeakEquality {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
-prim itt_quotient.quotient_memberEquality :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_quotient.quotient_memberEquality :
    [wf] sequent { <H> >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
    [wf] sequent { <H> >- 'a2 in quot x, y: 'A // 'E['x; 'y] } -->
    sequent { <H> >- esquash{'E['a1; 'a2]} } -->
    sequent { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
-prim itt_quotient.quotientElimination1 {| elim [ThinOption thinT] |} 'H :
+doc <:doc< This is a "weak-style" elimination rule and it can easily be verified as correct under pairwise >>
+
+(* OK *) prim itt_quotient.quotientElimination1 {| elim [ThinOption thinT] |} 'H :
    [wf] sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
    [main] sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]>;
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
@@ -1221,21 +1286,29 @@ prim itt_quotient.quotientElimination1 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] } =
    it
 
-prim itt_quotient.quotient_equalityElimination {| elim [ThinOption thinT] |} 'H :
+doc <:doc< This rule is trivially correct (since any true equashes are always equal) >>
+
+(* OK *) prim itt_quotient.quotient_equalityElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('g['e; 'v] : sequent { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]>; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
    sequent { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]> >- 'T['e] } =
    'g['e; it]
 
-prim itt_record_label.labelMember {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_record_label.labelMember {| intro [] |} :
    sequent { <H> >- label[t:t] in label } =
    it
 
-prim itt_record_label.reduce_eq_label_true {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_record_label.reduce_eq_label_true {| intro [] |} :
    sequent{ <H> >- label[x:t] = label[y:t]  in label} -->
    sequent{ <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'A}
       = it
 
-prim itt_record_label.reduce_eq_label_false {| intro [] |} :
+doc <:doc< Introduction rules have identical semantics in pairwise and pointwise, no need to re-verify >>
+
+(* OK *) prim itt_record_label.reduce_eq_label_false {| intro [] |} :
    sequent{ <H> >- label[x:t] <> label[y:t]  in label} -->
    sequent{ <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
       = it

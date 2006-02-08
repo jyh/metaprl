@@ -4,7 +4,6 @@ THEORYDESCR = Extensions to Computational Type Theory - Vector operations
 THEORY_DEPS[] +=
     meta/extensions
     itt/core
-    itt/extensions/base
 
 MLZFILES[] =
    itt_vec_theory

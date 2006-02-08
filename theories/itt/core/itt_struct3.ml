@@ -17,7 +17,7 @@ open Itt_ext_equal
  * difirent for these functionalities
  *)
 
-interactive substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
+interactive substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]} :
    [wf] sequent { <H>; x: 'A; <J['x]> >-  'g['x] in 'B } -->
    [equality] sequent { <H>; x: 'A; <J['x]> >- 'f['g['x]] ~ 'x } -->
    [main] sequent { <H>; y: 'B; <J['f['y]]> >- 'C['f['y]] } -->

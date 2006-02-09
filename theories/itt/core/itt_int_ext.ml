@@ -112,8 +112,8 @@ let resource reduce += [
    << ge_bool{'a; 'b} >>,    wrap_reduce unfold_ge_bool;
    << bneq_int{'a; 'b} >>,   wrap_reduce unfold_bneq_int;
 *)
-   << le_bool{'a;'a}>>, wrap_reduce (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC));
-   << ge_bool{'a;'a}>>, wrap_reduce (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC));
+   << le_bool{'a;'a}>>, wrap_reduce_crw (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC));
+   << ge_bool{'a;'a}>>, wrap_reduce_crw (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC));
 ]
 
 (*
@@ -211,11 +211,12 @@ let resource reduce += [
 	<<number[i:n] < number[j:n]>>, wrap_reduce reduce_lt_prop;
 	<<number[i:n] >= number[j:n]>>, wrap_reduce reduce_ge_prop;
    <<nequal{number[i:n]; number[j:n]}>>, wrap_reduce reduce_neq_prop;
+   <<"assert"{le_bool{'a; 'b}}>>, wrap_reduce fold_le;
 (*
    << le{'a; 'b} >>, wrap_reduce unfold_le;
    << nequal{'a; 'b} >>, wrap_reduce unfold_neq_int;
 *)
-   << le{'a;'a}>>, wrap_reduce (unfold_le thenC (addrC [Subterm 1] (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC))));
+   << le{'a;'a}>>, wrap_reduce_crw (unfold_le thenC (addrC [Subterm 1] (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC))));
 ]
 
 let resource elim += [
@@ -228,7 +229,7 @@ let resource elim += [
 	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_le_bool));
 	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)));
 	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_ge_bool));
-	]
+]
 
 let resource intro += [
 	<<number[i:n] > number[j:n]>>, wrap_intro (rw reduce_gt_prop 0);
@@ -240,7 +241,7 @@ let resource intro += [
 	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_le_bool) 0);
 	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)) 0);
 	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_ge_bool) 0);
-	]
+]
 
 let le_term = << 'x <= 'y >>
 let le_opname = opname_of_term le_term
@@ -887,7 +888,7 @@ let mul_Assoc2C = mul_Assoc2_rw
 doc docoff
 
 let resource reduce +=
-   << ('a *@ 'b) *@ 'c>>, wrap_reduce (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC tryC mul_Assoc2_rw)
+   << ('a *@ 'b) *@ 'c>>, wrap_reduce_crw (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC tryC mul_Assoc2_rw)
 
 let resource arith_unfold +=
 	<<- 'a>>, uni2negative1C

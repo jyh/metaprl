@@ -970,7 +970,7 @@ S	s1300	tbrarg\\ h3741\\ t1299
 B	b1304	s1300
 T	t1304	o1465 b1304
 B	b1306	t1304
-P	p1308	String "byDefsT [unfold_nat; unfold_le]"
+P	p1308	String "byDefsT [unfold_nat; unfold_ge]"
 O	o1315	ext_rule p1308
 T	t1315	o1312 b1304 b13
 B	b1315	t1315
@@ -1191,7 +1191,7 @@ B	b2995	s2970
 H	h1773	k t1189
 P	p3282	String "dT (-1)"
 O	o3282	ext_rule p3282
-T	t4132	o1320 b1196 b4095
+T	t4132	o1194 b4095 b1196
 B	b4135	t4132
 T	t4133	o1261 b4095 b1196
 VC	C4133	C\\ H\\ t4133
@@ -1226,6 +1226,8 @@ P	p1860	Var u
 O	o1861	var p1860
 T	t1861	o1861
 B	b1861	t1861
+NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
+O	o4219	ge_bool
 NItt_int_ext!le_bool	le_bool	le_bool Itt_int_ext
 O	o1954	le_bool
 NOcaml!fun	fun	fun Ocaml
@@ -1309,8 +1311,6 @@ P	p4217	String "sqSubstT << 'T['n1] ~ if ge_bool{'n1; 0} then 'T['n1] else unit 
 O	o4217	ext_rule p4217
 NItt_bool!ifthenelse	ifthenelse	ifthenelse Itt_bool
 O	o4218	ifthenelse
-NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
-O	o4219	ge_bool
 T	t4219	o4219 b4157 b1196
 B	b4219	t4219
 NItt_unit	Itt_unit	Itt_unit NIL
@@ -1328,14 +1328,14 @@ B	b4236	t4235
 T	t4236	o1936 b4236
 H	h2982	y t4236
 T	t4237	o1314 b4172 b4220
-P	p4248	String "byDefsT [unfold_ge; unfold_ge_bool; unfold_le]"
+P	p4248	String "byDefsT [unfold_ge_bool; unfold_ge]"
 O	o4248	ext_rule p4248
 P	p4252	String "rwh unfoldInd 0 thenT withT <<bind{x. if ge_bool{'x; 0} then 'T['x] else unit } >> (dT 0) ttca"
 O	o4252	ext_rule p4252
 B	b4260	t1215
 T	t685	o1304 b4157 b1262
 B	b685	t685
-P	p4303	String "byDefsT [unfold_ge_bool;unfold_lt] thenT rwh unfold_le_bool (-1) ttca"
+P	p4303	String "byDefsT [unfold_ge_bool;unfold_lt] thenT rwh unfold_ge_bool (-1) ttca"
 O	o4303	ext_rule p4303
 P	p4329	String "splitITE (-2) ttca"
 O	o4329	ext_rule p4329
@@ -1348,7 +1348,7 @@ P	p4589	String "rwh unfold_ge_bool (-1) thenT rw reduceC (-1) taa"
 O	o4589	ext_rule p4589
 P	p4703	String "assertT << 'x -@ 1 < 0 >> thenMT arithT ttca thenAT byDefT unfold_lt"
 O	o4703	ext_rule p4703
-P	p4871	String "byDefsT [unfold_ge_bool;unfold_lt] thenT rwh unfold_le_bool (-1) thenT dT (-1) thenT dT 0 ttca"
+P	p4871	String "byDefsT [unfold_ge_bool;unfold_lt] thenT rwh unfold_ge_bool (-1) thenT dT (-1) thenT dT 0 ttca"
 O	o4871	ext_rule p4871
 NItt_logic!false	false	false Itt_logic
 O	o3662	false
@@ -1750,7 +1750,7 @@ T	t3307	o1260 b1861 b1196
 B	b3307	t3307
 P	p3323	String "assumT 3 thenT assumT 4 thenT genAssumT [2] thenT autoT thenT moveToConclT 2 thenT dT (-1) thenT byDefT unfold_decidable"
 O	o3323	ext_rule p3323
-T	t3411	o1320 b1861 b1196
+T	t3411	o1194 b1196 b1861
 B	b3411	t3411
 P	p2595	String "dT 5 thenMT dT (-1) thenT autoT"
 O	o2595	ext_rule p2595
@@ -1767,7 +1767,7 @@ T	t5380	o1465 b5380
 B	b5381	t5380
 T	t5381	o1735 b5381
 B	b5382	t5381
-T	t5391	o1320 b1861 b4095
+T	t5391	o1194 b4095 b1861
 B	b5392	t5391
 VP	P5392	P\\ H\\ t1861
 B	b5393	P5392
@@ -6408,7 +6408,7 @@ P	p1190	String "arithRelInConcl2HypT thenMT dT (-3) thenMT arithT ttca"
 O	o1190	ext_rule p1190
 T	t835	o1310 b781 b13
 B	b838	t835
-P	p1212	String "rwh unfold_ge 0"
+P	p1212	String "idT"
 O	o1212	ext_rule p1212
 S	s841	tbrarg\\ h3741 h1049 h710\\ t4132
 B	b844	s841
@@ -6420,9 +6420,9 @@ T	t846	o b846 b13
 B	b847	t846
 T	t847	o1310 b787 b847
 B	b848	t847
-P	p1228	String "rwh unfold_le 0"
+P	p1228	String "rwh unfold_ge 0"
 O	o1228	ext_rule p1228
-T	t1228	o1954 b1196 b4095
+T	t1228	o4219 b4095 b1196
 B	b1231	t1228
 T	t1231	o1936 b1231
 S	s848	tbrarg\\ h3741 h1049 h710\\ t1231
@@ -6435,7 +6435,7 @@ T	t851	o b851 b13
 B	b858	t851
 T	t858	o1310 b846 b858
 B	b861	t858
-P	p1242	String "rwh unfold_le_bool 0"
+P	p1242	String "rwh unfold_ge_bool 0"
 O	o1243	ext_rule p1242
 T	t1250	o1949 b4095 b1196
 B	b1250	t1250
@@ -6500,14 +6500,14 @@ T	t952	o2335 b918 b13
 B	b1037	t952
 T	t1037	o1310 b1037 b13
 B	b1038	t1037
-P	p1388	String "byDefsT [unfold_ge;unfold_le]"
+P	p1388	String "byDefT unfold_ge"
 O	o1388	ext_rule p1388
-T	t1388	o1954 b4603 b2368
+T	t1388	o4219 b2368 b4603
 B	b1389	t1388
 T	t1395	o1936 b1389
 S	s968	tbrarg\\ h3741 h1049 h1297\\ t1395
 B	b978	s968
-T	t1400	o1954 b4095 b2368
+T	t1400	o4219 b2368 b4095
 B	b1400	t1400
 T	t1402	o1936 b1400
 H	h1402	"" t1402
@@ -6530,7 +6530,7 @@ T	t980	o b980 b13
 B	b1001	t980
 T	t1003	o1310 b944 b1001
 B	b1035	t1003
-P	p1035	String "rwh unfold_le_bool 0 thenT dT 0 thenMT dT 2  thenMT arithT ttca"
+P	p1035	String "rwh unfold_ge_bool 0 thenT dT 0 thenMT dT 2  thenMT arithT ttca"
 O	o1035	ext_rule p1035
 T	t1035	o2335 b979 b13
 B	b1036	t1035
@@ -6851,7 +6851,7 @@ T	t5237	o1312 b5234 b5237
 B	b5238	t5237
 T	t5238	o2335 b5238 b13
 B	b5239	t5238
-T	t5239	o1320 b5212 b1196
+T	t5239	o1194 b1196 b5212
 H	h5239	"" t5239
 T	t5240	o1194 b5212 b1196
 B	b5240	t5240
@@ -7107,7 +7107,7 @@ T	t5344	o1312 b5341 b5344
 B	b5345	t5344
 T	t5345	o2335 b5345 b13
 B	b5346	t5345
-T	t5346	o1320 b5212 b5312
+T	t5346	o1194 b5312 b5212
 B	b5347	t5346
 T	t5347	o1255 b5347 b5241
 S	s5347	tbrarg\\ h3741 h1556 h5209 h1558\\ t5347
@@ -7121,7 +7121,7 @@ B	b5351	t5350
 T	t5351	o1310 b5346 b5351
 B	b5352	t5351
 H	h5352	"" t5347
-T	t5352	o1320 b5247 b5312
+T	t5352	o1194 b5312 b5247
 B	b5353	t5352
 B	b5354	C5226
 T	t5354	o1255 b5353 b5354
@@ -7268,7 +7268,7 @@ T	t5452	o1312 b5442 b5452
 B	b5453	t5452
 T	t5453	o2335 b5453 b13
 B	b5454	t5453
-T	t5454	o1320 b5212 b736
+T	t5454	o1194 b736 b5212
 B	b5455	t5454
 T	t5455	o1255 b5455 b5241
 B	b5456	t5455 m
@@ -7284,7 +7284,7 @@ B	b5460	t5459
 T	t5460	o1310 b5454 b5460
 B	b5461	t5460
 B	b5462	t4563
-T	t5462	o1320 b5462 b1196
+T	t5462	o1194 b1196 b5462
 H	h5462	x t5462
 T	t5463	o1365 b5430 b5462
 H	h5463	x1 t5463
@@ -7296,7 +7296,7 @@ T	t5465	o1311 b5464 b13
 B	b5465	t5465
 T	t5466	o4207
 B	b5466	t5466
-T	t5467	o1320 b5466 b5212
+T	t5467	o1194 b5212 b5466
 B	b5467	t5467
 VC	C5467	C\\ J H\\ t5466
 B	b5468	C5467
@@ -7304,7 +7304,7 @@ T	t5468	o1255 b5467 b5468
 B	b5469	t5468 m1
 T	t5469	o1325 b1189 b5469
 H	h5469	_1 t5469
-T	t5470	o1320 b5462 b5247
+T	t5470	o1194 b5247 b5462
 H	h5470	x t5470
 S	s5470	tbrarg\\ h3741 h1556 h5209 h1558 h5469 h2097 h5470 h1773 h5463\\ C5431
 B	b5470	s5470
@@ -7580,7 +7580,7 @@ T	t5626	o1312 b2995 b5626
 B	b5627	t5626
 T	t5627	o2335 b5627 b13
 B	b5628	t5627
-T	t5628	o1320 b5430 b4095
+T	t5628	o1194 b4095 b5430
 B	b5629	t5628
 T	t5629	o1261 b4095 b5430
 VC	C5629	C\\ H\\ t5629
@@ -7611,14 +7611,14 @@ T	t5647	o1312 b1112 b5626
 B	b5648	t5647
 T	t5648	o2467 b5648 b13
 B	b5649	t5648
-T	t5649	o1320 b5212 b4095
+T	t5649	o1194 b4095 b5212
 B	b5650	t5649
 T	t5650	o1261 b4095 b5212
 VC	C5650	C\\ H\\ t5650
 B	b5651	C5650
 T	t5651	o1255 b5650 b5651
 H	h5651	_1 t5651
-T	t5652	o1320 b5247 b4095
+T	t5652	o1194 b4095 b5247
 B	b5652	t5652
 T	t5653	o1261 b4095 b5247
 VC	C5653	C\\ H\\ t5653
@@ -7826,7 +7826,7 @@ T	t5743	o b5742 b13
 B	b5743	t5743
 T	t5744	o1365 b1196 b4523
 H	h5744	"" t5744
-T	t5745	o1320 b4523 b4157
+T	t5745	o1194 b4157 b4523
 H	h5745	_1 t5745
 T	t5746	o1261 b4523 b1262
 VT	T5746	T\\ H\\ t5746
@@ -8184,7 +8184,7 @@ T	t5905	o1949 b4523 b685
 B	b5905	t5905
 T	t5906	o1936 b5905
 H	h5906	_4 t5906
-T	t5907	o1954 b1196 b5825
+T	t5907	o4219 b5825 b1196
 B	b5907	t5907
 T	t5908	o4218 b5907 b5827 b4220
 H	h5908	y t5908
@@ -8972,7 +8972,7 @@ T	t6244	o b6243 b13
 B	b6244	t6244
 T	t6245	o1310 b3289 b6244
 B	b6245	t6245
-T	t6246	o1320 b5466 b1196
+T	t6246	o1194 b1196 b5466
 H	h6246	"" t6246
 T	t6247	o1303 b1193 b5466 b4609
 H	h6247	y t6247
@@ -9302,7 +9302,7 @@ T	t6401	o1486
 B	b6402	t6401
 T	t6402	o1260 b6402 b1196
 B	b6403	t6402
-T	t6403	o1320 b6402 b4095
+T	t6403	o1194 b4095 b6402
 B	b6404	t6403
 T	t6404	o2195 b6403 b6404
 B	b6405	t6404
@@ -9361,7 +9361,7 @@ T	t6430	o2011 b6395 b6430
 B	b6431	t6430 a
 T	t6431	o1325 b1193 b6431
 H	h6431	x1 t6431
-T	t6432	o1320 b6402 b5212
+T	t6432	o1194 b5212 b6402
 B	b6432	t6432
 T	t6433	o2195 b6403 b6432
 B	b6433	t6433
@@ -9369,7 +9369,7 @@ T	t6434	o1255 b6433 b6407
 B	b6434	t6434 b
 T	t6435	o1325 b1193 b6434
 B	b6435	t6435
-T	t6436	o1320 b1861 b5212
+T	t6436	o1194 b5212 b1861
 B	b6436	t6436
 T	t6437	o2195 b6436 b6414
 B	b6437	t6437
@@ -9381,7 +9381,7 @@ T	t6440	o2011 b6435 b6439
 B	b6440	t6440
 T	t6441	o1255 b5557 b6440
 H	h6441	_1 t6441
-T	t6442	o1320 b6402 b5254
+T	t6442	o1194 b5254 b6402
 B	b6442	t6442
 T	t6443	o2195 b6403 b6442
 B	b6443	t6443
@@ -9389,7 +9389,7 @@ T	t6444	o1255 b6443 b6407
 B	b6444	t6444 b
 T	t6445	o1325 b1193 b6444
 B	b6445	t6445
-T	t6446	o1320 b1861 b5254
+T	t6446	o1194 b5254 b1861
 B	b6446	t6446
 T	t6447	o2195 b6446 b6414
 B	b6447	t6447
@@ -9414,7 +9414,7 @@ T	t6455	o1312 b6450 b6455
 B	b6456	t6455
 T	t6456	o1311 b6456 b13
 B	b6457	t6456
-T	t6457	o1320 b6402 b1196
+T	t6457	o1194 b1196 b6402
 B	b6458	t6457
 T	t6458	o2195 b6403 b6458
 B	b6459	t6458
@@ -9435,7 +9435,7 @@ T	t6465	o1312 b6465 b6455
 B	b6466	t6465
 T	t6466	o1311 b6466 b13
 B	b6467	t6466
-T	t6467	o1320 b6402 b5247
+T	t6467	o1194 b5247 b6402
 B	b6468	t6467
 T	t6468	o2195 b6403 b6468
 B	b6469	t6468
@@ -9443,7 +9443,7 @@ T	t6469	o1255 b6469 b6407
 B	b6470	t6469 b
 T	t6470	o1325 b1193 b6470
 B	b6471	t6470
-T	t6471	o1320 b1861 b5247
+T	t6471	o1194 b5247 b1861
 B	b6472	t6471
 T	t6472	o2195 b6472 b6414
 B	b6473	t6472
@@ -9615,7 +9615,7 @@ B	b6543	t6542
 H	h3542	y1 P6345
 T	t3543	o1304 b1196 b1262
 B	b3543	t3543
-T	t6543	o1320 b6402 b3543
+T	t6543	o1194 b3543 b6402
 B	b6544	t6543
 T	t6544	o2195 b6403 b6544
 B	b6545	t6544
@@ -9623,7 +9623,7 @@ T	t6545	o1255 b6545 b6407
 B	b6546	t6545 b
 T	t6546	o1325 b1193 b6546
 B	b6547	t6546
-T	t3548	o1320 b1861 b3543
+T	t3548	o1194 b3543 b1861
 B	b3549	t3548
 T	t6547	o2195 b3549 b6414
 B	b6548	t6547
@@ -9747,7 +9747,7 @@ P	p4142	String "selT 2 (dT 0) thenMT withT << 'm +@ 1 >> (dT 0) thenT byDefT red
 O	o4142	ext_rule p4142
 T	t6599	o2335 b6591 b13
 B	b6600	t6599
-T	t6600	o1320 b1196 b5212
+T	t6600	o1194 b5212 b1196
 H	h6600	v1 t6600
 T	t6601	o1365 b1196 b6402
 B	b6601	t6601
@@ -9759,7 +9759,7 @@ T	t6604	o1325 b1193 b6603
 H	h6604	y t6604
 H	h6605	y2 t6601
 H	h6606	z P6405
-T	t6606	o1320 b5247 b6402
+T	t6606	o1194 b6402 b5247
 S	s6606	tbrarg\\ h3741 h1587 h6600 h3744 h6604 h6577 h6589 h3539 h6605 h6606\\ t6606
 B	b6606	s6606
 T	t6607	o b5985 b6452
@@ -9996,7 +9996,7 @@ B	b6705	t6704
 T	t6705	o2335 b6705 b13
 B	b6706	t6705
 H	h6706	"" P6703
-T	t6706	o1320 b6402 b4996
+T	t6706	o1194 b4996 b6402
 B	b6707	t6706
 T	t6707	o2195 b6403 b6707
 B	b6708	t6707
@@ -10004,7 +10004,7 @@ T	t6708	o1255 b6708 b6407
 B	b6709	t6708 b
 T	t6709	o1325 b1193 b6709
 B	b6710	t6709
-T	t6710	o1320 b1861 b4996
+T	t6710	o1194 b4996 b1861
 B	b6711	t6710
 T	t6711	o2195 b6711 b6414
 B	b6712	t6711

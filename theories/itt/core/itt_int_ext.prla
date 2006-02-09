@@ -648,14 +648,14 @@ NSummary!prim	prim	prim Summary
 O	o1296	prim
 T	t1296	o1296 b17
 B	b1296	t1296
+NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
+O	o1309	ge_bool
 NItt_int_ext!le_bool	le_bool	le_bool Itt_int_ext
 O	o1301	le_bool
-P	p1303	String unfold_le_bool
+P	p1303	String unfold_ge_bool
 NItt_bool	Itt_bool	Itt_bool NIL
 NItt_bool!bnot	bnot	bnot Itt_bool
 O	o1304	bnot
-NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
-O	o1309	ge_bool
 P	p1311	String unfold_ge_bool
 NItt_int_ext!bneq_int	bneq_int	bneq_int Itt_int_ext
 O	o1318	bneq_int
@@ -848,13 +848,13 @@ P	p1955	String " "
 O	o1955	string1857 p1955
 T	t1955	o1955
 B	b1955	t1955
-NItt_int_ext!le	le1967	le Itt_int_ext
-O	o1968	le1967
-P	p1970	String unfold_le
+NItt_int_ext!ge	ge	ge Itt_int_ext
+O	o1976	ge
+NItt_int_ext!le	le	le Itt_int_ext
+O	o1968	le
+P	p1970	String unfold_ge
 NItt_bool!assert	assert	assert Itt_bool
 O	o1971	assert
-NItt_int_ext!ge	ge1975	ge Itt_int_ext
-O	o1976	ge1975
 P	p1978	String unfold_ge
 NItt_int_ext!nequal	nequal	nequal Itt_int_ext
 O	o1984	nequal
@@ -1257,7 +1257,7 @@ T	t1126	o1292 b1083 b1090
 B	b1126	t1126
 T	t1127	o1295 b1090 b1083
 B	b1127	t1127
-T	t1134	o1301 b1083 b1090
+T	t1134	o1309 b1090 b1083
 B	b1134	t1134
 T	t1135	o1304 b1127
 B	b1135	t1135
@@ -1287,7 +1287,7 @@ T	t1179	o1179
 B	b1180	t1179
 T	t1198	o1304 b1134
 B	b1199	t1198
-T	t1199	o1301 b1083 b1083
+T	t1199	o1309 b1083 b1083
 B	b1206	t1199
 T	t1206	o1309 b1083 b1083
 B	b1207	t1206
@@ -1333,7 +1333,7 @@ NSummary!msequent	msequent	msequent Summary
 O	o2190	msequent
 P	p2561	String le_bool_wf
 O	o2563	rule p2561
-P	p1245	String "rwh unfold_le_bool 0 ttca"
+P	p1245	String "rwh unfold_ge_bool 0 ttca"
 O	o1245	ext_rule p1245
 P	p2744	String ge_bool_wf
 O	o2744	rule p2744
@@ -1429,23 +1429,23 @@ T	t2561	o b6 b2561
 B	b2562	t2561
 T	t2568	o b76 b2562
 B	b2568	t2568
-T	t1606	o1968 b1083 b1090
+T	t1606	o1976 b1090 b1083
 B	b1606	t1606
 T	t1611	o1971 b1134
 B	b1614	t1611
 T	t1619	o1976 b1083 b1090
 B	b1619	t1619
-T	t1622	o1968 b1090 b1083
+T	t1622	o1976 b1083 b1090
 B	b1622	t1622
 T	t1628	o1984 b1083 b1090
 B	b1628	t1628
 T	t1631	o1971 b1150
 B	b1631	t1631
-T	t1635	o1968 b2063 b2064
+T	t1635	o1976 b2064 b2063
 B	b1635	t1635
 T	t1646	o1984 b2063 b2064
 B	b1646	t1646
-T	t1647	o1968 b1083 b1083
+T	t1647	o1976 b1083 b1083
 B	b1647	t1647
 P	p609	String unfold_lt
 O	o609	lid p609
@@ -1487,7 +1487,7 @@ P	p1677	Var _$item_bnd13
 O	o1677	var p1677
 T	t1677	o1677
 B	b1678	t1677
-T	t1719	o1968 b1171 b1172
+T	t1719	o1976 b1172 b1171
 B	b1722	t1719
 P	p1726	Var _$item_bnd14
 O	o1727	var p1726
@@ -1518,7 +1518,7 @@ T	t5933	o1295 b2063 b2064
 B	b5933	t5933
 T	t5960	o1971 b5933
 B	b5960	t5960
-T	t5961	o1301 b2063 b2064
+T	t5961	o1309 b2064 b2063
 B	b5961	t5961
 T	t5962	o1971 b5961
 B	b5962	t5962
@@ -1885,9 +1885,9 @@ P	p2382	String complete_unless_member
 O	o2382	lid p2382
 T	t2383	o2382
 B	b2383	t2383
-T	t2429	o1301 b2254 b2272
+T	t2429	o1309 b2272 b2254
 B	b2429	t2429
-T	t2432	o1301 b2268 b2273
+T	t2432	o1309 b2273 b2268
 B	b2432	t2432
 T	t2443	o2132 b1260 b2429 b2432
 S	s2443	tbrarg\\ h2250\\ t2443
@@ -2207,7 +2207,7 @@ T	t8973	o2185 b8972
 B	b8973	t8973
 P	p2276	String le_wf
 O	o2276	rule p2276
-T	t2821	o1968 b2737 b2749
+T	t2821	o1976 b2749 b2737
 B	b2821	t2821
 T	t2823	o1161 b2821
 S	s2823	tbrarg\\ h2250\\ t2823
@@ -2218,7 +2218,7 @@ T	t2831	o2128 b2763 b2831
 B	b2835	t2831
 T	t2835	o2128 b2746 b2835
 B	b2836	t2835
-P	p2287	String "rwh unfold_le 0 thenT rwh unfold_le_bool 0 thenT autoT"
+P	p2287	String "rwh unfold_ge 0 thenT rwh unfold_ge_bool 0 thenT autoT"
 O	o2287	ext_rule p2287
 T	t2836	o2190 b2823 b2789
 B	b2839	t2836
@@ -2243,7 +2243,7 @@ T	t2884	o2128 b2763 b2883
 B	b2884	t2884
 T	t2885	o2128 b2746 b2884
 B	b2885	t2885
-P	p2315	String "rwh unfold_ge 0 thenT autoT"
+P	p2315	String "autoT"
 O	o2315	ext_rule p2315
 T	t2891	o2190 b2882 b2789
 B	b2891	t2891
@@ -2257,7 +2257,7 @@ T	t8995	o2185 b8994
 B	b8995	t8995
 P	p1316	String le_refl
 O	o1316	rule p1316
-T	t1317	o1968 b2737 b2737
+T	t1317	o1976 b2737 b2737
 S	s1317	tbrarg\\ h2250\\ t1317
 B	b1317	s1317
 T	t1349	o2130 b1317
@@ -2329,7 +2329,7 @@ T	t9027	o b9027 b17
 B	b9028	t9027
 T	t9028	o2188 b9024 b9028
 B	b9029	t9028
-P	p725	String "onClausesT [2;0] (rwh (unfold_ge thenC unfold_le)) ttca"
+P	p725	String "onClausesT [2;0] (rwh unfold_ge) ttca"
 O	o725	ext_rule p725
 H	h	_1010 t2881
 S	s259	tbrarg\\ h2250 h\\ t2931
@@ -2376,7 +2376,7 @@ T	t14	o2128 b2763 b7
 B	b14	t14
 T	t15	o2128 b2746 b14
 B	b15	t15
-P	p4920	String "rw unfold_ge 0"
+P	p4920	String "idT"
 O	o4921	ext_rule p4920
 T	t4922	o b3216 b4921
 B	b4922	t4922
@@ -2388,7 +2388,7 @@ T	t4930	o2190 b4912 b4929
 B	b4930	t4930
 T	t9046	o2189 b4930 b17
 B	b9046	t9046
-T	t4942	o1968 b3509 b4899
+T	t4942	o1976 b4899 b3509
 S	s4942	tbrarg\\ h2250\\ t4942
 B	b4942	s4942
 T	t4944	o2190 b4942 b4929
@@ -2399,9 +2399,9 @@ T	t9048	o b9047 b17
 B	b9048	t9048
 T	t9049	o2188 b9046 b9048
 B	b9049	t9049
-P	p4949	String "rw unfold_le 0"
+P	p4949	String "rw unfold_ge 0"
 O	o4949	ext_rule p4949
-T	t4959	o1301 b3509 b4899
+T	t4959	o1309 b4899 b3509
 B	b4959	t4959
 T	t4961	o1971 b4959
 S	s4961	tbrarg\\ h2250\\ t4961
@@ -2414,7 +2414,7 @@ T	t9051	o b9050 b17
 B	b9051	t9051
 T	t9052	o2188 b9047 b9051
 B	b9052	t9052
-P	p4974	String "rwh unfold_le_bool 0"
+P	p4974	String "rwh unfold_ge_bool 0"
 O	o4975	ext_rule p4974
 T	t4983	o1295 b4899 b3509
 B	b4985	t4983
@@ -2464,7 +2464,7 @@ T	t9063	o b9063 b17
 B	b9064	t9063
 T	t9064	o2188 b9060 b9064
 B	b9065	t9064
-P	p5046	String "rw (unfold_ge thenC unfold_le) 2"
+P	p5046	String "rw unfold_ge 2"
 O	o5046	ext_rule p5046
 S	s5021	tbrarg\\ h2250 h\\ t4095
 B	b5022	s5021
@@ -2472,7 +2472,7 @@ T	t5022	o2190 b5022 b4929
 B	b5023	t5022
 T	t9065	o2189 b5023 b17
 B	b9066	t9065
-T	t5046	o1301 b2749 b2737
+T	t5046	o1309 b2737 b2749
 B	b5047	t5046
 T	t5047	o1971 b5047
 H	h5047	_1010 t5047
@@ -2486,7 +2486,7 @@ T	t9067	o b9067 b17
 B	b9068	t9067
 T	t9068	o2188 b9066 b9068
 B	b9069	t9068
-P	p5075	String "rwh unfold_le_bool 2 ttca"
+P	p5075	String "rwh unfold_ge_bool 2 ttca"
 O	o5075	ext_rule p5075
 T	t9069	o2188 b9067 b17
 B	b9070	t9069
@@ -2634,7 +2634,7 @@ T	t9124	o b9124 b17
 B	b9125	t9124
 T	t9125	o2188 b9123 b9125
 B	b9126	t9125
-P	p351	String "rwh unfold_le_bool 2"
+P	p351	String "rwh unfold_ge_bool 2"
 O	o351	ext_rule p351
 H	h4095	_1010 t4095
 S	s351	tbrarg\\ h2250 h4095 h264 h4180\\ t5197
@@ -2690,7 +2690,7 @@ T	t372	o2132 b2133 b2749 b3214
 H	h9142	w t372
 T	t377	o1330 b3214 b2749
 H	h9145	w t377
-P	p384	String "rw (unfold_ge thenC unfold_le) 3"
+P	p384	String "rw unfold_ge 3"
 O	o384	ext_rule p384
 H	h367	_1010 t367
 S	s367	tbrarg\\ h2250 h h264 h326 h367\\ t5197
@@ -2699,7 +2699,7 @@ T	t368	o2190 b368 b5211
 B	b370	t368
 T	t9152	o2189 b370 b17
 B	b9153	t9152
-T	t384	o1301 b3214 b2749
+T	t384	o1309 b2749 b3214
 B	b385	t384
 T	t385	o1971 b385
 H	h385	_1010 t385
@@ -2713,7 +2713,7 @@ T	t9154	o b9154 b17
 B	b9155	t9154
 T	t9155	o2188 b9153 b9155
 B	b9156	t9155
-P	p392	String "rwh unfold_le_bool 3"
+P	p392	String "rwh unfold_ge_bool 3"
 O	o392	ext_rule p392
 T	t392	o1295 b2749 b3214
 B	b394	t392
@@ -2758,7 +2758,7 @@ T	t9166	o2188 b9166 b17
 B	b9167	t9166
 T	t9167	o417 b2187 b9167 b17 b17
 B	b9168	t9167
-P	p424	String "rw (unfold_ge thenC unfold_le) 0"
+P	p424	String "rw unfold_ge 0"
 O	o424	ext_rule p424
 H	h377	_1010 t377
 S	s377	tbrarg\\ h2250 h h264 h326 h377\\ t5197
@@ -2767,7 +2767,7 @@ T	t378	o2190 b378 b5211
 B	b379	t378
 T	t9168	o2189 b379 b17
 B	b9169	t9168
-T	t425	o1301 b3214 b2737
+T	t425	o1309 b2737 b3214
 B	b425	t425
 T	t426	o1971 b425
 S	s426	tbrarg\\ h2250 h h264 h326 h377\\ t426
@@ -3005,7 +3005,7 @@ P	p8060	String lt_bool2le_bool_rw
 O	o8060	cond_rewrite p8060
 T	t8060	o2302 b1083 b2330
 B	b8060	t8060
-T	t8061	o1301 b8060 b1090
+T	t8061	o1309 b1090 b8060
 B	b8061	t8061
 P	p8061	String "rwh lt_DiscretC 0 taa"
 O	o8061	ext_rule p8061
@@ -3214,7 +3214,7 @@ T	t9487	o b9487 b17
 B	b9488	t9487
 T	t9488	o2188 b9484 b9488
 B	b9489	t9488
-P	p1951	String "rwh unfold_le 0 thenT rwh unfold_le_bool 0 thenT dT 0 ttca"
+P	p1951	String "rwh unfold_ge 0 thenT rwh unfold_ge_bool 0 thenT dT 0 ttca"
 O	o1952	ext_rule p1951
 H	h4082	_1010 t4082
 S	s1479	tbrarg\\ h2250 h4082\\ t2821
@@ -3271,7 +3271,7 @@ T	t4423	o2128 b2763 b2678
 B	b4423	t4423
 T	t4425	o2128 b2746 b4423
 B	b4426	t4425
-P	p2708	String "byDefT unfold_max thenT splitITE 0 thenT byDefT reduceC thenT rwh unfold_le 0 ttca"
+P	p2708	String "byDefT unfold_max thenT splitITE 0 thenT byDefT reduceC thenT rwh unfold_ge 0 ttca"
 O	o2708	ext_rule p2708
 T	t2708	o2190 b2677 b2789
 B	b2708	t2708
@@ -3285,7 +3285,7 @@ T	t9514	o2185 b9513
 B	b9514	t9514
 P	p33	String max_self3
 O	o33	rule p33
-T	t308	o1968 b2737 b39
+T	t308	o1976 b39 b2737
 S	s308	tbrarg\\ h2250\\ t308
 B	b308	s308
 T	t309	o2130 b308
@@ -3308,7 +3308,7 @@ T	t9525	o2185 b9524
 B	b9525	t9525
 P	p608	String max_self4
 O	o608	rule p608
-T	t608	o1968 b2749 b39
+T	t608	o1976 b39 b2749
 S	s608	tbrarg\\ h2250\\ t608
 B	b608	s608
 T	t609	o2130 b608
@@ -3331,7 +3331,7 @@ T	t9536	o2185 b9535
 B	b9536	t9536
 P	p4197	String min_self1
 O	o4197	rule p4197
-T	t4197	o1968 b754 b2737
+T	t4197	o1976 b2737 b754
 S	s4197	tbrarg\\ h2250\\ t4197
 B	b4344	s4197
 T	t4344	o2130 b4344
@@ -3340,7 +3340,7 @@ T	t4434	o2128 b2763 b4345
 B	b4434	t4434
 T	t4441	o2128 b2746 b4434
 B	b4442	t4441
-P	p4347	String "byDefT unfold_min thenT splitITE 0 thenT byDefT reduceC thenT rwh unfold_le 0 ttca"
+P	p4347	String "byDefT unfold_min thenT splitITE 0 thenT byDefT reduceC thenT rwh unfold_ge 0 ttca"
 O	o4347	ext_rule p4347
 T	t4347	o2190 b4344 b2789
 B	b4352	t4347
@@ -3354,7 +3354,7 @@ T	t9547	o2185 b9546
 B	b9547	t9547
 P	p4400	String min_self2
 O	o4400	rule p4400
-T	t4400	o1968 b754 b2749
+T	t4400	o1976 b2749 b754
 S	s4400	tbrarg\\ h2250\\ t4400
 B	b4401	s4400
 T	t4401	o2130 b4401
@@ -3557,7 +3557,7 @@ T	t9646	o b9646 b17
 B	b9647	t9646
 T	t9647	o2188 b9643 b9647
 B	b9648	t9647
-P	p5745	String "assumT 3 thenT byDefT reduceC thenT rwh unfold_le (-1) thenT rwh unfold_le_bool (-1) thenT dT (-1) ttca"
+P	p5745	String "assumT 3 thenT byDefT reduceC thenT rwh unfold_ge (-1) thenT rwh unfold_ge_bool (-1) thenT dT (-1) ttca"
 O	o5745	ext_rule p5745
 S	s5737	tbrarg\\ h2250 h5720 h4180\\ t5721
 B	b5738	s5737
@@ -4272,7 +4272,7 @@ P	p5968	String Definition
 O	o5968	comment_string p5968
 T	t5968	o5968
 B	b5968	t5968
-T	t4986	o1968 b2168 b2737
+T	t4986	o1976 b2737 b2168
 S	s4986	tbrarg\\ h2250\\ t4986
 B	b4986	s4986
 T	t4988	o2130 b4986
@@ -4296,7 +4296,7 @@ T	t5000	o2128 b4995 b5000
 B	b5001	t5000
 T	t5001	o2128 b4988 b5001
 B	b5002	t5001
-T	t5008	o1968 b2168 b1083
+T	t5008	o1976 b1083 b2168
 B	b5008	t5008
 T	t5009	o1330 b1083 b1090
 B	b5009	t5009
@@ -4395,7 +4395,7 @@ T	t5241	o1262 b2737 b3214
 B	b5241	t5241
 T	t5250	o1262 b2749 b3214
 B	b5250	t5250
-T	t5251	o1968 b5241 b5250
+T	t5251	o1976 b5250 b5241
 S	s5251	tbrarg\\ h2250\\ t5251
 B	b5251	s5251
 T	t5252	o2130 b5251
@@ -4411,7 +4411,7 @@ T	t5299	o2302 b2737 b2749
 B	b5299	t5299
 T	t5300	o1262 b5299 b3214
 B	b5300	t5300
-T	t5302	o1968 b5292 b5300
+T	t5302	o1976 b5300 b5292
 S	s5302	tbrarg\\ h2250\\ t5302
 B	b5302	s5302
 T	t5303	o2130 b5302
@@ -4468,7 +4468,7 @@ T	t5774	o2128 b5760 b5774
 B	b5775	t5774
 T	t5775	o2128 b5757 b5775
 B	b5776	t5775
-P	p4652	String "byDefsT [unfold_int_seg; unfold_le]"
+P	p4652	String "byDefsT [unfold_int_seg; unfold_ge]"
 O	o4652	ext_rule p4652
 T	t5776	o b5759 b17
 B	b5777	t5776
@@ -4507,7 +4507,7 @@ T	t5926	o2128 b5760 b5925
 B	b5926	t5926
 T	t5927	o2128 b5757 b5926
 B	b5927	t5927
-P	p4690	String "assumT 4 thenT byDefsT [unfold_int_seg; unfold_ge; unfold_le]"
+P	p4690	String "assumT 4 thenT byDefsT [unfold_int_seg; unfold_ge]"
 O	o4691	ext_rule p4690
 T	t5928	o b5846 b17
 B	b5928	t5928
@@ -5739,7 +5739,7 @@ T	t11395	o4691 b2187 b11394 b17 b17
 B	b11395	t11395
 T	t11396	o2185 b11395
 B	b11396	t11396
-P	p11405	String "byDefsT [unfold_int_seg; unfold_ge; unfold_le]"
+P	p11405	String "byDefsT [unfold_int_seg; unfold_ge]"
 O	o11405	ext_rule p11405
 T	t11405	o b6051 b17
 B	b11405	t11405
@@ -5795,7 +5795,7 @@ T	t335	o b614 b17
 B	b336	t335
 T	t336	o348 b336
 B	b337	t336
-T	t653	o1968 b1171 b1171
+T	t653	o1976 b1171 b1171
 B	b657	t653
 T	t338	o b657 b17
 B	b338	t338
@@ -5819,7 +5819,7 @@ T	t531	o b734 b17
 B	b533	t531
 T	t533	o348 b533
 B	b602	t533
-T	t788	o1301 b1171 b1171
+T	t788	o1309 b1171 b1171
 B	b789	t788
 T	t602	o b789 b17
 B	b603	t602
@@ -8401,7 +8401,7 @@ T	t7195	o2128 b2746 b7194
 B	b7195	t7195
 T	t7196	o24 b17 b7195 b63 b17
 B	b7196	t7196
-P	p7242	String "byDefT unfold_le"
+P	p7242	String "byDefT unfold_ge"
 O	o7242	ext_rule p7242
 T	t7242	o2188 b4092 b17
 B	b7242	t7242
@@ -8433,9 +8433,9 @@ T	t7286	o2185 b7284
 B	b7286	t7286
 P	p7323	String "assertT << ('a >= 'b) ~ (('a -@ 'b) +@ 'b)>= (0 +@ 'b) >> thenAT reduceT ttca"
 O	o7323	ext_rule p7323
-P	p7331	String "rwh unfold_ge 2 thenT rwh unfold_le 2 thenT rwh unfold_le_bool 2 thenT rwh lt_bool_addMono_rw 2 taa"
+P	p7331	String "rwh unfold_ge 2 thenT rwh unfold_ge_bool 2 thenT rwh lt_bool_addMono_rw 2 taa"
 O	o7331	ext_rule p7331
-P	p7341	String "rwh unfold_ge 0 thenT rwh unfold_le 0 thenT rwh unfold_le_bool 0 ttca;"
+P	p7341	String "rwh unfold_ge 0 thenT rwh unfold_ge_bool 0 ttca;"
 O	o7341	ext_rule p7341
 P	p7737	String termC
 O	o7738	lid p7737
@@ -9748,7 +9748,7 @@ P	p3534	Number 6086
 O	o3534	patt_var p3533 p3534
 O	o3535	patt_done p3531 p3532
 T	t3535	o3535
-B	b3535	t3535 fold_le
+B	b3535	t3535 fold_ge
 T	t3536	o3534 b3535
 B	b3536	t3536
 P	p3537	Number 6089
@@ -13442,7 +13442,7 @@ T	t9101	o2128 b2763 b9100
 B	b9101	t9101
 T	t9102	o2128 b2746 b9101
 B	b9102	t9102
-P	p7113	String "byDefT unfold_ge"
+P	p7113	String "autoT"
 O	o7113	ext_rule p7113
 T	t4508	o2190 b9099 b2789
 B	b4509	t4508
@@ -13740,7 +13740,7 @@ B	b7175	t7170
 P	p7175	Number 17561
 T	t3763	o2302 b2737 b2330
 B	b3763	t3763
-T	t3770	o1301 b3763 b2749
+T	t3770	o1309 b2749 b3763
 B	b3770	t3770
 T	t3779	o2176 b3814 b3770
 S	s3779	tbrarg\\ h2250\\ t3779
@@ -15042,7 +15042,7 @@ P	p4709	Var n
 O	o4709	var p4709
 T	t4709	o4709
 C	h4709	J\\ H\\ t4709
-T	t4711	o1968 b895 b2168
+T	t4711	o1976 b2168 b895
 H	h4711	"" t4711
 VC	C4711	C\\ J H\\ t895
 H	h4712	_1 C4711
@@ -15177,7 +15177,7 @@ T	t4825	o2188 b4809 b4825
 B	b4827	t4825
 P	p4827	String "assertT << 'l <= 0 >>"
 O	o4827	ext_rule p4827
-T	t4827	o1968 b4810 b2168
+T	t4827	o1976 b2168 b4810
 S	s4827	tbrarg\\ h2250 h4708 h4709 h887 h10084 h4766 h4810 h4812\\ t4827
 B	b4829	s4827
 T	t4829	o2190 b4829 b4777
@@ -15201,7 +15201,7 @@ P	p4871	String "hypSubstT (-1) 0 taa"
 O	o4871	ext_rule p4871
 T	t4871	o301 b4830 b17
 B	b4872	t4871
-T	t4881	o1968 b904 b2168
+T	t4881	o1976 b2168 b904
 S	s4881	tbrarg\\ h2250 h4708 h4709 h887 h10084 h4766 h4810 h4812\\ t4881
 B	b4881	s4881
 T	t4885	o2190 b4881 b4777
@@ -15212,7 +15212,7 @@ T	t4887	o b4886 b17
 B	b4887	t4887
 T	t4888	o2188 b4872 b4887
 B	b4888	t4888
-P	p4888	String "rwhAll (unfold_le thenC higherC unfold_le_bool) thenT dT 0 taa"
+P	p4888	String "rwhAll (unfold_ge thenC higherC unfold_ge_bool) thenT dT 0 taa"
 O	o4888	ext_rule p4888
 T	t4892	o301 b4885 b17
 B	b4894	t4892
@@ -15386,22 +15386,22 @@ T	t5069	o b5061 b5069
 B	b5070	t5069
 T	t5070	o2188 b5041 b5070
 B	b5071	t5070
-P	p5071	String "byDefsT [unfold_ge; unfold_le] thenT hypSubstT (-1) 0 ttca"
+P	p5071	String "byDefT unfold_ge thenT hypSubstT (-1) 0 ttca"
 O	o5071	ext_rule p5071
 T	t5071	o2189 b5058 b17
 B	b5072	t5071
-T	t5072	o1301 b2168 b1091
+T	t5072	o1309 b1091 b2168
 B	b5073	t5072
 T	t5073	o1971 b5073
 S	s5073	tbrarg\\ h2250 h4708 h4709 h887 h10088 h5021 h4810 h5035\\ t5073
 B	b5078	s5073
-T	t5078	o1301 b895 b2168
+T	t5078	o1309 b2168 b895
 B	b5079	t5078
 T	t5079	o1971 b5079
 H	h5079	v t5079
 S	s5079	tbrarg\\ h2250 h4708 h4709 h887 h5079 h4770\\ C4712
 B	b5080	s5079
-T	t5080	o1301 b2168 b895
+T	t5080	o1309 b895 b2168
 B	b5081	t5080
 T	t5081	o1971 b5081
 H	h5081	v t5081
@@ -15421,7 +15421,7 @@ T	t5094	o b5094 b17
 B	b5095	t5094
 T	t5095	o2188 b5072 b5095
 B	b5100	t5095
-P	p5100	String "rwh unfold_le_bool 0 thenT dT 0 ttca"
+P	p5100	String "rwh unfold_ge_bool 0 thenT dT 0 ttca"
 O	o5100	ext_rule p5100
 H	h5100	x t5283
 S	s5100	tbrarg\\ h2250 h4708 h4709 h887 h10088 h5021 h4810 h5035 h5100\\ t453
@@ -15531,7 +15531,7 @@ T	t5201	o b5195 b17
 B	b5201	t5201
 T	t5218	o2132 b2133 b1171 b1171
 B	b5218	t5218
-T	t5219	o1968 b1171 b2168
+T	t5219	o1976 b2168 b1171
 B	b5219	t5219
 T	t5220	o b5219 b17
 B	b5220	t5220
@@ -15582,7 +15582,7 @@ B	b5259	s5258
 T	t5259	o2132 b2133 b5235 b5235
 S	s5259	tbrarg\\ h2250\\ t5259
 B	b5260	s5259
-T	t5261	o1968 b5235 b2168
+T	t5261	o1976 b2168 b5235
 S	s5262	tbrarg\\ h2250\\ t5261
 B	b5269	s5262
 T	t5269	o b5269 b17
@@ -15604,7 +15604,7 @@ T	t5276	o b5276 b17
 B	b5287	t5276
 T	t5287	o2188 b5273 b5287
 B	b5288	t5287
-P	p5288	String "byDefsT [unfold_lt; lt_bool2le_boolC; fold_le]"
+P	p5288	String "byDefsT [unfold_lt; lt_bool2le_boolC; fold_ge]"
 O	o5288	ext_rule p5288
 T	t5289	o2189 b5275 b17
 B	b5289	t5289
@@ -15674,7 +15674,7 @@ T	t5427	o2188 b5402 b5427
 B	b5428	t5427
 T	t5428	o2189 b5411 b17
 B	b5429	t5428
-T	t5429	o1968 b2330 b5388
+T	t5429	o1976 b5388 b2330
 S	s5429	tbrarg\\ h2250\\ t5429
 B	b5433	s5429
 T	t5433	o2190 b5433 b5396
@@ -15685,7 +15685,7 @@ T	t5437	o b5437 b17
 B	b5445	t5437
 T	t5445	o2188 b5429 b5445
 B	b5452	t5445
-P	p5452	String "withT <<bind{y. 'y <= ('x +@ 1)} >> (substT << 1 ~ (0 +@ 1) >> 0) thenMT rwh fold_ge 0 ttca"
+P	p5452	String "withT <<bind{y. 'y <= ('x +@ 1)} >> (substT << 1 ~ (0 +@ 1) >> 0) ttca"
 O	o5452	ext_rule p5452
 T	t5452	o301 b5434 b17
 B	b5457	t5452
@@ -16795,12 +16795,12 @@ T	t7906	o2130 b5260
 B	b7906	t7906
 T	t7907	o2129 b7906
 B	b7907	t7907
-T	t7908	o1968 b5235 b2737
+T	t7908	o1976 b2737 b5235
 S	s7908	tbrarg\\ h2250\\ t7908
 B	b7908	s7908
 T	t7909	o2130 b7908
 B	b7909	t7909
-T	t7910	o1968 b5235 b39
+T	t7910	o1976 b39 b5235
 S	s7910	tbrarg\\ h2250\\ t7910
 B	b7910	s7910
 T	t7911	o2130 b7910
@@ -16831,7 +16831,7 @@ T	t7967	o7967
 B	b7967	t7967
 P	p7980	String max_ge_right
 O	o7980	rule p7980
-T	t7980	o1968 b5235 b2749
+T	t7980	o1976 b2749 b5235
 S	s7723	tbrarg\\ h2250 h9484\\ t7980
 B	b7723	s7723
 T	t7723	o2190 b7723 b7941
@@ -16842,7 +16842,7 @@ T	t7725	o b7725 b17
 B	b7726	t7725
 T	t7726	o2188 b7958 b7726
 B	b7727	t7726
-P	p7727	String "assumT 4 thenT rwhAll unfold_le thenT rwhAll unfold_le_bool thenT dT 0 thenMT dT 3 ttca"
+P	p7727	String "assumT 4 thenT rwhAll unfold_ge thenT rwhAll unfold_ge_bool thenT dT 0 thenMT dT 3 ttca"
 O	o7727	ext_rule p7727
 T	t7727	o301 b7724 b17
 B	b7728	t7727
@@ -16953,7 +16953,7 @@ T	t7763	o b7763 b17
 B	b7764	t7763
 T	t7764	o2188 b8144 b7764
 B	b7767	t7764
-P	p7767	String "assumT 4 thenT rwhAll unfold_le thenT rwhAll unfold_le_bool thenT dT 0 thenMT dT 2 ttca"
+P	p7767	String "assumT 4 thenT rwhAll unfold_ge thenT rwhAll unfold_ge_bool thenT dT 0 thenMT dT 2 ttca"
 O	o7767	ext_rule p7767
 T	t7767	o301 b7762 b17
 B	b7768	t7767
@@ -17066,17 +17066,17 @@ P	p7823	Number 23344
 O	o7823	location p7822 p7823
 P	p8257	String max_le
 O	o8257	rule p8257
-T	t8271	o1968 b2737 b5235
+T	t8271	o1976 b5235 b2737
 S	s8271	tbrarg\\ h2250\\ t8271
 B	b8271	s8271
 T	t8272	o2130 b8271
 B	b8272	t8272
-T	t8273	o1968 b2749 b5235
+T	t8273	o1976 b5235 b2749
 S	s8273	tbrarg\\ h2250\\ t8273
 B	b8273	s8273
 T	t8274	o2130 b8273
 B	b8274	t8274
-T	t8278	o1968 b39 b5235
+T	t8278	o1976 b5235 b39
 S	s8278	tbrarg\\ h2250\\ t8278
 B	b8278	s8278
 T	t8282	o2130 b8278
@@ -17151,7 +17151,7 @@ T	t8536	o2128 b2763 b8536
 B	b8551	t8536
 T	t8551	o2128 b2746 b8551
 B	b8552	t8551
-P	p7836	String "selT 0 (byDefT unfold_ge)"
+P	p7836	String "selT 0 autoT"
 O	o7836	ext_rule p7836
 T	t8552	o b8427 b17
 B	b8563	t8552
@@ -17226,7 +17226,7 @@ T	t8932	o2128 b2763 b8920
 B	b8932	t8932
 T	t8933	o2128 b2746 b8932
 B	b8933	t8933
-P	p7858	String "selT 1 (byDefT unfold_ge)"
+P	p7858	String "selT 1 autoT"
 O	o7858	ext_rule p7858
 T	t8935	o b8916 b17
 B	b8935	t8935
@@ -17390,7 +17390,7 @@ T	t7893	o b7893 b17
 B	b7899	t7893
 T	t7899	o2188 b9367 b7899
 B	b7900	t7899
-P	p7902	String "assumT 4 thenT rwhAll unfold_ge thenT rwhAll unfold_le thenT rwhAll unfold_le_bool thenT dT 0 thenMT dT 2 ttca"
+P	p7902	String "assumT 4 thenT rwhAll unfold_ge thenT rwhAll unfold_ge_bool thenT dT 0 thenMT dT 2 ttca"
 O	o7902	ext_rule p7902
 T	t7905	o301 b7892 b17
 B	b7905	t7905
@@ -17534,7 +17534,7 @@ T	t7992	o b7992 b17
 B	b7993	t7992
 T	t7993	o2188 b9542 b7993
 B	b7994	t7993
-P	p7994	String "assumT 4 thenT rwhAll unfold_ge thenT rwhAll unfold_le thenT rwhAll unfold_le_bool thenT dT 0 thenMT dT 3 ttca"
+P	p7994	String "assumT 4 thenT rwhAll unfold_ge thenT rwhAll unfold_ge_bool thenT dT 0 thenMT dT 3 ttca"
 O	o7994	ext_rule p7994
 T	t7994	o301 b7991 b17
 B	b7997	t7994
@@ -17663,7 +17663,7 @@ P	p8042	Number 25161
 O	o8042	location p8041 p8042
 P	p9800	String min_ge_left2
 O	o9800	rule p9800
-T	t9819	o1968 b754 b5235
+T	t9819	o1976 b5235 b754
 S	s9819	tbrarg\\ h2250\\ t9819
 B	b9819	s9819
 T	t9822	o2130 b9819
@@ -17676,7 +17676,7 @@ T	t9825	o2128 b2763 b9824
 B	b9825	t9825
 T	t9835	o2128 b2746 b9825
 B	b9835	t9835
-P	p8043	String "rw fold_ge 0 thenT selT 0 (dT 0) ttca"
+P	p8043	String "selT 0 (dT 0) ttca"
 O	o8043	ext_rule p8043
 T	t9836	o b8271 b17
 B	b9836	t9836
@@ -17746,7 +17746,7 @@ T	t9988	o2128 b2763 b9987
 B	b9988	t9988
 T	t9989	o2128 b2746 b9988
 B	b9989	t9989
-P	p8087	String "rw fold_ge 0 thenT selT 1 (dT 0) ttca"
+P	p8087	String "selT 1 (dT 0) ttca"
 O	o8087	ext_rule p8087
 T	t9990	o b5260 b8308
 B	b9990	t9990
@@ -17806,7 +17806,7 @@ P	p8152	Number 25688
 O	o8152	location p8151 p8152
 P	p10510	String min_le2
 O	o10510	rule p10510
-T	t10510	o1968 b5235 b754
+T	t10510	o1976 b754 b5235
 S	s10510	tbrarg\\ h2250\\ t10510
 B	b10510	s10510
 T	t10516	o2130 b10510
@@ -17821,7 +17821,7 @@ T	t10524	o2128 b2763 b10524
 B	b10525	t10524
 T	t10525	o2128 b2746 b10525
 B	b10526	t10525
-P	p8154	String "rw fold_ge 0 thenT dT 0 ttca"
+P	p8154	String "dT 0 ttca"
 O	o8154	ext_rule p8154
 T	t10526	o b7908 b8056
 B	b10527	t10526
@@ -17978,7 +17978,7 @@ T	t11077	o b11052 b11077
 B	b11078	t11077
 T	t11078	o2188 b10084 b11078
 B	b11079	t11078
-P	p11079	String "dT 0 thenMT rwh unfold_le 3 thenMT rwh unfold_le_bool 3 thenMT dT 3 taa"
+P	p11079	String "dT 0 thenMT rwh unfold_ge 3 thenMT rwh unfold_ge_bool 3 thenMT dT 3 taa"
 O	o11079	ext_rule p11079
 H	h11079	x t1092
 T	t11089	o1295 b2168 b895
@@ -18156,7 +18156,7 @@ T	t8313	o8278 b2187 b8293 b8311 b17
 B	b8313	t8313
 T	t8314	o301 b8269 b17
 B	b8314	t8314
-T	t8315	o1968 b2168 b895
+T	t8315	o1976 b895 b2168
 H	h8315	"" t8315
 T	t8317	o2302 b8255 b194
 B	b8317	t8317
@@ -18762,7 +18762,7 @@ P	p8782	Var m1
 O	o8782	var p8782
 T	t8782	o8782
 B	b8782	t8782
-T	t8783	o1968 b8782 b2168
+T	t8783	o1976 b2168 b8782
 H	h8783	_2 t8783
 T	t8792	o1254 b895 b8782
 B	b8792	t8792
@@ -19072,7 +19072,7 @@ T	t11186	o2188 b11186 b17
 B	b11187	t11186
 T	t11187	o11185 b2187 b11187 b17 b17
 B	b11188	t11187
-P	p11188	String "reduceT thenT rwhAll fold_le thenT rwhAll fold_ge"
+P	p11188	String "reduceT thenT rwhAll fold_ge"
 O	o11188	ext_rule p11188
 H	h11188	y t2881
 T	t11188	o1976 b3884 b3885
@@ -19126,7 +19126,7 @@ P	p11209	String "revHypSubstT (-1) 0 thenT reduceT ttca"
 O	o11209	ext_rule p11209
 T	t8951	o301 b8832 b17
 B	b8951	t8951
-T	t8952	o1968 b2168 b8782
+T	t8952	o1976 b8782 b2168
 H	h8952	_2 t8952
 T	t8955	o2302 b895 b8815
 B	b8955	t8955
@@ -19632,7 +19632,7 @@ T	t11211	o2188 b11210 b17
 B	b11211	t11211
 T	t11212	o11209 b2187 b11211 b17 b17
 B	b11212	t11212
-P	p11212	String "rwh unfold_ge 3 thenT rwh unfold_le 3 thenT rwh unfold_le_bool 3 thenT dT 3 ttca"
+P	p11212	String "rwh unfold_ge 3 thenT rwh unfold_ge_bool 3 thenT dT 3 ttca"
 O	o11212	ext_rule p11212
 T	t11213	o2188 b11119 b17
 B	b11213	t11213

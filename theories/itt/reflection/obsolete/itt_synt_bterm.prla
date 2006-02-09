@@ -7269,7 +7269,7 @@ NItt_int_ext!le	le	le Itt_int_ext
 O	o262	le
 T	t261	o962 b963
 B	b294	t261
-T	t295	o262 b294 b962
+T	t295	o388 b962 b294
 B	b295	t295 v
 T	t301	o1630 b938 b295
 B	b301	t301
@@ -7309,7 +7309,7 @@ T	t300	o1014 b296
 B	b300	t300
 T	t369	o962 b1047
 B	b370	t369
-T	t370	o262 b370 b324
+T	t370	o388 b324 b370
 S	s370	t949\\ h\\ t370
 B	b374	s370
 T	t374	o1014 b374
@@ -7338,7 +7338,7 @@ T	t460	o943 b431
 B	b461	t460
 P	p325	String vars_of_elim
 O	o325	rule p325
-T	t495	o262 b294 b324
+T	t495	o388 b324 b294
 H	h495	i t495
 C	h326	J\\ H\\ t882
 T	t182	o937 b869 b963 b963

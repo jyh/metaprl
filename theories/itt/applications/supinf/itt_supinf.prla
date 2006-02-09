@@ -36023,7 +36023,7 @@ P	p20289	String inttest2
 O	o20289	rule p20289
 NItt_int_ext!le	le	le Itt_int_ext
 O	o20290	le
-T	t20290	o20290 b20270 b13885
+T	t20290	o20269 b13885 b20270
 H	h20290	x t20290
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o20291	gt

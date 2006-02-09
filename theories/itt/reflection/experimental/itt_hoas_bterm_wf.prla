@@ -3303,7 +3303,7 @@ T	t1736	o1099 b1728 b1736
 B	b1737	t1736
 P	p1737	String "repeatT (reduceT ttca)"
 O	o1737	ext_rule p1737
-T	t1737	o858 b627 b1011
+T	t1737	o780 b1011 b627
 B	b1738	t1737 i
 T	t1738	o624 b1009 b1738
 S	s1738	t1102\\ h h1008\\ t1738

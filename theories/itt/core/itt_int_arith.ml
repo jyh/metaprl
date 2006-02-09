@@ -312,12 +312,6 @@ let testT = argfunT (fun i p ->
 
 doc docon
 
-interactive le2ge {| ge_elim [] |} 'H :
-   [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'a in int } -->
-   [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
-   [main] sequent { <H>; x: 'a <= 'b; <J['x]>; 'b >= 'a >- 'C['x] } -->
-   sequent { <H>; x: 'a <= 'b; <J['x]> >- 'C['x] }
-
 interactive lt2ge {| ge_elim [] |} 'H :
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
@@ -353,18 +347,6 @@ interactive eq2ge1 'H :
 interactive eq2ge2 'H :
    sequent { <H>; x: 'a = 'b in int; <J['x]>; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
-
-interactive notle2ge :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [aux] sequent { <H> >- "not"{('a <= 'b)} } -->
-   sequent { <H> >- 'a >= ('b +@ 1) }
-
-interactive notle2ge_elim {| ge_elim [] |} 'H :
-   [wf] sequent { <H>; x: "not"{'a <= 'b}; <J['x]> >- 'a in int } -->
-   [wf] sequent { <H>; x: "not"{'a <= 'b}; <J['x]> >- 'b in int } -->
-   sequent { <H>; x: "not"{'a <= 'b}; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
-   sequent { <H>; x: "not"{'a <= 'b}; <J['x]> >- 'C['x] }
 
 interactive notge2ge_elim {| ge_elim [] |} 'H :
    [wf] sequent { <H>; x: "not"{'a >= 'b}; <J['x]> >- 'a in int } -->
@@ -416,7 +398,6 @@ let wrap_ge t tll r tac =
    mk_pair_term dummy_var t, List.map mk_xlist_term tll, ([], fun i -> rw r i thenT tac i)
 
 let resource ge_elim += [
-   wrap_ge <<"assert"{le_bool{'a; 'b}}>> [[<<'b >= 'a>>]] fold_le le2ge;
    wrap_ge <<"assert"{'a <@ 'b}>> [[<<'b >= ('a +@ 1)>>]] fold_lt lt2ge;
    wrap_ge <<"assert"{bnot{'a =@ 'b}}>> [[<<'a >= 'b +@ 1>>];[<<'b >= 'a +@ 1>>]]
       (addrC [Subterm 1] fold_bneq_int thenC fold_neq_int) nequal_elim2;
@@ -426,11 +407,6 @@ interactive_rw bnot_lt2ge_rw :
    ('a in int) -->
    ('b in int) -->
    "assert"{bnot{lt_bool{'a; 'b}}} <--> ('a >= 'b)
-
-interactive_rw bnot_le2gt_rw :
-   ('a in int) -->
-   ('b in int) -->
-   "assert"{bnot{le_bool{'a; 'b}}} <--> ('a > 'b)
 
 interactive ltInConcl2ge {| ge_intro |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -443,12 +419,6 @@ interactive gtInConcl2ge {| ge_intro |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H>; 'b >= 'a >- "false" } -->
    sequent { <H> >- 'a > 'b }
-
-interactive leInConcl2ge {| ge_intro |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H>; 'a >= ('b +@ 1) >- "false" } -->
-   sequent { <H> >- 'a <= 'b }
 
 interactive geInConcl2ge {| ge_intro |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -476,7 +446,6 @@ let arithRelInConcl2HypT = funT (fun p ->
    match explode_term t with
       <<'a < 'b>> -> ltInConcl2ge
     | <<'a > 'b>> -> gtInConcl2ge
-    | <<'a <= 'b>> -> leInConcl2ge
     | <<'a >= 'b>> -> geInConcl2ge
     | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2ge
      | <<'a <> 'b>> -> neqInConcl2ge thenMT eq2ge (-1) thenMT thinT (-3)
@@ -487,7 +456,6 @@ let arithRelInConcl2HypT = funT (fun p ->
 let arith_rels=[
    opname_of_term << 'x<'y >>;
    opname_of_term << 'x>'y >>;
-   opname_of_term << 'x<='y >>;
    opname_of_term << 'x>='y >>]
 
 let rec is_arith_rel t =
@@ -833,9 +801,6 @@ let term2inequality p (i,t) =
    if is_ge_term t then
       let a,b=dest_ge t in
       List.map (term2inequality_aux p) [(a,b,num0,copyHypT i (-1))]
-   else if is_le_term t then
-      let a,b=dest_le t in
-      List.map (term2inequality_aux p) [(b,a,num0,((rw fold_ge i) thenT (copyHypT i (-1))))]
    else if is_gt_term t then
       let a,b=dest_gt t in
       List.map (term2inequality_aux p) [(a,b,num1,gt2ge i)]

@@ -2281,7 +2281,7 @@ P	p846	String test2
 O	o846	rule p846
 NItt_int_ext!le	le	le Itt_int_ext
 O	o847	le
-T	t847	o847 b823 b292
+T	t847	o286 b292 b823
 H	h847	x t847
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o848	gt

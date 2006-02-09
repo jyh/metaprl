@@ -10524,9 +10524,11 @@ B	b7932	t7931
 T	t7932	o1683 b7932 b17
 B	b7933	t7932
 H	h7933	"" t4229
+NItt_int_ext!ge	ge	ge Itt_int_ext
+O	oge	ge
 NItt_int_ext!le	le	le Itt_int_ext
 O	o4274	le
-T	t4274	o4274 b4133 b4125
+T	t4274	oge b4125 b4133
 S	s4274	t1246\\ h h4124 h4125 h4131 h4140 h4233\\ t4274
 B	b4275	s4274
 T	t4275	o1253 b4275 b4122

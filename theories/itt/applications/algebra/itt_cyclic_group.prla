@@ -1392,9 +1392,11 @@ B	b1201	t1200
 NItt_logic!implies	implies	implies Itt_logic
 O	o4648	implies
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_ext!ge	ge	ge Itt_int_ext
+O	o4652	ge
 NItt_int_ext!le	le	le Itt_int_ext
 O	o6990	le
-T	t1857	o6990 b1397 b1396
+T	t1857	o4652 b1396 b1397
 P	p3894	String "arithT ttca"
 O	o3894	ext_rule p3894
 P	p3895	String ""
@@ -2355,8 +2357,6 @@ T	t4646	o4646 b1147 b1397
 B	b4646	t4646
 T	t4649	o4646 b3571 b1397
 B	b4649	t4649
-NItt_int_ext!ge	ge	ge Itt_int_ext
-O	o4652	ge
 T	t4653	o4652 b3571 b1147
 B	b4653	t4653
 T	t4662	o4646 b3323 b1397
@@ -3049,13 +3049,13 @@ B	b5308	t5307
 H	h5308	_6 t2405
 T	t10369	o1217 b9206 b9935
 B	b10370	t10369
-T	t3492	o6990 b3323 b3571
+T	t3492	o4652 b3571 b3323
 B	b3492	t3492
 T	t10370	o4648 b10370 b3492
 B	b10371	t10370 b
 T	t10371	o1205 b1206 b10371
 H	h5309	_8 t10371
-T	t3495	o6990 b1397 b6887
+T	t3495	o4652 b6887 b1397
 H	h5310	_10 t3495
 T	t10372	o1183 b10338 b6039
 B	b10372	t10372
@@ -3139,7 +3139,7 @@ S	s10467	tbrarg\\ h5981 h9611 h10266 h9272 h9273 h9274 h9275 h9840 h9843 h3322 h
 B	b10468	s10467
 T	t10468	o1390 b10468 b9849
 B	b10469	t10468
-T	t4251	o6990 b3323 b6887
+T	t4251	o4652 b6887 b3323
 H	h1120	y1 t4251
 P	p4648	String "use_superset << 'g^car >> << 'g^inv group_power{'g; group_power{'g; 'y_1; 'y_2}; 'y_3} *['g] 'x >> ttca"
 O	o4649	ext_rule p4648
@@ -5990,7 +5990,7 @@ B	b3282	t3282
 P	p3282	Number 5852
 P	p3283	Number 6168
 O	o3283	location p3282 p3283
-T	t3283	o6990 b1396 b1397
+T	t3283	o4652 b1397 b1396
 H	h3283	v1 t3283
 H	h3284	"" t6617
 S	s3284	tbrarg\\ h5981 h1395 h3283 h3284\\ t6735
@@ -6473,7 +6473,7 @@ B	b3577	t3577
 P	p3577	Number 6570
 P	p3578	Number 6942
 O	o3578	location p3577 p3578
-T	t3578	o6990 b8629 b1397
+T	t3578	o4652 b1397 b8629
 H	h3578	v2 t3578
 H	h3579	"" t8640
 S	s3579	tbrarg\\ h5981 h6122 h8628 h3578 h3579\\ t661
@@ -6482,7 +6482,7 @@ T	t3579	o1390 b3579 b8626
 B	b3580	t3579
 T	t3580	o1389 b3580 b15
 B	b3583	t3580
-T	t3585	o6990 b1397 b8629
+T	t3585	o4652 b8629 b1397
 H	h3585	v2 t3585
 S	s3585	tbrarg\\ h5981 h6122 h8628 h3585 h3579\\ t8635
 B	b3585	s3585

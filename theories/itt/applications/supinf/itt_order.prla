@@ -11956,9 +11956,11 @@ B	b4984	s4984
 T	t4985	o2297 b4984
 B	b4985	t4985
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
+O	o5077	ge_bool
 NItt_int_ext!le_bool	le_bool	le_bool Itt_int_ext
 O	o4985	le_bool
-T	t4986	o4985 b2582 b2586
+T	t4986	o5077 b2586 b2582
 B	b4986	t4986
 T	t3397	o1028 b3281
 B	b3398	t3397
@@ -11998,7 +12000,7 @@ P	p9286	Number 16823
 O	o9286	location p9285 p9286
 P	p5004	String int_le_boolIsUnstrictTotalOrder
 O	o5004	rule p5004
-T	t3419	o4985 b892 b918
+T	t3419	o5077 b918 b892
 B	b3419	t3419 b
 T	t3433	o1029 b3419
 B	b3433	t3433 a
@@ -12174,8 +12176,6 @@ P	p9327	Number 17357
 O	o9327	location p9326 p9327
 P	p5076	String inverse_of_le_bool
 O	o5076	rule p5076
-NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
-O	o5077	ge_bool
 T	t5077	o5077 b2582 b2586
 B	b5077	t5077
 T	t3516	o1050 b3434
@@ -12199,7 +12199,7 @@ T	t3523	o2317 b3520 b3498
 B	b3524	t3523
 T	t3524	o2316 b3524 b14
 B	b3525	t3524
-T	t5087	o4985 b2586 b2582
+T	t5087	o5077 b2582 b2586
 B	b5087	t5087
 T	t5088	o915 b917 b5077 b5087
 S	s5088	t2298\\ h\\ t5088
@@ -12212,7 +12212,7 @@ T	t3527	o b3527 b14
 B	b3528	t3527
 T	t3528	o2315 b3525 b3528
 B	b3529	t3528
-P	p5123	String "rwh unfold_le_bool 0 thenT rwh unfold_ge_bool 0 ttca"
+P	p5123	String "rwh unfold_ge_bool 0 thenT rwh unfold_ge_bool 0 ttca"
 O	o5123	ext_rule p5123
 T	t3529	o2315 b3527 b14
 B	b3530	t3529

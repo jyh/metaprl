@@ -1225,7 +1225,7 @@ B	b1413	t1413
 T	t1446	o302 b1092 b797 b797
 S	s1446	t282\\ h\\ t1446
 B	b1446	s1446
-T	t1448	o716 b369 b1137
+T	t1448	o368 b1137 b369
 P	p965	String "dT 2 ttca"
 O	o965	ext_rule p965
 T	t1569	o378 b262 b377
@@ -1679,7 +1679,7 @@ T	t215	o302 b372 b1700 b215
 H	h215	w t215
 P	p221	String "assertT << 1 <= bdepth{nth{'bts; 0}} >> ttca"
 O	o221	ext_rule p221
-T	t221	o716 b369 b1700
+T	t221	o368 b1700 b369
 H	h225	x2 t221
 P	p236	String "rwh unfold_nat 6 thenT dT 6 thenT autoT thenT arithT ttca"
 O	o236	ext_rule p236
@@ -1744,7 +1744,7 @@ T	t1928	o281 b1923 b1927
 B	b1928	t1928
 T	t1929	o280 b1928 b4
 B	b1929	t1929
-T	t1462	o716 b369 b1405
+T	t1462	o368 b1405 b369
 S	s3	t282\\ h\\ t1462
 B	b10	s3
 T	t10	o b10 b4

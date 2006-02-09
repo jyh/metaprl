@@ -4450,7 +4450,7 @@ H	h2072	x t2061
 T	t2136	o1197 b1198 b2037 b2037
 S	s2136	t1184\\ h\\ t2136
 B	b2137	s2136
-T	t2247	o1371 b1569 b1270
+T	t2247	o1354 b1270 b1569
 S	s2247	t1184\\ h\\ t2247
 B	b2247	s2247
 P	p2583	String "rwh (foldC << lambda{y. 'bt1 ('x :: 'y)} ('v :: 'l) >> reduce_beta) 0 thenT hypSubstT (-1) 0 thenT byDefT reduceBTermC"
@@ -5624,7 +5624,7 @@ B	b4203	t4203
 T	t2881	o1197 b1198 b2863 b2863
 S	s2881	t1184\\ h h2872\\ t2881
 B	b2881	s2881
-T	t2882	o1371 b2813 b1270
+T	t2882	o1354 b1270 b2813
 S	s2882	t1184\\ h\\ t2882
 B	b2882	s2882
 T	t4211	o b2882 b26

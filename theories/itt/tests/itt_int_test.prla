@@ -981,7 +981,7 @@ P	p646	String test2
 O	o646	rule p646
 NItt_int_ext!le	le	le Itt_int_ext
 O	o647	le
-T	t647	o647 b617 b595
+T	t647	o614 b595 b617
 H	h647	x t647
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o648	gt

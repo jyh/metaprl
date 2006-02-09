@@ -3234,7 +3234,7 @@ B	b11130	t11129
 NSummary!interactive	interactive	interactive Summary
 O	o11130	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p11130	String "byDefsT [unfold_ge; unfold_le]"
+P	p11130	String "byDefT unfold_ge"
 O	o11131	ext_rule p11130
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o11132	status_incomplete
@@ -3253,9 +3253,11 @@ O	o11136	rewrite
 NItt_bool	Itt_bool	Itt_bool NIL
 NItt_bool!assert	assert	assert Itt_bool
 O	o11146	assert
+NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
+O	ogeb	ge_bool
 NItt_int_ext!le_bool	le_bool	le_bool Itt_int_ext
 O	o11147	le_bool
-P	p11155	String "rwh unfold_le_bool 0"
+P	p11155	String "rwh unfold_ge_bool 0"
 O	o11155	ext_rule p11155
 NItt_bool!bnot	bnot	bnot Itt_bool
 O	o11156	bnot
@@ -4265,11 +4267,11 @@ T	t24859	o11135 b24854 b24859
 B	b24860	t24859
 T	t24860	o11134 b24860 b6
 B	b24861	t24860
-T	t24861	o11147 b11237 b11232
+T	t24861	ogeb b11232 b11237
 B	b24862	t24861
 T	t24862	o11146 b24862
 B	b24863	t24862
-T	t24863	o11147 b11255 b11253
+T	t24863	ogeb b11253 b11255
 B	b24864	t24863
 T	t24864	o11146 b24864
 B	b24865	t24864
@@ -38464,7 +38466,7 @@ T	t35177	o11277 b11117 b11120
 B	b35177	t35177
 NItt_int_ext!le	le	le Itt_int_ext
 O	o35177	le
-T	t35178	o35177 b11117 b11120
+T	t35178	o11126 b11120 b11117
 B	b35178	t35178
 P	p32994	Number 43631
 P	p35182	Var _$item_bnd4

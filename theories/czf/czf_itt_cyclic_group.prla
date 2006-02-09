@@ -3610,9 +3610,11 @@ B	b3747	t3746
 P	p4	String "rwh unfold_power 0 thenT dT (-2) thenT reduceT thenT rwh fold_power (-1) ttca"
 O	o5	ext_rule p4
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_ext!ge	ge	ge Itt_int_ext
+O	oge	ge
 NItt_int_ext!le	le	le Itt_int_ext
 O	o13	le
-T	t26	o13 b1823 b1824
+T	t26	oge b1824 b1823
 H	h	_7 t26
 T	t3750	o1832 b3616 b1667
 B	b3750	t3750
@@ -3635,7 +3637,7 @@ T	t40	o1581 b39 b3676
 B	b40	t40
 T	t46	o1580 b40 b7
 B	b46	t46
-T	t48	o13 b1824 b1823
+T	t48	oge b1823 b1824
 H	h48	_7 t48
 T	t49	o1831 b3616 b1667 b3787
 B	b49	t49

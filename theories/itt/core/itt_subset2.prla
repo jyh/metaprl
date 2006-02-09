@@ -5213,6 +5213,8 @@ T	t2606	o1584 b2606
 B	b2607	t2606
 H	h2607	j t2199
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_ext!ge	ge	ge Itt_int_ext
+O	oge	ge
 NItt_int_ext!le	le	le Itt_int_ext
 O	o2607	le
 B	b2608	t2252
@@ -5220,7 +5222,7 @@ P	p2608	Var j
 O	o2608	var p2608
 T	t2608	o2608
 B	b2609	t2608
-T	t2609	o2607 b2608 b2609
+T	t2609	oge b2609 b2608
 H	h2609	"" t2609
 VA	A2609	A\\ H\\ t2608
 B	b2610	A2609
@@ -5478,7 +5480,7 @@ T	t788	o1606 b788 b2626
 B	b789	t788
 T	t789	o1611 b789 b30
 B	b790	t789
-T	t2703	o2607 b2594 b2687
+T	t2703	oge b2687 b2594
 B	b2703	t2703
 H	h2706	x1 t2703
 S	s2706	tbrarg\\ h3391 h2628 h2629 h2630 h2640 h2687 h2706\\ t2630
@@ -5553,7 +5555,7 @@ T	t2757	o2755 b1603 b2757 b30 b30
 B	b2758	t2757
 P	p2758	String "subtypeT << 'A[max{'f[!a]; 'f[!b]}] >> ttca thenT subset_is_subtype thenT backThruAssumT 5 ttca"
 O	o2758	ext_rule p2758
-T	t2758	o2607 b2687 b2594
+T	t2758	oge b2594 b2687
 S	s2758	tbrarg\\ h3391 h2628 h2629 h2630 h2640 h2693\\ t2758
 B	b2759	s2758
 T	t2759	o1606 b2759 b2626

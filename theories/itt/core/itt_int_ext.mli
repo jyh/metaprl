@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1998-2006 MetaPRL Group, Cornell University, Moscow State
+ * University, City University of New York, and California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +27,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Yegor Bryukhov
- * @email{ynb@mail.ru}
+ * Author: Yegor Bryukhov @email{ynb@mail.ru}
+ * Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
  *)
 extends Itt_equal
 extends Itt_logic
@@ -45,14 +46,11 @@ declare "div"{'a; 'b}
 declare "rem"{'a; 'b}
 
 (*
- Definitions of >b <=b >=b
+ Definitions of >b >=b
  *)
 
 define unfold_gt_bool :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
-
-define unfold_le_bool :
-   le_bool{'a; 'b} <--> bnot{lt_bool{'b; 'a}}
 
 define unfold_ge_bool :
    ge_bool{'a; 'b} <--> bnot{lt_bool{'a; 'b}}
@@ -63,30 +61,11 @@ define unfold_bneq_int :
 (*
  Prop-int-relations definitions
  *)
-
 define unfold_gt :
    gt{'a; 'b} <--> ('b < 'a)
 
-(*
-Switching to define-version to provide the same behaviour as bool-relations,
-i.d. rewritability of <= in the same extent as of <
-
-rewrite unfold_le :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- 'a <= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
-
-rewrite unfold_ge :
-   [wf] sequent { <H> >- a in int } -->
-   [wf] sequent { <H> >- b in int } -->
-   sequent { <H> >- 'a >= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
-*)
-
-define unfold_le :
-   le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
-
 define unfold_ge :
-   ge{'a; 'b} <--> ('b <= 'a)
+   ge{'a; 'b} <--> "assert"{ge_bool{'a; 'b}}
 
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
@@ -104,12 +83,19 @@ define unfold_abs : abs{'a} <--> ind{'a;x,y.(-'a);0;x,y.'a}
 define unfold_sign : sign{'a} <--> ind{'a;x,y.(-1);0;x,y.1}
 (*if 'a <@ 0 then number[(-1):n] else if 0 <@ 'a then 1 else 0*)
 
-topval fold_le : conv
 topval fold_ge : conv
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
+
+(*
+ * XXX: TODO: Once comments on terms or soft abstractions are implemented (bugs 256/261),
+ *            the "le" forms should have a comment that makes sure they will be displayed
+ *            as "le".
+ *)
+define iform le_bool_iform: le_bool{'a; 'b} <--> ge_bool{'b; 'a}
+define iform le_iform: le{'a; 'b} <--> ge{'b; 'a}
 
 prec prec_mul
 
@@ -128,11 +114,6 @@ val bneq_int_term : term
 val is_bneq_int_term : term -> bool
 val mk_bneq_int_term : term -> term -> term
 val dest_bneq_int : term -> term * term
-
-val le_term : term
-val is_le_term : term -> bool
-val mk_le_term : term -> term -> term
-val dest_le : term -> term * term
 
 val ge_term : term
 val is_ge_term : term -> bool

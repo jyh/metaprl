@@ -3330,6 +3330,10 @@ T	t1308	o1194 b991 b1306
 B	b1309	t1308
 T	t1309	o1194 b1305 b993
 B	b1310	t1309
+NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
+O	o6548	ge_bool
+NItt_int_ext!ge	ge	ge Itt_int_ext
+O	o6583	ge
 NItt_int_ext!le_bool	le_bool	le_bool Itt_int_ext
 O	o1316	le_bool
 P	p1320	String reduce_beq_rat
@@ -12774,7 +12778,7 @@ P	p3606	String rat_of_intLE
 O	o3606	rule p3606
 NItt_int_ext!le	le	le Itt_int_ext
 O	o3607	le
-T	t3607	o3607 b1065 b1069
+T	t3607	o6583 b1069 b1065
 S	s3607	t1064\\ h\\ t3607
 B	b3607	s3607
 T	t3608	o1063 b3607
@@ -12953,14 +12957,12 @@ T	t6534	o1818 b1137 b6483
 B	b6534	t6534
 P	p6540	String rat_of_int_le_bool
 O	o6540	cond_rewrite p6540
-T	t6540	o1316 b991 b993
+T	t6540	o6548 b993 b991
 B	b6540	t6540
 T	t6541	o1296 b1137 b6483
 B	b6541	t6541
 P	p6547	String rat_of_int_ge_bool
 O	o6547	cond_rewrite p6547
-NItt_int_ext!ge_bool	ge_bool	ge_bool Itt_int_ext
-O	o6548	ge_bool
 T	t6548	o6548 b991 b993
 B	b6548	t6548
 T	t6549	o1372 b1137 b6483
@@ -13022,14 +13024,12 @@ T	t6569	o2306 b1137 b6483
 B	b6569	t6569
 P	p6575	String rat_of_int_le
 O	o6575	cond_rewrite p6575
-T	t6575	o3607 b991 b993
+T	t6575	o6583 b993 b991
 B	b6575	t6575
 T	t6576	o2322 b1137 b6483
 B	b6576	t6576
 P	p6582	String rat_of_int_ge
 O	o6582	cond_rewrite p6582
-NItt_int_ext!ge	ge	ge Itt_int_ext
-O	o6583	ge
 T	t6583	o6583 b991 b993
 B	b6583	t6583
 T	t6584	o1378 b1137 b6483
@@ -13086,7 +13086,7 @@ H	h8035	u A
 B	b8035	A
 T	t8035	o7292 b8035
 H	h8036	v1 t8035
-T	t8036	o3607 b3034 b7297
+T	t8036	o6583 b7297 b3034
 B	b8036	t8036
 B	b8037	t8035
 NItt_list2!tail	tail	tail Itt_list2
@@ -13106,7 +13106,7 @@ T	t8041	o8041
 B	b8041	t8041
 T	t8042	o1219 b7297 b1000
 B	b8042	t8042
-T	t8043	o3607 b8041 b8042
+T	t8043	o6583 b8042 b8041
 B	b8043	t8043
 NItt_list!cons	cons8043	cons Itt_list
 O	o8043	cons8043
@@ -13120,7 +13120,7 @@ T	t8047	o7293 b8043 b8046
 H	h8047	_1 t8047
 T	t8048	o1219 b8041 b1000
 B	b8048	t8048
-T	t8049	o3607 b8048 b8042
+T	t8049	o6583 b8042 b8048
 H	h8049	x t8049
 T	t8050	o3584 b7297 b8041
 H	h8050	w1 t8050
@@ -13139,7 +13139,7 @@ S	s8053	t1064\\ h\\ t8053
 B	b8054	s8053
 T	t8054	o7296 b7304
 B	b8055	t8054
-T	t8055	o3607 b8053 b8055
+T	t8055	o6583 b8055 b8053
 S	s8055	t1064\\ h\\ t8055
 B	b8056	s8055
 T	t8056	o b8056 b12
@@ -14516,7 +14516,7 @@ B	b8613	t8613
 P	p8613	Number 26087
 P	p8615	Number 26232
 O	o8615	location p8613 p8615
-T	t8615	o1316 b1065 b1069
+T	t8615	o6548 b1069 b1065
 B	b8615	t8615
 T	t8616	o2599 b8615 b3609
 S	s8616	t1064\\ h\\ t8616

@@ -2412,9 +2412,11 @@ O	o1581	cond_rewrite p1581
 T	t1582	o1253 b1254 b1194 b1194
 B	b1582	t1582
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_ext!ge	ge	ge Itt_int_ext
+O	oge	ge
 NItt_int_ext!le	le	le Itt_int_ext
 O	o1582	le
-T	t1583	o1582 b1194 b1026
+T	t1583	oge b1026 b1194
 B	b1583	t1583
 T	t1584	o b1583 b137
 B	b1584	t1584
@@ -2451,7 +2453,7 @@ B	b1596	s1595
 T	t1596	o1253 b1254 b1592 b1592
 S	s1596	t1268\\ h\\ t1596
 B	b1597	s1596
-T	t1597	o1582 b1592 b1269
+T	t1597	oge b1269 b1592
 S	s1597	t1268\\ h\\ t1597
 B	b1598	s1597
 T	t1598	o b1598 b137

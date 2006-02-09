@@ -10,6 +10,9 @@ doc <:doc<
    (<<gt_bool{('x) ; ('x)}>>, <<le_bool{('x) ; ('x)}>>,
    <<ge_bool{('x) ; ('x)}>>, <<bneq_int{('x) ; ('x)}>>) forms.
 
+   Note that both ``less then'' forms are implemented as input forms that
+   turn them into appropriate ``greater then'' forms.
+
    @docoff
    ----------------------------------------------------------------
 
@@ -21,7 +24,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005 MetaPRL Group, Cornell University, Moscow State
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University, Moscow State
    University, City University of New York, and California Institute of Technology
 
    This program is free software; you can redistribute it and/or
@@ -83,9 +86,6 @@ doc <:doc< More boolean inequalities >>
 define unfold_gt_bool {| reduce |} :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
 
-define unfold_le_bool :
-   le_bool{'a; 'b} <--> bnot{lt_bool{'b; 'a}}
-
 define unfold_ge_bool :
    ge_bool{'a; 'b} <--> bnot{lt_bool{'a; 'b}}
 
@@ -103,16 +103,14 @@ let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
 let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
 let resource reduce += [
-   << bnot{lt_bool{'b; 'a}} >>, wrap_reduce (makeFoldC << le_bool{'a;'b} >> unfold_le_bool);
-   << bnot{le_bool{'a; 'b}} >>,
+   << bnot{lt_bool{'a; 'b}} >>, wrap_reduce (makeFoldC << ge_bool{'a;'b} >> unfold_ge_bool);
+   << bnot{ge_bool{'a; 'b}} >>,
       wrap_reduce (addrC [Subterm 1]
-         (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC unfold_le_bool)
+         (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC unfold_ge_bool)
        thenC Itt_bool.reduce_bnot_bnotC);
-(*    << le_bool{'a; 'b} >>, wrap_reduce unfold_le_bool;
-   << ge_bool{'a; 'b} >>,    wrap_reduce unfold_ge_bool;
+(* << ge_bool{'a; 'b} >>,    wrap_reduce unfold_ge_bool;
    << bneq_int{'a; 'b} >>,   wrap_reduce unfold_bneq_int;
 *)
-   << le_bool{'a;'a}>>, wrap_reduce_crw (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC));
    << ge_bool{'a;'a}>>, wrap_reduce_crw (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC));
 ]
 
@@ -151,6 +149,14 @@ let dest_gt = dest_dep0_dep0_term gt_opname
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
+(*
+ * XXX: TODO: Once comments on terms or soft abstractions are implemented (bugs 256/261),
+ *            the "le" forms should have a comment that makes sure they will be displayed
+ *            as "le".
+ *)
+define iform le_bool_iform: le_bool{'a; 'b} <--> ge_bool{'b; 'a}
+define iform le_iform: le{'a; 'b} <--> ge{'b; 'a}
+
 prec prec_mul
 
 dform mul_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b}
@@ -180,74 +186,58 @@ doc <:doc<
    via correspondent boolean inequalities.
 >>
 
-define unfold_le :
-   le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
-
-define unfold_ge {| reduce |} :
-   ge{'a; 'b} <--> ('b <= 'a)
+define unfold_ge :
+   ge{'a; 'b} <--> "assert"{ge_bool{'a; 'b}}
 
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
 doc docoff
 
-let fold_le = makeFoldC << le{'a; 'b} >> unfold_le
 let fold_ge = makeFoldC << ge{'a; 'b} >> unfold_ge
 let fold_neq_int = makeFoldC << nequal{'a; 'b} >> unfold_neq_int
 
 let reduce_lt_prop = unfold_lt thenC (addrC [Subterm 1] reduce_lt)
 let reduce_gt_prop = unfold_gt thenC reduce_lt_prop
-let reduce_le_prop = (unfold_le thenC
-                     (addrC [Subterm 1] (unfold_le_bool thenC
+let reduce_ge_prop = (unfold_ge thenC
+                     (addrC [Subterm 1] (unfold_ge_bool thenC
                      (addrC [Subterm 1] reduce_lt))))
-let reduce_ge_prop = unfold_ge thenC reduce_le_prop
 let reduce_neq_prop = unfold_neq_int thenC
                       (addrC [Subterm 1] (unfold_bneq_int thenC
 							 (addrC [Subterm 1] reduce_eq_int)))
 
 let resource reduce += [
 	<<number[i:n] > number[j:n]>>, wrap_reduce reduce_gt_prop;
-	<<number[i:n] <= number[j:n]>>, wrap_reduce reduce_le_prop;
 	<<number[i:n] < number[j:n]>>, wrap_reduce reduce_lt_prop;
 	<<number[i:n] >= number[j:n]>>, wrap_reduce reduce_ge_prop;
    <<nequal{number[i:n]; number[j:n]}>>, wrap_reduce reduce_neq_prop;
-   <<"assert"{le_bool{'a; 'b}}>>, wrap_reduce fold_le;
+   <<"assert"{ge_bool{'a; 'b}}>>, wrap_reduce fold_ge;
 (*
-   << le{'a; 'b} >>, wrap_reduce unfold_le;
    << nequal{'a; 'b} >>, wrap_reduce unfold_neq_int;
 *)
-   << le{'a;'a}>>, wrap_reduce_crw (unfold_le thenC (addrC [Subterm 1] (unfold_le_bool thenC (addrC [Subterm 1] lt_IrreflexC))));
+   << ge{'a;'a} >>, wrap_reduce_crw
+      (unfold_ge thenC (addrC [Subterm 1] (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC))));
 ]
 
 let resource elim += [
 	<<number[i:n] > number[j:n]>>, wrap_elim (rw reduce_gt_prop);
-	<<number[i:n] <= number[j:n]>>, wrap_elim (rw reduce_le_prop);
 	<<number[i:n] >= number[j:n]>>, wrap_elim (rw reduce_ge_prop);
 	<<number[i:n] < number[j:n]>>,  wrap_elim (rw reduce_lt_prop);
    <<nequal{number[i:n]; number[j:n]}>>, wrap_elim (rw reduce_neq_prop);
 	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] reduce_lt));
-	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_le_bool));
 	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)));
 	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_ge_bool));
 ]
 
 let resource intro += [
 	<<number[i:n] > number[j:n]>>, wrap_intro (rw reduce_gt_prop 0);
-	<<number[i:n] <= number[j:n]>>, wrap_intro (rw reduce_le_prop 0);
 	<<number[i:n] >= number[j:n]>>, wrap_intro (rw reduce_ge_prop 0);
 	<<number[i:n] < number[j:n]>>, wrap_intro (rw reduce_lt_prop 0);
    <<nequal{number[i:n]; number[j:n]}>>, wrap_intro (rw reduce_neq_prop 0);
 	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] reduce_lt) 0);
-	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_le_bool) 0);
 	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)) 0);
 	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_ge_bool) 0);
 ]
-
-let le_term = << 'x <= 'y >>
-let le_opname = opname_of_term le_term
-let is_le_term = is_dep0_dep0_term le_opname
-let mk_le_term = mk_dep0_dep0_term le_opname
-let dest_le = dest_dep0_dep0_term le_opname
 
 let ge_term = << 'x >= 'y >>
 let ge_opname = opname_of_term ge_term
@@ -261,11 +251,20 @@ let is_neq_int_term = is_dep0_dep0_term neq_int_opname
 let mk_neq_int_term = mk_dep0_dep0_term neq_int_opname
 let dest_neq_int = dest_dep0_dep0_term neq_int_opname
 
-dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b}
+(*
+ * XXX: TODO: Once comments on terms or soft abstractions are implemented (bugs 256/261),
+ *            the "le" forms should have a comment that makes sure they will be displayed
+ *            as "le".
+ *)
+dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; number[n:n]}
  =
-   slot["lt"]{'a} Mpsymbols!le slot["le"]{'b}
-dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
-   slot["lt"]{'a} `" <= " slot["le"]{'b}
+   slot["lt"]{'a} Mpsymbols!le slot["le"]{number[n:n]}
+
+dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; number[n:n]} =
+   slot["lt"]{'a} `" <=" space slot["le"]{number[n:n]}
+
+dform le_bool_df1 : parens :: "prec"[prec_compare] :: le_bool{'a; number[n:n]} =
+   slot["lt"]{'a} `" " Mpsymbols!le Mpsymbols!subb `" " slot["le"]{number[n:n]}
 
 dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b}
  =
@@ -275,9 +274,6 @@ dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
 
 dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
    slot["lt"]{'a} `" " Mpsymbols!neq Mpsymbols!subb `" " slot["le"]{'b}
-
-dform le_bool_df1 : parens :: "prec"[prec_compare] :: le_bool{'a; 'b} =
-   slot["lt"]{'a} `" " Mpsymbols!le Mpsymbols!subb `" " slot["le"]{'b}
 
 dform gt_bool_df1 : parens :: "prec"[prec_compare] :: gt_bool{'a; 'b} =
    slot["lt"]{'a} `" >" Mpsymbols!subb `" " slot["le"]{'b}
@@ -440,10 +436,6 @@ interactive ge_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- it in ('a >= 'b) }
 
-interactive le_sqstable {| squash; intro []; nth_hyp |} :
-   sequent { <H> >- 'a <= 'b } -->
-   sequent { <H> >- it in ('a <= 'b) }
-
 interactive lt_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a < 'b } -->
    sequent { <H> >- it in ('a < 'b) }
@@ -460,11 +452,6 @@ doc <:doc<
    The following rules establish decidability of integer relations and
    improve the @hreftactic[decideT] tactic.
 >>
-
-interactive le_decidable {| intro [] |} :
-   [wf] sequent{ <H> >- 'a in int } -->
-   [wf] sequent{ <H> >- 'b in int } -->
-   sequent{ <H> >- decidable{('a <= 'b)} }
 
 interactive ge_decidable {| intro [] |} :
    [wf] sequent{ <H> >- 'a in int } -->
@@ -576,32 +563,12 @@ interactive max_self2 {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- max{'a; 'b} >= 'b }
 
-interactive max_self3 {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- 'a <= max{'a; 'b} }
-
-interactive max_self4 {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- 'b <= max{'a; 'b} }
-
 interactive min_self1 {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- min{'a; 'b} <= 'a }
-
-interactive min_self2 {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- min{'a; 'b} <= 'b }
-
-interactive min_self3 {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'a >= min{'a; 'b} }
 
-interactive min_self4 {| intro [] |} :
+interactive min_self2 {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'b >= min{'a; 'b} }
@@ -664,39 +631,17 @@ interactive max_ge_left {| intro [SelectOption 0] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'x in int } -->
-   sequent { <H> >- 'x <= 'a } -->
-   sequent { <H> >- 'x <= max{'a; 'b} }
-
-interactive max_ge_right {| intro [SelectOption 1] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'x in int } -->
-   sequent { <H> >- 'x <= 'b } -->
-   sequent { <H> >- 'x <= max{'a; 'b} }
-
-interactive max_le {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'x in int } -->
-   sequent { <H> >- 'a <= 'x } -->
-   sequent { <H> >- 'b <= 'x } -->
-   sequent { <H> >- max{'a; 'b} <= 'x }
-
-interactive max_ge_left2 {| intro [SelectOption 0] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'x in int } -->
    sequent { <H> >- 'a >= 'x } -->
    sequent { <H> >- max{'a; 'b} >= 'x }
 
-interactive max_ge_right2 {| intro [SelectOption 1] |} :
+interactive max_ge_right {| intro [SelectOption 1] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'x in int } -->
    sequent { <H> >- 'b >= 'x } -->
    sequent { <H> >- max{'a; 'b} >= 'x }
 
-interactive max_le2 {| intro [] |} :
+interactive max_le {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'x in int } -->
@@ -725,28 +670,6 @@ interactive min_le {| intro [] |} :
    sequent { <H> >- 'a >= 'x } -->
    sequent { <H> >- 'b >= 'x } -->
    sequent { <H> >- min{'a; 'b} >= 'x }
-
-interactive min_ge_left2 {| intro [SelectOption 0] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'x in int } -->
-   sequent { <H> >- 'a <= 'x } -->
-   sequent { <H> >- min{'a; 'b} <= 'x }
-
-interactive min_ge_right2 {| intro [SelectOption 1] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'x in int } -->
-   sequent { <H> >- 'b <= 'x } -->
-   sequent { <H> >- min{'a; 'b} <= 'x }
-
-interactive min_le2 {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'x in int } -->
-   sequent { <H> >- 'x <= 'a } -->
-   sequent { <H> >- 'x <= 'b } -->
-   sequent { <H> >- 'x <= min{'a; 'b} }
 
 doc <:doc<
    @modsection{Well-formedness and algebraic properties of <<('x) *@ ('x)>>}
@@ -977,14 +900,14 @@ doc <:doc<
    @modsection{Definition and well-formedness of <<'x %@ 'x>>}
 >>
 prim rem_baseReduce :
-   sequent { <H> >- 0 <= 'a } -->
+   sequent { <H> >- 'a >= 0 } -->
    sequent { <H> >- 'a < 'b } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ 'a } = it
 
 interactive_rw rem_baseReduce_rw :
-   (0 <= 'a) -->
+   ('a >= 0) -->
    ('a < 'b) -->
    ('a in int) -->
    ('b in int) -->
@@ -1032,14 +955,14 @@ doc <:doc<
    @modsection{Definition and properties of <<'x /@ 'x>>}
 >>
 prim div_baseReduce :
-   sequent { <H> >- 0 <= 'a } -->
+   sequent { <H> >- 'a >= 0 } -->
    sequent { <H> >- 'a < 'b } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a /@ 'b) ~ 0 } = it
 
 interactive_rw div_baseReduce_rw :
-   (0 <= 'a) -->
+   ('a >= 0) -->
    ('a < 'b) -->
    ('a in int) -->
    ('b in int) -->
@@ -1107,7 +1030,7 @@ interactive add_divReduce :
    sequent { <H> >- ('a /@ 'c) +@ ('b /@ 'c) <= ('a +@ 'b) /@ 'c }
 
 interactive div_Assoc :
-   sequent { <H> >- 0 <= 'a } -->
+   sequent { <H> >- 'a >= 0 } -->
    sequent { <H> >- 0 < 'b } -->
    sequent { <H> >- 0 < 'c } -->
    [wf] sequent { <H> >- 'a in int } -->
@@ -1116,7 +1039,7 @@ interactive div_Assoc :
    sequent { <H> >- (('a /@ 'b) /@ 'c) ~ ('a /@ ('b *@ 'c)) }
 
 interactive_rw div_Assoc_rw :
-   (0 <= 'a) -->
+   ('a >= 0) -->
    (0 < 'b) -->
    (0 < 'c) -->
    ('a in int) -->

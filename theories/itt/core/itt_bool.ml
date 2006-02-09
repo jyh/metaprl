@@ -355,7 +355,7 @@ interactive bool_subst_concl bind{x. 'C['x]} 'e :
    [main] sequent { <H>; y: "assert"{bnot{'e}} >- 'C[bfalse] } -->
    sequent { <H> >- 'C['e] }
 
-interactive bool_subst_hyp 'H bind{x. 'A['x]} 'e :
+interactive bool_subst_hyp 'H bind{v. 'A['v]} 'e :
    [wf] sequent { <H>; x: 'A['e]; <J['x]> >- 'e in bool } -->
    [main] sequent { <H>; x: 'A[btrue]; <J['x]>; y: "assert"{'e} >- 'C['x]
  }

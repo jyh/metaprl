@@ -58,10 +58,10 @@ open Itt_quotient
 define unfold_fcompare : fcompare{'eq; 'x; 'y} <--> ('eq 'x 'y)
 
 define unfold_fmember : fmember{'eq; 'x; 's1} <-->
-   list_ind{'s1; bfalse; h, t, g. bor{fcompare{'eq; 'x; 'h}; 'g}}
+   list_ind{'s1; bfalse; h, t, g. bor{'g; fcompare{'eq; 'x; 'h}}}
 
 define unfold_fsubseteq : fsubseteq{'eq; 's1; 's2} <-->
-   list_ind{'s1; btrue; h, t, g. band{fmember{'eq; 'h; 's2}; 'g}}
+   list_ind{'s1; btrue; h, t, g. band{'g; fmember{'eq; 'h; 's2}}}
 
 define unfold_fequal : fequal{'eq; 's1; 's2} <-->
    band{fsubseteq{'eq; 's1; 's2}; fsubseteq{'eq; 's2; 's1}}
@@ -93,10 +93,10 @@ define unfold_fsquash : fsquash{'eq; 's} <-->
    list_ind{'s; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 't}; 'g; cons{it; 'g}}}
 
 define unfold_fball : fball{'s; x. 'b['x]} <-->
-   list_ind{'s; btrue; x, t, g. band{'b['x]; 'g}}
+   list_ind{'s; btrue; x, t, g. band{'g; 'b['x]}}
 
 define unfold_fbexists : fbexists{'s; x. 'b['x]} <-->
-   list_ind{'s; bfalse; x, t, g. bor{'b['x]; 'g}}
+   list_ind{'s; bfalse; x, t, g. bor{'g; 'b['x]}}
 
 define unfold_fall : fall{'eq; 'T; 's; x. 'b['x]} <-->
    (all x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x])
@@ -268,14 +268,14 @@ interactive_rw reduce_fmember_nil {| reduce |} : fmember{'eq; 'x; nil} <--> bfal
 
 interactive_rw reduce_fmember_cons {| reduce |} :
    fmember{'eq; 'x; cons{'h; 't}} <-->
-   bor{fcompare{'eq; 'x; 'h}; fmember{'eq; 'x; 't}}
+   bor{fmember{'eq; 'x; 't}; fcompare{'eq; 'x; 'h}}
 
 (*
  * Singleton.
  *)
 interactive_rw reduce_fmember_fsingleton {| reduce |} :
    fmember{'eq; 'x; fsingleton{'y}} <-->
-   bor{fcompare{'eq; 'x; 'y}; bfalse}
+   fcompare{'eq; 'x; 'y}
 
 (*
  * Subset.
@@ -284,7 +284,7 @@ interactive_rw reduce_fsubseteq_nil {| reduce |} : fsubseteq{'eq; nil; 's} <--> 
 
 interactive_rw reduce_fsubseteq_cons {| reduce |} :
    fsubseteq{'eq; cons{'h; 't}; 's} <-->
-   band{fmember{'eq; 'h; 's}; fsubseteq{'eq; 't; 's}}
+   band{fsubseteq{'eq; 't; 's}; fmember{'eq; 'h; 's}}
 
 (*
  * Union.
@@ -333,7 +333,7 @@ interactive_rw reduce_fball_nil {| reduce |} :
 
 interactive_rw reduce_fball_cons {| reduce |} :
    fball{cons{'h; 't}; x. 'b['x]} <-->
-      band{'b['h]; fball{'t; x. 'b['x]}}
+      band{fball{'t; x. 'b['x]}; 'b['h]}
 
 (*
  * Existential quantification.
@@ -343,7 +343,7 @@ interactive_rw reduce_fbexists_nil {| reduce |} :
 
 interactive_rw reduce_fbexists_cons {| reduce |} :
    fbexists{cons{'h; 't}; x. 'b['x]} <-->
-      bor{'b['h]; fbexists{'t; x. 'b['x]}}
+      bor{fbexists{'t; x. 'b['x]}; 'b['h]}
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

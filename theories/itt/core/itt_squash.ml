@@ -421,7 +421,10 @@ doc <:doc<
    @comment{Squash a goal}
 >>
 let unsquashT = argfunT (fun i p ->
-   Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i))
+   if i = 0 then
+      squashMemberFormation
+   else
+      Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i))
 
 let squashT = funT (fun p ->
    let ct = concl p in

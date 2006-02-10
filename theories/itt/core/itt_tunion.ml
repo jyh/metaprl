@@ -29,7 +29,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005, MetaPRL Group
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -72,6 +73,7 @@ open Tactic_type.Tacticals
 
 open Itt_struct
 open Itt_equal
+open Itt_squash
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -165,42 +167,44 @@ doc <:doc<
    $a @in A$.  This rule is allowed, but only for equality goals,
    where the computational content of the proof can be omitted.
 >>
-interactive tunionElimination {| elim [ThinOption thinT] |} 'H :
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y] >- 't1['z] = 't2['z] in 'C['z] } -->
+interactive tunionElimination 'H :
+   sequent { <H>; tunion{'A; y. 'B['y]}; y: 'A; x: 'B['y]; <J['x]> >- 't1['x] = 't2['x] in 'C['x] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
 
-interactive tunionElimination_sq {| elim [ThinOption thinT] |}  'H :
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y] >- squash{'C['z]} } -->
+interactive tunionElimination_sq 'H :
+   sequent { <H>; tunion{'A; y. 'B['y]}; y: 'A; x: 'B['y]; <J['x]> >- squash{'C['x]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
 doc docoff
 let thinLastT n = (thinT (-1) thenT tryT (thinT n))
 doc docon
 
-interactive tunionElimination_eq (* {| elim [ThinOption thinLastT] |} *) 'H :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
-      (* can we get rid of the above wf-assumption? *)
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
-                       u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
+interactive tunionElimination_eq 'H :
+   sequent { <H>; z: tunion{'A; y. 'B['y]}; y: 'A; x: 'B['y]; <J['x]>;
+                  u: 'x = 'z in tunion{'A; y. 'B['y]} >- squash{'C['x]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
-interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'f :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
-      (* can we get rid of the above wf-assumption? *)
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'f 'x in 'A } -->
-   [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'x in 'B['f 'x] } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y] >- 'C['z] } -->
+interactive tunionElimination2 'H 'f :
+   [aux] sequent { <H>; tunion{'A; y. 'B['y]}; y: 'A; x: 'B['y]; <J['x]> >- 'f 'x in 'A } -->
+   [aux] sequent { <H>; tunion{'A; y. 'B['y]}; y: 'A; x: 'B['y]; <J['x]> >- 'x in 'B['f 'x] } -->
+   sequent { <H>; tunion{'A; y. 'B['y]}; y: 'A; x: 'B['y]; <J['x]> >- 'C['x] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
 
+let tunionEliminationRevT = argfunT (fun i p -> tunionElimination2 i (get_with_arg p))
 
-interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 'f :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
-      (* can we get rid of the above wf-assumption? *)
-   [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
-                       u: 'z='x in tunion{'A; y. 'B['y]} >- 'f 'z = 'y in 'A } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
-                       u: 'z='x in tunion{'A; y. 'B['y]} >- 'C['z] } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
+let unionElimT = argfunT (fun i p ->
+   let t = Sequent.concl p in
+      begin
+         if is_equal_term t then
+            tunionElimination i
+         else if is_squash_term t then
+            tunionElimination_sq i
+         else
+            ((squashT thenT tunionElimination_sq i thenT unsquashT 0) orelseT tunionEliminationRevT i)
+      end
+      thenT thinIfThinningT [i])
+
+let resource elim += <<tunion{'A; y. 'B['y]}>>, wrap_elim unionElimT
 
 doc <:doc<
    @modsubsection{Subtyping}

@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +27,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.caltech.edu>
  *)
 extends Itt_equal
 extends Itt_set
@@ -46,56 +47,14 @@ prec prec_tunion
 topval fold_tunion : conv
 
 (************************************************************************
- * RULES                                                                *
+ * TACTICS                                                              *
  ************************************************************************)
 
-(*
- * Proof of Ui
- *)
-rule tunionFormation 'A :
-   sequent { <H> >- 'A = 'A in univ[i:l] } -->
-   sequent { <H>; x: 'A >- univ[i:l] } -->
-   sequent { <H> >- univ[i:l] }
-
-(*
- * Typehood.
- *)
-rule tunionEquality :
-   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
-   sequent { <H> >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] }
-
-rule tunionType :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- "type"{tunion{'A; x. 'B['x]}} }
-
-(*
- * Membership.
- *)
-rule tunionMemberEquality 'a :
-   sequent { <H> >- 'a = 'a in 'A } -->
-   sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- 'x1 = 'x2 in 'B['a] } -->
-   sequent { <H> >- 'x1 = 'x2 in Union x:'A. 'B['x]  }
-
-rule tunionMemberFormation 'a :
-   sequent { <H> >- 'a = 'a in 'A } -->
-   sequent { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent { <H> >- 'B['a] } -->
-   sequent { <H> >- Union x:'A. 'B['x]  }
-
-(*
- * Elimination.
- *)
-rule tunionElimination 'H :
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
+topval unionElimT : int -> tactic
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "nl"
  * End:
  * -*-
  *)

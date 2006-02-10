@@ -18,7 +18,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005 MetaPRL Group
+   Copyright (C) 2005-2006 MetaPRL Group, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ doc <:doc< @parents >>
 extends Base_theory
 extends Itt_equal
 extends Itt_squash
-extends Itt_struct2
+extends Itt_struct3
 extends Itt_sqsimple
 
 doc terms
@@ -53,6 +53,5 @@ declare Img{'A; x.'f['x]}
 
 open Basic_tactics
 
-topval imgElimSimpleT : int -> term -> tactic
-
 val dest_img_term : term -> var * term * term
+topval imgElimT : int -> tactic

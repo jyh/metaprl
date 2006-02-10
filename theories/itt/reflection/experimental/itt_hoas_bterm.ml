@@ -44,6 +44,7 @@ extends Itt_tunion
 doc docoff
 
 open Basic_tactics
+open Itt_struct
 open Itt_sqsimple
 open Itt_hoas_destterm
 
@@ -248,18 +249,18 @@ interactive  bt_elim_squash1  {| elim [] |} 'H :
                compatible_shapes{'depth;shape{'op};'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BT{'n+@1}; <J['t]> >- squash{'P['t]} }
 
-interactive  bt_elim1  {| elim [] |} 'H :
-   [wf] sequent { <H> >- 'n in nat } -->
-   [step] sequent { <H>; t: BT{'n+@1}; <J['t]>; x: dom{BT{'n}} >- 'P[mk{'x}] } -->
+interactive  bt_elim1  {| elim [ThinOption thinT] |} 'H :
+   [wf] sequent { <H>; t: BT{'n+@1}; <J['t]> >- 'n in nat } -->
+   [step] sequent { <H>; t: BT{'n+@1}; x: dom{BT{'n}}; <J[mk{'x}]> >- 'P[mk{'x}] } -->
    sequent { <H>; t: BT{'n+@1}; <J['t]> >- 'P['t] }
 
-interactive  bterm_elim_squash1 {| elim [] |} 'H :
+interactive  bterm_elim_squash1 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; t: BTerm; <J['t]>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    sequent { <H>; t: BTerm; <J['t]>; depth: nat; op:Operator; subterms:list{BTerm};
                compatible_shapes{'depth;shape{'op};'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BTerm; <J['t]> >- squash{'P['t]} }
 
-interactive bterm_elim2  {| elim [] |} 'H :
+interactive bterm_elim2  {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; t: BTerm; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    sequent { <H>; t: BTerm; <J['t]>; bdepth: nat; op:Operator; subterms:list{BTerm};
                compatible_shapes{'bdepth;shape{'op};'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
@@ -402,7 +403,7 @@ doc <:doc<
    The following is the actual induction principle (the previous
    rules are just elimination rules).
 >>
-interactive bterm_elim3 {| elim [] |} 'H :
+interactive bterm_elim3 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; t: BTerm; <J['t]>; x: Var >- 'P['x] } -->
    sequent { <H>; t: BTerm; <J['t]>; bdepth: nat; op: Operator;
                subterms: list{BTerm};

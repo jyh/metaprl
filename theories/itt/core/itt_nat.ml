@@ -201,6 +201,13 @@ interactive ge_eq2nat {| ge_intro |} :
    sequent { <H>; (-1) >= 'n; (-1) >= 'm >- "false" } -->
    sequent { <H> >- 'n = 'm in nat }
 
+interactive noteq2ge_elim {| ge_elim [] |} 'H :
+   [wf] sequent { <H>; x: "not"{'a = 'b in nat}; <J['x]> >- 'a in nat } -->
+   [wf] sequent { <H>; x: "not"{'a = 'b in nat}; <J['x]> >- 'b in int } -->
+   sequent { <H>; x: "not"{'a = 'b in nat}; <J['x]>; 'a >= 'b +@ 1 >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a = 'b in nat}; <J['x]>; 'b >= 'a +@ 1 >- 'C['x] } -->
+   sequent { <H>; x: "not"{'a = 'b in nat}; <J['x]> >- 'C['x] }
+
 interactive nat_plusone {| nth_hyp |} 'H :
    sequent { <H>; a: nat; <J['a]> >- 'a +@ 1 in nat }
 
@@ -241,6 +248,27 @@ interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :
    [base] sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
    [step] sequent { <H>; x: nat; 0<'x; le{'x;'n1}; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent { <H> >- ind{'n1; 'base1; k1, l1. 'up1['k1; 'l1]} = ind{'n2; 'base2; k2, l2. 'up2['k2; 'l2]} in 'T['n1] }
+
+interactive splitNat 'n :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [base] sequent { <H>; 'n = 0 in nat >- 'C } -->
+   [step] sequent { <H>; 'n in { x: int| 'x >= 1 } >- 'C } -->
+   sequent { <H> >- 'C }
+
+interactive_rw reduce_ind_up2 'n:
+   'n in { x: int| 'x >= 1 } -->
+   ind{'n; 'base; k,l. 'up['k;'l]} <-->
+   ('up['n; ind{'n -@ 1 ; 'base; k,l. 'up['k;'l]}])
+
+doc docoff
+
+let splitNatT t =
+   splitNat t thenLT [
+      autoT;
+      onAllHypsT (fun i -> tryT (progressT (hypSubstT (-1) i) thenT rwh reduce_ind_base i));
+      (onAllMHypsT (rwh (reduce_ind_up2 t)) thenAT nthHypT (-1)) thenMT (**)
+         (dT (-1) thenT dT (-1) thenT thinT (-2))
+   ]
 
 interactive finiteNatType {| intro [] |} :
    sequent { <H> >- 'k in int} -->

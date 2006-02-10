@@ -54,6 +54,8 @@ topval foldInd : conv
  * TACTICS                                                              *
  ************************************************************************)
 
+topval splitNatT : term -> tactic
+
 topval natBackInductionT : term -> tactic
 
 topval positiveRule1T : tactic

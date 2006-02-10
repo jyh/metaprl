@@ -262,13 +262,21 @@ interactive_rw reduce_ind_up2 'n:
 
 doc docoff
 
-let splitNatT t =
-   splitNat t thenLT [
-      autoT;
-      onAllHypsT (fun i -> tryT (progressT (hypSubstT (-1) i) thenT rwh reduce_ind_base i));
-      (onAllMHypsT (rwh (reduce_ind_up2 t)) thenAT nthHypT (-1)) thenMT (**)
-         (dT (-1) thenT dT (-1) thenT thinT (-2))
-   ]
+let splitNatT =
+   let rec iter i =
+      if i = 0 then 
+         idT 
+      else 
+         let tac = tryT (progressT (hypSubstT (-1) i) thenT rwh reduce_ind_base i) in
+            if i = 1 then tac else (tac thenT iter (i - 1))
+   in
+      argfunT (fun t p ->
+         splitNat t thenLT [
+            autoT;
+            iter (Sequent.hyp_count p) thenT thinT (-1);
+            (onAllMHypsT (rwh (reduce_ind_up2 t)) thenAT nthHypT (-1)) thenMT (**)
+               (dT (-1) thenT dT (-1) thenT thinT (-2))
+         ])
 
 interactive finiteNatType {| intro [] |} :
    sequent { <H> >- 'k in int} -->

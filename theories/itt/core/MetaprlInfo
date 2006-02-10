@@ -29,7 +29,6 @@ MPFILES[] =
    itt_pairwise
    itt_pairwise2
    itt_struct2
-   itt_list
    itt_struct3
    itt_match
    itt_int_base
@@ -45,6 +44,7 @@ MPFILES[] =
    itt_subset
    itt_image
    itt_tunion
+   itt_list
    itt_bisect
    itt_bunion
    itt_inv_typing

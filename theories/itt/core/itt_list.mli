@@ -118,7 +118,7 @@ rule nilFormation :
  * H >- A = A in Ui
  *)
 rule nilEquality :
-   sequent { <H> >- "type"{list{'A}} } -->
+   sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- nil in list{'A} }
 
 (*

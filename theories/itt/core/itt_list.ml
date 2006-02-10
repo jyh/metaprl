@@ -140,14 +140,6 @@ interactive nilEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- nil in list{'A} }
 
-doc <:doc<
-   We want to use a stronger version of the @tt[nilEquality] rule that is not derivable
-   (as it would require some sort of a weak form of ``reverse functionality'' reasoning).
->>
-prim nilEquality2 {| intro [] |} :
-   [wf] sequent { <H> >- "type"{list{'A}} } -->
-   sequent { <H> >- nil in list{'A} } = it
-
 interactive nilFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- list{'A} }
@@ -200,6 +192,15 @@ interactive list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
                    = list_ind{'e2; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]}
                    in 'T['e1]
            }
+
+doc <:doc<
+   @modsubsection{More well-formedness lemmas for the empty list}
+>>
+interactive nilEquality2 {| nth_hyp |} 'H :
+   sequent { <H>; l: list{'A}; <J['l]> >- nil in list{'A} }
+
+interactive nilEquality3 {| nth_hyp |} 'H :
+   sequent { <H>; x: 'l1 = 'l2 in list{'A}; <J['x]> >- nil in list{'A} }
 
 doc <:doc<
    @modsubsection{Contradiction}

@@ -52,18 +52,22 @@ struct
     *)
    declare sequent [fsub] { Term : Hyp >- Prop } : Judgment
 
-   interactive fsub_sequent_is_judgment_concl : <:xrule<
+   prim fsub_sequent_is_judgment_concl : <:xrule<
        meta_type{| <H> >- meta_member{C; "Prop"} |} -->
        meta_type{| <H> >- meta_member{fsub{| >- C |}; "Judgment"} |}
    >>
 
-(*
-   interactive fsub_sequent_is_judgment_val : <:xrule<
+   prim fsub_sequent_is_judgment_val : <:xrule<
        meta_type{| <H> >- meta_member{ty; "TyExp"} |} -->
        meta_type{| <H>; x: "Exp" >- meta_member{fsub{| <J[x]> >- C[x] |}; "Judgment"} |} -->
        meta_type{| <H> >- meta_member{fsub{| x: TyVal{ty}; <J[x]> >- C[x] |}; "Judgment"} |}
    >>
- *)
+
+   prim fsub_sequent_is_judgment_type : <:xrule<
+       meta_type{| <H> >- meta_member{ty; "TyExp"} |} -->
+       meta_type{| <H>; x: "TyExp" >- meta_member{fsub{| <J[x]> >- C[x] |}; "Judgment"} |} -->
+       meta_type{| <H> >- meta_member{fsub{| x: TyPower{ty}; <J[x]> >- C[x] |}; "Judgment"} |}
+   >>
 end
 
 (************************************************************************

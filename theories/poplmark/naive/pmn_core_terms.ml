@@ -38,7 +38,7 @@ open Itt_logic
 (*
  * Type expressions.
  *)
-reflected_logic Types =
+reflected_logic Terms =
 struct
    (* Type expressions *)
    declare typeclass TyExp -> Term

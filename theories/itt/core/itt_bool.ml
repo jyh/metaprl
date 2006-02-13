@@ -18,7 +18,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,8 +35,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 
@@ -43,7 +44,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_equal
-extends Itt_struct
+extends Itt_struct2
 extends Itt_union
 extends Itt_logic
 extends Itt_decidable
@@ -236,8 +237,8 @@ doc <:doc<
 >>
 interactive ifthenelse_type2 {| intro [] |} :
    [wf] sequent { <H> >- 'e in bool } -->
-   [wf] sequent { <H>; x: 'e = btrue in bool >- "type"{'A} } -->
-   [wf] sequent { <H>; x: 'e = bfalse in bool >- "type"{'B} } -->
+   [wf] sequent { <H>; x: "assert"{'e} >- "type"{'A} } -->
+   [wf] sequent { <H>; x: "assert"{bnot{'e}} >- "type"{'B} } -->
    sequent { <H> >- "type"{ifthenelse{'e; 'A; 'B}} }
 
 doc <:doc<
@@ -246,26 +247,11 @@ doc <:doc<
    The two following rules represent proof by contradiction:
    $@true$ and $@false$ are provably distinct.
 >>
-interactive boolContradiction1 {| elim [] |} 'H :
+interactive boolContradiction1 {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: btrue = bfalse in bool; <J['x]> >- 'C['x] }
 
-interactive boolContradiction2 {| elim [] |} 'H :
+interactive boolContradiction2 {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: bfalse = btrue in bool; <J['x]> >- 'C['x] }
-
-doc <:doc<
-   @modsubsection{Combinator equality}
-
-   The @tt{ifthenelse} term computes a value of type $T$
-   if the condition is a Boolean value, and the branches
-   both have type $T$ under a case analysis on the
-   condition.
->>
-interactive ifthenelse_equality {| intro [] |} :
-   [wf] sequent { <H> >- 'e1 = 'e2 in bool } -->
-   [wf] sequent { <H>; w: 'e1 = btrue in bool >- 'x1 = 'x2 in 'T } -->
-   [wf] sequent { <H>; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
-   sequent { <H> >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2}
- in 'T }
 
 doc <:doc<
    @modsubsection{Computational equivalence}
@@ -289,6 +275,21 @@ let resource intro += [
    << btrue ~ 'e >>, wrap_intro boolSqequal;
    << bfalse ~ 'e >>, wrap_intro boolSqequal
 ]
+
+doc <:doc<
+   @modsubsection{Combinator equality}
+
+   The @tt{ifthenelse} term computes a value of type $T$
+   if the condition is a Boolean value, and the branches
+   both have type $T$ under a case analysis on the
+   condition.
+>>
+interactive ifthenelse_equality {| intro [] |} :
+   [wf] sequent { <H> >- 'e1 = 'e2 in bool } -->
+   [wf] sequent { <H>; "assert"{'e1} >- 'x1 = 'x2 in 'T } -->
+   [wf] sequent { <H>; "assert"{bnot{'e1}} >- 'y1 = 'y2 in 'T } -->
+   sequent { <H> >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2}
+ in 'T }
 
 doc <:doc<
    @modsubsection{Connective well-formedness}

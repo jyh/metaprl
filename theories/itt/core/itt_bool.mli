@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +31,7 @@
  * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 extends Itt_equal
-extends Itt_struct
+extends Itt_struct2
 extends Itt_union
 extends Itt_decidable
 

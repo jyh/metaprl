@@ -17,8 +17,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
-   California Institute of Technology
+   Copyright (C) 1998 Jason Hickey, Cornell University
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,8 +33,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey @email{jyh@cs.cornell.edu}
-   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
    @end[license]
 >>
 
@@ -47,11 +46,13 @@ extends Itt_bool
 extends Itt_struct
 doc docoff
 
-open Basic_tactics
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+
+open Dtactic
 
 open Itt_equal
 open Itt_struct
-open Itt_squash
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -137,25 +138,25 @@ doc <:doc<
    for a union type $@bunion{A; B}$ produces two cases: one for
    membership in $A$, and another for membership in $B$.
 >>
-interactive bunionElimination 'H :
-   [main] sequent { <H>; 'A bunion 'B; x: 'A; <J['x]> >- squash{'C['x]} } -->
-   [main] sequent { <H>; 'A bunion 'B; x: 'B; <J['x]> >- squash{'C['x]} } -->
-   sequent { <H>; x: 'A bunion 'B; <J['x]> >- squash{'C['x]} }
+interactive bunionElimination {| elim [ThinOption thinT] |} 'H :
+   [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'A >- 't1['y] = 't2['y] in 'C['y] } -->
+   [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
+   sequent { <H>; x: 'A bunion 'B; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
 
 doc docoff
+let thinLastT n = thinT (-1) thenT tryT (thinT n)
+doc docon
 
-let bunionElimT = argfunT (fun i p ->
-   (if is_squash_term (concl p) then
-      bunionElimination i
-   else 
-      (squashT thenT bunionElimination i thenT unsquashT 0))
-   thenT thinIfThinningT [i]) 
-
-let resource elim += << 'A bunion 'B >>, wrap_elim bunionElimT
+interactive bunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
+   [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'A; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
+   [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'B; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
+   sequent { <H>; x: 'A bunion 'B; <J['x]> >- squash{'C['x]} }
+doc docoff
 
 (*
  * -*-
  * Local Variables:
+ * Caml-master: "nl"
  * End:
  * -*-
  *)

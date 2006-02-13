@@ -1537,6 +1537,7 @@ doc <:doc<
 >>
 
 interactive list_continuous {| intro[] |}:
+   [wf] sequent { <H>; i:nat >- 'A['i] Type} -->
    [monotone] sequent { <H>; i:nat >- 'A['i] subtype 'A['i+@1] } -->
    sequent { <H> >- ext_equal{ list{Union i:nat.'A['i]}; Union i:nat.list{'A['i]} } }
 

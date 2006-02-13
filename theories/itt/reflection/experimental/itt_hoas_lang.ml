@@ -18,7 +18,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005-2006 MetaPRL Group, California Institute of Technology
+   Copyright (C) 2005, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -48,8 +48,6 @@ extends Itt_subset2
 doc docoff
 
 open Basic_tactics
-
-open Itt_struct
 
 doc terms
 
@@ -435,10 +433,13 @@ interactive ndepth_correct {| intro[] |} :
    [wf] sequent{ <H> >- 't in Lang{'sop} } -->
    sequent { <H> >-  't in BT{'sop; ndepth{'t}} }
 
+
 interactive  lbt_subset_bterm  {| intro[] |} :
    sequent { <H> >- 'sop subtype Operator } -->
    [wf] sequent { <H> >- 'n in nat} -->
    sequent { <H> >- BT{'sop; 'n} subset Lang{'sop} }
+
+
 
 interactive  lang_elim_sq {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
@@ -449,6 +450,8 @@ interactive  lang_elim_sq {| elim [] |} 'H :
                 all_list{'subs;t.squash{'P['t]}}
                 >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
    sequent { <H>; t: Lang{'sop}; <J> >- squash{'P['t]} }
+
+
 
 interactive_rw mk_dest_reduce 'sop :
    'sop subtype Operator -->
@@ -488,20 +491,21 @@ interactive_rw dest_mk_reduce BT{'sop; 'n} :
    't in dom{'sop; BT{'sop; 'n}}  -->
    dest{mk{'t}} <--> 't
 
-interactive  lbt_elim1 {| elim [ThinOption thinT] |} 'H :
-   [wf] sequent { <H>; t: BT{'sop; 'n+@1}; <J['t]> >- 'n in nat } -->
-   [wf] sequent { <H>; t: BT{'sop; 'n+@1}; <J['t]> >- 'sop subtype Operator } -->
-   sequent { <H>; t: BT{'sop; 'n+@1}; x: dom{'sop; BT{'sop; 'n}}; <J[mk{'x}]> >- 'P[mk{'x}] } -->
+interactive  lbt_elim1  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
+   [step] sequent { <H>; t: BT{'sop; 'n+@1}; <J['t]>; x: dom{'sop; BT{'sop; 'n}} >- 'P[mk{'x}] } -->
    sequent { <H>; t: BT{'sop; 'n+@1}; <J['t]> >- 'P['t] }
 
-interactive  lang_elim_squash1 {| elim [ThinOption thinT] |} 'H :
-   [wf] sequent { <H>; t: Lang{'sop}; <J['t]> >- 'sop subtype Operator } -->
+interactive  lang_elim_squash1 {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
    sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    sequent { <H>; t: Lang{'sop}; <J['t]>; depth: nat; op: 'sop; subs: list{Lang{'sop}};
                compatible_shapes{'depth;shape{'op};'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
    sequent { <H>; t: Lang{'sop}; <J['t]> >- squash{'P['t]} }
 
-interactive lang_elim 'H :
+
+interactive lang_elim  'H :
    [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
    sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    sequent { <H>; <J>; bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
@@ -517,7 +521,7 @@ interactive lang_elim 'H :
  * on any sequent.  Note that it does not increase the expressive power,
  * it just makes the rule easier to use.
  *)
-interactive lang_elim2 {| elim [ThinOption thinT] |} 'H :
+interactive lang_elim2 {| elim [] |} 'H :
    [wf] sequent { <H>; t: Lang{'sop}; <J['t]> >- 'sop subtype Operator } -->
    [base] sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    [step] sequent { <H>; t: Lang{'sop}; <J['t]>;
@@ -528,16 +532,16 @@ interactive lang_elim2 {| elim [ThinOption thinT] |} 'H :
            } -->
    sequent { <H>; t: Lang{'sop}; <J['t]> >- 'P['t] }
 
-interactive lang_induction {| elim [ThinOption thinT] |} 'H :
-   [wf] sequent { <H>; t: Lang{'sop}; <J['t]> >- 'sop subtype Operator } -->
+interactive lang_induction  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
    [base] sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    [step] sequent { <H>; t: Lang{'sop}; <J['t]>; bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
                compatible_shapes{'bdepth;shape{'op};'subs} >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
    sequent { <H>; t: Lang{'sop}; <J['t]> >- 'P['t] }
 
-interactive lang_induction2 {| elim [ThinOption thinT] |} 'H :
-   [wf] sequent { <H>; t: Lang{SubOp{'h::'ops}}; <J['t]> >- 'h in Operator } -->
-   [wf] sequent { <H>; t: Lang{SubOp{'h::'ops}}; <J['t]> >- 'ops in list{Operator} } -->
+interactive lang_induction2  {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'h in Operator } -->
+   [wf] sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H>; t: Lang{SubOp{'h::'ops}}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    sequent { <H>; t: Lang{SubOp{'h::'ops}}; <J['t]>; bdepth: nat; subs: list{Lang{SubOp{'h::'ops}}};
                compatible_shapes{'bdepth;shape{'h};'subs} >- 'P[mk_bterm{'bdepth;'h;'subs}] } -->

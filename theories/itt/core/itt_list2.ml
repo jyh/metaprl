@@ -676,8 +676,8 @@ doc docoff
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
 
 let resource reduce += [
-   << nth{cons{'u; 'v}; !i} >>, wrap_reduce reduce_nth_cons;
-   << replace_nth{cons{'u; 'v}; !i; 't} >>, wrap_reduce reduce_replace_nth_cons
+   << nth{cons{'u; 'v}; !i} >>, wrap_reduce_crw reduce_nth_cons;
+   << replace_nth{cons{'u; 'v}; !i; 't} >>, wrap_reduce_crw reduce_replace_nth_cons
 ]
 
 doc <:doc<

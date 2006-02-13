@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -203,14 +203,11 @@ let reduce_depth_of_exp e =
 let reduceDepthBTerm2C = funC reduce_depth_of_exp
 
 let resource reduce +=
-   [<< bdepth{'e} >>, wrap_reduce reduceDepthBTerm2C]
+   [<< bdepth{'e} >>, wrap_reduce_crw reduceDepthBTerm2C]
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

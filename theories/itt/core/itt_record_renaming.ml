@@ -48,13 +48,12 @@ interactive_rw rename_rcrd_reduce :
             rcrd[c:t]{'x;rename[a:t, b:t]{'r}} }}                    (* else *)
 
 
-let rename_rcrd_reduceC = rename_rcrd_reduce  thenC reduce_eq_label thenC tryC reduce_eq_label
+let rename_rcrd_reduceC = rename_rcrd_reduce thenC reduce_eq_label thenC tryC reduce_eq_label
 
 (* BUG: rename_rcrd_reduceC does not suppose to work when labels are not constants. However it is not always a case *)
 
 let resource reduce +=
    << rename[a:t, b:t]{rcrd[c:t]{'x;'r}} >>, wrap_reduce rename_rcrd_reduceC
-
 
 doc <:doc<
      For example, <<rename[ "x":t, "y":t]{ {x=1;y=2;z=3} } ~ {y=1;x=2;z=3}>>.

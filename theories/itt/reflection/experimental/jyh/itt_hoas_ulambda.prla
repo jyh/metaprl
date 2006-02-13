@@ -1273,9 +1273,11 @@ S	s989	t216\\ h h21 h988 h41 h42 h76 h86 h114\\ P149
 B	b990	s989
 T	t990	o215 b990
 B	b991	t990
+NItt_int_base!lt	lt	lt Itt_int_base
+O	oltmy	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o991	gt
-T	t991	o991 b99 b22
+T	t991	oltmy b22 b99
 H	h991	__1 t991
 T	t992	o25 b99 b45
 B	b992	t992

@@ -822,6 +822,8 @@ B	b3298	t3298
 NItt_logic!implies	implies	implies Itt_logic
 O	o3302	implies
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o4212	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o3303	gt
 NItt_dprod!fst	fst	fst Itt_dprod
@@ -1125,8 +1127,6 @@ NItt_int_ext!ge	ge	ge Itt_int_ext
 O	o4191	ge
 P	p4191	Var v
 O	o4192	var p4191
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o4212	lt
 P	p4220	String "arithT ttca"
 O	o4220	ext_rule p4220
 P	p4236	String one_ge_0
@@ -2017,7 +2017,7 @@ T	t7445	o7444
 B	b7445	t7445
 P	p1077	String "dT 0 thenT autoT thenT byDefT reduceC thenT dT 2 thenT arithT ttca"
 O	o1077	ext_rule p1077
-T	t9260	o3303 b4464 b3307
+T	t9260	o4212 b3307 b4464
 S	s9260	t990\\ h\\ t9260
 B	b9260	s9260
 T	t9261	o989 b9260
@@ -4196,7 +4196,7 @@ T	t550	o3305
 B	b550	t550
 T	t551	o3304 b550
 B	b551	t551
-T	t552	o3303 b551 b3307
+T	t552	o4212 b3307 b551
 B	b552	t552
 T	t553	o3308 b550
 B	b553	t553

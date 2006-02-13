@@ -2295,11 +2295,13 @@ T	t3208	o b943 b3206
 B	b3209	t3208
 P	p3211	String unfold_let_sovar
 O	o3211	term_def p3211
+NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
+O	o3526	lt_bool
 NItt_int_ext!gt_bool	gt_bool	gt_bool Itt_int_ext
 O	o3213	gt_bool
 T	t3213	o995 b2804
 B	b3213	t3213
-T	t3214	o3213 b3213 b3198
+T	t3214	o3526 b3198 b3213
 B	b3214	t3214
 T	t3215	o4411 b2804 b3198
 B	b3215	t3215
@@ -2321,7 +2323,7 @@ P	p3319	String unfold_let_cvar
 O	o3319	term_def p3319
 T	t3329	o995 b2805
 B	b3335	t3329
-T	t3335	o3213 b3335 b3198
+T	t3335	o3526 b3198 b3335
 B	b3336	t3335
 T	t3336	o4411 b2805 b3198
 B	b3337	t3336
@@ -2410,7 +2412,7 @@ P	p3396	String reduce_let_sovar
 O	o3396	rewrite p3396
 T	t3399	o995 b1641
 B	b3400	t3399
-T	t3400	o3213 b3400 b3198
+T	t3400	o3526 b3198 b3400
 B	b3401	t3400
 T	t3401	o4411 b1641 b3198
 B	b3402	t3401
@@ -2430,7 +2432,7 @@ Ve	e3407	e\\ H\\ t1057
 B	b3409	e3407 v
 T	t3410	o995 b4102
 B	b3412	t3410
-T	t3412	o3213 b3412 b3229
+T	t3412	o3526 b3229 b3412
 B	b3414	t3412
 T	t3414	o4411 b4102 b3229
 B	b3415	t3414
@@ -2448,7 +2450,7 @@ P	p3436	String reduce_let_cvar
 O	o3436	rewrite p3436
 T	t3448	o995 b1645
 B	b3449	t3448
-T	t3449	o3213 b3449 b3198
+T	t3449	o3526 b3198 b3449
 B	b3453	t3449
 T	t3453	o4411 b1645 b3198
 B	b3464	t3453
@@ -2464,7 +2466,7 @@ P	p3468	String "rwh unfold_let_cvar 0 thenT rwh unfold_proof_step_witness 0 then
 O	o3468	ext_rule p3468
 T	t3469	o995 b4114
 B	b3470	t3469
-T	t3474	o3213 b3470 b3229
+T	t3474	o3526 b3229 b3470
 B	b3475	t3474
 T	t3475	o4411 b4114 b3229
 B	b3476	t3475
@@ -2487,8 +2489,6 @@ H	h3518	x1 t3231
 H	h3519	v t591
 Ve	e3519	e\\ H\\ t1056
 B	b3519	e3519 v1
-NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
-O	o3526	lt_bool
 T	t3526	o3526 b3229 b3213
 B	b3526	t3526
 T	t3527	o4411 b2804 b3229

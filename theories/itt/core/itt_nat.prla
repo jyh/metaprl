@@ -738,6 +738,8 @@ NItt_logic!implies	implies	implies Itt_logic
 O	o1255	implies
 NItt_int_base!display_ind_eq	display_ind_eq	display_ind_eq Itt_int_base
 O	o1256	display_ind_eq
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o1365	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o1260	gt
 NItt_int_base!sub	sub	sub Itt_int_base
@@ -781,8 +783,6 @@ NItt_logic!all	all	all Itt_logic
 O	o1325	all
 P	p1337	String assertion
 O	o1337	tactic_arg p1337
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o1365	lt
 P	p1401	String reduce_ind_base
 O	o1401	rewrite p1401
 NOcaml!apply	apply	apply Ocaml
@@ -1490,7 +1490,7 @@ S	s4603	tbrarg\\ h3741\\ t4603
 B	b4604	s4603
 T	t4604	o1465 b4604
 B	b4605	t4604
-T	t4605	o1260 b4491 b1196
+T	t4605	o1365 b1196 b4491
 S	s4605	tbrarg\\ h3741\\ t4605
 B	b4606	s4605
 T	t4606	o1465 b4606
@@ -1718,7 +1718,7 @@ O	o3287	rule p3287
 H	h3287	a t1193
 P	p3296	String decidable
 O	o3296	meta_labeled p3296
-T	t3307	o1260 b1861 b1196
+T	t3307	o1365 b1196 b1861
 B	b3307	t3307
 P	p3323	String "assumT 3 thenT assumT 4 thenT genAssumT [2] thenT autoT thenT moveToConclT 2 thenT dT (-1) thenT byDefT unfold_decidable"
 O	o3323	ext_rule p3323
@@ -1732,7 +1732,7 @@ T	t5377	o1465 b5377
 B	b5378	t5377
 T	t5378	o1735 b5378
 B	b5379	t5378
-T	t5379	o1260 b4095 b1196
+T	t5379	o1365 b1196 b4095
 S	s5379	tbrarg\\ h3741\\ t5379
 B	b5380	s5379
 T	t5380	o1465 b5380
@@ -3753,7 +3753,7 @@ T	t4544	o921
 B	b4544	t4544
 T	t4546	o3666
 B	b4546	t4546
-T	t4557	o1260 b4523 b1196
+T	t4557	o1365 b1196 b4523
 B	b4557	t4557 x
 T	t4558	o1192 b1193 b4557
 B	b4558	t4558
@@ -9063,7 +9063,7 @@ T	t6400	o3296 b6400
 B	b6401	t6400
 T	t6401	o1486
 B	b6402	t6401
-T	t6402	o1260 b6402 b1196
+T	t6402	o1365 b1196 b6402
 B	b6403	t6402
 T	t6403	o1194 b4095 b6402
 B	b6404	t6403
@@ -9688,7 +9688,7 @@ B	b1767	t1767
 P	p1767	Number 12680
 P	p1768	Number 13007
 O	o1768	location p1767 p1768
-T	t6683	o1260 b4962 b1196
+T	t6683	o1365 b1196 b4962
 B	b6683	t6683
 T	t6684	o2195 b6683 b6395
 B	b6684	t6684 a
@@ -9734,7 +9734,7 @@ T	t6701	o b6701 b13
 B	b6702	t6701
 T	t6702	o1310 b6698 b6702
 B	b6703	t6702
-T	t6703	o1260 b4996 b1196
+T	t6703	o1365 b1196 b4996
 H	h6703	_1010 t6703
 VP	P6703	P\\ H\\ t4996
 H	h6704	_1010 P6703

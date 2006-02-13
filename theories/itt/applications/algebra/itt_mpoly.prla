@@ -1726,13 +1726,17 @@ Vi	i	i\\ \\
 B	b790	i
 T	t790	o790 b358 b457 b790
 B	b791	t790
+NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
+O	o3902	lt_bool
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o4693	lt
 NItt_int_ext!gt_bool	gt_bool	gt_bool Itt_int_ext
 O	o791	gt_bool
 P	p791	Var j
 O	o792	var p791
 T	t792	o792
 B	b792	t792
-T	t793	o791 b792 b790
+T	t793	o3902 b790 b792
 B	b793	t793
 T	t794	o393 b792 b470
 B	b794	t794
@@ -2673,8 +2677,6 @@ T	t3900	o489 b3899
 B	b3901	t3900
 T	t3901	o393 b3901 b470
 B	b3902	t3901
-NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
-O	o3902	lt_bool
 P	p3902	Var n
 O	o3903	var p3902
 T	t3903	o3903
@@ -3360,8 +3362,6 @@ T	t4692	o529 b4691 b4
 B	b4692	t4692
 T	t4693	o4679 b4692 b4
 B	b4693	t4693
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o4693	lt
 T	t4694	o393 b4688 b470
 B	b4694	t4694
 T	t4695	o489 b869

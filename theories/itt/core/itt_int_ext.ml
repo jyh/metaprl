@@ -10,8 +10,9 @@ doc <:doc<
    (<<gt_bool{('x) ; ('x)}>>, <<le_bool{('x) ; ('x)}>>,
    <<ge_bool{('x) ; ('x)}>>, <<bneq_int{('x) ; ('x)}>>) forms.
 
-   Note that both ``less then'' forms are implemented as input forms that
-   turn them into appropriate ``greater then'' forms.
+   Note that both ``less then or equal'' forms are implemented as input forms
+   that turn them into appropriate ``greater then or equal'' forms and similarly
+   ``greater than'' forms will simply turn into corresponding ``less then'' ones.
 
    @docoff
    ----------------------------------------------------------------
@@ -83,9 +84,6 @@ declare "rem"{'a; 'b}
 
 doc <:doc< More boolean inequalities >>
 
-define unfold_gt_bool {| reduce |} :
-   gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
-
 define unfold_ge_bool :
    ge_bool{'a; 'b} <--> bnot{lt_bool{'a; 'b}}
 
@@ -95,12 +93,6 @@ define unfold_bneq_int :
 doc docoff
 
 let fold_bneq_int = makeFoldC << bneq_int{'a; 'b} >> unfold_bneq_int
-
-let bneq_int_term = << bneq_int{'x; 'y} >>
-let bneq_int_opname = opname_of_term bneq_int_term
-let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
-let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
-let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
 let resource reduce += [
    << bnot{lt_bool{'a; 'b}} >>, wrap_reduce (makeFoldC << ge_bool{'a;'b} >> unfold_ge_bool);
@@ -114,12 +106,15 @@ let resource reduce += [
    << ge_bool{'a;'a}>>, wrap_reduce_crw (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC));
 ]
 
-(*
- Prop-int-relations definitions
- *)
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
 
-define unfold_gt {| reduce |} :
-   gt{'a; 'b} <--> ('b < 'a)
+let bneq_int_term = << bneq_int{'x; 'y} >>
+let bneq_int_opname = opname_of_term bneq_int_term
+let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
+let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
+let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
 let mul_term = << 'x *@ 'y >>
 let mul_opname = opname_of_term mul_term
@@ -139,12 +134,6 @@ let is_rem_term = is_dep0_dep0_term rem_opname
 let mk_rem_term = mk_dep0_dep0_term rem_opname
 let dest_rem = dest_dep0_dep0_term rem_opname
 
-let gt_term = << 'x > 'y >>
-let gt_opname = opname_of_term gt_term
-let is_gt_term = is_dep0_dep0_term gt_opname
-let mk_gt_term = mk_dep0_dep0_term gt_opname
-let dest_gt = dest_dep0_dep0_term gt_opname
-
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -155,7 +144,9 @@ let dest_gt = dest_dep0_dep0_term gt_opname
  *            as "le".
  *)
 define iform le_bool_iform: le_bool{'a; 'b} <--> ge_bool{'b; 'a}
+define iform gt_bool_iform: gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
 define iform le_iform: le{'a; 'b} <--> ge{'b; 'a}
+define iform gt_iform: gt{'a; 'b} <--> lt{'b; 'a}
 
 prec prec_mul
 
@@ -177,8 +168,8 @@ dform rem_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b}
 dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
    slot["lt"]{'a} `" %@ " slot["le"]{'b}
 
-dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
-   slot["lt"]{'a} `" > " slot["le"]{'b}
+dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; number[n:n]} =
+   slot["lt"]{'a} `" > " slot["le"]{number[n:n]}
 
 doc <:doc<
    More propositional inequalities.
@@ -198,7 +189,6 @@ let fold_ge = makeFoldC << ge{'a; 'b} >> unfold_ge
 let fold_neq_int = makeFoldC << nequal{'a; 'b} >> unfold_neq_int
 
 let reduce_lt_prop = unfold_lt thenC (addrC [Subterm 1] reduce_lt)
-let reduce_gt_prop = unfold_gt thenC reduce_lt_prop
 let reduce_ge_prop = (unfold_ge thenC
                      (addrC [Subterm 1] (unfold_ge_bool thenC
                      (addrC [Subterm 1] reduce_lt))))
@@ -207,8 +197,6 @@ let reduce_neq_prop = unfold_neq_int thenC
 							 (addrC [Subterm 1] reduce_eq_int)))
 
 let resource reduce += [
-	<<number[i:n] > number[j:n]>>, wrap_reduce reduce_gt_prop;
-	<<number[i:n] < number[j:n]>>, wrap_reduce reduce_lt_prop;
 	<<number[i:n] >= number[j:n]>>, wrap_reduce reduce_ge_prop;
    <<nequal{number[i:n]; number[j:n]}>>, wrap_reduce reduce_neq_prop;
    <<"assert"{ge_bool{'a; 'b}}>>, wrap_reduce fold_ge;
@@ -220,22 +208,18 @@ let resource reduce += [
 ]
 
 let resource elim += [
-	<<number[i:n] > number[j:n]>>, wrap_elim (rw reduce_gt_prop);
 	<<number[i:n] >= number[j:n]>>, wrap_elim (rw reduce_ge_prop);
 	<<number[i:n] < number[j:n]>>,  wrap_elim (rw reduce_lt_prop);
    <<nequal{number[i:n]; number[j:n]}>>, wrap_elim (rw reduce_neq_prop);
 	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] reduce_lt));
-	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)));
 	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_ge_bool));
 ]
 
 let resource intro += [
-	<<number[i:n] > number[j:n]>>, wrap_intro (rw reduce_gt_prop 0);
 	<<number[i:n] >= number[j:n]>>, wrap_intro (rw reduce_ge_prop 0);
 	<<number[i:n] < number[j:n]>>, wrap_intro (rw reduce_lt_prop 0);
    <<nequal{number[i:n]; number[j:n]}>>, wrap_intro (rw reduce_neq_prop 0);
 	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] reduce_lt) 0);
-	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] (unfold_gt_bool thenC reduce_lt)) 0);
 	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_ge_bool) 0);
 ]
 
@@ -253,8 +237,8 @@ let dest_neq_int = dest_dep0_dep0_term neq_int_opname
 
 (*
  * XXX: TODO: Once comments on terms or soft abstractions are implemented (bugs 256/261),
- *            the "le" forms should have a comment that makes sure they will be displayed
- *            as "le".
+ *            the "le"/"gt" forms should have a comment that makes sure they will be displayed
+ *            as "le"/"gt".
  *)
 dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; number[n:n]}
  =
@@ -275,8 +259,8 @@ dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
 dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
    slot["lt"]{'a} `" " Mpsymbols!neq Mpsymbols!subb `" " slot["le"]{'b}
 
-dform gt_bool_df1 : parens :: "prec"[prec_compare] :: gt_bool{'a; 'b} =
-   slot["lt"]{'a} `" >" Mpsymbols!subb `" " slot["le"]{'b}
+dform gt_bool_df1 : parens :: "prec"[prec_compare] :: gt_bool{'a; number[n:n]} =
+   slot["lt"]{'a} `" >" Mpsymbols!subb `" " slot["le"]{number[n:n]}
 
 dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
    slot["lt"]{'a} `" " Mpsymbols!ge Mpsymbols!subb `" " slot["le"]{'b}
@@ -355,12 +339,6 @@ doc <:doc<
    @modsubsection{Well-formedness of inequalities}
 
 >>
-
-interactive gt_bool_wf {| intro [complete_unless_member] |} :
-   [wf] sequent { <H> >- 'a1='a2 in int } -->
-   [wf] sequent { <H> >- 'b1='b2 in int } -->
-   sequent { <H> >- gt_bool{'a1; 'b1}=gt_bool{'a2; 'b2} in bool }
-
 interactive le_bool_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
@@ -380,11 +358,6 @@ interactive neq_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- "type"{'a <> 'b} }
-
-interactive gt_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- "type"{gt{'a; 'b}} }
 
 interactive le_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -439,10 +412,6 @@ interactive ge_sqstable {| squash; intro []; nth_hyp |} :
 interactive lt_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a < 'b } -->
    sequent { <H> >- it in ('a < 'b) }
-
-interactive gt_sqstable {| squash; intro []; nth_hyp|} :
-   sequent { <H> >- 'a > 'b } -->
-   sequent { <H> >- it in ('a > 'b) }
 
 interactive ne_sqstable {| squash; intro []; nth_hyp |} :
    sequent { <H> >- 'a <> 'b } -->

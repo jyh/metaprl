@@ -2458,9 +2458,11 @@ NPerv!rewrite	rewrite	rewrite Perv
 O	o1251	rewrite
 P	p1266	String unbind_wf
 O	o1266	rule p1266
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o1310	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o1267	gt
-T	t1267	o1267 b1148 b829
+T	t1267	o1310 b829 b1148
 S	s1267	t803\\ h\\ t1267
 B	b1267	s1267
 T	t1268	o802 b1267
@@ -2494,7 +2496,7 @@ P	p1278	Var x
 O	o1278	var p1278
 T	t1279	o1278
 B	b1279	t1279
-T	t1280	o1267 b1279 b829
+T	t1280	o1310 b829 b1279
 H	h1280	x1 t1280
 T	t1281	o882 b1279 b883
 B	b1281	t1281
@@ -2523,7 +2525,7 @@ T	t1291	o816 b1290
 B	b1291	t1291
 P	p1300	String unbind_red
 O	o1300	cond_rewrite p1300
-T	t1300	o1267 b858 b829
+T	t1300	o1310 b829 b858
 B	b1300	t1300
 T	t1301	o b1300 b8
 B	b1301	t1301
@@ -2535,8 +2537,6 @@ P	p1303	String "byDefsT [unfold_unbind; reduceC] thenT dT 0 thenT autoT thenWT n
 O	o1303	ext_rule p1303
 P	p1309	String assertion
 O	o1309	tactic_arg p1309
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o1310	lt
 P	p1317	String "assertT << op_bdepth{'op} in int >> thenAT nat_is_int thenMT (assumT 2 thenT arithT) ttca"
 O	o1317	ext_rule p1317
 NComment!docoff	docoff	docoff Comment

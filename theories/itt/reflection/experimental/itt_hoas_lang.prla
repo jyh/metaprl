@@ -2917,9 +2917,11 @@ P	p2033	String lang_intro_mk_bterm_wf2
 O	o2033	rule p2033
 P	p2094	String lbt_elim_squash1
 O	o2094	rule p2094
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o1693	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o2096	gt
-T	t2096	o2096 b1295 b1275
+T	t2096	o1693 b1275 b1295
 H	h2096	"" t2096
 NItt_int_base!sub	sub	sub Itt_int_base
 O	o2097	sub
@@ -2967,7 +2969,7 @@ P	p2186	String lang_elim_squash
 O	o2186	rule p2186
 P	p2193	String "rwh unfold_Lang 2 thenT dT 2 thenT nameHypsT [3;4] [\"n\";\"t\"]"
 O	o2193	ext_rule p2193
-T	t2203	o2096 b1212 b1275
+T	t2203	o1693 b1275 b1212
 H	h2203	"" t2203
 T	t2207	o2097 b1212 b1291
 B	b2207	t2207
@@ -3574,7 +3576,7 @@ T	t3754	o970 b770 b1583 b1583
 B	b3754	t3754
 T	t3755	o1350 b1583
 B	b3755	t3755
-T	t3756	o2096 b3755 b1275
+T	t3756	o1693 b1275 b3755
 B	b3756	t3756
 NItt_hoas_base	Itt_hoas_base	Itt_hoas_base NIL
 NItt_hoas_base!bind	bind	bind Itt_hoas_base
@@ -3597,7 +3599,7 @@ S	s3764	t969\\ h\\ t3764
 B	b3764	s3764
 T	t3765	o1350 b2281
 B	b3765	t3765
-T	t3766	o2096 b3765 b1275
+T	t3766	o1693 b1275 b3765
 S	s3766	t969\\ h\\ t3766
 B	b3766	s3766
 P	p3776	String bind_vec_eta
@@ -5672,7 +5674,7 @@ B	b1652	t1652
 T	t1653	o985 b3763 b1652
 B	b1653	t1653
 H	h1656	v t2008
-T	t1658	o2096 b1657 b1275
+T	t1658	o1693 b1275 b1657
 B	b1658	t1658
 T	t1659	o3759 b1074 b924
 B	b1659	t1659 x
@@ -5790,8 +5792,6 @@ T	t1687	o985 b1686 b1652
 B	b1687	t1687
 P	p1692	String "dT 2 ttca thenT dT 0 thenT dT 0 thenT reduceT ttca"
 O	o1692	ext_rule p1692
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o1693	lt
 T	t1693	o1290 b1026 b1291
 B	b1693	t1693
 T	t1694	o1290 b1025 b1693

@@ -637,13 +637,13 @@ P	p1271	String More
 O	o1271	comment_string p1271
 T	t1271	o1271
 B	b1271	t1271
+NItt_int_base	Itt_int_base	Itt_int_base NIL
+NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
+O	o1295	lt_bool
 NItt_int_ext!gt_bool	gt_bool	gt_bool Itt_int_ext
 O	o1292	gt_bool
 NSummary!rewrite	rewrite	rewrite Summary
 P	p1294	String unfold_gt_bool
-NItt_int_base	Itt_int_base	Itt_int_base NIL
-NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
-O	o1295	lt_bool
 NSummary!prim	prim	prim Summary
 O	o1296	prim
 T	t1296	o1296 b17
@@ -661,11 +661,11 @@ O	o1318	bneq_int
 P	p1320	String unfold_bneq_int
 NItt_int_base!beq_int	beq_int	beq_int Itt_int_base
 O	o1321	beq_int
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o1330	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o1327	gt
 P	p1329	String unfold_gt
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o1330	lt
 NOcaml!str_let	str_let	str_let Ocaml
 NOcaml!patt_var	patt_var	patt_var Ocaml
 NOcaml!patt_done	patt_done	patt_done Ocaml
@@ -1234,7 +1234,7 @@ T	t1115	o1262 b1083 b1090
 B	b1116	t1115
 T	t1123	o1267 b1083 b1090
 B	b1123	t1123
-T	t1126	o1292 b1083 b1090
+T	t1126	o1295 b1090 b1083
 B	b1126	t1126
 T	t1127	o1295 b1090 b1083
 B	b1127	t1127
@@ -1318,7 +1318,7 @@ P	p2811	String bneq_int_wf
 O	o2812	rule p2811
 P	p1292	String "byDefT unfold_bneq_int ttca"
 O	o1293	ext_rule p1292
-T	t1351	o1327 b1083 b1090
+T	t1351	o1330 b1090 b1083
 B	b1353	t1351
 T	t1354	o1330 b1090 b1083
 B	b1354	t1354
@@ -1340,7 +1340,7 @@ P	p1416	Var _$item_bnd9
 O	o1416	var p1416
 T	t1419	o1416
 B	b1419	t1419
-T	t1447	o1327 b1171 b1172
+T	t1447	o1330 b1172 b1171
 B	b1447	t1447
 P	p1447	Var _$item_bnd10
 O	o1447	var p1447
@@ -1435,7 +1435,7 @@ P	p1656	Var _$item_bnd12
 O	o1657	var p1656
 T	t1661	o1657
 B	b1661	t1661
-T	t4776	o1327 b2063 b2064
+T	t4776	o1330 b2064 b2063
 B	b4782	t4776
 T	t4782	o1330 b2063 b2064
 B	b4789	t4782
@@ -1478,7 +1478,7 @@ T	t5933	o1295 b2063 b2064
 B	b5933	t5933
 T	t5960	o1971 b5933
 B	b5960	t5960
-T	t5967	o1292 b2063 b2064
+T	t5967	o1295 b2064 b2063
 B	b5967	t5967
 T	t5999	o1971 b5967
 B	b5999	t5999
@@ -1818,9 +1818,9 @@ T	t2295	o2130 b2278
 B	b2295	t2295
 T	t2296	o2129 b2295
 B	b2296	t2296
-T	t2297	o1292 b2254 b2272
+T	t2297	o1295 b2272 b2254
 B	b2297	t2297
-T	t2298	o1292 b2268 b2273
+T	t2298	o1295 b2273 b2268
 B	b2298	t2298
 T	t2299	o2132 b1260 b2297 b2298
 S	s2299	tbrarg\\ h2250\\ t2299
@@ -2138,7 +2138,7 @@ T	t8962	o2185 b8961
 B	b8962	t8962
 P	p2249	String gt_wf
 O	o2249	rule p2249
-T	t2763	o1327 b2737 b2749
+T	t2763	o1330 b2749 b2737
 B	b2775	t2763
 T	t2775	o1161 b2775
 S	s2775	tbrarg\\ h2250\\ t2775
@@ -2495,7 +2495,7 @@ T	t316	o b461 b17
 B	b316	t316
 T	t321	o348 b316
 B	b326	t321
-T	t590	o1327 b1171 b1171
+T	t590	o1330 b1171 b1171
 B	b614	t590
 T	t335	o b614 b17
 B	b336	t335
@@ -2519,7 +2519,7 @@ T	t502	o b714 b17
 B	b504	t502
 T	t504	o348 b504
 B	b531	t504
-T	t733	o1292 b1171 b1171
+T	t733	o1295 b1171 b1171
 B	b734	t733
 T	t531	o b734 b17
 B	b533	t531

@@ -2596,9 +2596,11 @@ O	o905	implies
 P	p1131	String bt_elim_squash2
 O	o1131	rule p1131
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o1044	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o1132	gt
-T	t1132	o1132 b432 b410
+T	t1132	o1044 b410 b432
 H	h1132	"" t1132
 NItt_int_base!sub	sub	sub Itt_int_base
 O	o1133	sub
@@ -2618,7 +2620,7 @@ P	p1012	String bind_eta
 O	o1012	cond_rewrite p1012
 T	t1012	o275 b449 b361 b361
 B	b1024	t1012
-T	t1024	o1132 b373 b410
+T	t1024	o1044 b410 b373
 B	b1025	t1024
 T	t1025	o b1025 b10
 B	b1027	t1025
@@ -2636,15 +2638,13 @@ S	s1037	t415\\ h\\ t1037
 B	b1038	s1037
 T	t1038	o283 b1031
 B	b1039	t1038
-T	t1039	o1132 b1039 b410
+T	t1039	o1044 b410 b1039
 S	s1039	t415\\ h\\ t1039
 B	b1040	s1039
 T	t1040	o b1040 b10
 B	b1041	t1040
 T	t1041	o b1038 b1041
 B	b1042	t1041
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o1044	lt
 H	h1074	v t449
 NItt_hoas_vector	Itt_hoas_vector	Itt_hoas_vector NIL
 NItt_hoas_vector!bind	bind1089	bind Itt_hoas_vector
@@ -3418,7 +3418,7 @@ T	t1625	o275 b449 b1625 b1625
 B	b1626	t1625
 T	t1626	o283 b1625
 B	b1627	t1626
-T	t1627	o1132 b1627 b410
+T	t1627	o1044 b410 b1627
 B	b1628	t1627
 T	t1628	o b1628 b10
 B	b1629	t1628
@@ -3448,7 +3448,7 @@ B	b1639	s1638
 T	t1639	o275 b449 b1634 b1634
 S	s1639	t415\\ h\\ t1639
 B	b1640	s1639
-T	t1640	o1132 b1637 b410
+T	t1640	o1044 b410 b1637
 S	s1640	t415\\ h\\ t1640
 B	b1641	s1640
 T	t1641	o b1641 b10
@@ -3487,7 +3487,7 @@ O	o1686	ext_rule p1686
 B	b1698	t2069
 T	t1698	o283 b1698
 B	b1699	t1698
-T	t1699	o1132 b1699 b410
+T	t1699	o1044 b410 b1699
 B	b1700	t1699
 T	t1700	o1029 b1698 b1598
 B	b1701	t1700
@@ -8499,7 +8499,7 @@ P	p6316	String "rw reduceBTermC 2"
 O	o6316	ext_rule p6316
 T	t6317	o283 b5500
 B	b6318	t6317
-T	t6318	o1132 b6318 b410
+T	t6318	o1044 b410 b6318
 B	b6319	t6318
 T	t6319	o1029 b5500 b1598
 B	b6320	t6319
@@ -8519,7 +8519,7 @@ B	b6326	t6325
 B	b6330	t5207
 T	t6330	o283 b6330
 B	b6331	t6330
-T	t6331	o1132 b6331 b410
+T	t6331	o1044 b410 b6331
 B	b6332	t6331
 T	t6332	o1029 b6330 b1598
 B	b6333	t6332
@@ -8561,7 +8561,7 @@ T	t6353	o345 b6353 b5207
 B	b6354	t6353
 T	t6354	o283 b6354
 B	b6355	t6354
-T	t6355	o1132 b6355 b410
+T	t6355	o1044 b410 b6355
 B	b6356	t6355
 T	t6356	o1029 b6354 b1598
 B	b6357	t6356
@@ -8681,7 +8681,7 @@ T	t6477	o350 b6353 b327 b328
 B	b6477	t6477
 T	t6478	o283 b6477
 B	b6478	t6478
-T	t6479	o1132 b6478 b410
+T	t6479	o1044 b410 b6478
 B	b6479	t6479
 T	t6480	o1029 b6477 b1598
 B	b6480	t6480

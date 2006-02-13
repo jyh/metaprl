@@ -318,18 +318,6 @@ interactive lt2ge {| ge_elim [] |} 'H :
    [main] sequent { <H>; x: 'a < 'b; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
    sequent { <H>; x: 'a < 'b; <J['x]> >- 'C['x] }
 
-interactive gt2ge {| ge_elim [] |} 'H :
-   [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'a in int } -->
-   [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'b in int } -->
-   [main] sequent { <H>; x: 'a > 'b; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
-   sequent { <H>; x: 'a > 'b; <J['x]> >- 'C['x] }
-
-interactive gtb2ge {| ge_elim [] |} 'H :
-   [wf] sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]> >- 'a in int } -->
-   [wf] sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]> >- 'b in int } -->
-   [main] sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
-   sequent { <H>; x: "assert"{'a >@ 'b}; <J['x]> >- 'C['x] }
-
 interactive eq2ge {| ge_elim [not_member] |} 'H :
    sequent { <H>; x: 'a = 'b in int; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
@@ -414,12 +402,6 @@ interactive ltInConcl2ge {| ge_intro |} :
    sequent { <H>; 'a >= 'b >- "false" } -->
    sequent { <H> >- 'a < 'b }
 
-interactive gtInConcl2ge {| ge_intro |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H>; 'b >= 'a >- "false" } -->
-   sequent { <H> >- 'a > 'b }
-
 interactive geInConcl2ge {| ge_intro |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -445,7 +427,6 @@ let arithRelInConcl2HypT = funT (fun p ->
    let t=Sequent.concl p in
    match explode_term t with
       <<'a < 'b>> -> ltInConcl2ge
-    | <<'a > 'b>> -> gtInConcl2ge
     | <<'a >= 'b>> -> geInConcl2ge
     | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2ge
      | <<'a <> 'b>> -> neqInConcl2ge thenMT eq2ge (-1) thenMT thinT (-3)
@@ -801,9 +782,6 @@ let term2inequality p (i,t) =
    if is_ge_term t then
       let a,b=dest_ge t in
       List.map (term2inequality_aux p) [(a,b,num0,copyHypT i (-1))]
-   else if is_gt_term t then
-      let a,b=dest_gt t in
-      List.map (term2inequality_aux p) [(a,b,num1,gt2ge i)]
    else if is_lt_term t then
       let a,b=dest_lt t in
       List.map (term2inequality_aux p) [(b,a,num1,lt2ge i)]

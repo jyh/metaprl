@@ -2506,6 +2506,8 @@ O	o998	ifthenelse
 NItt_int_base	Itt_int_base	Itt_int_base NIL
 NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
 O	o1004	lt_bool
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o3584	lt
 NItt_int_base!number	number	number Itt_int_base
 P	p977	Number 0
 O	o978	number p977
@@ -3032,7 +3034,7 @@ P	p976	Var x
 O	o977	var p976
 T	t977	o977
 B	b977	t977
-T	t979	o976 b977 b978
+T	t979	o3584 b978 b977
 B	b979	t979 x
 T	t980	o974 b975 b979
 B	b980	t980
@@ -3103,7 +3105,7 @@ T	t1277	o1184 b978 b1000
 B	b1277	t1277
 NItt_int_ext!gt_bool	gt_bool	gt_bool Itt_int_ext
 O	o1101	gt_bool
-T	t1102	o1101 b993 b978
+T	t1102	o1004 b978 b993
 B	b1102	t1102
 NItt_int_ext!div	div	div Itt_int_ext
 O	o1102	div
@@ -3182,7 +3184,7 @@ T	t1148	o999 b1144 b1000
 B	b1148	t1148
 T	t1149	o1147 b1147 b1148
 B	b1149	t1149
-T	t1150	o1101 b1144 b978
+T	t1150	o1004 b978 b1144
 B	b1150	t1150
 P	p1159	String unfold_rationals
 NItt_rat!rationals	rationals	rationals Itt_rat
@@ -4205,7 +4207,7 @@ T	t2543	o999 b1164 b1000
 B	b2544	t2543
 T	t2544	o1147 b2543 b2544
 B	b2545	t2544
-T	t2545	o1101 b1164 b978
+T	t2545	o1004 b978 b1164
 B	b2546	t2545
 T	t2546	o991 b977 b1164
 B	b2547	t2546
@@ -4635,7 +4637,7 @@ T	t2691	o999 b1198 b1000
 B	b2691	t2691
 T	t2692	o1147 b2690 b2691
 B	b2692	t2692
-T	t2693	o1101 b1198 b978
+T	t2693	o1004 b978 b1198
 B	b2693	t2693
 T	t2694	o991 b1195 b1198
 B	b2694	t2694
@@ -5181,7 +5183,7 @@ T	t5095	o999 b5034 b1000
 B	b5095	t5095
 T	t5096	o1147 b5094 b5095
 B	b5096	t5096
-T	t5097	o1101 b5034 b978
+T	t5097	o1004 b978 b5034
 B	b5097	t5097
 P	p5106	String "dT 0 thenMT dT 2 twa"
 O	o5106	ext_rule p5106
@@ -5246,7 +5248,7 @@ T	t5151	o999 b1069 b1000
 B	b5152	t5151
 T	t5152	o1147 b5151 b5152
 B	b5153	t5152
-T	t5153	o1101 b1069 b978
+T	t5153	o1004 b978 b1069
 B	b5154	t5153
 T	t5154	o1283 b1065 b1069
 B	b5155	t5154
@@ -11088,8 +11090,6 @@ P	p1877	Number 19787
 P	p1896	Number 19803
 P	p1897	Number 19917
 P	p1907	Number 19914
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o3584	lt
 NItt_list2!find	find	find Itt_list2
 O	o7295	find
 Veq	eq	eq\\ H\\ t977 t1164
@@ -12951,7 +12951,7 @@ P	p6522	String "rwh rat_of_int_ratnC 0 thenT rw reduceC 0 ttca"
 O	o6522	ext_rule p6522
 P	p6533	String rat_of_int_gt_bool
 O	o6533	cond_rewrite p6533
-T	t6533	o1101 b991 b993
+T	t6533	o1004 b993 b991
 B	b6533	t6533
 T	t6534	o1818 b1137 b6483
 B	b6534	t6534
@@ -13018,7 +13018,7 @@ T	t6562	o2281 b1137 b6483
 B	b6562	t6562
 P	p6568	String rat_of_int_gt
 O	o6568	cond_rewrite p6568
-T	t6568	o976 b991 b993
+T	t6568	o3584 b993 b991
 B	b6568	t6568
 T	t6569	o2306 b1137 b6483
 B	b6569	t6569
@@ -14487,7 +14487,7 @@ B	b8602	t8602
 P	p8602	Number 25941
 P	p8603	Number 26085
 O	o8603	location p8602 p8603
-T	t8603	o1101 b1065 b1069
+T	t8603	o1004 b1069 b1065
 B	b8603	t8603
 T	t8604	o1818 b3564 b3565
 B	b8604	t8604
@@ -14696,7 +14696,7 @@ B	b8685	t8685
 P	p3896	Number 26657
 P	p8685	Number 26790
 O	o8685	location p3896 p8685
-T	t8686	o976 b1065 b1069
+T	t8686	o3584 b1069 b1065
 B	b8686	t8686
 T	t8687	o2306 b3564 b3565
 B	b8687	t8687

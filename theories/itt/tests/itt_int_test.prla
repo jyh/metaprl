@@ -983,6 +983,8 @@ NItt_int_ext!le	le	le Itt_int_ext
 O	o647	le
 T	t647	o614 b595 b617
 H	h647	x t647
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o665	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o648	gt
 P	p648	Number 2
@@ -991,7 +993,7 @@ T	t649	o649
 B	b649	t649
 T	t650	o615 b598 b649
 B	b650	t650
-T	t651	o648 b600 b650
+T	t651	o665 b650 b600
 H	h651	t t651
 S	s651	t606\\ h h647 h651 h624\\ t626
 B	b651	s651
@@ -1022,8 +1024,6 @@ P	p663	Number 2060
 O	o663	location p662 p663
 P	p664	String test3
 O	o664	rule p664
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o665	lt
 T	t665	o665 b598 b623
 S	s665	t606\\ h h647 h651\\ t665
 B	b665	s665

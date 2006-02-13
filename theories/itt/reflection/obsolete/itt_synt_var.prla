@@ -2301,9 +2301,11 @@ T	t1111	o895 b1111
 B	b1112	t1111
 P	p1118	String depth_pos
 O	o1118	rule p1118
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o1151	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o1119	gt
-T	t1119	o1119 b1034 b1053
+T	t1119	o1151 b1053 b1034
 S	s1119	t901\\ h\\ t1119
 B	b1119	s1119
 T	t1120	o921 b1119
@@ -2314,7 +2316,7 @@ T	t1122	o900 b1119 b1004
 B	b1122	t1122
 T	t1123	o899 b1122 b19
 B	b1123	t1123
-T	t1124	o1119 b1041 b1053
+T	t1124	o1151 b1053 b1041
 S	s1124	t901\\ h\\ t1124
 B	b1124	s1124
 T	t1125	o900 b1124 b1004
@@ -2329,7 +2331,7 @@ P	p1128	String "letT << 'x = left{'v} in nat >> thenMT letT << 'y = right{'v} in
 O	o1128	ext_rule p1128
 T	t1129	o1047 b1125 b19
 B	b1129	t1129
-T	t1130	o1119 b1052 b1053
+T	t1130	o1151 b1053 b1052
 S	s1130	t901\\ h h1047 h1048\\ t1130
 B	b1130	s1130
 T	t1131	o900 b1130 b1004
@@ -2356,8 +2358,6 @@ T	t1141	o895 b1140
 B	b1141	t1141
 P	p1150	String left_bound
 O	o1150	rule p1150
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o1151	lt
 T	t1151	o1151 b1000 b1034
 S	s1151	t901\\ h\\ t1151
 B	b1151	s1151

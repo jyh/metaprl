@@ -12108,7 +12108,7 @@ P	p5051	String inverse_of_lt_bool
 O	o5051	rule p5051
 NItt_int_ext!gt_bool	gt_bool	gt_bool Itt_int_ext
 O	o5052	gt_bool
-T	t5052	o5052 b2582 b2586
+T	t5052	o4734 b2586 b2582
 B	b5052	t5052
 T	t3482	o1050 b3281
 B	b3483	t3482
@@ -12148,7 +12148,7 @@ P	p388	Number 17153
 O	o388	location p387 p388
 P	p5068	String int_gt_boolIsStrictTotalOrder
 O	o5068	rule p5068
-T	t3505	o5052 b892 b918
+T	t3505	o4734 b918 b892
 B	b3506	t3505 b
 T	t3506	o1029 b3506
 B	b3507	t3506 a

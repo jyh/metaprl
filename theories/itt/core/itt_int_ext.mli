@@ -48,10 +48,6 @@ declare "rem"{'a; 'b}
 (*
  Definitions of >b >=b
  *)
-
-define unfold_gt_bool :
-   gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
-
 define unfold_ge_bool :
    ge_bool{'a; 'b} <--> bnot{lt_bool{'a; 'b}}
 
@@ -61,9 +57,6 @@ define unfold_bneq_int :
 (*
  Prop-int-relations definitions
  *)
-define unfold_gt :
-   gt{'a; 'b} <--> ('b < 'a)
-
 define unfold_ge :
    ge{'a; 'b} <--> "assert"{ge_bool{'a; 'b}}
 
@@ -95,7 +88,9 @@ topval fold_ge : conv
  *            as "le".
  *)
 define iform le_bool_iform: le_bool{'a; 'b} <--> ge_bool{'b; 'a}
+define iform gt_bool_iform: gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
 define iform le_iform: le{'a; 'b} <--> ge{'b; 'a}
+define iform gt_iform: gt{'a; 'b} <--> lt{'b; 'a}
 
 prec prec_mul
 
@@ -119,11 +114,6 @@ val ge_term : term
 val is_ge_term : term -> bool
 val mk_ge_term : term -> term -> term
 val dest_ge : term -> term * term
-
-val gt_term : term
-val is_gt_term : term -> bool
-val mk_gt_term : term -> term -> term
-val dest_gt : term -> term * term
 
 val mul_term : term
 val is_mul_term : term -> bool

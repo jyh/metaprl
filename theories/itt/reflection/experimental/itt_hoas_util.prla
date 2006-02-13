@@ -3639,9 +3639,11 @@ T	t841	o241 b840
 B	b841	t841
 T	t1381	o245 b841
 B	b1381	t1381
+NItt_int_base!lt	lt	lt Itt_int_base
+O	oltmy	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o4130	gt
-T	t842	o4130 b831 b1383
+T	t842	oltmy b1383 b831
 H	h842	"" t842
 NItt_int_base!sub	sub	sub Itt_int_base
 O	o842	sub
@@ -3698,7 +3700,7 @@ P	p908	String "hypSubstT 2 0 ttca"
 O	o908	ext_rule p908
 T	t908	o684 b865 b6
 B	b909	t908
-T	t910	o4130 b836 b1383
+T	t910	oltmy b1383 b836
 S	s910	t242\\ h h836 h1263\\ t910
 B	b910	s910
 T	t916	o268 b910 b859
@@ -3715,7 +3717,7 @@ T	t953	o684 b922 b6
 B	b953	t953
 T	t979	o404 b356 b1918
 B	b979	t979
-T	t980	o4130 b979 b1383
+T	t980	oltmy b1383 b979
 B	b980	t980 j
 T	t981	o573 b415 b980
 S	s981	t242\\ h h836 h1263\\ t981

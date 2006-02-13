@@ -3002,9 +3002,11 @@ B	b2169	s2112
 T	t2169	o1388 b2169
 B	b2176	t2169
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o1523	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o2179	gt
-T	t2248	o2179 b1627 b1997
+T	t2248	o1523 b1997 b1627
 S	s2248	t1172\\ h1016 h2112 h1703\\ t2248
 B	b2252	s2248
 T	t2271	o1388 b2252
@@ -3180,8 +3182,6 @@ P	p1348	Number 2
 O	o1348	number p1348
 T	t1348	o1348
 B	b1349	t1348
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o1523	lt
 NItt_logic!false	false	false Itt_logic
 O	o1541	false
 T	t1541	o1541
@@ -4935,7 +4935,7 @@ T	t4912	o b4912 b8
 B	b4913	t4912
 T	t4913	o1169 b4910 b4913
 B	b4914	t4913
-T	t50	o2179 b1119 b1997
+T	t50	o1523 b1997 b1119
 H	h1308	v1 t1869
 T	t1309	o1001 b1116 b2932
 B	b1309	t1309

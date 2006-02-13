@@ -5124,9 +5124,11 @@ P	p157	Token foo
 O	o157	rcrd p157
 NItt_bool!ifthenelse	ifthenelse	ifthenelse Itt_bool
 O	o1806	ifthenelse
+NItt_int_base!lt_bool	lt_bool	lt_bool Itt_int_base
+O	oltbmy	lt_bool
 NItt_int_ext!gt_bool	gt_bool	gt_bool Itt_int_ext
 O	o1807	gt_bool
-T	t1807	o1807 b948 b600
+T	t1807	oltbmy b600 b948
 B	b1807	t1807
 P	p161	Token fee
 O	o161	field p161
@@ -6646,7 +6648,7 @@ Vx	x	x\\ \\
 B	b8028	x
 T	t8028	o3689 b586 b8028
 B	b8029	t8028
-T	t8029	o1807 b8028 b600
+T	t8029	oltbmy b600 b8028
 B	b8030	t8029
 T	t592	o161 b152
 B	b592	t592
@@ -6839,7 +6841,7 @@ P	p4775	Number 9241
 O	o4775	location p4774 p4775
 T	t4779	o3689 b586 b3142
 B	b4780	t4779
-T	t4780	o1807 b3142 b600
+T	t4780	oltbmy b600 b3142
 B	b4819	t4780
 T	t4819	o1811 b3142 b612
 B	b4957	t4819

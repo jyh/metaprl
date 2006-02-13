@@ -36025,11 +36025,13 @@ NItt_int_ext!le	le	le Itt_int_ext
 O	o20290	le
 T	t20290	o20269 b13885 b20270
 H	h20290	x t20290
+NItt_int_base!lt	lt	lt Itt_int_base
+O	o20304	lt
 NItt_int_ext!gt	gt	gt Itt_int_ext
 O	o20291	gt
 T	t20291	o20270 b14079 b20248
 B	b20291	t20291
-T	t20292	o20291 b13886 b20291
+T	t20292	o20304 b20291 b13886
 H	h20292	t t20292
 S	s20292	t13885\\ h h20290 h20292 h20275\\ t20180
 B	b20292	s20292
@@ -36060,8 +36062,6 @@ P	p4945	Number 42996
 O	o4945	location p4944 p4945
 P	p20303	String inttest3
 O	o20303	rule p20303
-NItt_int_base!lt	lt	lt Itt_int_base
-O	o20304	lt
 T	t20304	o20304 b14079 b20274
 S	s20304	t13885\\ h h20290 h20292\\ t20304
 B	b20304	s20304

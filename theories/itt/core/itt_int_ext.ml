@@ -105,7 +105,7 @@ let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 let resource reduce += [
    << bnot{lt_bool{'a; 'b}} >>, wrap_reduce (makeFoldC << ge_bool{'a;'b} >> unfold_ge_bool);
    << bnot{ge_bool{'a; 'b}} >>,
-      wrap_reduce (addrC [Subterm 1]
+      wrap_reduce_crw (addrC [Subterm 1]
          (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC unfold_ge_bool)
        thenC Itt_bool.reduce_bnot_bnotC);
 (* << ge_bool{'a; 'b} >>,    wrap_reduce unfold_ge_bool;

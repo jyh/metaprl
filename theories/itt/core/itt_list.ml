@@ -20,7 +20,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -36,8 +37,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 >>
 
@@ -46,6 +47,7 @@ extends Itt_equal
 extends Itt_dfun
 extends Itt_struct
 extends Itt_logic
+extends Itt_bool
 extends Itt_struct2
 doc docoff
 
@@ -122,7 +124,7 @@ doc <:doc<
    The @hrefterm[nil] term is a member of every list type $@list{A}$.
 >>
 prim nilEquality {| intro [] |} :
-   [wf] sequent { <H> >- "type"{list{'A}} } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- nil in list{'A} } =
    it
 
@@ -198,6 +200,15 @@ interactive nil_neq_cons {| elim [] |} 'H :
 
 interactive cons_neq_nil {| elim [] |} 'H :
    sequent { <H>; x: cons{'h; 't} = nil in list{'T}; <J['x]> >- 'C['x] }
+
+doc <:doc<
+   @modsubsection{More well-formedness lemmas for the empty list}
+>>
+interactive nilEquality2 {| nth_hyp |} 'H :
+   sequent { <H>; l: list{'A}; <J['l]> >- nil in list{'A} }
+
+interactive nilEquality3 {| nth_hyp |} 'H :
+   sequent { <H>; x: 'l1 = 'l2 in list{'A}; <J['x]> >- nil in list{'A} }
 
 (*
  * @modsubsection{Equality elimination}

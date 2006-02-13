@@ -53,51 +53,6 @@ define unfold_dummy_bterm {| reduce |} : dummy_bterm <--> <:xterm<
 >>
 
 (************************************************************************
- * Operators.
- *)
-
-doc <:doc<
-   A language is defined by a set of operators << SubOp{'ops} >>, where
-   << 'ops >> is a list of operators.  The following rules define case
-   analysis on the operator set.
->>
-
-(*
- * Case analysis on operators in a language.
- *)
-interactive operator_elim_cons {| elim [] |} 'H :
-   [wf] sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'h in Operator } -->
-   [wf] sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 't in list{Operator} } -->
-   [base] sequent { <H>; op: SubOp{'h :: 't}; <J['h]> >- 'C['h] } -->
-   [main] sequent { <H>; op: SubOp{'t}; <J['op]> >- 'C['op] } -->
-   sequent { <H>; op: SubOp{'h :: 't}; <J['op]> >- 'C['op] }
-
-interactive operator_elim_nil {| elim [] |} 'H :
-   sequent { <H>; op: SubOp{nil}; <J['op]> >- 'C['op] }
-
-doc docoff
-
-let listmem_opname = opname_of_term << SubOp{'ops} >>
-let dest_listmem_term = dest_dep0_dep0_term listmem_opname
-
-let rec opset_elim i p =
-   let t = nth_hyp p i in
-   let ops, _ = dest_listmem_term t in
-      if is_cons_term ops then
-         operator_elim_cons i thenLT [idT; idT; thinT i; funT (opset_elim i)]
-      else if is_nil_term ops then
-         operator_elim_nil i
-      else
-         raise (RefineError ("elim_operator", StringTermError ("non-constant term", t)))
-
-let opset_elimT i =
-   funT (opset_elim i)
-
-let resource elim +=
-    [<< SubOp{'h :: 't} >>, wrap_elim opset_elimT;
-     << SubOp{nil} >>,      wrap_elim opset_elimT]
-
-(************************************************************************
  * Properties of compatible_shapes.
  *)
 doc <:doc<

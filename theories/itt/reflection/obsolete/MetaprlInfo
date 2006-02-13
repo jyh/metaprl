@@ -3,10 +3,13 @@ THEORYDESCR = Syntax Reflection for Computational Type Theory - Obsolete
 
 THEORY_DEPS[] +=
     itt/core
+    itt/reflection/core
+    itt/reflection/experimental
     itt/applications/function_spaces
 
 # Library files
 MPFILES[] =
+   itt_hoas_lang
    itt_synt_var
    itt_synt_operator
    itt_synt_bterm

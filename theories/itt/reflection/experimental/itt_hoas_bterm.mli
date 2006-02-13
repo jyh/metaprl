@@ -13,7 +13,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,25 +30,45 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Author: Aleksey Kopylov @email{kopylov@cs.caltech.edu}
+           Xin Yu @email{xiny@cs.caltech.edu}
 
    @end[license]
 >>
 extends Itt_hoas_destterm
-extends Itt_hoas_lang
 
 open Basic_tactics
 
-define iform unfold_dom  : dom{'BT} <--> dom{Operator; 'BT}
-define iform unfold_Iter : Iter{'X} <--> Iter{Operator; 'X}
-define iform unfold_BT   : BT{'n} <--> BT{Operator; 'n}
-
+declare compatible_shapes{'bdepth;'op;'subterms}
+declare dom{'BT}
+declare mk{'x}
+declare dest{'bt}
+declare Iter{'X}
+declare BT{'n}
 declare const BTerm
 declare BTerm{'i}
 declare dummy
 
 (* Conversions *)
+topval unfold_compatible_shapes : conv
+topval unfold_dom : conv
+topval unfold_mk : conv
+topval unfold_dest : conv
+topval unfold_Iter : conv
+topval unfold_BT : conv
 topval unfold_BTerm : conv
+topval unfold_BTerm2 : conv
+topval unfold_ndepth : conv
+topval unfold_dummy : conv
+
+topval fold_compatible_shapes : conv
+topval fold_dom : conv
+topval fold_mk : conv
+topval fold_Iter : conv
+topval fold_dest : conv
+topval fold_BT : conv
 topval fold_BTerm : conv
+topval fold_BTerm2 : conv
+topval fold_ndepth : conv
 topval fold_dummy : conv
 
 (* Boolean equality *)
@@ -64,12 +84,9 @@ topval etaExpandC : term -> conv
 val mk_bterm_wf : tactic
 val mk_bterm_wf2 : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

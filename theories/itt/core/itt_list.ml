@@ -3,11 +3,7 @@ doc <:doc<
    @module[Itt_list]
 
    The @tt[Itt_list] module defines the type of finite
-   lists of elements.  The lists can be defined using the
-   simple recursive type in module @hrefmodule[Itt_srec].
-   However, the lists have a simpler semantics, and they are defined
-   as primitive, so that lists can be used without including
-   the recursive type.
+   lists of elements.
 
    @docoff
    ----------------------------------------------------------------
@@ -47,8 +43,9 @@ extends Itt_equal
 extends Itt_dfun
 extends Itt_struct
 extends Itt_logic
-extends Itt_bool
 extends Itt_struct2
+extends Itt_nat
+extends Itt_tunion
 doc docoff
 
 open Basic_tactics
@@ -67,15 +64,22 @@ doc <:doc<
    The @tt[nil] term is the empty list, the @tt[cons] term
    adds an element $a$ to list $b$.
 >>
-declare nil
-declare cons{'a; 'b}
+define (*private*) unfold_nil : nil <--> inl{it}
+define (*private*) unfold_cons : cons{'a; 'b} <--> inr{('a, 'b)}
 
 doc <:doc<
    The @tt[list] term defines the list type.  The @tt[list_ind]
    term defines the induction combinator.
 >>
-declare list{'a}
-declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
+(*private*) define unfold_listn:
+   list{'n; 'a} <--> ind{'n; unit + void; m, l. void + ('a * 'l)}
+
+define (*private*) unfold_list:
+   list{'a} <--> tunion{nat; n. list{'n; 'a}}
+
+define (*private*) unfold_list_ind:
+   list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} <-->
+   fix{r.lambda{l. decide{'l; nl.'base; ht. spread{'ht; h,t. 'step['h; 't; 'r 't] }}}} 'e
 
 (************************************************************************
  * REWRITES                                                             *
@@ -90,10 +94,10 @@ doc <:doc<
    term defines values on $@cons{h; t}$, where $f$ represents
    the value computed on the tail $t$ of the list.
 >>
-prim_rw reduce_listindNil {| reduce |} :
+interactive_rw reduce_listindNil {| reduce |} :
    list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]} <--> 'base
 
-prim_rw reduce_listindCons {| reduce |} :
+interactive_rw reduce_listindCons {| reduce |} :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
 
@@ -108,25 +112,33 @@ doc <:doc<
    The $@list{T}$ term is a well-formed type if
    $T$ is a type.
 >>
-prim listType {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{list{'A}} } =
-   it
 
-prim listEquality {| intro [] |} :
+(*private*) interactive listnType {| intro [] |} :
+   [wf] sequent { <H> >- 'n in nat } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{list{'n; 'A}} }
+
+(*private*) interactive listnEquality {| intro [] |} :
+   [wf] sequent { <H> >- 'n1 = 'n2 in nat } -->
    [wf] sequent { <H> >- 'A = 'B in univ[i:l] } -->
-   sequent { <H> >- list{'A} = list{'B} in univ[i:l] } =
-   it
+   sequent { <H> >- list{'n1; 'A} = list{'n2; 'B} in univ[i:l] }
+
+interactive listType {| intro [] |} :
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{list{'A}} }
+
+interactive listEquality {| intro [] |} :
+   [wf] sequent { <H> >- 'A = 'B in univ[i:l] } -->
+   sequent { <H> >- list{'A} = list{'B} in univ[i:l] }
 
 doc <:doc<
    @modsubsection{Membership}
 
    The @hrefterm[nil] term is a member of every list type $@list{A}$.
 >>
-prim nilEquality {| intro [] |} :
+interactive nilEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- nil in list{'A} } =
-   it
+   sequent { <H> >- nil in list{'A} }
 
 interactive nilFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -137,36 +149,15 @@ doc <:doc<
    type $@list{A}$ if $h$ is an element of $A$, and $t$ is an element
    of $@list{A}$.
 >>
-prim consEquality {| intro [] |} :
+interactive consEquality {| intro [] |} :
    [wf] sequent { <H> >- 'u1 = 'u2 in 'A } -->
    [wf] sequent { <H> >- 'v1 = 'v2 in list{'A} } -->
-   sequent { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
-   it
+   sequent { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} }
 
 interactive consSquiggleEq {| intro [] |} :
    sequent  { <H> >- 'h1 ~ 'h2 } -->
    sequent  { <H> >- 't1 ~ 't2 } -->
    sequent  { <H> >- 'h1 :: 't1 ~ 'h2 :: 't2 }
-
-doc <:doc<
-   @modsubsection{Combinator equality}
-
-   The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
-   computes a value of type $T$ if 1) the argument $l$ is a list of type $@list{A}$,
-   2) the @i{base} term has type $T$, and 3) the @i{step} term computes a value
-   of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
->>
-prim list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
-   [wf] sequent { <H> >- 'e1 = 'e2 in list{'A} } -->
-   [wf] sequent { <H> >- 'base1 = 'base2 in 'T[nil] } -->
-   [wf] sequent { <H>; u: 'A; v: list{'A}; w: 'T['v] >-
-             'step1['u; 'v; 'w] = 'step2['u; 'v; 'w] in 'T['u::'v]
-           } -->
-   sequent { <H> >- list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}
-                   = list_ind{'e2; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]}
-                   in 'T['e1]
-           } =
-   it
 
 doc <:doc<
    @modsubsection{Elimination}
@@ -178,16 +169,34 @@ doc <:doc<
    $h @in A$ and $t @in @list{A}$, where the induction hypothesis
    $C[t]$ holds on $t$.
 >>
-prim listEliminationLast :
-   [base] ('base : sequent { <H> >- 'C[nil] }) -->
-   [step] ('step['u; 'v; 'w] : sequent { <H>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
-   sequent { <H>; l: list{'A} >- 'C['l] } =
-   list_ind{'l; 'base; u, v, w. 'step['u; 'v; 'w]}
+interactive listEliminationLast :
+   [base] sequent { <H> >- 'C[nil] } -->
+   [step] sequent { <H>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
+   sequent { <H>; l: list{'A} >- 'C['l] }
 
 interactive listElimination {| elim [ThinOption thinT] |} 'H :
-   [base] sequent { <H>; l: list{'A}; <J['l]> >- 'C[nil] } -->
-   [step] sequent { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
+   [main] sequent { <H>; l: list{'A}; <J['l]> >- 'C[nil] } -->
+   [main] sequent { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
    sequent { <H>; l: list{'A}; <J['l]> >- 'C['l] }
+
+doc <:doc<
+   @modsubsection{Combinator equality}
+
+   The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
+   computes a value of type $T$ if 1) the argument $l$ is a list of type $@list{A}$,
+   2) the @i{base} term has type $T$, and 3) the @i{step} term computes a value
+   of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
+>>
+interactive list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
+   [wf] sequent { <H> >- 'e1 = 'e2 in list{'A} } -->
+   [wf] sequent { <H> >- 'base1 = 'base2 in 'T[nil] } -->
+   [wf] sequent { <H>; u: 'A; v: list{'A}; w: 'T['v] >-
+             'step1['u; 'v; 'w] = 'step2['u; 'v; 'w] in 'T['u::'v]
+           } -->
+   sequent { <H> >- list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}
+                   = list_ind{'e2; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]}
+                   in 'T['e1]
+           }
 
 doc <:doc<
    @modsubsection{Contradiction}

@@ -494,7 +494,7 @@ interactive_rw dest_mk_reduce BT{'sop; 'n} :
 interactive  lbt_elim1  {| elim [] |} 'H :
    [wf] sequent { <H> >- 'n in nat } -->
    [wf] sequent { <H> >- 'sop subtype Operator } -->
-   [step] sequent { <H>; t: BT{'sop; 'n+@1}; <J['t]>; x: dom{'sop; BT{'sop; 'n}} >- 'P[mk{'x}] } -->
+   [step] sequent { <H>; x: dom{'sop; BT{'sop; 'n}};  <J[mk{'x}]> >- 'P[mk{'x}] } -->
    sequent { <H>; t: BT{'sop; 'n+@1}; <J['t]> >- 'P['t] }
 
 interactive  lang_elim_squash1 {| elim [] |} 'H :
@@ -504,15 +504,14 @@ interactive  lang_elim_squash1 {| elim [] |} 'H :
                compatible_shapes{'depth;shape{'op};'subs} >- squash{'P[mk_bterm{'depth;'op;'subs}]} } -->
    sequent { <H>; t: Lang{'sop}; <J['t]> >- squash{'P['t]} }
 
-
-interactive lang_elim  'H :
-   [wf] sequent { <H>; <J> >- 'sop subtype Operator } -->
-   sequent { <H>; <J>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
-   sequent { <H>; <J>; bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
+interactive lang_elim_last :
+   [wf] sequent { <H> >- 'sop subtype Operator } -->
+   sequent { <H>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
+   sequent { <H>; bdepth: nat; op: 'sop; subs: list{Lang{'sop}};
                compatible_shapes{'bdepth;shape{'op};'subs};
                all_list{'subs;t.'P['t]}
                >- 'P[mk_bterm{'bdepth;'op;'subs}] } -->
-   sequent { <H>; t: Lang{'sop}; <J> >- 'P['t] }
+   sequent { <H>; t: Lang{'sop} >- 'P['t] }
 
 (*
  * The previous rule does not conform to the usual induction standard,
@@ -521,7 +520,7 @@ interactive lang_elim  'H :
  * on any sequent.  Note that it does not increase the expressive power,
  * it just makes the rule easier to use.
  *)
-interactive lang_elim2 {| elim [] |} 'H :
+interactive lang_elim {| elim [] |} 'H :
    [wf] sequent { <H>; t: Lang{'sop}; <J['t]> >- 'sop subtype Operator } -->
    [base] sequent { <H>; t: Lang{'sop}; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    [step] sequent { <H>; t: Lang{'sop}; <J['t]>;

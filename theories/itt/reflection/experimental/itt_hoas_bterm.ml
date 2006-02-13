@@ -250,7 +250,7 @@ interactive  bt_elim_squash1  {| elim [] |} 'H :
 
 interactive  bt_elim1  {| elim [] |} 'H :
    [wf] sequent { <H> >- 'n in nat } -->
-   [step] sequent { <H>; t: BT{'n+@1}; <J['t]>; x: dom{BT{'n}} >- 'P[mk{'x}] } -->
+   [step] sequent { <H>; x: dom{BT{'n}}; <J[mk{'x}]> >- 'P[mk{'x}] } -->
    sequent { <H>; t: BT{'n+@1}; <J['t]> >- 'P['t] }
 
 interactive  bterm_elim_squash1 {| elim [] |} 'H :

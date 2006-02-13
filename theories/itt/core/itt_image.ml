@@ -104,36 +104,31 @@ let img_introT = funT (fun p ->
 
 let resource intro += (<< 'a = 'b in Img{'A; x.'f<||>['x]} >>, wrap_intro img_introT)
 
-doc <:doc<   >>
+doc docon
 
 prim img_elim {| elim [ThinOption thinT] |} 'H :
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- squash{'C['f['a]]} } -->
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- squash{'C['y]} } = it
+   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]>; a: 'A >- squash{'C['f['a]]} } -->
+   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- squash{'C['y]} } = it
 
 interactive img_elim2 {| elim [ThinOption thinT] |} 'H :
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 't1['f['a]] = 't2['f['a]] in 'T['f['a]] } -->
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 't1['y] = 't2['y] in 'T['y] }
+   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]>; a: 'A >- 't1['f['a]] = 't2['f['a]] in 'T['f['a]] } -->
+   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- 't1['y] = 't2['y] in 'T['y] }
 
 doc <:doc<
-   When $f$ is squiggle-reversible, we can have elimination for non-squash-stable goals.
+   When $f$ is squiggle-reversible, we can have elimination for non-squash-stable goals. Morover,
+   in this case we can derive a @emph{strong} version of the elimination rule.
 >>
 extends Itt_squiggle
 extends Itt_dfun
+extends Itt_pairwise
 extends Itt_struct2
 
-interactive img_elim3 {| elim [ThinOption thinT] |} 'H 'g :
-   [aux] sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'g 'f['a] ~ 'a } -->
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'C['f['a]] } -->
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 'C['y] }
-
-interactive img_elim_sqsimple 'H 'g :
-   [aux] sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- sqsimple{'A} } -->
-   [aux] sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]>; a: 'A >- 'g 'f['a] ~ 'a } -->
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; a: 'A; <J['f['a]]> >- 'C['f['a]] } -->
-   sequent { <H>; y: Img{'A; x.'f<||>['x]}; <J['y]> >- 'C['y] }
+interactive img_elim3 {| elim |} 'H 'g :
+   [aux] sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]>; a: 'A >- 'g 'f['a] ~ 'a } -->
+   sequent { <H>; a: 'A; <J['f['a]]> >- 'C['f['a]] } -->
+   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- 'C['y] }
 
 interactive img_sqsimple 'g :
-   [wf] sequent { <H> >- 'A Type } -->
    [aux] sequent { <H>; a: 'A >- 'g 'f['a] ~ 'a } -->
    sequent { <H> >- sqsimple{'A} } -->
    sequent { <H> >- sqsimple{Img{'A; x. 'f<||>['x]}} }
@@ -152,13 +147,6 @@ interactive img_monotone_subset {| intro[] |} bind{x.'g['x]}:
    sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subset  Img{'A_2; x.'f<||>['x]} }
 
 doc docoff
-
-let imgElimSimpleT i t = funT (fun p ->
-   if get_thinning_arg p then
-      let i = Sequent.get_pos_hyp_num p i in
-         img_elim_sqsimple i t thenT tryT (thinT i)
-   else
-      img_elim_sqsimple i t)
 
 dform img_df : Img{'A; x.'f} =
    pushm[0] szone pushm[3] `"Img(" 'x `":" slot{'A} `"." slot{'f} popm `")" ezone popm

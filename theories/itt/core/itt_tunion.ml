@@ -29,7 +29,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005, MetaPRL Group
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -63,12 +64,6 @@ extends Itt_sqsimple
 doc docoff
 
 open Basic_tactics
-
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-
-open Dtactic
-open Tactic_type.Tacticals
 
 open Itt_struct
 open Itt_equal
@@ -184,22 +179,10 @@ interactive tunionElimination_eq (* {| elim [ThinOption thinLastT] |} *) 'H :
                        u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
-interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'f :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
-      (* can we get rid of the above wf-assumption? *)
+interactive tunionElimination2 {| elim |} 'H 'f :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'f 'x in 'A } -->
    [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'x in 'B['f 'x] } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y] >- 'C['z] } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
-
-
-interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 'f :
-   [wf] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A >- 'B['y] Type } -->
-      (* can we get rid of the above wf-assumption? *)
-   [aux] sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
-                       u: 'z='x in tunion{'A; y. 'B['y]} >- 'f 'z = 'y in 'A } -->
-   sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; y: 'A; z: 'B['y];
-                       u: 'z='x in tunion{'A; y. 'B['y]} >- 'C['z] } -->
+   sequent { <H>; y: 'A; x: 'B['y]; <J['x]> >- 'C['x] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
 
 doc <:doc<

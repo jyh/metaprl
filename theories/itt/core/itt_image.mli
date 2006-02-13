@@ -53,6 +53,4 @@ declare Img{'A; x.'f['x]}
 
 open Basic_tactics
 
-topval imgElimSimpleT : int -> term -> tactic
-
 val dest_img_term : term -> var * term * term

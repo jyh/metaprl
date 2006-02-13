@@ -138,7 +138,7 @@ rule pairEquality :
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
 rule productElimination 'H :
-   sequent { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] } -->
+   sequent { <H>; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] } -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] }
 
 (*

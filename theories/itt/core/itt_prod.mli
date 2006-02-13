@@ -88,7 +88,7 @@ rule independentPairFormation :
  * H, A * B, u: A, v: B, J >- T ext t
  *)
 rule independentProductElimination 'H :
-   sequent { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
+   sequent { <H>; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
    sequent { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
 
 (*

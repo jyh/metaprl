@@ -148,9 +148,9 @@ interactive left_member {| intro [] |} :
 interactive right_member {| intro [] |} :
    sequent { <H> >- right in two }
 
-interactive two_elim {| elim [ThinOption thinT] |} 'H :
-   [main] sequent { <H>; x: two; <J[left]> >- 'C[left] } -->
-   [main] sequent { <H>; x: two; <J[right]> >- 'C[right] } -->
+interactive two_elim {| elim |} 'H :
+   [main] sequent { <H>; <J[left]> >- 'C[left] } -->
+   [main] sequent { <H>; <J[right]> >- 'C[right] } -->
    sequent { <H>; x: two; <J['x]> >- 'C['x] }
 
 interactive two_well_founded {| intro [] |} :
@@ -217,8 +217,8 @@ interactive pairEquality {| intro [] |} :
  * by productElimination u v
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-interactive productElimination {| elim [ThinOption thinT] |} 'H :
-   [wf] ('t['u; 'v] : sequent { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] }) -->
+interactive productElimination {| elim |} 'H :
+   [wf] sequent { <H>; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] } -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] }
 
 (*

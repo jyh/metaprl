@@ -154,8 +154,8 @@ rule inrEquality :
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
 rule unionElimination 'H :
-   sequent { <H>; 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] } -->
-   sequent { <H>; 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] } -->
+   sequent { <H>; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] } -->
+   sequent { <H>; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] } -->
    sequent { <H>; x: 'A + 'B; <J['x]> >- 'T['x] }
 
 (*

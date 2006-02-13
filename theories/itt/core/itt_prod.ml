@@ -109,8 +109,8 @@ doc <:doc<
    The elimination form splits the hypothesis $z@colon @prod{A; B}$ into
    its parts $u@colon A$ and $v@colon B$.
 >>
-interactive independentProductElimination {| elim [ThinOption thinT] |} 'H :
-   sequent { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
+interactive independentProductElimination {| elim |} 'H :
+   sequent { <H>; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
    sequent { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
 
 interactive independentProductEqElimination {| elim [] |} 'H :

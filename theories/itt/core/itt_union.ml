@@ -244,11 +244,11 @@ doc <:doc<
    extract term is the @tt{decide} combinator (which performs a decision
    on element membership).
 >>
-prim unionElimination {| elim [ThinOption thinT] |} 'H :
-   [left] ('left['u;'p] : sequent { <H>; p: 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
-   [right] ('right['v;'p] : sequent { <H>; p: 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] }) -->
+prim unionElimination {| elim |} 'H :
+   [left] ('left['u] : sequent { <H>; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
+   [right] ('right['v] : sequent { <H>; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] }) -->
    sequent { <H>; x: 'A + 'B; <J['x]> >- 'T['x] } =
-   decide{'x; u. 'left['u;'x]; v. 'right['v;'x]}
+   decide{'x; u. 'left['u]; v. 'right['v]}
 
 doc <:doc<
    @modsubsection{Combinator equality}

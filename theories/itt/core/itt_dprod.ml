@@ -268,10 +268,10 @@ doc <:doc<
    into its parts.  The proof extract term is the @hrefterm[spread]
    induction combinator.
 >>
-prim productElimination {| elim [ThinOption thinT] |} 'H :
-   ('t['z; 'x; 'y] : sequent { <H>; z: x:'A * 'B['x]; x: 'A; y: 'B['x]; <J['x, 'y]> >- 'T['x, 'y] }) -->
+prim productElimination {| elim |} 'H :
+   ('t['x; 'y] : sequent { <H>; x: 'A; y: 'B['x]; <J['x, 'y]> >- 'T['x, 'y] }) -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
-   spread{'z; x, y. 't['z; 'x; 'y]}
+   spread{'z; x, y. 't['x; 'y]}
 
 doc <:doc<
    @modsubsection{Combinator equality}

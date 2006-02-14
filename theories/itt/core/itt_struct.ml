@@ -328,33 +328,11 @@ let thin_dup p =
 
 let thinDupT = funT thin_dup
 
-let matchAssumsT = argfunT (fun i p ->
-   let assum = TermMan.explode_sequent (Sequent.nth_assum p i) in
-   let goal = Sequent.explode_sequent_arg p in
-   let len = SeqHyp.length goal.sequent_hyps in
-   let () =
-      if len <> SeqHyp.length assum.sequent_hyps then
-         raise (Invalid_argument "Itt_struct.matchAssumsT: internal error")
-   in
-   let rec vars subst i =
-      if i = len then
-         subst
-      else
-         match SeqHyp.get goal.sequent_hyps i, SeqHyp.get assum.sequent_hyps i with
-            Hypothesis (v, _), Hypothesis (v', _) ->
-               vars ((v', mk_var_term v)::subst) (i + 1)
-          | _ ->
-               vars subst (i + 1)
-   in
-   let assum = apply_subst (vars [] 0) assum.sequent_concl in
-      if alpha_equal assum goal.sequent_concl then
-         nthAssumT i
-      else
-         cut 0 assum thenLT [nthAssumT i; nthHypT (-1)])
-
-let nthAssumT = argfunT (fun i p ->
-   let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thin_many (nth_hyp_mem p) assum thenT matchAssumsT i)
+let nthAssumT = 
+   let matchAssumT = Auto_tactic.matchAssumT (cut 0) in
+      argfunT (fun i p ->
+         let assum = Sequent.nth_assum p i in
+            Top_tacticals.thinMatchT thin_many (nth_hyp_mem p) assum thenT matchAssumT i)
 
 doc <:doc<
    @modsubsection{Reordering}

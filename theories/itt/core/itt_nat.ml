@@ -153,7 +153,10 @@ doc docoff
 
 let resource nth_hyp +=
    << number[m:n] = number[n:n] in nat >>, <<'C>>,
-   (fun i -> eq_2beq_nat i thenT rw (addrC [Subterm 1] Itt_int_base.reduce_eq_int) (-1) thenT Itt_bool.assert_false (-1))
+   wrap_nth_hyp (fun i -> 
+      eq_2beq_nat i
+         thenT rw (addrC [Subterm 1] Itt_int_base.reduce_eq_int) (-1)
+         thenT Itt_bool.assert_false (-1))
 
 doc docon
 

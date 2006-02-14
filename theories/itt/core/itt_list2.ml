@@ -935,12 +935,9 @@ interactive length_cons_pos {| intro []; nth_hyp |} :
 interactive listTop {| nth_hyp |} 'H :
    sequent { <H>; l : list{'A}; <J['l]> >- 'l in list }
 
-interactive listTop2 {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A} :
+interactive listTop2 {| intro[AutoMustComplete; intro_typeinf <<'l>>]; nth_hyp |} list{'A} :
    sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- 'l in list }
-
-interactive listTop3 {| nth_hyp |} 'H :
-   sequent { <H>; x: 'l in list{'A}; <J['x]> >- 'l in list }
 
 interactive listTop_nil {| intro [] |} :
    sequent { <H> >- nil in list }

@@ -152,7 +152,7 @@ interactive_rw reduce_vsubst_dummy_right {| reduce |} : <:xrewrite<
    "vsubst_dummy"{| <J> >- C["it"] |}
 >>
 
-interactive_rw reduce_vsubst_dummy_null : <:xrewrite<
+interactive_rw reduce_vsubst_dummy_null {| reduce |} : <:xrewrite<
    "vsubst_dummy"{| <J> >- e<||> |}
    <-->
    e

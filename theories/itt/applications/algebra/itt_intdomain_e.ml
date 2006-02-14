@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -164,7 +164,7 @@ doc <:doc<
    @modsection{Polynomial ring}
 
 >>
-interactive poly_intdomain {| intro [] |} :
+interactive poly_intdomain {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'F in intDomainE[i:l] } -->
    sequent { <H> >- poly_ring{'F} in intDomainE[i:l] }
 doc docoff

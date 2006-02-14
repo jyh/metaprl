@@ -169,7 +169,7 @@ interactive as_id_poly {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
 	[wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
 	sequent { <H> >- 'x = eval_poly{id_poly{'F}; cons{'x;nil}; 'F} in 'F^car }
 
-interactive length_nat {| intro [intro_typeinf <<'l>>] |} list{'T} :
+interactive length_nat {| intro [intro_typeinf <<'l>>]; nth_hyp |} list{'T} :
 	sequent { <H> >- 'l in list{'T} } -->
 	sequent { <H> >- length{'l} in nat }
 

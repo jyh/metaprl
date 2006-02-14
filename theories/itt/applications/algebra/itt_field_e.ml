@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ interactive prefieldE_elim {| elim [] |} 'H :
    sequent { <H>; f: prefieldE[i:l]; <J['f]> >- 'C['f] }
 doc docoff
 
-interactive car_prefieldE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} prefieldE[i:l] :
+interactive car_prefieldE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} prefieldE[i:l] :
    sequent { <H> >- 'f in prefieldE[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
@@ -167,7 +167,7 @@ doc <:doc<
    @modsection{Polynomial ring}
 
 >>
-interactive poly_field {| intro [] |} :
+interactive poly_field {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
    sequent { <H> >- poly_ring{'F} in intDomainE[i:l] }
 
@@ -195,7 +195,6 @@ dform isFieldE_df : except_mode[src] :: isFieldE{'F} =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

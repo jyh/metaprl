@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -179,23 +179,23 @@ doc <:doc<
    @modsubsection{Properties}
 
 >>
-interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
-interactive car_wf2 {| intro [AutoMustComplete] |} :
+interactive car_wf2 {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^car in univ[i:l] }
 
-interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^"+" in 'f^car -> 'f^car -> 'f^car }
 
-interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^"*" in 'f^car -> 'f^car -> 'f^car }
 
-interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^neg in 'f^car -> 'f^car }
 
@@ -211,11 +211,11 @@ interactive mul_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intD
    [wf] sequent { <H> >- 'b in 'f^car } -->
    sequent { <H> >- 'a *['f] 'b in 'f^car }
 
-interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^"0" in 'f^car }
 
-interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^"1" in 'f^car }
 
@@ -322,11 +322,11 @@ interactive intDomain_left_distib1 {| intro [AutoMustComplete; intro_typeinf <<'
    [wf] sequent { <H> >- 'c in 'f^car } -->
    sequent { <H> >- ('a *['f] 'b) +['f] ('a *['f] 'c) = 'a *['f] ('b +['f] 'c) in 'f^car }
 
-interactive intDomain_0neq1 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive intDomain_0neq1 {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- 'f^"0" <> 'f^"1" in 'f^car }
 
-interactive intDomain_noDiv0 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} intDomain[i:l] :
+interactive intDomain_noDiv0 {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} intDomain[i:l] :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- noDiv0{'f} }
 
@@ -365,11 +365,11 @@ interactive intDomain_subtype_unitring {| intro [] |} :
 interactive intDomain_subtype_ring {| intro [] |} :
    sequent { <H> >- intDomain[i:l] subtype ring[i:l] }
 
-interactive intDomain_additive_group {| intro [AutoMustComplete] |} :
+interactive intDomain_additive_group {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- as_additive{'f} in group[i:l] }
 
-interactive intDomain_additive_abelgroup {| intro [AutoMustComplete] |} :
+interactive intDomain_additive_abelgroup {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in intDomain[i:l] } -->
    sequent { <H> >- as_additive{'f} in abelg[i:l] }
 doc docoff
@@ -428,7 +428,6 @@ dform noDiv0_df : except_mode[src] :: noDiv0{'f} =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

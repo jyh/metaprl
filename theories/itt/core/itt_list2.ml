@@ -266,7 +266,6 @@ doc <:doc<
 define unfold_length :
    length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
 
-
 doc <:doc<
       <<Index{'l}>> of the list is a set of indexes of the list $l$, that is
 >>
@@ -818,7 +817,7 @@ interactive_rw tl_hd_rw :
    (not{'l = nil in list}) -->
      cons{hd{'l};tl{'l}} <--> 'l
 
-interactive is_nil_wf {| intro [] |} :
+interactive is_nil_wf {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- is_nil{'l} in bool }
 
@@ -909,27 +908,27 @@ interactive fold_left_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
 (*
  * Length.
  *)
-interactive length_wf {| intro [] |} :
+interactive length_wf {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- length{'l} in int }
 (*
-interactive length_eq_wf {| intro [] |} :
+interactive length_eq_wf {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'l1 = 'l2 in list } -->
    sequent { <H> >- length{'l1} =  length{'l2}  in int }
 *)
-interactive length_nonneg {| intro [] |}  :
+interactive length_nonneg {| intro []; nth_hyp |}  :
    [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- 0 <= length{'l} }
 
-interactive length_wf2 {| intro [] |} :
+interactive length_wf2 {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 't in list } -->
    sequent { <H> >- length{cons{'h;'t}} in nat }
 
-interactive length_wf1 {| intro [] |} :
+interactive length_wf1 {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- length{'l} in nat }
 
-interactive length_cons_pos {| intro [] |} :
+interactive length_cons_pos {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 't in list } -->
    sequent { <H> >- 0 < length{cons{'h;'t}} }
 
@@ -940,10 +939,13 @@ interactive listTop2 {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A
    sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- 'l in list }
 
+interactive listTop3 {| nth_hyp |} 'H :
+   sequent { <H>; x: 'l in list{'A}; <J['x]> >- 'l in list }
+
 interactive listTop_nil {| intro [] |} :
    sequent { <H> >- nil in list }
 
-interactive listTop_cons {| intro [] |} :
+interactive listTop_cons {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- cons{'e; 'l} in list }
 
@@ -952,7 +954,7 @@ interactive listTop3 {| intro[AutoMustComplete; intro_typeinf <<'l1>>] |} list{'
    sequent { <H> >- 'l1 = 'l2 in list{'A} } -->
    sequent { <H> >- 'l1 = 'l2 in list }
 *)
-interactive index_wf {| intro [] |}  :
+interactive index_wf {| intro []; nth_hyp |}  :
    [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- Index{'l} Type }
 
@@ -1039,7 +1041,7 @@ interactive_rw length_of_append {| reduce |} :
 (*
  * Reverse.
  *)
-interactive rev_wf {| intro [] |} :
+interactive rev_wf {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- rev{'l} in list{'A} }
 
@@ -1143,7 +1145,7 @@ interactive list_of_fun_wf {| intro [] |} :
    sequent { <H> >- 'A Type } -->
    sequent { <H> >- list_of_fun{k.'f['k]; 'n} in list{'A} }
 
-interactive list_of_fun_wf2 {| intro [] |} :
+interactive list_of_fun_wf2 {| intro []; nth_hyp |} :
    sequent { <H> >- 'n in nat } -->
    sequent { <H> >- list_of_fun{k.'f['k]; 'n} in list }
 
@@ -1166,7 +1168,7 @@ interactive tail_does_not_depend_on_the_head {| intro[] |}:
    sequent { <H> >- 'n <= length{'l} } -->
    sequent { <H> >- tail{'l;'n} ~ tail{cons{'h;'l};'n}  }
 
-interactive list_is_its_own_tail {| intro[] |}:
+interactive list_is_its_own_tail {| intro[]; nth_hyp |}:
    sequent { <H> >-  'l in list } -->
    sequent { <H> >- 'l ~ tail{'l;length{'l}} }
 
@@ -1292,7 +1294,7 @@ interactive exists_list_wf2  {| intro [SelectOption 5] |} :
    sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] Type } -->
    sequent { <H> >- exists_list{'l;  x. 'P['x]} Type }
 
-interactive exists_list_intro_cons  {| intro [] |} :
+interactive exists_list_intro_cons  {| intro []; nth_hyp |} :
    sequent { <H> >- 'P['a] or exists_list{'l; x. 'P['x]} } -->
    sequent { <H> >- exists_list{cons{'a; 'l};  x. 'P['x]} }
 
@@ -1372,7 +1374,7 @@ interactive list_wf2  :
    [wf] sequent { <H> >- all_list{'l;x.'x in 'T2} } -->
    sequent { <H> >- 'l in list{'T2} }
 
-interactive map_wf3 {| intro [] |} :
+interactive map_wf3 {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- map{x.'f['x]; 'l} in list }
 
@@ -1486,7 +1488,7 @@ doc <:doc<
 
 define unfold_diff_list: diff_list{'T} <--> {l:list{'T} | all i:Index{'l}. all j:Index{'l}. ('i < 'j => nth{'l;'i} <> nth{'l;'j} in 'T)}
 
-interactive diff_list_wf  {| intro[] |} :
+interactive diff_list_wf  {| intro[]; nth_hyp |} :
    sequent  { <H> >- 'T Type } -->
    sequent  { <H> >- diff_list{'T} Type }
 
@@ -1512,7 +1514,7 @@ interactive_rw reduce_list_max_nil {| reduce |} :
 interactive_rw reduce_list_max_cons {| reduce |} :
    list_max{cons{'h; 't}} <--> max{'h; list_max{'t}}
 
-interactive list_max_wf {| intro [] |} :
+interactive list_max_wf {| intro []; nth_hyp |} :
    sequent { <H> >- 'l in list{nat} } -->
    sequent { <H> >- list_max{'l} in nat }
 
@@ -1655,11 +1657,10 @@ interactive all2_intro2 'T1 'T2 :
 
 doc docoff
 
-
 (*
  * Squiggle equality.
  *)
-interactive list_sqsimple {| intro []; sqsimple |} :
+interactive list_sqsimple {| intro []; nth_hyp; sqsimple |} :
    sequent { <H> >- sqsimple{'T} } -->
    sequent { <H> >- sqsimple{list{'T}} }
 

@@ -43,7 +43,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -139,7 +140,7 @@ doc <:doc<
    This rule is irreversible, so we use @tt[AutoMustComplete] to prevent
    @hreftactic[autoT] from using it.
 >>
-prim squashMemberFormation {| intro [AutoMustComplete] |} :
+prim squashMemberFormation {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- 'A } -->
    sequent { <H> >- squash{'A} } =
    it

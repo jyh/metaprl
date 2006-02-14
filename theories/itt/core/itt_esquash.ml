@@ -27,7 +27,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -86,7 +87,7 @@ doc <:doc<
    The @tt[esquash] term inhabits the type universe $@univ{i}$
    if the proposition $P$ is also in $@univ{i}$.
 >>
-prim esquash_type {| intro [AutoMustComplete] |} :
+prim esquash_type {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- "type"{'P} } -->
    sequent { <H> >- "type"{esquash{'P}} } =
    it
@@ -103,7 +104,7 @@ prim esquash_equal {| intro [AutoMustComplete] |} :
    sequent { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 
-prim esquash_univ :
+prim esquash_univ {| nth_hyp |} :
    [wf] sequent { <H> >- 'P in univ[i:l] } -->
    sequent { <H> >- esquash{'P} in univ[i:l] } =
    it
@@ -117,7 +118,7 @@ doc <:doc<
    @hreftactic[esquashT] tactic is defined below to
    apply this rule.
 >>
-prim esquash_intro {| intro [AutoMustComplete] |} :
+prim esquash_intro {| intro [AutoMustComplete]; nth_hyp |} :
    [main] sequent { <H> >- squash{'P} } -->
    sequent { <H> >- esquash{'P} } =
    it

@@ -105,7 +105,7 @@ interactive recordTypeS {| intro [] |} :
    sequent{ <H> >- "type"{'A} } -->
    sequent{ <H> >- "type"{record[n:t]{'A}} }
 
-interactive field_member {| intro[AutoMustComplete] |} :
+interactive field_member {| intro[AutoMustComplete]; nth_hyp |} :
    sequent{ <H> >- 'r in record[n:t]{'A} } -->
    sequent{ <H> >- field[n:t]{'r} in 'A }
 

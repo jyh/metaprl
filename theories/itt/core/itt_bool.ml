@@ -312,7 +312,7 @@ interactive bimplies_member {| intro [] |} :
    [wf] sequent { <H>; "assert"{'t1} >- 't2 in bool } -->
    sequent { <H> >- bimplies{'t1; 't2} in bool }
 
-interactive bnot_equal {| intro [] |} :
+interactive bnot_equal {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'a = 'b in bool } -->
    sequent { <H> >- bnot{'a} = bnot{'b} in bool }
 
@@ -328,11 +328,11 @@ doc <:doc<
    The <<"assert"{"true"}>> goal is always provable;
    the <<"assert"{"false"}>> assumption is contradictory.
 >>
-interactive assert_type {| intro [] |} :
+interactive assert_type {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 't in bool } -->
    sequent { <H> >- "type"{"assert"{'t}} }
 
-interactive assert_univ {| intro [] |} :
+interactive assert_univ {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 't in bool } -->
    sequent { <H> >- "assert"{'t} in univ[i:l] }
 
@@ -384,7 +384,7 @@ doc <:doc<
    The proof extract of a Boolean assertion is always the
    term $@it$ term; the proof itself can be omitted.
 >>
-interactive assertSquashElim {| squash; intro [] |} :
+interactive assertSquashElim {| squash; intro []; nth_hyp |} :
    sequent { <H> >- "assert"{'t} } -->
    sequent { <H> >- it in "assert"{'t} }
 
@@ -417,7 +417,7 @@ interactive assert_magic :
 doc <:doc<
    The following rule establishes that @tt[assert] is always decidable.
 >>
-interactive assert_is_decidable {| intro [] |} :
+interactive assert_is_decidable {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 't in bool } -->
    sequent { <H> >- decidable{"assert"{'t}} }
 

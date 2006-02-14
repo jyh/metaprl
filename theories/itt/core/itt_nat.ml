@@ -278,11 +278,11 @@ let splitNatT =
                (dT (-1) thenT dT (-1) thenT thinT (-2))
          ])
 
-interactive finiteNatType {| intro [] |} :
+interactive finiteNatType {| intro []; nth_hyp |} :
    sequent { <H> >- 'k in int} -->
    sequent { <H> >- "type"{nat{'k}} }
 
-interactive finiteNatUniv {| intro [] |} :
+interactive finiteNatUniv {| intro []; nth_hyp |} :
    sequent { <H> >- 'k in int} -->
    sequent { <H> >- nat{'k} in univ[i:l] }
 

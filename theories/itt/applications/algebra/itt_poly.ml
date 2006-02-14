@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -39,17 +39,11 @@ extends Itt_cyclic_group
 extends Itt_labels
 doc docoff
 
-open Lm_debug
-open Lm_printf
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_grouplikeobj
 open Itt_group
 open Itt_equal
-
-let _ =
-   show_loading "Loading Itt_poly%t"
 
 (************************************************************************
  * Polynomials                                                          *
@@ -153,22 +147,22 @@ let fold_eval_poly = makeFoldC << eval_poly{'p; 'a; 'F} >> unfold_eval_poly
 let fold_eval_poly1 = makeFoldC << eval_poly{('u, 'v); 'a; 'F} >> unfold_eval_poly1
 let fold_eq_poly = makeFoldC << eq_poly{'p; 'q; 'F} >> unfold_eq_poly
 
-interactive nat_is_int {| intro[AutoMustComplete] |} :
+interactive nat_is_int {| intro[AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'a='b in nat} -->
    sequent { <H> >- 'a='b in int}
 
-interactive n_in_Nnplus1 {| intro [] |} :
+interactive n_in_Nnplus1 {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- 'n in nat{'n +@ 1} }
 
 interactive one_ge_0 {| intro [] |} :
    sequent { <H> >- 1 >= 0 }
 
-interactive a_lt_aplus1 {| intro [] |} :
+interactive a_lt_aplus1 {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- 'a < 'a +@ 1 }
 
-interactive plus1_nat {| intro [] |} :
+interactive plus1_nat {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- ('n +@ 1) in nat }
 
@@ -510,7 +504,6 @@ dform eq_poly_df : except_mode[src] :: parens :: eq_poly{'p; 'q; 'F} =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

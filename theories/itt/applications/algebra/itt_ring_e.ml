@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -156,7 +156,7 @@ interactive preringE_elim {| elim [] |} 'H :
    sequent { <H>; f: preringE[i:l]; <J['f]> >- 'C['f] }
 doc docoff
 
-interactive car_preringE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} preringE[i:l] :
+interactive car_preringE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} preringE[i:l] :
    [wf] sequent { <H> >- 'f in preringE[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
@@ -227,7 +227,6 @@ dform isRingE_df : except_mode[src] :: isRingE{'F} =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

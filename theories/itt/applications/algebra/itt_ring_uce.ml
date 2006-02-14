@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ interactive preunitringE_elim {| elim [] |} 'H :
    sequent { <H>; f: preunitringE[i:l]; <J['f]> >- 'C['f] }
 doc docoff
 
-interactive car_preunitringE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} preunitringE[i:l] :
+interactive car_preunitringE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} preunitringE[i:l] :
    [wf] sequent { <H> >- 'f in preunitringE[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
@@ -185,27 +185,27 @@ doc <:doc<
    @modsubsection{Properties}
 
 >>
-interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
-interactive car_wf2 {| intro [AutoMustComplete] |} :
+interactive car_wf2 {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^car in univ[i:l] }
 
-interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^"+" in 'R^car -> 'R^car -> 'R^car }
 
-interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^neg in 'R^car -> 'R^car }
 
-interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^"*" in 'R^car -> 'R^car -> 'R^car }
 
-interactive eq_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive eq_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^"eq" in 'R^car -> 'R^car -> bool }
 
@@ -227,11 +227,11 @@ interactive eq_in_bool {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unit
    [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- 'R^eq 'a 'b in bool }
 
-interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^"0" in 'R^car }
 
-interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^"1" in 'R^car }
 
@@ -460,14 +460,13 @@ interactive neg_neg2 {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^neg ('R^neg 'a) = 'a in 'R^car }
 
-interactive neg_of_addid {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive neg_of_addid {| intro [intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^neg 'R^"0" = 'R^"0" in 'R^car }
 
-interactive neg_of_addid2 {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive neg_of_addid2 {| intro [intro_typeinf <<'R>>]; nth_hyp |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
    sequent { <H> >- 'R^"0" = 'R^neg 'R^"0" in 'R^car }
-
 
 interactive ringpoly_coeff_addpoly {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
@@ -475,7 +474,6 @@ interactive ringpoly_coeff_addpoly {| intro [AutoMustComplete; intro_typeinf <<'
    [wf] sequent { <H> >- 'q in poly{'F} } -->
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- coeff{add_poly{'p; 'q; 'F}; 'n; 'F} = coeff{'p; 'n; 'F} +@ coeff{'q; 'n; 'F} in 'F^car }
-
 
 interactive ringpoly_add_assoc {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
    [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
@@ -617,7 +615,7 @@ doc <:doc<
    @modsubsection{Properties}
 
 >>
-interactive poly_ring_uce {| intro [] |} :
+interactive poly_ring_uce {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
    sequent { <H> >- poly_ring{'F} in unitringCE[i:l] }
 doc docoff
@@ -652,7 +650,6 @@ dform isUnitRingCE_df : except_mode[src] :: isUnitRingCE{'F} =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

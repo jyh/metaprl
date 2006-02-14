@@ -16,7 +16,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2003-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ doc <:doc<
    @modsubsection{Introduction and Elimination}
 
 >>
-interactive groupoid_intro {| intro [AutoMustComplete] |} :
+interactive groupoid_intro {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car} } -->
    sequent { <H> >- 'g in groupoid[i:l] }
 
@@ -210,7 +210,7 @@ doc <:doc<
 interactive premonoid_wf {| intro [] |} :
    sequent { <H> >- "type"{premonoid[i:l]} }
 
-interactive isMonoid_wf2 {| intro [intro_typeinf <<'A>>] |} premonoid[i:l] :
+interactive isMonoid_wf2 {| intro [intro_typeinf <<'A>>]; nth_hyp |} premonoid[i:l] :
    [wf] sequent { <H> >- 'A in premonoid[i:l] } -->
    sequent { <H> >- "type"{isMonoid{'A}} }
 
@@ -226,7 +226,7 @@ doc <:doc<
    @modsubsection{Introduction and Elimination}
 
 >>
-interactive premonoid_intro {| intro [AutoMustComplete] |} :
+interactive premonoid_intro {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car} } -->
    sequent { <H> >- 'g in premonoid[i:l] }
 
@@ -254,7 +254,7 @@ interactive monoid_elim {| elim [] |} 'H :
    sequent { <H>; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); v: all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car & 'x *['g] 'g^"1" = 'x in 'g^car); <J['g]> >- 'C['g] } -->
    sequent { <H>; g: monoid[i:l]; <J['g]> >- 'C['g] }
 
-interactive monoid_car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} monoid[i:l] :
+interactive monoid_car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>]; nth_hyp |} monoid[i:l] :
    [wf] sequent { <H> >- 'G in monoid[i:l] } -->
    sequent { <H> >- "type"{'G^car} }
 

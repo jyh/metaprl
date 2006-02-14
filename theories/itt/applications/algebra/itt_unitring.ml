@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -102,11 +102,11 @@ doc <:doc<
    @modsubsection{Introduction and Elimination}
 
 >>
-interactive preunitring_intro {| intro [AutoMustComplete] |} :
+interactive preunitring_intro {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car} } -->
    sequent { <H> >- 'R in preunitring[i:l] }
 
-interactive preunitring_equality {| intro [complete_unless_member] |} :
+interactive preunitring_equality {| intro [complete_unless_member]; nth_hyp |} :
    [wf] sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car; "1": ^car} } -->
    sequent { <H> >- 'A = 'B in preunitring[i:l] }
 
@@ -115,7 +115,7 @@ interactive preunitring_elim {| elim [] |} 'H :
    sequent { <H>; R: preunitring[i:l]; <J['R]> >- 'C['R] }
 doc docoff
 
-interactive car_preunitring_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} preunitring[i:l] :
+interactive car_preunitring_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} preunitring[i:l] :
    [wf] sequent { <H> >- 'R in preunitring[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
@@ -183,11 +183,11 @@ interactive unitring_subtype_monoid {| intro [] |} :
    sequent { <H> >- unitring[i:l] subtype monoid[i:l] }
 doc docoff
 
-interactive car_unitring_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
+interactive car_unitring_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitring[i:l] :
    [wf] sequent { <H> >- 'R in unitring[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
-interactive car_unitring_wf2 {| intro [AutoMustComplete] |} :
+interactive car_unitring_wf2 {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'R in unitring[i:l] } -->
    sequent { <H> >- 'R^car in univ[i:l] }
 
@@ -211,7 +211,7 @@ interactive unitring_mul_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'R>>
    [wf] sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'a *['R] ('b *['R] 'c) = ('a *['R] 'b) *['R] 'c in 'R^car }
 
-interactive unitring_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitring[i:l] :
+interactive unitring_id {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} unitring[i:l] :
    [wf] sequent { <H> >- 'R in unitring[i:l] } -->
    sequent { <H> >- 'R^"1" in 'R^car }
 
@@ -303,7 +303,6 @@ dform isUnit_df : except_mode[src] :: isUnit{'x; 'R} =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

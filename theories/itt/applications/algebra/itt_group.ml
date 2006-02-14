@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2003-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -126,11 +126,11 @@ doc <:doc<
    @modsubsection{Introduction and Elimination}
 
 >>
-interactive pregroup_intro {| intro [AutoMustComplete] |} :
+interactive pregroup_intro {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'G in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent { <H> >- 'G in pregroup[i:l] }
 
-interactive pregroup_equality {| intro [complete_unless_member] |} :
+interactive pregroup_equality {| intro [complete_unless_member]; nth_hyp |} :
    [wf] sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent { <H> >- 'A = 'B in pregroup[i:l] }
 
@@ -167,19 +167,19 @@ doc <:doc<
    @modsubsection{Properties}
 
 >>
-interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>]; nth_hyp |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- "type"{('G^car)} }
 
-interactive car_wf2 {| intro [AutoMustComplete] |} :
+interactive car_wf2 {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^car in univ[i:l] }
 
-interactive op_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive op_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>]; nth_hyp |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"*" in 'G^car -> 'G^car -> 'G^car }
 
-interactive inv_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive inv_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>]; nth_hyp |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^inv in 'G^car -> 'G^car }
 
@@ -189,7 +189,7 @@ interactive op_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group
    [wf] sequent { <H> >- 'b in 'G^car } -->
    sequent { <H> >- 'a *['G] 'b in 'G^car }
 
-interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>]; nth_hyp |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"1" in 'G^car }
 
@@ -394,11 +394,11 @@ interactive inv_inv2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G^inv ('G^inv 'a) = 'a in 'G^car }
 
 (* Inverse of id *)
-interactive inv_of_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive inv_of_id {| intro [intro_typeinf <<'G>>]; nth_hyp |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^inv 'G^"1" = 'G^"1" in 'G^car }
 
-interactive inv_of_id2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive inv_of_id2 {| intro [intro_typeinf <<'G>>]; nth_hyp |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"1" = 'G^inv 'G^"1" in 'G^car }
 
@@ -577,7 +577,7 @@ interactive subgroup_sqStable {| squash |} :
    sequent { <H> >- subgroup[i:l]{'S; 'G} }
 doc docoff
 
-interactive subgroup_ref {| intro [] |} :
+interactive subgroup_ref {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- subgroup[i:l]{'G; 'G} }
 

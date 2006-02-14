@@ -15,7 +15,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2003-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -44,23 +45,10 @@ doc <:doc<
 extends Itt_equal
 extends Itt_logic
 
-open Lm_debug
-open Lm_printf
-
-open Tactic_type.Tacticals
-
-open Dtactic
-open Auto_tactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_struct
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_nequal%t"
-
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -77,7 +65,6 @@ dform nequal_df : except_mode[src] :: parens :: "prec"[prec_equal] :: nequal{'T;
 
 dform nequal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: nequal{'T; 'a; 'b} =
    szone pushm slot["le"]{'a} space `"<> " slot["le"]{'b} space `"in " slot["le"]{'T} popm ezone
-
 
 (************************************************************************
  * RULES                                                                *

@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -126,7 +126,7 @@ interactive prefield_elim {| elim [] |} 'H :
    sequent { <H>; f: prefield[i:l]; <J['f]> >- 'C['f] }
 doc docoff
 
-interactive car_prefield_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} prefield[i:l] :
+interactive car_prefield_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} prefield[i:l] :
    [wf] sequent { <H> >- 'f in prefield[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
@@ -195,27 +195,27 @@ doc <:doc<
    @modsubsection{Properties}
 
 >>
-interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^car Type }
 
-interactive car_wf2 {| intro [AutoMustComplete] |} :
+interactive car_wf2 {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^car in univ[i:l] }
 
-interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^"+" in 'f^car -> 'f^car -> 'f^car }
 
-interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^"*" in 'f^car -> 'f^car -> 'f^car }
 
-interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^neg in 'f^car -> 'f^car }
 
-interactive inv_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive inv_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^inv in {x: 'f^car| 'x <> 'f^"0" in 'f^car} -> {x: 'f^car| 'x <> 'f^"0" in 'f^car} }
 
@@ -231,11 +231,11 @@ interactive mul_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} fiel
    [wf] sequent { <H> >- 'b in 'f^car } -->
    sequent { <H> >- 'a *['f] 'b in 'f^car }
 
-interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^"0" in 'f^car }
 
-interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^"1" in 'f^car }
 
@@ -357,7 +357,7 @@ interactive field_left_distib1 {| intro [AutoMustComplete; intro_typeinf <<'f>>]
    [wf] sequent { <H> >- 'c in 'f^car } -->
    sequent { <H> >- ('a *['f] 'b) +['f] ('a *['f] 'c) = 'a *['f] ('b +['f] 'c) in 'f^car }
 
-interactive field_0neq1 {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive field_0neq1 {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- 'f^"0" <> 'f^"1" in 'f^car }
 
@@ -427,12 +427,12 @@ interactive mul_naddid_naddid2 {| intro [AutoMustComplete; intro_typeinf <<'f>>]
    [wf] sequent { <H> >- 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} } -->
    sequent { <H> >- 'a *['f] 'b in {x: 'f^car|'x <> 'f^"0" in 'f^car} }
 
-interactive field_noDiv0 {| intro [intro_typeinf <<'f>>] |} field[i:l] :
+interactive field_noDiv0 {| intro [intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- noDiv0{'f} }
 
 doc docon
-interactive carNo0_car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} field[i:l] :
+interactive carNo0_car_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>]; nth_hyp |} field[i:l] :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- carNo0{'f}^car Type }
 
@@ -453,11 +453,11 @@ interactive carNo0_assoc {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} fi
    [wf] sequent { <H> >- 'c in carNo0{'f}^car } -->
    sequent { <H> >- ('a *[carNo0{'f}] 'b) *[carNo0{'f}] 'c = 'a *[carNo0{'f}] ('b *[carNo0{'f}] 'c) in carNo0{'f}^car }
 
-interactive field_carNo0_group {| intro [AutoMustComplete] |} :
+interactive field_carNo0_group {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- carNo0{'f} in group[i:l] }
 
-interactive field_carNo0_abelgroup {| intro [AutoMustComplete] |} :
+interactive field_carNo0_abelgroup {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- carNo0{'f} in abelg[i:l] }
 
@@ -470,11 +470,11 @@ interactive field_subtype_unitring {| intro [] |} :
 interactive field_subtype_ring {| intro [] |} :
    sequent { <H> >- field[i:l] subtype ring[i:l] }
 
-interactive field_additive_group {| intro [AutoMustComplete] |} :
+interactive field_additive_group {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- as_additive{'f} in group[i:l] }
 
-interactive field_additive_abelgroup {| intro [AutoMustComplete] |} :
+interactive field_additive_abelgroup {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'f in field[i:l] } -->
    sequent { <H> >- as_additive{'f} in abelg[i:l] }
 doc docoff

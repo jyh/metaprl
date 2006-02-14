@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2004 MetaPRL Group
+   Copyright (C) 2004-2006 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -168,7 +168,7 @@ interactive ring_wf {| intro [] |} :
    sequent { <H> >- ring[i:l] Type }
 doc docoff
 
-interactive as_additive_car_wf {| intro [] |} :
+interactive as_additive_car_wf {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'R^car Type } -->
    sequent { <H> >- as_additive{'R}^car Type }
 
@@ -176,11 +176,11 @@ doc <:doc<
    @modsubsection{Introduction and Elimination}
 
 >>
-interactive prering_intro {| intro [AutoMustComplete] |} :
+interactive prering_intro {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'R in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car} } -->
    sequent { <H> >- 'R in prering[i:l] }
 
-interactive prering_equality {| intro [complete_unless_member] |} :
+interactive prering_equality {| intro [complete_unless_member]; nth_hyp |} :
    [wf] sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car} } -->
    sequent { <H> >- 'A = 'B in prering[i:l] }
 
@@ -188,7 +188,7 @@ interactive prering_elim {| elim [] |} 'H :
    sequent { <H>; R: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car}; <J['R]> >- 'C['R] } -->
    sequent { <H>; R: prering[i:l]; <J['R]> >- 'C['R] }
 
-interactive car_prering_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} prering[i:l] :
+interactive car_prering_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} prering[i:l] :
    [wf] sequent { <H> >- 'R in prering[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
@@ -249,23 +249,23 @@ doc <:doc<
    @modsubsection{Properties}
 
 >>
-interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^car Type }
 
-interactive car_wf2 {| intro [AutoMustComplete] |} :
+interactive car_wf2 {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^car in univ[i:l] }
 
-interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^"+" in 'R^car -> 'R^car -> 'R^car }
 
-interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^neg in 'R^car -> 'R^car }
 
-interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^"*" in 'R^car -> 'R^car -> 'R^car }
 
@@ -281,7 +281,7 @@ interactive mul_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring
    [wf] sequent { <H> >- 'b in 'R^car } -->
    sequent { <H> >- 'a *['R] 'b in 'R^car }
 
-interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>]; nth_hyp |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^"0" in 'R^car }
 
@@ -404,11 +404,11 @@ doc <:doc<
 interactive ring_subtype_semigroup {| intro [] |} :
    sequent { <H> >- ring[i:l] subtype semigroup[i:l] }
 
-interactive ring_additive_group {| intro [AutoMustComplete] |} :
+interactive ring_additive_group {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- as_additive{'R} in group[i:l] }
 
-interactive ring_additive_abelgroup {| intro [AutoMustComplete] |} :
+interactive ring_additive_abelgroup {| intro [AutoMustComplete]; nth_hyp |} :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- as_additive{'R} in abelg[i:l] }
 doc docoff
@@ -459,11 +459,11 @@ interactive neg_neg2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
    [wf] sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^neg ('R^neg 'a) = 'a in 'R^car }
 
-interactive neg_of_addid {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+interactive neg_of_addid {| intro [intro_typeinf <<'R>>]; nth_hyp |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^neg 'R^"0" = 'R^"0" in 'R^car }
 
-interactive neg_of_addid2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+interactive neg_of_addid2 {| intro [intro_typeinf <<'R>>]; nth_hyp |} ring[i:l] :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^"0" = 'R^neg 'R^"0" in 'R^car }
 doc docoff
@@ -513,7 +513,7 @@ interactive integer_ring {| intro [] |} :
 interactive integer_ring_number_membership {| intro [] |} :
 	sequent { <H> >- number[i:n] in Z^car }
 
-interactive integer_ring_is_int {| intro [AutoMustComplete] |} :
+interactive integer_ring_is_int {| intro [AutoMustComplete]; nth_hyp |} :
 	sequent { <H> >- 'i in Z^car } -->
 	sequent { <H> >- 'i in int }
 
@@ -636,7 +636,7 @@ interactive subring_subgroup :
    sequent { <H> >- subgroup[i:l]{as_additive{'S}; as_additive{'R}} }
 doc docoff
 
-interactive subring_ref {| intro [] |} :
+interactive subring_ref {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- subring[i:l]{'R; 'R} }
 
@@ -728,7 +728,6 @@ dform subring_df2 : mode[prl] :: parens :: "prec"[prec_subtype] :: subring[i:l]{
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

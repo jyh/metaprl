@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2003-2006 MetaPRL Group, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -43,16 +43,9 @@ extends Itt_subset
 extends Itt_labels
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_group
-
-let _ =
-   show_loading "Loading Itt_cyclic_group%t"
 
 (************************************************************************
  * REWRITES                                                             *
@@ -216,7 +209,7 @@ doc <:doc<
    @modsubsection{Cyclic group}
 
 >>
-interactive isCyclic_type {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+interactive isCyclic_type {| intro [intro_typeinf <<'g>>]; nth_hyp |} group[i:l] :
    [wf] sequent { <H> >- 'g in group[i:l] } -->
    sequent { <H> >- "type"{isCyclic{'g}} }
 

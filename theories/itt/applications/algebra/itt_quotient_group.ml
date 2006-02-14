@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2003-2006 MetaPRL Group, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -42,15 +42,7 @@ extends Itt_subset2
 extends Itt_labels
 doc docoff
 
-open Lm_debug
-open Lm_printf
-open Refiner.Refiner.TermOp
-
-open Dtactic
-open Top_conversionals
-
-let _ =
-   show_loading "Loading Itt_quotient_group%t"
+open Basic_tactics
 
 (************************************************************************
  * QUOTIENT GROUP                                                       *
@@ -103,7 +95,7 @@ doc <:doc<
 
    Introduction
 >>
-interactive quotGroup_intro {| intro [] |} :
+interactive quotGroup_intro {| intro []; nth_hyp |} :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- quotGroup{'A; 'B} in group[i:l] }
 
@@ -156,7 +148,6 @@ dform quotGroup_df1 : except_mode[src] :: parens :: quotGroup{'A; 'B} =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

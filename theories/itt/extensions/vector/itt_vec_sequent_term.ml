@@ -340,7 +340,7 @@ interactive_rw reduce_hyps_flatten_length {| reduce |} : <:xrewrite<
  * Now the hoisting lemmas for occurrences
  * of << hyps_length{'e} >>.
  *)
-interactive_rw hyps_length_null : <:xrewrite<
+interactive_rw hyps_length_null {| reduce |} : <:xrewrite<
    hyps_length{"mk_vbind"{| <J> >- mk_core{l<||>} |}}
    <-->
    length{l}

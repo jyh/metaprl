@@ -348,14 +348,14 @@ interactive_rw hyps_length_null : <:xrewrite<
 
 interactive_rw hyps_length_bind_int 'i : <:xrewrite<
    i = hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}} in "nat" -->
-   "mk_vbind"{| <J> >- hyps_length{mk_core{"hypconslist"{| <K> >- [] |}}} |}
+   "mk_vbind"{| <J> >- length{"hypconslist"{| <K> >- [] |}} |}
    <-->
    "mk_vbind"{| <J> >- i<||> |}
 >>
 
 interactive_rw hoist_hyps_length 'i Perv!bind{x. 'S['x]} : <:xrewrite<
    i = hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- [] |}} |}} in "nat" -->
-   "mk_vbind"{| <J> >- S[hyps_length{mk_core{"hypconslist"{| <K> >- [] |}}}] |}
+   "mk_vbind"{| <J> >- S[length{"hypconslist"{| <K> >- [] |}}] |}
    <-->
    "mk_vbind"{| <J> >- S[i<||>] |}
 >>

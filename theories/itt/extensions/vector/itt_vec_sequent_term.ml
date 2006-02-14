@@ -413,15 +413,6 @@ interactive_rw reduce_hyps_length_bind_squashlist_cons {| reduce |} : <:xrewrite
 (************************************************
  * hyps_flatten reductions.
  *)
-interactive_rw reduce_nth_of_list_of_fun {| reduce |} : <:xrewrite<
-   n IN "nat" -->
-   j IN "nat" -->
-   j < n -->
-   nth{list_of_fun{i. f[i]; n}; j}
-   <-->
-   f[j]
->>
-
 interactive_rw reduce_hyps_nth_flatten_bind {| reduce |} : <:xrewrite<
    i IN "nat" -->
    i < hyps_length{"mk_vbind"{| <J>; <K> >- mk_core{"hypconslist"{| <L> >- [] |}} |}} -->

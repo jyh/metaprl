@@ -13250,7 +13250,7 @@ P	p379	String map_list_of_fun
 O	o379	cond_rewrite p379
 P	p384	String "genSOVarT \"f2\" thenT genAssumT [1] thenT dT (-1) thenT byDefT reduceC"
 O	o384	ext_rule p384
-P	p421	String nth_map_list_of_fun
+P	p421	String nth_of_list_of_fun
 O	o421	cond_rewrite p421
 Vm	m	m\\ \\
 B	b421	m

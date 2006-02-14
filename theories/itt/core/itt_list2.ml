@@ -1110,7 +1110,7 @@ interactive list_of_fun_id {| intro [] |} :
    sequent { <H>; k: nat; 'k < 'n1 >- 'f1['k] ~ 'f2['k] } -->
    sequent { <H> >- list_of_fun{k.'f1['k]; 'n1} ~ list_of_fun{k.'f2['k]; 'n2} }
 
-interactive_rw nth_map_list_of_fun {| reduce |} :
+interactive_rw nth_of_list_of_fun {| reduce |} :
    'n in nat -->
    'm in nat -->
    'm < 'n -->

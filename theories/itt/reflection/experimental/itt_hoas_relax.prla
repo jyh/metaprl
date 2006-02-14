@@ -4775,7 +4775,7 @@ B	b2630	s2629
 T	t2630	o990 b2630
 B	b2631	t2630
 NItt_hoas_lang	Itt_hoas_lang	Itt_hoas_lang NIL
-NItt_hoas_lang!compatible_shapes	compatible_shapes	compatible_shapes Itt_hoas_lang
+NItt_hoas_bterm!compatible_shapes	compatible_shapes	compatible_shapes Itt_hoas_bterm
 O	o2631	compatible_shapes
 T	t2631	o2631 b1283 b2623 b2454
 S	s2631	t991\\ h\\ t2631

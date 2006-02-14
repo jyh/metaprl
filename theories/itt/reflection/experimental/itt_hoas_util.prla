@@ -2150,7 +2150,7 @@ T	t497	o245 b497
 B	b498	t497
 P	p498	String aux
 O	o499	meta_labeled p498
-NItt_hoas_lang!compatible_shapes	compatible_shapes	compatible_shapes Itt_hoas_lang
+NItt_hoas_bterm!compatible_shapes	compatible_shapes	compatible_shapes Itt_hoas_bterm
 O	o500	compatible_shapes
 B	b501	t481
 T	t501	o500 b471 b476 b501

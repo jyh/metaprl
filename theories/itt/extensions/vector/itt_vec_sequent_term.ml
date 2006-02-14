@@ -4,7 +4,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ doc <:doc<
    within a bind <:xterm< bind{x. [t_1; cdots; t_n]} >>, we produce
    a new flattened list <:xterm< [bind{x. t_1}; cdots; bind{x. t_n}] >>.
 
-   This is the same trick from Itt_hoas_debruijn.  The reason
+   This is the same trick from @hrefmodule[Itt_hoas_debruijn].  The reason
    why we repeat this process here is that we want to minimize
    well-formedness goals.  We would like the rewrites to work
    even if sequent is ill-formed.
@@ -294,31 +294,14 @@ interactive hyps_flatten_bind_wf {| intro [] |} : <:xrule<
 >>
 
 (************************************************
- * Hyps length reductions.
+ * Length reductions.
  *)
-interactive_rw reduce_hyps_length_squashlist : <:xrewrite<
-   hyps_length{mk_core{"hypconslist"{| <J> >- [] |}}}
+interactive_rw reduce_length_squashlist {| reduce |} : <:xrewrite<
+   length{"hypconslist"{| <J> >- [] |}}
    <-->
    length{"squashlist"{| <J> >- [] |}}
 >>
 
-interactive_rw reduce_hyps_length_squashlist_list {| reduce |} : <:xrewrite<
-   l IN "list" -->
-   hyps_length{mk_core{"hypconslist"{| <J> >- l<||> |}}}
-   <-->
-   length{"squashlist"{| <J> >- l |}}
->>
-
-interactive_rw reduce_hyps_length_bind_squashlist {| reduce |} : <:xrewrite<
-   l IN "list" -->
-   hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l<||> |}} |}}
-   <-->
-   hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K> >- l |}} |}}
->>
-
-(************************************************
- * Length reductions.
- *)
 interactive_rw reduce_length_hypconslist {| reduce |} : <:xrewrite<
    l IN "list" -->
    length{"hypconslist"{| <J> >- l<||> |}}
@@ -326,15 +309,24 @@ interactive_rw reduce_length_hypconslist {| reduce |} : <:xrewrite<
    length{"squashlist"{| <J> >- l |}}
 >>
 
-interactive_rw reduce_hyps_length_right {| reduce |} : <:xrewrite<
-   l IN "list" -->
-   length{"hypconslist"{| <J>; x: A >- l<||> |}}
+interactive_rw reduce_length_right {| reduce |} : <:xrewrite<
+   length{"squashlist"{| <J>; x: A >- l<||> |}}
    <-->
-   length{"hypconslist"{| <J> >- l |}} +@ 1
+   length{"squashlist"{| <J> >- l |}} +@ 1
 >>
 
 interactive hypconslist_length_lt {| intro [] |} : <:xrewrite<
    <H> >- length{"hypconslist"{| <J> >- [] |}} <= length{"hypconslist"{| <J> >- "hypconslist"{| <K> >- [] |} |}}
+>>
+
+(************************************************
+ * Hyps length reductions.
+ *)
+interactive_rw reduce_hyps_length_bind_squashlist {| reduce |} : <:xrewrite<
+   l IN "list" -->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"hypconslist"{| <K> >- l<||> |}} |}}
+   <-->
+   hyps_length{"mk_vbind"{| <J> >- mk_core{"squashlist"{| <K> >- l |}} |}}
 >>
 
 interactive_rw reduce_hyps_flatten_length {| reduce |} : <:xrewrite<
@@ -694,12 +686,9 @@ dform hyplist_concl_df : display_concl{hyplist; xconcl} =
 dform hyplist_concl_df2 : display_concl{hyplist; 'C} =
    slot{'C}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

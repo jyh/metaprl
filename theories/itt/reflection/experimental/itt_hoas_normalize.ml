@@ -15,7 +15,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -64,15 +64,10 @@ doc <:doc<
 >>
 let extract_data tbl =
    let rw t =
-      let conv =
-         try
-            (* Find and apply the right tactic *)
-            Term_match_table.lookup tbl select_all t
-         with
-            Not_found ->
-               raise (RefineError ("Itt_hoas_normalize.extract_data", StringTermError ("no reduction for", t)))
-      in
-         conv
+      (* Find and apply the right tactic *)
+      match Term_match_table.lookup tbl select_all t with
+         Some conv -> conv
+       | None -> raise (RefineError ("Itt_hoas_normalize.extract_data", StringTermError ("no reduction for", t)))
    in
       termC rw
 

@@ -4,7 +4,7 @@
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
+ * Copyright (C) 2003-2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,19 +50,16 @@ let debug_reduce =
 let extract_data tbl =
    let rw e =
       let t = env_term e in
-      let conv =
-         try
-            (* Find and apply the right tactic *)
-            if !debug_reduce then
-               eprintf "M_util: lookup %a%t" debug_print t eflush;
-            Term_match_table.lookup tbl Term_match_table.select_all t
-         with
-            Not_found ->
-               raise (RefineError ("M_util.extract_data", StringTermError ("no reduction for", t)))
-      in
+         (* Find and apply the right tactic *)
          if !debug_reduce then
-            eprintf "M_util: applying %a%t" debug_print t eflush;
-         conv
+            eprintf "M_util: lookup %a%t" debug_print t eflush;
+         match Term_match_table.lookup tbl Term_match_table.select_all t with
+            Some conv ->
+               if !debug_reduce then
+                  eprintf "M_util: applying %a%t" debug_print t eflush;
+               conv
+          | None ->
+               raise (RefineError ("M_util.extract_data", StringTermError ("no reduction for", t)))
    in
       funC rw
 

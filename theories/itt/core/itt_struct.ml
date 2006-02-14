@@ -441,9 +441,9 @@ doc <:doc<
 open Term_match_table
 
 let extract_subst tbl t =
-   try lookup tbl select_all t t
-   with Not_found ->
-      raise (RefineError ("Itt_struct.substT", StringTermError("Found nothing appropriate for", t)))
+   match lookup tbl select_all t with
+      Some subst -> subst t
+    | None -> raise (RefineError ("Itt_struct.substT", StringTermError("Found nothing appropriate for", t)))
 
 let resource (term * (term -> int -> tactic), term -> int -> tactic) subst =
    table_resource_info extract_subst

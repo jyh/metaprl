@@ -18,7 +18,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2003 Yegor Bryukhov, GC CUNY
+   Copyright (C) 2003-2006 MetaPRL Group, City University of New York
+   Graduate Center and California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,8 +35,7 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Yegor Bryukhov
-   @email{ynb@mail.ru}
+   Author: Yegor Bryukhov @email{ynb@mail.ru}
    @end[license]
    @docon
    @parents
@@ -69,8 +69,6 @@ open Itt_dprod
 module TO = TermOrder (Refiner.Refiner)
 open TO
 
-let _ = show_loading "Loading Itt_int_ext%t"
-
 let debug_int_arith =
    create_debug (**)
       { debug_name = "int_arith";
@@ -97,8 +95,8 @@ dform cdot_df : cdot =
 
 let identity x = x
 
-type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
-type ge_intro_type = tactic_arg -> (term list * tactic)
+type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic)) option
+type ge_intro_type = tactic_arg -> (term list * tactic) option
 
 let select_ge =
    let select t f = f t in
@@ -108,15 +106,15 @@ let extract_ge_elim_data tbl i p =
    let t = mk_pair_term (mk_var_term (Sequent.nth_binding p i)) (Sequent.nth_hyp p i) in
    if !debug_arith_dtactic then
       eprintf "Itt_int_arith.ge_elim: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
-   let terms, (_, tac) = Term_match_table.lookup_rmap tbl (select_ge t) t in
-   terms, tac
+   match Term_match_table.lookup_rmap tbl (select_ge t) t with
+      Some (terms, (_, tac)) -> Some (terms, tac)
+    | None -> None
 
 let extract_ge_intro_data tbl p =
    let t = Sequent.concl p in
    if !debug_arith_dtactic then
       eprintf "Itt_int_arith.ge_intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
-   let terms, tac = Term_match_table.lookup_rmap tbl select_all t in
-   terms, tac
+   Term_match_table.lookup_rmap tbl select_all t
 
 let resource (term * (term list) * ((term -> bool) list * (int -> tactic)), ge_elim_type) ge_elim =
    rmap_table_resource_info extract_ge_elim_data
@@ -181,28 +179,23 @@ let process_ge_intro_resource_annotation ?labels name context_args term_args sta
    [t, seq_terms, tac]
 
 let hyp2geT = argfunT (fun i p ->
-   try
-      let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-      if List.length terms > 1 then
-         begin
-            if !debug_arith_dtactic then
-               eprintf "Itt_int_arith.hyp2geT: hyp %i - branching is not supported yet@." i;
-            idT
-         end
-      else
-         tac i
-   with Not_found ->
-      idT
- | RefineError _ ->
-      idT
+   match Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p with
+      Some (terms, tac) ->
+         if List.length terms > 1 then
+            begin
+               if !debug_arith_dtactic then
+                  eprintf "Itt_int_arith.hyp2geT: hyp %i - branching is not supported yet@." i;
+               idT
+            end
+         else
+            tac i
+    | None -> idT
 )
 
 let concl2geT = funT (fun p ->
-   try
-      snd (Sequent.get_resource_arg p get_ge_intro_resource p)
-   with Not_found ->
-      idT
-)
+   match Sequent.get_resource_arg p get_ge_intro_resource p with
+      Some (_, tac) -> tac
+    | None -> idT)
 
 let all2geT = onAllMHypsT hyp2geT
 
@@ -231,41 +224,38 @@ let rec hyp2ge p l = function
          eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
       if is_ge_term t then
          hyp2ge p ((t,i,0,idT)::l) tail
-      else
-         (try
-            if !debug_arith_dtactic then
-               eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
-            let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-            match terms with
-               [t] ->
-                  if !debug_arith_dtactic then
-                     eprintf "Itt_int_arith.hyp2ge: found %s%t" (SimplePrint.short_string_of_term t) eflush;
-                  let terms=dest_xlist t in
-                  let len=List.length terms in
-                  let pos= -len in
-                  let l'=append (tac i) len pos l terms in
-                  hyp2ge p l' tail
-             | _ -> (*raise (Invalid_argument "Itt_int_arith: branching is not supported yet")*)
-                  if !debug_arith_dtactic then
-                     eprintf "Itt_int_arith.hyp2ge: hyp %i - branching is not supported yet@." i;
-                  hyp2ge p l tail
-         with Not_found ->
-            if !debug_arith_dtactic then
-               eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
-            hyp2ge p l tail)
+      else begin
+         if !debug_arith_dtactic then
+            eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
+         match Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p with
+            Some([t], tac) ->
+               if !debug_arith_dtactic then
+                  eprintf "Itt_int_arith.hyp2ge: found %s%t" (SimplePrint.short_string_of_term t) eflush;
+               let terms=dest_xlist t in
+               let len=List.length terms in
+               let pos= -len in
+               let l'=append (tac i) len pos l terms in
+               hyp2ge p l' tail
+          | Some _ -> (*raise (Invalid_argument "Itt_int_arith: branching is not supported yet")*)
+               if !debug_arith_dtactic then
+                  eprintf "Itt_int_arith.hyp2ge: hyp %i - branching is not supported yet@." i;
+               hyp2ge p l tail
+          | None ->
+               if !debug_arith_dtactic then
+                  eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
+               hyp2ge p l tail
+      end
  | [] -> l
 
 let concl2ge p =
-   try
-      let terms,tac=Sequent.get_resource_arg p get_ge_intro_resource p in
-      match terms with
-         [t] ->
-            let terms = dest_xlist t in
-            let len=List.length terms in
-            let pos= -len in
-            append tac len pos [] terms
-       | _ -> raise (Invalid_argument "Itt_int_arith: branching is not supported yet")
-   with Not_found -> []
+   match Sequent.get_resource_arg p get_ge_intro_resource p with
+      Some([t], tac) ->
+         let terms = dest_xlist t in
+         let len=List.length terms in
+         let pos= -len in
+         append tac len pos [] terms
+    | Some _ -> raise (Invalid_argument "Itt_int_arith: branching is not supported yet")
+    | None -> []
 
 let allhyps2ge p tail =
    hyp2ge p tail (all_hyps p)

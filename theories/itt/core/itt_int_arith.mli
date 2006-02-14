@@ -38,8 +38,8 @@ extends Itt_int_ext
 open Basic_tactics
 open Tactic_type.Tactic
 
-type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
-type ge_intro_type = tactic_arg -> (term list * tactic)
+type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic)) option
+type ge_intro_type = tactic_arg -> (term list * tactic) option
 
 resource (term * (term list) * ((term -> bool) list * (int -> tactic)), ge_elim_type) ge_elim
 resource (term * (term list) * tactic, ge_intro_type) ge_intro

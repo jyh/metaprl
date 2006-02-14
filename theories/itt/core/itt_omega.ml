@@ -1504,18 +1504,18 @@ let rec hyp2ge p tree = function
 		if is_ge_term t then
 			let tree' = Node [([(i,t,i,0,idT)], tree)] in
 			hyp2ge p tree' tail
-		else
-			(try
-				if !debug_arith_dtactic then
-					eprintf "Itt_omega.hyp2ge: searching ge_elim resource%t" eflush;
-				let terms, tac = Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-				let tree' = options tree i (tac i) terms in
-				hyp2ge p tree' tail
-			with Not_found ->
-				if !debug_arith_dtactic then
-					eprintf "Itt_omega.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
-				hyp2ge p tree tail
-			)
+		else begin
+         if !debug_arith_dtactic then
+            eprintf "Itt_omega.hyp2ge: searching ge_elim resource%t" eflush;
+         match Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p with
+            Some (terms, tac) ->
+               let tree' = options tree i (tac i) terms in
+                  hyp2ge p tree' tail
+          | None ->
+               if !debug_arith_dtactic then
+                  eprintf "Itt_omega.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
+               hyp2ge p tree tail
+      end
  | [] -> tree
 
 let rec push2leaves f acc tree =
@@ -1642,11 +1642,9 @@ let sim_make_sacs p var2index constrs =
 		afs
 
 let ge_elimT = argfunT (fun i p ->
-	try
-		let _,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-		tac i
-	with Not_found ->
-		idT
+   match Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p with
+      Some (_, tac) -> tac i
+    | None -> idT
 )
 
 let rec prune_tree used_hyps = function

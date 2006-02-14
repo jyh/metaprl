@@ -6,7 +6,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -189,15 +189,11 @@ interactive_rw reduce_last_suffix_list :
  *)
 let extract_data tbl =
    let rw t =
-      let conv =
-         try
-            (* Find and apply the right tactic *)
-            Term_match_table.lookup tbl select_all t
-         with
-            Not_found ->
-               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
-      in
-         conv
+      (* Find and apply the right tactic *)
+      match Term_match_table.lookup tbl select_all t with
+         Some conv -> conv
+       | None ->
+            raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
    in
       termC rw
 

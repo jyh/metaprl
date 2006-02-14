@@ -13,7 +13,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2004-2005 MetaPRL Group, California Institute of Technology
+   Copyright (C) 2004-2006 MetaPRL Group, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -67,11 +67,9 @@ let dest_sqsimple_term = dest_dep0_term sqsimple_opname
 
 let extract_sqsimple tbl =
    let rec is_sqsimple t =
-      try
-         List.for_all is_sqsimple (fst (lookup_rmap tbl select_all t))
-      with
-         Not_found ->
-            false
+      match lookup_rmap tbl select_all t with
+         Some (ts, _) -> List.for_all is_sqsimple ts
+       | None -> false
    in
       is_sqsimple
 

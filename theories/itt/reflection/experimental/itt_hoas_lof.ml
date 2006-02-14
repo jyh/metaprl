@@ -67,15 +67,10 @@ doc <:doc<
 >>
 let extract_data tbl =
    let rw t =
-      let conv =
-         try
-            (* Find and apply the right tactic *)
-            Term_match_table.lookup tbl select_all t
-         with
-            Not_found ->
-               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
-      in
-         conv
+      (* Find and apply the right tactic *)
+      match Term_match_table.lookup tbl select_all t with
+         Some conv -> conv
+       | None -> raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
    in
       termC rw
 

@@ -13,7 +13,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005 Mojave Group, Caltech
+   Copyright (C) 1998-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -79,18 +79,13 @@ let extract_elim_data =
             argfunT (fun i p ->
                   let t = Sequent.nth_assum p i in
                   let options = get_options p in
-                  let () =
                      if !debug_meta_dtactic then
-                        eprintf "meta_d_tactic: elim: lookup %s%t" (SimplePrint.short_string_of_term t) eflush
-                  in
-                  let tacs =
-                     try
-                        lookup_bucket tbl (select_options options) t
-                     with
-                        Not_found ->
-                           raise (RefineError ("extract_elim_data", StringTermError ("D tactic doesn't know about", t)))
-                  in
-                     firstiT i tacs))
+                        eprintf "meta_d_tactic: elim: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
+                     match lookup_bucket tbl (select_options options) t with
+                        Some tacs ->
+                           firstiT i tacs
+                      | None ->
+                           raise (RefineError ("extract_elim_data", StringTermError ("D tactic doesn't know about", t)))))
 
 let in_auto p =
    match Sequent.get_int_arg p "d_auto" with
@@ -130,13 +125,12 @@ let extract_intro_data =
    let tac tbl =
       funT (fun p ->
             let t = Sequent.goal p in
-            let () =
                if !debug_meta_dtactic then
-                  eprintf "meta_d_tactic: intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush
-            in
-            let tacs =
-               try lookup_bucket tbl (select_intro p (Sequent.get_int_arg p "d_auto")) t with
-                  Not_found ->
+                  eprintf "meta_d_tactic: intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
+               match lookup_bucket tbl (select_intro p (Sequent.get_int_arg p "d_auto")) t with
+                  Some tacs ->
+                     firstT (List.map extract tacs)
+                | None ->
                      let msg =
                         match get_sel_arg p with
                            Some _ ->
@@ -144,9 +138,7 @@ let extract_intro_data =
                          | None ->
                               "meta_dT tactic failed: the rule may not apply, or option arguments may not be valid"
                      in
-                        raise (RefineError ("extract_intro_data", StringTermError (msg, t)))
-            in
-               firstT (List.map extract tacs))
+                        raise (RefineError ("extract_intro_data", StringTermError (msg, t))))
    in
       tac
 

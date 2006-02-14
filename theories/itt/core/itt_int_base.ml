@@ -28,7 +28,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005 MetaPRL Group, Cornell University, Moscow State
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University, Moscow State
    University, City University of New York, and California Institute of Technology
 
    This program is free software; you can redistribute it and/or
@@ -91,19 +91,16 @@ let debug_arith_unfold =
  *)
 let extract_data tbl =
    let rw t =
-      let conv =
-         try
-            (* Find and apply the right tactic *)
+      (* Find and apply the right tactic *)
+      if !debug_arith_unfold then
+         Lm_printf.eprintf "Conversionals: lookup %a%t" debug_print t eflush;
+      match Term_match_table.lookup tbl Term_match_table.select_all t with
+         Some conv ->
             if !debug_arith_unfold then
-               Lm_printf.eprintf "Conversionals: lookup %a%t" debug_print t eflush;
-            Term_match_table.lookup tbl Term_match_table.select_all t
-         with
-            Not_found ->
-               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
-      in
-         if !debug_arith_unfold then
-            Lm_printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
-         conv
+               Lm_printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
+            conv
+       | None -> 
+            raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
    in
       termC rw
 

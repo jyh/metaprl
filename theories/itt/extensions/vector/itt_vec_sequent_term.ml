@@ -436,13 +436,13 @@ interactive_rw reduce_hyps_flatten_bind_cons {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw reduce_hyps_flatten_bind_nil1 {| reduce |} : <:xrewrite<
-   hyps_flatten{"mk_vbind"{| <J> >- mk_core{hypconslist{| >- [] |}} |}}
+   hyps_flatten{"mk_vbind"{| <J> >- mk_core{[]} |}}
    <-->
    []
 >>
 
 interactive_rw reduce_hyps_flatten_bind_nil2 {| reduce |} : <:xrewrite<
-   hyps_flatten{"mk_vbind"{| <J> >- mk_core{[]} |}}
+   hyps_flatten{"mk_vbind"{| <J> >- mk_core{hypconslist{| >- [] |}} |}}
    <-->
    []
 >>

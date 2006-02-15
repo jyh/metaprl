@@ -197,7 +197,8 @@ interactive subtype_axiomEquality {| intro []; squash |} :
 doc docoff
 
 let resource nth_hyp +=
-   <<squash{'A subtype 'B}>>, <<'A subtype 'B>>, wrap_nth_hyp (fun i -> unsquashT i thenT hypothesis i)
+   <<squash{'A subtype 'B}>>, <<'A subtype 'B>>,
+   wrap_nth_hyp_certain (fun i -> unsquashT i thenT hypothesis i)
 
 (************************************************************************
  * SUBTYPE RESOURCE                                                     *

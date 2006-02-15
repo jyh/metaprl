@@ -516,7 +516,8 @@ interactive eq_2beq_int2 'H :
 doc docoff
 let resource nth_hyp +=
    << number[m:n] = number[n:n] in int >>, <<'C>>,
-   wrap_nth_hyp (fun i -> eq_2beq_int2 i thenT rw (addrC [Subterm 1] reduce_eq_int) (-1) thenT Itt_bool.assert_false (-1))
+   wrap_nth_hyp_uncertain (fun i ->
+      eq_2beq_int2 i thenT rw (addrC [Subterm 1] reduce_eq_int) (-1) thenT Itt_bool.assert_false (-1))
 
 doc docon
 

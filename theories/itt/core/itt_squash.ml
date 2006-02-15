@@ -419,7 +419,8 @@ let unsquashT = argfunT (fun i p ->
    Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i))
 
 let resource nth_hyp +=
-   <<squash{'a = 'b in 'T}>>, <<'a = 'b in 'T>>, wrap_nth_hyp (fun i -> unsquashHypEqual i thenT hypothesis i)
+   <<squash{'a = 'b in 'T}>>, <<'a = 'b in 'T>>,
+   wrap_nth_hyp_certain (fun i -> unsquashHypEqual i thenT hypothesis i)
 
 let squashT = funT (fun p ->
    let ct = concl p in

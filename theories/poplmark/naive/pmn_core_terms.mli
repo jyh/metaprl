@@ -25,6 +25,7 @@
  * @end[license]
  *)
 extends Base_theory
+extends Itt_hoas_theory
 
 open Basic_tactics
 

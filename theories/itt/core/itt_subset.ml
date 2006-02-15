@@ -23,6 +23,7 @@ doc <:doc<
    Type-theoretic intersection and union (Sections @refmodule[Itt_isect] and @refmodule[Itt_tunion])
    behaves on subsets of a given type  like usual intersection and union.
 
+   An equivalent definition of "strong subtype" was in Mark Bickford's Logic of Events.
    @docoff
    ----------------------------------------------------------------
 
@@ -35,7 +36,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2003-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -52,10 +54,9 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Authors:
-    Jason Hickey @email{jyh@cs.caltech.edu}
     Xin Yu @email{xiny@cs.caltech.edu},
     Alexei Kopylov @email{kopylov@cs.cornell.edu}
-    An equivalent definition of "strong subtype" was in Mark Bickford's Logic of Events.
+    Jason Hickey @email{jyh@cs.caltech.edu}
 
    @end[license]
 >>
@@ -152,7 +153,7 @@ interactive mem_wf {| intro [] |}  :
    sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- "type"{mem{'a;'A;'B}} }
 
-interactive mem_intro {| intro [] |}  :
+interactive mem_intro {| intro [AutoMustComplete] |}  :
    [wf] sequent { <H> >- 'a in 'B } -->
    sequent { <H>; b:'B; u: 'a='b in 'B >- 'b in 'A} -->
    sequent { <H> >- mem{'a;'A;'B} }

@@ -138,7 +138,7 @@ doc <:doc<
 
    A squashed type <<squash{'A}>> is true if $A$ is true.
    This rule is irreversible, so we use @tt[AutoMustComplete] to prevent
-   @hreftactic[autoT] from using it.
+   @hreftactic[autoT] from using it too eagerly.
 >>
 prim squashMemberFormation {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- 'A } -->
@@ -423,6 +423,9 @@ doc <:doc<
 >>
 let unsquashT = argfunT (fun i p ->
    Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i))
+
+let resource nth_hyp +=
+   <<squash{'A}>>, <<'A>>, wrap_nth_hyp (fun i -> unsquashT i thenT nthHypT i)
 
 let squashT = funT (fun p ->
    let ct = concl p in

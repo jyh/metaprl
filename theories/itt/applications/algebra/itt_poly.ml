@@ -147,10 +147,6 @@ let fold_eval_poly = makeFoldC << eval_poly{'p; 'a; 'F} >> unfold_eval_poly
 let fold_eval_poly1 = makeFoldC << eval_poly{('u, 'v); 'a; 'F} >> unfold_eval_poly1
 let fold_eq_poly = makeFoldC << eq_poly{'p; 'q; 'F} >> unfold_eq_poly
 
-interactive nat_is_int {| intro[AutoMustComplete]; nth_hyp |} :
-   [wf] sequent { <H> >- 'a='b in nat} -->
-   sequent { <H> >- 'a='b in int}
-
 interactive n_in_Nnplus1 {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- 'n in nat{'n +@ 1} }

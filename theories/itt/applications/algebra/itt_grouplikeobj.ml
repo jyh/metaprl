@@ -51,6 +51,7 @@ open Lm_printf
 
 open Basic_tactics
 
+open Itt_struct
 open Itt_dfun
 open Itt_record
 open Itt_subtype
@@ -384,24 +385,30 @@ interactive subStructure_intro {| intro [] |} :
    sequent { <H> >- subStructure{'s; 'g} }
 
 interactive subStructure_elim {| elim [] |} 'H :
-   sequent { <H>; u: subStructure{'s; 'g}; x: 's^car subset 'g^car; v: 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: subStructure{'s; 'g}; 's^car subset 'g^car; 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: subStructure{'s; 'g}; <J['u]> >- 'C['u] }
+
+doc docoff
+
+let resource nth_hyp +=
+   << subStructure{'s; 'g} >>, << 's^car subset 'g^car >>,
+   wrap_nth_hyp_certain (fun i -> subStructure_elim i thenT hypothesis (if i > 0 then i + 1 else i - 1))
 
 doc <:doc<
    @modsubsection{Rules}
 
    Substructure is squash-stable.
 >>
-interactive subStructure_sqStable {| squash |} :
+interactive subStructure_sqStable {| squash; nth_hyp |} :
    [wf] sequent { <H> >- squash{subStructure{'s; 'g}} } -->
    sequent { <H> >- subStructure{'s; 'g} }
 doc docoff
 
-interactive subStructure_type_right 'B :
+interactive subStructure_type_right {| nth_hyp |} 'B :
    sequent { <H> >- subStructure{'A; 'B} } -->
    sequent { <H> >- "type"{'A^car} }
 
-interactive subStructure_type_left 'A :
+interactive subStructure_type_left {| nth_hyp |} 'A :
    sequent { <H> >- subStructure{'A; 'B} } -->
    sequent { <H> >- "type"{'B^car} }
 

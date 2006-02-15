@@ -86,9 +86,6 @@ open Basic_tactics
 open Itt_dfun
 open Czf_itt_set
 
-let _ =
-   show_loading "Loading Czf_itt_equiv%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

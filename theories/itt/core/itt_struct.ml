@@ -57,12 +57,6 @@ open Simple_print
 
 open Itt_equal
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_struct%t"
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

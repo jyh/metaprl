@@ -118,9 +118,6 @@ open Itt_dfun
 open Itt_struct
 open Itt_w
 
-let _ =
-   show_loading "Loading Czf_itt_set%t"
-
 let debug_czf_set =
    create_debug (**)
       { debug_name = "czf_set";

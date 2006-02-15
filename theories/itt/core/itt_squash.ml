@@ -84,12 +84,6 @@ open Basic_tactics
 open Itt_struct
 open Itt_equal
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_squash%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

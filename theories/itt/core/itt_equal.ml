@@ -56,12 +56,6 @@ open Simple_print
 open Basic_tactics
 open Base_meta
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_equal%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

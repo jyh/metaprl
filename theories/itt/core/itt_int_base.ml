@@ -77,8 +77,6 @@ open Itt_bool
 open Itt_squiggle
 open Itt_sqsimple
 
-let _ = show_loading "Loading Itt_int_base%t"
-
 let debug_arith_unfold =
    create_debug (**)
       { debug_name = "arith_unfold";

@@ -56,14 +56,6 @@ open Itt_subtype
 open Itt_dprod
 open Itt_struct
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_prod%t"
-
-(* debug_string DebugLoad "Loading itt_prod..." *)
-
 doc <:doc<
    @rewrites
    The @tt{unfold_prod} rewrite unfolds the non-dependent

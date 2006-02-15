@@ -57,13 +57,6 @@ open Lm_printf
 
 open Dtactic
 
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_subset2%t"
-
 doc <:doc<
    @modsection{Sets}
   The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:

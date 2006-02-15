@@ -27,7 +27,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -43,8 +44,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
 >>
@@ -65,12 +66,6 @@ open Basic_tactics
 open Itt_equal
 open Itt_struct
 open Itt_subtype
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_union%t"
 
 (************************************************************************
  * TERMS                                                                *

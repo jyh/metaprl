@@ -56,9 +56,6 @@ open Auto_tactic
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
-let _ =
-   show_loading "Loading Itt_decidable%t"
-
 (************************************************************************
  * decidable                                                            *
  ************************************************************************)

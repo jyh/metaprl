@@ -42,9 +42,6 @@ extends Ocaml_expr_sos
 open Lm_debug
 open Lm_printf
 
-let _ =
-   show_loading "Loading Ocaml_patt_sos%t"
-
 (************************************************************************
  * NEW FORMS                                                            *
  ************************************************************************)

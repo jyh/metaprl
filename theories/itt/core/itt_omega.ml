@@ -64,8 +64,6 @@ open Itt_int_ext
 open Itt_int_arith
 (*open Itt_supinf*)
 
-let _ = show_loading "Loading Itt_omega%t"
-
 let debug_omega =
    create_debug (**)
       { debug_name = "omega";

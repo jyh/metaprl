@@ -67,12 +67,6 @@ open Auto_tactic
 open Itt_equal
 open Itt_subtype
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_set%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

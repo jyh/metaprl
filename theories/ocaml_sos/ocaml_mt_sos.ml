@@ -33,9 +33,6 @@
 open Lm_debug
 open Lm_printf
 
-let _ =
-   show_loading "Loading Ocaml_mt_sos%t"
-
 (*
  * -*-
  * Local Variables:

@@ -20,12 +20,6 @@ open Basic_tactics
 
 open Itt_struct
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_bintree%t"
-
 doc <:doc<
    @modsection{Simple Trees}
    @modsection{Basic Definitions}

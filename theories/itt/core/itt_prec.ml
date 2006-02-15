@@ -75,14 +75,6 @@ open Itt_equal
 open Itt_struct
 open Itt_dfun
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_prec%t"
-
-(* debug_string DebugLoad "Loading itt_prec..." *)
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

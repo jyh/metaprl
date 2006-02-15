@@ -18,9 +18,6 @@ open Tactic_type.Conversionals
 
 open Dtactic
 
-let _ =
-   show_loading "Loading Czf_itt_setdiff%t"
-
 doc terms
 declare setdiff{'s1; 's2}
 

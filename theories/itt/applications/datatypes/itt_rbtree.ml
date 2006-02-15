@@ -40,12 +40,6 @@ let reduceByRecDefC term unfold = reduceByDefC unfold thenC higherC (makeFoldC t
 let soft_reduce term unfold  = term, wrap_reduce (reduceByDefC unfold)
 let softrec_reduce term unfold  = term, wrap_reduce (reduceByRecDefC term unfold)
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_redblacktree%t"
-
 doc <:doc<
    @modsection{Definitions of Red-Black Trees}
    @modsubsection{Color}

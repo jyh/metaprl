@@ -50,9 +50,6 @@ open Itt_field2
 open Itt_ring_e
 open Itt_equal
 
-let _ =
-   show_loading "Loading Itt_field_e%t"
-
 (************************************************************************
  * Field with Decidable Equality                                        *
  ************************************************************************)

@@ -68,14 +68,6 @@ open Itt_equal
 open Itt_struct
 open Itt_squash
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_subtype%t"
-
-(* debug_string DebugLoad "Loading itt_subtype..." *)
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

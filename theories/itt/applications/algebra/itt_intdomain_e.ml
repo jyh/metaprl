@@ -50,9 +50,6 @@ open Itt_intdomain
 open Itt_ring_uce
 open Itt_ring_e
 
-let _ =
-   show_loading "Loading Itt_intdomain_e%t"
-
 (************************************************************************
  * Commutative intDomain with Decidable Equality                             *
  ************************************************************************)

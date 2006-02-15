@@ -17,14 +17,6 @@ open Dtactic
 
 open Itt_struct
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_pointwise2%t"
-
-(* debug_string DebugLoad "Loading itt_struct..." *)
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

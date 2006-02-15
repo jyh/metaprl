@@ -64,14 +64,6 @@ open Itt_squiggle
 open Itt_dfun
 open Itt_sqsimple
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_struct2%t"
-
-(* debug_string DebugLoad "Loading itt_struct2..." *)
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

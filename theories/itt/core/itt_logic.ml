@@ -75,12 +75,6 @@ open Itt_dfun
 open Itt_dprod
 open Itt_struct
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_logic%t"
-
 let debug_auto =
    create_debug (**)
       { debug_name = "auto";

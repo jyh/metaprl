@@ -47,9 +47,6 @@ open Basic_tactics
 open Itt_ring2
 open Itt_equal
 
-let _ =
-   show_loading "Loading Itt_ring_e%t"
-
 (************************************************************************
  * Decidable Equality                                                   *
  ************************************************************************)

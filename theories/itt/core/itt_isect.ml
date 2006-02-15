@@ -83,12 +83,6 @@ open Itt_struct
 open Itt_subtype
 open Perv
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_isect%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

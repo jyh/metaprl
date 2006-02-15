@@ -14,15 +14,6 @@ open Tactic_type.Tacticals
 open Itt_struct
 open Itt_ext_equal
 
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_struct3%t"
-
-(* debug_string DebugLoad "Loading itt_struct..." *)
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

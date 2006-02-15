@@ -61,12 +61,6 @@ open Itt_equal
 open Itt_subtype
 open Itt_rfun
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_dfun_imp%t"
-
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)

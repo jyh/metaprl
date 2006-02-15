@@ -47,9 +47,6 @@ open Basic_tactics
 open Itt_grouplikeobj
 open Itt_unitring
 
-let _ =
-   show_loading "Loading Itt_intdomain%t"
-
 (************************************************************************
  * INTEGRAL DOMAIN                                                      *
  ************************************************************************)

@@ -66,12 +66,6 @@ open Dtactic
 open Itt_equal
 open Itt_struct
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_srec%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

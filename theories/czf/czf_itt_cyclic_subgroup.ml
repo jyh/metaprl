@@ -52,9 +52,6 @@ open Tactic_type.Conversionals
 
 open Dtactic
 
-let _ =
-   show_loading "Loading Czf_itt_cyclic_subgroup%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

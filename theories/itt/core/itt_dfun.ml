@@ -56,12 +56,6 @@ open Unify_mm
 open Itt_equal
 open Itt_subtype
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_dfun%t"
-
 declare "fun"{'A; x. 'B['x]}
 
 declare lambda{x. 'b['x]}

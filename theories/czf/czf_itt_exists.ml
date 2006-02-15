@@ -37,14 +37,6 @@ open Lm_printf
 
 open Dtactic
 
-(*
- * We need the allAutoT tactic from Czf_itt_all,
- * but we don't need the logic.
- *)
-
-let _ =
-   show_loading "Loading Czf_itt_exists%t"
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

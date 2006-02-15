@@ -9,11 +9,6 @@ doc docoff
 open Lm_debug
 open Lm_printf
 
-(*
- * Show that the file is loading.
- *)
-let _ = show_loading "Loading Itt_pointwise%t"
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

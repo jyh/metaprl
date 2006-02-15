@@ -68,14 +68,6 @@ open Basic_tactics
 open Itt_equal
 open Itt_struct
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_rfun%t"
-
-(* debug_string DebugLoad "Loading itt_rfun..." *)
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

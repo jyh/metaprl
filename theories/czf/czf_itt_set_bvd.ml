@@ -54,9 +54,6 @@ open Lm_printf
 open Dtactic
 open Top_conversionals
 
-let _ =
-   show_loading "Loading Czf_itt_set_bvd%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

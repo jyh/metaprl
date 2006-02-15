@@ -62,9 +62,6 @@ doc docoff
 open Lm_debug
 open Lm_printf
 
-let _ =
-   show_loading "Loading CZF_itt_axioms%t"
-
 doc <:doc<
    @rules
    @modsubsection{Set induction}

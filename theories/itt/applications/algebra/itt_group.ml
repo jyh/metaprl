@@ -54,9 +54,6 @@ open Itt_squash
 open Itt_equal
 open Itt_subtype
 
-let _ =
-   show_loading "Loading Itt_group%t"
-
 (************************************************************************
  * Intro resource hack.                                                 *
  ************************************************************************)

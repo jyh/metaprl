@@ -26,12 +26,6 @@ open Basic_tactics
 open Itt_struct
 open Itt_record_label
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_record%t"
-
 (**********************************************)
 (*                                            *)
 (*  Records with token labels                 *)

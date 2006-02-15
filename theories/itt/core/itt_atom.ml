@@ -56,14 +56,6 @@ open Lm_printf
 open Basic_tactics
 open Itt_equal
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_atom%t"
-
-(* debug_string DebugLoad "Loading itt_atom..." *)
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

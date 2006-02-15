@@ -46,14 +46,6 @@ open Top_conversionals
 
 open Itt_struct
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_dprod_imp%t"
-
-(* debug_string DebugLoad "Loading itt_dprod..." *)
-
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)

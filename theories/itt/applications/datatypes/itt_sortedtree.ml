@@ -34,12 +34,6 @@ let reduceByRecDefC term unfold = reduceByDefC unfold thenC higherC (makeFoldC t
 let soft_reduce term unfold  = term, (reduceByDefC unfold)
 let softrec_reduce term unfold  = term, wrap_reduce (reduceByRecDefC term unfold)
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_binatatree%t"
-
 doc terms
 
 define dataNode: DataNode{'D;data.'N['data]} <--> record["data":t]{'D;data.'N['data]}

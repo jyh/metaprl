@@ -52,9 +52,6 @@ open Basic_tactics
 
 open Itt_dfun
 
-let _ =
-   show_loading "Loading Itt_order%t"
-
 (************************************************************************
  * RELATION, unstrictPartial ORDER                                              *
  ************************************************************************)

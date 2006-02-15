@@ -57,9 +57,6 @@ open Tactic_type.Conversionals
 
 open Dtactic
 
-let _ =
-   show_loading "Loading Czf_itt_group_power%t"
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

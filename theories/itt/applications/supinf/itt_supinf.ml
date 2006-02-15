@@ -23,8 +23,6 @@ open Itt_int_ext
 open Itt_int_arith
 open Itt_rat
 
-let _ = show_loading "Loading Itt_supinf%t"
-
 let debug_supinf_trace =
    create_debug (**)
       { debug_name = "supinf_trace";

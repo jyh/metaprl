@@ -51,9 +51,6 @@ open Itt_unitring
 open Itt_ring_e
 open Itt_equal
 
-let _ =
-   show_loading "Loading Itt_ring_uce%t"
-
 (************************************************************************
  * Commutative unitring with Decidable Equality                             *
  ************************************************************************)

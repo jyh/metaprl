@@ -11,17 +11,10 @@ extends Itt_labels
 
 doc docoff
 
-open Lm_debug
 open Lm_printf
 
 open Dtactic
 open Top_conversionals
-
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Itt_datatree%t"
 
 doc <:doc<
    @modsection{Definition}

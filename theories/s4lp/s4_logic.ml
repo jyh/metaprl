@@ -48,12 +48,6 @@ open Browser_resource
 
 open Basic_tactics
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading s4_logic%t"
-
 let debug_s4prover =
    create_debug (**)
       { debug_name = "s4prover";

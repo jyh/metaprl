@@ -8,12 +8,6 @@ open Lm_printf
 
 open Dtactic
 
-(*
- * Show that the file is loading.
- *)
-let _ =
-   show_loading "Loading Ctt_markov%t"
-
 interactive squash_stable1 't :
    sequent { <H>; x:'T >- 't in 'T} -->
    sequent { <H>; x:squash{'T} >- 'T}

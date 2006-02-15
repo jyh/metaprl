@@ -48,9 +48,6 @@ extends Ocaml_base_sos
 open Lm_debug
 open Lm_printf
 
-let _ =
-   show_loading "Loading Ocaml_expr_sos%t"
-
 (************************************************************************
  * EXCEPTIONS                                                           *
  ************************************************************************)

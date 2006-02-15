@@ -56,9 +56,6 @@ open Itt_record
 open Itt_subtype
 open Itt_squash
 
-let _ =
-   show_loading "Loading Itt_grouplikeobj%t"
-
 (************************************************************************
  * GROUPOID                                                             *
  ************************************************************************)

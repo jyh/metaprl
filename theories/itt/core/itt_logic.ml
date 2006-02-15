@@ -252,6 +252,15 @@ interactive and_squash_elim {| elim [] |} 'H :
    [main] sequent { <H>; y: squash{'a1}; z: squash{'a2}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: squash{('a1 & 'a2)}; <J['x]> >- 'C['x] }
 
+doc docoff
+
+let resource nth_hyp += [
+   <<'A & 'B >>, <<'A>>, wrap_nth_hyp_certain (fun i ->
+      and_elim i thenT hypothesis (if i > 0 then i else i - 1));
+   <<'A & 'B >>, <<'B>>, wrap_nth_hyp_certain (fun i ->
+      and_elim i thenT hypothesis (if i > 0 then i + 1 else i));
+]
+
 doc <:doc<
    @modsubsection{Disjunction}
 

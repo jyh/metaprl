@@ -1,4 +1,4 @@
-(*x
+(*
  * Typed AST.
  *
  * ----------------------------------------------------------------
@@ -25,6 +25,7 @@
  * @end[license]
  *)
 extends Itt_hoas_theory
+extends Base_theory
 
 open Basic_tactics
 open Itt_equal

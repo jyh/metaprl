@@ -1,16 +1,10 @@
 (*
- * Compile a binary file.
+ * Typed AST.
  *
  * ----------------------------------------------------------------
  *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/htmlman/default.html or visit http://metaprl.org/
- * for more information.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * @begin[license]
+ * Copyright (C) 2003-2005 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,13 +21,17 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ * @end[license]
  *)
+extends Base_theory
 
-(*
+(*!
+ * @docoff
+ *
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "compile"
  * End:
  * -*-
  *)

@@ -1,7 +1,0 @@
-#
-# Temporarily hardcode the dependencies
-#
-reflect_%.cmiz reflect_%.cmi: ../../itt/reflection/experimental/itt_hoas_theory.cmiz
-reflect_%.cmoz reflect_%.ppo: ../../itt/reflection/experimental/itt_hoas_theory.cmiz
-
-Theory($(MPFILES))

@@ -117,7 +117,7 @@ interactive sqsimple_elim {| elim[ThinOption thinT] |} 'H:
       sequent{ <H>; sqsimple{'T}; <J> >- 'x ~ 'y }
 
 interactive sqsimple_elim2 {| nth_hyp |} 'H:
-      sequent{ <H>; sqsimple{'T}; <J> >- "type"{'T} }
+      sequent{ <H>; x: sqsimple{'T}; <J['x]> >- "type"{'T} }
 
 interactive sqsimple_sq 'T:
       sequent{ <H> >- sqsimple{'T} } -->
@@ -148,7 +148,6 @@ interactive sqsimple_union {| intro []; sqsimple |} :
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

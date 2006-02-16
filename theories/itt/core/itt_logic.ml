@@ -210,12 +210,11 @@ interactive not_elim {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; x: "not"{'t}; <J['x]> >- 't } -->
    sequent { <H>; x: "not"{'t}; <J['x]> >- 'C['x] }
 
-(* BUG: Squash_resource shoud now that not{'t} (as well as neq is squash_stable
-interactive not_membership {| intro []; squash |} :
-   [wf] sequent { <H> >- "type"{'t} } -->
-   [main] sequent { <H> >- not{'t} } -->
-   sequent { <H> >- lambda{x.'f['x]} in not{'t} }
-*)
+interactive squash_not_elim {| elim [] (* squash *) |} 'H :
+   [wf] sequent { <H>; "not"{'t}; <J[it]> >- 't Type } -->
+   sequent { <H>; "not"{'t}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: squash{"not"{'t}}; <J['x]> >- 'C['x] }
+
 doc <:doc<
    @modsubsection{Conjunction}
 

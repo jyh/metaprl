@@ -196,7 +196,8 @@ doc docoff
 
 let resource elim += 
    << squash{compatible_shapes{'bdepth; 'shape; 'btl}} >>,
-   wrap_elim (fun i -> unsquashHypGoalStable i thenAT (compatible_shapes_sqstable thenMT hypothesis i))
+   (rule_labels_empty, true, fun i ->
+      unsquashHypGoalStable i thenAT (compatible_shapes_sqstable thenMT hypothesis i))
 
 doc docon
 

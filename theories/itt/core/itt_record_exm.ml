@@ -333,10 +333,6 @@ interactive_rw example_of_evaluation :
 
 doc docoff
 
-interactive tst :
-   sequent{ <H> >-  'C} -->
-   sequent{ <H> >-  'C}
-
 dform plane:  plane = mathbbP `"lane"
 dform space:  space = mathbbS `"pace"
 dform colored_plane:  cplane = mathbbC `"olored" plane

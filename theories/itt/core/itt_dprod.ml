@@ -260,7 +260,7 @@ doc <:doc<
    into its parts.  The proof extract term is the @hrefterm[spread]
    induction combinator.
 >>
-prim productElimination {| elim |} 'H :
+prim productElimination {| elim [AutoOK] |} 'H :
    ('t['x; 'y] : sequent { <H>; x: 'A; y: 'B['x]; <J['x, 'y]> >- 'T['x, 'y] }) -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
    spread{'z; x, y. 't['x; 'y]}
@@ -284,7 +284,7 @@ interactive spreadEquality_simple {| intro [intro_typeinf <<'e1>>] |} (w:'A * 'B
              'b1['u; 'v] = 'b2['u; 'v] in 'T } -->
    sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T }
 
-interactive productEqElimination {| elim [] |} 'H :
+interactive productEqElimination {| elim [AutoOK] |} 'H :
    sequent { <H>; 'x1 = 'x2 in 'A; 'y1= 'y2 in 'B['x1];  <J[it]> >- 'T[it] } -->
    sequent { <H>; u: ('x1,'y1) = ('x2,'y2) in x:'A * 'B['x]; <J['u]> >- 'T['u] }
 

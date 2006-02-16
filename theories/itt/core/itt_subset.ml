@@ -293,9 +293,9 @@ interactive member_intro {| intro [] |}  :
    sequent { <H> >- 'A subset 'B } -->
    sequent { <H> >- 'a in 'A subset 'B }
 
-interactive member_elim {| elim [] |} 'H :
-   sequent { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } -->
-   sequent { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }
+interactive member_elim {| elim [AutoOK] |} 'H :
+   sequent { <H>; 'a in 'A; 'A subset 'B; <J> >- 'C } -->
+   sequent { <H>; 'a in 'A subset 'B; <J> >- 'C  }
 
 doc <:doc<
    Note that the truth of predicate <<'a in 'A subset 'B>> does not depend on $B$ whenever
@@ -305,14 +305,13 @@ doc <:doc<
 
 interactive member_doesnot_depend_on_B :
    sequent { <H> >- 'A subset '"B'" } -->
-   sequent { <H>; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
+   sequent { <H>; 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
 
 doc docoff
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

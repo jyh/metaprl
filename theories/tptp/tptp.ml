@@ -440,7 +440,7 @@ let auto_tac =
 
 let resource auto += {
    auto_name = "Tptp.autoT";
-   auto_prec = logic_prec;
+   auto_prec = trivial_prec;
    auto_tac = auto_tac;
    auto_type = AutoNormal;
 }
@@ -448,7 +448,6 @@ let resource auto += {
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
  * End:
  * -*-
  *)

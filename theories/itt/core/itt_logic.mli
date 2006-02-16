@@ -152,8 +152,6 @@ topval univCDT : tactic
 topval genUnivCDT : tactic
 topval instHypT : term list -> int -> tactic
 
-val logic_prec : auto_prec
-
 topval backThruHypT : int -> tactic
 topval assumT : int -> tactic
 topval assumsT : int list -> tactic

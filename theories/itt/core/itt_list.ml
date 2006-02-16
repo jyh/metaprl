@@ -204,10 +204,10 @@ doc <:doc<
    The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
    every list type.
 >>
-interactive nil_neq_cons {| elim [] |} 'H :
+interactive nil_neq_cons {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: nil = cons{'h; 't} in list{'T}; <J['x]> >- 'C['x] }
 
-interactive cons_neq_nil {| elim [] |} 'H :
+interactive cons_neq_nil {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: cons{'h; 't} = nil in list{'T}; <J['x]> >- 'C['x] }
 
 doc <:doc<
@@ -222,9 +222,8 @@ interactive nilEquality3 {| nth_hyp |} 'H :
 (*
  * @modsubsection{Equality elimination}
  *)
-interactive consEqElimination {| elim [ThinOption thinT] |} 'H :
-   sequent { <H>; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A};
-                       v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   <J['u]> >- 'C['u] } -->
+interactive consEqElimination {| elim [AutoOK] |} 'H :
+   sequent { <H>; 'h1 = 'h2 in 'A; 't1 = 't2 in list{'A};   <J[it]> >- 'C[it] } -->
    sequent { <H>; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; <J['u]> >- 'C['u] }
 
 doc <:doc<

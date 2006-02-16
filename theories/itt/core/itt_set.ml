@@ -24,7 +24,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -40,8 +41,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
 >>
@@ -56,13 +57,7 @@ extends Itt_subtype
 extends Itt_struct
 doc docoff
 
-open Lm_debug
-open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-
-open Dtactic
-open Auto_tactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_subtype
@@ -151,7 +146,7 @@ doc <:doc<
    $@squash{B[u]}$ hypothesis states that $B[u]$ is true, but its proof is
    omitted.
 >>
-prim setElimination {| elim [] |} 'H :
+prim setElimination {| elim [AutoOK] |} 'H :
    ('t['u;'i] : sequent { <H>; u: 'A; i: squash{'B['u]}; <J['u]> >- 'T['u] }) -->
    sequent { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] } =
    't['u;it]
@@ -207,7 +202,6 @@ let resource sub += (LRSubtype ([<< { a: 'A | 'B['a] } >>, << 'A >>], set_subtyp
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

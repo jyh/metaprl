@@ -222,15 +222,15 @@ interactive applyFun 'f 'B 'H :
 doc <:doc<
    Elimination rule for equalities:
 >>
-interactive setEqualityElim {| elim [] |} 'H :
+interactive setEqualityElim {| elim [AutoOK] |} 'H :
    sequent { <H>; 'a = 'b in 'A; squash{'B['a]}; squash{'B['b]}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: 'a = 'b in { y: 'A | 'B['y] }; <J['x]> >- 'C['x] }
 
-interactive unionEqElimination1 {| elim [] |} 'H :
+interactive unionEqElimination1 {| elim [AutoOK] |} 'H :
    sequent { <H>; u: 'x = 'y in 'A; <J[it]> >- 'T[it] } -->
    sequent { <H>; u: inl{'x} = inl{'y} in 'A + 'B; <J['u]> >- 'T['u] }
 
-interactive unionEqElimination2 {| elim [] |} 'H :
+interactive unionEqElimination2 {| elim [AutoOK] |} 'H :
    sequent { <H>; u: 'x = 'y in 'B; <J[it]> >- 'T[it] } -->
    sequent { <H>; u: inr{'x} = inr{'y} in 'A + 'B; <J['u]> >- 'T['u] }
 

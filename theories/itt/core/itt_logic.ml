@@ -243,11 +243,11 @@ interactive and_squash_intro {| intro [] |} :
    [main] sequent { <H> >- squash{'a2} } -->
    sequent { <H> >- squash{('a1 & 'a2)} }
 
-interactive and_elim {| elim [] |} 'H :
+interactive and_elim {| elim [AutoOK] |} 'H :
    [main] sequent { <H>; y: 'a1; z: 'a2; <J['y, 'z]> >- 'C['y, 'z] } -->
    sequent { <H>; x: 'a1 & 'a2; <J['x]> >- 'C['x] }
 
-interactive and_squash_elim {| elim [] |} 'H :
+interactive and_squash_elim {| elim [AutoOK] |} 'H :
    [main] sequent { <H>; y: squash{'a1}; z: squash{'a2}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: squash{('a1 & 'a2)}; <J['x]> >- 'C['x] }
 
@@ -378,7 +378,7 @@ interactive cand_intro {| intro [] |} :
    [main] sequent { <H>; x: 'a1 >- 'a2 } -->
    sequent { <H> >- "cand"{'a1; 'a2} }
 
-interactive cand_elim {| elim [] |} 'H :
+interactive cand_elim {| elim [AutoOK] |} 'H :
    [main] sequent { <H>; y: 'a1; z: 'a2; <J['y, 'z]> >- 'C['y, 'z] } -->
    sequent { <H>; x: "cand"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
@@ -475,7 +475,7 @@ interactive exists_intro {| intro [] |} 'z :
    [wf] sequent { <H>; v: 't >- "type"{'b['v]} } -->
    sequent { <H> >- "exists"{'t; v. 'b['v]} }
 
-interactive exists_elim {| elim [] |} 'H :
+interactive exists_elim {| elim [AutoOK] |} 'H :
    [main] sequent { <H>; v: 'a; z: 'b['v]; <J['v, 'z]> >- 'C['v, 'z] } -->
    sequent { <H>; x: exst v: 'a. 'b['v]; <J['x]> >- 'C['x] }
 doc docoff
@@ -1402,35 +1402,14 @@ let jproverT = funT (base_jproverT (Some 100))
  * AUTO TACTIC                                                          *
  ************************************************************************)
 
-(*
- * In auto tactic, it's Ok to decompose product hyps.
- *)
-let logic_autoT = argfunT (fun i p ->
-   let hyp = Sequent.nth_hyp p i in
-      if is_and_term hyp
-         || is_prod_term hyp
-         || is_dprod_term hyp
-         || is_exists_term hyp
-         || is_and_term (dest_squash hyp)
-      then
-         dT i
-      else
-         raise (RefineError ("logic_autoT", StringError "unknown formula")))
-
-let logic_prec = create_auto_prec [trivial_prec] [d_prec]
-let jprover_prec = create_auto_prec [trivial_prec; logic_prec] [d_prec]
+let jprover_prec = create_auto_prec [trivial_prec] [d_prec]
 
 let resource auto +=
-    [{ auto_name = "logic_autoT";
-       auto_prec = logic_prec;
-       auto_tac = onSomeHypT logic_autoT;
-       auto_type = AutoNormal
-     };
      { auto_name = "simple_jproverT";
        auto_prec = jprover_prec;
        auto_tac = simple_jproverT;
        auto_type = AutoComplete;
-     }]
+     }
 
 let jAutoT i = withIntT "jprover" i autoT
 

@@ -111,11 +111,12 @@ val unsquashHypGoalStable : int -> tactic
  * Internal type.
  *)
 type squash_info
+type squash_out
 
 (*
  * The resource itself.
  *)
-resource (squash_info, int -> tactic) squash
+resource (squash_info, squash_out) squash
 
 val process_squash_resource_annotation :
    squash_info annotation_processor

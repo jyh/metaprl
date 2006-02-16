@@ -64,15 +64,16 @@ let debug_meta_dtactic =
  * The tactic checks for an optable.
  *)
 let extract_elim_data =
-   let select_options options (opts, _) =
+   let select_options options (opts, _, _) =
+      (* XXX: TODO: do we want to pay attention to the second component here? *)
       rule_labels_are_allowed options opts
    in
    let rec firstiT i = function
       [] ->
          raise (Invalid_argument "extract_elim_data: internal error")
-    | [_, tac] ->
+    | [_, _, tac] ->
          tac i
-    | (_, tac) :: tacs ->
+    | (_, _, tac) :: tacs ->
          tac i orelseT firstiT i tacs
    in
       (fun tbl ->
@@ -348,7 +349,8 @@ let process_meta_elim_resource_annotation ?(options = []) ?labels name args term
                   raise (Invalid_argument (sprintf "meta_d_tactic: %s: not an elimination rule" name))
          in
          let opts = rule_labels_of_opt_terms labels in
-            [t, (opts, tac)]
+            (* XXX: TODO: do we want to use a meaningful value here *)
+            [t, (opts, false, tac)]
     | _ ->
          raise (Invalid_argument (sprintf "meta_d_tactic.improve_elim: %s: must be an elimination rule" name))
 

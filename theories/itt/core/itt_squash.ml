@@ -280,6 +280,7 @@ type squash_inf =
  | SqStableGoal of tactic
 
 type squash_info = term * squash_inf
+type squash_out = (int -> tactic) * (term -> bool)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -288,27 +289,37 @@ type squash_info = term * squash_inf
 (*
  * Extract an SQUASH tactic from the data.
  *)
-let unsquash_tactic tbl = argfunT (fun i p ->
-   let conc = concl p in
-   let hyp = dest_squash (nth_hyp p i) in
-   match slookup_all tbl conc, slookup_all tbl hyp with
-      ((SqUnsquashGoal tac :: _)|(_ :: SqUnsquashGoal tac :: _)|(_ :: _ :: SqUnsquashGoal tac :: _)), _
-    | _, ((SqUnsquash tac :: _)|(_ :: SqUnsquash tac :: _)|(_ :: _ :: SqUnsquash tac :: _)) ->
-         tac i
-    | (SqStable (t,tac) :: _), _ ->
-         unsquashWWitness i t thenT tac
-    | (SqStableGoal tac :: _), _ ->
-         tac thenT unsquash i thenT squashMemberFormation
-    | _, (SqStable (t,tac) :: _) ->
-         unsquashStable i t thenLT [ idT; tac thenT trivialT]
-    | _, (SqUnsquashGoal tac :: _) ->
-         unsquashHypGoalStable i thenLT [idT; tac i thenT trivialT]
-    | (SqUnsquash tac :: _), _ ->
-         unsquashStableGoal i thenLT [idT; tac (-1) thenT hypothesis (-1)]
-    | _, (SqStableGoal tac :: _) ->
-         unsquashStableGoal i thenLT [idT; tac thenT hypothesis (-1)]
-    | [], [] ->
-         raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc]))))
+let unsq_err = RefineError("Itt_squash.unsquashT", StringError ("squashMemberFormation while in autoT"))
+let unsquash_tactic tbl = 
+   argfunT (fun i p ->
+      let conc = concl p in
+      if i = 0 then
+         if (slookup_all tbl (one_subterm conc) = []) && (d_in_auto p) then
+            raise unsq_err
+         else
+            squashMemberFormation
+      else
+         let hyp = dest_squash (nth_hyp p i) in
+         match slookup_all tbl conc, slookup_all tbl hyp with
+            ((SqUnsquashGoal tac :: _)|(_ :: SqUnsquashGoal tac :: _)|(_ :: _ :: SqUnsquashGoal tac :: _)), _
+          | _, ((SqUnsquash tac :: _)|(_ :: SqUnsquash tac :: _)|(_ :: _ :: SqUnsquash tac :: _)) ->
+               tac i
+          | (SqStable (t,tac) :: _), _ ->
+               unsquashWWitness i t thenT tac
+          | (SqStableGoal tac :: _), _ ->
+               tac thenT unsquash i thenT squashMemberFormation
+          | _, (SqStable (t,tac) :: _) ->
+               unsquashStable i t thenLT [ idT; tac thenT trivialT]
+          | _, (SqUnsquashGoal tac :: _) ->
+               unsquashHypGoalStable i thenLT [idT; tac i thenT trivialT]
+          | (SqUnsquash tac :: _), _ ->
+               unsquashStableGoal i thenLT [idT; tac (-1) thenT hypothesis (-1)]
+          | _, (SqStableGoal tac :: _) ->
+               unsquashStableGoal i thenLT [idT; tac thenT hypothesis (-1)]
+          | [], [] ->
+               raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ",
+                  mk_xlist_term [hyp;<<slot[" |- "]>>;conc])))),
+   (fun t -> (slookup_all tbl t) <> [])
 
 let process_squash_resource_annotation ?labels name contexts args stmt loc tac =
    if contexts.spec_addrs <> [||] then
@@ -365,7 +376,7 @@ let process_squash_resource_annotation ?labels name contexts args stmt loc tac =
 (*
  * Resource.
  *)
-let resource (squash_info, int -> tactic) squash =
+let resource (squash_info, squash_out) squash =
    stable_resource_info unsquash_tactic
 
 (********************************************************************
@@ -416,11 +427,14 @@ doc <:doc<
    @comment{Squash a goal}
 >>
 let unsquashT = argfunT (fun i p ->
-   Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i))
+   fst (Sequent.get_resource_arg p get_squash_resource) (Sequent.get_pos_hyp_num p i))
 
 let resource nth_hyp +=
    <<squash{'a = 'b in 'T}>>, <<'a = 'b in 'T>>,
    wrap_nth_hyp_certain (fun i -> unsquashHypEqual i thenT hypothesis i)
+
+let resource intro +=
+   <<squash{'A}>>, wrap_intro (funT (fun p -> fst (get_resource_arg p get_squash_resource) 0))
 
 let squashT = funT (fun p ->
    let ct = concl p in
@@ -431,22 +445,38 @@ let squashT = funT (fun p ->
 let squash_elimT i =
    (progressT (squashElim i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
 
-let resource elim += (squash_term, wrap_elim squash_elimT)
-
-let rec unsquashAllT_aux i seq hyps =
-   if i > hyps then idT else
-   match SeqHyp.get seq (pred i) with
-      Hypothesis (_, hyp) when is_squash_term hyp ->
-         unsquashT i orthenT unsquashAllT_aux (succ i) seq hyps
-    | _ ->
-         unsquashAllT_aux (succ i) seq hyps
-
-let unsquashAllT = funT (fun p ->
-   unsquashAllT_aux 1 (explode_sequent_arg p).sequent_hyps (hyp_count p))
+let resource elim += (squash_term, (rule_labels_empty, true, squash_elimT))
 
 (************************************************************************
  * AUTO TACTIC                                                          *
  ************************************************************************)
+
+let rec collect_sqhyps hyps i =
+   if i = 0 then
+      []
+   else
+      let i' = i - 1 in
+      match SeqHyp.get hyps i' with
+         Hypothesis(_, t) when is_squash_term t ->
+            i :: (collect_sqhyps hyps i')
+      | _ ->
+            collect_sqhyps hyps i'
+
+let err = RefineError("Itt_squash.unsquashAllT", StringError "not applicable")
+let unsquashAllT = funT (fun p ->
+   let s = explode_sequent_arg p in
+   let concl = s.sequent_concl in
+   let sqconcl = is_squash_term concl in
+      if sqconcl || (snd (get_resource_arg p get_squash_resource) concl) then
+         match collect_sqhyps s.sequent_hyps (SeqHyp.length s.sequent_hyps) with
+            [] -> raise err
+          | l -> 
+               if sqconcl then
+                  onHypsT l unsquash 
+               else
+                  (squashT thenT onHypsT l unsquash thenT squashMemberFormation)
+      else
+         raise err)
 
 let resource auto += {
    auto_name = "Itt_squash.unsquashAllT";

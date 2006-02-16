@@ -326,17 +326,19 @@ interactive by_subtype 'H:
    sequent { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
    sequent { <H>; x:'A; <J['x]> >- 'x in 'B }
 
-let bySubtypeT = funT (fun p ->
+let errMismatch = RefineError("Itt_subtype.bySubtypeT", StringError "mismatch")
+let bySubtypeT = argfunT (fun subt p ->
    let b, x, _ = dest_equal (concl p) in
    let x = dest_var x in
    let xdecl = get_decl_number p x in
    let a = nth_hyp p xdecl in
-   let t = <:con< "subtype"{$a$; $b$} >> in
-   let subt = get_hyp_number p t in
-      by_subtype xdecl thenT hypothesis subt)
+      if alpha_equal a (fst (two_subterms (nth_hyp p subt))) then
+         (by_subtype xdecl thenT hypothesis subt)
+      else
+         raise errMismatch)
 
-let resource intro +=
-   << !x in 'B >>, wrap_intro bySubtypeT
+let resource nth_hyp +=
+   << 'A subtype 'B >>, << !x in 'B >>, wrap_nth_hyp_uncertain bySubtypeT
 
 interactive subtypeReflexivity {| intro[] |} :
    [wf] sequent { <H> >- "type"{'A} } -->

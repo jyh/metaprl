@@ -44,6 +44,8 @@ extends Itt_subset
 doc docoff
 
 open Basic_tactics
+open Itt_struct
+open Itt_squash
 open Itt_sqsimple
 open Itt_hoas_destterm
 
@@ -189,6 +191,14 @@ interactive compatible_shapes_sqstable (*{| squash |}*) :
    [wf] sequent{ <H> >- 'btl in list{BTerm} } -->
    sequent{ <H> >- squash{compatible_shapes{'bdepth; 'shape; 'btl}}  } -->
    sequent{ <H> >- compatible_shapes{'bdepth; 'shape; 'btl} }
+
+doc docoff
+
+let resource elim += 
+   << squash{compatible_shapes{'bdepth; 'shape; 'btl}} >>,
+   wrap_elim (fun i -> unsquashHypGoalStable i thenAT (compatible_shapes_sqstable thenMT hypothesis i))
+
+doc docon
 
 interactive dom_wf {| intro [] |}:
    sequent{ <H> >- 'T subtype BTerm } -->

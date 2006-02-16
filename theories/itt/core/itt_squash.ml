@@ -197,8 +197,8 @@ doc <:doc<
    to be true.
 >>
 interactive squashStable 't :
-   [main] sequent { <H> >- squash{'A} } -->
-   [wf] sequent { <H>; 'A >- 't in 'A } -->
+   sequent { <H> >- squash{'A} } -->
+   [aux] sequent { <H>; 'A >- 't in 'A } -->
    sequent { <H> >- 'A}
 
 interactive unsquashHypEqual 'H :
@@ -212,27 +212,27 @@ interactive unsquash 'H :
 doc docoff
 interactive unsquashStableGoal 'H :
    sequent { <H>; 'A; <J[it]> >- 'C[it] } -->
-   sequent { <H>; u: squash{'A}; <J['u]>; squash{'C['u]} >- 'C['u] } -->
+   [aux] sequent { <H>; u: squash{'A}; <J['u]>; squash{'C['u]} >- 'C['u] } -->
    sequent { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive unsquashHypGoalStable 'H :
    sequent { <H>; 'A; <J[it]> >- 'C[it] } -->
-   sequent { <H>; u: squash{'A}; <J['u]> >- 'A } -->
+   [aux] sequent { <H>; u: squash{'A}; <J['u]> >- 'A } -->
    sequent { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive unsquashStable 'H 't :
    sequent { <H>; 'A; <J[it]> >- 'C[it] } -->
-   sequent { <H>; u: squash{'A}; <J['u]>; 'A >- 't in 'A } -->
+   [aux] sequent { <H>; u: squash{'A}; <J['u]>; 'A >- 't in 'A } -->
    sequent { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive squashAssert 'A :
    sequent { <H> >- squash{'A} } -->
-   sequent { <H>; squash{'A} >- 'C } -->
+   [assertion] sequent { <H>; squash{'A} >- 'C } -->
    sequent { <H> >- 'C }
 
 interactive assertSquash :
    [sqstable] sequent { <H>;  squash{'C} >- 'C } -->
-   [main] sequent { <H> >- squash{'C} } -->
+   sequent { <H> >- squash{'C} } -->
    sequent { <H> >- 'C }
 
 (*

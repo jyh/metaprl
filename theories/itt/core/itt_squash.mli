@@ -16,7 +16,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,6 +105,8 @@ val is_squash_term : term -> bool
 val dest_squash : term -> term
 val mk_squash_term : term -> term
 
+val unsquashHypGoalStable : int -> tactic
+
 (*
  * Internal type.
  *)
@@ -125,7 +128,6 @@ topval unsquashAllT : tactic
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.run"
  * End:
  * -*-
  *)

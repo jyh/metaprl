@@ -73,6 +73,8 @@ doc <:doc<
 >>
 extends Itt_equal
 extends Itt_struct
+extends Itt_image
+extends Itt_pairwise
 doc docoff
 
 open Lm_debug
@@ -83,6 +85,7 @@ open Basic_tactics
 
 open Itt_struct
 open Itt_equal
+open Itt_squiggle
 
 (************************************************************************
  * TERMS                                                                *
@@ -93,7 +96,9 @@ doc <:doc<
 
    The @tt[squash] term defines the @tt[squash] type.
 >>
-declare squash{'A}
+
+define unfold_squash: squash{'A} <--> Img{'A;x.it}
+
 doc docoff
 
 let squash_term = << squash{'a} >>
@@ -118,14 +123,13 @@ doc <:doc<
 
    <<squash{'A}>> is a type if $A$ is a type.
 >>
-prim squashEquality {| intro [] |}  :
+interactive squashEquality {| intro [] |}  :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent { <H> >- squash{'A1} = squash{'A2} in univ[i:l] } = it
+   sequent { <H> >- squash{'A1} = squash{'A2} in univ[i:l] }
 
-prim squashType {| intro [] |} :
+interactive squashType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{squash{'A}} } =
-   it
+   sequent { <H> >- "type"{squash{'A}} }
 
 doc <:doc<
    @modsubsection{Introduction}
@@ -134,10 +138,9 @@ doc <:doc<
    This rule is irreversible, so we use @tt[AutoMustComplete] to prevent
    @hreftactic[autoT] from using it too eagerly.
 >>
-prim squashMemberFormation {| intro [AutoMustComplete]; nth_hyp |} :
+interactive squashMemberFormation {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- 'A } -->
-   sequent { <H> >- squash{'A} } =
-   it
+   sequent { <H> >- squash{'A} }
 
 doc <:doc<
    @modsubsection{Elimination}
@@ -147,15 +150,13 @@ doc <:doc<
    The second rule, @tt[squashElim] shows that $@it$ is the only element
    of a non-empty squashed type.
 >>
-prim unsquashEqualWeak 'H :
+interactive unsquashEqualWeak 'H :
    sequent { <H>; 'P; <J> >- 'x = 'y in 'A } -->
-   sequent { <H>; squash{'P}; <J> >- 'x = 'y in 'A } =
-   it
+   sequent { <H>; squash{'P}; <J> >- 'x = 'y in 'A }
 
-prim squashElim 'H :
+interactive squashElim 'H :
    ('t['u] : sequent { <H>; u: squash{'P}; <J[it]> >- 'C[it] }) -->
-   sequent { <H>; u: squash{'P}; <J['u]> >- 'C['u] } =
-   't[it]
+   sequent { <H>; u: squash{'P}; <J['u]> >- 'C['u] }
 
 doc docoff
 
@@ -290,7 +291,7 @@ type squash_out = (int -> tactic) * (term -> bool)
  * Extract an SQUASH tactic from the data.
  *)
 let unsq_err = RefineError("Itt_squash.unsquashT", StringError ("squashMemberFormation while in autoT"))
-let unsquash_tactic tbl = 
+let unsquash_tactic tbl =
    argfunT (fun i p ->
       let conc = concl p in
       if i = 0 then
@@ -391,7 +392,8 @@ let resource squash += [
    equal_term, SqUnsquashGoal unsquashEqual;
    squash_term, SqStable (<<it>>, dT 0);
    squash_term, SqUnsquashGoal(unsquash);
-   type_term, SqStable(<<it>>, dT 0)
+   type_term, SqStable(<<it>>, dT 0);
+   squiggle_term, SqStable(<<it>>, dT 0)
 ]
 
 (************************************************************************
@@ -470,9 +472,9 @@ let unsquashAllT = funT (fun p ->
       if sqconcl || (snd (get_resource_arg p get_squash_resource) concl) then
          match collect_sqhyps s.sequent_hyps (SeqHyp.length s.sequent_hyps) with
             [] -> raise err
-          | l -> 
+          | l ->
                if sqconcl then
-                  onHypsT l unsquash 
+                  onHypsT l unsquash
                else
                   (squashT thenT onHypsT l unsquash thenT squashMemberFormation)
       else

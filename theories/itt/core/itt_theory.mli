@@ -71,7 +71,7 @@ extends Itt_tsquash
 extends Itt_disect
 extends Itt_singleton
 extends Itt_subset
-extends Itt_image
+extends Itt_image2
 extends Itt_tunion
 extends Itt_bisect
 extends Itt_bunion

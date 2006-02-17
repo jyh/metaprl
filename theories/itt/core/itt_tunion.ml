@@ -59,7 +59,7 @@ extends Itt_struct2
 extends Itt_equal
 extends Itt_set
 extends Itt_logic
-extends Itt_image
+extends Itt_image2
 extends Itt_sqsimple
 doc docoff
 

@@ -55,6 +55,8 @@ extends Itt_equal
 extends Itt_unit
 extends Itt_subtype
 extends Itt_struct
+extends Itt_dprod
+extends Itt_image
 doc docoff
 
 open Basic_tactics
@@ -71,7 +73,9 @@ doc <:doc<
 
    The @tt{set} term defines the set type.
 >>
-declare set{'A; x. 'B['x]}
+
+define unfold_set: set{'A; x. 'B['x]} <--> Img{x:'A * 'B['x]; p.fst{'p}}
+
 doc docoff
 
 let set_term = << { a: 'A | 'B['a] } >>
@@ -101,17 +105,15 @@ doc <:doc<
    an @emph{extensional} version of a set type using the @emph{intensional} one
    by applying the @hrefterm[esquash] operator to the set predicate.
 >>
-prim setEquality {| intro [] |} :
+interactive setEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ[i:l] } -->
-   sequent { <H> >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
-   it
+   sequent { <H> >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] }
 
-prim setType {| intro [] |} :
+interactive setType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
-   sequent { <H> >- "type"{ { a:'A | 'B['a] } } } =
-   it
+   sequent { <H> >- "type"{ { a:'A | 'B['a] } } }
 
 doc <:doc<
    @modsubsection{Membership}
@@ -119,12 +121,11 @@ doc <:doc<
    Two terms $a_1$ and $a_2$ are equal in the set type $@set{a; A; B[a]}$
    if they are equal in $A$ and also $B[a_1]$ is true.
 >>
-prim setMemberEquality {| intro [] |} :
+interactive setMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [assertion] sequent { <H> >- squash{'B['a1]} } -->
    [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
-   sequent { <H> >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
-   it
+   sequent { <H> >- 'a1 = 'a2 in { a:'A | 'B['a] } }
 
 doc <:doc<
    @modsubsection{Introduction}
@@ -146,10 +147,9 @@ doc <:doc<
    $@squash{B[u]}$ hypothesis states that $B[u]$ is true, but its proof is
    omitted.
 >>
-prim setElimination {| elim [AutoOK] |} 'H :
+interactive setElimination {| elim [AutoOK] |} 'H :
    ('t['u;'i] : sequent { <H>; u: 'A; i: squash{'B['u]}; <J['u]> >- 'T['u] }) -->
-   sequent { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] } =
-   't['u;it]
+   sequent { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] }
 
 interactive set_member {| nth_hyp |} 'H :
    sequent { <H>; u: { x: 'A | 'B['x] }; <J['u]> >- 'u in 'A }
@@ -174,18 +174,6 @@ interactive set_monotone {| intro [] |} :
 
 doc docoff
 
-(*
- * H >- Ui ext { a:A | B }
- * by setFormation A
- *
- * H >- A = A in Ui
- * H, a: A >- Ui ext B
- *)
-prim setFormation 'A :
-   [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
-   ('B['a] : sequent { <H>; a: 'A >- univ[i:l] }) -->
-   sequent { <H> >- univ[i:l] } =
-   { a: 'A | 'B['a] }
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

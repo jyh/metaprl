@@ -30,7 +30,7 @@ doc <:doc<
 >>
 extends Itt_bool
 extends Itt_dfun
-extends Itt_image
+extends Itt_image2
 extends Itt_list2
 extends Itt_nat
 extends Itt_pairwise

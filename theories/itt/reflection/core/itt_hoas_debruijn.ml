@@ -40,7 +40,7 @@ extends Itt_hoas_base
 extends Itt_hoas_vector
 extends Itt_nat
 extends Itt_list2
-extends Itt_image
+extends Itt_image2
 
 doc docoff
 

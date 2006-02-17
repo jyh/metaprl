@@ -47,18 +47,6 @@ declare set{'A; x. 'B['x]}
  ************************************************************************)
 
 (*
- * H >- Ui ext { a:A | B }
- * by setFormation A
- *
- * H >- A = A in Ui
- * H, a: A >- Ui ext B
- *)
-rule setFormation 'A :
-   sequent { <H> >- 'A = 'A in univ[i:l] } -->
-   sequent { <H>; 'A >- univ[i:l] } -->
-   sequent { <H> >- univ[i:l] }
-
-(*
  * H >- { a1:A1 | B1[a1] } = { a2:A2 | B2[a2] } in Ui
  * by setEquality
  *

@@ -49,7 +49,6 @@ doc <:doc<
 
 extends Itt_equal
 extends Itt_struct
-extends Itt_squash
 
 doc docoff
 extends Itt_comment
@@ -62,7 +61,6 @@ open Basic_tactics
 
 open Itt_equal
 open Itt_struct
-open Itt_squash
 
 (************************************************************************
  * TERMS                                                                *
@@ -115,7 +113,7 @@ prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
    'f['x]
 
-interactive squiggle_memberEquality {| intro []; squash |} :
+interactive squiggle_memberEquality {| intro [] |} :
   [wf] sequent{ <H> >- 't ~ 's } -->
   sequent{ <H> >- it in ('t ~ 's)}
 

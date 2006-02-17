@@ -7,16 +7,18 @@ MPFILES[] =
    itt_labels
    itt_equal
    itt_struct
-   itt_squash
    itt_squiggle
+   itt_pairwise
+   itt_image
+   itt_squash
    itt_subtype
    itt_void
    itt_unit
    itt_atom
-   itt_set
    itt_union
    itt_dprod
    itt_prod
+   itt_set
    itt_dfun
    itt_esquash
    itt_logic
@@ -25,7 +27,6 @@ MPFILES[] =
    itt_well_founded
    itt_decidable
    itt_ext_equal
-   itt_pairwise
    itt_pairwise2
    itt_struct2
    itt_struct3
@@ -42,7 +43,7 @@ MPFILES[] =
    itt_disect
    itt_singleton
    itt_subset
-   itt_image
+   itt_image2
    itt_tunion
    itt_list
    itt_bisect

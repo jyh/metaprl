@@ -43,9 +43,6 @@ doc <:doc<
 doc <:doc< @parents >>
 extends Base_theory
 extends Itt_equal
-extends Itt_squash
-extends Itt_struct2
-extends Itt_sqsimple
 
 doc terms
 

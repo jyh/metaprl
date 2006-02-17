@@ -38,7 +38,7 @@ doc <:doc<
 
 doc <:doc< @parents >>
 extends Itt_hoas_destterm
-extends Itt_image
+extends Itt_image2
 extends Itt_tunion
 extends Itt_subset
 doc docoff

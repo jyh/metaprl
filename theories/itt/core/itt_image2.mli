@@ -1,0 +1,1 @@
+extends Itt_image

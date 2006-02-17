@@ -46,9 +46,7 @@ doc <:doc<
 >>
 extends Base_theory
 extends Itt_equal
-extends Itt_squash
-extends Itt_subset
-extends Itt_sqsimple
+extends Itt_struct
 doc docoff
 extends Itt_comment
 
@@ -88,6 +86,7 @@ interactive img_eq 'a 'b :
    sequent { <H> >- 'a = 'b in 'A } -->
    sequent { <H> >- 'f['a] = 'f['b] in Img{'A; x.'f<||>['x]} }
 
+
 doc docoff
 
 let img_opname = opname_of_term <<Img{'A; x.'f['x]}>>
@@ -106,45 +105,13 @@ let resource intro += (<< 'a = 'b in Img{'A; x.'f<||>['x]} >>, wrap_intro img_in
 
 doc docon
 
+interactive img_intro {| intro[] |} :
+   sequent { <H> >- 'A } -->
+   sequent { <H> >- Img{'A; x.'f<||>['x]} }
+
 prim img_elim {| elim [ThinOption thinT] |} 'H :
-   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]>; a: 'A >- squash{'C['f['a]]} } -->
-   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- squash{'C['y]} } = it
-
-interactive img_elim2 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]>; a: 'A >- 't1['f['a]] = 't2['f['a]] in 'T['f['a]] } -->
-   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- 't1['y] = 't2['y] in 'T['y] }
-
-doc <:doc<
-   When $f$ is squiggle-reversible, we can have elimination for non-squash-stable goals. Morover,
-   in this case we can derive a @emph{strong} version of the elimination rule.
->>
-extends Itt_squiggle
-extends Itt_dfun
-extends Itt_pairwise
-extends Itt_struct2
-
-interactive img_elim3 {| elim |} 'H 'g :
-   [aux] sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]>; a: 'A >- 'g 'f['a] ~ 'a } -->
-   sequent { <H>; a: 'A; <J['f['a]]> >- 'C['f['a]] } -->
-   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- 'C['y] }
-
-interactive img_sqsimple 'g :
-   [aux] sequent { <H>; a: 'A >- 'g 'f['a] ~ 'a } -->
-   sequent { <H> >- sqsimple{'A} } -->
-   sequent { <H> >- sqsimple{Img{'A; x. 'f<||>['x]}} }
-
-doc <:doc<
-   The @tt[Image] operation is monotone on its first argument.
->>
-   
-interactive img_monotone {| intro[] |} :
-   sequent { <H> >-  'A_1 subtype 'A_2 } -->
-   sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subtype  Img{'A_2; x.'f<||>['x]} }
-
-interactive img_monotone_subset {| intro[] |} bind{x.'g['x]}:
-   sequent { <H>; x:'A_2 >- 'g['f<||>['x]]='x in 'A_2 } -->
-   sequent { <H> >-  'A_1 subset 'A_2 } -->
-   sequent { <H> >-  Img{'A_1; x.'f<||>['x]} subset  Img{'A_2; x.'f<||>['x]} }
+   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- 't1['y] = 't2['y] in 'T['y] } = it
 
 doc docoff
 

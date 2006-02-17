@@ -1741,8 +1741,6 @@ let omega_intro = "omegaT", None, rule_labels_empty, AutoComplete, (rw reduceC 0
 
 let resource intro += [
    << 'a < 'b >>, omega_intro;
-   << 'a > 'b >>, omega_intro;
-   << 'a <= 'b >>, omega_intro;
    << 'a >= 'b >>, omega_intro;
 ]
 

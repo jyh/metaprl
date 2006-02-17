@@ -118,8 +118,8 @@ doc <:doc<
    @hreftactic[esquashT] tactic is defined below to
    apply this rule.
 >>
-prim esquash_intro {| intro [AutoMustComplete]; nth_hyp |} :
-   [main] sequent { <H> >- squash{'P} } -->
+prim esquash_intro {| nth_hyp |} :
+   sequent { <H> >- 'P } -->
    sequent { <H> >- esquash{'P} } =
    it
 
@@ -142,23 +142,35 @@ interactive esquash_mem {| intro []; squash |} :
    sequent { <H> >- it in esquash{'A} }
 
 doc <:doc<
+   Now we can derive a slightly stronger version of the @hrefrule[esquash_intro] rule.
+>>
+interactive esquash_intro2 {| intro[AutoMustComplete]; nth_hyp |} :
+   sequent { <H> >- squash{'P} } -->
+   sequent { <H> >- esquash{'P} }
+
+doc <:doc<
    @modsubsection{Elimination}
    When a proposition is a type (i.e, functional), its @tt[esquash] is
    true if and only if its @tt[squash] is true.
 >>
-prim esquash :
-   [wf] sequent { <H> >- "type"{'P} } -->
-   sequent { <H> >- esquash{'P} } -->
-   sequent { <H> >- squash{'P} } =
+prim esquash_elim2 'H :
+   [wf] sequent { <H>; esquash{'P}; <J> >- "type"{'P} } -->
+   sequent { <H>; 'P; <J> >- 'a = 'b in 'C } -->
+   sequent { <H>; esquash{'P}; <J> >- 'a = 'b in 'C } =
    it
 
 doc <:doc<
-   The following rule is equivalent to the previous one.
+   The following two rules are equivalent to the previous one.
 >>
 interactive unesquash 'H :
    [wf] sequent { <H>; x: esquash{'P}; <J[it]> >- "type"{'P} } -->
    sequent { <H>; x: squash{'P}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: esquash{'P}; <J['x]> >- 'C['x] }
+
+interactive esquash :
+   [wf] sequent { <H> >- "type"{'P} } -->
+   sequent { <H> >- esquash{'P} } -->
+   sequent { <H> >- squash{'P} }
 
 doc <:doc<
    The <<esquash{void}>> can not be inhabited.

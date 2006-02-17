@@ -11,8 +11,8 @@ THEORY_DEPS[] +=
     itt/reflection/core
     itt/reflection/experimental
 
+# reflect_pmn_core_test
 MPFILES[] =
     pmn_core_test
-    reflect_pmn_core_test
     pmn_core_terms
     pmn_core_judgments

@@ -145,6 +145,14 @@ interactive nat_is_int {| nth_hyp |} :
    sequent { <H> >- 'a='b in nat} -->
    sequent { <H> >- 'a='b in int}
 
+interactive nat_is_int_left {| nth_hyp |} 'b :
+   sequent { <H> >- 'a='b in nat} -->
+   sequent { <H> >- 'a in int }
+
+interactive nat_is_int_right {| nth_hyp |} 'a :
+   sequent { <H> >- 'a='b in nat} -->
+   sequent { <H> >- 'b in int }
+
 interactive eq_2beq_nat 'H :
    sequent { <H>; x: 'a = 'b in nat; <J['x]>; "assert"{beq_int{'a; 'b}} >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in nat; <J['x]> >- 'C['x] }
@@ -385,7 +393,6 @@ let positiveRule2T = smallest_positive
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

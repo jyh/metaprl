@@ -187,7 +187,6 @@ doc docoff
 let fold_ge = makeFoldC << ge{'a; 'b} >> unfold_ge
 let fold_neq_int = makeFoldC << nequal{'a; 'b} >> unfold_neq_int
 
-let reduce_lt_prop = unfold_lt thenC (addrC [Subterm 1] reduce_lt)
 let reduce_ge_prop = (unfold_ge thenC
                      (addrC [Subterm 1] (unfold_ge_bool thenC
                      (addrC [Subterm 1] reduce_lt))))
@@ -207,19 +206,19 @@ let resource reduce += [
 ]
 
 let resource elim += [
-	<<number[i:n] >= number[j:n]>>, wrap_elim (rw reduce_ge_prop);
-	<<number[i:n] < number[j:n]>>,  wrap_elim (rw reduce_lt_prop);
-   <<nequal{number[i:n]; number[j:n]}>>, wrap_elim (rw reduce_neq_prop);
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] reduce_lt));
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] unfold_ge_bool));
+	<<number[i:n] >= number[j:n]>>, wrap_elim (rw simpleReduceC);
+	<<number[i:n] < number[j:n]>>,  wrap_elim (rw simpleReduceC);
+   <<nequal{number[i:n]; number[j:n]}>>, wrap_elim (rw simpleReduceC);
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] simpleReduceC));
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] simpleReduceC));
 ]
 
 let resource intro += [
-	<<number[i:n] >= number[j:n]>>, wrap_intro (rw reduce_ge_prop 0);
-	<<number[i:n] < number[j:n]>>, wrap_intro (rw reduce_lt_prop 0);
-   <<nequal{number[i:n]; number[j:n]}>>, wrap_intro (rw reduce_neq_prop 0);
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] reduce_lt) 0);
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] unfold_ge_bool) 0);
+	<<number[i:n] >= number[j:n]>>, wrap_intro (rw simpleReduceC 0);
+	<<number[i:n] < number[j:n]>>, wrap_intro (rw simpleReduceC 0);
+   <<nequal{number[i:n]; number[j:n]}>>, wrap_intro (rw simpleReduceC 0);
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] simpleReduceC) 0);
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] simpleReduceC) 0);
 ]
 
 let ge_term = << 'x >= 'y >>

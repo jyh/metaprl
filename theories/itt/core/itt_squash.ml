@@ -388,12 +388,12 @@ let resource (squash_info, squash_out) squash =
 
 let resource squash += [
    equal_term, SqUnsquash unsquashHypEqual;
-   equal_term, SqStable (<<it>>, dT 0);
+   equal_term, SqStable (<<it>>, axiomMember);
    equal_term, SqUnsquashGoal unsquashEqual;
-   squash_term, SqStable (<<it>>, dT 0);
+   squash_term, SqStable (<<it>>, squashMemberEquality);
    squash_term, SqUnsquashGoal(unsquash);
-   type_term, SqStable(<<it>>, dT 0);
-   squiggle_term, SqStable(<<it>>, dT 0)
+   type_term, SqStable(<<it>>, type_axiomMember);
+   squiggle_term, SqStable(<<it>>, squiggle_memberEquality)
 ]
 
 (************************************************************************

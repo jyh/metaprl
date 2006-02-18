@@ -77,3 +77,29 @@ let letAtT i x_is_s_in_S =
    in
       let_rule i x_is_s_in_S thenMT (rwh (hypC (-1)) 0 thenT onAllHypFrom i (rwh (hypC (-1))) thenT thinT (-1))
 
+doc <:doc<
+      Using @rule[letAtT] rule, we can "split" a hypothesis.
+      That is, we can copy a hypothesis and make conclusion and hypotheses
+      after the new copy of it to be depend on this new copy.
+      Cf. @tactic[copyHypT].
+>>
+
+interactive splitHyp 'H 'J:
+   sequent { <H>; x: 'A;  <J['x]>; y:'A; <K['y]>  >- 'T['y] } -->
+   sequent { <H>; x:'A; <J['x]>; <K['x]>  >- 'T['x]}
+
+doc <:doc<
+      The @tactic[spliHypT] $i$ $j$ tactic split $i$'th hypothesis and adds it to the $j$'s place.
+      It is useful for elimination rules where we want to keep the original hypothesis intact.
+      Cf. @tactic[splitHypT].
+      @docoff
+>>
+
+let splitHypT i j = funT (fun p ->
+   let i = get_pos_hyp_num p i in
+   let j = if j < 0 then (get_pos_hyp_num p j) + 1 else j in
+      if j > i then
+         splitHyp i (j - i)
+      else
+         moveHypT i j thenT copyHypT j (i+1)
+   )

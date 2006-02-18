@@ -47,6 +47,7 @@ doc <:doc<
 extends Base_theory
 extends Itt_equal
 extends Itt_struct
+extends Itt_pairwise
 doc docoff
 extends Itt_comment
 
@@ -109,9 +110,13 @@ interactive img_intro {| intro[] |} :
    sequent { <H> >- 'A } -->
    sequent { <H> >- Img{'A; x.'f<||>['x]} }
 
-prim img_elim {| elim [ThinOption thinT] |} 'H :
+prim img_elim :
+   sequent { <H>; a: 'A >- 't in 'T['f['a]] } -->
+   sequent { <H>; y: Img{'A; a.'f<||>['a]} >- 't in 'T['y] } = it
+
+interactive img_elim1 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]>; a: 'A >- 't1['f['a]] = 't2['f['a]] in 'T['f['a]] } -->
-   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- 't1['y] = 't2['y] in 'T['y] } = it
+   sequent { <H>; y: Img{'A; a.'f<||>['a]}; <J['y]> >- 't1['y] = 't2['y] in 'T['y] }
 
 doc docoff
 

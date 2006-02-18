@@ -322,7 +322,7 @@ let thin_dup p =
 
 let thinDupT = funT thin_dup
 
-let nthAssumT = 
+let nthAssumT =
    let matchAssumT = Auto_tactic.matchAssumT (cut 0) in
       argfunT (fun i p ->
          let assum = Sequent.nth_assum p i in
@@ -387,6 +387,13 @@ doc <:doc<
 let assertAtT i s =
    let i = if i < 0 then i + 1 else i in
       cut i s
+
+doc <:doc<
+   @modsubsection{Coping}
+   The @tactic[copyHypT] $i$ $j$ tactic copies $i$'th hypothesis to the $j$'th place in a sequent.
+   Cf. @tactic[splitHypT].
+   @docoff
+>>
 
 let copyHypT i j = funT (fun p ->
    assertAtT j (Sequent.nth_hyp p i) thenAT hypothesis i)

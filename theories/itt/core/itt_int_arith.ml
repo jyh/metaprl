@@ -338,12 +338,6 @@ interactive notlt2ge_elim {| ge_elim [] |} 'H :
    sequent { <H>; x: "not"{'a < 'b}; <J['x]>; 'a >= 'b >- 'C['x] } -->
    sequent { <H>; x: "not"{'a < 'b}; <J['x]> >- 'C['x] }
 
-interactive notgt2ge_elim {| ge_elim [] |} 'H :
-   [wf] sequent { <H>; x: "not"{'a > 'b}; <J['x]> >- 'a in int } -->
-   [wf] sequent { <H>; x: "not"{'a > 'b}; <J['x]> >- 'b in int } -->
-   sequent { <H>; x: "not"{'a > 'b}; <J['x]>; 'b >= 'a >- 'C['x] } -->
-   sequent { <H>; x: "not"{'a > 'b}; <J['x]> >- 'C['x] }
-
 interactive noteq2ge_elim {| ge_elim [] |} 'H :
    [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'b in int } -->

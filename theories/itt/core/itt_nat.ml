@@ -200,6 +200,11 @@ interactive nat2ge3 {| ge_elim [not_member] |} 'H :
    sequent { <H>; x: 'a = 'b in nat; <J['x]>; 'a >= 0; 'a >= 'b; 'b >= 'a >- 'C['x]}  -->
    sequent { <H>; x: 'a = 'b in nat; <J['x]> >- 'C['x]}
 
+let resource nth_hyp += [
+   <<nat>>, <<!x >= 0>>, wrap_nth_hyp_uncertain (fun i -> nat2ge i thenT hypothesis (-1));
+   <<'a = 'b in nat >>, << 'a >= 0 >>, wrap_nth_hyp_certain (fun i -> nat2ge3 i thenT hypothesis (-3));
+]
+
 interactive ge2nat {| ge_intro |} :
    [wf] sequent { <H> >- 'n in int }  -->
    sequent { <H>; (-1) >= 'n >- "false" } -->

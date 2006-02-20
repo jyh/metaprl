@@ -92,7 +92,7 @@ prim btermEquality {| intro [] |} :
 interactive btermType {| intro [] |} :
    sequent { <H> >- BTerm Type }
 
-prim bterm_memberEquality {| intro [AutoMustComplete] |} :
+prim bterm_memberEquality {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- is_bterm{'x<||>} } -->
    sequent { <H> >- 'x<||> in BTerm } =
    it
@@ -377,7 +377,7 @@ interactive same_op_id {| intro [] |} :
    sequent { <H> >- 'b in OpBTerm } -->
    sequent { <H> >- same_op{'b; 'b} }
 
-interactive same_op_id2 {| intro [AutoMustComplete] |} :
+interactive same_op_id2 {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in OpBTerm } -->
    sequent { <H> >- same_op{'b1; 'b2} }
 

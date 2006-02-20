@@ -117,7 +117,7 @@ declare bterm{x.'bt['x]}
 prim_rw bterm_reduce: bterm{x.bterm{| <K> >- 't['x] |}} <-->  bterm{| x:term; <K> >- 't['x] |}
 
 
-prim bterm_op {| intro[AutoMustComplete] |} :
+prim bterm_op {| intro[AutoMustComplete]; nth_hyp |} :
   sequent { <H> >- if_quoted_op{'op<||>;"true"} } -->
   sequent { <H> >- 'op<||> in BOperator }
   = it

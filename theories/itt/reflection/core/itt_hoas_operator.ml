@@ -118,7 +118,7 @@ prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- is_same_op{'op_1;'op_2} in bool }
    = it
 
-prim is_same_op_eq {| intro [AutoMustComplete] |} :
+prim is_same_op_eq {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- 'op_1 = 'op_2 in Operator } -->
    sequent { <H> >- "assert"{is_same_op{'op_1;'op_2}} }
    = it

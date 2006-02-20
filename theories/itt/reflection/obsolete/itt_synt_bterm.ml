@@ -562,7 +562,7 @@ interactive same_op_of_id {| intro [] |} :
    sequent { <H> >- 'b in BTerm } -->
    sequent { <H> >- same_op_of{'b; 'b} }
 
-interactive same_op_of_id2 {| intro [AutoMustComplete] |} :
+interactive same_op_of_id2 {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- same_op_of{'b1; 'b2} }
 

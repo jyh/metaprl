@@ -157,7 +157,7 @@ interactive op_univ {| intro [] |}:
 interactive op_type {| intro [] |}:
    sequent { <H> >- Operator Type }
 
-interactive bop_subtype_op {| intro [AutoMustComplete] |}:
+interactive bop_subtype_op {| intro [AutoMustComplete]; nth_hyp |}:
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- 'op in Operator }
 

@@ -20,9 +20,7 @@ THEORY_DEPS[] +=
     itt/reflection/experimental
 
 MPFILES[] =
-
-X[] =
-    pmn_core_test
     pmn_core_terms
     pmn_core_judgments
-    reflect_pmn_core_test
+    reflect_pmn_core_terms
+    reflect_pmn_core_judgments

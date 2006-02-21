@@ -51,7 +51,7 @@ declare "rem"{'a; 'b}
 define unfold_ge_bool :
    ge_bool{'a; 'b} <--> bnot{lt_bool{'a; 'b}}
 
-define unfold_bneq_int :
+define iform unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
 
 (*
@@ -98,17 +98,11 @@ prec prec_mul
  * REWRITES                                                             *
  ************************************************************************)
 
-topval fold_bneq_int : conv
 topval fold_neq_int : conv
 
 topval reduce_mul: conv
 topval reduce_div: conv
 topval reduce_rem: conv
-
-val bneq_int_term : term
-val is_bneq_int_term : term -> bool
-val mk_bneq_int_term : term -> term -> term
-val dest_bneq_int : term -> term * term
 
 val ge_term : term
 val is_ge_term : term -> bool

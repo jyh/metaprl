@@ -12779,7 +12779,7 @@ B	b6399	t6398
 T	t6399	o2974 b6399 b10
 B	b6404	t6399
 H	h4417	"" t3236
-P	p5752	String "copyHypT 2 2 thenT rw unfold_neq_int 2 thenT rwh unfold_bneq_int 2"
+P	p5752	String "copyHypT 2 2 thenT rw unfold_neq_int 2"
 O	o5753	ext_rule p5752
 T	t5753	o b3463 b10
 B	b5753	t5753
@@ -12868,7 +12868,7 @@ T	t6519	o1196 b6477 b6519
 B	b6520	t6519
 T	t6520	o1196 b6467 b6520
 B	b6529	t6520
-P	p6531	String "backThruAssumT 3 thenT copyHypT 2 (-1) thenT rwh unfold_neq_int (-1) thenT rwh unfold_bneq_int (-1) ttca thenT dT (-1) thenMT tryT (hypSubstT (-1) 0) ttca"
+P	p6531	String "backThruAssumT 3 thenT copyHypT 2 (-1) thenT rwh unfold_neq_int (-1) ttca thenT dT (-1) thenMT tryT (hypSubstT (-1) 0) ttca"
 O	o6536	ext_rule p6531
 T	t6536	o b6478 b10
 B	b6536	t6536

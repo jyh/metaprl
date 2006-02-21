@@ -369,16 +369,8 @@ let dummy_var = mk_var_term (Lm_symbol.add "")
 let wrap_ge t tll r tac =
    mk_pair_term dummy_var t, List.map mk_xlist_term tll, ([], fun i -> rw r i thenT tac i)
 
-let resource ge_elim += [
-   wrap_ge <<"assert"{'a <@ 'b}>> [[<<'b >= ('a +@ 1)>>]] fold_lt lt2ge;
-   wrap_ge <<"assert"{bnot{'a =@ 'b}}>> [[<<'a >= 'b +@ 1>>];[<<'b >= 'a +@ 1>>]]
-      (addrC [Subterm 1] fold_bneq_int thenC fold_neq_int) nequal_elim2;
-]
-
-interactive_rw bnot_lt2ge_rw :
-   ('a in int) -->
-   ('b in int) -->
-   "assert"{bnot{lt_bool{'a; 'b}}} <--> ('a >= 'b)
+let resource ge_elim +=
+   wrap_ge <<"assert"{'a <@ 'b}>> [[<<'b >= ('a +@ 1)>>]] fold_lt lt2ge
 
 interactive ltInConcl2ge {| ge_intro |} :
    [wf] sequent { <H> >- 'a in int } -->

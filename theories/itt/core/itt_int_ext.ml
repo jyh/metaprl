@@ -86,12 +86,10 @@ doc <:doc< More boolean inequalities >>
 define unfold_ge_bool :
    ge_bool{'a; 'b} <--> bnot{lt_bool{'a; 'b}}
 
-define unfold_bneq_int :
+define iform unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
 
 doc docoff
-
-let fold_bneq_int = makeFoldC << bneq_int{'a; 'b} >> unfold_bneq_int
 
 let resource reduce += [
    << bnot{lt_bool{'a; 'b}} >>, wrap_reduce (makeFoldC << ge_bool{'a;'b} >> unfold_ge_bool);
@@ -99,9 +97,6 @@ let resource reduce += [
       wrap_reduce_crw (addrC [Subterm 1]
          (addrC [Subterm 1] reduceC thenC addrC [Subterm 2] reduceC thenC unfold_ge_bool)
        thenC Itt_bool.reduce_bnot_bnotC);
-(* << ge_bool{'a; 'b} >>,    wrap_reduce unfold_ge_bool;
-   << bneq_int{'a; 'b} >>,   wrap_reduce unfold_bneq_int;
-*)
    << ge_bool{'a;'a}>>, wrap_reduce_crw (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC));
 ]
 
@@ -191,16 +186,13 @@ let reduce_ge_prop = (unfold_ge thenC
                      (addrC [Subterm 1] (unfold_ge_bool thenC
                      (addrC [Subterm 1] reduce_lt))))
 let reduce_neq_prop = unfold_neq_int thenC
-                      (addrC [Subterm 1] (unfold_bneq_int thenC
-							 (addrC [Subterm 1] reduce_eq_int)))
+                      (addrC [Subterm 1; Subterm 1] reduce_eq_int)
 
 let resource reduce += [
 	<<number[i:n] >= number[j:n]>>, wrap_reduce reduce_ge_prop;
    <<nequal{number[i:n]; number[j:n]}>>, wrap_reduce reduce_neq_prop;
    <<"assert"{ge_bool{'a; 'b}}>>, wrap_reduce fold_ge;
-(*
-   << nequal{'a; 'b} >>, wrap_reduce unfold_neq_int;
-*)
+   <<"assert"{bneq_int{'a; 'b}}>>, wrap_reduce fold_neq_int;
    << ge{'a;'a} >>, wrap_reduce_crw
       (unfold_ge thenC (addrC [Subterm 1] (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC))));
 ]
@@ -347,11 +339,6 @@ interactive ge_bool_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- ge_bool{'a1; 'b1}=ge_bool{'a2; 'b2} in bool }
 
-interactive bneq_int_wf {| intro [complete_unless_member] |} :
-   [wf] sequent { <H> >- 'a1='a2 in int } -->
-   [wf] sequent { <H> >- 'b1='b2 in int } -->
-   sequent { <H> >- bneq_int{'a1; 'b1}=bneq_int{'a2; 'b2} in bool }
-
 interactive neq_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -390,7 +377,7 @@ interactive not_nequal :
 interactive not_equal {| intro[AutoMustComplete] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- not{'a = 'b in int} } -->
+   sequent { <H>; 'a = 'b in int >- "false" } -->
    sequent { <H> >- 'a <> 'b }
 
 let notNequalT = not_nequal

@@ -1316,7 +1316,7 @@ P	p1277	String "byDefT unfold_ge_bool ttca"
 O	o1277	ext_rule p1277
 P	p2811	String bneq_int_wf
 O	o2812	rule p2811
-P	p1292	String "byDefT unfold_bneq_int ttca"
+P	p1292	String "autoT"
 O	o1293	ext_rule p1292
 T	t1351	o1330 b1090 b1083
 B	b1353	t1351
@@ -9598,7 +9598,7 @@ T	t10	o2128 b2763 b9
 B	b10	t10
 T	t11	o2128 b2746 b10
 B	b11	t11
-P	p3963	String "assumT 3 thenT rwh unfold_neq_int (-1) thenT rwh unfold_bneq_int (-1) thenT autoT"
+P	p3963	String "assumT 3 thenT rwh unfold_neq_int (-1) thenT autoT"
 O	o3963	ext_rule p3963
 P	p301	String ""
 O	o301	tactic_arg p301
@@ -9701,7 +9701,7 @@ T	t7194	o2128 b2763 b7193
 B	b7194	t7194
 T	t7195	o2128 b2746 b7194
 B	b7195	t7195
-P	p55	String "assertT << \"assert\"{beq_int{'a; 'b}} >> thenAT magicT thenT byDefsT [unfold_neq_int; unfold_bneq_int]"
+P	p55	String "assertT << \"assert\"{beq_int{'a; 'b}} >> thenAT magicT thenT byDefT unfold_neq_int"
 O	o55	ext_rule p55
 T	t56	o b38 b17
 B	b56	t56
@@ -9742,7 +9742,7 @@ T	t8822	o2128 b2763 b8821
 B	b8822	t8822
 T	t8823	o2128 b2746 b8822
 B	b8823	t8823
-P	p266	String "assumT 1 thenT byDefsT [unfold_neq_int; unfold_bneq_int]"
+P	p266	String "assumT 1 thenT byDefT unfold_neq_int"
 O	o267	ext_rule p266
 T	t278	o b66 b17
 B	b278	t278
@@ -15058,7 +15058,7 @@ T	t10978	o b10978 b17
 B	b10979	t10978
 T	t10979	o2188 b10977 b10979
 B	b10980	t10979
-P	p5085	String "rwh unfold_bneq_int 5"
+P	p5085	String "idT"
 O	o5085	ext_rule p5085
 T	t5085	o1321 b3214 b2168
 B	b5086	t5085

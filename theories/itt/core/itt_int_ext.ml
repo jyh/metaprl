@@ -198,11 +198,11 @@ let resource reduce += [
 ]
 
 let resource elim += [
-	<<number[i:n] >= number[j:n]>>, wrap_elim (rw simpleReduceC);
-	<<number[i:n] < number[j:n]>>,  wrap_elim (rw simpleReduceC);
-   <<nequal{number[i:n]; number[j:n]}>>, wrap_elim (rw simpleReduceC);
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] simpleReduceC));
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] simpleReduceC));
+	<<number[i:n] >= number[j:n]>>, wrap_elim_auto_ok (rw simpleReduceC);
+	<<number[i:n] < number[j:n]>>,  wrap_elim_auto_ok (rw simpleReduceC);
+   <<nequal{number[i:n]; number[j:n]}>>, wrap_elim_auto_ok (rw simpleReduceC);
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim_auto_ok (rw (addrC [Subterm 1] simpleReduceC));
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim_auto_ok (rw (addrC [Subterm 1] simpleReduceC));
    <<'a >= 'a >>, wrap_elim_auto_ok thinT;
 ]
 

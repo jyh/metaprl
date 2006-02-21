@@ -382,6 +382,10 @@ interactive not_equal {| intro[AutoMustComplete] |} :
 
 let notNequalT = not_nequal
 
+interactive elim_nequal {| elim |} 'H :
+   sequent { <H>; <J[it]> >- "assert"{beq_int{'a; 'b}} } -->
+   sequent { <H>; x: 'a <> 'b; <J['x]> >- 'C['x] }
+
 interactive le_refl {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- le{'a;'a} }

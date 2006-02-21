@@ -203,6 +203,7 @@ let resource elim += [
    <<nequal{number[i:n]; number[j:n]}>>, wrap_elim (rw simpleReduceC);
 	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] simpleReduceC));
 	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim (rw (addrC [Subterm 1] simpleReduceC));
+   <<'a >= 'a >>, wrap_elim_auto_ok thinT;
 ]
 
 let resource intro += [

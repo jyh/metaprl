@@ -277,7 +277,7 @@ interactive bt_elim_squash2  {| elim [] |} 'H :
                compatible_shapes{'depth;shape{'op};'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BT{'n}; <J> >- squash{'P['t]} }
 
-interactive bterm_elim_squash {| elim [] |} 'H :
+interactive bterm_elim_squash {| elim [ThinFirst thinT] |} 'H :
    sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    sequent { <H>; <J>; depth: nat; op:Operator; subterms:list{BTerm};
                compatible_shapes{'depth;shape{'op};'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->

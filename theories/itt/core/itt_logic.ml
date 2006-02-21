@@ -166,10 +166,9 @@ interactive true_type {| intro [] |} :
 interactive true_intro {| intro [] |} :
    sequent { <H> >- "true" }
 
-interactive true_elim {| elim [] |} 'H :
+interactive true_elim {| elim [AutoOK] |} 'H :
    sequent { <H>; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: "true"; <J['x]> >- 'C['x] }
-
 
 interactive false_univ {| intro [] |} :
    sequent { <H> >- "false" in univ[i:l] }

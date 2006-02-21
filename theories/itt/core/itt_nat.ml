@@ -232,7 +232,7 @@ interactive nat_plus {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'b in nat } -->
    sequent { <H> >- ('a +@ 'b) in nat }
 
-interactive natInduction {| elim [ThinOption thinT] |} 'H  :
+interactive natInduction {| elim [ThinFirst thinT; ThinOption thinT] |} 'H  :
    [base] sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
    [step] sequent { <H>; n: nat; <J['n]>; m: nat;  'C['m] >- 'C['m +@ 1] }  -->
    sequent { <H>; n: nat; <J['n]> >- 'C['n] }

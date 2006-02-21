@@ -709,7 +709,7 @@ prim intEliminationLast :
       ( 'up['m; 'v; 'z] : sequent { <H>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
       sequent { <H>; n: int >- 'C['n] } = ind{'n; m, z. 'down['m; it; 'z]; 'base; m,z. 'up['m; it; 'z]}
 
-interactive intElimination {| elim [ThinOption thinT] |} 'H :
+interactive intElimination {| elim [ThinFirst thinT; ThinOption thinT] |} 'H :
    [downcase] sequent { <H>; n: int; <J['n]>; m: int; 'm < 0; 'C['m +@ 1] >- 'C['m] } -->
    [basecase] sequent { <H>; n: int; <J['n]> >- 'C[0] } -->
    [upcase] sequent { <H>; n: int; <J['n]>; m: int; 0 < 'm; 'C['m -@ 1] >- 'C['m] } -->

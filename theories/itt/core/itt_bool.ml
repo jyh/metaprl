@@ -342,6 +342,10 @@ interactive assert_true {| intro [] |} :
 interactive assert_false {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: "assert"{bfalse}; <J['x]> >- 'C['x] }
 
+interactive assert_true_elim {| elim[AutoOK] |} 'H :
+   sequent { <H>; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: "assert"{btrue}; <J['x]> >- 'C['x] }
+
 doc <:doc<
    @modsubsection{Case analysis and substitution}
 

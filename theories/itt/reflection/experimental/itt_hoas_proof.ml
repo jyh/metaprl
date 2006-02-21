@@ -7,7 +7,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -36,13 +36,13 @@ extends Itt_hoas_util
 
 doc docoff
 
-open Dform
 open Basic_tactics
 
 open Itt_list
 open Itt_list2
 open Itt_dfun
 open Itt_sqsimple
+open Itt_struct
 
 doc <:doc<
    A proof step << ProofStep >> represents one rule application
@@ -150,7 +150,7 @@ interactive proof_step_wf2 {| intro [] |} : <:xrule<
    <H> >- proof_step{premises; goal} IN ProofStep
 >>
 
-interactive proof_step_elim {| elim [] |} 'H : <:xrule<
+interactive proof_step_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
    "wf" : <H>; premises: list{BTerm}; goal: BTerm; <J[proof_step{premises; goal}]> >- C[proof_step{premises; goal}] -->
    <H>; s: ProofStep; <J[s]> >- C[s]
 >>
@@ -172,7 +172,7 @@ interactive proof_step_witness_wf2 {| intro [] |} : <:xrule<
    <H> >- proof_step_witness{sovars; cvars} in ProofStepWitness
 >>
 
-interactive proof_step_witness_elim {| elim [] |} 'H : <:xrule<
+interactive proof_step_witness_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
    <H>; sovars: list{"BTerm"}; cvars: list{list{"BTerm"}}; <J[proof_step_witness{sovars; cvars}]> >- C[proof_step_witness{sovars; cvars}] -->
    <H>; x: "ProofStepWitness"; <J[x]> >- C[x]
 >>
@@ -301,7 +301,7 @@ interactive derivation_depth_wf {| intro [intro_typeinf << 'd >>] |} Derivation{
    <H> >- derivation_depth{d} IN "nat"
 >>
 
-interactive derivation_depth_elim {| elim [] |} 'H : <:xrule<
+interactive derivation_depth_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
    "wf" : <H>; e: Derivation{logic}; <J[e]> >- logic IN Logic -->
    <H>; e: Derivation{logic}; <J[e]>; e IN Derivation{derivation_depth{e}; logic} >- C[e] -->
    <H>; e: Derivation{logic}; <J[e]> >- C[e]
@@ -538,12 +538,9 @@ let beq_proof_step_opname = opname_of_term beq_proof_step_term
 let is_beq_proof_step_term = is_dep0_dep0_term beq_proof_step_opname
 let dest_beq_proof_step_term = dest_dep0_dep0_term beq_proof_step_opname
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

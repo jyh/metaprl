@@ -80,6 +80,9 @@ declare is_same_op{'op_1;'op_2}
 
 doc docoff
 
+let resource elim +=
+   <<Operator>>, wrap_elim_auto_ok thinT
+
 dform shape_df: shape{'op} = `"shape(" slot{'op} `")"
 dform issameop_df : is_same_op{'op1;'op2} =
    `"is_same_op(" slot{'op1} `"; " slot{'op2} `")"

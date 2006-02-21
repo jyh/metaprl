@@ -1,13 +1,21 @@
 doc <:doc<
-   Native sequent representation.  This representation of sequents
-   is not a BTerm itself.  If you want to work in a theory where
-   sequents are not part of your language, then you should probably
-   use this representation, because it is easier to use.
+   @module[Itt_hoas_sequent_elim]
 
+   The @tt[Itt_hoas_sequent_elim] module defines the tactic for
+   proving the proof induction term.
+
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+
+   See the file doc/htmlman/default.html or visit http://metaprl.org/
+   for more information.
+
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,34 +31,29 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
-   @end[license]
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
 
+   @end[license]
    @parents
 >>
-extends Itt_theory
-extends Itt_hoas_bterm
-extends Itt_hoas_util
-extends Itt_hoas_lof
-extends Itt_hoas_lof_vec
-extends Itt_hoas_normalize
-extends Itt_hoas_bterm_wf
-extends Itt_hoas_proof
 extends Itt_hoas_sequent
-extends Itt_hoas_sequent_bterm
-extends Itt_hoas_sequent_term
-extends Itt_hoas_sequent_proof_step
-extends Itt_hoas_sequent_proof
-extends Itt_hoas_sequent_elim
-extends Itt_hoas_meta_types
+extends Itt_hoas_proof_ind
 
-(*!
- * @docoff
- *
+doc docoff
+
+open Basic_tactics
+
+(*
+ * For now, the tactic does nothing.
+ *)
+let elimRuleT =
+   idT
+
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
+ * Fill-column: 100
  * End:
  * -*-
+ * vim:ts=3:et:tw=100
  *)

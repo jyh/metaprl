@@ -948,7 +948,7 @@ let group_of_ker_term t =
 
 let resource typeinf += (<<groupKer{'f; 'A; 'B}>>, Typeinf.infer_map group_of_ker_term)
 
-interactive_rw reduce_groupKer_car {| reduce |} :
+interactive_rw reduce_groupKer_car {| reduce ~labels: crw_labels |} :
    (groupKer{'f; 'A; 'B}^car) <--> { x: 'A^car | 'f 'x = 'B^"1" in 'B^car }
 
 interactive_rw reduce_groupKer_op {| reduce |} :

@@ -66,8 +66,10 @@ define unfold_natpower : natpower{'g; 'a; 'n} <-->
    ind{'n; .'g^"1"; k, l. 'a *['g] 'l}
 doc docoff
 
-let resource reduce += << group_power{'g; 'a; number[n:n]} >>, wrap_reduce unfold_group_power
-let resource reduce += << natpower{'g; 'a; number[n:n]} >>, wrap_reduce unfold_natpower
+let resource reduce += [ 
+   << group_power{'g; 'a; number[n:n]} >>, wrap_reduce unfold_group_power;
+   << natpower{'g; 'a; number[n:n]} >>, wrap_reduce unfold_natpower;
+]
 
 let fold_group_power = makeFoldC << group_power{'g; 'a; 'n} >> unfold_group_power
 let fold_isCyclic = makeFoldC << isCyclic{'g} >> unfold_isCyclic

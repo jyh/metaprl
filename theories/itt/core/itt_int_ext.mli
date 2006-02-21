@@ -368,6 +368,8 @@ topval div_AssocC : conv
 
 topval fold_int_seg : conv
 
+topval dest_geT : int -> tactic
+
 (************************************************************************
  * Grammar.
  *)

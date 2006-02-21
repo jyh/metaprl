@@ -477,7 +477,7 @@ doc <:doc<
 
 interactive_rw reduce_mem_nil {| reduce |} : mem{'x; nil; 'T} <--> "false"
 
-interactive_rw reduce_mem_cons {| reduce |} :
+interactive_rw reduce_mem_cons {| reduce ~labels:crw_labels |} :
    mem{'x; cons{'u; 'v}; 'T} <--> "or"{('x = 'u in 'T); mem{'x; 'v; 'T}}
 doc docoff
 

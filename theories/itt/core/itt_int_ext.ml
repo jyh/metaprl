@@ -64,6 +64,7 @@ open Base_meta
 open Itt_equal
 open Itt_struct
 open Itt_squash
+open Itt_bool
 open Itt_int_base
 
 (************************************************************************
@@ -197,23 +198,6 @@ let resource reduce += [
       (unfold_ge thenC (addrC [Subterm 1] (unfold_ge_bool thenC (addrC [Subterm 1] lt_IrreflexC))));
 ]
 
-let resource elim += [
-	<<number[i:n] >= number[j:n]>>, wrap_elim_auto_ok (rw simpleReduceC);
-	<<number[i:n] < number[j:n]>>,  wrap_elim_auto_ok (rw simpleReduceC);
-   <<nequal{number[i:n]; number[j:n]}>>, wrap_elim_auto_ok (rw simpleReduceC);
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_elim_auto_ok (rw (addrC [Subterm 1] simpleReduceC));
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_elim_auto_ok (rw (addrC [Subterm 1] simpleReduceC));
-   <<'a >= 'a >>, wrap_elim_auto_ok thinT;
-]
-
-let resource intro += [
-	<<number[i:n] >= number[j:n]>>, wrap_intro (rw simpleReduceC 0);
-	<<number[i:n] < number[j:n]>>, wrap_intro (rw simpleReduceC 0);
-   <<nequal{number[i:n]; number[j:n]}>>, wrap_intro (rw simpleReduceC 0);
-	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] simpleReduceC) 0);
-	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [Subterm 1] simpleReduceC) 0);
-]
-
 let ge_term = << 'x >= 'y >>
 let ge_opname = opname_of_term ge_term
 let is_ge_term = is_dep0_dep0_term ge_opname
@@ -225,6 +209,15 @@ let neq_int_opname = opname_of_term neq_int_term
 let is_neq_int_term = is_dep0_dep0_term neq_int_opname
 let mk_neq_int_term = mk_dep0_dep0_term neq_int_opname
 let dest_neq_int = dest_dep0_dep0_term neq_int_opname
+
+let dest_geT = argfunT (fun i p ->
+   let t = if i = 0 then concl p else nth_hyp p i in
+      (rw (
+         if is_ge_term t then 
+            unfold_ge thenC (addrC [Subterm 1] unfold_ge_bool)
+         else
+            addrC [Subterm 1] unfold_ge_bool) i)
+      thenT (if i = 0 then assert_bnot_intro taa else assert_bnot_elim i))
 
 (*
  * XXX: TODO: Once comments on terms or soft abstractions are implemented (bugs 256/261),
@@ -369,23 +362,23 @@ interactive_rw beq_int_is_false_rw :
 
 let beq_int_is_falseC = beq_int_is_false_rw
 
-interactive not_nequal :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- not{'a <> 'b} } -->
-   sequent { <H> >- 'a = 'b in int }
-
 interactive not_equal {| intro[AutoMustComplete] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H>; 'a = 'b in int >- "false" } -->
    sequent { <H> >- 'a <> 'b }
 
-let notNequalT = not_nequal
-
 interactive elim_nequal {| elim |} 'H :
    sequent { <H>; <J[it]> >- "assert"{beq_int{'a; 'b}} } -->
    sequent { <H>; x: 'a <> 'b; <J['x]> >- 'C['x] }
+
+interactive not_nequal :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- not{'a <> 'b} } -->
+   sequent { <H> >- 'a = 'b in int }
+
+let notNequalT = not_nequal
 
 interactive le_refl {| intro []; nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->

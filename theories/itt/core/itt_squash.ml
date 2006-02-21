@@ -447,7 +447,7 @@ let squashT = funT (fun p ->
 let squash_elimT i =
    (progressT (squashElim i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
 
-let resource elim += (squash_term, (rule_labels_empty, true, squash_elimT))
+let resource elim += (squash_term, wrap_elim_auto_ok squash_elimT)
 
 (************************************************************************
  * AUTO TACTIC                                                          *

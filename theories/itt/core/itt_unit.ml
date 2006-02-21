@@ -18,7 +18,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and 
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,8 +35,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
 >>
@@ -121,10 +122,10 @@ doc <:doc<
    The elimination rule @tt[unitElimination] performs a case analysis
    on $x@colon @unit$.  The witness is replaced with the term <<it>>.
 >>
-prim unitElimination {| elim [ThinOption thinT] |} 'H :
-   ('t['x] : sequent{ <H>; x: unit; <J[it]> >- 'C[it] }) -->
+prim unitElimination {| elim |} 'H :
+   ('t : sequent{ <H>; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: unit; <J['x]> >- 'C['x] } =
-   't[it]
+   't
 
 doc <:doc<
    @modsubsection{Rewriting}
@@ -160,7 +161,6 @@ let resource typeinf += (it_term, Typeinf.infer_const unit_term)
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

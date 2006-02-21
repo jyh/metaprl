@@ -14,7 +14,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +86,7 @@ rule unit_memberEquality : sequent { <H> >- it in unit }
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
 rule unitElimination 'H :
-   sequent{ <H>; unit; <J[it]> >- 'C[it] } -->
+   sequent{ <H>; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: unit; <J['x]> >- 'C['x] }
 
 (************************************************************************

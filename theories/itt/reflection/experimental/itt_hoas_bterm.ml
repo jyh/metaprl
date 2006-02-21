@@ -194,10 +194,12 @@ interactive compatible_shapes_sqstable (*{| squash |}*) :
 
 doc docoff
 
-let resource elim += 
+let resource elim += [
    << squash{compatible_shapes{'bdepth; 'shape; 'btl}} >>,
-   (rule_labels_empty, true, fun i ->
-      unsquashHypGoalStable i thenAT (compatible_shapes_sqstable thenMT hypothesis i))
+   wrap_elim_auto_ok (fun i ->
+      unsquashHypGoalStable i thenAT (compatible_shapes_sqstable thenMT hypothesis i));
+   <<BTerm{'i}>>, wrap_elim_auto_ok thinT;
+]
 
 doc docon
 

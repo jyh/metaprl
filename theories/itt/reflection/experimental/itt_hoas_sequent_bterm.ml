@@ -37,6 +37,7 @@ doc docoff
 
 open Basic_tactics
 open Itt_sqsimple
+open Itt_struct
 
 let resource private select +=
    [<< select["relax":t] >>, OptionAllow]
@@ -444,7 +445,7 @@ interactive sequent_bterm_core_bsequent_core_wf {| intro [] |} : <:xrule<
    <H> >- sequent_bterm{n; hyps; concl} in BSequentCore
 >>
 
-interactive bsequent_core_elim {| elim [] |} 'H : <:xrule<
+interactive bsequent_core_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
    "base" : <H>; x: BSequentCore; <J[x]>; n: nat; c: BTerm{n} >- C[mk_bterm{n; $seq_concl{c}; [c]}] -->
    "step" : <H>; x: BSequentCore; <J[x]>; n: nat; h: BTerm{n}; rest: BTerm{n +@ 1}; C[rest] >- C[mk_bterm{n; $seq_hyp{h; x. rest}; [h; rest]}] -->
    <H>; x: BSequentCore; <J[x]> >- C[x]
@@ -471,7 +472,7 @@ interactive sequent_bterm_core_depth_bsequent_core_wf {| intro [] |} : <:xrule<
    <H> >- sequent_bterm{n; hyps; concl} in BSequentCore{m}
 >>
 
-interactive bsequent_core_depth_elim {| elim [] |} 'H : <:xrule<
+interactive bsequent_core_depth_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
    "wf" : <H>; x: BSequentCore{m}; <J[x]> >- m in nat -->
    "base" : <H>; x: BSequentCore{m}; <J[x]>; n: nat; c: BTerm{n} >- C[mk_bterm{n; $seq_concl{c}; [c]}] -->
    "step" : <H>; x: BSequentCore{m}; <J[x]>; n: nat; h: BTerm{n}; rest: BTerm{n +@ 1}; C[rest] >- C[mk_bterm{n; $seq_hyp{h; x. rest}; [h; rest]}] -->
@@ -558,12 +559,9 @@ interactive bsequent_bterm_forward 'H : <:xrule<
 let fold_is_sequent_bterm_core = makeFoldC <:xterm< is_sequent_bterm_core{e} >> unfold_is_sequent_bterm_core
 let fold_sequent_of_bterm_core = makeFoldC <:xterm< sequent_of_bterm_core{e} >> unfold_sequent_of_bterm_core
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

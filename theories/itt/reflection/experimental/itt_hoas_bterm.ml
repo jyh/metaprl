@@ -14,7 +14,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005-2006, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@ extends Itt_subset
 doc docoff
 
 open Basic_tactics
+open Itt_equal
 open Itt_struct
 open Itt_squash
 open Itt_sqsimple
@@ -730,3 +731,6 @@ interactive mk_bterm_eq {| intro [] |} :
 interactive bterm_depth_eq {| nth_hyp |} :
    sequent{ <H> >- 't in BTerm{'d} } -->
    sequent{ <H> >- 'd = bdepth{'t} in int }
+
+let resource nth_hyp +=
+   <<BTerm{'d}>>, << 'd = bdepth{!t} in int >>, wrap_nth_hyp_uncertain (fun i -> bterm_depth_eq thenT equalityAxiom i)

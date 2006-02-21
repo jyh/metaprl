@@ -1141,6 +1141,24 @@ interactive var_elim2 'v number[l:n] 'tleft number[r:n] 'tright :
 	[aux] sequent { <H> >- 'left = (number[l:n] *@ 'tleft) -@ (number[r:n] *@ 'tright) in int } -->
 	sequent { <H> >- 'left >= 0 }
 
+interactive var_elim3 'v :
+	[wf] sequent { <H> >- 'tleft in int } -->
+	[wf] sequent { <H> >- 'tright in int } -->
+	[wf] sequent { <H> >- 'v in int } -->
+	[aux] sequent { <H> >- 0 < number[l:n] } -->
+	[aux] sequent { <H> >- 0 < number[r:n] } -->
+	sequent { <H> >- number[l:n] *@ 'v -@ 'tright >= 0 } -->
+	sequent { <H> >- 'tleft -@ number[r:n] *@ 'v >= 0 } -->
+	sequent { <H> >- (number[l:n] *@ 'tleft) -@ (number[r:n] *@ 'tright) >= 0 }
+
+let var_elimT v lnum lterm rnum rterm = funT (fun p ->
+	let concl' = mk_ge_term (mk_sub_term (mk_mul_term lnum lterm) (mk_mul_term rnum rterm)) <<0>> in
+	if alpha_equal concl' (concl p) then
+		var_elim3 v
+	else
+		var_elim2 v lnum lterm rnum rterm
+)
+
 let rec rev_flatten = function
    h :: t ->
       List.rev_append h (rev_flatten t)
@@ -1419,7 +1437,7 @@ match src with
 		let tleft = AF.term_of info u in
 		let cright = term_of c2 in
 		let tright = AF.term_of info l in
-		tryT (var_elim2 (VI.restore info v) cleft tleft cright tright thenMLT
+		tryT (var_elimT (VI.restore info v) cleft tleft cright tright thenMLT
 			[source2hyp info hyp_pos t1; source2hyp info hyp_pos t2])
 )
 

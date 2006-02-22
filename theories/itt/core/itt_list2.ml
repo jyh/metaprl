@@ -1302,7 +1302,7 @@ interactive exists_list_intro  {| intro [] |} 'i :
    sequent { <H>; i: Index{'l} >- 'P[nth{'l; 'i}] Type } -->
    sequent { <H> >- exists_list{'l;  x. 'P['x]} }
 
-interactive exists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} 'i :
+interactive exists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} :
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'A Type } -->
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; x: 'A >- 'P['x] Type  } -->

@@ -15,7 +15,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005-2006, MetaPRL Group
+   Copyright (C) 2006 MetaPRL Group, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Author: Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
    @parents
@@ -42,12 +42,13 @@ extends Itt_hoas_proof_ind
 doc docoff
 
 open Basic_tactics
+open Itt_hoas_proof_ind
 
 (*
  * For now, the tactic does nothing.
  *)
 let elimRuleT =
-   idT
+   provableSequent_elim 2 twa
 
 (*
  * -*-

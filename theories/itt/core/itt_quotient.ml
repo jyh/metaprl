@@ -161,7 +161,7 @@ dform quot_df1 : except_mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x
    slot{'x} `", " slot{'y} `":" " " slot{'A} `" // " slot{'E}
 
 dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E} =
-   `"quot " slot{'x} `", " slot{'y} `":" slot{'A} `" // " slot{'E}
+   `"quot " slot[x:s] `", " slot[y:s] `":" slot{'A} `" // " slot{'E}
 
 (************************************************************************
  * RULES                                                                *

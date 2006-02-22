@@ -499,8 +499,14 @@ prec prec_quant < prec_iff
 dform true_df : except_mode[src] :: "true" =
    `"True"
 
+dform true_df2 : mode[src] :: "true" =
+   `"\"true\""
+
 dform false_df : except_mode[src] :: "false" =
    `"False"
+
+dform false_df2 : mode[src] :: "false" =
+   `"\"false\""
 
 dform not_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: "not"{'a} =
    Mpsymbols!tneg slot["le"]{'a}
@@ -1327,7 +1333,7 @@ let base_jproverT =
             with
                RefineError _ ->
                   rest
-   in 
+   in
    let jprogressT = argfunT (fun t p ->
       if alpha_equal (Sequent.concl p) t then
          raise (RefineError ("Itt_logic.jprogressT", StringError "JProver failed to make progress"))
@@ -1343,7 +1349,7 @@ let base_jproverT =
       if (is_or_term t) || (is_and_term t) || (is_implies_term t) || (is_iff_term t) then
          let t1, t2 = two_subterms t in
             get_useful_opnames (get_useful_opnames opnames t1) t2
-      else if is_all_term t then 
+      else if is_all_term t then
          let _, _, t = dest_all t in
             get_useful_opnames opnames t
       else if is_exists_term t then
@@ -1353,7 +1359,7 @@ let base_jproverT =
          get_useful_opnames opnames (one_subterm t)
       else
          OpnameSet.add opnames (opname_of_term t)
-   in 
+   in
    let useful_opname opnames t =
       if OpnameSet.mem logic_opnames (opname_of_term t) then
          get_useful_opnames opnames t

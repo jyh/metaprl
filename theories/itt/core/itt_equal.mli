@@ -214,6 +214,7 @@ val itt_sequent_arg : term
 val equal_term : term
 val is_equal_term : term -> bool
 val is_member_term : term -> bool
+val complete_if_member : Dtactic.intro_option
 val complete_unless_member : Dtactic.intro_option
 val dest_equal : term -> term * term * term
 val mk_equal_term : term -> term -> term -> term

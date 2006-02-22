@@ -53,6 +53,7 @@ MPFILES[] =
    itt_prec
    itt_srec
    itt_quotient
+   itt_simple_singleton
    itt_list2
    itt_list_set
    itt_list3

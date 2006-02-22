@@ -117,6 +117,8 @@ let is_member_term t =
    match dest_equal t with
       _, t1, t2 -> alpha_equal t1 t2
 
+let complete_if_member =
+   CondMustComplete (fun p -> is_member_term (Sequent.concl p))
 let complete_unless_member =
    CondMustComplete (fun p -> not (is_member_term (Sequent.concl p)))
 

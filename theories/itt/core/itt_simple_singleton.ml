@@ -9,6 +9,7 @@ doc <:doc<
    $$   <<   sequent{  x:(quot u,v:bool//"true") >- "type"{singleton{'x}} }  >>$$
    is not true.
 
+   Cf. Section @hrefmodule[Itt_singleton].
    @docoff
    ----------------------------------------------------------------
 

@@ -81,7 +81,6 @@ doc <:doc<
       Using @rule[letAtT] rule, we can "split" a hypothesis.
       That is, we can copy a hypothesis and make conclusion and hypotheses
       after the new copy of it to be depend on this new copy.
-      Cf. @tactic[copyHypT].
 >>
 
 interactive splitHyp 'H 'J:
@@ -91,7 +90,7 @@ interactive splitHyp 'H 'J:
 doc <:doc<
       The @tactic[spliHypT] $i$ $j$ tactic split $i$'th hypothesis and adds it to the $j$'s place.
       It is useful for elimination rules where we want to keep the original hypothesis intact.
-      Cf. @tactic[splitHypT].
+      Cf. @hreftactic[copyHypT].
       @docoff
 >>
 

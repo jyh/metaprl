@@ -2,7 +2,9 @@ doc <:doc<
    @module[Itt_singleton]
 
    The @tt[Itt_singleton] module defines a singleton type.
-
+   <<singleton{'a;'A}>> is a subtype of $A$ that conatains $a$.
+   It also conains all elements that are equal to $a$ in $A$ and only those elements.
+   Cf. Section @hrefmodule[Itt_simple_singleton].
    @docoff
    ----------------------------------------------------------------
 
@@ -94,5 +96,7 @@ interactive singleton_equal {| intro[] |}:
    sequent{ <H> >- 'b  in singleton{'a;'A}} -->
    sequent{ <H> >- 'c  in singleton{'a;'A}} -->
    sequent{ <H> >- 'b = 'c in singleton{'a;'A} }
+
+let resource intro += (<<'b in singleton{'a;'A}>>, wrap_intro singleton_intro)
 
 doc docoff

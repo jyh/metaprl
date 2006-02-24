@@ -33,7 +33,7 @@ open Basic_tactics
  *)
 declare typeclass TyExp -> Term
 
-declare TyTop : TyExp
+declare const TyTop : TyExp
 declare TyFun{'ty_domain : TyExp; 'ty_range : TyExp} : TyExp
 declare TyAll{'ty_bound : TyExp; x : TyExp. 'ty['x] : TyExp} : TyExp
 

@@ -57,6 +57,25 @@ declare TyPower{'ty : TyExp} : Hyp
  *)
 declare sequent [fsub] { Term : Hyp >- Prop } : Judgment
 
+(************************************************************************
+ * Grammar.
+declare tok_subtype   : Terminal
+
+lex_token xterm : "<:"   --> tok_subtype
+
+lex_prec nonassoc [tok_subtype] = prec_rel
+
+declare iform parsed_tyexp{'e1} : TyExp
+
+production xterm_term{fsub_subtype{parsed_tyexp{'e1}; parsed_tyexp{'e2}}} <--
+   xterm_term{'e1}; tok_subtype; xterm_term{'e2}
+
+iform reduce_parsed_tyexp :
+   parsed_tyexp{'e1}
+   <-->
+   'e1
+ *)
+
 (*
  * -*-
  * Local Variables:

@@ -22,5 +22,6 @@ THEORY_DEPS[] +=
 MPFILES[] =
     pmn_core_terms
     pmn_core_judgments
+    pmn_core_logic
     reflect_pmn_core_terms
     reflect_pmn_core_judgments

@@ -27,6 +27,11 @@
 extends Pmn_core_terms
 extends Pmn_core_judgments
 
+(*
+ * No extracts in the current theory.
+ *)
+declare default_extract
+
 (*!
  * @docoff
  *

@@ -27,81 +27,70 @@
 extends Pmn_core_terms
 extends Pmn_core_judgments
 
-open Basic_tactics
-
 (*
- * Proof steps are over sequents.
+ * Subtyping rules.
  *)
-reflected_logic FSub =
-struct
 (*
-   extends Terms
-   extends Judgments
+prim sa_top : <:xrule<
+   fsub{| <H> >- T <: TyTop |}
+>>
 
-   (*
-    * Subtyping rules.
-    *)
-   prim sa_top : <:xrule<
-      fsub{| <H> >- T <: top |}
-   >>
+prim sa_tvar 'H : <:xrule<
+   fsub{| <H>; X: TyPower{T}; <J[X]> >- X <: X |}
+>>
 
-   prim sa_tvar 'H : <:xrule<
-      fsub{| <H>; X <: T; <J[X]> >- X <: X |}
-   >>
+prim sa_trans_tvar 'H : <:xrule<
+   fsub{| <H>; X <: U; <J[X]> >- U <: T |} -->
+   fsub{| <H>; X <: U; <J[X]> >- X <: T |}
+>>
 
-   prim sa_trans_tvar 'H : <:xrule<
-      fsub{| <H>; X <: U; <J[X]> >- U <: T |} -->
-      fsub{| <H>; X <: U; <J[X]> >- X <: T |}
-   >>
+prim sa_arrow : <:xrule<
+   fsub{| <H> >- T1 <: S1 |} -->
+   fsub{| <H> >- S2 <: T2 |} -->
+   fsub{| <H> >- S1 -> S2 <: T1 -> T2 |}
+>>
 
-   prim sa_arrow : <:xrule<
-      fsub{| <H> >- T1 <: S1 |} -->
-      fsub{| <H> >- S2 <: T2 |} -->
-      fsub{| <H> >- S1 -> S2 <: T1 -> T2 |}
-   >>
+prim sa_all : <:xrule<
+   fsub{| <H> >- T1 <: S1 |} -->
+   fsub{| <H>; X <: T1 >- S2[X] <: T2[X] |} -->
+   fsub{| <H> >- all X <: S1. S2[X] <: all X <: T1. T2[X] |}
+>>
 
-   prim sa_all : <:xrule<
-      fsub{| <H> >- T1 <: S1 |} -->
-      fsub{| <H>; X <: T1 >- S2[X] <: T2[X] |} -->
-      fsub{| <H> >- all X <: S1. S2[X] <: all X <: T1. T2[X] |}
-   >>
+(*
+ * Expression typing rules.
+ *)
+prim t_var 'H : <:xrule<
+   fsub{| <H>; x: T; <J[x]> >- x : T |}
+>>
 
-   (*
-    * Expression typing rules.
-    *)
-   prim t_var 'H : <:xrule<
-      fsub{| <H>; x: T; <J[x]> >- x : T |}
-   >>
+prim t_abs : <:xrule<
+   fsub{| <H>; x: T1 >- e[x] : T2 |} -->
+   fsub{| <H> >- fun x : T1 -> e[x] : T1 -> T2 |}
+>>
 
-   prim t_abs : <:xrule<
-      fsub{| <H>; x: T1 >- e[x] : T2 |} -->
-      fsub{| <H> >- fun x : T1 -> e[x] : T1 -> T2 |}
-   >>
+prim t_app TyVal{'T11} : <:xrule<
+   fsub{| <H> >- e1 : T11 -> T12 |} -->
+   fsub{| <H> >- e2 : T11 |} -->
+   fsub{| <H> >- e1 e2 : T12 |}
+>>
 
-   prim t_app TyVal{'T11} : <:xrule<
-      fsub{| <H> >- e1 : T11 -> T12 |} -->
-      fsub{| <H> >- e2 : T11 |} -->
-      fsub{| <H> >- e1 e2 : T12 |}
-   >>
+prim t_tabs : <:xrule<
+   fsub{| <H>; X <: T1 >- e[X] : T2[X] |} -->
+   fsub{| <H> >- Fun X <: T1 -> e[X] : all X <: T1. T2[X] |}
+>>
 
-   prim t_tabs : <:xrule<
-      fsub{| <H>; X <: T1 >- e[X] : T2[X] |} -->
-      fsub{| <H> >- Fun X <: T1 -> e[X] : all X <: T1. T2[X] |}
-   >>
+prim t_tapp TyVal{'T11} bind{x. TyVal{'T12['x]}} : <:xrule<
+   fsub{| <H> >- e : all X <: T11. T12[X] |} -->
+   fsub{| <H> >- T2 <: T11  |}-->
+   fsub{| <H> >- e{T2} : T12[T2] |}
+>>
 
-   prim t_tapp TyVal{'T11} bind{x. TyVal{'T12['x]}} : <:xrule<
-      fsub{| <H> >- e : all X <: T11. T12[X] |} -->
-      fsub{| <H> >- T2 <: T11  |}-->
-      fsub{| <H> >- e{T2} : T12[T2] |}
-   >>
-
-   prim t_sub TyVal{'S} : <:xrule<
-      fsub{| <H> >- e : S |} -->
-      fsub{| <H> >- S <: T |} -->
-      fsub{| <H> >- e : T |}
-   >>
+prim t_sub TyVal{'S} : <:xrule<
+   fsub{| <H> >- e : S |} -->
+   fsub{| <H> >- S <: T |} -->
+   fsub{| <H> >- e : T |}
+>>
 *)
-end
 
 (*!
  * @docoff

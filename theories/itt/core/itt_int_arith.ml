@@ -36,6 +36,7 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Author: Yegor Bryukhov @email{ynb@mail.ru}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
    @docon
    @parents
@@ -367,10 +368,15 @@ interactive nequal_elim2 {| ge_elim [] |} 'H :
 let dummy_var = mk_var_term (Lm_symbol.add "")
 
 let wrap_ge t tll r tac =
-   mk_pair_term dummy_var t, List.map mk_xlist_term tll, ([], fun i -> rw r i thenT tac i)
+   mk_pair_term dummy_var t, List.map mk_xlist_term tll, ([], fun i -> rw r i thenMT tac i)
 
-let resource ge_elim +=
-   wrap_ge <<"assert"{'a <@ 'b}>> [[<<'b >= ('a +@ 1)>>]] fold_lt lt2ge
+let fold_lt_bnot =
+   (addrC [Subterm 1] ((addrC [Subterm 1] unfold_ge_bool) thenC reduce_bnot_bnotC)) thenC fold_lt
+
+let resource ge_elim += [
+   wrap_ge <<"assert"{'a <@ 'b}>> [[<<'b >= ('a +@ 1)>>]] fold_lt lt2ge;
+   wrap_ge <<"assert"{bnot{'a >=@ 'b}}>> [[<<'b >= ('a +@ 1)>>]] fold_lt_bnot lt2ge
+]
 
 interactive ltInConcl2ge {| ge_intro |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -405,7 +411,7 @@ let arithRelInConcl2HypT = funT (fun p ->
       <<'a < 'b>> -> ltInConcl2ge
     | <<'a >= 'b>> -> geInConcl2ge
     | <<'a = 'b in 'ty>> when alpha_equal ty <<int>> -> eqInConcl2ge
-     | <<'a <> 'b>> -> neqInConcl2ge thenMT eq2ge (-1) thenMT thinT (-3)
+    | <<'a <> 'b>> -> neqInConcl2ge thenMT eq2ge (-1) thenMT thinT (-3)
     | <<not{'a}>> -> not_intro
     | _ -> concl2geT
 )
@@ -456,7 +462,7 @@ interactive_rw mul_BubblePrimitive_rw :
 
 let mul_BubblePrimitiveC = mul_BubblePrimitive_rw
 
-interactive_rw sum_same_products1_rw :
+interactive_rw sum_same_products1_rw {| reduce |} :
    ('a in int) -->
    ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <-->
    ((number[i:n] +@ number[j:n]) *@ 'a)
@@ -632,7 +638,7 @@ doc docoff
 
 let normalizeC = reduceC thenC arith_unfoldC
 
-interactive_rw ge_addContract_rw :
+interactive_rw ge_addContract_rw {| reduce |} :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ('a >= ('b +@ 'a)) <--> (0 >= 'b)

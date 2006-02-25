@@ -42,6 +42,10 @@ extends Itt_hoas_proof
 extends Itt_hoas_sequent_bterm
 extends Itt_hoas_sequent_proof
 
+doc docoff
+
+open Basic_tactics
+
 doc rules
 
 interactive provable_elim 'H :
@@ -82,6 +86,27 @@ interactive provableSequent_elim 'H :
                     all w: 'ty. (('A['w] = 'premise in BTerm) => 'C['w]))}
        >- 'C['u] }-->
    sequent { <H>; v: 'ty; x: ProvableSequent{'logic; 'A['v]}; <J['v; 'x]> >- 'C['v] }
+
+interactive step_empty_logic {| elim; nth_hyp |} 'H :
+   sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; empty_logic}; <J['x]> >- 'C['x] }
+
+interactive step_rules_logic_cons {| elim |} 'H :
+   sequent { <H>; "assert"{'r (proof_step{'assums; 'goal}, 'witness)}; <J> >- 'C } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{'rules; 'logic}}; <J> >- 'C } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{cons{'r; 'rules}; 'logic}}; <J> >- 'C }
+
+interactive step_rules_logic_nil {| elim |} 'H :
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic}; <J> >- 'C } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{nil; 'logic}}; <J> >- 'C }
+
+interactive step_union_logic_elim {| elim |} 'H :
+   [wf] sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >-
+      'logic_1 in Logic } -->
+   [wf] sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >-
+      'logic_2 in Logic } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_1}; <J> >- 'C } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_2}; <J> >- 'C } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >- 'C }
 
 (*
  * -*-

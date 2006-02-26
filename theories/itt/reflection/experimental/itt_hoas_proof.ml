@@ -95,6 +95,7 @@ doc <:doc<
 >>
 define unfold_SimpleStep : SimpleStep{'premises; 'goal; 'witness; 'logic} <-->
    exists_list{'logic; check. "assert"{'check (proof_step{'premises; 'goal}, 'witness)}}
+   and 'premises in list{BTerm} and 'goal in BTerm and 'witness in ProofStepWitness and 'logic in Logic
 
 define unfold_ValidStep : ValidStep{'premises; 'goal; 'witness; 'logic} <-->
    exists_list{'logic; check. "assert"{'check (proof_step{map{x. derivation_goal{'x}; 'premises}; 'goal}, 'witness)}}

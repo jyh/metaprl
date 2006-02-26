@@ -99,6 +99,11 @@ interactive step_rules_logic_nil {| elim |} 'H :
    sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic}; <J> >- 'C } -->
    sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{nil; 'logic}}; <J> >- 'C }
 
+(*
+ * XXX TODO: (2006/02/25 nogin)
+ * The "'logic_2 in Logic" condition is unnecessary, but getting rid of it is hard (will require "l1
+ * in A List && l1 @ l2 in A List >- l2 in A List" lemma). Leaving it in for now.
+ *)
 interactive step_union_logic_elim {| elim |} 'H :
    [wf] sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >-
       'logic_1 in Logic } -->

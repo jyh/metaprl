@@ -490,6 +490,20 @@ interactive bsequent_type_wf {| intro [] |} : <:xrule<
    <H> >- BSequent Type
 >>
 
+interactive bsequent_is_bterm1 {| nth_hyp |} 'H :
+   sequent { <H>; t: BSequent; <J['t]> >- 't in BTerm }
+
+interactive bsequent_is_bterm2 {| nth_hyp |} :
+   sequent { <H> >- 't in BSequent } -->
+   sequent { <H> >- 't in BTerm }
+
+interactive bsequent_is_bterm_list1 {| nth_hyp |} 'H :
+   sequent { <H>; t: list{BSequent}; <J['t]> >- 't in list{BTerm} }
+
+interactive bsequent_is_bterm_list2 {| nth_hyp |} :
+   sequent { <H> >- 't in list{BSequent} } -->
+   sequent { <H> >- 't in list{BTerm} }
+
 interactive bsequent_sqsimple {| intro []; sqsimple |} : <:xrule<
    <H> >- sqsimple{BSequent}
 >>

@@ -1752,8 +1752,8 @@ let omegaPrepT = funT (fun p ->
 )
 
 let omegaT =
-	(*startT 2 thenMT*) arithRelInConcl2HypT thenMT
-	omegaPrepT thenT rw relNormC 0 (*thenMT endT 2*)
+	(*startT 2 thenMT*) (arithRelInConcl2HypT thenMT
+	omegaPrepT thenT rw relNormC 0) thenMT (rw simpleReduceC (-1) thenMT assert_false (-1)) (*thenMT endT 2*)
 
 let omega_intro = "omegaT", None, rule_labels_empty, AutoComplete, omegaT
 

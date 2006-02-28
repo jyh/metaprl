@@ -999,12 +999,6 @@ interactive insert_at_wf {| intro [] |} :
    [wf] sequent { <H> >- 't in 'T } -->
    sequent { <H> >- insert_at{'l; 'i; 't} in list{'T} }
 
-interactive list_lengthzero {| elim [] |} 'H 'A :
-   sequent { <H>; x: (length{'l} = 0 in int); <J[it]> >- 'A Type } -->
-   sequent { <H>; x: (length{'l} = 0 in int); <J[it]> >- 'l in list{'A} } -->
-   sequent { <H>; x: (length{'l} = 0 in int); <J[it]>; y: 'l = nil in list{'A} >- 'C[it] } -->
-   sequent { <H>; x: (length{'l} = 0 in int); <J['x]> >- 'C['x] }
-
 interactive_rw nth_map {| reduce |} :
    ('l in list) -->
    ('i in Index{'l}) -->

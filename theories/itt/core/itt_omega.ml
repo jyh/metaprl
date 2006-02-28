@@ -1428,11 +1428,10 @@ match src with
 			else
 				hyp_pos.(i) + pos
 		in
-		(*let hyp = nth_hyp p hyp_addr in
-		if alpha_equal hyp (goal p) then
+		if alpha_equal (nth_hyp p hyp_addr) (concl p) then
 			hypothesis hyp_addr
-		else*)
-			(*endT i thenMT*) rw normalize2C hyp_addr (*thenMT hypothesis hyp_addr*)
+		else
+			( (*endT i thenMT*) rw normalize2C hyp_addr (*thenMT hypothesis hyp_addr*) )
  | Mul (tree, gcd) ->
 		rw (scaleC (mk_number_term gcd)) 0 thenMT
 		source2hyp info hyp_pos tree
@@ -1763,7 +1762,8 @@ interactive omega_final {| nth_hyp |} 'H :
 
 let omegaT =
 	(*startT 2 thenMT*) (arithRelInConcl2HypT thenMT
-	omegaPrepT thenT rw relNormC 0) thenMT someNthHypT (*thenMT endT 2*)
+	omegaPrepT thenT rw relNormC 0) thenMT (rw simpleReduceC (-1) thenMT tryT (assert_false (-1)))
+   (*thenMT endT 2*)
 
 let omega_intro = "omegaT", None, rule_labels_empty, AutoComplete, omegaT
 

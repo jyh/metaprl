@@ -1428,10 +1428,13 @@ match src with
 			else
 				hyp_pos.(i) + pos
 		in
-		if alpha_equal (nth_hyp p hyp_addr) (concl p) then
+      let conc = concl p in
+		if alpha_equal (nth_hyp p hyp_addr) conc then
 			hypothesis hyp_addr
-		else
-			( (*endT i thenMT*) rw normalize2C hyp_addr (*thenMT hypothesis hyp_addr*) )
+		else if is_ge_term conc then
+			(rw normalize2C hyp_addr thenMT rw relNormC 0 thenMT hypothesis hyp_addr)
+      else
+         (rw (normalize2C thenC simpleReduceC) hyp_addr thenMT assert_false hyp_addr)
  | Mul (tree, gcd) ->
 		rw (scaleC (mk_number_term gcd)) 0 thenMT
 		source2hyp info hyp_pos tree
@@ -1760,9 +1763,17 @@ let omegaPrepT = funT (fun p ->
 interactive omega_final {| nth_hyp |} 'H :
 	sequent { <H>; x: 0 <= number[-1:n]; <J['x]> >- 'C['x] }
 
+let normConclT = funT (fun p ->
+   let conc = concl p in
+      if is_equal_term conc then
+         let _, a, b = dest_equal conc in
+            if alpha_equal a b then idT else rw relNormC 0
+      else
+         idT)
+
 let omegaT =
 	(*startT 2 thenMT*) (arithRelInConcl2HypT thenMT
-	omegaPrepT thenT rw relNormC 0) thenMT (rw simpleReduceC (-1) thenMT tryT (assert_false (-1)))
+	omegaPrepT) thenMT (rw simpleReduceC (-1) thenMT tryT (assert_false (-1))) thenT normConclT
    (*thenMT endT 2*)
 
 let omega_intro = "omegaT", None, rule_labels_empty, AutoComplete, omegaT

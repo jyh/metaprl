@@ -1767,9 +1767,9 @@ let normConclT = funT (fun p ->
    let conc = concl p in
       if is_equal_term conc then
          let _, a, b = dest_equal conc in
-            if alpha_equal a b then idT else rw relNormC 0
+            if alpha_equal a b then rw simpleReduceC 0 else rw relNormC 0
       else
-         idT)
+         rw simpleReduceC 0)
 
 let omegaT =
 	(*startT 2 thenMT*) (arithRelInConcl2HypT thenMT

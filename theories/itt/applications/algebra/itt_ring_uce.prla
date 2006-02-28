@@ -5467,7 +5467,7 @@ T	t2308	o1245 b2308
 B	b2309	t2308
 T	t2309	o1266 b2306 b2309
 B	b2310	t2309
-P	p2310	String "genAssumT [1] thenT dT 2 thenT dT 2 thenT autoT"
+P	p2310	String "genAssumT [1] thenT dT 2 thenT dT 2 ta"
 O	o2310	ext_rule p2310
 T	t2310	o b2304 b17
 B	b2311	t2310
@@ -9044,7 +9044,7 @@ S	s3739	t1246\\ h\\ t3739
 B	b3739	s3739
 T	t3740	o1245 b3739
 B	b3740	t3740
-P	p3740	String "dT 0 thenT dT 0 thenT autoT thenT dT 2 thenT dT 2 ttca"
+P	p3740	String "dT 0 thenT dT 0 ta thenT dT 2 thenT dT 2 ttca"
 O	o3740	ext_rule p3740
 T	t3741	o1253 b3739 b17
 B	b3741	t3741
@@ -10266,7 +10266,7 @@ T	t5799	o b5790 b17
 B	b5799	t5799
 T	t5800	o1251 b5760 b5799
 B	b5800	t5800
-P	p4228	String "assertT << ('u, 'v1) in poly{'v} >> thenMT substT << (max{0; 'u}, lambda{x. (coeff{(0, lambda{x.'v^\"0\"});'x;'v} +['v] coeff{('u, 'v1);'x;'v})}) = ('u, 'v1) in poly{'v} >> 0 thenT autoT"
+P	p4228	String "assertT << ('u, 'v1) in poly{'v} >> thenMT substT << (max{0; 'u}, lambda{x. (coeff{(0, lambda{x.'v^\"0\"});'x;'v} +['v] coeff{('u, 'v1);'x;'v})}) = ('u, 'v1) in poly{'v} >> 0 ta"
 O	o4228	ext_rule p4228
 T	t5801	o4125 b5761 b4126
 B	b5801	t5801
@@ -10346,7 +10346,7 @@ T	t5849	o b5837 b5848
 B	b5849	t5849
 T	t5851	o1251 b5830 b5849
 B	b5851	t5851
-P	p4273	String "assertT << max{0; 'u} = 'u in nat >> thenT dT 0 thenT autoT thenT byDefT reduceC"
+P	p4273	String "assertT << max{0; 'u} = 'u in nat >> thenT dT 0 ta thenT byDefT reduceC"
 O	o4273	ext_rule p4273
 H	h5851	_1010 t5834
 S	s5851	t1246\\ h h4124 h4125 h5833 h5809 h5851\\ t5835
@@ -10480,7 +10480,7 @@ T	t5905	o b5905 b17
 B	b5906	t5905
 T	t5906	o1251 b5897 b5906
 B	b5907	t5906
-P	p4394	String "dT (-1) thenT byDefT unfold_coeff thenT repeatForT 2 (splitITE 0 thenT autoT)"
+P	p4394	String "dT (-1) thenT byDefT unfold_coeff thenT repeatForT 2 (splitITE 0 ta)"
 O	o4394	ext_rule p4394
 H	h5907	u1 t5831
 S	s5907	t1246\\ h h4124 h4125 h5833 h5809 h5851 h5876 h5907\\ t5894
@@ -10581,7 +10581,7 @@ T	t5946	o b5946 b17
 B	b5947	t5946
 T	t5947	o1251 b5941 b5947
 B	b5948	t5947
-P	p4427	String "substT << 'v^\"0\" +['v] ('v1 'u) = 'v1 'u in 'v^car >> (-1) thenMT dT 5 ttca thenT substT << max{0; 'u} = 'u in int >> (-2) thenT autoT thenT dT 3 thenT arithT ttca"
+P	p4427	String "substT << 'v^\"0\" +['v] ('v1 'u) = 'v1 'u in 'v^car >> (-1) thenMT dT 5 ttca thenT substT << max{0; 'u} = 'u in int >> (-2) ta thenT dT 3 thenT arithT ttca"
 O	o4427	ext_rule p4427
 H	h5948	_1010 t5943
 S	s5948	t1246\\ h h4124 h4125 h5833 h5809 h5851 h5876 h5938 h5948\\ t4312

@@ -215,7 +215,7 @@ B	b657	t615 x
 T	t658	o657 b611 b657
 B	b658	t658
 T	t659	o599 b658
-P	p670	String "rw reduceC 0 thenT autoT"
+P	p670	String "rw reduceC 0 ta"
 O	o670	ext_rule p670
 P	p676	String logicAutoT
 O	o676	ext_rule p676
@@ -223,7 +223,7 @@ P	p677	String wf
 O	o677	tactic_arg p677
 NItt_equal!equal	equal	equal Itt_equal
 O	o678	equal
-P	p691	String "rwh fold_isset 0 thenT autoT"
+P	p691	String "rwh fold_isset 0 ta"
 O	o691	ext_rule p691
 P	p703	String set_ind_dfun_fun
 O	o703	rule p703
@@ -241,7 +241,7 @@ P	p719	Var v
 O	o719	var p719
 T	t720	o719
 B	b720	t720
-P	p739	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p739	String "rwh unfold_fun_prop 0 ta"
 O	o739	ext_rule p739
 H	h745	x_1 t603
 NCzf_itt_eq!equal	equal1	equal Czf_itt_eq
@@ -402,9 +402,9 @@ P	p1909	String set_ind_dprod_fun
 O	o1909	rule p1909
 P	p1958	String "assertT << all s: set. \"type\"{set_ind{'s; T, f, g. x_1:'T * 'B['x; 'f 'x_1]}} >>"
 O	o1958	ext_rule p1958
-P	p1977	String "dT 5 thenT rw reduceC 0 thenT autoT"
+P	p1977	String "dT 5 thenT rw reduceC 0 ta"
 O	o1977	ext_rule p1977
-P	p1988	String "rwh fold_isset 0 thenT funSetT 2 thenT autoT"
+P	p1988	String "rwh fold_isset 0 thenT funSetT 2 ta"
 O	o1988	ext_rule p1988
 T	t390	o8 b942 b765
 B	b394	t390
@@ -431,7 +431,7 @@ O	o3060	ext_rule p3060
 P	p3064	String eq
 O	o3064	tactic_arg p3064
 T	t3072	o745 b1015 b1136
-P	p3139	String "eqSetSymT thenT autoT"
+P	p3139	String "eqSetSymT ta"
 O	o3141	ext_rule p3139
 P	p1995	String "assertT << fun_prop{w. set_ind{'w; T, f, g. x_1:'T * 'B['x; 'f 'x_1]}} >>"
 O	o1995	ext_rule p1995
@@ -444,22 +444,22 @@ B	b2149	t2148
 P	p2155	String "withT << 'y >> (dT 0) twa"
 O	o2155	ext_rule p2155
 T	t2188	o745 b2073 b2149
-P	p2295	String "rwh fold_isset 0 thenT funSetT 3 thenT autoT"
+P	p2295	String "rwh fold_isset 0 thenT funSetT 3 ta"
 O	o2295	ext_rule p2295
 T	t3628	o8 b814 b942
 B	b3633	t3628
 P	p3791	String "rwh fold_isset 0"
 O	o3791	ext_rule p3791
-P	p3797	String "funSetT 3 thenT autoT"
+P	p3797	String "funSetT 3 ta"
 O	o3797	ext_rule p3797
-P	p3997	String "thinT 12 thenT thinT 8 thenT rw reduceC 0 thenT autoT"
+P	p3997	String "thinT 12 thenT thinT 8 thenT rw reduceC 0 ta"
 O	o3997	ext_rule p3997
 P	p4055	String "withT << 'u >> (dT 14) twa"
 O	o4055	ext_rule p4055
 T	t4055	o745 b2073 b1007
 B	b4056	t4055 y2
 T	t4056	o1002 b978 b4056
-P	p4080	String "setSubstT << equal{.'f_1 'y; .'f 'u} >> 0 thenT autoT"
+P	p4080	String "setSubstT << equal{.'f_1 'y; .'f 'u} >> 0 ta"
 O	o4080	ext_rule p4080
 T	t4080	o745 b2149 b2073
 P	p2297	String "thinT 6 thenT dT 6"
@@ -470,7 +470,7 @@ P	p2364	String "assertT << all s: set. fun_prop{w. set_ind{'s; T, f, g. x:'T * '
 O	o2364	ext_rule p2364
 P	p2384	String "dT 7 twa"
 O	o2384	ext_rule p2384
-P	p2397	String "rw reduceC 0 thenT rwh unfold_fun_prop 0 thenT autoT"
+P	p2397	String "rw reduceC 0 thenT rwh unfold_fun_prop 0 ta"
 O	o2397	ext_rule p2397
 H	h2397	x_5 t603
 T	t4239	o8 b942 b1145

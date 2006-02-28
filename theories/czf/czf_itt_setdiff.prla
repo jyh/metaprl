@@ -346,7 +346,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o778	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p778	String "rwh unfold_setdiff 0 thenT autoT"
+P	p778	String "rwh unfold_setdiff 0 ta"
 O	o779	ext_rule p778
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o780	status_incomplete
@@ -370,7 +370,7 @@ T	t789	o789 b647
 P	p790	Var z
 O	o790	var p790
 T	t791	o790
-P	p808	String "rwh unfold_restricted 0 thenT autoT"
+P	p808	String "rwh unfold_restricted 0 ta"
 O	o808	ext_rule p808
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p816	String []
@@ -465,7 +465,7 @@ P	p929	String setdiff_intro
 O	o929	rule p929
 NSummary!term_param	term_param	term_param Summary
 O	o930	term_param
-P	p946	String "rwh unfold_setdiff 0 thenT autoT thenT rwh unfold_restricted 0 thenT autoT"
+P	p946	String "rwh unfold_setdiff 0 ta thenT rwh unfold_restricted 0 thenT autoT"
 O	o946	ext_rule p946
 P	p965	String Elimination
 O	o965	comment_string p965
@@ -512,7 +512,7 @@ P	p1038	String setdiff_elim
 O	o1038	rule p1038
 P	p1062	String "rwh unfold_setdiff 2"
 O	o1062	ext_rule p1062
-P	p1074	String "dT 2 thenT rwh fold_setdiff 2 thenT autoT"
+P	p1074	String "dT 2 thenT rwh fold_setdiff 2 ta"
 O	o1074	ext_rule p1074
 P	p1104	String Functionality
 O	o1104	comment_string p1104
@@ -570,9 +570,9 @@ P	p1161	Var u
 O	o1161	var p1161
 T	t1162	o1161
 H	h1184	w t788
-P	p1218	String "funSetT 3 thenT autoT"
+P	p1218	String "funSetT 3 ta"
 O	o1218	ext_rule p1218
-P	p1222	String "funSetT 2 thenT autoT"
+P	p1222	String "funSetT 2 ta"
 O	o1222	ext_rule p1222
 NSummary!id	id	id Summary
 P	p6	Number -715730310

@@ -1667,7 +1667,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o1272	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1272	String "rwh unfold_pair 0 thenT autoT"
+P	p1272	String "rwh unfold_pair 0 ta"
 O	o1273	ext_rule p1272
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1274	status_incomplete
@@ -1755,7 +1755,7 @@ NCzf_itt_member!mem	mem	mem Czf_itt_member
 O	o1339	mem
 P	p1345	String "rwh unfold_pair 0"
 O	o1345	ext_rule p1345
-P	p1357	String "selT 1 (dT 0) thenT autoT"
+P	p1357	String "selT 1 (dT 0) ta"
 O	o1357	ext_rule p1357
 NOcaml!apply	apply	apply Ocaml
 P	p1365	String ::
@@ -3351,7 +3351,7 @@ T	t1994	o b1993 b14
 B	b1994	t1994
 T	t1995	o1275 b1990 b1994
 B	b1995	t1995
-P	p1399	String "selT 2 (dT 0) thenT autoT"
+P	p1399	String "selT 2 (dT 0) ta"
 O	o1399	ext_rule p1399
 T	t1996	o1275 b1993 b14
 B	b1996	t1996

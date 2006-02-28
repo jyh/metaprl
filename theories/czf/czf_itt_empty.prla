@@ -145,7 +145,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o547	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p547	String "rwh unfold_empty 0 thenT autoT"
+P	p547	String "rwh unfold_empty 0 ta"
 O	o548	ext_rule p547
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o549	status_incomplete
@@ -167,7 +167,7 @@ B	b652	t652
 P	p561	String empty_member_elim
 O	o561	rule p561
 NCzf_itt_member	Czf_itt_member	Czf_itt_member NIL
-P	p569	String "rwh unfold_empty 2 thenT rw reduceC 2 thenT autoT"
+P	p569	String "rwh unfold_empty 2 thenT rw reduceC 2 ta"
 O	o569	ext_rule p569
 NSummary!comment	comment	comment Summary
 O	o10	comment

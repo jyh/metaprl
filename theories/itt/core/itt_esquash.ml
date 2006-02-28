@@ -214,7 +214,7 @@ let resource intro += [
 ]
 
 let esquashAutoT =
-   withBoolT "esquash" true (autoT thenT tryT (onSomeHypT esquashT orelseT esquash thenT autoT))
+   withBoolT "esquash" true (autoT thenT tryT (onSomeHypT esquashT orelseT esquash ta))
 
 (*
  * -*-

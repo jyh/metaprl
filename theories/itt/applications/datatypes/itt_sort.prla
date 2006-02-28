@@ -386,7 +386,7 @@ P	p2416	String bounded_wf
 O	o2416	rule p2416
 NItt_list!list	list	list Itt_list
 O	o2417	list
-P	p2578	String "dT 2 thenT rw reduceC 0 thenT autoT"
+P	p2578	String "dT 2 thenT rw reduceC 0 ta"
 O	o2578	ext_rule p2578
 T	t2584	o639 b1020 b631
 B	b2584	t2584
@@ -394,7 +394,7 @@ P	p2848	String sorted_wf
 O	o2848	rule p2848
 P	p3240	String insert_wf
 O	o3240	rule p3240
-P	p3245	String "assertT << all l: list{'A}. (insert{'u; 'l; 'lt} IN list{'A}) >> thenT autoT"
+P	p3245	String "assertT << all l: list{'A}. (insert{'u; 'l; 'lt} IN list{'A}) >> ta"
 O	o3245	ext_rule p3245
 NItt_bool!bfalse	bfalse	bfalse Itt_bool
 O	o3524	bfalse
@@ -402,7 +402,7 @@ T	t3525	o3524
 B	b3525	t3525
 P	p3834	String sort_wf
 O	o3834	rule p3834
-P	p3838	String "assertT << all l: list{'A}. (sort{'l; 'lt} IN list{'A}) >> thenT autoT"
+P	p3838	String "assertT << all l: list{'A}. (sort{'l; 'lt} IN list{'A}) >> ta"
 O	o3838	ext_rule p3838
 P	p4205	String symetric_elim
 O	o4205	rule p4205
@@ -478,15 +478,15 @@ T	t9336	o9336
 B	b9336	t9336
 P	p9423	String insert_thm
 O	o9423	rule p9423
-P	p9907	String "dT 0 thenMT dT (-1) thenWT autoT"
+P	p9907	String "dT 0 thenMT dT (-1) twa"
 O	o9907	ext_rule p9907
-P	p10377	String "splitITE 0 thenWT autoT"
+P	p10377	String "splitITE 0 twa"
 O	o10377	ext_rule p10377
-P	p10590	String "rw reduceC 0 thenT autoT"
+P	p10590	String "rw reduceC 0 ta"
 O	o10590	ext_rule p10590
-P	p11234	String "boundInclusionT << 'u_1 >> thenT autoT"
+P	p11234	String "boundInclusionT << 'u_1 >> ta"
 O	o11234	ext_rule p11234
-P	p11722	String "insertInclusionT thenT autoT"
+P	p11722	String "insertInclusionT ta"
 O	o11722	ext_rule p11722
 P	p12111	String sorted_thm
 O	o12111	rule p12111
@@ -868,7 +868,7 @@ T	t1166	o1437 b1156 b1165
 B	b1166	t1166
 T	t1167	o1437 b1112 b1166
 B	b1167	t1167
-P	p13336	String "genAssumT [2] thenT autoT"
+P	p13336	String "genAssumT [2] ta"
 O	o13336	ext_rule p13336
 T	t1168	o b1158 b1118
 B	b1168	t1168
@@ -3983,7 +3983,7 @@ T	t2396	o b2396 b4
 B	b2397	t2396
 T	t2397	o863 b2375 b2397
 B	b2398	t2397
-P	p8181	String "assumT 7 thenT splitITE 0 thenMT rw reduceC 0 thenT autoT"
+P	p8181	String "assumT 7 thenT splitITE 0 thenMT rw reduceC 0 ta"
 O	o8181	ext_rule p8181
 O	o2399	tactic_arg p658
 H	h3614	_1010 t3591
@@ -4553,11 +4553,11 @@ B	b2617	t2616
 H	h2269	_1010 t1137
 P	p8806	String "genAssumT [2;6]"
 O	o8806	ext_rule p8806
-P	p9817	String "rw fold_compare_lt (-1) thenT rw reduceC 0 thenT autoT"
+P	p9817	String "rw fold_compare_lt (-1) thenT rw reduceC 0 ta"
 O	o9817	ext_rule p9817
-P	p10147	String "assumT 5 thenT rw unfold_partial_order (-1) thenT autoT"
+P	p10147	String "assumT 5 thenT rw unfold_partial_order (-1) ta"
 O	o10147	ext_rule p10147
-P	p11582	String "rw unfold_compare_lt (-1) thenT dT (-2) thenT autoT"
+P	p11582	String "rw unfold_compare_lt (-1) thenT dT (-2) ta"
 O	o11582	ext_rule p11582
 NItt_logic!or	or	or Itt_logic
 O	o1276	or
@@ -5205,7 +5205,7 @@ T	t2790	o b2790 b4
 B	b2791	t2790
 T	t2791	o863 b2787 b2791
 B	b2792	t2791
-P	p11862	String "withT <<list{'A}>> (dT 0) thenT autoT"
+P	p11862	String "withT <<list{'A}>> (dT 0) ta"
 O	o11862	ext_rule p11862
 H	h4578	_1010 t4559
 S	s4579	tbrarg\\ h611 h4577 h1172 h4578\\ t4579
@@ -5574,7 +5574,7 @@ T	t2914	o b2910 b2914
 B	b2915	t2914
 T	t2915	o863 b2907 b2915
 B	b2916	t2915
-P	p3394	String "withT <<'u>> (dT 0) thenT autoT"
+P	p3394	String "withT <<'u>> (dT 0) ta"
 O	o3394	ext_rule p3394
 H	h3382	_1010 t3319
 S	s2916	tbrarg\\ h611 h2895 h2896 h4577 h1172 h2897 h3382\\ t2891
@@ -5638,7 +5638,7 @@ T	t2947	o b2941 b2947
 B	b2949	t2947
 T	t2949	o3394 b861 b2930 b2949 b4
 B	b2950	t2949
-P	p3430	String "dT 6 thenT autoT"
+P	p3430	String "dT 6 ta"
 O	o3430	ext_rule p3430
 H	h3388	_1010 t3320
 S	s2950	tbrarg\\ h611 h2895 h2896 h4577 h1172 h2897 h3388\\ t2891

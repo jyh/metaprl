@@ -1267,7 +1267,7 @@ T	t2509	o1493 b2494 b2178
 B	b2509	t2509
 P	p2537	String indEquality
 O	o2537	rule p2537
-P	p1145	String "beq_int2prop thenT autoT"
+P	p1145	String "beq_int2prop ta"
 O	o1146	ext_rule p1145
 H	h2553	x t1368
 P	p2559	Var y
@@ -1919,7 +1919,7 @@ O	o3650	ext_rule p3650
 O	o3663	lid p3649
 T	t3663	o3663
 B	b3663	t3663
-P	p3786	String "rw (someSubC minus_add_inverseC) 0 thenT autoT"
+P	p3786	String "rw (someSubC minus_add_inverseC) 0 ta"
 O	o3786	ext_rule p3786
 P	p3800	String add_Functionality_rw
 O	o3800	cond_rewrite p3800
@@ -2170,7 +2170,7 @@ P	p5158	String "rw (addrC [2] (splitIntC <<'a>> <<'b>>)) 2 ttca"
 O	o5158	ext_rule p5158
 P	p5164	String "rwh fold_assert 2"
 O	o5164	ext_rule p5164
-P	p5170	String "dT 2 thenT autoT"
+P	p5170	String "dT 2 ta"
 O	o5170	ext_rule p5170
 P	p5515	Number 2
 P	p3077	String display_ind_df2
@@ -2305,9 +2305,9 @@ T	t6302	o b6 b6301
 B	b6302	t6302
 T	t6303	o b2361 b6302
 B	b6303	t6303
-P	p6343	String "univTypeT <<univ[1:l]>> thenT autoT"
+P	p6343	String "univTypeT <<univ[1:l]>> ta"
 O	o6343	ext_rule p6343
-P	p6360	String "useWitnessT <<int>> thenT autoT"
+P	p6360	String "useWitnessT <<int>> ta"
 O	o6360	ext_rule p6360
 P	p6377	String Decidability
 O	o6377	comment_string p6377
@@ -2369,7 +2369,7 @@ P	p6257	String lt_Asym
 O	o6257	rule p6257
 P	p6258	String "assertT <<\"assert\"{bfalse}>>"
 O	o6258	ext_rule p6258
-P	p6263	String "rwh (foldC <<band{lt_bool{'a;'b};lt_bool{'b;'a}}>> lt_ReflexC) 0 thenT autoT"
+P	p6263	String "rwh (foldC <<band{lt_bool{'a;'b};lt_bool{'b;'a}}>> lt_ReflexC) 0 ta"
 O	o6263	ext_rule p6263
 P	p6265	String "dT 2"
 O	o6265	ext_rule p6265
@@ -2380,11 +2380,11 @@ P	p4201	String ltDissect
 O	o4202	rule p4201
 P	p4215	String "rwh (unfold_lt thenC unfold_assert) 0"
 O	o4215	ext_rule p4215
-P	p4236	String "rw (addrC [2] (lt_TransitC <<'b>>)) 0 thenT autoT"
+P	p4236	String "rw (addrC [2] (lt_TransitC <<'b>>)) 0 ta"
 O	o4236	ext_rule p4236
 P	p6490	String "rw unfold_decidable 0 thenT selT 2 autoT"
 O	o6490	ext_rule p6490
-P	p4251	String "rwh fold_assert 0 thenT autoT"
+P	p4251	String "rwh fold_assert 0 ta"
 O	o4251	ext_rule p4251
 O	o4279	lid p4201
 T	t4279	o4279
@@ -7693,7 +7693,7 @@ T	t6552	o6829 b5375
 B	b6554	t6552
 T	t6554	o1526 b6554
 H	h8462	y t6554
-P	p3902	String "dT (-1) thenMT rwh (int_sqequalC <<'m~0>>) 3 thenMT rwh reduceC 3 thenT autoT"
+P	p3902	String "dT (-1) thenMT rwh (int_sqequalC <<'m~0>>) 3 thenMT rwh reduceC 3 ta"
 O	o3903	ext_rule p3902
 P	p6061	String "splitITE 0 ttca"
 O	o6069	ext_rule p6061
@@ -7732,7 +7732,7 @@ T	t9240	o5312 b6828 b9238 b9239
 B	b9240	t9240
 T	t9241	o5312 b6827 b2125 b9240
 B	b9241	t9241
-P	p6878	String "rw (addrC [1] unfold_ind) 0 thenT autoT"
+P	p6878	String "rw (addrC [1] unfold_ind) 0 ta"
 O	o6880	ext_rule p6878
 O	o7002	lid p6806
 T	t7018	o7002
@@ -13912,7 +13912,7 @@ T	t9902	o b9901 b18
 B	b9902	t9902
 T	t9903	o1679 b9900 b9902
 B	b9903	t9903
-P	p4052	String "rw (allSubC minus_add_inverseC) 0 thenT autoT"
+P	p4052	String "rw (allSubC minus_add_inverseC) 0 ta"
 O	o4061	ext_rule p4052
 T	t9904	o1680 b10076 b18
 B	b9904	t9904
@@ -14328,7 +14328,7 @@ B	b6246	t6233
 T	t6246	o6828 b6229 b6246
 B	b6248	t6246
 T	t6248	o6828 b6218 b6248
-P	p7550	String "rwh reduce_ind_down 0 thenT autoT thenT dT 5 thenMT dT (-1) thenT dT 5 thenT autoT"
+P	p7550	String "rwh reduce_ind_down 0 ta thenT dT 5 thenMT dT (-1) thenT dT 5 thenT autoT"
 O	o7551	ext_rule p7550
 H	h6052	_1010 t6052
 S	s6063	tbrarg\\ h7158 h6003 h2499 h6855 h6052\\ t6063
@@ -14601,7 +14601,7 @@ T	t10282	o1679 b10169 b18
 B	b10283	t10282
 T	t10283	o6532 b1678 b10283 b18 b18
 B	b10284	t10283
-P	p7551	String "rwh reduce_ind_up 0 thenT autoT thenT dT 5 thenMT dT (-1) thenT dT 6 thenT autoT"
+P	p7551	String "rwh reduce_ind_up 0 ta thenT dT 5 thenMT dT (-1) thenT dT 6 thenT autoT"
 O	o7552	ext_rule p7551
 H	h6248	_1010 t6248
 S	s6248	tbrarg\\ h7158 h6003 h2499 h6857 h6248\\ t6063

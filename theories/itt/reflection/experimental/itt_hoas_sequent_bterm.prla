@@ -6047,7 +6047,7 @@ T	t2880	o b2789 b14
 B	b2880	t2880
 T	t2881	o1125 b2764 b2880
 B	b2881	t2881
-P	p1569	String "hypSubstT (-1) 6 thenT autoT"
+P	p1569	String "hypSubstT (-1) 6 ta"
 O	o1569	ext_rule p1569
 P	p2397	String "hypSubstT (-1) 6 ttca"
 O	o2397	ext_rule p2397
@@ -9743,7 +9743,7 @@ O	o4723	ext_rule p4723
 T	t6054	o1113 b13 b5979 b8951
 B	b6055	t6054
 T	t6055	o1118 b6055
-P	p4730	String "hypSubstT 10 (-3) thenT hypSubstT 10 (-2) thenT hypSubstT 10 0 thenT autoT"
+P	p4730	String "hypSubstT 10 (-3) thenT hypSubstT 10 (-2) thenT hypSubstT 10 0 ta"
 O	o4730	ext_rule p4730
 T	t4734	o1113 b13 b3766 b3766
 P	p4762	String "rwh unfold_BSequentCore_depth (-1) thenT dT (-1)"
@@ -10581,7 +10581,7 @@ T	t1227	o b1227 b14
 B	b1228	t1227
 T	t1228	o1125 b3619 b1228
 B	b1229	t1228
-P	p1725	String "hypSubstT (-2) 6 thenT autoT"
+P	p1725	String "hypSubstT (-2) 6 ta"
 O	o1725	ext_rule p1725
 S	s1725	t1112\\ h1112 h2286 h2287 h2288 h1575 h5170 h5181 h5201 h5197\\ t5174
 B	b1728	s1725
@@ -10615,7 +10615,7 @@ T	t1848	o b1848 b14
 B	b1849	t1848
 T	t1849	o1125 b1778 b1849
 B	b1850	t1849
-P	p1851	String "dT 5 thenT autoT"
+P	p1851	String "dT 5 ta"
 O	o1851	ext_rule p1851
 T	t1851	o1261 b1780 b1550
 B	b1851	t1851
@@ -10656,7 +10656,7 @@ T	t1935	o b1935 b14
 B	b1936	t1935
 T	t1936	o1125 b1851 b1936
 B	b1974	t1936
-P	p1974	String "reduceT thenT autoT"
+P	p1974	String "reduceT ta"
 O	o1974	ext_rule p1974
 T	t1974	o1113 b1114 b2551 b3598
 H	h1974	_4 t1974
@@ -10732,7 +10732,7 @@ T	t2338	o b2338 b14
 B	b2384	t2338
 T	t2384	o1266 b6295 b2335 b2384 b14
 B	b2387	t2384
-P	p2387	String "dT 0 thenT autoT"
+P	p2387	String "dT 0 ta"
 O	o2387	ext_rule p2387
 S	s2387	t1112\\ h1112 h2286 h2287 h2535 h2536 h1885 h1927 h5212 h5201 h3042 h5080 h1974 h3053 h2263 h2264\\ t7801
 B	b2397	s2387
@@ -11640,7 +11640,7 @@ T	t3250	o3241 b3249
 B	b3251	t3250
 P	p3254	Number 14547
 P	p3264	Number 14654
-P	p2816	String "dT (-1) thenT autoT"
+P	p2816	String "dT (-1) ta"
 O	o2816	ext_rule p2816
 S	s2816	t1112\\ h1112 h4489 h6323 h2286 h2287 h2288 h3652 h5867 h5877 h5878\\ t5870
 B	b2817	s2816
@@ -11690,7 +11690,7 @@ T	t2840	o b2840 b14
 B	b2841	t2840
 T	t2841	o1125 b2835 b2841
 B	b2842	t2841
-P	p2842	String "hypSubstT (-2) 7 thenT autoT"
+P	p2842	String "hypSubstT (-2) 7 ta"
 O	o2842	ext_rule p2842
 T	t2842	o1261 b2839 b1550
 B	b2856	t2842
@@ -11704,7 +11704,7 @@ T	t2859	o b2859 b14
 B	b2860	t2859
 T	t2860	o1125 b2856 b2860
 B	b2861	t2860
-P	p2861	String "dT 7 thenT autoT"
+P	p2861	String "dT 7 ta"
 O	o2861	ext_rule p2861
 T	t2861	o1261 b2858 b1550
 B	b2862	t2861
@@ -11856,7 +11856,7 @@ T	t3090	o b3090 b14
 B	b3091	t3090
 T	t3091	o4639 b6295 b3081 b3091 b14
 B	b3092	t3091
-P	p3093	String "hypSubstT (-4) 0 thenT autoT"
+P	p3093	String "hypSubstT (-4) 0 ta"
 O	o3093	ext_rule p3093
 T	t3093	o1261 b3065 b1550
 B	b3093	t3093

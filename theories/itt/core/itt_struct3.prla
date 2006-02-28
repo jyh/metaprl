@@ -928,7 +928,7 @@ T	t1252	o586 b1248 b1252
 B	b1253	t1252
 T	t1253	o586 b1245 b1253
 B	b1254	t1253
-P	p1107	String "substUsingEpimorphism 2 <<'B>> <<bind{y.'y}>> <<bind{y.'y}>> thenT autoT"
+P	p1107	String "substUsingEpimorphism 2 <<'B>> <<bind{y.'y}>> <<bind{y.'y}>> ta"
 O	o1107	ext_rule p1107
 T	t1254	o b1249 b4
 B	b1255	t1254
@@ -970,7 +970,7 @@ T	t1272	o586 b1270 b1272
 B	b1273	t1272
 T	t1273	o586 b1267 b1273
 B	b1274	t1273
-P	p1118	String "assertT <<ext_equal{'A;'B}>> thenAT autoT"
+P	p1118	String "assertT <<ext_equal{'A;'B}>> taa"
 O	o1118	ext_rule p1118
 T	t1274	o b1268 b4
 B	b1275	t1274
@@ -1054,7 +1054,7 @@ S	s1300	tbrarg\\ h1104 h1105 h1106 h1284 h1285\\ t1246
 B	b1301	s1300
 T	t1301	o621 b1301 b1276
 B	b1302	t1301
-P	p1306	String "withT <<'y>> (dT 5) thenT autoT"
+P	p1306	String "withT <<'y>> (dT 5) ta"
 O	o1306	ext_rule p1306
 T	t692	o674 b1298 b4
 B	b692	t692
@@ -1062,7 +1062,7 @@ T	t693	o619 b692 b4
 B	b693	t693
 T	t694	o1306 b618 b693 b4 b4
 B	b694	t694
-P	p1153	String "withT <<'x>> (dT 4) thenT autoT"
+P	p1153	String "withT <<'x>> (dT 4) ta"
 O	o1153	ext_rule p1153
 T	t695	o674 b1302 b4
 B	b695	t695

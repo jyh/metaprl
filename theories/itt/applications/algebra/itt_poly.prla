@@ -1068,7 +1068,7 @@ T	t4186	o989 b4186
 B	b4187	t4186
 T	t4187	o988 b4183 b4187
 B	b4188	t4187
-P	p4188	String "genAssumT [1] thenT autoT"
+P	p4188	String "genAssumT [1] ta"
 O	o4188	ext_rule p4188
 NItt_int_ext!ge	ge	ge Itt_int_ext
 O	o4191	ge
@@ -1094,7 +1094,7 @@ T	t4252	o989 b4251
 B	b4252	t4252
 T	t4253	o988 b4183 b4252
 B	b4253	t4253
-P	p4253	String "genAssumT [1] thenT byDefT unfold_nat thenT dT (-1) thenT autoT thenT dT 0"
+P	p4253	String "genAssumT [1] thenT byDefT unfold_nat thenT dT (-1) ta thenT dT 0"
 O	o4253	ext_rule p4253
 P	p1299	String intro_item
 O	o1300	type_lid p1299
@@ -1440,7 +1440,7 @@ S	s4471	t990\\ h\\ t4471
 B	b4471	s4471
 T	t4472	o989 b4471
 B	b4472	t4472
-P	p4476	String "assumT 4 thenT autoT"
+P	p4476	String "assumT 4 ta"
 O	o4476	ext_rule p4476
 T	t4483	o923 b4157 b4464 b4464
 S	s4483	t990\\ h\\ t4483
@@ -1451,7 +1451,7 @@ T	t4488	o3302 b4485 b4488
 H	h4546	x t4488
 S	s4546	t990\\ h h4546\\ t4471
 B	b4547	s4546
-P	p4502	String "genAssumT [1] thenT autoT thenT reduceT ttca"
+P	p4502	String "genAssumT [1] ta thenT reduceT ttca"
 O	o4502	ext_rule p4502
 H	h4464	_1010 t4464
 S	s4469	t990\\ h h4464\\ t4469
@@ -1485,7 +1485,7 @@ O	o4563	rule p4563
 H	h4563	p t4440
 H	h4567	u t3296
 H	h4931	x t4408
-P	p4676	String "assertT << 0 < 'u => \"not\"{\"assert\"{isZero{('v 'u); 'F}}} >> thenT autoT"
+P	p4676	String "assertT << 0 < 'u => \"not\"{\"assert\"{isZero{('v 'u); 'F}}} >> ta"
 O	o4676	ext_rule p4676
 H	h4590	_1010 t4408
 P	p4725	String "copyHypT 8 4 thenT thinT 5 thenT thinAllT 6 8 ttca"
@@ -1620,7 +1620,7 @@ T	t5429	o989 b5428
 B	b5429	t5429
 P	p5434	String "genAssumT [1] thenT byDefT unfold_add_const thenT dT 2 thenT reduceT ttca"
 O	o5434	ext_rule p5434
-P	p5513	String "dT 0 thenT autoT thenT byDefT reduceC"
+P	p5513	String "dT 0 ta thenT byDefT reduceC"
 O	o5513	ext_rule p5513
 P	p2	String "genAssumT [1] thenT rwh unfold_normalize 0 thenT Itt_nat.indEquality <<bind{b.poly{'F}}>> thenT dT 2 thenT rwh reduceC 0 ttca"
 O	o13	ext_rule p2
@@ -1638,7 +1638,7 @@ P	p6135	String "dT 0 ttca"
 O	o6135	ext_rule p6135
 P	p6166	String "byDefT reduceC"
 O	o6166	ext_rule p6166
-P	p6383	String "fnExtenT << nat{'u +@ 1} -> 'F^car >> thenT byDefsT [unfold_finite_nat;unfold_int_seg] thenT dT (-1) thenT autoT"
+P	p6383	String "fnExtenT << nat{'u +@ 1} -> 'F^car >> thenT byDefsT [unfold_finite_nat;unfold_int_seg] thenT dT (-1) ta"
 O	o6383	ext_rule p6383
 P	p5654	String "substT << ('u =@ 0) = bfalse in bool >> (-1) thenT byDefT reduceC"
 O	o5654	ext_rule p5654
@@ -1739,10 +1739,10 @@ T	t3995	o3425 b6089 b3298
 B	b3995	t3995
 P	p4012	String "withT << 'i +@ 'x1 >> (dT 2) thenMT (dT (-1)) thenMT (dT (-1)) ttca"
 O	o4012	ext_rule p4012
-P	p3476	String "ge_Transit <<'j>> thenT autoT"
+P	p3476	String "ge_Transit <<'j>> ta"
 O	o3476	ext_rule p3476
 H	h4030	_1010 t4403
-P	p3485	String "ge_Transit <<'i +@ 0>> thenT autoT"
+P	p3485	String "ge_Transit <<'i +@ 0>> ta"
 O	o3485	ext_rule p3485
 P	p5101	String "withT << 'i >> (dT 2) ttca"
 O	o5101	ext_rule p5101
@@ -1788,7 +1788,7 @@ O	o6617	ext_rule p6617
 T	t6644	o923 b3296 b4464 b4464
 S	s6644	t990\\ h\\ t6644
 B	b6644	s6644
-P	p7342	String "dT 9 ttca thenT substT << min{0; 'x} = 0 in int >> (-2) thenMT substT << max{0; 'x} = 'x in int >> (-1) thenT autoT thenT backThruAssumT 6 thenT autoT"
+P	p7342	String "dT 9 ttca thenT substT << min{0; 'x} = 0 in int >> (-2) thenMT substT << max{0; 'x} = 'x in int >> (-1) ta thenT backThruAssumT 6 thenT autoT"
 O	o7342	ext_rule p7342
 T	t9169	o923 b4404 b4761 b4761
 S	s9169	t990\\ h\\ t9169
@@ -1808,7 +1808,7 @@ S	s2752	t990\\ h\\ t2752
 B	b2752	s2752
 T	t2753	o989 b2752
 B	b2753	t2753
-P	p2757	String "genAssumT [1; 2] thenT byDefT unfold_eq_poly thenT tryT (dT 3) thenT tryT (dT 2) thenT byDefT reduceC thenT withT << bind{x.bool} >> (dT 0) thenT autoT thenT backThruAssumT 4 thenT autoT"
+P	p2757	String "genAssumT [1; 2] thenT byDefT unfold_eq_poly thenT tryT (dT 3) thenT tryT (dT 2) thenT byDefT reduceC thenT withT << bind{x.bool} >> (dT 0) ta thenT backThruAssumT 4 thenT autoT"
 O	o2757	ext_rule p2757
 P	p9260	String eval_leadingcoeff_isZero
 O	o9260	rule p9260
@@ -1827,18 +1827,18 @@ S	s1141	t990\\ h\\ t1141
 B	b1142	s1141
 T	t1142	o989 b1142
 B	b1143	t1142
-P	p1148	String "genAssumT [1] thenT dT (-1) ttca thenT moveToConclT 4 thenT moveToConclT 3 thenT dT 2 thenT autoT"
+P	p1148	String "genAssumT [1] thenT dT (-1) ttca thenT moveToConclT 4 thenT moveToConclT 3 thenT dT 2 ta"
 O	o1148	ext_rule p1148
 H	h7435	m t3296
 P	p7435	Var m
 O	o7435	var p7435
-P	p1537	String "rwh unfold_normalize 0 thenT byDefT reduceC thenT splitITE 0 thenT autoT thenT rwh fold_normalize1 0 ttca"
+P	p1537	String "rwh unfold_normalize 0 thenT byDefT reduceC thenT splitITE 0 ta thenT rwh fold_normalize1 0 ttca"
 O	o1537	ext_rule p1537
 P	p7444	Number 2
 O	o7444	number p7444
 T	t7445	o7444
 B	b7445	t7445
-P	p1077	String "dT 0 thenT autoT thenT byDefT reduceC thenT dT 2 thenT arithT ttca"
+P	p1077	String "dT 0 ta thenT byDefT reduceC thenT dT 2 thenT arithT ttca"
 O	o1077	ext_rule p1077
 P	p1417	Number -1
 O	o1417	location p1417 p1417
@@ -7559,7 +7559,7 @@ T	t6780	o989 b6779
 B	b6780	t6780
 P	p6786	String "genAssumT [1] thenT byDefT unfold_normalize thenT moveToConclT 3 thenT dT 2 thenT byDefT reduceC"
 O	o6786	ext_rule p6786
-P	p2002	String "backThruAssumT 9 thenT autoT"
+P	p2002	String "backThruAssumT 9 ta"
 O	o2002	ext_rule p2002
 T	t4207	o1502 b4203 b13
 B	b4208	t4207
@@ -7574,7 +7574,7 @@ T	t4211	o b4211 b13
 B	b4214	t4211
 T	t4214	o1008 b4208 b4214
 B	b4215	t4214
-P	p2092	String "fnExtenT << nat{'m +@ 2} -> 'F^car >> thenT autoT thenT dT (-1) ttca thenT arithT ttca"
+P	p2092	String "fnExtenT << nat{'m +@ 2} -> 'F^car >> ta thenT dT (-1) ttca thenT arithT ttca"
 O	o2092	ext_rule p2092
 T	t4215	o1502 b4210 b13
 B	b4216	t4215
@@ -7631,7 +7631,7 @@ T	t9308	o989 b9308
 B	b9309	t9308
 T	t9309	o988 b9303 b9309
 B	b9310	t9309
-P	p593	String "assertT << eval_poly{('u +@ 1, 'v); 'a; 'F} = eval_poly{((fst{('u +@ 1, 'v)} -@ 1), snd{('u +@ 1, 'v)}); 'a; 'F} in 'F^car >> thenAT autoT thenT byDefT reduceC"
+P	p593	String "assertT << eval_poly{('u +@ 1, 'v); 'a; 'F} = eval_poly{((fst{('u +@ 1, 'v)} -@ 1), snd{('u +@ 1, 'v)}); 'a; 'F} in 'F^car >> taa thenT byDefT reduceC"
 O	o594	ext_rule p593
 T	t594	o b9302 b13
 B	b594	t594
@@ -7640,13 +7640,13 @@ S	s	t990\\ h\\ t638
 B	b638	s
 P	p734	String "genAssumT [1] thenT dT 2 thenT arithT ttca"
 O	o734	ext_rule p734
-P	p7577	String "splitITE 0 thenT autoT"
+P	p7577	String "splitITE 0 ta"
 O	o7577	ext_rule p7577
-P	p1245	String "withT << 'v1 >> (dT 3) thenMT hypSubstT (-1) 0 thenT autoT thenT byDefT reduceC"
+P	p1245	String "withT << 'v1 >> (dT 3) thenMT hypSubstT (-1) 0 ta thenT byDefT reduceC"
 O	o1245	ext_rule p1245
-P	p1259	String "fnExtenT << nat{'m +@ 2} -> 'F^car >> thenMT withT << 'x >> (dT 3) thenT autoT thenT dT (-1) ttca thenT arithT ttca"
+P	p1259	String "fnExtenT << nat{'m +@ 2} -> 'F^car >> thenMT withT << 'x >> (dT 3) ta thenT dT (-1) ttca thenT arithT ttca"
 O	o1260	ext_rule p1259
-P	p7907	String "equalSymT thenT autoT"
+P	p7907	String "equalSymT ta"
 O	o7907	ext_rule p7907
 NSummary!prec	prec	prec Summary
 P	p2385	String prec_neg

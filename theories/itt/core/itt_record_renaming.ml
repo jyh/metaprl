@@ -334,7 +334,7 @@ let unfoldAdditiveT term  = rwhAll (unfoldAdditiveC term)
 
 let useAdditiveWithT term tac  = foldAdditiveT term thenT tac thenT unfoldAdditiveT term
 
-let useAdditiveWithAutoT term  = useAdditiveWithT term autoT thenT autoT
+let useAdditiveWithAutoT term  = useAdditiveWithT term autoT ta
 
 
 doc <:doc<

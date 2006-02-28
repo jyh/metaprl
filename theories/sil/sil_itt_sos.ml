@@ -169,7 +169,7 @@ let rwevalT = argfunT (fun i p ->
    let concl = TermMan.concl assum in
    let a, b = two_subterms concl in
    let t = mk_xrewrite_term a b in
-      rewriteT t thenAT (rw fold_evalsto 0 thenT autoT))
+      rewriteT t thenAT (rw fold_evalsto 0 ta))
 
 (*
  * Value.
@@ -185,7 +185,7 @@ let rwvalueT s2 i = funT (fun p ->
    let a = mk_eval_term e2 s2 in
    let b = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in
    let t = mk_xrewrite_term a b in
-      rewriteT t thenAT value_thm thenT autoT)
+      rewriteT t thenAT value_thm ta)
 
 let rwvalueRevT s2 i = funT (fun p ->
    let assum = Sequent.nth_assum p i in
@@ -194,7 +194,7 @@ let rwvalueRevT s2 i = funT (fun p ->
    let b = mk_eval_term e2 s2 in
    let a = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in
    let t = mk_xrewrite_term a b in
-      rewriteT t thenAT (rewriteSymT thenT value_thm thenT autoT))
+      rewriteT t thenAT (rewriteSymT thenT value_thm ta))
 
 (*
  * Need eta-contraction.

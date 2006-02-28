@@ -5138,7 +5138,7 @@ P	p3539	String "subtypeT <<singleton{'x; 'B}>> ttca"
 O	o3539	ext_rule p3539
 P	p3572	String use_superset2
 O	o3572	rule p3572
-P	p3575	String "equalSymT thenT use_superset1 <<'B>> thenT autoT"
+P	p3575	String "equalSymT thenT use_superset1 <<'B>> ta"
 O	o3575	ext_rule p3575
 P	p3672	String use_superset
 O	o3672	rule p3672
@@ -5209,11 +5209,11 @@ T	t3808	o b5 b3807
 B	b3808	t3808
 P	p3837	String subsetTypeRight
 O	o3837	rule p3837
-P	p3840	String "subtypeTypeRight <<'B>> thenT subset_is_subtype thenT autoT"
+P	p3840	String "subtypeTypeRight <<'B>> thenT subset_is_subtype ta"
 O	o3840	ext_rule p3840
 P	p3849	String subsetTypeLeft
 O	o3849	rule p3849
-P	p3851	String "subtypeTypeLeft <<'A>> thenT subset_is_subtype thenT autoT"
+P	p3851	String "subtypeTypeLeft <<'A>> thenT subset_is_subtype ta"
 O	o3851	ext_rule p3851
 P	p3860	String Membership
 O	o3860	comment_string p3860
@@ -6166,9 +6166,9 @@ P	p4041	String member_intro
 O	o4041	rule p4041
 P	p4046	String "rwh member 0 thenT dT 0"
 O	o4046	ext_rule p4046
-P	p4072	String "rwh unfold_subset 2 thenT dT 2 thenT backThruHypT 3 thenT autoT"
+P	p4072	String "rwh unfold_subset 2 thenT dT 2 thenT backThruHypT 3 ta"
 O	o4072	ext_rule p4072
-P	p4086	String "use_subset <<'A>> thenT autoT"
+P	p4086	String "use_subset <<'A>> ta"
 O	o4086	ext_rule p4086
 P	p4154	String member_elim
 O	o4154	rule p4154
@@ -6984,7 +6984,7 @@ S	s4776	tbrarg\\ h2998 h4757 h4245 h4758 h4747\\ t4665
 B	b4777	s4776
 T	t4777	o1513 b4777 b4754
 B	b4778	t4777
-P	p4187	String "subtypeT <<singleton{'a; 'B}>> thenT autoT"
+P	p4187	String "subtypeT <<singleton{'a; 'B}>> ta"
 O	o4187	ext_rule p4187
 T	t5573	o3486 b4778 b21
 B	b5574	t5573

@@ -1118,7 +1118,7 @@ T	t1667	o1410 b1666 b1615dep
 H	h1667	f_1 t1667
 P	p1667	Var f_1
 O	o1667	var p1667
-P	p1685	String "rw reduceC 0 thenT autoT"
+P	p1685	String "rw reduceC 0 ta"
 O	o1685	ext_rule p1685
 NSummary!resource_defs	resource_defs	resource_defs Summary
 T	t1709	o b188 b8
@@ -1216,7 +1216,7 @@ T	t1919	o1410 b1637 b1666dep
 B	b1919	t1919
 T	t1920	o1413 b1912 b1416
 B	b1920	t1920
-P	p1954	String "rwh unfold_rel 0 thenT rw reduceC 0 thenT autoT"
+P	p1954	String "rwh unfold_rel 0 thenT rw reduceC 0 ta"
 O	o1954	ext_rule p1954
 NItt_logic!and	and	and Itt_logic
 O	o1955	and
@@ -1258,7 +1258,7 @@ B	b2054	t2054
 T	t2055	o2009 b2054
 B	b2055	t2055
 T	t2056	o2007 b1666 b2055 b2055
-P	p2061	String "withT << 'x_1 >> (dT 8) thenT autoT"
+P	p2061	String "withT << 'x_1 >> (dT 8) ta"
 O	o2061	ext_rule p2061
 H	h2061	u t1666
 P	p2332	Number 4672
@@ -4407,7 +4407,7 @@ B	b2095	t2094
 T	t2095	o2007 b1666 b2095 b2095
 B	b2096	t2095
 T	t2096	o1785 b2096
-P	p2104	String "dT 13 thenT rw reduceC 0 thenT autoT"
+P	p2104	String "dT 13 thenT rw reduceC 0 ta"
 O	o2104	ext_rule p2104
 H	h2113	z_2 t1637
 T	t2114	o1413 b1415 b1956
@@ -4484,7 +4484,7 @@ B	b3655	t3655
 T	t3656	o1441 b3642 b3655
 B	b3656	t3656
 B	b3406	P x
-P	p2275	String "withT << 'y_1 >> (dT 8) thenT autoT"
+P	p2275	String "withT << 'y_1 >> (dT 8) ta"
 O	o2275	ext_rule p2275
 H	h2275	u_1 t1666
 P	p2276	Var u_1
@@ -4496,17 +4496,17 @@ O	o2301	ext_rule p2301
 T	t2306	o2007 b1666 b2209 b2209
 B	b2307	t2306
 T	t2307	o1785 b2307
-P	p2315	String "dT 17 thenT rw reduceC 0 thenT autoT"
+P	p2315	String "dT 17 thenT rw reduceC 0 ta"
 O	o2315	ext_rule p2315
 H	h2338	y t1637
 T	t2377	o2007 b1666 b2145 b2145
 P	p2428	String "revHypSubstT 13 0"
 O	o2428	ext_rule p2428
-P	p2440	String "dT 14 thenT rw reduceC 0 thenT autoT"
+P	p2440	String "dT 14 thenT rw reduceC 0 ta"
 O	o2440	ext_rule p2440
 P	p2476	String "instHypT [<< 'a >>; << 'b >>] 2"
 O	o2476	ext_rule p2476
-P	p2507	String "rwh fold_isset 0 thenT autoT"
+P	p2507	String "rwh fold_isset 0 ta"
 O	o2507	ext_rule p2507
 P	p2511	String "thinT 2 thenT dT 2"
 O	o2511	ext_rule p2511
@@ -4514,7 +4514,7 @@ P	p2535	String "dT 2 twa"
 O	o2535	ext_rule p2535
 P	p2545	String "rwh unfold_rel 0"
 O	o2545	ext_rule p2545
-P	p2556	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p2556	String "rwh unfold_fun_prop 0 ta"
 O	o2556	ext_rule p2556
 H	h2556	x_1 t1615
 NCzf_itt_eq!equal	equal2556	equal Czf_itt_eq
@@ -5145,7 +5145,7 @@ T	t3917	o b3917 b8
 B	b3918	t3917
 T	t3918	o1441 b3914 b3918
 B	b3919	t3918
-P	p1034	String "withT << 'z_2 >> (dT 8) thenT autoT"
+P	p1034	String "withT << 'z_2 >> (dT 8) ta"
 O	o1034	ext_rule p1034
 H	h3646	_1010 t1637
 S	s3919	tbrarg\\ h2513 h1636 h1638 h3024 h1665 h1667 h3611 h3668 h2113 h3646\\ t2377
@@ -5578,7 +5578,7 @@ O	o2652	var p2652
 T	t2652	o2652
 B	b2652	t2652
 T	t2653	o1799 b2652 b1415
-P	p2659	String "withT << 'z_1 >> (dT 0) thenT autoT"
+P	p2659	String "withT << 'z_1 >> (dT 0) ta"
 O	o2659	ext_rule p2659
 H	h3957	_1010 t2653
 VP	P4927	P\\ H\\ t2560 t2652
@@ -5604,7 +5604,7 @@ T	t4103	o1441 b4099 b4103
 B	b4104	t4103
 S	s4930	tbrarg\\ h2513 h4763 h1627 h2556 h3901 h4852 h4853 h2560 h4854 h4901 h2651 h3957 h4927\\ t2660
 B	b4931	s4930
-P	p2674	String "setSubstT << equal{'x; 'x_1} >> 12 thenT autoT"
+P	p2674	String "setSubstT << equal{'x; 'x_1} >> 12 ta"
 O	o2674	ext_rule p2674
 T	t4104	o1443 b4931 b3194
 B	b4105	t4104
@@ -5663,7 +5663,7 @@ T	t4128	o1441 b4120 b4128
 B	b4129	t4128
 S	s4972	tbrarg\\ h2513 h4763 h1627 h2556 h3901 h4852 h4853 h2560 h3983\\ t2684
 B	b4973	s4972
-P	p2698	String "setSubstT << equal{'x; 'x_1} >> 0 thenT autoT"
+P	p2698	String "setSubstT << equal{'x; 'x_1} >> 0 ta"
 O	o2698	ext_rule p2698
 T	t4129	o1443 b4973 b3194
 B	b4130	t4129

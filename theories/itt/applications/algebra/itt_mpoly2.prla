@@ -3964,7 +3964,7 @@ T	t2165	o b2165 b4
 B	b2166	t2165
 T	t2166	o1043 b2162 b2166
 B	b2167	t2166
-P	p2167	String "rwh unfold_mul_mpoly 0 thenT rwh unfold_mul_monom_mpoly 0 thenT rw reduceC 0 thenT autoT"
+P	p2167	String "rwh unfold_mul_mpoly 0 thenT rwh unfold_mul_monom_mpoly 0 thenT rw reduceC 0 ta"
 O	o2167	ext_rule p2167
 P	p2168	Var h1
 O	o2168	var p2168

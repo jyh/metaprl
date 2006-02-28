@@ -3352,7 +3352,7 @@ T	t4942	o b4941 b8
 B	b4942	t4942
 T	t4943	o b4928 b4942
 B	b4943	t4943
-P	p4954	String "rw reduceC 0 thenT autoT"
+P	p4954	String "rw reduceC 0 ta"
 O	o4954	ext_rule p4954
 T	t4963	oge b1997 b2932
 H	h4963	x t4963

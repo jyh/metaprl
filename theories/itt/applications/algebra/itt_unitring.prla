@@ -4105,7 +4105,7 @@ T	t1609	o1205 b1609
 B	b1610	t1609
 T	t1610	o1226 b1610 b1524
 B	b1611	t1610
-P	p1545	String "dT 2 thenT dT 3 thenT autoT"
+P	p1545	String "dT 2 thenT dT 3 ta"
 O	o1545	ext_rule p1545
 T	t1611	o b1609 b14
 B	b1612	t1611
@@ -4742,7 +4742,7 @@ S	s1839	t1206\\ h\\ t1839
 B	b1839	s1839
 T	t1840	o1205 b1839
 B	b1840	t1840
-P	p1840	String "autoT thenT repeatForT 3 (tryT (dT 0)) thenT dT 2 thenT dT 2 thenT autoT thenT reduceT ttca"
+P	p1840	String "autoT thenT repeatForT 3 (tryT (dT 0)) thenT dT 2 thenT dT 2 ta thenT reduceT ttca"
 O	o1840	ext_rule p1840
 T	t1841	o1213 b1839 b14
 B	b1841	t1841
@@ -6248,7 +6248,7 @@ T	t2364	o1226 b2346 b2363
 B	b2364	t2364
 T	t2365	o1226 b2978 b2364
 B	b2365	t2365
-P	p568	String "genAssumT [1; 2] thenT autoT thenT repeatForT 3 (tryT (dT 0)) thenT autoT thenT byDefT reduceC thenT tryT (unsquashT 0)"
+P	p568	String "genAssumT [1; 2] ta thenT repeatForT 3 (tryT (dT 0)) thenT autoT thenT byDefT reduceC thenT tryT (unsquashT 0)"
 O	o568	ext_rule p568
 T	t2366	o b2344 b14
 B	b2366	t2366
@@ -6417,7 +6417,7 @@ T	t2483	o b2483 b14
 B	b2484	t2483
 T	t2484	o1211 b2476 b2484
 B	b2485	t2484
-P	p4260	String "fnExtenT << 'v^car -> 'v^car >> thenT autoT thenWT (dT 2 thenT dT 2 ttca)"
+P	p4260	String "fnExtenT << 'v^car -> 'v^car >> ta thenWT (dT 2 thenT dT 2 ttca)"
 O	o4260	ext_rule p4260
 H	h2485	u t2374
 T	t2485	o956 b2378 b2239
@@ -6720,7 +6720,7 @@ T	t2736	o b2735 b14
 B	b2736	t2736
 T	t2737	o4403 b1281 b2732 b2736 b14
 B	b2737	t2737
-P	p4450	String "withT << 'x >> (dT 3) ttca thenT revHypSubstT (-1) 0 thenT autoT thenWT (dT (-2) thenT reduceT ttca)"
+P	p4450	String "withT << 'x >> (dT 3) ttca thenT revHypSubstT (-1) 0 ta thenWT (dT (-2) thenT reduceT ttca)"
 O	o4450	ext_rule p4450
 T	t2738	o1841 b2409 b14
 B	b2738	t2738
@@ -7018,7 +7018,7 @@ T	t2848	o1211 b2847 b14
 B	b2848	t2848
 T	t2849	o4648 b1281 b2848 b14 b14
 B	b2849	t2849
-P	p4679	String "withT << 'x >> (dT 3) ttca thenT revHypSubstT (-1) 0 thenT autoT thenWT dT (-2) thenWT reduceT ttca"
+P	p4679	String "withT << 'x >> (dT 3) ttca thenT revHypSubstT (-1) 0 ta thenWT dT (-2) thenWT reduceT ttca"
 O	o4679	ext_rule p4679
 T	t2850	o1841 b2455 b14
 B	b2850	t2850

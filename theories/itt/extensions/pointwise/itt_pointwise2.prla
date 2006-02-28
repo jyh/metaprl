@@ -170,7 +170,7 @@ O	o511	equal
 NSummary!interactive	interactive	interactive Summary
 O	o524	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p3	String "quotientT 2 thenT autoT"
+P	p3	String "quotientT 2 ta"
 O	o6	ext_rule p3
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o526	status_incomplete
@@ -184,7 +184,7 @@ NSummary!msequent	msequent	msequent Summary
 O	o529	msequent
 P	p541	String equality
 O	o541	tactic_arg p541
-P	p550	String "equalSymT thenT autoT"
+P	p550	String "equalSymT ta"
 O	o550	ext_rule p550
 NSummary!resource_defs	resource_defs	resource_defs Summary
 NOcaml!uid	uid	uid Ocaml
@@ -366,7 +366,7 @@ O	o640	rule p640
 NItt_bunion	Itt_bunion	Itt_bunion NIL
 NItt_bunion!bunion	bunion	bunion Itt_bunion
 O	o646	bunion
-P	p960	String "doNotThinT(dT 2) thenT moveHypT 3 5 thenT contextSubstPointwise 2 3 2 <<'y>> thenET equalSymT thenT autoT"
+P	p960	String "doNotThinT(dT 2) thenT moveHypT 3 5 thenT contextSubstPointwise 2 3 2 <<'y>> thenET equalSymT ta"
 O	o960	ext_rule p960
 O	o532	resource p147
 P	p534	String simp_typeinf_resource_info

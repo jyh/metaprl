@@ -970,7 +970,7 @@ O	o1596	type
 NSummary!interactive	interactive	interactive Summary
 O	o1601	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1601	String "rwh unfold_group_bvd 0 thenT autoT thenT rwh fold_isset 0 ttca"
+P	p1601	String "rwh unfold_group_bvd 0 ta thenT rwh fold_isset 0 ttca"
 O	o1602	ext_rule p1601
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1603	status_incomplete
@@ -1027,7 +1027,7 @@ P	p1733	String group_bvd_intro
 O	o1733	rule p1733
 H	h1738	a t1472
 H	h1739	b t1472
-P	p1751	String "rwh unfold_group_bvd 0 thenT autoT thenT rwh unfold_isset 0 thenT autoT thenT rwh fold_isset 0 ttca"
+P	p1751	String "rwh unfold_group_bvd 0 ta thenT rwh unfold_isset 0 thenT autoT thenT rwh fold_isset 0 ttca"
 O	o1751	ext_rule p1751
 P	p2034	String Properties
 O	o2034	comment_string p2034
@@ -1071,7 +1071,7 @@ NSummary!term_param	term_param	term_param Summary
 O	o2113	term_param
 NCzf_itt_group!id	id2115	id Czf_itt_group
 O	o2115	id2115
-P	p2123	String "assumT 4 thenT rwh unfold_group_bvd 2 thenT autoT"
+P	p2123	String "assumT 4 thenT rwh unfold_group_bvd 2 ta"
 O	o2123	ext_rule p2123
 P	p2163	String "instHypT [<< id{'h} >>; << id{'h} >>] 7 ttca thenT rwh fold_isset 0 ttca thenT dT 8 ttca thenT dT 8 ttca"
 O	o2163	ext_rule p2163
@@ -1085,7 +1085,7 @@ P	p2227	String "eqSetSymT ttca"
 O	o2227	ext_rule p2227
 P	p2229	String "dT 10 ttca"
 O	o2229	ext_rule p2229
-P	p2235	String "setSubstT << equal{'s; car{'h}} >> 5 thenT autoT"
+P	p2235	String "setSubstT << equal{'s; car{'h}} >> 5 ta"
 O	o2235	ext_rule p2235
 P	p2236	String eq
 O	o2236	tactic_arg p2236
@@ -1097,7 +1097,7 @@ P	p2278	String group_bvd_inv
 O	o2278	rule p2278
 NCzf_itt_group!inv	inv	inv Czf_itt_group
 O	o2282	inv
-P	p2292	String "assumT 5 thenT rwh unfold_group_bvd 2 thenT autoT thenT setSubstT << equal{'s; car{'h}} >> 5 thenT autoT"
+P	p2292	String "assumT 5 thenT rwh unfold_group_bvd 2 ta thenT setSubstT << equal{'s; car{'h}} >> 5 thenT autoT"
 O	o2292	ext_rule p2292
 P	p2363	String "rwh unfold_equal 6 thenT eqSetSymT ttca"
 O	o2363	ext_rule p2363
@@ -1107,7 +1107,7 @@ P	p2367	String "withT << inv{'h; 'a} >> (dT 8) ttca"
 O	o2367	ext_rule p2367
 P	p2369	String "instHypT [<< 'a >>; << inv{'h; 'a} >>] 7 ttca thenT rwh fold_isset 0 ttca thenT dT 9 ttca thenT dT 9 ttca"
 O	o2369	ext_rule p2369
-P	p2412	String "setSubstT << equal{op{'h; 'a; inv{'h; 'a}}; id{'h}} >> 9 ttca thenT setSubstT << equal{op{'g; 'a; inv{'h; 'a}}; id{'h}} >> 0 thenT autoT"
+P	p2412	String "setSubstT << equal{op{'h; 'a; inv{'h; 'a}}; id{'h}} >> 9 ttca thenT setSubstT << equal{op{'g; 'a; inv{'h; 'a}}; id{'h}} >> 0 ta"
 O	o2412	ext_rule p2412
 P	p2432	String "withT << 's >> (dT 0) ttca"
 O	o2432	ext_rule p2432

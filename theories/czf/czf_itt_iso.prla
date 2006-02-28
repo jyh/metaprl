@@ -1011,7 +1011,7 @@ O	o1523	fun_prop
 P	p1523	Var y
 O	o1524	var p1523
 T	t1524	o1524
-P	p1534	String "assertT << all x: set. all y: set. isset{'f['x; 'y]} >> thenT autoT"
+P	p1534	String "assertT << all x: set. all y: set. isset{'f['x; 'y]} >> ta"
 O	o1534	ext_rule p1534
 H	h1542	y t1260
 P	p1551	String assertion
@@ -1020,7 +1020,7 @@ P	p1566	String "funSetT 2 ttca"
 O	o1566	ext_rule p1566
 P	p1568	String "assertT << fun_prop{z. hom{'g1; 'g2; y. 'f['z; 'y]}} >> ttca"
 O	o1568	ext_rule p1568
-P	p1575	String "rwh unfold_fun_prop 0 thenT autoT thenT rwh unfold_iso 0 thenT dT 0 ttca"
+P	p1575	String "rwh unfold_fun_prop 0 ta thenT rwh unfold_iso 0 thenT dT 0 ttca"
 O	o1575	ext_rule p1575
 H	h1575	s1 t1260
 H	h1576	s2 t1260
@@ -1039,7 +1039,7 @@ P	p1638	String "rwh unfold_iso 7 thenT dT 7 ttca"
 O	o1638	ext_rule p1638
 P	p1664	String "rwh unfold_fun_prop 3 thenT instHypT [<< 's1 >>; << 's2 >>] 3 ttca thenT dT 9 ttca thenT dT 9 ttca"
 O	o1664	ext_rule p1664
-P	p1668	String "rwh unfold_iso 7 thenT autoT"
+P	p1668	String "rwh unfold_iso 7 ta"
 O	o1668	ext_rule p1668
 H	h1670	c t1260
 H	h1671	d t1260
@@ -1054,7 +1054,7 @@ P	p1783	String "setSubstT << equal{'s1; 's2} >> 0 ttca"
 O	o1783	ext_rule p1783
 P	p1785	String "setSubstT << equal{'f['s1; 'd]; 'f['s2; 'd]} >> 0 ttca"
 O	o1785	ext_rule p1785
-P	p1800	String "withT << 'e >> (dT 9) ttca thenT dT 11 thenT autoT"
+P	p1800	String "withT << 'e >> (dT 9) ttca thenT dT 11 ta"
 O	o1800	ext_rule p1800
 NSummary!id	id	id Summary
 P	p9	Number -488876430
@@ -3638,7 +3638,7 @@ T	t2938	o b2938 b8
 B	b2939	t2938
 T	t2939	o1450 b2892 b2939
 B	b2940	t2939
-P	p2940	String "withT << 'p >> (dT 0) thenT autoT"
+P	p2940	String "withT << 'p >> (dT 0) ta"
 O	o2940	ext_rule p2940
 S	s2940	tbrarg\\ h2739 h2817 h2826 h1575 h1576 h2831 h2860 h2883 h1709 h2889 h2934 h2935 h2936\\ t2849
 B	b2941	s2940

@@ -269,7 +269,7 @@ O	o852	var p851
 P	p857	String with
 P	p869	Var x_1
 O	o869	var p869
-P	p881	String "rw reduceC 0 thenT autoT"
+P	p881	String "rw reduceC 0 ta"
 O	o881	ext_rule p881
 P	p889	Var y_1
 O	o889	var p889
@@ -286,7 +286,7 @@ O	o934	implies
 P	p1063	String logicAutoT
 O	o1063	ext_rule p1063
 H	h1063	x_1 t681
-P	p1074	String "univTypeT << univ[1:l] >> thenT autoT"
+P	p1074	String "univTypeT << univ[1:l] >> ta"
 O	o1074	ext_rule p1074
 P	p1123	String "assumT 2"
 O	o1123	ext_rule p1123
@@ -319,7 +319,7 @@ B	b1337	t1329 s2
 T	t1337	o684 b681 b1337
 B	b1338	t1337 s1
 T	t1338	o684 b681 b1338
-P	p1348	String "dT 0 thenWT autoT"
+P	p1348	String "dT 0 twa"
 O	o1348	ext_rule p1348
 T	t1348	o560 b1150
 B	b1349	t1348 s2
@@ -368,7 +368,7 @@ T	t1406	o1405
 B	b1406	t1406
 T	t1407	o570 b1383 b1406
 B	b1407	t1407
-P	p1470	String "logicAutoT thenT rwh fold_isset 0 thenT autoT"
+P	p1470	String "logicAutoT thenT rwh fold_isset 0 ta"
 O	o1470	ext_rule p1470
 P	p1480	String member_restricted
 O	o1480	rule p1480
@@ -386,7 +386,7 @@ P	p1654	String z
 H	h1658	z t681
 P	p1664	String "assertT << all s: set. isset{sep{'s; x. 'P['x]}} >>"
 O	o1664	ext_rule p1664
-P	p1686	String "dT (-1) thenT rw reduceC 0 thenT autoT"
+P	p1686	String "dT (-1) thenT rw reduceC 0 ta"
 O	o1686	ext_rule p1686
 P	p1689	Var u
 O	o1689	var p1689
@@ -394,7 +394,7 @@ T	t1689	o1689
 B	b1689	t1689
 T	t1690	o570 b571 b1689
 B	b1690	t1690
-P	p1749	String "rw fold_isset 0 thenT autoT"
+P	p1749	String "rw fold_isset 0 ta"
 O	o1749	ext_rule p1749
 P	p1761	String sep_intro2
 O	o1761	rule p1761
@@ -413,7 +413,7 @@ T	t2041	o570 b571 b2040
 B	b2041	t2041
 P	p2195	String sep_elim
 O	o2195	rule p2195
-P	p2508	String "rwh fold_isset 0 thenT autoT"
+P	p2508	String "rwh fold_isset 0 ta"
 O	o2508	ext_rule p2508
 P	p2550	String sep_fun
 O	o2550	rule p2550
@@ -1557,7 +1557,7 @@ B	b5790	t5790 y2
 T	t5791	o670 b1381 b5790
 B	b5791	t5791 y1
 B	b5793	t5790 y1
-P	p5801	String "rwh unfold_restricted 0 thenT autoT"
+P	p5801	String "rwh unfold_restricted 0 ta"
 O	o5801	ext_rule p5801
 NCzf_itt_member!mem	mem	mem Czf_itt_member
 O	o5825	mem
@@ -1575,7 +1575,7 @@ T	t5846	o b164 b5845
 B	b5846	t5846
 T	t5847	o b5843 b5846
 B	b5847	t5847
-P	p5958	String "rwh fold_restricted 0 thenT autoT"
+P	p5958	String "rwh fold_restricted 0 ta"
 O	o5958	ext_rule p5958
 T	t5989	o402 b3253 b436 b176
 B	b5989	t5989
@@ -1583,7 +1583,7 @@ P	p6051	String "assertT << all s: set. all x: set. (mem{'x; 's} => ('P['x] => me
 O	o6051	ext_rule p6051
 T	t6055	o5825 b553 b551
 B	b6055	t6055
-P	p6079	String "dT 2 thenT rw reduceC 0 thenT autoT"
+P	p6079	String "dT 2 thenT rw reduceC 0 ta"
 O	o6079	ext_rule p6079
 NCzf_itt_eq!equal	equal6157	equal Czf_itt_eq
 O	o6157	equal6157
@@ -1591,7 +1591,7 @@ T	t6157	o6157 b1131 b1132
 B	b6158	t6157
 P	p6248	String "univTypeT << univ[1:l] >> thenT rwh fold_restricted 0 thenT logicAutoT"
 O	o6248	ext_rule p6248
-P	p6254	String "dT 12 thenT rw reduceC 0 thenT autoT"
+P	p6254	String "dT 12 thenT rw reduceC 0 ta"
 O	o6254	ext_rule p6254
 P	p6276	String "assumT 3 thenT rwh unfold_member (-1) thenT logicAutoT"
 O	o6276	ext_rule p6276
@@ -1637,9 +1637,9 @@ P	p6600	String "rw reduceC 11"
 O	o6600	ext_rule p6600
 P	p6646	String "dT 13 thenMT autoT"
 O	o6646	ext_rule p6646
-P	p6662	String "eqSetSymT thenT autoT"
+P	p6662	String "eqSetSymT ta"
 O	o6662	ext_rule p6662
-P	p6685	String "instHypT [<< 's >>; << 'x >>] 4 thenWT autoT"
+P	p6685	String "instHypT [<< 's >>; << 'x >>] 4 twa"
 O	o6685	ext_rule p6685
 P	p6712	String "thinT 4"
 O	o6712	ext_rule p6712
@@ -1707,23 +1707,23 @@ T	t6775	o b203 b6774
 B	b6775	t6775
 T	t6776	o b203 b6775
 B	b6776	t6776
-P	p6805	String "funSetT 2 thenT autoT"
+P	p6805	String "funSetT 2 ta"
 O	o6805	ext_rule p6805
-P	p6809	String "rwh unfold_fun_set 0 thenT autoT"
+P	p6809	String "rwh unfold_fun_set 0 ta"
 O	o6809	ext_rule p6809
 P	p6839	String "rwh unfold_equal 5"
 O	o6839	ext_rule p6839
-P	p6846	String "setExtT thenT autoT"
+P	p6846	String "setExtT ta"
 O	o6846	ext_rule p6846
-P	p6913	String "dT 9 thenWT autoT"
+P	p6913	String "dT 9 twa"
 O	o6913	ext_rule p6913
-P	p6919	String "setSubstT << equal{'x_1; 'x} >> 0 thenT autoT"
+P	p6919	String "setSubstT << equal{'x_1; 'x} >> 0 ta"
 O	o6919	ext_rule p6919
 P	p6920	String eq
 O	o6920	tactic_arg p6920
-P	p6959	String "setSubstT << equal{'x; 'x_1} >> 0 thenT autoT"
+P	p6959	String "setSubstT << equal{'x; 'x_1} >> 0 ta"
 O	o6959	ext_rule p6959
-P	p1270	String "rwh unfold_restricted 0 thenT autoT thenT rwh fold_restricted 0 thenT autoT"
+P	p1270	String "rwh unfold_restricted 0 ta thenT rwh fold_restricted 0 thenT autoT"
 O	o1270	ext_rule p1270
 T	t1975	o b1973 b4
 B	b1976	t1975
@@ -6439,7 +6439,7 @@ T	t4869	o b4869 b4
 B	b4870	t4869
 T	t4870	o597 b4868 b4870
 B	b4871	t4870
-P	p4045	String "instHypT [<< 'f 'u >>; << 'x1 >>] 12 thenWT autoT"
+P	p4045	String "instHypT [<< 'f 'u >>; << 'x1 >>] 12 twa"
 O	o4045	ext_rule p4045
 T	t4871	o2629 b4041 b4
 B	b4872	t4871

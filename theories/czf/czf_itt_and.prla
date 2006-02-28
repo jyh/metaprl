@@ -237,13 +237,13 @@ T	t184	o797 b183 b633
 H	h184	x_2 t184
 P	p189	String "dT 0"
 O	o189	ext_rule p189
-P	p199	String "setSubstT << equal{'x_1; 'x} >> 0 thenT autoT"
+P	p199	String "setSubstT << equal{'x_1; 'x} >> 0 ta"
 O	o199	ext_rule p199
 H	h199	y_1 t181
 H	h200	z_1 t182
 H	h201	z t617
 T	t201	o596 b616 b568
-P	p368	String "eqSetSymT thenT autoT"
+P	p368	String "eqSetSymT ta"
 O	o368	ext_rule p368
 P	p454	String squash_restrictedT
 O	o454	ext_rule p454
@@ -253,7 +253,7 @@ P	p713	String "rwh unfold_restricted 2 thenT rwh unfold_restricted 3 thenT rwh u
 O	o714	ext_rule p713
 NItt_equal!equal	equal714	equal Itt_equal
 O	o715	equal714
-P	p803	String "rwh unfold_and 0 thenT autoT"
+P	p803	String "rwh unfold_and 0 ta"
 O	o803	ext_rule p803
 P	p812	String and_res1
 O	o812	rule p812

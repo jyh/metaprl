@@ -3370,7 +3370,7 @@ T	t2848	o1434 b2848
 B	b2849	t2848
 T	t2849	o1458 b2847 b2849
 B	b2850	t2849
-P	p1337	String "copyHypT 2 (-2) thenT rwh unfold_isGroup (-2) thenT autoT"
+P	p1337	String "copyHypT 2 (-2) thenT rwh unfold_isGroup (-2) ta"
 O	o1337	ext_rule p1337
 T	t558	o b2846 b8
 B	b558	t558
@@ -3510,7 +3510,7 @@ T	t3055	o1434 b3053
 B	b3055	t3055
 T	t3056	o1458 b3041 b3055
 B	b3056	t3056
-P	p8186	String "assertAtT 3 << isGroup{'G} >> thenMT dT 3 thenT dT 2 thenT autoT thenT repeatForT 2 (tryT (dT 0)) thenWT dT 2 ttca"
+P	p8186	String "assertAtT 3 << isGroup{'G} >> thenMT dT 3 thenT dT 2 ta thenT repeatForT 2 (tryT (dT 0)) thenWT dT 2 ttca"
 O	o8186	ext_rule p8186
 T	t614	o b3039 b8
 B	b614	t614
@@ -3550,7 +3550,7 @@ T	t8826	o6290 b2864
 B	b8826	t8826
 T	t1889	o1458 b8826 b1894
 B	b1890	t1889
-P	p1603	String "genAssumT [1] thenT autoT thenT dT 2 thenT dT 2 ttca"
+P	p1603	String "genAssumT [1] ta thenT dT 2 thenT dT 2 ttca"
 O	o1603	ext_rule p1603
 T	t3096	o b2863 b8
 B	b3097	t3096
@@ -3866,7 +3866,7 @@ T	t3863	o1458 b9402 b4522
 B	b3864	t3863
 T	t3864	o1458 b8826 b3864
 B	b3865	t3864
-P	p1489	String "genAssumT [1; 2] thenT autoT"
+P	p1489	String "genAssumT [1; 2] ta"
 O	o1496	ext_rule p1489
 T	t4527	o1256 b4521 b3792
 B	b4527	t4527
@@ -4280,7 +4280,7 @@ T	t902	o b900 b8
 B	b902	t902
 T	t904	o1254 b897 b902
 B	b905	t904
-P	p5797	String "substT << 'u = 'G^\"1\" *['G] 'u in 'G^car >> 0 thenET equalSymT thenT autoT"
+P	p5797	String "substT << 'u = 'G^\"1\" *['G] 'u in 'G^car >> 0 thenET equalSymT ta"
 O	o5797	ext_rule p5797
 H	h5886	_1010 t5843
 S	s5886	tbrarg\\ h1636 h5792 h5793 h5886\\ C5843
@@ -4402,7 +4402,7 @@ T	t995	o b975 b995
 B	b1000	t995
 T	t1000	o1254 b974 b1000
 B	b1001	t1000
-P	p6238	String "substT << ('a *['G] ('G^inv 'a)) *['G] ('a *['G] ('G^inv 'a)) = 'a *['G] (('G^inv 'a) *['G] ('a *['G] ('G^inv 'a))) in 'G^car >> 0 thenT autoT"
+P	p6238	String "substT << ('a *['G] ('G^inv 'a)) *['G] ('a *['G] ('G^inv 'a)) = 'a *['G] (('G^inv 'a) *['G] ('a *['G] ('G^inv 'a))) in 'G^car >> 0 ta"
 O	o6238	ext_rule p6238
 T	t1001	o10 b6457 b8
 B	b1002	t1001
@@ -4442,7 +4442,7 @@ T	t1010	o b1010 b8
 B	b1011	t1010
 T	t1011	o1254 b1009 b1011
 B	b1016	t1011
-P	p6337	String "substT << ('G^inv 'a) *['G] 'a = 'G^\"1\" in 'G^car >> 0 thenT autoT"
+P	p6337	String "substT << ('G^inv 'a) *['G] 'a = 'G^\"1\" in 'G^car >> 0 ta"
 O	o6337	ext_rule p6337
 T	t1016	o10 b7051 b8
 B	b1017	t1016
@@ -4496,7 +4496,7 @@ T	t5000	o1458 b9402 b7268
 B	b5000	t5000
 T	t5001	o1458 b8826 b5000
 B	b5001	t5001
-P	p7	String "substT << 'G^\"1\" = ('G^inv 'a) *['G] 'a in 'G^car >> 0 thenT autoT"
+P	p7	String "substT << 'G^\"1\" = ('G^inv 'a) *['G] 'a in 'G^car >> 0 ta"
 O	o19	ext_rule p7
 T	t7322	o1256 b7264 b3792
 B	b7326	t7322
@@ -4515,7 +4515,7 @@ T	t1072	o b1072 b8
 B	b1073	t1072
 T	t1073	o1254 b1071 b1073
 B	b1078	t1073
-P	p4458	String "equalTransT << ('a *['G] ('G^inv 'a)) *['G] 'a >> thenT autoT"
+P	p4458	String "equalTransT << ('a *['G] ('G^inv 'a)) *['G] 'a >> ta"
 O	o4458	ext_rule p4458
 T	t7500	o1182 b6452 b3386
 B	b7513	t7500
@@ -4530,7 +4530,7 @@ T	t1079	o b1079 b8
 B	b1081	t1079
 T	t1081	o1254 b1072 b1081
 B	b1082	t1081
-P	p4470	String "substT << 'a *['G] ('G^inv 'a) = 'G^\"1\" in 'G^car >> 0 thenT autoT"
+P	p4470	String "substT << 'a *['G] ('G^inv 'a) = 'G^\"1\" in 'G^car >> 0 ta"
 O	o4470	ext_rule p4470
 T	t1084	o10 b7569 b8
 B	b1084	t1084
@@ -4781,7 +4781,7 @@ T	t5237	o1458 b5170 b5235
 B	b5237	t5237
 T	t5240	o1458 b5169 b5237
 B	b5240	t5240
-P	p4757	String "assertT << ('G^inv 'u) *['G] ('u *['G] 'v) = ('G^inv 'u) *['G] ('u *['G] 'w) in 'G^car >> thenT autoT"
+P	p4757	String "assertT << ('G^inv 'u) *['G] ('u *['G] 'v) = ('G^inv 'u) *['G] ('u *['G] 'w) in 'G^car >> ta"
 O	o4757	ext_rule p4757
 T	t8210	o b8180 b8
 B	b8225	t8210
@@ -4946,7 +4946,7 @@ T	t5291	o1458 b5276 b5289
 B	b5292	t5291
 T	t5306	o1458 b5275 b5292
 B	b5307	t5306
-P	p4892	String "assertT << ('v *['G] 'u) *['G] ('G^inv 'u) = ('w *['G] 'u) *['G] ('G^inv 'u) in 'G^car >> thenT autoT"
+P	p4892	String "assertT << ('v *['G] 'u) *['G] ('G^inv 'u) = ('w *['G] 'u) *['G] ('G^inv 'u) in 'G^car >> ta"
 O	o4892	ext_rule p4892
 T	t8630	o b8619 b8
 B	b8631	t8630
@@ -5572,7 +5572,7 @@ T	t5565	o1458 b9402 b5563
 B	b5565	t5565
 T	t5566	o1458 b8826 b5565
 B	b5566	t5566
-P	p8683	String "assumT 5 thenT equalTransT << ('y *['G] 'a) *['G] ('G^inv 'a) >> thenT autoT"
+P	p8683	String "assumT 5 thenT equalTransT << ('y *['G] 'a) *['G] ('G^inv 'a) >> ta"
 O	o8688	ext_rule p8683
 T	t9822	o b9807 b8
 B	b9824	t9822
@@ -5754,7 +5754,7 @@ T	t1618	o b1618 b8
 B	b1619	t1618
 T	t1619	o1254 b1612 b1619
 B	b1620	t1619
-P	p9015	String "substT << (('G^inv 'b) *['G] ('G^inv 'a)) *['G] ('a *['G] 'b) = ('G^inv 'b) *['G] (('G^inv 'a) *['G] ('a *['G] 'b)) in 'G^car >> 0 thenT autoT"
+P	p9015	String "substT << (('G^inv 'b) *['G] ('G^inv 'a)) *['G] ('a *['G] 'b) = ('G^inv 'b) *['G] (('G^inv 'a) *['G] ('a *['G] 'b)) in 'G^car >> 0 ta"
 O	o9015	ext_rule p9015
 H	h10152	_1010 t10152
 S	s10152	tbrarg\\ h1636 h10152\\ t10071
@@ -10803,7 +10803,7 @@ T	t12361	o6290 b12361
 B	b12362	t12361
 T	t12362	o1458 b12362 b12328
 B	b12363	t12362
-P	p2754	String "assumT 1 thenT autoT thenT dT 2 thenT dT 5 ttca"
+P	p2754	String "assumT 1 ta thenT dT 2 thenT dT 5 ttca"
 O	o2754	ext_rule p2754
 T	t12363	o b12360 b8
 B	b12366	t12363
@@ -11651,7 +11651,7 @@ T	t7470	o b7470 b8
 B	b7471	t7470
 T	t7471	o1254 b2121 b7471
 B	b7472	t7471
-P	p7831	String "use_superset2 <<'G^car>> ttca thenMT equalSymT thenT dT 0 thenT autoT"
+P	p7831	String "use_superset2 <<'G^car>> ttca thenMT equalSymT thenT dT 0 ta"
 O	o7831	ext_rule p7831
 S	s13914	tbrarg\\ h1636 h12376 h12377 h12378 h12379 h12380 h12381\\ t13839
 B	b13917	s13914
@@ -11710,7 +11710,7 @@ T	t2164	o1254 b2161 b8
 B	b2164	t2164
 T	t2165	o4251 b1253 b2164 b8 b8
 B	b2165	t2165
-P	p4533	String "use_subset <<'S^car>> thenT autoT"
+P	p4533	String "use_subset <<'S^car>> ta"
 O	o4533	ext_rule p4533
 S	s14105	tbrarg\\ h1636 h12376 h12377 h12378 h12379 h12380 h12381\\ t14105
 B	b14108	s14105
@@ -12069,7 +12069,7 @@ T	t14333	o1434 b14329
 B	b14333	t14333
 T	t14334	o1458 b12944 b14333
 B	b14334	t14334
-P	p4756	String "assumT 1 thenT dT (-1) thenT autoT"
+P	p4756	String "assumT 1 thenT dT (-1) ta"
 O	o4756	ext_rule p4756
 T	t14336	o1256 b14329 b13086
 B	b14346	t14336
@@ -12381,7 +12381,7 @@ H	h15495	u t14477
 T	t15499	o1182 b1905 b1498
 B	b15500	t15499
 T	t15500	o1181 b14754 b15500 b15500
-P	p5274	String "fnExtenT <<'G^car -> 'G^car>> thenT autoT thenT tryT (dT 0) ttca"
+P	p5274	String "fnExtenT <<'G^car -> 'G^car>> ta thenT tryT (dT 0) ttca"
 O	o5277	ext_rule p5274
 S	s15500	tbrarg\\ h1636 h14555 h14556 h12378 h14559 h14560 h14566 h14567 h14570 h12378 h14571 h14572 h14583 h15495\\ t15500
 B	b15501	s15500
@@ -12521,7 +12521,7 @@ T	t6631	o b6629 b256
 B	b6633	t6631
 T	t6633	o1254 b2426 b6633
 B	b6634	t6633
-P	p7649	String "fnExtenT <<'G^car -> 'G^car>> thenT autoT"
+P	p7649	String "fnExtenT <<'G^car -> 'G^car>> ta"
 O	o7649	ext_rule p7649
 S	s15901	tbrarg\\ h1636 h14555 h14556 h12378 h14559 h14560 h14566 h14567 h14570 h12378 h14571 h14572 h14583 h14777\\ t15901
 B	b15902	s15901
@@ -13209,7 +13209,7 @@ T	t20793	o1458 b9652 b20793
 B	b20794	t20793
 T	t20794	o1458 b12944 b20794
 B	b20795	t20794
-P	p7042	String "assumT 1 thenT dT (-1) thenT byDefT unfold_lcoset thenT withT << 'x >> (dT 0) thenT autoT"
+P	p7042	String "assumT 1 thenT dT (-1) thenT byDefT unfold_lcoset thenT withT << 'x >> (dT 0) ta"
 O	o7042	ext_rule p7042
 T	t20795	o b20787 b8
 B	b20796	t20795
@@ -13327,7 +13327,7 @@ T	t20892	o1458 b9652 b20892
 B	b20893	t20892
 T	t20893	o1458 b12944 b20893
 B	b20894	t20893
-P	p7241	String "assumT 1 thenT dT (-1) thenT byDefT unfold_rcoset thenT withT << 'x >> (dT 0) thenT autoT"
+P	p7241	String "assumT 1 thenT dT (-1) thenT byDefT unfold_rcoset thenT withT << 'x >> (dT 0) ta"
 O	o7241	ext_rule p7241
 T	t20894	o b20886 b8
 B	b20895	t20894
@@ -13500,7 +13500,7 @@ T	t8303	o b8299 b8303
 B	b8310	t8303
 T	t8310	o1254 b3044 b8310
 B	b8311	t8310
-P	p2971	String "withT << 'a >> (dT 0) thenT autoT thenT tryT (dT 0) ttca"
+P	p2971	String "withT << 'a >> (dT 0) ta thenT tryT (dT 0) ttca"
 O	o2974	ext_rule p2971
 S	s21000	tbrarg\\ h1636 h12376 h12377 h12378 h12379 h12380 h12381\\ t21000
 B	b21001	s21000
@@ -14554,7 +14554,7 @@ T	t21672	o1434 b21672
 B	b21673	t21672
 T	t21673	o1458 b21671 b21673
 B	b21674	t21673
-P	p8861	String "copyHypT 2 (-1) thenT rwh unfold_normalSubg (-1) thenT autoT"
+P	p8861	String "copyHypT 2 (-1) thenT rwh unfold_normalSubg (-1) ta"
 O	o8861	ext_rule p8861
 T	t3263	o b21669 b8
 B	b3264	t3263
@@ -14647,7 +14647,7 @@ T	t21683	o1458 b11547 b21637
 B	b21684	t21683
 T	t21684	o1458 b12944 b21684
 B	b21685	t21684
-P	p3366	String "assumT 1 thenT assumT 2 thenT dT 3 thenT dT 2 thenT dT (-3) thenT autoT thenMT dT (-1) thenT byDefsT [unfold_lcoset; unfold_rcoset] thenT dT 0 ttca thenT tryT (use_subset << 'S^car >>) ttca"
+P	p3366	String "assumT 1 thenT assumT 2 thenT dT 3 thenT dT 2 thenT dT (-3) ta thenMT dT (-1) thenT byDefsT [unfold_lcoset; unfold_rcoset] thenT dT 0 ttca thenT tryT (use_subset << 'S^car >>) ttca"
 O	o3366	ext_rule p3366
 T	t21685	o b12327 b11558
 B	b21686	t21685
@@ -14711,7 +14711,7 @@ P	p21696	Var y1
 O	o21696	var p21696
 T	t21697	o21696
 B	b21697	t21697
-P	p6316	String "withT << 'y_1 >> (dT 0) thenMT hypSubstT (-1) 0 thenT autoT thenMT backThruHypT 9 ttca thenT tryT (dT 0) ttca thenT use_subset << 'S^car >> ttca"
+P	p6316	String "withT << 'y_1 >> (dT 0) thenMT hypSubstT (-1) 0 ta thenMT backThruHypT 9 ttca thenT tryT (dT 0) ttca thenT use_subset << 'S^car >> ttca"
 O	o6316	ext_rule p6316
 H	h21688	_1010 t11531
 T	t21823	o1182 b2827 b1186
@@ -15042,11 +15042,11 @@ T	t10275	o1975 b10274
 B	b10275	t10275
 T	t10277	o1975 b10264
 B	b10277	t10277
-P	p2980	String "genAssumT [3] thenT autoT thenT dT (-1) ttca"
+P	p2980	String "genAssumT [3] ta thenT dT (-1) ttca"
 O	o2980	ext_rule p2980
 P	p3010	String "instHypT [<< 'A^\"1\" >>; << 'A^\"1\" >>] 3 ttca"
 O	o3010	ext_rule p3010
-P	p3063	String "substT << 'A^\"1\" *['A] 'A^\"1\" = 'A^\"1\" in 'A^car >> 4 thenT autoT"
+P	p3063	String "substT << 'A^\"1\" *['A] 'A^\"1\" = 'A^\"1\" in 'A^car >> 4 ta"
 O	o3063	ext_rule p3063
 P	p3395	String "dT 5 ttca"
 O	o3395	ext_rule p3395
@@ -15088,9 +15088,9 @@ T	t11538	o1182 b11535 b1226
 B	b11539	t11538
 P	p11600	String "assertT << ('f_1 'A^\"1\") *['B] ('f_1 'A^\"1\") = 'f_1 'A^\"1\" in 'B^car >> thenAT equalSymT ttca"
 O	o11600	ext_rule p11600
-P	p4134	String "assertT << 'f 'a in 'B^car & 'f ('A^inv 'a) in 'B^car >> thenT genAssumT [4] thenT autoT thenT dT (-1) ttca"
+P	p4134	String "assertT << 'f 'a in 'B^car & 'f ('A^inv 'a) in 'B^car >> thenT genAssumT [4] ta thenT dT (-1) ttca"
 O	o4134	ext_rule p4134
-P	p4841	String "substT << 'a *['A] ('A^inv 'a) = 'A^\"1\" in 'A^car >> 0 thenT autoT"
+P	p4841	String "substT << 'a *['A] ('A^inv 'a) = 'A^\"1\" in 'A^car >> 0 ta"
 O	o4841	ext_rule p4841
 P	p5282	String onto
 O	o5283	comment_string p5282
@@ -16665,7 +16665,7 @@ T	t10364	o1458 b22359 b22558
 B	b10364	t10364
 T	t10367	o1458 b22113 b10364
 B	b10367	t10367
-P	p9122	String "assumT 3 thenT dT (-1) thenT genAssumT [2] thenT assertT << all z: 'S^car. 'z in 'A^car >> thenT autoT thenT tryT (dT 6) thenT byDefT reduceC"
+P	p9122	String "assumT 3 thenT dT (-1) thenT genAssumT [2] thenT assertT << all z: 'S^car. 'z in 'A^car >> ta thenT tryT (dT 6) thenT byDefT reduceC"
 O	o9122	ext_rule p9122
 T	t22560	o b22546 b8
 B	b22561	t22560
@@ -16839,7 +16839,7 @@ B	b23295	t23294 y
 T	t23295	o3288 b12240 b23295
 B	b23296	t23295
 T	t23296	o799 b23296
-P	p11295	String "fnExtenT <<'B^car -> ('B^car -> 'B^car)>> thenT autoT"
+P	p11295	String "fnExtenT <<'B^car -> ('B^car -> 'B^car)>> ta"
 O	o11295	ext_rule p11295
 S	s22848	tbrarg\\ h1636 h22565 h12377 h22566 h22567 h22260 h22485 h22636\\ t22848
 B	b22849	s22848
@@ -16847,7 +16847,7 @@ T	t22849	o1256 b22849 b22563
 B	b22850	t22849
 T	t23376	o1182 b22021 b1498
 B	b23377	t23376
-P	p11302	String "fnExtenT <<'B^car -> 'B^car>> thenT autoT"
+P	p11302	String "fnExtenT <<'B^car -> 'B^car>> ta"
 O	o11302	ext_rule p11302
 T	t23396	o1182 b23377 b4194
 B	b23397	t23396
@@ -16916,7 +16916,7 @@ B	b23482	t23481
 T	t23482	o1181 b22009 b23482 b11539
 B	b23483	t23482 y
 T	t23483	o3288 b12240 b23483
-P	p11497	String "dT (-1) thenT autoT thenT dT 0"
+P	p11497	String "dT (-1) ta thenT dT 0"
 O	o11497	ext_rule p11497
 T	t23413	o1181 b22009 b1498 b11539
 P	p11704	String "hypSubstT (-1) 0 thenMT withT << 'A^inv 'y >> (dT 0) thenMT equalSymT ttca"
@@ -17028,7 +17028,7 @@ T	t3676	o15295 b1253 b3676 b8 b8
 B	b3677	t3676
 T	t3677	o b3677 b8
 B	b3678	t3677
-P	p12371	String "dT (-1) thenT autoT thenT dT 0 thenT withT << 'A^\"1\" >> (dT 0) thenMT equalTransT << 'B^\"1\" >> thenMT equalSymT ttca"
+P	p12371	String "dT (-1) ta thenT dT 0 thenT withT << 'A^\"1\" >> (dT 0) thenMT equalTransT << 'B^\"1\" >> thenMT equalSymT ttca"
 O	o12371	ext_rule p12371
 P	p8172	String T
 O	o8172	comment_string p8172
@@ -17097,7 +17097,7 @@ T	t10577	o1458 b22359 b24145
 B	b10577	t10577
 T	t10624	o1458 b22110 b10577
 B	b10625	t10624
-P	p1679	String "assumT 3 thenT dT (-1) thenT genAssumT [2] thenT autoT thenT dT 6 thenT byDefT reduceC"
+P	p1679	String "assumT 3 thenT dT (-1) thenT genAssumT [2] ta thenT dT 6 thenT byDefT reduceC"
 O	o1679	ext_rule p1679
 T	t24147	o b24133 b8
 B	b24148	t24147
@@ -17204,13 +17204,13 @@ T	t3770	o1254 b3770 b8
 B	b3771	t3770
 T	t3771	o4720 b1253 b3771 b8 b8
 B	b3772	t3771
-P	p4763	String "fnExtenT <<'A^car -> ('A^car -> 'A^car)>> thenT autoT"
+P	p4763	String "fnExtenT <<'A^car -> ('A^car -> 'A^car)>> ta"
 O	o4763	ext_rule p4763
 S	s24446	tbrarg\\ h1636 h24153 h24154 h24155 h24156 h22260 h22485\\ t24446
 B	b24447	s24446
 T	t24447	o1256 b24447 b24151
 B	b24448	t24447
-P	p4817	String "fnExtenT <<'A^car -> 'A^car >> thenT autoT"
+P	p4817	String "fnExtenT <<'A^car -> 'A^car >> ta"
 O	o4817	ext_rule p4817
 T	t25070	o1182 b22084 b4194
 B	b25071	t25070
@@ -18110,7 +18110,7 @@ T	t4078	o b4078 b8
 B	b4079	t4078
 T	t4079	o1254 b4077 b4079
 B	b4080	t4079
-P	p10332	String "repeatForT 3 (tryT (dT 0)) thenT repeatT (byDefT reduceC) thenT dT 2 thenT tryT (dT 6) thenT tryT (dT 5) thenT tryT (dT 4) thenT autoT thenT tryT (Itt_squash.squashMemberFormation) ttca"
+P	p10332	String "repeatForT 3 (tryT (dT 0)) thenT repeatT (byDefT reduceC) thenT dT 2 thenT tryT (dT 6) thenT tryT (dT 5) thenT tryT (dT 4) ta thenT tryT (Itt_squash.squashMemberFormation) ttca"
 O	o10332	ext_rule p10332
 H	h22268	f_1 t22046
 T	t25787	o1181 b22009 b11537 b22227
@@ -18499,7 +18499,7 @@ T	t27044	o1458 b22113 b27044
 B	b27045	t27044
 T	t27045	o1458 b22110 b27045
 B	b27046	t27045
-P	p13731	String "genAssumT [3] thenT autoT thenT dT 2 thenT byDefT unfold_groupKer thenT byDefT reduceC"
+P	p13731	String "genAssumT [3] ta thenT dT 2 thenT byDefT unfold_groupKer thenT byDefT reduceC"
 O	o13731	ext_rule p13731
 T	t27046	o1256 b27042 b22235
 B	b27047	t27046
@@ -18621,7 +18621,7 @@ T	t27336	o1458 b22113 b27336
 B	b27337	t27336
 T	t27337	o1458 b22110 b27337
 B	b27338	t27337
-P	p17823	String "genAssumT [3] thenT autoT thenT dT 2 thenMT tryT (dT (-1)) thenT autoT"
+P	p17823	String "genAssumT [3] ta thenT dT 2 thenMT tryT (dT (-1)) thenT autoT"
 O	o17823	ext_rule p17823
 T	t27338	o b27326 b8
 B	b27339	t27338
@@ -18726,7 +18726,7 @@ B	b4278	t4277
 T	t27509	o1181 b22006 b7349 b27350
 B	b27509	t27509 a
 T	t27593	o3288 b25789 b27509
-P	p18003	String "withT << ('A^inv 'x) *['A] 'x_1 >> (dT 0) thenT autoT thenT tryT (dT 0)"
+P	p18003	String "withT << ('A^inv 'x) *['A] 'x_1 >> (dT 0) ta thenT tryT (dT 0)"
 O	o18003	ext_rule p18003
 S	s27593	tbrarg\\ h1636 h22260 h27503 h27504 h27574\\ t27593
 B	b27594	s27593
@@ -18932,7 +18932,7 @@ B	b4385	t4384
 T	t27905	o1181 b22006 b7349 b27781
 B	b27906	t27905 a
 T	t27990	o3288 b25789 b27906
-P	p18266	String "withT << 'x_1 *['A] ('A^inv 'x) >> (dT 0) thenT autoT thenT tryT (dT 0)"
+P	p18266	String "withT << 'x_1 *['A] ('A^inv 'x) >> (dT 0) ta thenT tryT (dT 0)"
 O	o18266	ext_rule p18266
 S	s27990	tbrarg\\ h1636 h22260 h27503 h27504 h27574\\ t27990
 B	b27991	s27990
@@ -19307,7 +19307,7 @@ T	t28153	o1458 b22113 b28153
 B	b28154	t28153
 T	t28154	o1458 b22110 b28154
 B	b28155	t28154
-P	p18356	String "autoT thenT byDefsT [reduceC; fold_groupKer] thenMT assertT << ext_equal{lcoset{groupKer{'f; 'A; 'B}; 'A; 'x}; { y: 'A^car | 'f 'y = 'f 'x in 'B^car }} >> thenMT assertT << ext_equal{rcoset{groupKer{'f; 'A; 'B}; 'A; 'x}; { y: 'A^car | 'f 'y = 'f 'x in 'B^car }} >> thenWT genAssumT [3] thenT autoT thenT dT (-1) ttca thenT dT (-3)"
+P	p18356	String "autoT thenT byDefsT [reduceC; fold_groupKer] thenMT assertT << ext_equal{lcoset{groupKer{'f; 'A; 'B}; 'A; 'x}; { y: 'A^car | 'f 'y = 'f 'x in 'B^car }} >> thenMT assertT << ext_equal{rcoset{groupKer{'f; 'A; 'B}; 'A; 'x}; { y: 'A^car | 'f 'y = 'f 'x in 'B^car }} >> thenWT genAssumT [3] ta thenT dT (-1) ttca thenT dT (-3)"
 O	o18356	ext_rule p18356
 T	t28155	o1256 b28151 b22235
 B	b28156	t28155
@@ -20199,7 +20199,7 @@ T	t28638	o1434 b28638
 B	b28639	t28638
 T	t28639	o1458 b28637 b28639
 B	b28640	t28639
-P	p13561	String "copyHypT 2 3 thenT rwh unfold_isBijective 3 thenT autoT"
+P	p13561	String "copyHypT 2 3 thenT rwh unfold_isBijective 3 ta"
 O	o13561	ext_rule p13561
 T	t4587	o b28635 b8
 B	b4588	t4587
@@ -20290,7 +20290,7 @@ T	t28690	o1458 b28684 b28690
 B	b28691	t28690
 T	t28691	o1458 b28681 b28691
 B	b28692	t28691
-P	p9604	String "assertT << 'A in group[i:l] & 'B in group[i:l] & \"type\"{'A^car} & \"type\"{'B^car} >> thenT autoT"
+P	p9604	String "assertT << 'A in group[i:l] & 'B in group[i:l] & \"type\"{'A^car} & \"type\"{'B^car} >> ta"
 O	o9604	ext_rule p9604
 T	t4602	o b28685 b8
 B	b4602	t4602
@@ -20782,7 +20782,7 @@ T	t11860	o1458 b22113 b11859
 B	b11860	t11860
 T	t11861	o1458 b22110 b11860
 B	b11861	t11861
-P	p11861	String "byDefT reduceC thenT assumT 4 thenT moveToConclT (-1) thenT genAssumT [3] thenT autoT thenMT (dT (-1) thenT dT 0) thenT dT 2 ttca"
+P	p11861	String "byDefT reduceC thenT assumT 4 thenT moveToConclT (-1) thenT genAssumT [3] ta thenMT (dT (-1) thenT dT 0) thenT dT 2 ttca"
 O	o11861	ext_rule p11861
 T	t29281	o b28909 b8
 B	b29282	t29281
@@ -21220,7 +21220,7 @@ T	t4787	o b4787 b8
 B	b4788	t4787
 T	t4788	o1254 b4782 b4788
 B	b4789	t4788
-P	p11940	String "withT << 'x *['A] 'A^inv 'y1 >> (dT 4) thenT autoT thenT tryT (dT 0) thenT tryT (dT (-1)) thenT autoT"
+P	p11940	String "withT << 'x *['A] 'A^inv 'y1 >> (dT 4) ta thenT tryT (dT 0) thenT tryT (dT (-1)) thenT autoT"
 O	o11940	ext_rule p11940
 H	h11869	_1010 t11869
 H	h11870	_1010 t28934
@@ -21413,7 +21413,7 @@ T	t29642	o1458 b22113 b29642
 B	b29643	t29642
 T	t29643	o1458 b29638 b29643
 B	b29644	t29643
-P	p4775	String "genAssumT [1; 2; 3] thenT autoT"
+P	p4775	String "genAssumT [1; 2; 3] ta"
 O	o4776	ext_rule p4775
 T	t29644	o b28780 b8
 B	b29645	t29644
@@ -21458,7 +21458,7 @@ T	t4857	o b4857 b8
 B	b4858	t4857
 T	t4858	o1254 b4851 b4858
 B	b4860	t4858
-P	p6446	String "onHypsT [4; 2] dT thenT autoT thenT onHypsT [6; 5; 3] dT thenT autoT"
+P	p6446	String "onHypsT [4; 2] dT ta thenT onHypsT [6; 5; 3] dT thenT autoT"
 O	o6447	ext_rule p6446
 H	h12153	A_1 t846
 H	h4800	B_1 t1202
@@ -21552,7 +21552,7 @@ T	t8698	o b8698 b8
 B	b8700	t8698
 T	t8700	o1254 b4863 b8700
 B	b8701	t8700
-P	p7206	String "instHypT [<< 'x >>] (-3) thenMT instHypT [<< 'y >>] (-4) thenT autoT"
+P	p7206	String "instHypT [<< 'x >>] (-3) thenMT instHypT [<< 'y >>] (-4) ta"
 O	o7206	ext_rule p7206
 H	h12151	_1010 t12151
 T	t9881	o1182 b12052 b7339
@@ -21706,7 +21706,7 @@ T	t1576	o b1576 b8
 B	b1578	t1576
 T	t1578	o1254 b5012 b1578
 B	b1583	t1578
-P	p18894	String "hypSubstT (-1) (-3) thenMT equalTransT << 'v ('y_1 *['A_1] 'y_2) >> ttca thenMT equalSymT thenT autoT"
+P	p18894	String "hypSubstT (-1) (-3) thenMT equalTransT << 'v ('y_1 *['A_1] 'y_2) >> ttca thenMT equalSymT ta"
 O	o18894	ext_rule p18894
 H	h12088	_1010 t12088
 Vg	g	g\\ H\\
@@ -21823,7 +21823,7 @@ P	p14045	String "dT 2 thenT dT 2 ttca"
 O	o14045	ext_rule p14045
 P	p14047	String "dT 2 thenMT repeatForT 2 (dT 3) thenT dT 2 ttca"
 O	o14047	ext_rule p14047
-P	p14099	String "instHypT [<< 'x >>] (-4) thenMT instHypT [<< 'y >>] (-5) thenT autoT"
+P	p14099	String "instHypT [<< 'x >>] (-4) thenMT instHypT [<< 'y >>] (-5) ta"
 O	o14099	ext_rule p14099
 P	p14137	String "hypSubstT (-3) 0 thenMT hypSubstT (-1) 0 thenMT instHypT [<< 'y_2 >>] (-7) thenMT instHypT [<< 'y_1 >>] (-8) ttca"
 O	o14137	ext_rule p14137
@@ -21837,7 +21837,7 @@ T	t14567	o14567
 B	b14567	t14567
 P	p14328	String "repeatForT 2 (dT 4)"
 O	o14332	ext_rule p14328
-P	p14358	String "instHypT [<< 'x >>] (-5) thenMT instHypT [<< 'y >>] (-6) thenT autoT"
+P	p14358	String "instHypT [<< 'x >>] (-5) thenMT instHypT [<< 'y >>] (-6) ta"
 O	o14362	ext_rule p14358
 P	p14435	String "copyHypT (-5) (-1) thenT hypSubstT (-4) (-1) thenMT hypSubstT (-2) (-1) thenMT hypSubstT (-4) 0 thenMT hypSubstT (-2) 0 ttca"
 O	o14440	ext_rule p14435
@@ -21887,7 +21887,7 @@ T	t29985	o1458 b22113 b29985
 B	b29986	t29985
 T	t29986	o1458 b22110 b29986
 B	b29987	t29986
-P	p12136	String "assumT 5 thenMT moveToConclT (-1) thenAT genAssumT [3] thenT autoT"
+P	p12136	String "assumT 5 thenMT moveToConclT (-1) thenAT genAssumT [3] ta"
 O	o12136	ext_rule p12136
 T	t29987	o b29977 b8
 B	b29988	t29987
@@ -22012,7 +22012,7 @@ T	t9902	o b7896 b9901
 B	b9902	t9902
 T	t9903	o1254 b4081 b9902
 B	b9903	t9903
-P	p9903	String "fnExtenT << 'A^car -> 'A^car -> 'A^car >> thenMT fnExtenT << 'A^car -> 'A^car >> thenT autoT"
+P	p9903	String "fnExtenT << 'A^car -> 'A^car -> 'A^car >> thenMT fnExtenT << 'A^car -> 'A^car >> ta"
 O	o9903	ext_rule p9903
 H	h9903	_1 t7904
 S	s9903	tbrarg\\ h1636 h22260 h22265 h22015 h4756 h7900 h9903\\ t7910
@@ -22027,7 +22027,7 @@ T	t9907	o1254 b4106 b9907
 B	b9908	t9907
 T	t9908	o9903 b1253 b9908 b1065 b8
 B	b9909	t9908
-P	p9909	String "fnExtenT << 'A^car -> 'A^car >> thenT autoT"
+P	p9909	String "fnExtenT << 'A^car -> 'A^car >> ta"
 O	o9909	ext_rule p9909
 T	t9909	o9909 b1253 b7922 b4137 b8
 B	b9910	t9909
@@ -22117,7 +22117,7 @@ T	t9947	o b9943 b9947
 B	b9948	t9947
 T	t9949	o1254 b4192 b9948
 B	b9950	t9949
-P	p9950	String "byDefT reduceC thenT dT (-2) thenT autoT"
+P	p9950	String "byDefT reduceC thenT dT (-2) ta"
 O	o9950	ext_rule p9950
 H	h9950	a t22005
 T	t9950	o1182 b2628 b1199
@@ -23364,7 +23364,7 @@ B	b10719	t10719
 P	p10720	Number 47707
 P	p10721	Number 47991
 O	o10721	location p10720 p10721
-P	p10722	String "genAssumT [3] thenT byDefT reduceC thenT dT 2 thenT dT 2 thenT autoT"
+P	p10722	String "genAssumT [3] thenT byDefT reduceC thenT dT 2 thenT dT 2 ta"
 O	o10722	ext_rule p10722
 T	t10722	o10722 b1253 b8678 b1375 b8
 B	b10722	t10722

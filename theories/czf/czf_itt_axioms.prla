@@ -3961,7 +3961,7 @@ T	t2335	o b2331 b2335
 B	b2336	t2335
 T	t2336	o603 b2329 b2336
 B	b2337	t2336
-P	p912	String "setInduction1 thenT autoT"
+P	p912	String "setInduction1 ta"
 O	o912	ext_rule p912
 H	h961	_1010 t879
 S	s961	tbrarg\\ h250 h584 h835 h882 h961\\ C
@@ -3980,7 +3980,7 @@ T	t2339	o603 b2339 b4
 B	b2342	t2339
 T	t2342	o912 b602 b2342 b4 b4
 B	b2344	t2342
-P	p914	String "withT << 'x >> (dT 4) thenT autoT"
+P	p914	String "withT << 'x >> (dT 4) ta"
 O	o914	ext_rule p914
 H	h972	_1010 t968
 S	s972	tbrarg\\ h250 h584 h835 h972\\ C952
@@ -4903,7 +4903,7 @@ T	t3413	o b3413 b4
 B	b3414	t3413
 T	t3415	o603 b3407 b3414
 B	b3415	t3415
-P	p1306	String "dT 2 thenT rw reduceC 0 thenT autoT"
+P	p1306	String "dT 2 thenT rw reduceC 0 ta"
 O	o1306	ext_rule p1306
 T	t3417	o593 b586 b3208
 B	b3417	t3417
@@ -5155,7 +5155,7 @@ T	t3515	o b3508 b3515
 B	b3516	t3515
 T	t3516	o603 b3505 b3516
 B	b3517	t3516
-P	p1427	String "dT 8 thenT rw reduceC 0 thenT autoT"
+P	p1427	String "dT 8 thenT rw reduceC 0 ta"
 O	o1427	ext_rule p1427
 S	s3517	tbrarg\\ h250 h661 h664 h3442 h1617 h2023 h1391 h2118 h3502\\ t1416
 B	b3518	s3517
@@ -5167,7 +5167,7 @@ T	t3520	o603 b3520 b4
 B	b3521	t3520
 T	t3521	o1427 b602 b3521 b4 b4
 B	b3522	t3521
-P	p1429	String "dT 10 thenT rw reduceC 0 thenT autoT"
+P	p1429	String "dT 10 thenT rw reduceC 0 ta"
 O	o1429	ext_rule p1429
 H	h2229	z_1 t2118
 T	t1420	o1363 b690
@@ -5199,7 +5199,7 @@ T	t3533	o b3533 b4
 B	b3534	t3533
 T	t3534	o623 b602 b3487 b3534 b4
 B	b3535	t3534
-P	p1438	String "rw reduceC 0 thenT autoT"
+P	p1438	String "rw reduceC 0 ta"
 O	o1438	ext_rule p1438
 S	s3535	tbrarg\\ h250 h661 h664 h3442 h1617 h2023\\ t3464
 B	b3536	s3535
@@ -5444,7 +5444,7 @@ T	t3761	o603 b3761 b4
 B	b3762	t3761
 T	t3762	o623 b602 b3762 b4 b4
 B	b3763	t3762
-P	p1571	String "dT 11 thenT rw reduceC 0 thenT autoT"
+P	p1571	String "dT 11 thenT rw reduceC 0 ta"
 O	o1571	ext_rule p1571
 H	h4056	z_3 t3880
 P	p1547	Var z_3
@@ -5545,7 +5545,7 @@ P	p1135	Var x_1
 O	o1135	var p1135
 T	t1136	o1135
 B	b1136	t1136
-P	p1149	String "rwh fold_isset 0 thenT autoT"
+P	p1149	String "rwh fold_isset 0 ta"
 O	o1149	ext_rule p1149
 H	h1380	x_1 t584
 B	b1452	t1451
@@ -5580,7 +5580,7 @@ T	t3835	o b3829 b3834
 B	b3835	t3835
 T	t3836	o603 b3826 b3835
 B	b3836	t3836
-P	p1607	String "dT 9 thenT rw reduceC 0 thenT autoT"
+P	p1607	String "dT 9 thenT rw reduceC 0 ta"
 O	o1607	ext_rule p1607
 S	s3836	tbrarg\\ h250 h661 h664 h3442 h1617 h2023 h2273 h1391 h2118 h3502\\ t1595
 B	b3837	s3836
@@ -6204,21 +6204,21 @@ NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1985	lambda
 P	p2047	String "revHypSubstT 13 0"
 O	o2047	ext_rule p2047
-P	p2061	String "dT 14 thenT rw reduceC 0 thenT autoT"
+P	p2061	String "dT 14 thenT rw reduceC 0 ta"
 O	o2061	ext_rule p2061
-P	p2070	String "rwh unfold_rel 0 thenT rw reduceC 0 thenT autoT"
+P	p2070	String "rwh unfold_rel 0 thenT rw reduceC 0 ta"
 O	o2070	ext_rule p2070
 P	p2165	String "dT 11"
 O	o2165	ext_rule p2165
 P	p2207	String "rw reduceC 0 thenT trivialT"
 O	o2207	ext_rule p2207
-P	p2319	String "withT << 'y >> (dT 9) thenT autoT"
+P	p2319	String "withT << 'y >> (dT 9) ta"
 O	o2319	ext_rule p2319
 P	p2338	String "revHypSubstT 17 0 thenT rw reduceC 0"
 O	o2338	ext_rule p2338
-P	p2360	String "dT 18 thenT rw reduceC 0 thenT autoT"
+P	p2360	String "dT 18 thenT rw reduceC 0 ta"
 O	o2360	ext_rule p2360
-P	p2471	String "dT 15 thenT rw reduceC 0 thenT autoT"
+P	p2471	String "dT 15 thenT rw reduceC 0 ta"
 O	o2471	ext_rule p2471
 H	h2177	b1 t584
 P	p2177	Var b1
@@ -6618,7 +6618,7 @@ T	t4938	o b4938 b4
 B	b4939	t4938
 T	t4939	o603 b4934 b4939
 B	b4940	t4939
-P	p5178	String "withT << 'x1 >> (dT 9) thenT autoT"
+P	p5178	String "withT << 'x1 >> (dT 9) ta"
 O	o5178	ext_rule p5178
 T	t4940	o664 b586 b1302
 B	b4941	t4940

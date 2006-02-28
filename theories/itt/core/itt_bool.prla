@@ -9432,7 +9432,7 @@ T	t8073	o b8073 b10
 B	b8074	t8073
 T	t8074	o1829 b8072 b8074
 B	b8075	t8074
-P	p8753	String "dT 2 thenT autoT"
+P	p8753	String "dT 2 ta"
 O	o8753	ext_rule p8753
 T	t5003	o2699 b4765 b4762
 S	s6552	tbrarg\\ h1831 h4760\\ t5003
@@ -10056,7 +10056,7 @@ T	t7663	o7663
 B	b7663	t7663
 P	p7677	String reduce_bnot_bnot
 O	o7677	cond_rewrite p7677
-P	p7679	String "genAssumT [1] thenT autoT"
+P	p7679	String "genAssumT [1] ta"
 O	o7679	ext_rule p7679
 O	o7710	lid p7677
 T	t7710	o7710

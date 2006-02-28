@@ -1372,7 +1372,7 @@ T	t2056	o2055 b2056
 B	b2057	t2056
 P	p2068	String autoT
 O	o2068	ext_rule p2068
-P	p2111	String "dT 4 thenT autoT"
+P	p2111	String "dT 4 ta"
 O	o2111	ext_rule p2111
 NOcaml!str_let	str_let	str_let Ocaml
 NOcaml!patt_var	patt_var	patt_var Ocaml
@@ -4812,7 +4812,7 @@ B	b3129	s3128
 H	h2529	x1 t3128
 S	s2529	tbrarg\\ h2939 h3057 h3058 h2529\\ t3120
 B	b2530	s2529
-P	p1192	String "doNotThinT ( withT << bind{u. (('u = 'x in tunion{'A; y. 'B['y]}) -> squash{'C['u]})}>> ( letT <<'u='x in tunion{'A; y. 'B['y]}>>)) thenAT autoT"
+P	p1192	String "doNotThinT ( withT << bind{u. (('u = 'x in tunion{'A; y. 'B['y]}) -> squash{'C['u]})}>> ( letT <<'u='x in tunion{'A; y. 'B['y]}>>)) taa"
 O	o1192	ext_rule p1192
 H	h3144	u t3057
 T	t3144	o1453 b3117 b2035 b1406
@@ -5755,7 +5755,7 @@ B	b972	t972
 T	t973	o1586 b3676
 S	s973	tbrarg\\ h2939 h2943\\ t973
 B	b973	s973
-P	p979	String "assumT 2 thenWT autoT"
+P	p979	String "assumT 2 twa"
 O	o979	ext_rule p979
 B	b980	t3677 x
 T	t980	o2460 b2937 b980
@@ -5792,7 +5792,7 @@ T	t1000	o b1000 b8
 B	b1001	t1000
 T	t1001	o2017 b997 b1001
 B	b1002	t1001
-P	p1002	String "withT << 'w >> (dT 4) thenWT autoT"
+P	p1002	String "withT << 'w >> (dT 4) twa"
 O	o1002	ext_rule p1002
 T	t1002	o2362 b999 b8
 B	b1003	t1002
@@ -5808,7 +5808,7 @@ T	t1006	o b1006 b8
 B	b1007	t1006
 T	t1007	o2017 b1003 b1007
 B	b1008	t1007
-P	p1008	String "withT << 'z >> (dT (-1)) thenT autoT"
+P	p1008	String "withT << 'z >> (dT (-1)) ta"
 O	o1008	ext_rule p1008
 T	t1008	o2017 b1006 b8
 B	b1009	t1008

@@ -181,7 +181,7 @@ O	o620	tactic_arg p605
 NSummary!msequent	msequent	msequent Summary
 O	o621	msequent
 O	o627	tactic_arg p601
-P	p637	String "sqSymT thenT autoT"
+P	p637	String "sqSymT ta"
 O	o637	ext_rule p637
 P	p645	String "moveHypT 3 4"
 O	o645	ext_rule p645
@@ -189,7 +189,7 @@ P	p651	String "contextSubstPointwise 2 2 2 <<'f['y]>>"
 O	o651	ext_rule p651
 P	p674	String assertion
 O	o674	tactic_arg p674
-P	p687	String "equalSymT thenT autoT"
+P	p687	String "equalSymT ta"
 O	o687	ext_rule p687
 P	p689	String autoT
 O	o689	ext_rule p689
@@ -409,7 +409,7 @@ S	s1154	tbrarg\\ h1104 h1105 h1106\\ C1154
 B	b1155	s1154
 T	t1155	o621 b1155 b1148
 B	b1156	t1155
-P	p897	String "doNotThinT (letT <<'y='g['x] in 'B>>) thenAT autoT"
+P	p897	String "doNotThinT (letT <<'y='g['x] in 'B>>) taa"
 O	o899	ext_rule p897
 T	t1162	o593 b1093 b574 b1125
 NSummary!id	id	id Summary
@@ -1520,7 +1520,7 @@ T	t1252	o586 b1248 b1252
 B	b1253	t1252
 T	t1253	o586 b1245 b1253
 B	b1254	t1253
-P	p1107	String "substUsingEpimorphism 2 <<'B>> <<bind{y.'y}>> <<bind{y.'y}>> thenT autoT"
+P	p1107	String "substUsingEpimorphism 2 <<'B>> <<bind{y.'y}>> <<bind{y.'y}>> ta"
 O	o1107	ext_rule p1107
 T	t1254	o b1249 b4
 B	b1255	t1254
@@ -1568,7 +1568,7 @@ T	t1272	o586 b1270 b1272
 B	b1273	t1272
 T	t1273	o586 b1267 b1273
 B	b1274	t1273
-P	p1118	String "assertT <<ext_equal{'A;'B}>> thenAT autoT"
+P	p1118	String "assertT <<ext_equal{'A;'B}>> taa"
 O	o1118	ext_rule p1118
 T	t1274	o b1268 b4
 B	b1275	t1274
@@ -1652,7 +1652,7 @@ S	s1300	tbrarg\\ h1104 h1105 h1106 h1284 h1285\\ t1246
 B	b1301	s1300
 T	t1301	o621 b1301 b1276
 B	b1302	t1301
-P	p1306	String "withT <<'y>> (dT 5) thenT autoT"
+P	p1306	String "withT <<'y>> (dT 5) ta"
 O	o1306	ext_rule p1306
 T	t692	o674 b1298 b4
 B	b692	t692
@@ -1660,7 +1660,7 @@ T	t693	o619 b692 b4
 B	b693	t693
 T	t694	o1306 b618 b693 b4 b4
 B	b694	t694
-P	p1153	String "withT <<'x>> (dT 4) thenT autoT"
+P	p1153	String "withT <<'x>> (dT 4) ta"
 O	o1153	ext_rule p1153
 T	t695	o674 b1302 b4
 B	b695	t695

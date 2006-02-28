@@ -849,7 +849,7 @@ B	b550	t549
 NSummary!interactive	interactive	interactive Summary
 O	o333	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p333	String "rwh unfold_not 0 thenT autoT"
+P	p333	String "rwh unfold_not 0 ta"
 O	o334	ext_rule p333
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o335	status_incomplete

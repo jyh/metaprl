@@ -1205,21 +1205,21 @@ P	p2338	String "assertT << eq{'s; id{'g}} >> ttca"
 O	o2338	ext_rule p2338
 P	p2345	String assertion
 O	o2345	tactic_arg p2345
-P	p2351	String "setSubstT << equal{'s; op{'g; id{'g}; 's}} >> 0 thenT autoT"
+P	p2351	String "setSubstT << equal{'s; op{'g; id{'g}; 's}} >> 0 ta"
 O	o2351	ext_rule p2351
 P	p2352	String eq
 O	o2352	tactic_arg p2352
 NCzf_itt_eq!equal	equal2353	equal Czf_itt_eq
 O	o2353	equal2353
-P	p2368	String "setSubstT << equal{op{'g; id{'g}; 's}; 's} >> 0 thenT autoT"
+P	p2368	String "setSubstT << equal{op{'g; id{'g}; 's}; 's} >> 0 ta"
 O	o2368	ext_rule p2368
-P	p2370	String "setSubstT << equal{op{'g; id{'g}; 's}; op{'g; op{'g; inv{'g; 's}; 's}; 's}} >> 0 thenT autoT"
+P	p2370	String "setSubstT << equal{op{'g; id{'g}; 's}; op{'g; op{'g; inv{'g; 's}; 's}; 's}} >> 0 ta"
 O	o2370	ext_rule p2370
-P	p2389	String "setSubstT << equal{op{'g; inv{'g; 's}; 's}; id{'g}} >> 0 thenT autoT"
+P	p2389	String "setSubstT << equal{op{'g; inv{'g; 's}; 's}; id{'g}} >> 0 ta"
 O	o2389	ext_rule p2389
-P	p2391	String "setSubstT << equal{op{'g; op{'g; inv{'g; 's}; 's}; 's}; op{'g; inv{'g; 's}; op{'g; 's; 's}}} >> 0 thenT autoT"
+P	p2391	String "setSubstT << equal{op{'g; op{'g; inv{'g; 's}; 's}; 's}; op{'g; inv{'g; 's}; op{'g; 's; 's}}} >> 0 ta"
 O	o2391	ext_rule p2391
-P	p2398	String "setSubstT << equal{op{'g; 's; 's}; 's} >> 0 thenT autoT"
+P	p2398	String "setSubstT << equal{op{'g; 's; 's}; 's} >> 0 ta"
 O	o2398	ext_rule p2398
 P	p2420	String inv_id2
 O	o2420	rule p2420
@@ -1229,17 +1229,17 @@ P	p2443	String "setSubstT << equal{op{'g; op{'g; 's; inv{'g; 's}}; op{'g; 's; in
 O	o2443	ext_rule p2443
 P	p2451	String "setSubstT << equal{op{'g; 's; op{'g; inv{'g; 's}; op{'g; 's; inv{'g; 's}}}}; op{'g; 's; op{'g; op{'g; inv{'g; 's}; 's}; inv{'g; 's}}}} >> 0 ttca"
 O	o2451	ext_rule p2451
-P	p2459	String "setSubstT << equal{op{'g; op{'g; inv{'g; 's}; 's}; inv{'g; 's}}; op{'g; id{'g}; inv{'g; 's}}} >> 0 thenT autoT"
+P	p2459	String "setSubstT << equal{op{'g; op{'g; inv{'g; 's}; 's}; inv{'g; 's}}; op{'g; id{'g}; inv{'g; 's}}} >> 0 ta"
 O	o2459	ext_rule p2459
 P	p2465	String "dT 2 ttca"
 O	o2465	ext_rule p2465
 P	p2480	String id_eq2
 O	o2480	rule p2480
-P	p2486	String "setSubstT << equal{id{'g}; op{'g; inv{'g; 's}; 's}} >> 0 thenT autoT"
+P	p2486	String "setSubstT << equal{id{'g}; op{'g; inv{'g; 's}; 's}} >> 0 ta"
 O	o2486	ext_rule p2486
 P	p2505	String "setSubstT << equal{op{'g; 's; op{'g; inv{'g; 's}; 's}}; op{'g; op{'g; 's; inv{'g; 's}}; 's}}>> 0 ttca"
 O	o2505	ext_rule p2505
-P	p2512	String "setSubstT << equal{op{'g; 's; inv{'g; 's}}; id{'g}} >> 0 thenT autoT"
+P	p2512	String "setSubstT << equal{op{'g; 's; inv{'g; 's}}; id{'g}} >> 0 ta"
 O	o2512	ext_rule p2512
 P	p2529	String Theorems
 O	o2529	comment_string p2529
@@ -1287,7 +1287,7 @@ T	t2554	o b5 b2553
 B	b2554	t2554
 P	p2569	String cancel1
 O	o2569	rule p2569
-P	p2594	String "assertT << eq{op{'g; inv{'g; 's1}; op{'g; 's1; 's2}}; op{'g; inv{'g; 's1}; op{'g; 's1; 's3}}} >> thenT autoT"
+P	p2594	String "assertT << eq{op{'g; inv{'g; 's1}; op{'g; 's1; 's2}}; op{'g; inv{'g; 's1}; op{'g; 's1; 's3}}} >> ta"
 O	o2594	ext_rule p2594
 P	p2612	String "setSubstT << equal{op{'g; inv{'g; 's1}; op{'g; 's1; 's2}}; op{'g; op{'g; inv{'g; 's1}; 's1}; 's2}} >> 4 ttca"
 O	o2612	ext_rule p2612
@@ -1301,7 +1301,7 @@ P	p2641	String "setSubstT << equal{op{'g; id{'g}; 's3}; 's3} >> 8 ttca"
 O	o2641	ext_rule p2641
 P	p2658	String cancel2
 O	o2658	rule p2658
-P	p2683	String "assertT << eq{op{'g; op{'g; 's1; 's3}; inv{'g; 's3}}; op{'g; op{'g; 's2; 's3}; inv{'g; 's3}}} >> thenT autoT"
+P	p2683	String "assertT << eq{op{'g; op{'g; 's1; 's3}; inv{'g; 's3}}; op{'g; op{'g; 's2; 's3}; inv{'g; 's3}}} >> ta"
 O	o2683	ext_rule p2683
 P	p2702	String "setSubstT << equal{op{'g; op{'g; 's1; 's3}; inv{'g; 's3}}; op{'g; 's1; op{'g; 's3; inv{'g; 's3}}}} >> 4 ttca"
 O	o2702	ext_rule p2702
@@ -1353,7 +1353,7 @@ O	o2900	rule p2900
 NCzf_itt_dall	Czf_itt_dall	Czf_itt_dall NIL
 NCzf_itt_dall!dall	dall	dall Czf_itt_dall
 O	o2905	dall
-P	p2916	String "assumT 5 thenT withT << id{'g} >> (dT 2) thenT autoT"
+P	p2916	String "assumT 5 thenT withT << id{'g} >> (dT 2) ta"
 O	o2916	ext_rule p2916
 P	p2938	String "setSubstT << equal{op{'g; 'e2; id{'g}}; 'e2} >> 3 ttca"
 O	o2938	ext_rule p2938
@@ -1371,7 +1371,7 @@ T	t2983	o b2877 b2982
 B	b2983	t2983
 P	p2995	String unique_inv1
 O	o2995	rule p2995
-P	p3006	String "assumT 7 thenT setSubstT << equal{id{'g}; op{'g; inv{'g; 's}; 's}}>> 2 thenT autoT"
+P	p3006	String "assumT 7 thenT setSubstT << equal{id{'g}; op{'g; inv{'g; 's}; 's}}>> 2 ta"
 O	o3006	ext_rule p3006
 P	p3033	String "setSubstT << equal{op{'g; inv{'g; 's}; 's}; id{'g}} >> 0 ttca"
 O	o3033	ext_rule p3033
@@ -1453,7 +1453,7 @@ P	p3554	String "groupCancelRightT 2 ttca"
 O	o3554	ext_rule p3554
 P	p3571	String inv_of_id
 O	o3571	rule p3571
-P	p3575	String "assertT << equal{id{'g}; inv{'g; id{'g}}} >> thenT autoT"
+P	p3575	String "assertT << equal{id{'g}; inv{'g; id{'g}}} >> ta"
 O	o3575	ext_rule p3575
 P	p3585	String "eqSetSymT ttca"
 O	o3585	ext_rule p3585

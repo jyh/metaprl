@@ -5768,7 +5768,7 @@ S	s3835	tbrarg\\ h1138 h1895\\ t3825
 B	b3836	s3835
 T	t3836	o1210 b3836 b3833
 B	b3837	t3836
-P	p1347	String "withTermsT [<<'t1>>;<<'t2>>] (dT 2) thenT autoT"
+P	p1347	String "withTermsT [<<'t1>>;<<'t2>>] (dT 2) ta"
 O	o1347	ext_rule p1347
 P	p4215	String use_subtype2
 O	o4215	rule p4215

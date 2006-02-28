@@ -200,7 +200,7 @@ B	b1682	t1682
 NSummary!interactive	interactive	interactive Summary
 O	o652	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p652	String "useWitnessT <<'t>> thenT autoT"
+P	p652	String "useWitnessT <<'t>> ta"
 O	o653	ext_rule p652
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o654	status_incomplete
@@ -506,7 +506,7 @@ T	t1846	o641 b1839 b1845
 B	b1846	t1846
 T	t1847	o641 b1803 b1846
 B	b1847	t1847
-P	p790	String "autoT thenT autoT"
+P	p790	String "autoT ta"
 O	o790	ext_rule p790
 T	t1848	o b1837 b4
 B	b1848	t1848
@@ -667,7 +667,7 @@ B	b927	t927
 P	p934	String sqst_ex1
 O	o934	rule p934
 T	t934	o913 b740
-P	p935	String "rwh unfold_sqst 0 thenT autoT"
+P	p935	String "rwh unfold_sqst 0 ta"
 O	o935	ext_rule p935
 P	p944	String sqst_ex2
 O	o944	rule p944
@@ -679,7 +679,7 @@ P	p1001	String sqst_ex5
 O	o1001	rule p1001
 P	p1005	String "rwh unfold_sqst 0 thenT repeatT (dT 0) twa"
 O	o1005	ext_rule p1005
-P	p1029	String "dT 2 thenT autoT"
+P	p1029	String "dT 2 ta"
 O	o1029	ext_rule p1029
 P	p1038	String markov
 O	o1038	rule p1038
@@ -694,15 +694,15 @@ P	p1082	String sqstable
 O	o1082	meta_labeled p1082
 P	p1091	String "assertT <<squash{.'A or not{'A}}>>"
 O	o1091	ext_rule p1091
-P	p1106	String "markov3 thenT autoT"
+P	p1106	String "markov3 ta"
 O	o1106	ext_rule p1106
 P	p1108	String "assertT <<squash{'B}>>"
 O	o1108	ext_rule p1108
-P	p1118	String "autoT thenT dT 2 thenT autoT"
+P	p1118	String "autoT thenT dT 2 ta"
 O	o1118	ext_rule p1118
 P	p1133	String markov0
 O	o1133	rule p1133
-P	p1141	String "markov1 <<'A>> thenT autoT"
+P	p1141	String "markov1 <<'A>> ta"
 O	o1141	ext_rule p1141
 P	p1153	String markov2'
 O	o1153	rule p1153
@@ -710,14 +710,14 @@ P	p1154	String "useWitnessT <<it>> thenT markov0 <<'A>>"
 O	o1154	ext_rule p1154
 P	p1178	String "assertT <<not{not{'A}}>>"
 O	o1178	ext_rule p1178
-P	p1190	String "dT 3 thenT autoT"
+P	p1190	String "dT 3 ta"
 O	o1190	ext_rule p1190
 P	p1204	String markovN
 O	o1204	rule p1204
 O	o1211	meta_labeled p655
 P	p1221	String "assertT <<squash{.'s='t in 'T}>>"
 O	o1221	ext_rule p1221
-P	p1236	String "markov thenT autoT"
+P	p1236	String "markov ta"
 O	o1236	ext_rule p1236
 P	p1248	String markov2
 O	o1248	rule p1248
@@ -1679,9 +1679,9 @@ B	b1686	t1686
 T	t1689	o1594 b1253 b1686
 B	b1689	t1689
 B	b1704	t1645
-P	p1719	String "rwh unfold_exists 0 thenT autoT"
+P	p1719	String "rwh unfold_exists 0 ta"
 O	o1719	ext_rule p1719
-P	p1721	String "(dT 5) thenT autoT"
+P	p1721	String "(dT 5) ta"
 O	o1721	ext_rule p1721
 T	t1734	o1539 b1252 b1570
 B	b1735	t1734
@@ -1694,7 +1694,7 @@ P	p1828	String squash_ex4m
 O	o1828	rule p1828
 P	p1831	String "dT 0 twa"
 O	o1831	ext_rule p1831
-P	p1867	String "autoT thenT dT 3 thenT autoT"
+P	p1867	String "autoT thenT dT 3 ta"
 O	o1867	ext_rule p1867
 P	p1882	String sqst_ex6
 O	o1882	rule p1882
@@ -1709,11 +1709,11 @@ P	p1942	String delta_df
 O	o1942	dform p1942
 P	p1950	String delta1
 O	o1950	rule p1950
-P	p1952	String "rwh unfold_delta 0 thenT autoT"
+P	p1952	String "rwh unfold_delta 0 ta"
 O	o1952	ext_rule p1952
 P	p1961	String delta2
 O	o1961	rule p1961
-P	p1963	String "rwh unfold_delta 0 thenT autoT thenT useWitnessT <<it>>"
+P	p1963	String "rwh unfold_delta 0 ta thenT useWitnessT <<it>>"
 O	o1963	ext_rule p1963
 P	p1713	String "markov4 ttca"
 O	o1713	ext_rule p1713
@@ -1954,7 +1954,7 @@ T	t769	o b767 b769
 B	b770	t769
 T	t770	o655 b766 b770
 B	b771	t770
-P	p6	String "withT <<n:nat -> ('A 'n or not{.'A 'n})>> (dT 0) thenT rwh unfold_all 2 thenT autoT"
+P	p6	String "withT <<n:nat -> ('A 'n or not{.'A 'n})>> (dT 0) thenT rwh unfold_all 2 ta"
 O	o8	ext_rule p6
 T	t771	o655 b767 b4
 B	b772	t771

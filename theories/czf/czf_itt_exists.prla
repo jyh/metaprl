@@ -161,7 +161,7 @@ T	t553	o553
 NSummary!interactive	interactive	interactive Summary
 O	o562	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p562	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p562	String "rwh unfold_fun_prop 0 ta"
 O	o563	ext_rule p562
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o564	status_incomplete
@@ -1400,7 +1400,7 @@ T	t1312	o b1312 b4
 B	b1313	t1312
 T	t1313	o565 b1302 b1313
 B	b1314	t1313
-P	p878	String "rwh unfold_restricted (-1) thenT univTypeT << univ[1:l] >> thenT autoT"
+P	p878	String "rwh unfold_restricted (-1) thenT univTypeT << univ[1:l] >> ta"
 O	o878	ext_rule p878
 T	t1314	o565 b1312 b4
 B	b1315	t1314
@@ -1410,7 +1410,7 @@ T	t1316	o b1316 b4
 B	b1317	t1316
 T	t1317	o872 b564 b1314 b1317 b4
 B	b1318	t1317
-P	p882	String "rwh unfold_restricted 2 thenT rwh unfold_restricted 3 thenT rwh unfold_restricted 0 thenT autoT"
+P	p882	String "rwh unfold_restricted 2 thenT rwh unfold_restricted 3 thenT rwh unfold_restricted 0 ta"
 O	o882	ext_rule p882
 H	h1318	_1010 t1282
 H	h1319	"" t1303
@@ -1475,7 +1475,7 @@ T	t1342	o527 b1095 b1341
 B	b1342	t1342
 T	t1343	o527 b1091 b1342
 B	b1343	t1343
-P	p906	String "rwh unfold_exists 0 thenT autoT"
+P	p906	String "rwh unfold_exists 0 ta"
 O	o906	ext_rule p906
 T	t1344	o567 b1338 b1114
 B	b1344	t1344

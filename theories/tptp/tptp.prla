@@ -766,7 +766,7 @@ P	p1864	String tptp2_type_intro0
 O	o1864	rule p1864
 H	h1864	x t631
 T	t1864	o1479 b661
-P	p1865	String "rwh unfold_prop0 2 thenT univTypeT << univ[1:l] >> thenT autoT"
+P	p1865	String "rwh unfold_prop0 2 thenT univTypeT << univ[1:l] >> ta"
 O	o1865	ext_rule p1865
 P	p1874	String tptp2_type_intro1
 O	o1874	rule p1874

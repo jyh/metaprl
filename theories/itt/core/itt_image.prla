@@ -2131,7 +2131,7 @@ O	o1181	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
 P	p1096	String "assertT << 'A='B in univ[i:l] >> taa"
 O	o1096	ext_rule p1096
-P	p1181	String "assertT << 'a = 'b in 'A>> thenMT Itt_struct.hypSubstT (-1) 0 thenT autoT"
+P	p1181	String "assertT << 'a = 'b in 'A>> thenMT Itt_struct.hypSubstT (-1) 0 ta"
 O	o1182	ext_rule p1181
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1183	status_incomplete

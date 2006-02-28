@@ -960,7 +960,7 @@ P	p1753	String "dT 0 thenT dT 0 twa"
 O	o1753	ext_rule p1753
 NItt_logic!implies	implies	implies Itt_logic
 O	o1759	implies
-P	p1784	String "withT <<lambda{x. 'x in 'A subset 'B}>> (dT 0) thenT rwh reduceC 0 thenT autoT"
+P	p1784	String "withT <<lambda{x. 'x in 'A subset 'B}>> (dT 0) thenT rwh reduceC 0 ta"
 O	o1784	ext_rule p1784
 NItt_dfun!lambda	lambda	lambda Itt_dfun
 O	o1787	lambda
@@ -1068,7 +1068,7 @@ P	p2076	String "use_superset2 <<'C>> ttca"
 O	o2076	ext_rule p2076
 P	p2103	String subset_exact
 O	o2103	rule p2103
-P	p2108	String "dT 0 thenT subset_is_subtype thenT autoT"
+P	p2108	String "dT 0 thenT subset_is_subtype ta"
 O	o2108	ext_rule p2108
 P	p2119	String Union
 O	o2119	comment_string p2119
@@ -1278,7 +1278,7 @@ P	p1098	String Lm_printf
 O	o1099	string p1098
 T	t1099	o1099
 B	b1099	t1099
-P	p1120	String "dT 0 thenT autoT"
+P	p1120	String "dT 0 ta"
 O	o1120	ext_rule p1120
 VP	P3410	P\\ H\\ t1628
 B	b3410	P3410
@@ -1475,7 +1475,7 @@ T	t1231	o1606 b1231 b3554
 B	b1232	t1231
 T	t1232	o1605 b1232 b30
 B	b1233	t1232
-P	p1235	String "dT (-1) thenT dT 0 thenT autoT"
+P	p1235	String "dT (-1) thenT dT 0 ta"
 O	o1235	ext_rule p1235
 T	t1235	o1617 b3633 b3391
 H	h1235	y1 t1235
@@ -1530,7 +1530,7 @@ T	t2642	o2642
 B	b2643	t2642 x
 T	t2643	o1787 b2643
 B	b2644	t2643
-P	p2650	String "dT 2 thenT dT 0 thenT autoT"
+P	p2650	String "dT 2 thenT dT 0 ta"
 O	o2650	ext_rule p2650
 P	p2684	String "withT <<'w>> (dT 0) ttca"
 O	o2684	ext_rule p2684
@@ -1540,7 +1540,7 @@ P	p2709	String "byDefT unfold_implies"
 O	o2709	ext_rule p2709
 P	p2738	String "thinT (-1) thenT squashT thenT dT 2 thenT dT 0"
 O	o2738	ext_rule p2738
-P	p2767	String "rwh fold_implies 4 thenT autoT"
+P	p2767	String "rwh fold_implies 4 ta"
 O	o2767	ext_rule p2767
 P	p2790	String subset_bunion
 O	o2790	rule p2790
@@ -1621,7 +1621,7 @@ T	t1252	o1604 b1240 b30
 B	b1252	t1252
 T	t1254	o1252 b1603 b1252 b30 b30
 B	b1254	t1254
-P	p1256	String "withT <<'b>> (dT 3) thenT autoT"
+P	p1256	String "withT <<'b>> (dT 3) ta"
 O	o1256	ext_rule p1256
 T	t1256	o1745 b1812 b1628
 B	b1256	t1256
@@ -1746,7 +1746,7 @@ H	h3933	z I
 VA	A3933	A\\ H\\ t2295
 B	b3934	A3933
 T	t3934	o1627 b3934 b1628 b1628
-P	p313	String "assertT << 'A['y] subset 'T >> thenMT rwh unfold_subset (-1) thenT autoT"
+P	p313	String "assertT << 'A['y] subset 'T >> thenMT rwh unfold_subset (-1) ta"
 O	o313	ext_rule p313
 H	h3945	_1010 I
 S	s283	tbrarg\\ h3391 h3945 h3918\\ t3919
@@ -1994,7 +1994,7 @@ T	t4436	o1582 b4432 b4436
 B	b4437	t4436
 T	t4437	o1582 b4429 b4437
 B	b4438	t4437
-P	p1628	String "assumT 1 thenT assumT 2 thenT dT 0 thenT autoT"
+P	p1628	String "assumT 1 thenT assumT 2 thenT dT 0 ta"
 O	o1629	ext_rule p1628
 T	t4438	o b4431 b30
 B	b4439	t4438
@@ -5381,7 +5381,7 @@ T	t2960	o b2956 b2960
 B	b2961	t2960
 T	t2961	o1604 b2949 b2961
 B	b2962	t2961
-P	p2648	String "hypSubstT (-1) 0 thenT onHypsT [4;2] thinT thenT autoT"
+P	p2648	String "hypSubstT (-1) 0 thenT onHypsT [4;2] thinT ta"
 O	o2648	ext_rule p2648
 T	t2962	o76 b2955 b30
 B	b2963	t2962
@@ -5431,7 +5431,7 @@ T	t2975	o755 b1603 b2975 b30 b30
 B	b2984	t2975
 P	p760	String "subtypeT <<nat>> ttca"
 O	o760	ext_rule p760
-P	p764	String "use_subset << 'A['f['vv]] >> thenT autoT"
+P	p764	String "use_subset << 'A['f['vv]] >> ta"
 O	o764	ext_rule p764
 VA	A764	A\\ H\\ f2653
 B	b765	A764
@@ -5446,7 +5446,7 @@ T	t768	o b768 b30
 B	b769	t768
 T	t769	o1604 b2658 b769
 B	b770	t769
-P	p770	String "backThruAssumT 5 thenT autoT thenT subtypeT <<nat>> ttca"
+P	p770	String "backThruAssumT 5 ta thenT subtypeT <<nat>> ttca"
 O	o770	ext_rule p770
 T	t770	o76 b767 b30
 B	b771	t770
@@ -5458,7 +5458,7 @@ T	t773	o b773 b30
 B	b774	t773
 T	t774	o764 b1603 b770 b774 b30
 B	b775	t774
-P	p775	String "use_subset <<'A['f['b]]>> ttca thenT backThruAssumT 5 thenT autoT thenT  subtypeT <<nat>> ttca"
+P	p775	String "use_subset <<'A['f['b]]>> ttca thenT backThruAssumT 5 ta thenT  subtypeT <<nat>> ttca"
 O	o775	ext_rule p775
 T	t775	o1604 b2661 b30
 B	b776	t775
@@ -5557,7 +5557,7 @@ T	t3018	o1604 b3008 b30
 B	b3019	t3018
 T	t3019	o800 b1603 b3019 b30 b30
 B	b3020	t3019
-P	p802	String "dT (-1) thenT arithT thenT autoT thenT subtypeT <<nat>> ttca"
+P	p802	String "dT (-1) thenT arithT ta thenT subtypeT <<nat>> ttca"
 O	o802	ext_rule p802
 T	t3020	o1604 b3012 b30
 B	b3021	t3020
@@ -5592,7 +5592,7 @@ T	t3032	o b3032 b30
 B	b3033	t3032
 T	t3033	o1604 b2997 b3033
 B	b3034	t3033
-P	p810	String "arithT thenT autoT thenT subtypeT <<nat>> ttca"
+P	p810	String "arithT ta thenT subtypeT <<nat>> ttca"
 O	o810	ext_rule p810
 T	t3034	o76 b3031 b30
 B	b3035	t3034
@@ -5873,7 +5873,7 @@ T	t3083	o b3082 b30
 B	b3083	t3083
 T	t3084	o1604 b878 b3083
 B	b3084	t3084
-P	p890	String "dT 3 thenT dT 2 thenT dT (-1) thenT assertT <<'x='y in 'A>> thenT autoT"
+P	p890	String "dT 3 thenT dT 2 thenT dT (-1) thenT assertT <<'x='y in 'A>> ta"
 O	o890	ext_rule p890
 H	h890	y2 B861
 H	h891	y A'
@@ -6089,7 +6089,7 @@ T	t1034	o b1024 b1033
 B	b1034	t1034
 T	t3104	o1604 b3103 b1034
 B	b3104	t3104
-P	p1035	String "substT <<'u2='u1 in 'A>> 0 thenT autoT"
+P	p1035	String "substT <<'u2='u1 in 'A>> 0 ta"
 O	o1035	ext_rule p1035
 T	t1036	o76 b1023 b30
 B	b1036	t1036
@@ -6144,7 +6144,7 @@ T	t1063	o b1057 b1063
 B	b1064	t1063
 T	t1064	o1035 b1603 b1054 b1064 b30
 B	b1065	t1064
-P	p1065	String "substT <<'v1='v in 'B>> 0 thenT autoT"
+P	p1065	String "substT <<'v1='v in 'B>> 0 ta"
 O	o1065	ext_rule p1065
 T	t1065	o76 b1031 b30
 B	b1066	t1065
@@ -6389,7 +6389,7 @@ T	t3175	o b3163 b3175
 B	b3176	t3175
 T	t3176	o1602 b1603 b3161 b3176 b30
 B	b3177	t3176
-P	p1308	String "doNotThinT (hypSubstT 4 0) thenT autoT"
+P	p1308	String "doNotThinT (hypSubstT 4 0) ta"
 O	o1308	ext_rule p1308
 T	t3177	o76 b3147 b30
 B	b3178	t3177

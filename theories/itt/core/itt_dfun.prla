@@ -4204,7 +4204,7 @@ T	t4551	o b4547 b4551
 B	b4552	t4551
 T	t4552	o1505 b1412 b4545 b4552 b7
 B	b4553	t4552
-P	p2717	String "nameHypT (-1) \"f\" thenT useWitnessT << a: 'A -> ('f 'a) >> thenT autoT"
+P	p2717	String "nameHypT (-1) \"f\" thenT useWitnessT << a: 'A -> ('f 'a) >> ta"
 O	o2717	ext_rule p2717
 H	h2696	_1010 t2692
 S	s2696	t1402\\ h h2696\\ t1446
@@ -7733,7 +7733,7 @@ B	b4851	t4851
 P	p4852	Number 10909
 P	p4853	Number 11150
 O	o4853	location p4852 p4853
-P	p4854	String "assertT << 'A2 subtype 'A1 >> thenT autoT"
+P	p4854	String "assertT << 'A2 subtype 'A1 >> ta"
 O	o4854	ext_rule p4854
 T	t4854	o1403 b2593
 S	s4854	t1402\\ h h4485 h3386\\ t4854
@@ -7781,7 +7781,7 @@ T	t4871	o b4871 b7
 B	b4872	t4871
 T	t4872	o1413 b4860 b4872
 B	b4873	t4872
-P	p4873	String "assertT <<x:'A1 -> ('x1  'x in 'B2['x]) >> thenT autoT"
+P	p4873	String "assertT <<x:'A1 -> ('x1  'x in 'B2['x]) >> ta"
 O	o4873	ext_rule p4873
 H	h4873	x2 A1
 P	p4874	Var x2

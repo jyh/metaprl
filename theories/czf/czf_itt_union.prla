@@ -254,7 +254,7 @@ B	b729	t719 s2
 T	t729	o727 b728 b729
 B	b730	t729 s1
 T	t730	o727 b728 b730
-P	p740	String "dT 0 thenWT autoT"
+P	p740	String "dT 0 twa"
 O	o740	ext_rule p740
 H	h740	x t728
 T	t740	o549 b563 b551
@@ -307,7 +307,7 @@ P	p779	Var T_1
 O	o779	var p779
 P	p780	Var f_1
 O	o780	var p780
-P	p798	String "rw reduceC 0 thenT autoT"
+P	p798	String "rw reduceC 0 ta"
 O	o798	ext_rule p798
 P	p801	Var y
 O	o801	var p801
@@ -322,7 +322,7 @@ O	o831	tactic_arg p831
 NItt_equal!equal	equal	equal Itt_equal
 O	o832	equal
 P	p833	String with
-P	p861	String "rwh fold_isset 0 thenT autoT"
+P	p861	String "rwh fold_isset 0 ta"
 O	o861	ext_rule p861
 NCzf_itt_member	Czf_itt_member	Czf_itt_member NIL
 NCzf_itt_member!member	member	member Czf_itt_member
@@ -353,7 +353,7 @@ NItt_equal!type	type	type Itt_equal
 O	o1061	type
 P	p1070	String "rw reduceC 0 thenT trivialT"
 O	o1070	ext_rule p1070
-P	p1286	String "withT << inr{'y} >> (dT 0) thenWT autoT"
+P	p1286	String "withT << inr{'y} >> (dT 0) twa"
 O	o1286	ext_rule p1286
 NItt_union!inr	inr	inr Itt_union
 O	o1287	inr
@@ -383,12 +383,12 @@ NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p1881	String SelectOption
 O	o1881	uid p1881
 NOcaml!int	int	int Ocaml
-P	p1566	String "selT 1 (dT 0) thenWT autoT"
+P	p1566	String "selT 1 (dT 0) twa"
 O	o1566	ext_rule p1566
 P	p1569	Number 1
-P	p1588	String "withT << 'u >> (dT 0) thenT autoT"
+P	p1588	String "withT << 'u >> (dT 0) ta"
 O	o1588	ext_rule p1588
-P	p1603	String "selT 2 (dT 0) thenWT autoT"
+P	p1603	String "selT 2 (dT 0) twa"
 O	o1603	ext_rule p1603
 P	p1605	Number 2
 P	p1695	String "dT 5 thenAT trivialT"
@@ -1637,7 +1637,7 @@ P	p3341	String "dT 2"
 O	o3341	ext_rule p3341
 P	p3354	String "dT 6"
 O	o3354	ext_rule p3354
-P	p3382	String "logicAutoT thenT rwh fold_isset 0 thenT autoT"
+P	p3382	String "logicAutoT thenT rwh fold_isset 0 ta"
 O	o3382	ext_rule p3382
 T	t3396	o549 b550
 B	b3396	t3396
@@ -1701,7 +1701,7 @@ B	b3516	t3515 v
 T	t3516	o727 b3514 b3516
 P	p3522	String "dT 8 thenT rw reduceC 0"
 O	o3522	ext_rule p3522
-P	p3561	String "withT << 'f 'u >> (dT 8) thenWT autoT"
+P	p3561	String "withT << 'f 'u >> (dT 8) twa"
 O	o3561	ext_rule p3561
 P	p3579	String "withT << 'v >> (dT 8) thenT trivialT"
 O	o3579	ext_rule p3579
@@ -1779,11 +1779,11 @@ B	b4101	t4100
 T	t4101	o885 b4099 b4101
 B	b4102	t4101 x
 T	t4102	o727 b728 b4102
-P	p4142	String "dT 7 thenWT autoT"
+P	p4142	String "dT 7 twa"
 O	o4142	ext_rule p4142
 NCzf_itt_eq!fun_set	fun_set	fun_set Czf_itt_eq
 O	o4143	fun_set
-P	p4161	String "rwh unfold_fun_set 0 thenT autoT"
+P	p4161	String "rwh unfold_fun_set 0 ta"
 O	o4161	ext_rule p4161
 P	p4205	String "dT 9"
 O	o4205	ext_rule p4205
@@ -5520,7 +5520,7 @@ T	t4349	o4348
 B	b4349	t4349
 P	p4431	String trivialT
 O	o4431	ext_rule p4431
-P	p4535	String "univTypeT << univ[1:l] >> thenT autoT"
+P	p4535	String "univTypeT << univ[1:l] >> ta"
 O	o4535	ext_rule p4535
 P	p4539	String "rw reduceC 0"
 O	o4539	ext_rule p4539
@@ -6947,7 +6947,7 @@ B	b7487	t7486
 T	t7487	o985 b7487 b5674
 B	b7488	t7487 z
 T	t7488	o990 b728 b7488
-P	p5230	String "withT << 'f 'u >> (dT 0) thenWT autoT"
+P	p5230	String "withT << 'f 'u >> (dT 0) twa"
 O	o5230	ext_rule p5230
 P	p5881	String "assertT << all s: set. all v: set_ind{'s; a, f, g. 'a}. (eq{'y1; set_ind{'s; a, f, g. 'f 'v}} => mem{'y1; 's}) >>"
 O	o5881	ext_rule p5881
@@ -6981,14 +6981,14 @@ B	b7550	t7550
 T	t7551	o885 b7549 b7550
 B	b7551	t7551 v
 T	t7552	o727 b7547 b7551
-P	p5294	String "thinT 14 thenT rw reduceC 0 thenT autoT"
+P	p5294	String "thinT 14 thenT rw reduceC 0 ta"
 O	o5294	ext_rule p5294
 H	h7556	_1010 t7546
-P	p5339	String "withT << 'f 'u >> (dT 12) thenWT autoT"
+P	p5339	String "withT << 'f 'u >> (dT 12) twa"
 O	o5339	ext_rule p5339
-P	p5352	String "withT << 'v >> (dT 12) thenWT autoT"
+P	p5352	String "withT << 'v >> (dT 12) twa"
 O	o5352	ext_rule p5352
-P	p5399	String "instHypT [<< 's >>; << 'y >>] 4 thenWT autoT"
+P	p5399	String "instHypT [<< 's >>; << 'y >>] 4 twa"
 O	o5399	ext_rule p5399
 B	b7709	t5644 s1
 T	t7709	o727 b728 b7709
@@ -7236,7 +7236,7 @@ T	t737	o b737 b4
 B	b738	t737
 T	t738	o595 b731 b738
 B	b739	t738
-P	p739	String "withT << inl{'t} >> (dT 0) thenT autoT"
+P	p739	String "withT << inl{'t} >> (dT 0) ta"
 O	o739	ext_rule p739
 T	t739	o5977 b736 b4
 B	b740	t739
@@ -7531,7 +7531,7 @@ T	t899	o5977 b891 b4
 B	b899	t899
 T	t901	o595 b899 b6644
 B	b902	t901
-P	p902	String "dT 0 thenT autoT"
+P	p902	String "dT 0 ta"
 O	o902	ext_rule p902
 T	t903	o4071 b666 b4072
 B	b904	t903
@@ -7840,7 +7840,7 @@ T	t1060	o b1060 b4
 B	b1061	t1060
 T	t1061	o595 b1045 b1061
 B	b1062	t1061
-P	p1062	String "withT << 't1 >> (dT (-2)) thenT autoT"
+P	p1062	String "withT << 't1 >> (dT (-2)) ta"
 O	o1062	ext_rule p1062
 T	t1062	o5977 b1058 b4
 B	b1063	t1062
@@ -7859,7 +7859,7 @@ T	t1067	o b1067 b4
 B	b1068	t1067
 T	t1068	o595 b1063 b1068
 B	b1069	t1068
-P	p1069	String "withT << 'y1 >> (dT 0) thenWT autoT"
+P	p1069	String "withT << 'y1 >> (dT 0) twa"
 O	o1071	ext_rule p1069
 T	t1071	o5977 b1066 b4
 B	b1071	t1071
@@ -7874,7 +7874,7 @@ T	t1075	o b1074 b4
 B	b1075	t1075
 T	t1076	o595 b1071 b1075
 B	b1076	t1076
-P	p1076	String "eqSetTransT << 'f2 't1 >> thenT autoT"
+P	p1076	String "eqSetTransT << 'f2 't1 >> ta"
 O	o1076	ext_rule p1076
 T	t1077	o5977 b1073 b4
 B	b1077	t1077
@@ -7918,7 +7918,7 @@ T	t1111	o b1109 b4
 B	b1111	t1111
 T	t1112	o740 b594 b964 b1111 b4
 B	b1112	t1112
-P	p1112	String "withT << 'f 't >> (dT (-1)) thenT autoT"
+P	p1112	String "withT << 'f 't >> (dT (-1)) ta"
 O	o1112	ext_rule p1112
 T	t1113	o5977 b951 b4
 B	b1113	t1113
@@ -7946,7 +7946,7 @@ T	t1123	o b1123 b4
 B	b1124	t1123
 T	t1124	o595 b937 b1124
 B	b1125	t1124
-P	p1125	String "withT << 't, 'z >> (dT 0) thenT autoT"
+P	p1125	String "withT << 't, 'z >> (dT 0) ta"
 O	o1125	ext_rule p1125
 H	h1125	x2 t751
 T	t1125	o564 b753 b966
@@ -8018,7 +8018,7 @@ T	t1180	o b1180 b4
 B	b1181	t1180
 T	t1184	o595 b1173 b1181
 B	b1186	t1184
-P	p1186	String "dT (-1) thenT autoT"
+P	p1186	String "dT (-1) ta"
 O	o1186	ext_rule p1186
 T	t1186	o595 b1180 b4
 B	b1187	t1186
@@ -8785,7 +8785,7 @@ T	t8395	o b8395 b4
 B	b8396	t8395
 T	t8396	o595 b8382 b8396
 B	b8397	t8396
-P	p5542	String "funSetT 2 thenT autoT"
+P	p5542	String "funSetT 2 ta"
 O	o5542	ext_rule p5542
 T	t8397	o595 b8395 b4
 B	b8398	t8397
@@ -8838,7 +8838,7 @@ T	t8414	o b8414 b4
 B	b8415	t8414
 T	t8415	o595 b8406 b8415
 B	b8416	t8415
-P	p5564	String "funSetT 3 thenT autoT"
+P	p5564	String "funSetT 3 ta"
 O	o5564	ext_rule p5564
 T	t8416	o595 b8414 b4
 B	b8417	t8416
@@ -8888,7 +8888,7 @@ T	t1657	o b1657 b4
 B	b1658	t1657
 T	t1658	o595 b8423 b1658
 B	b1659	t1658
-P	p5609	String "setExtT thenWT autoT"
+P	p5609	String "setExtT twa"
 O	o5609	ext_rule p5609
 T	t5568	o5568 b563 b901
 H	h7289	_1010 t5568
@@ -8932,7 +8932,7 @@ B	b8438	t8437
 T	t8438	o595 b8430 b8438
 B	b8439	t8438
 H	h5609	u t728
-P	p5619	String "dT 8 thenWT autoT"
+P	p5619	String "dT 8 twa"
 O	o5619	ext_rule p5619
 T	t1659	o3706 b414 b7892
 H	h1659	_1010 t1659
@@ -8985,7 +8985,7 @@ T	t1684	o b1683 b4
 B	b1684	t1684
 T	t1685	o595 b1680 b1684
 B	b1685	t1685
-P	p5636	String "setSubstT << equal{'x; 'x_1} >> 9 thenT autoT"
+P	p5636	String "setSubstT << equal{'x; 'x_1} >> 9 ta"
 O	o5636	ext_rule p5636
 S	s1685	tbrarg\\ h1226 h7814 h7839 h740 h900 h7289 h5609 h1659 h1676\\ t1681
 B	b1686	s1685
@@ -9001,7 +9001,7 @@ T	t1694	o b1694 b4
 B	b1695	t1694
 T	t1695	o1566 b594 b1685 b1695 b4
 B	b1696	t1695
-P	p5640	String "selT 2 (dT 0) thenT autoT"
+P	p5640	String "selT 2 (dT 0) ta"
 O	o5640	ext_rule p5640
 H	h1696	_1010 t1670
 S	s1696	tbrarg\\ h1226 h7814 h7839 h740 h900 h7289 h5609 h1659 h1696\\ t1660
@@ -9088,7 +9088,7 @@ T	t1793	o b1793 b4
 B	b1794	t1793
 T	t1794	o595 b1786 b1794
 B	b1795	t1794
-P	p5671	String "setSubstT << equal{'x; 'x_1} >> 0 thenT autoT"
+P	p5671	String "setSubstT << equal{'x; 'x_1} >> 0 ta"
 O	o5671	ext_rule p5671
 S	s1795	tbrarg\\ h1226 h7814 h7839 h740 h900 h7289 h5609 h1716 h1743\\ t1663
 B	b1796	s1795
@@ -9372,7 +9372,7 @@ T	t1896	o b1896 b4
 B	b1897	t1896
 T	t1897	o595 b1891 b1897
 B	b1898	t1897
-P	p5800	String "withT << 'z >> (dT 0) thenWT autoT"
+P	p5800	String "withT << 'z >> (dT 0) twa"
 O	o5800	ext_rule p5800
 S	s1898	tbrarg\\ h1226 h8576 h740 h900 h7289 h5609 h1880 h5096 h8124 h1888\\ t1892
 B	b1899	s1898
@@ -9494,7 +9494,7 @@ T	t1979	o b1979 b4
 B	b1980	t1979
 T	t1980	o595 b1976 b1980
 B	b1981	t1980
-P	p5858	String "withT << 'z >> (dT 0) thenT autoT"
+P	p5858	String "withT << 'z >> (dT 0) ta"
 O	o5858	ext_rule p5858
 S	s1981	tbrarg\\ h1226 h8576 h740 h900 h7289 h5609 h1939 h5096 h8178 h1888\\ t1976
 B	b1982	s1981

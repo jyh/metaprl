@@ -3602,7 +3602,7 @@ T	t2020	o1007 b1411 b2019
 B	b2020	t2020
 T	t2021	o1007 b1407 b2020
 B	b2021	t2021
-P	p2021	String "rwh unfold_Img 0 thenT autoT"
+P	p2021	String "rwh unfold_Img 0 ta"
 O	o2021	ext_rule p2021
 T	t2022	o b1413 b28
 B	b2022	t2022
@@ -3706,7 +3706,7 @@ T	t2068	o1028 b2042 b28
 B	b2068	t2068
 T	t2069	o2067 b1027 b2068 b28 b28
 B	b2069	t2069
-P	p2069	String "repeatForT 3 (dT (-1)) thenT dT 0 thenT withT <<'a>> (dT 0) thenT autoT"
+P	p2069	String "repeatForT 3 (dT (-1)) thenT dT 0 thenT withT <<'a>> (dT 0) ta"
 O	o2069	ext_rule p2069
 H	h2069	y A_1
 T	t2070	o878 b1408 b1944 b2039
@@ -5513,7 +5513,7 @@ T	t3021	o b3021 b28
 B	b3022	t3021
 T	t3022	o1028 b3018 b3022
 B	b3023	t3022
-P	p3023	String "dT 0 thenT reduceT thenT autoT"
+P	p3023	String "dT 0 thenT reduceT ta"
 O	o3023	ext_rule p3023
 T	t3023	o1028 b3021 b28
 B	b3024	t3023
@@ -6107,7 +6107,7 @@ S	s3384	t1009\\ h\\ t1917
 B	b3384	s3384
 T	t3384	o1008 b3384
 B	b3385	t3384
-P	p3389	String "assumT 2 thenT dT 0 thenT autoT"
+P	p3389	String "assumT 2 thenT dT 0 ta"
 O	o3389	ext_rule p3389
 T	t3389	o b1018 b3050
 B	b3390	t3389
@@ -6263,7 +6263,7 @@ T	t3478	o b3384 b3477
 B	b3478	t3478
 T	t3479	o b1011 b3478
 B	b3479	t3479
-P	p3488	String "dT 0 thenT autoT"
+P	p3488	String "dT 0 ta"
 O	o3488	ext_rule p3488
 H	h3488	u t1592
 P	p3489	Var u
@@ -6652,7 +6652,7 @@ T	t3761	o1007 b3385 b3760
 B	b3761	t3761
 T	t3762	o1007 b1594 b3761
 B	b3762	t3762
-P	p3762	String "genAssumT [2;3] thenT dT 0 thenT autoT thenMT withT <<'y>> (dT (-2)) thenT autoT"
+P	p3762	String "genAssumT [2;3] thenT dT 0 ta thenMT withT <<'y>> (dT (-2)) thenT autoT"
 O	o3762	ext_rule p3762
 T	t3763	o b3125 b28
 B	b3763	t3763

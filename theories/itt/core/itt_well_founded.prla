@@ -182,7 +182,7 @@ T	t489	o489
 NSummary!interactive	interactive	interactive Summary
 O	o499	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p499	String "rwh unfold_partial_order 0 thenT autoT"
+P	p499	String "rwh unfold_partial_order 0 ta"
 O	o500	ext_rule p499
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o501	status_incomplete
@@ -197,7 +197,7 @@ NSummary!msequent	msequent	msequent Summary
 O	o504	msequent
 P	p515	String well_founded_type
 O	o515	rule p515
-P	p518	String "rwh unfold_well_founded 0 thenT autoT thenT univTypeT << univ[i:l] >> thenT withT << 'A -> univ[i:l] >> (dT 0) thenT autoT"
+P	p518	String "rwh unfold_well_founded 0 ta thenT univTypeT << univ[i:l] >> thenT withT << 'A -> univ[i:l] >> (dT 0) thenT autoT"
 O	o518	ext_rule p518
 P	p720	String with
 NSummary!comment	comment	comment Summary

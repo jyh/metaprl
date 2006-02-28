@@ -112,7 +112,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o530	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p530	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p530	String "rwh unfold_fun_prop 0 ta"
 O	o531	ext_rule p530
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o532	status_incomplete
@@ -163,7 +163,7 @@ NCzf_itt_sep!restricted	restricted	restricted Czf_itt_sep
 O	o545	restricted
 B	b545	t528
 T	t545	o545 b545
-P	p4	String "rwh unfold_restricted 0 thenT autoT"
+P	p4	String "rwh unfold_restricted 0 ta"
 O	o8	ext_rule p4
 NItt_logic	Itt_logic	Itt_logic NIL
 P	p567	String false_fun
@@ -173,7 +173,7 @@ O	o568	false
 T	t568	o568
 B	b568	t568 x
 T	t569	o527 b568
-P	p570	String "rwh unfold_false 0 thenT autoT"
+P	p570	String "rwh unfold_false 0 ta"
 O	o570	ext_rule p570
 P	p578	String false_res
 O	o578	rule p578

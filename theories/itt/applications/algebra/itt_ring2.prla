@@ -1770,7 +1770,7 @@ T	t2006	o1393 b2006
 B	b2007	t2006
 T	t2007	o1392 b2007 b1972
 B	b2008	t2007
-P	p2008	String "copyHypT 2 (-2) thenT rwh unfold_isRing (-2) thenT reduceT thenT autoT"
+P	p2008	String "copyHypT 2 (-2) thenT rwh unfold_isRing (-2) thenT reduceT ta"
 O	o2008	ext_rule p2008
 P	p2027	String ring_intro
 O	o2027	rule p2027
@@ -2518,7 +2518,7 @@ S	s2578	t1394\\ h\\ t2578
 B	b2578	s2578
 T	t2579	o1393 b2578
 B	b2579	t2579
-P	p2583	String "genAssumT [1; 2; 3; 4] thenT autoT"
+P	p2583	String "genAssumT [1; 2; 3; 4] ta"
 O	o2583	ext_rule p2583
 T	t2584	o1419 b2578 b2510
 B	b2584	t2584
@@ -2548,7 +2548,7 @@ S	s2647	t1394\\ h\\ t2647
 B	b2647	s2647
 T	t2648	o1393 b2647
 B	b2648	t2648
-P	p2650	String "genAssumT [1; 2] thenT autoT"
+P	p2650	String "genAssumT [1; 2] ta"
 O	o2650	ext_rule p2650
 T	t2651	o1419 b2647 b2464
 B	b2651	t2651
@@ -2847,7 +2847,7 @@ S	s2991	t1394\\ h\\ t2991
 B	b2991	s2991
 T	t2992	o1393 b2991
 B	b2992	t2992
-P	p2993	String "genAssumT [1] thenT dT 0 thenT autoT thenT repeatForT 2 (dT 2) thenT reduceT ttca"
+P	p2993	String "genAssumT [1] thenT dT 0 ta thenT repeatForT 2 (dT 2) thenT reduceT ttca"
 O	o2993	ext_rule p2993
 T	t2994	o1419 b2991 b2204
 B	b2994	t2994
@@ -3401,7 +3401,7 @@ T	t4860	o1392 b3325 b4859
 B	b4860	t4860
 T	t4861	o1392 b7170 b4860
 B	b4861	t4861
-P	p789	String "genAssumT [1; 2; 3] thenT autoT"
+P	p789	String "genAssumT [1; 2; 3] ta"
 O	o791	ext_rule p789
 T	t791	o1419 b774 b2365
 B	b791	t791
@@ -3943,7 +3943,7 @@ S	s9177	t1394\\ h\\ t9177
 B	b9177	s9177
 T	t9178	o1393 b9177
 B	b9178	t9178
-P	p11161	String "byDefT unfold_Zeven thenT repeatForT 3 (tryT (dT 0)) thenT repeatT (byDefT reduceC) thenT tryT (dT 4) thenT tryT (dT 3) thenT dT 2 thenT autoT"
+P	p11161	String "byDefT unfold_Zeven thenT repeatForT 3 (tryT (dT 0)) thenT repeatT (byDefT reduceC) thenT tryT (dT 4) thenT tryT (dT 3) thenT dT 2 ta"
 O	o11161	ext_rule p11161
 T	t9179	o1419 b9177 b13
 B	b9179	t9179
@@ -4797,7 +4797,7 @@ T	t12979	o1418 b1927 b13
 B	b12979	t12979
 T	t12980	o1417 b12979 b13
 B	b12980	t12980
-P	p2041	String "foldAdditiveT << 'R >> thenT autoT thenT reduceT ttca"
+P	p2041	String "foldAdditiveT << 'R >> ta thenT reduceT ttca"
 O	o2051	ext_rule p2041
 T	t1965	o921 b1656 b648
 B	b1966	t1965
@@ -5030,7 +5030,7 @@ T	t7953	o1704 b7952
 B	b7953	t7953
 T	t7954	o1392 b7953 b7175
 B	b7954	t7954
-P	p7954	String "assumT 1 thenT autoT thenT dT 2 thenT dT 5 ttca"
+P	p7954	String "assumT 1 ta thenT dT 2 thenT dT 5 ttca"
 O	o7954	ext_rule p7954
 T	t7955	o b7951 b13
 B	b7955	t7955
@@ -5351,7 +5351,7 @@ S	s11414	t1394\\ h\\ t11414
 B	b11414	s11414
 T	t11415	o1393 b11414
 B	b11415	t11415
-P	p13284	String "strongAutoT thenT byDefsT [unfold_Zeven; unfold_Z] thenT byDefT reduceC thenT tryT (dT 0) thenPT (dT (-1) thenT dT 2) thenT autoT"
+P	p13284	String "strongAutoT thenT byDefsT [unfold_Zeven; unfold_Z] thenT byDefT reduceC thenT tryT (dT 0) thenPT (dT (-1) thenT dT 2) ta"
 O	o13284	ext_rule p13284
 T	t11416	o1419 b11414 b13
 B	b11416	t11416

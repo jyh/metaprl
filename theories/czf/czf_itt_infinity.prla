@@ -1539,7 +1539,7 @@ B	b539	t539
 NSummary!interactive	interactive	interactive Summary
 O	o539	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p539	String "rwh unfold_inf 0 thenT autoT"
+P	p539	String "rwh unfold_inf 0 ta"
 O	o540	ext_rule p539
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o541	status_incomplete
@@ -1597,7 +1597,7 @@ T	t559	o b558 b4
 B	b559	t559
 T	t560	o542 b546 b559
 B	b560	t560
-P	p560	String "dT 2 thenT rw reduceC 0 thenT autoT"
+P	p560	String "dT 2 thenT rw reduceC 0 ta"
 O	o560	ext_rule p560
 T	t561	o542 b558 b4
 B	b561	t561
@@ -1758,7 +1758,7 @@ T	t612	o b611 b4
 B	b612	t612
 T	t613	o542 b596 b612
 B	b613	t613
-P	p613	String "rwh unfold_inf 0 thenT rw reduceC 0 thenT autoT"
+P	p613	String "rwh unfold_inf 0 thenT rw reduceC 0 ta"
 O	o613	ext_rule p613
 P	p614	String wf
 O	o614	tactic_arg p614
@@ -1903,7 +1903,7 @@ T	t669	o b658 b668
 B	b669	t669
 T	t670	o542 b642 b669
 B	b670	t670
-P	p670	String "rw reduceC 0 thenT autoT"
+P	p670	String "rw reduceC 0 ta"
 O	o670	ext_rule p670
 T	t671	o542 b658 b4
 B	b671	t671
@@ -2173,7 +2173,7 @@ T	t775	o b774 b4
 B	b775	t775
 T	t776	o542 b757 b775
 B	b776	t776
-P	p776	String "rwh unfold_sing 0 thenT rw reduceC 0 thenT autoT"
+P	p776	String "rwh unfold_sing 0 thenT rw reduceC 0 ta"
 O	o776	ext_rule p776
 H	h776	y_2 t512
 S	s776	tbrarg h h596 h693 h703 h704 h548 h725 h776
@@ -2246,13 +2246,13 @@ T	t806	o b802 b806
 B	b807	t806
 T	t807	o542 b774 b807
 B	b808	t807
-P	p808	String "dT 6 thenT rw reduceC 0 thenT autoT"
+P	p808	String "dT 6 thenT rw reduceC 0 ta"
 O	o808	ext_rule p808
 T	t808	o542 b802 b4
 B	b809	t808
 T	t809	o808 b541 b809 b4 b4
 B	b810	t809
-P	p810	String "withT << it >> (dT 0) thenT autoT"
+P	p810	String "withT << it >> (dT 0) ta"
 O	o810	ext_rule p810
 H	h810	x t512
 S	s810	tbrarg h h596 h693 h703 h704 h548 h725 h810
@@ -2321,7 +2321,7 @@ T	t839	o b839 b4
 B	b840	t839
 T	t840	o542 b763 b840
 B	b841	t840
-P	p841	String "dT 8 thenT rw reduceC 0 thenT autoT"
+P	p841	String "dT 8 thenT rw reduceC 0 ta"
 O	o841	ext_rule p841
 T	t841	o542 b839 b4
 B	b842	t841

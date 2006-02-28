@@ -7728,19 +7728,19 @@ O	o3021	fun
 P	p3428	Var t
 O	o3428	var p3428
 O	o3500	tactic_arg p2522
-P	p11	String "doNotThinT (withT <<bind{b.lambda{it.'s['a]}= lambda{it.'t['a]} in (('a='b in quot x, y: 'A // 'E['x; 'y]) -> 'T['a])}>>(letT <<'b='a in quot x, y: 'A // 'E['x; 'y]>>)) thenAT autoT"
+P	p11	String "doNotThinT (withT <<bind{b.lambda{it.'s['a]}= lambda{it.'t['a]} in (('a='b in quot x, y: 'A // 'E['x; 'y]) -> 'T['a])}>>(letT <<'b='a in quot x, y: 'A // 'E['x; 'y]>>)) taa"
 O	o12	ext_rule p11
-P	p3533	String "dT 2 thenWT autoT"
+P	p3533	String "dT 2 twa"
 O	o3533	ext_rule p3533
 P	p3548	String "dT 0"
 O	o3548	ext_rule p3548
-P	p3579	String "typeAssertT thenT autoT"
+P	p3579	String "typeAssertT ta"
 O	o3579	ext_rule p3579
 P	p3581	String autoT
 O	o3581	ext_rule p3581
 P	p3603	String "assertT <<'w='a in quot x, y: 'A // 'E['x; 'y]>>"
 O	o3603	ext_rule p3603
-P	p3683	String "rwh reduceC 4 thenT autoT"
+P	p3683	String "rwh reduceC 4 ta"
 O	o3683	ext_rule p3683
 P	p3706	String An
 O	o3706	comment_string p3706
@@ -8158,7 +8158,7 @@ T	t3148	o b3144 b3148
 B	b3149	t3148
 T	t3149	o3476 b3067 b3149
 B	b3150	t3149
-P	p2969	String "equalTransT <<'b1>> thenT autoT"
+P	p2969	String "equalTransT <<'b1>> ta"
 O	o2969	ext_rule p2969
 S	s2955	tbrarg\\ h2169 h2425 h2426 h2712 h2713 h2174 h2207 h2208 h2857\\ t2493
 B	b2956	s2955
@@ -8223,7 +8223,7 @@ T	t3490	o b3486 b3490
 B	b3500	t3490
 T	t3500	o3476 b3469 b3500
 B	b3501	t3500
-P	p5105	String "equalSymT thenT autoT"
+P	p5105	String "equalSymT ta"
 O	o5105	ext_rule p5105
 S	s2981	tbrarg\\ h2169 h2425 h2426 h2712 h2713 h2174 h2207 h2208 h2857 h2501\\ t2981
 B	b2982	s2981
@@ -8791,7 +8791,7 @@ P	p4167	String DSubtype
 O	o4167	uid p4167
 T	t4167	o4167
 B	b4167	t4167
-P	p5171	String "assumT 1 thenT dT 2 thenT autoT"
+P	p5171	String "assumT 1 thenT dT 2 ta"
 O	o5171	ext_rule p5171
 H	h4665	x1 t3154
 H	h3269	v A1
@@ -8836,7 +8836,7 @@ S	s3463	tbrarg\\ h2169 h3268 h3269 h3270 h3271\\ t3463
 B	b3463	s3463
 T	t3464	o3478 b3463 b3173
 B	b3464	t3464
-P	p5195	String "dT 0 thenT withT <<'w>> (dT 2) thenT autoT"
+P	p5195	String "dT 0 thenT withT <<'w>> (dT 2) ta"
 O	o5195	ext_rule p5195
 T	t4677	o3500 b3464 b10
 B	b4678	t4677

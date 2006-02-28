@@ -312,7 +312,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o648	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p648	String "rwh unfold_plane 0 thenT autoT"
+P	p648	String "rwh unfold_plane 0 ta"
 O	o649	ext_rule p648
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o650	status_incomplete
@@ -342,7 +342,7 @@ T	t689	o689
 P	p705	String spaceType
 O	o705	rule p705
 T	t705	o646 b568
-P	p706	String "rwaAll [unfold_space;unfold_A] thenT autoT"
+P	p706	String "rwaAll [unfold_space;unfold_A] ta"
 O	o706	ext_rule p706
 P	p720	String aInSpace
 O	o720	rule p720
@@ -359,12 +359,12 @@ O	o756	rewrite756
 P	p766	String a_z_rw
 O	o766	rewrite p766
 NItt_record!field	field	field Itt_record
-P	p777	String "rwh reduceC 0 thenT autoT"
+P	p777	String "rwh reduceC 0 ta"
 O	o777	ext_rule p777
 P	p786	String bInSpace
 O	o786	rule p786
 T	t786	o721 b568 b623 b623
-P	p787	String "rwaAll [unfold_B;unfold_space] thenT autoT"
+P	p787	String "rwaAll [unfold_B;unfold_space] ta"
 O	o787	ext_rule p787
 P	p800	String oInSpace
 O	o800	rule p800
@@ -468,7 +468,7 @@ P	p1016	Var x_2
 O	o1016	var p1016
 T	t1016	o1016
 B	b1016	t1016
-P	p1045	String "moveHypT 2 5 thenT autoT"
+P	p1045	String "moveHypT 2 5 ta"
 O	o1045	ext_rule p1045
 NSummary!ext_goal	ext_goal	ext_goal Summary
 O	o1051	ext_goal
@@ -538,7 +538,7 @@ P	p1132	String tst
 O	o1132	rule p1132
 P	p1137	String assertion
 O	o1137	tactic_arg p1137
-P	p1371	String "assertEqT <<A=B in space>> thenAT autoT"
+P	p1371	String "assertEqT <<A=B in space>> taa"
 O	o1371	ext_rule p1371
 H	h1371	z t568
 P	p1372	Var z
@@ -821,7 +821,7 @@ O	o1641	ext_rule p1641
 P	p1643	String ort
 O	o1643	tactic_arg p1643
 NItt_record!record_ort	record_ort	record_ort Itt_record
-P	p1687	String "rwh plane_point 0 thenT rwh reduceC 0 thenT autoT"
+P	p1687	String "rwh plane_point 0 thenT rwh reduceC 0 ta"
 O	o1687	ext_rule p1687
 P	p1708	String ::
 O	o1709	uid p1708
@@ -942,7 +942,7 @@ T	t2302	o2302
 B	b2302	t2302
 P	p1835	String "rwhAll unfold_length"
 O	o1835	ext_rule p1835
-P	p1928	String "letT <<'r='p in plane>> thenAT autoT"
+P	p1928	String "letT <<'r='p in plane>> taa"
 O	o1928	ext_rule p1928
 H	h1929	r t556
 P	p1929	Var r
@@ -965,11 +965,11 @@ T	t2356	o b1293 b2355
 B	b2356	t2356
 P	p2424	String planeIntro
 O	o2424	rule p2424
-P	p2432	String "rwaAll [unfold_point; unfold_plane] thenT autoT"
+P	p2432	String "rwaAll [unfold_point; unfold_plane] ta"
 O	o2432	ext_rule p2432
 P	p2448	String spaceIntro
 O	o2448	rule p2448
-P	p2455	String "rwaAll [unfold_point; unfold_space] thenT autoT"
+P	p2455	String "rwaAll [unfold_point; unfold_space] ta"
 O	o2455	ext_rule p2455
 P	p2472	String Then
 O	o2472	comment_string p2472
@@ -1186,11 +1186,11 @@ P	p1480	String unfold_O
 O	o1481	rcrd p1109
 O	o1482	rcrd p1110
 O	o1483	rcrd p1194
-P	p1532	String "rwaAll [unfold_O;unfold_space] thenT autoT"
+P	p1532	String "rwaAll [unfold_O;unfold_space] ta"
 O	o1532	ext_rule p1532
-P	p1547	String "rwaAll [unfold_O; unfold_plane] thenT autoT"
+P	p1547	String "rwaAll [unfold_O; unfold_plane] ta"
 O	o1548	ext_rule p1547
-P	p1750	String "rwaAll [unfold_A;unfold_space] thenT autoT"
+P	p1750	String "rwaAll [unfold_A;unfold_space] ta"
 O	o1750	ext_rule p1750
 O	o1882	label p1109
 T	t1882	o1882
@@ -1201,7 +1201,7 @@ B	b1887	t1887
 O	o1891	label p1194
 T	t1892	o1891
 B	b1892	t1892
-P	p2020	String "rwaAll [unfold_A;unfold_B;unfold_plane] thenT autoT"
+P	p2020	String "rwaAll [unfold_A;unfold_B;unfold_plane] ta"
 O	o2020	ext_rule p2020
 P	p2030	String "assertT <<field[\"z\":t]{A} = field[\"z\":t]{B} in int>>"
 O	o2030	ext_rule p2030
@@ -1214,7 +1214,7 @@ T	t2033	o721 b560 b2031 b2032
 T	t2041	o2031 b1372
 B	b2042	t2041
 T	t2042	o721 b560 b2042 b2042
-P	p922	String "assertT <<\"assert\"{beq_int{3;0}}>> thenAT autoT"
+P	p922	String "assertT <<\"assert\"{beq_int{3;0}}>> taa"
 O	o922	ext_rule p922
 NItt_int_base!beq_int	beq_int922	beq_int Itt_int_base
 O	o923	beq_int922
@@ -1310,14 +1310,14 @@ B	b3551	t3551
 P	p2874	String redAInCSpace
 O	o2874	rule p2874
 T	t2874	o721 b588 b633 b633
-P	p2875	String "rwaAll [unfold_redA; unfold_colored_space] thenT autoT"
+P	p2875	String "rwaAll [unfold_redA; unfold_colored_space] ta"
 O	o2875	ext_rule p2875
 T	t3554	o721 b568 b3551 b3551
 P	p3579	String recordOrtT
 O	o3579	ext_rule p3579
 O	o3581	record_ort p3543
 T	t3581	o3581 b637 b568
-P	p2920	String "rwh unfold_space 0 thenT autoT"
+P	p2920	String "rwh unfold_space 0 ta"
 O	o2920	ext_rule p2920
 T	t3607	o3551 b981 b863
 H	h3613	p t3547
@@ -4997,7 +4997,7 @@ T	t5356	o3862 b5356
 B	b5357	t5356
 P	p5365	String stack_as_list_wf
 O	o5365	rule p5365
-P	p5367	String "byDefT stack_as_list thenT byDefT unfold_stack thenT reduceT thenT autoT thenT tryT (completeT (univTypeT <<univ[i:l]>> thenT autoT))"
+P	p5367	String "byDefT stack_as_list thenT byDefT unfold_stack thenT reduceT ta thenT tryT (completeT (univTypeT <<univ[i:l]>> thenT autoT))"
 O	o5367	ext_rule p5367
 T	t5372	o5355 b948 b5332 b5355
 B	b5372	t5372
@@ -6064,7 +6064,7 @@ S	s7497	tbrarg\\ h1063 h7494 h6974 h7495\\ t7497
 B	b7497	s7497
 T	t7498	o653 b7497 b4788
 B	b7498	t7498
-P	p5683	String "dT 2 thenT rwh reduceC 0 thenT autoT"
+P	p5683	String "dT 2 thenT rwh reduceC 0 ta"
 O	o5683	ext_rule p5683
 T	t7605	o721 b5307 b5372 b5372
 S	s7605	tbrarg\\ h1063 h5158\\ t7605

@@ -265,7 +265,7 @@ O	o1731	false
 T	t1731	o1731
 B	b1731	t1731
 T	t1732	o504 b1731
-P	p1733	String "rwh unfold_decidable 0 thenT selT 2 (dT 0) thenT autoT"
+P	p1733	String "rwh unfold_decidable 0 thenT selT 2 (dT 0) ta"
 O	o1733	ext_rule p1733
 P	p1746	Number 0
 NSummary!comment	comment	comment Summary
@@ -3903,7 +3903,7 @@ S	s2080	tbrarg\\ h1623\\ t1811
 B	b2081	s2080
 T	t2081	o568 b2081
 B	b2082	t2081
-P	p1812	String "rwh unfold_decidable 0 thenT selT 1 (dT 0) thenT autoT"
+P	p1812	String "rwh unfold_decidable 0 thenT selT 1 (dT 0) ta"
 O	o1812	ext_rule p1812
 T	t2082	o536 b2081 b4
 B	b2083	t2082

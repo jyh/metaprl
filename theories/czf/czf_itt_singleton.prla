@@ -134,7 +134,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o557	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p557	String "rwh unfold_sing 0 thenT autoT"
+P	p557	String "rwh unfold_sing 0 ta"
 O	o558	ext_rule p557
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o559	status_incomplete
@@ -954,7 +954,7 @@ T	t1598	o1597
 B	b1598	t1598
 P	p1609	String "rwh unfold_sing 0 thenT rw reduceC 0"
 O	o1609	ext_rule p1609
-P	p1627	String "withT << it >> (dT 0) thenT autoT"
+P	p1627	String "withT << it >> (dT 0) ta"
 O	o1627	ext_rule p1627
 P	p1641	String Functionality
 O	o1641	comment_string p1641
@@ -1019,7 +1019,7 @@ O	o1679	fun_set
 P	p1679	Var z
 O	o1680	var p1679
 T	t1680	o1680
-P	p1688	String "rwh unfold_fun_set 0 thenT autoT"
+P	p1688	String "rwh unfold_fun_set 0 ta"
 O	o1688	ext_rule p1688
 O	o1691	tactic_arg p1593
 NCzf_itt_set!set	set	set Czf_itt_set
@@ -1039,9 +1039,9 @@ T	t1695	o1693 b582 b1694
 H	h1695	x_2 t1695
 T	t1717	o1693 b1594 b1598
 H	h1956	x t1717
-P	p1751	String "funSetT 2 thenT autoT"
+P	p1751	String "funSetT 2 ta"
 O	o1751	ext_rule p1751
-P	p1753	String "funSetT 3 thenT autoT"
+P	p1753	String "funSetT 3 ta"
 O	o1753	ext_rule p1753
 P	p1755	String "setExtT twa"
 O	o1755	ext_rule p1755
@@ -1050,16 +1050,16 @@ P	p1766	Var u
 O	o1766	var p1766
 T	t1766	o1766
 B	b1767	t1766
-P	p1782	String "dT 6 thenT autoT"
+P	p1782	String "dT 6 ta"
 O	o1782	ext_rule p1782
-P	p1798	String "setSubstT << equal{'x_1; 'x} >> 0 thenT autoT"
+P	p1798	String "setSubstT << equal{'x_1; 'x} >> 0 ta"
 O	o1798	ext_rule p1798
 P	p1799	String eq
 O	o1799	tactic_arg p1799
 T	t1799	o581 b1694 b582
-P	p1808	String "rwh unfold_equal 4 thenT eqSetSymT thenT autoT"
+P	p1808	String "rwh unfold_equal 4 thenT eqSetSymT ta"
 O	o1808	ext_rule p1808
-P	p1831	String "setSubstT << equal{'x; 'x_1} >> 0 thenT autoT"
+P	p1831	String "setSubstT << equal{'x; 'x_1} >> 0 ta"
 O	o1831	ext_rule p1831
 NSummary!id	id	id Summary
 P	p1	Number -383209756

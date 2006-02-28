@@ -931,7 +931,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o1599	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1599	String "rwh unfold_bisect 0 thenT autoT"
+P	p1599	String "rwh unfold_bisect 0 ta"
 O	o1600	ext_rule p1599
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1601	status_incomplete
@@ -959,7 +959,7 @@ T	t1634	o1634
 B	b1634	t1634
 P	p1642	String isect_isset
 O	o1642	rule p1642
-P	p1645	String "rwh unfold_isect 0 thenT autoT"
+P	p1645	String "rwh unfold_isect 0 ta"
 O	o1645	ext_rule p1645
 P	p1660	String Introduction
 O	o1660	comment_string p1660
@@ -1095,7 +1095,7 @@ P	p1899	String bisect_member_elim
 O	o1899	rule p1899
 P	p1923	String "assertT << mem{'y; .\"isect\"{'s1; 's2}} >> thenAT trivialT"
 O	o1923	ext_rule p1923
-P	p1936	String "rwh unfold_bisect 4 thenT dT 4 thenT autoT"
+P	p1936	String "rwh unfold_bisect 4 thenT dT 4 ta"
 O	o1936	ext_rule p1936
 P	p1954	String performs
 O	o1954	comment_string p1954
@@ -1139,7 +1139,7 @@ P	p2054	String "rwh unfold_isect 4"
 O	o2054	ext_rule p2054
 P	p2060	String "dT 4 twa"
 O	o2060	ext_rule p2060
-P	p2068	String "withT << 'z >> (dT 6) thenT autoT"
+P	p2068	String "withT << 'z >> (dT 6) ta"
 O	o2068	ext_rule p2068
 P	p1788	Number 6189
 P	p1846	String intro
@@ -1213,9 +1213,9 @@ T	t2131	o2131
 P	p2134	Var u
 O	o2135	var p2134
 T	t2135	o2135
-P	p2165	String "funSetT 3 thenT autoT"
+P	p2165	String "funSetT 3 ta"
 O	o2165	ext_rule p2165
-P	p2167	String "funSetT 2 thenT autoT"
+P	p2167	String "funSetT 2 ta"
 O	o2167	ext_rule p2167
 P	p2182	String isect_fun
 O	o2182	rule p2182

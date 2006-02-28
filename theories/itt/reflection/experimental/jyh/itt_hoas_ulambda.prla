@@ -693,7 +693,7 @@ B	b218	t218
 NSummary!interactive	interactive	interactive Summary
 O	o218	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p218	String "rwh unfold_ulambda 0 thenT autoT"
+P	p218	String "rwh unfold_ulambda 0 ta"
 O	o219	ext_rule p218
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o220	status_incomplete
@@ -981,7 +981,7 @@ O	o422	tactic_arg p422
 P	p483	String ""
 O	o483	tactic_arg p483
 NItt_int_ext	Itt_int_ext	Itt_int_ext NIL
-P	p507	String "omegaT thenT autoT"
+P	p507	String "omegaT ta"
 O	o507	ext_rule p507
 NSummary!resource_defs	resource_defs	resource_defs Summary
 NOcaml!uid	uid	uid Ocaml
@@ -1096,7 +1096,7 @@ T	t918	o b918 b6
 B	b919	t918
 T	t919	o221 b912 b919
 B	b920	t919
-P	p920	String "rwh fold_ulambda 0 thenT autoT"
+P	p920	String "rwh fold_ulambda 0 ta"
 O	o920	ext_rule p920
 T	t920	o221 b918 b6
 B	b921	t920
@@ -1207,7 +1207,7 @@ T	t285	o221 b279 b6
 B	b286	t285
 T	t286	o920 b220 b286 b6 b6
 B	b287	t286
-P	p287	String "rw reduceC 0 thenT rwh fold_dummy 0 thenT autoT"
+P	p287	String "rw reduceC 0 thenT rwh fold_dummy 0 ta"
 O	o287	ext_rule p287
 T	t287	o307 b45 b260
 B	b288	t287

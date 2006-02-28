@@ -945,7 +945,7 @@ T	t2168	o b2164 b2167
 B	b2168	t2168
 T	t2169	o b131 b2168
 B	b2169	t2169
-P	p1163	String "type_subtype_rightT << 'C >> thenT autoT"
+P	p1163	String "type_subtype_rightT << 'C >> ta"
 O	o1163	ext_rule p1163
 P	p1168	String "selT 1 (dT 2)"
 O	o1168	ext_rule p1168
@@ -963,9 +963,9 @@ P	p1487	String "type_subtype_rightT << 'A >> thenT trivialT"
 O	o1487	ext_rule p1487
 P	p1490	String "assumT 1 thenT assumT 2 thenT dT 0"
 O	o1490	ext_rule p1490
-P	p1508	String "withT << 'x >> (dT 3) thenT autoT"
+P	p1508	String "withT << 'x >> (dT 3) ta"
 O	o1508	ext_rule p1508
-P	p1511	String "withT << 'x >> (dT 4) thenT autoT"
+P	p1511	String "withT << 'x >> (dT 4) ta"
 O	o1511	ext_rule p1511
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p2210	String []
@@ -1343,7 +1343,7 @@ T	t740	o740
 B	b740	t740
 P	p892	String "rwhAllAll unfold_bisect"
 O	o893	ext_rule p892
-P	p237	String "doNotThinT (withTermsT [<<btrue>>; <<bind{a.'C['x;'a;'x]}>>] (dT 2)) thenAT autoT thenT reduceT"
+P	p237	String "doNotThinT (withTermsT [<<btrue>>; <<bind{a.'C['x;'a;'x]}>>] (dT 2)) taa thenT reduceT"
 O	o237	ext_rule p237
 T	t3254	o510 b776 b3167 b3171
 B	b3255	t3254
@@ -3569,7 +3569,7 @@ S	s3359	tbrarg\\ h3119 h3359 h3315 h3316 h3323\\ C3359
 B	b3360	s3359
 T	t3360	o548 b3360 b3330
 B	b3361	t3360
-P	p254	String "doNotThinT (withTermsT [<<bfalse>>; <<bind{b.'C['x;'a;'b]}>>] (dT 2)) thenAT autoT thenT reduceT"
+P	p254	String "doNotThinT (withTermsT [<<bfalse>>; <<bind{b.'C['x;'a;'b]}>>] (dT 2)) taa thenT reduceT"
 O	o254	ext_rule p254
 T	t1936	o1924 b3361 b4
 B	b1937	t1936
@@ -4077,7 +4077,7 @@ P	p2245	Number 4904
 O	o2245	apply p2245 p2219
 O	o2246	uid p2245 p2219
 O	o2924	rule p1376
-P	p2934	String "withT <<bind{a,b.'C['a;'b]}>> (dT 2) thenT autoT"
+P	p2934	String "withT <<bind{a,b.'C['a;'b]}>> (dT 2) ta"
 O	o2934	ext_rule p2934
 P	p2944	String also
 O	o2944	comment_string p2944
@@ -4096,9 +4096,9 @@ O	o3157	uid p3157
 T	t3157	o3157
 B	b3157	t3157
 P	p3160	String "select option is out of range ([1,2])"
-P	p3268	String "assumT 2 thenT withT << 'a >> (dT (-1)) thenT autoT"
+P	p3268	String "assumT 2 thenT withT << 'a >> (dT (-1)) ta"
 O	o3268	ext_rule p3268
-P	p3280	String "selT 2 (dT 2) thenT autoT"
+P	p3280	String "selT 2 (dT 2) ta"
 O	o3280	ext_rule p3280
 P	p3424	String ::
 O	o3425	uid p3424
@@ -4416,7 +4416,7 @@ T	t3660	o522 b3660
 B	b3661	t3660
 T	t3661	o520 b3659 b3661
 B	b3662	t3661
-P	p1987	String "doNotThinT (withT <<bind{a,b.'C['a]}>> (dT 2)) thenT autoT"
+P	p1987	String "doNotThinT (withT <<bind{a,b.'C['a]}>> (dT 2)) ta"
 O	o1987	ext_rule p1987
 T	t2556	o b3658 b4
 B	b2556	t2556
@@ -4444,7 +4444,7 @@ T	t3672	o522 b3672
 B	b3673	t3672
 T	t3673	o520 b3673 b3661
 B	b3674	t3673
-P	p1992	String "doNotThinT (withT <<bind{a,b.'C['b]}>> (dT 2)) thenT autoT"
+P	p1992	String "doNotThinT (withT <<bind{a,b.'C['b]}>> (dT 2)) ta"
 O	o1992	ext_rule p1992
 T	t2564	o b3672 b4
 B	b2564	t2564
@@ -5251,7 +5251,7 @@ T	t3983	o520 b3982 b3909
 B	b3983	t3983
 T	t3984	o520 b3169 b3983
 B	b3984	t3984
-P	p629	String "subtype_axiomFormation thenT autoT"
+P	p629	String "subtype_axiomFormation ta"
 O	o629	ext_rule p629
 T	t3985	o b3981 b4
 B	b3985	t3985

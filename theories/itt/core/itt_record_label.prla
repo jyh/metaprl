@@ -2856,7 +2856,7 @@ T	t1424	o548 b1424
 B	b1425	t1424
 T	t1425	o762 b1423 b1425
 B	b1426	t1425
-P	p1326	String "rwh reduceC 0 thenT autoT"
+P	p1326	String "rwh reduceC 0 ta"
 O	o1326	ext_rule p1326
 T	t1426	o b1422 b4
 B	b1427	t1426

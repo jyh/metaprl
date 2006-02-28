@@ -1137,7 +1137,7 @@ B	b2472	t2471
 NSummary!interactive	interactive	interactive Summary
 O	o1586	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1586	String "genAssumT [3] thenT autoT thenT dT 2 thenT rwh unfold_power 0 thenT rwh reduceC 0 ttca"
+P	p1586	String "genAssumT [3] ta thenT dT 2 thenT rwh unfold_power 0 thenT rwh reduceC 0 ttca"
 O	o1587	ext_rule p1586
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1588	status_incomplete
@@ -3596,7 +3596,7 @@ T	t3566	o1568 b3447 b3566
 B	b3567	t3566
 T	t3567	o1568 b1960 b3567
 B	b3568	t3567
-P	p1845	String "rwh unfold_fun_set 0 thenT autoT"
+P	p1845	String "rwh unfold_fun_set 0 ta"
 O	o1845	ext_rule p1845
 T	t3568	o b3559 b8
 B	b3569	t3568
@@ -3758,7 +3758,7 @@ T	t2210	o1589 b2210 b8
 B	b2211	t2210
 T	t2211	o1905 b1588 b2211 b8 b8
 B	b2212	t2211
-P	p1931	String "genAssumT [3] thenT autoT thenT dT 7 thenT rwh unfold_power 0 thenT rwh reduceC 0 ttca"
+P	p1931	String "genAssumT [3] ta thenT dT 7 thenT rwh unfold_power 0 thenT rwh reduceC 0 ttca"
 O	o1931	ext_rule p1931
 H	h3639	_1010 t3606
 S	s3639	tbrarg\\ h1932 h1852 h1853 h1559 h3627 h3639\\ t3613
@@ -3878,7 +3878,7 @@ T	t2240	o b2240 b8
 B	b2241	t2240
 T	t2241	o1647 b1588 b2229 b2241 b8
 B	b2242	t2241
-P	p2000	String "rwh reduce_ind_up 0 thenT autoT"
+P	p2000	String "rwh reduce_ind_up 0 ta"
 O	o2000	ext_rule p2000
 H	h3686	_1010 t3686
 S	s3686	tbrarg\\ h1932 h1852 h1853 h1559 h3627 h3639 h1596 h1139 h3686\\ t3660
@@ -3904,7 +3904,7 @@ S	s3828	tbrarg\\ h1932 h1852 h1853 h1559 h3627 h3639 h1596 h1139 h3686\\ t3828
 B	b3829	s3828
 T	t3829	o1591 b3829 b3573
 B	b3830	t3829
-P	p2008	String "setSubstT << equal{power{'g; 'f['s1]; ('m -@ 1)}; power{'g; 'f['s2]; ('m -@ 1)}} >> 0 thenT autoT thenT setSubstT << equal{'s1; 's2} >> 0 ttca"
+P	p2008	String "setSubstT << equal{power{'g; 'f['s1]; ('m -@ 1)}; power{'g; 'f['s2]; ('m -@ 1)}} >> 0 ta thenT setSubstT << equal{'s1; 's2} >> 0 ttca"
 O	o2008	ext_rule p2008
 T	t2249	o1590 b3830 b8
 B	b2250	t2249
@@ -4008,7 +4008,7 @@ T	t3898	o1568 b3447 b3898
 B	b3899	t3898
 T	t3899	o1568 b1960 b3899
 B	b3900	t3899
-P	p3844	String "genAssumT [3] thenT autoT thenT dT 2 thenT byDefT reduceC"
+P	p3844	String "genAssumT [3] ta thenT dT 2 thenT byDefT reduceC"
 O	o3844	ext_rule p3844
 T	t3900	o b3887 b8
 B	b3901	t3900
@@ -4239,11 +4239,11 @@ T	t2344	o1589 b2331 b2344
 B	b2345	t2344
 T	t3983	o1374 b1944 b3884 b2096
 B	b3984	t3983
-P	p2548	String "setSubstT << equal{op{'g; 'x; id{'g}}; 'x} >> 0 thenT autoT thenT rwh unfold_power 0 thenT rwh reduceC 0"
+P	p2548	String "setSubstT << equal{op{'g; 'x; id{'g}}; 'x} >> 0 ta thenT rwh unfold_power 0 thenT rwh reduceC 0"
 O	o2548	ext_rule p2548
-P	p2584	String "setSubstT << equal{op{'g; 'x; op{'g; 'x; id{'g}}}; op{'g; 'x; 'x}} >> 0 thenT autoT"
+P	p2584	String "setSubstT << equal{op{'g; 'x; op{'g; 'x; id{'g}}}; op{'g; 'x; 'x}} >> 0 ta"
 O	o2584	ext_rule p2584
-P	p2592	String "setSubstT << equal{op{'g; op{'g; 'x; 'x}; inv{'g; 'x}}; op{'g; 'x; op{'g; 'x; inv{'g; 'x}}}} >> 0 thenT autoT thenT setSubstT << equal{op{'g; 'x; inv{'g; 'x}}; id{'g}} >> 0 ttca"
+P	p2592	String "setSubstT << equal{op{'g; op{'g; 'x; 'x}; inv{'g; 'x}}; op{'g; 'x; op{'g; 'x; inv{'g; 'x}}}} >> 0 ta thenT setSubstT << equal{op{'g; 'x; inv{'g; 'x}}; id{'g}} >> 0 ttca"
 O	o2592	ext_rule p2592
 P	p2642	String "rwh unfold_power 0 thenT rwh reduce_ind_up 0 ttca"
 O	o2642	ext_rule p2642
@@ -4251,7 +4251,7 @@ P	p3912	String "hypSubstT 5 0 ttca thenT rwh unfold_power 0 thenT rwh reduceC 0 
 O	o3912	ext_rule p3912
 P	p2872	String power_more
 O	o2872	rule p2872
-P	p2879	String "genAssumT [3] thenT autoT thenT dT 2 ttca"
+P	p2879	String "genAssumT [3] ta thenT dT 2 ttca"
 O	o2879	ext_rule p2879
 P	p2931	String "hypSubstT 5 0 ttca thenT rwh reduceC 0 ttca thenT rwh unfold_power 0 thenT rwh reduceC 0 ttca thenT rwh unfold_power 0 thenT rwh reduceC 0 ttca"
 O	o2931	ext_rule p2931
@@ -4297,7 +4297,7 @@ T	t3392	o39 b41 b3391
 B	b3392	t3392
 P	p3419	String power_reduce1
 O	o3419	rule p3419
-P	p3431	String "genAssumT [3; 4] thenT autoT thenT dT 3 ttca"
+P	p3431	String "genAssumT [3; 4] ta thenT dT 3 ttca"
 O	o3431	ext_rule p3431
 H	h3436	m_1 t1577
 P	p3436	Var m_1
@@ -5015,7 +5015,7 @@ T	t2569	o b2563 b2569
 B	b2570	t2569
 T	t2570	o1589 b2560 b2570
 B	b2571	t2570
-P	p5326	String "setSubstT << equal{power{'g; 'x; ('m_2 +@ 1)}; op{'g; power{'g; 'x; 'm_2}; 'x}} >> 5 thenT autoT"
+P	p5326	String "setSubstT << equal{power{'g; 'x; ('m_2 +@ 1)}; op{'g; power{'g; 'x; 'm_2}; 'x}} >> 5 ta"
 O	o5326	ext_rule p5326
 H	h5268	_1010 t5268
 T	t5269	o1417 b5267 b1418
@@ -5086,7 +5086,7 @@ T	t2583	o1589 b2582 b8
 B	b2583	t2583
 T	t2584	o3512 b1588 b2583 b8 b8
 B	b2584	t2584
-P	p5344	String "setSubstT << equal{power{'g; 'x; ('m_1 +@ ('m_2 +@ 1))}; op{'g; power{'g; 'x; ('m_1 +@ 'm_2)}; 'x}} >> 6 thenT autoT"
+P	p5344	String "setSubstT << equal{power{'g; 'x; ('m_1 +@ ('m_2 +@ 1))}; op{'g; power{'g; 'x; ('m_1 +@ 'm_2)}; 'x}} >> 6 ta"
 O	o5344	ext_rule p5344
 H	h6595	_1010 t6595
 S	s6595	tbrarg\\ h1932 h3436 h5266 h5268 h6554 h6595\\ t6558

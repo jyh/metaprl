@@ -2319,7 +2319,7 @@ T	t1096	o802 b1095
 B	b1096	t1096
 T	t1097	o801 b988 b1096
 B	b1097	t1097
-P	p1097	String "byDefT unfold_op thenT dT 0 thenT autoT"
+P	p1097	String "byDefT unfold_op thenT dT 0 ta"
 O	o1097	ext_rule p1097
 T	t1098	o b987 b8
 B	b1098	t1098
@@ -2434,7 +2434,7 @@ T	t1202	o801 b811 b1201
 B	b1202	t1202
 T	t1203	o801 b988 b1202
 B	b1203	t1203
-P	p1203	String "byDefT unfold_bind thenT dT 0 thenT autoT thenWT nat_is_int ttca"
+P	p1203	String "byDefT unfold_bind thenT dT 0 ta thenWT nat_is_int ttca"
 O	o1203	ext_rule p1203
 T	t1204	o b987 b821
 B	b1204	t1204
@@ -2478,7 +2478,7 @@ T	t1272	o801 b1268 b1271
 B	b1272	t1272
 T	t1273	o801 b988 b1272
 B	b1273	t1273
-P	p1273	String "assumT 2 thenT byDefT unfold_unbind thenT moveToConclT (-1) thenT letT << 'x = op_bdepth{'op} in int >> thenAT nat_is_int thenT autoT"
+P	p1273	String "assumT 2 thenT byDefT unfold_unbind thenT moveToConclT (-1) thenT letT << 'x = op_bdepth{'op} in int >> thenAT nat_is_int ta"
 O	o1273	ext_rule p1273
 T	t1274	o b1267 b8
 B	b1274	t1274
@@ -2533,7 +2533,7 @@ T	t1302	o b1248 b1301
 B	b1302	t1302
 T	t1303	o857 b881
 B	b1303	t1303
-P	p1303	String "byDefsT [unfold_unbind; reduceC] thenT dT 0 thenT autoT thenWT nat_is_int ttca"
+P	p1303	String "byDefsT [unfold_unbind; reduceC] thenT dT 0 ta thenWT nat_is_int ttca"
 O	o1303	ext_rule p1303
 P	p1309	String assertion
 O	o1309	tactic_arg p1309
@@ -3980,7 +3980,7 @@ T	t1643	o802 b1642
 B	b1643	t1643
 T	t1644	o801 b1622 b1643
 B	b1644	t1644
-P	p1644	String "assertT << shape{'op1} = shape{'op2} in list{int} >> thenMT listSquiggle thenT autoT"
+P	p1644	String "assertT << shape{'op1} = shape{'op2} in list{int} >> thenMT listSquiggle ta"
 O	o1644	ext_rule p1644
 T	t1645	o821 b1642 b1628
 B	b1645	t1645
@@ -4832,7 +4832,7 @@ T	t1666	o b1665 b8
 B	b1666	t1666
 T	t1667	o b1658 b1666
 B	b1667	t1667
-P	p1676	String "moveToConclT (-1) thenT letT << 'l2 = shape{'op2} in list{int} >> thenT autoT"
+P	p1676	String "moveToConclT (-1) thenT letT << 'l2 = shape{'op2} in list{int} >> ta"
 O	o1676	ext_rule p1676
 T	t1677	o1213 b1657 b8
 B	b1677	t1677

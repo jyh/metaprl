@@ -1110,7 +1110,7 @@ T	t1355	o955 b1354 b1350
 B	b1355	t1355
 T	t1356	o954 b1355 b8
 B	b1356	t1356
-P	p1358	String "assertT << subterms{'bt} in list{BTerm} >> ttca thenT dT 0 thenT autoT"
+P	p1358	String "assertT << subterms{'bt} in list{BTerm} >> ttca thenT dT 0 ta"
 O	o1358	ext_rule p1358
 H	h1358	x t1226
 NItt_int_base	Itt_int_base	Itt_int_base NIL
@@ -2000,7 +2000,7 @@ B	b2501	t2500
 T	t2501	o1006 b1345 b2501 b2501
 S	s2501	t938\\ h h2499\\ t2501
 B	b2502	s2501
-P	p2506	String "dT 0 thenT byDefT unfold_nat thenT dT (-1) thenT autoT thenT arithT ttca"
+P	p2506	String "dT 0 thenT byDefT unfold_nat thenT dT (-1) ta thenT arithT ttca"
 O	o2506	ext_rule p2506
 P	p2522	String var_arity_subst2
 O	o2522	rule p2522
@@ -2221,7 +2221,7 @@ S	s2559	t938\\ h\\ t2559
 B	b2560	s2559
 T	t2560	o937 b2560
 B	b2561	t2560
-P	p2563	String "byDefT unfold_opbterm thenT dT 0 thenT autoT"
+P	p2563	String "byDefT unfold_opbterm thenT dT 0 ta"
 O	o2563	ext_rule p2563
 T	t2563	o b2558 b8
 B	b2565	t2563
@@ -2425,7 +2425,7 @@ S	s3288	t938\\ h\\ t3288
 B	b3288	s3288
 T	t3289	o937 b3288
 B	b3289	t3289
-P	p3296	String "byDefT unfold_bbterm thenT dT 0 thenT autoT"
+P	p3296	String "byDefT unfold_bbterm thenT dT 0 ta"
 O	o3296	ext_rule p3296
 T	t3297	o b3286 b8
 B	b3297	t3297
@@ -2485,15 +2485,15 @@ B	b3718	t3718
 T	t3719	o1006 b1345 b3718 b3334
 S	s3719	t938\\ h\\ t3719
 B	b3719	s3719
-P	p3723	String "substT << var_arity{subst{'b; itbterm}} ~ var_arity{subst{'b; 'a}} >> 0 thenT autoT"
+P	p3723	String "substT << var_arity{subst{'b; itbterm}} ~ var_arity{subst{'b; 'a}} >> 0 ta"
 O	o3723	ext_rule p3723
-P	p2796	String "hypSubstT (-1) 0 thenT autoT thenWT nat_is_int ttca"
+P	p2796	String "hypSubstT (-1) 0 ta thenWT nat_is_int ttca"
 O	o2796	ext_rule p2796
-P	p2802	String "assertT << list_max{map{lambda{x.depth{'x}}; 'v1}} in int >> thenMT assertT <<depth{'u} <= max{depth{'u}; list_max{map{lambda{x.depth{'x}}; 'v1}}} >> thenT autoT"
+P	p2802	String "assertT << list_max{map{lambda{x.depth{'x}}; 'v1}} in int >> thenMT assertT <<depth{'u} <= max{depth{'u}; list_max{map{lambda{x.depth{'x}}; 'v1}}} >> ta"
 O	o2802	ext_rule p2802
 P	p2814	String "arithT ttca"
 O	o2814	ext_rule p2814
-P	p2822	String "dT 6 ttca thenT assertT << list_max{map{lambda{x.depth{'x}}; 'v1}} in int >> thenMT assertT << list_max{map{lambda{x.depth{'x}}; 'v1}} <= max{depth{'u}; list_max{map{lambda{x.depth{'x}}; 'v1}}} >> thenT autoT"
+P	p2822	String "dT 6 ttca thenT assertT << list_max{map{lambda{x.depth{'x}}; 'v1}} in int >> thenMT assertT << list_max{map{lambda{x.depth{'x}}; 'v1}} <= max{depth{'u}; list_max{map{lambda{x.depth{'x}}; 'v1}}} >> ta"
 O	o2822	ext_rule p2822
 P	p2859	String bterm_elim1
 O	o2859	rule p2859
@@ -2536,7 +2536,7 @@ T	t3118	o2002 b3118
 H	h3118	x t3118
 S	s3118	t938\\ h h3118\\ C3095
 B	b3126	s3118
-P	p3146	String "assumT 2 thenT autoT"
+P	p3146	String "assumT 2 ta"
 O	o3146	ext_rule p3146
 P	p3163	String "assumT 3 thenMT backThruHypT (-1) ttca"
 O	o3163	ext_rule p3163
@@ -3298,7 +3298,7 @@ P	p1759	String "sqSubstT << 'c ~ make_bterm{'c; subterms{'c}} >> 0 thenET sqSymT
 O	o1759	ext_rule p1759
 P	p4638	String "doNotThinT (letT <<'bl = subterms{'c} in list{BTerm} >>) taa"
 O	o4638	ext_rule p4638
-P	p4644	String "assertT << all a: BTerm.(mem{'a; !bl; BTerm} => 'C['a] and lt{depth{'a}; depth{!c}}) >> thenT autoT thenT tryT (backThruHypT 5 thenT autoT)"
+P	p4644	String "assertT << all a: BTerm.(mem{'a; !bl; BTerm} => 'C['a] and lt{depth{'a}; depth{!c}}) >> ta thenT tryT (backThruHypT 5 thenT autoT)"
 O	o4644	ext_rule p4644
 P	p4645	Var a1
 O	o4645	var p4645
@@ -3318,7 +3318,7 @@ P	p4655	String "hypSubstT 7 (-1) ttca"
 O	o4655	ext_rule p4655
 T	t681	o2280 b2910
 B	b684	t681
-P	p821	String "assertT << all a: Term. 'C[subst{'c; 'a}] >> thenT autoT thenT tryT (backThruHypT 5 thenT autoT)"
+P	p821	String "assertT << all a: Term. 'C[subst{'c; 'a}] >> ta thenT tryT (backThruHypT 5 thenT autoT)"
 O	o821	ext_rule p821
 P	p4588	String bterm_elim4
 O	o4588	rule p4588
@@ -3398,7 +3398,7 @@ T	t1122	o4074 b1122 b1160 b1063
 B	b1123	t1122
 T	t1196	o953 b4385 b8
 B	b1196	t1196
-P	p3699	String "decideT << subterms_arity{'c} <> 0 >> thenT autoT"
+P	p3699	String "decideT << subterms_arity{'c} <> 0 >> ta"
 O	o3699	ext_rule p3699
 P	p3700	String decidable
 O	o3700	tactic_arg p3700
@@ -3422,7 +3422,7 @@ T	t3741	o1006 b1225 b2929 b1078
 H	h3742	y t3741
 P	p3747	String "notNequalT ttca"
 O	o3747	ext_rule p3747
-P	p3750	String "hypSubstT (-1) 7 thenMT hypSubstT 7 10 thenMT byDefsT [unfold_mem; reduceC] thenT autoT"
+P	p3750	String "hypSubstT (-1) 7 thenMT hypSubstT 7 10 thenMT byDefsT [unfold_mem; reduceC] ta"
 O	o3750	ext_rule p3750
 T	t5097	o1006 b2474 b1222 b1222
 S	s5097	t938\\ h\\ t5097
@@ -3517,7 +3517,7 @@ T	t5189	o953 b5188 b8
 B	b5189	t5189
 P	p5195	String makebterm_wf1
 O	o5195	rule p5195
-P	p5196	String "assumT 3 thenT moveToConclT (-1) thenT splitBTermVT << 'bt >> 0 thenT autoT"
+P	p5196	String "assumT 3 thenT moveToConclT (-1) thenT splitBTermVT << 'bt >> 0 ta"
 O	o5196	ext_rule p5196
 T	t5196	o b1223 b5185
 B	b5196	t5196
@@ -3657,7 +3657,7 @@ S	s5402	t938\\ h\\ t5402
 B	b5402	s5402
 T	t5403	o937 b5402
 B	b5403	t5403
-P	p631	String "assertT << 'btl in list{BTerm} & 'bt in BTerm & 'bt in BBTerm>> thenT autoT"
+P	p631	String "assertT << 'btl in list{BTerm} & 'bt in BTerm & 'bt in BBTerm>> ta"
 O	o631	ext_rule p631
 T	t5408	o b5402 b8
 B	b5408	t5408
@@ -3776,9 +3776,9 @@ T	t5455	o b5455 b8
 B	b5456	t5455
 T	t1759	o b1758 b5456
 B	b1759	t1759
-P	p5458	String "squiggleTrans << map{lambda{x.subst{'x; 't}}; subterms{make_bterm{'bt; 'btl}}} >> thenT sqSymT thenT autoT"
+P	p5458	String "squiggleTrans << map{lambda{x.subst{'x; 't}}; subterms{make_bterm{'bt; 'btl}}} >> thenT sqSymT ta"
 O	o5458	ext_rule p5458
-P	p5464	String "substT << subterms{make_bterm{'bt; 'btl}} ~ 'btl >> 0 thenT autoT"
+P	p5464	String "substT << subterms{make_bterm{'bt; 'btl}} ~ 'btl >> 0 ta"
 O	o5464	ext_rule p5464
 T	t1180	o953 b996 b8
 B	b1203	t1180
@@ -3833,7 +3833,7 @@ T	t1637	o b1637 b8
 B	b1639	t1637
 T	t1763	o3469 b1758
 B	b1763	t1763
-P	p5468	String "sameOpTransT << make_bterm{'bt; 'btl} >> thenT tryT sameOpSymT ttca thenT assertT << 'bt in OpBTerm >> thenT autoT"
+P	p5468	String "sameOpTransT << make_bterm{'bt; 'btl} >> thenT tryT sameOpSymT ttca thenT assertT << 'bt in OpBTerm >> ta"
 O	o5468	ext_rule p5468
 T	t5468	o953 b5455 b8
 B	b5469	t5468

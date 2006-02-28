@@ -4716,7 +4716,7 @@ T	t2063	o b2059 b10
 B	b2063	t2063
 T	t2067	o1116 b2223 b2063
 B	b2067	t2067
-P	p1443	String "splitITE 0 thenT reduceT thenT autoT thenT tryT nat_is_int ttca"
+P	p1443	String "splitITE 0 thenT reduceT ta thenT tryT nat_is_int ttca"
 O	o1443	ext_rule p1443
 T	t2068	o964 b2008 b2483
 H	h2068	y t2068
@@ -4782,7 +4782,7 @@ T	t1469	o989 b1197 b1468
 B	b1469	t1469
 T	t1470	o989 b748 b1469
 B	b1470	t1470
-P	p1470	String "genAssumT [1] thenT dT (-1) thenT reduceT thenT autoT thenT byDefT unfold_compatible_shapes thenT reduceT thenT autoT"
+P	p1470	String "genAssumT [1] thenT dT (-1) thenT reduceT ta thenT byDefT unfold_compatible_shapes thenT reduceT thenT autoT"
 O	o1470	ext_rule p1470
 T	t1473	o972 b1467 b1472
 B	b1473	t1473
@@ -5138,7 +5138,7 @@ P	p1278	String add_new_var_reduce2
 O	o1278	cond_rewrite p1278
 T	t1282	o891 b1097
 B	b1282	t1282
-P	p1282	String "byDefT unfold_add_new_var thenMT splitITE 0 thenT autoT thenT tryT nat_is_int ttca"
+P	p1282	String "byDefT unfold_add_new_var thenMT splitITE 0 ta thenT tryT nat_is_int ttca"
 O	o1282	ext_rule p1282
 T	t4961	o891 b1557
 B	b4961	t4961
@@ -5190,13 +5190,13 @@ T	t2259	o b2256 b2259
 B	b2260	t2259
 T	t2260	o1116 b2248 b2260
 B	b2261	t2260
-P	p1321	String "genAssumT [1;2] thenT autoT thenT dT (-2) thenT arithT ttca"
+P	p1321	String "genAssumT [1;2] ta thenT dT (-2) thenT arithT ttca"
 O	o1321	ext_rule p1321
 T	t2261	o1116 b2256 b10
 B	b2262	t2261
 T	t2262	o1321 b1360 b2262 b10 b10
 B	b2265	t2262
-P	p1323	String "assertT << 'l in int & 'r in int >> thenMT arithT thenT autoT thenT nat_is_int ttca"
+P	p1323	String "assertT << 'l in int & 'r in int >> thenMT arithT ta thenT nat_is_int ttca"
 O	o1323	ext_rule p1323
 T	t2265	o1175 b2257 b10
 B	b2268	t2265
@@ -5666,7 +5666,7 @@ T	t2311	o b2311 b10
 B	b2312	t2311
 T	t2312	o1116 b5104 b2312
 B	b2313	t2312
-P	p1588	String "dT 2 thenT autoT"
+P	p1588	String "dT 2 ta"
 O	o1588	ext_rule p1588
 T	t5115	o964 b937 b997
 H	h5115	x t5115
@@ -5759,7 +5759,7 @@ T	t3506	o b3396 b3506
 B	b3507	t3506
 T	t3507	o1116 b3189 b3507
 B	b3508	t3507
-P	p1626	String "assertT << bdepth{'s} >= 0 >> thenMT arithT thenT autoT"
+P	p1626	String "assertT << bdepth{'s} >= 0 >> thenMT arithT ta"
 O	o1626	ext_rule p1626
 T	t3508	o1175 b3395 b10
 B	b3509	t3508
@@ -5831,7 +5831,7 @@ T	t2366	o b2357 b2365
 B	b2366	t2366
 T	t2369	o1116 b2354 b2366
 B	b2369	t2369
-P	p1659	String "substT << ('m +@ 1) -@ bdepth{'s} ~ ('m -@ bdepth{'s}) +@ 1 >> 0 thenT reduceT thenT autoT"
+P	p1659	String "substT << ('m +@ 1) -@ bdepth{'s} ~ ('m -@ bdepth{'s}) +@ 1 >> 0 thenT reduceT ta"
 O	o1659	ext_rule p1659
 P	p1660	String equality
 O	o1660	tactic_arg p1660
@@ -5996,7 +5996,7 @@ T	t2458	o b2440 b2458
 B	b2459	t2458
 T	t2459	o b2416 b2459
 B	b2460	t2459
-P	p1729	String "dT 0 thenT autoT thenT omegaT ttca"
+P	p1729	String "dT 0 ta thenT omegaT ttca"
 O	o1729	ext_rule p1729
 T	t2463	o1729 b1360 b2454 b10 b10
 B	b2463	t2463
@@ -6602,7 +6602,7 @@ P	p1161	String "splitITE 0 ttca"
 O	o1161	ext_rule p1161
 P	p1168	String "reduceT ttca"
 O	o1168	ext_rule p1168
-P	p1174	String "arithT thenT autoT"
+P	p1174	String "arithT ta"
 O	o1174	ext_rule p1174
 P	p1195	String subst_wf
 O	o1195	rule p1195
@@ -6639,7 +6639,7 @@ T	t2253	o b2252 b967
 B	b2253	t2253
 T	t2254	o b963 b2253
 B	b2254	t2254
-P	p2270	String "splitITE 0 thenT autoT"
+P	p2270	String "splitITE 0 ta"
 O	o2270	ext_rule p2270
 P	p2284	String "genAssumT [2] ttca"
 O	o2284	ext_rule p2284
@@ -7399,7 +7399,7 @@ T	t2840	o b2839 b10
 B	b2840	t2840
 T	t2842	o1116 b2331 b2840
 B	b2842	t2842
-P	p2356	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> thenT reduceT thenT autoT thenT reduceT thenT byDefT unfold_compatible_shapes"
+P	p2356	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> thenT reduceT ta thenT reduceT thenT byDefT unfold_compatible_shapes"
 O	o2356	ext_rule p2356
 T	t2848	o1023 b2148 b1573 b993
 B	b2848	t2848
@@ -7482,7 +7482,7 @@ T	t2976	o b2974 b10
 B	b2976	t2976
 T	t2977	o1116 b2928 b2976
 B	b2977	t2977
-P	p1855	String "letT << 'j = nth{shape{'op}; 'i} in nat >> thenT autoT"
+P	p1855	String "letT << 'j = nth{shape{'op}; 'i} in nat >> ta"
 O	o1855	ext_rule p1855
 T	t2978	o1175 b2966 b10
 B	b2978	t2978
@@ -8013,7 +8013,7 @@ T	t1513	o b2760 b1512
 B	b1513	t1513
 T	t1514	o b994 b1513
 B	b1514	t1514
-P	p1589	String "dT (-1) thenT reduceT thenT autoT"
+P	p1589	String "dT (-1) thenT reduceT ta"
 O	o1589	ext_rule p1589
 P	p2118	String subst_commutativity
 O	o2118	rule p2118
@@ -8087,7 +8087,7 @@ T	t2168	o964 b2167 b2130
 B	b2168	t2168
 T	t2169	o964 b2167 b2133
 B	b2169	t2169
-P	p2206	String "dT 3 thenT reduceT thenT autoT"
+P	p2206	String "dT 3 thenT reduceT ta"
 O	o2206	ext_rule p2206
 P	p2277	String "listSquiggle thenT reduceT ttca thenT reduceT ttca"
 O	o2277	ext_rule p2277
@@ -8199,7 +8199,7 @@ T	t3328	o b3327 b10
 B	b3328	t3328
 T	t3329	o1589 b1360 b3325 b3328 b10
 B	b3329	t3329
-P	p3154	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> thenT autoT"
+P	p3154	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> ta"
 O	o3154	ext_rule p3154
 T	t3330	o2010 b1573 b2148
 B	b3330	t3330
@@ -8332,7 +8332,7 @@ T	t3399	o b3399 b10
 B	b3400	t3399
 T	t3400	o1116 b3391 b3400
 B	b3401	t3400
-P	p3208	String "withT << 'i >> (dT 6) ttca thenT backThruHypT (-1) thenT autoT"
+P	p3208	String "withT << 'i >> (dT 6) ttca thenT backThruHypT (-1) ta"
 O	o3208	ext_rule p3208
 T	t3401	o2010 b2166 b2112
 B	b3402	t3401
@@ -8611,7 +8611,7 @@ P	p3342	String "dT 3 thenT byDefT reduceC"
 O	o3342	ext_rule p3342
 P	p3350	String "dT (-2) thenT eq_trans << 'v3 >> ttca"
 O	o3350	ext_rule p3350
-P	p3406	String "instHypT [<< 'v2 >>; << 'v3 >>] (-1) thenT autoT"
+P	p3406	String "instHypT [<< 'v2 >>; << 'v3 >>] (-1) ta"
 O	o3406	ext_rule p3406
 P	p3407	Var v4
 O	o3407	var p3407
@@ -8647,7 +8647,7 @@ P	p3524	String "dT 6 thenT moveToConclT (-1) thenT dT 5 thenT dT 5 thenT byDefT 
 O	o3524	ext_rule p3524
 P	p3526	String "byDefT fold_ge thenT arithT ttca"
 O	o3526	ext_rule p3526
-P	p3537	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> thenT autoT thenT reduceT ttca"
+P	p3537	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> ta thenT reduceT ttca"
 O	o3537	ext_rule p3537
 T	t3579	o891 b2166 b1949
 B	b3580	t3579
@@ -8663,7 +8663,7 @@ T	t3623	o989 b2325 b3622
 B	b3623	t3623
 T	t3624	o989 b992 b3623
 B	b3624	t3624
-P	p3624	String "not_free_eq_var << add_var{'v; 'u} >> thenT reduceT thenT autoT thenT reduceT ttca"
+P	p3624	String "not_free_eq_var << add_var{'v; 'u} >> thenT reduceT ta thenT reduceT ttca"
 O	o3624	ext_rule p3624
 T	t3625	o b1410 b3261
 B	b3625	t3625
@@ -8716,22 +8716,22 @@ T	t2642	o964 b937 b996
 B	b2642	t2642
 T	t2643	o951 b937 b996
 B	b2643	t2643
-P	p2663	String "letT << 'i = bdepth{'t} in nat >> thenT autoT"
+P	p2663	String "letT << 'i = bdepth{'t} in nat >> ta"
 O	o2663	ext_rule p2663
 H	h2664	i t1426
 P	p2672	String "substT << 'i ~ 0 >> 0 thenT reduceT ttca"
 O	o2672	ext_rule p2672
-P	p2683	String "splitIntT << bdepth{'t} >> << 'm +@ 1 >> thenT autoT"
+P	p2683	String "splitIntT << bdepth{'t} >> << 'm +@ 1 >> ta"
 O	o2683	ext_rule p2683
 P	p2697	String "dT 3 thenAT arithT ttca"
 O	o2697	ext_rule p2697
-P	p2703	String "substT << ('m +@ 1) -@ bdepth{'t} ~ ('m -@ bdepth{'t}) +@ 1 >> 0 thenT reduceT thenT autoT"
+P	p2703	String "substT << ('m +@ 1) -@ bdepth{'t} ~ ('m -@ bdepth{'t}) +@ 1 >> 0 thenT reduceT ta"
 O	o2703	ext_rule p2703
 T	t2720	o1683 b996
 B	b2720	t2720
 P	p2733	String "letT << 'j = 'm -@ bdepth{'t} in nat >> thenMT dT (-1) thenT reduceT ttca"
 O	o2733	ext_rule p2733
-P	p2735	String "rwh unfold_nat 0 thenT autoT thenT dT 0 thenT omegaT ttca"
+P	p2735	String "rwh unfold_nat 0 ta thenT dT 0 thenT omegaT ttca"
 O	o2735	ext_rule p2735
 P	p2744	String "substT << bdepth{'t} ~ ('m +@ 1) >> 0 thenT reduceT ttca"
 O	o2744	ext_rule p2744
@@ -8787,12 +8787,12 @@ T	t3658	o1116 b3640 b10
 B	b3658	t3658
 T	t3660	o1116 b3643 b10
 B	b3660	t3660
-P	p3661	String "genAssumT [2;5] thenT autoT"
+P	p3661	String "genAssumT [2;5] ta"
 O	o3661	ext_rule p3661
 H	h3661	v1 t2323
 P	p3662	Var v1
 O	o3662	var p3662
-P	p3671	String "eq_sym thenT autoT"
+P	p3671	String "eq_sym ta"
 O	o3671	ext_rule p3671
 P	p6136	Number 10853
 P	p6137	Number 11066
@@ -9647,7 +9647,7 @@ T	t4129	o b4128 b10
 B	b4129	t4129
 T	t4131	o1116 b4104 b4129
 B	b4132	t4131
-P	p3745	String "splitITE 0 thenT reduceT thenT autoT"
+P	p3745	String "splitITE 0 thenT reduceT ta"
 O	o3745	ext_rule p3745
 T	t4132	o1175 b4127 b10
 B	b4133	t4132
@@ -9681,7 +9681,7 @@ T	t4148	o b4138 b4147
 B	b4148	t4148
 T	t4155	o1116 b4133 b4148
 B	b4155	t4155
-P	p3760	String "moveToConclT (-1) thenT moveToConclT (-1) thenT dT (-1) thenT dT (-2) thenT reduceT thenT autoT"
+P	p3760	String "moveToConclT (-1) thenT moveToConclT (-1) thenT dT (-1) thenT dT (-2) thenT reduceT ta"
 O	o3760	ext_rule p3760
 H	h3760	left1 t1426
 H	h3761	right1 t1426
@@ -9723,7 +9723,7 @@ T	t4199	o b4198 b10
 B	b4199	t4199
 T	t4203	o3760 b1360 b4174 b4199 b10
 B	b4203	t4203
-P	p3777	String "moveToConclT (-1) thenT moveToConclT (-1) thenT dT (-1) thenT dT (-2) thenT reduceT thenT autoT thenT arithT ttca"
+P	p3777	String "moveToConclT (-1) thenT moveToConclT (-1) thenT dT (-1) thenT dT (-2) thenT reduceT ta thenT arithT ttca"
 O	o3777	ext_rule p3777
 T	t4204	o1116 b4146 b10
 B	b4204	t4204
@@ -9739,7 +9739,7 @@ T	t4209	o b4208 b10
 B	b4209	t4209
 T	t4210	o1589 b1360 b4132 b4209 b10
 B	b4210	t4210
-P	p3784	String "autoT thenT reduceT thenT autoT"
+P	p3784	String "autoT thenT reduceT ta"
 O	o3784	ext_rule p3784
 T	t4211	o891 b2148 b1573
 B	b4211	t4211
@@ -9819,7 +9819,7 @@ T	t4267	o b4267 b10
 B	b4275	t4267
 T	t4275	o1116 b4257 b4275
 B	b4276	t4275
-P	p3808	String "dT 7 thenT reduceT thenT letT << 'j = nth{shape{'op}; 'i} in nat >> thenT autoT"
+P	p3808	String "dT 7 thenT reduceT thenT letT << 'j = nth{shape{'op}; 'i} in nat >> ta"
 O	o3808	ext_rule p3808
 T	t4276	o1116 b4267 b10
 B	b4277	t4276
@@ -9913,7 +9913,7 @@ P	p3873	String "dT (-2) thenT eq_trans << var{'left; 'right +@ 1} >> thenT byDef
 O	o3873	ext_rule p3873
 P	p3884	String "dT 0 ttca"
 O	o3884	ext_rule p3884
-P	p3890	String "assertT << all_list{'bl; bt. bdepth{'bt} >= bdepth{'v2}}>> thenT autoT thenT reduceT thenT autoT"
+P	p3890	String "assertT << all_list{'bl; bt. bdepth{'bt} >= bdepth{'v2}}>> ta thenT reduceT thenT autoT"
 O	o3890	ext_rule p3890
 P	p3900	String "dT 7 thenT reduceT thenT byDefT unfold_compatible_shapes"
 O	o3900	ext_rule p3900
@@ -9923,9 +9923,9 @@ P	p3946	String "withT << 'i >> (dT 8) ttca"
 O	o3946	ext_rule p3946
 P	p3950	String "dT 7 thenT reduceT thenT moveToConclT 8"
 O	o3950	ext_rule p3950
-P	p3957	String "dT 7 thenT reduceT thenT autoT"
+P	p3957	String "dT 7 thenT reduceT ta"
 O	o3957	ext_rule p3957
-P	p3966	String "rwh unfold_nat 8 thenT dT 8 thenT autoT thenT omegaT ttca"
+P	p3966	String "rwh unfold_nat 8 thenT dT 8 ta thenT omegaT ttca"
 O	o3966	ext_rule p3966
 T	t6713	o891 b2199
 B	b6713	t6713
@@ -10516,7 +10516,7 @@ T	t5106	o b5106 b10
 B	b5107	t5106
 T	t5107	o2733 b1360 b5078 b10 b5107
 B	b5108	t5107
-P	p4083	String "letT << 'j = 'm -@ bdepth{'t} in nat >> thenMT dT (-1) thenT reduceT thenT autoT"
+P	p4083	String "letT << 'j = 'm -@ bdepth{'t} in nat >> thenMT dT (-1) thenT reduceT ta"
 O	o4083	ext_rule p4083
 T	t5108	o1175 b4986 b10
 B	b5109	t5108
@@ -10568,7 +10568,7 @@ T	t5124	o1116 b5112 b10
 B	b5125	t5124
 T	t5125	o4105 b1360 b5125 b10 b10
 B	b5126	t5125
-P	p4107	String "assertT << all i: nat. ind{'i; 't; k,s.add_var{'s}} in BTerm & 'v in BTerm >> thenT autoT"
+P	p4107	String "assertT << all i: nat. ind{'i; 't; k,s.add_var{'s}} in BTerm & 'v in BTerm >> ta"
 O	o4107	ext_rule p4107
 T	t5126	o1175 b5114 b10
 B	b5127	t5126
@@ -10814,7 +10814,7 @@ T	t1189	o989 b4193 b1182
 B	b1189	t1189
 T	t1190	o989 b1197 b1189
 B	b1190	t1190
-P	p2001	String "genAssumT [2;7;8] thenT assumT 5 thenT assumT 6 thenT autoT"
+P	p2001	String "genAssumT [2;7;8] thenT assumT 5 thenT assumT 6 ta"
 O	o2001	ext_rule p2001
 T	t2787	o b2773 b10
 B	b2787	t2787
@@ -10860,7 +10860,7 @@ T	t5214	o b5213 b10
 B	b5214	t5214
 T	t5215	o1116 b1227 b5214
 B	b5215	t5215
-P	p2028	String "dT 2 thenT subst_not_free thenT autoT thenT reduceT ttca"
+P	p2028	String "dT 2 thenT subst_not_free ta thenT reduceT ttca"
 O	o2028	ext_rule p2028
 H	h870	v1 t1061
 T	t5216	o964 b2768 b5208
@@ -11099,7 +11099,7 @@ T	t5412	o b5405 b10
 B	b5499	t5412
 T	t5499	o1116 b1496 b5499
 B	b5518	t5499
-P	p1850	String "assertT << 'v1 in Var & 'v2 in Var >> thenT autoT"
+P	p1850	String "assertT << 'v1 in Var & 'v2 in Var >> ta"
 O	o1850	ext_rule p1850
 T	t5518	o1175 b5398 b10
 B	b5520	t5518
@@ -11143,7 +11143,7 @@ T	t5574	o1116 b5574 b10
 B	b5575	t5574
 T	t5575	o4081 b1360 b5575 b10 b10
 B	b5576	t5575
-P	p5576	String "repeatT (splitITE 0 thenT autoT)"
+P	p5576	String "repeatT (splitITE 0 ta)"
 O	o5576	ext_rule p5576
 T	t5576	o1175 b5528 b10
 B	b5577	t5576
@@ -11199,7 +11199,7 @@ T	t5601	o1116 b5584 b10
 B	b5601	t5601
 T	t5602	o1986 b1360 b5601 b10 b10
 B	b5602	t5602
-P	p5602	String "subst_add_vars_upto thenT autoT"
+P	p5602	String "subst_add_vars_upto ta"
 O	o5602	ext_rule p5602
 T	t5603	o670 b3287
 B	b5603	t5603
@@ -11245,7 +11245,7 @@ T	t5629	o b5620 b5628
 B	b5629	t5629
 T	t5633	o5602 b1360 b5618 b5629 b10
 B	b5638	t5633
-P	p5638	String "sqSymT thenT subst_add_vars_upto thenT autoT"
+P	p5638	String "sqSymT thenT subst_add_vars_upto ta"
 O	o5638	ext_rule p5638
 T	t5638	o964 b5603 b1991
 S	s5638	t973\\ h h2165 h1426 h1427 h5292 h5293 h1862 h1863 h5593 h5578\\ t5638
@@ -11336,7 +11336,7 @@ T	t5750	o b5749 b10
 B	b5750	t5750
 T	t5751	o1116 b5740 b5750
 B	b5751	t5751
-P	p4396	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> thenT autoT thenT reduceT thenT autoT"
+P	p4396	String "assertT << all_list{'bl; bt. bdepth{'bt} >= op_bdepth{'op}}>> ta thenT reduceT thenT autoT"
 O	o4396	ext_rule p4396
 H	h4396	i1 t1242
 P	p4397	Var i1
@@ -11398,7 +11398,7 @@ T	t5802	o b5801 b10
 B	b5802	t5802
 T	t5803	o1116 b5786 b5802
 B	b5803	t5803
-P	p4420	String "letT << 'j = nth{shape{'op}; 'i1} in nat >> thenT autoT"
+P	p4420	String "letT << 'j = nth{shape{'op}; 'i1} in nat >> ta"
 O	o4420	ext_rule p4420
 T	t5804	o1175 b5800 b10
 B	b5804	t5804

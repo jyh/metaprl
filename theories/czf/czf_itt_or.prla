@@ -124,7 +124,7 @@ O	o575	union
 NSummary!interactive	interactive	interactive Summary
 O	o584	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p584	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p584	String "rwh unfold_fun_prop 0 ta"
 O	o585	ext_rule p584
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o586	status_incomplete
@@ -169,13 +169,13 @@ P	p670	String "assumT 3"
 O	o670	ext_rule p670
 P	p676	String "rwh unfold_fun_prop (-1)"
 O	o676	ext_rule p676
-P	p685	String "instHypT [<< 'x >>; << 'x_1 >>] 6 thenT autoT"
+P	p685	String "instHypT [<< 'x >>; << 'x_1 >>] 6 ta"
 O	o685	ext_rule p685
 P	p693	String "selT 2 (dT 0) twa"
 O	o693	ext_rule p693
 P	p703	String "assumT 4 thenT rwh unfold_fun_prop (-1)"
 O	o703	ext_rule p703
-P	p716	String "instHypT [<< 'x >>; << 'x_1 >>] (-1) thenT autoT"
+P	p716	String "instHypT [<< 'x >>; << 'x_1 >>] (-1) ta"
 O	o716	ext_rule p716
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p712	String intro
@@ -217,7 +217,7 @@ P	p894	String or_fun
 O	o894	rule p894
 NItt_logic!or	or	or Itt_logic
 O	o895	or
-P	p901	String "rwh unfold_or 0 thenT autoT"
+P	p901	String "rwh unfold_or 0 ta"
 O	o901	ext_rule p901
 P	p910	String or_res1
 O	o910	rule p910

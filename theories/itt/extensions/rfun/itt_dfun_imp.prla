@@ -1050,7 +1050,7 @@ B	b1410	t1410
 NSummary!interactive	interactive	interactive Summary
 O	o1410	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1410	String "dT 0 thenT autoT"
+P	p1410	String "dT 0 ta"
 O	o1411	ext_rule p1410
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1412	status_incomplete
@@ -2948,7 +2948,7 @@ T	t3370	o b3370 b7
 B	b3371	t3370
 T	t3371	o1413 b3367 b3371
 B	b3372	t3371
-P	p1428	String "withT << 'a1 >> (dT 4) thenT autoT"
+P	p1428	String "withT << 'a1 >> (dT 4) ta"
 O	o1428	ext_rule p1428
 H	h1421	_1010 t1421
 S	s1423	t1402\\ h h1418 h1419 h1421\\ t1423
@@ -3223,7 +3223,7 @@ O	o1541	rule p1541
 T	t1543	o1403 b1452
 S	s1543	t1402\\ h h1451\\ t1543
 B	b1543	s1543
-P	p1549	String "rwh unfold_dfun 0 thenT withT << bind{a,b. void} >> (dT 0) thenT autoT"
+P	p1549	String "rwh unfold_dfun 0 thenT withT << bind{a,b. void} >> (dT 0) ta"
 O	o1549	ext_rule p1549
 P	p1565	String Introduction
 O	o1565	comment_string p1565
@@ -4072,7 +4072,7 @@ S	s1948	t1402\\ h\\ t1948
 B	b1949	s1948
 T	t1949	o1415 b1949 b1919
 B	b1950	t1949
-P	p1956	String "withT << bind{a,b. void} >> (dT 0) thenT autoT"
+P	p1956	String "withT << bind{a,b. void} >> (dT 0) ta"
 O	o1956	ext_rule p1956
 T	t1956	o1403 b1923
 S	s1956	t1402\\ h\\ t1956
@@ -6333,7 +6333,7 @@ T	t4421	o1413 b4421 b7
 B	b4422	t4421
 T	t4422	o1503 b1412 b4422 b7 b7
 B	b4423	t4422
-P	p2526	String "withT << 'x >> (dT 4) thenT autoT"
+P	p2526	String "withT << 'x >> (dT 4) ta"
 O	o2526	ext_rule p2526
 H	h2518	_1010 t2355
 S	s2518	t1402\\ h h2447 h2460 h2518\\ t2487
@@ -6562,7 +6562,7 @@ T	t4492	o1413 b4492 b7
 B	b4493	t4492
 T	t4493	o1503 b1412 b4493 b7 b7
 B	b4494	t4493
-P	p2639	String "withT << 'a >> (dT 3) thenT autoT"
+P	p2639	String "withT << 'a >> (dT 3) ta"
 O	o2639	ext_rule p2639
 S	s2631	t1402\\ h h2389 h2518\\ t2596
 B	b2632	s2631
@@ -6746,7 +6746,7 @@ T	t4551	o b4547 b4551
 B	b4552	t4551
 T	t4552	o1505 b1412 b4545 b4552 b7
 B	b4553	t4552
-P	p2717	String "nameHypT (-1) \"f\" thenT useWitnessT << a: 'A -> ('f 'a) >> thenT autoT"
+P	p2717	String "nameHypT (-1) \"f\" thenT useWitnessT << a: 'A -> ('f 'a) >> ta"
 O	o2717	ext_rule p2717
 H	h2696	_1010 t2692
 S	s2696	t1402\\ h h2696\\ t1446

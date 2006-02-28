@@ -162,7 +162,7 @@ T	t645	o645
 NSummary!interactive	interactive	interactive Summary
 O	o654	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p654	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p654	String "rwh unfold_fun_prop 0 ta"
 O	o655	ext_rule p654
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o656	status_incomplete
@@ -242,7 +242,7 @@ T	t866	o866
 B	b867	t866
 T	t867	o799 b867 b796
 B	b868	t867
-P	p888	String "withT << 'z >> (dT 15) thenT autoT"
+P	p888	String "withT << 'z >> (dT 15) ta"
 O	o888	ext_rule p888
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p1329	Number 1925
@@ -267,13 +267,13 @@ T	t164	o151 b698 b689
 B	b165	t164
 T	t195	o151 b668 b667
 B	b196	t195
-P	p387	String "rwh unfold_equal 4 thenT autoT"
+P	p387	String "rwh unfold_equal 4 ta"
 O	o387	ext_rule p387
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o388	isset
 T	t390	o388 b667
 T	t394	o388 b668
-P	p423	String "eqSetSymT thenT autoT"
+P	p423	String "eqSetSymT ta"
 O	o423	ext_rule p423
 P	p1040	Number 1933
 P	p1421	String squash_restrictedT
@@ -284,11 +284,11 @@ P	p1454	String "assumT 1"
 O	o1454	ext_rule p1454
 P	p1460	String "rwh unfold_restricted 2 thenT univTypeT << univ[1:l] >> thenT trivialT"
 O	o1460	ext_rule p1460
-P	p1464	String "rwh unfold_restricted 2 thenT rwh unfold_restricted 3 thenT rwh unfold_restricted 0 thenT autoT"
+P	p1464	String "rwh unfold_restricted 2 thenT rwh unfold_restricted 3 thenT rwh unfold_restricted 0 ta"
 O	o1464	ext_rule p1464
 P	p1246	String all_fun
 O	o1246	rule p1246
-P	p1252	String "rwh unfold_all 0 thenT autoT"
+P	p1252	String "rwh unfold_all 0 ta"
 O	o1252	ext_rule p1252
 NSummary!id	id	id Summary
 P	p10	Number 641013990

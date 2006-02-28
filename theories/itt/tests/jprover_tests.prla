@@ -905,7 +905,7 @@ B	b331	t330
 NSummary!interactive	interactive	interactive Summary
 O	o331	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p331	String "jproverT thenT autoT"
+P	p331	String "jproverT ta"
 O	o332	ext_rule p331
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o333	status_incomplete
@@ -1654,7 +1654,7 @@ T	t661	o323 b636 b661
 B	b662	t661
 T	t662	o323 b658 b662
 B	b663	t662
-P	p663	String "withT <<'item>> jproverT thenT autoT"
+P	p663	String "withT <<'item>> jproverT ta"
 O	o663	ext_rule p663
 T	t663	o b657 b643
 B	b664	t663

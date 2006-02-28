@@ -3749,7 +3749,7 @@ T	t922	o b915 b922
 B	b923	t922
 T	t923	o1306 b908 b923
 B	b924	t923
-P	p1635	String "repeatT (dT 0) thenT autoT"
+P	p1635	String "repeatT (dT 0) ta"
 O	o1637	ext_rule p1635
 H	h924	_1010 t892
 H	h925	_1010 t893
@@ -3860,7 +3860,7 @@ T	t968	o b959 b968
 B	b969	t968
 T	t969	o1306 b955 b969
 B	b970	t969
-P	p2480	String "equalSymT thenT autoT"
+P	p2480	String "equalSymT ta"
 O	o2480	ext_rule p2480
 T	t970	o1306 b959 b23
 B	b971	t970
@@ -4516,9 +4516,9 @@ P	p2848	String "dT 0"
 O	o2848	ext_rule p2848
 P	p2858	String "autoT thenT typeAssertT thenT useWitnessT <<'s>> thenT trivialT"
 O	o2858	ext_rule p2858
-P	p2860	String "dT 2 thenT autoT"
+P	p2860	String "dT 2 ta"
 O	o2860	ext_rule p2860
-P	p2865	String "withT <<'s>> (dT 2) thenT autoT"
+P	p2865	String "withT <<'s>> (dT 2) ta"
 O	o2865	ext_rule p2865
 P	p2875	String corresponding
 O	o2875	comment_string p2875
@@ -4835,15 +4835,15 @@ O	o474	ext_rule p474
 T	t3809	o1269 b3301 b3676 b3676
 S	s3809	tbrarg\\ h1590\\ t3809
 B	b3810	s3809
-P	p1525	String "equalRefT <<'s_2>> thenT autoT"
+P	p1525	String "equalRefT <<'s_2>> ta"
 O	o1525	ext_rule p1525
 P	p572	String "assertT <<'s_1='x in 'S>> thenMT assertT <<'s_2='x in 'S>> thenMT thinT 3"
 O	o572	ext_rule p572
 H	h3823	vv S
 B	b3824	t1638
-P	p823	String "equalSymT thenT equalTransT <<'s_1>> thenT autoT"
+P	p823	String "equalSymT thenT equalTransT <<'s_1>> ta"
 O	o823	ext_rule p823
-P	p828	String "doNotThinT (hypSubstT 4 0) thenT autoT"
+P	p828	String "doNotThinT (hypSubstT 4 0) ta"
 O	o828	ext_rule p828
 T	t3880	o1269 b3301 b3677 b3824
 H	h1510	_1 t3880
@@ -4865,7 +4865,7 @@ T	t3938	o1269 b1569 b3938 b3908
 P	p873	String "assertAtT 6 <<'s_1='z in 'S>> thenMT autoT"
 O	o873	ext_rule p873
 T	t3958	o1269 b3301 b3676 b1325
-P	p3416	String "equalTransT <<'x>> thenT autoT"
+P	p3416	String "equalTransT <<'x>> ta"
 O	o3416	ext_rule p3416
 P	p962	String substitutionInType
 O	o962	rule p962
@@ -4929,7 +4929,7 @@ T	t1211	o1282 b4024 b1211
 B	b1212	t1211
 T	t1215	o1282 b4020 b1212
 B	b1215	t1215
-P	p5171	String "assertT << all v:{x:'T| 't_1 = 'x in 'T & 't_2 = 'x in 'T}.all c:'C['t_2].'c in 'C['v] >> thenT autoT"
+P	p5171	String "assertT << all v:{x:'T| 't_1 = 'x in 'T & 't_2 = 'x in 'T}.all c:'C['t_2].'c in 'C['v] >> ta"
 O	o5171	ext_rule p5171
 T	t1216	o b1207 b23
 B	b1216	t1216
@@ -5628,7 +5628,7 @@ B	b1192	s1186
 T	t1207	o b1192 b23
 B	b1208	t1207
 H	h3008	x1 t1184
-P	p1239	String "dT 2 thenT assertAtT (-2) << all x: {y:'A | 'B ['y]} . squash{'B['x]} >> thenT autoT"
+P	p1239	String "dT 2 thenT assertAtT (-2) << all x: {y:'A | 'B ['y]} . squash{'B['x]} >> ta"
 O	o1240	ext_rule p1239
 VB	B1241	B\\ H\\ t2829
 B	b1246	B1241
@@ -5729,7 +5729,7 @@ T	t60	o49 b36
 B	b64	t60
 T	t64	o1269 b49 b60 b64
 H	h64	u t64
-P	p105	String "applyFun <<lambda{z.decide{'z; l.'l; r.'x}}>> <<'A>> 2 thenT reduceT thenT autoT thenT tryT (dT (-1)) thenT reduceT thenT autoT"
+P	p105	String "applyFun <<lambda{z.decide{'z; l.'l; r.'x}}>> <<'A>> 2 thenT reduceT ta thenT tryT (dT (-1)) thenT reduceT thenT autoT"
 O	o105	ext_rule p105
 T	t105	o b44 b23
 B	b107	t105
@@ -5765,7 +5765,7 @@ T	t296	o290 b36
 B	b296	t296
 T	t298	o1269 b49 b292 b296
 H	h298	u t298
-P	p300	String "applyFun <<lambda{z.decide{'z; l.'x; r.'r}}>> <<'B>> 2 thenT reduceT thenT autoT thenT tryT (dT (-1)) thenT reduceT thenT autoT"
+P	p300	String "applyFun <<lambda{z.decide{'z; l.'x; r.'r}}>> <<'B>> 2 thenT reduceT ta thenT tryT (dT (-1)) thenT reduceT thenT autoT"
 O	o300	ext_rule p300
 T	t301	o b289 b23
 B	b301	t301
@@ -6484,13 +6484,13 @@ T	t1237	o b1227 b1237
 B	b1238	t1237
 T	t1238	o1306 b1220 b1238
 B	b1240	t1238
-P	p5187	String "substT << 't_2='v in {x:'T| 't_1 = 'x in 'T & 't_2 = 'x in 'T} >> (-1) thenT autoT"
+P	p5187	String "substT << 't_2='v in {x:'T| 't_1 = 'x in 'T & 't_2 = 'x in 'T} >> (-1) ta"
 O	o5187	ext_rule p5187
 T	t1240	o1306 b1227 b23
 B	b1241	t1240
 T	t1241	o5187 b903 b1241 b23 b23
 B	b1242	t1241
-P	p5188	String "substT << 't_1='t_2 in {x:'T| 't_1 = 'x in 'T & 't_2 = 'x in 'T} >> 0 thenT autoT"
+P	p5188	String "substT << 't_1='t_2 in {x:'T| 't_1 = 'x in 'T & 't_2 = 'x in 'T} >> 0 ta"
 O	o5188	ext_rule p5188
 T	t1242	o1306 b1236 b23
 B	b1243	t1242

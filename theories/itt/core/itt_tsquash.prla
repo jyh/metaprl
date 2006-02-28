@@ -1157,7 +1157,7 @@ T	t901	o433 b901
 B	b902	t901
 T	t902	o431 b898 b902
 B	b903	t902
-P	p497	String "assertT <<squash{'A}>> thenAT autoT"
+P	p497	String "assertT <<squash{'A}>> taa"
 O	o497	ext_rule p497
 T	t903	o b897 b4
 B	b904	t903
@@ -1216,7 +1216,7 @@ T	t925	o433 b925
 B	b926	t925
 T	t926	o431 b898 b926
 B	b927	t926
-P	p538	String "useWitnessT <<it>> thenT autoT"
+P	p538	String "useWitnessT <<it>> ta"
 O	o538	ext_rule p538
 T	t927	o453 b925 b904
 B	b928	t927
@@ -1274,7 +1274,7 @@ T	t945	o433 b945
 B	b946	t945
 T	t946	o431 b944 b946
 B	b947	t946
-P	p564	String "byDefT unfold_tsquash thenT dT 2 thenT autoT"
+P	p564	String "byDefT unfold_tsquash thenT dT 2 ta"
 O	o564	ext_rule p564
 S	s947	tbrarg\\ h854 h557 h906 h943\\ C
 B	b948	s947

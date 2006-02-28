@@ -166,12 +166,12 @@ P	p582	String "assertT << \"type\"{'A} >>"
 O	o582	ext_rule p582
 P	p588	String assertion
 O	o588	tactic_arg p588
-P	p599	String "univTypeT << univ[i:l] >> thenT autoT"
+P	p599	String "univTypeT << univ[i:l] >> ta"
 O	o599	ext_rule p599
 P	p601	String "assertT << all a: 'A. all b: 'A. \"type\"{'R['a; 'b]} >>"
 O	o601	ext_rule p601
 O	o632	tactic_arg p480
-P	p693	String "dT 0 thenT autoT"
+P	p693	String "dT 0 ta"
 O	o693	ext_rule p693
 P	p694	Var a1
 O	o694	var p694
@@ -3208,7 +3208,7 @@ T	t823	o b818 b823
 B	b829	t823
 T	t829	o864 b501 b806 b829 b4
 B	b833	t829
-P	p1064	String "withT << 'a1 >> (dT 10) thenWT autoT"
+P	p1064	String "withT << 'a1 >> (dT 10) twa"
 O	o1064	ext_rule p1064
 T	t1711	o951 b1683 b4
 B	b1712	t1711

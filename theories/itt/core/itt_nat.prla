@@ -806,7 +806,7 @@ O	o1465	meta_theorem
 NItt_equal!type	type	type Itt_equal
 O	o1467	type
 T	t1468	o1467 b1189
-P	p1469	String "rwh unfold_nat 0 thenT autoT"
+P	p1469	String "rwh unfold_nat 0 ta"
 O	o1469	ext_rule p1469
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p1483	String natMemberEquality
@@ -920,7 +920,7 @@ O	o1538	rule p1538
 P	p3890	Var H
 H	h1540	x t1193
 H	h1543	x t1189
-P	p1546	String "rwh unfold_nat 2 thenT dT 2 thenT autoT"
+P	p1546	String "rwh unfold_nat 2 thenT dT 2 ta"
 O	o1546	ext_rule p1546
 P	p1556	String natInduction
 O	o1556	rule p1556
@@ -1125,7 +1125,7 @@ B	b2646	t2645
 NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash1573	squash Itt_squash
 O	o1573	squash1573
-P	p732	String "assertT << all n:nat. 'C['n]>> thenT autoT thenT rwh unfold_nat (-1) thenT dT (-1) thenT dT (-1)"
+P	p732	String "assertT << all n:nat. 'C['n]>> ta thenT rwh unfold_nat (-1) thenT dT (-1) thenT dT (-1)"
 O	o734	ext_rule p732
 H	h734	n1 t1193
 P	p734	Var n1
@@ -1134,13 +1134,13 @@ T	t736	o735
 B	b736	t736
 T	t737	o1194 b736 b1196
 VC	C737	C\\ J H\\ t736
-P	p776	String "moveToConclT (-1) thenT dT (-1) thenT autoT"
+P	p776	String "moveToConclT (-1) thenT dT (-1) ta"
 O	o777	ext_rule p776
 H	h737	_1010 t737
 H	h1587	m t1193
 P	p2535	String "arithT ttca"
 O	o2535	ext_rule p2535
-P	p894	String "dT (-2) thenAT (arithT thenT autoT)"
+P	p894	String "dT (-2) thenAT (arithT ta)"
 O	o895	ext_rule p894
 P	p1729	String natBackInduction
 O	o1729	rule p1729
@@ -1192,7 +1192,7 @@ B	b4136	C4133
 T	t4136	o1255 b4135 b4136
 P	p3366	String "byDefT unfold_sub"
 O	o3366	ext_rule p3366
-P	p3373	String "assertT << 'm in int >> thenAT subtypeT <<nat>> thenT autoT"
+P	p3373	String "assertT << 'm in int >> thenAT subtypeT <<nat>> ta"
 O	o3373	ext_rule p3373
 P	p3415	String "dT (-3) thenAT (arithT ttca)"
 O	o3415	ext_rule p3415
@@ -1290,7 +1290,7 @@ P	p4174	Var k2
 O	o4174	var p4174
 P	p4175	Var l2
 O	o4175	var p4175
-P	p4182	String "assumT 1 thenT rwh unfold_nat (-1) thenT dT (-1) thenT autoT"
+P	p4182	String "assumT 1 thenT rwh unfold_nat (-1) thenT dT (-1) ta"
 O	o4182	ext_rule p4182
 T	t4188	o1303 b1193 b4157 b4158
 H	h2960	_ t4188
@@ -1323,7 +1323,7 @@ P	p4329	String "splitITE (-2) ttca"
 O	o4329	ext_rule p4329
 P	p4351	String "changeHypT <<nat>> 5 thenAT byDefT unfold_nat ttca"
 O	o4351	ext_rule p4351
-P	p4180	String "assertAtT 7 << le{'x;'n1} >> thenAT arithT thenT autoT thenT nat_is_int ttca"
+P	p4180	String "assertAtT 7 << le{'x;'n1} >> thenAT arithT ta thenT nat_is_int ttca"
 O	o4180	ext_rule p4180
 NItt_logic!false	false	false Itt_logic
 O	o3662	false
@@ -1425,7 +1425,7 @@ O	o692	rule p692
 P	p706	String "assertT << all n:nat. (all m:nat. (('m <= 'n) => 'C['m])) >> ttca"
 O	o706	ext_rule p706
 H	h729	n1 t1189
-P	p741	String "dT (-1) thenT (dT 0 thenMT dT 0) ttca thenT nameHypT (-2) \"l\" thenT assertT << all k: nat. (('k < 'l) => 'C['k]) >> thenT autoT"
+P	p741	String "dT (-1) thenT (dT 0 thenMT dT 0) ttca thenT nameHypT (-2) \"l\" thenT assertT << all k: nat. (('k < 'l) => 'C['k]) >> ta"
 O	o741	ext_rule p741
 P	p758	String "assertT << 'k <= 'm >> ttca"
 O	o758	ext_rule p758
@@ -4581,7 +4581,7 @@ T	t4863	o1465 b4863
 B	b4864	t4863
 T	t4864	o1484 b4862 b4864
 B	b4865	t4864
-P	p4865	String "backThruAssumT 1 thenT autoT thenT nat_is_int ttca"
+P	p4865	String "backThruAssumT 1 ta thenT nat_is_int ttca"
 O	o4865	ext_rule p4865
 T	t4866	o b4866 b13
 B	b4867	t4866
@@ -4930,7 +4930,7 @@ T	t5002	o b5002 b13
 B	b5003	t5002
 T	t5003	o1310 b3341 b5003
 B	b5006	t5003
-P	p3363	String "assertT << 'x = 'y in int >> thenT autoT"
+P	p3363	String "assertT << 'x = 'y in int >> ta"
 O	o3363	ext_rule p3363
 H	h5006	x1 t4997
 S	s5006	tbrarg\\ h3741 h1543 h3341 h5006\\ t4998
@@ -5917,7 +5917,7 @@ T	t5358	o b5358 b13
 B	b5359	t5358
 T	t5359	o1310 b5350 b5359
 B	b5360	t5359
-P	p2482	String "autoT thenT dT 5 thenT autoT"
+P	p2482	String "autoT thenT dT 5 ta"
 O	o2482	ext_rule p2482
 H	h5360	_ t5347
 S	s5360	tbrarg\\ h3741 h1556 h5209 h1558 h5360\\ t5354
@@ -5937,7 +5937,7 @@ T	t5367	o b5367 b13
 B	b5368	t5367
 T	t5368	o1310 b5364 b5368
 B	b5369	t5368
-P	p2498	String "assertT <<'m < 'n>> thenT autoT"
+P	p2498	String "assertT <<'m < 'n>> ta"
 O	o2498	ext_rule p2498
 T	t5369	o1310 b5367 b13
 B	b5370	t5369
@@ -6172,7 +6172,7 @@ T	t5529	o b5525 b5529
 B	b5530	t5529
 T	t5530	o1310 b5517 b5530
 B	b5531	t5530
-P	p852	String "dT 0 thenMT natFullInduction (-1) thenT autoT"
+P	p852	String "dT 0 thenMT natFullInduction (-1) ta"
 O	o852	ext_rule p852
 H	h809	_ t809
 S	s5531	tbrarg\\ h3741 h800 h4859 h803 h809\\ C809
@@ -6197,7 +6197,7 @@ T	t5540	o1325 b1189 b5540
 H	h5540	"" t5540
 T	t5553	o1303 b1189 b806 b5212
 H	h5553	x2 t5553
-P	p878	String "assertT << all x2 : 'T. (('f['x2] < 'f['x1]) => 'C['x2]) >> thenT autoT thenWT (nat_is_int ttca)"
+P	p878	String "assertT << all x2 : 'T. (('f['x2] < 'f['x1]) => 'C['x2]) >> ta thenWT (nat_is_int ttca)"
 O	o878	ext_rule p878
 H	h879	x3 T800
 P	p879	Var x3
@@ -6208,7 +6208,7 @@ B	b880	f880
 T	t881	o1365 b880 b806
 H	h881	x4 t881
 VC	C881	C\\ J H\\ t880
-P	p891	String "assertT << ('f['x3] = 'f['x3] in nat) and ('f['x3] < 'm) >> thenT autoT"
+P	p891	String "assertT << ('f['x3] = 'f['x3] in nat) and ('f['x3] < 'm) >> ta"
 O	o891	ext_rule p891
 P	p927	String "assertT << 'f['x] = 'f['x] in nat >> ttca"
 O	o928	ext_rule p927
@@ -7134,7 +7134,7 @@ T	t6055	o1484 b6053 b6055
 B	b6056	t6055
 T	t6056	o1484 b6051 b6056
 B	b6057	t6056
-P	p3203	String "backThruAssumT 2 thenT assumT 1 thenT byDefsT [unfold_finite_nat; unfold_int_seg] thenT dT 2 thenT autoT thenT arithT ttca"
+P	p3203	String "backThruAssumT 2 thenT assumT 1 thenT byDefsT [unfold_finite_nat; unfold_int_seg] thenT dT 2 ta thenT arithT ttca"
 O	o3203	ext_rule p3203
 T	t6057	o b6052 b13
 B	b6058	t6057
@@ -8990,11 +8990,11 @@ P	p3296	String decidable
 O	o3296	meta_labeled p3296
 T	t3307	o1365 b1196 b1861
 B	b3307	t3307
-P	p3323	String "assumT 3 thenT assumT 4 thenT genAssumT [2] thenT autoT thenT moveToConclT 2 thenT dT (-1) thenT byDefT unfold_decidable"
+P	p3323	String "assumT 3 thenT assumT 4 thenT genAssumT [2] ta thenT moveToConclT 2 thenT dT (-1) thenT byDefT unfold_decidable"
 O	o3323	ext_rule p3323
 T	t3411	o1194 b1196 b1861
 B	b3411	t3411
-P	p2595	String "dT 5 thenMT dT (-1) thenT autoT"
+P	p2595	String "dT 5 thenMT dT (-1) ta"
 O	o2595	ext_rule p2595
 T	t5379	o1365 b1196 b4095
 S	s5379	tbrarg\\ h3741\\ t5379
@@ -9017,7 +9017,7 @@ T	t6244	o b6243 b13
 B	b6244	t6244
 T	t6245	o1310 b3289 b6244
 B	b6245	t6245
-P	p2982	String "dT 2 thenT autoT"
+P	p2982	String "dT 2 ta"
 O	o2982	ext_rule p2982
 T	t6246	o1194 b1196 b5466
 H	h6246	"" t6246
@@ -9140,7 +9140,7 @@ T	t6290	o b6290 b13
 B	b6291	t6290
 T	t6291	o1310 b6275 b6291
 B	b6292	t6291
-P	p3070	String "withT <<'k -@ 1>> (dT 0) thenT autoT thenT tryT arithT ttca"
+P	p3070	String "withT <<'k -@ 1>> (dT 0) ta thenT tryT arithT ttca"
 O	o3070	ext_rule p3070
 T	t3071	o1304 b3062 b4809
 B	b3071	t3071
@@ -9183,7 +9183,7 @@ T	t6307	o b6307 b13
 B	b6308	t6307
 T	t6308	o1310 b6278 b6308
 B	b6309	t6308
-P	p3114	String "withT <<'r -@ 1>> (dT 0) thenT autoT thenT tryT arithT ttca"
+P	p3114	String "withT <<'r -@ 1>> (dT 0) ta thenT tryT arithT ttca"
 O	o3114	ext_rule p3114
 T	t6309	o1310 b6307 b13
 B	b6310	t6309
@@ -9260,7 +9260,7 @@ T	t6347	o b6347 b13
 B	b6348	t6347
 T	t6348	o1310 b6334 b6348
 B	b6349	t6348
-P	p3153	String "withT <<'r +@ 1>> (dT 0) thenT autoT thenT arithT ttca"
+P	p3153	String "withT <<'r +@ 1>> (dT 0) ta thenT arithT ttca"
 O	o3153	ext_rule p3153
 T	t6349	o1310 b6347 b13
 B	b6350	t6349
@@ -9293,7 +9293,7 @@ T	t6359	o b6359 b13
 B	b6360	t6359
 T	t6360	o1310 b6337 b6360
 B	b6361	t6360
-P	p3224	String "withT <<0>> (dT 0) thenT autoT"
+P	p3224	String "withT <<0>> (dT 0) ta"
 O	o3224	ext_rule p3224
 T	t3224	o1304 b3183 b1196
 B	b3225	t3224
@@ -9391,10 +9391,10 @@ B	b5393	P5392
 B	b5557	t5379
 H	h4449	x t5379
 H	h5564	_1010 t5379
-P	p4206	String "selT 1 (dT 0) thenT autoT"
+P	p4206	String "selT 1 (dT 0) ta"
 O	o4206	ext_rule p4206
 H	h3539	b t1193
-P	p3213	String "selT 1 (dT 0) thenT autoT thenT arithT ttca"
+P	p3213	String "selT 1 (dT 0) ta thenT arithT ttca"
 O	o3213	ext_rule p3213
 P	p3486	String "withT << 1 >> (dT 2) thenMT hypSubstT 6 0 thenMT dT 7 ttca"
 O	o3486	ext_rule p3486
@@ -9403,7 +9403,7 @@ B	b6353	P6345
 T	t6353	o2012 b6353
 P	p3523	String "selT 2 (dT 0) thenMT withT << 1 >> (dT 0) thenT byDefT reduceC"
 O	o3523	ext_rule p3523
-P	p3660	String "selT 1 (dT 0) thenT autoT thenT substT << 'b = 1 in int >> (-1) ttca"
+P	p3660	String "selT 1 (dT 0) ta thenT substT << 'b = 1 in int >> (-1) ttca"
 O	o3660	ext_rule p3660
 O	o4390	lid p3287
 T	t4390	o4390
@@ -9411,9 +9411,9 @@ B	b4390	t4390
 P	p4398	String smallest_positive
 O	o4398	rule p4398
 O	o4399	meta_labeled p1310
-P	p4409	String "assumT 3 thenT autoT"
+P	p4409	String "assumT 3 ta"
 O	o4409	ext_rule p4409
-P	p4428	String "assertT << (all b: int. ('b > 0 & 'b <= 'y => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'y & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) >> thenMT dT (-1) thenT autoT"
+P	p4428	String "assertT << (all b: int. ('b > 0 & 'b <= 'y => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'y & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) >> thenMT dT (-1) ta"
 O	o4428	ext_rule p4428
 P	p4481	String "positiveRule1T ttca"
 O	o4481	ext_rule p4481
@@ -9680,7 +9680,7 @@ T	t6514	o1310 b6514 b13
 B	b6515	t6514
 T	t6515	o3213 b4688 b6515 b13 b13
 B	b6516	t6515
-P	p3496	String "dT 5 thenT autoT"
+P	p3496	String "dT 5 ta"
 O	o3496	ext_rule p3496
 H	h6516	v1 t5240
 S	s6516	tbrarg\\ h3741 h6431 h1587 h6516 h6483 h4449\\ t6475
@@ -9818,7 +9818,7 @@ T	t882	o b6562 b882
 B	b885	t882
 T	t885	o3486 b4688 b6559 b885 b13
 B	b886	t885
-P	p3910	String "dT 6 thenT autoT"
+P	p3910	String "dT 6 ta"
 O	o3910	ext_rule p3910
 T	t6579	o2335 b6578 b13
 B	b6579	t6579
@@ -9936,7 +9936,7 @@ T	t6631	o b6627 b6631
 B	b6632	t6631
 T	t6632	o1310 b6624 b6632
 B	b6633	t6632
-P	p4251	String "withT <<'b>> (dT 5) thenMT dT (-1) thenT autoT"
+P	p4251	String "withT <<'b>> (dT 5) thenMT dT (-1) ta"
 O	o4251	ext_rule p4251
 T	t6633	o2335 b6626 b13
 B	b6634	t6633
@@ -9968,7 +9968,7 @@ T	t2833	o b6618 b2832
 B	b2833	t2833
 T	t2834	o4035 b4688 b6599 b2833 b13
 B	b2834	t2834
-P	p4288	String "selT 2 (dT 0) thenMT withT << 'u >> (dT 0) thenT autoT"
+P	p4288	String "selT 2 (dT 0) thenMT withT << 'u >> (dT 0) ta"
 O	o4288	ext_rule p4288
 T	t6647	o2335 b6584 b13
 B	b6648	t6647

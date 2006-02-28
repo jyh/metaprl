@@ -3708,7 +3708,7 @@ T	t1479	o1260 b1479
 B	b1480	t1479
 T	t1480	o1258 b1478 b1480
 B	b1481	t1480
-P	p1481	String "copyHypT 2 3 thenT rwh unfold_isIntDomain1 (-2) thenT autoT"
+P	p1481	String "copyHypT 2 3 thenT rwh unfold_isIntDomain1 (-2) ta"
 O	o1481	ext_rule p1481
 P	p2975	String ""
 O	o2975	tactic_arg p2975
@@ -4996,7 +4996,7 @@ P	p2058	String addid_in_car
 O	o2058	rule p2058
 T	t2058	o1258 b1826 b1265
 B	b2058	t2058
-P	p2059	String "genAssumT [1] thenT repeatForT 2 (dT 2) thenT autoT"
+P	p2059	String "genAssumT [1] thenT repeatForT 2 (dT 2) ta"
 O	o2059	ext_rule p2059
 T	t2059	o1283 b1264 b1830
 B	b2059	t2059
@@ -5262,7 +5262,7 @@ T	t2163	o1258 b2021 b2163
 B	b2164	t2163
 T	t2164	o1258 b1826 b2164
 B	b2165	t2164
-P	p2165	String "genAssumT [1; 2; 3; 4] thenT autoT"
+P	p2165	String "genAssumT [1; 2; 3; 4] ta"
 O	o2165	ext_rule p2165
 T	t2165	o b2152 b14
 B	b2166	t2165
@@ -5618,7 +5618,7 @@ T	t2308	o1258 b2021 b2307
 B	b2308	t2308
 T	t2309	o1258 b1826 b2308
 B	b2309	t2309
-P	p2309	String "genAssumT [1; 2] thenT autoT"
+P	p2309	String "genAssumT [1; 2] ta"
 O	o2309	ext_rule p2309
 T	t2310	o1283 b2306 b2122
 B	b2310	t2310
@@ -6110,7 +6110,7 @@ T	t2505	o1258 b2021 b2504
 B	b2505	t2505
 T	t2506	o1258 b1826 b2505
 B	b2506	t2506
-P	p2506	String "genAssumT [1; 2; 3] thenT autoT"
+P	p2506	String "genAssumT [1; 2; 3] ta"
 O	o2506	ext_rule p2506
 T	t2507	o1283 b2502 b1992
 B	b2507	t2507
@@ -6196,7 +6196,7 @@ T	t2539	o1258 b2021 b2538
 B	b2539	t2539
 T	t2540	o1258 b1826 b2539
 B	b2540	t2540
-P	p2540	String "genAssumT [1; 2; 3] thenT autoT thenT dT 2 ttca"
+P	p2540	String "genAssumT [1; 2; 3] ta thenT dT 2 ttca"
 O	o2540	ext_rule p2540
 T	t2541	o1283 b2536 b1992
 B	b2541	t2541
@@ -6623,7 +6623,7 @@ P	p2713	String intDomain_0neq1
 O	o2713	rule p2713
 T	t2713	o1258 b1826 b1439
 B	b2713	t2713
-P	p2714	String "genAssumT [1] thenT autoT"
+P	p2714	String "genAssumT [1] ta"
 O	o2714	ext_rule p2714
 T	t2714	o1283 b1438 b1830
 B	b2714	t2714
@@ -6698,7 +6698,7 @@ P	p2742	String intDomain_noDiv0
 O	o2742	rule p2742
 T	t2742	o1258 b1826 b1379
 B	b2742	t2742
-P	p2743	String "genAssumT [1] thenT autoT thenT dT 2 ttca"
+P	p2743	String "genAssumT [1] ta thenT dT 2 ttca"
 O	o2743	ext_rule p2743
 T	t2743	o1283 b1378 b1830
 B	b2743	t2743
@@ -7225,7 +7225,7 @@ S	s2956	t1261\\ h\\ t2956
 B	b2956	s2956
 T	t2957	o1260 b2956
 B	b2957	t2957
-P	p2957	String "autoT thenT repeatForT 3 (tryT (dT 0)) ttca thenT dT 2 thenT dT 2 thenT autoT thenT byDefT reduceC"
+P	p2957	String "autoT thenT repeatForT 3 (tryT (dT 0)) ttca thenT dT 2 thenT dT 2 ta thenT byDefT reduceC"
 O	o2957	ext_rule p2957
 T	t2958	o1283 b2956 b14
 B	b2958	t2958

@@ -5907,7 +5907,7 @@ T	t4670	o b4663 b4670
 B	b4671	t4670
 T	t4671	o2677 b4662 b4671
 B	b4672	t4671
-P	p2693	String "rwh reduceC 0 thenT useWitnessT <<inl{'y}>> thenT equalRefT <<inr{'z}>> thenT autoT"
+P	p2693	String "rwh reduceC 0 thenT useWitnessT <<inl{'y}>> thenT equalRefT <<inr{'z}>> ta"
 O	o2693	ext_rule p2693
 T	t4672	o2677 b4663 b16
 B	b4674	t4672
@@ -5983,7 +5983,7 @@ T	t4693	o b4689 b4693
 B	b4694	t4693
 T	t4694	o2677 b4678 b4694
 B	b4695	t4694
-P	p2740	String "equalTypeT <<inl{'y}>> <<inr{'z}>> thenT autoT"
+P	p2740	String "equalTypeT <<inl{'y}>> <<inr{'z}>> ta"
 O	o2740	ext_rule p2740
 H	h3904	_1010 A3543
 S	s3904	tbrarg\\ h3495 h3865 h3732 h3874 h3904\\ t3551
@@ -6087,7 +6087,7 @@ T	t4726	o b4722 b4726
 B	b4727	t4726
 T	t4727	o2677 b4721 b4727
 B	b4728	t4727
-P	p2777	String "equalSymT thenT autoT"
+P	p2777	String "equalSymT ta"
 O	o2777	ext_rule p2777
 T	t4728	o2677 b4722 b16
 B	b4730	t4728

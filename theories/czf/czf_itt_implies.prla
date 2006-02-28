@@ -124,7 +124,7 @@ O	o577	fun
 NSummary!interactive	interactive	interactive Summary
 O	o586	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p586	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p586	String "rwh unfold_fun_prop 0 ta"
 O	o587	ext_rule p586
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o588	status_incomplete
@@ -175,7 +175,7 @@ P	p726	String "dT 9 thenAT trivialT"
 O	o726	ext_rule p726
 P	p736	String "dT 5 thenAT trivialT"
 O	o736	ext_rule p736
-P	p742	String "instHypT [<< 'x >>; << 'x_1 >>] 8 thenT autoT"
+P	p742	String "instHypT [<< 'x >>; << 'x_1 >>] 8 ta"
 O	o742	ext_rule p742
 NSummary!resource_defs	resource_defs	resource_defs Summary
 NOcaml!uid	uid	uid Ocaml
@@ -223,7 +223,7 @@ H	h875	x t165
 B	b166	t165
 T	t211	o152 b599 b571
 B	b212	t211
-P	p412	String "rwh unfold_equal 4 thenT autoT"
+P	p412	String "rwh unfold_equal 4 ta"
 O	o412	ext_rule p412
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o413	isset
@@ -232,7 +232,7 @@ H	h413	y_1 t413
 T	t414	o413 b599
 H	h414	z_2 t414
 H	h415	z_1 t600
-P	p461	String "eqSetSymT thenT autoT"
+P	p461	String "eqSetSymT ta"
 O	o461	ext_rule p461
 NCzf_itt_sep	Czf_itt_sep	Czf_itt_sep NIL
 NCzf_itt_sep!restricted	restricted	restricted Czf_itt_sep
@@ -241,20 +241,20 @@ P	p923	String squash_restrictedT
 O	o924	ext_rule p923
 P	p973	String "assumT 1 thenT assumT 2"
 O	o973	ext_rule p973
-P	p1035	String "rwh unfold_restricted 2 thenT rwh unfold_restricted 3 thenT rwh unfold_restricted 0 thenT autoT"
+P	p1035	String "rwh unfold_restricted 2 thenT rwh unfold_restricted 3 thenT rwh unfold_restricted 0 ta"
 O	o1035	ext_rule p1035
 P	p1026	Number 2701
 NItt_logic!iff	iff	iff Itt_logic
 O	o801	iff
 P	p847	String implies_fun
 O	o847	rule p847
-P	p853	String "rwh unfold_implies 0 thenT autoT"
+P	p853	String "rwh unfold_implies 0 ta"
 O	o853	ext_rule p853
 P	p862	String implies_res1
 O	o862	rule p862
 P	p877	String iff_fun
 O	o877	rule p877
-P	p883	String "rwh unfold_iff 0 thenT autoT"
+P	p883	String "rwh unfold_iff 0 ta"
 O	o883	ext_rule p883
 P	p892	String iff_res1
 O	o892	rule p892

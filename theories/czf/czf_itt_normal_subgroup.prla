@@ -3505,7 +3505,7 @@ T	t2068	o1438 b2036 b2068
 B	b2072	t2068
 T	t2072	o1438 b2034 b2072
 B	b2076	t2072
-P	p1649	String "assertT << normal_subg{'s; 'g} >> ttca thenT rwh unfold_normal_subg 0 thenT autoT"
+P	p1649	String "assertT << normal_subg{'s; 'g} >> ttca thenT rwh unfold_normal_subg 0 ta"
 O	o1649	ext_rule p1649
 T	t2855	o b2042 b11
 B	b2855	t2855
@@ -3537,7 +3537,7 @@ T	t2863	o b2863 b11
 B	b2864	t2863
 T	t2864	o1458 b2860 b2864
 B	b2865	t2864
-P	p1684	String "setExtT thenT autoT thenT dT 7 ttca"
+P	p1684	String "setExtT ta thenT dT 7 ttca"
 O	o1684	ext_rule p1684
 H	h2007	_1010 t1994
 S	s2109	tbrarg\\ h1958 h2032 h2033 h1569 h2007\\ t2109
@@ -3634,7 +3634,7 @@ T	t2883	o b2883 b11
 B	b2884	t2883
 T	t2884	o1458 b2878 b2884
 B	b2885	t2884
-P	p1722	String "copyHypT 2 4 thenT rwh unfold_abel 4 thenT autoT thenT instHypT [<< 'a >>; << 'z >>] 5 ttca thenT dT 14 ttca thenT dT 14 ttca"
+P	p1722	String "copyHypT 2 4 thenT rwh unfold_abel 4 ta thenT instHypT [<< 'a >>; << 'z >>] 5 ttca thenT dT 14 ttca thenT dT 14 ttca"
 O	o1722	ext_rule p1722
 P	p2885	String ""
 O	o2885	tactic_arg p2885
@@ -3693,7 +3693,7 @@ T	t2893	o b2889 b2893
 B	b2894	t2893
 T	t2894	o1458 b2886 b2894
 B	b2895	t2894
-P	p1794	String "assumT 3 ttca thenT rwh unfold_subgroup 14 thenT autoT thenT withT << 'z >> (dT 16) ttca"
+P	p1794	String "assumT 3 ttca thenT rwh unfold_subgroup 14 ta thenT withT << 'z >> (dT 16) ttca"
 O	o1794	ext_rule p1794
 H	h2584	_1010 t2584
 H	h2594	_1010 t2594
@@ -3754,7 +3754,7 @@ S	s2664	tbrarg\\ h1958 h2032 h2033 h1569 h2007 h2551 h2566 h2554 h1688 h2556 h25
 B	b2665	s2664
 T	t2665	o1460 b2665 b2096
 B	b2666	t2665
-P	p1810	String "copyHypT 2 4 thenT rwh unfold_abel 4 thenT autoT thenT instHypT [<< 'z >>; << 'a >>] 5 ttca thenT dT 14 ttca"
+P	p1810	String "copyHypT 2 4 thenT rwh unfold_abel 4 ta thenT instHypT [<< 'z >>; << 'a >>] 5 ttca thenT dT 14 ttca"
 O	o1810	ext_rule p1810
 T	t2912	o2885 b2666 b11
 B	b2913	t2912

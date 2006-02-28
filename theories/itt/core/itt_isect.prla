@@ -1204,7 +1204,7 @@ B	b1435	t1435
 P	p673	String topUniv
 O	o673	rule p673
 T	t674	o585 b586 b526 b526
-P	p675	String "rwh unfold_top 0 thenT autoT"
+P	p675	String "rwh unfold_top 0 ta"
 O	o675	ext_rule p675
 P	p684	String topType
 O	o684	rule p684
@@ -1723,7 +1723,7 @@ T	t2636	o581 b2632 b2636
 B	b2637	t2636
 T	t2637	o581 b1897 b2637
 B	b2638	t2637
-P	p1134	String "assertT <<squash{'A} -> 'B>> thenAT autoT"
+P	p1134	String "assertT <<squash{'A} -> 'B>> taa"
 O	o1134	ext_rule p1134
 P	p1671	Number -1
 O	o3	location p1671 p1671
@@ -6047,7 +6047,7 @@ T	t5980	o b5979 b4
 B	b5980	t5980
 T	t5981	o645 b5977 b5980
 B	b5981	t5981
-P	p4148	String "withT <<'a>> (dT 2) thenT autoT"
+P	p4148	String "withT <<'a>> (dT 2) ta"
 O	o4148	ext_rule p4148
 H	h2795	_1010 t2788
 S	s2795	tbrarg\\ h1829 h2693 h2694 h2697 h2795\\ T2718
@@ -7179,7 +7179,7 @@ T	t3965	o581 b3963 b3965
 B	b3966	t3965
 T	t3966	o581 b3960 b3966
 B	b3967	t3966
-P	p5252	String "assertT <<squash{'A}>> thenAT autoT"
+P	p5252	String "assertT <<squash{'A}>> taa"
 O	o5252	ext_rule p5252
 T	t6383	o b3961 b4
 B	b6383	t6383
@@ -8625,11 +8625,11 @@ T	t6813	o857 b644 b6812 b4 b4
 B	b6813	t6813
 P	p952	String intersectionSubtype3
 O	o952	rule p952
-P	p963	String "dT 0 thenWT autoT"
+P	p963	String "dT 0 twa"
 O	o963	ext_rule p963
 P	p1025	String topSubtype
 O	o1025	rule p1025
-P	p1029	String "dT 0 thenT autoT"
+P	p1029	String "dT 0 ta"
 O	o1029	ext_rule p1029
 P	p1056	String opname_of_term
 O	o1056	lid p1056
@@ -8720,7 +8720,7 @@ P	p1047	String infer_univ_dep0_dep1
 O	o1048	lid p1047
 T	t1048	o1048
 B	b1048	t1048
-P	p5553	String "assumT 3 thenT withT << 'z >> (dT (-1)) thenT autoT"
+P	p5553	String "assumT 3 thenT withT << 'z >> (dT (-1)) ta"
 O	o5553	ext_rule p5553
 H	h5280	z B4388
 T	t5280	o585 b5197 b698 b698

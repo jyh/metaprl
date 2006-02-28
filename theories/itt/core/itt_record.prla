@@ -1011,7 +1011,7 @@ B	b1321	t1320
 NSummary!interactive	interactive	interactive Summary
 O	o975	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1589	String "rwh unfoldRecordS 0 thenT autoT"
+P	p1589	String "rwh unfoldRecordS 0 ta"
 O	o1591	ext_rule p1589
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o977	status_incomplete
@@ -1054,7 +1054,7 @@ T	t1352	o965 b1352
 B	b1353	t1352
 T	t1353	o964 b1350 b1353
 B	b1354	t1353
-P	p1630	String "rwh unfoldField 0 thenT rwch unfoldRecordS 1 0 thenT autoT"
+P	p1630	String "rwh unfoldField 0 thenT rwch unfoldRecordS 1 0 ta"
 O	o1630	ext_rule p1630
 T	t1354	o b1349 b4
 B	b1355	t1354
@@ -1482,7 +1482,7 @@ T	t1399	o964 b1393 b1399
 B	b1400	t1399
 T	t1400	o964 b1387 b1400
 B	b1404	t1400
-P	p1705	String "rwh unfoldRecordL 0 thenT autoT"
+P	p1705	String "rwh unfoldRecordL 0 ta"
 O	o1705	ext_rule p1705
 T	t1404	o b1392 b4
 B	b1408	t1404
@@ -1520,7 +1520,7 @@ T	t1438	o964 b1434 b1438
 B	b1439	t1438
 T	t1439	o964 b1317 b1439
 B	b1442	t1439
-P	p1769	String "rwh unfoldRecordR 0 thenT autoT"
+P	p1769	String "rwh unfoldRecordR 0 ta"
 O	o1769	ext_rule p1769
 T	t1442	o b1433 b4
 B	b1443	t1442
@@ -1549,7 +1549,7 @@ T	t1470	o964 b1387 b1468
 B	b1470	t1470
 T	t1471	o964 b1317 b1470
 B	b1471	t1471
-P	p1797	String "rwh unfoldRecordI 0 thenT autoT"
+P	p1797	String "rwh unfoldRecordI 0 ta"
 O	o1797	ext_rule p1797
 T	t1472	o b1385 b4
 B	b1472	t1472
@@ -1581,7 +1581,7 @@ T	t1495	o1816 b960 b967
 B	b1495	t1495
 T	t1496	o1405 b1495
 B	b1496	t1496
-P	p1817	String "rwaAll [unfoldRcrd; unfoldField] thenT autoT"
+P	p1817	String "rwaAll [unfoldRcrd; unfoldField] ta"
 O	o1817	ext_rule p1817
 NPerv!rewrite	rewrite1473	rewrite Perv
 O	o1474	rewrite1473
@@ -1633,7 +1633,7 @@ T	t1510	o1405 b1507
 B	b1511	t1510
 T	t1511	o1405 b967
 B	b1514	t1511
-P	p454	String "rwa [unfoldRcrd;unfoldField] 0 thenT autoT"
+P	p454	String "rwa [unfoldRcrd;unfoldField] 0 ta"
 O	o454	ext_rule p454
 T	t2545	o1836 b1868 b1348
 B	b2545	t2545
@@ -1664,7 +1664,7 @@ NItt_record_label!eq_label	eq_label	eq_label Itt_record_label
 O	o498	eq_label p1832 p1245
 T	t1525	o498 b960 b1514
 B	b1525	t1525
-P	p505	String "decideEqLabelT <<label[m:t]>> <<label[n:t]>> thenT rwaAll [unfoldRcrd;unfoldField] thenT autoT"
+P	p505	String "decideEqLabelT <<label[m:t]>> <<label[n:t]>> thenT rwaAll [unfoldRcrd;unfoldField] ta"
 O	o506	ext_rule p505
 T	t2563	o498 b1868 b1351
 B	b2563	t2563
@@ -1692,7 +1692,7 @@ T	t2574	o b2574 b4
 B	b2575	t2574
 T	t2575	o978 b2569 b2575
 B	b2576	t2575
-P	p547	String "substT <<label[m:t] ~ label[n:t]>> 0 thenET label_sqequal thenT autoT"
+P	p547	String "substT <<label[m:t] ~ label[n:t]>> 0 thenET label_sqequal ta"
 O	o548	ext_rule p547
 P	p5319	String ""
 O	o5319	tactic_arg p5319
@@ -2215,7 +2215,7 @@ T	t1741	o1836 b1738 b1495
 B	b1742	t1741
 T	t1742	o1845 b1495 b1742
 B	b1743	t1742
-P	p1845	String "decideEqLabelT <<label[n:t]>> <<label[m:t]>> thenT rwaAll [unfoldRcrd;unfoldField] thenT autoT"
+P	p1845	String "decideEqLabelT <<label[n:t]>> <<label[m:t]>> thenT rwaAll [unfoldRcrd;unfoldField] ta"
 O	o1846	ext_rule p1845
 Vb	b3059	b\\ H\\
 B	b3060	b3059
@@ -2253,7 +2253,7 @@ T	t3080	o b3080 b4
 B	b3081	t3080
 T	t3081	o978 b3067 b3081
 B	b3082	t3081
-P	p880	String "substT <<label[n:t] ~ label[m:t]>> 0 thenET label_sqequal thenT autoT"
+P	p880	String "substT <<label[n:t] ~ label[m:t]>> 0 thenET label_sqequal ta"
 O	o881	ext_rule p880
 T	t3082	o5319 b3078 b4
 B	b3083	t3082
@@ -2383,7 +2383,7 @@ T	t1871	o964 b1867 b1871
 B	b1872	t1871
 T	t617	o964 b614 b1872
 B	b618	t617
-P	p906	String "rwaAllAll [unfoldRcrd; unfoldRecordS] thenT autoT"
+P	p906	String "rwaAllAll [unfoldRcrd; unfoldRecordS] ta"
 O	o906	ext_rule p906
 T	t1873	o b1865 b4
 B	b1874	t1873
@@ -3691,7 +3691,7 @@ T	t2076	o965 b2076
 B	b2077	t2076
 T	t2077	o964 b2075 b2077
 B	b2078	t2077
-P	p2573	String "rwh unfoldRecordS 2 thenT rwch unfoldRecordS 1 2 thenT dT 2 thenT autoT"
+P	p2573	String "rwh unfoldRecordS 2 thenT rwch unfoldRecordS 1 2 thenT dT 2 ta"
 O	o2573	ext_rule p2573
 T	t3841	o b2073 b4
 B	b3841	t3841
@@ -3848,7 +3848,7 @@ T	t3948	o b3948 b4
 B	b3951	t3948
 T	t3951	o978 b3937 b3951
 B	b3954	t3951
-P	p2683	String "dT 3 thenT autoT"
+P	p2683	String "dT 3 ta"
 O	o2683	ext_rule p2683
 H	h2151	_1010 t2151
 S	s2151	tbrarg\\ h1314 h2125 h2151 h2073\\ C
@@ -4026,7 +4026,7 @@ T	t4104	o978 b4060 b4
 B	b4105	t4104
 T	t4105	o3962 b977 b4105 b4 b4
 B	b4109	t4105
-P	p2814	String "rwh reduceC 3 thenT autoT"
+P	p2814	String "rwh reduceC 3 ta"
 O	o2816	ext_rule p2814
 H	h2257	_1010 t2257
 S	s2257	tbrarg\\ h1314 h2225 h2257 h2073\\ C
@@ -4163,7 +4163,7 @@ T	t4261	o b4261 b4
 B	b4262	t4261
 T	t4262	o978 b4259 b4262
 B	b4263	t4262
-P	p4887	String "moveHypT 2 3 thenT withT <<'self>> (dT 3) thenT autoT"
+P	p4887	String "moveHypT 2 3 thenT withT <<'self>> (dT 3) ta"
 O	o4889	ext_rule p4887
 T	t4263	o978 b4261 b4
 B	b4294	t4263
@@ -4317,7 +4317,7 @@ T	t2427	o964 b2294 b2426
 B	b2427	t2427
 T	t2428	o964 b2369 b2427
 B	b2428	t2428
-P	p3555	String "rwh unfoldRecordI 0 thenT rwh unfoldRecordR 0 thenT autoT"
+P	p3555	String "rwh unfoldRecordI 0 thenT rwh unfoldRecordR 0 ta"
 O	o3555	ext_rule p3555
 T	t2429	o b2292 b4
 B	b2429	t2429
@@ -4454,7 +4454,7 @@ T	t4852	o b4851 b4
 B	b4852	t4852
 T	t4853	o978 b4821 b4852
 B	b4853	t4853
-P	p780	String "equalRefT <<'rr>> thenT equalSymT thenT autoT"
+P	p780	String "equalRefT <<'rr>> thenT equalSymT ta"
 O	o780	ext_rule p780
 H	h2669	_1010 t2669
 S	s2669	tbrarg\\ h1314 h2608 h2669\\ t2609
@@ -4544,7 +4544,7 @@ T	t4879	o b4874 b4879
 B	b4880	t4879
 T	t4880	o978 b4870 b4880
 B	b4881	t4880
-P	p1672	String "equalTypeT <<'r1>> <<'r2>> thenT autoT"
+P	p1672	String "equalTypeT <<'r1>> <<'r2>> ta"
 O	o1672	ext_rule p1672
 T	t2751	o b2735 b2603
 B	b2751	t2751
@@ -4599,7 +4599,7 @@ T	t4894	o b4894 b4
 B	b4895	t4894
 T	t4895	o978 b4887 b4895
 B	b4896	t4895
-P	p1750	String "equalRefT <<'r2>> thenT autoT"
+P	p1750	String "equalRefT <<'r2>> ta"
 O	o1750	ext_rule p1750
 T	t4896	o978 b4894 b4
 B	b4897	t4896
@@ -4659,7 +4659,7 @@ T	t4917	o b4914 b4917
 B	b4918	t4917
 T	t4918	o978 b4913 b4918
 B	b4929	t4918
-P	p843	String "equalSymT thenT autoT"
+P	p843	String "equalSymT ta"
 O	o851	ext_rule p843
 T	t4929	o978 b4914 b4
 B	b4930	t4929
@@ -4713,7 +4713,7 @@ T	t2951	o964 b2740 b2950
 B	b2951	t2951
 T	t2952	o964 b2737 b2951
 B	b2952	t2952
-P	p2158	String "equalSymT thenT selT 1 recordOrtT thenMT equalSymT thenT autoT"
+P	p2158	String "equalSymT thenT selT 1 recordOrtT thenMT equalSymT ta"
 O	o2158	ext_rule p2158
 T	t4958	o980 b2949 b4867
 B	b4958	t4958
@@ -5081,7 +5081,7 @@ T	t3149	o965 b3149
 B	b3150	t3149
 T	t3150	o964 b3147 b3150
 B	b3151	t3150
-P	p38	String "substUsingEpimorphism 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>> <<bind{z.(field[n:t]{'z},'z)}>> thenT autoT thenT reduceT thenT autoT"
+P	p38	String "substUsingEpimorphism 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>> <<bind{z.(field[n:t]{'z},'z)}>> ta thenT reduceT thenT autoT"
 O	o38	ext_rule p38
 T	t3151	o b3144 b4
 B	b3152	t3151
@@ -5225,7 +5225,7 @@ T	t5228	o b5228 b4
 B	b5229	t5228
 T	t5229	o978 b5209 b5229
 B	b5230	t5229
-P	p2906	String "rwch unfoldRecordL 1 2 thenT autoT"
+P	p2906	String "rwch unfoldRecordL 1 2 ta"
 O	o2906	ext_rule p2906
 H	h5996	_1010 t1640
 S	s3400	tbrarg\\ h1314 h3334 h3148 h3335 h3400 h5996\\ C3400
@@ -5331,7 +5331,7 @@ T	t5376	o b5376 b4
 B	b5377	t5376
 T	t5377	o978 b5371 b5377
 B	b5378	t5377
-P	p2987	String "rwh unfoldRecordL 2 thenT withT <<bind{a,b.'b IN record[n:t]{'A['a]}}>> (dT 2) thenT autoT"
+P	p2987	String "rwh unfoldRecordL 2 thenT withT <<bind{a,b.'b IN record[n:t]{'A['a]}}>> (dT 2) ta"
 O	o2987	ext_rule p2987
 T	t5378	o978 b5376 b4
 B	b5379	t5378
@@ -5374,7 +5374,7 @@ T	t5389	o b5389 b4
 B	b5390	t5389
 T	t5390	o978 b5388 b5390
 B	b5391	t5390
-P	p3854	String "moveHypT 2 4 thenT autoT"
+P	p3854	String "moveHypT 2 4 ta"
 O	o3854	ext_rule p3854
 T	t5391	o978 b5389 b4
 B	b5392	t5391
@@ -5493,7 +5493,7 @@ T	t1493	o978 b5404 b5419
 B	b1493	t1493
 H	h4042	r1 R1384
 VA	A3615	A\\ H\\ t1025
-P	p1322	String "withT <<bind{r,x.('r,'x) IN (self:'R * 'A['self])}>> (dT 2) thenT autoT"
+P	p1322	String "withT <<bind{r,x.('r,'x) IN (self:'R * 'A['self])}>> (dT 2) ta"
 O	o1322	ext_rule p1322
 T	t3894	o3668 b718 b1406
 B	b3895	t3894
@@ -5515,7 +5515,7 @@ T	t5477	o b5477 b4
 B	b5478	t5477
 T	t5478	o978 b5474 b5478
 B	b5479	t5478
-P	p1300	String "assertT <<\"type\"{record[n:t]{self.'A['self];'R}}>> thenAT (typeAssertT thenT autoT)"
+P	p1300	String "assertT <<\"type\"{record[n:t]{self.'A['self];'R}}>> thenAT (typeAssertT ta)"
 O	o1300	ext_rule p1300
 H	h4043	_1010 A3615
 H	h4044	y R1384
@@ -5538,7 +5538,7 @@ T	t5483	o b5483 b4
 B	b5484	t5483
 T	t5484	o978 b5480 b5484
 B	b5485	t5484
-P	p1352	String "withT <<'y>> (dT 7) thenT autoT"
+P	p1352	String "withT <<'y>> (dT 7) ta"
 O	o1352	ext_rule p1352
 S	s4099	tbrarg\\ h1314 h3306 h3148 h4042 h4043 h4044 h2309\\ t4044
 B	b4100	s4099
@@ -5603,7 +5603,7 @@ T	t5498	o b5498 b4
 B	b5499	t5498
 T	t5499	o978 b5497 b5499
 B	b5500	t5499
-P	p3044	String "recordEliminationL1 4 thenT autoT"
+P	p3044	String "recordEliminationL1 4 ta"
 O	o3044	ext_rule p3044
 T	t5500	o978 b5498 b4
 B	b5501	t5500
@@ -5617,7 +5617,7 @@ T	t5504	o b5504 b4
 B	b5505	t5504
 T	t5505	o1358 b977 b5496 b5505 b4
 B	b5506	t5505
-P	p175	String "dT 2 thenT reduceT thenT autoT"
+P	p175	String "dT 2 thenT reduceT ta"
 O	o175	ext_rule p175
 T	t5506	o978 b5416 b4
 B	b5507	t5506
@@ -5701,7 +5701,7 @@ T	t5524	o b5524 b4
 B	b5525	t5524
 T	t5525	o978 b5519 b5525
 B	b5526	t5525
-P	p3096	String "rwch unfoldRecordR 1 2 thenT autoT"
+P	p3096	String "rwch unfoldRecordR 1 2 ta"
 O	o3096	ext_rule p3096
 S	s4346	tbrarg\\ h1314 h4289 h3148 h1432 h5996 h4346\\ C3400
 B	b4358	s4346
@@ -5795,7 +5795,7 @@ T	t5549	o b5548 b4
 B	b5549	t5549
 T	t5550	o978 b5543 b5549
 B	b5550	t5550
-P	p3137	String "rwh unfoldRecordR 2 thenT withT <<bind{a,b.'a IN record[n:t]{'A}}>> (dT 2) thenT autoT"
+P	p3137	String "rwh unfoldRecordR 2 thenT withT <<bind{a,b.'a IN record[n:t]{'A}}>> (dT 2) ta"
 O	o3137	ext_rule p3137
 T	t5551	o978 b5548 b4
 B	b5551	t5551
@@ -5947,7 +5947,7 @@ T	t1517	o b5584 b5601
 B	b1517	t1517
 T	t1518	o978 b5582 b1517
 B	b1518	t1518
-P	p1505	String "assertT <<\"type\"{record[n:t]{'A;x.'R['x]}}>> thenAT (typeAssertT thenT autoT)"
+P	p1505	String "assertT <<\"type\"{record[n:t]{'A;x.'R['x]}}>> thenAT (typeAssertT ta)"
 O	o1505	ext_rule p1505
 H	h4481	_1010 R1432
 S	s4481	tbrarg\\ h1314 h4248 h3148 h1432 h4481\\ t4481
@@ -5969,7 +5969,7 @@ T	t5608	o b5608 b4
 B	b5609	t5608
 T	t5609	o978 b5605 b5609
 B	b5610	t5609
-P	p1516	String "withT <<'x>> (dT 5) thenT autoT"
+P	p1516	String "withT <<'x>> (dT 5) ta"
 O	o1516	ext_rule p1516
 H	h4540	_1010 t1436
 S	s4540	tbrarg\\ h1314 h4248 h3148 h1432 h4540\\ t1432
@@ -6049,7 +6049,7 @@ T	t5661	o978 b5650 b4
 B	b5662	t5661
 T	t5662	o3962 b977 b5662 b4 b4
 B	b5663	t5662
-P	p3944	String "onHypsT [5;4] thinT thenT autoT"
+P	p3944	String "onHypsT [5;4] thinT ta"
 O	o3944	ext_rule p3944
 H	h4694	y A1314
 VR	R4694	R\\ H\\ t3676
@@ -6113,7 +6113,7 @@ B	b5678	t5677
 O	o3152	ext_rule p2466
 T	t5678	o978 b5676 b5677
 B	b5679	t5678
-P	p4283	String "recordEliminationR1 4 thenT autoT"
+P	p4283	String "recordEliminationR1 4 ta"
 O	o4283	ext_rule p4283
 T	t5679	o978 b5676 b4
 B	b5680	t5679
@@ -6199,7 +6199,7 @@ T	t5706	o b5706 b4
 B	b5707	t5706
 T	t5707	o978 b5702 b5707
 B	b5708	t5707
-P	p4376	String "withT <<bind{x,y.'C['x]}>> (dT 2) thenT autoT"
+P	p4376	String "withT <<bind{x,y.'C['x]}>> (dT 2) ta"
 O	o4376	ext_rule p4376
 H	h2522	_1010 A1314
 S	s4926	tbrarg\\ h1314 h4925 h3148 h2522 h2608\\ C4900
@@ -6241,7 +6241,7 @@ T	t5050	o965 b5050
 B	b5052	t5050
 T	t5052	o964 b5049 b5052
 B	b5053	t5052
-P	p4351	String "rw unfoldRecordI 2 thenT recordEliminationR1 2 thenT autoT"
+P	p4351	String "rw unfoldRecordI 2 thenT recordEliminationR1 2 ta"
 O	o4351	ext_rule p4351
 T	t5053	o b5028 b4
 B	b5054	t5053
@@ -6280,7 +6280,7 @@ T	t5116	o964 b5116 b4919
 B	b5117	t5116
 T	t5117	o964 b5113 b5117
 B	b5123	t5117
-P	p3043	String "rwhAllAll unfoldRecordI thenT recordEliminationR 2 thenT autoT"
+P	p3043	String "rwhAllAll unfoldRecordI thenT recordEliminationR 2 ta"
 O	o3047	ext_rule p3043
 T	t5131	o b5114 b4
 B	b5140	t5131
@@ -7582,7 +7582,7 @@ T	t6649	o964 b6608 b6649
 B	b6652	t6649
 T	t6652	o964 b6586 b6652
 B	b6653	t6652
-P	p4405	String "rwh unfoldFunctionOrt 0 thenT autoT"
+P	p4405	String "rwh unfoldFunctionOrt 0 ta"
 O	o4405	ext_rule p4405
 T	t6174	o b6621 b4
 B	b6174	t6174
@@ -7627,7 +7627,7 @@ T	t6187	o b6181 b6187
 B	b6188	t6187
 T	t6188	o978 b6178 b6188
 B	b6189	t6188
-P	p4443	String "assumT 1 thenT withT <<'a>> (dT (-1)) thenT autoT"
+P	p4443	String "assumT 1 thenT withT <<'a>> (dT (-1)) ta"
 O	o4443	ext_rule p4443
 H	h6660	_1010 t6569
 S	s6660	tbrarg\\ h1314 h6660 h6586\\ t6660
@@ -7689,7 +7689,7 @@ T	t6203	o b6203 b4
 B	b6204	t6203
 T	t6204	o978 b6200 b6204
 B	b6205	t6204
-P	p4649	String "rwh unfoldFunctionOrt 4 thenT withT <<'a>> (dT 4) thenT autoT"
+P	p4649	String "rwh unfoldFunctionOrt 4 thenT withT <<'a>> (dT 4) ta"
 O	o4651	ext_rule p4649
 H	h6895	_1010 t6588
 S	s6895	tbrarg\\ h1314 h6586 h6653 h6895\\ t6761
@@ -7748,7 +7748,7 @@ T	t6221	o b6221 b4
 B	b6222	t6221
 T	t6222	o978 b6218 b6222
 B	b6223	t6222
-P	p4698	String "rwh unfoldFunctionOrt 4 thenT withT <<'b>> (dT 4) thenT autoT"
+P	p4698	String "rwh unfoldFunctionOrt 4 thenT withT <<'b>> (dT 4) ta"
 O	o4698	ext_rule p4698
 H	h7084	_1010 t6620
 S	s7084	tbrarg\\ h1314 h6586 h6587 h7084\\ t6942
@@ -7806,7 +7806,7 @@ S	s7379	tbrarg\\ h1314\\ t7379
 B	b7379	s7379
 T	t7390	o965 b7379
 B	b7390	t7390
-P	p1745	String "rwh (unfoldRecordOrt thenC unfoldFunctionOrt) 0 thenT autoT"
+P	p1745	String "rwh (unfoldRecordOrt thenC unfoldFunctionOrt) 0 ta"
 O	o1745	ext_rule p1745
 T	t7391	o980 b7379 b4
 B	b7391	t7391
@@ -7896,7 +7896,7 @@ T	t7558	o965 b7538
 B	b7558	t7558
 T	t7559	o964 b7529 b7558
 B	b7559	t7559
-P	p5695	String "rwh unfoldRecordOrt 0 thenT rwh unfoldFunctionOrt 0 thenT autoT"
+P	p5695	String "rwh unfoldRecordOrt 0 thenT rwh unfoldFunctionOrt 0 ta"
 O	o5695	ext_rule p5695
 T	t7560	o b7525 b4
 B	b7560	t7560
@@ -7919,7 +7919,7 @@ T	t6269	o b6269 b4
 B	b6270	t6269
 T	t6270	o978 b6266 b6270
 B	b6271	t6270
-P	p5726	String "dT 2 thenT autoT"
+P	p5726	String "dT 2 ta"
 O	o5726	ext_rule p5726
 H	h7580	_1010 t7524
 S	s7581	tbrarg\\ h1314 h7580\\ t7581
@@ -7978,7 +7978,7 @@ T	t3633	o964 b3621 b7805
 B	b3653	t3633
 T	t3653	o964 b7790 b3653
 B	b3655	t3653
-P	p5742	String "rw (unfoldRecordOrt thenC unfoldFunctionOrt) 0 thenT autoT"
+P	p5742	String "rw (unfoldRecordOrt thenC unfoldFunctionOrt) 0 ta"
 O	o5742	ext_rule p5742
 T	t3661	o b605 b4
 B	b3662	t3661
@@ -8229,7 +8229,7 @@ T	t8404	o964 b8397 b8404
 B	b8405	t8404
 T	t8405	o964 b8394 b8405
 B	b8406	t8405
-P	p2266	String "rwaAllAll [unfoldRecordOrt;unfoldRecordL] thenT dT 0 thenMT dT 3 thenT autoT"
+P	p2266	String "rwaAllAll [unfoldRecordOrt;unfoldRecordL] thenT dT 0 thenMT dT 3 ta"
 O	o2266	ext_rule p2266
 T	t6346	o b8399 b4
 B	b6346	t6346
@@ -8560,7 +8560,7 @@ T	t8532	o964 b8526 b8532
 B	b8533	t8532
 T	t8533	o964 b8523 b8533
 B	b8534	t8533
-P	p2388	String "rwaAllAll [unfoldRecordOrt;unfoldRecordR] thenT dT 0 thenMT dT 2 thenT reduceT thenT autoT"
+P	p2388	String "rwaAllAll [unfoldRecordOrt;unfoldRecordR] thenT dT 0 thenMT dT 2 thenT reduceT ta"
 O	o2388	ext_rule p2388
 T	t6450	o b8527 b4
 B	b6450	t6450
@@ -8865,7 +8865,7 @@ T	t8651	o964 b8645 b8651
 B	b8652	t8651
 T	t8652	o964 b8642 b8652
 B	b8653	t8652
-P	p6219	String "rwaAllAll [unfoldRecordI] thenT recordOrtIntroR thenT autoT"
+P	p6219	String "rwaAllAll [unfoldRecordI] thenT recordOrtIntroR ta"
 O	o6219	ext_rule p6219
 T	t6546	o b8646 b4
 B	b6546	t6546

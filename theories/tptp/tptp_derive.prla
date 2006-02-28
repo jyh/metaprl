@@ -202,7 +202,7 @@ T	t559	o559
 B	b559	t559
 P	p598	String "dT 2"
 O	o598	ext_rule p598
-P	p616	String "revHypSubstT 3 0 thenT autoT"
+P	p616	String "revHypSubstT 3 0 ta"
 O	o616	ext_rule p616
 P	p628	String independentApplyIntro
 O	o628	rule p628
@@ -437,13 +437,13 @@ P	p830	String "assertT <<'f 'a IN 'B['a]>>"
 O	o832	ext_rule p830
 P	p885	String autoT
 O	o894	ext_rule p885
-P	p921	String "withT << 'f 'a >> (dT 0) thenT autoT"
+P	p921	String "withT << 'f 'a >> (dT 0) ta"
 O	o922	ext_rule p921
 P	p1176	String "assertT << exst y: 'B. ('y = 'f 'a in 'B) >>"
 O	o1178	ext_rule p1176
 P	p1253	String "assertT <<'f 'a IN 'B>>"
 O	o1261	ext_rule p1253
-P	p1331	String "withT << 'A -> 'B >> (dT 0) thenT autoT"
+P	p1331	String "withT << 'A -> 'B >> (dT 0) ta"
 O	o1331	ext_rule p1331
 P	p1301	String dest_term
 O	o1301	lid p1301

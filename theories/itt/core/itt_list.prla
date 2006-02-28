@@ -1356,7 +1356,7 @@ P	p1079	Var x
 O	o1079	var p1079
 T	t1080	o1079
 B	b1080	t1080
-P	p1100	String "dT 2 thenT autoT"
+P	p1100	String "dT 2 ta"
 O	o1100	ext_rule p1100
 P	p1129	String "assertT << \"subtype\"{'A1; 'A2} >>"
 O	o1129	ext_rule p1129
@@ -1364,7 +1364,7 @@ P	p1134	String assertion
 O	o1134	tactic_arg p1134
 P	p1145	String trivialT
 O	o1145	ext_rule p1145
-P	p1147	String "withT << 'u >> (dT (-1)) thenT autoT"
+P	p1147	String "withT << 'u >> (dT (-1)) ta"
 O	o1147	ext_rule p1147
 P	p1171	String nil_neq_cons
 O	o1171	rule p1171
@@ -1496,7 +1496,7 @@ T	t3352	o b1464 b4
 B	b3352	t3352
 T	t3353	o3267 b3352
 B	b3353	t3353
-P	p209	String "useWitnessT <<nil>> thenT autoT"
+P	p209	String "useWitnessT <<nil>> ta"
 O	o209	ext_rule p209
 O	o3463	hrefterm p529
 T	t3463	o3463
@@ -2077,7 +2077,7 @@ T	t2611	o4073 b2611 b2134
 B	b2612	t2611 l
 T	t2612	o4072 b2144 b2612
 H	h1669	x t2612
-P	p4084	String "dT 0 thenMT dT (-1) thenT autoT"
+P	p4084	String "dT 0 thenMT dT (-1) ta"
 O	o4084	ext_rule p4084
 H	h1717	y A
 P	p4414	String "nameHypT (-1) \"a\" thenT assertT <<list_ind{cons{'h1;'t1};'a;h,t,g.'h} = list_ind{cons{'h2;'t2};'a;h,t,g.'h} in 'A>>"
@@ -2101,7 +2101,7 @@ B	b2712	t2711
 T	t2712	o542 b2576 b526 b4152
 B	b2713	t2712
 T	t2713	o833 b2144 b2712 b2713
-P	p4172	String "withTermsT [<<bind{x.list{'A}}>>; <<list{'A}>>] (dT 0) thenT autoT"
+P	p4172	String "withTermsT [<<bind{x.list{'A}}>>; <<list{'A}>>] (dT 0) ta"
 O	o4172	ext_rule p4172
 P	p3912	String Computation
 O	o3912	comment_string p3912
@@ -6293,7 +6293,7 @@ T	t995	o816 b994 b425
 B	b995	t995
 T	t996	o816 b988 b995
 B	b996	t996
-P	p499	String "byDefT unfold_list thenT decideT <<\"assert\"{decide{'l; x.btrue; b.bfalse}}>> thenT autoT"
+P	p499	String "byDefT unfold_list thenT decideT <<\"assert\"{decide{'l; x.btrue; b.bfalse}}>> ta"
 O	o499	ext_rule p499
 T	t500	o b420 b4
 B	b500	t500
@@ -6851,7 +6851,7 @@ T	t659	o b659 b4
 B	b660	t659
 T	t660	o854 b632 b660
 B	b661	t660
-P	p661	String "dT 2 thenT moveToConclT (-1) thenT dT (-1) thenT rwh reduce_fix 0 thenT reduceT thenT autoT thenT dT (-1) thenT dT (-1) thenT reduceT ttca"
+P	p661	String "dT 2 thenT moveToConclT (-1) thenT dT (-1) thenT rwh reduce_fix 0 thenT reduceT ta thenT dT (-1) thenT dT (-1) thenT reduceT ttca"
 O	o661	ext_rule p661
 T	t661	o854 b659 b4
 B	b662	t661
@@ -6882,7 +6882,7 @@ T	t683	o b683 b4
 B	b684	t683
 T	t684	o854 b669 b684
 B	b685	t684
-P	p685	String "dT (-1) thenT reduceT thenT autoT thenT rwh reduce_fix 0 thenT dT (-1) thenT dT (-1) thenT reduceT ttca"
+P	p685	String "dT (-1) thenT reduceT ta thenT rwh reduce_fix 0 thenT dT (-1) thenT dT (-1) thenT reduceT ttca"
 O	o685	ext_rule p685
 H	h685	m t184
 P	p686	Var m
@@ -6938,7 +6938,7 @@ T	t712	o b712 b4
 B	b713	t712
 T	t713	o854 b704 b713
 B	b714	t713
-P	p714	String "dT 3 thenT reduceT thenT autoT thenT rwh reduce_fix 0 thenT dT (-1) thenT dT (-1) thenT reduceT ttca"
+P	p714	String "dT 3 thenT reduceT ta thenT rwh reduce_fix 0 thenT dT (-1) thenT dT (-1) thenT reduceT ttca"
 O	o714	ext_rule p714
 T	t714	o854 b712 b4
 B	b715	t714
@@ -7158,7 +7158,7 @@ B	b841	t841
 P	p842	Number 6595
 P	p843	Number 7114
 O	o843	location p842 p843
-P	p844	String "assertT << all l:list{'A}. (list_ind{'l; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]} = list_ind{'l; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]} in 'T['l]) >> thenT autoT"
+P	p844	String "assertT << all l:list{'A}. (list_ind{'l; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]} = list_ind{'l; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]} in 'T['l]) >> ta"
 O	o844	ext_rule p844
 T	t844	o b2385 b4
 B	b844	t844
@@ -7238,7 +7238,7 @@ T	t885	o b885 b4
 B	b886	t885
 T	t886	o854 b881 b886
 B	b887	t886
-P	p887	String "hypSubstT (-2) 0 thenT autoT"
+P	p887	String "hypSubstT (-2) 0 ta"
 O	o887	ext_rule p887
 T	t887	o399 b884 b4
 B	b888	t887
@@ -7272,7 +7272,7 @@ T	t899	o b899 b4
 B	b900	t899
 T	t900	o868 b853 b880 b900 b4
 B	b901	t900
-P	p903	String "assumT 1 thenT doNotThinT (revHypSubstT (-1) 0 thenT autoT)"
+P	p903	String "assumT 1 thenT doNotThinT (revHypSubstT (-1) 0 ta)"
 O	o903	ext_rule p903
 H	h903	x1 t2369
 H	h904	vv t2143

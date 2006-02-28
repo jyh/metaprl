@@ -1602,7 +1602,7 @@ B	b149	t148
 T	t149	o993 b120 b149
 B	b150	t149
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1025	String "rwh unfold_equiv 0 thenT autoT thenT rwh fold_isset 0 ttca"
+P	p1025	String "rwh unfold_equiv 0 ta thenT rwh fold_isset 0 ttca"
 O	o1026	ext_rule p1025
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1027	status_incomplete
@@ -5787,7 +5787,7 @@ T	t1497	o993 b1356 b1497
 B	b1499	t1497
 T	t1499	o993 b1350 b1499
 B	b1514	t1499
-P	p1413	String "assumT 5 thenT rwh unfold_equiv_fun_set 4 thenT instHypT [<< 'z >>; << 'z >>] 4 ttca thenT dT 5 ttca thenT dT 5 thenT autoT thenT rwh unfold_equiv 5 ttca"
+P	p1413	String "assumT 5 thenT rwh unfold_equiv_fun_set 4 thenT instHypT [<< 'z >>; << 'z >>] 4 ttca thenT dT 5 ttca thenT dT 5 ta thenT rwh unfold_equiv 5 ttca"
 O	o1413	ext_rule p1413
 T	t1514	o b1444 b4
 B	b1515	t1514
@@ -6963,7 +6963,7 @@ T	t2095	o993 b1847 b2085
 B	b2095	t2095
 T	t2165	o993 b1815 b2095
 B	b2175	t2165
-P	p1962	String "rwh unfold_equiv 0 thenT rwh unfold_fun_prop 0 thenT autoT thenT rwh fold_isset 0 thenT autoT"
+P	p1962	String "rwh unfold_equiv 0 thenT rwh unfold_fun_prop 0 ta thenT rwh fold_isset 0 thenT autoT"
 O	o1962	ext_rule p1962
 T	t2175	o b1883 b4
 B	b2176	t2175
@@ -7217,7 +7217,7 @@ T	t8640	o1028 b8640 b4
 B	b8641	t8640
 T	t8641	o2228 b1027 b8641 b4 b4
 B	b8642	t8641
-P	p2236	String "setSubstT << equal{'s1; 's2} >> 9 thenT autoT"
+P	p2236	String "setSubstT << equal{'s1; 's2} >> 9 ta"
 O	o2236	ext_rule p2236
 S	s3595	tbrarg\\ h118 h1968 h1969 h8086 h2543 h2922 h3008 h3329 h3330 h3331 h3332\\ t2273
 B	b3596	s3595
@@ -7229,7 +7229,7 @@ T	t8643	o1028 b8643 b4
 B	b8644	t8643
 T	t8644	o2236 b1027 b8644 b4 b4
 B	b8645	t8644
-P	p2238	String "setSubstT << equal{'s1; 's2} >> 10 thenT autoT"
+P	p2238	String "setSubstT << equal{'s1; 's2} >> 10 ta"
 O	o2238	ext_rule p2238
 S	s3605	tbrarg\\ h118 h1968 h1969 h8086 h2543 h2922 h3008 h3329 h3330 h3331 h3332\\ t2285
 B	b3610	s3605
@@ -7241,7 +7241,7 @@ T	t8646	o1028 b8646 b4
 B	b8647	t8646
 T	t8647	o2238 b1027 b8647 b4 b4
 B	b8648	t8647
-P	p2240	String "setSubstT << equal{'s1; 's2} >> 11 thenT autoT"
+P	p2240	String "setSubstT << equal{'s1; 's2} >> 11 ta"
 O	o2240	ext_rule p2240
 S	s3613	tbrarg\\ h118 h1968 h1969 h8086 h2543 h2922 h3008 h3329 h3330 h3331 h3332\\ t2337
 B	b3614	s3613
@@ -7533,7 +7533,7 @@ T	t8794	o b8790 b8794
 B	b8795	t8794
 T	t8795	o1028 b8786 b8795
 B	b8796	t8795
-P	p2350	String "rwh unfold_equal 4 thenT autoT thenT eqSetSymT ttca"
+P	p2350	String "rwh unfold_equal 4 ta thenT eqSetSymT ttca"
 O	o2350	ext_rule p2350
 S	s3967	tbrarg\\ h118 h1968 h1969 h8086 h3867 h1102 h1103 h3887 h3889 h3890\\ t2341
 B	b3968	s3967
@@ -7865,7 +7865,7 @@ T	t4274	o993 b163 b4274
 B	b4275	t4274
 T	t4275	o993 b162 b4275
 B	b4277	t4275
-P	p2459	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p2459	String "rwh unfold_fun_prop 0 ta"
 O	o2459	ext_rule p2459
 T	t4277	o b278 b3805
 B	b4278	t4277
@@ -7918,7 +7918,7 @@ T	t9025	o1028 b9024 b4
 B	b9025	t9025
 T	t9026	o2220 b1027 b9025 b4 b4
 B	b9026	t9026
-P	p5043	String "rwh unfold_equiv 0 thenT rwh unfold_equiv 5 thenT autoT"
+P	p5043	String "rwh unfold_equiv 0 thenT rwh unfold_equiv 5 ta"
 O	o5043	ext_rule p5043
 H	h4370	_1010 t4284
 S	s4370	tbrarg\\ h118 h1968 h1969 h8086 h4370\\ t4287
@@ -8344,7 +8344,7 @@ T	t5411	o993 b163 b5410
 B	b5411	t5411
 T	t5412	o993 b162 b5411
 B	b5412	t5412
-P	p2674	String "rwh unfold_fun_prop 0 thenT autoT thenT rwh unfold_equiv 5 thenT autoT"
+P	p2674	String "rwh unfold_fun_prop 0 ta thenT rwh unfold_equiv 5 thenT autoT"
 O	o2674	ext_rule p2674
 T	t5414	o b278 b173
 B	b5414	t5414
@@ -8379,7 +8379,7 @@ T	t9212	o b9212 b4
 B	b9213	t9212
 T	t9213	o1028 b9206 b9213
 B	b9214	t9213
-P	p5308	String "rwh unfold_equiv 0 thenT autoT"
+P	p5308	String "rwh unfold_equiv 0 ta"
 O	o5308	ext_rule p5308
 H	h5421	_1010 t137
 H	h8860	_1010 t2683
@@ -8559,7 +8559,7 @@ T	t5891	o993 b163 b5891
 B	b5892	t5891
 T	t5892	o993 b162 b5892
 B	b5893	t5892
-P	p2840	String "assumT 4 thenT assumT 5 thenT rwh unfold_equiv_fun_prop 0 thenT dT 0 thenT dT 0 thenT dT 0 thenT dT 0 ttca thenT dT 0 thenAT autoT"
+P	p2840	String "assumT 4 thenT assumT 5 thenT rwh unfold_equiv_fun_prop 0 thenT dT 0 thenT dT 0 thenT dT 0 thenT dT 0 ttca thenT dT 0 taa"
 O	o2840	ext_rule p2840
 P	p9261	String ""
 O	o9261	tactic_arg p9261
@@ -8621,7 +8621,7 @@ T	t9274	o b9266 b9274
 B	b9275	t9274
 T	t9275	o1028 b9261 b9275
 B	b9276	t9275
-P	p2906	String "withTermsT [<< 's >>; << 'r >>] (equivFunSetT 4) thenT autoT thenT rwh unfold_equiv 7 ttca"
+P	p2906	String "withTermsT [<< 's >>; << 'r >>] (equivFunSetT 4) ta thenT rwh unfold_equiv 7 ttca"
 O	o2906	ext_rule p2906
 H	h5900	_1010 t5878
 H	h5901	_1010 t5884
@@ -8721,7 +8721,7 @@ T	t9378	o b9288 b9378
 B	b9379	t9378
 T	t9379	o1028 b9283 b9379
 B	b9380	t9379
-P	p2975	String "withTermsT [<< 's >>; << 'r >>] (equivFunMemT << 'f1['b] >> 5) thenT autoT thenT rwh unfold_equiv 7 ttca"
+P	p2975	String "withTermsT [<< 's >>; << 'r >>] (equivFunMemT << 'f1['b] >> 5) ta thenT rwh unfold_equiv 7 ttca"
 O	o2975	ext_rule p2975
 H	h5974	_1010 t5974
 S	s5975	tbrarg\\ h118 h5900 h5901 h2849 h1102 h5902 h5903 h5974\\ t5975
@@ -8734,7 +8734,7 @@ T	t9381	o1028 b9381 b4
 B	b9382	t9381
 T	t9382	o2975 b1027 b9382 b4 b4
 B	b9383	t9382
-P	p2977	String "withTermsT [<< 's >>; << 'r >>] (equivFunMemT << 'f2['b] >> 5) thenT autoT thenT rwh unfold_equiv 7 ttca"
+P	p2977	String "withTermsT [<< 's >>; << 'r >>] (equivFunMemT << 'f2['b] >> 5) ta thenT rwh unfold_equiv 7 ttca"
 O	o2977	ext_rule p2977
 S	s5983	tbrarg\\ h118 h5900 h5901 h2849 h1102 h5902 h5903 h5974\\ t5983
 B	b5984	s5983
@@ -8876,7 +8876,7 @@ T	t6063	o993 b163 b6063
 B	b6064	t6063
 T	t6064	o993 b162 b6064
 B	b6065	t6064
-P	p3028	String "autoT thenT rwh unfold_equiv_fun_set 0 thenT autoT"
+P	p3028	String "autoT thenT rwh unfold_equiv_fun_set 0 ta"
 O	o3028	ext_rule p3028
 T	t6065	o b5883 b4
 B	b6066	t6065
@@ -8939,7 +8939,7 @@ T	t6101	o993 b163 b6101
 B	b6102	t6101
 T	t6102	o993 b162 b6102
 B	b6103	t6102
-P	p3054	String "rwh unfold_equiv_fun_prop 0 thenT autoT"
+P	p3054	String "rwh unfold_equiv_fun_prop 0 ta"
 O	o3054	ext_rule p3054
 T	t6103	o b360 b6067
 B	b6104	t6103
@@ -8984,7 +8984,7 @@ T	t9516	o b9507 b9515
 B	b9516	t9516
 T	t9517	o1028 b9504 b9516
 B	b9517	t9517
-P	p3116	String "withTermsT [<< 's >>; << 'r >>] (equivFunSetT 2) thenT autoT thenT rwh unfold_equiv 5 ttca"
+P	p3116	String "withTermsT [<< 's >>; << 'r >>] (equivFunSetT 2) ta thenT rwh unfold_equiv 5 ttca"
 O	o3116	ext_rule p3116
 H	h3060	b_1 t878
 P	p3060	Var b_1
@@ -9003,7 +9003,7 @@ T	t9519	o1028 b9518 b4
 B	b9519	t9519
 T	t9520	o3116 b1027 b9519 b4 b4
 B	b9520	t9520
-P	p5408	String "rwh unfold_equiv 0 thenT autoT thenT rwh unfold_equiv 6 ttca thenT rwh fold_equiv 6"
+P	p5408	String "rwh unfold_equiv 0 ta thenT rwh unfold_equiv 6 ttca thenT rwh fold_equiv 6"
 O	o5408	ext_rule p5408
 H	h6151	_1010 t6114
 Vf1	f16161	f1\\ H\\ t3061
@@ -9048,7 +9048,7 @@ T	t9532	o b9524 b9532
 B	b9533	t9532
 T	t9533	o1028 b9521 b9533
 B	b9534	t9533
-P	p3118	String "withTermsT [<< 's >>; << 'r >>] (equivFunSetT 3) thenT autoT thenT rwh unfold_equiv 5 ttca"
+P	p3118	String "withTermsT [<< 's >>; << 'r >>] (equivFunSetT 3) ta thenT rwh unfold_equiv 5 ttca"
 O	o3118	ext_rule p3118
 S	s6196	tbrarg\\ h118 h2849 h3060 h5902 h6157 h6151\\ t6196
 B	b6197	s6196
@@ -9060,7 +9060,7 @@ T	t9535	o1028 b9535 b4
 B	b9536	t9535
 T	t9536	o3118 b1027 b9536 b4 b4
 B	b9537	t9536
-P	p3120	String "withTermsT [<< 's >>; << 'r >>] (equivFunMemT << 'f1['b_1] >> 3) thenT autoT thenT rwh unfold_equiv 5 ttca"
+P	p3120	String "withTermsT [<< 's >>; << 'r >>] (equivFunMemT << 'f1['b_1] >> 3) ta thenT rwh unfold_equiv 5 ttca"
 O	o3120	ext_rule p3120
 S	s6242	tbrarg\\ h118 h2849 h3060 h5902 h6157 h6151\\ t6217
 B	b6243	s6242
@@ -9206,7 +9206,7 @@ T	t6419	o993 b163 b6419
 B	b6420	t6419
 T	t6420	o993 b162 b6420
 B	b6421	t6420
-P	p3200	String "rwh unfold_equiv_fun_prop 0 thenT autoT thenT rwh unfold_equiv 5 ttca thenT rwh fold_equiv 5"
+P	p3200	String "rwh unfold_equiv_fun_prop 0 ta thenT rwh unfold_equiv 5 ttca thenT rwh fold_equiv 5"
 O	o3200	ext_rule p3200
 T	t6421	o b278 b4
 B	b6422	t6421
@@ -9845,7 +9845,7 @@ T	t9858	o b9858 b4
 B	b9859	t9858
 T	t9859	o1028 b9839 b9859
 B	b9860	t9859
-P	p3457	String "rwh unfold_equiv_fun_prop 4 thenT instHypT [<< 's2 >>; << 's1 >> ] 4 thenT rwh fold_isset 0 thenT rwh unfold_equiv 2 thenT autoT"
+P	p3457	String "rwh unfold_equiv_fun_prop 4 thenT instHypT [<< 's2 >>; << 's1 >> ] 4 thenT rwh fold_isset 0 thenT rwh unfold_equiv 2 ta"
 O	o3457	ext_rule p3457
 H	h6899	_1010 t6880
 H	h6900	_1010 C6882
@@ -10291,7 +10291,7 @@ T	t7073	o993 b163 b7073
 B	b7074	t7073
 T	t7074	o993 b162 b7074
 B	b7075	t7074
-P	p4034	String "rwh unfold_equiv_fun_set 0 thenT autoT"
+P	p4034	String "rwh unfold_equiv_fun_set 0 ta"
 O	o4034	ext_rule p4034
 T	t7075	o b7066 b4
 B	b7076	t7075
@@ -11234,7 +11234,7 @@ T	t7321	o993 b7313 b7321
 B	b7322	t7321
 T	t7322	o993 b7311 b7322
 B	b7323	t7322
-P	p246	String "assertT << eq{'a; 'b} & eq{'a; 'z} >> thenT autoT"
+P	p246	String "assertT << eq{'a; 'b} & eq{'a; 'z} >> ta"
 O	o246	ext_rule p246
 T	t10294	o b7316 b4
 B	b10294	t10294
@@ -11295,7 +11295,7 @@ T	t10316	o b10316 b4
 B	b10317	t10316
 T	t10317	o1028 b10313 b10317
 B	b10318	t10317
-P	p4287	String "rwh unfold_pair 3 thenT rwh unfold_sing 3 thenT rwh reduceC 3 thenT autoT"
+P	p4287	String "rwh unfold_pair 3 thenT rwh unfold_sing 3 thenT rwh reduceC 3 ta"
 O	o4287	ext_rule p4287
 H	h7346	_1010 t7309
 S	s7346	tbrarg\\ h118 h7309 h7346 h758\\ t7169
@@ -11388,7 +11388,7 @@ T	t10334	o b10334 b4
 B	b10335	t10334
 T	t10335	o1028 b10331 b10335
 B	b10336	t10335
-P	p4353	String "withT << inl{it} >> (dT 3) thenT autoT thenT withT << inr{it} >> (dT 3) thenT autoT"
+P	p4353	String "withT << inl{it} >> (dT 3) ta thenT withT << inr{it} >> (dT 3) thenT autoT"
 O	o4353	ext_rule p4353
 S	s7406	tbrarg\\ h118 h7309 h7359 h7359 h7361 h758\\ t7169
 B	b7407	s7406
@@ -11429,7 +11429,7 @@ T	t10342	o b10342 b4
 B	b10343	t10342
 T	t10343	o1028 b10337 b10343
 B	b10344	t10343
-P	p4401	String "rwh reduceC 6 thenT autoT thenT rwh reduceC 8 thenT autoT"
+P	p4401	String "rwh reduceC 6 ta thenT rwh reduceC 8 thenT autoT"
 O	o4401	ext_rule p4401
 T	t7414	o4143 b7413 b7414
 H	h7414	_1010 t7414
@@ -11475,7 +11475,7 @@ T	t10351	o b10351 b4
 B	b10352	t10351
 T	t10352	o1028 b10346 b10352
 B	b10353	t10352
-P	p4428	String "dT 7 ttca thenT rwh reduceC 8 thenT autoT"
+P	p4428	String "dT 7 ttca thenT rwh reduceC 8 ta"
 O	o4428	ext_rule p4428
 H	h9828	_1010 t4289
 S	s8033	tbrarg\\ h118 h7309 h7361 h758 h9828 h7324 h3714 h7914\\ t7169
@@ -11792,7 +11792,7 @@ T	t10439	o b10435 b10439
 B	b10440	t10439
 T	t10440	o1028 b10434 b10440
 B	b10441	t10440
-P	p6077	String "autoT thenT rwh unfold_equiv 0 thenT autoT thenT rwh unfold_equiv 8 ttca thenT rwh fold_equiv 8"
+P	p6077	String "autoT thenT rwh unfold_equiv 0 ta thenT rwh unfold_equiv 8 ttca thenT rwh fold_equiv 8"
 O	o6077	ext_rule p6077
 T	t8939	o864 b3017 b118
 H	h10441	x1 t8939
@@ -11879,7 +11879,7 @@ T	t10459	o b10455 b10459
 B	b10460	t10459
 T	t10460	o1028 b10452 b10460
 B	b10461	t10460
-P	p4591	String "rwh unfold_equiv 8 thenT autoT thenT dT 14 ttca thenT dT 17 ttca thenT eqSetSymT ttca"
+P	p4591	String "rwh unfold_equiv 8 ta thenT dT 14 ttca thenT dT 17 ttca thenT eqSetSymT ttca"
 O	o4591	ext_rule p4591
 S	s9302	tbrarg\\ h118 h8703 h758 h3016 h1103 h8939 h286 h8940\\ t9302
 B	b9303	s9302
@@ -12056,7 +12056,7 @@ T	t10480	o b10476 b10480
 B	b10481	t10480
 T	t10481	o1028 b10471 b10481
 B	b10482	t10481
-P	p4608	String "rwh unfold_equiv 10 thenT rwh unfold_equiv 11 thenT autoT"
+P	p4608	String "rwh unfold_equiv 10 thenT rwh unfold_equiv 11 ta"
 O	o4608	ext_rule p4608
 S	s9355	tbrarg\\ h118 h8703 h758 h1108 h1109 h1110 h288 h289 h290 h8976 h8977\\ t4599
 B	b9356	s9355
@@ -12281,7 +12281,7 @@ T	t10559	o b10470 b10559
 B	b10560	t10559
 T	t10560	o6077 b1027 b10451 b10560 b4
 B	b10561	t10560
-P	p4746	String "rwh unfold_equiv 4 thenT autoT"
+P	p4746	String "rwh unfold_equiv 4 ta"
 O	o4746	ext_rule p4746
 H	h8929	_1010 t8845
 S	s8929	tbrarg\\ h118 h8703 h758 h8929\\ t7257

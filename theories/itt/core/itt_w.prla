@@ -1938,7 +1938,7 @@ B	b3843	t3842
 NSummary!interactive	interactive	interactive Summary
 O	o2470	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p2470	String "assertEqT <<'z1='z2 in w{'A;x.'B['x]}>> thenAT autoT"
+P	p2470	String "assertEqT <<'z1='z2 in w{'A;x.'B['x]}>> taa"
 O	o2471	ext_rule p2470
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o2472	status_incomplete
@@ -5738,7 +5738,7 @@ T	t4537	o b4537 b13
 B	b4538	t4537
 T	t4538	o2473 b4532 b4538
 B	b4539	t4538
-P	p2555	String "assertT <<\"type\"{.'B['a] -> w{'A;x.'B['x]}}>> thenT autoT"
+P	p2555	String "assertT <<\"type\"{.'B['a] -> w{'A;x.'B['x]}}>> ta"
 O	o2555	ext_rule p2555
 T	t4539	o2473 b4537 b13
 B	b4540	t4539

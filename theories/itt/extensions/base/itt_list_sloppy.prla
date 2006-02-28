@@ -3161,7 +3161,7 @@ T	t528	o b527 b8
 B	b528	t528
 T	t529	o1169 b509 b528
 B	b529	t529
-P	p531	String "thinAllT 1 (-1) thenT autoT"
+P	p531	String "thinAllT 1 (-1) ta"
 O	o531	ext_rule p531
 H	h531	j1 t1096
 P	p532	Var j1
@@ -3172,7 +3172,7 @@ T	t538	o1106 b537 b1107
 B	b538	t538
 T	t539	o1389 b1096 b538 b1997
 H	h539	x t539
-P	p919	String "autoT thenT omegaT thenT autoT"
+P	p919	String "autoT thenT omegaT ta"
 O	o920	ext_rule p919
 P	p1255	String "rwh unfold_ConsN (-1) thenT dT (-1)"
 O	o1255	ext_rule p1255
@@ -3443,7 +3443,7 @@ T	t2055	o b2051 b2055
 B	b2056	t2055
 T	t2056	o1169 b2012 b2056
 B	b2057	t2056
-P	p2057	String "thinAllT 1 (-1) thenT autoT thenT omegaT thenT autoT"
+P	p2057	String "thinAllT 1 (-1) ta thenT omegaT thenT autoT"
 O	o2057	ext_rule p2057
 T	t2057	o1169 b2051 b8
 B	b2058	t2057
@@ -3845,7 +3845,7 @@ T	t2412	o1169 b2406 b8
 B	b2413	t2412
 T	t2413	o920 b1168 b2413 b8 b8
 B	b2414	t2413
-P	p2414	String "genAssumT [1; 2; 3] thenT autoT"
+P	p2414	String "genAssumT [1; 2; 3] ta"
 O	o2414	ext_rule p2414
 H	h2414	v1 t1096
 T	t2414	o1106 b2932 b1107
@@ -9132,7 +9132,7 @@ T	t1849	o1665 b1802 b1849
 B	b1851	t1849
 T	t1895	o1665 b1630 b1851
 B	b1895	t1895
-P	p1895	String "genAssumT [1; 2] thenT autoT"
+P	p1895	String "genAssumT [1; 2] ta"
 O	o1895	ext_rule p1895
 T	t1896	o b1800 b8
 B	b1896	t1896
@@ -10644,7 +10644,7 @@ T	t4330	o b4330 b8
 B	b4331	t4330
 T	t4331	o1169 b4296 b4331
 B	b4332	t4331
-P	p4332	String "omegaT thenT autoT"
+P	p4332	String "omegaT ta"
 O	o4332	ext_rule p4332
 T	t4332	o1925 b4329 b8
 B	b4334	t4332
@@ -10900,7 +10900,7 @@ T	t4943	o b4928 b4942
 B	b4943	t4943
 T	t4954	o1169 b4895 b4943
 B	b4954	t4954
-P	p4954	String "rw reduceC 0 thenT autoT"
+P	p4954	String "rw reduceC 0 ta"
 O	o4954	ext_rule p4954
 T	t4963	o3245 b1997 b2932
 H	h4963	x t4963

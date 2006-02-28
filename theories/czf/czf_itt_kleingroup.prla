@@ -1387,7 +1387,7 @@ NCzf_itt_member	Czf_itt_member	Czf_itt_member NIL
 NCzf_itt_member!mem	mem	mem Czf_itt_member
 O	o2152	mem
 T	t2152	o2152 b1584 b1634
-P	p2153	String "rwh unfold_klein4_car 0 thenT autoT"
+P	p2153	String "rwh unfold_klein4_car 0 ta"
 O	o2153	ext_rule p2153
 T	t2156	o2152 b1584 b1642
 P	p2161	String "selT 1 (dT 0) ttca"

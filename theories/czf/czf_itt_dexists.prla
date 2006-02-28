@@ -1241,10 +1241,10 @@ T	t73	o b73 b66
 B	b74	t73
 T	t74	o595 b72 b74
 B	b75	t74
-P	p733	String "dT 0 thenWT autoT"
+P	p733	String "dT 0 twa"
 O	o733	ext_rule p733
 H	h733	x t710
-P	p740	String "dT 2 thenT rw reduceC 0 thenT autoT"
+P	p740	String "dT 2 thenT rw reduceC 0 ta"
 O	o740	ext_rule p740
 T	t87	o558 b926 b60
 B	b88	t87
@@ -1258,7 +1258,7 @@ B	b91	t90
 P	p744	String logicAutoT
 O	o744	ext_rule p744
 O	o745	tactic_arg p702
-P	p759	String "rwh fold_isset 0 thenT autoT"
+P	p759	String "rwh fold_isset 0 ta"
 O	o759	ext_rule p759
 P	p771	String dexists_intro
 O	o771	rule p771
@@ -4031,7 +4031,7 @@ T	t3840	o b3840 b4
 B	b3841	t3840
 T	t3841	o593 b3831 b3841
 B	b3842	t3841
-P	p908	String "withT << 'y_1 >> (dT 0) thenWT autoT"
+P	p908	String "withT << 'y_1 >> (dT 0) twa"
 O	o908	ext_rule p908
 T	t830	o787 b773 b573
 B	b830	t830
@@ -4142,7 +4142,7 @@ T	t3859	o b3859 b4
 B	b3860	t3859
 T	t3860	o593 b3858 b3860
 B	b3861	t3860
-P	p939	String "instHypT [<< 'x >>; << 'f 'y_1 >>] 12 thenWT autoT"
+P	p939	String "instHypT [<< 'x >>; << 'f 'y_1 >>] 12 twa"
 O	o939	ext_rule p939
 T	t3861	o3821 b891 b4
 B	b3862	t3861
@@ -4239,7 +4239,7 @@ T	t3893	o b3887 b3893
 B	b3894	t3893
 T	t3894	o593 b3883 b3894
 B	b3895	t3894
-P	p1009	String "assumT 3 thenT rwh fold_isset 0 thenT rwh unfold_member (-1) thenT autoT"
+P	p1009	String "assumT 3 thenT rwh fold_isset 0 thenT rwh unfold_member (-1) ta"
 O	o1009	ext_rule p1009
 S	s981	tbrarg\\ h18 h978\\ t72
 B	b982	s981
@@ -4579,7 +4579,7 @@ T	t3973	o b3973 b4
 B	b3974	t3973
 T	t3974	o593 b3972 b3974
 B	b3975	t3974
-P	p1087	String "dT (-1) thenT rw reduceC 0 thenT autoT"
+P	p1087	String "dT (-1) thenT rw reduceC 0 ta"
 O	o1087	ext_rule p1087
 T	t1165	o558 b3112 b1032
 B	b1166	t1165
@@ -4619,7 +4619,7 @@ T	t3979	o b3979 b4
 B	b3980	t3979
 T	t3980	o593 b3973 b3980
 B	b3981	t3980
-P	p1130	String "withT << 'f 'u >> (dT 0) thenT autoT"
+P	p1130	String "withT << 'f 'u >> (dT 0) ta"
 O	o1130	ext_rule p1130
 H	h1171	_1010 t1171
 H	h3119	_1010 t3119
@@ -4654,7 +4654,7 @@ T	t3985	o b3985 b4
 B	b3986	t3985
 T	t3986	o593 b3982 b3986
 B	b3987	t3986
-P	p1155	String "withT << 'u >> (dT 0) thenT autoT"
+P	p1155	String "withT << 'u >> (dT 0) ta"
 O	o1155	ext_rule p1155
 S	s1283	tbrarg\\ h18 h1032 h1033 h828 h829 h1171 h3119 h1093 h1172\\ t1131
 B	b1284	s1283
@@ -4974,7 +4974,7 @@ T	t1419	o702 b1405 b1419
 B	b1420	t1419
 T	t1420	o702 b1402 b1420
 B	b1421	t1420
-P	p2821	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p2821	String "rwh unfold_fun_prop 0 ta"
 O	o2821	ext_rule p2821
 T	t1421	o b1410 b4
 B	b1422	t1421
@@ -5016,7 +5016,7 @@ T	t4056	o b4052 b4056
 B	b4057	t4056
 T	t4057	o593 b4049 b4057
 B	b4058	t4057
-P	p2873	String "funSetT 2 thenT autoT"
+P	p2873	String "funSetT 2 ta"
 O	o2873	ext_rule p2873
 T	t2827	o2478 b561 b1077
 H	h3577	_1010 t2827
@@ -5039,7 +5039,7 @@ B	b1523	A1522
 VB	B1523	B\\ H\\ t1076 t584
 B	b1524	B1523 y
 T	t1524	o558 b1523 b1524
-P	p2875	String "dT 5 thenWT autoT"
+P	p2875	String "dT 5 twa"
 O	o2875	ext_rule p2875
 H	h2146	_1010 t1519
 S	s2146	tbrarg\\ h18 h733 h1076 h3577 h2146\\ t1524
@@ -5080,7 +5080,7 @@ T	t4072	o593 b4072 b4
 B	b4073	t4072
 T	t4073	o2873 b592 b4073 b4 b4
 B	b4074	t4073
-P	p2887	String "withT << 'z >> (dT 0) thenWT autoT"
+P	p2887	String "withT << 'z >> (dT 0) twa"
 O	o2887	ext_rule p2887
 H	h2159	_1010 t2159
 H	h2160	_1010 B1405
@@ -5151,7 +5151,7 @@ S	s2304	tbrarg\\ h18 h733 h1076 h3577 h2146 h1040 h2159 h2160\\ t2304
 B	b2305	s2304
 T	t2305	o595 b2305 b1425
 B	b2311	t2305
-P	p2909	String "funSetT 3 thenT autoT"
+P	p2909	String "funSetT 3 ta"
 O	o2909	ext_rule p2909
 T	t4094	o745 b2273 b4
 B	b4095	t4094
@@ -5159,7 +5159,7 @@ T	t4095	o593 b4095 b4
 B	b4096	t4095
 T	t4096	o2909 b592 b4096 b4 b4
 B	b4097	t4096
-P	p2911	String "setSubstT << equal{'x_1; 'x} >> 0 thenWT autoT"
+P	p2911	String "setSubstT << equal{'x_1; 'x} >> 0 twa"
 O	o2911	ext_rule p2911
 T	t4097	o3821 b2311 b4
 B	b4098	t4097
@@ -5209,7 +5209,7 @@ S	s2422	tbrarg\\ h18 h733 h1076 h3577 h2146 h1040 h2159 h2160\\ t2921
 B	b2426	s2422
 T	t2426	o595 b2426 b1425
 B	b2427	t2426
-P	p2927	String "rwh unfold_equal 4 thenT eqSetSymT thenT autoT"
+P	p2927	String "rwh unfold_equal 4 thenT eqSetSymT ta"
 O	o2927	ext_rule p2927
 T	t4113	o2912 b2427 b4
 B	b4114	t4113
@@ -5241,7 +5241,7 @@ T	t4125	o b4097 b4125
 B	b4126	t4125
 T	t4126	o744 b592 b4094 b4126 b4
 B	b4127	t4126
-P	p2939	String "setSubstT << equal{'x_1; 'x} >> 0 thenT autoT"
+P	p2939	String "setSubstT << equal{'x_1; 'x} >> 0 ta"
 O	o2939	ext_rule p2939
 T	t4127	o2893 b2185 b4
 B	b4128	t4127
@@ -5446,7 +5446,7 @@ T	t4183	o b4182 b4
 B	b4183	t4183
 T	t4184	o593 b4182 b4183
 B	b4184	t4184
-P	p3044	String "assumT 1 thenT assumT 2 thenWT autoT"
+P	p3044	String "assumT 1 thenT assumT 2 twa"
 O	o3044	ext_rule p3044
 T	t4185	o3821 b2609 b4
 B	b4185	t4185
@@ -5490,7 +5490,7 @@ T	t4192	o b4192 b4
 B	b4193	t4192
 T	t4193	o593 b4191 b4193
 B	b4194	t4193
-P	p3066	String "rwh unfold_dexists 0 thenT autoT"
+P	p3066	String "rwh unfold_dexists 0 ta"
 O	o3066	ext_rule p3066
 H	h4194	"" t2640
 T	t2652	o746 b722 b2526 b2526

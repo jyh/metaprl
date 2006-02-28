@@ -302,11 +302,11 @@ T	t812	o812
 B	b813	t812
 T	t813	o483 b813
 B	b814	t813
-P	p1510	String "hypSubstT 3 (-1) thenT autoT"
+P	p1510	String "hypSubstT 3 (-1) ta"
 O	o1510	ext_rule p1510
-P	p848	String "hypSubstT 2 0 thenT autoT"
+P	p848	String "hypSubstT 2 0 ta"
 O	o848	ext_rule p848
-P	p850	String "hypSubstT 3 0 thenT autoT"
+P	p850	String "hypSubstT 3 0 ta"
 O	o850	ext_rule p850
 P	p876	String and_intro
 O	o876	rule p876
@@ -1717,7 +1717,7 @@ T	t833	o b828 b832
 B	b833	t833
 T	t834	o519 b827 b833
 B	b834	t834
-P	p945	String "substT << 'A = \"true\" in univ[1:l] >> 0 thenT autoT"
+P	p945	String "substT << 'A = \"true\" in univ[1:l] >> 0 ta"
 O	o945	ext_rule p945
 T	t835	o748 b1654 b4
 B	b835	t835
@@ -1746,7 +1746,7 @@ T	t842	o b841 b4
 B	b843	t842
 T	t843	o519 b836 b843
 B	b844	t843
-P	p965	String "dT 4 thenT dT 4 thenT autoT"
+P	p965	String "dT 4 thenT dT 4 ta"
 O	o965	ext_rule p965
 H	h1158	_1010 t1132
 S	s1670	tbrarg\\ h1045 h1632 h1633 h1158\\ t1099
@@ -1825,7 +1825,7 @@ T	t864	o b864 b4
 B	b865	t864
 T	t865	o519 b861 b865
 B	b866	t865
-P	p1604	String "esquashT 2 thenT autoT"
+P	p1604	String "esquashT 2 ta"
 O	o1604	ext_rule p1604
 H	h1707	_1010 t1707
 S	s1708	tbrarg\\ h1045 h1707 h1708 h1680 h1081\\ t1099
@@ -1856,7 +1856,7 @@ T	t877	o b873 b877
 B	b878	t877
 T	t878	o519 b868 b878
 B	b879	t878
-P	p1618	String "rwh unfold_false 0 thenT autoT"
+P	p1618	String "rwh unfold_false 0 ta"
 O	o1618	ext_rule p1618
 S	s1735	tbrarg\\ h1045 h1707 h1708 h1680 h1081\\ t1604
 B	b1736	s1735
@@ -1868,7 +1868,7 @@ T	t880	o519 b880 b4
 B	b881	t880
 T	t881	o1618 b518 b881 b4 b4
 B	b882	t881
-P	p1620	String "univTypeT <<univ[1:l]>> thenT rwh unfold_type (-1) thenT autoT"
+P	p1620	String "univTypeT <<univ[1:l]>> thenT rwh unfold_type (-1) ta"
 O	o1620	ext_rule p1620
 S	s1743	tbrarg\\ h1045 h1707 h1708 h1680 h1081\\ t1743
 B	b1744	s1743
@@ -1911,7 +1911,7 @@ T	t896	o b896 b4
 B	b897	t896
 T	t897	o990 b518 b866 b897 b4
 B	b898	t897
-P	p1627	String "rwh unfold_and 0 thenT dT 0 thenT autoT"
+P	p1627	String "rwh unfold_and 0 thenT dT 0 ta"
 O	o1627	ext_rule p1627
 S	s1700	tbrarg\\ h1045 h1632 h1633 h1680 h1081 h982\\ t1700
 B	b1700	s1700
@@ -1929,7 +1929,7 @@ T	t909	o b908 b4
 B	b909	t909
 T	t910	o519 b905 b909
 B	b910	t910
-P	p1030	String "univTypeT << univ[1:l] >> thenT typeT thenT autoT"
+P	p1030	String "univTypeT << univ[1:l] >> thenT typeT ta"
 O	o1030	ext_rule p1030
 H	h1290	_1010 t512
 S	s1942	tbrarg\\ h1045 h1632 h1633 h1680 h1081 h1290\\ t1743
@@ -1991,7 +1991,7 @@ T	t936	o b932 b936
 B	b937	t936
 T	t937	o519 b931 b937
 B	b938	t937
-P	p1058	String "substT << 'B = \"true\" in univ[1:l] >> 0 thenT autoT"
+P	p1058	String "substT << 'B = \"true\" in univ[1:l] >> 0 ta"
 O	o1058	ext_rule p1058
 T	t938	o748 b1973 b4
 B	b942	t938

@@ -1270,7 +1270,7 @@ T	t1202	o946 b1188 b8
 B	b1203	t1202
 T	t1203	o1202 b945 b1203 b8 b8
 B	b1204	t1203
-P	p1204	String "letT << 'ind_hyp = all_list_witness{'bl; x.bterm_ind{'x;v.'var_case['v]; op,subterms,ind. 'op_case['op; 'subterms; 'ind]}} in all_list{'bl; a.'C['a]} >> thenT autoT"
+P	p1204	String "letT << 'ind_hyp = all_list_witness{'bl; x.bterm_ind{'x;v.'var_case['v]; op,subterms,ind. 'op_case['op; 'subterms; 'ind]}} in all_list{'bl; a.'C['a]} >> ta"
 O	o1204	ext_rule p1204
 P	p1205	String ""
 O	o1205	tactic_arg p1205
@@ -1900,7 +1900,7 @@ P	p2038	Var left
 O	o2038	var p2038
 T	t2043	o2038
 B	b2043	t2043
-P	p2266	String "assertAtT 3 << 'u in BTerm & var_bterm{'u} >> thenT autoT"
+P	p2266	String "assertAtT 3 << 'u in BTerm & var_bterm{'u} >> ta"
 O	o2266	ext_rule p2266
 T	t2268	o937 b869 b1477 b1477
 H	h2268	y t2268
@@ -1933,7 +1933,7 @@ T	t2315	o2294 b945 b2314 b8 b8
 B	b2315	t2315
 T	t2316	o943 b2315
 B	b2316	t2316
-P	p2325	String "byDefT unfold_opbterm thenT dT 0 thenT autoT"
+P	p2325	String "byDefT unfold_opbterm thenT dT 0 ta"
 O	o2325	ext_rule p2325
 T	t2342	o946 b1714 b8
 B	b2342	t2342
@@ -1964,13 +1964,13 @@ T	t2366	o b2361 b2366
 B	b2367	t2366
 T	t2367	o946 b1762 b2367
 B	b2368	t2367
-P	p2368	String "assumT 2 thenT autoT thenT backThruHypT (-1) thenT var_intro ttca"
+P	p2368	String "assumT 2 ta thenT backThruHypT (-1) thenT var_intro ttca"
 O	o2368	ext_rule p2368
 T	t2368	o946 b2361 b8
 B	b2369	t2368
 T	t2369	o2368 b945 b2369 b8 b8
 B	b2370	t2369
-P	p2370	String "assumT 3 thenT autoT thenT backThruHypT (-1) ttca"
+P	p2370	String "assumT 3 ta thenT backThruHypT (-1) ttca"
 O	o2370	ext_rule p2370
 T	t2370	o946 b2365 b8
 B	b2371	t2370
@@ -2416,7 +2416,7 @@ T	t2078	o1014 b2078
 B	b2079	t2078
 T	t2079	o1047 b1460 b2079
 B	b2080	t2079
-P	p2649	String "substT << 'b1 ~ 'b2 >> 0 thenET btermSquiggle thenT autoT"
+P	p2649	String "substT << 'b1 ~ 'b2 >> 0 thenET btermSquiggle ta"
 O	o2649	ext_rule p2649
 T	t2080	o948 b2078 b1504
 B	b2081	t2080
@@ -5059,7 +5059,7 @@ T	t1511	o946 b1496 b8
 B	b1511	t1511
 T	t1512	o1510 b945 b1511 b8 b8
 B	b1512	t1512
-P	p1513	String "genAssumT [2;1] thenT moveToConclT (-2) thenT moveToConclT (-1) thenT letT << 'b = 'b1 in BTerm >> thenMT dT 0 thenMT hypSubstT (-1) 0 thenT autoT thenT tryT (var_intro1 ttca) thenT (assumT 1 thenT hypSubstT (-1) 0 ttca)"
+P	p1513	String "genAssumT [2;1] thenT moveToConclT (-2) thenT moveToConclT (-1) thenT letT << 'b = 'b1 in BTerm >> thenMT dT 0 thenMT hypSubstT (-1) 0 ta thenT tryT (var_intro1 ttca) thenT (assumT 1 thenT hypSubstT (-1) 0 ttca)"
 O	o1514	ext_rule p1513
 T	t1520	o1205 b1498 b8
 B	b1520	t1520
@@ -5225,7 +5225,7 @@ B	b2040	t2040
 T	t2041	o1295 b1835 b2040 b8 b1302 b1296
 B	b2041	t2041
 O	o2041	term_def p1834
-P	p2579	String "moveToConclT (-1) thenT dT (-1) thenT dT 0 thenMT dT (-1) thenT autoT"
+P	p2579	String "moveToConclT (-1) thenT dT (-1) thenT dT 0 thenMT dT (-1) ta"
 O	o2579	ext_rule p2579
 T	t2588	o1205 b1517 b8
 B	b2588	t2588
@@ -5307,7 +5307,7 @@ T	t2785	o946 b2632 b8
 B	b2785	t2785
 T	t2786	o2784 b945 b2785 b8 b8
 B	b2786	t2786
-P	p2786	String "assertT << 'op1 = 'op in BOperator & 'bl ~ 'bl1 >> thenT autoT"
+P	p2786	String "assertT << 'op1 = 'op in BOperator & 'bl ~ 'bl1 >> ta"
 O	o2786	ext_rule p2786
 S	s2786	t949\\ h h1118 h1122 h1123 h1124 h2626 h1512 h1546 h1547 h1548 h2636 h2642\\ t2466
 B	b2787	s2786
@@ -6251,7 +6251,7 @@ T	t3659	o b3659 b8
 B	b3660	t3659
 T	t3660	o946 b3656 b3660
 B	b3661	t3660
-P	p429	String "letT << 'j = nth{shape{'op};'i} in nat >> thenT autoT"
+P	p429	String "letT << 'j = nth{shape{'op};'i} in nat >> ta"
 O	o429	ext_rule p429
 T	t3661	o1205 b3658 b8
 B	b3662	t3661
@@ -7876,7 +7876,7 @@ T	t3342	o948 b3341 b1504
 B	b3342	t3342
 T	t3343	o947 b3342 b8
 B	b3343	t3343
-P	p3345	String "withT << nth{'bl1; 'i} >> (dT (-1)) thenT autoT"
+P	p3345	String "withT << nth{'bl1; 'i} >> (dT (-1)) ta"
 O	o3345	ext_rule p3345
 T	t3346	o3324 b1548
 B	b3346	t3346

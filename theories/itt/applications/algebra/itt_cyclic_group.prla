@@ -818,7 +818,7 @@ T	t1481	o1480
 B	b1481	t1481
 P	p1492	String group_power_less
 O	o1492	rule p1492
-P	p1498	String "genAssumT [3] thenT autoT thenT dT 2 thenT byDefT reduceC"
+P	p1498	String "genAssumT [3] ta thenT dT 2 thenT byDefT reduceC"
 O	o1498	ext_rule p1498
 NItt_int_base!minus	minus	minus Itt_int_base
 O	o1574	minus
@@ -900,7 +900,7 @@ T	t2750	o2732 b2732 b2749
 B	b2750	t2750
 P	p2780	String group_power_reduce
 O	o2780	rule p2780
-P	p2790	String "genAssumT [3; 4] thenT autoT thenT dT 3 thenT byDefT reduceC"
+P	p2790	String "genAssumT [3; 4] ta thenT dT 3 thenT byDefT reduceC"
 O	o2790	ext_rule p2790
 H	h2795	m_1 t1206
 P	p2795	Var m_1
@@ -931,7 +931,7 @@ P	p3099	String "byDefT unfold_isCyclic"
 O	o3099	ext_rule p3099
 P	p3128	String isCyclic_intro
 O	o3128	rule p3128
-P	p3138	String "assumT 3 thenT genAssumT [2] thenT byDefT unfold_isCyclic thenT withT << 'a >> (dT 0) thenT autoT"
+P	p3138	String "assumT 3 thenT genAssumT [2] thenT byDefT unfold_isCyclic thenT withT << 'a >> (dT 0) ta"
 O	o3138	ext_rule p3138
 P	p3169	String isCyclic_elim
 O	o3169	rule p3169
@@ -939,7 +939,7 @@ NSummary!meta_labeled	meta_labeled	meta_labeled Summary
 P	p3172	String wf
 O	o3172	meta_labeled p3172
 O	o3175	meta_labeled p1388
-P	p3182	String "assumT 2 thenT copyHypT 2 (-1) thenT rwh unfold_isCyclic (-1) thenT autoT"
+P	p3182	String "assumT 2 thenT copyHypT 2 (-1) thenT rwh unfold_isCyclic (-1) ta"
 O	o3182	ext_rule p3182
 P	p3195	String elim_typeinf
 O	o3195	lid p3195
@@ -1609,7 +1609,7 @@ S	s8964	tbrarg\\ h5981\\ t8964
 B	b8964	s8964
 T	t8965	o1370 b8964
 B	b8965	t8965
-P	p3848	String "genAssumT [3; 4] thenT autoT thenT dT 3"
+P	p3848	String "genAssumT [3; 4] ta thenT dT 3"
 O	o3848	ext_rule p3848
 T	t8970	o1390 b8964 b8626
 B	b8970	t8970
@@ -1623,7 +1623,7 @@ T	t1145	o1369 b10618 b1138
 B	b1145	t1145
 T	t1164	o1369 b9567 b1145
 B	b1164	t1164
-P	p4179	String "equalSymT thenT dT 0 thenT autoT"
+P	p4179	String "equalSymT thenT dT 0 ta"
 O	o4179	ext_rule p4179
 T	t4179	o1389 b8913 b15
 B	b4179	t4179
@@ -1727,7 +1727,7 @@ T	t9266	o1369 b9261 b9266
 B	b9267	t9266
 T	t9267	o1369 b9257 b9267
 B	b9268	t9267
-P	p1326	String "assumT 1 thenT genAssumT [3] thenT autoT thenT dT 2 thenT dT (-1) thenT byDefT reduceC"
+P	p1326	String "assumT 1 thenT genAssumT [3] ta thenT dT 2 thenT dT (-1) thenT byDefT reduceC"
 O	o1328	ext_rule p1326
 T	t9268	o b9259 b6028
 B	b9269	t9268
@@ -1821,7 +1821,7 @@ T	t9571	o1369 b9568 b9570
 B	b9571	t9571
 T	t9572	o1369 b9567 b9571
 B	b9572	t9572
-P	p1204	String "assumT 2 thenT dT (-1) thenT autoT"
+P	p1204	String "assumT 2 thenT dT (-1) ta"
 O	o1209	ext_rule p1204
 T	t9573	o b9492 b15
 B	b9573	t9573
@@ -1842,7 +1842,7 @@ B	b4792	t4792
 H	h891	x1 t6006
 P	p5152	Var u_1
 O	o5152	var p5152
-P	p1295	String "instHypT [<< 'x >>] 4 thenMT instHypT [<< 'y >>] 4 thenT autoT"
+P	p1295	String "instHypT [<< 'x >>] 4 thenMT instHypT [<< 'y >>] 4 ta"
 O	o1295	ext_rule p1295
 H	h9576	_1010 t9458
 H	h5398	a t1206
@@ -1956,15 +1956,15 @@ B	b9842	t9842
 T	t9843	o1207 b9842 b6034 b9367
 H	h932	v t9843
 H	h4867	_5 t9843
-P	p936	String "assertT << (exst a: int. ('a > 0 & (group_power{'g; 'y1; 'a} in 's^car subset 'g^car) & (all b: int. ('b > 0 & group_power{'g; 'y1; 'b} in 's^car subset 'g^car => 'b >= 'a)))) >> thenT autoT"
+P	p936	String "assertT << (exst a: int. ('a > 0 & (group_power{'g; 'y1; 'a} in 's^car subset 'g^car) & (all b: int. ('b > 0 & group_power{'g; 'y1; 'b} in 's^car subset 'g^car => 'b >= 'a)))) >> ta"
 O	o936	ext_rule p936
-P	p2351	String "positiveRule2T thenT autoT"
+P	p2351	String "positiveRule2T ta"
 O	o2351	ext_rule p2351
-P	p2919	String "assumT 3 thenT autoT"
+P	p2919	String "assumT 3 ta"
 O	o2919	ext_rule p2919
 H	h9840	_1010 t9840
 H	h9843	_1010 t9843
-P	p2930	String "withT << 'y_2 >> (dT 3) thenT autoT"
+P	p2930	String "withT << 'y_2 >> (dT 3) ta"
 O	o2930	ext_rule p2930
 H	h9986	y_2 t9257
 P	p2392	String "use_subset << 's^car >> ttca"
@@ -1974,7 +1974,7 @@ P	p2957	String "splitIntT << 'y >> << 0 >> ttca"
 O	o2957	ext_rule p2957
 H	h5008	_3 t9840
 H	h5010	_4 t9843
-P	p2971	String "withT << (-'y) >> (dT 0) thenT autoT"
+P	p2971	String "withT << (-'y) >> (dT 0) ta"
 O	o2971	ext_rule p2971
 P	p3000	String "use_superset << 'g^car >> << 'g^inv 'y_2 >> ttca"
 O	o3000	ext_rule p3000
@@ -1990,7 +1990,7 @@ P	p3199	String "withT << 'y >> (dT 0) thenT byDefT reduceC"
 O	o3199	ext_rule p3199
 P	p3270	String "use_superset << 'g^car >> << 'y_2 >> thenMT equalSymT ttca"
 O	o3270	ext_rule p3270
-P	p2654	String "instHypT [<< 'x >>] 3 thenWT use_subset << 's^car >> thenT autoT"
+P	p2654	String "instHypT [<< 'x >>] 3 thenWT use_subset << 's^car >> ta"
 O	o2654	ext_rule p2654
 H	h10222	x t9257
 P	p3383	String "copyHypT (-6) (-1) thenT hypSubstT (-3) (-1) ttca"
@@ -2018,7 +2018,7 @@ T	t5445	o1389 b10624 b15
 B	b5445	t5445
 T	t11007	o1183 b6034 b6039
 B	b11008	t11007
-P	p5151	String "fnExtenT << 'g^car -> 'g^car -> 'g^car >> thenMT fnExtenT << 'g^car -> 'g^car >> thenT autoT"
+P	p5151	String "fnExtenT << 'g^car -> 'g^car -> 'g^car >> thenMT fnExtenT << 'g^car -> 'g^car >> ta"
 O	o5151	ext_rule p5151
 H	h11248	u t6006
 H	h11251	u_1 t6006
@@ -2028,7 +2028,7 @@ P	p5221	String "hypSubstT (-4) 0 thenMT hypSubstT (-1) 0 ttca"
 O	o5221	ext_rule p5221
 P	p5229	String "dT 0 thenT withT << 0 >> (dT 0) thenT byDefT reduceC"
 O	o5229	ext_rule p5229
-P	p5231	String "fnExtenT << 'g^car -> 'g^car >> thenT autoT"
+P	p5231	String "fnExtenT << 'g^car -> 'g^car >> ta"
 O	o5231	ext_rule p5231
 P	p5244	String "repeatForT 3 (dT (-1)) thenT dT 0"
 O	o5244	ext_rule p5244
@@ -2091,7 +2091,7 @@ T	t11871	o1221 b11862 b11867dep
 B	b11871	t11871
 P	p4447	String cycSubg_inv
 O	o4447	rule p4447
-P	p6407	String "fnExtenT << 'g^car -> 'g^car -> 'g^car >> thenMT fnExtenT << 'g^car -> 'g^car >> thenMT dT (-2) thenMT dT (-1) thenT autoT thenT dT 0"
+P	p6407	String "fnExtenT << 'g^car -> 'g^car -> 'g^car >> thenMT fnExtenT << 'g^car -> 'g^car >> thenMT dT (-2) thenMT dT (-1) ta thenT dT 0"
 O	o6407	ext_rule p6407
 P	p6446	String "withT << 'y_1 +@ 'y >> (dT 0) thenMT hypSubstT (-4) 0 thenMT hypSubstT (-1) 0 ttca"
 O	o6446	ext_rule p6446
@@ -7085,7 +7085,7 @@ T	t4438	o b4437 b15
 B	b4438	t4438
 T	t4439	o2351 b2138 b4017 b4438 b15
 B	b4439	t4439
-P	p4439	String "withT << group_power{'g; 'y1; 'a} >> (dT 0) thenT autoT"
+P	p4439	String "withT << group_power{'g; 'y1; 'a} >> (dT 0) ta"
 O	o4439	ext_rule p4439
 T	t4440	o1145 b9254 b3877 b1956
 B	b4440	t4440
@@ -7125,7 +7125,7 @@ T	t4454	o b4454 b15
 B	b4455	t4454
 T	t4455	o1388 b4447 b4455
 B	b4456	t4455
-P	p4456	String "assertT << exst q: int. exst c: nat. (('n = 'y_2 *@ 'q +@ 'c in int) & 'c < 'y_2) >> thenT autoT"
+P	p4456	String "assertT << exst q: int. exst c: nat. (('n = 'y_2 *@ 'q +@ 'c in int) & 'c < 'y_2) >> ta"
 O	o4456	ext_rule p4456
 T	t4456	o1207 b6007 b3546 b4018
 B	b4457	t4456 n
@@ -7192,7 +7192,7 @@ T	t4479	o b4478 b15
 B	b4479	t4479
 T	t4480	o1388 b4472 b4479
 B	b4480	t4480
-P	p4480	String "rwh unfold_nat (-3) thenT autoT"
+P	p4480	String "rwh unfold_nat (-3) ta"
 O	o4480	ext_rule p4480
 H	h4480	c t1206
 T	t4481	o4652 b2525 b1397
@@ -7223,7 +7223,7 @@ T	t4491	o b4490 b15
 B	b4491	t4491
 T	t4492	o1388 b4486 b4491
 B	b4492	t4492
-P	p4492	String "substT << group_power{'g; 'y_1; ('y_2 *@ 'q +@ 'c)} = group_power{'g; group_power{'g; 'y_1; 'y_2}; 'q} *['g] group_power{'g; 'y_1; 'c} in 'g^car>> (-1) thenT autoT"
+P	p4492	String "substT << group_power{'g; 'y_1; ('y_2 *@ 'q +@ 'c)} = group_power{'g; group_power{'g; 'y_1; 'y_2}; 'q} *['g] group_power{'g; 'y_1; 'c} in 'g^car>> (-1) ta"
 O	o4492	ext_rule p4492
 T	t4493	o1145 b6004 b4460 b2523
 B	b4493	t4493
@@ -7422,7 +7422,7 @@ T	t4587	o b4586 b15
 B	b4587	t4587
 T	t4588	o1388 b4574 b4587
 B	b4588	t4588
-P	p4588	String "substT << group_power{'g; group_power{'g; 'y_1; 'y_2}; 'q} = group_power{'s; group_power{'g; 'y_1; 'y_2}; 'q} in 's^car >> 0 thenT autoT"
+P	p4588	String "substT << group_power{'g; group_power{'g; 'y_1; 'y_2}; 'q} = group_power{'s; group_power{'g; 'y_1; 'y_2}; 'q} in 's^car >> 0 ta"
 O	o4588	ext_rule p4588
 T	t4589	o3895 b4585 b15
 B	b4589	t4589

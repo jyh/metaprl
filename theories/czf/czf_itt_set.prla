@@ -344,7 +344,7 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-P	p1020	String "rwh unfold_set 0 thenT autoT"
+P	p1020	String "rwh unfold_set 0 ta"
 O	o1020	ext_rule p1020
 P	p1029	String equal_set
 O	o1029	rule p1029
@@ -378,7 +378,7 @@ P	p1117	String "rwh fold_set 0 thenT rwh fold_isset 0 thenT trivialT"
 O	o1117	ext_rule p1117
 P	p1129	String isset_collect2
 O	o1129	rule p1129
-P	p1132	String "rwh fold_isset 0 thenT autoT"
+P	p1132	String "rwh fold_isset 0 ta"
 O	o1132	ext_rule p1132
 P	p1141	String isset_apply
 O	o1141	rule p1141
@@ -430,14 +430,14 @@ O	o1226	tactic_arg p1226
 T	t1226	o704 b1194 b1183
 B	b1226	t1226
 T	t1227	o697 b1226
-P	p1236	String "rwh unfold_collect 0 thenT rwh unfold_isset 0 thenT rwh unfold_set 0 thenT dT 0 thenT autoT"
+P	p1236	String "rwh unfold_collect 0 thenT rwh unfold_isset 0 thenT rwh unfold_set 0 thenT dT 0 ta"
 O	o1236	ext_rule p1236
 H	h1236	x t1194
 T	t1236	o733 b727 b1181 b1181
 T	t1239	o739 b1183
 B	b1240	t1239
 T	t1242	o738 b1194 b1240
-P	p1261	String "rwh fold_set 0 thenT autoT"
+P	p1261	String "rwh fold_set 0 ta"
 O	o1261	ext_rule p1261
 P	p1279	String "rwh fold_all 6 thenT trivialT"
 O	o1279	ext_rule p1279
@@ -458,19 +458,19 @@ B	b1325	t1325 y
 T	t1326	o704 b705 b1325
 P	p1334	String "assertT << all z: set. all x: 'A['z]. 'C['x] >>"
 O	o1334	ext_rule p1334
-P	p1351	String "dT 0 thenWT autoT"
+P	p1351	String "dT 0 twa"
 O	o1351	ext_rule p1351
 P	p1359	String "dT 4"
 O	o1359	ext_rule p1359
-P	p1373	String "assumT 3 thenWT autoT"
+P	p1373	String "assumT 3 twa"
 O	o1373	ext_rule p1373
 B	b1374	t1179
-P	p1384	String "instHypT [<< 'T >>; << 'f >>] 8 thenWT autoT"
+P	p1384	String "instHypT [<< 'T >>; << 'f >>] 8 twa"
 O	o1384	ext_rule p1384
 P	p1393	String with
 P	p1410	String trivialT
 O	o1410	ext_rule p1410
-P	p1492	String "instHypT [<< 's >>; << 'x >>] 4 thenT autoT"
+P	p1492	String "instHypT [<< 's >>; << 'x >>] 4 ta"
 O	o1492	ext_rule p1492
 P	p1515	String set_split_concl
 O	o1515	rule p1515
@@ -478,9 +478,9 @@ P	p1532	String "assertT << all s: set. 'C['s] >>"
 O	o1532	ext_rule p1532
 P	p1554	String "dT 2"
 O	o1554	ext_rule p1554
-P	p1572	String "instHypT [<< 'T >>; << 'f >>] 6 thenT autoT"
+P	p1572	String "instHypT [<< 'T >>; << 'f >>] 6 ta"
 O	o1572	ext_rule p1572
-P	p1580	String "withT << 's >> (dT 2) thenT autoT"
+P	p1580	String "withT << 's >> (dT 2) ta"
 O	o1580	ext_rule p1580
 P	p1604	String set_ind_equality2
 O	o1604	rule p1604

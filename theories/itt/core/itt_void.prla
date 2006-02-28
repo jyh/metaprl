@@ -3311,7 +3311,7 @@ O	o938	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
 P	p792	String "univTypeT <<univ[1:l]>> ttca"
 O	o792	ext_rule p792
-P	p68	String "useWitnessT <<void>> thenT autoT"
+P	p68	String "useWitnessT <<void>> ta"
 O	o68	ext_rule p68
 P	p938	String autoT
 O	o939	ext_rule p938

@@ -60,8 +60,8 @@ let arithAT = arithT ttca
 *)
 
 let arithT = preArithT thenMT prepareT (-1) thenMT stdT (-1)
-(*let arithAT = arithT thenT autoT thenT repeatT (rw reduceC 0) ttca*)
-(*let arithAT = arithT thenT autoT thenT rw mpoly_evalC 0 ttca*)
+(*let arithAT = arithT ta thenT repeatT (rw reduceC 0) ttca*)
+(*let arithAT = arithT ta thenT rw mpoly_evalC 0 ttca*)
 let arithAT = arithT ttca
 
 

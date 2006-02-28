@@ -171,7 +171,7 @@ let resource intro +=
 let proofRuleAuxWFT =
    autoT
    thenT rw (normalizeBTermSimpleC thenC reduceC) 0
-   thenT autoT
+ ta
    thenT tryT arithT
 
 let proofRuleWFT =

@@ -2409,7 +2409,7 @@ T	t1101	o b1101 b136
 B	b1102	t1101
 T	t1102	o1056 b1031 b1090 b1102 b136
 B	b1103	t1102
-P	p658	String "eq_mem_eq thenWT type_subtype_rightT <<'B>> thenT autoT thenT (tryT (completeT ( subtypeT <<'A>> ttca))) thenT dT 0 ttca"
+P	p658	String "eq_mem_eq thenWT type_subtype_rightT <<'B>> ta thenT (tryT (completeT ( subtypeT <<'A>> ttca))) thenT dT 0 ttca"
 O	o658	ext_rule p658
 H	h1740	_1010 t1737
 S	s1740	tbrarg\\ h1694 h1729 h1740\\ t1730

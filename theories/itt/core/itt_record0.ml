@@ -205,10 +205,10 @@ dform recordS_df : except_mode [src] :: record{'n;'A} = `"{" slot{'n} `":" slot{
 
 (*
 let doubleInductionT =
- letT <<'rr='r in record>> thenAT autoT thenT thinT (-1) thenT moveToConclT 2
+ letT <<'rr='r in record>> taa thenT thinT (-1) thenT moveToConclT 2
  thenT genAssumT [1;2;3] thenLT
-    [repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) thenT autoT;
-     assumT 3 thenT dT (-1) thenT autoT
+    [repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) ta;
+     assumT 3 thenT dT (-1) ta
     ]
 *)
 

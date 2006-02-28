@@ -227,7 +227,7 @@ B	b1106	t1105
 NSummary!interactive	interactive	interactive Summary
 O	o531	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p531	String "assumT 1 thenWT autoT"
+P	p531	String "assumT 1 twa"
 O	o532	ext_rule p531
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o533	status_incomplete
@@ -1127,7 +1127,7 @@ T	t651	o b651 b4
 B	b652	t651
 T	t652	o534 b648 b652
 B	b653	t652
-P	p547	String "rwh unfold_all 0 thenT autoT"
+P	p547	String "rwh unfold_all 0 ta"
 O	o547	ext_rule p547
 H	h1110	_1010 t1110
 S	s1110	tbrarg\\ h1097 h1110\\ t1103
@@ -1300,7 +1300,7 @@ T	t695	o b695 b4
 B	b696	t695
 T	t696	o534 b693 b696
 B	b697	t696
-P	p622	String "trueT thenT assumT 1 thenT assumT 2 thenWT autoT"
+P	p622	String "trueT thenT assumT 1 thenT assumT 2 twa"
 O	o622	ext_rule p622
 H	h1172	_1010 B1164
 S	s1172	tbrarg\\ h1097 h1155 h1156 h1172\\ C
@@ -1339,7 +1339,7 @@ T	t708	o b707 b4
 B	b708	t708
 T	t709	o534 b699 b708
 B	b709	t709
-P	p639	String "assertT << Fol_all!\"all\"{y. 'B['y]} >> thenT autoT"
+P	p639	String "assertT << Fol_all!\"all\"{y. 'B['y]} >> ta"
 O	o639	ext_rule p639
 H	h1184	_1010 t1156
 H	h1185	_1010 t1185
@@ -1361,7 +1361,7 @@ T	t713	o b713 b4
 B	b714	t713
 T	t714	o534 b710 b714
 B	b715	t714
-P	p645	String "rwh unfold_all 6 thenT dT 6 thenWT autoT"
+P	p645	String "rwh unfold_all 6 thenT dT 6 twa"
 O	o645	ext_rule p645
 H	h1200	_1010 t1102
 S	s1200	tbrarg\\ h1097 h1155 h1156 h1184 h1185 h1200\\ t1186
@@ -1429,7 +1429,7 @@ T	t1219	o536 b1219 b1176
 B	b1220	t1219
 T	t733	o535 b1220 b4
 B	b734	t733
-P	p697	String "rwh unfold_pred 0 thenT dT 0 thenT autoT"
+P	p697	String "rwh unfold_pred 0 thenT dT 0 ta"
 O	o697	ext_rule p697
 O	o698	tactic_arg p516
 T	t1239	o623 b540 b1152 b505
@@ -1502,7 +1502,7 @@ T	t753	o b753 b4
 B	b754	t753
 T	t754	o697 b533 b750 b754 b4
 B	b755	t754
-P	p744	String "hypSubstT 8 0 thenT autoT"
+P	p744	String "hypSubstT 8 0 ta"
 O	o744	ext_rule p744
 H	h1243	_1010 t1239
 S	s1243	tbrarg\\ h1097 h1155 h1156 h1218 h1185 h1206 h1207 h1243\\ t1186
@@ -1523,7 +1523,7 @@ T	t759	o b759 b4
 B	b760	t759
 T	t760	o534 b756 b760
 B	b761	t760
-P	p760	String "trueT thenT autoT"
+P	p760	String "trueT ta"
 O	o760	ext_rule p760
 S	s1342	tbrarg\\ h1097 h1155 h1156 h1218 h1185 h1206 h1207 h1243\\ t1342
 B	b1343	s1342
@@ -1578,7 +1578,7 @@ S	s1379	tbrarg\\ h1097 h1155 h1156 h1233 h1185 h1206 h1207\\ t1379
 B	b1380	s1379
 T	t1380	o536 b1380 b1176
 B	b1381	t1380
-P	p785	String "rwh unfold_pred 0 thenT autoT"
+P	p785	String "rwh unfold_pred 0 ta"
 O	o785	ext_rule p785
 T	t796	o535 b1381 b4
 B	b797	t796

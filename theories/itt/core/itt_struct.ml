@@ -366,9 +366,9 @@ let assertT = cut 0
 
 let dupHypT = dup_hyp
 
-let tryAssertT s ta tm = funT (fun p ->
-   if alpha_equal s (Sequent.concl p) then ta else
-      assertT s thenLT [ta;tm])
+let tryAssertT s taca tacm = funT (fun p ->
+   if alpha_equal s (Sequent.concl p) then taca else
+      assertT s thenLT [taca;tacm])
 
 doc <:doc<
    @noindent

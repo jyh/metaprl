@@ -475,7 +475,7 @@ T	t490	o243 b481 b490
 B	b491	t490
 B	b492	t167
 T	t189	o185 b492
-P	p108	String "req3_intro 1 <<Set>> thenT autoT"
+P	p108	String "req3_intro 1 <<Set>> ta"
 O	o108	ext_rule p108
 NCic_ind_type!type_of_constructor	type_of_constructor	type_of_constructor Cic_ind_type
 O	o202	type_of_constructor

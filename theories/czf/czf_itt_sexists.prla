@@ -209,7 +209,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o639	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p639	String "rwh unfold_sexists 0 thenT autoT"
+P	p639	String "rwh unfold_sexists 0 ta"
 O	o640	ext_rule p639
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o641	status_incomplete
@@ -248,13 +248,13 @@ T	t668	o667
 B	b668	t668
 P	p677	String "rwh unfold_sexists 0"
 O	o677	ext_rule p677
-P	p688	String "withT << 'z >> (dT 0) thenT autoT"
+P	p688	String "withT << 'z >> (dT 0) ta"
 O	o688	ext_rule p688
 O	o689	tactic_arg p661
 NItt_equal!equal	equal	equal Itt_equal
 O	o690	equal
 P	p691	String with
-P	p700	String "rwh fold_isset 0 thenT autoT"
+P	p700	String "rwh fold_isset 0 ta"
 O	o700	ext_rule p700
 P	p711	String sexists_elim
 O	o711	rule p711

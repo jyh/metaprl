@@ -566,7 +566,7 @@ B	b1291	t1291
 NSummary!interactive	interactive	interactive Summary
 O	o1296	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1296	String "genAssumT [1;2;3] thenT autoT"
+P	p1296	String "genAssumT [1;2;3] ta"
 O	o1297	ext_rule p1296
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1298	status_incomplete
@@ -3461,7 +3461,7 @@ NItt_logic!iff	iff	iff Itt_logic
 O	o1973	iff
 NItt_bool!assert	assert	assert Itt_bool
 O	o1974	assert
-P	p1980	String "genAssumT [1;2;3] thenT repeatMForT 3 (dT 0) thenWT autoT"
+P	p1980	String "genAssumT [1;2;3] thenT repeatMForT 3 (dT 0) twa"
 O	o1980	ext_rule p1980
 T	t4356	o1974 b368
 B	b4357	t4356
@@ -3599,7 +3599,7 @@ T	t1304	o b1299 b1304
 B	b1306	t1304
 T	t1306	o1299 b1297 b1306
 B	b1318	t1306
-P	p2048	String "rw reduceC 0 thenT autoT"
+P	p2048	String "rw reduceC 0 ta"
 O	o2048	ext_rule p2048
 T	t1318	o1299 b1299 b18
 B	b1319	t1318
@@ -3814,7 +3814,7 @@ T	t1745	o1299 b1683 b1745
 B	b1746	t1745
 T	t1746	o1347 b1697
 B	b1747	t1746
-P	p2494	String "jproverT thenT autoT"
+P	p2494	String "jproverT ta"
 O	o2494	ext_rule p2494
 H	h4767	_1010 t4767
 H	h4763	_1010 t4763
@@ -4204,7 +4204,7 @@ T	t2934	o2934
 B	b2934	t2934
 P	p2943	String insert_wf
 O	o2943	rule p2943
-P	p2950	String "genAssumT [1;2;3] thenT genUnivCDT thenAT autoT"
+P	p2950	String "genAssumT [1;2;3] thenT genUnivCDT taa"
 O	o2950	ext_rule p2950
 S	s3705	tbrarg\\ h2261 h4024 h438 h4433 h4434 h4435 h4440 h4400 h4403 h4913 h5222\\ t4795
 B	b3706	s3705

@@ -1092,7 +1092,7 @@ B	b623	t623
 T	t624	o536 b623 b6
 B	b624	t624
 B	b625	t597
-P	p634	String "repeatT (dT (-1) thenT reduceT ttca) thenT autoT"
+P	p634	String "repeatT (dT (-1) thenT reduceT ttca) ta"
 O	o634	ext_rule p634
 P	p635	String right
 O	o635	tactic_arg p635
@@ -1153,7 +1153,7 @@ T	t686	o535 b673 b6
 B	b686	t686
 T	t687	o685 b534 b686 b6 b6
 B	b687	t687
-P	p687	String "assertT << 'T Type >> thenMT dT 2 thenT autoT thenT tryT (completeT (dT (-1) ttca))"
+P	p687	String "assertT << 'T Type >> thenMT dT 2 ta thenT tryT (completeT (dT (-1) ttca))"
 O	o687	ext_rule p687
 P	p688	String assertion
 O	o688	tactic_arg p688
@@ -1162,7 +1162,7 @@ NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash	squash Itt_squash
 O	o694	squash
 H	h704	y1 t675
-P	p709	String "dT 4 thenT autoT"
+P	p709	String "dT 4 ta"
 O	o709	ext_rule p709
 H	h709	u t674
 H	h710	v t675
@@ -1273,7 +1273,7 @@ T	t804	o516 b800 b803
 B	b804	t804
 T	t805	o516 b768 b804
 B	b805	t805
-P	p805	String "assertT << 'ops in list{Operator} & 'T Type >> thenMT dT 0 thenT autoT"
+P	p805	String "assertT << 'ops in list{Operator} & 'T Type >> thenMT dT 0 ta"
 O	o805	ext_rule p805
 T	t806	o b799 b6
 B	b806	t806
@@ -1315,12 +1315,12 @@ P	p841	Var y2
 O	o841	var p841
 T	t842	o841
 B	b842	t842
-P	p853	String "byDefT dest thenT reduceT thenT dT (-1) thenT reduceT thenT autoT"
+P	p853	String "byDefT dest thenT reduceT thenT dT (-1) thenT reduceT ta"
 O	o853	ext_rule p853
 H	h853	left t464
 H	h854	right t464
 H	h873	y2 t543
-P	p887	String "byDefsT [dest; unfold_dom] thenT reduceT thenT autoT thenT tryT (completeT (dT (-1) ttca))"
+P	p887	String "byDefsT [dest; unfold_dom] thenT reduceT ta thenT tryT (completeT (dT (-1) ttca))"
 O	o887	ext_rule p887
 T	t922	o519 b544 b842 b842
 P	p927	String "dT 6 ttca"
@@ -1379,7 +1379,7 @@ NItt_bool!assert	assert	assert Itt_bool
 O	o1115	assert
 NItt_bool!bnot	bnot	bnot Itt_bool
 O	o1124	bnot
-P	p1274	String "dT 0 thenT autoT"
+P	p1274	String "dT 0 ta"
 O	o1274	ext_rule p1274
 P	p1283	Var i1
 O	o1284	var p1283
@@ -1444,7 +1444,7 @@ T	t1752	o970 b520 b711 b381
 T	t1758	o519 b520 b711 b1661
 P	p1763	String "rwh unfold_op 0 thenT dT 0 thenT byDefT fold_op"
 O	o1763	ext_rule p1763
-P	p1784	String "instHypT [<< 'i1 +@ 1 >>; << 'j +@ 1 >>] 4 ttca thenWT dT 0 thenT byDefT reduceC thenT tryT arithT thenT autoT"
+P	p1784	String "instHypT [<< 'i1 +@ 1 >>; << 'j +@ 1 >>] 4 ttca thenWT dT 0 thenT byDefT reduceC thenT tryT arithT ta"
 O	o1784	ext_rule p1784
 P	p1785	Var i2
 O	o1785	var p1785
@@ -1460,7 +1460,7 @@ P	p1870	String "byDefT unfold_index thenT hypSubstT (-1) 0 thenT byDefT reduceC 
 O	o1870	ext_rule p1870
 P	p1929	String "assertT << find{'ops; inject{nth{'ops; 'i}; 'depth}; x,y.Itt_synt_operator!is_same_op{'x;'y}} = 'i in Index{'ops} >> ttca"
 O	o1929	ext_rule p1929
-P	p1938	String "rwh unfold_index (-1) thenT hypSubstT (-1) 0 thenT autoT"
+P	p1938	String "rwh unfold_index (-1) thenT hypSubstT (-1) 0 ta"
 O	o1938	ext_rule p1938
 T	t1938	o1038 b522
 B	b1939	t1938
@@ -1482,7 +1482,7 @@ T	t1424	o516 b800 b1423
 B	b1424	t1424
 T	t1425	o516 b768 b1424
 B	b1425	t1425
-P	p1982	String "assertT << 'ops in list{Operator} & 'T Type >> thenMT selT 1 (dT 0) thenT autoT"
+P	p1982	String "assertT << 'ops in list{Operator} & 'T Type >> thenMT selT 1 (dT 0) ta"
 O	o1982	ext_rule p1982
 T	t1426	o537 b1422 b807
 B	b1426	t1426
@@ -2183,13 +2183,13 @@ T	t932	o1115 b931
 H	h932	y t932
 H	h933	y1 t1542
 H	h935	y1 t1693
-P	p947	String "repeatT (dT 0 thenT autoT) thenT arithT ttca"
+P	p947	String "repeatT (dT 0 ta) thenT arithT ttca"
 O	o947	ext_rule p947
 P	p952	String "splitITE (-1) thenT byDefT fold_neq_int"
 O	o952	ext_rule p952
 P	p1336	String "arithT ttca"
 O	o1336	ext_rule p1336
-P	p1471	String "assertT << 'v2 -@ 1 in Index{'v1} >> thenMT (dT (-3) thenT equalTransT << inject{nth{'v1; 'v2 -@ 1}; 'depth} >> thenT autoT)"
+P	p1471	String "assertT << 'v2 -@ 1 in Index{'v1} >> thenMT (dT (-3) thenT equalTransT << inject{nth{'v1; 'v2 -@ 1}; 'depth} >> ta)"
 O	o1471	ext_rule p1471
 P	p1506	String "is_same_op_sym1 ttca"
 O	o1506	ext_rule p1506
@@ -2311,7 +2311,7 @@ T	t918	o506 b618 b911 b54
 H	h918	z t918
 P	p921	Var z
 O	o921	var p921
-P	p943	String "dT (-1) thenT autoT"
+P	p943	String "dT (-1) ta"
 O	o943	ext_rule p943
 H	h943	a t911
 P	p1056	String "rwh unfold_Img 0 thenT byDefT fold_lang"
@@ -2339,7 +2339,7 @@ B	b1065	s1065
 H	h1067	b t54
 H	h1068	a t1060
 T	t1068	o519 b54 b1062 b1062
-P	p962	String "letT << 'f = mk{'ops} in dom{'ops; 'T} -> BTerm >> thenT autoT"
+P	p962	String "letT << 'f = mk{'ops} in dom{'ops; 'T} -> BTerm >> ta"
 O	o962	ext_rule p962
 P	p1356	String "rwhAll unfold_lang thenT withT << univ[i:l] >> (dT 2) thenT byDefT fold_lang"
 O	o1356	ext_rule p1356
@@ -2366,9 +2366,9 @@ P	p1384	String "assertT << compatible_shapes{inject{nth{'ops;'i};'depth};'y1} >>
 O	o1384	ext_rule p1384
 P	p1393	String "compatible_shapes_squash ttca"
 O	o1393	ext_rule p1393
-P	p1395	String "assertT << all_list{'y1;t.'P['t]} >> thenT autoT"
+P	p1395	String "assertT << all_list{'y1;t.'P['t]} >> ta"
 O	o1395	ext_rule p1395
-P	p1404	String "backThruHypT 5 thenT autoT"
+P	p1404	String "backThruHypT 5 ta"
 O	o1404	ext_rule p1404
 T	t1405	o466 b901
 B	b1405	t1405
@@ -2391,7 +2391,7 @@ S	s1068	t518\\ h h1067 h1068\\ t1068
 B	b1068	s1068
 P	p1074	String "genAssumT [4] thenT dT (-1) ttca"
 O	o1074	ext_rule p1074
-P	p1076	String "dT 0 thenT withT << inr{(find{'ops; 'op; x,y.Itt_synt_operator!is_same_op{'x;'y}}, ('depth, 'bts))} >> autoT thenT autoT thenWT tryT (dT (-1) ttca)"
+P	p1076	String "dT 0 thenT withT << inr{(find{'ops; 'op; x,y.Itt_synt_operator!is_same_op{'x;'y}}, ('depth, 'bts))} >> autoT ta thenWT tryT (dT (-1) ttca)"
 O	o1076	ext_rule p1076
 T	t1089	o749 b772 b1575
 B	b1089	t1089
@@ -2403,7 +2403,7 @@ T	t1101	o1100
 B	b1101	t1101
 P	p1117	String "byDefT unfold_lang"
 O	o1117	ext_rule p1117
-P	p1120	String "substT << inject{nth{'ops; find{'ops; 'op; x,y.Itt_synt_operator!is_same_op{'x; 'y}}}; 'depth} = inject{'op; 'depth} in BOperator >> 0 thenT autoT"
+P	p1120	String "substT << inject{nth{'ops; find{'ops; 'op; x,y.Itt_synt_operator!is_same_op{'x; 'y}}}; 'depth} = inject{'op; 'depth} in BOperator >> 0 ta"
 O	o1120	ext_rule p1120
 P	p1121	String equality
 O	o1121	tactic_arg p1121
@@ -2413,7 +2413,7 @@ T	t1125	o1125
 H	h1125	vv t1125
 S	s1125	t518\\ h h1125\\ t1057
 B	b1125	s1125
-P	p1130	String "rwh unfold_op 0 thenT autoT thenT byDefT fold_op"
+P	p1130	String "rwh unfold_op 0 ta thenT byDefT fold_op"
 O	o1130	ext_rule p1130
 NItt_esquash	Itt_esquash	Itt_esquash NIL
 NItt_esquash!esquash	esquash	esquash Itt_esquash
@@ -3302,7 +3302,7 @@ T	t893	o b820 b893
 B	b894	t893
 T	t894	o952 b534 b818 b894 b6
 B	b917	t894
-P	p917	String "dT (-1) thenMT hypSubstT (-1) (-2) thenMT dT (-2) thenT autoT"
+P	p917	String "dT (-1) thenMT hypSubstT (-1) (-2) thenMT dT (-2) ta"
 O	o918	ext_rule p917
 T	t927	o667 b682 b6
 B	b927	t927
@@ -4304,7 +4304,7 @@ T	t2495	o b2482 b2495
 B	b2496	t2495
 T	t2496	o829 b534 b2447 b2496 b6
 B	b2497	t2496
-P	p1194	String "letT << 'f = mk{'ops} in dom{'ops; Lang{'ops}} -> BTerm >> thenT autoT"
+P	p1194	String "letT << 'f = mk{'ops} in dom{'ops; Lang{'ops}} -> BTerm >> ta"
 O	o1194	ext_rule p1194
 T	t2497	o667 b2309 b6
 B	b2498	t2497
@@ -4400,7 +4400,7 @@ T	t1978	o516 b524 b1978
 B	b1979	t1978
 T	t1979	o516 b1775 b1979
 B	b1980	t1979
-P	p1980	String "assumT 6 thenT rwh make_bterm_depth 0 thenT autoT thenT byDefsT [unfold_compatible_shapes; reduceC]"
+P	p1980	String "assumT 6 thenT rwh make_bterm_depth 0 ta thenT byDefsT [unfold_compatible_shapes; reduceC]"
 O	o1980	ext_rule p1980
 T	t1980	o b1809 b6
 B	b1981	t1980
@@ -4708,7 +4708,7 @@ T	t1307	o516 b1083 b1307
 B	b1308	t1307
 T	t1308	o516 b768 b1308
 B	b1309	t1308
-P	p1309	String "genAssumT [1;2] thenT autoT thenT dT (-1) thenT repeatT (byDefT reduceC) thenT tryT (completeT (dT 2 ttca))"
+P	p1309	String "genAssumT [1;2] ta thenT dT (-1) thenT repeatT (byDefT reduceC) thenT tryT (completeT (dT 2 ttca))"
 O	o1309	ext_rule p1309
 T	t3732	o b1604 b6
 B	b3732	t3732
@@ -4845,7 +4845,7 @@ T	t2808	o3183 b2541
 B	b2809	t2808
 T	t2809	o3183 b2639
 B	b2810	t2809
-P	p1608	String "dT 4 thenT autoT thenT subtypeT << Lang{'v1} >> ttca"
+P	p1608	String "dT 4 ta thenT subtypeT << Lang{'v1} >> ttca"
 O	o1608	ext_rule p1608
 P	p1613	String "withT << 'i1 >> (dT (-2)) ttca"
 O	o1613	ext_rule p1613
@@ -5015,7 +5015,7 @@ T	t1690	o968 b471 b1690
 H	h1690	_1 t1690
 T	t1691	o1060 b471 b1003
 H	h1691	y t1691
-P	p1705	String "dT 0 thenT autoT thenT dT 0 ttca thenT tryT arithT ttca"
+P	p1705	String "dT 0 ta thenT dT 0 ttca thenT tryT arithT ttca"
 O	o1705	ext_rule p1705
 T	t3121	o519 b520 b3114 b3114
 S	s3121	t518\\ h h985 h3005 h1319 h542 h984 h1624 h2916 h1688 h1690 h1691\\ t3121
@@ -5146,7 +5146,7 @@ T	t3237	o b3237 b6
 B	b3238	t3237
 T	t3238	o535 b3234 b3238
 B	b3239	t3238
-P	p1761	String "dT (-1) thenT dT 0 thenT autoT"
+P	p1761	String "dT (-1) thenT dT 0 ta"
 O	o1761	ext_rule p1761
 T	t3239	o535 b3237 b6
 B	b3240	t3239
@@ -5403,7 +5403,7 @@ T	t3929	o b1222 b3928
 B	b3929	t3929
 T	t3930	o535 b1897 b3929
 B	b3930	t3930
-P	p1845	String "genAssumT [3;4] thenT letAtT 2 << 'i = bdepth{'s} in int >> thenT autoT"
+P	p1845	String "genAssumT [3;4] thenT letAtT 2 << 'i = bdepth{'s} in int >> ta"
 O	o1845	ext_rule p1845
 H	h1845	v t464
 T	t1851	o519 b54 b296 b296
@@ -5419,7 +5419,7 @@ T	t1973	o537 b1907 b1895
 B	b2045	t1973
 T	t2045	o536 b2045 b6
 B	b2056	t2045
-P	p2241	String "dT 0 thenT autoT thenT omegaT ttca"
+P	p2241	String "dT 0 ta thenT omegaT ttca"
 O	o2241	ext_rule p2241
 T	t2241	o535 b2056 b6
 B	b2242	t2241
@@ -5554,7 +5554,7 @@ T	t2067	o516 b1910 b2066
 B	b2067	t2067
 T	t2068	o516 b768 b2067
 B	b2068	t2068
-P	p2259	String "assertT << 's in BTerm & 'ops in list{Operator} >> thenT autoT"
+P	p2259	String "assertT << 's in BTerm & 'ops in list{Operator} >> ta"
 O	o2259	ext_rule p2259
 T	t2069	o b2059 b1922
 B	b2069	t2069
@@ -5806,7 +5806,7 @@ B	b3336	t3335
 T	t2337	o2060 b1330 b267 b296
 B	b2337	t2337
 T	t2338	o519 b1546 b2337 b2337
-P	p2349	String "dT 5 thenT autoT thenT subtypeT << Lang{'ops} >> ttca"
+P	p2349	String "dT 5 ta thenT subtypeT << Lang{'ops} >> ttca"
 O	o2349	ext_rule p2349
 T	t3336	o535 b3310 b6
 B	b3337	t3336
@@ -6020,7 +6020,7 @@ T	t3422	o b3422 b6
 B	b3423	t3422
 T	t3423	o535 b3419 b3423
 B	b3424	t3423
-P	p2362	String "letT << 'j = nth{shape{nth{'ops; 'i}}; 'i1} in nat >> thenT autoT"
+P	p2362	String "letT << 'j = nth{shape{nth{'ops; 'i}}; 'i1} in nat >> ta"
 O	o2362	ext_rule p2362
 T	t3424	o667 b3421 b6
 B	b3425	t3424
@@ -6041,7 +6041,7 @@ T	t3429	o535 b3429 b6
 B	b3430	t3429
 T	t3430	o2409 b534 b3430 b6 b6
 B	b3431	t3430
-P	p2384	String "rwh unfold_nat (-1) thenT dT (-1) thenT autoT thenT omegaT ttca"
+P	p2384	String "rwh unfold_nat (-1) thenT dT (-1) ta thenT omegaT ttca"
 O	o2384	ext_rule p2384
 T	t3431	o1027 b131 b3148
 B	b3432	t3431
@@ -6164,7 +6164,7 @@ T	t3487	o b3339 b3487
 B	b3488	t3487
 T	t3488	o b3338 b3488
 B	b3489	t3488
-P	p2418	String "withT << 'i1 >> (dT 9) ttca thenT backThruHypT (-1) thenT autoT"
+P	p2418	String "withT << 'i1 >> (dT 9) ttca thenT backThruHypT (-1) ta"
 O	o2418	ext_rule p2418
 S	s3489	t518\\ h h2265 h2266 h541 h1546 h542 h2312 h3307 h2577 h2328 h3310 h3311 h1327\\ t2338
 B	b3490	s3489

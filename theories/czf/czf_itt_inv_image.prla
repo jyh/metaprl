@@ -404,7 +404,7 @@ B	b719	t719
 NSummary!interactive	interactive	interactive Summary
 O	o741	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p741	String "rwh unfold_inv_image 0 thenT autoT"
+P	p741	String "rwh unfold_inv_image 0 ta"
 O	o742	ext_rule p741
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o743	status_incomplete
@@ -958,7 +958,7 @@ T	t1701	o1692 b1700 b619
 B	b1701	t1701
 P	p853	String inv_image_intro
 O	o853	rule p853
-P	p855	String "rwh unfold_inv_image 0 thenT autoT thenT funSetT 2 ttca"
+P	p855	String "rwh unfold_inv_image 0 ta thenT funSetT 2 ttca"
 O	o855	ext_rule p855
 P	p1767	String Elimination
 O	o1767	comment_string p1767
@@ -988,7 +988,7 @@ T	t1781	o1780
 B	b1781	t1781
 P	p870	String inv_image_elim
 O	o870	rule p870
-P	p873	String "copyHypT 2 3 thenT rwh unfold_inv_image 3 thenT dT 3 thenT autoT thenT funSetT 5 ttca"
+P	p873	String "copyHypT 2 3 thenT rwh unfold_inv_image 3 thenT dT 3 ta thenT funSetT 5 ttca"
 O	o873	ext_rule p873
 NSummary!id	id	id Summary
 P	p6	Number 479387776

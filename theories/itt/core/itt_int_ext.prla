@@ -1968,7 +1968,7 @@ T	t2831	o2128 b2763 b2831
 B	b2835	t2831
 T	t2835	o2128 b2746 b2835
 B	b2836	t2835
-P	p2287	String "rwh unfold_ge 0 thenT rwh unfold_ge_bool 0 thenT autoT"
+P	p2287	String "rwh unfold_ge 0 thenT rwh unfold_ge_bool 0 ta"
 O	o2287	ext_rule p2287
 T	t2836	o2190 b2823 b2789
 B	b2839	t2836
@@ -11588,7 +11588,7 @@ T	t10110	o b10110 b17
 B	b10111	t10110
 T	t10111	o2188 b10107 b10111
 B	b10112	t10111
-P	p3660	String "lt_AsymT <<0>> <<0>> thenT autoT"
+P	p3660	String "lt_AsymT <<0>> <<0>> ta"
 O	o3660	ext_rule p3660
 H	h4947	_1010 t977
 S	s4024	tbrarg\\ h2250 h4947\\ t3902
@@ -17031,7 +17031,7 @@ T	t11141	o b11141 b17
 B	b11142	t11141
 T	t11142	o2188 b11135 b11142
 B	b11143	t11142
-P	p11143	String "moveToConclT (-1) thenT splitBoolT << lt_bool {'a; 'b} >> 0 thenT autoT"
+P	p11143	String "moveToConclT (-1) thenT splitBoolT << lt_bool {'a; 'b} >> 0 ta"
 O	o11143	ext_rule p11143
 H	h11143	x t4083
 T	t11143	o2132 b1260 b1270 b11138

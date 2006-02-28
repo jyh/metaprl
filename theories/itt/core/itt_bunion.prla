@@ -208,12 +208,12 @@ P	p730	Var y
 O	o730	var p730
 T	t730	o730
 B	b730	t730
-P	p746	String "withT << btrue >> (dT 0) thenT autoT"
+P	p746	String "withT << btrue >> (dT 0) ta"
 O	o746	ext_rule p746
 P	p747	String with
 P	p819	String bunionMemberEqualityRight
 O	o819	rule p819
-P	p832	String "withT << bfalse >> (dT 0) thenT autoT"
+P	p832	String "withT << bfalse >> (dT 0) ta"
 O	o832	ext_rule p832
 P	p884	String bunionElimination
 O	o884	rule p884
@@ -1399,7 +1399,7 @@ O	o1542	rule p1542
 NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash1548	squash Itt_squash
 O	o1548	squash1548
-P	p1675	String "dT 4 thenT reduceT thenT rwhAll fold_bunion thenT autoT"
+P	p1675	String "dT 4 thenT reduceT thenT rwhAll fold_bunion ta"
 O	o1675	ext_rule p1675
 P	p305	Var n
 O	o305	var p305

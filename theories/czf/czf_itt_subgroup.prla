@@ -848,7 +848,7 @@ O	o1430	type
 NSummary!interactive	interactive	interactive Summary
 O	o1434	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1434	String "rwh unfold_subgroup 0 thenT autoT"
+P	p1434	String "rwh unfold_subgroup 0 ta"
 O	o1435	ext_rule p1434
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1436	status_incomplete
@@ -963,11 +963,11 @@ P	p1724	String subgroup_op
 O	o1724	rule p1724
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o1725	isset
-P	p1741	String "assumT 7 thenT rwh unfold_subgroup 2 thenT autoT"
+P	p1741	String "assumT 7 thenT rwh unfold_subgroup 2 ta"
 O	o1741	ext_rule p1741
 P	p1774	String "instHypT [<< 'a >>; << 'b >>] 5 ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT dT 6 ttca"
 O	o1774	ext_rule p1774
-P	p1816	String "setSubstT << equal{op{'g; 'a; 'b}; op{'s; 'a; 'b}} >> 0 thenT autoT thenT eqSetSymT ttca"
+P	p1816	String "setSubstT << equal{op{'g; 'a; 'b}; op{'s; 'a; 'b}} >> 0 ta thenT eqSetSymT ttca"
 O	o1816	ext_rule p1816
 P	p1983	Number 1578
 P	p2122	Number 1652
@@ -986,9 +986,9 @@ P	p1830	String subgroup_id1
 O	o1830	rule p1830
 NCzf_itt_group!id	id	id Czf_itt_group
 O	o1831	id
-P	p1837	String "assumT 3 thenT rwh unfold_subgroup 2 thenT autoT"
+P	p1837	String "assumT 3 thenT rwh unfold_subgroup 2 ta"
 O	o1837	ext_rule p1837
-P	p1863	String "instHypT [<< id{'s} >>; << id{'s} >>] 5 thenT rwh fold_isset 0 thenT autoT thenT dT 6 ttca thenT dT 6 ttca"
+P	p1863	String "instHypT [<< id{'s} >>; << id{'s} >>] 5 thenT rwh fold_isset 0 ta thenT dT 6 ttca thenT dT 6 ttca"
 O	o1863	ext_rule p1863
 P	p1908	String "assertT << eq{op{'g; id{'s}; id{'s}}; op{'s; id{'s}; id{'s}}} >> ttca"
 O	o1908	ext_rule p1908
@@ -1016,7 +1016,7 @@ P	p1986	String subgroup_inv1
 O	o1986	rule p1986
 NCzf_itt_group!inv	inv	inv Czf_itt_group
 O	o1987	inv
-P	p1995	String "assumT 5 thenT rwh unfold_subgroup 2 thenT autoT"
+P	p1995	String "assumT 5 thenT rwh unfold_subgroup 2 ta"
 O	o1995	ext_rule p1995
 P	p2039	String "withT << 'a >> (dT 4) ttca"
 O	o2039	ext_rule p2039
@@ -1026,7 +1026,7 @@ P	p2043	String "setSubstT << equal{op{'g; 'a; inv{'s; 'a}}; op{'s; 'a; inv{'s; '
 O	o2043	ext_rule p2043
 P	p2054	String "instHypT [<< 'a >>; << inv{'s; 'a} >>] 5 ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT dT 6 ttca thenT setSubstT << equal{op{'s; 'a; inv{'s; 'a}}; op{'g; 'a; inv{'s; 'a}}} >> 0 ttca"
 O	o2054	ext_rule p2054
-P	p2056	String "setSubstT << equal{op{'s; 'a; inv{'s; 'a}}; id{'s}} >> 0 thenT autoT"
+P	p2056	String "setSubstT << equal{op{'s; 'a; inv{'s; 'a}}; id{'s}} >> 0 ta"
 O	o2056	ext_rule p2056
 P	p2073	String subgroup_inv2
 O	o2073	rule p2073
@@ -1075,7 +1075,7 @@ O	o2188	term_param
 NCzf_itt_isect	Czf_itt_isect	Czf_itt_isect NIL
 NCzf_itt_isect!isect	isect	isect Czf_itt_isect
 O	o2209	isect
-P	p2231	String "assumT 5 thenT assumT 8 thenT assumT 9 ttca thenT rwh unfold_subgroup 2 thenT autoT"
+P	p2231	String "assumT 5 thenT assumT 8 thenT assumT 9 ttca thenT rwh unfold_subgroup 2 ta"
 O	o2231	ext_rule p2231
 H	h2258	x t1328
 P	p2258	Var x

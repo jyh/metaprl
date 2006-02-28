@@ -1847,7 +1847,7 @@ T	t2006	o1082 b2006
 B	b2007	t2006
 P	p2061	String autoT
 O	o2061	ext_rule p2061
-P	p2070	String "dT 2 thenT autoT thenT subtypeT <<'A_1>> ttca"
+P	p2070	String "dT 2 ta thenT subtypeT <<'A_1>> ttca"
 O	o2070	ext_rule p2070
 NItt_sqsimple	Itt_sqsimple	Itt_sqsimple NIL
 NItt_sqsimple!sqsimple	sqsimple	sqsimple Itt_sqsimple
@@ -1880,14 +1880,14 @@ P	p2790	String "use_subset <<'A_1>> ttca"
 O	o2790	ext_rule p2790
 P	p2792	String "use_superset <<'A_2>> <<'a1>> ttca"
 O	o2792	ext_rule p2792
-P	p2797	String "substT <<'a='g['f['a]] in 'A_2>> 0 thenMT substT <<'a1='g['f['a1]] in 'A_2>> 0 thenT autoT thenT equalSymT thenAT autoT"
+P	p2797	String "substT <<'a='g['f['a]] in 'A_2>> 0 thenMT substT <<'a1='g['f['a1]] in 'A_2>> 0 ta thenT equalSymT taa"
 O	o2797	ext_rule p2797
 P	p2798	String equality
 O	o2798	tactic_arg p2798
 H	h2806	vv A_2
 P	p2817	String "letT <<'a='a1 in 'A_2>> ttca"
 O	o2817	ext_rule p2817
-P	p2827	String "hypSubstT 4 0 thenT autoT thenT dT (-1)"
+P	p2827	String "hypSubstT 4 0 ta thenT dT (-1)"
 O	o2827	ext_rule p2827
 P	p8	String img_sqsimple
 O	o16	rule p8
@@ -3248,7 +3248,7 @@ T	t2702	o b2701 b14
 B	b2702	t2702
 T	t2703	o2101 b2344 b2694 b2702 b14
 B	b2703	t2703
-P	p2112	String "substT << 'g 'f['x] ~ 'x >> (-1) thenAT autoT"
+P	p2112	String "substT << 'g 'f['x] ~ 'x >> (-1) taa"
 O	o2112	ext_rule p2112
 T	t2705	o1185 b2705 b14
 B	b2706	t2705
@@ -3264,7 +3264,7 @@ T	t2709	o b2709 b14
 B	b2710	t2709
 T	t2710	o1184 b2706 b2710
 B	b2711	t2710
-P	p2118	String "substT << 'g 'f['x1] ~ 'x1 >> (-1) thenAT autoT"
+P	p2118	String "substT << 'g 'f['x1] ~ 'x1 >> (-1) taa"
 O	o2118	ext_rule p2118
 T	t2713	o1185 b2713 b14
 B	b2714	t2713

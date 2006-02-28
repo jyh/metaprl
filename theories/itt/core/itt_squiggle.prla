@@ -1697,7 +1697,7 @@ P	p737	String squiggleRef
 O	o737	rule p737
 P	p746	String squiggleSym
 O	o746	rule p746
-P	p750	String "sqSubstT <<'s ~ 't>> 0 thenT autoT"
+P	p750	String "sqSubstT <<'s ~ 't>> 0 ta"
 O	o750	ext_rule p750
 P	p759	String squiggleTrans
 O	o759	rule p759
@@ -2386,7 +2386,7 @@ T	t3147	o570 b3147 b2832
 B	b3148	t3147
 T	t3148	o570 b3145 b3148
 B	b3149	t3148
-P	p769	String "sqSubstT <<'t ~ 'r>> 0 thenT autoT"
+P	p769	String "sqSubstT <<'t ~ 'r>> 0 ta"
 O	o769	ext_rule p769
 T	t3149	o b3146 b4
 B	b3150	t3149

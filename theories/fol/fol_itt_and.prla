@@ -331,7 +331,7 @@ O	o681	rule p681
 NSummary!meta_function	meta_function	meta_function Summary
 O	o682	meta_function
 O	o683	meta_labeled p591
-P	p692	String "rwh unfold_and 0 thenT autoT"
+P	p692	String "rwh unfold_and 0 ta"
 O	o692	ext_rule p692
 P	p606	String simp_typeinf_resource_info
 O	o607	type_lid p606

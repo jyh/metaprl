@@ -6893,7 +6893,7 @@ P	p7242	String addid_in_car
 O	o7242	rule p7242
 T	t8947	o1312 b7221 b1329
 B	b8947	t8947
-P	p7243	String "genAssumT [1] thenT repeatForT 2 (dT 2) thenT autoT"
+P	p7243	String "genAssumT [1] thenT repeatForT 2 (dT 2) ta"
 O	o7243	ext_rule p7243
 T	t7243	o1297 b1328 b6985
 B	b7243	t7243
@@ -7159,7 +7159,7 @@ T	t5190	o1312 b5189 b7339
 B	b5190	t5190
 T	t5191	o1312 b7221 b5190
 B	b5191	t5191
-P	p7341	String "genAssumT [1;2] thenT repeatForT 2 (dT 2) thenT autoT"
+P	p7341	String "genAssumT [1;2] thenT repeatForT 2 (dT 2) ta"
 O	o7341	ext_rule p7341
 T	t5192	o b5187 b13
 B	b5192	t5192
@@ -7429,7 +7429,7 @@ T	t9109	o1312 b8843 b9108
 B	b9109	t9109
 T	t9110	o1312 b7221 b9109
 B	b9110	t9110
-P	p8779	String "genAssumT [1; 2; 3; 4] thenT autoT"
+P	p8779	String "genAssumT [1; 2; 3; 4] ta"
 O	o8779	ext_rule p8779
 T	t8779	o b8767 b13
 B	b8780	t8779
@@ -7785,7 +7785,7 @@ T	t9284	o1312 b8843 b8921
 B	b9284	t9284
 T	t9285	o1312 b7221 b9284
 B	b9285	t9285
-P	p8923	String "genAssumT [1; 2] thenT autoT"
+P	p8923	String "genAssumT [1; 2] ta"
 O	o8923	ext_rule p8923
 T	t8924	o1297 b8920 b7306
 B	b8924	t8924
@@ -8443,7 +8443,7 @@ T	t9630	o1312 b8843 b9629
 B	b9630	t9630
 T	t9631	o1312 b7221 b9630
 B	b9631	t9631
-P	p9186	String "genAssumT [1; 2; 3] thenT autoT"
+P	p9186	String "genAssumT [1; 2; 3] ta"
 O	o9186	ext_rule p9186
 T	t9187	o1297 b9182 b7178
 B	b9187	t9187
@@ -8529,7 +8529,7 @@ T	t9652	o1312 b8843 b9651
 B	b9652	t9652
 T	t9653	o1312 b7221 b9652
 B	b9653	t9653
-P	p9220	String "genAssumT [1; 2; 3] thenT autoT thenT dT 2 ttca"
+P	p9220	String "genAssumT [1; 2; 3] ta thenT dT 2 ttca"
 O	o9220	ext_rule p9220
 T	t9221	o1297 b9216 b7178
 B	b9221	t9221
@@ -8956,7 +8956,7 @@ P	p9393	String field_0neq1
 O	o9393	rule p9393
 T	t10638	o1312 b7221 b6022
 B	b10638	t10638
-P	p9394	String "genAssumT [1] thenT autoT"
+P	p9394	String "genAssumT [1] ta"
 O	o9394	ext_rule p9394
 T	t9394	o1297 b6021 b6985
 B	b9394	t9394
@@ -10154,7 +10154,7 @@ T	t11282	o1312 b8843 b11281
 B	b11282	t11282
 T	t11283	o1312 b7221 b11282
 B	b11283	t11283
-P	p9979	String "genAssumT [1; 2; 3; 4; 5] thenT rwh unfold_nequal 0 thenT autoT"
+P	p9979	String "genAssumT [1; 2; 3; 4; 5] thenT rwh unfold_nequal 0 ta"
 O	o9979	ext_rule p9979
 T	t9980	o b9971 b13
 B	b9980	t9980
@@ -10394,7 +10394,7 @@ T	t6289	o b6288 b13
 B	b6289	t6289
 T	t6290	o1295 b12220 b6289
 B	b6290	t6290
-P	p10042	String "assertT << 'v2 = 'v^\"0\" in 'v^car >> thenT autoT"
+P	p10042	String "assertT << 'v2 = 'v^\"0\" in 'v^car >> ta"
 O	o10042	ext_rule p10042
 H	h6290	v1 t6275
 T	t6291	o932 b6275 b5257 b6280
@@ -10526,7 +10526,7 @@ T	t6344	o b6344 b13
 B	b6345	t6344
 T	t6345	o1295 b6340 b6345
 B	b6346	t6345
-P	p10082	String "assertT << 'v in ring[i:l] >> thenT autoT"
+P	p10082	String "assertT << 'v in ring[i:l] >> ta"
 O	o10082	ext_rule p10082
 S	s6346	t1290\\ h h8243 h6290 h6275 h6292 h6293 h6296\\ t6341
 B	b6347	s6346
@@ -10567,7 +10567,7 @@ T	t6361	o1295 b6361 b13
 B	b6362	t6361
 T	t6362	o10096 b4188 b6362 b13 b13
 B	b6363	t6362
-P	p10098	String "thinT (-1) thenT autoT"
+P	p10098	String "thinT (-1) ta"
 O	o10098	ext_rule p10098
 H	h6363	_1010 t6349
 S	s6363	t1290\\ h h8243 h6290 h6275 h6292 h6293 h6296 h6363\\ t6352
@@ -10625,7 +10625,7 @@ P	p6387	Number 19459
 O	o6387	lid p6387 p6385
 P	p10133	String mul_naddid_naddid2
 O	o10133	rule p10133
-P	p10139	String "genAssumT [1; 2; 3] thenT autoT thenT dT (-2) thenT dT (-1) ttca"
+P	p10139	String "genAssumT [1; 2; 3] ta thenT dT (-2) thenT dT (-1) ttca"
 O	o10139	ext_rule p10139
 P	p11535	String field_noDiv0
 O	o11535	rule p11535
@@ -10862,7 +10862,7 @@ P	p10341	String "autoT thenT reduceT"
 O	o10341	ext_rule p10341
 P	p10395	String "sqSubstT << 'v ~ rcrd[\"*\":t]{'v^\"*\"; 'v} >> 0 thenT byDefT reduceC"
 O	o10395	ext_rule p10395
-P	p10479	String "sqSymT thenT withT << 'v^car -> 'v^car -> 'v^car >> (dT 0) ttca thenT dT 2 thenT dT 2 thenT autoT"
+P	p10479	String "sqSymT thenT withT << 'v^car -> 'v^car -> 'v^car >> (dT 0) ttca thenT dT 2 thenT dT 2 ta"
 O	o10479	ext_rule p10479
 P	p10481	String "fnExtenT << 'v^car -> 'v^car -> 'v^car >> thenMT fnExtenT << 'v^car -> 'v^car >> ttca"
 O	o10481	ext_rule p10481
@@ -10877,7 +10877,7 @@ S	s10527	t1290\\ h\\ t10527
 B	b10527	s10527
 T	t10528	o1289 b10527
 B	b10528	t10528
-P	p10529	String "genAssumT [1] thenT autoT thenT byDefT unfold_carNo0 thenT reduceT ttca"
+P	p10529	String "genAssumT [1] ta thenT byDefT unfold_carNo0 thenT reduceT ttca"
 O	o10529	ext_rule p10529
 T	t10530	o1297 b10527 b6985
 B	b10530	t10530

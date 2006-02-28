@@ -9458,7 +9458,7 @@ T	t5163	o b5162 b137
 B	b5163	t5163
 T	t5164	o3985 b1264 b5159 b5163 b137
 B	b5164	t5164
-P	p5164	String "assumT 3 thenT autoT"
+P	p5164	String "assumT 3 ta"
 O	o5164	ext_rule p5164
 T	t5165	oge b1259 b3803
 H	h5165	y t5165

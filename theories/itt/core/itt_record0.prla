@@ -157,7 +157,7 @@ B	b702	t702
 NSummary!interactive	interactive	interactive Summary
 O	o703	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p703	String "rwh unfoldRecordS 0 thenT rwh reduceC 0 thenT autoT"
+P	p703	String "rwh unfoldRecordS 0 thenT rwh reduceC 0 ta"
 O	o704	ext_rule p703
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o705	status_incomplete
@@ -287,7 +287,7 @@ T	t837	o829 b836
 B	b837	t837 l
 P	p843	String baseRcrd
 O	o843	rewrite p843
-P	p844	String "rwh unfoldRcrd 0 thenT rwh reduceC 0 thenT autoT"
+P	p844	String "rwh unfoldRcrd 0 thenT rwh reduceC 0 ta"
 O	o844	ext_rule p844
 P	p854	String stepRcrd
 O	o854	rule p854
@@ -304,7 +304,7 @@ T	t927	o829 b927
 B	b928	t927 l
 P	p933	String baseField
 O	o933	rewrite p933
-P	p934	String "rwh unfoldField 0 thenT rwh reduceC 0 thenT autoT"
+P	p934	String "rwh unfoldField 0 thenT rwh reduceC 0 ta"
 O	o934	ext_rule p934
 P	p942	String stepField
 O	o942	rule p942
@@ -324,7 +324,7 @@ O	o1010	rule p1010
 NItt_equal!type	type	type Itt_equal
 O	o1011	type
 T	t1011	o1011 b680
-P	p1012	String "rwh unfoldEmptyRecord 0 thenT autoT"
+P	p1012	String "rwh unfoldEmptyRecord 0 ta"
 O	o1012	ext_rule p1012
 P	p1026	String recordType
 O	o1026	rule p1026
@@ -351,7 +351,7 @@ P	p1058	String wf
 O	o1058	meta_labeled p1058
 P	p1065	String "assertT <<record{zero;'A}>>"
 O	o1065	ext_rule p1065
-P	p1079	String "labelBackInduction <<'n>> <<bind{x.record{'x;'A}}>> thenT autoT"
+P	p1079	String "labelBackInduction <<'n>> <<bind{x.record{'x;'A}}>> ta"
 O	o1079	ext_rule p1079
 H	h1079	m t726
 P	p1080	Var m
@@ -360,7 +360,7 @@ T	t1080	o1080
 B	b1080	t1080
 T	t1081	o730 b1080
 B	b1081	t1081
-P	p1092	String "typeAssertT thenT rwh reduceC 2 thenT autoT"
+P	p1092	String "typeAssertT thenT rwh reduceC 2 ta"
 O	o1092	ext_rule p1092
 P	p1112	String recordTypeElimination
 O	o1112	rule p1112
@@ -376,11 +376,11 @@ P	p1146	String "labelBackInduction <<'n>> <<bind{k.\"type\"{record{'k;'A}}}>>"
 O	o1146	ext_rule p1146
 P	p1167	String "rwh reduceC 5"
 O	o1167	ext_rule p1167
-P	p1178	String "dT 5 thenT autoT"
+P	p1178	String "dT 5 ta"
 O	o1178	ext_rule p1178
 P	p1189	String "rw reduceC 4"
 O	o1189	ext_rule p1189
-P	p1195	String "dT 4 thenT autoT"
+P	p1195	String "dT 4 ta"
 O	o1195	ext_rule p1195
 P	p1211	String ThinOption
 O	o1211	uid p1211
@@ -405,7 +405,7 @@ O	o1243	rule p1243
 P	p1244	String equality
 O	o1244	meta_labeled p1244
 T	t1324	o725 b726 b1080 b1080
-P	p1353	String "dT 0 thenMT dT (-1) thenMT rwh reduceC 0 thenT autoT"
+P	p1353	String "dT 0 thenMT dT (-1) thenMT rwh reduceC 0 ta"
 O	o1353	ext_rule p1353
 P	p1433	Var rr
 O	o1433	var p1433
@@ -418,7 +418,7 @@ O	o1455	implies
 O	o1462	tactic_arg p1058
 P	p1512	String "assertT <<\"type\"{'A}>>"
 O	o1512	ext_rule p1512
-P	p1521	String "record_elim1 <<'m>> thenT autoT"
+P	p1521	String "record_elim1 <<'m>> ta"
 O	o1521	ext_rule p1521
 T	t1549	o831 b1434
 B	b1550	t1549
@@ -439,15 +439,15 @@ P	p1844	Var z
 O	o1844	var p1844
 T	t1844	o1844
 B	b1844	t1844
-P	p1892	String "equalRefT <<'r1>> thenT equalSymT thenT autoT"
+P	p1892	String "equalRefT <<'r1>> thenT equalSymT ta"
 O	o1892	ext_rule p1892
 P	p2194	String recordEqualS2
 O	o2194	rule p2194
 P	p2222	String record_beta1
 O	o2222	rule p2222
-P	p2245	String "dT 0 thenMT dT 2 thenMT rwh reduceC 0 thenT autoT"
+P	p2245	String "dT 0 thenMT dT 2 thenMT rwh reduceC 0 ta"
 O	o2245	ext_rule p2245
-P	p2247	String "withT <<'n>> (dT 2) thenMT withT <<'r>> (dT 2) thenT autoT"
+P	p2247	String "withT <<'n>> (dT 2) thenMT withT <<'r>> (dT 2) ta"
 O	o2247	ext_rule p2247
 P	p2275	String record_beta2
 O	o2275	rule p2275
@@ -675,9 +675,9 @@ T	t388	o321 b386
 B	b388	t388
 P	p3624	String idT
 O	o3624	ext_rule p3624
-P	p683	String "letT <<'r_1='r1 in record>> thenAT autoT thenT moveToConclT 2"
+P	p683	String "letT <<'r_1='r1 in record>> taa thenT moveToConclT 2"
 O	o685	ext_rule p683
-P	p685	String "letT <<'r_2='r2 in record>> thenAT autoT thenT moveToConclT 2"
+P	p685	String "letT <<'r_2='r2 in record>> taa thenT moveToConclT 2"
 O	o686	ext_rule p685
 P	p686	String "letT <<'n='m in label>> thenMT moveToConclT 2"
 O	o687	ext_rule p686
@@ -1160,7 +1160,7 @@ T	t310	o723 b1175 b309
 B	b310	t310
 T	t311	o723 b931 b310
 B	b311	t311
-P	p977	String "letT <<'rr='r in record>> thenAT autoT thenT moveToConclT 2"
+P	p977	String "letT <<'rr='r in record>> taa thenT moveToConclT 2"
 O	o977	ext_rule p977
 T	t317	o b288 b4
 B	b317	t317
@@ -1344,7 +1344,7 @@ T	t2015	o b2007 b2015
 B	b2016	t2015
 T	t2016	o706 b2006 b2016
 B	b2017	t2016
-P	p2734	String "record_elim1 <<'n>> thenT autoT thenT useWitnessT <<'r>> thenT autoT"
+P	p2734	String "record_elim1 <<'n>> ta thenT useWitnessT <<'r>> thenT autoT"
 O	o2734	ext_rule p2734
 T	t2017	o1462 b2766 b4
 B	b2018	t2017
@@ -1363,7 +1363,7 @@ T	t2021	o706 b2021 b4
 B	b2022	t2021
 T	t2022	o2734 b705 b2022 b4 b4
 B	b2023	t2022
-P	p2738	String "withT <<'v>> (dT 3) thenMT hypSubstT (-1) 0 thenT autoT"
+P	p2738	String "withT <<'v>> (dT 3) thenMT hypSubstT (-1) 0 ta"
 O	o2738	ext_rule p2738
 S	s2827	tbrarg\\ h577 h1079 h2792 h1659 h2827\\ t2694
 B	b2831	s2827
@@ -1545,7 +1545,7 @@ T	t2079	o b2079 b4
 B	b2080	t2079
 T	t2080	o706 b2076 b2080
 B	b2081	t2080
-P	p3033	String "hypSubstT 4 0 thenT autoT"
+P	p3033	String "hypSubstT 4 0 ta"
 O	o3033	ext_rule p3033
 H	h3754	_1010 t3754
 S	s3754	tbrarg\\ h577 h1079 h2951 h3754\\ t3729
@@ -1919,7 +1919,7 @@ T	t2187	o b2187 b4
 B	b2188	t2187
 T	t2188	o706 b2184 b2188
 B	b2189	t2188
-P	p724	String "repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) thenT autoT thenT rwh reduceC 0 thenT logicAutoT"
+P	p724	String "repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) ta thenT rwh reduceC 0 thenT logicAutoT"
 O	o728	ext_rule p724
 T	t2189	o171 b674 b4
 B	b2190	t2189
@@ -2000,7 +2000,7 @@ T	t2210	o b2210 b4
 B	b2211	t2210
 T	t2211	o706 b2204 b2211
 B	b2212	t2211
-P	p1067	String "assertT <<\"type\"{'A}>> thenMT repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) thenT autoT thenT rwh reduceC 0 thenT logicAutoT"
+P	p1067	String "assertT <<\"type\"{'A}>> thenMT repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) ta thenT rwh reduceC 0 thenT logicAutoT"
 O	o1067	ext_rule p1067
 T	t2212	o171 b989 b4
 B	b2213	t2212
@@ -2036,7 +2036,7 @@ T	t1170	o723 b1175 b1170
 B	b1171	t1170
 T	t1171	o723 b931 b1171
 B	b1206	t1171
-P	p4363	String "record_eqcdST thenT autoT thenT autoT"
+P	p4363	String "record_eqcdST ta thenT autoT"
 O	o4363	ext_rule p4363
 T	t1951	o b1942 b4
 B	b1968	t1951
@@ -2071,7 +2071,7 @@ T	t1388	o723 b1175 b1378
 B	b1389	t1388
 T	t1402	o723 b931 b1389
 B	b1421	t1402
-P	p4376	String "equalSymT thenT record_eqcdST thenT autoT thenT equalSymT thenT autoT"
+P	p4376	String "equalSymT thenT record_eqcdST ta thenT equalSymT thenT autoT"
 O	o4376	ext_rule p4376
 T	t1428	o708 b2153 b561
 B	b1433	t1428
@@ -2151,7 +2151,7 @@ T	t1565	o723 b1563 b1565
 B	b1566	t1565
 T	t1566	o723 b1561 b1566
 B	b1567	t1566
-P	p1569	String "rwh unfoldRecordTop 0 thenT autoT"
+P	p1569	String "rwh unfoldRecordTop 0 ta"
 O	o1570	ext_rule p1569
 T	t1570	o b1562 b4
 B	b1571	t1570
@@ -2175,7 +2175,7 @@ T	t2314	o b2313 b4
 B	b2314	t2314
 T	t2315	o706 b2312 b2314
 B	b2315	t2315
-P	p1676	String "substT <<'r1 ~  rcrd{'z; field{'r1;'z}; 'r1} >> 0 thenMT substT <<'r2 ~  rcrd{'z; field{'r2;'z}; 'r2} >> 0 thenT autoT thenT rwh record_eta_rw 0 ttca"
+P	p1676	String "substT <<'r1 ~  rcrd{'z; field{'r1;'z}; 'r1} >> 0 thenMT substT <<'r2 ~  rcrd{'z; field{'r2;'z}; 'r2} >> 0 ta thenT rwh record_eta_rw 0 ttca"
 O	o1676	ext_rule p1676
 T	t2320	o171 b1641 b4
 B	b2321	t2320
@@ -2266,7 +2266,7 @@ T	t2358	o b2357 b4
 B	b2358	t2358
 T	t2359	o706 b2356 b2358
 B	b2359	t2359
-P	p1781	String "decide_eq_label2  <<'m>> <<'z>> thenLT [idT;idT; hypSubstT (-1) 0; idT] thenT autoT"
+P	p1781	String "decide_eq_label2  <<'m>> <<'z>> thenLT [idT;idT; hypSubstT (-1) 0; idT] ta"
 O	o1781	ext_rule p1781
 T	t1666	o232 b726 b1172 b1844
 H	h2359	u t1666

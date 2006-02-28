@@ -2006,7 +2006,7 @@ T	t1310	o1310 b1308
 B	b1311	t1310
 T	t1311	o b1311 b4
 B	b1312	t1311
-P	p201	String "assertT << 0 in Index{'bts} >> thenT autoT thenT tryT (dT 0 thenT autoT thenT arithT ttca)"
+P	p201	String "assertT << 0 in Index{'bts} >> ta thenT tryT (dT 0 thenT autoT thenT arithT ttca)"
 O	o202	ext_rule p201
 T	t1546	o378 b1507 b373
 B	b1546	t1546
@@ -2373,7 +2373,7 @@ T	t1602	o244 b551 b1349 b1601 b4
 B	b1602	t1602
 T	t1603	o b1602 b4
 B	b1603	t1603
-P	p236	String "rwh unfold_nat 6 thenT dT 6 thenT autoT thenT arithT ttca"
+P	p236	String "rwh unfold_nat 6 thenT dT 6 ta thenT arithT ttca"
 O	o236	ext_rule p236
 S	s742	t282\\ h h649 h445 h1514 h1503 h1504 h711 h1509 h626 h1524 h126 h202 h215\\ t221
 B	b743	s742
@@ -2567,7 +2567,7 @@ T	t1670	o1310 b1668
 B	b1671	t1670
 T	t1671	o b1671 b4
 B	b1672	t1671
-P	p1691	String "assertT << 0 in Index{'bts} & 1 in Index{'bts} >> thenT autoT thenT tryT (dT 0 thenT autoT thenT arithT ttca)"
+P	p1691	String "assertT << 0 in Index{'bts} & 1 in Index{'bts} >> ta thenT tryT (dT 0 thenT autoT thenT arithT ttca)"
 O	o1691	ext_rule p1691
 T	t1544	o302 b372 b447 b1543
 H	h1544	y4 t1544
@@ -2683,7 +2683,7 @@ T	t843	o b839 b843
 B	b844	t843
 T	t844	o552 b832 b844
 B	b845	t844
-P	p11	String "dT 0 thenT tryT (equalTransT << 'depth >>) thenT autoT"
+P	p11	String "dT 0 thenT tryT (equalTransT << 'depth >>) ta"
 O	o11	ext_rule p11
 T	t11	o1503 b1092
 B	b11	t11
@@ -2766,7 +2766,7 @@ T	t1713	o b1713 b4
 B	b1714	t1713
 T	t1714	o552 b865 b1714
 B	b1715	t1714
-P	p74	String "letAtT 3 <<'t=nth{'bts;1} in LambdaTerm>> thenMT letAtT 3 <<'s=nth{'bts;0} in LambdaTerm>> thenT autoT"
+P	p74	String "letAtT 3 <<'t=nth{'bts;1} in LambdaTerm>> thenMT letAtT 3 <<'s=nth{'bts;0} in LambdaTerm>> ta"
 O	o74	ext_rule p74
 S	s867	t282\\ h h649 h445 h1514 h1503 h1504 h1544 h1509 h367 h424 h1537 h1538 h1653 h1693 h1694 h1701 h1703 h2 h1719 h1720\\ P54
 B	b868	s867
@@ -2834,7 +2834,7 @@ T	t251	o b249 b1740
 B	b251	t251
 T	t252	o1536 b551 b1640 b251 b4
 B	b252	t252
-P	p1843	String "byDefT fold_neq_int thenT byDefT unfold_nat thenT dT 3 thenT autoT thenT omegaT ttca"
+P	p1843	String "byDefT fold_neq_int thenT byDefT unfold_nat thenT dT 3 ta thenT omegaT ttca"
 O	o1843	ext_rule p1843
 H	h491	y1 t433
 T	t1529	o1067 b1529 b1507
@@ -2910,7 +2910,7 @@ T	t1925	o315 b1407 b1924
 B	b1925	t1925
 T	t1926	o315 b1922 b1925
 B	b1926	t1926
-P	p2	String "assertT << 't in BTerm >> thenT autoT thenT byDefT reduceC"
+P	p2	String "assertT << 't in BTerm >> ta thenT byDefT reduceC"
 O	o3	ext_rule p2
 T	t10	o b10 b4
 B	b42	t10
@@ -3240,7 +3240,7 @@ T	t937	o552 b923 b4
 B	b937	t937
 T	t938	o25 b551 b937 b4 b4
 B	b938	t938
-P	p938	String "selT 1 autoT thenT rwh lambda_term 0 thenT rwh unfold_op 0 thenT autoT thenT byDefT fold_op"
+P	p938	String "selT 1 autoT thenT rwh lambda_term 0 thenT rwh unfold_op 0 ta thenT byDefT fold_op"
 O	o938	ext_rule p938
 S	s938	t282\\ h h923\\ t446
 B	b939	s938
@@ -3313,7 +3313,7 @@ T	t314	o b314 b68
 B	b315	t314
 T	t315	o552 b283 b315
 B	b316	t315
-P	p958	String "int_sqequal thenT dT 3 thenT byDefT reduceC  thenT rwh unfold_nat 3 thenT dT 3 thenT autoT thenT arithT ttca"
+P	p958	String "int_sqequal thenT dT 3 thenT byDefT reduceC  thenT rwh unfold_nat 3 thenT dT 3 ta thenT arithT ttca"
 O	o958	ext_rule p958
 T	t316	o552 b314 b4
 B	b317	t316
@@ -3444,7 +3444,7 @@ T	t670	o315 b2004 b602
 B	b688	t670
 T	t688	o315 b1922 b688
 B	b689	t688
-P	p689	String "assertT << 't in BTerm & 's in BTerm >> thenT autoT thenT byDefT reduceC"
+P	p689	String "assertT << 't in BTerm & 's in BTerm >> ta thenT byDefT reduceC"
 O	o689	ext_rule p689
 T	t689	o b285 b4
 B	b690	t689
@@ -4200,7 +4200,7 @@ T	t1169	o281 b1168 b2011
 B	b1169	t1169
 T	t1170	o280 b1169 b4
 B	b1170	t1170
-P	p1172	String "rwh unfold_nat 4 thenT dT 4 thenT autoT thenT omegaT ttca"
+P	p1172	String "rwh unfold_nat 4 thenT dT 4 ta thenT omegaT ttca"
 O	o1172	ext_rule p1172
 T	t1173	o552 b1170 b4
 B	b1173	t1173

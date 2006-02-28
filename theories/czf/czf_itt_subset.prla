@@ -141,7 +141,7 @@ O	o558	type
 NSummary!interactive	interactive	interactive Summary
 O	o562	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p562	String "rwh unfold_subset 0 thenT autoT"
+P	p562	String "rwh unfold_subset 0 ta"
 O	o563	ext_rule p562
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o564	status_incomplete
@@ -178,7 +178,7 @@ P	p624	String "assertT << 's1 subset 's2 >> thenAT trivialT"
 O	o624	ext_rule p624
 P	p635	String "rwh unfold_subset 4"
 O	o635	ext_rule p635
-P	p641	String "withT << 's >> (dT 4) thenT autoT"
+P	p641	String "withT << 's >> (dT 4) ta"
 O	o641	ext_rule p641
 O	o642	tactic_arg p546
 NCzf_itt_eq	Czf_itt_eq	Czf_itt_eq NIL
@@ -989,7 +989,7 @@ P	p1809	Var z
 O	o1809	var p1809
 T	t1809	o1809
 H	h1826	z t582
-P	p1862	String "funSetT 2 thenT autoT"
+P	p1862	String "funSetT 2 ta"
 O	o1862	ext_rule p1862
 NSummary!id	id	id Summary
 P	p1	Number 207988866

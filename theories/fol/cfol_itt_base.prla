@@ -198,7 +198,7 @@ O	o657	meta_theorem
 NSummary!interactive	interactive	interactive Summary
 O	o661	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p661	String "rwh unfold_false 0 thenT autoT"
+P	p661	String "rwh unfold_false 0 ta"
 O	o662	ext_rule p661
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o663	status_incomplete
@@ -213,7 +213,7 @@ NSummary!msequent	msequent	msequent Summary
 O	o666	msequent
 P	p675	String true_univ
 O	o675	rule p675
-P	p676	String "rwh unfold_true 0 thenT autoT"
+P	p676	String "rwh unfold_true 0 ta"
 O	o676	ext_rule p676
 P	p684	String type_univ
 O	o684	rule p684
@@ -302,15 +302,15 @@ O	o861	rule p861
 P	p871	String true_concl_elim
 O	o871	rule p871
 O	o872	meta_labeled p664
-P	p879	String "substT << 'P = \"true\" in univ[1:l] >> 0 thenT autoT"
+P	p879	String "substT << 'P = \"true\" in univ[1:l] >> 0 ta"
 O	o879	ext_rule p879
 P	p889	String true_concl_intro
 O	o889	rule p889
 P	p894	String "assumT 1 thenT assumT 2"
 O	o894	ext_rule p894
-P	p908	String "rwh unfold_type 2 thenT dT 2 thenT dT 2 thenT autoT"
+P	p908	String "rwh unfold_type 2 thenT dT 2 thenT dT 2 ta"
 O	o908	ext_rule p908
-P	p925	String "hypSubstT 2 3 thenT autoT"
+P	p925	String "hypSubstT 2 3 ta"
 O	o925	ext_rule p925
 P	p1413	Number 3226
 NOcaml!let	let	let Ocaml
@@ -371,13 +371,13 @@ P	p1011	Number 3279
 P	p1107	String true_pred
 O	o1107	rule p1107
 T	t1528	o541 b551 b531 b531
-P	p1108	String "rwh unfold_pred 0 thenT autoT"
+P	p1108	String "rwh unfold_pred 0 ta"
 O	o1108	ext_rule p1108
 O	o1110	tactic_arg p685
 NItt_equal!type	type1110	type Itt_equal
 O	o1111	type1110
 T	t1111	o1111 b1034
-P	p1120	String "rwh unfold_type 0 thenT autoT"
+P	p1120	String "rwh unfold_type 0 ta"
 O	o1120	ext_rule p1120
 P	p1061	Number 3458
 P	p1129	String false_pred

@@ -3595,7 +3595,7 @@ T	t1775	o832 b1774 b1717
 B	b1775	t1775
 T	t1776	o1189 b1775 b6
 B	b1776	t1776
-P	p1779	String "rw reduceVBindC 0 thenT autoT"
+P	p1779	String "rw reduceVBindC 0 ta"
 O	o1779	ext_rule p1779
 H	h1789	x t1771
 S	s1789	t833\\ h833 h1765 h1766 h1769 h1789\\ t1773

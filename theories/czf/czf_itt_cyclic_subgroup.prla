@@ -863,7 +863,7 @@ B	b1447	t1447
 NSummary!interactive	interactive	interactive Summary
 O	o1453	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1453	String "rwh unfold_fun_prop 0 thenT autoT"
+P	p1453	String "rwh unfold_fun_prop 0 ta"
 O	o1454	ext_rule p1453
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1455	status_incomplete
@@ -895,7 +895,7 @@ B	b1466	t1466
 P	p1479	String true
 P	p1505	String "withT << 'y >> (dT 0) ttca"
 O	o1505	ext_rule p1505
-P	p1516	String "setSubstT << equal{power{'g; 'a; 'y}; 's1} >> 0 thenT autoT thenT rwh unfold_equal 4 thenT eqSetSymT ttca"
+P	p1516	String "setSubstT << equal{power{'g; 'a; 'y}; 's1} >> 0 ta thenT rwh unfold_equal 4 thenT eqSetSymT ttca"
 O	o1516	ext_rule p1516
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p1526	String []
@@ -906,7 +906,7 @@ P	p1532	String exst_power_res
 O	o1532	rule p1532
 NCzf_itt_sep!restricted	restricted	restricted Czf_itt_sep
 O	o1534	restricted
-P	p1540	String "rwh unfold_restricted 0 thenT autoT thenT rwh fold_isset 0 ttca"
+P	p1540	String "rwh unfold_restricted 0 ta thenT rwh fold_isset 0 ttca"
 O	o1540	ext_rule p1540
 P	p1557	String Typehood
 O	o1558	comment_string p1557
@@ -996,7 +996,7 @@ P	p1623	String cyc_subg_wf
 O	o1623	rule p1623
 NItt_equal!type	type	type Itt_equal
 O	o1625	type
-P	p1630	String "rwh unfold_cyc_subg 0 thenT autoT"
+P	p1630	String "rwh unfold_cyc_subg 0 ta"
 O	o1630	ext_rule p1630
 P	p1646	String Introduction
 O	o1646	comment_string p1646
@@ -3956,7 +3956,7 @@ T	t3358	o1436 b3186 b3357
 B	b3358	t3358
 T	t3359	o1436 b3079 b3358
 B	b3359	t3359
-P	p1848	String "assumT 7 thenT rwh unfold_cyc_subg 2 thenT autoT"
+P	p1848	String "assumT 7 thenT rwh unfold_cyc_subg 2 ta"
 O	o1848	ext_rule p1848
 T	t3360	o b3315 b8
 B	b3360	t3360
@@ -4015,7 +4015,7 @@ T	t3383	o b3382 b8
 B	b3383	t3383
 T	t3384	o1456 b3368 b3383
 B	b3384	t3384
-P	p1907	String "setSubstT << equal{car{'s}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}} >> 8 thenT autoT"
+P	p1907	String "setSubstT << equal{car{'s}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}} >> 8 ta"
 O	o1907	ext_rule p1907
 H	h3384	_1010 t3298
 H	h3385	"" t3296

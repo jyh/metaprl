@@ -3850,7 +3850,7 @@ T	t1207	o980 b1204 b1207
 B	b1208	t1207
 T	t1208	o980 b1202 b1208
 B	b1209	t1208
-P	p1211	String "rwh unfold_sqsimple 0 thenT autoT"
+P	p1211	String "rwh unfold_sqsimple 0 ta"
 O	o1211	ext_rule p1211
 T	t1211	o b1203 b132
 B	b1212	t1211
@@ -3958,7 +3958,7 @@ T	t916	o914 b888 b914 b915
 B	b917	t916
 T	t917	o857 b1193 b916 b917
 H	h922	x t917
-P	p929	String "hypSubstT 4 0 thenT autoT"
+P	p929	String "hypSubstT 4 0 ta"
 O	o929	ext_rule p929
 P	p932	String "rw reduceC 5"
 O	o932	ext_rule p932

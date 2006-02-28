@@ -230,7 +230,7 @@ O	o700	rule p700
 NSummary!meta_function	meta_function	meta_function Summary
 O	o701	meta_function
 O	o702	meta_labeled p623
-P	p708	String "rwh unfold_or 0 thenT selT 1 (dT 0) thenT autoT"
+P	p708	String "rwh unfold_or 0 thenT selT 1 (dT 0) ta"
 O	o708	ext_rule p708
 O	o601	resource p221
 P	p603	String simp_typeinf_resource_info
@@ -408,7 +408,7 @@ T	t1186	o654 b1186
 B	b1187	t1186
 T	t1187	o702 b1187
 B	b1188	t1187
-P	p738	String "rwh unfold_or 0 thenT selT 2 (dT 0) thenT autoT"
+P	p738	String "rwh unfold_or 0 thenT selT 2 (dT 0) ta"
 O	o738	ext_rule p738
 T	t1190	o b1186 b4
 B	b1191	t1190

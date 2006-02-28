@@ -934,7 +934,7 @@ O	o1659	isset
 NSummary!interactive	interactive	interactive Summary
 O	o1668	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1668	String "rwh unfold_lcoset 0 thenT autoT"
+P	p1668	String "rwh unfold_lcoset 0 ta"
 O	o1669	ext_rule p1668
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1670	status_incomplete
@@ -955,7 +955,7 @@ T	t1684	o1684
 B	b1684	t1684
 P	p1692	String rcoset_isset
 O	o1692	rule p1692
-P	p1696	String "rwh unfold_rcoset 0 thenT autoT"
+P	p1696	String "rwh unfold_rcoset 0 ta"
 O	o1696	ext_rule p1696
 P	p1710	String Introduction
 O	o1710	comment_string p1710
@@ -1263,7 +1263,7 @@ T	t3240	o1651 b3054 b3240
 B	b3241	t3240
 T	t3241	o1651 b3051 b3241
 B	b3242	t3241
-P	p1865	String "rwh unfold_lcoset 0 thenT autoT thenT withT << 'z >> (dT 0) thenT autoT"
+P	p1865	String "rwh unfold_lcoset 0 ta thenT withT << 'z >> (dT 0) thenT autoT"
 O	o1865	ext_rule p1865
 T	t3242	o b3229 b9
 B	b3243	t3242
@@ -1321,7 +1321,7 @@ T	t3278	o1651 b3054 b3277
 B	b3278	t3278
 T	t3279	o1651 b3051 b3278
 B	b3279	t3279
-P	p1903	String "rwh unfold_rcoset 0 thenT autoT thenT withT << 'z >> (dT 0) thenT autoT"
+P	p1903	String "rwh unfold_rcoset 0 ta thenT withT << 'z >> (dT 0) thenT autoT"
 O	o1903	ext_rule p1903
 T	t3280	o b3266 b9
 B	b3280	t3280
@@ -1457,7 +1457,7 @@ T	t3378	o1651 b3359 b3378
 B	b3379	t3378
 T	t3379	o1651 b3357 b3379
 B	b3380	t3379
-P	p2044	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 4 thenT rwh unfold_lcoset 4 thenT autoT"
+P	p2044	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 4 thenT rwh unfold_lcoset 4 ta"
 O	o2044	ext_rule p2044
 NSummary!id	id	id Summary
 P	p3	Number 638325345
@@ -4411,7 +4411,7 @@ T	t2295	o b2295 b9
 B	b2296	t2295
 T	t2296	o1671 b2290 b2296
 B	b2297	t2296
-P	p2101	String "assertT << (mem{'y; car{'g}} & exst z: set. (mem{'z; car{'h}} & eq{'y; op{'g; 'a; 'z}})) >> thenT autoT"
+P	p2101	String "assertT << (mem{'y; car{'g}} & exst z: set. (mem{'z; car{'h}} & eq{'y; op{'g; 'a; 'z}})) >> ta"
 O	o2101	ext_rule p2101
 H	h3395	_1010 t3395
 H	h3396	_1010 t3396
@@ -4584,7 +4584,7 @@ T	t3500	o1651 b3482 b3500
 B	b3501	t3500
 T	t3501	o1651 b3480 b3501
 B	b3502	t3501
-P	p2164	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 4 thenT rwh unfold_rcoset 4 thenT autoT"
+P	p2164	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 4 thenT rwh unfold_rcoset 4 ta"
 O	o2164	ext_rule p2164
 T	t2331	o b3492 b9
 B	b2331	t2331
@@ -4624,7 +4624,7 @@ T	t2343	o b2343 b9
 B	b2344	t2343
 T	t2344	o1671 b2340 b2344
 B	b2345	t2344
-P	p2203	String "assertT << (mem{'y; car{'g}} & exst z: set. (mem{'z; car{'h}} & eq{'y; op{'g; 'z; 'a}})) >> thenT autoT"
+P	p2203	String "assertT << (mem{'y; car{'g}} & exst z: set. (mem{'z; car{'h}} & eq{'y; op{'g; 'z; 'a}})) >> ta"
 O	o2203	ext_rule p2203
 H	h3516	_1010 t3516
 S	s3516	tbrarg\\ h3048 h3479 h3356 h3516 h3396 h3397 h3398 h3407\\ C
@@ -4876,7 +4876,7 @@ T	t3647	o1651 b3054 b3646
 B	b3647	t3647
 T	t3648	o1651 b3051 b3647
 B	b3648	t3648
-P	p2315	String "rwh unfold_lcoset 0 thenT autoT thenT dT 3 ttca"
+P	p2315	String "rwh unfold_lcoset 0 ta thenT dT 3 ttca"
 O	o2315	ext_rule p2315
 T	t3649	o b3223 b9
 B	b3649	t3649
@@ -4935,7 +4935,7 @@ T	t3671	o1651 b3054 b3670
 B	b3671	t3671
 T	t3672	o1651 b3051 b3671
 B	b3672	t3672
-P	p2340	String "rwh unfold_rcoset 0 thenT autoT thenT dT 3 ttca"
+P	p2340	String "rwh unfold_rcoset 0 ta thenT dT 3 ttca"
 O	o2340	ext_rule p2340
 T	t3673	o1673 b3666 b3653
 B	b3673	t3673

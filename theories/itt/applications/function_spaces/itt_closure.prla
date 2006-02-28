@@ -3118,7 +3118,7 @@ T	t1539	o1314 b1539
 B	b1540	t1539
 T	t1540	o1313 b1532 b1540
 B	b1541	t1540
-P	p1541	String "genAssumT [1] thenT dT 2 ttca thenT byDefsT [unfold_app; reduceC] thenT reduceT thenT autoT"
+P	p1541	String "genAssumT [1] thenT dT 2 ttca thenT byDefsT [unfold_app; reduceC] thenT reduceT ta"
 O	o1541	ext_rule p1541
 T	t1541	o b1531 b17
 B	b1542	t1541
@@ -4432,7 +4432,7 @@ T	t2423	o b2420 b2423
 B	b2424	t2423
 T	t2424	o1325 b2416 b2424
 B	b2425	t2424
-P	p1828	String "selT 1 (dT 8) thenT autoT"
+P	p1828	String "selT 1 (dT 8) ta"
 O	o1828	ext_rule p1828
 T	t2425	o1325 b2420 b17
 B	b2426	t2425
@@ -4449,7 +4449,7 @@ T	t2427	o1327 b1833 b2382
 B	b2428	t2427
 T	t2428	o1326 b2428 b17
 B	b2429	t2428
-P	p1837	String "autoT thenT (tryT ( selT 1 (dT 0))) thenT autoT"
+P	p1837	String "autoT thenT (tryT ( selT 1 (dT 0))) ta"
 O	o1837	ext_rule p1837
 H	h2431	x2 t1815
 T	t2431	o71 b1330 b1341 b1341
@@ -5104,7 +5104,7 @@ O	o3203	location p3202 p3203
 T	t1966	o71 b1947 b1965 b1965
 S	s1966	t1315\\ h\\ t1966
 B	b1966	s1966
-P	p2469	String "repeatT (dT 0) thenT tryT fnExtenVoidT thenT autoT"
+P	p2469	String "repeatT (dT 0) thenT tryT fnExtenVoidT ta"
 O	o2469	ext_rule p2469
 NItt_void	Itt_void	Itt_void NIL
 NItt_void!void	void	void Itt_void

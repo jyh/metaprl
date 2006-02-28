@@ -1821,7 +1821,7 @@ T	t2168	o1675 b2167
 B	b2168	t2168
 T	t2172	o1673 b2166 b2168
 B	b2172	t2172
-P	p3486	String "assertEqT <<'x1='x2 in bisect{'A;y.'B['y]}>> thenAT autoT"
+P	p3486	String "assertEqT <<'x1='x2 in bisect{'A;y.'B['y]}>> taa"
 O	o3486	ext_rule p3486
 T	t2173	o b2164 b13
 B	b2173	t2173
@@ -5177,7 +5177,7 @@ T	t5127	o b5126 b13
 B	b5127	t5127
 T	t5128	o2069 b5125 b5127
 B	b5128	t5128
-P	p3497	String "withT <<bind{a,b.'a IN 'A}>> (dT 2) thenT autoT"
+P	p3497	String "withT <<bind{a,b.'a IN 'A}>> (dT 2) ta"
 O	o3497	ext_rule p3497
 T	t5129	o2069 b5126 b13
 B	b5129	t5129
@@ -5202,7 +5202,7 @@ T	t2229	o1675 b2229
 B	b2230	t2229
 T	t2230	o1673 b2166 b2230
 B	b2231	t2230
-P	p257	String "doNotThinT (assertEqT <<'x1='x2 in bisect{'A;y.'B['y]}>>) thenAT autoT"
+P	p257	String "doNotThinT (assertEqT <<'x1='x2 in bisect{'A;y.'B['y]}>>) taa"
 O	o257	ext_rule p257
 T	t2231	o2071 b2229 b2173
 B	b2232	t2231
@@ -5224,7 +5224,7 @@ T	t5139	o b5139 b13
 B	b5140	t5139
 T	t5140	o2069 b5136 b5140
 B	b5141	t5140
-P	p3529	String "withT <<bind{a,b.'b IN 'B['a]}>> (dT 2) thenT autoT"
+P	p3529	String "withT <<bind{a,b.'b IN 'B['a]}>> (dT 2) ta"
 O	o3529	ext_rule p3529
 H	h2184	_1010 t2184
 H	h2182	_1010 t2182
@@ -5376,9 +5376,9 @@ NOcaml!patt_apply_arg	patt_apply_arg	patt_apply_arg Ocaml
 NOcaml!patt_apply_end	patt_apply_end	patt_apply_end Ocaml
 NOcaml!int	int	int Ocaml
 P	p1336	Number -3
-P	p4	String "doNotThinT (withT <<bind{a,b.'C['a]}>> (dT 2)) thenT autoT"
+P	p4	String "doNotThinT (withT <<bind{a,b.'C['a]}>> (dT 2)) ta"
 O	o16	ext_rule p4
-P	p307	String "doNotThinT (withT <<bind{a,b.'C['b]}>> (dT 2)) thenT autoT"
+P	p307	String "doNotThinT (withT <<bind{a,b.'C['b]}>> (dT 2)) ta"
 O	o323	ext_rule p307
 O	o4206	lid p4054
 T	t4206	o4206
@@ -5423,11 +5423,11 @@ NItt_tsquash	Itt_tsquash	Itt_tsquash NIL
 NItt_tsquash!tsquash	tsquash	tsquash Itt_tsquash
 O	o4385	tsquash
 NItt_logic	Itt_logic	Itt_logic NIL
-P	p1277	String "withT <<bind{a,b. \"type\"{'C['a;'b]}}>>(dT 3) thenT autoT"
+P	p1277	String "withT <<bind{a,b. \"type\"{'C['a;'b]}}>>(dT 3) ta"
 O	o1277	ext_rule p1277
 P	p1284	String "withT <<bind{a,b. 'b IN 'B['a]}>>(dT 2)"
 O	o1284	ext_rule p1284
-P	p1340	String "selT 1 (dT 3) thenT autoT"
+P	p1340	String "selT 1 (dT 3) ta"
 O	o1340	ext_rule p1340
 P	p1346	String "withT <<bind{a,bc. 'bc IN 'C['a;'bc]}>>(dT 2)"
 O	o1346	ext_rule p1346
@@ -5435,11 +5435,11 @@ P	p1347	Var bc
 O	o1347	var p1347
 T	t1347	o1347
 B	b1347	t1347
-P	p1394	String "withT <<bind{b,c. 'c IN 'C['a;'b]}>>(dT 3) thenT autoT"
+P	p1394	String "withT <<bind{b,c. 'c IN 'C['a;'b]}>>(dT 3) ta"
 O	o1394	ext_rule p1394
-P	p1578	String "withT <<bind{a,b. \"type\"{'C['a;'b]}}>>(dT 2) thenT autoT"
+P	p1578	String "withT <<bind{a,b. \"type\"{'C['a;'b]}}>>(dT 2) ta"
 O	o1578	ext_rule p1578
-P	p1580	String "selT 1 (dT 2) thenT selT 1 (dT 2) thenT autoT"
+P	p1580	String "selT 1 (dT 2) thenT selT 1 (dT 2) ta"
 O	o1580	ext_rule p1580
 P	p1586	String "moveToConclT 3"
 O	o1586	ext_rule p1586
@@ -7326,7 +7326,7 @@ S	s3777	tbrarg\\ h1497 h3705 h3696\\ t3777
 B	b3778	s3777
 T	t3778	o2071 b3778 b3369
 B	b3779	t3778
-P	p2372	String "withT <<bind{a,b. 'b IN 'B['a]}>>(dT 2) thenT autoT"
+P	p2372	String "withT <<bind{a,b. 'b IN 'B['a]}>>(dT 2) ta"
 O	o2373	ext_rule p2372
 T	t5850	o2070 b3779 b13
 B	b5851	t5850
@@ -7338,7 +7338,7 @@ T	t5853	o b5853 b13
 B	b5854	t5853
 T	t5854	o2268 b2068 b5850 b5854 b13
 B	b5855	t5854
-P	p2379	String "withT <<bind{ab,c. 'c IN 'C['ab;'ab]}>>(dT 2) thenT autoT"
+P	p2379	String "withT <<bind{ab,c. 'c IN 'C['ab;'ab]}>>(dT 2) ta"
 O	o2379	ext_rule p2379
 T	t5855	o2069 b5820 b13
 B	b5856	t5855
@@ -7601,7 +7601,7 @@ T	t2750	o b5953 b5956
 B	b2750	t2750
 T	t2751	o2069 b5952 b2750
 B	b2751	t2751
-P	p4632	String "selT 1 (dT 2) thenT dT 3 thenT autoT"
+P	p4632	String "selT 1 (dT 2) thenT dT 3 ta"
 O	o4632	ext_rule p4632
 T	t5960	o2069 b5953 b13
 B	b5960	t5960

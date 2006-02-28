@@ -837,13 +837,13 @@ P	p1276	String singleton_intro
 O	o1276	rule p1276
 P	p1285	String wf
 O	o1285	tactic_arg p1285
-P	p1323	String "equalRefT <<'a>> thenT equalSymT thenT autoT"
+P	p1323	String "equalRefT <<'a>> thenT equalSymT ta"
 O	o1323	ext_rule p1323
-P	p1327	String "equalRefT <<'b>> thenT autoT"
+P	p1327	String "equalRefT <<'b>> ta"
 O	o1327	ext_rule p1327
 P	p1343	String singleton_elim
 O	o1343	rule p1343
-P	p1350	String "byDefT singleton thenT dT 2 thenT dT 3 thenT autoT"
+P	p1350	String "byDefT singleton thenT dT 2 thenT dT 3 ta"
 O	o1350	ext_rule p1350
 P	p1236	String singletonEquality
 O	o1236	rule p1236

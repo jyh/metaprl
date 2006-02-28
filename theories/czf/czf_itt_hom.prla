@@ -1165,7 +1165,7 @@ O	o1990	type
 NSummary!interactive	interactive	interactive Summary
 O	o1995	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1995	String "rwh unfold_hom 0 thenT autoT"
+P	p1995	String "rwh unfold_hom 0 ta"
 O	o1996	ext_rule p1995
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1997	status_incomplete
@@ -5073,7 +5073,7 @@ T	t6800	o b6794 b6800
 B	b6801	t6800
 T	t6801	o1998 b6788 b6801
 B	b6802	t6801
-P	p2074	String "rwh unfold_member 0 thenT autoT thenT rwh fold_isset 0 ttca"
+P	p2074	String "rwh unfold_member 0 ta thenT rwh fold_isset 0 ttca"
 O	o2074	ext_rule p2074
 T	t6802	o1998 b6794 b8
 B	b6803	t6802
@@ -5589,7 +5589,7 @@ T	t6996	o1978 b2718 b6995
 B	b6996	t6996
 T	t6997	o1978 b2710 b6996
 B	b6997	t6997
-P	p1792	String "rwh unfold_fun_prop 0 thenT rwh unfold_hom 0 thenT autoT thenT (completeT (funSetT 2 ttca) orelseT tryT (completeT (funSetT 3 ttca)))"
+P	p1792	String "rwh unfold_fun_prop 0 thenT rwh unfold_hom 0 ta thenT (completeT (funSetT 2 ttca) orelseT tryT (completeT (funSetT 3 ttca)))"
 O	o1792	ext_rule p1792
 T	t6998	o b6964 b8
 B	b6998	t6998
@@ -5710,7 +5710,7 @@ T	t7026	o b7008 b7026
 B	b7027	t7026
 T	t7027	o1998 b7005 b7027
 B	b7028	t7027
-P	p2624	String "rwh unfold_member 0 thenT autoT thenT rwh fold_isset 0 ttca thenT funSetT 2 ttca"
+P	p2624	String "rwh unfold_member 0 ta thenT rwh fold_isset 0 ttca thenT funSetT 2 ttca"
 O	o2624	ext_rule p2624
 T	t7028	o1998 b7008 b8
 B	b7029	t7028
@@ -5870,7 +5870,7 @@ T	t7068	o b7068 b8
 B	b7069	t7068
 T	t7069	o2759 b6783 b7064 b7069 b8
 B	b7070	t7069
-P	p2810	String "assertT << all x: set. all y: set. isset{'f['x; 'y]} >> thenT autoT"
+P	p2810	String "assertT << all x: set. all y: set. isset{'f['x; 'y]} >> ta"
 O	o2810	ext_rule p2810
 S	s3177	tbrarg\\ h2698 h2358 h2359 h5992 h2743 h2744 h3043 h3044 h3119 h2005 h2042 h3120 h3121\\ t2988
 B	b3178	s3177
@@ -5983,7 +5983,7 @@ T	t7108	o b7108 b8
 B	b7109	t7108
 T	t7109	o1998 b7102 b7109
 B	b7110	t7109
-P	p2910	String "setSubstT << equal{'f['s1; 'a]; 'f['s2; 'a]} >> 18 thenT autoT"
+P	p2910	String "setSubstT << equal{'f['s1; 'a]; 'f['s2; 'a]} >> 18 ta"
 O	o2910	ext_rule p2910
 H	h3690	_1010 t2956
 S	s7110	tbrarg\\ h2698 h2358 h2359 h5992 h2743 h2744 h3043 h3044 h3119 h2005 h2042 h3120 h3121 h7089 h3593 h3594 h3595 h3690\\ t2988
@@ -6038,7 +6038,7 @@ T	t7129	o1998 b7129 b8
 B	b7130	t7129
 T	t7130	o2941 b6783 b7130 b8 b8
 B	b7131	t7130
-P	p2943	String "setSubstT << equal{'f['s1; 'b]; 'f['s2; 'b]} >> 19 thenT autoT"
+P	p2943	String "setSubstT << equal{'f['s1; 'b]; 'f['s2; 'b]} >> 19 ta"
 O	o2943	ext_rule p2943
 H	h3799	_1010 t3799
 S	s7131	tbrarg\\ h2698 h2358 h2359 h5992 h2743 h2744 h3043 h3044 h3119 h2005 h2042 h3120 h3121 h7089 h3593 h3594 h3595 h3690 h3799\\ t2988
@@ -6087,7 +6087,7 @@ T	t7150	o1998 b7150 b8
 B	b7151	t7150
 T	t7151	o2941 b6783 b7151 b8 b8
 B	b7152	t7151
-P	p2975	String "setSubstT << equal{'f['s1; op{'g1; 'a; 'b}]; 'f['s2; op{'g1; 'a; 'b}]} >> 20 thenT autoT"
+P	p2975	String "setSubstT << equal{'f['s1; op{'g1; 'a; 'b}]; 'f['s2; op{'g1; 'a; 'b}]} >> 20 ta"
 O	o2975	ext_rule p2975
 H	h3831	_1010 t3831
 S	s7152	tbrarg\\ h2698 h2358 h2359 h5992 h2743 h2744 h3043 h3044 h3119 h2005 h2042 h3120 h3121 h7089 h3593 h3594 h3595 h3690 h3799 h3831\\ t2988
@@ -6128,7 +6128,7 @@ T	t7167	o1998 b7167 b8
 B	b7168	t7167
 T	t7168	o2989 b6783 b7168 b8 b8
 B	b7169	t7168
-P	p2991	String "setSubstT << equal{'s1; 's2} >> 0 thenT autoT"
+P	p2991	String "setSubstT << equal{'s1; 's2} >> 0 ta"
 O	o2991	ext_rule p2991
 S	s7169	tbrarg\\ h2698 h2358 h2359 h5992 h2743 h2744 h3043 h3044 h3119 h2005 h2042 h3120 h3121 h7089 h3593 h3594 h3595 h3690 h3799 h3831\\ t3869
 B	b7170	s7169
@@ -6477,7 +6477,7 @@ T	t7292	o1978 b2718 b7291
 B	b7292	t7292
 T	t7293	o1978 b2710 b7292
 B	b7293	t7293
-P	p3173	String "assumT 5 thenT autoT"
+P	p3173	String "assumT 5 ta"
 O	o3173	ext_rule p3173
 T	t7294	o b7287 b8
 B	b7294	t7294
@@ -6564,7 +6564,7 @@ T	t7330	o1998 b7330 b8
 B	b7331	t7330
 T	t7331	o3209 b6783 b7331 b8 b8
 B	b7332	t7331
-P	p3211	String "withT << 'x >> (dT 2) ttca thenT dT 4 ttca thenT setSubstT << equal{'f['x]; id{'g2}} >> 0 thenT autoT"
+P	p3211	String "withT << 'x >> (dT 2) ttca thenT dT 4 ttca thenT setSubstT << equal{'f['x]; id{'g2}} >> 0 ta"
 O	o3211	ext_rule p3211
 T	t7332	o1822 b6773 b2745
 S	s7332	tbrarg\\ h2698 h7321 h1986 h7322\\ t7332
@@ -6577,7 +6577,7 @@ T	t7335	o1998 b7335 b8
 B	b7336	t7335
 T	t7336	o3211 b6783 b7336 b8 b8
 B	b7337	t7336
-P	p3213	String "instHypT [<< 'c >>] 2 ttca thenT dT 8 ttca thenT instHypT [<< 'd >>] 2 ttca thenT dT 9 ttca thenT rwh unfold_equal 8 thenT rwh unfold_equal 9 thenT autoT"
+P	p3213	String "instHypT [<< 'c >>] 2 ttca thenT dT 8 ttca thenT instHypT [<< 'd >>] 2 ttca thenT dT 9 ttca thenT rwh unfold_equal 8 thenT rwh unfold_equal 9 ta"
 O	o3213	ext_rule p3213
 H	h2887	_1010 t2866
 H	h2888	_1010 t2867
@@ -6683,7 +6683,7 @@ T	t7376	o b7376 b8
 B	b7377	t7376
 T	t7377	o1998 b7372 b7377
 B	b7378	t7377
-P	p3351	String "rwh unfold_equal 7 thenT rwh unfold_equal 8 thenT rwh unfold_equal 9 thenT autoT"
+P	p3351	String "rwh unfold_equal 7 thenT rwh unfold_equal 8 thenT rwh unfold_equal 9 ta"
 O	o3351	ext_rule p3351
 H	h4244	_1010 t4244
 S	s7378	tbrarg\\ h2698 h7321 h2253 h2254 h2889 h2890 h4190 h4191 h4244\\ t2875
@@ -6715,7 +6715,7 @@ T	t7389	o b7389 b8
 B	b7390	t7389
 T	t7390	o1998 b7381 b7390
 B	b7391	t7390
-P	p3403	String "eqSetSymT ttca thenT setSubstT << equal{'f['e]; id{'g2}} >> 0 thenT autoT"
+P	p3403	String "eqSetSymT ttca thenT setSubstT << equal{'f['e]; id{'g2}} >> 0 ta"
 O	o3403	ext_rule p3403
 H	h4278	_1010 t4278
 H	h4279	_1010 t4279
@@ -6751,7 +6751,7 @@ T	t7404	o b7404 b8
 B	b7405	t7404
 T	t7405	o1998 b7394 b7405
 B	b7406	t7405
-P	p3414	String "setSubstT << equal{'f['g]; id{'g2}} >> 0 thenT autoT"
+P	p3414	String "setSubstT << equal{'f['g]; id{'g2}} >> 0 ta"
 O	o3414	ext_rule p3414
 S	s7406	tbrarg\\ h2698 h7321 h2253 h2254 h2889 h2890 h4278 h4075 h4279 h4280 h4075 h4281 h4282 h4075 h4283\\ t4347
 B	b7407	s7406
@@ -6772,7 +6772,7 @@ T	t7412	o b7412 b8
 B	b7416	t7412
 T	t7416	o1998 b7409 b7416
 B	b7417	t7416
-P	p3421	String "setSubstT << equal{'f[op{'g1; 'e; 'g}]; id{'g2}} >> 0 thenT autoT"
+P	p3421	String "setSubstT << equal{'f[op{'g1; 'e; 'g}]; id{'g2}} >> 0 ta"
 O	o3421	ext_rule p3421
 S	s7417	tbrarg\\ h2698 h7321 h2253 h2254 h2889 h2890 h4278 h4075 h4279 h4280 h4075 h4281 h4282 h4075 h4283\\ t4358
 B	b7418	s7417
@@ -7029,7 +7029,7 @@ T	t7507	o1978 b2718 b7507
 B	b7508	t7507
 T	t7508	o1978 b2710 b7508
 B	b7509	t7508
-P	p3542	String "assumT 3 ttca thenT assumT 4 thenT assumT 5 thenT rwh unfold_hom 3 thenT rwh unfold_abel 4 thenT autoT"
+P	p3542	String "assumT 3 ttca thenT assumT 4 thenT assumT 5 thenT rwh unfold_hom 3 thenT rwh unfold_abel 4 ta"
 O	o3542	ext_rule p3542
 T	t4434	o b4425 b8
 B	b4435	t4434
@@ -7088,7 +7088,7 @@ T	t7528	o b7528 b8
 B	b7529	t7528
 T	t7529	o1998 b7515 b7529
 B	b7530	t7529
-P	p3613	String "assertT << all u: set. (mem{'u; car{'g1}} => isset{'f['u]}) >> thenT autoT"
+P	p3613	String "assertT << all u: set. (mem{'u; car{'g1}} => isset{'f['u]}) >> ta"
 O	o3613	ext_rule p3613
 H	h7530	_1010 t7518
 H	h2804	_1010 t2754
@@ -7164,7 +7164,7 @@ T	t7590	o1998 b7590 b8
 B	b7591	t7590
 T	t7591	o3637 b6783 b7591 b8 b8
 B	b7592	t7591
-P	p3639	String "instHypT [<< 'a >>] 2 ttca thenT dT 15 ttca thenT dT 15 thenT autoT"
+P	p3639	String "instHypT [<< 'a >>] 2 ttca thenT dT 15 ttca thenT dT 15 ta"
 O	o3639	ext_rule p3639
 H	h7592	_1010 t7548
 S	s7592	tbrarg\\ h2698 h7530 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h2042 h4451 h4452 h7592\\ t4457
@@ -7187,7 +7187,7 @@ T	t7599	o b7599 b8
 B	b7600	t7599
 T	t7600	o1998 b7595 b7600
 B	b7601	t7600
-P	p3671	String "instHypT [<< 'b >>] 2 ttca thenT dT 18 ttca thenT dT 18 thenT autoT"
+P	p3671	String "instHypT [<< 'b >>] 2 ttca thenT dT 18 ttca thenT dT 18 ta"
 O	o3671	ext_rule p3671
 H	h3639	y_6 t1820
 P	p3640	Var y_6
@@ -7220,7 +7220,7 @@ T	t7608	o b7608 b8
 B	b7609	t7608
 T	t7609	o1998 b7604 b7609
 B	b7610	t7609
-P	p3703	String "setSubstT << equal{op{'g2; 'a; 'b}; op{'g2; 'f['y_6]; 'f['y_8]}} >> 0 thenT autoT thenT setSubstT << equal{'a; 'f['y_6]} >> 0 ttca thenT setSubstT << equal{'b; 'f['y_8]} >> 0 ttca"
+P	p3703	String "setSubstT << equal{op{'g2; 'a; 'b}; op{'g2; 'f['y_6]; 'f['y_8]}} >> 0 ta thenT setSubstT << equal{'a; 'f['y_6]} >> 0 ttca thenT setSubstT << equal{'b; 'f['y_8]} >> 0 ttca"
 O	o3703	ext_rule p3703
 H	h3671	y_8 t1820
 P	p3672	Var y_8
@@ -7256,7 +7256,7 @@ T	t7616	o b7616 b8
 B	b7617	t7616
 T	t7617	o1998 b7613 b7617
 B	b7618	t7617
-P	p3720	String "instHypT [<< 'y_6 >>; << 'y_8 >>] 7 ttca thenT dT 21 ttca thenT dT 21 thenT autoT"
+P	p3720	String "instHypT [<< 'y_6 >>; << 'y_8 >>] 7 ttca thenT dT 21 ttca thenT dT 21 ta"
 O	o3720	ext_rule p3720
 S	s7618	tbrarg\\ h2698 h7530 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h2042 h4451 h4452 h7592 h3639 h4571 h4572 h3671 h4630 h4631\\ t4655
 B	b7619	s7618
@@ -7295,7 +7295,7 @@ T	t7624	o b7624 b8
 B	b7625	t7624
 T	t7625	o1998 b7621 b7625
 B	b7626	t7625
-P	p3769	String "instHypT [<< 'y_8 >>; << 'y_6 >>] 7 ttca thenT dT 22 ttca thenT dT 22 thenT autoT"
+P	p3769	String "instHypT [<< 'y_8 >>; << 'y_6 >>] 7 ttca thenT dT 22 ttca thenT dT 22 ta"
 O	o3769	ext_rule p3769
 H	h4683	_1010 t4683
 S	s7626	tbrarg\\ h2698 h7530 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h2042 h4451 h4452 h7592 h3639 h4571 h4572 h3671 h4630 h4631 h4683\\ t4655
@@ -7320,7 +7320,7 @@ T	t7632	o b7632 b8
 B	b7633	t7632
 T	t7633	o1998 b7629 b7633
 B	b7634	t7633
-P	p3810	String "assertT << isset{'f[op{'g1; 'y_8; 'y_6}]} >> thenT autoT"
+P	p3810	String "assertT << isset{'f[op{'g1; 'y_8; 'y_6}]} >> ta"
 O	o3810	ext_rule p3810
 H	h4766	_1010 t4766
 S	s7634	tbrarg\\ h2698 h7530 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h2042 h4451 h4452 h7592 h3639 h4571 h4572 h3671 h4630 h4631 h4683 h4766\\ t4655
@@ -7364,7 +7364,7 @@ T	t7649	o1998 b7649 b8
 B	b7650	t7649
 T	t7650	o3820 b6783 b7650 b8 b8
 B	b7651	t7650
-P	p3822	String "assertT << isset{'f[op{'g1; 'y_6; 'y_8}]} >> thenT autoT"
+P	p3822	String "assertT << isset{'f[op{'g1; 'y_6; 'y_8}]} >> ta"
 O	o3822	ext_rule p3822
 H	h4842	_1010 t4838
 S	s7651	tbrarg\\ h2698 h7530 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h2042 h4451 h4452 h7592 h3639 h4571 h4572 h3671 h4630 h4631 h4683 h4766 h4842\\ t4655
@@ -7406,7 +7406,7 @@ T	t7666	o1998 b7666 b8
 B	b7667	t7666
 T	t7667	o3832 b6783 b7667 b8 b8
 B	b7668	t7667
-P	p3834	String "eqSetTransT << 'f[op{'g1; 'y_8; 'y_6}] >> thenT autoT"
+P	p3834	String "eqSetTransT << 'f[op{'g1; 'y_8; 'y_6}] >> ta"
 O	o3834	ext_rule p3834
 H	h4854	_1010 t4850
 S	s7668	tbrarg\\ h2698 h7530 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h2042 h4451 h4452 h7592 h3639 h4571 h4572 h3671 h4630 h4631 h4683 h4766 h4842 h4854\\ t4655
@@ -7427,7 +7427,7 @@ T	t7674	o b7674 b8
 B	b7675	t7674
 T	t7675	o1998 b7671 b7675
 B	b7676	t7675
-P	p3840	String "eqSetTransT << 'f[op{'g1; 'y_6; 'y_8}] >> thenT autoT"
+P	p3840	String "eqSetTransT << 'f[op{'g1; 'y_6; 'y_8}] >> ta"
 O	o3840	ext_rule p3840
 S	s7676	tbrarg\\ h2698 h7530 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h2042 h4451 h4452 h7592 h3639 h4571 h4572 h3671 h4630 h4631 h4683 h4766 h4842 h4854\\ t4862
 B	b7677	s7676
@@ -7601,7 +7601,7 @@ T	t7745	o1978 b2718 b7744
 B	b7745	t7745
 T	t7746	o1978 b2710 b7745
 B	b7746	t7746
-P	p3963	String "assumT 3 thenT rwh unfold_hom 2 thenT autoT"
+P	p3963	String "assumT 3 thenT rwh unfold_hom 2 ta"
 O	o3963	ext_rule p3963
 T	t7747	o b6921 b8
 B	b7747	t7747
@@ -7678,7 +7678,7 @@ T	t7772	o b7772 b8
 B	b7773	t7772
 T	t7773	o1998 b7769 b7773
 B	b7774	t7773
-P	p4095	String "setSubstT << equal{'f[op{'g1; id{'g1}; id{'g1}}]; op{'g2; 'f[id{'g1}]; 'f[id{'g1}]}} >> 8 thenT autoT"
+P	p4095	String "setSubstT << equal{'f[op{'g1; id{'g1}; id{'g1}}]; op{'g2; 'f[id{'g1}]; 'f[id{'g1}]}} >> 8 ta"
 O	o4095	ext_rule p4095
 H	h5279	_1010 t5279
 S	s5279	tbrarg\\ h2698 h2743 h2744 h2804 h2805 h4445 h5205 h5279\\ t5114
@@ -7909,7 +7909,7 @@ T	t7867	o b7867 b8
 B	b7868	t7867
 T	t7868	o1998 b7864 b7868
 B	b7869	t7868
-P	p4168	String "copyHypT 2 3 thenT rwh unfold_hom 3 thenT autoT"
+P	p4168	String "copyHypT 2 3 thenT rwh unfold_hom 3 ta"
 O	o4168	ext_rule p4168
 H	h5488	_1010 t5114
 S	s7869	tbrarg\\ h2698 h7848 h7849 h5488\\ C7852
@@ -8011,7 +8011,7 @@ T	t7911	o b7911 b8
 B	b7912	t7911
 T	t7912	o1998 b7908 b7912
 B	b7913	t7912
-P	p4276	String "setSubstT << equal{'f[op{'g1; id{'g1}; id{'g1}}]; op{'g2; 'f[id{'g1}]; 'f[id{'g1}]}} >> 11 thenT autoT"
+P	p4276	String "setSubstT << equal{'f[op{'g1; id{'g1}; id{'g1}}]; op{'g2; 'f[id{'g1}]; 'f[id{'g1}]}} >> 11 ta"
 O	o4276	ext_rule p4276
 S	s7913	tbrarg\\ h2698 h7848 h2743 h2744 h2804 h2805 h4445 h7849 h5205 h5569 h5279\\ t5114
 B	b7914	s7913
@@ -8146,7 +8146,7 @@ T	t7957	o1978 b2718 b7956
 B	b7957	t7957
 T	t7958	o1978 b2710 b7957
 B	b7958	t7958
-P	p4377	String "assumT 3 thenT rwh unfold_hom 2 thenT assertT << isset{'f['a]} & isset{'f[id{'g1}]} & isset{'f[inv{'g1; 'a}]} & mem{'f['a]; car{'g2}} & mem{'f[inv{'g1; 'a}]; car{'g2}} >> thenT autoT"
+P	p4377	String "assumT 3 thenT rwh unfold_hom 2 thenT assertT << isset{'f['a]} & isset{'f[id{'g1}]} & isset{'f[inv{'g1; 'a}]} & mem{'f['a]; car{'g2}} & mem{'f[inv{'g1; 'a}]; car{'g2}} >> ta"
 O	o4377	ext_rule p4377
 T	t5845	o b5833 b8
 B	b5845	t5845
@@ -8228,7 +8228,7 @@ T	t7993	o b7966 b7993
 B	b7994	t7993
 T	t7994	o1998 b7963 b7994
 B	b7995	t7994
-P	p4501	String "withT << 'a >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT rwh unfold_member 6 thenT autoT"
+P	p4501	String "withT << 'a >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT rwh unfold_member 6 ta"
 O	o4501	ext_rule p4501
 S	s5852	tbrarg\\ h2698 h2743 h2744 h2804 h2805 h4445\\ t5852
 B	b5852	s5852
@@ -8240,7 +8240,7 @@ T	t7997	o1998 b7997 b8
 B	b7998	t7997
 T	t7998	o4501 b6783 b7998 b8 b8
 B	b7999	t7998
-P	p4503	String "withT << id{'g1} >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT rwh unfold_member 6 thenT autoT"
+P	p4503	String "withT << id{'g1} >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT rwh unfold_member 6 ta"
 O	o4503	ext_rule p4503
 S	s5896	tbrarg\\ h2698 h2743 h2744 h2804 h2805 h4445\\ t5432
 B	b5898	s5896
@@ -8252,7 +8252,7 @@ T	t8001	o1998 b8001 b8
 B	b8002	t8001
 T	t8002	o4503 b6783 b8002 b8 b8
 B	b8003	t8002
-P	p4505	String "withT << inv{'g1; 'a} >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT rwh unfold_member 6 thenT autoT"
+P	p4505	String "withT << inv{'g1; 'a} >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 6 ttca thenT rwh unfold_member 6 ta"
 O	o4505	ext_rule p4505
 S	s5906	tbrarg\\ h2698 h2743 h2744 h2804 h2805 h4445\\ t5855
 B	b5907	s5906
@@ -8317,7 +8317,7 @@ T	t8024	o b8024 b8
 B	b8025	t8024
 T	t8025	o1998 b8017 b8025
 B	b8026	t8025
-P	p4551	String "eqSetTransT << 'f[id{'g1}] >> thenT autoT"
+P	p4551	String "eqSetTransT << 'f[id{'g1}] >> ta"
 O	o4551	ext_rule p4551
 H	h6045	_1010 t6045
 S	s6093	tbrarg\\ h2698 h2743 h2744 h2804 h2805 h4445 h5923 h5569 h5924 h5925 h5926 h6045\\ t5928
@@ -8378,7 +8378,7 @@ T	t8086	o b8086 b8
 B	b8087	t8086
 T	t8087	o1998 b8083 b8087
 B	b8088	t8087
-P	p4614	String "setSubstT << equal{'f[op{'g1; 'a; inv{'g1; 'a}}]; op{'g2; 'f['a]; 'f[inv{'g1; 'a}]}} >> 13 thenT autoT"
+P	p4614	String "setSubstT << equal{'f[op{'g1; 'a; inv{'g1; 'a}}]; op{'g2; 'f['a]; 'f[inv{'g1; 'a}]}} >> 13 ta"
 O	o4614	ext_rule p4614
 H	h6219	_1010 t6219
 S	s6284	tbrarg\\ h2698 h2743 h2744 h2804 h2805 h4445 h5923 h5569 h5924 h5925 h5926 h6045 h6219\\ t6203
@@ -8399,7 +8399,7 @@ T	t8093	o b8093 b8
 B	b8094	t8093
 T	t8094	o1998 b8090 b8094
 B	b8095	t8094
-P	p4624	String "withT << op{'g1; 'a; inv{'g1; 'a}} >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 13 ttca thenT rwh unfold_member 13 thenT autoT"
+P	p4624	String "withT << op{'g1; 'a; inv{'g1; 'a}} >> (dT 4) ttca thenT rwh fold_isset 0 ttca thenT dT 13 ttca thenT rwh unfold_member 13 ta"
 O	o4624	ext_rule p4624
 S	s6750	tbrarg\\ h2698 h2743 h2744 h2804 h2805 h4445 h5923 h5569 h5924 h5925 h5926 h6045 h6219\\ t6750
 B	b6751	s6750
@@ -8698,7 +8698,7 @@ T	t8216	o b8212 b8216
 B	b8217	t8216
 T	t8217	o1998 b8209 b8217
 B	b8218	t8217
-P	p4702	String "autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 8 ttca thenT rwh unfold_member 8 thenT autoT"
+P	p4702	String "autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 8 ttca thenT rwh unfold_member 8 ta"
 O	o4702	ext_rule p4702
 T	t8218	o1998 b8212 b8
 B	b8219	t8218
@@ -8730,7 +8730,7 @@ T	t8230	o b8226 b8230
 B	b8231	t8230
 T	t8231	o1998 b8223 b8231
 B	b8232	t8231
-P	p4714	String "autoT thenT withT << id{'g1} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 9 ttca thenT rwh unfold_member 9 thenT autoT"
+P	p4714	String "autoT thenT withT << id{'g1} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 9 ttca thenT rwh unfold_member 9 ta"
 O	o4714	ext_rule p4714
 S	s8232	tbrarg\\ h2698 h7848 h7849 h4466 h8459\\ t5432
 B	b8233	s8232
@@ -8771,7 +8771,7 @@ T	t8247	o b8243 b8247
 B	b8248	t8247
 T	t8248	o1998 b8240 b8248
 B	b8249	t8248
-P	p4726	String "autoT thenT withT << inv{'g1; 'a} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 10 ttca thenT rwh unfold_member 10 thenT autoT"
+P	p4726	String "autoT thenT withT << inv{'g1; 'a} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 10 ttca thenT rwh unfold_member 10 ta"
 O	o4726	ext_rule p4726
 S	s8249	tbrarg\\ h2698 h7848 h7849 h4466 h8459 h5569\\ t8479
 B	b8250	s8249
@@ -8813,7 +8813,7 @@ T	t8264	o b8260 b8264
 B	b8265	t8264
 T	t8265	o1998 b8257 b8265
 B	b8266	t8265
-P	p4738	String "autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 11 ttca thenT rwh unfold_member 11 thenT autoT"
+P	p4738	String "autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 11 ttca thenT rwh unfold_member 11 ta"
 O	o4738	ext_rule p4738
 S	s8266	tbrarg\\ h2698 h7848 h7849 h4466 h8459 h5569 h8515\\ t8526
 B	b8267	s8266
@@ -8855,7 +8855,7 @@ T	t8281	o b8277 b8281
 B	b8282	t8281
 T	t8282	o1998 b8274 b8282
 B	b8283	t8282
-P	p4750	String "autoT thenT withT << inv{'g1; 'a} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 12 ttca thenT rwh unfold_member 12 thenT autoT"
+P	p4750	String "autoT thenT withT << inv{'g1; 'a} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 12 ttca thenT rwh unfold_member 12 ta"
 O	o4750	ext_rule p4750
 S	s8283	tbrarg\\ h2698 h7848 h7849 h4466 h8459 h5569 h8515 h8530\\ t8601
 B	b8284	s8283
@@ -8966,7 +8966,7 @@ T	t8325	o b8325 b8
 B	b8326	t8325
 T	t8326	o1998 b8322 b8326
 B	b8327	t8326
-P	p4854	String "setSubstT << equal{'f[op{'g1; 'a; inv{'g1; 'a}}]; op{'g2; 'f['a]; 'f[inv{'g1; 'a}]}} >> 15 thenT autoT"
+P	p4854	String "setSubstT << equal{'f[op{'g1; 'a; inv{'g1; 'a}}]; op{'g2; 'f['a]; 'f[inv{'g1; 'a}]}} >> 15 ta"
 O	o4854	ext_rule p4854
 H	h6218	_1010 t6218
 H	h8883	_1010 t8883
@@ -8988,7 +8988,7 @@ T	t8333	o b8333 b8
 B	b8334	t8333
 T	t8334	o1998 b8330 b8334
 B	b8335	t8334
-P	p4864	String "withT << op{'g1; 'a; inv{'g1; 'a}} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 15 ttca thenT rwh unfold_member 15 thenT autoT"
+P	p4864	String "withT << op{'g1; 'a; inv{'g1; 'a}} >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 15 ttca thenT rwh unfold_member 15 ta"
 O	o4864	ext_rule p4864
 S	s8335	tbrarg\\ h2698 h7848 h7849 h2743 h2744 h2804 h6218 h4681 h8459 h5569 h8515 h8530 h8645 h8678 h8883\\ t8987
 B	b8336	s8335
@@ -9277,7 +9277,7 @@ T	t8454	o1978 b2718 b8454
 B	b8455	t8454
 T	t8455	o1978 b2710 b8455
 B	b8481	t8455
-P	p1363	String "assumT 6 thenT assumT 9 thenT assumT 10 ttca thenT rwh unfold_hom 2 thenT autoT"
+P	p1363	String "assumT 6 thenT assumT 9 thenT assumT 10 ttca thenT rwh unfold_hom 2 ta"
 O	o1364	ext_rule p1363
 T	t8481	o b9062 b8
 B	b8482	t8481
@@ -9327,7 +9327,7 @@ T	t8497	o b8497 b8
 B	b8498	t8497
 T	t8498	o1998 b8493 b8498
 B	b8499	t8498
-P	p5875	String "setSubstT << equal{car{'h2}; sep{car{'g2}; x. \"dexists\"{car{'h1}; y. eq{'x; 'f['y]}}}} >> 10 ttca thenT dT 11 thenT autoT"
+P	p5875	String "setSubstT << equal{car{'h2}; sep{car{'g2}; x. \"dexists\"{car{'h1}; y. eq{'x; 'f['y]}}}} >> 10 ttca thenT dT 11 ta"
 O	o5875	ext_rule p5875
 H	h8499	_1010 t8441
 H	h9094	_1010 t9094
@@ -9547,7 +9547,7 @@ O	o2529	rule p2529
 NCzf_itt_inv_image	Czf_itt_inv_image	Czf_itt_inv_image NIL
 NCzf_itt_inv_image!inv_image	inv_image	inv_image Czf_itt_inv_image
 O	o5195	inv_image
-P	p3555	String "assumT 6 thenT assumT 7 thenT assumT 9 thenT assumT 10 ttca thenT rwh unfold_hom 2 thenT autoT"
+P	p3555	String "assumT 6 thenT assumT 7 thenT assumT 9 thenT assumT 10 ttca thenT rwh unfold_hom 2 ta"
 O	o3555	ext_rule p3555
 P	p5488	String "setSubstT << equal{car{'h1}; inv_image{car{'g1}; x. 'f['x]; car{'h2}}} >> 11 ttca thenT dT 12 ttca thenT funSetT 13 ttca"
 O	o5495	ext_rule p5488

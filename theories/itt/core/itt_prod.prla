@@ -942,7 +942,7 @@ B	b1848	t1848
 NSummary!interactive	interactive	interactive Summary
 O	o771	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p771	String "rwh unfold_prod 0 thenT autoT"
+P	p771	String "rwh unfold_prod 0 ta"
 O	o772	ext_rule p771
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o773	status_incomplete

@@ -121,14 +121,14 @@ P	p350	String main
 O	o351	tactic_arg p350
 NSummary!msequent	msequent	msequent Summary
 O	o352	msequent
-P	p390	String "dT 2 thenT autoT"
+P	p390	String "dT 2 ta"
 O	o390	ext_rule p390
 P	p391	String assertion
 O	o391	tactic_arg p391
-P	p396	String "selT 1 (dT 0) thenT autoT"
+P	p396	String "selT 1 (dT 0) ta"
 O	o396	ext_rule p396
 P	p398	Number 1
-P	p425	String "selT 2 (dT 0) thenT autoT"
+P	p425	String "selT 2 (dT 0) ta"
 O	o425	ext_rule p425
 P	p426	Number 2
 NSummary!summary_item	summary_item	summary_item Summary
@@ -409,15 +409,15 @@ T	t1651	o1651
 B	b1651	t1651
 P	p1672	String distrib_or2
 O	o1672	rule p1672
-P	p1375	String "assertT << 'C => 'D => 'B >> thenT autoT"
+P	p1375	String "assertT << 'C => 'D => 'B >> ta"
 O	o1377	ext_rule p1375
-P	p1518	String "assertT << 'C => 'B >> thenMT assertT << 'D => 'B >> thenT autoT"
+P	p1518	String "assertT << 'C => 'B >> thenMT assertT << 'D => 'B >> ta"
 O	o1519	ext_rule p1518
 P	p1651	String "selT 2 autoT"
 O	o1652	ext_rule p1651
 P	p1726	String "selT 1 autoT"
 O	o1726	ext_rule p1726
-P	p1750	String "assertT <<'D => 'B>> thenT autoT"
+P	p1750	String "assertT <<'D => 'B>> ta"
 O	o1750	ext_rule p1750
 P	p1786	Number 2858
 P	p275	Number 3032

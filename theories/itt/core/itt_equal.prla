@@ -5983,7 +5983,7 @@ S	s4119	tbrarg\\ h1326\\ t2964
 B	b4119	s4119
 T	t4119	o2153 b4119
 B	b4120	t4119
-P	p5416	String "univTypeT <<univ[l':l]>> thenT autoT"
+P	p5416	String "univTypeT <<univ[l':l]>> ta"
 O	o5416	ext_rule p5416
 T	t4120	o2176 b4119 b4
 B	b4121	t4120

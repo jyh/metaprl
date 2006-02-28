@@ -5149,7 +5149,7 @@ S	s725	tbrarg\\ h5053 h678 h5263\\ t5332
 B	b726	s725
 T	t726	o2307 b726
 B	b727	t726
-P	p4228	String "useWitnessT <<'t>> thenT unsquashEqual 2 thenT autoT"
+P	p4228	String "useWitnessT <<'t>> thenT unsquashEqual 2 ta"
 O	o4228	ext_rule p4228
 P	p2792	String Next
 O	o2792	comment_string p2792
@@ -5208,7 +5208,7 @@ T	t5376	o2782 b5376 b5354
 B	b5377	t5376
 T	t741	o2781 b5377 b19
 B	b741	t741
-P	p2909	String "unsquashEqual 2 thenT autoT"
+P	p2909	String "unsquashEqual 2 ta"
 O	o2909	ext_rule p2909
 T	t744	o2780 b741 b19
 B	b744	t744
@@ -5371,7 +5371,7 @@ B	b829	t827
 B	b5449	t5445
 T	t5449	o65 b5449
 H	h5449	u t5449
-P	p3039	String "assertAtT 3 <<'x = 'y in 'A>> thenAT (unsquashEqual 2 thenT autoT)"
+P	p3039	String "assertAtT 3 <<'x = 'y in 'A>> thenAT (unsquashEqual 2 ta)"
 O	o3039	ext_rule p3039
 H	h5445	_1010 t5445
 S	s5445	tbrarg\\ h5053 h5445 h5263\\ C
@@ -5388,7 +5388,7 @@ S	s842	tbrarg\\ h5053 h678 h5263\\ t5504
 B	b842	s842
 T	t842	o2307 b842
 B	b843	t842
-P	p3063	String "useWitnessT <<it>> thenT unsquashEqual 2 thenT autoT"
+P	p3063	String "useWitnessT <<it>> thenT unsquashEqual 2 ta"
 O	o3063	ext_rule p3063
 P	p4265	String unsquashStableGoal
 O	o4265	rule p4265
@@ -5416,18 +5416,18 @@ B	b5950	t5949
 T	t5950	o4282 b5950 b19
 B	b5951	t5950
 H	h5951	x t5947
-P	p504	String "unsquash 2 thenT autoT"
+P	p504	String "unsquash 2 ta"
 O	o504	ext_rule p504
 P	p4377	String unsquashHypGoalStable
 O	o4377	rule p4377
-P	p4382	String "assertAtT 3 <<'A>> thenAT autoT"
+P	p4382	String "assertAtT 3 <<'A>> taa"
 O	o4382	ext_rule p4382
 P	p4401	String unsquashStable
 O	o4401	rule p4401
 T	t5595	o2309 b5085 b5328 b5328
 P	p4407	String "assertAtT 3 <<'A>>"
 O	o4407	ext_rule p4407
-P	p4419	String "squashStable <<'t>> thenT autoT"
+P	p4419	String "squashStable <<'t>> ta"
 O	o4419	ext_rule p4419
 P	p4517	String squashAssert
 O	o4517	rule p4517
@@ -5441,7 +5441,7 @@ S	s5636	tbrarg\\ h5053\\ C5634
 B	b5637	s5636
 T	t5637	o2307 b5637
 B	b5638	t5637
-P	p4525	String "assertT <<squash{'A}>> thenT autoT"
+P	p4525	String "assertT <<squash{'A}>> ta"
 O	o4525	ext_rule p4525
 P	p919	String assertSquash
 O	o919	rule p919

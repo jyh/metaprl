@@ -153,7 +153,7 @@ O	o556	isset
 NSummary!interactive	interactive	interactive Summary
 O	o568	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p568	String "rwh unfold_rel 0 thenT autoT"
+P	p568	String "rwh unfold_rel 0 ta"
 O	o569	ext_rule p568
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o570	status_incomplete

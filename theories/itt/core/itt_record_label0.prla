@@ -172,7 +172,7 @@ O	o536	equal
 NSummary!interactive	interactive	interactive Summary
 O	o540	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p540	String "rwaAllAll [unfoldInd; unfold_next; unfold_label] thenT rwh reduceC 0 thenT autoT"
+P	p540	String "rwaAllAll [unfoldInd; unfold_next; unfold_label] thenT rwh reduceC 0 ta"
 O	o541	ext_rule p540
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o542	status_incomplete
@@ -193,7 +193,7 @@ O	obrarg	brwsqarg
 T	tbrarg	obrarg
 P	p560	String reduce_ind_base
 O	o560	rewrite p560
-P	p561	String "rwaAllAll [unfoldInd; unfold_zero; unfold_label] thenT rwh reduceC 0 thenT autoT"
+P	p561	String "rwaAllAll [unfoldInd; unfold_zero; unfold_label] thenT rwh reduceC 0 ta"
 O	o561	ext_rule p561
 NSummary!comment	comment	comment Summary
 O	o570	comment
@@ -221,13 +221,13 @@ O	o630	meta_theorem
 NItt_equal!type	type	type Itt_equal
 O	o632	type
 T	t633	o632 b492
-P	p634	String "rwh unfold_label 0 thenT autoT"
+P	p634	String "rwh unfold_label 0 ta"
 O	o634	ext_rule p634
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p648	String zeroMember
 O	o648	rule p648
 T	t648	o536 b492 b501 b501
-P	p649	String "rwaAll [unfold_zero;unfold_label] thenT autoT"
+P	p649	String "rwaAll [unfold_zero;unfold_label] ta"
 O	o649	ext_rule p649
 P	p663	String nextMember
 O	o663	rule p663
@@ -260,7 +260,7 @@ O	o788	rule p788
 H	h797	n t492
 H	h799	m t492
 T	t801	o509 b735
-P	p807	String "rw unfold_label 2 thenT dT 2 thenT rwaAllAll [ unfold_label; unfold_next; unfold_zero] thenT autoT"
+P	p807	String "rw unfold_label 2 thenT dT 2 thenT rwaAllAll [ unfold_label; unfold_next; unfold_zero] ta"
 O	o807	ext_rule p807
 P	p820	String ThinOption
 O	o820	uid p820
@@ -278,9 +278,9 @@ NPerv!bind	bind	bind Perv
 O	o835	bind
 P	p851	String "rwh unfold_zero 0 thenT natBackInductionT <<'n>>"
 O	o851	ext_rule p851
-P	p873	String "rwch unfold_label 1 0 thenT autoT"
+P	p873	String "rwch unfold_label 1 0 ta"
 O	o873	ext_rule p873
-P	p876	String "rwaAllAll [ unfold_label; unfold_next; unfold_zero] thenT autoT"
+P	p876	String "rwaAllAll [ unfold_label; unfold_next; unfold_zero] ta"
 O	o876	ext_rule p876
 P	p889	String label_sqequal
 O	o889	rule p889

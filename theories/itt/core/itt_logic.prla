@@ -1516,7 +1516,7 @@ B	b3778	t3777
 NSummary!interactive	interactive	interactive Summary
 O	o1019	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1019	String "rwh unfold_true 0 thenT autoT"
+P	p1019	String "rwh unfold_true 0 ta"
 O	o1020	ext_rule p1019
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1021	status_incomplete
@@ -1683,7 +1683,7 @@ T	t4238	o1015 b4238
 B	b4250	t4238
 T	t4250	o1110 b4233 b4250
 B	b4251	t4250
-P	p1137	String "rwh unfold_not 0 thenT autoT"
+P	p1137	String "rwh unfold_not 0 ta"
 O	o1137	ext_rule p1137
 T	t4251	o b4220 b4
 B	b4252	t4251
@@ -1731,7 +1731,7 @@ T	t4446	o1110 b4444 b4446
 B	b4447	t4446
 T	t4447	o1110 b4349 b4447
 B	b4455	t4447
-P	p1190	String "rwh unfold_not 0 thenT dT 0 thenT autoT"
+P	p1190	String "rwh unfold_not 0 thenT dT 0 ta"
 O	o1190	ext_rule p1190
 T	t4513	o717 b4342 b712dep
 NItt_squash	Itt_squash	Itt_squash NIL
@@ -3481,7 +3481,7 @@ T	t5264	o1110 b5261 b5264
 B	b5265	t5264
 T	t5265	o1110 b5255 b5265
 B	b5279	t5265
-P	p1302	String "rwh unfold_and 0 thenT autoT"
+P	p1302	String "rwh unfold_and 0 ta"
 O	o1302	ext_rule p1302
 T	t5279	o b5256 b4
 B	b5281	t5279
@@ -3522,7 +3522,7 @@ T	t5433	o1110 b5412 b5432
 B	b5433	t5433
 T	t5449	o1110 b5404 b5433
 B	b5449	t5449
-P	p3979	String "assumT 1 thenT assumT 2 thenT autoT"
+P	p3979	String "assumT 1 thenT assumT 2 ta"
 O	o3979	ext_rule p3979
 T	t5467	o b5410 b4
 B	b5467	t5467
@@ -3599,7 +3599,7 @@ T	t5617	o1015 b5617
 B	b5629	t5617
 T	t5629	o1110 b5615 b5629
 B	b5630	t5629
-P	p4026	String "dT 2 thenT assertAtT 2 <<squash{'a1} & squash{'a2}>> thenT autoT"
+P	p4026	String "dT 2 thenT assertAtT 2 <<squash{'a1} & squash{'a2}>> ta"
 O	o4026	ext_rule p4026
 T	t7340	o b5612 b4
 B	b7340	t7340
@@ -4108,7 +4108,7 @@ T	t5723	o1110 b5707 b5723
 B	b5724	t5723
 T	t5724	o1110 b5019 b5724
 B	b5741	t5724
-P	p1414	String "rwh unfold_or 0 thenT autoT"
+P	p1414	String "rwh unfold_or 0 ta"
 O	o1414	ext_rule p1414
 T	t5741	o b5704 b4
 B	b5754	t5741
@@ -4190,7 +4190,7 @@ T	t5872	o1110 b5261 b5816
 B	b5872	t5872
 T	t5873	o1110 b5146 b5872
 B	b5873	t5873
-P	p1474	String "rwh unfold_or 0 thenT selT 2 (dT 0) thenT autoT"
+P	p1474	String "rwh unfold_or 0 thenT selT 2 (dT 0) ta"
 O	o1474	ext_rule p1474
 T	t5874	o b5144 b5281
 B	b5874	t5874
@@ -4582,7 +4582,7 @@ T	t6019	o1110 b5707 b6018
 B	b6019	t6019
 T	t6021	o1110 b5019 b6019
 B	b6021	t6021
-P	p1514	String "rwh unfold_implies 0 thenT autoT"
+P	p1514	String "rwh unfold_implies 0 ta"
 O	o1514	ext_rule p1514
 T	t6027	o1024 b6017 b5755
 B	b6027	t6027
@@ -4852,7 +4852,7 @@ T	t6618	o1110 b5707 b6617
 B	b6618	t6618
 T	t6619	o1110 b5019 b6618
 B	b6619	t6619
-P	p1602	String "rwh unfold_iff 0 thenT autoT"
+P	p1602	String "rwh unfold_iff 0 ta"
 O	o1602	ext_rule p1602
 T	t6623	o1024 b6615 b5755
 B	b6623	t6623
@@ -5185,7 +5185,7 @@ T	t6966	o1110 b6957 b6966
 B	b6967	t6966
 T	t6967	o1110 b5019 b6967
 B	b6968	t6967
-P	p1694	String "repeatT (rwh (firstC [unfold_cand; unfold_and; unfold_prod]) 0) thenT autoT"
+P	p1694	String "repeatT (rwh (firstC [unfold_cand; unfold_and; unfold_prod]) 0) ta"
 O	o1694	ext_rule p1694
 T	t9508	o b6945 b4
 B	b9508	t9508
@@ -5396,7 +5396,7 @@ T	t7319	o1110 b7313 b7318
 B	b7319	t7319
 T	t7325	o1110 b5019 b7319
 B	b7325	t7325
-P	p1851	String "rwh unfold_cor 0 thenT autoT"
+P	p1851	String "rwh unfold_cor 0 ta"
 O	o1851	ext_rule p1851
 T	t3869	o682 b2070 b2071
 B	b3869	t3869
@@ -6018,7 +6018,7 @@ S	s7622	tbrarg\\ h3757\\ t7622
 B	b7623	s7622
 T	t7623	o1015 b7623
 B	b7624	t7623
-P	p2082	String "rwh unfold_all 0 thenT autoT"
+P	p2082	String "rwh unfold_all 0 ta"
 O	o2082	ext_rule p2082
 P	p2113	String all_type
 O	o2113	rule p2113
@@ -6800,7 +6800,7 @@ T	t10722	o1110 b10357 b7793
 B	b10722	t10722
 T	t10723	o1110 b4233 b10722
 B	b10723	t10723
-P	p2228	String "rwh unfold_exists 0 thenT autoT"
+P	p2228	String "rwh unfold_exists 0 ta"
 O	o2228	ext_rule p2228
 T	t10724	o1024 b7792 b10361
 B	b10724	t10724

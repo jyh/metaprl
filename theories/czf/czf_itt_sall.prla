@@ -209,7 +209,7 @@ T	tbrarg	obrarg
 NSummary!interactive	interactive	interactive Summary
 O	o627	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p627	String "rwh unfold_sall 0 thenT autoT"
+P	p627	String "rwh unfold_sall 0 ta"
 O	o628	ext_rule p627
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o629	status_incomplete
@@ -933,7 +933,7 @@ T	t1661	o b1660 b4
 B	b1661	t1661
 T	t1662	o158 b1661
 B	b1662	t1662
-P	p715	String "rwh fold_isset 0 thenT autoT"
+P	p715	String "rwh fold_isset 0 ta"
 O	o715	ext_rule p715
 P	p717	String trivialT
 O	o717	ext_rule p717

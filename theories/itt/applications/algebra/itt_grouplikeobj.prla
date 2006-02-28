@@ -4203,7 +4203,7 @@ P	p848	Number 4917
 P	p849	Number 5218
 O	o849	location p848 p849
 P	p3913	Number 5263
-P	p2340	String "dT 2 thenT assertT << all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car) >> thenT autoT"
+P	p2340	String "dT 2 thenT assertT << all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car) >> ta"
 O	o2340	ext_rule p2340
 T	t3914	o b3462 b10
 B	b3914	t3914
@@ -5298,7 +5298,7 @@ T	t4257	o1617 b4257
 B	b4258	t4257
 T	t4258	o2073 b4256 b4258
 B	b4259	t4258
-P	p3201	String "copyHypT 2 3 thenT rwh unfold_isMonoid 3 thenT autoT"
+P	p3201	String "copyHypT 2 3 thenT rwh unfold_isMonoid 3 ta"
 O	o3201	ext_rule p3201
 NSummary!term_param	term_param	term_param Summary
 O	o1811	term_param
@@ -6140,7 +6140,7 @@ T	t4644	o b4644 b10
 B	b4645	t4644
 T	t4645	o1292 b4641 b4645
 B	b4646	t4645
-P	p2636	String "rwh unfold_all 0 thenT rwh unfold_and 0 thenT autoT thenT dT 2 ttca"
+P	p2636	String "rwh unfold_all 0 thenT rwh unfold_and 0 ta thenT dT 2 ttca"
 O	o2636	ext_rule p2636
 S	s2620	tbrarg\\ h2557 h3246 h2951 h3889 h3455 h3804\\ t2620
 B	b2620	s2620
@@ -6156,7 +6156,7 @@ T	t4649	o b4649 b10
 B	b4650	t4649
 T	t4650	o2613 b1291 b4646 b4650 b10
 B	b4651	t4650
-P	p2659	String "rw (sweepDnC unfold_all) 0 thenT autoT thenT dT 2 ttca"
+P	p2659	String "rw (sweepDnC unfold_all) 0 ta thenT dT 2 ttca"
 O	o2659	ext_rule p2659
 S	s2512	tbrarg\\ h2557 h3246 h2961 h3889 h3455 h2951\\ t2512
 B	b2514	s2512
@@ -7282,7 +7282,7 @@ T	t5561	o1617 b5561
 B	b5562	t5561
 T	t5562	o2073 b5560 b5562
 B	b5563	t5562
-P	p3906	String "copyHypT 2 3 thenT rwh unfold_subStructure 3 thenT autoT"
+P	p3906	String "copyHypT 2 3 thenT rwh unfold_subStructure 3 ta"
 O	o3906	ext_rule p3906
 P	p3921	String Rules
 O	o3921	comment_string p3921
@@ -7329,7 +7329,7 @@ T	t5582	o2815 b5582
 B	b5583	t5582
 T	t5583	o2073 b5583 b5340
 B	b5584	t5583
-P	p32	String "assumT 1 thenT autoT thenT dT 2 ttca"
+P	p32	String "assumT 1 ta thenT dT 2 ttca"
 O	o39	ext_rule p32
 T	t5584	o b5581 b10
 B	b5585	t5584

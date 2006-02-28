@@ -2952,7 +2952,7 @@ T	t6663	o1269 b6663
 B	b6664	t6663
 T	t589	o1268 b6652 b6664
 B	b589	t589
-P	p1278	String "assumT 1 thenT dT (-1) thenT dT (-1) thenT autoT"
+P	p1278	String "assumT 1 thenT dT (-1) thenT dT (-1) ta"
 O	o1279	ext_rule p1278
 T	t6665	o b6651 b14
 B	b6666	t6665
@@ -3793,7 +3793,7 @@ T	t1922	o b1922 b14
 B	b1923	t1922
 T	t1923	o1281 b1917 b1923
 B	b1924	t1923
-P	p2178	String "repeatForT 2 (dT (-1) ttca) thenT thinT (-1) thenT autoT thenT repeatForT 2 (dT 0) thenT autoT"
+P	p2178	String "repeatForT 2 (dT (-1) ttca) thenT thinT (-1) ta thenT repeatForT 2 (dT 0) thenT autoT"
 O	o2178	ext_rule p2178
 T	t7611	o1219 b7591 b1295
 B	b7612	t7611
@@ -3845,7 +3845,7 @@ T	t1927	o b1927 b14
 B	b1928	t1927
 T	t1928	o1281 b3168 b1928
 B	b1929	t1928
-P	p2222	String "instHypT [<< 'v >>] (-7) thenMT dT (-1) thenMT withT << 'v *['B] ('v_1 *['B] 'B^inv 'w_1) >> (dT (-2)) thenT autoT"
+P	p2222	String "instHypT [<< 'v >>] (-7) thenMT dT (-1) thenMT withT << 'v *['B] ('v_1 *['B] 'B^inv 'w_1) >> (dT (-2)) ta"
 O	o2222	ext_rule p2222
 H	h7662	w_1 t6653
 P	p2179	Var w_1
@@ -3924,7 +3924,7 @@ T	t3185	o1281 b3185 b14
 B	b3186	t3185
 T	t3186	o4758 b1280 b3186 b14 b14
 B	b3187	t3186
-P	p2290	String "rwh unfold_rcoset (-1) thenT dT (-1) thenT autoT"
+P	p2290	String "rwh unfold_rcoset (-1) thenT dT (-1) ta"
 O	o2290	ext_rule p2290
 H	h7728	_1010 t7728
 S	s7728	tbrarg\\ h5676 h6904 h6668 h6669 h6670 h6671 h6672 h6675 h6907 h7590 h6726 h7592 h6755 h7662 h7664 h7703 h7704 h7728\\ t7670
@@ -4156,7 +4156,7 @@ T	t2012	o b2012 b14
 B	b2013	t2012
 T	t2013	o2141 b1280 b1911 b2013 b14
 B	b2014	t2013
-P	p2379	String "fnExtenT << 'B^car -> 'B^car >> thenMT repeatForT 2 (tryT (dT (-1))) thenT autoT thenT repeatForT 2 (dT 0) thenT autoT"
+P	p2379	String "fnExtenT << 'B^car -> 'B^car >> thenMT repeatForT 2 (tryT (dT (-1))) ta thenT repeatForT 2 (dT 0) thenT autoT"
 O	o2379	ext_rule p2379
 T	t7106	o1287 b7011 b6657 b6657
 S	s7106	tbrarg\\ h5676 h6904 h6668 h6669 h6670 h6671 h6672 h6675 h6907\\ t7106
@@ -4375,7 +4375,7 @@ T	t2102	o b2102 b14
 B	b2103	t2102
 T	t2103	o2379 b1280 b2019 b2103 b14
 B	b2104	t2103
-P	p2552	String "repeatForT 2 (dT (-1) ttca) thenT dT (-6) thenMT dT (-1) thenMT dT (-9) thenMT dT (-1) thenT autoT thenT repeatForT 2 (dT 0) thenT autoT"
+P	p2552	String "repeatForT 2 (dT (-1) ttca) thenT dT (-6) thenMT dT (-1) thenMT dT (-9) thenMT dT (-1) ta thenT repeatForT 2 (dT 0) thenT autoT"
 O	o2552	ext_rule p2552
 T	t8049	o1219 b6655 b1569
 B	b8050	t8049
@@ -4652,7 +4652,7 @@ T	t2143	o b2139 b2143
 B	b2144	t2143
 T	t2144	o1281 b3359 b2144
 B	b2145	t2144
-P	p2768	String "rwh unfold_rcoset 0 thenT autoT thenT dT 0 ttca thenWT use_subset << 'A^car >> ttca"
+P	p2768	String "rwh unfold_rcoset 0 ta thenT dT 0 ttca thenWT use_subset << 'A^car >> ttca"
 O	o2768	ext_rule p2768
 H	h8417	_1010 t8417
 H	h8418	_1010 t8418
@@ -4699,7 +4699,7 @@ T	t3378	o b3378 b14
 B	b3379	t3378
 T	t2151	o2768 b1280 b2151 b3379 b14
 B	b2152	t2151
-P	p2792	String "rwh unfold_lcoset (-1) thenT dT (-1) thenT autoT"
+P	p2792	String "rwh unfold_lcoset (-1) thenT dT (-1) ta"
 O	o2792	ext_rule p2792
 H	h8443	_1010 t8443
 S	s1620	tbrarg\\ h5676 h6904 h6668 h6669 h6670 h6671 h6672 h6675 h6907 h7590 h6726 h7592 h6672 h8252 h7662 h8254 h6672 h8255 h8256 h8259 h6672 h8327 h8328 h8384 h8498 h1560 h7763 h8386 h7788 h8417 h8418 h8443\\ t8270
@@ -5135,7 +5135,7 @@ T	t2271	o b2118 b2271
 B	b2272	t2271
 T	t2272	o1281 b3492 b2272
 B	b2273	t2272
-P	p2675	String "rwh unfold_lcoset 0 thenT autoT thenT dT 0 ttca thenWT use_subset << 'A^car >> ttca"
+P	p2675	String "rwh unfold_lcoset 0 ta thenT dT 0 ttca thenWT use_subset << 'A^car >> ttca"
 O	o2675	ext_rule p2675
 T	t3498	o864 b8331 b14
 B	b3499	t3498
@@ -5604,7 +5604,7 @@ T	t2446	o b2446 b14
 B	b2447	t2446
 T	t2447	o2552 b1280 b2267 b2447 b14
 B	b2448	t2447
-P	p3279	String "repeatForT 2 (dT 0) thenT autoT thenT repeatForT 2 (dT (-1) ttca) thenT dT (-6) thenMT dT (-1) thenMT dT (-9) thenMT dT (-1) ttca"
+P	p3279	String "repeatForT 2 (dT 0) ta thenT repeatForT 2 (dT (-1) ttca) thenT dT (-6) thenMT dT (-1) thenMT dT (-9) thenMT dT (-1) ttca"
 O	o3279	ext_rule p3279
 S	s7336	tbrarg\\ h5676 h6904 h6668 h6669 h6670 h6671 h6672 h6675 h6907 h7156 h7157 h7158\\ t7336
 B	b7337	s7336
@@ -5748,7 +5748,7 @@ T	t2479	o b2479 b14
 B	b2480	t2479
 T	t2480	o3279 b1280 b2455 b2480 b14
 B	b2481	t2480
-P	p3380	String "repeatForT 2 (dT (-1) ttca) thenT autoT thenT repeatForT 2 (dT 0) thenT autoT"
+P	p3380	String "repeatForT 2 (dT (-1) ttca) ta thenT repeatForT 2 (dT 0) thenT autoT"
 O	o3380	ext_rule p3380
 T	t9227	o1219 b8050 b6658
 B	b9228	t9227
@@ -5823,7 +5823,7 @@ T	t2492	o b2492 b14
 B	b2493	t2492
 T	t2493	o3380 b1280 b2486 b2493 b14
 B	b2494	t2493
-P	p3428	String "repeatForT 2 (dT 0) thenT autoT thenT repeatForT 2 (dT (-1) ttca)"
+P	p3428	String "repeatForT 2 (dT 0) ta thenT repeatForT 2 (dT (-1) ttca)"
 O	o3428	ext_rule p3428
 S	s7418	tbrarg\\ h5676 h6904 h6668 h6669 h6670 h6671 h6672 h6675 h6907 h7156\\ t7418
 B	b7419	s7418
@@ -6265,7 +6265,7 @@ T	t9656	o1268 b9654 b9656
 B	b9657	t9656
 T	t9657	o1268 b6898 b9657
 B	b9658	t9657
-P	p4799	String "assumT 1 thenT assumT 2 thenT dT 2 thenT repeatForT 2 (dT (-2)) thenT dT 3 thenT autoT thenT byDefT reduceC"
+P	p4799	String "assumT 1 thenT assumT 2 thenT dT 2 thenT repeatForT 2 (dT (-2)) thenT dT 3 ta thenT byDefT reduceC"
 O	o4799	ext_rule p4799
 T	t9658	o b9653 b14
 B	b9659	t9658
@@ -6347,7 +6347,7 @@ T	t2656	o b2642 b2656
 B	b2657	t2656
 T	t2657	o1281 b3898 b2657
 B	b2658	t2657
-P	p4085	String "dT (-2) thenMT dT (-1) thenMT dT (-5) thenMT dT (-1) thenT autoT thenT repeatForT 2 (dT 0) thenT autoT"
+P	p4085	String "dT (-2) thenMT dT (-1) thenMT dT (-5) thenMT dT (-1) ta thenT repeatForT 2 (dT 0) thenT autoT"
 O	o4085	ext_rule p4085
 H	h9662	_1010 t9652
 P	p3895	Var y_2
@@ -6442,7 +6442,7 @@ T	t2666	o b2666 b14
 B	b2667	t2666
 T	t2667	o1281 b3926 b2667
 B	b2668	t2667
-P	p4140	String "substT << 'B^inv ('w *['B] 'w_1) = 'B^inv 'w_1 *['B] 'B^inv 'w in 'B^car >> 0 thenT autoT"
+P	p4140	String "substT << 'B^inv ('w *['B] 'w_1) = 'B^inv 'w_1 *['B] 'B^inv 'w in 'B^car >> 0 ta"
 O	o4140	ext_rule p4140
 S	s10002	tbrarg\\ h5676 h6904 h9662 h9770 h6668 h6669 h6670 h6671 h6672 h6675 h6907 h7590 h6726 h7592 h6672 h8252 h7662 h8254 h6672\\ t10002
 B	b10003	s10002
@@ -6704,7 +6704,7 @@ T	t2772	o b2771 b14
 B	b2772	t2772
 T	t2777	o4085 b1280 b2707 b2772 b14
 B	b2777	t2777
-P	p4297	String "repeatForT 2 (dT 0) thenT autoT thenT dT (-2) thenMT dT (-1) thenMT dT (-5) thenMT dT (-1) thenT autoT"
+P	p4297	String "repeatForT 2 (dT 0) ta thenT dT (-2) thenMT dT (-1) thenMT dT (-5) thenMT dT (-1) thenT autoT"
 O	o4297	ext_rule p4297
 T	t10207	o1219 b6655 b9766
 B	b10208	t10207
@@ -7062,7 +7062,7 @@ T	t10371	o1269 b10371
 B	b10372	t10371
 T	t10372	o1268 b6898 b10372
 B	b10373	t10372
-P	p4965	String "assumT 1 thenT dT (-1) thenT dT (-2) thenT autoT thenT byDefT reduceC"
+P	p4965	String "assumT 1 thenT dT (-1) thenT dT (-2) ta thenT byDefT reduceC"
 O	o4965	ext_rule p4965
 T	t10373	o1283 b10371 b6902
 B	b10374	t10373
@@ -7133,7 +7133,7 @@ T	t10392	o1269 b10392
 B	b10393	t10392
 T	t10393	o1268 b6898 b10393
 B	b10394	t10393
-P	p4993	String "assumT 1 thenT dT (-1) thenT repeatForT 2 (dT (-2)) thenT autoT thenT dT 0 thenT byDefT reduceC"
+P	p4993	String "assumT 1 thenT dT (-1) thenT repeatForT 2 (dT (-2)) ta thenT dT 0 thenT byDefT reduceC"
 O	o4993	ext_rule p4993
 T	t10394	o1283 b10392 b6902
 B	b10395	t10394
@@ -7162,7 +7162,7 @@ T	t2906	o b2906 b14
 B	b2907	t2906
 T	t2907	o1281 b4091 b2907
 B	b2908	t2907
-P	p5025	String "dT (-1) thenMT dT 0 thenMT withT << 'x >> (dT 0) thenT autoT"
+P	p5025	String "dT (-1) thenMT dT 0 thenMT withT << 'x >> (dT 0) ta"
 O	o5025	ext_rule p5025
 H	h10453	z_3 t6661
 P	p4994	Var z_3
@@ -7263,7 +7263,7 @@ T	t10539	o1269 b10539
 B	b10540	t10539
 T	t10540	o1268 b6898 b10540
 B	b10541	t10540
-P	p5117	String "assumT 1 thenT dT 2 thenT dT 3 thenT dT 6 thenT assertT << ext_equal{(groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}})^car; 'A^car} >> thenMT dT 10 thenT autoT thenT byDefT reduceC thenT repeatT (dT 0 ttca) thenWT use_subset << 'A^car >> ttca"
+P	p5117	String "assumT 1 thenT dT 2 thenT dT 3 thenT dT 6 thenT assertT << ext_equal{(groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}})^car; 'A^car} >> thenMT dT 10 ta thenT byDefT reduceC thenT repeatT (dT 0 ttca) thenWT use_subset << 'A^car >> ttca"
 O	o5117	ext_rule p5117
 T	t10541	o1283 b10539 b6902
 B	b10542	t10541
@@ -7328,7 +7328,7 @@ T	t2960	o1281 b2960 b14
 B	b2961	t2960
 T	t2961	o2959 b1280 b2961 b14 b14
 B	b2962	t2961
-P	p5542	String "fnExtenT << 'A^car -> 'A^car -> 'A^car >> thenMT fnExtenT << 'A^car -> 'A^car >> thenT autoT"
+P	p5542	String "fnExtenT << 'A^car -> 'A^car -> 'A^car >> thenMT fnExtenT << 'A^car -> 'A^car >> ta"
 O	o5542	ext_rule p5542
 H	h10613	_1010 t10613
 H	h10614	_1010 t10614
@@ -7457,7 +7457,7 @@ T	t3038	o b3013 b3038
 B	b3039	t3038
 T	t3039	o5542 b1280 b3011 b3039 b14
 B	b3040	t3039
-P	p5632	String "fnExtenT << 'A^car -> 'A^car >> thenT autoT"
+P	p5632	String "fnExtenT << 'A^car -> 'A^car >> ta"
 O	o5632	ext_rule p5632
 S	s10856	tbrarg\\ h5676 h6904 h6668 h6669 h6670 h6671 h6672 h6675 h6907 h10613 h10614\\ t10856
 B	b10857	s10856
@@ -8085,7 +8085,7 @@ T	t4368	o b4368 b14
 B	b4379	t4368
 T	t4379	o3382 b1280 b3915 b4379 b14
 B	b4410	t4379
-P	p5986	String "assertT << \"type\"{(quotGroup{groupKer{'f_1; 'A; 'B}; 'A})^car} >> thenAT autoT thenT dT 0 ttca thenT repeatForT 2 (dT 0) thenT reduceT ttca"
+P	p5986	String "assertT << \"type\"{(quotGroup{groupKer{'f_1; 'A; 'B}; 'A})^car} >> taa thenT dT 0 ttca thenT repeatForT 2 (dT 0) thenT reduceT ttca"
 O	o5986	ext_rule p5986
 H	h11539	_1010 t11527
 S	s11539	tbrarg\\ h5676 h11489 h11494 h11496 h11539\\ t11500
@@ -8191,7 +8191,7 @@ T	t4585	o b4456 b4585
 B	b4586	t4585
 T	t4586	o1281 b4298 b4586
 B	b4587	t4586
-P	p3631	String "genAssumT [2] thenT dT (-1) thenT autoT"
+P	p3631	String "genAssumT [2] thenT dT (-1) ta"
 O	o3631	ext_rule p3631
 H	h11667	_1010 t11667
 S	s11668	tbrarg\\ h5676 h11489 h11494 h11496 h11539 h11667\\ t11668
@@ -8312,7 +8312,7 @@ T	t4341	o1282 b11783 b14
 B	b4342	t4341
 T	t4342	o1281 b4342 b14
 B	b4343	t4342
-P	p6262	String "assertT <<'f_1 'x in 'B^car>> thenMT assertT <<'f_1 'y in 'B^car>> thenT autoT"
+P	p6262	String "assertT <<'f_1 'x in 'B^car>> thenMT assertT <<'f_1 'y in 'B^car>> ta"
 O	o6262	ext_rule p6262
 T	t12048	o1287 b6654 b5821 b5823
 H	h12048	_1010 t12048
@@ -8833,7 +8833,7 @@ P	p4803	String "dT 0 ttca thenT dT (-1) ttca thenT backThruHypT 5 ttca"
 O	o4803	ext_rule p4803
 T	t4803	o4803 b1280 b4343 b14 b14
 B	b4804	t4803
-P	p6592	String "repeatForT 2 (dT 4) thenT withT << 'z >> (dT 5) thenT autoT thenT dT 0"
+P	p6592	String "repeatForT 2 (dT 4) thenT withT << 'z >> (dT 5) ta thenT dT 0"
 O	o6592	ext_rule p6592
 T	t4482	o1282 b11854 b14
 B	b4483	t4482

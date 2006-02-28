@@ -4686,7 +4686,7 @@ T	t2071	o800 b2032 b110
 B	b2072	t2071
 T	t2072	o1106 b799 b2072 b110 b110
 B	b2075	t2072
-P	p2840	String "rwh unfold_ProofRule (-1) thenT autoT"
+P	p2840	String "rwh unfold_ProofRule (-1) ta"
 O	o2854	ext_rule p2840
 T	t2075	o800 b2036 b110
 B	b2076	t2075

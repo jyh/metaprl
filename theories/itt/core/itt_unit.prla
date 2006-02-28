@@ -2041,7 +2041,7 @@ O	o1300	rule p1300
 NSummary!interactive	interactive	interactive Summary
 O	o1301	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p1301	String "useWitnessT <<unit>> thenT autoT"
+P	p1301	String "useWitnessT <<unit>> ta"
 O	o1302	ext_rule p1301
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o1303	status_incomplete
@@ -2100,7 +2100,7 @@ T	t1383	o1382
 B	b1383	t1383
 P	p1419	String unit_memberFormation
 O	o1419	rule p1419
-P	p1420	String "useWitnessT <<it>> thenT autoT"
+P	p1420	String "useWitnessT <<it>> ta"
 O	o1420	ext_rule p1420
 P	p1434	String Elimination
 O	o1434	comment_string p1434

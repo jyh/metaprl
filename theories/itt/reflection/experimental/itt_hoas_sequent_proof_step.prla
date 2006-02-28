@@ -2970,7 +2970,7 @@ T	t817	o b814 b125
 B	b817	t817
 T	t818	o1050 b799 b817
 B	b818	t818
-P	p1069	String "dT (-1) thenT rw reduceC 0 thenT autoT"
+P	p1069	String "dT (-1) thenT rw reduceC 0 ta"
 O	o1069	ext_rule p1069
 T	t667	o1052 b3543 b621
 B	b668	t667

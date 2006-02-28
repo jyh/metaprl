@@ -1177,7 +1177,7 @@ B	b424	t423
 NSummary!interactive	interactive	interactive Summary
 O	o424	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p320	String "genAssumT [4;5] thenT rwh unfold_reduce1 2 thenT rwh unfold_reduce1 3 thenT autoT thenT moveToConclT 2"
+P	p320	String "genAssumT [4;5] thenT rwh unfold_reduce1 2 thenT rwh unfold_reduce1 3 ta thenT moveToConclT 2"
 O	o320	ext_rule p320
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o426	status_incomplete
@@ -1245,7 +1245,7 @@ T	t352	o b352 b6
 B	b353	t352
 T	t353	o427 b435 b353
 B	b354	t353
-P	p452	String "hypSubstT 5 0 thenMT hypSubstT 6 0 thenWT autoT thenT onHypsT [6;5] thinT"
+P	p452	String "hypSubstT 5 0 thenMT hypSubstT 6 0 twa thenT onHypsT [6;5] thinT"
 O	o452	ext_rule p452
 P	p453	String ""
 O	o453	tactic_arg p453

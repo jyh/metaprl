@@ -2480,7 +2480,7 @@ T	t1217	o921 b1216
 B	b1217	t1217
 T	t1218	o954 b1213 b1217
 B	b1218	t1218
-P	p1218	String "int_sqequal thenT assumT 1 thenT hypSubstT (-1) 0 thenT autoT thenT nat_is_int ttca"
+P	p1218	String "int_sqequal thenT assumT 1 thenT hypSubstT (-1) 0 ta thenT nat_is_int ttca"
 O	o1218	ext_rule p1218
 T	t1219	o b1212 b19
 B	b1219	t1219
@@ -2563,7 +2563,7 @@ T	t1265	o b1264 b19
 B	b1265	t1265
 T	t1266	o898 b1259 b1265
 B	b1266	t1266
-P	p1266	String "dT 2 thenT dT (-1) thenT autoT"
+P	p1266	String "dT 2 thenT dT (-1) ta"
 O	o1266	ext_rule p1266
 H	h1266	left1 t955
 H	h1267	right1 t955

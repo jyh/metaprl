@@ -4318,7 +4318,7 @@ T	t3717	o b3717 b4
 B	b3718	t3717
 T	t3718	o576 b3712 b3718
 B	b3719	t3718
-P	p2250	String "withT << 'f 'y2 >> (dT 0) thenT autoT"
+P	p2250	String "withT << 'f 'y2 >> (dT 0) ta"
 O	o2250	ext_rule p2250
 H	h3719	_1 t2068
 T	t2250	o727 b2078 b802
@@ -4636,7 +4636,7 @@ T	t3788	o b3788 b4
 B	b3789	t3788
 T	t3789	o1123 b575 b3786 b3789 b4
 B	b3790	t3789
-P	p1134	String "rwh unfold_fun_set 0 thenT autoT"
+P	p1134	String "rwh unfold_fun_set 0 ta"
 O	o1134	ext_rule p1134
 H	h2574	_1010 t2570
 S	s2574	tbrarg\\ h93 h2574\\ t2557
@@ -4677,7 +4677,7 @@ T	t3794	o b3794 b4
 B	b3795	t3794
 T	t3795	o576 b3791 b3795
 B	b3796	t3795
-P	p1169	String "setExtT thenT autoT"
+P	p1169	String "setExtT ta"
 O	o1169	ext_rule p1169
 H	h3007	_1010 t1137
 S	s2643	tbrarg\\ h93 h2574 h690 h1134 h3007\\ t2643
@@ -4756,7 +4756,7 @@ T	t3811	o b3811 b4
 B	b3812	t3811
 T	t3812	o576 b3807 b3812
 B	b3813	t3812
-P	p1200	String "withT << 'z >> (dT 0) thenT autoT"
+P	p1200	String "withT << 'z >> (dT 0) ta"
 O	o1200	ext_rule p1200
 H	h2919	_1010 t2919
 H	h2920	_1010 t2920

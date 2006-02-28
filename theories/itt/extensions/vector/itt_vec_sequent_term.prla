@@ -4310,7 +4310,7 @@ T	t1927	o b1927 b8
 B	b1928	t1927
 T	t1928	o1169 b1919 b1928
 B	b1929	t1928
-P	p1929	String "rwh reduce_hypconslist_left 0 thenT autoT"
+P	p1929	String "rwh reduce_hypconslist_left 0 ta"
 O	o1929	ext_rule p1929
 T	t1929	o880 b1922
 S	s1929	t900\\ h4794\\ t1929
@@ -4328,7 +4328,7 @@ T	t1937	o b1937 b8
 B	b1938	t1937
 T	t1938	o1169 b1927 b1938
 B	b1939	t1938
-P	p1939	String "rwh unfold_hyps_flatten 0 thenT autoT"
+P	p1939	String "rwh unfold_hyps_flatten 0 ta"
 O	o1939	ext_rule p1939
 T	t1939	o33 b1930
 B	b1940	t1939
@@ -7124,7 +7124,7 @@ B	b3910	s3909
 T	t3910	o33 b3910
 S	s3910	t900\\ h1112\\ t3910
 B	b3911	s3910
-P	p3922	String "rwh hyps_length_null 0 thenT rw reduceVBindC 0 thenT autoT"
+P	p3922	String "rwh hyps_length_null 0 thenT rw reduceVBindC 0 ta"
 O	o3922	ext_rule p3922
 H	h3922	x t3203
 S	s3922	t1172\\ h1016 h3182 h4169 h3922\\ t3191

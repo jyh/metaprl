@@ -627,7 +627,7 @@ B	b259	t258
 NSummary!interactive	interactive	interactive Summary
 O	o263	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p5	String "thinningT false (dT 2) thenT autoT"
+P	p5	String "thinningT false (dT 2) ta"
 O	o8	ext_rule p5
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o265	status_incomplete
@@ -2322,13 +2322,13 @@ T	t609	o b576 b608
 B	b609	t609
 T	t610	o266 b562 b609
 B	b610	t610
-P	p610	String "rw reduceC 0 thenT autoT"
+P	p610	String "rw reduceC 0 ta"
 O	o610	ext_rule p610
 T	t611	o266 b576 b6
 B	b611	t611
 T	t612	o610 b265 b611 b6 b6
 B	b612	t612
-P	p612	String "dT 0 thenWT autoT"
+P	p612	String "dT 0 twa"
 O	o612	ext_rule p612
 T	t613	o684 b606 b6
 B	b613	t613
@@ -2343,7 +2343,7 @@ T	t618	o b618 b6
 B	b619	t618
 T	t619	o266 b613 b619
 B	b620	t619
-P	p620	String "withT << 'u >> (dT 0) thenWT autoT"
+P	p620	String "withT << 'u >> (dT 0) twa"
 O	o620	ext_rule p620
 T	t620	o684 b617 b6
 B	b621	t620
@@ -2360,7 +2360,7 @@ T	t632	o b632 b6
 B	b633	t632
 T	t633	o266 b621 b633
 B	b634	t633
-P	p635	String "withT << 'v >> (dT 0) thenT autoT"
+P	p635	String "withT << 'v >> (dT 0) ta"
 O	o635	ext_rule p635
 T	t635	o266 b632 b6
 B	b635	t635
@@ -2415,7 +2415,7 @@ T	t689	o b684 b689
 B	b690	t689
 T	t690	o266 b659 b690
 B	b692	t690
-P	p692	String "sqsimple_sq << list{BTerm} >> thenT autoT"
+P	p692	String "sqsimple_sq << list{BTerm} >> ta"
 O	o692	ext_rule p692
 T	t692	o266 b684 b6
 B	b694	t692
@@ -2474,7 +2474,7 @@ T	t726	o b725 b6
 B	b726	t726
 T	t729	o266 b719 b726
 B	b730	t729
-P	p730	String "substT << 'depth +@ 'h ~ bdepth{'u} >> 0 thenT autoT"
+P	p730	String "substT << 'depth +@ 'h ~ bdepth{'u} >> 0 ta"
 O	o730	ext_rule p730
 T	t730	o684 b724 b6
 B	b731	t730
@@ -2632,7 +2632,7 @@ T	t896	o b892 b895
 B	b896	t896
 T	t897	o867 b265 b890 b896 b6
 B	b897	t897
-P	p897	String "rwAll (higherC (hypC 4)) thenT autoT"
+P	p897	String "rwAll (higherC (hypC 4)) ta"
 O	o897	ext_rule p897
 T	t898	o266 b846 b6
 B	b898	t898
@@ -3730,7 +3730,7 @@ T	t988	o b986 b6
 B	b988	t988
 T	t992	o266 b953 b988
 B	b992	t992
-P	p992	String "dT 0 thenWT autoT thenT omegaT thenT autoT"
+P	p992	String "dT 0 twa thenT omegaT ta"
 O	o993	ext_rule p992
 T	t993	o684 b985 b6
 B	b993	t993
@@ -3784,7 +3784,7 @@ T	t1208	o b1202 b1208
 B	b1209	t1208
 T	t1209	o266 b1130 b1209
 B	b1210	t1209
-P	p1210	String "sqsimple_sq << nat >> thenT autoT"
+P	p1210	String "sqsimple_sq << nat >> ta"
 O	o1210	ext_rule p1210
 T	t1210	o266 b1202 b6
 B	b1211	t1210

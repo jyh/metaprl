@@ -2130,14 +2130,14 @@ NItt_list!cons	cons	cons Itt_list
 O	o1074	cons
 P	p1074	Var u
 O	o1075	var p1074
-P	p1084	String "rwh unfold_hyp_depths 0 thenT rw reduceC 0 thenT autoT"
+P	p1084	String "rwh unfold_hyp_depths 0 thenT rw reduceC 0 ta"
 O	o1084	ext_rule p1084
-P	p1086	String "dT 0 thenWT autoT"
+P	p1086	String "dT 0 twa"
 O	o1086	ext_rule p1086
 P	p1087	String ""
 O	o1087	tactic_arg p1087
 H	h1087	v2 t965
-P	p1092	String "rwh unfold_hyp_depths 0 thenT rw reduceC 0 thenT rwh fold_hyp_depths 0 thenT autoT"
+P	p1092	String "rwh unfold_hyp_depths 0 thenT rw reduceC 0 thenT rwh fold_hyp_depths 0 ta"
 O	o1092	ext_rule p1092
 O	o1118	tactic_arg p1032
 NSummary!resource_defs	resource_defs	resource_defs Summary
@@ -2163,7 +2163,7 @@ H	h1159	u1 t774
 H	h1160	v t773
 P	p1160	Var u1
 O	o1160	var p1160
-P	p1168	String "rwh unfold_is_sequent 0 thenT rw reduceC 0 thenT autoT"
+P	p1168	String "rwh unfold_is_sequent 0 thenT rw reduceC 0 ta"
 O	o1168	ext_rule p1168
 P	p1180	String is_sequent_wf2
 O	o1180	rule p1180
@@ -2190,7 +2190,7 @@ T	t1188	o1034 b1188
 B	b1189	t1188
 T	t1189	o937 b1181 b1184 b1187
 B	b1190	t1189
-P	p1197	String "rwh unfold_sequent 0 thenT autoT"
+P	p1197	String "rwh unfold_sequent 0 ta"
 O	o1197	ext_rule p1197
 T	t1197	o b1188 b125
 B	b1198	t1197
@@ -2554,7 +2554,7 @@ T	t1927	o966 b1187
 B	b1928	t1927
 T	t1928	o995 b1184
 B	b1929	t1928
-P	p1945	String "rwh unfold_sequent 0 thenT rwh unfold_Sequent 0 thenT autoT"
+P	p1945	String "rwh unfold_sequent 0 thenT rwh unfold_Sequent 0 ta"
 O	o1945	ext_rule p1945
 P	p1957	String assertion
 O	o1957	tactic_arg p1957
@@ -2821,7 +2821,7 @@ B	b1891	t1525
 P	p3758	String equality
 P	p4271	Var y
 O	o4271	var p4271
-P	p4328	String "assumT 1 thenT autoT"
+P	p4328	String "assumT 1 ta"
 O	o4328	ext_rule p4328
 P	p3555	String Define
 O	o3555	comment_string p3555
@@ -3065,7 +3065,7 @@ O	o4810	ext_rule p4804
 H	h4823	y t4732
 B	b4845	t4734
 B	b4879	t4732
-P	p4907	String "assumT 1 thenT assumT 2 thenT rwh unfold_assert 2 thenT dT 2 thenT rwh fold_assert 2 thenT autoT"
+P	p4907	String "assumT 1 thenT assumT 2 thenT rwh unfold_assert 2 thenT dT 2 thenT rwh fold_assert 2 ta"
 O	o4907	ext_rule p4907
 NBase_trivial	Base_trivial	Base_trivial NIL
 NBase_trivial!it	it	it Base_trivial
@@ -4978,7 +4978,7 @@ O	o2137	ext_rule p2137
 H	h1	l1 t774
 P	p4	Var l1
 O	o126	var p4
-P	p887	String "dT (-1) thenT autoT"
+P	p887	String "dT (-1) ta"
 O	o887	ext_rule p887
 H	h5272	v2 t5223
 P	p5296	String beq_sequent_list_intro
@@ -6139,7 +6139,7 @@ T	t2344	o b2343 b125
 B	b2344	t2344
 T	t2345	o1050 b2340 b2344
 B	b2345	t2345
-P	p919	String "dT (-1) thenT autoT thenT dT (-1) ttca"
+P	p919	String "dT (-1) ta thenT dT (-1) ttca"
 O	o919	ext_rule p919
 T	t919	o1050 b2343 b125
 B	b919	t919
@@ -7536,7 +7536,7 @@ P	p1458	Var v3
 O	o1458	var p1458
 T	t1479	o1458
 B	b1481	t1479
-P	p1494	String "rwh unfold_BTerm2 0 thenT rwh unfold_CVar 0 thenT autoT"
+P	p1494	String "rwh unfold_BTerm2 0 thenT rwh unfold_CVar 0 ta"
 O	o1494	ext_rule p1494
 H	h1542	v3 t774
 P	p1972	String cvar_cons_eq
@@ -7629,7 +7629,7 @@ T	t1766	o b1036 b1761
 B	b1766	t1766
 T	t1772	o1052 b1741 b1766
 B	b1772	t1772
-P	p1867	String "rwh unfold_CVar 0 thenT autoT"
+P	p1867	String "rwh unfold_CVar 0 ta"
 O	o1867	ext_rule p1867
 H	h1899	v2 t774
 P	p1937	String "repeatForT 3 (moveToConclT (-1)) thenT moveToConclT (-2)"
@@ -9677,7 +9677,7 @@ T	t3458	o1740 b1065 b5228
 B	b3459	t3458
 T	t3462	o995 b1065
 B	b3463	t3462
-P	p3501	String "rw reduceC 0 thenT autoT"
+P	p3501	String "rw reduceC 0 ta"
 O	o3501	ext_rule p3501
 P	p3546	String "withT << 'v2 +@ 1 >> (dT 6) ttca"
 O	o3546	ext_rule p3546

@@ -1111,7 +1111,7 @@ T	t1558	o662 b1531 b1558
 B	b1559	t1558
 T	t1559	o662 b1522 b1559
 B	b1560	t1559
-P	p4298	String "univTypeT <<univ[l:l]>> thenT autoT"
+P	p4298	String "univTypeT <<univ[l:l]>> ta"
 O	o4298	ext_rule p4298
 T	t1560	o1265 b1557 b1538
 B	b1561	t1560
@@ -3744,7 +3744,7 @@ T	t3306	o b3302 b3306
 B	b3308	t3306
 T	t3308	o1263 b3298 b3308
 B	b3309	t3308
-P	p2684	String "atT <<univ[l:l]>> (colEqSymT thenT autoT)"
+P	p2684	String "atT <<univ[l:l]>> (colEqSymT ta)"
 O	o2684	ext_rule p2684
 H	h1798	_1010 t1797
 S	s1798	tbrarg\\ h1467 h1796 h1797 h1798\\ t1798
@@ -3764,7 +3764,7 @@ B	b1801	t1801
 T	t1802	o667 b1801
 S	s1802	tbrarg\\ h1467\\ t1802
 B	b1802	s1802
-P	p2687	String "atT <<univ[l:l]>> (colEqTransT <<'v>> thenT autoT)"
+P	p2687	String "atT <<univ[l:l]>> (colEqTransT <<'v>> ta)"
 O	o2689	ext_rule p2687
 H	h1821	_1010 t1820
 S	s1822	tbrarg\\ h1467 h1796 h1797 h1820 h1798 h1821\\ t1822
@@ -3814,7 +3814,7 @@ T	t1925	o663 b1919
 B	b1926	t1925
 T	t1926	o662 b1470 b1926
 B	b1927	t1926
-P	p2706	String "genAssumT [1] thenT autoT"
+P	p2706	String "genAssumT [1] ta"
 O	o2706	ext_rule p2706
 T	t1927	o1265 b1919 b1475
 B	b1928	t1927
@@ -4101,7 +4101,7 @@ T	t3500	o b3499 b4
 B	b3500	t3500
 T	t3501	o1263 b3498 b3500
 B	b3501	t3501
-P	p2852	String "rwh unfold_Col 2 thenT dT 2 thenWT autoT"
+P	p2852	String "rwh unfold_Col 2 thenT dT 2 twa"
 O	o2852	ext_rule p2852
 P	p3501	String ""
 O	o3501	tactic_arg p3501
@@ -4174,7 +4174,7 @@ P	p2993	String col_member_member
 O	o2993	rule p2993
 P	p3014	String "byDefT unfold_col_member"
 O	o3014	ext_rule p3014
-P	p3071	String "byDefsT [unfold_type_col; unfold_col] thenT univTypeT <<univ[l:l]>> thenT autoT"
+P	p3071	String "byDefsT [unfold_type_col; unfold_col] thenT univTypeT <<univ[l:l]>> ta"
 O	o3071	ext_rule p3071
 P	p3085	String "rwh unfold_type_col 0 thenT byDefT unfold_col_member"
 O	o3085	ext_rule p3085
@@ -4509,7 +4509,7 @@ P	p3315	String member_singleton_elim
 O	o3315	rule p3315
 P	p3328	String "assumT 1 thenT assumT 2 thenT rwh unfold_singleton 2 thenT rwh unfold_col_member 2"
 O	o3328	ext_rule p3328
-P	p3407	String "rwh reduceC 2 thenT esquashT 2 thenT autoT"
+P	p3407	String "rwh reduceC 2 thenT esquashT 2 ta"
 O	o3407	ext_rule p3407
 P	p3492	String "rwh unfold_union 0 thenT rwh unfold_Col 0 thenT rwh unfold_col 0"
 O	o3492	ext_rule p3492
@@ -4522,7 +4522,7 @@ P	p3916	String "withT <<'z>> (repeatT (dT 0)) thenT trivialT"
 O	o3925	ext_rule p3916
 P	p4006	String "copyHypT 2 3 thenT rwh unfold_union 3 thenT rwh unfold_col_member 3 thenT rwh reduceC 3"
 O	o4006	ext_rule p4006
-P	p4051	String "esquashT 3 thenT autoT"
+P	p4051	String "esquashT 3 ta"
 O	o4051	ext_rule p4051
 P	p4062	String ThinOption
 O	o4062	uid p4062
@@ -6081,7 +6081,7 @@ T	t4809	o b4809 b4
 B	b4810	t4809
 T	t4810	o1263 b4808 b4810
 B	b4811	t4810
-P	p5111	String "esquashAutoT thenT assertAtT 3 <<col_member{'C['s];'x}>> thenT autoT"
+P	p5111	String "esquashAutoT thenT assertAtT 3 <<col_member{'C['s];'x}>> ta"
 O	o5111	ext_rule p5111
 T	t4811	o1263 b4809 b4
 B	b4812	t4811
@@ -6543,7 +6543,7 @@ B	b4945	t4945
 P	p4945	Number 11397
 P	p6295	String "rwh unfold_add 0 thenT atT <<univ[l:l]>> (withT <<\"bfalse\">> (dT 0) thenT byDefT reduceC)"
 O	o6295	ext_rule p6295
-P	p6429	String "byDefT unfold_add thenT doNotThinT (dT 2) thenWT autoT"
+P	p6429	String "byDefT unfold_add thenT doNotThinT (dT 2) twa"
 O	o6437	ext_rule p6429
 P	p6660	String "dT (-1) thenT atT <<univ[l:l]>> (byDefT reduceC)"
 O	o6680	ext_rule p6660

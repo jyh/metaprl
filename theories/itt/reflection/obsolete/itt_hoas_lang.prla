@@ -4101,7 +4101,7 @@ T	t1604	o1539 b1594 b1603
 B	b1604	t1604
 T	t1605	o1539 b1591 b1604
 B	b1605	t1605
-P	p1605	String "genAssumT [1] thenT dT 2 thenT autoT thenT tryT (univTypeT <<univ[l:l]>>)"
+P	p1605	String "genAssumT [1] thenT dT 2 ta thenT tryT (univTypeT <<univ[l:l]>>)"
 O	o1605	ext_rule p1605
 T	t1606	o b1595 b23
 B	b1606	t1606
@@ -4206,7 +4206,7 @@ T	t1647	o1539 b1596 b1646
 B	b1647	t1647
 T	t1648	o1539 b1591 b1647
 B	b1648	t1648
-P	p1648	String "genAssumT [1] thenT dT 2 thenT autoT"
+P	p1648	String "genAssumT [1] thenT dT 2 ta"
 O	o1648	ext_rule p1648
 T	t1649	o b1525 b1606
 B	b1649	t1649
@@ -5051,7 +5051,7 @@ T	t1998	o b1998 b23
 B	b1999	t1998
 T	t1999	o1412 b1986 b1999
 B	b2000	t1999
-P	p2000	String "assumT 2 thenT all2_length_elim 2 << int >> << Lang{'sop} >> thenMT all2_index_elim 2 << int >> << Lang{'sop} >> thenT autoT"
+P	p2000	String "assumT 2 thenT all2_length_elim 2 << int >> << Lang{'sop} >> thenMT all2_index_elim 2 << int >> << Lang{'sop} >> ta"
 O	o2000	ext_rule p2000
 T	t2000	o1979 b1997 b1424
 B	b2001	t2000
@@ -5161,7 +5161,7 @@ T	t2041	o b2041 b23
 B	b2042	t2041
 T	t2042	o1412 b2038 b2042
 B	b2043	t2042
-P	p2043	String "letT << 'x = nth{'shape;'v} in nat >> thenT autoT"
+P	p2043	String "letT << 'x = nth{'shape;'v} in nat >> ta"
 O	o2043	ext_rule p2043
 T	t2043	o1979 b2040 b1424
 B	b2044	t2043
@@ -5338,7 +5338,7 @@ T	t2116	o b2116 b23
 B	b2117	t2116
 T	t2117	o1412 b2112 b2117
 B	b2118	t2117
-P	p2118	String "assertT << 'subterms in list{Lang{'sop}} >> thenT autoT"
+P	p2118	String "assertT << 'subterms in list{Lang{'sop}} >> ta"
 O	o2118	ext_rule p2118
 P	p2119	String assertion
 O	o2119	tactic_arg p2119
@@ -5430,7 +5430,7 @@ T	t2155	o1539 b1861 b2154
 B	b2155	t2155
 T	t2156	o1539 b2149 b2155
 B	b2156	t2156
-P	p2156	String "byDefT unfold_compatible_shapes thenT all2_sqstable << int >> << Lang{'sop} >> thenT autoT"
+P	p2156	String "byDefT unfold_compatible_shapes thenT all2_sqstable << int >> << Lang{'sop} >> ta"
 O	o2156	ext_rule p2156
 T	t2157	o b2150 b23
 B	b2157	t2157
@@ -5499,7 +5499,7 @@ T	t2184	o b2184 b23
 B	b2185	t2184
 T	t2185	o1412 b2181 b2185
 B	b2186	t2185
-P	p2186	String "letT << 'l = 'subterms in list{Lang{'sop}} >> thenT autoT"
+P	p2186	String "letT << 'l = 'subterms in list{Lang{'sop}} >> ta"
 O	o2186	ext_rule p2186
 T	t2186	o1979 b2183 b1424
 B	b2187	t2186
@@ -6070,7 +6070,7 @@ T	t2432	o b2432 b23
 B	b2433	t2432
 T	t2433	o1412 b2423 b2433
 B	b2434	t2433
-P	p2434	String "letT << 's = 'subterms in list{Lang{'sop}} >> thenT autoT"
+P	p2434	String "letT << 's = 'subterms in list{Lang{'sop}} >> ta"
 O	o2434	ext_rule p2434
 T	t2434	o1979 b2431 b1424
 B	b2435	t2434
@@ -6286,7 +6286,7 @@ T	t2526	o b2522 b2526
 B	b2527	t2526
 T	t2527	o1412 b2515 b2527
 B	b2528	t2527
-P	p2528	String "byDefsT [unfold_LIter;unfold_Ldom]  thenT letT << 'l = 'subterms1 in list{Lang{'sop}} >> thenT autoT thenWT subtypeT << 'sop >> ttca thenT subtypeT << list{BT{'sop;'n}} >> ttca"
+P	p2528	String "byDefsT [unfold_LIter;unfold_Ldom]  thenT letT << 'l = 'subterms1 in list{Lang{'sop}} >> ta thenWT subtypeT << 'sop >> ttca thenT subtypeT << list{BT{'sop;'n}} >> ttca"
 O	o2528	ext_rule p2528
 T	t2528	o1412 b2522 b23
 B	b2529	t2528
@@ -6476,7 +6476,7 @@ T	t2604	o b2598 b2603
 B	b2604	t2604
 T	t2605	o1412 b2580 b2604
 B	b2605	t2605
-P	p2605	String "letT << 'l = 'z in list{Lang{'sop}} >> thenT autoT thenWT subtypeT << 'sop >> ttca"
+P	p2605	String "letT << 'l = 'z in list{Lang{'sop}} >> ta thenWT subtypeT << 'sop >> ttca"
 O	o2605	ext_rule p2605
 T	t2606	o1979 b2597 b1424
 B	b2606	t2606
@@ -6802,7 +6802,7 @@ T	t2734	o b2730 b2734
 B	b2735	t2734
 T	t2735	o1412 b2722 b2735
 B	b2736	t2735
-P	p2736	String "moveToConclT (-1) thenT genAssumT [1] thenT dT (-1) thenT autoT thenT arithT ttca"
+P	p2736	String "moveToConclT (-1) thenT genAssumT [1] thenT dT (-1) ta thenT arithT ttca"
 O	o2736	ext_rule p2736
 T	t2736	o1412 b2730 b23
 B	b2737	t2736
@@ -6820,7 +6820,7 @@ T	t2741	o b2741 b23
 B	b2742	t2741
 T	t2742	o1412 b2733 b2742
 B	b2743	t2742
-P	p2743	String "moveToConclT 3 thenT genAssumT [1] thenT dT (-1) thenT autoT thenT omegaT ttca"
+P	p2743	String "moveToConclT 3 thenT genAssumT [1] thenT dT (-1) ta thenT omegaT ttca"
 O	o2743	ext_rule p2743
 T	t2743	o1412 b2741 b23
 B	b2744	t2743
@@ -6918,7 +6918,7 @@ T	t2782	o b2782 b23
 B	b2783	t2782
 T	t2783	o1412 b2779 b2783
 B	b2784	t2783
-P	p2784	String "moveToConclT (-1) thenT dT (-1) thenT autoT"
+P	p2784	String "moveToConclT (-1) thenT dT (-1) ta"
 O	o2784	ext_rule p2784
 T	t2784	o1597 b1612 b2767
 H	h2784	_1 t2784
@@ -7299,7 +7299,7 @@ T	t2940	o2938 b1173 b2939
 B	b2940	t2940 gamma
 T	t2941	o2883 b1204 b2940
 B	b2941	t2941
-P	p2941	String "genAssumT [2;1;3] thenT assertSquash thenT autoT"
+P	p2941	String "genAssumT [2;1;3] thenT assertSquash ta"
 O	o2941	ext_rule p2941
 T	t2942	o2938 b2837 b2939
 B	b2942	t2942 gamma
@@ -7344,7 +7344,7 @@ T	t2960	o b2959 b23
 B	b2960	t2960
 T	t2961	o1412 b2950 b2960
 B	b2961	t2961
-P	p2961	String "dT 2 ttca thenT dT 0 thenT autoT thenT reduceT ttca thenT arithT ttca"
+P	p2961	String "dT 2 ttca thenT dT 0 ta thenT reduceT ttca thenT arithT ttca"
 O	o2961	ext_rule p2961
 T	t2962	o1412 b2959 b23
 B	b2962	t2962
@@ -7490,7 +7490,7 @@ T	t3024	o b3016 b3023
 B	b3024	t3024
 T	t3025	o1412 b2996 b3024
 B	b3025	t3025
-P	p3025	String "autoT thenT subtypeT <<nat>> thenT autoT"
+P	p3025	String "autoT thenT subtypeT <<nat>> ta"
 O	o3025	ext_rule p3025
 H	h3025	i t3009
 T	t3026	o1114 b1133 b3011 b3011
@@ -7544,7 +7544,7 @@ T	t3045	o b3044 b23
 B	b3045	t3045
 T	t3046	o1412 b3031 b3045
 B	b3046	t3046
-P	p3046	String "letT << 'x = nth{'v1; 'i -@ 1} in Lang{'sop} >> thenT autoT"
+P	p3046	String "letT << 'x = nth{'v1; 'i -@ 1} in Lang{'sop} >> ta"
 O	o3046	ext_rule p3046
 T	t3047	o1979 b3043 b1424
 B	b3047	t3047
@@ -7691,7 +7691,7 @@ T	t3107	o1177 b3105 b3106 b3107
 B	b3108	t3107
 Vop_case	op_case3108	op_case\\ \\ n op3097 subterms
 B	b3109	op_case3108
-P	p3109	String "reduceT thenT rwh (subterms_lemma << 'sop >>) 0 thenT autoT"
+P	p3109	String "reduceT thenT rwh (subterms_lemma << 'sop >>) 0 ta"
 O	o3109	ext_rule p3109
 T	t3109	o1162 b1519 b2487 b2492
 B	b3110	t3109
@@ -7857,7 +7857,7 @@ T	t3180	o b3179 b23
 B	b3180	t3180
 T	t3181	o1412 b3170 b3180
 B	b3181	t3181
-P	p3181	String "rwhAll unfold_LIter thenT rwhAll unfold_Ldom thenT dT 0 thenT autoT"
+P	p3181	String "rwhAll unfold_LIter thenT rwhAll unfold_Ldom thenT dT 0 ta"
 O	o3181	ext_rule p3181
 H	h3181	op sop1
 T	t3182	o1135 b3173
@@ -7891,7 +7891,7 @@ T	t3192	o b3184 b3192
 B	b3193	t3192
 T	t3193	o1412 b3179 b3193
 B	b3194	t3193
-P	p3194	String "letT << 'l = 'subterms in list{Lang{'sop1}} >> thenT autoT thenT tryT (completeT (subtypeT << 'sop2 >> ttca thenT subtypeT <<'sop1>> ttca)) thenT subtypeT << list{BT{'sop1;'m}} >> thenT autoT"
+P	p3194	String "letT << 'l = 'subterms in list{Lang{'sop1}} >> ta thenT tryT (completeT (subtypeT << 'sop2 >> ttca thenT subtypeT <<'sop1>> ttca)) thenT subtypeT << list{BT{'sop1;'m}} >> thenT autoT"
 O	o3194	ext_rule p3194
 T	t3194	o1979 b3183 b1424
 B	b3195	t3194
@@ -7917,7 +7917,7 @@ T	t3202	o b3202 b23
 B	b3203	t3202
 T	t3203	o3194 b1411 b3200 b3203 b23
 B	b3204	t3203
-P	p3204	String "letT << 'l = 'subterms in list{Lang{'sop2}} >> thenT autoT thenT tryT (completeT (subtypeT << 'sop2 >> ttca thenT subtypeT <<'sop1>> ttca)) thenT subtypeT << list{BT{'sop2;'m}} >> thenT autoT"
+P	p3204	String "letT << 'l = 'subterms in list{Lang{'sop2}} >> ta thenT tryT (completeT (subtypeT << 'sop2 >> ttca thenT subtypeT <<'sop1>> ttca)) thenT subtypeT << list{BT{'sop2;'m}} >> thenT autoT"
 O	o3204	ext_rule p3204
 T	t3204	o1979 b3186 b1424
 B	b3205	t3204
@@ -7925,7 +7925,7 @@ T	t3205	o1412 b3205 b23
 B	b3206	t3205
 T	t3206	o3204 b1411 b3206 b23 b23
 B	b3207	t3206
-P	p3207	String "letT << 'l = 'subterms in list{Lang{'sop2}} >> thenT autoT thenWT subtypeT <<'sop2>> ttca thenT subtypeT << list{BT{'sop2;'m}} >> ttca"
+P	p3207	String "letT << 'l = 'subterms in list{Lang{'sop2}} >> ta thenWT subtypeT <<'sop2>> ttca thenT subtypeT << list{BT{'sop2;'m}} >> ttca"
 O	o3207	ext_rule p3207
 T	t3207	o1979 b3189 b1424
 B	b3208	t3207
@@ -8180,7 +8180,7 @@ T	t3311	o b3307 b3311
 B	b3312	t3311
 T	t3312	o1412 b3275 b3312
 B	b3313	t3312
-P	p3313	String "autoT thenT compatible_shapes_depth2 << 'sop >> << shape{'op} >> <<'i>> thenT autoT"
+P	p3313	String "autoT thenT compatible_shapes_depth2 << 'sop >> << shape{'op} >> <<'i>> ta"
 O	o3313	ext_rule p3313
 H	h3313	i t3300
 S	s3313	t1415\\ h h1547 h1548 h3269 h3270 h3313\\ t1670
@@ -8251,7 +8251,7 @@ T	t3340	o b3336 b3339
 B	b3340	t3340
 T	t3341	o3300 b1411 b3313 b3340 b23
 B	b3341	t3341
-P	p3341	String "rwh (subterms_lemma << 'sop >>) 0 thenT autoT"
+P	p3341	String "rwh (subterms_lemma << 'sop >>) 0 ta"
 O	o3341	ext_rule p3341
 S	s3341	t1415\\ h h1547 h1548 h3269 h3270 h3313\\ t3303
 B	b3342	s3341
@@ -8263,7 +8263,7 @@ T	t3344	o b3344 b3311
 B	b3345	t3344
 T	t3345	o1412 b3279 b3345
 B	b3346	t3345
-P	p3346	String "compatible_shapes_depth2 << 'sop >> << shape{'op} >> <<'i1>> thenT autoT"
+P	p3346	String "compatible_shapes_depth2 << 'sop >> << shape{'op} >> <<'i1>> ta"
 O	o3346	ext_rule p3346
 T	t3346	o1969 b3323 b2014
 B	b3347	t3346
@@ -8306,7 +8306,7 @@ T	t3364	o b3358 b3364
 B	b3365	t3364
 T	t3365	o3341 b1411 b3346 b3365 b23
 B	b3366	t3365
-P	p3366	String "letT << 'l = 'subterms in list{Lang{'sop}} >> thenT autoT thenWT subtypeT <<'sop>> ttca thenT subtypeT << list{'S} >> ttca"
+P	p3366	String "letT << 'l = 'subterms in list{Lang{'sop}} >> ta thenWT subtypeT <<'sop>> ttca thenT subtypeT << list{'S} >> ttca"
 O	o3366	ext_rule p3366
 T	t3366	o1412 b2317 b23
 B	b3367	t3366
@@ -8484,7 +8484,7 @@ T	t3440	o b3435 b3440
 B	b3441	t3440
 T	t3441	o1412 b3430 b3441
 B	b3442	t3441
-P	p3442	String "int_sqequal thenT omegaT thenT autoT thenT subtypeT <<nat>> thenT autoT"
+P	p3442	String "int_sqequal thenT omegaT ta thenT subtypeT <<nat>> thenT autoT"
 O	o3442	ext_rule p3442
 T	t3442	o1412 b3435 b23
 B	b3443	t3442
@@ -8519,7 +8519,7 @@ T	t3454	o b3448 b3454
 B	b3455	t3454
 T	t3455	o1412 b3445 b3455
 B	b3456	t3455
-P	p3456	String "dT 0 thenT autoT thenT onAllAssumT assumT thenT omegaT ttca"
+P	p3456	String "dT 0 ta thenT onAllAssumT assumT thenT omegaT ttca"
 O	o3456	ext_rule p3456
 T	t3456	o1412 b3448 b23
 B	b3457	t3456
@@ -8559,7 +8559,7 @@ T	t3471	o b3470 b23
 B	b3471	t3471
 T	t3472	o1412 b3465 b3471
 B	b3472	t3472
-P	p3472	String "substT <<'k+@('m+@1) ~ ('k+@'m)+@1>> 0 ttca thenT int_sqequal thenT omegaT thenT autoT thenT subtypeT <<nat>> thenT autoT"
+P	p3472	String "substT <<'k+@('m+@1) ~ ('k+@'m)+@1>> 0 ttca thenT int_sqequal thenT omegaT ta thenT subtypeT <<nat>> thenT autoT"
 O	o3472	ext_rule p3472
 T	t3473	o1412 b3470 b23
 B	b3473	t3473
@@ -8765,7 +8765,7 @@ T	t3560	o b3560 b23
 B	b3561	t3560
 T	t3561	o1412 b3555 b3561
 B	b3562	t3561
-P	p3562	String "rwh (subterms_lemma << Operator >>) 0 thenT autoT thenT compatible_shapes_depth2 << Operator >> << shape{'op} >> <<'i>> thenT autoT"
+P	p3562	String "rwh (subterms_lemma << Operator >>) 0 ta thenT compatible_shapes_depth2 << Operator >> << shape{'op} >> <<'i>> thenT autoT"
 O	o3562	ext_rule p3562
 T	t3562	o1412 b3560 b23
 B	b3563	t3562
@@ -8886,7 +8886,7 @@ T	t3612	o b3611 b23
 B	b3612	t3612
 T	t3613	o3601 b1411 b3609 b3612 b23
 B	b3613	t3613
-P	p3613	String "subtypeT << list{BT{Operator; !n}} >> thenT autoT"
+P	p3613	String "subtypeT << list{BT{Operator; !n}} >> ta"
 O	o3613	ext_rule p3613
 T	t3614	o1412 b3598 b23
 B	b3614	t3614
@@ -8981,7 +8981,7 @@ T	t3652	o1412 b3639 b23
 B	b3652	t3652
 T	t3653	o3651 b1411 b3652 b23 b23
 B	b3653	t3653
-P	p3653	String "selT 5 (rwh reduceTopC 0 thenMT dT 0 thenT autoT)"
+P	p3653	String "selT 5 (rwh reduceTopC 0 thenMT dT 0 ta)"
 O	o3653	ext_rule p3653
 T	t3654	o1114 b1228 b3603 b3603
 S	s3654	t1415\\ h h1787 h1547 h1548 h2766 h2767 h3643 h3602\\ t3654
@@ -9023,13 +9023,13 @@ T	t3670	o b3656 b3670
 B	b3671	t3670
 T	t3671	o1412 b3648 b3671
 B	b3672	t3671
-P	p3672	String "withT <<Lang{'sop}>> (dT 0) ttca thenT subtypeT << BT{'sop; !n} >> thenT autoT"
+P	p3672	String "withT <<Lang{'sop}>> (dT 0) ttca thenT subtypeT << BT{'sop; !n} >> ta"
 O	o3672	ext_rule p3672
 T	t3672	o1412 b3656 b23
 B	b3673	t3672
 T	t3673	o3672 b1411 b3673 b23 b23
 B	b3674	t3673
-P	p3674	String "selT 5 (list_wf2 thenT autoT thenT tryT (thinT 8))"
+P	p3674	String "selT 5 (list_wf2 ta thenT tryT (thinT 8))"
 O	o3674	ext_rule p3674
 H	h3674	i1 t3602
 T	t3674	o1969 b2684 b2014
@@ -9132,7 +9132,7 @@ T	t3714	o b3713 b23
 B	b3714	t3714
 T	t3715	o1412 b3703 b3714
 B	b3715	t3715
-P	p3715	String "selT 5 (dT 9 thenT use_subset << BT{'sop; ndepth{nth{!subs; !i}}} >> thenT autoT)"
+P	p3715	String "selT 5 (dT 9 thenT use_subset << BT{'sop; ndepth{nth{!subs; !i}}} >> ta)"
 O	o3715	ext_rule p3715
 H	h3715	_2 t3710
 S	s3715	t1415\\ h h1787 h1547 h1548 h2766 h2767 h3643 h3602 h3715\\ t3654
@@ -9231,7 +9231,7 @@ T	t3756	o b3732 b23
 B	b3757	t3756
 T	t3757	o3691 b1411 b3756 b3757 b23
 B	b3758	t3757
-P	p3758	String "subtypeT <<nat>> ttca thenT withT <<Lang{'sop}>> autoT thenT subtypeT <<list{BT{'sop; !n}} >> thenT autoT"
+P	p3758	String "subtypeT <<nat>> ttca thenT withT <<Lang{'sop}>> autoT thenT subtypeT <<list{BT{'sop; !n}} >> ta"
 O	o3758	ext_rule p3758
 T	t3758	o1412 b3741 b23
 B	b3759	t3758
@@ -9275,7 +9275,7 @@ T	t3777	o b3674 b3777
 B	b3778	t3777
 T	t3778	o3674 b1411 b3681 b3778 b23
 B	b3779	t3778
-P	p3779	String "subtypeT <<list{Lang{'sop}}>> ttca thenT subtypeT << list{BT{'sop; !n}} >> thenT autoT"
+P	p3779	String "subtypeT <<list{Lang{'sop}}>> ttca thenT subtypeT << list{BT{'sop; !n}} >> ta"
 O	o3779	ext_rule p3779
 T	t3779	o1412 b3664 b23
 B	b3780	t3779
@@ -9573,7 +9573,7 @@ T	t3906	o1539 b3892 b3906
 B	b3907	t3906
 T	t3907	o1539 b1596 b3907
 B	b3908	t3907
-P	p3908	String "genAssumT [2] thenT squashT thenT dT 2 thenT reduceT thenT rwh (subterms_lemma <<'sop>>) 0 thenT autoT thenT assertT << 'op in Operator >> thenAT (subtypeT << 'sop >>) ttca"
+P	p3908	String "genAssumT [2] thenT squashT thenT dT 2 thenT reduceT thenT rwh (subterms_lemma <<'sop>>) 0 ta thenT assertT << 'op in Operator >> thenAT (subtypeT << 'sop >>) ttca"
 O	o3908	ext_rule p3908
 T	t3908	o b3899 b23
 B	b3909	t3908
@@ -9675,7 +9675,7 @@ T	t3950	o1539 b1778 b3949
 B	b3950	t3950
 T	t3951	o1539 b1596 b3950
 B	b3951	t3951
-P	p3951	String "selT 5 (genAssumT [2] thenT squashT thenT dT (-1) thenT byDefsT [unfold_dest; unfold_Ldom] thenT tryT (dT 0) thenT autoT thenT tryT (completeT (subtypeT << 'sop >> ttca)) thenT tryT (completeT (withT << 'sop >> autoT)))"
+P	p3951	String "selT 5 (genAssumT [2] thenT squashT thenT dT (-1) thenT byDefsT [unfold_dest; unfold_Ldom] thenT tryT (dT 0) ta thenT tryT (completeT (subtypeT << 'sop >> ttca)) thenT tryT (completeT (withT << 'sop >> autoT)))"
 O	o3951	ext_rule p3951
 T	t3952	o1414 b3948 b1785
 B	b3952	t3952
@@ -9811,7 +9811,7 @@ T	t4010	o1539 b1852 b4010
 B	b4011	t4010
 T	t4011	o1539 b1591 b4011
 B	b4012	t4011
-P	p4012	String "assertT << (all l: nat. all r:nat. squash{'P[var{'l;'r}]}) & (all depth: nat. all op: 'sop. all subs: list{BT{'sop; 'n}}. (compatible_shapes{'depth;shape{'op};'subs} => squash{'P[mk_bterm{'depth;'op;'subs}]})) >> thenT autoT"
+P	p4012	String "assertT << (all l: nat. all r:nat. squash{'P[var{'l;'r}]}) & (all depth: nat. all op: 'sop. all subs: list{BT{'sop; 'n}}. (compatible_shapes{'depth;shape{'op};'subs} => squash{'P[mk_bterm{'depth;'op;'subs}]})) >> ta"
 O	o4012	ext_rule p4012
 T	t4012	o b4004 b23
 B	b4013	t4012
@@ -9859,7 +9859,7 @@ T	t4032	o b4022 b4032
 B	b4033	t4032
 T	t4033	o1412 b4018 b4033
 B	b4034	t4033
-P	p4034	String "letT << 'l = 'subs in list{Lang{'sop}} >> thenT autoT thenWT subtypeT <<'sop>> ttca thenT subtypeT << list{BT{'sop;'n}} >> ttca"
+P	p4034	String "letT << 'l = 'subs in list{Lang{'sop}} >> ta thenWT subtypeT <<'sop>> ttca thenT subtypeT << list{BT{'sop;'n}} >> ttca"
 O	o4034	ext_rule p4034
 T	t4034	o1979 b4021 b1424
 B	b4035	t4034
@@ -10264,7 +10264,7 @@ T	t4208	o1539 b4203 b4208
 B	b4209	t4208
 T	t4209	o1539 b1852 b4209
 B	b4210	t4209
-P	p4210	String "assertT << (all l: nat. all r:nat. squash{'P[var{'l;'r}]}) & (all depth: nat. all op:'sop. all subterms:list{Lang{'sop}}. (compatible_shapes{'depth;shape{'op};'subterms} => squash{'P[mk_bterm{'depth;'op;'subterms}]})) >> thenT autoT"
+P	p4210	String "assertT << (all l: nat. all r:nat. squash{'P[var{'l;'r}]}) & (all depth: nat. all op:'sop. all subterms:list{Lang{'sop}}. (compatible_shapes{'depth;shape{'op};'subterms} => squash{'P[mk_bterm{'depth;'op;'subterms}]})) >> ta"
 O	o4210	ext_rule p4210
 T	t4210	o b4204 b23
 B	b4211	t4210
@@ -10340,7 +10340,7 @@ T	t4241	o b4240 b23
 B	b4241	t4241
 T	t4242	o1412 b4233 b4241
 B	b4242	t4242
-P	p4242	String "moveToConclT (-1) thenT letT <<'st='subs in list{Lang{'sop}} >> thenT autoT"
+P	p4242	String "moveToConclT (-1) thenT letT <<'st='subs in list{Lang{'sop}} >> ta"
 O	o4242	ext_rule p4242
 S	s4242	t1415\\ h h4230 h4001 h4024 h4222 h1787 h4235 h1548 h4238\\ t3745
 B	b4243	s4242
@@ -10361,7 +10361,7 @@ T	t4249	o b4245 b4249
 B	b4250	t4249
 T	t4250	o1412 b4240 b4250
 B	b4251	t4250
-P	p4251	String "subtypeT << list{BT{'sop; 'n -@ 1}} >> thenT autoT"
+P	p4251	String "subtypeT << list{BT{'sop; 'n -@ 1}} >> ta"
 O	o4251	ext_rule p4251
 T	t4251	o1412 b4245 b23
 B	b4252	t4251
@@ -10476,7 +10476,7 @@ T	t4297	o b4297 b23
 B	b4298	t4297
 T	t4298	o1412 b4292 b4298
 B	b4299	t4298
-P	p4299	String "dT (-1) ttca thenT dT (-1) thenT autoT thenT reduceT thenT byDefT unfold_mk"
+P	p4299	String "dT (-1) ttca thenT dT (-1) ta thenT reduceT thenT byDefT unfold_mk"
 O	o4299	ext_rule p4299
 T	t4299	o1979 b4296 b1424
 B	b4300	t4299
@@ -10498,7 +10498,7 @@ T	t4305	o b4304 b23
 B	b4305	t4305
 T	t4306	o1412 b4300 b4305
 B	b4306	t4306
-P	p4306	String "assertT <<compatible_shapes{'depth; shape{'op}; 'y} >> thenAT compatible_shapes_sqstable <<'sop>> ttca thenT onHypsT [8;4] thinT thenT autoT"
+P	p4306	String "assertT <<compatible_shapes{'depth; shape{'op}; 'y} >> thenAT compatible_shapes_sqstable <<'sop>> ttca thenT onHypsT [8;4] thinT ta"
 O	o4306	ext_rule p4306
 T	t4307	o1979 b4303 b1424
 B	b4307	t4307
@@ -10700,7 +10700,7 @@ T	t4391	o1539 b4362 b4391
 B	b4392	t4391
 T	t4392	o1539 b1852 b4392
 B	b4393	t4392
-P	p4393	String "assertT <<all x: dom{'sop; Lang{'sop}}. 'P[mk{'x}]>> thenT autoT"
+P	p4393	String "assertT <<all x: dom{'sop; Lang{'sop}}. 'P[mk{'x}]>> ta"
 O	o4393	ext_rule p4393
 T	t4393	o b4388 b23
 B	b4394	t4393
@@ -10750,7 +10750,7 @@ T	t4411	o b4411 b23
 B	b4412	t4411
 T	t4412	o1412 b4401 b4412
 B	b4413	t4412
-P	p4413	String "unsquashHypGoalStable (-1) ttca thenT compatible_shapes_sqstable <<'sop>> thenT autoT thenT subtypeT <<'sop>> ttca"
+P	p4413	String "unsquashHypGoalStable (-1) ttca thenT compatible_shapes_sqstable <<'sop>> ta thenT subtypeT <<'sop>> ttca"
 O	o4413	ext_rule p4413
 H	h4413	y1 t1848
 B	b4414	t3323
@@ -10885,7 +10885,7 @@ T	t4468	o b4468 b23
 B	b4469	t4468
 T	t4469	o1412 b4465 b4469
 B	b4470	t4469
-P	p4470	String "moveToConclT (-1) thenT moveToConclT (-1) thenT dT (-1) thenT autoT"
+P	p4470	String "moveToConclT (-1) thenT moveToConclT (-1) thenT dT (-1) ta"
 O	o4470	ext_rule p4470
 T	t4470	o1412 b4468 b23
 B	b4471	t4470
@@ -10975,7 +10975,7 @@ T	t4503	o b3516 b4502
 B	b4503	t4503
 T	t4504	o b1514 b4503
 B	b4504	t4504
-P	p4504	String "rwh (dest_bterm_mk_bterm2 << Operator >>) 0 thenT autoT"
+P	p4504	String "rwh (dest_bterm_mk_bterm2 << Operator >>) 0 ta"
 O	o4504	ext_rule p4504
 T	t4505	o1114 b3519 b2492 b2492
 S	s4505	t1415\\ h\\ t4505

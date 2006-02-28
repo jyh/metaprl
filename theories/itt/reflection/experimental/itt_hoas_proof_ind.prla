@@ -2932,7 +2932,7 @@ B	b1712	t1711
 NSummary!interactive	interactive	interactive Summary
 O	o332	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p332	String "assertT << all v: 'ty. all x: Provable{'logic; 'A['v]}. 'C['v] >> thenT autoT"
+P	p332	String "assertT << all v: 'ty. all x: Provable{'logic; 'A['v]}. 'C['v] >> ta"
 O	o333	ext_rule p332
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o334	status_incomplete
@@ -3032,7 +3032,7 @@ T	t1741	o b1732 b1741
 B	b1742	t1741
 T	t1742	o335 b1724 b1742
 B	b1743	t1742
-P	p354	String "rwh unfold_Provable (-1) thenT autoT"
+P	p354	String "rwh unfold_Provable (-1) ta"
 O	o354	ext_rule p354
 T	t1743	o b1728 b1738
 B	b1744	t1743
@@ -3096,7 +3096,7 @@ T	t582	o304 b300
 H	h582	premises t582
 NItt_hoas_proof!SimpleStep	SimpleStep	SimpleStep Itt_hoas_proof
 O	o582	SimpleStep
-P	p371	String "assertT << all_list{'premises; premise. (Provable{'logic; derivation_goal{'premise}} & all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))} >> thenT autoT"
+P	p371	String "assertT << all_list{'premises; premise. (Provable{'logic; derivation_goal{'premise}} & all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))} >> ta"
 O	o371	ext_rule p371
 NItt_list2!Index	Index	Index Itt_list2
 O	o372	Index
@@ -3169,7 +3169,7 @@ T	t1790	o b1790 b6
 B	b1791	t1790
 T	t1791	o335 b1772 b1791
 B	b1792	t1791
-P	p399	String "withT << nth{'premises; 'i} >> (dT 0) thenT autoT"
+P	p399	String "withT << nth{'premises; 'i} >> (dT 0) ta"
 O	o399	ext_rule p399
 S	s1792	t291\\ h h291 h1690 h1691 h306 h307 h308 h1760 h1761 h341 h1762 h372\\ t1773
 B	b1793	s1792
@@ -3955,7 +3955,7 @@ T	t2015	o b2014 b6
 B	b2015	t2015
 T	t2016	o335 b2013 b2015
 B	b2016	t2016
-P	p2016	String "copyHypT 2 (-1) thenT rwh unfold_SimpleStep (-1) thenT autoT"
+P	p2016	String "copyHypT 2 (-1) thenT rwh unfold_SimpleStep (-1) ta"
 O	o2016	ext_rule p2016
 T	t2017	o336 b731 b1744
 B	b2017	t2017

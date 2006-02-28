@@ -1463,7 +1463,7 @@ T	t681	o676 b677 b680
 P	p689	String reduce_indtree_empty
 O	o689	rewrite p689
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p691	String "byDefT indtree thenT byDefT emptytree thenT rwh unfold_srecind 0 thenT rwh reduceC 0 thenT autoT"
+P	p691	String "byDefT indtree thenT byDefT emptytree thenT rwh unfold_srecind 0 thenT rwh reduceC 0 ta"
 O	o692	ext_rule p691
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o693	status_incomplete
@@ -1473,7 +1473,7 @@ NSummary!ext_unjustified	ext_unjustified	ext_unjustified Summary
 O	o694	ext_unjustified
 P	p709	String reduce_indtree_node
 O	o709	rewrite p709
-P	p712	String "byDefT indtree thenT byDefT tree thenT rw (addrC [1] unfold_srecind) 0 thenT rwh reduceC 0 thenT autoT"
+P	p712	String "byDefT indtree thenT byDefT tree thenT rw (addrC [1] unfold_srecind) 0 thenT rwh reduceC 0 ta"
 O	o712	ext_rule p712
 NSummary!dform	dform	dform Summary
 P	p724	String nodetype_df
@@ -1987,7 +1987,7 @@ P	p1101	Number 2
 O	o1101	number p1101
 T	t1101	o1101
 B	b1101	t1101
-P	p1102	String "byDefT weight thenT byDefT example thenT repeatT (rwh reduceC 0) thenT autoT"
+P	p1102	String "byDefT weight thenT byDefT example thenT repeatT (rwh reduceC 0) ta"
 O	o1102	ext_rule p1102
 T	t1102	o698 b1100 b1101
 S	s2284	tbrarg\\ h2053\\ t1102

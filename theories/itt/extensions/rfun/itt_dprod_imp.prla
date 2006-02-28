@@ -455,19 +455,19 @@ NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!type	type	type Itt_equal
 O	o1235	type
 T	t1235	o1235 b474
-P	p1236	String "rwh unfold_two 0 thenT autoT"
+P	p1236	String "rwh unfold_two 0 ta"
 O	o1236	ext_rule p1236
 P	p1245	String left_member
 O	o1245	rule p1245
 NItt_equal!equal	equal	equal Itt_equal
 O	o1552	equal
 T	t1246	o1552 b474 b479 b479
-P	p1247	String "rwh (unfold_left orelseC unfold_two) 0 thenT autoT"
+P	p1247	String "rwh (unfold_left orelseC unfold_two) 0 ta"
 O	o1247	ext_rule p1247
 P	p1256	String right_member
 O	o1256	rule p1256
 T	t1256	o1552 b474 b484 b484
-P	p1257	String "rwh (unfold_right orelseC unfold_two) 0 thenT autoT"
+P	p1257	String "rwh (unfold_right orelseC unfold_two) 0 ta"
 O	o1257	ext_rule p1257
 P	p1266	String two_elim
 O	o1266	rule p1266
@@ -482,7 +482,7 @@ NItt_rfun!well_founded	well_founded	well_founded Itt_rfun
 O	o1395	well_founded
 B	b1395	t494 a b
 T	t1395	o1395 b474 b1395
-P	p1397	String "dT 0 thenT autoT"
+P	p1397	String "dT 0 ta"
 O	o1397	ext_rule p1397
 P	p1399	String wf
 O	o1399	tactic_arg p1399
@@ -528,7 +528,7 @@ P	p1493	String autoT
 O	o1493	ext_rule p1493
 P	p1501	String "dT 5 thenT rw reduceC 5 thenT dT 5"
 O	o1501	ext_rule p1501
-P	p1504	String "withT << 'a1 >> (dT 4) thenT autoT"
+P	p1504	String "withT << 'a1 >> (dT 4) ta"
 O	o1504	ext_rule p1504
 P	p1548	String productEquality
 O	o1548	rule p1548
@@ -635,7 +635,7 @@ P	p2086	String "rw reduceC 4"
 O	o2086	ext_rule p2086
 P	p2093	String "assertT << x: 'A1 -> \"type\"{'A2['x]} >>"
 O	o2093	ext_rule p2093
-P	p2111	String "withT << 'g left >> (dT 5) thenT autoT"
+P	p2111	String "withT << 'g left >> (dT 5) ta"
 O	o2111	ext_rule p2111
 P	p2143	String pairFormation
 O	o2143	rule p2143

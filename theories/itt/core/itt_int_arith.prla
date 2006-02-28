@@ -26449,7 +26449,7 @@ T	t1129	o b1061 b17928
 B	b1131	t1129
 T	t1131	o13684 b5079 b14058 b1131 b10
 B	b1133	t1131
-P	p17661	String "reduceT thenT autoT"
+P	p17661	String "reduceT ta"
 O	o17661	ext_rule p17661
 H	h16508	y t4153
 S	s16508	tbrarg\\ h2742 h16508 h6590\\ t13776

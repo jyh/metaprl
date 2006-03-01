@@ -296,9 +296,9 @@ doc <:doc<
    type $B[a]$ for each $a @in A$.
 >>
 interactive productSubtype {| intro [] |} :
+   [wf] sequent { <H>; a2: 'A2 >- 'B2['a2] Type } -->
    ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
    ["subtype"] sequent { <H>; a1: 'A1 >- 'B1['a1] subtype 'B2['a1] } -->
-   ["subtype"] sequent { <H>; a2: 'A2 >- 'B2['a2] Type } -->
    sequent { <H> >- (a1:'A1 * 'B1['a1]) subtype (a2:'A2 * 'B2['a2]) }
 doc docoff
 
@@ -353,12 +353,11 @@ let resource sub +=
    (DSubtype ([<< a1:'A1 * 'B1['a1] >>, << a2:'A2 * 'B2['a2] >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],
-              dT 0))
+              productSubtype))
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

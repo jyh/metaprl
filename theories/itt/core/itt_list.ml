@@ -242,8 +242,8 @@ doc <:doc<
    The list type $@list{A}$ is covariant in the type argument $A$.
 >>
 interactive listSubtype {| intro [] |} :
-   ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
-   sequent { <H> >- \subtype{list{'A1}; list{'A2}}}
+   ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
+   sequent { <H> >- list{'A1} subtype list{'A2}}
 doc docoff
 
 (* Formation rules *)
@@ -402,12 +402,11 @@ let resource typeinf += (list_ind_term, inf_list_ind)
 let resource sub +=
    (DSubtype ([<< list{'A1} >>, << list{'A2} >>;
                << 'A2 >>, << 'A1 >>],
-              dT 0))
+              listSubtype))
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

@@ -143,18 +143,6 @@ dform decide_df : except_mode[src] :: decide{'x; y. 'a; z. 'b} =
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext A + B
- * by unionFormation
- * H >- Ui ext A
- * H >- Ui ext B
- *)
-prim unionFormation :
-   ('A : sequent { <H> >- univ[i:l] }) -->
-   ('B : sequent { <H> >- univ[i:l] }) -->
-   sequent { <H> >- univ[i:l] } =
-   'A + 'B
-
 doc <:doc<
    @rules
    @modsubsection{Typehood and equality}
@@ -176,34 +164,6 @@ prim unionType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- "type"{'A + 'B} } =
    it
-
-doc <:doc<
-   @modsubsection{Introduction}
-
-   The union type $A + B$ is true if both $A$ and $B$ are types,
-   and either 1) $A$ is provable, or 2) $B$ is provable.  The following
-   two rules are added to the @hreftactic[dT] tactic.  The application
-   uses the @hreftactic[selT] tactic to choose the handedness; the
-   @tt{inlFormation} rule is applied with the tactic @tt{selT 1 (dT 0)}
-   and the @tt{inrFormation} is applied with @tt{selT 2 (dT 0)}.
->>
-prim inlFormation {| intro [SelectOption 1] |} :
-   [main] ('a : sequent { <H> >- 'A }) -->
-   [wf] sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- 'A + 'B } =
-   inl{'a}
-
-(*
- * H >- A + B ext inl a
- * by inrFormation
- * H >- B
- * H >- A = A in Ui
- *)
-prim inrFormation {| intro [SelectOption 2] |} :
-   [main] ('b : sequent { <H> >- 'B }) -->
-   [wf] sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- 'A + 'B } =
-   inr{'b}
 
 doc <:doc<
    @modsubsection{Membership}
@@ -229,6 +189,32 @@ prim inrEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- inr{'b1} = inr{'b2} in 'A + 'B } =
    it
+
+doc <:doc<
+   @modsubsection{Introduction}
+
+   The union type $A + B$ is true if both $A$ and $B$ are types,
+   and either 1) $A$ is provable, or 2) $B$ is provable.  The following
+   two rules are added to the @hreftactic[dT] tactic.  The application
+   uses the @hreftactic[selT] tactic to choose the handedness; the
+   @tt{inlFormation} rule is applied with the tactic @tt{selT 1 (dT 0)}
+   and the @tt{inrFormation} is applied with @tt{selT 2 (dT 0)}.
+>>
+interactive inlFormation {| intro [SelectOption 1] |} :
+   [main] sequent { <H> >- 'A } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- 'A + 'B }
+
+(*
+ * H >- A + B ext inl a
+ * by inrFormation
+ * H >- B
+ * H >- A = A in Ui
+ *)
+interactive inrFormation {| intro [SelectOption 2] |} :
+   [main] ('b : sequent { <H> >- 'B }) -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- 'A + 'B }
 
 doc <:doc<
    @modsubsection{Elimination}
@@ -267,23 +253,33 @@ doc <:doc<
    $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.  This rule is added
    to the @hrefresource[subtype_resource].
 >>
-prim unionSubtype {| intro [] |} :
+interactive unionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
    ["subtype"] sequent { <H> >- 'B1 subtype 'B2 } -->
-   sequent { <H> >- 'A1 + 'B1 subtype 'A2 + 'B2  } =
-   it
-doc docoff
+   sequent { <H> >- 'A1 + 'B1 subtype 'A2 + 'B2  }
 
-(*
- * Interactive.
- *)
-interactive unionContradiction1 {| elim [] |} 'H :
+doc <:doc<
+   @modsubsection{Contradiction lemmas}
+
+   An @tt[inl] can not be equal to @tt[inr].
+>>
+interactive unionContradiction1 {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: inl{'y} = inr{'z} in 'A+'B; <J['x]> >- 'C['x] }
 
-interactive unionContradiction2 {| elim [] |} 'H :
+interactive unionContradiction2 {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: inr{'y} = inl{'z} in 'A+'B; <J['x]> >- 'C['x] }
 
-
+doc docoff
+(*
+ * H >- Ui ext A + B
+ * by unionFormation
+ * H >- Ui ext A
+ * H >- Ui ext B
+ *)
+interactive unionFormation :
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] }
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -377,12 +373,11 @@ let resource sub +=
    (DSubtype ([<< 'A1 + 'B1 >>, << 'A2 + 'B2 >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1 >>, << 'B2 >>],
-              dT 0))
+              unionSubtype))
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

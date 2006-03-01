@@ -140,9 +140,9 @@ doc <:doc<
    The product space is covariant in both parts.
 >>
 interactive independentProductSubtype {| intro [] |} :
-   ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
-   ["subtype"] sequent { <H> >- \subtype{'B1; 'B2} } -->
-   sequent { <H> >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
+   ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
+   ["subtype"] sequent { <H> >- 'B1 subtype 'B2 } -->
+   sequent { <H> >- ('A1 * 'B1) subtype ('A2 * 'B2) }
 doc docoff
 
 (************************************************************************
@@ -162,12 +162,11 @@ let resource sub +=
    (DSubtype ([<< 'A1 * 'B1 >>, << 'A2 * 'B2 >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1 >>, << 'B2 >>],
-              dT 0))
+               independentProductSubtype))
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

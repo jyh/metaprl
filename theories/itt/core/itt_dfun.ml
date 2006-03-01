@@ -439,13 +439,6 @@ let resource typeinf += [
    apply_term, inf_apply
 ]
 
-(*
- * -*-
- * Local Variables:
- * Caml-master: "prlcomp.run"
- * End:
- * -*-
- *)
 (************************************************************************
  * SUBTYPING                                                            *
  ************************************************************************)
@@ -462,7 +455,6 @@ let resource sub +=
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

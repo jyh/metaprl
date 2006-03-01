@@ -28,7 +28,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University, City University
+   of New York Graduate Center, California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -44,8 +45,11 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
+                Alexei Kopylov @email{kopylov@cs.caltech.edu}
+                Xin Yu @email{xiny@cs.caltech.edu}
+                Yegor Bryukhov @email{ynb@mail.ru}
 
    @end[license]
 >>
@@ -85,6 +89,9 @@ let subtype_opname = opname_of_term subtype_term
 let is_subtype_term = is_dep0_dep0_term subtype_opname
 let dest_subtype = dest_dep0_dep0_term subtype_opname
 let mk_subtype_term = mk_dep0_dep0_term subtype_opname
+
+declare subtype_formation : SelectOption
+let subtype_formation = << select["subtype_formation":t] >>
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -152,7 +159,7 @@ doc <:doc<
    and $B$ are types, and any term $t @in A$ is also in $B$.  The
    proof extract term is always the $@it$ term.
 >>
-prim subtype_axiomFormation {| intro [] |} :
+prim subtype_axiomFormation {| intro ~labels:[subtype_formation] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [main] sequent { <H>; x: 'A >- 'x in 'B } -->
    sequent { <H> >- 'A subtype 'B } =
@@ -326,6 +333,10 @@ interactive by_subtype 'H:
    sequent { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
    sequent { <H>; x:'A; <J['x]> >- 'x in 'B }
 
+interactive by_subtype2 'H:
+   sequent { <H>; 't1 = 't2 in 'A; <J[it]> >- 'A subtype 'B } -->
+   sequent { <H>; x: 't1 = 't2 in 'A; <J['x]> >- 't1 = 't2 in 'B }
+
 let errMismatch = RefineError("Itt_subtype.bySubtypeT", StringError "mismatch")
 let bySubtypeT = argfunT (fun subt p ->
    let b, x, _ = dest_equal (concl p) in
@@ -337,8 +348,22 @@ let bySubtypeT = argfunT (fun subt p ->
       else
          raise errMismatch)
 
-let resource nth_hyp +=
+let bySomeSubtypeT = funT (fun p ->
+   let _, x, _ = dest_equal (concl p) in
+   let x = dest_var x in
+   let xdecl = get_decl_number p x in
+      by_subtype xdecl thenT withExcludeOptionT subtype_formation (d_outside_auto (dT 0)))
+
+let trySubtypeT i = 
+   completeT (by_subtype2 i thenT withExcludeOptionT subtype_formation (repeatT (dT 0)))
+
+let resource nth_hyp += [
+   << 't1 = 't2 in 'A >>, << 't1 = 't2 in 'B >>, wrap_nth_hyp_uncertain trySubtypeT;
    << 'A subtype 'B >>, << !x in 'B >>, wrap_nth_hyp_uncertain bySubtypeT
+]
+
+let resource intro +=
+   << !x in 'A >>, wrap_intro_auto_complete bySomeSubtypeT
 
 interactive subtypeReflexivity {| intro[] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -384,7 +409,6 @@ let type_subtype_rightT = subtypeTypeRight
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

@@ -332,7 +332,7 @@ interactive derivation_depth_list_elim2 'H : <:xrule<
 doc <:doc<
    This is the general proof induction principle.
 >>
-interactive derivation_elim {| elim [] |} 'H : <:xrule<
+interactive derivation_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
    "wf" : <H>; e: Derivation{logic}; <J[e]> >- logic IN Logic -->
    <H>; e: Derivation{logic}; <J[e]>;
        premises: list{Derivation{logic}};
@@ -344,6 +344,9 @@ interactive derivation_elim {| elim [] |} 'H : <:xrule<
 >>
 
 doc docoff
+
+let resource elim +=
+   << Derivation{'depth; 'logic} >>, wrap_elim thinT
 
 (*
  * Restate some of the well-formedness goals.

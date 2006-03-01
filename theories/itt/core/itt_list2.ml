@@ -831,7 +831,6 @@ interactive mem_univ_wf {| intro [] |} :
    sequent { <H> >- mem{'x1; 'l1; 'T1} = mem{'x2; 'l2; 'T2} in univ[i:l] }
 
 interactive mem_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'x in 'T } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->
    sequent { <H> >- "type"{mem{'x; 'l; 'T}} }
@@ -840,7 +839,6 @@ interactive mem_wf {| intro [] |} :
  * Subset.
  *)
 interactive subset_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l1 in list{'T} } -->
    [wf] sequent { <H> >- 'l2 in list{'T} } -->
    sequent { <H> >- "type"{\subset{'l1; 'l2; 'T}} }
@@ -849,7 +847,6 @@ interactive subset_wf {| intro [] |} :
  * Sameset.
  *)
 interactive sameset_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l1 in list{'T} } -->
    [wf] sequent { <H> >- 'l2 in list{'T} } -->
    sequent { <H> >- "type"{sameset{'l1; 'l2; 'T}} }
@@ -866,8 +863,6 @@ interactive append_wf2 {| intro [] |} :
  * Ball2.
  *)
 interactive ball2_wf2 {| intro [] |} 'T1 'T2 :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- "type"{'T2} } -->
    [wf] sequent { <H> >- 'l1 in list{'T1} } -->
    [wf] sequent { <H> >- 'l2 in list{'T2} } -->
    [wf] sequent { <H>; u: 'T1; v: 'T2 >- 'b['u; 'v] in bool } -->
@@ -898,8 +893,6 @@ interactive rev_assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{'T1 * 'T2} :
  * Fold_left.
  *)
 interactive fold_left_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- "type"{'T2} } -->
    [wf] sequent { <H> >- 'f in 'T1 -> 'T2 -> 'T2 } -->
    [wf] sequent { <H> >- 'v in 'T2 } -->
    [wf] sequent { <H> >- 'l in list{'T1} } -->
@@ -975,7 +968,6 @@ interactive index_nil_elim {| elim []; squash; nth_hyp |} 'H :
    sequent { <H>; i:Index{nil}; <J['i]> >-  'P['i] }
 
 interactive nth_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->
    [wf] sequent { <H> >- 'i in Index{'l} } -->
    sequent { <H> >- nth{'l; 'i} in 'T }
@@ -986,14 +978,12 @@ interactive index_rev_wf {| intro[] |} :
    sequent { <H> >-  length{'l} -@ ('i +@ 1) in Index{'l} }
 
 interactive replace_nth_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->
    [wf] sequent { <H> >- 'i in Index{'l} } -->
    [wf] sequent { <H> >- 't in 'T } -->
    sequent { <H> >- replace_nth{'l; 'i; 't} in list{'T} }
 
 interactive insert_at_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->
    [wf] sequent { <H> >- 'i in Index{'t::'l} } -->
    [wf] sequent { <H> >- 't in 'T } -->
@@ -1010,7 +1000,6 @@ interactive_rw nth_map2 {| reduce |} :
    nth{map{x.'f['x]; 'l};'i} <--> 'f[nth{'l;'i}]
 
 interactive nth_eq {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l1 = 'l2 in list{'T} } -->
    [wf] sequent { <H> >- 'i in Index{'l1} } -->
    sequent { <H> >- nth{'l1; 'i} = nth{'l2; 'i} in 'T }
@@ -1169,7 +1158,6 @@ interactive tail_squiggle {| intro[] |}:
    sequent { <H> >-  tail{'l_1;'n} ~ tail{'l_2;'n} }
 
 interactive tail_wf {| intro[] |}:
-   [wf] sequent { <H> >- 'A Type } -->
    [wf] sequent { <H> >-  'l in list{'A} } -->
    [wf] sequent { <H> >-  'n in nat } -->
    sequent { <H> >- 'n <= length{'l} } -->
@@ -1244,7 +1232,6 @@ interactive all_list_intro  {| intro[] |} :
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
 interactive all_list_intro1  {| intro[SelectOption 1;  intro_typeinf <<'l>>] |} list{'A} :
-   sequent { <H> >- 'A Type  } -->
    sequent { <H> >- 'l in list{'A}  } -->
    sequent { <H>; x:'A; mem{'x; 'l; 'A}  >- 'P['x]  } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
@@ -1261,7 +1248,6 @@ interactive all_list_map  {| intro[] |} :
    sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
 
 interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
-   sequent { <H> >- 'A Type  } -->
    sequent { <H> >- 'l in list{'A}  } -->
    sequent { <H>; x:'A; mem{'x; 'l; 'A} >- 'p['x] in 'P['x]  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
@@ -1335,17 +1321,15 @@ interactive bexists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} 'i 
  * map.
  *)
 interactive map_wf {| intro [intro_typeinf <<'l>>; AutoMustComplete] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
    [wf] sequent { <H> >- "type"{'T2} } -->
-   [wf] sequent { <H> >- 'f in 'T1 -> 'T2 } -->
    [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H> >- 'f in 'T1 -> 'T2 } -->
    sequent { <H> >- map{'f; 'l} in list{'T2} }
 
 interactive map_wf4 {| intro [intro_typeinf <<'l>>; AutoMustComplete] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
    [wf] sequent { <H> >- "type"{'T2} } -->
-   [wf] sequent { <H>; x: 'T1 >- 'f['x] in 'T2 } -->
    [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H>; x: 'T1 >- 'f['x] in 'T2 } -->
    sequent { <H> >- map{x. 'f['x]; 'l} in list{'T2} }
 
 (*
@@ -1373,7 +1357,6 @@ doc <:doc<
    A list $v$ is a subset of the list <<cons{'u; 'v}>>.
 >>
 interactive subset_cons {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'u in 'A } -->
    [wf] sequent { <H> >- 'v in list{'A} } -->
    [wf] sequent { <H> >- 'l in list{'A} } -->
@@ -1386,12 +1369,10 @@ doc <:doc<
    @tt[subset] is reflexive and transitive.
 >>
 interactive subset_ref {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- \subset{'l; 'l; 'A} }
 
 interactive subset_trans 'l2 :
-   [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'l1 in list{'A} } -->
    [wf] sequent { <H> >- 'l2 in list{'A} } -->
    [wf] sequent { <H> >- 'l3 in list{'A} } -->
@@ -1405,19 +1386,16 @@ doc <:doc<
    @tt[sameset] is reflexive, symmetric, and transitive.
 >>
 interactive sameset_ref {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- sameset{'l; 'l; 'A} }
 
 interactive sameset_sym :
-   [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'l1 in list{'A} } -->
    [wf] sequent { <H> >- 'l2 in list{'A} } -->
    sequent { <H> >- sameset{'l1; 'l2; 'A} } -->
    sequent { <H> >- sameset{'l2; 'l1; 'A} }
 
 interactive sameset_trans 'l2 :
-   [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'l1 in list{'A} } -->
    [wf] sequent { <H> >- 'l2 in list{'A} } -->
    [wf] sequent { <H> >- 'l3 in list{'A} } -->
@@ -1509,7 +1487,7 @@ interactive list_max_wf {| intro []; nth_hyp |} :
    sequent { <H> >- 'l in list{nat} } -->
    sequent { <H> >- list_max{'l} in nat }
 
-interactive list_max_wf2 {| intro [AutoMustComplete] |} :
+interactive list_max_wf2 {| intro [AutoMustComplete]; nth_hyp |} :
    sequent { <H> >- 'l in list{nat} } -->
    sequent { <H> >- list_max{'l} in int }
 
@@ -1637,8 +1615,6 @@ interactive all2_index_elim 'H 'T1 'T2 :
    sequent { <H>; u: all2{'l1; 'l2; x, y. 'P['x; 'y]}; <J['u]> >- 'C['u] }
 
 interactive all2_intro2 'T1 'T2 :
-   [wf] sequent { <H> >- 'T1 Type } -->
-   [wf] sequent { <H> >- 'T2 Type } -->
    [wf] sequent { <H> >- 'l1 in list{'T1} } -->
    [wf] sequent { <H> >- 'l2 in list{'T2} } -->
    [wf] sequent { <H>; x: 'T1; y: 'T2 >- 'P['x; 'y] Type } -->
@@ -1671,7 +1647,6 @@ let samesetTransT = sameset_trans
 (*
  * -*-
  * Local Variables:
- * Caml-master: "nl"
  * End:
  * -*-
  *)

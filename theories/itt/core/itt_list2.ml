@@ -1334,14 +1334,14 @@ interactive bexists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} 'i 
 (*
  * map.
  *)
-interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+interactive map_wf {| intro [intro_typeinf <<'l>>; AutoMustComplete] |} list{'T1} :
    [wf] sequent { <H> >- "type"{'T1} } -->
    [wf] sequent { <H> >- "type"{'T2} } -->
    [wf] sequent { <H> >- 'f in 'T1 -> 'T2 } -->
    [wf] sequent { <H> >- 'l in list{'T1} } -->
    sequent { <H> >- map{'f; 'l} in list{'T2} }
 
-interactive map_wf4 {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+interactive map_wf4 {| intro [intro_typeinf <<'l>>; AutoMustComplete] |} list{'T1} :
    [wf] sequent { <H> >- "type"{'T1} } -->
    [wf] sequent { <H> >- "type"{'T2} } -->
    [wf] sequent { <H>; x: 'T1 >- 'f['x] in 'T2 } -->

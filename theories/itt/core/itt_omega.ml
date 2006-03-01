@@ -1760,9 +1760,6 @@ let omegaPrepT = funT (fun p ->
 	applyTreeT ge_elimT aux [] pruned_solutions
 )
 
-interactive omega_final {| nth_hyp |} 'H :
-	sequent { <H>; x: 0 <= number[-1:n]; <J['x]> >- 'C['x] }
-
 let normConclT = funT (fun p ->
    let conc = concl p in
       if is_equal_term conc then

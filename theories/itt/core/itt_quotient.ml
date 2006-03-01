@@ -98,7 +98,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and California
+   Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -246,8 +247,8 @@ let quotientIntroT weak = funT (fun p ->
       quotient_memberEquality)
 
 let resource intro += [
-   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, rule_labels_empty, AutoNormal, quotientIntroT true);
-   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, rule_labels_empty, AutoComplete, quotientIntroT false);
+   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, wrap_intro (quotientIntroT true);
+   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, wrap_intro_auto_complete (quotientIntroT false);
 ]
 
 doc <:doc<
@@ -351,7 +352,6 @@ let resource sub +=
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

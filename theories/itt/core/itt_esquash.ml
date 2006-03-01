@@ -209,8 +209,8 @@ let esquashEqualT weak = funT (fun p ->
    else if in_esquash then esquash_equal_intro else esquash_equal)
 
 let resource intro += [
-   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, rule_labels_empty, AutoNormal, esquashEqualT true);
-   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, rule_labels_empty, AutoComplete, esquashEqualT false)
+   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, wrap_intro (esquashEqualT true);
+   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, wrap_intro_auto_complete (esquashEqualT false)
 ]
 
 let esquashAutoT =
@@ -219,7 +219,6 @@ let esquashAutoT =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "nl"
  * End:
  * -*-
  *)

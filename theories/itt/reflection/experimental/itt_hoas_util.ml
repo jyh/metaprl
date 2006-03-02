@@ -72,7 +72,6 @@ interactive subterm_cons_elim 'H 'depth ('h :: 't) :
    sequent { <H>; l: list{BTerm}; <J['l]> >- 'C['l] }
 
 interactive subterm_nil_elim 'H 'depth :
-   [wf] sequent { <H>; l: list{BTerm}; <J['l]> >- 'depth in nat } -->
    [aux] sequent { <H>; l: list{BTerm}; <J['l]> >- compatible_shapes{'depth; nil; 'l} } -->
    sequent { <H>; <J[nil]> >- 'C[nil] } -->
    sequent { <H>; l: list{BTerm}; <J['l]> >- 'C['l] }
@@ -86,20 +85,16 @@ let rec dest_compatible_shapes i p =
    let i = get_pos_hyp_num p i in
    let t = nth_hyp p i in
    let depth, op, subs = dest_compatible_shapes_term t in
-      if is_var_term subs then
-         let v = dest_var subs in
-         let j = get_decl_number p v in
-            if is_cons_term op then
-               subterm_cons_elim j depth op thenMT (thinT (i + 1) thenT funT (dest_compatible_shapes (-1)))
-            else if is_nil_term op then
-               subterm_nil_elim j depth thenMT thinT (-1)
-            else
-               raise (RefineError ("Itt_hoas_util.dest_compatible_shapes", StringTermError ("opname should be a constant", op)))
+   let v = dest_var subs in
+   let j = get_decl_number p v in
+      if is_cons_term op then
+         subterm_cons_elim j depth op thenMT (thinT (i + 1) thenT funT (dest_compatible_shapes (-1)))
+      else if is_nil_term op then
+         subterm_nil_elim j depth thenMT thinT (-1)
       else
-         raise (RefineError ("Itt_hoas_util.dest_compatible_shapes", StringTermError ("subterms should be a variable", subs)))
+         raise (RefineError ("Itt_hoas_util.dest_compatible_shapes", StringTermError ("opname should be a constant", op)))
 
-let dest_compatible_shapesT i =
-   funT (dest_compatible_shapes i)
+let dest_compatible_shapesT = argfunT dest_compatible_shapes
 
 let dest_compatible_shapes_shapeT i =
    rw (addrC [Subterm 2] reduceC) i thenT dest_compatible_shapesT i

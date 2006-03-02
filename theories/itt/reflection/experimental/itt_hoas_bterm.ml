@@ -48,7 +48,11 @@ open Itt_equal
 open Itt_struct
 open Itt_squash
 open Itt_sqsimple
+open Itt_list2
 open Itt_hoas_destterm
+
+let resource private select +=
+   intensional_wf_option, OptionAllow
 
 doc terms
 

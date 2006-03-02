@@ -14041,7 +14041,7 @@ P	p1340	String all2_intro2
 O	o1340	rule p1340
 H	h1340	x T1
 P	p1395	Number 5
-P	p43	String "substT <<'l ~ map{x.'x; 'l}>> 0 ttca thenT selT 5 (dT 0) ta"
+P	p43	String "substT <<'l ~ map{x.'x; 'l}>> 0 ta"
 O	o62	ext_rule p43
 P	p13219	Var _$item_bnd37
 O	o13219	var p13219
@@ -14361,7 +14361,7 @@ P	p9442	String "decideT << length{'l} -@ ('m +@ 1) = 'i in int >>"
 O	o9442	ext_rule p9442
 P	p9709	String "selT 1 (dT 0)"
 O	o9709	ext_rule p9709
-P	p9835	String "selT 5 (dT 0)"
+P	p9835	String "dT 0"
 O	o9835	ext_rule p9835
 P	p10456	String "tail_wf ttca"
 O	o10456	ext_rule p10456
@@ -14477,7 +14477,7 @@ H	h15578	_1 t15578
 H	h15579	_2 t15578
 P	p15832	String "decideT << length{'l} -@ ('m +@ 1) = 'i in int >> ttca"
 O	o15836	ext_rule p15832
-P	p15864	String "selT 5 autoT"
+P	p15864	String "autoT"
 O	o15866	ext_rule p15864
 P	p15912	String "assertT << all m: nat. ('m <= length{'l} => (all i: Index{tail{'l; 'm}}. 'P[nth{tail{'l; 'm}; 'i}] in bool)) >>"
 O	o15912	ext_rule p15912

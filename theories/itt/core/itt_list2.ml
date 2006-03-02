@@ -1257,6 +1257,20 @@ interactive all_list_witness_wf2  {| intro[] |} :
    sequent { <H> >- all_list{'l;  x. 'p['x] in 'P['x]}  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
+doc docoff
+
+declare intensional_wf : SelectOption
+let intensional_wf_option = <<select["intensional_wf":t]>>
+let intensional_wf_labels = [intensional_wf_option]
+
+let resource select +=
+   intensional_wf_option, OptionExclude
+
+let resource private select +=
+   intensional_wf_option, OptionAllow
+
+doc docon
+
 doc <:doc<
    @rules
    Rules for quantifiers are the following:
@@ -1266,7 +1280,7 @@ interactive exists_list_wf1  {| intro [intro_typeinf << 'l >>] |} list{'T} :
    sequent { <H>; x: 'T >- 'P['x] Type } -->
    sequent { <H> >- exists_list{'l;  x. 'P['x]} Type }
 
-interactive exists_list_wf2  {| intro [SelectOption 5] |} :
+interactive exists_list_wf2  {| intro ~labels:intensional_wf_labels |} :
    sequent { <H> >- 'l in list  } -->
    sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] Type } -->
    sequent { <H> >- exists_list{'l;  x. 'P['x]} Type }
@@ -1298,7 +1312,7 @@ interactive bexists_list_wf1  {| intro [intro_typeinf << 'l >>] |} list{'T} :
    sequent { <H>; x: 'T >- 'P['x] in bool } -->
    sequent { <H> >- bexists_list{'l;  x. 'P['x]} in bool }
 
-interactive bexists_list_wf2  {| intro [SelectOption 5] |} :
+interactive bexists_list_wf2  {| intro ~labels:intensional_wf_labels |} :
    sequent { <H> >- 'l in list  } -->
    sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] in bool } -->
    sequent { <H> >- bexists_list{'l;  x. 'P['x]} in bool }
@@ -1332,12 +1346,7 @@ interactive map_wf4 {| intro [intro_typeinf <<'l>>; AutoMustComplete] |} list{'T
    sequent { <H>; x: 'T1 >- 'f['x] in 'T2 } -->
    sequent { <H> >- map{x. 'f['x]; 'l} in list{'T2} }
 
-(*
- * JYH: keep this rule with a select option.
- * We don't want to use this rule by default because it is hard to use.
- * However, the Itt_hoas_lang theory needs to use it by default.
- *)
-interactive map_wf2 {| intro [SelectOption 5] |} :
+interactive map_wf2 {| intro ~labels:intensional_wf_labels |} :
    [wf] sequent { <H> >- "type"{'T2} } -->
    [wf] sequent { <H> >- 'l in list } -->
    [wf] sequent { <H> >- all_list{'l; x. 'f['x] in 'T2} } -->

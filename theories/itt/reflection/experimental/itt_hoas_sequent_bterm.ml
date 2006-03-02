@@ -40,7 +40,7 @@ open Itt_sqsimple
 open Itt_struct
 
 let resource private select +=
-   [<< select["relax":t] >>, OptionAllow]
+   << select["relax":t] >>, OptionAllow
 
 (************************************************************************
  * Relaxed reductions.

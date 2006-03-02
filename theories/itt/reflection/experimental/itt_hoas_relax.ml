@@ -69,10 +69,10 @@ let relax_option = [relax_term]
  * Privately, accept it.
  *)
 let resource select +=
-   [relax_term, OptionExclude]
+   relax_term, OptionExclude
 
 let resource private select +=
-   [relax_term, OptionAllow]
+   relax_term, OptionAllow
 
 (************************************************************************
  * General Bind type.

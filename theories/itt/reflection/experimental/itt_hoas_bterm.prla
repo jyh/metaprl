@@ -7225,7 +7225,7 @@ T	t7716	o b7713 b7715
 B	b7716	t7716
 T	t7717	o1398 b7712 b7716
 B	b7717	t7717
-P	p3353	String "selT 5 (repeatForT 5 (dT 0 ttca))"
+P	p3353	String "autoT thenT dT 0 ta"
 O	o3353	ext_rule p3353
 T	t3353	o2749 b1090
 H	h3353	i t3353
@@ -7340,7 +7340,7 @@ T	t7748	o b7747 b17
 B	b7748	t7748
 T	t7749	o1398 b7746 b7748
 B	b7749	t7749
-P	p3409	String "selT 5 (rwh reduceTopC 0 thenMT dT 0 ta)"
+P	p3409	String "rwh reduceTopC 0 thenMT dT 0 ta"
 O	o3409	ext_rule p3409
 P	p3410	Var x1
 O	o3410	var p3410
@@ -7367,11 +7367,11 @@ T	t7751	o b7750 b17
 B	b7751	t7751
 T	t7752	o1398 b7747 b7751
 B	b7752	t7752
-P	p3420	String "selT 5 (list_wf2 ta thenT tryT (thinT 9))"
+P	p3420	String "list_wf2 ta thenT tryT (thinT 9)"
 O	o3420	ext_rule p3420
 T	t7753	o1398 b7750 b7751
 B	b7753	t7753
-P	p3421	String "selT 5 (list_wf2 ttca)"
+P	p3421	String "list_wf2 ttca"
 O	o3421	ext_rule p3421
 T	t3422	o1063 b3414 b3410 b3410
 B	b3422	t3422 x1
@@ -7415,7 +7415,7 @@ T	t7761	o b7760 b17
 B	b7761	t7761
 T	t7762	o1398 b7757 b7761
 B	b7762	t7762
-P	p3439	String "selT 5 (dT (-1) thenT use_subset << BT{ndepth{nth{'subterms; 'i}}} >> ta)"
+P	p3439	String "dT (-1) thenT use_subset << BT{ndepth{nth{'subterms; 'i}}} >> ta"
 O	o3439	ext_rule p3439
 H	h3439	_2 t3434
 T	t3440	o2710 b3413 b3355

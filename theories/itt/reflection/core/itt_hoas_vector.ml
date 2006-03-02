@@ -57,10 +57,10 @@ let denormalize_term = << select["denormalize":t] >>
 let denormalize_labels = [denormalize_term]
 
 let resource select +=
-   [denormalize_term, OptionExclude]
+   denormalize_term, OptionExclude
 
 let resource private select +=
-   [denormalize_term, OptionAllow]
+   denormalize_term, OptionAllow
 
 (************************************************************************
  * TERMS                                                                *

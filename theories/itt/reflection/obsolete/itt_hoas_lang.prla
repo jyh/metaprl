@@ -8857,7 +8857,7 @@ T	t3600	o b3595 b3599
 B	b3600	t3600
 T	t3601	o1412 b3582 b3600
 B	b3601	t3601
-P	p3601	String "selT 5 (repeatForT 5 (dT 0 ttca))"
+P	p3601	String "autoT thenT dT 0 ta"
 O	o3601	ext_rule p3601
 T	t3602	o1964 b2684
 H	h3602	i t3602
@@ -8981,7 +8981,7 @@ T	t3652	o1412 b3639 b23
 B	b3652	t3652
 T	t3653	o3651 b1411 b3652 b23 b23
 B	b3653	t3653
-P	p3653	String "selT 5 (rwh reduceTopC 0 thenMT dT 0 ta)"
+P	p3653	String "rwh reduceTopC 0 thenMT dT 0 ta"
 O	o3653	ext_rule p3653
 T	t3654	o1114 b1228 b3603 b3603
 S	s3654	t1415\\ h h1787 h1547 h1548 h2766 h2767 h3643 h3602\\ t3654
@@ -9029,7 +9029,7 @@ T	t3672	o1412 b3656 b23
 B	b3673	t3672
 T	t3673	o3672 b1411 b3673 b23 b23
 B	b3674	t3673
-P	p3674	String "selT 5 (list_wf2 ta thenT tryT (thinT 8))"
+P	p3674	String "list_wf2 ta thenT tryT (thinT 8)"
 O	o3674	ext_rule p3674
 H	h3674	i1 t3602
 T	t3674	o1969 b2684 b2014
@@ -9047,7 +9047,7 @@ T	t3679	o b3678 b3679
 B	b3680	t3679
 T	t3680	o1412 b3661 b3680
 B	b3681	t3680
-P	p3681	String "selT 5 (list_wf2 ttca)"
+P	p3681	String "list_wf2 ttca"
 O	o3681	ext_rule p3681
 T	t3681	o1644 b3657
 S	s3681	t1415\\ h h1787 h1547 h1548 h2766 h2767 h3643\\ t3681
@@ -9071,7 +9071,7 @@ T	t3689	o b3684 b3689
 B	b3690	t3689
 T	t3690	o1412 b3661 b3690
 B	b3691	t3690
-P	p3691	String "selT 5 autoT"
+P	p3691	String "autoT"
 O	o3691	ext_rule p3691
 T	t3691	o b3656 b23
 B	b3692	t3691
@@ -9132,7 +9132,7 @@ T	t3714	o b3713 b23
 B	b3714	t3714
 T	t3715	o1412 b3703 b3714
 B	b3715	t3715
-P	p3715	String "selT 5 (dT 9 thenT use_subset << BT{'sop; ndepth{nth{!subs; !i}}} >> ta)"
+P	p3715	String "dT 9 thenT use_subset << BT{'sop; ndepth{nth{!subs; !i}}} >> ta"
 O	o3715	ext_rule p3715
 H	h3715	_2 t3710
 S	s3715	t1415\\ h h1787 h1547 h1548 h2766 h2767 h3643 h3602 h3715\\ t3654
@@ -9675,7 +9675,7 @@ T	t3950	o1539 b1778 b3949
 B	b3950	t3950
 T	t3951	o1539 b1596 b3950
 B	b3951	t3951
-P	p3951	String "selT 5 (genAssumT [2] thenT squashT thenT dT (-1) thenT byDefsT [unfold_dest; unfold_Ldom] thenT tryT (dT 0) ta thenT tryT (completeT (subtypeT << 'sop >> ttca)) thenT tryT (completeT (withT << 'sop >> autoT)))"
+P	p3951	String "genAssumT [2] thenT squashT thenT dT (-1) thenT byDefsT [unfold_dest; unfold_Ldom] thenT tryT (dT 0) ta thenT tryT (completeT (subtypeT << 'sop >> ttca)) thenT tryT (completeT (withT << 'sop >> autoT))"
 O	o3951	ext_rule p3951
 T	t3952	o1414 b3948 b1785
 B	b3952	t3952

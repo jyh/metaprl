@@ -381,6 +381,16 @@ interactive_rw reduce_vsequent_right : <:xrewrite<
                 |}
 >>
 
+interactive_rw reduce_bsequent 'J : <:xrewrite<
+   bsequent{arg}{| <J>; x: A; <K[x]> >- C[x] |}
+   <-->
+   sequent_bterm{vsequent{arg}{| hyp_context{| >- hyplist{| <J> |} |};
+                                 hyp_term{| <J> >- A |};
+                                 hyp_context{| <J>; x: A >- hyplist{| <K[x]> |} |}
+                                 >- vbind{| <J>; x: A; <K[x]> >- C[x] |}
+                              |}}
+>>
+
 (************************************************************************
  * Forward reasoning.
  *)

@@ -392,6 +392,15 @@ interactive derivation_step_intro {| intro [] |} : <:xrule<
    <H> >- derivation_step{premises; goal; witness; p} in Derivation{logic}
 >>
 
+interactive provable_intro 'premises : <:xrule<
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- premises in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   "aux" : <H> >- all_list{premises; premise. Provable{logic; premise}} -->
+   <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic} -->
+   <H> >- Provable{logic; goal}
+>>
+
 (************************************************************************
  * Alpha-equality.
  *)

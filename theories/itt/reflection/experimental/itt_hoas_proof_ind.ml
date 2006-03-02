@@ -113,6 +113,16 @@ interactive step_union_logic_elim {| elim |} 'H :
    sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_2}; <J> >- 'C } -->
    sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >- 'C }
 
+interactive caseAnalysis_7 'H :
+   sequent { <H>; <J[0]> >- 'C[0] } -->
+   sequent { <H>; <J[1]> >- 'C[1] } -->
+   sequent { <H>; <J[2]> >- 'C[2] } -->
+   sequent { <H>; <J[3]> >- 'C[3] } -->
+   sequent { <H>; <J[4]> >- 'C[4] } -->
+   sequent { <H>; <J[5]> >- 'C[5] } -->
+   sequent { <H>; <J[6]> >- 'C[6] } -->
+   sequent { <H>; i: nat; 'i < 7; <J['i]> >- 'C['i] }
+
 (*
  * -*-
  * Local Variables:

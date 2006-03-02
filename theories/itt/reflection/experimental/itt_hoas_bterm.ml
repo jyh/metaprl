@@ -166,6 +166,10 @@ interactive  bdepth_wf_int  {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- bdepth{'t} in int }
 
+interactive  bdepth_wf_positive  {| intro [] |}:
+   [wf] sequent{ <H> >- 't in BTerm } -->
+   sequent{ <H> >- bdepth{'t} >= 0 }
+
 interactive bterm2_wf {| intro [] |} :
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- BTerm{'n} Type }

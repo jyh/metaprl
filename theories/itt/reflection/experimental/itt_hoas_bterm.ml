@@ -542,7 +542,6 @@ interactive var_neq_bterm 'H :
    [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'r in nat } -->
    [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'depth in nat } -->
    [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'op in Operator } -->
-   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'subterms in list{BTerm} } -->
    sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'C['u] }
 
 interactive bterm_neq_var 'H :
@@ -550,7 +549,6 @@ interactive bterm_neq_var 'H :
    [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'r in nat } -->
    [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'depth in nat } -->
    [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'op in Operator } -->
-   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'subterms in list{BTerm} } -->
    sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'C['u] }
 
 interactive subs_equal 'depth 'op :
@@ -607,8 +605,7 @@ interactive_rw reduce_beq_bterm_var_bterm {| reduce |} :
    'r in nat -->
    'd in nat -->
    'o in Operator -->
-   's in list{BTerm} -->
-   compatible_shapes{'d; shape{'o}; 's} -->
+   's in list -->
    beq_bterm{var{'l; 'r}; mk_bterm{'d; 'o; 's}}
    <-->
    bfalse
@@ -618,8 +615,7 @@ interactive_rw reduce_beq_bterm_bterm_var {| reduce |} :
    'r in nat -->
    'd in nat -->
    'o in Operator -->
-   's in list{BTerm} -->
-   compatible_shapes{'d; shape{'o}; 's} -->
+   's in list -->
    beq_bterm{mk_bterm{'d; 'o; 's}; var{'l; 'r}}
    <-->
    bfalse

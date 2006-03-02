@@ -16,7 +16,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005 MetaPRL Group, Caltech
+   Copyright (C) 2005-2006 MetaPRL Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -367,7 +367,7 @@ interactive_rw reduce_vflatten_left :
    <-->
    append{'A; vflatten{| <J[it]> |}}
 
-interactive_rw reduce_vflatten_singleton2 : <:xrule<
+interactive_rw reduce_vflatten_singleton2 {| reduce |} : <:xrule<
    A in list -->
    vflatten{| A |}
    <-->
@@ -589,12 +589,9 @@ dform vflatten_concl_df : display_concl{vflatten; xconcl} =
 dform vflatten_concl_df2 : display_concl{vflatten; 'C} =
    slot{'C}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

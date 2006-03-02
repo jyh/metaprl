@@ -64,7 +64,6 @@ doc <:doc<
 interactive subterm_cons_elim 'H 'depth ('h :: 't) :
    [wf] sequent { <H>; l: list{BTerm}; <J['l]> >- 'depth in nat } -->
    [wf] sequent { <H>; l: list{BTerm}; <J['l]> >- 'h in int } -->
-   [wf] sequent { <H>; l: list{BTerm}; <J['l]> >- 't in list{int} } -->
    [aux] sequent { <H>; l: list{BTerm}; <J['l]> >- compatible_shapes{'depth; 'h :: 't; 'l} } -->
    sequent { <H>; e: BTerm; l: list{BTerm}; <J['e :: 'l]>;
        bdepth{'e} = 'depth +@ 'h in nat;

@@ -433,6 +433,7 @@ let provableRuleStartT t unfold =
    assumAllT
    thenT tryOnAllMHypsT provable_forwardT
    thenMT rwhAll reduce_bsequent
+   thenMT simpleReduceT
    thenMT forwardChainT
    thenT thinDupT
    thenMT provableIntroT

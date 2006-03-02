@@ -57,6 +57,7 @@ doc <:doc<
     Xin Yu @email{xiny@cs.caltech.edu},
     Alexei Kopylov @email{kopylov@cs.cornell.edu}
     Jason Hickey @email{jyh@cs.caltech.edu}
+    Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
 >>
@@ -252,11 +253,11 @@ doc <:doc<
 >>
 (* Note than if would have reverse functionality we could say that if A subset B Type then both A and B are types *)
 
-interactive subsetTypeRight  'B :
+interactive subsetTypeRight {| nth_hyp |} 'B :
    [main] sequent { <H> >- 'A subset 'B } -->
    sequent { <H> >- "type"{'A} }
 
-interactive subsetTypeLeft  'A :
+interactive subsetTypeLeft {| nth_hyp |} 'A :
    [main] sequent { <H> >- 'A subset 'B }  -->
    sequent { <H> >- "type"{'B} }
 

@@ -53,6 +53,7 @@ open Basic_tactics
 open Itt_equal
 open Itt_subtype
 open Itt_struct
+open Itt_squiggle
 
 (************************************************************************
  * TERMS                                                                *
@@ -80,6 +81,36 @@ define (*private*) unfold_list:
 define (*private*) unfold_list_ind:
    list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} <-->
    fix{r.lambda{l. decide{'l; nl.'base; ht. spread{'ht; h,t. 'step['h; 't; 'r 't] }}}} 'e
+
+(************************************************************************
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+let list_term = << list{'A} >>
+let list_opname = opname_of_term list_term
+let is_list_term = is_dep0_term list_opname
+let dest_list = dest_dep0_term list_opname
+let mk_list_term = mk_dep0_term list_opname
+
+let nil_term = << nil >>
+let nil_opname = opname_of_term nil_term
+let is_nil_term = is_no_subterms_term nil_opname
+
+let cons_term = << cons{'a; 'b} >>
+let cons_opname = opname_of_term cons_term
+let is_cons_term = is_dep0_dep0_term cons_opname
+let dest_cons = dest_dep0_dep0_term cons_opname
+let mk_cons_term = mk_dep0_dep0_term cons_opname
+
+let list_ind_term = << list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} >>
+let list_ind_opname = opname_of_term list_ind_term
+let is_list_ind_term = is_dep0_dep0_dep3_term list_ind_opname
+let dest_list_ind = dest_dep0_dep0_dep3_term list_ind_opname
+let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
+
+let rec mk_list_of_list = function
+   h::t -> mk_cons_term h (mk_list_of_list t)
+ | [] -> nil_term
 
 (************************************************************************
  * REWRITES                                                             *
@@ -236,6 +267,13 @@ interactive nilSqequal {| nth_hyp |} 'T :
    sequent { <H> >- 'u = nil in list{'T} } -->
    sequent { <H> >- 'u ~ nil }
 
+doc docoff
+
+let resource subst +=
+   <<'u = nil in list{'T}>>, (fun t i ->
+      let t, u, _ = dest_equal t in
+         sqSubstT (mk_squiggle_term u nil_term) i thenET nilSqequal (dest_list t))
+
 doc <:doc<
    @modsubsection{Subtyping}
 
@@ -316,36 +354,6 @@ dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind
    `"match " slot{'e} `" with" hspace
    pushm[3] `"[] ->" hspace slot{'base} popm popm hspace
    `"| " pushm[3] slot{'h} `"::" slot{'t} `"." slot{'f} `" ->" hspace slot{'step} popm popm ezone
-
-(************************************************************************
- * PRIMITIVES                                                           *
- ************************************************************************)
-
-let list_term = << list{'A} >>
-let list_opname = opname_of_term list_term
-let is_list_term = is_dep0_term list_opname
-let dest_list = dest_dep0_term list_opname
-let mk_list_term = mk_dep0_term list_opname
-
-let nil_term = << nil >>
-let nil_opname = opname_of_term nil_term
-let is_nil_term = is_no_subterms_term nil_opname
-
-let cons_term = << cons{'a; 'b} >>
-let cons_opname = opname_of_term cons_term
-let is_cons_term = is_dep0_dep0_term cons_opname
-let dest_cons = dest_dep0_dep0_term cons_opname
-let mk_cons_term = mk_dep0_dep0_term cons_opname
-
-let list_ind_term = << list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} >>
-let list_ind_opname = opname_of_term list_ind_term
-let is_list_ind_term = is_dep0_dep0_dep3_term list_ind_opname
-let dest_list_ind = dest_dep0_dep0_dep3_term list_ind_opname
-let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
-
-let rec mk_list_of_list = function
-   h::t -> mk_cons_term h (mk_list_of_list t)
- | [] -> nil_term
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

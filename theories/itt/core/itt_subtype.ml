@@ -352,10 +352,16 @@ let bySomeSubtypeT = funT (fun p ->
    let _, x, _ = dest_equal (concl p) in
    let x = dest_var x in
    let xdecl = get_decl_number p x in
-      by_subtype xdecl thenT withExcludeOptionT subtype_formation (d_outside_auto (dT 0)))
+      by_subtype xdecl thenT withExcludeOptionT subtype_formation (d_outside_auto (completeAutoT)))
 
-let trySubtypeT i = 
-   completeT (by_subtype2 i thenT withExcludeOptionT subtype_formation (repeatT (dT 0)))
+let subtype_formation_labels = rule_labels_of_terms [subtype_formation]
+
+let trySubtypeT = argfunT (fun i p ->
+   by_subtype2 i thenT (
+      if rule_labels_are_allowed_arg p subtype_formation_labels then
+         withExcludeOptionT subtype_formation completeAutoT
+      else
+         completeT (repeatT (dT 0))))
 
 let resource nth_hyp += [
    << 't1 = 't2 in 'A >>, << 't1 = 't2 in 'B >>, wrap_nth_hyp_uncertain trySubtypeT;
@@ -363,7 +369,7 @@ let resource nth_hyp += [
 ]
 
 let resource intro +=
-   << !x in 'A >>, wrap_intro_auto_complete bySomeSubtypeT
+   << !x in 'A >>, wrap_intro ~labels:[subtype_formation] bySomeSubtypeT
 
 interactive subtypeReflexivity {| intro[] |} :
    [wf] sequent { <H> >- "type"{'A} } -->

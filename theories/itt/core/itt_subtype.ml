@@ -29,7 +29,7 @@ doc <:doc<
    for more information.
 
    Copyright (C) 1997-2006 MetaPRL Group, Cornell University, City University
-   of New York Graduate Center, California Institute of Technology
+   of New York Graduate Center, and California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -62,7 +62,6 @@ extends Itt_struct
 extends Itt_squash
 doc docoff
 
-open Lm_debug
 open Lm_printf
 
 open Basic_tactics
@@ -135,21 +134,15 @@ doc <:doc<
    the subtype judgment <<'A subtype 'B>> is true, then both $A$
    and $B$ are types.
 >>
-prim subtypeTypeRight 'B :
+prim subtypeTypeRight {| nth_hyp |} 'B :
    [main] sequent { <H> >- 'A subtype 'B } -->
    sequent { <H> >- "type"{'A} } =
    it
 
-prim subtypeTypeLeft 'A :
+prim subtypeTypeLeft {| nth_hyp |} 'A :
    [main] sequent { <H> >- 'A subtype 'B }  -->
    sequent { <H> >- "type"{'B} } =
    it
-
-interactive subtypeElimTypeRight {| nth_hyp |} 'H :
-	sequent { <H>; w: 'A subtype 'B; <J['w]> >- 'A Type }
-
-interactive subtypeElimTypeLeft  {| nth_hyp |} 'H :
-	sequent { <H>; w: 'A subtype 'B; <J['w]> >- 'B Type }
 
 doc <:doc<
    @modsubsection{Introduction}
@@ -161,6 +154,7 @@ doc <:doc<
 >>
 prim subtype_axiomFormation {| intro ~labels:[subtype_formation] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
    [main] sequent { <H>; x: 'A >- 'x in 'B } -->
    sequent { <H> >- 'A subtype 'B } =
    it

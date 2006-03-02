@@ -113,7 +113,7 @@ doc <:doc<
 >>
 
 interactive subset_isect {| intro[AutoMustComplete] |}:
-   sequent { <H> >-'I } -->
+   sequent { <H> >- 'I } -->
    sequent { <H>; i: 'I >- 'A['i] subset 'T } -->
    sequent { <H> >- Isect i:'I. 'A['i] subset 'T }
 
@@ -135,7 +135,8 @@ doc <:doc<
 >>
 
 interactive subset_union {| intro[] |}:
-   sequent { <H> >-"type"{'I} } -->
+   [wf] sequent { <H> >-"type"{'I} } -->
+   [wf] sequent { <H> >-"type"{'T} } -->
    sequent { <H>; i: 'I >- 'A['i] subset 'T } -->
    sequent { <H> >- Union i:'I. 'A['i] subset 'T }
 

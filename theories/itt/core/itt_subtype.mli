@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1997-2006 MetaPRL Group, Cornell University, and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +27,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.caltech.edu>
  *)
 
 extends Itt_equal
@@ -47,90 +47,6 @@ declare \subtype{'A; 'B}
  ************************************************************************)
 
 prec prec_subtype
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * H >- Ui ext subtype(A; B)
- * by subtypeFormation
- * H >- Ui ext A
- * H >- Ui ext B
- *)
-rule subtypeFormation :
-   sequent { <H> >- univ[i:l] } -->
-   sequent { <H> >- univ[i:l] } -->
-   sequent { <H> >- univ[i:l] }
-
-(*
- * H >- subtype(A1; B1) = subtype(A2; B2) in Ui
- * by subtypeEquality
- *
- * H >- A1 = A2 in Ui
- * H >- B1 = B2 in Ui
- *)
-rule subtypeEquality :
-   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent { <H> >- \subtype{'A1; 'B1} = \subtype{'A2; 'B2} in univ[i:l] }
-
-rule subtypeType :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H> >- "type"{'B} } -->
-   sequent { <H> >- "type"{'A subtype 'B} }
-
-rule subtypeTypeRight 'B :
-   sequent { <H> >- 'A subtype 'B } -->
-   sequent { <H> >- "type"{'A} }
-
-rule subtypeTypeLeft 'A :
-   sequent { <H> >- 'A subtype 'B } -->
-   sequent { <H> >- "type"{'B} }
-
-(*
- * H >- subtype(A; B) ext it
- * by subtype_axiomFormation
- *
- * H >- A = A in Ui
- * H; x: A; y: A; x = y in A >- x = y in B
- *)
-rule subtype_axiomFormation :
-   sequent { <H> >- "type"{'A} } -->
-   sequent { <H>; x: 'A >- 'x in 'B } -->
-   sequent { <H> >- 'A subtype 'B }
-
-(*
- * H >- it = it in subtype(A; B)
- * by subtype_axiomEquality
- *
- * H >- subtype(A; B)
- *)
-rule subtype_axiomEquality :
-   sequent { <H> >- 'A subtype 'B } -->
-   sequent { <H> >- it in 'A subtype 'B }
-
-(*
- * H, x: subtype(A; B); J[x] >- C[x]
- * by subtypeElimination
- *
- * H, x: subtype(A; B); J[it] >- C[it]
- *)
-rule subtypeElimination 'H :
-   sequent { <H>; 'A subtype 'B; <J[it]> >- 'C[it] } -->
-   sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] }
-
-(*
- * H >- x = y in B
- * by subtypeElimination2 A
- *
- * H >- x = y in A
- * H >- subtype(A; B)
- *)
-rule subtypeElimination2 'H 'a 'b :
-   sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->
-   sequent { <H>; x: 'A subtype 'B; <J['x]>; 'a = 'b in 'B >- 'C['x] } -->
-   sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] }
 
 (************************************************************************
  * RESOURCE                                                             *

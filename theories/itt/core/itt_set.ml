@@ -162,7 +162,8 @@ doc <:doc<
    @hrefresource[subtype_resource].
 >>
 interactive set_subtype {| intro [] |} :
-   sequent { <H> >- { a: 'A | 'B['a] } Type } -->
+   [wf] sequent { <H> >- 'A Type } -->
+   [wf] sequent { <H> >- { a: 'A | 'B['a] } Type } -->
    sequent { <H> >- { a: 'A | 'B['a] } subtype 'A  }
 
 interactive set_monotone {| intro [] |} :

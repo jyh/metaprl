@@ -12,7 +12,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1997-2006 MetaPRL Group, Cornell University, and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +29,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.caltech.edu>
  *)
 
 extends Itt_equal
@@ -71,12 +71,6 @@ rule voidType : sequent { <H> >- "type"{void} }
  *)
 rule voidElimination 'H : sequent { <H>; x: void; <J['x]> >- 'C['x] }
 
-(*
- * Subtyping.
- *)
-rule void_subtype :
-   sequent { <H> >- \subtype{void; 'T} }
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -88,7 +82,6 @@ val is_void_term : term -> bool
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

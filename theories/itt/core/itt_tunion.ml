@@ -205,6 +205,7 @@ interactive unionSubtype2 'a:
 
 interactive unionSubtype3 :
    [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'T} } -->
    ["subtype"] sequent { <H>; x: 'A >- 'B['x] subtype 'T } -->
    sequent { <H> >- Union x:'A. 'B['x] subtype 'T }
 

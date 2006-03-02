@@ -81,6 +81,9 @@ doc docoff
 
 let foldInd = makeFoldC << ind{'n; 'base; k,l. 'up['k;'l]} >> unfoldInd
 
+let resource elim +=
+   << 0 in nat >>, wrap_elim_auto_ok thinT
+
 (******************
  *  Display Forms *
  ******************)

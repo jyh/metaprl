@@ -30,11 +30,12 @@ doc <:doc<
 
    Authors:
       Xin Yu @email{xiny@cs.caltech.edu}
+      Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
    @parents
 >>
-extends Itt_hoas_bterm
+extends Itt_hoas_destterm
 doc docoff
 
 open Basic_tactics
@@ -44,24 +45,17 @@ doc terms
 define unfold_eta: eta{'n; 'e} <--> bind{'n; x. substl{'e; 'x}}
 define unfold_etal: etal{'n; 'tl} <--> map{x. eta{'n; 'x}; 'tl}
 
-doc rules
+doc rewrites
 
 interactive_rw eta_nil {| reduce |} :
    etal{'n; nil} <--> nil
 
 interactive_rw eta_cons {| reduce |} :
-   etal{'n; cons{'h; 't}} <--> eta{'n; cons{'h; etal{'n; 't}}}
+   etal{'n; cons{'h; 't}} <--> cons{eta{'n; 'h}; etal{'n; 't}}
 
-interactive_rw mk_bterm_eta :
-   'btl in list -->
+interactive_rw mk_bterm_eta {| reduce |} :
    'n in nat -->
-   'm in nat -->
-   'm <= 'n -->
-   mk_bterm{'n; 'op; etal{'m; 'btl}} <--> mk_bterm{'n; 'op; 'btl}
-
-interactive_rw mk_bterm_eta1 {| reduce |} :
    'btl in list -->
-   'n in nat -->
    mk_bterm{'n; 'op; etal{'n; 'btl}} <--> mk_bterm{'n; 'op; 'btl}
 
 interactive_rw mk_bterm_eta_expand :
@@ -75,9 +69,32 @@ interactive_rw eta_mk_bterm {| reduce |} :
    'm <= 'n -->
    eta{'m; mk_bterm{'n; 'op; 'btl}} <--> mk_bterm{'n; 'op; 'btl}
 
+interactive_rw subterms_id {| reduce |} :
+   'btl in list -->
+   'n in nat -->
+   subterms{mk_bterm{'n; 'op; 'btl}} <--> etal{'n; 'btl}
+
+interactive_rw dest_bterm_mk_bterm {| reduce |} :
+   'n in nat -->
+   'op in Operator -->
+   'subterms in list -->
+   dest_bterm{mk_bterm{'n; 'op; 'subterms}; l,r.'var_case['l; 'r];
+      bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
+   <-->
+   'op_case['n; 'op; etal{'n; 'subterms}]
+
+doc rules
+
+interactive eta_wf {| intro |} :
+   sequent{ <H> >- 'l in list } -->
+   sequent{ <H> >- etal{'n; 'l} in list }
+
+extends Itt_hoas_bterm
+
 interactive mk_bterm_wf {| intro [] |} :
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
+   [wf] sequent{ <H> >- 'subterms in list } -->
    [wf] sequent{ <H> >- etal{'depth; 'subterms} in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'depth; shape{'op}; etal{'depth; 'subterms}} } -->
    sequent{ <H> >- mk_bterm{'depth; 'op; 'subterms} in BTerm }
@@ -85,6 +102,7 @@ interactive mk_bterm_wf {| intro [] |} :
 interactive mk_bterm_wf2 {| intro [] |} :
    [wf] sequent{ <H> >- 'd1 = 'd2 in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
+   [wf] sequent{ <H> >- 'subterms in list } -->
    [wf] sequent{ <H> >- etal{'d1; 'subterms} in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'d1; shape{'op}; etal{'d1; 'subterms}} } -->
    sequent{ <H> >- mk_bterm{'d1; 'op; 'subterms} in BTerm{'d2} }

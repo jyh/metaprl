@@ -98,6 +98,17 @@ interactive recordTypeElimination{| elim [ThinOption thinT]  |} 'H :
    sequent{ <H>; u:"type"{record{'n;'A}}; <J['u]> >- 'C['u] }
 
 
+interactive recordType_univ {| intro [] |} :
+   sequent{ <H> >- 'A in univ[i:l] } -->
+   sequent{ <H> >- 'n in label} -->
+   sequent{ <H> >- record{'n;'A} in univ[i:l] }
+
+interactive emptyRecordType_univ {| intro [] |} :
+   sequent{ <H> >- record in univ[i:l] }
+
+interactive recordTopType_univ {| intro [] |} :
+   sequent{ <H> >- recordTop in univ[i:l] }
+
 interactive emptyRecordIntro {| intro[] |} :
    sequent{ <H> >-'r_1 = 'r_2 in record }
 

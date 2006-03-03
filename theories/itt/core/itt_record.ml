@@ -118,6 +118,25 @@ interactive recordTypeI {| intro [] |} :
    sequent{ <H> >- "type"{'R} } -->
    sequent{ <H> >- "type"{record[n:t]{'A;'R}} }
 
+interactive recordTypeS_univ {| intro [] |} :
+   sequent{ <H> >- 'A in univ[i:l] } -->
+   sequent{ <H> >- record[n:t]{'A} in univ[i:l] }
+
+interactive recordTypeL_univ {| intro [] |} :
+   sequent{ <H> >- 'R in univ[i:l] } -->
+   sequent{ <H>; self:'R >- 'A['self] in univ[i:l] } -->
+   sequent{ <H> >- record[n:t]{self.'A['self];'R} in univ[i:l] }
+
+interactive recordTypeR_univ {| intro [] |} :
+   sequent{ <H> >- 'A in univ[i:l] } -->
+   sequent{ <H>; x:'A >- 'R['x] in univ[i:l] } -->
+   sequent{ <H> >- record[n:t]{'A;x.'R['x]} in univ[i:l] }
+
+interactive recordTypeI_univ {| intro [] |} :
+   sequent{ <H> >- 'A in univ[i:l] } -->
+   sequent{ <H> >- 'R in univ[i:l] } -->
+   sequent{ <H> >- record[n:t]{'A;'R} in univ[i:l] }
+
 (*** Reductions ***)
 
 doc <:doc< @modsubsection{Reductions} >>

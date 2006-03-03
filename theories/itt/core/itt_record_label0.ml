@@ -37,6 +37,9 @@ interactive_rw reduce_ind_base {| reduce |} :
 interactive labelType {| intro [] |} :
    sequent { <H> >- "type"{label} }
 
+interactive labelType_univ {| intro [] |} :
+   sequent { <H> >- label in univ[i:l] }
+
 interactive zeroMember {| intro [] |} :
    sequent { <H> >- zero in label}
 

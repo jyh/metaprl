@@ -1,6 +1,6 @@
 DIRS[] =
     core
     experimental
-    obsolete
+#    obsolete
 
 VirtualTheory($(DIRS))

@@ -76,16 +76,6 @@ interactive bterm2_forward {| forward []; nth_hyp |} 'H : <:xrule<
    <H>; x: e in BTerm{d}; <J[x]> >- C[x]
 >>
 
-interactive mk_bterm_depth_forward {| nth_hyp |} 'H : <:xrule<
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; d in nat >- C[x] -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
->>
-
-interactive mk_bterm_op_forward {| nth_hyp |} 'H : <:xrule<
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; op in "Operator" >- C[x] -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
->>
-
 interactive mk_bterm_subterms_forward {| nth_hyp |} 'H : <:xrule<
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; subterms in list{BTerm} >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
@@ -110,20 +100,21 @@ doc <:doc<
    Combine them all into a single forward-chaining theorem,
    just for efficiency.
 >>
-interactive mk_bterm_wf_forward2 {| forward [] |} 'H : <:xrule<
+interactive mk_bterm_wf_forward2 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'd in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'op in Operator -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>;
-      d in nat;
-      op in "Operator";
       subterms in list{BTerm};
       compatible_shapes{d; shape{op}; subterms}
       >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
-interactive mk_bterm_wf_forward3 {| forward [] |} 'H : <:xrule<
+interactive mk_bterm_wf_forward3 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- 'd in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- 'op in Operator -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]>;
       d = n in nat;
-      op in "Operator";
       subterms in list{BTerm};
       compatible_shapes{d; shape{op}; subterms}
       >- C[x] -->

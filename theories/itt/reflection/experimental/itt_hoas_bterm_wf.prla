@@ -3301,7 +3301,7 @@ T	t1735	o b1735 b138
 B	b1736	t1735
 T	t1736	o1099 b1728 b1736
 B	b1737	t1736
-P	p1737	String "repeatT (reduceT ttca)"
+P	p1737	String "(* repeatT (reduceT ttca) *) idT"
 O	o1737	ext_rule p1737
 T	t1737	o780 b1011 b627
 B	b1738	t1737 i

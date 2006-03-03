@@ -522,7 +522,8 @@ interactive append_cvar_elim {| forward [] |} 'H : <:xrule<
    <H>; append{l1; l2} in CVar{d}; <J> >- C
 >>
 
-interactive vflatten_cvar_forward1 {| forward []; nth_hyp |} 'H : <:xrule<
+interactive vflatten_cvar_forward1 {| forward [] |} 'H : <:xrule<
+   "wf" : <H>; vflatten{| A |} in CVar{n}; <K> >- A in list -->
    <H>; vflatten{| A |} in CVar{n}; <K>; A in CVar{n} >- C -->
    <H>; vflatten{| A |} in CVar{n}; <K> >- C
 >>

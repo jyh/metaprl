@@ -76,12 +76,16 @@ interactive bterm2_forward {| forward []; nth_hyp |} 'H : <:xrule<
    <H>; x: e in BTerm{d}; <J[x]> >- C[x]
 >>
 
-interactive mk_bterm_subterms_forward {| nth_hyp |} 'H : <:xrule<
+interactive mk_bterm_subterms_forward 'H : <:xrule<
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'd in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'op in Operator -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; subterms in list{BTerm} >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
-interactive mk_bterm_wf_forward {| nth_hyp |} 'H : <:xrule<
+interactive mk_bterm_wf_forward 'H : <:xrule<
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'd in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'op in Operator -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; compatible_shapes{d; shape{op}; subterms} >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>

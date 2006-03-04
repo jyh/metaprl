@@ -83,6 +83,25 @@ interactive_rw dest_bterm_mk_bterm {| reduce |} :
    <-->
    'op_case['n; 'op; etal{'n; 'subterms}]
 
+interactive_rw eta_eta {| reduce |} :
+   'n in nat -->
+   eta{'n; eta{'n; 't}} <--> eta{'n; 't}
+
+interactive_rw etal_etal {| reduce |} :
+   'n in nat -->
+   'btl in list -->
+   etal{'n; etal{'n; 'btl}} <--> etal{'n; 'btl}
+
+interactive_rw eta_bind {| reduce |} :
+   'm in nat -->
+   'n in nat -->
+   'm <= 'n -->
+   eta{'m; bind{'n; x. 't}} <--> bind{'n; x. 't}
+
+interactive_rw eta_bind1 {| reduce |} :
+   'n in nat -->
+   eta{'n; bind{'n; x. 't}} <--> bind{'n; x. 't}
+
 doc rules
 
 interactive eta_wf {| intro |} :

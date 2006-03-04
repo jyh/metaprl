@@ -96,11 +96,11 @@ interactive_rw eta_bind {| reduce |} :
    'm in nat -->
    'n in nat -->
    'm <= 'n -->
-   eta{'m; bind{'n; x. 't}} <--> bind{'n; x. 't}
+   eta{'m; bind{'n; x. 't['x]}} <--> bind{'n; x. 't['x]}
 
 interactive_rw eta_bind1 {| reduce |} :
    'n in nat -->
-   eta{'n; bind{'n; x. 't}} <--> bind{'n; x. 't}
+   eta{'n; bind{'n; x. 't['x]}} <--> bind{'n; x. 't['x]}
 
 doc rules
 

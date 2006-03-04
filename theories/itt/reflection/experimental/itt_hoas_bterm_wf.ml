@@ -31,6 +31,7 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
 
    @end[license]
    @parents
@@ -43,6 +44,7 @@ extends Itt_hoas_bterm
 extends Itt_hoas_lof
 extends Itt_hoas_lof_vec
 extends Itt_hoas_normalize
+extends Itt_hoas_eta
 
 doc docoff
 
@@ -64,11 +66,12 @@ open Itt_struct
 doc <:doc<
    Some useful rules for forward chaining.
 >>
-interactive  subterms_forward_lemma 'n 'op : <:xrule<
+interactive subterms_forward_lemma 'n 'op : <:xrule<
    <H> >- 'n in nat -->
    <H> >- 'op in "Operator" -->
-   <H> >- mk_bterm{'n; 'op; 'btl} in BTerm -->
-   <H> >- 'btl in list{BTerm}
+   <H> >- btl in list -->
+   <H> >- mk_bterm{n; op; btl} in BTerm -->
+   <H> >- etal{n; btl} in list{BTerm}
 >>
 
 interactive bterm2_forward {| forward []; nth_hyp |} 'H : <:xrule<
@@ -77,16 +80,18 @@ interactive bterm2_forward {| forward []; nth_hyp |} 'H : <:xrule<
 >>
 
 interactive mk_bterm_subterms_forward 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'd in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'op in Operator -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; subterms in list{BTerm} >- C[x] -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- d in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- op in Operator -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- subterms in list -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; etal{d; subterms} in list{BTerm} >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_wf_forward 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'd in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'op in Operator -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; compatible_shapes{d; shape{op}; subterms} >- C[x] -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- d in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- op in Operator -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- subterms in list -->
+   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; compatible_shapes{d; shape{op}; etal{d;subterms}} >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
@@ -105,22 +110,24 @@ doc <:doc<
    just for efficiency.
 >>
 interactive mk_bterm_wf_forward2 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'd in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- 'op in Operator -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- d in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- op in Operator -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- subterms in list -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>;
-      subterms in list{BTerm};
-      compatible_shapes{d; shape{op}; subterms}
+      etal{d; subterms} in list{BTerm};
+      compatible_shapes{d; shape{op}; etal{d; subterms}}
       >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_wf_forward3 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- 'd in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- 'op in Operator -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- d in nat -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- op in Operator -->
+   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- subterms in list -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]>;
       d = n in nat;
-      subterms in list{BTerm};
-      compatible_shapes{d; shape{op}; subterms}
+      etal{d; subterms} in list{BTerm};
+      compatible_shapes{d; shape{op}; etal{d; subterms}}
       >- C[x] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- C[x]
 >>
@@ -166,11 +173,12 @@ let resource intro +=
 let proofRuleAuxWFT =
    autoT
    thenT rw (normalizeBTermSimpleC thenC reduceC) 0
- ta
+   thenT autoT 
    thenT tryT arithT
 
 let proofRuleWFT =
-   repeatT proofRuleAuxWFT
+   (* XXX: Aleksey: repeatT temporary disabled because the unfinished eta-expansion changes cause it to run forever *)
+   (* repeatT *) proofRuleAuxWFT
 
 (************************************************************************
  * Depth wf.

@@ -4,7 +4,7 @@
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2005-2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
  * @end[license]
  *)
 extends Itt_hoas_normalize
+extends Itt_hoas_eta
 
 open Basic_tactics
 
@@ -35,12 +36,9 @@ topval bindWFT : tactic
 topval proofRuleAuxWFT : tactic
 topval proofRuleWFT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

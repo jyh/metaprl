@@ -55,6 +55,8 @@ let debug_meta_dtactic =
         debug_value = false
       }
 
+type intro_item = string * int option * rule_labels * auto_type * tactic
+
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)

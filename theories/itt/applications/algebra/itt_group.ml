@@ -61,7 +61,7 @@ open Itt_subtype
 (* We do not want the default into handling for broup operations *)
 
 let alg_intro =
-   "alg_intro", None, rule_labels_empty, AutoNormal, failWithT "Abstract algebra intro tactic: do not know what to do"
+   wrap_intro ~name:"alg_intro" (failWithT "Abstract algebra intro tactic: do not know what to do")
 
 let resource intro += [
    << ('a *['G] 'b) in 'T >>, alg_intro;

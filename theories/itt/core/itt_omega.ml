@@ -1773,7 +1773,7 @@ let omegaT =
 	omegaPrepT) thenMT (rw simpleReduceC (-1) thenMT tryT (assert_false (-1))) thenT normConclT
    (*thenMT endT 2*)
 
-let omega_intro = "omegaT", None, rule_labels_empty, AutoComplete, omegaT
+let omega_intro = wrap_intro_auto_complete ~name:"omegaT" omegaT
 
 let resource intro += [
    << 'a < 'b >>, omega_intro;

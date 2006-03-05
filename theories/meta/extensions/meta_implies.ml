@@ -4,7 +4,7 @@
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2005-2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,7 @@ let moveToGoalT i = funT (fun p ->
  * Resources.
  *)
 let resource meta_intro +=
-   [<< mimplies{'e1; 'e2} >>, wrap_intro mimplies_intro]
+   [<< mimplies{'e1; 'e2} >>, ("mimplies_intro", None, rule_labels_empty, AutoNormal, mimplies_intro)]
 
 let resource meta_elim +=
    [<< mimplies{'e1; 'e2} >>, wrap_elim mimplies_elim]
@@ -190,12 +190,9 @@ interactive test2 :
    mimplies{sequent { <H> >- 'S }; sequent { <H> >- 'T }} -->
    mimplies{sequent { <H> >- 'S }; sequent { <H> >- 'T }}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

@@ -35,6 +35,7 @@ open Basic_tactics
 
 open Tactic_type
 
+type intro_item = string * int option * rule_labels * auto_type * tactic
 resource (term * elim_item, int -> tactic) meta_elim
 resource (term * intro_item, tactic) meta_intro
 

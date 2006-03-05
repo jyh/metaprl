@@ -210,7 +210,7 @@ let esquashEqualT weak = funT (fun p ->
 
 let resource intro += [
    <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, wrap_intro (esquashEqualT true);
-   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, wrap_intro_auto_complete (esquashEqualT false)
+   <<esquash{'P1} = esquash{'P2} in univ[i:l]>>, wrap_intro ~auto:AutoComplete (esquashEqualT false)
 ]
 
 let esquashAutoT =

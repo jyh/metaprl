@@ -248,7 +248,7 @@ let quotientIntroT weak = funT (fun p ->
 
 let resource intro += [
    <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, wrap_intro (quotientIntroT true);
-   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, wrap_intro_auto_complete (quotientIntroT false);
+   <<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, wrap_intro ~auto:AutoComplete (quotientIntroT false);
 ]
 
 doc <:doc<

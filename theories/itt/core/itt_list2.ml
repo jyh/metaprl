@@ -752,8 +752,8 @@ let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
 
 let t_var = Lm_symbol.add "T"
 
-let infer_hd inf consts decls eqs opt_eqs defs t =
-   let l = one_subterm t in
+let infer_sublist f inf consts decls eqs opt_eqs defs t =
+   let l = f t in
    let eqs, opt_eqs, defs, tp_l = inf consts decls eqs opt_eqs defs l in
       if is_list_term tp_l then
          eqs, opt_eqs, defs, dest_list tp_l
@@ -771,9 +771,16 @@ let infer_append inf consts decls eqs opt_eqs defs t =
 
 let resource typeinf += [
    << length{'l}>>, Typeinf.infer_const << nat >>;
+   << list_max{'l}>>, Typeinf.infer_const << nat >>;
+   << bexists_list{'l; x. 'P['x]} >>, Typeinf.infer_const << bool >>;
+   << rev{'l} >>, Typeinf.infer_map one_subterm;
    << tl{'l} >>, Typeinf.infer_map one_subterm;
-   << hd{'l} >>, infer_hd;
-   << append{'l1; 'l2} >>, infer_append
+   << hd{'l} >>, infer_sublist one_subterm;
+   << tail{'l; 'i} >>, Typeinf.infer_map (fun t -> fst (two_subterms t));
+   << nth{'l; 'i} >>, infer_sublist (fun t -> fst (two_subterms t));
+   << append{'l1; 'l2} >>, infer_append;
+   << replace_nth{'l; 'i; 't} >>, Typeinf.infer_map (fun t -> let t, _, _ = three_subterms t in t);
+   << insert_at{'l; 'i; 't} >>, Typeinf.infer_map (fun t -> let t, _, _ = three_subterms t in t);
 ]
 
 (************************************************************************

@@ -25,7 +25,6 @@
  * @end[license]
  *)
 extends Itt_hoas_normalize
-extends Itt_hoas_eta
 
 open Basic_tactics
 

@@ -15,7 +15,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -38,10 +38,12 @@ doc <:doc<
 >>
 extends Itt_hoas_bterm
 
+open Basic_tactics
+
 (*
  * Relax option.  Use this if you want to used relaxed rules.
  *)
-declare relax : SelectOption
+val relax_term: term
 
 (*
  * The type << Bind{'n} >> is the type of terms with
@@ -56,12 +58,9 @@ declare Bind{'n}
  *)
 declare BindTriangle{'n}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

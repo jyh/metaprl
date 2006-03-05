@@ -22,7 +22,6 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
-   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 
    @parents
@@ -31,7 +30,6 @@ extends Itt_vec_bind
 extends Itt_vec_list1
 extends Itt_vec_dform
 extends Itt_vec_sequent_term
-extends Itt_hoas_eta
 extends Itt_hoas_relax
 extends Itt_hoas_vbind
 extends Itt_hoas_sequent
@@ -315,14 +313,14 @@ doc <:doc<
 interactive vsequent_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- arg in BTerm{0} -->
    "wf" : <H> >- vflatten{| <J> |} in CVar{length{vflatten{| |}}} -->
-   "wf" : <H> >- eta{length{vflatten{| <J> |}}; C} in BTerm{length{vflatten{| <J> |}}} -->
+   "wf" : <H> >- C in BTerm{length{vflatten{| <J> |}}} -->
    <H> >- vsequent{arg}{| <J> >- C<|H|> |} in Sequent
 >>
 
 interactive vsequent_equal {| intro [] |} : <:xrule<
    "wf" : <H> >- arg1 = arg2 in BTerm{0} -->
    "wf" : <H> >- vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{length{vflatten{||}}} -->
-   "wf" : <H> >- eta{length{vflatten{| <J1> |}}; C1} = eta{length{vflatten{| <J1> |}}; C2} in BTerm{length{vflatten{| <J1> |}}} -->
+   "wf" : <H> >- C1 = C2 in BTerm{length{vflatten{| <J1> |}}} -->
    <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent
 >>
 

@@ -74,11 +74,6 @@ interactive subterms_forward_lemma 'n 'op : <:xrule<
    <H> >- etal{n; btl} in list{BTerm}
 >>
 
-interactive bterm2_forward {| forward []; nth_hyp |} 'H : <:xrule<
-   <H>; x: e in BTerm{d}; <J[x]>; e in BTerm; bdepth{e} = d in nat >- C[x] -->
-   <H>; x: e in BTerm{d}; <J[x]> >- C[x]
->>
-
 interactive mk_bterm_subterms_forward 'H : <:xrule<
    "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- d in nat -->
    "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- op in Operator -->

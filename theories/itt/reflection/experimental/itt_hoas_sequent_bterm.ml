@@ -27,7 +27,7 @@ doc <:doc<
 
    @parents
 >>
-extends Itt_hoas_bterm_wf
+extends Itt_hoas_bterm
 extends Itt_hoas_sequent
 extends Itt_hoas_relax
 extends Itt_dprod

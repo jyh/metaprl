@@ -484,12 +484,6 @@ interactive vflatten_cvar_wf 'J1 'J2 : <:xrule<
    <H> >- vflatten{| <J1>; <K1<|H|> > |} = vflatten{| <J2>; <K2<|H|> > |} in CVar{d}
 >>
 
-(*
- * XXX: JYH: These two theorems are not a good idea because
- * they will break the compositionality of dT.
- * Will be removed eventually in favor of forward chaining
- * I believe.
- *)
 interactive cvar_is_list {| intro [intro_typeinf << 'l >>] |} CVar{'n} : <:xrule<
    "wf" : <H> >- n IN "nat" -->
    "wf" : <H> >- l IN CVar{n} -->

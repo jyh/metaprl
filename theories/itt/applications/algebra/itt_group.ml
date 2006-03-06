@@ -60,12 +60,15 @@ open Itt_subtype
 
 (* We do not want the default into handling for broup operations *)
 
-let alg_intro =
-   wrap_intro ~name:"alg_intro" (failWithT "Abstract algebra intro tactic: do not know what to do")
+let alg_intro ?auto () =
+   wrap_intro ?auto:auto ~name:"alg_intro" ~fall_through:false (failWithT "Abstract algebra intro tactic: do not know what to do")
 
 let resource intro += [
-   << ('a *['G] 'b) in 'T >>, alg_intro;
-   << ('a +['G] 'b) in 'T >>, alg_intro
+   << ('a *['G] 'b) in 'T >>, alg_intro ();
+   << ('a +['G] 'b) in 'T >>, alg_intro ();
+   << ('G^inv 'a) in 'G^car >>, alg_intro ();
+   << ('a *['G] 'b) = 'x in 'T >>, alg_intro ~auto:AutoComplete ();
+   << ('a +['G] 'b) = 'x in 'T >>, alg_intro ~auto:AutoComplete ();
 ]
 
 (************************************************************************

@@ -176,7 +176,10 @@ let proofRuleAuxWFT =
    thenT tryT arithT
 
 let proofRuleWFT =
-   (* XXX: Aleksey: repeatT temporary disabled because the unfinished eta-expansion changes cause it to run forever *)
+   (*
+    * XXX: Aleksey: Do we need this repeatT?
+    * Temporary disabled as it creates infinite loops when debugging things
+    *)
    (* repeatT *) proofRuleAuxWFT
 
 (************************************************************************

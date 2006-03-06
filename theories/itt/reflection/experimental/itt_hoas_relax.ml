@@ -416,6 +416,11 @@ interactive vbind_in_bind {| intro |} : <:xrule<
    <H> >- vbind{| <J> >- e1 |} in Bind{length{vlist{| <J> |}}}
 >>
 
+interactive vbind_in_bind2 {| intro |} : <:xrule<
+   <H> >- n = length{vlist{| <J> |}} in int -->
+   <H> >- vbind{| <J> >- e1 |} in Bind{n}
+>>
+
 doc <:doc<
    Sometimes it is useful to use the depth of a term (usually this
    is during induction).

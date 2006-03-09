@@ -1221,7 +1221,7 @@ doc <:doc<
    Rules for quantifiers are the following:
 >>
 interactive all_list_wf  {| intro[] |} :
-   sequent { <H> >- 'l in list  } -->
+   [wf] sequent { <H> >- 'l in list  } -->
    sequent { <H>; i:Index{'l}  >- 'P[nth{'l;'i}] Type } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} Type }
 
@@ -1234,20 +1234,31 @@ interactive all_list_intro_cons  {| intro[] |} :
    sequent { <H> >- all_list{cons{'a; 'l};  x. 'P['x]} }
 
 interactive all_list_intro  {| intro[] |} :
-   sequent { <H> >- 'l in list  } -->
+   [wf] sequent { <H> >- 'l in list  } -->
    sequent { <H>; i:Index{'l}  >- 'P[nth{'l;'i}]  } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
 interactive all_list_intro1  {| intro[SelectOption 1;  intro_typeinf <<'l>>] |} list{'A} :
-   sequent { <H> >- 'l in list{'A}  } -->
+   [wf] sequent { <H> >- 'l in list{'A}  } -->
    sequent { <H>; x:'A; mem{'x; 'l; 'A}  >- 'P['x]  } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
 interactive all_list_elim {| elim[] |} 'H  'i :
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list  } -->
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'i in Index{'l}  } -->
+   [wf] sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list  } -->
+   [wf] sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'i in Index{'l}  } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P[nth{'l;'i}] >- 'C['u] } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
+
+interactive all_list_and_intro  {| intro[] |} :
+   [wf] sequent { <H> >- 'l in list  } -->
+   sequent { <H> >- all_list{'l;  x. 'P['x]}  } -->
+   sequent { <H> >- all_list{'l;  x. 'Q['x]}  } -->
+   sequent { <H> >- all_list{'l;  x. ('P['x] & 'Q['x]) } }
+
+interactive all_list_and_elim {| elim[] |} 'H :
+   [wf] sequent { <H>; u: all_list{'l;  x. ('P['x] & 'Q['x])}; <J['u]> >- 'l in list  } -->
+   sequent { <H>; u: all_list{'l;  x. ('P['x] & 'Q['x])}; <J['u]>; all_list{'l;  x. 'P['x]}; all_list{'l;  x. 'Q['x]} >- 'C['u]  } -->
+   sequent { <H>; u: all_list{'l;  x. ('P['x] & 'Q['x])}; <J['u]> >- 'C['u] }
 
 interactive all_list_map  {| intro[] |} :
    [wf] sequent { <H> >- 'l in list  } -->
@@ -1255,12 +1266,12 @@ interactive all_list_map  {| intro[] |} :
    sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
 
 interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
-   sequent { <H> >- 'l in list{'A}  } -->
+   [wf] sequent { <H> >- 'l in list{'A}  } -->
    sequent { <H>; x:'A; mem{'x; 'l; 'A} >- 'p['x] in 'P['x]  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
 interactive all_list_witness_wf2  {| intro[] |} :
-   sequent { <H> >- 'l in list } -->
+   [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- all_list{'l;  x. 'p['x] in 'P['x]}  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
@@ -1283,13 +1294,13 @@ doc <:doc<
    Rules for quantifiers are the following:
 >>
 interactive exists_list_wf1  {| intro [intro_typeinf << 'l >>] |} list{'T} :
-   sequent { <H> >- 'l in list{'T}  } -->
-   sequent { <H>; x: 'T >- 'P['x] Type } -->
+   [wf] sequent { <H> >- 'l in list{'T}  } -->
+   [wf] sequent { <H>; x: 'T >- 'P['x] Type } -->
    sequent { <H> >- exists_list{'l;  x. 'P['x]} Type }
 
 interactive exists_list_wf2  {| intro ~labels:intensional_wf_labels |} :
-   sequent { <H> >- 'l in list  } -->
-   sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] Type } -->
+   [wf] sequent { <H> >- 'l in list  } -->
+   [wf] sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] Type } -->
    sequent { <H> >- exists_list{'l;  x. 'P['x]} Type }
 
 interactive exists_list_intro_cons  {| intro []; nth_hyp |} :
@@ -1297,16 +1308,16 @@ interactive exists_list_intro_cons  {| intro []; nth_hyp |} :
    sequent { <H> >- exists_list{cons{'a; 'l};  x. 'P['x]} }
 
 interactive exists_list_intro  {| intro [] |} 'i :
-   sequent { <H> >- 'l in list  } -->
-   sequent { <H> >- 'i in Index{'l}  } -->
+   [wf] sequent { <H> >- 'l in list  } -->
+   [wf] sequent { <H> >- 'i in Index{'l}  } -->
    sequent { <H> >- 'P[nth{'l; 'i}]  } -->
-   sequent { <H>; i: Index{'l} >- 'P[nth{'l; 'i}] Type } -->
+   [wf] sequent { <H>; i: Index{'l} >- 'P[nth{'l; 'i}] Type } -->
    sequent { <H> >- exists_list{'l;  x. 'P['x]} }
 
 interactive exists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} :
-   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'A Type } -->
-   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
-   sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; x: 'A >- 'P['x] Type  } -->
+   [wf] sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'A Type } -->
+   [wf] sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
+   [wf] sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; x: 'A >- 'P['x] Type  } -->
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]>; i: Index{'l}; 'P[nth{'l; 'i}] >- 'C['u] } -->
    sequent { <H>; u: exists_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
 
@@ -1315,26 +1326,26 @@ doc <:doc<
    Rules for the Boolean existential.
 >>
 interactive bexists_list_wf1  {| intro [intro_typeinf << 'l >>] |} list{'T} :
-   sequent { <H> >- 'l in list{'T}  } -->
-   sequent { <H>; x: 'T >- 'P['x] in bool } -->
+   [wf] sequent { <H> >- 'l in list{'T}  } -->
+   [wf] sequent { <H>; x: 'T >- 'P['x] in bool } -->
    sequent { <H> >- bexists_list{'l;  x. 'P['x]} in bool }
 
 interactive bexists_list_wf2  {| intro ~labels:intensional_wf_labels |} :
-   sequent { <H> >- 'l in list  } -->
-   sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] in bool } -->
+   [wf] sequent { <H> >- 'l in list  } -->
+   [wf] sequent { <H>; i: Index{'l}  >- 'P[nth{'l; 'i}] in bool } -->
    sequent { <H> >- bexists_list{'l;  x. 'P['x]} in bool }
 
 interactive bexists_list_intro  {| intro [] |} 'i :
-   sequent { <H> >- 'l in list  } -->
-   sequent { <H> >- 'i in Index{'l}  } -->
+   [wf] sequent { <H> >- 'l in list  } -->
+   [wf] sequent { <H> >- 'i in Index{'l}  } -->
    sequent { <H> >- "assert"{'P[nth{'l; 'i}]}  } -->
-   sequent { <H>; i: Index{'l} >- 'P[nth{'l; 'i}] in bool } -->
+   [wf] sequent { <H>; i: Index{'l} >- 'P[nth{'l; 'i}] in bool } -->
    sequent { <H> >- "assert"{bexists_list{'l;  x. 'P['x]}} }
 
 interactive bexists_list_elim {| elim [elim_typeinf << 'l >>] |} 'H list{'A} 'i :
-   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'A Type } -->
-   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'l in list{'A}  } -->
-   sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]>; x: 'A >- 'P['x] in bool  } -->
+   [wf] sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'A Type } -->
+   [wf] sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'l in list{'A}  } -->
+   [wf] sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]>; x: 'A >- 'P['x] in bool  } -->
    sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]>; i: Index{'l}; "assert"{'P[nth{'l; 'i}]} >- 'C['u] } -->
    sequent { <H>; u: "assert"{bexists_list{'l;  x. 'P['x]}}; <J['u]> >- 'C['u] }
 

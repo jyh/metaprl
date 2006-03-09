@@ -392,6 +392,10 @@ interactive derivation_step_intro {| intro [] |} : <:xrule<
    <H> >- derivation_step{premises; goal; witness; p} in Derivation{logic}
 >>
 
+doc <:doc<
+   A @tt[Provable] judgment intro rule is provable if it can be refined
+   by a rule in the logic.
+>>
 interactive provable_intro 'premises : <:xrule<
    "wf" : <H> >- logic in Logic -->
    "wf" : <H> >- premises in list{BTerm} -->
@@ -536,6 +540,7 @@ interactive simple_step_wf {| intro [intro_typeinf << 'goal >>] |} : <:xrule<
    "wf" : <H> >- logic in Logic -->
    <H> >- SimpleStep{premises; goal; witness; logic} Type
 >>
+doc docoff
 
 (************************************************************************
  * Tactics.

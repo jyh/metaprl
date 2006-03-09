@@ -85,6 +85,13 @@ interactive provable_sequent_wf {| intro [] |} : <:xrule<
    <H> >- ProvableSequent{logic; seq} Type
 >>
 
+interactive provable_sequent_all_list {| intro [] |} : <:xrule<
+   "wf" : <H> >- 'l in list -->
+   "wf" : <H> >- all_list{'l; x. ('x in BSequent)} -->
+   <H> >- all_list{'l; x. Provable{logic; 'x}} -->
+   <H> >- all_list{'l; x. ProvableSequent{logic; 'x}}
+>>
+
 (************************************************************************
  * Intro rules.
  *)
@@ -93,6 +100,12 @@ doc <:doc<
    by a rule in the logic.  Unfortunately, we have to provide the witness
    eagerly.  However, it should be easy to do so.
 >>
+interactive provable_sequent_intro0 {| intro [] |} : <:xrule<
+   "wf" : <H> >- seq in BSequent -->
+   <H> >- Provable{logic; seq} -->
+   <H> >- ProvableSequent{logic; seq}
+>>
+
 interactive provable_sequent_intro 'premises : <:xrule<
    "wf" : <H> >- logic in Logic -->
    "wf" : <H> >- premises in list{BSequent} -->

@@ -56,8 +56,8 @@ interactive provable_elim 'H :
        premises: list{Derivation{'logic}};
        witness: ProofStepWitness;
        ValidStep{'premises; 'A['u]; 'witness; 'logic};
-       all_list{'premises; premise. (Provable{'logic; derivation_goal{'premise}} &
-                    all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))}
+       all_list{'premises; premise. Provable{'logic; derivation_goal{'premise}}};
+       all_list{'premises; premise. (all w: 'ty. (('A['w] = derivation_goal{'premise} in BTerm) => 'C['w]))}
        >- 'C['u] }-->
    sequent { <H>; v: 'ty; x: Provable{'logic; 'A['v]}; <J['v; 'x]> >- 'C['v] }
 
@@ -69,8 +69,8 @@ interactive provable_elim1 'H :
        premises: list{BTerm};
        witness: ProofStepWitness;
        SimpleStep{'premises; 'A['u]; 'witness; 'logic};
-       all_list{'premises; premise. (Provable{'logic; 'premise} &
-                    all w: 'ty. (('A['w] = 'premise in BTerm) => 'C['w]))}
+       all_list{'premises; premise. Provable{'logic; 'premise}};
+       all_list{'premises; premise. (all w: 'ty. (('A['w] = 'premise in BTerm) => 'C['w]))}
        >- 'C['u] }-->
    sequent { <H>; v: 'ty; x: Provable{'logic; 'A['v]}; <J['v; 'x]> >- 'C['v] }
 
@@ -82,8 +82,8 @@ interactive provableSequent_elim 'H :
        premises: list{BTerm};
        witness: ProofStepWitness;
        SimpleStep{'premises; 'A['u]; 'witness; 'logic};
-       all_list{'premises; premise. (Provable{'logic; 'premise} &
-                    all w: 'ty. (('A['w] = 'premise in BTerm) => 'C['w]))}
+       all_list{'premises; premise. Provable{'logic; 'premise}};
+       all_list{'premises; premise. (all w: 'ty. (('A['w] = 'premise in BTerm) => 'C['w]))}
        >- 'C['u] }-->
    sequent { <H>; v: 'ty; x: ProvableSequent{'logic; 'A['v]}; <J['v; 'x]> >- 'C['v] }
 

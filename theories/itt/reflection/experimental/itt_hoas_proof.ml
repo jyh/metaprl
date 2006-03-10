@@ -82,6 +82,10 @@ define unfold_proof_check : proof_check{'r; 'premises; 'goal; 'witness} <-->
 
 define unfold_ProofCheck : ProofCheck{'r; 'premises; 'goal; 'witness} <-->
    "assert"{proof_check{'r; 'premises; 'goal; 'witness}}
+   and 'r in ProofRule
+   and 'premises in list{BTerm}
+   and 'goal in BTerm
+   and 'witness in ProofStepWitness
 
 doc <:doc<
    The term << Logic >> represents a set of proof rules.

@@ -50,6 +50,12 @@ open Itt_hoas_proof_ind
 let elimRuleT =
    provableSequent_elim 2 twa
 
+let elimRuleStartT =
+   idT
+
+let elimSimpleStepT =
+   idT
+
 (*
  * -*-
  * Local Variables:

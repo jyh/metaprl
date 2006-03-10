@@ -32,6 +32,8 @@ open Basic_tactics
  * Prove an elimination theorem.
  *)
 topval elimRuleT : tactic
+topval elimRuleStartT : tactic
+topval elimSimpleStepT : tactic
 
 (*
  * -*-

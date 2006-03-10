@@ -74,6 +74,16 @@ define const unfold_ProofRule : ProofRule <-->
    ProofStep * ProofStepWitness -> bool
 
 doc <:doc<
+   The term << proof_check{'r; 'assums; 'goal; 'witness} >> is a Boolean
+   predicate that tests if the proof step checks.
+>>
+define unfold_proof_check : proof_check{'r; 'premises; 'goal; 'witness} <-->
+   'r (proof_step{'premises; 'goal}, 'witness)
+
+define unfold_ProofCheck : ProofCheck{'r; 'premises; 'goal; 'witness} <-->
+   "assert"{proof_check{'r; 'premises; 'goal; 'witness}}
+
+doc <:doc<
    The term << Logic >> represents a set of proof rules.
 >>
 define const unfold_Logic : Logic <-->
@@ -95,7 +105,10 @@ doc <:doc<
 >>
 define unfold_SimpleStep : SimpleStep{'premises; 'goal; 'witness; 'logic} <-->
    exists_list{'logic; check. "assert"{'check (proof_step{'premises; 'goal}, 'witness)}}
-   and 'premises in list{BTerm} and 'goal in BTerm and 'witness in ProofStepWitness and 'logic in Logic
+   and 'premises in list{BTerm}
+   and 'goal in BTerm
+   and 'witness in ProofStepWitness
+   and 'logic in Logic
 
 define unfold_ValidStep : ValidStep{'premises; 'goal; 'witness; 'logic} <-->
    exists_list{'logic; check. "assert"{'check (proof_step{map{x. derivation_goal{'x}; 'premises}; 'goal}, 'witness)}}
@@ -528,6 +541,22 @@ interactive mem_union_logic2 {| intro [SelectOption 2] |} : <:xrule<
 (************************************************************************
  * Additional wf rules.
  *)
+interactive proof_check_wf {| intro |} : <:xrule<
+   "wf" : <H> >- r in ProofRule -->
+   "wf" : <H> >- assums in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   "wf" : <H> >- witness in ProofStepWitness -->
+   <H> >- proof_check{r; assums; goal; witness} in bool
+>>
+
+interactive proof_check_wf2 {| intro |} : <:xrule<
+   "wf" : <H> >- r in ProofRule -->
+   "wf" : <H> >- assums in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   "wf" : <H> >- witness in ProofStepWitness -->
+   <H> >- ProofCheck{r; assums; goal; witness} Type
+>>
+
 interactive proof_rule_start_wf {| intro [] |} : <:xrule<
    "wf" : <H>; s: ProofStep; w: ProofStepWitness >- e[s; w] in "bool" -->
    <H> >- lambda{step. spread{step; s, w. e[s; w]}} in ProofRule

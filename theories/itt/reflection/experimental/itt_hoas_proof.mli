@@ -49,6 +49,12 @@ declare SimpleStep{'premises; 'goal; 'witness; 'logic}
 declare ValidStep{'premises; 'goal; 'witness; 'logic}
 
 (*
+ * Proof checking predicates.
+ *)
+declare proof_check{'r; 'premises; 'goal; 'witness}
+declare ProofCheck{'r; 'premises; 'goal; 'witness}
+
+(*
  * A Logic is a list of ProofRules.
  *)
 declare const Logic

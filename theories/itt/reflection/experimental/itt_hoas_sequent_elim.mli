@@ -34,6 +34,7 @@ open Basic_tactics
 topval elimRuleT : tactic
 topval elimRuleStartT : tactic
 topval elimSimpleStepT : tactic
+topval elimProofCheckT : tactic
 
 (*
  * -*-

@@ -56,6 +56,9 @@ let elimRuleStartT =
 let elimSimpleStepT =
    idT
 
+let elimProofCheckT =
+   idT
+
 (*
  * -*-
  * Local Variables:

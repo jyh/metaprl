@@ -42,6 +42,7 @@ open Basic_tactics
 
 open Itt_squiggle
 open Itt_struct
+open Itt_equal
 
 (************************************************************************
  * RULES                                                                *
@@ -102,3 +103,35 @@ let splitHypT i j = funT (fun p ->
       else
          moveHypT i j thenT copyHypT j (i+1)
    )
+
+doc <:doc<
+   The @tactic[genHypT] $i$ tactics turns a membership (or an equality) hypothesis into a hypothesis
+   that introduces a variable, effictively generalizing for the membershin hypothesis.
+>>
+
+interactive gen_hyp 'H bind{x.sequent { v: 'A<|H|>['x]; <J<|H|>['v; 'x]> >- 'C<|J;H|>['v; 'x] }} :
+   sequent { <H>; x: 'T; <J[it; 'x]> >- 'C[it; 'x] } -->
+   sequent { <H>; v: 't1 = 't2 in 'T; <J['v; 't1]> >- 'C['v; 't1] }
+
+doc docoff
+
+let xv = Lm_symbol.add "x"
+
+let genHypT = argfunT (fun i p ->
+   let i = get_pos_hyp_num p i in
+   let _, t1, _ = dest_equal (nth_hyp p i) in
+   let s = explode_sequent_arg p in
+   let t = mk_sequent_term { s with
+      sequent_hyps = SeqHyp.of_list (Lm_list_util.nth_tl (i-1) (SeqHyp.to_list s.sequent_hyps))
+   }
+   in
+   let v =
+      if is_var_term t1 then
+         dest_var t1
+      else if is_so_var_term t1 then
+         let v, _, _ = dest_so_var t1 in v
+      else
+         xv
+   in
+   let bind = var_subst_to_bind ~var:v t t1 in
+      gen_hyp i bind)

@@ -91,13 +91,13 @@ interactive step_empty_logic {| elim; nth_hyp |} 'H :
    sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; empty_logic}; <J['x]> >- 'C['x] }
 
 interactive step_rules_logic_cons {| elim |} 'H :
-   sequent { <H>; "assert"{'r (proof_step{'assums; 'goal}, 'witness)}; <J> >- 'C } -->
-   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{'rules; 'logic}}; <J> >- 'C } -->
-   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{cons{'r; 'rules}; 'logic}}; <J> >- 'C }
+   sequent { <H>; ProofCheck{'r; 'assums; 'goal; 'witness}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{'rules; 'logic}}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; rules_logic{cons{'r; 'rules}; 'logic}}; <J['x]> >- 'C['x] }
 
 interactive step_rules_logic_nil {| elim |} 'H :
-   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic}; <J> >- 'C } -->
-   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; rules_logic{nil; 'logic}}; <J> >- 'C }
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; rules_logic{nil; 'logic}}; <J['x]> >- 'C['x] }
 
 (*
  * XXX TODO: (2006/02/25 nogin)
@@ -105,13 +105,13 @@ interactive step_rules_logic_nil {| elim |} 'H :
  * in A List && l1 @ l2 in A List >- l2 in A List" lemma). Leaving it in for now.
  *)
 interactive step_union_logic_elim {| elim |} 'H :
-   [wf] sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >-
+   [wf] sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J['x]> >-
       'logic_1 in Logic } -->
-   [wf] sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >-
+   [wf] sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J['x]> >-
       'logic_2 in Logic } -->
-   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_1}; <J> >- 'C } -->
-   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_2}; <J> >- 'C } -->
-   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J> >- 'C }
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_1}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_2}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J['x]> >- 'C['x] }
 
 (*
  * -*-

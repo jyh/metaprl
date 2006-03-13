@@ -81,11 +81,12 @@ define unfold_proof_check : proof_check{'r; 'premises; 'goal; 'witness} <-->
    'r (proof_step{'premises; 'goal}, 'witness)
 
 define unfold_ProofCheck : ProofCheck{'r; 'premises; 'goal; 'witness} <-->
-   "assert"{proof_check{'r; 'premises; 'goal; 'witness}}
-   and 'r in ProofRule
-   and 'premises in list{BTerm}
-   and 'goal in BTerm
-   and 'witness in ProofStepWitness
+   squash{
+      "assert"{proof_check{'r; 'premises; 'goal; 'witness}}
+      and 'r in ProofRule
+      and 'premises in list{BTerm}
+      and 'goal in BTerm
+      and 'witness in ProofStepWitness }
 
 doc <:doc<
    The term << Logic >> represents a set of proof rules.
@@ -108,14 +109,15 @@ doc <:doc<
    if the proof step matches one of the proof rules in the logic.
 >>
 define unfold_SimpleStep : SimpleStep{'premises; 'goal; 'witness; 'logic} <-->
-   exists_list{'logic; check. "assert"{'check (proof_step{'premises; 'goal}, 'witness)}}
-   and 'premises in list{BTerm}
-   and 'goal in BTerm
-   and 'witness in ProofStepWitness
-   and 'logic in Logic
+   squash{
+      exists_list{'logic; r. ProofCheck{'r; 'premises; 'goal; 'witness}}
+      and 'premises in list{BTerm}
+      and 'goal in BTerm
+      and 'witness in ProofStepWitness
+      and 'logic in Logic}
 
 define unfold_ValidStep : ValidStep{'premises; 'goal; 'witness; 'logic} <-->
-   exists_list{'logic; check. "assert"{'check (proof_step{map{x. derivation_goal{'x}; 'premises}; 'goal}, 'witness)}}
+   SimpleStep{map{x. derivation_goal{'x}; 'premises}; 'goal; 'witness; 'logic}
 
 doc <:doc<
    A << derivation_step{'premises; 'goal; 'witness; 'p} >> forms one step of a derivation,
@@ -217,6 +219,38 @@ interactive derivation_premises_wf1 : <:xrule<
 interactive derivation_goal_wf1 : <:xrule<
    "wf" : <H> >- t IN "top" * BTerm * "top" -->
    <H> >- derivation_goal{t} IN BTerm
+>>
+
+(*
+ * Misc wf rules
+ *)
+interactive proof_check_wf {| intro |} : <:xrule<
+   "wf" : <H> >- r in ProofRule -->
+   "wf" : <H> >- assums in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   "wf" : <H> >- witness in ProofStepWitness -->
+   <H> >- proof_check{r; assums; goal; witness} in bool
+>>
+
+interactive proof_check_wf2 {| intro |} : <:xrule<
+   "wf" : <H> >- r in ProofRule -->
+   "wf" : <H> >- assums in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   "wf" : <H> >- witness in ProofStepWitness -->
+   <H> >- ProofCheck{r; assums; goal; witness} Type
+>>
+
+interactive proof_rule_start_wf {| intro [] |} : <:xrule<
+   "wf" : <H>; s: ProofStep; w: ProofStepWitness >- e[s; w] in "bool" -->
+   <H> >- lambda{step. spread{step; s, w. e[s; w]}} in ProofRule
+>>
+
+interactive simple_step_wf {| intro [intro_typeinf << 'goal >>] |} : <:xrule<
+   "wf" : <H> >- premises in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   "wf" : <H> >- witness in ProofStepWitness -->
+   "wf" : <H> >- logic in Logic -->
+   <H> >- SimpleStep{premises; goal; witness; logic} Type
 >>
 
 interactive valid_step_wf {| intro [intro_typeinf << 'goal >>] |} : <:xrule<
@@ -382,6 +416,11 @@ interactive valid_step_wf3 {| intro [intro_typeinf << 'premises >>] |} list{Deri
    <H> >- ValidStep{premises; goal; witness; logic} Type
 >>
 
+interactive simple_step_elim {| elim |} 'H : <:xrule<
+   <H>; exists_list{'logic; r. ProofCheck{'r; 'premises; 'goal; 'witness}}; 'logic in Logic; <J[it]> >- C[it] -->
+   <H>; x: SimpleStep{premises; goal; witness; logic}; <J[x]> >- C[x]
+>>
+
 doc <:doc<
    The << Provable{'logic; 't} >> predicate specifies that a particular
    term << 't >> is the root of a derivation in a logic.
@@ -542,37 +581,6 @@ interactive mem_union_logic2 {| intro [SelectOption 2] |} : <:xrule<
    <H> >- MemLogic{step; union_logic{logic1; logic2}}
 >>
 
-(************************************************************************
- * Additional wf rules.
- *)
-interactive proof_check_wf {| intro |} : <:xrule<
-   "wf" : <H> >- r in ProofRule -->
-   "wf" : <H> >- assums in list{BTerm} -->
-   "wf" : <H> >- goal in BTerm -->
-   "wf" : <H> >- witness in ProofStepWitness -->
-   <H> >- proof_check{r; assums; goal; witness} in bool
->>
-
-interactive proof_check_wf2 {| intro |} : <:xrule<
-   "wf" : <H> >- r in ProofRule -->
-   "wf" : <H> >- assums in list{BTerm} -->
-   "wf" : <H> >- goal in BTerm -->
-   "wf" : <H> >- witness in ProofStepWitness -->
-   <H> >- ProofCheck{r; assums; goal; witness} Type
->>
-
-interactive proof_rule_start_wf {| intro [] |} : <:xrule<
-   "wf" : <H>; s: ProofStep; w: ProofStepWitness >- e[s; w] in "bool" -->
-   <H> >- lambda{step. spread{step; s, w. e[s; w]}} in ProofRule
->>
-
-interactive simple_step_wf {| intro [intro_typeinf << 'goal >>] |} : <:xrule<
-   "wf" : <H> >- premises in list{BTerm} -->
-   "wf" : <H> >- goal in BTerm -->
-   "wf" : <H> >- witness in ProofStepWitness -->
-   "wf" : <H> >- logic in Logic -->
-   <H> >- SimpleStep{premises; goal; witness; logic} Type
->>
 doc docoff
 
 (************************************************************************

@@ -21,7 +21,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1999-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -47,14 +48,7 @@ doc <:doc<
 extends Itt_logic
 doc docoff
 
-open Lm_debug
-open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Auto_tactic
-
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
+open Basic_tactics
 
 (************************************************************************
  * decidable                                                            *
@@ -121,4 +115,11 @@ interactive dec_false {| intro [] |} :
 
 interactive dec_true {| intro [] |} :
    sequent { <H> >- decidable{"true"} }
+
+doc <:doc< Decidability can ignore the @tt[squash] operator >>
+
+interactive dec_squash {| intro [] |} :
+   [wf] sequent { <H> >- 'A Type } -->
+   sequent { <H> >- decidable{'A} } -->
+   sequent { <H> >- decidable{squash{'A}} }
 doc docoff

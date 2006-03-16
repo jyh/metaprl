@@ -101,6 +101,20 @@ interactive let_cvar_wf {| intro [] |} : <:xrule<
    <H> >- "let_cvar"[name:s]{d; witness; i; v. e[v]} in bool
 >>
 
+interactive let_sovar_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'witness in ProofStepWitness } -->
+   [wf] sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'i in nat } -->
+   [wf] sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'd in nat } -->
+   [main] sequent { <H>; u: BTerm{'d}; bdepth{'u} = 'd in int; "assert"{'e['u]}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'C['x] }
+
+interactive let_cvar_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'witness in ProofStepWitness } -->
+   [wf] sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'i in nat } -->
+   [wf] sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'd in nat } -->
+   [main] sequent { <H>; u: CVar{'d}; "assert"{bhyp_depths{'d; 'u}}; "assert"{'e['u]}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'C['x] }
+
 (************************************************************************
  * Terms.
  *)

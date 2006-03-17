@@ -45,8 +45,8 @@ declare fsub_subtype{'ty1 : TyExp; 'ty2 : TyExp} : Prop
 declare fsub_member{'e : Exp; 'ty : TyExp} : Prop
 
 declare typeclass Judgment -> Perv!Judgment
-declare typeclass Hyp -> Term
 
+declare typeclass Hyp -> Dform
 declare TyVal{'ty : TyExp} : Hyp
 declare TyPower{'ty : TyExp} : Hyp
 
@@ -55,7 +55,7 @@ declare TyPower{'ty : TyExp} : Hyp
  * For now, we'll define the type judgments manually,
  * rather than using existential types.
  *)
-declare sequent [fsub] { Term : Hyp >- Prop } : Judgment
+declare sequent [fsub] { Exp :: TyVal{'ty} | TyExp :: TyPower{'ty} >- Prop } : Judgment
 
 (************************************************************************
  * Grammar.

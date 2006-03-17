@@ -25,3 +25,4 @@ MPFILES[] =
     pmn_core_logic
     reflect_pmn_core_terms
     reflect_pmn_core_judgments
+    reflect_pmn_core_logic

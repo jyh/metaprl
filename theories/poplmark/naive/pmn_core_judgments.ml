@@ -36,9 +36,6 @@ open Itt_dfun
 dform ty_power_df : <:xterm< TyPower{ty} >> =
    `"<: " slot{'ty}
 
-dform ty_val_df : <:xterm< TyVal{ty} >> =
-   `": " slot{'ty}
-
 dform fsub_df : <:xterm< "fsub" >> =
    `"fsub"
 

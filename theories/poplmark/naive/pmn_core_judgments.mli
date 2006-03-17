@@ -32,12 +32,13 @@ open Basic_tactics
  * Sequents.
  *
  * The type << Prop >> represents the "propositions" that appear
- * as the conclusion of a sequent.
+ * as the conclusion of a sequent.  We define a subtyping, and
+ * a membership judgment.
  *
  * In a sequent, hypotheses are wrapped.
- *    - The << TyVal{'ty} >> represents the programs that have type << 'ty >>.
- *    - The << TyPower{'ty} >> is used in hypothesis lists to represent
- *      subtyping assumptions.
+ * The << TyPower{'ty} >> is used in hypothesis lists to represent
+ * subtyping assumptions, so @code{x : TyPower('ty)} means
+ * @code{x <: 'ty}.
  *)
 declare typeclass Prop -> Term
 
@@ -46,16 +47,10 @@ declare fsub_member{'e : Exp; 'ty : TyExp} : Prop
 
 declare typeclass Judgment -> Perv!Judgment
 
-declare typeclass Hyp -> Dform
-declare TyVal{'ty : TyExp} : Hyp
-declare TyPower{'ty : TyExp} : Hyp
+declare typeclass KindExp -> Term
+declare TyPower{'ty : TyExp} : KindExp
 
-(*
- * Sequents have dependent types.
- * For now, we'll define the type judgments manually,
- * rather than using existential types.
- *)
-declare sequent [fsub] { Exp :: TyVal{'ty} | TyExp :: TyPower{'ty} >- Prop } : Judgment
+declare sequent [fsub] { Exp : TyExp | TyExp : KindExp >- Prop } : Judgment
 
 (************************************************************************
  * Grammar.

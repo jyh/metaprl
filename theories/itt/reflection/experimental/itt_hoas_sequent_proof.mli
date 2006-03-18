@@ -38,6 +38,12 @@ open Basic_tactics
  *)
 declare ProvableSequent{'logic; 'seq}
 
+(*
+ * Judgments in a sequent logic.
+ *)
+declare IsJudgment{'logic; 'seq}
+declare ProvableJudgment{'logic; 'seq}
+
 (************************************************************************
  * Tactics.
  *)

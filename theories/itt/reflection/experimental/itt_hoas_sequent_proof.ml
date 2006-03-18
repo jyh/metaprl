@@ -29,6 +29,7 @@ doc <:doc<
 >>
 extends Itt_hoas_bterm_wf
 extends Itt_hoas_proof
+extends Itt_hoas_meta_types
 extends Itt_hoas_sequent
 extends Itt_hoas_sequent_term
 extends Itt_hoas_sequent_bterm
@@ -73,6 +74,14 @@ define unfold_Provable_sequent : ProvableSequent{'logic; 'seq} <--> <:xterm<
    (seq in BSequent) && Provable{logic; seq}
 >>
 
+define unfold_IsJudgment : IsJudgment{'logic; 'seq} <--> <:xterm<
+   Provable{logic; $`meta_type{| >- meta_member{seq; Judgment{}} |}}
+>>
+
+define unfold_ProvableJudgment : ProvableJudgment{'logic; 'seq} <--> <:xterm<
+   ProvableSequent{logic; seq} && IsJudgment{logic; seq}
+>>
+
 (************************************************************************
  * Well-formedness.
  *)
@@ -90,6 +99,18 @@ interactive provable_sequent_all_list {| intro [] |} : <:xrule<
    "wf" : <H> >- all_list{'l; x. ('x in BSequent)} -->
    <H> >- all_list{'l; x. Provable{logic; 'x}} -->
    <H> >- all_list{'l; x. ProvableSequent{logic; 'x}}
+>>
+
+interactive is_judgment_wf {| intro |} : <:xrule<
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- seq in BSequent -->
+   <H> >- IsJudgment{logic; seq} Type
+>>
+
+interactive provable_judgment_wf {| intro [] |} : <:xrule<
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- seq in BSequent -->
+   <H> >- ProvableJudgment{logic; seq} Type
 >>
 
 (************************************************************************
@@ -144,12 +165,10 @@ let provable_forwardT i =
    thenT forward_bsequent_wf (-1)
    thenT rw normalizeBTermC (-1)
 
-(*
- * JYH: we don't need this because we call it manually.
- *
-let resource forward +=
-   [<< ProvableSequent{'logic; 'seq} >>, { forward_loc = (LOCATION); forward_prec = forward_trivial_prec; forward_tac = provable_forwardT }]
- *)
+interactive provable_judgment_forward {| forward |} 'H : <:xrule<
+   <H>; ProvableJudgment{logic; seq}; <J>; ProvableSequent{logic; seq}; IsJudgment{logic; seq} >- C -->
+   <H>; ProvableJudgment{logic; seq}; <J> >- C
+>>
 
 (************************************************************************
  * Tactics.

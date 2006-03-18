@@ -10,9 +10,6 @@ THEORY_DEPS[] +=
     itt/reflection/experimental
     itt/extensions/vector
 
-MLZFILES[] =
-    reflect_base_theory
-
 MPFILES[] =
     reflect_itt_hoas_base_theory
     reflect_base_theory

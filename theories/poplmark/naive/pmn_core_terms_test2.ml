@@ -1,10 +1,10 @@
 (*
- * Tests.
+ * Use the reflection mechanism to generate the theorem.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003-2005 Mojave Group, Caltech
+ * Copyright (C) 2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,23 +20,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * Author: Jason Hickey
+ * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Reflect_pmn_core_terms
+extends Itt_hoas_theory
+extends Pmn_core_judgments
 
-open Basic_tactics
-open Itt_equal
-open Itt_dfun
-open Itt_logic
-
-interactive tyExp_left 't2 : <:xrule<
-   <H1> >- ProvableSequent{pmn_core_terms; $`meta_type{| <H> >- meta_member{ TyFun{t1; t2}; TyExp{} } |}} -->
-   <H1> >- ProvableSequent{pmn_core_terms; $`meta_type{| <H> >- meta_member{ t1; TyExp{} } |} }
+interactive test1 TyArg{'ty1} TyArg{'ty2} : <:xrule<
+   meta_type{| <H> >- meta_member{TyFun{'ty1; 'ty2}; TyExp} |} -->
+   meta_type{| <H> >- meta_member{'ty1; TyExp} |}
 >>
 
 (*
  * -*-
  * Local Variables:
+ * Fill-column: 100
  * End:
  * -*-
+ * vim:ts=3:et:tw=100
  *)

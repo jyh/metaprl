@@ -1,10 +1,10 @@
 (*
- * Logic for core FSub.
+ * Include the HOAS base theory.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,15 +24,18 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Pmn_core_terms
-extends Pmn_core_judgments
+extends Reflect_itt_hoas_base_theory
 
-(*!
- * @docoff
- *
+(*
+ * The logic.
+ *)
+declare base_theory
+
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
+ * Fill-column: 100
  * End:
  * -*-
+ * vim:ts=3:et:tw=100
  *)

@@ -57,6 +57,11 @@ declare sequent [fsub] { Exp : TyExp | TyExp : KindExp >- Prop } : Judgment
  *)
 declare TyArg{'ty : TyExp}
 
+(*
+ * No extracts in this theory.
+ *)
+declare default_extract
+
 (************************************************************************
  * Grammar.
 declare tok_subtype   : Terminal

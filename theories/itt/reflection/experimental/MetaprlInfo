@@ -29,3 +29,5 @@ MPFILES[] =
     itt_hoas_sequent_elim
     itt_hoas_meta_types
     itt_hoas_theory
+
+

@@ -1,6 +1,5 @@
 (*
- * Base theory for reflection.
- * By default, this is empty.
+ * Include the HOAS base theory.
  *
  * ----------------------------------------------------------------
  *
@@ -25,6 +24,30 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
+extends Reflect_itt_hoas_base_theory
+
+open Basic_tactics
+
+(*
+ * The logic.
+ *)
+define unfold_base_theory : base_theory <--> <:xterm<
+   "itt_hoas_base_theory"
+>>
+
+interactive base_theory_wf {| intro |} : <:xrule<
+   <H> >- "base_theory" in Logic
+>>
+
+interactive elim_start_base_theory {| elim |} 'H : <:xrule<
+   <H>; x: SimpleStep{premises; goal; witness; "itt_hoas_base_theory"}; <J[x]> >- C[x] -->
+   <H>; x: SimpleStep{premises; goal; witness; "base_theory"}; <J[x]> >- C[x]
+>>
+
+interactive elim_base_theory {| elim |} 'H : <:xrule<
+   <H>; x: ProvableSequent{"itt_hoas_base_theory"; e}; <J[x]> >- C[x] -->
+   <H>; x: ProvableSequent{"base_theory"; e}; <J[x]> >- C[x]
+>>
 
 (*
  * -*-

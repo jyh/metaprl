@@ -1,0 +1,18 @@
+THEORYNAME = itt_reflection_base
+THEORYDESCR = Reflected base theory for Computational Type Theory - Work in progress
+
+OCAMLDEPFLAGS += -reflect
+
+THEORY_DEPS[] +=
+    meta/extensions
+    itt/core
+    itt/reflection/core
+    itt/reflection/experimental
+    itt/extensions/vector
+
+MLZFILES[] =
+    reflect_base_theory
+
+MPFILES[] =
+    reflect_itt_hoas_base_theory
+    reflect_base_theory

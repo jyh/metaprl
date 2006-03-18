@@ -1,6 +1,7 @@
 DIRS[] =
     core
     experimental
+    base
 #    obsolete
 
 VirtualTheory($(DIRS))

@@ -6,7 +6,6 @@ THEORY_DEPS[] =
 # Common files
 MLZFILES[] =
     base_theory
-    reflect_base_theory
 
 # Library files
 MPFILES[] =
@@ -17,4 +16,3 @@ MPFILES[] =
     base_operator
     base_grammar
     base_theory
-    reflect_base_theory

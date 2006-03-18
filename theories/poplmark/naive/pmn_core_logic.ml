@@ -89,8 +89,6 @@ prim t_sub TyArg{'S} : <:xrule<
    fsub{| <H> >- fsub_subtype{S; T} |} -->
    fsub{| <H> >- fsub_member{e; T} |}
 >>
-(*
-*)
 
 (*!
  * @docoff

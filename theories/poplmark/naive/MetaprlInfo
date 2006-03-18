@@ -18,6 +18,7 @@ THEORY_DEPS[] +=
     itt/extensions/vector
     itt/reflection/core
     itt/reflection/experimental
+    itt/reflection/base
 
 MPFILES[] =
     pmn_core_terms

@@ -26,3 +26,4 @@ MPFILES[] =
     reflect_pmn_core_terms
     reflect_pmn_core_judgments
     reflect_pmn_core_logic
+    pmn_core_terms_test

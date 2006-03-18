@@ -52,6 +52,11 @@ declare TyPower{'ty : TyExp} : KindExp
 
 declare sequent [fsub] { Exp : TyExp | TyExp : KindExp >- Prop } : Judgment
 
+(*
+ * Wrapper terms for passing arguments to rules.
+ *)
+declare TyArg{'ty : TyExp}
+
 (************************************************************************
  * Grammar.
 declare tok_subtype   : Terminal

@@ -38,6 +38,7 @@ extends Itt_hoas_base
 extends Itt_hoas_vector
 extends Itt_hoas_operator
 extends Itt_hoas_debruijn
+extends Itt_hoas_df
 
 declare is_var{'bt}
 declare dest_bterm{'bt; l, r. 'var_case['l; 'r]; bdepth, op, subterms. 'op_case['bdepth,'op; 'subterms] }

@@ -50,23 +50,8 @@ doc docoff
 (************************************************************************
  * Display forms.
  *)
-dform meta_type_df : <:xterm< $`"meta_type" >> =
-   `"meta_type"
-
-dform meta_member_df : <:xterm< $`meta_member{e; ty} >> =
+dform meta_member_df : meta_member{'e; 'ty} =
    szone pushm[3] slot{'e} `" " Mpsymbols!member `"M" hspace slot{'ty} popm ezone
-
-dform meta_type_df2 : <:xterm< $'[d] "meta_type" >> =
-   `"meta_type[" slot{'d} `"]"
-
-dform meta_member_df2 : <:xterm< $'[d] meta_member{e; ty} >> =
-   szone pushm[3] slot{'e} `" " Mpsymbols!member `"M[" slot{'d} `"]" hspace slot{'ty} popm ezone
-
-dform bsequent_meta_type_df : bsequent{meta_type} =
-   `"BM"
-
-dform vsequent_meta_type_df : vsequent{meta_type} =
-   `"VM"
 
 (*!
  * @docoff

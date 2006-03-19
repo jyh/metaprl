@@ -13,4 +13,5 @@ MPFILES[] =
    itt_hoas_vbind
    itt_hoas_debruijn
    itt_hoas_operator
+   itt_hoas_df
    itt_hoas_destterm

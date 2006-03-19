@@ -24,13 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_bterm
-
-(*
- * Wrappers for reflectes terms.
- *)
-declare reflect_df{'t}       : Dform
-declare reflect_df{'d; 't}   : Dform
 
 (*
  * -*-

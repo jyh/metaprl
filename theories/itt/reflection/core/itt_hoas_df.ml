@@ -123,19 +123,20 @@ struct
             unquote_bind_arity_exn (pred arity) (v :: vars) t
 
    and unquote_mk_term t =
-      let info =
-         try Some (dest_mk_term_term t) with
-            RefineError _ ->
-               None
-      in
-         match info with
-            Some (op, subterms) ->
-               (try unquote_term_exn op subterms with
-                   RefineError _
-                 | BadShape ->
-                      mk_raw_mk_term_term op subterms)
-          | None ->
-               mk_unquote_term t
+      if is_var_term t then
+         t
+      else if is_so_var_term t then
+         let x, cargs, args = dest_so_var t in
+         let args = List.map unquote_mk_term args in
+            mk_so_var_term x cargs args
+      else if is_mk_term_term t then
+         let op, subterms = dest_mk_term_term t in
+            try unquote_term_exn op subterms with
+               RefineError _
+             | BadShape ->
+                  mk_raw_mk_term_term op subterms
+      else
+         mk_unquote_term t
 
    (*
     * The display form.
@@ -212,19 +213,23 @@ struct
             unquote_bind_arity_exn n (pred arity) (v :: vars) t
 
    and unquote_mk_bterm n t =
-      let info =
-         try Some (dest_mk_bterm_term t) with
-            RefineError _ ->
-               None
-      in
-         match info with
-            Some (d, op, subterms) ->
-               (try unquote_bterm_exn n op subterms with
-                   RefineError _
-                 | BadShape ->
-                      mk_raw_mk_bterm_term n op subterms)
-          | None ->
+      if is_var_term t then
+         t
+      else if is_so_var_term t then
+         let x, cargs, args = dest_so_var t in
+         let args = List.map (unquote_mk_bterm n) args in
+            mk_so_var_term x cargs args
+      else if is_mk_bterm_term t then
+         let d, op, subterms = dest_mk_bterm_term t in
+            if alpha_equal d n then
+               try unquote_bterm_exn n op subterms with
+                  RefineError _
+                | BadShape ->
+                     mk_raw_mk_bterm_term n op subterms
+            else
                mk_unquote_term t
+      else
+         mk_unquote_term t
 
    (*
     * The display form.

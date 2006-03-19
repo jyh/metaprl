@@ -341,6 +341,19 @@ interactive_rw reduce_vec_bind_of_mk_bterm_of_list_of_fun :
    bind{'i; x. mk_bterm{'n; 'op; list_of_fun{y. 'f['x; 'y]; 'm}}}
    <-->
    mk_bterm{'n +@ 'i; 'op; list_of_fun{y. bind{'i; x. 'f['x; 'y]}; 'm}}
+
+doc <:doc<
+   Some quivalences on binds.
+>>
+interactive_rw reduce_bindn_nth {| reduce |} : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   m < n -->
+   bind{n; x. nth{x; m}}
+   <-->
+   var{m; n -@ m -@ 1}
+>>
+
 doc docoff
 
 (************************************************************************

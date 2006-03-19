@@ -36,6 +36,11 @@ topval proofRuleAuxWFT : tactic
 topval proofRuleWFT : tactic
 
 (*
+ * Debugging.
+ *)
+topval proveArithT : tactic
+
+(*
  * -*-
  * Local Variables:
  * End:

@@ -169,11 +169,51 @@ let resource intro +=
    [<< lof_bind{'n; x. 'e['x]} in BTerm >>, bind_wf;
     << lof_bind{'n; x. 'e['x]} in BTerm{'m} >>, bind_wf]
 
+(*
+ * JYH: we seem to be coming up with a lot of arithmetic goals
+ * based on the lengths of CVars.  In this case, we just normalize
+ * the expression.  We don't want to normalize aggressively necessarily,
+ * so we normalize conditionally.
+ *)
+let rec is_arith_exp t =
+   match explode_term t with
+      << length{'l} >> ->
+         true
+    | << number[i:n] >> ->
+         true
+    | << 'i +@ 'j >>
+    | << 'i -@ 'j >>
+    | << 'i *@ 'j >> ->
+         is_arith_exp i && is_arith_exp j
+    | _ ->
+         false
+
+let is_arith_goal t =
+   match explode_term t with
+      << 'e1 = 'e2 in '__e3 >>
+    | << 'e1 < 'e2 >>
+    | << 'e1 <= 'e2 >> ->
+         is_arith_exp e1 && is_arith_exp e2
+    | _ ->
+         false
+
+let proveArithT = funT (fun p ->
+   if is_arith_goal (concl p) then
+      rw normalizeC 0 thenT autoT
+   else
+      idT)
+
+(*
+ * The main tactic pulls all the parts together.
+ *)
 let proofRuleAuxWFT =
    autoT
    thenT rw (normalizeBTermSimpleC thenC reduceC) 0
-   thenT autoT 
-   thenT tryT arithT
+   thenT autoT
+   thenT reduceT
+   thenT autoT
+   thenT tryT (arithT thenT autoT)
+   thenT proveArithT
 
 let proofRuleWFT =
    (*

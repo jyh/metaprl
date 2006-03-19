@@ -502,11 +502,32 @@ let resource reduce_lof +=
 let resource reduce +=
    << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, wrap_reduce unfold_lof_nth_suffix
 
-let resource normalize_lof += [
-   << lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, (unfold_lof_nth_suffix thenC reduceC);
-   << hd{lof{i. 'f['i]; 'n}} >>, (hd_lof thenC reduceC);
-   << lof_nth{lof{i. 'f['i]; 'n}; 'j} >>, (reduce_nth_lof thenC reduceC)
-]
+let resource normalize_lof +=
+   [<< lof_nth_suffix{i. 'f['i]; number[n:n]; 'n; 'm} >>, (unfold_lof_nth_suffix thenC reduceC);
+    << hd{lof{i. 'f['i]; 'n}} >>, (hd_lof thenC reduceC);
+    << lof_nth{lof{i. 'f['i]; 'n}; 'j} >>, (reduce_nth_lof thenC reduceC)]
+
+(************************************************************************
+ * Naked terms.
+ *
+ * These get introduced because the constant reductions remove the lof,
+ * which produces non-normal terms.
+ *
+ * XXX: JYH: I am still suspicious of this.
+ *
+ * So, when we encounter a naked lof term, we reduce it.
+ *)
+interactive_rw reduce_bind_nth {| reduce; reduce_lof |} : <:xrewrite<
+   lof_bind{n; x. lof_nth{l[x]; i[x]}}
+   <-->
+   lof_bind{n; x. nth{l[x]; i[x]}}
+>>
+
+interactive_rw reduce_bind_nth_prefix {| normalize_lof; reduce; reduce_lof |} : <:xrewrite<
+   lof_bind{n; x. lof_nth_prefix{i. f[i; x]; m[x]; a[x]; b[x]}}
+   <-->
+   lof_bind{n; x. f[m[x]; x]}
+>>
 
 (************************************************************************
  * Optimizations.

@@ -53,6 +53,12 @@ define iform unfold_arity : arity{'op} <--> length{shape{'op}}
 topval opCaseT : term -> tactic
 
 (************************************************************************
+ * Term operations.
+ *)
+val is_operator_term : term -> bool
+val dest_operator_term : term -> param op_param
+
+(************************************************************************
  * Grammar.
  *)
 declare iform parsed_operator{'t}

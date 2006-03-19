@@ -112,6 +112,15 @@ let rec mk_list_of_list = function
    h::t -> mk_cons_term h (mk_list_of_list t)
  | [] -> nil_term
 
+let rec dest_list_term t =
+   if is_cons_term t then
+      let h, t = dest_cons t in
+         h :: dest_list_term t
+   else if is_nil_term t then
+      []
+   else
+      raise (RefineError ("Itt_list.dest_list_term", StringTermError ("not a list", t)))
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)

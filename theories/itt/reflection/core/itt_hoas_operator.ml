@@ -267,14 +267,48 @@ interactive shape_exam1 {| intro[] |}:
 interactive shape_exam2 {| intro[] |}:
    sequent{ <H> >- shape{operator[(lambda{x.it}):op]} = 1::nil in list{int} }
 
+(************************************************************************
+ * Terms
+ *)
+let operator_term = << operator[(it):op] >>
+let operator_opname = opname_of_term operator_term
+
+let is_operator_term t =
+   let { term_op = op; term_terms = bterms } = dest_term t in
+   let { op_name = opname; op_params = params } = dest_op op in
+      match params, bterms with
+         [param], [] when Opname.eq opname operator_opname ->
+            (match dest_param param with
+                Operator _ ->
+                   true
+              | _ ->
+                   false)
+       | _ ->
+            false
+
+let dest_operator_term t =
+   let { term_op = op; term_terms = bterms } = dest_term t in
+   let { op_name = opname; op_params = params } = dest_op op in
+      match params, bterms with
+         [param], [] when Opname.eq opname operator_opname ->
+            (match dest_param param with
+                Operator op ->
+                   op
+              | _ ->
+                   raise (RefineError ("Itt_hoas_operator.dest_operator", StringTermError ("not an operator", t))))
+       | _ ->
+            raise (RefineError ("Itt_hoas_operator.dest_operator", StringTermError ("not an operator", t)))
+
 (*
  * Case analysis on operators.
  *)
-let operator_term = << Operator >>
-
 let is_same_op_opname = opname_of_term << is_same_op{'op1; 'op2} >>
 let mk_is_same_op_term = mk_dep0_dep0_term is_same_op_opname
 
+(************************************************************************
+ * Tactics
+ *)
+let operator_term = << Operator >>
 let bfalse_term = << bfalse >>
 
 let opCaseT t =

@@ -135,8 +135,10 @@ dform bind_df : parens :: "prec"[prec_lambda] :: bind{x.'t} =
 dform subst_df : parens :: "prec"[prec_apply] :: subst{'bt; 't} =
    slot["lt"]{'bt} `"@" slot["le"]{'t}
 
+(*
 dform mk_term_df : mk_term{'op; 'subterms} =
    pushm[0] szone pushm[3] `"T(" slot{'op} `";" hspace slot{'subterms} popm `")" ezone popm
+ *)
 
 dform wdt_df : weak_dest_bterm{'bt; 'bind_case; op, sbt. 'mkterm_case} =
    pushm[0] szone szone pushm[3] keyword["match"] hspace slot{'bt} popm hspace ezone pushm[1] pushm[3]

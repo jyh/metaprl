@@ -34,12 +34,12 @@ declare typeclass Member -> Dform
 (*
  * Type-judgment sequents.
  *)
-declare sequent [meta_type] { exst a : Ty. 'a : Ty >- Member } : Judgment
+declare sequent [meta_type] { exst a : Ty. exst b : Ty. 'a : 'b >- Member } : Judgment
 
 (*
  * The term 'e has meta-type 'ty.
  *)
-declare meta_member{'e : 'a; 'ty : Ty} : Member
+declare meta_member{'e : 'a; 'ty : 'b} : Member
 
 (*!
  * @docoff

@@ -43,7 +43,7 @@ doc <:doc<
    The << meta_member{'e; 'ty} >> term specifies that the term << 'e >>
    has meta-type << 'ty >>.
 >>
-declare meta_member{'e : 'a; 'ty : Ty} : Member
+declare meta_member{'e : 'a; 'ty : 'b} : Member
 
 doc docoff
 

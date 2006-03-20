@@ -413,6 +413,32 @@ interactive_rw reduce_lof_bind_mk_bterm {| reduce_lof |} :
    <-->
    mk_bterm{'n +@ 'i; 'op; lof{y. lof_bind{'i; x. 'f['x; 'y]}; 'm}}
 
+doc <:doc<
+   Some facts about substitutions.
+>>
+interactive_rw reduce_lof_zero : <:xrule<
+   lof{i. f[i]; 0}
+   <-->
+   []
+>>
+
+interactive_rw reduce_lof_succ : <:xrule<
+   j in nat -->
+   lof{i. f[i]; j +@ 1}
+   <-->
+   f[0] :: lof{i. f[i +@ 1]; j}
+>>
+
+interactive_rw normalize_mk_bterm_subst {| normalize_lof |} : <:xrule<
+   n in nat -->
+   m in nat -->
+   m <= n -->
+   subterms in list -->
+   substl{mk_bterm{n; op; subterms}; lof{i. f[i]; m}}
+   <-->
+   mk_bterm{n -@ m; op; lof{j. substl{lof_nth{subterms; j}; lof{i. f[i]; m}}; length{subterms}}}
+>>
+
 (************************************************************************
  * Lof removal.
  *)
@@ -545,6 +571,15 @@ interactive_rw reduce_append_prefix_singleton {| reduce_lof |} :
                      'i; 'n3; 'n4}; 'n5}
    <-->
    lof{i. lof_nth{'x; 'i}; 'n5}
+
+doc <:doc<
+   Nested << nth_prefix{'l; 'n} >> cancel.
+>>
+interactive_rw reduce_nth_prefix_nth_prefix {| reduce_lof |} : <:xrewrite<
+   lof{i. lof_nth_prefix{j. lof_nth_prefix{k. l[k]; j; n2; m2}; i; n1; m1}; n}
+   <-->
+   lof{i. lof_nth_prefix{j. l[j]; i; n2; m1}; n}
+>>
 
 (************************************************************************
  * Add substl coalescing to normalize_lof

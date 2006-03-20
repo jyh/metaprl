@@ -145,6 +145,21 @@ interactive and_forward {| forward [] |} 'H : <:xrule<
 >>
 
 (************************************************************************
+ * Additional theorems for bind.
+ *
+ * XXX: JYH: we need to consider some general form for these lemmas,
+ * but at the moment I'm not sure exactly what it is.
+ *)
+interactive bind_subst_nth_prefix_wf {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- m in nat -->
+   "aux" : <H> >- m <= n -->
+   "wf" : <H> >- e in BTerm -->
+   "aux" : <H> >- bdepth{e} >= m -->
+   <H> >- bind{n; x. substl{e; nth_prefix{x; m}}} in BTerm
+>>
+
+(************************************************************************
  * Tactics.
  *)
 doc <:doc<

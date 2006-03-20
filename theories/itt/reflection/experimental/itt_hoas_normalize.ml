@@ -242,6 +242,17 @@ interactive_rw hd_nth_suffix_nth_prefix {| normalize_simple |} : <:xrewrite<
    bind{n; x. nth{x; s}}
 >>
 
+interactive_rw bind_nth_prefix_nth_prefix {| normalize_simple |} : <:xrewrite<
+   n in nat -->
+   m1 in nat -->
+   m2 in nat -->
+   m1 <= n -->
+   m2 <= m1 -->
+   bind{n; x. substl{v; nth_prefix{nth_prefix{x; m1}; m2}}}
+   <-->
+   bind{n; x. substl{v; nth_prefix{x; m2}}}
+>>
+
 doc <:doc<
    We also perform coalescing during normalization.
 >>

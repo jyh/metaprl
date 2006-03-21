@@ -429,6 +429,42 @@ interactive_rw reduce_lof_succ : <:xrule<
    f[0] :: lof{i. f[i +@ 1]; j}
 >>
 
+interactive_rw reduce_lof_nth : <:xrule<
+   l in list -->
+   lof{i. lof_nth{l; i}; length{l}}
+   <-->
+   l
+>>
+
+interactive_rw reduce_lof_map_nth Perv!bind{z. 'e['z]} lof_nth{map{x. 'f['x]; 'l}; 'i} : <:xrule<
+   l in list -->
+   lof{i. e[lof_nth{map{x. f[x]; l}; i}]; length{l}}
+   <-->
+   lof{i. e[f[lof_nth{l; i}]]; length{l}}
+>>
+
+let is_lof_map_nth_term t _bv =
+   match explode_term t with
+      << lof_nth{'e; '__i} >> ->
+         (match explode_term e with
+             << map{__x. '__e; '__l} >> ->
+                true
+           | _ ->
+                false)
+    | _ ->
+         false
+
+let reduce_lof_map_nthC = termC (fun t ->
+   let i, e, n = dest_lof_term t in
+      match find_subterm e is_lof_map_nth_term with
+         addr :: _ ->
+            let t_lof_nth = term_subterm e addr in
+            let v_z = maybe_new_var_set var_z (free_vars_set e) in
+            let t_bind = mk_bind1_term v_z (replace_subterm e addr (mk_var_term v_z)) in
+               forceC "reduce_lof_map_nthC" (reduce_lof_map_nth t_bind t_lof_nth)
+       | [] ->
+            raise (RefineError ("reduce_lof_map_nthC", StringTermError ("no map subterm", t))))
+
 interactive_rw normalize_mk_bterm_subst {| normalize_lof |} : <:xrule<
    n in nat -->
    m in nat -->
@@ -437,6 +473,20 @@ interactive_rw normalize_mk_bterm_subst {| normalize_lof |} : <:xrule<
    substl{mk_bterm{n; op; subterms}; lof{i. f[i]; m}}
    <-->
    mk_bterm{n -@ m; op; lof{j. substl{lof_nth{subterms; j}; lof{i. f[i]; m}}; length{subterms}}}
+>>
+
+(*
+ * Actually, the previous theorem is a slight mistake.
+ * We should use native list_of_fun for the subterm list.
+ *)
+interactive_rw normalize_mk_bterm_subst2 : <:xrule<
+   n in nat -->
+   m in nat -->
+   m <= n -->
+   subterms in list -->
+   substl{mk_bterm{n; op; subterms}; lof{i. f[i]; m}}
+   <-->
+   mk_bterm{n -@ m; op; list_of_fun{j. substl{nth{subterms; j}; lof{i. f[i]; m}}; length{subterms}}}
 >>
 
 (************************************************************************

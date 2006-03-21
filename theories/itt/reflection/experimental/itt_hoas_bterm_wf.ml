@@ -150,6 +150,35 @@ interactive and_forward {| forward [] |} 'H : <:xrule<
  * XXX: JYH: we need to consider some general form for these lemmas,
  * but at the moment I'm not sure exactly what it is.
  *)
+interactive compatible_shapes_forward1 {| forward |} 'H : <:xrule<
+   "wf" : <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- n in nat -->
+   "wf" : <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- shape in list{nat} -->
+   "wf" : <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- subterms in list{BTerm} -->
+   <H>; x: compatible_shapes{n; shape; subterms}; <J[x]>;
+      length{shape} = length{subterms} in nat;
+      all i: Index{subterms}. bdepth{nth{subterms; i}} = nth{shape; i} +@ n in nat
+      >- C[x] -->
+   <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- C[x]
+>>
+
+interactive compatible_shapes1 : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- shape in list{nat} -->
+   "wf" : <H> >- subterms in list{BTerm} -->
+   "aux" : <H> >- length{subterms} = length{shape} in nat -->
+   "wf" : <H>; i: Index{subterms} >- bdepth{nth{subterms; i}} = nth{shape; i} +@ n in nat -->
+   <H> >- compatible_shapes{n; shape; subterms}
+>>
+
+interactive bind_subst_nth_prefix_wf_aux : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- m in nat -->
+   "aux" : <H> >- m <= n -->
+   "wf" : <H> >- e in BTerm -->
+   "aux" : <H> >- bdepth{e} >= m -->
+   <H> >- bind{n; x. substl{e; nth_prefix{x; m}}} in BTerm{bdepth{e} -@ m +@ n}
+>>
+
 interactive bind_subst_nth_prefix_wf {| intro |} : <:xrule<
    "wf" : <H> >- n in nat -->
    "wf" : <H> >- m in nat -->

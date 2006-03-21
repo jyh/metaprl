@@ -101,6 +101,8 @@ val is_lof_bind_term : term -> bool
 val mk_lof_bind_term : var -> term -> term -> term
 val dest_lof_bind_term : term -> var * term * term
 
+topval reduce_lof_map_nthC : conv
+
 (*!
  * @docoff
  *

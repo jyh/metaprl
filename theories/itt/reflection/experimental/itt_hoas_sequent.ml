@@ -7,7 +7,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 
    @parents
@@ -45,6 +45,7 @@ open Itt_list2
 open Itt_dfun
 open Itt_equal
 open Itt_sqsimple
+open Itt_int_arith
 
 doc <:doc<
    A sequent is represented as a 3-tuple << BTerm * list{BTerm} * BTerm >>,
@@ -490,6 +491,10 @@ interactive cvar_is_list {| intro [intro_typeinf << 'l >>] |} CVar{'n} : <:xrule
    <H> >- l IN "list"
 >>
 
+interactive cvar_is_bterm_list {| nth_hyp |} 'H : <:xrule<
+   <H>; l: CVar{n}; <J[l]> >- l IN list{BTerm}
+>>
+
 interactive bterm2_is_bterm {| intro [intro_typeinf << 'e >>] |} BTerm{'n} : <:xrule<
    "wf" : <H> >- n in nat -->
    "wf" : <H> >- e in BTerm{n} -->
@@ -504,8 +509,8 @@ doc <:doc<
 >>
 interactive cvar_forward {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
    "wf" : <H>; l in CVar{n}; <J> >- n in nat -->
-   <H>; l in CVar{n}; <J>; l in list{BTerm}; hyp_depths{n; l} >- 'C -->
-   <H>; l in CVar{n}; <J> >- 'C
+   <H>; l in CVar{n}; <J>; l in list{BTerm}; hyp_depths{n; l} >- C -->
+   <H>; l in CVar{n}; <J> >- C
 >>
 
 interactive append_cvar_elim {| forward [] |} 'H : <:xrule<
@@ -528,6 +533,11 @@ interactive vflatten_cvar_forward {| forward [] |} 'H : <:xrule<
    "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- vflatten{| <J> |} in list{BTerm} -->
    <H>; vflatten{| A; <J> |} in CVar{n}; <K>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C -->
    <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- C
+>>
+
+interactive cvar_positive_length {| ge_elim |} 'H : <:xrule<
+   <H>; l: CVar{n}; <J[l]>; length{l} >= 0 >- C[l] -->
+   <H>; l: CVar{n}; <J[l]> >- C[l]
 >>
 
 (************************************************************************
@@ -626,12 +636,9 @@ let vflatten_cvar_wf_tac p =
 let resource intro +=
    [<< vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{'d} >>, wrap_intro (funT vflatten_cvar_wf_tac)]
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

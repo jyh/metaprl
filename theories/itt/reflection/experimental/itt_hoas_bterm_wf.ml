@@ -170,6 +170,43 @@ interactive compatible_shapes1 : <:xrule<
    <H> >- compatible_shapes{n; shape; subterms}
 >>
 
+
+interactive bterm_bind {| intro [] |} : <:xrule<
+   "wf" : <H> >- 'v in BTerm -->
+   <H> >- bind{x. 'v} in BTerm
+>>
+
+interactive_rw bind_substl_nth_prefix_nth_suffix : <:xrewrite<
+   r in nat -->
+   m1 in nat -->
+   m2 in nat -->
+   m2 <= r -->
+   m2 <= m1 -->
+   bind{m1 +@ 1; l. substl{bind{r; x. hd{l}}; nth_prefix{nth_suffix{l; 1}; m2}}}
+   <-->
+   bind{m1 +@ 1; l. bind{r -@ m2; x. hd{l}}}
+>>
+
+interactive_rw bind_substl_nth_prefix : <:xrewrite<
+   r in nat -->
+   m1 in nat -->
+   m2 in nat -->
+   m2 <= r -->
+   m2 <= m1 -->
+   bind{m1 +@ 1; x. substl{var{0; r}; nth_prefix{'x; m2 +@ 1}}}
+   <-->
+   bind{m1 +@ 1 +@ r -@ m2; x. hd{x}}
+>>
+
+interactive bind_subst_nth_prefix_wf_aux0 : <:xrule<
+   "wf" : <H> >- r in nat -->
+   "wf" : <H> >- m1 in nat -->
+   "wf" : <H> >- m2 in nat -->
+   "aux" : <H> >- m2 <= r -->
+   "aux" : <H> >- m2 <= m1 -->
+   <H> >- bind{m1 +@ 1; x. substl{var{0; r}; nth_prefix{'x; m2 +@ 1}}} in BTerm{m1 +@ 1 +@ r -@ m2}
+>>
+
 interactive bind_subst_nth_prefix_wf_aux : <:xrule<
    "wf" : <H> >- n in nat -->
    "wf" : <H> >- m in nat -->

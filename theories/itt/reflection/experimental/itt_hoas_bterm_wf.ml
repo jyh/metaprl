@@ -264,7 +264,7 @@ let proofRuleWFT =
     * XXX: Aleksey: Do we need this repeatT?
     * Temporary disabled as it creates infinite loops when debugging things
     *)
-   (* repeatT *) proofRuleAuxWFT
+   withAllowOptionT relax_term ((* repeatT *) proofRuleAuxWFT)
 
 (************************************************************************
  * Depth wf.

@@ -229,6 +229,11 @@ interactive bterm_is_bind 'n : <:xrule<
    <H> >- e in Bind{m}
 >>
 
+interactive bterm_is_bind2 {| nth_hyp |} 'H : <:xrule<
+   "wf" : <H>; b: BTerm{n}; <J[b]> >- n in nat -->
+   <H>; b: BTerm{n}; <J[b]> >- b in Bind{n}
+>>
+
 (************************************************************************
  * Relaxed reductions.
  *)

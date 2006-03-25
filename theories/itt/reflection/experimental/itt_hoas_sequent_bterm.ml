@@ -121,6 +121,11 @@ interactive cons_is_cvar_relax {| intro |} : <:xrule<
    <H> >- u::v in CVarRelax{n}
 >>
 
+interactive cvar_is_bind_list {| nth_hyp |} 'H : <:xrule<
+   "wf" : <H>; l: CVar{n}; <J[l]> >- n in nat -->
+   <H>; l: CVar{n}; <J[l]> >- l in list{Bind{n}}
+>>
+
 (************************************************************************
  * Rewrites.
  *)

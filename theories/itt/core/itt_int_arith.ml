@@ -150,7 +150,7 @@ let rec on_main_subgoals = function
          on_main_subgoals tl*)
  | [] -> []
 
-let process_ge_elim_resource_annotation ~options:arg ?labels name context_args term_args statement loc pre_tactic =
+let process_ge_elim_resource_annotation ?options:(arg=[]) ?labels name context_args term_args statement loc pre_tactic =
    rule_labels_not_allowed loc labels;
    let assums, goal = unzip_mfunction statement in
    let () =
@@ -303,7 +303,7 @@ let testT = argfunT (fun i p ->
 
 doc docon
 
-interactive lt2ge {| ge_elim [] |} 'H :
+interactive lt2ge {| ge_elim |} 'H :
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
    [main] sequent { <H>; x: 'a < 'b; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
@@ -313,7 +313,7 @@ interactive eq2ge {| ge_elim [not_member] |} 'H :
    sequent { <H>; x: 'a = 'b in int; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
 
-interactive assert_beq2ge {| ge_elim [] |} 'H :
+interactive assert_beq2ge {| ge_elim |} 'H :
    [wf] sequent { <H>; x: "assert"{'a =@ 'b}; <J[it]> >- 'a in int } -->
    [wf] sequent { <H>; x: "assert"{'a =@ 'b}; <J[it]> >- 'b in int } -->
    sequent { <H>; x: "assert"{'a =@ 'b}; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
@@ -327,26 +327,26 @@ interactive eq2ge2 'H :
    sequent { <H>; x: 'a = 'b in int; <J['x]>; 'b >= 'a >- 'C['x] } -->
    sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
 
-interactive notge2ge_elim {| ge_elim [] |} 'H :
+interactive notge2ge_elim {| ge_elim |} 'H :
    [wf] sequent { <H>; x: "not"{'a >= 'b}; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: "not"{'a >= 'b}; <J['x]> >- 'b in int } -->
    sequent { <H>; x: "not"{'a >= 'b}; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
    sequent { <H>; x: "not"{'a >= 'b}; <J['x]> >- 'C['x] }
 
-interactive notlt2ge_elim {| ge_elim [] |} 'H :
+interactive notlt2ge_elim {| ge_elim |} 'H :
    [wf] sequent { <H>; x: "not"{'a < 'b}; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: "not"{'a < 'b}; <J['x]> >- 'b in int } -->
    sequent { <H>; x: "not"{'a < 'b}; <J['x]>; 'a >= 'b >- 'C['x] } -->
    sequent { <H>; x: "not"{'a < 'b}; <J['x]> >- 'C['x] }
 
-interactive noteq2ge_elim {| ge_elim [] |} 'H :
+interactive noteq2ge_elim {| ge_elim |} 'H :
    [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'b in int } -->
    sequent { <H>; x: "not"{'a = 'b in int}; <J['x]>; 'a >= 'b +@ 1 >- 'C['x] } -->
    sequent { <H>; x: "not"{'a = 'b in int}; <J['x]>; 'b >= 'a +@ 1 >- 'C['x] } -->
    sequent { <H>; x: "not"{'a = 'b in int}; <J['x]> >- 'C['x] }
 
-interactive notneq2ge_elim {| ge_elim [] |} 'H :
+interactive notneq2ge_elim {| ge_elim |} 'H :
    [wf] sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: "not"{'a <> 'b}; <J['x]> >- 'b in int } -->
    sequent { <H>; x: "not"{'a <> 'b}; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
@@ -358,7 +358,7 @@ interactive nequal_elim {| elim [] |} 'H :
    sequent { <H>; <J[it]>; (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
 
-interactive nequal_elim2 {| ge_elim [] |} 'H :
+interactive nequal_elim2 {| ge_elim |} 'H :
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'a in int } -->
    [wf] sequent { <H>; x: nequal{'a;'b}; <J['x]>  >- 'b in int } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]>; 'a >= 'b +@ 1 >- 'C['x] } -->

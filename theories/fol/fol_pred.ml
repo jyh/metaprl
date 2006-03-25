@@ -43,13 +43,12 @@ dform pred_df : pred = `"Pred"
 (*
  * Type judgment.
  *)
-prim pred_type {| intro [] |} 'H :
+prim pred_type {| nth_hyp |} 'H :
    sequent { <H>; x: pred; <J['x]> >- "type"{'x} } = trivial
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "nl"
  * End:
  * -*-
  *)

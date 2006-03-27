@@ -429,6 +429,14 @@ interactive_rw reduce_lof_succ : <:xrule<
    f[0] :: lof{i. f[i +@ 1]; j}
 >>
 
+interactive_rw reduce_lof_split : <:xrule<
+   j in nat -->
+   k in nat -->
+   lof{i. f[i]; j +@ k}
+   <-->
+   append{lof{i. f[i]; j}; lof{i. f[i +@ j]; k}}
+>>
+
 interactive_rw reduce_lof_nth : <:xrule<
    l in list -->
    lof{i. lof_nth{l; i}; length{l}}
@@ -487,6 +495,36 @@ interactive_rw normalize_mk_bterm_subst2 : <:xrule<
    substl{mk_bterm{n; op; subterms}; lof{i. f[i]; m}}
    <-->
    mk_bterm{n -@ m; op; list_of_fun{j. substl{nth{subterms; j}; lof{i. f[i]; m}}; length{subterms}}}
+>>
+
+(*
+ * Var substitutions.
+ *)
+interactive_rw normalize_bind_subst_lof_null {| reduce |} : <:xrule<
+   n in nat -->
+   substl{bind{n; x. e}; lof{i. f[i]; n}}
+   <-->
+   e
+>>
+
+interactive_rw reduce_substl_append_lof : <:xrule<
+   n in nat -->
+   substl{e; append{lof{i. f[i]; n}; l}}
+   <-->
+   substl{substl{e; lof{i. f[i]; n}}; l}
+>>
+
+interactive_rw normalize_var_subst {| normalize_lof |} : <:xrule<
+   l in nat -->
+   r in nat -->
+   n in nat -->
+   n <= l +@ r +@ 1 -->
+   substl{var{l; r}; lof{i. f[i]; n}}
+   <-->
+   if le_bool{n; l} then
+      var{l -@ n; r}
+   else
+      bind{r -@ n +@ l +@ 1; f[l]}
 >>
 
 (************************************************************************

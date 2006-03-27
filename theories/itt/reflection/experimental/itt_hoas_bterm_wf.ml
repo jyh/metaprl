@@ -150,6 +150,13 @@ interactive and_forward {| forward [] |} 'H : <:xrule<
  * XXX: JYH: we need to consider some general form for these lemmas,
  * but at the moment I'm not sure exactly what it is.
  *)
+interactive var_bterm2_wf {| intro |} : <:xrule<
+   "wf" : <H> >- l in nat -->
+   "wf" : <H> >- r in nat -->
+   "aux" : <H> >- n = l +@ (r +@ 1) in nat -->
+   <H> >- var{l; r} in BTerm{n}
+>>
+
 interactive compatible_shapes_forward1 {| forward |} 'H : <:xrule<
    "wf" : <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- n in nat -->
    "wf" : <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- shape in list{nat} -->
@@ -223,6 +230,27 @@ interactive bind_subst_nth_prefix_wf {| intro |} : <:xrule<
    "wf" : <H> >- e in BTerm -->
    "aux" : <H> >- bdepth{e} >= m -->
    <H> >- bind{n; x. substl{e; nth_prefix{x; m}}} in BTerm
+>>
+
+interactive bind_subst_nth_prefix_wf2 {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- m in nat -->
+   "aux" : <H> >- m <= n -->
+   "wf" : <H> >- e in BTerm -->
+   "aux" : <H> >- bdepth{e} >= m -->
+   "aux" : <H> >- d = bdepth{e} -@ m +@ n in nat -->
+   <H> >- bind{n; x. substl{e; nth_prefix{x; m}}} in BTerm{d}
+>>
+
+interactive_rw reduce_bdepth_bind_subst_nth_prefix {| reduce |} : <:xrule<
+   n in nat -->
+   m in nat -->
+   m <= n -->
+   e in BTerm -->
+   bdepth{e} >= m -->
+   bdepth{bind{n; x. substl{e; nth_prefix{x; m}}}}
+   <-->
+   bdepth{e} -@ m +@ n
 >>
 
 (************************************************************************
@@ -302,6 +330,8 @@ let proofRuleWFT =
     * Temporary disabled as it creates infinite loops when debugging things
     *)
    withAllowOptionT relax_term ((* repeatT *) proofRuleAuxWFT)
+   thenT forwardChainT
+   thenT autoT
 
 (************************************************************************
  * Depth wf.

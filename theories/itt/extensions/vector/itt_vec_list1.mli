@@ -57,6 +57,9 @@ topval assert_reduce_length_of_fun_term1 : term
 topval reduce_length_fun_termC : conv
 topval vlist_of_concrete_listC : conv
 
+topval reduce_vlist_nil : conv
+topval reduce_vlist_left : conv
+
 (*!
  * @docoff
  *

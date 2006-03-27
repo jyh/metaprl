@@ -80,6 +80,11 @@ interactive_rw reduce_vbind_merge :
    <-->
    vbind{| <J>; <K> >- 'e |}
 
+interactive_rw reduce_vbind_split 'J :
+   vbind{| <J>; <K> >- 'e |}
+   <-->
+   vbind{| <J> >- vbind{| <K> >- 'e |} |}
+
 (************************************************************************
  * Hyp squashing.
  *)

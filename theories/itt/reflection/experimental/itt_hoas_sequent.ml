@@ -508,9 +508,15 @@ doc <:doc<
    Forward-chaining.
 >>
 interactive cvar_forward {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
-   "wf" : <H>; l in CVar{n}; <J> >- n in nat -->
-   <H>; l in CVar{n}; <J>; l in list{BTerm}; hyp_depths{n; l} >- C -->
-   <H>; l in CVar{n}; <J> >- C
+   "wf" : <H>; x: l in CVar{n}; <J[x]> >- n in nat -->
+   <H>; x: l in CVar{n}; <J[x]>; l in list{BTerm}; hyp_depths{n; l}; length{l} in nat >- 'C[x] -->
+   <H>; x: l in CVar{n}; <J[x]> >- 'C[x]
+>>
+
+interactive cvar_forward2 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+   "wf" : <H>; l: CVar{n}; <J[l]> >- n in nat -->
+   <H>; l: CVar{n}; <J[l]>; l in list{BTerm}; hyp_depths{n; l}; length{l} in nat >- 'C[l] -->
+   <H>; l: CVar{n}; <J[l]> >- C[l]
 >>
 
 interactive append_cvar_elim {| forward [] |} 'H : <:xrule<
@@ -636,7 +642,42 @@ let vflatten_cvar_wf_tac p =
 let resource intro +=
    [<< vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{'d} >>, wrap_intro (funT vflatten_cvar_wf_tac)]
 
-(*
+(************************************************************************
+ * Depth reductions.
+ *)
+interactive_rw reduce_bdepth_context_nth 'n : <:xrewrite<
+   n in nat -->
+   i in nat -->
+   l in CVar{n} -->
+   i < length{l} -->
+   bdepth{nth{l; i}}
+   <-->
+   n +@ i
+>>
+
+let reduce_bdepth_context_nthC = funC (fun e ->
+   let t = env_term e in
+   let p = env_arg e in
+      match explode_term t with
+         << bdepth{'t} >> ->
+            (match explode_term t with
+                << nth{'l; '__i} >> ->
+                   (match explode_term (infer_type p l) with
+                       << CVar{'n} >> ->
+                          reduce_bdepth_context_nth n
+                     | _ ->
+                          raise (RefineError ("reduce_bdepth_context_nthC", StringTermError ("not a context", l))))
+             | _ ->
+                  raise (RefineError ("reduce_bdepth_context_nthC", StringTermError ("not a nth term", t))))
+       | _ ->
+            raise (RefineError ("reduce_bdepth_context_nthC", StringTermError ("not a bdepth term", t))))
+
+let resource reduce +=
+   [<:xterm< bdepth{nth{l; i}} >>, wrap_reduce reduce_bdepth_context_nthC]
+
+(*!
+ * @docoff
+ *
  * -*-
  * Local Variables:
  * End:

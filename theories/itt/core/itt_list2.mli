@@ -223,6 +223,9 @@ topval fold_rev : conv
 
 topval listIntoElementsC : term -> conv
 
+topval reduce_length_nil : conv
+topval reduce_length_cons : conv
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

@@ -80,7 +80,7 @@ prim t_tabs : <:xrule<
 
 prim t_tapp TyArg{'T11} bind{x. 'T12['x]} : <:xrule<
    fsub{| <H> >- fsub_member{e; TyAll{T11; X. T12[X]}} |} -->
-   fsub{| <H> >- fsub_subtype{T2; T11}  |}-->
+   fsub{| <H> >- fsub_subtype{T2; T11} |} -->
    fsub{| <H> >- fsub_member{TyApply{e; T2}; T12[T2]} |}
 >>
 

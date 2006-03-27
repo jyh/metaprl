@@ -63,6 +63,7 @@ open Itt_struct
 open Itt_squiggle
 open Itt_dfun
 open Itt_sqsimple
+open Itt_logic
 
 (************************************************************************
  * RULES                                                                *
@@ -476,6 +477,52 @@ let genSOVarT = argfunT (fun s p ->
    let b' = mk_lambda_term v' (map_down map b) in
       assertT (mk_squiggle_term a' b') thenMT
       tryT (expand thenT (hypSubstT (-1) 0 thenT collapse thenT trivialT)))
+
+let quantSOVarT_aux s p =
+   let t  = concl p in
+   let v  = Lm_symbol.add s in
+   let v' = maybe_new_var_set v (all_vars t) in
+   let t' = mk_var_term v' in
+
+   (* Find and replace all occurrences of the so-var *)
+   let arity = ref [] in
+   let contexts = ref [] in
+   let map t =
+      if is_so_var_term t then
+         let vv, conts, ts = dest_so_var t in
+            if Lm_symbol.eq v vv then begin
+               contexts := conts;
+               arity := ts;
+               List.fold_left mk_apply_term t' ts
+            end
+            else
+               t
+      else
+         t
+   in
+
+   (* Build the new quantified assertion *)
+   let e = map_down map t in
+   let ty_top = Itt_void.top_term in
+   let ty_fun = List.fold_left (fun ty _ -> mk_fun_term ty_top ty) ty_top !arity in
+   let e = mk_all_term v' ty_fun e in
+
+   (* For instantiating the quantified form *)
+   let vars, _ =
+      List.fold_left (fun (vars, index) _ ->
+            let v = Lm_symbol.make "x" index in
+               v :: vars, succ index) ([], 1) !arity
+   in
+   let t_vars = List.fold_left (fun tl v -> mk_var_term v :: tl) [] vars in
+   let t_body = mk_so_var_term v !contexts t_vars in
+   let t_lam =
+      List.fold_left (fun t_lam v ->
+            mk_lambda_term v t_lam) t_body vars
+   in
+      assertT e
+      thenMT (withT t_lam (dT (-1)) thenT tryT (rw reduceC (-1) thenT trivialT))
+
+let quantSOVarT = argfunT quantSOVarT_aux
 
 (*
  * Eta-expand an expression.

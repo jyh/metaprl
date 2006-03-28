@@ -57,7 +57,7 @@ let elimSimpleStepT =
    idT
 
 let elimProofCheckT =
-   idT
+   dT 2
 
 (*
  * -*-

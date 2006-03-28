@@ -325,6 +325,14 @@ interactive derivation_indexed_list_monotone 'i : <:xrule<
 >>
 
 (*
+ * Elimination rule for ProofCheck.
+ *)
+interactive proofCheck_elim {| elim [] |} 'H : <:xrule<
+   <H>; x: ProofCheck{r; premises; goal; witness}; <J[x]>; "assert"{'r (proof_step{'premises; 'goal}, 'witness)}; r in ProofRule; premises in list{BTerm}; goal in BTerm; witness in ProofStepWitness >- C[x] -->
+   <H>; x: ProofCheck{r; premises; goal; witness}; <J[x]> >- C[x]
+>>
+
+(*
  * The depth of a derivation is computable.
  *)
 define unfold_derivation_depth : derivation_depth{'d} <--> <:xterm<

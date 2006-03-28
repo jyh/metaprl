@@ -149,6 +149,29 @@ interactive simple_step_intro 'step : <:xrule<
    <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic}
 >>
 
+doc <:doc<
+   Use sublogic to prove << SimpleStep{'premises; 'goal; 'witness; 'logic} >>.
+>>
+interactive simple_step_intro0 'step : <:xrule<
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- premises in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   "wf" : <H> >- step in ProofRule -->
+   "wf" : <H> >- MemLogic{step; logic} -->
+   <H> >- exists witness: ProofStepWitness. "assert"{step (proof_step{premises; goal}, witness)} -->
+   <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic}
+>>
+
+interactive simple_step_sublogic 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 in Logic -->
+   "wf" : <H> >- logic2 in Logic -->
+   "wf" : <H> >- premises in list{BTerm} -->
+   "wf" : <H> >- goal in BTerm -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic1} -->
+   <H> >- exists witness: ProofStepWitness. SimpleStep{premises; goal; witness; logic2}
+>>
+
 (************************************************************************
  * Forward chaining.
  *)
@@ -164,6 +187,11 @@ let provable_forwardT i =
    provable_forward i
    thenT forward_bsequent_wf (-1)
    thenT rw normalizeBTermC (-1)
+
+interactive provable_forward0 'H : <:xrule<
+   <H>; Provable{logic; seq}; <J>; seq in BTerm >- C -->
+   <H>; Provable{logic; seq}; <J> >- C
+>>
 
 interactive provable_judgment_forward {| forward |} 'H : <:xrule<
    <H>; ProvableJudgment{logic; seq}; <J>; ProvableSequent{logic; seq}; IsJudgment{logic; seq} >- C -->

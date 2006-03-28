@@ -113,6 +113,28 @@ interactive step_union_logic_elim {| elim |} 'H :
    sequent { <H>; SimpleStep{'assums; 'goal; 'witness; 'logic_2}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: SimpleStep{'assums; 'goal; 'witness; union_logic{'logic_1; 'logic_2}}; <J['x]> >- 'C['x] }
 
+(************************************************************************
+ * IsJudgment.
+ *)
+doc <:doc<
+   Prove << IsJudgment{'logic; 'seq} >> with sublogic.
+>>
+interactive provable_sub 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 in Logic -->
+   "wf" : <H> >- logic2 in Logic -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- Provable{logic1; seq} -->
+   <H> >- Provable{logic2; seq}
+>>
+
+interactive is_judgment_sub 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 in Logic -->
+   "wf" : <H> >- logic2 in Logic -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- IsJudgment{logic1; seq} -->
+   <H> >- IsJudgment{logic2; seq}
+>>
+
 (*
  * -*-
  * Local Variables:

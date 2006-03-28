@@ -52,6 +52,11 @@ topval wrapVBindT : tactic
 val is_vbind_term : term -> bool
 val dest_vbind_term : term -> seq_hyps * term
 
+(*
+ * Debugging.
+ *)
+topval squash_vbindC : conv
+
 (*!
  * @docoff
  *

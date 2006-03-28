@@ -450,6 +450,11 @@ interactive subterms_bind_list1 'shape : <:xrule<
    <H> >- subterms in list{Bind{n}}
 >>
 
+(************************************************************************
+ * Tactics.
+ *)
+let relaxT = withOptionT relax_term "allow"
+
 (*!
  * @docoff
  *

@@ -156,7 +156,6 @@ let squash_vbind_conv t =
    (*
     * Find the term to be replaced.
     *)
-   let hyps = (explode_sequent t).sequent_hyps in
    let x = maybe_new_var_set var_x (all_vars t) in
    let x_t = mk_var_term x in
    let rec search rev_hyps hyps =
@@ -192,8 +191,10 @@ let squash_vbind_conv t =
    let t_bind = mk_bind1_term x t_var in
       squash_vbind t_bind
 
+let squash_vbindC = termC squash_vbind_conv
+
 let resource reduce +=
-    [<< vbind{| <J> >- 'e |} >>, wrap_reduce (termC squash_vbind_conv)]
+    [<< vbind{| <J> >- 'e |} >>, wrap_reduce squash_vbindC]
 
 (*!
  * @docoff

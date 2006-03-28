@@ -60,6 +60,8 @@ topval vlist_of_concrete_listC : conv
 topval reduce_vlist_nil : conv
 topval reduce_vlist_left : conv
 
+topval squash_vlistC : conv
+
 (*!
  * @docoff
  *

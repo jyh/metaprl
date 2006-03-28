@@ -29,6 +29,7 @@ doc <:doc<
 extends Itt_hoas_sequent_term
 extends Itt_hoas_normalize
 extends Itt_hoas_bterm_wf
+extends Itt_hoas_relax
 
 doc docoff
 
@@ -211,21 +212,36 @@ let resource reduce +=
    [<< vbind{| <J> >- 'x |} >>, wrap_reduce reduce_vbind_varC]
 
 (************************************************************************
- * Depths.
- *)
-interactive_rw reduce_depth_vbind_trivial {| reduce |} : <:xrewrite<
-   e in BTerm -->
-   bdepth{vbind{| <J> >- e<||> |}}
-   <-->
-   length{vlist{| <J> |}} +@ bdepth{e}
->>
-
-(************************************************************************
  * BTerm wf.
  *)
-interactive vbind_trivial_wf {| intro |} : <:xrewrite<
-   "wf" : <H> >- e in BTerm -->
-   <H> >- vbind{| <J> >- e<|H|> |} in BTerm
+interactive_rw vbind_eta_expand1 : <:xrewrite<
+   vbind{| <J> >- bind{z. e} |}
+   <-->
+   bind{length{vlist{| <J> |}}; x. bind{z. substl{vbind{| <J> >- e |}; x}}}
+>>
+
+interactive_rw bindn_bind1_prefix : <:xrewrite<
+   n in nat -->
+   bind{n; x. bind{y. substl{e; x}}}
+   <-->
+   bind{n +@ 1; x. substl{e; nth_prefix{x; n}}}
+>>
+
+interactive_rw vbind_eta_expand2 : <:xrewrite<
+   n in nat -->
+   vbind{| <J> >- bind{n<||>; z. e} |}
+   <-->
+   bind{length{vlist{| <J> |}}; x. bind{n; z. substl{vbind{| <J> >- e |}; x}}}
+>>
+
+interactive vbind_bind1_wf {| intro |} : <:xrewrite<
+   "wf" : <H> >- vbind{| <J> >- e |} in BTerm -->
+   <H> >- vbind{| <J> >- bind{x. e} |} in BTerm
+>>
+
+interactive vbind_split_wf 'J : <:xrewrite<
+   "wf" : <H> >- vbind{| <J> >- e |} in BTerm -->
+   <H> >- vbind{| <J>; <K> >- e<|J,H|> |} in BTerm
 >>
 
 (*

@@ -43,7 +43,9 @@ open Basic_tactics
 (*
  * Relax option.  Use this if you want to used relaxed rules.
  *)
-val relax_term: term
+val relax_term : term
+
+topval relaxT : tactic -> tactic
 
 (*
  * The type << Bind{'n} >> is the type of terms with

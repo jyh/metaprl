@@ -562,6 +562,61 @@ let vlist_of_concrete_list t =
 
 let vlist_of_concrete_listC = termC vlist_of_concrete_list
 
+(*
+ * Squash as much as possible in the << lenth{vlist{| <J> |}} >> term.
+ *)
+let squash_vlist_conv t =
+   let t = dest_length t in
+   let { sequent_args = arg;
+         sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+
+   (*
+    * Find the term to be replaced.
+    *)
+   let x = maybe_new_var_set var_x (all_vars t) in
+   let x_t = mk_var_term x in
+   let rec search rev_hyps hyps =
+      match hyps with
+         [] ->
+            raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("already converted", t)))
+       | Context (z, cv, args) as hyp :: hyps ->
+            let rec search_args rev_args args =
+               match args with
+                  arg :: args ->
+                     if is_it_term arg then
+                        search_args (arg :: rev_args) args
+                     else
+                        rev_hyps, Context (z, cv, List.rev_append rev_args (x_t :: args)), hyps
+                | [] ->
+                     search (hyp :: rev_hyps) hyps
+            in
+               search_args [] args
+       | Hypothesis (z, t) as hyp :: hyps ->
+            if is_it_term t then
+               search (hyp :: rev_hyps) hyps
+            else
+               rev_hyps, Hypothesis (z, x_t), hyps
+   in
+   let rev_hyps, hyp, hyps = search [] (SeqHyp.to_list hyps) in
+   let eseq =
+      { sequent_args = arg;
+        sequent_hyps = SeqHyp.of_list (List.rev_append rev_hyps (hyp :: hyps));
+        sequent_concl = concl
+      }
+   in
+   let t_var = mk_sequent_term eseq in
+   let t_len = mk_length_term t_var in
+   let t_bind = mk_bind1_term x t_len in
+      reduce_length_fun_term t_bind
+
+let squash_vlistC = termC squash_vlist_conv
+
+let resource reduce +=
+    [<< length{vlist{| <J> |}} >>, wrap_reduce squash_vlistC]
+
 (************************************************************************
  * Display forms.
  *)

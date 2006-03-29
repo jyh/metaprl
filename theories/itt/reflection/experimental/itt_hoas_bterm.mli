@@ -48,6 +48,9 @@ declare const BTerm
 declare BTerm{'i}
 declare dummy
 
+(* XXX: JYH: private, looking for better elim rule *)
+declare ndepth{'e}
+
 (* Conversions *)
 topval unfold_compatible_shapes : conv
 topval unfold_dom : conv
@@ -83,6 +86,12 @@ topval etaExpandC : term -> conv
 (* Tactics *)
 val mk_bterm_wf : tactic
 val mk_bterm_wf2 : tactic
+
+(*
+ * Term operations.
+ *)
+val is_BTerm_term : term -> bool
+val is_BTerm2_term : term -> bool
 
 (*
  * -*-

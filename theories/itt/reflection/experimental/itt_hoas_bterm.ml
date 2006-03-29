@@ -453,6 +453,14 @@ interactive bterm_elim2  {| elim [] |} 'H :
                compatible_shapes{'bdepth;shape{'op};'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->
    sequent { <H>; t: BTerm; <J['t]> >- 'P['t] }
 
+interactive bterm_elim3  'H :
+   sequent { <H>; l: nat; r:nat; <J[var{'l; 'r}]> >- 'P[var{'l;'r}] } -->
+   sequent { <H>; bdepth: nat; op: Operator; subterms: list{BTerm};
+               compatible_shapes{'bdepth; shape{'op}; 'subterms};
+               <J[mk_bterm{'bdepth; 'op; 'subterms}]>
+             >- 'P[mk_bterm{'bdepth; 'op; 'subterms}] } -->
+   sequent { <H>; t: BTerm; <J['t]> >- 'P['t] }
+
 doc <:doc<
    The following is the actual induction principle (the previous
    rules are just elimination rules).
@@ -743,3 +751,15 @@ interactive bterm_depth_eq {| nth_hyp |} :
 
 let resource nth_hyp +=
    <<BTerm{'d}>>, << 'd = bdepth{!t} in int >>, wrap_nth_hyp_uncertain (fun i -> bterm_depth_eq thenT equalityAxiom i)
+
+(************************************************************************
+ * Terms.
+ *)
+let t_BTerm = << BTerm >>
+let opname_BTerm = opname_of_term t_BTerm
+let is_BTerm_term = is_no_subterms_term opname_BTerm
+
+let t_BTerm2 = << BTerm{'n} >>
+let opname_BTerm2 = opname_of_term t_BTerm2
+let is_BTerm2_term = is_dep0_term opname_BTerm2
+

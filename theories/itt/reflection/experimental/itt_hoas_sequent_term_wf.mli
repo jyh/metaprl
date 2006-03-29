@@ -34,6 +34,9 @@ topval reduce_length_vlistC : conv
 topval squash_hyp_context_bindC : conv
 topval reduce_vbind_varC : conv
 
+topval vbind_splitT : tactic
+topval reduce_depth_vbind_splitC : conv
+
 (*
  * -*-
  * Local Variables:

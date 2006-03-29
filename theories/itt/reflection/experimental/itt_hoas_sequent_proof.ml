@@ -400,7 +400,7 @@ let build_context_witness cinfo cindex =
             (* Now build the witness term *)
             let seq =
                { sequent_args = hyp_context_arg_term;
-                 sequent_hyps = SeqHyp.of_list (List.rev hyps);
+                 sequent_hyps = SeqHyp.of_list hyps;
                  sequent_concl = t
                }
             in

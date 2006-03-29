@@ -437,6 +437,119 @@ interactive_rw reduce_bdepth_of_vbind {| reduce |} : <:xrewrite<
 >>
 
 (************************************************************************
+ * Depth theorems
+ *)
+doc <:doc<
+   More depth theorems.
+>>
+define unfold_probe : probe{'n; 't} <--> <:xterm<
+   (fix probe i t ->
+       if beq_int{i; 0} then
+          "true"
+       else
+          "weak_dest_terms"{t;
+             probe (i -@ 1) subst{t; mk_terms{it}};
+             core. "false"}) n t
+>>
+
+interactive_rw reduce_probe : probe{'i; 't} <--> <:xterm<
+   if beq_int{i; 0} then
+      "true"
+   else
+      "weak_dest_terms"{t;
+         probe{i -@ 1; subst{t; mk_terms{it}}};
+         core. "false"}
+>>
+
+interactive_rw reduce_probe_zero {| reduce |} : <:xrewrite<
+   probe{0; t}
+   <-->
+   "true"
+>>
+
+interactive_rw reduce_probe_succ_bind {| reduce |} : <:xrewrite<
+   i in nat -->
+   probe{i +@ 1; bind{x. e[x]}}
+   <-->
+   probe{i; e[mk_terms{it}]}
+>>
+
+interactive_rw reduce_probe_succ_mk_terms {| reduce |} : <:xrewrite<
+   i in nat -->
+   probe{i +@ 1; mk_terms{e}}
+   <-->
+   "false"
+>>
+
+interactive_rw reduce_probe_succ_mk_term {| reduce |} : <:xrewrite<
+   i in nat -->
+   probe{i +@ 1; mk_term{op; subterms}}
+   <-->
+   "false"
+>>
+
+interactive_rw reduce_probe_succ_var {| reduce |} : <:xrewrite<
+   i in nat -->
+   l in nat -->
+   r in nat -->
+   probe{i +@ 1; var{l; r}}
+   <-->
+   if beq_int{l; 0} then
+      probe{i; bind{r; x. mk_terms{it}}}
+   else
+      probe{i; var{l -@ 1; r}}
+>>
+
+interactive_rw reduce_probe_succ_mk_bterm {| reduce |} : <:xrewrite<
+   i in nat -->
+   d in nat -->
+   probe{i +@ 1; mk_bterm{d; op; subterms}}
+   <-->
+   if beq_int{d; 0} then
+      "false"
+   else
+      probe{i; mk_bterm{d -@ 1; op; map{t. subst{t; mk_terms{it}}; subterms}}}
+>>
+
+interactive_rw reduce_probe_bindn : <:xrule<
+   i in nat -->
+   n in nat -->
+   i <= n -->
+   probe{i; bind{n; x. e[x]}}
+   <-->
+   "true"
+>>
+
+interactive_rw reduce_probe_bindn_mk_terms {| reduce |} : <:xrule<
+   i in nat -->
+   n in nat -->
+   probe{i; bind{n; x. mk_terms{e[x]}}}
+   <-->
+   if le_bool{i; n} then
+      "true"
+   else
+      "false"
+>>
+
+interactive_rw reduce_bterm_probe : <:xrule<
+   e in BTerm -->
+   n in nat -->
+   probe{n; e}
+   <-->
+   if le_bool{n; bdepth{e}} then
+      "true"
+   else
+      "false"
+>>
+
+interactive bterm_bind_depth : <:xrewrite<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- e in BTerm -->
+   "wf" : <H> >- e in Bind{n} -->
+   <H> >- bdepth{e} >= n
+>>
+
+(************************************************************************
  * Additional theorems.
  *)
 doc <:doc<

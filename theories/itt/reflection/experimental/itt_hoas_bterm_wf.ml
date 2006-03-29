@@ -157,6 +157,19 @@ interactive var_bterm2_wf {| intro |} : <:xrule<
    <H> >- var{l; r} in BTerm{n}
 >>
 
+interactive var_bterm2_wf2 {| intro |} : <:xrule<
+   "wf" : <H> >- l1 = l2 in nat -->
+   "wf" : <H> >- r1 = r2 in nat -->
+   "aux" : <H> >- n = l1 +@ (r1 +@ 1) in nat -->
+   <H> >- var{l1; r1} = var{l2; r2} in BTerm{n}
+>>
+
+interactive var_bterm2_wf3 {| intro |} : <:xrule<
+   "wf" : <H> >- l1 = l2 in nat -->
+   "wf" : <H> >- r1 = r2 in nat -->
+   <H> >- var{l1; r1} = var{l2; r2} in BTerm
+>>
+
 interactive compatible_shapes_forward1 {| forward |} 'H : <:xrule<
    "wf" : <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- n in nat -->
    "wf" : <H>; x: compatible_shapes{n; shape; subterms}; <J[x]> >- shape in list{nat} -->

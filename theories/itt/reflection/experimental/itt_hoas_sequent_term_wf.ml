@@ -33,10 +33,15 @@ extends Itt_hoas_relax
 
 doc docoff
 
+open Lm_printf
+
 open Basic_tactics
 
 open Itt_list2
+open Itt_equal
 open Itt_vec_list1
+open Itt_hoas_bterm
+open Itt_hoas_debruijn
 
 (************************************************************************
  * Length reductions.
@@ -212,7 +217,20 @@ let resource reduce +=
    [<< vbind{| <J> >- 'x |} >>, wrap_reduce reduce_vbind_varC]
 
 (************************************************************************
+ * More splitting.
+ *)
+interactive_rw vbind_split_prefix 'J : <:xrewrite<
+   vbind{| <J>; <K> >- e<|J|> |}
+   <-->
+   bind{length{vlist{| <J>; <K> |}}; x. substl{vbind{| <J> >- e |}; nth_prefix{x; length{vlist{| <J> |}}}}}
+>>
+
+(************************************************************************
  * BTerm wf.
+ *)
+
+(*
+ * Step cases.
  *)
 interactive_rw vbind_eta_expand1 : <:xrewrite<
    vbind{| <J> >- bind{z. e} |}
@@ -242,6 +260,124 @@ interactive vbind_bind1_wf {| intro |} : <:xrewrite<
 interactive vbind_split_wf 'J : <:xrewrite<
    "wf" : <H> >- vbind{| <J> >- e |} in BTerm -->
    <H> >- vbind{| <J>; <K> >- e<|J,H|> |} in BTerm
+>>
+
+(*
+ * Depth versions.
+ *)
+interactive vbind_bind1_wf2 {| intro |} : <:xrewrite<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- vbind{| <J> >- e |} in BTerm{n -@ 1} -->
+   <H> >- vbind{| <J> >- bind{x. e} |} in BTerm{n}
+>>
+
+interactive vbind_split_wf2 'J : <:xrewrite<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- vbind{| <J> >- e |} in BTerm{n -@ length{hyp_context{| <J> >- hyplist{| <K> |} |}}} -->
+   <H> >- vbind{| <J>; <K> >- e<|J,H|> |} in BTerm{n}
+>>
+
+(*
+ * Depths.
+ *)
+interactive_rw reduce_bdepth_vbind_split 'J : <:xrewrite<
+   vbind{| <J> >- e |} in BTerm -->
+   bdepth{vbind{| <J>; <K> >- e<|J|> |}}
+   <-->
+   bdepth{vbind{| <J> >- e |}} +@ length{hyp_context{| <J> >- hyplist{| <K> |} |}}
+>>
+
+(*
+ * Tactic.
+ *)
+let unused_tail t =
+   let { sequent_hyps = hyps;
+         sequent_concl = concl
+       } = explode_sequent t
+   in
+
+   (* Figure out which hyps are included in the concl *)
+   let vars = all_vars concl in
+   let rec search i hyps =
+      match hyps with
+         h :: hyps ->
+            (match h with
+                Hypothesis (x, _)
+              | Context (x, _, _) ->
+                   if SymbolSet.mem vars x then
+                      i
+                   else
+                      search (succ i) hyps)
+       | [] ->
+            i
+   in
+   let i = search 0 (List.rev (SeqHyp.to_list hyps)) in
+      if i = 0 then
+         raise (RefineError ("Itt_hoas_sequent_term_wf.unused_tail", StringTermError ("sequent is fully dependent", t)));
+      SeqHyp.length hyps - i + 1
+
+let vbind_split_tac p =
+   let t_concl, t, _ = dest_equal (concl p) in
+   let i = unused_tail t in
+   let tac =
+      if is_BTerm_term t_concl then
+         vbind_split_wf
+      else
+         vbind_split_wf2
+   in
+      tac i
+
+let vbind_splitT = funT vbind_split_tac
+
+let resource intro +=
+   [<:xterm< vbind{| <J> >- e |} in BTerm >>, wrap_intro vbind_splitT;
+    <:xterm< vbind{| <J> >- e |} in BTerm{n} >>, wrap_intro vbind_splitT]
+
+(*
+ * Depth rewrite.
+ *)
+let reduce_depth_vbind_split_conv t =
+   let t = dest_bdepth_term t in
+   let i = unused_tail t in
+      reduce_bdepth_vbind_split i
+
+let reduce_depth_vbind_splitC = termC reduce_depth_vbind_split_conv
+
+let resource reduce +=
+   [<:xterm< bdepth{vbind{| <J> >- e |}} >>, wrap_reduce reduce_depth_vbind_splitC]
+
+(************************************************************************
+ * Var properties.
+ *)
+interactive bind_trivial_wf {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- e in BTerm{n -@ 1} -->
+   <H> >- bind{x. e} in BTerm{n}
+>>
+
+interactive vbind_var_wf {| intro |} : <:xrule<
+   "wf" : <H> >- n = length{vlist{| <J> |}} +@ 1 in nat -->
+   <H> >- vbind{| <J>; x: A >- x |} in BTerm{n}
+>>
+
+interactive vbind_var_wf2 {| intro |} : <:xrule<
+   <H> >- vbind{| <J>; x: A >- x |} in BTerm
+>>
+
+interactive_rw reduce_depth_vbind_var {| reduce |} : <:xrewrite<
+   bdepth{vbind{| <J>; x: A >- x |}}
+   <-->
+   length{vlist{| <J> |}} +@ 1
+>>
+
+(************************************************************************
+ * Relaxed goals.
+ *)
+interactive hyp_depths_forward1 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+   "wf" : <H>; x: hyp_depths{n; l}; <J[x]> >- n in nat -->
+   "wf" : <H>; x: hyp_depths{n; l}; <J[x]> >- l in list{BTerm} -->
+   <H>; x: hyp_depths{n; l}; <J[x]>; l in list{Bind{n}} >- C[x] -->
+   <H>; x: hyp_depths{n; l}; <J[x]> >- C[x]
 >>
 
 (*

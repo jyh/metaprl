@@ -589,6 +589,17 @@ interactive mem_union_logic2 {| intro [SelectOption 2] |} : <:xrule<
    <H> >- MemLogic{step; union_logic{logic1; logic2}}
 >>
 
+(*
+ * Properties of SubLogic.
+ *)
+interactive derivation_sub 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 IN Logic -->
+   "wf" : <H> >- logic2 IN Logic -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- e IN Derivation{logic1} -->
+   <H> >- e IN Derivation{logic2}
+>>
+
 doc docoff
 
 (************************************************************************

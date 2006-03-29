@@ -3743,12 +3743,10 @@ T	t1139	o335 b1129 b1139
 B	b1140	t1139
 P	p1140	String "selT 1 (byDefT unfold_ProofCheck)"
 O	o1140	ext_rule p1140
-T	t1140	o341 b1132 b276
-B	b1142	t1140
-T	t1142	o335 b1142 b6
-B	b1143	t1142
-T	t1143	o1140 b1713 b1143 b6 b6
-B	b1144	t1143
+T	t55	o335 b1133 b6
+B	b113	t55
+T	t113	o1140 b1713 b113 b6 b6
+B	b114	t113
 P	p1144	String "withT <<'v2>> (dT 8) thenMT dT (-1) ta"
 O	o1144	ext_rule p1144
 H	h1144	"" t1112
@@ -3831,34 +3829,34 @@ T	t1236	o1144 b1713 b1153 b1234 b6
 B	b1236	t1236
 T	t1238	o b1236 b6
 B	b1238	t1238
-T	t1239	o b1144 b1238
-B	b1239	t1239
-T	t1240	o1128 b1713 b1140 b1239 b6
-B	b1240	t1240
-T	t1241	o b1240 b6
-B	b1241	t1241
-T	t1242	o b1128 b1241
-B	b1242	t1242
-T	t1243	o409 b1713 b1126 b1242 b6
-B	b1243	t1243
-T	t1245	o b1243 b6
-B	b1245	t1245
-T	t1246	o404 b1713 b409 b1245 b6
-B	b1246	t1246
-T	t1247	o b1246 b6
-B	b1247	t1247
-T	t1248	o2023 b1713 b404 b1247 b6
-B	b1248	t1248
-T	t1249	o b1248 b6
-B	b1249	t1249
-T	t1250	o2016 b1713 b396 b1249 b6
-B	b1250	t1250
-T	t1251	o b1250 b6
-B	b1251	t1251
-T	t1252	o721 b1713 b388 b1251 b6
-B	b1252	t1252
-T	t1253	o332 b1252
-B	b1253	t1253
+T	t114	o b114 b1238
+B	b115	t114
+T	t115	o1128 b1713 b1140 b115 b6
+B	b116	t115
+T	t116	o b116 b6
+B	b117	t116
+T	t117	o b1128 b117
+B	b118	t117
+T	t118	o409 b1713 b1126 b118 b6
+B	b119	t118
+T	t119	o b119 b6
+B	b120	t119
+T	t138	o404 b1713 b409 b120 b6
+B	b162	t138
+T	t163	o b162 b6
+B	b163	t163
+T	t164	o2023 b1713 b404 b163 b6
+B	b164	t164
+T	t165	o b164 b6
+B	b165	t165
+T	t181	o2016 b1713 b396 b165 b6
+B	b182	t181
+T	t182	o b182 b6
+B	b183	t182
+T	t183	o721 b1713 b388 b183 b6
+B	b210	t183
+T	t210	o332 b210
+B	b212	t210
 P	p1253	Number 4697
 P	p1254	Number 4701
 O	o1254	resource_defs p1253 p1254 p59
@@ -3866,36 +3864,343 @@ T	t1254	o1254 b173 b6
 B	b1254	t1254
 T	t1255	o b1254 b6
 B	b1255	t1255
-T	t1256	o550 b1689 b375 b1253 b1255
-B	b1256	t1256
-T	t1257	o349 b1256
-B	b1257	t1257
-T	t1258	o b1257 b6
-B	b1258	t1258
-T	t1259	o b348 b1258
-B	b1259	t1259
-T	t1260	o b303 b1259
-B	b1260	t1260
-T	t1261	o b1732 b1260
-B	b1261	t1261
-T	t1262	o b1680 b1261
-B	b1262	t1262
-T	t1263	o b112 b1262
-B	b1263	t1263
-T	t1264	o b47 b1263
-B	b1264	t1264
-T	t1265	o b84 b1264
-B	b1265	t1265
-T	t1266	o b1687 b1265
-B	b1266	t1266
-T	t1267	o b1682 b1266
-B	b1267	t1267
-T	t1268	o b1520 b1267
-B	b1268	t1268
-T	t1278	o b1518 b1268
-B	b1278	t1278
-T	t1279	o b1516 b1278
-B	b1279	t1279
-T	t1280	o b1227 b1279
-B	b1280	t1280
-T	t1281	o b5 b1280
+T	t212	o550 b1689 b375 b212 b1255
+B	b213	t212
+T	t213	o349 b213
+B	b214	t213
+P	p256	Number 5796
+P	p258	Number 5860
+O	o258	location p256 p258
+P	p259	String Prove
+O	o259	comment_string p259
+T	t266	o259
+B	b273	t266
+NComment!math	math	math Comment
+O	o273	math
+NItt_hoas_sequent_proof!IsJudgment	IsJudgment	IsJudgment Itt_hoas_sequent_proof
+O	o275	IsJudgment
+Vlogic	logic275	logic\\ \\
+B	b280	logic275
+Vseq	seq	seq\\ \\
+B	b291	seq
+T	t304	o275 b280 b291
+B	b304	t304
+T	t311	o b304 b6
+B	b315	t311
+T	t315	o273 b315
+B	b316	t315
+P	p317	String sublogic
+O	o321	comment_string p317
+T	t323	o321
+B	b336	t323
+T	t336	o b34 b594
+B	b337	t336
+T	t337	o b336 b337
+B	b343	t337
+T	t343	o b18 b343
+B	b352	t343
+T	t352	o b531 b352
+B	b354	t352
+T	t357	o b18 b354
+B	b417	t357
+T	t417	o b316 b417
+B	b418	t417
+T	t418	o b18 b418
+B	b419	t418
+T	t422	o b273 b419
+B	b422	t422
+T	t423	o11 b422
+B	b423	t423
+T	t424	o9 b423
+B	b424	t424
+T	t425	o258 b424
+B	b425	t425
+P	p425	Number 5861
+P	p427	Number 6088
+O	o427	location p425 p427
+P	p457	String provable_sub
+O	o457	rule p457
+NSummary!term_param	term_param	term_param Summary
+O	o458	term_param
+Vlogic1	logic1	logic1\\ H\\
+B	b465	logic1
+T	t466	o458 b465
+B	b466	t466
+T	t469	o b466 b6
+B	b469	t469
+T	t473	o295 b296 b465 b465
+S	s473	t291\\ h\\ t473
+B	b473	s473
+T	t474	o290 b473
+B	b474	t474
+T	t475	o289 b474
+B	b475	t475
+Vlogic2	logic2	logic2\\ H\\
+B	b476	logic2
+T	t476	o295 b296 b476 b476
+S	s476	t291\\ h\\ t476
+B	b477	s476
+T	t477	o290 b477
+B	b478	t477
+T	t478	o289 b478
+B	b479	t478
+NItt_hoas_proof!SubLogic	SubLogic	SubLogic Itt_hoas_proof
+O	o480	SubLogic
+T	t480	o480 b465 b476
+S	s480	t291\\ h\\ t480
+B	b480	s480
+T	t482	o290 b480
+B	b482	t482
+Vseq	seq482	seq\\ H\\
+B	b483	seq482
+T	t483	o292 b465 b483
+S	s483	t291\\ h\\ t483
+B	b484	s483
+T	t484	o290 b484
+B	b487	t484
+T	t487	o292 b476 b483
+S	s487	t291\\ h\\ t487
+B	b489	s487
+T	t489	o290 b489
+B	b490	t489
+T	t490	o288 b487 b490
+B	b491	t490
+T	t491	o288 b482 b491
+B	b492	t491
+T	t492	o288 b479 b492
+B	b493	t492
+T	t493	o288 b475 b493
+B	b495	t493
+P	p503	String "assumT 4 thenT byDefT unfold_Provable"
+O	o504	ext_rule p503
+T	t504	o b484 b6
+B	b504	t504
+T	t508	o b480 b504
+B	b509	t508
+T	t509	o b477 b509
+B	b510	t509
+T	t510	o b473 b510
+B	b511	t510
+T	t511	o337 b489 b511
+B	b512	t511
+T	t514	o341 b512 b276
+B	b514	t514
+T	t516	o305 b465
+H	h516	e t516
+T	t517	o295 b300 b1747 b483
+H	h517	z t517
+T	t518	o305 b476
+B	b518	t518
+B	b519	t517 e
+T	t519	o394 b518 b519
+S	s519	t291\\ h h516 h517\\ t519
+B	b520	s519
+B	b521	t516
+T	t521	o394 b521 b519
+S	s521	t291\\ h\\ t521
+B	b522	s521
+T	t522	o b522 b6
+B	b523	t522
+T	t523	o b480 b523
+B	b524	t523
+T	t524	o b477 b524
+B	b525	t524
+T	t525	o b473 b525
+B	b535	t525
+T	t535	o337 b520 b535
+B	b536	t535
+T	t536	o341 b536 b276
+B	b543	t536
+T	t543	o b543 b6
+B	b544	t543
+T	t544	o335 b514 b544
+B	b549	t544
+P	p549	String "withT << 'e >> (dT 0) ttca"
+O	o552	ext_rule p549
+O	o553	tactic_arg p288
+T	t553	o295 b518 b1746 b1746
+S	s553	t291\\ h h516 h517\\ t553
+B	b553	s553
+T	t554	o337 b553 b535
+B	b554	t554
+T	t555	o553 b554 b276
+B	b555	t555
+T	t556	o b555 b6
+B	b556	t556
+T	t557	o335 b543 b556
+B	b557	t557
+P	p557	String "derivation_sub <<'logic1>> ttca"
+O	o557	ext_rule p557
+T	t558	o335 b555 b6
+B	b558	t558
+T	t559	o557 b1713 b558 b6 b6
+B	b559	t559
+T	t563	o b559 b6
+B	b563	t563
+T	t564	o552 b1713 b557 b563 b6
+B	b564	t564
+T	t566	o b564 b6
+B	b566	t566
+T	t567	o504 b1713 b549 b566 b6
+B	b567	t567
+T	t568	o332 b567
+B	b568	t568
+T	t569	o457 b469 b495 b568 b6
+B	b569	t569
+T	t570	o427 b569
+B	b570	t570
+P	p570	Number 6090
+P	p571	Number 6324
+O	o571	location p570 p571
+P	p572	String is_judgment_sub
+O	o572	rule p572
+T	t572	o275 b465 b483
+S	s572	t291\\ h\\ t572
+B	b572	s572
+T	t573	o290 b572
+B	b573	t573
+T	t574	o275 b476 b483
+S	s574	t291\\ h\\ t574
+B	b574	s574
+T	t575	o290 b574
+B	b575	t575
+T	t576	o288 b573 b575
+B	b576	t576
+T	t577	o288 b482 b576
+B	b577	t577
+T	t578	o288 b479 b577
+B	b578	t578
+T	t579	o288 b475 b578
+B	b579	t579
+P	p579	String "assumT 4 thenT byDefT unfold_IsJudgment"
+O	o579	ext_rule p579
+T	t580	o b572 b6
+B	b580	t580
+T	t581	o b480 b580
+B	b581	t581
+T	t689	o b477 b581
+B	b689	t689
+T	t690	o b473 b689
+B	b690	t690
+T	t691	o337 b574 b690
+B	b691	t691
+T	t699	o341 b691 b276
+B	b699	t699
+NItt_hoas_sequent_term	Itt_hoas_sequent_term	Itt_hoas_sequent_term NIL
+NItt_hoas_sequent_term!bsequent	bsequent	bsequent Itt_hoas_sequent_term
+O	o700	bsequent
+NItt_hoas_base	Itt_hoas_base	Itt_hoas_base NIL
+NItt_hoas_base!mk_term	mk_term	mk_term Itt_hoas_base
+O	o702	mk_term
+NItt_hoas_operator	Itt_hoas_operator	Itt_hoas_operator NIL
+NItt_hoas_operator!operator	operator	operator Itt_hoas_operator
+NItt_hoas_meta_types	Itt_hoas_meta_types	Itt_hoas_meta_types NIL
+NItt_hoas_meta_types!meta_type	meta_type	meta_type Itt_hoas_meta_types
+O	o703	meta_type
+T	t706	o703
+P	p706	Operator t706
+O	o706	operator p706
+T	t708	o706
+B	b708	t708
+T	t710	o702 b708 b467
+B	b710	t710
+T	t712	o700 b710
+NItt_hoas_meta_types!meta_member	meta_member	meta_member Itt_hoas_meta_types
+O	o712	meta_member
+Vt	t714	t\\ \\
+B	b714	t714
+T	t716	o712 b714 b714
+P	p716	Operator t716
+O	o716	operator p716
+T	t717	o716
+B	b717	t717
+NPerv!Judgment	Judgment	Judgment Perv
+O	o717	Judgment
+T	t718	o717
+P	p718	Operator t718
+O	o718	operator p718
+T	t719	o718
+B	b719	t719
+T	t720	o702 b719 b467
+B	b720	t720
+T	t721	o363 b720 b467
+B	b721	t721
+T	t722	o363 b483 b721
+B	b722	t722
+T	t723	o702 b717 b722
+S	s723	t712\\ \\ t723
+B	b723	s723
+T	t724	o292 b465 b723
+H	h724	x t724
+T	t725	o292 b476 b723
+S	s725	t291\\ h h724\\ t725
+B	b725	s725
+S	s726	t291\\ h\\ t724
+B	b726	s726
+T	t726	o b726 b6
+B	b727	t726
+T	t727	o b480 b727
+B	b730	t727
+T	t730	o b477 b730
+B	b731	t730
+T	t732	o b473 b731
+B	b732	t732
+T	t733	o337 b725 b732
+B	b733	t733
+T	t734	o341 b733 b276
+B	b734	t734
+T	t735	o b734 b6
+B	b735	t735
+T	t736	o335 b699 b735
+B	b736	t736
+P	p736	String "provable_sub << 'logic1 >> ttca"
+O	o736	ext_rule p736
+T	t737	o335 b734 b6
+B	b737	t737
+T	t738	o736 b1713 b737 b6 b6
+B	b738	t738
+T	t740	o b738 b6
+B	b740	t740
+T	t741	o579 b1713 b736 b740 b6
+B	b741	t741
+T	t742	o332 b741
+B	b742	t742
+T	t743	o572 b469 b579 b742 b6
+B	b743	t743
+T	t744	o571 b743
+B	b744	t744
+T	t745	o b744 b6
+B	b745	t745
+T	t746	o b570 b745
+B	b746	t746
+T	t747	o b425 b746
+B	b747	t747
+T	t748	o b214 b747
+B	b748	t748
+T	t749	o b348 b748
+B	b749	t749
+T	t751	o b303 b749
+B	b751	t751
+T	t752	o b1732 b751
+B	b752	t752
+T	t753	o b1680 b752
+B	b754	t753
+T	t754	o b112 b754
+B	b758	t754
+T	t763	o b47 b758
+B	b1105	t763
+T	t1105	o b84 b1105
+B	b1109	t1105
+T	t1144	o b1687 b1109
+B	b1156	t1144
+T	t1156	o b1682 b1156
+B	b1157	t1156
+T	t1157	o b1520 b1157
+B	b1158	t1157
+T	t1158	o b1518 b1158
+B	b1281	t1158
+T	t1282	o b1516 b1281
+B	b1282	t1282
+T	t1283	o b1227 b1282
+B	b1283	t1283
+T	t1284	o b5 b1283

@@ -116,6 +116,14 @@ interactive step_union_logic_elim {| elim |} 'H :
 (************************************************************************
  * IsJudgment.
  *)
+(*interactive_rw reduce_subset_nil1 {| reduce |} : \subset{nil; nil; 'T} <--> "true"
+interactive_rw reduce_subset_nil2 {| reduce |} : \subset{nil; 'u::'v; 'T} <--> "true"
+
+interactive_rw reduce_subset_cons1 {| reduce |} :
+   \subset{cons{'u; 'v}; nil; 'T} <--> "false"
+interactive_rw reduce_subset_cons1 {| reduce |} :
+   \subset{'u1::'v1; 'u2::'v2; 'T} <--> "and"{mem{'u1; 'u2::'v2; 'T}; \subset{'v1; 'u2::'v2; 'T}}
+*)
 doc <:doc<
    Prove << IsJudgment{'logic; 'seq} >> with sublogic.
 >>

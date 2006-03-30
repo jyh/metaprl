@@ -410,13 +410,11 @@ interactive_rw reduce_bind_of_bterm2 BTerm{'d} : <:xrewrite<
 >>
 
 let reduce_depth_of_exp e =
-   let t = env_term e in
-   let t = dest_bdepth_term t in
    let p = env_arg e in
    let ty =
-      try get_with_arg p with
-         RefineError _ ->
-            infer_type p t
+      match get_with_arg p with
+         Some ty -> ty
+       | None -> infer_type p (dest_bdepth_term (env_term e))
    in
       reduce_bind_of_bterm2 ty
 

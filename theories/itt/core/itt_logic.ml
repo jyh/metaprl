@@ -1392,9 +1392,9 @@ let base_jproverT =
          match ITT_JProver.prover mult_limit hyps concl with
             [t] ->
                let substs =
-                  try [Lm_symbol.make "n_jprover" 0, get_with_arg p] with
-                     RefineError _ ->
-                        []
+                  match get_with_arg p with
+                     Some t -> [Lm_symbol.make "n_jprover" 0, t]
+                   | None -> []
                in
                   t substs assums thenT jprogressT concl
           | _ ->

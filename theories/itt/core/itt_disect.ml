@@ -221,13 +221,13 @@ interactive disectElimination_eq {| elim [] |} 'H bind{x.bind{a,b.'C['x;'a;'b]}}
 
 let disectEliminationT = argfunT (fun n p ->
    let x = Sequent.nth_binding p n in
-   let bind =  get_with_arg p in
-      if is_bind2_term bind then
-         let bind = mk_bind1_term x bind in
-            disectElimination_eq n bind
-      else
-         raise (RefineError
-           ("disectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>))))
+      match get_with_arg p with
+         Some bind when is_bind2_term bind ->
+            let bind = mk_bind1_term x bind in
+               disectElimination_eq n bind
+       | _ ->
+            raise (RefineError
+               ("disectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>))))
 
 let disectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in

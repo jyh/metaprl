@@ -605,13 +605,16 @@ let splitITE = argfunT (fun i p ->
          Sequent.nth_hyp p i
    in
    let t =
-      try get_with_arg p with
-         RefineError _ ->
-            match find_subterm term search_ifthenelse with
+      match get_with_arg p with
+         Some t ->
+            t
+       | None ->
+            begin match find_subterm term search_ifthenelse with
                addr :: _ ->
                   let t, _, _ = dest_ifthenelse (term_subterm term addr) in t
              | [] ->
                   raise (RefineError ("search_ifthenelse", StringError "no free ifthenelse"))
+            end
    in
    let addrs = find_subterm term (filter_ifthenelse t) in
    let () =

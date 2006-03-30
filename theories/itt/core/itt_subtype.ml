@@ -297,13 +297,11 @@ let resource intro +=
  * We take the argument.
  *)
 let d_hyp_subtypeT = argfunT (fun i p ->
-   try
-      let args = get_with_args p in
-         match args with
-           [a] -> subtypeElimination2 i a a |
-           [a;b] -> subtypeElimination2 i a b |
-           _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
-   with RefineError ("get_attribute",_) -> subtypeElimination i)
+   match get_with_args p with
+      Some [a] -> subtypeElimination2 i a a
+    | Some [a;b] -> subtypeElimination2 i a b
+    | Some _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
+    | None -> subtypeElimination i)
 
 let resource elim += (subtype_term, wrap_elim d_hyp_subtypeT)
 

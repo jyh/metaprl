@@ -17,7 +17,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1998-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,8 +34,9 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified by: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+                Aleksey Nogin @email{nogin@cs.cornell.edu}
    @end[license]
 >>
 
@@ -131,13 +133,13 @@ interactive bisectElimination_eq 'H bind{x.bind{a,b.'C['x;'a;'b]}} :
 let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
    let x = Sequent.nth_binding p n in
-   let bind =  get_with_arg p in
-      if is_bind2_term bind then
-         let bind = mk_bind1_term x bind in
-            bisectElimination_eq n bind
-      else
-         raise (RefineError
-           ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>))))
+      match get_with_arg p with
+         Some bind when is_bind2_term bind ->
+            let bind = mk_bind1_term x bind in
+               bisectElimination_eq n bind
+       | _ ->
+            raise (RefineError
+               ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>))))
 
 let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
@@ -226,7 +228,6 @@ doc docoff
 (*
  * -*-
  * Local Variables:
- * Caml-master: "nl"
  * End:
  * -*-
  *)

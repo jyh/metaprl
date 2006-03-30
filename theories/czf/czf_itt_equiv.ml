@@ -313,26 +313,20 @@ let equivFunSetT = argfunT (fun i p ->
    let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in
    let t =
-      try
-         let l = Sequent.get_term_list_arg p "with" in
-            match l with
-               [s; r] -> mk_equiv_fun_set_term s r z t
-             | _ -> raise(RefineError ("equivFunSetT", StringError ("wrong number of terms")))
-      with RefineError ("get_attribute",_) ->
-         raise (RefineError ("equivFunSetT", StringError ("need a term list")))
+      match get_with_args p with
+         Some [s; r] -> mk_equiv_fun_set_term s r z t
+       | Some _ -> raise(RefineError ("equivFunSetT", StringError ("wrong number of terms")))
+       | None -> raise (RefineError ("equivFunSetT", StringError ("need a term list")))
    in
       equiv_fun_isset (get_pos_hyp_num p i) t)
 
 let equivFunMemT t i = funT (fun p ->
    let z = Sequent.nth_binding p i in
    let t =
-      try
-         let l = Sequent.get_term_list_arg p "with" in
-            match l with
-               [s; r] -> mk_equiv_fun_set_term s r z t
-             | _ -> raise(RefineError ("equivFunSetT", StringError ("wrong number of terms")))
-      with RefineError ("get_attribute",_) ->
-         raise (RefineError ("equivFunSetT", StringError ("need a term list")))
+      match get_with_args p with
+         Some [s; r] -> mk_equiv_fun_set_term s r z t
+       | Some _ -> raise(RefineError ("equivFunSetT", StringError ("wrong number of terms")))
+       | None -> raise (RefineError ("equivFunSetT", StringError ("need a term list")))
    in
       equiv_fun_mem i t)
 
@@ -596,14 +590,10 @@ let equivConclSubstT = argfunT (fun t p ->
    let s, r, s1, s2 = dest_equiv t in
    let goal = Sequent.concl p in
    let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_xbind_term t1 then
-               t1
-            else
-               raise generic_refiner_exn (* will be immedeiatelly caugh *)
-      with
-         RefineError _ ->
+      match get_with_arg p with
+         Some t1 when is_xbind_term t1 ->
+            t1
+       | _ ->
             var_subst_to_bind goal s1
    in
       equiv_concl_subst s r s1 s2 bind)
@@ -612,14 +602,10 @@ let equivHypSubstT t i = funT (fun p ->
    let s, r, s1, s2 = dest_equiv t in
    let hyp = nth_hyp p i in
    let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_xbind_term t1 then
-               t1
-            else
-               raise generic_refiner_exn (* will be immedeiatelly caugh *)
-      with
-         RefineError _ ->
+      match get_with_arg p with
+         Some t1 when is_xbind_term t1 ->
+            t1
+       | _ ->
             var_subst_to_bind hyp s1
    in
       equiv_hyp_subst i s r s1 s2 bind)

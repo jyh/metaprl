@@ -15,8 +15,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2000-2001
-   Alexei Kopylov & Aleksey Nogin, Cornell University
+   Copyright (C) 2000-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -90,19 +90,6 @@ interactive col_member_univ {| intro [intro_typeinf <<'x>>] |} 'T:
    sequent{ <H> >- 'x in 'T } -->
    sequent{ <H> >- 'C in col[l:l]{'T} } -->
    sequent{ <H> >- col_member{'C;'x} in univ[l:l] }
-
-doc docoff
-
-let univ_typeinf_arg p t =
-   let t =
-      try get_with_arg p with RefineError _ -> infer_type p t
-   in
-      [get_univ_arg p; t]
-
-let intro_univ_typeinf t = IntroArgsOption (univ_typeinf_arg, Some t)
-let elim_univ_typeinf t = ElimArgsOption (univ_typeinf_arg, Some t)
-
-doc docon
 
 interactive col_member_wf {| intro [intro_univ_typeinf <<'x>>] |} univ[l:l] 'T:
    sequent{ <H> >- 'x in 'T } -->
@@ -236,14 +223,6 @@ interactive union_wf {| intro [] |} :
    sequent{ <H> >- 'X in univ[l:l] } -->
    sequent{ <H>; x:'X >- 'Y['x] in Col[l:l]{'T} } -->
    sequent{ <H> >- "union"{'X;x.'Y['x]} in Col[l:l]{'T} }
-
-doc docoff
-
-let univ_with_args_fun p _ = [get_univ_arg p; get_with_arg p]
-let intro_univ_with_args = IntroArgsOption (univ_with_args_fun, None)
-let elim_univ_with_args = ElimArgsOption (univ_with_args_fun, None)
-
-doc docon
 
 interactive member_union {| intro [intro_univ_with_args] |} univ[l:l] 'z :
    [wf] sequent{ <H>; x:'X >- "type"{col_member{'Y['x];'y}} } -->
@@ -471,11 +450,16 @@ doc docoff
 
 (********************** Tactics *********************)
 
+let require_univ_arg name p =
+   match get_univ_arg p with
+      Some t -> t
+    | None -> raise (RefineError(name, StringError "univ arg required"))
+
 let colEqSymT = funT (fun p ->
-   col_equal_sym (get_univ_arg p))
+   col_equal_sym (require_univ_arg "colEqSymT" p))
 
 let colEqTransT = argfunT (fun t p ->
-   col_equal_trans (get_univ_arg p) t)
+   col_equal_trans (require_univ_arg "colEqTransT" p) t)
 
 (********************** dforms **********************)
 

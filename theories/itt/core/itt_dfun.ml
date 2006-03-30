@@ -15,7 +15,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998-2005 MetaPRL Group, Cornell University and Caltech
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -273,12 +273,9 @@ interactive independentFunctionElimination 'H :
 
 doc docoff
 let d_hyp_fun = argfunT (fun i p ->
-   try
-      let a = get_with_arg p in
-         functionElimination i a
-   with
-      RefineError _ ->
-         independentFunctionElimination i)
+   match get_with_arg p with
+      Some a -> functionElimination i a
+    | None -> independentFunctionElimination i)
 
 let resource elim += (dfun_term, wrap_elim d_hyp_fun)
 
@@ -304,9 +301,9 @@ let d_apply_typeT = funT (fun p ->
    let app = dest_type_term (Sequent.concl p) in
    let f, _ = dest_apply app in
    let f_type =
-      try get_with_arg p with
-         RefineError _ ->
-            infer_type p f
+      match get_with_arg p with
+         Some t -> t
+       | None -> infer_type p f
    in
    let tac, univ =
      let _, _, univ = dest_dfun f_type in

@@ -23,7 +23,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ doc <:doc<
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 
    @parents
@@ -512,9 +513,9 @@ ml_rule context_ind 't_v 't_step 't_trans : 'T =
  *)
 let context_ind_p t_v t_step p =
    let t_trans =
-      try get_with_arg p with
-         RefineError _ ->
-            it_term
+      match get_with_arg p with
+         Some t -> t
+       | None -> it_term
    in
       context_ind t_v t_step t_trans
       thenLT [addHiddenLabelT "base";

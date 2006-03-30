@@ -42,7 +42,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
+   California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -58,8 +59,9 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.cornell.edu}
+   Author: Jason Hickey @email{jyh@cs.cornell.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
+                Alexei Kopylov @email{kopylov@cs.cornell.edu}
    @end[license]
 >>
 
@@ -238,8 +240,9 @@ let intersectionEliminationT = argfunT (fun n p ->
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let args=
-      try get_with_args p with
-        RefineError _ -> raise (RefineError ("intersectionElimination", StringError ("arguments required")))
+      match get_with_args p with
+         Some args -> args
+       | None -> raise (RefineError ("intersectionElimination", StringError ("arguments required")))
    in
    let (a,bind) =
       match args with
@@ -373,19 +376,9 @@ let resource sub +=
                << 'B1['a1] >>, << 'B2['a1] >>],
               intersectionSubtype))
 
-let d_isect_subtypeT = argfunT (fun i p ->
-   if i = 0 then
-      let a = get_with_arg p in
-         intersectionSubtype2 a
-   else
-      raise (RefineError ("d_isect_subtypeT", StringError "no elimination form")))
-
-let isect_subtype_term = << \subtype{"isect"{'A; x. 'B['x]}; 'T} >>
-
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

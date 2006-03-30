@@ -1205,8 +1205,10 @@ doc docoff
 
 let tail_ind l p =
    let t_bind =
-      try get_with_arg p with
-         RefineError _ ->
+      match get_with_arg p with
+         Some t ->
+            t
+       | None ->
             let ty = infer_type p l in
             let t = concl p in
             let v = maybe_new_var_set (Lm_symbol.add "l") (free_vars_set t) in

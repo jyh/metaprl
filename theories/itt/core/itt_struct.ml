@@ -529,7 +529,9 @@ let revHypSubstT i j = funT (fun p ->
  * Replace the entire hypothesis.
  *)
 let replaceHypT t i = funT (fun p ->
-   hypReplacement i t (get_univ_arg p))
+   match get_univ_arg p with
+      Some u -> hypReplacement i t u
+    | None -> raise (RefineError("replaceHypT", StringError "universe argument required")))
 
 (*
  * Typehood from equality.
@@ -555,7 +557,6 @@ let resource auto += {
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

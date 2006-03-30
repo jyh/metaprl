@@ -15,7 +15,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1998-2006 Jason Hickey, Cornell University and California
+ * Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +32,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.caltech.edu>
  *
  *)
 extends Itt_bool
@@ -397,8 +398,9 @@ let dest_fset_type t =
 
 let typeinf_fset_arg p t =
    let t =
-      try get_with_arg p with
-         RefineError _ ->
+      match get_with_arg p with
+         Some t -> t
+       | None ->
             if !(load_debug "auto") then eprintf "Type of: %a%t" print_term t eflush;
             dest_fset_type (infer_type p t)
    in
@@ -406,15 +408,15 @@ let typeinf_fset_arg p t =
 
 let typeinf_plusone_arg p t =
    match get_with_args p with
-      [u] ->
-         [infer_type p t;u]
-    | l -> l
+      Some [u] -> [infer_type p t;u]
+    | Some l -> l
+    | None -> []
 
 let typeinf_plusone_fset_arg p t =
    match get_with_args p with
-      [u] ->
-         [dest_fset_type (infer_type p t);u]
-    | l -> l
+      Some [u] -> [dest_fset_type (infer_type p t);u]
+    | Some l -> l
+    | None -> []
 
 let intro_typeinf_fset t = IntroArgsOption (typeinf_fset_arg, Some t)
 let elim_typeinf_fset t = ElimArgsOption (typeinf_fset_arg, Some t)
@@ -1059,8 +1061,10 @@ interactive fall_elim 'H 'a 'w :
 
 let fmember_subst_elementT = argfunT (fun x p ->
    let t =
-      try get_univ_arg p with
-         RefineError _ ->
+      match get_univ_arg p with
+         Some univ ->
+            univ
+       | None ->
             let t = Sequent.concl p in
             let t = dest_assert t in
             let _, x, _ = dest_fmember t in
@@ -1069,8 +1073,10 @@ let fmember_subst_elementT = argfunT (fun x p ->
       fmember_fun t x)
 
 let assert_2of3_type p t =
-   try get_with_arg p with
-      RefineError _ ->
+   match get_with_arg p with
+      Some t ->
+         t
+    | None ->
          let t = dest_assert t in
          let _, x, y = three_subterms t in begin
             try infer_type p x with

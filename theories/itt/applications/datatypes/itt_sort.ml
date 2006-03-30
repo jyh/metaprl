@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1999 Jason Hickey, Cornell University
+ * Copyright (C) 1999-2006 MetaPRL Group, Cornell University and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,15 +34,7 @@
 
 extends Itt_theory
 
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
-
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Typeinf
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_list
 
@@ -243,8 +236,10 @@ let boundInclusionT = argfunT (fun t p ->
             raise (RefineError("boundInclusion", StringTermError("not a \"bounded\" term",goal)))
    in
    let a_type =
-      try get_with_arg p with
-         RefineError _ ->
+      match get_with_arg p with
+         Some t ->
+            t
+       | None ->
             begin try infer_type p l with
                RefineError _ ->
                   raise (RefineError("boundInclusion", StringTermError("can not infer type",l)))
@@ -267,9 +262,9 @@ let insertInclusionT = funT (fun p ->
    let goal = Sequent.concl p in
    let u, _, _ = three_subterms goal in
    let a_type =
-      try get_with_arg p with
-         RefineError _ ->
-            infer_type p u
+      match get_with_arg p with
+         Some t -> t
+       | None -> infer_type p u
    in
       insert_inclusion a_type)
 

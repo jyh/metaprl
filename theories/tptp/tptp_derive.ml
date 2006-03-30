@@ -91,9 +91,9 @@ let applyT app = argfunT (fun i p ->
    if i = 0 then
       let f, a = dest_apply app in
       let goal_type =
-         try get_with_arg p with
-            RefineError _ ->
-               infer_type p f
+         match get_with_arg p with
+            Some t -> t
+          | None -> infer_type p f
       in
       let goal_type, tac =
          if is_dfun_term goal_type then

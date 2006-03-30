@@ -18,7 +18,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2001-2005 MetaPRL Group, Cornell University and
+   Copyright (C) 2001-2006 MetaPRL Group, Cornell University and
    California Institute of Technology
 
    This program is free software; you can redistribute it and/or
@@ -382,10 +382,10 @@ let assertEqT =
    argfunT (fun eq p ->
       let _, s1, s2 = dest_equal eq in
       let bind =
-         try
-            get_with_arg p
-         with
-            RefineError _ ->
+         match get_with_arg p with
+            Some t ->
+               t
+          | None ->
                let concl = Sequent.concl p in
                let x = maybe_new_var_set var_z (free_vars_terms [concl; eq]) in
                let t, t1,  t2 = dest_equal concl in

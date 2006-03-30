@@ -207,12 +207,6 @@ interactive and_forward {| forward [] |} 'H : <:xrule<
    <H>; x: A && B; <J[x]> >- C[x]
 >>
 
-(************************************************************************
- * Additional theorems for bind.
- *
- * XXX: JYH: we need to consider some general form for these lemmas,
- * but at the moment I'm not sure exactly what it is.
- *)
 interactive var_bterm2_wf {| intro |} : <:xrule<
    "wf" : <H> >- l in nat -->
    "wf" : <H> >- r in nat -->
@@ -253,6 +247,29 @@ interactive compatible_shapes1 : <:xrule<
    <H> >- compatible_shapes{n; shape; subterms}
 >>
 
+(************************************************************************
+ * Additional theorems for bind.
+ *
+ * XXX: TODO: JYH: we need to consider some general form for these lemmas,
+ * but at the moment I'm not sure exactly what it is.
+ *
+ * Aleksey: as I wrote on mailing list, I think that the general theorem
+ * should be something like:
+ *
+ * t in BTerm[m] -->                                                 (1)
+ * k <= m -->
+ * all i:[0..k-1]. bind{n; x.ts[i; x]} in BTerms{n} -->              (2)
+ * bind{n; x. t @ lof{k; i. t[i; x]} in BTerms {m -@ k +@ n}
+ *
+ * We would need to make sure that the LOF algebra (or some modification of it)
+ * can ensure that (2) will always be auto-provable.
+ *
+ * P.S. The "relax" version of the above would have the "eta-expansion"
+ * bind{k; x. t @x} in BTerm[m]
+ * in place of (1). This "relax" version is a bit stronger on the surface (as the condition is strictly weaker), but
+ * either one is trivially derivable from another and I am not sure whether we'd actually need it. Hopefully not a
+ * big deal either way. 
+ *)
 interactive bind_subst_nth_prefix_wf_aux : <:xrule<
    "wf" : <H> >- n in nat -->
    "wf" : <H> >- m in nat -->

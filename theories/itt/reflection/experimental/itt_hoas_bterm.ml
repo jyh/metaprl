@@ -213,6 +213,7 @@ let resource elim += [
    wrap_elim_auto_ok (fun i ->
       unsquashHypGoalStable i thenAT (compatible_shapes_sqstable thenMT hypothesis i));
    <<BTerm{'i}>>, wrap_elim_auto_ok thinT;
+   <<nil in list{BTerm}>>, wrap_elim_auto_ok thinT;
 ]
 
 doc docon

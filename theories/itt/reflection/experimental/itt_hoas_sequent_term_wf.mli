@@ -36,6 +36,7 @@ topval reduce_vbind_varC : conv
 
 topval vbind_splitT : tactic
 topval reduce_depth_vbind_splitC : conv
+topval vbind_bindn_equalT : tactic
 
 (*
  * -*-

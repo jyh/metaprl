@@ -39,9 +39,14 @@ open Basic_tactics
 
 open Itt_list2
 open Itt_equal
+open Itt_struct
+open Itt_squiggle
 open Itt_vec_list1
 open Itt_hoas_bterm
+open Itt_hoas_vbind
+open Itt_hoas_vector
 open Itt_hoas_debruijn
+open Itt_hoas_bterm_wf
 
 (************************************************************************
  * Length reductions.
@@ -136,13 +141,19 @@ let resource reduce +=
 (************************************************************************
  * Vbinds.
  *)
-interactive_rw length_hyplist_succ : <:xrule<
+interactive_rw length_hyplist_succ {| reduce |} : <:xrule<
    length{hyp_context{| <J> >- hyplist{| x: A; <K[x]> |} |}}
    <-->
    length{hyp_context{| <J> >- hyplist{| <K[it]> |} |}} +@ 1
 >>
 
-interactive_rw length_hypcontext_right : <:xrule<
+interactive_rw length_hyplist_right {| reduce |} : <:xrule<
+   length{hyp_context{| <J> >- hyplist{| <K>; x: A |} |}}
+   <-->
+   length{hyp_context{| <J> >- hyplist{| <K> |} |}} +@ 1
+>>
+
+interactive_rw length_hypcontext_right {| reduce |} : <:xrule<
    length{hyp_context{| <J>; x: A >- hyplist{| <K[x]> |} |}}
    <-->
    length{hyp_context{| <J> >- hyplist{| <K[it]> |} |}}
@@ -213,17 +224,17 @@ let reduce_vbind_var_aux t =
 
 let reduce_vbind_varC = termC reduce_vbind_var_aux
 
-let resource reduce +=
-   [<< vbind{| <J> >- 'x |} >>, wrap_reduce reduce_vbind_varC]
-
-(************************************************************************
- * More splitting.
+(*
+ * XXX: JYH: the term_match_table is broken, and doesn't allow
+ * multiple sequents matches.  So for now, we manually add in
+ * the other entries.
  *)
-interactive_rw vbind_split_prefix 'J : <:xrewrite<
-   vbind{| <J>; <K> >- e<|J|> |}
-   <-->
-   bind{length{vlist{| <J>; <K> |}}; x. substl{vbind{| <J> >- e |}; nth_prefix{x; length{vlist{| <J> |}}}}}
->>
+let reduce_vbind_hackC =
+   reduce_vbind_varC
+   orelseC squash_vbindC
+
+let resource reduce +=
+   [<< vbind{| <J> >- 'x |} >>, wrap_reduce reduce_vbind_hackC]
 
 (************************************************************************
  * BTerm wf.
@@ -347,6 +358,56 @@ let resource reduce +=
    [<:xterm< bdepth{vbind{| <J> >- e |}} >>, wrap_reduce reduce_depth_vbind_splitC]
 
 (************************************************************************
+ * More splitting.
+ *)
+interactive_rw bind_merge_prefix : <:xrewrite<
+   n in nat -->
+   m in nat -->
+   bind{n; x. bind{m; y. substl{e; x}}}
+   <-->
+   bind{n +@ m; x. substl{e; nth_prefix{x; n}}}
+>>
+
+interactive_rw vbind_split_bindn 'J : <:xrewrite<
+   vbind{| <J>; <K> >- e<|J|> |}
+   <-->
+   vbind{| <J> >- bind{length{hyp_context{| <J> >- hyplist{| <K> |} |}}; y. e} |}
+>>
+
+interactive_rw vbind_split_prefix 'J : <:xrewrite<
+   vbind{| <J>; <K> >- e<|J|> |}
+   <-->
+   bind{length{vlist{| <J>; <K> |}}; x. substl{vbind{| <J> >- e |}; nth_prefix{x; length{vlist{| <J> |}}}}}
+>>
+
+interactive vbind_bindn_equal 'J : <:xrewrite<
+   "wf" : <H> >- m = length{vlist{| <J> |}} in nat -->
+   "wf" : <H> >- n = length{vlist{| <J>; <K> |}} in nat -->
+   "wf" : <H> >- vbind{| <J>; <K> >- e |} in BTerm -->
+   <H> >- vbind{| <J>; <K> >- e<|J,H|> |} = bind{n; x. substl{vbind{| <J> >- e |}; nth_prefix{x; m}}} in BTerm
+>>
+
+let vbind_bindn_equal_tac p =
+   let _, t1, t2 = dest_equal (concl p) in
+   let tac1, t1, t2 =
+      if is_vbind_term t1 then
+         idT, t1, t2
+      else
+         equalSymT, t2, t1
+   in
+   let _, _, subst = dest_bindn_term t2 in
+   let vbind, _ = dest_substl_term subst in
+   let hyps = (explode_sequent vbind).sequent_hyps in
+   let i = SeqHyp.length hyps + 1 in
+      tac1 thenT vbind_bindn_equal i
+
+let vbind_bindn_equalT = funT vbind_bindn_equal_tac
+
+let resource intro +=
+   [<:xterm< vbind{| <J> >- e1 |} = bind{n; x. substl{vbind{| <K> >- e |}; nth_prefix{x; m}}} in BTerm >>, wrap_intro vbind_bindn_equalT;
+    <:xterm< bind{n; x. substl{vbind{| <K> >- e |}; nth_prefix{x; m}}} = vbind{| <J> >- e1 |} in BTerm >>, wrap_intro vbind_bindn_equalT]
+
+(************************************************************************
  * Var properties.
  *)
 interactive bind_trivial_wf {| intro |} : <:xrule<
@@ -379,6 +440,12 @@ interactive hyp_depths_forward1 {| forward [ForwardPrec forward_trivial_prec] |}
    <H>; x: hyp_depths{n; l}; <J[x]>; l in list{Bind{n}} >- C[x] -->
    <H>; x: hyp_depths{n; l}; <J[x]> >- C[x]
 >>
+
+(************************************************************************
+ * More depth lemmas.
+ *)
+let resource forward_subst +=
+   [<:xterm< bdepth{vbind{| <J> >- e1 |}} = length{e2} in nat >>, ()]
 
 (*
  * -*-

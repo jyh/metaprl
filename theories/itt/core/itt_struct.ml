@@ -256,6 +256,8 @@ doc <:doc<
    @docoff
 >>
 let thinT = thin
+let forwardT = doForwardT thin
+let forwardChainT = doForwardChainT thin
 
 let thinTermT =
    let rec findThinT t hyps i =

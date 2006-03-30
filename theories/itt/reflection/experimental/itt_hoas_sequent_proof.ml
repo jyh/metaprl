@@ -495,7 +495,6 @@ let provableRuleStartT t unfold =
    thenMT rwhAll reduce_bsequent
    thenMT simpleReduceT
    thenMT forwardChainT
-   thenT thinDupT
    thenMT provableIntroT
    thenMT simple_step_intro t
    thenMT rw (higherC unfold thenC reduceC) 0
@@ -511,12 +510,9 @@ let provableRuleT t unfold =
 dform provable_sequent_df : ProvableSequent{'logic; 'e} =
    szone pushm[0] pushm[3] `"P[" slot{'logic} `"] <<" hspace slot{'e} popm hspace `">>" popm ezone
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

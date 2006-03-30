@@ -134,6 +134,9 @@ topval copyHypT : int -> int -> tactic
 topval dupT : tactic
 topval useWitnessT : term -> tactic
 
+topval forwardT : int -> tactic
+topval forwardChainT : tactic
+
 resource (term * (term -> int -> tactic), term -> int -> tactic) subst
 
 topval substT : term -> int -> tactic

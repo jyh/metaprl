@@ -7,7 +7,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,8 +23,9 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Xin Yu @email{xiny@cs.caltech.edu}
+                Aleksey Nogin @email{nogin@cs.caltech.edu}
    @end[license]
 
    @parents
@@ -105,14 +106,14 @@ interactive let_sovar_elim {| elim [] |} 'H :
    [wf] sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'witness in ProofStepWitness } -->
    [wf] sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'i in nat } -->
    [wf] sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'd in nat } -->
-   [main] sequent { <H>; u: BTerm{'d}; bdepth{'u} = 'd in int; "assert"{'e['u]}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: BTerm{'d}; "assert"{'e['u]}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: "assert"{let_sovar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'C['x] }
 
 interactive let_cvar_elim {| elim [] |} 'H :
    [wf] sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'witness in ProofStepWitness } -->
    [wf] sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'i in nat } -->
    [wf] sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'd in nat } -->
-   [main] sequent { <H>; u: CVar{'d}; "assert"{bhyp_depths{'d; 'u}}; "assert"{'e['u]}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: CVar{'d}; "assert"{bhyp_depths{'d; 'u}}; "assert"{'e['u]}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: "assert"{let_cvar[name:s]{'d; 'witness; 'i; v. 'e['v]}}; <J['x]> >- 'C['x] }
 
 (************************************************************************
@@ -146,12 +147,9 @@ let dest_let_sovar_term t =
     | _ ->
          raise (RefineError ("dest_let_sovar_term", StringTermError ("not a let_sovar term", t)))
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

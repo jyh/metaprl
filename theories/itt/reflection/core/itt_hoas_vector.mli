@@ -12,7 +12,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005-2006, MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ doc <:doc<
 >>
 extends Itt_hoas_base
 extends Itt_nat
-extends Itt_list2
+extends Itt_list3
 
 open Basic_tactics
 
@@ -43,7 +43,7 @@ open Basic_tactics
  *)
 declare denormalize : SelectOption
 
-val denormalize_term : term
+topval denormalize_term : term
 val denormalize_labels: term list
 
 (************************************************************************

@@ -80,15 +80,18 @@ let extract_forward_subst_data =
    in
    let equal_in_table table t =
       if is_equal_term t then
-         if lookup_mem table t then
-            1
-         else
-            let t1, t2, t3 = dest_equal t in
-            let t = mk_equal_term t1 t3 t2 in
+         let t1, t2, t3 = dest_equal t in
+            if alpha_equal t2 t3 then
+               0
+            else
                if lookup_mem table t then
-                  -1
+                  1
                else
-                  0
+                  let t = mk_equal_term t1 t3 t2 in
+                     if lookup_mem table t then
+                        -1
+                     else
+                        0
       else
          0
    in

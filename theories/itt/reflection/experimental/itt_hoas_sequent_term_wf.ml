@@ -212,29 +212,22 @@ let reduce_vbind_var_aux t =
    let len = SeqHyp.length hyps in
    let rec search i =
       if i = len then
-         raise (RefineError ("reduce_vbind_var_aux", StringTermError ("not a variable", t)));
-      match SeqHyp.get hyps i with
-         Hypothesis (v', _) when Lm_symbol.eq v' v ->
-            succ i
-       | Hypothesis _
-       | Context _ ->
-            search (succ i)
+         (* XXX: reduceC does not fall back to less specific matches; have to do it manually *)
+         squash_vbindC
+      else
+         match SeqHyp.get hyps i with
+            Hypothesis (v', _) when Lm_symbol.eq v' v ->
+               reduce_vbind_var (succ i)
+          | Hypothesis _
+          | Context _ ->
+               search (succ i)
    in
-      reduce_vbind_var (search 0)
+      search 0
 
 let reduce_vbind_varC = termC reduce_vbind_var_aux
 
-(*
- * XXX: JYH: the term_match_table is broken, and doesn't allow
- * multiple sequents matches.  So for now, we manually add in
- * the other entries.
- *)
-let reduce_vbind_hackC =
-   reduce_vbind_varC
-   orelseC squash_vbindC
-
 let resource reduce +=
-   [<< vbind{| <J> >- 'x |} >>, wrap_reduce reduce_vbind_hackC]
+   [<< vbind{| <J> >- !x |} >>, wrap_reduce reduce_vbind_varC]
 
 (************************************************************************
  * BTerm wf.

@@ -144,6 +144,8 @@ val is_not_term : term -> bool
 val dest_not : term -> term
 val mk_not_term : term -> term
 
+val all_elim : int -> term -> tactic
+
 (************************************************************************
  * AUTOMATION                                                           *
  ************************************************************************)

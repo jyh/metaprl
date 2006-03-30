@@ -237,6 +237,8 @@ topval tailIndT : term -> tactic
 
 val intensional_wf_option : term
 
+val index_cons_elimT : int -> tactic
+
 (*
  * -*-
  * Local Variables:

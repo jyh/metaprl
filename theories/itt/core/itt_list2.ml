@@ -1025,6 +1025,21 @@ interactive_rw length_of_append {| reduce |} :
    <-->
    length{'l1} +@ length{'l2}
 
+interactive index_cons_elim 'H :
+   ["wf"] sequent { <H>; all i:Index{cons{'h; 't}}. 'P['i]; <J> >- 't in list } -->
+   sequent { <H>; 'P[0]; all i:Index{'t}. 'P['i +@ 1]; <J> >- 'C } -->
+   sequent { <H>; all i:Index{cons{'h; 't}}. 'P['i]; <J> >- 'C }
+
+let index_cons_elimT = argfunT (fun i p ->
+   match get_with_arg p with
+      Some t -> all_elim i t
+    | None -> index_cons_elim i)
+
+let resource elim += [
+   << all i:Index{nil}. 'P['i] >>, wrap_elim_auto_ok thinT;
+   << all i:Index{cons{'h; 't}}. 'P['i] >>, wrap_elim index_cons_elimT;
+]
+
 (*
  * Reverse.
  *)

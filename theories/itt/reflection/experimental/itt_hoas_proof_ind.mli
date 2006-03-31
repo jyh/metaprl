@@ -40,6 +40,9 @@ doc <:doc<
 open Basic_tactics
 
 val provableSequent_elim : int -> tactic
+val step_rules_logic_cons : int -> tactic
+val step_union_logic_elim : int -> tactic
+val step_rules_logic_nil : int -> tactic
 
 (*
  * -*-

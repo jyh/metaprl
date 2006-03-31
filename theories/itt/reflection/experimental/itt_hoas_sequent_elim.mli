@@ -33,7 +33,7 @@ open Basic_tactics
  *)
 topval elimRuleT : tactic
 topval elimRuleStartT : tactic
-topval elimSimpleStepT : tactic
+topval elimSimpleStepT : conv -> tactic
 topval elimProofCheckT : tactic
 
 (*

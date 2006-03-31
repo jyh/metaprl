@@ -3757,7 +3757,7 @@ T	t2098	o824 b1985 b2091 b2098 b735
 B	b2099	t2098
 T	t2099	o1 b2099
 B	b2100	t2099
-P	p854	String elim_step_pmn_core_terms
+P	p854	String foo
 O	o854	rule p854
 O	o856	int_param p428
 T	t2100	o856

@@ -53,8 +53,14 @@ let elimRuleT =
 let elimRuleStartT =
    idT
 
-let elimSimpleStepT =
-   idT
+let elimSimpleStepT unfold =
+   rw (addrC [Subterm 4] unfold) 2
+   thenT repeatMT (firstT [
+      step_rules_logic_cons 2;
+      step_union_logic_elim 2;
+      step_rules_logic_nil 2
+   ])
+   thenT autoT
 
 let elimProofCheckT =
    dT 2

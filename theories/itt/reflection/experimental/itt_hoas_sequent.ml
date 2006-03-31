@@ -263,6 +263,12 @@ interactive sequent_elim {| elim [] |} 'H : <:xrule<
    <H>; s: "Sequent"; <J[s]> >- C[s]
 >>
 
+interactive sequent_elim2 {| elim [] |} 'H : <:xrule<
+   <H>; arg: "BTerm"; hyps: list{"BTerm"}; goal: "BTerm"; squash{is_sequent{d;"sequent"{arg; hyps; goal}}};
+      <J["sequent"{arg; hyps; goal}]> >- C["sequent"{arg; hyps; goal}] -->
+   <H>; s: "Sequent"{d}; <J[s]> >- C[s]
+>>
+
 (*
  * An CVar is well-formed over subtypes of BTerm.
  *)
@@ -309,6 +315,14 @@ interactive_rw reduce_is_sequent {| reduce |} : <:xrewrite<
    bdepth{arg} = 0 in "nat"
    && hyp_depths{0; hyps}
    && bdepth{concl} = length{hyps} in "nat"
+>>
+
+interactive_rw reduce_is_sequent2 {| reduce |} : <:xrewrite<
+   is_sequent{d;"sequent"{arg; hyps; concl}}
+   <-->
+   bdepth{arg} = 0 in "nat"
+   && hyp_depths{d; hyps}
+   && bdepth{concl} = length{hyps} +@ d in "nat"
 >>
 
 interactive sequent_arg_wf {| intro [] |} : <:xrule<

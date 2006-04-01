@@ -419,11 +419,11 @@ doc <:doc<
    true, so we do the actual forward chaining on the @tt[bsequent] form.
 >>
 interactive vsequent_wf_forward {| forward |} 'H : <:xrule<
-   <H>; vsequent{arg}{| <J> >- C |} in Sequent; <K>;
-      arg in BTerm{0};
-      vflatten{| <J> |} in CVar{0};
-      C in BTerm{length{vflatten{| <J> |}}} >- D -->
-   <H>; vsequent{arg}{| <J> >- C<|H|> |} in Sequent; <K> >- D
+   <H>; vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent; <K>;
+      arg1 = arg2 in BTerm{0};
+      vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{length{vflatten{||}}};
+      C1 = C2 in BTerm{length{vflatten{| <J1> |}}} >- D -->
+   <H>; vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent; <K> >- D
 >>
 
 (*

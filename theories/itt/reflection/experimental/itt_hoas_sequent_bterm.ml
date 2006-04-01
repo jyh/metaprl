@@ -536,6 +536,18 @@ interactive bsequent_type_elim {| elim [] |} 'H : <:xrule<
 doc <:doc<
    Forward-chaining.
 >>
+interactive sequent_bterm_forward0 'H : <:xrule<
+   <H>; sequent_bterm{s} in BTerm; <J>;
+      s in Sequent >- C -->
+   <H>; sequent_bterm{s} in BTerm; <J> >- C
+>>
+
+interactive sequent_bterm_forward 'H : <:xrule<
+   <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J>;
+      s1 = s2 in Sequent >- C -->
+   <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- C
+>>
+
 interactive bsequent_core_parts_forward 'H : <:xrule<
    <H>; x: BSequentCore; <J[x]>;
       n: nat;

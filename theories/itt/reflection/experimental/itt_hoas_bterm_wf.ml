@@ -194,6 +194,41 @@ interactive mk_bterm_wf_forward3 {| forward [ForwardPrec forward_trivial_prec] |
    <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- C[x]
 >>
 
+interactive mk_bterm_wf_forward4 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- d1 in nat -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- d2 in nat -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- o1 in Operator -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- o2 in Operator -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- s1 in list{Bind{d1}} -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- s2 in list{Bind{d2}} -->
+   <H>; mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[it]>;
+      d1 = d2 in nat;
+      o1 = o2 in Operator;
+      s1 = s2 in list{BTerm};
+      compatible_shapes{d1; shape{o1}; s1};
+      compatible_shapes{d2; shape{o2}; s2}
+      >- C[it] -->
+   <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- C[x]
+>>
+
+interactive mk_bterm_wf_forward5 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- d1 in nat -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- d2 in nat -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- o1 in Operator -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- o2 in Operator -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- s1 in list{Bind{d1}} -->
+   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- s2 in list{Bind{d2}} -->
+   <H>; mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[it]>;
+      d1 = n in nat;
+      d1 = d2 in nat;
+      o1 = o2 in Operator;
+      s1 = s2 in list{BTerm};
+      compatible_shapes{d1; shape{o1}; s1};
+      compatible_shapes{d2; shape{o2}; s2}
+      >- C[it] -->
+   <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- C[x]
+>>
+
 doc <:doc<
    Basic rules for forward chaining.
 >>
@@ -268,7 +303,7 @@ interactive compatible_shapes1 : <:xrule<
  * bind{k; x. t @x} in BTerm[m]
  * in place of (1). This "relax" version is a bit stronger on the surface (as the condition is strictly weaker), but
  * either one is trivially derivable from another and I am not sure whether we'd actually need it. Hopefully not a
- * big deal either way. 
+ * big deal either way.
  *)
 interactive bind_subst_nth_prefix_wf_aux : <:xrule<
    "wf" : <H> >- n in nat -->

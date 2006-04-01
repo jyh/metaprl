@@ -35,6 +35,7 @@ doc <:doc<
       Alexei Kopylov @email{kopylov@cs.cornell.edu}
    Modified By:
       Aleksey Nogin @email{nogin@cs.caltech.edu}
+      Jason Hickey @email{jyh@cs.caltech.edu}
    @end[license]
 >>
 
@@ -404,6 +405,19 @@ let positiveRule2T = smallest_positive
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]>; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]> >- 'C['x] }
 *)
+
+(*
+ * Some arithmetic helper rules.
+ *)
+interactive nat_plus_one_eq_zero_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; <J[it]> >- 'j in nat } -->
+   sequent { <H>; x: ('j +@ 1 = 0 in nat); <J['x]> >- 'C['x] }
+
+interactive nat_plus_one_eq_nat_plus_one_elim {| elim [] |} 'H :
+   [wf] sequent { <H>; <J[it]> >- 'i in nat } -->
+   [wf] sequent { <H>; <J[it]> >- 'j in nat } -->
+   sequent { <H>; 'i = 'j in nat; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: ('i +@ 1 = 'j +@ 1 in nat); <J['x]> >- 'C['x] }
 
 (*
  * -*-

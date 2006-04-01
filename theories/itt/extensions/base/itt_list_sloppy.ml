@@ -6,7 +6,7 @@ doc <:doc<
    ----------------------------------------------------------------
 
    @begin[license]
-   Copyright (C) 2005 Mojave Group, Caltech
+   Copyright (C) 2005-2006 Mojave Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -45,19 +45,9 @@ open Itt_equal
 (*
  * Some arithmetic helper rules.
  *)
-interactive nat_plus_one_eq_zero_elim {| elim [] |} 'H :
-   [wf] sequent { <H>; x: ('j +@ 1 = 0 in nat); <J['x]> >- 'j in nat } -->
-   sequent { <H>; x: ('j +@ 1 = 0 in nat); <J['x]> >- 'C['x] }
-
 interactive one_eq_nat_plus_two_elim {| elim [] |} 'H :
    [wf] sequent { <H>; x: (1 = 'j +@ 2 in nat); <J['x]> >- 'j in nat } -->
    sequent { <H>; x: (1 = 'j +@ 2 in nat); <J['x]> >- 'C['x] }
-
-interactive nat_plus_one_eq_nat_plus_one_elim {| elim [] |} 'H :
-   [wf] sequent { <H>; x: ('i +@ 1 = 'j +@ 1 in nat); <J['x]> >- 'i in nat } -->
-   [wf] sequent { <H>; x: ('i +@ 1 = 'j +@ 1 in nat); <J['x]> >- 'j in nat } -->
-   sequent { <H>; x: 'i = 'j in nat; <J['x]> >- 'C['x] } -->
-   sequent { <H>; x: ('i +@ 1 = 'j +@ 1 in nat); <J['x]> >- 'C['x] }
 
 interactive nat_plus_one_eq_nat_plus_two_intro {| intro [] |} :
    [wf] sequent { <H> >- 'j in nat } -->

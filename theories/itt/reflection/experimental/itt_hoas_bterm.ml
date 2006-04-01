@@ -158,6 +158,10 @@ interactive bterm_univ  {| intro[] |} :
 interactive  bterm_wf {| intro [] |}:
    sequent{ <H> >- BTerm Type }
 
+(* Optimization *)
+interactive  nil_in_list_bterm {| intro [] |}:
+   sequent{ <H> >- nil in list{BTerm} }
+
 interactive  bdepth_wf  {| intro [] |}:
    [wf] sequent{ <H> >- 't in BTerm } -->
    sequent{ <H> >- bdepth{'t} in nat }

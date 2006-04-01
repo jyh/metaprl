@@ -231,6 +231,10 @@ prim op_constant {| intro [] |} :
    sequent { <H> >- operator[op:op] in Operator }
    = it
 
+(* Optimization *)
+interactive shape_const_nat_list {| intro [] |} :
+   sequent { <H> >- shape{operator[op:op]} in list{nat} }
+
 (* private *) prim_rw bterm_shape :
    shape{operator[op:op]} <--> list_of_numlist{Base_operator!shape[op:op]}
 

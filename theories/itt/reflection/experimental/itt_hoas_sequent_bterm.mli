@@ -4,7 +4,7 @@
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2005-2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,15 +28,24 @@ extends Itt_hoas_sequent
 
 open Basic_tactics
 
+declare SequentRelax{'d}
+
 (*
  * Convert the sequent triple into a BTerm.
  *)
-declare sequent_bterm{'s}
+declare sequent_bterm{'d; 's}
 
 (*
  * The type of BTerms that represent sequents.
  *)
-declare const BSequent
+declare BSequent{'d}
+
+(*
+ * Common abbreviations
+ *)
+define const iform unfold_sequent_relax_zero: SequentRelax <--> SequentRelax{0}
+define iform unfold_sequent_bterm_zero: sequent_bterm{'s} <--> sequent_bterm{0; 's}
+define const iform unfold_BSequent_zero: BSequent <--> BSequent{0}
 
 (*
  * Relaxed types.
@@ -55,12 +64,9 @@ declare is_sequent_bterm{'e}
 topval fold_is_sequent_bterm_core : conv
 topval fold_sequent_of_bterm_core : conv
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

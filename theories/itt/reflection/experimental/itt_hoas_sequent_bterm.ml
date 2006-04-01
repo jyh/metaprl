@@ -21,8 +21,9 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
+   Modified by: Alexei Kopylov @email{kopylov@cs.caltech.edu}
    @end[license]
 
    @parents
@@ -50,8 +51,13 @@ define unfold_CVarRelax : CVarRelax{'d} <--> <:xterm<
    BindTriangle{d}
 >>
 
+(*
 define const unfold_SequentRelax : SequentRelax <--> <:xterm<
    Bind{0} * Prod hyps: CVarRelax{0} * Bind{length{hyps}}
+>>
+*)
+define unfold_SequentRelax : SequentRelax{'d} <--> <:xterm<
+   Bind{d} * Prod hyps: CVarRelax{d} * Bind{length{hyps} +@ 'd}
 >>
 
 (************************************************************************
@@ -73,9 +79,9 @@ define unfold_sequent_bterm_core : sequent_bterm{'d; 'hyps; 'concl} <--> <:xterm
        u, v, g. lambda{d. mk_bterm{d; $seq_hyp{h; x. r}; [u; g (d +@ 1)]}}} d
 >>
 
-define unfold_sequent_bterm : sequent_bterm{'s} <--> <:xterm<
+define unfold_sequent_bterm : sequent_bterm{'d; 's} <--> <:xterm<
    dest_sequent{s; arg, hyps, concl.
-      $`seq_arg{arg; $,sequent_bterm{0; hyps; concl}}}
+      $'[d] seq_arg{arg; $,sequent_bterm{d; hyps; concl}}}
 >>
 
 (************************************************************************
@@ -94,13 +100,14 @@ interactive cvar_relax_is_list {| nth_hyp |} 'H : <:xrule<
 >>
 
 interactive sequent_relax_wf {| intro [] |} : <:xrule<
-   <H> >- SequentRelax Type
+   "wf" : <H> >- d in nat -->
+   <H> >- SequentRelax{d} Type
 >>
 
 interactive sequent_relax_elim {| elim [] |} 'H : <:xrule<
-   <H>; arg: Bind{0}; hyps: CVarRelax{0}; concl: Bind{length{hyps}};
+   <H>; arg: Bind{d}; hyps: CVarRelax{d}; concl: Bind{length{hyps} +@ d};
       <J["sequent"{arg; hyps; concl}]> >- C["sequent"{arg; hyps; concl}] -->
-   <H>; x: SequentRelax; <J[x]> >- C[x]
+   <H>; x: SequentRelax{d}; <J[x]> >- C[x]
 >>
 
 interactive cvar_is_cvar_relax : <:xrule<
@@ -126,6 +133,16 @@ interactive cvar_is_bind_list {| nth_hyp |} 'H : <:xrule<
    <H>; l: CVar{n}; <J[l]> >- l in list{Bind{n}}
 >>
 
+interactive sequent_relax_subtype {| intro [] |} :
+   ["wf"] sequent{ <H> >- 'd in nat} -->
+   sequent{ <H> >- Sequent{'d} subtype SequentRelax{'d} }
+
+interactive sequentRelax_is_sequent {| intro[AutoMustComplete] |} : <:xrule<
+   "wf" : <H> >- d in nat -->
+   <H> >- s in Sequent{d} -->
+   <H> >- s in SequentRelax{d}
+>>
+
 (************************************************************************
  * Rewrites.
  *)
@@ -145,9 +162,9 @@ interactive_rw reduce_sequent_bterm_core_cons {| reduce |} : <:xrewrite<
 >>
 
 interactive_rw reduce_sequent_bterm_sequent {| reduce |} : <:xrewrite<
-   sequent_bterm{"sequent"{arg; hyps; concl}}
+   sequent_bterm{d; "sequent"{arg; hyps; concl}}
    <-->
-   $`seq_arg{arg; $,sequent_bterm{0; hyps; concl}}
+   $'[d] seq_arg{arg; $,sequent_bterm{d; hyps; concl}}
 >>
 
 (************************************************************************
@@ -184,23 +201,27 @@ interactive sequent_bterm_core_relax_wf2 {| intro [] |} : <:xrule<
 >>
 
 interactive sequent_bterm_wf1 {| intro [] |} : <:xrule<
-   "wf" : <H> >- s in Sequent -->
-   <H> >- sequent_bterm{s} in BTerm{0}
+   "wf" : <H> >- s in Sequent{'d} -->
+   "wf" : <H> >- d in nat -->
+   <H> >- sequent_bterm{d; s} in BTerm{d}
 >>
 
 interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
-   "wf" : <H> >- s in Sequent -->
-   <H> >- sequent_bterm{s} in BTerm
+   "wf" : <H> >- s in Sequent{'d}-->
+   "wf" : <H> >- d in nat -->
+   <H> >- sequent_bterm{d; s} in BTerm
 >>
 
 interactive sequent_bterm_equal1 {| intro [] |} : <:xrule<
-   "wf" : <H> >- s1 = s2 in Sequent -->
-   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BTerm{0}
+   "wf" : <H> >- d1 = d2 in nat -->
+   "wf" : <H> >- s1 = s2 in Sequent{'d1} -->
+   <H> >- sequent_bterm{d1; s1} = sequent_bterm{d2; s2} in BTerm{d1}
 >>
 
 interactive sequent_bterm_equal2 {| intro [] |} : <:xrule<
-   "wf" : <H> >- s1 = s2 in Sequent -->
-   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BTerm
+   "wf" : <H> >- d1 = d2 in nat -->
+   "wf" : <H> >- s1 = s2 in Sequent{'d1} -->
+   <H> >- sequent_bterm{d1; s1} = sequent_bterm{d2; s2} in BTerm
 >>
 
 (************************************************************************
@@ -399,8 +420,9 @@ interactive sequent_bterm_core_is_bsequent_core {| intro [] |} : <:xrule<
 >>
 
 interactive sequent_bterm_is_bsequent {| intro [] |} : <:xrule<
-   "wf" : <H> >- s in SequentRelax -->
-   <H> >- "assert"{is_sequent_bterm{sequent_bterm{s}}}
+   "wf" : <H> >- d in nat -->
+   "wf" : <H> >- s in SequentRelax{d} -->
+   <H> >- "assert"{is_sequent_bterm{sequent_bterm{d;s}}}
 >>
 
 interactive_rw reduce_sequent_of_bterm_core_inverse : <:xrewrite<
@@ -414,7 +436,7 @@ interactive_rw reduce_sequent_of_bterm_core_inverse : <:xrewrite<
 
 interactive_rw reduce_sequent_of_bterm_inverse : <:xrewrite<
    s in SequentRelax -->
-   sequent_of_bterm{sequent_bterm{s}}
+   sequent_of_bterm{sequent_bterm{0; s}}
    <-->
    s
 >>
@@ -488,46 +510,55 @@ interactive bsequent_core_depth_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
 (************************************************
  * BSequent.
  *)
-define const unfold_BSequent : BSequent <--> <:xterm<
-   { e : BTerm{0} | "assert"{is_sequent_bterm{e}} }
+define unfold_BSequent : BSequent{'d} <--> <:xterm<
+   { e : BTerm{d} | "assert"{is_sequent_bterm{e}} }
 >>
 
 interactive bsequent_type_wf {| intro [] |} : <:xrule<
-   <H> >- BSequent Type
+   "wf" : <H> >- d in nat -->
+   <H> >- BSequent{'d} Type
 >>
 
-interactive bsequent_is_bterm1 {| nth_hyp |} 'H :
-   sequent { <H>; t: BSequent; <J['t]> >- 't in BTerm }
+interactive bsequent_is_bterm1 {| elim[] |} 'H :
+   [wf] sequent { <H>; t: BSequent{'d}; <J['t]> >- 'd in nat } -->
+   sequent { <H>; t: BSequent{'d}; <J['t]> >- 't in BTerm }
 
-interactive bsequent_is_bterm2 {| nth_hyp |} :
-   sequent { <H> >- 't in BSequent } -->
+interactive bsequent_is_bterm2 'd :
+   [wf] sequent { <H> >- 'd in nat } -->
+   sequent { <H> >- 't in BSequent{'d} } -->
    sequent { <H> >- 't in BTerm }
 
-interactive bsequent_is_bterm_list1 {| nth_hyp |} 'H :
-   sequent { <H>; t: list{BSequent}; <J['t]> >- 't in list{BTerm} }
+interactive bsequent_is_bterm_list1 {| elim[] |} 'H :
+   [wf] sequent { <H>; t: list{BSequent{'d}}; <J['t]> >- 'd in nat } -->
+   sequent { <H>; t: list{BSequent{'d}}; <J['t]> >- 't in list{BTerm} }
 
-interactive bsequent_is_bterm_list2 {| nth_hyp |} :
-   sequent { <H> >- 't in list{BSequent} } -->
+interactive bsequent_is_bterm_list2 'd :
+   [wf] sequent { <H> >- 'd in nat } -->
+   sequent { <H> >- 't in list{BSequent{'d}} } -->
    sequent { <H> >- 't in list{BTerm} }
 
 interactive bsequent_sqsimple {| intro []; sqsimple |} : <:xrule<
-   <H> >- sqsimple{BSequent}
+   <H> >- d in nat  -->
+   <H> >- sqsimple{BSequent{d}}
 >>
 
 interactive sequent_bterm_bsequent_wf {| intro [] |} : <:xrule<
-   "wf" : <H> >- s in Sequent -->
-   <H> >- sequent_bterm{s} in BSequent
+   "wf" : <H> >- d in nat -->
+   "wf" : <H> >- s in Sequent{'d} -->
+   <H> >- sequent_bterm{d; s} in BSequent{d}
 >>
 
 interactive sequent_bterm_bsequent_equal {| intro [] |} : <:xrule<
-   "wf" : <H> >- s1 = s2 in Sequent -->
-   <H> >- sequent_bterm{s1} = sequent_bterm{s2} in BSequent
+   "wf" : <H> >- d1 = d2 in nat -->
+   "wf" : <H> >- s1 = s2 in Sequent{'d1} -->
+   <H> >- sequent_bterm{d1; s1} = sequent_bterm{d2; s2} in BSequent{d1}
 >>
 
 interactive bsequent_type_elim {| elim [] |} 'H : <:xrule<
-   <H>; arg: BTerm{0}; rest: BSequentCore{0}; <J[mk_bterm{0; $seq_arg{arg; rest}; [arg; rest]}]> >-
-      C[mk_bterm{0; $seq_arg{arg; rest}; [arg; rest]}] -->
-   <H>; x: BSequent; <J[x]> >- C[x]
+   "wf" : <H>; x: BSequent{d}; <J[x]> >- d in nat -->
+   <H>; arg: BTerm{d}; rest: BSequentCore{d}; <J[mk_bterm{d; $seq_arg{arg; rest}; [arg; rest]}]> >-
+      C[mk_bterm{d; $seq_arg{arg; rest}; [arg; rest]}] -->
+   <H>; x: BSequent{d}; <J[x]> >- C[x]
 >>
 
 (************************************************************************
@@ -591,6 +622,12 @@ interactive bsequent_bterm_forward 'H : <:xrule<
 let fold_is_sequent_bterm_core = makeFoldC <:xterm< is_sequent_bterm_core{e} >> unfold_is_sequent_bterm_core
 let fold_sequent_of_bterm_core = makeFoldC <:xterm< sequent_of_bterm_core{e} >> unfold_sequent_of_bterm_core
 
+(************************************************************************
+ * Common abbreviations
+ *)
+define const iform unfold_sequent_relax_zero: SequentRelax <--> SequentRelax{0}
+define iform unfold_sequent_bterm_zero: sequent_bterm{'s} <--> sequent_bterm{0; 's}
+define const iform unfold_BSequent_zero: BSequent <--> BSequent{0}
 (*
  * -*-
  * Local Variables:

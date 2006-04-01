@@ -86,13 +86,13 @@ define unfold_bhyp_depths : bhyp_depths{'d; 'l} <-->
 doc <:doc<
    The << is_sequent{'d; 's} >> predicate tests whether a sequent << 's >> is well-formed
    with respect to binding depths.
-   The argument must have depth << 0 >>, the hypotheses must have binding depths
+   The argument must have depth << 'd >>, the hypotheses must have binding depths
    starting with << 'd >>, and the conclusion must have binding depth
    << length{'hyps} +@ 'd >>.
 >>
 define unfold_is_sequent_depth : is_sequent{'d; 's} <-->
    spread{'s; arg, rest. spread{'rest; hyps, concl.
-      bdepth{'arg} = 0 in nat
+      bdepth{'arg} = 'd in nat
       & hyp_depths{'d; 'hyps}
       & bdepth{'concl} = length{'hyps} +@ 'd in nat}}
 
@@ -320,7 +320,7 @@ interactive_rw reduce_is_sequent {| reduce |} : <:xrewrite<
 interactive_rw reduce_is_sequent2 {| reduce |} : <:xrewrite<
    is_sequent{d;"sequent"{arg; hyps; concl}}
    <-->
-   bdepth{arg} = 0 in "nat"
+   bdepth{arg} = d in "nat"
    && hyp_depths{d; hyps}
    && bdepth{concl} = length{hyps} +@ d in "nat"
 >>
@@ -445,7 +445,7 @@ interactive sequent_depth_elim :
 
 interactive sequent_depth_mem {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
-   "wf" : <H> >- arg IN BTerm{0} -->
+   "wf" : <H> >- arg IN BTerm{d} -->
    "wf" : <H> >- hyps IN CVar{d} -->
    "wf" : <H> >- concl IN BTerm{length{hyps} +@ d} -->
    <H> >- "sequent"{arg; hyps; concl} IN Sequent{d}

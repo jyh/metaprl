@@ -504,6 +504,25 @@ let provableRuleT t unfold =
    thenMT proofStepWitnessT
    thenT proofRuleWFT
 
+(*
+ * Some properties of SubLogic.
+ *)
+interactive provable_sequent_sub 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 in Logic -->
+   "wf" : <H> >- logic2 in Logic -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- ProvableSequent{logic1; seq} -->
+   <H> >- ProvableSequent{logic2; seq}
+>>
+
+interactive is_judgment_sub 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 in Logic -->
+   "wf" : <H> >- logic2 in Logic -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- IsJudgment{logic1; seq} -->
+   <H> >- IsJudgment{logic2; seq}
+>>
+
 (************************************************************************
  * Display.
  *)

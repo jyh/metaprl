@@ -600,6 +600,14 @@ interactive derivation_sub 'logic1 : <:xrule<
    <H> >- e IN Derivation{logic2}
 >>
 
+interactive provable_sub 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 in Logic -->
+   "wf" : <H> >- logic2 in Logic -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- Provable{logic1; seq} -->
+   <H> >- Provable{logic2; seq}
+>>
+
 doc docoff
 
 (************************************************************************

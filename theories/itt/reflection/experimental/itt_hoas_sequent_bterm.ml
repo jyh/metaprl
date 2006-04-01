@@ -537,6 +537,13 @@ interactive bsequent_is_bterm_list2 'd :
    sequent { <H> >- 't in list{BSequent{'d}} } -->
    sequent { <H> >- 't in list{BTerm} }
 
+interactive bsequent_is_bterm0 {| nth_hyp; elim[] |} 'H :
+   sequent { <H>; t: BSequent; <J['t]> >- 't in BTerm }
+
+interactive bsequent_is_bterm_list0 {| nth_hyp; elim[] |} 'H :
+   sequent { <H>; t: list{BSequent}; <J['t]> >- 't in list{BTerm} }
+
+
 interactive bsequent_sqsimple {| intro []; sqsimple |} : <:xrule<
    <H> >- d in nat  -->
    <H> >- sqsimple{BSequent{d}}

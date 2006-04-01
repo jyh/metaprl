@@ -194,7 +194,7 @@ interactive mk_bterm_wf_forward3 {| forward [ForwardPrec forward_trivial_prec] |
    <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- C[x]
 >>
 
-interactive mk_bterm_wf_forward4 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+interactive mk_bterm_wf_forward4 {| forward |} 'H : <:xrule<
    "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- d1 in nat -->
    "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- d2 in nat -->
    "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- o1 in Operator -->
@@ -211,7 +211,7 @@ interactive mk_bterm_wf_forward4 {| forward [ForwardPrec forward_trivial_prec] |
    <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- C[x]
 >>
 
-interactive mk_bterm_wf_forward5 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
+interactive mk_bterm_wf_forward5 {| forward |} 'H : <:xrule<
    "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- d1 in nat -->
    "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- d2 in nat -->
    "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- o1 in Operator -->

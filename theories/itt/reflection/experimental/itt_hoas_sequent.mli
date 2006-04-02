@@ -37,7 +37,6 @@ declare sequent_hyps{'s}
 declare sequent_concl{'s}
 declare dest_sequent{'s; arg, hyps, concl. 'e['arg; 'hyps; 'concl]}
 
-declare const Sequent
 declare beq_sequent{'s1; 's2}
 declare beq_sequent_list{'l1; 's2}
 
@@ -45,6 +44,9 @@ declare beq_sequent_list{'l1; 's2}
  * A sequent with depth 'd.
  *)
 declare Sequent{'d}
+declare is_sequent{'d;'e}
+
+declare const Sequent
 declare is_sequent{'e}
 
 (*
@@ -66,11 +68,15 @@ topval fold_hyp_depths : conv
 topval fold_bhyp_depths : conv
 topval fold_beq_sequent_list : conv
 
+topval unfold_is_sequent : conv
+topval unfold_Sequent : conv
+
 (*
  * Tactics.
  *)
 val is_beq_sequent_term : term -> bool
 val dest_beq_sequent_term : term -> term * term
+
 
 (*!
  * @docoff

@@ -25,6 +25,7 @@ doc <:doc<
 
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
    Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
+   Modified by: Alexei Kopylov @email{kopylov@cs.caltech.edu}
    @end[license]
 
    @parents
@@ -96,11 +97,12 @@ define unfold_is_sequent_depth : is_sequent{'d; 's} <-->
       & hyp_depths{'d; 'hyps}
       & bdepth{'concl} = length{'hyps} +@ 'd in nat}}
 
-define unfold_is_sequent : is_sequent{'s} <-->
-   spread{'s; arg, rest. spread{'rest; hyps, concl.
-      bdepth{'arg} = 0 in nat
-      & hyp_depths{0; 'hyps}
-      & bdepth{'concl} = length{'hyps} in nat}}
+define unfold_is_sequent_0 : is_sequent{'s} <--> is_sequent{0; 's}
+
+let unfold_is_sequent = unfold_is_sequent_0 thenC unfold_is_sequent_depth
+
+interactive_rw fold_is_sequent_0 {| reduce |} :
+      is_sequent{0;'s} <--> is_sequent{'s}
 
 doc <:doc<
    The term << Sequent >> represents the type of sequents.
@@ -108,8 +110,12 @@ doc <:doc<
 define unfold_Sequent_depth : Sequent{'d} <-->
    { s: BTerm * list{BTerm} * BTerm | is_sequent{'d; 's} }
 
-define const unfold_Sequent : Sequent <-->
-   { s: BTerm * list{BTerm} * BTerm | is_sequent{'s} }
+define const unfold_Sequent_0: Sequent <--> Sequent{0}
+
+let unfold_Sequent = unfold_Sequent_0 thenC unfold_Sequent_depth
+
+interactive_rw fold_Sequent_0 {| reduce |} :
+      Sequent{0} <--> Sequent
 
 doc <:doc<
    The << CVar{'d} >> represents a sequent context at binding depth << 'd >>.
@@ -314,7 +320,7 @@ interactive_rw reduce_is_sequent {| reduce |} : <:xrewrite<
    <-->
    bdepth{arg} = 0 in "nat"
    && hyp_depths{0; hyps}
-   && bdepth{concl} = length{hyps} in "nat"
+   && bdepth{concl} = length{hyps} +@ 0 in "nat"
 >>
 
 interactive_rw reduce_is_sequent2 {| reduce |} : <:xrewrite<
@@ -688,6 +694,13 @@ let reduce_bdepth_context_nthC = funC (fun e ->
 
 let resource reduce +=
    [<:xterm< bdepth{nth{l; i}} >>, wrap_reduce reduce_bdepth_context_nthC]
+
+(************************************************************************
+ * Common abbreviations
+define const iform unfold_sequent_iform: Sequent <--> Sequent{0}
+define iform unfold_is_sequent_iform: is_sequent{'s} <--> is_sequent{0; 's}
+ *)
+
 
 (*!
  * @docoff

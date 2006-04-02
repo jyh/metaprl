@@ -754,8 +754,13 @@ interactive bterm_depth_eq {| nth_hyp |} :
    sequent{ <H> >- 't in BTerm{'d} } -->
    sequent{ <H> >- 'd = bdepth{'t} in int }
 
+interactive bterm_depth_ge {| nth_hyp |} :
+   sequent{ <H> >- 't in BTerm{'d} } -->
+   sequent{ <H> >- bdepth{'t} >= 'd }
+
 let resource nth_hyp +=
-   <<BTerm{'d}>>, << 'd = bdepth{!t} in int >>, wrap_nth_hyp_uncertain (fun i -> bterm_depth_eq thenT equalityAxiom i)
+   [<<BTerm{'d}>>, << 'd = bdepth{!t} in int >>, wrap_nth_hyp_uncertain (fun i -> bterm_depth_eq thenT equalityAxiom i);
+    <<BTerm{'d}>>, << bdepth{!t} >= 'd >>, wrap_nth_hyp_uncertain (fun i -> bterm_depth_ge thenT equalityAxiom i)]
 
 (************************************************************************
  * Terms.

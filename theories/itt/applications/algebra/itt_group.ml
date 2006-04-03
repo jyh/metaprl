@@ -254,8 +254,8 @@ doc <:doc<
      @end[enumerate]
 >>
 interactive id_judge {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   [wf] sequent { <H>; x: 'u *['G] 'u = 'u in 'G^car; <J['x]> >- 'G in group[i:l] } -->
-   sequent { <H>; x: 'u *['G] 'u = 'u in 'G^car; <J['x]>; y: 'u = 'G^"1" in 'G^car >- 'C['x] } -->
+   [wf] sequent { <H>; 'u *['G] 'u = 'u in 'G^car; <J[it]> >- 'G in group[i:l] } -->
+   sequent { <H>; 'u *['G] 'u = 'u in 'G^car; <J[it]>; y: 'u = 'G^"1" in 'G^car >- 'C[it] } -->
    sequent { <H>; x: 'u *['G] 'u = 'u in 'G^car; <J['x]> >- 'C['x] }
 
 interactive right_inv {| intro [intro_typeinf <<'G>>] |} group[i:l] :
@@ -294,18 +294,18 @@ doc <:doc<
 >>
 (* Cancellation: a * b = a * c => b = c *)
 interactive cancel_left {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'G in group[i:l] } -->
-   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'u in 'G^car } -->
-   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'v in 'G^car } -->
-   [wf] sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'w in 'G^car } -->
+   [wf] sequent { <H>; <J[it]> >- 'G in group[i:l] } -->
+   [wf] sequent { <H>; <J[it]> >- 'u in 'G^car } -->
+   [wf] sequent { <H>; <J[it]> >- 'v in 'G^car } -->
+   [wf] sequent { <H>; <J[it]> >- 'w in 'G^car } -->
    sequent { <H>; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; <J['x]> >- 'v = 'w in 'G^car }
 
 (* Cancellation: b * a = c * a => b = c *)
 interactive cancel_right {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
-   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'G in group[i:l] } -->
-   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'u in 'G^car } -->
-   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'v in 'G^car } -->
-   [wf] sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'w in 'G^car } -->
+   [wf] sequent { <H>; <J[it]> >- 'G in group[i:l] } -->
+   [wf] sequent { <H>; <J[it]> >- 'u in 'G^car } -->
+   [wf] sequent { <H>; <J[it]> >- 'v in 'G^car } -->
+   [wf] sequent { <H>; <J[it]> >- 'w in 'G^car } -->
    sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'v = 'w in 'G^car }
 
 doc <:doc<

@@ -46,7 +46,7 @@ open Itt_equal
  * Some arithmetic helper rules.
  *)
 interactive one_eq_nat_plus_two_elim {| elim [] |} 'H :
-   [wf] sequent { <H>; x: (1 = 'j +@ 2 in nat); <J['x]> >- 'j in nat } -->
+   [wf] sequent { <H>; x: (1 = 'j +@ 2 in nat); <J[it]> >- 'j in nat } -->
    sequent { <H>; x: (1 = 'j +@ 2 in nat); <J['x]> >- 'C['x] }
 
 interactive nat_plus_one_eq_nat_plus_two_intro {| intro [] |} :

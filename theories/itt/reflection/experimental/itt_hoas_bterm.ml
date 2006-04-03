@@ -556,17 +556,17 @@ interactive var_squiggle  :
    sequent { <H> >- 'x ~ 'y }
 
 interactive var_neq_bterm 'H :
-   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'l in nat } -->
-   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'r in nat } -->
-   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'depth in nat } -->
-   [wf] sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'op in Operator } -->
+   [wf] sequent { <H>; <J[it]> >- 'l in nat } -->
+   [wf] sequent { <H>; <J[it]> >- 'r in nat } -->
+   [wf] sequent { <H>; <J[it]> >- 'depth in nat } -->
+   [wf] sequent { <H>; <J[it]> >- 'op in Operator } -->
    sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'C['u] }
 
 interactive bterm_neq_var 'H :
-   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'l in nat } -->
-   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'r in nat } -->
-   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'depth in nat } -->
-   [wf] sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'op in Operator } -->
+   [wf] sequent { <H>; <J[it]> >- 'l in nat } -->
+   [wf] sequent { <H>; <J[it]> >- 'r in nat } -->
+   [wf] sequent { <H>; <J[it]> >- 'depth in nat } -->
+   [wf] sequent { <H>; <J[it]> >- 'op in Operator } -->
    sequent { <H>; u: mk_bterm{'depth; 'op; 'subterms} = var{'l; 'r} in BTerm; <J['u]> >- 'C['u] }
 
 interactive subs_equal 'depth 'op :

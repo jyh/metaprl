@@ -310,7 +310,7 @@ prim axiomMember {| intro [] |} :
  *
  * H, x: a = b in T; J[it] >- C[it]
  *)
-prim equalityElimination {| elim [] |} 'H :
+prim equalityElimination 'H :
    ('t['x] : sequent { <H>; x: 'a = 'b in 'T; <J[it]> >- 'C[it] }) -->
    sequent { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] } =
    't[it]
@@ -319,6 +319,33 @@ prim type_axiomMember {| intro [] |} :
    sequent { <H> >- 'T Type } -->
    sequent { <H> >- it in ('T Type) } =
    it
+
+doc docoff
+
+let eqElimT =
+   let err = RefineError("Itt_elim.eqElimT", StringError "not applicable") in
+   let rec is_var_free_hyps hyps len v i =
+      i < len &&
+      match SeqHyp.get hyps i with
+         Hypothesis (v', t) ->
+            is_var_free v t || (not (Lm_symbol.eq v v') && is_var_free_hyps hyps len v (i + 1))
+       | Context(_, _, ts) ->
+            List.exists (is_var_free v) ts || is_var_free_hyps hyps len v (i + 1)
+   in
+      argfunT (fun i p ->
+         let i = get_pos_hyp_num p i in
+         let seq = explode_sequent_arg p in
+         let hyps = seq.sequent_hyps in
+            match SeqHyp.get hyps (i - 1) with
+               Context _ -> raise err
+             | Hypothesis (v, _ ) ->
+                  if is_var_free v seq.sequent_concl || is_var_free_hyps hyps (SeqHyp.length hyps) v i then
+                     equalityElimination i
+                  else
+                     raise err)
+
+let resource elim +=
+   << 'a = 'b in 'T >>, wrap_elim_auto_ok eqElimT
 
 doc <:doc<
    @modsubsection{Truth implies typehood}

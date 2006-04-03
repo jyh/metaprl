@@ -213,12 +213,10 @@ interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
    [main]      sequent { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
 
-
 interactive applyFun 'f 'B 'H :
-   [wf] sequent { <H>; u:'a = 'b in 'A; <J['u]> >- 'f in 'A -> 'B} -->
-   sequent { <H>; u:'a = 'b in 'A; 'f('a)='f('b) in 'B; <J['u]> >- 'C['u]} -->
+   [wf] sequent { <H>; 'a = 'b in 'A; <J[it]> >- 'f in 'A -> 'B} -->
+   sequent { <H>; 'a = 'b in 'A; 'f('a)='f('b) in 'B; <J[it]> >- 'C[it]} -->
    sequent { <H>; u:'a = 'b in 'A; <J['u]> >- 'C['u]}
-
 
 doc <:doc<
    Elimination rule for equalities:

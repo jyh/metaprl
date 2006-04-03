@@ -4,7 +4,7 @@
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2005-2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
  * @end[license]
  *)
 extends Itt_hoas_sequent
@@ -44,12 +44,12 @@ val dest_let_cvar_term : term -> string * term * term * term * var * term
 val is_let_sovar_term : term -> bool
 val dest_let_sovar_term : term -> string * term * term * term * var * term
 
-(*!
- * @docoff
- *
+val let_cvar_elim : int -> tactic
+val let_sovar_elim : int -> tactic
+
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

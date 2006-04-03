@@ -42,6 +42,10 @@ extends Itt_hoas_proof_ind
 doc docoff
 
 open Basic_tactics
+open Itt_struct
+open Itt_hoas_bterm_wf
+open Itt_hoas_proof
+open Itt_hoas_sequent_proof_step
 open Itt_hoas_proof_ind
 
 (*
@@ -62,8 +66,23 @@ let elimSimpleStepT unfold =
    ])
    thenT autoT
 
-let elimProofCheckT =
-   dT 2
+let rec var_elimT i p =
+   (* XXX: TODO: use "p" instead of guessing with orelseT *)
+   (let_cvar_elim i thenMT rw reduceC (i + 2) thenMT argfunT var_elimT (i + 2))
+   orelseT
+   (let_sovar_elim i thenMT rw reduceC (i + 1) thenMT argfunT var_elimT (i + 1))
+   orelseT
+   idT
+
+let elimProofCheckT unfold =
+   dupHypT 2
+   thenT rw (addrC [Subterm 1] unfold) 4
+   thenT proofCheck_elim 4 thenT thinT 4 thenT thinT 5
+   thenT simpleReduceT
+   thenT argfunT var_elimT 4
+   thenMT dT (-4) thenMT dT (-4) thenMT dT (-5)
+   thenMT rwcAll reduceC 1
+   thenT proofRuleWFT
 
 (*
  * -*-

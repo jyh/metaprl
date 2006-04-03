@@ -3416,7 +3416,7 @@ T	t1981	o1311 b4 b1973 b1981 b4
 B	b1982	t1981
 T	t1982	o768 b1982
 B	b1983	t1982
-P	p714	String elim_check_term_TyTop
+P	p714	String foo_term_TyTop
 O	o714	rule p714
 P	p1330	String elim_pmn_core_terms
 O	o1330	rule p1330
@@ -3512,7 +3512,7 @@ T	t2002	o714 b1985 b1992 b2002 b735
 B	b2003	t2002
 T	t2003	o1 b2003
 B	b2004	t2003
-P	p737	String elim_check_term_TyFun
+P	p737	String foo_term_TyFun
 O	o737	rule p737
 T	t738	o715 b500 b715 b716 b717
 H	h738	x t738
@@ -3555,7 +3555,7 @@ T	t2019	o737 b1985 b2011 b2019 b735
 B	b2020	t2019
 T	t2020	o1 b2020
 B	b2021	t2020
-P	p753	String elim_check_term_TyAll
+P	p753	String foo_term_TyAll
 O	o753	rule p753
 T	t753	o715 b564 b715 b716 b717
 H	h753	x t753
@@ -3601,7 +3601,7 @@ T	t2037	o753 b1985 b2030 b2037 b735
 B	b2038	t2037
 T	t2038	o1 b2038
 B	b2039	t2038
-P	p772	String elim_check_term_Lambda
+P	p772	String foo_term_Lambda
 O	o772	rule p772
 T	t772	o715 b628 b715 b716 b717
 H	h772	x t772
@@ -3649,7 +3649,7 @@ T	t2056	o772 b1985 b2049 b2056 b735
 B	b2057	t2056
 T	t2057	o1 b2057
 B	b2058	t2057
-P	p789	String elim_check_term_Apply
+P	p789	String foo_term_Apply
 O	o789	rule p789
 T	t789	o715 b683 b715 b716 b717
 H	h789	x t789
@@ -3685,7 +3685,7 @@ T	t2070	o789 b1985 b2063 b2070 b735
 B	b2071	t2070
 T	t2071	o1 b2071
 B	b2072	t2071
-P	p805	String elim_check_term_TyLambda
+P	p805	String foo_term_TyLambda
 O	o805	rule p805
 T	t805	o715 b733 b715 b716 b717
 H	h805	x t805
@@ -3721,7 +3721,7 @@ T	t2084	o805 b1985 b2077 b2084 b735
 B	b2085	t2084
 T	t2085	o1 b2085
 B	b2086	t2085
-P	p824	String elim_check_term_TyApply
+P	p824	String foo_term_TyApply
 O	o824	rule p824
 T	t824	o715 b776 b715 b716 b717
 H	h824	x t824

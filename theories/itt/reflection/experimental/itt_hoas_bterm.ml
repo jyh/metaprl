@@ -555,14 +555,14 @@ interactive var_squiggle  :
    [aux] sequent { <H> >- 'x = 'y in BTerm } -->
    sequent { <H> >- 'x ~ 'y }
 
-interactive var_neq_bterm 'H :
+interactive var_neq_bterm {| elim |} 'H :
    [wf] sequent { <H>; <J[it]> >- 'l in nat } -->
    [wf] sequent { <H>; <J[it]> >- 'r in nat } -->
    [wf] sequent { <H>; <J[it]> >- 'depth in nat } -->
    [wf] sequent { <H>; <J[it]> >- 'op in Operator } -->
    sequent { <H>; u: var{'l; 'r} = mk_bterm{'depth; 'op; 'subterms} in BTerm; <J['u]> >- 'C['u] }
 
-interactive bterm_neq_var 'H :
+interactive bterm_neq_var {| elim |} 'H :
    [wf] sequent { <H>; <J[it]> >- 'l in nat } -->
    [wf] sequent { <H>; <J[it]> >- 'r in nat } -->
    [wf] sequent { <H>; <J[it]> >- 'depth in nat } -->

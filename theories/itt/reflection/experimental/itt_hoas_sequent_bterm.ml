@@ -537,10 +537,10 @@ interactive bsequent_is_bterm_list2 'd :
    sequent { <H> >- 't in list{BSequent{'d}} } -->
    sequent { <H> >- 't in list{BTerm} }
 
-interactive bsequent_is_bterm0 {| nth_hyp; elim[] |} 'H :
+interactive bsequent_is_bterm0 {| nth_hyp |} 'H :
    sequent { <H>; t: BSequent; <J['t]> >- 't in BTerm }
 
-interactive bsequent_is_bterm_list0 {| nth_hyp; elim[] |} 'H :
+interactive bsequent_is_bterm_list0 {| nth_hyp |} 'H :
    sequent { <H>; t: list{BSequent}; <J['t]> >- 't in list{BTerm} }
 
 interactive bsequent_is_bterm3 {| nth_hyp |} :

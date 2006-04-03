@@ -419,11 +419,11 @@ doc <:doc<
    true, so we do the actual forward chaining on the @tt[bsequent] form.
 >>
 interactive vsequent_wf_forward {| forward |} 'H : <:xrule<
-   <H>; vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent; <K>;
+   <H>; <K[it]>;
       arg1 = arg2 in BTerm{0};
       vflatten{| <J1> |} = vflatten{| <J2> |} in CVar{length{vflatten{||}}};
-      C1 = C2 in BTerm{length{vflatten{| <J1> |}}} >- D -->
-   <H>; vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent; <K> >- D
+      C1 = C2 in BTerm{length{vflatten{| <J1> |}}} >- D[it] -->
+   <H>; x: vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent; <K[x]> >- D[x]
 >>
 
 (*
@@ -451,11 +451,11 @@ interactive bsequent_wf_forward2 'H : <:xrule<
  * Hyps forward-chaining.
  *)
 interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- n in nat -->
-   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- A in list{BTerm} -->
-   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- vflatten{| <J> |} in list{BTerm} -->
-   <H>; vflatten{| A; <J> |} in CVar{n}; <K>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C -->
-   <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- C
+   "wf" : <H>; <K[it]> >- n in nat -->
+   "wf" : <H>; <K[it]> >- A in list{BTerm} -->
+   "wf" : <H>; <K[it]> >- vflatten{| <J> |} in list{BTerm} -->
+   <H>; <K[it]>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C[it] -->
+   <H>; x: vflatten{| A; <J> |} in CVar{n}; <K[x]> >- C[x]
 >>
 
 interactive_rw reduce_vflatten_hyp_term {| reduce |} : <:xrewrite<

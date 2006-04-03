@@ -142,18 +142,18 @@ interactive subterms_forward_lemma 'n 'op : <:xrule<
 >>
 
 interactive mk_bterm_subterms_forward 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- d in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- op in Operator -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- subterms in list{Bind{d}} -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; subterms in list{BTerm} >- C[x] -->
+   "wf" : <H>; <J[it]> >- d in nat -->
+   "wf" : <H>; <J[it]> >- op in Operator -->
+   "wf" : <H>; <J[it]> >- subterms in list{Bind{d}} -->
+   <H>; <J[it]>; subterms in list{BTerm} >- C[it] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_wf_forward 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- d in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- op in Operator -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- subterms in list{Bind{d}} -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>; compatible_shapes{d; shape{op}; subterms} >- C[x] -->
+   "wf" : <H>; <J[it]> >- d in nat -->
+   "wf" : <H>; <J[it]> >- op in Operator -->
+   "wf" : <H>; <J[it]> >- subterms in list{Bind{d}} -->
+   <H>; <J[it]>; compatible_shapes{d; shape{op}; subterms} >- C[it] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
@@ -172,36 +172,36 @@ doc <:doc<
    just for efficiency.
 >>
 interactive mk_bterm_wf_forward2 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- d in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- op in Operator -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- subterms in list{Bind{d}} -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]>;
+   "wf" : <H>; <J[it]> >- d in nat -->
+   "wf" : <H>; <J[it]> >- op in Operator -->
+   "wf" : <H>; <J[it]> >- subterms in list{Bind{d}} -->
+   <H>; <J[it]>;
       subterms in list{BTerm};
       compatible_shapes{d; shape{op}; subterms}
-      >- C[x] -->
+      >- C[it] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_wf_forward3 {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- d in nat -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- op in Operator -->
-   "wf" : <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- subterms in list{Bind{d}} -->
-   <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]>;
+   "wf" : <H>; <J[it]> >- d in nat -->
+   "wf" : <H>; <J[it]> >- op in Operator -->
+   "wf" : <H>; <J[it]> >- subterms in list{Bind{d}} -->
+   <H>; <J[it]>;
       d = n in nat;
       subterms in list{BTerm};
       compatible_shapes{d; shape{op}; subterms}
-      >- C[x] -->
+      >- C[it] -->
    <H>; x: mk_bterm{d; op; subterms} in BTerm{n}; <J[x]> >- C[x]
 >>
 
 interactive mk_bterm_wf_forward4 {| forward |} 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- d1 in nat -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- d2 in nat -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- o1 in Operator -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- o2 in Operator -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- s1 in list{Bind{d1}} -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[x]> >- s2 in list{Bind{d2}} -->
-   <H>; mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm; <J[it]>;
+   "wf" : <H>; <J[it]> >- d1 in nat -->
+   "wf" : <H>; <J[it]> >- d2 in nat -->
+   "wf" : <H>; <J[it]> >- o1 in Operator -->
+   "wf" : <H>; <J[it]> >- o2 in Operator -->
+   "wf" : <H>; <J[it]> >- s1 in list{Bind{d1}} -->
+   "wf" : <H>; <J[it]> >- s2 in list{Bind{d2}} -->
+   <H>; <J[it]>;
       d1 = d2 in nat;
       o1 = o2 in Operator;
       s1 = s2 in list{BTerm};
@@ -212,13 +212,13 @@ interactive mk_bterm_wf_forward4 {| forward |} 'H : <:xrule<
 >>
 
 interactive mk_bterm_wf_forward5 {| forward |} 'H : <:xrule<
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- d1 in nat -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- d2 in nat -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- o1 in Operator -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- o2 in Operator -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- s1 in list{Bind{d1}} -->
-   "wf" : <H>; x: mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[x]> >- s2 in list{Bind{d2}} -->
-   <H>; mk_bterm{'d1; 'o1; 's1} = mk_bterm{'d2; 'o2; 's2} in BTerm{n}; <J[it]>;
+   "wf" : <H>; <J[it]> >- d1 in nat -->
+   "wf" : <H>; <J[it]> >- d2 in nat -->
+   "wf" : <H>; <J[it]> >- o1 in Operator -->
+   "wf" : <H>; <J[it]> >- o2 in Operator -->
+   "wf" : <H>; <J[it]> >- s1 in list{Bind{d1}} -->
+   "wf" : <H>; <J[it]> >- s2 in list{Bind{d2}} -->
+   <H>; <J[it]>;
       d1 = n in nat;
       d1 = d2 in nat;
       o1 = o2 in Operator;
@@ -232,12 +232,12 @@ interactive mk_bterm_wf_forward5 {| forward |} 'H : <:xrule<
 doc <:doc<
    Basic rules for forward chaining.
 >>
-interactive cons_wf_forward {| forward [] |} 'H : <:xrule<
-   <H>; x: cons{h; l} in list{t}; <J[x]>; h in t; l in list{t} >- C[x] -->
+interactive cons_wf_forward {| forward |} 'H : <:xrule<
+   <H>; <J[it]>; h in t; l in list{t} >- C[it] -->
    <H>; x: cons{h; l} in list{t}; <J[x]> >- C[x]
 >>
 
-interactive and_forward {| forward [] |} 'H : <:xrule<
+interactive and_forward {| forward [ForwardPost thinT] |} 'H : <:xrule<
    <H>; x: A && B; <J[x]>; A; B >- C[x] -->
    <H>; x: A && B; <J[x]> >- C[x]
 >>

@@ -717,17 +717,17 @@ interactive beq_bterm_list_elim {| elim [] |} 'H :
 doc <:doc<
    Simple rules for forward chaining.
 >>
-interactive beq_bterm_forward {| forward [] |} 'H :
-   [wf] sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J> >- 't1 in BTerm } -->
-   [wf] sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J> >- 't2 in BTerm } -->
-   sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J>; 't1 = 't2 in BTerm >- 'C } -->
-   sequent { <H>; "assert"{beq_bterm{'t1; 't2}}; <J> >- 'C }
+interactive beq_bterm_forward {| forward |} 'H :
+   [wf] sequent { <H>; <J[it]> >- 't1 in BTerm } -->
+   [wf] sequent { <H>; <J[it]> >- 't2 in BTerm } -->
+   sequent { <H>; <J[it]>; 't1 = 't2 in BTerm >- 'C[it] } -->
+   sequent { <H>; x: "assert"{beq_bterm{'t1; 't2}}; <J['x]> >- 'C['x] }
 
-interactive beq_bterm_list_forward {| forward [] |} 'H :
-   [wf] sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J> >- 't1 in list{BTerm} } -->
-   [wf] sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J> >- 't2 in list{BTerm} } -->
-   sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J>; 't1 = 't2 in list{BTerm} >- 'C } -->
-   sequent { <H>; "assert"{beq_bterm_list{'t1; 't2}}; <J> >- 'C }
+interactive beq_bterm_list_forward {| forward |} 'H :
+   [wf] sequent { <H>; <J[it]> >- 't1 in list{BTerm} } -->
+   [wf] sequent { <H>; <J[it]> >- 't2 in list{BTerm} } -->
+   sequent { <H>; <J[it]>; 't1 = 't2 in list{BTerm} >- 'C[it] } -->
+   sequent { <H>; x: "assert"{beq_bterm_list{'t1; 't2}}; <J['x]> >- 'C['x] }
 
 (************************************************************************
  * Equality.

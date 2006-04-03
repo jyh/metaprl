@@ -616,13 +616,13 @@ interactive bsequent_core_mem_forward 'H : <:xrule<
  * XXX: JYH: currently the proof is pretty sloppy.
  *)
 interactive bsequent_bterm_forward 'H : <:xrule<
-   "wf" : <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BSequent; <J[x]> >- hyps in CVarRelax{0} -->
-   "wf" : <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BSequent; <J[x]> >- concl in Bind{length{hyps}} -->
-   <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BSequent; <J[x]>;
+   "wf" : <H>; <J[it]> >- hyps in CVarRelax{0} -->
+   "wf" : <H>; <J[it]> >- concl in Bind{length{hyps}} -->
+   <H>; <J[it]>;
       arg in BTerm{0};
       hyps in CVar{0};
       concl in BTerm{length{hyps}}
-      >- C[x] -->
+      >- C[it] -->
    <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BSequent; <J[x]> >- C[x]
 >>
 

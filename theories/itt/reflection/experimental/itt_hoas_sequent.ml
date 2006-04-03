@@ -185,11 +185,11 @@ interactive bhyp_depths_elim {| elim [] |} 'H : <:xrule<
    <H>; u: "assert"{bhyp_depths{d; l}}; <J[u]> >- C[u]
 >>
 
-interactive bhyp_depths_forward {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; "assert"{bhyp_depths{d; l}}; <J> >- d in nat -->
-   "wf" : <H>; "assert"{bhyp_depths{d; l}}; <J> >- l in list{BTerm} -->
-   <H>; "assert"{bhyp_depths{d; l}}; <J>; hyp_depths{d; l} >- C -->
-   <H>; "assert"{bhyp_depths{d; l}}; <J> >- C
+interactive bhyp_depths_forward {| forward |} 'H : <:xrule<
+   "wf" : <H>; <J[it]> >- d in nat -->
+   "wf" : <H>; <J[it]> >- l in list{BTerm} -->
+   <H>; <J[it]>; hyp_depths{d; l} >- C[it] -->
+   <H>; x: "assert"{bhyp_depths{d; l}}; <J[x]> >- C[x]
 >>
 
 (*
@@ -387,11 +387,11 @@ interactive beq_sequent_elim {| elim [] |} 'H : <:xrule<
    <H>; u: "assert"{beq_sequent{s1; s2}}; <J[u]> >- C[u]
 >>
 
-interactive beq_sequent_forward {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; "assert"{beq_sequent{s1; s2}}; <J> >- s1 in Sequent -->
-   "wf" : <H>; "assert"{beq_sequent{s1; s2}}; <J> >- s2 in Sequent -->
-   <H>; "assert"{beq_sequent{s1; s2}}; <J>; s1 = s2 in Sequent >- C -->
-   <H>; "assert"{beq_sequent{s1; s2}}; <J> >- C
+interactive beq_sequent_forward {| forward |} 'H : <:xrule<
+   "wf" : <H>; <J[it]> >- s1 in Sequent -->
+   "wf" : <H>; <J[it]> >- s2 in Sequent -->
+   <H>; <J[it]>; s1 = s2 in Sequent >- C[it] -->
+   <H>; x: "assert"{beq_sequent{s1; s2}}; <J[x]> >- C[x]
 >>
 
 (*
@@ -529,7 +529,7 @@ doc <:doc<
 >>
 interactive cvar_forward {| forward [ForwardPrec forward_trivial_prec] |} 'H : <:xrule<
    "wf" : <H>; x: l in CVar{n}; <J[x]> >- n in nat -->
-   <H>; x: l in CVar{n}; <J[x]>; l in list{BTerm}; hyp_depths{n; l}; length{l} in nat >- 'C[x] -->
+   <H>; x: l in CVar{n}; <J[x]>; l in list{BTerm}; hyp_depths{n; l}; length{l} in nat >- C[x] -->
    <H>; x: l in CVar{n}; <J[x]> >- 'C[x]
 >>
 
@@ -540,25 +540,25 @@ interactive cvar_forward2 {| forward [ForwardPrec forward_trivial_prec] |} 'H : 
 >>
 
 interactive append_cvar_elim {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; append{l1; l2} in CVar{d}; <J> >- d in nat -->
-   "wf" : <H>; append{l1; l2} in CVar{d}; <J> >- l1 in list{BTerm} -->
-   "wf" : <H>; append{l1; l2} in CVar{d}; <J> >- l2 in list{BTerm} -->
-   <H>; append{l1; l2} in CVar{d}; <J>; l1 in CVar{d}; l2 in CVar{d +@ length{l1}} >- C -->
-   <H>; append{l1; l2} in CVar{d}; <J> >- C
+   "wf" : <H>; <J[it]> >- d in nat -->
+   "wf" : <H>; <J[it]> >- l1 in list{BTerm} -->
+   "wf" : <H>; <J[it]> >- l2 in list{BTerm} -->
+   <H>; <J[it]>; l1 in CVar{d}; l2 in CVar{d +@ length{l1}} >- C[it] -->
+   <H>; x: append{l1; l2} in CVar{d}; <J[x]> >- C[x]
 >>
 
 interactive vflatten_cvar_forward1 {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; vflatten{| A |} in CVar{n}; <K> >- A in list -->
-   <H>; vflatten{| A |} in CVar{n}; <K>; A in CVar{n} >- C -->
-   <H>; vflatten{| A |} in CVar{n}; <K> >- C
+   "wf" : <H>; <K[it]> >- A in list -->
+   <H>; <K[it]>; A in CVar{n} >- C[it] -->
+   <H>; x: vflatten{| A |} in CVar{n}; <K[x]> >- C[x]
 >>
 
 interactive vflatten_cvar_forward {| forward [] |} 'H : <:xrule<
-   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- n in nat -->
-   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- A in list{BTerm} -->
-   "wf" : <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- vflatten{| <J> |} in list{BTerm} -->
-   <H>; vflatten{| A; <J> |} in CVar{n}; <K>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C -->
-   <H>; vflatten{| A; <J> |} in CVar{n}; <K> >- C
+   "wf" : <H>; <K[it]> >- n in nat -->
+   "wf" : <H>; <K[it]> >- A in list{BTerm} -->
+   "wf" : <H>; <K[it]> >- vflatten{| <J> |} in list{BTerm} -->
+   <H>; <K[it]>; A in CVar{n}; vflatten{| <J> |} in CVar{n +@ length{A}} >- C[it] -->
+   <H>; x: vflatten{| A; <J> |} in CVar{n}; <K[x]> >- C[x]
 >>
 
 interactive cvar_positive_length {| ge_elim |} 'H : <:xrule<

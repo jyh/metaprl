@@ -385,9 +385,6 @@ let rec meta_dForT i =
 (*
  * By default, dT 0 should always make progress.
  *)
-let d_prec = create_auto_prec [trivial_prec] [nth_hyp_prec]
-let d_elim_prec = create_auto_prec [trivial_prec; d_prec] [reduce_prec]
-
 let eq_exn = RefineError ("meta_dT", StringError "elim rule not suitable for autoT")
 
 let rec num_equal_aux t hyps i =
@@ -443,7 +440,6 @@ let resource menubar +=
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.run"
  * End:
  * -*-
  *)

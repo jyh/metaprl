@@ -120,6 +120,10 @@ let resource forward += [
     << operator[op:op] in Operator >>, forward_thin forward_normal_prec;
 ]
 
+let fwd_reduce_type i =
+   let tac = rw (addrC [Subterm 1] reduceC) i in
+      ForwardPost (fun _ -> tac)
+
 (************************************************************************
  * Custom rewrite annotation processor.
  *)

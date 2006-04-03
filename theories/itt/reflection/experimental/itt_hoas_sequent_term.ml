@@ -46,6 +46,7 @@ open Base_trivial
 
 open Itt_list2
 open Itt_vec_sequent_term
+open Itt_hoas_util
 
 (************************************************************************
  * Itt_vec_bind --> Itt_hoas_vbind conversion.
@@ -450,7 +451,7 @@ interactive bsequent_wf_forward2 'H : <:xrule<
 (*
  * Hyps forward-chaining.
  *)
-interactive vflatten_wf_forward_left {| forward [] |} 'H : <:xrule<
+interactive vflatten_wf_forward_left {| forward [fwd_reduce_type (-1)] |} 'H : <:xrule<
    "wf" : <H>; <K[it]> >- n in nat -->
    "wf" : <H>; <K[it]> >- A in list{BTerm} -->
    "wf" : <H>; <K[it]> >- vflatten{| <J> |} in list{BTerm} -->

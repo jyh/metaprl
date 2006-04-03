@@ -47,6 +47,7 @@ open Itt_dfun
 open Itt_equal
 open Itt_sqsimple
 open Itt_int_arith
+open Itt_hoas_util
 
 doc <:doc<
    A sequent is represented as a 3-tuple << BTerm * list{BTerm} * BTerm >>,
@@ -539,7 +540,7 @@ interactive cvar_forward2 {| forward [ForwardPrec forward_trivial_prec] |} 'H : 
    <H>; l: CVar{n}; <J[l]> >- C[l]
 >>
 
-interactive append_cvar_elim {| forward [] |} 'H : <:xrule<
+interactive append_cvar_elim {| forward [fwd_reduce_type (-1)] |} 'H : <:xrule<
    "wf" : <H>; <J[it]> >- d in nat -->
    "wf" : <H>; <J[it]> >- l1 in list{BTerm} -->
    "wf" : <H>; <J[it]> >- l2 in list{BTerm} -->
@@ -553,7 +554,7 @@ interactive vflatten_cvar_forward1 {| forward [] |} 'H : <:xrule<
    <H>; x: vflatten{| A |} in CVar{n}; <K[x]> >- C[x]
 >>
 
-interactive vflatten_cvar_forward {| forward [] |} 'H : <:xrule<
+interactive vflatten_cvar_forward {| forward [fwd_reduce_type (-1)] |} 'H : <:xrule<
    "wf" : <H>; <K[it]> >- n in nat -->
    "wf" : <H>; <K[it]> >- A in list{BTerm} -->
    "wf" : <H>; <K[it]> >- vflatten{| <J> |} in list{BTerm} -->

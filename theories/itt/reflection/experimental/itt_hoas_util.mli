@@ -44,3 +44,8 @@ declare dummy_bterm
  * Rewrite annotation processor with arithmetical simplifier
  *)
 val arith_rw_annotation : string -> (term * conv) rw_annotation_processor
+
+(*
+ * Tell forward to run reduceC on the type part of the equality hyp
+ *)
+val fwd_reduce_type : int -> forward_option

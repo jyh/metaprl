@@ -368,7 +368,7 @@ interactive not_equal {| intro[AutoMustComplete] |} :
    sequent { <H>; 'a = 'b in int >- "false" } -->
    sequent { <H> >- 'a <> 'b }
 
-interactive elim_nequal {| elim |} 'H :
+interactive elim_nequal 'H :
    sequent { <H>; <J[it]> >- "assert"{beq_int{'a; 'b}} } -->
    sequent { <H>; x: 'a <> 'b; <J['x]> >- 'C['x] }
 

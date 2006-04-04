@@ -55,7 +55,7 @@ let elimRuleT =
    provableSequent_elim 2 twa
 
 let elimRuleStartT =
-   idT
+   provableSequent_elim 2 ta
 
 let elimSimpleStepT unfold =
    rw (addrC [Subterm 4] unfold) 2

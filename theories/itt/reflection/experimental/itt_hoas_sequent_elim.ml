@@ -55,11 +55,11 @@ open Itt_hoas_proof_ind
 let proofCheckElimT = argfunT (fun i p ->
    match explode_term (nth_hyp p i) with
       << ProofCheck{'_rule; 'premises; 'goal; 'witness} >> ->
-         dT i
-         thenMT repeatForT 3 (moveHypT i (-3))
-         thenMT hypSubstT (-1) (-5)
+         dT i thenT thinT i
+         thenMT repeatForT 2 (moveHypT i (-3))
          thenMT hypSubstT (-2) (-4)
          thenMT hypSubstT (-2) (-3)
+         thenMT moveHypT 5 (-2)
     | _ -> idT)
 
 let elimRuleT =

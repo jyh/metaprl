@@ -37,6 +37,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_hoas_sequent
+extends Itt_hoas_proof
 extends Itt_hoas_proof_ind
 
 doc docoff
@@ -49,10 +50,25 @@ open Itt_hoas_sequent_proof_step
 open Itt_hoas_proof_ind
 
 (*
- * For now, the tactic does nothing.
+ *
  *)
+let proofCheckElimT = argfunT (fun i p ->
+   match explode_term (nth_hyp p i) with
+      << ProofCheck{'_rule; 'premises; 'goal; 'witness} >> ->
+         dT i
+         thenMT repeatForT 3 (moveHypT i (-3))
+         thenMT hypSubstT (-1) (-5)
+         thenMT hypSubstT (-2) (-4)
+         thenMT hypSubstT (-2) (-3)
+    | _ -> idT)
+
 let elimRuleT =
-   provableSequent_elim 2 twa
+   rwhAllAll reduceC 
+   thenMT provableSequent_elim 2 
+   thenMT dT 8
+   thenMT proofCheckElimT 8
+   (* XXX: incomplete *)
+   thenT autoT
 
 let elimRuleStartT =
    provableSequent_elim 2 ta

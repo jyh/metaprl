@@ -36,22 +36,42 @@ doc <:doc<
    @end[license]
    @parents
 >>
-extends Itt_hoas_sequent
 extends Itt_hoas_proof
 extends Itt_hoas_proof_ind
+extends Itt_hoas_sequent
+extends Itt_hoas_sequent_bterm
+extends Itt_hoas_sequent_proof
 
 doc docoff
 
 open Basic_tactics
 open Itt_struct
+open Itt_logic
 open Itt_hoas_bterm_wf
 open Itt_hoas_proof
 open Itt_hoas_sequent_proof_step
 open Itt_hoas_proof_ind
 
-(*
- *
- *)
+doc <:doc< @rules >>
+
+interactive provable_to_provable_sequent 'H :
+   [wf] sequent { <H>; Provable{'logic; 'seq}; <J> >- 'seq in BSequent } -->
+   sequent { <H>; ProvableSequent{'logic; 'seq}; <J> >- 'C } -->
+   sequent { <H>; Provable{'logic; 'seq}; <J> >- 'C }
+
+doc docoff
+
+let rec all_and_alim i p =
+   if i > (hyp_count p) then
+      idT
+   else if is_and_term (nth_hyp p i) then begin
+      and_elim i
+      thenMT (
+         (provable_to_provable_sequent i thenMT argfunT all_and_alim (i + 1))
+         orelseT argfunT all_and_alim i)
+   end else
+      argfunT all_and_alim (i+1)
+
 let proofCheckElimT = argfunT (fun i p ->
    match explode_term (nth_hyp p i) with
       << ProofCheck{'_rule; 'premises; 'goal; 'witness} >> ->
@@ -59,7 +79,11 @@ let proofCheckElimT = argfunT (fun i p ->
          thenMT repeatForT 2 (moveHypT i (-3))
          thenMT hypSubstT (-2) (-4)
          thenMT hypSubstT (-2) (-3)
+         thenMT thinT (-2)
+         thenMT thinT 6
          thenMT moveHypT 5 (-2)
+         thenMT simpleReduceT
+         thenMT argfunT all_and_alim 5
     | _ -> idT)
 
 let elimRuleT =
@@ -68,7 +92,7 @@ let elimRuleT =
    thenMT dT 8
    thenMT proofCheckElimT 8
    (* XXX: incomplete *)
-   thenT autoT
+   thenT proofRuleWFT
 
 let elimRuleStartT =
    provableSequent_elim 2 ta

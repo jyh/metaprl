@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1997-2006 MetaPRL Group, Cornell University,
+ * City University of New York and California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +27,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by : Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 extends Itt_equal
 extends Itt_dfun
@@ -87,20 +87,11 @@ prec prec_quant
  * RULES, used by other theories directly                               *
  ************************************************************************)
 
-rule not_intro :
-   [wf] sequent { <H> >- "type"{'t} } -->
-   [main] sequent { <H>; x: 't >- "false" } -->
-   sequent { <H> >- "not"{'t} }
-
-rule not_elim 'H :
-   [main] sequent { <H>; x: "not"{'t}; <J['x]> >- 't } -->
-   sequent { <H>; x: "not"{'t}; <J['x]> >- 'C['x] }
-
-rule exists_elim 'H :
-   [main] sequent { <H>; v: 'a; z: 'b['v]; <J['v, 'z]> >- 'C['v, 'z] } -->
-   sequent { <H>; x: exst v: 'a. 'b['v]; <J['x]> >- 'C['x] }
-
+val not_intro : tactic
+val not_elim : int -> tactic
+val exists_elim : int -> tactic
 val exists_intro : term -> tactic
+val and_elim : int -> tactic
 
 (************************************************************************
  * TACTICS                                                              *

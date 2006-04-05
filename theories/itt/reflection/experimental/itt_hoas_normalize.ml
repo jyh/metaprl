@@ -359,10 +359,9 @@ let normalizeBTermC =
 
 let elim_reduce = wrap_elim_auto_ok (fun i -> rw (addrC [Subterm 1] reduceC) i)
 
-let resource elim += [
-   << BTerm{'n +@ 0 } >>, elim_reduce;
-   << CVar{'n +@ 0 } >>, elim_reduce;
-]
+let resource elim +=
+   [<< BTerm{'n +@ 0 } >>, elim_reduce;
+    << CVar{'n +@ 0 } >>, elim_reduce]
 
 (*
  * -*-

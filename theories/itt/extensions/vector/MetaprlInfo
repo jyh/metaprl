@@ -11,6 +11,7 @@ MLZFILES[] =
 # Library files
 MPFILES[] =
    itt_vec_dform
+   itt_vec_util
    itt_vec_struct
    itt_vec_list1
    itt_vec_bind

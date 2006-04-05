@@ -43,6 +43,7 @@ open Base_trivial
 open Itt_squiggle
 open Itt_struct
 open Itt_dfun
+open Itt_vec_util
 
 declare Invalid_argument
 
@@ -365,54 +366,10 @@ let pushVBindSubstC t1 = termC (push_vbind_subst t1)
 (*
  * Squash as much as possible in the << mk_vbind{| <J> >- 'e |} >> hyp list.
  *)
-let squash_mk_vbind_conv t =
-   let { sequent_args = arg;
-         sequent_hyps = hyps;
-         sequent_concl = concl
-       } = explode_sequent t
-   in
-
-   (*
-    * Find the term to be replaced.
-    *)
-   let hyps = (explode_sequent t).sequent_hyps in
-   let x = maybe_new_var_set var_x (all_vars t) in
-   let x_t = mk_var_term x in
-   let rec search rev_hyps hyps =
-      match hyps with
-         [] ->
-            raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("already converted", t)))
-       | Context (z, cv, args) as hyp :: hyps ->
-            let rec search_args rev_args args =
-               match args with
-                  arg :: args ->
-                     if is_it_term arg then
-                        search_args (arg :: rev_args) args
-                     else
-                        rev_hyps, Context (z, cv, List.rev_append rev_args (x_t :: args)), hyps
-                | [] ->
-                     search (hyp :: rev_hyps) hyps
-            in
-               search_args [] args
-       | Hypothesis (z, t) as hyp :: hyps ->
-            if is_it_term t then
-               search (hyp :: rev_hyps) hyps
-            else
-               rev_hyps, Hypothesis (z, x_t), hyps
-   in
-   let rev_hyps, hyp, hyps = search [] (SeqHyp.to_list hyps) in
-   let eseq =
-      { sequent_args = arg;
-        sequent_hyps = SeqHyp.of_list (List.rev_append rev_hyps (hyp :: hyps));
-        sequent_concl = concl
-      }
-   in
-   let t_var = mk_sequent_term eseq in
-   let t_bind = mk_bind1_term x t_var in
-      squash_mk_bind t_bind
+let squash_mk_vbindC = termC (fun t -> squash_mk_bind (squash_rewrite_arg t))
 
 let resource reduce +=
-    [<< mk_vbind{| <J> >- 'e |} >>, wrap_reduce (termC squash_mk_vbind_conv)]
+    [<< mk_vbind{| <J> >- 'e |} >>, wrap_reduce squash_mk_vbindC]
 
 (*!
  * @docoff

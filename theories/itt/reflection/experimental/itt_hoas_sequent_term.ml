@@ -45,6 +45,7 @@ open Basic_tactics
 open Base_trivial
 
 open Itt_list2
+open Itt_vec_util
 open Itt_vec_sequent_term
 open Itt_hoas_util
 
@@ -586,56 +587,10 @@ let resource forward +=
 (************************************************
  * Squash as much as possible in the << hyp_context{| <J> >- 'e |} >> hyp list.
  *)
-let var_x = Lm_symbol.add "x"
-
-let squash_hyp_context_conv t =
-   let { sequent_args = arg;
-         sequent_hyps = hyps;
-         sequent_concl = concl
-       } = explode_sequent t
-   in
-
-   (*
-    * Find the term to be replaced.
-    *)
-   let hyps = (explode_sequent t).sequent_hyps in
-   let x = maybe_new_var_set var_x (all_vars t) in
-   let x_t = mk_var_term x in
-   let rec search rev_hyps hyps =
-      match hyps with
-         [] ->
-            raise (RefineError ("reduce_length_fun_term_conv", StringTermError ("already converted", t)))
-       | Context (z, cv, args) as hyp :: hyps ->
-            let rec search_args rev_args args =
-               match args with
-                  arg :: args ->
-                     if is_it_term arg then
-                        search_args (arg :: rev_args) args
-                     else
-                        rev_hyps, Context (z, cv, List.rev_append rev_args (x_t :: args)), hyps
-                | [] ->
-                     search (hyp :: rev_hyps) hyps
-            in
-               search_args [] args
-       | Hypothesis (z, t) as hyp :: hyps ->
-            if is_it_term t then
-               search (hyp :: rev_hyps) hyps
-            else
-               rev_hyps, Hypothesis (z, x_t), hyps
-   in
-   let rev_hyps, hyp, hyps = search [] (SeqHyp.to_list hyps) in
-   let eseq =
-      { sequent_args = arg;
-        sequent_hyps = SeqHyp.of_list (List.rev_append rev_hyps (hyp :: hyps));
-        sequent_concl = concl
-      }
-   in
-   let t_var = mk_sequent_term eseq in
-   let t_bind = mk_bind1_term x t_var in
-      squash_hyp_context t_bind
+let squash_hyp_contextC = termC (fun t -> squash_hyp_context (squash_rewrite_arg t))
 
 let resource reduce +=
-    [<< hyp_context{| <J> >- 'e |} >>, wrap_reduce (termC squash_hyp_context_conv)]
+    [<< hyp_context{| <J> >- 'e |} >>, wrap_reduce squash_hyp_contextC]
 
 (************************************************************************
  * Tests.

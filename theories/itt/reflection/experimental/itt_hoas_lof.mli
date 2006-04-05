@@ -41,7 +41,7 @@ declare lof_bind{'n; x. 'e['x]}
 (*
  * Lof algebra.
  *)
-declare lof_nil
+declare const lof_nil
 declare lof_cons{i. 'f['i]; 'i; 'e}
 declare lof_tl{i. 'f['i]; 'i}
 declare lof_nth_prefix{i. 'f['i]; 'i; 'n; 'm}

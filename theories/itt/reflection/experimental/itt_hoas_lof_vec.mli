@@ -42,6 +42,11 @@ extends Itt_hoas_lof
 open Basic_tactics
 
 (*
+ * Terms.
+ *)
+declare sequent [lof_vbind] { Term : Term >- Term } : Term
+
+(*
  * Tactics.
  *)
 topval lofVBindElimC : conv

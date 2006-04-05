@@ -37,6 +37,11 @@ extends Itt_vec_list1
 open Basic_tactics
 
 (*
+ * Individual hypotheses.
+ *)
+declare sequent [hyp_term] { Term : Term >- Term } : Term
+
+(*
  * Context variables are represented with the << hyp_context >> term.
  *)
 declare sequent [hyp_context] { Term : Term >- Term } : Term

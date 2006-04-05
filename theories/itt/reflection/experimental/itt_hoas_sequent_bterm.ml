@@ -544,12 +544,12 @@ interactive bsequent_is_bterm_list0 {| nth_hyp |} 'H :
    sequent { <H>; t: list{BSequent}; <J['t]> >- 't in list{BTerm} }
 
 interactive bsequent_is_bterm3 {| nth_hyp |} :
-    sequent { <H> >- 't in BSequent{0} } -->
-    sequent { <H> >- 't in BTerm }
+   sequent { <H> >- 't in BSequent{0} } -->
+   sequent { <H> >- 't in BTerm }
 
 interactive bsequent_is_bterm_list3 {| nth_hyp |} :
-    sequent { <H> >- 't in list{BSequent{0}} } -->
-    sequent { <H> >- 't in list{BTerm} }
+   sequent { <H> >- 't in list{BSequent{0}} } -->
+   sequent { <H> >- 't in list{BTerm} }
 
 interactive bsequent_sqsimple {| intro []; sqsimple |} : <:xrule<
    <H> >- d in nat  -->

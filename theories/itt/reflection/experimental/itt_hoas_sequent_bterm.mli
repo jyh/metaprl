@@ -43,9 +43,9 @@ declare BSequent{'d}
 (*
  * Common abbreviations
  *)
-define const iform unfold_sequent_relax_zero: SequentRelax <--> SequentRelax{0}
-define iform unfold_sequent_bterm_zero: sequent_bterm{'s} <--> sequent_bterm{0; 's}
-define const iform unfold_BSequent_zero: BSequent <--> BSequent{0}
+define const iform unfold_sequent_relax_zero : SequentRelax <--> SequentRelax{0}
+define const iform unfold_BSequent_zero : BSequent <--> BSequent{0}
+define iform unfold_sequent_bterm_zero : sequent_bterm{'s} <--> sequent_bterm{0; 's}
 
 (*
  * Relaxed types.
@@ -57,6 +57,14 @@ declare CVarRelax{'n}
  *)
 declare sequent_of_bterm{'e}
 declare is_sequent_bterm{'e}
+
+(*
+ * Internal terms for normalization.
+ *)
+declare sequent_bterm{'d; 'hyps; 'concl}
+declare seq_concl{'e}
+declare seq_hyp{'h; x. 't['x]}
+declare seq_arg{'arg; 's}
 
 (*
  * Tactics.

@@ -154,7 +154,7 @@ doc <:doc<
 define unfold_lof_nth : lof_nth{'x; 'i} <-->
    nth{'x; 'i}
 
-define unfold_lof_nil : lof_nil <-->
+define const unfold_lof_nil : lof_nil <-->
    it
 
 define unfold_lof_tl : lof_tl{i. 'f['i]; 'i} <-->

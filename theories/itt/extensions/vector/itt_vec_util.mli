@@ -1,10 +1,10 @@
 (*
- * Additional well-formedness rule for bterms.
+ * Some frequently-used utilities.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2005 Mojave Group, Caltech
+ * Copyright (C) 2006 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,38 +24,27 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Itt_hoas_lof
-extends Itt_hoas_lof_vec
-
 open Basic_tactics
 
 (*
- * Normalization resource.
- *)
-resource (term * conv, conv) pre_normalize_simple
-resource (term * conv, conv) normalize_simple
-
-val process_pre_normalize_simple_resource_rw_annotation : (term * conv) rw_annotation_processor
-val process_normalize_simple_resource_rw_annotation : (term * conv) rw_annotation_processor
-
-(*
- * Normalize the term.
- *)
-topval normalizeBTermC : conv
-topval normalizeBTermForceC : conv
-
-(*
- * Debugging.
- *)
-topval normalizeBTermSimpleC : conv
-topval normalizeBTermAuxC : conv
-
-(*!
- * @docoff
+ * In many case, we have rules that say the the hyp values do not matter.
+ * The rules have the following form:
  *
+ * rewrite foo Perv!bind{x. arg{| <J[x]> >- e |}} :
+ *    arg{| <J[t]> >- e |}
+ *    <-->
+ *    arg{| <J[it]> >- e |}
+ *
+ * The following function takes a rule of this form and computes
+ * and appropriate argument.
+ *)
+val squash_rewrite_arg : term -> term
+
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
+ * Fill-column: 100
  * End:
  * -*-
+ * vim:ts=3:et:tw=100
  *)

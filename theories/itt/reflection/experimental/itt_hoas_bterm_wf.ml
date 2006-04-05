@@ -272,6 +272,15 @@ interactive compatible_shapes1 : <:xrule<
    <H> >- compatible_shapes{n; shape; subterms}
 >>
 
+interactive operator_forward {| forward |} 'H : <:xrule<
+   "wf" : <H>; <J[it]> >- op_1 in Operator -->
+   "wf" : <H>; <J[it]> >- op_2 in Operator -->
+   <H>; <J[it]>;
+      "assert"{is_same_op{op_1;op_2}}
+      >- C[it] -->
+   <H>; x: op_1 = op_2 in Operator; <J[x]> >- C[x]
+>>
+
 (************************************************************************
  * Additional theorems for bind.
  *

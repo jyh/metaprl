@@ -25,8 +25,10 @@ MPFILES[] =
     pmn_core_judgments
     pmn_core_logic
     pmn_core_terms_test2
+    pmn_core_logic_test
     reflect_pmn_core_terms
     reflect_pmn_core_judgments
     reflect_pmn_core_logic
     pmn_core_terms_test
     reflect_pmn_core_terms_test2
+    reflect_pmn_core_logic_test

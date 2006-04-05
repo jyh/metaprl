@@ -75,7 +75,7 @@ define unfold_Provable_sequent : ProvableSequent{'logic; 'seq} <--> <:xterm<
 >>
 
 define unfold_IsJudgment : IsJudgment{'logic; 'seq} <--> <:xterm<
-   Provable{logic; $`meta_type{| >- meta_member{seq; Judgment{}} |}}
+   ProvableSequent{logic; $`meta_type{| >- meta_member{seq; Judgment{}} |}}
 >>
 
 define unfold_ProvableJudgment : ProvableJudgment{'logic; 'seq} <--> <:xterm<
@@ -521,6 +521,14 @@ interactive is_judgment_sub 'logic1 : <:xrule<
    <H> >- SubLogic{logic1; logic2} -->
    <H> >- IsJudgment{logic1; seq} -->
    <H> >- IsJudgment{logic2; seq}
+>>
+
+interactive provable_judgment_sub 'logic1 : <:xrule<
+   "wf" : <H> >- logic1 in Logic -->
+   "wf" : <H> >- logic2 in Logic -->
+   <H> >- SubLogic{logic1; logic2} -->
+   <H> >- ProvableJudgment{logic1; seq} -->
+   <H> >- ProvableJudgment{logic2; seq}
 >>
 
 (************************************************************************

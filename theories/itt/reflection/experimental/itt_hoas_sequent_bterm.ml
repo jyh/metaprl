@@ -212,6 +212,12 @@ interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
    <H> >- sequent_bterm{d; s} in BTerm
 >>
 
+interactive_rw sequent_bterm_depth {| reduce |} : <:xrewrite<
+   s in Sequent{d} -->
+   d in nat -->
+   bdepth{sequent_bterm{d; s}} <--> d
+>>
+
 interactive sequent_bterm_equal1 {| intro [] |} : <:xrule<
    "wf" : <H> >- d1 = d2 in nat -->
    "wf" : <H> >- s1 = s2 in Sequent{'d1} -->

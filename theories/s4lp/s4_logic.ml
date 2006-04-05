@@ -48,11 +48,24 @@ open Browser_resource
 
 open Basic_tactics
 
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   show_loading "Loading s4_logic%t"
+
 let debug_s4prover =
    create_debug (**)
       { debug_name = "s4prover";
         debug_description = "Display S4-Jprover operations";
         debug_value = false
+      }
+
+let debug_jprover =
+   create_debug (**)
+      { debug_name = "jprover";
+        debug_description = "Display Jprover operations";
+        debug_value = true
       }
 
 declare default_extract
@@ -206,6 +219,44 @@ dform and_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: and_df{'a} 
  *)
 dform box_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: box[i:n]{'a} =
    `"[" slot[i] `"]" slot["lt"]{'a}
+
+dform sequent_df : sequent_arg = sub["S4nJ"]
+
+declare display_sequent{'s : Dform} : Dform
+declare display_hyp{'e : Dform} : Dform
+declare display_concl{'e : Dform} : Dform
+declare display_hyps{'s : Dform} : Dform
+
+(*
+ * Generic sequent printers
+ *)
+
+dform display_hyps_nil_df : display_hyps{sequent ['arg] { >- 'e }} =
+	`""
+
+dform display_hyps_cons_df1 : display_hyps{sequent ['arg] { 't; <H> >- 'e }} =
+   display_hyp{'t} `";" hspace display_hyps{sequent ['arg] { <H> >- 'e }}
+
+dform display_hyps_cons_df2 : display_hyps{sequent ['arg] { 't >- 'e }} =
+   display_hyp{'t} display_hyps{sequent ['arg] { >- 'e }}
+
+dform display_concl_df : display_concl{sequent ['arg] { <H> >- 'e<||> } } =
+	slot{'e}
+
+dform context_hyp_df : display_hyp{df_context{'c}} =
+   df_context{'c}
+
+dform display_hyp_df : display_hyp{'t} = slot{'t}
+
+dform concl_df : except_mode[src] :: concl{| <H> |} =
+	slot{display_hyps{concl{| <H> |}}}
+
+dform boxed_df : except_mode[src] :: boxed[i:n]{| <H> |} =
+	`"boxed[" slot[i:n] `"]{" slot{display_hyps{concl{| <H> |}}} `"}"
+
+dform default_extract_df : sequent('arg){ <H> >- default_extract } = `""
+dform default_extract_df : sequent['arg]{ <H> >- default_extract } = `""
+dform default_extract_df2 : default_extract = `""
 
 (************************************************************************
  * TACTICS                                                              *

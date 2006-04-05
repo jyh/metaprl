@@ -1,3 +1,6 @@
+THEORYNAME = s4lp
+THEORYDESCR = Logics of knowledge and proofs: S4, LP, S4nJ, S4nLP, etc
+
 # Library files
 MPFILES[] =
 	hilbert_internal

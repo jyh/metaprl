@@ -149,6 +149,12 @@ interactive bind_in_bind_ge : <:xrule<
    <H> >- bind{n; y. e[y]} in Bind{m}
 >>
 
+interactive bind_in_bind_add {| intro |} : <:xrule<
+   "wf" : <H> >- m in nat -->
+   "wf" : <H> >- k in nat -->
+   <H> >- bind{m +@ k; y. e[y]} in Bind{m}
+>>
+
 interactive bind_monotone 'n : <:xrule<
    "wf" : <H> >- n in nat -->
    "wf" : <H> >- m in nat -->

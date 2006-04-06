@@ -212,10 +212,9 @@ interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
    <H> >- sequent_bterm{d; s} in BTerm
 >>
 
-interactive_rw sequent_bterm_depth 'd2 : <:xrewrite<
-   s in Sequent{d2} -->
+interactive_rw sequent_bterm_depth {| reduce |} : <:xrewrite<
+   s in Sequent{d} -->
    d in nat -->
-   d2 in nat -->
    bdepth{sequent_bterm{d; s}} <--> d
 >>
 

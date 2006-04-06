@@ -344,6 +344,20 @@ interactive vsequent_equal {| intro [] |} : <:xrule<
    <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in Sequent
 >>
 
+interactive vsequent_wf1 {| intro [] |} : <:xrule<
+(*   "wf" : <H> >- vflatten{| <J> |} in CVar{0} -->*)
+   "wf" : <H> >- vflatten{| <J> |} in CVarRelax{0} -->
+   "wf" : <H> >- C in Bind{length{vflatten{| <J> |}}} -->
+   <H> >- vsequent{arg}{| <J> >- C<|H|> |} in SequentRelax
+>>
+
+interactive vsequent_equal1 {| intro [] |} : <:xrule<
+   "wf" : <H> >- arg1 = arg2 in Bind{0} -->
+   "wf" : <H> >- vflatten{| <J1> |} = vflatten{| <J2> |} in CVarRelax{0} -->
+   "wf" : <H> >- C1 = C2 in Bind{length{vflatten{| <J1> |}}} -->
+   <H> >- vsequent{arg1}{| <J1> >- C1<|H|> |} = vsequent{arg2}{| <J2> >- C2<|H|> |} in SequentRelax
+>>
+
 interactive vflatten_hyp_concl_wf {| intro [] |} : <:xrule<
    "wf" : <H> >- d IN "nat" -->
    <H> >- "vflatten"{| |} IN CVar{d}

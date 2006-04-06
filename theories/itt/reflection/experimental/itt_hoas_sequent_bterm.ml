@@ -116,6 +116,15 @@ interactive cvar_is_cvar_relax : <:xrule<
    <H> >- e in CVarRelax{n}
 >>
 
+interactive cvar_is_cvar_relax0 {| nth_hyp |} : <:xrule<
+   "wf" : <H> >- e in CVar{0} -->
+   <H> >- e in CVarRelax{0}
+>>
+
+interactive cvar_is_cvar_relax1 {| nth_hyp |} 'H : <:xrule<
+   <H>; e: CVar{0}; <J[e]> >- e in CVarRelax{0}
+>>
+
 interactive nil_is_cvar_relax {| intro |} : <:xrule<
    "wf" : <H> >- n in nat -->
    <H> >- [] in CVarRelax{n}

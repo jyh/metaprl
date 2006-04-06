@@ -212,9 +212,10 @@ interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
    <H> >- sequent_bterm{d; s} in BTerm
 >>
 
-interactive_rw sequent_bterm_depth {| reduce |} : <:xrewrite<
-   s in Sequent{d} -->
+interactive_rw sequent_bterm_depth 'd2 : <:xrewrite<
+   s in Sequent{d2} -->
    d in nat -->
+   d2 in nat -->
    bdepth{sequent_bterm{d; s}} <--> d
 >>
 
@@ -587,9 +588,16 @@ interactive bsequent_type_elim {| elim [] |} 'H : <:xrule<
 doc <:doc<
    Forward-chaining.
 >>
+
+interactive sequent_bterm_forward_lemma : <:xrule<
+   "wf" : <H> >- s in SequentRelax -->
+   "wf" : <H> >- sequent_bterm{s} in BTerm -->
+   <H> >- s in Sequent
+>>
+
 interactive sequent_bterm_forward (* {| forward |} *) 'H : <:xrule<
-   "wf" : <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- s1 in Sequent -->
-   "wf" : <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- s2 in Sequent -->
+   "wf" : <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- s1 in SequentRelax -->
+   "wf" : <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- s2 in SequentRelax -->
    <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J>;
       s1 = s2 in Sequent >- C -->
    <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- C

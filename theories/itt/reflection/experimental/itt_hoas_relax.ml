@@ -142,7 +142,7 @@ interactive bind_in_bind_eq {| intro |} : <:xrule<
    <H> >- bind{n; y. e[y]} in Bind{n}
 >>
 
-interactive bind_in_bind_ge {| intro |} : <:xrule<
+interactive bind_in_bind_ge : <:xrule<
    "wf" : <H> >- n in nat -->
    "wf" : <H> >- m in nat -->
    "wf" : <H> >- n >= m -->

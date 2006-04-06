@@ -60,8 +60,9 @@ open Itt_struct
 open Itt_equal
 open Itt_bool
 open Itt_subtype
-open Itt_int_arith
+open Itt_squiggle
 open Itt_sqsimple
+open Itt_int_arith
 
 doc terms
 
@@ -189,6 +190,54 @@ interactive nat_sqsimple {| intro []; sqsimple |} :
    sequent { <H> >- sqsimple{nat} }
 
 let resource sub += (RLSubtype ([<< nat >>, << int>>], nat_is_subtype_of_int  ))
+
+let err = RefineError("Itt_nat.elim_nat_eq", StringError "not applicable")
+
+let elim_nat_eq fwd = argfunT (fun i p ->
+   let s = explode_sequent_arg p in
+   let hyps = s.sequent_hyps in
+   let i = get_pos_hyp_num p i in
+      match SeqHyp.get hyps (i - 1) with
+         Hypothesis (v, t) ->
+            let len = SeqHyp.length hyps in
+            let _, t1, t2 = dest_equal t in
+            let dep = is_var_free v s.sequent_concl || is_var_free_hyps hyps len v i in
+               if alpha_equal t1 t2 then
+                  if dep then equalityElimination i thenT thinT i else thinT i
+               else
+                  let t_from = if fwd then t1 else t2 in
+                  let ind = snd (least_fw_index hyps (free_vars_set t_from) SymbolSet.empty (i - 1)) in
+                  let bind_hyps = Lm_list_util.remove_nth (i - ind - 1) (Lm_list_util.nth_tl ind (SeqHyp.to_list hyps)) in
+                  let v = maybe_new_var_set v (free_vars_terms [t; s.sequent_concl]) in
+                  let bind_hyps = bind_hyps @ [Hypothesis(v, mk_var_term v)] in
+                  let t = mk_sequent_term { s with sequent_hyps = SeqHyp.of_list bind_hyps } in
+                  let bind = var_subst_to_bind t t_from in
+                  let tac =
+                     if alpha_equal (snd (dest_bind1 bind)) t then
+                        idT
+                     else begin
+                        moveHypT i (ind + 1) thenT sqsimple (ind + 1) thenLT [
+                           trivialT;
+                           (if fwd then sq_subst_forward else sq_subst_backward) (ind + 2) (len - ind) bind
+                           thenT moveHypT (ind + 1) i
+                        ]
+                     end
+                  in
+                     if dep then
+                        equalityElimination i thenT tac
+                     else if tac == idT then
+                        raise err
+                     else 
+                        tac
+       | Context _ ->
+            raise err)
+
+let resource elim += [
+   << 'a = number[n:n] in nat >>, wrap_elim_auto_ok (elim_nat_eq true);
+   << 'a = number[n:n] in int >>, wrap_elim_auto_ok (elim_nat_eq true);
+   << number[n:n] = 'a in nat >>, wrap_elim_auto_ok (elim_nat_eq false);
+   << number[n:n] = 'a in int >>, wrap_elim_auto_ok (elim_nat_eq false);
+]
 
 interactive eq_nat_decidable {| intro [] |} :
    [wf] sequent{ <H> >- 'a in nat } -->

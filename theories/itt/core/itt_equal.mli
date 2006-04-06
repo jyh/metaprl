@@ -239,6 +239,8 @@ val infer_univ1 : typeinf_comp
 
 val equality_prec : auto_prec
 
+val is_var_free_hyps : SeqHyp.t -> int -> var -> int -> bool
+
 (*
  * Typehood from truth.
  *)

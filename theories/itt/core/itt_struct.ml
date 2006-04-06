@@ -344,7 +344,9 @@ doc <:doc<
 let moveHypT i j = funT (fun p ->
    let i = get_pos_hyp_num p i in
    let j = get_pos_hyp_num p j in
-      if j > i then
+      if i = j then
+         idT
+      else if j > i then
          exchange i 2 (j - i + 1)
       else
          exchange j (i - j + 1) 2)

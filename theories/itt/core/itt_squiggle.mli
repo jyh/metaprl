@@ -10,7 +10,8 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 2001-2006 MetaPRL Group, Cornell University and
+ * California Institute of Technology
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +27,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Alexei Kopylov <kopylov@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.caltech.edu>
+ *              Jason Hickey <jyh@cs.caltech.edu>
  *)
 extends Itt_equal
 extends Itt_struct
@@ -41,6 +43,9 @@ val mk_squiggle_term : term -> term -> term
 
 val squiggle_memberEquality : tactic
 
+val sq_subst_forward : int -> int -> term -> tactic
+val sq_subst_backward : int -> int -> term -> tactic
+
 topval sqSubstT : term -> int -> tactic
 topval sqSymT : tactic
 
@@ -48,6 +53,9 @@ topval hypC : int -> conv
 topval revHypC : int -> conv
 topval assumC : int -> conv
 topval revAssumC : int -> conv
+
+(* Helper function for sq_subst_forward/sq_subst_backward tactics *)
+val least_fw_index : SeqHyp.t -> SymbolSet.t -> SymbolSet.t -> int -> bool * int
 
 (************************************************************************
  * Grammar.
@@ -58,7 +66,6 @@ production xterm_term{'e1 ~ 'e2} <--
 (*
  * -*-
  * Local Variables:
- * Caml-master: "mp"
  * End:
  * -*-
  *)

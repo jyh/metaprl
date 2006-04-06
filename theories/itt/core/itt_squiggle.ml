@@ -24,7 +24,8 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2001-2006 MetaPRL Group, Cornell University
+   and California Institute of Technology
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -39,6 +40,10 @@ doc <:doc<
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Author: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.caltech.edu}
+                Jason Hickey @email{jyh@cs.caltech.edu}
 
    @end[license]
 >>
@@ -230,7 +235,7 @@ let revAssumC i = funC (fun p ->
    let trm = TermMan.concl (Sequent.nth_assum (env_arg p) i) in
    rewriteC (revSqTerm trm) thenTC (sqSymT thenT nthAssumT i))
 
-let rec find_index hyps vars1 vars2 i =
+let rec least_fw_index hyps vars1 vars2 i =
    if i = 0 then
       true, 0
    else
@@ -242,26 +247,24 @@ let rec find_index hyps vars1 vars2 i =
             else if SymbolSet.mem vars2 v then
                false, i
             else
-               find_index hyps vars1 vars2 (i - 1)
+               least_fw_index hyps vars1 vars2 (i - 1)
 
 let sqElimAllT = argfunT (fun i p ->
    let i = get_pos_hyp_num p i in
    let t1, t2 = two_subterms (nth_hyp p i) in
-      if alpha_equal t1 t2 then
-         thinT i
-      else
-         let vs1 = free_vars_set t1 in
-         let vs2 = free_vars_set t2 in
-         let s = explode_sequent_arg p in
-         let fwd, j = find_index s.sequent_hyps vs1 vs2 (i - 1) in
-         let t =
-            mk_sequent_term { s with 
-               sequent_hyps = SeqHyp.of_list (Lm_list_util.nth_tl j (SeqHyp.to_list s.sequent_hyps))
-            }
-         in
-         let bind = var_subst_to_bind t (if fwd then t1 else t2) in
-            (if fwd then sq_subst_forward else sq_subst_backward) (j + 1) (i - j) bind)
+   let vs1 = free_vars_set t1 in
+   let vs2 = free_vars_set t2 in
+   let s = explode_sequent_arg p in
+   let fwd, j = least_fw_index s.sequent_hyps vs1 vs2 (i - 1) in
+   let t =
+      mk_sequent_term { s with 
+         sequent_hyps = SeqHyp.of_list (Lm_list_util.nth_tl j (SeqHyp.to_list s.sequent_hyps))
+      }
+   in
+   let bind = var_subst_to_bind t (if fwd then t1 else t2) in
+      (if fwd then sq_subst_forward else sq_subst_backward) (j + 1) (i - j) bind)
 
-let resource elim +=
-   << 'a ~ 'b >>, wrap_elim sqElimAllT
-
+let resource elim += [
+   << 'a ~ 'b >>, wrap_elim sqElimAllT;
+   << 'a ~ 'a >>, wrap_elim_auto_ok (fun i -> squiggleElimination i thenT thinT i)
+]

@@ -12,7 +12,7 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 2004-2005 MetaPRL Group, Caltech
+ * Copyright (C) 2004-2006 MetaPRL Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,12 +42,12 @@ declare sqsimple{'T}
 
 topval fold_sqsimple : conv
 
+val sqsimple : int -> tactic
 val sqsimple_sq: term -> tactic
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

@@ -322,16 +322,16 @@ prim type_axiomMember {| intro [] |} :
 
 doc docoff
 
+let rec is_var_free_hyps hyps len v i =
+   i < len &&
+   match SeqHyp.get hyps i with
+      Hypothesis (v', t) ->
+         is_var_free v t || (not (Lm_symbol.eq v v') && is_var_free_hyps hyps len v (i + 1))
+    | Context(_, _, ts) ->
+         List.exists (is_var_free v) ts || is_var_free_hyps hyps len v (i + 1)
+
 let eqElimT =
    let err = RefineError("Itt_elim.eqElimT", StringError "not applicable") in
-   let rec is_var_free_hyps hyps len v i =
-      i < len &&
-      match SeqHyp.get hyps i with
-         Hypothesis (v', t) ->
-            is_var_free v t || (not (Lm_symbol.eq v v') && is_var_free_hyps hyps len v (i + 1))
-       | Context(_, _, ts) ->
-            List.exists (is_var_free v) ts || is_var_free_hyps hyps len v (i + 1)
-   in
       argfunT (fun i p ->
          let i = get_pos_hyp_num p i in
          let seq = explode_sequent_arg p in

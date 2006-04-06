@@ -183,6 +183,9 @@ interactive bterm2_forward {| forward []; nth_hyp |} 'H : <:xrule<
    <H>; x: e in BTerm{d}; <J[x]> >- C[x]
 >>
 
+interactive bterm2_is_bterm {| nth_hyp |} 'H :
+   sequent { <H>; x: BTerm{'d}; <J['x]> >- 'x in BTerm }
+
 interactive compatible_shapes_univ {| intro [] |} :
    [wf] sequent { <H> >- 'bdepth in nat } -->
    [wf] sequent { <H> >- 'shape in list{int} } -->

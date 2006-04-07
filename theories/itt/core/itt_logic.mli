@@ -164,6 +164,9 @@ topval jAutoT : int -> tactic
 (* Tries various backThruHyp and backThruAssum *)
 topval logicAutoT : tactic
 
+(* Can be used to turn off JProver in autoT *)
+topval jprover_selector : term
+
 (************************************************************************
  * Grammar.
  *)
@@ -215,7 +218,6 @@ production xterm_term{exst v: 't1. 't2} <--
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

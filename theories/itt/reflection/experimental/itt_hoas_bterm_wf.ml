@@ -53,16 +53,17 @@ open Lm_printf
 open Term_match_table
 open Basic_tactics
 
+open Itt_equal
+open Itt_struct
+open Itt_logic
 open Itt_int_arith
+open Itt_omega
 open Itt_hoas_normalize
 open Itt_hoas_debruijn
 open Itt_hoas_vector
 open Itt_hoas_relax
 open Itt_hoas_bterm
 open Itt_hoas_lof
-open Itt_equal
-open Itt_omega
-open Itt_struct
 
 let resource private select +=
    relax_term, OptionAllow
@@ -425,13 +426,11 @@ let proofRuleAuxWFT =
    thenT proofRule3T
 
 let proofRuleWFT =
-   (*
-    * XXX: Aleksey: Do we need this repeatT?
-    * Temporary disabled as it creates infinite loops when debugging things
-    *)
-   withAllowOptionT relax_term ((* repeatT *) proofRuleAuxWFT)
-   thenT forwardChainT
-   thenT autoT
+   withExcludeOptionT jprover_selector (
+   withAllowOptionT relax_term (
+      proofRuleAuxWFT
+      thenT forwardChainT
+      thenT autoT))
 
 (************************************************************************
  * Depth wf.

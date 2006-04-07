@@ -36,14 +36,6 @@ topval proofRuleAuxWFT : tactic
 topval proofRuleWFT : tactic
 
 (*
- * Debugging.
- *)
-topval proofRule1T : tactic
-topval proofRule2T : tactic
-topval proofRule3T : tactic
-topval proveArithT : tactic
-
-(*
  * This will eventually go back into the standard library.
  *)
 resource (term * unit, tactic) forward_subst

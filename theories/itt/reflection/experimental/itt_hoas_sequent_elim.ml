@@ -92,7 +92,7 @@ let elimRuleT =
    thenMT dT 8
    thenMT proofCheckElimT 8
    (* XXX: incomplete *)
-   thenT proofRuleWFT
+   thenT withExcludeOptionT jprover_selector proofRuleWFT
 
 let elimRuleStartT =
    provableSequent_elim 2 ta
@@ -104,7 +104,7 @@ let elimSimpleStepT unfold =
       step_union_logic_elim 2;
       step_rules_logic_nil 2
    ])
-   thenT autoT
+   thenT withExcludeOptionT jprover_selector autoT
 
 let rec var_elimT i p =
    (* XXX: TODO: use "p" instead of guessing with orelseT *)
@@ -122,7 +122,7 @@ let elimProofCheckT unfold =
    thenT argfunT var_elimT 4
    thenMT dT (-4) thenMT dT (-4) thenMT dT (-5)
    thenMT rwcAll reduceC 1
-   thenT proofRuleWFT
+   thenT withExcludeOptionT jprover_selector proofRuleWFT
 
 (*
  * -*-

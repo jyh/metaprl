@@ -1400,8 +1400,19 @@ let base_jproverT =
           | _ ->
                raise (Invalid_argument "Problems decoding ITT_JProver.prover proof"))
 
-let simple_jproverT = funT (base_jproverT (Some 1))
-let jproverT = funT (base_jproverT (Some 100))
+declare jprover : SelectOption
+let jprover_selector = << select["jprover":t] >>
+let jprover_options = rule_labels_of_terms [jprover_selector]
+
+let simple_jproverT = 
+   let err = RefineError("Itt_logic.simple_jproverT", StringError ("JProver is excluded")) in
+      funT (fun p ->
+         if rule_labels_are_allowed (get_option_args p) jprover_options then
+            base_jproverT (Some 1) p
+         else
+            raise err)
+
+let jproverT = argfunT base_jproverT (Some 100)
 
 (************************************************************************
  * AUTO TACTIC                                                          *
@@ -1448,7 +1459,6 @@ let logicAutoT = autoBackT (==) (fun p _ -> p) backThruAssumT onSomeAssumT hypAu
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

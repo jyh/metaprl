@@ -72,6 +72,8 @@ declare seq_arg{'arg; 's}
 topval fold_is_sequent_bterm_core : conv
 topval fold_sequent_of_bterm_core : conv
 
+val sequent_bterm_forward: int -> tactic
+
 (*
  * -*-
  * Local Variables:

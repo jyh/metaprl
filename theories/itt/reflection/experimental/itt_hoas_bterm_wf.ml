@@ -223,9 +223,9 @@ doc <:doc<
    Basic rules for forward chaining.
 >>
 interactive cons_wf_forward {| forward |} 'H : <:xrule<
-   <H>; <J[it]>; h in t; l in list{t} >- C[it] -->
-   <H>; x: cons{h; l} in list{t}; <J[x]> >- C[x]
->>
+   <H>; <J[it]>; h1 = h2 in t; l1 = l2 in list{t} >- C[it] -->
+   <H>; x: cons{h1; l1} = cons{h2; l2} in list{t}; <J[x]> >- C[x]
+ >>
 
 interactive and_forward {| forward [ForwardPost thinT] |} 'H : <:xrule<
    <H>; x: A && B; <J[x]>; A; B >- C[x] -->

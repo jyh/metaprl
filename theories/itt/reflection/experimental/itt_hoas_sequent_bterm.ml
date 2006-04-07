@@ -603,12 +603,11 @@ interactive sequent_bterm_forward_lemma : <:xrule<
    <H> >- s in Sequent
 >>
 
-interactive sequent_bterm_forward (* {| forward |} *) 'H : <:xrule<
-   "wf" : <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- s1 in SequentRelax -->
-   "wf" : <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- s2 in SequentRelax -->
-   <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J>;
-      s1 = s2 in Sequent >- C -->
-   <H>; sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J> >- C
+interactive sequent_bterm_forward {| forward |} 'H : <:xrule<
+   "wf" : <H>; <J[it]> >- s1 in SequentRelax -->
+   "wf" : <H>; <J[it]> >- s2 in SequentRelax -->
+   <H>; <J[it]>; s1 = s2 in Sequent >- C[it] -->
+   <H>; x: sequent_bterm{s1} = sequent_bterm{s2} in BTerm; <J[x]> >- C[x]
 >>
 
 interactive bsequent_core_parts_forward 'H : <:xrule<

@@ -30,6 +30,7 @@ extends Itt_vec_bind
 extends Itt_vec_list1
 extends Itt_vec_dform
 extends Itt_vec_sequent_term
+extends Itt_hoas_normalize
 extends Itt_hoas_relax
 extends Itt_hoas_vbind
 extends Itt_hoas_sequent
@@ -47,6 +48,8 @@ open Base_trivial
 open Itt_list2
 open Itt_vec_util
 open Itt_vec_sequent_term
+open Itt_hoas_normalize
+open Itt_hoas_sequent_bterm
 open Itt_hoas_util
 
 (************************************************************************
@@ -586,6 +589,17 @@ let forward_bsequent_wf i =
     bsequent_wf_forward2 i
     thenT rw (addrC [Subterm 2] (tryC reduce_vsequent)) (-1)
     thenT rw (addrC [Subterm 3] (tryC reduce_vsequent)) (-2)
+
+let forward_sequent_bterm = {
+   forward_loc = (LOCATION);
+   forward_prec = forward_normal_prec ;
+   forward_tac = (fun i -> rwh reduce_bsequent i thenT rwh normalizeBTermC i thenMT sequent_bterm_forward i)
+}
+
+let resource forward += [
+   << bsequent{'arg}{| <J> >- 'C |} = sequent_bterm{'s} in BTerm >>, forward_sequent_bterm;
+   << sequent_bterm{'s} = bsequent{'arg}{| <J> >- 'C |} in BTerm >>, forward_sequent_bterm;
+]
 
 (*
  * JYH: we don't need this for now because the Itt_hoas_sequent_proof.provable_forwardT

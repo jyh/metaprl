@@ -659,6 +659,7 @@ let fold_sequent_of_bterm_core = makeFoldC <:xterm< sequent_of_bterm_core{e} >> 
 define const iform unfold_sequent_relax_zero: SequentRelax <--> SequentRelax{0}
 define iform unfold_sequent_bterm_zero: sequent_bterm{'s} <--> sequent_bterm{0; 's}
 define const iform unfold_BSequent_zero: BSequent <--> BSequent{0}
+
 (*
  * -*-
  * Local Variables:

@@ -15,6 +15,7 @@ MPFILES[] =
     ocaml_doc_expr3
     ocaml_doc_exn1
     ocaml_doc_expr4
+    ocaml_doc_expr5
     ocaml_doc_io1
     ocaml_doc_mod1
     ocaml_doc_mod2
@@ -33,6 +34,7 @@ PRINT_THEORIES[] =
     ocaml_doc_expr2
     ocaml_doc_expr3
     ocaml_doc_expr4
+    ocaml_doc_expr5
     ocaml_doc_exn1
     ocaml_doc_io1
     ocaml_doc_mod1

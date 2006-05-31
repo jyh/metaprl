@@ -45,7 +45,11 @@ declare typeclass Prop -> Term
 declare fsub_subtype{'ty1 : TyExp; 'ty2 : TyExp} : Prop
 declare fsub_member{'e : Exp; 'ty : TyExp} : Prop
 
+(*
+ * XXX: JYH: for now, the filter has no idea what to do with
+ * mta-subtyping rules, so we just use Perv!Judgment natively.
 declare typeclass Judgment -> Perv!Judgment
+ *)
 
 declare typeclass KindExp -> Term
 declare TyPower{'ty : TyExp} : KindExp

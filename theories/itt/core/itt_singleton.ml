@@ -2,9 +2,9 @@ doc <:doc<
    @module[Itt_singleton]
 
    The @tt[Itt_singleton] module defines a singleton type.
-   <<singleton{'a;'A}>> is a subtype of $A$ that conatains $a$.
-   It also conains all elements that are equal to $a$ in $A$ and only those elements.
-   Cf. Section @hrefmodule[Itt_simple_singleton].
+   <<singleton{'a;'A}>> is a subtype of $A$ that contains $a$.
+   It also contains all elements that are equal to $a$ in $A$ and only those elements.
+   @em[Cf]. Section @hrefmodule[Itt_simple_singleton].
    @docoff
    ----------------------------------------------------------------
 

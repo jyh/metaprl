@@ -1,5 +1,5 @@
 doc <:doc<
-	@module{This module contains tests for S4nJ}
+	@module{This module contains tests for @tt[S4nJ]}
 
 	<<box[0]{'a}>> plays the role of J and all other boxes are normal S4-modalities
 >>
@@ -10,7 +10,7 @@ open S4_logic
 doc <:doc< @parents >>
 extends S4_logic
 
-doc <:doc< @modsection{Standalone tests} >>
+doc <:doc< @modsection{Stand-alone tests} >>
 
 interactive test0 :
 	sequent { box[0]{'a} >- concl{| box[1]{'a} |} }

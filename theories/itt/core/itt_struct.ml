@@ -395,7 +395,7 @@ let assertAtT i s =
 doc <:doc<
    @modsubsection{Coping}
    The @tactic[copyHypT] $i$ $j$ tactic copies $i$'th hypothesis to the $j$'th place in a sequent.
-   Cf. @hreftactic[splitHypT].
+   @em[Cf]. @hreftactic[splitHypT].
    @docoff
 >>
 

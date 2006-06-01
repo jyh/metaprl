@@ -89,9 +89,9 @@ interactive splitHyp 'H 'J:
    sequent { <H>; x:'A; <J['x]>; <K['x]>  >- 'T['x]}
 
 doc <:doc<
-      The @tactic[spliHypT] $i$ $j$ tactic split $i$'th hypothesis and adds it to the $j$'s place.
+      The @tactic[spliHypT] $i$ $j$ tactic split $i$'@misspelled{th} hypothesis and adds it to the $j$'s place.
       It is useful for elimination rules where we want to keep the original hypothesis intact.
-      Cf. @hreftactic[copyHypT].
+      @em[Cf]. @hreftactic[copyHypT].
       @docoff
 >>
 
@@ -106,7 +106,7 @@ let splitHypT i j = funT (fun p ->
 
 doc <:doc<
    The @tactic[genHypT] $i$ tactics turns a membership (or an equality) hypothesis into a hypothesis
-   that introduces a variable, effictively generalizing for the membershin hypothesis.
+   that introduces a variable, effectively generalizing for the membership hypothesis.
 >>
 
 interactive gen_hyp 'H bind{x.sequent { v: 'A<|H|>['x]; <J<|H|>['v; 'x]> >- 'C<|J;H|>['v; 'x] }} :

@@ -73,6 +73,8 @@ topval fold_is_sequent_bterm_core : conv
 topval fold_sequent_of_bterm_core : conv
 
 val sequent_bterm_forward: int -> tactic
+val cvar_is_cvar_relax0 : tactic
+
 
 (*
  * -*-

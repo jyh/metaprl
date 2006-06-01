@@ -427,11 +427,14 @@ interactive vbind_in_bind {| intro |} : <:xrule<
    <H> >- vbind{| <J> >- e1 |} in Bind{length{vlist{| <J> |}}}
 >>
 
+
+(* XXX: BUG?: Should it be proved for n>=  length{vlist{| <J> |}} - AK *)
 interactive vbind_in_bind2 {| intro |} : <:xrule<
    <H> >- n = length{vlist{| <J> |}} in int -->
    <H> >- vbind{| <J> >- e1 |} in Bind{n}
 >>
 
+(* XXX: BUG?: I think the following rule belongs to Itt_vbind - AK *)
 doc <:doc<
    Sometimes it is useful to use the depth of a term (usually this
    is during induction).

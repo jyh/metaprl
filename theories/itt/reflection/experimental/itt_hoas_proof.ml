@@ -592,6 +592,14 @@ interactive mem_union_logic2 {| intro [SelectOption 2] |} : <:xrule<
 (*
  * Properties of SubLogic.
  *)
+
+interactive sub_logic_ref {| intro [] |} : <:xrule<
+   "wf" : <H> >- logic in Logic -->
+   "wf" : <H> >- logic in Logic -->
+   <H> >- SubLogic{logic; logic}
+>>
+
+
 interactive derivation_sub 'logic1 : <:xrule<
    "wf" : <H> >- logic1 IN Logic -->
    "wf" : <H> >- logic2 IN Logic -->

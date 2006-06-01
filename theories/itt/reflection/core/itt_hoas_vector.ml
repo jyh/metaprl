@@ -70,7 +70,7 @@ doc <:doc<
    @terms
    The <<bind{'n; x.'t['x]}>> expression, where <<'n>> is a natural number,
    represents a ``telescope'' of $n$ nested @tt[bind] operations. Namely, it
-   stands for <<bind{v_0.bind{v_1.math_ldots bind{v_n.'t['v0::'v1::math_ldots::'v_n::nil]}}}>>.
+   stands for <<bind{v_1.bind{v_2.math_ldots bind{v_n.'t['v1::'v2::math_ldots::'v_n::nil]}}}>>.
 
    We also provide an input form <<bind{'n; 't}>> for the important case of a vector
    binding that introduces a variable that does not occur freely in the bterm body.

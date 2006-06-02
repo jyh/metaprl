@@ -32,3 +32,4 @@ MPFILES[] =
     pmn_core_terms_test
     reflect_pmn_core_terms_test2
     reflect_pmn_core_logic_test
+    reflect_pmn_core_logic_test2

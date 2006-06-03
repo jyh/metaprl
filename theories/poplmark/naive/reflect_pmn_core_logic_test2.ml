@@ -26,9 +26,9 @@ doc <:doc<
    @parents
 >>
 
-extends itt_hoas_theory
+extends Itt_hoas_theory
 open Basic_tactics
-extends reflect_pmn_core_logic
+extends Reflect_pmn_core_logic
 open Basic_tactics
 open Itt_equal
 open Itt_dfun

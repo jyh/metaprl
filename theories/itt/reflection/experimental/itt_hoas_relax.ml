@@ -427,10 +427,9 @@ interactive vbind_in_bind {| intro |} : <:xrule<
    <H> >- vbind{| <J> >- e1 |} in Bind{length{vlist{| <J> |}}}
 >>
 
-
-(* XXX: BUG?: Should it be proved for n>=  length{vlist{| <J> |}} - AK *)
 interactive vbind_in_bind2 {| intro |} : <:xrule<
-   <H> >- n = length{vlist{| <J> |}} in int -->
+   "wf": <H> >- n in nat  -->
+   <H> >- n <= length{vlist{| <J> |}} -->
    <H> >- vbind{| <J> >- e1 |} in Bind{n}
 >>
 

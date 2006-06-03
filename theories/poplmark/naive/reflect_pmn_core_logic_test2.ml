@@ -38,6 +38,9 @@ open Itt_struct
 open Itt_unit
 open Itt_hoas_bterm_wf
 open Itt_hoas_sequent_bterm
+open Itt_hoas_sequent_term
+open Itt_hoas_sequent_normalize
+open Itt_hoas_normalize
 
 
 let elimReflT elim_rule n =
@@ -46,7 +49,31 @@ let elimReflT elim_rule n =
    thenMT repeatMT (forwardChainT ttca)
    thenT tryT (proofRuleWFT ttca thenT cvar_is_cvar_relax0 ttca)
    thenT tryOnAllHypsT unitElimination
+   thenWT tryT (completeT (rwh reduce_bsequent 0 thenT autoT thenT rwh normalizeBTermC 0 ta))
 
+
+(*
+open Reflect_itt_hoas_base_theory
+open Reflect_pmn_core_logic
+
+let resource elim += [
+     <<ProvableSequent{itt_hoas_base_theory;'s}>>, wrap_elim (elimReflT elim_itt_hoas_base_theory) ;
+     <<ProvableSequent{pmn_core_logic;'s}>>, wrap_elim (elimReflT elim_pmn_core_logic) ]
+*)
+
+
+(*
+interactive judgment_is_term:  <:xrule<
+  <H1> >- IsJudgment {pmn_core_logic{}; Jud } -->
+  <H1> >- Jud in BTerm
+>>
+*)
+
+(*
+interactive subterm_is_term:  <:xrule<
+  <H1> >- $`fsub{| <H> >- fsub_subtype{'T;TyTop} |} in BTerm -->
+  <H1> >- vbind{| <H> >- 'T |} in BTerm{length{sequent (vlist) { <'H> >- xconcl }}}
+ >>*)
 
 
 interactive top_is_top:  <:xrule<
@@ -57,3 +84,23 @@ interactive top_is_top:  <:xrule<
   "wf": <H1> >- vbind{| <H> >- 'S |} in BTerm{length{vlist{| <H> |} } } -->
   <H1> >- ProvableJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{T; S}  |}}
 >>
+
+(*
+interactive test:  <:xrule<
+  <H1> >- ProvableJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{T<||>; S}  |}} -->
+  <H1> >- ProvableJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{T; S}  |}}
+>>
+*)
+
+(*
+
+
+interactive transitivity TyArg{'Q} : <:xrule<
+  <H1> >- ProvableJudgment {pmn_core_logic;  $`fsub{| <H> >- fsub_subtype{S; T}  |}
+  <H1> >- ProvableJudgment {pmn_core_logic;  $`fsub{| <H> >- fsub_subtype{S; T}  |}
+  <H1> >- ProvableJudgment {pmn_core_logic;  $`fsub{| <H> >- fsub_subtype{S; T}  |}
+ }
+>>
+
+
+*)

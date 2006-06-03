@@ -1,8 +1,5 @@
 (*
  * Some utilities for wrapping and simplifying the reflection theory.
- * We define a new kind of language olang{'ops}, where 'ops is an
- * operator list, and we define several simplified theorems, including
- * induction, and squiggle equality.
  *
  * ----------------------------------------------------------------
  *

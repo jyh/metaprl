@@ -696,6 +696,12 @@ let reduce_bdepth_context_nthC = funC (fun e ->
 let resource reduce +=
    [<:xterm< bdepth{nth{l; i}} >>, wrap_reduce reduce_bdepth_context_nthC]
 
+
+let elim_reduce = wrap_elim_auto_ok (fun i -> rw (addrC [Subterm 1] reduceC) i)
+
+let resource elim +=
+   [<< CVar{'n +@ 0 } >>, elim_reduce]
+
 (************************************************************************
  * Common abbreviations
 define const iform unfold_sequent_iform: Sequent <--> Sequent{0}

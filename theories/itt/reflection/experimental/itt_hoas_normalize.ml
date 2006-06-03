@@ -39,7 +39,7 @@ doc <:doc<
 extends Itt_hoas_lof
 extends Itt_hoas_lof_vec
 extends Itt_vec_list1
-extends Itt_hoas_sequent
+extends Itt_hoas_bterm
 
 doc docoff
 
@@ -360,8 +360,7 @@ let normalizeBTermC =
 let elim_reduce = wrap_elim_auto_ok (fun i -> rw (addrC [Subterm 1] reduceC) i)
 
 let resource elim +=
-   [<< BTerm{'n +@ 0 } >>, elim_reduce;
-    << CVar{'n +@ 0 } >>, elim_reduce]
+   [<< BTerm{'n +@ 0 } >>, elim_reduce]
 
 (*
  * -*-

@@ -131,7 +131,7 @@ doc <:doc<
    Suppose the shape of an operator << 'op >> is $[b_1;@ldots;b_n]$ ($n @ge 0$)
    and its binding depth is << 'd >>. We say << 'mbtl >> and << 'op >> have
    compatible shapes if << 'mbtl >> is a list of length << 'n >> where the
-   binding depth of the $i$-@misspelled{th} element is $b_i+d$ (for each $i @in 1..n$).
+   binding depth of the $i$'th element is $b_i+d$ (for each $i @in 1..n$).
 >>
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
       length{shape{'op}} = length{'btl} in int &

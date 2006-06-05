@@ -51,7 +51,7 @@ declare Invalid_argument
  * Simple version.
  *)
 doc <:doc<
-   The bind terms are modeled after the terms in Itt_hoas_base.
+   The bind terms are modeled after the terms in @hrefmodule[Itt_hoas_base].
    The function space is marked by a disjoint union.
 >>
 define unfold_mk_bind : mk_bind{x. 'e['x]} <-->
@@ -88,8 +88,8 @@ interactive_rw reduce_subst_bind {| reduce |} :
  * Vector version.
  *)
 doc <:doc<
-   A vector binding ignores the actual hyp values and just performs a bind
-   of the comclusion.
+   A vector binding ignores the actual hypotheses values and just performs a bind
+   of the conclusion.
 >>
 prim_rw unfold_mk_vbind : <:xrewrite<
    "mk_vbind"{| <J> >- C |}
@@ -194,7 +194,7 @@ interactive_rw reduce_vsubst_dummy_cons {| reduce |} : <:xrewrite<
 doc <:doc<
    The list binding is like a vector binding, but wraps the binders
    in a list.  Use unit lists (unary natural numbers) instead of
-   << nat >> to avoid wf subgoals.
+   << nat >> to avoid wellformedness subgoals.
 >>
 define unfold_mk_lbind : mk_lbind{'n; x. 'e['x]} <--> <:xterm<
    list_ind{n; lambda{f. f "nil"}; u, v, g. lambda{f. mk_bind{x. g (lambda{l. f (x :: l)})}}} lambda{x. e[x]}
@@ -371,12 +371,9 @@ let squash_mk_vbindC = termC (fun t -> squash_mk_bind (squash_rewrite_arg t))
 let resource reduce +=
     [<< mk_vbind{| <J> >- 'e |} >>, wrap_reduce squash_mk_vbindC]
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
- * Caml-master: "compile"
  * End:
  * -*-
  *)

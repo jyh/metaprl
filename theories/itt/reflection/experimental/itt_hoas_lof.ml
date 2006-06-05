@@ -3,7 +3,7 @@ doc <:doc<
 
    During normalization, we define a custom version of list_of_fun,
    called << lof{i. 'f['i]; 'n} >>.  The expressions << 'f['i] >> are
-   stylizied, and include only operations that correspond directly
+   stylized, and include only operations that correspond directly
    to list operations.  The style is designed carefully to make the
    conversion reversible.  Normal lists can be converted to @tt[lof]
    and back without change.
@@ -57,7 +57,7 @@ open Itt_hoas_util
  * Resources.
  *)
 doc <:doc<
-   The << lof{i. 'f['i]; 'n} >> normalizers follow the same pattern as in Itt_list3.
+   The << lof{i. 'f['i]; 'n} >> normalizers follow the same pattern as in @hrefmodule[Itt_list3].
 
    Invariant: the @tt[normalize_lof] tactic works using @tt[sweepUpC] and
    @tt[reduce_lof] works using @tt[sweepDnC].  When choosing which resource
@@ -353,7 +353,7 @@ interactive_rw lof_bind_append {| reduce_lof |} :
  * Bind forms.
  *)
 doc <:doc<
-   Convert the expression in a << bind{'n; x. 'e['x]} >> to lof form.
+   Convert the expression in a << bind{'n; x. 'e['x]} >> to @tt[lof] form.
 >>
 let resource pre_normalize_lof +=
    [<< mk_term{'op; 'subterms} >>, fold_mk_term;
@@ -531,7 +531,7 @@ interactive_rw normalize_var_subst {| normalize_lof |} : <:xrule<
  * Lof removal.
  *)
 doc <:doc<
-   After a reduction, remove as many lof as possible.
+   After a reduction, remove as many @tt[lof] as possible.
 >>
 interactive_rw lof_lof_elim :
    'n in nat -->

@@ -49,7 +49,7 @@ open Basic_tactics
 open Itt_struct
 
 doc <:doc<
-   When $f$ is squiggle-reversible, we can have elimination for non-squash-stable goals. Morover,
+   When $f$ is squiggle-reversible, we can have elimination for non-squash-stable goals. Moreover,
    in this case we can derive a @emph{strong} version of the elimination rule.
 >>
 

@@ -2,7 +2,7 @@ doc <:doc<
    @spelling{unrollings}
    @module[Itt_srec]
 
-   The @tt[Itt_obj_base_rewrite] module defines basic operations of @em{object calculas}.
+   The @tt[Itt_obj_base_rewrite] module defines basic operations of @em{object calculus}.
    It does not define types of objects yet.
 
    @docoff

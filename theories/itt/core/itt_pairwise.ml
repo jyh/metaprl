@@ -89,7 +89,7 @@ interactive splitHyp 'H 'J:
    sequent { <H>; x:'A; <J['x]>; <K['x]>  >- 'T['x]}
 
 doc <:doc<
-      The @tactic[spliHypT] $i$ $j$ tactic split $i$'@misspelled{th} hypothesis and adds it to the $j$'s place.
+      The @tactic[spliHypT] $i$ $j$ tactic split $i$'th hypothesis and adds it to the $j$'s place.
       It is useful for elimination rules where we want to keep the original hypothesis intact.
       @em[Cf]. @hreftactic[copyHypT].
       @docoff

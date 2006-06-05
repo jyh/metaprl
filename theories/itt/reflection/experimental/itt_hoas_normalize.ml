@@ -111,7 +111,7 @@ let normalizeSimpleT =
    rwAll normalizeSimpleC
 
 doc <:doc<
-   Pre-normalization.  This eliminates the non-canonical forms.
+   @misspelled{Pre}-normalization.  This eliminates the non-canonical forms.
 >>
 let resource pre_normalize_simple +=
    [<< mk_term{'op; 'subterms} >>, fold_mk_term;
@@ -270,7 +270,7 @@ interactive_rw coalesce_vbind_bind1 {| normalize_simple |} : <:xrewrite<
  * Tactics.
  *)
 doc <:doc<
-   The ``simple'' normalizer works with a pre-defined set of theorems
+   The ``simple'' normalizer works with a @misspelled{pre}-defined set of theorems
    for a finite number of different shapes.  Also, it does not perform
    any kind of optimization.  These are the steps:
 
@@ -306,8 +306,8 @@ doc <:doc<
    The @tt[reduceLofC] conversion coalesces binds and pushes them down.
    The @tt[reduceLofC] conversion must be run with all @tt[lof] terms
    hoisted as much as possible---it should be run after @tt[normalizeLofC].
-   The @tt[normalizeLofC] convertion pushed hoists the lof terms as much as possible
-   and coalesces substl terms.
+   The @tt[normalizeLofC] conversion pushed hoists the @tt[lof] terms as much as possible
+   and coalesces @hrefterm[substl] terms.
    @docoff
 >>
 let normalizeBTermAuxC =

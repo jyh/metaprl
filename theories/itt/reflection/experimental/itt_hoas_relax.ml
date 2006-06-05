@@ -2,7 +2,7 @@ doc <:doc<
    @module[Itt_hoas_relax]
 
    The @tt[Itt_hoas_relax] module defines some transformations
-   with relaxed wf subgoals.
+   with relaxed wellformedness subgoals.
 
    The goal here is to define a type << Bind{'n} >> that includes
    all the terms with binding depth at least << 'n >>.  We will have

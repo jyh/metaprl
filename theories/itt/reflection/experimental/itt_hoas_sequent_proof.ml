@@ -117,7 +117,7 @@ interactive provable_judgment_wf {| intro [] |} : <:xrule<
  * Intro rules.
  *)
 doc <:doc<
-   A @tt[ProvableSequent] judgment intro rule is provable if it can be refined
+   A @tt[ProvableSequent] judgment introduction rule is provable if it can be refined
    by a rule in the logic.  Unfortunately, we have to provide the witness
    eagerly.  However, it should be easy to do so.
 >>
@@ -150,7 +150,7 @@ interactive simple_step_intro 'step : <:xrule<
 >>
 
 doc <:doc<
-   Use sublogic to prove << SimpleStep{'premises; 'goal; 'witness; 'logic} >>.
+   Use a sublogic to prove << SimpleStep{'premises; 'goal; 'witness; 'logic} >>.
 >>
 interactive simple_step_intro0 'step : <:xrule<
    "wf" : <H> >- logic in Logic -->

@@ -343,7 +343,7 @@ interactive_rw reduce_vec_bind_of_mk_bterm_of_list_of_fun :
    mk_bterm{'n +@ 'i; 'op; list_of_fun{y. bind{'i; x. 'f['x; 'y]}; 'm}}
 
 doc <:doc<
-   Some quivalences on binds.
+   Some equivalences on binds.
 >>
 interactive_rw reduce_bindn_nth {| reduce |} : <:xrewrite<
    n in nat -->

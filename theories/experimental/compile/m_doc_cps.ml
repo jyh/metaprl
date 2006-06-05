@@ -63,7 +63,7 @@ tail-calls, and all occurrences of $@LetApply{a_1; a_2; v; e}$ and $@Return{a}$ 
 main objective in CPS conversion is to pass the result of the computation to a continuation
 function.
 
-CPS conversion is not a requsite part of our methodology.  However, it represents an important style
+CPS conversion is not a requisite part of our methodology.  However, it represents an important style
 of transformation, and therefore we choose to illustrate it in this case study.
 
 There are different ways of formalizing the CPS conversion (see Section @refsection[m_doc_summary]

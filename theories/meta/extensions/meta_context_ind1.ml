@@ -5,7 +5,7 @@ doc <:doc<
    This model is documented more precisely in
    @code{papers/notebook/context_induction}.
 
-   At a high level, the mechanism works by ``teleporting'' a contex
+   At a high level, the mechanism works by ``teleporting'' a context
    from one sequent to another.  Suppose we are proving
    a rule @code{S1 --> ... --> Sn(Gamma)} and we wish to do induction on
    Gamma.  For each occurrence of Gamma on which to do induction, specify

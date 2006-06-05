@@ -1,7 +1,7 @@
 doc <:doc<
    @module["meta_context_simple"]
 
-   Simplified form of context induction where the hyps are squashed.
+   Simplified form of context induction where the hypotheses are squashed.
 
    @begin[license]
 
@@ -42,7 +42,7 @@ doc docoff
 open Basic_tactics
 
 doc <:doc<
-   This is a limited form of context induction, where the hyp dependencies
+   This is a limited form of context induction, where the hypotheses dependencies
    are squashed.
 >>
 prim_rw reduce_squash_sequent_ind_base2 {| reduce |} :

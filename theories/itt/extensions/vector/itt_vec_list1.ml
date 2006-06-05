@@ -64,7 +64,7 @@ open Itt_vec_util
  * Temporarily use the declare/prim_rw form.
  *)
 doc <:doc<
-   The vector list produces a list from the hyps.
+   The vector list produces a list from the hypotheses.
 >>
 declare sequent [vlist_nest] { Term : Term >- Term } : Term
 
@@ -176,7 +176,7 @@ let resource intro +=
    [<< vlist{| <J> |} in list{'A} >>, wrap_intro (funT vlist_wf_tac)]
 
 doc <:doc<
-   A vlist is @emph{always} a list.
+   A @tt[vlist] is @emph{always} a list.
 >>
 interactive vlist_wf {| intro [] |} :
    sequent { <H> >- vlist{| <J> |} in list }
@@ -210,7 +210,7 @@ interactive_rw list_of_fun_of_vlist_elem :
  * Squash list.
  *)
 doc <:doc<
-   The << vsquashlist{| <J> >- 'l |} >> is the list where all hyps are
+   The << vsquashlist{| <J> >- 'l |} >> is the list where all hypotheses are
    replaced by the term << it >>.  Most commonly, the << vsquashlist{| <J> >- 'l |} >>
    term is used in << length{'e} >> reasoning, where the elements don't matter.
 >>

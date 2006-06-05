@@ -9,7 +9,7 @@ doc <:doc<
    $$   <<   sequent{  x:(quot u,v:bool//"true") >- "type"{singleton{'x}} }  >>$$
    is not true.
 
-   Cf. Section @hrefmodule[Itt_singleton].
+   @em[Cf]. Section @hrefmodule[Itt_singleton].
    @docoff
    ----------------------------------------------------------------
 
@@ -120,7 +120,7 @@ doc <:doc<
  It is essential that we have the restriction that $a$ should be a constant to prove that
  <<singleton{'a}>> is a type.
  The judgment
-    $$ sequent{  <H>; x:(quot u,v:bool//"true") >- "type"{singleton{'x}} } $$
+    $$<< sequent{  <H>; x:(quot u,v:bool//"true") >- "type"{singleton{'x}} }>> $$
  would lead to the contradiction.
 >>
 
@@ -135,7 +135,7 @@ interactive singleton_example :
    sequent{ <H>; x:bool >- "type"{singleton{'x}} }
 
 doc <:doc<
-  We can constuct $<<singleton{'a}>>$ even when $a$ is not reduced to a canonical form. E.g.,
+  We can construct $<<singleton{'a}>>$ even when $a$ is not reduced to a canonical form. @em{E.g.},
 >>
 interactive singleton_example2 :
    sequent{ <H> >- ycomb in singleton{ycomb} }

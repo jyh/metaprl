@@ -57,7 +57,7 @@ interactive nat_plus_one_eq_nat_plus_two_intro {| intro [] |} :
 
 doc <:doc<
    Define a relaxed form of list type.  The type << Nil >> includes
-   just << nil >>.  The type << Cons >> includes all cons-cells
+   just << nil >>.  The type << Cons >> includes all @misspelled{cons}-cells
    << cons{'e1; 'e2} >> for any << 'e1 >> and << 'e2 >>.
 >>
 define unfold_Nil : Nil <-->
@@ -203,7 +203,7 @@ interactive_rw reduce_cons_of_fun_of_cons {| reduce |} :
    'l
 
 doc <:doc<
-   These are the main introduction and elimination lemmmas for the sloppy lists.
+   These are the main introduction and elimination lemmas for the sloppy lists.
 >>
 interactive cons_n_elim {| elim [] |} 'H :
    [wf] sequent { <H>; x: Cons{'n}; <J['x]> >- 'n in nat } -->
@@ -221,7 +221,7 @@ interactive cons_n_intro_cons {| intro [] |} :
  * Now define a function space for functions that produce conses.
  *)
 doc <:doc<
-   Define a space of lambdas that compute to cons lists.
+   Define a space of lambdas that compute to @tt[cons] lists.
 >>
 define unfold_ConsFun : ConsFun <-->
    Img{(top -> top) * (top -> top); x. spread{'x; u, v. lambda{y. cons{'u 'y; 'v 'y}}}}

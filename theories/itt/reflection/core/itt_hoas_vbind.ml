@@ -1,7 +1,7 @@
 doc <:doc<
    @module[Itt_hoas_vbind]
    The @tt[Itt_hoas_vbind] module defines a ``vector binding''
-   using context notation.  We define a conversion to Itt_vec_bind.mk_vbind.
+   using context notation.  We define a conversion to @tt["Itt_vec_bind.mk_vbind"].
 
    @docoff
    ----------------------------------------------------------------

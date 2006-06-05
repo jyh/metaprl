@@ -457,7 +457,7 @@ interactive derivation_step_intro {| intro [] |} : <:xrule<
 >>
 
 doc <:doc<
-   A @tt[Provable] judgment intro rule is provable if it can be refined
+   A @tt[Provable] judgment introduction rule is provable if it can be refined
    by a rule in the logic.
 >>
 interactive provable_intro 'premises : <:xrule<

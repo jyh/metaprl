@@ -1,7 +1,7 @@
 doc <:doc<
    @module[Itt_hoas_lof_vec]
 
-   Vector counterparts for lof normalization.
+   Vector counterparts for @hrefterm[lof] normalization.
 
    @docoff
 

@@ -1,7 +1,7 @@
 doc <:doc<
    @module[Reflec_pmn_core_logic_test2]
 
-      Some more lemmas about FSub.
+      Some more lemmas about @em[FSub].
 
    @begin[license]
    Copyright (C) 2005-2006 Mojave Group, Caltech

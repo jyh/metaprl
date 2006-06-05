@@ -65,23 +65,25 @@ doc <:doc<
 define unfold_compatible_shapes: compatible_shapes{'depth; 'shape; 'btl} <-->
    all2{'shape; 'btl; x, y. ('depth +@ 'x) = bdepth{'y} in int}
 
-define unfold_dom: dom{'BT} <--> nat*nat + depth:nat * op: Operator * {subterms:list{'BT} | compatible_shapes{'depth;shape{'op};'subterms} }
+(*private*) define unfold_dom:
+   dom{'BT} <-->
+   nat * nat + depth:nat * op: Operator * {subterms:list{'BT} | compatible_shapes{'depth;shape{'op};'subterms} }
 
-define unfold_mk: mk{'x} <--> decide{'x;
+(*private*) define unfold_mk: mk{'x} <--> decide{'x;
                                       v.spread{'v;left,right. var{'left;'right}};
                                       t.spread{'t;d,op,st. mk_bterm{'d;'op;'st}}}
 
-define unfold_dest: dest{'bt} <--> dest_bterm{'bt; l,r. inl{('l,'r)}; d,op,ts. inr{('d,('op,'ts))}}
+(*private*) define unfold_dest: dest{'bt} <--> dest_bterm{'bt; l,r. inl{('l,'r)}; d,op,ts. inr{('d,('op,'ts))}}
 
-define unfold_Iter: Iter{'X} <--> Img{dom{'X};x.mk{'x}}
+(*private*) define unfold_Iter: Iter{'X} <--> Img{dom{'X};x.mk{'x}}
 
-define unfold_BT: BT{'n} <--> ind{'n; void; X.Iter{'X}}
+(*private*) define unfold_BT: BT{'n} <--> ind{'n; void; X.Iter{'X}}
 
-define const unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
+define const (*opaque*) unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
 
 define unfold_BTerm2 : BTerm{'i} <--> { e: BTerm | bdepth{'e} = 'i in nat }
 
-define (*private *) unfold_ndepth:
+(*private*) define unfold_ndepth:
    ndepth{'t} <-->
     fix{ndepth. lambda{t.
       dest_bterm{'t; l,r.1; bdepth,op,subterms. list_max{map{x.'ndepth 'x;'subterms}}+@ 1 }
@@ -98,6 +100,11 @@ let fold_BT = makeFoldC << BT{'n} >> unfold_BT
 let fold_BTerm = makeFoldC << BTerm >> unfold_BTerm
 let fold_BTerm2 = makeFoldC << BTerm{'i} >> unfold_BTerm2
 let fold_ndepth = makeFoldC << ndepth{'t} >> unfold_ndepth
+
+doc <:doc<
+     @rewrites
+     Basic facts about @tt[compatible_shapes]
+>>
 
 interactive_rw compatible_shapes_nil_nil {| reduce |} :
    compatible_shapes{'depth; nil; nil}
@@ -125,7 +132,7 @@ interactive_rw bt_reduce_step {| reduce |}: 'n in nat --> BT{'n +@ 1} <--> Iter{
 
 doc rules
 
-interactive bt_elim_squash  {| elim [] |} 'H :
+(*private*) interactive bt_elim_squash  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
    [base] sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    [step] sequent { <H>; <J>; depth: nat; op:Operator; subterms:list{BT{'n}};
@@ -133,22 +140,22 @@ interactive bt_elim_squash  {| elim [] |} 'H :
                >- squash{'P[mk_bterm{'depth; 'op; 'subterms}]} } -->
    sequent { <H>; t: BT{'n+@1}; <J> >- squash{'P['t]} }
 
-interactive bt_elim_squash0  {| nth_hyp |} 'H :
+(*private*) interactive bt_elim_squash0  {| nth_hyp |} 'H :
    sequent { <H>; t: BT{0}; <J> >- 'P['t] }
 
-interactive bt_wf_and_bdepth_univ  {| intro[] |}:
+(*private*) interactive bt_wf_and_bdepth_univ  {| intro[] |}:
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- BT{'n} in univ[l:l] & all t: BT{'n}. bdepth{'t} in nat }
 
-interactive bt_wf_and_bdepth_wf  {| intro [] |}:
+(*private*) interactive bt_wf_and_bdepth_wf  {| intro [] |}:
    [wf] sequent{ <H> >- 'n in nat } -->
    sequent{ <H> >- BT{'n} Type & all t: BT{'n}. bdepth{'t} in nat }
 
-interactive bt_univ {| intro[] |}:
+(*private*) interactive bt_univ {| intro[] |}:
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- BT{'n} in univ[l:l] }
 
-interactive bt_wf {| intro [] |}:
+(*private*) interactive bt_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'n in nat } -->
    sequent{ <H> >- BT{'n} Type }
 
@@ -198,11 +205,11 @@ interactive compatible_shapes_wf {| intro [] |} :
    [wf] sequent{ <H> >- 'btl in list{BTerm} } -->
    sequent{ <H> >- compatible_shapes{'bdepth; 'shape; 'btl} Type }
 
-interactive bt_subtype_bterm  {| intro[] |} :
+(*private*) interactive bt_subtype_bterm  {| intro[] |} :
    [wf] sequent { <H> >- 'n in nat} -->
    sequent { <H> >- BT{'n} subtype BTerm }
 
-interactive dom_wf1 {| intro[] |}:
+(*private*) interactive dom_wf1 {| intro[] |}:
    [wf] sequent { <H> >- 'n in nat} -->
    sequent { <H> >-  dom{BT{'n}} Type }
 
@@ -225,30 +232,30 @@ let resource elim += [
 
 doc docon
 
-interactive dom_wf {| intro [] |}:
+(*private*) interactive dom_wf {| intro [] |}:
    sequent{ <H> >- 'T subtype BTerm } -->
    sequent{ <H> >-  dom{'T} Type }
 
-interactive dom_monotone {| intro[] |}:
+(*private*) interactive dom_monotone {| intro[] |}:
    sequent{ <H> >- 'T subtype 'S } -->
    sequent { <H> >- 'S subtype BTerm } -->
    sequent{ <H> >-  dom{'T} subtype dom{'S} }
 
-interactive dom_monotone_set {| intro[] |}:
+(*private*) interactive dom_monotone_set {| intro[] |}:
    sequent{ <H> >- 'T subset 'S } -->
    sequent { <H> >- 'S subtype BTerm } -->
    sequent{ <H> >-  dom{'T} subset dom{'S} }
 
-interactive iter_monotone {| intro[] |}:
+(*private*) interactive iter_monotone {| intro[] |}:
    sequent{ <H> >- 'T subtype 'S } -->
    sequent { <H> >- 'S subtype BTerm } -->
    sequent{ <H> >-  Iter{'T} subtype Iter{'S} }
 
-interactive bt_monotone  {| intro [] |} :
+(*private*) interactive bt_monotone  {| intro [] |} :
    [wf] sequent{ <H> >- 'n in nat} -->
    sequent{ <H> >- BT{'n} subtype BT{'n+@1} }
 
-interactive var_wf0 {| intro[] |}:
+(*private*) interactive var_wf0 {| intro[] |}:
    sequent { <H> >- 'X subtype BTerm } -->
    [wf] sequent { <H> >- 'l in nat } -->
    [wf] sequent { <H> >- 'r in nat } -->
@@ -259,7 +266,7 @@ interactive var_wf {| intro [] |}:
    [wf] sequent{ <H> >- 'r in nat } -->
    sequent{ <H> >- var{'l;'r} in BTerm }
 
-interactive mk_bterm_bt_wf {| intro [] |} :
+(*private*) interactive mk_bterm_bt_wf {| intro [] |} :
    [wf] sequent{ <H> >- 'n in nat } -->
    [wf] sequent{ <H> >- 'depth in nat } -->
    [wf] sequent{ <H> >- 'op in Operator } -->
@@ -294,7 +301,7 @@ interactive mk_term_wf2 {| intro [] |} :
    sequent { <H> >- compatible_shapes{0; shape{'op}; 'subterms} } -->
    sequent { <H> >- mk_term{'op; 'subterms} in BTerm{'d} }
 
-interactive bt_elim_squash2  {| elim [] |} 'H :
+(*private*) interactive bt_elim_squash2  {| elim [] |} 'H :
    [wf] sequent { <H>; <J> >- 'n in nat } -->
    [base] sequent { <H>; <J>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    [step] sequent { <H>; 'n>0; <J>; depth: nat; op:Operator; subterms:list{BT{'n-@1}};
@@ -439,23 +446,23 @@ interactive dom_elim  {| elim [] |} 'H :
                >- 'P[inr{'v}] } -->
    sequent { <H>; t: dom{'T}; <J['t]> >- 'P['t] }
 
-interactive_rw dest_mk_reduce 'n :
+(*private*) interactive_rw dest_mk_reduce 'n :
    'n in nat -->
    't in dom{BT{'n}}  -->
    dest{mk{'t}} <--> 't
 
-interactive  bt_elim1  {| elim [] |} 'H :
+(*private*) interactive  bt_elim1  {| elim [] |} 'H :
    [wf] sequent { <H>; t: BT{'n+@1}; <J['t]> >- 'n in nat } -->
    [step] sequent { <H>; x: dom{BT{'n}}; <J[mk{'x}]> >- 'P[mk{'x}] } -->
    sequent { <H>; t: BT{'n+@1}; <J['t]> >- 'P['t] }
 
-interactive  bterm_elim_squash1 {| elim [] |} 'H :
+(*private*) interactive  bterm_elim_squash1 {| elim [] |} 'H :
    sequent { <H>; t: BTerm; <J['t]>; l: nat; r:nat >- squash{'P[var{'l;'r}]} } -->
    sequent { <H>; t: BTerm; <J['t]>; depth: nat; op:Operator; subterms:list{BTerm};
                compatible_shapes{'depth;shape{'op};'subterms} >- squash{'P[mk_bterm{'depth;'op;'subterms}]} } -->
    sequent { <H>; t: BTerm; <J['t]> >- squash{'P['t]} }
 
-interactive bterm_elim2  {| elim [] |} 'H :
+(*private*) interactive bterm_elim2  {| elim [] |} 'H :
    sequent { <H>; t: BTerm; <J['t]>; l: nat; r:nat >- 'P[var{'l;'r}] } -->
    sequent { <H>; t: BTerm; <J['t]>; bdepth: nat; op:Operator; subterms:list{BTerm};
                compatible_shapes{'bdepth;shape{'op};'subterms} >- 'P[mk_bterm{'bdepth;'op;'subterms}] } -->

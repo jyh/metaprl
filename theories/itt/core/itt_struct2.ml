@@ -272,7 +272,7 @@ interactive prod_rev_elim 'H: <:xrule<
 >>
 
 doc <:doc<
-   The (@tt[combineT] @it[m] @it[n]) tactic combines m hypothesis starting from the @it[n]th one into a one hypothesis that a product of them.
+   The (@tt[combineT] @it[m] @it[n]) tactic combines m hypothesis starting from the @it[n]th one into a product of them.
    For example when apply @tt[combineT] 3 2 to sequent <:xrule< <H>; x:A; y:B; z:C; <J> >- T >> we get
    <:xrule< <H>; p: A*B*C; <J> >- T >> and some well-formedness subgoals.
 >>

@@ -41,6 +41,7 @@ extends Base_theory
 extends Itt_dfun
 extends Itt_union
 extends Itt_prod
+extends Itt_list2
 doc docoff
 
 open Basic_tactics
@@ -73,6 +74,8 @@ doc <:doc<
 define (*private*) unfold_bind:
    bind{x.'t['x]} <--> inl{lambda{x.'t['x]}}
 
+define iform bind_list: bind_list{'terms} <--> map{bt. bind{x.'bt}; 'terms}
+
 define (*private*) unfold_mk_term:
    mk_term{'op; 'subterms} <--> inr{('op, 'subterms)}
 
@@ -80,6 +83,8 @@ declare illegal_subst
 
 define (*private*) unfold_subst:
    subst{'bt; 't} <--> decide{'bt; f. 'f 't; opt. illegal_subst}
+
+define iform subst_list: subst_list{'terms;'v} <-->  map{bt. subst{'bt; 'v}; 'terms}
 
 define (*private*) unfold_wdt:
    weak_dest_bterm{'bt; 'bind_case; op, sbt. 'mkterm_case['op; 'sbt]}
@@ -132,8 +137,13 @@ doc docoff
 dform bind_df : parens :: "prec"[prec_lambda] :: bind{x.'t} =
    szone pushm[3] `"B " 'x `"." hspace slot{'t} popm ezone
 
+dform bind_list_df : parens :: "prec"[prec_lambda] :: bind_list{'t} =
+   szone pushm[3] `"B" hspace slot{'t} popm ezone
+
 dform subst_df : parens :: "prec"[prec_apply] :: subst{'bt; 't} =
    slot["lt"]{'bt} `"@" slot["le"]{'t}
+
+dform subst_list_df : parens :: "prec"[prec_apply] :: subst_list{'bt; 't} = subst{'bt; 't}
 
 dform mk_term_df : mk_term{'op; 'subterms} =
    pushm[0] szone pushm[3] `"T(" slot{'op} `";" hspace slot{'subterms} popm `")" ezone popm

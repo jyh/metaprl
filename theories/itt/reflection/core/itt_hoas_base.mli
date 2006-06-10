@@ -34,12 +34,16 @@ doc <:doc<
    @end[license]
 >>
 extends Base_theory
+extends Itt_list2
 
 open Basic_tactics
 
 declare bind{x. 't['x]}
 declare mk_term{'op; 'subterms}
 declare subst{'bt; 't}
+
+define iform bind_list: bind_list{'terms} <--> map{bt. bind{x.'bt}; 'terms}
+define iform subst_list: subst_list{'terms;'v} <-->  map{bt. subst{'bt; 'v}; 'terms}
 
 declare weak_dest_bterm{'bt; 'bind_case; op, sbt. 'subterms_case['op; 'sbt]}
 

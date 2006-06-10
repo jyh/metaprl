@@ -216,7 +216,7 @@ interactive_rw reduce_mk_bterm_full : <:xrewrite<
    subterms in list -->
    mk_bterm{n; op; subterms}
    <-->
-   bind{n; x. mk_term{op; map{subterm. substl{subterm; x}; subterms}}}
+   bind{n; x. mk_term{op; substl_list{subterms; x}}}
 >>
 
 interactive mk_bterm_is_bind {| intro |} : <:xrule<
@@ -516,7 +516,7 @@ interactive_rw reduce_probe_succ_mk_bterm {| reduce |} : <:xrewrite<
    if beq_int{d; 0} then
       "false"
    else
-      probe{i; mk_bterm{d -@ 1; op; map{t. subst{t; mk_terms{it}}; subterms}}}
+      probe{i; mk_bterm{d -@ 1; op; subst_list{subterms; mk_terms{it}}}}
 >>
 
 interactive_rw reduce_probe_bindn : <:xrule<

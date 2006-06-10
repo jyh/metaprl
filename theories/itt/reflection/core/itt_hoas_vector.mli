@@ -54,6 +54,8 @@ declare subst{'n; 'bt; 't}
 declare substl{'bt; 'tl}
 
 define iform simple_bindn: bind{'n; 't} <-->  bind{'n; x.'t}
+define iform bindn_list: bind_list{'n;'terms} <--> map{bt. bind{'n;'bt}; 'terms}
+define iform substl_list: substl_list{'terms;'v} <-->  map{bt. substl{'bt; 'v}; 'terms}
 
 (************************************************************************
  * Tactics.

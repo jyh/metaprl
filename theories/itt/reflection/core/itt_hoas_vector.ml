@@ -98,6 +98,10 @@ define (*private*) unfold_substl:
 
 define iform simple_bindn: bind{'n; 't} <-->  bind{'n; "_".'t}
 
+define iform bindn_list: bind_list{'n;'terms} <--> map{bt. bind{'n;'bt}; 'terms}
+
+define iform substl_list: substl_list{'terms;'v} <-->  map{bt. substl{'bt; 'v}; 'terms}
+
 doc rewrites
 
 interactive_rw reduce_bindn_base {| reduce |} :
@@ -272,6 +276,8 @@ dform bind_df : "prec"[prec_apply] :: mode[prl] :: bind{'n; x.'t} =
 dform bind_df2 : mode[html] :: mode[tex] :: bind{'n; x.'t} =
    szone pushm[3] `"B " 'x `":" sup{slot{'n}} `"." hspace slot["le"]{'t} popm ezone
 
+dform bind_list_df : "prec"[prec_apply] :: bind_list{'n; 't} = bind{'n; 't}
+
 dform subst_df : parens :: "prec"[prec_apply] :: mode[prl] :: subst{'n; 'bt; 't} =
    szone pushm[3] slot["lt"]{'bt} `" @(" slot["none"]{'n} `")" hspace slot["le"]{'t} popm ezone
 
@@ -280,6 +286,8 @@ dform subst_df2 : parens :: "prec"[prec_apply] :: mode[html] :: mode[tex] :: sub
 
 dform substl_df : parens :: "prec"[prec_apply] :: substl{'bt; 'tl} =
       slot["lt"]{'bt} `"@" Mpsymbols!subl slot["le"]{'tl}
+
+dform substl_list_df : parens :: "prec"[prec_apply] :: substl_list{'bt; 'tl} = substl{'bt; 'tl}
 
 (************************************************************************
  * Tactics.

@@ -75,7 +75,7 @@ define (*private*) unfold_mk_bterm:
    <-->
    ind{'n;
       lambda{btl. mk_term{'op; 'btl }};
-      "_", r. lambda{btl. bind{v. 'r map{bt. subst{'bt; 'v}; 'btl}}}}
+      "_", r. lambda{btl. bind{v. 'r subst_list{'btl; 'v}}}}
    'btl
 
 doc <:doc<
@@ -133,7 +133,7 @@ interactive_rw reduce_mk_bterm_base {| reduce ~labels:denormalize_labels |} :
 
 interactive_rw reduce_mk_bterm_step {| reduce ~labels:denormalize_labels |} :
    'n in nat -->
-   mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; map{bt. subst{'bt; 'v}; 'btl}}}
+   mk_bterm{'n +@ 1; 'op; 'btl} <--> bind{v. mk_bterm{'n; 'op; subst_list{'btl; 'v}}}
 
 interactive_rw reduce_mk_bterm_empty {| reduce ~labels:denormalize_labels |} :
    'n in nat -->
@@ -209,7 +209,7 @@ interactive_rw subst_var {| reduce |} :
 
 interactive_rw subst_mkbterm {| reduce |} :
    'bdepth in nat -->
-   subst{mk_bterm{'bdepth+@1;'op;'btl};'t} <-->  mk_bterm{'bdepth; 'op; map{bt. subst{'bt; 't}; 'btl}}
+   subst{mk_bterm{'bdepth+@1;'op;'btl};'t} <-->  mk_bterm{'bdepth; 'op; subst_list{'btl; 't}}
 
 interactive_rw bind_var {| reduce |} :
    'l in nat -->
@@ -218,12 +218,12 @@ interactive_rw bind_var {| reduce |} :
 
 interactive_rw lemma {| reduce |} :
    'btl in list -->
-   map{bt. subst{'bt; 'v}; map{bt. bind{x. 'bt}; 'btl}} <--> 'btl
+   subst_list{bind_list{'btl}; 'v} <--> 'btl
 
 interactive_rw bind_mkbterm  {| reduce |} :
    'bdepth in nat -->
    'btl in list -->
-   bind{x.mk_bterm{'bdepth;'op;'btl}} <-->  mk_bterm{'bdepth+@1; 'op; map{bt. bind{x.'bt}; 'btl}}
+   bind{x.mk_bterm{'bdepth;'op;'btl}} <-->  mk_bterm{'bdepth+@1; 'op; bind_list{'btl}}
 
 interactive_rw lemma1 {| reduce |} :
    'r in nat -->

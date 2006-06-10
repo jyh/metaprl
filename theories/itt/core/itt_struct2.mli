@@ -54,6 +54,9 @@ topval lambdaSqElim1T : int -> term -> tactic
 topval lambdaSqElim2T : int -> term -> tactic
 topval lambdaSqElimFull2T : int -> term -> term -> tactic
 
+topval combineT: int -> int -> tactic
+topval separateT: int -> int -> tactic
+
 (*
  * -*-
  * Local Variables:

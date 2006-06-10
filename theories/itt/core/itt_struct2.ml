@@ -45,6 +45,7 @@ doc <:doc<
    @parents
 >>
 extends Itt_equal
+extends Itt_unit
 extends Itt_struct
 extends Itt_squiggle
 extends Itt_squash
@@ -64,6 +65,8 @@ open Itt_squiggle
 open Itt_dfun
 open Itt_sqsimple
 open Itt_logic
+open Itt_unit
+open Itt_dprod
 
 (************************************************************************
  * RULES                                                                *
@@ -159,6 +162,45 @@ let eqSubstT t i = funT (fun p ->
 let resource subst +=
    equal_term, eqSubstT
 
+
+
+interactive fun_sqeq_elim {| elim [ThinOption thinT] |} 'H 'a :
+   sequent { <H>; lambda{x. 't1['x]} ~ lambda{x. 't2['x]}; <J>; 't1['a] ~ 't2['a]  >- 'C } -->
+   sequent { <H>; lambda{x. 't1['x]} ~ lambda{x. 't2['x]}; <J>  >- 'C }
+
+interactive lambda_sqsubst_concl 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't :
+   [equality] sequent { <H> >- lambda{x. 't1['x]} ~ lambda{x. 't2['x]} } -->
+   [main] sequent { <H> >- 'C[[ 't2<|H|>['t] ]] } -->
+   sequent { <H> >- 'C[[ 't1<|H|>['t] ]] }
+
+interactive lambda_sqsubst_hyp 'H 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't :
+   [equality] sequent { <H>; v: 'C[['t1<|H|>['t]]]; <J['v]> >- lambda{x. 't1['x]} ~ lambda{x.'t2['x]} } -->
+   [main] sequent { <H>; v: 'C[['t2<|H|>['t]]]; <J['v]> >- 'A['v] } -->
+   sequent { <H>; v: 'C[['t1<|H|>['t]]]; <J['v]> >- 'A['v] }
+
+(*
+ * XXX: TODO: nogin: The rule I'd actually want is the one below, but so far
+ * the combination of type-checker "stupidity" (not knowing that in ITT a
+ * subterm of a term of type Term must also have type Term) and rewriter
+ * limitations (it can not not match non-sequent contexts that occur more
+ * than once in redices) make it impossible to specify this rule.
+ *
+ * JYH: note that this is not a "stupidity" on the part of the typechecker.
+ * The issue is that there is no elimination rule for Term.  It is quite
+ * easy for a user to write:
+ *
+ *    declare foo{'x : Dform} : Term
+ *
+ * If you wish the invariant to hold, you must provide an elimination rule,
+ * and you must restrict what can be declared.
+ *
+interactive lambda_sqsubst2_concl 'C 'C1 'C2 't1 lambda{x. 'C2[['x 't2]]} bind{x. 't['x]} :
+   sequent { <H> >- lambda{x. 'C1[['x 't1]]} ~ lambda{x. 'C2[['x 't2]]} } -->
+   sequent { <H> >- 'C[[ 'C2<|H|>[['t<|C;H|>['t2<|C2;H|>] ]] ]] } -->
+   sequent { <H> >- 'C[[ 'C1<|H|>[['t<|C;H|>['t1<|C1;H|>] ]] ]] }
+ *
+ *)
+
 doc <:doc<
    @modsubsection{Cut rules}
 
@@ -217,6 +259,47 @@ interactive applyFun 'f 'B 'H :
    [wf] sequent { <H>; 'a = 'b in 'A; <J[it]> >- 'f in 'A -> 'B} -->
    sequent { <H>; 'a = 'b in 'A; 'f('a)='f('b) in 'B; <J[it]> >- 'C[it]} -->
    sequent { <H>; u:'a = 'b in 'A; <J['u]> >- 'C['u]}
+
+
+doc <:doc<
+   @modsubsection{Reverse Elimination, @tt[combineT] and @tt[separateT]}
+      The following rule is the reverse of the Elimination rule. It is used in the @tactic[combineT] tactic.
+>>
+interactive prod_rev_elim 'H: <:xrule<
+      "wf": <H>; x:A; y:B[x]; <J[x;y]>; z:A >- B[z] Type -->
+      <H>; p:Prod x:'A*'B['x]; <J[fst{p};snd{p}]> >- C[fst{p};snd{p}] -->
+      <H>; x:A; y:B[x]; <J[x;y]> >- C[x;y]
+>>
+
+doc <:doc<
+   The (@tt[combineT] @it[m] @it[n]) tactic combines m hypothesis starting from the @it[n]th one into a one hypothesis that a product of them.
+   For example when apply @tt[combineT] 3 2 to sequent <:xrule< <H>; x:A; y:B; z:C; <J> >- T >> we get
+   <:xrule< <H>; p: A*B*C; <J> >- T >> and some well-formedness subgoals.
+>>
+
+let rec combineT m n = funT( fun p ->
+  let n = get_pos_hyp_num p n in
+  if m=0 then (assertAtT n <<unit>> thenAT unit_memberFormation) else
+  if m=1 then idT else
+  if m>1 then combineT (m-1) n thenMT prod_rev_elim n else
+     raise (Invalid_argument ("combineT m n combines m hypothesis starting from the nth one, m should be >=0")))
+
+doc <:doc<
+   The (@tt[separateT] @it[m] @it[n]) tactic is opposite to the @tactic[combineT] tactic.
+>>
+
+let rec separateT m n = funT( fun p ->
+  let n = get_pos_hyp_num p n in
+  if m=0 then unitElimination n else
+  if m=1 then idT else
+  if m>1 then productElimination n thenT rwhAll (reduceFst orelseC reduceSnd) thenT separateT (m-1) n else
+     raise (Invalid_argument ("separateT m n separates nth hypothesis to m ones, m should be >=0")))
+
+
+doc <:doc<
+   @modsubsection{Other rules}
+>>
+
 
 doc <:doc<
    Elimination rule for equalities:
@@ -278,42 +361,6 @@ doc <:doc<
    Next we implement ``third-order'' rewriting using the lambda binding to represent
    arbitrary SO contexts.
 >>
-interactive fun_sqeq_elim {| elim [ThinOption thinT] |} 'H 'a :
-   sequent { <H>; lambda{x. 't1['x]} ~ lambda{x. 't2['x]}; <J>; 't1['a] ~ 't2['a]  >- 'C } -->
-   sequent { <H>; lambda{x. 't1['x]} ~ lambda{x. 't2['x]}; <J>  >- 'C }
-
-interactive lambda_sqsubst_concl 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't :
-   [equality] sequent { <H> >- lambda{x. 't1['x]} ~ lambda{x. 't2['x]} } -->
-   [main] sequent { <H> >- 'C[[ 't2<|H|>['t] ]] } -->
-   sequent { <H> >- 'C[[ 't1<|H|>['t] ]] }
-
-interactive lambda_sqsubst_hyp 'H 'C (lambda{x. 't1['x]} ~ lambda{x.'t2['x]}) 't :
-   [equality] sequent { <H>; v: 'C[['t1<|H|>['t]]]; <J['v]> >- lambda{x. 't1['x]} ~ lambda{x.'t2['x]} } -->
-   [main] sequent { <H>; v: 'C[['t2<|H|>['t]]]; <J['v]> >- 'A['v] } -->
-   sequent { <H>; v: 'C[['t1<|H|>['t]]]; <J['v]> >- 'A['v] }
-
-(*
- * XXX: TODO: nogin: The rule I'd actually want is the one below, but so far
- * the combination of type-checker "stupidity" (not knowing that in ITT a
- * subterm of a term of type Term must also have type Term) and rewriter
- * limitations (it can not not match non-sequent contexts that occur more
- * than once in redices) make it impossible to specify this rule.
- *
- * JYH: note that this is not a "stupidity" on the part of the typechecker.
- * The issue is that there is no elimination rule for Term.  It is quite
- * easy for a user to write:
- *
- *    declare foo{'x : Dform} : Term
- *
- * If you wish the invariant to hold, you must provide an elimination rule,
- * and you must restrict what can be declared.
- *
-interactive lambda_sqsubst2_concl 'C 'C1 'C2 't1 lambda{x. 'C2[['x 't2]]} bind{x. 't['x]} :
-   sequent { <H> >- lambda{x. 'C1[['x 't1]]} ~ lambda{x. 'C2[['x 't2]]} } -->
-   sequent { <H> >- 'C[[ 'C2<|H|>[['t<|C;H|>['t2<|C2;H|>] ]] ]] } -->
-   sequent { <H> >- 'C[[ 'C1<|H|>[['t<|C;H|>['t1<|C1;H|>] ]] ]] }
- *
- *)
 
 doc docoff
 

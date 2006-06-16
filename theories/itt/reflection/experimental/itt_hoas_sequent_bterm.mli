@@ -40,6 +40,10 @@ declare sequent_bterm{'d; 's}
  *)
 declare BSequent{'d}
 
+declare BSequentCore{'d}
+
+declare const BSequentCore
+
 (*
  * Common abbreviations
  *)

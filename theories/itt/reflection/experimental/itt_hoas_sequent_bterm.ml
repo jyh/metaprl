@@ -494,7 +494,7 @@ interactive bsequent_core_elim {| elim [ThinFirst thinT] |} 'H : <:xrule<
    <H>; x: BSequentCore; <J[x]> >- C[x]
 >>
 
-define const unfold_BSequentCore_depth : BSequentCore{'n} <--> <:xterm<
+define unfold_BSequentCore_depth : BSequentCore{'n} <--> <:xterm<
    { e: BTerm{'n} | "assert"{is_sequent_bterm_core{e}} }
 >>
 

@@ -510,7 +510,7 @@ interactive_rw append_nil {| reduce |} :
    ('l in list) -->
    append{'l;nil} <--> 'l
 
-interactive_rw append_assoc :
+interactive_rw append_assoc {| reduce |} :
    ('l1 in list) -->
    append{append{'l1;'l2};'l3} <-->
    append{'l1;append{'l2;'l3}}
@@ -733,6 +733,10 @@ interactive_rw length_map {| reduce |} :
 interactive_rw length_map2 {| reduce |} :
    ('l in list) -->
    length{map{x.'f['x]; 'l}} <--> length{'l}
+
+interactive_rw map_append {| reduce |} :
+   ('l1 in list) -->
+   map{x.'f['x]; append{'l1;'l2}} <--> append{map{x.'f['x]; 'l1};map{x.'f['x]; 'l2}}
 
 interactive_rw index_map {| reduce |} :
    ('l in list) -->

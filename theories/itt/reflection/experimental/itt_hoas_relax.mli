@@ -46,6 +46,7 @@ open Basic_tactics
 val relax_term : term
 
 topval relaxT : tactic -> tactic
+topval doNotRelaxT : tactic -> tactic
 
 (*
  * The type << Bind{'n} >> is the type of terms with

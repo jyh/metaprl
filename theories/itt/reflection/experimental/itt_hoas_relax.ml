@@ -184,6 +184,13 @@ interactive_rw bindn_eta_relax {| reduce ~labels:relax_option |} : <:xrewrite<
    t
 >>
 
+interactive_rw subterms_lemma {| reduce ~labels:relax_option |} :
+   'n in nat -->
+   'subterms in list{Bind{'n}} -->
+   map{bt. bind{'n; v. substl{'bt; 'v}};'subterms} <--> 'subterms
+
+
+
 (************************************************************************
  * Relation to BTerms.
  *)
@@ -575,6 +582,7 @@ interactive subterms_bind_list1 'shape : <:xrule<
  * Tactics.
  *)
 let relaxT = withOptionT relax_term "allow"
+let doNotRelaxT = withOptionT relax_term "exclude"
 
 (*!
  * @docoff

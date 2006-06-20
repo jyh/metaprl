@@ -260,6 +260,38 @@ interactive applyFun 'f 'B 'H :
    sequent { <H>; 'a = 'b in 'A; 'f('a)='f('b) in 'B; <J[it]> >- 'C[it]} -->
    sequent { <H>; u:'a = 'b in 'A; <J['u]> >- 'C['u]}
 
+doc <:doc<
+   @modsubsection{Variable elimination}
+   The following rules allows us to eliminate a variable $x$ using an equality $x=t$.
+   This rules are opposite to the @tactic[letT] tactic.
+   The @tt[varElimT] $n$ tactic eliminates a variable using the equality in the n$th$ hypothesis.
+   The @tt[allVarElimT] tactic eliminates all possible variables.
+>>
+
+interactive variable_elim 'H 'J: <:xrule<
+      "aux": <H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- sqsimple{B[x]} -->
+      <H>; <J[t]>; <K[t]> >- C[t] -->
+      <H>; x:A;  <J[x]>; x=t<|H|> in B[x]; <K[x]> >- C[x]
+   >>
+
+interactive variable_elim_rev 'H 'J: <:xrule<
+      "aux": <H>; x:A;  <J[x]>; t=x in B[x]; <K[x]> >- sqsimple{B[x]} -->
+      <H>; <J[t]>; <K[t]> >- C[t] -->
+      <H>; x:A;  <J[x]>; t<|H|>=x in B[x]; <K[x]> >- C[x]
+   >>
+
+let varElimT n = funT( fun p ->
+   let n = get_pos_hyp_num p n in
+   let rec auxT m n =
+      if m <= 0 then failWithT "varElimT: Could not eliminate a variable"
+      else variable_elim m (n-m) orelseT  variable_elim_rev m (n-m) orelseT auxT (m-1) n
+   in auxT (n-1) n )
+
+let allVarElimT =
+   let varElimTtaca n = varElimT n thenAT completeT autoT in
+      repeatT (onSomeHypT varElimTtaca)
+
+
 
 doc <:doc<
    @modsubsection{Reverse Elimination, @tt[combineT] and @tt[separateT]}
@@ -292,8 +324,22 @@ let rec separateT m n = funT( fun p ->
   let n = get_pos_hyp_num p n in
   if m=0 then unitElimination n else
   if m=1 then idT else
-  if m>1 then productElimination n thenT rwhAll (reduceFst orelseC reduceSnd) thenT separateT (m-1) n else
+  if m>1 then productElimination n thenT rwhAll (firstC [reduceSpread;reduceFst;reduceSnd]) thenT separateT (m-1) n else
      raise (Invalid_argument ("separateT m n separates nth hypothesis to m ones, m should be >=0")))
+
+
+interactive reduceForallProd {| forward[] |} 'H : <:xrule<
+     "wf": <H>;  all p: (Prod x:A*B[x]).C[p]; <J> >- A Type -->
+     "wf": <H>;  all p: (Prod x:A*B[x]).C[p]; <J>; x:A >- B[x] Type -->
+     <H>; all x:A. all p:B[x].C[(x,p)]; <J> >- T -->
+     <H>; all p: (Prod x:A*B[x]).C[p]; <J> >- T
+>>
+
+let rec reduceForallProdT n = funT( fun p ->
+    reduceForallProd n twtca
+    thenMT rwh (firstC [reduceSpread;reduceFst;reduceSnd]) n
+    thenMT tryT (reduceForallProdT n)
+    )
 
 
 doc <:doc<

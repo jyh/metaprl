@@ -56,6 +56,10 @@ topval lambdaSqElimFull2T : int -> term -> term -> tactic
 
 topval combineT: int -> int -> tactic
 topval separateT: int -> int -> tactic
+topval reduceForallProdT: int -> tactic
+topval varElimT : int -> tactic
+topval allVarElimT : tactic
+
 
 (*
  * -*-

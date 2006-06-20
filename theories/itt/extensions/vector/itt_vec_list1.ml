@@ -520,6 +520,50 @@ let reduce_length_fun_term_conv t =
       reduce_length_fun_term t_bind
 
 (*
+ * Split the << vlist{| <J> |} >> into the standard form.
+ *)
+let rec reduce_vlist_term s =
+   let hyps = (explode_sequent s).sequent_hyps in
+   let len = SeqHyp.length hyps in
+      if SeqHyp.length hyps = 0 then
+         reduce_vlist_nil
+      else
+         match SeqHyp.get hyps 0 with
+            Hypothesis _ ->
+               reduce_vlist_left
+               thenC addrC [Subterm 2] (termC reduce_vlist_term)
+          | Context _ ->
+               if len = 1 then
+                  idC
+               else
+                  reduce_vlist_split 2
+                  thenC addrC [Subterm 2] (termC reduce_vlist_term)
+
+let reduce_vlistC = termC reduce_vlist_term
+
+(*
+ * Split the << vflatten{| <J> |} >> into the append form.
+ *)
+let rec reduce_vflatten_term s =
+   let hyps = (explode_sequent s).sequent_hyps in
+   let len = SeqHyp.length hyps in
+      if SeqHyp.length hyps = 0 then
+         reduce_vflatten_nil
+      else
+         match SeqHyp.get hyps 0 with
+            Hypothesis _ ->
+               reduce_vflatten_left
+               thenC addrC [Subterm 2] (termC reduce_vflatten_term)
+          | Context _ ->
+               if len = 1 then
+                  idC
+               else
+                  reduce_vflatten_split 2
+                  thenC addrC [Subterm 2] (termC reduce_vflatten_term)
+
+let reduce_vflattenC = termC reduce_vflatten_term
+
+(*
  * Split the << length{vlist{| <J> |}} >> into a sum.
  *)
 let rec reduce_length_vlist_term t =

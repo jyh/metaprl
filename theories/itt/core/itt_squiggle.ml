@@ -138,7 +138,7 @@ doc <:doc<
    in any place without generating any well-formedness subgoals.
 >>
 
-prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
+prim squiggleHypSubstitution 'H ('t ~ 's) bind{y. 'A['y]}:
    [equality] sequent { <H>; x: 'A['t]; <J['x]> >- 't ~ 's } -->
    [main] ('f['x]: sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }) -->
    sequent { <H>; x: 'A['t]; <J['x]> >- 'C['x] } =
@@ -257,7 +257,7 @@ let sqElimAllT = argfunT (fun i p ->
    let s = explode_sequent_arg p in
    let fwd, j = least_fw_index s.sequent_hyps vs1 vs2 (i - 1) in
    let t =
-      mk_sequent_term { s with 
+      mk_sequent_term { s with
          sequent_hyps = SeqHyp.of_list (Lm_list_util.nth_tl j (SeqHyp.to_list s.sequent_hyps))
       }
    in

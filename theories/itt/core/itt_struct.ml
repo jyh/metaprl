@@ -336,20 +336,87 @@ doc <:doc<
    in the current goal from position $i$ to position $j$. For example, when $j>i$,
    $$
    @rulebox{moveHypT; i j;
-     <<sequent{ <H>; <J>; "j. x": 'A; <K> >- 'C}>>;
-     <<sequent{ <H>; "i. x": 'A; <J>; <K> >- 'C}>>}
+     <<sequent{ <H>; "i. x": 'A; <J>; <K> >- 'C}>>;
+     <<sequent{ <H>; <J>; "j. x": 'A; <K> >- 'C}>>}
    $$
    @docoff
 >>
+
+let moveRight i j = (* supposed: j>i>0 *)
+   exchange i 2 (j - i + 1)
+
+let moveLeft i j = (* supposed: 0<j<i *)
+   exchange j (i - j + 1) 2
+
 let moveHypT i j = funT (fun p ->
    let i = get_pos_hyp_num p i in
    let j = get_pos_hyp_num p j in
       if i = j then
          idT
       else if j > i then
-         exchange i 2 (j - i + 1)
+         moveRight i j
       else
-         exchange j (i - j + 1) 2)
+         moveLeft i j)
+
+
+doc <:doc<
+   The @tactic[moveHypT] $i$ $j$ does not work when there is a dependency between the hypothesis $i$
+   and one of the hypotheses between $i$ and $j$.
+   In this case one can use the @tactic[moveHypWithDependenciesT] or @tactic[moveHypWithDependenciesThenT] tactic.
+
+   @tactic[moveHypWithDependenciesT] $i$ $j$ tactic moves the $i$@sup[th] hypothesis and all necessary dependencies.
+   (It tries to move as little hypotheses as possible.)
+   For example, when $j>i$,
+   $$
+   @rulebox{moveHypWithDependenciesT; i j;
+      <<Gamma>>@; i. x: A@; <<Sigma>>[x]@; j+1. <<Delta>>  @vdash C;
+      <<Gamma>>@; <<Sigma>>1@; x: A@; <<Sigma>>2[x]@; j+1. <<Delta>> @vdash C}
+   $$
+   where <<Sigma>>1 is a list of all hypotheses from $<<Sigma>>[x]$ that do not depend on $x$,
+   and <<Sigma>>2 is a list of all other hypotheses from $<<Sigma>>[x]$.
+
+   @tactic[moveHypWithDependenciesThenT] $i$:@tt[int] $j$:@tt[int] @it[tac]:@tt["int->tactic"] tactic moves
+   the $i$@sup[th] hypothesis and
+   the apply @it[tac] to the moving hypotheses. That is, it runs @it[tac] $j'$ where $j'$ is a new position of the hypotheses
+   that we just moved (in normal case it would be just $j$).
+
+   @docoff
+>>
+
+let rec moveRightWD n k tac = (* moves hyps [n:m] right up to k, supposed 0<n<=m<=k *)
+   let rec move n m=
+      funT (fun p->
+      if m=k then tac n
+      else (moveLeft (m+1) n thenT move (n+1) (m+1))
+             orelseT  move n (m+1)
+        )
+   in move n n
+
+let rec moveLeftWD n k tac = (* moves hyps [n:m] left up to k, supposed 0<k<=n<=m *)
+   let rec move n m=
+      funT (fun p->
+      if n=k then tac m
+      else (moveRight (n-1) m thenT move (n-1) (m-1))
+             orelseT  move (n-1) m
+        )
+   in move n n
+
+let moveHypWithDependenciesThenT n k tac =
+   funT (fun p->
+   let n = get_pos_hyp_num p n in
+   let k = get_pos_hyp_num p k in
+      if (n=0) or (k=0) then
+         raise (Invalid_argument "moveHypWithDependenciesThenT: Can't move the conclusion")
+      else
+      if k >= n then
+         moveRightWD n k tac
+      else
+         moveLeftWD n k tac
+        )
+
+let moveHypWithDependenciesT n k = moveHypWithDependenciesThenT n k (fun i -> idT )
+
+
 
 doc <:doc<
    @modsubsection{Lemma assertion}
@@ -458,26 +525,9 @@ let substTaux t i = funT (fun p ->
 
 let substConclT t = substTaux t 0
 
-let local_substConclT = argfunT (fun t p ->
-   let _, a, _ = dest_equal t in
-   let bind = get_bind_from_arg_or_concl_subst p a in
-      substitution t bind)
-
-(*
- * Hyp substitution requires a replacement.
- *)
-let substHypT i t = funT (fun p ->
-   let i = Sequent.get_pos_hyp_num p i in
-   let _, a, _ = dest_equal t in
-   let bind = get_bind_from_arg_or_hyp_subst p i a in
-      hypSubstitution i t bind)
-
 (*
  * General substition.
  *)
-let resource subst +=
-   equal_term, (fun t i -> if i = 0 then local_substConclT t else substHypT i t)
-
 let move_and_substT t i = funT (fun p ->
    let i = get_pos_hyp_num p i in
       copyHypT i (-1) thenT substTaux t (-1) thenT tryT (thinT i))
@@ -526,6 +576,31 @@ and swap t_orig t =
 let revHypSubstT i j = funT (fun p ->
    let t = Sequent.nth_hyp p i in
       justSubstT (swap t t) j nthHypT i)
+
+
+
+(*
+ * Add substitution rules in the resource.
+ *)
+
+let local_substConclT = argfunT (fun t p ->
+   let _, a, _ = dest_equal t in
+   let bind = get_bind_from_arg_or_concl_subst p a in
+      substitution t bind)
+
+(*
+ * Hyp substitution requires a replacement.
+ *)
+let substHypT i t = funT (fun p ->
+   let i = Sequent.get_pos_hyp_num p i in
+   let _, a, _ = dest_equal t in
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
+      hypSubstitution i t bind)
+
+let resource subst +=
+   equal_term, (fun t i -> if i = 0 then local_substConclT t else substHypT i t)
+
+
 
 (*
  * Replace the entire hypothesis.

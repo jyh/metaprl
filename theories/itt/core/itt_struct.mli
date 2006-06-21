@@ -52,6 +52,12 @@ rule thin 'H :
    sequent { <H>; <J> >- 'C } -->
    sequent { <H>; 'A; <J> >- 'C }
 
+rule exchange 'H 'K 'L:
+   sequent { <H>; <L>; <K>; <J> >- 'C } -->
+   sequent { <H>; <K>; < L<|H|> >; <J> >- 'C }
+
+
+
 (*
  * H, J >- T ext t[s]
  * by cut S
@@ -130,6 +136,8 @@ topval dupHypT : int -> tactic
 topval tryAssertT : term -> tactic -> tactic -> tactic
 topval assertAtT : int -> term -> tactic
 topval moveHypT : int -> int -> tactic
+topval moveHypWithDependenciesThenT : int -> int -> (int->tactic) -> tactic
+topval moveHypWithDependenciesT : int -> int -> tactic
 topval copyHypT : int -> int -> tactic
 topval dupT : tactic
 topval useWitnessT : term -> tactic

@@ -482,6 +482,7 @@ interactive_rw reduce_vflatten_hyp_term {| reduce |} : <:xrewrite<
    <-->
    [vbind{| <J> >- e |}]
 >>
+doc docoff
 
 (************************************************************************
  * Tactics.

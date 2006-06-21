@@ -238,16 +238,20 @@ interactive shape_const_nat_list {| intro [] |} :
 (* private *) prim_rw bterm_shape :
    shape{operator[op:op]} <--> list_of_numlist{Base_operator!shape[op:op]}
 
+doc docoff
+
 let resource reduce +=
    <<shape{operator[op:op]}>>, wrap_reduce (bterm_shape thenC addrC [Subterm 1] reduce_shape thenC termC reduce_numlist)
+
+doc docon
 
 (* private *) prim_rw bterm_same_op :
    is_same_op{operator[op1:op]; operator[op2:op]} <--> meta_eq[op1:op, op2:op]{btrue; bfalse}
 
+doc docoff
+
 let resource reduce +=
    << is_same_op{operator[op1:op]; operator[op2:op]} >>, wrap_reduce (bterm_same_op thenC Base_meta.reduce_meta_eq_ops)
-
-doc docoff
 
 (* ********** Examples ************* *)
 interactive op_exam1 {| intro[] |}:

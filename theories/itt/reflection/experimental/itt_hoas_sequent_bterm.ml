@@ -1,7 +1,10 @@
 doc <:doc<
+   @module[Itt_hoas_sequent_bterm]
+
    Native sequent representation as a << BTerm >>.
    This is computed from the non-BTerm sequent in @tt[Itt_hoas_sequent].
 
+   @docoff
    ----------------------------------------------------------------
 
    @begin[license]
@@ -647,6 +650,8 @@ interactive bsequent_bterm_forward 'H : <:xrule<
    <H>; x: sequent_bterm{"sequent"{arg; hyps; concl}} in BSequent; <J[x]> >- C[x]
 >>
 
+doc docoff
+
 (************************************************************************
  * Tactics.
  *)
@@ -656,9 +661,11 @@ let fold_sequent_of_bterm_core = makeFoldC <:xterm< sequent_of_bterm_core{e} >> 
 (************************************************************************
  * Common abbreviations
  *)
+doc docon
 define const iform unfold_sequent_relax_zero: SequentRelax <--> SequentRelax{0}
 define iform unfold_sequent_bterm_zero: sequent_bterm{'s} <--> sequent_bterm{0; 's}
 define const iform unfold_BSequent_zero: BSequent <--> BSequent{0}
+doc docoff
 
 (*
  * -*-

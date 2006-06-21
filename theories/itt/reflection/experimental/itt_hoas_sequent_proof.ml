@@ -1,4 +1,6 @@
 doc <:doc<
+   @module[Itt_hoas_sequent_proof]
+
    Provability in a sequent logic.
    @docoff
 
@@ -182,11 +184,14 @@ interactive provable_forward 'H : <:xrule<
    <H>; ProvableSequent{logic; seq}; <J>; seq in BSequent >- C -->
    <H>; ProvableSequent{logic; seq}; <J> >- C
 >>
+doc docoff
 
 let provable_forwardT i =
    provable_forward i
    thenT forward_bsequent_wf (-1)
    thenT rw normalizeBTermC (-1)
+
+doc docon
 
 interactive provable_forward0 'H : <:xrule<
    <H>; Provable{logic; seq}; <J>; seq in BTerm >- C -->

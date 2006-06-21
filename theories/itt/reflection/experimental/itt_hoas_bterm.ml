@@ -599,7 +599,7 @@ interactive bterm_sqsimple2 {| intro []; sqsimple |} :
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- sqsimple{BTerm{'n}} }
 
-<:doc<
+doc <:doc<
    Define a Boolean equality (alpha equality) on BTerms.
 >>
 define unfold_beq_bterm : beq_bterm{'t1; 't2} <-->
@@ -617,8 +617,11 @@ define unfold_beq_bterm : beq_bterm{'t1; 't2} <-->
                   band{is_same_op{'o1; 'o2};
                   ball2{'s1; 's2; t1, t2. 'beq_bterm 't1 't2}}}}}}}} 't1 't2
 
+doc docoff
+
 let fold_beq_bterm = makeFoldC << beq_bterm{'t1; 't2} >> unfold_beq_bterm
 
+doc docon
 interactive_rw reduce_beq_bterm_var_var {| reduce |} :
    'l1 in nat -->
    'r1 in nat -->
@@ -683,8 +686,11 @@ interactive beq_bterm_elim {| elim [] |} 'H :
  *)
 define unfold_beq_bterm_list : beq_bterm_list{'l1; 'l2} <-->
    ball2{'l1; 'l2; t1, t2. beq_bterm{'t1; 't2}}
+doc docoff
 
 let fold_beq_bterm_list = makeFoldC << beq_bterm_list{'l1; 'l2} >> unfold_beq_bterm_list
+
+doc docon
 
 interactive_rw reduce_beq_bterm_list_nil_nil {| reduce |} :
    beq_bterm_list{nil; nil}
@@ -768,6 +774,8 @@ interactive bterm_depth_ge {| nth_hyp |} :
    sequent{ <H> >- 't in BTerm{'d} } -->
    sequent{ <H> >- bdepth{'t} >= 'd }
 
+doc docoff
+
 let resource nth_hyp +=
    [<<BTerm{'d}>>, << 'd = bdepth{!t} in int >>, wrap_nth_hyp_uncertain (fun i -> bterm_depth_eq thenT equalityAxiom i);
     <<BTerm{'d}>>, << bdepth{!t} >= 'd >>, wrap_nth_hyp_uncertain (fun i -> bterm_depth_ge thenT equalityAxiom i)]
@@ -782,4 +790,3 @@ let is_BTerm_term = is_no_subterms_term opname_BTerm
 let t_BTerm2 = << BTerm{'n} >>
 let opname_BTerm2 = opname_of_term t_BTerm2
 let is_BTerm2_term = is_dep0_term opname_BTerm2
-

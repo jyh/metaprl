@@ -353,7 +353,7 @@ dform sameset_df : except_mode[src] :: sameset{'l1; 'l2; 'T} =
    ezone popm
 
 dform append_df : except_mode[src] :: parens :: "prec"[prec_append] :: append{'l1; 'l2} =
-   slot["le"]{'l1} `" @" space slot{'l2}
+   slot["le"]{'l1} circ space slot{'l2}
 
 dform all2_df : except_mode[src] :: parens :: "prec"[prec_ball] :: all2{'l1; 'l2; x, y. 'b} =
    pushm[3] Mpsymbols!forall slot{'x} `", " slot{'y} space

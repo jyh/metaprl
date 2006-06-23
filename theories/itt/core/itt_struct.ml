@@ -364,7 +364,7 @@ doc <:doc<
    and one of the hypotheses between $i$ and $j$.
    In this case one can use the @tactic[moveHypWithDependenciesT] or @tactic[moveHypWithDependenciesThenT] tactic.
 
-   @tactic[moveHypWithDependenciesT] $i$ $j$ tactic moves the $i$@sup[th] hypothesis and all necessary dependencies.
+   @tactic[moveHypWithDependenciesT] $i$ $j$ tactic moves the $i$'th hypothesis and all necessary dependencies.
    (It tries to move as little hypotheses as possible.)
    For example, when $j>i$,
    $$
@@ -376,7 +376,7 @@ doc <:doc<
    and <<Sigma>>2 is a list of all other hypotheses from $<<Sigma>>[x]$.
 
    @tactic[moveHypWithDependenciesThenT] $i$:@tt[int] $j$:@tt[int] @it[tac]:@tt["int->tactic"] tactic moves
-   the $i$@sup[th] hypothesis and
+   the $i$'th hypothesis and
    the apply @it[tac] to the moving hypotheses. That is, it runs @it[tac] $j'$ where $j'$ is a new position of the hypotheses
    that we just moved (in normal case it would be just $j$).
 

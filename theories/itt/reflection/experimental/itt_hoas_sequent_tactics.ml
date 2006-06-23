@@ -1,8 +1,4 @@
 doc <:doc<
-   Native sequent representation.  This representation of sequents
-   is not a BTerm itself.  If you want to work in a theory where
-   sequents are not part of your language, then you should probably
-   use this representation, because it is easier to use.
 
    ----------------------------------------------------------------
 

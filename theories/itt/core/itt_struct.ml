@@ -366,6 +366,9 @@ doc <:doc<
 
    @tactic[moveHypWithDependenciesT] $i$ $j$ tactic moves the $i$'th hypothesis and all necessary dependencies.
    (It tries to move as little hypotheses as possible.)
+   In particular, @tactic[moveHypWithDependenciesT] $i$ $(-1)$ moves the $i$@sup[th] hypothesis right as far as possible and
+   @tactic[moveHypWithDependenciesT] $i$ $1$ moves the $i$@sup[th] hypothesis left as far as possible.
+
    For example, when $j>i$,
    $$
    @rulebox{moveHypWithDependenciesT; i j;
@@ -383,22 +386,22 @@ doc <:doc<
    @docoff
 >>
 
-let rec moveRightWD n k tac = (* moves hyps [n:m] right up to k, supposed 0<n<=m<=k *)
-   let rec move n m=
+let rec moveRightWD n k tac = (* moves hyps [n:m] right up to k, supposed 0<n<=k *)
+   let rec move n m= (* supposed 0<n<=m<=k *)
       funT (fun p->
       if m=k then tac n
-      else (moveLeft (m+1) n thenT move (n+1) (m+1))
-             orelseT  move n (m+1)
-        )
+      else ifthenelseT (moveLeft (m+1) n)
+               (*then*)  (move (n+1) (m+1))
+               (*else*)  (move n (m+1)))
    in move n n
 
-let rec moveLeftWD n k tac = (* moves hyps [n:m] left up to k, supposed 0<k<=n<=m *)
-   let rec move n m=
+let rec moveLeftWD n k tac = (* moves hyps [n:m] left up to k, supposed 0<k<=n *)
+   let rec move n m= (* supposed 0<k<=n<=m *)
       funT (fun p->
       if n=k then tac m
-      else (moveRight (n-1) m thenT move (n-1) (m-1))
-             orelseT  move (n-1) m
-        )
+      else ifthenelseT (moveRight (n-1) m)
+             (*then*) (move (n-1) (m-1))
+             (*else*) (move (n-1) m))
    in move n n
 
 let moveHypWithDependenciesThenT n k tac =
@@ -520,38 +523,47 @@ let extract_subst tbl t =
 let resource (term * (term -> int -> tactic), term -> int -> tactic) subst =
    table_resource_info extract_subst
 
-let substTaux t i = funT (fun p ->
+let simpleSubstT t i = funT (fun p ->
    Sequent.get_resource_arg p get_subst_resource t i)
 
-let substConclT t = substTaux t 0
+let substConclT t = simpleSubstT t 0
 
 (*
  * General substition.
  *)
-let move_and_substT t i = funT (fun p ->
-   let i = get_pos_hyp_num p i in
-      copyHypT i (-1) thenT substTaux t (-1) thenT tryT (thinT i))
-
-let substT t i =
-   if i = 0 then
-      substTaux t i
-   else
-      substTaux t i orelseT move_and_substT t i
-
-let justSubstT t i tac j =
-   let t1 = substTaux t i thenET tac j in
-      if i = 0 then
-         t1
-      else
-         t1 orelseT funT (fun p ->
-            let j = get_pos_hyp_num p j in
-              copyHypT i (-1) thenT substTaux t (-1) thenET tac j thenT tryT (thinT i))
-
 (*
- * Derived versions.
- *)
-let hypSubstT i j = funT (fun p ->
-   justSubstT (Sequent.nth_hyp p i) j hypothesis i)
+let orelseMoveT i k tac = (* try to apply tac to the i-th hypotheses, if it can't then move the hypotheses to k and try again *)
+   if i = 0 then
+      tac i
+   else
+      tac i orelseT moveHypWithDependenciesThenT i k tac
+*)
+
+let substOrMoveAndSubst k tac i =
+(* try to apply substitution tac to i-th hyp; if it does not work, then move this hyp to the right as far as possible upto k, and apply substitution again *)
+   funT (fun p ->
+   let k = get_pos_hyp_num p k in
+   let i = get_pos_hyp_num p i in
+      if i>=k or i=0 then (* we don't need to move *)
+         tac i
+      else
+         tac i orelseT moveRightWD i (k-1) tac)
+
+
+let substT = simpleSubstT
+
+(* Maybe substT should be defined as
+let substT t i = substOrMoveAndSubst (-1) (simpleSubstT t) i
+or
+let substT t i = funT (fun p ->
+   let i = Sequent.get_pos_hyp_num p i in
+   assertT t thenMT (hypSubstT (-1) i thenT thinT (-1)))
+*)
+
+let simpleHypSubstT j i =   funT (fun p ->
+   simpleSubstT (Sequent.nth_hyp p j) i thenET hypothesis j)
+
+let hypSubstT j i = substOrMoveAndSubst j (simpleHypSubstT j) i
 
 (*
  * XXX: HACK (2005/12/21 nogin). A "proper" way of doing this is resource-based.
@@ -573,11 +585,11 @@ and swap t_orig t =
    let t = dest_term t in
       mk_term t.term_op (swap_bterm t_orig t.term_terms)
 
-let revHypSubstT i j = funT (fun p ->
-   let t = Sequent.nth_hyp p i in
-      justSubstT (swap t t) j nthHypT i)
+let simpleRevHypSubstT j i = funT (fun p ->
+   let t = Sequent.nth_hyp p j in
+      simpleSubstT (swap t t) i thenET nthHypT j)
 
-
+let revHypSubstT j i = substOrMoveAndSubst j (simpleRevHypSubstT j) i
 
 (*
  * Add substitution rules in the resource.

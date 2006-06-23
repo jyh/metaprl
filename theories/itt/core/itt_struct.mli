@@ -149,7 +149,9 @@ resource (term * (term -> int -> tactic), term -> int -> tactic) subst
 
 topval substT : term -> int -> tactic
 topval substConclT : term -> tactic
+topval simpleHypSubstT : int -> int -> tactic
 topval hypSubstT : int -> int -> tactic
+topval simpleRevHypSubstT : int -> int -> tactic
 topval revHypSubstT : int -> int -> tactic
 
 topval replaceHypT : term -> int -> tactic

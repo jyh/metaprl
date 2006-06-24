@@ -360,14 +360,14 @@ let moveHypT i j = funT (fun p ->
 
 
 doc <:doc<
-   The @tactic[moveHypT] $i$ $j$ does not work when there is a dependency between the hypothesis $i$
-   and one of the hypotheses between $i$ and $j$.
-   In this case one can use the @tactic[moveHypWithDependenciesT] or @tactic[moveHypWithDependenciesThenT] tactic.
+   The @tactic[moveHypT] $i$ $j$ does not work when there is a dependency between the hypothesis $i$ and one of the
+   hypotheses between $i$ and $j$.  In this case one can use the @tactic[moveHypWithDependenciesT] or
+   @tactic[moveHypWithDependenciesThenT] tactic.
 
-   @tactic[moveHypWithDependenciesT] $i$ $j$ tactic moves the $i$'th hypothesis and all necessary dependencies.
-   (It tries to move as little hypotheses as possible.)
-   In particular, @tactic[moveHypWithDependenciesT] $i$ $(-1)$ moves the $i$@sup[th] hypothesis right as far as possible and
-   @tactic[moveHypWithDependenciesT] $i$ $1$ moves the $i$@sup[th] hypothesis left as far as possible.
+   @tactic[moveHypWithDependenciesT] $i$ $j$ tactic moves the $i$'th hypothesis and all necessary dependencies.  (It
+   tries to move as little hypotheses as possible.) In particular, @tactic[moveHypWithDependenciesT] $i$ $(-1)$ moves
+   the $i$@'th hypothesis right as far as possible and @tactic[moveHypWithDependenciesT] $i$ $1$ moves the $i$'th
+   hypothesis left as far as possible.
 
    For example, when $j>i$,
    $$
@@ -378,10 +378,9 @@ doc <:doc<
    where <<Sigma>>1 is a list of all hypotheses from $<<Sigma>>[x]$ that do not depend on $x$,
    and <<Sigma>>2 is a list of all other hypotheses from $<<Sigma>>[x]$.
 
-   @tactic[moveHypWithDependenciesThenT] $i$:@tt[int] $j$:@tt[int] @it[tac]:@tt["int->tactic"] tactic moves
-   the $i$'th hypothesis and
-   the apply @it[tac] to the moving hypotheses. That is, it runs @it[tac] $j'$ where $j'$ is a new position of the hypotheses
-   that we just moved (in normal case it would be just $j$).
+   @tactic[moveHypWithDependenciesThenT] $i$:@tt[int] $j$:@tt[int] @it[tac]:@tt["int->tactic"] tactic moves the $i$'th
+   hypothesis and the apply @it[tac] to the moving hypotheses. That is, it runs @it[tac] $j'$ where $j'$ is a new
+   position of the hypotheses that we just moved (in normal case it would be just $j$).
 
    @docoff
 >>

@@ -274,22 +274,53 @@ interactive variable_elim 'H 'J: <:xrule<
       <H>; x:A;  <J[x]>; x=t<|H|> in B[x]; <K[x]> >- C[x]
    >>
 
-interactive variable_elim_rev 'H 'J: <:xrule<
-      "aux": <H>; x:A;  <J[x]>; t=x in B[x]; <K[x]> >- sqsimple{B[x]} -->
-      <H>; <J[t]>; <K[t]> >- C[t] -->
-      <H>; x:A;  <J[x]>; t<|H|>=x in B[x]; <K[x]> >- C[x]
+interactive variable_elim2 'H 'J: <:xrule<
+      "aux": <H>; x:A;  <J>; x=t in B[x]; <K[x]> >- sqsimple{B[x]} -->
+      <H>; <J>; <K[t]> >- C[t] -->
+      <H>; x:A;  <J>; x=t in B[x]; <K[x]> >- C[x]
    >>
+
+interactive var_eq_rev 'H 'J: <:xrule<
+      "yes":<H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- C[x] -->
+      <H>; x:A;  <J[x]>; t=x in B[x]; <K[x]> >- C[x]
+   >>
+
+interactive is_var_eq 'H 'J: <:xrule<
+      "yes":<H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- C[x] -->
+      <H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- C[x]
+   >>
+
+
+let is_var_eq m n = (is_var_eq m (n-m) orelseT var_eq_rev m (n-m))
+
+
+(* XXX: HACK:
+if_var_eq should be defined as:
+  let if_var_eq m n = ifthenelseT ( is_var_eq m n)
+But unfortunately right now ifthenelseT is not defined  in faithful way.
+So, for now we use here a hack with the label "yes":
+*)
+let if_var_eq m n tac1 tac2 = tryT (is_var_eq m n) thenT ifLabT "yes" tac1 tac2
+
+let variable_elim2 m n = variable_elim2 m (n-m)
+
+let varElimOn m n = (*supposed: 0<m<n *)
+   variable_elim m (n-m) orelseT
+   moveHypWithDependenciesThenT n (m+1) (variable_elim2 m)
 
 let varElimT n = funT( fun p ->
    let n = get_pos_hyp_num p n in
    let rec auxT m n =
       if m <= 0 then failWithT "varElimT: Could not eliminate a variable"
-      else variable_elim m (n-m) orelseT  variable_elim_rev m (n-m) orelseT auxT (m-1) n
+      else if_var_eq m n
+         (* then *) (varElimOn m n)
+         (* else *) (auxT (m-1) n)
    in auxT (n-1) n )
+
 
 let allVarElimT =
    let varElimTtaca n = varElimT n thenAT completeT autoT in
-      repeatT (onSomeHypT varElimTtaca)
+      repeatMT (onSomeHypT varElimTtaca)
 
 
 

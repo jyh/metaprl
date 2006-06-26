@@ -149,10 +149,7 @@ let eqSubstT t i = funT (fun p ->
       if get_resource_arg p get_sqsimple_resource tp then
          let i = Sequent.get_pos_hyp_num p i in
          let t' = mk_squiggle_term a b in
-            assertT t' thenLT [
-               sqsimple_sq tp thenLT [autoT thenT addHiddenLabelT "wf"; addHiddenLabelT "equality"];
-               hypSubstT (-1) i thenT thinTermT t'
-            ]
+            sqSubstT t' i thenET (sqsimple_sq tp thenLT [autoT thenT addHiddenLabelT "wf"; addHiddenLabelT "equality"])
       else
          if i = 0 then
             substConclT t

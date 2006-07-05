@@ -79,7 +79,7 @@ let letAtT i x_is_s_in_S =
       let_rule i x_is_s_in_S thenMT (rwh (hypC (-1)) 0 thenT onAllHypFrom i (rwh (hypC (-1))) thenT thinT (-1))
 
 doc <:doc<
-      Using @rule[letAtT] rule, we can "split" a hypothesis.
+      Using @rule[letAtT] rule, we can ``split'' a hypothesis.
       That is, we can copy a hypothesis and make conclusion and hypotheses
       after the new copy of it to be depend on this new copy.
 >>

@@ -23,7 +23,7 @@ doc <:doc<
    Type-theoretic intersection and union (Sections @refmodule[Itt_isect] and @refmodule[Itt_tunion])
    behaves on subsets of a given type  like usual intersection and union.
 
-   An equivalent definition of "strong subtype" was in Mark Bickford's Logic of Events.
+   An equivalent definition of ``strong subtype'' was in Mark Bickford's Logic of Events.
    @docoff
    ----------------------------------------------------------------
 

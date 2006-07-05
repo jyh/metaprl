@@ -3,7 +3,7 @@ doc <:doc<
 
    The @tt[Czf_itt_group] module defines groups. Each group
    is assigned a label, such as $g$. The predicate $@group{g}$
-   is used to represent "$g$ is a group". The carrier set,
+   is used to represent ``$g$ is a group''. The carrier set,
    operation, identity, and inverse of the group are defined
    as $@car{g}$, $@op{g; a; b}$, $@id{g}$, and $@inv{g; a}$
    respectively. @emph{Axioms} are used to describe a group,

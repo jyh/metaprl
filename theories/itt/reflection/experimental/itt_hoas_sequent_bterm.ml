@@ -128,6 +128,11 @@ interactive cvar_is_cvar_relax1 {| nth_hyp |} 'H : <:xrule<
    <H>; e: CVar{0}; <J[e]> >- e in CVarRelax{0}
 >>
 
+interactive cvar_is_cvar_relax2 {| nth_hyp |} 'H : <:xrule<
+   <H>; e: CVar{n}; <J[e]> >- n in nat -->
+   <H>; e: CVar{n}; <J[e]> >- e in CVarRelax{n}
+>>
+
 interactive nil_is_cvar_relax {| intro |} : <:xrule<
    "wf" : <H> >- n in nat -->
    <H> >- [] in CVarRelax{n}
@@ -138,6 +143,13 @@ interactive cons_is_cvar_relax {| intro |} : <:xrule<
    "wf" : <H> >- u in Bind{n} -->
    "wf" : <H> >- v in CVarRelax{n +@ 1} -->
    <H> >- u::v in CVarRelax{n}
+>>
+
+interactive append_is_cvar_relax {| intro |} : <:xrule<
+   "wf" : <H> >- n in nat -->
+   "wf" : <H> >- u in CVarRelax{n} -->
+   "wf" : <H> >- v in CVarRelax{n +@ length{u}} -->
+   <H> >- append{u;v} in CVarRelax{n}
 >>
 
 interactive cvar_is_bind_list {| nth_hyp |} 'H : <:xrule<
@@ -222,6 +234,12 @@ interactive sequent_bterm_wf2 {| intro [] |} : <:xrule<
    "wf" : <H> >- s in Sequent{'d}-->
    "wf" : <H> >- d in nat -->
    <H> >- sequent_bterm{d; s} in BTerm
+>>
+
+interactive_rw sequent_bterm_depth0 {| reduce |} : <:xrewrite<
+   d in nat -->
+   hyps in list -->
+   bdepth{sequent_bterm{'d; 'hyps; 'concl}} <--> d
 >>
 
 interactive_rw sequent_bterm_depth {| reduce |} : <:xrewrite<

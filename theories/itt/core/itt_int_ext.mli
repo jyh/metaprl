@@ -281,7 +281,7 @@ rule rem_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) }
+   sequent { <H> >- ('a %@ 'b) ~ ((-'a) %@ (-'b)) }
 
 topval rem_negC : conv
 
@@ -318,7 +318,9 @@ rule div_neg :
 topval  div_negC : conv
 
 rule div_indReduce :
-   sequent { <H> >- 'b <> 0 } -->
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- 'b > 0 } -->
+   sequent { <H> >- 'c >= 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->

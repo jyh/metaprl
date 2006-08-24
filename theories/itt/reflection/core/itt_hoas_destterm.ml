@@ -62,10 +62,10 @@ doc <:doc<
 declare op1
 declare op2
 
-define (*private*) unfold_isvar:
+define opaque unfold_isvar:
    is_var{'bt} <--> bnot{is_same_op{get_op{'bt; op1}; get_op{'bt; op2}}}
 
-define (*private*) unfold_dest_bterm:
+define opaque unfold_dest_bterm:
    dest_bterm{'bt; l,r.'var_case['l; 'r]; bdepth,op,subterms. 'op_case['bdepth; 'op; 'subterms] }
    <--> if is_var{'bt}
            then 'var_case[left{'bt}; right{'bt}]

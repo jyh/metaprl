@@ -84,15 +84,15 @@ doc <:doc<
 
 >>
 
-define (*private*) unfold_bindn:
+define opaque unfold_bindn:
    bind{'n; x.'t['x]} <-->
    ind{'n; lambda{f. 'f nil}; "_", r. lambda{f. bind{v. 'r (lambda{l. 'f ('v :: 'l)})}}} lambda{x.'t['x]}
 
-define (*private*) unfold_substn:
+define opaque unfold_substn:
    subst{'n; 'bt; 't} <-->
    ind{'n; lambda{bt. subst{'bt; 't}}; "_", r. lambda{bt. bind{v. 'r subst{'bt; 'v}}}} 'bt
 
-define (*private*) unfold_substl:
+define opaque unfold_substl:
    substl{'bt; 'tl} <-->
    list_ind{'tl; lambda{b.'b}; h, "_", f. lambda{b. 'f subst{'b; 'h}}} 'bt
 

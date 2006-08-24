@@ -65,8 +65,8 @@ doc <:doc<
    The @tt[nil] term is the empty list, the @tt[cons] term
    adds an element $a$ to list $b$.
 >>
-define (*private*) unfold_nil : nil <--> inl{it}
-define (*private*) unfold_cons : cons{'a; 'b} <--> inr{('a, 'b)}
+define opaque unfold_nil : nil <--> inl{it}
+define opaque unfold_cons : cons{'a; 'b} <--> inr{('a, 'b)}
 
 doc <:doc<
    The @tt[list] term defines the list type.  The @tt[list_ind]
@@ -75,10 +75,10 @@ doc <:doc<
 (*private*) define unfold_listn:
    list{'n; 'a} <--> ind{'n; unit + void; m, l. void + ('a * 'l)}
 
-define (*private*) unfold_list:
+define opaque unfold_list:
    list{'a} <--> tunion{nat; n. list{'n; 'a}}
 
-define (*private*) unfold_list_ind:
+define opaque unfold_list_ind:
    list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} <-->
    fix{r.lambda{l. decide{'l; nl.'base; ht. spread{'ht; h,t. 'step['h; 't; 'r 't] }}}} 'e
 

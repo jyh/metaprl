@@ -78,7 +78,7 @@ doc <:doc<
    The @tt{tunion} term defines the union type.
 >>
 
-define (*private*) unfold_tunion :
+define opaque unfold_tunion :
    tunion{'A; x. 'B['x]} <--> Img{x: 'A * 'B['x]; p.snd{'p}}
 doc docoff
 

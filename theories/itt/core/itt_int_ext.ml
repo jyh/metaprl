@@ -74,9 +74,9 @@ doc <:doc<
    @terms
    Multiplicative operations on <<int>>
 >>
-define (*opaque*) unfold_mul : "mul"{'a; 'b} <--> ind{'a; m, z. 'z -@ 'b; 0; m, z. 'z +@ 'b }
+define opaque unfold_mul : "mul"{'a; 'b} <--> ind{'a; m, z. 'z -@ 'b; 0; m, z. 'z +@ 'b }
 
-define (*opaque*) unfold_div :
+define opaque unfold_div :
    "div"{'a; 'b} <-->
    (let div =
       fix{div.lambda{a. lambda{b.
@@ -93,7 +93,7 @@ define (*opaque*) unfold_div :
          else
             'div 'a 'b)
                            
-define (*opaque*) unfold_rem:
+define opaque unfold_rem:
    "rem"{'a; 'b} <--> 'a -@ ("div"{'a; 'b} *@ 'b)
 
 (*

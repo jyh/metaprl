@@ -79,7 +79,7 @@ define unfold_compatible_shapes: compatible_shapes{'depth; 'shape; 'btl} <-->
 
 (*private*) define unfold_BT: BT{'n} <--> ind{'n; void; X.Iter{'X}}
 
-define const (*opaque*) unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
+define opaque const unfold_BTerm: BTerm <--> Union n:nat. BT{'n}
 
 define unfold_BTerm2 : BTerm{'i} <--> { e: BTerm | bdepth{'e} = 'i in nat }
 

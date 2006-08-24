@@ -71,22 +71,22 @@ doc <:doc<
    or a @tt[mk_term] and to get the <<'op>> and $subterms$ in the latter case.
 >>
 
-define (*private*) unfold_bind:
+define opaque unfold_bind:
    bind{x.'t['x]} <--> inl{lambda{x.'t['x]}}
 
 define iform bind_list: bind_list{'terms} <--> map{bt. bind{x.'bt}; 'terms}
 
-define (*private*) unfold_mk_term:
+define opaque unfold_mk_term:
    mk_term{'op; 'subterms} <--> inr{('op, 'subterms)}
 
 declare illegal_subst
 
-define (*private*) unfold_subst:
+define opaque unfold_subst:
    subst{'bt; 't} <--> decide{'bt; f. 'f 't; opt. illegal_subst}
 
 define iform subst_list: subst_list{'terms;'v} <-->  map{bt. subst{'bt; 'v}; 'terms}
 
-define (*private*) unfold_wdt:
+define opaque unfold_wdt:
    weak_dest_bterm{'bt; 'bind_case; op, sbt. 'mkterm_case['op; 'sbt]}
    <-->
    decide{'bt; f. 'bind_case; opt. spread{'opt; op, sbt. 'mkterm_case['op; 'sbt]}}
@@ -109,7 +109,7 @@ doc <:doc<
    the operator.  Define another constructor << mk_terms{'l} >> that represents
    a list of terms << 'l >>.
 >>
-define (*private*) unfold_mk_terms :
+define opaque unfold_mk_terms :
    mk_terms{'l} <--> inr{'l}
 
 define unfold_weak_dest_terms :

@@ -70,7 +70,7 @@ doc <:doc<
 define unfold_var:
    var{'left; 'right} <--> bind{'left; bind{v. bind{'right; 'v}}}
 
-define (*private*) unfold_mk_bterm:
+define opaque unfold_mk_bterm:
    mk_bterm{'n; 'op; 'btl}
    <-->
    ind{'n;
@@ -90,17 +90,17 @@ doc <:doc<
    <<subterms{'bt}>> computes the subterms of the bterm <<'bt>>.
 >>
 
-define (*private*) unfold_bdepth:
+define opaque unfold_bdepth:
    bdepth{'bt} <--> fix{f.lambda{bt. weak_dest_terms{'bt; 1 +@ 'f subst{'bt; mk_term{it; nil}}; y. 0}}} 'bt
 
-define (*private*) unfold_left:
+define opaque unfold_left:
    left{'bt} <-->
    fix{f.lambda{bt. lambda{l. weak_dest_bterm{'bt; 'f subst{'bt; mk_term{'l; nil}} ('l +@ 1); op, "_". 'op}}}} 'bt 0
 
-define (*private*) unfold_right:
+define opaque unfold_right:
    right{'bt} <--> bdepth{'bt} -@ left{'bt} -@ 1
 
-define (*private*) unfold_get_op:
+define opaque unfold_get_op:
    get_op{'bt; 'op} <--> fix{f.lambda{bt. weak_dest_bterm{'bt;  'f subst{'bt; mk_term{'op; nil}}; op, "_". 'op}}} 'bt
 
 declare not_found
@@ -118,7 +118,7 @@ define iform unfold_get_op1:
    <-->
    fix{f. lambda{bt. weak_dest_bterm{'bt; bind{v. 'f subst{'bt; 'v}}; "_", btl. nth{'btl; 'n}}}} 'bt
 
-define (*private*) unfold_subterms:
+define opaque unfold_subterms:
    subterms{'bt} <--> list_of_fun{n.nth_subterm{'bt; 'n}; num_subterms{'bt}}
 
 doc <:doc< @rewrites >>

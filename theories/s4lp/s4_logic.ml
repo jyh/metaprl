@@ -13,7 +13,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 2005-2006 MetaPRL Group, Caltech
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -151,6 +151,11 @@ prim boxed_base :
  * DISPLAY FORMS							*
  ************************************************************************)
 
+define iform simple_box: box{'a} <--> box[0]{'a}
+define iform diamond : diamond[i:n]{'a} <--> "not"{"box"[i:n]{"not"{'a}}}
+define iform simple_diamond : diamond{'a} <--> diamond[0]{'a}
+define iform iff : "iff"{'a; 'b} <--> "and"{'a => 'b; 'b => 'a}
+
 prec prec_implies
 prec prec_and
 prec prec_or
@@ -186,6 +191,9 @@ dform implies_df2 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: implies
 dform implies_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: implies_df{'a} =
    hspace Mpsymbols!Rightarrow `" " slot{'a}
 
+dform iff_df : parens :: "prec"[prec_implies] :: mode[prl] :: mode[html] :: mode[tex] :: "iff"{'a; 'b} =
+   szone pushm[0] slot["le"]{'a} Leftrightarrow slot["le"]{'b} popm ezone
+
 (*
  * Disjunction.
  *)
@@ -219,6 +227,15 @@ dform and_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: and_df{'a} 
  *)
 dform box_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: box[i:n]{'a} =
    `"[" slot[i] `"]" slot["lt"]{'a}
+
+dform box_df2 : except_mode[src] :: parens :: "prec"[prec_not] :: box{'a} =
+   Mpsymbols!box slot["lt"]{'a}
+
+dform diamond_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: diamond[i:n]{'a} =
+   `"<" slot[i] `">" slot["lt"]{'a}
+
+dform diamond_df2 : except_mode[src] :: parens :: "prec"[prec_not] :: box{'a} =
+   `"<>" slot["lt"]{'a}
 
 dform sequent_df : sequent_arg = sub["S4nJ"]
 

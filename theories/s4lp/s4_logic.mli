@@ -10,7 +10,7 @@
  * See the file doc/htmlman/default.html or visit http://metaprl.org/
  * for more information.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 2005-2006 MetaPRL Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,12 @@ declare "and"{'a; 'b}
 declare "or"{'a; 'b}
 declare "implies"{'a; 'b}
 declare "box"[i:n]{'a}
+
+define iform simple_box: box{'a} <--> box[0]{'a}
+define iform diamond : diamond[i:n]{'a} <--> "not"{"box"[i:n]{"not"{'a}}}
+define iform simple_diamond : diamond{'a} <--> diamond[0]{'a}
+define iform iff : "iff"{'a; 'b} <--> "and"{'a => 'b; 'b => 'a}
+
 (************************************************************************
  * DISPLAY FORMS							*
  ************************************************************************)
@@ -100,7 +106,6 @@ topval simple_proverT : tactic (* JProver with max multiplicity 1; used by autoT
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

@@ -234,7 +234,7 @@ dform box_df2 : except_mode[src] :: parens :: "prec"[prec_not] :: box{'a} =
 dform diamond_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: diamond[i:n]{'a} =
    `"<" slot[i] `">" slot["lt"]{'a}
 
-dform diamond_df2 : except_mode[src] :: parens :: "prec"[prec_not] :: box{'a} =
+dform diamond_df2 : except_mode[src] :: parens :: "prec"[prec_not] :: diamond{'a} =
    `"<>" slot["lt"]{'a}
 
 dform sequent_df : sequent_arg = sub["S4nJ"]

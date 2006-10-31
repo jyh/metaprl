@@ -235,7 +235,7 @@ dform diamond_df1 : except_mode[src] :: parens :: "prec"[prec_not] :: diamond[i:
    `"<" slot[i] `">" slot["lt"]{'a}
 
 dform diamond_df2 : except_mode[src] :: parens :: "prec"[prec_not] :: diamond{'a} =
-   `"<>" slot["lt"]{'a}
+   Mpsymbols!diamond slot["lt"]{'a}
 
 dform sequent_df : sequent_arg = sub["S4nJ"]
 

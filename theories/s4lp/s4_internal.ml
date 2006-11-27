@@ -1,7 +1,14 @@
-open Hilbert_internal
 open Lm_int_set
 open Lm_symbol
 open Lm_printf
+
+open Term_sig
+open Refiner.Refiner
+open Term
+open RefineError
+
+open Hilbert_internal
+open S4_logic
 open LP
 open OrderedFormula
 
@@ -18,6 +25,94 @@ type s4_derivation =
  | BoxRight of formula * FSet.t * FSet.t * s4_derivation
  | Axiom of formula * FSet.t * FSet.t
  | FalsumLeft of FSet.t * FSet.t
+
+module Structured_S4_Logic =
+struct
+
+   open Jlogic_sig
+
+   let is_and_term = S4_Logic.is_and_term
+   let dest_and = S4_Logic.dest_and
+   let is_or_term = S4_Logic.is_or_term
+   let dest_or = S4_Logic.dest_or
+   let is_implies_term = S4_Logic.is_implies_term
+   let dest_implies = S4_Logic.dest_implies
+   let is_not_term = S4_Logic.is_not_term
+   let dest_not = S4_Logic.dest_not
+
+   let is_box_term = S4_Logic.is_box_term
+   let dest_box = S4_Logic.dest_box
+
+   let is_exists_term = S4_Logic.is_exists_term
+   let dest_exists = S4_Logic.dest_exists 
+   let is_all_term = S4_Logic.is_all_term
+   let dest_all = S4_Logic.dest_all
+
+   type inference = s4_derivation list
+   let empty_inf = []
+
+   let rec term2formula t =
+      if is_and_term t then
+         let a, b = dest_and t in
+         And(term2formula a,term2formula  b)
+      else if is_or_term t then
+         let a, b = dest_or t in
+         Or(term2formula a, term2formula b)
+      else if is_not_term t then
+         Neg(term2formula (dest_not t))
+      else if is_implies_term t then
+         let a, b = dest_implies t in
+         Implies(term2formula a, term2formula b)
+      else if is_box_term t then
+         let f, a = dest_box t in
+         Box(Modal f, term2formula a)
+      else if is_false_term t then
+         Falsum
+      else if is_var_term t then
+         Atom (dest_var t)
+      else
+         raise (RefineError("s4_internal.term2formula, unsupported term", TermError(t)))
+
+   let append_inf inf hyp _ r =
+      match r, inf with
+         Ax, _ -> Axiom(term2formula hyp, FSet.empty, FSet.empty) :: inf
+       | Andl,t::ts -> AndLeft(term2formula hyp, t) :: ts
+       | Negl,t::ts -> NegLeft(term2formula hyp, t) :: ts
+       | Orl, t1::t2::ts ->
+            OrLeft(term2formula hyp, t1, t2) :: ts
+       | Impl,t1::t2::ts ->
+            let implication = term2formula hyp in
+            begin match implication with
+               Implies(a, b) ->
+                  ImplLeft(a, b, t1, t2) :: ts
+             | _ ->
+                  raise (RefineError("Structured_S4_Logic.append_inf unexpected argument of ImplLeft", TermError hyp))
+            end
+       | Andr,t1::t2::ts ->
+            AndRight(term2formula hyp, t1, t2) :: ts
+       | Impr,t::ts ->
+            let implication = term2formula hyp in
+            begin match implication with
+               Implies(a, b) ->
+                  ImplRight(a, b, t) :: ts
+             | _ ->
+                  raise (RefineError("Structured_S4_Logic.append_inf unexpected argument of ImplRight", TermError hyp))
+            end
+       | Negr,t::ts ->
+            NegRight(term2formula hyp, t) :: ts
+       | Orr, t::ts ->
+            OrRight(term2formula hyp, t) :: ts
+       | Boxr,t::ts ->
+            BoxRight(term2formula hyp, FSet.empty, FSet.empty, t) :: ts
+       | Boxl,t::ts ->
+            BoxLeft(term2formula hyp, t) :: ts
+       | Fail,_ -> raise (RefineError("Structured_S4_Logic.append_inf", StringError "failed"))
+       | _ ->
+            raise (Invalid_argument "Structured_S4_Logic.append_inf")
+
+end
+
+module Structured_S4_Prover = Jall.JProver(Structured_S4_Logic)
 
 let extract set item =
 	let item_set, rest = FSet.partition (fun x -> compare item x = 0) set in

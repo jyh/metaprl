@@ -91,6 +91,8 @@ val is_not_term : term -> bool
 val dest_not : term -> term
 val mk_not_term : term -> term
 
+module S4_Logic : Jlogic_sig.JLogicSig
+
 (************************************************************************
  * AUTOMATION                                                           *
  ************************************************************************)

@@ -93,7 +93,7 @@ let fold_prodAppC = fold_prodApp_base thenC (repeatC fold_prodApp_step)
 let prodAppC = (repeatC prodApp_step) thenC prodApp_base
 
 let resource reduce += [
-	<<prodApp{| <H> >- prodAppShape{x.'T['x]; 't} |}>>, prodAppC;
+	<<prodApp{| <H> >- prodAppShape{x.'T['x]; 't} |}>>, wrap_reduce prodAppC;
 ]
 
 (******************************************************************************************
@@ -193,7 +193,7 @@ prim dep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 'A
 	[restr]  sequent { <H>; <Hp> >- good_dep{'A<|Hp|>; 's2<||>} } -->
 	[eq] 		sequent { <H>; <Hp> >- equal_length{Aux{|<Hpredicates<|H|> > >- it|}; Aux{|<Hi> >- it|}} } -->
 	[f_p]		sequent { <H> >-
-					'const in applH{|<Hargs> >-
+					'constant in applH{|<Hargs> >-
 						IndParams{|<Hp<||> > >-
 						IndTypes{|<Hi<|Hp|> >; I: 'A<|Hp|>; <Ji<|Hp|> > >-
 						IndConstrs{|<Hc<|Hp;Hi;Ji|>['I]> >- 'I |}|}|}|} } -->
@@ -217,8 +217,8 @@ prim dep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 'A
 					}
 				} -->
    sequent { <H> >-
-		Elim{'const; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}; ElimCases{|<F<|H|> > >- it|}}
-		in applH{|<Hargs<|H|> >; 'const >- 'P<|H|> |}
+		Elim{'constant; ElimPredicates{|<Hpredicates<|H|> >; 'P<|H|>; <Jpredicates<|H|> > >- it|}; ElimCases{|<F<|H|> > >- it|}}
+		in applH{|<Hargs<|H|> >; 'constant >- 'P<|H|> |}
 	} = it
 
 

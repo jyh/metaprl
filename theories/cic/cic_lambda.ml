@@ -228,7 +228,7 @@ prim set_a_prop_set {| intro [] |} :
 *      RULES
 *************************************************)
 
-prim var {| intro [] |} 'H :
+prim var {| nth_hyp |} 'H :
    sequent { <H> >- of_some_sort{'T} } -->
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } = it
 

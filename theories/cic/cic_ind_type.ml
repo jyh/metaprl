@@ -629,7 +629,7 @@ prim positivity_cond_1 {| nth_hyp |} 'H :
 	sequent { <H>; x:'T; <J['x]> >-
 	   positivity_cond{ applH{| <T1> >- 'x|} ;'x } } = it
 
-prim positivity_cond_2 {| intro [] |} 'H (*bind{x.'T['x]} bind{y,x.'U['y;'x]}*) :
+prim positivity_cond_2 {| nth_hyp |} 'H (*bind{x.'T['x]} bind{y,x.'U['y;'x]}*) :
    sequent { <H>; x:'S; <J['x]> >- strictly_pos{'x;'T['x]}} -->
 	sequent { <H>; x:'S; <J['x]>; y:'T['x] >- positivity_cond{'U['y;'x];'x} } -->
 	sequent { <H>; x:'S; <J['x]> >- positivity_cond{(y:'T['x] -> 'U['y;'x]);'x} } = it
@@ -660,11 +660,11 @@ prim strictly_pos_2 {| nth_hyp |} 'H :
 interactive strictly_pos_2_base {| nth_hyp |} 'H :
 	sequent { <H>; x:'T1; <J['x]> >- strictly_pos{'x; 'x} }
 
-interactive strictly_pos_2_step {| intro [] |} 'H :
+interactive strictly_pos_2_step {| nth_hyp |} 'H :
 	sequent { <H>; x:'T1; <J['x]> >- strictly_pos{'x; 't['x]} } -->
 	sequent { <H>; x:'T1; <J['x]> >- strictly_pos{'x; ('t['x] 'a)} }
 
-prim strictly_pos_3 {| intro [] |} 'H (*'U bind{x,y.'V['x;'y]}*) :
+prim strictly_pos_3 {| nth_hyp |} 'H (*'U bind{x,y.'V['x;'y]}*) :
    sequent { <H>; x:'T2; <J['x]>; x1:'U >- strictly_pos{'x;'V['x1;'x]} } -->
 	sequent { <H>; x:'T2; <J['x]> >-
 	   strictly_pos{'x ; (x1:'U -> 'V['x1;'x])} } = it
@@ -687,13 +687,13 @@ prim strictly_pos_4 'H :
 
 (* declaration of 'imbricated positivity condition' notion *)
 
-prim imbr_pos_cond_1 {| intro [] |} 'H :
+prim imbr_pos_cond_1 {| nth_hyp |} 'H :
    sequent { <H>; x:'T; <J['x]> >-
 	   type_of_constructor{ applH{| <T1> >- 'I<|J;H|>['x] |} ;'I<|J;H|>['x]} } -->
 	sequent { <H>; x:'T; <J['x]> >-
 	   imbr_pos_cond{ applH{| <T1> >- 'I<|J;H|>['x] |};'I<|J;H|>['x];'x} } = it
 
-prim imbr_pos_cond_2 {| intro [] |} 'H (*bind{x,y.'U['x;'y]}*) :
+prim imbr_pos_cond_2 {| nth_hyp |} 'H (*bind{x,y.'U['x;'y]}*) :
    sequent { <H>; x:'T2; <J['x]> >- type_of_constructor{ (x1:'T['x] -> 'U['x1;'x]) ;'I} } -->
    sequent { <H>; x:'T2; <J['x]> >- strictly_pos{'x;'T['x]} } -->
 	sequent { <H>; x:'T2; <J['x]>; x1:'T['x] >- imbr_pos_cond{'U['x1;'x];'I;'x} } -->
@@ -712,7 +712,7 @@ prim imbr_pos_cond_m_base {| nth_hyp |} 'H :
    sequent { <H>; x:'T; <J['x]> >-
 		sequent [imbr_pos_cond_m] { >- imbr_params{'I['x];'x} } } = it
 
-prim imbr_pos_cond_m_step (*{| intro [] |}*) 'H :
+prim imbr_pos_cond_m_step (*{| nth_hyp |}*) 'H :
    sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
 	sequent { <H>; x:'T; <J['x]> >-
 		sequent [imbr_pos_cond_m] { <Hc['x]> >-

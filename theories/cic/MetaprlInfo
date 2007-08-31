@@ -6,5 +6,8 @@ MPFILES[] =
    cic_ind_elim
    cic_ind_elim_dep
    cic_list
+   cic_prop_connectives
+   minimal_logic
+
 #   cic_ind_cases
 

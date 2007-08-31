@@ -223,13 +223,18 @@ prim dep 's2 'Hi (sequent [IndParams] { <Hp> >- sequent [IndTypes] { <Hi>; I: 'A
 
 
 (* In Coq there is a restriction that (s, s2) are sorts (Set,Set) or (Set,Prop),
- * where A = (<x> : <A>)s, meaning that A is an arity of sort s (X_i : A)
+ * where A = (<x> : <A>)s, meaning that A is an arity of sort s (X_i : A).
+ * The upper statement is taken from Paulin-Mohring-92-inductive,
+ * Coq 7.4 manual allows (Prop, Prop) and some others.
  *)
 prim good_dep_set_set {| intro [] |} :
 	sequent { <H> >- good_dep{Set; Set} } = it
 
 prim good_dep_set_prop {| intro [] |} :
 	sequent { <H> >- good_dep{Set; Prop} } = it
+
+prim good_dep_prop_prop {| intro [] |} :
+	sequent { <H> >- good_dep{Prop; Prop} } = it
 
 declare ElimBracket{'indDef; 'F; 'f}
 

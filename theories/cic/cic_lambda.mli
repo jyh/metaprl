@@ -5,8 +5,6 @@ open Basic_tactics
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
 
-declare le[i:l,j:l]  (* i is less or equal to j *)
-
 (*
 declare WF (* hypothesises are well-formed *)
 declare WF{'H}
@@ -30,6 +28,7 @@ rewrite unfold_fun :
 	('A -> 'B) <--> (x:'A -> 'B)
 
 topval unfold_funC : conv
+topval fold_funC : conv
 
 declare lambda{'T;x.'t['x]}  (* the term ['x:'T]'t is a function which maps
                                    elements of 'T to 't - lambda_abstraction
@@ -41,6 +40,12 @@ declare let_in{'t;x.'u['x]} (* declaration of the let-in expressions -
 declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                             free occurrences of a variable 'x in a term 'u *)
+
+declare "true"
+declare "false"
+
+define unfold_level_le :
+	level_le[i:l, j:l] <--> meta_lt[j:l, i:l]{"false"; "true"}
 
 prec prec_fun
 prec prec_apply
@@ -128,15 +133,39 @@ rule set_a_prop_set:
 *      RULES
 *************************************************)
 
+rule introduction 't :
+   sequent { <H> >- 't in 'T } -->
+   sequent { <H> >- 'T }
+
 rule var 'H :
    (*sequent { <H>; <J> >- of_some_sort{'T} } -->*)
    sequent { <H> >- of_some_sort{'T} } -->
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T }
 
+rule hypothesis 'H :
+   sequent { <H> >- of_some_sort{'T} } -->
+   sequent { <H>; x: 'T; <J['x]> >- 'T }
+
+rule thin_many 'H 'J :
+   sequent { <H>; <K> >- 'C } -->
+   sequent { <H>; <J>; < K<|H|> > >- 'C<|H;K|> }
+
+rule thin 'H :
+	sequent { <H>; <J> >- 'B } -->
+	sequent { <H>; <J> >- of_some_sort{'C} } -->
+	sequent { <H>; x: 'C; <J> >- 'B }
+
+(*
 rule weak 'H :
 	sequent { <H>; <J> >- 'A in 'B } -->
 	sequent { <H>; <J> >- of_some_sort{'C} } -->
 	sequent { <H>; x: 'C; <J> >- 'A in 'B }
+*)
+
+rule cut 'H 'S :
+   sequent { <H>; <J> >- 'S } -->
+   sequent { <H>; x: 'S; <J> >- 'T } -->
+   sequent { <H>; <J> >- 'T }
 
 rule prod_1 's1:
    sequent { <H> >- prop_set{'s1} } -->
@@ -153,8 +182,8 @@ rule prod_2 's1:
 rule prod_types "type"[i:l] "type"[j:l] :
    sequent { <H> >- 'T in "type"[i:l] } -->
    sequent { <H>; x:'T >- 'U['x] in "type"[j:l] } -->
-   sequent { >- le[i:l,k:l] } -->
-   sequent { >- le[j:l,k:l] } -->
+   sequent { >- level_le[i:l,k:l] } -->
+   sequent { >- level_le[j:l,k:l] } -->
    sequent { <H> >- (x:'T -> 'U['x]) in "type"[k:l] }
 
 
@@ -168,6 +197,11 @@ rule lam 's:
    sequent { <H>; x:'T >- 't['x] in 'U['x] } -->
    sequent { <H> >- lambda{'T;x.'t['x]} in (x:'T -> 'U['x]) }
 
+rule lambdaFormation 's :
+   sequent { <H> >- (x:'T -> 'U['x]) in 's } -->
+   sequent { <H> >- is_sort{'s } } -->
+   sequent { <H>; x:'T >- 'U['x] } -->
+   sequent { <H> >- (x:'T -> 'U['x]) }
 
 (************************************************
  *                                              *
@@ -178,6 +212,10 @@ rule app (x:'T -> 'U['x]) :
    sequent { <H> >- 't in 'T } -->
    sequent { <H> >- apply{'u;'t} in 'U['t] }
 
+rule appFormation (x:'T -> 'U['x]) :
+   sequent { <H> >- x:'T -> 'U['x] } -->
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- 'U['t] }
 
 (************************************************
  *                                              *
@@ -241,7 +279,7 @@ rule conv_le_1 :
    sequent { <H> >- conv_le{ 't; 't } }
 
 rule conv_le_2 :
-   sequent { >- le[i:l,j:l] } -->
+   sequent { >- level_le[i:l,j:l] } -->
    sequent { <H> >- conv_le{ "type"[i:l]; "type"[j:l] } }
 
 rule conv_le_3 :

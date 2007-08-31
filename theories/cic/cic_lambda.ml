@@ -7,8 +7,6 @@ so in rules w-s, ... we skip such things as "x not in H"
 !!!!!!!! no, it's not enforced by MetaPRL :( !!!!!!!!!!!!!!!
 *)
 
-declare le[i:l,j:l]  (* i is less or equal to j *)
-
 (*
 declare WF (* hypothesises are well-formed *)
 declare WF{'H}
@@ -28,10 +26,12 @@ declare "fun"{'T;x.'U['x]} (* product ('x:'T)'U, x-variable, T,U-terms *)
 
 declare "fun"{'A;'B}
 
-prim_rw unfold_fun :
+prim_rw unfold_fun {| reduce |} :
 	('A -> 'B) <--> (x:'A -> 'B)
 
 let unfold_funC = unfold_fun
+let fold_funC = makeFoldC << 'A -> 'B >> unfold_fun
+
 
 declare lambda{'T;x.'t['x]}  (* the term ['x:'T]'t is a function which maps
                                    elements of 'T to 't - lambda_abstraction
@@ -43,6 +43,18 @@ declare let_in{'t;x.'u['x]} (* declaration of the let-in expressions -
 declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                          free occurrences of a variable 'x in a term 'u *)
+
+declare "true"
+declare "false"
+
+define unfold_level_le {| reduce |} :
+	level_le[i:l, j:l] <--> meta_lt[j:l, i:l]{"false"; "true"}
+
+interactive level_le_reflexive {| intro [] |} :
+	sequent { <H> >- level_le[i:l, i:l] }
+
+interactive level_le_succ {| intro [] |} :
+	sequent { <H> >- level_le[i:l, i':l] }
 
 let member_term = << 'a in 'c >>
 let member_opname = opname_of_term member_term
@@ -99,7 +111,7 @@ dform math_fun_df1 : mode[tex] :: math_fun{'A; 'B} =
    'B
 
 dform fun_df1 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'A; 'B} =
-   slot["le"]{'A} " " rightarrow " " slot["lt"]{'B}
+   slot{'A} " " rightarrow " " slot{'B}
 
 dform fun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'x; 'A; 'B} =
    slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}
@@ -177,12 +189,12 @@ prim ax_type {| intro [] |} :
    sequent { <H> >- member{"type"[i:l];"type"[i':l]}  } = it
 
 (* if P:Prop then P is of some sort *)
-prim prop_a_sort {| intro [] |} :
+prim prop_a_sort {| intro [AutoMustComplete] |} :
    sequent { <H> >- member{'P;Prop} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 (* if P:Set then P is of some sort *)
-prim set_a_sort {| intro [] |} :
+prim set_a_sort {| intro [AutoMustComplete] |} :
    sequent { <H> >- member{'P;Set} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
@@ -199,6 +211,15 @@ interactive setHasSort {| intro [] |} :
 
 interactive typeHasSort {| intro [] |} :
    sequent { <H> >- of_some_sort{"type"[i:l]} }
+
+interactive propMemberHasSort {| elim [] |} 'H :
+   sequent { <H>; A: Prop; <J['A]> >- of_some_sort{'A} }
+
+interactive setMemberHasSort {| elim [] |} 'H :
+   sequent { <H>; A: Set; <J['A]> >- of_some_sort{'A} }
+
+interactive typeMemberHasSort {| elim [] |} 'H :
+   sequent { <H>; A: "type"[i:l]; <J['A]> >- of_some_sort{'A} }
 
 (* Set is a sort *)
 prim set_is_sort {| intro [] |} :
@@ -228,45 +249,93 @@ prim set_a_prop_set {| intro [] |} :
 *      RULES
 *************************************************)
 
+prim introduction 't :
+   [wf] sequent { <H> >- 't in 'T } -->
+   sequent { <H> >- 'T } =
+   't
+
 prim var {| nth_hyp |} 'H :
    sequent { <H> >- of_some_sort{'T} } -->
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } = it
 
+interactive hypothesis 'H :
+   sequent { <H> >- of_some_sort{'T} } -->
+   sequent { <H>; x: 'T; <J['x]> >- 'T }
+
+prim thin_many 'H 'J :
+   ('t : sequent { <H>; <K> >- 'C }) -->
+   sequent { <H>; <J>; < K<|H|> > >- 'C<|H;K|> } =
+   't
+
+prim thin 'H :
+	('t : sequent { <H>; <J> >- 'B }) -->
+	[wf] sequent { <H>; <J> >- of_some_sort{'C} } -->
+	sequent { <H>; x: 'C; <J> >- 'B } = 't
+
+(*
 prim weak 'H :
 	sequent { <H>; <J> >- 'A in 'B } -->
-	sequent { <H>; <J> >- of_some_sort{'C} } -->
+	[wf] sequent { <H>; <J> >- of_some_sort{'C} } -->
 	sequent { <H>; x: 'C; <J> >- 'A in 'B } = it
+*)
+
+prim cut 'H 'S :
+   [assertion] ('a : sequent { <H>; <J> >- 'S }) -->
+   [main] ('f['x] : sequent { <H>; x: 'S; <J> >- 'T }) -->
+   sequent { <H>; <J> >- 'T } =
+   'f['a]
 
 prim prod_1 's1 :
-   sequent { <H> >- prop_set{'s1}  } -->
-   sequent { <H> >- member{ 'T; 's1 } } -->
+   [wf] sequent { <H> >- prop_set{'s1} } -->
+   [wf] sequent { <H> >- member{ 'T; 's1 } } -->
    sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
-   sequent { <H> >- (x:'T -> 'U['x]) in 's2  } = it
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2 } = it
 
 prim prod_2 's1 :
-   sequent { <H>; x:'T >- prop_set{'s2}  } -->
+   [wf] sequent { <H>; x:'T >- prop_set{'s2} } -->
    sequent { <H>; x:'T >- 'U['x] in 's2 } -->
-   sequent { <H> >- 'T in 's1 } -->
-   sequent { <H> >- (x:'T -> 'U['x]) in 's2  } = it
+   [wf] sequent { <H> >- 'T in 's1 } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2 } = it
 
 prim prod_types "type"[i:l] "type"[j:l] :
-   sequent { <H> >- 'T in "type"[i:l]  } -->
-   sequent { <H>; x:'T >- 'U['x] in "type"[j:l]  } -->
-   sequent { >- le[i:l,k:l]  } -->
-   sequent { >- le[j:l,k:l]  } -->
+   [wf] sequent { <H> >- 'T in "type"[i:l] } -->
+   sequent { <H>; x:'T >- 'U['x] in "type"[j:l] } -->
+   [wf] sequent { >- level_le[i:l,k:l] } -->
+   [wf] sequent { >- level_le[j:l,k:l] } -->
    sequent { <H> >- (x:'T -> 'U['x]) in "type"[k:l] } = it
 
+(*
+ * True always holds.
+ *)
+prim trueIntro {| intro [] |} :
+   sequent { <H> >- "true" } =
+   it
+
+interactive prod_1_prop {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- member{ 'T; Prop } } -->
+   sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2 }
+
+interactive prod_1_set {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- member{ 'T; Set } } -->
+   sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
+   sequent { <H> >- (x:'T -> 'U['x]) in 's2 }
 
 (************************************************
  *                                              *
  ************************************************)
 
 prim lam {| intro [] |} 's :
-   sequent { <H> >- (x:'T -> 'U['x]) in 's  } -->
-   sequent { <H> >- is_sort{'s }  } -->
-   sequent { <H>; x:'T >- 't['x] in 'U['x]  } -->
+   [wf] sequent { <H> >- (x:'T -> 'U['x]) in 's  } -->
+   [wf] sequent { <H> >- is_sort{'s } } -->
+   sequent { <H>; x:'T >- 't['x] in 'U['x] } -->
    sequent { <H> >- lambda{'T;x.'t['x]} in (x:'T -> 'U['x]) } = it
 
+prim lambdaFormation {| intro [] |} 's :
+   [wf] sequent { <H> >- (x:'T -> 'U['x]) in 's } -->
+   [wf] sequent { <H> >- is_sort{'s } } -->
+   [main] ('t['x] : sequent { <H>; x:'T >- 'U['x] }) -->
+   sequent { <H> >- (x:'T -> 'U['x]) } = lambda{'T;x.'t['x]}
 
 (************************************************
  *                                              *
@@ -277,6 +346,10 @@ prim app {| intro [] |} (x:'T -> 'U['x]) :
    sequent { <H> >- 't in 'T  } -->
    sequent { <H> >- apply{'u;'t} in 'U['t] } = it
 
+prim appFormation {| intro [] |} (x:'T -> 'U['x]) :
+   ('u : sequent { <H> >- x:'T -> 'U['x] }) -->
+   ('t : sequent { <H> >- 'T })-->
+   sequent { <H> >- 'U['t] } = apply{'u;'t}
 
 (************************************************
  *                                              *
@@ -286,7 +359,7 @@ prim app {| intro [] |} (x:'T -> 'U['x]) :
 prim let_in 'T bind{x.'U['x]}:
    sequent { <H> >- 't in 'T  } -->
    sequent { <H>; x:"let"{'t;'T} >- 'u['x] in 'U['x] } -->
-   sequent { <H> >- let_in{'t;x.'u['x]} in 'U['t]  } = it
+   sequent { <H> >- let_in{'t;x.'u['x]} in 'U['t] } = it
 *)
 
 (************************************************
@@ -336,20 +409,20 @@ declare conv_le{ 't; 'u } (* extending equivalence relation into an order
 
 (* inductive defenition of conv_le *)
 
-prim conv_le_1 :
+prim conv_le_1 {| intro [] |} :
    sequent { <H> >- conv_le{ 't; 't } } = it
 
-prim conv_le_2 :
-   sequent { >- le[i:l,j:l] } -->
+prim conv_le_2 {| intro [] |} :
+   sequent { >- level_le[i:l,j:l] } -->
    sequent { <H> >- conv_le{ "type"[i:l]; "type"[j:l] } } = it
 
-prim conv_le_3 :
+prim conv_le_3 {| intro [] |} :
    sequent { <H> >- conv_le{ Prop; "type"[i:l] } } = it
 
-prim conv_le_4 :
+prim conv_le_4 {| intro [] |} :
    sequent { <H> >- conv_le{ Set; "type"[i:l] } } = it
 
-prim conv_le_5 :
+prim conv_le_5 {| intro [] |} :
    sequent { <H>; x:'T >- conv_le{ 'T1['x]; 'U1['x] } } -->
    sequent { <H> >- conv_le{ (x:'T -> 'T1['x]); (x:'T -> 'U1['x]) }} = it
 
@@ -358,3 +431,9 @@ prim conv_rule 's 'T:
    sequent { <H> >- 't in 'T } -->
    sequent { <H> >- conv_le{ 'T; 'U } } -->
    sequent { <H> >- 't in 'U } = it
+
+interactive prop_subtype_type {| nth_hyp |} 'H :
+	sequent { <H>; A: Prop; <J['A]> >- 'A in "type"[i:l] }
+
+interactive set_subtype_type {| nth_hyp |} 'H :
+	sequent { <H>; A: Set; <J['A]> >- 'A in "type"[i:l] }

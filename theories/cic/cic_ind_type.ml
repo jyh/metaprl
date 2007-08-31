@@ -266,6 +266,14 @@ let fold_applH = fold_applHBase thenC (repeatC fold_applHStep)
 
 let applHC = (repeatC applHStep) thenC applHBase
 
+interactive_rw fold_proper_applHBase :
+	apply{'S;'T} <-->
+   applH{| x:'T >- 'S |}
+
+let fold_proper_applHBase = makeFoldC <<applH{| x:'T >- 'S |}>> (applHStep thenC applHBase)
+
+let fold_proper_applH = fold_proper_applHBase thenC (repeatC fold_applHStep)
+
 declare sequent [lambdaH] { Term : Term >- Term } : Term
 
 prim_rw lambdaHBase {| reduce |} :
@@ -598,7 +606,7 @@ dform type_of_constructor_df : type_of_constructor{'T;'I} =
 prim type_of_constructor_app {| intro [] |} :
    sequent { <H> >- type_of_constructor{ applH{| <T1> >- 'I<|H|> |}; 'I } } = it
 
-prim type_of_constructor_prod {| intro [] |} 'T1 (*bind{x.'C['x]}*) :
+prim type_of_constructor_prod {| intro [] |} (*'T1*) (*bind{x.'C['x]}*) :
    sequent { <H>; x:'T1 >- type_of_constructor{'C['x];'I} } -->
 	sequent { <H> >- type_of_constructor{ (x:'T1 -> 'C['x]); 'I } } = it
 
@@ -766,7 +774,7 @@ prim req3_m_step {| intro [] |} :
 
 
 (* implementation of the Coq's W-Ind rule *)
-prim w_Ind :
+prim w_Ind {| intro [] |} :
    sequent { <H>; <Hp> >-
 		sequent [of_some_sort_m] { <Hi> >- of_some_sort_m } } -->
 	sequent { <H>; <Hp> >-

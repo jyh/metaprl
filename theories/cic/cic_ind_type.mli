@@ -126,6 +126,7 @@ topval fold_applHBase : conv
 topval fold_applHStep : conv
 topval fold_applH : conv
 topval applHC : conv
+topval fold_proper_applH : conv
 
 declare sequent [lambdaH] { Term : Term >- Term } : Term
 
@@ -238,7 +239,7 @@ declare type_of_constructor{'T;'I} (* 'T is a type of constructor of 'I *)
 rule type_of_constructor_app :
    sequent { <H> >- type_of_constructor{ applH{| <T1> >- 'I<|H|> |}; 'I } }
 
-rule type_of_constructor_prod 'T1 (*bind{x.'C['x]}*) :
+rule type_of_constructor_prod (*'T1*) (*bind{x.'C['x]}*) :
    sequent { <H>; x:'T1 >- type_of_constructor{'C['x];'I} } -->
 	sequent { <H> >- type_of_constructor{ (x:'T1 -> 'C['x]); 'I } }
 

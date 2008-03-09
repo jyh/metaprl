@@ -254,6 +254,10 @@ prim introduction 't :
    sequent { <H> >- 'T } =
    't
 
+prim proposition :
+   ('t: sequent { <H> >- 'T }) -->
+   sequent { <H> >- 't in 'T } = it
+
 prim var {| nth_hyp |} 'H :
    sequent { <H> >- of_some_sort{'T} } -->
    sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } = it

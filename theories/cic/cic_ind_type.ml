@@ -136,7 +136,7 @@ interactive_rw indFoldDef 'Hi bind{x.'t['x]} :
 let seq_concl seq =
    (TermMan.explode_sequent seq).sequent_concl
 
-(* Being applied to a inductive definition (3 nested sequents),
+(* Being applied to an inductive definition (3 nested sequents),
    it returns the term defined in the context of that inductive definition,
 	i.e. conclusion of the third nested sequent.
 
@@ -653,6 +653,9 @@ prim positivity_cond_m_base {| intro [] |} :
    sequent { <H>; I:'A >- positivity_cond{'C['I];'I} } -->
 	sequent { <H> >- sequent [positivity_cond_m] { I:'A >- 'C['I] } } = it
 
+(* Hi here should be moved to main hypotheses or a more complex form
+of positivity_cond has to be defined
+*)
 prim positivity_cond_m_step {| intro [] |} :
    sequent { <H>; I:'A >- sequent [Aux] { <Hi> >- positivity_cond{'C['I];'I} } } -->
 	sequent { <H>; I:'A >- sequent [positivity_cond_m] { <Hi > >- 'C['I] } } -->
@@ -740,6 +743,8 @@ dform of_some_sort_m_df : sequent [of_some_sort_m] { <T1> >- of_some_sort_m } =
 prim of_some_sort_m_base {| intro [] |} :
 	sequent { <H> >- sequent [of_some_sort_m] { >- of_some_sort_m } } = it
 
+(* is_sort seems to be wrong , of_some_Sort seems to be more appropriate
+*)
 prim of_some_sort_m_step {| intro [] |} :
    sequent { <H> >- is_sort{'T2} } -->
 	sequent { <H> >- sequent [of_some_sort_m] { <T1> >- of_some_sort_m } } -->

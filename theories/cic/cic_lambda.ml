@@ -111,10 +111,10 @@ dform math_fun_df1 : mode[tex] :: math_fun{'A; 'B} =
    'B
 
 dform fun_df1 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'A; 'B} =
-   slot{'A} " " rightarrow " " slot{'B}
+   slot["le"]{'A} " " rightarrow " " slot["lt"]{'B}
 
 dform fun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'x; 'A; 'B} =
-   slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}
+   slot{bvar{'x}} `":" slot["le"]{'A} " " rightarrow " " slot["lt"]{'B}
 
 dform it_df1 : except_mode[src] :: it = cdot
 dform it_df2 : mode[src] :: it = `"it"
@@ -154,8 +154,8 @@ dform let_in_df : let_in{'t;x.'u} =
      szone{'u} popm ezone
 *)
 
-dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
-dform fun_df2 : "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
+dform fun_df1 : parens :: "fun"{'A; 'B} = math_fun{'A; 'B}
+dform fun_df2 : parens :: "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
 
 dform lambda_df : parens :: except_mode [src] :: "prec"[prec_lambda] :: lambda{'T;x. 'b} =
    Mpsymbols!lambda slot{'x} `":" slot{'T} `"." slot{'b}

@@ -23,10 +23,10 @@ struct
 	 | Box of family * formula
 	 | Pr of proof_term * formula
 
-	type derivation =
+	type 'formula hilbert =
 		Axiom of int
-	 | MP of formula * derivation * derivation
-	 | Concat of derivation * derivation
+	 | MP of 'formula * 'formula hilbert * 'formula hilbert
+	 | Choice of 'formula hilbert * 'formula hilbert
 	 | Hyp of int
 	 | ConstSpec
 
@@ -42,7 +42,7 @@ type t = formula
 let fam_cmp f1 f2 =
    match f1, f2 with
       Evidence _, Evidence _ ->
-         0
+         0 (* why 0, not Pervasives.compare ? *)
     | Evidence _, Modal _ ->
          -1
     | Modal _, Evidence _ ->
@@ -201,7 +201,7 @@ let rec check_proof hyps d f =
 			(i > 0) && (axiom_index f = i)
 	 | MP(a,d1,d2) ->
 	 		(check_proof hyps d1 a) && (check_proof hyps d2 (Implies(a,f)))
-	 | Concat(d1,d2) ->
+	 | Choice(d1,d2) ->
 	 		(check_proof hyps d1 f) || (check_proof hyps d2 f)
 	 | Hyp i ->
 	 		List.nth hyps i = f
@@ -217,7 +217,7 @@ exception Not_proof
 
 let rec lift hyps d f =
 	match d, f with
-		Concat(d1,d2), _ ->
+		Choice(d1,d2), _ ->
 			begin try
 				lift hyps d1 f
 			with Not_proof | Unliftable ->
@@ -261,7 +261,7 @@ let rec lift hyps d f =
 
 let rec deduction h hyps d f =
 	match d with
-		Concat(d1,d2) ->
+		Choice(d1,d2) ->
 			begin try
 				deduction h hyps d1 f
 			with Not_proof ->
@@ -307,3 +307,41 @@ let rec deduction h hyps d f =
 					MP(f,ConstSpec,Axiom(1))
 			 | _ ->
 			 		raise Not_proof
+
+module S4G =
+struct
+   type fset = FSet.t
+   
+   type rule_node =
+      Axiom of LP.formula
+    | AxiomFalsum of LP.formula
+    | NegLeft of LP.formula * gentzen
+    | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
+    | ImplRight of LP.formula * LP.formula * gentzen
+    | BoxRight of LP.formula * gentzen
+    | BoxLeft of LP.formula * gentzen
+
+   and gentzen = rule_node * fset * fset (* rule, hyps, concls *)
+end
+
+open S4G
+
+(*                                    
+let rec realize derivation tail =
+   match derivation with
+    | Axiom(f), hyps, concls ->
+         assert (FSet.mem hyps f);
+         assert (FSet.mem concls f);
+         PropTaut (sequent_formula hyps concls), ConstSpec::tail
+    | AxiomFalsum(f), hyps, concls ->
+         assert (FSet.mem hyps Falsum);
+         PropTaut (sequent_formula hyps concls), ConstSpec::tail
+    | NegLeft(f, subderivation), hyps, concls ->
+         assert (FSet.mem hyps (Neg f));
+         let tail' = realize subderivation tail in
+         let _, hyps0, concls0 = subderivation in         
+    | ImplLeft(f, left, right), hyps, concls ->
+    | ImplRight(f, subderivation), hyps, concls ->
+    | BoxRight(f, subderivation), hyps, concls ->
+    | BoxLeft(f, subderivation), hyps, concls ->
+*) 

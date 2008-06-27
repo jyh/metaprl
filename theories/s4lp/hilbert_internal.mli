@@ -23,10 +23,10 @@ sig
     | Box of family * formula
     | Pr of proof_term * formula
 
-   type derivation =
+   type 'formula hilbert =
       Axiom of int
-    | MP of formula * derivation * derivation
-    | Concat of derivation * derivation
+    | MP of 'formula * 'formula hilbert * 'formula hilbert
+    | Choice of 'formula hilbert * 'formula hilbert
     | Hyp of int
 	 | ConstSpec
 
@@ -46,6 +46,7 @@ end
 
 module FSet : Lm_set_sig.LmSet with type elt = OrderedFormula.t
 
-val check_proof : formula list -> derivation -> formula -> bool
-val lift : formula list -> derivation -> formula -> derivation * proof_term
-val deduction : formula -> formula list -> derivation -> formula -> derivation
+val check_proof : formula list -> formula hilbert -> formula -> bool
+val lift : formula list -> formula hilbert -> formula -> formula hilbert * proof_term
+val deduction : formula -> formula list -> formula hilbert -> formula -> formula hilbert
+

@@ -326,22 +326,75 @@ end
 
 open S4G
 
-(*                                    
-let rec realize derivation tail =
+let symbolic_left_sum op set =
+   let first = FSet.min_elt set in
+   let rest = FSet.remove set first in
+   FSet.fold (fun acc e -> op acc e) first rest
+
+let sequent_formula hyps concls =
+   let fh = symbolic_left_sum (fun acc e -> And(acc, e)) hyps in
+   let fc = symbolic_left_sum (fun acc e -> Or(acc, e)) concls in
+   Implies(fh, fc)
+
+(*
+ * c - propositional translation of the assuption sequent of the rule
+ * tC - a proof term for it
+ * proofTC - the proof of tC:c
+ * hyps, concls - hyps and conclusion formulae of the conclusion sequent
+ *)
+let realize_chain_rule tC c proofTC hyps concls =
+   let c' = sequent_formula hyps concls in
+   let tR = PropTaut(Implies(c, c')) in
+   let tail2 = ConstSpec in (* a proof of Pr(tR, c -> c') *)
+   let tail3 = LP.Axiom(12) in (* a proof of tR:(c->c')->(tC:c->tR*tC:c') *)
+   let tail4 = MP(Pr(tR, Implies(c, c')), tail2, tail3) in (* a proof of tC:c->tR*tC:c' *)
+   let tail5 = MP(Pr(tC,c), proofTC, tail4) in (* a proof of tR*tC:c' *)
+   App(tR,tC), c', tail5
+
+let realize_branch_rule tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
+   let c' = sequent_formula hyps concls in
+   let d = Implies(c2, c') in
+   let taut = Implies(c1, d) in
+   let tR = PropTaut(taut) in
+   let proof1 = ConstSpec in (*for tR:taut *)
+   let proof2 = LP.Axiom(12) in (*for tR:taut->(tC1:c1->tR*tC1:d *)
+   let proof3 = MP(Pr(tR, taut), proof1, proof2) in (*for tC1:c1->tR*tC1:d *)
+   let proof4 = MP(Pr(tC1,c1), proofTC1, proof3) in (*for tR*tC1:d *)
+   let proof5 = LP.Axiom(12) in (*for tR*tC1:d->(tC2:c2->tR*tC1*tC2:c') *)
+   let proof6 = MP(Pr(App(tR, tC1), d), proof4, proof5) in (*for tC2:c2->tR*tC1*tC2:c' *)
+   let proof7 = MP(Pr(tC2, c2), proofTC2, proof6) in (*for tR*tC1*tC2:c' *)
+   App(App(tR, tC1), tC2), c', proof7
+
+let realize_axiom hyps concls =
+   let f' = sequent_formula hyps concls in
+   PropTaut f', f', ConstSpec
+
+exception Not_implemented
+
+let rec realize derivation =
    match derivation with
     | Axiom(f), hyps, concls ->
          assert (FSet.mem hyps f);
          assert (FSet.mem concls f);
-         PropTaut (sequent_formula hyps concls), ConstSpec::tail
+         realize_axiom hyps concls
     | AxiomFalsum(f), hyps, concls ->
          assert (FSet.mem hyps Falsum);
-         PropTaut (sequent_formula hyps concls), ConstSpec::tail
+         realize_axiom hyps concls
     | NegLeft(f, subderivation), hyps, concls ->
          assert (FSet.mem hyps (Neg f));
-         let tail' = realize subderivation tail in
-         let _, hyps0, concls0 = subderivation in         
-    | ImplLeft(f, left, right), hyps, concls ->
-    | ImplRight(f, subderivation), hyps, concls ->
+         let tC, c, proofTC = realize subderivation in
+         realize_chain_rule tC c proofTC hyps concls
+    | ImplLeft(a, b, left, right), hyps, concls ->
+         assert (FSet.mem hyps (Implies(a, b)));
+         let tC1, c1, proofTC1 = realize left in
+         let tC2, c2, proofTC2 = realize right in
+         realize_branch_rule tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
+    | ImplRight(a, b, subderivation), hyps, concls ->
+         assert (FSet.mem concls (Implies(a, b)));
+         let tC, c, proofTC = realize subderivation in
+         realize_chain_rule tC c proofTC hyps concls
     | BoxRight(f, subderivation), hyps, concls ->
+         raise Not_implemented
     | BoxLeft(f, subderivation), hyps, concls ->
-*) 
+         raise Not_implemented
+ 

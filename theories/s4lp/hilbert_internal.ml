@@ -393,8 +393,10 @@ let rec realize derivation =
          assert (FSet.mem concls (Implies(a, b)));
          let tC, c, proofTC = realize subderivation in
          realize_chain_rule tC c proofTC hyps concls
+    | BoxLeft(f, subderivation), hyps, concls ->
+         assert (if FSet.mem hyps f then false else true);
+         let tC, c, proofTC = realize subderivation in
+         realize_chain_rule tC c proofTC hyps concls
     | BoxRight(f, subderivation), hyps, concls ->
          raise Not_implemented
-    | BoxLeft(f, subderivation), hyps, concls ->
-         raise Not_implemented
- 
+               

@@ -217,12 +217,6 @@ exception Not_proof
 
 let rec lift hyps d f =
 	match d, f with
-		Choice(d1,d2), _ ->
-			begin try
-				lift hyps d1 f
-			with Not_proof | Unliftable ->
-				lift hyps d2 f
-			end
 	 | Axiom i, Pr(t,a) ->
 	 		if i > 0 && axiom_index f = i then
 		 		MP(f,d,Axiom(14)),
@@ -240,24 +234,35 @@ let rec lift hyps d f =
 				Check(t)
 	 | Hyp i, _ ->
 				raise Unliftable
-	 | MP(a,d1,d2), _ ->
-	 		let ld1, a_pt = lift hyps d1 a in
-			let ld2, af_pt = lift hyps d2 (Implies(a,f)) in
-			MP(
-				Pr(a_pt,a),
-				ld1,
-				MP(
-					Pr(af_pt,Implies(a,f)),
-					ld2,
-					Axiom(12)
-				)
-			),
-			App(af_pt,a_pt)
 	 | ConstSpec, Pr(PropTaut(f1) as t, f2) when compare f1 f2 = 0 ->
 			MP(f,d,Axiom(14)),
 			Check(t)
 	 | ConstSpec, _ ->
 	 		raise (Invalid_argument "lift: PropTaut used to prove a wrong formula")
+    | _, Pr(t, a) ->
+         let proof0 = Axiom(14) in (* t:a->!t:t:a *)
+         MP(f,d,proof0),
+         Check(t)
+    | Choice(d1,d2), _ ->
+         begin try
+            lift hyps d1 f
+         with Not_proof | Unliftable ->
+            lift hyps d2 f
+         end
+    | MP(a,d1,d2), _ ->
+         let ld1, a_pt = lift hyps d1 a in
+         let ld2, af_pt = lift hyps d2 (Implies(a,f)) in
+         MP(
+            Pr(a_pt,a),
+            ld1,
+            MP(
+               Pr(af_pt,Implies(a,f)),
+               ld2,
+               Axiom(12)
+            )
+         ),
+         App(af_pt,a_pt)
+
 
 let rec deduction h hyps d f =
 	match d with
@@ -307,6 +312,18 @@ let rec deduction h hyps d f =
 					MP(f,ConstSpec,Axiom(1))
 			 | _ ->
 			 		raise Not_proof
+
+let syllogism a b c proofAB proofBC =
+   let ab = Implies(a,b) in
+   let bc = Implies(b,c) in
+   let ac = Implies(a,c) in
+   let syll = Implies(ab, Implies(bc, ac)) in
+   let proof0 = MP(a, Hyp 0, Hyp 2) in (* a,b->c,a->b >- b *)
+   let proof1 = MP(b, proof0, Hyp 1) in (* a,b->c,a->b >- c *)
+   let proof2 = deduction a [bc;ab] proof1 ac in
+   let proof3 = deduction bc [ab] proof2 (Implies(bc, ac)) in
+   let proof4 = deduction ab [] proof3 syll in
+   proof4
 
 module S4G =
 struct
@@ -371,7 +388,27 @@ let realize_axiom hyps concls =
 
 exception Not_implemented
 
-let rec realize derivation =
+let weaker_or_equal a b =
+   match a with
+      Box(Modal af, _) ->
+         begin match b with
+            Box(Modal bf, _) ->
+               (af = bf) || (bf = 0)
+          | _ ->
+               false
+         end
+    | _ ->
+         false
+
+let add_family families t f =
+   let family_term = Hashtbl.find families f in
+   let taut = Implies(Pr(t,f), Pr(family_term,f)) in
+   let taut' = Pr(PropTaut(taut), taut) in
+   let proof0 = ConstSpec in (* taut' *)
+   let proof1 = LP.Axiom(13) in
+   MP(taut', proof0, proof1), Pr(family_term, f)
+
+let rec realize families derivation =
    match derivation with
     | Axiom(f), hyps, concls ->
          assert (FSet.mem hyps f);
@@ -382,21 +419,48 @@ let rec realize derivation =
          realize_axiom hyps concls
     | NegLeft(f, subderivation), hyps, concls ->
          assert (FSet.mem hyps (Neg f));
-         let tC, c, proofTC = realize subderivation in
+         let tC, c, proofTC = realize families subderivation in
          realize_chain_rule tC c proofTC hyps concls
     | ImplLeft(a, b, left, right), hyps, concls ->
          assert (FSet.mem hyps (Implies(a, b)));
-         let tC1, c1, proofTC1 = realize left in
-         let tC2, c2, proofTC2 = realize right in
+         let tC1, c1, proofTC1 = realize families left in
+         let tC2, c2, proofTC2 = realize families right in
          realize_branch_rule tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
     | ImplRight(a, b, subderivation), hyps, concls ->
          assert (FSet.mem concls (Implies(a, b)));
-         let tC, c, proofTC = realize subderivation in
+         let tC, c, proofTC = realize families subderivation in
          realize_chain_rule tC c proofTC hyps concls
     | BoxLeft(f, subderivation), hyps, concls ->
          assert (if FSet.mem hyps f then false else true);
-         let tC, c, proofTC = realize subderivation in
+         let tC, c, proofTC = realize families subderivation in
          realize_chain_rule tC c proofTC hyps concls
     | BoxRight(f, subderivation), hyps, concls ->
-         raise Not_implemented
-               
+         let _, assum_hyps, assum_concls = subderivation in
+         assert (FSet.cardinal assum_concls = 1);
+         assert (FSet.choose assum_concls = f);
+         let test = weaker_or_equal f in
+         assert (FSet.for_all test assum_hyps);
+         let tC, c, proofTC = realize families subderivation in
+         begin match c with
+            Implies(ais, b) ->
+               let proof0, s = lift [ais] (Hyp 0) ais in (* ais >- s:ais *)
+               let proof1 = deduction ais [] proof0 in (* ais->s:ais *)
+               let proof2 = LP.Axiom(12) in (* tC:c->(s:ais->tC*s:b) *)
+               let proof3 = MP(Pr(tC, c), proofTC, proof2) in (* s:ais->tC*s:b) *)
+               let prB = Pr(App(tC, s), b) in
+               let proof4 = syllogism ais (Pr(s, ais)) prB proof1 proof3 in (* ais->tC*s:b *)
+               let proof5, prB' = add_family families (App(tC, s)) b in (* tC*s:b->fam:b *)
+               let proof6 = syllogism ais prB prB' proof4 proof5 in (* ais->prB' *)
+               let c' = sequent_formula hyps concls in
+               let taut = Implies(Implies(ais, prB'), c') in
+               let taut' = Pr(PropTaut(taut), taut) in
+               let proof7 = ConstSpec in (* taut' *)
+               let proof8 = LP.Axiom 17 in (* taut'->taut *)
+               let proof9 = MP(taut', proof7, proof8) in (* taut *)
+               let proof10 = MP(Implies(ais, prB'), proof6, proof9) in
+               let proof11, tC' = lift [] proof10 c' in
+               tC', c', proof11
+          | _ ->
+               raise Not_implemented
+         end
+

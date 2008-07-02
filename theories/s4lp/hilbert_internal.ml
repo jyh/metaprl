@@ -32,6 +32,8 @@ struct
 
 end
 
+exception Not_implemented
+
 open LP
 
 module OrderedFormula =
@@ -42,7 +44,9 @@ type t = formula
 let fam_cmp f1 f2 =
    match f1, f2 with
       Evidence _, Evidence _ ->
-         0 (* why 0, not Pervasives.compare ? *)
+         0 (* why 0, not Pervasives.compare ? 
+            * because these are two provisionals for the same formula
+            *)
     | Evidence _, Modal _ ->
          -1
     | Modal _, Evidence _ ->
@@ -138,6 +142,7 @@ end
 
 open OrderedFormula
 module FSet = Lm_set.LmMake(OrderedFormula)
+module FMap = Lm_map.LmMake(OrderedFormula)
 
 (*
 let rec pt2term = function
@@ -331,7 +336,7 @@ struct
    
    type rule_node =
       Axiom of LP.formula
-    | AxiomFalsum of LP.formula
+    | AxiomFalsum
     | NegLeft of LP.formula * gentzen
     | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
     | ImplRight of LP.formula * LP.formula * gentzen
@@ -352,6 +357,165 @@ let sequent_formula hyps concls =
    let fh = symbolic_left_sum (fun acc e -> And(acc, e)) hyps in
    let fc = symbolic_left_sum (fun acc e -> Or(acc, e)) concls in
    Implies(fh, fc)
+
+let rec substitute_box_for_provisional i = function
+   Implies(a,b) ->
+      Implies(
+         substitute_box_for_provisional i a,
+         substitute_box_for_provisional i b
+      )
+ | Neg a ->
+      substitute_box_for_provisional i a
+ | And(a,b) ->
+      And(
+         substitute_box_for_provisional i a,
+         substitute_box_for_provisional i b
+      )
+ | Or(a,b) ->
+      Or(
+         substitute_box_for_provisional i a,
+         substitute_box_for_provisional i b
+      )
+ | Falsum -> Falsum
+ | Atom _ as a -> a
+ | Box(Modal 0, a) -> Box(Evidence i, a)
+ | Box(m, a) ->
+      Box(
+         m,
+         substitute_box_for_provisional i a
+      )
+ | Pr(t, a) ->
+      Pr(
+         t,
+         substitute_box_for_provisional i a
+      )
+
+let rec assign_fresh counter = function
+   Implies(a,b) ->
+      let counter0, a' = assign_fresh counter a in
+      let counter1, b' =  assign_fresh counter0 b in
+      counter1, Implies(a', b')
+ | Neg a ->
+      let counter', a' = assign_fresh counter a in
+      counter', Neg a'
+ | And(a,b) ->
+      let counter0, a' = assign_fresh counter a in
+      let counter1, b' = assign_fresh counter0 b in
+      counter1, And(a', b')
+ | Or(a,b) ->
+      let counter0, a' = assign_fresh counter a in
+      let counter1, b' = assign_fresh counter0 b in
+      counter1, Or(a', b')
+ | Falsum -> counter, Falsum
+ | Atom _ as a -> counter, a
+ | Box(Modal 0, a) ->
+      let counter', a' = assign_fresh counter a in
+      succ counter', Box(Evidence counter', a')
+ | Box(m, a) ->
+      let counter', a' = assign_fresh counter a in
+      counter', Box(m, a')
+ | Pr(t, a) ->
+      let counter', a' = assign_fresh counter a in
+      counter', Pr(t, a')
+
+let assign_fresh_multiple map counter set =
+   FSet.fold 
+      (fun (map, counter, set) a ->
+         let counter', a' = assign_fresh counter a in
+         FMap.add map a a',
+         counter',
+         FSet.add set a'
+      )
+      (map, counter, FSet.empty)
+      set
+
+(*
+ * assign recursively goes over a Gentzen style S4 proof and assigns
+ * unique indices to each fresh instance of box0 (agent0's box).
+ * It does so in such a way that the same formula instance
+ * above and below a rule (line) get the same indices in its boxes
+ * Since a rule might have two branches and indices in them
+ * might clash, a mapping 'families' is maintained to map
+ * each index to the complete list of indices from its family
+ * for the formula below such rule one of the indices is chosen.
+ * Another problem is that when 'assign' converts a subderivation,
+ * its bottom sequent has many formulas converted and not identical
+ * to the originals but the sequent below the current rules
+ * has only original formulas. They have to be related somehow.
+ * One option would be to consider hyps and conclusions not
+ * as multisets but as lists/arrays and refer toformulas by
+ * their positions but this approach will render certain operation
+ * less efficient.
+ * So, I've chosen a different approach - the first element of
+ * the 'assign's result tuple is a map from original formulas
+ * to their new forms 
+ * (not global but limited to just processed sequent)
+ *)
+let rec assign families counter = function
+   AxiomFalsum, hyps, concls ->
+      let map0, counter0, hyps' = assign_fresh_multiple FMap.empty counter hyps in
+      let map1, counter1, concls' = assign_fresh_multiple map0 counter0 concls in
+      families, map1, counter1, (AxiomFalsum, hyps', concls')
+ | Axiom(a), hyps, concls ->
+      let map0, counter0, hyps' = assign_fresh_multiple FMap.empty counter (FSet.remove hyps a) in
+      let map1, counter1, concls' = assign_fresh_multiple map0 counter0 (FSet.remove concls a) in
+      let counter2, a' = assign_fresh counter1 a in
+      families, (FMap.add map1 a a'), counter2, (Axiom a', FSet.add hyps' a', FSet.add concls' a')
+ | NegLeft(a, subder), hyps, concls ->
+      let families0, map0, counter0, subder0 = assign families counter subder in
+      let _, hyps0, concls0 = subder0 in
+      let a' = FMap.find map0 a in
+      let nega' = Neg a' in
+      families0,
+      FMap.add (FMap.remove map0 a) (Neg a) nega',
+      counter0,
+      (
+         NegLeft(a', subder0),
+         FSet.add hyps0 nega',FSet.remove concls0 nega'
+      )
+ | ImplLeft(a,b,left,right), hyps, concls ->
+      let families0, map0, counter0, left' = assign families counter left in
+      let families1, map1, counter1, right' = assign families counter0 right in
+      let _, hyps0, concls0 = left' in
+      let a' = FMap.find map0 a in
+      let b' = FMap.find map1 b in
+      let ab' = Implies(a', b') in
+      FMap.union (fun k l r -> raise (Invalid_argument "incompatible maps")) families0 families1,
+      FMap.add (FMap.remove map0 a) (Implies(a, b)) ab',
+      counter1,
+      (
+         ImplLeft(a', b', left', right'),
+         FSet.add hyps0 ab',
+         FSet.remove concls0 a'
+      )      
+ | ImplRight(a,b,subder), hyps, concls ->
+      let families0, map0, counter0, subder0 = assign families counter subder in
+      let _, hyps0, concls0 = subder0 in
+      let a' = FMap.find map0 a in
+      let b' = FMap.find map0 b in
+      let ab' = Implies(a', b') in
+      families0,
+      FMap.add (FMap.remove (FMap.remove map0 a) b) (Implies(a, b)) ab',
+      counter0,
+      (
+         ImplRight(a', b', subder0),
+         FSet.remove hyps0 a',
+         FSet.add (FSet.remove concls0 b') ab'
+      )
+ | BoxRight(a,subder), hyps, concls ->
+      raise Not_implemented
+ | BoxLeft(a,subder), hyps, concls ->
+      let families0, map0, counter0, subder0 = assign families counter subder in
+      let _, hyps0, concls0 = subder0 in
+      let a' = FMap.find map0 a in
+      families0,
+      FMap.remove map0 a,
+      counter0,
+      (
+         BoxLeft(a', subder0), 
+         FSet.remove hyps0 a',
+         concls0
+      )
 
 (*
  * c - propositional translation of the assuption sequent of the rule
@@ -386,8 +550,6 @@ let realize_axiom hyps concls =
    let f' = sequent_formula hyps concls in
    PropTaut f', f', ConstSpec
 
-exception Not_implemented
-
 let weaker_or_equal a b =
    match a with
       Box(Modal af, _) ->
@@ -414,7 +576,7 @@ let rec realize families derivation =
          assert (FSet.mem hyps f);
          assert (FSet.mem concls f);
          realize_axiom hyps concls
-    | AxiomFalsum(f), hyps, concls ->
+    | AxiomFalsum, hyps, concls ->
          assert (FSet.mem hyps Falsum);
          realize_axiom hyps concls
     | NegLeft(f, subderivation), hyps, concls ->

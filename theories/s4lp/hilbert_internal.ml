@@ -502,8 +502,26 @@ let rec assign families counter = function
          FSet.remove hyps0 a',
          FSet.add (FSet.remove concls0 b') ab'
       )
- | BoxRight(a,subder), hyps, concls ->
-      raise Not_implemented
+ | BoxRight(b,subder), hyps, concls ->
+      let families0, map0, counter0, subder0 = assign families counter subder in
+      let _, hyps0, concls0 = subder0 in
+      let b' = FMap.find map0 b in
+      let map0' = FMap.remove map0 b in
+      let _, assum_h, _ = subder in
+      let gamma = FSet.subtract_list hyps (FSet.to_list assum_h) in
+      let boxb = Box(Modal 0, b) in
+      let delta = FSet.remove concls boxb in 
+      let map1, counter1, gamma' = assign_fresh_multiple map0' counter0 gamma in
+      let map2, counter2, delta' = assign_fresh_multiple map1 counter1 delta in
+      let boxb' = Box(Evidence counter2, b') in 
+      families0,
+      FMap.add map2 boxb boxb',
+      succ counter2,
+      (
+         BoxRight(b', subder0),
+         FSet.union hyps0 gamma',
+         FSet.add delta' boxb'
+      )
  | BoxLeft(a,subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
       let _, hyps0, concls0 = subder0 in

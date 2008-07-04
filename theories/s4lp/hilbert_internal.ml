@@ -144,6 +144,14 @@ open OrderedFormula
 module FSet = Lm_set.LmMake(OrderedFormula)
 module FMap = Lm_map.LmMake(OrderedFormula)
 
+module Integer =
+struct
+   type t = int
+   let compare = Pervasives.compare
+end
+
+module FamMap = Lm_map.LmMake(Integer)
+
 (*
 let rec pt2term = function
 	Var s -> mk_var_term s
@@ -429,6 +437,51 @@ let assign_fresh_multiple map counter set =
       (map, counter, FSet.empty)
       set
 
+let rec merge_pair acc f1 f2 =
+match f1, f2 with
+   Falsum, Falsum -> acc
+ | Atom _, Atom _ -> acc
+ | And(a0,b0), And(a1,b1) ->
+      let acc' = merge_pair acc a0 a1 in
+      merge_pair acc' b0 b1
+ | Or(a0,b0), Or(a1,b1) ->
+      let acc' = merge_pair acc a0 a1 in
+      merge_pair acc' b0 b1
+ | Neg a0, Neg a1 ->
+      merge_pair acc a0 a1
+ | Implies(a0,b0), Implies(a1,b1) ->
+      let acc' = merge_pair acc a0 a1 in
+      merge_pair acc' b0 b1
+ | Box(Evidence i0, a0), Box(Evidence i1, a1) ->
+      let fam0 =
+         try FamMap.find acc i0
+         with Not_found ->
+            [i0]
+      in
+      let fam1 =
+         try FamMap.find acc i1
+         with Not_found ->
+            [i1]
+      in
+      let fam = List.concat [fam0; fam1] in
+      let acc0 = FamMap.remove acc i0 in
+      let acc1 = FamMap.remove acc0 i1 in
+      let acc2 = FamMap.add_list acc1 [(i0,fam);(i1,fam)] in
+      merge_pair acc2 a0 a1
+ | Box(_,a0), Box(_,a1) ->
+      merge_pair acc a0 a1
+ | Pr(_,a0), Pr(_,a1) ->
+      merge_pair acc a0 a1
+ | _, _ ->
+      raise (Invalid_argument "merge_pair: non-matching formulas")
+
+let merge_formula map0 map1 acc f =
+   merge_pair acc (FMap.find map0 f) (FMap.find map1 f)
+
+let merge start_set map0 map1 families0 families1 =
+   let families = FamMap.union (fun k l r -> List.concat [l;r]) families0 families1 in
+   FSet.fold (merge_formula map0 map1) families start_set
+
 (*
  * assign recursively goes over a Gentzen style S4 proof and assigns
  * unique indices to each fresh instance of box0 (agent0's box).
@@ -480,7 +533,8 @@ let rec assign families counter = function
       let a' = FMap.find map0 a in
       let b' = FMap.find map1 b in
       let ab' = Implies(a', b') in
-      FMap.union (fun k l r -> raise (Invalid_argument "incompatible maps")) families0 families1,
+      let start_set = FSet.union hyps concls in
+      merge start_set map0 map1 families0 families1,
       FMap.add (FMap.remove map0 a) (Implies(a, b)) ab',
       counter1,
       (
@@ -581,7 +635,7 @@ let weaker_or_equal a b =
          false
 
 let add_family families t f =
-   let family_term = Hashtbl.find families f in
+   let family_term = FMap.find families f in
    let taut = Implies(Pr(t,f), Pr(family_term,f)) in
    let taut' = Pr(PropTaut(taut), taut) in
    let proof0 = ConstSpec in (* taut' *)

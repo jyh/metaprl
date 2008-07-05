@@ -11,7 +11,7 @@ struct
 	 | Provisional of int
 	 | PropTaut of formula
 
-	and family = Modal of int | Evidence of int
+	and agent = Modal of int | Evidence of int
 
 	and formula =
 		Falsum
@@ -20,7 +20,7 @@ struct
 	 | Or of formula * formula
 	 | Neg of formula
 	 | Implies of formula * formula
-	 | Box of family * formula
+	 | Box of agent * formula
 	 | Pr of proof_term * formula
 
 	type 'formula hilbert =
@@ -141,7 +141,19 @@ and compare_pairs (f11,f12) (f21,f22) =
 end
 
 open OrderedFormula
-module FSet = Lm_set.LmMake(OrderedFormula)
+
+module SymbolicSet = functor (O : Lm_set_sig.OrderedType) ->
+struct
+   include Lm_set.LmMake(O)
+
+   let symbolic_left_sum base op set =
+      let first = min_elt set in
+      let rest = remove set first in
+      fold op (base first) rest
+
+end
+
+module FSet = SymbolicSet(OrderedFormula)
 module FMap = Lm_map.LmMake(OrderedFormula)
 
 module Integer =
@@ -150,7 +162,8 @@ struct
    let compare = Pervasives.compare
 end
 
-module FamMap = Lm_map.LmMake(Integer)
+module IntMap = Lm_map.LmMake(Integer)
+module IntSet = SymbolicSet(Integer)
 
 (*
 let rec pt2term = function
@@ -348,7 +361,7 @@ struct
     | NegLeft of LP.formula * gentzen
     | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
     | ImplRight of LP.formula * LP.formula * gentzen
-    | BoxRight of LP.formula * gentzen
+    | BoxRight of int * LP.formula * gentzen
     | BoxLeft of LP.formula * gentzen
 
    and gentzen = rule_node * fset * fset (* rule, hyps, concls *)
@@ -356,14 +369,9 @@ end
 
 open S4G
 
-let symbolic_left_sum op set =
-   let first = FSet.min_elt set in
-   let rest = FSet.remove set first in
-   FSet.fold (fun acc e -> op acc e) first rest
-
 let sequent_formula hyps concls =
-   let fh = symbolic_left_sum (fun acc e -> And(acc, e)) hyps in
-   let fc = symbolic_left_sum (fun acc e -> Or(acc, e)) concls in
+   let fh = FSet.symbolic_left_sum (fun x->x) (fun acc e -> And(acc, e)) hyps in
+   let fc = FSet.symbolic_left_sum (fun x->x) (fun acc e -> Or(acc, e)) concls in
    Implies(fh, fc)
 
 let rec substitute_box_for_provisional i = function
@@ -386,7 +394,7 @@ let rec substitute_box_for_provisional i = function
       )
  | Falsum -> Falsum
  | Atom _ as a -> a
- | Box(Modal 0, a) -> Box(Evidence i, a)
+ | Box(Modal 0, a) -> Pr(Provisional i, a)
  | Box(m, a) ->
       Box(
          m,
@@ -397,6 +405,16 @@ let rec substitute_box_for_provisional i = function
          t,
          substitute_box_for_provisional i a
       )
+
+type family = Essential of IntSet.t | NonEssential of int
+
+let merge_families f1 f2 =
+   match f1, f2 with
+      Essential s1, Essential s2 ->
+         Essential(IntSet.union s1 s2)
+    | Essential s, NonEssential _ -> f1
+    | NonEssential _, Essential s -> f2
+    | NonEssential i1, NonEssential i2 -> NonEssential(min i1 i2)
 
 let rec assign_fresh counter = function
    Implies(a,b) ->
@@ -418,7 +436,7 @@ let rec assign_fresh counter = function
  | Atom _ as a -> counter, a
  | Box(Modal 0, a) ->
       let counter', a' = assign_fresh counter a in
-      succ counter', Box(Evidence counter', a')
+      succ counter', Pr(Provisional counter', a')
  | Box(m, a) ->
       let counter', a' = assign_fresh counter a in
       counter', Box(m, a')
@@ -452,21 +470,21 @@ match f1, f2 with
  | Implies(a0,b0), Implies(a1,b1) ->
       let acc' = merge_pair acc a0 a1 in
       merge_pair acc' b0 b1
- | Box(Evidence i0, a0), Box(Evidence i1, a1) ->
+ | Pr(Provisional i0, a0), Pr(Provisional i1, a1) ->
       let fam0 =
-         try FamMap.find acc i0
+         try IntMap.find acc i0
          with Not_found ->
-            [i0]
+            NonEssential i0
       in
       let fam1 =
-         try FamMap.find acc i1
+         try IntMap.find acc i1
          with Not_found ->
-            [i1]
+            NonEssential i1
       in
-      let fam = List.concat [fam0; fam1] in
-      let acc0 = FamMap.remove acc i0 in
-      let acc1 = FamMap.remove acc0 i1 in
-      let acc2 = FamMap.add_list acc1 [(i0,fam);(i1,fam)] in
+      let fam = merge_families fam0 fam1 in
+      let acc0 = IntMap.remove acc i0 in
+      let acc1 = IntMap.remove acc0 i1 in
+      let acc2 = IntMap.add_list acc1 [(i0,fam);(i1,fam)] in
       merge_pair acc2 a0 a1
  | Box(_,a0), Box(_,a1) ->
       merge_pair acc a0 a1
@@ -479,7 +497,7 @@ let merge_formula map0 map1 acc f =
    merge_pair acc (FMap.find map0 f) (FMap.find map1 f)
 
 let merge start_set map0 map1 families0 families1 =
-   let families = FamMap.union (fun k l r -> List.concat [l;r]) families0 families1 in
+   let families = IntMap.union (fun k l r -> merge_families l r) families0 families1 in
    FSet.fold (merge_formula map0 map1) families start_set
 
 (*
@@ -556,23 +574,23 @@ let rec assign families counter = function
          FSet.remove hyps0 a',
          FSet.add (FSet.remove concls0 b') ab'
       )
- | BoxRight(b,subder), hyps, concls ->
+ | BoxRight(agent,b,subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
       let _, hyps0, concls0 = subder0 in
       let b' = FMap.find map0 b in
       let map0' = FMap.remove map0 b in
       let _, assum_h, _ = subder in
       let gamma = FSet.subtract_list hyps (FSet.to_list assum_h) in
-      let boxb = Box(Modal 0, b) in
+      let boxb = Box(Modal agent, b) in
       let delta = FSet.remove concls boxb in 
       let map1, counter1, gamma' = assign_fresh_multiple map0' counter0 gamma in
       let map2, counter2, delta' = assign_fresh_multiple map1 counter1 delta in
-      let boxb' = Box(Evidence counter2, b') in 
-      families0,
+      let boxb' = Pr(Provisional counter2, b') in 
+      IntMap.add families0 counter2 (Essential(IntSet.singleton counter2)),
       FMap.add map2 boxb boxb',
       succ counter2,
       (
-         BoxRight(b', subder0),
+         BoxRight(agent, b', subder0),
          FSet.union hyps0 gamma',
          FSet.add delta' boxb'
       )
@@ -634,17 +652,27 @@ let weaker_or_equal a b =
     | _ ->
          false
 
-let add_family families t f =
-   let family_term = FMap.find families f in
+let add_family families fam t f =
+   let family_set =
+      match IntMap.find families fam with
+         Essential s -> s
+       | NonEssential i -> raise (Invalid_argument "BoxRight rule associated with a non-essential family")
+   in
+   let family_term =
+      IntSet.symbolic_left_sum
+         (fun e -> Provisional e)
+         (fun acc e -> LP.Plus(acc,Provisional e))
+         family_set
+   in
    let taut = Implies(Pr(t,f), Pr(family_term,f)) in
    let taut' = Pr(PropTaut(taut), taut) in
    let proof0 = ConstSpec in (* taut' *)
    let proof1 = LP.Axiom(13) in
    MP(taut', proof0, proof1), Pr(family_term, f)
 
-let rec realize families derivation =
-   match derivation with
-    | Axiom(f), hyps, concls ->
+(* Gentzen to Hilbert transformation (phase 3) *)
+let rec g2h families = function
+      Axiom(f), hyps, concls ->
          assert (FSet.mem hyps f);
          assert (FSet.mem concls f);
          realize_axiom hyps concls
@@ -653,37 +681,38 @@ let rec realize families derivation =
          realize_axiom hyps concls
     | NegLeft(f, subderivation), hyps, concls ->
          assert (FSet.mem hyps (Neg f));
-         let tC, c, proofTC = realize families subderivation in
+         let tC, c, proofTC = g2h families subderivation in
          realize_chain_rule tC c proofTC hyps concls
     | ImplLeft(a, b, left, right), hyps, concls ->
          assert (FSet.mem hyps (Implies(a, b)));
-         let tC1, c1, proofTC1 = realize families left in
-         let tC2, c2, proofTC2 = realize families right in
+         let tC1, c1, proofTC1 = g2h families left in
+         let tC2, c2, proofTC2 = g2h families right in
          realize_branch_rule tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
     | ImplRight(a, b, subderivation), hyps, concls ->
          assert (FSet.mem concls (Implies(a, b)));
-         let tC, c, proofTC = realize families subderivation in
+         let tC, c, proofTC = g2h families subderivation in
          realize_chain_rule tC c proofTC hyps concls
     | BoxLeft(f, subderivation), hyps, concls ->
          assert (if FSet.mem hyps f then false else true);
-         let tC, c, proofTC = realize families subderivation in
+         let tC, c, proofTC = g2h families subderivation in
          realize_chain_rule tC c proofTC hyps concls
-    | BoxRight(f, subderivation), hyps, concls ->
+    | BoxRight(agent, f, subderivation), hyps, concls ->
          let _, assum_hyps, assum_concls = subderivation in
          assert (FSet.cardinal assum_concls = 1);
-         assert (FSet.choose assum_concls = f);
-         let test = weaker_or_equal f in
+         let boxf = Box(Modal agent, f) in
+         assert (FSet.choose assum_concls = boxf);
+         let test = weaker_or_equal boxf in
          assert (FSet.for_all test assum_hyps);
-         let tC, c, proofTC = realize families subderivation in
+         let tC, c, proofTC = g2h families subderivation in
          begin match c with
-            Implies(ais, b) ->
+            Implies(ais, (Pr(Provisional fam, _) as b)) ->
                let proof0, s = lift [ais] (Hyp 0) ais in (* ais >- s:ais *)
                let proof1 = deduction ais [] proof0 in (* ais->s:ais *)
                let proof2 = LP.Axiom(12) in (* tC:c->(s:ais->tC*s:b) *)
                let proof3 = MP(Pr(tC, c), proofTC, proof2) in (* s:ais->tC*s:b) *)
                let prB = Pr(App(tC, s), b) in
                let proof4 = syllogism ais (Pr(s, ais)) prB proof1 proof3 in (* ais->tC*s:b *)
-               let proof5, prB' = add_family families (App(tC, s)) b in (* tC*s:b->fam:b *)
+               let proof5, prB' = add_family families fam (App(tC, s)) b in (* tC*s:b->fam:b *)
                let proof6 = syllogism ais prB prB' proof4 proof5 in (* ais->prB' *)
                let c' = sequent_formula hyps concls in
                let taut = Implies(Implies(ais, prB'), c') in
@@ -698,3 +727,6 @@ let rec realize families derivation =
                raise Not_implemented
          end
 
+let realize derivation =
+   let families, map, counter, derivation' = assign IntMap.empty 0 derivation in
+   g2h families derivation'

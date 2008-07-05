@@ -11,7 +11,7 @@ sig
     | Provisional of int
     | PropTaut of formula
 
-   and family = Modal of int | Evidence of int
+   and agent = Modal of int | Evidence of int
 
    and formula =
       Falsum
@@ -20,7 +20,7 @@ sig
     | Or of formula * formula
     | Neg of formula
     | Implies of formula * formula
-    | Box of family * formula
+    | Box of agent * formula
     | Pr of proof_term * formula
 
    type 'formula hilbert =
@@ -38,7 +38,7 @@ module OrderedFormula :
 sig
 	type t = formula
 
-	val fam_cmp : family -> family -> int
+	val fam_cmp : agent -> agent -> int
 	val compare_pterm : proof_term -> proof_term -> int
 	val compare : formula -> formula -> int
 	val compare_pairs : formula * formula -> formula * formula -> int

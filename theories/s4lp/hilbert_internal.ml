@@ -30,6 +30,37 @@ struct
 	 | Hyp of int
 	 | ConstSpec
 
+   open Lm_printf
+
+   let rec print_formula out = function
+      Falsum -> fprintf out "Falsum"
+    | Atom s -> fprintf out "Atom %a" output_symbol s
+    | And(a,b) -> fprintf out "And(%a, %a)" print_formula a print_formula b
+    | Or(a,b) -> fprintf out "Or(%a, %a)" print_formula a print_formula b
+    | Neg a -> fprintf out "Neg %a" print_formula a
+    | Implies(a,b) -> fprintf out "Implies(%a, %a)" print_formula a print_formula b
+    | Box(agent,a) -> fprintf out "Box(%a, %a)" print_agent agent print_formula a
+    | Pr(t,a) -> fprintf out "Pr(%a, %a)" print_term t print_formula a
+
+   and print_agent out = function
+      Modal i -> fprintf out "Modal %i" i
+    | Evidence i -> fprintf out "Evidence %i" i
+
+   and print_term out = function
+      Var s -> fprintf out "%a" output_symbol s
+    | Const i -> fprintf out "C%i" i
+    | App(a,b) -> fprintf out "(%a %a)" print_term a print_term b
+    | Plus(a,b) -> fprintf out "(%a+%a)" print_term a print_term b
+    | Check(t) -> fprintf out "!%a" print_term t
+    | Provisional i -> fprintf out "V%i" i
+    | PropTaut a -> fprintf out "PropTaut" (*print_formula a*)
+
+   let rec print_hproof out = function
+      Axiom i -> fprintf out "A%i" i
+    | MP(f,pf,p) -> fprintf out "MP(%a,%a)" print_hproof pf print_hproof p
+    | Choice(p1,p2) -> fprintf out "(%a|%a)" print_hproof p1 print_hproof p2
+    | Hyp i -> fprintf out "H%i" i
+    | ConstSpec -> fprintf out "CS"
 end
 
 exception Not_implemented
@@ -153,8 +184,36 @@ struct
 
 end
 
-module FSet = SymbolicSet(OrderedFormula)
-module FMap = Lm_map.LmMake(OrderedFormula)
+module FSet =
+struct
+   include SymbolicSet(OrderedFormula)
+
+   let print out set =
+      iter (fun f -> Lm_printf.fprintf out "%a " print_formula f) set
+end
+
+module FMap =
+struct
+
+   include Lm_map.LmMakeList(OrderedFormula)
+
+   let remove map k =
+      filter map k (function
+         h :: t -> t
+       | [] ->
+            begin
+               Lm_printf.printf "FMap.remove: Not found %a" print_formula k;
+               raise Not_found
+            end
+      )
+
+   let print printer out map = 
+      iter
+         (fun k d ->
+            Lm_printf.fprintf out "%a : %a\n" print_formula k printer d
+         )
+         map
+end
 
 module Integer =
 struct
@@ -239,7 +298,7 @@ let rec check_proof hyps d f =
 			 		false
 
 exception Unliftable
-exception Not_proof
+exception Not_proof of formula hilbert * formula 
 
 let rec lift hyps d f =
 	match d, f with
@@ -248,13 +307,13 @@ let rec lift hyps d f =
 		 		MP(f,d,Axiom(14)),
 				Check(t)
 			else
-				raise Not_proof
+				raise (Not_proof(d, f))
 	 | Axiom i, _ -> (* propositional axiom *)
 	 		if i > 0 && prop_axiom_index f = i then
 				Axiom(i+prop_axiom_count),
 				Const(i)
 			else
-				raise Not_proof
+				raise (Not_proof(d,f))
 	 | Hyp i, Pr(t,a) when f = List.nth hyps i ->
 				MP(f,d,Axiom(14)),
 				Check(t)
@@ -272,7 +331,7 @@ let rec lift hyps d f =
     | Choice(d1,d2), _ ->
          begin try
             lift hyps d1 f
-         with Not_proof | Unliftable ->
+         with Not_proof _ | Unliftable ->
             lift hyps d2 f
          end
     | MP(a,d1,d2), _ ->
@@ -291,17 +350,19 @@ let rec lift hyps d f =
 
 
 let rec deduction h hyps d f =
+   (*Lm_printf.printf "deduction: h=%a hyps=%a f=%a\n" print_formula h (fun out l -> List.iter (Lm_printf.fprintf out "%a " print_formula) l) hyps print_formula f;*)
+   assert (check_proof (h::hyps) d f);
 	match d with
 		Choice(d1,d2) ->
 			begin try
 				deduction h hyps d1 f
-			with Not_proof ->
+			with Not_proof _ ->
 				deduction h hyps d2 f
 			end
 	 | Axiom i when i > 0 && axiom_index f = i ->
 	 		MP(f,Axiom(i),Axiom(1))
 	 | Axiom _ ->
-	 		raise Not_proof
+	 		raise (Not_proof(d,f))
 	 | Hyp 0 when compare h f = 0 ->
 	 		MP(
 				Implies(f,Implies(f,f)),
@@ -313,13 +374,13 @@ let rec deduction h hyps d f =
 				)
 			)
 	 | Hyp 0 ->
-				raise Not_proof
+				raise (Not_proof(d,f))
 	 | Hyp i ->
 	 		let i' = pred i in
 	 		if List.nth hyps i' = f then
 		 		MP(f,Hyp(i'),Axiom(1))
 			else
-				raise Not_proof
+				raise (Not_proof(d,f))
 	 | MP(a,d1,d2) ->
 			let dd1 = deduction h hyps d1 a in
 			let dd2 = deduction h hyps d2 (Implies(a,f)) in
@@ -337,19 +398,26 @@ let rec deduction h hyps d f =
 				Pr(PropTaut(f1), f2) when compare f1 f2 = 0 ->
 					MP(f,ConstSpec,Axiom(1))
 			 | _ ->
-			 		raise Not_proof
+			 		raise (Not_proof(d,f))
 
 let syllogism a b c proofAB proofBC =
    let ab = Implies(a,b) in
    let bc = Implies(b,c) in
    let ac = Implies(a,c) in
-   let syll = Implies(ab, Implies(bc, ac)) in
+   let bcac = Implies(bc, ac) in
+   let syll = Implies(ab, bcac) in
    let proof0 = MP(a, Hyp 0, Hyp 2) in (* a,b->c,a->b >- b *)
    let proof1 = MP(b, proof0, Hyp 1) in (* a,b->c,a->b >- c *)
-   let proof2 = deduction a [bc;ab] proof1 ac in
-   let proof3 = deduction bc [ab] proof2 (Implies(bc, ac)) in
-   let proof4 = deduction ab [] proof3 syll in
-   proof4
+   let proof2 = deduction a [bc;ab] proof1 c in
+   assert(check_proof [bc;ab] proof2 (Implies(a,c)));
+   let proof3 = deduction bc [ab] proof2 ac in
+   assert(check_proof [ab] proof3 (Implies(bc,ac)));
+   let proof4 = deduction ab [] proof3 bcac in
+   assert(check_proof [] proof4 syll);
+   let proof5 = MP(ab, proofAB, proof4) in (* bcac *)
+   let proof6 = MP(bc, proofBC, proof5) in (* ac *)
+   assert(check_proof [] proof6 ac);
+   proof6
 
 module S4G =
 struct
@@ -370,8 +438,18 @@ end
 open S4G
 
 let sequent_formula hyps concls =
-   let fh = FSet.symbolic_left_sum (fun x->x) (fun acc e -> And(acc, e)) hyps in
-   let fc = FSet.symbolic_left_sum (fun x->x) (fun acc e -> Or(acc, e)) concls in
+   let fh = 
+      if FSet.is_empty hyps then
+         Neg Falsum
+      else
+         FSet.symbolic_left_sum (fun x->x) (fun acc e -> And(acc, e)) hyps
+   in
+   let fc =
+      if FSet.is_empty concls then
+         Falsum
+      else
+         FSet.symbolic_left_sum (fun x->x) (fun acc e -> Or(acc, e)) concls
+   in
    Implies(fh, fc)
 
 let rec substitute_box_for_provisional i = function
@@ -522,7 +600,8 @@ let merge start_set map0 map1 families0 families1 =
  * to their new forms 
  * (not global but limited to just processed sequent)
  *)
-let rec assign families counter = function
+let rec assign families counter deriv =
+let result = match deriv with
    AxiomFalsum, hyps, concls ->
       let map0, counter0, hyps' = assign_fresh_multiple FMap.empty counter hyps in
       let map1, counter1, concls' = assign_fresh_multiple map0 counter0 concls in
@@ -531,7 +610,7 @@ let rec assign families counter = function
       let map0, counter0, hyps' = assign_fresh_multiple FMap.empty counter (FSet.remove hyps a) in
       let map1, counter1, concls' = assign_fresh_multiple map0 counter0 (FSet.remove concls a) in
       let counter2, a' = assign_fresh counter1 a in
-      families, (FMap.add map1 a a'), counter2, (Axiom a', FSet.add hyps' a', FSet.add concls' a')
+      families, FMap.add (FMap.add map1 a a') a a', counter2, (Axiom a', FSet.add hyps' a', FSet.add concls' a')
  | NegLeft(a, subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
       let _, hyps0, concls0 = subder0 in
@@ -542,7 +621,8 @@ let rec assign families counter = function
       counter0,
       (
          NegLeft(a', subder0),
-         FSet.add hyps0 nega',FSet.remove concls0 nega'
+         FSet.add hyps0 nega',
+         FSet.remove concls0 a'
       )
  | ImplLeft(a,b,left,right), hyps, concls ->
       let families0, map0, counter0, left' = assign families counter left in
@@ -606,6 +686,12 @@ let rec assign families counter = function
          FSet.remove hyps0 a',
          concls0
       )
+in
+   let families', map', counter', deriv' = result in
+   let _, hyps', concls' = deriv' in
+   Lm_printf.printf "\nmap:\n%a" (FMap.print print_formula) map';
+   Lm_printf.printf "\n%a\n>-\n%a\n" FSet.print hyps' FSet.print concls';
+   result
 
 (*
  * c - propositional translation of the assuption sequent of the rule
@@ -646,6 +732,17 @@ let weaker_or_equal a b =
          begin match b with
             Box(Modal bf, _) ->
                (af = bf) || (bf = 0)
+          | Pr(_, _) ->
+               true
+          | _ ->
+               false
+         end
+    | Pr(_, _) ->
+         begin match b with
+            Box(Modal bf, _) ->
+               (bf = 0)
+          | Pr(_, _) ->
+               true
           | _ ->
                false
          end
@@ -667,8 +764,15 @@ let add_family families fam t f =
    let taut = Implies(Pr(t,f), Pr(family_term,f)) in
    let taut' = Pr(PropTaut(taut), taut) in
    let proof0 = ConstSpec in (* taut' *)
-   let proof1 = LP.Axiom(13) in
-   MP(taut', proof0, proof1), Pr(family_term, f)
+   assert(check_proof [] proof0 taut');
+   let proof1 = LP.Axiom(13) in (* taut'->taut *)
+   let proof2 = MP(taut', proof0, proof1) in
+   let prF = Pr(family_term, f) in
+   Lm_printf.printf "add_family: %a\n" print_formula prF;
+   assert(check_proof [] proof2 taut);
+   proof2, prF
+
+exception Found of int
 
 (* Gentzen to Hilbert transformation (phase 3) *)
 let rec g2h families = function
@@ -700,27 +804,51 @@ let rec g2h families = function
          let _, assum_hyps, assum_concls = subderivation in
          assert (FSet.cardinal assum_concls = 1);
          let boxf = Box(Modal agent, f) in
-         assert (FSet.choose assum_concls = boxf);
+         assert (FSet.choose assum_concls = f);
          let test = weaker_or_equal boxf in
          assert (FSet.for_all test assum_hyps);
          let tC, c, proofTC = g2h families subderivation in
+         let fam =
+            try
+               begin
+                  FSet.fold (fun _ e ->
+                     match e with
+                        Pr(Provisional i, f') when compare f f' = 0 ->
+                           raise (Found i)
+                      | _ -> ()
+                  ) () concls;
+                  Lm_printf.printf "g2h.BoxRight: box(%a) not found in the conclusion" print_formula f;
+                  raise Not_found
+               end
+            with Found i -> i
+         in
          begin match c with
-            Implies(ais, (Pr(Provisional fam, _) as b)) ->
+            Implies(ais, b) ->
                let proof0, s = lift [ais] (Hyp 0) ais in (* ais >- s:ais *)
-               let proof1 = deduction ais [] proof0 in (* ais->s:ais *)
+               assert (check_proof [ais] proof0 (Pr(s,ais)));
+               let proof1 = deduction ais [] proof0 (Pr(s,ais)) in (* ais->s:ais *)
                let proof2 = LP.Axiom(12) in (* tC:c->(s:ais->tC*s:b) *)
                let proof3 = MP(Pr(tC, c), proofTC, proof2) in (* s:ais->tC*s:b) *)
                let prB = Pr(App(tC, s), b) in
+               assert (check_proof [] proof1 (Implies(ais, Pr(s,ais))));
+               assert (check_proof [] proof3 (Implies(Pr(s,ais), prB)));
                let proof4 = syllogism ais (Pr(s, ais)) prB proof1 proof3 in (* ais->tC*s:b *)
+               assert(check_proof [] proof4 (Implies(ais, prB)));
                let proof5, prB' = add_family families fam (App(tC, s)) b in (* tC*s:b->fam:b *)
+               assert(check_proof [] proof5 (Implies(prB, prB')));
                let proof6 = syllogism ais prB prB' proof4 proof5 in (* ais->prB' *)
+               assert(check_proof [] proof6 (Implies(ais,prB')));
                let c' = sequent_formula hyps concls in
                let taut = Implies(Implies(ais, prB'), c') in
                let taut' = Pr(PropTaut(taut), taut) in
                let proof7 = ConstSpec in (* taut' *)
-               let proof8 = LP.Axiom 17 in (* taut'->taut *)
+               assert(check_proof [] proof7 taut');
+               let proof8 = LP.Axiom 13 in (* taut'->taut *)
+               assert(check_proof [] proof8 (Implies(taut', taut)));
                let proof9 = MP(taut', proof7, proof8) in (* taut *)
+               assert(check_proof [] proof9 taut);
                let proof10 = MP(Implies(ais, prB'), proof6, proof9) in
+               assert (check_proof [] proof10 c');
                let proof11, tC' = lift [] proof10 c' in
                tC', c', proof11
           | _ ->
@@ -730,3 +858,82 @@ let rec g2h families = function
 let realize derivation =
    let families, map, counter, derivation' = assign IntMap.empty 0 derivation in
    g2h families derivation'
+
+let s = Atom(add "s")
+let s_concl = FSet.singleton s
+let hyps0 = FSet.singleton (Box(Modal 0, Neg(Implies(s, Box(Modal 0, s)))))
+
+let _ =
+   let b = Implies(s, s) in
+   let m = FMap.add FMap.empty s s in
+   let m' = FMap.add m s b in
+   assert (FMap.find m' s = b);
+   let m'' = FMap.remove m' s in
+   assert (FMap.mem m'' s);
+   assert (FMap.find m'' s = s)
+
+let proof1 =
+   BoxLeft(
+      Neg(Implies(s, Box(Modal 0, s))),
+      (
+         NegLeft(
+            Implies(s, Box(Modal 0, s)),
+            (
+               ImplRight(
+                  s,
+                  Box(Modal 0, s),
+                  (
+                     BoxRight(
+                        0,
+                        s,
+                        (
+                           BoxLeft(
+                              Neg(Implies(s, Box(Modal 0, s))),
+                              (
+                                 NegLeft(
+                                    Implies(s, Box(Modal 0, s)),
+                                    (
+                                       ImplRight(
+                                          s,
+                                          Box(Modal 0, s),
+                                          (
+                                             Axiom(s),
+                                             FSet.add hyps0 s,
+                                             FSet.add s_concl (Box(Modal 0, s))
+                                          )
+                                       ),
+                                       hyps0,
+                                       FSet.add s_concl (Implies(s, Box(Modal 0, s)))
+                                    )
+                                 ),
+                                 FSet.add hyps0 (Neg(Implies(s, Box(Modal 0, s)))),
+                                 s_concl
+                              )
+                           ),
+                           hyps0,
+                           s_concl
+                        )
+                     ),
+                     FSet.add hyps0 s,
+                     FSet.singleton (Box(Modal 0, s))
+                  )
+               ),
+               hyps0,
+               FSet.singleton (Implies(s, Box(Modal 0, s)))
+            )
+         ),
+         FSet.add hyps0 (Neg(Implies(s, Box(Modal 0, s)))),
+         FSet.empty
+      )
+   ),
+   hyps0,
+   FSet.empty
+
+let tC, c, proof = realize proof1 in
+   Lm_printf.printf "result: %a\nproof: %a" print_formula (Pr(tC, c)) print_hproof proof;
+   assert(check_proof [] proof (Pr(tC, c)))
+(*
+Pr((PropTaut (PropTaut (PropTaut ((C13 !PropTaut) ((((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 ((C2 (C1 C2)) (C1 C1))) (C1 C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 (C1 C1)) ((C2 C1) C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C1)) (C1 C1))))) ((((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 ((C2 (C1 C2)) (C1 C1))) (C1 C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 (C1 C1)) ((C2 C1) C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C14)) ((C2 C1) C1))) (C12 !(PropTaut (PropTaut (PropTaut PropTaut)))))) (C13 !PropTaut)))))), Implies(Pr(V1, Neg Implies(Atom s, Pr(V0, Atom s))), Falsum))
+
+MP(MP(MP(MP(MP(MP(MP(CS,A14),MP(A29,A12)),MP(MP(MP(MP(MP(MP(MP(MP(CS,MP(CS,A12)),MP(CS,A12)),MP(CS,A12)),A14),MP(A28,A12)),MP(MP(MP(MP(A17,MP(MP(A17,MP(A18,A12)),A12)),MP(MP(MP(A30,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(MP(A17,MP(A18,A12)),A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(MP(A17,MP(A18,A12)),A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),A12)),A12)),MP(MP(MP(CS,A14),MP(A29,A12)),A12)),MP(CS,A12)),MP(CS,A12)),MP(CS,A12))
+*)

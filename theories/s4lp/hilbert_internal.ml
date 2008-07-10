@@ -4,6 +4,8 @@ module SymbolicSet = functor (O : Lm_set_sig.OrderedTypeDebug) ->
 struct
    include Lm_set.LmMake(O)
 
+   let map f s = fold (fun acc i -> add acc (f i)) empty s
+
    let symbolic_left_sum base op set =
       let first = min_elt set in
       let rest = remove set first in
@@ -42,7 +44,7 @@ module Partitioning = functor (O : Lm_set_sig.OrderedTypeDebug) ->
 struct
 
    type elt = O.t
-   module Set = Lm_set.LmMake(O)
+   module Set = SymbolicSet(O)
    type part = Set.t
 
    let empty = []
@@ -108,6 +110,8 @@ struct
       in
       List.fold_left join_aux p1 p2
 
+   let fold = List.fold_left
+
    let print out p =
       List.iter (fun s ->
          Lm_printf.fprintf out " {";
@@ -152,6 +156,16 @@ struct
    let print_family out = function
       Essential s -> Lm_printf.fprintf out "Ess%a" IntSet.print s
     | NonEssential i -> Lm_printf.fprintf out "NonEss%i" i
+
+   let strip_principality family =
+      Set.fold
+         (fun acc rep ->
+            match rep with
+               Principal i -> IntSet.add acc i
+             | NonPrincipal i -> IntSet.add acc i
+         )
+         IntSet.empty
+         family
 
    let essential family =
       let s = Set.range_fold
@@ -652,6 +666,44 @@ struct
     | BoxLeft of LP.formula * gentzen
 
    and gentzen = rule_node * fset * fset (* rule, hyps, concls *)
+
+   let rec subst_provisionals_in_gentzen subst (r, hyps, concls) =
+      let hyps' = FSet.map (subst_provisionals_in_formula subst) hyps in
+      let concls' = FSet.map (subst_provisionals_in_formula subst) concls in
+      let r' = match r with
+         Axiom f -> Axiom (subst_provisionals_in_formula subst f)
+       | AxiomFalsum -> r
+       | NegLeft(a,subderivation) ->
+            NegLeft(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+       | ImplLeft(a,b,left,right) ->
+            ImplLeft(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst left,
+               subst_provisionals_in_gentzen subst right
+            )
+       | ImplRight(a,b,subderivation) ->
+            ImplRight(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+       | BoxRight(agent,a,subderivation) ->
+            BoxRight(
+               agent,
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+       | BoxLeft(a,subderivation) ->
+            BoxLeft(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+      in
+      r', hyps', concls'
 end
 
 open S4G
@@ -910,6 +962,27 @@ in
    Lm_printf.printf "\n%a\n>-\n%a\n" FSet.print hyps' FSet.print concls';
    result
 
+let make_provisionals_sum set =
+   IntSet.symbolic_left_sum
+      (fun e -> Provisional e)
+      (fun acc e -> LP.Plus(acc,Provisional e))
+      set
+
+let rec make_provisionals_subst families =
+   FamilyPart.fold 
+      (fun subst set ->
+         let family_set = FamilyPart.strip_principality set in
+         let essential =
+            match FamilyPart.essential set with
+               FamilyPart.Essential s -> s
+             | FamilyPart.NonEssential i -> IntSet.singleton i
+         in
+         let sum = make_provisionals_sum essential in
+         IntSet.fold (fun acc i -> IntMap.add acc i sum) subst family_set
+      )
+      IntMap.empty
+      families
+
 (*
  * c - propositional translation of the assuption sequent of the rule
  * tC - a proof term for it
@@ -967,7 +1040,6 @@ let weaker_or_equal a b =
          false
 
 let add_family families fam t f =
-   Lm_printf.printf "families:\n%a\n" FamilyPart.print families;
    Lm_printf.printf "family: %i\n" fam;
    Lm_printf.printf "fm: %a\n" print_formula (Pr(t,f));
    let family_set =
@@ -975,12 +1047,7 @@ let add_family families fam t f =
          FamilyPart.Essential s -> s
        | FamilyPart.NonEssential i -> raise (Invalid_argument "BoxRight rule associated with a non-essential family")
    in
-   let family_term =
-      IntSet.symbolic_left_sum
-         (fun e -> Provisional e)
-         (fun acc e -> LP.Plus(acc,Provisional e))
-         family_set
-   in
+   let family_term = make_provisionals_sum family_set in
    let taut = Implies(Pr(t,f), Pr(family_term,f)) in
    let taut' = Pr(PropTaut(taut), taut) in
    let proof0 = ConstSpec in (* taut' *)
@@ -1080,8 +1147,12 @@ let rec g2h families subst = function
          end
 
 let realize derivation =
-   let families, map, counter, derivation' = assign FamilyPart.empty 0 derivation in
-   let subst,tC,c,proof = g2h families IntMap.empty derivation' in
+   let families, map, counter, derivation1 = assign FamilyPart.empty 0 derivation in
+   Lm_printf.printf "families:\n%a\n" FamilyPart.print families;
+   let provisional_subst = make_provisionals_subst families in
+   Lm_printf.printf "provisional subst: %a\n" (IntMap.print print_term) provisional_subst;
+   let derivation2 = subst_provisionals_in_gentzen provisional_subst derivation1 in
+   let subst,tC,c,proof = g2h families IntMap.empty derivation2 in
    Lm_printf.printf "subst: %a\n" (IntMap.print print_term) subst;
    subst_provisionals subst tC,
    subst_provisionals_in_formula subst c,

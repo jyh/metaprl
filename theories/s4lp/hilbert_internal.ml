@@ -1,5 +1,177 @@
 open Lm_symbol
 
+module SymbolicSet = functor (O : Lm_set_sig.OrderedTypeDebug) ->
+struct
+   include Lm_set.LmMake(O)
+
+   let symbolic_left_sum base op set =
+      let first = min_elt set in
+      let rest = remove set first in
+      fold op (base first) rest
+
+   let print out set =
+      Lm_printf.fprintf out "{";
+      iter (fun i -> Lm_printf.fprintf out "%a " O.print i) set;
+      Lm_printf.fprintf out "}"
+
+end
+
+module Integer =
+struct
+   type t = int
+   let compare = Pervasives.compare
+   let print out i = Lm_printf.fprintf out "%i" i
+end
+
+module IntMap =
+struct
+   include Lm_map.LmMake(Integer)
+
+   let print printer out map =
+      iter
+         (fun k d ->
+            Lm_printf.fprintf out "%i : %a\n" k printer d
+         )
+         map
+
+end
+
+module IntSet = SymbolicSet(Integer)
+
+module Partitioning = functor (O : Lm_set_sig.OrderedTypeDebug) ->
+struct
+
+   type elt = O.t
+   module Set = Lm_set.LmMake(O)
+   type part = Set.t
+
+   let empty = []
+
+   let rec mem s i =
+   match s with
+      [] -> false
+    | h::t ->
+         if Set.mem h i then
+            true
+         else
+            mem t i
+
+   let rec find s i =
+   match s with
+      [] -> raise Not_found
+    | h::t ->
+         if Set.mem h i then
+            h
+         else
+            find t i
+
+   let merge s i1 i2 =
+      let rec phase2 i1part = function
+         [] -> raise Not_found
+       | h::t ->
+            if Set.mem h i2 then
+               let new_part = Set.union i1part h in
+               new_part::t
+            else
+               h::(phase2 i1part t)
+      in
+      let rec phase1 = function
+         [] -> raise Not_found
+       | h::t ->
+            if Set.mem h i1 then
+               phase2 h t
+            else
+               h::(phase1 t)
+      in
+      phase1 s
+
+   let add_new s i = (Set.singleton i)::s
+
+   let rec add s i =
+   match s with
+      [] -> [Set.singleton i]
+    | h::t ->
+         if Set.mem h i then
+            s
+         else
+            h::(add t i)
+
+   let join p1 p2 =
+      let rec join_aux acc s =
+         match acc with
+            [] -> [s]
+          | h::t ->
+               if Set.is_empty (Set.inter h s) then
+                  h::(join_aux t s)
+               else
+                  join_aux t (Set.union h s)
+      in
+      List.fold_left join_aux p1 p2
+
+   let print out p =
+      List.iter (fun s ->
+         Lm_printf.fprintf out " {";
+         Set.iter (fun i -> Lm_printf.fprintf out "%a " O.print i) s;
+         Lm_printf.fprintf out "}"
+      ) p
+
+end
+
+module Provisional =
+struct
+   type t = Principal of int | NonPrincipal of int
+
+   exception Collision of int
+
+   let exact_compare p1 p2 =
+      match p1, p2 with
+         Principal i1, Principal i2 -> Pervasives.compare i1 i2
+       | NonPrincipal i1, NonPrincipal i2 -> Pervasives.compare i1 i2
+       | Principal i1, NonPrincipal i2 when i1 = i2 -> raise (Collision i1)
+       | NonPrincipal i1, Principal i2 when i1 = i2 -> raise (Collision i1)
+       | Principal i1, NonPrincipal i2 -> 1
+       | NonPrincipal i1, Principal i2 -> -1
+
+   let compare p1 p2 =
+      try exact_compare p1 p2
+      with Collision _ -> 0
+
+   let print out = function
+      Principal i -> Lm_printf.fprintf out "+%i" i
+    | NonPrincipal i -> Lm_printf.fprintf out "-%i" i
+
+end
+
+module FamilyPart =
+struct
+   include Partitioning(Provisional)
+   open Provisional
+
+   type family = Essential of IntSet.t | NonEssential of int
+
+   let print_family out = function
+      Essential s -> Lm_printf.fprintf out "Ess%a" IntSet.print s
+    | NonEssential i -> Lm_printf.fprintf out "NonEss%i" i
+
+   let essential family =
+      let s = Set.range_fold
+         (fun p -> match p with Principal _ -> 0 | NonPrincipal _ -> 1)
+         (fun acc -> function
+            Principal i -> IntSet.add acc i
+          | NonPrincipal _ -> raise (Invalid_argument "Only Principal provisionals were expected")
+         )
+         IntSet.empty
+         family
+      in
+      if IntSet.is_empty s then
+         match Set.min_elt family with
+            NonPrincipal i -> NonEssential i
+          | Principal _ -> raise (Invalid_argument "Found Principal but there were none just an instant ago")
+      else
+         Essential s
+
+end
+
 module LP =
 struct
 	type proof_term =
@@ -31,6 +203,71 @@ struct
 	 | ConstSpec
 
    open Lm_printf
+
+   let rec subst_provisionals subst t =
+      match t with
+         Var _ | Const _ -> t
+       | App(t1,t2) ->
+            App(
+               subst_provisionals subst t1,
+               subst_provisionals subst t2
+            )
+       | Plus(t1,t2) ->
+            Plus(
+               subst_provisionals subst t1,
+               subst_provisionals subst t2
+            )
+       | Check(t1) -> Check(subst_provisionals subst t1)
+       | PropTaut(f) -> PropTaut(subst_provisionals_in_formula subst f)
+       | Provisional i ->
+            try
+               IntMap.find subst i
+            with
+               Not_found -> t
+
+   and subst_provisionals_in_formula subst (f: formula) =
+      match f with
+         Falsum | Atom _ -> f
+       | And(a,b) -> 
+            And(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b
+            )
+       | Or(a,b) ->
+            Or(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b
+            )
+       | Neg a ->
+            Neg (subst_provisionals_in_formula subst a)
+       | Implies(a,b) ->
+            Implies(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b
+            )
+       | Box(a,b) ->
+            Box(a, subst_provisionals_in_formula subst b)
+       | Pr(t,a) ->
+            Pr(
+               subst_provisionals subst t,
+               subst_provisionals_in_formula subst a
+            )
+
+   let rec subst_provisionals_in_hilbert subst pr =
+   match pr with
+      Axiom _ -> pr
+    | MP(f,pr1,pr2) ->
+         MP(
+            subst_provisionals_in_formula subst f,
+            subst_provisionals_in_hilbert subst pr1,
+            subst_provisionals_in_hilbert subst pr2
+         )
+    | Choice(pr1,pr2) ->
+         Choice(
+            subst_provisionals_in_hilbert subst pr1,
+            subst_provisionals_in_hilbert subst pr2
+         )
+    | Hyp _ | ConstSpec -> pr
 
    let rec print_formula out = function
       Falsum -> fprintf out "Falsum"
@@ -169,20 +406,11 @@ and compare_pairs (f11,f12) (f21,f22) =
    else
       c
 
+let print = print_formula
+
 end
 
 open OrderedFormula
-
-module SymbolicSet = functor (O : Lm_set_sig.OrderedType) ->
-struct
-   include Lm_set.LmMake(O)
-
-   let symbolic_left_sum base op set =
-      let first = min_elt set in
-      let rest = remove set first in
-      fold op (base first) rest
-
-end
 
 module FSet =
 struct
@@ -214,15 +442,6 @@ struct
          )
          map
 end
-
-module Integer =
-struct
-   type t = int
-   let compare = Pervasives.compare
-end
-
-module IntMap = Lm_map.LmMake(Integer)
-module IntSet = SymbolicSet(Integer)
 
 (*
 let rec pt2term = function
@@ -484,16 +703,6 @@ let rec substitute_box_for_provisional i = function
          substitute_box_for_provisional i a
       )
 
-type family = Essential of IntSet.t | NonEssential of int
-
-let merge_families f1 f2 =
-   match f1, f2 with
-      Essential s1, Essential s2 ->
-         Essential(IntSet.union s1 s2)
-    | Essential s, NonEssential _ -> f1
-    | NonEssential _, Essential s -> f2
-    | NonEssential i1, NonEssential i2 -> NonEssential(min i1 i2)
-
 let rec assign_fresh counter = function
    Implies(a,b) ->
       let counter0, a' = assign_fresh counter a in
@@ -533,41 +742,32 @@ let assign_fresh_multiple map counter set =
       (map, counter, FSet.empty)
       set
 
-let rec merge_pair acc f1 f2 =
+let rec merge_pair families f1 f2 =
 match f1, f2 with
-   Falsum, Falsum -> acc
- | Atom _, Atom _ -> acc
+   Falsum, Falsum -> families
+ | Atom _, Atom _ -> families
  | And(a0,b0), And(a1,b1) ->
-      let acc' = merge_pair acc a0 a1 in
+      let acc' = merge_pair families a0 a1 in
       merge_pair acc' b0 b1
  | Or(a0,b0), Or(a1,b1) ->
-      let acc' = merge_pair acc a0 a1 in
+      let acc' = merge_pair families a0 a1 in
       merge_pair acc' b0 b1
  | Neg a0, Neg a1 ->
-      merge_pair acc a0 a1
+      merge_pair families a0 a1
  | Implies(a0,b0), Implies(a1,b1) ->
-      let acc' = merge_pair acc a0 a1 in
-      merge_pair acc' b0 b1
+      let families' = merge_pair families a0 a1 in
+      merge_pair families' b0 b1
  | Pr(Provisional i0, a0), Pr(Provisional i1, a1) ->
-      let fam0 =
-         try IntMap.find acc i0
-         with Not_found ->
-            NonEssential i0
-      in
-      let fam1 =
-         try IntMap.find acc i1
-         with Not_found ->
-            NonEssential i1
-      in
-      let fam = merge_families fam0 fam1 in
-      let acc0 = IntMap.remove acc i0 in
-      let acc1 = IntMap.remove acc0 i1 in
-      let acc2 = IntMap.add_list acc1 [(i0,fam);(i1,fam)] in
-      merge_pair acc2 a0 a1
+      let fam0 = Provisional.NonPrincipal i0 in
+      let fam1 = Provisional.NonPrincipal i1 in
+      let families0 = FamilyPart.add families fam0 in
+      let families1 = FamilyPart.add families0 fam1 in
+      let families2 = FamilyPart.merge families1 fam0 fam1 in
+      merge_pair families2 a0 a1
  | Box(_,a0), Box(_,a1) ->
-      merge_pair acc a0 a1
+      merge_pair families a0 a1
  | Pr(_,a0), Pr(_,a1) ->
-      merge_pair acc a0 a1
+      merge_pair families a0 a1
  | _, _ ->
       raise (Invalid_argument "merge_pair: non-matching formulas")
 
@@ -575,8 +775,10 @@ let merge_formula map0 map1 acc f =
    merge_pair acc (FMap.find map0 f) (FMap.find map1 f)
 
 let merge start_set map0 map1 families0 families1 =
-   let families = IntMap.union (fun k l r -> merge_families l r) families0 families1 in
+   let families = FamilyPart.join families0 families1 in
    FSet.fold (merge_formula map0 map1) families start_set
+
+exception FoundFormula of formula
 
 (*
  * assign recursively goes over a Gentzen style S4 proof and assigns
@@ -666,7 +868,7 @@ let result = match deriv with
       let map1, counter1, gamma' = assign_fresh_multiple map0' counter0 gamma in
       let map2, counter2, delta' = assign_fresh_multiple map1 counter1 delta in
       let boxb' = Pr(Provisional counter2, b') in 
-      IntMap.add families0 counter2 (Essential(IntSet.singleton counter2)),
+      FamilyPart.add_new families0 (Provisional.Principal counter2),
       FMap.add map2 boxb boxb',
       succ counter2,
       (
@@ -678,7 +880,22 @@ let result = match deriv with
       let families0, map0, counter0, subder0 = assign families counter subder in
       let _, hyps0, concls0 = subder0 in
       let a' = FMap.find map0 a in
-      families0,
+      let _, assum_hyps, _ = subder in
+      let a'from_box =
+         try FSet.iter
+            (fun fm -> match fm with
+               Box(Modal 0, fm') when compare a fm' = 0 ->
+                  raise (FoundFormula fm)
+             | _ -> ()
+            ) assum_hyps;
+            raise (Invalid_argument "A boxed formula expected")
+         with FoundFormula fm ->
+            match FMap.find map0 fm with
+               Pr(_, fm') -> fm'
+             | _ -> raise (Invalid_argument "A Pr-formula expected")
+      in
+      let families1 = merge_pair families0 a' a'from_box in
+      families1,
       FMap.remove map0 a,
       counter0,
       (
@@ -699,16 +916,16 @@ in
  * proofTC - the proof of tC:c
  * hyps, concls - hyps and conclusion formulae of the conclusion sequent
  *)
-let realize_chain_rule tC c proofTC hyps concls =
+let realize_chain_rule subst tC c proofTC hyps concls =
    let c' = sequent_formula hyps concls in
    let tR = PropTaut(Implies(c, c')) in
    let tail2 = ConstSpec in (* a proof of Pr(tR, c -> c') *)
    let tail3 = LP.Axiom(12) in (* a proof of tR:(c->c')->(tC:c->tR*tC:c') *)
    let tail4 = MP(Pr(tR, Implies(c, c')), tail2, tail3) in (* a proof of tC:c->tR*tC:c' *)
    let tail5 = MP(Pr(tC,c), proofTC, tail4) in (* a proof of tR*tC:c' *)
-   App(tR,tC), c', tail5
+   subst, App(tR,tC), c', tail5
 
-let realize_branch_rule tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
+let realize_branch_rule subst tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
    let c' = sequent_formula hyps concls in
    let d = Implies(c2, c') in
    let taut = Implies(c1, d) in
@@ -720,11 +937,11 @@ let realize_branch_rule tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
    let proof5 = LP.Axiom(12) in (*for tR*tC1:d->(tC2:c2->tR*tC1*tC2:c') *)
    let proof6 = MP(Pr(App(tR, tC1), d), proof4, proof5) in (*for tC2:c2->tR*tC1*tC2:c' *)
    let proof7 = MP(Pr(tC2, c2), proofTC2, proof6) in (*for tR*tC1*tC2:c' *)
-   App(App(tR, tC1), tC2), c', proof7
+   subst, App(App(tR, tC1), tC2), c', proof7
 
-let realize_axiom hyps concls =
+let realize_axiom subst hyps concls =
    let f' = sequent_formula hyps concls in
-   PropTaut f', f', ConstSpec
+   subst, PropTaut f', f', ConstSpec
 
 let weaker_or_equal a b =
    match a with
@@ -750,10 +967,13 @@ let weaker_or_equal a b =
          false
 
 let add_family families fam t f =
+   Lm_printf.printf "families:\n%a\n" FamilyPart.print families;
+   Lm_printf.printf "family: %i\n" fam;
+   Lm_printf.printf "fm: %a\n" print_formula (Pr(t,f));
    let family_set =
-      match IntMap.find families fam with
-         Essential s -> s
-       | NonEssential i -> raise (Invalid_argument "BoxRight rule associated with a non-essential family")
+      match FamilyPart.essential (FamilyPart.find families (Provisional.Principal fam)) with
+         FamilyPart.Essential s -> s
+       | FamilyPart.NonEssential i -> raise (Invalid_argument "BoxRight rule associated with a non-essential family")
    in
    let family_term =
       IntSet.symbolic_left_sum
@@ -775,31 +995,31 @@ let add_family families fam t f =
 exception Found of int
 
 (* Gentzen to Hilbert transformation (phase 3) *)
-let rec g2h families = function
+let rec g2h families subst = function
       Axiom(f), hyps, concls ->
          assert (FSet.mem hyps f);
          assert (FSet.mem concls f);
-         realize_axiom hyps concls
+         realize_axiom subst hyps concls
     | AxiomFalsum, hyps, concls ->
          assert (FSet.mem hyps Falsum);
-         realize_axiom hyps concls
+         realize_axiom subst hyps concls
     | NegLeft(f, subderivation), hyps, concls ->
          assert (FSet.mem hyps (Neg f));
-         let tC, c, proofTC = g2h families subderivation in
-         realize_chain_rule tC c proofTC hyps concls
+         let subst', tC, c, proofTC = g2h families subst subderivation in
+         realize_chain_rule subst' tC c proofTC hyps concls
     | ImplLeft(a, b, left, right), hyps, concls ->
          assert (FSet.mem hyps (Implies(a, b)));
-         let tC1, c1, proofTC1 = g2h families left in
-         let tC2, c2, proofTC2 = g2h families right in
-         realize_branch_rule tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
+         let subst1, tC1, c1, proofTC1 = g2h families subst left in
+         let subst2, tC2, c2, proofTC2 = g2h families subst1 right in
+         realize_branch_rule subst2 tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
     | ImplRight(a, b, subderivation), hyps, concls ->
          assert (FSet.mem concls (Implies(a, b)));
-         let tC, c, proofTC = g2h families subderivation in
-         realize_chain_rule tC c proofTC hyps concls
+         let subst', tC, c, proofTC = g2h families subst subderivation in
+         realize_chain_rule subst' tC c proofTC hyps concls
     | BoxLeft(f, subderivation), hyps, concls ->
          assert (if FSet.mem hyps f then false else true);
-         let tC, c, proofTC = g2h families subderivation in
-         realize_chain_rule tC c proofTC hyps concls
+         let subst', tC, c, proofTC = g2h families subst subderivation in
+         realize_chain_rule subst' tC c proofTC hyps concls
     | BoxRight(agent, f, subderivation), hyps, concls ->
          let _, assum_hyps, assum_concls = subderivation in
          assert (FSet.cardinal assum_concls = 1);
@@ -807,7 +1027,7 @@ let rec g2h families = function
          assert (FSet.choose assum_concls = f);
          let test = weaker_or_equal boxf in
          assert (FSet.for_all test assum_hyps);
-         let tC, c, proofTC = g2h families subderivation in
+         let subst1, tC, c, proofTC = g2h families subst subderivation in
          let fam =
             try
                begin
@@ -826,16 +1046,20 @@ let rec g2h families = function
             Implies(ais, b) ->
                let proof0, s = lift [ais] (Hyp 0) ais in (* ais >- s:ais *)
                assert (check_proof [ais] proof0 (Pr(s,ais)));
+               Lm_printf.printf "s:ais %a\n" print_formula (Pr(s,ais));
                let proof1 = deduction ais [] proof0 (Pr(s,ais)) in (* ais->s:ais *)
                let proof2 = LP.Axiom(12) in (* tC:c->(s:ais->tC*s:b) *)
                let proof3 = MP(Pr(tC, c), proofTC, proof2) in (* s:ais->tC*s:b) *)
-               let prB = Pr(App(tC, s), b) in
+               let tCs = App(tC, s) in
+               let prB = Pr(tCs, b) in
                assert (check_proof [] proof1 (Implies(ais, Pr(s,ais))));
                assert (check_proof [] proof3 (Implies(Pr(s,ais), prB)));
                let proof4 = syllogism ais (Pr(s, ais)) prB proof1 proof3 in (* ais->tC*s:b *)
                assert(check_proof [] proof4 (Implies(ais, prB)));
-               let proof5, prB' = add_family families fam (App(tC, s)) b in (* tC*s:b->fam:b *)
+               let subst2 = IntMap.add subst1 fam tCs in
+               let proof5, prB' = add_family families fam tCs b in (* tC*s:b->fam:b *)
                assert(check_proof [] proof5 (Implies(prB, prB')));
+               Lm_printf.printf "prB': %a\n" print_formula prB';
                let proof6 = syllogism ais prB prB' proof4 proof5 in (* ais->prB' *)
                assert(check_proof [] proof6 (Implies(ais,prB')));
                let c' = sequent_formula hyps concls in
@@ -850,14 +1074,18 @@ let rec g2h families = function
                let proof10 = MP(Implies(ais, prB'), proof6, proof9) in
                assert (check_proof [] proof10 c');
                let proof11, tC' = lift [] proof10 c' in
-               tC', c', proof11
+               subst2, tC', c', proof11
           | _ ->
                raise Not_implemented
          end
 
 let realize derivation =
-   let families, map, counter, derivation' = assign IntMap.empty 0 derivation in
-   g2h families derivation'
+   let families, map, counter, derivation' = assign FamilyPart.empty 0 derivation in
+   let subst,tC,c,proof = g2h families IntMap.empty derivation' in
+   Lm_printf.printf "subst: %a\n" (IntMap.print print_term) subst;
+   subst_provisionals subst tC,
+   subst_provisionals_in_formula subst c,
+   subst_provisionals_in_hilbert subst proof
 
 let s = Atom(add "s")
 let s_concl = FSet.singleton s

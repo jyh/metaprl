@@ -285,7 +285,7 @@ struct
 
    let rec print_formula out = function
       Falsum -> fprintf out "Falsum"
-    | Atom s -> fprintf out "Atom %a" output_symbol s
+    | Atom s -> fprintf out "%a" output_symbol s
     | And(a,b) -> fprintf out "And(%a, %a)" print_formula a print_formula b
     | Or(a,b) -> fprintf out "Or(%a, %a)" print_formula a print_formula b
     | Neg a -> fprintf out "Neg %a" print_formula a
@@ -513,22 +513,36 @@ let axiom_index = function
 			0
  | f -> prop_axiom_index f
 
-let rec check_proof hyps d f =
+let rec check_proof_hidden hyps d f hidden =
 	match d with
-		Axiom(i) ->
-			(i > 0) && (axiom_index f = i)
+	 | Axiom(i) ->
+			(i > 0) && (axiom_index f = i), hidden
 	 | MP(a,d1,d2) ->
-	 		(check_proof hyps d1 a) && (check_proof hyps d2 (Implies(a,f)))
+	 		let check1, hidden1 = check_proof_hidden hyps d1 a hidden in
+         if check1 then
+            check_proof_hidden hyps d2 (Implies(a,f)) hidden1
+         else
+            false, FSet.empty
 	 | Choice(d1,d2) ->
-	 		(check_proof hyps d1 f) || (check_proof hyps d2 f)
+	 		let check1, hidden1 = check_proof_hidden hyps d1 f hidden in
+         if check1 then
+            true, hidden1
+         else check_proof_hidden hyps d2 f hidden
 	 | Hyp i ->
-	 		List.nth hyps i = f
+	 		List.nth hyps i = f, hidden
 	 | ConstSpec ->
 	 		match f with
 				Pr(PropTaut(f1), f2) ->
-			 		compare f1 f2 = 0
+			 		if compare f1 f2 = 0 then
+                  true, FSet.add hidden f2
+               else
+                  false, FSet.empty
 			 | _ ->
-			 		false
+			 		false, FSet.empty
+
+let check_proof hyps d f =
+   let check, _ = check_proof_hidden hyps d f FSet.empty in
+   check
 
 exception Unliftable
 exception Not_proof of formula hilbert * formula 
@@ -991,10 +1005,11 @@ let rec make_provisionals_subst families =
  *)
 let realize_chain_rule subst tC c proofTC hyps concls =
    let c' = sequent_formula hyps concls in
-   let tR = PropTaut(Implies(c, c')) in
+   let cc' = Implies(c, c') in
+   let tR = PropTaut(cc') in
    let tail2 = ConstSpec in (* a proof of Pr(tR, c -> c') *)
    let tail3 = LP.Axiom(12) in (* a proof of tR:(c->c')->(tC:c->tR*tC:c') *)
-   let tail4 = MP(Pr(tR, Implies(c, c')), tail2, tail3) in (* a proof of tC:c->tR*tC:c' *)
+   let tail4 = MP(Pr(tR, cc'), tail2, tail3) in (* a proof of tC:c->tR*tC:c' *)
    let tail5 = MP(Pr(tC,c), proofTC, tail4) in (* a proof of tR*tC:c' *)
    subst, App(tR,tC), c', tail5
 
@@ -1228,11 +1243,45 @@ let proof1 =
    hyps0,
    FSet.empty
 
-let tC, c, proof = realize proof1 in
-   Lm_printf.printf "result: %a\nproof: %a" print_formula (Pr(tC, c)) print_hproof proof;
-   assert(check_proof [] proof (Pr(tC, c)))
-(*
-Pr((PropTaut (PropTaut (PropTaut ((C13 !PropTaut) ((((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 ((C2 (C1 C2)) (C1 C1))) (C1 C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 (C1 C1)) ((C2 C1) C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C1)) (C1 C1))))) ((((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 ((C2 (C1 C2)) (C1 C1))) (C1 C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 (C1 C1)) ((C2 C1) C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C14)) ((C2 C1) C1))) (C12 !(PropTaut (PropTaut (PropTaut PropTaut)))))) (C13 !PropTaut)))))), Implies(Pr(V1, Neg Implies(Atom s, Pr(V0, Atom s))), Falsum))
+let rec lp_free subst f =
+   match f with
+    | Falsum | Atom _ -> subst, f
+    | And(a,b) ->
+         let subst1, a' = lp_free subst a in
+         let subst2, b' = lp_free subst1 b in
+         subst2, And(a',b')
+    | Or(a,b) ->
+         let subst1, a' = lp_free subst a in
+         let subst2, b' = lp_free subst1 b in
+         subst2, Or(a',b')
+    | Neg a ->
+         let subst1, a' = lp_free subst a in
+         subst1, Neg(a')
+    | Implies(a,b) ->
+         let subst1, a' = lp_free subst a in
+         let subst2, b' = lp_free subst1 b in
+         subst2, Implies(a',b')
+    | Box(agent, a) ->
+         let subst1, a' = lp_free subst a in
+         subst1, Box(agent, a')
+    | Pr(Plus(_,_),_) ->
+         subst, f
+    | Pr(_,_) ->
+         try 
+            let v = FMap.find subst f in
+            subst, Atom v
+         with Not_found ->
+            let v = new_symbol_string "Pr" in
+            let subst' = FMap.add subst f v in
+            subst', Atom v
 
-MP(MP(MP(MP(MP(MP(MP(CS,A14),MP(A29,A12)),MP(MP(MP(MP(MP(MP(MP(MP(CS,MP(CS,A12)),MP(CS,A12)),MP(CS,A12)),A14),MP(A28,A12)),MP(MP(MP(MP(A17,MP(MP(A17,MP(A18,A12)),A12)),MP(MP(MP(A30,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(MP(A17,MP(A18,A12)),A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(MP(A17,MP(A18,A12)),A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A17,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(MP(MP(A18,MP(A17,A12)),MP(MP(MP(A17,MP(A17,A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),MP(MP(MP(A18,MP(A17,A12)),MP(A18,A12)),A12)),MP(A18,A12)),A12)),A12)),A12)),MP(MP(MP(CS,A14),MP(A29,A12)),A12)),MP(CS,A12)),MP(CS,A12)),MP(CS,A12))
+let tC, c, proof = realize proof1 in
+   Lm_printf.printf "result: %a\nproof: %a\n" print_formula (Pr(tC, c)) print_hproof proof;
+   let check, hidden = check_proof_hidden [] proof (Pr(tC, c)) FSet.empty in
+   assert check;
+   Lm_printf.printf "hidden assumptions:\n";
+   let hidden' = FSet.map (fun f -> snd (lp_free FMap.empty f)) hidden in
+   FSet.iter (Lm_printf.printf "%a\n" print_formula) hidden'
+(*
+Pr((PropTaut (PropTaut (PropTaut ((C13 !PropTaut) ((((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 ((C2 (C1 C2)) (C1 C1))) (C1 C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 (C1 C1)) ((C2 C1) C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C1)) (C1 C1))))) ((((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 ((C2 (C1 C2)) (C1 C1))) (C1 C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C1)))) ((C2 (C1 C1)) ((C2 C1) C1)))))) ((C2 ((C2 (C1 C2)) ((C2 ((C2 (C1 C2)) ((C2 (C1 C1)) (C1 C2)))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C1)) (C1 C1))))) ((C2 (C1 C14)) ((C2 C1) C1))) (C12 !(PropTaut (PropTaut (PropTaut PropTaut)))))) (C13 !PropTaut)))))), Implies(Pr(V1, Neg Implies(Atom s, Pr(((PropTaut (PropTaut (PropTaut PropTaut))) !V1), Atom s))), Falsum))
 *)

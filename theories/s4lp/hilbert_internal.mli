@@ -30,6 +30,8 @@ sig
     | Hyp of int
 	 | ConstSpec
 
+	val weaker_or_equal : formula -> formula -> bool
+
 end
 
 open LP
@@ -44,9 +46,25 @@ sig
 	val compare_pairs : formula * formula -> formula * formula -> int
 end
 
-module FSet : Lm_set_sig.LmSet with type elt = OrderedFormula.t
+module FSet : Lm_set_sig.LmSetDebug with type elt = OrderedFormula.t
+
+module S4G :
+sig
+   type fset = FSet.t
+
+   type rule_node =
+      Axiom of LP.formula
+    | AxiomFalsum
+    | NegLeft of LP.formula * gentzen
+    | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
+    | ImplRight of LP.formula * LP.formula * gentzen
+    | BoxRight of int * LP.formula * gentzen
+    | BoxLeft of LP.formula * gentzen
+
+   and gentzen = rule_node * fset * fset (* rule, hyps, concls *)
+end
 
 val check_proof : formula list -> formula hilbert -> formula -> bool
 val lift : formula list -> formula hilbert -> formula -> formula hilbert * proof_term
 val deduction : formula -> formula list -> formula hilbert -> formula -> formula hilbert
-
+val realize : S4G.gentzen -> proof_term * formula * formula hilbert

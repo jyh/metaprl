@@ -73,6 +73,7 @@ prec prec_not
  * TACTICS                                                              *
  ************************************************************************)
 
+val false_term : term
 val is_false_term : term -> bool
 
 val is_or_term : term -> bool
@@ -90,6 +91,10 @@ val mk_implies_term : term -> term -> term
 val is_not_term : term -> bool
 val dest_not : term -> term
 val mk_not_term : term -> term
+
+val is_box_term : term -> bool
+val dest_box : term -> Lm_num.num * term
+val mk_box_term : Lm_num.num -> term -> term
 
 module S4_Logic : Jlogic_sig.JLogicSig
 

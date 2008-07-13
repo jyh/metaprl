@@ -1,4 +1,10 @@
 open Lm_symbol
+open Lm_printf
+
+open Term_sig
+open Refiner.Refiner
+open Term
+open RefineError
 
 module SymbolicSet = functor (O : Lm_set_sig.OrderedTypeDebug) ->
 struct
@@ -21,7 +27,15 @@ end
 module Integer =
 struct
    type t = int
-   let compare = Pervasives.compare
+
+   let compare (i : int) (j : int) =
+      if i < j then
+         -1
+      else if i > j then
+         1
+      else
+         0
+
    let print out i = Lm_printf.fprintf out "%i" i
 end
 
@@ -215,6 +229,29 @@ struct
 	 | Choice of 'formula hilbert * 'formula hilbert
 	 | Hyp of int
 	 | ConstSpec
+
+	let weaker_or_equal a b =
+   match a with
+      Box(Modal af, _) ->
+         begin match b with
+            Box(Modal bf, _) ->
+               (af = bf) || (bf = 0)
+          | Pr(_, _) ->
+               true
+          | _ ->
+               false
+         end
+    | Pr(_, _) ->
+         begin match b with
+            Box(Modal bf, _) ->
+               (bf = 0)
+          | Pr(_, _) ->
+               true
+          | _ ->
+               false
+         end
+    | _ ->
+         false
 
    open Lm_printf
 
@@ -1030,29 +1067,6 @@ let realize_branch_rule subst tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
 let realize_axiom subst hyps concls =
    let f' = sequent_formula hyps concls in
    subst, PropTaut f', f', ConstSpec
-
-let weaker_or_equal a b =
-   match a with
-      Box(Modal af, _) ->
-         begin match b with
-            Box(Modal bf, _) ->
-               (af = bf) || (bf = 0)
-          | Pr(_, _) ->
-               true
-          | _ ->
-               false
-         end
-    | Pr(_, _) ->
-         begin match b with
-            Box(Modal bf, _) ->
-               (bf = 0)
-          | Pr(_, _) ->
-               true
-          | _ ->
-               false
-         end
-    | _ ->
-         false
 
 let add_family families fam t f =
    Lm_printf.printf "family: %i\n" fam;

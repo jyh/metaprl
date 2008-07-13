@@ -7,5 +7,5 @@ MPFILES[] =
 	s4_logic
 	s4_tests
 	s4_internal
-#   hilbert
+	hilbert_logic
 #   lp_hilbert

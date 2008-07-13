@@ -22,6 +22,16 @@ struct
       iter (fun i -> Lm_printf.fprintf out "%a " O.print i) set;
       Lm_printf.fprintf out "}"
 
+	exception Found of O.t
+
+	let find set i =
+		try 
+			iter
+				(fun i0 -> if O.compare i i0 = 0 then raise (Found i0))
+				set;
+			raise Not_found
+		with Found i1 -> i1
+
 end
 
 module Integer =
@@ -881,8 +891,6 @@ let merge start_set map0 map1 families0 families1 =
    let families = FamilyPart.join families0 families1 in
    FSet.fold (merge_formula map0 map1) families start_set
 
-exception FoundFormula of formula
-
 (*
  * assign recursively goes over a Gentzen style S4 proof and assigns
  * unique indices to each fresh instance of box0 (agent0's box).
@@ -984,18 +992,11 @@ let result = match deriv with
       let _, hyps0, concls0 = subder0 in
       let a' = FMap.find map0 a in
       let _, assum_hyps, _ = subder in
+		let fm = FSet.find assum_hyps (Box(Modal 0, a)) in
       let a'from_box =
-         try FSet.iter
-            (fun fm -> match fm with
-               Box(Modal 0, fm') when compare a fm' = 0 ->
-                  raise (FoundFormula fm)
-             | _ -> ()
-            ) assum_hyps;
-            raise (Invalid_argument "A boxed formula expected")
-         with FoundFormula fm ->
-            match FMap.find map0 fm with
-               Pr(_, fm') -> fm'
-             | _ -> raise (Invalid_argument "A Pr-formula expected")
+         match FMap.find map0 fm with
+            Pr(_, fm') -> fm'
+          | _ -> raise (Invalid_argument "A Pr-formula expected")
       in
       let families1 = merge_pair families0 a' a'from_box in
       families1,

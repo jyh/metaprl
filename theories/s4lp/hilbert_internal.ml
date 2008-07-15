@@ -32,6 +32,27 @@ struct
 			raise Not_found
 		with Found i1 -> i1
 
+	exception Success
+
+	let query f set =
+		let result = ref None in
+      try
+         iter
+            (fun i -> 
+					match f i with
+						Some x ->
+							result := Some x;
+							raise Success
+					 | None ->
+					 		()
+				)
+            set;
+         raise Not_found
+      with Success ->
+			match !result with
+				Some r -> r
+			 | None -> raise Not_found
+
 end
 
 module Integer =
@@ -1027,28 +1048,43 @@ let result = match deriv with
       let _, assum_h, _ = subder in
       let gamma = FSet.subtract_list hyps (FSet.to_list assum_h) in
       let boxb = Box(Modal agent, b) in
-      let delta = FSet.remove concls boxb in 
+      let delta = FSet.remove concls boxb in
       let map1, counter1, gamma' = assign_fresh_multiple map0' counter0 gamma in
       let map2, counter2, delta' = assign_fresh_multiple map1 counter1 delta in
-      let boxb' = Pr(Provisional counter2, b') in 
-      FamilyPart.add_new families0 (Provisional.Principal counter2),
-      FMap.add map2 boxb boxb',
-      succ counter2,
-      (
-         BoxRight(agent, b', subder0),
-         FSet.union hyps0 gamma',
-         FSet.add delta' boxb'
-      )
+		let boxb', families1, counter3 =
+			if agent = 0 then
+	      	Pr(Provisional counter2, b'),
+   	   	FamilyPart.add_new families0 (Provisional.Principal counter2),
+	      	succ counter2
+			else
+				Box(Modal agent, b'),
+				families0,
+         	counter2
+		in
+			families1,
+			FMap.add map2 boxb boxb',
+			counter3,
+         (
+            BoxRight(agent, b', subder0),
+            FSet.union hyps0 gamma',
+            FSet.add delta' boxb'
+         )
  | BoxLeft(a,subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
       let _, hyps0, concls0 = subder0 in
       let a' = FMap.find map0 a in
       let _, assum_hyps, _ = subder in
-		let fm = FSet.find assum_hyps (Box(Modal 0, a)) in
+		let fm =
+			FSet.query
+				(function Box(Modal _, a1) as f when compare a a1 = 0 -> Some f | _ -> None)
+				assum_hyps
+		in
       let a'from_box =
-         match FMap.find map0 fm with
-            Pr(_, fm') -> fm'
-          | _ -> raise (Invalid_argument "A Pr-formula expected")
+        	match fm, FMap.find map0 fm with
+   	      Box(Modal 0, _), Pr(_, fm') -> fm'
+      	 | Box(Modal 0, _), _ -> raise (Invalid_argument "A Pr-formula expected")
+			 | _, Box(Modal _, fm') -> fm'
+			 | _, _ -> raise (Invalid_argument "A Box-formula expected")
       in
       let families1 = merge_pair families0 a' a'from_box in
       families1,
@@ -1170,28 +1206,21 @@ let rec g2h families subst = function
          assert (if FSet.mem hyps f then false else true);
          let subst', tC, c, proofTC = g2h families subst subderivation in
          realize_chain_rule subst' tC c proofTC hyps concls
-    | BoxRight(agent, f, subderivation), hyps, concls ->
+    | BoxRight(0, f, subderivation), hyps, concls ->
          let _, assum_hyps, assum_concls = subderivation in
          assert (FSet.cardinal assum_concls = 1);
-         let boxf = Box(Modal agent, f) in
+         let boxf = Box(Modal 0, f) in
          assert (FSet.choose assum_concls = f);
          let test = weaker_or_equal boxf in
          assert (FSet.for_all test assum_hyps);
          let subst1, tC, c, proofTC = g2h families subst subderivation in
-         let fam =
-            try
-               begin
-                  FSet.fold (fun _ e ->
-                     match e with
-                        Pr(Provisional i, f') when compare f f' = 0 ->
-                           raise (Found i)
-                      | _ -> ()
-                  ) () concls;
-                  Lm_printf.printf "g2h.BoxRight: box(%a) not found in the conclusion" print_formula f;
-                  raise Not_found
-               end
-            with Found i -> i
-         in
+         let fam = FSet.query
+				(function
+					Pr(Provisional i, f') when compare f f' = 0 -> Some i
+				 | _ -> None
+				)
+				concls
+			in
          begin match c with
             Implies(ais, b) ->
                let proof0, s = lift [ais] (Hyp 0) ais in (* ais >- s:ais *)
@@ -1228,6 +1257,8 @@ let rec g2h families subst = function
           | _ ->
                raise Not_implemented
          end
+    | BoxRight(agent, f, subderivation), hyps, concls ->
+	 		raise Not_implemented
 
 let realize derivation =
    let families, map, counter, derivation1 = assign FamilyPart.empty 0 derivation in

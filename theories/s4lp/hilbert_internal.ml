@@ -239,6 +239,7 @@ struct
 	 | Choice of 'formula hilbert * 'formula hilbert
 	 | Hyp of int
 	 | ConstSpec
+	 | Nec of int * 'formula hilbert
 
 	let weaker_or_equal a b =
    match a with
@@ -329,6 +330,8 @@ struct
             subst_provisionals_in_hilbert subst pr2
          )
     | Hyp _ | ConstSpec -> pr
+	 | Nec(i,pr) ->
+	 		Nec(i, subst_provisionals_in_hilbert subst pr)
 
    let rec print_formula out = function
       Falsum -> fprintf out "Falsum"
@@ -359,6 +362,7 @@ struct
     | Choice(p1,p2) -> fprintf out "(%a|%a)" print_hproof p1 print_hproof p2
     | Hyp i -> fprintf out "H%i" i
     | ConstSpec -> fprintf out "CS"
+	 | Nec(i,p) -> fprintf out "Nec(%i,%a)" i print_hproof p
 end
 
 exception Not_implemented
@@ -544,9 +548,13 @@ let prop_axiom_index = function
  | Implies(Pr(t1,a1),Pr(Check(t2),Pr(t3,a2))) when a1=a2 & t1=t2 & t1=t3 -> 14
  | Implies(Pr(t1,a1),Pr(Plus(s,t2),a2)) when t1=t2 & a1=a2 -> 15
  | Implies(Pr(s1,a1),Pr(Plus(s2,t),a2)) when s2=s2 & a1=a2 -> 16
+ | Implies(Box(Modal i1, Implies(a1,b1)),Implies(Box(Modal i2,a2),Box(Modal i3,b2))) when i1=i2 & i1=i3 & a1=a2 & b1=b2 -> 17
+ | Implies(Box(Modal i, a1),a2) when a1=a2 -> 18
+ | Implies(Box(Modal i1, a1),Box(Modal i2,Box(Modal i3,a2))) when i1=i2 & i1=i3 & a1=a2 -> 19
+ | Implies(Pr(t,a1),Box(Modal i,a2)) when a1=a2 -> 20
  | _ -> 0
 
-let prop_axiom_count = 16
+let prop_axiom_count = 20
 
 let axiom_index = function
  | Pr(Const(i),a) ->
@@ -580,14 +588,19 @@ let rec check_proof_hidden hyps d f hidden =
 	 | Hyp i ->
 	 		List.nth hyps i = f, hidden
 	 | ConstSpec ->
-	 		match f with
-				Pr(PropTaut(f1), f2) ->
-			 		if compare f1 f2 = 0 then
-                  true, FSet.add hidden f2
-               else
-                  false, FSet.empty
+	 		begin match f with
+				Pr(PropTaut(f1), f2) when compare f1 f2 = 0 ->
+               true, FSet.add hidden f2
 			 | _ ->
 			 		false, FSet.empty
+			end
+	 | Nec(i,d1) ->
+	 		begin match f with
+				Box(Modal i1, f1) when i=i1 & (hyps=[] || prop_axiom_index f1 > 0) ->
+					check_proof_hidden hyps d1 f1 hidden
+			 | _ ->
+			 		false, FSet.empty
+			end
 
 let check_proof hyps d f =
    let check, _ = check_proof_hidden hyps d f FSet.empty in
@@ -604,6 +617,21 @@ let atomS = atom "s"
 let atomA = atom "a"
 let atomB = atom "b"
 let atomC = atom "c"
+
+(* from proofs of s:a->b and t:a build a proof of s*t:b *)
+let appProof s b s_ab_proof t a t_a_proof =
+	let pr_s_ab = Pr(s,Implies(a,b)) in
+	let st = App(s,t) in
+	MP(
+		Pr(t,a),
+		t_a_proof,
+		MP(
+			pr_s_ab,
+			s_ab_proof,
+			axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB))))
+		)
+	),
+	st
 
 let rec lift hyps d f =
 	let checkAxiom = axiom (Implies(Pr(pT,atomS),Pr(Check(pT),Pr(pT,atomS)))) in
@@ -643,16 +671,16 @@ let rec lift hyps d f =
     | MP(a,d1,d2), _ ->
          let ld1, a_pt = lift hyps d1 a in
          let ld2, af_pt = lift hyps d2 (Implies(a,f)) in
-         MP(
-            Pr(a_pt,a),
-            ld1,
-            MP(
-               Pr(af_pt,Implies(a,f)),
-               ld2,
-               axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB))))
-            )
-         ),
-         App(af_pt,a_pt)
+			appProof af_pt f ld2 a_pt a ld1
+	 | Nec(i,d1), Box(Modal i1, f1) when i=i1 ->
+	 		let ld1, f1_pt = lift hyps d1 f1 in
+			let pr_f1 = Pr(f1_pt, f1) in
+			let lld1, check_f1_pt = lift hyps ld1 pr_f1 in
+			let connection = Implies(Pr(f1_pt,f1),Box(Modal i, f1)) in
+			let ai = axiom_index connection in
+			appProof (Const ai) connection (Axiom ai) check_f1_pt pr_f1 lld1
+	 | Nec(_,_), _ ->
+	 		raise (Invalid_argument "lift: Nec used to prove a wrong formula")
 
 
 let rec deduction h hyps d f =
@@ -700,11 +728,23 @@ let rec deduction h hyps d f =
 				)
 			)
 	 | ConstSpec ->
-	 		match f with
+	 		begin match f with
 				Pr(PropTaut(f1), f2) when compare f1 f2 = 0 ->
 					MP(f,ConstSpec,axiom (Implies(atomA,Implies(atomB,atomA))))
 			 | _ ->
 			 		raise (Not_proof(d,f))
+			end
+	 | Nec(i,d1) ->
+	 		begin match f with
+				Box(Modal i, f1) when prop_axiom_index f1 > 0 ->
+					MP(
+						f,
+						axiom f,
+						axiom (Implies(f,Implies(h,f)))
+					)
+			 | _ ->
+			 		raise (Not_proof(d,f))
+			end
 
 let syllogism a b c proofAB proofBC =
    let ab = Implies(a,b) in

@@ -29,6 +29,7 @@ sig
     | Choice of 'formula hilbert * 'formula hilbert
     | Hyp of int
 	 | ConstSpec
+	 | Nec of int * 'formula hilbert
 
 	val weaker_or_equal : formula -> formula -> bool
 

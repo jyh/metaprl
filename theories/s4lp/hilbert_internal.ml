@@ -560,6 +560,8 @@ let axiom_index = function
 			0
  | f -> prop_axiom_index f
 
+let axiom f = Axiom(axiom_index f)
+
 let rec check_proof_hidden hyps d f hidden =
 	match d with
 	 | Axiom(i) ->
@@ -594,32 +596,42 @@ let check_proof hyps d f =
 exception Unliftable
 exception Not_proof of formula hilbert * formula 
 
+let pt t = Var(add t)
+let pT = pt "t"
+let pS = pt "s"
+let atom s = Atom(add s)
+let atomS = atom "s"
+let atomA = atom "a"
+let atomB = atom "b"
+let atomC = atom "c"
+
 let rec lift hyps d f =
+	let checkAxiom = axiom (Implies(Pr(pT,atomS),Pr(Check(pT),Pr(pT,atomS)))) in
 	match d, f with
 	 | Axiom i, Pr(t,a) ->
 	 		if i > 0 && axiom_index f = i then
-		 		MP(f,d,Axiom(14)),
+		 		MP(f,d,checkAxiom),
 				Check(t)
 			else
 				raise (Not_proof(d, f))
 	 | Axiom i, _ -> (* propositional axiom *)
 	 		if i > 0 && prop_axiom_index f = i then
-				Axiom(i+prop_axiom_count),
+				axiom (Pr(Const(i),f)),
 				Const(i)
 			else
 				raise (Not_proof(d,f))
 	 | Hyp i, Pr(t,a) when f = List.nth hyps i ->
-				MP(f,d,Axiom(14)),
+				MP(f,d,checkAxiom),
 				Check(t)
 	 | Hyp i, _ ->
 				raise Unliftable
 	 | ConstSpec, Pr(PropTaut(f1) as t, f2) when compare f1 f2 = 0 ->
-			MP(f,d,Axiom(14)),
+			MP(f,d,checkAxiom),
 			Check(t)
 	 | ConstSpec, _ ->
 	 		raise (Invalid_argument "lift: PropTaut used to prove a wrong formula")
     | _, Pr(t, a) ->
-         let proof0 = Axiom(14) in (* t:a->!t:t:a *)
+         let proof0 = checkAxiom in (* t:a->!t:t:a *)
          MP(f,d,proof0),
          Check(t)
     | Choice(d1,d2), _ ->
@@ -637,7 +649,7 @@ let rec lift hyps d f =
             MP(
                Pr(af_pt,Implies(a,f)),
                ld2,
-               Axiom(12)
+               axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB))))
             )
          ),
          App(af_pt,a_pt)
@@ -654,17 +666,17 @@ let rec deduction h hyps d f =
 				deduction h hyps d2 f
 			end
 	 | Axiom i when i > 0 && axiom_index f = i ->
-	 		MP(f,Axiom(i),Axiom(1))
+	 		MP(f,Axiom(i),axiom (Implies(atomA,Implies(atomB,atomA))))
 	 | Axiom _ ->
 	 		raise (Not_proof(d,f))
 	 | Hyp 0 when compare h f = 0 ->
 	 		MP(
 				Implies(f,Implies(f,f)),
-				Axiom(1),
+				axiom (Implies(atomA,Implies(atomB,atomA))),
 				MP(
 					Implies(f,Implies(Implies(f,f),f)),
-					Axiom(1),
-					Axiom(2)
+					axiom (Implies(atomA,Implies(atomB,atomA))),
+					axiom (Implies(Implies(atomA,Implies(atomB,atomC)),Implies(Implies(atomA,atomB),Implies(atomA,atomC))))
 				)
 			)
 	 | Hyp 0 ->
@@ -672,7 +684,7 @@ let rec deduction h hyps d f =
 	 | Hyp i ->
 	 		let i' = pred i in
 	 		if List.nth hyps i' = f then
-		 		MP(f,Hyp(i'),Axiom(1))
+		 		MP(f,Hyp(i'),axiom (Implies(atomA,Implies(atomB,atomA))))
 			else
 				raise (Not_proof(d,f))
 	 | MP(a,d1,d2) ->
@@ -684,13 +696,13 @@ let rec deduction h hyps d f =
 				MP(
 					Implies(h,Implies(a,f)),
 					dd2,
-					Axiom(2)
+					axiom (Implies(Implies(atomA,Implies(atomB,atomC)),Implies(Implies(atomA,atomB),Implies(atomA,atomC))))
 				)
 			)
 	 | ConstSpec ->
 	 		match f with
 				Pr(PropTaut(f1), f2) when compare f1 f2 = 0 ->
-					MP(f,ConstSpec,Axiom(1))
+					MP(f,ConstSpec,axiom (Implies(atomA,Implies(atomB,atomA))))
 			 | _ ->
 			 		raise (Not_proof(d,f))
 
@@ -1046,7 +1058,7 @@ let realize_chain_rule subst tC c proofTC hyps concls =
    let cc' = Implies(c, c') in
    let tR = PropTaut(cc') in
    let tail2 = ConstSpec in (* a proof of Pr(tR, c -> c') *)
-   let tail3 = LP.Axiom(12) in (* a proof of tR:(c->c')->(tC:c->tR*tC:c') *)
+   let tail3 = axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB)))) in (* a proof of tR:(c->c')->(tC:c->tR*tC:c') *)
    let tail4 = MP(Pr(tR, cc'), tail2, tail3) in (* a proof of tC:c->tR*tC:c' *)
    let tail5 = MP(Pr(tC,c), proofTC, tail4) in (* a proof of tR*tC:c' *)
    subst, App(tR,tC), c', tail5
@@ -1056,11 +1068,12 @@ let realize_branch_rule subst tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
    let d = Implies(c2, c') in
    let taut = Implies(c1, d) in
    let tR = PropTaut(taut) in
+	let appAxiom = axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB)))) in
    let proof1 = ConstSpec in (*for tR:taut *)
-   let proof2 = LP.Axiom(12) in (*for tR:taut->(tC1:c1->tR*tC1:d *)
+   let proof2 =  appAxiom in (*for tR:taut->(tC1:c1->tR*tC1:d *)
    let proof3 = MP(Pr(tR, taut), proof1, proof2) in (*for tC1:c1->tR*tC1:d *)
    let proof4 = MP(Pr(tC1,c1), proofTC1, proof3) in (*for tR*tC1:d *)
-   let proof5 = LP.Axiom(12) in (*for tR*tC1:d->(tC2:c2->tR*tC1*tC2:c') *)
+   let proof5 = appAxiom in (*for tR*tC1:d->(tC2:c2->tR*tC1*tC2:c') *)
    let proof6 = MP(Pr(App(tR, tC1), d), proof4, proof5) in (*for tC2:c2->tR*tC1*tC2:c' *)
    let proof7 = MP(Pr(tC2, c2), proofTC2, proof6) in (*for tR*tC1*tC2:c' *)
    subst, App(App(tR, tC1), tC2), c', proof7
@@ -1082,7 +1095,7 @@ let add_family families fam t f =
    let taut' = Pr(PropTaut(taut), taut) in
    let proof0 = ConstSpec in (* taut' *)
    assert(check_proof [] proof0 taut');
-   let proof1 = LP.Axiom(13) in (* taut'->taut *)
+   let proof1 = axiom (Implies(Pr(pT,atomA),atomA)) in (* taut'->taut *)
    let proof2 = MP(taut', proof0, proof1) in
    let prF = Pr(family_term, f) in
    Lm_printf.printf "add_family: %a\n" print_formula prF;
@@ -1145,7 +1158,7 @@ let rec g2h families subst = function
                assert (check_proof [ais] proof0 (Pr(s,ais)));
                Lm_printf.printf "s:ais %a\n" print_formula (Pr(s,ais));
                let proof1 = deduction ais [] proof0 (Pr(s,ais)) in (* ais->s:ais *)
-               let proof2 = LP.Axiom(12) in (* tC:c->(s:ais->tC*s:b) *)
+               let proof2 = axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB)))) in (* tC:c->(s:ais->tC*s:b) *)
                let proof3 = MP(Pr(tC, c), proofTC, proof2) in (* s:ais->tC*s:b) *)
                let tCs = App(tC, s) in
                let prB = Pr(tCs, b) in
@@ -1164,7 +1177,7 @@ let rec g2h families subst = function
                let taut' = Pr(PropTaut(taut), taut) in
                let proof7 = ConstSpec in (* taut' *)
                assert(check_proof [] proof7 taut');
-               let proof8 = LP.Axiom 13 in (* taut'->taut *)
+               let proof8 = axiom (Implies(Pr(pT,atomA),atomA)) in (* taut'->taut *)
                assert(check_proof [] proof8 (Implies(taut', taut)));
                let proof9 = MP(taut', proof7, proof8) in (* taut *)
                assert(check_proof [] proof9 taut);

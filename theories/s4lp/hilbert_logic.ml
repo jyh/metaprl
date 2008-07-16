@@ -129,6 +129,14 @@ struct
 				 | _ ->
 				 		raise (RefineError("Structured_S4_Logic.append_inf unexpected argument of OrLeft", TermError hyp))
 				end
+		 | Orr, t::ts ->
+		 		let disjunction = term2formula hyp in
+				begin match disjunction with
+					Or(a,b) ->
+						(OrRight(a, b, t), FSet.empty, FSet.empty) :: ts
+				 | _ ->
+				 		raise (RefineError("Structured_S4_Logic.append_inf unexpected argument of OrRight", TermError hyp))
+				end
        | Boxr,t::ts ->
             let f = term2formula hyp in
             begin match f with
@@ -192,6 +200,13 @@ match derivation with
 		OrLeft(a, b,
 			fill_sequents (FSet.add gamma a) concls left,
 			fill_sequents (FSet.add gamma b) concls right
+		),
+		hyps,
+		concls
+ | OrRight(a, b, subder), _, _ ->
+ 		let delta = FSet.remove concls (Or(a,b)) in
+		OrRight(a, b,
+				fill_sequents hyps (FSet.add (FSet.add delta a) b) subder
 		),
 		hyps,
 		concls
@@ -260,3 +275,19 @@ let _ = (* OrLeft test *)
          let g = fill_sequents (FSet.singleton abf) (FSet.add (FSet.singleton a) b) inf in
          realize g
     | _ -> raise (Invalid_argument "resulting inference has more than one root")
+
+let _ = (* OrRight test *)
+   let a = Atom(add "a") in
+   let b = Atom(add "b") in
+   let af = Box(Modal 0, a) in
+   let abf = Box(Modal 0, Or(a,b)) in
+   let atm = formula2term af in
+   let abtm = formula2term abf in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [atm] [abtm] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.singleton af) (FSet.singleton abf) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+

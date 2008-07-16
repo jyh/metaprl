@@ -62,6 +62,7 @@ sig
 	 | AndLeft of LP.formula * LP.formula * gentzen
 	 | AndRight of LP.formula * LP.formula * gentzen * gentzen
 	 | OrLeft of LP.formula * LP.formula * gentzen * gentzen
+	 | OrRight of LP.formula * LP.formula * gentzen
     | BoxRight of int * LP.formula * gentzen
     | BoxLeft of LP.formula * gentzen
 

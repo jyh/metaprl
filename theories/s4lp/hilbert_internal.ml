@@ -806,6 +806,7 @@ struct
 	 | AndLeft of LP.formula * LP.formula * gentzen
 	 | AndRight of LP.formula * LP.formula * gentzen * gentzen
 	 | OrLeft of LP.formula * LP.formula * gentzen * gentzen
+	 | OrRight of LP.formula * LP.formula * gentzen
     | BoxRight of int * LP.formula * gentzen
     | BoxLeft of LP.formula * gentzen
 
@@ -854,6 +855,12 @@ struct
                subst_provisionals_in_formula subst b,
                subst_provisionals_in_gentzen subst left,
                subst_provisionals_in_gentzen subst right
+            )
+		 | OrRight(a,b,subder) ->
+            OrRight(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst subder
             )
        | BoxRight(agent,a,subderivation) ->
             BoxRight(
@@ -1117,6 +1124,20 @@ let result = match deriv with
          OrLeft(a', b', left', right'),
          FSet.add (FSet.remove hyps0 a') ab',
          concls0
+      )
+ | OrRight(a,b,subder), hyps, concls ->
+		let families0, map0, counter0, subder0 = assign families counter subder in
+      let _, hyps0, concls0 = subder0 in
+      let a' = FMap.find map0 a in
+      let b' = FMap.find map0 b in
+      let ab' = Or(a', b') in
+      families0,
+      FMap.add (FMap.remove (FMap.remove map0 a) b) (Or(a, b)) ab',
+      counter0,
+      (
+         OrRight(a', b', subder0),
+			hyps0,
+         FSet.add (FSet.remove (FSet.remove concls0 a') b') ab'
       )
  | BoxRight(agent,b,subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
@@ -1384,6 +1405,10 @@ let rec g2h families subst = function
          let subst1, tC1, c1, proofTC1 = g2h families subst left in
          let subst2, tC2, c2, proofTC2 = g2h families subst1 right in
          realize_branch_rule subst2 tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
+	 | OrRight(a, b, subderivation), hyps, concls ->
+         assert (FSet.mem concls (Or(a, b)));
+         let subst', tC, c, proofTC = g2h families subst subderivation in
+         realize_chain_rule subst' tC c proofTC hyps concls
     | BoxLeft(f, subderivation), hyps, concls ->
          assert (if FSet.mem hyps f then false else true);
          let subst', tC, c, proofTC = g2h families subst subderivation in

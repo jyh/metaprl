@@ -805,6 +805,7 @@ struct
     | ImplRight of LP.formula * LP.formula * gentzen
 	 | AndLeft of LP.formula * LP.formula * gentzen
 	 | AndRight of LP.formula * LP.formula * gentzen * gentzen
+	 | OrLeft of LP.formula * LP.formula * gentzen * gentzen
     | BoxRight of int * LP.formula * gentzen
     | BoxLeft of LP.formula * gentzen
 
@@ -842,6 +843,13 @@ struct
             )
 		 | AndRight(a,b,left,right) ->
 		 		AndRight(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst left,
+               subst_provisionals_in_gentzen subst right
+            )
+		 | OrLeft(a,b,left,right) ->
+            OrLeft(
                subst_provisionals_in_formula subst a,
                subst_provisionals_in_formula subst b,
                subst_provisionals_in_gentzen subst left,
@@ -1092,6 +1100,23 @@ let result = match deriv with
          AndRight(a', b', left', right'),
          hyps0,
          FSet.add (FSet.remove concls0 a') ab'
+      )
+ | OrLeft(a,b,left,right), hyps, concls ->
+      let families0, map0, counter0, left' = assign families counter left in
+      let families1, map1, counter1, right' = assign families counter0 right in
+      let _, hyps0, concls0 = left' in
+      let a' = FMap.find map0 a in
+      let b' = FMap.find map1 b in
+      let ab = Or(a, b) in
+      let ab' = Or(a', b') in
+      let start_set = FSet.union (FSet.remove hyps ab) concls in
+      merge start_set map0 map1 families0 families1,
+      FMap.add (FMap.remove map0 a) ab ab',
+      counter1,
+      (
+         OrLeft(a', b', left', right'),
+         FSet.add (FSet.remove hyps0 a') ab',
+         concls0
       )
  | BoxRight(agent,b,subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
@@ -1351,6 +1376,11 @@ let rec g2h families subst = function
          realize_chain_rule subst' tC c proofTC hyps concls
 	 | AndRight(a, b, left, right), hyps, concls ->
          assert (FSet.mem concls (And(a, b)));
+         let subst1, tC1, c1, proofTC1 = g2h families subst left in
+         let subst2, tC2, c2, proofTC2 = g2h families subst1 right in
+         realize_branch_rule subst2 tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
+	 | OrLeft(a, b, left, right), hyps, concls ->
+         assert (FSet.mem hyps (Or(a, b)));
          let subst1, tC1, c1, proofTC1 = g2h families subst left in
          let subst2, tC2, c2, proofTC2 = g2h families subst1 right in
          realize_branch_rule subst2 tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls

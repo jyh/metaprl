@@ -803,6 +803,7 @@ struct
     | NegLeft of LP.formula * gentzen
     | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
     | ImplRight of LP.formula * LP.formula * gentzen
+	 | AndLeft of LP.formula * LP.formula * gentzen
 	 | AndRight of LP.formula * LP.formula * gentzen * gentzen
     | BoxRight of int * LP.formula * gentzen
     | BoxLeft of LP.formula * gentzen
@@ -829,6 +830,12 @@ struct
             )
        | ImplRight(a,b,subderivation) ->
             ImplRight(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+		 | AndLeft(a,b,subderivation) ->
+            AndLeft(
                subst_provisionals_in_formula subst a,
                subst_provisionals_in_formula subst b,
                subst_provisionals_in_gentzen subst subderivation
@@ -1040,7 +1047,7 @@ let result = match deriv with
          ImplLeft(a', b', left', right'),
          FSet.add hyps0 ab',
          FSet.remove concls0 a'
-      )      
+      )
  | ImplRight(a,b,subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
       let _, hyps0, concls0 = subder0 in
@@ -1054,6 +1061,20 @@ let result = match deriv with
          ImplRight(a', b', subder0),
          FSet.remove hyps0 a',
          FSet.add (FSet.remove concls0 b') ab'
+      )
+ | AndLeft(a,b,subder), hyps, concls ->
+		let families0, map0, counter0, subder0 = assign families counter subder in
+      let _, hyps0, concls0 = subder0 in
+      let a' = FMap.find map0 a in
+      let b' = FMap.find map0 b in
+      let ab' = And(a', b') in
+      families0,
+      FMap.add (FMap.remove (FMap.remove map0 a) b) (And(a, b)) ab',
+      counter0,
+      (
+         AndLeft(a', b', subder0),
+         FSet.add (FSet.remove (FSet.remove hyps0 a') b') ab',
+         concls0
       )
  | AndRight(a,b,left,right), hyps, concls ->
       let families0, map0, counter0, left' = assign families counter left in
@@ -1322,6 +1343,10 @@ let rec g2h families subst = function
          realize_branch_rule subst2 tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
     | ImplRight(a, b, subderivation), hyps, concls ->
          assert (FSet.mem concls (Implies(a, b)));
+         let subst', tC, c, proofTC = g2h families subst subderivation in
+         realize_chain_rule subst' tC c proofTC hyps concls
+    | AndLeft(a, b, subderivation), hyps, concls ->
+         assert (FSet.mem hyps (And(a, b)));
          let subst', tC, c, proofTC = g2h families subst subderivation in
          realize_chain_rule subst' tC c proofTC hyps concls
 	 | AndRight(a, b, left, right), hyps, concls ->

@@ -672,7 +672,14 @@ let rec lift hyps d f =
 	 | Hyp i, Pr(t,a) when f = List.nth hyps i ->
 				MP(f,d,checkAxiom),
 				Check(t)
+(*	 | Hyp i, Box(Modal i ,a) when f = List.nth hyps i ->
+	 			MP(
+				*)
 	 | Hyp i, _ ->
+	 			Lm_printf.printf "hyps:";
+				List.iter (Lm_printf.printf "%a " print_formula) hyps;
+				Lm_printf.printf "\nHyp %i\n" i;
+				Lm_printf.printf "f:%a\n" print_formula f;
 				raise Unliftable
 	 | ConstSpec, Pr(PropTaut(f1) as t, f2) when compare f1 f2 = 0 ->
 			MP(f,d,checkAxiom),
@@ -796,6 +803,7 @@ struct
     | NegLeft of LP.formula * gentzen
     | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
     | ImplRight of LP.formula * LP.formula * gentzen
+	 | AndRight of LP.formula * LP.formula * gentzen * gentzen
     | BoxRight of int * LP.formula * gentzen
     | BoxLeft of LP.formula * gentzen
 
@@ -824,6 +832,13 @@ struct
                subst_provisionals_in_formula subst a,
                subst_provisionals_in_formula subst b,
                subst_provisionals_in_gentzen subst subderivation
+            )
+		 | AndRight(a,b,left,right) ->
+		 		AndRight(
+               subst_provisionals_in_formula subst a,
+               subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst left,
+               subst_provisionals_in_gentzen subst right
             )
        | BoxRight(agent,a,subderivation) ->
             BoxRight(
@@ -1040,6 +1055,23 @@ let result = match deriv with
          FSet.remove hyps0 a',
          FSet.add (FSet.remove concls0 b') ab'
       )
+ | AndRight(a,b,left,right), hyps, concls ->
+      let families0, map0, counter0, left' = assign families counter left in
+      let families1, map1, counter1, right' = assign families counter0 right in
+      let _, hyps0, concls0 = left' in
+      let a' = FMap.find map0 a in
+      let b' = FMap.find map1 b in
+		let ab = And(a, b) in
+      let ab' = And(a', b') in
+      let start_set = FSet.union hyps (FSet.remove concls ab) in
+      merge start_set map0 map1 families0 families1,
+      FMap.add (FMap.remove map0 a) ab ab',
+      counter1,
+      (
+         AndRight(a', b', left', right'),
+         hyps0,
+         FSet.add (FSet.remove concls0 a') ab'
+      )
  | BoxRight(agent,b,subder), hyps, concls ->
       let families0, map0, counter0, subder0 = assign families counter subder in
       let _, hyps0, concls0 = subder0 in
@@ -1178,7 +1210,97 @@ let add_family families fam t f =
    assert(check_proof [] proof2 taut);
    proof2, prF
 
-exception Found of int
+let prove_conj hyps a proofa b proofb =
+	let ab = And(a,b) in
+	let proof =
+		MP(
+			b,
+			proofb,
+			MP(
+				a,
+				proofa,
+				axiom (Implies(a,Implies(b,ab)))
+			)
+		)
+	in
+	assert (check_proof hyps proof ab);
+	proof
+
+(* from a->b->c to b&a->c *)
+let collapse_2impls a b c proof =
+	let ba = And(b,a) in
+	let abc = Implies(a,Implies(b,c)) in
+	let hyps = [ba;abc] in
+	let proofA =
+		MP(
+			ba,
+			Hyp 0,
+			axiom (Implies(ba,a))
+		)
+	in
+   let proofB =
+      MP(
+         ba,
+         Hyp 0,
+         axiom (Implies(ba,b))
+      )
+   in
+	let proofC =
+		MP(
+			b,
+			proofB,
+			MP(
+				a,
+				proofA,
+				Hyp 1
+			)
+		)
+	in
+	assert (check_proof hyps proofC c);
+	let proof1 = deduction ba [abc] proofC c in
+	let proof2 = deduction abc [] proof1 (Implies(ba,c)) in
+	assert (check_proof [] proof2 (Implies(abc,Implies(ba,c))));
+	MP(
+		abc,
+		proof,
+		proof2
+	)
+
+(* from a1->...->an->b to an&...&a1->b *)
+let rec collapse_impls f proof =
+	(*Lm_printf.printf"collapse_impls %a\n" print_formula f;*)
+	match f with
+		Implies(a,Implies(b,c)) ->
+			let proof0 = collapse_2impls a b c proof in
+			collapse_impls (Implies(And(b,a),c)) proof0
+	 | _ ->
+	 		proof
+
+let lemma3 aiset =
+	let ailist = FSet.to_list aiset in
+	let _, conj, proof0 = FSet.symbolic_left_sum
+		(fun a0 ->
+			(1, a0, Hyp 0))
+		(fun acc ai ->
+			let i, f, proof0 = acc in
+			succ i, And(f,ai), prove_conj ailist f proof0 ai (Hyp i)
+		)
+		aiset
+	in
+	let proof1, s = lift ailist proof0 conj in
+	let prconj = Pr(s,conj) in
+	assert (check_proof ailist proof1 prconj);
+	let rec aux = fun proof f l ->
+		match l with
+			ai::tl ->
+				aux (deduction ai tl proof f) (Implies(ai,f)) tl
+		 |	[] ->
+				proof, f
+	in
+	let proof2, f = aux proof1 prconj ailist in (* a0->a1->...->prconj *)
+	let proof3 = collapse_impls f proof2 in
+	assert (check_proof [] proof3 (Implies(conj,prconj)));
+	proof3, s, conj
 
 (* Gentzen to Hilbert transformation (phase 3) *)
 let rec g2h families subst = function
@@ -1202,6 +1324,11 @@ let rec g2h families subst = function
          assert (FSet.mem concls (Implies(a, b)));
          let subst', tC, c, proofTC = g2h families subst subderivation in
          realize_chain_rule subst' tC c proofTC hyps concls
+	 | AndRight(a, b, left, right), hyps, concls ->
+         assert (FSet.mem concls (And(a, b)));
+         let subst1, tC1, c1, proofTC1 = g2h families subst left in
+         let subst2, tC2, c2, proofTC2 = g2h families subst1 right in
+         realize_branch_rule subst2 tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls
     | BoxLeft(f, subderivation), hyps, concls ->
          assert (if FSet.mem hyps f then false else true);
          let subst', tC, c, proofTC = g2h families subst subderivation in
@@ -1223,10 +1350,8 @@ let rec g2h families subst = function
 			in
          begin match c with
             Implies(ais, b) ->
-               let proof0, s = lift [ais] (Hyp 0) ais in (* ais >- s:ais *)
-               assert (check_proof [ais] proof0 (Pr(s,ais)));
-               Lm_printf.printf "s:ais %a\n" print_formula (Pr(s,ais));
-               let proof1 = deduction ais [] proof0 (Pr(s,ais)) in (* ais->s:ais *)
+					let proof1, s, ais' = lemma3 assum_hyps in (* ais->s:ais *)
+					assert (check_proof [] proof1 (Implies(ais,Pr(s,ais))));
                let proof2 = axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB)))) in (* tC:c->(s:ais->tC*s:b) *)
                let proof3 = MP(Pr(tC, c), proofTC, proof2) in (* s:ais->tC*s:b) *)
                let tCs = App(tC, s) in
@@ -1250,7 +1375,7 @@ let rec g2h families subst = function
                assert(check_proof [] proof8 (Implies(taut', taut)));
                let proof9 = MP(taut', proof7, proof8) in (* taut *)
                assert(check_proof [] proof9 taut);
-               let proof10 = MP(Implies(ais, prB'), proof6, proof9) in
+               let proof10 = MP(Implies(ais, prB'), proof6, proof9) in (* c' *)
                assert (check_proof [] proof10 c');
                let proof11, tC' = lift [] proof10 c' in
                subst2, tC', c', proof11
@@ -1259,6 +1384,52 @@ let rec g2h families subst = function
          end
     | BoxRight(agent, f, subderivation), hyps, concls ->
 	 		raise Not_implemented
+			(*
+         let _, assum_hyps, assum_concls = subderivation in
+         assert (FSet.cardinal assum_concls = 1);
+         let boxf = Box(Modal agent, f) in
+         assert (FSet.choose assum_concls = f);
+         let test = weaker_or_equal boxf in
+         assert (FSet.for_all test assum_hyps);
+         let subst1, tC, c, proofTC = g2h families subst subderivation in
+         begin match c with
+            Implies(ais, b) ->
+               let proof0, s = lift [ais] (Hyp 0) ais in (* ais >- s:ais *)
+               assert (check_proof [ais] proof0 (Pr(s,ais)));
+               Lm_printf.printf "s:ais %a\n" print_formula (Pr(s,ais));
+               let proof1 = deduction ais [] proof0 (Pr(s,ais)) in (* ais->s:ais *)
+               let proof2 = axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB)))) in (* tC:c->(s:ais->tC*s:b) *)
+               let proof3 = MP(Pr(tC, c), proofTC, proof2) in (* s:ais->tC*s:b) *)
+               let tCs = App(tC, s) in
+               let prB = Pr(tCs, b) in
+               assert (check_proof [] proof1 (Implies(ais, Pr(s,ais))));
+               assert (check_proof [] proof3 (Implies(Pr(s,ais), prB)));
+               let proof4 = syllogism ais (Pr(s, ais)) prB proof1 proof3 in (* ais->tC*s:b *)
+               assert(check_proof [] proof4 (Implies(ais, prB)));
+
+               let subst2 = IntMap.add subst1 fam tCs in
+               let proof5, prB' = add_family families fam tCs b in (* tC*s:b->fam:b *)
+               assert(check_proof [] proof5 (Implies(prB, prB')));
+               Lm_printf.printf "prB': %a\n" print_formula prB';
+               let proof6 = syllogism ais prB prB' proof4 proof5 in (* ais->prB' *)
+               assert(check_proof [] proof6 (Implies(ais,prB')));
+               let c' = sequent_formula hyps concls in
+               let taut = Implies(Implies(ais, prB'), c') in
+               let taut' = Pr(PropTaut(taut), taut) in
+               let proof7 = ConstSpec in (* taut' *)
+               assert(check_proof [] proof7 taut');
+               let proof8 = axiom (Implies(Pr(pT,atomA),atomA)) in (* taut'->taut *)
+               assert(check_proof [] proof8 (Implies(taut', taut)));
+               let proof9 = MP(taut', proof7, proof8) in (* taut *)
+               assert(check_proof [] proof9 taut);
+               let proof10 = MP(Implies(ais, prB'), proof6, proof9) in (* c' *)
+               assert (check_proof [] proof10 c');
+               let proof11, tC' = lift [] proof10 c' in
+               subst2, tC', c', proof11
+          | _ ->
+               raise Not_implemented
+         end
+			*)
 
 let realize derivation =
    let families, map, counter, derivation1 = assign FamilyPart.empty 0 derivation in

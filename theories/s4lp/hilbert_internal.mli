@@ -57,6 +57,7 @@ sig
       Axiom of LP.formula
     | AxiomFalsum
     | NegLeft of LP.formula * gentzen
+	 | NegRight of LP.formula * gentzen
     | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
     | ImplRight of LP.formula * LP.formula * gentzen
 	 | AndLeft of LP.formula * LP.formula * gentzen

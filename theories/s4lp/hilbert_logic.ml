@@ -89,6 +89,13 @@ struct
 				 | _ ->
 				 		raise (RefineError("Structured_S4_Logic.append_inf unexpected argument of NegLeft", TermError hyp))
 				end
+		 | Negr, t::ts ->
+		 		begin match term2formula hyp with
+					Neg a ->
+						(NegRight(a, t), FSet.empty, FSet.empty) :: ts
+				 | _ ->
+                  raise (RefineError("Structured_S4_Logic.append_inf unexpected argument of NegRight", TermError hyp))
+				end
        | Impl,t1::t2::ts ->
             let implication = term2formula hyp in
             begin match implication with
@@ -173,6 +180,10 @@ match derivation with
  		let hyps0 = FSet.remove hyps (Neg a) in
 		let concls0 = FSet.add concls a in
 		NegLeft(a, fill_sequents hyps0 concls0 subder), hyps, concls
+ | NegRight(a, subder), _, _ ->
+ 		let hyps0 = FSet.add hyps a in
+		let concls0 = FSet.remove concls (Neg a) in
+		NegRight(a, fill_sequents hyps0 concls0 subder), hyps, concls
  | ImplLeft(a, b, left, right), _, _ ->
  		let gamma = FSet.remove hyps (Implies(a,b)) in
 		ImplLeft(a,b,
@@ -288,6 +299,30 @@ let _ = (* OrRight test *)
       [inf] ->
          printf "Filling in sequents\n";
          let g = fill_sequents (FSet.singleton af) (FSet.singleton abf) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+
+let _ = (* NegLeft test *)
+   let a = Atom(add "a") in
+   let af = Neg a in
+   let atm = formula2term af in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [formula2term a; atm] [] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.add (FSet.singleton a) af) FSet.empty inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+
+let _ = (* NegRight test *)
+   let a = Atom(add "a") in
+   let af = Neg(Box(Modal 0, Neg a)) in
+   let atm = formula2term af in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [formula2term a] [atm] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.singleton a) (FSet.singleton af) inf in
          realize g
     | _ -> raise (Invalid_argument "resulting inference has more than one root")
 

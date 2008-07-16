@@ -801,6 +801,7 @@ struct
       Axiom of LP.formula
     | AxiomFalsum
     | NegLeft of LP.formula * gentzen
+	 | NegRight of LP.formula * gentzen
     | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
     | ImplRight of LP.formula * LP.formula * gentzen
 	 | AndLeft of LP.formula * LP.formula * gentzen
@@ -821,6 +822,11 @@ struct
        | NegLeft(a,subderivation) ->
             NegLeft(
                subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+		 | NegRight(a,subderivation) ->
+		 		NegRight(
+				   subst_provisionals_in_formula subst a,
                subst_provisionals_in_gentzen subst subderivation
             )
        | ImplLeft(a,b,left,right) ->
@@ -1046,6 +1052,19 @@ let result = match deriv with
          NegLeft(a', subder0),
          FSet.add hyps0 nega',
          FSet.remove concls0 a'
+      )
+ | NegRight(a, subder), hyps, concls ->
+		let families0, map0, counter0, subder0 = assign families counter subder in
+      let _, hyps0, concls0 = subder0 in
+      let a' = FMap.find map0 a in
+      let nega' = Neg a' in
+      families0,
+      FMap.add (FMap.remove map0 a) (Neg a) nega',
+      counter0,
+      (
+         NegRight(a', subder0),
+         FSet.remove hyps0 a',
+         FSet.add concls0 nega'
       )
  | ImplLeft(a,b,left,right), hyps, concls ->
       let families0, map0, counter0, left' = assign families counter left in
@@ -1380,6 +1399,10 @@ let rec g2h families subst = function
          realize_axiom subst hyps concls
     | NegLeft(f, subderivation), hyps, concls ->
          assert (FSet.mem hyps (Neg f));
+         let subst', tC, c, proofTC = g2h families subst subderivation in
+         realize_chain_rule subst' tC c proofTC hyps concls
+	 | NegRight(f, subderivation), hyps, concls ->
+         assert (FSet.mem concls (Neg f));
          let subst', tC, c, proofTC = g2h families subst subderivation in
          realize_chain_rule subst' tC c proofTC hyps concls
     | ImplLeft(a, b, left, right), hyps, concls ->

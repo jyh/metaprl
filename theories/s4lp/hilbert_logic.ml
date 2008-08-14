@@ -326,3 +326,150 @@ let _ = (* NegRight test *)
          realize g
     | _ -> raise (Invalid_argument "resulting inference has more than one root")
 
+let _ =
+   let a = Atom(add "a") in
+   let c = Box(Modal 1, Implies(a,a)) in
+   let ctm = formula2term c in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [] [ctm] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.empty) (FSet.singleton c) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+
+(* test0: box[0]{'a} >- concl{| box[1]{'a} |} *)
+let _ =
+	let a = Atom(add "a") in
+	let h = Box(Modal 0, a) in
+	let c = Box(Modal 1, a) in
+	let htm = formula2term h in
+	let ctm = formula2term c in
+	let infs = gen_prover (Some 100) Jlogic_sig.S4 [htm] [ctm] in
+	match infs with
+		[inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.singleton h) (FSet.singleton c) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+
+(* test1: box[2]{box[0]{'a}} >- concl{| box[1]{'a} |} *)
+let _ =
+   let a = Atom(add "a") in
+   let h = Box(Modal 2, Box(Modal 0, a)) in
+   let c = Box(Modal 1, a) in
+   let htm = formula2term h in
+   let ctm = formula2term c in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [htm] [ctm] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.singleton h) (FSet.singleton c) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+
+(* test1a: box[0]{box[2]{box[0]{'a}}} >- concl{| box[1]{'a} |} *)
+let _ =
+   let a = Atom(add "a") in
+   let h = Box(Modal 0, Box(Modal 2, Box(Modal 0, a))) in
+   let c = Box(Modal 1, a) in
+   let htm = formula2term h in
+   let ctm = formula2term c in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [htm] [ctm] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.singleton h) (FSet.singleton c) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+
+(* Wise men *)
+
+let m1 = Atom(add "m1")
+let m2 = Atom(add "m2")
+let m3 = Atom(add "m3")
+
+let kwh i a = Or(Box(Modal i, a), Box(Modal i, Neg a))
+(*
+let kao = And(kwh 1 m2, And(kwh 1 m3, And(kwh 2 m1, kwh 2 m3)))
+
+let w0 = And(Box(Modal 0, kao), Box(Modal 0, Neg(And(Neg m1, And(Neg m2, Neg m3)))))
+
+let w2 = And(w0, And(Box(Modal 0, Neg(kwh 1 m1)), Box(Modal 0, Neg(kwh 2 m2))))
+
+let _= (* sequent { w2 >- concl{| box[0]{m3} |} } *)
+   let h = w2 in
+   let c = Box(Modal 0, m3) in
+   let htm = formula2term h in
+   let ctm = formula2term c in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [htm] [ctm] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.singleton h) (FSet.singleton c) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+*)
+(* Muddy children, 4 children *)
+
+let c1 = Atom(add "c1")
+let c2 = Atom(add "c2")
+let c3 = Atom(add "c3")
+let c4 = Atom(add "c4")
+
+let mch4_KAO = Box(Modal 0,
+   List.fold_left (fun x acc -> And(x, acc)) (kwh 1 c2)
+		[	kwh 1 c3 ; kwh 1 c4 ;
+      	kwh 2 c1 ; kwh 2 c3 ; kwh 2 c4 ;
+      	kwh 3 c1 ; kwh 3 c2 ; kwh 3 c4 ;
+      	kwh 4 c1 ; kwh 4 c2 ; kwh 4 c3
+		]
+)
+
+let s = Or(kwh 1 c1, Or(kwh 2 c2, Or(kwh 3 c3, kwh 4  c4)))
+
+let nbk = Box(Modal 0,
+	And(Neg(kwh 1 c1), And(Neg(kwh 2 c2), And(Neg(kwh 3 c3), Neg(kwh 4 c4))))
+)
+
+let s0 = And(c1, And(c2, And(Neg c3, Neg c4)))
+let s1 = Box(Modal 0, Or(c1, Or(c2, Or(c3, c4))))
+let s2 =
+   Box(Modal 0,
+      Or(And(c1, c2),
+      Or(And(c1, c3),
+      Or(And(c1, c4),
+      Or(And(c2, c3),
+      Or(And(c2, c4),
+      And(c3, c4))))))
+   )
+
+let s3 =
+   Box(Modal 0,
+      And(kwh 1 c1,
+      kwh 2 c2)
+   )
+
+let short_KAO =
+   Box(Modal 0,
+      And(kwh 1 c2, And(kwh 1 c3, And(kwh 1 c4,
+      And(kwh 2 c1, And(kwh 2 c3, kwh 2 c4)))))
+   )
+
+(*
+interactive muddy_children :
+   sequent { s0; s2; NBK; mch4_KAO >- concl {| box[1]{c1} & box[2]{c2} & box[3]{not{c3}} & box[4]{not{c4}} |} }
+*)
+let _=
+   let h = [s0;s2;nbk;mch4_KAO] in
+   let c = And(Box(Modal 1, c1), And(Box(Modal 2, c2), And(Box(Modal 3, Neg c3), Box(Modal 4, Neg c4)))) in
+   let htm = List.map formula2term h in
+   let ctm = formula2term c in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 htm [ctm] in
+   match infs with
+      [inf] ->
+         printf "Filling in sequents\n";
+         let g = fill_sequents (FSet.of_list h) (FSet.singleton c) inf in
+         realize g
+    | _ -> raise (Invalid_argument "resulting inference has more than one root")
+

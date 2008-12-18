@@ -463,13 +463,16 @@ interactive muddy_children :
 let _=
    let h = [s0;s2;nbk;mch4_KAO] in
    let c = And(Box(Modal 1, c1), And(Box(Modal 2, c2), And(Box(Modal 3, Neg c3), Box(Modal 4, Neg c4)))) in
-   let htm = List.map formula2term h in
-   let ctm = formula2term c in
-   let infs = gen_prover (Some 100) Jlogic_sig.S4 htm [ctm] in
+	let goal = Implies(And(s0,And(s2,And(nbk,mch4_KAO))), c) in
+(*   let htm = List.map formula2term h in
+   let ctm = formula2term c in*)
+	let goal_tm = formula2term goal in
+   let infs = gen_prover (Some 100) Jlogic_sig.S4 [] [goal_tm] in
    match infs with
       [inf] ->
          printf "Filling in sequents\n";
-         let g = fill_sequents (FSet.of_list h) (FSet.singleton c) inf in
-         realize g
+			let hyps = FSet.of_list h in
+         let g = fill_sequents hyps (FSet.empty) inf in
+         full g
     | _ -> raise (Invalid_argument "resulting inference has more than one root")
 

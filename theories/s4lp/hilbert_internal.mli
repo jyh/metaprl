@@ -74,3 +74,4 @@ val check_proof : formula list -> formula hilbert -> formula -> bool
 val lift : formula list -> formula hilbert -> formula -> formula hilbert * proof_term
 val deduction : formula -> formula list -> formula hilbert -> formula -> formula hilbert
 val realize : S4G.gentzen -> proof_term * formula * formula hilbert
+val full : S4G.gentzen -> unit

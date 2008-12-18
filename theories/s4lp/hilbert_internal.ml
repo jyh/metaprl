@@ -609,7 +609,10 @@ let rec check_proof_hidden hyps d f hidden =
             true, hidden1
          else check_proof_hidden hyps d2 f hidden
 	 | Hyp i ->
-	 		List.nth hyps i = f, hidden
+	 		if(i < List.length hyps) then
+		 		List.nth hyps i = f, hidden
+			else
+				false, hidden
 	 | ConstSpec ->
 	 		begin match f with
 				Pr(PropTaut(f1), f2) when compare f1 f2 = 0 ->
@@ -642,10 +645,12 @@ let atomB = atom "b"
 let atomC = atom "c"
 
 (* from proofs of s:a->b and t:a build a proof of s*t:b *)
-let appProof s b s_ab_proof t a t_a_proof =
+let appProof hyps s b s_ab_proof t a t_a_proof =
+	assert(check_proof hyps s_ab_proof (Pr(s,Implies(a,b))));
+	assert(check_proof hyps t_a_proof (Pr(t,a)));
 	let pr_s_ab = Pr(s,Implies(a,b)) in
 	let st = App(s,t) in
-	MP(
+	let st_b_proof = MP(
 		Pr(t,a),
 		t_a_proof,
 		MP(
@@ -653,10 +658,12 @@ let appProof s b s_ab_proof t a t_a_proof =
 			s_ab_proof,
 			axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB))))
 		)
-	),
-	st
+	) in
+	assert(check_proof hyps st_b_proof (Pr(st,b)));
+	st_b_proof, st
 
 let rec lift hyps d f =
+	assert(check_proof hyps d f);
 	let checkAxiom = axiom (Implies(Pr(pT,atomS),Pr(Check(pT),Pr(pT,atomS)))) in
 	match d, f with
 	 | Axiom i, Pr(t,a) ->
@@ -701,14 +708,17 @@ let rec lift hyps d f =
     | MP(a,d1,d2), _ ->
          let ld1, a_pt = lift hyps d1 a in
          let ld2, af_pt = lift hyps d2 (Implies(a,f)) in
-			appProof af_pt f ld2 a_pt a ld1
+			appProof hyps af_pt f ld2 a_pt a ld1
 	 | Nec(i,d1), Box(Modal i1, f1) when i=i1 ->
 	 		let ld1, f1_pt = lift hyps d1 f1 in
 			let pr_f1 = Pr(f1_pt, f1) in
 			let lld1, check_f1_pt = lift hyps ld1 pr_f1 in
-			let connection = Implies(Pr(f1_pt,f1),Box(Modal i, f1)) in
+			let concl = f in (*Box(Modal i, f1)*)
+			let connection = Implies(pr_f1,concl) in
 			let ai = axiom_index connection in
-			appProof (Const ai) connection (Axiom ai) check_f1_pt pr_f1 lld1
+			let pr_conn_proof = Axiom ai in
+			let lconn, conn_pt = lift hyps pr_conn_proof connection in
+			appProof hyps (Const ai) concl lconn check_f1_pt pr_f1 lld1
 	 | Nec(_,_), _ ->
 	 		raise (Invalid_argument "lift: Nec used to prove a wrong formula")
 
@@ -1269,7 +1279,9 @@ let realize_chain_rule subst tC c proofTC hyps concls =
    let tail3 = axiom (Implies(Pr(pS,Implies(atomA,atomB)),Implies(Pr(pT,atomA),Pr(App(pS,pT),atomB)))) in (* a proof of tR:(c->c')->(tC:c->tR*tC:c') *)
    let tail4 = MP(Pr(tR, cc'), tail2, tail3) in (* a proof of tC:c->tR*tC:c' *)
    let tail5 = MP(Pr(tC,c), proofTC, tail4) in (* a proof of tR*tC:c' *)
-   subst, App(tR,tC), c', tail5
+   let resultT, resultF, resultProof = App(tR,tC), c', tail5 in
+	assert(check_proof [] resultProof (Pr(resultT, resultF)));
+	subst, resultT, resultF, resultProof
 
 let realize_branch_rule subst tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
    let c' = sequent_formula hyps concls in
@@ -1284,11 +1296,15 @@ let realize_branch_rule subst tC1 c1 proofTC1 tC2 c2 proofTC2 hyps concls =
    let proof5 = appAxiom in (*for tR*tC1:d->(tC2:c2->tR*tC1*tC2:c') *)
    let proof6 = MP(Pr(App(tR, tC1), d), proof4, proof5) in (*for tC2:c2->tR*tC1*tC2:c' *)
    let proof7 = MP(Pr(tC2, c2), proofTC2, proof6) in (*for tR*tC1*tC2:c' *)
-   subst, App(App(tR, tC1), tC2), c', proof7
+   let resultT, resultF, resultProof = App(App(tR, tC1), tC2), c', proof7 in
+	assert(check_proof [] resultProof (Pr(resultT, resultF)));
+   subst, resultT, resultF, resultProof
 
 let realize_axiom subst hyps concls =
    let f' = sequent_formula hyps concls in
-   subst, PropTaut f', f', ConstSpec
+   let resultT, resultF, resultProof = PropTaut f', f', ConstSpec in
+	assert(check_proof [] resultProof (Pr(resultT, resultF)));
+   subst, resultT, resultF, resultProof
 
 let add_family families fam t f =
    Lm_printf.printf "family: %i\n" fam;
@@ -1533,7 +1549,7 @@ let rec g2h families subst = function
          realize_axiom subst hyps concls
     | NegLeft(f, subderivation), hyps, concls ->
          assert (FSet.mem hyps (Neg f));
-         let subst', tC, c, proofTC = g2h families subst subderivation in
+			let subst', tC, c, proofTC = g2h families subst subderivation in
          realize_chain_rule subst' tC c proofTC hyps concls
 	 | NegRight(f, subderivation), hyps, concls ->
          assert (FSet.mem concls (Neg f));
@@ -1615,6 +1631,7 @@ let rec g2h families subst = function
                let proof10 = MP(Implies(ais, prB'), proof6, proof9) in (* c' *)
                assert (check_proof [] proof10 c');
                let proof11, tC' = lift [] proof10 c' in
+					assert(check_proof [] proof11 (Pr(tC', c')));
                subst2, tC', c', proof11
           | _ ->
                raise Not_implemented
@@ -1684,7 +1701,9 @@ let rec g2h families subst = function
 							proof7
 						)
 					in
+					assert(check_proof [] proof8 c');
 					let proof9, tC' = lift [] proof8 c' in
+					assert(check_proof [] proof9 (Pr(tC', c')));
                subst1, tC', c', proof9
           | _ ->
                raise Not_implemented
@@ -1804,7 +1823,8 @@ let rec lp_free subst f =
             let subst' = FMap.add subst f v in
             subst', Atom v
 
-let tC, c, proof = realize proof1 in
+let full proof1 =
+	let tC, c, proof = realize proof1 in
    Lm_printf.printf "result: %a\nproof: %a\n" print_formula (Pr(tC, c)) print_hproof proof;
    let check, hidden = check_proof_hidden [] proof (Pr(tC, c)) FSet.empty in
    assert check;

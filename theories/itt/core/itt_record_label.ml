@@ -6,7 +6,6 @@ open Basic_tactics
 open Base_meta
 open Itt_squiggle
 open Itt_struct
-open Itt_equal
 
 (******************)
 (*  Defenitions   *)
@@ -20,11 +19,13 @@ prim labelMember {| intro [] |} :
    sequent { <H> >- label[t:t] in label } =
    it
 
+(* unused
 let label_term = << label[x:t] >>
 let label_opname = opname_of_term label_term
 let is_label_term = TermOp.is_string_term label_opname
 let dest_label = TermOp.dest_string_term label_opname
 let mk_label_term = TermOp.mk_string_term label_opname
+ *)
 
 (**** equality ****)
 

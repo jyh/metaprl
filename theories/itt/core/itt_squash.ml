@@ -77,8 +77,6 @@ extends Itt_image
 extends Itt_pairwise
 doc docoff
 
-open Lm_debug
-open Lm_printf
 open Term_stable
 
 open Basic_tactics

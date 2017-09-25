@@ -51,12 +51,7 @@ extends Itt_equal
 
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Dtactic
-
-open Itt_equal
 
 doc <:doc<
    @modsection{Definition}

@@ -80,11 +80,13 @@ interactive assert_decidable 'p :
 
 doc docoff
 
+(* unused
 let decidable_term = <<decidable{'p}>>
 let decidable_opname = opname_of_term decidable_term
 let is_decidable_term = is_dep0_term decidable_opname
 let mk_decidable_term = mk_dep0_term decidable_opname
 let dest_decidable_term = dest_dep0_term decidable_opname
+ *)
 
 doc <:doc<
    @tactics

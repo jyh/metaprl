@@ -50,9 +50,6 @@ extends Itt_equal
 extends Itt_squiggle
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 open Itt_equal
 
@@ -73,12 +70,14 @@ declare const atom
 declare token[t:t]
 doc docoff
 
+(* unused
 let atom_term = << atom >>
 let token_term = << token[x:t] >>
 let token_opname = opname_of_term token_term
 let is_token_term = TermOp.is_token_term token_opname
 let dest_token = TermOp.dest_token_term token_opname
 let mk_token_term = TermOp.mk_token_term token_opname
+*)
 
 let bogus_token = << token[token:t] >>
 

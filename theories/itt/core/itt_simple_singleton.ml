@@ -50,8 +50,6 @@ extends Itt_unit
 extends Itt_struct2
 open Basic_tactics
 open Base_rewrite
-open Itt_squiggle
-open Itt_equal
 
 define unfold_singleton: singleton{'a} <--> Img{unit; x.'a}
 

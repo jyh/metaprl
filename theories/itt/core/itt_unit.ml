@@ -18,7 +18,7 @@ doc <:doc<
    See the file doc/htmlman/default.html or visit http://metaprl.org/
    for more information.
 
-   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and 
+   Copyright (C) 1997-2006 MetaPRL Group, Cornell University and
    California Institute of Technology
 
    This program is free software; you can redistribute it and/or
@@ -50,12 +50,8 @@ extends Itt_struct
 extends Itt_squiggle
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 open Itt_equal
-open Itt_struct
 open Itt_squash
 
 (************************************************************************

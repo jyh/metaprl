@@ -51,7 +51,6 @@ open Tactic_type.Conversionals
 
 open Dtactic
 
-open Itt_equal
 open Itt_struct
 
 (************************************************************************

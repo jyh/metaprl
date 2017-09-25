@@ -18,9 +18,6 @@ extends Itt_labels
 
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_struct
@@ -624,7 +621,9 @@ let record_exchangeC n =
          in
             aux n
 
+(* unused
 let t = <<'alpha>>
+ *)
 
 (*************
  * Subtyping

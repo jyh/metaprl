@@ -52,9 +52,6 @@ extends Itt_struct3
 
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Dtactic
 
 doc <:doc<

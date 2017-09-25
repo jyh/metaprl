@@ -953,7 +953,9 @@ dform tree_ind_df : except_mode[tex] :: parens :: "prec"[prec_tree_ind] :: math_
    pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" space slot{'z} space `"in" popm space
    slot{'body} popm ezone
 
+(* unused
 prec prec_cons
+ *)
 prec prec_list
 
 declare search{'a : Dform; 'b : Dform} : Dform

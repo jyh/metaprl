@@ -32,7 +32,6 @@ doc <:doc<
    Author: Yegor Bryukhov @email{ynb@mail.ru}
    @end[license]
 >>
-open Basic_tactics
 open Tactic_type.Tactic
 
 topval normalize2C : conv

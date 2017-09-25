@@ -495,7 +495,9 @@ let dest_assert = dest_dep0_term assert_opname
 
 let ifthenelse_term = << ifthenelse{'e1; 'e2; 'e3} >>
 let ifthenelse_opname = opname_of_term ifthenelse_term
+(* unused
 let mk_ifthenelse_term = mk_dep0_dep0_dep0_term ifthenelse_opname
+ *)
 let is_ifthenelse_term = is_dep0_dep0_dep0_term ifthenelse_opname
 let dest_ifthenelse = dest_dep0_dep0_dep0_term ifthenelse_opname
 
@@ -565,7 +567,7 @@ let search_ifthenelse t vars  =
 (*
  * Filter out all the addresses for the term.
  *)
-let rec filter_ifthenelse term t vars =
+let filter_ifthenelse term t vars =
    (is_ifthenelse_term t) &&
       let t, _, _ = dest_ifthenelse t in
          (alpha_equal t term) && not (SymbolSet.intersectp vars (free_vars_set t))

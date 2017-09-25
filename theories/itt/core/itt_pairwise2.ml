@@ -36,12 +36,6 @@ doc <:doc<
 extends Itt_subtype
 extends Itt_pairwise
 
-doc docoff
-
-open Basic_tactics
-
-doc docon
-
 interactive supertype 'H 'B:
    [wf] sequent  { <H>; x:'A; <J['x]> >- 'A subtype 'B} -->
    sequent  { <H>; x:'B; <J['x]> >- 'T['x]} -->

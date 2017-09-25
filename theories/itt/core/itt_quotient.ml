@@ -131,9 +131,6 @@ extends Itt_struct2
 extends Itt_esquash
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_equal

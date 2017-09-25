@@ -62,7 +62,9 @@ let fold_sqsimple = makeFoldC << sqsimple{'T} >> unfold_sqsimple
 let sqsimple_term = << sqsimple{'T} >>
 let sqsimple_opname = opname_of_term sqsimple_term
 let is_sqsimple_term = is_dep0_term sqsimple_opname
+(* unused
 let mk_sqsimple_term = mk_dep0_term sqsimple_opname
+ *)
 let dest_sqsimple_term = dest_dep0_term sqsimple_opname
 
 let extract_sqsimple tbl =

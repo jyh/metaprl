@@ -92,6 +92,11 @@ rule tunionElimination 'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
 
+val tunion_term : term
+val is_tunion_term : term -> bool
+val dest_tunion : term -> var * term * term
+val mk_tunion_term : var -> term -> term -> term
+
 (*
  * -*-
  * Local Variables:

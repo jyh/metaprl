@@ -97,7 +97,7 @@ let extract_data tbl =
             if !debug_arith_unfold then
                Lm_printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
             conv
-       | None -> 
+       | None ->
             raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
    in
       termC rw
@@ -945,7 +945,9 @@ interactive_rw minus_minus_reduce_rw {| reduce |} :
    ('a in int) -->
    (-(-'a)) <--> 'a
 
+(* unused
 let minus_minus_reduceC = minus_minus_reduce_rw
+ *)
 
 interactive_rw minus_same_rw {| reduce |} :
    ('a in int) -->

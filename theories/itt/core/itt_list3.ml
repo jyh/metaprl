@@ -38,8 +38,6 @@ extends Itt_pairwise
 doc docoff
 
 open Basic_tactics
-open Itt_struct
-open Itt_equal
 
 (************************************************************************
  * Prefixes, suffixes, and elements.

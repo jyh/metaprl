@@ -47,13 +47,10 @@ doc <:doc<
 extends Itt_equal
 doc docoff
 
-open Lm_debug
-open Lm_printf
 open Lm_int_set
 
 open Basic_tactics
 open Term_hash_code
-open Simple_print
 
 open Itt_equal
 
@@ -385,7 +382,7 @@ doc <:doc<
    @docoff
 >>
 
-let rec moveRightWD n k tac = (* moves hyps [n:m] right up to k, supposed 0<n<=k *)
+let moveRightWD n k tac = (* moves hyps [n:m] right up to k, supposed 0<n<=k *)
    let rec move n m= (* supposed 0<n<=m<=k *)
       funT (fun p->
       if m=k then tac n
@@ -394,7 +391,7 @@ let rec moveRightWD n k tac = (* moves hyps [n:m] right up to k, supposed 0<n<=k
                (*else*)  (move n (m+1)))
    in move n n
 
-let rec moveLeftWD n k tac = (* moves hyps [n:m] left up to k, supposed 0<k<=n *)
+let moveLeftWD n k tac = (* moves hyps [n:m] left up to k, supposed 0<k<=n *)
    let rec move n m= (* supposed 0<k<=n<=m *)
       funT (fun p->
       if n=k then tac m

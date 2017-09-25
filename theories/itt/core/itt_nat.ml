@@ -69,7 +69,9 @@ doc terms
 define const unfold_nat : nat <--> ({x:int | 'x>=0})
 define unfold_finite_nat : nat{'k} <--> int_seg{0; 'k}
 
+(* unused
 let fold_finite_nat = makeFoldC << nat{'k} >> unfold_finite_nat
+ *)
 
 define unfold_nat_plus : nat_plus <--> ({x:int | 'x>0})
 
@@ -166,7 +168,7 @@ doc docoff
 
 let resource nth_hyp += [
    << number[m:n] = number[n:n] in nat >>, <<'C>>,
-   wrap_nth_hyp_uncertain (fun i -> 
+   wrap_nth_hyp_uncertain (fun i ->
       eq_2beq_nat i
          thenT rw (addrC [Subterm 1] Itt_int_base.reduce_eq_int) (-1)
          thenT Itt_bool.assert_false (-1));
@@ -227,7 +229,7 @@ let elim_nat_eq fwd = argfunT (fun i p ->
                         equalityElimination i thenT tac
                      else if tac == idT then
                         raise err
-                     else 
+                     else
                         tac
        | Context _ ->
             raise err)
@@ -340,9 +342,9 @@ doc docoff
 
 let splitNatT =
    let rec iter i =
-      if i = 0 then 
-         idT 
-      else 
+      if i = 0 then
+         idT
+      else
          let tac = tryT (progressT (hypSubstT (-1) i) thenT rwh reduce_ind_base i) in
             if i = 1 then tac else (tac thenT iter (i - 1))
    in

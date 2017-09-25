@@ -66,7 +66,6 @@ doc docoff
 open Basic_tactics
 
 open Itt_struct
-open Itt_equal
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -169,7 +168,9 @@ interactive tunionElimination_sq {| elim [ThinOption thinT] |}  'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
 doc docoff
+(* unused
 let thinLastT n = (thinT (-1) thenT tryT (thinT n))
+ *)
 doc docon
 
 interactive tunionElimination_eq (* {| elim [ThinOption thinLastT] |} *) 'H :

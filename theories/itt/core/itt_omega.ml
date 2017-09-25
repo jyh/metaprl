@@ -50,9 +50,6 @@ open Lm_printf
 
 open Lm_num
 
-open Supinf
-
-open Simple_print
 open Basic_tactics
 
 open Itt_equal
@@ -78,8 +75,10 @@ let debug_arith_dtactic =
         debug_value = false
       }
 
+(* unused
 let debug_rewrite = load_debug "rewrite"
 let debug_refine = load_debug "refine"
+ *)
 
 module type RingSig =
 sig
@@ -150,11 +149,13 @@ struct
             index
          end
 
+(* unused
    let print out info =
       let count,table=info in
       let aux k d = fprintf out "%a ->v%i%t" print_term k d eflush in
       (*printf "count=%i%t" !count eflush;*)
       Table.iter aux table
+*)
 
    let invert ((count,table) : t) =
       let ar=Array.make !count (Ring.term_of Ring.ringZero) in
@@ -374,7 +375,7 @@ struct
     | [(v,k)] -> term_of_monom info k v
     | (v,k)::tl -> Ring.add_term (term_of_monom info k v) (term_of_aux info tl)
 
-   let rec term_of info f =
+   let term_of info f =
       let l=Table.list_of f in
       let aux = function
          (k,[d]) -> (k,d)
@@ -386,6 +387,7 @@ struct
 
 end
 
+(* unused
 module MakeArrayAF(Ring : RingSig)
    : AF_Sig with
 	type ring=Ring.ring and
@@ -547,7 +549,9 @@ struct
 		term_of_aux info f (Array.length f) (Ring.term_of f.(constvar)) 1
 
 end
+ *)
 
+(* unused
 module MakeDebugAF(Ring : RingSig)
 	(AF1: AF_Sig with type ring=Ring.ring) (* less trusted module *)
 	(AF2: AF_Sig with type ring=Ring.ring) (* more trusted module *)
@@ -775,6 +779,7 @@ struct
 		AF2.term_of info f2
 
 end
+*)
 
 module IntRing =
 struct
@@ -822,7 +827,9 @@ struct
 		else
 			neg abs_div
 
+(* unused
 	let sign_num a = num_of_int (compare_num a num0)
+*)
 
    let compare = compare_num
    let equal = eq_num
@@ -935,8 +942,10 @@ struct
 		let key = get_key dim f in
 		add_aux info key constr
 
+(* unused
 	let get (dim,table) key =
 		Hash.find table key
+*)
 
 	let iter f (dim,table) = Hash.iter f table
 
@@ -1186,7 +1195,7 @@ let omega_aux v ((c1,t1,l),(c2,t2,u)) =
 	let s = (Solve (v,c1,t1,l,c2,t2,u),	AF.sub_scaled (AF.scale c1 u) c2 l) in
 	norm s
 
-let rec compute_metric pool key (tree,f) =
+let compute_metric pool key (tree,f) =
 	Array.iteri (fun v m -> pool.(v) <- add m (abs (AF.coef f (succ v)))) pool
 
 let rec min_index_aux pool result current =
@@ -1232,7 +1241,7 @@ let pick_var pool constrs =
 			raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
 *)
 
-let rec get_bounds_aux v key constr (l,u,rest) =
+let get_bounds_aux v key constr (l,u,rest) =
 	let tree, f = constr in
 	let c = AF.coef f v in
 	if isPositive c then
@@ -1301,7 +1310,7 @@ let remove_unbound_vars_aux pool constrs =
 	let unbound_vars = collect_unbound_vars pool [] 0 in
 	C.filter (fun k (tree,f) -> no_unbound_vars f unbound_vars) constrs
 
-let rec remove_unbound_vars pool constrs =
+let remove_unbound_vars pool constrs =
 	let new_constrs = remove_unbound_vars_aux pool constrs in
 	(*
 	if C.length new_constrs < C.length constrs then
@@ -1588,12 +1597,14 @@ and
  | [] ->
 		Node (List.rev mapped)
 
+(* unused
 let rec leaves2list = function
 	Node edges ->
 		let lists = List.map (fun (data,tree) -> leaves2list tree) edges in
 		List.flatten lists
  | Leaf data ->
 		[data]
+*)
 
 let allhyps2ge p tree =
 	hyp2ge p tree (all_hyps p)
@@ -1672,6 +1683,7 @@ let ge_elimT = argfunT (fun i p ->
     | None -> idT
 )
 
+(* unused
 let rec prune_tree used_hyps = function
 	Node edges ->
 		let terms, subtree = List.hd edges in
@@ -1682,6 +1694,7 @@ let rec prune_tree used_hyps = function
 		else
 			prune_tree used_hyps subtree
  | Leaf data -> Leaf data
+*)
 
 let isEmptyOrMainLabel l =
    (l="") or (List.mem l main_labels)

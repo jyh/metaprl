@@ -62,8 +62,6 @@ extends Itt_struct
 extends Itt_squash
 doc docoff
 
-open Lm_printf
-
 open Basic_tactics
 open Term_dtable
 

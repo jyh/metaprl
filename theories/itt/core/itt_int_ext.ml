@@ -55,9 +55,6 @@ extends Itt_bool
 extends Itt_int_base
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 open Base_meta
 
@@ -92,7 +89,7 @@ define opaque unfold_div :
             -'div 'a (-'b)
          else
             'div 'a 'b)
-                           
+
 define opaque unfold_rem:
    "rem"{'a; 'b} <--> 'a -@ ("div"{'a; 'b} *@ 'b)
 
@@ -123,11 +120,13 @@ let resource reduce += [
  * TERMS                                                                *
  ************************************************************************)
 
+(* unused
 let bneq_int_term = << bneq_int{'x; 'y} >>
 let bneq_int_opname = opname_of_term bneq_int_term
 let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
 let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
 let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
+ *)
 
 let mul_term = << 'x *@ 'y >>
 let mul_opname = opname_of_term mul_term
@@ -231,7 +230,7 @@ let dest_neq_int = dest_dep0_dep0_term neq_int_opname
 let dest_geT = argfunT (fun i p ->
    let t = if i = 0 then concl p else nth_hyp p i in
       (rw (
-         if is_ge_term t then 
+         if is_ge_term t then
             unfold_ge thenC (addrC [Subterm 1] unfold_ge_bool)
          else
             addrC [Subterm 1] unfold_ge_bool) i)
@@ -700,7 +699,9 @@ interactive mul_Zero {| intro[] |} :
 interactive_rw mul_Zero_rw {| reduce; arith_unfold |} :
    (0 *@ 'a) <--> 0
 
+(* unused
 let mul_ZeroC = mul_Zero_rw
+ *)
 
 interactive mul_Zero2 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
@@ -710,7 +711,9 @@ interactive_rw mul_Zero2_rw {| reduce; arith_unfold |} :
    ('a in int) -->
    ('a *@ 0) <--> 0
 
+(* unused
 let mul_Zero2C = mul_Zero2_rw
+ *)
 
 interactive_rw mul_Zero3C 'a :
    0 <--> (0 *@ 'a)

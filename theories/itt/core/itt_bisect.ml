@@ -48,7 +48,6 @@ extends Itt_bool
 doc docoff
 
 open Basic_tactics
-open Itt_equal
 open Itt_struct
 
 (************************************************************************

@@ -32,10 +32,6 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
-open Lm_debug
-open Lm_printf
-
 extends Itt_equal
 extends Itt_squash
 extends Itt_subtype

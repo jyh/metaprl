@@ -57,14 +57,11 @@ extends Itt_struct
 extends Itt_subtype
 doc docoff
 
-open Lm_debug
-open Lm_printf
 open Unify_mm
 
 open Basic_tactics
 
 open Itt_equal
-open Itt_struct
 open Itt_subtype
 
 (************************************************************************

@@ -54,7 +54,6 @@ extends Itt_logic
 extends Itt_sqsimple
 doc docoff
 
-open Lm_debug
 open Lm_printf
 
 open Basic_tactics
@@ -265,26 +264,26 @@ doc <:doc<
    The @tt[allVarElimT] tactic eliminates all possible variables.
 >>
 
-interactive variable_elim 'H 'J: <:xrule<
-      "aux": <H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- sqsimple{B[x]} -->
-      <H>; <J[t]>; <K[t]> >- C[t] -->
-      <H>; x:A;  <J[x]>; x=t<|H|> in B[x]; <K[x]> >- C[x]
+interactive variable_elim 'H 'J : <:xrule<
+      "aux": <H>; x:'A;  <J['x]>; 'x='t in B['x]; <K['x]> >- sqsimple{B['x]} -->
+      <H>; <J['t]>; <K['t]> >- C['t] -->
+      <H>; x:'A;  <J['x]>; 'x='t<|H|> in 'B['x]; <K['x]> >- 'C['x]
    >>
 
-interactive variable_elim2 'H 'J: <:xrule<
-      "aux": <H>; x:A;  <J>; x=t in B[x]; <K[x]> >- sqsimple{B[x]} -->
-      <H>; <J>; <K[t]> >- C[t] -->
-      <H>; x:A;  <J>; x=t in B[x]; <K[x]> >- C[x]
+interactive variable_elim2 'H 'J : <:xrule<
+      "aux": <H>; x:'A;  <J>; 'x='t in B['x]; <K['x]> >- sqsimple{B['x]} -->
+      <H>; <J>; <K['t]> >- C['t] -->
+      <H>; x:'A;  <J>; 'x='t in B['x]; <K['x]> >- C['x]
    >>
 
 interactive var_eq_rev 'H 'J: <:xrule<
-      "yes":<H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- C[x] -->
-      <H>; x:A;  <J[x]>; t=x in B[x]; <K[x]> >- C[x]
+      "yes":<H>; x:'A;  <J['x]>; 'x='t in B['x]; <K['x]> >- C['x] -->
+      <H>; x:'A;  <J['x]>; 't='x in B['x]; <K['x]> >- C['x]
    >>
 
 interactive is_var_eq 'H 'J: <:xrule<
-      "yes":<H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- C[x] -->
-      <H>; x:A;  <J[x]>; x=t in B[x]; <K[x]> >- C[x]
+      "yes":<H>; x:'A;  <J['x]>; 'x='t in B['x]; <K['x]> >- C['x] -->
+      <H>; x:'A;  <J['x]>; 'x='t in B['x]; <K['x]> >- C['x]
    >>
 
 
@@ -326,9 +325,9 @@ doc <:doc<
       The following rule is the reverse of the Elimination rule. It is used in the @tactic[combineT] tactic.
 >>
 interactive prod_rev_elim 'H: <:xrule<
-      "wf": <H>; x:A; y:B[x]; <J[x;y]>; z:A >- B[z] Type -->
-      <H>; p:Prod x:'A*'B['x]; <J[fst{p};snd{p}]> >- C[fst{p};snd{p}] -->
-      <H>; x:A; y:B[x]; <J[x;y]> >- C[x;y]
+      "wf": <H>; x:'A; y:B['x]; <J['x;'y]>; z:'A >- B['z] Type -->
+      <H>; p:Prod x:'A*'B['x]; <J[fst{'p};snd{'p}]> >- C[fst{'p};snd{'p}] -->
+      <H>; x:'A; y:B['x]; <J['x;'y]> >- C['x;'y]
 >>
 
 doc <:doc<
@@ -357,10 +356,10 @@ let rec separateT m n = funT( fun p ->
 
 
 interactive reduceForallProd {| forward[] |} 'H : <:xrule<
-     "wf": <H>;  all p: (Prod x:A*B[x]).C[p]; <J> >- A Type -->
-     "wf": <H>;  all p: (Prod x:A*B[x]).C[p]; <J>; x:A >- B[x] Type -->
-     <H>; all x:A. all p:B[x].C[(x,p)]; <J> >- T -->
-     <H>; all p: (Prod x:A*B[x]).C[p]; <J> >- T
+     "wf": <H>;  all p: (Prod x:'A*B['x]).C['p]; <J> >- 'A Type -->
+     "wf": <H>;  all p: (Prod x:'A*B['x]).C['p]; <J>; x:'A >- B['x] Type -->
+     <H>; all x:'A. all p:B['x].C[('x,'p)]; <J> >- 'T -->
+     <H>; all p: (Prod x:'A*B['x]).C['p]; <J> >- 'T
 >>
 
 let rec reduceForallProdT n = funT( fun p ->

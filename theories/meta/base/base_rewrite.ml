@@ -61,8 +61,6 @@ doc docoff
 extends Perv
 extends Ocaml_df
 
-open Refiner.Refiner.TermMan
-
 open Tactic_type.Conversionals
 
 open Dtactic

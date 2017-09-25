@@ -63,7 +63,6 @@ doc docoff
 
 open Lm_debug
 open Lm_printf
-open Simple_print
 
 open Browser_resource
 
@@ -688,6 +687,7 @@ let resource typeinf += [
 (*
  * Move hyps dependeing on the var to the conclusion.
  *)
+(* unused
 let rec intersects vars fv =
    match vars with
       [] ->
@@ -697,6 +697,7 @@ let rec intersects vars fv =
             true
          else
             intersects tl fv
+*)
 
 doc <:doc<
    @tactics
@@ -731,7 +732,9 @@ doc <:doc<
    @docoff
 >>
 
+(* unused
 let none_var = Lm_symbol.add "none"
+*)
 
 let moveToConclT =
    let err = RefineError("moveToConclT",StringError "is a context") in
@@ -1404,7 +1407,7 @@ declare jprover : SelectOption
 let jprover_selector = << select["jprover":t] >>
 let jprover_options = rule_labels_of_terms [jprover_selector]
 
-let simple_jproverT = 
+let simple_jproverT =
    let err = RefineError("Itt_logic.simple_jproverT", StringError ("JProver is excluded")) in
       funT (fun p ->
          if rule_labels_are_allowed (get_option_args p) jprover_options then

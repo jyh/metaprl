@@ -46,19 +46,14 @@ doc docoff
 
 open Basic_tactics
 
-open Lm_debug
 open Lm_symbol
-open Lm_printf
 
 open Term_sig
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.Rewrite
 open Refiner.Refiner.RefineError
-open Dform
-open Lm_rformat
 
 (************************************************************************
  * List utilities.
@@ -68,7 +63,9 @@ open Lm_rformat
  * Lists.
  *)
 let rnil_term = << rnil >>
+(* unused
 let rnil_opname = opname_of_term rnil_term
+*)
 let is_rnil_term = alpha_equal rnil_term
 
 let rcons_term = << rcons{'a; 'b} >>

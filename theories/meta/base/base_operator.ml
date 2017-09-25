@@ -46,13 +46,6 @@ doc docoff
 
 open Basic_tactics
 
-open Lm_debug
-open Lm_symbol
-open Lm_printf
-open Lm_rformat
-
-open Dform
-
 (************************************************************************
  * List utilities.
  *)
@@ -61,7 +54,9 @@ open Dform
  * Lists.
  *)
 let rnil_term = << rnil >>
+(* unused
 let rnil_opname = opname_of_term rnil_term
+ *)
 let is_rnil_term = alpha_equal rnil_term
 
 let rcons_term = << rcons[a:n]{'b} >>

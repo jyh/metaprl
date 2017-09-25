@@ -48,8 +48,6 @@ extends Itt_squash
 extends Itt_subtype
 doc docoff
 
-open Lm_debug
-open Lm_printf
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

@@ -46,15 +46,11 @@ extends Itt_dprod
 extends Itt_struct
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Dtactic
 
 open Itt_equal
 open Itt_subtype
 open Itt_dprod
-open Itt_struct
 
 doc <:doc<
    @rewrites

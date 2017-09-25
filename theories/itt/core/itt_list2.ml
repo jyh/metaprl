@@ -539,7 +539,9 @@ interactive_rw reduce_all2_cons_cons {| reduce |} :
 
 doc docoff
 
+(* unused
 let fold_all2 = makeFoldC << all2{'l1; 'l2; x, y. 'b['x; 'y]} >> unfold_all2
+ *)
 
 doc <:doc<
    The @hrefterm[ball2] term performs simultaneous induction

@@ -49,10 +49,6 @@ extends Base_theory
 doc docoff
 extends Itt_comment
 
-open Lm_debug
-open Lm_printf
-open Simple_print
-
 open Basic_tactics
 open Base_meta
 
@@ -102,7 +98,9 @@ define unfold_cumulativity :
    cumulativity[i:l, j:l] <--> meta_lt[i:l, j:l]{"true"; "false"}
 doc docoff
 
+(* unused
 let cumulativity_term = << cumulativity[i:l, j:l] >>
+*)
 
 let itt_sequent_arg = (explode_sequent << sequent { >- 'C } >>).sequent_args
 

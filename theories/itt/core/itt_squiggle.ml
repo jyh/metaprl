@@ -58,13 +58,9 @@ extends Itt_struct
 doc docoff
 extends Itt_comment
 
-open Lm_debug
-open Lm_printf
-
 open Base_rewrite
 open Basic_tactics
 
-open Itt_equal
 open Itt_struct
 
 (************************************************************************

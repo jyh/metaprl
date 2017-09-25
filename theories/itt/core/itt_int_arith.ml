@@ -53,8 +53,6 @@ open Lm_printf
 open Lm_num
 
 open Term_order
-open Simple_print
-open Term_match_table
 
 open Basic_tactics
 
@@ -94,7 +92,9 @@ dform cdot_df : cdot =
  * ARITH
  *******************************************************)
 
+(* unused
 let identity x = x
+ *)
 
 type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic)) option
 type ge_intro_type = tactic_arg -> (term list * tactic) option
@@ -130,7 +130,9 @@ let rec filter_ge = function
  | _::tl -> filter_ge tl
  | [] -> []
 
+(* unused
 let main_labels = ""::main_labels
+ *)
 
 let rec on_main_subgoals = function
    (labels,_,seq)::tl ->
@@ -732,7 +734,9 @@ let sumListT l = funT ( fun p ->
 )
 
 let num0 = num_of_int 0
+(* unused
 let num1 = num_of_int 1
+ *)
 
 let term2term_number p t =
    let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
@@ -755,6 +759,7 @@ let term2term_number p t =
             (t',num0)
    end
 
+(* unused
 let term2inequality_aux p (a,b,n,tac) =
    let a1,a2=term2term_number p a in
    let b1,b2=term2term_number p b in
@@ -772,6 +777,7 @@ let term2inequality p (i,t) =
       List.map (term2inequality_aux p) [(a,b,num0,eq2ge1 i);(b,a,num0,eq2ge2 i)]
    else
       raise (Invalid_argument "Itt_int_arith.term2triple - unexpected opname")
+ *)
 
 (*
 let good_term t =

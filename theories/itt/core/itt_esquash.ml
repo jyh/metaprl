@@ -58,9 +58,6 @@ extends Itt_squash
 extends Itt_struct
 doc docoff
 
-open Refiner.Refiner.RefineError
-open Tactic_type
-open Tactic_type.Tacticals
 open Basic_tactics
 
 open Dtactic

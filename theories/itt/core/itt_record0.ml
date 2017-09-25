@@ -3,9 +3,6 @@ extends Itt_isect
 extends Itt_struct3
 extends Itt_inv_typing
 
-open Lm_debug
-open Lm_printf
-
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals

@@ -4,5 +4,6 @@ DIRS[] =
     function_spaces
     objects
     supinf
+    ga
 
 VirtualTheory($(DIRS))

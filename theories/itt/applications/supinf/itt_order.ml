@@ -45,9 +45,6 @@ extends Itt_bool
 extends Itt_labels
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_dfun
@@ -123,21 +120,27 @@ let unfold_isUnstrictPartialOrder = unfold_isUnstrictPartialOrder1 thenC addrC [
 let unfold_isStrictPartialOrder = unfold_isStrictPartialOrder1 thenC addrC [Subterm 1] unfold_isIrreflexive thenC addrC [Subterm 2] unfold_isTransitive
 
 let fold_isReflexive = makeFoldC << isReflexive{'car; 'rel} >> unfold_isReflexive
+(* unused
 let fold_isIrreflexive = makeFoldC << isIrreflexive{'car; 'rel} >> unfold_isIrreflexive
+ *)
 let fold_isTransitive = makeFoldC << isTransitive{'car; 'rel} >> unfold_isTransitive
 let fold_isAntisym = makeFoldC << isAntisym{'car; 'rel} >> unfold_isAntisym
+(* unused
 let fold_isPreorder1 = makeFoldC << isPreorder{'car; 'rel} >> unfold_isPreorder1
 let fold_isUnstrictPartialOrder1 = makeFoldC << isUnstrictPartialOrder{'car; 'rel} >> unfold_isUnstrictPartialOrder1
 let fold_isStrictPartialOrder1 = makeFoldC << isStrictPartialOrder{'car; 'rel} >> unfold_isStrictPartialOrder1
 let fold_isLinear = makeFoldC << isLinear{'car; 'rel} >> unfold_isLinear
 let fold_isTrichotomous = makeFoldC << isTrichotomous{'car; 'rel} >> unfold_isTrichotomous
+*)
 
 let isRelationDT n = rw unfold_isRelation n thenT dT n
 let isRelationDT0 = rw unfold_isRelation 0 thenT dT 0
 let isReflexiveDT0 = rw unfold_isReflexive 0 thenT dT 0
 let isIrreflexiveDT0 = rw unfold_isIrreflexive 0 thenT dT 0
 let isAntisymDT0 = rw unfold_isAntisym 0 thenT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT (-1)
+(* unused
 let isTransitiveDT0 = rw unfold_isTransitive 0 thenT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT (-1)
+ *)
 let isUnstrictPartialOrderDT n = rw (unfold_isUnstrictPartialOrder1 thenC addrC [Subterm 1] unfold_isPreorder1) n thenT dT n thenT dT n thenT dT (n+1)
 let isUnstrictPartialOrderDT0 = rw (unfold_isUnstrictPartialOrder1 thenC addrC [Subterm 1] unfold_isPreorder1) 0 thenT dT 0 thenLT [(dT 0 thenLT [idT;dT 0]); idT]
 let isStrictPartialOrderDT n = rw unfold_isStrictPartialOrder1 n thenT dT n thenT dT (n+1)
@@ -474,11 +477,13 @@ let unfold_unstrictPartialOrder = unfold_unstrictPartialOrder1 thenC addrC [Subt
 let unfold_strictPartialOrder = unfold_strictPartialOrder1 thenC addrC [Subterm 1] unfold_relation thenC addrC [Subterm 2] unfold_isStrictPartialOrder
 
 let fold_relation = makeFoldC << relation[i:l,rel:t] >> unfold_relation
+(* unused
 let fold_preorder1 = makeFoldC << preorder[i:l,rel:t] >> unfold_preorder1
 let fold_unstrictPartialOrder1 = makeFoldC << unstrictPartialOrder[i:l,rel:t] >> unfold_unstrictPartialOrder1
 let fold_strictPartialOrder1 = makeFoldC << strictPartialOrder[i:l,rel:t] >> unfold_strictPartialOrder1
 let fold_unstrictTotalOrder1 = makeFoldC << unstrictTotalOrder[i:l,rel:t] >> unfold_unstrictTotalOrder1
 let fold_strictTotalOrder1 = makeFoldC << strictTotalOrder[i:l,rel:t] >> unfold_strictTotalOrder1
+ *)
 
 let unstrictPartialOrderDT n = rw unfold_unstrictPartialOrder1 n thenT dT n
 

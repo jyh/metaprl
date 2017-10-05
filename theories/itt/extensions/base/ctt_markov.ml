@@ -3,9 +3,6 @@ extends Itt_nat
 
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Dtactic
 
 interactive squash_stable1 't :

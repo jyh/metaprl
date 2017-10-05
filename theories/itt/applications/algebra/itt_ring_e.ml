@@ -39,9 +39,6 @@ extends Itt_ring2
 extends Itt_labels
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_ring2

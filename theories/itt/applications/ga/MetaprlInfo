@@ -1,0 +1,20 @@
+THEORYNAME = ga
+THEORYDESCR = Geometric Algebra
+
+# ITT extensions are included for itt_eta
+THEORY_DEPS[] +=
+    itt/core
+    itt/extensions/base
+    itt/applications/supinf
+
+# Library files
+MPFILES[] =
+    ga_type
+    ga_sum
+    ga_prod
+
+#
+# Documentation
+#
+PRINT_THEORIES[] =
+    ga_prod

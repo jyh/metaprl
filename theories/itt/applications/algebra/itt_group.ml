@@ -43,9 +43,6 @@ extends Itt_ext_equal
 extends Itt_labels
 doc docoff
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_struct
@@ -818,7 +815,9 @@ doc docoff
 let unfold_groupHom = unfold_groupHom1 thenC addrC [Subterm 2] unfold_isGroupHom
 
 let fold_isGroupHom = makeFoldC << isGroupHom{'f; 'A; 'B}  >> unfold_isGroupHom
+(* unused
 let fold_groupHom1 = makeFoldC << groupHom{'A; 'B}  >> unfold_groupHom1
+ *)
 let fold_groupHom = makeFoldC << groupHom{'A; 'B}  >> unfold_groupHom
 
 doc <:doc<
@@ -1053,7 +1052,9 @@ let unfold_isBijective = unfold_isBijective1 thenC addrC [Subterm 1] unfold_isIn
 
 let fold_isInjective = makeFoldC << isInjective{'f; 'A; 'B}  >> unfold_isInjective
 let fold_isSurjective = makeFoldC << isSurjective{'f; 'A; 'B}  >> unfold_isSurjective
+(* unused
 let fold_isBijective1 = makeFoldC << isBijective{'f; 'A; 'B}  >> unfold_isBijective1
+ *)
 let fold_isBijective = makeFoldC << isBijective{'f; 'A; 'B}  >> unfold_isBijective
 let fold_groupMono = makeFoldC << groupMono{'A; 'B}  >> unfold_groupMono
 let fold_groupEpi = makeFoldC << groupEpi{'A; 'B}  >> unfold_groupEpi

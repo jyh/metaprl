@@ -57,9 +57,7 @@ open Lm_printf
 
 open Basic_tactics
 
-open Itt_equal
 open Itt_dfun
-open Itt_struct
 open Itt_squash
 open Itt_int_base
 open Itt_int_ext
@@ -202,7 +200,9 @@ define unfold_fieldQ : fieldQ <-->
 	 inv=lambda{x.rat{snd{'x};fst{'x}}}
 	}
 
+(* unused
 let fold_fieldQ = makeFoldC <<fieldQ>> unfold_fieldQ
+*)
 
 define unfold_max_rat : max_rat{'a;'b} <-->
 	(max{lambda{x.lambda{y.le_bool_rat{'x;'y}}}} 'a 'b)
@@ -256,11 +256,13 @@ let is_inv_rat_term = is_dep0_term inv_rat_opname
 let mk_inv_rat_term = mk_dep0_term inv_rat_opname
 let dest_inv_rat = dest_dep0_term inv_rat_opname
 
+(* unused
 let beq_rat_term = << beq_rat{'x; 'y} >>
 let beq_rat_opname = opname_of_term beq_rat_term
 let is_beq_rat_term = is_dep0_dep0_term beq_rat_opname
 let mk_beq_rat_term = mk_dep0_dep0_term beq_rat_opname
 let dest_beq_rat = dest_dep0_dep0_term beq_rat_opname
+ *)
 
 let le_bool_rat_term = << le_bool_rat{'x; 'y} >>
 let le_bool_rat_opname = opname_of_term le_bool_rat_term
@@ -596,13 +598,17 @@ interactive_rw add_rat_Id3_rw ('a :> Term) :
    ( 'a in rationals ) -->
    'a <--> add_rat{rat{0; 1}; 'a}
 
+(* unused
 let add_rat_Id3C = termC add_rat_Id3_rw
+ *)
 
 interactive_rw add_rat_Id4_rw ('a :> Term) :
    ( 'a in rationals ) -->
    'a <--> add_rat{'a; rat{0; 1}}
 
+(* unused
 let add_rat_Id4C = termC add_rat_Id4_rw
+ *)
 
 interactive mul_rat_Commut :
    [wf] sequent { <H> >- 'a in rationals } -->
@@ -692,7 +698,9 @@ interactive_rw mul_rat_Id3_rw ('a :> Term) :
    ('a in rationals) -->
    'a <--> mul_rat{rat{1; 1}; 'a}
 
+(* unused
 let mul_rat_Id3C = termC mul_rat_Id3_rw
+ *)
 
 interactive mul_rat_Zero {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
@@ -702,7 +710,9 @@ interactive_rw mul_rat_Zero_rw {| reduce |} :
    ('a in rationals) -->
    mul_rat{rat{0; 'd}; 'a} <--> rat{0; 1}
 
+(* unused
 let mul_rat_ZeroC = mul_rat_Zero_rw
+ *)
 
 interactive mul_rat_Zero2 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
@@ -712,7 +722,9 @@ interactive_rw mul_rat_Zero2_rw {| reduce |} :
    ('a in rationals) -->
    mul_rat{'a; rat{0; 'd}} <--> rat{0; 1}
 
+(* unused
 let mul_rat_Zero2C = mul_rat_Zero2_rw
+ *)
 
 interactive_rw mul_rat_Zero3C 'a :
    ('a in rationals) -->

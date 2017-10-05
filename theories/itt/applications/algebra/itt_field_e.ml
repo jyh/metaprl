@@ -41,9 +41,6 @@ doc docoff
 extends Itt_poly
 extends Itt_labels
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_field2

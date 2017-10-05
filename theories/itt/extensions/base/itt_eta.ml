@@ -4,8 +4,6 @@ doc <:doc<
 >>
 extends Itt_dfun
 
-open Basic_tactics
-
 doc <:doc<
 
    The @tt[reduceEta] rewrite defines eta-reduction.

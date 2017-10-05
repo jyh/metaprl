@@ -42,9 +42,6 @@ extends Itt_unitring
 extends Itt_intdomain
 extends Itt_labels
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_grouplikeobj

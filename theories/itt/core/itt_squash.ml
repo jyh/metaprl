@@ -77,6 +77,8 @@ extends Itt_image
 extends Itt_pairwise
 doc docoff
 
+open Lm_printf
+
 open Term_stable
 
 open Basic_tactics
@@ -474,7 +476,7 @@ let unsquashAllT = funT (fun p ->
                if sqconcl then
                   onHypsT l unsquash
                else
-                  (squashT thenT onHypsT l unsquash thenT squashMemberFormation)
+                  (squashT thenT onHypsT l unsquash thenT squashMemberFormation))
       else
          raise err)
 

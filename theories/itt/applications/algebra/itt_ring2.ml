@@ -42,9 +42,6 @@ extends Itt_singleton
 extends Itt_labels
 extends Itt_atom
 
-open Lm_debug
-open Lm_printf
-
 open Basic_tactics
 
 open Itt_struct

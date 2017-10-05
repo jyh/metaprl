@@ -11,10 +11,8 @@ open Lm_printf
 
 open Supinf
 
-open Simple_print
 open Basic_tactics
 
-open Itt_equal
 open Itt_struct
 open Itt_bool
 
@@ -48,37 +46,39 @@ module RationalBoundField =
 struct
    open Lm_num
 
-   type bfield = Number of (num * num) | MinusInfinity | PlusInfinity
+   type bfield = Num of (num * num) | MinusInfinity | PlusInfinity
 
    let num0=num_of_int 0
    let num1=num_of_int 1
-   let fieldUnit = Number (num1, num1)
-   let fieldZero = Number (num0,num1)
+   let fieldUnit = Num (num1, num1)
+   let fieldZero = Num (num0,num1)
    let plusInfinity=PlusInfinity
    let minusInfinity=MinusInfinity
 
    let isInfinite = function
-      Number _ -> false
+      Num _ -> false
     | _ -> true
 
 	let isNegative = function
-		Number (a,b) ->
+		Num (a,b) ->
 			((compare_num a num0) * (compare_num b num0)) < 0
 	 | PlusInfinity -> false
 	 | MinusInfinity -> true
 
+(* unused
 	let isPositive = function
-		Number (a,b) ->
+		Num (a,b) ->
 			((compare_num a num0) * (compare_num b num0)) > 0
 	 | PlusInfinity -> true
 	 | MinusInfinity -> false
+*)
 
    let mul a b =
       match a with
-       |	Number (a1,a2) ->
+       |	Num (a1,a2) ->
             begin
                match b with
-                  Number (b1,b2) -> Number(mult_num a1 b1, mult_num a2 b2)
+                  Num (b1,b2) -> Num(mult_num a1 b1, mult_num a2 b2)
                 | PlusInfinity ->
                      if isNegative a then MinusInfinity
                      else b
@@ -98,36 +98,36 @@ struct
        | _, PlusInfinity -> b
        | MinusInfinity, _ -> a
        | _, MinusInfinity -> b
-       | Number (a1,a2), Number (b1,b2) -> Number(add_num (mult_num a1 b2) (mult_num a2 b1), mult_num a2 b2)
+       | Num (a1,a2), Num (b1,b2) -> Num(add_num (mult_num a1 b2) (mult_num a2 b1), mult_num a2 b2)
 
    let sub a b =
       match a,b with
-         Number (a1,a2), Number (b1,b2) -> Number(sub_num (mult_num a1 b2) (mult_num b1 a2), mult_num a2 b2)
+         Num (a1,a2), Num (b1,b2) -> Num(sub_num (mult_num a1 b2) (mult_num b1 a2), mult_num a2 b2)
        | _,_ -> raise (Invalid_argument "Subtraction defined only on proper numbers")
 
    let neg a =
       match a with
-         Number (a1,a2) -> Number(sub_num num0 a1,a2)
+         Num (a1,a2) -> Num(sub_num num0 a1,a2)
        | PlusInfinity -> MinusInfinity
        | MinusInfinity -> PlusInfinity
 
    let inv a =
       match a with
-         Number (a1,a2) ->
+         Num (a1,a2) ->
             if eq_num a2 num0 then raise (Invalid_argument "Division by zero")
-            else Number(a2,a1)
+            else Num(a2,a1)
        | _ -> raise (Invalid_argument "Division defined only on proper numbers")
 
    let div a b =
       match a,b with
-         Number (a1,a2), Number (b1,b2) ->
+         Num (a1,a2), Num (b1,b2) ->
             if eq_num b1 num0 then raise (Invalid_argument "Division by zero")
-            else Number(mult_num a1 b2, mult_num a2 b1)
+            else Num(mult_num a1 b2, mult_num a2 b1)
        | _,_ -> raise (Invalid_argument "Division defined only on proper numbers")
 
 	let floor r =
 		match r with
-			Number (a,b) ->
+			Num (a,b) ->
 				if isNegative r then
 					let a' = abs_num a in
 					let b' = abs_num b in
@@ -147,13 +147,13 @@ struct
        | PlusInfinity, PlusInfinity -> 0
        | PlusInfinity, _ -> 1
        | _, PlusInfinity -> -1
-       | Number (a1,a2), Number (b1,b2) ->
+       | Num (a1,a2), Num (b1,b2) ->
 				compare_num (mult_num (mult_num a1 (sign_num a2)) (abs_num b2)) (mult_num (abs_num a2) (mult_num b1 (sign_num b2)))
 
    let print out r =
       match r with
-(*			Number (a,b) -> fprintf out "rat(%s,%s)" (string_of_num a) (string_of_num b)*)
-         Number (a,b) ->
+(*			Num (a,b) -> fprintf out "rat(%s,%s)" (string_of_num a) (string_of_num b)*)
+         Num (a,b) ->
             if eq_num a num0 then fprintf out "0*"
             else if eq_num b num1 then fprintf out "(%s)" (string_of_num a)
             else fprintf out "(%s/%s)" (string_of_num a) (string_of_num b)
@@ -161,7 +161,7 @@ struct
        | PlusInfinity -> fprintf out "(+oo)"
 
    let term_of = function
-      Number (a,b) -> mk_rat_term (mk_number_term a) (mk_number_term b)
+      Num (a,b) -> mk_rat_term (mk_number_term a) (mk_number_term b)
 (*	 | _ -> raise (Invalid_argument "Infinities have no projections to terms")*)
     | PlusInfinity -> mk_rat_term (mk_number_term num1) (mk_number_term num0)
     | MinusInfinity -> mk_rat_term (mk_number_term (sub_num num0 num1)) (mk_number_term num0)
@@ -178,7 +178,9 @@ struct
    let min_term a b = mk_min_rat_term a b
 end
 
+(* unused
 module R = RationalBoundField
+ *)
 
 module Var =
 struct
@@ -228,6 +230,7 @@ struct
 			inverted.(index-1)
 end
 
+(* unused
 module MakeMonom(BField : BoundFieldSig) =
 struct
    type elt = VarType.t
@@ -249,6 +252,7 @@ struct
        | _,_ -> raise (Invalid_argument "Addition non-trivial lists are not supported")
 
 end
+*)
 (*
 let divideAuxC t =
 	let left,right=dest_ge_rat in
@@ -460,6 +464,7 @@ end
 
 module type CS_Sig =
 sig
+(* unused
 	type t
 	type elt
 
@@ -467,6 +472,7 @@ sig
    val add: t -> elt -> t
 
    val mem: t -> elt -> bool
+ *)
 end
 
 module S=MakeSource(RationalBoundField)
@@ -823,12 +829,12 @@ let monom2af var2index t =
             let k1,k2=dest_rat t1 in
             let i=VI.lookup var2index t2 in
             let f=AF.mk_var i in
-               AF.scale (Number (dest_number k1, dest_number k2)) f
+               AF.scale (Num (dest_number k1, dest_number k2)) f
          else
             let i=VI.lookup var2index t in
                AF.mk_var i
 	 | <<rat{'k1;'k2}>> ->
-         AF.mk_number (Number (dest_number k1, dest_number k2))
+         AF.mk_number (Num (dest_number k1, dest_number k2))
 	 | _ ->
 			let i=VI.lookup var2index t in
 				AF.mk_var i
@@ -1198,8 +1204,8 @@ let rec iter p info constrs v =
 							else
 								let floor_inf = floor inf_val in
 								let floor_sup = floor sup_val in
-								let floor_inf' = Number(floor_inf, num1) in
-								let floor_sup' = Number(floor_sup, num1) in
+								let floor_inf' = RationalBoundField.Num(floor_inf, num1) in
+								let floor_sup' = RationalBoundField.Num(floor_sup, num1) in
 								if compare floor_inf' floor_sup' = 0 then
 									use_both info v sup' inf' supsrc infsrc thenMT
 									inseparable_rat (-1) (mk_number_term floor_inf) thenMT

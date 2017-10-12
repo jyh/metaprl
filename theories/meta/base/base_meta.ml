@@ -36,6 +36,8 @@ extends Ocaml_df
 
 open Basic_tactics
 
+module TermShape = Refiner.Refiner.TermShape
+
 (*
  * Meta-operations.
  *)

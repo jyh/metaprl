@@ -61,6 +61,9 @@ open Itt_int_ext
 open Itt_int_arith
 (*open Itt_supinf*)
 
+module Term = Refiner.Refiner.Term
+module TermMan = Refiner.Refiner.TermMan
+
 let debug_omega =
    create_debug (**)
       { debug_name = "omega";

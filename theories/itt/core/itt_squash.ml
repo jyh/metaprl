@@ -85,6 +85,8 @@ open Itt_struct
 open Itt_equal
 open Itt_squiggle
 
+module TermMan = Refiner.Refiner.TermMan
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

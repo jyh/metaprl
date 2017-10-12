@@ -68,6 +68,9 @@ open Itt_dprod
 module TO = TermOrder (Refiner.Refiner)
 open TO
 
+module Term = Refiner.Refiner.Term
+module TermMan = Refiner.Refiner.TermMan
+
 let debug_int_arith =
    create_debug (**)
       { debug_name = "int_arith";

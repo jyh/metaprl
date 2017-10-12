@@ -55,6 +55,8 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 
+module TermMan = Refiner.Refiner.TermMan
+
 (************************************************************************
  * List utilities.
  *)

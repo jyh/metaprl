@@ -53,6 +53,8 @@ doc docoff
 open Basic_tactics
 open Itt_equal
 
+module TermOp = Refiner.Refiner.TermOp
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

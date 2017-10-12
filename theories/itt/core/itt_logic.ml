@@ -74,6 +74,8 @@ open Itt_dfun
 open Itt_dprod
 open Itt_struct
 
+module TermMan = Refiner.Refiner.TermMan
+
 let debug_auto =
    create_debug (**)
       { debug_name = "auto";

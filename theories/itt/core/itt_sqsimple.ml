@@ -48,6 +48,8 @@ open Term_match_table
 open Itt_equal
 open Itt_struct
 
+module TermMan = Refiner.Refiner.TermMan
+
 doc <:doc<
    @modsection{Definition}
    A type is said to be squiggle simple if only squiggle equal elements are equal in this type.

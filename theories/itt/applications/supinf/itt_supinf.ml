@@ -21,6 +21,9 @@ open Itt_int_ext
 open Itt_int_arith
 open Itt_rat
 
+module Term = Refiner.Refiner.Term
+module TermMan = Refiner.Refiner.TermMan
+
 let debug_supinf_trace =
    create_debug (**)
       { debug_name = "supinf_trace";

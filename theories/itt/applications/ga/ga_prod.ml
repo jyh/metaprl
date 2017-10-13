@@ -26,54 +26,83 @@
  *)
 doc <:doc< @parents >>
 extends Itt_theory
-
-extends Ga_type
-extends Ga_sum
+extends Itt_vector_space
+extends Itt_labels
 doc docoff
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
+open Basic_tactics
+
+(************************************************************************
+ * Vector space
+ *)
 
 doc <:doc<
-     @terms
+     @modsection{Geometric Algebra}
 
-     The @tt{prod} term is basic operator, the product.
+     A Geometric Algebra is a vector space with a product operator
+     satisfying the axioms of a geometric algebra.
+
+     @modsubsection{Rewrites}
 >>
-declare prod{'e1; 'e2}
+define unfold_pre_ga : pre_ga[i:l] <-->
+   record["*:g":t]{r. 'r^vec -> 'r^vec -> 'r^vec; pre_vector_space[i:l]}
 
-(*
- * Equality.
- *)
-prim sumEquality :
-   [wf] sequent { <H> >- gatype{'T} } -->
-   [wf] sequent { <H> >- 'e1 = 'e1 in 'T } -->
-   [wf] sequent { <H> >- 'e2 = 'e2 in 'T } -->
-   sequent { <H> >- prod{'e1; 'e2} in 'T } =
-   it
+define unfold_ga_prod_is_assoc : GaProdIsAssoc{'g} <-->
+   all x: 'g^vec. all y: 'g^vec. all z: 'g^vec. (('x *:g['g] ('y *:g['g] 'z)) = (('x *:g['g] 'y) *:g['g] 'z) in 'g^vec)
 
-prim assoc :
-   [wf] sequent { <H> >- gatype{'T} } -->
-   [wf] sequent { <H> >- 'e1 = 'e1 in 'T } -->
-   [wf] sequent { <H> >- 'e2 = 'e2 in 'T } -->
-   [wf] sequent { <H> >- 'e3 = 'e3 in 'T } -->
-   sequent { <H> >- prod{'e1; prod{'e2; 'e3}} = prod{prod{'e1; 'e2}; 'e3} in 'T } =
-   it
+define unfold_ga_prod_distrib : GaProdDistrib{'g} <-->
+   all x: 'g^vec. all y: 'g^vec. all z: 'g^vec. (('x *:g['g] ('y +|['g] 'z)) = (('x *:g['g] 'y) +|['g] ('x *:g['g] 'z)) in 'g^vec)
 
-prim distrib :
-   [wf] sequent { <H> >- gatype{'T} } -->
-   [wf] sequent { <H> >- 'e1 = 'e1 in 'T } -->
-   [wf] sequent { <H> >- 'e2 = 'e2 in 'T } -->
-   [wf] sequent { <H> >- 'e3 = 'e3 in 'T } -->
-   sequent { <H> >- prod{'e1; sum{'e2; 'e3}} = sum{prod{'e1; 'e2}; prod{'e1; 'e3}} in 'T } =
-   it
+doc <:doc<
+   @modsubsection{Well-formedness}
 
-doc docoff
+>>
+interactive pre_ga_wf {| intro [] |} :
+   sequent { <H> >- pre_ga[i:l] Type }
 
-let prod_term = << prod{'e1; 'e2} >>
-let prod_opname = opname_of_term prod_term
-let is_prod_term = is_dep0_dep0_term prod_opname
-let dest_prod = dest_dep0_dep0_term prod_opname
-let mk_prod_term = mk_dep0_dep0_term prod_opname
+interactive pre_ga_elim {| elim [] |} 'H  :
+   sequent { <H>; g: record["*:g":t]{r. 'r^vec -> 'r^vec -> 'r^vec; pre_vector_space[i:l]}; <J['g]> >- 'C['g] } -->
+   sequent { <H>; g: pre_ga[i:l]; <J['g]> >- 'C['g] }
+
+interactive ga_car_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g IN pre_ga[i:l] } -->
+   sequent { <H> >- 'g^car Type }
+
+interactive ga_vec_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g IN pre_ga[i:l] } -->
+   sequent { <H> >- 'g^vec Type }
+
+interactive ga_scalar_mul_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g IN pre_ga[i:l] } -->
+   [wf] sequent { <H> >- 'x IN 'g^car } -->
+   [wf] sequent { <H> >- 'y IN 'g^car } -->
+   sequent { <H> >- 'x *['g] 'y IN 'g^car }
+
+interactive ga_add_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g IN pre_ga[i:l] } -->
+   [wf] sequent { <H> >- 'x IN 'g^vec } -->
+   [wf] sequent { <H> >- 'y IN 'g^vec } -->
+   sequent { <H> >- 'x +|['g] 'y IN 'g^vec }
+
+interactive ga_mul_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g IN pre_ga[i:l] } -->
+   [wf] sequent { <H> >- 'a IN 'g^car } -->
+   [wf] sequent { <H> >- 'x IN 'g^vec } -->
+   sequent { <H> >- 'a *|['g] 'x IN 'g^vec }
+
+interactive ga_prod_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g IN pre_ga[i:l] } -->
+   [wf] sequent { <H> >- 'x IN 'g^vec } -->
+   [wf] sequent { <H> >- 'y IN 'g^vec } -->
+   sequent { <H> >- 'x *:g['g] 'y IN 'g^vec }
+
+interactive ga_prod_is_assoc_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g in pre_ga[i:l] } -->
+   sequent { <H> >- GaProdIsAssoc{'g} Type }
+
+interactive ga_prod_distrib_wf {| intro [intro_typeinf <<'g>>] |} pre_ga[i:l] :
+   [wf] sequent { <H> >- 'g in pre_ga[i:l] } -->
+   sequent { <H> >- GaProdDistrib{'g} Type }
 
 (*
  * -*-

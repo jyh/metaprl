@@ -208,6 +208,9 @@ interactive is_vector_space_wf {| intro [intro_typeinf <<'g>>] |} pre_vector_spa
    [wf] sequent { <H> >- 'g IN pre_vector_space[i:l] } -->
    sequent { <H> >- isVectorSpace{'g} Type }
 
+interactive vector_space_wf {| intro [] |} :
+   sequent { <H> >- vector_space[i:l] Type }
+
 (*
  * -*-
  * Local Variables:

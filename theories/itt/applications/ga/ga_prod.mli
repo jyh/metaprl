@@ -24,15 +24,24 @@
  * @end[license]
  *)
 extends Itt_theory
+extends Itt_vector_space
+extends Itt_labels
 
-open Refiner.Refiner.TermType
+open Tactic_type.Tactic
 
-declare prod{'e1; 'e2}
+(************************************************************************
+ * SYNTAX                                                               *
+ ************************************************************************)
 
-val prod_term : term
-val is_prod_term : term -> bool
-val dest_prod : term -> term * term
-val mk_prod_term : term -> term -> term
+declare "*:g" : RecordLabel
+
+declare pre_ga[i:l]
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+topval unfold_pre_ga : conv
 
 (*
  * -*-

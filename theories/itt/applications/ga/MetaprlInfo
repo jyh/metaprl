@@ -5,12 +5,11 @@ THEORYDESCR = Geometric Algebra
 THEORY_DEPS[] +=
     itt/core
     itt/extensions/base
+    itt/applications/algebra
     itt/applications/supinf
 
 # Library files
 MPFILES[] =
-    ga_type
-    ga_sum
     ga_prod
 
 #

@@ -40,7 +40,7 @@ open Tactic_type.Tactic
  ************************************************************************)
 
 declare "vec" : RecordLabel
-declare "v0" : RecordLabel
+declare "0v" : RecordLabel
 declare "+|" : RecordLabel
 declare "*|" : RecordLabel
 
@@ -58,7 +58,7 @@ topval unfold_vs_add_has_inverse : conv
 topval unfold_vs_mul_is_compat : conv
 topval unfold_vs_mul_has_identity : conv
 topval unfold_vs_mul_vec_distrib : conv
-topval unfold_vec_mul_scalar_distrib : conv
+topval unfold_vs_mul_scalar_distrib : conv
 topval unfold_is_vector_space : conv
 
 topval fold_pre_vector_space : conv

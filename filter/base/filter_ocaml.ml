@@ -447,6 +447,21 @@ struct
          Stdpp.raise_with_loc (MLast.loc_of_module_expr me) (Failure "Filter_ocaml: open of a module expression that is not a path")
 
    (*
+    * A camlp5 8 let binding as camlp5 7 parsed it.  camlp5 8 puts the type
+    * of `let x : 'a. t = e` on the pattern; camlp5 7 put it on the
+    * expression, as (e : 'a. t).  The cast's location runs from the colon,
+    * two characters before the type in normally written code, to the end of e.
+    *)
+   let old_binding (p, e, _) =
+      match p with
+         MLast.PaTyc (_, p', (MLast.TyPol (tloc, _, _) as t)) ->
+            let eloc = MLast.loc_of_expr e in
+            let cloc = Ploc.sub tloc (-2) (Ploc.last_pos eloc - Ploc.first_pos tloc + 2) in
+               p', MLast.ExTyc (cloc, e, t)
+       | _ ->
+            p, e
+
+   (*
     * For looking up destructors in a hashtable.
     *)
    let dest_tbl code table t =
@@ -1170,9 +1185,9 @@ struct
              | (<:expr< lazy $e$ >>) ->
                   mk_simple_term expr_laz_op loc [mk_expr vars e]
              | (<:expr< let rec $list:pel$ in $e$ >>) ->
-                  mk_fix vars loc (List.map (fun (p, e, _) -> p, e) pel) e
+                  mk_fix vars loc (List.map old_binding pel) e
              | (<:expr< let $list:pel$ in $e$ >>) ->
-                  mk_let vars loc (List.map (fun (p, e, _) -> p, e) pel) e
+                  mk_let vars loc (List.map old_binding pel) e
              | (<:expr< $lid:s$ >>) ->
                   mk_var expr_lid_op vars loc s
              | MLast.ExLSI (_, Ploc.VaVal (MLast.StMod (_, _, Ploc.VaVal [(Ploc.VaVal (Some (Ploc.VaVal s)), me, _)])), e) ->
@@ -2171,7 +2186,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                      mk_simple_term str_open_op loc [mk_olist_term (List.map mk_simple_string sl)]
              | (<:str_item< type $list:tdl$ >>) ->
                   mk_simple_term str_type_op loc [mk_olist_term (List.map mk_tdl tdl)]
-             | (<:str_item< value $opt:b$ $list:pel$ >>) -> mk_str_fix loc b (List.map (fun (p, e, _) -> p, e) pel)
+             | (<:str_item< value $opt:b$ $list:pel$ >>) -> mk_str_fix loc b (List.map old_binding pel)
              | StInc (_, me, _) ->
                   mk_simple_term str_inc_op loc [mk_module_expr vars me]
              | StDir (_, Ploc.VaVal s, Ploc.VaVal eo) ->
@@ -2542,7 +2557,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                [mk_patt vars p (fun vars -> mk_ce vars ce)]
        | MLast.CeLet (loc, Ploc.VaVal b, Ploc.VaVal pela, ce) ->
             (* camlp5 8 bindings carry attributes; camlp5 7's did not *)
-            let pel = List.map (fun (p, e, _) -> p, e) pela in
+            let pel = List.map old_binding pela in
             mk_simple_term ce_let_op (num_of_loc loc) (**)
                [(if b then
                    mk_fix_tail

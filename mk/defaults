@@ -70,7 +70,7 @@ static. =
    CAMLLIB_DEFAULT = $(dir $"$(CAMLLIB_DEFAULT)")
    ConfMsgResult($(CAMLLIB_DEFAULT))
 
-OCAMLFLAGS = -warn-error +A-e-z-3-7-29-37-44-45-50-69-70 -w +A-e-z-3-7-29-37-44-45-50-70
+OCAMLFLAGS = -warn-error +A-e-z-3-7-29-37-44-45-50-67-69-70 -w +A-e-z-3-7-29-37-44-45-50-70
 
 #
 # Configure

@@ -336,6 +336,10 @@ Theory(files) =
     # these are printed, not errors.
     OCAMLFLAGS += -warn-error -9-24-32..35-38-41
     OCAMLINCLUDES[] += $(find-theories $(THEORY_DEPS))
+    # Windows: the variables the prlcomp alias sets elsewhere (mk/prlcomp).
+    if $(equal $(OSTYPE), Win32)
+        prlenv()
+        export
     OCamlLibrary(theory, $(files))
 
     .DEFAULT: $(addsuffix .cmoz, $(files))

@@ -40,7 +40,7 @@ CI builds this on Linux with both OCaml versions and runs the shell tests in
 `editor/ml/tests/`. A second job builds every theory in `THEORIES_ALL` and
 replays every stored proof, comparing each rule's status with
 `editor/ml/tests/proof_census.expected`. At the last update that file records
-5,422 rule statuses in 270 modules: 3,357 rules whose stored proof replays
+5,191 rule statuses in 264 modules: 3,357 rules whose stored proof replays
 complete, 1,265 primitive rules, 532 with no stored proof, and 37 whose stored
 proof replays unfinished. It checks status, not the content of the proofs.
 [`CHANGES.md`](./CHANGES.md) lists what changed and what is known not to work.

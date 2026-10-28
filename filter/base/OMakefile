@@ -11,6 +11,13 @@ OCAMLFLAGS += -rectypes
 infix.ml: infix.mlp
 	$(CAMLP5O) -I $(CAMLP5LIB) q_MLast.cmo pa_extend.cmo $(addsuffix .cmo, $(CAMLP5_PR_O)) $(LOC) -impl $^ | sed -e 's,"XXXXXXXX",keyword,g' > $@
 
+# infix.ml is not tracked, so a fresh checkout has only infix.mli. Without
+# this, the dependency scan runs before infix.ml exists and records
+# infix.cmi but not infix.cmx for the modules that use Infix; under -j the
+# native build then fails on warning 58 when filter_summary.cmx is compiled
+# first.
+OCamlGeneratedFiles(infix.ml)
+
 ########################################################################
 # Magic numbers
 #

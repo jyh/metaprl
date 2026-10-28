@@ -25,6 +25,8 @@ include base/Files
 
 SUB_FILES[] =
     $(addprefix base/, $(BASE_FILES))
+    filter/filter_dot_lexer
+    filter/filter_lexer
     filter/term_grammar
 
 OCamlLibraryInstall($(MPINSTALL), $(LIB), $(MAINLIB), $(SUB_FILES))
@@ -79,7 +81,6 @@ section
         $(CAMLP5LIB)/q_MLast
         filter/filter_patt
         filter/filter_prog
-        filter/filter_dot_lexer
         filter/filter_parse
         $(ROOT)/util/pa_macro
         filter/filter_main

@@ -13,29 +13,41 @@ theories connected by derived-rule model translations. Its defining ideas were
 modular theories, computational reflection, and a tight weave of formal
 statements with OCaml code.
 
-**Status: archived / historically frozen (2017).** Preserved as a research
-artifact and a record of two decades of proof-assistant engineering. Reading
-the `theories/` and `refiner/` sources is the best way in.
+**Status: archived in 2017; refreshed in 2026 (see below). GPL-2.0-or-later.**
+Preserved as a research artifact and a record of two decades of
+proof-assistant engineering. Reading the `theories/` and `refiner/` sources is
+the best way in.
 
-## Building (historical)
+## The 2026 refresh: building on a current OCaml
 
-The original build instructions live in the plain-text [`README`](./README)
-(plus [`README.MACOSX`](./README.MACOSX) and [`README.WIN32`](./README.WIN32)).
-They target the OCaml + OMake toolchain of the era and are kept verbatim as
-historical content — they will not work against a modern toolchain unmodified.
+Since October 2026 MetaPRL builds again, on OCaml 4.14.4 and 5.4.1 with
+camlp5 8.05.02 and OMake 0.10.7 (all from opam). It needs
+[libmojave](https://github.com/jyh/libmojave) checked out beside it:
 
-## What revival would take
+```sh
+git clone https://github.com/jyh/metaprl.git
+git clone https://github.com/jyh/libmojave.git
+ln -s ../libmojave metaprl/libmojave
+cd metaprl
+printf 'CAMLP5 = camlp5\nSSL_ENABLED = false\n' > mk/config.local
+omake            # the first run writes mk/config and stops
+# optional: set THEORIES = all in mk/config to build every theory
+omake -j4
+editor/ml/mp -cli    # the MetaPRL shell
+```
 
-A working build targets OCaml 4.05 with camlp5 7.02, driven by a 0.9.8-era
-OMake; none of those are drop-in against current toolchains. The mathematics in
-`theories/` is written in MetaPRL's own camlp5 quotation syntax — extended
-concrete syntax realised through camlp5 quotations and grammar extensions —
-spread across several hundred source files (over 500 `.ml` files, the bulk of
-them using these term-quotation constructs). Reviving the system therefore
-means either resurrecting the exact legacy toolchain or porting both the
-quotation front end and the build to modern equivalents, on top of the
-system's own bootstrap of syntax extensions and filters. That is a
-substantial, research-grade porting project rather than a routine version bump.
+CI builds this on Linux with both OCaml versions and runs the shell tests in
+`editor/ml/tests/`. A second job builds every theory in `THEORIES_ALL` and
+replays every stored proof, comparing each rule's status with
+`editor/ml/tests/proof_census.expected`. At the last update that file records
+5,422 rule statuses in 270 modules: 3,357 rules whose stored proof replays
+complete, 1,265 primitive rules, 532 with no stored proof, and 37 whose stored
+proof replays unfinished. It checks status, not the content of the proofs.
+[`CHANGES.md`](./CHANGES.md) lists what changed and what is known not to work.
+
+The 2017 build targeted OCaml 4.05 with camlp5 7.02; its instructions are kept
+as they were in the plain-text [`README`](./README) (plus
+[`README.MACOSX`](./README.MACOSX) and [`README.WIN32`](./README.WIN32)).
 
 ## License
 

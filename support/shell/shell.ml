@@ -60,6 +60,18 @@ open Shell_current
 (*
  * Show that the file is loading.
  *)
+(*
+ * camlp5 8's open carries a module expression; eval_opens takes the
+ * module path as a list of names (MeUid, and MeAcc of paths).
+ *)
+let rec strings_of_me = function
+   MLast.MeUid (_, Ploc.VaVal s) ->
+      [s]
+ | MLast.MeAcc (_, me, MLast.MeUid (_, Ploc.VaVal s)) ->
+      strings_of_me me @ [s]
+ | me ->
+      Stdpp.raise_with_loc (MLast.loc_of_module_expr me) (Failure "Shell: open of a module expression that is not a path")
+
 let _ =
    show_loading "Loading Shell%t"
 
@@ -309,8 +321,8 @@ struct
                      []
                 | (h, _) :: t ->
                      match h with
-                        SummaryItem { item_item = <:str_item< open $sl$ >>; _ } ->
-                           sl :: collect t
+                        SummaryItem { item_item = <:str_item< open $me$ >>; _ } ->
+                           strings_of_me me :: collect t
                       | _ ->
                            collect t
                in

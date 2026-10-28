@@ -598,14 +598,14 @@ let get_buffered_text start finish bufs =
             if start + count - pos > len then
                raise (Failure "collect")
             else
-               Lm_string_util.blit "Shell_state.get_buffered_text" buf (start - pos) s 0 count
+               Lm_string_util.blit "Shell_state.get_buffered_text" (Bytes.unsafe_of_string buf) (start - pos) s 0 count
          else if start + count > pos then
             let amount = start + count - pos in
                if amount > len then
                   raise (Failure "collect")
                else
                   begin
-                     Lm_string_util.blit "Shell_state.get_buffered_text" buf 0 s (pos - start) amount;
+                     Lm_string_util.blit "Shell_state.get_buffered_text" (Bytes.unsafe_of_string buf) 0 s (pos - start) amount;
                      collect (count - amount) t
                   end
          else
@@ -662,7 +662,8 @@ let get_text_aux state loc =
 let get_text loc =
    synchronize_state (function
       state ->
-         get_text_aux state loc)
+         (* The text is a fresh buffer that nothing else keeps. *)
+         Bytes.unsafe_to_string (get_text_aux state loc))
 
 (*
  * Create an empty buffer.
@@ -791,14 +792,16 @@ let wrap f lb =
    let refill = lb.refill_buff in
    let refill' lb =
       let state = State.get state_entry in
-         lb.lex_buffer <- String.copy lb.lex_buffer;
+         (* A fresh buffer per refill, so a recorded one is never written
+            again; that is also why it can be recorded without a copy. *)
+         lb.lex_buffer <- Bytes.copy lb.lex_buffer;
          unsynchronize refill lb;
-         push_buffer state lb.lex_abs_pos lb.lex_buffer_len lb.lex_buffer
+         push_buffer state lb.lex_abs_pos lb.lex_buffer_len (Bytes.unsafe_to_string lb.lex_buffer)
    in
    let f' lb =
       let state = State.get state_entry in
          reset_input state;
-         push_buffer state lb.lex_abs_pos lb.lex_buffer_len lb.lex_buffer;
+         push_buffer state lb.lex_abs_pos lb.lex_buffer_len (Bytes.unsafe_to_string lb.lex_buffer);
          let x = f lb in
             reset_input state;
             x

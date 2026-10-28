@@ -151,8 +151,10 @@ let not_supported loc str =
 let rec mk_proj_expr loc top_expr =
    let rec collect names top_expr =
       match top_expr with
-         (<:expr< $uid: name$ . $e2$ >>) ->
-            collect (name :: names) e2
+         (* camlp5 8: M.x is a field access on the module path M. camlp5 7
+            nested M.N.x to the left, so, as there, only one level is handled. *)
+         MLast.ExFle (_, MLast.ExLong (_, MLast.LiUid (_, Ploc.VaVal name)), Ploc.VaVal (None, Ploc.VaVal v)) ->
+            collect (name :: names) (MLast.ExLid (loc, Ploc.VaVal v))
        | (<:expr< $lid: v$ >>) ->
             VarProjExpr (names, v)
        | (<:expr< $lid: v$ . val >>) ->
@@ -214,11 +216,12 @@ and mk_expr top_expr =
        | (<:expr< $lid:s$ >>)
        | (<:expr< $uid:s$ >>) ->
             VarExpr s
-       | MLast.ExLmd _ ->
+       | MLast.ExLSI (_, Ploc.VaVal (MLast.StMod _), _) ->
+          (* camlp5 8: let module is a local structure item *)
             not_supported loc "local module"
        | (<:expr< match $e$ with [ $list:pwel$ ] >>) ->
             not_supported loc "match"
-       | (<:expr< new $list:_$ >>) ->
+       | MLast.ExNew _ ->
             not_supported loc "new"
        | (<:expr< {< $list:_$ >} >>) ->
             not_supported loc "stream"
@@ -252,35 +255,8 @@ and mk_expr top_expr =
             not_supported loc "ExLab"
        | MLast.ExCoe _ ->
             not_supported loc "ExCoe"
-       | MLast.ExArr (_, Ploc.VaAnt _)
-       | MLast.ExChr (_, Ploc.VaAnt _)
-       | MLast.ExFlo (_, Ploc.VaAnt _)
-       | MLast.ExFor (_, _, _, _, _, Ploc.VaAnt _)
-       | MLast.ExFor (_, _, _, _, Ploc.VaAnt _, _)
-       | MLast.ExFor (_, Ploc.VaAnt _, _, _, _, _)
-       | MLast.ExFun (_, Ploc.VaAnt _)
-       | MLast.ExInt (_, _, _)
-       | MLast.ExLet (_, _, Ploc.VaAnt _, _)
-       | MLast.ExLet (_, Ploc.VaAnt _, _, _)
-       | MLast.ExLid (_, Ploc.VaAnt _)
-       | MLast.ExUid (_, Ploc.VaAnt _)
-       | MLast.ExMat (_, _, Ploc.VaAnt _)
-       | MLast.ExNew (_, Ploc.VaAnt _)
-       | MLast.ExOvr (_, Ploc.VaAnt _)
-       | MLast.ExSeq (_, Ploc.VaAnt _)
-       | MLast.ExSnd (_, _, Ploc.VaAnt _)
-       | MLast.ExStr (_, Ploc.VaAnt _)
-       | MLast.ExTry (_, _, Ploc.VaAnt _)
-       | MLast.ExTup (_, Ploc.VaAnt _)
-       | MLast.ExWhi (_, _, Ploc.VaAnt _)
-       | MLast.ExBae (_, _, _)
-       | ExJdf (_, _, _)
-       | ExLop (_, _, _)
-       | ExPar (_, _, _)
-       | ExPck (_, _, _)
-       | ExRpl (_, _, _)
-       | ExSpw (_, _)
-       | ExXtr (_, _, _) ->
+       | _ ->
+            (* camlp5 7 antiquotations and the constructors left; camlp5 8 has others *)
             not_supported loc "antiquotations"
 
    in
@@ -536,17 +512,8 @@ let rec mk_str_item si =
             not_supported loc "StExc"
        | StUse _ ->
             not_supported loc "str module use"
-       | StDcl (_, Ploc.VaAnt _)
-       | StExt (_, _, _, Ploc.VaAnt _)
-       | StExt (_, Ploc.VaAnt _, _, _)
-       | StMod _
-       | StMty (_, Ploc.VaAnt _, _)
-       | StOpn (_, Ploc.VaAnt _)
-       | StTyp (_, Ploc.VaAnt _)
-       | StVal (_, _, Ploc.VaAnt _)
-       | StVal (_, Ploc.VaAnt _, _)
-       | StDef (_, _)
-       | StXtr (_, _, _) ->
+       | _ ->
+            (* camlp5 7 antiquotations and the constructors left; camlp5 8 has others *)
             not_supported loc "antiquotations"
 
 (************************************************************************

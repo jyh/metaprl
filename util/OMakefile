@@ -37,8 +37,11 @@ OCAMLFLAGS += -pp $(quote-argv $(CAMLP5R) -I $(CAMLP5LIB) -nolib $(LOC))
 %.cmo: $(CAMLP5R_VERSION)
 %.cmi: $(CAMLP5R_VERSION)
 
+# `mkcamlp5 -opt`, not `mkcamlp5.opt`: camlp5 picks native mode by matching
+# its own program name against `mkcamlp5.opt$`, which fails on Windows
+# (`mkcamlp5.opt.exe`), so it handed the .cmx files to ocamlc.
 if $(NATIVE_ENABLED)
-    MKCAMLP5 = mkcamlp5.opt
+    MKCAMLP5 = mkcamlp5 -opt
     MACRO_EXT = .cmx
     MACRO_DEPS = pa_macro.cmx pa_macro$(EXT_OBJ)
     export

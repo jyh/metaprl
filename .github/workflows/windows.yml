@@ -1,0 +1,122 @@
+name: Windows
+
+# A MEASUREMENT, not a gate, run by hand (workflow_dispatch): builds MetaPRL
+# on Windows (setup-ocaml; MinGW and MSVC; OCaml 4.14.4 and 5.4.1) with
+# libmojave's master inside the tree. Each leg is continue-on-error and has
+# a timeout; the logs are uploaded as artifacts. Scope: the default
+# configuration (THEORIES = itt/core, COMPILATION_MODE = mixed); SSL,
+# readline and ncurses off (mk/load_config turns the last two off on Win32).
+#
+# MEASURED 2026-10-28 (branch mojave/windows-measure, seven runs):
+# - MinGW, both OCaml versions: omake.0.10.7 does not build (5.4.1: its
+#   vendored libmojave uses the removed failwith/invalid_argument; 4.14.4:
+#   an incompatible-pointer-type error); ocaml-omake master installs. With
+#   the perl modules below, camlp5 installs. libmojave, the refiner and
+#   util/macropp then build with no C errors, and the build STOPS
+#   PROGRESSING at the first theory files (theories/meta/base: the
+#   lib/camlp5n.exe preprocessing step under Shell.prlcomp); a run left
+#   for two hours made no further progress. Not yet diagnosed.
+# - MSVC: on 5.4.1 omake does not build (MSVC rejects the OCaml headers'
+#   C11 atomics) on 0.10.7 or master; on 4.14.4 omake builds but camlp5
+#   does not install (conf-pkg-config's shim finds no cygpath.exe).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }}; allowed to fail)
+    runs-on: windows-latest
+    continue-on-error: true
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        ocaml: ["4.14.4", "5.4.1"]
+        compiler: [mingw, msvc]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+        with:
+          path: metaprl
+      - uses: actions/checkout@v4
+        with:
+          repository: jyh/libmojave
+          ref: master
+          path: metaprl/libmojave
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: ${{ matrix.ocaml }}
+          windows-compiler: ${{ matrix.compiler }}
+      # Measured on the first run (OCaml 5.4.1): omake 0.10.7 failed to bootstrap
+      # (MinGW: its vendored libmojave calls the removed failwith/invalid_argument;
+      # MSVC: cl lacks C11 atomics), and camlp5's conf-perl-ipc-system-simple and
+      # conf-perl-string-shellquote failed. The steps below measure each separately.
+      # Round 2: `perl` on PATH is Strawberry Perl, while opam's builds run
+      # Cygwin's /usr/bin/perl. Round 3: that perl does not exist until opam
+      # installs it for conf-perl. Round 4: Cygwin's CPAN fails at its
+      # first-time setup. Both modules are pure Perl, so their .pm files are
+      # copied from the CPAN tarballs (sha256-pinned) into Cygwin perl's
+      # site_perl directory.
+      - name: the two perl modules camlp5 needs, into Cygwin's perl
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          opam install -y conf-perl 2>&1 | tail -3 | tee "$RUNNER_TEMP/perl.log"
+          site=$(/usr/bin/perl -MConfig -e 'print $Config{installsitelib}')
+          echo "site_perl: $site" | tee -a "$RUNNER_TEMP/perl.log"
+          mkdir -p "$site/IPC/System" "$site/String"
+          cd "$RUNNER_TEMP"
+          get() { curl -sSfL -o "$2" "$1" && echo "$3  $2" | sha256sum -c -; }
+          get https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz ipc.tar.gz \
+            22e6f5222b505ee513058fdca35ab7a1eab80539b98e5ca4a923a70a8ae9ba9e
+          get https://cpan.metacpan.org/authors/id/R/RO/ROSCH/String-ShellQuote-1.04.tar.gz sq.tar.gz \
+            e606365038ce20d646d255c805effdd32f86475f18d43ca75455b00e4d86dd35
+          tar xzf ipc.tar.gz && cp IPC-System-Simple-1.30/lib/IPC/System/Simple.pm "$site/IPC/System/"
+          tar xzf sq.tar.gz && cp String-ShellQuote-1.04/ShellQuote.pm "$site/String/"
+          /usr/bin/perl -MIPC::System::Simple -MString::ShellQuote -e 'print "perl modules OK\n"' 2>&1 | tee -a "$RUNNER_TEMP/perl.log"
+      - name: install omake
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          if ! opam install -y omake.0.10.7 2>&1 | tee "$RUNNER_TEMP/opam-omake.log"; then
+            echo "omake.0.10.7 failed; trying upstream ocaml-omake master"
+            opam pin add -y omake git+https://github.com/ocaml-omake/omake.git#master 2>&1 | tee "$RUNNER_TEMP/opam-omake-master.log"
+          fi
+      - name: install ocamlfind and camlp5
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          opam install -y ocamlfind camlp5.8.05.02 camlp-streams 2>&1 | tee "$RUNNER_TEMP/opam-camlp5.log"
+      - name: configure
+        working-directory: metaprl
+        run: |
+          printf 'CAMLP5 = camlp5\nSSL_ENABLED = false\n' > mk/config.local
+          # The first run writes mk/config and stops (mk/load_config).
+          opam exec -- omake --no--progress 2>&1 | tee "$RUNNER_TEMP/configure.log" || true
+          grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED|READLINE_ENABLED|NCURSES_ENABLED)' mk/config
+      - name: build
+        working-directory: metaprl
+        run: |
+          set -o pipefail
+          opam exec -- omake -k -j4 --no--progress 2>&1 | tee "$RUNNER_TEMP/build.log"
+      - name: summarise the build log
+        if: always()
+        run: |
+          f="$RUNNER_TEMP/build.log"
+          test -f "$f" || { echo "no build log"; exit 0; }
+          echo "lines: $(wc -l < "$f")"
+          echo "--- first 40 error lines"
+          grep -n -E 'rror|\*\*\* omake' "$f" | head -40 || true
+          echo "--- tail"
+          tail -40 "$f"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-${{ matrix.ocaml }}-${{ matrix.compiler }}-logs
+          path: ${{ runner.temp }}/*.log

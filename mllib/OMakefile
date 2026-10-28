@@ -2,6 +2,7 @@
 # Library files
 #
 FILES[] =
+    latin1_case
     file_base_type
     remote_queue_sig
     remote_lazy_queue_sig

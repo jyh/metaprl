@@ -21,6 +21,11 @@ name: Windows
 #   does not install (conf-pkg-config's shim finds no cygpath.exe).
 on:
   workflow_dispatch:
+    inputs:
+      only_pipe:
+        description: run only the small omake pipe test
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -55,21 +60,53 @@ jobs:
           d="$RUNNER_TEMP/pipe"; mkdir -p "$d"; cd "$d"
           printf 'let () = prerr_string (String.make (int_of_string Sys.argv.(1)) (Char.chr 120)); prerr_newline ()\n' > spew.ml
           printf 'open build/Common\nDefineCommandVars()\n.SUBDIRS: .\n' > OMakeroot
-          {
-            printf 'SPEW = $(absname spew.exe)\n'
-            printf 'Shell. +=\n'
-            printf '   viaalias(argv) =\n'
-            printf '      code = $(shell-code $(argv))\n'
-            printf '      if $(eq $(code), 0)\n'
-            printf '         return 1\n'
-            printf '      else\n'
-            printf '         exit $(code)\n'
-            printf '.PHONY: alias2k alias8k plain2k plain8k\n'
-            for n in 2 8; do
-              printf 'alias%sk:\n\tviaalias $(SPEW) %s\n' $n $((n*1024))
-              printf 'plain%sk:\n\t$(SPEW) %s\n' $n $((n*1024))
-            done
-          } > OMakefile
+          # Round 10: viafile is mk/prlcomp's Win32 branch from PR #41 (output to
+          # a temporary file, then copied), with a marker after each stage. On
+          # #41's Windows run the first preprocessor step hung inside it.
+          cat > OMakefile <<'OMK'
+          SPEW = $(absname spew.exe)
+          Shell. +=
+             viaalias(argv) =
+                code = $(shell-code $(argv))
+                if $(eq $(code), 0)
+                   return 1
+                else
+                   exit $(code)
+             viafile(argv) =
+                tmp = $(tmpfile prlcomp)
+                eprintln(MARK-A tmp=$(tmp))
+                code = $(shell-code $(argv) >& $(tmp))
+                eprintln(MARK-B code=$(code))
+                ch = $(fopen $(tmp), rb)
+                eprintln(MARK-C opened)
+                try
+                   while true
+                      s = $(read $(ch), 4096)
+                      eprintln(MARK-D read)
+                      fprint($(stderr), $(s))
+                catch RuntimeException(e)
+                   eprintln(MARK-E eof)
+                close($(ch))
+                rm(-f $(tmp))
+                eprintln(MARK-F done)
+                if $(eq $(code), 0)
+                   return 1
+                else
+                   exit $(code)
+          .PHONY: alias2k alias8k plain2k plain8k file0 file8k
+          alias2k:
+          	viaalias $(SPEW) 2048
+          plain2k:
+          	$(SPEW) 2048
+          alias8k:
+          	viaalias $(SPEW) 8192
+          plain8k:
+          	$(SPEW) 8192
+          file0:
+          	viafile $(SPEW) 0
+          file8k:
+          	viafile $(SPEW) 8192
+          OMK
           cat OMakefile
           # Round 9's first two runs: opam exec exited 50, "No switch is currently
           # set": setup-ocaml's switch is local to the workspace and this step
@@ -79,10 +116,11 @@ jobs:
       - name: run each target (90 s bound each)
         run: |
           cd "$RUNNER_TEMP/pipe"
-          for t in plain2k alias2k plain8k alias8k; do
+          for t in plain2k alias2k plain8k alias8k file0 file8k; do
             start=$(date +%s)
             timeout 90 opam exec --switch="$GITHUB_WORKSPACE" -- omake -j1 --no--progress $t > "$RUNNER_TEMP/pipe-$t.log" 2>&1 && rc=0 || rc=$?
             echo "RESULT $t rc=$rc after $(( $(date +%s) - start )) s, output $(wc -c < "$RUNNER_TEMP/pipe-$t.log") bytes"
+            grep -a -E 'MARK-|\*\*\* omake: (done|failed)|rror' "$RUNNER_TEMP/pipe-$t.log" | cut -c1-160 || true
           done
       - uses: actions/upload-artifact@v4
         if: always()
@@ -90,6 +128,7 @@ jobs:
           name: windows-pipe-logs
           path: ${{ runner.temp }}/pipe-*.log
   build:
+    if: ${{ !inputs.only_pipe }}
     name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }}; allowed to fail)
     runs-on: windows-latest
     continue-on-error: true

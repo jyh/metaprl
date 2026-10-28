@@ -404,7 +404,7 @@ let moveHypWithDependenciesThenT n k tac =
    funT (fun p->
    let n = get_pos_hyp_num p n in
    let k = get_pos_hyp_num p k in
-      if (n=0) or (k=0) then
+      if (n=0) || (k=0) then
          raise (Invalid_argument "moveHypWithDependenciesThenT: Can't move the conclusion")
       else
       if k >= n then
@@ -540,7 +540,7 @@ let substOrMoveAndSubst k tac i =
    funT (fun p ->
    let k = get_pos_hyp_num p k in
    let i = get_pos_hyp_num p i in
-      if i>=k or i=0 then (* we don't need to move *)
+      if i>=k || i=0 then (* we don't need to move *)
          tac i
       else
          tac i orelseT moveRightWD i (k-1) tac)

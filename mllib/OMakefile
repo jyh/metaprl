@@ -3,6 +3,7 @@
 #
 FILES[] =
     latin1_case
+    sort
     file_base_type
     remote_queue_sig
     remote_lazy_queue_sig

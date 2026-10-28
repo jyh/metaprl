@@ -115,7 +115,7 @@ end
 module VarType =
 struct
    type t=int
-   let compare (a: int) b = Pervasives.compare a b
+   let compare (a: int) b = Stdlib.compare a b
 
    let print out v =
       if v>0 then fprintf out "v%i" v
@@ -1475,7 +1475,7 @@ let rec eval_hyp_pos_aux hyp_length hyp_pos count = function
  | [] -> ()
 
 let eval_hyp_pos n hyp_length used_hyps =
-	let hyp_pos = Array.create (Array.length hyp_length) 0 in
+	let hyp_pos = Array.make (Array.length hyp_length) 0 in
 	eval_hyp_pos_aux hyp_length hyp_pos n used_hyps;
 	hyp_pos
 
@@ -1700,7 +1700,7 @@ let rec prune_tree used_hyps = function
 *)
 
 let isEmptyOrMainLabel l =
-   (l="") or (List.mem l main_labels)
+   (l="") || (List.mem l main_labels)
 
 let count_main_goals goall =
 	let count = ref 0 in

@@ -802,8 +802,8 @@ let univCDT =
    let rec tac p =
       let concl = Sequent.concl p in
          if is_all_term concl
-            or is_dfun_term concl
-            or is_implies_term concl
+            || is_dfun_term concl
+            || is_implies_term concl
          then
             dT 0 thenMT (funT tac)
          else
@@ -815,11 +815,11 @@ let genUnivCDT =
    let rec tac p =
       let concl = Sequent.concl p in
          if is_all_term concl
-            or is_dfun_term concl
-            or is_implies_term concl
-            or is_and_term concl
-            or is_prod_term concl
-            or is_iff_term concl
+            || is_dfun_term concl
+            || is_implies_term concl
+            || is_and_term concl
+            || is_prod_term concl
+            || is_iff_term concl
          then
             dT 0 thenMT (funT tac)
          else
@@ -865,7 +865,7 @@ let instHypT args i =
                   all_elim i arg thenMT tailT args'
                else if is_dfun_term hyp then
                   withT arg (dT i) thenMT (thinT (-1) thenT tailT args')
-               else if is_implies_term hyp or is_fun_term hyp then
+               else if is_implies_term hyp || is_fun_term hyp then
                   implies_elim i thenMT tailT args
                else
                   raise (RefineError ("instHypT", StringTermError ("hyp is not quantified", hyp))))
@@ -918,7 +918,7 @@ let check_subst subst =
    let check (v, t) =
       if !debug_auto then
          eprintf "check_subst: checking %a/%a%t" output_symbol v SimplePrint.print_simple_term_fp t eflush;
-      if not (is_var_term t & dest_var t = v) then
+      if not (is_var_term t && dest_var t = v) then
          raise (RefineError ("check_subst", StringError "bad match"))
    in
       List.iter check subst

@@ -397,8 +397,14 @@ struct
        | None ->
             raise (Invalid_argument "Input grammar is not initialized")
 
+   (*
+    * camlp5 7's Quotation.add put the newest expander first, so adding a
+    * name again replaced it; camlp5 8's refuses a name it already has.
+    * Quotation.upsert does what add did (it also prints a warning when it
+    * replaces). Every theory's extends adds its grammar's quotations again.
+    *)
    let add_start name shape =
-      Quotation.add name (Quotation.ExAst (input_exp shape name, input_patt shape name))
+      Quotation.upsert name (Quotation.ExAst (input_exp shape name, input_patt shape name))
 
    let add_starts starts =
       StringTable.iter add_start starts
@@ -1074,7 +1080,7 @@ let term_patt s =
    let t = TermGrammar.parse_term dummy_loc t in
       Filter_exn.print_exn Dform.null_base (Some "Can not build a pattern out of a term:\n") Filter_patt.build_term_patt t
 
-let _ = Quotation.add "term" (Quotation.ExAst (term_exp, term_patt))
+let _ = Quotation.upsert "term" (Quotation.ExAst (term_exp, term_patt))
 let _ = Quotation.default := "term"
 
 (* Allow dforms too *)
@@ -1088,7 +1094,7 @@ let add_quot name check =
       let t = unchecked_term_of_parsed_term dummy_loc t in
          Filter_exn.print_exn Dform.null_base (Some "Can not build a pattern out of a term:\n") Filter_patt.build_term_patt t
    in
-      ignore (Quotation.add name (Quotation.ExAst (quot_exp, quot_patt)))
+      ignore (Quotation.upsert name (Quotation.ExAst (quot_exp, quot_patt)))
 
 let () = add_quot "dform" true
 let () = add_quot "doc" false
@@ -1216,7 +1222,7 @@ let con_exp s =
 let con_patt _ =
    raise (Invalid_argument "<:con< >> quotation can not be used where pattern is expected")
 
-let _ = Quotation.add "con" (Quotation.ExAst (con_exp, con_patt))
+let _ = Quotation.upsert "con" (Quotation.ExAst (con_exp, con_patt))
 
 (*
  * <:action< s >> is like <:con< s >>, but it is wrapped in
@@ -1230,7 +1236,7 @@ let action_exp s =
 let action_patt _ =
    raise (Invalid_argument "<:action< >> quotation can not be used where pattern is expected")
 
-let _ = Quotation.add "action" (Quotation.ExAst (action_exp, action_patt))
+let _ = Quotation.upsert "action" (Quotation.ExAst (action_exp, action_patt))
 
 (*
  * Parsed the terms from the bindings.

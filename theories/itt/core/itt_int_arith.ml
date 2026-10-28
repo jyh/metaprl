@@ -428,8 +428,8 @@ let arith_rels=[
 
 let rec is_arith_rel t =
    let op=opname_of_term t in
-   (List.mem op arith_rels) or
-   (is_equal_term t && (let (t',_,_)=dest_equal t in alpha_equal t' <<int>>)) or
+   (List.mem op arith_rels) ||
+   (is_equal_term t && (let (t',_,_)=dest_equal t in alpha_equal t' <<int>>)) ||
    (is_not_term t && is_arith_rel (dest_not t))
 
 let rec negativeHyp2Concl i p =

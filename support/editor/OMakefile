@@ -111,8 +111,16 @@ LocalOCamlGeneratedFiles(mp_version.ml)
 #
 OCamlLibrary($(MP)run, $(RUNFILES))
 OCamlLibrary($(MP)top, $(TOPFILES))
-OCamlLibraryCopy($(MPINSTALL), $(LIB), $(MP)run, $(set $(RUNFILES) $(TOPFILES)))
-OCamlLibraryCopy($(MPINSTALL), $(LIB), $(MP)top, $(EMPTY))
+# Install what the configuration builds. The run variant (libmprun, mprun)
+# is built only when MPRUN_ENABLED, which is off by default; its sources
+# (shell_p4.ml, mp.ml) have not been ported to OCaml 4.14/5.
+if $(MPRUN_ENABLED)
+    OCamlLibraryCopy($(MPINSTALL), $(LIB), $(MP)run, $(set $(RUNFILES) $(TOPFILES)))
+    OCamlLibraryCopy($(MPINSTALL), $(LIB), $(MP)top, $(EMPTY))
+    export
+else
+    OCamlLibraryCopy($(MPINSTALL), $(LIB), $(MP)top, $(TOPFILES))
+    export
 LibInstall(svnversion.txt $(basename $(MP_DIRECT_SCRIPTS)))
 
 #

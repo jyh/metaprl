@@ -194,8 +194,8 @@ $(MPINSTALL): $(EXPORT)/mk/OMakeroot $(EXPORT)/mk/OCaml_version
 # Install everything
 #
 install: $(MPINSTALL)
-    mkdir -p $(INSTALL_DIR)
-    /bin/cp -L -r --remove-destination $(LIB) $(INSTALL_DIR)
-    /bin/cp -L -r --remove-destination $(BIN) $(INSTALL_DIR)
-    /bin/cp -L -r --remove-destination $(EXPORT)/mk $(INSTALL_DIR)
-    /bin/cp -L -r --remove-destination $(EXPORT)/theories $(INSTALL_DIR)
+    mkdir -p "$(INSTALL_DIR)"
+    /bin/cp -L -r --remove-destination $(LIB) "$(INSTALL_DIR)"
+    /bin/cp -L -r --remove-destination $(BIN) "$(INSTALL_DIR)"
+    /bin/cp -L -r --remove-destination $(EXPORT)/mk "$(INSTALL_DIR)"
+    /bin/cp -L -r --remove-destination $(EXPORT)/theories "$(INSTALL_DIR)"

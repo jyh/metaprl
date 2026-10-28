@@ -58,6 +58,9 @@ jobs:
       - name: an INSTALL_DIR with a space stays one THEORYPATH entry (editor/ml/tests/install_dir_space.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/install_dir_space.sh
+      - name: omake install works with a space in INSTALL_DIR (editor/ml/tests/install_space.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/install_space.sh
       - name: the build leaves the tree clean
         working-directory: metaprl
         run: |

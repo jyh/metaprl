@@ -2322,10 +2322,20 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       let wc_type_op =
          let dest_type_wc t =
             let loc = dest_loc "dest_type_wc" t in
-            let sl1, sl2, b, t = four_subterms t in
+            let sl1, sl2, b, t =
+               match (dest_term t).term_terms with
+                  [_; _; _] ->
+                     (* The form before the private flag, wc_type{names; params; type},
+                        which proof archives saved before 2017 still carry. *)
+                     let sl1, sl2, t = three_subterms t in
+                        sl1, sl2, false, t
+                | _ ->
+                     let sl1, sl2, b, t = four_subterms t in
+                        sl1, sl2, dest_bool b, t
+            in
             let sl1' = List.map dest_string (dest_olist sl1) in
             let sl2' = List.map dest_sbb (dest_olist sl2) in
-               WcTyp (loc, Ploc.VaVal (longid_lident_of_strings loc sl1'), Ploc.VaVal sl2', Ploc.VaVal (dest_bool b), dest_type t)
+               WcTyp (loc, Ploc.VaVal (longid_lident_of_strings loc sl1'), Ploc.VaVal sl2', Ploc.VaVal b, dest_type t)
          in add_wc "wc_type" dest_type_wc
       and wc_tys_op =
          let dest_tys_wc t =

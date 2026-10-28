@@ -18,6 +18,11 @@ mp="$here/../mp"
 expected="$here/proof_census.expected"
 out=${1:-$(mktemp)}
 tmp=${PROOF_CENSUS_TMP:-$(mktemp -d)}
+# An empty or missing expected file would replay nothing and compare equal.
+if [ -z "$PROOF_CENSUS_ONE" ] && [ ! -s "$expected" ]; then
+   echo "FAIL: $expected is missing or empty"
+   exit 1
+fi
 [ -n "$PROOF_CENSUS_ONE" ] || cut -d' ' -f1 "$expected" | uniq > "$tmp/modules"
 # One module: replay it and print "module rule status" lines.
 one() {
@@ -40,6 +45,10 @@ xargs -P 4 -I{} env PROOF_CENSUS_TMP="$tmp" PROOF_CENSUS_ONE={} sh "$0" < "$tmp/
 : > "$out"
 while read -r m; do cat "$tmp/m.$m" >> "$out" 2>/dev/null; done < "$tmp/modules"
 echo "replayed: $(wc -l < "$tmp/modules" | tr -d ' ') modules, $(wc -l < "$out" | tr -d ' ') rule statuses"
+if [ ! -s "$out" ]; then
+   echo "FAIL: no rule status was replayed"
+   exit 1
+fi
 if diff -u "$expected" "$out" > "$tmp/diff"; then
    echo "OK: every status as expected"
    exit 0

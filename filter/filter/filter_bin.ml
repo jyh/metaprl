@@ -34,18 +34,12 @@
 open Arg
 open Lm_debug
 
-open Lm_printf
 
 open File_base_type
 
-open Refiner.Refiner.TermType
 
-open Filter_type
-open Filter_summary
 open Filter_summary_type
-open Filter_prog
 open Filter_magic
-open Proof_convert
 
 open Filter_prog.ProofCaches
 
@@ -93,6 +87,11 @@ let theory_group, theory_groupdsc = Filter_util.make_groupdsc_opts ()
 (*
  * Compile a signature to ML.
  *)
+(*
+ * camlp5's printers take the items and the location of the end of the
+ * input. pr_dump ignores it; pr_o prints the comments it carries, and
+ * there are none here.
+ *)
 let compile_sig name =
    let path = Lm_filename_util.root name in
    let cache = SigFilterCache.create !include_path in
@@ -109,7 +108,7 @@ let compile_sig name =
          (theory_groupdsc ())
    in
       (* Print them *)
-      (!Pcaml.print_interf) items
+      (!Pcaml.print_interf) (items, Ploc.dummy)
 
 (*
  * Compile an implementation to ML.
@@ -132,7 +131,7 @@ let compile_str name =
          (theory_groupdsc ())
    in
       (* Print them *)
-      (!Pcaml.print_implem) items
+      (!Pcaml.print_implem) (items, Ploc.dummy)
 
 (*
  * Generate a reflected signature.
@@ -166,7 +165,7 @@ let compile_reflect_sig name =
          (theory_groupdsc ())
    in
       (* Print the ML part *)
-      (!Pcaml.print_interf) items
+      (!Pcaml.print_interf) (items, Ploc.dummy)
 
 (*
  * Generate a reflected implementation.
@@ -225,7 +224,7 @@ let compile_reflect_str name =
          (theory_groupdsc ())
    in
       (* Print them *)
-      (!Pcaml.print_implem) items
+      (!Pcaml.print_implem) (items, Ploc.dummy)
 
 (*
  * Compile a file.

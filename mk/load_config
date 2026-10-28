@@ -132,6 +132,23 @@ if $(not $(defined CAMLP_STREAMS_LIB))
         export
     export
 
+# camlp5 8's camlp5.cma needs other libraries (compiler-libs, pcre2, fmt,
+# camlp-streams); camlp5 7's needs none. A program that links camlp5.cma
+# links these first. Asked of ocamlfind, without camlp5's own odyl and
+# camlp5 archives, which the programs name themselves, and without
+# camlp_streams, which OMakefile_common links into every program.
+if $(not $(defined CAMLP5_DEP_LIBS))
+    CAMLP5_DEP_LIBS[] =
+    CAMLP5_DEP_DIRS[] =
+    if $(where ocamlfind)
+        if $(equal $(shell-code ocamlfind query -qe -qo camlp5), 0)
+            CAMLP5_DEP_ARCHIVES[] = $(filter-out %/odyl.cma %/camlp5.cma %/camlp_streams.cma, $(shell ocamlfind query -r -predicates byte -format %d/%a camlp5))
+            CAMLP5_DEP_LIBS[] = $(removesuffix $(CAMLP5_DEP_ARCHIVES))
+            CAMLP5_DEP_DIRS[] = $(set $(dirof $(CAMLP5_DEP_ARCHIVES)))
+            export
+        export
+    export
+
 if $(not $(defined CAMLP5))
     CAMLP5 = camlp5
     export

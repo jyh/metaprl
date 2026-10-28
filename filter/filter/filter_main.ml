@@ -88,35 +88,37 @@ let spec =
     "-export", Unit set_export, "export an ASCII file"]
 
 (*
- * Add the include path.
+ * This program is camlp5 with the MetaPRL filter linked in, and camlp5's
+ * odyl.cmo is its main module: it runs camlp5's Main.go, which parses the
+ * command line and preprocesses the file. camlp5 7 and 8 install no
+ * odyl_main.cmi, so this file cannot call Odyl_main.go itself.
+ *
+ * Main.go reports any error while preprocessing and exits 2 on its own.
+ * What this file adds runs at load time (the filter's options and include
+ * path) and after camlp5 has printed the output (the spelling check). If a
+ * word is misspelled, the output file is removed and the program exits 1.
  *)
-let main () =
-   Arg.current := 1;
-   Env_arg.parse spec add_anon_arg "MetaPRL compiler";
-   set_include_path !include_path;
-   try
-      Filter_exn.print_exn Dform.null_base None !Odyl_main.go ();
-      Term_grammar.raise_spelling_error ()
-   with
-      exn ->
-         remove_output_file ();
-         raise exn
-
 external exit : int -> unit = "caml_exit"
 
-let _ =
+let check_spelling () =
    try
-      main ();
-      do_at_exit ();
-      close_out stdout;
-      close_out stderr;
-      exit 0
+      Filter_exn.print_exn Dform.null_base None Term_grammar.raise_spelling_error ()
    with
-      exn ->
+      _ ->
+         remove_output_file ();
          do_at_exit ();
          close_out stdout;
          close_out stderr;
          exit 1
+
+let () =
+   Arg.current := 1;
+   Env_arg.parse spec add_anon_arg "MetaPRL compiler";
+   set_include_path !include_path;
+   let print_interf = !Pcaml.print_interf in
+   let print_implem = !Pcaml.print_implem in
+      Pcaml.print_interf := (fun x -> print_interf x; check_spelling ());
+      Pcaml.print_implem := (fun x -> print_implem x; check_spelling ())
 
 (*
  * -*-

@@ -25,6 +25,16 @@ a current OCaml again, without changing what the theories say.
   builds; the `mprun` variant, which is not ported, is installed only when
   `MPRUN_ENABLED` is set. An `INSTALL_DIR` containing a space is quoted in the
   install rule (#38) and stays one `THEORYPATH` entry (#33).
+- Windows with MinGW (#34, #41): the default configuration builds on both
+  OCaml versions with ocaml-omake's master branch (OMake 0.10.7 does not build
+  there), measured by a manual workflow, `.github/workflows/windows.yml`, that
+  does not run on pushes. Nothing is run on Windows yet: no shell tests and no
+  proof replay. On Windows OMake's `shell-code` does not drain a child's output
+  while the child runs, so a command run through MetaPRL's `prlcomp` alias hung
+  once it wrote about 4 KB, and the build stopped at the first theory files.
+  There the preprocessor steps now run as plain rule commands, with the
+  alias's environment variables set for each directory (#41). `mk/defaults`
+  adds `/MT` only for MSVC, and `macropp` is linked with `mkcamlp5 -opt` (#34).
 - `clib/locale.c` is no longer built (#36). libmojave 1.0.0 defines the same
   six C primitives for `Lm_ctype`, and linking both gave duplicate symbols.
 
@@ -68,15 +78,9 @@ a current OCaml again, without changing what the theories say.
   experimental/unity, experimental/mcc) were not in the 2017 build either and
   are not built now. hol compiles; the others do not, and their sources are
   unchanged since 2006.
-- Windows (#34). A manual workflow, `.github/workflows/windows.yml`, measures
-  the build; it is not run on pushes. With MinGW, libmojave, the refiner and
-  `macropp` build on both OCaml versions, using ocaml-omake's master branch
-  (OMake 0.10.7 does not build there). The build then stops making progress at
-  the first theory file: the preprocessor run on its own finishes in a second,
-  so the hang is in how OMake starts or waits for it, and it is not yet
-  diagnosed. With MSVC, OMake does not build on 5.4.1 and camlp5 does not
-  install on 4.14.4. `mk/defaults` adds `/MT` only for MSVC, and `macropp` is
-  linked with `mkcamlp5 -opt` (#34).
+- Windows with MSVC does not build: OMake does not build on OCaml 5.4.1 (MSVC
+  rejects the OCaml headers' C11 atomics), and on 4.14.4 camlp5 does not
+  install.
 - A build reads a module's proofs from the newest of its `.prla`, `.prlb` and
   `.cmoz` files, and the build itself writes `.prlb` and `.cmoz`. In a tree
   that was built before a change to the filter, those files shadow the `.prla`

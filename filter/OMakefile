@@ -47,7 +47,8 @@ OCAML_CLIBS[] =
    $(LIB)/clib
    $(LIB)/liblmcutil
 
-OCAML_OTHER_LIBS += str
+OCAML_OTHER_LIBS += str $(CAMLP5_DEP_LIBS)
+OCAMLINCLUDES += $(CAMLP5_DEP_DIRS)
 
 OCAML_LIBS[] =
    $(LIB)/lm
@@ -81,6 +82,7 @@ section
         filter/filter_parse
         $(ROOT)/util/pa_macro
         filter/filter_main
+        $(CAMLP5LIB)/odyl
 
     # XXX: http://caml.inria.fr/bin/caml-bugs?selectid=3439 workaround
     if $(and $(file-exists $(CAMLP5LIB)/argl.cmx), $(file-exists $(CAMLP5LIB)/argl.o), $(file-exists $(CAMLP5LIB)/argl.cmo))
@@ -97,7 +99,7 @@ section
         $(CAMLP5_FILES)
 
     CAMLP5O_FILES[] =
-        $(CAMLP5LIB)/pr_o
+        $(addprefix $(CAMLP5LIB)/, $(CAMLP5_PR_O))
         $(CAMLP5_FILES)
 
     OCamlProgramInstall($(MPINSTALL), $(LIB), camlp5n, $(CAMLP5N_FILES))
@@ -124,7 +126,7 @@ section
         $(PRLC_FILES)
 
     PRLCO_FILES[] =
-        $(CAMLP5LIB)/pr_o
+        $(addprefix $(CAMLP5LIB)/, $(CAMLP5_PR_O))
         $(PRLC_FILES)
 
     OCamlProgramInstall($(MPINSTALL), $(BIN), prlcn, $(PRLCN_FILES))

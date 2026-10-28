@@ -28,6 +28,14 @@ open Lm_debug
 open Lm_printf
 open Lm_symbol
 
+(*
+ * This file has unused opens and values and record patterns that omit
+ * fields (warnings 33, 32, 9), which the build makes errors. It is kept
+ * as written; the warnings stay on, but not as errors, in this file only.
+ *)
+[@@@ocaml.warning "+9+32+33"]
+[@@@ocaml.warnerror "-9-32-33"]
+
 open Term_sig
 open Term_ty_sig
 open Term_ty_infer
@@ -164,7 +172,7 @@ let reflect_filename new_name orig_path =
  *)
 let not_exn_located exn =
    match exn with
-      Stdpp.Exc_located _ ->
+      Ploc.Exc _ ->
          false
     | _ ->
          true

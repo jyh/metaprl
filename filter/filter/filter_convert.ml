@@ -33,7 +33,6 @@
  *)
 
 open Lm_debug
-open Lm_printf
 
 open File_base_type
 
@@ -62,14 +61,6 @@ let output_suffix = ref (OnlySuffixes ["prla"])
 let set_raw () =
    output_suffix := OnlySuffixes ["prlb"];
    set_raw ()
-
-let set_file () =
-   output_suffix := OnlySuffixes ["prlb"];
-   set_file ()
-
-let set_lib () =
-   output_suffix := OnlySuffixes ["prlb"];
-   set_lib ()
 
 let set_ascii () =
    output_suffix := OnlySuffixes ["prla"]

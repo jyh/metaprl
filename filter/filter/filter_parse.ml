@@ -180,6 +180,38 @@ let parsing_state = ref None
 (*
  * Base term grammar
  *)
+(*
+ * MetaPRL writes {| ... |} as brackets (resource annotations, sequents),
+ * 6,894 times in theories/. camlp5 8's pa_o makes the lexer with
+ * Plexer.simplest_raw_strings set, so {|...|} lexes as an OCaml quoted
+ * string, and the keyword "{|" is refused. camlp5 7's lexer had no quoted
+ * strings. Install a lexer made with that flag unset, before the term
+ * grammar adds its rules. $ antiquotations stay on: pa_o turns them off,
+ * but <:con< ... $x$ ... >> quotations need them (with them off, three of
+ * the sixteen support/display files fail to preprocess).
+ *
+ * Grammar.Unsafe.gram_reinit would do this but also empties the grammar's
+ * token use counts, and Grammar.delete_rule (Infix, pa_macro) then fails
+ * or removes keywords still in use. So the lexer field is set directly
+ * (Grammar.g is Gramext.grammar on (string * string) tokens), the counts
+ * are kept, and every token in use is registered with the new lexer.
+ *)
+let () =
+   let g = (Obj.magic Pcaml.gram : (string * string) Gramext.grammar) in
+   let srs = !Plexer.simplest_raw_strings in
+   let dfa = !Plexer.dollar_for_antiquotation in
+   let lexer =
+      Plexer.simplest_raw_strings := false;
+      Plexer.dollar_for_antiquotation := true;
+      Fun.protect (**)
+         ~finally:(fun () ->
+               Plexer.simplest_raw_strings := srs;
+               Plexer.dollar_for_antiquotation := dfa)
+         Plexer.gmake
+   in
+      Hashtbl.iter (fun tok _ -> lexer.Plexing.tok_using tok) g.Gramext.gtokens;
+      g.Gramext.glexer <- lexer
+
 module TermGrammarBefore : TermGrammarSig =
 struct
    let parsing_state loc =
@@ -327,7 +359,7 @@ struct
    (*
     * Processor.
     *)
-   let proc_ref = ref None
+   let proc_ref : t option ref = ref None
 
    (*
     * Parse an input expression.
@@ -1020,6 +1052,16 @@ let define_int_thm proc loc name params mterm res =
 
 open TermGrammar
 
+(*
+ * camlp5 8 cannot antiquote a name after a module path (M.$uid:x$), so
+ * build the qualified constructor M.x as an expression.
+ *)
+let mk_qualified_uid _loc path name =
+   match path with
+      [] -> MLast.ExLong (_loc, MLast.LiUid (_loc, Ploc.VaVal name))
+    | h :: t ->
+         MLast.ExLong (_loc, List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) (MLast.LiUid (_loc, Ploc.VaVal h)) (t @ [name]))
+
 (* Parse a term *)
 let term_exp s =
    let cs = Stream.of_string s in
@@ -1068,7 +1110,7 @@ let expr_of_pcon _loc = function
           | _ ->
                Stdpp.raise_with_loc _loc (Invalid_argument "\"con\" quotation: string constant parameter must be of string kind")
       in
-         <:expr< Refiner.Refiner.Term.make_param (Term_sig.$uid:shape$ $str:s$) >>
+         <:expr< Refiner.Refiner.Term.make_param ($mk_qualified_uid _loc ["Term_sig"] (shape)$ $str:s$) >>
  | ConPToken opname, shape ->
       let strings = Opname.dest_opname opname in
       let strings = List.map (fun s -> <:expr< $str: s$ >>) strings in
@@ -1089,7 +1131,7 @@ let expr_of_pcon _loc = function
           | ShapeOperator -> "MOperator"
           | _ -> Stdpp.raise_with_loc _loc (Invalid_argument "\"con\" quotation: unsupported meta-parameter")
       in
-         <:expr< Refiner.Refiner.Term.make_param (Term_sig.$uid:shape$ $str:string_of_symbol s$) >>
+         <:expr< Refiner.Refiner.Term.make_param ($mk_qualified_uid _loc ["Term_sig"] (shape)$ $str:string_of_symbol s$) >>
  | ConPExpr e, shape ->
       let shape =
          match shape with
@@ -1102,7 +1144,7 @@ let expr_of_pcon _loc = function
           | ShapeShape -> "Shape"
           | ShapeOperator -> "Operator"
       in
-         <:expr< Refiner.Refiner.Term.make_param (Term_sig.$uid:shape$ $e$) >>
+         <:expr< Refiner.Refiner.Term.make_param ($mk_qualified_uid _loc ["Term_sig"] (shape)$ $e$) >>
  | ConPNum n, ShapeNumber ->
       <:expr< Refiner.Refiner.Term.make_param (Term_sig.Number $add_parsed_binding (BindNum n)$) >>
  | ConPInt e, ShapeNumber ->
@@ -1353,7 +1395,19 @@ let _ =
    Grammar.Unsafe.clear_entry interf;
    Grammar.Unsafe.clear_entry implem
 
-let operator = Pa_o.operator_rparen
+(*
+ * camlp5 installs no pa_o.cmi, so Pa_o.operator_rparen cannot be named at
+ * compile time. pa_o is loaded before this file, and its expr grammar uses
+ * the entry in the rule  "(" operator_rparen , so look it up there at load
+ * time. Grammar.Entry.find raises Not_found if it is missing; say so.
+ *
+ * Note: operator_rparen itself consumes the closing ")" (camlp5 7 and 8), so
+ * the "topval" rule below, which expects another ")", is kept as it was.
+ *)
+let operator : string Grammar.Entry.e =
+   try Obj.magic (Grammar.Entry.find Pcaml.expr "operator_rparen") with
+      Not_found ->
+         raise (Failure "Filter_parse: entry operator_rparen not found in Pcaml.expr (is pa_o loaded?)")
 
 EXTEND
    GLOBAL: interf implem sig_item str_item expr;

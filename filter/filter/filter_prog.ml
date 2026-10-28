@@ -56,6 +56,24 @@ open Filter_summary
 open Proof_convert
 
 (*
+ * camlp5 8 cannot antiquote a name after a module path (M.$uid:x$), so
+ * build the qualified constructor M.x as an expression.
+ *)
+let mk_longid _loc = function
+   [] -> raise (Invalid_argument "Filter_prog.mk_longid")
+ | h :: t -> List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) (MLast.LiUid (_loc, Ploc.VaVal h)) t
+
+(* e.x with a computed field name x; camlp5 8 cannot antiquote it after a dot. *)
+let mk_field _loc e x =
+   MLast.ExFle (_loc, e, Ploc.VaVal (None, Ploc.VaVal x))
+
+let mk_qualified_uid _loc path name =
+   match path with
+      [] -> MLast.ExLong (_loc, MLast.LiUid (_loc, Ploc.VaVal name))
+    | h :: t ->
+         MLast.ExLong (_loc, List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) (MLast.LiUid (_loc, Ploc.VaVal h)) (t @ [name]))
+
+(*
  * Show the file loading.
  *)
 let _ =
@@ -213,8 +231,9 @@ let rec fun_expr _loc ids body =
 let refiner_expr _loc =
    <:expr< Refiner.Refiner.Refine >>
 
-let refiner_ctyp _loc =
-   <:ctyp< Refiner.Refiner.Refine >>
+(* camlp5 8 has no type for a bare module path; these are longids. *)
+let refiner_ctyp_path _loc =
+   mk_longid _loc ["Refiner"; "Refiner"; "Refine"]
 
 let rewriter_expr _loc =
    <:expr< Refiner.Refiner.Rewrite >>
@@ -230,8 +249,8 @@ let tactic_type_expr _loc =
 let rewrite_type_expr _loc =
    <:expr< Tactic_type.Conversionals >>
 
-let rewrite_type_ctyp _loc =
-   <:ctyp< Tactic_type.Tactic >>
+let rewrite_type_ctyp_path _loc =
+   mk_longid _loc ["Tactic_type"; "Tactic"]
 
 let dest_msequent_expr _loc =
    <:expr< $refiner_expr _loc$ . dest_msequent >>
@@ -252,7 +271,7 @@ let tactic_ctyp _loc =
  * Rewrite.
  *)
 let rewrite_ctyp _loc =
-   <:ctyp< $rewrite_type_ctyp _loc$ . conv >>
+   MLast.TyAcc (_loc, rewrite_type_ctyp_path _loc, Ploc.VaVal "conv")
 
 let prim_rewrite_expr _loc =
    <:expr< $refiner_expr _loc$ . prim_rewrite >>
@@ -273,7 +292,7 @@ let rewrite_of_pre_rewrite_expr _loc =
  * Conditional rewrite.
  *)
 let cond_rewrite_ctyp _loc =
-   <:ctyp< $rewrite_type_ctyp _loc$ . conv >>
+   MLast.TyAcc (_loc, rewrite_type_ctyp_path _loc, Ploc.VaVal "conv")
 
 let prim_cond_rewrite_expr _loc =
    <:expr< $refiner_expr _loc$ . prim_cond_rewrite >>
@@ -291,7 +310,7 @@ let apply_redex_expr _loc =
  * Other expressions.
  *)
 let refiner_ctyp _loc =
-   <:ctyp< $refiner_ctyp _loc$ . refiner >>
+   MLast.TyAcc (_loc, refiner_ctyp_path _loc, Ploc.VaVal "refiner")
 
 let get_resource_name name =
    "get_" ^ name ^ "_resource"
@@ -466,21 +485,14 @@ let dform_option_expr _loc = function
 (*
  * Convert a module path to an expression.
  *)
-let rec parent_path_expr _loc = function
-   [h] ->
-      <:expr< $uid:Latin1_case.capitalize h$ >>
- | h::t ->
-      <:expr< $uid:Latin1_case.capitalize h$ . $parent_path_expr _loc t$ >>
- | [] ->
+let parent_path_longid _loc = function
+   [] ->
       raise (Invalid_argument "parent_path")
+ | path ->
+      mk_longid _loc (List.map Latin1_case.capitalize path)
 
-let rec parent_path_ctyp _loc = function
-   [h] ->
-      <:ctyp< $uid:Latin1_case.capitalize h$ >>
- | h::t ->
-      <:ctyp< $uid:Latin1_case.capitalize h$ . $parent_path_ctyp _loc t$ >>
- | [] ->
-      raise (Invalid_argument "parent_path")
+let parent_path_expr _loc path =
+   MLast.ExLong (_loc, parent_path_longid _loc path)
 
 let raise_toploop_exn loc =
    Stdpp.raise_with_loc loc (RefineError ("topval", StringError
@@ -502,7 +514,7 @@ let toploop_item_expr _loc name ctyp =
    in let rec collect index expr = function
       <:ctyp< $lid: typ$ >> ->
          let name = str_lid typ in
-            <:expr< Shell_sig. $uid: name ^ "Expr"$ $expr$ >>, <:expr< Shell_sig. $uid: name ^ "Type"$ >>
+            <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Expr")$ $expr$ >>, <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Type")$ >>
     | <:ctyp< $t1$ -> $t2$ >> ->
          let v = sprintf "v%d" index in
          let patt = <:patt< $lid: v$ >> in
@@ -511,12 +523,12 @@ let toploop_item_expr _loc name ctyp =
             begin match t1 with
                <:ctyp< $lid: typ$ >> ->
                   let name = str_lid typ in
-                     <:expr< Shell_sig. $uid: name ^ "FunExpr"$ $expr$ >>,
-                     <:expr< Shell_sig.FunType Shell_sig.$uid: name ^ "Type"$ $texpr$ >>
+                     <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "FunExpr")$ $expr$ >>,
+                     <:expr< Shell_sig.FunType $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Type")$ $texpr$ >>
              | <:ctyp< list $lid: typ$ >> ->
                   let name = str_lid typ in
-                     <:expr< Shell_sig. $uid: name ^ "ListFunExpr"$ $expr$ >>,
-                     <:expr< Shell_sig.FunType (Shell_sig.ListType Shell_sig.$uid: name ^ "Type"$) $texpr$ >>
+                     <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "ListFunExpr")$ $expr$ >>,
+                     <:expr< Shell_sig.FunType (Shell_sig.ListType $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Type")$) $texpr$ >>
              | <:ctyp< int -> tactic >> ->
                   <:expr< Shell_sig.IntTacticFunExpr $expr$ >>,
                   <:expr< Shell_sig.FunType (Shell_sig.FunType Shell_sig.IntType Shell_sig.TacticType) $texpr$ >>
@@ -742,15 +754,18 @@ let rec mk_string_list_expr _loc = function
       <:expr< $lid:"::"$ $str:hd$ $mk_string_list_expr _loc tl$ >>
 *)
 
+(* camlp5 8: a let binding is a triple; the third part is its attributes. *)
 let binding_let proc _loc (v, bnd) =
-   <:patt< $lid:v$ >>,
-   match bnd with
-      BindTerm t ->
-         expr_of_term proc _loc t
-    | BindOpname op ->
-         expr_of_opname proc _loc op
-    | BindNum n ->
-         expr_of_num proc _loc n
+   let e =
+      match bnd with
+         BindTerm t ->
+            expr_of_term proc _loc t
+       | BindOpname op ->
+            expr_of_opname proc _loc op
+       | BindNum n ->
+            expr_of_num proc _loc n
+   in
+      <:patt< $lid:v$ >>, e, Ploc.VaVal []
 
 let bindings_let proc _loc bnd_expr expr =
    if bnd_expr.item_bindings = [] then
@@ -808,9 +823,9 @@ let wrap_tactic_expr _loc =
 let wrap_optimized _loc name arglist_name vars expr =
    let name = <:expr< $str:name$ >> in
       if vars = [] then
-         <:expr< $wrap_tactic_expr _loc$ (Tactic_boot_sig . $uid:arglist_name$ $name$ ) $expr$ >>
+         <:expr< $wrap_tactic_expr _loc$ ($mk_qualified_uid _loc ["Tactic_boot_sig"] (arglist_name)$ $name$ ) $expr$ >>
       else
-         <:expr< $wrap_tactic_expr _loc$ (Tactic_boot_sig . $uid:arglist_name$ ( $list:name :: vars$ )) $expr$ >>
+         <:expr< $wrap_tactic_expr _loc$ ($mk_qualified_uid _loc ["Tactic_boot_sig"] (arglist_name)$ ( $list:name :: vars$ )) $expr$ >>
 
 let wrap_arg _loc arg v =
    let s =
@@ -826,7 +841,7 @@ let wrap_arg _loc arg v =
        | TermListArg ->
             "TermListArg"
    in
-      <:expr< Tactic_boot_sig. $uid:s$ $v$ >>
+      <:expr< $mk_qualified_uid _loc ["Tactic_boot_sig"] (s)$ $v$ >>
 
 let wrap_general _loc name wrap vars expr =
       <:expr< $wrap_tactic_expr _loc$ (Tactic_boot_sig.GeneralArgList
@@ -1218,7 +1233,7 @@ let define_rule prim_rule deffun proc _loc
          $tactic_type_expr _loc$.compile_rule $lid:local_refiner_id$ ($list_expr _loc (expr_of_label _loc) labels$) $lid:rule_id$
       in
       let _ = do {
-         $refiner_expr _loc$.$lid:deffun$ $lid:local_refiner_id$ $str:name$ $lid:args_id$ $lid:params_id$ $lid:assums_id$ $extract_args$ $extract$;
+         $mk_field _loc (refiner_expr _loc) deffun$ $lid:local_refiner_id$ $str:name$ $lid:args_id$ $lid:params_id$ $lid:assums_id$ $extract_args$ $extract$;
          $define_rule_resources proc _loc name args_id params_id assums_id resources name_rule_expr$
       }
       in
@@ -1427,8 +1442,8 @@ let define_resource proc _loc name res =
             ( $res.res_body$ : Mp_resource.resource_info $lid:inp_name$ '$intermediate$ $lid:outp_name$ ) >>]
 
 let rec is_list_expr = function
-   MLast.ExUid(_, Ploc.VaVal "[]") -> true
- | MLast.ExApp(_, MLast.ExApp(_, MLast.ExUid(_, Ploc.VaVal "::"), _), tail) ->
+   MLast.ExLong(_, MLast.LiUid(_, Ploc.VaVal "[]")) -> true
+ | MLast.ExApp(_, MLast.ExApp(_, MLast.ExLong(_, MLast.LiUid(_, Ploc.VaVal "::")), _), tail) ->
       is_list_expr tail
  | _ -> false
 
@@ -1464,13 +1479,13 @@ let define_parent proc _loc
    in
    let make_ctyp (name, _) =
       let path = find_resource name proc.imp_all_resources in
-         (name, (<:ctyp< $parent_path_ctyp _loc path$ . $lid:input_type name$ >>, res_fqn path name))
+         (name, (MLast.TyAcc (_loc, parent_path_longid _loc path, Ploc.VaVal (input_type name)), res_fqn path name))
    in
       proc.imp_resources <- proc.imp_resources @ (List.map make_ctyp nresources);
       match path with
          [name] -> [
             <:str_item< Mp_resource.extends_theory $str:name$ >>;
-            <:str_item< $exp:refiner_expr _loc$.join_refiner $lid: local_refiner_id$ $parent_path$.$lid: refiner_id$ >>;
+            <:str_item< $exp:refiner_expr _loc$.join_refiner $lid: local_refiner_id$ $mk_field _loc parent_path refiner_id$ >>;
             refiner_let _loc;
             refiner_ignore _loc;
          ]
@@ -1494,9 +1509,9 @@ let implem_toploop info =
 let define_summary_item proc _loc = function
    { item_bindings = []; item_item = item } ->
       [item]
- | { item_bindings = bnds; item_item = <:str_item< value $list:[patt,expr]$ >> } ->
+ | { item_bindings = bnds; item_item = <:str_item< value $list:[(patt, expr, attrs)]$ >> } ->
       let expr = <:expr< let $list:List.map (binding_let proc _loc) (List.rev bnds)$ in $expr$ >> in
-         [<:str_item< value $list:[patt, expr]$ >>]
+         [<:str_item< value $list:[(patt, expr, attrs)]$ >>]
  | { item_bindings = bnds; item_item = item } ->
       [<:str_item< value $list:List.map (binding_let proc _loc) (List.rev bnds)$ >>; item]
 
@@ -1515,12 +1530,12 @@ let get_top_ctyp proc name =
 (*
  * An regular item.
  *)
-let wrap_toploop_item proc _loc ((patt, expr) as item) =
+let wrap_toploop_item proc _loc ((patt, expr, attrs) as item) =
    match patt with
       <:patt< $lid:name$ >> when List.mem_assoc name proc.imp_toploop ->
          let ctyp = get_top_ctyp proc name in
          let expr = wrap_toploop_item _loc name ctyp expr in
-            (patt, expr), [add_toploop_item proc _loc name ctyp]
+            (patt, expr, attrs), [add_toploop_item proc _loc name ctyp]
      | _ ->
          item, []
 
@@ -1537,7 +1552,7 @@ let rec wrap_summary_items proc = function
             let pel, toploop = wrap_toploop_items proc _loc pel in
             let toploop = List.map (fun x -> x, _loc) toploop in
                (<:str_item< value $opt:rec_flag$ $list:pel$ >>, _loc) :: (toploop @ items)
-       | MLast.StExt (_loc, Ploc.VaVal name, ctyp, _ ) when List.mem_assoc name proc.imp_toploop ->
+       | MLast.StExt (_loc, Ploc.VaVal name, _, ctyp, _, _) when List.mem_assoc name proc.imp_toploop ->
             (item, loc) :: (add_toploop_item proc _loc name (get_top_ctyp proc name), _loc) :: items
        | _ ->
          (item, loc)::items

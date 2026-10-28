@@ -1,0 +1,399 @@
+name: Scrub
+
+# PORTED TO metaprl 2026-10-27 from jyh/libmojave (which took it from jyh/salt 9c967dad), unchanged
+# except: salt's two Lean-claim jobs (verification-claims, prose-lean) are not
+# carried -- this repository makes no machine-checked claims -- and the baseline
+# counts quoted below are metaprl's own. At the port every arm was run over the
+# full history (see the PR for the scan); baselines hold any accepted findings.
+
+# PORTED FROM jyh/jas (scripts/check_commit_trailers.py + scrub.yml), scheduled
+# by the Captain 2026-08-23 ("schedule the ci immediately"). The gate and its
+# fail-closed doctrine are jas's, debugged in production there; only the RANGE
+# differs, and the difference is a ruling, not a soft choice:
+#
+#   THIS repo's history carries session URLs ACCEPTED by the Captain's
+#   2026-08-23 ruling ("the published URLs stay" — no rewrite). A full-history
+#   scan would therefore be permanently red, which is the exact
+#   red-sweep-gets-abandoned failure jas's own header documents. So this
+#   workflow scans THE PUSH DELTA: the rule it enforces is "no NEW session
+#   trailer or URL enters history", which is the whole enforceable content of
+#   the ruling. DECLARED COVERAGE LIMIT: on a brand-new branch (before-sha is
+#   zeros) it falls back to the last 100 commits — imperfect, stated here
+#   rather than hidden.
+on:
+  push:
+  workflow_dispatch:
+  # ⛔ ADDED BECAUSE THE FORGE-PROSE ARM'S SUBJECT SET IS FIXED BY ITS TRIGGER, AND
+  #   THAT COST TWO PRs IN ONE DAY. `check_pr_descriptions.py --open` enumerates the
+  #   OPEN PRs AT RUN TIME. With push as the only trigger, the run fired by the last
+  #   push of a branch completes BEFORE the PR for that branch is created -- so the
+  #   PR is not in the population, while the checks list prints that green on the
+  #   PR's own page, which is exactly where a reader concludes it is about it.
+  #   MEASURED, TWICE, AT THE REAL OBJECTS -- this is the red arm, in production,
+  #   not a fixture: PR #5 created 18:50:23Z against a run that started 18:48:52Z
+  #   (91 s early); PR #6 created 00:02:01Z against a run whose prose arm finished
+  #   00:01:07Z (61 s early). Both were closed one at a time by a workflow_dispatch
+  #   after the fact -- a remedy that fixes the instance and leaves the class.
+  # ⚠️ THE OTHER DOOR THIS DOES NOT CLOSE, SO IT IS NOT OVERSOLD: a push to the BASE
+  #   still fires no run for the PRs targeting it. That is what the arm's own
+  #   re-read-every-open-PR design covers, and it is why `push` STAYS. This adds the
+  #   one event the design could not reach: the PR that did not exist yet.
+  # The green arm is this workflow's own PR: if the trigger works, THIS change's PR
+  # carries a `pull_request` Scrub run with itself in the population.
+  # ⛔ AND `edited`, ADDED 2026-09-21 -- THE DAY THE FORGE-PROSE CHECK BECAME A
+  #   *REQUIRED* STATUS CHECK. `pull_request` defaults to opened / synchronize /
+  #   reopened, so the EDIT THAT FIXES A TITLE OR BODY FIRED NO RUN. While a red
+  #   merged anyway that was a stale red; once required, it is a PR that sits
+  #   BLOCKED after its author did exactly what the gate's own message said. With
+  #   `edited`, saving the fix IS the event that re-reads the forge, on the same
+  #   head sha -- and a body edited to BAD after a green no longer waits for the
+  #   next push. `check_pr_descriptions.py` READS THIS LIST to choose the remedy it
+  #   prints, and its self-test reds if `edited` is dropped: one fact, one owner.
+  # The green arm is again this change's own PR: edit its body once and a Scrub
+  #   run appears with event `pull_request`, no push.
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scrub-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commit-trailers:
+    name: no NEW session trailer enters history
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # The gate proves it can fail before it is allowed to pass.
+      - run: python scripts/check_commit_trailers.py --self-test
+      - name: scan the pushed delta
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          # ⛔ CARRIED FROM THE SIBLING JOB AFTER A REAL FORCE-PUSH KILLED THIS ONE.
+          # 2026-08-25: a Captain-ruled history rewrite landed, and the next push
+          # carried a before-sha naming commits that no longer exist. This step
+          # ran `<dead-sha>..HEAD`, git exited 128, and the job RED with
+          # "could not read history" -- a spurious failure on clean content.
+          #
+          # THE SIBLING JOB SURVIVED THE SAME PUSH, because it had been given
+          # this guard days earlier. Same push, same repo, two jobs, opposite
+          # outcomes: THE FIX LANDED WHERE THE ALARM WENT OFF AND WAS NEVER
+          # CARRIED ACROSS. That is the whole defect; the code below is small.
+          #
+          # A before-sha must be REACHABLE, not merely non-empty. Rewritten-away
+          # history is neither the "new branch" case nor the ordinary case, and
+          # the old two-branch test had nowhere to put it.
+          DEF="${{ github.event.repository.default_branch }}"
+          # ⛔⛔ ANCESTRY, NOT EXISTENCE — row ML finding #6, closed 2026-09-16.
+          #   `git cat-file -e BEFORE` asks whether the object EXISTS. The question is whether
+          #   it is an ANCESTOR of HEAD, and the two come apart on a REWIND: move a branch back
+          #   to an ancestor while its old tip survives on another fetched ref and BEFORE still
+          #   resolves, so `BEFORE..HEAD` is EMPTY and the gate's fail-closed fires on CLEAN
+          #   content. The `!= HEAD` half closes the no-op push, a SECOND empty-range case.
+          #   FAIL-CLOSED both ways, so this was never a leak — it was a spurious red, and a
+          #   gate whose only red is false teaches its reader to skip the red.
+          #   ⭐ Driven red-first in a scratch repo before this edit, five arms: ordinary push
+          #   AGREES (range:1), all-zeros and an unreachable sha AGREE (fallback), and the two
+          #   that differ are exactly REWIND and NO-OP — both old=empty-range, new=fallback.
+          #   ⚠️ I predicted ONE differing arm and the matrix returned TWO; the no-op case is
+          #   the `!= HEAD` clause earning its place, and I had not reasoned about it.
+          #   Reference implementation: jas `scripts/pick_scan_range.sh:42`, whose own comment
+          #   records that a mutant DELETING a redundant `cat-file -e` SURVIVED — `--is-ancestor`
+          #   already subsumes existence, so testing both is dead code. This follows that.
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
+             && git merge-base --is-ancestor "$BEFORE" HEAD 2>/dev/null \
+             && [ "$BEFORE" != "$(git rev-parse HEAD)" ]; then
+            RANGE="$BEFORE..HEAD"
+            echo "push delta: $RANGE"
+          elif MB=$(git merge-base "origin/$DEF" HEAD 2>/dev/null) && [ -n "$MB" ] \
+               && [ "$MB" != "$(git rev-parse HEAD)" ]; then
+            RANGE="$MB..HEAD"
+            echo "before-sha absent or unreachable: merge-base with origin/$DEF -> $RANGE"
+          elif git rev-parse HEAD~1 >/dev/null 2>&1; then
+            # ⛔ THE MERGE-BASE FALLBACK DEGENERATES ON THE DEFAULT BRANCH, and
+            # driving it is the only way I found that out. Force-push to the
+            # default branch itself: the before-sha is unreachable AND
+            # merge-base(origin/DEF, HEAD) IS HEAD, so the range is EMPTY and
+            # the gate's own fail-closed fires -- the SAME spurious red, moved
+            # one branch over. Reasoning about this arm produced a clean bill;
+            # running it produced the bug.
+            RANGE="HEAD~1..HEAD"
+            echo "DECLARED PARTIAL COVERAGE: the default branch was rewritten, so"
+            echo "  'new' cannot be bounded -- the delta against $DEF is empty by"
+            echo "  construction. Scanning the tip commit ONLY. This is a stated"
+            echo "  limit, not a clean scan; the next ordinary push scans in full."
+          else
+            echo "FAIL: cannot determine a delta range (no reachable before-sha,"
+            echo "      no usable merge-base, no parent commit). Refusing to guess."
+            exit 1
+          fi
+          echo "scanning $RANGE"
+          python scripts/check_commit_trailers.py --range "$RANGE"
+      # ⛔ desk QF (found HERE, 2026-09-16, a6ada5c3): THE DELTA ABOVE CANNOT SEE A COMMIT WHOSE OWN RUN WAS CANCELLED. A rapid
+      #   push cancels the run on the older tip, and the next run's range `$BEFORE..HEAD` STARTS AT that tip — a `..` range
+      #   excludes its start — so the one commit that lost its scan is exactly the one the next scan begins after, while every
+      #   consumer reads green. So the WHOLE history reachable from HEAD is scanned on every run as well: the gate's default
+      #   range. Measured before this step was added: 3,921 commit messages on main, 0 forbidden strings, ~0.1 s — no baseline
+      #   is needed, and any future offender reachable from HEAD turns the run red.
+      - name: scan the whole history (desk QF)
+        run: python scripts/check_commit_trailers.py
+
+  private-paths:
+    name: no NEW path into the private record enters a public repo
+    runs-on: ubuntu-latest
+    # Council 2026-08-25 ruled the firewall line at PATHS and booked this gate
+    # as construction. Booked is not built: measured over the 9 commits that
+    # landed on saltworks at or after that stamp, THREE carried a path into the
+    # private record -- the first 1m41s after the ruling. A rule with no
+    # instrument is obeyed for exactly as long as it is remembered.
+    #
+    # RANGE: the pushed delta, same doctrine as the job above. Measured before
+    # this shipped, THIS repo's history carries ZERO of these shapes across all
+    # 2142 commit messages -- so a full scan would be green today. It is still a
+    # delta scan, deliberately: the enforceable rule is "no NEW path enters",
+    # and a gate whose range depends on today's luck changes meaning the first
+    # time a pre-ruling path is found in an old message.
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # BOTH ARMS DRIVEN BEFORE TRUST: a planted path must fail it, a
+      # role-worded message must pass it, and the fixtures are the real
+      # post-ruling instances rather than invented shapes.
+      - run: python scripts/check_private_paths.py --self-test
+      # The subject gate (desk QA) rides THIS job, which is required: a commit
+      # subject is history, so its miss is permanent, unlike a PR body, which is
+      # editable. It proves it can fail before it is allowed to pass.
+      - run: python scripts/check_pr_descriptions.py --self-test
+      # The infrastructure-name gate (council 2026-10-07 ruling 3, "ratchet only"): proves it can fail first.
+      - run: python scripts/check_infra_names.py --self-test
+      - name: scan the pushed delta
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          # ⛔ THE FALLBACK IS A CONTROL PATH AND THE FIRST ONE WAS NEVER DRIVEN.
+          # Its original form was HEAD~100..HEAD, which on any new branch reaches
+          # ~100 commits of PRE-RULING history -- so every new branch redded
+          # permanently, on findings the commencement clause protects. That is
+          # precisely the red-sweep-gets-abandoned failure this workflow's own
+          # header names, reintroduced in the one code path that had both arms
+          # reasoned and neither driven. Found by the jas seat's meta-gate.
+          #
+          # MERGE-BASE is the correct fallback: it scans what THIS BRANCH ADDS
+          # relative to the mainline, which is the same question the before-sha
+          # answers on an existing branch. Both paths are now driven as controls
+          # before shipping, clean AND dirty.
+          DEF="${{ github.event.repository.default_branch }}"
+          # ⛔ ANCESTRY, NOT EXISTENCE — row ML finding #6. The full reasoning, the five-arm
+          #   red-first matrix and the reference implementation are on the FIRST copy of this
+          #   test in this file (the `trailers` job above); this is the same guard, and the two
+          #   must move together. ⚠️ Kept SHORT deliberately: a 17-line rationale duplicated at
+          #   two sites is the two-hand-maintained-copies hazard this very file's siblings keep
+          #   paying for (desk PC) — one statement of the WHY, one pointer to it.
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
+             && git merge-base --is-ancestor "$BEFORE" HEAD 2>/dev/null \
+             && [ "$BEFORE" != "$(git rev-parse HEAD)" ]; then
+            RANGE="$BEFORE..HEAD"
+            echo "push delta: $RANGE"
+          elif MB=$(git merge-base "origin/$DEF" HEAD 2>/dev/null) && [ -n "$MB" ] \
+               && [ "$MB" != "$(git rev-parse HEAD)" ]; then
+            RANGE="$MB..HEAD"
+            echo "new branch: merge-base with origin/$DEF -> $RANGE"
+          elif git rev-parse HEAD~1 >/dev/null 2>&1; then
+            # ⛔ SAME DEGENERATE CASE AS THE SIBLING JOB, AND I ALMOST LEFT IT
+            # HERE. I repaired the trailer job's version of this, looked at the
+            # diff, and saw that the fix had landed on exactly one of the two
+            # jobs -- the one whose failure I had been handed. That is the
+            # defect this whole day keeps producing: A FIX LANDS WHERE THE ALARM
+            # WENT OFF. Carried deliberately, and driven on both jobs.
+            #
+            # Force-push to the DEFAULT BRANCH: before-sha unreachable AND
+            # merge-base(origin/DEF, HEAD) IS HEAD, so the range is empty and
+            # the fail-closed below fires on clean content.
+            RANGE="HEAD~1..HEAD"
+            echo "DECLARED PARTIAL COVERAGE: the default branch was rewritten, so"
+            echo "  'new' cannot be bounded. Scanning the tip commit ONLY -- a"
+            echo "  stated limit, not a clean scan."
+          else
+            echo "FAIL: cannot determine a delta range (no reachable before-sha,"
+            echo "      no usable merge-base, no parent commit). Refusing to guess."
+            exit 1
+          fi
+          echo "scanning $RANGE"
+          python scripts/check_private_paths.py --range "$RANGE"
+          # ⛔ THE SAME RANGE, NOT ANOTHER COPY OF ITS LOGIC. Subjects (lane
+          # names and family references) and, forward only, bodies (lane names).
+          # The tip-only fallback above can name an OLD commit; there the
+          # baseline excuses the subject and never the body -- a stated limit.
+          python scripts/check_pr_descriptions.py --range "$RANGE"
+          # The branch name: a merge subject will quote it, and the forge
+          # writes that subject where no hook runs.
+          python scripts/check_pr_descriptions.py --ref "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          # No NEW host or account name in what this push adds (ratchet: a verbatim move of a baselined
+          # line is accepted; an edited line that keeps a name is new). Council 2026-10-07 ruling 3.
+          python scripts/check_infra_names.py --range "$RANGE"
+      - name: tree ratchet -- residue the delta gate already fired on must not survive the next green
+        run: |
+          # A delta gate charges the commit that ADDS a private path; it cannot charge the tree for
+          # KEEPING one. Measured across the fleet 08/29: on saltworks the gate fired 5x on one file
+          # and the next push went green with the file unchanged; on jas it fired twice on a PR branch
+          # whose head then reported green. This arm asks whether the TREE is clean, against
+          # scripts/private_paths_baseline.tsv (EMPTY at the port). Anything NEW reds.
+          python scripts/check_private_paths.py --tree
+      - name: infra-name tree ratchet -- no NEW host or account name survives in the tree (ruling 3, 2026-10-07)
+        run: |
+          # Against scripts/infra_names_baseline.tsv (EMPTY at the port; rows are digests,
+          # never by text). Anything NEW reds; a line that drops its name is debt paid, never red.
+          python scripts/check_infra_names.py --tree
+      - name: message ratchet -- a violating message must not launder into the next scan's base
+        run: |
+          # The delta gate charges the push that carries a violating MESSAGE; it cannot
+          # charge history for keeping one. Measured here: a merge push landed four
+          # branch commits whose messages cite the private record, the delta gate fired
+          # on that very run -- and every later push was green, because the four had
+          # fallen into the next scan's BASE. Ruled 2026-08-30: ACCEPT + record, NO
+          # history rewrite, then close the laundering. This arm scans EVERY message
+          # reachable from HEAD against scripts/private_paths_message_baseline.tsv
+          # (sha + shape only -- never the line, which would trip the tree ratchet).
+          # Anything NEW reds, on every push, on every branch.
+          python scripts/check_private_paths.py --messages
+
+      - name: every commit subject against the accepted-debt baseline (desk QA)
+        # Red in both directions: a subject carrying a refused word that the
+        # owner has not accepted, and a baseline row history no longer carries.
+        run: python scripts/check_pr_descriptions.py --history
+      - name: History ratchet (what each commit INTRODUCED -- the arm --range cannot be)
+        run: |
+          # ⭐⭐⭐ PORTED FROM x86lean 2026-09-10 ON THE HELM'S RULING (FLEET.md 48491666).
+          # The other arms cannot see this population, and it was DRIVEN, not argued:
+          # two commits pushed together, commit 1 ADDS a private path and commit 2
+          # REMOVES it -- `--range BASE..HEAD` rc 0 (the NET DIFFERENCE has no such
+          # file), `--tree` rc 0 (the TREE has no such file), `--history` FAIL, naming
+          # the intermediate commit and the blob. The blob reaches a public remote and
+          # every gate is green.
+          # ⛔ THE FLAG WAS ABSENT HERE, NOT MERELY UNRUN: argparse rejected it, so this
+          # repository's intermediate commits had NEVER been read. First cut: 84
+          # findings across 49 commits, of which 13 are the tree ratchet's already
+          # accepted residue and 71 were introduced-then-repaired and had never been
+          # seen by any gate.
+          # ⚠️ `fetch-depth: 0` is load-bearing -- the arm REFUSES a shallow clone by
+          # name rather than walking a truncated history and reporting success.
+          python scripts/check_private_paths.py --history
+          # The same population for infrastructure names (saltbench's arm, ported with the gate): what each
+          # commit INTRODUCED, against scripts/infra_names_history_baseline.tsv; refuses a shallow clone.
+          python scripts/check_infra_names.py --history
+
+  pr-descriptions:
+    name: no private-record path in PR titles/bodies (the forge-side prose)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      checks: read
+    # Desk row I(a): a PR's TITLE and BODY are not git objects, so the four
+    # git-object arms above cannot see them -- the most-read public prose
+    # surface on the repo page had no gate, and one body in this fleet carried
+    # a private-record path for five days while every push stayed green. And
+    # the FOURTH DOOR (same audit, item (f)): a push to the BASE fires no run
+    # for the PRs targeting it, so a PR sits green and MERGEABLE while its
+    # verdicts describe a base that no longer exists. So this job runs from
+    # the PUSH workflow, re-reads EVERY open PR each time anything lands, and
+    # reports REF-vs-RUN -- which object each verdict is about -- instead of
+    # trusting status. The event payload is deliberately never read: a guard
+    # is scoped by its event set, and this workflow has two trigger kinds.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # The gate proves it can fail before it is allowed to pass.
+      - run: python scripts/check_pr_descriptions.py --self-test
+      - name: scan every open PR's title and body via the forge API
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/check_pr_descriptions.py --open
+
+  pre-push-proof:
+    name: the pre-push hook refuses what the jobs above can only report
+    runs-on: ubuntu-latest
+    # ⛔ EVERY GATE ABOVE IS ON THE WRONG SIDE OF THE WIRE, AND THAT IS NOT A
+    # CRITICISM OF THEM -- it is the reason this job exists. They run AFTER the
+    # objects reach the public remote. On 2026-09-03 a push in this fleet carried
+    # two private-record paths to a public remote; the gate went red, correctly,
+    # and the bytes were already served by sha and stay served by sha until the
+    # forge collects them on its own schedule. A report is not a repair.
+    #
+    # `.githooks/pre-push` asks the same two questions one step earlier, where
+    # the answer is still free. But a hook is LOCAL configuration: CI's own clone
+    # never runs it and cannot. What CI *can* do is prove the hook still works --
+    # that its red arms are red and its green arm is green -- so that a hook
+    # broken by an edit fails HERE rather than the next time it matters.
+    #
+    # The prover drives a real `git push` into a scratch bare remote in a temp
+    # dir, never the repository under test, and carries a MUTATION CONTROL: the
+    # same refused push must succeed with --no-verify, or its refusals prove
+    # nothing.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # ⛔ THE INTERPRETER ARM, MASKED. A prover that names `python` by hand
+      # reports `ok` WITHOUT THE GATE EVER RUNNING wherever `python` is absent --
+      # measured in this fleet on 08/26, on a prover that had rotted exactly that
+      # way. The arm only discriminates where `python` is missing, so it is made
+      # missing here.
+      - name: mask `python`, leaving only python3
+        run: |
+          mkdir -p "$RUNNER_TEMP/mask"
+          printf '#!/bin/sh\necho "python: not found" >&2\nexit 127\n' > "$RUNNER_TEMP/mask/python"
+          chmod +x "$RUNNER_TEMP/mask/python"
+      - name: the mask must actually mask, and python3 must survive it
+        run: |
+          if PATH="$RUNNER_TEMP/mask:$PATH" python -c "" 2>/dev/null; then
+            echo "MASK FAILED: \`python\` still runs -- the arm below would be vacuous."; exit 1
+          fi
+          PATH="$RUNNER_TEMP/mask:$PATH" python3 -c "" || { echo "python3 must still work"; exit 1; }
+          echo "mask OK: python refuses, python3 runs"
+      - name: the proof must hold with `python` masked
+        run: PATH="$RUNNER_TEMP/mask:$PATH" sh .githooks/prove_pre_push.sh
+      # ...and in an ordinary environment, so the mask cannot become the only
+      # configuration the proof is ever exercised in.
+      - name: and in an ordinary environment
+        run: sh .githooks/prove_pre_push.sh
+      # census D #7 (desk LQ, 2026-09-13): the commit-msg hook is PROVEN, not only
+      # mode-checked. It reads its patterns from the trailer gate, and the prover
+      # drives the five shapes through a real `git commit`, each first shown to be
+      # a gate finding. The v2 hook scored 9 failed arms here (it passed three of
+      # the five shapes and had no fail-closed arm).
+      - name: the commit-msg proof must hold with `python` masked
+        run: PATH="$RUNNER_TEMP/mask:$PATH" sh .githooks/prove_commit_msg.sh
+      - name: and the commit-msg proof in an ordinary environment
+        run: sh .githooks/prove_commit_msg.sh
+      - name: the hooks are committed 100755, or they are INERT on macOS/Linux
+        # census D #7 (2026-09-13): commit-msg was not in this loop, though it is the same kind of file.
+        #   jas mode-checks its commit-msg hook; salt and saltworks did not.
+        # `core.filemode` is false on Windows, so a chmod there never reaches the
+        # index: a hook authored on that platform is committed 100644, runs on
+        # the box that wrote it, and does nothing at all for everyone else.
+        run: |
+          for f in .githooks/pre-push .githooks/prove_pre_push.sh .githooks/commit-msg .githooks/prove_commit_msg.sh; do
+            mode=$(git ls-files -s "$f" | awk '{print $1}')
+            if [ "$mode" != "100755" ]; then
+              echo "FAIL $f is ${mode:-<untracked>} -- fix: git update-index --chmod=+x $f"
+              exit 1
+            fi
+            echo "OK   $f is $mode"
+          done

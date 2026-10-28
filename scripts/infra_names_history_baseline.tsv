@@ -1,0 +1,24 @@
+# infra_names_history_baseline.tsv -- ACCEPTED historical commits whose ADDED LINES carry an infrastructure name (check_infra_names.py --history).
+# sha<TAB>file<TAB>count. NEVER the line and NEVER the name: an excerpt would put the name into the tree, where the tree arm correctly reds on it.
+# This list does not shrink without a force-push, which is a Captain-level call on a public repo. A GROWTH is a reviewed diff.
+0183ae49791f	doc/htmlman/tutorial/mp_fol_ctheory1.txt	1
+0183ae49791f	doc/htmlman/tutorial/mp_fol_not1.txt	1
+0183ae49791f	doc/htmlman/tutorial/mp_fol_theory1.txt	1
+0b616aef9ef6	filter/words.linux	6
+1e270ab4162b	theories/ocaml_doc/ocaml_doc_expr1.ml	3
+20decb20b917	editor/ml/nlconfig	1
+360a586b1c6d	editor/ml/mp_version.ml	1
+39e6f7ca44c0	editor/ml/nlconfig	1
+3f8913c41fc1	doc/htmlman/tutorial/mp_fol_ctheory1.txt	1
+3f8913c41fc1	doc/htmlman/tutorial/mp_fol_not1.txt	1
+3f8913c41fc1	doc/htmlman/tutorial/mp_fol_theory1.txt	1
+91c396beafb6	editor/ml/mp_version.ml	1
+970bf8059c84	theories/ocaml_doc/ocaml_doc_expr1.ml	9
+be8bebf303a1	editor/ml/mpconfig	1
+dc920a4ebdea	theories/itt/applications/algebra/itt_vector_space.mli	1
+dc920a4ebdea	theories/itt/applications/ga/ga_prod.ml	1
+dc920a4ebdea	theories/itt/applications/ga/ga_prod.mli	1
+dc920a4ebdea	theories/itt/applications/ga/ga_sum.ml	1
+dc920a4ebdea	theories/itt/applications/ga/ga_sum.mli	1
+dc920a4ebdea	theories/itt/applications/ga/ga_type.ml	1
+dc920a4ebdea	theories/itt/applications/ga/ga_type.mli	1

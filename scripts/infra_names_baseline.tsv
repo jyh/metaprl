@@ -1,0 +1,12 @@
+# infra_names_baseline.tsv -- ACCEPTED residue for the tree ratchet (check_infra_names.py --tree).
+# file<TAB>line-sha16<TAB>what. NEVER the line and NEVER the name. Shrink it after a repair with
+# --tree --write-baseline; a growth is a reviewed diff (council 2026-10-07 ruling 3: ratchet only).
+filter/words.linux	1fae8c6878037e30	an infrastructure name (account or host)
+filter/words.linux	5afa39317c9f6622	an infrastructure name (account or host)
+filter/words.linux	63bd46b57235e263	an infrastructure name (account or host)
+filter/words.linux	691332b5b384c314	an infrastructure name (account or host)
+filter/words.linux	9aa8073ec65838b1	an infrastructure name (account or host)
+filter/words.linux	de370ac65726155e	an infrastructure name (account or host)
+theories/itt/applications/algebra/itt_vector_space.mli	c6afa0c92cb7d6ee	an infrastructure name (account or host)
+theories/itt/applications/ga/ga_prod.ml	c81a34586fa785ef	an infrastructure name (account or host)
+theories/itt/applications/ga/ga_prod.mli	c81a34586fa785ef	an infrastructure name (account or host)

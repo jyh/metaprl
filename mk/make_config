@@ -11,10 +11,10 @@ MakeConfig(name) =
     public.map-path(d) =
        if $(equal $d, $(in $(ROOT), $(dir theories)))
           return $$(dir theories)
-       elseif $(equal $d, $(INSTALL_DIR)/theories)
-          return $$(dir $$(INSTALL_DIR)/theories)
-       elseif $(equal $d, $(INSTALL_DIR))
-          return $$(dir $$(INSTALL_DIR))
+       elseif $(equal $d, $(dir $"$(INSTALL_DIR)/theories"))
+          return $$(dir $$"$$(INSTALL_DIR)/theories")
+       elseif $(equal $d, $(dir $"$(INSTALL_DIR)"))
+          return $$(dir $$"$$(INSTALL_DIR)")
        elseif $(equal $d, $(ROOT))
           return $$(ROOT)
        else

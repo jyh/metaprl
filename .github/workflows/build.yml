@@ -2,7 +2,9 @@ name: Build
 
 # Builds MetaPRL from a clean checkout with libmojave's master beside it
 # (metaprl/libmojave is a link to ../libmojave, as in a developer tree),
-# on OCaml 5.4 with camlp5 8, then runs the shell tests in editor/ml/tests.
+# on OCaml 4.14 and 5.4 with camlp5 8, then runs the shell tests in
+# editor/ml/tests. mk/defaults' CAML_VERSIONS must name the exact
+# versions the matrix below pins (4.14.4, 5.4.1).
 #
 # Scope, stated: Ubuntu only; the default configuration (THEORIES =
 # itt/core, COMPILATION_MODE = mixed, so the shell is bytecode); SSL off.
@@ -16,8 +18,12 @@ permissions:
 
 jobs:
   build:
-    name: build and test (OCaml 5.4, camlp5 8)
+    name: build and test (OCaml ${{ matrix.ocaml }}, camlp5 8)
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ocaml: ["4.14.4", "5.4.1"]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +36,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y libncurses-dev libreadline-dev
       - uses: ocaml/setup-ocaml@v3
         with:
-          ocaml-compiler: "5.4"
+          ocaml-compiler: ${{ matrix.ocaml }}
       - run: opam install -y omake.0.10.7 ocamlfind camlp5.8.05.02 camlp-streams
       - name: configure
         working-directory: metaprl

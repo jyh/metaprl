@@ -15,5 +15,7 @@
 bin
 lib
 libmojave
+# staging written by `omake install` (OMakefile: $(EXPORT))
+/export/
 __pycache__/
 *.pyc

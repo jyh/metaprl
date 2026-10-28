@@ -28,7 +28,14 @@ terms the same. This pin records them.
 Run it against a built tree, with that tree's compilers on `PATH`:
 
     sh filter/test/run_pin_filter_ocaml.sh <tree> out.txt $(ls filter/test/corpus/*.ml | sort)
-    diff filter/test/pin_filter_ocaml.expected out.txt
+    sh filter/test/compare_pin.sh filter/test/pin_filter_ocaml.expected out.txt
+
+What must match is the term's **structure** (`shape=`: the MD5 of the term
+with each node's location pair blanked), the round trip and the free
+variables. `compare_pin.sh` fails on any difference there. The full MD5
+also covers locations; camlp5 7 and 8 record source positions differently
+(for example, camlp5 8 starts a structure item after its keyword), so items
+that differ only there are counted and reported, not failed.
 
 Checked when it was made: two runs of the reference give byte-identical
 output. Renaming one term operator (`str_open`) in the reference filter

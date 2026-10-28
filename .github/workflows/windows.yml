@@ -26,6 +26,64 @@ permissions:
   contents: read
 
 jobs:
+  # Round 9: the theory-step stall without MetaPRL. Rounds 6-8: no command
+  # under omake ever wrote 4096 bytes of output (largest 3658 of 236), the
+  # stuck camlp5n sat inside Filter_cache.save (whose debug print is one
+  # buffered write), and after a kill the next stuck step had written exactly
+  # 4095 bytes. Hypothesis: omake on Windows does not drain a child's output
+  # pipe while the child runs. Test: a child writing 2 KB and 8 KB to stderr,
+  # through a Shell. alias with shell-code (MetaPRL's prlcomp path) and as a
+  # plain rule command. rc 124 = still running at the 90 s bound.
+  pipe:
+    name: omake child output above the pipe buffer (allowed to fail)
+    runs-on: windows-latest
+    continue-on-error: true
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "5.4.1"
+          windows-compiler: mingw
+      - name: install omake (ocaml-omake master, as the build job uses)
+        run: opam pin add -y omake git+https://github.com/ocaml-omake/omake.git#master 2>&1 | tail -3
+      - name: a minimal project
+        run: |
+          d="$RUNNER_TEMP/pipe"; mkdir -p "$d"; cd "$d"
+          printf 'let () = prerr_string (String.make (int_of_string Sys.argv.(1)) (Char.chr 120)); prerr_newline ()\n' > spew.ml
+          printf 'open build/Common\nDefineCommandVars()\n.SUBDIRS: .\n' > OMakeroot
+          {
+            printf 'Shell. +=\n'
+            printf '   viaalias(argv) =\n'
+            printf '      code = $(shell-code $(argv))\n'
+            printf '      if $(eq $(code), 0)\n'
+            printf '         return 1\n'
+            printf '      else\n'
+            printf '         exit $(code)\n'
+            printf '.PHONY: alias2k alias8k plain2k plain8k\n'
+            for n in 2 8; do
+              printf 'alias%sk:\n\tviaalias ocaml spew.ml %s\n' $n $((n*1024))
+              printf 'plain%sk:\n\tocaml spew.ml %s\n' $n $((n*1024))
+            done
+          } > OMakefile
+          cat OMakefile
+          opam exec -- ocaml spew.ml 16 2>&1 | wc -c
+      - name: run each target (90 s bound each)
+        run: |
+          cd "$RUNNER_TEMP/pipe"
+          for t in plain2k alias2k plain8k alias8k; do
+            start=$(date +%s)
+            timeout 90 opam exec -- omake -j1 --no--progress $t > "$RUNNER_TEMP/pipe-$t.log" 2>&1 && rc=0 || rc=$?
+            echo "RESULT $t rc=$rc after $(( $(date +%s) - start )) s, output $(wc -c < "$RUNNER_TEMP/pipe-$t.log") bytes"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-pipe-logs
+          path: ${{ runner.temp }}/pipe-*.log
   build:
     name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }}; allowed to fail)
     runs-on: windows-latest

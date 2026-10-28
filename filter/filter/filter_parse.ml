@@ -1020,6 +1020,16 @@ let define_int_thm proc loc name params mterm res =
 
 open TermGrammar
 
+(*
+ * camlp5 8 cannot antiquote a name after a module path (M.$uid:x$), so
+ * build the qualified constructor M.x as an expression.
+ *)
+let mk_qualified_uid _loc path name =
+   match path with
+      [] -> MLast.ExLong (_loc, MLast.LiUid (_loc, Ploc.VaVal name))
+    | h :: t ->
+         MLast.ExLong (_loc, List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) (MLast.LiUid (_loc, Ploc.VaVal h)) (t @ [name]))
+
 (* Parse a term *)
 let term_exp s =
    let cs = Stream.of_string s in
@@ -1068,7 +1078,7 @@ let expr_of_pcon _loc = function
           | _ ->
                Stdpp.raise_with_loc _loc (Invalid_argument "\"con\" quotation: string constant parameter must be of string kind")
       in
-         <:expr< Refiner.Refiner.Term.make_param (Term_sig.$uid:shape$ $str:s$) >>
+         <:expr< Refiner.Refiner.Term.make_param ($mk_qualified_uid _loc ["Term_sig"] (shape)$ $str:s$) >>
  | ConPToken opname, shape ->
       let strings = Opname.dest_opname opname in
       let strings = List.map (fun s -> <:expr< $str: s$ >>) strings in
@@ -1089,7 +1099,7 @@ let expr_of_pcon _loc = function
           | ShapeOperator -> "MOperator"
           | _ -> Stdpp.raise_with_loc _loc (Invalid_argument "\"con\" quotation: unsupported meta-parameter")
       in
-         <:expr< Refiner.Refiner.Term.make_param (Term_sig.$uid:shape$ $str:string_of_symbol s$) >>
+         <:expr< Refiner.Refiner.Term.make_param ($mk_qualified_uid _loc ["Term_sig"] (shape)$ $str:string_of_symbol s$) >>
  | ConPExpr e, shape ->
       let shape =
          match shape with
@@ -1102,7 +1112,7 @@ let expr_of_pcon _loc = function
           | ShapeShape -> "Shape"
           | ShapeOperator -> "Operator"
       in
-         <:expr< Refiner.Refiner.Term.make_param (Term_sig.$uid:shape$ $e$) >>
+         <:expr< Refiner.Refiner.Term.make_param ($mk_qualified_uid _loc ["Term_sig"] (shape)$ $e$) >>
  | ConPNum n, ShapeNumber ->
       <:expr< Refiner.Refiner.Term.make_param (Term_sig.Number $add_parsed_binding (BindNum n)$) >>
  | ConPInt e, ShapeNumber ->

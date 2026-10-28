@@ -56,6 +56,24 @@ open Filter_summary
 open Proof_convert
 
 (*
+ * camlp5 8 cannot antiquote a name after a module path (M.$uid:x$), so
+ * build the qualified constructor M.x as an expression.
+ *)
+let mk_longid _loc = function
+   [] -> raise (Invalid_argument "Filter_prog.mk_longid")
+ | h :: t -> List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) (MLast.LiUid (_loc, Ploc.VaVal h)) t
+
+(* e.x with a computed field name x; camlp5 8 cannot antiquote it after a dot. *)
+let mk_field _loc e x =
+   MLast.ExFle (_loc, e, Ploc.VaVal (None, Ploc.VaVal x))
+
+let mk_qualified_uid _loc path name =
+   match path with
+      [] -> MLast.ExLong (_loc, MLast.LiUid (_loc, Ploc.VaVal name))
+    | h :: t ->
+         MLast.ExLong (_loc, List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) (MLast.LiUid (_loc, Ploc.VaVal h)) (t @ [name]))
+
+(*
  * Show the file loading.
  *)
 let _ =
@@ -213,8 +231,9 @@ let rec fun_expr _loc ids body =
 let refiner_expr _loc =
    <:expr< Refiner.Refiner.Refine >>
 
-let refiner_ctyp _loc =
-   <:ctyp< Refiner.Refiner.Refine >>
+(* camlp5 8 has no type for a bare module path; these are longids. *)
+let refiner_ctyp_path _loc =
+   mk_longid _loc ["Refiner"; "Refiner"; "Refine"]
 
 let rewriter_expr _loc =
    <:expr< Refiner.Refiner.Rewrite >>
@@ -230,8 +249,8 @@ let tactic_type_expr _loc =
 let rewrite_type_expr _loc =
    <:expr< Tactic_type.Conversionals >>
 
-let rewrite_type_ctyp _loc =
-   <:ctyp< Tactic_type.Tactic >>
+let rewrite_type_ctyp_path _loc =
+   mk_longid _loc ["Tactic_type"; "Tactic"]
 
 let dest_msequent_expr _loc =
    <:expr< $refiner_expr _loc$ . dest_msequent >>
@@ -252,7 +271,7 @@ let tactic_ctyp _loc =
  * Rewrite.
  *)
 let rewrite_ctyp _loc =
-   <:ctyp< $rewrite_type_ctyp _loc$ . conv >>
+   MLast.TyAcc (_loc, rewrite_type_ctyp_path _loc, Ploc.VaVal "conv")
 
 let prim_rewrite_expr _loc =
    <:expr< $refiner_expr _loc$ . prim_rewrite >>
@@ -273,7 +292,7 @@ let rewrite_of_pre_rewrite_expr _loc =
  * Conditional rewrite.
  *)
 let cond_rewrite_ctyp _loc =
-   <:ctyp< $rewrite_type_ctyp _loc$ . conv >>
+   MLast.TyAcc (_loc, rewrite_type_ctyp_path _loc, Ploc.VaVal "conv")
 
 let prim_cond_rewrite_expr _loc =
    <:expr< $refiner_expr _loc$ . prim_cond_rewrite >>
@@ -291,7 +310,7 @@ let apply_redex_expr _loc =
  * Other expressions.
  *)
 let refiner_ctyp _loc =
-   <:ctyp< $refiner_ctyp _loc$ . refiner >>
+   MLast.TyAcc (_loc, refiner_ctyp_path _loc, Ploc.VaVal "refiner")
 
 let get_resource_name name =
    "get_" ^ name ^ "_resource"
@@ -466,21 +485,14 @@ let dform_option_expr _loc = function
 (*
  * Convert a module path to an expression.
  *)
-let rec parent_path_expr _loc = function
-   [h] ->
-      <:expr< $uid:Latin1_case.capitalize h$ >>
- | h::t ->
-      <:expr< $uid:Latin1_case.capitalize h$ . $parent_path_expr _loc t$ >>
- | [] ->
+let parent_path_longid _loc = function
+   [] ->
       raise (Invalid_argument "parent_path")
+ | path ->
+      mk_longid _loc (List.map Latin1_case.capitalize path)
 
-let rec parent_path_ctyp _loc = function
-   [h] ->
-      <:ctyp< $uid:Latin1_case.capitalize h$ >>
- | h::t ->
-      <:ctyp< $uid:Latin1_case.capitalize h$ . $parent_path_ctyp _loc t$ >>
- | [] ->
-      raise (Invalid_argument "parent_path")
+let parent_path_expr _loc path =
+   MLast.ExLong (_loc, parent_path_longid _loc path)
 
 let raise_toploop_exn loc =
    Stdpp.raise_with_loc loc (RefineError ("topval", StringError
@@ -502,7 +514,7 @@ let toploop_item_expr _loc name ctyp =
    in let rec collect index expr = function
       <:ctyp< $lid: typ$ >> ->
          let name = str_lid typ in
-            <:expr< Shell_sig. $uid: name ^ "Expr"$ $expr$ >>, <:expr< Shell_sig. $uid: name ^ "Type"$ >>
+            <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Expr")$ $expr$ >>, <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Type")$ >>
     | <:ctyp< $t1$ -> $t2$ >> ->
          let v = sprintf "v%d" index in
          let patt = <:patt< $lid: v$ >> in
@@ -511,12 +523,12 @@ let toploop_item_expr _loc name ctyp =
             begin match t1 with
                <:ctyp< $lid: typ$ >> ->
                   let name = str_lid typ in
-                     <:expr< Shell_sig. $uid: name ^ "FunExpr"$ $expr$ >>,
-                     <:expr< Shell_sig.FunType Shell_sig.$uid: name ^ "Type"$ $texpr$ >>
+                     <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "FunExpr")$ $expr$ >>,
+                     <:expr< Shell_sig.FunType $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Type")$ $texpr$ >>
              | <:ctyp< list $lid: typ$ >> ->
                   let name = str_lid typ in
-                     <:expr< Shell_sig. $uid: name ^ "ListFunExpr"$ $expr$ >>,
-                     <:expr< Shell_sig.FunType (Shell_sig.ListType Shell_sig.$uid: name ^ "Type"$) $texpr$ >>
+                     <:expr< $mk_qualified_uid _loc ["Shell_sig"] (name ^ "ListFunExpr")$ $expr$ >>,
+                     <:expr< Shell_sig.FunType (Shell_sig.ListType $mk_qualified_uid _loc ["Shell_sig"] (name ^ "Type")$) $texpr$ >>
              | <:ctyp< int -> tactic >> ->
                   <:expr< Shell_sig.IntTacticFunExpr $expr$ >>,
                   <:expr< Shell_sig.FunType (Shell_sig.FunType Shell_sig.IntType Shell_sig.TacticType) $texpr$ >>
@@ -808,9 +820,9 @@ let wrap_tactic_expr _loc =
 let wrap_optimized _loc name arglist_name vars expr =
    let name = <:expr< $str:name$ >> in
       if vars = [] then
-         <:expr< $wrap_tactic_expr _loc$ (Tactic_boot_sig . $uid:arglist_name$ $name$ ) $expr$ >>
+         <:expr< $wrap_tactic_expr _loc$ ($mk_qualified_uid _loc ["Tactic_boot_sig"] (arglist_name)$ $name$ ) $expr$ >>
       else
-         <:expr< $wrap_tactic_expr _loc$ (Tactic_boot_sig . $uid:arglist_name$ ( $list:name :: vars$ )) $expr$ >>
+         <:expr< $wrap_tactic_expr _loc$ ($mk_qualified_uid _loc ["Tactic_boot_sig"] (arglist_name)$ ( $list:name :: vars$ )) $expr$ >>
 
 let wrap_arg _loc arg v =
    let s =
@@ -826,7 +838,7 @@ let wrap_arg _loc arg v =
        | TermListArg ->
             "TermListArg"
    in
-      <:expr< Tactic_boot_sig. $uid:s$ $v$ >>
+      <:expr< $mk_qualified_uid _loc ["Tactic_boot_sig"] (s)$ $v$ >>
 
 let wrap_general _loc name wrap vars expr =
       <:expr< $wrap_tactic_expr _loc$ (Tactic_boot_sig.GeneralArgList
@@ -1218,7 +1230,7 @@ let define_rule prim_rule deffun proc _loc
          $tactic_type_expr _loc$.compile_rule $lid:local_refiner_id$ ($list_expr _loc (expr_of_label _loc) labels$) $lid:rule_id$
       in
       let _ = do {
-         $refiner_expr _loc$.$lid:deffun$ $lid:local_refiner_id$ $str:name$ $lid:args_id$ $lid:params_id$ $lid:assums_id$ $extract_args$ $extract$;
+         $mk_field _loc (refiner_expr _loc) deffun$ $lid:local_refiner_id$ $str:name$ $lid:args_id$ $lid:params_id$ $lid:assums_id$ $extract_args$ $extract$;
          $define_rule_resources proc _loc name args_id params_id assums_id resources name_rule_expr$
       }
       in
@@ -1464,13 +1476,13 @@ let define_parent proc _loc
    in
    let make_ctyp (name, _) =
       let path = find_resource name proc.imp_all_resources in
-         (name, (<:ctyp< $parent_path_ctyp _loc path$ . $lid:input_type name$ >>, res_fqn path name))
+         (name, (MLast.TyAcc (_loc, parent_path_longid _loc path, Ploc.VaVal (input_type name)), res_fqn path name))
    in
       proc.imp_resources <- proc.imp_resources @ (List.map make_ctyp nresources);
       match path with
          [name] -> [
             <:str_item< Mp_resource.extends_theory $str:name$ >>;
-            <:str_item< $exp:refiner_expr _loc$.join_refiner $lid: local_refiner_id$ $parent_path$.$lid: refiner_id$ >>;
+            <:str_item< $exp:refiner_expr _loc$.join_refiner $lid: local_refiner_id$ $mk_field _loc parent_path refiner_id$ >>;
             refiner_let _loc;
             refiner_ignore _loc;
          ]

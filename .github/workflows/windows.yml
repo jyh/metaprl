@@ -113,8 +113,14 @@ jobs:
         if: always()
         working-directory: metaprl
         run: |
-          ls -la editor/ml/mp lib/mpopt* lib/mp* editor/ml/mp.opt* 2>&1 | head -20 || true
-          file editor/ml/mp 2>&1 || true
+          ls -la editor/ml | grep -iE ' mp|config|theories' || true
+          # First run: the Windows build is bytecode and installs mp.bat, not
+          # the editor/ml/mp the tests call, so both tests failed without
+          # running the shell. The Unix bytecode launcher (support/editor/mptop:
+          # cd to its own directory, read mpconfig, exec ./mp.top) is put there.
+          test -e editor/ml/mp || cp support/editor/mptop editor/ml/mp
+          echo '(4000 + 2);;' > "$RUNNER_TEMP/smoke.in"
+          timeout 120 sh editor/ml/mp -cli < "$RUNNER_TEMP/smoke.in" 2>&1 | tail -5 || true
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
         if: always()
         continue-on-error: true

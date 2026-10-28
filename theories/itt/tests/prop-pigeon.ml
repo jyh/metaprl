@@ -260,7 +260,7 @@ let rec decompPropDecideHyp1T max_depth count i = funT (fun p ->
    let term = Sequent.nth_hyp p i in
       if is_false_term term then
          dT i
-      else if is_and_term term or is_or_term term then
+      else if is_and_term term || is_or_term term then
          dT i thenT ifNotWT (internalPropDecideT max_depth count)
       else if is_imp_and_term term then
          (* {C & D => B} => {C => D => B} *)
@@ -297,7 +297,7 @@ and decompPropDecideConclT max_depth count = funT (fun p ->
       if is_or_term goal then
          (selT 1 (dT 0) thenT ifNotWT (internalPropDecideT max_depth count))
          orelseT (selT 2 (dT 0) thenT ifNotWT (internalPropDecideT max_depth count))
-      else if is_and_term goal or is_implies_term goal then
+      else if is_and_term goal || is_implies_term goal then
          dT 0 thenT ifNotWT (internalPropDecideT max_depth count)
       else
          trivialT)

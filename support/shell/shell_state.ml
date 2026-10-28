@@ -321,7 +321,7 @@ let term_exp s =
 let term_patt s =
    raise (Failure "Shell_mp.term_patt: not implemented yet")
 
-let _ = Quotation.add "term" (Quotation.ExAst (term_exp, term_patt))
+let _ = Quotation.upsert "term" (Quotation.ExAst (term_exp, term_patt))
 let _ = Quotation.default := "term"
 
 (*
@@ -340,7 +340,7 @@ let input_patt id s =
    raise (Failure "Input grammar does not support patterns")
 
 let add_start name shape =
-   Quotation.add name (Quotation.ExAst (input_exp name, input_patt name))
+   Quotation.upsert name (Quotation.ExAst (input_exp name, input_patt name))
 
 let add_starts starts =
    StringTable.iter add_start starts

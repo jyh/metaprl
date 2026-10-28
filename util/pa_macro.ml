@@ -678,12 +678,12 @@ EXTEND
           if not e then x else Grammar.skip_item x
       | "ELSE"; x = match_case -> x ] ]
   ;
+  (* No OR, AND or NOT here (camlp5's pa_macro has them): a grammar keyword
+     is a keyword everywhere, and the x86 compiler theory names opcodes NOT,
+     AND and OR. No IFDEF in MetaPRL uses them. *)
   dexpr:
-    [ [ x = SELF; "OR"; y = SELF -> x || y ]
-    | [ x = SELF; "AND"; y = SELF -> x && y ]
     (* | [ "OCAML_VERSION"; f = op; y = uident -> f (defined_version _loc) y ] *)
-    | [ "NOT"; x = SELF -> not x ]
-    | [ i = uident -> is_defined i
+    [ [ i = uident -> is_defined i
       | "("; x = SELF; ")" -> x ] ]
   ;
 (*

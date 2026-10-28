@@ -16,7 +16,25 @@ Shell. +=
       setenv(MP_DESCR, $(THEORYDESCR))
       # The platform's path-list separator; filter_main.ml splits on it.
       setenv(MP_INCLUDE, $(concat $(if $(equal $(OSTYPE), Win32), ;, :), $(OCAMLINCLUDES)))
-      code = $(shell-code $(argv))
+      # On Windows, omake's shell-code does not drain the child's output pipe
+      # while the child runs, so a step that writes about 4 KB or more blocks
+      # forever (reproduced with a 12-line OMake project and no MetaPRL). There
+      # the output goes to a temporary file, copied to stderr byte for byte.
+      if $(equal $(OSTYPE), Win32)
+         tmp = $(tmpfile prlcomp)
+         code = $(shell-code $(argv) >& $(tmp))
+         ch = $(fopen $(tmp), rb)
+         try
+            while true
+               fprint($(stderr), $(read $(ch), 4096))
+         catch RuntimeException(e)
+            value
+         close($(ch))
+         rm(-f $(tmp))
+         export code
+      else
+         code = $(shell-code $(argv))
+         export code
       if $(eq $(code), 0)
          return 1
       else

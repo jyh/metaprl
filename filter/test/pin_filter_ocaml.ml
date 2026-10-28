@@ -56,11 +56,12 @@ let print_item i (si, _) =
          let shown = if full then s else Digest.to_hex (Digest.string s) in
          (* The term without source locations: every term's parameters start
           * with its location pair, which camlp5 7 and 8 record differently.
-          * Whitespace is collapsed too, since the printer wraps lines by
-          * width and the location numbers change the width. *)
+          * Whitespace is collapsed first, since the printer wraps lines by
+          * width, the location numbers change the width, and a wrap can fall
+          * inside a location pair. *)
          let shape =
-            let s = Str.global_replace (Str.regexp "\\[[0-9]+:n, [0-9]+:n") "[L, L" s in
             let s = Str.global_replace (Str.regexp "[ \t\n]+") " " s in
+            let s = Str.global_replace (Str.regexp "\\[[0-9]+:n, [0-9]+:n") "[L, L" s in
                Digest.to_hex (Digest.string s)
          in
          let rt =

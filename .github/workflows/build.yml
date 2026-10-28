@@ -1,0 +1,56 @@
+name: Build
+
+# Builds MetaPRL from a clean checkout with libmojave's master beside it
+# (metaprl/libmojave is a link to ../libmojave, as in a developer tree),
+# on OCaml 5.4 with camlp5 8, then runs the shell tests in editor/ml/tests.
+#
+# Scope, stated: Ubuntu only; the default configuration (THEORIES =
+# itt/core, COMPILATION_MODE = mixed, so the shell is bytecode); SSL off.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build and test (OCaml 5.4, camlp5 8)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: metaprl
+      - uses: actions/checkout@v4
+        with:
+          repository: jyh/libmojave
+          ref: master
+          path: libmojave
+      - run: sudo apt-get update && sudo apt-get install -y libncurses-dev libreadline-dev
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "5.4"
+      - run: opam install -y omake.0.10.7 ocamlfind camlp5.8.05.02 camlp-streams
+      - name: configure
+        working-directory: metaprl
+        run: |
+          ln -s ../libmojave libmojave
+          printf 'CAMLP5 = camlp5\nSSL_ENABLED = false\n' > mk/config.local
+          # The first run writes mk/config and stops (mk/load_config).
+          opam exec -- omake --no--progress
+          grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED)' mk/config
+      - name: build
+        working-directory: metaprl
+        run: opam exec -- omake -j4 --no--progress
+      - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/old_labels.sh
+      - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/toploop_minus.sh
+      - name: the build leaves the tree clean
+        working-directory: metaprl
+        run: |
+          git status --short > "$RUNNER_TEMP/status.txt"
+          if [ -s "$RUNNER_TEMP/status.txt" ]; then cat "$RUNNER_TEMP/status.txt"; echo "FAIL: the build left untracked or modified files"; exit 1; fi

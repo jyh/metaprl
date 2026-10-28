@@ -129,16 +129,21 @@ jobs:
       # output, stdin from /dev/null and a 60 s bound.
       - name: processes left after the stall
         run: tasklist.exe /v | grep -i -E 'camlp5n|omake|Image' || echo "none"
-      - name: camlp5n directly on theories/itt/core/itt_comment.ml (60 s bound)
+      - name: camlp5n directly on theories/itt/core/itt_comment.ml, real include path (120 s bound)
         working-directory: metaprl/theories/itt/core
         run: |
           root=$(cd ../../.. && pwd)
-          export MP_ROOT="$(cygpath -w "$root")" MPLIB="$(cygpath -w "$root/lib")" MP_GROUP=itt MP_DESCR=itt MP_INCLUDE=
+          inc=""
+          for d in libmojave/stdlib libmojave/util libmojave/unix mllib refiner/refsig refiner/refbase refiner/refiner refiner/reflib library tactics/proof filter/base filter/filter support/display support/shell support/tactics support/doc lib theories/meta/base theories/itt/core; do
+            inc="$inc${inc:+;}$(cygpath -w "$root/$d")"
+          done
+          export MP_ROOT="$(cygpath -w "$root")" MPLIB="$(cygpath -w "$root/lib")" MP_GROUP=itt MP_DESCR=itt MP_INCLUDE=".;$inc"
+          echo "MP_INCLUDE has $(echo "$MP_INCLUDE" | tr ';' '\n' | wc -l) entries"
           export MP_DEBUG=file_base:filter_cache:filter_path
           echo "MP_ROOT=$MP_ROOT MPLIB=$MPLIB"
           ls -la "$root/lib/camlp5n.exe" "$root/filter/camlp5n.opt" 2>&1 || true
           start=$(date +%s)
-          timeout 60 opam exec -- "$(cygpath -w "$root/filter/camlp5n.opt")" -o "$RUNNER_TEMP/itt_comment.ppo" itt_comment.ml < /dev/null > "$RUNNER_TEMP/direct.log" 2>&1 && rc=0 || rc=$?
+          timeout 120 opam exec -- "$(cygpath -w "$root/filter/camlp5n.opt")" -o "$RUNNER_TEMP/itt_comment.ppo" itt_comment.ml < /dev/null > "$RUNNER_TEMP/direct.log" 2>&1 && rc=0 || rc=$?
           echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"
           grep -v 'Quotation.upsert' "$RUNNER_TEMP/direct.log" | tail -40
           taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true; taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null || true

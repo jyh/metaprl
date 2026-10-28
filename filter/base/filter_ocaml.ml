@@ -3006,13 +3006,23 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
    and mk_lab_expr =
       let expr_lab_op =
          let dest_lab_expr t =
-            let _loc = dest_loc "dest_lab_expr" t in
-            let poel = one_subterm "dest_lab_expr" t in
-            match dest_lab_aux poel with
-               [(p, eo)] ->
-                  MLast.ExLab (_loc, p, eo)
-             | _ ->
-                  raise_format_error "Filter_ocaml.dest_lab_expr: camlp5 8 has one label per ExLab" t
+            match dest_loc_params "dest_lab_expr" t with
+               _loc, [String s] ->
+                  (*
+                   * The 2005 form lab[s]{opt(e)} (filter_ocaml before
+                   * 2005-10-28). Proof archives saved in 2006 still carry it:
+                   * without this case their ~labels resource annotations
+                   * fail to read and the whole rule is dropped with its proof.
+                   *)
+                  let eo = dest_expr_opt (one_subterm "dest_lab_expr" t) in
+                     MLast.ExLab (_loc, <:patt< $lid:s$ >>, Ploc.VaVal eo)
+             | _loc, _ ->
+                  let poel = one_subterm "dest_lab_expr" t in
+                  match dest_lab_aux poel with
+                     [(p, eo)] ->
+                        MLast.ExLab (_loc, p, eo)
+                   | _ ->
+                        raise_format_error "Filter_ocaml.dest_lab_expr: camlp5 8 has one label per ExLab" t
          in add_expr "lab" dest_lab_expr
       in fun vars loc poel ->
          let make_poe = function

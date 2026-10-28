@@ -72,7 +72,21 @@ else
    PROF_EXT =
    export
 
+#
+# camlp5 8's archives need compiler-libs, pcre2 and fmt (CAMLP5_DEP_LIBS,
+# from mk/load_config), and OCaml 5 moved Stream, which camlp5 and the
+# MetaPRL libraries use, into camlp-streams. All are empty with camlp5 7
+# on OCaml 4. The link commands below pass no OCAMLINCLUDES, so their
+# directories are given as -I here (pcre2's C stubs are found that way).
+#
+CAMLP5_PRE_LIBS[] =
+    $(if $(CAMLP_STREAMS_LIB), $(CAMLP_STREAMS_LIB)/camlp_streams)
+    $(CAMLP5_DEP_LIBS)
+
+CAMLP5_LINK_INCLUDES = $(mapprefix -I, $(CAMLP5_DEP_DIRS) $(CAMLP_STREAMS_LIB))
+
 CMXADEPS[] =
+    $(addsuffix .cmxa, $(CAMLP5_PRE_LIBS))
     $(CAMLLIB_UNIX)/unix.cmxa
     $(CAMLLIB_STR)/str.cmxa
     $(OPTTHREADSLIB)
@@ -90,6 +104,7 @@ ARDEPS[] =
     $(addsuffix /theory$(EXT_LIB), $(MP_DIRS))
 
 CMADEPS[] =
+    $(addsuffix .cma, $(CAMLP5_PRE_LIBS))
     $(CAMLP5LIB)/odyl.cma
     $(CAMLLIB_UNIX)/unix.cma
     $(CAMLLIB_STR)/str.cma
@@ -103,6 +118,7 @@ CMADEPS[] =
     $(addsuffix /theory.cma, $(MP_DIRS))
 
 TCMADEPS[] =
+    $(addsuffix .cma, $(CAMLP5_PRE_LIBS))
     $(CAMLP5LIB)/odyl.cma
     $(CAMLLIB_UNIX)/unix.cma
     $(CAMLLIB_STR)/str.cma
@@ -146,17 +162,17 @@ if $(NATIVE_ENABLED)
 if $(MPRUN_ENABLED)
     $(MP).run: $(BYTE_DEPS) $(OCAMLMKTOP_VERSION) $(RCMAMPLIBS)
         $(RM) $@
-        $(OCAMLMKTOP) $(OCAMLFLAGS) $(OCAMLCFLAGS) -o $@ -custom \
+        $(OCAMLMKTOP) $(OCAMLFLAGS) $(OCAMLCFLAGS) $(CAMLP5_LINK_INCLUDES) -o $@ -custom \
             $(CMOBJS) $(RCMAMPLIBS) $(BYTE_CCLIBS) $(LIBS) $(OCAML_LINK_FLAGS)
 
 $(MP).top: $(TOP_DEPS) $(TCMAMPLIBS)
     $(RM) $@
-    $(OCAMLLINK) $(OCAMLFLAGS) $(OCAMLCFLAGS) -o $@ -custom \
+    $(OCAMLLINK) $(OCAMLFLAGS) $(OCAMLCFLAGS) $(CAMLP5_LINK_INCLUDES) -o $@ -custom \
         $(TCMOBJS) $(TCMAMPLIBS) $(BYTE_CCLIBS) $(LIBS) $(OCAML_LINK_FLAGS)
 
 $(MP).opt: $(OPT_DEPS) $(TCMXAMPDEPS)
     $(RM) $@
-    $(OCAMLOPTLINK) $(OCAMLFLAGS) $(OCAMLOPTFLAGS) -o $@ \
+    $(OCAMLOPTLINK) $(OCAMLFLAGS) $(OCAMLOPTFLAGS) $(CAMLP5_LINK_INCLUDES) -o $@ \
         $(CMXOBJS) $(TCMXAMPLIBS) $(NATIVE_CCLIBS) $(LIBS) $(OCAML_LINK_FLAGS)
 
 #

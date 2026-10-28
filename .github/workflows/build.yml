@@ -60,3 +60,39 @@ jobs:
         run: |
           git status --short > "$RUNNER_TEMP/status.txt"
           if [ -s "$RUNNER_TEMP/status.txt" ]; then cat "$RUNNER_TEMP/status.txt"; echo "FAIL: the build left untracked or modified files"; exit 1; fi
+
+  proofs:
+    # Builds every theory in THEORIES_ALL (native) and replays every stored
+    # proof, comparing each rule's status and rule-box count with
+    # editor/ml/tests/proof_census.expected. One OCaml version only.
+    name: replay every stored proof (OCaml 5.4.1, THEORIES = all)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: metaprl
+      - uses: actions/checkout@v4
+        with:
+          repository: jyh/libmojave
+          ref: master
+          path: libmojave
+      - run: sudo apt-get update && sudo apt-get install -y libncurses-dev libreadline-dev
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "5.4.1"
+      - run: opam install -y omake.0.10.7 ocamlfind camlp5.8.05.02 camlp-streams
+      - name: configure (THEORIES = all, native)
+        working-directory: metaprl
+        run: |
+          ln -s ../libmojave libmojave
+          printf 'CAMLP5 = camlp5\nSSL_ENABLED = false\n' > mk/config.local
+          # The first run writes mk/config and stops (mk/load_config).
+          opam exec -- omake --no--progress
+          sed -i 's/^THEORIES = .*/THEORIES = all/; s/^COMPILATION_MODE = .*/COMPILATION_MODE = native/' mk/config
+          grep -E '^(THEORIES|COMPILATION_MODE) ' mk/config
+      - name: build
+        working-directory: metaprl
+        run: opam exec -- omake -k -j4 --no--progress
+      - name: replay every stored proof (editor/ml/tests/proof_census.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/proof_census.sh

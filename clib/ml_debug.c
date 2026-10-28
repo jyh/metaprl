@@ -53,7 +53,7 @@ value ml_debug(value name, value flag)
 #endif
 
     /* Did not find it */
-    failwith("ml_debug");
+    caml_failwith("ml_debug");
     return Val_int(0);
 }
 
@@ -79,8 +79,8 @@ value ml_get_debug(value name, value flag)
     for(i = 0; i != INFO_LEN; i++) {
         struct debug_info *infop = info + i;
         if(strcmp(infop->name, l_name) == 0) {
-            dinfo = copy_string(infop->info);
-            tuple = alloc_tuple(2);
+            dinfo = caml_copy_string(infop->info);
+            tuple = caml_alloc_tuple(2);
             Field(tuple, 0) = dinfo;
             Field(tuple, 1) = Val_int(*infop->flag ? 1 : 0);
             rval = tuple;
@@ -92,7 +92,7 @@ value ml_get_debug(value name, value flag)
     Pop_roots();
 #endif
     if(rval == 0)
-        failwith("ml_get_debug");
+        caml_failwith("ml_get_debug");
     return rval;
 }
 
@@ -113,20 +113,20 @@ value ml_debuggers(value unit)
 #define dpair   r[3]
 
     // Array of string pairs
-    rinfo = alloc_shr(INFO_LEN, 0);
+    rinfo = caml_alloc_shr(INFO_LEN, 0);
     for(i = 0; i != INFO_LEN; i++)
-        initialize(&Field(rinfo, i), Int_val(0));
+        caml_initialize(&Field(rinfo, i), Int_val(0));
 
     // Now allocate string pairs
     for(i = 0; i != INFO_LEN; i++) {
         struct debug_info *infop = info + i;
-        dname = copy_string(infop->name);
-        dinfo = copy_string(infop->info);
-        dpair = alloc_tuple(3);
+        dname = caml_copy_string(infop->name);
+        dinfo = caml_copy_string(infop->info);
+        dpair = caml_alloc_tuple(3);
         Field(dpair, 0) = dname;
         Field(dpair, 1) = dinfo;
         Field(dpair, 2) = Val_int(*infop->flag ? 1 : 0);
-        initialize(&Field(rinfo, i), dpair);
+        caml_initialize(&Field(rinfo, i), dpair);
     }
 
 #undef dinfo

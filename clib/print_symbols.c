@@ -49,7 +49,7 @@ value function_symbols = 0;
 /* Store the symbol array */
 value ml_extern_symbols(value symbols)
 {
-    register_global_root(&function_symbols);
+    caml_register_global_root(&function_symbols);
     function_symbols = symbols;
     return Val_unit;
 }

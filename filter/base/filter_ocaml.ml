@@ -1424,13 +1424,17 @@ struct
             let mto = dest_opt dest_mt mt in
                MLast.PaUnp (_loc, vala_name s, mto), t
          in add_patt "patt_unp" dest_unp_patt
-(* XXX
-      and patt_olb_none_op =
+      (*
+       * patt_olb_none[s] is an optional argument ?s with no default, in the
+       * form proof archives saved before 2017 carry. Nothing writes it now
+       * (patt_olb covers it), but without this case those archives' stored
+       * ML items are omitted with a FormatError.
+       *)
+      and _patt_olb_none_op =
          let dest_olb_none_patt t =
             let _loc, s = dest_loc_string "dest_olb_none_patt" t in
-               <:patt< ? $s$ >>, one_subterm "dest_olb_none_patt" t
+               MLast.PaOlb (_loc, <:patt< $lid:s$ >>, Ploc.VaVal None), one_subterm "dest_olb_none_patt" t
          in add_patt "patt_olb_none" dest_olb_none_patt
-*)
       and patt_lazy_op =
          let dest_lazy_patt t =
             let _loc = dest_loc "dest_lazy_patt" t in

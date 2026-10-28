@@ -376,7 +376,7 @@ let meta_dT =
          else
             Sequent.get_resource_arg p get_meta_elim_resource (Sequent.get_pos_assum_num p i))
 
-let rec meta_dForT i =
+let meta_dForT i =
    if i <= 0 then
       idT
    else

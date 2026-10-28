@@ -327,6 +327,11 @@ Theory(files) =
         ConfMsgError($"In $(in $(ROOT), $(CWD)) :$(nl)The THEORYDESCR variable is not defined")
 
     OCAMLFLAGS += -rectypes
+    # OCaml 5 finds unused values and opens (32, 33), and checks file
+    # names (24), where the 4.x these files were written against did not;
+    # record patterns that omit fields (9) are style only. In theory
+    # directories these are printed, not errors.
+    OCAMLFLAGS += -warn-error -9-24-32-33
     OCAMLINCLUDES[] += $(find-theories $(THEORY_DEPS))
     OCamlLibrary(theory, $(files))
 

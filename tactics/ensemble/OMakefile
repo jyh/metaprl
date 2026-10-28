@@ -37,7 +37,7 @@ MSFILES[] =
     appl_outboard_server
 
 LIBS_serv[] =
-    $(CAMLLIB)/unix.cma
+    $(CAMLLIB_UNIX)/unix.cma
     $(THREADSLIB)
     $(ENSROOT)/lib/$(HOSTTYPE)/socket.cma
     $(ENSROOT)/lib/$(HOSTTYPE)/crypto.cma

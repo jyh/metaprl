@@ -55,4 +55,4 @@ MacroProgram(name, printer) =
     LibInstall($(name)$(EXE))
 
 MacroProgram(macropp, pr_dump)
-MacroProgram(macroprint, o_keywords pr_o)
+MacroProgram(macroprint, $(CAMLP5_PR_O))

@@ -711,5 +711,10 @@ Pcaml.add_option "-U" (Arg.String undef)
 Pcaml.add_option "-I" (Arg.String add_include_dir)
   "<string> Add a directory to INCLUDE search path.";
 
+(* camlp5 8's driver consumes -I itself (its object search path), so
+   the option above no longer reaches INCLUDE; -incdir always does. *)
+Pcaml.add_option "-incdir" (Arg.String add_include_dir)
+  "<string> Add a directory to INCLUDE search path.";
+
 Pcaml.add_option "-defined" (Arg.Unit print_defined)
   " Print the defined macros and exit.";

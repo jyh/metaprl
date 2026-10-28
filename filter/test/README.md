@@ -62,3 +62,17 @@ it gets back. A wrong entry name must make it fail:
     sh filter/test/run_operator_entry.sh no_such_entry   # FAIL, rc 1
 
 It tests the lookup only, not the rest of `filter_parse`.
+
+# Dot-operator lexing
+
+camlp5 8 lexes OCaml's dot operators (`.^`, `.+`, ...) as one token; camlp5 7
+lexed `.` and then the operator, and MetaPRL term syntax depends on that
+(`.^data`, the field `data` of self). `filter/filter/filter_dot_lexer.ml`
+splits such tokens back. `test_dot_lexer.expected` is camlp5 7.14's own
+output (tokens and positions) for `dot_lexer_corpus.txt`:
+
+    sh filter/test/run_dot_lexer.sh 7 > filter/test/test_dot_lexer.expected   # OCaml 4.12, camlp5 7.14
+    sh filter/test/run_dot_lexer.sh 8 | diff filter/test/test_dot_lexer.expected -
+
+Checked when it was made: the camlp5 8 run matches all 133 tokens. Without the
+split, 75 lines differ; with the second part's location wrong, 50 do.

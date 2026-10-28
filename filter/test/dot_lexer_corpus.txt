@@ -1,0 +1,8 @@
+compare{'O;'a;.^data;
+   .^left:='L;
+   .^right:='R}
+compare{'ord;. 'a^data; .^data;
+x.y M.x r.(i) s.[i] a.{i} f.(.^data)
+.^* .^/ .^^ .^@ .+ .- .* ./ .= .> .| .& .! .? .% .: .@ .+. .^- 
+.. ... .~ .< .( .[ .{
+let x = y in r.lab <- .^data

@@ -4,6 +4,7 @@ mpconfig
 mpdebug-top
 mpkonsole
 mpkonsole-large
+/mpopt
 mpshell
 mptop
 mpxterm

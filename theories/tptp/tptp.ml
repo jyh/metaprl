@@ -249,7 +249,7 @@ let is_t_term = is_no_subterms_term t_opname
 let apply_term = << 'f 'x >>
 let apply_opname = opname_of_term apply_term
 
-let rec mk_apply_term = function
+let mk_apply_term = function
    [] ->
       raise (Failure "mk_apply_term")
  | [f] ->

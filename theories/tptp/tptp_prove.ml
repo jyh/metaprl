@@ -272,7 +272,7 @@ let dest_hyps bound hyps =
         tptp_positive = StringSet.empty
       }
    in
-   let hyps' = Array.create len null_hyp in
+   let hyps' = Array.make len null_hyp in
    let _ =
       for i = j to len - 1 do
          match SeqHyp.get hyps i with
@@ -460,7 +460,7 @@ let new_goal constants subst terms1 terms2 =
                   debug_subst := true
                end
          in
-         let body = List.map (fun t -> TermSubst.subst t free_vars' new_vars_terms) body in
+         let body = List.map (fun t -> Refiner.Refiner.TermSubst.subst t free_vars' new_vars_terms) body in
          let _ =
             if !debug_tptp then
                begin

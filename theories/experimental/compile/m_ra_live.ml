@@ -259,7 +259,7 @@ struct
        * Compute the dataflow assignment for a single node.
        * Returns true iff the live sets have changed.
        *)
-      let rec update_block updated benv label =
+      let update_block updated benv label =
          let block =
             try SymbolTable.find benv label with
                Not_found -> raise (Invalid_argument "dataflow")
@@ -321,7 +321,7 @@ struct
          if depth < len then
             defs
          else
-            let defs' = Array.create (succ depth) 0 in
+            let defs' = Array.make (succ depth) 0 in
                Array.blit defs 0 defs' 0 len;
                defs'
       in
@@ -341,7 +341,7 @@ struct
          if depth < len then
             defs
          else
-            let defs' = Array.create (succ depth) 0 in
+            let defs' = Array.make (succ depth) 0 in
                Array.blit defs 0 defs' 0 len;
                set stats defs';
                defs'
@@ -402,7 +402,7 @@ struct
     * New move stats.
     *)
    let move_new_stats depth =
-      let depth' = Array.create (succ depth) 0 in
+      let depth' = Array.make (succ depth) 0 in
          depth'.(depth) <- 1;
          { move_depth = depth' }
 

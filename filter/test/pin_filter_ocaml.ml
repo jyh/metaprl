@@ -1,0 +1,59 @@
+(*
+ * Pin for Filter_ocaml, the map between OCaml syntax and MetaPRL terms.
+ *
+ * For each top-level item of each file named on the command line, print
+ * the term the item maps to (as an MD5 unless PIN_FULL is set), and
+ * whether mapping that term back to OCaml and then to a term again gives
+ * the same term.  The output is compared
+ * with pin_filter_ocaml.expected, which was produced by the same program
+ * built against the camlp5 7 filter (see run_pin_filter_ocaml.sh).
+ *)
+module F = Filter_ocaml.FilterOCaml (Refiner.Refiner)
+
+let string_of_term = Simple_print.SimplePrint.string_of_term
+
+(* PIN_FULL=1 prints each term; otherwise its MD5, which keeps the
+ * expected file small.  Use PIN_FULL on both sides to see a difference. *)
+let full = (try Sys.getenv "PIN_FULL" <> "" with Not_found -> false)
+
+let parse_file name =
+   Pcaml.input_file := name;
+   let ic = open_in_bin name in
+   let cs = Stream.of_channel ic in
+   let rec loop acc =
+      let items, st = Grammar.Entry.parse Pcaml.implem cs in
+      let acc = List.rev_append items acc in
+         (* Stop at end of input; a parse that consumes nothing also ends it. *)
+         if st = None || items = [] || Stream.peek cs = None then
+            List.rev acc
+         else
+            loop acc
+   in
+   let items = try loop [] with e -> close_in ic; raise e in
+      close_in ic;
+      items
+
+let print_item i (si, _) =
+   match F.term_of_str_item [] si with
+      exception e ->
+         Printf.printf "%d TO-TERM-ERROR %s\n" i (Printexc.to_string e)
+    | t ->
+         let s = string_of_term t in
+         let shown = if full then s else Digest.to_hex (Digest.string s) in
+         let rt =
+            match F.term_of_str_item [] (F.str_item_of_term t) with
+               exception e -> "ERROR " ^ Printexc.to_string e
+             | t' -> if string_of_term t' = s then "same" else "DIFFERENT"
+         in
+            Printf.printf "%d %s roundtrip=%s\n%!" i shown rt
+
+let () =
+   for k = 1 to Array.length Sys.argv - 1 do
+      let name = Sys.argv.(k) in
+         Printf.printf "== %s\n%!" (Filename.basename name);
+         match parse_file name with
+            exception e ->
+               Printf.printf "PARSE-ERROR %s\n" (Printexc.to_string e)
+          | items ->
+               List.iteri print_item items
+   done

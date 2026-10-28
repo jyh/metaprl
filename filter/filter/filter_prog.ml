@@ -1779,7 +1779,13 @@ let extract_str arg sig_info info resources name group groupdesc =
    let dummy_loc = make_dummy_loc name in
    let items = Lm_list_util.flat_map (extract_str_item_list proc) items in
    let items = wrap_summary_items proc items in
-   let prolog = List.map (fun item -> item, dummy_loc) (implem_prolog proc dummy_loc name) in
+   (*
+    * The refiner is named after the MODULE (itt_logic), not the file
+    * (itt_logic.ml): rules are registered under this name, and the shell and
+    * the tactics look them up as [rule; module] (Tactic_boot, Proof_edit).
+    *)
+   let module_name = Filename.remove_extension (Filename.basename name) in
+   let prolog = List.map (fun item -> item, dummy_loc) (implem_prolog proc dummy_loc module_name) in
    let postlog = List.map (fun item -> item, dummy_loc) (implem_postlog proc dummy_loc) in
       prolog @ items @ postlog
 

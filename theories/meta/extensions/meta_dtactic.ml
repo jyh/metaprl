@@ -48,6 +48,10 @@ open Simple_print
 
 open Browser_resource
 
+(* Basic_tactics no longer includes Refiner.Refiner (2017-10-12), so TermMan
+   is named here, as base_reflection does. *)
+module TermMan = Refiner.Refiner.TermMan
+
 let debug_meta_dtactic =
    create_debug (**)
       { debug_name = "meta_dtactic";
@@ -376,7 +380,7 @@ let meta_dT =
          else
             Sequent.get_resource_arg p get_meta_elim_resource (Sequent.get_pos_assum_num p i))
 
-let rec meta_dForT i =
+let meta_dForT i =
    if i <= 0 then
       idT
    else

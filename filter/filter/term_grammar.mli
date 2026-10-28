@@ -35,6 +35,9 @@ open Filter_type
 val comment_string_op : opname
 val raise_spelling_error : unit -> unit
 
+(* Install a Pcaml.gram lexer that accepts {| and |} as keywords (camlp5 8) *)
+val install_lexer : unit -> unit
+
 (* Parsed types *)
 module MakeTermGrammar (TermGrammar : TermGrammarSig) : ParsedTermGrammarSig
 

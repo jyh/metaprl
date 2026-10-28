@@ -161,6 +161,41 @@ let xparam_term_opname   = Opname.mk_opname "xparam_term" perv_opname
 let xparam_opname        = Opname.mk_opname "xparam" perv_opname
 
 (*
+ * MetaPRL writes {| ... |} as brackets (resource annotations, sequents),
+ * 6,894 times in theories/. camlp5 8's pa_o makes the lexer with
+ * Plexer.simplest_raw_strings set, so {|...|} lexes as an OCaml quoted
+ * string, and the keyword "{|" is refused. camlp5 7's lexer had no quoted
+ * strings. Install a lexer made with that flag unset, before the term
+ * grammar adds its rules. $ antiquotations stay on: pa_o turns them off,
+ * but <:con< ... $x$ ... >> quotations need them (with them off, three of
+ * the sixteen support/display files fail to preprocess).
+ *
+ * Grammar.Unsafe.gram_reinit would do this but also empties the grammar's
+ * token use counts, and Grammar.delete_rule (Infix, pa_macro) then fails
+ * or removes keywords still in use. So the lexer field is set directly
+ * (Grammar.g is Gramext.grammar on (string * string) tokens), the counts
+ * are kept, and every token in use is registered with the new lexer.
+ *
+ * Called by every program that extends Pcaml.gram with the term grammar
+ * (Filter_parse in the filter, Shell_state in mp), after pa_o is linked.
+ *)
+let install_lexer () =
+   let g = (Obj.magic Pcaml.gram : (string * string) Gramext.grammar) in
+   let srs = !Plexer.simplest_raw_strings in
+   let dfa = !Plexer.dollar_for_antiquotation in
+   let lexer =
+      Plexer.simplest_raw_strings := false;
+      Plexer.dollar_for_antiquotation := true;
+      Fun.protect (**)
+         ~finally:(fun () ->
+               Plexer.simplest_raw_strings := srs;
+               Plexer.dollar_for_antiquotation := dfa)
+         Plexer.gmake
+   in
+      Hashtbl.iter (fun tok _ -> lexer.Plexing.tok_using tok) g.Gramext.gtokens;
+      g.Gramext.glexer <- lexer
+
+(*
  * Build the grammar.
  *)
 module MakeTermGrammar (TermGrammar : TermGrammarSig) =

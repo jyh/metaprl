@@ -260,6 +260,8 @@ let synchronize_state f =
 (*
  * Extend the grammar with terms.
  *)
+let () = install_lexer ()
+
 module TermGrammar = MakeTermGrammar
 (struct
    (*

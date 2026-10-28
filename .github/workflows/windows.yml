@@ -52,15 +52,27 @@ jobs:
       # MSVC: cl lacks C11 atomics), and camlp5's conf-perl-ipc-system-simple and
       # conf-perl-string-shellquote failed. The steps below measure each separately.
       # Round 2: `perl` on PATH is Strawberry Perl, while opam's builds run
-      # Cygwin's /usr/bin/perl, so the modules go into Cygwin's perl.
-      - name: the two perl modules camlp5 needs, into Cygwin's perl (from CPAN)
+      # Cygwin's /usr/bin/perl. Round 3: that perl does not exist until opam
+      # installs it for conf-perl. Round 4: Cygwin's CPAN fails at its
+      # first-time setup. Both modules are pure Perl, so their .pm files are
+      # copied from the CPAN tarballs (sha256-pinned) into Cygwin perl's
+      # site_perl directory.
+      - name: the two perl modules camlp5 needs, into Cygwin's perl
         continue-on-error: true
-        # Round 3: Cygwin's perl does not exist until opam installs it as the
-        # system dependency of conf-perl, so install that first.
         run: |
-          opam install -y conf-perl 2>&1 | tail -5 | tee "$RUNNER_TEMP/perl.log"
-          /usr/bin/perl -v | sed -n 2p | tee -a "$RUNNER_TEMP/perl.log"
-          PERL_MM_USE_DEFAULT=1 /usr/bin/perl -MCPAN -e 'CPAN::Shell->notest(install => q(IPC::System::Simple), q(String::ShellQuote))' 2>&1 | tail -40 | tee -a "$RUNNER_TEMP/perl.log"
+          set -o pipefail
+          opam install -y conf-perl 2>&1 | tail -3 | tee "$RUNNER_TEMP/perl.log"
+          site=$(/usr/bin/perl -MConfig -e 'print $Config{installsitelib}')
+          echo "site_perl: $site" | tee -a "$RUNNER_TEMP/perl.log"
+          mkdir -p "$site/IPC/System" "$site/String"
+          cd "$RUNNER_TEMP"
+          get() { curl -sSfL -o "$2" "$1" && echo "$3  $2" | sha256sum -c -; }
+          get https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz ipc.tar.gz \
+            22e6f5222b505ee513058fdca35ab7a1eab80539b98e5ca4a923a70a8ae9ba9e
+          get https://cpan.metacpan.org/authors/id/R/RO/ROSCH/String-ShellQuote-1.04.tar.gz sq.tar.gz \
+            e606365038ce20d646d255c805effdd32f86475f18d43ca75455b00e4d86dd35
+          tar xzf ipc.tar.gz && cp IPC-System-Simple-1.30/lib/IPC/System/Simple.pm "$site/IPC/System/"
+          tar xzf sq.tar.gz && cp String-ShellQuote-1.04/ShellQuote.pm "$site/String/"
           /usr/bin/perl -MIPC::System::Simple -MString::ShellQuote -e 'print "perl modules OK\n"' 2>&1 | tee -a "$RUNNER_TEMP/perl.log"
       - name: install omake
         continue-on-error: true

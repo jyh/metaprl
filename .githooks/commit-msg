@@ -1,0 +1,66 @@
+#!/bin/sh
+# Session-URL gate v3 (2026-09-13; implements the 08/16 purge's ratified scope).
+# PUBLIC repo: a commit message must carry no shape scripts/check_commit_trailers.py
+# forbids -- the session trailer key, in any case and spacing, and any chat-service
+# URL (compiler arm-3, 08/23: the harm is the URL, not the key). Co-Authored-By is
+# allowed (the purge deliberately kept it). Prose that merely names the rule still
+# passes.
+#
+# ⛔ v2 GREPPED TWO LITERAL SHAPES, AND THE GATE FORBIDS MORE. A lowercase key, a
+#   space before the colon, and a chat-service URL that is not a session URL all
+#   passed v2 and went red in CI after the push (census D #2). v3 types no pattern:
+#   .githooks/gate_scan.py loads them from the gate. If the gate is in neither the
+#   working tree nor origin's default branch, this hook REFUSES -- a scrubber whose
+#   oracle has vanished must refuse, not return zero.
+#
+# Fresh clone: git config core.hooksPath .githooks  (fleet-up asserts it too).
+GATE=scripts/check_commit_trailers.py
+
+# Interpreter chosen by EXECUTION, never by `command -v`: on Windows the Store
+# ships a `python3` stub that answers the lookup and fails when run.
+PY=
+for c in python3 python py; do
+  if "$c" -c "" >/dev/null 2>&1; then PY="$c"; break; fi
+done
+if [ -z "$PY" ]; then
+  echo "commit-msg REFUSED: no working python interpreter, so the trailer gate's" >&2
+  echo "  patterns cannot be read. Refusing rather than committing unchecked." >&2
+  exit 1
+fi
+
+SCAN="$(cd "$(dirname "$0")" && pwd)/gate_scan.py"
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=.
+GATE_RUN=
+GATE_TMP=
+if [ -f "$ROOT/$GATE" ]; then
+  GATE_RUN="$ROOT/$GATE"
+else
+  # A branch cut before the gate landed still has it in reach. The patterns
+  # still have exactly one source; this is a read of the same file.
+  for cand in origin/HEAD origin/main origin/master; do
+    if git cat-file -e "${cand}:${GATE}" 2>/dev/null; then
+      GATE_TMP=$(mktemp) && git show "${cand}:${GATE}" > "$GATE_TMP" 2>/dev/null && GATE_RUN="$GATE_TMP"
+      break
+    fi
+  done
+fi
+if [ -z "$GATE_RUN" ] || [ ! -f "$SCAN" ]; then
+  [ -n "$GATE_TMP" ] && rm -f -- "$GATE_TMP"
+  echo "commit-msg REFUSED: cannot find $GATE (working tree or origin's default branch)" >&2
+  echo "  or $SCAN. This hook derives its patterns from the gate and will not guess them." >&2
+  exit 1
+fi
+
+"$PY" "$SCAN" message --trailers-gate "$GATE_RUN" "$1"
+rc=$?
+[ -n "$GATE_TMP" ] && rm -f -- "$GATE_TMP"
+if [ "$rc" -ne 0 ]; then
+  if [ "$rc" -eq 1 ]; then
+    echo "commit-msg HOOK v3: a shape the trailer gate forbids is REFUSED in this PUBLIC repo (08/16 purge scope)." >&2
+    echo "Remove the line(s) named above. Co-Authored-By is fine." >&2
+  else
+    echo "commit-msg REFUSED: the trailer scan could not run (exit $rc)." >&2
+  fi
+  exit 1
+fi
+exit 0

@@ -1,0 +1,5 @@
+# private_paths_history_baseline.tsv -- ACCEPTED HISTORICAL DEBT: content a
+# commit INTRODUCED, which every clone receives whatever the tree now says.
+# sha<TAB>file<TAB>line-sha16<TAB>what.
+# A TREE REPAIR NEVER SHRINKS THIS FILE. Only a history rewrite does, and
+# that is a council act -- so a shrink here is a diff somebody must have ruled.

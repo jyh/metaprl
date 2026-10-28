@@ -1,0 +1,330 @@
+#!/bin/sh
+# pre-push -- PREVENT the private-path class, instead of DETECTING it after.
+#
+# WHY THIS EXISTS
+# ---------------
+# The private-paths gate and the session-trailer gate both run in CI, on every
+# pushed branch. That is a real guard and it has caught real leaks. But CI runs
+# AFTER the objects are on the public remote: on 2026-09-03 a push carried two
+# private-record paths to a public remote, CI went red -- and the bytes were
+# already served by sha, and stay served by sha until the forge garbage-collects
+# them, which it does on its own schedule and never on request.
+#
+# ⇒ A DETECTOR ON THE WRONG SIDE OF THE WIRE CANNOT UNDO WHAT IT REPORTS. The
+#   cheapest moment to stop a private path is the last moment it is still local,
+#   and that moment is here. This hook does not replace the CI gates; it moves
+#   the same two questions one step earlier, where the answer is still free.
+#
+# WHAT IT CHECKS, per ref being pushed, over the commits that ref ADDS:
+#   1. .githooks/gate_scan.py push -- ONE COMMIT AT A TIME: every message
+#      against scripts/check_commit_trailers.py's own patterns, and every line
+#      each commit INTRODUCES against both gates' patterns. commit-msg sees one
+#      message at a time and only at the moment it is written; a rebase, a
+#      cherry-pick, an --amend --no-verify, or a branch made before the hook was
+#      armed all reach a push with messages commit-msg never saw. And a line one
+#      commit adds and the next removes is in no net diff, yet both blobs are
+#      pushed: census D #3, the population only CI's --history arm could see.
+#   2. scripts/check_private_paths.py --range -- the ruled firewall line at
+#      PATHS, over the net delta (messages, added lines, and the pin audit).
+#   5. scripts/check_cert_imports.py --rev -- SaltC1/Cert54/ imports Mathlib
+#      and Lean only, read from the pushed tree (skipped, and said, where the
+#      gate is absent).
+#   3. scripts/check_pr_descriptions.py --range -- no lane name or family
+#      reference in a commit SUBJECT, and no lane name in a commit body (desk
+#      QA). A pushed subject cannot be edited without a history rewrite, so
+#      this is the last moment the reword is free. The pushed delta only: the
+#      bodies already public are history this arm does not rule on. The
+#      pushed REF NAME too: a merge subject will quote it, and the forge
+#      writes that subject where no hook runs.
+#
+# ⛔ NO PATTERN IS TYPED IN THIS FILE. Until 2026-09-13 arm 1 was a grep for two
+#   literal shapes, and it was narrower than the gate: a lowercase key, a space
+#   before the colon, and a chat-service URL that is not a session URL all went
+#   red in CI and passed here (census D #2). The patterns now have one home, the
+#   gate, and gate_scan.py loads them from it.
+#
+# WHAT IT DELIBERATELY DOES NOT DO: the --tree and --messages ratchets. Those
+# scan whole history / the whole tree and are CI's job. A pre-push hook that is
+# slow is a pre-push hook that gets --no-verify'd, and a bypassed guard guards
+# nothing. This one is a delta scan and costs a fraction of a second.
+#
+# DELETING a ref (local sha all zeros) pushes no objects and is ALLOWED.
+#
+# A GREEN PRINTS A RECEIPT NAMING THE RANGE. A silent success and a hook that
+# never ran are the same observation, and this repository has paid for that
+# confusion before; so every outcome here, including "nothing to scan", says so
+# in words with the range in it.
+set -u
+
+ZERO=0000000000000000000000000000000000000000
+GATE=scripts/check_private_paths.py
+TRAILER_GATE=scripts/check_commit_trailers.py
+SUBJECT_GATE=scripts/check_pr_descriptions.py
+INFRA_GATE=scripts/check_infra_names.py
+CERT_GATE=scripts/check_cert_imports.py
+HISTORY_BASELINE=scripts/private_paths_history_baseline.tsv
+SCAN="$(cd "$(dirname "$0")" && pwd)/gate_scan.py"
+
+# Interpreter chosen by EXECUTION, never by `command -v` -- on Windows the Store
+# ships an app-execution-alias stub named `python3` that is on PATH, answers the
+# lookup, and fails when run. Same rule, and same loop, as the commit-msg hook.
+PY=
+for c in python3 python py; do
+  if "$c" -c "" >/dev/null 2>&1; then PY="$c"; break; fi
+done
+if [ -z "$PY" ]; then
+  echo "pre-push REFUSED: no working python interpreter, so the private-paths" >&2
+  echo "  gate cannot run. Refusing rather than pushing unchecked -- a guard" >&2
+  echo "  that cannot run must refuse, not return zero." >&2
+  exit 1
+fi
+
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=.
+for need in "$ROOT/$GATE" "$ROOT/$TRAILER_GATE" "$ROOT/$SUBJECT_GATE" "$ROOT/$INFRA_GATE" "$SCAN"; do
+  if [ ! -f "$need" ]; then
+    echo "pre-push REFUSED: $need is not in this working tree." >&2
+    echo "  This hook derives its verdict from the gates and will not guess it." >&2
+    echo "  (core.hooksPath is repo-global while .githooks/ is branch-local, so a" >&2
+    echo "   checkout of a branch predating the gate lands exactly here.)" >&2
+    exit 1
+  fi
+done
+BASELINE_ARG=
+[ -f "$ROOT/$HISTORY_BASELINE" ] && BASELINE_ARG="$ROOT/$HISTORY_BASELINE"
+
+# origin's default branch, for the base of a ref origin does not yet have.
+default_remote_branch() {
+  d=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+  if [ -n "${d:-}" ]; then printf '%s\n' "$d"; return 0; fi
+  for b in origin/main origin/master; do
+    if git rev-parse --verify --quiet "$b" >/dev/null 2>&1; then
+      printf '%s\n' "$b"; return 0
+    fi
+  done
+  return 1
+}
+
+# git feeds the ref lines on stdin. Read them ALL first: the loop below runs
+# commands that inherit this stdin, and a consumer inside the loop would eat the
+# refs it has not read yet -- silently checking fewer refs than were pushed.
+TMPIN=$(mktemp) || { echo "pre-push REFUSED: mktemp failed." >&2; exit 1; }
+cleanup() { [ -n "${TMPIN:-}" ] && rm -f -- "$TMPIN"; }
+trap cleanup EXIT
+cat > "$TMPIN"
+
+status=0
+seen=0
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -z "${local_sha:-}" ] && continue
+  seen=$((seen + 1))
+
+  # All-zero local sha == this ref is being DELETED. No objects are sent.
+  case "$local_sha" in
+    *[!0]*) : ;;
+    *)
+      echo "pre-push OK: ${remote_ref:-<ref>} is being DELETED -- no objects are pushed, nothing to scan."
+      continue
+      ;;
+  esac
+
+  # ---- A NEW TAG WHOSE COMMIT ORIGIN ALREADY HAS (the helm's ask, 2026-10-15) ---
+  # `merge-base <default> <tag-object>` peels to the tagged commit, and the guard
+  # below compares that commit with `rev-parse <tag-object>` -- the TAG OBJECT --
+  # so for an annotated tag on a commit that is already public the range is
+  # <commit>..<tag-object>, which lists ZERO commits, and every arm correctly
+  # refuses "an empty scan is not clean". What such a push ADDS is the tag object,
+  # so that is what is scanned: its raw text and message, by gate_scan.py `tag`.
+  # ONLY this shape is let through: a NEW refs/tags/ ref, peelable to a commit that
+  # is an ancestor of the remote's default branch. A tag on an unpushed commit
+  # falls through to the range arms below and scans that commit; a branch with an
+  # empty range is still refused.
+  case "${remote_ref:-}" in
+    refs/tags/*)
+      if [ -z "${remote_sha:-}" ] || [ "$remote_sha" = "$ZERO" ]; then
+        TGT=$(git rev-parse --verify --quiet "${local_sha}^{commit}" 2>/dev/null) || TGT=
+        TDEF=$(default_remote_branch) || TDEF=
+        if [ -n "$TGT" ] && [ -n "$TDEF" ] && git merge-base --is-ancestor "$TGT" "$TDEF" 2>/dev/null; then
+          tbad=0
+          if ! ( cd "$ROOT" && "$PY" "$SUBJECT_GATE" --ref "${remote_ref:-}" ) < /dev/null; then
+            echo "pre-push REFUSED: the pushed tag name carries a refused word." >&2
+            tbad=1
+          fi
+          ttype=$(git cat-file -t "$local_sha" 2>/dev/null) || ttype=
+          if [ "$ttype" = "tag" ]; then
+            trc=0
+            # The infra-name gate is optional: a repository without one scans the rest and says so.
+            TINFRA=
+            [ -n "${INFRA_GATE:-}" ] && [ -f "$ROOT/$INFRA_GATE" ] && TINFRA="--infra-gate $ROOT/$INFRA_GATE"
+            # shellcheck disable=SC2086
+            ( cd "$ROOT" && "$PY" "$SCAN" tag --trailers-gate "$ROOT/$TRAILER_GATE" \
+                --paths-gate "$ROOT/$GATE" --subject-gate "$ROOT/$SUBJECT_GATE" \
+                $TINFRA "$local_sha" ) < /dev/null || trc=$?
+            if [ "$trc" -ne 0 ]; then
+              if [ "$trc" -eq 1 ]; then
+                echo "pre-push REFUSED: the tag object ${local_sha} carries a forbidden shape (named above)." >&2
+              else
+                echo "pre-push REFUSED: the tag-object scan could NOT RUN on ${local_sha} (exit ${trc})." >&2
+              fi
+              tbad=1
+            fi
+            tnote="annotated tag object scanned"
+          elif [ "$ttype" = "commit" ]; then
+            tnote="LIGHTWEIGHT tag: no tag object, nothing but the ref name is new"
+          else
+            echo "pre-push REFUSED: ${local_sha} is a ${ttype:-<unreadable>}, not a tag or a commit." >&2
+            tbad=1
+            tnote=
+          fi
+          if [ "$tbad" -ne 0 ]; then
+            status=1
+          else
+            echo "pre-push OK [tag: ref name + tag object vs trailer, private-paths, subject, infra-names]: ${local_ref:-<ref>} -> ${remote_ref}, NO commit scanned BECAUSE ${TGT} is already an ancestor of ${TDEF} (public); ${tnote}."
+          fi
+          continue
+        fi
+      fi
+      ;;
+  esac
+
+  RANGE=
+  WHY=
+  if [ -n "${remote_sha:-}" ] && [ "$remote_sha" != "$ZERO" ] \
+     && git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null \
+     && [ "$remote_sha" != "$local_sha" ]; then
+    # A remote sha must be an ANCESTOR of what is pushed, not merely non-empty:
+    # after a history rewrite the remote tip names commits this clone no longer
+    # has, and `<dead-sha>..HEAD` makes git exit 128 -- a spurious refusal on
+    # clean content. The CI gates learned this the expensive way; it is carried here.
+    # EXISTENCE WAS NOT ENOUGH (desk ML finding #6): on a force-push that REWINDS
+    # the ref, the old tip is still here, `remote..local` is EMPTY, and the gate
+    # refuses "scanned ZERO commits". prove_pre_push.sh ARM 3b drives it.
+    RANGE="${remote_sha}..${local_sha}"
+    WHY="delta against the remote tip"
+  else
+    DEF=$(default_remote_branch) || DEF=
+    MB=
+    [ -n "$DEF" ] && MB=$(git merge-base "$DEF" "$local_sha" 2>/dev/null)
+    if [ -n "${MB:-}" ] && [ "$MB" != "$(git rev-parse "$local_sha")" ]; then
+      RANGE="${MB}..${local_sha}"
+      WHY="ref new to origin (or its tip unreachable): merge-base with $DEF"
+    else
+      # The merge-base arm degenerates when the pushed ref IS the default
+      # branch's tip, or is an ancestor of it. Bound the new commits directly.
+      NEW=$(git rev-list "$local_sha" --not --remotes=origin 2>/dev/null)
+      if [ -z "${NEW:-}" ]; then
+        echo "pre-push OK: ${local_ref:-<ref>} -> ${remote_ref:-<ref>} adds NO commit that origin does not already have; nothing to scan."
+        continue
+      fi
+      OLDEST=$(printf '%s\n' "$NEW" | tail -1)
+      BASE=$(git rev-parse --verify --quiet "${OLDEST}^" 2>/dev/null) || BASE=
+      if [ -n "${BASE:-}" ]; then
+        RANGE="${BASE}..${local_sha}"
+        WHY="no usable merge-base: parent of the oldest commit origin lacks"
+      else
+        # A ROOT commit is in the delta, so there is no two-dot range that
+        # contains it. Stated, never hidden: on a one-dot range the --range
+        # gate's file arm cannot run (`git diff <one-dot>` compares the WORKING
+        # TREE, not a delta), so arm 2 scans BY MESSAGE ONLY. Arm 1 is not
+        # limited that way: it diffs a root commit against the empty tree.
+        RANGE="$local_sha"
+        WHY="ROOT COMMIT in the delta -- one-dot range, --range gate MESSAGE ARM ONLY; arm 1 still reads every commit's content"
+      fi
+    fi
+  fi
+
+  bad=0
+
+  # ---- ARM 1: per commit, with the gates' own patterns -----------------------
+  # gate_scan.py exits 0 clean, 1 on a finding, 2 when it could not look. Both
+  # non-zero codes refuse: a scan that could not run is not a clean scan.
+  scan_rc=0
+  if [ -n "$BASELINE_ARG" ]; then
+    ( cd "$ROOT" && "$PY" "$SCAN" push --trailers-gate "$ROOT/$TRAILER_GATE" \
+        --paths-gate "$ROOT/$GATE" --history-baseline "$BASELINE_ARG" "$RANGE" ) < /dev/null || scan_rc=$?
+  else
+    ( cd "$ROOT" && "$PY" "$SCAN" push --trailers-gate "$ROOT/$TRAILER_GATE" \
+        --paths-gate "$ROOT/$GATE" "$RANGE" ) < /dev/null || scan_rc=$?
+  fi
+  if [ "$scan_rc" -ne 0 ]; then
+    if [ "$scan_rc" -eq 1 ]; then
+      echo "pre-push REFUSED: a commit in ${RANGE} carries a forbidden shape (named above)." >&2
+    else
+      echo "pre-push REFUSED: the per-commit scan could NOT RUN on ${RANGE} (exit ${scan_rc})." >&2
+    fi
+    echo "  This repository is PUBLIC; the 2026-08-16 purge's scope is standing law." >&2
+    echo "  Rewrite those commits BEFORE the push -- amend or rebase them, never fix" >&2
+    echo "  forward: a later commit that removes a line leaves the blob in the one" >&2
+    echo "  that added it, and the old object stays served by sha until the forge" >&2
+    echo "  collects it." >&2
+    echo "    git rebase -i --exec 'git commit --amend --no-edit' <base>" >&2
+    bad=1
+  fi
+
+  # ---- ARM 2: the ruled firewall line at PATHS ------------------------------
+  # </dev/null so the gate cannot consume the ref lines still queued above.
+  if ! ( cd "$ROOT" && "$PY" "$GATE" --range "$RANGE" ) < /dev/null; then
+    echo "pre-push REFUSED: the private-paths gate RED on ${RANGE} (${local_ref:-<ref>} -> ${remote_ref:-<ref>})." >&2
+    echo "  The findings above name the commit or the added line. Fix them here," >&2
+    echo "  where it is still free: once pushed, the objects are served by sha." >&2
+    bad=1
+  fi
+
+  # ---- ARM 3: lane names and family references in what the push adds ------
+  if ! ( cd "$ROOT" && "$PY" "$SUBJECT_GATE" --range "$RANGE" ) < /dev/null; then
+    echo "pre-push REFUSED: the subject gate RED on ${RANGE} (${local_ref:-<ref>} -> ${remote_ref:-<ref>})." >&2
+    echo "  The findings above name the commit and the surface, never the word." >&2
+    echo "  Reword the commit now (amend or rebase): a pushed subject stays in" >&2
+    echo "  history for as long as the repository does." >&2
+    bad=1
+  fi
+  # ---- ARM 4: no NEW host or account name in what the push adds (ruling 3, 2026-10-07) ----
+  # The ratchet form: an added line byte-identical to a baselined line of the same file passes
+  # (a verbatim move); an edited line that keeps a name is NEW. CI runs the same arm.
+  if ! ( cd "$ROOT" && "$PY" "$INFRA_GATE" --range "$RANGE" ) < /dev/null; then
+    echo "pre-push REFUSED: the infrastructure-name gate RED on ${RANGE} (${local_ref:-<ref>} -> ${remote_ref:-<ref>})." >&2
+    echo "  The findings above name file:line, never the name. Drop the name from the" >&2
+    echo "  line (a role word, a pool number); the baseline grows only by a reviewed act." >&2
+    bad=1
+  fi
+  # ---- ARM 5: the certificates' import rule (C1 · A2e) ----------------------
+  # SaltC1/Cert54/ imports Mathlib and Lean only: its CI job builds it against
+  # Mathlib alone. Read from the TREE BEING PUSHED (`--rev`), never the working
+  # tree. A repository without the gate skips this arm and its receipt says so.
+  CERT_NOTE="cert-imports: no gate in this tree"
+  if [ -f "$ROOT/$CERT_GATE" ]; then
+    if ( cd "$ROOT" && "$PY" "$CERT_GATE" --rev "$local_sha" ) < /dev/null; then
+      CERT_NOTE="cert-imports --rev"
+    else
+      echo "pre-push REFUSED: the certificates' import gate RED on ${local_sha} (${local_ref:-<ref>} -> ${remote_ref:-<ref>})." >&2
+      echo "  SaltC1/Cert54/ may import Mathlib and Lean only (the file and line are named above)." >&2
+      bad=1
+    fi
+  fi
+  if ! ( cd "$ROOT" && "$PY" "$SUBJECT_GATE" --ref "${remote_ref:-}" ) < /dev/null; then
+    echo "pre-push REFUSED: the pushed ref name carries a refused word. Push the" >&2
+    echo "  work under a neutral branch name: a merge subject will quote this one." >&2
+    bad=1
+  fi
+
+  if [ "$bad" -ne 0 ]; then
+    status=1
+    continue
+  fi
+
+  n=$(git rev-list --count "$RANGE" 2>/dev/null) || n="?"
+  echo "pre-push OK [per-commit trailer+paths + private-paths --range + subject gate --range + infra-names --range + ${CERT_NOTE}]: ${local_ref:-<ref>} -> ${remote_ref:-<ref>}, range ${RANGE} (${WHY}), ${n} commit(s) scanned."
+done < "$TMPIN"
+
+if [ "$seen" -eq 0 ]; then
+  # Not a pass: git named no ref, so this hook inspected nothing. Say which.
+  echo "pre-push: git supplied no ref lines -- this hook inspected NOTHING (not a clean scan)."
+fi
+
+if [ "$status" -ne 0 ]; then
+  echo "" >&2
+  echo "PUSH REFUSED by .githooks/pre-push. --no-verify bypasses this hook and" >&2
+  echo "the CI gates will still red AFTER the objects are public -- which is the" >&2
+  echo "failure mode this hook exists to prevent, not a workaround for it." >&2
+fi
+exit $status

@@ -15,3 +15,5 @@
 bin
 lib
 libmojave
+__pycache__/
+*.pyc

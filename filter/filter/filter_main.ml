@@ -45,8 +45,12 @@ let _ =
 (*
  * string -> path commands
  *)
+(* MP_INCLUDE (mk/prlcomp) is a list of directories joined with the
+   platform's path-list separator: ";" on Windows, where a directory
+   name can contain ":" (d:\...), and ":" elsewhere. *)
 let set_path doc var path =
-   let path' = Lm_string_util.split ":" path in
+   let sep = if Sys.os_type = "Win32" then ";" else ":" in
+   let path' = Lm_string_util.split sep path in
       var := path'
 
 let set_path_arg doc var =

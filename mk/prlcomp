@@ -14,7 +14,8 @@ Shell. +=
       setenv(MPLIB, $(LIB))
       setenv(MP_GROUP, $(THEORYNAME))
       setenv(MP_DESCR, $(THEORYDESCR))
-      setenv(MP_INCLUDE, $(concat :, $(OCAMLINCLUDES)))
+      # The platform's path-list separator; filter_main.ml splits on it.
+      setenv(MP_INCLUDE, $(concat $(if $(equal $(OSTYPE), Win32), ;, :), $(OCAMLINCLUDES)))
       code = $(shell-code $(argv))
       if $(eq $(code), 0)
          return 1

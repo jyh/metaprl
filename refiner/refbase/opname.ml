@@ -57,13 +57,14 @@ let debug_opname =
  * This changes the GC parameters for the whole MetaPRL system.
  *)
 let _ =
-   let r = Gc.get () in
-      (* r.verbose <- 1; *)
-      r.Gc.minor_heap_size <- 196608;
-      r.Gc.major_heap_increment <- 1048576;
-      r.Gc.space_overhead <- 85;
-      r.Gc.stack_limit <- 524288;
-      Gc.set r
+   (* The Gc.control fields are no longer mutable (OCaml 5), so build a
+    * new record.  stack_limit is left at the runtime's default: on
+    * OCaml 5 it bounds native stacks too, and the old 524288 words
+    * (4 MB) is far below that default (128M words). *)
+   Gc.set { (Gc.get ()) with
+               Gc.minor_heap_size = 196608;
+               Gc.major_heap_increment = 1048576;
+               Gc.space_overhead = 85 }
 
 (************************************************************************
  * TYPES                                                                *

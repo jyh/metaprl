@@ -530,7 +530,7 @@ let set_module name =
          let rsrc =
             try Mp_resource.find (Mp_resource.theory_bookmark name) with
                Not_found ->
-                  eprintf "Module %s: resources not found%t" (String.capitalize name) eflush;
+                  eprintf "Module %s: resources not found%t" (Latin1_case.capitalize name) eflush;
                   Mp_resource.recompute_top ();
                   Mp_resource.find Mp_resource.top_bookmark
          in

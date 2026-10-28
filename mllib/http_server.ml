@@ -160,21 +160,21 @@ let unhex c1 c2 =
  *)
 let decode_hex uri =
    let len = String.length uri in
-   let buf = String.create len in
+   let buf = Bytes.create len in
    let rec convert i j =
       if j = len then
          if i = len then
-            buf
+            Bytes.to_string buf
          else
-            String.sub buf 0 i
+            Bytes.sub_string buf 0 i
       else if uri.[j] = '%' && j < len - 2 then
          begin
-            buf.[i] <- unhex uri.[j + 1] uri.[j + 2];
+            Bytes.set buf i (unhex uri.[j + 1] uri.[j + 2]);
             convert (i + 1) (j + 3)
          end
       else
          begin
-            buf.[i] <- uri.[j];
+            Bytes.set buf i uri.[j];
             convert (i + 1) (j + 1)
          end
    in
@@ -259,7 +259,7 @@ let head out uri protocol =
  * Copy the input file to the output stream.
  *)
 let copy_fd out fd =
-   let buffer = String.create 8192 in
+   let buffer = Bytes.create 8192 in
    let rec copy () =
       try
          let count = Unix.read fd buffer 0 8192 in
@@ -340,7 +340,7 @@ let handle server connect client =
    let args =
       match parse_args line with
          command :: args ->
-            String.lowercase command :: args
+            Latin1_case.lowercase command :: args
        | [] ->
             []
    in

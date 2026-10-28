@@ -1255,7 +1255,7 @@ struct
       let rec collect_opname cap = function
          [t] -> cap t
        | h :: t ->
-            (collect_opname String.capitalize t) ^ "." ^ cap h
+            (collect_opname Latin1_case.capitalize t) ^ "." ^ cap h
        | [] ->
             "<nil opname>"
       in

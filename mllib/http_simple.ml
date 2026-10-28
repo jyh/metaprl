@@ -185,12 +185,12 @@ let print_content_page_err out code content_type buf =
  * Print a file.
  *)
 let copy outx inx =
-   let buffer = String.create 8192 in
+   let buffer = Bytes.create 8192 in
    let rec copy () =
       let count = input inx buffer 0 8192 in
          if count <> 0 then
             begin
-               Lm_ssl.output outx buffer 0 count;
+               Lm_ssl.output outx (Bytes.sub_string buffer 0 count) 0 count;
                copy ()
             end
    in
@@ -356,26 +356,26 @@ let unhex c1 c2 =
  *)
 let decode_hex uri =
    let len = String.length uri in
-   let buf = String.create len in
+   let buf = Bytes.create len in
    let rec convert i j =
       if j = len then
          if i = len then
-            buf
+            Bytes.to_string buf
          else
-            String.sub buf 0 i
+            Bytes.sub_string buf 0 i
       else if uri.[j] = '+' then
          begin
-            buf.[i] <- ' ';
+            Bytes.set buf i ' ';
             convert (i + 1) (j + 1)
          end
       else if uri.[j] = '%' && j < len - 2 then
          begin
-            buf.[i] <- unhex uri.[j + 1] uri.[j + 2];
+            Bytes.set buf i (unhex uri.[j + 1] uri.[j + 2]);
             convert (i + 1) (j + 3)
          end
       else
          begin
-            buf.[i] <- uri.[j];
+            Bytes.set buf i uri.[j];
             convert (i + 1) (j + 1)
          end
    in
@@ -392,20 +392,20 @@ let hex code =
 
 let encode_hex uri =
    let len = String.length uri in
-   let buf = String.create (3 * len) in
+   let buf = Bytes.create (3 * len) in
    let rec convert i j =
       if i = len then
-         String.sub buf 0 j
+         Bytes.sub_string buf 0 j
       else
          match uri.[i] with
             ('0'..'9' | 'A'..'Z' | 'a'..'z') as c ->
-               buf.[j] <- c;
+               Bytes.set buf j c;
                convert (succ i) (succ j)
           | c ->
                let code = Char.code c in
-                  buf.[j] <- '%';
-                  buf.[j + 1] <- hex ((code lsr 4) land 15);
-                  buf.[j + 2] <- hex (code land 15);
+                  Bytes.set buf j '%';
+                  Bytes.set buf (j + 1) (hex ((code lsr 4) land 15));
+                  Bytes.set buf (j + 2) (hex (code land 15));
                   convert (succ i) (j + 3)
    in
       convert 0 0
@@ -435,7 +435,7 @@ let header_line inx =
          let index = String.index line colon in
          let length = String.length line in
             if index < length then
-               let tag = String.lowercase (String.sub line 0 index) in
+               let tag = Latin1_case.lowercase (String.sub line 0 index) in
                let field = String.sub line (succ index) (length - index - 1) in
                   Some (tag, Lm_string_util.trim field)
             else
@@ -478,7 +478,7 @@ let string_header_line line i =
       let length = String.index_from line i '\n' in
          try
             let index = find_colon line i length in
-            let tag = String.lowercase (String.sub line i (index - i)) in
+            let tag = Latin1_case.lowercase (String.sub line i (index - i)) in
             let field = String.sub line (succ index) (length - index - 1) in
                StringEntry (tag, Lm_string_util.trim field, succ length)
          with
@@ -527,7 +527,7 @@ let parse_if_match s =
          Some args
 
 let parse_request_cache_control field =
-   match Lm_string_util.parse_args (String.lowercase field) with
+   match Lm_string_util.parse_args (Latin1_case.lowercase field) with
       ["no-cache"] ->
          CacheRequestNoCache
     | ["no-store"] ->
@@ -647,10 +647,10 @@ let parse_content_type body =
             let params =
                List.map (fun arg ->
                      let key, x = split_eq_val arg in
-                        String.lowercase key, x) params
+                        Latin1_case.lowercase key, x) params
             in
-               { content_type_main   = String.lowercase main;
-                 content_type_sub    = String.lowercase sub;
+               { content_type_main   = Latin1_case.lowercase main;
+                 content_type_sub    = Latin1_case.lowercase sub;
                  content_type_params = params
                }
        | [] ->
@@ -669,9 +669,9 @@ let parse_content_disposition body =
             let params =
                List.map (fun arg ->
                      let key, x = split_eq_val arg in
-                        String.lowercase key, x) params
+                        Latin1_case.lowercase key, x) params
             in
-               { content_disposition_type = String.lowercase info;
+               { content_disposition_type = Latin1_case.lowercase info;
                  content_disposition_params = params
                }
        | [] ->
@@ -850,10 +850,11 @@ let rec find_content_length = function
 let read_body inx header =
    try
       let length = find_content_length header in
-      let body = String.create length in
+      let body = Bytes.create length in
          if !debug_http then
             eprintf "Http_simple.read_body: trying to read %d chars%t" length eflush;
          Lm_ssl.really_input inx body 0 length;
+         let body = Bytes.to_string body in
          if !debug_http then
             eprintf "Http_simple.read_body: %d, %s%t" length (String.escaped body) eflush;
          body
@@ -897,7 +898,7 @@ let handle server client connect info =
    let args =
       match parse_args line with
          command :: args ->
-            String.lowercase command :: args
+            Latin1_case.lowercase command :: args
        | [] ->
             []
    in

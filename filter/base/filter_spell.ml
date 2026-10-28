@@ -177,7 +177,7 @@ let check s =
          if String.length s >= 2 then
             match s.[0] with
                'A'..'Z' ->
-                  Hashtbl.mem dict s || (Hashtbl.mem dict (String.lowercase s))
+                  Hashtbl.mem dict s || (Hashtbl.mem dict (Latin1_case.lowercase s))
              | '0'..'9' when Lm_string_util.for_all is_num s ->
                   true
              | _ ->

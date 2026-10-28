@@ -658,7 +658,7 @@ let mount_current_module modname parse_arg shell force_flag need_shell verbose =
       if force_flag || update then
          begin
             (* Make sure the module name is well-formed *)
-            if modname <> String.uncapitalize modname then
+            if modname <> Latin1_case.uncapitalize modname then
                raise (Failure "Shell_core: module name should not be capitalized");
 
             (* See if the theory exists *)

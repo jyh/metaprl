@@ -187,8 +187,8 @@ let rec string_of_path = function
    [] ->
       (* This should never happen because paths always point to something *)
       raise (EmptyModulePath "string_of_path")
- | [h] -> String.capitalize h
- | h::t -> (String.capitalize h) ^ "/" ^ (string_of_path t)
+ | [h] -> Latin1_case.capitalize h
+ | h::t -> (Latin1_case.capitalize h) ^ "/" ^ (string_of_path t)
 
 (*
  * Output a path to an ml file.
@@ -196,7 +196,7 @@ let rec string_of_path = function
 let output_path oport =
    let rec aux = function
       [] -> raise (EmptyModulePath "output_path")
-    | [h] -> output_string oport (String.capitalize h)
+    | [h] -> output_string oport (Latin1_case.capitalize h)
     | h::t ->
          output_string oport h;
          output_string oport ".";

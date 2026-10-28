@@ -430,7 +430,7 @@ let string_value_with_unicode node =
     Mbint b -> let (x, y) = dest_lint32 b in
     let str = if y < 0 then failwith "string_value" else Lm_string_util.create "MathBus.string_value" y in
     let rec loop i j =
-      if (i >= y) || (j > (mbnode_nSubterms node)) then str else
+      if (i >= y) || (j > (mbnode_nSubterms node)) then Bytes.to_string str else
       (match node.(j) with
 	Mbint c -> let (a, b) = dest_lint32 c in
 	(Lm_string_util.set "MathBus.string_value_with_unicode" str i (Char.chr a);
@@ -448,7 +448,7 @@ let string_value node =
     Mbint b -> let (x, y) = dest_lint32 b in
     let str = if y < 0 then failwith "string_value" else Lm_string_util.create "MathBus.string_value" y in
     let rec loop i j =
-      if (i >= y) || (j > (mbnode_nSubterms node)) then str else
+      if (i >= y) || (j > (mbnode_nSubterms node)) then Bytes.to_string str else
       (match node.(j) with
 	Mbint c -> let (a, b) = dest_lint32 c in let a1 = (a asr 8) land 0xFF and a2 = a land 0xFF and b1 = (b asr 8) land 0xFF and b2 = b land 0xFF in
 	(Lm_string_util.set "MathBus.string_value" str i (Char.chr a1);

@@ -77,7 +77,7 @@ let level_of_byte b = ((b land 0x30) lsr 4)
 type catetype =   COpid  | CBinding | CParameter | COperator | CTerm | CNumeral
 
 let catetypes =
-  let a = create 6 COpid in
+  let a = make 6 COpid in
     set a 0 COpid;
     set a 1 CBinding;
     set a 2 CParameter;
@@ -103,12 +103,12 @@ type level =
 let level_array_growth = 256
 let level_array_initial = (Opid "")
 
-let new_level n = {items = (create n level_array_initial); fill = 0 }
+let new_level n = {items = (make n level_array_initial); fill = 0 }
 
 let level_allocate_slot l =
   let fill = l.fill in
     (if inteq fill (Array.length l.items)
-       then let nitems = create (fill + level_array_growth) level_array_initial in
+       then let nitems = make (fill + level_array_growth) level_array_initial in
          blit l.items 0 nitems 0 fill;
          l.items <- nitems
     );

@@ -28,11 +28,6 @@ jobs:
     defaults:
       run:
         shell: bash
-    env:
-      # mk/defaults falls back to the registry's ProgramFilesDir ("C:\Program
-      # Files") for INSTALL_DIR, and the space splits THEORYPATH in mk/make_config
-      # (measured, round 2). Set it to a path without a space.
-      INSTALL_DIR: D:/mpinstall
     steps:
       - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4

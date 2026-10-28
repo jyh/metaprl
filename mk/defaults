@@ -49,9 +49,12 @@ DEFAULT_BROWSER_COMMANDS[] =
 # Location of OCAML libraries and default compilation flags
 #
 if $(equal $(OSTYPE), Win32)
-   # Compile C files with threads
    CAMLLIB_DEFAULT = $"C:/Program Files/Objective Caml/lib"
-   CFLAGS += /MT
+   # MSVC: link C files with the multithreaded static runtime. MinGW gcc
+   # reads /MT as a file name, so the flag is MSVC-only.
+   if $(equal $(CCOMPTYPE), msvc)
+      CFLAGS += /MT
+      export
    export
 
 else

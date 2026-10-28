@@ -71,16 +71,17 @@ jobs:
             done
           } > OMakefile
           cat OMakefile
-          # Round 9's first run: `opam exec -- ocaml spew.ml` exited 50 here, so
-          # the writer is a native program.
-          opam exec -- ocamlfind ocamlopt -package unix spew.ml -o spew.exe
+          # Round 9's first two runs: opam exec exited 50, "No switch is currently
+          # set": setup-ocaml's switch is local to the workspace and this step
+          # runs outside it, so the switch is named.
+          opam exec --switch="$GITHUB_WORKSPACE" -- ocamlopt spew.ml -o spew.exe
           ./spew.exe 16 2> spew16.txt; echo "spew rc=$? wrote $(wc -c < spew16.txt) bytes"
       - name: run each target (90 s bound each)
         run: |
           cd "$RUNNER_TEMP/pipe"
           for t in plain2k alias2k plain8k alias8k; do
             start=$(date +%s)
-            timeout 90 opam exec -- omake -j1 --no--progress $t > "$RUNNER_TEMP/pipe-$t.log" 2>&1 && rc=0 || rc=$?
+            timeout 90 opam exec --switch="$GITHUB_WORKSPACE" -- omake -j1 --no--progress $t > "$RUNNER_TEMP/pipe-$t.log" 2>&1 && rc=0 || rc=$?
             echo "RESULT $t rc=$rc after $(( $(date +%s) - start )) s, output $(wc -c < "$RUNNER_TEMP/pipe-$t.log") bytes"
           done
       - uses: actions/upload-artifact@v4

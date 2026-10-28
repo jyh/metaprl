@@ -22,6 +22,23 @@ Shell. +=
       else
          exit $(code)
 
+#
+# On Windows, omake's shell-code does not drain the child's output pipe
+# while the child runs, so a command run through the alias above blocks
+# forever once it writes about 4 KB (reproduced with a small OMake project
+# and no MetaPRL; redirecting the output to a file inside the alias hangs
+# the same way). There the commands below run as plain rule commands, which
+# do not have the problem, and Theory calls prlenv to set the same variables
+# for its directory.
+#
+prlenv() =
+   setenv(MP_ROOT, $(ROOT))
+   setenv(MPLIB, $(LIB))
+   setenv(MP_GROUP, $(THEORYNAME))
+   setenv(MP_DESCR, $(THEORYDESCR))
+   setenv(MP_INCLUDE, $(concat $(if $(equal $(OSTYPE), Win32), ;, :), $(OCAMLINCLUDES)))
+   export
+
 prlc-deps() =
    DEPS[] =
       $(ROOT)
@@ -38,7 +55,12 @@ WrapC(command) =
    #
    # Put together the command
    #
-   COMMAND = prlcomp $(command)
+   if $(equal $(OSTYPE), Win32)
+      COMMAND = $(command)
+      export
+   else
+      COMMAND = prlcomp $(command)
+      export
 
    return($(COMMAND))
 
@@ -50,6 +72,11 @@ PrlC(command) =
    # Put together the command.  This should not be an array,
    # because the alias prlcomp should not be quoted.
    #
-   COMMAND = prlcomp $(command) -pp $(quote-argv $(CAMLP5N) $(LOC))
+   if $(equal $(OSTYPE), Win32)
+      COMMAND = $(command) -pp $(quote-argv $(CAMLP5N) $(LOC))
+      export
+   else
+      COMMAND = prlcomp $(command) -pp $(quote-argv $(CAMLP5N) $(LOC))
+      export
 
    return($(COMMAND))

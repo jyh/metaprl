@@ -113,6 +113,11 @@ let grammar_parse gram st =
          restore ();
          raise exn
 
+let source_file = ref ""
+
+let source_file_or name =
+   if !source_file <> "" then !source_file else name
+
 (*
  * Collect the arguments in a rewrite.
  *)

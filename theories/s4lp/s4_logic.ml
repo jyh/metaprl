@@ -453,7 +453,7 @@ module S4_Prover = Jall.JProver(S4_Logic)
 let rec all_hyps_aux hyps l i =
    if i = 0 then l else
    let i = pred i in
-      match Term.SeqHyp.get hyps i with
+      match SeqHyp.get hyps i with
          Hypothesis (_, t) ->
             all_hyps_aux hyps (t::l) i
        | Context _ ->
@@ -461,7 +461,7 @@ let rec all_hyps_aux hyps l i =
 
 let all_hyps t =
    let hyps = (TermMan.explode_sequent t).sequent_hyps in
-      all_hyps_aux hyps [] (Term.SeqHyp.length hyps)
+      all_hyps_aux hyps [] (SeqHyp.length hyps)
 
 let base_proverT def_mult = funT (fun p ->
    let mult_limit =

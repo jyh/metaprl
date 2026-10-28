@@ -1198,8 +1198,8 @@ let rec iter p info constrs v =
 						let sup_val=SAF.value_of sup' in
 						let inf_val=SAF.value_of inf' in
 						if compare sup_val inf_val >= 0 then
-							if 	SAF.isInfinite sup' or
-									SAF.isInfinite inf' or
+							if 	SAF.isInfinite sup' ||
+									SAF.isInfinite inf' ||
 									not (isIntegral (VI.restore info v)) then
 								let constrs' = SACS.addUpperBound constrs v sup_val in
 								let constrs'' = SACS.addLowerBound constrs' v inf_val in
@@ -1227,15 +1227,15 @@ let coreT = funT (fun p ->
    let var2index = VI.create 13 in
    let s = make_sacs var2index p in
    let info=VI.invert var2index in
-   if !debug_supinf_steps or !debug_supinf_post then
+   if !debug_supinf_steps || !debug_supinf_post then
 		eprintf "Vars:\n%a@." VI.print var2index;
    match s with
    	Constraints constrs ->
-		   if !debug_supinf_steps or !debug_supinf_post then
+		   if !debug_supinf_steps || !debug_supinf_post then
 				eprintf "SACS:\n%a@." SACS.print constrs;
 			iter p info constrs 1
 	 | Contradiction s ->
-		   if !debug_supinf_steps or !debug_supinf_post then
+		   if !debug_supinf_steps || !debug_supinf_post then
 		   	eprintf "Contradiction at %a@." S.print s;
 	 		source2hypT info (Scontradiction s)
 )

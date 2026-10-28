@@ -1464,7 +1464,7 @@ struct
    (*
     * Assign colors to the nodes in the stack.
     *)
-   let rec assign_colors ra =
+   let assign_colors ra =
       if !debug_regalloc >= 1 then
          eprintf "Assign colors@.";
       node_iter ra NodeStack (fun node ->
@@ -1514,7 +1514,7 @@ struct
    (*
     * Assign colors to the spilled nodes.
     *)
-   let rec assign_spill_colors rclass ra spset =
+   let assign_spill_colors rclass ra spset =
       if !debug_regalloc >= 1 then
          eprintf "Assign spill colors: %d@." rclass;
 

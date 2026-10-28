@@ -92,7 +92,7 @@ let allocT =
  * Print the assembly to a file.
  *)
 let printT_aux filename p =
-   let out = Pervasives.open_out filename in
+   let out = Stdlib.open_out filename in
    let buf = formatter_of_out_channel out in
       pp_print_prog buf (concl p);
       close_out out;

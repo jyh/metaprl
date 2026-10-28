@@ -89,13 +89,13 @@ let implies_opname = opname_of_term << 'A => 'B >>
 let is_implies_term = is_dep0_dep0_term implies_opname
 
 let is_imp_and_term term =
-   is_implies_term term & is_and_term (fst (two_subterms term))
+   is_implies_term term && is_and_term (fst (two_subterms term))
 
 let is_imp_or_term term =
-   is_implies_term term & is_or_term (fst (two_subterms term))
+   is_implies_term term && is_or_term (fst (two_subterms term))
 
 let is_imp_imp_term term =
-   is_implies_term term & is_implies_term (fst (two_subterms term))
+   is_implies_term term && is_implies_term (fst (two_subterms term))
 
 (* Try to decompose a hypothesis *)
 let rec decompPropDecideHypT i = funT (fun p ->
@@ -103,7 +103,7 @@ let rec decompPropDecideHypT i = funT (fun p ->
    let term = Sequent.nth_hyp p i in
        if is_false_term term then
           dT i
-       else if is_and_term term or is_or_term term then
+       else if is_and_term term || is_or_term term then
           dT i thenT funT internalPropDecideT
        else if is_imp_and_term term then
           (* {C & D => B} => {C => D => B} *)
@@ -126,7 +126,7 @@ and decompPropDecideConclT p =
        if is_or_term goal then
           (selT 1 (dT 0) thenT funT internalPropDecideT)
           orelseT (selT 2 (dT 0) thenT funT internalPropDecideT)
-       else if is_and_term goal or is_implies_term goal then
+       else if is_and_term goal || is_implies_term goal then
           dT 0 thenT funT internalPropDecideT
        else
           trivialT

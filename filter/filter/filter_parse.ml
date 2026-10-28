@@ -195,6 +195,9 @@ let parsing_state = ref None
  * or removes keywords still in use. So the lexer field is set directly
  * (Grammar.g is Gramext.grammar on (string * string) tokens), the counts
  * are kept, and every token in use is registered with the new lexer.
+ *
+ * The lexer also splits camlp5 8's dot-operator tokens back into "." and
+ * the operator, as camlp5 7 lexed them (Filter_dot_lexer).
  *)
 let () =
    let g = (Obj.magic Pcaml.gram : (string * string) Gramext.grammar) in
@@ -209,6 +212,7 @@ let () =
                Plexer.dollar_for_antiquotation := dfa)
          Plexer.gmake
    in
+   let lexer = Filter_dot_lexer.split lexer in
       Hashtbl.iter (fun tok _ -> lexer.Plexing.tok_using tok) g.Gramext.gtokens;
       g.Gramext.glexer <- lexer
 
@@ -825,7 +829,7 @@ struct
             proc
        | None ->
             let select, module_name =
-               let name = !Pcaml.input_file in
+               let name = Filter_util.source_file_or !Pcaml.input_file in
                   if Filename.check_suffix name ".ml" then
                      ImplementationType, Filename.chop_suffix name ".ml"
                   else if Filename.check_suffix name ".mli" then

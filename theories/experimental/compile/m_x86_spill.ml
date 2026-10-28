@@ -260,7 +260,7 @@ let splitTopC =
           | LabelEnd ->
                raise (RefineError ("splitTopC", StringTermError ("illegal instruction", t)))
       in
-      let rec regs_operand regs op =
+      let regs_operand regs op =
          match op with
             ImmediateNumber _
           | ImmediateLabel _

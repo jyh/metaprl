@@ -34,9 +34,7 @@ rule main = parse
     { RightBrack }
   | '\''  [^ '\''] * '\''
     { let s = Lexing.lexeme lexbuf in
-	let s' = String.create (String.length s - 2) in
-	   String.blit s 1 s' 0 (String.length s');
-	   String s'
+	   String (String.sub s 1 (String.length s - 2))
     }
   | "--"
     { Negative }

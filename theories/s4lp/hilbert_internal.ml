@@ -8,7 +8,7 @@ open RefineError
 
 module SymbolicSet = functor (O : Lm_set_sig.OrderedTypeDebug) ->
 struct
-   include Lm_set.LmMake(O)
+   include Lm_set.LmMakeDebug(O)
 
    let map f s = fold (fun acc i -> add acc (f i)) empty s
 
@@ -176,8 +176,8 @@ struct
 
    let exact_compare p1 p2 =
       match p1, p2 with
-         Principal i1, Principal i2 -> Pervasives.compare i1 i2
-       | NonPrincipal i1, NonPrincipal i2 -> Pervasives.compare i1 i2
+         Principal i1, Principal i2 -> Stdlib.compare i1 i2
+       | NonPrincipal i1, NonPrincipal i2 -> Stdlib.compare i1 i2
        | Principal i1, NonPrincipal i2 when i1 = i2 -> raise (Collision i1)
        | NonPrincipal i1, Principal i2 when i1 = i2 -> raise (Collision i1)
        | Principal i1, NonPrincipal i2 -> 1
@@ -400,7 +400,7 @@ type t = formula
 let fam_cmp f1 f2 =
    match f1, f2 with
       Evidence _, Evidence _ ->
-         0 (* why 0, not Pervasives.compare ? 
+         0 (* why 0, not Stdlib.compare ? 
             * because these are two provisionals for the same formula
             *)
     | Evidence _, Modal _ ->
@@ -408,14 +408,14 @@ let fam_cmp f1 f2 =
     | Modal _, Evidence _ ->
          1
     | Modal i1, Modal i2 ->
-         Pervasives.compare i1 i2
+         Stdlib.compare i1 i2
 
 let rec compare_pterm t1 t2 =
    match t1, t2 with
       Var v1, Var v2 -> Lm_symbol.compare v1 v2
     | Var _, (Const _ | App _ | Plus _ | Check _ | Provisional _ | PropTaut _) -> -1
     | Const _, Var _ -> 1
-    | Const c1, Const c2 -> Pervasives.compare c1 c2
+    | Const c1, Const c2 -> Stdlib.compare c1 c2
     | Const _, (App _ | Plus _ | Check _ | Provisional _ | PropTaut _) -> -1
     | App _, (Var _ | Const _) -> 1
     | App(t11, t12), App(t21, t22) ->
@@ -440,7 +440,7 @@ let rec compare_pterm t1 t2 =
 	 		raise (Invalid_argument
 			"Equal formulas were prefixed with provisional term and something else")
 	 | Provisional i, Provisional j ->
-	 		let c = Pervasives.compare i j in
+	 		let c = Stdlib.compare i j in
 			if c = 0 then
 				0
 			else
@@ -553,27 +553,27 @@ exception Not_axiom
 let prop_axiom_index = function
 	Implies(a1,Implies(b,a2)) when a1=a2 -> 1
  | Implies(Implies(a1,Implies(b1,c1)),Implies(Implies(a2,b2),Implies(a3,c2)))
- 	when a1=a2 & a1=a3 & b1=b2 & c1=c2 -> 2
+ 	when a1=a2 && a1=a3 && b1=b2 && c1=c2 -> 2
  | Implies(And(a1,b),a2) when a1=a2 -> 3
  | Implies(And(a,b1),b2) when b1=b2 -> 4
- | Implies(a1,Implies(b1,And(a2,b2))) when a1=a2 & b1=b2 -> 5
+ | Implies(a1,Implies(b1,And(a2,b2))) when a1=a2 && b1=b2 -> 5
  | Implies(a1,Or(a2,b)) when a1=a2 -> 6
  | Implies(b1,Or(a,b2)) when b1=b2 -> 7
  | Implies(Implies(a1,c1),Implies(Implies(b1,c2),Implies(Or(a2,b2),c3)))
- 	when a1=a2 & b1=b2 & c1=c2 & c1=c3 -> 8
+ 	when a1=a2 && b1=b2 && c1=c2 && c1=c3 -> 8
  | Implies(Implies(a1,b1),Implies(Implies(a2,Neg(b2)),Neg(a3)))
- 	when a1=a2 & a1=a3 & b1=b2 -> 9
+ 	when a1=a2 && a1=a3 && b1=b2 -> 9
  | Implies(a1,Implies(Neg(a2),b)) when a1=a2 -> 10
  | Or(a1,Neg(a2)) when a1=a2 -> 11
  | Implies(Pr(s1,Implies(a1,b1)),Implies(Pr(t1,a2),Pr(App(s2,t2),b2)))
- 	when a1=a2 & b1=b2 & s1=s2 & t1=t2 -> 12
+ 	when a1=a2 && b1=b2 && s1=s2 && t1=t2 -> 12
  | Implies(Pr(t,a1),a2) when a1=a2 -> 13
- | Implies(Pr(t1,a1),Pr(Check(t2),Pr(t3,a2))) when a1=a2 & t1=t2 & t1=t3 -> 14
- | Implies(Pr(t1,a1),Pr(Plus(s,t2),a2)) when t1=t2 & a1=a2 -> 15
- | Implies(Pr(s1,a1),Pr(Plus(s2,t),a2)) when s2=s2 & a1=a2 -> 16
- | Implies(Box(Modal i1, Implies(a1,b1)),Implies(Box(Modal i2,a2),Box(Modal i3,b2))) when i1=i2 & i1=i3 & a1=a2 & b1=b2 -> 17
+ | Implies(Pr(t1,a1),Pr(Check(t2),Pr(t3,a2))) when a1=a2 && t1=t2 && t1=t3 -> 14
+ | Implies(Pr(t1,a1),Pr(Plus(s,t2),a2)) when t1=t2 && a1=a2 -> 15
+ | Implies(Pr(s1,a1),Pr(Plus(s2,t),a2)) when s2=s2 && a1=a2 -> 16
+ | Implies(Box(Modal i1, Implies(a1,b1)),Implies(Box(Modal i2,a2),Box(Modal i3,b2))) when i1=i2 && i1=i3 && a1=a2 && b1=b2 -> 17
  | Implies(Box(Modal i, a1),a2) when a1=a2 -> 18
- | Implies(Box(Modal i1, a1),Box(Modal i2,Box(Modal i3,a2))) when i1=i2 & i1=i3 & a1=a2 -> 19
+ | Implies(Box(Modal i1, a1),Box(Modal i2,Box(Modal i3,a2))) when i1=i2 && i1=i3 && a1=a2 -> 19
  | Implies(Pr(t,a1),Box(Modal i,a2)) when a1=a2 -> 20
  | _ -> 0
 
@@ -622,7 +622,7 @@ let rec check_proof_hidden hyps d f hidden =
 			end
 	 | Nec(i,d1) ->
 	 		begin match f with
-				Box(Modal i1, f1) when i=i1 & (hyps=[] || prop_axiom_index f1 > 0) ->
+				Box(Modal i1, f1) when i=i1 && (hyps=[] || prop_axiom_index f1 > 0) ->
 					check_proof_hidden hyps d1 f1 hidden
 			 | _ ->
 			 		false, FSet.empty
@@ -1250,7 +1250,7 @@ let make_provisionals_sum set =
       (fun acc e -> LP.Plus(acc,Provisional e))
       set
 
-let rec make_provisionals_subst families =
+let make_provisionals_subst families =
    FamilyPart.fold 
       (fun subst set ->
          let family_set = FamilyPart.strip_principality set in

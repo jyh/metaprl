@@ -30,12 +30,12 @@ jobs:
     name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }}; allowed to fail)
     runs-on: windows-latest
     continue-on-error: true
-    timeout-minutes: 90
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        ocaml: ["4.14.4", "5.4.1"]
-        compiler: [mingw, msvc]
+        ocaml: ["5.4.1"]
+        compiler: [mingw]
     defaults:
       run:
         shell: bash
@@ -100,11 +100,47 @@ jobs:
           # The first run writes mk/config and stops (mk/load_config).
           opam exec -- omake --no--progress 2>&1 | tee "$RUNNER_TEMP/configure.log" || true
           grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED|READLINE_ENABLED|NCURSES_ENABLED)' mk/config
-      - name: build
+      # DIAGNOSIS (row 41): build with -j1 and stop when the log has not
+      # grown for 240 s; then list processes and re-run the stalled target
+      # alone, with stdin from /dev/null and from a pipe that stays open.
+      # Processes are stopped by the PID this job started, or on the runner
+      # by image name (the runner is a throwaway VM).
+      - name: build, stopping at a stall
         working-directory: metaprl
         run: |
-          set -o pipefail
-          opam exec -- omake -k -j4 --no--progress 2>&1 | tee "$RUNNER_TEMP/build.log"
+          log="$RUNNER_TEMP/build.log"
+          opam exec -- omake -k -j1 --no--progress > "$log" 2>&1 &
+          pid=$!
+          last=-1; still=0
+          while kill -0 $pid 2>/dev/null; do
+            sleep 30
+            n=$(wc -c < "$log")
+            if [ "$n" = "$last" ]; then still=$((still+30)); else still=0; last=$n; fi
+            if [ $still -ge 240 ]; then echo "STALLED: no output for 240 s"; break; fi
+          done
+          if ! kill -0 $pid 2>/dev/null; then wait $pid; echo "omake exited rc=$?"; fi
+          echo "--- last 15 lines of the build log"; tail -15 "$log"
+          echo "--- cygwin ps -W"; ps -efW | grep -i -E 'camlp5n|omake|ocaml|macropp' | tee "$RUNNER_TEMP/ps.log" || true
+          echo "--- tasklist"; tasklist.exe //v | grep -i -E 'camlp5n|omake|Image' | tee -a "$RUNNER_TEMP/ps.log" || true
+          kill $pid 2>/dev/null; sleep 5
+          taskkill.exe //F //T //IM camlp5n.exe 2>/dev/null; taskkill.exe //F //T //IM omake.exe 2>/dev/null; true
+      - name: the stalled target alone, stdin from /dev/null (180 s bound)
+        working-directory: metaprl
+        run: |
+          t=$(grep -E '^- build ' "$RUNNER_TEMP/build.log" | tail -1 | sed 's/^- build //' | tr '\\' '/' | awk '{print $1"/"$2}')
+          echo "target: $t"
+          start=$(date +%s)
+          timeout 180 opam exec -- omake -j1 --no--progress "$t" < /dev/null > "$RUNNER_TEMP/alone-null.log" 2>&1; rc=$?
+          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"; tail -25 "$RUNNER_TEMP/alone-null.log"
+          taskkill.exe //F //T //IM camlp5n.exe 2>/dev/null; true
+      - name: the stalled target alone, stdin an open pipe (180 s bound)
+        working-directory: metaprl
+        run: |
+          t=$(grep -E '^- build ' "$RUNNER_TEMP/build.log" | tail -1 | sed 's/^- build //' | tr '\\' '/' | awk '{print $1"/"$2}')
+          start=$(date +%s)
+          sleep 400 | timeout 180 opam exec -- omake -j1 --no--progress "$t" > "$RUNNER_TEMP/alone-pipe.log" 2>&1; rc=${PIPESTATUS[1]}
+          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"; tail -25 "$RUNNER_TEMP/alone-pipe.log"
+          taskkill.exe //F //T //IM camlp5n.exe 2>/dev/null; true
       - name: summarise the build log
         if: always()
         run: |

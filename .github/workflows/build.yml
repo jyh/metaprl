@@ -48,7 +48,7 @@ jobs:
           grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED)' mk/config
       - name: build
         working-directory: metaprl
-        run: opam exec -- omake -j4 --no--progress
+        run: opam exec -- omake -k -j4 --no--progress
       - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/old_labels.sh

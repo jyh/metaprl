@@ -124,25 +124,34 @@ jobs:
           echo "--- tasklist"; tasklist.exe /v | grep -i -E 'camlp5n|omake|Image' | tee -a "$RUNNER_TEMP/ps.log" || true
           kill $pid 2>/dev/null || true; sleep 5
           taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true; taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null || true; taskkill.exe /F /T /IM omake.exe 2>/dev/null || true
-      - name: the stalled target alone, stdin from /dev/null (180 s bound)
-        working-directory: metaprl
+      # Round 4: omake out of the picture. Run camlp5n directly on the file
+      # the build stalled on, with prlcomp's environment, file-loading debug
+      # output, stdin from /dev/null and a 60 s bound.
+      - name: processes left after the stall
+        run: tasklist.exe /v | grep -i -E 'camlp5n|omake|Image' || echo "none"
+      - name: camlp5n directly on theories/itt/core/itt_comment.ml (60 s bound)
+        working-directory: metaprl/theories/itt/core
         run: |
-          t=$(grep -E '^- build ' "$RUNNER_TEMP/build.log" | tail -1 | sed 's/^- build //' | tr '\\' '/' | awk '{print $1"/"$2}')
-          echo "target: $t"
+          root=$(cd ../../.. && pwd)
+          export MP_ROOT="$(cygpath -w "$root")" MPLIB="$(cygpath -w "$root/lib")" MP_GROUP=itt MP_DESCR=itt MP_INCLUDE=
+          export MP_DEBUG=file_base:filter_cache:filter_path
+          echo "MP_ROOT=$MP_ROOT MPLIB=$MPLIB"
+          ls -la "$root/lib/camlp5n.exe" "$root/filter/camlp5n.opt" 2>&1 || true
           start=$(date +%s)
-          timeout 180 opam exec -- omake -j1 --no--progress "$t" < /dev/null > "$RUNNER_TEMP/alone-null.log" 2>&1 && rc=0 || rc=$?
-          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"; tail -25 "$RUNNER_TEMP/alone-null.log"
+          timeout 60 opam exec -- "$root/lib/camlp5n.exe" -o "$RUNNER_TEMP/itt_comment.ppo" itt_comment.ml < /dev/null > "$RUNNER_TEMP/direct.log" 2>&1 && rc=0 || rc=$?
+          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"
+          grep -v 'Quotation.upsert' "$RUNNER_TEMP/direct.log" | tail -40
           taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true; taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null || true
-      - name: the stalled target alone, spelling off (180 s bound)
-        working-directory: metaprl
+      - name: the same on a theory/meta/base file that built (60 s bound)
+        working-directory: metaprl/theories/meta/base
         run: |
-          t=$(grep -E '^- build ' "$RUNNER_TEMP/build.log" | tail -1 | sed 's/^- build //' | tr '\\' '/' | awk '{print $1"/"$2}')
-          grep -E '^SPELLING_ENABLED' mk/config || echo "no SPELLING_ENABLED line"
-          awk '/^SPELLING_ENABLED/ { print "SPELLING_ENABLED = false"; next } { print }' mk/config > mk/config.new && mv mk/config.new mk/config
-          grep -E '^SPELLING_ENABLED' mk/config || echo "SPELLING_ENABLED = false" >> mk/config
+          root=$(cd ../../.. && pwd)
+          export MP_ROOT="$(cygpath -w "$root")" MPLIB="$(cygpath -w "$root/lib")" MP_GROUP=base MP_DESCR=base MP_INCLUDE=
+          export MP_DEBUG=file_base:filter_cache:filter_path
           start=$(date +%s)
-          timeout 180 opam exec -- omake -j1 --no--progress "$t" < /dev/null > "$RUNNER_TEMP/alone-nospell.log" 2>&1 && rc=0 || rc=$?
-          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"; tail -25 "$RUNNER_TEMP/alone-nospell.log"
+          timeout 60 opam exec -- "$root/lib/camlp5n.exe" -o "$RUNNER_TEMP/base_theory.ppo" base_theory.ml < /dev/null > "$RUNNER_TEMP/direct-base.log" 2>&1 && rc=0 || rc=$?
+          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"
+          grep -v 'Quotation.upsert' "$RUNNER_TEMP/direct-base.log" | tail -25
           taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true
       - name: summarise the build log
         if: always()

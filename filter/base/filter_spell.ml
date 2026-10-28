@@ -115,8 +115,10 @@ let make_dict () =
    let table = Hashtbl.create 1037 in
       List.iter (add_file table) words_filenames;
       dict := Some table;
+      (* Write through the channel try_name opened. A second open of the
+         same file left the first channel open, and Windows refuses to
+         rename a file that is open (Unix allows it). *)
       let tmp, out = try_name 0 in
-      let out = Stdlib.open_out_bin tmp in
          Stdlib.output_binary_int out dat_magic;
          Marshal.to_channel out table [];
          Stdlib.close_out out;

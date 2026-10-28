@@ -2044,7 +2044,7 @@ struct
                         implem_error loc (sprintf "Cond_rewrite %s: param list mismatch" name)
                      else if not (List.length args = List.length args' && List.for_all2 alpha_equal args' args) then
                         implem_error loc (sprintf "Cond_rewrite %s: arg lists mismatch" name)
-                     else if not (alpha_equal redex' redex & alpha_equal contractum contractum') then
+                     else if not (alpha_equal redex' redex && alpha_equal contractum contractum') then
                         implem_error loc (sprintf "Cond_rewrite %s: specification mismatch" name)
                      else
                         ()
@@ -2509,7 +2509,7 @@ struct
                             rw_proof = proof;
                             _
                   }, _) ->
-               if not (alpha_equal rw.rw_redex redex & alpha_equal rw.rw_contractum contractum) then
+               if not (alpha_equal rw.rw_redex redex && alpha_equal rw.rw_contractum contractum) then
                   eprintf "Copy_proof: warning: rewrite %s%s%t" rw.rw_name changed_warning eflush;
                { rw with rw_proof = copy_proof rw.rw_proof proof }
           | Some (Rule { rule_proof = proof; _ }, _)
@@ -2533,8 +2533,8 @@ struct
                                 _
                   }, _) ->
                if not (alpha_equal crw.crw_redex redex)
-                  or not (alpha_equal crw.crw_contractum contractum)
-                  or not (Lm_list_util.for_all2 alpha_equal crw.crw_assums assums)
+                  || not (alpha_equal crw.crw_contractum contractum)
+                  || not (Lm_list_util.for_all2 alpha_equal crw.crw_assums assums)
                then
                   eprintf "Copy_proof: warning: cond_rewrite %s%s%t" crw.crw_name changed_warning eflush;
                { crw with crw_proof = copy_proof crw.crw_proof proof }

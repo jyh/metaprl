@@ -1173,7 +1173,7 @@ struct
             begin
                info.mp_new_view <- true;
                if rank = 0 then
-                  let flags = Array.create length false in
+                  let flags = Array.make length false in
                      flags.(0) <- true;
                      info.mp_rank_flags <- flags;
                      []
@@ -1694,7 +1694,7 @@ struct
    let append_share info key =
       let length = Weak.length info.mp_keys in
       let weak' = Weak.create (succ length) in
-      let numbers' = Array.create (succ length) 0 in
+      let numbers' = Array.make (succ length) 0 in
          Weak.blit info.mp_keys 0 weak' 0 length;
          Weak.set weak' length (Some key);
          Array.blit info.mp_key_numbers 0 numbers' 0 length;

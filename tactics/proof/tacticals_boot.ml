@@ -538,7 +538,7 @@ struct
                [p''] ->
                   let t' = Sequent.goal p'' in
                   let lab' = Sequent.label p'' in
-                     [(if alpha_equal t t' & lab = lab' then
+                     [(if alpha_equal t t' && lab = lab' then
                           idT
                        else
                           failWithT "progressT")]

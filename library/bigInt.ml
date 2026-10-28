@@ -71,7 +71,7 @@ let mk_bint i =
   let a = abs i in let b = ((a asr 16) land 0xFFFF) and c = (a land 0xFFFF) in
   if i >= 0 then (b, c) else (-b, c)
 let make_bigint (i, k) =
-  if ((i > 0xFFFF) or (k > 0xFFFF)) then raise (IntSize ("make_bigint", i))
+  if ((i > 0xFFFF) || (k > 0xFFFF)) then raise (IntSize ("make_bigint", i))
   else (i, k)
 let dest_bint (a, b) =
   let c = abs a in
@@ -105,10 +105,10 @@ let bplus (x, w) n = (x, w+ n)
 let bminus (x, w) n = (x, w - n)
 
 let bequal (x, w) (y, z) = (x = y) && (w = z)
-let blt (x, w) (y, z) = (x < y) or ((x = y) && (w < z))
-let bgt (x, w) (y, z) = (x > y) or ((x = y) && (w > z))
-let blte (x, w) (y, z) = (x < y) or ((x = y) && (w <= z))
-let bgte (x, w) (y, z) = (x > y) or ((x = y) && (w >= z))
+let blt (x, w) (y, z) = (x < y) || ((x = y) && (w < z))
+let bgt (x, w) (y, z) = (x > y) || ((x = y) && (w > z))
+let blte (x, w) (y, z) = (x < y) || ((x = y) && (w <= z))
+let bgte (x, w) (y, z) = (x > y) || ((x = y) && (w >= z))
 
 let bdecr b = let (x, y) = !b
 in if y > 0 then b:=  (x, y-1) else b:= (x-1, 0xffff)

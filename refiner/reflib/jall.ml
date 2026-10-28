@@ -210,7 +210,7 @@ struct
 		type t = (position * position) * int
 
 		let compare (p1,i1) (p2,i2) =
-			let c = Pervasives.compare (i1:int) i2 in
+			let c = Stdlib.compare (i1:int) i2 in
 			if c = 0 then
 				OrderedPositionPair.compare p1 p2
 			else
@@ -800,7 +800,7 @@ struct
 *)
          not (List.exists
             (fun x ->
-               Set.mem beta_expansions x or
+               Set.mem beta_expansions x ||
                ConnSet.exists (fun (a,b) -> position_eq a x || position_eq b x) connections
             )
             alpha_layer
@@ -1803,7 +1803,7 @@ struct
       PEmpty -> true
     | PNodeAx(y) -> false
     | PNodeA(y,left) -> (unclosed left)
-    | PNodeB(y,left,right) -> (or) (unclosed left) (unclosed right)
+    | PNodeB(y,left,right) -> (||) (unclosed left) (unclosed right)
 
    let rec extend prooftree element =
       match prooftree with
@@ -2315,7 +2315,7 @@ struct
 
    let update_connections slist connections =
       ConnSet.filter
-         (fun (a,b) -> not (Set.mem slist a or Set.mem slist b))
+         (fun (a,b) -> not (Set.mem slist a || Set.mem slist b))
          connections
 
    let rec update_redord delset redord =   (* delset is the set of positions to be deleted *)
@@ -2652,7 +2652,7 @@ struct
        | Empty :: r ->    (* may become possible after purity *)
             exists_solved_Zero_At r slist
        | NodeAt {pospos=pospos; pol=pospol; _} :: r ->
-            if ((Set.mem slist pospos) or (pospol = One)) then  (* recall slist is the unsolved list *)
+            if ((Set.mem slist pospos) || (pospol = One)) then  (* recall slist is the unsolved list *)
                exists_solved_Zero_At r slist
             else
     (* here, we have pos solved let pos.pol = Zero) *)
@@ -2673,7 +2673,7 @@ struct
        | Empty :: r ->    (* may become possible after purity *)
             collect_solved_Zero_At r slist
        | NodeAt ({pospos=pospos; pol=pospol; _} as pos) :: r ->
-            if (pospol = One) or (Set.mem slist pospos) then  (* recall slist is the unsolved list *)
+            if (pospol = One) || (Set.mem slist pospos) then  (* recall slist is the unsolved list *)
                collect_solved_Zero_At r slist
             else
     (* here, we have pos solved let pos.pol = Zero) *)
@@ -2712,7 +2712,7 @@ struct
       match redord with
          [] -> false
        | (f,fset)::r ->
-            if ((position_eq f pospos) or (not (Set.mem fset pospos))) then
+            if ((position_eq f pospos) || (not (Set.mem fset pospos))) then
                red_ord_block pospos r
             else
                true   (* then, we have (StringSet.mem fset pname) *)
@@ -2827,8 +2827,8 @@ struct
                begin match calc with
                   MultiConcl ->
 (*                   print_endline "wait-2 check"; *)
-                     if (f.st = Psi_0)  &  (f.pt <> PNull) &
-                        (not (PosSet.is_empty pa_Zero) or not (PosSet.is_empty po_test)) then
+                     if (f.st = Psi_0)  &&  (f.pt <> PNull) &&
+                        (not (PosSet.is_empty pa_Zero) || not (PosSet.is_empty po_test)) then
                         begin
 (*                         print_endline "wait-2 positive"; *)
                            true,0 (* wait_2 label *)
@@ -2839,8 +2839,8 @@ struct
                            false,0
                         end
                 | SingleConcl ->
-                     if ((f.st = Phi_0)  & ((f.op=Neg) or (f.op=Imp)) &
-                          (not (PosSet.is_empty pa_Zero) or not (PosSet.is_empty po_test))
+                     if ((f.st = Phi_0)  && ((f.op=Neg) || (f.op=Imp)) &&
+                          (not (PosSet.is_empty pa_Zero) || not (PosSet.is_empty po_test))
                         )
          (* this would cause an impl or negl rule with an non-empty succedent *)
                      then
@@ -2868,10 +2868,10 @@ struct
                            let po_fake_test = delete pos_eq ft1_root po_fake in
                            let pa_Zero_fake = exists_solved_Zero_At [ft1] uslist1 in
 (*                     print_purelist (po_fake_test @ pa_O_fake); *)
-                              (pa_Zero_fake or
+                              (pa_Zero_fake ||
                               (List.exists (fun x -> x.pol = Zero) po_fake_test)), 0
                      else
-                        if ((f.pol=Zero) & ((f.st=Gamma_0) or (f.op=Or))) then
+                        if ((f.pol=Zero) && ((f.st=Gamma_0) || (f.op=Or))) then
                            let (bool,orr_flag) = check_wait_succ_LJ f.address ftree in
                            (bool,orr_flag)
               (* here is determined if orr1 or orr2 will be performed, provided bool=false) *)
@@ -3486,7 +3486,7 @@ let get_connections a alpha
 	let alpha' = AtomSet.diff alpha tabulist in
 	AtomSet.fold
 		(fun acc f ->
-         if (Opname.eq a.apredicate f.apredicate) &
+         if (Opname.eq a.apredicate f.apredicate) &&
             (a.apol <> f.apol)
          then
             (a,f)::acc
@@ -3516,7 +3516,7 @@ let check_alpha_relation atom set atom_map =
 let extset atom_map path closed =
 	AtomMap.fold
 		(fun acc at (alpha, beta) ->
-         if (AtomSet.subset path alpha) & (AtomSet.subset closed beta) then
+         if (AtomSet.subset path alpha) && (AtomSet.subset closed beta) then
             AtomSet.add acc at
          else
             acc

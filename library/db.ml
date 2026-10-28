@@ -522,9 +522,9 @@ let mk_real_param_from_strings stp value ptype =
   | "s" -> (String value)
   | "q" -> (ParamList [(make_param (token "quote")); (make_param (token value))])
   | "b" -> ( ParamList [ (make_param (token "bool"))
-                        ; if (stringeq value "false") or (stringeq value "F") then
+                        ; if (stringeq value "false") || (stringeq value "F") then
                           make_param (Number (Lm_num.num_of_int 0))
-                          else if (stringeq value "true") or (stringeq value "T") then
+                          else if (stringeq value "true") || (stringeq value "T") then
                           make_param (Number (Lm_num.num_of_int 1))
                           else error ["real_parameter_from_string"; value] [] []
                       ])
@@ -589,7 +589,7 @@ let string_to_bindings value =
 let rec string_to_parameter s ptype =
   (*if s = "!stamp" then failwith "stamp";*)
   let len = String.length s in
-    if (len < 2 or not (chareq '%' (Lm_string_util.get "Db.string_to_parameter" s 0)))
+    if (len < 2 || not (chareq '%' (Lm_string_util.get "Db.string_to_parameter" s 0)))
      then make_param (mk_real_param_from_strings string_to_parameter s ptype)
     else
      let ss = (Lm_string_util.sub "Db.string_to_parameter" s 2 (len -2)) in

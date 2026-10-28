@@ -167,7 +167,7 @@ let decode_hex uri =
             buf
          else
             String.sub buf 0 i
-      else if uri.[j] = '%' & j < len - 2 then
+      else if uri.[j] = '%' && j < len - 2 then
          begin
             buf.[i] <- unhex uri.[j + 1] uri.[j + 2];
             convert (i + 1) (j + 3)
@@ -252,7 +252,7 @@ let head out uri protocol =
                fprintf out "%s %d %s\r\n" http_protocol code msg
    in
       search !http_path;
-      Pervasives.flush out;
+      Stdlib.flush out;
       close_out out
 
 (*
@@ -315,7 +315,7 @@ let get out uri protocol =
             fprintf out "%s\n" not_found_msg
    in
       search !http_path;
-      Pervasives.flush out;
+      Stdlib.flush out;
       close_out out
 
 (*

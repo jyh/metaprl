@@ -376,7 +376,7 @@ let r5 eq =
 let r6 eq =
       match eq with
        | _, s1::_, [], r1::rtl ->
-		 		is_var s1 & is_const r1 (* r6 *)
+		 		is_var s1 && is_const r1 (* r6 *)
        | _ ->
             false
 
@@ -405,7 +405,7 @@ let r10 eq =
    match eq with
       _, v::stl, _, x::rtl ->
          var_le v x && (v <> x) &&
-         ((stl =[]) or (is_const x) or (rtl <> []))
+         ((stl =[]) || (is_const x) || (rtl <> []))
     | _ -> false
 
 (*

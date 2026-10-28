@@ -1204,7 +1204,7 @@ struct
    let resource_member name resources =
       let rec search = function
          (_, name', _) :: t ->
-            name = name' or search t
+            name = name' || search t
        | [] ->
             false
       in

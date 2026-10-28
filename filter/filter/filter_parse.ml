@@ -185,8 +185,10 @@ let parsing_state = ref None
  * 6,894 times in theories/. camlp5 8's pa_o makes the lexer with
  * Plexer.simplest_raw_strings set, so {|...|} lexes as an OCaml quoted
  * string, and the keyword "{|" is refused. camlp5 7's lexer had no quoted
- * strings. Install a lexer made with that flag unset (and, as pa_o does,
- * without $ antiquotations), before the term grammar adds its rules.
+ * strings. Install a lexer made with that flag unset, before the term
+ * grammar adds its rules. $ antiquotations stay on: pa_o turns them off,
+ * but <:con< ... $x$ ... >> quotations need them (with them off, three of
+ * the sixteen support/display files fail to preprocess).
  *
  * Grammar.Unsafe.gram_reinit would do this but also empties the grammar's
  * token use counts, and Grammar.delete_rule (Infix, pa_macro) then fails
@@ -200,7 +202,7 @@ let () =
    let dfa = !Plexer.dollar_for_antiquotation in
    let lexer =
       Plexer.simplest_raw_strings := false;
-      Plexer.dollar_for_antiquotation := false;
+      Plexer.dollar_for_antiquotation := true;
       Fun.protect (**)
          ~finally:(fun () ->
                Plexer.simplest_raw_strings := srs;

@@ -55,8 +55,14 @@ let print_item i (si, _) =
          let s = string_of_term t in
          let shown = if full then s else Digest.to_hex (Digest.string s) in
          (* The term without source locations: every term's parameters start
-          * with its location pair, which camlp5 7 and 8 record differently. *)
-         let shape = Digest.to_hex (Digest.string (Str.global_replace (Str.regexp "\\[[0-9]+:n, [0-9]+:n") "[L, L" s)) in
+          * with its location pair, which camlp5 7 and 8 record differently.
+          * Whitespace is collapsed too, since the printer wraps lines by
+          * width and the location numbers change the width. *)
+         let shape =
+            let s = Str.global_replace (Str.regexp "\\[[0-9]+:n, [0-9]+:n") "[L, L" s in
+            let s = Str.global_replace (Str.regexp "[ \t\n]+") " " s in
+               Digest.to_hex (Digest.string s)
+         in
          let rt =
             match F.term_of_str_item [] (F.str_item_of_term t) with
                exception e -> "ERROR " ^ Printexc.to_string e

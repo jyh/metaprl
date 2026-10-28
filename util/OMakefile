@@ -24,21 +24,35 @@ clean:
 #
 # Macros
 #
-OCAML_LIBS += $(CAMLP5LIB)/odyl $(CAMLP5LIB)/camlp5
-OCAMLINCLUDES += $(CAMLP5LIB)
-OCAML_LINK_FLAGS += -linkall
+# macropp and macroprint are camlp5 drivers with pa_macro linked in.
+# camlp5 8 no longer installs Odyl_main's .cmi, so the old macro_main.ml
+# (a one-line call to Odyl_main.go) cannot be compiled.  We link with
+# camlp5's own mkcamlp5, which supplies the odyl main and the libraries
+# camlp5.cma needs (compiler-libs, pcre2, fmt, camlp-streams).
+#
+OCAMLINCLUDES += $(CAMLP5LIB) $(CAMLP_STREAMS_LIB)
 OCAMLFLAGS += -pp $(quote-argv $(CAMLP5R) -I $(CAMLP5LIB) -nolib $(LOC))
 
 %.cmx %$(EXT_OBJ): $(CAMLP5R_VERSION)
 %.cmo: $(CAMLP5R_VERSION)
 %.cmi: $(CAMLP5R_VERSION)
 
-MACRO_FILES[] =
-    $(CAMLP5LIB)/pa_o
-    $(CAMLP5LIB)/q_MLast
-    pa_macro
-    $(CAMLP5LIB)/pa_extend
-    macro_main
+if $(NATIVE_ENABLED)
+    MKCAMLP5 = mkcamlp5.opt
+    MACRO_EXT = .cmx
+    MACRO_DEPS = pa_macro.cmx pa_macro$(EXT_OBJ)
+    export
+else
+    MKCAMLP5 = mkcamlp5
+    MACRO_EXT = .cmo
+    MACRO_DEPS = pa_macro.cmo
+    export
 
-OCamlProgramInstall($(MPINSTALL), $(LIB), macropp, $(CAMLP5LIB)/pr_dump $(MACRO_FILES))
-OCamlProgramInstall($(MPINSTALL), $(LIB), macroprint, $(CAMLP5LIB)/pr_o $(MACRO_FILES))
+MacroProgram(name, printer) =
+    $(name)$(EXE): $(MACRO_DEPS)
+        $(MKCAMLP5) -I $(CAMLP5LIB) pa_o$(MACRO_EXT) q_MLast$(MACRO_EXT) pa_macro$(MACRO_EXT) pa_extend$(MACRO_EXT) $(addsuffix $(MACRO_EXT), $(printer)) -o $@
+
+    LibInstall($(name)$(EXE))
+
+MacroProgram(macropp, pr_dump)
+MacroProgram(macroprint, o_keywords pr_o)

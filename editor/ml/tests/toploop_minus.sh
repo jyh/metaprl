@@ -17,12 +17,9 @@ exprs='(0 - 1)
 (3 - (-(1 + 1)))'
 # After each expression a sentinel (9000 + i) marks where its output ends.
 printf '%s\n' "$exprs" | awk '{ print $0 ";;"; print "(9000 + " NR ");;" }' > "$tmp/in"
-# A terminal is needed: without one the shell reads no input.
-if script --version >/dev/null 2>&1; then
-   (cat "$tmp/in"; sleep 20) | script -q -c "$mp -cli" "$tmp/raw" >/dev/null 2>&1   # util-linux
-else
-   (cat "$tmp/in"; sleep 20) | script -q "$tmp/raw" "$mp" -cli >/dev/null 2>&1        # BSD
-fi
+# Input goes through a pipe. (With stdin redirected from a regular file
+# the shell reads nothing; a pipe or a terminal works.)
+cat "$tmp/in" | "$mp" -cli > "$tmp/raw" 2>&1
 tr -d '\r' < "$tmp/raw" | sed 's/\x1b\[[0-9;]*m//g' > "$tmp/out"
 # For expression i: the "value : type" line before sentinel 900i, or "".
 result() {

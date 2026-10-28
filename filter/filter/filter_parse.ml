@@ -829,7 +829,7 @@ struct
             proc
        | None ->
             let select, module_name =
-               let name = !Pcaml.input_file in
+               let name = Filter_util.source_file_or !Pcaml.input_file in
                   if Filename.check_suffix name ".ml" then
                      ImplementationType, Filename.chop_suffix name ".ml"
                   else if Filename.check_suffix name ".mli" then

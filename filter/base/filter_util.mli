@@ -72,6 +72,16 @@ val ploc_of_lexing : Lexing.position * Lexing.position -> Ploc.t
 (* PR#2954 workaround: Calls Grammar.Entry.parse, restoring all the pos components *)
 val grammar_parse : 'a Grammar.Entry.e -> char Stream.t -> 'a
 
+(*
+ * The file being compiled, as named on the command line ("" if not set).
+ * camlp5 8's lexer changes Pcaml.input_file, and the file name in every
+ * later location, at a line directive (an ocamllex output starts with
+ * one); camlp5 7's lexer did not. The theory's module name and refiner
+ * name come from this, so they are what camlp5 7 gave.
+ *)
+val source_file : string ref
+val source_file_or : string -> string
+
 (************************************************************************
  * OPNAMES								*
  ************************************************************************)

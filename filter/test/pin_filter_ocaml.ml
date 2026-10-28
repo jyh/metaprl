@@ -4,7 +4,8 @@
  * For each top-level item of each file named on the command line, print
  * the term the item maps to (as an MD5 unless PIN_FULL is set), and
  * whether mapping that term back to OCaml and then to a term again gives
- * the same term.  The output is compared
+ * the same term, and Free_vars.free_vars of each expression a top-level
+ * let binds.  The output is compared
  * with pin_filter_ocaml.expected, which was produced by the same program
  * built against the camlp5 7 filter (see run_pin_filter_ocaml.sh).
  *)
@@ -33,10 +34,23 @@ let parse_file name =
       close_in ic;
       items
 
+(* Free_vars.free_vars of each expression a top-level let binds, in order. *)
+let free_vars_of si =
+   match Pin_compat.let_exprs si with
+      None -> ""
+    | Some el ->
+         let one e =
+            match Free_vars.free_vars e with
+               exception e -> "ERROR " ^ Printexc.to_string e
+             | vl -> String.concat "," vl
+         in
+            " fv=[" ^ String.concat "|" (List.map one el) ^ "]"
+
 let print_item i (si, _) =
+   let fv = free_vars_of si in
    match F.term_of_str_item [] si with
       exception e ->
-         Printf.printf "%d TO-TERM-ERROR %s\n" i (Printexc.to_string e)
+         Printf.printf "%d TO-TERM-ERROR %s%s\n" i (Printexc.to_string e) fv
     | t ->
          let s = string_of_term t in
          let shown = if full then s else Digest.to_hex (Digest.string s) in
@@ -45,7 +59,7 @@ let print_item i (si, _) =
                exception e -> "ERROR " ^ Printexc.to_string e
              | t' -> if string_of_term t' = s then "same" else "DIFFERENT"
          in
-            Printf.printf "%d %s roundtrip=%s\n%!" i shown rt
+            Printf.printf "%d %s roundtrip=%s%s\n%!" i shown rt fv
 
 let () =
    for k = 1 to Array.length Sys.argv - 1 do

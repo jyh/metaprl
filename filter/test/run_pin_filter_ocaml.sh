@@ -31,6 +31,11 @@ else
    pkgs=unix,str,threads.posix; c5lib="$c5/camlp5.cma"
 fi
 cp "$here/pin_filter_ocaml.ml" "$tmp/"
+# MLast's let bindings differ between camlp5 7 and 8.
+case "$(camlp5 -v 2>&1)" in
+   *"version 7."*) cp "$here/pin_compat_camlp5_7.ml" "$tmp/pin_compat.ml" ;;
+   *) cp "$here/pin_compat_camlp5_8.ml" "$tmp/pin_compat.ml" ;;
+esac
 cd "$tmp"
 ocamlfind ocamlc -predicates syntax,preprocessor -package $pkgs -thread -rectypes -linkpkg \
    -I "$c5" $inc -custom $c5lib \
@@ -38,7 +43,7 @@ ocamlfind ocamlc -predicates syntax,preprocessor -package $pkgs -thread -rectype
    "$root/filter/prlc.cma" "$c5/pa_o.cmo" \
    -cclib -L"$root/libmojave/cutil" -cclib -L"$root/clib" \
    -cclib -llmcutil -cclib "$root/clib/clib.a" \
-   pin_filter_ocaml.ml -o pin
+   pin_compat.ml pin_filter_ocaml.ml -o pin
 # PIN_TIMEOUT (seconds, default 600) bounds the run; ./pin is killed by
 # its own pid if it is still running then.
 ./pin $files > "$out" &

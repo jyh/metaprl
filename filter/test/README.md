@@ -7,7 +7,10 @@ terms the same. This pin records them.
 - `pin_filter_ocaml.ml` parses each file, maps every top-level item to a term,
   and prints the term's MD5 (the full term with `PIN_FULL=1`). It then maps the
   term back to OCaml and to a term again, and prints whether that gives the
-  same term.
+  same term. For each top-level `let`, it also prints
+  `Free_vars.free_vars` of each bound expression. `pin_compat_camlp5_7.ml`
+  and `pin_compat_camlp5_8.ml` extract those expressions from each version's
+  `MLast`.
 - `corpus/` holds the input files:
   - `coverage.ml` is written for this pin.
   - The other seven are copies of `mllib/` and `library/` files from commit
@@ -29,7 +32,9 @@ Run it against a built tree, with that tree's compilers on `PATH`:
 
 Checked when it was made: two runs of the reference give byte-identical
 output. Renaming one term operator (`str_open`) in the reference filter
-changes 33 lines.
+changes 33 lines. Making `free_vars` drop every variable changes 183 lines.
+238 items carry free variables; for 14 of them the old `free_vars` raises,
+and that is pinned as it is.
 
 Not covered:
 - The old filter overflows the stack on `let f ?(x = 1) () = ...`, and the

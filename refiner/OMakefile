@@ -1,7 +1,7 @@
 #
 # Add the preprocessor command line argument
 #
-MACROPPOPTS = -D $(REFINER)_EXN -D SEQ_SET_$(SEQ_SET)_linear_set -D TERMS_$(TERMS) -I $(dir refsig)
+MACROPPOPTS = -D $(REFINER)_EXN -D SEQ_SET_$(SEQ_SET)_linear_set -D TERMS_$(TERMS) -incdir $(dir refsig)
 
 #
 # Include files from subdirectories

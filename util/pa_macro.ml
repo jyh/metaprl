@@ -163,7 +163,7 @@ value subst mloc env =
   let rec loop =
     fun
     [ <:expr< let $opt:rf$ $list:pel$ in $e$ >> ->
-        let pel = List.map (fun (p, e) -> (p, loop e)) pel in
+        let pel = List.map (fun (p, e, attrs) -> (p, loop e, attrs)) pel in
         <:expr< let $opt:rf$ $list:pel$ in $loop e$ >>
     | <:expr< if $e1$ then $e2$ else $e3$ >> ->
         <:expr< if $loop e1$ then $loop e2$ else $loop e3$ >>
@@ -252,8 +252,8 @@ value substt mloc env =
     fun
     [ <:ctyp< $t1$ -> $t2$ >> -> <:ctyp< $loop t1$ -> $loop t2$ >>
     | <:ctyp< $t1$ $t2$ >> -> <:ctyp< $loop t1$ $loop t2$ >>
-    | <:ctyp< ($list:tl$) >> -> <:ctyp< ($list:List.map loop tl$) >>
-    | <:ctyp< $lid:x$ >> | <:ctyp< $uid:x$ >> as t ->
+    | <:ctyp< ($list:tl$) >> -> <:ctyp< ($list:List.map (fun (l, t) -> (l, loop t)) tl$) >>
+    | <:ctyp< $lid:x$ >> as t ->
         try List.assoc x env with [ Not_found -> t ]
     | t -> t ]
 ;
@@ -709,6 +709,11 @@ Pcaml.add_option "-U" (Arg.String undef)
   "<string> Undefine for IFDEF instruction.";
 
 Pcaml.add_option "-I" (Arg.String add_include_dir)
+  "<string> Add a directory to INCLUDE search path.";
+
+(* camlp5 8's driver consumes -I itself (its object search path), so
+   the option above no longer reaches INCLUDE; -incdir always does. *)
+Pcaml.add_option "-incdir" (Arg.String add_include_dir)
   "<string> Add a directory to INCLUDE search path.";
 
 Pcaml.add_option "-defined" (Arg.Unit print_defined)

@@ -102,7 +102,25 @@ if $(not $(defined CAMLLIB))
     export
 
 if $(not $(defined CAMLP5LIB))
-    CAMLP5LIB = $(dir $(getenv CAMLP5LIB, $"$(CAMLLIB)/camlp5"))
+    CAMLP5LIB_DEFAULT = $"$(CAMLLIB)/camlp5"
+    # opam installs camlp5 beside the OCaml library, not inside it.
+    # When the old default has no camlp5.cma, ask camlp5 where it lives.
+    if $(and $(not $(file-exists $(CAMLP5LIB_DEFAULT)/camlp5.cma)), $(where camlp5))
+        CAMLP5LIB_DEFAULT = $(shell camlp5 -where)
+        export
+    CAMLP5LIB = $(dir $(getenv CAMLP5LIB, $(CAMLP5LIB_DEFAULT)))
+    export
+
+# OCaml 5 removed the Stream module from the standard library; the
+# camlp-streams package carries it.  Empty when ocamlfind or the
+# package is absent (OCaml 4 still has Stream in the stdlib).
+if $(not $(defined CAMLP_STREAMS_LIB))
+    CAMLP_STREAMS_LIB =
+    if $(where ocamlfind)
+        if $(equal $(shell-code ocamlfind query -qe -qo camlp-streams), 0)
+            CAMLP_STREAMS_LIB = $(dir $(shell ocamlfind query camlp-streams))
+            export
+        export
     export
 
 if $(not $(defined CAMLP5))

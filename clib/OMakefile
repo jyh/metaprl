@@ -7,7 +7,6 @@ LCFILES[] =
     exit
     debug
     ml_debug
-    locale
     c_time
 
 StaticCLibraryInstall($(MPINSTALL), $(LIB), clib, $(LCFILES))

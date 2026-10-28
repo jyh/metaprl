@@ -38,3 +38,10 @@ clean:
     $(CLEAN)
 
 all: theory$(LIB_SUFFIX)
+
+#
+# Windows: the variables the prlcomp alias sets elsewhere (mk/prlcomp).
+#
+if $(equal $(OSTYPE), Win32)
+    prlenv()
+    export

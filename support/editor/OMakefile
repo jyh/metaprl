@@ -128,3 +128,10 @@ LibInstall(svnversion.txt $(basename $(MP_DIRECT_SCRIPTS)))
 #
 clean:
     $(CLEAN) mp_version.ml make_mp_version$(EXE) svnversion.txt
+
+#
+# Windows: the variables the prlcomp alias sets elsewhere (mk/prlcomp).
+#
+if $(equal $(OSTYPE), Win32)
+    prlenv()
+    export

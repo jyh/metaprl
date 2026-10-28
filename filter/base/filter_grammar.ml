@@ -785,9 +785,12 @@ let unfold_xvar_term state t =
             else
                raise Not_found
       with
-(* TODO[jyh]: fixme
-         Stdpp.Exc_located _
-*)
+         (* parse_opname wraps its exceptions with a location (Ploc.Exc;
+            camlp5 6 called it Stdpp.Exc_located, whose case was left
+            commented out here as "TODO[jyh]: fixme"). An unwrapped one
+            can only have stopped the build, so this changes nothing for
+            input that compiled. *)
+         Ploc.Exc _
        | RefineError _
        | Failure _
        | Not_found ->

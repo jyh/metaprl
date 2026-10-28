@@ -10,6 +10,9 @@ include Term_match_table
  * like a link error to me.
 include Refiner.Refiner
  *)
+(* Theory files use TermMan (from Refiner.Refiner) through this module;
+   name it alone, not the whole include above. *)
+module TermMan = Refiner.Refiner.TermMan
 include Refiner.Refiner.TermType
 include Refiner.Refiner.Term
 include Refiner.Refiner.TermAddr

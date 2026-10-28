@@ -755,7 +755,7 @@ let get_table base =
          let t =
              try find_dftable bk with
                Not_found ->
-                  raise (Failure("Dform.get_mode_base: can not find display forms for " ^ (String.capitalize (fst bk)) ^ "." ^ (snd bk)))
+                  raise (Failure("Dform.get_mode_base: can not find display forms for " ^ (Latin1_case.capitalize (fst bk)) ^ "." ^ (snd bk)))
          in
             base.df_table <- DfTable t;
             t

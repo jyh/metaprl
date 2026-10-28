@@ -1160,7 +1160,7 @@ struct
     * The list is reversed.
     *)
    let spread_results args_length res_length results =
-      let res_array = Array.create (args_length + res_length) None in
+      let res_array = Array.make (args_length + res_length) None in
       let rec spread i = function
          result :: results ->
             res_array.(i) <- Some result;
@@ -1422,7 +1422,7 @@ struct
             { and_extract = ext;
               and_parent = parent;
               and_children = [];
-              and_results = Array.create (List.length args) None
+              and_results = Array.make (List.length args) None
             }
          in
          let new_entry = SAndEntry and_entry in
@@ -1446,7 +1446,7 @@ struct
             { and_extract = ext;
               and_parent = parent;
               and_children = [];
-              and_results = Array.create (List.length args) None
+              and_results = Array.make (List.length args) None
             }
          in
          let new_entry = SAndEntry and_entry in
@@ -1464,7 +1464,7 @@ struct
                   { andf_extract = ext;
                     andf_parent = parent;
                     andf_children = [];
-                    andf_results = Array.create (List.length goals) None
+                    andf_results = Array.make (List.length goals) None
                   }
                in
                let new_entry = SAndEntryF andf_entry in
@@ -1701,7 +1701,7 @@ struct
                let this =
                   { or_parent = parent;
                     or_children = [];
-                    or_results = Array.create (List.length tacs) OrPending
+                    or_results = Array.make (List.length tacs) OrPending
                   }
                in
                let this_entry = SOrEntry this in
@@ -2234,7 +2234,7 @@ struct
                unlock_printer ()
             end;
          let result = Lm_thread_event.sync (-1) (Lm_thread_event.receive msg.submit_response) in
-            if !debug_sync or true then
+            if !debug_sync || true then
                begin
                   lock_printer ();
                   eprintf "Thread_refiner.eval: job complete%t" eflush;

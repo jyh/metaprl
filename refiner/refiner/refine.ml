@@ -223,8 +223,8 @@ struct
    module Deps = struct
       type t = dependency * opname
       let compare (d1, o1) (d2, o2) =
-         match Pervasives.compare d1 d2 with
-            0 -> Pervasives.compare (List.rev (dest_opname o1)) (List.rev (dest_opname o2))
+         match Stdlib.compare d1 d2 with
+            0 -> Stdlib.compare (List.rev (dest_opname o1)) (List.rev (dest_opname o2))
           | c -> c
    end
    module DepSet = Lm_set.LmMake (Deps)
@@ -1633,7 +1633,9 @@ struct
       check_rule name addrs params mterm;
       let subgoals, goal = unzip_mimplies mterm in
          List.iter2 check_subgoal_arg subgoals args;
-         let _ = compute_rule_ext name addrs params goal args result in ()
+         (* compute_rule_ext is staged: these six arguments build and check
+          * the rewrite, and the closure it returns is not needed here. *)
+         let _check = compute_rule_ext name addrs params goal args result in ()
 
    let extract_term refiner opname args =
       let assums, refiner, derivation =

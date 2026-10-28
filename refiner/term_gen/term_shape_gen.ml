@@ -148,8 +148,8 @@ struct
          shape_arities = arities2
        } =
       (Opname.eq name1 name2)
-      & (params1 = params2)
-      & (arities1 = arities2)
+      && (params1 = params2)
+      && (arities1 = arities2)
 
    let shape_eq = eq
 
@@ -267,7 +267,7 @@ struct
          in
          let cmp = Opname.compare opname1 opname2 in
             if cmp = 0 then
-               Pervasives.compare (params1, arities1) (params2, arities2)
+               Stdlib.compare (params1, arities1) (params2, arities2)
             else
                cmp
    end

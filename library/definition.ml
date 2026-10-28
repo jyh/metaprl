@@ -312,7 +312,7 @@ let idirectory_term_p t =
   { term_op = op; term_terms = [children]} when unbound_bterm_p children
      -> (match dest_op op with
 	  { op_name = opname; op_params = id :: rest}
-		when nuprl5_opname_p opname & parmeq id idirectory_param
+		when nuprl5_opname_p opname && parmeq id idirectory_param
 		-> true
 	  |_ -> false
 	)
@@ -412,7 +412,7 @@ let dag_description_p t =
   if ivoid_term_p t
      then false
      else let purposes = (purposes_of_idescription_term t) in
-       ((mem "ObjectIdDAG" purposes) & not (mem "Derived" purposes))
+       ((mem "ObjectIdDAG" purposes) && not (mem "Derived" purposes))
 
 let idefinition_op = mk_nuprl5_op [make_param (token "!definition")]
 
@@ -423,7 +423,7 @@ let term_to_dependency t =
     { term_op = op; term_terms = [objc; data] }
       -> (match dest_op op with
 	  { op_name = opname; op_params = [id; oid] } when parmeq id idependency_param
-							   & nuprl5_opname_p opname
+							   && nuprl5_opname_p opname
 		->	{ data = term_to_stamp (term_of_unbound_term data)
 			; objc = term_to_stamp (term_of_unbound_term objc)
 			; oid = dest_obid_param oid

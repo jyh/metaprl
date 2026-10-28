@@ -49,6 +49,15 @@ if $(file-exists $(CAMLLIB)/threads/threads.cma)
     OCAMLINCLUDES += $(dir $(CAMLLIB)/threads)
     export
 
+#
+# OCaml 5 moved Stream out of the stdlib into camlp-streams
+# (CAMLP_STREAMS_LIB, from mk/load_config; empty on OCaml 4).
+#
+if $(CAMLP_STREAMS_LIB)
+    OCAMLINCLUDES += $(CAMLP_STREAMS_LIB)
+    OCAML_OTHER_LIBS += camlp_streams
+    export
+
 if $(THREADS_ENABLED)
     OCAMLFLAGS += -thread
     OCAML_OTHER_LIBS += threads

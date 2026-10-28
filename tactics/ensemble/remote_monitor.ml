@@ -144,7 +144,7 @@ struct
     * Create a new empty queue.
     *)
    let create () =
-      { remote_info = Array.create 128 [];
+      { remote_info = Array.make 128 [];
         remote_index = 0;
         remote_count = 0;
         remote_remote = Remote.create ()
@@ -170,7 +170,7 @@ struct
       in
       let info =
          if index = Array.length info then
-            let info' = Array.create (2 * index) [] in
+            let info' = Array.make (2 * index) [] in
                Array.blit info 0 info' 0 index;
                queue.remote_info <- info';
                info'

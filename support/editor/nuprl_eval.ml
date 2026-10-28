@@ -202,7 +202,7 @@ module Nuprl (Edit : ShellEditSig) = struct
    let get_parents_all name =
       let rec f l1 l2 =
          if l1 = [] then l2
-         else let l3 = List.map String.uncapitalize (Edit.list_parents (hd l1)) in
+         else let l3 = List.map Latin1_case.uncapitalize (Edit.list_parents (hd l1)) in
                  f (union l3 (tl l1)) (union l3 l2) in
          f [name] [name]
 

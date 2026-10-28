@@ -534,7 +534,7 @@ struct
       let inx = open_in filename in
       let magic, version =
          try
-            match List.map String.uppercase (Lm_string_util.parse_args (input_line inx)) with
+            match List.map Latin1_case.uppercase (Lm_string_util.parse_args (input_line inx)) with
                "#PRL" :: "VERSION" :: code :: _ ->
                   let major, minor, rev =
                      match List.map int_of_string (Lm_string_util.split "." code) with
@@ -595,11 +595,11 @@ struct
 
       (* Now write the term *)
       let newname = filename ^ ".new" in
-      let outx = Pervasives.open_out_bin newname in
+      let outx = Stdlib.open_out_bin newname in
       let major, minor, rev = unpack_version (List.hd versions) in
          Printf.fprintf outx "#PRL version %d.%d.%d ASCII term\n" major minor rev;
          PreAsciiIO.write_term outx table term;
-         Pervasives.close_out outx;
+         Stdlib.close_out outx;
          Unix.rename newname filename
 end
 

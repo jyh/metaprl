@@ -165,7 +165,7 @@ struct
                let vars = Lm_list_util.subtract vars bvars' in
                   vars <> [] && free_vars_term vars (bvars' @ bvars) term
             in
-               first or free_vars_bterms vars bvars t
+               first || free_vars_bterms vars bvars t
        | [] ->
             false
       in
@@ -216,12 +216,12 @@ struct
          },
          { term_op = { op_name = opname2; op_params = [Var v'] };
            term_terms = []
-         } when Opname.eq opname1 var_opname & Opname.eq opname2 var_opname ->
+         } when Opname.eq opname1 var_opname && Opname.eq opname2 var_opname ->
             Lm_list_util.check_assoc v v' vars
        | { term_op = op1; term_terms = bterms1 },
          { term_op = op2; term_terms = bterms2 } ->
             equal_operators op1 op2
-            & (equal_bterms vars bterms1 bterms2)
+            && (equal_bterms vars bterms1 bterms2)
 
    and equal_bterms vars bterms1 bterms2 =
       let equal_bterm = fun
@@ -286,7 +286,7 @@ struct
             f t' (List.assoc v sub)
        | { term_op = op1; term_terms = bterms1 },
          { term_op = op2; term_terms = bterms2 } ->
-            equal_operators op1 op2 & equal_fun_bterms bvars bterms1 bterms2
+            equal_operators op1 op2 && equal_fun_bterms bvars bterms1 bterms2
 
       and equal_fun_bterms bvars bterms1 bterms2 =
          let equal_fun_bterm = fun
@@ -426,7 +426,7 @@ struct
    let rec need_to_rename avoid = function
       [] -> false
     | v::vs ->
-         SymbolSet.mem avoid v or
+         SymbolSet.mem avoid v ||
          need_to_rename (SymbolSet.add avoid v) vs
 
    let rec compute_renames avoid avoid' = function

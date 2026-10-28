@@ -432,7 +432,7 @@ struct
                name'
       in let smap_rename = Lm_list_util.smap (Lm_list_util.smap rename) in
       let clean_inputs tail ((comment,name,record) as item) =
-         let c = Char.uppercase comment.[0] in
+         let c = Latin1_case.char_uppercase comment.[0] in
          let record' = match c, record with
             ('T' | 'O' | 'G' | 'S'), _ ->
                smap_rename record
@@ -562,7 +562,10 @@ struct
                 | (l,_,([_;_;_] as io_data)) :: _ when (l.[0]='V') || (l.[0]='v') ->
                      data.out_items <- New (l, name, io_data) :: data.out_items
                 | (l, name, _) :: _ ->  (* XXX HACK: version <= 1.0.7 *)
-                     l.[0] <- 'V';
+                     (* Strings are immutable: make the 'V' label as a copy.
+                      * The old in-place edit also changed the copy kept in
+                      * old_items, which is printed only for Old entries. *)
+                     let l = "V" ^ String.sub l 1 (String.length l - 1) in
                      data.out_items <- New (l, name, [[v]; conts; ts_names]) :: data.out_items
                 | _ ->
                      fail ("out_term - SO variable entry " ^ name ^ " was invalid")
@@ -804,7 +807,7 @@ struct
       let s = (String.concat "\\\\ " (List.map output_aux strs)) in
       let l = String.length s - 1 in
          if l>=0 && s.[l] = ' ' then begin
-            s.[l] <- '\n'; output_string out s
+            output_string out (String.sub s 0 l); output_char out '\n'
          end else begin
             output_string out s; output_char out '\n'
          end

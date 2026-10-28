@@ -360,14 +360,14 @@ let print_translated_file_to_channel out table name =
  *)
 let brbuf =
    (* This is a silly hack to get the browser to wake up *)
-   let s = String.make 1024 ' ' in
-      s.[0] <- '<';
-      s.[1] <- 'b';
-      s.[2] <- 'r';
-      s.[3] <- '>';
-      s.[1022] <- '\r';
-      s.[1023] <- '\n';
-      s
+   let s = Bytes.make 1024 ' ' in
+      Bytes.set s 0 '<';
+      Bytes.set s 1 'b';
+      Bytes.set s 2 'r';
+      Bytes.set s 3 '>';
+      Bytes.set s 1022 '\r';
+      Bytes.set s 1023 '\n';
+      Bytes.to_string s
 
 let html_escape_char info col c =
    match c with

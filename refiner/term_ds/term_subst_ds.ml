@@ -268,7 +268,7 @@ struct
             Lm_list_util.check_assoc v v' vars
        | Term { term_op = op1; term_terms = bterms1 },
          Term { term_op = op2; term_terms = bterms2 } ->
-            equal_operators op1 op2 & equal_bterms vars bterms1 bterms2
+            equal_operators op1 op2 && equal_bterms vars bterms1 bterms2
        | Sequent s1, Sequent s2 ->
             (SeqHyp.length s1.sequent_hyps = SeqHyp.length s2.sequent_hyps) &&
             (equal_term vars s1.sequent_args s2.sequent_args) &&

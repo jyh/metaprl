@@ -3,6 +3,7 @@
 #
 if $(SSL_ENABLED)
    PROXYEDIT_FILES[] =
+       ../mllib/latin1_case
        ../mllib/punix
        ../mllib/setup
        proxyedit_lex

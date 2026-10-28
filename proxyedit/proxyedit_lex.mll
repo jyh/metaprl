@@ -117,7 +117,7 @@ and parse_var args v lexbuf =
 and parse_value args v lexbuf =
    match main lexbuf with
       TokString x ->
-         parse ((String.lowercase v, x) :: args) lexbuf
+         parse ((Latin1_case.lowercase v, x) :: args) lexbuf
     | TokEqual ->
          parse args lexbuf
     | TokEof ->

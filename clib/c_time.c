@@ -26,7 +26,7 @@ value c_localtime(value v_date)
 
     when = Int_val(v_date);
     tmp = localtime(&when);
-    tuple = alloc_tuple(7);
+    tuple = caml_alloc_tuple(7);
     Field(tuple, 0) = Val_int(tmp->tm_sec);
     Field(tuple, 1) = Val_int(tmp->tm_min);
     Field(tuple, 2) = Val_int(tmp->tm_hour);
@@ -72,7 +72,7 @@ value c_simpletime(value v_date)
     date = Int_val(v_date);
     fmt = localtime(&date);
     sprintf(buffer, "%d/%d/%02d", fmt->tm_mon + 1, fmt->tm_mday, fmt->tm_year % 100);
-    v_string = copy_string(buffer);
+    v_string = caml_copy_string(buffer);
     CAMLreturn(v_string);
 }
 
@@ -87,6 +87,6 @@ value c_ctime(value v_date)
     date = Int_val(v_date);
     strcpy(buffer, ctime(&date));
     buffer[strlen(buffer) - 1] = 0;
-    v_string = copy_string(buffer);
+    v_string = caml_copy_string(buffer);
     CAMLreturn(v_string);
 }

@@ -754,15 +754,18 @@ let rec mk_string_list_expr _loc = function
       <:expr< $lid:"::"$ $str:hd$ $mk_string_list_expr _loc tl$ >>
 *)
 
+(* camlp5 8: a let binding is a triple; the third part is its attributes. *)
 let binding_let proc _loc (v, bnd) =
-   <:patt< $lid:v$ >>,
-   match bnd with
-      BindTerm t ->
-         expr_of_term proc _loc t
-    | BindOpname op ->
-         expr_of_opname proc _loc op
-    | BindNum n ->
-         expr_of_num proc _loc n
+   let e =
+      match bnd with
+         BindTerm t ->
+            expr_of_term proc _loc t
+       | BindOpname op ->
+            expr_of_opname proc _loc op
+       | BindNum n ->
+            expr_of_num proc _loc n
+   in
+      <:patt< $lid:v$ >>, e, Ploc.VaVal []
 
 let bindings_let proc _loc bnd_expr expr =
    if bnd_expr.item_bindings = [] then
@@ -1439,8 +1442,8 @@ let define_resource proc _loc name res =
             ( $res.res_body$ : Mp_resource.resource_info $lid:inp_name$ '$intermediate$ $lid:outp_name$ ) >>]
 
 let rec is_list_expr = function
-   MLast.ExUid(_, Ploc.VaVal "[]") -> true
- | MLast.ExApp(_, MLast.ExApp(_, MLast.ExUid(_, Ploc.VaVal "::"), _), tail) ->
+   MLast.ExLong(_, MLast.LiUid(_, Ploc.VaVal "[]")) -> true
+ | MLast.ExApp(_, MLast.ExApp(_, MLast.ExLong(_, MLast.LiUid(_, Ploc.VaVal "::")), _), tail) ->
       is_list_expr tail
  | _ -> false
 
@@ -1506,9 +1509,9 @@ let implem_toploop info =
 let define_summary_item proc _loc = function
    { item_bindings = []; item_item = item } ->
       [item]
- | { item_bindings = bnds; item_item = <:str_item< value $list:[patt,expr]$ >> } ->
+ | { item_bindings = bnds; item_item = <:str_item< value $list:[(patt, expr, attrs)]$ >> } ->
       let expr = <:expr< let $list:List.map (binding_let proc _loc) (List.rev bnds)$ in $expr$ >> in
-         [<:str_item< value $list:[patt, expr]$ >>]
+         [<:str_item< value $list:[(patt, expr, attrs)]$ >>]
  | { item_bindings = bnds; item_item = item } ->
       [<:str_item< value $list:List.map (binding_let proc _loc) (List.rev bnds)$ >>; item]
 
@@ -1527,12 +1530,12 @@ let get_top_ctyp proc name =
 (*
  * An regular item.
  *)
-let wrap_toploop_item proc _loc ((patt, expr) as item) =
+let wrap_toploop_item proc _loc ((patt, expr, attrs) as item) =
    match patt with
       <:patt< $lid:name$ >> when List.mem_assoc name proc.imp_toploop ->
          let ctyp = get_top_ctyp proc name in
          let expr = wrap_toploop_item _loc name ctyp expr in
-            (patt, expr), [add_toploop_item proc _loc name ctyp]
+            (patt, expr, attrs), [add_toploop_item proc _loc name ctyp]
      | _ ->
          item, []
 
@@ -1549,7 +1552,7 @@ let rec wrap_summary_items proc = function
             let pel, toploop = wrap_toploop_items proc _loc pel in
             let toploop = List.map (fun x -> x, _loc) toploop in
                (<:str_item< value $opt:rec_flag$ $list:pel$ >>, _loc) :: (toploop @ items)
-       | MLast.StExt (_loc, Ploc.VaVal name, ctyp, _ ) when List.mem_assoc name proc.imp_toploop ->
+       | MLast.StExt (_loc, Ploc.VaVal name, _, ctyp, _, _) when List.mem_assoc name proc.imp_toploop ->
             (item, loc) :: (add_toploop_item proc _loc name (get_top_ctyp proc name), _loc) :: items
        | _ ->
          (item, loc)::items

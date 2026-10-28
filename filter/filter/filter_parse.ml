@@ -327,7 +327,7 @@ struct
    (*
     * Processor.
     *)
-   let proc_ref = ref None
+   let proc_ref : t option ref = ref None
 
    (*
     * Parse an input expression.
@@ -1363,7 +1363,19 @@ let _ =
    Grammar.Unsafe.clear_entry interf;
    Grammar.Unsafe.clear_entry implem
 
-let operator = Pa_o.operator_rparen
+(*
+ * camlp5 installs no pa_o.cmi, so Pa_o.operator_rparen cannot be named at
+ * compile time. pa_o is loaded before this file, and its expr grammar uses
+ * the entry in the rule  "(" operator_rparen , so look it up there at load
+ * time. Grammar.Entry.find raises Not_found if it is missing; say so.
+ *
+ * Note: operator_rparen itself consumes the closing ")" (camlp5 7 and 8), so
+ * the "topval" rule below, which expects another ")", is kept as it was.
+ *)
+let operator : string Grammar.Entry.e =
+   try Obj.magic (Grammar.Entry.find Pcaml.expr "operator_rparen") with
+      Not_found ->
+         raise (Failure "Filter_parse: entry operator_rparen not found in Pcaml.expr (is pa_o loaded?)")
 
 EXTEND
    GLOBAL: interf implem sig_item str_item expr;

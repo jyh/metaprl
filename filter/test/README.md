@@ -49,3 +49,16 @@ Not covered:
   none of the three is in the corpus.
 - Locations appear inside the terms as character offsets, so a change in how
   camlp5 counts them shows up as a difference.
+
+# operator_rparen lookup
+
+camlp5 installs no `pa_o.cmi`, so `filter/filter/filter_parse.ml` cannot name
+`Pa_o.operator_rparen` at compile time. It finds the entry at load time with
+`Grammar.Entry.find Pcaml.expr "operator_rparen"`. `test_operator_entry.ml`
+runs that lookup with `pa_o` linked and parses three operators with the entry
+it gets back. A wrong entry name must make it fail:
+
+    sh filter/test/run_operator_entry.sh                 # OK, rc 0
+    sh filter/test/run_operator_entry.sh no_such_entry   # FAIL, rc 1
+
+It tests the lookup only, not the rest of `filter_parse`.

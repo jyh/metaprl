@@ -23,6 +23,16 @@ if [ -z "$PROOF_CENSUS_ONE" ] && [ ! -s "$expected" ]; then
    echo "FAIL: $expected is missing or empty"
    exit 1
 fi
+# Each module's lines must be one block: the module list below is built with
+# uniq, so a module in two blocks would be replayed twice (by two concurrent
+# processes writing the same file) and its statuses counted twice.
+if [ -z "$PROOF_CENSUS_ONE" ]; then
+   split=$(cut -d' ' -f1 "$expected" | uniq | sort | uniq -d)
+   if [ -n "$split" ]; then
+      echo "FAIL: modules listed in more than one block of $expected:" $split
+      exit 1
+   fi
+fi
 [ -n "$PROOF_CENSUS_ONE" ] || cut -d' ' -f1 "$expected" | uniq > "$tmp/modules"
 # One module: replay it and print "module rule status" lines.
 one() {

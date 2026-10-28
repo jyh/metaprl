@@ -123,24 +123,27 @@ jobs:
           echo "--- cygwin ps -W"; ps -efW | grep -i -E 'camlp5n|omake|ocaml|macropp' | tee "$RUNNER_TEMP/ps.log" || true
           echo "--- tasklist"; tasklist.exe /v | grep -i -E 'camlp5n|omake|Image' | tee -a "$RUNNER_TEMP/ps.log" || true
           kill $pid 2>/dev/null || true; sleep 5
-          taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null; taskkill.exe /F /T /IM omake.exe 2>/dev/null; true
+          taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true; taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null || true; taskkill.exe /F /T /IM omake.exe 2>/dev/null || true
       - name: the stalled target alone, stdin from /dev/null (180 s bound)
         working-directory: metaprl
         run: |
           t=$(grep -E '^- build ' "$RUNNER_TEMP/build.log" | tail -1 | sed 's/^- build //' | tr '\\' '/' | awk '{print $1"/"$2}')
           echo "target: $t"
           start=$(date +%s)
-          timeout 180 opam exec -- omake -j1 --no--progress "$t" < /dev/null > "$RUNNER_TEMP/alone-null.log" 2>&1; rc=$?
+          timeout 180 opam exec -- omake -j1 --no--progress "$t" < /dev/null > "$RUNNER_TEMP/alone-null.log" 2>&1 && rc=0 || rc=$?
           echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"; tail -25 "$RUNNER_TEMP/alone-null.log"
-          taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null; true
-      - name: the stalled target alone, stdin an open pipe (180 s bound)
+          taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true; taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null || true
+      - name: the stalled target alone, spelling off (180 s bound)
         working-directory: metaprl
         run: |
           t=$(grep -E '^- build ' "$RUNNER_TEMP/build.log" | tail -1 | sed 's/^- build //' | tr '\\' '/' | awk '{print $1"/"$2}')
+          grep -E '^SPELLING_ENABLED' mk/config || echo "no SPELLING_ENABLED line"
+          awk '/^SPELLING_ENABLED/ { print "SPELLING_ENABLED = false"; next } { print }' mk/config > mk/config.new && mv mk/config.new mk/config
+          grep -E '^SPELLING_ENABLED' mk/config || echo "SPELLING_ENABLED = false" >> mk/config
           start=$(date +%s)
-          sleep 400 | timeout 180 opam exec -- omake -j1 --no--progress "$t" > "$RUNNER_TEMP/alone-pipe.log" 2>&1; rc=${PIPESTATUS[1]}
-          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"; tail -25 "$RUNNER_TEMP/alone-pipe.log"
-          taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null; true
+          timeout 180 opam exec -- omake -j1 --no--progress "$t" < /dev/null > "$RUNNER_TEMP/alone-nospell.log" 2>&1 && rc=0 || rc=$?
+          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"; tail -25 "$RUNNER_TEMP/alone-nospell.log"
+          taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true
       - name: summarise the build log
         if: always()
         run: |

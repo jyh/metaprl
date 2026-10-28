@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ocaml: ["5.4.1"]
+        ocaml: ["4.14.4", "5.4.1"]
         compiler: [mingw, msvc]
     defaults:
       run:
@@ -42,8 +42,26 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml }}
           windows-compiler: ${{ matrix.compiler }}
-      - name: install omake, ocamlfind, camlp5
-        run: opam install -y omake.0.10.7 ocamlfind camlp5.8.05.02 camlp-streams 2>&1 | tee "$RUNNER_TEMP/opam.log"
+      # Measured on the first run (OCaml 5.4.1): omake 0.10.7 failed to bootstrap
+      # (MinGW: its vendored libmojave calls the removed failwith/invalid_argument;
+      # MSVC: cl lacks C11 atomics), and camlp5's conf-perl-ipc-system-simple and
+      # conf-perl-string-shellquote failed. The steps below measure each separately.
+      - name: which perl opam uses, and the two perl modules camlp5 needs (from CPAN)
+        continue-on-error: true
+        run: |
+          opam exec -- sh -c 'command -v perl; perl -v | head -2' 2>&1 | tee "$RUNNER_TEMP/perl.log"
+          opam exec -- sh -c 'PERL_MM_USE_DEFAULT=1 perl -MCPAN -e "CPAN::Shell->notest(install => q(IPC::System::Simple), q(String::ShellQuote))"' 2>&1 | tail -40 | tee -a "$RUNNER_TEMP/perl.log"
+          opam exec -- perl -MIPC::System::Simple -MString::ShellQuote -e 'print "perl modules OK\n"' 2>&1 | tee -a "$RUNNER_TEMP/perl.log"
+      - name: install omake
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          opam install -y omake.0.10.7 2>&1 | tee "$RUNNER_TEMP/opam-omake.log"
+      - name: install ocamlfind and camlp5
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          opam install -y ocamlfind camlp5.8.05.02 camlp-streams 2>&1 | tee "$RUNNER_TEMP/opam-camlp5.log"
       - name: configure
         working-directory: metaprl
         run: |

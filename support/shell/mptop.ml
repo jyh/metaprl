@@ -182,6 +182,12 @@ and mk_expr top_expr =
       match top_expr with
          (<:expr< $e1$ . $e2$ >> as top_expr) ->
             mk_proj_expr loc top_expr
+       | (<:expr< $lid:"-"$ $e1$ $e2$ >>) ->
+            ApplyExpr ((loc, ApplyExpr ((loc, VarExpr "-"), mk_expr e1)), mk_expr e2)
+       | (<:expr< $lid:"-"$ $e$ >>) ->
+            (match mk_expr e with
+                _, IntExpr i -> IntExpr (-i)
+              | expr -> ApplyExpr ((loc, VarExpr "~-"), expr))
        | (<:expr< $e1$ $e2$ >>) ->
             ApplyExpr (mk_expr e1, mk_expr e2)
        | (<:expr< $e1$ .( $e2$ ) >>) ->
@@ -523,6 +529,11 @@ let rec mk_str_item si =
 (*
  * Include the common library functions.
  *)
+let int_fun_int_expr f =
+   IntFunExpr (fun i -> IntExpr (f i))
+
+let int_fun_typ = FunType (IntType, IntType)
+
 let int_int_fun_int_expr f =
    IntFunExpr (fun i -> IntFunExpr (fun j -> IntExpr (f i j)))
 
@@ -547,6 +558,7 @@ let resource toploop +=
     "Pervasives", "-",      int_int_fun_int_expr ( - ),  int_int_fun_typ;
     "Pervasives", "*",      int_int_fun_int_expr ( * ),  int_int_fun_typ;
     "Pervasives", "/",      int_int_fun_int_expr ( / ),  int_int_fun_typ;
+    "Pervasives", "~-",     int_fun_int_expr ( ~- ),     int_fun_typ;
     "Pervasives", "::",     cons_expr,                   ConsType;
     "Pervasives", "()",     UnitExpr (),                 UnitType;
     "Pervasives", "[]",     ListExpr [],                 NilType;

@@ -72,11 +72,23 @@ else
    PROF_EXT =
    export
 
+# camlp5 8: camlp5.cma needs compiler-libs, pcre2 and fmt linked first
+OCAMLINCLUDES += $(CAMLP5_DEP_DIRS)
+OCAML_LINK_FLAGS += $(mapprefix -I, $(CAMLP5_DEP_DIRS))
+
+# OCaml 5: Stream lives in camlp-streams (empty on OCaml 4)
+STREAMS_LIBS[] =
+if $(CAMLP_STREAMS_LIB)
+    STREAMS_LIBS[] = $(file $(CAMLP_STREAMS_LIB)/camlp_streams)
+    export
+
 CMXADEPS[] =
+    $(addsuffix .cmxa, $(STREAMS_LIBS))
     $(CAMLLIB_UNIX)/unix.cmxa
     $(CAMLLIB_STR)/str.cmxa
     $(OPTTHREADSLIB)
     $(CAMLP5LIB)/odyl$(PROF_EXT).cmxa
+    $(addsuffix .cmxa, $(CAMLP5_DEP_LIBS))
     $(CAMLP5LIB)/camlp5$(PROF_EXT).cmxa
     $(BASE_CMXAS)
     $(CAMLP5LIB)/pa_o$(PROF_EXT).cmx
@@ -90,10 +102,12 @@ ARDEPS[] =
     $(addsuffix /theory$(EXT_LIB), $(MP_DIRS))
 
 CMADEPS[] =
+    $(addsuffix .cma, $(STREAMS_LIBS))
     $(CAMLP5LIB)/odyl.cma
     $(CAMLLIB_UNIX)/unix.cma
     $(CAMLLIB_STR)/str.cma
     $(THREADSLIB)
+    $(addsuffix .cma, $(CAMLP5_DEP_LIBS))
     $(CAMLP5LIB)/camlp5.cma
     $(CAMLP5LIB)/camlp5_top.cma
     $(BASE_CMAS)
@@ -103,10 +117,12 @@ CMADEPS[] =
     $(addsuffix /theory.cma, $(MP_DIRS))
 
 TCMADEPS[] =
+    $(addsuffix .cma, $(STREAMS_LIBS))
     $(CAMLP5LIB)/odyl.cma
     $(CAMLLIB_UNIX)/unix.cma
     $(CAMLLIB_STR)/str.cma
     $(THREADSLIB)
+    $(addsuffix .cma, $(CAMLP5_DEP_LIBS))
     $(CAMLP5LIB)/camlp5.cma
     $(BASE_CMAS)
     $(CAMLP5LIB)/pa_o.cmo

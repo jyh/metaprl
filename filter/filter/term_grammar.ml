@@ -165,6 +165,9 @@ let xparam_opname        = Opname.mk_opname "xparam" perv_opname
  *)
 module MakeTermGrammar (TermGrammar : TermGrammarSig) =
 struct
+   (* The camlp5 7 lexer, before any rule is added (Filter_lexer). *)
+   let () = Filter_lexer.install ()
+
    (************************************************************************
     * TYPES                                                                *
     ************************************************************************)

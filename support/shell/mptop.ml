@@ -176,14 +176,37 @@ and mk_tuple_expr loc = function
  | _ ->
       not_supported loc "tuple expression"
 
+(*
+ * An application. camlp5 writes -e as the application of "-" to one
+ * argument, and a - b as its application to two; OCaml reads the first as
+ * negation (ast2pt does the same). So the arguments are counted here: with
+ * one, an integer constant is negated in place and anything else becomes
+ * 0 - e. Proof steps such as nameHypT (-1) "a" depend on this.
+ *)
+and mk_apply_expr loc top_expr =
+   let rec flatten args = function
+      (<:expr< $f$ $a$ >>) ->
+         flatten (a :: args) f
+    | f ->
+         f, args
+   in
+      match flatten [] top_expr with
+         MLast.ExLid (_, Ploc.VaVal ("-" | "~-")), [MLast.ExInt (_, Ploc.VaVal s, "")] ->
+            IntExpr (- (int_of_string s))
+       | MLast.ExLid (_, Ploc.VaVal ("-" | "~-")), [e] ->
+            let minus = loc, VarExpr "-" in
+               ApplyExpr ((loc, ApplyExpr (minus, (loc, IntExpr 0))), mk_expr e)
+       | f, args ->
+            snd (List.fold_left (fun f a -> loc, ApplyExpr (f, mk_expr a)) (mk_expr f) args)
+
 and mk_expr top_expr =
    let loc = loc_of_expr top_expr in
    let expr =
       match top_expr with
          (<:expr< $e1$ . $e2$ >> as top_expr) ->
             mk_proj_expr loc top_expr
-       | (<:expr< $e1$ $e2$ >>) ->
-            ApplyExpr (mk_expr e1, mk_expr e2)
+       | (<:expr< $_$ $_$ >>) ->
+            mk_apply_expr loc top_expr
        | (<:expr< $e1$ .( $e2$ ) >>) ->
             not_supported loc "array subscript"
        | (<:expr< [| $list:el$ |] >>) ->

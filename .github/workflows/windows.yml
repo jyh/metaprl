@@ -107,6 +107,24 @@ jobs:
         run: |
           set -o pipefail
           opam exec -- omake -k -j4 --no--progress 2>&1 | tee "$RUNNER_TEMP/build.log"
+      # Since #41 the build completes; these run what Linux CI runs first.
+      # Each is bounded and allowed to fail: this records what works.
+      - name: what the shell launcher is on Windows
+        if: always()
+        working-directory: metaprl
+        run: |
+          ls -la editor/ml/mp lib/mpopt* lib/mp* editor/ml/mp.opt* 2>&1 | head -20 || true
+          file editor/ml/mp 2>&1 || true
+      - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
+        if: always()
+        continue-on-error: true
+        working-directory: metaprl
+        run: timeout 300 opam exec -- sh editor/ml/tests/toploop_minus.sh
+      - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)
+        if: always()
+        continue-on-error: true
+        working-directory: metaprl
+        run: timeout 600 opam exec -- sh editor/ml/tests/old_labels.sh
       - name: summarise the build log
         if: always()
         run: |

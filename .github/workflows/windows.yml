@@ -127,6 +127,17 @@ jobs:
           echo "--- bytes since the last omake '+' line: $(awk '/^\+ /{n=0;next}{n+=length($0)+1}END{print n}' "$log")"
           echo "--- cygwin ps -W"; ps -efW | grep -i -E 'camlp5n|omake|ocaml|macropp' | tee "$RUNNER_TEMP/ps.log" || true
           echo "--- tasklist"; tasklist.exe /v | grep -i -E 'camlp5n|omake|Image' | tee -a "$RUNNER_TEMP/ps.log" || true
+          # Round 8: round 7 showed the stuck camlp5n had printed its last trace
+          # line ("Filter_cache.save: done"), i.e. it finished its work and did not
+          # exit. Record whether its output file exists, the whole process tree
+          # with command lines, and the stuck process's threads and wait reasons.
+          echo "--- output files of the last prlcomp step"
+          last=$(grep -E '^\+ Shell.prlcomp' "$log" | tail -1); echo "$last"
+          ls -la theories/meta/base/*.ppo support/display/*.ppo support/tactics/*.ppo 2>&1 | tail -20 || true
+          echo "--- process tree (Win32_Process)"
+          powershell.exe -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { \$_.Name -notmatch '^(svchost|conhost|RuntimeBroker|csrss|dwm|lsass|services|wininit|winlogon|smss|fontdrvhost|System|Registry|Idle|Memory Compression)' } | Select-Object ProcessId,ParentProcessId,Name,CommandLine | Format-Table -AutoSize -Wrap | Out-String -Width 400" | tee "$RUNNER_TEMP/proctree.log" || true
+          echo "--- threads of every camlp5n and omake process"
+          powershell.exe -NoProfile -Command "Get-Process camlp5n*,omake*,sh,bash,cmd -ErrorAction SilentlyContinue | ForEach-Object { 'PROCESS ' + \$_.Id + ' ' + \$_.ProcessName + ' cpu=' + \$_.CPU + ' handles=' + \$_.HandleCount; \$_.Threads | Select-Object Id,ThreadState,WaitReason,TotalProcessorTime | Format-Table -AutoSize | Out-String }" | tee "$RUNNER_TEMP/threads.log" || true
           kill $pid 2>/dev/null || true; sleep 5
           taskkill.exe /F /T /IM camlp5n.opt 2>/dev/null || true; taskkill.exe /F /T /IM camlp5n.exe 2>/dev/null || true; taskkill.exe /F /T /IM omake.exe 2>/dev/null || true
       # Round 4: omake out of the picture. Run camlp5n directly on the file

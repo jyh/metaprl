@@ -55,8 +55,11 @@ jobs:
       # Cygwin's /usr/bin/perl, so the modules go into Cygwin's perl.
       - name: the two perl modules camlp5 needs, into Cygwin's perl (from CPAN)
         continue-on-error: true
+        # Round 3: Cygwin's perl does not exist until opam installs it as the
+        # system dependency of conf-perl, so install that first.
         run: |
-          /usr/bin/perl -v | head -2 | tee "$RUNNER_TEMP/perl.log"
+          opam install -y conf-perl 2>&1 | tail -5 | tee "$RUNNER_TEMP/perl.log"
+          /usr/bin/perl -v | sed -n 2p | tee -a "$RUNNER_TEMP/perl.log"
           PERL_MM_USE_DEFAULT=1 /usr/bin/perl -MCPAN -e 'CPAN::Shell->notest(install => q(IPC::System::Simple), q(String::ShellQuote))' 2>&1 | tail -40 | tee -a "$RUNNER_TEMP/perl.log"
           /usr/bin/perl -MIPC::System::Simple -MString::ShellQuote -e 'print "perl modules OK\n"' 2>&1 | tee -a "$RUNNER_TEMP/perl.log"
       - name: install omake

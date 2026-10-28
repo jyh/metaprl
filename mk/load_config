@@ -111,6 +111,15 @@ if $(not $(defined CAMLP5LIB))
     CAMLP5LIB = $(dir $(getenv CAMLP5LIB, $(CAMLP5LIB_DEFAULT)))
     export
 
+# camlp5 8's pr_o needs o_keywords loaded before it; camlp5 7 has no
+# such module.  CAMLP5_PR_O is the list of modules to load for pr_o.
+if $(not $(defined CAMLP5_PR_O))
+    CAMLP5_PR_O = pr_o
+    if $(file-exists $(CAMLP5LIB)/o_keywords.cmo)
+        CAMLP5_PR_O = o_keywords pr_o
+        export
+    export
+
 # OCaml 5 removed the Stream module from the standard library; the
 # camlp-streams package carries it.  Empty when ocamlfind or the
 # package is absent (OCaml 4 still has Stream in the stdlib).

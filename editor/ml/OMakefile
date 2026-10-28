@@ -73,8 +73,8 @@ else
    export
 
 CMXADEPS[] =
-    $(CAMLLIB)/unix.cmxa
-    $(CAMLLIB)/str.cmxa
+    $(CAMLLIB_UNIX)/unix.cmxa
+    $(CAMLLIB_STR)/str.cmxa
     $(OPTTHREADSLIB)
     $(CAMLP5LIB)/odyl$(PROF_EXT).cmxa
     $(CAMLP5LIB)/camlp5$(PROF_EXT).cmxa
@@ -91,8 +91,8 @@ ARDEPS[] =
 
 CMADEPS[] =
     $(CAMLP5LIB)/odyl.cma
-    $(CAMLLIB)/unix.cma
-    $(CAMLLIB)/str.cma
+    $(CAMLLIB_UNIX)/unix.cma
+    $(CAMLLIB_STR)/str.cma
     $(THREADSLIB)
     $(CAMLP5LIB)/camlp5.cma
     $(CAMLP5LIB)/camlp5_top.cma
@@ -104,8 +104,8 @@ CMADEPS[] =
 
 TCMADEPS[] =
     $(CAMLP5LIB)/odyl.cma
-    $(CAMLLIB)/unix.cma
-    $(CAMLLIB)/str.cma
+    $(CAMLLIB_UNIX)/unix.cma
+    $(CAMLLIB_STR)/str.cma
     $(THREADSLIB)
     $(CAMLP5LIB)/camlp5.cma
     $(BASE_CMAS)

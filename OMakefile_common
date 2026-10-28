@@ -28,6 +28,27 @@ THREADSLIB[] =
 OPTTHREADSLIB[] =
 OCAML_OTHER_LIBS += unix
 
+#
+# OCaml 5 moved unix, str and threads out of the top of the library
+# directory into their own subdirectories.  When they are there, add
+# them to the search path so the libraries are found at link time.
+# CAMLLIB_UNIX and CAMLLIB_STR name the directory holding each library,
+# for the OMakefiles that link it by path.
+#
+CAMLLIB_UNIX = $(CAMLLIB)
+CAMLLIB_STR = $(CAMLLIB)
+if $(file-exists $(CAMLLIB)/unix/unix.cma)
+    CAMLLIB_UNIX = $(dir $(CAMLLIB)/unix)
+    OCAMLINCLUDES += $(CAMLLIB_UNIX)
+    export
+if $(file-exists $(CAMLLIB)/str/str.cma)
+    CAMLLIB_STR = $(dir $(CAMLLIB)/str)
+    OCAMLINCLUDES += $(CAMLLIB_STR)
+    export
+if $(file-exists $(CAMLLIB)/threads/threads.cma)
+    OCAMLINCLUDES += $(dir $(CAMLLIB)/threads)
+    export
+
 if $(THREADS_ENABLED)
     OCAMLFLAGS += -thread
     OCAML_OTHER_LIBS += threads

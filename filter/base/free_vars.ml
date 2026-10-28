@@ -44,8 +44,17 @@ let _ =
 (*
  * Compute the binding variables.
  *)
+(*
+ * camlp5 8 replaced the old PaAcc/PaUid with PaPfx (M.p) and PaLong
+ * (a possibly qualified constructor).  The cases below give the results
+ * the old ones did: a prefix binds what its pattern binds, and a
+ * constructor binds nothing.
+ *)
 let rec patt_bvars bvars = function
-   <:patt< $p1$ . $p2$ >>
+   MLast.PaPfx (_, _, p) ->
+      patt_bvars bvars p
+ | MLast.PaLong (_, _, Ploc.VaVal []) ->
+      bvars
  | <:patt< ($p1$ as $p2$) >>
  | <:patt< $p1$ $p2$ >>
  | <:patt< $p1$ | $p2$ >>
@@ -54,8 +63,7 @@ let rec patt_bvars bvars = function
  | <:patt< _ >>
  | <:patt< $chr:_$ >>
  | <:patt< $int:_$ >>
- | <:patt< $str:_$ >>
- | <:patt< $uid:_$ >> ->
+ | <:patt< $str:_$ >> ->
       bvars
  | <:patt< $lid:i$ >> ->
       if List.mem i bvars then
@@ -78,17 +86,34 @@ let patt_vars patt =
  * Compute free vars of an Ast.expr.
  *)
 let free_vars expr =
+   (*
+    * camlp5 8 replaced the old ExAcc/ExUid with ExLong (a module or
+    * constructor path), ExFle (e.f and e.M.f) and ExOpen (M.(e)), and
+    * index expressions now carry a list of indices.  Each case below
+    * gives the result the old one did: a path contributes nothing, the
+    * field name of e.f is treated like a variable (as the old ExAcc case
+    * did), and M.(e) is e.
+    *)
+   let add bvars l v =
+      if List.mem v bvars || List.mem v l then
+         l
+      else
+         v :: l
+   in
    let rec free bvars l = function
       <:expr< $lid:v$ >> ->
-         if List.mem v bvars || List.mem v l then
-            l
-         else
-            v :: l
-    | <:expr< $e1$ . $e2$ >>
+         add bvars l v
+    | MLast.ExFle (_, e, Ploc.VaVal (_, Ploc.VaVal f)) ->
+         add bvars (free bvars l e) f
+    | MLast.ExLong _ ->
+         l
+    | MLast.ExOpen (_, _, e) ->
+         free bvars l e
+    | MLast.ExAre (_, _, e, Ploc.VaVal il)
+    | MLast.ExSte (_, _, e, Ploc.VaVal il) ->
+         List.fold_left (free bvars) l (e :: il)
     | <:expr< $e1$ $e2$ >>
-    | <:expr< $e1$ .( $e2$ ) >>
-    | <:expr< $e1$ := $e2$ >>
-    | <:expr< $e1$ .[ $e2$ ] >> ->
+    | <:expr< $e1$ := $e2$ >> ->
          free bvars (free bvars l e1) e2
     | <:expr< [| $list:el$ |] >>
     | <:expr< do { $list:el$ } >>
@@ -97,29 +122,29 @@ let free_vars expr =
     | <:expr< $chr:_$ >>
     | <:expr< $flo:_$ >>
     | <:expr< $int:_$ >>
-    | <:expr< $str:_$ >>
-    | <:expr< $uid:_$ >> ->
+    | <:expr< $str:_$ >> ->
          l
 (*
     | <:expr< ( $e1$ :> $_$ ) >> ->
 *)
     | MLast.ExCoe (_, e, _, _)
     | <:expr< $e$ # $_$ >>
-    | MLast.ExLmd (_, _, _, e)
+    | MLast.ExLSI (_, Ploc.VaVal (MLast.StMod _), e)
     | <:expr< ( $e$ : $_$ ) >> ->
          free bvars l e
-    | <:expr< for $v$ = $e1$ $to:_$ $e2$ do { $list:el$ } >> ->
-         List.fold_left (free (v::bvars)) (free bvars (free bvars l e1) e2) el
+    | MLast.ExFor (_, p, e1, e2, _, Ploc.VaVal el) ->
+         List.fold_left (free (patt_bvars bvars p)) (free bvars (free bvars l e1) e2) el
     | <:expr< fun [ $list:pwel$ ] >> ->
          free_pwel bvars l pwel
     | <:expr< if $e1$ then $e2$ else $e3$ >> ->
          free bvars (free bvars (free bvars l e1) e2) e3
-    | <:expr< let $opt:_$ $list:pel$ in $e$ >> ->
+    | MLast.ExLet (_, _, Ploc.VaVal pel, e) ->
          free_pel bvars l e pel
     | <:expr< match $e$ with [ $list:pwel$ ] >>
     | <:expr< try $e$ with [ $list:pwel$ ] >> ->
          free_pwel bvars (free bvars l e) pwel
-    | <:expr< new $list:_$ >> ->
+    | MLast.ExNew _ ->
+         (* As in the old code, this returns bvars, not l. *)
          bvars
     | <:expr< {< $list:sel$ >} >> ->
          List.fold_left (fun l (_, el) -> free bvars l el) l sel
@@ -135,7 +160,7 @@ let free_vars expr =
      | [] ->
           l
    and free_pel bvars l e = function
-      (patt, e)::tl ->
+      (patt, e, _)::tl ->
           free_pel (patt_bvars bvars patt) (free bvars l e) e tl
      | [] ->
           free bvars l e

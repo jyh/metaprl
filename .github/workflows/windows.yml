@@ -1,0 +1,73 @@
+name: Windows
+
+# A MEASUREMENT, not a gate: builds MetaPRL on Windows (setup-ocaml, MinGW
+# and MSVC) with libmojave's master inside the tree, to learn what breaks.
+# The job is allowed to fail (continue-on-error), so a red leg here does not
+# make the workflow red. Each step runs with `omake -k` and the build log is
+# uploaded as an artifact. Scope: the default configuration (THEORIES =
+# itt/core, COMPILATION_MODE = mixed), SSL, readline and ncurses off (mk/
+# load_config turns readline and ncurses off on Win32).
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }}; allowed to fail)
+    runs-on: windows-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        ocaml: ["5.4.1"]
+        compiler: [mingw, msvc]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+        with:
+          path: metaprl
+      - uses: actions/checkout@v4
+        with:
+          repository: jyh/libmojave
+          ref: master
+          path: metaprl/libmojave
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: ${{ matrix.ocaml }}
+          windows-compiler: ${{ matrix.compiler }}
+      - name: install omake, ocamlfind, camlp5
+        run: opam install -y omake.0.10.7 ocamlfind camlp5.8.05.02 camlp-streams 2>&1 | tee "$RUNNER_TEMP/opam.log"
+      - name: configure
+        working-directory: metaprl
+        run: |
+          printf 'CAMLP5 = camlp5\nSSL_ENABLED = false\n' > mk/config.local
+          # The first run writes mk/config and stops (mk/load_config).
+          opam exec -- omake --no--progress 2>&1 | tee "$RUNNER_TEMP/configure.log" || true
+          grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED|READLINE_ENABLED|NCURSES_ENABLED)' mk/config
+      - name: build
+        working-directory: metaprl
+        run: |
+          set -o pipefail
+          opam exec -- omake -k -j4 --no--progress 2>&1 | tee "$RUNNER_TEMP/build.log"
+      - name: summarise the build log
+        if: always()
+        run: |
+          f="$RUNNER_TEMP/build.log"
+          test -f "$f" || { echo "no build log"; exit 0; }
+          echo "lines: $(wc -l < "$f")"
+          echo "--- first 40 error lines"
+          grep -n -E 'rror|\*\*\* omake' "$f" | head -40 || true
+          echo "--- tail"
+          tail -40 "$f"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-${{ matrix.compiler }}-logs
+          path: ${{ runner.temp }}/*.log

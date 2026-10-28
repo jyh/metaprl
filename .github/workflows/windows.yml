@@ -12,10 +12,12 @@ name: Windows
 #   vendored libmojave uses the removed failwith/invalid_argument; 4.14.4:
 #   an incompatible-pointer-type error); ocaml-omake master installs. With
 #   the perl modules below, camlp5 installs. libmojave, the refiner and
-#   util/macropp then build with no C errors, and the build STOPS
-#   PROGRESSING at the first theory files (theories/meta/base: the
-#   lib/camlp5n.exe preprocessing step under Shell.prlcomp); a run left
-#   for two hours made no further progress. Not yet diagnosed.
+#   util/macropp then build with no C errors. The build then stopped at
+#   the first theory files until #41: on Windows omake's shell-code does not
+#   drain a child's output while the child runs, so a step run through the
+#   Shell.prlcomp alias hung once it wrote about 4 KB (reproduced without
+#   MetaPRL on branch mojave/windows-hang). Since #41 the default
+#   configuration builds on both OCaml versions (run 40783303200).
 # - MSVC: on 5.4.1 omake does not build (MSVC rejects the OCaml headers'
 #   C11 atomics) on 0.10.7 or master; on 4.14.4 omake builds but camlp5
 #   does not install (conf-pkg-config's shim finds no cygpath.exe).

@@ -56,6 +56,7 @@ jobs:
           printf 'let () = prerr_string (String.make (int_of_string Sys.argv.(1)) (Char.chr 120)); prerr_newline ()\n' > spew.ml
           printf 'open build/Common\nDefineCommandVars()\n.SUBDIRS: .\n' > OMakeroot
           {
+            printf 'SPEW = $(absname spew.exe)\n'
             printf 'Shell. +=\n'
             printf '   viaalias(argv) =\n'
             printf '      code = $(shell-code $(argv))\n'
@@ -65,12 +66,15 @@ jobs:
             printf '         exit $(code)\n'
             printf '.PHONY: alias2k alias8k plain2k plain8k\n'
             for n in 2 8; do
-              printf 'alias%sk:\n\tviaalias ocaml spew.ml %s\n' $n $((n*1024))
-              printf 'plain%sk:\n\tocaml spew.ml %s\n' $n $((n*1024))
+              printf 'alias%sk:\n\tviaalias $(SPEW) %s\n' $n $((n*1024))
+              printf 'plain%sk:\n\t$(SPEW) %s\n' $n $((n*1024))
             done
           } > OMakefile
           cat OMakefile
-          opam exec -- ocaml spew.ml 16 2>&1 | wc -c
+          # Round 9's first run: `opam exec -- ocaml spew.ml` exited 50 here, so
+          # the writer is a native program.
+          opam exec -- ocamlfind ocamlopt -package unix spew.ml -o spew.exe
+          ./spew.exe 16 2> spew16.txt; echo "spew rc=$? wrote $(wc -c < spew16.txt) bytes"
       - name: run each target (90 s bound each)
         run: |
           cd "$RUNNER_TEMP/pipe"

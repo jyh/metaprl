@@ -324,29 +324,131 @@ struct
    (*
     * Conversion between pattern and expression identifiers.
     *)
-   let rec expr_of_patt_ident p =
+   (*
+    * In camlp5 8 a (qualified) constructor is PaLong / ExLong, and M.x is
+    * PaPfx (M, x) / ExFle (ExLong M, x); these were PaUid/PaAcc and
+    * ExUid/ExAcc.
+    *)
+   let expr_of_patt_ident p =
       let _loc = MLast.loc_of_patt p in
          match p with
-            <:patt< $p1$ . $p2$ >> ->
-              <:expr< $expr_of_patt_ident p1$ . $expr_of_patt_ident p2$ >>
-          | <:patt< $uid: uid$ >> ->
-              <:expr< $uid: uid$ >>
+            MLast.PaLong (_, li, Ploc.VaVal []) ->
+               MLast.ExLong (_loc, li)
+          | MLast.PaPfx (_, li, MLast.PaLid (_, x)) ->
+               MLast.ExFle (_loc, MLast.ExLong (_loc, li), Ploc.VaVal (None, x))
           | <:patt< $lid: lid$ >> ->
               <:expr< $lid: lid$ >>
           | _ ->
               Stdpp.raise_with_loc _loc (Failure "Filter_ocaml.expr_of_patt_ident: not an identifier")
 
-   let rec patt_of_expr_ident e =
+   let patt_of_expr_ident e =
       let _loc = MLast.loc_of_expr e in
          match e with
-          | <:expr< $e1$ . $e2$ >> ->
-               <:patt< $patt_of_expr_ident e1$ . $patt_of_expr_ident e2$ >>
-          | <:expr< $uid: uid$ >> ->
-               <:patt< $uid: uid$ >>
+            MLast.ExLong (_, li) ->
+               MLast.PaLong (_loc, li, Ploc.VaVal [])
+          | MLast.ExFle (_, MLast.ExLong (_, li), Ploc.VaVal (None, x)) ->
+               MLast.PaPfx (_loc, li, MLast.PaLid (_loc, x))
           | <:expr< $lid: lid$ >> ->
                <:patt< $lid: lid$ >>
           | _ ->
                Stdpp.raise_with_loc _loc (Failure "Filter_ocaml.patt_of_expr_ident: not an identifier")
+
+   (*
+    * camlp5 8 module paths (longid) and paths to a lowercase name
+    * (longid_lident), to and from the string lists the terms use.
+    *)
+   let longid_of_strings _loc = function
+      [] ->
+         raise (Invalid_argument "Filter_ocaml.longid_of_strings")
+    | h :: t ->
+         List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) (MLast.LiUid (_loc, Ploc.VaVal h)) t
+
+   let rec strings_of_longid = function
+      MLast.LiUid (_, Ploc.VaVal s) ->
+         [s]
+    | MLast.LiAcc (_, li, Ploc.VaVal s) ->
+         strings_of_longid li @ [s]
+    | li ->
+         Stdpp.raise_with_loc (MLast.loc_of_longid li) (Failure "Filter_ocaml: unsupported module path")
+
+   let longid_lident_of_strings _loc sl =
+      match List.rev sl with
+         [] ->
+            raise (Invalid_argument "Filter_ocaml.longid_lident_of_strings")
+       | [c] ->
+            None, Ploc.VaVal c
+       | c :: rpath ->
+            Some (Ploc.VaVal (longid_of_strings _loc (List.rev rpath))), Ploc.VaVal c
+
+   let strings_of_longid_lident _loc = function
+      None, Ploc.VaVal c ->
+         [c]
+    | Some (Ploc.VaVal li), Ploc.VaVal c ->
+         strings_of_longid li @ [c]
+    | _ ->
+         Stdpp.raise_with_loc _loc (Failure "Filter_ocaml: unsupported path")
+
+   (*
+    * The location of the last n characters of _loc.  camlp5 8 does not
+    * record a location for the last name in a path (M.x, M.A); in normally
+    * written code that name ends where the path ends, which is where the
+    * camlp5 7 AST had its own node.
+    *)
+   let loc_of_last _loc n =
+      let len = Ploc.last_pos _loc - Ploc.first_pos _loc in
+         if n <= len then
+            Ploc.sub _loc (len - n) n
+         else
+            _loc
+
+   let longid_append _loc li1 li2 =
+      List.fold_left (fun li s -> MLast.LiAcc (_loc, li, Ploc.VaVal s)) li1 (strings_of_longid li2)
+
+   (*
+    * Rebuild camlp5 8 expressions from the halves of an old projection
+    * term (the camlp5 7 ExAcc): M.A, M.x and e.f, and e.M.f, which passes
+    * through e.M, kept as an ExFle with an empty field name until the
+    * field arrives.
+    *)
+   let expr_proj _loc e1 e2 =
+      match e1, e2 with
+         MLast.ExLong (_, li1), MLast.ExLong (_, li2) ->
+            MLast.ExLong (_loc, longid_append _loc li1 li2)
+       | MLast.ExFle (_, e, Ploc.VaVal (lio, Ploc.VaVal "")), MLast.ExLid (_, f) ->
+            MLast.ExFle (_loc, e, Ploc.VaVal (lio, f))
+       | MLast.ExFle (_, e, Ploc.VaVal (Some (Ploc.VaVal li1), Ploc.VaVal "")), MLast.ExLong (_, li2) ->
+            MLast.ExFle (_loc, e, Ploc.VaVal (Some (Ploc.VaVal (longid_append _loc li1 li2)), Ploc.VaVal ""))
+       | _, MLast.ExLid (_, f) ->
+            MLast.ExFle (_loc, e1, Ploc.VaVal (None, f))
+       | _, MLast.ExLong (_, li2) ->
+            MLast.ExFle (_loc, e1, Ploc.VaVal (Some (Ploc.VaVal li2), Ploc.VaVal ""))
+       | _ ->
+            Stdpp.raise_with_loc _loc (Failure "Filter_ocaml.expr_proj: not a path")
+
+   (* The same for patterns: M.A, and M.p (a record label M.x). *)
+   let patt_proj _loc p1 p2 =
+      match p1, p2 with
+         MLast.PaLong (_, li1, Ploc.VaVal []), MLast.PaLong (_, li2, Ploc.VaVal []) ->
+            MLast.PaLong (_loc, longid_append _loc li1 li2, Ploc.VaVal [])
+       | MLast.PaLong (_, li1, Ploc.VaVal []), _ ->
+            MLast.PaPfx (_loc, li1, p2)
+       | _ ->
+            Stdpp.raise_with_loc _loc (Failure "Filter_ocaml.patt_proj: not a path")
+
+   (* A module path as a module expression (open, include): MeUid / MeAcc. *)
+   let me_of_strings _loc = function
+      [] ->
+         raise (Invalid_argument "Filter_ocaml.me_of_strings")
+    | h :: t ->
+         List.fold_left (fun me s -> MLast.MeAcc (_loc, me, MLast.MeUid (_loc, Ploc.VaVal s))) (MLast.MeUid (_loc, Ploc.VaVal h)) t
+
+   let rec strings_of_me = function
+      MLast.MeUid (_, Ploc.VaVal s) ->
+         [s]
+    | MLast.MeAcc (_, me, MLast.MeUid (_, Ploc.VaVal s)) ->
+         strings_of_me me @ [s]
+    | me ->
+         Stdpp.raise_with_loc (MLast.loc_of_module_expr me) (Failure "Filter_ocaml: open of a module expression that is not a path")
 
    (*
     * For looking up destructors in a hashtable.
@@ -878,7 +980,7 @@ struct
       and expr_new_op =
          let dest_new_expr t =
             let _loc = dest_loc "dest_new_expr" t in
-               <:expr< new $list:List.map dest_string (dest_olist t)$ >>
+               MLast.ExNew (_loc, Ploc.VaVal (longid_lident_of_strings _loc (List.map dest_string (dest_olist t))))
          in add_expr "new" dest_new_expr
       and expr_obj_op =
          let dest_obj_expr t =
@@ -1056,8 +1158,9 @@ struct
                                                            mk_expr vars e]
              | (<:expr< match $e$ with [ $list:pwel$ ] >>) ->
                   mk_match vars loc pwel e
-             | (<:expr< new $list: sl$ >>) ->
-                  mk_simple_term expr_new_op loc [mk_olist_term (List.map (mk_string expr_new_op) sl)]
+             | MLast.ExNew (_, Ploc.VaVal lil) ->
+                  let sl = strings_of_longid_lident loc lil in
+                     mk_simple_term expr_new_op loc [mk_olist_term (List.map (mk_string expr_new_op) sl)]
              | (<:expr:< object $opt:po$ $list:cfl$ end >>) ->
                   mk_simple_term expr_obj_op loc [mk_patt_opt _loc [] po (mk_cf_list cfl)]
              | (<:expr< {< $list:sel$ >} >>) ->
@@ -1231,7 +1334,7 @@ struct
          let dest_proj_patt t =
             let _loc = dest_loc "dest_proj_patt" t in
             let p1, p2, t = dest_patt_triple t in
-               <:patt< $p1$ . $p2$ >>, t
+               patt_proj _loc p1 p2, t
          in add_patt "patt_proj" dest_proj_patt
       and patt_as_op =
          let dest_as_patt t =
@@ -1355,8 +1458,16 @@ struct
       in fun vars patt tailf ->
          let loc = loc_of_patt patt in
             match patt with
-               (<:patt< $p1$ . $p2$ >>) ->
-                  mk_patt_triple vars loc patt_proj_op patt_proj_arg_op patt_proj_end_op p1 p2 tailf
+               MLast.PaLong (_, MLast.LiAcc (_, li, Ploc.VaVal s), Ploc.VaVal []) ->
+                  (* M.A: the camlp5 7 PaAcc (PaUid M, PaUid A) *)
+                  let sloc = loc_of_last loc (String.length s) in
+                     mk_patt_triple vars loc patt_proj_op patt_proj_arg_op patt_proj_end_op
+                        (MLast.PaLong (MLast.loc_of_longid li, li, Ploc.VaVal []))
+                        (MLast.PaLong (sloc, MLast.LiUid (sloc, Ploc.VaVal s), Ploc.VaVal [])) tailf
+             | MLast.PaPfx (_, li, p) ->
+                  (* M.p: the camlp5 7 PaAcc (PaUid M, p) *)
+                  mk_patt_triple vars loc patt_proj_op patt_proj_arg_op patt_proj_end_op
+                     (MLast.PaLong (MLast.loc_of_longid li, li, Ploc.VaVal [])) p tailf
              | (<:patt< ( $p1$ as $p2$ ) >>) ->
                   mk_patt_triple vars loc patt_as_op patt_as_arg_op patt_as_end_op p1 p2 tailf
              | (<:patt< _ >>) ->
@@ -1546,13 +1657,20 @@ struct
       and type_uid_op =
          let dest_uid_type t =
             let _loc = dest_loc "dest_uid_type" t in
-               <:ctyp< $uid:dest_var t$ >>
+               (* camlp5 8 has no type for a bare M; it is completed by type_proj *)
+               MLast.TyAcc (_loc, MLast.LiUid (_loc, Ploc.VaVal (dest_var t)), Ploc.VaVal "")
          in add_type "type_uid" dest_uid_type
       and type_proj_op =
          let dest_proj_type t =
             let _loc = dest_loc "dest_proj_type" t in
             let t1, t2 = two_subterms t in
-               <:ctyp< $dest_type t1$ . $dest_type t2$ >>
+               match dest_type t1, dest_type t2 with
+                  MLast.TyAcc (_, li, Ploc.VaVal ""), MLast.TyLid (_, s) ->
+                     MLast.TyAcc (_loc, li, s)
+                | MLast.TyAcc (_, li1, Ploc.VaVal ""), MLast.TyAcc (_, li2, Ploc.VaVal "") ->
+                     MLast.TyAcc (_loc, longid_append _loc li1 li2, Ploc.VaVal "")
+                | _ ->
+                     raise (FormatError ("Filter_ocaml.dest_proj_type: not a type path", t))
          in add_type "type_proj" dest_proj_type
       and type_as_op =
          let dest_as_type t =
@@ -1580,7 +1698,7 @@ struct
       and type_class_id_op =
          let dest_class_id_type t =
             let _loc = dest_loc "dest_class_id_type" t in
-               <:ctyp< # $list:List.map dest_string (dest_olist (one_subterm "dest_class_id_type" t))$ >>
+               MLast.TyCls (_loc, Ploc.VaVal (longid_lident_of_strings _loc (List.map dest_string (dest_olist (one_subterm "dest_class_id_type" t)))))
          in add_type "type_class_id" dest_class_id_type
       and type_param_op =
          let dest_param_type t =
@@ -1690,11 +1808,21 @@ struct
             let t = one_subterm "dest_lab_type" t in
                MLast.TyLab (loc, Ploc.VaVal s, dest_type t)
          in add_type "type_lab" dest_lab_type
+      in
+      (* A module path, as the camlp5 7 TyUid / TyAcc chain encoded it. *)
+      let rec mk_longid_type = function
+         MLast.LiUid (l, Ploc.VaVal s) ->
+            mk_var type_uid_op [] l s
+       | MLast.LiAcc (l, li, Ploc.VaVal s) ->
+            mk_simple_term type_proj_op l [mk_longid_type li; mk_var type_uid_op [] (loc_of_last l (String.length s)) s]
+       | li ->
+            Stdpp.raise_with_loc (MLast.loc_of_longid li) (Failure "Filter_ocaml.mk_type: unsupported module path")
       in fun t ->
          let loc = loc_of_ctyp t in
             match t with
-               (<:ctyp< $t1$ . $t2$ >>) ->
-                  mk_simple_term type_proj_op loc [mk_type t1; mk_type t2]
+               MLast.TyAcc (_, li, Ploc.VaVal s) ->
+                  (* M.t: the camlp5 7 TyAcc (TyUid M, TyLid t) *)
+                  mk_simple_term type_proj_op loc [mk_longid_type li; mk_var type_lid_op [] (loc_of_last loc (String.length s)) s]
              | (<:ctyp< $t1$ as $t2$ >>) ->
                   mk_simple_term type_as_op loc [mk_type t1; mk_type t2]
              | (<:ctyp< _ >>) ->
@@ -1703,8 +1831,9 @@ struct
                   mk_simple_term type_apply_op loc [mk_type t1; mk_type t2]
              | (<:ctyp< $t1$ -> $t2$ >>) ->
                   mk_simple_term type_fun_op loc [mk_type t1; mk_type t2]
-             | (<:ctyp< # $list:i$ >>) ->
-                  mk_simple_term type_class_id_op loc [mk_olist_term (List.map (mk_string type_class_id_op) i)]
+             | MLast.TyCls (_, Ploc.VaVal lil) ->
+                  let i = strings_of_longid_lident loc lil in
+                     mk_simple_term type_class_id_op loc [mk_olist_term (List.map (mk_string type_class_id_op) i)]
              | (<:ctyp< $lid:s$ >>) ->
                   mk_var type_lid_op [] loc s
              | (<:ctyp< '$s$ >>) ->
@@ -1728,8 +1857,6 @@ struct
                   mk_simple_term type_list_op loc [mk_olist_term (List.map mk_stl stll)]
              | (<:ctyp< ( $list:tl$ ) >>) ->
                   mk_simple_term type_prod_op loc [mk_olist_term (List.map mk_type tl)]
-             | (<:ctyp< $uid:s$ >>) ->
-                  mk_var type_uid_op [] loc s
              | MLast.TyVrn (_, Ploc.VaVal sbtll, sloo) ->
                   mk_simple_term type_vrn_op loc [mk_olist_term (List.map mk_rf sbtll);
                                                   mk_opt (mk_opt (mk_vala "TyVrn" mk_string_list)) sloo]
@@ -1814,7 +1941,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          let dest_open_sig t =
             let _loc = dest_loc "dest_open_sig" t in
             let sl = dest_olist (one_subterm "dest_open_sig" t) in
-               <:sig_item< open $List.map dest_string sl$ >>
+               MLast.SgOpn (_loc, longid_of_strings _loc (List.map dest_string sl), Ploc.VaVal [])
          in add_sig "sig_open" dest_open_sig
       and sig_type_op =
          let dest_type_sig t =
@@ -1874,8 +2001,9 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                   mk_simple_named_term sig_module_op loc s [mk_module_type mt]
              | (<:sig_item< module type $s$ = $mt$ >>) ->
                   mk_simple_named_term sig_module_type_op loc s [mk_module_type mt]
-             | (<:sig_item< open $sl$ >>) ->
-                  mk_simple_term sig_open_op loc [mk_olist_term (List.map mk_simple_string sl)]
+             | MLast.SgOpn (_, li, _) ->
+                  let sl = strings_of_longid li in
+                     mk_simple_term sig_open_op loc [mk_olist_term (List.map mk_simple_string sl)]
              | (<:sig_item< type $list:tdl$ >>) ->
                   mk_simple_term sig_type_op loc [mk_olist_term (List.map mk_tdl tdl)]
              | (<:sig_item< value $s$ : $t$ >>) ->
@@ -1980,7 +2108,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          let dest_open_str t =
             let _loc = dest_loc "dest_open_str" t in
             let sl = dest_olist (one_subterm "dest_open_str" t) in
-               <:str_item< open $List.map dest_string sl$ >>
+               MLast.StOpn (_loc, Ploc.VaVal false, me_of_strings _loc (List.map dest_string sl), Ploc.VaVal [])
          in add_str "str_open" dest_open_str
       and str_inc_op =
          let dest_inc_str t =
@@ -2076,8 +2204,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                   mk_simple_named_term str_module_op loc s [mk_module_expr vars me]
              | (<:str_item< module type $s$ = $mt$ >>) ->
                   mk_simple_named_term str_module_type_op loc s [mk_module_type mt]
-             | (<:str_item< open $sl$ >>) ->
-                  mk_simple_term str_open_op loc [mk_olist_term (List.map mk_simple_string sl)]
+             | MLast.StOpn (_, _, me, _) ->
+                  (* open! is written as open: camlp5 7 had no override flag *)
+                  let sl = strings_of_me me in
+                     mk_simple_term str_open_op loc [mk_olist_term (List.map mk_simple_string sl)]
              | (<:str_item< type $list:tdl$ >>) ->
                   mk_simple_term str_type_op loc [mk_olist_term (List.map mk_tdl tdl)]
              | (<:str_item< value $opt:b$ $list:pel$ >>) -> mk_str_fix loc b pel
@@ -2152,19 +2282,30 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       and mt_uid_op =
          let dest_uid_mt t =
             let _loc = dest_loc "dest_uid_mt" t in
-               <:module_type< $uid:dest_var t$ >>
+               MLast.MtLong (_loc, MLast.LiUid (_loc, Ploc.VaVal (dest_var t)))
          in add_mt "mt_uid" dest_uid_mt
       and mt_proj_op =
          let dest_proj_mt t =
             let _loc = dest_loc "dest_proj_mt" t in
             let mt1, mt2 = two_subterms t in
-               <:module_type< $dest_mt mt1$ . $dest_mt mt2$ >>
+               (* camlp5 8: M.S is MtLong, M.s is MtLongLid *)
+               match dest_mt mt1, dest_mt mt2 with
+                  MLast.MtLong (_, li1), MLast.MtLong (_, li2) ->
+                     MLast.MtLong (_loc, longid_append _loc li1 li2)
+                | MLast.MtLong (_, li1), MLast.MtLid (_, s) ->
+                     MLast.MtLongLid (_loc, li1, s)
+                | _ ->
+                     raise (FormatError ("Filter_ocaml.dest_proj_mt: not a module type path", t))
          in add_mt "mt_proj" dest_proj_mt
       and mt_apply_op =
          let dest_apply_mt t =
             let _loc = dest_loc "dest_apply_mt" t in
             let mt1, mt2 = two_subterms t in
-               <:module_type< $dest_mt mt1$ $dest_mt mt2$ >>
+               match dest_mt mt1, dest_mt mt2 with
+                  MLast.MtLong (_, li1), MLast.MtLong (_, li2) ->
+                     MLast.MtLong (_loc, MLast.LiApp (_loc, li1, li2))
+                | _ ->
+                     raise (FormatError ("Filter_ocaml.dest_apply_mt: not a module type path", t))
          in add_mt "mt_apply" dest_apply_mt
       and mt_functor_op =
          let dest_functor_mt t =
@@ -2202,13 +2343,24 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
             let s, mto = two_subterms t in
                MtXtr (loc, dest_string s, dest_opt (fun mt -> Ploc.VaVal (dest_mt mt)) mto)
          in add_mt "mt_xtr" dest_xtr_mt
+     in
+     (* Module type paths, as the camlp5 7 MtUid / MtAcc / MtApp chain encoded them. *)
+     let rec mk_longid_mt = function
+        MLast.LiUid (l, Ploc.VaVal s) ->
+           mk_var mt_uid_op [] l s
+      | MLast.LiAcc (l, li, Ploc.VaVal s) ->
+           mk_simple_term mt_proj_op l [mk_longid_mt li; mk_var mt_uid_op [] (loc_of_last l (String.length s)) s]
+      | MLast.LiApp (l, li1, li2) ->
+           mk_simple_term mt_apply_op l [mk_longid_mt li1; mk_longid_mt li2]
+      | li ->
+           Stdpp.raise_with_loc (MLast.loc_of_longid li) (Failure "Filter_ocaml.mk_module_type: unsupported module path")
      in fun mt ->
          let loc = loc_of_module_type mt in
             match mt with
-               (<:module_type< $mt1$ . $mt2$ >>) ->
-                  mk_simple_term mt_proj_op loc [mk_module_type mt1; mk_module_type mt2]
-             | (<:module_type< $mt1$ $mt2$ >>) ->
-                  mk_simple_term mt_apply_op loc [mk_module_type mt1; mk_module_type mt2]
+               MLast.MtLong (_, li) ->
+                  mk_longid_mt li
+             | MLast.MtLongLid (_, li, Ploc.VaVal s) ->
+                  mk_simple_term mt_proj_op loc [mk_longid_mt li; mk_var mt_lid_op [] (loc_of_last loc (String.length s)) s]
              | (<:module_type< functor ( $s$ : $mt1$ ) -> $mt2$ >>) ->
                   let op_loc = mk_op_loc mt_functor_op loc in
                      mk_dep0_dep1_any_term op_loc (Lm_symbol.add s) (mk_module_type mt1) (mk_module_type mt2)
@@ -2218,8 +2370,6 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                   mk_var mt_quot_op [] loc i
              | (<:module_type< sig $list:sil$ end >>) ->
                   mk_simple_term mt_sig_op loc [mk_olist_term (List.map mk_sig_item sil)]
-             | (<:module_type< $uid:i$ >>) ->
-                  mk_var mt_uid_op [] loc i
              | (<:module_type< $mt$ with $list:wcl$ >>) ->
                   mk_simple_term mt_type_with_op loc
                      [mk_module_type mt; mk_olist_term (List.map mk_wc wcl)]

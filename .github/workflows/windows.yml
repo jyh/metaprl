@@ -28,6 +28,11 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+      # mk/defaults falls back to the registry's ProgramFilesDir ("C:\Program
+      # Files") for INSTALL_DIR, and the space splits THEORYPATH in mk/make_config
+      # (measured, round 2). Set it to a path without a space.
+      INSTALL_DIR: D:/mpinstall
     steps:
       - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
@@ -46,17 +51,22 @@ jobs:
       # (MinGW: its vendored libmojave calls the removed failwith/invalid_argument;
       # MSVC: cl lacks C11 atomics), and camlp5's conf-perl-ipc-system-simple and
       # conf-perl-string-shellquote failed. The steps below measure each separately.
-      - name: which perl opam uses, and the two perl modules camlp5 needs (from CPAN)
+      # Round 2: `perl` on PATH is Strawberry Perl, while opam's builds run
+      # Cygwin's /usr/bin/perl, so the modules go into Cygwin's perl.
+      - name: the two perl modules camlp5 needs, into Cygwin's perl (from CPAN)
         continue-on-error: true
         run: |
-          opam exec -- sh -c 'command -v perl; perl -v | head -2' 2>&1 | tee "$RUNNER_TEMP/perl.log"
-          opam exec -- sh -c 'PERL_MM_USE_DEFAULT=1 perl -MCPAN -e "CPAN::Shell->notest(install => q(IPC::System::Simple), q(String::ShellQuote))"' 2>&1 | tail -40 | tee -a "$RUNNER_TEMP/perl.log"
-          opam exec -- perl -MIPC::System::Simple -MString::ShellQuote -e 'print "perl modules OK\n"' 2>&1 | tee -a "$RUNNER_TEMP/perl.log"
+          /usr/bin/perl -v | head -2 | tee "$RUNNER_TEMP/perl.log"
+          PERL_MM_USE_DEFAULT=1 /usr/bin/perl -MCPAN -e 'CPAN::Shell->notest(install => q(IPC::System::Simple), q(String::ShellQuote))' 2>&1 | tail -40 | tee -a "$RUNNER_TEMP/perl.log"
+          /usr/bin/perl -MIPC::System::Simple -MString::ShellQuote -e 'print "perl modules OK\n"' 2>&1 | tee -a "$RUNNER_TEMP/perl.log"
       - name: install omake
         continue-on-error: true
         run: |
           set -o pipefail
-          opam install -y omake.0.10.7 2>&1 | tee "$RUNNER_TEMP/opam-omake.log"
+          if ! opam install -y omake.0.10.7 2>&1 | tee "$RUNNER_TEMP/opam-omake.log"; then
+            echo "omake.0.10.7 failed; trying upstream ocaml-omake master"
+            opam pin add -y omake git+https://github.com/ocaml-omake/omake.git#master 2>&1 | tee "$RUNNER_TEMP/opam-omake-master.log"
+          fi
       - name: install ocamlfind and camlp5
         continue-on-error: true
         run: |
@@ -87,5 +97,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: windows-${{ matrix.compiler }}-logs
+          name: windows-${{ matrix.ocaml }}-${{ matrix.compiler }}-logs
           path: ${{ runner.temp }}/*.log

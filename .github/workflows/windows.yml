@@ -115,8 +115,12 @@ jobs:
           ./spew.exe 16 2> spew16.txt; echo "spew rc=$? wrote $(wc -c < spew16.txt) bytes"
       - name: run each target (90 s bound each)
         run: |
-          cd "$RUNNER_TEMP/pipe"
-          for t in plain2k alias2k plain8k alias8k file0 file8k; do
+          # Each target in its own copy of the project: round 10's first run showed
+          # a timed-out target leaves a process holding omake's project lock, and
+          # the next target only waited for the lock.
+          for t in file0 file8k plain2k alias2k plain8k alias8k; do
+            cp -r "$RUNNER_TEMP/pipe" "$RUNNER_TEMP/pipe-$t"
+            cd "$RUNNER_TEMP/pipe-$t"
             start=$(date +%s)
             timeout 90 opam exec --switch="$GITHUB_WORKSPACE" -- omake -j1 --no--progress $t > "$RUNNER_TEMP/pipe-$t.log" 2>&1 && rc=0 || rc=$?
             echo "RESULT $t rc=$rc after $(( $(date +%s) - start )) s, output $(wc -c < "$RUNNER_TEMP/pipe-$t.log") bytes"

@@ -19,7 +19,8 @@ name: Windows
 #   MetaPRL on branch mojave/windows-hang). Since #41 the default
 #   configuration builds on both OCaml versions (run 40783303200), and the
 #   shell tests below pass on both (run 40796689070). With the census input
-#   the proof census matches the Linux expected file on both (run 40799680637).
+#   the proof census matches the Linux expected file on both (run 40799680637),
+#   in bytecode and, with the native input, in native code (run 40807321856).
 # - MSVC: on 5.4.1 omake does not build (MSVC rejects the OCaml headers'
 #   C11 atomics) on 0.10.7 or master; on 4.14.4 omake builds but camlp5
 #   does not install (conf-pkg-config's shim finds no cygpath.exe).

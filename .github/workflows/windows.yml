@@ -24,6 +24,11 @@ name: Windows
 #   does not install (conf-pkg-config's shim finds no cygpath.exe).
 on:
   workflow_dispatch:
+    inputs:
+      census:
+        description: build every theory (THEORIES = all) and run the proof census
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -33,7 +38,7 @@ jobs:
     name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }}; allowed to fail)
     runs-on: windows-latest
     continue-on-error: true
-    timeout-minutes: 90
+    timeout-minutes: ${{ inputs.census && 240 || 90 }}
     strategy:
       fail-fast: false
       matrix:
@@ -102,6 +107,9 @@ jobs:
           printf 'CAMLP5 = camlp5\nSSL_ENABLED = false\n' > mk/config.local
           # The first run writes mk/config and stops (mk/load_config).
           opam exec -- omake --no--progress 2>&1 | tee "$RUNNER_TEMP/configure.log" || true
+          if [ "${{ inputs.census }}" = true ]; then
+            sed -i 's/^THEORIES = .*/THEORIES = all/' mk/config
+          fi
           grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED|READLINE_ENABLED|NCURSES_ENABLED)' mk/config
       - name: build
         working-directory: metaprl
@@ -124,6 +132,17 @@ jobs:
         if: always()
         working-directory: metaprl
         run: timeout 600 opam exec -- sh editor/ml/tests/old_labels.sh
+      # With the census input: every stored proof, compared with the file the
+      # Linux proofs job checks. A difference is a finding to name.
+      - name: replay every stored proof (editor/ml/tests/proof_census.sh)
+        if: ${{ always() && inputs.census }}
+        working-directory: metaprl
+        run: |
+          start=$(date +%s)
+          timeout 7200 opam exec -- sh editor/ml/tests/proof_census.sh "$RUNNER_TEMP/census-out.log" > "$RUNNER_TEMP/census.log" 2>&1 && rc=0 || rc=$?
+          echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"
+          tail -70 "$RUNNER_TEMP/census.log"
+          exit $rc
       - name: summarise the build log
         if: always()
         run: |

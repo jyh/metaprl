@@ -54,6 +54,17 @@
   first failure is a context-hoisting rewrite whose subgoal drops the
   `<|S|>` contexts of `A2` and `T`, which `Refiner_debug` cannot see (it
   compares term shapes only).
+- Fixed: term_std's `map_down`, `map_up`, `iter_down` and `iter_up`
+  (`refiner/term_std/term_op_std.ml`, #57) applied the function to a
+  context hypothesis, which term_std encodes as a context node, and
+  visited the contexts lists of variables; term_ds does neither
+  (`test/unit/test_term_op_std_ds.ml`: 6 of 6 lines differed, now 0).
+  `Refine.mk_rewrite_hack` adds the context `H` to every second-order
+  variable and context with `map_down`, so under `TERMS = std` a rule's
+  rewrite goal was a different term from the one its stored proof was
+  made for: the `TERMS = std` proof census loses 8 proofs instead of 90
+  (6 in `itt_vec_sequent_term`, 1 in `itt_hoas_sequent_term`,
+  `cic_prop_connectives and_elimL`).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

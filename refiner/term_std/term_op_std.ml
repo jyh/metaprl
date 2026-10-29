@@ -1188,44 +1188,88 @@ struct
       let concl_opname = mk_opname "concl" xperv in
       fun t -> not (is_dep0_dep1_term hyp_opname t || is_dep0_term concl_opname t)
 
-   let rec iter_down f t =
-      if normal_term t then f t;
-      List.iter (fun bterm -> iter_down f bterm.bterm) t.term_terms
+   (*
+    * In the encoding of a sequent, sequent{arg; body}, the body is a chain
+    * of hyp{A; x. rest}, context[v]{args; v. rest; conts} and concl{C}.
+    * A context node in that chain is a context HYPOTHESIS, not a context
+    * term: the function is not applied to it (it is only applied to its
+    * arguments), as in Term_op_ds, where hypotheses are not terms. The
+    * last subterm of a variable or context node (its contexts list) is not
+    * a term either.
+    *)
+   let is_sequent t =
+      Opname.eq t.term_op.op_name sequent_opname && List.length t.term_terms = 2
 
-   let rec iter_up f t =
-      List.iter (fun bterm -> iter_up f bterm.bterm) t.term_terms;
-      if normal_term t then f t
+   let is_context t =
+      Opname.eq t.term_op.op_name context_opname
+
+   (* hyps: t is a node of a sequent's hypothesis chain *)
+   let applies hyps t =
+      normal_term t && not (hyps && is_context t)
+
+   (* For each subterm: whether it is a node of a hypothesis chain. *)
+   let subterm_hyps hyps t =
+      let n = List.length t.term_terms in
+         if is_sequent t then
+            fun i -> i = 1
+         else if hyps && is_context t then
+            fun i -> i = n - 2
+         else if hyps && not (normal_term t) && n = 2 then
+            (* hyp{A; x. rest} *)
+            fun i -> i = 1
+         else
+            fun _ -> false
+
+   (* Whether the last subterm is a contexts list. *)
+   let has_conts t =
+      (Opname.eq t.term_op.op_name var_opname || is_context t) && t.term_terms <> []
+
+   let rec iter_down_aux hyps f t =
+      if applies hyps t then f t;
+      let sub = subterm_hyps hyps t in
+      let n = List.length t.term_terms in
+         List.iteri (fun i bterm ->
+               if not (has_conts t && i = n - 1) then iter_down_aux (sub i) f bterm.bterm) t.term_terms
+
+   let iter_down f t = iter_down_aux false f t
+
+   let rec iter_up_aux hyps f t =
+      let sub = subterm_hyps hyps t in
+      let n = List.length t.term_terms in
+         List.iteri (fun i bterm ->
+               if not (has_conts t && i = n - 1) then iter_up_aux (sub i) f bterm.bterm) t.term_terms;
+         if applies hyps t then f t
+
+   let iter_up f t = iter_up_aux false f t
 
    (*
     * Sweep a function down through the term.
     *)
-   let rec map_down f t =
-      let { term_op = op; term_terms = bterms } = if normal_term t then f t else t in
-      let apply { bvars = vars; bterm = t } =
-         { bvars = vars; bterm = map_down f t }
-      in
+   let rec map_down_aux hyps f t =
+      let t = if applies hyps t then f t else t in
+      let sub = subterm_hyps hyps t in
+      let n = List.length t.term_terms in
       let bterms =
-         if (Opname.eq op.op_name var_opname || Opname.eq op.op_name context_opname) && bterms != [] then
-            let bterms, last = Lm_list_util.split_last bterms in
-               (List.map apply bterms) @ [last]
-         else
-            List.map apply bterms
+         List.mapi (fun i ({ bvars = vars; bterm = t' } as bterm) ->
+               if has_conts t && i = n - 1 then bterm
+               else { bvars = vars; bterm = map_down_aux (sub i) f t' }) t.term_terms
       in
-         { term_op = op; term_terms = bterms }
+         { term_op = t.term_op; term_terms = bterms }
 
-   let rec map_up f { term_op = op; term_terms = bterms } =
-      let apply { bvars = vars; bterm = t } =
-         { bvars = vars; bterm = map_up f t }
-      in
+   let map_down f t = map_down_aux false f t
+
+   let rec map_up_aux hyps f t =
+      let sub = subterm_hyps hyps t in
+      let n = List.length t.term_terms in
       let bterms =
-         if (Opname.eq op.op_name var_opname || Opname.eq op.op_name context_opname) && bterms != [] then
-            let bterms, last = Lm_list_util.split_last bterms in
-               (List.map apply bterms) @ [last]
-         else
-            List.map apply bterms
+         List.mapi (fun i ({ bvars = vars; bterm = t' } as bterm) ->
+               if has_conts t && i = n - 1 then bterm
+               else { bvars = vars; bterm = map_up_aux (sub i) f t' }) t.term_terms
       in
-      let t = { term_op = op; term_terms = bterms } in
-         if normal_term t then f t else t
+      let t = { term_op = t.term_op; term_terms = bterms } in
+         if applies hyps t then f t else t
+
+   let map_up f t = map_up_aux false f t
 end
 
 (*

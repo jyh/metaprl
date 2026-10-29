@@ -1,0 +1,13 @@
+sequent  map_down: sequent{<J<||>()>; x: A<|H,J|>(); <K<|J|>(x)> >- C<|H,J,K|>(x)}
+  ds: same
+sequent  map_up:   sequent{<J<||>()>; x: A<|H,J|>(); <K<|J|>(x)> >- C<|H,J,K|>(x)}
+  ds: same
+sequent  iter_down visits 6, iter_up visits 6
+  ds: same
+rewrite{sequent; context}  map_down: rewrite{sequent{<J<||>()>; x: A<|H,J|>(); <K<|J|>(x)> >- C<|H,J,K|>(x)}; <L<|H|>(D<|H|>())> B<|H,L|>()}
+  ds: same
+rewrite{sequent; context}  map_up:   rewrite{sequent{<J<||>()>; x: A<|H,J|>(); <K<|J|>(x)> >- C<|H,J,K|>(x)}; <L<|H|>(D<|H|>())> B<|H,L|>()}
+  ds: same
+rewrite{sequent; context}  iter_down visits 10, iter_up visits 10
+  ds: same
+0 of 6 lines differ

@@ -65,6 +65,20 @@
   made for: the `TERMS = std` proof census loses 8 proofs instead of 90
   (6 in `itt_vec_sequent_term`, 1 in `itt_hoas_sequent_term`,
   `cic_prop_connectives and_elimL`).
+- Fixed: term_std's `find_subterm` (`refiner/term_gen/term_addr_gen.ml`,
+  #58) returned addresses `term_subterm` refuses: paths into the contexts
+  lists of second-order variables and contexts, and, inside a sequent, paths
+  through the term that encodes its hypotheses. The reduce resource
+  (`support/tactics/top_conversionals.ml`) takes these addresses on a rule's
+  redex and applies them to its instances, where a context such as `<J>`
+  stands for any number of hypotheses, so under `TERMS = std` a conditional
+  rule's reduction raised and `reduceC` fell back to the identity. It now
+  addresses a sequent by clause (`ArgAddr`, `ClauseAddr i`, `ClauseAddr 0`)
+  and names only arguments, as term_ds does
+  (`test/unit/test_find_subterm_std_ds.ml`: 5 of 9 addresses refused and the
+  redex's address refused on its instance; now 0, and both agree with
+  term_ds). The `TERMS = std` proof census now replays all 264 modules and
+  5,191 rule statuses as stored, as `TERMS = ds` does.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

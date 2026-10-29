@@ -76,19 +76,6 @@ struct
     | _ ->
          REF_RAISE (RefineError ("Term_addr_gen.split_clause_address", StringError "address is not a sequent address"))
 
-   let find_subterm t arg =
-      let rec search vars addrs addr t =
-         let addrs = if arg t vars then (List.rev addr) :: addrs else addrs in
-            search_bterms vars addrs addr 1 (dest_term t).term_terms
-      and search_bterms vars addrs addr index = function
-         [] -> addrs
-       | bterm :: bterms ->
-            let bterm = dest_bterm bterm in
-            let addrs = search (SymbolSet.add_list vars bterm.bvars) addrs (Subterm index :: addr) bterm.bterm in
-               search_bterms vars addrs addr (succ index) bterms
-      in
-         List.rev (search SymbolSet.empty [] [] t)
-
    (*
     * The number of subterms an address can name. A second-order variable
     * K<|conts|>[args] is represented here with its contexts as one more
@@ -99,6 +86,57 @@ struct
     *)
    let addr_length t n =
       if is_so_var_term t || is_context_term t then n - 1 else n
+
+   (*
+    * As in Term_addr_ds, a sequent's subterms are found by clause address
+    * (ArgAddr, ClauseAddr i for hypothesis i, ClauseAddr 0 for the
+    * conclusion), never by a path through the term that encodes its
+    * hypotheses: the reduce resource takes these addresses on a rule's
+    * redex and applies them to its instances, whose contexts may stand
+    * for any number of hypotheses.
+    *)
+   let find_subterm_name = "Term_addr_gen.find_subterm"
+   let find_subterm t arg =
+      let rec search vars addrs addr t =
+         let addrs = if arg t vars then (List.rev addr) :: addrs else addrs in
+            if is_sequent_term t then
+               let body, args = dest_sequent_outer_term t in
+               let addrs = search vars addrs (ArgAddr :: addr) args in
+                  search_hyps vars addrs addr t 1 body
+            else
+               let bterms = (dest_term t).term_terms in
+                  (* Only the subterms an address can name (see addr_length):
+                   * never the contexts list of a second-order variable or a
+                   * context, which term_subterm refuses. *)
+                  search_bterms vars addrs addr 1 (Lm_list_util.firstn (addr_length t (List.length bterms)) bterms)
+      and search_bterms vars addrs addr index = function
+         [] -> addrs
+       | bterm :: bterms ->
+            let bterm = dest_bterm bterm in
+            let addrs = search (SymbolSet.add_list vars bterm.bvars) addrs (Subterm index :: addr) bterm.bterm in
+               search_bterms vars addrs addr (succ index) bterms
+      and search_terms vars addrs addr index = function
+         [] -> addrs
+       | t :: ts ->
+            let addrs = search vars addrs (Subterm index :: addr) t in
+               search_terms vars addrs addr (succ index) ts
+      and search_hyps vars addrs addr seq i term =
+         let { term_op = op; term_terms = bterms } = dest_term term in
+         let opname = (dest_op op).op_name in
+            if Opname.eq opname hyp_opname then
+               let a, x, rest = match_hyp_all find_subterm_name seq bterms in
+               let addrs = search vars addrs (ClauseAddr i :: addr) a in
+                  search_hyps (SymbolSet.add vars x) addrs addr seq (succ i) rest
+            else if Opname.eq opname context_opname then
+               let v, rest, _, ts = dest_context term in
+               let addrs = search_terms vars addrs (ClauseAddr i :: addr) 1 ts in
+                  search_hyps (SymbolSet.add vars v) addrs addr seq (succ i) rest
+            else if Opname.eq opname concl_opname then
+               search vars addrs (ClauseAddr 0 :: addr) (concl seq)
+            else
+               REF_RAISE(RefineError (find_subterm_name, TermMatchError (seq, "malformed sequent")))
+      in
+         List.rev (search SymbolSet.empty [] [] t)
 
    (*
     * A version of the nth_hyp capable of returning a context hypothesis,

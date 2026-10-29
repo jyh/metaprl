@@ -1,13 +1,8 @@
-std: find_subterm returned 9 addresses, term_subterm refused 5
+std: find_subterm returned 4 addresses, term_subterm refused 0
   second-order variable A
-  REFUSED by term_subterm
   variable x
   variable x
   second-order variable l
-  REFUSED by term_subterm
-  REFUSED by term_subterm
-  REFUSED by term_subterm
-  REFUSED by term_subterm
 ds: find_subterm returned 4 addresses, term_subterm refused 0
   second-order variable A
   variable x
@@ -15,7 +10,7 @@ ds: find_subterm returned 4 addresses, term_subterm refused 0
   second-order variable l
 the accepted subterms agree
 std: on the redex, find_subterm returned 1 addresses
-  second-order variable l on the redex, REFUSED on the instance
+  second-order variable l on the redex, second-order variable l on the instance
 ds: on the redex, find_subterm returned 1 addresses
   second-order variable l on the redex, second-order variable l on the instance
-on the redex and its instance they DIFFER
+on the redex and its instance they agree

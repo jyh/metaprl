@@ -138,6 +138,9 @@ jobs:
         run: |
           set -o pipefail
           opam exec -- omake -k -j4 --no--progress 2>&1 | tee "$RUNNER_TEMP/build.log"
+      - name: unit tests of the OCaml libraries (test/unit/run.sh)
+        working-directory: metaprl
+        run: timeout 600 opam exec -- sh test/unit/run.sh
       # The shell tests Linux CI runs. The Windows build is bytecode and
       # installs editor/ml/mp.bat, not the editor/ml/mp the tests call. The Unix
       # launcher cannot stand in for it (it sources mpconfig, written CRLF, and

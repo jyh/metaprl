@@ -23,7 +23,8 @@ for src in "$here"/test_*.ml; do
    if ! (cd "$tmp" && "./$name") > "$tmp/$name.out" 2>&1; then
       echo "FAIL $name: exited non-zero"; cat "$tmp/$name.out"; status=1; continue
    fi
-   if diff -u "$here/$name.expected" "$tmp/$name.out"; then
+   # OCaml's stdout is in text mode on Windows: ignore the CRs it adds.
+   if diff -u --strip-trailing-cr "$here/$name.expected" "$tmp/$name.out"; then
       echo "OK   $name"
    else
       echo "FAIL $name: output differs from $name.expected"; status=1

@@ -17,7 +17,8 @@ name: Windows
 #   drain a child's output while the child runs, so a step run through the
 #   Shell.prlcomp alias hung once it wrote about 4 KB (reproduced without
 #   MetaPRL on branch mojave/windows-hang). Since #41 the default
-#   configuration builds on both OCaml versions (run 40783303200).
+#   configuration builds on both OCaml versions (run 40783303200), and the
+#   shell tests below pass on both (run 40796689070).
 # - MSVC: on 5.4.1 omake does not build (MSVC rejects the OCaml headers'
 #   C11 atomics) on 0.10.7 or master; on 4.14.4 omake builds but camlp5
 #   does not install (conf-pkg-config's shim finds no cygpath.exe).
@@ -107,6 +108,22 @@ jobs:
         run: |
           set -o pipefail
           opam exec -- omake -k -j4 --no--progress 2>&1 | tee "$RUNNER_TEMP/build.log"
+      # The shell tests Linux CI runs. The Windows build is bytecode and
+      # installs editor/ml/mp.bat, not the editor/ml/mp the tests call. The Unix
+      # launcher cannot stand in for it (it sources mpconfig, written CRLF, and
+      # on Win32 theories.dir holds bare -I flags for mptop.bat's `set /p`), so
+      # the tests drive the Windows launcher through a two-line wrapper. Cygwin
+      # passes `cmd /c` through unchanged (`//c` is the MSYS spelling).
+      - name: a test launcher at editor/ml/mp that runs mp.bat
+        working-directory: metaprl
+        run: printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd /c mp.bat "$@"\n' > editor/ml/mp
+      - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
+        working-directory: metaprl
+        run: timeout 300 opam exec -- sh editor/ml/tests/toploop_minus.sh
+      - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)
+        if: always()
+        working-directory: metaprl
+        run: timeout 600 opam exec -- sh editor/ml/tests/old_labels.sh
       - name: summarise the build log
         if: always()
         run: |

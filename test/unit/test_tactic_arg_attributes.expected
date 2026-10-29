@@ -2,7 +2,7 @@ no attributes                            equal
 term a, term a                           equal
 term a, term b                           different
 term list [a], term list [a]             equal
-term list [a], term list [b]             equal
-term list [a], term list [a; b]          equal
+term list [a], term list [b]             different
+term list [a], term list [a; b]          different
 int 1, int 2                             different
 type a, type b                           different

@@ -921,7 +921,7 @@ struct
           } = arg2
       in
          assoc_equal terms1 terms2 alpha_equal
-         && assoc_equal term_lists1 term_lists1 alpha_equal_term_list
+         && assoc_equal term_lists1 term_lists2 alpha_equal_term_list
          && assoc_equal types1 types2 alpha_equal
          && assoc_equal ints1 ints2 eq
          && assoc_equal bools1 bools2 eq

@@ -23,7 +23,7 @@ done
 for src in "$here"/test_*.ml; do
    name=$(basename "$src" .ml)
    cp "$src" "$tmp/"
-   if ! (cd "$tmp" && ocamlfind ocamlc -package unix,threads.posix -linkpkg -rectypes \
+   if ! (cd "$tmp" && ocamlfind ocamlc -package unix,threads.posix -thread -linkpkg -rectypes \
            $includes "$root/libmojave/lm.cma" "$root/mllib/util.cma" "$root/refiner/refiner.cma" \
            "$name.ml" -o "$name") > "$tmp/$name.build" 2>&1; then
       echo "FAIL $name: does not build"; cat "$tmp/$name.build"; status=1; continue

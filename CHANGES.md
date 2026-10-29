@@ -95,6 +95,14 @@
   and the terms `TermOp.iter_down` visits. All agree. On the code before
   #56–#58 the same test finds the defects those fixed: `subterm_addresses`
   disagrees on 84 terms, `find_subterm` on 921, `iter_down` on 1,054.
+  The rewriter is compared the same way (`test/unit/test_rewrite_differential.ml`):
+  four rules (an operator, a beta rule with a second-order body, a sequent
+  with a context and a hypothesis, the `hyps_length` rule of #58) compiled
+  in both implementations and applied to 400 instances of each redex and to
+  400 random terms; all agree. The defects #56–#58 fixed do not reach the
+  bare rewriter, so it was checked with a mutant instead: a term_std
+  substitution that ignores a single variable makes the beta rule disagree
+  on 152 of its 400 instances.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

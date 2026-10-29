@@ -1,0 +1,8 @@
+Memo.Memo apply = g (f a): 0 of 3000 differ
+Memo.Memo calls of g: 50 for 50 classes of headers
+Memo.Memo repeated argument: 0 more calls of g
+Weak_memo.TheMemo apply = g (f a), with major collections: 0 of 3000 differ
+Weak_memo.TheWeakMemo lookup/retrieve, holding and dropping descriptors: 0 of 6000 differ
+Line_buffer.LineBuffer against the last 100 lines: 0 of 5000 differ
+Line_buffer.LineTable against the 100 most recent keys: 0 of 400 differ
+LineTable re-add: a=3 b=2 entries=2

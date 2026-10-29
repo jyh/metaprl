@@ -1,9 +1,18 @@
 # Changes
 
-## Unreleased (2026 refresh)
+## 1.0.0 (2026-10-29): the 2026 refresh
 
-MetaPRL had not been built since 2017. These changes make it build and run on
-a current OCaml again, without changing what the theories say.
+MetaPRL's first tagged release. It had not been built since 2017. These
+changes make it build and run on a current OCaml again, without changing what
+the theories say.
+
+**What tests this release.** The proof census (`editor/ml/tests/proof_census.sh`,
+below) is its test: on every push it builds every theory in `THEORIES_ALL`
+and replays every stored proof (264 modules, 5,191 rule statuses) against
+libmojave's master, on OCaml 4.14.4 and 5.4.1, and the Windows workflow does
+the same with MinGW. There are no unit tests of the refiner or of `mllib` yet;
+they are planned after libmojave's test coverage. The gaps are listed under
+"Known not to work" below.
 
 ### Building
 
@@ -86,6 +95,9 @@ a current OCaml again, without changing what the theories say.
 - Windows with MSVC does not build: OMake does not build on OCaml 5.4.1 (MSVC
   rejects the OCaml headers' C11 atomics), and on 4.14.4 camlp5 does not
   install.
+- Two theories written in 2017 were never committed to this repository and
+  are not part of this release; their toolchain (OCaml 4.05 with a camlp5
+  that opam never packaged) could not be rebuilt.
 - A build reads a module's proofs from the newest of its `.prla`, `.prlb` and
   `.cmoz` files, and the build itself writes `.prlb` and `.cmoz`. In a tree
   that was built before a change to the filter, those files shadow the `.prla`

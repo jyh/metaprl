@@ -38,6 +38,6 @@ ds sequent:  sequent{ <H[]>; x: A; <K['t1; it]> >- C }
 [Clause -3; Subterm 3]  std (raises)  ds (raises)
 0 of 36 addresses differ
 subterm_addresses
-  std [Clause(1)] [Clause(3)] [Clause(4); 2] [Clause(4); 1] [Arg]
+  std [Clause(1)] [Clause(3)] [Clause(4); 1] [Clause(4); 2] [Arg]
   ds  [Clause(1)] [Clause(3)] [Clause(4); 1] [Clause(4); 2] [Arg]
-  DIFFER
+  agree

@@ -412,7 +412,8 @@ struct
                   [ClauseAddr i] :: (aux (i + 1) (match_hyp subterm_addresses_name t bterms))
                else if Opname.eq opname context_opname then
                   let _, term, _, ts = dest_context term in
-                     let addrs = List.map (fun a -> ClauseAddr i :: a) (make_path_list (List.length ts)) in
+                     (* The arguments in increasing order, as Term_addr_ds lists them. *)
+                     let addrs = List.rev_map (fun a -> ClauseAddr i :: a) (make_path_list (List.length ts)) in
                         addrs @ (aux (i + 1) term)
                else if Opname.eq opname concl_opname then
                   match bterms with

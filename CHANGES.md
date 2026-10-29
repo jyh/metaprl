@@ -43,10 +43,17 @@
   now addresses a context hypothesis as `K<|conts|>[args]` and does not
   count the contexts list of a second-order variable or context as a
   subterm, as term_ds does and as `subterm_addresses` in the same file
-  already listed them; the pin above reads 0 of 36. The refiner (term_ds)
-  does not use this file. The 90 proofs a `TERMS = std` census loses are
-  unchanged by it: their first failure is elsewhere (a context-hoisting
-  rewrite whose subgoal drops the `<|S|>` contexts of `A2` and `T`).
+  already listed them; the pin above reads 0 of 36. Its `subterm_addresses`
+  also lists the arguments of a context hypothesis in increasing order, as
+  term_ds does (it listed them in decreasing order, and tactics take them
+  in order). The refiner (term_ds) does not use this file. With both
+  fixes a `TERMS = both` build no longer stops on `term_subterm`; the 66
+  remaining reports compare rewrite justifications with polymorphic
+  equality across the two representations and also fire in proofs that
+  pass. The 90 proofs a `TERMS = std` census loses are unchanged: their
+  first failure is a context-hoisting rewrite whose subgoal drops the
+  `<|S|>` contexts of `A2` and `T`, which `Refiner_debug` cannot see (it
+  compares term shapes only).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

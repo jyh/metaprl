@@ -109,6 +109,15 @@
   filter saves a proof file (each written with the table read from the
   previous version), are alpha-equal to what was written. A reader that
   reverses a term's subterms makes 396 of them differ.
+  `Match_seq.match_hyps`, which re-attaches a sub-proof when hypotheses were
+  added, is checked against a model on 20,000 pairs of sequents
+  (`test/unit/test_match_seq.ml`): it succeeds exactly when the model says
+  a match exists and every mapping it returns is a valid matching (a
+  mutant that forgets to record a hypothesis match makes 5,997 invalid).
+  The test records one asymmetry: a big context is never skipped while
+  small hypotheses remain, but once they are all matched the rest of the
+  big sequent is skipped, contexts too (big `<K>; x: B` matches small with
+  no hypotheses).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

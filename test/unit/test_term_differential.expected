@@ -1,0 +1,7 @@
+2000 terms: 2424 sequents, 2425 hypotheses, 1228 context hypotheses, 1114 second-order variables, 1760 contexts lists, 1186 binders
+the term                       2000 of 2000 terms agree
+subterm_addresses              2000 of 2000 terms agree
+find_subterm                   2000 of 2000 terms agree
+free_vars_set                  2000 of 2000 terms agree
+alpha_equal to a renamed copy  2000 of 2000 terms agree
+TermOp.iter_down visits        2000 of 2000 terms agree

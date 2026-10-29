@@ -87,6 +87,14 @@
   (`test/unit/test_tactic_arg_attributes.ml`: `[a]` against `[b]` and against
   `[a; b]` read equal, now different). No stored proof depended on it: the
   proof census is unchanged (264 modules, 5,191 rule statuses).
+- term_std and term_ds are compared on 2,000 pseudo-random terms
+  (`test/unit/test_term_differential.ml`, #60): sequents with hypotheses and
+  context hypotheses, second-order variables with contexts lists, binders;
+  for each, the term, `subterm_addresses` and `term_subterm`,
+  `find_subterm`, `free_vars_set`, `alpha_equal` against a renamed copy,
+  and the terms `TermOp.iter_down` visits. All agree. On the code before
+  #56–#58 the same test finds the defects those fixed: `subterm_addresses`
+  disagrees on 84 terms, `find_subterm` on 921, `iter_down` on 1,054.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

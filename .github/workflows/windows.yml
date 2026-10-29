@@ -19,7 +19,8 @@ name: Windows
 #   MetaPRL on branch mojave/windows-hang). Since #41 the default
 #   configuration builds on both OCaml versions (run 40783303200), and the
 #   shell tests below pass on both (run 40796689070). With the census input
-#   the proof census matches the Linux expected file on both (run 40799680637).
+#   the proof census matches the Linux expected file on both (run 40799680637),
+#   in bytecode and, with the native input, in native code (run 40807321856).
 # - MSVC: on 5.4.1 omake does not build (MSVC rejects the OCaml headers'
 #   C11 atomics) on 0.10.7 or master; on 4.14.4 omake builds but camlp5
 #   does not install (conf-pkg-config's shim finds no cygpath.exe).
@@ -28,6 +29,10 @@ on:
     inputs:
       census:
         description: build every theory (THEORIES = all) and run the proof census
+        type: boolean
+        default: false
+      native:
+        description: COMPILATION_MODE = native (a measurement; the default build is bytecode here)
         type: boolean
         default: false
 
@@ -111,6 +116,9 @@ jobs:
           if [ "${{ inputs.census }}" = true ]; then
             sed -i 's/^THEORIES = .*/THEORIES = all/' mk/config
           fi
+          if [ "${{ inputs.native }}" = true ]; then
+            sed -i 's/^COMPILATION_MODE = .*/COMPILATION_MODE = native/' mk/config
+          fi
           grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED|READLINE_ENABLED|NCURSES_ENABLED)' mk/config
       - name: build
         working-directory: metaprl
@@ -125,7 +133,10 @@ jobs:
       # passes `cmd /c` through unchanged (`//c` is the MSYS spelling).
       - name: a test launcher at editor/ml/mp that runs mp.bat
         working-directory: metaprl
-        run: printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd /c mp.bat "$@"\n' > editor/ml/mp
+        run: |
+          printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd /c mp.bat "$@"\n' > editor/ml/mp
+          ls -la editor/ml | grep -iE ' mp' || true
+          cat editor/ml/mp.bat 2>/dev/null | tail -3 || true
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
         working-directory: metaprl
         run: timeout 300 opam exec -- sh editor/ml/tests/toploop_minus.sh

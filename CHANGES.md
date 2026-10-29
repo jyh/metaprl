@@ -33,7 +33,8 @@ a current OCaml again, without changing what the theories say.
   `editor/ml/mp.bat`, and both pass on both OCaml versions (#43). With its
   `census` input it builds every theory and runs the proof census, which
   matches `proof_census.expected` on both versions: 264 modules, 5,191 rule
-  statuses (#44). On Windows OMake's `shell-code` does not drain a child's output
+  statuses (#44). The same holds for a native-code build (its `native` input:
+  `mp.bat` then runs `mp.opt`) (#46). On Windows OMake's `shell-code` does not drain a child's output
   while the child runs, so a command run through MetaPRL's `prlcomp` alias hung
   once it wrote about 4 KB, and the build stopped at the first theory files.
   There the preprocessor steps now run as plain rule commands, with the

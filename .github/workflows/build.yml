@@ -9,10 +9,16 @@ name: Build
 # Scope, stated: Ubuntu only; the default configuration (THEORIES =
 # itt/core, COMPILATION_MODE = mixed, so the shell is bytecode); SSL off.
 # A manual run can choose the refiner's sequent sets (SEQ_SET, mk/defaults:
-# Lm_array); every other run uses the default.
+# Lm_array). The weekly run (Monday 07:00 UTC, an hour after the Windows
+# census) replays every stored proof with SEQ_SET = Lm_splay and skips the
+# build job, so libmojave's Lm_splay_linear_set stays exercised end to end
+# (its defects fixed in libmojave #46 and #56 were found this way). Every
+# other run uses the default.
 on:
   push:
   pull_request:
+  schedule:
+    - cron: "0 7 * * 1"
   workflow_dispatch:
     inputs:
       seq_set:
@@ -22,7 +28,7 @@ on:
         default: Lm_array
 
 env:
-  SEQ_SET: ${{ inputs.seq_set || 'Lm_array' }}
+  SEQ_SET: ${{ inputs.seq_set || (github.event_name == 'schedule' && 'Lm_splay') || 'Lm_array' }}
 
 permissions:
   contents: read
@@ -30,6 +36,7 @@ permissions:
 jobs:
   build:
     name: build and test (OCaml ${{ matrix.ocaml }}, camlp5 8)
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

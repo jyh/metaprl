@@ -1,0 +1,3 @@
+Latin1_case on all 256 characters against ISO 8859-1: 0 differ
+Latin1_case strings: lowercase, uppercase, capitalize, uncapitalize: 0 of 2000 differ
+Precedence: get_prec against the closure of add_lt and add_eq: 0 of 1000 differ

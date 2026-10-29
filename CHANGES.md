@@ -10,6 +10,11 @@
   step after the build, on Linux and Windows. The first, `test_bitset.ml`, checks `mllib`'s
   `Bitset` against a bool array (100,000 reads, none differ). `refiner/`
   and `mllib/` had no unit tests; the proof census tests them end to end.
+- `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
+  checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
+  their interfaces state them. No defect. `List_neq_append.to_list`
+  returns the elements in reverse order of insertion (no order is
+  documented; the test records it).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

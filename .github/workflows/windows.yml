@@ -119,6 +119,10 @@ jobs:
           # running the shell. The Unix bytecode launcher (support/editor/mptop:
           # cd to its own directory, read mpconfig, exec ./mp.top) is put there.
           test -e editor/ml/mp || cp support/editor/mptop editor/ml/mp
+          # Second run: mp.top ran, but the build writes mpconfig (and
+          # theories.dir) with CRLF line ends, which sh cannot source. The .bat
+          # launcher reads neither through sh, so the CRs are removed here.
+          sed -i 's/\r$//' editor/ml/mpconfig editor/ml/theories.dir
           echo '(4000 + 2);;' > "$RUNNER_TEMP/smoke.in"
           timeout 120 sh editor/ml/mp -cli < "$RUNNER_TEMP/smoke.in" 2>&1 | tail -5 || true
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)

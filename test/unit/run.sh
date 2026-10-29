@@ -1,8 +1,9 @@
 #!/bin/sh
 # Unit tests for MetaPRL's OCaml libraries, run after the build (omake).
 # Each test/unit/test_*.ml is compiled in a temporary directory against the
-# built libmojave (libmojave/lm.cma), mllib (mllib/util.cma) and the refiner
-# (refiner/refiner.cma), run, and
+# built libmojave (libmojave/lm.cma), mllib (mllib/util.cma), the refiner
+# (refiner/refiner.cma) and the proof library (tactics/null/trefiner.cma,
+# tactics/proof/prooflib.cma, which need camlp5's runtime), run, and
 # its output compared with test/unit/test_*.expected, which is the output
 # as generated from the code when the test was written (never typed).
 # Exit 1 if any output differs or any test fails to build or run.
@@ -17,14 +18,15 @@ status=0
 includes=""
 for d in libmojave libmojave/stdlib libmojave/util libmojave/unix libmojave/system mllib \
          refiner/refbase refiner/refsig refiner/term_gen refiner/term_std refiner/term_ds \
-         refiner/rewrite refiner/refiner refiner/reflib; do
+         refiner/rewrite refiner/refiner refiner/reflib tactics/null tactics/proof; do
    includes="$includes -I $root/$d"
 done
 for src in "$here"/test_*.ml; do
    name=$(basename "$src" .ml)
    cp "$src" "$tmp/"
-   if ! (cd "$tmp" && ocamlfind ocamlc -package unix,threads.posix -thread -linkpkg -rectypes \
+   if ! (cd "$tmp" && ocamlfind ocamlc -package unix,threads.posix,camlp5 -thread -linkpkg -rectypes \
            $includes "$root/libmojave/lm.cma" "$root/mllib/util.cma" "$root/refiner/refiner.cma" \
+           "$root/tactics/null/trefiner.cma" "$root/tactics/proof/prooflib.cma" \
            "$name.ml" -o "$name") > "$tmp/$name.build" 2>&1; then
       echo "FAIL $name: does not build"; cat "$tmp/$name.build"; status=1; continue
    fi

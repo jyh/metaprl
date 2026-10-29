@@ -39,6 +39,14 @@
   (`TERMS = ds`); with `TERMS = std` the proof census loses 90 proofs, all
   in theories built on such contexts, and `TERMS = both` stops the build on
   this disagreement. `test/unit/run.sh` now also links the refiner.
+- Fixed: term_std's addressing (`refiner/term_gen/term_addr_gen.ml`, #56)
+  now addresses a context hypothesis as `K<|conts|>[args]` and does not
+  count the contexts list of a second-order variable or context as a
+  subterm, as term_ds does and as `subterm_addresses` in the same file
+  already listed them; the pin above reads 0 of 36. The refiner (term_ds)
+  does not use this file. The 90 proofs a `TERMS = std` census loses are
+  unchanged by it: their first failure is elsewhere (a context-hoisting
+  rewrite whose subgoal drops the `<|S|>` contexts of `A2` and `T`).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

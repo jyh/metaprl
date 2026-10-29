@@ -90,7 +90,20 @@ struct
          List.rev (search SymbolSet.empty [] [] t)
 
    (*
-    * A version of the nth_hyp capable of returning the context term.
+    * The number of subterms an address can name. A second-order variable
+    * K<|conts|>[args] is represented here with its contexts as one more
+    * subterm after the arguments, and a context <K<|conts|>[args]> body
+    * with the contexts after the body; an address names the arguments
+    * (and the body) only, as Term_addr_ds does and as subterm_addresses
+    * below lists them.
+    *)
+   let addr_length t n =
+      if is_so_var_term t || is_context_term t then n - 1 else n
+
+   (*
+    * A version of the nth_hyp capable of returning a context hypothesis,
+    * as the second-order variable K<|conts|>[args] (as in Term_addr_ds;
+    * the context term itself would also carry the rest of the sequent).
     *)
    let nth_hyp_name = "Term_addr_gen.nth_hyp"
    let nth_hyp t i =
@@ -102,7 +115,11 @@ struct
                let t, _, term = match_hyp_all nth_hyp_name t bterms in
                   if i = 0 then t else aux (i - 1) term
             else if Opname.eq opname context_opname then
-               if i = 0 then term else aux (i - 1) (match_context op nth_hyp_name t bterms)
+               if i = 0 then
+                  let v, _, conts, args = dest_context term in
+                     mk_so_var_term v conts args
+               else
+                  aux (i - 1) (match_context op nth_hyp_name t bterms)
             else if Opname.eq opname concl_opname then
                REF_RAISE(RefineError (nth_hyp_name, StringError "hyp is out of range"))
             else
@@ -115,10 +132,10 @@ struct
     | Subterm 0 :: _ ->
          raise (Invalid_argument "Term_addr_gen.subterm_exists: got Subterm 0")
     | Subterm i :: addr ->
-         let t = dest_term t in
-            begin match make_index_opt i (List.length t.term_terms) with
+         let t' = dest_term t in
+            begin match make_index_opt i (addr_length t (List.length t'.term_terms)) with
                None -> false
-             | Some i -> subterm_exists (dest_bterm (List.nth t.term_terms i)).bterm addr
+             | Some i -> subterm_exists (dest_bterm (List.nth t'.term_terms i)).bterm addr
             end
     | ArgAddr :: addr ->
          is_sequent_term t && subterm_exists (snd (dest_sequent_outer_term t)) addr
@@ -164,7 +181,7 @@ struct
          raise (Invalid_argument "Term_addr_gen.term_subterm: got Subterm 0")
     | (Subterm i :: addr) as a ->
          let term' = dest_term term in
-         let i = make_index ATERM i (List.length term'.term_terms) in
+         let i = make_index ATERM i (addr_length term (List.length term'.term_terms)) in
             term_subterm (dest_bterm (List.nth term'.term_terms i)).bterm addr
     | ArgAddr :: addr ->
          term_subterm (snd (dest_sequent_outer_term term)) addr
@@ -210,13 +227,15 @@ struct
          if i = 0 then
             match dest_term t with
                { term_op = op; _ } when Opname.eq (dest_op op).op_name context_opname ->
+                  (* As in Term_addr_ds: the hypothesis is K<|conts|>[args]. *)
                   let v, term, conts, subterms = dest_context t in
-                  let slot = mk_var_term v in
-                  let t = mk_context_term v slot conts subterms in
-                  let t, arg = replace_term FAIL f addr bvars t in
-                  let v1, term1, conts, subterms = dest_context t in
-                     if Lm_symbol.eq v1 v && is_var_term term1 && dest_var term1 = v then
-                        mk_context_term v term conts subterms, arg
+                  let t, arg = replace_term FAIL f addr bvars (mk_so_var_term v conts subterms) in
+                     if is_so_var_term t then
+                        let v1, conts, subterms = dest_so_var t in
+                           if Lm_symbol.eq v1 v then
+                              mk_context_term v term conts subterms, arg
+                           else
+                              DO_FAIL
                      else
                         DO_FAIL
              | { term_op = op; term_terms = bterm :: bterms } ->
@@ -254,7 +273,7 @@ struct
             [] -> f bvars term
           | Subterm i :: addr ->
                let { term_op = op; term_terms = bterms } = dest_term term in
-               let i = make_index FAIL i (List.length bterms) in
+               let i = make_index FAIL i (addr_length term (List.length bterms)) in
                let bterms, arg = replace_bterm FAIL f addr i bvars bterms in
                   mk_term op bterms, arg
           | ArgAddr :: addr ->

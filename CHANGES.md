@@ -79,6 +79,14 @@
   redex's address refused on its instance; now 0, and both agree with
   term_ds). The `TERMS = std` proof census now replays all 264 modules and
   5,191 rule statuses as stored, as `TERMS = ds` does.
+- Fixed: `Tactic_boot`'s `tactic_arg_alpha_equal_with_attributes`
+  (`tactics/proof/tactic_boot.ml`, #59) compared the first argument's
+  term-list attributes with themselves, so two tactic arguments that
+  differed only there compared equal, and the proof editor could re-attach
+  a stored sub-proof to a subgoal whose term-list annotations differ
+  (`test/unit/test_tactic_arg_attributes.ml`: `[a]` against `[b]` and against
+  `[a; b]` read equal, now different). No stored proof depended on it: the
+  proof census is unchanged (264 modules, 5,191 rule statuses).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

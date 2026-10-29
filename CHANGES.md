@@ -103,6 +103,12 @@
   bare rewriter, so it was checked with a mutant instead: a term_std
   substitution that ignores a single variable makes the beta rule disagree
   on 152 of its 400 instances.
+  Term I/O, through which stored proofs come back, is checked by round
+  trip (`test/unit/test_term_io.ml`): the same 2,000 terms written with
+  `Ascii_io.AsciiIO.write_term` and read back, one per file and as the
+  filter saves a proof file (each written with the table read from the
+  previous version), are alpha-equal to what was written. A reader that
+  reverses a term's subterms makes 396 of them differ.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

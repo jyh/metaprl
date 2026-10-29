@@ -1,0 +1,6 @@
+Sort.list against List.stable_sort: 0 of 2000 differ
+Sort.array against Array.stable_sort: 0 of 2000 differ
+Sort.merge of two sorted lists: 0 of 2000 differ
+List_neq_append: to_list (append a b) is rev (a @ b); append x x is x: 0 of 2000 differ
+Flist: first, last, singleton after create and append: 0 of 2000 differ
+Permutations: permute_list (get_permut l l') l' is l; id_perm: 0 of 2000 differ

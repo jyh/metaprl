@@ -1,0 +1,43 @@
+std sequent: sequent{ <H[]>; x: A; <K['t1; it]> >- C }
+ds sequent:  sequent{ <H[]>; x: A; <K['t1; it]> >- C }
+[Clause 1; Subterm -3]  std (raises)  ds (raises)
+[Clause 1; Subterm -2]  std (raises)  ds (raises)
+[Clause 1; Subterm -1]  std (raises)  ds (raises)
+[Clause 1; Subterm 1]  std (raises)  ds (raises)
+[Clause 1; Subterm 2]  std (raises)  ds (raises)
+[Clause 1; Subterm 3]  std (raises)  ds (raises)
+[Clause 2; Subterm -3]  std (raises)  ds (raises)
+[Clause 2; Subterm -2]  std (raises)  ds (raises)
+[Clause 2; Subterm -1]  std (raises)  ds (raises)
+[Clause 2; Subterm 1]  std (raises)  ds (raises)
+[Clause 2; Subterm 2]  std (raises)  ds (raises)
+[Clause 2; Subterm 3]  std (raises)  ds (raises)
+[Clause 3; Subterm -3]  std (raises)  ds (raises)
+[Clause 3; Subterm -2]  std 't1  ds 't1
+[Clause 3; Subterm -1]  std it  ds it
+[Clause 3; Subterm 1]  std 't1  ds 't1
+[Clause 3; Subterm 2]  std it  ds it
+[Clause 3; Subterm 3]  std (raises)  ds (raises)
+[Clause -1; Subterm -3]  std (raises)  ds (raises)
+[Clause -1; Subterm -2]  std 't1  ds 't1
+[Clause -1; Subterm -1]  std it  ds it
+[Clause -1; Subterm 1]  std 't1  ds 't1
+[Clause -1; Subterm 2]  std it  ds it
+[Clause -1; Subterm 3]  std (raises)  ds (raises)
+[Clause -2; Subterm -3]  std (raises)  ds (raises)
+[Clause -2; Subterm -2]  std (raises)  ds (raises)
+[Clause -2; Subterm -1]  std (raises)  ds (raises)
+[Clause -2; Subterm 1]  std (raises)  ds (raises)
+[Clause -2; Subterm 2]  std (raises)  ds (raises)
+[Clause -2; Subterm 3]  std (raises)  ds (raises)
+[Clause -3; Subterm -3]  std (raises)  ds (raises)
+[Clause -3; Subterm -2]  std (raises)  ds (raises)
+[Clause -3; Subterm -1]  std (raises)  ds (raises)
+[Clause -3; Subterm 1]  std (raises)  ds (raises)
+[Clause -3; Subterm 2]  std (raises)  ds (raises)
+[Clause -3; Subterm 3]  std (raises)  ds (raises)
+0 of 36 addresses differ
+subterm_addresses
+  std [Clause(1)] [Clause(3)] [Clause(4); 1] [Clause(4); 2] [Arg]
+  ds  [Clause(1)] [Clause(3)] [Clause(4); 1] [Clause(4); 2] [Arg]
+  agree

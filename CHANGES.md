@@ -10,6 +10,50 @@
   step after the build, on Linux and Windows. The first, `test_bitset.ml`, checks `mllib`'s
   `Bitset` against a bool array (100,000 reads, none differ). `refiner/`
   and `mllib/` had no unit tests; the proof census tests them end to end.
+- `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
+  checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
+  their interfaces state them. No defect. `List_neq_append.to_list`
+  returns the elements in reverse order of insertion (no order is
+  documented; the test records it).
+- `mllib`'s `Latin1_case` (all 256 characters against ISO 8859-1, and its
+  string functions) and `Precedence` (`get_prec` against the closure of
+  `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,
+  #53). No defect. `mllib/simplehashtbl.ml` is not built (it is not in
+  mllib's `FILES`) and nothing uses it.
+- `mllib`'s `Memo`, `Weak_memo` and `Line_buffer` are checked
+  (`test/unit/test_mllib_models3.ml`, #54): memo tables against the
+  function they memoize, the weak table across forced major collections
+  (which drive its slot reuse; a hash table that kept a reused slot's old
+  entry reads 1,515 of 6,000 wrong), and the bounded buffer and table
+  against lists. No defect. `LineTable` evicts by `Unix.gettimeofday`, and
+  entries added in the same clock tick are ordered by key, so on a coarse
+  clock (Windows) a newly added key that sorts first can be the one
+  evicted; the test adds keys in increasing order and records this.
+- metaprl's two term implementations disagree on addresses under a
+  context hypothesis (`test/unit/test_term_addr_std_ds.ml`, #55, a pin:
+  16 of 36 addresses differ). For `sequent { <H>; x: A; <K['t1; it]> >- C }`,
+  term_ds's `term_subterm` at `[ClauseAddr 3; Subterm j]` is the j-th
+  argument of `K`, while term_std's exposes the rest of the sequent
+  (`concl{C}`, a trailing `xnil`) as further subterms, so negative indexes
+  and indexes past the arguments differ. The refiner uses term_ds
+  (`TERMS = ds`); with `TERMS = std` the proof census loses 90 proofs, all
+  in theories built on such contexts, and `TERMS = both` stops the build on
+  this disagreement. `test/unit/run.sh` now also links the refiner.
+- Fixed: term_std's addressing (`refiner/term_gen/term_addr_gen.ml`, #56)
+  now addresses a context hypothesis as `K<|conts|>[args]` and does not
+  count the contexts list of a second-order variable or context as a
+  subterm, as term_ds does and as `subterm_addresses` in the same file
+  already listed them; the pin above reads 0 of 36. Its `subterm_addresses`
+  also lists the arguments of a context hypothesis in increasing order, as
+  term_ds does (it listed them in decreasing order, and tactics take them
+  in order). The refiner (term_ds) does not use this file. With both
+  fixes a `TERMS = both` build no longer stops on `term_subterm`; the 66
+  remaining reports compare rewrite justifications with polymorphic
+  equality across the two representations and also fire in proofs that
+  pass. The 90 proofs a `TERMS = std` census loses are unchanged: their
+  first failure is a context-hoisting rewrite whose subgoal drops the
+  `<|S|>` contexts of `A2` and `T`, which `Refiner_debug` cannot see (it
+  compares term shapes only).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

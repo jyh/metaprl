@@ -20,6 +20,15 @@
   `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,
   #53). No defect. `mllib/simplehashtbl.ml` is not built (it is not in
   mllib's `FILES`) and nothing uses it.
+- `mllib`'s `Memo`, `Weak_memo` and `Line_buffer` are checked
+  (`test/unit/test_mllib_models3.ml`, #54): memo tables against the
+  function they memoize, the weak table across forced major collections
+  (which drive its slot reuse; a hash table that kept a reused slot's old
+  entry reads 1,515 of 6,000 wrong), and the bounded buffer and table
+  against lists. No defect. `LineTable` evicts by `Unix.gettimeofday`, and
+  entries added in the same clock tick are ordered by key, so on a coarse
+  clock (Windows) a newly added key that sorts first can be the one
+  evicted; the test adds keys in increasing order and records this.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

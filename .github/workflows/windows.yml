@@ -30,6 +30,10 @@ on:
         description: build every theory (THEORIES = all) and run the proof census
         type: boolean
         default: false
+      native:
+        description: COMPILATION_MODE = native (a measurement; the default build is bytecode here)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -111,6 +115,9 @@ jobs:
           if [ "${{ inputs.census }}" = true ]; then
             sed -i 's/^THEORIES = .*/THEORIES = all/' mk/config
           fi
+          if [ "${{ inputs.native }}" = true ]; then
+            sed -i 's/^COMPILATION_MODE = .*/COMPILATION_MODE = native/' mk/config
+          fi
           grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED|READLINE_ENABLED|NCURSES_ENABLED)' mk/config
       - name: build
         working-directory: metaprl
@@ -125,7 +132,10 @@ jobs:
       # passes `cmd /c` through unchanged (`//c` is the MSYS spelling).
       - name: a test launcher at editor/ml/mp that runs mp.bat
         working-directory: metaprl
-        run: printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd /c mp.bat "$@"\n' > editor/ml/mp
+        run: |
+          printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd /c mp.bat "$@"\n' > editor/ml/mp
+          ls -la editor/ml | grep -iE ' mp' || true
+          cat editor/ml/mp.bat 2>/dev/null | tail -3 || true
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
         working-directory: metaprl
         run: timeout 300 opam exec -- sh editor/ml/tests/toploop_minus.sh

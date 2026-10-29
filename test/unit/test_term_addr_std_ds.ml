@@ -7,7 +7,8 @@
      sequent { <H>; x: A; <K['t1; it]> >- C },
    takes term_subterm at [ClauseAddr i; Subterm j] for every hypothesis i
    (from the left and from the right) and j in -3..3 (j <> 0), and prints
-   each implementation's answer and whether they agree. *)
+   each implementation's answer and whether they agree; then the two
+   implementations' subterm_addresses of the sequent, in order. *)
 open Lm_symbol
 open Term_sig
 open Term_addr_sig
@@ -50,6 +51,9 @@ module Show (R : Refiner_sig.RefinerSig) = struct
         sequent_hyps = R.Term.SeqHyp.of_list [ h; x; k ];
         sequent_concl = mk_simple_term (opname "C") [] }
 
+  let addresses =
+    String.concat " " (List.map R.TermAddr.string_of_address (R.TermAddr.subterm_addresses sequent))
+
   let at addr =
     try show 0 (R.TermAddr.term_subterm sequent (R.TermAddr.make_address addr))
     with _ -> "(raises)"
@@ -69,4 +73,8 @@ let () =
           Printf.printf "[Clause %d; Subterm %d]  std %s  ds %s%s\n" i j s d (if s = d then "" else "  DIFFER"))
         [ -3; -2; -1; 1; 2; 3 ])
     [ 1; 2; 3; -1; -2; -3 ];
-  Printf.printf "%d of %d addresses differ\n" !differ !total
+  Printf.printf "%d of %d addresses differ\n" !differ !total;
+  (* subterm_addresses lists the addresses of the immediate subterms; tactics
+     take them in this order. *)
+  let s = Std.addresses and d = Ds.addresses in
+  Printf.printf "subterm_addresses\n  std %s\n  ds  %s\n  %s\n" s d (if s = d then "agree" else "DIFFER")

@@ -69,6 +69,9 @@ jobs:
       - name: build
         working-directory: metaprl
         run: opam exec -- omake -k -j4 --no--progress
+      - name: unit tests of the OCaml libraries (test/unit/run.sh)
+        working-directory: metaprl
+        run: opam exec -- sh test/unit/run.sh
       - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/old_labels.sh

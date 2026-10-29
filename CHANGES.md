@@ -1,5 +1,16 @@
 # Changes
 
+## Unreleased
+
+### Tests
+
+- Unit tests for MetaPRL's OCaml libraries (`test/unit/`, #51): each
+  `test/unit/test_*.ml` is built against the built libmojave and `mllib`,
+  run, and compared with its `.expected` file by `test/unit/run.sh`, a CI
+  step after the build. The first, `test_bitset.ml`, checks `mllib`'s
+  `Bitset` against a bool array (100,000 reads, none differ). `refiner/`
+  and `mllib/` had no unit tests; the proof census tests them end to end.
+
 ## 1.0.0 (2026-10-29): the 2026 refresh
 
 MetaPRL's first tagged release. It had not been built since 2017. These

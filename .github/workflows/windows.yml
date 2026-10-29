@@ -1,9 +1,16 @@
 name: Windows
 
-# A MEASUREMENT, not a gate, run by hand (workflow_dispatch): builds MetaPRL
-# on Windows (setup-ocaml; MinGW and MSVC; OCaml 4.14.4 and 5.4.1) with
-# libmojave's master inside the tree. Each leg is continue-on-error and has
-# a timeout; the logs are uploaded as artifacts. Scope: the default
+# Builds MetaPRL on Windows (setup-ocaml) with libmojave's master inside the
+# tree, runs the shell tests through mp.bat, and optionally the proof census.
+# WHEN (decided 2026-10-28, STATUS-mojave row 54; re-read 2026-11-28):
+# - every push to master: MinGW, OCaml 5.4.1, the default configuration; a
+#   failure turns the run red (MinGW passes since #41/#43);
+# - weekly (Monday 06:00 UTC): MinGW on both OCaml versions, THEORIES = all,
+#   native code, with the proof census;
+# - by hand: any combination, including MSVC, whose legs stay allowed to fail.
+# What would show this wrong: Windows reds on master with no code cause (more
+# than one in ten pushes), or runner time that crowds out Linux CI; then the
+# push trigger goes back to manual. Logs are uploaded as artifacts. Scope: the default
 # configuration (THEORIES = itt/core, COMPILATION_MODE = mixed); SSL,
 # readline and ncurses off (mk/load_config turns the last two off on Win32).
 #
@@ -25,6 +32,10 @@ name: Windows
 #   C11 atomics) on 0.10.7 or master; on 4.14.4 omake builds but camlp5
 #   does not install (conf-pkg-config's shim finds no cygpath.exe).
 on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: "0 6 * * 1"
   workflow_dispatch:
     inputs:
       census:
@@ -41,15 +52,17 @@ permissions:
 
 jobs:
   build:
-    name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }}; allowed to fail)
+    name: build on Windows (OCaml ${{ matrix.ocaml }}, ${{ matrix.compiler }})
     runs-on: windows-latest
-    continue-on-error: true
-    timeout-minutes: ${{ inputs.census && 240 || 90 }}
+    continue-on-error: ${{ matrix.compiler == 'msvc' }}
+    timeout-minutes: ${{ (github.event_name == 'schedule' || inputs.census) && 240 || 90 }}
+    env:
+      CENSUS: ${{ github.event_name == 'schedule' || inputs.census }}
+      NATIVE: ${{ github.event_name == 'schedule' || inputs.native }}
     strategy:
       fail-fast: false
       matrix:
-        ocaml: ["4.14.4", "5.4.1"]
-        compiler: [mingw, msvc]
+        include: ${{ fromJSON(github.event_name == 'push' && '[{"ocaml":"5.4.1","compiler":"mingw"}]' || github.event_name == 'schedule' && '[{"ocaml":"5.4.1","compiler":"mingw"},{"ocaml":"4.14.4","compiler":"mingw"}]' || '[{"ocaml":"5.4.1","compiler":"mingw"},{"ocaml":"4.14.4","compiler":"mingw"},{"ocaml":"5.4.1","compiler":"msvc"},{"ocaml":"4.14.4","compiler":"msvc"}]') }}
     defaults:
       run:
         shell: bash
@@ -113,10 +126,10 @@ jobs:
           printf 'CAMLP5 = camlp5\nSSL_ENABLED = false\n' > mk/config.local
           # The first run writes mk/config and stops (mk/load_config).
           opam exec -- omake --no--progress 2>&1 | tee "$RUNNER_TEMP/configure.log" || true
-          if [ "${{ inputs.census }}" = true ]; then
+          if [ "$CENSUS" = true ]; then
             sed -i 's/^THEORIES = .*/THEORIES = all/' mk/config
           fi
-          if [ "${{ inputs.native }}" = true ]; then
+          if [ "$NATIVE" = true ]; then
             sed -i 's/^COMPILATION_MODE = .*/COMPILATION_MODE = native/' mk/config
           fi
           grep -E '^(THEORIES|COMPILATION_MODE|SSL_ENABLED|READLINE_ENABLED|NCURSES_ENABLED)' mk/config
@@ -147,7 +160,7 @@ jobs:
       # With the census input: every stored proof, compared with the file the
       # Linux proofs job checks. A difference is a finding to name.
       - name: replay every stored proof (editor/ml/tests/proof_census.sh)
-        if: ${{ always() && inputs.census }}
+        if: ${{ always() && env.CENSUS == 'true' }}
         working-directory: metaprl
         run: |
           start=$(date +%s)

@@ -29,6 +29,31 @@
   entries added in the same clock tick are ordered by key, so on a coarse
   clock (Windows) a newly added key that sorts first can be the one
   evicted; the test adds keys in increasing order and records this.
+- metaprl's two term implementations disagree on addresses under a
+  context hypothesis (`test/unit/test_term_addr_std_ds.ml`, #55, a pin:
+  16 of 36 addresses differ). For `sequent { <H>; x: A; <K['t1; it]> >- C }`,
+  term_ds's `term_subterm` at `[ClauseAddr 3; Subterm j]` is the j-th
+  argument of `K`, while term_std's exposes the rest of the sequent
+  (`concl{C}`, a trailing `xnil`) as further subterms, so negative indexes
+  and indexes past the arguments differ. The refiner uses term_ds
+  (`TERMS = ds`); with `TERMS = std` the proof census loses 90 proofs, all
+  in theories built on such contexts, and `TERMS = both` stops the build on
+  this disagreement. `test/unit/run.sh` now also links the refiner.
+- Fixed: term_std's addressing (`refiner/term_gen/term_addr_gen.ml`, #56)
+  now addresses a context hypothesis as `K<|conts|>[args]` and does not
+  count the contexts list of a second-order variable or context as a
+  subterm, as term_ds does and as `subterm_addresses` in the same file
+  already listed them; the pin above reads 0 of 36. Its `subterm_addresses`
+  also lists the arguments of a context hypothesis in increasing order, as
+  term_ds does (it listed them in decreasing order, and tactics take them
+  in order). The refiner (term_ds) does not use this file. With both
+  fixes a `TERMS = both` build no longer stops on `term_subterm`; the 66
+  remaining reports compare rewrite justifications with polymorphic
+  equality across the two representations and also fire in proofs that
+  pass. The 90 proofs a `TERMS = std` census loses are unchanged: their
+  first failure is a context-hoisting rewrite whose subgoal drops the
+  `<|S|>` contexts of `A2` and `T`, which `Refiner_debug` cannot see (it
+  compares term shapes only).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

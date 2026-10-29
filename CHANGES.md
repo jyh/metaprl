@@ -15,6 +15,11 @@
   their interfaces state them. No defect. `List_neq_append.to_list`
   returns the elements in reverse order of insertion (no order is
   documented; the test records it).
+- `mllib`'s `Latin1_case` (all 256 characters against ISO 8859-1, and its
+  string functions) and `Precedence` (`get_prec` against the closure of
+  `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,
+  #53). No defect. `mllib/simplehashtbl.ml` is not built (it is not in
+  mllib's `FILES`) and nothing uses it.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

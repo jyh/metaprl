@@ -87,6 +87,41 @@
   (`test/unit/test_tactic_arg_attributes.ml`: `[a]` against `[b]` and against
   `[a; b]` read equal, now different). No stored proof depended on it: the
   proof census is unchanged (264 modules, 5,191 rule statuses).
+- term_std and term_ds are compared on 2,000 pseudo-random terms
+  (`test/unit/test_term_differential.ml`, #60): sequents with hypotheses and
+  context hypotheses, second-order variables with contexts lists, binders;
+  for each, the term, `subterm_addresses` and `term_subterm`,
+  `find_subterm`, `free_vars_set`, `alpha_equal` against a renamed copy,
+  the terms `TermOp.iter_down` visits, and `TermSubst.subst` of a term
+  that a binder could capture (compared up to bound-variable names: term_std
+  renames such a binder even where the variable does not occur, term_ds does
+  not). All agree; a term_std substitution that ignores a single variable
+  makes the last check disagree on 1,096. On the code before
+  #56–#58 the same test finds the defects those fixed: `subterm_addresses`
+  disagrees on 84 terms, `find_subterm` on 921, `iter_down` on 1,054.
+  The rewriter is compared the same way (`test/unit/test_rewrite_differential.ml`):
+  four rules (an operator, a beta rule with a second-order body, a sequent
+  with a context and a hypothesis, the `hyps_length` rule of #58) compiled
+  in both implementations and applied to 400 instances of each redex and to
+  400 random terms; all agree. The defects #56–#58 fixed do not reach the
+  bare rewriter, so it was checked with a mutant instead: a term_std
+  substitution that ignores a single variable makes the beta rule disagree
+  on 152 of its 400 instances.
+  Term I/O, through which stored proofs come back, is checked by round
+  trip (`test/unit/test_term_io.ml`): the same 2,000 terms written with
+  `Ascii_io.AsciiIO.write_term` and read back, one per file and as the
+  filter saves a proof file (each written with the table read from the
+  previous version), are alpha-equal to what was written. A reader that
+  reverses a term's subterms makes 396 of them differ.
+  `Match_seq.match_hyps`, which re-attaches a sub-proof when hypotheses were
+  added, is checked against a model on 20,000 pairs of sequents
+  (`test/unit/test_match_seq.ml`): it succeeds exactly when the model says
+  a match exists and every mapping it returns is a valid matching (a
+  mutant that forgets to record a hypothesis match makes 5,997 invalid).
+  The test records one asymmetry: a big context is never skipped while
+  small hypotheses remain, but once they are all matched the rest of the
+  big sequent is skipped, contexts too (big `<K>; x: B` matches small with
+  no hypotheses).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

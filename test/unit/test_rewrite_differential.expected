@@ -1,0 +1,16 @@
+f{'a; 'b} --> f{'b; 'a}
+  std compiles; ds compiles
+  instances of the redex 400 of 400 agree (term_ds rewrote 400)
+  random terms           400 of 400 agree (term_ds rewrote 25)
+app{lam{x. 'b['x]}; 'a} --> 'b['a]
+  std compiles; ds compiles
+  instances of the redex 400 of 400 agree (term_ds rewrote 400)
+  random terms           400 of 400 agree (term_ds rewrote 0)
+sequent[sa]{ <J>; x: 'A<|J|> >- 'C<|J|>['x] } --> sequent[sb]{ same }
+  std compiles; ds compiles
+  instances of the redex 400 of 400 agree (term_ds rewrote 400)
+  random terms           400 of 400 agree (term_ds rewrote 27)
+hyps_length{mk_vbind{<J> >- mk_core{hypconslist{<K> >- 'l}}}} --> ...squashlist...
+  std compiles; ds compiles
+  instances of the redex 400 of 400 agree (term_ds rewrote 400)
+  random terms           400 of 400 agree (term_ds rewrote 0)

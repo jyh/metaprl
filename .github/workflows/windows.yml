@@ -119,7 +119,7 @@ jobs:
           # (it sources mpconfig, written CRLF, and on Win32 theories.dir holds
           # bare -I flags for mptop.bat's `set /p`, so it found no theories), so
           # the tests drive the real Windows launcher through a two-line wrapper.
-          printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd //c mp.bat "$@"\n' > editor/ml/mp
+          printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd /c mp.bat "$@"\n' > editor/ml/mp
           cat editor/ml/mp
           echo '(4000 + 2);;' > "$RUNNER_TEMP/smoke.in"
           timeout 120 sh editor/ml/mp -cli < "$RUNNER_TEMP/smoke.in" 2>&1 | tail -5 || true

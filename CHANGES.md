@@ -92,7 +92,11 @@
   context hypotheses, second-order variables with contexts lists, binders;
   for each, the term, `subterm_addresses` and `term_subterm`,
   `find_subterm`, `free_vars_set`, `alpha_equal` against a renamed copy,
-  and the terms `TermOp.iter_down` visits. All agree. On the code before
+  the terms `TermOp.iter_down` visits, and `TermSubst.subst` of a term
+  that a binder could capture (compared up to bound-variable names: term_std
+  renames such a binder even where the variable does not occur, term_ds does
+  not). All agree; a term_std substitution that ignores a single variable
+  makes the last check disagree on 1,096. On the code before
   #56–#58 the same test finds the defects those fixed: `subterm_addresses`
   disagrees on 84 terms, `find_subterm` on 921, `iter_down` on 1,054.
   The rewriter is compared the same way (`test/unit/test_rewrite_differential.ml`):

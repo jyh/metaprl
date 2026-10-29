@@ -5,3 +5,4 @@ find_subterm                   2000 of 2000 terms agree
 free_vars_set                  2000 of 2000 terms agree
 alpha_equal to a renamed copy  2000 of 2000 terms agree
 TermOp.iter_down visits        2000 of 2000 terms agree
+subst of g{'x0; A['x0]} for 'z 2000 of 2000 terms agree

@@ -11,7 +11,11 @@
      - find_subterm for variables, and term_subterm at each address found;
      - free_vars_set;
      - alpha_equal against a copy whose bound variables are renamed;
-     - the number of terms TermOp.iter_down visits.
+     - the number of terms TermOp.iter_down visits;
+     - TermSubst.subst of g{'x0; A['x0]} for the free variable 'z (bound
+       variables named x0 would capture it, so this exercises renaming),
+       compared up to the names of bound variables: term_std renames a
+       binder named x0 even where 'z does not occur, term_ds does not.
    It prints, per check, how many terms agree, and the first term on which
    a check disagrees.  The generator is a fixed linear congruential
    sequence, not Random, so the terms are the same on every OCaml. *)
@@ -133,6 +137,37 @@ module Check (R : Refiner_sig.RefinerSig) = struct
           (if bvars = [] then "" else String.concat "," (List.map string_of_symbol bvars) ^ ". ") ^ show bterm)
           term_terms) ^ "}"
 
+  (* As show, but bound variables print by binding position, so that
+     alpha-equivalent terms print the same. *)
+  let rec cshow env t =
+    let name v = try "#" ^ string_of_int (List.assoc v env) with Not_found -> string_of_symbol v in
+    let bind env v = (v, List.length env) :: env in
+    if is_sequent_term t then
+      let s = explode_sequent t in
+      let e = ref env in
+      let hs = List.map (function
+          | Hypothesis (v, a) -> let a = cshow !e a in e := bind !e v; "#" ^ string_of_int (List.length !e - 1) ^ ": " ^ a
+          | Context (v, cs, args) ->
+              let r = "<" ^ string_of_symbol v ^ "<|" ^ String.concat ";" (List.map string_of_symbol cs) ^ "|>["
+                      ^ String.concat "; " (List.map (cshow !e) args) ^ "]>" in
+              e := bind !e v; r)
+          (R.Term.SeqHyp.to_list s.sequent_hyps) in
+      "sequent[" ^ cshow env s.sequent_args ^ "]{ " ^ String.concat "; " hs ^ " >- " ^ cshow !e s.sequent_concl ^ " }"
+    else if is_var_term t then "'" ^ name (dest_var t)
+    else if is_so_var_term t then
+      let v, cs, args = dest_so_var t in
+      string_of_symbol v ^ "<|" ^ String.concat ";" (List.map string_of_symbol cs) ^ "|>["
+      ^ String.concat "; " (List.map (cshow env) args) ^ "]"
+    else
+      let { term_op; term_terms } = dest_term t in
+      let opn = String.concat "!" (Opname.dest_opname (dest_op term_op).op_name) in
+      if term_terms = [] then opn
+      else opn ^ "{" ^ String.concat "; " (List.map (fun b ->
+          let { bvars; bterm } = dest_bterm b in
+          let env' = List.fold_left bind env bvars in
+          (if bvars = [] then "" else String.concat "," (List.map name bvars |> List.map (fun _ -> "_")) ^ ". ") ^ cshow env' bterm)
+          term_terms) ^ "}"
+
   let safe f = try f () with _ -> "(raises)"
   let at t a = safe (fun () -> show (R.TermAddr.term_subterm t a))
   let checks d =
@@ -145,7 +180,8 @@ module Check (R : Refiner_sig.RefinerSig) = struct
           (SymbolSet.elements (R.TermSubst.free_vars_set t))))) in
     let c4 = safe (fun () -> string_of_bool (R.TermSubst.alpha_equal t (build (rename d)))) in
     let c5 = safe (fun () -> let n = ref 0 in R.TermOp.iter_down (fun _ -> incr n) t; string_of_int !n) in
-    [ c0; c1; c2; c3; c4; c5 ]
+    let c6 = safe (fun () -> cshow [] (R.TermSubst.subst t [ add "z" ] [ build (Op ("g", [ Var "x0"; SOVar ("A", [], [ Var "x0" ]) ])) ])) in
+    [ c0; c1; c2; c3; c4; c5; c6 ]
 
 end
 
@@ -165,7 +201,7 @@ let rec count = function
           | Ctx (_, cs, ts) -> incr ctxs; if cs <> [] then incr conts_lists; List.iter count ts) hs;
       count c
 
-let names = [ "the term"; "subterm_addresses"; "find_subterm"; "free_vars_set"; "alpha_equal to a renamed copy"; "TermOp.iter_down visits" ]
+let names = [ "the term"; "subterm_addresses"; "find_subterm"; "free_vars_set"; "alpha_equal to a renamed copy"; "TermOp.iter_down visits"; "subst of g{'x0; A['x0]} for 'z" ]
 
 let () =
   let n = 2000 in

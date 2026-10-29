@@ -59,7 +59,8 @@ opam pin add omake git+https://github.com/ocaml-omake/omake.git#master  # 0.10.7
 opam install ocamlfind camlp5.8.05.02 camlp-streams
 # then the steps above, from `git clone` to `omake -j4`, except that the
 # workflow clones libmojave into metaprl/libmojave instead of linking it
-editor\ml\mp.bat     # the MetaPRL shell (the Windows build is bytecode)
+cd editor/ml && cmd /c mp.bat   # the MetaPRL shell; mp.bat runs from editor/ml
+                                # (the Windows build is bytecode)
 ```
 
 Run by hand, that workflow builds, runs the two shell tests through

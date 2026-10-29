@@ -69,6 +69,15 @@ proof census, which matches the Linux expected file. MSVC does not build:
 OMake does not build on OCaml 5.4.1 there, and camlp5 does not install on
 4.14.4.
 
+### Why OMake, not dune
+
+MetaPRL stays on OMake. A port to dune was priced at about 30 to 37
+engineer-days (the build generates code, runs its own filter over every theory
+and writes proof archives), and OMake already builds the tree and checks every
+stored proof on Linux and Windows. Two things would reopen the question: if
+OMake stops building from opam on a supported OCaml, or if an opam release of
+MetaPRL is decided.
+
 The 2017 build targeted OCaml 4.05 with camlp5 7.02; its instructions are kept
 as they were in the plain-text [`README`](./README) (plus
 [`README.MACOSX`](./README.MACOSX) and [`README.WIN32`](./README.WIN32)).

@@ -29,6 +29,16 @@
   entries added in the same clock tick are ordered by key, so on a coarse
   clock (Windows) a newly added key that sorts first can be the one
   evicted; the test adds keys in increasing order and records this.
+- metaprl's two term implementations disagree on addresses under a
+  context hypothesis (`test/unit/test_term_addr_std_ds.ml`, #55, a pin:
+  16 of 36 addresses differ). For `sequent { <H>; x: A; <K['t1; it]> >- C }`,
+  term_ds's `term_subterm` at `[ClauseAddr 3; Subterm j]` is the j-th
+  argument of `K`, while term_std's exposes the rest of the sequent
+  (`concl{C}`, a trailing `xnil`) as further subterms, so negative indexes
+  and indexes past the arguments differ. The refiner uses term_ds
+  (`TERMS = ds`); with `TERMS = std` the proof census loses 90 proofs, all
+  in theories built on such contexts, and `TERMS = both` stops the build on
+  this disagreement. `test/unit/run.sh` now also links the refiner.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

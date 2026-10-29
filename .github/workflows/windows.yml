@@ -135,6 +135,15 @@ jobs:
         continue-on-error: true
         working-directory: metaprl
         run: timeout 600 opam exec -- sh editor/ml/tests/old_labels.sh
+      - name: what the shell prints for old_labels' command (diagnosis)
+        if: always()
+        working-directory: metaprl
+        run: |
+          printf 'cd "/itt_list2";;\nstatus_all ();;\n' | timeout 300 sh editor/ml/mp -batch > "$RUNNER_TEMP/ol.raw" 2>&1; echo "rc=$?"
+          echo "bytes: $(wc -c < "$RUNNER_TEMP/ol.raw")  Status lines: $(grep -ac 'Status:' "$RUNNER_TEMP/ol.raw")"
+          head -40 "$RUNNER_TEMP/ol.raw" | cut -c1-200
+          echo ---; tail -15 "$RUNNER_TEMP/ol.raw" | cut -c1-200
+          ls -la theories/itt/core/itt_list2.* | head
       - name: summarise the build log
         if: always()
         run: |

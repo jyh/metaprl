@@ -114,15 +114,13 @@ jobs:
         working-directory: metaprl
         run: |
           ls -la editor/ml | grep -iE ' mp|config|theories' || true
-          # First run: the Windows build is bytecode and installs mp.bat, not
-          # the editor/ml/mp the tests call, so both tests failed without
-          # running the shell. The Unix bytecode launcher (support/editor/mptop:
-          # cd to its own directory, read mpconfig, exec ./mp.top) is put there.
-          test -e editor/ml/mp || cp support/editor/mptop editor/ml/mp
-          # Second run: mp.top ran, but the build writes mpconfig (and
-          # theories.dir) with CRLF line ends, which sh cannot source. The .bat
-          # launcher reads neither through sh, so the CRs are removed here.
-          sed -i 's/\r$//' editor/ml/mpconfig editor/ml/theories.dir
+          # The Windows build is bytecode and installs editor/ml/mp.bat, not the
+          # editor/ml/mp the tests call. The Unix launcher cannot stand in for it
+          # (it sources mpconfig, written CRLF, and on Win32 theories.dir holds
+          # bare -I flags for mptop.bat's `set /p`, so it found no theories), so
+          # the tests drive the real Windows launcher through a two-line wrapper.
+          printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd //c mp.bat "$@"\n' > editor/ml/mp
+          cat editor/ml/mp
           echo '(4000 + 2);;' > "$RUNNER_TEMP/smoke.in"
           timeout 120 sh editor/ml/mp -cli < "$RUNNER_TEMP/smoke.in" 2>&1 | tail -5 || true
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
@@ -139,7 +137,7 @@ jobs:
         if: always()
         working-directory: metaprl
         run: |
-          printf 'cd "/itt_list2";;\nstatus_all ();;\n' | timeout 300 sh editor/ml/mp -batch > "$RUNNER_TEMP/ol.raw" 2>&1; echo "rc=$?"
+          printf 'cd "/itt_list2";;\nstatus_all ();;\n' | timeout 300 opam exec -- sh editor/ml/mp -batch > "$RUNNER_TEMP/ol.raw" 2>&1; echo "rc=$?"
           echo "bytes: $(wc -c < "$RUNNER_TEMP/ol.raw")  Status lines: $(grep -ac 'Status:' "$RUNNER_TEMP/ol.raw")"
           head -40 "$RUNNER_TEMP/ol.raw" | cut -c1-200
           echo ---; tail -15 "$RUNNER_TEMP/ol.raw" | cut -c1-200

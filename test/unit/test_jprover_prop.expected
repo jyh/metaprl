@@ -1,0 +1,5 @@
+400 formulas, 17 skipped (did not finish in 10 s), 38 tautologies, 31 proved in LJ
+C proves F iff F is a tautology           383 of  383
+what LJ proves is a tautology             383 of  383
+LJ proves ~~F iff F is a tautology        383 of  383
+LJ and LJmc prove the same                383 of  383

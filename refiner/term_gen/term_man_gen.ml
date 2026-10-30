@@ -338,7 +338,9 @@ struct
     * A term is first-order if it has no bvars.
     *)
    let is_fo_term t =
-      List.for_all is_simple_bterm (dest_term t).term_terms
+      (* a sequent binds its hypotheses: not first-order (as term_ds) *)
+      not (is_simple_term_opname sequent_opname t)
+      && List.for_all is_simple_bterm (dest_term t).term_terms
 
    (*
     * Second order context, contains a context term, plus
@@ -1079,10 +1081,37 @@ struct
 (* unused
    let all_vars_info_list = all_vars_term_list
 *)
-   let all_vars t = SymbolTable.fold (fun t v _ -> SymbolSet.add t v) SymbolSet.empty (all_vars_info SymbolTable.empty t)
+   (*
+    * The names in contexts lists (<|H; S|>), which all_vars_info does not
+    * record and all_vars must ("all vars in the term", as term_ds).
+    *)
+   let rec conts_names names t =
+      if is_var_term t then
+         names
+      else if is_so_var_term t then
+         let _, cs, ts = dest_so_var t in
+            List.fold_left conts_names (SymbolSet.add_list names cs) ts
+      else if is_context_term t then
+         let _, term, cs, ts = dest_context t in
+            List.fold_left conts_names (SymbolSet.add_list names cs) (term :: ts)
+      else if is_sequent_term t then
+         let { sequent_args = args; sequent_hyps = hyps; sequent_concl = concl } = explode_sequent t in
+         let names = conts_names names args in
+         let names =
+            SeqHyp.fold (fun names _ h ->
+               match h with
+                  Hypothesis (_, h) -> conts_names names h
+                | Context (_, cs, ts) -> List.fold_left conts_names (SymbolSet.add_list names cs) ts) names hyps
+         in
+            conts_names names concl
+      else
+         List.fold_left (fun names bt -> conts_names names (dest_bterm bt).bterm) names (dest_term t).term_terms
+
+   let all_vars t =
+      conts_names (SymbolTable.fold (fun t v _ -> SymbolSet.add t v) SymbolSet.empty (all_vars_info SymbolTable.empty t)) t
    let all_vars_terms tl =
       let info = all_vars_term_list SymbolTable.empty tl in
-         SymbolTable.fold (fun t v _ -> SymbolSet.add t v) SymbolSet.empty info
+         List.fold_left conts_names (SymbolTable.fold (fun t v _ -> SymbolSet.add t v) SymbolSet.empty info) tl
 
    (************************************************************************
     * General term destruction.

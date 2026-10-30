@@ -29,9 +29,9 @@
        agrees on 959 of 969 and 551 of 1031).
    term_ds's match_terms raises Invalid_argument on any sequent, by its
    own code; term_std matches them.  Last, a few match_terms cases random
-   instances never reach, printed for both: ds matches the bound variable
-   of lam x.f{'x} against c in lam y.f{c}, where std refuses.  The output
-   records that as it is (a candidate defect, not yet changed).  The two
+   instances never reach, printed for both: until it was fixed, ds matched
+   the bound variable of lam x.f{'x} against c in lam y.f{c} ([x:=c]),
+   where std refuses.  The two
    parts share the term sequence, so the first part's lines are unchanged.
    The generator is a fixed linear congruential sequence, not Random, so
    the terms are the same on every OCaml. *)

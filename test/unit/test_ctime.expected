@@ -1,0 +1,15 @@
+TZ = UTC0: mktime (localtime t) = t       2000 of 2000
+TZ = UTC0: localtime t = Unix.gmtime t    2000 of 2000
+TZ = UTC0: parse_time, RFC 1123  Sun, 06 Nov 1994 08:49:37 GMT: returns 0 0, exact 2000
+TZ = UTC0: parse_time, RFC 850   Sunday, 06-Nov-94 08:49:37 GMT: returns 0 0, exact 2000
+TZ = UTC0: parse_time, asctime   Sun Nov  6 08:49:37 1994: returns 0 0, exact 2000
+TZ = UTC0: parse_time, the old   06 Nov 1994 08 49 37 GMT: returns 0 0, exact 2000
+TZ = PST8PDT: mktime (localtime t) = t       2000 of 2000
+TZ = PST8PDT: parse_time, RFC 1123  Sun, 06 Nov 1994 08:49:37 GMT: returns 0 0, exact 2000
+TZ = PST8PDT: parse_time, RFC 850   Sunday, 06-Nov-94 08:49:37 GMT: returns 0 0, exact 2000
+TZ = PST8PDT: parse_time, asctime   Sun Nov  6 08:49:37 1994: returns 0 0, exact 2000
+TZ = PST8PDT: parse_time, the old   06 Nov 1994 08 49 37 GMT: returns 0 0, exact 2000
+parse_time "Sun, 06 Nov 1994 08:49:37 GMT" = 784111777
+parse_time "Sun, 06 Nov 1994 03:49:37 EST" = 784111777
+parse_time "Sun, 06 Nov 1994 00:49:37 PST" = 784111777
+parse_time "not a date" = 0

@@ -23,8 +23,9 @@
        answers the first, term_ds the last;
      - all_vars ("all vars in the term, even the bound ones",
        term_man_sig): term_std leaves out the names in contexts lists,
-       which term_ds includes; term_ds leaves out the variables a bound
-       term binds (lam x0. ...), which term_std includes;
+       which term_ds includes (term_ds left out the variables a bound
+       term binds, lam x0. ..., until it was fixed: 542/1000 agreed with
+       H and S removed, now 1000);
      - is_fo_term of a sequent: term_std true, term_ds false.
    The generator is a fixed linear congruential sequence, not Random. *)
 open Lm_symbol

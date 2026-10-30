@@ -7,16 +7,18 @@
      - parse_time of the date of t in each of the three forms an HTTP
        server must accept (RFC 7231 7.1.1.1: RFC 1123, RFC 850, asctime),
        and of the one form parse_time took, "06 Nov 1994 08 49 37 GMT".
-   Recorded as found:
-     - parse_time returns 0 for all three HTTP forms: it splits on
-       whitespace only, so "08:49:37" is one field and the date has six,
-       and it takes only seven or eight;
-     - in the form it takes, the month is one too early: parse_time numbers
-       months from 0 and c_mktime subtracts 1 again;
-     - (declared, not printed: it is undefined behaviour) c_mktime calls
-       memset(&time, sizeof(time), 0), arguments swapped, so tm_isdst is
-       whatever the stack held; under a zone with daylight saving that
-       read 966 of 2,000 instants an hour off on macOS.
+   and the same with TZ = PST8PDT (daylight saving), where parse_time must
+   give the same answers.  Until they were fixed:
+     - parse_time returned 0 for all three HTTP forms (2000 of 2000 each):
+       it split on whitespace only, so "08:49:37" was one field;
+     - in the one form it took, every date was a month early: it numbered
+       months from 0 and c_mktime subtracted 1 again;
+     - c_mktime's memset(&time, sizeof(time), 0) had its arguments swapped,
+       so tm_isdst was whatever the stack held: with TZ = PST8PDT, 966 of
+       2,000 round trips were an hour off on macOS (undefined behaviour,
+       so it was declared, not printed);
+     - parse_time read the fields as local time (c_mktime), so the answer
+       depended on the machine's zone.
    The generator is a fixed linear congruential sequence, not Random. *)
 let state = ref 5
 let next () = state := (!state * 1103515245 + 12345) land 0x7fffffff; !state
@@ -39,16 +41,17 @@ let classify d =
   else "other"
 
 let () =
-  Unix.putenv "TZ" "UTC0";
   let n = 2000 in
+  List.iter (fun tz ->
+  Unix.putenv "TZ" tz;
   let ts = List.init n (fun _ -> next () mod 2145916800) in  (* 1970 .. 2038 *)
   let rt = List.length (List.filter (fun t -> Ctime.mktime (Ctime.localtime t) = t) ts) in
   let lt = List.length (List.filter (fun t ->
       let l = Ctime.localtime t and g = Unix.gmtime (float_of_int t) in
       l.Ctime.time_sec = g.tm_sec && l.time_min = g.tm_min && l.time_hour = g.tm_hour
       && l.time_mday = g.tm_mday && l.time_mon = g.tm_mon + 1 && l.time_year = g.tm_year + 1900) ts) in
-  Printf.printf "TZ = UTC0: mktime (localtime t) = t       %4d of %d\n" rt n;
-  Printf.printf "TZ = UTC0: localtime t = Unix.gmtime t    %4d of %d\n" lt n;
+  Printf.printf "TZ = %s: mktime (localtime t) = t       %4d of %d\n" tz rt n;
+  if tz = "UTC0" then Printf.printf "TZ = %s: localtime t = Unix.gmtime t    %4d of %d\n" tz lt n;
   List.iter (fun (name, fmt) ->
       let counts = Hashtbl.create 4 in
       let zero = ref 0 in
@@ -58,9 +61,13 @@ let () =
           if p = 0 then incr zero
           else let k = classify (p - t) in Hashtbl.replace counts k (1 + try Hashtbl.find counts k with Not_found -> 0))
         ts;
-      Printf.printf "parse_time, %s: returns 0 %d" name !zero;
+      Printf.printf "TZ = %s: parse_time, %s: returns 0 %d" tz name !zero;
       List.iter (fun k -> match Hashtbl.find_opt counts k with
           | Some c -> Printf.printf ", %s %d" k c | None -> ())
         [ "exact"; "a month early"; "other" ];
       print_newline ())
-    forms
+    forms)
+  [ "UTC0"; "PST8PDT" ];
+  (* A named zone: 03:49:37 EST is 08:49:37 GMT, 784111777 (Unix). *)
+  List.iter (fun s -> Printf.printf "parse_time %S = %d\n" s (Ctime.parse_time s))
+    [ "Sun, 06 Nov 1994 08:49:37 GMT"; "Sun, 06 Nov 1994 03:49:37 EST"; "Sun, 06 Nov 1994 00:49:37 PST"; "not a date" ]

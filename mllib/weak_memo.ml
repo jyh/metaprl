@@ -201,9 +201,17 @@ END
                         (* It has not been collected, so return the value *)
                         make_descriptor info wd item
                    | None ->
-                        (* It has been collected, so create a new value *)
+                        (*
+                         * It has been collected, so create a new value in
+                         * the same slot, under the SAME descriptor wd: the
+                         * table entry keeps wd, so a new one (set) would be
+                         * returned only this once, and headers that name
+                         * this value (compared with ==) would then differ
+                         * from the ones built after it.
+                         *)
                         let item = info.make_result param header in
-                           set info index item
+                           Weak.set info.image_array index (Some item);
+                           make_descriptor info wd item
                end
           | None ->
                (* This is a new call to the function *)

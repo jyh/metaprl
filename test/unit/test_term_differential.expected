@@ -19,7 +19,7 @@ match_terms with an instance (a sequent)         of 1031:    0 1031    0
     y:=g{c}, z:='w
 match_terms on hand-made cases (std / ds):
   lam x.f{'x} with lam y.f{'y}   [] / []
-  lam x.f{'x} with lam y.f{c}    (raises) / [x:=c]
+  lam x.f{'x} with lam y.f{c}    (raises) / (raises)
   f{'y; 'y} with f{c; c}         [y:=c] / [y:=c]
   f{'y; 'y} with f{c; 'w}        (raises) / (raises)
   lam x.f{'y} with lam x.f{'x}   (raises) / (raises)

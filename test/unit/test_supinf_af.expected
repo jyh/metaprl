@@ -1,0 +1,5 @@
+2000 forms, 413 of them numbers
+coef = the model's, every variable                  2000 of  2000
+isNumber iff no variable's coefficient is nonzero   2000 of  2000
+value_of a number = the model's constant             413 of   413
+split = largest nonzero variable, its coef, the rest  2000 of  2000

@@ -147,13 +147,18 @@ jobs:
       # on Win32 theories.dir holds bare -I flags for mptop.bat's `set /p`), so
       # the tests drive the Windows launcher through a two-line wrapper. Cygwin
       # passes `cmd /c` through unchanged (`//c` is the MSYS spelling).
+      # if: always() on this step and the shell tests: a red unit-test step
+      # must not skip them (on f86cdf9a it did, and old_labels.sh then read
+      # "no status line" because the launcher was never written).
       - name: a test launcher at editor/ml/mp that runs mp.bat
+        if: always()
         working-directory: metaprl
         run: |
           printf '#!/bin/sh\ncd "$(dirname "$0")" && exec cmd /c mp.bat "$@"\n' > editor/ml/mp
           ls -la editor/ml | grep -iE ' mp' || true
           cat editor/ml/mp.bat 2>/dev/null | tail -3 || true
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
+        if: always()
         working-directory: metaprl
         run: timeout 300 opam exec -- sh editor/ml/tests/toploop_minus.sh
       - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)

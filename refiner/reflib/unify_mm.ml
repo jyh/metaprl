@@ -709,16 +709,18 @@ let cterms2system t_0 t_1 consts var_hashtbl =
    { t=[]; u=u }
 
 let unifiable t0 t1 consts=
+   (* The variable cases answer as unify's do, occurs check included. *)
    if is_var_term t0 then
       let x = dest_var t0 in
       if is_var_term t1 then
          let y = dest_var t1 in
             (not (SymbolSet.mem consts x)) || (not (SymbolSet.mem consts y)) || x=y
       else
-         not (SymbolSet.mem consts x)
+         not (SymbolSet.mem consts x) && not (is_free_var x t1)
     else
       if is_var_term t1 then
-         not (SymbolSet.mem consts (dest_var t1))
+         let y = dest_var t1 in
+            not (SymbolSet.mem consts y) && not (is_free_var y t0)
       else
       let var_hashtbl = (Hashtbl.create 23) in
       let t_0 = dest_term t0 in

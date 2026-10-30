@@ -12,9 +12,9 @@
    each first with no constants, then with 'a declared a constant (the
    SymbolSet argument: a variable that may not be bound).
    Unify_mm.unifiable is documented as the faster form of the same test,
-   but its shortcut for a problem whose side is a variable ('d against
-   f{..'d..}) had no occurs check, so it answered true where unify raises
-   Cycle; the expected output records that as it was found.
+   but until it was fixed its shortcut for a problem whose side is a
+   variable ('d against f{..'d..}) had no occurs check, so it answered true
+   where unify raises Cycle (1968 and 1977 of 2000 agreed).
    A problem is a pair (t1, t2) where t2 is t1 with some subterms
    replaced at random, so that about half are unifiable.  The generator is
    a fixed linear congruential sequence, so the problems are the same on

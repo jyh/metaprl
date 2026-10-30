@@ -7,7 +7,9 @@ name: Windows
 #   failure turns the run red (MinGW passes since #41/#43);
 # - weekly (Monday 06:00 UTC): MinGW on both OCaml versions, THEORIES = all,
 #   native code, with the proof census;
-# - by hand: any combination, including MSVC, whose legs stay allowed to fail.
+# - by hand: any combination, including MSVC, whose legs stay allowed to fail;
+#   msvc = false runs only the two MinGW legs (a pre-merge check of a PR
+#   branch, since this workflow does not run on pull requests).
 # What would show this wrong: Windows reds on master with no code cause (more
 # than one in ten pushes), or runner time that crowds out Linux CI; then the
 # push trigger goes back to manual. Logs are uploaded as artifacts. Scope: the default
@@ -46,6 +48,10 @@ on:
         description: COMPILATION_MODE = native (a measurement; the default build is bytecode here)
         type: boolean
         default: false
+      msvc:
+        description: also run the MSVC legs (allowed to fail); off = the two MinGW legs, for a pre-merge check
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -62,7 +68,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(github.event_name == 'push' && '[{"ocaml":"5.4.1","compiler":"mingw"}]' || github.event_name == 'schedule' && '[{"ocaml":"5.4.1","compiler":"mingw"},{"ocaml":"4.14.4","compiler":"mingw"}]' || '[{"ocaml":"5.4.1","compiler":"mingw"},{"ocaml":"4.14.4","compiler":"mingw"},{"ocaml":"5.4.1","compiler":"msvc"},{"ocaml":"4.14.4","compiler":"msvc"}]') }}
+        include: ${{ fromJSON(github.event_name == 'push' && '[{"ocaml":"5.4.1","compiler":"mingw"}]' || (github.event_name == 'schedule' || inputs.msvc == false) && '[{"ocaml":"5.4.1","compiler":"mingw"},{"ocaml":"4.14.4","compiler":"mingw"}]' || '[{"ocaml":"5.4.1","compiler":"mingw"},{"ocaml":"4.14.4","compiler":"mingw"},{"ocaml":"5.4.1","compiler":"msvc"},{"ocaml":"4.14.4","compiler":"msvc"}]') }}
     defaults:
       run:
         shell: bash

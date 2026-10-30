@@ -164,7 +164,9 @@ struct
           | None2 ->
                let i' = succ i in
                   if i' = Array.length info.table then
-                     if 100 * info.gc_count < info.gc_critical_level * info.count then
+                     (* count = 0: nothing is left to release (this read
+                        0 < 0 and swept again forever) *)
+                     if info.count = 0 || 100 * info.gc_count < info.gc_critical_level * info.count then
                         begin
                            info.gc_on <- false;
                            None

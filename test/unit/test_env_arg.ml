@@ -6,9 +6,9 @@
    the parent prints each child's output and exit status.  Cases:
    string / int / bool options from neither, the environment, the command
    line, and both (the command line wins); a bad int and a bad bool in the
-   environment; the option names Env_arg.args lists.  Recorded as found:
-   a bad int prints "'int_of_string' not integer", not the value: the
-   handler's `Failure s` shadows the string it reports. *)
+   environment; the option names Env_arg.args lists.  Until it was fixed,
+   a bad int printed "'int_of_string' not integer", not the value: the
+   handler's `Failure s` shadowed the string it reports. *)
 let child () =
   let s = Env_arg.string "tstr" "default" "a string" Env_arg.set_string_string in
   let i = Env_arg.int "tint" 7 "an int" Env_arg.set_int_int in

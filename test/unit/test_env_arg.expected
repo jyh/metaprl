@@ -7,6 +7,6 @@ command line                 exit 0
 both (command line wins)     exit 0
     tstr="cmd" tint=34 tbool=false args=-tbool,-tint,-tstr
 bad int in the environment   exit 1
-    Env_arg: bad value for tint: 'int_of_string' not integer, exiting
+    Env_arg: bad value for tint: 'x12' not integer, exiting
 bad bool in the environment  exit 1
     Env_arg: bad value for tbool: 'yes' not boolean, exiting

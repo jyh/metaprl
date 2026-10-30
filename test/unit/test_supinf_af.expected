@@ -1,0 +1,7 @@
+2000 forms, 413 of them numbers
+coef = the model's, every variable                  2000 of  2000
+isNumber iff no variable's coefficient is nonzero   1988 of  2000
+  first difference: remove(-1/2*(-2/2*((v2 - v2))), v1): model a number
+value_of a number = the model's constant             401 of   413
+  first difference: remove(-1/2*(-2/2*((v2 - v2))), v1)
+split = largest nonzero variable, its coef, the rest  2000 of  2000

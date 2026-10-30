@@ -10,6 +10,9 @@
 # Usage (from the metaprl root, after omake): sh test/unit/run.sh
 set -u
 root=$(pwd)
+# On Windows this shell is Cygwin's and pwd prints /cygdrive/d/...,
+# which the native (MinGW/MSVC) compiler cannot open: hand it D:/... instead.
+if command -v cygpath > /dev/null 2>&1; then root=$(cygpath -m "$root"); fi
 here="$root/test/unit"
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT

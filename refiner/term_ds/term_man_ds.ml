@@ -846,7 +846,8 @@ struct
       List.fold_left all_vars_term vars tl
 
    and all_vars_term_bterm vars bt =
-      all_vars_term vars bt.bterm
+      (* "even the bound ones" (term_man_sig): the binders too *)
+      all_vars_term (SymbolSet.add_list vars bt.bvars) bt.bterm
 
    and all_vars_term_bterm_list vars l =
       List.fold_left all_vars_term_bterm vars l

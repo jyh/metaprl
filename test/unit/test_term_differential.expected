@@ -6,3 +6,21 @@ free_vars_set                  2000 of 2000 terms agree
 alpha_equal to a renamed copy  2000 of 2000 terms agree
 TermOp.iter_down visits        2000 of 2000 terms agree
 subst of g{'x0; A['x0]} for 'z 2000 of 2000 terms agree
+On the same terms with every second 'z renamed 'y (std = ds, std = model, ds = model):
+subst 'y,'z := 'z,'y at once                     of 2000: 2000 2000 2000
+subst 'z,'z := g{c},'w (the first is used)       of 2000: 2000 2000 2000
+match_terms with an instance (no sequent)        of  969:  969  969  969
+match_terms with an instance (a sequent)         of 1031:    0 1031    0
+  first difference, std vs ds:
+    y:=g{c}, z:='w
+    (raises)
+  first difference, ds vs model:
+    (raises)
+    y:=g{c}, z:='w
+match_terms on hand-made cases (std / ds):
+  lam x.f{'x} with lam y.f{'y}   [] / []
+  lam x.f{'x} with lam y.f{c}    (raises) / (raises)
+  f{'y; 'y} with f{c; c}         [y:=c] / [y:=c]
+  f{'y; 'y} with f{c; 'w}        (raises) / (raises)
+  lam x.f{'y} with lam x.f{'x}   (raises) / (raises)
+  f{'y} with f{'y}               [] / []

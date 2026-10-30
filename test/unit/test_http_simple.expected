@@ -1,0 +1,4 @@
+decode_hex (encode_hex s) = s     3000 of 3000
+decode_hex = the usual decoding   2466 of 3000
+  raises (a % then a non-hex digit) 534, first: 9%z99+ raises Failure("unhexify")
+  other differences                0

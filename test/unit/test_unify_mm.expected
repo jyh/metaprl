@@ -1,0 +1,10 @@
+constants {}: 2000 problems, 1034 unifiable by the model
+  unifiable agrees with the model            2000 of 2000
+  unify raises exactly when no unifier       2000 of 2000
+  unify's substitution unifies               1034 of 1034
+  most general (model mgu up to renaming)    1034 of 1034
+constants {a}: 2000 problems, 968 unifiable by the model
+  unifiable agrees with the model            2000 of 2000
+  unify raises exactly when no unifier       2000 of 2000
+  unify's substitution unifies               968 of 968
+  most general (model mgu up to renaming)    968 of 968

@@ -17,8 +17,24 @@
        compared up to the names of bound variables: term_std renames a
        binder named x0 even where 'z does not occur, term_ds does not.
    It prints, per check, how many terms agree, and the first term on which
-   a check disagrees.  The generator is a fixed linear congruential
-   sequence, not Random, so the terms are the same on every OCaml. *)
+   a check disagrees.
+   Then, on the same terms with every second 'z renamed 'y, it compares
+   std, ds and a model (the substitution done on the description) for
+     - TermSubst.subst of 'y,'z by 'z,'y (simultaneous, not one after the
+       other: a sequential mutant agrees on 1510 of 2000);
+     - TermSubst.subst of 'z,'z by g{c},'w (the first is used: a mutant
+       using the last agrees on 904);
+     - TermSubst.match_terms of the term with an instance of it, split by
+       whether the term holds a sequent (a mutant that drops 'y's binding
+       agrees on 959 of 969 and 551 of 1031).
+   term_ds's match_terms raises Invalid_argument on any sequent, by its
+   own code; term_std matches them.  Last, a few match_terms cases random
+   instances never reach, printed for both: ds matches the bound variable
+   of lam x.f{'x} against c in lam y.f{c}, where std refuses.  The output
+   records that as it is (a candidate defect, not yet changed).  The two
+   parts share the term sequence, so the first part's lines are unchanged.
+   The generator is a fixed linear congruential sequence, not Random, so
+   the terms are the same on every OCaml. *)
 open Lm_symbol
 open Term_sig
 
@@ -64,6 +80,46 @@ let rec gen depth env n =
         in
         let hs, env' = hyps (pick 4) env [] in
         Seq ((if pick 2 = 0 then "sa" else "sb"), hs, gen (depth - 1) env' (n + 10))
+
+(* The same description with every second free 'z renamed 'y, so terms
+   have two free first-order variables ('y and 'z are never bound). *)
+let yz d =
+  let k = ref 0 in
+  let rec go = function
+    | Var "z" -> incr k; if !k mod 2 = 0 then Var "y" else Var "z"
+    | Var v -> Var v
+    | SOVar (v, cs, ts) -> SOVar (v, cs, List.map go ts)
+    | Op (o, ts) -> Op (o, List.map go ts)
+    | Bind (x, t) -> Bind (x, go t)
+    | Seq (a, hs, c) ->
+        let hs = List.map (function Hyp (v, t) -> Hyp (v, go t) | Ctx (k, cs, ts) -> Ctx (k, cs, List.map go ts)) hs in
+        Seq (a, hs, go c)
+  in
+  go d
+
+(* Replace the free first-order variables of a description (models). *)
+let rec replace f = function
+  | Var v -> (match f v with Some d -> d | None -> Var v)
+  | SOVar (v, cs, ts) -> SOVar (v, cs, List.map (replace f) ts)
+  | Op (o, ts) -> Op (o, List.map (replace f) ts)
+  | Bind (x, t) -> Bind (x, replace f t)
+  | Seq (a, hs, c) ->
+      Seq (a, List.map (function
+          | Hyp (v, t) -> Hyp (v, replace f t)
+          | Ctx (k, cs, ts) -> Ctx (k, cs, List.map (replace f) ts)) hs, replace f c)
+
+let rec occurs v = function
+  | Var w -> v = w
+  | SOVar (_, _, ts) | Op (_, ts) -> List.exists (occurs v) ts
+  | Bind (_, t) -> occurs v t
+  | Seq (_, hs, c) ->
+      occurs v c || List.exists (function Hyp (_, t) -> occurs v t | Ctx (_, _, ts) -> List.exists (occurs v) ts) hs
+
+let rec has_seq = function
+  | Var _ -> false
+  | SOVar (_, _, ts) | Op (_, ts) -> List.exists has_seq ts
+  | Bind (_, t) -> has_seq t
+  | Seq _ -> true
 
 (* The same description with every bound name renamed (alpha-variant). *)
 let rec rename = function
@@ -183,6 +239,37 @@ module Check (R : Refiner_sig.RefinerSig) = struct
     let c6 = safe (fun () -> cshow [] (R.TermSubst.subst t [ add "z" ] [ build (Op ("g", [ Var "x0"; SOVar ("A", [], [ Var "x0" ]) ])) ])) in
     [ c0; c1; c2; c3; c4; c5; c6 ]
 
+  (* Substitution of several variables at once, and matching.  Each returns
+     the result and the model's answer, printed the same way. *)
+  let g = Op ("g", [ Op ("c", []) ])
+  let showsubst s =
+    String.concat ", " (List.sort Stdlib.compare (List.map (fun (v, t) -> string_of_symbol v ^ ":=" ^ cshow [] t) s))
+  let more d =
+    let d = yz d in
+    let t = build d in
+    let swap v = match v with "y" -> Some (Var "z") | "z" -> Some (Var "y") | _ -> None in
+    let c7 = safe (fun () -> cshow [] (R.TermSubst.subst t [ add "y"; add "z" ] [ mk_var_term (add "z"); mk_var_term (add "y") ])),
+             safe (fun () -> cshow [] (build (replace swap d))) in
+    let first v = match v with "z" -> Some g | _ -> None in
+    let c8 = safe (fun () -> cshow [] (R.TermSubst.subst t [ add "z"; add "z" ] [ build g; build (Var "w") ])),
+             safe (fun () -> cshow [] (build (replace first d))) in
+    let inst v = match v with "y" -> Some g | "z" -> Some (Var "w") | _ -> None in
+    let c9 = safe (fun () -> showsubst (R.TermSubst.match_terms [] t (build (replace inst d)))),
+             safe (fun () -> showsubst (List.filter_map (fun v -> if occurs v d then Option.map (fun e -> add v, build e) (inst v) else None) [ "y"; "z" ])) in
+    [ c7; c8; c9 ]
+
+  (* Matching cases the random terms never reach: in an instance built by
+     substitution, a bound variable always meets a bound variable. *)
+  let hand =
+    let c = Op ("c", []) in
+    [ "lam x.f{'x} with lam y.f{'y}", Bind ("x", Op ("f", [ Var "x" ])), Bind ("y", Op ("f", [ Var "y" ]));
+      "lam x.f{'x} with lam y.f{c}", Bind ("x", Op ("f", [ Var "x" ])), Bind ("y", Op ("f", [ c ]));
+      "f{'y; 'y} with f{c; c}", Op ("f", [ Var "y"; Var "y" ]), Op ("f", [ c; c ]);
+      "f{'y; 'y} with f{c; 'w}", Op ("f", [ Var "y"; Var "y" ]), Op ("f", [ c; Var "w" ]);
+      "lam x.f{'y} with lam x.f{'x}", Bind ("x", Op ("f", [ Var "y" ])), Bind ("x", Op ("f", [ Var "x" ]));
+      "f{'y} with f{'y}", Op ("f", [ Var "y" ]), Op ("f", [ Var "y" ]) ]
+    |> List.map (fun (name, p, i) -> name, safe (fun () -> "[" ^ showsubst (R.TermSubst.match_terms [] (build p) (build i)) ^ "]"))
+
 end
 
 module Std = Check (Refiner_std.Refiner)
@@ -201,18 +288,31 @@ let rec count = function
           | Ctx (_, cs, ts) -> incr ctxs; if cs <> [] then incr conts_lists; List.iter count ts) hs;
       count c
 
+let names2 = [ "subst 'y,'z := 'z,'y at once"; "subst 'z,'z := g{c},'w (the first is used)";
+                "match_terms with an instance (no sequent)"; "match_terms with an instance (a sequent)" ]
 let names = [ "the term"; "subterm_addresses"; "find_subterm"; "free_vars_set"; "alpha_equal to a renamed copy"; "TermOp.iter_down visits"; "subst of g{'x0; A['x0]} for 'z" ]
 
 let () =
   let n = 2000 in
   let agree = Array.make (List.length names) 0 and first = Array.make (List.length names) None in
+  let total2 = Array.make (List.length names2) 0 in
+  let agree2 = Array.init (List.length names2) (fun _ -> Array.make 3 0)
+  and first2 = Array.init (List.length names2) (fun _ -> Array.make 3 None) in
   for i = 1 to n do
     let d = gen 4 [] 0 in
     count d;
     List.iteri (fun k (s, t) ->
         if s = t then agree.(k) <- agree.(k) + 1
         else if first.(k) = None then first.(k) <- Some (i, s, t))
-      (List.combine (Std.checks d) (Ds.checks d))
+      (List.combine (Std.checks d) (Ds.checks d));
+    let k_of k = if k = 2 && has_seq (yz d) then 3 else k in
+    List.iteri (fun k ((s, sm), (t, tm)) ->
+        let k = k_of k in
+        total2.(k) <- total2.(k) + 1;
+        let note i x y = if x = y then agree2.(k).(i) <- agree2.(k).(i) + 1
+          else if first2.(k).(i) = None then first2.(k).(i) <- Some (x, y) in
+        note 0 s t; note 1 s sm; note 2 t tm)
+      (List.combine (Std.more d) (Ds.more d))
   done;
   Printf.printf "%d terms: %d sequents, %d hypotheses, %d context hypotheses, %d second-order variables, %d contexts lists, %d binders\n"
     n !seqs !hyps !ctxs !sovars !conts_lists !binds;
@@ -221,4 +321,16 @@ let () =
       match first.(k) with
       | None -> ()
       | Some (i, s, t) -> Printf.printf "  first difference, term %d:\n    std %s\n    ds  %s\n" i s t)
-    names
+    names;
+  Printf.printf "On the same terms with every second 'z renamed 'y (std = ds, std = model, ds = model):\n";
+  List.iteri (fun k name ->
+      let a = agree2.(k) in
+      Printf.printf "%-48s of %4d: %4d %4d %4d\n" name total2.(k) a.(0) a.(1) a.(2);
+      Array.iteri (fun i f -> match f with
+          | None -> ()
+          | Some (x, y) ->
+              Printf.printf "  first difference, %s:\n    %s\n    %s\n" (List.nth [ "std vs ds"; "std vs model"; "ds vs model" ] i) x y)
+        first2.(k))
+    names2;
+  Printf.printf "match_terms on hand-made cases (std / ds):\n";
+  List.iter2 (fun (name, a) (_, b) -> Printf.printf "  %-30s %s / %s\n" name a b) Std.hand Ds.hand

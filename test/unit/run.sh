@@ -30,6 +30,10 @@ clibs=""
 for a in "$root/lib/liblmcutil.a" "$root/lib/liblmcutil.lib"; do
    if [ -f "$a" ]; then clibs="-custom -cclib $a"; break; fi
 done
+# MetaPRL's own C primitives (clib: putenv, execv, execvp for Punix).
+for a in "$root/lib/clib.a" "$root/lib/clib.lib"; do
+   if [ -f "$a" ]; then clibs="$clibs -cclib $a"; break; fi
+done
 if grep -q '^NCURSES_ENABLED *= *true' "$root/mk/config" 2>/dev/null; then
    clibs="$clibs -cclib -lncurses"
 fi

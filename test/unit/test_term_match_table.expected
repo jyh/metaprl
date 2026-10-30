@@ -1,0 +1,5 @@
+600 tables: 400 with a matching pattern, 197 with several, 122 where a repeated variable matches
+lookup_all = the matching values              600 of  600
+lookup: None iff no match, else a match       600 of  600
+lookup's pattern is not strictly more general  400 of  400
+identical patterns: the newest value wins      91 of   91

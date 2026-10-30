@@ -47,28 +47,51 @@ let parse_int s =
       Failure _ ->
          0
 
+let month_of_name mon =
+   match Latin1_case.lowercase mon with
+      "jan" -> Some 0
+    | "feb" -> Some 1
+    | "mar" -> Some 2
+    | "apr" -> Some 3
+    | "may" -> Some 4
+    | "jun" -> Some 5
+    | "jul" -> Some 6
+    | "aug" -> Some 7
+    | "sep" -> Some 8
+    | "oct" -> Some 9
+    | "nov" -> Some 10
+    | "dec" -> Some 11
+    | _ -> None
+
+(*
+ * Days from 1970-01-01 to the civil date year-month-mday (month 1-12),
+ * in the proleptic Gregorian calendar.
+ *)
+let days_from_civil year month mday =
+   let year = if month <= 2 then year - 1 else year in
+   let era = (if year >= 0 then year else year - 399) / 400 in
+   let yoe = year - era * 400 in
+   let mp = (month + 9) mod 12 in
+   let doy = (153 * mp + 2) / 5 + mday - 1 in
+   let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy in
+      era * 146097 + doe - 719468
+
+(*
+ * The fields are a date and time in the named zone (GMT when unnamed);
+ * the result is seconds since the epoch, UTC.  A two-digit year is
+ * 2000-2049 below 50 and 1950-1999 otherwise.
+ *)
 let parse_date_aux mday mon year hour min sec zone =
    let mday = parse_int mday in
    let mon =
-      match Latin1_case.lowercase mon with
-         "jan" -> 0
-       | "feb" -> 1
-       | "mar" -> 2
-       | "apr" -> 3
-       | "may" -> 4
-       | "jun" -> 5
-       | "jul" -> 6
-       | "aug" -> 7
-       | "sep" -> 8
-       | "oct" -> 9
-       | "nov" -> 10
-       | "dec" -> 11
-       | _ -> 0
+      match month_of_name mon with
+         Some m -> m
+       | None -> 0
    in
    let year =
       let year = parse_int year in
-         if year = 0 then
-            2000
+         if year < 50 then
+            year + 2000
          else if year < 100 then
             year + 1900
          else
@@ -79,7 +102,7 @@ let parse_date_aux mday mon year hour min sec zone =
    let sec = parse_int sec in
    let zone =
       match Latin1_case.lowercase zone with
-         "ut" | "gmt" -> 0
+         "ut" | "gmt" | "utc" -> 0
        | "est" -> -5 * 60 * 60
        | "edt" -> -4 * 60 * 60
        | "cst" -> -6 * 60 * 60
@@ -90,24 +113,28 @@ let parse_date_aux mday mon year hour min sec zone =
        | "pdt" -> -7 * 60 * 60
        | _ -> 0
    in
-      mktime (**)
-         { time_sec = sec;
-           time_min = min;
-           time_hour = hour;
-           time_mday = mday;
-           time_mon = mon;
-           time_year = year;
-           time_zone = zone
-         }
+      days_from_civil year (mon + 1) mday * 86400 + hour * 3600 + min * 60 + sec - zone
 
+(*
+ * The three forms of RFC 7231 7.1.1.1, and the form this read before:
+ *    Sun, 06 Nov 1994 08:49:37 GMT       RFC 1123
+ *    Sunday, 06-Nov-94 08:49:37 GMT      RFC 850
+ *    Sun Nov  6 08:49:37 1994            asctime (GMT)
+ *    [Sun] 06 Nov 1994 08 49 37 GMT
+ * Anything else is 0.
+ *)
 let parse_time s =
-   match Lm_string_util.parse_args s with
-      [mday; month; year; hour; minute; sec; zone] ->
-         parse_date_aux mday month year hour minute sec zone
-    | [_; mday; month; year; hour; minute; sec; zone] ->
-         parse_date_aux mday month year hour minute sec zone
-    | _ ->
-         0
+   let fields = List.filter (fun f -> f <> "") (Lm_string_util.split " \t,:-" s) in
+   let is_number f = try ignore (int_of_string f); true with Failure _ -> false in
+      match fields with
+         [wday; mon; mday; hour; minute; sec; year] when not (is_number wday) && month_of_name mon <> None ->
+            parse_date_aux mday mon year hour minute sec "gmt"
+       | [mday; month; year; hour; minute; sec; zone] ->
+            parse_date_aux mday month year hour minute sec zone
+       | [_; mday; month; year; hour; minute; sec; zone] ->
+            parse_date_aux mday month year hour minute sec zone
+       | _ ->
+            0
 
 (*
  * Month name.

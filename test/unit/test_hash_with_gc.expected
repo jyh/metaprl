@@ -1,0 +1,7 @@
+GCs that empty the table (until fixed, these never returned): 283
+seek                      5464 of  5464
+iter                      1781 of  1781
+gc removes the marked     3466 of  3466
+gc leaves the rest        3466 of  3466
+is_gc after gc_start      3466 of  3466
+is_gc after gc_iter       3466 of  3466

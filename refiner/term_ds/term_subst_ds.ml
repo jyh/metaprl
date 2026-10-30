@@ -507,6 +507,10 @@ struct
       match get_core tm1, get_core tm2 with
          FOVar v, FOVar v' when List.mem_assoc v bvars ->
             if v' = List.assoc v bvars then subst else RAISE_GENERIC_EXN
+       | FOVar v, _ when List.mem_assoc v bvars ->
+            (* A bound variable matches only its counterpart, never a term
+               (it used to fall through and be bound like a free one). *)
+            RAISE_GENERIC_EXN
        | FOVar v, _ ->
             begin try
                let tm1 = List.assoc v subst in

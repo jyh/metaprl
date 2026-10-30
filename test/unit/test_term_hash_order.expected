@@ -1,0 +1,8 @@
+renamed copy is alpha_equal (the premise)            1000 of 1000
+hash_term t = hash_term (renamed t)                  1000 of 1000
+compare_terms t t = 0                                1000 of 1000
+compare_terms t (renamed t) = 0                      1000 of 1000
+sign (compare a b) = - sign (compare b a)            1000 of 1000
+compare a b = 0 exactly when alpha_equal a b         1000 of 1000
+transitive on (a, b, c)                              1000 of 1000
+distinct terms 591, in 591 hash values; 0 share a hash value with another

@@ -1,0 +1,7 @@
+400 tables, 361 with a key that has a binder (so two forms)
+5003 lookups of a key whose alpha-equal, differently named form held values
+find_all = the model's values              32137 of 32137
+find = the newest value, else Not_found    32137 of 32137
+mem = the key has values                   32137 of 32137
+length = the number of keys                  400 of   400
+list_of = the model's keys and values        400 of   400

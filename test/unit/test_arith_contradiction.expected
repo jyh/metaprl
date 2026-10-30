@@ -1,0 +1,4 @@
+3000 systems, 1547 unsatisfiable
+raises iff the system is satisfiable    3000 of  3000
+returns a sub-multiset of the input     1547 of  1547
+what it returns is unsatisfiable        1547 of  1547

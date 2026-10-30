@@ -471,7 +471,7 @@ struct
    let isNumber (s,f) =
       let test=ref true in
       let aux v c =
-         if v<>constvar && compare c BField.fieldZero <>0 then
+         if v<>constvar && BField.compare c BField.fieldZero <>0 then
             test:=false
       in
       Table.iter aux f;

@@ -9,10 +9,11 @@
        each once, and leaves the rest findable;
      - is_gc is true after gc_start and false once gc_iter has run.
    It prints, per operation, how many agree, and the first difference.
-   DECLARED: a GC that leaves the table empty (a fresh table, or one where
-   the predicate marks every entry) never returns: scan_for_release ends a
-   sweep only when 100 * released < gc_critical * count, which is never
-   true when count = 0.  This test skips those GCs and counts them.
+   Until it was fixed, a GC that leaves the table empty (a fresh table, or
+   one where the predicate marks every entry) never returned:
+   scan_for_release ended a sweep only when 100 * released < gc_critical *
+   count, never true when count = 0.  Those GCs are now counted with the
+   rest.
    The generator is a fixed linear congruential sequence, not Random. *)
 open Hash_with_gc.HashWithGC
 
@@ -27,7 +28,7 @@ let note op ok what =
   if ok then Hashtbl.replace agree op (1 + try Hashtbl.find agree op with Not_found -> 0)
   else if not (Hashtbl.mem first op) then Hashtbl.add first op what
 
-let skipped = ref 0
+let emptying = ref 0
 let sorted l = List.sort compare l
 let show l = String.concat " " (List.map (fun (k, v) -> Printf.sprintf "%d:%d" k v) (sorted l))
 
@@ -56,9 +57,7 @@ let () =
       | _ ->
           let m = 2 + pick 3 in
           let marked (k, _) = k mod m = 0 in
-          (* SKIP: a GC that would leave the table empty never returns
-             (declared in this commit; the next commit fixes it). *)
-          if List.for_all marked !model then incr skipped else begin
+          if List.for_all marked !model then incr emptying;
           gc_start t;
           note "is_gc after gc_start" (is_gc t) what;
           let removed = ref [] in
@@ -77,10 +76,9 @@ let () =
           note "gc leaves the rest"
             (List.for_all (fun (k, v) -> (try seek t (hash t k) k with _ -> None) = Some v) !model)
             what
-          end
     done
   done;
-  Printf.printf "GCs skipped because they would empty the table: %d\n" !skipped;
+  Printf.printf "GCs that empty the table (until fixed, these never returned): %d\n" !emptying;
   List.iter (fun op ->
       let a = try Hashtbl.find agree op with Not_found -> 0 and n = try Hashtbl.find total op with Not_found -> 0 in
       Printf.printf "%-24s %5d of %5d\n" op a n;

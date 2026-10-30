@@ -1,0 +1,8 @@
+1000 terms
+check                                std=ds  std law   ds law
+replace_subterm by c                   1000      692      692
+apply_fun_at_addr w{_}                 1000      692      692
+apply_var_fun_at_addr's bvars          1000        -        -
+apply_fun_higher on variables          1000        -        -
+apply_var_fun_higher on variables      1000        -        -
+coverage (std): 1576 addresses, 599 with bound variables passed; apply_fun_higher collected 90 variables

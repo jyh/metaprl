@@ -16,7 +16,7 @@
        context_vars, so_vars_info, context_vars_info, is_fo_term.
    It prints, per check, how many sequents agree std = ds, std = model and
    ds = model (a dash where there is no model), and the first difference.
-   Found, and recorded rather than changed here:
+   Found (the last two since fixed, in term_ds and term_gen):
      - declared_vars lists the hypotheses newest first in both (a 2017
        comment in term_man_ds asks whether that is a mistake);
      - get_hyp_number of a type that two hypotheses share: term_std
@@ -26,7 +26,8 @@
        which term_ds includes (term_ds left out the variables a bound
        term binds, lam x0. ..., until it was fixed: 542/1000 agreed with
        H and S removed, now 1000);
-     - is_fo_term of a sequent: term_std true, term_ds false.
+     - is_fo_term of a sequent: term_std true, term_ds false (0/1000,
+       now 1000; all_vars 193 -> 288 -> 1000 with both halves fixed).
    The generator is a fixed linear congruential sequence, not Random. *)
 open Lm_symbol
 open Term_sig

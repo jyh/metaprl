@@ -20,17 +20,11 @@ get_hyp_number                  987      -      -
     3 | 2 | 3
 replace_concl by c             1000      -      -
 explode_sequent_and_rename     1000      -      -
-all_vars                        288      -      -
-  first difference (std vs ds), sequent 2:
-    A K1 K2 v1 v2 z
-    A H K1 K2 S v1 v2 z
+all_vars                       1000      -      -
 all_vars without H, S          1000      -      -
 all_contexts                   1000      -      -
 all_meta_variables             1000      -      -
 context_vars                   1000      -      -
 so_vars_info                   1000      -      -
 context_vars_info              1000      -      -
-is_fo_term                        0      -      -
-  first difference (std vs ds), sequent 1:
-    true
-    false
+is_fo_term                     1000      -      -

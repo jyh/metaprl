@@ -84,6 +84,9 @@ jobs:
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/toploop_minus.sh
+      - name: display forms print 59 itt/core goals as expected (editor/ml/tests/dform_golden.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/dform_golden.sh
       - name: an INSTALL_DIR with a space stays one THEORYPATH entry (editor/ml/tests/install_dir_space.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/install_dir_space.sh

@@ -7,11 +7,14 @@
      - convert of the std term is the ds term built from the same
        description, and revert of the ds term is the std term;
      - revert (convert t) is t;
-   Not checked: whether two copies of one term convert to the same
-   (physically equal) term.  They do in 1,961 to 1,980 of 2,000 depending
-   on when the GC runs, even with both copies kept alive, because convert
-   drops the table index it looked up; output that depends on the GC
-   cannot be an expected file.
+     - two copies of one term convert to ONE term (physically equal), with
+       a full major GC between the two converts, the first result kept
+       alive, and the first convert the term's first conversion.
+       Weak_memo remakes a collected entry under its stored descriptor
+       (3811510d7), so a header that names it still matches.
+       Before that fix this check read 1,038 of 2,000 (measured 2026-11-01
+       by building this test against the earlier weak_memo.ml); the terms
+       that split carry binders (lam or sequent hypotheses).
    The generator is the fixed linear congruential sequence of
    test_term_differential.ml. *)
 open Lm_symbol
@@ -107,16 +110,25 @@ module C = Term_copy2_weak.TermCopy2Weak (Refiner_std.Refiner) (Refiner_ds.Refin
 
 let () =
   let n = 2000 in
-  let names = [ "convert std = ds"; "revert ds = std"; "revert (convert t) = t" ] in
-  let ok = Array.make 3 0 and first = Array.make 3 None in
+  let names = [ "convert std = ds"; "revert ds = std"; "revert (convert t) = t";
+                "two copies convert to one term" ] in
+  let ok = Array.make 4 0 and first = Array.make 4 None in
   let note k b d = if b then ok.(k) <- ok.(k) + 1 else if first.(k) = None then first.(k) <- Some d in
   for _ = 1 to n do
     let d = gen 4 [] 0 in
     let s = S.build d and t = D.build d in
+    (* First, before any other convert of this term: the split needs the
+       term's first conversion (measured: as the third it never splits). *)
+    let s' = S.build d in
+    let r1 = C.convert s in
+    Gc.full_major ();
+    let r2 = C.convert s' in
+    note 3 (r1 == r2) d;
     let safe f = try f () with e -> "raised " ^ Printexc.to_string e in
     note 0 (safe (fun () -> D.show (C.convert s)) = D.show t) d;
     note 1 (safe (fun () -> S.show (C.revert t)) = S.show s) d;
-    note 2 (safe (fun () -> S.show (C.revert (C.convert s))) = S.show s) d
+    note 2 (safe (fun () -> S.show (C.revert (C.convert s))) = S.show s) d;
+    ignore (Sys.opaque_identity (s', r1, r2))
   done;
   List.iteri (fun k name ->
       Printf.printf "%-36s %d of %d\n" name ok.(k) n;

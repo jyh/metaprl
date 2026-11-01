@@ -52,6 +52,15 @@
   when `F` is a tautology (Glivenko), and LJ and LJmc agree: 383 of 383
   checked. The 17 on which LJ did not finish in 10 s are skipped and
   counted (see Known not to work).
+- `File_base`, which chooses which of a module's files to load
+  (`test/unit/test_file_base.ml`): the first directory on the path that
+  has any of them, and in it the newest by mtime, the earlier file type on
+  a tie. Eight cases agree with a model of that rule; mutants that break
+  the tie the other way or ignore the mtime differ in 2 and 6. This is why
+  a newer archive of any kind shadows the stored proof (a session's
+  auto-saved `.cmoz` is read instead of the `.prla`). Recorded: when the
+  newest file cannot be unmarshalled, loading fails; it does not fall back
+  to an older file.
 - `Term_dtable`, the table behind the intro step for subtype goals
   (`Itt_subtype`), against a model (`test/unit/test_term_dtable.ml`): a
   small subtyping system inserted the three ways itt theories insert one,
@@ -70,10 +79,11 @@
   the ds term built from the same description, revert gives the std term,
   and revert of convert is the identity, on all 2,000 (a mutant that
   reverses subterms in the copy's header makes the first two 1,604; the
-  round trip cannot see a defect that is undone on the way back). Not
-  checked: whether two copies of one term convert to one shared term,
-  which holds for 1,961 to 1,980 of the 2,000 depending on when the GC
-  runs.
+  round trip cannot see a defect that is undone on the way back). Two
+  copies of one term convert to one shared term on all 2,000, with a full
+  GC between the two converts (#84). The 1,961 to 1,980 first reported
+  here was not reproduced on this code; built against `Weak_memo` from
+  before #76 the same check reads 1,038 of 2,000.
 - The filter's term-type checking (`term_ty_infer`) on seven small theories
   (`test/filter_types/`, a CI step after the build, Linux only): building
   the theories shows that well-typed declarations are accepted, and these
@@ -83,6 +93,13 @@
   that must be accepted, including a Term where a Dform is taken (perv
   declares `Dform <- Term`). A mutant whose subtype check accepts makes
   the three type errors pass.
+- Display forms (`editor/ml/tests/dform_golden.sh`, a CI step after the
+  build): `mp -batch` prints 59 goals, one per itt/core module (its first
+  rule with a stored complete proof), and the text is compared with
+  `dform_golden.expected`. Until now nothing pinned printed output; the
+  proof census reads rule statuses. A mutant that changes one bracket in
+  `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
+  ASCII display mode only, at mp's default width of 80.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`
@@ -195,6 +212,15 @@
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+- `Term_stable`, the table keyed by a term's shape behind itt_squash's
+  unsquash resource (`test/unit/test_term_stable.ml`): 300 generated terms
+  inserted and 1,000 looked up, one in five of a shape never inserted;
+  `slookup_all` returns the values whose shape matches, newest first, and
+  `slookup` the newest or `Not_found`, against a model that computes the
+  shape from the term's structure, on all 1,000. Mutants: inserting with
+  `Hashtbl.replace` (212), counting no binders (790), giving a Token
+  parameter the Number kind (983). Recorded: a variable and a
+  second-order variable with no arguments have the same shape.
 
 ### Known not to work
 

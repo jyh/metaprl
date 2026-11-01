@@ -82,8 +82,15 @@ let proved = function Ok _ -> true | Error () -> false
    run.  Each is a non-theorem whose double negation LJ and LJmc search for
    a long time although the multiplicity is capped at 3 (one ran over 120 s
    native); the smallest seen is ~~((r => r) => r), whose search at
-   multiplicity 2 had taken over 99,000 steps after 5 s.  Whether the
-   search is infinite or only very large is not measured. *)
+   multiplicity 2 had taken over 99,000 steps after 5 s.  Measured
+   2026-10-31 on that formula (LJ, native, a counter in a copy of jall.ml):
+   the first 100,000 connection steps take 4 s and revisit 3,694 distinct
+   (path, closed, atom, partner) states, about 40 us a step; once the path
+   reaches 8 atoms, the prefix (string) unifications sampled took 30-230 ms
+   each, and the next 10,000 steps did not finish in 110 s.  So the time
+   goes to string unification inside a large search, whose steps keep
+   returning, each more slowly.  Whether the search is finite is not
+   measured. *)
 let hangs = [ 14; 29; 64; 66; 99; 115; 120; 157; 182; 211; 241; 246; 302; 332; 337; 380; 393 ]
 
 let () =

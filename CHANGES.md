@@ -38,6 +38,15 @@
   checked: whether two copies of one term convert to one shared term,
   which holds for 1,961 to 1,980 of the 2,000 depending on when the GC
   runs.
+- The filter's term-type checking (`term_ty_infer`) on seven small theories
+  (`test/filter_types/`, a CI step after the build, Linux only): building
+  the theories shows that well-typed declarations are accepted, and these
+  check that ill-typed ones are refused, with the error: a Dform result
+  where a Term is required, a Dform argument where a Term is taken, a
+  Dform-typed bound variable used as a Term, and a wrong arity; and three
+  that must be accepted, including a Term where a Dform is taken (perv
+  declares `Dform <- Term`). A mutant whose subtype check accepts makes
+  the three type errors pass.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`

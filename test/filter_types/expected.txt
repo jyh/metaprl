@@ -1,0 +1,7 @@
+bad_arg_type REFUSED Bad_arg_type!ft_e has type Perv!Dform, used with type Perv!Term
+bad_arity REFUSED Failure: undeclared name: ft_f{<0>; <0>}
+bad_binder_type REFUSED 'x<|!|> has type Perv!Dform, used with type Perv!Term
+bad_result_type REFUSED Bad_result_type!ft_f{Bad_result_type!ft_g} has type Perv!Dform, used with type Perv!Term
+ok_binder ACCEPTED
+ok_term_as_dform ACCEPTED
+ok_term ACCEPTED

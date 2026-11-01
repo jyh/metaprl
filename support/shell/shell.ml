@@ -522,8 +522,20 @@ struct
       let abandon            = wrap_unit_arg abandon
       let abandon_all        = wrap_unit_arg abandon_all
 
+      (*
+       * The filter registers each derived rule with Shell_command.extract
+       * [module; rule]. Resolve that pair by MODULE name: as a path from the root,
+       * a first component that names a theory (a group) wins, so the rules of a
+       * module named like its theory (itt_rfun, itt_supinf) were never found and
+       * read as incomplete to the refiner, i.e. as depending on themselves.
+       *)
       let extract shell path =
-         extract parse_arg shell (dir_of_path path)
+         let dir =
+            match path with
+               [modname; name] -> proof_dir modname name
+             | _ -> dir_of_path path
+         in
+            extract parse_arg shell dir
 
       (*
        * Refresh packages at startup.

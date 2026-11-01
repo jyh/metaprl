@@ -32,9 +32,6 @@ interactive whole_slice_wf {| intro [] |} :
    [wf] sequent { <H> >- 'b in wirebuf } -->
    sequent { <H> >- whole_slice{'b} in vslice }
 
-interactive validframe_univ {| intro [] |} :
-   sequent { <H> >- validframe in univ[i:l] }
-
 interactive validframe_type {| intro [] |} :
    sequent { <H> >- "type"{validframe} }
 

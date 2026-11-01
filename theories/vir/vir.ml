@@ -65,7 +65,12 @@ interactive vresult_univ {| intro [] |} :
 interactive vresult_type {| intro [] |} :
    sequent { <H> >- "type"{vresult} }
 
-(* A slice's two projections (the buffer and the offset). *)
+(* A slice's constructor and its two projections (the buffer and the offset). *)
+interactive vslice_pair_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'b in wirebuf } -->
+   [wf] sequent { <H> >- 'o in int } -->
+   sequent { <H> >- pair{'b; 'o} in vslice }
+
 interactive vslice_fst_wf {| intro [] |} :
    [wf] sequent { <H> >- 's in vslice } -->
    sequent { <H> >- fst{'s} in wirebuf }

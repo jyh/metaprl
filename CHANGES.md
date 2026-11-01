@@ -42,6 +42,15 @@
   when `F` is a tautology (Glivenko), and LJ and LJmc agree: 383 of 383
   checked. The 17 on which LJ did not finish in 10 s are skipped and
   counted (see Known not to work).
+- `File_base`, which chooses which of a module's files to load
+  (`test/unit/test_file_base.ml`): the first directory on the path that
+  has any of them, and in it the newest by mtime, the earlier file type on
+  a tie. Eight cases agree with a model of that rule; mutants that break
+  the tie the other way or ignore the mtime differ in 2 and 6. This is why
+  a newer archive of any kind shadows the stored proof (a session's
+  auto-saved `.cmoz` is read instead of the `.prla`). Recorded: when the
+  newest file cannot be unmarshalled, loading fails; it does not fall back
+  to an older file.
 - `Term_dtable`, the table behind the intro step for subtype goals
   (`Itt_subtype`), against a model (`test/unit/test_term_dtable.ml`): a
   small subtyping system inserted the three ways itt theories insert one,

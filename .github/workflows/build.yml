@@ -72,6 +72,9 @@ jobs:
       - name: unit tests of the OCaml libraries (test/unit/run.sh)
         working-directory: metaprl
         run: opam exec -- sh test/unit/run.sh
+      - name: the filter refuses ill-typed term declarations (test/filter_types/run.sh)
+        working-directory: metaprl
+        run: opam exec -- sh test/filter_types/run.sh
       - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/old_labels.sh

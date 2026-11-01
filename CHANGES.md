@@ -16,6 +16,37 @@
   when `F` is a tautology (Glivenko), and LJ and LJmc agree: 383 of 383
   checked. The 17 on which LJ did not finish in 10 s are skipped and
   counted (see Known not to work).
+- `Term_dtable`, the table behind the intro step for subtype goals
+  (`Itt_subtype`), against a model (`test/unit/test_term_dtable.ml`): a
+  small subtyping system inserted the three ways itt theories insert one,
+  looked up on all 576 pairs of ground terms up to depth 1; the table and
+  the model give the same derivation on all 576 (a mutant that lets older
+  entries win makes 4 differ; one that stops at the first matching entry
+  whose subgoals fail makes 2 differ). The test records two behaviours
+  that may be bugs: a left-to-right entry answers every goal whose left
+  side matches, with the derivation of a different pair (92 of 104
+  answers; `Itt_set`'s set rule is one), and a right-to-left entry whose
+  right side is a variable answers no ground goal (`Itt_void`'s void
+  rule). Both rules also carry their own intro annotation.
+- `Term_copy2_weak`, which copies terms between term implementations for
+  the filter's proof cache and `Term_io` (`test/unit/test_term_copy2_weak.ml`):
+  2,000 generated terms copied between term_std and term_ds; convert gives
+  the ds term built from the same description, revert gives the std term,
+  and revert of convert is the identity, on all 2,000 (a mutant that
+  reverses subterms in the copy's header makes the first two 1,604; the
+  round trip cannot see a defect that is undone on the way back). Not
+  checked: whether two copies of one term convert to one shared term,
+  which holds for 1,961 to 1,980 of the 2,000 depending on when the GC
+  runs.
+- The filter's term-type checking (`term_ty_infer`) on seven small theories
+  (`test/filter_types/`, a CI step after the build, Linux only): building
+  the theories shows that well-typed declarations are accepted, and these
+  check that ill-typed ones are refused, with the error: a Dform result
+  where a Term is required, a Dform argument where a Term is taken, a
+  Dform-typed bound variable used as a Term, and a wrong arity; and three
+  that must be accepted, including a Term where a Dform is taken (perv
+  declares `Dform <- Term`). A mutant whose subtype check accepts makes
+  the three type errors pass.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`

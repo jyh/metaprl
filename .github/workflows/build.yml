@@ -143,3 +143,6 @@ jobs:
       - name: replay every stored proof (editor/ml/tests/proof_census.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/proof_census.sh
+      - name: no rule depends on itself in the grounded check (editor/ml/tests/no_self_dependency.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/no_self_dependency.sh

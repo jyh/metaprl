@@ -10,6 +10,12 @@
   step after the build, on Linux and Windows. The first, `test_bitset.ml`, checks `mllib`'s
   `Bitset` against a bool array (100,000 reads, none differ). `refiner/`
   and `mllib/` had no unit tests; the proof census tests them end to end.
+- JProver on propositional formulas (`test/unit/test_jprover_prop.ml`, #79):
+  on 400 generated formulas, classical JProver proves exactly the
+  tautologies, whatever LJ proves is a tautology, LJ proves `~~F` exactly
+  when `F` is a tautology (Glivenko), and LJ and LJmc agree: 383 of 383
+  checked. The 17 on which LJ did not finish in 10 s are skipped and
+  counted (see Known not to work).
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`
@@ -122,6 +128,16 @@
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+
+### Known not to work
+
+- JProver's intuitionistic search (LJ, LJmc) does not finish in 10 s on 17
+  of the 400 test formulas, all non-theorems, although the multiplicity is
+  capped at 3. On `~~((r => r) => r)` the time goes to prefix (string)
+  unification: the first 100,000 search steps average about 40 us, and once
+  the search path reaches 8 atoms the unifications sampled took 30-230 ms
+  each. Changing the search to avoid this is not
+  attempted here.
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 
